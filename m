@@ -2,66 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8309E6F367A
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 21:06:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B7BD6F367D
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 21:06:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232792AbjEATGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 15:06:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44434 "EHLO
+        id S232818AbjEATGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 15:06:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbjEATGU (ORCPT
+        with ESMTP id S229915AbjEATGl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 15:06:20 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A4210F8
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 12:06:19 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id af79cd13be357-74e1745356dso121291685a.0
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 12:06:19 -0700 (PDT)
+        Mon, 1 May 2023 15:06:41 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D28A21708;
+        Mon,  1 May 2023 12:06:37 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-95f4c5cb755so573688666b.0;
+        Mon, 01 May 2023 12:06:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682967978; x=1685559978;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=h7SjFUEVHFEjNXjqk3Wy4WFYpwQq7tXRNuaA2WillKc=;
-        b=qwmwpYuP3xJ5FM+y+ACsPfCdOO8roj6KCkX910r3xQCCDNB97gVQgj+ELmYPvVkL/7
-         RrTK30prgoCHSUlLvbOIsVHh7eOGhigLXhKRJ3tO0PqkzKA2eZpM68o71hHQ+IItwzff
-         e7DlmC+daNuiKB//KopiCzWx9tUvQVIAmX1REGR6EiU82MkSLkFeD/3r9/TDQ74tWZSv
-         tEX6APB86Fb/Np4x0eIDA1qLprguHcdCEc3VUlJ/0ThofuXK8MrFeuGP7MFg3PziJJc1
-         oGdVw+6lqPFJ11IiBnJv/rpayHkPDP1lHSFAMp42KlUYqkeozj3MSLUF8zY9ttCc13Go
-         SS3w==
+        d=googlemail.com; s=20221208; t=1682967996; x=1685559996;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GbK7EtQRtZZE7KYEeoJBLaWKVzPK4dKamhRK6nyLgos=;
+        b=IOKOgtayzfFZNsyi1stDP8bgZ2e8StGU6AXpOokekL9MEPm8GXe3VVJMt94V5DwdEM
+         ATKwwwmalpAfY1y3ljA9x93gRbYm86ihqRakr7DtMI9ZAvHu4/Xs6P92b7aiNugQszBm
+         mqqxxLmirHC+gAs0Yx2c5Kru6Ep97A/IaHWdSPh3TuZ1xx8AJlB21C0UZNlroQL3+CbI
+         KvqjNd8TDpgSNIJLqROqTJv8HrTCVenOUH8bCNKlW5s9PK8cbQKVXSX9ahZv9ZMy5vAG
+         B699V9dmeE2OyfAQ+qFqLCps61OUjvCXCzwMouYAxCdkpDi57VxOLyxpHBGR96pBt4rT
+         C3fQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682967978; x=1685559978;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=h7SjFUEVHFEjNXjqk3Wy4WFYpwQq7tXRNuaA2WillKc=;
-        b=aRxJ5L/jTfjYwMw+9J7cot0Tx2Jxhl3SOMz3yDLQLglZMr3M1W9W8MQdrlnVYmvVG3
-         g5v6/OdujoNSK5Ky55guU6r40Ab+LG5ECflVq7voITToul4sufs6rL3+FfEc9xWpT4Mm
-         KSm8Tb375cZaQ64i9bCtPbEDcMmMrPPoAWb/cE1eev6MHkZUU2A+FN3pxTHV/yKKLywH
-         Y9z20+MAgnXWt6hUehIAGriaqfhyqCOtTu2Zm1hgVEe6ZHgNaVnV2sVXWNdd/lPHXqND
-         TeAoSuKTpgoD6GtYGapi5s+gdjJbNWBmyePR3Q8JJPdDuoYMtOyqxM/Mo8QJDfCljrWr
-         A1qw==
-X-Gm-Message-State: AC+VfDwsSOeXZuTuawH0fy+SN0nAi+4xInfl+DaBEitEB9rjagfT7xAN
-        BN2tJ2HKyqZFgv3nhaxdtFY=
-X-Google-Smtp-Source: ACHHUZ7xIwiZkmlPBcLiddlfv4WObvEczwG21UftYy8+tFHEyD8EmHDM/h9Hd/lsgrr2BarWWtut7g==
-X-Received: by 2002:a05:6214:5019:b0:619:ca55:970a with SMTP id jo25-20020a056214501900b00619ca55970amr1613558qvb.47.1682967978378;
-        Mon, 01 May 2023 12:06:18 -0700 (PDT)
-Received: from pm2-ws13.praxislan02.com (207-172-141-204.s8906.c3-0.slvr-cbr1.lnh-slvr.md.cable.rcncustomer.com. [207.172.141.204])
-        by smtp.gmail.com with ESMTPSA id g7-20020a0ce4c7000000b005dd8b9345casm8918208qvm.98.2023.05.01.12.06.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 May 2023 12:06:15 -0700 (PDT)
-From:   Jason Andryuk <jandryuk@gmail.com>
-To:     Eric Van Hensbergen <ericvh@kernel.org>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Christian Schoenebeck <linux_oss@crudebyte.com>
-Cc:     Jason Andryuk <jandryuk@gmail.com>, v9fs@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] fs/9p: Remove INET dependency
-Date:   Mon,  1 May 2023 15:06:00 -0400
-Message-Id: <20230501190602.86281-1-jandryuk@gmail.com>
-X-Mailer: git-send-email 2.40.0
+        d=1e100.net; s=20221208; t=1682967996; x=1685559996;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GbK7EtQRtZZE7KYEeoJBLaWKVzPK4dKamhRK6nyLgos=;
+        b=JzXHGY1TZ2duCsLT7yKGD8PjVuoZ6JLeIbdni1jhcCh7goDc5IfqndKzMX6Z0L0AoB
+         nO4oSSaU8pYJucMNzKqgKKFKETDtHqDzdo5/mwLZ7lfr3iu5y8Pev/g7iOKmj88r659U
+         AiR3MIHALfSG3I3h3nYRt66CFZfl36sgUYLGbPWuYdz6q9NyIS4Sura6LP0hZ+QGmbzo
+         sRh9/92PzizgGjpNm74ym4lq2s2iW5NeZr0izdXRCj2c+0waJYZLjgTihS+UGD9Bhp7C
+         ngRLlkLX2O2Wvt/FZRygUq8GkfHu+p4+kxy+h5jlwrykMIcfFaKlJZZ8Ppdt5w9ZImV6
+         2KEw==
+X-Gm-Message-State: AC+VfDzlQ5mrcQPwilumqu+vdEqCK/Ra3M++EGV293aFHjT3gaMCDx1m
+        EtTFpxkeBZS158yY9ReaFC276WdJfx4bqEeB4Nk=
+X-Google-Smtp-Source: ACHHUZ5qgzS3PhkmnYZSPw1/CWfO5K2yQvVRa39/ZwKaLWKwP2rgTDXwfMm6qXhJyEvt0k+aENNNLDiUmPBDvWB5QjA=
+X-Received: by 2002:a17:906:9b86:b0:957:2a7e:ce0a with SMTP id
+ dd6-20020a1709069b8600b009572a7ece0amr14352840ejc.44.1682967996043; Mon, 01
+ May 2023 12:06:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230426095805.15338-1-ddrokosov@sberdevices.ru> <20230426095805.15338-7-ddrokosov@sberdevices.ru>
+In-Reply-To: <20230426095805.15338-7-ddrokosov@sberdevices.ru>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Mon, 1 May 2023 21:06:24 +0200
+Message-ID: <CAFBinCA2OhtVaCJDi8ZfAFLSE4oUgxYBDScaP_WW63curEK8Mg@mail.gmail.com>
+Subject: Re: [PATCH v14 6/6] clk: meson: a1: add Amlogic A1 Peripherals clock
+ controller driver
+To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Cc:     neil.armstrong@linaro.org, jbrunet@baylibre.com,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, khilman@baylibre.com,
+        jian.hu@amlogic.com, kernel@sberdevices.ru, rockosov@gmail.com,
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Heiner Kallweit <hkallweit1@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -72,120 +76,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-9pfs can run over assorted transports, so it doesn't have an INET
-dependency.  Drop it and remove the includes of linux/inet.h.
+Hi Dmitry,
 
-This allows configuring 9pfs over Xen with INET disabled.
+overall this looks pretty good.
 
-Signed-off-by: Jason Andryuk <jandryuk@gmail.com>
----
- fs/9p/Kconfig          | 2 +-
- fs/9p/vfs_addr.c       | 1 -
- fs/9p/vfs_dentry.c     | 1 -
- fs/9p/vfs_dir.c        | 1 -
- fs/9p/vfs_file.c       | 1 -
- fs/9p/vfs_inode.c      | 1 -
- fs/9p/vfs_inode_dotl.c | 1 -
- fs/9p/vfs_super.c      | 1 -
- 8 files changed, 1 insertion(+), 8 deletions(-)
++Cc Heiner
 
-diff --git a/fs/9p/Kconfig b/fs/9p/Kconfig
-index d7bc93447c85..0c63df574ee7 100644
---- a/fs/9p/Kconfig
-+++ b/fs/9p/Kconfig
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
- config 9P_FS
- 	tristate "Plan 9 Resource Sharing Support (9P2000)"
--	depends on INET && NET_9P
-+	depends on NET_9P
- 	select NETFS_SUPPORT
- 	help
- 	  If you say Y here, you will get experimental support for
-diff --git a/fs/9p/vfs_addr.c b/fs/9p/vfs_addr.c
-index 6f46d7e4c750..425956eb9fde 100644
---- a/fs/9p/vfs_addr.c
-+++ b/fs/9p/vfs_addr.c
-@@ -12,7 +12,6 @@
- #include <linux/file.h>
- #include <linux/stat.h>
- #include <linux/string.h>
--#include <linux/inet.h>
- #include <linux/pagemap.h>
- #include <linux/sched.h>
- #include <linux/swap.h>
-diff --git a/fs/9p/vfs_dentry.c b/fs/9p/vfs_dentry.c
-index 65fa2df5e49b..f16f73581634 100644
---- a/fs/9p/vfs_dentry.c
-+++ b/fs/9p/vfs_dentry.c
-@@ -13,7 +13,6 @@
- #include <linux/pagemap.h>
- #include <linux/stat.h>
- #include <linux/string.h>
--#include <linux/inet.h>
- #include <linux/namei.h>
- #include <linux/sched.h>
- #include <linux/slab.h>
-diff --git a/fs/9p/vfs_dir.c b/fs/9p/vfs_dir.c
-index 3d74b04fe0de..52bf87934650 100644
---- a/fs/9p/vfs_dir.c
-+++ b/fs/9p/vfs_dir.c
-@@ -13,7 +13,6 @@
- #include <linux/stat.h>
- #include <linux/string.h>
- #include <linux/sched.h>
--#include <linux/inet.h>
- #include <linux/slab.h>
- #include <linux/uio.h>
- #include <linux/fscache.h>
-diff --git a/fs/9p/vfs_file.c b/fs/9p/vfs_file.c
-index 44c15eb2b908..367a851eaa82 100644
---- a/fs/9p/vfs_file.c
-+++ b/fs/9p/vfs_file.c
-@@ -14,7 +14,6 @@
- #include <linux/file.h>
- #include <linux/stat.h>
- #include <linux/string.h>
--#include <linux/inet.h>
- #include <linux/list.h>
- #include <linux/pagemap.h>
- #include <linux/utsname.h>
-diff --git a/fs/9p/vfs_inode.c b/fs/9p/vfs_inode.c
-index 1d523bec0a94..502ac74e4959 100644
---- a/fs/9p/vfs_inode.c
-+++ b/fs/9p/vfs_inode.c
-@@ -15,7 +15,6 @@
- #include <linux/pagemap.h>
- #include <linux/stat.h>
- #include <linux/string.h>
--#include <linux/inet.h>
- #include <linux/namei.h>
- #include <linux/sched.h>
- #include <linux/slab.h>
-diff --git a/fs/9p/vfs_inode_dotl.c b/fs/9p/vfs_inode_dotl.c
-index 331ed60d8fcb..a7da49906d99 100644
---- a/fs/9p/vfs_inode_dotl.c
-+++ b/fs/9p/vfs_inode_dotl.c
-@@ -13,7 +13,6 @@
- #include <linux/pagemap.h>
- #include <linux/stat.h>
- #include <linux/string.h>
--#include <linux/inet.h>
- #include <linux/namei.h>
- #include <linux/sched.h>
- #include <linux/slab.h>
-diff --git a/fs/9p/vfs_super.c b/fs/9p/vfs_super.c
-index 266c4693e20c..10449994a972 100644
---- a/fs/9p/vfs_super.c
-+++ b/fs/9p/vfs_super.c
-@@ -12,7 +12,6 @@
- #include <linux/file.h>
- #include <linux/stat.h>
- #include <linux/string.h>
--#include <linux/inet.h>
- #include <linux/pagemap.h>
- #include <linux/mount.h>
- #include <linux/sched.h>
--- 
-2.40.0
+On Wed, Apr 26, 2023 at 11:58=E2=80=AFAM Dmitry Rokosov
+<ddrokosov@sberdevices.ru> wrote:
+[...]
+> +static struct clk_regmap pwm_a_sel =3D {
+> +       .data =3D &(struct clk_regmap_mux_data){
+> +               .offset =3D PWM_CLK_AB_CTRL,
+> +               .mask =3D 0x1,
+> +               .shift =3D 9,
+> +       },
+> +       .hw.init =3D &(struct clk_init_data){
+> +               .name =3D "pwm_a_sel",
+> +               .ops =3D &clk_regmap_mux_ops,
+> +               .parent_data =3D pwm_abcd_parents,
+> +               .num_parents =3D ARRAY_SIZE(pwm_abcd_parents),
+> +               /* For more information, please refer to rtc clock */
+> +               .flags =3D CLK_SET_RATE_NO_REPARENT,
+Heiner is working on a series that adds common clock support to the
+PWM driver [0].
+I think his plans for a next step are adding support for SoCs where
+the PWM clocks are part of the peripheral clock controller (instead of
+being part of the PWM controller registers).
 
+Have you considered removing CLK_SET_RATE_PARENT from the &rtc clock
+so downstream clocks won't change the rtc clock rate by accident?
+Then we could drop the CLK_SET_RATE_NO_REPARENT flag from the PWM
+clocks to allow them to pick the best available parent (whether that's
+the rtc clock, xtal or sys_pll).
+That said, it would require managing the CLKID_RTC_32K_SEL clock (or
+it's parents) using assigned-clocks instead of doing so with the PWM
+(and other) clocks. Whether this would cause problems: I'm not sure,
+so I'm hoping that you can share some insights.
+
+
+Best regards,
+Martin
+
+
+[0] https://lore.kernel.org/linux-amlogic/9faca2e6-b7a1-4748-7eb0-48f8064e3=
+23e@gmail.com/
