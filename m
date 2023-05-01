@@ -2,133 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8917B6F311D
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 14:44:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D2706F311A
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 14:43:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232654AbjEAMoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 08:44:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37772 "EHLO
+        id S232627AbjEAMnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 08:43:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232636AbjEAMoI (ORCPT
+        with ESMTP id S232621AbjEAMnr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 08:44:08 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2093.outbound.protection.outlook.com [40.107.243.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3E119BD;
-        Mon,  1 May 2023 05:43:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QtyprcsvBtEWHYENq8bh/kF+uHK8CCan/QgT9pK2yaTu41/mrDN+SijcBQ3y9Lwu3pEvtHKeDlC2JgPHo96I5Y3bsiyRBGAtOrW/T+yHhrzaeT87KhWpQu17oooHl8BYP5D8CoQBuIAkx5vejGdba0wyE9c7xYZKhsuhxCR9/YMyUFhDmX5aocsTsmsju5wcsjRLM5NFM4NNPcCQyt3d5+L9EcJafpWadexPGt2Rd6EFVldGeo6jYhwWYximG8MqsT9DM02SDFvRZzXcY9Qx4cH9EkAk91GjyBLUA5QRy5qObMusc/FfVVH6UpfFV5LatVv3lYjoQmF/eU+jHLGz8Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=49enj4bGHVDbPILFVd4Kk2wFJyZsPnu/YCWf0MQVgnE=;
- b=gPWQ42Wv+dNAdT6IPOnYytL1jKNOTKP1NZU1O3y7Cw+e+c0XOgqclssGy3EI7YzXL/9uSbWxra5cDKyTtx9EdM6xlN77FGpWNA+5J4+YNSjaWi7BUgYgU2mT2zLr3ItlB8mvcpp1EC9T5sNQfWwXd8D5hauxKc1s4WCc7LkyT/S/PmvWDQDDmIjb1wBHgs/VdzqXqz+VxLHcdPZDchh1SH9ZFSr8rO0WFVNOFd5p7m7xS8o15bGFIwnk0Jbv4Y+92NBo6R+CrYIxs4djdBlcj1fPAMphBEJ5tZIeISGtbc5pb/jF7axoHOZOtKKsxwraLDzd9h6fHHD1hnBiQVcGNw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Mon, 1 May 2023 08:43:47 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C4261FD8
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 05:43:16 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2a8eb8db083so24151791fa.3
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 05:43:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=49enj4bGHVDbPILFVd4Kk2wFJyZsPnu/YCWf0MQVgnE=;
- b=nTEPAXzMpcm8WXcCTRfdrl/408JMRJn7qmtVTqYybo9+KVRqxIwZBmA2qWO9VC6htBKl4U+u6y3X4bjBDmnTSGXiD1OKIsS8fOEXNS0VnW5qrq7jfqQSq3G0IZG+L97D3iBEDOYTgyQRycfZCRdI6D9F5Hob5+2+kkxlnyMs3EA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by PH0PR13MB5001.namprd13.prod.outlook.com (2603:10b6:510:98::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.30; Mon, 1 May
- 2023 12:42:59 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6340.030; Mon, 1 May 2023
- 12:42:59 +0000
-Date:   Mon, 1 May 2023 14:42:52 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Feng Liu <feliu@nvidia.com>
-Cc:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        Jason Wang <jasowang@redhat.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        William Tu <witu@nvidia.com>, Parav Pandit <parav@nvidia.com>
-Subject: Re: [PATCH net v1 1/2] virtio_net: Fix error unwinding of XDP
- initialization
-Message-ID: <ZE+zzGF3r2Zo7coK@corigine.com>
-References: <20230428223712.67499-1-feliu@nvidia.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230428223712.67499-1-feliu@nvidia.com>
-X-ClientProxiedBy: AM0PR04CA0119.eurprd04.prod.outlook.com
- (2603:10a6:208:55::24) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=linaro.org; s=google; t=1682944993; x=1685536993;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xwPDq5ZTkDVgHb/uQb+f+dVIO2o0aAZpD6P70DMwUWI=;
+        b=Tp4VGH2K/v86k0jAdcITs8TPICO69LbiKCESGpARv9/gOoclKMAqqyzfTaRB0gt82o
+         J+kBvULZzrwHNwzfVgcNzQ20PhoOZ01drUJ4CySFSMzl+8mDACY4l7hXsSOCXYYKe0+m
+         KMXTqB1HlFsDiqf9WWAJLo1PbeJ0QHhWbUJOv1QRaW08BPrVavJeDSuu58oTWcnzy4Ed
+         7PaVTOivdw1qaZGJtAUnMO/1XfoKbk0S0fXDQHM8IgX16H5nG/Zo/u+5JHucub16CcIr
+         foCCCm4d0ueXJWwY+MiizSt2ChiSCB8+1Yn00FnNOYyVGL85djX6t0UjtoI6+XlYUIAr
+         Rx7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682944993; x=1685536993;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xwPDq5ZTkDVgHb/uQb+f+dVIO2o0aAZpD6P70DMwUWI=;
+        b=cDbVGZ5udIau31G+Q3oiw3jRyxXmnNBBTJUuX0GjEsS1nRYe6UJxC8iEy5ZR9Xbmoo
+         eUGhzOfWPEueg5V/xs/SL5MnU2x4cYVn3qJvGUYEeAOZyXttN8ybGBam1f79YT40qXUR
+         DhMJhhsGr2Dk8WPC7oYBcxvrCA49lfLfLIcosGqBJYDlOFPqSMs/f2YO+D6WNRxJBkc8
+         +ofyO7oM9KC/Lu4Yh7oiCQCm4uQeoM7kmvNZgtMpJBcTpXXJPIR4Eo08hewuxKtLGNAT
+         6VmFAAcBWmUPBuPM7kWTxHEZsjmdVd+dhGelRGCa8FAeK479yZ7sD/nuSvUC8YmAQvrM
+         lZ9A==
+X-Gm-Message-State: AC+VfDxTMGZaZe27LxvwwMRGtPawUbbBBYVrRzkvlFDUi9SZMWKKGKQ3
+        IvGvYkc94zOenTwr30a8Ea8Ssw==
+X-Google-Smtp-Source: ACHHUZ780umdJ9HJNYHcxHXY0b4RUYHj7BHsSAwYpBbHxTvtY/ATxjIdot2LYlFfq5/YiDwr0H6ixA==
+X-Received: by 2002:a2e:934c:0:b0:2a7:6e37:ee68 with SMTP id m12-20020a2e934c000000b002a76e37ee68mr3562808ljh.12.1682944992764;
+        Mon, 01 May 2023 05:43:12 -0700 (PDT)
+Received: from [192.168.1.101] (abyl248.neoplus.adsl.tpnet.pl. [83.9.31.248])
+        by smtp.gmail.com with ESMTPSA id d14-20020ac2544e000000b004eb3b6da6f5sm4673288lfn.228.2023.05.01.05.43.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 01 May 2023 05:43:12 -0700 (PDT)
+Message-ID: <d23d3757-da6f-69d7-bca9-581c489f81e6@linaro.org>
+Date:   Mon, 1 May 2023 14:43:11 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH0PR13MB5001:EE_
-X-MS-Office365-Filtering-Correlation-Id: e71a4701-77be-4747-1771-08db4a419867
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ZnUmqdtydCMzYLSfeIj16l+RGgJt34X0yjakPpxNzkwzjCwy/EJVmQOEfW+g7LVwr41VtwwO6NfYs5N1QxOWboBlfEjndjzVA6RuIBGNU45Pv2eLFSM4OGX/rXmXEudr2PYwblfdmQwkFYKHAZitM5lsfcv6cE6ZRnkIokBj8kHxDL9m00iqaC43YUgNWwFjKCaHrxhlJmv17hav5W09HGiP88fVhCCtvl+Fvl7xSzXUIGfIxZXf36ol3Clh/CEp4BWD028b27kP57jYw/GCpKAoft0xiJ7m4G1mPQM4QGm8I1M/u54uvc1QbrqiyEMjgZGjc2C7G29oNcpPbpqGVPw1lS6iSQ7P4PIIgRjil6g2OOdXKQsFtlMRoP8PJOOxN1DhnM3QOqLw24BCJcLrGYYtP1guBoCrniqxtNHl4BxaX5arIgdaGSFSAoTaWV+9wmJUAa4WoNuvL19Va3H8+rzxFcHGp1wqH8ON7a8uMi8iGw9zDssgDkA/2AbbH8gRvCoo03gr8BKRd70SI8L3SaFDpEZ1WoLNBRzOZoDHNDJhNCddn20t6pItT2YRPZNNMjw+8DezZopOv1pOIrs09CC8HzBaKW0Ho1zoN0LDH4OzryUil5q8LY+zQb9FtMQeRUwv8wBwRJ/ttpXPflcNHc8QWaT04nLFrSYyTCRZPU8=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(346002)(136003)(39830400003)(366004)(451199021)(186003)(6512007)(6506007)(7416002)(44832011)(8936002)(8676002)(5660300002)(2616005)(36756003)(54906003)(478600001)(316002)(6916009)(4326008)(66476007)(66946007)(66556008)(86362001)(41300700001)(6666004)(6486002)(38100700002)(2906002)(4744005)(67856001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?HjMSVVX1F5Ayht8PxeAzj6jp9RVZvsINiCxEgQkRkHMmCJmpfdlIAQBJtkNu?=
- =?us-ascii?Q?cu/wihz4OkfttVcNbwW1bIBTLYJqj3e6Oao3I2uQyIUdY6S0fQEgUna/iot3?=
- =?us-ascii?Q?wRgRLivHlxDnSpdeCDH+Xgl8JZOIUheVk4tfmvlcqoU4ajSo+x5WjrGj1JFJ?=
- =?us-ascii?Q?tTvPgos8HX8bf/3uPYOc9QTP0gTbcznh6722RwLp084UpwOP7ZgIG3gvQ/qI?=
- =?us-ascii?Q?zDth/eDhxdtWawHKsoEXcM8aRM2kaFKCP1NoxpGateFjOEytvLeLNab2hMTb?=
- =?us-ascii?Q?EOXygiLND9IBP5ZbW47EvS3nenN/0it/DTyAYbx2Oa5bf92MkL9kXliT9S5y?=
- =?us-ascii?Q?q4aeATBuSte8H7CVxtV4J1ZzVTPCKzaQIX2MKmcS02fNQxPbwp/xnT1lUu3Z?=
- =?us-ascii?Q?GvJJRGg0XXRBTaUIKdcWfwbpS/RnQJxdtAWDxmTkVbN053R1CuibgwuL80Ii?=
- =?us-ascii?Q?6PWW2MtD+B9dzdhbPfu2g0iiCkk7Yl6lHIjtIz2J2Tkzh4gxlTACtVKIqSMk?=
- =?us-ascii?Q?qNtZkyqUpflxgDTh2VsXn7qJc9sai6Osrqg4EWOBerlhb4416C9HohKgDsBd?=
- =?us-ascii?Q?Eq8HVxkPFqpGtsIa6nlmQqtFy7dK5iaygph0PEk4BipmEbiYIu4ZTlC7/nPI?=
- =?us-ascii?Q?K9Ws1LZbd4x12O24+ZAMcSX+VhCs+lWhedMv+ioDP6XqQnO/5AGdWVbHocuV?=
- =?us-ascii?Q?dsmyAoDY7qPwMJoBxXblKeA0KCugdA0GzjOvw6t4xEQb0sl1rPY1/DUOymxP?=
- =?us-ascii?Q?ibNgbSIltjjunRKn8ySFf0B7ybkZblSkIlsY4b24V7C2HvDD8X39TZU/WJl3?=
- =?us-ascii?Q?T2Cf33JL0yE6PMSJ7+E+jO06a8PZgLvYwt3zrjSBbDuYY9OHa582NEhMh1Lr?=
- =?us-ascii?Q?znGOySxNuyd0nOS1iIEu09iphSy7g3AF1gvTyQprkeCmrwcCFP9+CKaWtcCG?=
- =?us-ascii?Q?FCbqmSKK28Dt1uLVy8me7NVbokYfGe96q3vtZOC7tU/Nbz9tiGgX9F7FcOvw?=
- =?us-ascii?Q?epBCnZyfPqAJ5WB40XsCOesZX+4E9ohKYgEaPSfaFRmq2xFaF2VxL2MBlSP2?=
- =?us-ascii?Q?qfMWspSdkSLFJSA0FQvsSVKjRLyJWHiifEiXJCHkWXwu7o8YzAZUvwLoTmFP?=
- =?us-ascii?Q?M/X/cWXcePomWH/rmADJ4ZCto/nSBwBXKePPP+lTM3xttG95x0c3/V8/B3YG?=
- =?us-ascii?Q?1oTLBG0vIyf+g9mIXEmY1cimQZmCNROeL4J67L85txfY8zjTu6qtsHAuwan5?=
- =?us-ascii?Q?ApwVVThhD0aSvn45srnR5I9R7vwOfFeH1z8RK7c355d6hkNKYSZBo7kyFGPF?=
- =?us-ascii?Q?lrxamO19D+K8RjQ+hawRLuRYxKNht3+NS6w0Lrq4pg8QVfVDDkZZ/+LWC2he?=
- =?us-ascii?Q?7H/7jOTSkVK7KjTXYwJxMff86kC583JFMwG8XzKVKMxnmYncyNDzqjYBveY3?=
- =?us-ascii?Q?2QNNTVSMSietKLD0apuAHkqUWFM7FCJmxxfAXGiIIn84ki9UR5+THMV4CSMO?=
- =?us-ascii?Q?DkVwcdbvIYCoQ23HQtKvT2ldX6TrSFOPTMkHTM3uk+vtlX2mViqKjNMl9+X9?=
- =?us-ascii?Q?meW1xNoy+lNYjSh2l31pr8Sicr5CJ/jA3VBPT869NteBTG+oDjW1H8bpnUCV?=
- =?us-ascii?Q?kxDY8aBXjj3c8t9yLJELqg9dZrLwzNeby4RvoVT1zfGuFMNbaLF9VnhECnoS?=
- =?us-ascii?Q?JyGeCg=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e71a4701-77be-4747-1771-08db4a419867
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 May 2023 12:42:59.4543
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KcwBiDgr6jKDPnBcPQRTQMr7B4Xa/i25MfhWiGaVygEizmdMyQezWaO7NZlNyEdHD8l5GrPnOCEh3HqCUhRaPMdDSZQ39jzapS6MiOHqubk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR13MB5001
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH] spi: spi-geni-qcom: Correct CS_TOGGLE bit in
+ SPI_TRANS_CFG
+Content-Language: en-US
+To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
+        agross@kernel.org, andersson@kernel.org, broonie@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     quic_msavaliy@quicinc.com, dianders@chromium.org, mka@chromium.org,
+        swboyd@chromium.org, quic_vtanuku@quicinc.com
+References: <1682412128-1913-1-git-send-email-quic_vnivarth@quicinc.com>
+ <9f28dbff-ca3a-8523-5bfc-37b38bc846c3@linaro.org>
+ <1b1b095e-8fcb-37d5-7542-48a6b55f35a1@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <1b1b095e-8fcb-37d5-7542-48a6b55f35a1@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 06:37:12PM -0400, Feng Liu wrote:
-> When initializing XDP in virtnet_open(), some rq xdp initialization
-> may hit an error causing net device open failed. However, previous
-> rqs have already initialized XDP and enabled NAPI, which is not the
-> expected behavior. Need to roll back the previous rq initialization
-> to avoid leaks in error unwinding of init code.
-> 
-> Fixes: 754b8a21a96d ("virtio_net: setup xdp_rxq_info")
-> Signed-off-by: Feng Liu <feliu@nvidia.com>
-> Reviewed-by: William Tu <witu@nvidia.com>
-> Reviewed-by: Parav Pandit <parav@nvidia.com>
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+
+On 1.05.2023 10:05, Vijaya Krishna Nivarthi wrote:
+> On 4/25/2023 7:15 PM, Konrad Dybcio wrote:
+>>
+>> On 4/25/23 09:42, Vijaya Krishna Nivarthi wrote:
+>>> The CS_TOGGLE bit when set is supposed to instruct FW to
+>>> toggle CS line between words. The driver with intent of
+>>> disabling this behaviour has been unsetting BIT(0). This has
+>>> not caused any trouble so far because the original BIT(1)
+>>> is untouched and BIT(0) likely wasn't being used.
+>>>
+>>> Correct this to prevent a potential future bug.
+>>>
+>>> Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+>>> ---
+>>
+>> Has this always been the case, or did the switch to BIT(1)
+>> only occur on some recent platforms?
+> 
+> 
+> Thank you very much for the review..
+> 
+> This has always been the case.
+> 
+> With intent of disabling CS_TOGGLE, currently, the driver is unsetting BIT(0), though it should have been BIT(1).
+> 
+> Yet no problem was encountered because
+> 
+> a) BIT(0) seems to be an unused bit
+> 
+> b) BIT(1) is probably already unset because its untouched
+> 
+> Further more, as Doug pointed we are mostly using GPIO for CS.
+> 
+> 
+> Testing with the change has not caused any regressions.
+Okay, with no deeper knowledge of the topic best I can give you is:
+
+Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+
+Konrad
+> 
+> 
+> Thank you,
+> 
+> Vijay/
+> 
+> 
+> 
+>>
+>> Konrad
+>>
+>>>   drivers/spi/spi-geni-qcom.c | 2 +-
+>>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
+>>> index ba7be50..8a7d1c2 100644
+>>> --- a/drivers/spi/spi-geni-qcom.c
+>>> +++ b/drivers/spi/spi-geni-qcom.c
+>>> @@ -35,7 +35,7 @@
+>>>   #define CS_DEMUX_OUTPUT_SEL    GENMASK(3, 0)
+>>>     #define SE_SPI_TRANS_CFG    0x25c
+>>> -#define CS_TOGGLE        BIT(0)
+>>> +#define CS_TOGGLE        BIT(1)
+>>>     #define SE_SPI_WORD_LEN        0x268
+>>>   #define WORD_LEN_MSK        GENMASK(9, 0)
