@@ -2,432 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55DB46F339B
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 18:39:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7C1E6F339D
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 18:43:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbjEAQjm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 1 May 2023 12:39:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54752 "EHLO
+        id S232249AbjEAQnH convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 1 May 2023 12:43:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbjEAQjk (ORCPT
+        with ESMTP id S229676AbjEAQnF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 12:39:40 -0400
-Received: from IND01-MAX-obe.outbound.protection.outlook.com (mail-maxind01on2070.outbound.protection.outlook.com [40.107.222.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B26E58
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 09:39:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oXyggMvKkZvr0sD7QgKh7WEsfG6PW9ohgM3zRhr+cv897Wzg4hjamzrcrYQQoIZiycubMUfRUmFRnsfMZV4woonKWv7F9fVsN/xqT61McZl6BHY2tDUIRS2VEI44FpPuSJUQT/e88sQ/P/7nxg3Qd78tRjmMtpEzO0aQupAdRLNDdHCns4bJVUL/fS+lEb+BGFgRSBNFUZopPpmqRMibk9qCJnkXvCpzQgKzvBOADEtoEr9aQIUnGgy5n8+F9MWrdKuVWj90dgWxxyWqxj3kjTJyYQQ835oQxzlxyvKdnb/cXc0aznOofNJoLortv2NpexPPYn9XZ3fGAE/61sm17Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/szcFTppAsj9CSQa2rC65pTmBwWNAETs+N5II3wQZxA=;
- b=DrAPdcw8xJ+ehYlULpNG9m9M/sn2v05i/BhOx5aIUs3vG0AC0MUey/94qknMORvEPdwuBXZ+tYL80ElPmf3L0At/2Od9DzsKw8RC1Nm75kRbfhyim6sfdkKopdeFPJhCRxqS+vSy3S28yGiapMZVKq7NP9gVEb4qT17T1ZswBQ7Tt27zOYX4h6n4OR5ntRVLzXl2zFIRNKsY6DgXWoMPzcbgvNuA9qOBWOeMIA2kWIzJmAg7ZbUKOvY85/roYe7avd2/yqqXA4KTivKzihPC2BRcH9KLxARMOGxn0RO/7dbQY6Y8etyl2edvgjpkeU7C39VtQjy8Pluq9Od8zxH13g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siliconsignals.io; dmarc=pass action=none
- header.from=siliconsignals.io; dkim=pass header.d=siliconsignals.io; arc=none
-Received: from BM1PR01MB4899.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b01:b::15)
- by PNYPR01MB8335.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:54::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.30; Mon, 1 May
- 2023 16:39:35 +0000
-Received: from BM1PR01MB4899.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::a54e:e611:b89d:7470]) by BM1PR01MB4899.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::a54e:e611:b89d:7470%6]) with mapi id 15.20.6340.030; Mon, 1 May 2023
- 16:39:35 +0000
-From:   Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>
-CC:     "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "linux-imx@nxp.com" <linux-imx@nxp.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: [PATCH V2] arm64: dts: Add a device tree file for Emtop SOM IMX8MM
-Thread-Topic: [PATCH V2] arm64: dts: Add a device tree file for Emtop SOM
- IMX8MM
-Thread-Index: AQHZfEtegpDM2nagJ0q1JDDmkpZEPw==
-Date:   Mon, 1 May 2023 16:39:35 +0000
-Message-ID: <BM1PR01MB4899A5B20580E5988FBF80EA9A6E9@BM1PR01MB4899.INDPRD01.PROD.OUTLOOK.COM>
-Accept-Language: en-GB, en-US
-Content-Language: en-GB
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=siliconsignals.io;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BM1PR01MB4899:EE_|PNYPR01MB8335:EE_
-x-ms-office365-filtering-correlation-id: ae471e3c-fca2-43ca-c44d-08db4a62a5fb
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: GxffOLvGMXQvX7bXlBKDyQYYX3YEei7iEMM8iac+3QEQeGbBqTAU+Rio1VVhdkyRLcnV8WgZ+C0c1wVp4uX/NvMSpXV+COU2pGitwg3mnGpfkoXlfJ98vubcSueJGdvjPvvbj/PDDw/qCjdWfror/GS0yGEKLJOz2fbnsXe5LlX6dEpoC1gW9P1UtEEgMakHv1NLfUHOO5dZOx/lr/e0YzmCSYtw/rx4c8hBQT/6ZYAbesXTmck+UQXcBaqwDz0aG0tMAjWRTjBXdEWrq1SyoVb4lIj7STllviYcxXW8bz0bFinPbh1/HtnG6XM8NqJ4NOz7wNSYqxLBWaENpRGrcWYrQ2vyldGXzgPHL09updWSYoR+zBOBJcQVtpiUeJhgQXyRSW4D7SB7Wot6Ow2p1HmsnEfBP7K/g0VXCN0G8Uj2Ipa60q2HlsU1ZuGHO6HuHPwaYK/xdIkxZv9KXmRgixVAFftPfDyX0aioc2c5o+dU3dsMIJEDh3fQmud/ULIhNfHbs+B5ISYD1zq7k3ge6gJJAqdxJeBPfrKAZ4xO/08XAusSs5rW6wlhHivSt9E9V7W4OlE53j/gWAXwIBUfbj9KbbewAOH7ND0ErEpFFt7CnvJPtNyq4B1xNao3i2+xl352ePBv1z3n6Gk8n9xx6Q==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BM1PR01MB4899.INDPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(396003)(346002)(366004)(376002)(136003)(39830400003)(451199021)(55016003)(316002)(4326008)(9686003)(6506007)(53546011)(186003)(41300700001)(83380400001)(66946007)(478600001)(54906003)(26005)(110136005)(71200400001)(7696005)(66446008)(66556008)(64756008)(66476007)(38100700002)(76116006)(2906002)(122000001)(86362001)(33656002)(38070700005)(7416002)(8936002)(44832011)(8676002)(52536014)(5660300002)(32563001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?v6lgaNesP+dXQro6gf+TWpiuCDl5miYgy/ztm52zprgZaAVGAIBoGYnMmG?=
- =?iso-8859-1?Q?U70wE/9GmLFt9Ynn5g2bzDL5EbYwfhSLa/t+/6SbpF4rPgRBTVBYto+30M?=
- =?iso-8859-1?Q?cIBDaz8BeKYmZ2dM3YZKMnRFef8iews70wZ0xS/xP67Zhl9baGgJH5Wivf?=
- =?iso-8859-1?Q?wdZ9vGTC6MLL5atdvz0MKCgNnL8jLM2uPUsYZfuw4ivR6pIUFZZzbucI7z?=
- =?iso-8859-1?Q?onc3z76vAdoSF6TE8NFazyce/WxtA4Kpb52Piz09+sMn3w45q8wFiQPWkq?=
- =?iso-8859-1?Q?+73xMe1vbmn3S2VXGIb1aK7ejl/1NdvilA8C8L7qcRTMfwTz6Xs7krhjKR?=
- =?iso-8859-1?Q?ZBx60uHBhhAzpgFX409Ru5y5e65zQVCmFQSKv7ZQW3oBtw3C1w9oMsnf9+?=
- =?iso-8859-1?Q?wVOrLByJTxCXYBoqXugN7iEn+dKrw9nxXqllmNkNk8sTknO98eizyVxF6u?=
- =?iso-8859-1?Q?4AE1E+RI6nojqDeE9zVbS/uME4z9hAx99GWztyWCXneM9cmPwW1Ax84W+b?=
- =?iso-8859-1?Q?easVXg88nk422Q1KFc/8vmeiJD5algg4eTvrZlH9fcESwSTtp7ojHtCJIs?=
- =?iso-8859-1?Q?lqK6jhJSsTFAM9wRgkejYdMGVsutVd7skQuZAEsa0GKUxZCAnmTyfQq1Dh?=
- =?iso-8859-1?Q?rt12cAkRVTXyspiA+RZu10oWhRXRRXDD2UChb/SVWk0u6R2SheFcyH58D0?=
- =?iso-8859-1?Q?kOv/fNsI/xNeZ9Y46AMxfRLoQL6stqt1BKyOABEpoRy58DczraL/xPRNXS?=
- =?iso-8859-1?Q?slrFERh0lyr8JWhyuXVyOerOl1NmoVCqFx0R0ocfZHRsT0VXLxGXYYjP0x?=
- =?iso-8859-1?Q?+6MV/ri/INtotfd0JyAPBqQk9qPkL+cvZwF3jgKQ0UpJb4dSjMbYGa1RBn?=
- =?iso-8859-1?Q?ihgm0AVVC93fhp4wSNVGkiD6myFtfXzsyqRoi1ZjRHcivUAmJuw2bf408L?=
- =?iso-8859-1?Q?vDq4p/CGae/VeVUpW+sxvm4gPBzjlHlL5YEXskAamWrko1TDHjzjV3bVUL?=
- =?iso-8859-1?Q?2MjGWa5SrqogHvq3IcA5C2MwwXmbDJh4CadfgWZnHaFugQU9Gq/NARzYvi?=
- =?iso-8859-1?Q?lL5gaJ/oZH+YTUa+3ompqwaKrhbkvWt4EOW/O+MK01kPGzPEITAdxffZun?=
- =?iso-8859-1?Q?QqtV4Hgni2CtiT5Mz/9ICHgsJEMJc4pmDqkvd08du6ts5yzGE06FZKlJmE?=
- =?iso-8859-1?Q?garqtAYgD8nfoED7nauO/o6ZthKCcwZvrBj/NpoMb6D4HYvOhurbbBcFfT?=
- =?iso-8859-1?Q?uv5oVeXJ7hT4vObpkde1Hh6d1bCLlOacQiBH4hD3L+SaSDXHldeJWhNEaz?=
- =?iso-8859-1?Q?YYy7SptZvxIjDesaa0/cpBS9WAvGffOKyoxmEXdLV22SAf3NO/aWbnQIkT?=
- =?iso-8859-1?Q?b0I2L9HuAVMRN7AT7jU8oBWNiGuDLNerFBXayAjtHv3WCauHJRsWk6qAK6?=
- =?iso-8859-1?Q?yklyeNIOLxAFEtgGYJfVEFsXQdPgVSRZFCGgiZ5aawx3Ea4gCDsyqZeSbC?=
- =?iso-8859-1?Q?j4PEZVxCWNJ3v6K0HfjgdjWEuApd1zYQMkY9x/4wKh/UACHCNdU8yGar2h?=
- =?iso-8859-1?Q?xEs/Hz1WapYGoXy27rQ8CUOzr2GA0fT2LJxuhe06FKCuBWIgTFUzbkl17i?=
- =?iso-8859-1?Q?csKbZqKqNND+Jg0zhsaM16PTB7TLqzouAtVM6BwZSp5lAfWRjc77Dw884n?=
- =?iso-8859-1?Q?p4taCpVsi1XANKLkXt0=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
+        Mon, 1 May 2023 12:43:05 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 117B8E58
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 09:43:03 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-7638744ba8cso163804139f.0
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 09:43:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682959382; x=1685551382;
+        h=content-transfer-encoding:to:from:subject:message-id:date
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GEenIJauIMAGY3HMHxVT/vunQXlXGIGzHQZFgMgclkk=;
+        b=KE9yI4Yc53q9ZQtTyFMpaxPP7TiUDpfEbN4cUX/JnMGX+dQvSc8hcl5Cg9DFZQ395g
+         lxjHXwNcbbWEXVPK/WE9OE/u7EphgeeJYD8pD4XL1IQ14STcPCyMSXYmnP+vSvye7baY
+         HzcsjLoZNYDEuijc58QW8n43BnUHtDdc/0rgHIf0VCRzgFVsuzt+x07sBFTOekKJ/pqi
+         /1P5q6/OC2uYWZsO3TjKmScDDQD1oazAD0gm5mQz73+RWPHwuFmQO9ivNmzQTcbsunot
+         g+zl+KeFT4pzqmStaS53aithwqnxqoH+iuuZsb9jynIbrjhji/dV+DRJhpL0nNS8vnld
+         x0rQ==
+X-Gm-Message-State: AC+VfDwaBhdu97035yB1cRUKdbK+/7h4BA0dLq5hAAn9R0klJPkdUgYE
+        N6+XlUCl+CWllgcExuv0dLraT2zd8/hITFazZo7fza87hTp6
+X-Google-Smtp-Source: ACHHUZ5H+dQBRnG2cj6yfaeLSBfEVq8IGIIdryufsZLEH9rMB1lEW1ftKVAmzsP4UDb6jGNIKS6eCryKKlolY6Jo0LYVDWve0bj+
 MIME-Version: 1.0
-X-OriginatorOrg: siliconsignals.io
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BM1PR01MB4899.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: ae471e3c-fca2-43ca-c44d-08db4a62a5fb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 May 2023 16:39:35.4526
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 7ec5089e-a433-4bd1-a638-82ee62e21d37
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: jETr5M3uN0VeACBl6AJiMxld+IYhcvO2xuXT/eeNPisg7ZAK4yEglqFTsGHeu7qF0qWTM5SQWyMYV9jG0Fn7TpgML0ChmeDBm/3Qwv9s+CVmPPft6BFr2tNf6HIxmr12
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PNYPR01MB8335
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:6f0d:0:b0:40f:9859:1fa3 with SMTP id
+ x13-20020a026f0d000000b0040f98591fa3mr5959455jab.2.1682959382353; Mon, 01 May
+ 2023 09:43:02 -0700 (PDT)
+Date:   Mon, 01 May 2023 09:43:02 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000281ae805faa4844e@google.com>
+Subject: [syzbot] upstream boot error: BUG: unable to handle kernel NULL
+ pointer dereference in psi_task_switch
+From:   syzbot <syzbot+0827f43974813b74e6db@syzkaller.appspotmail.com>
+To:     bristot@redhat.com, bsegall@google.com, dietmar.eggemann@arm.com,
+        hannes@cmpxchg.org, juri.lelli@redhat.com,
+        linux-kernel@vger.kernel.org, mgorman@suse.de, mingo@redhat.com,
+        peterz@infradead.org, rostedt@goodmis.org, surenb@google.com,
+        syzkaller-bugs@googlegroups.com, vincent.guittot@linaro.org,
+        vschneid@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From 33b96ec2602598f2a29e876c1f83b101d88faf2e Mon Sep 17 00:00:00 2001
-From: Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>
-Date: Mon, 1 May 2023 21:50:44 +0530
-Subject: [PATCH] Added dts for describing the Emtop SOM-IMX8MM
+Hello,
 
-Changes in v2:
-	- Update dtb add order in Makefile
-	- Update bindings
-	- Update proper prefix/name in dts
-	- Removed stray blank line
-	- Add pinctrl-names in pmic node
+syzbot found the following issue on:
 
-Signed-off-by: Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>
+HEAD commit:    89d77f71f493 Merge tag 'riscv-for-linus-6.4-mw1' of git://..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1113550c280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4cc65ccad523b604
+dashboard link: https://syzkaller.appspot.com/bug?extid=0827f43974813b74e6db
+compiler:       arm-linux-gnueabi-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm
 
-diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-index 198fff3731ae..36590515fbc1 100644
---- a/arch/arm64/boot/dts/freescale/Makefile
-+++ b/arch/arm64/boot/dts/freescale/Makefile
-@@ -54,6 +54,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mm-beacon-kit.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-data-modul-edm-sbc.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-ddr4-evk.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-emcon-avari.dtb
-+dtb-$(CONFIG_ARCH_MXC) += imx8mm-emtop.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-evk.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-icore-mx8mm-ctouch2.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-icore-mx8mm-edimm2.2.dtb
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-emtop.dts b/arch/arm64/boot/dts/freescale/imx8mm-emtop.dts
-new file mode 100644
-index 000000000000..5c569bbedc69
---- /dev/null
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-emtop.dts
-@@ -0,0 +1,276 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright 2023 Emtop
-+ */
-+
-+/dts-v1/;
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/leds/common.h>
-+#include <dt-bindings/usb/pd.h>
-+
-+#include "imx8mm.dtsi"
-+
-+/ {
-+	model = "Emtop SOM i.MX8MM";
-+	compatible = "emtop,imx8mm-emtop", "fsl,imx8mm";
-+
-+	chosen {
-+		stdout-path = &uart2;
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_gpio_led>;
-+		
-+		led-0 {
-+			function = LED_FUNCTION_POWER;
-+			gpios = <&gpio3 16 GPIO_ACTIVE_HIGH>;
-+			linux,default-trigger = "heartbeat";
-+		};
-+	};
-+/*	leds {
-+		compatible = "gpio-leds";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_gpio_led>;
-+
-+		sys {
-+			label = "sys";
-+			gpios = <&gpio3 16 GPIO_ACTIVE_HIGH>;
-+			linux,default-trigger = "heartbeat";
-+		};
-+	};*/
-+};
-+
-+&A53_0 {
-+	cpu-supply = <&buck2>;
-+};
-+
-+&A53_1 {
-+        cpu-supply = <&buck2>;
-+};
-+ 
-+&A53_2 {
-+        cpu-supply = <&buck2>;
-+};
-+
-+&A53_3 {
-+        cpu-supply = <&buck2>;
-+};
-+
-+&uart2 { /* console */
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_uart2>;
-+	status = "okay";
-+};
-+
-+/* eMMC */
-+&usdhc3 {
-+	pinctrl-names = "default", "state_100mhz", "state_200mhz";
-+	pinctrl-0 = <&pinctrl_usdhc3>;
-+	pinctrl-1 = <&pinctrl_usdhc3_100mhz>;
-+	pinctrl-2 = <&pinctrl_usdhc3_200mhz>;
-+	bus-width = <8>;
-+	non-removable;
-+	status = "okay";
-+};
-+
-+&wdog1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_wdog>;
-+	fsl,ext-reset-output;
-+	status = "okay";
-+};
-+
-+&i2c1 {
-+	clock-frequency = <400000>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_i2c1>;
-+	status = "okay";
-+
-+	pmic@25 {
-+		compatible = "nxp,pca9450";
-+		reg = <0x25>;
-+		pinctrl-names = "default";
-+		/* PMIC PCA9450 PMIC_nINT GPIO1_IO3 */
-+		pinctrl-0 = <&pinctrl_pmic>;
-+		interrupt-parent = <&gpio1>;
-+		interrupts = <3 IRQ_TYPE_EDGE_RISING>;
-+
-+		regulators {
-+			buck1: BUCK1 {
-+				regulator-compatible = "BUCK1";
-+				regulator-min-microvolt = <800000>;
-+				regulator-max-microvolt = <1000000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+				regulator-ramp-delay = <3125>;
-+			};
-+
-+			buck2: BUCK2 {
-+				regulator-compatible = "BUCK2";
-+				regulator-min-microvolt = <800000>;
-+				regulator-max-microvolt = <900000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+				regulator-ramp-delay = <3125>;
-+			};
-+
-+			buck3: BUCK3 {
-+				regulator-compatible = "BUCK3";
-+				regulator-min-microvolt = <800000>;
-+				regulator-max-microvolt = <1000000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			buck4: BUCK4 {
-+				regulator-compatible = "BUCK4";
-+				regulator-min-microvolt = <3000000>;
-+				regulator-max-microvolt = <3600000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			buck5: BUCK5 {
-+				regulator-compatible = "BUCK5";
-+				regulator-min-microvolt = <1650000>;
-+				regulator-max-microvolt = <1950000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			buck6: BUCK6 {
-+				regulator-compatible = "BUCK6";
-+				regulator-min-microvolt = <1100000>;
-+				regulator-max-microvolt = <1200000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			ldo1: LDO1 {
-+				regulator-compatible = "LDO1";
-+				regulator-min-microvolt = <1650000>;
-+				regulator-max-microvolt = <1950000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			ldo2: LDO2 {
-+				regulator-compatible = "LDO2";
-+				regulator-min-microvolt = <800000>;
-+				regulator-max-microvolt = <945000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			ldo3: LDO3 {
-+				regulator-compatible = "LDO3";
-+				regulator-min-microvolt = <1710000>;
-+				regulator-max-microvolt = <1890000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			ldo4: LDO4 {
-+				regulator-compatible = "LDO4";
-+				regulator-min-microvolt = <810000>;
-+				regulator-max-microvolt = <945000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			ldo5: LDO5 {
-+				regulator-compatible = "LDO5";
-+				regulator-min-microvolt = <1650000>;
-+				regulator-max-microvolt = <3600000>;
-+			};
-+		};
-+	};
-+};
-+
-+&iomuxc {
-+	pinctrl-names = "default";
-+
-+	pinctrl_gpio_led: gpioledgrp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_NAND_READY_B_GPIO3_IO16			0x19
-+			MX8MM_IOMUXC_SAI3_RXC_GPIO4_IO29			0x19
-+		>;
-+	};
-+
-+	pinctrl_i2c1: i2c1grp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_I2C1_SCL_I2C1_SCL				0x400001c3
-+			MX8MM_IOMUXC_I2C1_SDA_I2C1_SDA				0x400001c3
-+		>;
-+	};
-+
-+	pinctrl_pmic: pmicirq {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_GPIO1_IO03_GPIO1_IO3			0x41
-+		>;
-+	};
-+
-+	pinctrl_uart2: uart2grp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_UART2_RXD_UART2_DCE_RX			0x140
-+			MX8MM_IOMUXC_UART2_TXD_UART2_DCE_TX			0x140
-+		>;
-+	};
-+
-+	pinctrl_usdhc3: usdhc3grp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_NAND_WE_B_USDHC3_CLK			0x190
-+			MX8MM_IOMUXC_NAND_WP_B_USDHC3_CMD			0x1d0
-+			MX8MM_IOMUXC_NAND_DATA04_USDHC3_DATA0			0x1d0
-+			MX8MM_IOMUXC_NAND_DATA05_USDHC3_DATA1			0x1d0
-+			MX8MM_IOMUXC_NAND_DATA06_USDHC3_DATA2			0x1d0
-+			MX8MM_IOMUXC_NAND_DATA07_USDHC3_DATA3			0x1d0
-+			MX8MM_IOMUXC_NAND_RE_B_USDHC3_DATA4			0x1d0
-+			MX8MM_IOMUXC_NAND_CE2_B_USDHC3_DATA5			0x1d0
-+			MX8MM_IOMUXC_NAND_CE3_B_USDHC3_DATA6			0x1d0
-+			MX8MM_IOMUXC_NAND_CLE_USDHC3_DATA7			0x1d0
-+			MX8MM_IOMUXC_NAND_CE1_B_USDHC3_STROBE			0x190
-+		>;
-+	};
-+
-+	pinctrl_usdhc3_100mhz: usdhc3grp100mhz {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_NAND_WE_B_USDHC3_CLK			0x194
-+			MX8MM_IOMUXC_NAND_WP_B_USDHC3_CMD			0x1d4
-+			MX8MM_IOMUXC_NAND_DATA04_USDHC3_DATA0			0x1d4
-+			MX8MM_IOMUXC_NAND_DATA05_USDHC3_DATA1			0x1d4
-+			MX8MM_IOMUXC_NAND_DATA06_USDHC3_DATA2			0x1d4
-+			MX8MM_IOMUXC_NAND_DATA07_USDHC3_DATA3			0x1d4
-+			MX8MM_IOMUXC_NAND_RE_B_USDHC3_DATA4			0x1d4
-+			MX8MM_IOMUXC_NAND_CE2_B_USDHC3_DATA5			0x1d4
-+			MX8MM_IOMUXC_NAND_CE3_B_USDHC3_DATA6			0x1d4
-+			MX8MM_IOMUXC_NAND_CLE_USDHC3_DATA7			0x1d4
-+			MX8MM_IOMUXC_NAND_CE1_B_USDHC3_STROBE			0x194
-+		>;
-+	};
-+
-+	pinctrl_usdhc3_200mhz: usdhc3grp200mhz {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_NAND_WE_B_USDHC3_CLK			0x196
-+			MX8MM_IOMUXC_NAND_WP_B_USDHC3_CMD			0x1d6
-+			MX8MM_IOMUXC_NAND_DATA04_USDHC3_DATA0			0x1d6
-+			MX8MM_IOMUXC_NAND_DATA05_USDHC3_DATA1			0x1d6
-+			MX8MM_IOMUXC_NAND_DATA06_USDHC3_DATA2			0x1d6
-+			MX8MM_IOMUXC_NAND_DATA07_USDHC3_DATA3			0x1d6
-+			MX8MM_IOMUXC_NAND_RE_B_USDHC3_DATA4			0x1d6
-+			MX8MM_IOMUXC_NAND_CE2_B_USDHC3_DATA5			0x1d6
-+			MX8MM_IOMUXC_NAND_CE3_B_USDHC3_DATA6			0x1d6
-+			MX8MM_IOMUXC_NAND_CLE_USDHC3_DATA7			0x1d6
-+			MX8MM_IOMUXC_NAND_CE1_B_USDHC3_STROBE 			0x196
-+		>;
-+	};
-+
-+	pinctrl_wdog: wdoggrp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_GPIO1_IO02_WDOG1_WDOG_B			0xc6
-+		>;
-+	};
-+};
--- 
-2.25.1
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+0827f43974813b74e6db@syzkaller.appspotmail.com
+
+Movable zone start for each node
+Early memory node ranges
+  node   0: [mem 0x0000000080000000-0x00000000ffffffff]
+Initmem setup node 0 [mem 0x0000000080000000-0x00000000ffffffff]
+percpu: Embedded 19 pages/cpu s47048 r8192 d22584 u77824
+Kernel command line: root=/dev/vda console=ttyAMA0  earlyprintk=serial net.ifnames=0 sysctl.kernel.hung_task_all_cpu_backtrace=1 ima_policy=tcb nf-conntrack-ftp.ports=20000 nf-conntrack-tftp.ports=20000 nf-conntrack-sip.ports=20000 nf-conntrack-irc.ports=20000 nf-conntrack-sane.ports=20000 binder.debug_mask=0 rcupdate.rcu_expedited=1 rcupdate.rcu_cpu_stall_cputime=1 no_hash_pointers page_owner=on sysctl.vm.nr_hugepages=4 sysctl.vm.nr_overcommit_hugepages=4 secretmem.enable=1 sysctl.max_rcu_stall_to_panic=1 msr.allow_writes=off coredump_filter=0xffff root=/dev/vda console=ttyAMA0 vmalloc=512M smp.csd_lock_timeout=300000 watchdog_thresh=165 workqueue.watchdog_thresh=420 sysctl.net.core.netdev_unregister_timeout_secs=420 dummy_hcd.num=2 panic_on_warn=1
+Unknown kernel command line parameters "earlyprintk=serial page_owner=on", will be passed to user space.
+Dentry cache hash table entries: 262144 (order: 8, 1048576 bytes, linear)
+Inode-cache hash table entries: 131072 (order: 7, 524288 bytes, linear)
+Built 1 zonelists, mobility grouping on.  Total pages: 520868
+allocated 2097152 bytes of page_ext
+mem auto-init: stack:off, heap alloc:on, heap free:off
+software IO TLB: area num 2.
+software IO TLB: mapped [mem 0x00000000d9a47000-0x00000000dda47000] (64MB)
+Memory: 1952320K/2097152K available (24576K kernel code, 2362K rwdata, 8400K rodata, 2048K init, 867K bss, 128448K reserved, 16384K cma-reserved, 524288K highmem)
+SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=2, Nodes=1
+trace event string verifier disabled
+rcu: Preemptible hierarchical RCU implementation.
+rcu: 	RCU restricting CPUs from NR_CPUS=8 to nr_cpu_ids=2.
+rcu: 	RCU callback double-/use-after-free debug is enabled.
+	All grace periods are expedited (rcu_expedited).
+	Trampoline variant of Tasks RCU enabled.
+	Tracing variant of Tasks RCU enabled.
+rcu: RCU calculated value of scheduler-enlistment delay is 10 jiffies.
+rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=2
+NR_IRQS: 16, nr_irqs: 16, preallocated irqs: 16
+GIC physical location is 0x2c001000
+rcu: srcu_init: Setting srcu_struct sizes based on contention.
+sched_clock: 32 bits at 24MHz, resolution 41ns, wraps every 89478484971ns
+clocksource: arm,sp804: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 1911260446275 ns
+arch_timer: cp15 timer(s) running at 62.50MHz (virt).
+clocksource: arch_sys_counter: mask: 0x1ffffffffffffff max_cycles: 0x1cd42e208c, max_idle_ns: 881590405314 ns
+sched_clock: 57 bits at 63MHz, resolution 16ns, wraps every 4398046511096ns
+Switching to timer-based delay loop, resolution 16ns
+Console: colour dummy device 80x30
+Calibrating delay loop (skipped), value calculated using timer frequency.. 125.00 BogoMIPS (lpj=625000)
+pid_max: default: 32768 minimum: 301
+LSM: initializing lsm=lockdown,capability,landlock,yama,safesetid,tomoyo,selinux,bpf,integrity
+landlock: Up and running.
+Yama: becoming mindful.
+TOMOYO Linux initialized
+SELinux:  Initializing.
+LSM support for eBPF active
+stackdepot: allocating hash table of 131072 entries via kvcalloc
+Mount-cache hash table entries: 4096 (order: 2, 16384 bytes, linear)
+Mountpoint-cache hash table entries: 4096 (order: 2, 16384 bytes, linear)
+CPU: Testing write buffer coherency: ok
+CPU0: Spectre BHB: enabling loop workaround for all CPUs
+CPU1: thread -1, cpu 1, socket 0, mpidr 80000001
+8<--- cut here ---
+Unable to handle kernel NULL pointer dereference at virtual address 0000001c when read
+[0000001c] *pgd=80000080004003, *pmd=00000000
+Internal error: Oops: 206 [#1] PREEMPT SMP ARM
+Modules linked in:
+CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.3.0-syzkaller #0
+Hardware name: ARM-Versatile Express
+PC is at psi_task_switch+0x1e0/0x204 kernel/sched/psi.c:940
+LR is at psi_task_switch+0x190/0x204 kernel/sched/psi.c:932
+pc : [<802a3c58>]    lr : [<802a3c08>]    psr: a0000193
+sp : 82601e70  ip : 5b923000  fp : 82601ebc
+r10: 8261ae40  r9 : 00000001  r8 : 00000002
+r7 : 1b5aa6f1  r6 : 00000000  r5 : 8260c964  r4 : 00000000
+r3 : 826f6748  r2 : 8309d13c  r1 : 00000000  r0 : 00000000
+Flags: NzCv  IRQs off  FIQs on  Mode SVC_32  ISA ARM  Segment user
+Control: 30c5387d  Table: 80003000  DAC: fffffffd
+Register r0 information:
+8<--- cut here ---
+Unable to handle kernel paging request at virtual address 00802158 when read
+[00802158] *pgd=80000080004003, *pmd=00000000
+Internal error: Oops: 206 [#2] PREEMPT SMP ARM
+Modules linked in:
+CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.3.0-syzkaller #0
+Hardware name: ARM-Versatile Express
+PC is at __find_vmap_area mm/vmalloc.c:841 [inline]
+PC is at find_vmap_area mm/vmalloc.c:1862 [inline]
+PC is at find_vm_area mm/vmalloc.c:2623 [inline]
+PC is at vmalloc_dump_obj+0x38/0xb4 mm/vmalloc.c:4221
+LR is at __raw_spin_lock include/linux/spinlock_api_smp.h:132 [inline]
+LR is at _raw_spin_lock+0x18/0x58 kernel/locking/spinlock.c:154
+pc : [<80479e58>]    lr : [<81800154>]    psr: 20000193
+sp : 82601cd8  ip : 82601cc0  fp : 82601cec
+r10: 8261ae40  r9 : 8261c9a4  r8 : 8284f41c
+r7 : 60000193  r6 : 00000001  r5 : 00000000  r4 : 00802160
+r3 : f0830b42  r2 : 00001ef5  r1 : 00000000  r0 : 00000001
+Flags: nzCv  IRQs off  FIQs on  Mode SVC_32  ISA ARM  Segment user
+Control: 30c5387d  Table: 80003000  DAC: fffffffd
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
