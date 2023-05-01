@@ -2,133 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97E806F31FE
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 16:33:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1331A6F3205
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 16:35:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232070AbjEAOdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 10:33:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45438 "EHLO
+        id S232439AbjEAOfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 10:35:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjEAOdC (ORCPT
+        with ESMTP id S229556AbjEAOfh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 10:33:02 -0400
-Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B96791A1
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 07:32:59 -0700 (PDT)
-Received: by mail-il1-f207.google.com with SMTP id e9e14a558f8ab-32afe238257so15002225ab.3
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 07:32:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682951579; x=1685543579;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=P/+2cE3z0lhFjJbQiqH+I4CrwDRwNUiZcC7hmNJYW8A=;
-        b=IlivzTy7mFjCtQbf9h/+jgCGmW+mrsZbhnvXPAMkFbngkacOyyer6wbMtrwJbv2D22
-         v1e1gSiBsHYgx4azfk6cS+6GWdrF5kzsVAe0Bwp1WeR3tH2lZDxpqm6Vu7f791UtfJnD
-         DmQrcqf8ZVqVDs5w6AbDGKPI54IFomNCu1qp4svNCD+ldNd71nPaUkVHyEwiW7RbFVIy
-         k91D+rM1cv7KwJkWFLeD29DHnD78g1vsZV8E+D95B5psx8FoCy8MYyH4rCtiZjjId3Aj
-         4u0rEHuqjR0GoREoA/NF0Q2vePirv4MGmWcQNPnF2M6JGh55aq7cEbcrMyVoFAf9cNWm
-         14SQ==
-X-Gm-Message-State: AC+VfDzTzE/BiKIpWexxKbFlS5UgcKlPYUufwDGf5og2av2JLIKvYea6
-        pJftoKox2j8rfap7jmWl7OBohM3hUZGbdQ8YvKjL5QPlIgfk
-X-Google-Smtp-Source: ACHHUZ7DsuxZyoa81uiXdIozGw32ivqgikl7MTNF7YLxBS3TNpQmsmoQ2mMfQ+ius/6AArevc1fkfTOzPrHeH348q+hxz4yeZBE1
+        Mon, 1 May 2023 10:35:37 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5C7134;
+        Mon,  1 May 2023 07:35:35 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 341ELZnA000325;
+        Mon, 1 May 2023 14:35:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=E6TfuQFI0dUkNEIv9TZPGXgZ2terHGZLiSlaLnzVKf8=;
+ b=oDh+u3TGzoxD6+/gvJ2Q46HBcWW/oRQEfUwujfHAKo/L6lJfdS3t9Md1RkoK7Q3fgrRK
+ vM641RH6XmjJ49IVCFO7/k8qydKScibMdEab8A8nXAv2kpnksaOfxxgCdGjU9GmaAmXA
+ PuPiJX4qjVPyzCzwk1pHdNVCd/xKNF79GdPrNBTnfsFMMr2HwOTVw24nu+29l8ulOmGb
+ b1bAjwlj/qxny3ufEYiTyjOl9VsFaVNwFUS9PWAazP+HhxSE+kL+et5WqKNfwQeFTTT0
+ S6s/vFeei/vJHLCVlRKiBs9OHbI4ykp8UBdmCunNHVNv+5w91MOMGNa3LzURBdfq3pO5 7g== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q8t8ubrqv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 01 May 2023 14:35:02 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 341EZ0oP015266
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 1 May 2023 14:35:01 GMT
+Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Mon, 1 May 2023 07:34:54 -0700
+From:   Krishna Kurapati <quic_kriskura@quicinc.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Andy Gross" <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
+        <quic_jackp@quicinc.com>, <quic_harshq@quicinc.com>,
+        <ahalaney@redhat.com>, <quic_shazhuss@quicinc.com>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>
+Subject: [PATCH v7 0/9] Add multiport support for DWC3 controllers
+Date:   Mon, 1 May 2023 20:04:36 +0530
+Message-ID: <20230501143445.3851-1-quic_kriskura@quicinc.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-X-Received: by 2002:a92:c90e:0:b0:32b:1c9f:3c48 with SMTP id
- t14-20020a92c90e000000b0032b1c9f3c48mr7029883ilp.1.1682951579100; Mon, 01 May
- 2023 07:32:59 -0700 (PDT)
-Date:   Mon, 01 May 2023 07:32:59 -0700
-In-Reply-To: <0000000000007fcc9c05f909f7f3@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000bf02a05faa2b3d2@google.com>
-Subject: Re: [syzbot] [reiserfs?] KASAN: null-ptr-deref Read in fix_nodes
-From:   syzbot <syzbot+5184326923f180b9d11a@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: S5s6Cq-jGvbWsMG8EwsTwojfy0D8Ktg1
+X-Proofpoint-GUID: S5s6Cq-jGvbWsMG8EwsTwojfy0D8Ktg1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-01_07,2023-04-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1011
+ adultscore=0 priorityscore=1501 phishscore=0 bulkscore=0 spamscore=0
+ mlxscore=0 mlxlogscore=999 impostorscore=0 suspectscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2305010115
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Currently the DWC3 driver supports only single port controller which
+requires at most two PHYs ie HS and SS PHYs. There are SoCs that has
+DWC3 controller with multiple ports that can operate in host mode.
+Some of the port supports both SS+HS and other port supports only HS
+mode.
 
-HEAD commit:    58390c8ce1bd Merge tag 'iommu-updates-v6.4' of git://git.k..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=155bead8280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d56ffc213bf6bf4a
-dashboard link: https://syzkaller.appspot.com/bug?extid=5184326923f180b9d11a
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16936ffc280000
+This change primarily refactors the Phy logic in core driver to allow
+multiport support with Generic Phy's.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/64e93dba0330/disk-58390c8c.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/2b7f3c1154f1/vmlinux-58390c8c.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/4ad00371a063/bzImage-58390c8c.xz
-mounted in repro #1: https://storage.googleapis.com/syzbot-assets/5bd5f6fead6e/mount_1.gz
-mounted in repro #2: https://storage.googleapis.com/syzbot-assets/58251a87486a/mount_10.gz
+Chananges have been tested on  QCOM SoC SA8295P which has 4 ports (2
+are HS+SS capable and 2 are HS only capable).
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5184326923f180b9d11a@syzkaller.appspotmail.com
+Changes in v7:
+Added power event irq's for Multiport controller.
+Udpated commit text for patch-9 (adding DT changes for enabling first
+port of multiport controller on sa8540-ride).
+Fixed check-patch warnings for driver code.
+Fixed DT binding errors for changes in snps,dwc3.yaml
+Reabsed code on top of usb-next
 
-REISERFS warning: reiserfs-5093 is_leaf: item entry count seems wrong *3.5*[2 1 0(1) DIR], item_len 35, item_location 4029, free_space(entry_count) 2
-REISERFS error (device loop2): vs-5150 search_by_key: invalid format found in block 539. Fsck?
-==================================================================
-BUG: KASAN: null-ptr-deref in instrument_atomic_read include/linux/instrumented.h:68 [inline]
-BUG: KASAN: null-ptr-deref in _test_bit include/asm-generic/bitops/instrumented-non-atomic.h:141 [inline]
-BUG: KASAN: null-ptr-deref in buffer_locked include/linux/buffer_head.h:126 [inline]
-BUG: KASAN: null-ptr-deref in fix_nodes+0x464/0x8660 fs/reiserfs/fix_node.c:2578
-Read of size 8 at addr 0000000000000000 by task syz-executor.2/5390
+Changes in v6:
+Updated comments in code after.
+Updated variables names appropriately as per review comments.
+Updated commit text in patch-2 and added additional info as per review
+comments.
+The patch header in v5 doesn't have "PATHCH v5" notation present. Corrected
+it in this version.
 
-CPU: 1 PID: 5390 Comm: syz-executor.2 Not tainted 6.3.0-syzkaller-12049-g58390c8ce1bd #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
- print_report mm/kasan/report.c:465 [inline]
- kasan_report+0xec/0x130 mm/kasan/report.c:572
- check_region_inline mm/kasan/generic.c:181 [inline]
- kasan_check_range+0x141/0x190 mm/kasan/generic.c:187
- instrument_atomic_read include/linux/instrumented.h:68 [inline]
- _test_bit include/asm-generic/bitops/instrumented-non-atomic.h:141 [inline]
- buffer_locked include/linux/buffer_head.h:126 [inline]
- fix_nodes+0x464/0x8660 fs/reiserfs/fix_node.c:2578
- reiserfs_cut_from_item+0x2bd/0x1b20 fs/reiserfs/stree.c:1740
- reiserfs_do_truncate+0x630/0x1080 fs/reiserfs/stree.c:1971
- reiserfs_truncate_file+0x1b5/0x1070 fs/reiserfs/inode.c:2308
- reiserfs_setattr+0xddf/0x1370 fs/reiserfs/inode.c:3393
- notify_change+0xb2c/0x1180 fs/attr.c:483
- do_truncate+0x143/0x200 fs/open.c:66
- handle_truncate fs/namei.c:3295 [inline]
- do_open fs/namei.c:3640 [inline]
- path_openat+0x2083/0x2750 fs/namei.c:3791
- do_filp_open+0x1ba/0x410 fs/namei.c:3818
- do_sys_openat2+0x16d/0x4c0 fs/open.c:1356
- do_sys_open fs/open.c:1372 [inline]
- __do_sys_open fs/open.c:1380 [inline]
- __se_sys_open fs/open.c:1376 [inline]
- __x64_sys_open+0x11d/0x1c0 fs/open.c:1376
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f4ee868c169
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f4ee9456168 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
-RAX: ffffffffffffffda RBX: 00007f4ee87ac120 RCX: 00007f4ee868c169
-RDX: 0000000000000000 RSI: 000000000014937e RDI: 0000000020000180
-RBP: 00007f4ee86e7ca1 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffe3e91162f R14: 00007f4ee9456300 R15: 0000000000022000
- </TASK>
-==================================================================
+Changes in v5:
+Added DT support for first port of Teritiary USB controller on SA8540-Ride
+Added support for reading port info from XHCI Extended Params registers.
+
+Changes in RFC v4:
+Added DT support for SA8295p.
+
+Changes in RFC v3:
+Incase any PHY init fails, then clear/exit the PHYs that
+are already initialized.
+
+Changes in RFC v2:
+Changed dwc3_count_phys to return the number of PHY Phandles in the node.
+This will be used now in dwc3_extract_num_phys to increment num_usb2_phy 
+and num_usb3_phy.
+
+Added new parameter "ss_idx" in dwc3_core_get_phy_ny_node and changed its
+structure such that the first half is for HS-PHY and second half is for
+SS-PHY.
+
+In dwc3_core_get_phy, for multiport controller, only if SS-PHY phandle is
+present, pass proper SS_IDX else pass -1.
+
+Link to v6: https://lore.kernel.org/all/20230405125759.4201-1-quic_kriskura@quicinc.com/
+Link to v5: https://lore.kernel.org/all/20230310163420.7582-1-quic_kriskura@quicinc.com/
+Link to RFC v4: https://lore.kernel.org/all/20230115114146.12628-1-quic_kriskura@quicinc.com/
+Link to RFC v3: https://lore.kernel.org/all/1654709787-23686-1-git-send-email-quic_harshq@quicinc.com/#r
+Link to RFC v2: https://lore.kernel.org/all/1653560029-6937-1-git-send-email-quic_harshq@quicinc.com/#r
+
+Test results:
+
+Bus 3/4 represent multiport controller having 4 HS ports and 2 SS ports.
+
+/ # dmesg |grep hub
+[    0.029029] usbcore: registered new interface driver hub
+[    1.372812] hub 1-0:1.0: USB hub found
+[    1.389142] hub 1-0:1.0: 1 port detected
+[    1.414721] hub 2-0:1.0: USB hub found
+[    1.427669] hub 2-0:1.0: 1 port detected
+[    2.931465] hub 3-0:1.0: USB hub found
+[    2.935340] hub 3-0:1.0: 4 ports detected
+[    2.948721] hub 4-0:1.0: USB hub found
+[    2.952604] hub 4-0:1.0: 2 ports detected
+/ #
+/ # lsusb
+Bus 003 Device 001: ID 1d6b:0002
+Bus 001 Device 001: ID 1d6b:0002
+Bus 003 Device 005: ID 0b0e:0300
+Bus 003 Device 002: ID 046d:c077
+Bus 004 Device 001: ID 1d6b:0003
+Bus 002 Device 001: ID 1d6b:0003
+Bus 003 Device 004: ID 03f0:0024
+Bus 003 Device 003: ID 046d:c016
 
 
----
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+Krishna Kurapati (9):
+  dt-bindings: usb: qcom,dwc3: Add bindings for SC8280 Multiport
+  dt-bindings: usb: Add bindings for multiport properties on DWC3
+    controller
+  usb: dwc3: core: Access XHCI address space temporarily to read port
+    info
+  usb: dwc3: core: Skip setting event buffers for host only controllers
+  usb: dwc3: core: Refactor PHY logic to support Multiport Controller
+  usb: dwc3: qcom: Add multiport controller support for qcom wrapper
+  arm64: dts: qcom: sc8280xp: Add multiport controller node for SC8280
+  arm64: dts: qcom: sa8295p: Enable tertiary controller and its 4 USB
+    ports
+  arm64: dts: qcom: sa8540-ride: Enable first port of tertiary usb
+    controller
+
+ .../devicetree/bindings/usb/qcom,dwc3.yaml    |  21 ++
+ .../devicetree/bindings/usb/snps,dwc3.yaml    |  13 +-
+ arch/arm64/boot/dts/qcom/sa8295p-adp.dts      |  47 +++
+ arch/arm64/boot/dts/qcom/sa8540p-ride.dts     |  22 ++
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi        |  64 ++++
+ drivers/usb/dwc3/core.c                       | 352 ++++++++++++++----
+ drivers/usb/dwc3/core.h                       |  68 +++-
+ drivers/usb/dwc3/drd.c                        |  13 +-
+ drivers/usb/dwc3/dwc3-qcom.c                  |  28 +-
+ 9 files changed, 533 insertions(+), 95 deletions(-)
+
+-- 
+2.40.0
+
