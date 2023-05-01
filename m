@@ -2,296 +2,340 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 792F66F398A
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 23:03:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA2276F3993
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 23:12:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232688AbjEAVC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 17:02:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39170 "EHLO
+        id S232532AbjEAVMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 17:12:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230433AbjEAVCu (ORCPT
+        with ESMTP id S229379AbjEAVMq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 17:02:50 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEF7B1BFE
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 14:02:48 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id 41be03b00d2f7-518d325b8a2so2545379a12.0
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 14:02:48 -0700 (PDT)
+        Mon, 1 May 2023 17:12:46 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00AF31FDD
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 14:12:42 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1aae90f5ebcso4415ad.1
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 14:12:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1682974968; x=1685566968;
-        h=to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=D0PMc06A2yO1+4gBCh6kqZ9mPyJIp2PmIrRbClN4AUU=;
-        b=22pB7WZDuACv8vKwyma11RORQBTgeLJOhEWaVOHjR4k1EQ0m1ccauLXSPMoS3CqUI/
-         Rmt/TNm93ODh6yu4l+tzgcaPwUwVghZn9Jisri9HzX0plEHuvrRu2qxW74AqeNGf8eKk
-         KZNN+IdcPduuRJJuPHMyQ/Wo+y9GBQDMtyKx+rbVQOUHJRC1/Uk6EyD+AEMMZiWBBFnk
-         yJ+xL0NBALIifCIO9X7ncLxEpoHDsgAV0JzhuJA5vhpB5p82OR90CGnJ8h6RKMyFj7xL
-         V60Q1Juh68HPQPuHaYSQB/KenVA7usLPla0Gp4iTzeBZdo4WCwuYayOSbP8MqNZEjDMV
-         iD7Q==
+        d=google.com; s=20221208; t=1682975562; x=1685567562;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=J9+mgGd9+Jp4BeaqO8OgptqLi9JIHDz1Ll48RjzQaSc=;
+        b=csDpshoSF+g09wU//tMGH/EjBTJVcA/8IKTO17Fp0FlnYWymNWXUOyqCTdvRh8k3Er
+         LLEeylGIX7p03GIQIc7qGjfzXmgslFk9q876fiARTwJQ3BD2INneXhEKammmaXQ22xWq
+         2JCv/dkAuf31QwAARY9nPPdlatq0PyAj8ZlyCWiIFafHvYrCvAActNpvcfpnBSdJbLof
+         DimfdVhEPZoSXwgDoCSO9Pcip6hEHllWhPB36mwG16R4gYf2U9lRv2anEABeIYBWguR3
+         eoKjLL5ZN5rgASlEhTW0OXSd4jKCgLy/cRIyvztVCEveK0FKHNY2Qxm4+dJtWFZEoICe
+         GbvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682974968; x=1685566968;
-        h=to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1682975562; x=1685567562;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=D0PMc06A2yO1+4gBCh6kqZ9mPyJIp2PmIrRbClN4AUU=;
-        b=ccCoKcZtW9Ty5d/AiEFpm072jMU/i2ch4tXVxQTCOgVt3gmt4wPv7HVDmf4008k7WJ
-         WxWAmq1K0BR/1m4IywAJtTywwU4kHQlZDZPZEbHQGLMQy6Im6tXqoXPci6UoiGod5y53
-         HndJvvlUXHMAqtaWVEsXacoTef4C9YSHJ9v19bV4DCD3ar9npjfMTDCTzIURt63Nw28/
-         XgSgK7SKlW9SdXQNOgdAD2seWmcG8DbZkT0/W4kKByQRc2ivB7CwRTYJeRcWR4Sgphk2
-         tQ2lBnw5LrJOYCYzEA0xFJ+sSwGkamfG9AlElpy9FELLNGs8WqSBeEF3ncMLowVWRD7j
-         gYhw==
-X-Gm-Message-State: AC+VfDyJYIqOOIdN5l8AtnmteaFAejw8/EG2h55sO2+qCm/8chZBXyCY
-        rVM+NTkYL1/9OPdNt0lA7j82fg==
-X-Google-Smtp-Source: ACHHUZ7JntkrxpTw7Ce1AQ2PUesqX2qhhXG3Smz+hSrCFgp2HGEQOm3YMYdv9ENcPs4dJ+3sdr21MA==
-X-Received: by 2002:a05:6a20:3c8b:b0:f2:93b7:a452 with SMTP id b11-20020a056a203c8b00b000f293b7a452mr18876852pzj.4.1682974968123;
-        Mon, 01 May 2023 14:02:48 -0700 (PDT)
-Received: from [127.0.1.1] ([2601:1c2:1800:f680:1f1:1360:eb9b:387])
-        by smtp.gmail.com with ESMTPSA id i12-20020a056a00224c00b0063d670ad850sm20899151pfu.92.2023.05.01.14.02.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 May 2023 14:02:47 -0700 (PDT)
-From:   Drew Fustini <dfustini@baylibre.com>
-Date:   Mon, 01 May 2023 14:05:22 -0700
-Subject: [PATCH RFC v2 2/2] RISC-V: Add support for sqoscfg CSR
+        bh=J9+mgGd9+Jp4BeaqO8OgptqLi9JIHDz1Ll48RjzQaSc=;
+        b=NKAx/U6ueQczW7q8ulfZf46k1CIZ/b9+XK0efPCpFPef2yyTc1cWzCfR4xsv3zS7RQ
+         yQahvF9QrOgspGNTkQbCMeZyWY+jHMNFwngcWq2bTZGwfjcHbnjvLKuorqVkJ1ENVN9Q
+         nv1r3JQ46cVAwlvjPYlZqYOJ+QajItl/E8sYsGOfXq7tqme9CZ0VrdNG3a5yXZ/rHJkO
+         Kagyo9FUj0nf4ey0Le4Sm35/piALz3+hdo0K1E82xJDk4wJplgYEZqzYu0906LQWIeG+
+         0etDhQp7yeD9MkqZVNeORQHLwcx2myNX3+FJ2WtIRxUHtP82c3s5YBJ7/Vs7Hoaz1ZS1
+         K2YA==
+X-Gm-Message-State: AC+VfDxSMvqkzd4FKii0l3M2E+ZljBvQX3H+GIAq5138r2YVlUULAFEN
+        r1TaeC+q2RE48odtNI6EesIAxF6ClPQR4GuMDOuoGw==
+X-Google-Smtp-Source: ACHHUZ6JB2tgg926bAnCef6ZxCIZYlbBK1YTJijyfrcPOT2ZN2y2uwuhOaxdPVBRzFuYmNm52D/YGx3ji1DJyBU1feg=
+X-Received: by 2002:a17:902:d507:b0:1a9:5f69:10d0 with SMTP id
+ b7-20020a170902d50700b001a95f6910d0mr68484plg.14.1682975562184; Mon, 01 May
+ 2023 14:12:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230430-riscv-cbqri-rfc-v2-v2-2-8e3725c4a473@baylibre.com>
-References: <20230430-riscv-cbqri-rfc-v2-v2-0-8e3725c4a473@baylibre.com>
-In-Reply-To: <20230430-riscv-cbqri-rfc-v2-v2-0-8e3725c4a473@baylibre.com>
-To:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Ved Shanbhogue <ved@rivosinc.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@rivosinc.com>,
-        James Morse <james.morse@arm.com>,
-        =?utf-8?q?Kornel_Dul=C4=99ba?= <mindal@semihalf.com>,
-        Adrien Ricciardi <aricciardi@baylibre.com>,
-        Drew Fustini <dfustini@baylibre.com>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1682975186; l=7192;
- i=dfustini@baylibre.com; s=20230430; h=from:subject:message-id;
- bh=pWQVrZDB0/WwGsPOU+vgZxpwWoA9+OJKEaCTiIWYn6w=;
- b=VjMXT5Dzf04LphERS+3SbW74JjkhLQUHjOPgLeAFISnPcRs305me/gjpnAkZckj+fzNbuxsdN
- vRjJTMbr2LrCpv4aWJlJNcPV4OIZOMfcc9gZEKjrBn+TM89MWzdC+3C
-X-Developer-Key: i=dfustini@baylibre.com; a=ed25519;
- pk=p3GKE9XFmjhwAayAHG4U108yag7V8xQVd4zJLdW0g7g=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1681580558.git.noodles@earth.li> <f26d11e613df7bd55822ff3fb7689e36bf9e4f7a.1681580558.git.noodles@earth.li>
+ <20230416012421.255bfd19@slackpad.lan> <ZEGOk1isRhaekk3h@earth.li>
+ <CAGETcx-UnEK3CPC38Ef3gmHcq46nXSJbA9QAwEsF+Xt2bDKEWA@mail.gmail.com>
+ <ZEJJGGeIu8QW44mh@earth.li> <CAGETcx8JDYUT2bdDhJ0PN8_CPmHJ37jCfnuoav6CGFJoovfSqA@mail.gmail.com>
+ <ZEa9rcDlIOn+df5h@earth.li>
+In-Reply-To: <ZEa9rcDlIOn+df5h@earth.li>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Mon, 1 May 2023 14:12:05 -0700
+Message-ID: <CAGETcx8OK-DNM2hJb2sz0jDyKBRqtmPRxnk_acKgB0pfrD0_JA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] ARM: dts: sun5i: chip: Enable bluetooth
+To:     Jonathan McDowell <noodles@earth.li>
+Cc:     Andre Przywara <andre.przywara@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the sqoscfg CSR defined in the Ssqosid ISA extension
-(Supervisor-mode Quality of Service ID). The CSR contains two fields:
+On Mon, Apr 24, 2023 at 10:34=E2=80=AFAM Jonathan McDowell <noodles@earth.l=
+i> wrote:
+>
+> On Fri, Apr 21, 2023 at 03:45:52PM -0700, Saravana Kannan wrote:
+> > On Fri, Apr 21, 2023 at 1:28=E2=80=AFAM Jonathan McDowell <noodles@eart=
+h.li> wrote:
+> > >
+> > > On Thu, Apr 20, 2023 at 06:43:06PM -0700, Saravana Kannan wrote:
+> > > > On Thu, Apr 20, 2023 at 12:12=E2=80=AFPM Jonathan McDowell <noodles=
+@earth.li> wrote:
+> > > > > On Sun, Apr 16, 2023 at 01:24:21AM +0100, Andre Przywara wrote:
+> > > > > > On Sat, 15 Apr 2023 18:46:03 +0100
+> > > > > > Jonathan McDowell <noodles@earth.li> wrote:
+> > > > > >
+> > > > > > > The C.H.I.P has an rtl8723bs device with the bluetooth interf=
+ace hooked
+> > > > > > > up on UART3. Support for this didn't exist in mainline when t=
+he DTS was
+> > > > > > > initially added, but it does now, so enable it.
+> > > > > > >
+> > > > > > > Signed-off-by: Jonathan McDowell <noodles@earth.li>
+> > > > > > > ---
+> > > > > > >  arch/arm/boot/dts/sun5i-r8-chip.dts | 4 ++++
+> > > > > > >  1 file changed, 4 insertions(+)
+> > > > > > >
+> > > > > > > diff --git a/arch/arm/boot/dts/sun5i-r8-chip.dts b/arch/arm/b=
+oot/dts/sun5i-r8-chip.dts
+> > > > > > > index fd37bd1f3920..4d72a181d8aa 100644
+> > > > > > > --- a/arch/arm/boot/dts/sun5i-r8-chip.dts
+> > > > > > > +++ b/arch/arm/boot/dts/sun5i-r8-chip.dts
+> > > > > > > @@ -255,6 +255,10 @@ &uart3 {
+> > > > > > >     pinctrl-0 =3D <&uart3_pg_pins>,
+> > > > > > >                 <&uart3_cts_rts_pg_pins>;
+> > > > > > >     status =3D "okay";
+> > > > > > > +
+> > > > > > > +   bluetooth {
+> > > > > > > +           compatible =3D "realtek,rtl8723bs-bt";
+> > > > > > > +   }
+> > > > > >
+> > > > > > As the kernel test robot already pointed out, there is a semico=
+lon
+> > > > > > missing here.
+> > > > > > Otherwise looks good (dt-validate passes), but don't know if th=
+ere are
+> > > > > > any wakeup GPIOs connected (can't seem to find a schematic?).
+> > > > >
+> > > > > So there are wakeups, but if I add:
+> > > > >
+> > > > >         device-wake-gpios =3D <&axp_gpio 3 GPIO_ACTIVE_LOW>;
+> > > > >         host-wake-gpios =3D <&pio 1 3 GPIO_ACTIVE_HIGH>; /* PB3 *=
+/
+> > > > >
+> > > > > then some odd sort of dependency issue happens where the serial p=
+ort
+> > > > > load is deferred waiting for the GPIO to appear, and then the dev=
+ice
+> > > > > doesn't work.
+> > > >
+> > > > When you say your device doesn't work, are you saying it never prob=
+es?
+> >
+> > Read your whole email and it's a strange issue. Also, going forward to
+> > avoid confusion, only reply to questions with respect to 6.3-rc7.
 
-  - Resource Control ID (RCID) used determine resource allocation
-  - Monitoring Counter ID (MCID) used to track resource usage
+Sorry it took a while to respond. Life got busy.
 
-Requests from a hart to shared resources like cache will be tagged with
-these IDs. This allows the usage of shared resources to be associated
-with the task currently running on the hart.
+> Just to be clear, in my initial mail I referred to 6.1.21 as that's
+> where I started, but in my reply to you all output was quoted from
+> 6.3-rc7. 6.3 has been released since, so all details below are based on
+> that.
+>
+> > > The bluetooth device (realtek,rtl8723bs-bt) never appears, apparently
+> > > because the UART it's attached to never loads - it doesn't even try t=
+o
+> > > load the firmware.
+> > >
+> > > > <debugfs>/devices_deferred should tell you what devices have deferr=
+ed and why.
+> > >
+> > > root@chip:~# cat /sys/kernel/debug/devices_deferred
+> > > serial0-0
+> >
+> > Do you see this in 6.3-rc7 too?
+>
+> That was under 6.3-rc7. I see it on 6.3 too:
+>
+> root@chip:~# cat /sys/kernel/debug/devices_deferred
+> serial0-0
 
-A sqoscfg field is added to thread_struct and has the same format as the
-sqoscfg CSR. This allows the scheduler to set the hart's sqoscfg CSR to
-contain the RCID and MCID for the task that is being scheduled in. The
-sqoscfg CSR is only written to if the thread_struct.sqoscfg is different
-from the current value of the CSR.
+I somehow didn't connect the dots earlier... but serial0-0 is NOT the
+uart/serial device. It's the child device of serial0 and in this case,
+it's the bluetooth device.
 
-A per-cpu variable cpu_sqoscfg is used to mirror that state of the CSR.
-This is because access to L1D hot memory should be several times faster
-than a CSR read. Also, in the case of virtualization, accesses to this
-CSR are trapped in the hypervisor.
+So adding those gpios in DT is not breaking serial. It's just
+preventing the BT device from probing.
 
-Link: https://github.com/riscv-non-isa/riscv-cbqri/blob/main/riscv-cbqri.pdf
-Co-developed-by: Kornel Dulęba <mindal@semihalf.com>
-Signed-off-by: Kornel Dulęba <mindal@semihalf.com>
-Signed-off-by: Drew Fustini <dfustini@baylibre.com>
----
- arch/riscv/Kconfig                 | 19 +++++++++++++++++
- arch/riscv/include/asm/csr.h       |  8 +++++++
- arch/riscv/include/asm/processor.h |  3 +++
- arch/riscv/include/asm/qos.h       | 43 ++++++++++++++++++++++++++++++++++++++
- arch/riscv/include/asm/switch_to.h |  3 +++
- arch/riscv/kernel/Makefile         |  1 +
- arch/riscv/kernel/qos/Makefile     |  2 ++
- arch/riscv/kernel/qos/qos.c        |  5 +++++
- 8 files changed, 84 insertions(+)
+Looking at the logs in the non-working case:
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index c58d74235363..4de2ce69f9fa 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -409,6 +409,25 @@ config RISCV_ISA_C
- 
- 	  If you don't know what to do here, say Y.
- 
-+config RISCV_ISA_SSQOSID
-+	bool "Ssqosid extension support for supervisor mode QoS ID"
-+	default y
-+	help
-+	  Adds support for the Ssqosid ISA extension (Supervisor-mode
-+	  Quality of Service ID).
-+
-+	  Ssqosid defines the sqoscfg CSR which allows the system to tag
-+	  the running process with RCID (Resource Control ID) and MCID
-+	  (Monitoring Counter ID). The RCID is used determine resource
-+	  allocation. The MCID is used to track resource usage in event
-+	  counters.
-+
-+	  For example, a cache controller may use the RCID to apply a
-+	  cache partitioning scheme and use the MCID to track how much
-+	  cache a process, or a group of processes, is using.
-+
-+	  If you don't know what to do here, say Y.
-+
- config RISCV_ISA_SVNAPOT
- 	bool "Svnapot extension support for supervisor mode NAPOT pages"
- 	depends on 64BIT && MMU
-diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
-index 7c2b8cdb7b77..17d04a0cacd6 100644
---- a/arch/riscv/include/asm/csr.h
-+++ b/arch/riscv/include/asm/csr.h
-@@ -59,6 +59,13 @@
- #define SATP_ASID_MASK	_AC(0xFFFF, UL)
- #endif
- 
-+/* SQOSCFG fields */
-+#define SQOSCFG_RCID_MASK	_AC(0x00000FFF, UL)
-+#define SQOSCFG_MCID_MASK	SQOSCFG_RCID_MASK
-+#define SQOSCFG_MCID_SHIFT	16
-+#define SQOSCFG_MASK		((SQOSCFG_MCID_MASK << SQOSCFG_MCID_SHIFT) | \
-+				  SQOSCFG_RCID_MASK)
-+
- /* Exception cause high bit - is an interrupt if set */
- #define CAUSE_IRQ_FLAG		(_AC(1, UL) << (__riscv_xlen - 1))
- 
-@@ -245,6 +252,7 @@
- #define CSR_STVAL		0x143
- #define CSR_SIP			0x144
- #define CSR_SATP		0x180
-+#define CSR_SQOSCFG		0x181
- 
- #define CSR_STIMECMP		0x14D
- #define CSR_STIMECMPH		0x15D
-diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/include/asm/processor.h
-index 94a0590c6971..724b2aa2732d 100644
---- a/arch/riscv/include/asm/processor.h
-+++ b/arch/riscv/include/asm/processor.h
-@@ -39,6 +39,9 @@ struct thread_struct {
- 	unsigned long s[12];	/* s[0]: frame pointer */
- 	struct __riscv_d_ext_state fstate;
- 	unsigned long bad_cause;
-+#ifdef CONFIG_RISCV_ISA_SSQOSID
-+	u32 sqoscfg;
-+#endif
- };
- 
- /* Whitelist the fstate from the task_struct for hardened usercopy */
-diff --git a/arch/riscv/include/asm/qos.h b/arch/riscv/include/asm/qos.h
-new file mode 100644
-index 000000000000..9d0fe1ac1b34
---- /dev/null
-+++ b/arch/riscv/include/asm/qos.h
-@@ -0,0 +1,43 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_RISCV_QOS_H
-+#define _ASM_RISCV_QOS_H
-+
-+#ifdef CONFIG_RISCV_ISA_SSQOSID
-+
-+#include <linux/sched.h>
-+#include <linux/jump_label.h>
-+
-+#include <asm/barrier.h>
-+#include <asm/csr.h>
-+#include <asm/hwcap.h>
-+
-+/* cached value of sqoscfg csr for each cpu */
-+DECLARE_PER_CPU(u32, cpu_sqoscfg);
-+
-+static inline void __switch_to_sqoscfg(struct task_struct *prev,
-+				       struct task_struct *next)
-+{
-+	u32 *cpu_sqoscfg_ptr = this_cpu_ptr(&cpu_sqoscfg);
-+	u32 thread_sqoscfg;
-+
-+	thread_sqoscfg = READ_ONCE(next->thread.sqoscfg);
-+
-+	if (thread_sqoscfg != *cpu_sqoscfg_ptr) {
-+		*cpu_sqoscfg_ptr = thread_sqoscfg;
-+		csr_write(CSR_SQOSCFG, thread_sqoscfg);
-+	}
-+}
-+
-+static __always_inline bool has_sqoscfg(void)
-+{
-+	return riscv_has_extension_likely(RISCV_ISA_EXT_SSQOSID);
-+}
-+
-+#else /* ! CONFIG_RISCV_ISA_SSQOSID  */
-+
-+static __always_inline bool has_sqoscfg(void) { return false; }
-+#define __switch_to_sqoscfg(__prev, __next) do { } while (0)
-+
-+#endif /* CONFIG_RISCV_ISA_SSQOSID */
-+
-+#endif /* _ASM_RISCV_QOS_H */
-diff --git a/arch/riscv/include/asm/switch_to.h b/arch/riscv/include/asm/switch_to.h
-index 60f8ca01d36e..79e8e907d7a6 100644
---- a/arch/riscv/include/asm/switch_to.h
-+++ b/arch/riscv/include/asm/switch_to.h
-@@ -12,6 +12,7 @@
- #include <asm/processor.h>
- #include <asm/ptrace.h>
- #include <asm/csr.h>
-+#include <asm/qos.h>
- 
- #ifdef CONFIG_FPU
- extern void __fstate_save(struct task_struct *save_to);
-@@ -78,6 +79,8 @@ do {							\
- 	struct task_struct *__next = (next);		\
- 	if (has_fpu())					\
- 		__switch_to_aux(__prev, __next);	\
-+	if (has_sqoscfg())				\
-+		__switch_to_sqoscfg(__prev, __next);	\
- 	((last) = __switch_to(__prev, __next));		\
- } while (0)
- 
-diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-index 0fee73a20c87..22c18b916212 100644
---- a/arch/riscv/kernel/Makefile
-+++ b/arch/riscv/kernel/Makefile
-@@ -89,3 +89,4 @@ obj-$(CONFIG_COMPAT)		+= compat_signal.o
- obj-$(CONFIG_COMPAT)		+= compat_vdso/
- 
- obj-$(CONFIG_64BIT)		+= pi/
-+obj-$(CONFIG_RISCV_ISA_SSQOSID) += qos/
-diff --git a/arch/riscv/kernel/qos/Makefile b/arch/riscv/kernel/qos/Makefile
-new file mode 100644
-index 000000000000..9f996263a86d
---- /dev/null
-+++ b/arch/riscv/kernel/qos/Makefile
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0
-+obj-$(CONFIG_RISCV_ISA_SSQOSID) += qos.o
-diff --git a/arch/riscv/kernel/qos/qos.c b/arch/riscv/kernel/qos/qos.c
-new file mode 100644
-index 000000000000..a6956664dfe1
---- /dev/null
-+++ b/arch/riscv/kernel/qos/qos.c
-@@ -0,0 +1,5 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+#include <asm/qos.h>
-+
-+/* cached value of sqoscfg csr for each cpu */
-+DEFINE_PER_CPU(u32, cpu_sqoscfg);
+[    0.715083] 1c28c00.serial: ttyS1 at MMIO 0x1c28c00 (irq =3D 53,
+base_baud =3D 1500000) is a U6_16550A
+[    0.724132] device: 'serial0': device_add
 
--- 
-2.34.1
+I don't know why all of the ttySx are showing up as serial0, but this
+is the serial port. As you can see 1c28c00 is already probing.
 
+[    0.724228] device: 'serial0-0': device_add
+
+This is the child devices getting populated. In this case this is the BT de=
+vice.
+
+[    0.724311] device: 'platform:1c20800.pinctrl--serial:serial0-0': device=
+_add
+
+I can tell it's the BT device because we see a device link being
+created between pinctrl and serial:serial0-0. So it's a device sitting
+on the serial bus.
+
+[    0.724378] devices_kset: Moving serial0-0 to end of list
+[    0.724390] serial serial0-0: Linked as a consumer to 1c20800.pinctrl
+[    0.724401] /soc/serial@1c28c00/bluetooth Dropping the fwnode link
+to /soc/pinctrl@1c20800
+
+And the fwnode like that was converted to device link clearly shows
+that the serial0-0 corresponds to the bluetooth node.
+
+[    0.724441] serial serial0: tty port ttyS1 registered
+
+Serial port works.
+
+>
+> Without the device-wake-gpios line in the device tree it's empty.
+
+I think the issue is at the BT driver level or some other framework.
+
+Add a print at the start of the BT driver to see if the probe() is
+actually getting called. I'm guessing it is and it's returning an
+error from within.
+
+If you don't see that print, then debug the really_probe() function to
+see how far within it the BT device goes through before it errors out.
+It's possible pinctrl_bind_pins() in really_probe() fails for the BT
+device because of how the GPIO pins are configured in your DT.
+
+Thanks,
+Saravana
+
+>
+> > > > > Error in dmesg is:
+> > > > >
+> > > > > serial serial0-0: deferred probe pending
+> > > > >
+> > > > > on 6.3-rc and on 6.1 I get:
+> > > > >
+> > > > > dw-apb-uart 1c28c00.serial: Failed to create device link (0x180) =
+with axp20x-gpio
+> > > >
+> > > > This error message doesn't block anything. So I don't think this is
+> > > > the cause of your blocking issue. But I still want to understand wh=
+y
+> > > > this error message is showing up.
+> > > >
+> > > > > I'm not clear why it's trying to link the serial port to the GPIO=
+; it
+> > > > > seems that it should be the bluetooth device that depends on both=
+ the
+> > > > > UART and the GPIO,
+> > > >
+> > > > A fix for the device link error message went in on v6.3-rc3. Is tha=
+t
+> > > > the 6.3 version you tested this on?
+> > >
+> > > I originally tried on 6.1.21, which is where I got the "Failed to cre=
+ate
+> > > device link" message. I then moved to 6.3-rc7 as I saw there had been
+> > > further changes recently. There I just get the:
+> > >
+> > > serial serial0-0: deferred probe pending
+> >
+> > If the deferral is related to fw_devlink, you should see the reason
+> > for deferring in the devices_deferred file. So I don't think the issue
+> > is related to fw_devlink.
+>
+> Ok.
+>
+> > > message.
+> > >
+> > > > Also, I tried looking into the UART driver
+> > > > (drivers/tty/serial/8250/8250_dw.c) but it wasn't clear how it ends=
+ up
+> > > > populating the bluetooth serial device. If you can point that out,
+> > > > that'd be helpful (assuming 6.3-rc3 still shows that error message)=
+.
+> > >
+> > > I have the following in my device tree:
+> > >
+> > > &uart3 {
+> > >         pinctrl-names =3D "default";
+> > >         pinctrl-0 =3D <&uart3_pg_pins>,
+> > >                     <&uart3_cts_rts_pg_pins>;
+> > >         status =3D "okay";
+> > >
+> > >         bluetooth {
+> > >                 compatible =3D "realtek,rtl8723bs-bt";
+> > >                 device-wake-gpios =3D <&axp_gpio 3 GPIO_ACTIVE_LOW>;
+> > >                 host-wake-gpios =3D <&pio 1 3 GPIO_ACTIVE_HIGH>; /* P=
+B3 */
+> > >         };
+> > > };
+> > >
+> > > uart3 is a snps,dw-apb-uart, defined in arch/arm/boot/dts/sun5i.dtsi
+> > >
+> > > The UART and AXP209 device drivers are compiled into the kernel:
+> > >
+> > > CONFIG_PINCTRL_AXP209=3Dy
+> > > CONFIG_SERIAL_8250=3Dy
+> > > CONFIG_SERIAL_8250_DW=3Dy
+> > >
+> > > The bluetooth bits are modules (btrtl, hci_uart).
+> > >
+> > > If I remove the device-wake-gpios line then the Bluetooth device work=
+s
+> > > fine, and /sys/kernel/debug/devices_deferred is empty.
+> > >
+> > > Somehow it seems like the GPIO is being parsed as a dependency for th=
+e
+> > > serial port, even though the serial port + GPIO are both dependencies
+> > > for the bluetooth device.
+> >
+> > I'm fairly sure that fw_devlink isn't causing that. Because even
+> > without bluetooth, fw_devlink doesn't consider any suppliers listed in
+> > child DT nodes as mandatory suppliers. That has been the case since
+> > the beginning.
+>
+> Ok, I just got confused with the 6.1 message about the device link and
+> thought that might be the rough area.
+>
+> > > Even with that, given both are built-in I
+> > > don't understand why the serial port never completes setup.
+> >
+> > My guess is that the driver itself has some bug that's sensitive to
+> > device probe order even though it shouldn't.
+> >
+> > Can you add #define DEBUG 1 to the top of drivers/base/core.c and
+> > share the boot log? I can try and help debug it.
+>
+> Thanks for any input you're able to provide. dmesg from 6.3 with a
+> failure to complete the probe:
+>
+> https://the.earth.li/~noodles/chip-bluetooth/6.3-not-working
+>
+> and just for completeness, without the device-wake-gpios line:
+>
+> https://the.earth.li/~noodles/chip-bluetooth/6.3-working
+>
+> J.
+>
+> --
+> Most people are descended from apes. Redheads are descended from cats.
