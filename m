@@ -2,189 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AFAC6F2E91
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 07:15:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7DAB6F2E96
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 07:17:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbjEAFPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 01:15:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41188 "EHLO
+        id S230445AbjEAFRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 01:17:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbjEAFPE (ORCPT
+        with ESMTP id S229519AbjEAFRJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 01:15:04 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69CCC1710
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 22:15:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682918102; x=1714454102;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ux9Ts+3V9zBCVDNMcJUyurtBq8zr7ey0DE6a6V0SDgM=;
-  b=D6H4XGx6oFigtqgaO5WMmsr/YrIwMxK5/L6MrH9xZYiLZriPV4a0NfSJ
-   eyaFl4BRCph9iHGbwGf5UoVjWAGS8olv15G7VVr+z17lYhL3VPtfGfeMP
-   o7RsCZwKCKfhEemlzzFe2JeCGMjHZqUC/8rjCRlyMjEm/A2HUuKEg6knB
-   Aq4FMP8aSZDPvkVMPV7ka1erVPnVqS7SvRX1qv8GbSy+cOb0cXhW/y7aC
-   s94XkyrRxa1OBjeZzlVsczRY2G/PTSdxRb8HvGMEVRwT4YrYyLopbHVdu
-   uqktSzhUncX4MThKKTWe6dWxabhQqxLYfQJvq7ZYK+oyA6a3mdtm2Qcr4
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10696"; a="376132465"
-X-IronPort-AV: E=Sophos;i="5.99,239,1677571200"; 
-   d="scan'208";a="376132465"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2023 22:15:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10696"; a="765181857"
-X-IronPort-AV: E=Sophos;i="5.99,239,1677571200"; 
-   d="scan'208";a="765181857"
-Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 30 Apr 2023 22:14:58 -0700
-Received: from kbuild by e3434d64424d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ptLsH-0000JV-23;
-        Mon, 01 May 2023 05:14:57 +0000
-Date:   Mon, 1 May 2023 13:14:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tom Rix <trix@redhat.com>, chunkuang.hu@kernel.org,
-        p.zabel@pengutronix.de, chunfeng.yun@mediatek.com,
-        vkoul@kernel.org, kishon@kernel.org, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] phy: mediatek: rework the floating point comparisons to
- fixed point
-Message-ID: <202305011302.fwiJuq8v-lkp@intel.com>
-References: <20230501025716.2905609-1-trix@redhat.com>
+        Mon, 1 May 2023 01:17:09 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F3C1716;
+        Sun, 30 Apr 2023 22:17:07 -0700 (PDT)
+Received: from fsav311.sakura.ne.jp (fsav311.sakura.ne.jp [153.120.85.142])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 3415GRo2034853;
+        Mon, 1 May 2023 14:16:27 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav311.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp);
+ Mon, 01 May 2023 14:16:27 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp)
+Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 3415FvQL034733
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Mon, 1 May 2023 14:16:27 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <bdb1fe2d-f904-78f0-d287-5e601f789862@I-love.SAKURA.ne.jp>
+Date:   Mon, 1 May 2023 14:15:56 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230501025716.2905609-1-trix@redhat.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [syzbot] [mm?] KCSAN: data-race in generic_fillattr / shmem_mknod
+ (2)
+To:     linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Cc:     akpm@linux-foundation.org, hughd@google.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com,
+        syzbot <syzbot+702361cf7e3d95758761@syzkaller.appspotmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>
+References: <0000000000007337c705fa1060e2@google.com>
+ <CACT4Y+a=xWkNGw_iKibRp4ivSE8OJkWWT0VPQ4N4d1+vj0FMdg@mail.gmail.com>
+Content-Language: en-US
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <CACT4Y+a=xWkNGw_iKibRp4ivSE8OJkWWT0VPQ4N4d1+vj0FMdg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tom,
+On 2023/04/24 17:26, Dmitry Vyukov wrote:
+>> HEAD commit:    457391b03803 Linux 6.3
+>> git tree:       upstream
+>> console output: https://syzkaller.appspot.com/x/log.txt?x=13226cf0280000
+>> kernel config:  https://syzkaller.appspot.com/x/.config?x=8c81c9a3d360ebcf
+>> dashboard link: https://syzkaller.appspot.com/bug?extid=702361cf7e3d95758761
+>> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+> 
+> I think shmem_mknod() needs to use i_size_write() to update the size.
+> Writes to i_size are not assumed to be atomic throughout the kernel
+> code.
+> 
 
-kernel test robot noticed the following build warnings:
+I don't think that using i_size_{read,write}() alone is sufficient,
+for I think that i_size_{read,write}() needs data_race() annotation.
 
-[auto build test WARNING on next-20230428]
-[cannot apply to linus/master pza/reset/next pza/imx-drm/next mbgg-mediatek/for-next v6.3 v6.3-rc7 v6.3-rc6 v6.3]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+ include/linux/fs.h |   13 +++++++++++--
+ mm/shmem.c         |   12 ++++++------
+ 2 files changed, 17 insertions(+), 8 deletions(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tom-Rix/phy-mediatek-rework-the-floating-point-comparisons-to-fixed-point/20230501-110044
-base:   next-20230428
-patch link:    https://lore.kernel.org/r/20230501025716.2905609-1-trix%40redhat.com
-patch subject: [PATCH] phy: mediatek: rework the floating point comparisons to fixed point
-config: arm64-randconfig-r026-20230430 (https://download.01.org/0day-ci/archive/20230501/202305011302.fwiJuq8v-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b1465cd49efcbc114a75220b153f5a055ce7911f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/7a707b74a3a3ce9d018ee340e478e5c75301c894
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Tom-Rix/phy-mediatek-rework-the-floating-point-comparisons-to-fixed-point/20230501-110044
-        git checkout 7a707b74a3a3ce9d018ee340e478e5c75301c894
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/phy/mediatek/
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index 21a981680856..0d067bbe3ee9 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -860,6 +860,13 @@ void filemap_invalidate_unlock_two(struct address_space *mapping1,
+  * the read or for example on x86 they can be still implemented as a
+  * cmpxchg8b without the need of the lock prefix). For SMP compiles
+  * and 64bit archs it makes no difference if preempt is enabled or not.
++ *
++ * However, when KCSAN is enabled, CPU being capable of reading/updating
++ * naturally aligned 8 bytes of memory atomically is not sufficient for
++ * avoiding KCSAN warning, for KCSAN checks whether value has changed between
++ * before and after of a read operation. But since we don't want to introduce
++ * seqcount overhead only for suppressing KCSAN warning, tell KCSAN that data
++ * race on accessing i_size field is acceptable.
+  */
+ static inline loff_t i_size_read(const struct inode *inode)
+ {
+@@ -880,7 +887,8 @@ static inline loff_t i_size_read(const struct inode *inode)
+ 	preempt_enable();
+ 	return i_size;
+ #else
+-	return inode->i_size;
++	/* See comment above. */
++	return data_race(inode->i_size);
+ #endif
+ }
+ 
+@@ -902,7 +910,8 @@ static inline void i_size_write(struct inode *inode, loff_t i_size)
+ 	inode->i_size = i_size;
+ 	preempt_enable();
+ #else
+-	inode->i_size = i_size;
++	/* See comment above. */
++	data_race(inode->i_size = i_size);
+ #endif
+ }
+ 
+diff --git a/mm/shmem.c b/mm/shmem.c
+index e40a08c5c6d7..a2f20297fb59 100644
+--- a/mm/shmem.c
++++ b/mm/shmem.c
+@@ -2951,7 +2951,7 @@ shmem_mknod(struct mnt_idmap *idmap, struct inode *dir,
+ 			goto out_iput;
+ 
+ 		error = 0;
+-		dir->i_size += BOGO_DIRENT_SIZE;
++		i_size_write(dir, i_size_read(dir) + BOGO_DIRENT_SIZE);
+ 		dir->i_ctime = dir->i_mtime = current_time(dir);
+ 		inode_inc_iversion(dir);
+ 		d_instantiate(dentry, inode);
+@@ -3027,7 +3027,7 @@ static int shmem_link(struct dentry *old_dentry, struct inode *dir, struct dentr
+ 			goto out;
+ 	}
+ 
+-	dir->i_size += BOGO_DIRENT_SIZE;
++	i_size_write(dir, i_size_read(dir) + BOGO_DIRENT_SIZE);
+ 	inode->i_ctime = dir->i_ctime = dir->i_mtime = current_time(inode);
+ 	inode_inc_iversion(dir);
+ 	inc_nlink(inode);
+@@ -3045,7 +3045,7 @@ static int shmem_unlink(struct inode *dir, struct dentry *dentry)
+ 	if (inode->i_nlink > 1 && !S_ISDIR(inode->i_mode))
+ 		shmem_free_inode(inode->i_sb);
+ 
+-	dir->i_size -= BOGO_DIRENT_SIZE;
++	i_size_write(dir, i_size_read(dir) - BOGO_DIRENT_SIZE);
+ 	inode->i_ctime = dir->i_ctime = dir->i_mtime = current_time(inode);
+ 	inode_inc_iversion(dir);
+ 	drop_nlink(inode);
+@@ -3132,8 +3132,8 @@ static int shmem_rename2(struct mnt_idmap *idmap,
+ 		inc_nlink(new_dir);
+ 	}
+ 
+-	old_dir->i_size -= BOGO_DIRENT_SIZE;
+-	new_dir->i_size += BOGO_DIRENT_SIZE;
++	i_size_write(old_dir, i_size_read(old_dir) - BOGO_DIRENT_SIZE);
++	i_size_write(new_dir, i_size_read(new_dir) + BOGO_DIRENT_SIZE);
+ 	old_dir->i_ctime = old_dir->i_mtime =
+ 	new_dir->i_ctime = new_dir->i_mtime =
+ 	inode->i_ctime = current_time(old_dir);
+@@ -3189,7 +3189,7 @@ static int shmem_symlink(struct mnt_idmap *idmap, struct inode *dir,
+ 		folio_unlock(folio);
+ 		folio_put(folio);
+ 	}
+-	dir->i_size += BOGO_DIRENT_SIZE;
++	i_size_write(dir, i_size_read(dir) + BOGO_DIRENT_SIZE);
+ 	dir->i_ctime = dir->i_mtime = current_time(dir);
+ 	inode_inc_iversion(dir);
+ 	d_instantiate(dentry, inode);
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305011302.fwiJuq8v-lkp@intel.com/
+Maybe we want i_size_add() ?
 
-All warnings (new ones prefixed by >>):
+Also, there was a similar report on updating i_{ctime,mtime} to current_time()
+which means that i_size is not the only field that is causing data race.
+https://syzkaller.appspot.com/bug?id=067d40ab9ab23a6fa0a8156857ed54e295062a29
 
-   drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-           if (ret)
-               ^~~
-   drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:216:12: note: initialize the variable 'ret' to silence this warning
-           int i, ret;
-                     ^
-                      = 0
->> drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:331:32: warning: result of comparison of constant 74175000000 with expression of type 'u32' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
-           } else if ((pixel_clk * 1000) >= 74175 * MEGA && pixel_clk <= 300 * MEGA) {
-                      ~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~
->> drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:336:58: warning: result of comparison of constant 74175000000 with expression of type 'u32' (aka 'unsigned int') is always true [-Wtautological-constant-out-of-range-compare]
-           } else if (pixel_clk >= 27 * MEGA && (pixel_clk * 1000) < 74175 * MEGA) {
-                                                ~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~
-   3 warnings generated.
+Hmm, where is the serialization that avoids concurrent
+shmem_mknod()/shmem_mknod() or shmem_mknod()/shmem_unlink() ?
+i_size_write() says "need locking around it (normally i_mutex)"...
 
-
-vim +331 drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c
-
-   303	
-   304	static int mtk_hdmi_pll_drv_setting(struct clk_hw *hw)
-   305	{
-   306		struct mtk_hdmi_phy *hdmi_phy = to_mtk_hdmi_phy(hw);
-   307		void __iomem *regs = hdmi_phy->regs;
-   308		u8 data_channel_bias, clk_channel_bias;
-   309		u8 impedance, impedance_en;
-   310		u32 tmds_clk;
-   311		u32 pixel_clk = hdmi_phy->pll_rate;
-   312	
-   313		tmds_clk = pixel_clk;
-   314	
-   315		/* bias & impedance setting:
-   316		 * 3G < data rate <= 6G: enable impedance 100ohm,
-   317		 *      data channel bias 24mA, clock channel bias 20mA
-   318		 * pixel clk >= HD,  74.175MHZ <= pixel clk <= 300MHZ:
-   319		 *      enalbe impedance 100ohm
-   320		 *      data channel 20mA, clock channel 16mA
-   321		 * 27M =< pixel clk < 74.175: disable impedance
-   322		 *      data channel & clock channel bias 10mA
-   323		 */
-   324	
-   325		/* 3G < data rate <= 6G, 300M < tmds rate <= 594M */
-   326		if (tmds_clk > 300 * MEGA && tmds_clk <= 594 * MEGA) {
-   327			data_channel_bias = 0x3c; /* 24mA */
-   328			clk_channel_bias = 0x34; /* 20mA */
-   329			impedance_en = 0xf;
-   330			impedance = 0x36; /* 100ohm */
- > 331		} else if ((pixel_clk * 1000) >= 74175 * MEGA && pixel_clk <= 300 * MEGA) {
-   332			data_channel_bias = 0x34; /* 20mA */
-   333			clk_channel_bias = 0x2c; /* 16mA */
-   334			impedance_en = 0xf;
-   335			impedance = 0x36; /* 100ohm */
- > 336		} else if (pixel_clk >= 27 * MEGA && (pixel_clk * 1000) < 74175 * MEGA) {
-   337			data_channel_bias = 0x14; /* 10mA */
-   338			clk_channel_bias = 0x14; /* 10mA */
-   339			impedance_en = 0x0;
-   340			impedance = 0x0;
-   341		} else {
-   342			return -EINVAL;
-   343		}
-   344	
-   345		/* bias */
-   346		mtk_phy_update_field(regs + HDMI_1_CFG_1, RG_HDMITX21_DRV_IBIAS_D0, data_channel_bias);
-   347		mtk_phy_update_field(regs + HDMI_1_CFG_1, RG_HDMITX21_DRV_IBIAS_D1, data_channel_bias);
-   348		mtk_phy_update_field(regs + HDMI_1_CFG_1, RG_HDMITX21_DRV_IBIAS_D2, data_channel_bias);
-   349		mtk_phy_update_field(regs + HDMI_1_CFG_0, RG_HDMITX21_DRV_IBIAS_CLK, clk_channel_bias);
-   350	
-   351		/* impedance */
-   352		mtk_phy_update_field(regs + HDMI_1_CFG_0, RG_HDMITX21_DRV_IMP_EN, impedance_en);
-   353		mtk_phy_update_field(regs + HDMI_1_CFG_2, RG_HDMITX21_DRV_IMP_D0_EN1, impedance);
-   354		mtk_phy_update_field(regs + HDMI_1_CFG_2, RG_HDMITX21_DRV_IMP_D1_EN1, impedance);
-   355		mtk_phy_update_field(regs + HDMI_1_CFG_2, RG_HDMITX21_DRV_IMP_D2_EN1, impedance);
-   356		mtk_phy_update_field(regs + HDMI_1_CFG_2, RG_HDMITX21_DRV_IMP_CLK_EN1, impedance);
-   357	
-   358		return 0;
-   359	}
-   360	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
