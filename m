@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B93EB6F2E0D
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 05:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F223D6F2E0E
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 05:19:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233217AbjEADTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 23:19:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43776 "EHLO
+        id S233248AbjEADTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 23:19:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233782AbjEADQQ (ORCPT
+        with ESMTP id S233816AbjEADQS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 23:16:16 -0400
+        Sun, 30 Apr 2023 23:16:18 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBC4B10D7;
-        Sun, 30 Apr 2023 20:06:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0937061B1;
+        Sun, 30 Apr 2023 20:06:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 88D81617AA;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D29B9617C0;
+        Mon,  1 May 2023 03:06:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DFE5C4339B;
         Mon,  1 May 2023 03:06:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54719C4339E;
-        Mon,  1 May 2023 03:06:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682910376;
-        bh=1sAK7siXULBkOdJo4LOofxcynx/scLOF9+4VyLSnkiA=;
+        s=k20201202; t=1682910377;
+        bh=OtBYrX14mxTpbm1B0QpoHXJUjd80vi3tq+CGMksfjIo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nw+JstElzpm8vWUKIScpTtPbnq9HYTIF+f/W2sDvoqWUSgctSbNoSKTBuBY65pP6F
-         P7L/8hoIG5/uCNqFWXRQ7+UA71ew1YU74Aqo5u5fe2FRGDCw/9qhLCLXhXt6+Dhazg
-         1W4EUr6M9vEuT00iA8wautCaxmdaPfmL9RKA3tRzMdAK5vGfnMlrjcBHuspagEXawf
-         VrDyCABVOqLA0WytoU1YQUQ6KTUau2totTKFKBlmYsKVuUfGV7itFyUTy1W32B8P6+
-         p8fUAGYUfwu0uDMqJwR7+Bdc+1NEABCMASACT578zr8RTIcoyvii4v0eHbA9ghlo9j
-         WJEXHOgT/4paA==
+        b=uirppBh9VPq+Y3L3AOGwCB6d9lOemdbmDhxRrm21zAqCds/Uy4O3xcgeCkVnVFoQ2
+         C/odYoWgKze0Fs6zMdIcfhQ6gSY6FhN2lnM/kVD6Po/sDbwNc4YTvv7qYRrL39Ov3+
+         BSeWmgNgF+i4/JdxBxbGDpuyRBb4/3KQeVqlOfMan6QMpusPrDXDr94mjD+u9IG1TJ
+         Hl38IZS3Qrc8+PuHy6PQY+msuVvbCuZHADqe2zzpX/dJrwRzTIjzYhTv8IENxRQtOR
+         5S8vfbsQ+j7jkK5HdvUDlbiXoSm4o9rK3krA8ml7nsAxk+WzYrx//CSOezT5WNnwib
+         5R7lbPLYB1tdw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, gregkh@linuxfoundation.org
-Subject: [PATCH AUTOSEL 5.4 2/9] regmap: cache: Return error in cache sync operations for REGCACHE_NONE
-Date:   Sun, 30 Apr 2023 23:06:02 -0400
-Message-Id: <20230501030611.3255082-2-sashal@kernel.org>
+Cc:     Zheng Wang <zyytlz.wz@163.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Sasha Levin <sashal@kernel.org>, maximlevitsky@gmail.com,
+        oakad@yahoo.com, linux-mmc@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 3/9] memstick: r592: Fix UAF bug in r592_remove due to race condition
+Date:   Sun, 30 Apr 2023 23:06:03 -0400
+Message-Id: <20230501030611.3255082-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230501030611.3255082-1-sashal@kernel.org>
 References: <20230501030611.3255082-1-sashal@kernel.org>
@@ -57,46 +58,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
+From: Zheng Wang <zyytlz.wz@163.com>
 
-[ Upstream commit fd883d79e4dcd2417c2b80756f22a2ff03b0f6e0 ]
+[ Upstream commit 63264422785021704c39b38f65a78ab9e4a186d7 ]
 
-There is no sense in doing a cache sync on REGCACHE_NONE regmaps.
-Instead of panicking the kernel due to missing cache_ops, return an error
-to client driver.
+In r592_probe, dev->detect_timer was bound with r592_detect_timer.
+In r592_irq function, the timer function will be invoked by mod_timer.
 
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-Link: https://lore.kernel.org/r/20230313071812.13577-1-alexander.stein@ew.tq-group.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+If we remove the module which will call hantro_release to make cleanup,
+there may be a unfinished work. The possible sequence is as follows,
+which will cause a typical UAF bug.
+
+Fix it by canceling the work before cleanup in r592_remove.
+
+CPU0                  CPU1
+
+                    |r592_detect_timer
+r592_remove         |
+  memstick_free_host|
+  put_device;       |
+  kfree(host);      |
+                    |
+                    | queue_work
+                    |   &host->media_checker //use
+
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+Link: https://lore.kernel.org/r/20230307164338.1246287-1-zyytlz.wz@163.com
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/base/regmap/regcache.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/memstick/host/r592.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/base/regmap/regcache.c b/drivers/base/regmap/regcache.c
-index 7f4b3b62492ca..7fdd702e564ae 100644
---- a/drivers/base/regmap/regcache.c
-+++ b/drivers/base/regmap/regcache.c
-@@ -343,6 +343,9 @@ int regcache_sync(struct regmap *map)
- 	const char *name;
- 	bool bypass;
+diff --git a/drivers/memstick/host/r592.c b/drivers/memstick/host/r592.c
+index eaa2a94d18be4..dd06c18495eb6 100644
+--- a/drivers/memstick/host/r592.c
++++ b/drivers/memstick/host/r592.c
+@@ -828,7 +828,7 @@ static void r592_remove(struct pci_dev *pdev)
+ 	/* Stop the processing thread.
+ 	That ensures that we won't take any more requests */
+ 	kthread_stop(dev->io_thread);
+-
++	del_timer_sync(&dev->detect_timer);
+ 	r592_enable_device(dev, false);
  
-+	if (WARN_ON(map->cache_type == REGCACHE_NONE))
-+		return -EINVAL;
-+
- 	BUG_ON(!map->cache_ops);
- 
- 	map->lock(map->lock_arg);
-@@ -412,6 +415,9 @@ int regcache_sync_region(struct regmap *map, unsigned int min,
- 	const char *name;
- 	bool bypass;
- 
-+	if (WARN_ON(map->cache_type == REGCACHE_NONE))
-+		return -EINVAL;
-+
- 	BUG_ON(!map->cache_ops);
- 
- 	map->lock(map->lock_arg);
+ 	while (!error && dev->req) {
 -- 
 2.39.2
 
