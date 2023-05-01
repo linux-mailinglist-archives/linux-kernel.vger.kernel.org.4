@@ -2,92 +2,341 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F9346F32E1
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 17:29:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BAC06F32E3
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 17:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232487AbjEAP3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 11:29:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54134 "EHLO
+        id S232291AbjEAPaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 11:30:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232132AbjEAP3X (ORCPT
+        with ESMTP id S229928AbjEAPaJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 11:29:23 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 259A1AA
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 08:29:21 -0700 (PDT)
-Received: from [192.168.2.246] (109-252-144-198.dynamic.spd-mgts.ru [109.252.144.198])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id A39F56602121;
-        Mon,  1 May 2023 16:29:19 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1682954960;
-        bh=FZyPsnbblvvI0dwFtBHzZu8AEK9Dl+/PqP5r71i3Los=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=dsK9Lfh0mY5Ee/PPbnpDY1hIcenU8+6ZP4SuMHANIuf6zkac2xaVECSWFKSbM0FZK
-         cBoepnUBxZ1MkVctRVIjG7eqRXR+N2OyTEYi54ddlmu7JtSvnuvXorrGzax7deaTeN
-         YWcyBr0Xj9a2fiZfxO937MrXj0lIahKNpWPR4xK0F5DDcp+mhTXaviXq6Lb3W00ADn
-         52+Omf000QaqOO0k0AJJfRM9SkUHA+prX0PhobW6VlMfkMybZu9JSCO0uVflRepxkn
-         nf22X8+NQSjEMIe2UIQE+WVYB5KPZcgBJIN0iv89ad/L+DtZTBOeJ8Zso3wstx+jML
-         icDue5QwFo1Ng==
-Message-ID: <b0970bbc-d759-3b93-cfcd-b8f5a7db0ff0@collabora.com>
-Date:   Mon, 1 May 2023 18:29:16 +0300
+        Mon, 1 May 2023 11:30:09 -0400
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D4ABF
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 08:30:07 -0700 (PDT)
+Received: by mail-il1-x136.google.com with SMTP id e9e14a558f8ab-330ec047d3bso67555ab.0
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 08:30:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682955007; x=1685547007;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XoLH4MoVzWMKPmuaWwNpwbaq4+1Ny7M8bJ2SpA3CcL4=;
+        b=DmI7HG5EBEIEK3reaDygTCNrN8k7T1UISGQ3x6UQdiotEs4tNi43PXUbGX6LJn5l3U
+         1+TI+iszRtmvlr0fihUDa5ECLxYujRvcUVYVMaH/WK3BLo2Ba1xgAeRJgIa0JaGuvdej
+         6hzTSYECWbnVAGXJW5DoAsWmxbWrdVJudi0RGWKIF3OmEMlYDr/0ZjK+4T4qdjByHNac
+         MMuWQnsOuHgg0C/+S2OFLu9A1u/xWWSv5tAbAcZMFqvJEP9CLGsmkJmsRHTx2Zx4q4hL
+         YN4eH5qcWogZm/hgxX5RtBxMRQuk3kisJR9ic5iJ2N+7uCIOLrJls8UhJWxhYOkQ7Z7d
+         pGXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682955007; x=1685547007;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XoLH4MoVzWMKPmuaWwNpwbaq4+1Ny7M8bJ2SpA3CcL4=;
+        b=LeyRS0OBstJF3o62afDygmibwTekrFrxDcVOHK3hsllw1S5r1J5QROJ12fu+G/M2UB
+         74JNcZg9fDaVv3pvr2CfhXtXwejOqUs3YSSawiFb87wAkaBWxen5jKZ5NgdMBKQV4Gsr
+         EnCV5h9aiOTCSc15v5skhib/QBgJO+WlKEZCxFL7SvRuwnMYo4aToAjbLajTxdelVAb4
+         2RwDE2aYpOySKJm4YL7hHWy0KXTWSNF5NnGJa03T8T2RA71QKSgSeSYF+yQieclmSLTu
+         By1pn7QA+gTrEQT366IYi0rUffmUKrkNVkvIMF/n72/Z9nOHUJH7Cao03PK01ZGjlfLD
+         CeiA==
+X-Gm-Message-State: AC+VfDzJy+vMSC99ASRG4Hum2VT3OPebmL5a6UKh78aYxhUTwcMadl6Y
+        HBDt/yj+fc+P201arMD48FRCcTiWU9ljKwPsaXRk7A==
+X-Google-Smtp-Source: ACHHUZ5yAMYBlomuJ6X58K1WP4jk7f1ilBSbeIyMcUKZdbAEHH1dNuwKJ4GrsPXHMXFxdo8d8FY/LVV7H2d6cH2e798=
+X-Received: by 2002:a05:6e02:b49:b0:32a:642d:2a13 with SMTP id
+ f9-20020a056e020b4900b0032a642d2a13mr498768ilu.6.1682955006738; Mon, 01 May
+ 2023 08:30:06 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v6 3/3] drm/virtio: Support sync objects
-Content-Language: en-US
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-To:     David Airlie <airlied@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Rob Clark <robdclark@gmail.com>,
-        =?UTF-8?B?TWFyZWsgT2zFocOhaw==?= <maraeo@gmail.com>,
-        Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>,
-        Emil Velikov <emil.velikov@collabora.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org
-References: <20230416115237.798604-1-dmitry.osipenko@collabora.com>
- <20230416115237.798604-4-dmitry.osipenko@collabora.com>
-In-Reply-To: <20230416115237.798604-4-dmitry.osipenko@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230429053506.1962559-1-irogers@google.com> <20230429053506.1962559-4-irogers@google.com>
+ <d6784858-2a5f-7920-f1ac-d7ec9ed89605@linux.intel.com>
+In-Reply-To: <d6784858-2a5f-7920-f1ac-d7ec9ed89605@linux.intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Mon, 1 May 2023 08:29:55 -0700
+Message-ID: <CAP-5=fUtgEvgburjhE6HpazDh9dtn=DiSOwHaVnoE3N7sBynEw@mail.gmail.com>
+Subject: Re: [PATCH v3 03/46] perf stat: Introduce skippable evsels
+To:     "Liang, Kan" <kan.liang@linux.intel.com>,
+        Weilin Wang <weilin.wang@intel.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ahmad Yasin <ahmad.yasin@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Stephane Eranian <eranian@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Samantha Alt <samantha.alt@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>,
+        Edward Baker <edward.baker@intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        Rob Herring <robh@kernel.org>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        James Clark <james.clark@arm.com>,
+        Suzuki Poulouse <suzuki.poulose@arm.com>,
+        Kang Minchul <tegongkang@gmail.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/16/23 14:52, Dmitry Osipenko wrote:
-> Add sync object DRM UAPI support to VirtIO-GPU driver. Sync objects
-> support is needed by native context VirtIO-GPU Mesa drivers, it also will
-> be used by Venus and Virgl contexts.
-> 
-> Reviewed-by; Emil Velikov <emil.velikov@collabora.com>
-> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> ---
->  drivers/gpu/drm/virtio/virtgpu_drv.c    |   3 +-
->  drivers/gpu/drm/virtio/virtgpu_submit.c | 219 ++++++++++++++++++++++++
->  include/uapi/drm/virtgpu_drm.h          |  16 +-
->  3 files changed, 236 insertions(+), 2 deletions(-)
+On Mon, May 1, 2023 at 7:56=E2=80=AFAM Liang, Kan <kan.liang@linux.intel.co=
+m> wrote:
+>
+>
+>
+> On 2023-04-29 1:34 a.m., Ian Rogers wrote:
+> > Perf stat with no arguments will use default events and metrics. These
+> > events may fail to open even with kernel and hypervisor disabled. When
+> > these fail then the permissions error appears even though they were
+> > implicitly selected. This is particularly a problem with the automatic
+> > selection of the TopdownL1 metric group on certain architectures like
+> > Skylake:
+> >
+> > '''
+> > $ perf stat true
+> > Error:
+> > Access to performance monitoring and observability operations is limite=
+d.
+> > Consider adjusting /proc/sys/kernel/perf_event_paranoid setting to open
+> > access to performance monitoring and observability operations for proce=
+sses
+> > without CAP_PERFMON, CAP_SYS_PTRACE or CAP_SYS_ADMIN Linux capability.
+> > More information can be found at 'Perf events and tool security' docume=
+nt:
+> > https://www.kernel.org/doc/html/latest/admin-guide/perf-security.html
+> > perf_event_paranoid setting is 2:
+> >   -1: Allow use of (almost) all events by all users
+> >       Ignore mlock limit after perf_event_mlock_kb without CAP_IPC_LOCK
+> >> =3D 0: Disallow raw and ftrace function tracepoint access
+> >> =3D 1: Disallow CPU event access
+> >> =3D 2: Disallow kernel profiling
+> > To make the adjusted perf_event_paranoid setting permanent preserve it
+> > in /etc/sysctl.conf (e.g. kernel.perf_event_paranoid =3D <setting>)
+> > '''
+> >
+> > This patch adds skippable evsels that when they fail to open won't
+> > cause termination and will appear as "<not supported>" in output. The
+> > TopdownL1 events, from the metric group, are marked as skippable. This
+> > turns the failure above to:
+> >
+> > '''
+> > $ perf stat perf bench internals synthesize
+> > Computing performance of single threaded perf event synthesis by
+> > synthesizing events on the perf process itself:
+> >   Average synthesis took: 49.287 usec (+- 0.083 usec)
+> >   Average num. events: 3.000 (+- 0.000)
+> >   Average time per event 16.429 usec
+> >   Average data synthesis took: 49.641 usec (+- 0.085 usec)
+> >   Average num. events: 11.000 (+- 0.000)
+> >   Average time per event 4.513 usec
+> >
+> >  Performance counter stats for 'perf bench internals synthesize':
+> >
+> >           1,222.38 msec task-clock:u                     #    0.993 CPU=
+s utilized
+> >                  0      context-switches:u               #    0.000 /se=
+c
+> >                  0      cpu-migrations:u                 #    0.000 /se=
+c
+> >                162      page-faults:u                    #  132.529 /se=
+c
+> >        774,445,184      cycles:u                         #    0.634 GHz=
+                         (49.61%)
+> >      1,640,969,811      instructions:u                   #    2.12  ins=
+n per cycle              (59.67%)
+> >        302,052,148      branches:u                       #  247.102 M/s=
+ec                       (59.69%)
+> >          1,807,718      branch-misses:u                  #    0.60% of =
+all branches             (59.68%)
+> >          5,218,927      CPU_CLK_UNHALTED.REF_XCLK:u      #    4.269 M/s=
+ec
+> >                                                   #     17.3 %  tma_fro=
+ntend_bound
+> >                                                   #     56.4 %  tma_ret=
+iring
+> >                                                   #      nan %  tma_bac=
+kend_bound
+> >                                                   #      nan %  tma_bad=
+_speculation      (60.01%)
+> >        536,580,469      IDQ_UOPS_NOT_DELIVERED.CORE:u    #  438.965 M/s=
+ec                       (60.33%)
+> >    <not supported>      INT_MISC.RECOVERY_CYCLES_ANY:u
+> >          5,223,936      CPU_CLK_UNHALTED.ONE_THREAD_ACTIVE:u #    4.274=
+ M/sec                       (40.31%)
+> >        774,127,250      CPU_CLK_UNHALTED.THREAD:u        #  633.297 M/s=
+ec                       (50.34%)
+> >      1,746,579,518      UOPS_RETIRED.RETIRE_SLOTS:u      #    1.429 G/s=
+ec                       (50.12%)
+> >      1,940,625,702      UOPS_ISSUED.ANY:u                #    1.588 G/s=
+ec                       (49.70%)
+> >
+> >        1.231055525 seconds time elapsed
+> >
+> >        0.258327000 seconds user
+> >        0.965749000 seconds sys
+>
+>
+> Which branch is this patch series based on?
+>
+> I still cannot get the same output as the examples.
+>
+> I'm using the latest perf-tools-next (The latest commit ID is
+> 5d27a645f609 ("perf tracepoint: Fix memory leak in is_valid_tracepoint()"=
+)).
+> I only applied patch 2 and patch 3, since the patch 1 is already merged.
+>
+> It's a single socket Cascade Lake. with kernel 5.19-8.
+> $ uname -r
+> 5.19.8-100.fc35.x86_64
+>
+> As you can see, all the topdown related events are displayed twice.
+>
+> With root permission,
+>
+> $ sudo ./perf stat perf bench internals synthesize
+> # Running 'internals/synthesize' benchmark:
+> Computing performance of single threaded perf event synthesis by
+> synthesizing events on the perf process itself:
+>   Average synthesis took: 91.487 usec (+- 0.050 usec)
+>   Average num. events: 47.000 (+- 0.000)
+>   Average time per event 1.947 usec
+>   Average data synthesis took: 97.720 usec (+- 0.059 usec)
+>   Average num. events: 245.000 (+- 0.000)
+>   Average time per event 0.399 usec
+>
+>  Performance counter stats for 'perf bench internals synthesize':
+>
+>           2,077.81 msec task-clock                       #    0.998 CPUs
+> utilized
+>                466      context-switches                 #  224.274 /sec
+>                  4      cpu-migrations                   #    1.925 /sec
+>                775      page-faults                      #  372.988 /sec
+>      9,561,957,326      cycles                           #    4.602 GHz
+>                        (31.17%)
+>     24,466,854,021      instructions                     #    2.56  insn
+> per cycle              (37.42%)
+>      5,547,892,196      branches                         #    2.670
+> G/sec                       (37.48%)
+>         37,880,526      branch-misses                    #    0.68% of
+> all branches             (37.52%)
+>         49,576,109      CPU_CLK_UNHALTED.REF_XCLK        #   23.860 M/sec
+>                                                   #     59.9 %  tma_retir=
+ing
+>                                                   #      4.6 %
+> tma_bad_speculation      (37.47%)
+>        228,406,003      INT_MISC.RECOVERY_CYCLES_ANY     #  109.926
+> M/sec                       (37.52%)
+>         49,591,815      CPU_CLK_UNHALTED.ONE_THREAD_ACTIVE #   23.867
+> M/sec                       (24.99%)
+>      9,553,472,893      CPU_CLK_UNHALTED.THREAD          #    4.598
+> G/sec                       (31.25%)
+>     22,893,372,651      UOPS_RETIRED.RETIRE_SLOTS        #   11.018
+> G/sec                       (31.23%)
+>     24,180,375,299      UOPS_ISSUED.ANY                  #   11.637
+> G/sec                       (31.25%)
+>         49,562,300      CPU_CLK_UNHALTED.REF_XCLK        #   23.853 M/sec
+>                                                   #     28.1 %
+> tma_frontend_bound
+>                                                   #      7.2 %
+> tma_backend_bound        (31.24%)
+>     10,735,205,084      IDQ_UOPS_NOT_DELIVERED.CORE      #    5.167
+> G/sec                       (31.30%)
+>        228,798,426      INT_MISC.RECOVERY_CYCLES_ANY     #  110.115
+> M/sec                       (25.04%)
+>         49,559,962      CPU_CLK_UNHALTED.ONE_THREAD_ACTIVE #   23.852
+> M/sec                       (25.00%)
+>      9,538,354,333      CPU_CLK_UNHALTED.THREAD          #    4.591
+> G/sec                       (31.29%)
+>     24,207,967,071      UOPS_ISSUED.ANY                  #   11.651
+> G/sec                       (31.24%)
+>
+>        2.082670856 seconds time elapsed
+>
+>        0.812763000 seconds user
+>        1.252387000 seconds sys
 
-Pierre-Eric tested this v6 patchset with the AMDGPU native context. He
-has problems his email/ML setup and is unable to reply here. I asked him
-to provide his t-b on the Mesa MR [1] and now replicating it here.
+The events are displayed twice as there are 2 groups of events. This
+is changed by:
+https://lore.kernel.org/lkml/20230429053506.1962559-5-irogers@google.com/
+where the events are no longer grouped.
 
-[1]
-https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/21658#note_1889792
+> With non-root, nothing is counted for the topdownL1 events.
+>
+> $ ./perf stat perf bench internals synthesize
+> # Running 'internals/synthesize' benchmark:
+> Computing performance of single threaded perf event synthesis by
+> synthesizing events on the perf process itself:
+>   Average synthesis took: 91.852 usec (+- 0.139 usec)
+>   Average num. events: 47.000 (+- 0.000)
+>   Average time per event 1.954 usec
+>   Average data synthesis took: 96.230 usec (+- 0.046 usec)
+>   Average num. events: 245.000 (+- 0.000)
+>   Average time per event 0.393 usec
+>
+>  Performance counter stats for 'perf bench internals synthesize':
+>
+>           2,051.95 msec task-clock:u                     #    0.997 CPUs
+> utilized
+>                  0      context-switches:u               #    0.000 /sec
+>                  0      cpu-migrations:u                 #    0.000 /sec
+>                765      page-faults:u                    #  372.816 /sec
+>      3,601,662,523      cycles:u                         #    1.755 GHz
+>                        (16.72%)
+>      9,241,811,003      instructions:u                   #    2.57  insn
+> per cycle              (33.43%)
+>      2,238,848,485      branches:u                       #    1.091
+> G/sec                       (50.06%)
+>         19,966,181      branch-misses:u                  #    0.89% of
+> all branches             (66.77%)
+>      <not counted>      CPU_CLK_UNHALTED.REF_XCLK:u
+>    <not supported>      INT_MISC.RECOVERY_CYCLES_ANY:u
+>      <not counted>      CPU_CLK_UNHALTED.ONE_THREAD_ACTIVE:u
+>      <not counted>      CPU_CLK_UNHALTED.THREAD:u
+>      <not counted>      UOPS_RETIRED.RETIRE_SLOTS:u
+>      <not counted>      UOPS_ISSUED.ANY:u
+>      <not counted>      CPU_CLK_UNHALTED.REF_XCLK:u
+>      <not counted>      IDQ_UOPS_NOT_DELIVERED.CORE:u
+>    <not supported>      INT_MISC.RECOVERY_CYCLES_ANY:u
+>      <not counted>      CPU_CLK_UNHALTED.ONE_THREAD_ACTIVE:u
+>      <not counted>      CPU_CLK_UNHALTED.THREAD:u
+>      <not counted>      UOPS_ISSUED.ANY:u
+>
+>        2.057691297 seconds time elapsed
+>
+>        0.766640000 seconds user
+>        1.275170000 seconds sys
 
-Tested-by: Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>
+The reason nothing is counted is that all the metrics are trying to
+share groups with the event INT_MISC.RECOVERY_CYCLES_ANY in them,
+which means the whole group ends up being not supported. Again, the
+patch above that removes the groups for TopdownL1 and TopdownL2, as
+requested by Weilin, will address the issue.
 
--- 
-Best regards,
-Dmitry
+Thanks,
+Ian
 
+> Thanks,
+> Kan
+>
