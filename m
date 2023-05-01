@@ -2,127 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63B806F3382
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 18:25:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B15446F3372
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 18:09:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232331AbjEAQZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 12:25:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50652 "EHLO
+        id S232898AbjEAQJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 12:09:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbjEAQZG (ORCPT
+        with ESMTP id S231229AbjEAQJU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 12:25:06 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F27F10C2;
-        Mon,  1 May 2023 09:25:05 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-63b50a02bffso1956578b3a.2;
-        Mon, 01 May 2023 09:25:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682958305; x=1685550305;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hi2i6+2A7Vme+8Bw6/DbpVhur6f5/wfyKbNa3KD3XxY=;
-        b=gKLjxs75WmlwBqGSSx/wYqqAvwTtUA4KSx3Q+z9o2JPteLVSk0sM2ydoaJwub4ui22
-         SOQj3Hr/OBBQGZiKcaY/tkwCH1cFVUf95hckaIUMnP/YmYsiIVwVX2r1KXALMrpR9f6b
-         xWcIlT67GL5GhbGiLla+ta52oY22/KZUh4AaEGbasgUQ+MnGDfJFOs7orIE2FBMKq8in
-         Y+acU0h3zwre5KQlbqL5v78b0omZIqoZyteSaQciVGjjztuc6SzQK+VW0Yjtzky7hSUj
-         DbiFe4R94r9EigM9dVoEVAyvn9qDEsNZHzfQvTwKtsiIvVFNF7UpdSRVaEzMkJASM3Y3
-         q7pA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682958305; x=1685550305;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Hi2i6+2A7Vme+8Bw6/DbpVhur6f5/wfyKbNa3KD3XxY=;
-        b=jb8vmoF2oFF8Q4CCGC/etTW8OJbpB5XXeuwLUfm0vhuy3/y/00JEID+XULENuNsJFs
-         Usu/g0qg55ms+O8fWJvllja1LxW9JSrreVZqJwKlnU2IkR0c03a7CDLd8Qglz/WO3UDP
-         q7O8Lk2g07efIZxfsleGzRylcOk1Hh0BAVHL/avfVGA5f3xs/oZzMM9l/uo/NO38h6vs
-         xIENycmeh6ShfQvutsW/4OAPbgR5xEkSFruH+lAjUKjTkd7LAOKkGyPwxnAnbXapnMVX
-         gn2gV27Mmgl2PRYaJ8sdrZhwfkbDaJixEigWmZgvmEsO5Ch2HS4fdNrHQPpcVXQRKykr
-         /0Rg==
-X-Gm-Message-State: AC+VfDxActLdoNGEO8VKvEFVLnulMYQsl1NQd3i/iIrB1efDWdoBvFhi
-        ysa49BhhhKyt0/Gq9LXL1wI=
-X-Google-Smtp-Source: ACHHUZ4n14UICtaTafCBlV7ibiarxus3+l8PeLea8hsV8ktohlB6MROy3QkUnTl+1BhcVh+jXYIMxw==
-X-Received: by 2002:a05:6a00:848:b0:63d:23dc:7760 with SMTP id q8-20020a056a00084800b0063d23dc7760mr21489004pfk.2.1682958304491;
-        Mon, 01 May 2023 09:25:04 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:b6ce:736b:e4f7:adb])
-        by smtp.gmail.com with ESMTPSA id q5-20020a056a00084500b0062dae524006sm20078819pfk.157.2023.05.01.09.25.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 May 2023 09:25:03 -0700 (PDT)
-Date:   Mon, 1 May 2023 09:25:00 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Lee Jones <lee@kernel.org>,
-        Philippe Schenker <philippe.schenker@toradex.com>,
-        Stefan Agner <stefan@agner.ch>, Marek Vasut <marex@denx.de>,
-        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-input@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] dt-bindings: MFD: Convert STMPE to YAML schema
-Message-ID: <ZE/n3O6eZRCeBTJy@google.com>
-References: <20230426-stmpe-dt-bindings-v2-0-2f85a1fffcda@linaro.org>
- <20230426-stmpe-dt-bindings-v2-2-2f85a1fffcda@linaro.org>
- <20230427161633.GA3112472-robh@kernel.org>
+        Mon, 1 May 2023 12:09:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B4C6C3;
+        Mon,  1 May 2023 09:09:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DB2C860FDA;
+        Mon,  1 May 2023 16:09:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E49CAC433D2;
+        Mon,  1 May 2023 16:09:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682957358;
+        bh=FpX1zNwZQzmzSkTPVq4PcLD3xWjdT3sXy6nTbjcK06Q=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nFPnn1MdR23QP0io14jeQsK8WBK8E0y7G8G37buFvBxFvbHWDdKo76elxOU+pZInP
+         VL0YOYaYclgnWfZhctvmv9H4En4qjRie3Zbr96Ca55KFhtGPM84yPV9a0WZ6DDO3j7
+         rrB4o/1uO19CtnzLgJnxkQmjdwER4TWZImzkK8LKEtpqvcLwGIic1PwDIJ06j8r/ck
+         lP3a1u9WwXwm2m1Eg8cXo+IkrcypCIsiusgB/dDJ50wnhhQK4OHqPzucqRbWKUBxA2
+         /t2uqEi80OMTxnUe9y42Bf40xd8zkq8NIWjOIvTtqCFBRrGyeeGm4mHydH6+9OH97O
+         cDQFyymLTnZWQ==
+Date:   Mon, 1 May 2023 17:25:02 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Vinod Koul <vkoul@kernel.org>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Nuno =?UTF-8?B?U8Oh?= <noname.nuno@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
+Subject: Re: [PATCH v3 03/11] iio: buffer-dma: Get rid of outgoing queue
+Message-ID: <20230501172502.125e4859@jic23-huawei>
+In-Reply-To: <1f63ffced9ed18309401af9a885310e1715b6538.camel@crapouillou.net>
+References: <20230403154800.215924-1-paul@crapouillou.net>
+        <20230403154800.215924-4-paul@crapouillou.net>
+        <20230416152422.477ecf67@jic23-huawei>
+        <1f63ffced9ed18309401af9a885310e1715b6538.camel@crapouillou.net>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230427161633.GA3112472-robh@kernel.org>
-X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 11:16:33AM -0500, Rob Herring wrote:
-> On Wed, Apr 26, 2023 at 01:21:39PM +0200, Linus Walleij wrote:
-> > This converts the STMPE MFD device tree bindings to the YAML
-> > schema.
-> > 
-> > Reference the existing schema for the ADC, just define the
-> > other subnode schemas directly in the MFD schema.
-> > 
-> > Add two examples so we have examples covering both the simple
-> > GPIO expander and the more complex with ADC and touchscreen.
-> > 
-> > Some in-tree users do not follow the naming conventions for nodes
-> > so these DTS files need to be augmented to use proper node names
-> > like "adc", "pwm", "gpio", "keyboard-controller" etc before the
-> > bindings take effect on them.
-> > 
-> > Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> > ---
-> > ChangeLog v1->v2:
-> > - Split off the GPIO bindings to their own schema, as the old
-> >   bindings didn't even have any GPIO bindings. Put the GPIO
-> >   schema before this schema so we can use GPIO in the examples.
-> > - Drop nodename and pattern as STMPE is not a generic name.
-> > - Add maxItems to the resets.
-> > - Make wakeup-source just :true, as it is a generic property.
-> > - Move unevaluatedProperties for subnodes right before properties
-> >   as requested.
-> > - Name devices "port-expander" in the examples.
-> > - Use lowercase hex in line init.
-> > ---
-> >  .../devicetree/bindings/input/stmpe-keypad.txt     |  41 ---
-> >  .../bindings/input/touchscreen/stmpe.txt           | 108 --------
+On Tue, 18 Apr 2023 10:08:21 +0200
+Paul Cercueil <paul@crapouillou.net> wrote:
 
-Since Rob is happy with the bindings, for the input bits:
+> Hi Jonathan,
+>=20
+> Le dimanche 16 avril 2023 =C3=A0 15:24 +0100, Jonathan Cameron a =C3=A9cr=
+it=C2=A0:
+> > On Mon,=C2=A0 3 Apr 2023 17:47:52 +0200
+> > Paul Cercueil <paul@crapouillou.net> wrote:
+> >  =20
+> > > The buffer-dma code was using two queues, incoming and outgoing, to
+> > > manage the state of the blocks in use.
+> > >=20
+> > > While this totally works, it adds some complexity to the code,
+> > > especially since the code only manages 2 blocks. It is much easier
+> > > to
+> > > just check each block's state manually, and keep a counter for the
+> > > next
+> > > block to dequeue.
+> > >=20
+> > > Since the new DMABUF based API wouldn't use the outgoing queue
+> > > anyway,
+> > > getting rid of it now makes the upcoming changes simpler.
+> > >=20
+> > > With this change, the IIO_BLOCK_STATE_DEQUEUED is now useless, and
+> > > can
+> > > be removed.
+> > >=20
+> > > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> > >=20
+> > > ---
+> > > v2: - Only remove the outgoing queue, and keep the incoming queue,
+> > > as we
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 want the buffer to start streaming dat=
+a as soon as it is
+> > > enabled.
+> > > =C2=A0=C2=A0=C2=A0 - Remove IIO_BLOCK_STATE_DEQUEUED, since it is now=
+ functionally
+> > > the
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 same as IIO_BLOCK_STATE_DONE. =20
+> >=20
+> > I'm not that familiar with this code, but with my understanding this
+> > makes
+> > sense.=C2=A0=C2=A0 I think it is independent of the earlier patches and=
+ is a
+> > useful
+> > change in it's own right.=C2=A0 As such, does it make sense to pick this
+> > up
+> > ahead of the rest of the series? I'm assuming that discussion on the
+> > rest will take a while.=C2=A0 No great rush as too late for the coming
+> > merge
+> > window anyway. =20
+>=20
+> Actually, you can pick patches 3 to 6 (when all have been acked). They
+> add write support for buffer-dma implementations; which is a dependency
+> for the rest of the patchset, but they can live on their own.
 
-Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Remind me of that in the cover letter for v4.
 
-Thanks.
+Thanks,
 
--- 
-Dmitry
+Jonathan
+
+>=20
+> Cheers,
+> -Paul
+
