@@ -2,49 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED7666F2DF4
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 05:18:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 952C66F2DE4
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 05:17:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233062AbjEADR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 23:17:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43654 "EHLO
+        id S233303AbjEADRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 23:17:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233573AbjEADPy (ORCPT
+        with ESMTP id S233087AbjEADO2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 23:15:54 -0400
+        Sun, 30 Apr 2023 23:14:28 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE10359E3;
-        Sun, 30 Apr 2023 20:06:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E9224C0C;
+        Sun, 30 Apr 2023 20:05:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B102B6112D;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F41F61137;
+        Mon,  1 May 2023 03:05:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98602C4339B;
         Mon,  1 May 2023 03:05:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AD2CC433D2;
-        Mon,  1 May 2023 03:05:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682910313;
-        bh=oJuoo9B2Qn8mZYl2jaRGvq7HNNEAqRoirg8xoB0TXtQ=;
+        s=k20201202; t=1682910314;
+        bh=T3IVwh1exPrs5tinsS08t/lhNpTlgRhSJcUsU+dfATg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZDkHXrVibqe3sDzZyP80EMT7TPq7yqwUE4wiffGJw4mui2B83wzO7DLNtTwV+w8o1
-         KrjaB1YFfuixMdj37IZguanQ0r38LXd+75A+tGotwprb5N1SplnyNvojJJ/dNr/yBq
-         eHcnF1x0GxjM6iP2RnkIVm7rM8ObhoIEX6z6ianBKrnfQRRKJ11sUiXVsKrpzGxP/b
-         dcGVTTo4yzV08bT107yeNcHAgFroLcrS3R0U/rznmJPngQrS0GR8z7SnfY2dVsdGQa
-         xoitMF1h0ZVF4Q1vIF0nw63b4dR0BocN3XsMuPkCK4BNCAr/0e+clE/L2FpNc72yuH
-         K7Srx8nN5cY+g==
+        b=WrJ0ooDPtLrv9I3yHxTaF5I7bZKdCuNlxuZBaUG41Jsm3WI2hrjS953sA444/Re8X
+         TlhEODzD50mGZ9YG01EbE59ONbRNyhQ+MzLqERWe5aN1i4QEmTMqRZq+nfINh8+xT0
+         ORKBuM9uKy3eqZpOsTqORaFvNSQkaTPAEtPgDRtlsWMxsuvNnOiFA3sJkwCQPPGJyd
+         U812CoXbGBHCryilNTQsXgGtI6/kYux1JuXe32j35AXAv/6lAEd9b7t48oQkH0gleW
+         NvEyktsCVf9/KsHEzJMSvJzmowRPISnvw6f+ifuLgeuNkAg8m0Ys3W39GKpK4Kk43B
+         U4QD3soBVxrcg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sasha Levin <sashal@kernel.org>, robdclark@gmail.com,
-        quic_abhinavk@quicinc.com, airlied@gmail.com, daniel@ffwll.ch,
-        swboyd@chromium.org, quic_sbillaka@quicinc.com,
-        quic_vpolimer@quicinc.com, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org
-Subject: [PATCH AUTOSEL 5.15 12/17] drm/msm/dp: Clean up handling of DP AUX interrupts
-Date:   Sun, 30 Apr 2023 23:04:29 -0400
-Message-Id: <20230501030435.3254695-12-sashal@kernel.org>
+Cc:     Tamir Duberstein <tamird@google.com>,
+        Bob Moore <robert.moore@intel.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Sasha Levin <sashal@kernel.org>, linux-acpi@vger.kernel.org,
+        acpica-devel@lists.linuxfoundation.org
+Subject: [PATCH AUTOSEL 5.15 13/17] ACPICA: Avoid undefined behavior: applying zero offset to null pointer
+Date:   Sun, 30 Apr 2023 23:04:30 -0400
+Message-Id: <20230501030435.3254695-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230501030435.3254695-1-sashal@kernel.org>
 References: <20230501030435.3254695-1-sashal@kernel.org>
@@ -54,7 +51,7 @@ X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,WEIRD_PORT autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,208 +59,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Douglas Anderson <dianders@chromium.org>
+From: Tamir Duberstein <tamird@google.com>
 
-[ Upstream commit b20566cdef05cd40d95f10869d2a7646f48b1bbe ]
+[ Upstream commit 05bb0167c80b8f93c6a4e0451b7da9b96db990c2 ]
 
-The DP AUX interrupt handling was a bit of a mess.
-* There were two functions (one for "native" transfers and one for
-  "i2c" transfers) that were quite similar. It was hard to say how
-  many of the differences between the two functions were on purpose
-  and how many of them were just an accident of how they were coded.
-* Each function sometimes used "else if" to test for error bits and
-  sometimes didn't and again it was hard to say if this was on purpose
-  or just an accident.
-* The two functions wouldn't notice whether "unknown" bits were
-  set. For instance, there seems to be a bit "DP_INTR_PLL_UNLOCKED"
-  and if it was set there would be no indication.
-* The two functions wouldn't notice if more than one error was set.
+ACPICA commit 770653e3ba67c30a629ca7d12e352d83c2541b1e
 
-Let's fix this by being more consistent / explicit about what we're
-doing.
+Before this change we see the following UBSAN stack trace in Fuchsia:
 
-By design this could cause different handling for AUX transfers,
-though I'm not actually aware of any bug fixed as a result of
-this patch (this patch was created because we simply noticed how odd
-the old code was by code inspection). Specific notes here:
-1. In the old native transfer case if we got "done + wrong address"
-   we'd ignore the "wrong address" (because of the "else if"). Now we
-   won't.
-2. In the old native transfer case if we got "done + timeout" we'd
-   ignore the "timeout" (because of the "else if"). Now we won't.
-3. In the old native transfer case we'd see "nack_defer" and translate
-   it to the error number for "nack". This differed from the i2c
-   transfer case where "nack_defer" was given the error number for
-   "nack_defer". This 100% can't matter because the only user of this
-   error number treats "nack defer" the same as "nack", so it's clear
-   that the difference between the "native" and "i2c" was pointless
-   here.
-4. In the old i2c transfer case if we got "done" plus any error
-   besides "nack" or "defer" then we'd ignore the error. Now we don't.
-5. If there is more than one error signaled by the hardware it's
-   possible that we'll report a different one than we used to. I don't
-   know if this matters. If someone is aware of a case this matters we
-   should document it and change the code to make it explicit.
-6. One quirk we keep (I don't know if this is important) is that in
-   the i2c transfer case if we see "done + defer" we report that as a
-   "nack". That seemed too intentional in the old code to just drop.
+  #0    0x000021e4213b3302 in acpi_ds_init_aml_walk(struct acpi_walk_state*, union acpi_parse_object*, struct acpi_namespace_node*, u8*, u32, struct acpi_evaluate_info*, u8) ../../third_party/acpica/source/components/dispatcher/dswstate.c:682 <platform-bus-x86.so>+0x233302
+  #1.2  0x000020d0f660777f in ubsan_get_stack_trace() compiler-rt/lib/ubsan/ubsan_diag.cpp:41 <libclang_rt.asan.so>+0x3d77f
+  #1.1  0x000020d0f660777f in maybe_print_stack_trace() compiler-rt/lib/ubsan/ubsan_diag.cpp:51 <libclang_rt.asan.so>+0x3d77f
+  #1    0x000020d0f660777f in ~scoped_report() compiler-rt/lib/ubsan/ubsan_diag.cpp:387 <libclang_rt.asan.so>+0x3d77f
+  #2    0x000020d0f660b96d in handlepointer_overflow_impl() compiler-rt/lib/ubsan/ubsan_handlers.cpp:809 <libclang_rt.asan.so>+0x4196d
+  #3    0x000020d0f660b50d in compiler-rt/lib/ubsan/ubsan_handlers.cpp:815 <libclang_rt.asan.so>+0x4150d
+  #4    0x000021e4213b3302 in acpi_ds_init_aml_walk(struct acpi_walk_state*, union acpi_parse_object*, struct acpi_namespace_node*, u8*, u32, struct acpi_evaluate_info*, u8) ../../third_party/acpica/source/components/dispatcher/dswstate.c:682 <platform-bus-x86.so>+0x233302
+  #5    0x000021e4213e2369 in acpi_ds_call_control_method(struct acpi_thread_state*, struct acpi_walk_state*, union acpi_parse_object*) ../../third_party/acpica/source/components/dispatcher/dsmethod.c:605 <platform-bus-x86.so>+0x262369
+  #6    0x000021e421437fac in acpi_ps_parse_aml(struct acpi_walk_state*) ../../third_party/acpica/source/components/parser/psparse.c:550 <platform-bus-x86.so>+0x2b7fac
+  #7    0x000021e4214464d2 in acpi_ps_execute_method(struct acpi_evaluate_info*) ../../third_party/acpica/source/components/parser/psxface.c:244 <platform-bus-x86.so>+0x2c64d2
+  #8    0x000021e4213aa052 in acpi_ns_evaluate(struct acpi_evaluate_info*) ../../third_party/acpica/source/components/namespace/nseval.c:250 <platform-bus-x86.so>+0x22a052
+  #9    0x000021e421413dd8 in acpi_ns_init_one_device(acpi_handle, u32, void*, void**) ../../third_party/acpica/source/components/namespace/nsinit.c:735 <platform-bus-x86.so>+0x293dd8
+  #10   0x000021e421429e98 in acpi_ns_walk_namespace(acpi_object_type, acpi_handle, u32, u32, acpi_walk_callback, acpi_walk_callback, void*, void**) ../../third_party/acpica/source/components/namespace/nswalk.c:298 <platform-bus-x86.so>+0x2a9e98
+  #11   0x000021e4214131ac in acpi_ns_initialize_devices(u32) ../../third_party/acpica/source/components/namespace/nsinit.c:268 <platform-bus-x86.so>+0x2931ac
+  #12   0x000021e42147c40d in acpi_initialize_objects(u32) ../../third_party/acpica/source/components/utilities/utxfinit.c:304 <platform-bus-x86.so>+0x2fc40d
+  #13   0x000021e42126d603 in acpi::acpi_impl::initialize_acpi(acpi::acpi_impl*) ../../src/devices/board/lib/acpi/acpi-impl.cc:224 <platform-bus-x86.so>+0xed603
 
-After this change we will add extra logging, including:
-* A warning if we see more than one error bit set.
-* A warning if we see an unexpected interrupt.
-* A warning if we get an AUX transfer interrupt when shouldn't.
+Add a simple check that avoids incrementing a pointer by zero, but
+otherwise behaves as before. Note that our findings are against ACPICA
+20221020, but the same code exists on master.
 
-It actually turns out that as a result of this change then at boot we
-sometimes see an error:
-  [drm:dp_aux_isr] *ERROR* Unexpected DP AUX IRQ 0x01000000 when not busy
-That means that, during init, we are seeing DP_INTR_PLL_UNLOCKED. For
-now I'm going to say that leaving this error reported in the logs is
-OK-ish and hopefully it will encourage someone to track down what's
-going on at init time.
-
-One last note here is that this change renames one of the interrupt
-bits. The bit named "i2c done" clearly was used for native transfers
-being done too, so I renamed it to indicate this.
-
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
-Tested-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-Reviewed-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-Patchwork: https://patchwork.freedesktop.org/patch/520658/
-Link: https://lore.kernel.org/r/20230126170745.v2.1.I90ffed3ddd21e818ae534f820cb4d6d8638859ab@changeid
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Link: https://github.com/acpica/acpica/commit/770653e3
+Signed-off-by: Bob Moore <robert.moore@intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/dp/dp_aux.c     | 80 ++++++++++++-----------------
- drivers/gpu/drm/msm/dp/dp_catalog.c |  2 +-
- drivers/gpu/drm/msm/dp/dp_catalog.h |  2 +-
- 3 files changed, 36 insertions(+), 48 deletions(-)
+ drivers/acpi/acpica/dswstate.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_aux.c b/drivers/gpu/drm/msm/dp/dp_aux.c
-index 7b8d4ba868eb7..4742aca2af482 100644
---- a/drivers/gpu/drm/msm/dp/dp_aux.c
-+++ b/drivers/gpu/drm/msm/dp/dp_aux.c
-@@ -161,47 +161,6 @@ static ssize_t dp_aux_cmd_fifo_rx(struct dp_aux_private *aux,
- 	return i;
- }
+diff --git a/drivers/acpi/acpica/dswstate.c b/drivers/acpi/acpica/dswstate.c
+index fbe2ba05c82a6..1c862940cc5b2 100644
+--- a/drivers/acpi/acpica/dswstate.c
++++ b/drivers/acpi/acpica/dswstate.c
+@@ -576,9 +576,14 @@ acpi_ds_init_aml_walk(struct acpi_walk_state *walk_state,
+ 	ACPI_FUNCTION_TRACE(ds_init_aml_walk);
  
--static void dp_aux_native_handler(struct dp_aux_private *aux, u32 isr)
--{
--	if (isr & DP_INTR_AUX_I2C_DONE)
--		aux->aux_error_num = DP_AUX_ERR_NONE;
--	else if (isr & DP_INTR_WRONG_ADDR)
--		aux->aux_error_num = DP_AUX_ERR_ADDR;
--	else if (isr & DP_INTR_TIMEOUT)
--		aux->aux_error_num = DP_AUX_ERR_TOUT;
--	if (isr & DP_INTR_NACK_DEFER)
--		aux->aux_error_num = DP_AUX_ERR_NACK;
--	if (isr & DP_INTR_AUX_ERROR) {
--		aux->aux_error_num = DP_AUX_ERR_PHY;
--		dp_catalog_aux_clear_hw_interrupts(aux->catalog);
--	}
--}
--
--static void dp_aux_i2c_handler(struct dp_aux_private *aux, u32 isr)
--{
--	if (isr & DP_INTR_AUX_I2C_DONE) {
--		if (isr & (DP_INTR_I2C_NACK | DP_INTR_I2C_DEFER))
--			aux->aux_error_num = DP_AUX_ERR_NACK;
--		else
--			aux->aux_error_num = DP_AUX_ERR_NONE;
--	} else {
--		if (isr & DP_INTR_WRONG_ADDR)
--			aux->aux_error_num = DP_AUX_ERR_ADDR;
--		else if (isr & DP_INTR_TIMEOUT)
--			aux->aux_error_num = DP_AUX_ERR_TOUT;
--		if (isr & DP_INTR_NACK_DEFER)
--			aux->aux_error_num = DP_AUX_ERR_NACK_DEFER;
--		if (isr & DP_INTR_I2C_NACK)
--			aux->aux_error_num = DP_AUX_ERR_NACK;
--		if (isr & DP_INTR_I2C_DEFER)
--			aux->aux_error_num = DP_AUX_ERR_DEFER;
--		if (isr & DP_INTR_AUX_ERROR) {
--			aux->aux_error_num = DP_AUX_ERR_PHY;
--			dp_catalog_aux_clear_hw_interrupts(aux->catalog);
--		}
--	}
--}
--
- static void dp_aux_update_offset_and_segment(struct dp_aux_private *aux,
- 					     struct drm_dp_aux_msg *input_msg)
- {
-@@ -410,13 +369,42 @@ void dp_aux_isr(struct drm_dp_aux *dp_aux)
- 	if (!isr)
- 		return;
- 
--	if (!aux->cmd_busy)
-+	if (!aux->cmd_busy) {
-+		DRM_ERROR("Unexpected DP AUX IRQ %#010x when not busy\n", isr);
- 		return;
+ 	walk_state->parser_state.aml =
+-	    walk_state->parser_state.aml_start = aml_start;
+-	walk_state->parser_state.aml_end =
+-	    walk_state->parser_state.pkg_end = aml_start + aml_length;
++	    walk_state->parser_state.aml_start =
++	    walk_state->parser_state.aml_end =
++	    walk_state->parser_state.pkg_end = aml_start;
++	/* Avoid undefined behavior: applying zero offset to null pointer */
++	if (aml_length != 0) {
++		walk_state->parser_state.aml_end += aml_length;
++		walk_state->parser_state.pkg_end += aml_length;
 +	}
  
--	if (aux->native)
--		dp_aux_native_handler(aux, isr);
--	else
--		dp_aux_i2c_handler(aux, isr);
-+	/*
-+	 * The logic below assumes only one error bit is set (other than "done"
-+	 * which can apparently be set at the same time as some of the other
-+	 * bits). Warn if more than one get set so we know we need to improve
-+	 * the logic.
-+	 */
-+	if (hweight32(isr & ~DP_INTR_AUX_XFER_DONE) > 1)
-+		DRM_WARN("Some DP AUX interrupts unhandled: %#010x\n", isr);
-+
-+	if (isr & DP_INTR_AUX_ERROR) {
-+		aux->aux_error_num = DP_AUX_ERR_PHY;
-+		dp_catalog_aux_clear_hw_interrupts(aux->catalog);
-+	} else if (isr & DP_INTR_NACK_DEFER) {
-+		aux->aux_error_num = DP_AUX_ERR_NACK_DEFER;
-+	} else if (isr & DP_INTR_WRONG_ADDR) {
-+		aux->aux_error_num = DP_AUX_ERR_ADDR;
-+	} else if (isr & DP_INTR_TIMEOUT) {
-+		aux->aux_error_num = DP_AUX_ERR_TOUT;
-+	} else if (!aux->native && (isr & DP_INTR_I2C_NACK)) {
-+		aux->aux_error_num = DP_AUX_ERR_NACK;
-+	} else if (!aux->native && (isr & DP_INTR_I2C_DEFER)) {
-+		if (isr & DP_INTR_AUX_XFER_DONE)
-+			aux->aux_error_num = DP_AUX_ERR_NACK;
-+		else
-+			aux->aux_error_num = DP_AUX_ERR_DEFER;
-+	} else if (isr & DP_INTR_AUX_XFER_DONE) {
-+		aux->aux_error_num = DP_AUX_ERR_NONE;
-+	} else {
-+		DRM_WARN("Unexpected interrupt: %#010x\n", isr);
-+		return;
-+	}
+ 	/* The next_op of the next_walk will be the beginning of the method */
  
- 	complete(&aux->comp);
- }
-diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.c b/drivers/gpu/drm/msm/dp/dp_catalog.c
-index 9ef24ced6586d..8df5dfd6ad17f 100644
---- a/drivers/gpu/drm/msm/dp/dp_catalog.c
-+++ b/drivers/gpu/drm/msm/dp/dp_catalog.c
-@@ -34,7 +34,7 @@
- #define MSM_DP_CONTROLLER_P0_SIZE	0x0400
- 
- #define DP_INTERRUPT_STATUS1 \
--	(DP_INTR_AUX_I2C_DONE| \
-+	(DP_INTR_AUX_XFER_DONE| \
- 	DP_INTR_WRONG_ADDR | DP_INTR_TIMEOUT | \
- 	DP_INTR_NACK_DEFER | DP_INTR_WRONG_DATA_CNT | \
- 	DP_INTR_I2C_NACK | DP_INTR_I2C_DEFER | \
-diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.h b/drivers/gpu/drm/msm/dp/dp_catalog.h
-index 6965afa81aad2..32d3e14c98f7f 100644
---- a/drivers/gpu/drm/msm/dp/dp_catalog.h
-+++ b/drivers/gpu/drm/msm/dp/dp_catalog.h
-@@ -13,7 +13,7 @@
- 
- /* interrupts */
- #define DP_INTR_HPD		BIT(0)
--#define DP_INTR_AUX_I2C_DONE	BIT(3)
-+#define DP_INTR_AUX_XFER_DONE	BIT(3)
- #define DP_INTR_WRONG_ADDR	BIT(6)
- #define DP_INTR_TIMEOUT		BIT(9)
- #define DP_INTR_NACK_DEFER	BIT(12)
 -- 
 2.39.2
 
