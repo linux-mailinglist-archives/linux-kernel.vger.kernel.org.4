@@ -2,106 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96BAD6F383A
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 21:38:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBD956F3838
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 21:38:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233396AbjEATiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 15:38:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33522 "EHLO
+        id S233439AbjEATi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 15:38:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233395AbjEAThn (ORCPT
+        with ESMTP id S233171AbjEAThy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 15:37:43 -0400
-Received: from out-42.mta1.migadu.com (out-42.mta1.migadu.com [95.215.58.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EBE42727
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 12:35:58 -0700 (PDT)
-Date:   Mon, 1 May 2023 15:35:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1682969756;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hpWnoWbnH7XHW07GL5HN1fHIxDy9SUudHHmRHAQgRBM=;
-        b=uotwq971HnVfizoutRaYv8+Gg4dprWBpXM6BezfvimNLzl00V1oTf1QlaE+u3WeZsMeziK
-        C5H1k4WMH14ItFz/9ogt0J+TmpRUyd43sqLYCT6f12j4Qtui1iRdfjc+eiHTz8nOyq/OnG
-        5EPIGqnHT7Xhl5AP2WMXcgnbqlqcl8w=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
-        mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
-        roman.gushchin@linux.dev, mgorman@suse.de, willy@infradead.org,
-        liam.howlett@oracle.com, corbet@lwn.net, void@manifault.com,
-        peterz@infradead.org, juri.lelli@redhat.com, ldufour@linux.ibm.com,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, peterx@redhat.com, david@redhat.com,
-        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
-        nathan@kernel.org, dennis@kernel.org, tj@kernel.org,
-        muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
-        pasha.tatashin@soleen.com, yosryahmed@google.com,
-        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
-        andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, gregkh@linuxfoundation.org,
-        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org,
-        Andy Shevchenko <andy@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Noralf =?utf-8?B?VHLDr8K/wr1ubmVz?= <noralf@tronnes.org>
-Subject: Re: [PATCH 01/40] lib/string_helpers: Drop space in
- string_get_size's output
-Message-ID: <ZFAUj+Q+hP7cWs4w@moria.home.lan>
-References: <20230501165450.15352-1-surenb@google.com>
- <20230501165450.15352-2-surenb@google.com>
- <ouuidemyregstrijempvhv357ggp4tgnv6cijhasnungsovokm@jkgvyuyw2fti>
+        Mon, 1 May 2023 15:37:54 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7B2F30D1
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 12:37:24 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-32948b8cb25so45535735ab.0
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 12:37:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682969844; x=1685561844;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lL9+eqzTbFpszMPAGwdcjGQPxkrmAwjR3imb9BQU1Bw=;
+        b=lDdmsUegX31BeF9qgdxQp+miD87e0bxwKqL4p4AelhC3x35r5EvwYr9CaAouRSPHW7
+         H8wip4/vR2vavPO+vULzW8cLLGPj7KDKoR+Jr77SlY3KRMY2oY+4o826o94Uw+eUa8BY
+         6wtGSbFcTCGVIiTf1U7aYa9/cgFL7YZEC5ilD/unnejLVbrOZ88suPde1vkTI4cX+GNi
+         uOMaowWJcGzelDc2v9Vlyz4by5q6K9TFSUzHtaiUwaVqAk5ZT2godfNTMRXfSohC//h9
+         pOvRYQWc5kCCr9NBrJMMZe7qWfTul5nONWV5xx05yr5n+BKaTYgK+Jj103fhgckJFrAj
+         p9xQ==
+X-Gm-Message-State: AC+VfDysv/UQdh3lZMUoTrIXtkz5mxBWbEt2qDg9wnRsyj8cHlr+J9yj
+        VdMu1PEgOlKw4Mtp3SWqI0hw2zNoduSBwZqle2UEk5ZVfUn3
+X-Google-Smtp-Source: ACHHUZ4NBYTE8DBwA4VTr98R6VfDE0D0c+ThHQpBTEHd9wAKkzWpbjKXrNp1F+aBCSrkvxfFNE01C+4tYUJkYCQsymPazlo6gNRb
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ouuidemyregstrijempvhv357ggp4tgnv6cijhasnungsovokm@jkgvyuyw2fti>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a92:cf42:0:b0:32b:7087:5bc1 with SMTP id
+ c2-20020a92cf42000000b0032b70875bc1mr7937628ilr.2.1682969844210; Mon, 01 May
+ 2023 12:37:24 -0700 (PDT)
+Date:   Mon, 01 May 2023 12:37:24 -0700
+In-Reply-To: <ba18f241-72ef-4d10-acaf-5fc34edbd695@rowland.harvard.edu>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000bb868005faa6f31a@google.com>
+Subject: Re: [syzbot] [usb?] memory leak in class_create
+From:   syzbot <syzbot+e7afd76ad060fa0d2605@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, rafael@kernel.org,
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 01, 2023 at 11:13:15AM -0700, Davidlohr Bueso wrote:
-> On Mon, 01 May 2023, Suren Baghdasaryan wrote:
-> 
-> > From: Kent Overstreet <kent.overstreet@linux.dev>
-> > 
-> > Previously, string_get_size() outputted a space between the number and
-> > the units, i.e.
-> >  9.88 MiB
-> > 
-> > This changes it to
-> >  9.88MiB
-> > 
-> > which allows it to be parsed correctly by the 'sort -h' command.
-> 
-> Wouldn't this break users that already parse it the current way?
+Hello,
 
-It's not impossible - but it's not used in very many places and we
-wouldn't be printing in human-readable units if it was meant to be
-parsed - it's mainly used for debug output currently.
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+memory leak in class_create
 
-If someone raises a specific objection we'll do something different,
-otherwise I think standardizing on what userspace tooling already parses
-is a good idea.
+BUG: memory leak
+unreferenced object 0xffff88810a6af480 (size 96):
+  comm "kworker/0:2", pid 1755, jiffies 4294944661 (age 9.520s)
+  hex dump (first 32 bytes):
+    c7 03 9b 85 ff ff ff ff 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff81544e14>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1057
+    [<ffffffff82b65445>] kmalloc include/linux/slab.h:559 [inline]
+    [<ffffffff82b65445>] kzalloc include/linux/slab.h:680 [inline]
+    [<ffffffff82b65445>] class_create+0x25/0x90 drivers/base/class.c:261
+    [<ffffffff831f7a9b>] init_usb_class drivers/usb/core/file.c:91 [inline]
+    [<ffffffff831f7a9b>] usb_register_dev+0x2ab/0x3e0 drivers/usb/core/file.c:179
+    [<ffffffff832cfff4>] usblp_probe+0x4e4/0x750 drivers/usb/class/usblp.c:1208
+    [<ffffffff831f39a9>] usb_probe_interface+0x179/0x3c0 drivers/usb/core/driver.c:396
+    [<ffffffff82b62d7d>] call_driver_probe drivers/base/dd.c:579 [inline]
+    [<ffffffff82b62d7d>] really_probe+0x12d/0x430 drivers/base/dd.c:658
+    [<ffffffff82b63141>] __driver_probe_device+0xc1/0x1a0 drivers/base/dd.c:800
+    [<ffffffff82b6324a>] driver_probe_device+0x2a/0x120 drivers/base/dd.c:830
+    [<ffffffff82b6343b>] __device_attach_driver+0xfb/0x150 drivers/base/dd.c:958
+    [<ffffffff82b60191>] bus_for_each_drv+0xc1/0x110 drivers/base/bus.c:457
+    [<ffffffff82b63962>] __device_attach+0x102/0x2a0 drivers/base/dd.c:1030
+    [<ffffffff82b618fa>] bus_probe_device+0xca/0xd0 drivers/base/bus.c:532
+    [<ffffffff82b5def3>] device_add+0x993/0xc60 drivers/base/core.c:3625
+    [<ffffffff831f0a89>] usb_set_configuration+0x9a9/0xc90 drivers/usb/core/message.c:2211
+    [<ffffffff832033d1>] usb_generic_driver_probe+0xa1/0x100 drivers/usb/core/generic.c:238
+    [<ffffffff831f3080>] usb_probe_device+0x60/0x140 drivers/usb/core/driver.c:293
+
+BUG: memory leak
+unreferenced object 0xffff888114088c00 (size 512):
+  comm "kworker/0:2", pid 1755, jiffies 4294944661 (age 9.520s)
+  hex dump (first 32 bytes):
+    00 8c 08 14 81 88 ff ff 00 8c 08 14 81 88 ff ff  ................
+    00 00 00 00 00 00 00 00 c7 03 9b 85 ff ff ff ff  ................
+  backtrace:
+    [<ffffffff81544e14>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1057
+    [<ffffffff82b65308>] kmalloc include/linux/slab.h:559 [inline]
+    [<ffffffff82b65308>] kzalloc include/linux/slab.h:680 [inline]
+    [<ffffffff82b65308>] class_register+0x28/0x140 drivers/base/class.c:186
+    [<ffffffff82b65467>] class_create+0x47/0x90 drivers/base/class.c:270
+    [<ffffffff831f7a9b>] init_usb_class drivers/usb/core/file.c:91 [inline]
+    [<ffffffff831f7a9b>] usb_register_dev+0x2ab/0x3e0 drivers/usb/core/file.c:179
+    [<ffffffff832cfff4>] usblp_probe+0x4e4/0x750 drivers/usb/class/usblp.c:1208
+    [<ffffffff831f39a9>] usb_probe_interface+0x179/0x3c0 drivers/usb/core/driver.c:396
+    [<ffffffff82b62d7d>] call_driver_probe drivers/base/dd.c:579 [inline]
+    [<ffffffff82b62d7d>] really_probe+0x12d/0x430 drivers/base/dd.c:658
+    [<ffffffff82b63141>] __driver_probe_device+0xc1/0x1a0 drivers/base/dd.c:800
+    [<ffffffff82b6324a>] driver_probe_device+0x2a/0x120 drivers/base/dd.c:830
+    [<ffffffff82b6343b>] __device_attach_driver+0xfb/0x150 drivers/base/dd.c:958
+    [<ffffffff82b60191>] bus_for_each_drv+0xc1/0x110 drivers/base/bus.c:457
+    [<ffffffff82b63962>] __device_attach+0x102/0x2a0 drivers/base/dd.c:1030
+    [<ffffffff82b618fa>] bus_probe_device+0xca/0xd0 drivers/base/bus.c:532
+    [<ffffffff82b5def3>] device_add+0x993/0xc60 drivers/base/core.c:3625
+    [<ffffffff831f0a89>] usb_set_configuration+0x9a9/0xc90 drivers/usb/core/message.c:2211
+    [<ffffffff832033d1>] usb_generic_driver_probe+0xa1/0x100 drivers/usb/core/generic.c:238
+
+
+
+Tested on:
+
+commit:         22b8cc3e Merge tag 'x86_mm_for_6.4' of git://git.kerne..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
+console output: https://syzkaller.appspot.com/x/log.txt?x=14569d94280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5046ebeca744dd40
+dashboard link: https://syzkaller.appspot.com/bug?extid=e7afd76ad060fa0d2605
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=138259d7c80000
+
