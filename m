@@ -2,169 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84F556F2FD4
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 11:16:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C05D76F2FDA
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 11:18:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231779AbjEAJQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 05:16:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38230 "EHLO
+        id S232181AbjEAJSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 05:18:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbjEAJQC (ORCPT
+        with ESMTP id S229556AbjEAJSl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 05:16:02 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A03961AB
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 02:16:00 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-94a342f7c4cso467945466b.0
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 02:16:00 -0700 (PDT)
+        Mon, 1 May 2023 05:18:41 -0400
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675CA18E
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 02:18:40 -0700 (PDT)
+Received: by mail-il1-x12c.google.com with SMTP id e9e14a558f8ab-330ec047d3bso38425ab.0
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 02:18:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1682932560; x=1685524560;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=google.com; s=20221208; t=1682932719; x=1685524719;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=deLhqHNlkRGaOVPkjyoMd684bHUV64uU06CP2w8Rkjc=;
-        b=gj0WDZrvDo6kdPGp5lFtedx5wR7mFPU8FR0fdP8cVEhniVnsLG1KeCwwwnzFaUILX0
-         Caa1boWYSK1UkDkNcEXV0Pc9oOEvhyrWlWtdpazA65ypqCGKOEGgDVbYW9zt6w/uscZ9
-         yiolFislJzxwOdEH2pXWnabryAs8MJhTu1XTkMqe7OjGXxIhYJXgWVocGoPv1VfJHb1w
-         V7RDc2/LQOjrHEpUAD4LShHCLdq2Jzr2BNUy8ldShYiUQ4I5rajthijHF0DJYtJXVTfX
-         ZU7C/FCiyJo7d8YuIUjM2+i5eIq1Dg5oOO/VS5eBdofjNK+o4h4W+761L9A8EH5GxYEh
-         zHhw==
+        bh=O86laohwidt7Bpepl03li3jzMB4EXmXzNejm8wi6V84=;
+        b=jvs7kr4VxgxyccvQgBhbQK9IwARcESd2U3pKgjhOVP4NNOFXTd7usmhNIpWhGDQYUv
+         X9/zszV9c9VElnowdKqA2s7mBjXZgA1dMPT6GMvUQ0EQvfeRH76UG9N+ZNQ92v9BNr8Q
+         FEar4Nl2LalrM7wLcoemncbZ4eS+YLyaaweWkyOy3wybB6clODU8itjhoBqIDtr/9z2U
+         G/0qZbBY+iuKkNZXmT+LWf5TpVIqLCxfONNUIOO2SRzQxkuiIdnqBnUICFHYmrW6p93q
+         0GuRhRc/ewB6u/i+e0glrufgN1R1+e3Z+O0XTAyoZLybYJFo8/v+bgBKQe39iFrK2SGP
+         SWBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682932560; x=1685524560;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1682932719; x=1685524719;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=deLhqHNlkRGaOVPkjyoMd684bHUV64uU06CP2w8Rkjc=;
-        b=JsWGqglT133CZDtF8dwshWCJjFrYLlv1zOSKH2A7kyMHIiSFhOnfLDDglkntg+qEdg
-         lNpYclYjQCrkCf+oKTxT3GW+Npy9HaM/d3gK4i8QpxrQF0WKYsDwFvR38DqD0ZwkvHCG
-         RtDgfPPcQCtkLp1U4x4HpdsfqvjXT30u52K1umbddnUD2V9ggkRngbLs6X8Cd8c9qxRq
-         RAKwv0ookdEnL91oC1MLxI31vR7q2HJoT7uVBumXmgKKOKitfJXBz35dppt4ofym0Ma4
-         ELZ7Xvti1TzM9rrAijRV+9QrDZFBd5me1LIo9SXXVK6XCubq4c7U/z5TnIPasLKJoFso
-         OfkA==
-X-Gm-Message-State: AC+VfDxlp5es6Pyeg1SumUVDun9jyvYarNll+QyrnSERGbv9CqSZsJ7b
-        3Kfwi24DnG49H2ExI8B/d7QRRA==
-X-Google-Smtp-Source: ACHHUZ4Y4cbO7jqnHQ+V0Unb725qqsrtAckf2/0TSgsaBOt3rZZjTc6hfx4mrxGzT5lGMzWBvvT1uA==
-X-Received: by 2002:a17:907:728d:b0:95f:2046:d20d with SMTP id dt13-20020a170907728d00b0095f2046d20dmr12568044ejc.2.1682932560217;
-        Mon, 01 May 2023 02:16:00 -0700 (PDT)
-Received: from fedora.. (ip-095-222-150-251.um34.pools.vodafone-ip.de. [95.222.150.251])
-        by smtp.gmail.com with ESMTPSA id xa3-20020a170907b9c300b0094e954fd015sm14714266ejc.175.2023.05.01.02.15.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 May 2023 02:15:59 -0700 (PDT)
-From:   Patrick Rudolph <patrick.rudolph@9elements.com>
-To:     Peter Rosin <peda@axentia.se>
-Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v14 4/4] i2c: muxes: pca954x: Add regulator support
-Date:   Mon,  1 May 2023 11:15:51 +0200
-Message-Id: <20230501091552.847240-5-patrick.rudolph@9elements.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230501091552.847240-1-patrick.rudolph@9elements.com>
-References: <20230501091552.847240-1-patrick.rudolph@9elements.com>
+        bh=O86laohwidt7Bpepl03li3jzMB4EXmXzNejm8wi6V84=;
+        b=FD9C8bZXrFdjTu09sOoouzs/j4QXZhyRyS+tjDg1C847PFQ3OoPMqrQ5PelLBv5O5A
+         tHNbOaDOVGtTpHcoOl1cbDR1kJgDJ9yqCeO1YIHzPiFx5uRvl5uaq2GuoncSdtg8S9mX
+         UHSGLpcK0ObIKtvV9hiU/K6T4fugydpYw/RJL+O2jedXnhum2wOlfaP7HQr5h6HHSAu3
+         2vtcBIrqfKlTCnnMKlI4iERUY0TJkEXieX7dg92pyp40A0Fk+T3sho0yt2gm6dCIr3NM
+         EEvdnQODTsuCAQeFfxxzEflduOmUayUMteSvCsfKh5/G6JiDAUjwDx9A+KYTQSlW8aDE
+         hAEw==
+X-Gm-Message-State: AC+VfDxovaUY5le2O9oLBvwJOi7G3KphD3SS6anA30s70NHLgLyqjeoy
+        kc19V9WfuAvlAULjPPhKtty91IefXmnCpgm7KxZPTw==
+X-Google-Smtp-Source: ACHHUZ5ngfNanfrhJTCmcKjegKker9g3iRo8IO02+ZEh/87VQJgz1tmGSQF+THePU63x3ALCCiPcmgXXSt2jenW6ZvI=
+X-Received: by 2002:a05:6e02:b49:b0:32a:642d:2a13 with SMTP id
+ f9-20020a056e020b4900b0032a642d2a13mr440333ilu.6.1682932719586; Mon, 01 May
+ 2023 02:18:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <000000000000eccdc505f061d47f@google.com> <ZE4NVo6rTOeGQdK+@mit.edu>
+In-Reply-To: <ZE4NVo6rTOeGQdK+@mit.edu>
+From:   Aleksandr Nogikh <nogikh@google.com>
+Date:   Mon, 1 May 2023 11:18:28 +0200
+Message-ID: <CANp29Y7dG3Z11Bt99rS0y8epdXfaKk+HJfXt=ePbm29vYF88Gg@mail.gmail.com>
+Subject: Re: [syzbot] [sysv?] [vfs?] WARNING in invalidate_bh_lru
+To:     "Theodore Ts'o" <tytso@mit.edu>
+Cc:     syzbot <syzbot+9743a41f74f00e50fc77@syzkaller.appspotmail.com>,
+        hch@infradead.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a vdd regulator and enable it for boards that have the
-mux powered off by default.
+Hi Ted,
 
-Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
----
- drivers/i2c/muxes/i2c-mux-pca954x.c | 28 +++++++++++++++++++++++-----
- 1 file changed, 23 insertions(+), 5 deletions(-)
+On Sun, Apr 30, 2023 at 8:40=E2=80=AFAM Theodore Ts'o <tytso@mit.edu> wrote=
+:
+>
+> On Wed, Dec 21, 2022 at 06:57:38PM -0800, syzbot wrote:
+> > Hello,
+> >
+> > syzbot found the following issue on:
+> >
+> > HEAD commit:    a5541c0811a0 Merge branch 'for-next/core' into for-kern=
+elci
+> > git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/lin=
+ux.git for-kernelci
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=3D1560b830480=
+000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3Dcbd4e584773=
+e9397
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=3D9743a41f74f00=
+e50fc77
+> > compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2=
+da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+> > userspace arch: arm64
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D15e320b38=
+80000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D147c0577880=
+000
+>
+> #syz set subsystems: sysv, udf
+>
+> There are two reproducers, one that mounts a sysv file system, and the
+> other which mounts a udf file system.  There is no mention of ext4 in
+> the stack trace, and yet syzbot has assigned this to the ext4
+> subsystem for some unknown reason.
 
-diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-mux-pca954x.c
-index 968111442625..b863f7b18190 100644
---- a/drivers/i2c/muxes/i2c-mux-pca954x.c
-+++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
-@@ -49,6 +49,7 @@
- #include <linux/module.h>
- #include <linux/pm.h>
- #include <linux/property.h>
-+#include <linux/regulator/consumer.h>
- #include <linux/slab.h>
- #include <linux/spinlock.h>
- #include <dt-bindings/mux/mux.h>
-@@ -101,6 +102,7 @@ struct pca954x {
- 	struct irq_domain *irq;
- 	unsigned int irq_mask;
- 	raw_spinlock_t lock;
-+	struct regulator *supply;
- };
- 
- /* Provide specs for the MAX735x, PCA954x and PCA984x types we know about */
-@@ -444,6 +446,8 @@ static void pca954x_cleanup(struct i2c_mux_core *muxc)
- 	struct pca954x *data = i2c_mux_priv(muxc);
- 	int c, irq;
- 
-+	regulator_disable(data->supply);
-+
- 	if (data->irq) {
- 		for (c = 0; c < data->chip->nchans; c++) {
- 			irq = irq_find_mapping(data->irq, c);
-@@ -496,10 +500,22 @@ static int pca954x_probe(struct i2c_client *client)
- 	i2c_set_clientdata(client, muxc);
- 	data->client = client;
- 
-+	data->supply = devm_regulator_get(dev, "vdd");
-+	if (IS_ERR(data->supply))
-+		return dev_err_probe(dev, PTR_ERR(data->supply),
-+				"Failed to request regulator\n");
-+
-+	ret = regulator_enable(data->supply);
-+	if (ret)
-+		return dev_err_probe(dev, ret,
-+				     "Failed to enable vdd supply\n");
-+
- 	/* Reset the mux if a reset GPIO is specified. */
- 	gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
--	if (IS_ERR(gpio))
--		return PTR_ERR(gpio);
-+	if (IS_ERR(gpio)) {
-+		ret = PTR_ERR(gpio);
-+		goto fail_cleanup;
-+	}
- 	if (gpio) {
- 		udelay(1);
- 		gpiod_set_value_cansleep(gpio, 0);
-@@ -516,7 +532,7 @@ static int pca954x_probe(struct i2c_client *client)
- 
- 		ret = i2c_get_device_id(client, &id);
- 		if (ret && ret != -EOPNOTSUPP)
--			return ret;
-+			goto fail_cleanup;
- 
- 		if (!ret &&
- 		    (id.manufacturer_id != data->chip->id.manufacturer_id ||
-@@ -524,7 +540,8 @@ static int pca954x_probe(struct i2c_client *client)
- 			dev_warn(dev, "unexpected device id %03x-%03x-%x\n",
- 				 id.manufacturer_id, id.part_id,
- 				 id.die_revision);
--			return -ENODEV;
-+			ret = -ENODEV;
-+			goto fail_cleanup;
- 		}
- 	}
- 
-@@ -543,7 +560,8 @@ static int pca954x_probe(struct i2c_client *client)
- 	ret = pca954x_init(client, data);
- 	if (ret < 0) {
- 		dev_warn(dev, "probe failed\n");
--		return -ENODEV;
-+		ret = -ENODEV;
-+		goto fail_cleanup;
- 	}
- 
- 	ret = pca954x_irq_setup(muxc);
--- 
-2.39.2
+In this particular case, there were two ext4-related crashes as well:
 
+https://syzkaller.appspot.com/text?tag=3DCrashReport&x=3D14c7dd1b480000
+https://syzkaller.appspot.com/text?tag=3DCrashReport&x=3D1153a07f480000
+
+I think syzbot picked a too generic frame as a bug title and it just
+got confused by crashes belonging to different filesystems.
+Maybe we need to display subsystems for individual crashes as well, so
+that it's easier for a human to understand what's going on..
+
+--
+Aleksandr
+
+
+>
+>                                         - Ted
+>
+> --
+> You received this message because you are subscribed to the Google Groups=
+ "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgi=
+d/syzkaller-bugs/ZE4NVo6rTOeGQdK%2B%40mit.edu.
