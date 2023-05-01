@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39EAC6F3622
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 20:46:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E32416F3621
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 20:46:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232662AbjEASpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 14:45:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58564 "EHLO
+        id S232294AbjEASpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 14:45:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232650AbjEASpd (ORCPT
+        with ESMTP id S232627AbjEASpe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 14:45:33 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60572212D;
-        Mon,  1 May 2023 11:45:22 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-642f5394651so387386b3a.3;
-        Mon, 01 May 2023 11:45:22 -0700 (PDT)
+        Mon, 1 May 2023 14:45:34 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C04072710;
+        Mon,  1 May 2023 11:45:24 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-63b5465fb99so2209776b3a.1;
+        Mon, 01 May 2023 11:45:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682966721; x=1685558721;
+        d=gmail.com; s=20221208; t=1682966723; x=1685558723;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=txqLAX2ZeHUuYfn7+/gjt1ln/mVXpEI+QLx8SJDIN6g=;
-        b=f4LGwvAuK/XoawhvaLRsbVd1xHVXJgaE/ouTNYpKVg8zlmvLXVogFG4Yovwb42Qd57
-         ujUvo6+nHg//g4U/jxpAh6eSa/qUfyQwZzjNDXTq1XKnvYCLKc4TKA079BDU7kMxPicO
-         yzSk78ao4uAY7b2Xh4rY9awJtE0qXX5TRTvzjc0DEbheXcUVEgpKMmZ4xvdUTPkMepwm
-         kBKUG8/qE28kz6tSUv/M/IgDPCZ63kD0OOhfgOdkEbjqaGO1b4joKsXE7mxC9PzZMBXv
-         LT9v+hEzfTtEN5JKmvtXRG0KdmICx+5h+4MiaZ9vPFPH19dG91BOf7wK/32zlYVlwWNu
-         UWTA==
+        bh=OPMqzx0tM4YAjR4KEyZrtVllL0FOx+3j3GjXG2bjHSo=;
+        b=m0yeF5XDnoSNCwWz8zb/15XvdP85Wq9Wty2g5oK1tWp5bpWl6MJt8GhEaD0cX25F2Q
+         3Gv7A//1uVPQKKu7iWp7bPWX61K+M8YbK5pvQ0pg6Ob3cSw7XYdxYhlIVfJDHRmLqdt0
+         /J5UV81E9BNJUaJd3HxTFbZTBn4GxMw3zLsWaEqt3uq9dPR4awpWlaH1Q1lSFa539lWT
+         msGRv/uFpr9s1XT8zRwVdIAlMSQsbHtogIwLIEdQnhF8j26m2KvK9vKRiA/lUrVWujQt
+         L4S0z5C3av2GWfYb2zS8bmVHtoPDPY8vsluNOZltL4W1BQxZxjaUlq545p/UzpUjSOgb
+         PcvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682966721; x=1685558721;
+        d=1e100.net; s=20221208; t=1682966723; x=1685558723;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=txqLAX2ZeHUuYfn7+/gjt1ln/mVXpEI+QLx8SJDIN6g=;
-        b=Cx8PDxhyQ55beLTOzw8OH2axydnZpHizIDgHRYPDoGg0SXk5f6W4RQaetG0LRopylm
-         rAQfVPPdlebMN2bdwhRDZq4N3DNZPS9a5uK2v9+HqgD6y7S1FFDi8f1b/+qYL3dwWwI3
-         9fRhxW2hSsl0/CqNwRZrR/trXWTVdvxU5lVzxK3mK3KYwkCsiXo0a6CRbOT0YTTE9hwp
-         oxL3U5iHJoPNLLOK5Qis7ocFq4/k4k5HryaCk6zFOSKEGwBntCEi2NKbrTanLWfqjKZn
-         P+DOBXMusPjiEyClcc1ri1OeDeybMKPh5APkzWOArsyrZSBgGKT4uSiae/HhPZTmIZZm
-         TQIQ==
-X-Gm-Message-State: AC+VfDxr+yj6nEtpiE1SFoZnN8AnMxDRw53/fl2pud1w63mTTFOAB5Kc
-        uEbKW6FSnyrFlXSkJq942O0=
-X-Google-Smtp-Source: ACHHUZ5ufftVV8BZl4Vx8rWA4zRjQDkDsiNR5Pk+vNtG9t2sDNjTIzPdswaBLma6goGyfFkSJ5n99w==
-X-Received: by 2002:a05:6a00:2485:b0:641:4d30:7922 with SMTP id c5-20020a056a00248500b006414d307922mr10351853pfv.4.1682966721437;
-        Mon, 01 May 2023 11:45:21 -0700 (PDT)
+        bh=OPMqzx0tM4YAjR4KEyZrtVllL0FOx+3j3GjXG2bjHSo=;
+        b=HGs6D+f8NG6BbXLd1p/ynZKofk9tmXsn1SCDYttU/Gd7ukOvUoNPCApx4uJTP/Jpab
+         L+XHTPiEAFKsxDXAh6BTCVX/QkWmUR1BdxFHdg0KbUljHjpbDG4SzWTcnGDhORCKPkAR
+         nxE0bQ3Pi30wi5OQPPQMmYPU5YGxa6mvrjQLuwLQPSo4+AL4Tr6Ln283z5TUGaAzr9Sa
+         FLR1xplaiDCaemWAeMNmwpdWnnKuP+6Z9HKE21OOltaGJNWvYX0n+7Ac+Mp0arGatKG4
+         jhZDixpjBspNlspPtQPp4iyqOXtqacVPa8FMKBSFxsS34OpYjRWEca/Yx+O/7zmHZ+Je
+         yM7A==
+X-Gm-Message-State: AC+VfDx+z8PnlEuML8AV8/XDb1MDv11ZTK/+UWgW+jg+DbV0/rBf5UEK
+        BvWdDa9Iry1Dec7p+e+q6fs=
+X-Google-Smtp-Source: ACHHUZ5kWDPbyXZ8IAVsgL324BEDoAigBDLexRlapPgQoDaPBV8uSYJRoanU3EsEU9ZHORHXg+btAA==
+X-Received: by 2002:a05:6a00:2d24:b0:63b:2102:a1d4 with SMTP id fa36-20020a056a002d2400b0063b2102a1d4mr22975654pfb.13.1682966723259;
+        Mon, 01 May 2023 11:45:23 -0700 (PDT)
 Received: from localhost ([2a00:79e1:abd:4a00:61b:48ed:72ab:435b])
-        by smtp.gmail.com with ESMTPSA id c192-20020a621cc9000000b0063d44634d8csm20199690pfc.71.2023.05.01.11.45.20
+        by smtp.gmail.com with ESMTPSA id y72-20020a62644b000000b006372791d708sm20201846pfb.104.2023.05.01.11.45.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 May 2023 11:45:21 -0700 (PDT)
+        Mon, 01 May 2023 11:45:22 -0700 (PDT)
 From:   Rob Clark <robdclark@gmail.com>
 To:     dri-devel@lists.freedesktop.org
 Cc:     freedreno@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
@@ -59,15 +59,17 @@ Cc:     freedreno@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
         Emil Velikov <emil.l.velikov@gmail.com>,
         =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
         Rob Clark <robdclark@chromium.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        linux-arm-msm@vger.kernel.org (open list:DRM DRIVER FOR MSM ADRENO GPU),
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org (open list:DOCUMENTATION),
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v3 6/9] drm/msm: Add memory stats to fdinfo
-Date:   Mon,  1 May 2023 11:44:52 -0700
-Message-Id: <20230501184502.1620335-7-robdclark@gmail.com>
+Subject: [PATCH v3 7/9] drm/doc: Relax fdinfo string constraints
+Date:   Mon,  1 May 2023 11:44:53 -0700
+Message-Id: <20230501184502.1620335-8-robdclark@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230501184502.1620335-1-robdclark@gmail.com>
 References: <20230501184502.1620335-1-robdclark@gmail.com>
@@ -85,99 +87,139 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rob Clark <robdclark@chromium.org>
 
-Use the new helper to export stats about memory usage.
-
-v2: Drop unintended hunk
-v3: Rebase
+The restriction about no whitespace, etc, really only applies to the
+usage of strings in keys.  Values can contain anything (other than
+newline).
 
 Signed-off-by: Rob Clark <robdclark@chromium.org>
-Reviewed-by: Emil Velikov <emil.l.velikov@gmail.com>
+Acked-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
 ---
- drivers/gpu/drm/msm/msm_drv.c |  2 ++
- drivers/gpu/drm/msm/msm_gem.c | 15 +++++++++++++++
- 2 files changed, 17 insertions(+)
+ Documentation/gpu/drm-usage-stats.rst | 27 ++++++++++++++-------------
+ 1 file changed, 14 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
-index 1e941aa77609..81a1371c0307 100644
---- a/drivers/gpu/drm/msm/msm_drv.c
-+++ b/drivers/gpu/drm/msm/msm_drv.c
-@@ -1045,20 +1045,22 @@ static const struct drm_ioctl_desc msm_ioctls[] = {
+diff --git a/Documentation/gpu/drm-usage-stats.rst b/Documentation/gpu/drm-usage-stats.rst
+index d012eb56885e..fe35a291ff3e 100644
+--- a/Documentation/gpu/drm-usage-stats.rst
++++ b/Documentation/gpu/drm-usage-stats.rst
+@@ -17,41 +17,42 @@ wherever possible effort should still be made to standardise as much as
+ possible.
  
- static void msm_show_fdinfo(struct drm_printer *p, struct drm_file *file)
- {
- 	struct drm_device *dev = file->minor->dev;
- 	struct msm_drm_private *priv = dev->dev_private;
+ File format specification
+ =========================
  
- 	if (!priv->gpu)
- 		return;
+ - File shall contain one key value pair per one line of text.
+ - Colon character (`:`) must be used to delimit keys and values.
+ - All keys shall be prefixed with `drm-`.
+ - Whitespace between the delimiter and first non-whitespace character shall be
+   ignored when parsing.
+-- Neither keys or values are allowed to contain whitespace characters.
++- Keys are not allowed to contain whitespace characters.
+ - Numerical key value pairs can end with optional unit string.
+ - Data type of the value is fixed as defined in the specification.
  
- 	msm_gpu_show_fdinfo(priv->gpu, file->driver_priv, p);
-+
-+	drm_show_memory_stats(p, file);
- }
+ Key types
+ ---------
  
- static const struct file_operations fops = {
- 	.owner = THIS_MODULE,
- 	DRM_GEM_FOPS,
- 	.show_fdinfo = drm_show_fdinfo,
- };
+ 1. Mandatory, fully standardised.
+ 2. Optional, fully standardised.
+ 3. Driver specific.
  
- static const struct drm_driver msm_driver = {
- 	.driver_features    = DRIVER_GEM |
-diff --git a/drivers/gpu/drm/msm/msm_gem.c b/drivers/gpu/drm/msm/msm_gem.c
-index cd39b9d8abdb..20cfd86d2b32 100644
---- a/drivers/gpu/drm/msm/msm_gem.c
-+++ b/drivers/gpu/drm/msm/msm_gem.c
-@@ -1083,34 +1083,49 @@ int msm_gem_new_handle(struct drm_device *dev, struct drm_file *file,
- 		msm_gem_object_set_name(obj, "%s", name);
+ Data types
+ ----------
  
- 	ret = drm_gem_handle_create(file, obj, handle);
+ - <uint> - Unsigned integer without defining the maximum value.
+-- <str> - String excluding any above defined reserved characters or whitespace.
++- <keystr> - String excluding any above defined reserved characters or whitespace.
++- <valstr> - String.
  
- 	/* drop reference from allocate - handle holds it now */
- 	drm_gem_object_put(obj);
+ Mandatory fully standardised keys
+ ---------------------------------
  
- 	return ret;
- }
+-- drm-driver: <str>
++- drm-driver: <valstr>
  
-+static enum drm_gem_object_status msm_gem_status(struct drm_gem_object *obj)
-+{
-+	struct msm_gem_object *msm_obj = to_msm_bo(obj);
-+	enum drm_gem_object_status status = 0;
-+
-+	if (msm_obj->pages)
-+		status |= DRM_GEM_OBJECT_RESIDENT;
-+
-+	if (msm_obj->madv == MSM_MADV_DONTNEED)
-+		status |= DRM_GEM_OBJECT_PURGEABLE;
-+
-+	return status;
-+}
-+
- static const struct vm_operations_struct vm_ops = {
- 	.fault = msm_gem_fault,
- 	.open = drm_gem_vm_open,
- 	.close = drm_gem_vm_close,
- };
+ String shall contain the name this driver registered as via the respective
+ `struct drm_driver` data structure.
  
- static const struct drm_gem_object_funcs msm_gem_object_funcs = {
- 	.free = msm_gem_free_object,
- 	.pin = msm_gem_prime_pin,
- 	.unpin = msm_gem_prime_unpin,
- 	.get_sg_table = msm_gem_prime_get_sg_table,
- 	.vmap = msm_gem_prime_vmap,
- 	.vunmap = msm_gem_prime_vunmap,
- 	.mmap = msm_gem_object_mmap,
-+	.status = msm_gem_status,
- 	.vm_ops = &vm_ops,
- };
+ Optional fully standardised keys
+ --------------------------------
  
- static int msm_gem_new_impl(struct drm_device *dev,
- 		uint32_t size, uint32_t flags,
- 		struct drm_gem_object **obj)
- {
- 	struct msm_drm_private *priv = dev->dev_private;
- 	struct msm_gem_object *msm_obj;
+ Identification
+ ^^^^^^^^^^^^^^
  
+@@ -68,62 +69,62 @@ to the in kernel representation of `struct drm_file` instances.
+ 
+ Uniqueness of the value shall be either globally unique, or unique within the
+ scope of each device, in which case `drm-pdev` shall be present as well.
+ 
+ Userspace should make sure to not double account any usage statistics by using
+ the above described criteria in order to associate data to individual clients.
+ 
+ Utilization
+ ^^^^^^^^^^^
+ 
+-- drm-engine-<str>: <uint> ns
++- drm-engine-<keystr>: <uint> ns
+ 
+ GPUs usually contain multiple execution engines. Each shall be given a stable
+-and unique name (str), with possible values documented in the driver specific
++and unique name (keystr), with possible values documented in the driver specific
+ documentation.
+ 
+ Value shall be in specified time units which the respective GPU engine spent
+ busy executing workloads belonging to this client.
+ 
+ Values are not required to be constantly monotonic if it makes the driver
+ implementation easier, but are required to catch up with the previously reported
+ larger value within a reasonable period. Upon observing a value lower than what
+ was previously read, userspace is expected to stay with that larger previous
+ value until a monotonic update is seen.
+ 
+-- drm-engine-capacity-<str>: <uint>
++- drm-engine-capacity-<keystr>: <uint>
+ 
+ Engine identifier string must be the same as the one specified in the
+-drm-engine-<str> tag and shall contain a greater than zero number in case the
++drm-engine-<keystr> tag and shall contain a greater than zero number in case the
+ exported engine corresponds to a group of identical hardware engines.
+ 
+ In the absence of this tag parser shall assume capacity of one. Zero capacity
+ is not allowed.
+ 
+-- drm-cycles-<str>: <uint>
++- drm-cycles-<keystr>: <uint>
+ 
+ Engine identifier string must be the same as the one specified in the
+-drm-engine-<str> tag and shall contain the number of busy cycles for the given
++drm-engine-<keystr> tag and shall contain the number of busy cycles for the given
+ engine.
+ 
+ Values are not required to be constantly monotonic if it makes the driver
+ implementation easier, but are required to catch up with the previously reported
+ larger value within a reasonable period. Upon observing a value lower than what
+ was previously read, userspace is expected to stay with that larger previous
+ value until a monotonic update is seen.
+ 
+-- drm-maxfreq-<str>: <uint> [Hz|MHz|KHz]
++- drm-maxfreq-<keystr>: <uint> [Hz|MHz|KHz]
+ 
+ Engine identifier string must be the same as the one specified in the
+-drm-engine-<str> tag and shall contain the maximum frequency for the given
+-engine.  Taken together with drm-cycles-<str>, this can be used to calculate
+-percentage utilization of the engine, whereas drm-engine-<str> only reflects
++drm-engine-<keystr> tag and shall contain the maximum frequency for the given
++engine.  Taken together with drm-cycles-<keystr>, this can be used to calculate
++percentage utilization of the engine, whereas drm-engine-<keystr> only reflects
+ time active without considering what frequency the engine is operating as a
+ percentage of it's maximum frequency.
+ 
+ Memory
+ ^^^^^^
+ 
+ - drm-memory-<region>: <uint> [KiB|MiB]
+ 
+ Each possible memory type which can be used to store buffer objects by the
+ GPU in question shall be given a stable and unique name to be returned as the
 -- 
 2.39.2
 
