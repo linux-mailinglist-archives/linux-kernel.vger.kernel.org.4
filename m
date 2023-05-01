@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A3906F364C
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 20:51:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEC606F364A
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 20:51:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232684AbjEASv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 14:51:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36210 "EHLO
+        id S232707AbjEASvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 14:51:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232557AbjEASvS (ORCPT
+        with ESMTP id S232388AbjEASvR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 14:51:18 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6993CB6;
-        Mon,  1 May 2023 11:51:15 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-95f4c5cb755so570813966b.0;
-        Mon, 01 May 2023 11:51:15 -0700 (PDT)
+        Mon, 1 May 2023 14:51:17 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DAA41FC6;
+        Mon,  1 May 2023 11:51:16 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-95f4c5cb755so570817566b.0;
+        Mon, 01 May 2023 11:51:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682967074; x=1685559074;
+        d=gmail.com; s=20221208; t=1682967075; x=1685559075;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MLmRnoWF7GSL9uIEnEwgKiCLmKJ3pfKNObWjnWGe/8A=;
-        b=pIbdh/qoCWEaYkdF8wlqLF/Kf+r/SoeXVIA26yOmllQEH58I17Cc6TkpijzrWK7/vL
-         wk72zvZtFwVhBXqodmlp5prpu57Np8usE/eii5m1rCKTtKhjMYR9okj1v8Fb4xmg8PWg
-         DienOTHetSO/gZhnwtJfoqVq6tZEkuv+OqJcCVVjS0PvPBGY5q+KNn/WndVaK/9B7gqY
-         fYQ5B7Lr+tbfYfFojcInSnUcvKGE4VDywtZIPjHevIpdbWTM9hQ3QNepJ20witLJT9aB
-         yIY9ceyfI6/95aljLKYeJMAbDvDpsltBHh38pVQP+vVJt2s+lo54LB/bXVR3SRlWxoT8
-         C6cQ==
+        bh=Ia4S9+YQp0hX054SmvRAd0/GGyvsyhJekQtGvFs9lZQ=;
+        b=TSMtVM/KcrRmtF+UDxEuIC3kVv5dfOap7UT9r3zRPlFcA+h72j/j/Nc9iPmrFTgwC4
+         a26u3Wi3qOxAPcAdj4/2G2PQ3mi2ww1HPFwAbKUYsevdjTjlgnOcPZQbnnnuoGtHyq3x
+         k5eWdaF9hVazYrs3m/stejdLIdcwY0d+1JQhclT3Qc3vVKxTeyVf047r2r/ytwjkAwe9
+         D3NStU3JSnMeOEPKrGmXWEJNnZX2acAw8IeEWYFnWbWUSodaSKAsm1poDdqiJG8ZGA73
+         4tfbjqcKBNPypqKUi+4JIc+DWk1I1k3LwNfiTDGqEKhNFysG0UFBJcVlHajqH3Ga+uhl
+         3fLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682967074; x=1685559074;
+        d=1e100.net; s=20221208; t=1682967075; x=1685559075;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=MLmRnoWF7GSL9uIEnEwgKiCLmKJ3pfKNObWjnWGe/8A=;
-        b=KP0Lfakw2wASjHIaV8hla3RbvLdp+eMltL/umzMGGqvXpu8OFF1GRH8WvTB4nPtN+J
-         5mY7OfbRB95/A46M4Vftja0qIDBHBi8Dn6gSGpUI0UtVBFP5JUdKSS1PLxSfj7UUZbY+
-         pWailupiRdknHepbxhkmbiyy5Y+p/P32pLqOYjr/EfuCRQdMVw9lkQzwdgFw7WTQI12f
-         OZl0Nt0o1EBMMwgE16z90vjrBjP+Q00rP0FWz75rmryjGHMN7UZkLAgJGh7uERHw9GlB
-         Cl5vngHdGqbcEai8pHy/FST5uunP8h/YJJGcJKrWtirqPFWWBKpMDzeRszD0DEfYDMy8
-         o4xA==
-X-Gm-Message-State: AC+VfDxHvqXMiWGGPUFtZuzHjqVrCD1I+/XM1lYedLUtsp/8vDRIe+FV
-        3OsCJv85gD3ahqnzzYGcL/4=
-X-Google-Smtp-Source: ACHHUZ7rU3+63xoCrAVtYmeN/ypFOEnC+Gi8uOlDqkOWjPmBLuUgrK23fy5cRnZ+rs7FQ1TKfz5lUg==
-X-Received: by 2002:a17:907:7207:b0:94f:2efa:a3eb with SMTP id dr7-20020a170907720700b0094f2efaa3ebmr13354509ejc.33.1682967073701;
-        Mon, 01 May 2023 11:51:13 -0700 (PDT)
+        bh=Ia4S9+YQp0hX054SmvRAd0/GGyvsyhJekQtGvFs9lZQ=;
+        b=EPOnuzBg0oUn4SLrcbai/wQ4/MBk0uvW8x/89Qbs7FZPX4yu4OrOdBp1XkBoEPJs4s
+         zfTEMIB4+FE0fKOS4e3CElv6JXDuf+Z6TcuNfQ6jFMpgwyFBNrwtBP3nD9177P1PFWL/
+         QXYGff0N/Ts9qYqKxoX8JJCNCHO8T+r7Ihx+jsz4A9EDIE8WBNttaL4z2ak/Kw4uSRMH
+         LzDcIilqclPARCwJlrlb4PGITprtPZhqTZXYkBH1gK3y7UcQE/gI08K2i7O0ETQFMDs1
+         q4Dc/qsLhCHx9uleaP96m9wyI4bYcJvodD+QDf4NGgCOU7gLbRpP8fMlTJIvMDR7A/T+
+         6SAg==
+X-Gm-Message-State: AC+VfDz1GtAFQEndJHGsOq7uEnQsoLWtxu9LpAsfBY/g+0C0gTlSLmz4
+        DU7qeaXx4LnaTzxtBWE8O80=
+X-Google-Smtp-Source: ACHHUZ5KFqi8j+53PjOE4k7tKQLtJogIZF5Gqg6aaMT6dnsZEF7Xh6DD+ZHgPQq+bJFOLMCR32oL1Q==
+X-Received: by 2002:a17:907:2681:b0:94a:682f:7744 with SMTP id bn1-20020a170907268100b0094a682f7744mr13675993ejc.16.1682967075013;
+        Mon, 01 May 2023 11:51:15 -0700 (PDT)
 Received: from localhost.my.domain (83.8.115.30.ipv4.supernova.orange.pl. [83.8.115.30])
-        by smtp.gmail.com with ESMTPSA id g10-20020a170906594a00b008cecb8f374asm15028335ejr.0.2023.05.01.11.51.12
+        by smtp.gmail.com with ESMTPSA id g10-20020a170906594a00b008cecb8f374asm15028335ejr.0.2023.05.01.11.51.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 May 2023 11:51:13 -0700 (PDT)
+        Mon, 01 May 2023 11:51:14 -0700 (PDT)
 From:   Artur Weber <aweber.kernel@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>
 Cc:     Sam Ravnborg <sam@ravnborg.org>, David Airlie <airlied@gmail.com>,
@@ -59,15 +59,15 @@ Cc:     Sam Ravnborg <sam@ravnborg.org>, David Airlie <airlied@gmail.com>,
         dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht,
-        Artur Weber <aweber.kernel@gmail.com>,
-        Nikita Travkin <nikita@trvn.ru>
-Subject: [PATCH v4 2/3] drm/panel: Add Samsung S6D7AA0 panel controller driver
-Date:   Mon,  1 May 2023 20:51:02 +0200
-Message-Id: <20230501185103.25939-3-aweber.kernel@gmail.com>
+        Artur Weber <aweber.kernel@gmail.com>
+Subject: [PATCH v4 3/3] MAINTAINERS: Add entry for Samsung S6D7AA0 LCD panel controller driver
+Date:   Mon,  1 May 2023 20:51:03 +0200
+Message-Id: <20230501185103.25939-4-aweber.kernel@gmail.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230501185103.25939-1-aweber.kernel@gmail.com>
 References: <20230501185103.25939-1-aweber.kernel@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -79,656 +79,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Initial driver for S6D7AA0-controlled panels. Currently, the following
-panels are supported:
+Add myself as maintainer of the Samsung S6D7AA0 panel driver.
 
- - S6D7AA0-LSL080AL02 (Samsung Galaxy Tab 3 8.0)
- - S6D7AA0-LSL080AL03 (Samsung Galaxy Tab A 8.0 2015)
- - S6D7AA0-LTL101AT01 (Samsung Galaxy Tab A 9.7 2015)
-
-It should be possible to extend this driver to work with other panels
-using this IC.
-
-Tested-by: Nikita Travkin <nikita@trvn.ru> #ltl101at01
 Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
 ---
-Changed in v2:
- - Removed unused panel_name property from desc struct
-Changed in v4:
- - Added LSL080AL03 and LTL101AT01 panels
- - Added DSI-controlled backlight support for panels that support it
- - Renamed command defines: CMD_* -> MCS_*
- - Dropped s6d7aa0_bl_ctl_on (not universal across panels)
- - Dropped MIPI_DSI_MODE_LPM flag
- - Added vmipi-supply, renamed enable-supply to power-supply
----
- drivers/gpu/drm/panel/Kconfig                 |   7 +
- drivers/gpu/drm/panel/Makefile                |   1 +
- drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c | 585 ++++++++++++++++++
- 3 files changed, 593 insertions(+)
- create mode 100644 drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c
+ MAINTAINERS | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
-index 2b9d6db7860b..203c0ef0bbfd 100644
---- a/drivers/gpu/drm/panel/Kconfig
-+++ b/drivers/gpu/drm/panel/Kconfig
-@@ -553,6 +553,13 @@ config DRM_PANEL_SAMSUNG_S6D27A1
- 	  This panel can be found in Samsung Galaxy Ace 2
- 	  GT-I8160 mobile phone.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 59a9a22a69fc..d1bc2f8b6e34 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -6641,6 +6641,12 @@ S:	Maintained
+ F:	Documentation/devicetree/bindings/display/panel/samsung,s6d27a1.yaml
+ F:	drivers/gpu/drm/panel/panel-samsung-s6d27a1.c
  
-+config DRM_PANEL_SAMSUNG_S6D7AA0
-+	tristate "Samsung S6D7AA0 MIPI-DSI video mode panel controller"
-+	depends on OF
-+	depends on BACKLIGHT_CLASS_DEVICE
-+	select DRM_MIPI_DSI
-+	select VIDEOMODE_HELPERS
-+
- config DRM_PANEL_SAMSUNG_S6E3HA2
- 	tristate "Samsung S6E3HA2 DSI video mode panel"
- 	depends on OF
-diff --git a/drivers/gpu/drm/panel/Makefile b/drivers/gpu/drm/panel/Makefile
-index ff169781e82d..30cf553c8d1d 100644
---- a/drivers/gpu/drm/panel/Makefile
-+++ b/drivers/gpu/drm/panel/Makefile
-@@ -54,6 +54,7 @@ obj-$(CONFIG_DRM_PANEL_SAMSUNG_DB7430) += panel-samsung-db7430.o
- obj-$(CONFIG_DRM_PANEL_SAMSUNG_LD9040) += panel-samsung-ld9040.o
- obj-$(CONFIG_DRM_PANEL_SAMSUNG_S6D16D0) += panel-samsung-s6d16d0.o
- obj-$(CONFIG_DRM_PANEL_SAMSUNG_S6D27A1) += panel-samsung-s6d27a1.o
-+obj-$(CONFIG_DRM_PANEL_SAMSUNG_S6D7AA0) += panel-samsung-s6d7aa0.o
- obj-$(CONFIG_DRM_PANEL_SAMSUNG_S6E3HA2) += panel-samsung-s6e3ha2.o
- obj-$(CONFIG_DRM_PANEL_SAMSUNG_S6E63J0X03) += panel-samsung-s6e63j0x03.o
- obj-$(CONFIG_DRM_PANEL_SAMSUNG_S6E63M0) += panel-samsung-s6e63m0.o
-diff --git a/drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c b/drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c
-new file mode 100644
-index 000000000000..f839ef14790f
---- /dev/null
-+++ b/drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c
-@@ -0,0 +1,585 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Samsung S6D7AA0 MIPI-DSI TFT LCD controller drm_panel driver.
-+ *
-+ * Copyright (C) 2022 Artur Weber <aweber.kernel@gmail.com>
-+ */
-+
-+#include <linux/backlight.h>
-+#include <linux/delay.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/module.h>
-+#include <linux/regulator/consumer.h>
-+#include <linux/of.h>
-+#include <linux/of_device.h>
-+
-+#include <video/mipi_display.h>
-+#include <drm/drm_mipi_dsi.h>
-+#include <drm/drm_modes.h>
-+#include <drm/drm_panel.h>
-+
-+/* Manufacturer command set */
-+#define MCS_BL_CTL		0xc3
-+#define MCS_OTP_RELOAD		0xd0
-+#define MCS_PASSWD1		0xf0
-+#define MCS_PASSWD2		0xf1
-+#define MCS_PASSWD3		0xfc
-+
-+struct s6d7aa0 {
-+	struct drm_panel panel;
-+	struct mipi_dsi_device *dsi;
-+	struct gpio_desc *reset_gpio;
-+	struct regulator_bulk_data supplies[2];
-+	const struct s6d7aa0_panel_desc *desc;
-+};
-+
-+struct s6d7aa0_panel_desc {
-+	unsigned int panel_type;
-+	int (*init_func)(struct s6d7aa0 *ctx);
-+	int (*off_func)(struct s6d7aa0 *ctx);
-+	const struct drm_display_mode drm_mode;
-+	unsigned long mode_flags;
-+	u32 bus_flags;
-+	bool has_backlight;
-+	bool use_passwd3;
-+};
-+
-+enum s6d7aa0_panels {
-+	S6D7AA0_PANEL_LSL080AL02,
-+	S6D7AA0_PANEL_LSL080AL03,
-+	S6D7AA0_PANEL_LTL101AT01,
-+};
-+
-+static inline struct s6d7aa0 *panel_to_s6d7aa0(struct drm_panel *panel)
-+{
-+	return container_of(panel, struct s6d7aa0, panel);
-+}
-+
-+static void s6d7aa0_reset(struct s6d7aa0 *ctx)
-+{
-+	gpiod_set_value_cansleep(ctx->reset_gpio, 1);
-+	msleep(50);
-+	gpiod_set_value_cansleep(ctx->reset_gpio, 0);
-+	msleep(50);
-+}
-+
-+static int s6d7aa0_lock(struct s6d7aa0 *ctx, bool lock)
-+{
-+	struct mipi_dsi_device *dsi = ctx->dsi;
-+	int ret = 0;
-+
-+	if (lock) {
-+		mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD1, 0xa5, 0xa5);
-+		mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD2, 0xa5, 0xa5);
-+		if (ctx->desc->use_passwd3)
-+			mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD3, 0x5a, 0x5a);
-+	} else {
-+		mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD1, 0x5a, 0x5a);
-+		mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD2, 0x5a, 0x5a);
-+		if (ctx->desc->use_passwd3)
-+			mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD3, 0xa5, 0xa5);
-+	}
-+
-+	return ret;
-+}
-+
-+static int s6d7aa0_on(struct s6d7aa0 *ctx)
-+{
-+	struct mipi_dsi_device *dsi = ctx->dsi;
-+	struct device *dev = &dsi->dev;
-+	int ret;
-+
-+	ret = ctx->desc->init_func(ctx);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to initialize panel: %d\n", ret);
-+		gpiod_set_value_cansleep(ctx->reset_gpio, 1);
-+		return ret;
-+	}
-+
-+	ret = mipi_dsi_dcs_set_display_on(dsi);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to set display on: %d\n", ret);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int s6d7aa0_off(struct s6d7aa0 *ctx)
-+{
-+	struct mipi_dsi_device *dsi = ctx->dsi;
-+	struct device *dev = &dsi->dev;
-+	int ret;
-+
-+	ret = ctx->desc->off_func(ctx);
-+	if (ret < 0) {
-+		dev_err(dev, "Panel-specific off function failed: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = mipi_dsi_dcs_set_display_off(dsi);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to set display off: %d\n", ret);
-+		return ret;
-+	}
-+	msleep(64);
-+
-+	ret = mipi_dsi_dcs_enter_sleep_mode(dsi);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to enter sleep mode: %d\n", ret);
-+		return ret;
-+	}
-+	msleep(120);
-+
-+	return 0;
-+}
-+
-+static int s6d7aa0_prepare(struct drm_panel *panel)
-+{
-+	struct s6d7aa0 *ctx = panel_to_s6d7aa0(panel);
-+	struct device *dev = &ctx->dsi->dev;
-+	int ret;
-+
-+	ret = regulator_bulk_enable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to enable regulators: %d\n", ret);
-+		return ret;
-+	}
-+
-+	s6d7aa0_reset(ctx);
-+
-+	ret = s6d7aa0_on(ctx);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to initialize panel: %d\n", ret);
-+		gpiod_set_value_cansleep(ctx->reset_gpio, 1);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int s6d7aa0_disable(struct drm_panel *panel)
-+{
-+	struct s6d7aa0 *ctx = panel_to_s6d7aa0(panel);
-+	struct device *dev = &ctx->dsi->dev;
-+	int ret;
-+
-+	ret = s6d7aa0_off(ctx);
-+	if (ret < 0)
-+		dev_err(dev, "Failed to un-initialize panel: %d\n", ret);
-+
-+	return 0;
-+}
-+
-+static int s6d7aa0_unprepare(struct drm_panel *panel)
-+{
-+	struct s6d7aa0 *ctx = panel_to_s6d7aa0(panel);
-+
-+	gpiod_set_value_cansleep(ctx->reset_gpio, 1);
-+	regulator_bulk_disable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
-+
-+	return 0;
-+}
-+
-+/* Backlight control code */
-+
-+static int s6d7aa0_bl_update_status(struct backlight_device *bl)
-+{
-+	struct mipi_dsi_device *dsi = bl_get_data(bl);
-+	u16 brightness = backlight_get_brightness(bl);
-+	int ret;
-+
-+	ret = mipi_dsi_dcs_set_display_brightness(dsi, brightness);
-+	if (ret < 0)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+static int s6d7aa0_bl_get_brightness(struct backlight_device *bl)
-+{
-+	struct mipi_dsi_device *dsi = bl_get_data(bl);
-+	u16 brightness;
-+	int ret;
-+
-+	ret = mipi_dsi_dcs_get_display_brightness(dsi, &brightness);
-+	if (ret < 0)
-+		return ret;
-+
-+	return brightness & 0xff;
-+}
-+
-+static const struct backlight_ops s6d7aa0_bl_ops = {
-+	.update_status = s6d7aa0_bl_update_status,
-+	.get_brightness = s6d7aa0_bl_get_brightness,
-+};
-+
-+static struct backlight_device *
-+s6d7aa0_create_backlight(struct mipi_dsi_device *dsi)
-+{
-+	struct device *dev = &dsi->dev;
-+	const struct backlight_properties props = {
-+		.type = BACKLIGHT_RAW,
-+		.brightness = 255,
-+		.max_brightness = 255,
-+	};
-+
-+	return devm_backlight_device_register(dev, dev_name(dev), dev, dsi,
-+					      &s6d7aa0_bl_ops, &props);
-+}
-+
-+/* Initialization code and structures for LSL080AL02 panel */
-+
-+static int s6d7aa0_lsl080al02_init(struct s6d7aa0 *ctx)
-+{
-+	struct mipi_dsi_device *dsi = ctx->dsi;
-+	struct device *dev = &dsi->dev;
-+	int ret;
-+
-+	usleep_range(20000, 25000);
-+
-+	ret = s6d7aa0_lock(ctx, false);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to unlock registers: %d\n", ret);
-+		return ret;
-+	}
-+
-+	mipi_dsi_dcs_write_seq(dsi, MCS_OTP_RELOAD, 0x00, 0x10);
-+	usleep_range(1000, 1500);
-+
-+	/* SEQ_B6_PARAM_8_R01 */
-+	mipi_dsi_dcs_write_seq(dsi, 0xb6, 0x10);
-+
-+	/* BL_CTL_ON */
-+	mipi_dsi_dcs_write_seq(dsi, MCS_BL_CTL, 0x40, 0x00, 0x28);
-+
-+	usleep_range(5000, 6000);
-+
-+	mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_SET_ADDRESS_MODE, 0x04);
-+
-+	ret = mipi_dsi_dcs_exit_sleep_mode(dsi);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to exit sleep mode: %d\n", ret);
-+		return ret;
-+	}
-+
-+	msleep(120);
-+	mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_SET_ADDRESS_MODE, 0x00);
-+
-+	ret = s6d7aa0_lock(ctx, true);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to lock registers: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = mipi_dsi_dcs_set_display_on(dsi);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to set display on: %d\n", ret);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int s6d7aa0_lsl080al02_off(struct s6d7aa0 *ctx)
-+{
-+	struct mipi_dsi_device *dsi = ctx->dsi;
-+
-+	/* BL_CTL_OFF */
-+	mipi_dsi_dcs_write_seq(dsi, MCS_BL_CTL, 0x40, 0x00, 0x20);
-+
-+	return 0;
-+}
-+
-+static const struct drm_display_mode s6d7aa0_lsl080al02_mode = {
-+	.clock = (800 + 16 + 4 + 140) * (1280 + 8 + 4 + 4) * 60 / 1000,
-+	.hdisplay = 800,
-+	.hsync_start = 800 + 16,
-+	.hsync_end = 800 + 16 + 4,
-+	.htotal = 800 + 16 + 4 + 140,
-+	.vdisplay = 1280,
-+	.vsync_start = 1280 + 8,
-+	.vsync_end = 1280 + 8 + 4,
-+	.vtotal = 1280 + 8 + 4 + 4,
-+	.width_mm = 108,
-+	.height_mm = 173,
-+};
-+
-+static const struct s6d7aa0_panel_desc s6d7aa0_lsl080al02_desc = {
-+	.panel_type = S6D7AA0_PANEL_LSL080AL02,
-+	.init_func = s6d7aa0_lsl080al02_init,
-+	.off_func = s6d7aa0_lsl080al02_off,
-+	.drm_mode = s6d7aa0_lsl080al02_mode,
-+	.mode_flags = MIPI_DSI_MODE_VSYNC_FLUSH | MIPI_DSI_MODE_VIDEO_NO_HFP,
-+	.bus_flags = DRM_BUS_FLAG_DE_HIGH,
-+
-+	.has_backlight = false,
-+	.use_passwd3 = false,
-+};
-+
-+/* Initialization code and structures for LSL080AL03 panel */
-+
-+static int s6d7aa0_lsl080al03_init(struct s6d7aa0 *ctx)
-+{
-+	struct mipi_dsi_device *dsi = ctx->dsi;
-+	struct device *dev = &dsi->dev;
-+	int ret;
-+
-+	usleep_range(20000, 25000);
-+
-+	ret = s6d7aa0_lock(ctx, false);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to unlock registers: %d\n", ret);
-+		return ret;
-+	}
-+
-+	if (ctx->desc->panel_type == S6D7AA0_PANEL_LSL080AL03) {
-+		mipi_dsi_dcs_write_seq(dsi, MCS_BL_CTL, 0xc7, 0x00, 0x29);
-+		mipi_dsi_dcs_write_seq(dsi, 0xbc, 0x01, 0x4e, 0xa0);
-+		mipi_dsi_dcs_write_seq(dsi, 0xfd, 0x16, 0x10, 0x11, 0x23,
-+				       0x09);
-+		mipi_dsi_dcs_write_seq(dsi, 0xfe, 0x00, 0x02, 0x03, 0x21,
-+				       0x80, 0x78);
-+	} else if (ctx->desc->panel_type == S6D7AA0_PANEL_LTL101AT01) {
-+		mipi_dsi_dcs_write_seq(dsi, MCS_BL_CTL, 0x40, 0x00, 0x08);
-+		mipi_dsi_dcs_write_seq(dsi, 0xbc, 0x01, 0x4e, 0x0b);
-+		mipi_dsi_dcs_write_seq(dsi, 0xfd, 0x16, 0x10, 0x11, 0x23,
-+				       0x09);
-+		mipi_dsi_dcs_write_seq(dsi, 0xfe, 0x00, 0x02, 0x03, 0x21,
-+				       0x80, 0x68);
-+	}
-+
-+	mipi_dsi_dcs_write_seq(dsi, 0xb3, 0x51);
-+	mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_WRITE_CONTROL_DISPLAY, 0x24);
-+	mipi_dsi_dcs_write_seq(dsi, 0xf2, 0x02, 0x08, 0x08);
-+
-+	usleep_range(10000, 11000);
-+
-+	mipi_dsi_dcs_write_seq(dsi, 0xc0, 0x80, 0x80, 0x30);
-+	mipi_dsi_dcs_write_seq(dsi, 0xcd,
-+			       0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e,
-+			       0x2e, 0x2e, 0x2e, 0x2e, 0x2e);
-+	mipi_dsi_dcs_write_seq(dsi, 0xce,
-+			       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+			       0x00, 0x00, 0x00, 0x00, 0x00);
-+	mipi_dsi_dcs_write_seq(dsi, 0xc1, 0x03);
-+
-+	ret = mipi_dsi_dcs_exit_sleep_mode(dsi);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to exit sleep mode: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = s6d7aa0_lock(ctx, true);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to lock registers: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = mipi_dsi_dcs_set_display_on(dsi);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to set display on: %d\n", ret);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int s6d7aa0_lsl080al03_off(struct s6d7aa0 *ctx)
-+{
-+	struct mipi_dsi_device *dsi = ctx->dsi;
-+
-+	mipi_dsi_dcs_write_seq(dsi, 0x22, 0x00);
-+
-+	return 0;
-+}
-+
-+static const struct drm_display_mode s6d7aa0_lsl080al03_mode = {
-+	.clock = (768 + 18 + 16 + 126) * (1024 + 8 + 2 + 6) * 60 / 1000,
-+	.hdisplay = 768,
-+	.hsync_start = 768 + 18,
-+	.hsync_end = 768 + 18 + 16,
-+	.htotal = 768 + 18 + 16 + 126,
-+	.vdisplay = 1024,
-+	.vsync_start = 1024 + 8,
-+	.vsync_end = 1024 + 8 + 2,
-+	.vtotal = 1024 + 8 + 2 + 6,
-+	.width_mm = 122,
-+	.height_mm = 163,
-+};
-+
-+static const struct s6d7aa0_panel_desc s6d7aa0_lsl080al03_desc = {
-+	.panel_type = S6D7AA0_PANEL_LSL080AL03,
-+	.init_func = s6d7aa0_lsl080al03_init,
-+	.off_func = s6d7aa0_lsl080al03_off,
-+	.drm_mode = s6d7aa0_lsl080al03_mode,
-+	.mode_flags = MIPI_DSI_MODE_NO_EOT_PACKET,
-+	.bus_flags = 0,
-+
-+	.has_backlight = true,
-+	.use_passwd3 = true,
-+};
-+
-+/* Initialization structures for LTL101AT01 panel */
-+
-+static const struct drm_display_mode s6d7aa0_ltl101at01_mode = {
-+	.clock = (768 + 96 + 16 + 184) * (1024 + 8 + 2 + 6) * 60 / 1000,
-+	.hdisplay = 768,
-+	.hsync_start = 768 + 96,
-+	.hsync_end = 768 + 96 + 16,
-+	.htotal = 768 + 96 + 16 + 184,
-+	.vdisplay = 1024,
-+	.vsync_start = 1024 + 8,
-+	.vsync_end = 1024 + 8 + 2,
-+	.vtotal = 1024 + 8 + 2 + 6,
-+	.width_mm = 148,
-+	.height_mm = 197,
-+};
-+
-+static const struct s6d7aa0_panel_desc s6d7aa0_ltl101at01_desc = {
-+	.panel_type = S6D7AA0_PANEL_LTL101AT01,
-+	.init_func = s6d7aa0_lsl080al03_init, /* Similar init to LSL080AL03 */
-+	.off_func = s6d7aa0_lsl080al03_off,
-+	.drm_mode = s6d7aa0_ltl101at01_mode,
-+	.mode_flags = MIPI_DSI_MODE_NO_EOT_PACKET,
-+	.bus_flags = 0,
-+
-+	.has_backlight = true,
-+	.use_passwd3 = true,
-+};
-+
-+static int s6d7aa0_get_modes(struct drm_panel *panel,
-+					struct drm_connector *connector)
-+{
-+	struct drm_display_mode *mode;
-+	struct s6d7aa0 *ctx;
-+
-+	ctx = container_of(panel, struct s6d7aa0, panel);
-+	if (!ctx)
-+		return -EINVAL;
-+
-+	mode = drm_mode_duplicate(connector->dev, &ctx->desc->drm_mode);
-+	if (!mode)
-+		return -ENOMEM;
-+
-+	drm_mode_set_name(mode);
-+
-+	mode->type = DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED;
-+	connector->display_info.width_mm = mode->width_mm;
-+	connector->display_info.height_mm = mode->height_mm;
-+	connector->display_info.bus_flags = ctx->desc->bus_flags;
-+	drm_mode_probed_add(connector, mode);
-+
-+	return 1;
-+}
-+
-+static const struct drm_panel_funcs s6d7aa0_panel_funcs = {
-+	.disable = s6d7aa0_disable,
-+	.prepare = s6d7aa0_prepare,
-+	.unprepare = s6d7aa0_unprepare,
-+	.get_modes = s6d7aa0_get_modes,
-+};
-+
-+static int s6d7aa0_probe(struct mipi_dsi_device *dsi)
-+{
-+	struct device *dev = &dsi->dev;
-+	struct s6d7aa0 *ctx;
-+	int ret;
-+
-+	ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
-+	if (!ctx)
-+		return -ENOMEM;
-+
-+	ctx->desc = of_device_get_match_data(dev);
-+	if (!ctx->desc)
-+		return -ENODEV;
-+
-+	ctx->supplies[0].supply = "power";
-+	ctx->supplies[1].supply = "vmipi";
-+	ret = devm_regulator_bulk_get(dev, ARRAY_SIZE(ctx->supplies),
-+					      ctx->supplies);
-+	if (ret < 0)
-+		return dev_err_probe(dev, ret, "Failed to get regulators\n");
-+
-+	ctx->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_HIGH);
-+	if (IS_ERR(ctx->reset_gpio))
-+		return dev_err_probe(dev, PTR_ERR(ctx->reset_gpio),
-+				     "Failed to get reset-gpios\n");
-+
-+	ctx->dsi = dsi;
-+	mipi_dsi_set_drvdata(dsi, ctx);
-+
-+	dsi->lanes = 4;
-+	dsi->format = MIPI_DSI_FMT_RGB888;
-+	dsi->mode_flags = MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_BURST
-+		| ctx->desc->mode_flags;
-+
-+	drm_panel_init(&ctx->panel, dev, &s6d7aa0_panel_funcs,
-+		       DRM_MODE_CONNECTOR_DSI);
-+	ctx->panel.prepare_prev_first = true;
-+
-+	ret = drm_panel_of_backlight(&ctx->panel);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Failed to get backlight\n");
-+
-+	/* Use DSI-based backlight as fallback if available */
-+	if (ctx->desc->has_backlight && !ctx->panel.backlight) {
-+		ctx->panel.backlight = s6d7aa0_create_backlight(dsi);
-+		if (IS_ERR(ctx->panel.backlight))
-+			return dev_err_probe(dev, PTR_ERR(ctx->panel.backlight),
-+					     "Failed to create backlight\n");
-+	}
-+
-+	drm_panel_add(&ctx->panel);
-+
-+	ret = mipi_dsi_attach(dsi);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to attach to DSI host: %d\n", ret);
-+		drm_panel_remove(&ctx->panel);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static void s6d7aa0_remove(struct mipi_dsi_device *dsi)
-+{
-+	struct s6d7aa0 *ctx = mipi_dsi_get_drvdata(dsi);
-+	int ret;
-+
-+	ret = mipi_dsi_detach(dsi);
-+	if (ret < 0)
-+		dev_err(&dsi->dev, "Failed to detach from DSI host: %d\n", ret);
-+
-+	drm_panel_remove(&ctx->panel);
-+}
-+
-+static const struct of_device_id s6d7aa0_of_match[] = {
-+	{
-+		.compatible = "samsung,s6d7aa0-lsl080al02",
-+		.data = &s6d7aa0_lsl080al02_desc
-+	},
-+	{
-+		.compatible = "samsung,s6d7aa0-lsl080al03",
-+		.data = &s6d7aa0_lsl080al03_desc
-+	},
-+	{
-+		.compatible = "samsung,s6d7aa0-ltl101at01",
-+		.data = &s6d7aa0_ltl101at01_desc
-+	},
-+	{ /* sentinel */ }
-+};
-+
-+static struct mipi_dsi_driver s6d7aa0_driver = {
-+	.probe = s6d7aa0_probe,
-+	.remove = s6d7aa0_remove,
-+	.driver = {
-+		.name = "panel-samsung-s6d7aa0",
-+		.of_match_table = s6d7aa0_of_match,
-+	},
-+};
-+module_mipi_dsi_driver(s6d7aa0_driver);
-+
-+MODULE_AUTHOR("Artur Weber <aweber.kernel@gmail.com>");
-+MODULE_DESCRIPTION("Samsung S6D7AA0 MIPI-DSI LCD controller driver");
-+MODULE_LICENSE("GPL");
++DRM DRIVER FOR SAMSUNG S6D7AA0 PANELS
++M:	Artur Weber <aweber.kernel@gmail.com>
++S:	Maintained
++F:	Documentation/devicetree/bindings/display/panel/samsung,s6d7aa0.yaml
++F:	drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c
++
+ DRM DRIVER FOR SITRONIX ST7703 PANELS
+ M:	Guido Günther <agx@sigxcpu.org>
+ R:	Purism Kernel Team <kernel@puri.sm>
 -- 
 2.40.1
 
