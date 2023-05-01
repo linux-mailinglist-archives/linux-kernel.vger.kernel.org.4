@@ -2,74 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC4086F3AC7
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 01:06:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98D886F3ADB
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 01:14:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233241AbjEAXGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 19:06:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43898 "EHLO
+        id S233139AbjEAXOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 19:14:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233156AbjEAXGD (ORCPT
+        with ESMTP id S229810AbjEAXOC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 19:06:03 -0400
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14665358B;
-        Mon,  1 May 2023 16:06:01 -0700 (PDT)
-Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 341MdjXh003950;
-        Mon, 1 May 2023 19:05:57 -0400
-Received: from nwd2mta4.analog.com ([137.71.173.58])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3q8w3aef67-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 01 May 2023 19:05:57 -0400
-Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
-        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 341N5uDA056200
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 1 May 2023 19:05:56 -0400
-Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
- ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Mon, 1 May 2023 19:05:55 -0400
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
- ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Mon, 1 May 2023 19:05:54 -0400
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Mon, 1 May 2023 19:05:54 -0400
-Received: from okan.localdomain ([10.158.19.61])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 341N5QQj005911;
-        Mon, 1 May 2023 19:05:49 -0400
-From:   Okan Sahin <okan.sahin@analog.com>
-To:     <okan.sahin@analog.com>
-CC:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 2/2] gpio: ds4520: Add ADI DS4520 GPIO Expander Support
-Date:   Tue, 2 May 2023 02:05:16 +0300
-Message-ID: <20230501230517.4491-3-okan.sahin@analog.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230501230517.4491-1-okan.sahin@analog.com>
-References: <20230501230517.4491-1-okan.sahin@analog.com>
+        Mon, 1 May 2023 19:14:02 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7D730D6;
+        Mon,  1 May 2023 16:14:00 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f09b4a1527so31657175e9.0;
+        Mon, 01 May 2023 16:14:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682982838; x=1685574838;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dH0PVRqeh1hbjfzzn3FtIhyE9VI9lTkG4LXY49ABXmY=;
+        b=JQj0JK6I2bTiPohR3qubZWuRn+sGFRxt6BiT32mEZPbkhdb+VDED/zAQ7lBuswWTRu
+         z/wa9FNBxqoJyBRr1tEicrUqsort73a5tOt/dvLxRJXwtYzaOxaZSEh4metr65/4MmiW
+         E4iwriT+F51wa6I+jRK21/2vn1dJNNORgGSHNAWFjwgktUkZ3lN21JYI5lznuqMp+q/e
+         J+UDk+SzLCrItZ9rhWkvwbFEdc036nWSXBqMtCEpdK3hfAxjClYVCkZKynnA8LsHEc0p
+         +tCc2fXNTCwiS2GLkhOV5E4Q03YTYRyOflX1DfH8buK9Myr7cllHM741uQNN5I97MQRU
+         zNYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682982838; x=1685574838;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dH0PVRqeh1hbjfzzn3FtIhyE9VI9lTkG4LXY49ABXmY=;
+        b=RPaKffdaZPXrj+iIIs6/Has9CTx5q0NI3x8xaXDfSUOvGjiSYtN2OIwKhqWSUIENX8
+         33Dlb/DKNL9HkbeGoYjyytOFUzBS717zTTD/rdIn5IXYSs1mR0X7IAlTBriwD+mCnwzQ
+         I9kPop71V9oQ+xxpcVw/NHnXGuW+15o+PusSDvmzlU10iKPclBCMNwq3G28r90YNU8aR
+         rdBfX5hlBuSJzyp+ypGdp39aa7RFaq+JSjyG+x2aNXC1mT8btTzdkv2HH7n5rHPYYrpw
+         KWhP+b9q0KMpP+UF6ENb4ulNg5xv6Y96h6eD4kz4k6XIXkTNB9SgGU546M1NYvc+Jg2N
+         Cwew==
+X-Gm-Message-State: AC+VfDwrs9b5Uh4lrH+vPwy+3dSHt7IP0l8kdJ/AuHrp7LrXbranOGhF
+        QS/p5+khgxuuth2+c3G8TFw=
+X-Google-Smtp-Source: ACHHUZ4B+CYvDYGtDHGkYMOJFrOq8n7poWlJLL09a9R99dns+0+E4k2Wr5n2KBxrwUijlxnB+zLwbw==
+X-Received: by 2002:a05:600c:2046:b0:3f1:9503:4db0 with SMTP id p6-20020a05600c204600b003f195034db0mr10552021wmg.13.1682982838155;
+        Mon, 01 May 2023 16:13:58 -0700 (PDT)
+Received: from lucifer.home (host86-156-84-164.range86-156.btcentralplus.com. [86.156.84.164])
+        by smtp.googlemail.com with ESMTPSA id v9-20020a05600c444900b003f173be2ccfsm48948904wmn.2.2023.05.01.16.13.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 May 2023 16:13:57 -0700 (PDT)
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Mika Penttila <mpenttil@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Theodore Ts'o <tytso@mit.edu>, Peter Xu <peterx@redhat.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>
+Subject: [PATCH v6 0/3] mm/gup: disallow GUP writing to file-backed mappings by default
+Date:   Tue,  2 May 2023 00:11:46 +0100
+Message-Id: <cover.1682981880.git.lstoakes@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-GUID: 61MpMiK2BLsEvwWznN-jo9SNWWj8kRyt
-X-Proofpoint-ORIG-GUID: 61MpMiK2BLsEvwWznN-jo9SNWWj8kRyt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-01_14,2023-04-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=897
- impostorscore=0 clxscore=1015 lowpriorityscore=0 mlxscore=0 bulkscore=0
- adultscore=0 malwarescore=0 suspectscore=0 priorityscore=1501 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2305010186
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,142 +111,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DS4520 is a 9-bit nonvolatile (NV) I/O expander.
-It offers users a digitally programmable alternative
-to hardware jumpers and mechanical switches that are
-being used to control digital logic node.
+Writing to file-backed mappings which require folio dirty tracking using
+GUP is a fundamentally broken operation, as kernel write access to GUP
+mappings do not adhere to the semantics expected by a file system.
 
-Signed-off-by: Okan Sahin <okan.sahin@analog.com>
----
- drivers/gpio/Kconfig       | 11 +++++
- drivers/gpio/Makefile      |  1 +
- drivers/gpio/gpio-ds4520.c | 83 ++++++++++++++++++++++++++++++++++++++
- 3 files changed, 95 insertions(+)
- create mode 100644 drivers/gpio/gpio-ds4520.c
+A GUP caller uses the direct mapping to access the folio, which does not
+cause write notify to trigger, nor does it enforce that the caller marks
+the folio dirty.
 
-diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-index 13be729710f2..5f89e46d6411 100644
---- a/drivers/gpio/Kconfig
-+++ b/drivers/gpio/Kconfig
-@@ -1000,6 +1000,17 @@ config GPIO_ADNP
- 	  enough to represent all pins, but the driver will assume a
- 	  register layout for 64 pins (8 registers).
- 
-+config GPIO_DS4520
-+	tristate "DS4520 I2C GPIO expander"
-+	select REGMAP_I2C
-+	select GPIO_REGMAP
-+	help
-+	  GPIO driver for ADI DS4520 I2C-based GPIO expander.
-+	  Say yes here to enable the GPIO driver for the ADI DS4520 chip.
-+
-+	  To compile this driver as a module, choose M here: the module will
-+	  be called gpio-ds4520.
-+
- config GPIO_GW_PLD
- 	tristate "Gateworks PLD GPIO Expander"
- 	depends on OF_GPIO
-diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
-index c048ba003367..6f8656d5d617 100644
---- a/drivers/gpio/Makefile
-+++ b/drivers/gpio/Makefile
-@@ -52,6 +52,7 @@ obj-$(CONFIG_GPIO_DA9052)		+= gpio-da9052.o
- obj-$(CONFIG_GPIO_DA9055)		+= gpio-da9055.o
- obj-$(CONFIG_GPIO_DAVINCI)		+= gpio-davinci.o
- obj-$(CONFIG_GPIO_DLN2)			+= gpio-dln2.o
-+obj-$(CONFIG_GPIO_DS4520)		+= gpio-ds4520.o
- obj-$(CONFIG_GPIO_DWAPB)		+= gpio-dwapb.o
- obj-$(CONFIG_GPIO_EIC_SPRD)		+= gpio-eic-sprd.o
- obj-$(CONFIG_GPIO_EM)			+= gpio-em.o
-diff --git a/drivers/gpio/gpio-ds4520.c b/drivers/gpio/gpio-ds4520.c
-new file mode 100644
-index 000000000000..3358c2faa787
---- /dev/null
-+++ b/drivers/gpio/gpio-ds4520.c
-@@ -0,0 +1,83 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Copyright (c) 2023 Analog Devices, Inc.
-+ * Driver for the DS4520 I/O Expander
-+ */
-+
-+#include <linux/device.h>
-+#include <linux/gpio/driver.h>
-+#include <linux/gpio/regmap.h>
-+#include <linux/i2c.h>
-+#include <linux/regmap.h>
-+
-+#define NUMBER_OF_GPIO	9
-+
-+#define PULLUP0		0xF0
-+#define IO_CONTROL0	0xF2
-+#define IO_STATUS0	0xF8
-+
-+static const struct regmap_config ds4520_regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+};
-+
-+static int ds4520_gpio_probe(struct i2c_client *client)
-+{
-+	struct gpio_regmap_config config = {0};
-+	struct device *dev = &client->dev;
-+	struct regmap *regmap;
-+	u32 ngpio;
-+	u32 base;
-+	int ret;
-+
-+	ngpio = NUMBER_OF_GPIO;
-+
-+	ret = device_property_read_u32(dev, "reg", &base);
-+	if (ret)
-+		return -EINVAL;
-+	regmap = devm_regmap_init_i2c(client, &ds4520_regmap_config);
-+	if (IS_ERR(regmap)) {
-+		ret = PTR_ERR(regmap);
-+		dev_err_probe(dev, ret,
-+			      "Failed to allocate register map\n");
-+		return ret;
-+	}
-+
-+	config.regmap = regmap;
-+	config.parent = dev;
-+	config.ngpio = ngpio;
-+
-+	config.reg_dat_base = base + IO_STATUS0;
-+	config.reg_set_base = base + PULLUP0;
-+	config.reg_dir_out_base = base + IO_CONTROL0;
-+
-+	return PTR_ERR_OR_ZERO(devm_gpio_regmap_register(dev, &config));
-+}
-+
-+static const struct of_device_id ds4520_gpio_of_match_table[] = {
-+	{
-+		.compatible = "adi,ds4520-gpio"
-+	},
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, ds4520_gpio_of_match_table);
-+
-+static const struct i2c_device_id ds4520_gpio_id_table[] = {
-+	{ "ds4520-gpio" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(i2c, ds4520_gpio_id_table);
-+
-+static struct i2c_driver ds4520_gpio_driver = {
-+	.driver = {
-+		.name = "ds4520-gpio",
-+		.of_match_table = ds4520_gpio_of_match_table,
-+	},
-+	.probe_new = ds4520_gpio_probe,
-+	.id_table = ds4520_gpio_id_table,
-+};
-+module_i2c_driver(ds4520_gpio_driver);
-+
-+MODULE_DESCRIPTION("DS4520 I/O Expander");
-+MODULE_AUTHOR("Okan Sahin <okan.sahin@analog.com>");
-+MODULE_LICENSE("GPL");
--- 
-2.30.2
+The problem arises when, after an initial write to the folio, writeback
+results in the folio being cleaned and then the caller, via the GUP
+interface, writes to the folio again.
 
+As a result of the use of this secondary, direct, mapping to the folio no
+write notify will occur, and if the caller does mark the folio dirty, this
+will be done so unexpectedly.
+
+For example, consider the following scenario:-
+
+1. A folio is written to via GUP which write-faults the memory, notifying
+   the file system and dirtying the folio.
+2. Later, writeback is triggered, resulting in the folio being cleaned and
+   the PTE being marked read-only.
+3. The GUP caller writes to the folio, as it is mapped read/write via the
+   direct mapping.
+4. The GUP caller, now done with the page, unpins it and sets it dirty
+   (though it does not have to).
+
+This change updates both the PUP FOLL_LONGTERM slow and fast APIs. As
+pin_user_pages_fast_only() does not exist, we can rely on a slightly
+imperfect whitelisting in the PUP-fast case and fall back to the slow case
+should this fail.
+
+v6:
+- Rebased on latest mm-unstable as of 28th April 2023.
+- Add PUP-fast check with handling for rcu-locked TLB shootdown to synchronise
+  correctly.
+- Split patch series into 3 to make it more digestible.
+
+v5:
+- Rebased on latest mm-unstable as of 25th April 2023.
+- Some small refactorings suggested by John.
+- Added an extended description of the problem in the comment around
+  writeable_file_mapping_allowed() for clarity.
+- Updated commit message as suggested by Mika and John.
+https://lore.kernel.org/all/6b73e692c2929dc4613af711bdf92e2ec1956a66.1682638385.git.lstoakes@gmail.com/
+
+v4:
+- Split out vma_needs_dirty_tracking() from vma_wants_writenotify() to
+  reduce duplication and update to use this in the GUP check. Note that
+  both separately check vm_ops_needs_writenotify() as the latter needs to
+  test this before the vm_pgprot_modify() test, resulting in
+  vma_wants_writenotify() checking this twice, however it is such a small
+  check this should not be egregious.
+https://lore.kernel.org/all/3b92d56f55671a0389252379237703df6e86ea48.1682464032.git.lstoakes@gmail.com/
+
+v3:
+- Rebased on latest mm-unstable as of 24th April 2023.
+- Explicitly check whether file system requires folio dirtying. Note that
+  vma_wants_writenotify() could not be used directly as it is very much focused
+  on determining if the PTE r/w should be set (e.g. assuming private mapping
+  does not require it as already set, soft dirty considerations).
+- Tested code against shmem and hugetlb mappings - confirmed that these are not
+  disallowed by the check.
+- Eliminate FOLL_ALLOW_BROKEN_FILE_MAPPING flag and instead perform check only
+  for FOLL_LONGTERM pins.
+- As a result, limit check to internal GUP code.
+ https://lore.kernel.org/all/23c19e27ef0745f6d3125976e047ee0da62569d4.1682406295.git.lstoakes@gmail.com/
+
+v2:
+- Add accidentally excluded ptrace_access_vm() use of
+  FOLL_ALLOW_BROKEN_FILE_MAPPING.
+- Tweak commit message.
+https://lore.kernel.org/all/c8ee7e02d3d4f50bb3e40855c53bda39eec85b7d.1682321768.git.lstoakes@gmail.com/
+
+v1:
+https://lore.kernel.org/all/f86dc089b460c80805e321747b0898fd1efe93d7.1682168199.git.lstoakes@gmail.com/
+
+
+Lorenzo Stoakes (3):
+  mm/mmap: separate writenotify and dirty tracking logic
+  mm/gup: disallow FOLL_LONGTERM GUP-nonfast writing to file-backed
+    mappings
+  mm/gup: disallow FOLL_LONGTERM GUP-fast writing to file-backed
+    mappings
+
+ include/linux/mm.h |   1 +
+ mm/gup.c           | 128 +++++++++++++++++++++++++++++++++++++++++++--
+ mm/mmap.c          |  36 +++++++++----
+ 3 files changed, 153 insertions(+), 12 deletions(-)
+
+--
+2.40.1
