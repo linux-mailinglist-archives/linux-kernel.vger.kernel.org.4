@@ -2,313 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02B6B6F2BF3
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 04:11:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 783156F2BF5
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 04:15:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231249AbjEACK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 22:10:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42544 "EHLO
+        id S229916AbjEACO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 22:14:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbjEACK4 (ORCPT
+        with ESMTP id S229531AbjEACO5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 22:10:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC2EE48;
-        Sun, 30 Apr 2023 19:10:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DFC1460DCF;
-        Mon,  1 May 2023 02:10:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11702C433D2;
-        Mon,  1 May 2023 02:10:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682907053;
-        bh=2GlUlkWpYxlo5gpiVBc88jTPdsDukE8rDlPvFN9QCLE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=b8o4FB/WoTuM65Lyovw3GCIE0kN7nGwUT5yOaiki7wZgb0cXUYUrvfKvzkA+bd+nJ
-         JS/AqGStWPuFwT03zOnzGTasOS1G9idrqEd1Wqm9nY0Ulz3/n4p6rdzkVC3r0kwJpF
-         HL9EG+erCzqpSAoWLwrNEdORGFXfbpf32XaNsNgWolgAkiWX4eDui0+gEbPcjdaZl0
-         k0xG4Wdi2XCKET/qSi+FUHaX9kLfD7wiw2zFBh7FpUFLDqxRC+YdknIejLJOI1Ckb/
-         8ISBKTxrABDRSUrFiaDqgFlD8lKt3E+hWOt+xrziPXRLdQU7P6cUEN40mrqQLG2sdk
-         HAUxOkg2XVcnw==
-Date:   Sun, 30 Apr 2023 21:10:51 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Ding Hui <dinghui@sangfor.com.cn>
-Cc:     bhelgaas@google.com, sathyanarayanan.kuppuswamy@linux.intel.com,
-        vidyas@nvidia.com, david.e.box@linux.intel.com,
-        kai.heng.feng@canonical.com, michael.a.bottini@linux.intel.com,
-        rajatja@google.com, qinzongquan@sangfor.com.cn,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI/ASPM: fix UAF by removing cached downstream
-Message-ID: <20230501021051.GA543423@bhelgaas>
+        Sun, 30 Apr 2023 22:14:57 -0400
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD42EE4E;
+        Sun, 30 Apr 2023 19:14:55 -0700 (PDT)
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-2f833bda191so1105640f8f.1;
+        Sun, 30 Apr 2023 19:14:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682907294; x=1685499294;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dF2Oq+4K4N5QrRxu/ofhiyU4ka4upW1zrADy8lB3cuE=;
+        b=PKKfCuDg2FFpsyKPwverRrurvazHKM/00biQQV+UOTz9IluBCGu9EPNmEhedbGh9sa
+         a3+WnulHyyVbV16ByjohZBR1ZoTlqyt37pPxyfYyTq25Vp9fxcF1B6SyzeF54uSlV5hL
+         2m8EPPgkPVvU++Ma3BPINyDqABAVy40i0ZkQYQAwZ++qrUJ84mjLk/g8SGiRx+V8Mq+T
+         3qXuUBe/zzHvVrgF86aFBe1sMZnW7W8pu7qK4hxNm/KHQAwXdh1Wzkxyt8d8fWq2Hix2
+         gTB6Y7MxPuC44qzzt1RhDrvyPQIX+X1RFPW0/NQUitbSIj2W60Ygz0RaDOqY5PoE3aGN
+         zKzQ==
+X-Gm-Message-State: AC+VfDzITdLYa1BDp0Fhup21DZLWJ1N/3wEVTqijwFq/uvBzFLisubGN
+        lE2C6dppHMRglXVdpUbNnKM=
+X-Google-Smtp-Source: ACHHUZ5rVWvxu8Sibinq6YwcXcWI6z+7WASAxvSNQ9LLZxDkWeF5bCHy7NVBndlye7bH+pGkGQxPIQ==
+X-Received: by 2002:a5d:5186:0:b0:306:2b5f:8d0a with SMTP id k6-20020a5d5186000000b003062b5f8d0amr2029597wrv.56.1682907294075;
+        Sun, 30 Apr 2023 19:14:54 -0700 (PDT)
+Received: from costa-tp.bos2.lab ([2a00:a040:1a3:c11b:3ae6:1732:e587:a81f])
+        by smtp.gmail.com with ESMTPSA id bl13-20020adfe24d000000b003062d3daf79sm1568660wrb.107.2023.04.30.19.14.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 30 Apr 2023 19:14:53 -0700 (PDT)
+From:   Costa Shulyupin <costa.shul@redhat.com>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-doc@vger.kernel.org
+Cc:     Costa Shulyupin <costa.shul@redhat.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v2] docs: automatic redirects for moved pages
+Date:   Mon,  1 May 2023 05:13:36 +0300
+Message-Id: <20230501021338.182770-1-costa.shul@redhat.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230429132604.31853-1-dinghui@sangfor.com.cn>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 29, 2023 at 09:26:04PM +0800, Ding Hui wrote:
-> If the function 0 of a multifunction device is removed, an freed
-> downstream pointer will be left in struct pcie_link_state, and then
-> when pcie_config_aspm_link() be invoked from any path, we will get a
-> KASAN use-after-free report.
+Problems:
+- The documentation is not well-organized
+- Relocating pages disrupts external links to
+  the documentation and causes confusion for users
 
-Thanks for finding this problem, debugging it, and the patch!
+Benefits:
+- Users can easily access relocated pages from external resources
+- Using redirects frees up options for reorganizing the documentation
 
-In this case we're doing a "software remove" and the other functions
-are still present, right?  It's kind of annoying that there's only one
-link, but all the functions of a multifunction device have a Link
-Control register, and the spec "recommends" that software program the
-same ASPM control value for all the functions.
+The solution:
+- To prevent the need for ongoing maintenance, extract renames
+  from git log since specified age
+- Input the renames into sphinx_reredirects module
 
-The hardware of course doesn't know anything about this software
-remove; all the functions are still physically present and powered up.
+Signed-off-by: Costa Shulyupin <costa.shul@redhat.com>
 
-That makes me think that if software ignores the "removed" function
-and continues to operate ASPM on the N-1 remaining functions, we're
-outside the spec recommendations because the ASPM configuration is no
-longer the same across all the functions.
+---
 
-So my inclination would be disable ASPM completely when any function
-of a multi-function device is removed.  What are your thoughts on
-this?
+Changes:
+- added the extraction of renames from Git.
 
-> Reproducer:
-> 
->   [root@host ~]# cat repro.sh
->   #!/bin/bash
->   DEV_F0="0000:03:00.0"
->   echo 1 > /sys/bus/pci/devices/$DEV_F0/remove
->   echo powersave > /sys/module/pcie_aspm/parameters/policy
-> 
-> Result:
-> 
-> [  177.433490] ==================================================================
-> [  177.433814] BUG: KASAN: slab-use-after-free in pcie_config_aspm_link+0x42d/0x500
-> [  177.434114] Read of size 4 at addr ffff8881070c80a0 by task repro.sh/2056
-> 
-> [  177.434747] CPU: 3 PID: 2056 Comm: repro.sh Not tainted 6.3.0+ #15
-> [  177.435062] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 11/12/2020
-> [  177.435379] Call Trace:
-> [  177.435741]  <TASK>
-> [  177.436058]  dump_stack_lvl+0x33/0x50
-> [  177.436379]  print_address_description.constprop.0+0x27/0x310
-> [  177.436733]  print_report+0x3e/0x70
-> [  177.437067]  ? pcie_config_aspm_link+0x42d/0x500
-> [  177.437398]  kasan_report+0xae/0xe0
-> [  177.437753]  ? pcie_config_aspm_link+0x42d/0x500
-> [  177.438115]  pcie_config_aspm_link+0x42d/0x500
-> [  177.438447]  pcie_aspm_set_policy+0x8e/0x1a0
-> [  177.438862]  param_attr_store+0x162/0x2c0
-> [  177.439217]  ? __pfx_sysfs_kf_write+0x10/0x10
-> [  177.439571]  module_attr_store+0x3e/0x80
-> [  177.439898]  kernfs_fop_write_iter+0x2d5/0x460
-> [  177.440218]  vfs_write+0x72e/0xae0
-> [  177.440552]  ? __pfx_vfs_write+0x10/0x10
-> [  177.440866]  ? __count_memcg_events+0xea/0x1d0
-> [  177.441173]  ksys_write+0xed/0x1c0
-> [  177.441519]  ? __pfx_ksys_write+0x10/0x10
-> [  177.441874]  do_syscall_64+0x38/0x90
-> [  177.442202]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
-> [  177.442547] RIP: 0033:0x7f0829a622c7
-> [  177.442922] Code: 0e 00 f7 d8 64 89 02 48 c7 c0 ff ff ff ff eb b7 0f 1f 00 f3 0f 1e fa 64 8b 04 25 18 00 00 00 85 c0 75 10 b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 51 c3 48 83 ec 28 48 89 54 24 18 48 89 74 24
-> [  177.443721] RSP: 002b:00007ffc6bb2d128 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-> [  177.444151] RAX: ffffffffffffffda RBX: 000000000000000a RCX: 00007f0829a622c7
-> [  177.444572] RDX: 000000000000000a RSI: 000055b8e6b168f0 RDI: 0000000000000001
-> [  177.445049] RBP: 000055b8e6b168f0 R08: 00007f0829b12000 R09: 00007f0829b12080
-> [  177.445490] R10: 00007f0829b11f80 R11: 0000000000000246 R12: 000000000000000a
-> [  177.445984] R13: 00007f0829b535a0 R14: 000000000000000a R15: 00007f0829b53780
-> [  177.446443]  </TASK>
-> 
-> [  177.447402] Allocated by task 1:
-> [  177.447902]  kasan_save_stack+0x1e/0x40
-> [  177.448444]  kasan_set_track+0x21/0x30
-> [  177.448946]  __kasan_kmalloc+0x7b/0x90
-> [  177.449447]  pci_alloc_dev+0x44/0x260
-> [  177.449950]  pci_scan_single_device+0x132/0x280
-> [  177.450467]  pci_scan_slot+0x193/0x510
-> [  177.450986]  pci_scan_child_bus_extend+0x61/0x5d0
-> [  177.451528]  pci_scan_bridge_extend+0xc4c/0x10c0
-> [  177.452021]  pci_scan_child_bus_extend+0x332/0x5d0
-> [  177.452539]  acpi_pci_root_create+0x4ec/0x700
-> [  177.453015]  pci_acpi_scan_root+0x3ad/0x4e0
-> [  177.453495]  acpi_pci_root_add+0x3f2/0x910
-> [  177.453973]  acpi_bus_attach+0x38b/0x890
-> [  177.454415]  device_for_each_child+0xd8/0x150
-> [  177.454896]  acpi_dev_for_each_child+0x77/0xa0
-> [  177.455328]  acpi_bus_attach+0x19f/0x890
-> [  177.455785]  device_for_each_child+0xd8/0x150
-> [  177.456189]  acpi_dev_for_each_child+0x77/0xa0
-> [  177.456626]  acpi_bus_attach+0x19f/0x890
-> [  177.457077]  acpi_bus_scan+0x98/0x160
-> [  177.457481]  acpi_scan_init+0x1e3/0x3f0
-> [  177.457905]  acpi_init+0xff/0x2c0
-> [  177.458300]  do_one_initcall+0x87/0x300
-> [  177.458694]  do_initcalls+0x127/0x260
-> [  177.459113]  kernel_init_freeable+0x811/0xc80
-> [  177.459517]  kernel_init+0x1b/0x1e0
-> [  177.459915]  ret_from_fork+0x29/0x50
-> 
-> [  177.460724] Freed by task 2011:
-> [  177.461119]  kasan_save_stack+0x1e/0x40
-> [  177.461556]  kasan_set_track+0x21/0x30
-> [  177.461939]  kasan_save_free_info+0x2a/0x50
-> [  177.462320]  __kasan_slab_free+0x106/0x190
-> [  177.462737]  __kmem_cache_free+0x133/0x270
-> [  177.463115]  device_release+0x98/0x210
-> [  177.463492]  kobject_cleanup+0x101/0x360
-> [  177.463952]  pci_stop_and_remove_bus_device_locked+0xdb/0x110
-> [  177.464341]  remove_store+0xcf/0xe0
-> [  177.464746]  kernfs_fop_write_iter+0x2d5/0x460
-> [  177.465112]  vfs_write+0x72e/0xae0
-> [  177.465493]  ksys_write+0xed/0x1c0
-> [  177.465834]  do_syscall_64+0x38/0x90
-> [  177.466174]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+---
+ Documentation/Makefile                |  8 +++++++-
+ Documentation/conf.py                 | 17 ++++++++++++++++-
+ Documentation/sphinx/requirements.txt |  1 +
+ 3 files changed, 24 insertions(+), 2 deletions(-)
 
-We don't need ALL this detail.  Most of this, including the
-timestamps, register dump, and most of the backtrace, is not relevant.
+diff --git a/Documentation/Makefile b/Documentation/Makefile
+index 023fa658a0a8..fae385cf4d6d 100644
+--- a/Documentation/Makefile
++++ b/Documentation/Makefile
+@@ -91,10 +91,16 @@ quiet_cmd_sphinx = SPHINX  $@ --> file://$(abspath $(BUILDDIR)/$3/$4)
+ 		cp $(if $(patsubst /%,,$(DOCS_CSS)),$(abspath $(srctree)/$(DOCS_CSS)),$(DOCS_CSS)) $(BUILDDIR)/$3/_static/; \
+ 	fi
+ 
+-htmldocs:
++htmldocs: Documentation/redirects
+ 	@$(srctree)/scripts/sphinx-pre-install --version-check
+ 	@+$(foreach var,$(SPHINXDIRS),$(call loop_cmd,sphinx,html,$(var),,$(var)))
+ 
++Documentation/redirects: $(srctree)/**/*.rst
++	git log --since="5 years ago" \
++		--name-status --find-renames=30 --diff-filter=R \
++		$(srctree)/Documentation/ \
++		| grep ^R | cut -f2,3 > $@
++
+ texinfodocs:
+ 	@$(srctree)/scripts/sphinx-pre-install --version-check
+ 	@+$(foreach var,$(SPHINXDIRS),$(call loop_cmd,sphinx,texinfo,$(var),texinfo,$(var)))
+diff --git a/Documentation/conf.py b/Documentation/conf.py
+index 37314afd1ac8..16c5036992a0 100644
+--- a/Documentation/conf.py
++++ b/Documentation/conf.py
+@@ -16,6 +16,7 @@ import sys
+ import os
+ import sphinx
+ import shutil
++import re
+ 
+ # helper
+ # ------
+@@ -55,7 +56,21 @@ needs_sphinx = '1.7'
+ extensions = ['kerneldoc', 'rstFlatTable', 'kernel_include',
+               'kfigure', 'sphinx.ext.ifconfig', 'automarkup',
+               'maintainers_include', 'sphinx.ext.autosectionlabel',
+-              'kernel_abi', 'kernel_feat']
++              'kernel_abi', 'kernel_feat',
++              'sphinx_reredirects',
++]
++
++redirects = dict()
++
++with open('redirects', 'r') as f:
++    for line in f:
++        p = r'Documentation/(.*)\.rst'
++        m = re.search(f'{p}\t{p}', line)
++        if not m or os.path.isfile(line.split()[0]):
++            continue
++        redirects[m.group(1) + '.html'] = os.path.relpath(m.group(2),
++            os.path.dirname(m.group(1))) + '.html'
++
+ 
+ if major >= 3:
+     if (major > 3) or (minor > 0 or patch >= 2):
+diff --git a/Documentation/sphinx/requirements.txt b/Documentation/sphinx/requirements.txt
+index 335b53df35e2..0b067e985edb 100644
+--- a/Documentation/sphinx/requirements.txt
++++ b/Documentation/sphinx/requirements.txt
+@@ -1,3 +1,4 @@
+ # jinja2>=3.1 is not compatible with Sphinx<4.0
+ jinja2<3.1
+ Sphinx==2.4.4
++sphinx_reredirects
+-- 
+2.40.0
 
-> This patch is based on original RFC by Bolarinwa O. Saheed in 2021 [1],
-> which using pci_function_0() to obtain child instead of cached
-> downstream pointer in struct pcie_link_state.
-> 
-> In addition, I added the condition about child to avoid dereference
-> null pointer, in case the device is removed without rescan back.
-> 
-> [1] https://lore.kernel.org/lkml/20211106175503.27178-5-refactormyself@gmail.com/
->
-> --------
-> 
-> The commit log of original patch:
-> 
-> Information on the downstream component is cached in
-> struct pcie_link_state.downstream it obtained within
-> alloc_pcie_link_state() by calling pci_function_0()
-> 
->  - remove *downstream* from the struct pcie_link_state.
->  - replaces references to pcie_link_state.downstream with
->    a call to pci_function_0(pdev->subordinate).
-> 
-> Originally-by: Bolarinwa O. Saheed <refactormyself@gmail.com>
-> Fixes: b5a0a9b59c81 ("PCI/ASPM: Read and set up L1 substate capabilities")
-> Debugged-by: Zongquan Qin <qinzongquan@sangfor.com.cn>
-> Signed-off-by: Ding Hui <dinghui@sangfor.com.cn>
-> ---
->  drivers/pci/pcie/aspm.c | 31 +++++++++++++++++++++++--------
->  1 file changed, 23 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-> index 66d7514ca111..bca3f52009fe 100644
-> --- a/drivers/pci/pcie/aspm.c
-> +++ b/drivers/pci/pcie/aspm.c
-> @@ -44,7 +44,6 @@
->  
->  struct pcie_link_state {
->  	struct pci_dev *pdev;		/* Upstream component of the Link */
-> -	struct pci_dev *downstream;	/* Downstream component, function 0 */
->  	struct pcie_link_state *root;	/* pointer to the root port link */
->  	struct pcie_link_state *parent;	/* pointer to the parent Link state */
->  	struct list_head sibling;	/* node in link_list */
-> @@ -474,7 +473,8 @@ static void pci_clear_and_set_dword(struct pci_dev *pdev, int pos,
->  static void aspm_calc_l1ss_info(struct pcie_link_state *link,
->  				u32 parent_l1ss_cap, u32 child_l1ss_cap)
->  {
-> -	struct pci_dev *child = link->downstream, *parent = link->pdev;
-> +	struct pci_dev *parent = link->pdev;
-> +	struct pci_dev *child = pci_function_0(link->pdev->subordinate);
->  	u32 val1, val2, scale1, scale2;
->  	u32 t_common_mode, t_power_on, l1_2_threshold, scale, value;
->  	u32 ctl1 = 0, ctl2 = 0;
-> @@ -484,6 +484,9 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
->  	if (!(link->aspm_support & ASPM_STATE_L1_2_MASK))
->  		return;
->  
-> +	if (!child)
-> +		return;
-> +
->  	/* Choose the greater of the two Port Common_Mode_Restore_Times */
->  	val1 = (parent_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
->  	val2 = (child_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
-> @@ -565,11 +568,12 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
->  
->  static void aspm_l1ss_init(struct pcie_link_state *link)
->  {
-> -	struct pci_dev *child = link->downstream, *parent = link->pdev;
-> +	struct pci_dev *parent = link->pdev;
-> +	struct pci_dev *child = pci_function_0(link->pdev->subordinate);
->  	u32 parent_l1ss_cap, child_l1ss_cap;
->  	u32 parent_l1ss_ctl1 = 0, child_l1ss_ctl1 = 0;
->  
-> -	if (!parent->l1ss || !child->l1ss)
-> +	if (!parent->l1ss || !child || !child->l1ss)
->  		return;
->  
->  	/* Setup L1 substate */
-> @@ -622,7 +626,8 @@ static void aspm_l1ss_init(struct pcie_link_state *link)
->  
->  static void pcie_aspm_cap_init(struct pcie_link_state *link, int blacklist)
->  {
-> -	struct pci_dev *child = link->downstream, *parent = link->pdev;
-> +	struct pci_dev *parent = link->pdev;
-> +	struct pci_dev *child = pci_function_0(link->pdev->subordinate);
->  	u32 parent_lnkcap, child_lnkcap;
->  	u16 parent_lnkctl, child_lnkctl;
->  	struct pci_bus *linkbus = parent->subordinate;
-> @@ -634,6 +639,9 @@ static void pcie_aspm_cap_init(struct pcie_link_state *link, int blacklist)
->  		return;
->  	}
->  
-> +	if (!child)
-> +		return;
-> +
->  	/*
->  	 * If ASPM not supported, don't mess with the clocks and link,
->  	 * bail out now.
-> @@ -701,7 +709,11 @@ static void pcie_aspm_cap_init(struct pcie_link_state *link, int blacklist)
->  static void pcie_config_aspm_l1ss(struct pcie_link_state *link, u32 state)
->  {
->  	u32 val, enable_req;
-> -	struct pci_dev *child = link->downstream, *parent = link->pdev;
-> +	struct pci_dev *parent = link->pdev;
-> +	struct pci_dev *child = pci_function_0(link->pdev->subordinate);
-> +
-> +	if (!child)
-> +		return;
->  
->  	enable_req = (link->aspm_enabled ^ state) & state;
->  
-> @@ -760,9 +772,13 @@ static void pcie_config_aspm_dev(struct pci_dev *pdev, u32 val)
->  static void pcie_config_aspm_link(struct pcie_link_state *link, u32 state)
->  {
->  	u32 upstream = 0, dwstream = 0;
-> -	struct pci_dev *child = link->downstream, *parent = link->pdev;
-> +	struct pci_dev *parent = link->pdev;
-> +	struct pci_dev *child = pci_function_0(link->pdev->subordinate);
->  	struct pci_bus *linkbus = parent->subordinate;
->  
-> +	if (!child)
-> +		return;
-> +
->  	/* Enable only the states that were not explicitly disabled */
->  	state &= (link->aspm_capable & ~link->aspm_disable);
->  
-> @@ -867,7 +883,6 @@ static struct pcie_link_state *alloc_pcie_link_state(struct pci_dev *pdev)
->  
->  	INIT_LIST_HEAD(&link->sibling);
->  	link->pdev = pdev;
-> -	link->downstream = pci_function_0(pdev->subordinate);
->  
->  	/*
->  	 * Root Ports and PCI/PCI-X to PCIe Bridges are roots of PCIe
-> -- 
-> 2.17.1
-> 
