@@ -2,132 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C05D76F2FDA
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 11:18:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 864146F2FE0
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 11:23:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232181AbjEAJSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 05:18:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40760 "EHLO
+        id S232261AbjEAJXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 05:23:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjEAJSl (ORCPT
+        with ESMTP id S231755AbjEAJXA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 05:18:41 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675CA18E
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 02:18:40 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id e9e14a558f8ab-330ec047d3bso38425ab.0
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 02:18:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682932719; x=1685524719;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=O86laohwidt7Bpepl03li3jzMB4EXmXzNejm8wi6V84=;
-        b=jvs7kr4VxgxyccvQgBhbQK9IwARcESd2U3pKgjhOVP4NNOFXTd7usmhNIpWhGDQYUv
-         X9/zszV9c9VElnowdKqA2s7mBjXZgA1dMPT6GMvUQ0EQvfeRH76UG9N+ZNQ92v9BNr8Q
-         FEar4Nl2LalrM7wLcoemncbZ4eS+YLyaaweWkyOy3wybB6clODU8itjhoBqIDtr/9z2U
-         G/0qZbBY+iuKkNZXmT+LWf5TpVIqLCxfONNUIOO2SRzQxkuiIdnqBnUICFHYmrW6p93q
-         0GuRhRc/ewB6u/i+e0glrufgN1R1+e3Z+O0XTAyoZLybYJFo8/v+bgBKQe39iFrK2SGP
-         SWBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682932719; x=1685524719;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=O86laohwidt7Bpepl03li3jzMB4EXmXzNejm8wi6V84=;
-        b=FD9C8bZXrFdjTu09sOoouzs/j4QXZhyRyS+tjDg1C847PFQ3OoPMqrQ5PelLBv5O5A
-         tHNbOaDOVGtTpHcoOl1cbDR1kJgDJ9yqCeO1YIHzPiFx5uRvl5uaq2GuoncSdtg8S9mX
-         UHSGLpcK0ObIKtvV9hiU/K6T4fugydpYw/RJL+O2jedXnhum2wOlfaP7HQr5h6HHSAu3
-         2vtcBIrqfKlTCnnMKlI4iERUY0TJkEXieX7dg92pyp40A0Fk+T3sho0yt2gm6dCIr3NM
-         EEvdnQODTsuCAQeFfxxzEflduOmUayUMteSvCsfKh5/G6JiDAUjwDx9A+KYTQSlW8aDE
-         hAEw==
-X-Gm-Message-State: AC+VfDxovaUY5le2O9oLBvwJOi7G3KphD3SS6anA30s70NHLgLyqjeoy
-        kc19V9WfuAvlAULjPPhKtty91IefXmnCpgm7KxZPTw==
-X-Google-Smtp-Source: ACHHUZ5ngfNanfrhJTCmcKjegKker9g3iRo8IO02+ZEh/87VQJgz1tmGSQF+THePU63x3ALCCiPcmgXXSt2jenW6ZvI=
-X-Received: by 2002:a05:6e02:b49:b0:32a:642d:2a13 with SMTP id
- f9-20020a056e020b4900b0032a642d2a13mr440333ilu.6.1682932719586; Mon, 01 May
- 2023 02:18:39 -0700 (PDT)
+        Mon, 1 May 2023 05:23:00 -0400
+Received: from perseus.uberspace.de (perseus.uberspace.de [95.143.172.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77FB81B0
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 02:22:56 -0700 (PDT)
+Received: (qmail 8168 invoked by uid 988); 1 May 2023 09:22:54 -0000
+Authentication-Results: perseus.uberspace.de;
+        auth=pass (plain)
+Message-ID: <1f759370-af97-e2a4-4b93-183eb854f7cd@david-bauer.net>
+Date:   Mon, 1 May 2023 11:22:52 +0200
 MIME-Version: 1.0
-References: <000000000000eccdc505f061d47f@google.com> <ZE4NVo6rTOeGQdK+@mit.edu>
-In-Reply-To: <ZE4NVo6rTOeGQdK+@mit.edu>
-From:   Aleksandr Nogikh <nogikh@google.com>
-Date:   Mon, 1 May 2023 11:18:28 +0200
-Message-ID: <CANp29Y7dG3Z11Bt99rS0y8epdXfaKk+HJfXt=ePbm29vYF88Gg@mail.gmail.com>
-Subject: Re: [syzbot] [sysv?] [vfs?] WARNING in invalidate_bh_lru
-To:     "Theodore Ts'o" <tytso@mit.edu>
-Cc:     syzbot <syzbot+9743a41f74f00e50fc77@syzkaller.appspotmail.com>,
-        hch@infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 2/2] dt-bindings: net: dsa: mediatek,mt7530: document
+ MDIO-bus
+To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Andrew Lunn <andrew@lunn.ch>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Daniel Golle <daniel@makrotopia.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230430112834.11520-1-mail@david-bauer.net>
+ <20230430112834.11520-2-mail@david-bauer.net>
+ <e4feeac2-636b-8b75-53a5-7603325fb411@arinc9.com>
+ <396fad42-89d0-114d-c02e-ac483c1dd1ed@arinc9.com>
+ <04cc2904-6d61-416e-bfbe-c24d96fe261b@lunn.ch>
+ <a6c6fe83-fbb5-f289-2210-6f1db6585636@arinc9.com>
+ <207753d6-cffd-4a23-be16-658d7c9ceb4a@lunn.ch>
+ <e5476692-aa3a-29b8-2e1d-ce93fd13a23b@arinc9.com>
+Content-Language: en-US
+From:   David Bauer <mail@david-bauer.net>
+In-Reply-To: <e5476692-aa3a-29b8-2e1d-ce93fd13a23b@arinc9.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Bar: -
+X-Rspamd-Report: MIME_GOOD(-0.1) BAYES_HAM(-3) SUSPICIOUS_RECIPS(1.5)
+X-Rspamd-Score: -1.6
+Received: from unknown (HELO unkown) (::1)
+        by perseus.uberspace.de (Haraka/3.0.1) with ESMTPSA; Mon, 01 May 2023 11:22:54 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=david-bauer.net; s=uberspace;
+        h=from;
+        bh=QwZKnoaoF4qggiTtg5kg8KcY443HPD6AZLVvdXmng7M=;
+        b=EumWdTO8wEuVeRgdhvZ2g4iQPSswe58duOH/gUbmNWcy2s2D9biyRbmcjEG0fF7xZQZgiC7wvU
+        cbrElEoYqWNgBpHIkWB3mXTccfsEmDNBRmVYvG8+CMc2yuL8NVbYxXBtlDrZBmWd5NZqbqLhK2D1
+        2dLj9zCzC01/G8SGmxywJAf7lBNSs2ehnrbljnpBCLTQqTUW3pPbwbMM8aRI8t6SO1g7sgEHqv6/
+        UIf6TFgjPgmAq/2LRhqgcf2NuDxiLquNOedJmPkoAXNW8Vj9drkpM+Cm7/1dlgeGfLtTUD9SOdrr
+        W89lCARjN+20I013+Gt0cY5nYB81nhDnBBvepqZjLiGkrOTqr2a4pTqjYnVkt4Wn5Ntgxf1JC7kp
+        oE5S7lx4c4LzKnb39z6BPd2mIECgCOm2NcflodxJF2zXxgOc/ofmAnfn6DaOelDfnRTvD/up0U8u
+        xerz+A2oQEf+tyNn2tKwaaLPdSETKC9u2wkRqvj71P4h7PJ15DEZxmv4K20qrKAzdgv5Bkz55jd1
+        l+YCur7JrBLDCPXBsCZaT7cOLRuWE0tRMdXEFvEoR78kHJSAaXJxPtXpqANjhb5Lfq0dQWj1bYvb
+        rQu8U9g5xlQHUjTdtHp8F75/2azyeCWzRjacnu0D4WZmk/t6AYIGtwQ/T6JKeSGj4YIQ9A5YqTvf
+        8=
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,MSGID_FROM_MTA_HEADER,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ted,
+Hi Arinc,
 
-On Sun, Apr 30, 2023 at 8:40=E2=80=AFAM Theodore Ts'o <tytso@mit.edu> wrote=
-:
->
-> On Wed, Dec 21, 2022 at 06:57:38PM -0800, syzbot wrote:
-> > Hello,
-> >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    a5541c0811a0 Merge branch 'for-next/core' into for-kern=
-elci
-> > git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/lin=
-ux.git for-kernelci
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=3D1560b830480=
-000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3Dcbd4e584773=
-e9397
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=3D9743a41f74f00=
-e50fc77
-> > compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2=
-da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-> > userspace arch: arm64
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D15e320b38=
-80000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D147c0577880=
-000
->
-> #syz set subsystems: sysv, udf
->
-> There are two reproducers, one that mounts a sysv file system, and the
-> other which mounts a udf file system.  There is no mention of ext4 in
-> the stack trace, and yet syzbot has assigned this to the ext4
-> subsystem for some unknown reason.
+thanks for spotting this issue.
 
-In this particular case, there were two ext4-related crashes as well:
+On 4/30/23 21:54, Arınç ÜNAL wrote:
+> On 30.04.2023 21:48, Andrew Lunn wrote:
+>>>> Try setting ds->slave_mii_bus to the MDIO bus you register via
+>>>> of_mdiobus_register().
+>>>
+>>> That seems to be the case already, under mt7530_setup_mdio():
+>>>
+>>>     bus = devm_mdiobus_alloc(dev);
+>>>     if (!bus)
+>>>         return -ENOMEM;
+>>>
+>>>     ds->slave_mii_bus = bus;
+>>>
+>>> The bus is registered with devm_of_mdiobus_register(), if that matters. (My
+>>> current knowledge about OF or OF helpers for MDIO is next to nothing.)
+>>>
+>>> The same behaviour is there.
+>>
+>> Maybe take a look at what is going on in dsa_slave_phy_setup() and
+>> dsa_slave_phy_connect().
+>>
+>> The way i understand it, is it first looks in DT to see if there is a
+>> phy-handle, and if there is, it uses it. If not, it assumes there is a
+>> 1:1 mapping between port number and PHY address, and looks to see if a
+>> PHY has been found on ds->slave_mii_bus at that address, and uses it.
+>>
+>> So i don't think you need to list the PHY, the fallback should be
+>> used.
+> 
+> Thanks for pointing me in the right direction Andrew.
+> 
+> I applied this diff:
+> 
+> diff --git a/drivers/net/phy/mdio_bus.c b/drivers/net/phy/mdio_bus.c
+> index 389f33a12534..19d0c209e7e9 100644
+> --- a/drivers/net/phy/mdio_bus.c
+> +++ b/drivers/net/phy/mdio_bus.c
+> @@ -117,8 +117,12 @@ struct phy_device *mdiobus_get_phy(struct mii_bus *bus, int addr)
+> 
+>       mdiodev = bus->mdio_map[addr];
+> 
+> -    if (!mdiodev)
+> +    if (!mdiodev) {
+> +        dev_info(&bus->dev, "mdio device doesn't exist\n");
+>           return NULL;
+> +    }
+> +
+> +    dev_info(&bus->dev, "mdio device exists\n");
+> 
+>       if (!(mdiodev->flags & MDIO_DEVICE_FLAG_PHY))
+>           return NULL;
+> diff --git a/net/dsa/slave.c b/net/dsa/slave.c
+> index 165bb2cb8431..0be408e32a76 100644
+> --- a/net/dsa/slave.c
+> +++ b/net/dsa/slave.c
+> @@ -2487,6 +2487,7 @@ static int dsa_slave_phy_setup(struct net_device *slave_dev)
+>           /* We could not connect to a designated PHY or SFP, so try to
+>            * use the switch internal MDIO bus instead
+>            */
+> +        netdev_err(slave_dev, "using switch's internal MDIO bus\n");
+>           ret = dsa_slave_phy_connect(slave_dev, dp->index, phy_flags);
+>       }
+>       if (ret) {
+> 
+> With or without this patch, the switch's internal MDIO bus is used to set
+> up the PHYs.
+> 
+> DT that defines ethphy0 only, without this patch applied:
+> 
+> [    4.660784] mt7530-mdio mdio-bus:1f wan (uninitialized): using switch's internal MDIO bus
+> [    4.669026] mdio_bus mt7530-0: mdio device exists
+> [    4.677693] mt7530-mdio mdio-bus:1f wan (uninitialized): PHY [mt7530-0:00] driver [MediaTek MT7530 PHY] (irq=POLL)
+> [    4.693238] mt7530-mdio mdio-bus:1f lan0 (uninitialized): using switch's internal MDIO bus
+> [    4.701589] mdio_bus mt7530-0: mdio device exists
+> [    4.707101] mt7530-mdio mdio-bus:1f lan0 (uninitialized): PHY [mt7530-0:01] driver [MediaTek MT7530 PHY] (irq=POLL)
+> [    4.718550] mt7530-mdio mdio-bus:1f lan1 (uninitialized): using switch's internal MDIO bus
+> [    4.726856] mdio_bus mt7530-0: mdio device exists
+> [    4.732384] mt7530-mdio mdio-bus:1f lan1 (uninitialized): PHY [mt7530-0:02] driver [MediaTek MT7530 PHY] (irq=POLL)
+> [    4.743822] mt7530-mdio mdio-bus:1f lan2 (uninitialized): using switch's internal MDIO bus
+> [    4.752154] mdio_bus mt7530-0: mdio device exists
+> [    4.757662] mt7530-mdio mdio-bus:1f lan2 (uninitialized): PHY [mt7530-0:03] driver [MediaTek MT7530 PHY] (irq=POLL)
+> [    4.769099] mt7530-mdio mdio-bus:1f lan3 (uninitialized): using switch's internal MDIO bus
+> [    4.781872] mdio_bus mt7530-0: mdio device exists
+> [    4.787413] mt7530-mdio mdio-bus:1f lan3 (uninitialized): PHY [mt7530-0:04] driver [MediaTek MT7530 PHY] (irq=POLL)
+> 
+> Same DT but with this patch applied:
+> 
+> [    4.621547] mt7530-mdio mdio-bus:1f: configuring for fixed/trgmii link mode
+> [    4.631524] mt7530-mdio mdio-bus:1f wan (uninitialized): using switch's internal MDIO bus
+> [    4.639764] mdio_bus mt7530-0: mdio device exists
+> [    4.647770] mt7530-mdio mdio-bus:1f wan (uninitialized): PHY [mt7530-0:00] driver [MediaTek MT7530 PHY] (irq=POLL)
+> [    4.663898] mt7530-mdio mdio-bus:1f lan0 (uninitialized): using switch's internal MDIO bus
+> [    4.672253] mdio_bus mt7530-0: mdio device doesn't exist
+> [    4.677597] mt7530-mdio mdio-bus:1f lan0 (uninitialized): no phy at 1
+> [    4.684053] mt7530-mdio mdio-bus:1f lan0 (uninitialized): failed to connect to PHY: -ENODEV
+> [    4.692435] mt7530-mdio mdio-bus:1f lan0 (uninitialized): error -19 setting up PHY for tree 0, switch 0, port 1
+> [    4.703087] mt7530-mdio mdio-bus:1f lan1 (uninitialized): using switch's internal MDIO bus
+> [    4.711408] mdio_bus mt7530-0: mdio device doesn't exist
+> [    4.716731] mt7530-mdio mdio-bus:1f lan1 (uninitialized): no phy at 2
+> [    4.723214] mt7530-mdio mdio-bus:1f lan1 (uninitialized): failed to connect to PHY: -ENODEV
+> [    4.731597] mt7530-mdio mdio-bus:1f lan1 (uninitialized): error -19 setting up PHY for tree 0, switch 0, port 2
+> [    4.742199] mt7530-mdio mdio-bus:1f lan2 (uninitialized): using switch's internal MDIO bus
+> [    4.755431] mdio_bus mt7530-0: mdio device doesn't exist
+> [    4.760793] mt7530-mdio mdio-bus:1f lan2 (uninitialized): no phy at 3
+> [    4.767263] mt7530-mdio mdio-bus:1f lan2 (uninitialized): failed to connect to PHY: -ENODEV
+> [    4.775632] mt7530-mdio mdio-bus:1f lan2 (uninitialized): error -19 setting up PHY for tree 0, switch 0, port 3
+> [    4.786270] mt7530-mdio mdio-bus:1f lan3 (uninitialized): using switch's internal MDIO bus
+> [    4.794591] mdio_bus mt7530-0: mdio device doesn't exist
+> [    4.799944] mt7530-mdio mdio-bus:1f lan3 (uninitialized): no phy at 4
+> [    4.806397] mt7530-mdio mdio-bus:1f lan3 (uninitialized): failed to connect to PHY: -ENODEV
+> [    4.814782] mt7530-mdio mdio-bus:1f lan3 (uninitialized): error -19 setting up PHY for tree 0, switch 0, port 4
+> 
+> DT without the mdio node defined, with this patch applied:
+> 
+> [    4.650766] mt7530-mdio mdio-bus:1f: configuring for fixed/trgmii link mode
+> [    4.660687] mt7530-mdio mdio-bus:1f wan (uninitialized): using switch's internal MDIO bus
+> [    4.668937] mdio_bus mt7530-0: mdio device exists
+> [    4.677787] mt7530-mdio mdio-bus:1f wan (uninitialized): PHY [mt7530-0:00] driver [MediaTek MT7530 PHY] (irq=POLL)
+> [    4.693165] mt7530-mdio mdio-bus:1f lan0 (uninitialized): using switch's internal MDIO bus
+> [    4.701517] mdio_bus mt7530-0: mdio device exists
+> [    4.707029] mt7530-mdio mdio-bus:1f lan0 (uninitialized): PHY [mt7530-0:01] driver [MediaTek MT7530 PHY] (irq=POLL)
+> [    4.718469] mt7530-mdio mdio-bus:1f lan1 (uninitialized): using switch's internal MDIO bus
+> [    4.726773] mdio_bus mt7530-0: mdio device exists
+> [    4.732322] mt7530-mdio mdio-bus:1f lan1 (uninitialized): PHY [mt7530-0:02] driver [MediaTek MT7530 PHY] (irq=POLL)
+> [    4.743793] mt7530-mdio mdio-bus:1f lan2 (uninitialized): using switch's internal MDIO bus
+> [    4.752143] mdio_bus mt7530-0: mdio device exists
+> [    4.757662] mt7530-mdio mdio-bus:1f lan2 (uninitialized): PHY [mt7530-0:03] driver [MediaTek MT7530 PHY] (irq=POLL)
+> [    4.769105] mt7530-mdio mdio-bus:1f lan3 (uninitialized): using switch's internal MDIO bus
+> [    4.781905] mdio_bus mt7530-0: mdio device exists
+> [    4.787459] mt7530-mdio mdio-bus:1f lan3 (uninitialized): PHY [mt7530-0:04] driver [MediaTek MT7530 PHY] (irq=POLL)
+> 
+> This is how I define it, mind you no phandles.
+> 
+> switch@1f {
+>      ...
+>      mdio {
+>          #address-cells = <0x01>;
+>          #size-cells = <0x00>;
+> 
+>          ethernet-phy@0 {
+>              reg = <0x00>;
+>          };
+>      };
+> };
+> 
+> Like you said, if the mdio node is not defined, the driver will assume 1:1
+> mapping. If not, it will need all the PHYs to be defined on the mdio node
+> along with on the ports node. Hence back to my original statement, we can
+> either force defining the PHYs on the mdio node which would break the ABI,
+> or forget about doing PHY muxing this way.
 
-https://syzkaller.appspot.com/text?tag=3DCrashReport&x=3D14c7dd1b480000
-https://syzkaller.appspot.com/text?tag=3DCrashReport&x=3D1153a07f480000
+While i was not aware of this side effect, I don't see how this breaks the ABI.
 
-I think syzbot picked a too generic frame as a bug title and it just
-got confused by crashes belonging to different filesystems.
-Maybe we need to display subsystems for individual crashes as well, so
-that it's easier for a human to understand what's going on..
+Existing device-trees not defining the MDIO node will still continue to work.
 
---
-Aleksandr
+Wouldn't we just skip the whole issue by documenting the need for defining all PHYs
+used on the switch when defining the MDIO bus?
 
+Best
+David
 
->
->                                         - Ted
->
-> --
-> You received this message because you are subscribed to the Google Groups=
- "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgi=
-d/syzkaller-bugs/ZE4NVo6rTOeGQdK%2B%40mit.edu.
+> 
+> There are no MDIO operations needed on the PHYs for the PHY muxing anyway,
+> so I'd rather do this some other way.
+> 
+> Thanks for the help.
+> 
+> Arınç
