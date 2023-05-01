@@ -2,159 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA2476F3120
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 14:45:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 263E56F3122
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 14:45:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232630AbjEAMo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 08:44:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38548 "EHLO
+        id S232637AbjEAMpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 08:45:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232588AbjEAMo4 (ORCPT
+        with ESMTP id S232444AbjEAMpA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 08:44:56 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3815619B2
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 05:44:24 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2a8a6602171so24305231fa.0
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 05:44:24 -0700 (PDT)
+        Mon, 1 May 2023 08:45:00 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81FE619A4
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 05:44:33 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-63b8b19901fso2898343b3a.3
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 05:44:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682945060; x=1685537060;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=suaeyMT2wIT4/8yocWcP6im75ZqkU8QMeE1d2rFD3ic=;
-        b=c7pk9kGVF3zIlacvFcyQJ0UA0BXjcIiKmJgKlYJnFQkUYqgPhV/CYNlQlngDttIdZt
-         6ntmumKh7/opzHAj/f9mF7gKp34ahP4r1PamDyEMu5aGVWJvwk5pQH9+kvFsR69wgQsG
-         rnIYCNT5OefbPSmhrVn1DMfMSKPakIl/Lp5J7FT1/8q4LtcnYY+EDOMvBt+vdWX9t+kp
-         OxOFAVPgUOLMjrVRnSP9nVt1jzvfRQfOrhBVxVKWh3xNm8POfsaRcKdX05s2ILOLqVnJ
-         Uyn1OvVHefwaI+5Vbhjw7mqinQlAGi45kYwfIF+1YUFq/PiGMOgTw0QjZj0mz/gRv+cE
-         buSQ==
+        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1682945067; x=1685537067;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=U+/m/Q8rJDfBtNlvA5MoeSZihLHMU+hMCap0lrbB/rs=;
+        b=cwwHyIgX4KWvvBvY8nSBkLAFNRsKMYzp6WW1Di0i93YYJQgPlYiPsZZCu6Q8jvx894
+         ycO1ma38TjwwxCTgtSZueTlcY4Th+uxr3S4GZBnOqQEH/2pBTsxgbr9pWx/8L3JZczbj
+         MnpoznAqXqI5UK+Sm37GsXne1PqltuZm1m4Xu8tVG+/im46OIrq2m1j0tSR/GAxO8Bh4
+         VdlXDlQkolJTQQTRdSXDTZdb4WP2mQUEn80kYCVF+/O11w7FZ444LzumBUmo4iRb4nVZ
+         uU5vUU+SbF4ykTZ8FxZUOcJJPtSPqDIpmNPWpIGo5upiSDMbV64yvLxaou3JoJtoNA5f
+         aYLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682945060; x=1685537060;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=suaeyMT2wIT4/8yocWcP6im75ZqkU8QMeE1d2rFD3ic=;
-        b=RENkSEL/oza6ZDNyZFmfkkqtAo0Q5XLcaw5K5mk0kjJJcVAdyOeBgE7CpwU9iHq7IA
-         3JjyaT2BkUHfZhRiRFTE0qLSEZhLEnDb6HhA1Jlhz9/GW3hnf0T5GDP84K69xlgiinxk
-         t2J4ZcFew1n6FV4iO7+nMxymJRWu/e1SlY+mh0FLEtvAq3/0Gp0Bs5uP1DzcZ2Tj5OtZ
-         EaQD/GYRPE5mwCyuzGn0KxDI8sFcy9CRIPGxwAE+sqhrSkKFlHAWuQObQooGvUb6C5Hy
-         o3tBLbWOjMSY9D6r59+wq1Y53B9yZs4NOy2dq/7WmwdDc/bkvZLzd6BaaPa8vxUkJ8nD
-         r1Zg==
-X-Gm-Message-State: AC+VfDxp2RsbzchMiprEKQKqRweUH3HoSuG9veuc166KkZFQIAA57U86
-        adbmcMYMmUbfRMHZHTlhYUtmxg==
-X-Google-Smtp-Source: ACHHUZ6yE30OtfPljX7Jl1MgoIhUtuFIHGsWWjI3F9JJzNvLWmq5NvR3XZhR6aS9nr4SLcLCbwqZGg==
-X-Received: by 2002:a2e:918b:0:b0:2a8:a651:8098 with SMTP id f11-20020a2e918b000000b002a8a6518098mr3613054ljg.38.1682945059809;
-        Mon, 01 May 2023 05:44:19 -0700 (PDT)
-Received: from [192.168.1.101] (abyl248.neoplus.adsl.tpnet.pl. [83.9.31.248])
-        by smtp.gmail.com with ESMTPSA id n1-20020a2e8781000000b002a7e9e4e9dcsm4631177lji.114.2023.05.01.05.44.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 May 2023 05:44:19 -0700 (PDT)
-Message-ID: <4c5e485a-e6ed-f5ec-f1af-3aad2efbb30a@linaro.org>
-Date:   Mon, 1 May 2023 14:44:18 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH] spi: spi-geni-qcom: Correct CS_TOGGLE bit in
- SPI_TRANS_CFG
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
-        agross@kernel.org, andersson@kernel.org, broonie@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     quic_msavaliy@quicinc.com, dianders@chromium.org, mka@chromium.org,
-        swboyd@chromium.org, quic_vtanuku@quicinc.com
-References: <1682412128-1913-1-git-send-email-quic_vnivarth@quicinc.com>
- <9f28dbff-ca3a-8523-5bfc-37b38bc846c3@linaro.org>
- <1b1b095e-8fcb-37d5-7542-48a6b55f35a1@quicinc.com>
- <d23d3757-da6f-69d7-bca9-581c489f81e6@linaro.org>
-In-Reply-To: <d23d3757-da6f-69d7-bca9-581c489f81e6@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+        d=1e100.net; s=20221208; t=1682945067; x=1685537067;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U+/m/Q8rJDfBtNlvA5MoeSZihLHMU+hMCap0lrbB/rs=;
+        b=PEF+KGHXH9n4k9qkFvuq0bnzeD8O5FVV8myNWv6hRSJJaTKByk76mdMFIeTj3Lgd6s
+         exLM/7Kdt8ODg4UhpRf5sFyfE4AkGQvm4YXRMkI2z4DW6pEnJqhxUuky6Ons4UGG82S9
+         ryOBiqiHFflLmhVxQ8gpCRbIvTJcLOQ/mWpXNjiS0ik3e3AUVgZnSj9YnpcZfNs87jVQ
+         kj+Oz7MOykCT/F+P6TH2gN3NmvwZpcOuOudo46rSTuaXf2JTZBWi34JKtAKLzEAjTM3C
+         gqiqVsp2crz8m8vYYi2I8k4pC7UmyeaGF2ObgY2JDsER7BPSFOOzaIi5FsNLaDUdvq+2
+         TAQg==
+X-Gm-Message-State: AC+VfDwyFClBZuXXm7ygP9Xm1DvktAyym6a6X0FI4ZBXKWVSUezGgbKO
+        gWWABZPBRvCH9x2u42LtmeNnbg==
+X-Google-Smtp-Source: ACHHUZ7UwoeVcV7NcPNRh+PYPFK4S9ad6FQ4bVggkB4CDQoyhbAx7EDtp4SCD00iu4lmGkebBwMNsA==
+X-Received: by 2002:a05:6a20:6f03:b0:f8:b39b:b24e with SMTP id gt3-20020a056a206f0300b000f8b39bb24emr14578405pzb.11.1682945067231;
+        Mon, 01 May 2023 05:44:27 -0700 (PDT)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id v17-20020a62c311000000b005a8bf239f5csm19690294pfg.193.2023.05.01.05.44.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 May 2023 05:44:26 -0700 (PDT)
+Date:   Mon, 01 May 2023 05:44:26 -0700 (PDT)
+X-Google-Original-Date: Mon, 01 May 2023 05:44:09 PDT (-0700)
+Subject:     Re: [PATCH v6 4/4] risc/purgatory: Add linker script
+In-Reply-To: <20230321-kexec_clang16-v6-4-a2255e81ab45@chromium.org>
+CC:     ebiederm@xmission.com, prudo@linux.vnet.ibm.com, dyoung@redhat.com,
+        akpm@linux-foundation.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, nathan@kernel.org, trix@redhat.com,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, bhe@redhat.com, prudo@redhat.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        zwisler@google.com, rostedt@goodmis.org, horms@kernel.org,
+        ndesaulniers@google.com, llvm@lists.linux.dev,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        ribalda@chromium.org, stable@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     ribalda@chromium.org
+Message-ID: <mhng-6809e805-0a92-401b-af74-fef93eeda1ae@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 01 May 2023 05:38:22 PDT (-0700), ribalda@chromium.org wrote:
+> If PGO is enabled, the purgatory ends up with multiple .text sections.
+> This is not supported by kexec and crashes the system.
+>
+> Cc: stable@vger.kernel.org
+> Fixes: 930457057abe ("kernel/kexec_file.c: split up __kexec_load_puragory")
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> ---
+>  arch/riscv/purgatory/Makefile | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/arch/riscv/purgatory/Makefile b/arch/riscv/purgatory/Makefile
+> index 5730797a6b40..cf3a44121a90 100644
+> --- a/arch/riscv/purgatory/Makefile
+> +++ b/arch/riscv/purgatory/Makefile
+> @@ -35,6 +35,11 @@ CFLAGS_sha256.o := -D__DISABLE_EXPORTS
+>  CFLAGS_string.o := -D__DISABLE_EXPORTS
+>  CFLAGS_ctype.o := -D__DISABLE_EXPORTS
+>
+> +# When profile optimization is enabled, llvm emits two different overlapping
+> +# text sections, which is not supported by kexec. Remove profile optimization
+> +# flags.
+> +KBUILD_CFLAGS := $(filter-out -fprofile-sample-use=% -fprofile-use=%,$(KBUILD_CFLAGS))
+> +
+>  # When linking purgatory.ro with -r unresolved symbols are not checked,
+>  # also link a purgatory.chk binary without -r to check for unresolved symbols.
+>  PURGATORY_LDFLAGS := -e purgatory_start -z nodefaultlib
 
-
-On 1.05.2023 14:43, Konrad Dybcio wrote:
-> 
-> 
-> On 1.05.2023 10:05, Vijaya Krishna Nivarthi wrote:
->> On 4/25/2023 7:15 PM, Konrad Dybcio wrote:
->>>
->>> On 4/25/23 09:42, Vijaya Krishna Nivarthi wrote:
->>>> The CS_TOGGLE bit when set is supposed to instruct FW to
->>>> toggle CS line between words. The driver with intent of
->>>> disabling this behaviour has been unsetting BIT(0). This has
->>>> not caused any trouble so far because the original BIT(1)
->>>> is untouched and BIT(0) likely wasn't being used.
->>>>
->>>> Correct this to prevent a potential future bug.
->>>>
->>>> Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
->>>> ---
->>>
->>> Has this always been the case, or did the switch to BIT(1)
->>> only occur on some recent platforms?
->>
->>
->> Thank you very much for the review..
->>
->> This has always been the case.
->>
->> With intent of disabling CS_TOGGLE, currently, the driver is unsetting BIT(0), though it should have been BIT(1).
->>
->> Yet no problem was encountered because
->>
->> a) BIT(0) seems to be an unused bit
->>
->> b) BIT(1) is probably already unset because its untouched
->>
->> Further more, as Doug pointed we are mostly using GPIO for CS.
->>
->>
->> Testing with the change has not caused any regressions.
-> Okay, with no deeper knowledge of the topic best I can give you is:
-> 
-> Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> 
-> 
-Also, missing:
-
-Fixes: 561de45f72bd ("spi: spi-geni-qcom: Add SPI driver support for GENI based QUP")
-
-Konrad
-> Konrad
->>
->>
->> Thank you,
->>
->> Vijay/
->>
->>
->>
->>>
->>> Konrad
->>>
->>>>   drivers/spi/spi-geni-qcom.c | 2 +-
->>>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
->>>> index ba7be50..8a7d1c2 100644
->>>> --- a/drivers/spi/spi-geni-qcom.c
->>>> +++ b/drivers/spi/spi-geni-qcom.c
->>>> @@ -35,7 +35,7 @@
->>>>   #define CS_DEMUX_OUTPUT_SEL    GENMASK(3, 0)
->>>>     #define SE_SPI_TRANS_CFG    0x25c
->>>> -#define CS_TOGGLE        BIT(0)
->>>> +#define CS_TOGGLE        BIT(1)
->>>>     #define SE_SPI_WORD_LEN        0x268
->>>>   #define WORD_LEN_MSK        GENMASK(9, 0)
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
