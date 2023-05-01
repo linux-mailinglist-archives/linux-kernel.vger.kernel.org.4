@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A17D6F3054
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 12:59:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F2426F3052
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 12:59:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232380AbjEAK66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 06:58:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60968 "EHLO
+        id S232372AbjEAK7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 06:59:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232332AbjEAK6x (ORCPT
+        with ESMTP id S232243AbjEAK6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 06:58:53 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 286C7E69
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 03:58:49 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1ab032d9266so1163845ad.0
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 03:58:49 -0700 (PDT)
+        Mon, 1 May 2023 06:58:54 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B9210FC
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 03:58:53 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1aaea43def7so9435025ad.2
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 03:58:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682938728; x=1685530728;
+        d=linaro.org; s=google; t=1682938732; x=1685530732;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/pXnRK2b3RixHzpaps5p4VYQKZZN8MYbqwqZth/e4To=;
-        b=hlznR5LySl+UK2ZLlJct3GOXpPUghZFAT5FJ6Tbok0XhGHi5JbMr0jt3firDYM753r
-         D0SVsdL6FPZQdukNYjo2zpJvaOjx73opafsEDTf71X+0+ruBIEXNsIFQi4u7iobKHlHk
-         kgMPN+iR4a5yWG4Fq3Mrkbyjr84u7SYPJeb3fyGjaeHPla0v4GT/oxRzpx0683EwA8qo
-         oe4tuPuuZeE86e45VdTRn7q6KuhOs1KrrAU0c/f3Q0XU3SjqoQQY/+3wBYJKJt3LR7hj
-         RAMGbjfqTwXPQ5rpOopSC5eRlopJgs2Q78RDUYsM7dUdr9neDEjcbxm2yebw596gli3y
-         srGw==
+        bh=jOc5TkBBFvhPYDtl6ktWA3NEqkqqyBYzt0eDjS+Sk2A=;
+        b=OLxTFE+/bHywEhGnTp0KfaxlPToVPdkVvcxEKvTctVIEVcJ/+CEwwcB/FOgPdaPoyC
+         mrlb17WqnqVIxwUt/W0bDwZWotaHH9xwvmZTYagJDqjx/z7ZCSqgWkkHLGxCUJERqayC
+         s3qPgGrxNrXEAXR2BIc0GAWjPSmf7CZzwxT8NRQFTqVcPzQ/tRZMwJQSjuHuQm8SUY47
+         1LP8IqqwUD/SmF5q25gmvkf1GEhmCsEU80t5ohvkphdyq6mwe9XsJzf4Zhu80YaG2oIW
+         gK91bD4kzDY5pvaz9zBXb2CFaOwagEsKjfDhXr/jkAUoAONh9RlRXK5ZH9lAqmmAGlN6
+         eu2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682938728; x=1685530728;
+        d=1e100.net; s=20221208; t=1682938732; x=1685530732;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/pXnRK2b3RixHzpaps5p4VYQKZZN8MYbqwqZth/e4To=;
-        b=gOWK7cQG7pN7zlKC7WClCkro9GNuPqyvsLlSAW/QHvkJbmwtfBjlvb1g7BCw4+LGNL
-         s2AU2u4Nb4xhE4OE1QL7/Iw9BCKaLmeTackM5/lZ6jTLTmjhAtwxiKf3Mp1uBqUtT7WI
-         RTZevCeWRAtF0pxYdUbXEUzs+RBXs9nzZGL0OyNBeNYSBWgw1a9EtvLf9dC/7VtuII7T
-         ydc+vJLA2KkGU/aEgMwJ0lm0XxEQ9qKyr2m7upHKVdPiNQVepYQOtLnVaY2Z6YkqBMJn
-         2izlkKxSceHAWuUOa5cygZ2ODb15SZL/fb72gQrABrbLQ2S/dJzjdts9usdtbBW3YT0X
-         mF7g==
-X-Gm-Message-State: AC+VfDxRV32QsJTJAkbJWvhVQaXt9jp9viW9VMGZammvN6sRp87YE/In
-        ZeIzSlD3NCnmfY+naz0NPRNc6jov6kNzNhByaqo=
-X-Google-Smtp-Source: ACHHUZ6OXsWA6+RtZrgvZBclz8f2I3x5h1gpBhK0DFTK8p7UXR1PlKsBxsVW6+ym1p4obsHM0XM/nA==
-X-Received: by 2002:a17:902:7790:b0:19c:dbce:dce8 with SMTP id o16-20020a170902779000b0019cdbcedce8mr13652032pll.15.1682938728576;
-        Mon, 01 May 2023 03:58:48 -0700 (PDT)
+        bh=jOc5TkBBFvhPYDtl6ktWA3NEqkqqyBYzt0eDjS+Sk2A=;
+        b=BkSx2F4qrdo9Io6CiaCE9lpDEqzj5U0PGv1PhWW7zyiPABpvpvVcn4qt8GjFn4gsFa
+         5tsqFzlSmDZ1vRan1qnelgFlvqQMmsZH7I1NlV+Llpxkn0eVVgveYXa8SYw0UCm7j0J8
+         618YoJajf59TMmARHFliBNET/G2PPJno6E38SMtwd9GV19vxNZLqgRsndiq7f8e2ILYB
+         LZUQkXPzrwRU1rrg3TskFOiHY80Q19HFKyx3u7bHesu8x5Sz2PNVNcDTrbgwHI+QixmN
+         /CxtvwhZECpFAHSlACQ2o3c5V4fsXz/eJZjWHsNGJT3z+p0hdRDpaIxGHkhoz2h9QIt+
+         uoog==
+X-Gm-Message-State: AC+VfDxeM+qQ/Q6SiNgmubNlkf4uUrOAwSiMRvcA+ZPc9llq8RZ+izlC
+        uZ2bUUYXcikWuelG3ER1fo7dkQ==
+X-Google-Smtp-Source: ACHHUZ5kWIDXe2cVbE/Bd06XNCjBzznw8QhrgiL632m4i3Uexc/PgFAvw+SP6c1fY13CnkxyOv+0ZQ==
+X-Received: by 2002:a17:902:d4c7:b0:1aa:e6ff:d978 with SMTP id o7-20020a170902d4c700b001aae6ffd978mr6779153plg.48.1682938732570;
+        Mon, 01 May 2023 03:58:52 -0700 (PDT)
 Received: from localhost.localdomain ([2401:4900:1f3b:58fa:39f6:37e1:bb9a:a094])
-        by smtp.gmail.com with ESMTPSA id c24-20020a170902849800b001a50ae08284sm17569516plo.301.2023.05.01.03.58.45
+        by smtp.gmail.com with ESMTPSA id c24-20020a170902849800b001a50ae08284sm17569516plo.301.2023.05.01.03.58.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 May 2023 03:58:48 -0700 (PDT)
+        Mon, 01 May 2023 03:58:52 -0700 (PDT)
 From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
 To:     linux-arm-msm@vger.kernel.org
 Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
         linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
         bhupesh.sharma@linaro.org, robh+dt@kernel.org,
         krzysztof.kozlowski@linaro.org, devicetree@vger.kernel.org
-Subject: [PATCH v2 2/3] arm64: dts: qcom: qrb4210-rb2: Fix CD gpio for SDHC2
-Date:   Mon,  1 May 2023 16:28:31 +0530
-Message-Id: <20230501105832.1185477-3-bhupesh.sharma@linaro.org>
+Subject: [PATCH v2 3/3] arm64: dts: qcom: qrb4210-rb2: Enable aDSP and cDSP remoteproc nodes
+Date:   Mon,  1 May 2023 16:28:32 +0530
+Message-Id: <20230501105832.1185477-4-bhupesh.sharma@linaro.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20230501105832.1185477-1-bhupesh.sharma@linaro.org>
 References: <20230501105832.1185477-1-bhupesh.sharma@linaro.org>
@@ -74,28 +74,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Card-Detect (CD) gpio for SDHC2 is an active GPIO line. Fix the same.
-This allows the uSD card to be properly detected on the board.
+Enable the aDSP and cDSP remoteproc nodes on Qualcomm QRB4210 RB2 board.
 
-Fixes: 8d58a8c0d930 ("arm64: dts: qcom: Add base qrb4210-rb2 board dts")
 Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/qrb4210-rb2.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/boot/dts/qcom/qrb4210-rb2.dts | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-index 5a5294cc6e45..bff6ba1d689f 100644
+index bff6ba1d689f..3ab46499d3fa 100644
 --- a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
 +++ b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-@@ -203,7 +203,7 @@ &sdhc_1 {
+@@ -34,6 +34,16 @@ &qupv3_id_0 {
+ 	status = "okay";
  };
  
- &sdhc_2 {
--	cd-gpios = <&tlmm 88 GPIO_ACTIVE_HIGH>; /* card detect gpio */
-+	cd-gpios = <&tlmm 88 GPIO_ACTIVE_LOW>; /* card detect gpio */
- 	pinctrl-names = "default", "sleep";
- 	pinctrl-0 = <&sdc2_state_on &sdc2_card_det_n>;
- 	pinctrl-1 = <&sdc2_state_off &sdc2_card_det_n>;
++&remoteproc_adsp {
++	status = "okay";
++	firmware-name = "qcom/sm6115/adsp.mdt";
++};
++
++&remoteproc_cdsp {
++	status = "okay";
++	firmware-name = "qcom/sm6115/cdsp.mdt";
++};
++
+ &rpm_requests {
+ 	regulators {
+ 		compatible = "qcom,rpm-pm6125-regulators";
 -- 
 2.38.1
 
