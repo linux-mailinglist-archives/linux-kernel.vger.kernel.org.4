@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86C5F6F3374
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 18:11:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EBFE6F3378
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 18:19:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232916AbjEAQLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 12:11:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46574 "EHLO
+        id S232640AbjEAQS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 12:18:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231229AbjEAQLT (ORCPT
+        with ESMTP id S231229AbjEAQSx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 12:11:19 -0400
-Received: from out162-62-57-87.mail.qq.com (out162-62-57-87.mail.qq.com [162.62.57.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE74C3
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 09:11:14 -0700 (PDT)
+        Mon, 1 May 2023 12:18:53 -0400
+Received: from out203-205-221-192.mail.qq.com (out203-205-221-192.mail.qq.com [203.205.221.192])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4736E128
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 09:18:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-        t=1682957470; bh=1i4fXVrCHwEHcOBQq4Knw1AJdDT/VSryujsH07IAoqQ=;
-        h=From:To:Cc:Subject:Date;
-        b=UKWQ+b24CF1iBZ3hJK3myiF0teCi6Jguw8dv3SscxNb1iFZOCJ9/rwZWV3MGL02bl
-         fu0yKdL/jr6cDEThMX3f4KjNKx8QepT3R2yw5+JUr+7IxT0YFiuaXYAjW02MYcSnLg
-         oGQem488C5exnnz9u6lzgr0Om/yMVjGFW51RcV50=
+        t=1682957928; bh=qjJiyzBNBbUlf4yh42f8z12rbSe6xROgU/PEvKYl9WY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=zsdYFVH+eXgM1V4khs9DxIP/19Uscz+GnMj7CB+thDkHHFGvqKw8GfY51znpeFG7k
+         OxM68HAlGswGg7sdFARFPqP8R3ZyT3U6PWkhEv3m1t7HeFTHRbS2OjyxGs1LAcAAhI
+         ej3f3s4sqlyY15OW28iHYFA+wTwZIaxLjYK6/uP0=
 Received: from cyy-pc.lan ([2001:da8:c800:d084:c65a:644a:13d7:e72c])
         by newxmesmtplogicsvrsza10-0.qq.com (NewEsmtp) with SMTP
-        id 2C5BE6A6; Tue, 02 May 2023 00:11:05 +0800
-X-QQ-mid: xmsmtpt1682957465tbh88bn4e
-Message-ID: <tencent_E6911C8D71F5624E432A1AFDF86804C3B509@qq.com>
-X-QQ-XMAILINFO: MB5+LsFw85NoN+Knf0Ay9A4a08OjqZU83GADjlLKdSN2QEjLhjRhG9wBVAS++z
-         C+5NxI/l8K4j+Gz5TyWv5BkO6CB0IZa4OJD5mwLzE3CxzDGWkb9ZYorgLjeoP7eM3f7B3BN2sk1H
-         UMLr5AdjEZ/T4ao4ChX4o8MN7JPo6NIVgHr1d8u9HaSLc64yfYZzCb5dwvn9O1itdWiMbH/s36Pe
-         6NKME10is6Z4mpZuAL+w8zmB26HlIS4p9+OBMHmY6FeA84B7v6Ez7TUi/XUYBjfioHcvJOYkO671
-         uJPoE8QNzqPHJA+SG+6PdX4T8fpQlK8dMNifJASiL9Is0ZK3mo6OoR2vxoMWz8Tt1Cx8FfKx5Fff
-         764EMdkhh5inrFGm/+zg7UpjADs+DAFxVV5U1IHrX9eDg8SumBMvj+q28xnnWUNDFwUHzymUb2sI
-         bbNBawlLhh3ZkPbYbWr//rWZT4pjr0ohQzQUDhHt93xELgEY7S9kkx1G57USJQLGWHxcapR2Z5Yv
-         rcBMJta5gbc07yYQ+2WRJUITbCjxtDz1FgyAK+EfvgpBYpSSOSZ/D9rdQT3MmKOeVH/Qpbk608zQ
-         aYXHIrzqckeSCniOUhEOMLOJ3+9Bb816DoJQpgt0M/pO49CAxopXmoTNElss3INWSS1earQIF2qM
-         G03ddTFSL/0RTZ7AGsygnrfj3aWJ4nCfg+7i/i2spyUq016gQysCWfSbsX12d6Ly6W6Yi49XyQEq
-         BiGe2NWqv24foTI5T/NFQBYZQBl4uuRBSI0VedpO+7DAg73APEnqCXhmQu4fGp3fIQkfWEq1aK0K
-         5FCMelPOb2GSIpaFbl/Ibcloic6AGZJ21QNGKgVVqWow719bDHd/7qveSmbFvqFvVwg/wMsExu8X
-         54Xnp63uQ4lbsQfrgiKgPhb9ZwMXDpP1KA2hYCkQ+zFkkdG/+EHrzVhKcqPJQSMLQV6+AEE9Do/U
-         W7Q52QzxAdTJYIPQ5on3+sBSwl1Z9lcEtW7WuCZFdpbkuLrTvQdymsFQH0p3KA
+        id 4A78EECC; Tue, 02 May 2023 00:18:39 +0800
+X-QQ-mid: xmsmtpt1682957919tn47q1wz9
+Message-ID: <tencent_B30EED51C7235CA1988890E5C658BE35C107@qq.com>
+X-QQ-XMAILINFO: MmpliBmRb3iCy16tAaa39EEOagJjQ/rnxcLb/w1MiUhusue37gubn/ccZAhw6G
+         roM8215nTTF3jNos8LmPBjZW0CUOzczJMEAx30b5eg1B9mFyJAkBxz8c/QH3qPkz3vZbUDrUb4mI
+         qtp5jjj4V+Fl30GJmSaWo4p+Ip4nkaGvrWd9+NhSbIeYR3157oy8kOTAr9Y/Xc70PTU3tMlcUd5v
+         U90AcX/zwxWIPS6+DyWPaovc7D6GoJSh1N9AULZpfutwGS9mYMMqlydWY0y5Hg3Iew8WzdOUrJBM
+         nlaMjwGuXng93ZQ0fx3omZkVy4F5D/nxvZfDWY+PbnTbeibCwcoImujyW9/0Il72/1aAdi5IOLcX
+         6WNNpPk1ezubO/bvLQte1+iqX+ajJycr+b4649ZCrkBi1W/PlxYWmlPuJzwyypNDu/5j2W4zRGLC
+         J6h90ijjtsEfm9WSxNd9Ae7+oAzuBUFJW0T0P59n9qpqosvJJ/CdDSen09wPOLH/ffmqa2Ctbjg+
+         x8olpSk2ndGcwjkHE5MPI63jPdi81k+tU7TYjR5iowMota7xdQGOBGYnZgQ76owSJGKKRy3XTLrN
+         44mtvMg7GyCb79bUKYSYFgdp7Ebbu+igBLCjdGpRBbrQiiOGGRtVBQq/0+NP4orBIka6XDkQ8OEB
+         5itRtcTNHUmSmCQeOVBDbQO5mlDLQOamciQYpnTRThh9/FL5fzNEuvtCgxw2E5WBGBKjBINOBysy
+         V0HReKhIFa0EECUoQ5aStcL2CRRr6mN08ITB5F7TobII4dM8u2Vbtul/8fnIB+F6sEQiGNrl2FDi
+         3k5jJY3NtL+8PJAPfpBfr6kboIMbJ2XvFgOguqHZeC7Er7B7N86naNOznEAdTNorPD8P3g41EWE9
+         jJ0fJ4myt3jhRTSFrXHjlCsmJcmBM4jGk3hhy4P0ssPoWc898LrPB1JL8OS7t8OS1u0VV8AN9YJa
+         aaIMDyiyWfkF1JvRmjFAf7EAxZKP7oz188IIA2gLNSOWujrMbVPdDQrheoW9OMSF+91vRC4Eg=
 From:   Yangyu Chen <cyy@cyyself.name>
 To:     Conor Dooley <conor@kernel.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
@@ -50,11 +50,14 @@ To:     Conor Dooley <conor@kernel.org>,
 Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         Andrew Jones <ajones@ventanamicro.com>,
         Wende Tan <twd2.me@gmail.com>, Soha Jin <soha@lohu.info>,
-        Hongren Zheng <i@zenithal.me>, Yangyu Chen <cyy@cyyself.name>
-Subject: [PATCH v3 0/2] riscv: allow case-insensitive ISA string parsing
-Date:   Tue,  2 May 2023 00:10:19 +0800
-X-OQ-MSGID: <20230501161019.150419-1-cyy@cyyself.name>
+        Hongren Zheng <i@zenithal.me>, Yangyu Chen <cyy@cyyself.name>,
+        Conor Dooley <conor.dooley@microchip.com>
+Subject: [PATCH v3 1/2] riscv: allow case-insensitive ISA string parsing
+Date:   Tue,  2 May 2023 00:17:38 +0800
+X-OQ-MSGID: <20230501161739.152403-1-cyy@cyyself.name>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <tencent_E6911C8D71F5624E432A1AFDF86804C3B509@qq.com>
+References: <tencent_E6911C8D71F5624E432A1AFDF86804C3B509@qq.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -68,62 +71,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patchset allows case-insensitive ISA string parsing, which is
-needed in the ACPI environment. As the RISC-V Hart Capabilities Table
-(RHCT) description in UEFI Forum ECR[1] shows the format of the ISA
-string is defined in the RISC-V unprivileged specification[2]. However,
-the RISC-V unprivileged specification defines the ISA naming strings are
-case-insensitive while the current ISA string parser in the kernel only
-accepts lowercase letters. In this case, the kernel should allow
-case-insensitive ISA string parsing. Moreover, this reason has been
-discussed in Conor's patch[3]. And I have also checked the current ISA
-string parsing in the recent ACPI support patch[4] will also call
-`riscv_fill_hwcap` function as DT we use now.
+According to RISC-V Hart Capabilities Table (RHCT) description in UEFI
+Forum ECR, the format of the ISA string is defined in the RISC-V
+unprivileged specification which is case-insensitive. However, the
+current ISA string parser in the kernel does not support ISA strings
+with uppercase letters.
 
-The original motivation for my patch v1[5] is that some SoC generators
-will provide generated DT with illegal ISA string in dt-binding such as
-rocket-chip, which will even cause kernel panic in some cases as I
-mentioned in v1[5]. Now, the rocket-chip has been fixed in PR #3333[6].
-However, when using some specific version of rocket-chip with
-illegal ISA string in DT, this patchset will also work for parsing
-uppercase letters correctly in DT, thus will have better compatibility.
+This patch modifies the ISA string parser in the kernel to support
+case-insensitive ISA string parsing.
 
-In summary, this patch not only works for case-insensitive ISA string
-parsing to meet the requirements in ECR[1] but also can be a workaround
-for some specific versions of rocket-chip.
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Yangyu Chen <cyy@cyyself.name>
+---
+ arch/riscv/kernel/cpu.c        |  3 ++-
+ arch/riscv/kernel/cpufeature.c | 35 +++++++++++++++++-----------------
+ 2 files changed, 19 insertions(+), 19 deletions(-)
 
-[1] https://drive.google.com/file/d/1nP3nFiH4jkPMp6COOxP6123DCZKR-tia/view
-[2] https://github.com/riscv/riscv-isa-manual/blob/main/src/naming.adoc
-[3] https://lore.kernel.org/all/20230426-getting-tactile-e6cee2cdf870@spud/
-[4] https://lore.kernel.org/linux-riscv/20230404182037.863533-14-sunilvl@ventanamicro.com/
-[5] https://lore.kernel.org/all/tencent_1647475C9618C390BEC601BE2CC1206D0C07@qq.com/
-[6] https://github.com/chipsalliance/rocket-chip/pull/3333
-
-Changes since v2:
-* Fixed misaligned '\' in `riscv_fill_hwcap`
-* Move case 'S' after 's' to make the workaround only works for QEMU 
-    in `riscv_fill_hwcap`
-
-Changes since v1:
-* Remove convert all isa string to lowercase letters in `print_isa`
-* Remove warp parser pointer dereference with tolower in switch, use
-    uppercase letter case instead in `riscv_fill_hwcap`
-* Remove allow uppercase letters in dt-bindings
-* Add Conor Dooley's patch which drops invalid comment about riscv,isa
-    lower-case reasoning
-
-Conor Dooley (1):
-  dt-bindings: riscv: drop invalid comment about riscv,isa lower-case
-    reasoning
-
-Yangyu Chen (1):
-  riscv: allow case-insensitive ISA string parsing
-
- .../devicetree/bindings/riscv/cpus.yaml       |  2 +-
- arch/riscv/kernel/cpu.c                       |  3 +-
- arch/riscv/kernel/cpufeature.c                | 35 +++++++++----------
- 3 files changed, 20 insertions(+), 20 deletions(-)
-
+diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
+index 3df38052dcbd..f4dadbfecd04 100644
+--- a/arch/riscv/kernel/cpu.c
++++ b/arch/riscv/kernel/cpu.c
+@@ -4,6 +4,7 @@
+  */
+ 
+ #include <linux/cpu.h>
++#include <linux/ctype.h>
+ #include <linux/init.h>
+ #include <linux/seq_file.h>
+ #include <linux/of.h>
+@@ -42,7 +43,7 @@ int riscv_of_processor_hartid(struct device_node *node, unsigned long *hart)
+ 		pr_warn("CPU with hartid=%lu has no \"riscv,isa\" property\n", *hart);
+ 		return -ENODEV;
+ 	}
+-	if (isa[0] != 'r' || isa[1] != 'v') {
++	if (tolower(isa[0]) != 'r' || tolower(isa[1]) != 'v') {
+ 		pr_warn("CPU with hartid=%lu has an invalid ISA of \"%s\"\n", *hart, isa);
+ 		return -ENODEV;
+ 	}
+diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+index 52585e088873..af2b468642a4 100644
+--- a/arch/riscv/kernel/cpufeature.c
++++ b/arch/riscv/kernel/cpufeature.c
+@@ -126,13 +126,10 @@ void __init riscv_fill_hwcap(void)
+ 		}
+ 
+ 		temp = isa;
+-#if IS_ENABLED(CONFIG_32BIT)
+-		if (!strncmp(isa, "rv32", 4))
++		if (IS_ENABLED(CONFIG_32BIT) && !strncasecmp(isa, "rv32", 4))
+ 			isa += 4;
+-#elif IS_ENABLED(CONFIG_64BIT)
+-		if (!strncmp(isa, "rv64", 4))
++		else if (IS_ENABLED(CONFIG_64BIT) && !strncasecmp(isa, "rv64", 4))
+ 			isa += 4;
+-#endif
+ 		/* The riscv,isa DT property must start with rv64 or rv32 */
+ 		if (temp == isa)
+ 			continue;
+@@ -156,13 +153,15 @@ void __init riscv_fill_hwcap(void)
+ 					break;
+ 				}
+ 				fallthrough;
++			case 'S':
+ 			case 'x':
++			case 'X':
+ 			case 'z':
++			case 'Z':
+ 				ext_long = true;
+ 				/* Multi-letter extension must be delimited */
+ 				for (; *isa && *isa != '_'; ++isa)
+-					if (unlikely(!islower(*isa)
+-						     && !isdigit(*isa)))
++					if (unlikely(!isalnum(*isa)))
+ 						ext_err = true;
+ 				/* Parse backwards */
+ 				ext_end = isa;
+@@ -173,7 +172,7 @@ void __init riscv_fill_hwcap(void)
+ 				/* Skip the minor version */
+ 				while (isdigit(*--ext_end))
+ 					;
+-				if (ext_end[0] != 'p'
++				if (tolower(ext_end[0]) != 'p'
+ 				    || !isdigit(ext_end[-1])) {
+ 					/* Advance it to offset the pre-decrement */
+ 					++ext_end;
+@@ -185,7 +184,7 @@ void __init riscv_fill_hwcap(void)
+ 				++ext_end;
+ 				break;
+ 			default:
+-				if (unlikely(!islower(*ext))) {
++				if (unlikely(!isalpha(*ext))) {
+ 					ext_err = true;
+ 					break;
+ 				}
+@@ -195,7 +194,7 @@ void __init riscv_fill_hwcap(void)
+ 				/* Skip the minor version */
+ 				while (isdigit(*++isa))
+ 					;
+-				if (*isa != 'p')
++				if (tolower(*isa) != 'p')
+ 					break;
+ 				if (!isdigit(*++isa)) {
+ 					--isa;
+@@ -209,18 +208,18 @@ void __init riscv_fill_hwcap(void)
+ 			if (*isa != '_')
+ 				--isa;
+ 
+-#define SET_ISA_EXT_MAP(name, bit)						\
+-			do {							\
+-				if ((ext_end - ext == sizeof(name) - 1) &&	\
+-				     !memcmp(ext, name, sizeof(name) - 1) &&	\
+-				     riscv_isa_extension_check(bit))		\
+-					set_bit(bit, this_isa);			\
+-			} while (false)						\
++#define SET_ISA_EXT_MAP(name, bit)							\
++			do {								\
++				if ((ext_end - ext == sizeof(name) - 1) &&		\
++				     !strncasecmp(ext, name, sizeof(name) - 1) &&	\
++				     riscv_isa_extension_check(bit))			\
++					set_bit(bit, this_isa);				\
++			} while (false)							\
+ 
+ 			if (unlikely(ext_err))
+ 				continue;
+ 			if (!ext_long) {
+-				int nr = *ext - 'a';
++				int nr = tolower(*ext) - 'a';
+ 
+ 				if (riscv_isa_extension_check(nr)) {
+ 					this_hwcap |= isa2hwcap[nr];
 -- 
 2.40.1
 
