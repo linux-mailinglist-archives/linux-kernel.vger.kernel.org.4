@@ -2,241 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21AFD6F3542
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 19:55:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 500E26F35A9
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 20:08:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232308AbjEARzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 13:55:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42938 "EHLO
+        id S231735AbjEASI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 14:08:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232234AbjEARzL (ORCPT
+        with ESMTP id S229927AbjEASIY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 13:55:11 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E886310CC
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 10:55:09 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-55a829411b5so4836127b3.1
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 10:55:09 -0700 (PDT)
+        Mon, 1 May 2023 14:08:24 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753FF172B
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 11:08:22 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-2f3fe12de15so1577607f8f.3
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 11:08:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682963708; x=1685555708;
+        d=google.com; s=20221208; t=1682964501; x=1685556501;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=K1weW95EDkyvCe/cwOd0PB4zhkheUJ8J7X9stA1ol6Q=;
-        b=lP6cll0z5vbj6X6IJg7KZRDM+XxjC5Ngg8DG7vvrNCivjyJ9kDOBXO1WuWwCXQLHBn
-         1E2BcPfZg3mWljCec9RRGGmDeqX0YL+xrRiyufqAyVMDGg5mVTBIxino6+wyW+n3ryxi
-         yrKIUOeNmF2b1D7OcQWhZucW46kMKOfOgsrSy92HHWLwiz6f7YjnQcs9EKULAb6y0GRs
-         Vb54uSol9NsKc6zWrFK+mvrqu9PnOjW2BqKrfeTE297ljHqs8Dn+hsyJalVG888MMiqo
-         50pjicv54BL6AISuVbz8ViY8whn2Ac/9umlOC18eVGvnZyT2xscjWtebXKSHbTHF/n9T
-         NTKQ==
+        bh=+2lYHhqlJD16G2HYpsFMb3ZFL7Kq76WjunB2OGwz3cs=;
+        b=InnNvCbyWRIxKxFGHEw18GDFvAR07SJg7UsaQSzayd856NvZvHy/7D82OiVunxTwOQ
+         iI4bPEnaVC8DKfBD9q2mpFU/D2+4QZOsePkMvk/nKecGEkR7ieMp18RUohlow/ONsuPb
+         fRpdmKiy/hCz/JHzVWz2n5Mg5OcWXlB55bYJJxXjQz7D5uG5SID6uaCO/Kks5xdfPjJJ
+         it9fnMSSuNm2JWdg5Tcm2D1rTGbvS4aDpWOvTKMsD+KeIoUScC3se5ywU/XKx17SosJd
+         CH4HSE+fdc45RYf+DKFB/2hLNASZoyYfq4ehjOUiQfqHoIRcizKtgl3mADdezSKqh+u9
+         RU9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682963708; x=1685555708;
+        d=1e100.net; s=20221208; t=1682964501; x=1685556501;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=K1weW95EDkyvCe/cwOd0PB4zhkheUJ8J7X9stA1ol6Q=;
-        b=TjNSXJuw++vxR5daqUjERApmOrA8Nxq/JDdnKDNKohnU8dGWq8mddx//U6wd2qUoUb
-         rFlTn7HBEfAB6gB81ls2mozOMJzdkp/LKpa1t7SnSuLt12IP7jnU07Vhvp/SfEb8byRA
-         TDji8OsBS1HRCOaUvBwiGxbhC1OOOvolGhHSH6ZYlTbcv0R1o/2EFIGknABHjEkzb0Yw
-         mThazW7mp76dOut07g/BcZCQV2Madn1S/7wZtzGnLCiO3SyG5R6O2m9DxWqL/JTIV/ge
-         905B3dC1LlCRRzSHM7Epx5LhmW8Agx2aVqaRyHthaWa2TihXL9/OuF0eRlztF5Medo9D
-         1UwA==
-X-Gm-Message-State: AC+VfDyKTargWNHQZL/I5OmwjPFhiS2CX6t/kks0X3mEodO60mRNk3EJ
-        u5t6H3QhNZXWq3Qi19NVmRonmxtD6mD5/iW87IygOw==
-X-Google-Smtp-Source: ACHHUZ7hjXzhbIK1lFI88VY95LtZ84gfi8LXLoxdp40GiU3x23472skHcwg4uViuJvkrj1tcHIY697aV+7pvRDqs4eA=
-X-Received: by 2002:a81:8787:0:b0:556:1065:e6a8 with SMTP id
- x129-20020a818787000000b005561065e6a8mr12344466ywf.2.1682963708480; Mon, 01
- May 2023 10:55:08 -0700 (PDT)
+        bh=+2lYHhqlJD16G2HYpsFMb3ZFL7Kq76WjunB2OGwz3cs=;
+        b=gXUe299MSamAa7oNk+nAExSjVcoVPYZBU9vjSck6PGVKvDeQAeyIQtu0fs7fee9lr5
+         S/bt/U2W+pu7rFgB5EoGH36GDFBFvkSb/ZAhnt2pKWo0kSonjJK5WEPVkou6El+lJ8KG
+         dxrIpIaWjQqnCFFbBcQIiq4yoJeywbBhujjl42o2GNBPXo7zmifdUmlGvzpRV4aXyopG
+         C4AiwLBRqYhusCZRvywvGNBEuJPh8U8mlEXffTw6YRoPeSN2ghx66yTRExfr9f7dlZja
+         So9jfmBxFMq8WCDb589IHXtagjxWZZQmVr9jrweJNuUh6jmBKGLTZ3qlV0OtY1sAty+Q
+         5DMg==
+X-Gm-Message-State: AC+VfDzNLeds9Sy32n6kLKHlvUFYwSH01yxdP/mH9wgc3i6aFGMO4jNO
+        1giHwPfYQK+ppIfdYbn6S7eOY5Yfug3Rm5QlX5ouqQ==
+X-Google-Smtp-Source: ACHHUZ5amJjA/6tq+0x964OebbbLQ/pHCZFbXYS1+6FrTMuusEGNpiFnDiBKAeRF77HbwZnod13qqDRv0TRCNeDlvRc=
+X-Received: by 2002:a5d:6351:0:b0:306:2b9e:2a8c with SMTP id
+ b17-20020a5d6351000000b003062b9e2a8cmr3336094wrw.11.1682964500617; Mon, 01
+ May 2023 11:08:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230414180043.1839745-1-surenb@google.com> <ZDmetaUdmlEz/W8Q@casper.infradead.org>
- <87sfczuxkc.fsf@nvidia.com> <CAJuCfpEV1OiM423bykYQTxDC1=bQAqhAwd5fiKYifsk=seP6yw@mail.gmail.com>
- <877cuaulrm.fsf@nvidia.com> <CAJuCfpFEwdnpTXGRpKtXaZ+F4RW4+DkxaRRTiBVy4jE9cG=TEw@mail.gmail.com>
- <CAJuCfpHpnOevnuQSAK2WwtambXqiaoS8gpSFQsi9=O=szKe8vg@mail.gmail.com>
-In-Reply-To: <CAJuCfpHpnOevnuQSAK2WwtambXqiaoS8gpSFQsi9=O=szKe8vg@mail.gmail.com>
+References: <20230501165450.15352-1-surenb@google.com> <ZE/7FZbd31qIzrOc@P9FQF9L96D>
+In-Reply-To: <ZE/7FZbd31qIzrOc@P9FQF9L96D>
 From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Mon, 1 May 2023 10:54:57 -0700
-Message-ID: <CAJuCfpEMKv5Twk=V49cpCTpT5+-6bEP5gH=hk8VQKXi_OVPsng@mail.gmail.com>
-Subject: Re: [PATCH 1/1] mm: handle swap page faults if the faulting page can
- be locked
-To:     Alistair Popple <apopple@nvidia.com>
-Cc:     Matthew Wilcox <willy@infradead.org>, akpm@linux-foundation.org,
-        hannes@cmpxchg.org, mhocko@suse.com, josef@toxicpanda.com,
-        jack@suse.cz, ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
-        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
+Date:   Mon, 1 May 2023 11:08:05 -0700
+Message-ID: <CAJuCfpHU3ZMsNuqi1gSxzAWKr2D3VkiaTY0BEUQgM-QHNxRtSg@mail.gmail.com>
+Subject: Re: [PATCH 00/40] Memory allocation profiling
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
+        mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
+        mgorman@suse.de, dave@stgolabs.net, willy@infradead.org,
+        liam.howlett@oracle.com, corbet@lwn.net, void@manifault.com,
+        peterz@infradead.org, juri.lelli@redhat.com, ldufour@linux.ibm.com,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, peterx@redhat.com, david@redhat.com,
+        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
+        nathan@kernel.org, dennis@kernel.org, tj@kernel.org,
+        muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
+        pasha.tatashin@soleen.com, yosryahmed@google.com,
+        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
+        andreyknvl@gmail.com, keescook@chromium.org,
+        ndesaulniers@google.com, gregkh@linuxfoundation.org,
+        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+        glider@google.com, elver@google.com, dvyukov@google.com,
+        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
+        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 6:07=E2=80=AFPM Suren Baghdasaryan <surenb@google.c=
-om> wrote:
+On Mon, May 1, 2023 at 10:47=E2=80=AFAM Roman Gushchin <roman.gushchin@linu=
+x.dev> wrote:
 >
-> On Mon, Apr 17, 2023 at 4:50=E2=80=AFPM Suren Baghdasaryan <surenb@google=
-.com> wrote:
-> >
-> > On Mon, Apr 17, 2023 at 4:33=E2=80=AFPM Alistair Popple <apopple@nvidia=
-.com> wrote:
-> > >
-> > >
-> > > Suren Baghdasaryan <surenb@google.com> writes:
-> > >
-> > > > On Sun, Apr 16, 2023 at 6:06=E2=80=AFPM Alistair Popple <apopple@nv=
-idia.com> wrote:
-> > > >>
-> > > >>
-> > > >> Matthew Wilcox <willy@infradead.org> writes:
-> > > >>
-> > > >> > On Fri, Apr 14, 2023 at 11:00:43AM -0700, Suren Baghdasaryan wro=
-te:
-> > > >> >> When page fault is handled under VMA lock protection, all swap =
-page
-> > > >> >> faults are retried with mmap_lock because folio_lock_or_retry
-> > > >> >> implementation has to drop and reacquire mmap_lock if folio cou=
-ld
-> > > >> >> not be immediately locked.
-> > > >> >> Instead of retrying all swapped page faults, retry only when fo=
-lio
-> > > >> >> locking fails.
-> > > >> >
-> > > >> > Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> > > >> >
-> > > >> > Let's just review what can now be handled under the VMA lock ins=
-tead of
-> > > >> > the mmap_lock, in case somebody knows better than me that it's n=
-ot safe.
-> > > >> >
-> > > >> >  - We can call migration_entry_wait().  This will wait for PG_lo=
-cked to
-> > > >> >    become clear (in migration_entry_wait_on_locked()).  As previ=
-ously
-> > > >> >    discussed offline, I think this is safe to do while holding t=
-he VMA
-> > > >> >    locked.
-> > > >>
-> > > >> Do we even need to be holding the VMA locked while in
-> > > >> migration_entry_wait()? My understanding is we're just waiting for
-> > > >> PG_locked to be cleared so we can return with a reasonable chance =
-the
-> > > >> migration entry is gone. If for example it has been unmapped or
-> > > >> protections downgraded we will simply refault.
-> > > >
-> > > > If we drop VMA lock before migration_entry_wait() then we would nee=
-d
-> > > > to lock_vma_under_rcu again after the wait. In which case it might =
-be
-> > > > simpler to retry the fault with some special return code to indicat=
-e
-> > > > that VMA lock is not held anymore and we want to retry without taki=
+> On Mon, May 01, 2023 at 09:54:10AM -0700, Suren Baghdasaryan wrote:
+> > Performance overhead:
+> > To evaluate performance we implemented an in-kernel test executing
+> > multiple get_free_page/free_page and kmalloc/kfree calls with allocatio=
+n
+> > sizes growing from 8 to 240 bytes with CPU frequency set to max and CPU
+> > affinity set to a specific CPU to minimize the noise. Below is performa=
+nce
+> > comparison between the baseline kernel, profiling when enabled, profili=
 ng
-> > > > mmap_lock. I think it's similar to the last options Matthew suggest=
-ed
-> > > > earlier. In which case we can reuse the same retry mechanism for bo=
-th
-> > > > cases, here and in __folio_lock_or_retry.
-> > >
-> > > Good point. Agree there is no reason to re-take the VMA lock after th=
-e
-> > > wait, although in this case we shouldn't need to retry the fault
-> > > (ie. return VM_FAULT_RETRY). Just skip calling vma_end_read() on the =
-way
-> > > out to userspace.
+> > when disabled (nomem_profiling=3Dy) and (for comparison purposes) basel=
+ine
+> > with CONFIG_MEMCG_KMEM enabled and allocations using __GFP_ACCOUNT:
 > >
-> > Actually, __collapse_huge_page_swapin() which calls do_swap_page() can
-> > use VMA reference again inside its loop unless we return
-> > VM_FAULT_RETRY or VM_FAULT_ERROR. That is not safe since we dropped
-> > the VMA lock and stability of the VMA is not guaranteed at that point.
-> > So, we do need to return VM_FAULT_RETRY maybe with another bit
-> > indicating that retry does not need to fallback to mmap_lock. Smth
-> > like "return VM_FAULT_RETRY | VM_FAULT_USE_VMA_LOCK".
+> >                       kmalloc                 pgalloc
+> > Baseline (6.3-rc7)    9.200s                  31.050s
+> > profiling disabled    9.800 (+6.52%)          32.600 (+4.99%)
+> > profiling enabled     12.500 (+35.87%)        39.010 (+25.60%)
+> > memcg_kmem enabled    41.400 (+350.00%)       70.600 (+127.38%)
 >
-> False alarm. __collapse_huge_page_swapin is always called under
-> mmap_lock protection. I'll go over the code once more to make sure
-> nothing else would use VMA after we drop the VMA lock in page fault
-> path.
+> Hm, this makes me think we have a regression with memcg_kmem in one of
+> the recent releases. When I measured it a couple of years ago, the overhe=
+ad
+> was definitely within 100%.
+>
+> Do you understand what makes the your profiling drastically faster than k=
+mem?
 
-I posted a new series at
-https://lore.kernel.org/all/20230501175025.36233-1-surenb@google.com/
-It implements suggestions discussed in this thread. Feedback is
-appreciated! Thanks!
+I haven't profiled or looked into kmem overhead closely but I can do
+that. I just wanted to see how the overhead compares with the existing
+accounting mechanisms.
+
+For kmalloc, the overhead is low because after we create the vector of
+slab_ext objects (which is the same as what memcg_kmem does), memory
+profiling just increments a lazy counter (which in many cases would be
+a per-cpu counter). memcg_kmem operates on cgroup hierarchy with
+additional overhead associated with that. I'm guessing that's the
+reason for the big difference between these mechanisms but, I didn't
+look into the details to understand memcg_kmem performance.
 
 >
->
-> >
-> > >
-> > > >>
-> > > >> >  - We can call remove_device_exclusive_entry().  That calls
-> > > >> >    folio_lock_or_retry(), which will fail if it can't get the VM=
-A lock.
-> > > >>
-> > > >> Looks ok to me.
-> > > >>
-> > > >> >  - We can call pgmap->ops->migrate_to_ram().  Perhaps somebody f=
-amiliar
-> > > >> >    with Nouveau and amdkfd could comment on how safe this is?
-> > > >>
-> > > >> Currently this won't work because drives assume mmap_lock is held =
-during
-> > > >> pgmap->ops->migrate_to_ram(). Primarily this is because
-> > > >> migrate_vma_setup()/migrate_vma_pages() is used to handle the faul=
-t and
-> > > >> that asserts mmap_lock is taken in walk_page_range() and also
-> > > >> migrate_vma_insert_page().
-> > > >>
-> > > >> So I don't think we can call that case without mmap_lock.
-> > > >>
-> > > >> At a glance it seems it should be relatively easy to move to using
-> > > >> lock_vma_under_rcu(). Drivers will need updating as well though be=
-cause
-> > > >> migrate_vma_setup() is called outside of fault handling paths so d=
-rivers
-> > > >> will currently take mmap_lock rather than vma lock when looking up=
- the
-> > > >> vma. See for example nouveau_svmm_bind().
-> > > >
-> > > > Thanks for the pointers, Alistair! It does look like we need to be
-> > > > more careful with the migrate_to_ram() path. For now I can fallback=
- to
-> > > > retrying with mmap_lock for this case, like with do with all cases
-> > > > today. Afterwards this path can be made ready for working under VMA
-> > > > lock and we can remove that retry. Does that sound good?
-> > >
-> > > Sounds good to me. Fixing that shouldn't be too difficult but will ne=
-ed
-> > > changes to at least Nouveau and amdkfd (and hmm-tests obviously). Hap=
-py
-> > > to look at doing that if/when this change makes it in. Thanks.
-> > >
-> > > >>
-> > > >> >  - I believe we can't call handle_pte_marker() because we exclud=
-e UFFD
-> > > >> >    VMAs earlier.
-> > > >> >  - We can call swap_readpage() if we allocate a new folio.  I ha=
-ven't
-> > > >> >    traced through all this code to tell if it's OK.
-> > > >> >
-> > > >> > So ... I believe this is all OK, but we're definitely now willin=
-g to
-> > > >> > wait for I/O from the swap device while holding the VMA lock whe=
-n we
-> > > >> > weren't before.  And maybe we should make a bigger deal of it in=
- the
-> > > >> > changelog.
-> > > >> >
-> > > >> > And maybe we shouldn't just be failing the folio_lock_or_retry()=
-,
-> > > >> > maybe we should be waiting for the folio lock with the VMA locke=
-d.
-> > > >>
-> > >
+> Thanks!
