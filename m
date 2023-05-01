@@ -2,117 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FDDA6F353F
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 19:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 766CC6F34E9
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 19:16:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232606AbjEARvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 13:51:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41180 "EHLO
+        id S233289AbjEARQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 13:16:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232589AbjEARvN (ORCPT
+        with ESMTP id S233129AbjEARNT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 13:51:13 -0400
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60682123;
-        Mon,  1 May 2023 10:51:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Cc:To
-        :From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date
-        :Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
-        References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:
-        List-Owner:List-Archive; bh=PzJmc0+GvzSfc2yOHqDineOYCekWt+cdUMYavoLGzI4=; b=k
-        1Eb1jh2wo+EWvi7LtyEun/pAGmmrMrZDOcNpDpDpeBZzYu0bCZwlCJEsEngzGn7QAggw0iWp5e7MU
-        GB1oKq7HRqpBDCZVC6jInh+xQdowIznwmrMHI3t0f/MaIHL3vHnXlA3etZ6PB2jzJix0jjYhDx67m
-        9E4mr5cW1zCGzt0A=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:45966 helo=pettiford.lan)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1ptWyS-0006Ac-Bk; Mon, 01 May 2023 13:06:05 -0400
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Cc:     hugo@hugovil.com, Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Date:   Mon,  1 May 2023 13:05:32 -0400
-Message-Id: <20230501170531.2961459-1-hugo@hugovil.com>
-X-Mailer: git-send-email 2.30.2
+        Mon, 1 May 2023 13:13:19 -0400
+Received: from mail-il1-x14d.google.com (mail-il1-x14d.google.com [IPv6:2607:f8b0:4864:20::14d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C10C62737
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 10:12:31 -0700 (PDT)
+Received: by mail-il1-x14d.google.com with SMTP id e9e14a558f8ab-32b5ec09cf8so16155875ab.2
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 10:12:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682960819; x=1685552819;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2yu+xZYmt+R/b0iytkvmQxEh5KQSPGy0cMwq8ICzHwY=;
+        b=S+M2ouakPuB0s47XVuAyfXVb12qVjE07lpgfGptWXylhkmHJ12S4nuJyFClPdjUhio
+         uF2rc393IJ8OyG6B9RI16kFvpiTzjd572+jSZoFiX3keKJ5+K3EMxAI0FS2MiW+Sa8e8
+         y4zImHs6EoNTNsmmMVCPCRX1/EkVkDOGJqKCierjMSXK6LDXBcQ89ZN0nMAaaBVe7A92
+         dehLGcBPrkuZ6AWcfMgfOG29ohZuSQWV1NwOSJfCkjI85fliUeTHRc8Z+i1w/gyR3zUb
+         mN79oBB3d6jV7FkBh/2LnQ3p7feMkbBOG7DxhUnYpua5aidXhyDFy2iZhsz3fbjHWg/b
+         ghWA==
+X-Gm-Message-State: AC+VfDxQT9hXHdnvEdNHiWg61yXchi8fOPqeWi/vaMahGaUsogLlrshC
+        CKCGP6XYgjhKiKi3fuI4jxrptcHDWHqO0SU9Eyp0T+KyAg4g
+X-Google-Smtp-Source: ACHHUZ6Pwj9qMgUzCKC3UCLlDtadHFChfBAR4VWBNArE7BJthBACaKFXlhA6LPbhyVHvFsqzs2nq02ImwzbBVFE9Laf9gzCvgs4e
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
+X-Received: by 2002:a02:a1de:0:b0:40f:a98f:6aec with SMTP id
+ o30-20020a02a1de000000b0040fa98f6aecmr5211924jah.1.1682960819133; Mon, 01 May
+ 2023 10:06:59 -0700 (PDT)
+Date:   Mon, 01 May 2023 10:06:59 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000cbb5f505faa4d920@google.com>
+Subject: [syzbot] [f2fs?] possible deadlock in f2fs_release_file
+From:   syzbot <syzbot+e5b81eaab292e00e7d98@syzkaller.appspotmail.com>
+To:     chao@kernel.org, jaegeuk@kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Subject: [PATCH v2] arm64: dts: imx8mn-var-som: fix PHY detection bug by adding deassert delay
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Hello,
 
-While testing the ethernet interface on a Variscite symphony carrier
-board using an imx8mn SOM with an onboard ADIN1300 PHY (EC hardware
-configuration), the ethernet PHY is not detected.
+syzbot found the following issue on:
 
-The ADIN1300 datasheet indicate that the "Management interface
-active (t4)" state is reached at most 5ms after the reset signal is
-deasserted.
+HEAD commit:    58390c8ce1bd Merge tag 'iommu-updates-v6.4' of git://git.k..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=17fc7ef7c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5eadbf0d3c2ece89
+dashboard link: https://syzkaller.appspot.com/bug?extid=e5b81eaab292e00e7d98
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
 
-The device tree in Variscite custom git repository uses the following
-property:
+Unfortunately, I don't have any reproducer for this issue yet.
 
-    phy-reset-post-delay = <20>;
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/60130779f509/disk-58390c8c.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/d7f0cdd29b71/vmlinux-58390c8c.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/de415ad52ae4/bzImage-58390c8c.xz
 
-Add a new MDIO property 'reset-deassert-us' of 20ms to have the same
-delay inside the ethphy node. Adding this property fixes the problem
-with the PHY detection.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e5b81eaab292e00e7d98@syzkaller.appspotmail.com
 
-Note that this SOM can also have an Atheros AR8033 PHY. In this case,
-a 1ms deassert delay is sufficient. Add a comment to that effect.
+syz-executor.0: attempt to access beyond end of device
+loop0: rw=2049, sector=77824, nr_sectors = 2048 limit=63271
+syz-executor.0: attempt to access beyond end of device
+loop0: rw=2049, sector=79872, nr_sectors = 2048 limit=63271
+======================================================
+WARNING: possible circular locking dependency detected
+6.3.0-syzkaller-12049-g58390c8ce1bd #0 Not tainted
+------------------------------------------------------
+syz-executor.0/7526 is trying to acquire lock:
+ffff8880366c9bd8 (&sb->s_type->i_mutex_key#29){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ffff8880366c9bd8 (&sb->s_type->i_mutex_key#29){+.+.}-{3:3}, at: f2fs_release_file+0x9b/0x100 fs/f2fs/file.c:1866
 
-Fixes: ade0176dd8a0 ("arm64: dts: imx8mn-var-som: Add Variscite
-VAR-SOM-MX8MN System on Module")
+but task is already holding lock:
+ffff888037e0c448 (&sbi->node_write){++++}-{3:3}, at: f2fs_down_read fs/f2fs/f2fs.h:2087 [inline]
+ffff888037e0c448 (&sbi->node_write){++++}-{3:3}, at: f2fs_write_single_data_page+0xa10/0x1d50 fs/f2fs/data.c:2842
 
-Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #2 (&sbi->node_write){++++}-{3:3}:
+       reacquire_held_locks+0x3aa/0x660 kernel/locking/lockdep.c:5216
+       __lock_release kernel/locking/lockdep.c:5405 [inline]
+       lock_release+0x36f/0x9d0 kernel/locking/lockdep.c:5711
+       up_write+0x79/0x580 kernel/locking/rwsem.c:1625
+       f2fs_write_checkpoint+0x13a4/0x1f90 fs/f2fs/checkpoint.c:1651
+       __write_checkpoint_sync fs/f2fs/checkpoint.c:1768 [inline]
+       __checkpoint_and_complete_reqs+0xda/0x3b0 fs/f2fs/checkpoint.c:1787
+       issue_checkpoint_thread+0xda/0x260 fs/f2fs/checkpoint.c:1818
+       kthread+0x2b8/0x350 kernel/kthread.c:379
+       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+
+-> #1 (&sbi->cp_rwsem){++++}-{3:3}:
+       lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5691
+       down_read+0x3d/0x50 kernel/locking/rwsem.c:1520
+       f2fs_down_read fs/f2fs/f2fs.h:2087 [inline]
+       f2fs_lock_op fs/f2fs/f2fs.h:2130 [inline]
+       f2fs_convert_inline_inode+0x578/0x800 fs/f2fs/inline.c:218
+       f2fs_setattr+0xb0c/0x1270 fs/f2fs/file.c:995
+       notify_change+0xc8b/0xf40 fs/attr.c:483
+       do_truncate+0x220/0x300 fs/open.c:66
+       do_sys_ftruncate+0x2e4/0x380 fs/open.c:194
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #0 (&sb->s_type->i_mutex_key#29){+.+.}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3108 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3227 [inline]
+       validate_chain+0x166b/0x58e0 kernel/locking/lockdep.c:3842
+       __lock_acquire+0x1295/0x2000 kernel/locking/lockdep.c:5074
+       lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5691
+       down_write+0x3a/0x50 kernel/locking/rwsem.c:1573
+       inode_lock include/linux/fs.h:775 [inline]
+       f2fs_release_file+0x9b/0x100 fs/f2fs/file.c:1866
+       __fput+0x3b7/0x890 fs/file_table.c:321
+       task_work_run+0x24a/0x300 kernel/task_work.c:179
+       get_signal+0x1606/0x17e0 kernel/signal.c:2650
+       arch_do_signal_or_restart+0x91/0x670 arch/x86/kernel/signal.c:306
+       exit_to_user_mode_loop+0x6a/0x100 kernel/entry/common.c:168
+       exit_to_user_mode_prepare+0xb1/0x140 kernel/entry/common.c:204
+       __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+       syscall_exit_to_user_mode+0x64/0x280 kernel/entry/common.c:297
+       do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+other info that might help us debug this:
+
+Chain exists of:
+  &sb->s_type->i_mutex_key#29 --> &sbi->cp_rwsem --> &sbi->node_write
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  rlock(&sbi->node_write);
+                               lock(&sbi->cp_rwsem);
+                               lock(&sbi->node_write);
+  lock(&sb->s_type->i_mutex_key#29);
+
+ *** DEADLOCK ***
+
+1 lock held by syz-executor.0/7526:
+ #0: ffff888037e0c448 (&sbi->node_write){++++}-{3:3}, at: f2fs_down_read fs/f2fs/f2fs.h:2087 [inline]
+ #0: ffff888037e0c448 (&sbi->node_write){++++}-{3:3}, at: f2fs_write_single_data_page+0xa10/0x1d50 fs/f2fs/data.c:2842
+
+stack backtrace:
+CPU: 1 PID: 7526 Comm: syz-executor.0 Not tainted 6.3.0-syzkaller-12049-g58390c8ce1bd #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
+ check_noncircular+0x2fe/0x3b0 kernel/locking/lockdep.c:2188
+ check_prev_add kernel/locking/lockdep.c:3108 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3227 [inline]
+ validate_chain+0x166b/0x58e0 kernel/locking/lockdep.c:3842
+ __lock_acquire+0x1295/0x2000 kernel/locking/lockdep.c:5074
+ lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5691
+ down_write+0x3a/0x50 kernel/locking/rwsem.c:1573
+ inode_lock include/linux/fs.h:775 [inline]
+ f2fs_release_file+0x9b/0x100 fs/f2fs/file.c:1866
+ __fput+0x3b7/0x890 fs/file_table.c:321
+ task_work_run+0x24a/0x300 kernel/task_work.c:179
+ get_signal+0x1606/0x17e0 kernel/signal.c:2650
+ arch_do_signal_or_restart+0x91/0x670 arch/x86/kernel/signal.c:306
+ exit_to_user_mode_loop+0x6a/0x100 kernel/entry/common.c:168
+ exit_to_user_mode_prepare+0xb1/0x140 kernel/entry/common.c:204
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+ syscall_exit_to_user_mode+0x64/0x280 kernel/entry/common.c:297
+ do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f9fbc28c169
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f9fbd007168 EFLAGS: 00000246 ORIG_RAX: 0000000000000148
+RAX: fffffffffffffffb RBX: 00007f9fbc3abf80 RCX: 00007f9fbc28c169
+RDX: 0000000000000001 RSI: 0000000020000240 RDI: 0000000000000005
+RBP: 00007f9fbc2e7ca1 R08: 0000000000000000 R09: 0000000000000003
+R10: 0000000000001400 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffc6d012c3f R14: 00007f9fbd007300 R15: 0000000000022000
+ </TASK>
+
+
 ---
- arch/arm64/boot/dts/freescale/imx8mn-var-som.dtsi | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mn-var-som.dtsi b/arch/arm64/boot/dts/freescale/imx8mn-var-som.dtsi
-index 67072e6c77d5..cbd9d124c80d 100644
---- a/arch/arm64/boot/dts/freescale/imx8mn-var-som.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mn-var-som.dtsi
-@@ -98,11 +98,17 @@ mdio {
- 		#address-cells = <1>;
- 		#size-cells = <0>;
- 
--		ethphy: ethernet-phy@4 {
-+		ethphy: ethernet-phy@4 { /* AR8033 or ADIN1300 */
- 			compatible = "ethernet-phy-ieee802.3-c22";
- 			reg = <4>;
- 			reset-gpios = <&gpio1 9 GPIO_ACTIVE_LOW>;
- 			reset-assert-us = <10000>;
-+			/*
-+			 * Deassert delay:
-+			 * ADIN1300 requires 5ms.
-+			 * AR8033   requires 1ms.
-+			 */
-+			reset-deassert-us = <20000>;
- 		};
- 	};
- };
--- 
-2.30.2
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
