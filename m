@@ -2,157 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D908C6F35E9
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 20:39:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6BD36F35EC
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 20:40:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbjEASjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 14:39:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54582 "EHLO
+        id S232391AbjEASkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 14:40:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbjEASji (ORCPT
+        with ESMTP id S229688AbjEASj6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 14:39:38 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920D319B0;
-        Mon,  1 May 2023 11:39:33 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-958bb7731a9so581784166b.0;
-        Mon, 01 May 2023 11:39:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20221208; t=1682966372; x=1685558372;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Vy8LMgK7nlj8Hadd9P4DNIqtoF7V1DAnGwP0/fa2hB8=;
-        b=U5D7cxNQTURT8xwkIm3G1FjwzyMGG5dzHJMisO4ldoGpHCh2i4+CzU5YRAlZCAKUGD
-         Xn6lbly6fyylDsFJy7yJgxXVXxkji8ExeXlGf6txh4V/hW7XCBVIKBxy5q71Bivb2V2c
-         uIgmKUQHOAA0WMq1LxPtFAvSwnlWRx2YBULmIgt+592UWgpHwxO75jhDHOoB4H82COlr
-         yy1R9sUHSAI2/hJ6oWc4RqgrpbJv+uy9qVnZ5qo62qEQ5zgJMIrAASjE+RcYdFefYVw3
-         JNfCACRGxcC0WO5XEoqMtPKgw6j3KM5b4jUV2TgDyTT4trKxdU2Pwl0XeAcsxa+mW/xZ
-         q4Vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682966372; x=1685558372;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Vy8LMgK7nlj8Hadd9P4DNIqtoF7V1DAnGwP0/fa2hB8=;
-        b=GTht1OR/nC15lh+sV/bB5WPtgJG6yqyQnFByLd0WILfwMG7+Jvl9GzHCI/MErrzThv
-         p++csaxonEZ0kdA4P08KckwtaSYKhKFhP4pOQKLhVyyxzEjunZUsj1VFUBEElaCpk/5y
-         5T8oN1BD+2LT+obINAvt6fvz359iCiKeEzJ3Ae5ay+AwnJ/bzD6NqFTxtSKrgzVBOmuL
-         t8KEir4O7LJp+CGE8Vm1xqpoWvj1sYbOXHi+lwpQdDMeXPVJ9MMECMP4CNkgxbAvNX1q
-         YrSfuJ8uJAAkIvBAnRFCIGo5WGzgTqZryUDNKggyBLAYbA6af9gxJpU6rF7OwBR1Y6vQ
-         WJfw==
-X-Gm-Message-State: AC+VfDwJnqq0SCEh+eOViKA/kePQSpvDpABm3ndbq7vofJzJke0KbS+W
-        tpcWLG1pW5bkTxxeNh6dMvyOMp8JKSrwUGDqFs0=
-X-Google-Smtp-Source: ACHHUZ7XYkmDWh6C7QrAP5IrIgIh54a4MMgW7FDGV1Ipa9leHn0ud1zf0ChP3eFCS4Yg4qGriQmF6zeP4UR5ar4Bb4U=
-X-Received: by 2002:a17:907:160a:b0:94f:21cf:86c6 with SMTP id
- hb10-20020a170907160a00b0094f21cf86c6mr14226257ejc.51.1682966371921; Mon, 01
- May 2023 11:39:31 -0700 (PDT)
+        Mon, 1 May 2023 14:39:58 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2086.outbound.protection.outlook.com [40.107.244.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C0E170B;
+        Mon,  1 May 2023 11:39:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SPwTojbKD6Zx2IWrM7y9K1ckfH0/LuwdoaU0zZ91h2k3TuGMGwEZisyhbbfKPU4/NSco4CA0qlR/1FHgS6quV3/csQ1xkYxee490Uvd9XScwgqShe8GNx04HLlGww7kSlvnCwYEGqLEFKnxkmXNP//qDdow2SR9ZlvvuhZ2uD0oERe6E9V4dbIErLoF1zg2AP0X+tM7EFWYdtyMcR8Ro4R3Uz+P9hmEcl9SXCqbdqWthYUQ0ZLKc57HiQBddqAvfT8ILUaLkejSewam3a6TYDpmS2QarIuhghBFhfD8/P8XP2ta1eafRaphg+mPf6mn11w5He096IPy6cja5VTgWqw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=T0iShuGPz5ciZ5KiTwMLt2inyLpKtUh+VAq1yyv+X7k=;
+ b=UexFcgRRAcJFvznenC2vW02InYubhowlxbtO1aNPmvnyglv4UY1n8CjSyCz8cxDP59qXpS1wj6yFYQ3f9c60aUBGGJaJMiFf7cQTvTxiHo+iovzs9WKLl7vyZOjPyVo66Rey/h8xLXS2rNR4ce4/CmqVUsWNh2y9uASuvCaYz8542wA2bNpBxc4slRrXtLtD5uRS8EbdhjYVyLwOAfIVi410C3v/PAl8wX9qNlpT1fMgPA0ut2yjX0IZfzOkNfU1O8CFJ2bylrcDdDelNdLnniLEM4VWzTZRCs1SIHsZ+R6p9+DIm4chR/XTEJUoBKeS5GhVTHM1DonV0SgXPxdYEQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=T0iShuGPz5ciZ5KiTwMLt2inyLpKtUh+VAq1yyv+X7k=;
+ b=Y0tXa+XawhtkSqtjD9c38uZIOKc6rJoFanzs0zrlK21iKCz7BBHvyrzMIXgqd11m7+DlyUYjK1lZVLrtEWuhYlqHkSBHaq1nBQ7KpTRmo2Nslyy9+e8NWivDiHB7xysyemzk7imrrE+SkUpWOwnWQEl1bBmifqiMcBfI5/i9nGo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
+ by IA1PR12MB6066.namprd12.prod.outlook.com (2603:10b6:208:3ee::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.30; Mon, 1 May
+ 2023 18:39:52 +0000
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::ea32:baf8:cc85:9648]) by DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::ea32:baf8:cc85:9648%7]) with mapi id 15.20.6340.030; Mon, 1 May 2023
+ 18:39:52 +0000
+Message-ID: <7daa5081-7239-3494-e7a4-07c48f308f1f@amd.com>
+Date:   Mon, 1 May 2023 13:39:49 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 03/10] crypto: ccp: Add bootloader and TEE version
+ offsets
+Content-Language: en-US
+To:     Mario Limonciello <mario.limonciello@amd.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        John Allen <john.allen@amd.com>
+Cc:     David S Miller <davem@davemloft.net>, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230428185543.8381-1-mario.limonciello@amd.com>
+ <20230428185543.8381-4-mario.limonciello@amd.com>
+From:   Tom Lendacky <thomas.lendacky@amd.com>
+In-Reply-To: <20230428185543.8381-4-mario.limonciello@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SA0PR11CA0196.namprd11.prod.outlook.com
+ (2603:10b6:806:1bc::21) To DM4PR12MB5229.namprd12.prod.outlook.com
+ (2603:10b6:5:398::12)
 MIME-Version: 1.0
-References: <20230405195927.13487-1-ddrokosov@sberdevices.ru>
- <20230405195927.13487-5-ddrokosov@sberdevices.ru> <CAFBinCA3uZXzr3RgnWnKV5Qr-CPaZQX5joDg319i_cgzhLJy2g@mail.gmail.com>
- <20230425123304.xjmrkraybp2siwdw@CAB-WSD-L081021>
-In-Reply-To: <20230425123304.xjmrkraybp2siwdw@CAB-WSD-L081021>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Mon, 1 May 2023 20:39:20 +0200
-Message-ID: <CAFBinCCqx1oHf+PcXBkeRYHnGQChbTTPRyD8SJU+ait+TG+AjQ@mail.gmail.com>
-Subject: Re: [PATCH v13 4/6] clk: meson: a1: add Amlogic A1 PLL clock
- controller driver
-To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Cc:     neil.armstrong@linaro.org, jbrunet@baylibre.com,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, khilman@baylibre.com,
-        jian.hu@amlogic.com, kernel@sberdevices.ru, rockosov@gmail.com,
-        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5229:EE_|IA1PR12MB6066:EE_
+X-MS-Office365-Filtering-Correlation-Id: e67808e9-3d12-46dc-dc82-08db4a7373b5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: cYZM2OmNXL/l0a+NrjO6VepLKDNgS4hDdAOR3kvyH2wWeuVBvykmpA+vwM2WDCW/mmbR0O6eryxpCxtA09+DWMwjnc5MJy5zjYrAZUZCeAn84+JRfpdGja98IxBXbPhviyu+W1frVrOIX46b0v60UJDBPgWGuPvv+9Dvj5n+c7AVXNScNr83HWGiGpFiA5XwmpUNcuYdlqpD1BL1agd9wv8auKqlSp49VhN6xCLjFlOUIcwr3aueicavG1JytTJt7lIZFg2sRQDkSchuhAUFIrZdooko7iTJcBCCe+pGuGdIOpc/j2/v9J2AUUhhzKH3H/2S+yFjjlLqCwUdSetRded4eWFXcxdkH0InB5ShLctSrfTFklCnVcGWGqqCCeRp0drvUH8RtLHf0J1PhrSGH/FSlfiH4AmqeB5umw2P7JA1wq02bGpJ0KrpyVy+4Ji/LEW0Leo2xnOtVx799jO+cwzw0N92QXQXXN7KYX6cNfzC0NbFasCoS9G7ebamF37QT3CSG7FURoP4H6yqcootv/k/ezxUhL0RBDjRJkZGvCHFQs4MIvcIw7nTcZSHX9bSaFl6bPky+oosN0srRWDRPx+ECrCJsj0egyoNqRxXSeFq7sM3daU+6ddgTd6Cgcm2QjCy6EcAQzrrM/pEnKAZBg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(346002)(366004)(376002)(136003)(451199021)(83380400001)(26005)(6512007)(6506007)(6666004)(186003)(53546011)(6486002)(86362001)(6636002)(110136005)(31696002)(2616005)(36756003)(31686004)(478600001)(66946007)(316002)(38100700002)(41300700001)(66556008)(4326008)(66476007)(8936002)(8676002)(5660300002)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UUFhT3RnOGFaOWJveUtQSWZiazFoSVNEaGNCT05qRmMyb3pwaUxDbzF1d3hx?=
+ =?utf-8?B?TUdpQjZ1TWhNRU1qZGhIUlBTclIybkFnRVJkem5SZ0hoV210RFFIV21DaWhy?=
+ =?utf-8?B?aUFtUEFEcXJycmM3OGszdFlNZlFvTWFWY0k4Nms1ZWt1VUNPZ3VUUGFwQ1Zy?=
+ =?utf-8?B?MkVFOHkwRFp3UFNCSEtLUjJIeFpNczYrWlRlOU1lNGF5bEllMWFHSnp5ai9C?=
+ =?utf-8?B?aTFrZklWQjZnd2ZOVytSaFI0TnRVUEdWaS9DYkxXMm1vSWRWNG5KaVJ0Tktx?=
+ =?utf-8?B?WEVsZzJ4eUIzY2lYbHI5dVlpdjZ4WVJoTENIcU5qYjFWZlRGMFBlRGRzeFVI?=
+ =?utf-8?B?VGx3Ylk4SkZyc29SS3pYVTk3cXFwQTVHY3NXUmVHT0gwNzF6Uy8zSkRCUGkw?=
+ =?utf-8?B?bjlOak91RS9BN2FQbEU4dWFvMEFHcVFCd210VHFRQ3QySzQvajZWbVl4QUEx?=
+ =?utf-8?B?MW00cUtna3BiUzBSTXdMOHZTZzhUNkQ4Mm1DOXJSV3Y3U2tTb0p1WmhmazlY?=
+ =?utf-8?B?cE9ZY3VxekxGeks4UElIVmpoUlpPY1FiTmkvczkwK2VMWU9JQU00ZklYcDhM?=
+ =?utf-8?B?b3orckRpWWUwaDM2ekg5MWV3aTlSMzZlL011TndpZGR0VHpvMWRsK3hJWDht?=
+ =?utf-8?B?Vmo3TkZlQUV0WXlCaEphaVFYc01CWnFRQjNkUm1mY2tuVTBDUjUxT2toa1pw?=
+ =?utf-8?B?RlhUbjlKMnFYQnorM1VkYUcxNEVtTEc2aVZ5aEFveThSV0R1U3hTam1OYmhz?=
+ =?utf-8?B?Q3YxR2NyWWRKT3V6VkxFUnR5R0NrTmE1UDdVU2ZtSUUzUk9yc0lVQmo2NHhw?=
+ =?utf-8?B?VjRFYm1mc01XNXM5c0d4ZnZQd1h6ZUQ3bCtNMW9ON3lyVTg4ODcrbDhRL1Nz?=
+ =?utf-8?B?dXFNeXQvVE1lM2ppLzg2aU8zMVhBalBMSWRNUG5DdHlzNWt6QjNBVWdyTFFP?=
+ =?utf-8?B?NzVacjY0NGZzTEgvWHdEaWg4WGRoei8xQzNONUJIU2lJNjllbnZGM2Y3RTAw?=
+ =?utf-8?B?MWpzbHphOVY4N3QvNG1lS0wyVzlpZmFjck9vdTNENHUwS1U1ZDFoN09ZRzE4?=
+ =?utf-8?B?dG05cGFYYU1iSElSakFSZjNqM0RrRm5qUytOMHVzczlRUjU5bVNlVVZyakFw?=
+ =?utf-8?B?UVI2eVNsb3dQMTVWdzhwQ3g1TktWQ1FBUGtDL2pJOHNiS21aZ3JISFVnbGpZ?=
+ =?utf-8?B?UmxHOGZySkplTFVKSWp3VHAzd2g2NFNEeHFnSVZoUU5zeXB6QXJKZytrMmpm?=
+ =?utf-8?B?UTl4djFadUg3WTlNdENkUisrVHQ5eWxTS0p0WjdxMVZDbkJYemFTMTNrYjFX?=
+ =?utf-8?B?aG9KYWJPWFZZWDJCR3JmT2pUTzFqY1c3ZFpyQlRtMVVmRnY2QVZhY01aL2lT?=
+ =?utf-8?B?enVRazQzSXpJM293L0ZCQ2lNYllwNWtwelFvWmxPK3FlMU9ZbUszTlpxK1hJ?=
+ =?utf-8?B?TTcvZk10K1dIMEJQSjIzUjl3ME10V25paW5QRjRvakNNTUF1OEZsQVBHMHZL?=
+ =?utf-8?B?VnN1MUFXTVQ5Zk5qU1ZKclVjajlGT0h3UVJvLzhlRGxNVFYzTWR2d28weHlG?=
+ =?utf-8?B?bVlrTEhnNllyQ3VYRWw2NjdKMU01NmZiVDIrYlh3ZENXU3VYT05UQ09QS0Zq?=
+ =?utf-8?B?OGpiL0pTeXlMUktYYjRqZVlERGtFeStzRjBveEVlWFNIOWNQMHNqYy9PRFlw?=
+ =?utf-8?B?UzZJYmh3K3dvTVo3MityMFZsSklkTys1dC8yVENCUDBySUYzSHNmdGxvZjlI?=
+ =?utf-8?B?MERSVkowcURpZ2lZUWxrSzFKQnN3c2NYejdYamtzNnVZSGdZRlhRYVI1WnI1?=
+ =?utf-8?B?WnorTml4cjRuTkE4MFNzaVZQYmpSQzBNclEwZWtVZmc3VlovVHZRd1JMeXZ0?=
+ =?utf-8?B?SXdVdFF1clR3QzJmcDR3ek55RHBvbDN3QTN4UGI1eXZ5SEpMOXBzN1ZRU05y?=
+ =?utf-8?B?d1ZlUDNaYnBOVjNLK3llbEpBMDRQV20yNWcwbDRxZkRpL2xlZzFOOWh6VFpy?=
+ =?utf-8?B?UDkyUkQ3ZG9acmErU2pNUTA0SmN3WGxqcmE3dVAyK1MwMXhkc3N0S1VDQ0sy?=
+ =?utf-8?B?dnFjcElxYnRjVW5DcEQzWWtVUzFCNHREbmc2TTBWMzZlT28razdkMi9oVjUv?=
+ =?utf-8?Q?HxrL71dtYlwdltgy3LehVeXVt?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e67808e9-3d12-46dc-dc82-08db4a7373b5
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 May 2023 18:39:52.7733
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: RvopQs/dogU1dVNgCRkFW1FNwTIh69t3uZbgWGVkbqnRyadPsfVLPU6o5G2v7Qe0D6nFXJJ2gmfCglWP47h6AA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6066
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Dmitry,
+On 4/28/23 13:55, Mario Limonciello wrote:
+> The bootloader and TEE versions are stored in registers that can be
+> accessed from sysfs.  This exports the information for recent client
+> and datacenter parts.
+> 
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 
-(I'm aware you already posted a v14 - but I'm still replying here to
-continue the discussion on one question I had to keep the context)
+Acked-by: Tom Lendacky <thomas.lendacky@amd.com>
 
-On Tue, Apr 25, 2023 at 2:33=E2=80=AFPM Dmitry Rokosov <ddrokosov@sberdevic=
-es.ru> wrote:
-[...]
-> > > +/* PLL register offset */
-> > > +#define ANACTRL_FIXPLL_CTRL0   0x0
-> > > +#define ANACTRL_FIXPLL_CTRL1   0x4
-> > > +#define ANACTRL_FIXPLL_STS     0x14
-> > > +#define ANACTRL_HIFIPLL_CTRL0  0xc0
-> > > +#define ANACTRL_HIFIPLL_CTRL1  0xc4
-> > > +#define ANACTRL_HIFIPLL_CTRL2  0xc8
-> > > +#define ANACTRL_HIFIPLL_CTRL3  0xcc
-> > > +#define ANACTRL_HIFIPLL_CTRL4  0xd0
-> > > +#define ANACTRL_HIFIPLL_STS    0xd4
-> > Here I have a question that will potentially affect patch 3/6
-> > ("dt-bindings: clock: meson: add A1 PLL clock controller bindings").
-> > In the cover-letter you mentioned that quite a few clocks have been omi=
-tted.
-> > Any dt-bindings that we create need to be stable going forward. That
-> > means: the dt-bindings will always need to describe what the hardware
-> > is capable of, not what the driver implements.
-> > So my question is: do we have all needed inputs described in the
-> > dt-bindings (even though we're omitting quite a few registers here
-> > that will only be added/used in the future)?
-> > Older SoCs require (temporarily) using the XTAL clock for CPU clock
-> > tree changes. To make a long story short: I'm wondering if - at least
-> > - the XTAL clock input is missing.
->
-> The Amlogic A1 clock engine comprises four clock controllers for
-> peripherals, PLL, CPU, and audio. While the first two have been
-> introduced in the current patch series, the last two will be sent in the
-> next iteration.
-I (think that I) understand this part.
-
-> Presently, the PLL controller driver includes all the required bindings,
-> and the peripherals controller driver has all bindings except for the
-> CPU-related clock.
-Let's stick to the PLL controller bindings for the next part.
-My understanding is that the PLL clock controller registers
-(ANACTRL_*) are managing the following clocks:
-- fixed_pll
-- sys_pll
-- hifi_pll
-- whatever "AUDDDS" is
-- and some miscellaneous registers like ANACTRL_POR_CNTL and
-ANACTRL_MISCTOP_CTRL0
-
-I *think* you got the dt-bindings correct:
-Even though the driver part does not support the hifi_pll yet, this IP
-block seems to have a "hifipll_in" clock input.
-Since the dt-bindings describes the hardware it may describe (for
-example) clock inputs that are not used by the driver yet.
-
-If you agree with my statement from above I'll be able to make my
-original question more specific:
-Since we know that we have all the required inputs for fixed_pll,
-sys_pll and hifi_pll - do you know what AUDDDS is and whether it
-requires any specific clock inputs (other than "fixpll_in" and
-"hifipll_in")?
-
-> However, I do not believe this to be a significant issue. The clock DT
-> bindings are organized to simplify the process of introducing new binding=
-s,
-> whether public or private. For instance, we may add new bindings to
-> include/dt-bindings at the end of the list and increase the overall numbe=
-r,
-> without disrupting the DT bindings ABI (the old numbers will remain
-> unchanged).
-Yep, this part is clear to me. I should have been more specific that I
-was asking about the inputs that are described in the .yaml file, not
-the clock IDs.
-
-
-Best regards,
-Martin
+> ---
+>   drivers/crypto/ccp/sp-pci.c | 5 +++++
+>   1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/crypto/ccp/sp-pci.c b/drivers/crypto/ccp/sp-pci.c
+> index 7ef7c09b4a2f..46dd7a2ade18 100644
+> --- a/drivers/crypto/ccp/sp-pci.c
+> +++ b/drivers/crypto/ccp/sp-pci.c
+> @@ -423,6 +423,7 @@ static const struct tee_vdata teev1 = {
+>   	.cmdbuff_addr_hi_reg	= 0x1054c,	/* C2PMSG_19 */
+>   	.ring_wptr_reg          = 0x10550,	/* C2PMSG_20 */
+>   	.ring_rptr_reg          = 0x10554,	/* C2PMSG_21 */
+> +	.info_reg		= 0x109e8,	/* C2PMSG_58 */
+>   };
+>   
+>   static const struct platform_access_vdata pa_v1 = {
+> @@ -435,6 +436,7 @@ static const struct platform_access_vdata pa_v1 = {
+>   
+>   static const struct psp_vdata pspv1 = {
+>   	.sev			= &sevv1,
+> +	.bootloader_info_reg	= 0x105ec,	/* C2PMSG_59 */
+>   	.feature_reg		= 0x105fc,	/* C2PMSG_63 */
+>   	.inten_reg		= 0x10610,	/* P2CMSG_INTEN */
+>   	.intsts_reg		= 0x10614,	/* P2CMSG_INTSTS */
+> @@ -442,6 +444,7 @@ static const struct psp_vdata pspv1 = {
+>   
+>   static const struct psp_vdata pspv2 = {
+>   	.sev			= &sevv2,
+> +	.bootloader_info_reg	= 0x109ec,	/* C2PMSG_59 */
+>   	.feature_reg		= 0x109fc,	/* C2PMSG_63 */
+>   	.inten_reg		= 0x10690,	/* P2CMSG_INTEN */
+>   	.intsts_reg		= 0x10694,	/* P2CMSG_INTSTS */
+> @@ -450,6 +453,7 @@ static const struct psp_vdata pspv2 = {
+>   static const struct psp_vdata pspv3 = {
+>   	.tee			= &teev1,
+>   	.platform_access	= &pa_v1,
+> +	.bootloader_info_reg	= 0x109ec,	/* C2PMSG_59 */
+>   	.feature_reg		= 0x109fc,	/* C2PMSG_63 */
+>   	.inten_reg		= 0x10690,	/* P2CMSG_INTEN */
+>   	.intsts_reg		= 0x10694,	/* P2CMSG_INTSTS */
+> @@ -458,6 +462,7 @@ static const struct psp_vdata pspv3 = {
+>   static const struct psp_vdata pspv4 = {
+>   	.sev			= &sevv2,
+>   	.tee			= &teev1,
+> +	.bootloader_info_reg	= 0x109ec,	/* C2PMSG_59 */
+>   	.feature_reg		= 0x109fc,	/* C2PMSG_63 */
+>   	.inten_reg		= 0x10690,	/* P2CMSG_INTEN */
+>   	.intsts_reg		= 0x10694,	/* P2CMSG_INTSTS */
