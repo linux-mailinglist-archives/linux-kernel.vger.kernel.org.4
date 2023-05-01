@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F8B86F2FB2
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 11:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1FB36F2FB0
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 11:04:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232265AbjEAJFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 05:05:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59510 "EHLO
+        id S232043AbjEAJEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 05:04:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232361AbjEAJDi (ORCPT
+        with ESMTP id S232070AbjEAJEN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 05:03:38 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF7210E0
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 02:03:06 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-329572e5abeso35311515ab.2
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 02:03:06 -0700 (PDT)
+        Mon, 1 May 2023 05:04:13 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4866D10F2
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 02:03:55 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-331027514f6so406195ab.0
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 02:03:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682931762; x=1685523762;
+        d=1e100.net; s=20221208; t=1682931834; x=1685523834;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=8TRxn8Hy1NWPcJqiNoPbXlJR8Shf1orIfvYvY77Iwcc=;
-        b=QDWmQABefExYcB3vZAjwyJB65VIxGlO8GbEPbbbVaDxvKWsTVATrp4+dSq97dVAFAs
-         tqVsjcByQGTO4J4HCn6PHdq8mQHBxynecbPUwC2yAztHJOYOHPej4mFXtIv02GFUkDEu
-         pPWhNi0ZOI7+oZdkOhuSSHpjz/LagcHJ/xHJsSK3iPjMOQCSRFMOxguLLQMu/MRww95j
-         1s0+9Pot29MlckUfTOET9nmEgFwaX6L+GbysEdvdSRVU1X+vHYyzmWZ2AyODNsYwjqiK
-         fRXeeg3TBJVnqGzYE4Hm1x8G7O10N3pMiuEKYnbvQAdX359GyAx7BA2rjr8tw+uzJhH+
-         BjDg==
-X-Gm-Message-State: AC+VfDzKyuysdUOZGmTOdW1t+kcStk0OOTd+LjpmKO9SIh+SeqtotYX+
-        CBQPkgrZCW0B1f5IRYsR6VYwnCvY6OVRViVDdb4QS9P1mj7M6j4=
-X-Google-Smtp-Source: ACHHUZ7gP7vT5iBmGE8NuEp9huD7Ip/Aq05StbBuLGySxP7qpsorWO4B5GVBXeshS82V9esflBj+gVKhFgWiruDtHvf2OZZ63GsY
+        bh=rhp9GBgrHr9B7k3Gk9cH3dUUthVHyW0iKvO1Evx4PB8=;
+        b=By+LoIhKbLHqqxdqUvxto0+Fvby5RFZYUWrBIj+0ZUcrjChKzAmZ7/OAiNhPkpawL2
+         j0vVpitaheUYhfOqdw6/aKkeqeVK9p2rMfCE+0aGB41BvICfM/Ow1Qj73L6wIwR9buK3
+         qTQdqVowDgt0+pXQupPkNGRb7/Ohe5Y76Lc/4dszfbjQr6KVKgNSUHYb64In774YAjbd
+         6Hz45uPFyZGql86tNjKaNsGkPjpSh/+6IeeRthUY49TulPc6QtnjZfNEmuP8/8hqAjnU
+         g8FWDGJ1SyHJh/0gcbOfw5HWSQ3V03GJT0FkWluuojjSmRyZFQm3oflPklIQGd8zEWe2
+         bzhA==
+X-Gm-Message-State: AC+VfDx4glhkiJruZo43jaVtEL5HuYWFFlzO8ijl6RUa4QMtp1dNqhTt
+        UCN6niUJsMre8JUBCaozq7Yqi4yVxXMBLGO6/8Q/dbdmMFtc
+X-Google-Smtp-Source: ACHHUZ6TFCy1DO4JGQ3bDaR6W6UHivOG3h2JFA2NazviMN0+BYbL6BxAXI+q8eMBqLWc7MDMix+N8uCPvMNIMUAyPryRDoIW95oX
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:2152:b0:40f:9c3a:8ce2 with SMTP id
- z18-20020a056638215200b0040f9c3a8ce2mr5749111jaj.5.1682931762773; Mon, 01 May
- 2023 02:02:42 -0700 (PDT)
-Date:   Mon, 01 May 2023 02:02:42 -0700
+X-Received: by 2002:a05:6e02:6c9:b0:32a:76a8:9b4f with SMTP id
+ p9-20020a056e0206c900b0032a76a89b4fmr6686672ils.5.1682931834585; Mon, 01 May
+ 2023 02:03:54 -0700 (PDT)
+Date:   Mon, 01 May 2023 02:03:54 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e6c78e05fa9e15bd@google.com>
-Subject: [syzbot] Monthly media report (Apr 2023)
-From:   syzbot <syzbot+list8669f45a42328eab044d@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+Message-ID: <0000000000002e8a7c05fa9e1a7a@google.com>
+Subject: [syzbot] Monthly wireguard report (Apr 2023)
+From:   syzbot <syzbot+listded2f47f5f1d416c4059@syzkaller.appspotmail.com>
+To:     Jason@zx2c4.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        wireguard@lists.zx2c4.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -54,28 +55,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello media maintainers/developers,
+Hello wireguard maintainers/developers,
 
-This is a 31-day syzbot report for the media subsystem.
+This is a 31-day syzbot report for the wireguard subsystem.
 All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/media
+https://syzkaller.appspot.com/upstream/s/wireguard
 
-During the period, 2 new issues were detected and 0 were fixed.
-In total, 17 issues are still open and 83 have been fixed so far.
+During the period, 1 new issues were detected and 0 were fixed.
+In total, 4 issues are still open and 13 have been fixed so far.
 
 Some of the still happening issues:
 
 Ref Crashes Repro Title
-<1> 2277    Yes   KMSAN: uninit-value in dib3000mb_attach (2)
-                  https://syzkaller.appspot.com/bug?extid=c88fc0ebe0d5935c70da
-<2> 978     Yes   WARNING in get_vaddr_frames
-                  https://syzkaller.appspot.com/bug?extid=59a71007ccac79e8bb69
-<3> 397     Yes   WARNING in smsusb_term_device
-                  https://syzkaller.appspot.com/bug?extid=40ac6e73326e79ee8ecb
-<4> 98      Yes   general protection fault in ir_raw_event_store_with_filter
-                  https://syzkaller.appspot.com/bug?extid=34008406ee9a31b13c73
-<5> 32      Yes   inconsistent lock state in sync_info_debugfs_show
-                  https://syzkaller.appspot.com/bug?extid=007bfe0f3330f6e1e7d1
+<1> 620     No    KCSAN: data-race in wg_packet_send_staged_packets / wg_packet_send_staged_packets (3)
+                  https://syzkaller.appspot.com/bug?extid=6ba34f16b98fe40daef1
+<2> 440     No    KCSAN: data-race in wg_packet_decrypt_worker / wg_packet_rx_poll (2)
+                  https://syzkaller.appspot.com/bug?extid=d1de830e4ecdaac83d89
+<3> 6       No    KASAN: slab-use-after-free Write in enqueue_timer
+                  https://syzkaller.appspot.com/bug?extid=c2775460db0e1c70018e
 
 ---
 This report is generated by a bot. It may contain errors.
