@@ -2,50 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 810276F2DA7
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 05:14:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A63B6F2DAA
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 05:16:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233114AbjEADOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 23:14:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37080 "EHLO
+        id S233122AbjEADOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 23:14:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232944AbjEADMf (ORCPT
+        with ESMTP id S232956AbjEADMk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 23:12:35 -0400
+        Sun, 30 Apr 2023 23:12:40 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 806591B9;
-        Sun, 30 Apr 2023 20:04:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC6FF2D58;
+        Sun, 30 Apr 2023 20:04:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 178416100E;
-        Mon,  1 May 2023 03:04:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E847BC433EF;
-        Mon,  1 May 2023 03:04:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BF9461137;
+        Mon,  1 May 2023 03:04:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F23F9C4339B;
+        Mon,  1 May 2023 03:04:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682910282;
-        bh=8L0YUmQisuwdiCTcNyYLilgshNpv6wm2b+pOlg6m8to=;
+        s=k20201202; t=1682910283;
+        bh=KjgtbDCxzQ4M6up/uMs1fEi+aKQ1FBB5mGRllVZiH8M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tplJoeYyLVdY2jkT87fxuRdaiN9nRu1OMWvB4nvl0d5Ibwe6D7kXby6ijA/jq0q5s
-         ZvMRb91rRYhMm+I7tHoNFyDsd42l/SApbHSvM1pdkMwQQenaKTypw5hGL2rbrJ5571
-         TYDSk2vS0mZEGhbNK2xd+Hffmsa1tcT0XAO8pCdn3YRUhSD4D/5K16As1RjfL23mGS
-         Ur6Lp/zuYYkvNDyynDIv1XwjGp+FH1Yi81oIjU7jSPxg7es9AKSjxrECwWyVoVSjAD
-         nOdMR4ItHM2hnaE4cW/QqQSEr1tachdH3r8uFpHdvjhYVts8u8pV4duLtuCcOVNrUU
-         Jk30/VA9oUjsg==
+        b=sOfk7lYQRlOR7vsjU7e5XS1tcjNst1JWVwvFskG5a24QcUTtZ1EJprzM4cm0zZjfP
+         QA6A3AyHON4ESS574j7N3Yl1W8/Wdc20VxyTQ5NPNWCEmtJg/bpMYJNAZ7i8i0FV1d
+         wTz/S6SlMO8dsQ/Cz7kbEd+6AF56pGCGFyPhbgKuLIaPzSSYdStN2AZuSHUfe7lUZj
+         JAxlFBoxmBeYEnH+r0l9U2JQruKpwUd9/eVevB0gUTd+u0R5n55mPf/Lbb83JQIFl7
+         d71O5rt2kpbn8Ratvwq80z8XBLxTak+jpL8Sm/Paw2fX/JluRyXMz5xDNr6MLfqFt5
+         /wv2Sz7Ffc2fQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Harry Wentland <Harry.Wentland@amd.com>,
-        Qingqing Zhuo <qingqing.zhuo@amd.com>,
-        Daniel Wheeler <daniel.wheeler@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>, harry.wentland@amd.com,
-        sunpeng.li@amd.com, christian.koenig@amd.com, Xinhui.Pan@amd.com,
-        airlied@gmail.com, daniel@ffwll.ch, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH AUTOSEL 5.15 02/17] drm/amd/display: Use DC_LOG_DC in the trasform pixel function
-Date:   Sun, 30 Apr 2023 23:04:19 -0400
-Message-Id: <20230501030435.3254695-2-sashal@kernel.org>
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, gregkh@linuxfoundation.org
+Subject: [PATCH AUTOSEL 5.15 03/17] regmap: cache: Return error in cache sync operations for REGCACHE_NONE
+Date:   Sun, 30 Apr 2023 23:04:20 -0400
+Message-Id: <20230501030435.3254695-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230501030435.3254695-1-sashal@kernel.org>
 References: <20230501030435.3254695-1-sashal@kernel.org>
@@ -63,107 +57,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+From: Alexander Stein <alexander.stein@ew.tq-group.com>
 
-[ Upstream commit 7222f5841ff49709ca666b05ff336776e0664a20 ]
+[ Upstream commit fd883d79e4dcd2417c2b80756f22a2ff03b0f6e0 ]
 
-[Why & How]
-DC now uses a new commit sequence which is more robust since it
-addresses cases where we need to reorganize pipes based on planes and
-other parameters. As a result, this new commit sequence reset the DC
-state by cleaning plane states and re-creating them accordingly with the
-need. For this reason, the dce_transform_set_pixel_storage_depth can be
-invoked after a plane state is destroyed and before its re-creation. In
-this situation and on DCE devices, DC will hit a condition that will
-trigger a dmesg log that looks like this:
+There is no sense in doing a cache sync on REGCACHE_NONE regmaps.
+Instead of panicking the kernel due to missing cache_ops, return an error
+to client driver.
 
-Console: switching to colour frame buffer device 240x67
-------------[ cut here ]------------
-[..]
-Hardware name: System manufacturer System Product Name/PRIME X370-PRO, BIOS 5603 07/28/2020
-RIP: 0010:dce_transform_set_pixel_storage_depth+0x3f8/0x480 [amdgpu]
-[..]
-RSP: 0018:ffffc9000202b850 EFLAGS: 00010293
-RAX: ffffffffa081d100 RBX: ffff888110790000 RCX: 000000000000000c
-RDX: ffff888100bedbf8 RSI: 0000000000001a50 RDI: ffff88810463c900
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000007
-R10: 0000000000000001 R11: 0000000000000f00 R12: ffff88810f500010
-R13: ffff888100bedbf8 R14: ffff88810f515688 R15: 0000000000000000
-FS:  00007ff0159249c0(0000) GS:ffff88840e940000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ff01528e550 CR3: 0000000002a10000 CR4: 00000000003506e0
-Call Trace:
- <TASK>
- ? dm_write_reg_func+0x21/0x80 [amdgpu 340dadd3f7c8cf4be11cf0bdc850245e99abe0e8]
- dc_stream_set_dither_option+0xfb/0x130 [amdgpu 340dadd3f7c8cf4be11cf0bdc850245e99abe0e8]
- amdgpu_dm_crtc_configure_crc_source+0x10b/0x190 [amdgpu 340dadd3f7c8cf4be11cf0bdc850245e99abe0e8]
- amdgpu_dm_atomic_commit_tail+0x20a8/0x2a90 [amdgpu 340dadd3f7c8cf4be11cf0bdc850245e99abe0e8]
- ? free_unref_page_commit+0x98/0x170
- ? free_unref_page+0xcc/0x150
- commit_tail+0x94/0x120
- drm_atomic_helper_commit+0x10f/0x140
- drm_atomic_commit+0x94/0xc0
- ? drm_plane_get_damage_clips.cold+0x1c/0x1c
- drm_client_modeset_commit_atomic+0x203/0x250
- drm_client_modeset_commit_locked+0x56/0x150
- drm_client_modeset_commit+0x21/0x40
- drm_fb_helper_lastclose+0x42/0x70
- amdgpu_driver_lastclose_kms+0xa/0x10 [amdgpu 340dadd3f7c8cf4be11cf0bdc850245e99abe0e8]
- drm_release+0xda/0x110
- __fput+0x89/0x240
- task_work_run+0x5c/0x90
- do_exit+0x333/0xae0
- do_group_exit+0x2d/0x90
- __x64_sys_exit_group+0x14/0x20
- do_syscall_64+0x5b/0x80
- ? exit_to_user_mode_prepare+0x1e/0x140
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7ff016ceaca1
-Code: Unable to access opcode bytes at RIP 0x7ff016ceac77.
-RSP: 002b:00007ffe7a2357e8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-RAX: ffffffffffffffda RBX: 00007ff016e15a00 RCX: 00007ff016ceaca1
-RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
-RBP: 0000000000000000 R08: ffffffffffffff78 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007ff016e15a00
-R13: 0000000000000000 R14: 00007ff016e1aee8 R15: 00007ff016e1af00
- </TASK>
-
-Since this issue only happens in a transition state on DC, this commit
-replace BREAK_TO_DEBUGGER with DC_LOG_DC.
-
-Reviewed-by: Harry Wentland <Harry.Wentland@amd.com>
-Acked-by: Qingqing Zhuo <qingqing.zhuo@amd.com>
-Signed-off-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
-Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+Link: https://lore.kernel.org/r/20230313071812.13577-1-alexander.stein@ew.tq-group.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/display/dc/dce/dce_transform.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/base/regmap/regcache.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dce/dce_transform.c b/drivers/gpu/drm/amd/display/dc/dce/dce_transform.c
-index d9fd4ec60588f..670d5ab9d9984 100644
---- a/drivers/gpu/drm/amd/display/dc/dce/dce_transform.c
-+++ b/drivers/gpu/drm/amd/display/dc/dce/dce_transform.c
-@@ -1009,7 +1009,7 @@ static void dce_transform_set_pixel_storage_depth(
- 		color_depth = COLOR_DEPTH_101010;
- 		pixel_depth = 0;
- 		expan_mode  = 1;
--		BREAK_TO_DEBUGGER();
-+		DC_LOG_DC("The pixel depth %d is not valid, set COLOR_DEPTH_101010 instead.", depth);
- 		break;
- 	}
+diff --git a/drivers/base/regmap/regcache.c b/drivers/base/regmap/regcache.c
+index f2469d3435ca3..0b517a83c4493 100644
+--- a/drivers/base/regmap/regcache.c
++++ b/drivers/base/regmap/regcache.c
+@@ -343,6 +343,9 @@ int regcache_sync(struct regmap *map)
+ 	const char *name;
+ 	bool bypass;
  
-@@ -1023,8 +1023,7 @@ static void dce_transform_set_pixel_storage_depth(
- 	if (!(xfm_dce->lb_pixel_depth_supported & depth)) {
- 		/*we should use unsupported capabilities
- 		 *  unless it is required by w/a*/
--		DC_LOG_WARNING("%s: Capability not supported",
--			__func__);
-+		DC_LOG_DC("%s: Capability not supported", __func__);
- 	}
- }
++	if (WARN_ON(map->cache_type == REGCACHE_NONE))
++		return -EINVAL;
++
+ 	BUG_ON(!map->cache_ops);
  
+ 	map->lock(map->lock_arg);
+@@ -412,6 +415,9 @@ int regcache_sync_region(struct regmap *map, unsigned int min,
+ 	const char *name;
+ 	bool bypass;
+ 
++	if (WARN_ON(map->cache_type == REGCACHE_NONE))
++		return -EINVAL;
++
+ 	BUG_ON(!map->cache_ops);
+ 
+ 	map->lock(map->lock_arg);
 -- 
 2.39.2
 
