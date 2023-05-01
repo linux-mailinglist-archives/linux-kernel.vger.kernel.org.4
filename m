@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C199F6F2C3E
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 04:58:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 012A66F2C44
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 04:58:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232314AbjEAC6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 22:58:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48408 "EHLO
+        id S232351AbjEAC6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 22:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232238AbjEAC60 (ORCPT
+        with ESMTP id S232221AbjEAC61 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 22:58:26 -0400
+        Sun, 30 Apr 2023 22:58:27 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460C419B9;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B8A21BC7;
         Sun, 30 Apr 2023 19:57:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 767F760E93;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F348760FC6;
+        Mon,  1 May 2023 02:57:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FAFFC4339B;
         Mon,  1 May 2023 02:57:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD4A5C433A0;
-        Mon,  1 May 2023 02:57:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682909874;
-        bh=0FgOAeLWITfHqxmvydovCvhdnSidBbTih1SuweCVZcc=;
+        s=k20201202; t=1682909876;
+        bh=epKsAZ6DSYzK4rCW0R5nLL2mxBdnP+pZABR+ucWo7ew=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iFYac7n2BCJGwBIZuv6RrXOOu/JhyQfH2Gf5ZJ2TgSuSrfZ3GyLHPW3UOBu/hMFZ6
-         6u7KWBc/5ZluQ9fLg69NAfd8ya3qDXw5vg6WQWhaxQCteyNcxW1GgEfRckZUbZLVY8
-         lbQQo/U2cB+dEBskxktNlhxwY0jAjM7zQDxvp0Tnd8FCssuJW1eKRr5aAqQyRfRiCX
-         kFXlBywKlbTLNJH6O6KfpzMrHo+C500EtR1aDttLUcJ7AzGMOX1vs4gkt9kivraofM
-         sCNkKzr2hQZItr4r/TSspraF9LezObDg/cwxETPMAWCC/o0tZsC3720yXEcTWO42mu
-         hKkq1wDBg/jlg==
+        b=RIxpH1puc01MWXjGKrSoZo2rhvUiX6ZiWOgTmHJ5JwnvNplqzk6kbjdsk9I9NAgWX
+         Z+fapg24Tz0DNyd6AfNRp5wwwGt+3aTB2oiBtpE2qePmEIa5eJ8h08MDwgbySOxHpI
+         Q/x7C/DQlMZaHunBtLL6WAC5Vsa38uI+aqhNfY1+oDIKxas4R9qmSnGLE1TYO2rhJ4
+         uEr4Hzs6OLLWhHU1JGXdkJbdalT3XSKb6JFCF8gKS2xItItBDrFPB/bhSuvi4JxaPb
+         zwKEOMj/zpmzHyjOXXgHktZ27/ZksiFO3LlLYoWIhBlKjRcQUfKnARFvcI00P/JxN7
+         dxvyzQs6DaZaw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Tom Rix <trix@redhat.com>, Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, isely@pobox.com,
-        linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 16/44] media: pvrusb2: VIDEO_PVRUSB2 depends on DVB_CORE to use dvb_* symbols
-Date:   Sun, 30 Apr 2023 22:56:04 -0400
-Message-Id: <20230501025632.3253067-16-sashal@kernel.org>
+Cc:     "David E. Box" <david.e.box@linux.intel.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sasha Levin <sashal@kernel.org>, markgross@kernel.org,
+        platform-driver-x86@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.3 17/44] platform/x86/intel: vsec: Explicitly enable capabilities
+Date:   Sun, 30 Apr 2023 22:56:05 -0400
+Message-Id: <20230501025632.3253067-17-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230501025632.3253067-1-sashal@kernel.org>
 References: <20230501025632.3253067-1-sashal@kernel.org>
@@ -58,42 +59,195 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+From: "David E. Box" <david.e.box@linux.intel.com>
 
-[ Upstream commit 1107283b3351bef138cd12dbda1f999891cab7db ]
+[ Upstream commit 3f95ecf2a3e4db09e58d307932037e8f1210d6e7 ]
 
-A rand config causes this link error
-vmlinux.o: In function `pvr2_dvb_create':
-(.text+0x8af1d2): undefined reference to `dvb_register_adapter'
+Discovered Intel VSEC/DVSEC capabilities are enabled by default and only
+get disabled by quirk. Instead, remove such quirks and only enable support
+for capabilities that have been explicitly added to a new capabilities
+field. While here, also reorder the device info structures alphabetically.
 
-The rand config has
-CONFIG_VIDEO_PVRUSB2=y
-CONFIG_VIDEO_DEV=y
-CONFIG_DVB_CORE=m
-
-VIDEO_PVRUSB2 should also depend on DVB_CORE.
-
-Signed-off-by: Tom Rix <trix@redhat.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: David E. Box <david.e.box@linux.intel.com>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Link: https://lore.kernel.org/r/20230316224628.2855884-1-david.e.box@linux.intel.com
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/pvrusb2/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/platform/x86/intel/vsec.c | 69 ++++++++++++++-----------------
+ drivers/platform/x86/intel/vsec.h |  9 +++-
+ 2 files changed, 38 insertions(+), 40 deletions(-)
 
-diff --git a/drivers/media/usb/pvrusb2/Kconfig b/drivers/media/usb/pvrusb2/Kconfig
-index f2b64e49c5a20..9501b10b31aa5 100644
---- a/drivers/media/usb/pvrusb2/Kconfig
-+++ b/drivers/media/usb/pvrusb2/Kconfig
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
- config VIDEO_PVRUSB2
- 	tristate "Hauppauge WinTV-PVR USB2 support"
--	depends on VIDEO_DEV && I2C
-+	depends on VIDEO_DEV && I2C && DVB_CORE
- 	select VIDEO_TUNER
- 	select VIDEO_TVEEPROM
- 	select VIDEO_CX2341X
+diff --git a/drivers/platform/x86/intel/vsec.c b/drivers/platform/x86/intel/vsec.c
+index 2311c16cb975d..91be391bba3f7 100644
+--- a/drivers/platform/x86/intel/vsec.c
++++ b/drivers/platform/x86/intel/vsec.c
+@@ -67,14 +67,6 @@ enum intel_vsec_id {
+ 	VSEC_ID_TPMI		= 66,
+ };
+ 
+-static enum intel_vsec_id intel_vsec_allow_list[] = {
+-	VSEC_ID_TELEMETRY,
+-	VSEC_ID_WATCHER,
+-	VSEC_ID_CRASHLOG,
+-	VSEC_ID_SDSI,
+-	VSEC_ID_TPMI,
+-};
+-
+ static const char *intel_vsec_name(enum intel_vsec_id id)
+ {
+ 	switch (id) {
+@@ -98,26 +90,19 @@ static const char *intel_vsec_name(enum intel_vsec_id id)
+ 	}
+ }
+ 
+-static bool intel_vsec_allowed(u16 id)
+-{
+-	int i;
+-
+-	for (i = 0; i < ARRAY_SIZE(intel_vsec_allow_list); i++)
+-		if (intel_vsec_allow_list[i] == id)
+-			return true;
+-
+-	return false;
+-}
+-
+-static bool intel_vsec_disabled(u16 id, unsigned long quirks)
++static bool intel_vsec_supported(u16 id, unsigned long caps)
+ {
+ 	switch (id) {
++	case VSEC_ID_TELEMETRY:
++		return !!(caps & VSEC_CAP_TELEMETRY);
+ 	case VSEC_ID_WATCHER:
+-		return !!(quirks & VSEC_QUIRK_NO_WATCHER);
+-
++		return !!(caps & VSEC_CAP_WATCHER);
+ 	case VSEC_ID_CRASHLOG:
+-		return !!(quirks & VSEC_QUIRK_NO_CRASHLOG);
+-
++		return !!(caps & VSEC_CAP_CRASHLOG);
++	case VSEC_ID_SDSI:
++		return !!(caps & VSEC_CAP_SDSI);
++	case VSEC_ID_TPMI:
++		return !!(caps & VSEC_CAP_TPMI);
+ 	default:
+ 		return false;
+ 	}
+@@ -206,7 +191,7 @@ static int intel_vsec_add_dev(struct pci_dev *pdev, struct intel_vsec_header *he
+ 	unsigned long quirks = info->quirks;
+ 	int i;
+ 
+-	if (!intel_vsec_allowed(header->id) || intel_vsec_disabled(header->id, quirks))
++	if (!intel_vsec_supported(header->id, info->caps))
+ 		return -EINVAL;
+ 
+ 	if (!header->num_entries) {
+@@ -261,14 +246,14 @@ static int intel_vsec_add_dev(struct pci_dev *pdev, struct intel_vsec_header *he
+ static bool intel_vsec_walk_header(struct pci_dev *pdev,
+ 				   struct intel_vsec_platform_info *info)
+ {
+-	struct intel_vsec_header **header = info->capabilities;
++	struct intel_vsec_header **header = info->headers;
+ 	bool have_devices = false;
+ 	int ret;
+ 
+ 	for ( ; *header; header++) {
+ 		ret = intel_vsec_add_dev(pdev, *header, info);
+ 		if (ret)
+-			dev_info(&pdev->dev, "Could not add device for DVSEC id %d\n",
++			dev_info(&pdev->dev, "Could not add device for VSEC id %d\n",
+ 				 (*header)->id);
+ 		else
+ 			have_devices = true;
+@@ -403,14 +388,8 @@ static int intel_vsec_pci_probe(struct pci_dev *pdev, const struct pci_device_id
+ 	return 0;
+ }
+ 
+-/* TGL info */
+-static const struct intel_vsec_platform_info tgl_info = {
+-	.quirks = VSEC_QUIRK_NO_WATCHER | VSEC_QUIRK_NO_CRASHLOG |
+-		  VSEC_QUIRK_TABLE_SHIFT | VSEC_QUIRK_EARLY_HW,
+-};
+-
+ /* DG1 info */
+-static struct intel_vsec_header dg1_telemetry = {
++static struct intel_vsec_header dg1_header = {
+ 	.length = 0x10,
+ 	.id = 2,
+ 	.num_entries = 1,
+@@ -419,19 +398,31 @@ static struct intel_vsec_header dg1_telemetry = {
+ 	.offset = 0x466000,
+ };
+ 
+-static struct intel_vsec_header *dg1_capabilities[] = {
+-	&dg1_telemetry,
++static struct intel_vsec_header *dg1_headers[] = {
++	&dg1_header,
+ 	NULL
+ };
+ 
+ static const struct intel_vsec_platform_info dg1_info = {
+-	.capabilities = dg1_capabilities,
++	.caps = VSEC_CAP_TELEMETRY,
++	.headers = dg1_headers,
+ 	.quirks = VSEC_QUIRK_NO_DVSEC | VSEC_QUIRK_EARLY_HW,
+ };
+ 
+ /* MTL info */
+ static const struct intel_vsec_platform_info mtl_info = {
+-	.quirks = VSEC_QUIRK_NO_WATCHER | VSEC_QUIRK_NO_CRASHLOG,
++	.caps = VSEC_CAP_TELEMETRY,
++};
++
++/* OOBMSM info */
++static const struct intel_vsec_platform_info oobmsm_info = {
++	.caps = VSEC_CAP_TELEMETRY | VSEC_CAP_SDSI | VSEC_CAP_TPMI,
++};
++
++/* TGL info */
++static const struct intel_vsec_platform_info tgl_info = {
++	.caps = VSEC_CAP_TELEMETRY,
++	.quirks = VSEC_QUIRK_TABLE_SHIFT | VSEC_QUIRK_EARLY_HW,
+ };
+ 
+ #define PCI_DEVICE_ID_INTEL_VSEC_ADL		0x467d
+@@ -446,7 +437,7 @@ static const struct pci_device_id intel_vsec_pci_ids[] = {
+ 	{ PCI_DEVICE_DATA(INTEL, VSEC_DG1, &dg1_info) },
+ 	{ PCI_DEVICE_DATA(INTEL, VSEC_MTL_M, &mtl_info) },
+ 	{ PCI_DEVICE_DATA(INTEL, VSEC_MTL_S, &mtl_info) },
+-	{ PCI_DEVICE_DATA(INTEL, VSEC_OOBMSM, &(struct intel_vsec_platform_info) {}) },
++	{ PCI_DEVICE_DATA(INTEL, VSEC_OOBMSM, &oobmsm_info) },
+ 	{ PCI_DEVICE_DATA(INTEL, VSEC_RPL, &tgl_info) },
+ 	{ PCI_DEVICE_DATA(INTEL, VSEC_TGL, &tgl_info) },
+ 	{ }
+diff --git a/drivers/platform/x86/intel/vsec.h b/drivers/platform/x86/intel/vsec.h
+index ae8fe92c5595b..0fd042c171ba0 100644
+--- a/drivers/platform/x86/intel/vsec.h
++++ b/drivers/platform/x86/intel/vsec.h
+@@ -5,6 +5,12 @@
+ #include <linux/auxiliary_bus.h>
+ #include <linux/bits.h>
+ 
++#define VSEC_CAP_TELEMETRY	BIT(0)
++#define VSEC_CAP_WATCHER	BIT(1)
++#define VSEC_CAP_CRASHLOG	BIT(2)
++#define VSEC_CAP_SDSI		BIT(3)
++#define VSEC_CAP_TPMI		BIT(4)
++
+ struct pci_dev;
+ struct resource;
+ 
+@@ -27,7 +33,8 @@ enum intel_vsec_quirks {
+ 
+ /* Platform specific data */
+ struct intel_vsec_platform_info {
+-	struct intel_vsec_header **capabilities;
++	struct intel_vsec_header **headers;
++	unsigned long caps;
+ 	unsigned long quirks;
+ };
+ 
 -- 
 2.39.2
 
