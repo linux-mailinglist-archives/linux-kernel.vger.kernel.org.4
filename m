@@ -2,197 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9BC76F3197
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 15:42:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EDAD6F31B9
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 16:01:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232613AbjEANmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 09:42:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59268 "EHLO
+        id S232301AbjEAOBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 10:01:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232208AbjEANmF (ORCPT
+        with ESMTP id S229688AbjEAOBE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 09:42:05 -0400
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [IPv6:2001:67c:2050:0:465::101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69D3219D
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 06:42:03 -0700 (PDT)
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:b231:465::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4Q94BX2xRGz9sVh;
-        Mon,  1 May 2023 15:41:56 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
-        s=MBO0001; t=1682948516;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jqYP4L/dOQIMjnG4KNToVeLEt+0G6LtXeDVBdi/r+Rg=;
-        b=zvcWH6KBDacptU5xkzi9uKyNMs3di7lqxMKl+ZHDf60qM2JjAQ9YphAvYDVbSp4Nk5p3/k
-        BNusxtiVRWr91z42j93X8ZpJYR5717bDOnVJph+9WTy2BrlkdYDGy22ceS6sXfVnhzrH6z
-        KDjDIkH59HlUqz0l4EtylDF5dJZda7BZhbKxBzcwzkf8sjq6ic08nLD+/7fYSRz6Efo4y6
-        ex2mdqmCTcVJH6vbiNj/NPkEf6hMLyz/VslpjDVkzIAoQNHd6F161qrCm4jkAXIa2bOC86
-        UFCOnfPeOhh2mQECnozaInvlast3VtVl1lwR1qngUtWw5XKKjtrTCbxqrYYffA==
-References: <20230418074008.69752-1-me@crly.cz> <87cz3uzpx1.fsf@oltmanns.dev>
-From:   Frank Oltmanns <frank@oltmanns.dev>
-To:     Maxime Ripard <mripard@kernel.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     Roman Beranek <me@crly.cz>, Chen-Yu Tsai <wens@csie.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Samuel Holland <samuel@sholland.org>,
-        Ondrej Jirman <megi@xff.cz>, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/7] drm: sun4i: set proper TCON0 DCLK rate in DSI mode
-Date:   Mon, 01 May 2023 15:40:49 +0200
-In-reply-to: <87cz3uzpx1.fsf@oltmanns.dev>
-Message-ID: <87mt2o9njh.fsf@oltmanns.dev>
+        Mon, 1 May 2023 10:01:04 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F79710D;
+        Mon,  1 May 2023 07:01:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682949662; x=1714485662;
+  h=message-id:date:mime-version:from:subject:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=Qm+V5a7mXlhtM5xei+hBeHzRmB8KI195QQcxOYMy2bs=;
+  b=cEiWTz30D2B+VRlhJ1SUr6S9ui8XfjcNH5ore/PKrHUF96M8OTKqeA60
+   NlU2lPx6GJXZe4vRAZs7rWjLvUKIVczjNncKN/sicDE3KtZ7l10NmvZ0E
+   R+hCXVen26bPYcwToAy1OaEkSSI4tzwh1NrMllLTBWeZ4px/AZLoiVIrP
+   umGJTGk1qsNDKpck6QITmIuTTMEBerxTj/uOqKZ4qM+9R4EE9895AbOt8
+   Z9Qqrhbfh5sTJhF/E6GD6IzWQjHAYKdPcqWARoAgCH5/0vVkt66mzt/HY
+   sv1oNiqxn20dC4UmGYtgCq8+baz0my/tY1JgeiOa3TZoetOBWbOd3OvYs
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="434464623"
+X-IronPort-AV: E=Sophos;i="5.99,241,1677571200"; 
+   d="scan'208";a="434464623"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2023 07:01:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="870186698"
+X-IronPort-AV: E=Sophos;i="5.99,241,1677571200"; 
+   d="scan'208";a="870186698"
+Received: from blele-mobl.amr.corp.intel.com (HELO [10.212.170.95]) ([10.212.170.95])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2023 07:01:00 -0700
+Message-ID: <3f618297-e1cd-a46d-5318-c3b77a0fc78d@linux.intel.com>
+Date:   Mon, 1 May 2023 08:43:37 -0500
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Rspamd-Queue-Id: 4Q94BX2xRGz9sVh
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.10.0
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Subject: Re: [PATCH 6/6] soundwire: qcom: do not probe devices before bus/link
+ init
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Cc:     Patrick Lai <quic_plai@quicinc.com>
+References: <20230420101617.142225-1-krzysztof.kozlowski@linaro.org>
+ <20230420101617.142225-7-krzysztof.kozlowski@linaro.org>
+ <28141433-2130-e278-0f59-d9ab507b9be3@linux.intel.com>
+ <42fbf7ad-54db-0917-bb85-a1be9f99cc45@linaro.org>
+Content-Language: en-US
+In-Reply-To: <42fbf7ad-54db-0917-bb85-a1be9f99cc45@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Maxime, Jernej, I was trying to understand why pll-video0 is not updated
-and I tracked down the culprit to ccu_nkm.c.
 
-On 2023-04-23 at 15:24:33 +0200, Frank Oltmanns <frank@oltmanns.dev> wrote:
-> On 2023-04-18 at 09:40:01 +0200, Roman Beranek <me@crly.cz> wrote:
->> According to Allwinner's BSP code, in DSI mode, TCON0 clock needs to be
->> running at what's effectively the per-lane datarate of the DSI link.
->> Given that the TCON DCLK divider is fixed to 4 (SUN6I_DSI_TCON_DIV),
->> DCLK can't be set equal to the dotclock. Therefore labeling TCON DCLK
->> as sun4i_dotclock or tcon-pixel-clock shall be avoided.
+
+On 5/1/23 07:24, Krzysztof Kozlowski wrote:
+> On 20/04/2023 23:37, Pierre-Louis Bossart wrote:
 >>
->> With bpp bits per pixel transmitted over n DSI lanes, the target DCLK
->> rate for a given pixel clock is obtained as follows:
 >>
->> DCLK rate = 1/4 * bpp / n * pixel clock
+>> On 4/20/23 05:16, Krzysztof Kozlowski wrote:
+>>> Soundwire devices are supposed to be kept in reset state (powered off)
+>>> till their probe() or component bind() callbacks.  However if they are
+>>> already powered on, then they might enumerate before the master
+>>> initializes bus in qcom_swrm_init() leading to occasional errors like:
 >>
->> Effect of this change can be observed through the rate of Vblank IRQs
->> which should now match refresh rate implied by set display mode. It
->> was verified to do so on a A64 board with a 2-lane and a 4-lane panel.
-[...]
-> I've tried your patches on my pinephone. I also set the panel's clock to
-> 72 MHz, so at 24 bpp and 4 lanes that should result in a data clock of
-> 108 MHz. This should be possible when pll-video0 is at 297 MHz.
->
-> Unfortunately, pll-video0 is not set and therefore the relevant part of
-> the clk_summary looks like this:
->
->                           enable  prepare  protect              hardware
-> clock                      count    count    count        rate    enable
-> ------------------------------------------------------------------------
->  pll-video0                    1        1        1   294000000         Y
->     hdmi                       0        0        0   294000000         N
->     tcon1                      0        0        0   294000000         N
->     pll-mipi                   1        1        1   431200000         Y
->        tcon0                   2        2        1   431200000         Y
->           tcon-data-clock      1        1        1   107800000         Y
->     pll-video0-2x              0        0        0   588000000         Y
->
-> Note, I've cut the columns accuracy, phase, and duty cycle, because they
-> show the same values for all clocks (0, 0, 50000).
->
-> My understanding was that with this patchset setting the parent clock
-> should be possible. Do you have any idea why it doesn't work on the
-> pinephone? Or maybe it does work on yours and I'm making some kind of
-> mistake?
+>> The problem statement is really hard to follow.
+>>
+>> The peripheral can only be enumerated AFTER
+>> a) the manager starts the bus clock and transmitting PING frames
+>> b) the peripheral detects the sync words for 16 frames in a row.
+>> c) the peripheral reports as Attached in the Device0 slot
+>>
+>> That sequence holds whether the manager does the enumeration manually or
+>> relies on hardware-assisted autoenumeration. This is what the spec requires.
+>>
+>> So why can't the bus clock start be controlled by the manager driver,
+>> and started once all required initializations are done?
+>>
+>> I mean, there's got to be some sort of parent-child hierarchy with
+>> manager first, peripheral(s) second, I don't get how these steps could
+>> be inverted or race.
+>>
+>>>   qcom-soundwire 6d30000.soundwire-controller: Qualcomm Soundwire controller v2.0.0 Registered
+>>>   wcd938x_codec audio-codec: bound sdw:0:0217:010d:00:4 (ops wcd938x_sdw_component_ops)
+>>>   wcd938x_codec audio-codec: bound sdw:0:0217:010d:00:3 (ops wcd938x_sdw_component_ops)
+>>>   qcom-soundwire 6ad0000.soundwire-controller: swrm_wait_for_wr_fifo_avail err write overflow
+>>>
+>>> The problem primarily lies in Qualcomm Soundwire controller probe() sequence:
+>>> 1. request_threaded_irq()
+>>> 2. sdw_bus_master_add() - which will cause probe() and component bind()
+>>>    of Soundwire devices, e.g. WCD938x codec drivers.  Device drivers
+>>>    might already start accessing their registers.
+>>
+>> not if the bus clock hasn't started...
+>>
+>>> 3. qcom_swrm_init() - which initializes the link/bus and enables
+>>>    interrupts.
+>>
+>> if you can move the clock start in 3) then problem solved. Why can't
+>> this be done?
+> 
+> Responding to all your three responses:
+> The clock is enabled in this 3. qcom_swrm_init(), so the old code to my
+> knowledge is written exactly how you expect.
+> 
+> However even with stopped clock, the device enumerates at
+> sdw_bus_master_add(), before anything is enabled.
 
-To better understand what's going on I've extended the clk_rate_request
-class to also output the requested rate. The relevant output is this
-(leading line numbers by me for referencing the lines below):
-line  1:     kworker/u8:2-49      [002] .....     1.850141: clk_rate_request_start: tcon-data-clock rate 108000000 min 0 max 18446744073709551615, parent tcon0 (588000000)
-line  2:     kworker/u8:2-49      [002] .....     1.850149: clk_rate_request_start: tcon0 rate 432000000 min 0 max 18446744073709551615, parent pll-mipi (588000000)
-line  3:     kworker/u8:2-49      [002] .....     1.850154: clk_rate_request_start: pll-mipi rate 432000000 min 0 max 18446744073709551615, parent pll-video0 (294000000)
-line  4:     kworker/u8:2-49      [002] .....     1.850168: clk_rate_request_done: pll-mipi rate 431200000 min 0 max 18446744073709551615, parent pll-video0 (294000000)
-line  5:     kworker/u8:2-49      [002] .....     1.850169: clk_rate_request_done: tcon0 rate 431200000 min 0 max 18446744073709551615, parent pll-mipi (431200000)
-line  6:     kworker/u8:2-49      [002] .....     1.850171: clk_rate_request_done: tcon-data-clock rate 107800000 min 0 max 18446744073709551615, parent tcon0 (431200000)
-line  7:     kworker/u8:2-49      [002] .....     1.850172: clk_rate_request_start: tcon-data-clock rate 108000000 min 0 max 18446744073709551615, parent tcon0 (588000000)
-line  8:     kworker/u8:2-49      [002] .....     1.850174: clk_rate_request_start: tcon0 rate 432000000 min 0 max 18446744073709551615, parent pll-mipi (588000000)
-line  9:     kworker/u8:2-49      [002] .....     1.850179: clk_rate_request_start: pll-mipi rate 432000000 min 0 max 18446744073709551615, parent pll-video0 (294000000)
-line 10:     kworker/u8:2-49      [002] .....     1.850190: clk_rate_request_done: pll-mipi rate 431200000 min 0 max 18446744073709551615, parent pll-video0 (294000000)
-line 11:     kworker/u8:2-49      [002] .....     1.850191: clk_rate_request_done: tcon0 rate 431200000 min 0 max 18446744073709551615, parent pll-mipi (431200000)
-line 12:     kworker/u8:2-49      [002] .....     1.850192: clk_rate_request_done: tcon-data-clock rate 107800000 min 0 max 18446744073709551615, parent tcon0 (431200000)
-line 13:     kworker/u8:2-49      [002] .....     1.850193: clk_rate_request_start: tcon0 rate 431200000 min 0 max 18446744073709551615, parent pll-mipi (588000000)
-line 14:     kworker/u8:2-49      [002] .....     1.850195: clk_rate_request_start: pll-mipi rate 431200000 min 0 max 18446744073709551615, parent pll-video0 (294000000)
-line 15:     kworker/u8:2-49      [002] .....     1.850205: clk_rate_request_done: pll-mipi rate 431200000 min 0 max 18446744073709551615, parent pll-video0 (294000000)
-line 16:     kworker/u8:2-49      [002] .....     1.850206: clk_rate_request_done: tcon0 rate 431200000 min 0 max 18446744073709551615, parent pll-mipi (431200000)
-line 17:     kworker/u8:2-49      [002] .....     1.850208: clk_rate_request_start: pll-mipi rate 431200000 min 0 max 18446744073709551615, parent pll-video0 (294000000)
-line 18:     kworker/u8:2-49      [002] .....     1.850219: clk_rate_request_done: pll-mipi rate 431200000 min 0 max 18446744073709551615, parent pll-video0 (294000000)
-line 19:     kworker/u8:2-49      [002] .....     1.850229: clk_set_rate: pll-mipi 431200000
-line 20:     kworker/u8:2-49      [003] .....     1.850508: clk_set_rate_complete: pll-mipi 431200000
-line 21:     kworker/u8:2-49      [003] .....     1.850513: clk_set_rate: tcon0 431200000
-line 22:     kworker/u8:2-49      [003] .....     1.850515: clk_set_rate_complete: tcon0 431200000
-line 23:     kworker/u8:2-49      [003] .....     1.850516: clk_set_rate: tcon-data-clock 107800000
-line 24:     kworker/u8:2-49      [003] .....     1.850524: clk_set_rate_complete: tcon-data-clock 107800000
-line 25:     kworker/u8:2-49      [003] .....     1.853320: clk_prepare: tcon-data-clock
-line 26:     kworker/u8:2-49      [003] .....     1.853324: clk_prepare_complete: tcon-data-clock
-line 27:     kworker/u8:2-49      [003] d..1.     1.853328: clk_enable: tcon-data-clock
-line 28:     kworker/u8:2-49      [003] d..1.     1.853333: clk_enable_complete: tcon-data-clock
+Erm, that's not physically possible...
 
-In line 1 we can see that a rate of 108 MHz is requested for
-tcon-data-clock. In lines 2 and 3 this is forwarded to tcon0 and
-pll-mipi (432 MHz). What surprised me, is that there is no request to
-set the rate of pll-video0. Instead pll-mipi (and subsequently tcon0)
-are set to 431.2 MHz (lines 4,5) and consequently tcon-data-clock is at
-107.8 MHz (line 6) as I also reported in my previous mail (see quote
-above).
+The peripheral can report as attached and be enumerated by the manager,
+i.e. assigned a non-zero "Device Number" after the peripheral
+synchronizes on 16 frames with valid static and dynamic syncwords. That
+can only happen if there is a clock toggling and PING frames transmitted
+on the data line.
 
-When figuring out the call stack, I traced the whole thing down to
-ccu_nkm_determine_rate(). The simplified call stack looks like this:
+There's something else at play here.
 
-clk_set_rate(tcon-data-clock, 108MHz)
-   clk_core_set_rate_nolock(tcon-data-clock, 108MHz)
-      clk_core_req_round_rate_nolock(tcon-data-clock, 108MHz)
-         clk_core_round_rate_nolock(tcon-data-clock, 108MHz)
-            sun4i_dclk_round_rate(tcon-data-clock)
-               clk_hw_round_rate(tcon0, 432MHz)
-                  clk_core_round_rate_nolock(tcon0, 432MHz)
-                     clk_mux_determine_rate_flags(tcon0, 432MHz)
-                        clk_core_round_rate_nolock(pll-mipi, 432MHz)
-                           ccu_nkm_determine_rate(pll-mipi, 432MHz)
+> I also checked the reset values of these registers - clock is off after
+> reset. Assuming of course I look at correct clock registers... but I
+> have only one.
+> 
+>>
+>>> Any access to device registers at (2) above, will fail because link/bus
+>>> is not yet initialized.
+>>>
+>>> However the fix is not as simple as moving qcom_swrm_init() before
+>>> sdw_bus_master_add(), because this will cause early interrupt of new
+>>> slave attached.  The interrupt handler expects bus master (ctrl->bus.md)
+>>> to be allocated, so this would lead to NULL pointer exception.
+>>>
+>>> Rework the init sequence and change the interrupt handler.  The correct
+>>> sequence fixing accessing device registers before link init is now:
+>>> 1. qcom_swrm_init()
+>>> 2. request_threaded_irq()
+>>> 3. sdw_bus_master_add()
+>>> which still might cause early interrupts, if Soundwire devices are not
+>>> in powered off state before their probe.  This early interrupt issue is
+>>
+>> You'd need to clarify in which step the bus clock starts. In general,
+>> you want to clock started last.
+> 
+> Clock is enabled in qcom_swrm_init() step, but as I wrote above, it
+> looks like it does not matter for enumeration.
 
-Looking at ccu_nkm_determine_rate(), we've found our culprit because it
-does not try parent clock rates other than the current one. The same
-applies to all other ccu_nkm_* functions.
+without a clock you can't have any enumeration.
 
-So, I can see two options:
- a. Set pll-video0 to 297 MHz on boot
- b. Add functionality to ccu_nkm_* to also update the parent clock rate.
 
-I'm actually interested in tackling b, but I can't make any promises as
-to if and when I'll be able to solve it. I'm not certain about any side
-effects this might have.
+>>> +	 * from reset by its probe() or bind() function, as a result of
+>>> +	 * sdw_bus_master_add().
+>>> +	 * Add a simple check to avoid NULL pointer except on early interrupts.
+>>> +	 * Note that if this condition happens, the slave device will not be
+>>> +	 * enumerated. Its driver should be fixed.
+>>
+>> ???
+>>
+>> The codec driver is NEVER involved in enumeration.
+> 
+> If the device stays in power down, only the driver bind can bring it on.
+> enumeration won't happen when device is powered down, right?
 
-Until then, is option a acceptable in mainline?
+The codec driver can indeed control the codec power with sideband links
+- i.e. not with SoundWire but gpios/I2C/SPI, etc. - and it could very
+well prevent the codec hardware from showing up on the bus until TBD
+platform-specific criteria are met.
 
-Thanks,
-  Frank
+But that's not really taking part in the enumeration process, rather
+gating the enumeration process.
 
->
-> On a brighter note, when I initialize pll-video0 to 297 MHz in
-> sunxi-ng/ccu-sun50i-a64.c:sun50i_a64_ccu_probe() I get an even 108 Mhz
-> for the data clock. The patch is:
->
-> 	writel(0x515, reg + SUN50I_A64_PLL_MIPI_REG);
->
-> +	/*
-> +	 * Initialize PLL VIDEO0 to default values (297 MHz)
-> +	 * to clean up any changes made by bootloader
-> +	 */
-> +	writel(0x03006207, reg + 0x10);
-> +
-> 	ret = devm_sunxi_ccu_probe(&pdev->dev, reg, &sun50i_a64_ccu_desc);
-> 	if (ret)
-> 		return ret;
->
-> Best,
->   Frank
+>> The only thing a codec driver should do is provide a callback to be
+>> notified of a status change for additional initialization, but the
+>> enumeration can be done even in the absence of a codec driver.
+>>
+>> The proof in the pudding is that you can 'blacklist' a codec driver and
+>> bind it later, after the hardware is enumerated. You can even unbind a
+>> codec driver and nothing bad will happen (we hardened that sequence last
+>> year).
+>>
+>> probe != enumeration != initialization for SoundWire codecs.
+>>
+>> Probe and enumeration can happen in any order
+>> Initialization can only happen after both probe and enumeration happened.
+> 
+> I am speaking here about component_master_ops->bind() callback.
+
+That's on the manager side, I really don't see how this is related to
+the codec?
+
+>>> +	 * removing Soundwire bus master.
+>>> +	 */
+>>> +	if (ctrl->version < SWRM_VERSION_2_0_0)
+>>> +		ctrl->reg_write(ctrl, ctrl->reg_layout[SWRM_REG_INTERRUPT_MASK_ADDR],
+>>> +				0);
+>>> +	if (ctrl->mmio)
+>>> +		ctrl->reg_write(ctrl, ctrl->reg_layout[SWRM_REG_INTERRUPT_CPU_EN],
+>>> +				0);
+>>> +
+>>> +	cancel_delayed_work_sync(&ctrl->new_slave_work);
+>>>  	sdw_bus_master_delete(&ctrl->bus);
+>>>  	clk_disable_unprepare(ctrl->hclk);
+>>
+>> should the last two be inverted? Keeping a clock running while removing
+>> stuff is asking for trouble.
+
+actually it doesn't really matter, if the interrupts are disabled first
+and you wait for in-flight work to be done. Ignore this comment.
+> 
+> It is a reversed probe(), which is usually correct. Do you expect
+> probe() like:
+> 
+> 	clk_enable
+> 	sdw_bus_master_add
+
+it's likely the other way around,
+
+probe():
+sdw_bus_master_add
+clk_enable
+
+assuming that clk_enable() starts the bus - not sure it does based on
+the answers above.
+
