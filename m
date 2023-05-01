@@ -2,55 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D12B66F34F3
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 19:16:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F78A6F3502
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 19:26:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232158AbjEARQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 13:16:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51250 "EHLO
+        id S232557AbjEARTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 13:19:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232869AbjEARPZ (ORCPT
+        with ESMTP id S232473AbjEARTL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 13:15:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9777DB;
-        Mon,  1 May 2023 10:15:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 601A9611C5;
-        Mon,  1 May 2023 17:15:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD6C8C433D2;
-        Mon,  1 May 2023 17:15:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682961322;
-        bh=Rnwd3jASwht07ENoOLmN+yQOD6wS2aI12lvNs7J1KiM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qt/nwiWlP5Xj3LoPebLaYBd4begRxAvkF+fafNlLBq/yn0x2FClZiwL8v6Vrhy3mm
-         fbarybHIQtkp6pNjeyiw6SwOmWnMhu49MSEq9eEyXR0MvmMQQbwoi4JGwOyrTf4ql6
-         BOtbWGVKN18JEydmlmUSpldN5kzQ2XvhoigQh1SzfusmHUJBoK2Kqd4sikw1JEWB3i
-         A3rZpA0afXkH+OxsX9GQ/nEiH2G0tgf4aAGuZC4kFTapgY8dnx5vpuJRM9nsz0ozBQ
-         FsnuoTtiejqSqmLJkYWWnfTFLvyMhc6kCWadRQuPZeI6BWjGZFk15FxEUD8CElE56Z
-         G1CRz+jl1eeEw==
-From:   SeongJae Park <sj@kernel.org>
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     SeongJae Park <sj@kernel.org>, brendanhiggins@google.com,
-        davidgow@google.com, rmoar@google.com,
-        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        johannes@sipsolutions.net, Johannes Berg <johannes.berg@intel.com>,
-        regressions@lists.linux.dev
-Subject: Re: [PATCH v2 1/3] kunit: tool: add subscripts for type annotations where appropriate
-Date:   Mon,  1 May 2023 17:15:20 +0000
-Message-Id: <20230501171520.138753-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <CAGS_qxqmWYzTBkfmFoALoteaG303tJNh1K5N2=Pmykqk+2BeTg@mail.gmail.com>
-References: 
+        Mon, 1 May 2023 13:19:11 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 004671BF3
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 10:18:45 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-b9a7e639656so4802679276.0
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 10:18:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1682961525; x=1685553525;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EDAy0yw2Hl6Xad3kepfPR0FriSjDMaQH5Y0jnLgi2V4=;
+        b=oDAyKLSdxWeDf2Rr539YuGPN8WIpEGf8MZUyaYq5jr+2u5r+cTYAw2jASoneiiCznU
+         2SvyyFMMDnvtDUHjWd0FR1VXwxNkJF1Db2fr3bNgMpEqVPMJ7oTUtw4hQgx3+k8EZndj
+         FscTv8obyqztv1iAv4Pz/neD2LiCUt46YSdAA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682961525; x=1685553525;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EDAy0yw2Hl6Xad3kepfPR0FriSjDMaQH5Y0jnLgi2V4=;
+        b=FQYVlO3s5RhiOOaanPHQn2HfmF8pxwifesQFpiQ8cn+b6YhDBjdrNiTpVxEvaDsVJX
+         62h9Ux382ueeVlzUII9lcc+1noBPnPDTcsRc85pNhQNbXOYlGzCWNY7jOf/oQTaGzEHl
+         0jE+EgtnMULUxX7UuYddF6KmqlV5DDXFWCqBXQ1lRqVPA5UmFVmdL9ZL0vsr0NenzwxP
+         DsBGP/1DG/S5CHWucqYBaqT6dawdbhYyzoaGm9L02cInRzhnu+ciRm68lkM9fetWniiA
+         l6oiYbvI69toMK0vlGmogkTlv2FdRT5+u2d6/+EdDpjRrw76Q0CKI2CCgLGzf9vterM9
+         /dmg==
+X-Gm-Message-State: AC+VfDwxP60iE9p/Pr+gCADxWnfNWzWSSCVtU6bLNXOJ0oezeGdJnR7t
+        7QN3R8VKw+8U0ZQoaOdPq7075DJiT2zaXHpB2Oz3Rg==
+X-Google-Smtp-Source: ACHHUZ5z/sgAP8gyhtdLCDBjebbm46pNGGst7mujzb2BzokX3/F4pIfNKLRJOsskDWnG5pfivj40/g==
+X-Received: by 2002:a25:2507:0:b0:b9d:9500:9d29 with SMTP id l7-20020a252507000000b00b9d95009d29mr9584876ybl.45.1682961524947;
+        Mon, 01 May 2023 10:18:44 -0700 (PDT)
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
+        by smtp.gmail.com with ESMTPSA id z12-20020a5b020c000000b00b7767ca7485sm6135803ybl.34.2023.05.01.10.18.44
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 01 May 2023 10:18:44 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-b9a7e639656so4802648276.0
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 10:18:44 -0700 (PDT)
+X-Received: by 2002:a17:902:f70f:b0:1a8:1c9a:f68 with SMTP id
+ h15-20020a170902f70f00b001a81c9a0f68mr17818554plo.36.1682961504069; Mon, 01
+ May 2023 10:18:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20230321-kexec_clang16-v6-0-a2255e81ab45@chromium.org>
+ <20230321-kexec_clang16-v6-4-a2255e81ab45@chromium.org> <CAKwvOd=9RMivtkKX27nDDsagH5yCWjpAOvpE2uaW38KYC57vtg@mail.gmail.com>
+In-Reply-To: <CAKwvOd=9RMivtkKX27nDDsagH5yCWjpAOvpE2uaW38KYC57vtg@mail.gmail.com>
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Mon, 1 May 2023 19:18:12 +0200
+X-Gmail-Original-Message-ID: <CANiDSCtDfPffUQTuH3JiPWC+87FBtpog7kT954PSoiTbB_fmJQ@mail.gmail.com>
+Message-ID: <CANiDSCtDfPffUQTuH3JiPWC+87FBtpog7kT954PSoiTbB_fmJQ@mail.gmail.com>
+Subject: Re: [PATCH v6 4/4] risc/purgatory: Add linker script
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Eric Biederman <ebiederm@xmission.com>,
+        Philipp Rudo <prudo@linux.vnet.ibm.com>,
+        Dave Young <dyoung@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Baoquan He <bhe@redhat.com>,
+        Philipp Rudo <prudo@redhat.com>, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Ross Zwisler <zwisler@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Simon Horman <horms@kernel.org>, llvm@lists.linux.dev,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,105 +97,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+Hi Nick
 
-On Sun, 30 Apr 2023 14:34:09 -0700 Daniel Latypov <dlatypov@google.com> wrote:
+Thanks for catching this. It should have said
 
-> On Sun, Apr 30, 2023 at 11:15 AM SeongJae Park <sj@kernel.org> wrote:
+risc/purgatory: Remove profile optimization flags
+
+Will fix it on my local branch in case there is a next version of the
+series. Otherwise, please the maintainer fix the subject.
+
+Thanks!
+
+On Mon, 1 May 2023 at 18:19, Nick Desaulniers <ndesaulniers@google.com> wro=
+te:
+>
+> On Mon, May 1, 2023 at 5:39=E2=80=AFAM Ricardo Ribalda <ribalda@chromium.=
+org> wrote:
 > >
-> > Hi Daniel,
+> > If PGO is enabled, the purgatory ends up with multiple .text sections.
+> > This is not supported by kexec and crashes the system.
 > >
-> > On Thu, 16 Mar 2023 15:06:36 -0700 Daniel Latypov <dlatypov@google.com> wrote:
+> > Cc: stable@vger.kernel.org
+> > Fixes: 930457057abe ("kernel/kexec_file.c: split up __kexec_load_purago=
+ry")
+> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+>
+> Hi Ricardo,
+> Thanks for the series.  Does this patch 4/4 need a new online commit
+> description? It's not adding a linker script (maybe an earlier version
+> was).
+>
+> > ---
+> >  arch/riscv/purgatory/Makefile | 5 +++++
+> >  1 file changed, 5 insertions(+)
 > >
-> > > E.g. for subprocess.Popen, it can be opened in `text=True` mode where it
-> > > returns strings, or `text=False` where it returns bytes.
-> > > To differentiate, you can annotate types as `Popen[str]` or
-> > > `Popen[bytes]`.
-> > >
-> > > This patch should add subscripts in all the places we were missing them.
+> > diff --git a/arch/riscv/purgatory/Makefile b/arch/riscv/purgatory/Makef=
+ile
+> > index 5730797a6b40..cf3a44121a90 100644
+> > --- a/arch/riscv/purgatory/Makefile
+> > +++ b/arch/riscv/purgatory/Makefile
+> > @@ -35,6 +35,11 @@ CFLAGS_sha256.o :=3D -D__DISABLE_EXPORTS
+> >  CFLAGS_string.o :=3D -D__DISABLE_EXPORTS
+> >  CFLAGS_ctype.o :=3D -D__DISABLE_EXPORTS
 > >
-> > I just found this patch is in the latest mainline tree, and it causes kunit
-> > failure on my test machine like below.
+> > +# When profile optimization is enabled, llvm emits two different overl=
+apping
+> > +# text sections, which is not supported by kexec. Remove profile optim=
+ization
+> > +# flags.
+> > +KBUILD_CFLAGS :=3D $(filter-out -fprofile-sample-use=3D% -fprofile-use=
+=3D%,$(KBUILD_CFLAGS))
+> > +
+> >  # When linking purgatory.ro with -r unresolved symbols are not checked=
+,
+> >  # also link a purgatory.chk binary without -r to check for unresolved =
+symbols.
+> >  PURGATORY_LDFLAGS :=3D -e purgatory_start -z nodefaultlib
 > >
-> >     $ python3 --version
-> >     Python 3.8.10
-> >     $
-> >     $ ./tools/testing/kunit/kunit.py run --build_dir ../kunit.out/
-> >     Traceback (most recent call last):
-> >       File "./tools/testing/kunit/kunit.py", line 24, in <module>
-> >         import kunit_kernel
-> >       File "/home/sjpark/linux/tools/testing/kunit/kunit_kernel.py", line 42, in <module>
-> >         class LinuxSourceTreeOperations:
-> >       File "/home/sjpark/linux/tools/testing/kunit/kunit_kernel.py", line 95, in LinuxSourceTreeOperations
-> >         def start(self, params: List[str], build_dir: str) -> subprocess.Popen[str]:
-> >     TypeError: 'type' object is not subscriptable
-> >     $
+> > --
+> > 2.40.1.495.gc816e09b53d-goog
 > >
-> > I further confirmed reverting this patch makes it run again.  Do you have any
-> > idea?
-> 
-> It seems like support for the subscript wasn't added until Python 3.9.
-> 
-> I know support for subscripting other types like re.Pattern was added
-> in 3.9 per https://peps.python.org/pep-0585/ but it doesn't mention
-> Popen there...
-> This patch also added typing.IO[str] and concurrent.Future[None], so
-> those might be problematic too.
-> 
-> Can you check if the typing.IO and concurrent.Future[None] changes
-> cause problems?
-> (I don't have an easy way of testing against older Python versions currently).
-
-Thank you for quick reply.  Reverting Popen changes only as below fixed my
-issue.  So seems typing.IO and concurrent.Future[None] chages doesn't cause
-problems at least for my use case.
-
-    diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-    index f01f94106129..7f648802caf6 100644
-    --- a/tools/testing/kunit/kunit_kernel.py
-    +++ b/tools/testing/kunit/kunit_kernel.py
-    @@ -92,7 +92,7 @@ class LinuxSourceTreeOperations:
-     		if stderr:  # likely only due to build warnings
-     			print(stderr.decode())
-     
-    -	def start(self, params: List[str], build_dir: str) -> subprocess.Popen[str]:
-    +	def start(self, params: List[str], build_dir: str) -> subprocess.Popen:
-     		raise RuntimeError('not implemented!')
-     
-     
-    @@ -113,7 +113,7 @@ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
-     		kconfig.merge_in_entries(base_kunitconfig)
-     		return kconfig
-     
-    -	def start(self, params: List[str], build_dir: str) -> subprocess.Popen[str]:
-    +	def start(self, params: List[str], build_dir: str) -> subprocess.Popen:
-     		kernel_path = os.path.join(build_dir, self._kernel_path)
-     		qemu_command = ['qemu-system-' + self._qemu_arch,
-     				'-nodefaults',
-    @@ -142,7 +142,7 @@ class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
-     		kconfig.merge_in_entries(base_kunitconfig)
-     		return kconfig
-     
-    -	def start(self, params: List[str], build_dir: str) -> subprocess.Popen[str]:
-    +	def start(self, params: List[str], build_dir: str) -> subprocess.Popen:
-     		"""Runs the Linux UML binary. Must be named 'linux'."""
-     		linux_bin = os.path.join(build_dir, 'linux')
-     		params.extend(['mem=1G', 'console=tty', 'kunit_shutdown=halt'])
-
-> 
-> If so, we should revert the patch.
-> If not, we can undo just the Popen changes.
-> 
-> And in either case, we'll need to update ./tools/testing/kunit/run_checks.py.
-> Currently, it runs `mypy --strict` which will start failing if we
-> revert any part of this patch.
-
-Those make sense.
-
-
-Thanks,
-SJ
-
-> 
+>
+>
+> --
 > Thanks,
-> Daniel
+> ~Nick Desaulniers
+
+
+
+--=20
+Ricardo Ribalda
