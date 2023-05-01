@@ -2,181 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C14A6F310E
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 14:41:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8917B6F311D
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 14:44:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232591AbjEAMlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 08:41:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35002 "EHLO
+        id S232654AbjEAMoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 08:44:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232600AbjEAMls (ORCPT
+        with ESMTP id S232636AbjEAMoI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 08:41:48 -0400
-Received: from smtp.smtpout.orange.fr (smtp-25.smtpout.orange.fr [80.12.242.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6B01BD5
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 05:41:13 -0700 (PDT)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id tSpZpM6hwpwRItSpmpInbR; Mon, 01 May 2023 14:40:50 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1682944850;
-        bh=2WOGiov/m2pA1t59sXGUsmU4eYhd1snXKoF3h/t1OiE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=aNBie3PYKeQ+8ngqAp7gsv76YqsQqflNrSky9N0LmN8gnXehQ+LPWDHAKmWUZUb5L
-         qsryuuTtFwuT+8QLeVPZK8Zx3uTwcqBcroYA4Svslx2AERgndJNOwav/rHzQmmr6Mt
-         WNqcz6/9GRlSmXpRvtD2wGpLxh8XBgbtjjlHMaaYJFvW15zdeSgBcyUSRlqzHENnkr
-         6VJeeolJ/3v39moz7s+K3sWA9Vj20SGC4IDN+L38BMKjEQyMKBiSP0hYYFefHTIAeg
-         MXlmJv5KKgsmvCmlX3f3iQr9pOzOI1JbmsjQdVqFz3sk2arnzQjmqdofkyNKX3kFQI
-         mWurVPEaMkiPw==
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Mon, 01 May 2023 14:40:50 +0200
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     hch@lst.de, sagi@grimberg.me, kch@nvidia.com
-Cc:     linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH 5/5] nvmet: Reorder fields in 'struct nvmefc_fcp_req'
-Date:   Mon,  1 May 2023 14:40:29 +0200
-Message-Id: <9433a896eae368a65f430f4eb7310c56da81d954.1682941568.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1682941568.git.christophe.jaillet@wanadoo.fr>
-References: <cover.1682941568.git.christophe.jaillet@wanadoo.fr>
+        Mon, 1 May 2023 08:44:08 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2093.outbound.protection.outlook.com [40.107.243.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3E119BD;
+        Mon,  1 May 2023 05:43:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QtyprcsvBtEWHYENq8bh/kF+uHK8CCan/QgT9pK2yaTu41/mrDN+SijcBQ3y9Lwu3pEvtHKeDlC2JgPHo96I5Y3bsiyRBGAtOrW/T+yHhrzaeT87KhWpQu17oooHl8BYP5D8CoQBuIAkx5vejGdba0wyE9c7xYZKhsuhxCR9/YMyUFhDmX5aocsTsmsju5wcsjRLM5NFM4NNPcCQyt3d5+L9EcJafpWadexPGt2Rd6EFVldGeo6jYhwWYximG8MqsT9DM02SDFvRZzXcY9Qx4cH9EkAk91GjyBLUA5QRy5qObMusc/FfVVH6UpfFV5LatVv3lYjoQmF/eU+jHLGz8Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=49enj4bGHVDbPILFVd4Kk2wFJyZsPnu/YCWf0MQVgnE=;
+ b=gPWQ42Wv+dNAdT6IPOnYytL1jKNOTKP1NZU1O3y7Cw+e+c0XOgqclssGy3EI7YzXL/9uSbWxra5cDKyTtx9EdM6xlN77FGpWNA+5J4+YNSjaWi7BUgYgU2mT2zLr3ItlB8mvcpp1EC9T5sNQfWwXd8D5hauxKc1s4WCc7LkyT/S/PmvWDQDDmIjb1wBHgs/VdzqXqz+VxLHcdPZDchh1SH9ZFSr8rO0WFVNOFd5p7m7xS8o15bGFIwnk0Jbv4Y+92NBo6R+CrYIxs4djdBlcj1fPAMphBEJ5tZIeISGtbc5pb/jF7axoHOZOtKKsxwraLDzd9h6fHHD1hnBiQVcGNw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=49enj4bGHVDbPILFVd4Kk2wFJyZsPnu/YCWf0MQVgnE=;
+ b=nTEPAXzMpcm8WXcCTRfdrl/408JMRJn7qmtVTqYybo9+KVRqxIwZBmA2qWO9VC6htBKl4U+u6y3X4bjBDmnTSGXiD1OKIsS8fOEXNS0VnW5qrq7jfqQSq3G0IZG+L97D3iBEDOYTgyQRycfZCRdI6D9F5Hob5+2+kkxlnyMs3EA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by PH0PR13MB5001.namprd13.prod.outlook.com (2603:10b6:510:98::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.30; Mon, 1 May
+ 2023 12:42:59 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6340.030; Mon, 1 May 2023
+ 12:42:59 +0000
+Date:   Mon, 1 May 2023 14:42:52 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Feng Liu <feliu@nvidia.com>
+Cc:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        Jason Wang <jasowang@redhat.com>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        William Tu <witu@nvidia.com>, Parav Pandit <parav@nvidia.com>
+Subject: Re: [PATCH net v1 1/2] virtio_net: Fix error unwinding of XDP
+ initialization
+Message-ID: <ZE+zzGF3r2Zo7coK@corigine.com>
+References: <20230428223712.67499-1-feliu@nvidia.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230428223712.67499-1-feliu@nvidia.com>
+X-ClientProxiedBy: AM0PR04CA0119.eurprd04.prod.outlook.com
+ (2603:10a6:208:55::24) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH0PR13MB5001:EE_
+X-MS-Office365-Filtering-Correlation-Id: e71a4701-77be-4747-1771-08db4a419867
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ZnUmqdtydCMzYLSfeIj16l+RGgJt34X0yjakPpxNzkwzjCwy/EJVmQOEfW+g7LVwr41VtwwO6NfYs5N1QxOWboBlfEjndjzVA6RuIBGNU45Pv2eLFSM4OGX/rXmXEudr2PYwblfdmQwkFYKHAZitM5lsfcv6cE6ZRnkIokBj8kHxDL9m00iqaC43YUgNWwFjKCaHrxhlJmv17hav5W09HGiP88fVhCCtvl+Fvl7xSzXUIGfIxZXf36ol3Clh/CEp4BWD028b27kP57jYw/GCpKAoft0xiJ7m4G1mPQM4QGm8I1M/u54uvc1QbrqiyEMjgZGjc2C7G29oNcpPbpqGVPw1lS6iSQ7P4PIIgRjil6g2OOdXKQsFtlMRoP8PJOOxN1DhnM3QOqLw24BCJcLrGYYtP1guBoCrniqxtNHl4BxaX5arIgdaGSFSAoTaWV+9wmJUAa4WoNuvL19Va3H8+rzxFcHGp1wqH8ON7a8uMi8iGw9zDssgDkA/2AbbH8gRvCoo03gr8BKRd70SI8L3SaFDpEZ1WoLNBRzOZoDHNDJhNCddn20t6pItT2YRPZNNMjw+8DezZopOv1pOIrs09CC8HzBaKW0Ho1zoN0LDH4OzryUil5q8LY+zQb9FtMQeRUwv8wBwRJ/ttpXPflcNHc8QWaT04nLFrSYyTCRZPU8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(346002)(136003)(39830400003)(366004)(451199021)(186003)(6512007)(6506007)(7416002)(44832011)(8936002)(8676002)(5660300002)(2616005)(36756003)(54906003)(478600001)(316002)(6916009)(4326008)(66476007)(66946007)(66556008)(86362001)(41300700001)(6666004)(6486002)(38100700002)(2906002)(4744005)(67856001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?HjMSVVX1F5Ayht8PxeAzj6jp9RVZvsINiCxEgQkRkHMmCJmpfdlIAQBJtkNu?=
+ =?us-ascii?Q?cu/wihz4OkfttVcNbwW1bIBTLYJqj3e6Oao3I2uQyIUdY6S0fQEgUna/iot3?=
+ =?us-ascii?Q?wRgRLivHlxDnSpdeCDH+Xgl8JZOIUheVk4tfmvlcqoU4ajSo+x5WjrGj1JFJ?=
+ =?us-ascii?Q?tTvPgos8HX8bf/3uPYOc9QTP0gTbcznh6722RwLp084UpwOP7ZgIG3gvQ/qI?=
+ =?us-ascii?Q?zDth/eDhxdtWawHKsoEXcM8aRM2kaFKCP1NoxpGateFjOEytvLeLNab2hMTb?=
+ =?us-ascii?Q?EOXygiLND9IBP5ZbW47EvS3nenN/0it/DTyAYbx2Oa5bf92MkL9kXliT9S5y?=
+ =?us-ascii?Q?q4aeATBuSte8H7CVxtV4J1ZzVTPCKzaQIX2MKmcS02fNQxPbwp/xnT1lUu3Z?=
+ =?us-ascii?Q?GvJJRGg0XXRBTaUIKdcWfwbpS/RnQJxdtAWDxmTkVbN053R1CuibgwuL80Ii?=
+ =?us-ascii?Q?6PWW2MtD+B9dzdhbPfu2g0iiCkk7Yl6lHIjtIz2J2Tkzh4gxlTACtVKIqSMk?=
+ =?us-ascii?Q?qNtZkyqUpflxgDTh2VsXn7qJc9sai6Osrqg4EWOBerlhb4416C9HohKgDsBd?=
+ =?us-ascii?Q?Eq8HVxkPFqpGtsIa6nlmQqtFy7dK5iaygph0PEk4BipmEbiYIu4ZTlC7/nPI?=
+ =?us-ascii?Q?K9Ws1LZbd4x12O24+ZAMcSX+VhCs+lWhedMv+ioDP6XqQnO/5AGdWVbHocuV?=
+ =?us-ascii?Q?dsmyAoDY7qPwMJoBxXblKeA0KCugdA0GzjOvw6t4xEQb0sl1rPY1/DUOymxP?=
+ =?us-ascii?Q?ibNgbSIltjjunRKn8ySFf0B7ybkZblSkIlsY4b24V7C2HvDD8X39TZU/WJl3?=
+ =?us-ascii?Q?T2Cf33JL0yE6PMSJ7+E+jO06a8PZgLvYwt3zrjSBbDuYY9OHa582NEhMh1Lr?=
+ =?us-ascii?Q?znGOySxNuyd0nOS1iIEu09iphSy7g3AF1gvTyQprkeCmrwcCFP9+CKaWtcCG?=
+ =?us-ascii?Q?FCbqmSKK28Dt1uLVy8me7NVbokYfGe96q3vtZOC7tU/Nbz9tiGgX9F7FcOvw?=
+ =?us-ascii?Q?epBCnZyfPqAJ5WB40XsCOesZX+4E9ohKYgEaPSfaFRmq2xFaF2VxL2MBlSP2?=
+ =?us-ascii?Q?qfMWspSdkSLFJSA0FQvsSVKjRLyJWHiifEiXJCHkWXwu7o8YzAZUvwLoTmFP?=
+ =?us-ascii?Q?M/X/cWXcePomWH/rmADJ4ZCto/nSBwBXKePPP+lTM3xttG95x0c3/V8/B3YG?=
+ =?us-ascii?Q?1oTLBG0vIyf+g9mIXEmY1cimQZmCNROeL4J67L85txfY8zjTu6qtsHAuwan5?=
+ =?us-ascii?Q?ApwVVThhD0aSvn45srnR5I9R7vwOfFeH1z8RK7c355d6hkNKYSZBo7kyFGPF?=
+ =?us-ascii?Q?lrxamO19D+K8RjQ+hawRLuRYxKNht3+NS6w0Lrq4pg8QVfVDDkZZ/+LWC2he?=
+ =?us-ascii?Q?7H/7jOTSkVK7KjTXYwJxMff86kC583JFMwG8XzKVKMxnmYncyNDzqjYBveY3?=
+ =?us-ascii?Q?2QNNTVSMSietKLD0apuAHkqUWFM7FCJmxxfAXGiIIn84ki9UR5+THMV4CSMO?=
+ =?us-ascii?Q?DkVwcdbvIYCoQ23HQtKvT2ldX6TrSFOPTMkHTM3uk+vtlX2mViqKjNMl9+X9?=
+ =?us-ascii?Q?meW1xNoy+lNYjSh2l31pr8Sicr5CJ/jA3VBPT869NteBTG+oDjW1H8bpnUCV?=
+ =?us-ascii?Q?kxDY8aBXjj3c8t9yLJELqg9dZrLwzNeby4RvoVT1zfGuFMNbaLF9VnhECnoS?=
+ =?us-ascii?Q?JyGeCg=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e71a4701-77be-4747-1771-08db4a419867
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 May 2023 12:42:59.4543
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: KcwBiDgr6jKDPnBcPQRTQMr7B4Xa/i25MfhWiGaVygEizmdMyQezWaO7NZlNyEdHD8l5GrPnOCEh3HqCUhRaPMdDSZQ39jzapS6MiOHqubk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR13MB5001
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Group some variables based on their sizes to reduce holes.
-On x86_64, this shrinks the size of 'struct nvmefc_fcp_req' from
-112 to 104 bytes.
+On Fri, Apr 28, 2023 at 06:37:12PM -0400, Feng Liu wrote:
+> When initializing XDP in virtnet_open(), some rq xdp initialization
+> may hit an error causing net device open failed. However, previous
+> rqs have already initialized XDP and enabled NAPI, which is not the
+> expected behavior. Need to roll back the previous rq initialization
+> to avoid leaks in error unwinding of init code.
+> 
+> Fixes: 754b8a21a96d ("virtio_net: setup xdp_rxq_info")
+> Signed-off-by: Feng Liu <feliu@nvidia.com>
+> Reviewed-by: William Tu <witu@nvidia.com>
+> Reviewed-by: Parav Pandit <parav@nvidia.com>
 
-This structure is embedded in some other structures (nvme_fc_fcp_op
-which itself is embedded in nvme_fcp_op_w_sgl), so it helps reducing the
-size of these structures too.
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-Using pahole
-
-Before:
-======
-struct nvmefc_fcp_req {
-	void *                     cmdaddr;              /*     0     8 */
-	void *                     rspaddr;              /*     8     8 */
-	dma_addr_t                 cmddma;               /*    16     8 */
-	dma_addr_t                 rspdma;               /*    24     8 */
-	u16                        cmdlen;               /*    32     2 */
-	u16                        rsplen;               /*    34     2 */
-	u32                        payload_length;       /*    36     4 */
-	struct sg_table            sg_table;             /*    40    16 */
-	struct scatterlist *       first_sgl;            /*    56     8 */
-	/* --- cacheline 1 boundary (64 bytes) --- */
-	int                        sg_cnt;               /*    64     4 */
-	enum nvmefc_fcp_datadir    io_dir;               /*    68     4 */
-	__le16                     sqid;                 /*    72     2 */
-
-	/* XXX 6 bytes hole, try to pack */
-
-	void                       (*done)(struct nvmefc_fcp_req *); /*    80     8 */
-	void *                     private;              /*    88     8 */
-	u32                        transferred_length;   /*    96     4 */
-	u16                        rcv_rsplen;           /*   100     2 */
-
-	/* XXX 2 bytes hole, try to pack */
-
-	u32                        status;               /*   104     4 */
-
-	/* size: 112, cachelines: 2, members: 17 */
-	/* sum members: 100, holes: 2, sum holes: 8 */
-	/* padding: 4 */
-	/* last cacheline: 48 bytes */
-} __attribute__((__aligned__(8)));
-
-
-After:
-=====
-struct nvmefc_fcp_req {
-	void *                     cmdaddr;              /*     0     8 */
-	void *                     rspaddr;              /*     8     8 */
-	dma_addr_t                 cmddma;               /*    16     8 */
-	dma_addr_t                 rspdma;               /*    24     8 */
-	u16                        cmdlen;               /*    32     2 */
-	u16                        rsplen;               /*    34     2 */
-	u32                        payload_length;       /*    36     4 */
-	struct sg_table            sg_table;             /*    40    16 */
-	struct scatterlist *       first_sgl;            /*    56     8 */
-	/* --- cacheline 1 boundary (64 bytes) --- */
-	int                        sg_cnt;               /*    64     4 */
-	enum nvmefc_fcp_datadir    io_dir;               /*    68     4 */
-	void                       (*done)(struct nvmefc_fcp_req *); /*    72     8 */
-	void *                     private;              /*    80     8 */
-	__le16                     sqid;                 /*    88     2 */
-	u16                        rcv_rsplen;           /*    90     2 */
-	u32                        transferred_length;   /*    92     4 */
-	u32                        status;               /*    96     4 */
-
-	/* size: 104, cachelines: 2, members: 17 */
-	/* padding: 4 */
-	/* last cacheline: 40 bytes */
-} __attribute__((__aligned__(8)));
----
- include/linux/nvme-fc-driver.h | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/include/linux/nvme-fc-driver.h b/include/linux/nvme-fc-driver.h
-index fa092b9be2fd..4109f1bd6128 100644
---- a/include/linux/nvme-fc-driver.h
-+++ b/include/linux/nvme-fc-driver.h
-@@ -185,7 +185,6 @@ enum nvmefc_fcp_datadir {
-  * @first_sgl: memory for 1st scatter/gather list segment for payload data
-  * @sg_cnt:    number of elements in the scatter/gather list
-  * @io_dir:    direction of the FCP request (see NVMEFC_FCP_xxx)
-- * @sqid:      The nvme SQID the command is being issued on
-  * @done:      The callback routine the LLDD is to invoke upon completion of
-  *             the FCP operation. req argument is the pointer to the original
-  *             FCP IO operation.
-@@ -194,12 +193,13 @@ enum nvmefc_fcp_datadir {
-  *             while processing the operation. The length of the buffer
-  *             corresponds to the fcprqst_priv_sz value specified in the
-  *             nvme_fc_port_template supplied by the LLDD.
-+ * @sqid:      The nvme SQID the command is being issued on
-  *
-  * Values set by the LLDD indicating completion status of the FCP operation.
-  * Must be set prior to calling the done() callback.
-+ * @rcv_rsplen: length, in bytes, of the FCP RSP IU received.
-  * @transferred_length: amount of payload data, in bytes, that were
-  *             transferred. Should equal payload_length on success.
-- * @rcv_rsplen: length, in bytes, of the FCP RSP IU received.
-  * @status:    Completion status of the FCP operation. must be 0 upon success,
-  *             negative errno value upon failure (ex: -EIO). Note: this is
-  *             NOT a reflection of the NVME CQE completion status. Only the
-@@ -219,14 +219,14 @@ struct nvmefc_fcp_req {
- 	int			sg_cnt;
- 	enum nvmefc_fcp_datadir	io_dir;
- 
--	__le16			sqid;
--
- 	void (*done)(struct nvmefc_fcp_req *req);
- 
- 	void			*private;
- 
--	u32			transferred_length;
-+	__le16			sqid;
-+
- 	u16			rcv_rsplen;
-+	u32			transferred_length;
- 	u32			status;
- } __aligned(sizeof(u64));	/* alignment for other things alloc'd with */
- 
--- 
-2.34.1
-
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
