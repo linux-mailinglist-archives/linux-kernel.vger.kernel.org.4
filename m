@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB6F86F2E01
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 05:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95F0B6F2E03
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 05:18:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233461AbjEADSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 23:18:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43596 "EHLO
+        id S233486AbjEADS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 23:18:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233728AbjEADQL (ORCPT
+        with ESMTP id S233744AbjEADQM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 23:16:11 -0400
+        Sun, 30 Apr 2023 23:16:12 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A05618F;
-        Sun, 30 Apr 2023 20:06:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 533C96198;
+        Sun, 30 Apr 2023 20:06:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 712B26179B;
-        Mon,  1 May 2023 03:06:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8665EC433D2;
-        Mon,  1 May 2023 03:06:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2500961781;
+        Mon,  1 May 2023 03:06:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C1E0C433D2;
+        Mon,  1 May 2023 03:06:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682910363;
-        bh=pFbDP6UlpYSrP0iKGq40NRahiU810/SYBYS0pTCxdBE=;
+        s=k20201202; t=1682910368;
+        bh=IGfIzOT7oHVhB9sFos7UW2q2/INaAcipA+hvzY46HZ0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IxrWJR29jIZhmKgr5AHSoL4g5aYmVhqQa0ptNHAdLz38bGXG31/AC2IJJGf6eawwL
-         2uXl5wvDCDb20yFtX9Sp8csiPlCeLxMoBfTzsZsBcbt0//ULtzsG9lzFqEuXjeoy0f
-         140mU6rZqrSo5kcOctJ1M+7yNJ8/VeRWpV/pGx5Fh48UZ/zow1NCsW9oJpXi/A2spf
-         HR5Z/ehwH28OR7uGyY1i2FEauYlsKLrVZEOVdG9dt1VjSk6Y6TGwflbVc5kfEvENZe
-         4bwvmRyrHFvRiara0Lh+018vIcRkC9eBGrYqVR9d6exN4Ljr6H2y53/elIzjRDi+dY
-         slIM2goCkMVfA==
+        b=TlVN0oes0KFHxNwbEsc7St/KpgtsYMPb8u7KpSqsWE0h3bxwM0kElu5i67WP5nG6u
+         JoakbKukZORRA48mYgjauSivaDH/eio1ASO7GRskq3qUMKqticSgBXLbjJOs6v+U3z
+         7ZyDoavRaT39J/ETkZ15vNxeynfS1xzLEjEfAaslW907io4KNNkEK+b0+SdDRfnGRC
+         7uSNakHWr49du8Zx2hgoRJyunFKKvFvYyh7hkrVybwp9ZJ6N53xYa94TD5M+kJVjKX
+         6yJyvsHGKj4hgZRjKLAX4B4pjBHwOTR1+W7Zt3iITo0mlcRVFXfiPmuc0zByEiVCcC
+         IZpqXdfhHYJ0A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sasha Levin <sashal@kernel.org>, mchehab@kernel.org,
-        bleung@chromium.org, groeck@chromium.org,
-        zoey_wu@wistron.corp-partner.google.com,
-        ajye_huang@compal.corp-partner.google.com,
-        hellojacky0226@hotmail.com, kevin.chiu.17802@gmail.com,
-        linux-media@vger.kernel.org, chrome-platform@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.10 11/12] media: cros-ec-cec: Don't exit early in .remove() callback
-Date:   Sun, 30 Apr 2023 23:05:37 -0400
-Message-Id: <20230501030540.3254928-11-sashal@kernel.org>
+Cc:     Mario Limonciello <mario.limonciello@amd.com>,
+        erhard_f@mailbox.org, Harry Wentland <harry.wentland@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>, sunpeng.li@amd.com,
+        Rodrigo.Siqueira@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
+        Charlene.Liu@amd.com, chiahsuan.chung@amd.com,
+        tony.tascioglu@amd.com, aurabindo.pillai@amd.com, sancchen@amd.com,
+        george.shen@amd.com, tales.aparecida@gmail.com,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Subject: [PATCH AUTOSEL 5.10 12/12] drm/amd: Fix an out of bounds error in BIOS parser
+Date:   Sun, 30 Apr 2023 23:05:38 -0400
+Message-Id: <20230501030540.3254928-12-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230501030540.3254928-1-sashal@kernel.org>
 References: <20230501030540.3254928-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -64,51 +64,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+From: Mario Limonciello <mario.limonciello@amd.com>
 
-[ Upstream commit 0ff7aee24e47beb4306ce050824b54147f2fabfa ]
+[ Upstream commit d116db180decec1b21bba31d2ff495ac4d8e1b83 ]
 
-Exiting early in remove without releasing all acquired resources yields
-leaks. Note that e.g. memory allocated with devm_zalloc() is freed after
-.remove() returns, even if the return code was negative.
+The array is hardcoded to 8 in atomfirmware.h, but firmware provides
+a bigger one sometimes. Deferencing the larger array causes an out
+of bounds error.
 
-While blocking_notifier_chain_unregister() won't fail and so the
-change is somewhat cosmetic, platform driver's .remove callbacks are
-about to be converted to return void. To prepare that, keep the error
-message but don't return early.
+commit 4fc1ba4aa589 ("drm/amd/display: fix array index out of bound error
+in bios parser") fixed some of this, but there are two other cases
+not covered by it.  Fix those as well.
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Reported-by: erhard_f@mailbox.org
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=214853
+Link: https://gitlab.freedesktop.org/drm/amd/-/issues/2473
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+Reviewed-by: Harry Wentland <harry.wentland@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/cec/platform/cros-ec/cros-ec-cec.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/amd/display/dc/bios/bios_parser2.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
-index f66699d5dc66e..8bf34620db5fe 100644
---- a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
-+++ b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
-@@ -324,14 +324,16 @@ static int cros_ec_cec_remove(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	int ret;
+diff --git a/drivers/gpu/drm/amd/display/dc/bios/bios_parser2.c b/drivers/gpu/drm/amd/display/dc/bios/bios_parser2.c
+index 930d2b7d34489..9dd41eaf32cb5 100644
+--- a/drivers/gpu/drm/amd/display/dc/bios/bios_parser2.c
++++ b/drivers/gpu/drm/amd/display/dc/bios/bios_parser2.c
+@@ -406,11 +406,8 @@ static enum bp_result get_gpio_i2c_info(
+ 	info->i2c_slave_address = record->i2c_slave_addr;
  
-+	/*
-+	 * blocking_notifier_chain_unregister() only fails if the notifier isn't
-+	 * in the list. We know it was added to it by .probe(), so there should
-+	 * be no need for error checking. Be cautious and still check.
-+	 */
- 	ret = blocking_notifier_chain_unregister(
- 			&cros_ec_cec->cros_ec->event_notifier,
- 			&cros_ec_cec->notifier);
--
--	if (ret) {
-+	if (ret)
- 		dev_err(dev, "failed to unregister notifier\n");
--		return ret;
--	}
+ 	/* TODO: check how to get register offset for en, Y, etc. */
+-	info->gpio_info.clk_a_register_index =
+-			le16_to_cpu(
+-			header->gpio_pin[table_index].data_a_reg_index);
+-	info->gpio_info.clk_a_shift =
+-			header->gpio_pin[table_index].gpio_bitshift;
++	info->gpio_info.clk_a_register_index = le16_to_cpu(pin->data_a_reg_index);
++	info->gpio_info.clk_a_shift = pin->gpio_bitshift;
  
- 	cec_notifier_cec_adap_unregister(cros_ec_cec->notify,
- 					 cros_ec_cec->adap);
+ 	return BP_RESULT_OK;
+ }
 -- 
 2.39.2
 
