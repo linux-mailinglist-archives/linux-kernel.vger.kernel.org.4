@@ -2,168 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70A726F3533
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 19:50:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 537CB6F3538
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 19:53:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232552AbjEARsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 13:48:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39320 "EHLO
+        id S232473AbjEARue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 13:50:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232513AbjEARsN (ORCPT
+        with ESMTP id S230429AbjEARuc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 13:48:13 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A08610C6;
-        Mon,  1 May 2023 10:48:12 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-94f7a7a3351so556226166b.2;
-        Mon, 01 May 2023 10:48:11 -0700 (PDT)
+        Mon, 1 May 2023 13:50:32 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04ED910C6
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 10:50:31 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-559d35837bbso54144037b3.3
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 10:50:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682963290; x=1685555290;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7zn2qiz0PMcDlMBZ9iY+p8RStjdYbRZl/cnGOAd2Vqg=;
-        b=E909MYKQQE2H2eABVhK2NB2EqRseF2MVkG26I7NnkE2LTNq3iiK3sZ81J8yuInxdGL
-         eW3sEbuz5qp4p2RIgknB0EVVXKRnynjZiH0thBBrmil/LtpvY1/bIcpCofrxAHux7e80
-         SKTbBF3OiYADM3Bb7nxbhGkOyIaP7WmZnHe8BAu8bwPfTLGaudGxhDcyPSl3ewstPzVA
-         lyHqfgjtqYI2UdaRwTle2opR6/x81jeMs6AgrChQM3B2DBFxUL9p2Pu/seAWY/ZTVsww
-         DKEjP4ZsIt5FDfuV+zUnwRLcA+6Xwkhd6k/ny3ZePUqP9Mbcx3xgTRFP1IciGEaoW1B5
-         0PQA==
+        d=google.com; s=20221208; t=1682963430; x=1685555430;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Vjmy9npoFS1ltTIQSU6SYKXLbdap9UrmwfWM+Y2ixPk=;
+        b=dZCcwJncaHug3B8HkBJA8I4rogyge1EVTo4b3P8k7VcTSJVpEkICoBGsnhmO7W+EaQ
+         BIxtz97RUXIfYWYlU1CJsKlwqGVGZ7x+vS+3P/rfb8ANuZUjR7SbifV/F6aSBN5z7ZRt
+         /AMQ4KNfWlhXtFlPUDhe7iDHC11AWgJzvh0HYI/QSVDj28sAvGrMcNoB1jrqM2PiCRxV
+         MKWY+ho9Y/9MhG5dJ5YP+l84eWwLxXehtDV3C+sB45yhtiKFovPsBc0ojtZnWpwnmUO1
+         OgbB8QClj+k71UJXHVn/U9WcLkhMORsNKUzA9GKVhmcWDmrnB5+OYkqWUJRZdkLT90UK
+         DpmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682963290; x=1685555290;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7zn2qiz0PMcDlMBZ9iY+p8RStjdYbRZl/cnGOAd2Vqg=;
-        b=FmRsxoCyoMyUoPFdHlKWdetvazxt/OXpobUJlOjVQJSprXyz+KQcA6FlfaWEuxcJ5N
-         OfTKgmR/ItkpyQPwTUIMm9i+v7nMNlogsD79NZhCCLG8SbB6aeHVSu4GyUQj1wOcbVa4
-         ZdEXp5UJPc34a5N42zixt/sgY8KwDpMts+xi1bKMMjFixFCbxYYXXP6at4bmkeLS/rYo
-         6VjlHeyDKeNJokBcm/TyIY1gTK/9eiYkFeeuzQwV0itFX0J+qmamvI0bhXeNGLiMtvyO
-         z52WCxRPDoK6L/k/AtlPxGwBusPQOfIO0hFSIknzbQZdxYCVyuJ38Aa4Ai4zpyTC0FP2
-         UHNQ==
-X-Gm-Message-State: AC+VfDwf3LpjycDwyRIgehf1p6z83nw4NYohJvKldCK+Qh1AjS2JyJ1O
-        edh4USu4Hz5+HlUVCrUIPOE=
-X-Google-Smtp-Source: ACHHUZ5DEcNfC1UtuRNa7f50gd0sYliwOZl7OqRIA3Ob1gb+R7LWKSfIJGKY1dall4G8t5nc+y4xrw==
-X-Received: by 2002:a17:907:a4c:b0:94e:bc04:1e19 with SMTP id be12-20020a1709070a4c00b0094ebc041e19mr12339374ejc.71.1682963290375;
-        Mon, 01 May 2023 10:48:10 -0700 (PDT)
-Received: from arinc9-PC.lan ([149.91.1.15])
-        by smtp.gmail.com with ESMTPSA id se20-20020a170907a39400b0095ef737dbd7sm7745282ejc.93.2023.05.01.10.48.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 May 2023 10:48:10 -0700 (PDT)
-From:   arinc9.unal@gmail.com
-X-Google-Original-From: arinc.unal@arinc9.com
-To:     Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?q?Ren=C3=A9=20van=20Dorst?= <opensource@vdorst.com>
-Cc:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
-        Richard van Schagen <richard@routerhints.com>,
-        Richard van Schagen <vschagen@cs.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH v2 net 2/2] net: dsa: mt7530: fix network connectivity with multiple CPU ports
-Date:   Mon,  1 May 2023 20:47:43 +0300
-Message-Id: <20230501174743.95897-2-arinc.unal@arinc9.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230501174743.95897-1-arinc.unal@arinc9.com>
-References: <20230501174743.95897-1-arinc.unal@arinc9.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1682963430; x=1685555430;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Vjmy9npoFS1ltTIQSU6SYKXLbdap9UrmwfWM+Y2ixPk=;
+        b=BsilZOOoLlkgaf5L8TRwYqLod7zmE88nRCfmPpYLrDiEB+xbxtKui2Rhvn84eE052T
+         pOe6yBSzTCfniX9Gns3SQgvqqou0xpD8rjxFiBCmG2CMEr6twTt3Lgt0TJPQL+cNe7Xm
+         imTpxXSg1PSGoLZ+djL/MfIMjMQOrlp5lxQxIoSFXKGTw25o9+xWOGaSdpOzxIImMvBZ
+         qsPp8xz93J+798z2ruU7+roaDzl2mwl+fx782e0+4eZKTA44FBI7Og2hESkzv9kJ/lBV
+         Q0jFN3rdZ9HLNQqLhfcVEOxi6Nudz2JVjMRjAkFWJEqmte1OOvT1WvRBh7OWBfmYCGAx
+         8vkQ==
+X-Gm-Message-State: AC+VfDy69IhJ9RyvZmrqrmWx6lT4npRUZeUxIWvKNHS4mS3nd+54/ce0
+        55Gt05d3yaSr3L7D6OdzqsDPvKWzYh0=
+X-Google-Smtp-Source: ACHHUZ64NZ3/9tsMewuAy2AdTfarKe08wL+z4DEH/85FRjs3ZEIBqL9XqLFWxrB85BCLpG0FPVBpKygFEUY=
+X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:6d24:3efd:facc:7ac4])
+ (user=surenb job=sendgmr) by 2002:a81:9f09:0:b0:559:e830:60f1 with SMTP id
+ s9-20020a819f09000000b00559e83060f1mr4687408ywn.8.1682963430249; Mon, 01 May
+ 2023 10:50:30 -0700 (PDT)
+Date:   Mon,  1 May 2023 10:50:23 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
+Message-ID: <20230501175025.36233-1-surenb@google.com>
+Subject: [PATCH 1/3] mm: handle swap page faults under VMA lock if page is uncontended
+From:   Suren Baghdasaryan <surenb@google.com>
+To:     akpm@linux-foundation.org
+Cc:     willy@infradead.org, hannes@cmpxchg.org, mhocko@suse.com,
+        josef@toxicpanda.com, jack@suse.cz, ldufour@linux.ibm.com,
+        laurent.dufour@fr.ibm.com, michel@lespinasse.org,
+        liam.howlett@oracle.com, jglisse@google.com, vbabka@suse.cz,
+        minchan@google.com, dave@stgolabs.net, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, hdanton@sina.com, apopple@nvidia.com,
+        surenb@google.com, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arınç ÜNAL <arinc.unal@arinc9.com>
+When page fault is handled under VMA lock protection, all swap page
+faults are retried with mmap_lock because folio_lock_or_retry
+implementation has to drop and reacquire mmap_lock if folio could
+not be immediately locked.
+Instead of retrying all swapped page faults, retry only when folio
+locking fails.
+Drivers implementing ops->migrate_to_ram might still rely on mmap_lock,
+therefore fall back to mmap_lock in this case.
 
-On mt753x_cpu_port_enable() there's code that enables flooding for the CPU
-port only. Since mt753x_cpu_port_enable() runs twice when both CPU ports
-are enabled, port 6 becomes the only port to forward the frames to. But
-port 5 is the active port, so no frames received from the user ports will
-be forwarded to port 5 which breaks network connectivity.
-
-Every bit of the BC_FFP, UNM_FFP, and UNU_FFP bits represents a port. Fix
-this issue by setting the bit that corresponds to the CPU port without
-overwriting the other bits.
-
-Clear the bits beforehand only for the MT7531 switch. According to the
-documents MT7621 Giga Switch Programming Guide v0.3 and MT7531 Reference
-Manual for Development Board v1.0, after reset, the BC_FFP, UNM_FFP, and
-UNU_FFP bits are set to 1 for MT7531, 0 for MT7530.
-
-The commit 5e5502e012b8 ("net: dsa: mt7530: fix roaming from DSA user
-ports") silently changed the method to set the bits on the MT7530_MFC.
-Instead of clearing the relevant bits before mt7530_cpu_port_enable()
-which runs under a for loop, the commit started doing it on
-mt7530_cpu_port_enable().
-
-Back then, this didn't really matter as only a single CPU port could be
-used since the CPU port number was hardcoded. The driver was later changed
-with commit 1f9a6abecf53 ("net: dsa: mt7530: get cpu-port via dp->cpu_dp
-instead of constant") to retrieve the CPU port via dp->cpu_dp. With that,
-this silent change became an issue for when using multiple CPU ports.
-
-Fixes: 5e5502e012b8 ("net: dsa: mt7530: fix roaming from DSA user ports")
-Tested-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 ---
+ mm/filemap.c |  6 ++++++
+ mm/memory.c  | 14 +++++++++-----
+ 2 files changed, 15 insertions(+), 5 deletions(-)
 
-v2: Add the fixes tag and information about the commit that caused this
-issue.
-
----
- drivers/net/dsa/mt7530.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
-index 7d9f9563dbda..9bc54e1348cb 100644
---- a/drivers/net/dsa/mt7530.c
-+++ b/drivers/net/dsa/mt7530.c
-@@ -1002,9 +1002,9 @@ mt753x_cpu_port_enable(struct dsa_switch *ds, int port)
- 	mt7530_write(priv, MT7530_PVC_P(port),
- 		     PORT_SPEC_TAG);
- 
--	/* Disable flooding by default */
--	mt7530_rmw(priv, MT7530_MFC, BC_FFP_MASK | UNM_FFP_MASK | UNU_FFP_MASK,
--		   BC_FFP(BIT(port)) | UNM_FFP(BIT(port)) | UNU_FFP(BIT(port)));
-+	/* Enable flooding on the CPU port */
-+	mt7530_set(priv, MT7530_MFC, BC_FFP(BIT(port)) | UNM_FFP(BIT(port)) |
-+		   UNU_FFP(BIT(port)));
- 
- 	/* Set CPU port number */
- 	if (priv->id == ID_MT7621)
-@@ -2367,6 +2367,10 @@ mt7531_setup_common(struct dsa_switch *ds)
- 	/* Enable and reset MIB counters */
- 	mt7530_mib_reset(ds);
- 
-+	/* Disable flooding on all ports */
-+	mt7530_clear(priv, MT7530_MFC, BC_FFP_MASK | UNM_FFP_MASK |
-+		     UNU_FFP_MASK);
+diff --git a/mm/filemap.c b/mm/filemap.c
+index a34abfe8c654..84f39114d4de 100644
+--- a/mm/filemap.c
++++ b/mm/filemap.c
+@@ -1706,6 +1706,8 @@ static int __folio_lock_async(struct folio *folio, struct wait_page_queue *wait)
+  *     mmap_lock has been released (mmap_read_unlock(), unless flags had both
+  *     FAULT_FLAG_ALLOW_RETRY and FAULT_FLAG_RETRY_NOWAIT set, in
+  *     which case mmap_lock is still held.
++ *     If flags had FAULT_FLAG_VMA_LOCK set, meaning the operation is performed
++ *     with VMA lock only, the VMA lock is still held.
+  *
+  * If neither ALLOW_RETRY nor KILLABLE are set, will always return true
+  * with the folio locked and the mmap_lock unperturbed.
+@@ -1713,6 +1715,10 @@ static int __folio_lock_async(struct folio *folio, struct wait_page_queue *wait)
+ bool __folio_lock_or_retry(struct folio *folio, struct mm_struct *mm,
+ 			 unsigned int flags)
+ {
++	/* Can't do this if not holding mmap_lock */
++	if (flags & FAULT_FLAG_VMA_LOCK)
++		return false;
 +
- 	for (i = 0; i < MT7530_NUM_PORTS; i++) {
- 		/* Disable forwarding by default on all ports */
- 		mt7530_rmw(priv, MT7530_PCR_P(i), PCR_MATRIX_MASK,
+ 	if (fault_flag_allow_retry_first(flags)) {
+ 		/*
+ 		 * CAUTION! In this case, mmap_lock is not released
+diff --git a/mm/memory.c b/mm/memory.c
+index f69fbc251198..41f45819a923 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -3711,11 +3711,6 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+ 	if (!pte_unmap_same(vmf))
+ 		goto out;
+ 
+-	if (vmf->flags & FAULT_FLAG_VMA_LOCK) {
+-		ret = VM_FAULT_RETRY;
+-		goto out;
+-	}
+-
+ 	entry = pte_to_swp_entry(vmf->orig_pte);
+ 	if (unlikely(non_swap_entry(entry))) {
+ 		if (is_migration_entry(entry)) {
+@@ -3725,6 +3720,15 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+ 			vmf->page = pfn_swap_entry_to_page(entry);
+ 			ret = remove_device_exclusive_entry(vmf);
+ 		} else if (is_device_private_entry(entry)) {
++			if (vmf->flags & FAULT_FLAG_VMA_LOCK) {
++				/*
++				 * migrate_to_ram is not yet ready to operate
++				 * under VMA lock.
++				 */
++				ret |= VM_FAULT_RETRY;
++				goto out;
++			}
++
+ 			vmf->page = pfn_swap_entry_to_page(entry);
+ 			vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd,
+ 					vmf->address, &vmf->ptl);
 -- 
-2.39.2
+2.40.1.495.gc816e09b53d-goog
 
