@@ -2,97 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53A216F3976
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 22:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84D926F397A
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 22:56:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232402AbjEAUzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 16:55:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37274 "EHLO
+        id S232632AbjEAU4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 16:56:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232128AbjEAUzg (ORCPT
+        with ESMTP id S231995AbjEAU4b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 16:55:36 -0400
-Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [IPv6:2a01:37:3000::53df:4ef0:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBDD8124
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 13:55:34 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
-        by bmailout2.hostsharing.net (Postfix) with ESMTPS id 8996C2800B6ED;
-        Mon,  1 May 2023 22:55:29 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id 7857E4A8DC; Mon,  1 May 2023 22:55:29 +0200 (CEST)
-Date:   Mon, 1 May 2023 22:55:29 +0200
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Jim Quinlan <james.quinlan@broadcom.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Jim Quinlan <jim2101024@gmail.com>, linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cyril Brulebois <kibi@debian.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof Wilczy??ski <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 3/5] PCI: brcmstb: Set PCIe transaction completion
- timeout
-Message-ID: <20230501205529.GA3626@wunner.de>
-References: <20230428223500.23337-4-jim2101024@gmail.com>
- <20230430191323.GA388047@bhelgaas>
- <CA+-6iNwb6Cn-78BJ5URhwvDuYHg5b4X5h+WdMw-CB3nRs=pSYw@mail.gmail.com>
+        Mon, 1 May 2023 16:56:31 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B76124
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 13:56:29 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f127b10140so173719e87.3
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 13:56:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682974588; x=1685566588;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fRi8WeWbFUqJuehlBhyZd78a/p9Tg8JwKR1fy0aT0Jg=;
+        b=ddsTfsgnDYaHHdX1g4taaGDyH2sPtMkYxmVUyu/MOxweHpFL+sUoh+LIOPidLdRN4/
+         GsuTDoggzA4y+41/eWfa5RhT34nAXN8NDKxwtnS1oGZZvpNR2ziTJwNXjg8ZibF6dln4
+         mQoAXHAwYY6FuPLM7yEpjGZVTL08G3s5IoWBQbHwVDDzoOllVOnY/DgrU2PO3KPcva36
+         UTsZoBNyTpyk2L1rP3iHMgTQ7bLLDJpOfRg/RcBsXY1kdcPdGailIC/MoJjJ01bdHaZT
+         9QdATURzOOANSO+kdGNHM4vPZrECagQYmAA2o1F7J8WACpLGzd/B20sb0xWBceGIoUVW
+         nqXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682974588; x=1685566588;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fRi8WeWbFUqJuehlBhyZd78a/p9Tg8JwKR1fy0aT0Jg=;
+        b=Sff/6Kx6UYxkeex43aY9J4l048gQ7BdVimo+eIq0iLUUyiLj01Z4JFZyS32f3eNcFN
+         MNTUK7qGLvSUwa+j+pMa3BDru+Ozz0yNI//HD+wko121qVD0Ecus+3Pe82eaK5sz8+PL
+         qV4a77xYuSD2vesXZjgQHAk8RuhXkiLa2myoROZn3/Yzci7SRMboP6rHgVZSbX0J6fpx
+         hY4Wt8SU6NwfuwmUejYTcS5XJ+XWD7f+fJv4bVGxH1LR7rkDzWR9JDoSbC3FAWMuWyN7
+         q+o/8nZkMjpk2HpvWSyH4lO8gWfjdrNw9zQ4ZMuWrNeMfg5u0CZkAN6pk7t9l7ZnThPQ
+         GPXQ==
+X-Gm-Message-State: AC+VfDwrXBH1eHf+tGh/4laLkqvIYmnlGuNyuNGRr/ChWxWSxP436gJ+
+        l1Ym80OdbFeUAV1WoN8VtiZm9w==
+X-Google-Smtp-Source: ACHHUZ7/wdm93DxRBAvt2OwUx/l0GuYYMfX+zGJ+Yy7jSPEk21ffkc8d/WR+DjJ/+FbE9Kqcs2CB8Q==
+X-Received: by 2002:ac2:5691:0:b0:4ed:bdac:7a49 with SMTP id 17-20020ac25691000000b004edbdac7a49mr4895238lfr.54.1682974587748;
+        Mon, 01 May 2023 13:56:27 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id v22-20020ac25596000000b004e845b49d81sm4931174lfg.140.2023.05.01.13.56.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 01 May 2023 13:56:27 -0700 (PDT)
+Message-ID: <f2b7e6cf-d747-efb8-820c-41e4eef6cbb3@linaro.org>
+Date:   Mon, 1 May 2023 23:56:26 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+-6iNwb6Cn-78BJ5URhwvDuYHg5b4X5h+WdMw-CB3nRs=pSYw@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] drm/msm: Set max segment size earlier
+Content-Language: en-GB
+To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
+Cc:     freedreno@lists.freedesktop.org,
+        Rob Clark <robdclark@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
+        <linux-arm-msm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230501204441.1642741-1-robdclark@gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230501204441.1642741-1-robdclark@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 30, 2023 at 05:24:26PM -0400, Jim Quinlan wrote:
-> I've been maintaining this driver for over eight years or so and we've
-> done fine with the HW default completion timeout value.
-> Only recently has a major customer requested that this timeout value
-> be changed, and their reason was so they could
-> avoid a CPU abort when using L1SS.
+On 01/05/2023 23:44, Rob Clark wrote:
+> From: Rob Clark <robdclark@chromium.org>
 > 
-> Now we could set this value to a big number for all cases and not
-> require "brcm,completion-timeout-us".  I cannot see any
-> downsides, other than another customer coming along asking us to
-> double the default or lessen it.
+> Fixes the following splat on a6xx gen2+ (a640, a650, a660 families),
+> a6xx gen1 has smaller GMU allocations so they fit under the default
+> 64K max segment size.
+> 
+>     ------------[ cut here ]------------
+>     DMA-API: msm_dpu ae01000.display-controller: mapping sg segment longer than device claims to support [len=126976] [max=65536]
+>     WARNING: CPU: 5 PID: 9 at kernel/dma/debug.c:1160 debug_dma_map_sg+0x288/0x314
+>     Modules linked in:
+>     CPU: 5 PID: 9 Comm: kworker/u16:0 Not tainted 6.3.0-rc2-debug+ #629
+>     Hardware name: Google Villager (rev1+) with LTE (DT)
+>     Workqueue: events_unbound deferred_probe_work_func
+>     pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>     pc : debug_dma_map_sg+0x288/0x314
+>     lr : debug_dma_map_sg+0x288/0x314
+>     sp : ffffffc00809b560
+>     x29: ffffffc00809b560 x28: 0000000000000060 x27: 0000000000000000
+>     x26: 0000000000010000 x25: 0000000000000004 x24: 0000000000000004
+>     x23: ffffffffffffffff x22: ffffffdb31693cc0 x21: ffffff8080935800
+>     x20: ffffff8087417400 x19: ffffff8087a45010 x18: 0000000000000000
+>     x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000010000
+>     x14: 0000000000000001 x13: ffffffffffffffff x12: ffffffffffffffff
+>     x11: 0000000000000000 x10: 000000000000000a x9 : ffffffdb2ff05e14
+>     x8 : ffffffdb31275000 x7 : ffffffdb2ff08908 x6 : 0000000000000000
+>     x5 : 0000000000000001 x4 : ffffffdb2ff08a74 x3 : ffffffdb31275008
+>     x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffffff80803a9a80
+>     Call trace:
+>      debug_dma_map_sg+0x288/0x314
+>      __dma_map_sg_attrs+0x80/0xe4
+>      dma_map_sgtable+0x30/0x4c
+>      get_pages+0x1d4/0x1e4
+>      msm_gem_pin_pages_locked+0xbc/0xf8
+>      msm_gem_pin_vma_locked+0x58/0xa0
+>      msm_gem_get_and_pin_iova_range+0x98/0xac
+>      a6xx_gmu_memory_alloc+0x7c/0x128
+>      a6xx_gmu_init+0x16c/0x9b0
+>      a6xx_gpu_init+0x38c/0x3e4
+>      adreno_bind+0x214/0x264
+>      component_bind_all+0x128/0x1f8
+>      msm_drm_bind+0x2b8/0x608
+>      try_to_bring_up_aggregate_device+0x88/0x1a4
+>      __component_add+0xec/0x13c
+>      component_add+0x1c/0x28
+>      dp_display_probe+0x3f8/0x43c
+>      platform_probe+0x70/0xc4
+>      really_probe+0x148/0x280
+>      __driver_probe_device+0xc8/0xe0
+>      driver_probe_device+0x44/0x100
+>      __device_attach_driver+0x64/0xdc
+>      bus_for_each_drv+0xb0/0xd8
+>      __device_attach+0xd8/0x168
+>      device_initial_probe+0x1c/0x28
+>      bus_probe_device+0x44/0xb0
+>      deferred_probe_work_func+0xc8/0xe0
+>      process_one_work+0x2e0/0x488
+>      process_scheduled_works+0x4c/0x50
+>      worker_thread+0x218/0x274
+>      kthread+0xf0/0x100
+>      ret_from_fork+0x10/0x20
+>     irq event stamp: 293712
+>     hardirqs last  enabled at (293711): [<ffffffdb2ff0893c>] vprintk_emit+0x160/0x25c
+>     hardirqs last disabled at (293712): [<ffffffdb30b48130>] el1_dbg+0x24/0x80
+>     softirqs last  enabled at (279520): [<ffffffdb2fe10420>] __do_softirq+0x21c/0x4bc
+>     softirqs last disabled at (279515): [<ffffffdb2fe16708>] ____do_softirq+0x18/0x24
+>     ---[ end trace 0000000000000000 ]---
+> 
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
 
-The Completion Timeout is configurable in the Device Control 2 Register
-(PCIe r2.1 sec 7.8.16).  Your controller does expose that register:
+I think this should be:
 
-  DevCtl2: Completion Timeout: 50us to 50ms, TimeoutDis- LTR+ OBFF Disabled, ARIFwd-
-           AtomicOpsCtl: ReqEn- EgressBlck-
+Fixes: db735fc4036b ("drm/msm: Set dma maximum segment size for mdss")
 
-Why does your controller allow configuration of the timeout in a
-proprietary register in addition to DevCtl2?
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-If you make the Completion Timeout configurable, please do so in
-a spec-compliant way, i.e. via DevCtl2, so that it works for
-other products as well.
+> ---
+>   drivers/gpu/drm/msm/msm_drv.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
+> index 3a74b5653e96..6dec1a3534f2 100644
+> --- a/drivers/gpu/drm/msm/msm_drv.c
+> +++ b/drivers/gpu/drm/msm/msm_drv.c
+> @@ -440,27 +440,27 @@ static int msm_drm_init(struct device *dev, const struct drm_driver *drv)
+>   	fs_reclaim_acquire(GFP_KERNEL);
+>   	might_lock(&priv->lru.lock);
+>   	fs_reclaim_release(GFP_KERNEL);
+>   
+>   	drm_mode_config_init(ddev);
+>   
+>   	ret = msm_init_vram(ddev);
+>   	if (ret)
+>   		goto err_drm_dev_put;
+>   
+> +	dma_set_max_seg_size(dev, UINT_MAX);
+> +
+>   	/* Bind all our sub-components: */
+>   	ret = component_bind_all(dev, ddev);
+>   	if (ret)
+>   		goto err_drm_dev_put;
+>   
+> -	dma_set_max_seg_size(dev, UINT_MAX);
+> -
+>   	msm_gem_shrinker_init(ddev);
+>   
+>   	if (priv->kms_init) {
+>   		ret = priv->kms_init(ddev);
+>   		if (ret) {
+>   			DRM_DEV_ERROR(dev, "failed to load kms\n");
+>   			priv->kms = NULL;
+>   			goto err_msm_uninit;
+>   		}
+>   		kms = priv->kms;
 
-If the proprietary register has advantages over DevCtl2 (e.g.
-finer granularity), perhaps you can divert accesses to the
-Completion Timeout Value in DevCtl2 to your proprietary register.
+-- 
+With best wishes
+Dmitry
 
-Thanks,
-
-Lukas
