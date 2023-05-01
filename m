@@ -2,139 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BD2E6F3389
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 18:28:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A047B6F338E
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 18:30:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232434AbjEAQ2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 12:28:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51734 "EHLO
+        id S232473AbjEAQac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 12:30:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbjEAQ16 (ORCPT
+        with ESMTP id S229679AbjEAQaa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 12:27:58 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6590E124
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 09:27:57 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-50bc070c557so3437717a12.0
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 09:27:57 -0700 (PDT)
+        Mon, 1 May 2023 12:30:30 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC69118;
+        Mon,  1 May 2023 09:30:28 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4edb26f762dso3322868e87.3;
+        Mon, 01 May 2023 09:30:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682958476; x=1685550476;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=e9lVh64jM33d4LMooLPUuuzQksiW+TZToGUMu7K+YSM=;
-        b=z60/MVK8/HkZ6esdpAiuI19sPObutnIBlyvBt+m5+iuPmWk9mlIC++CgwqIZdaigC5
-         6BKc+LyK/i7ghAuutlJRhCGJFv4Q4mU4fRjUkRFzgXxRV3GbR+gjGvLP1JT3pR4V73ys
-         62vsVXsgvpkpjK/m142eRyIF0+dTY8D1GaqhHa2ua6M9Gxz1A2S4eRtlUbthhQGvcdqG
-         90Wi9/8223Hhd0oZGA8du2yZ45jbggQggiYuVXgywDaGuQJlqzZPHbunE9pWXClmRu2O
-         ERaXQhlJSXyML4lPv3JFs9rOU1Nvm55/Gf74VdBGS0sNq23uaIIicYCDmzehjt7Sz+jg
-         N/ig==
+        d=gmail.com; s=20221208; t=1682958626; x=1685550626;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dhyY7qHBH6sqFDpLFZPOfJAsbZ/jh+LoAySlLW5v564=;
+        b=Me/CK+eKkmHcSCfwKpOjXd4tUjZF5/VDgkPHJuAsRU9uwx2iltUZW9V/6Aawql5tij
+         LZkSM4/o1kwDNzBu42ImCSbv1mHZ3yRkQcx1Otv//k1xPBluguCEHQBDqZADbSBlbE1N
+         fTemcboLPfOvYqcPELmHxh6ykoU56XyJW3tCERgrvU/68XxI9NwlJamarm7h2864lSoN
+         rYsR/BzZxO1Po1Vvyp6wGlq4pGrPBB7AOCZgqw2gwo86beakGmupQYM073muOfbooOcu
+         SJGqQKmlXAq9mae/V2FQyOEBxfVyXpm3pCdoBwLOEHwam9zLaf29mo6UgmLOKRHfs5wZ
+         jAlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682958476; x=1685550476;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=e9lVh64jM33d4LMooLPUuuzQksiW+TZToGUMu7K+YSM=;
-        b=ShXhHNLq53uyCb2xg2ItHOaAeXTpLsxev5l7Hhh7WxVFYPS81+83DLc9cC67+TzcXd
-         Qml5PiKPchzBE1QcPZhEnlcE8KjDfJJ0QxodYdX44JKW50lAsQJIkbd0NhufBck1F7NQ
-         uot3G9S/nBXdMeRmD/8IyFBaM/kCCfQL9U68lyqa6yInsk8NAtY6lYs5DVnaVFChJDBK
-         ++TApdpcJJtvS7Oy2m+LWriXf6IO38cIp3lTjHjqw+88Yh+L9T0VL5zoGuheMg+7SzOl
-         enD4y3wc8BTGQmPcspevzSR9pj4BC8FGUpUvSeU8r54S0l9+C86IeNcr19K/omWIu3Xh
-         x3DA==
-X-Gm-Message-State: AC+VfDwv2dRLtMJF5dkUvJbhYxCK6JhaeNBkdb4IQZ3JD5gZHI0Py8lB
-        8zn9IrKPomSHa/y/0aVHxRgtSw==
-X-Google-Smtp-Source: ACHHUZ4ma15X5csw2YRjprlWpBcI6VCQfb3mwFdFMhAU6NHbk6o87oQi1mJMQKSX3tzrxrxRsud46Q==
-X-Received: by 2002:aa7:d9da:0:b0:50a:1d85:319e with SMTP id v26-20020aa7d9da000000b0050a1d85319emr5577899eds.27.1682958475815;
-        Mon, 01 May 2023 09:27:55 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:637a:fd0c:58fd:9f00? ([2a02:810d:15c0:828:637a:fd0c:58fd:9f00])
-        by smtp.gmail.com with ESMTPSA id q9-20020aa7da89000000b005069175dcb7sm12523060eds.58.2023.05.01.09.27.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 May 2023 09:27:54 -0700 (PDT)
-Message-ID: <deaca10c-46ac-df19-5540-f1ae4c6fe9f7@linaro.org>
-Date:   Mon, 1 May 2023 18:27:52 +0200
+        d=1e100.net; s=20221208; t=1682958626; x=1685550626;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dhyY7qHBH6sqFDpLFZPOfJAsbZ/jh+LoAySlLW5v564=;
+        b=hyhDUhYgoR+DeGsL/a2H3U4RtCVc91/cf5hZNmbzsrm+bUtw3EMOupkWPWL9WaEK9O
+         9tp3pR/gDcY1sw9FtGkqvkMzHWbAKbJpnmetLkwa1/o/o0b/pRP0bmxNwjJN8hKCFSxy
+         Fr345iONUWJsu3v50JQZ1v4fD4xtOi9ynArIgANRXVGLs8nYZIpCjRX7SkegnJJknDfc
+         a4qRydJOlX4GfmXrCa5Lt8SeCRcf0LWa/TRBm8URoTKhXnm1I+PXHlZ8hgM5Axw9lMlW
+         /ViJGjWvpsg3TpW6LnhT95uIA7Dmx7hV8AhPh9j4GWAnguaBrNRhgPF/5a3urMlPpfUj
+         oL3w==
+X-Gm-Message-State: AC+VfDz5ohYptDSJC/m2oOBsOX/LXiZVbznVy9U2ydLstB3K2+gq4PRj
+        mlxRql3VwlLZeQHXZf1YNSs=
+X-Google-Smtp-Source: ACHHUZ4/2ceDc4pC1aiCJnTvLMRBf39++inShkCIxU+nSVgxHEh5RUZLR3y7ywLuIZVVxCn7yCoR5w==
+X-Received: by 2002:a05:6512:24a:b0:4db:3e56:55c8 with SMTP id b10-20020a056512024a00b004db3e5655c8mr4000247lfo.59.1682958626370;
+        Mon, 01 May 2023 09:30:26 -0700 (PDT)
+Received: from eg ([2a01:799:1727:1d00:bf75:af6:260e:41be])
+        by smtp.gmail.com with ESMTPSA id m19-20020ac24293000000b004edc585d6besm4799556lfh.285.2023.05.01.09.30.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 May 2023 09:30:25 -0700 (PDT)
+Date:   Mon, 1 May 2023 18:30:24 +0200
+From:   Espen Grindhaug <espen.grindhaug@gmail.com>
+To:     Yonghong Song <yhs@meta.com>
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2] libbpf: Improve version handling when attaching uprobe
+Message-ID: <ZE/pIM/z7x+35KQo@eg>
+References: <ZEV/EzOM+TJomP66@eg>
+ <07e05c57-feb7-5482-9c07-eb41f976f9fd@meta.com>
+ <ZErK0M/qAi/VS8U8@eg>
+ <0e7b884a-05c3-83c7-0de1-9bfe14ff77b3@meta.com>
+ <ZE+4Ct7ZMecFy7YV@eg>
+ <533437a4-a76d-96e0-b04a-ab8eb7b5fb7f@meta.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH] imx8mn-var-som: dts: add SOM EEPROM
-Content-Language: en-US
-To:     Hugo Villeneuve <hugo@hugovil.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20230427195639.2718734-1-hugo@hugovil.com>
- <88a7cf9e-89a5-7860-2219-337aee04e75e@linaro.org>
- <20230501094514.38acbacc7f596226f04dc504@hugovil.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230501094514.38acbacc7f596226f04dc504@hugovil.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <533437a4-a76d-96e0-b04a-ab8eb7b5fb7f@meta.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/05/2023 15:45, Hugo Villeneuve wrote:
-> On Fri, 28 Apr 2023 15:06:22 +0200
-> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> 
->> On 27/04/2023 21:56, Hugo Villeneuve wrote:
->>> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
->>
->> Thank you for your patch. There is something to discuss/improve.
->>
->>>
->>> The 4Kbit EEPROM located on the SOM contains hardware configuration
->>> options, manufacturing infos and ethernet MAC address.
->>
->> Use subject prefixes matching the subsystem (which you can get for
->> example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
->> your patch is touching).
->>
->>>
->>> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
->>> ---
->>>  arch/arm64/boot/dts/freescale/imx8mn-var-som.dtsi | 10 ++++++++++
->>>  1 file changed, 10 insertions(+)
->>>
->>> diff --git a/arch/arm64/boot/dts/freescale/imx8mn-var-som.dtsi b/arch/arm64/boot/dts/freescale/imx8mn-var-som.dtsi
->>> index 9052b0d4b5b4..3ed396f41e46 100644
->>> --- a/arch/arm64/boot/dts/freescale/imx8mn-var-som.dtsi
->>> +++ b/arch/arm64/boot/dts/freescale/imx8mn-var-som.dtsi
->>> @@ -30,6 +30,10 @@ reg_eth_phy: regulator-eth-phy {
->>>  		gpio = <&gpio2 9 GPIO_ACTIVE_HIGH>;
->>>  		enable-active-high;
->>>  	};
->>> +
->>> +	aliases {
->>
->> Keep nodes ordered.
->>
->>> +		eeprom_som = &eeprom_som;
->>
->> That's no valid alias. Which upstream kernel driver makes use of this?
-> 
-> Is "eeprom-som" ok?
-> 
-> No driver uses it for now..
+On Mon, May 01, 2023 at 08:23:35AM -0700, Yonghong Song wrote:
+>
+>
+> On 5/1/23 6:00 AM, Espen Grindhaug wrote:
+> > On Thu, Apr 27, 2023 at 06:19:29PM -0700, Yonghong Song wrote:
+> > >
+> > >
+> > > On 4/27/23 12:19 PM, Espen Grindhaug wrote:
+> > > > On Wed, Apr 26, 2023 at 02:47:27PM -0700, Yonghong Song wrote:
+> > > > >
+> > > > >
+> > > > > On 4/23/23 11:55 AM, Espen Grindhaug wrote:
+> > > > > > This change fixes the handling of versions in elf_find_func_offset.
+> > > > > > In the previous implementation, we incorrectly assumed that the
+> > > > >
+> > > > > Could you give more explanation/example in the commit message
+> > > > > what does 'incorrectly' mean here? In which situations the
+> > > > > current libbpf implementation will not be correct?
+> > > > >
+> > > >
+> > > > How about something like this?
+> > > >
+> > > >
+> > > > libbpf: Improve version handling when attaching uprobe
+> > > >
+> > > > This change fixes the handling of versions in elf_find_func_offset.
+> > > >
+> > > > For example, let's assume we are trying to attach an uprobe to pthread_create in
+> > > > glibc. Prior to this commit, it would fail with an error message saying 'elf:
+> > > > ambiguous match [...]', this is because there are two entries in the symbol
+> > > > table with that name.
+> > > >
+> > > > $ nm -D /lib/x86_64-linux-gnu/libc.so.6 | grep pthread_create
+> > > > 0000000000094cc0 T pthread_create@GLIBC_2.2.5
+> > > > 0000000000094cc0 T pthread_create@@GLIBC_2.34
+> > > >
+> > > > So we go ahead and modify our code to attach to 'pthread_create@@GLIBC_2.34',
+> > > > and this also fails, but this time with the error 'elf: failed to find symbol
+> > > > [...]'. This fails because we incorrectly assumed that the version information
+> > > > would be present in the string found in the string table, but there is only the
+> > > > string 'pthread_create'.
+> > >
+> > > I tried one example with my centos8 libpthread library.
+> > >
+> > > $ llvm-readelf -s /lib64/libc-2.28.so | grep pthread_cond_signal
+> > >      39: 0000000000095f70    43 FUNC    GLOBAL DEFAULT    14
+> > > pthread_cond_signal@@GLIBC_2.3.2
+> > >      40: 0000000000096250    43 FUNC    GLOBAL DEFAULT    14
+> > > pthread_cond_signal@GLIBC_2.2.5
+> > >    3160: 0000000000096250    43 FUNC    LOCAL  DEFAULT    14
+> > > __pthread_cond_signal_2_0
+> > >    3589: 0000000000095f70    43 FUNC    LOCAL  DEFAULT    14
+> > > __pthread_cond_signal
+> > >    5522: 0000000000095f70    43 FUNC    GLOBAL DEFAULT    14
+> > > pthread_cond_signal@@GLIBC_2.3.2
+> > >    5545: 0000000000096250    43 FUNC    GLOBAL DEFAULT    14
+> > > pthread_cond_signal@GLIBC_2.2.5
+> > > $ nm -D /lib64/libc-2.28.so | grep pthread_cond_signal
+> > > 0000000000095f70 T pthread_cond_signal@@GLIBC_2.3.2
+> > > 0000000000096250 T pthread_cond_signal@GLIBC_2.2.5
+> > > $
+> > >
+> > > Note that two pthread_cond_signal functions have different addresses,
+> > > which is expected as they implemented for different versions.
+> > >
+> > > But in your case,
+> > > > $ nm -D /lib/x86_64-linux-gnu/libc.so.6 | grep pthread_create
+> > > > 0000000000094cc0 T pthread_create@GLIBC_2.2.5
+> > > > 0000000000094cc0 T pthread_create@@GLIBC_2.34
+> > >
+> > > Two functions have the same address which is very weird and I suspect
+> > > some issues here at least needs some investigation.
+> > >
+> >
+> > I am no expert on this, but as far as I can tell, this is normal,
+> > although much more common on my Ubuntu machine than my Fedora machine.
+> >
+> > Script to find duplicates:
+> >
+> > nm -D /usr/lib64/libc-2.33.so | awk '
+> > {
+> >      addr = $1;
+> >      symbol = $3;
+> >      sub(/[@].*$/, "", symbol);
+> >
+> >      if (addr == prev_addr && symbol == prev_symbol) {
+> >          if (prev_symbol_printed == 0) {
+> >              print prev_line;
+> >              prev_symbol_printed = 1;
+> >          }
+> >          print;
+> >      } else {
+> >          prev_symbol_printed = 0;
+> >      }
+> >      prev_addr = addr;
+> >      prev_symbol = symbol;
+> >      prev_line = $0;
+> > }'
+> >
+> >
+> > > Second, for the symbol table, the following is ELF encoding,
+> > >
+> > > typedef struct {
+> > >          Elf64_Word      st_name;
+> > >          unsigned char   st_info;
+> > >          unsigned char   st_other;
+> > >          Elf64_Half      st_shndx;
+> > >          Elf64_Addr      st_value;
+> > >          Elf64_Xword     st_size;
+> > > } Elf64_Sym;
+> > >
+> > > where
+> > > st_name
+> > >
+> > >      An index into the object file's symbol string table, which holds the
+> > > character representations of the symbol names. If the value is nonzero, the
+> > > value represents a string table index that gives the symbol name. Otherwise,
+> > > the symbol table entry has no name.
+> > >
+> > > So, the function name (including @..., @@...) should be in string table
+> > > which is the same for the above two pthread_cond_signal symbols.
+> > >
+> > > I think it is worthwhile to debug why in your situation
+> > > pthread_create@GLIBC_2.2.5 and pthread_create@@GLIBC_2.34 do not
+> > > have them in the string table.
+> > >
+> >
+> > I think you are mistaken here; the strings in the strings table don't contain
+> > the version. Take a look at this partial dump of the strings table.
+> >
+> > 	$ readelf -W -p .dynstr /usr/lib64/libc-2.33.so
+> >
+> > 	String dump of section '.dynstr':
+> > 		[     1]  xdrmem_create
+> > 		[     f]  __wctomb_chk
+> > 		[    1c]  getmntent
+> > 		[    26]  __freelocale
+> > 		[    33]  __rawmemchr
+> > 		[    3f]  _IO_vsprintf
+> > 		[    4c]  getutent
+> > 		[    55]  __file_change_detection_for_path
+> > 	(...)
+> > 		[  350e]  memrchr
+> > 		[  3516]  pthread_cond_signal
+> > 		[  352a]  __close
+> > 	(...)
+> > 		[  61b6]  GLIBC_2.2.5
+> > 		[  61c2]  GLIBC_2.2.6
+> > 		[  61ce]  GLIBC_2.3
+> > 		[  61d8]  GLIBC_2.3.2
+> > 		[  61e4]  GLIBC_2.3.3
+> >
+> > As you can see, the strings have no versions, and the version strings
+> > themselves are also in this table as entries at the end of the table.
+>
+> I see you search .dynstr section. Do you think whether we should
+> search .strtab instead since it contains versioned symbols?
+>
 
-None of them are valid if nothing uses them. There is also no clear
-meaning of this alias to me. Why "som" should denote any alias in
-upstream kernel?
+I searched .dynstr since my libc files only have that section, but I do see
+your point. If const char *binary_path points to an executable and not an
+.so file, then we would find some versioned symbols in the .strtab section.
+However, since libbpf supports using the .so as binary_path, would we not
+need the functionality to build the complete name regardless?
 
-Anyway, drop it as there are no users.
+Adding a check to not build the full name if it already contains an '@' is
+probably a good idea, though.
 
-Best regards,
-Krzysztof
-
+> >
+> > > >
+> > > > This patch reworks how we compare the symbol name provided by the user if it is
+> > > > qualified with a version (using @ or @@). We now look up the correct version
+> > > > string in the version symbol table before constructing the full name, as also
+> > > > done above by nm, before comparing.
+> > > >
+> > > > > > version information would be present in the string found in the
+> > > > > > string table.
+> > > > > >
+> > > > > > We now look up the correct version string in the version symbol
+> > > > > > table before constructing the full name and then comparing.
+> > > > > >
+> > > > > > This patch adds support for both name@version and name@@version to
+> > > > > > match output of the various elf parsers.
+> > > > > >
+> > > > > > Signed-off-by: Espen Grindhaug <espen.grindhaug@gmail.com>
+> > > > >
+> > > > > [...]
