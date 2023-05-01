@@ -2,297 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE75B6F2FA7
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 11:00:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F8B86F2FB2
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 11:05:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232419AbjEAI7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 04:59:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54408 "EHLO
+        id S232265AbjEAJFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 05:05:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232070AbjEAI7L (ORCPT
+        with ESMTP id S232361AbjEAJDi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 04:59:11 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E585410D8;
-        Mon,  1 May 2023 01:57:55 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1aaebed5bd6so8315655ad.1;
-        Mon, 01 May 2023 01:57:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682931471; x=1685523471;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=85FbKOIGeJKFvrZkC+4B4Gx5bHvgxBGU0hkt5+QsJqk=;
-        b=CYmVFe1ZSITuLQYsYizoY0KSUhYRoc3Md2T3+Zn3YfBMhN96TjlaesKr0AHYkxYL3v
-         xf6KqM2vo4FHnlA9N+jobMd2j0rw9GmXaOyD0ksuq3xqSRXWNriRp1dywc02INgHtJOa
-         7ZQiLnu7ypHI1/DM3yog6Eq+UrjNGY43okh2hO6Y+VBY2FRliX/lYTQpHj9uYd/JjXh0
-         oTwSNOq7l/uXXvImVuBOg82rf4w0t0Wof18L+NUlLzWO5uEtCCvQPS7xzdWD9jG7qNqH
-         nXXnq0yTNRHWetCQV7B+OgXJqrIfjSTNe2n4NCfq29mDprN2kOaC6zvS2JvyHgi1LXLT
-         Xs9A==
+        Mon, 1 May 2023 05:03:38 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF7210E0
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 02:03:06 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-329572e5abeso35311515ab.2
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 02:03:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682931471; x=1685523471;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=85FbKOIGeJKFvrZkC+4B4Gx5bHvgxBGU0hkt5+QsJqk=;
-        b=EHi6CD/KDOYL8kMfViFr+rsD1X/LaCYXjAeq6z/n3O5NrAKXvVLgxVRnwvdLnZfW78
-         h9LZsRYvH6QJwv4lncgjjTVmI/Tk3EJkMbK0v7dDz51kP1Rw0R2OSc6SenCF9KtBOeeK
-         pT0tbAlu0mOUb9rc/jH925fW13B+x3Yj2vSXcLFHKCz+voT6Dmg6ul+72I4ZKghs4z8E
-         8vxL8zn8lUlPXqivMP4gmSbI7SGRSMhr8xyhPTCeOO47dC3Wgm+wWey5VQ6t/hBoP32a
-         ZlH31tk01ofH5rXkxsvn5LPjvfCG0NskuAggnbs/XBeM1DT7f4fr1K2umixQU7oGaHb6
-         aAAw==
-X-Gm-Message-State: AC+VfDyvodnaMuZ2NmRZI5wCTVLXhQaEvET97aBtMc0rZQMmpG/7H0sF
-        zctloVaj/9wIrmcnl7xlEGA=
-X-Google-Smtp-Source: ACHHUZ4pSFG50Yn3+YjfnFZIYk4iayAIyRl4ulCUswwf5cB7fb2dNgoNDk/UK/mdNoBXMvkT5zvNHA==
-X-Received: by 2002:a17:903:2310:b0:1a6:54ce:4311 with SMTP id d16-20020a170903231000b001a654ce4311mr16387616plh.43.1682931471101;
-        Mon, 01 May 2023 01:57:51 -0700 (PDT)
-Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:b:e11b:15ea:ad44:bde7])
-        by smtp.gmail.com with ESMTPSA id t13-20020a1709028c8d00b001a4fe00a8d4sm17407070plo.90.2023.05.01.01.57.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 May 2023 01:57:50 -0700 (PDT)
-From:   Tianyu Lan <ltykernel@gmail.com>
-To:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, seanjc@google.com, pbonzini@redhat.com,
-        jgross@suse.com, tiala@microsoft.com, kirill@shutemov.name,
-        jiangshan.ljs@antgroup.com, peterz@infradead.org,
-        ashish.kalra@amd.com, srutherford@google.com,
-        akpm@linux-foundation.org, anshuman.khandual@arm.com,
-        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
-        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
-        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
-        michael.roth@amd.com, thomas.lendacky@amd.com,
-        venu.busireddy@oracle.com, sterritt@google.com,
-        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com
-Cc:     pangupta@amd.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: [RFC PATCH V5 15/15] x86/sev: Fix interrupt exit code paths from #HV exception
-Date:   Mon,  1 May 2023 04:57:25 -0400
-Message-Id: <20230501085726.544209-16-ltykernel@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230501085726.544209-1-ltykernel@gmail.com>
-References: <20230501085726.544209-1-ltykernel@gmail.com>
+        d=1e100.net; s=20221208; t=1682931762; x=1685523762;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8TRxn8Hy1NWPcJqiNoPbXlJR8Shf1orIfvYvY77Iwcc=;
+        b=QDWmQABefExYcB3vZAjwyJB65VIxGlO8GbEPbbbVaDxvKWsTVATrp4+dSq97dVAFAs
+         tqVsjcByQGTO4J4HCn6PHdq8mQHBxynecbPUwC2yAztHJOYOHPej4mFXtIv02GFUkDEu
+         pPWhNi0ZOI7+oZdkOhuSSHpjz/LagcHJ/xHJsSK3iPjMOQCSRFMOxguLLQMu/MRww95j
+         1s0+9Pot29MlckUfTOET9nmEgFwaX6L+GbysEdvdSRVU1X+vHYyzmWZ2AyODNsYwjqiK
+         fRXeeg3TBJVnqGzYE4Hm1x8G7O10N3pMiuEKYnbvQAdX359GyAx7BA2rjr8tw+uzJhH+
+         BjDg==
+X-Gm-Message-State: AC+VfDzKyuysdUOZGmTOdW1t+kcStk0OOTd+LjpmKO9SIh+SeqtotYX+
+        CBQPkgrZCW0B1f5IRYsR6VYwnCvY6OVRViVDdb4QS9P1mj7M6j4=
+X-Google-Smtp-Source: ACHHUZ7gP7vT5iBmGE8NuEp9huD7Ip/Aq05StbBuLGySxP7qpsorWO4B5GVBXeshS82V9esflBj+gVKhFgWiruDtHvf2OZZ63GsY
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:2152:b0:40f:9c3a:8ce2 with SMTP id
+ z18-20020a056638215200b0040f9c3a8ce2mr5749111jaj.5.1682931762773; Mon, 01 May
+ 2023 02:02:42 -0700 (PDT)
+Date:   Mon, 01 May 2023 02:02:42 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e6c78e05fa9e15bd@google.com>
+Subject: [syzbot] Monthly media report (Apr 2023)
+From:   syzbot <syzbot+list8669f45a42328eab044d@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ashish Kalra <ashish.kalra@amd.com>
+Hello media maintainers/developers,
 
-Add checks in interrupt exit code paths in case of returns
-to user mode to check if currently executing the #HV handler
-then don't follow the irqentry_exit_to_user_mode path as
-that can potentially cause the #HV handler to be
-preempted and rescheduled on another CPU. Rescheduled #HV
-handler on another cpu will cause interrupts to be handled
-on a different cpu than the injected one, causing
-invalid EOIs and missed/lost guest interrupts and
-corresponding hangs and/or per-cpu IRQs handled on
-non-intended cpu.
+This is a 31-day syzbot report for the media subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/media
 
-Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
+During the period, 2 new issues were detected and 0 were fixed.
+In total, 17 issues are still open and 83 have been fixed so far.
+
+Some of the still happening issues:
+
+Ref Crashes Repro Title
+<1> 2277    Yes   KMSAN: uninit-value in dib3000mb_attach (2)
+                  https://syzkaller.appspot.com/bug?extid=c88fc0ebe0d5935c70da
+<2> 978     Yes   WARNING in get_vaddr_frames
+                  https://syzkaller.appspot.com/bug?extid=59a71007ccac79e8bb69
+<3> 397     Yes   WARNING in smsusb_term_device
+                  https://syzkaller.appspot.com/bug?extid=40ac6e73326e79ee8ecb
+<4> 98      Yes   general protection fault in ir_raw_event_store_with_filter
+                  https://syzkaller.appspot.com/bug?extid=34008406ee9a31b13c73
+<5> 32      Yes   inconsistent lock state in sync_info_debugfs_show
+                  https://syzkaller.appspot.com/bug?extid=007bfe0f3330f6e1e7d1
+
 ---
-Change since RFC v3:
-       * Add check of hv_handling_events in the do_exc_hv()
-       	 to avoid nested entry.
----
- arch/x86/include/asm/idtentry.h | 66 +++++++++++++++++++++++++++++++++
- arch/x86/kernel/sev.c           | 37 +++++++++++++++++-
- 2 files changed, 102 insertions(+), 1 deletion(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
-index b0f3501b2767..415b7e14c227 100644
---- a/arch/x86/include/asm/idtentry.h
-+++ b/arch/x86/include/asm/idtentry.h
-@@ -13,6 +13,10 @@
- 
- #include <asm/irq_stack.h>
- 
-+#ifdef CONFIG_AMD_MEM_ENCRYPT
-+noinstr void irqentry_exit_hv_cond(struct pt_regs *regs, irqentry_state_t state);
-+#endif
-+
- /**
-  * DECLARE_IDTENTRY - Declare functions for simple IDT entry points
-  *		      No error code pushed by hardware
-@@ -176,6 +180,7 @@ __visible noinstr void func(struct pt_regs *regs, unsigned long error_code)
- #define DECLARE_IDTENTRY_IRQ(vector, func)				\
- 	DECLARE_IDTENTRY_ERRORCODE(vector, func)
- 
-+#ifndef CONFIG_AMD_MEM_ENCRYPT
- /**
-  * DEFINE_IDTENTRY_IRQ - Emit code for device interrupt IDT entry points
-  * @func:	Function name of the entry point
-@@ -205,6 +210,26 @@ __visible noinstr void func(struct pt_regs *regs,			\
- }									\
- 									\
- static noinline void __##func(struct pt_regs *regs, u32 vector)
-+#else
-+
-+#define DEFINE_IDTENTRY_IRQ(func)					\
-+static void __##func(struct pt_regs *regs, u32 vector);		\
-+									\
-+__visible noinstr void func(struct pt_regs *regs,			\
-+			    unsigned long error_code)			\
-+{									\
-+	irqentry_state_t state = irqentry_enter(regs);			\
-+	u32 vector = (u32)(u8)error_code;				\
-+									\
-+	instrumentation_begin();					\
-+	kvm_set_cpu_l1tf_flush_l1d();					\
-+	run_irq_on_irqstack_cond(__##func, regs, vector);		\
-+	instrumentation_end();						\
-+	irqentry_exit_hv_cond(regs, state);				\
-+}									\
-+									\
-+static noinline void __##func(struct pt_regs *regs, u32 vector)
-+#endif
- 
- /**
-  * DECLARE_IDTENTRY_SYSVEC - Declare functions for system vector entry points
-@@ -221,6 +246,7 @@ static noinline void __##func(struct pt_regs *regs, u32 vector)
- #define DECLARE_IDTENTRY_SYSVEC(vector, func)				\
- 	DECLARE_IDTENTRY(vector, func)
- 
-+#ifndef CONFIG_AMD_MEM_ENCRYPT
- /**
-  * DEFINE_IDTENTRY_SYSVEC - Emit code for system vector IDT entry points
-  * @func:	Function name of the entry point
-@@ -245,6 +271,26 @@ __visible noinstr void func(struct pt_regs *regs)			\
- }									\
- 									\
- static noinline void __##func(struct pt_regs *regs)
-+#else
-+
-+#define DEFINE_IDTENTRY_SYSVEC(func)					\
-+static void __##func(struct pt_regs *regs);				\
-+									\
-+__visible noinstr void func(struct pt_regs *regs)			\
-+{									\
-+	irqentry_state_t state = irqentry_enter(regs);			\
-+									\
-+	instrumentation_begin();					\
-+	kvm_set_cpu_l1tf_flush_l1d();					\
-+	run_sysvec_on_irqstack_cond(__##func, regs);			\
-+	instrumentation_end();						\
-+	irqentry_exit_hv_cond(regs, state);				\
-+}									\
-+									\
-+static noinline void __##func(struct pt_regs *regs)
-+#endif
-+
-+#ifndef CONFIG_AMD_MEM_ENCRYPT
- 
- /**
-  * DEFINE_IDTENTRY_SYSVEC_SIMPLE - Emit code for simple system vector IDT
-@@ -274,6 +320,26 @@ __visible noinstr void func(struct pt_regs *regs)			\
- }									\
- 									\
- static __always_inline void __##func(struct pt_regs *regs)
-+#else
-+
-+#define DEFINE_IDTENTRY_SYSVEC_SIMPLE(func)				\
-+static __always_inline void __##func(struct pt_regs *regs);		\
-+									\
-+__visible noinstr void func(struct pt_regs *regs)			\
-+{									\
-+	irqentry_state_t state = irqentry_enter(regs);			\
-+									\
-+	instrumentation_begin();					\
-+	__irq_enter_raw();						\
-+	kvm_set_cpu_l1tf_flush_l1d();					\
-+	__##func(regs);						\
-+	__irq_exit_raw();						\
-+	instrumentation_end();						\
-+	irqentry_exit_hv_cond(regs, state);				\
-+}									\
-+									\
-+static __always_inline void __##func(struct pt_regs *regs)
-+#endif
- 
- /**
-  * DECLARE_IDTENTRY_XENCB - Declare functions for XEN HV callback entry point
-diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-index b6becf158598..69b55075ddfe 100644
---- a/arch/x86/kernel/sev.c
-+++ b/arch/x86/kernel/sev.c
-@@ -149,6 +149,10 @@ struct sev_hv_doorbell_page {
- 
- struct sev_snp_runtime_data {
- 	struct sev_hv_doorbell_page hv_doorbell_page;
-+	/*
-+	 * Indication that we are currently handling #HV events.
-+	 */
-+	bool hv_handling_events;
- };
- 
- static DEFINE_PER_CPU(struct sev_snp_runtime_data*, snp_runtime_data);
-@@ -204,6 +208,12 @@ static void do_exc_hv(struct pt_regs *regs)
- {
- 	union hv_pending_events pending_events;
- 
-+	/* Avoid nested entry. */
-+	if (this_cpu_read(snp_runtime_data)->hv_handling_events)
-+		return;
-+
-+	this_cpu_read(snp_runtime_data)->hv_handling_events = true;
-+
- 	while (sev_hv_pending()) {
- 		pending_events.events = xchg(
- 			&sev_snp_current_doorbell_page()->pending_events.events,
-@@ -218,7 +228,7 @@ static void do_exc_hv(struct pt_regs *regs)
- #endif
- 
- 		if (!pending_events.vector)
--			return;
-+			goto out;
- 
- 		if (pending_events.vector < FIRST_EXTERNAL_VECTOR) {
- 			/* Exception vectors */
-@@ -238,6 +248,9 @@ static void do_exc_hv(struct pt_regs *regs)
- 			common_interrupt(regs, pending_events.vector);
- 		}
- 	}
-+
-+out:
-+	this_cpu_read(snp_runtime_data)->hv_handling_events = false;
- }
- 
- static __always_inline bool on_vc_stack(struct pt_regs *regs)
-@@ -2542,3 +2555,25 @@ static int __init snp_init_platform_device(void)
- 	return 0;
- }
- device_initcall(snp_init_platform_device);
-+
-+noinstr void irqentry_exit_hv_cond(struct pt_regs *regs, irqentry_state_t state)
-+{
-+	/*
-+	 * Check whether this returns to user mode, if so and if
-+	 * we are currently executing the #HV handler then we don't
-+	 * want to follow the irqentry_exit_to_user_mode path as
-+	 * that can potentially cause the #HV handler to be
-+	 * preempted and rescheduled on another CPU. Rescheduled #HV
-+	 * handler on another cpu will cause interrupts to be handled
-+	 * on a different cpu than the injected one, causing
-+	 * invalid EOIs and missed/lost guest interrupts and
-+	 * corresponding hangs and/or per-cpu IRQs handled on
-+	 * non-intended cpu.
-+	 */
-+	if (user_mode(regs) &&
-+	    this_cpu_read(snp_runtime_data)->hv_handling_events)
-+		return;
-+
-+	/* follow normal interrupt return/exit path */
-+	irqentry_exit(regs, state);
-+}
--- 
-2.25.1
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
 
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
+
+You may send multiple commands in a single email message.
