@@ -2,137 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFAC66F2C35
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 04:58:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 533456F2C0F
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 04:57:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231803AbjEAC61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 22:58:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48538 "EHLO
+        id S232087AbjEAC5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 22:57:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232192AbjEAC6U (ORCPT
+        with ESMTP id S232086AbjEAC46 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 22:58:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2B8EE5C;
-        Sun, 30 Apr 2023 19:57:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E1D0D615CC;
-        Mon,  1 May 2023 02:57:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA1A9C4339B;
-        Mon,  1 May 2023 02:57:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682909864;
-        bh=3RQ3NpkUvKvMX1Q9TThOfZqbeNUdpgUUkq+Yf3PtgjM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Mu8J4lgATEE3YhooCJV9LmzpLj7kc/BbZngHRRxCrjcqG8HzboUGk2qjG4Ok4jtc5
-         6eZhOSoRn7IjzytWkVOtk3gV/0WklpW3H1wlq4R/ybFyZrX7Wro7qyMVXeXt0Oz9BY
-         gIaP2pDfJuQ7m7pZTGcfI5/UTy1a1PN2K9XMAkwk9KXqna4pAQ625ri28tQTBSLgYl
-         BUTtOPLq5cbDRihhc4vNATY33odA6b9j5h9sOZHyhlvH7rssLomH8veCINXm1fGtSp
-         Hdt8dQQethKvsNUg2N/E56FFiPL1xmAp780Jp3wGHDManoNNuM633zksdMEr9Hr/SG
-         X7PmODWMuDTgw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Kees Cook <keescook@chromium.org>,
-        Mirela Rabulea <mirela.rabulea@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 13/44] media: imx-jpeg: Bounds check sizeimage access
-Date:   Sun, 30 Apr 2023 22:56:01 -0400
-Message-Id: <20230501025632.3253067-13-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230501025632.3253067-1-sashal@kernel.org>
-References: <20230501025632.3253067-1-sashal@kernel.org>
+        Sun, 30 Apr 2023 22:56:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB3419D
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 19:56:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682909767;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=P71hh1hVX94ThG5yTOof07dnMP25hXjA33Fj1bRqY+8=;
+        b=MTdAEWV1pOEGwpMUvVFulKRazUa/bi4k9+6kiXB+lZbnaLVEYg/7SsHEUQUKXxz8rKx68v
+        2zEeA4ItZ84XzG9/yYrsqLrAfMJxDQ3kx2tuv1266gSfhR24EfAtezbI9zedqnCNSnc3Pf
+        GMXAD5errsZyA0JYMTJsD4att+rN0H8=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-202-A5AJ4H1zNJCReyvgn4rlOQ-1; Sun, 30 Apr 2023 22:56:05 -0400
+X-MC-Unique: A5AJ4H1zNJCReyvgn4rlOQ-1
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-3ef65714d24so27614331cf.1
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 19:56:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682909765; x=1685501765;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=P71hh1hVX94ThG5yTOof07dnMP25hXjA33Fj1bRqY+8=;
+        b=bPqdPDRM67IzeTXFyWauFKgZC5P0juq40XM4brZh4tvoJp0E8GqM9KSOkKNpFYto0O
+         0lwtWKC3hlFnPRRlArRkwYVQ84triBFVQsxSQSJoPWoPO4BC9GRF3WEIkCjA0fKH9d8u
+         IP4FnpTBY2CaA99lYy0LSY911yeVkZ6ywqJLpw3gp6AlYrDhQWge9FA2VYodVClnRmEN
+         bh2uOd7DpkLixvlUk7mbwen1RxJcHekckV2j+SySFulePa7kSMX+BvyNM98loiOlv1Bc
+         BUmflaXup6PjW6Fkbh2u6gz2776dkBlzDvwUDU0dEdyu83Z0YsKZGQqiqSI4nS2/zIwX
+         6t5A==
+X-Gm-Message-State: AC+VfDxUFn8GWHKSYRxpX3x81X9ZSCMB0JabajKIjPtavgxIhvJcvdnc
+        qw+nNEOn8E9ZvtFYHALiC3DRoFv7M5S4tELqwWR4+o34JWr63abl3h5RErLL91OICrF/2TxgAaK
+        PJ20Te7xEU+ipaZinWxK1bDhv
+X-Received: by 2002:ac8:5dd1:0:b0:3ef:54c9:9869 with SMTP id e17-20020ac85dd1000000b003ef54c99869mr20599171qtx.31.1682909765217;
+        Sun, 30 Apr 2023 19:56:05 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ62YgtU1mxsZmkSlSss9+q+sO2G3Y4kjPIDvU2+bP5ieOPhlyiMmbSysV2BD1rj091m1GXrjg==
+X-Received: by 2002:ac8:5dd1:0:b0:3ef:54c9:9869 with SMTP id e17-20020ac85dd1000000b003ef54c99869mr20599159qtx.31.1682909764947;
+        Sun, 30 Apr 2023 19:56:04 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id x8-20020ac86b48000000b003e39106bdb2sm9062696qts.31.2023.04.30.19.56.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 30 Apr 2023 19:56:04 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     gregkh@linuxfoundation.org, jirislaby@kernel.org
+Cc:     linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] tty: define hung_up_tty_compat_ioctl with CONFIG_COMPAT
+Date:   Sun, 30 Apr 2023 22:56:02 -0400
+Message-Id: <20230501025602.2905173-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
+gcc reports
+drivers/tty/tty_io.c:446:13: error: ‘hung_up_tty_compat_ioctl’
+  defined but not used [-Werror=unused-function]
+  446 | static long hung_up_tty_compat_ioctl(struct file *file,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
 
-[ Upstream commit 474acc639fc8671fa4c1919d9e03253c82b6d321 ]
+hung_up_tty_compat_ioctl is used conditionally with CONFIG_COMPAT,
+so it should be likewise defined.
 
-The call of mxc_jpeg_get_plane_size() from mxc_jpeg_dec_irq() sets
-plane_no argument to 1. The compiler sees that it's possible to end up
-with an access beyond the bounds of sizeimage, if mem_planes was too
-large:
-
-        if (plane_no >= fmt->mem_planes)        // mem_planes = 2+
-                return 0;
-
-        if (fmt->mem_planes == fmt->comp_planes) // comp_planes != mem_planes
-                return q_data->sizeimage[plane_no];
-
-        if (plane_no < fmt->mem_planes - 1)     // mem_planes = 2
-                return q_data->sizeimage[plane_no];
-
-comp_planes == 0 or 1 is safe. comp_planes > 2 would be out of bounds.
-
-(This isn't currently possible given the contents of mxc_formats, though.)
-
-Silence the warning by bounds checking comp_planes for future
-robustness. Seen with GCC 13:
-
-In function 'mxc_jpeg_get_plane_size',
-    inlined from 'mxc_jpeg_dec_irq' at ../drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c:729:14:
-../drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c:641:42: warning: array subscript 2 is above array bounds of 'u32[2]' {aka 'unsigned int[2]'} [-Warray-bounds=]
-  641 |                 size += q_data->sizeimage[i];
-      |                         ~~~~~~~~~~~~~~~~~^~~
-In file included from ../drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h:112,
-                 from ../drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c:63:
-../drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.h: In function 'mxc_jpeg_dec_irq':
-../drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.h:84:41: note: while referencing 'sizeimage'
-   84 |         u32                             sizeimage[MXC_JPEG_MAX_PLANES];
-      |                                         ^~~~~~~~~
-
-Cc: Mirela Rabulea <mirela.rabulea@nxp.com>
-Cc: NXP Linux Team <linux-imx@nxp.com>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: linux-arm-kernel@lists.infradead.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Tom Rix <trix@redhat.com>
 ---
- drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/tty/tty_io.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-index f085f14d676ad..c898116b763a2 100644
---- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-+++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-@@ -637,6 +637,11 @@ static u32 mxc_jpeg_get_plane_size(struct mxc_jpeg_q_data *q_data, u32 plane_no)
- 		return q_data->sizeimage[plane_no];
+diff --git a/drivers/tty/tty_io.c b/drivers/tty/tty_io.c
+index 553182753098..7fe404d56ce7 100644
+--- a/drivers/tty/tty_io.c
++++ b/drivers/tty/tty_io.c
+@@ -443,11 +443,13 @@ static long hung_up_tty_ioctl(struct file *file, unsigned int cmd,
+ 	return cmd == TIOCSPGRP ? -ENOTTY : -EIO;
+ }
  
- 	size = q_data->sizeimage[fmt->mem_planes - 1];
-+
-+	/* Should be impossible given mxc_formats. */
-+	if (WARN_ON_ONCE(fmt->comp_planes > ARRAY_SIZE(q_data->sizeimage)))
-+		return size;
-+
- 	for (i = fmt->mem_planes; i < fmt->comp_planes; i++)
- 		size += q_data->sizeimage[i];
++#ifdef CONFIG_COMPAT
+ static long hung_up_tty_compat_ioctl(struct file *file,
+ 				     unsigned int cmd, unsigned long arg)
+ {
+ 	return cmd == TIOCSPGRP ? -ENOTTY : -EIO;
+ }
++#endif
  
+ static int hung_up_tty_fasync(int fd, struct file *file, int on)
+ {
 -- 
-2.39.2
+2.27.0
 
