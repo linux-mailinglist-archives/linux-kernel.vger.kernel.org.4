@@ -2,153 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEF7E6F3627
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 20:47:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9ED46F35B3
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 20:13:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232740AbjEASqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 14:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58738 "EHLO
+        id S229960AbjEASNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 14:13:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232653AbjEASqN (ORCPT
+        with ESMTP id S229627AbjEASNf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 14:46:13 -0400
-Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEACF1FC6;
-        Mon,  1 May 2023 11:45:43 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 600378216B9;
-        Mon,  1 May 2023 18:45:32 +0000 (UTC)
-Received: from pdx1-sub0-mail-a228.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 9BB4C820A23;
-        Mon,  1 May 2023 18:45:31 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1682966731; a=rsa-sha256;
-        cv=none;
-        b=dnpvW2KJLbhkjnTS8+Uc33Ivl1JTEBaPf1cYPhijHW4Cb5L60BuXPw6v1PhyBHiLCR71cC
-        ABjaQHxP9BXyROI4SDb3MdfcJYKQPJpyQsFBd69Z/HZzYNYZGOIzp4FH/di5v8ECEoQyS5
-        WX0kZV2/IGg8omFGgrBT+ExkKbmpZYHbpvAZFJwwUoeM2/gZN0wkEzOhKPuavNIcpm2xT6
-        q2LVSEI9wLzGospqFSWqgS6yssbAVX354S773wzBUCOq6YGXw9jUyv2zxsgmIqJpOrqZFX
-        56Rxkl6vRNLsZzqSvwmIQCZ3GYUP+Tu679HWqCGG5KxyBgYohih59UO/Qknrfw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1682966731;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=cQvIokD2K+NzYNjjiFicwOdl/ld8t+K11AzJBztMv5w=;
-        b=EufxBkPss/2COJ8pfMlFHUNdUuvrBCUONkr3A6e1jg1yyFYd5xhJH4mLaxD7aU2h8nBR53
-        V+o4nbJFB/L9D0NOGHb3DBss2q5S+4hsMLotT3uptAe9HwdWKRbArgTHwnlR3eICkokIBA
-        cZJ099JOWM+YTyx0MuQ0DenQDeEalQRlp+L2x30I94J4SVbJ2DH76CcXrJ93feegrSswwa
-        H3OGZjO1+/W8QGQ8P4mxPtbLUtJJb3xKWvcUy2WSs3p+u7Z030lxGrPUgLDek5jseDxGgh
-        pmwbO9HuvFoYQuzfWfJIJYli8x2S58DEQTanlmIBdkXHQl8SR05YLm/CAGtRmQ==
-ARC-Authentication-Results: i=1;
-        rspamd-548d6c8f77-6r4d7;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Cooing-Obese: 2bace05f6be69ff6_1682966732181_4019548331
-X-MC-Loop-Signature: 1682966732181:3490870074
-X-MC-Ingress-Time: 1682966732181
-Received: from pdx1-sub0-mail-a228.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.125.42.177 (trex/6.7.2);
-        Mon, 01 May 2023 18:45:32 +0000
-Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a228.dreamhost.com (Postfix) with ESMTPSA id 4Q9Bwk670Cz2r;
-        Mon,  1 May 2023 11:45:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1682966731;
-        bh=cQvIokD2K+NzYNjjiFicwOdl/ld8t+K11AzJBztMv5w=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=M4zg8dWD7JrhTAPu66mAaTSowPpbRrHZy5vX69tq81nfwkxu5ABcZTvdEitOi/pao
-         /F7Zvy8qWg1uHLSHLIy71BfECCRDVEwVkTwGKV4enAwitbWyAX7zQqIxmgy5Ekd/3X
-         eBwxyFJiNCc7dhGh2bz9gA9ZTYm8wnwYJYcxvjmWmZlG9vFDjd6eLcRSIDYUNogSq+
-         oVjfYOIiAkLFcvJXiR+WaIO0m3OLgmSHgWG9uIJmSrQfiv/1IAVWlVBaPb3a4MC4bW
-         0zy1Hp6lJ5g/95zoBLuM69MBh/dir7fkKAaiZvBE5LBTcfUuT5xk1lKoWeUIQ/grrx
-         vT+3O4+ucwzGA==
-Date:   Mon, 1 May 2023 11:13:15 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
-        mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
-        roman.gushchin@linux.dev, mgorman@suse.de, willy@infradead.org,
-        liam.howlett@oracle.com, corbet@lwn.net, void@manifault.com,
-        peterz@infradead.org, juri.lelli@redhat.com, ldufour@linux.ibm.com,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, peterx@redhat.com, david@redhat.com,
-        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
-        nathan@kernel.org, dennis@kernel.org, tj@kernel.org,
-        muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
-        pasha.tatashin@soleen.com, yosryahmed@google.com,
-        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
-        andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, gregkh@linuxfoundation.org,
-        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org,
-        Andy Shevchenko <andy@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Noralf =?utf-8?B?VHLDr8K/wr1ubmVz?= <noralf@tronnes.org>
-Subject: Re: [PATCH 01/40] lib/string_helpers: Drop space in
- string_get_size's output
-Message-ID: <ouuidemyregstrijempvhv357ggp4tgnv6cijhasnungsovokm@jkgvyuyw2fti>
-Mail-Followup-To: Suren Baghdasaryan <surenb@google.com>, 
-        akpm@linux-foundation.org, kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz, 
-        hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, willy@infradead.org, 
-        liam.howlett@oracle.com, corbet@lwn.net, void@manifault.com, peterz@infradead.org, 
-        juri.lelli@redhat.com, ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org, 
-        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com, 
-        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com, david@redhat.com, 
-        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org, nathan@kernel.org, 
-        dennis@kernel.org, tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org, 
-        paulmck@kernel.org, pasha.tatashin@soleen.com, yosryahmed@google.com, 
-        yuzhao@google.com, dhowells@redhat.com, hughd@google.com, andreyknvl@gmail.com, 
-        keescook@chromium.org, ndesaulniers@google.com, gregkh@linuxfoundation.org, 
-        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org, 
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com, 
-        vschneid@redhat.com, cl@linux.com, penberg@kernel.org, iamjoonsoo.kim@lge.com, 
-        42.hyeyoo@gmail.com, glider@google.com, elver@google.com, dvyukov@google.com, 
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com, 
-        minchan@google.com, kaleshsingh@google.com, kernel-team@android.com, 
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, iommu@lists.linux.dev, 
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-        linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, cgroups@vger.kernel.org, 
-        Andy Shevchenko <andy@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>, 
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>, Paul Mackerras <paulus@samba.org>, 
-        "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
-        Noralf =?utf-8?B?VHLDr8K/wr1ubmVz?= <noralf@tronnes.org>
-References: <20230501165450.15352-1-surenb@google.com>
- <20230501165450.15352-2-surenb@google.com>
+        Mon, 1 May 2023 14:13:35 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175A41726;
+        Mon,  1 May 2023 11:13:34 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1a9253d4551so20537285ad.0;
+        Mon, 01 May 2023 11:13:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682964813; x=1685556813;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qEhROaQcZQLnbzTauj+cfNDcTtk+j2A/7J0LKCoVZ/4=;
+        b=RHxFA7YqoMfiCpreigp+ya/oCYmLTGVPM9pB2mM2E8Ydm7Aua3enGM8i+/DyCmDNxC
+         9g9cFkDWhSBDGCT/5hCIDoo9KoN6DVlWsNWR5Gv1Yvx7HwHUauyFK1RMr5xXTaFZuF2S
+         Z1Cyp9/2aHVOs/UFV/IiNd09RiqbQuB91Vp2Gl0W/e6q0Raxs4c0S2qRvE5Roj7siUu2
+         Ezic3jcx9xJD4hDxNDJThis0Z17WUAxA0jJ7KvU1d8jNPsalKhrxGaX62IxWylqf5xE+
+         QrxRtt+6XTPzMOFCMG3KtLeehdlC++Y31sR0zVMe676Qw6CtRjiECn6xF+BbJYXcyu9r
+         thrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682964813; x=1685556813;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qEhROaQcZQLnbzTauj+cfNDcTtk+j2A/7J0LKCoVZ/4=;
+        b=AWNgaxenUY/D0IG1n5ukSG1RuH08YG0JZOdSn8qH1h6D7mwc67jPgVS4+5Pv2aM4eV
+         DOdCA6v1crisyS7qt8CsvUk0AJa7PWqa3DlZOS23ndhIJmFN2fhieBzMej5Diupye6pb
+         lq+jBxN9ABHpsWMqN/dOTbDenIcuqTayj7zEAvAgn0JEDAX2cpKrGO2isuEmX5691UOW
+         uZIcxPdgdoi//Z4w+0Qbg09CoyXk7g65TaEXnHVDI5qdojlrolq9aZkGpcq8Ux5R261z
+         sdnglsmK/bMXohUErKdF4ygZV28sNNxZZdhUvLCm88BehOMDUHQgewsqEoo5x6RMbYQv
+         smLw==
+X-Gm-Message-State: AC+VfDxXC1REWWhYXMJnH7VZT7GTa2ZKRHN19u4iOwgbCYXyxZCSM5Pv
+        sEnxM7hfXm1zexDL+LlkORYokyVk/AA=
+X-Google-Smtp-Source: ACHHUZ5wIp76xl2tP0hTBbDGoPFOJBbuzJrVyCWD1JDP6rmO7Pfto8qsf0S2tL6pu8d+9WubviVRMw==
+X-Received: by 2002:a17:902:c94d:b0:1a6:6fe3:df9e with SMTP id i13-20020a170902c94d00b001a66fe3df9emr18756479pla.47.1682964813453;
+        Mon, 01 May 2023 11:13:33 -0700 (PDT)
+Received: from localhost ([2a00:79e1:abd:4a00:61b:48ed:72ab:435b])
+        by smtp.gmail.com with ESMTPSA id l9-20020a170902d34900b001a1c721f7f8sm18168322plk.267.2023.05.01.11.13.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 May 2023 11:13:33 -0700 (PDT)
+From:   Rob Clark <robdclark@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Rob Clark <robdclark@chromium.org>, pinkperfect2021@gmail.com,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v2] drm/msm: Fix submit error-path leaks
+Date:   Mon,  1 May 2023 11:13:27 -0700
+Message-Id: <20230501181327.1618596-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20230501165450.15352-2-surenb@google.com>
-User-Agent: NeoMutt/20230407
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -156,20 +75,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 01 May 2023, Suren Baghdasaryan wrote:
+From: Rob Clark <robdclark@chromium.org>
 
->From: Kent Overstreet <kent.overstreet@linux.dev>
->
->Previously, string_get_size() outputted a space between the number and
->the units, i.e.
->  9.88 MiB
->
->This changes it to
->  9.88MiB
->
->which allows it to be parsed correctly by the 'sort -h' command.
+For errors after msm_submitqueue_get(), we need to drop the submitqueue
+reference.  Additionally after get_unused_fd() we need to drop the fd.
+The ordering for dropping the queue lock and put_unused_fd() is not
+important, so just move this all into out_post_unlock.
 
-Wouldn't this break users that already parse it the current way?
+v2: Only drop queue ref if submit doesn't take it
 
-Thanks,
-Davidlohr
+Reported-by: pinkperfect2021@gmail.com
+Fixes: f0de40a131d9 drm/msm: ("Reorder lock vs submit alloc")
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+---
+ drivers/gpu/drm/msm/msm_gem_submit.c | 22 ++++++++++++++++------
+ 1 file changed, 16 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/gpu/drm/msm/msm_gem_submit.c b/drivers/gpu/drm/msm/msm_gem_submit.c
+index 6c6aefaa72be..77d73a81d10e 100644
+--- a/drivers/gpu/drm/msm/msm_gem_submit.c
++++ b/drivers/gpu/drm/msm/msm_gem_submit.c
+@@ -767,27 +767,29 @@ int msm_ioctl_gem_submit(struct drm_device *dev, void *data,
+ 	queue = msm_submitqueue_get(ctx, args->queueid);
+ 	if (!queue)
+ 		return -ENOENT;
+ 
+ 	ring = gpu->rb[queue->ring_nr];
+ 
+ 	if (args->flags & MSM_SUBMIT_FENCE_FD_OUT) {
+ 		out_fence_fd = get_unused_fd_flags(O_CLOEXEC);
+ 		if (out_fence_fd < 0) {
+ 			ret = out_fence_fd;
+-			return ret;
++			goto out_post_unlock;
+ 		}
+ 	}
+ 
+ 	submit = submit_create(dev, gpu, queue, args->nr_bos, args->nr_cmds);
+-	if (IS_ERR(submit))
+-		return PTR_ERR(submit);
++	if (IS_ERR(submit)) {
++		ret = PTR_ERR(submit);
++		goto out_post_unlock;
++	}
+ 
+ 	trace_msm_gpu_submit(pid_nr(submit->pid), ring->id, submit->ident,
+ 		args->nr_bos, args->nr_cmds);
+ 
+ 	ret = mutex_lock_interruptible(&queue->lock);
+ 	if (ret)
+ 		goto out_post_unlock;
+ 
+ 	if (args->flags & MSM_SUBMIT_SUDO)
+ 		submit->in_rb = true;
+@@ -962,25 +964,33 @@ int msm_ioctl_gem_submit(struct drm_device *dev, void *data,
+ 	msm_reset_syncobjs(syncobjs_to_reset, args->nr_in_syncobjs);
+ 	msm_process_post_deps(post_deps, args->nr_out_syncobjs,
+ 	                      submit->user_fence);
+ 
+ 
+ out:
+ 	submit_cleanup(submit, !!ret);
+ 	if (has_ww_ticket)
+ 		ww_acquire_fini(&submit->ticket);
+ out_unlock:
+-	if (ret && (out_fence_fd >= 0))
+-		put_unused_fd(out_fence_fd);
+ 	mutex_unlock(&queue->lock);
+ out_post_unlock:
+-	msm_gem_submit_put(submit);
++	if (ret && (out_fence_fd >= 0))
++		put_unused_fd(out_fence_fd);
++	if (submit) {
++		msm_gem_submit_put(submit);
++	} else {
++		/*
++		 * If the submit hasn't yet taken ownership of the queue
++		 * then we need to drop the reference ourself:
++		 */
++		msm_submitqueue_put(queue);
++	}
+ 	if (!IS_ERR_OR_NULL(post_deps)) {
+ 		for (i = 0; i < args->nr_out_syncobjs; ++i) {
+ 			kfree(post_deps[i].chain);
+ 			drm_syncobj_put(post_deps[i].syncobj);
+ 		}
+ 		kfree(post_deps);
+ 	}
+ 
+ 	if (!IS_ERR_OR_NULL(syncobjs_to_reset)) {
+ 		for (i = 0; i < args->nr_in_syncobjs; ++i) {
+-- 
+2.39.2
+
