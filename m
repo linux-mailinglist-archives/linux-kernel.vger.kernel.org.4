@@ -2,86 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F14786F2BCC
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 02:16:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2B216F2BD6
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 02:50:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232041AbjEAAQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 20:16:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33942 "EHLO
+        id S230361AbjEAAuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 20:50:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbjEAAQ1 (ORCPT
+        with ESMTP id S229519AbjEAAt7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 20:16:27 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B50E4E
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 17:16:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=bwVD7xPPmW0/T4pDo3syWV+u10HS4qWZOkLHQ50Qrms=; b=CSVo1/WtywdxUAaaP6gtA736bu
-        7yzvBIyzmc4s9fXFlk/bEyqKsDSk54DNEvhGHgyJoHKRh1y+cpwIH/NR6RQ9pHYsRN3psZ7FHs26u
-        CpCg08Il51etplABWTVrv0tRgwayrEamkHch/yQGPbd4y5XOCTLF9YlNLJFRzYx8wgl/8z9xME886
-        gPsfaCUjupucSl+wB/ytgVWK8at8p7BEU2DMZlbb2vhbQc+kmPlOngTrtYNcsd1nNQlOmwBu4JNdL
-        O5ftH0NzfqocHM7LKoveIRn/etLVUTvkugVGDYoUP1vOkurJ0kEPAWHohgccduraaoTkvZYrw4TGG
-        z1UpS97A==;
-Received: from [2601:1c2:980:9ec0::2764] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1ptHDH-00EwtV-0y;
-        Mon, 01 May 2023 00:16:21 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Mushahid Hussain <mushi.shar@gmail.com>,
-        William Hubbs <w.d.hubbs@gmail.com>,
-        Chris Brannon <chris@the-brannons.com>,
-        Kirk Reiser <kirk@reisers.ca>,
-        Samuel Thibault <samuel.thibault@ens-lyon.org>,
-        speakup@linux-speakup.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH] accessibility: use C99 array init
-Date:   Sun, 30 Apr 2023 17:16:17 -0700
-Message-Id: <20230501001617.9152-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.40.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sun, 30 Apr 2023 20:49:59 -0400
+Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26194E53;
+        Sun, 30 Apr 2023 17:49:56 -0700 (PDT)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id C1BC6C020; Mon,  1 May 2023 02:49:53 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1682902193; bh=hm15N7vJax2mIWusbMRVcnUBbMzuLPS5BPsJqPiU/l0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LQrfuPvo+JHtj/a2D7YjTJcIuWGY2hznh1E95isCOIFcruF/ujhq7m+BRkVADh4Zm
+         4A7bLtgj+vOXukiylg12o0cs4i6I4pgfxi9tJNjs7MFPXmo07DqF+cpRbTturmkb0K
+         wVTFfduRC5XYHwwQxWKsfqeDxcO67d5hYemg2KzsbPQ1RuQrk7udZ8lhkmVFUdcA8C
+         QuEHC3DiRAJ0MbgjbIJDiKCIkY6r6149q6QXOwSe3kP8ipG+FD+OArup59Pro43tJJ
+         9LsyJ/Ox8QRjovtm7Rs9SWnMp4WyNFhfA50uxjenloxH/kUn5XvEjVWl1lTfg2uacG
+         mNmYlCpVkbzCA==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 33F82C009;
+        Mon,  1 May 2023 02:49:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1682902192; bh=hm15N7vJax2mIWusbMRVcnUBbMzuLPS5BPsJqPiU/l0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nCMEMOrgncu0lf+YKNq3elkcOl+mEF6t41Ctn+b71TitRkXfS6hSr+exbszGBMGPd
+         rPVVgq+LvR/v85KTA7JekdRkKrR83em/pWmsvNYF0CnlnvBgs5gwW1tJqhSmXLGnjw
+         70ZNfyOgC9g+dELL4M3Hmd5JTnlm0sldrEzXkaEcjKwOzDlKkQKx5rcneOzFaQI57H
+         vtpDPY+fA3e4hOXhnMej21ht0dychC0O58slMdGPkuB+3vWmJm6fMflEwRTIYOKFTR
+         e0h0QcYtf3qyi7+61Lj5mZHTXbHCMhlfezuEGYeuq5Q9DKzE14sXExfg88AE5HFCGn
+         xJKaAwX++IUVg==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 34ab558c;
+        Mon, 1 May 2023 00:49:46 +0000 (UTC)
+Date:   Mon, 1 May 2023 09:49:31 +0900
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Stefan Roesch <shr@fb.com>, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org
+Subject: Re: [PATCH RFC 2/2] io_uring: add support for getdents
+Message-ID: <ZE8Mm-9PikpFSjLp@codewreck.org>
+References: <20230422-uring-getdents-v1-0-14c1db36e98c@codewreck.org>
+ <20230422-uring-getdents-v1-2-14c1db36e98c@codewreck.org>
+ <20230423224045.GS447837@dread.disaster.area>
+ <ZEXChAJfCRPv9vbs@codewreck.org>
+ <20230428050640.GA1969623@dread.disaster.area>
+ <ZEtkXJ1vMsFR3tkN@codewreck.org>
+ <ZEzQRLUnlix1GvbA@codewreck.org>
+ <20230430233241.GC2155823@dread.disaster.area>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230430233241.GC2155823@dread.disaster.area>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use C99 array initializer syntax for consistency with other array
-initializers around it and to eliminate a sparse warning:
+Dave Chinner wrote on Mon, May 01, 2023 at 09:32:41AM +1000:
+> > I've had a second look and I still don't see anything obvious though;
+> > I'd rather avoid adding a new variant of iterate()/iterate_shared() --
+> > we could use that as a chance to add a flag to struct file_operation
+> > instead? e.g., something like mmap_supported_flags:
+> 
+> I don't think that makes sense - the eventual goal is to make
+> ->iterate() go away entirely and all filesystems use
+> ->iterate_shared(). Hence I think adding flags to select iterate vs
+> iterate_shared and the locking that is needed is the wrong place to
+> start from here.
 
-drivers/accessibility/speakup/main.c:1290:26: sparse: warning: obsolete array initializer, use C99 syntax
+(The flag could just go away when all filesystems not supporting it are
+gone, and it could be made the other way around (e.g. explicit
+NOT_SHARED to encourage migrations), so I don't really see the problem
+with this but next point makes this moot anyway)
 
-Fixes: f43241aafedb ("accessibility: speakup: Specify spk_vars among module parameters")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Mushahid Hussain <mushi.shar@gmail.com>
-Cc: William Hubbs <w.d.hubbs@gmail.com>
-Cc: Chris Brannon <chris@the-brannons.com>
-Cc: Kirk Reiser <kirk@reisers.ca>
-Cc: Samuel Thibault <samuel.thibault@ens-lyon.org>
-Cc: speakup@linux-speakup.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/accessibility/speakup/main.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Whether the filesystem supports non-blocking ->iterate_shared() or
+> not is a filesystem implementation option and io_uring needs that
+> information to be held on the struct file for efficient
+> determination of whether it should use non-blocking operations or
+> not.
 
-diff -- a/drivers/accessibility/speakup/main.c b/drivers/accessibility/speakup/main.c
---- a/drivers/accessibility/speakup/main.c
-+++ b/drivers/accessibility/speakup/main.c
-@@ -1287,7 +1287,7 @@ static struct var_t spk_vars[NB_ID] = {
- 	[PUNC_LEVEL_ID] = { PUNC_LEVEL, .u.n = {NULL, 1, 0, 4, 0, 0, NULL} },
- 	[READING_PUNC_ID] = { READING_PUNC, .u.n = {NULL, 1, 0, 4, 0, 0, NULL} },
- 	[CURSOR_TIME_ID] = { CURSOR_TIME, .u.n = {NULL, 120, 50, 600, 0, 0, NULL} },
--	[SAY_CONTROL_ID] { SAY_CONTROL, TOGGLE_0},
-+	[SAY_CONTROL_ID] = { SAY_CONTROL, TOGGLE_0},
- 	[SAY_WORD_CTL_ID] = {SAY_WORD_CTL, TOGGLE_0},
- 	[NO_INTERRUPT_ID] = { NO_INTERRUPT, TOGGLE_0},
- 	[KEY_ECHO_ID] = { KEY_ECHO, .u.n = {NULL, 1, 0, 2, 0, 0, NULL} },
+Right, sorry. I was thinking that since it's fs/op dependant it made
+more sense to keep next to the iterate operation, but that'd be a
+layering violation to look directly at the file_operation vector
+directly from the uring code... So having it in the struct file is
+better from that point of view.
+
+> We already set per-filesystem file modes via the ->open method,
+> that's how we already tell io_uring that it can do NOWAIT IO, as
+> well as async read/write IO for regular files. And now we also use
+> it for FMODE_DIO_PARALLEL_WRITE, too.
+> 
+> See __io_file_supports_nowait()....
+> 
+> Essentially, io_uring already cwhas the mechanism available to it
+> to determine if it should use NOWAIT semantics for getdents
+> operations; we just need to set FMODE_NOWAIT correctly for directory
+> files via ->open() on the filesystems that support it...
+
+Great, I wasn't aware of FMODE_NOWAIT; things are starting to fall in
+place.
+I'll send a v2 around Wed or Thurs (yay national holidays)
+
+> [ Hmmmm - we probably need to be more careful in XFS about what
+> types of files we set those flags on.... ]
+
+Yes, FMODE_NOWAIT will be set on directories as xfs_dir_open calls
+xfs_file_open which sets it inconditionally... So I got to check other
+filesystems don't do something similar as a bonus, but it looks like
+none that set FMODE_NOWAIT on regular files share the file open path,
+so at least that shouldn't be too bad.
+Happy to also fold the xfs fix as a prerequisite patch of this series or
+to let you do it, just tell me.
+
+
+Thanks,
+-- 
+Dominique Martinet | Asmadeus
