@@ -2,285 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E63346F362A
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 20:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FAF86F362D
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 20:48:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231428AbjEASqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 14:46:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58586 "EHLO
+        id S232181AbjEASr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 14:47:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232684AbjEASpk (ORCPT
+        with ESMTP id S230391AbjEASrz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 14:45:40 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8822D5E;
-        Mon,  1 May 2023 11:45:28 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-63b5c830d5eso1970884b3a.2;
-        Mon, 01 May 2023 11:45:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682966728; x=1685558728;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ej3O8h3ZWoAQLcK8hFb5Wz4fSCAI1uIdFPtS/Ymi5AQ=;
-        b=JfC97d9J/pcL5yhiMnjDyNh4CwgNnz5usEsDqGGVxix+juBHtF7xvL/gwq/cTnbIq+
-         QL1g8DGEL7BO3qNCQTgUHgzjNol8Pm4CN5SZpCeCdzCU4bIP1upsUloPENQI95r+3M+q
-         vEw4GkunXAKMpq+iI781Qo5SNea6fmQgYx5lWlT1MSHXPw++AOPbxGiI1kylS31CmEPz
-         haJ0ZSx4Evqiphrz1VMJBtR4e1Inkb9UHPUnwCmxCyqITmudcW+APDDX59qQp0R3R7Ud
-         m+T75jT5Iy7xGr0lRffMTckGgdUb3b4Hn3Rh5R42SZkfW++4bM80lnob3bjEVumZtrCk
-         Kthw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682966728; x=1685558728;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ej3O8h3ZWoAQLcK8hFb5Wz4fSCAI1uIdFPtS/Ymi5AQ=;
-        b=cNdzEeHRp2iZWgt7u/J4oGdR6+BYKk5L3K/4bKkVUbZhf/Yp0RhXDUU3e9DwbLwXz2
-         /EZpUiJ4ZhisBK11JxtWm2Kd/3h2bIsRNCY0RRCpp3YDC7JZsHWMMicAGEtLCDhxRD/5
-         8N+gn75FcbosCMX1OBJ9T/caMTjgGc+ECl6iDUFPuLPqbScSfsj1WvHfd/fDHDYK+uj5
-         NfqJOk9F0GMqaoTweO4CcLjqaaFyGSFDrvTNQ+uumpGuKa/yxseH37u8V2eByEOBAYhJ
-         ZV0XfmdzD9Z+Y8iZi4/HJtY3lrlvKoDCyAIZcyiiQcLkbbMKgJnrR9gVHSohR5FMwV05
-         dgNw==
-X-Gm-Message-State: AC+VfDwawWPLgFbWm8KhGxAqWbWZtf/NtXvTNVQWcKIt/0e21yuaPJTF
-        /FX/SIT5PUcDqYmZQM7WyvQ=
-X-Google-Smtp-Source: ACHHUZ6xjC+IXT/sFRGOEvj/MjCi4WpmFr5TYXENVRy6LJGbRoVdL674AZUJCcS7wUsvtrDT8RZ94A==
-X-Received: by 2002:a17:902:d505:b0:1a9:9c5d:9fac with SMTP id b5-20020a170902d50500b001a99c5d9facmr18578911plg.33.1682966727756;
-        Mon, 01 May 2023 11:45:27 -0700 (PDT)
-Received: from localhost ([2a00:79e1:abd:4a00:61b:48ed:72ab:435b])
-        by smtp.gmail.com with ESMTPSA id c24-20020a170902d91800b001ab05828797sm416775plz.179.2023.05.01.11.45.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 May 2023 11:45:27 -0700 (PDT)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     freedreno@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Christopher Healy <healych@amazon.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org (open list:DRM DRIVER FOR MSM ADRENO GPU),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v3 9/9] drm/msm: Wire up comm/cmdline override for fdinfo
-Date:   Mon,  1 May 2023 11:44:55 -0700
-Message-Id: <20230501184502.1620335-10-robdclark@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230501184502.1620335-1-robdclark@gmail.com>
-References: <20230501184502.1620335-1-robdclark@gmail.com>
+        Mon, 1 May 2023 14:47:55 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2055.outbound.protection.outlook.com [40.107.93.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3673F2D4C;
+        Mon,  1 May 2023 11:47:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KRlMH1AG++Sohn7Mimwoqg5CN7xWzZ4XjyE1NqyQtXENgonkSp6TEp0/ru0AMnD1c1ssHbSRbvPXbKIQioYuOKq2H6rzCXk8fwJM4mJtlYIXvjf29wepq56CidRaeDPVuGvEW8SDx4sFOBmoKmJqnmATqpBbTr4tsKM56qmn4xzgCS0LVg19KWfS3y8HrbLtJLYR3l1yV+TDcCWX/O9cjlCbRCOPbHich6/OCPTNvdyrkdYZGZEKzhYEsZ2yrR3Xt8MxtW84xZL3uCgeHHRwFq6G9Pb8G+77lef6OPINfAm1xa0de7JustIXWwRo1KJPEiFK26WezA/M8xyRmKA+Zw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Scqa7tPOyQ4FSi1Vj5NW3tlk5z5GWV5iP/hg9VBlRyQ=;
+ b=eOs2myVzVsbWQkV0biPE43IZwDk4fWLEYZ+t9hHs1qWmG4wqi6L6FARreMIbpqIhHrmhTMZeO07M4yekXstww3S2BOlrBJjV8uyNCpdwcT8AgoAQJwibG1Ck7KC4x4+i5MAO5Ez74w7hncdw0yEcJZAss+uYx2iVrNWf8u2OkgD2DZKj0EPPvFjgm7SuBKL8vyGTjPCBYl1OkpvEpZwmzXD+hMmDYZ8h41zulj4Y8MPLXdIq+nq3Y/CV5dUF+HXHIm3B21M0q4/cVSo+fivSUh1L6WqONjtK6c62jM5wyQdvW1hU2mV9ysmilbyARxp+jwho6WAHSDInh4ILaeGCHw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Scqa7tPOyQ4FSi1Vj5NW3tlk5z5GWV5iP/hg9VBlRyQ=;
+ b=D3OoIgV9/U2tahVCbr8xpXxbG4kgaYOYGPHIlK/poBrGAIuOSgI9faX9dzA0+IgBd6aWK3LQWpSwXrn70LUkR7JEor/40Lm7AK/KZX66mHAF9Zs5uqjrGYm/+y9HbrCC/6u72NUvcioY7RLAjmf9zB1KvSfKwyy0KttkwVuq40s=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
+ by CO6PR12MB5411.namprd12.prod.outlook.com (2603:10b6:5:356::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.30; Mon, 1 May
+ 2023 18:47:11 +0000
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::ea32:baf8:cc85:9648]) by DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::ea32:baf8:cc85:9648%7]) with mapi id 15.20.6340.030; Mon, 1 May 2023
+ 18:47:11 +0000
+Message-ID: <348157d8-f3dc-6894-2bad-6d2a85cf879e@amd.com>
+Date:   Mon, 1 May 2023 13:47:08 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 04/10] crypto: ccp: move setting PSP master to earlier
+ in the init
+Content-Language: en-US
+To:     Mario Limonciello <mario.limonciello@amd.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        John Allen <john.allen@amd.com>
+Cc:     David S Miller <davem@davemloft.net>, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230428185543.8381-1-mario.limonciello@amd.com>
+ <20230428185543.8381-5-mario.limonciello@amd.com>
+From:   Tom Lendacky <thomas.lendacky@amd.com>
+In-Reply-To: <20230428185543.8381-5-mario.limonciello@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: DS7PR03CA0215.namprd03.prod.outlook.com
+ (2603:10b6:5:3ba::10) To DM4PR12MB5229.namprd12.prod.outlook.com
+ (2603:10b6:5:398::12)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5229:EE_|CO6PR12MB5411:EE_
+X-MS-Office365-Filtering-Correlation-Id: 92684161-38b9-442d-dbe5-08db4a747913
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: kNjsHu6gwllx/tVdsr8euuDLWt5G+hCK02qniYeksCLaaya1IBx6vqDfR4AttxP2LmVP5iD13tEieK+gWy7oknxZH2BO4tInftmdcA5qSV291/f54q7BeSt7dlGS4HfO4eLuIzRGlSgrYyo78/3cMKG3gm/L9l6+iIAMLYR17njcyO4nj7lqTMsdvcjWQnu8QyqicmLODFT6r2WzkAboJDydcB9hY8TLcsA9M8BxUS7IMlu6CtAbd7yaNLq01gQb0K1hjgxTJF+ReUVpi5RqOtK008CM/GmSN0SEa40euy/djbtfusSq1+1AqM+Swuaxm9iBFTIDPFSgqQb1TpKs/qlC0MOaQ5z2iwNxMr8tmGfDx5KI71IJvQ+5DcmaAP+2hTlixEGb2pnO8n1dBr9SQgjw/lLCj9cowJ3sWxUoNJnAAh6j2aRp7FZWT8lG3lbmcj7TwX2U2tvYwGaPmmwzJ8PldZZHe82iQlSYjBqzbrPbmZGnMlQadEJni5AEbI2AQHmNl8j5xwzEmfoHIlOZHQr1X9YbI9BYLTX1P91FlndiMxAqluBANb6cO5s+a4S8i83RUvOUcM3bLR77wFOHFQkMs0NTGz2JSJlUW5Gqf5CX6cMAOpFZ/+ao21hHmXYgm80fC/B5WdO6He+yYEl4Fg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(136003)(376002)(39860400002)(366004)(451199021)(53546011)(316002)(6512007)(6506007)(26005)(2616005)(41300700001)(83380400001)(110136005)(186003)(478600001)(66476007)(66946007)(66556008)(6636002)(6486002)(4326008)(6666004)(38100700002)(2906002)(36756003)(31696002)(86362001)(5660300002)(8936002)(8676002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bVhXMmJjb0FNUlF3b2RWbjE2bjFrY1JEYk4rbGlFYUp3NjNZNWVxNkpkMCt5?=
+ =?utf-8?B?RXRZRnh2eU0wOWNBZ0F4eVlIR0RIUncwT1U0Q1kwa0NvNlNMYkFjL2hBYWd2?=
+ =?utf-8?B?VEJManVlTC94V3hnUzVDcUN0eFZhYWd0azdpWkpMUnk4U3Y1KzM5eDd5MENo?=
+ =?utf-8?B?dlBnZi9hMXlJZWRYcGwwaVFUME5hd09KTUJzOG1mU053c1k1TDYvcEtrSlQ4?=
+ =?utf-8?B?M01tRS9UeTFmb3A4VjliaXRNZmhTSUZaWlBFYWdROHRJRGw3TktxMlFLNk43?=
+ =?utf-8?B?NXFnTGZ4NU9qTFVUZkJFZ3ltTnlZa2lRNG1Jb3NRUGpuazdIODZaVHFwenVi?=
+ =?utf-8?B?RmxzeHJnRGdvS2FNc3NmS3A1eFVINXQ5QnpOWDJldGlXRDJ2YTA4RUM4WWtD?=
+ =?utf-8?B?Z0UweEM3UHhoMjJBZjh1OStMdVdDSmRhMVR5by9Ja3BKTjAzN1BRb3d1UFZm?=
+ =?utf-8?B?R2FUVGhTWThwVUM2SmFsMXNDeEVQM08xVWJ5ZHNMSEVWbVVyWllSWHg0Z2lH?=
+ =?utf-8?B?TGFCR0YxcGg0TXgyNGJxbVVIZ0FxOWNlT0tSSWdYeEpmeURoS2g1ZmpYOExI?=
+ =?utf-8?B?VUtrRk1qMC9nTlR2TGgzSWhZVXJzVC9rVGp5bU9BeFhmejhYOUFxSGhBRHlo?=
+ =?utf-8?B?K0dITEJJUGtlRFJJbTlvWkZNOUVEM1dOY1VzMmp3WldEWHBLMDBuTXMvVGx5?=
+ =?utf-8?B?TUtNZWV0ZXZUWFo1K20rMmtaeUYwVURzZTRqalArdnZJRUQ0RjI4TE1hNTBJ?=
+ =?utf-8?B?amtwbGVTSGQxUzhEckFtajlnY3lWQjYvRkZpaW9EbjBjdWxmdTFncDQwNXNa?=
+ =?utf-8?B?aC9RcnVPSEh4Q3FsbDU0OE5BYVBBNlcrcmVDZHBmM0NxaTllbWlUWVV1TGJJ?=
+ =?utf-8?B?dG9JSmJZeWZZaU5iUmRuUE1uQmUwZVhmbkNzWjBmc2E2MXN2emhHU0t5UVN2?=
+ =?utf-8?B?dHBhckhDWmg2eHFQcG5uZTR0NVZ6WHk2M09mOCtZSjlQdXFlTURiL3BHOEN6?=
+ =?utf-8?B?UHA4MlVlaGwxaU5Ub3ZBQ2dndWtVZDdwK29NNWpVQ0dPK1BqNjZ0SjlBSVdi?=
+ =?utf-8?B?dGZXOVFPTkE2OU9VWFBnanVKY2tOMGxYWjNmYnZMMDhqNER3TUJUNEwrS1B5?=
+ =?utf-8?B?QXVNZlZWTUtnbDFubjRpR1BXNzFGL3RMMEN0UnJVQW1OSEltd2NTK0hROXF4?=
+ =?utf-8?B?cGFUcWxyQVRkekY2VmxSeVVJNGIrcDVUZTNtd3FUNjkramdYQnloMEZYMm8x?=
+ =?utf-8?B?ckNzK1lhdW9PaCtUQWRaT29SNGs4R0FuZnZsbStSZ0U0b0JYdmhUeDVDS3BG?=
+ =?utf-8?B?ZjZGcGo0TG5nQk51TGo4aU9rK1JxbWc1QXZUZ3l3NHpXeWphZHNJVThKTU9S?=
+ =?utf-8?B?amJSUzYzSTN3R0E3cDJoaGRoRlNZNHlxK3BUWk5EMDJZTFB1TlVtZ1Vpd3Jy?=
+ =?utf-8?B?RjhlVmE3ZEJQMzJUWXRwOFBwMFVJRkRmZXBFRHVjUXkyMEpETk84RDFlT1My?=
+ =?utf-8?B?S1FReE1wY0RBTXdlc0g3UzFTdDlhZmt4a3Z3QzVHeExoaVdzd3hJemN6dHNY?=
+ =?utf-8?B?UHVPMFZTcDJ2ZGlrRzdNN1h2LzI0amJaMHc4WXY3cFRyMUcxbUF0Rmorb2kr?=
+ =?utf-8?B?OVVBcmtnd212eEdHNWREL2xjdGhHdW92RldWajhyV1VMOTA5cTVRandpR240?=
+ =?utf-8?B?WE5PLysxRWJUclBGbVQvRkpJajJyaXN5RmdsZC9lSkI2V1FhVVpVN1hCU25s?=
+ =?utf-8?B?QU1zYU5UYlhmY1NLc05lL0R2MWtrdmNRRHFYZTJXVSswc2duV1JiV3pNZ2c0?=
+ =?utf-8?B?KytYY1JvZ3k1ODgyUkJnL3pibEh2STlOQzlIVWl1a0NQY0c4U3JhYU1seStn?=
+ =?utf-8?B?NnF2ZHF1L0JWQURrcVBJOXhKZnVxa3hYMXdUNWxnVG9kS1YycmlqNUZlSFVZ?=
+ =?utf-8?B?M0k1TTJGLzVPYStxZHEzOFYzdGcvVk9XR1h1cUVxQ2wySjhJZW9LVWVucktx?=
+ =?utf-8?B?ajV1NlpNdkVPS2tkV3ZnMFQzVTFWa3c4ak9zWXdnWEN0WlpTWi9mUit3ekxZ?=
+ =?utf-8?B?OWdsV1RWbHpRYnFHNE9jd1FGdnlFU3hUWnp5ZzJDMG1rOVV6eVY0YzdSd0Vl?=
+ =?utf-8?Q?CTHEIUv5B+UyBs7Ku1D7UpgOl?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 92684161-38b9-442d-dbe5-08db4a747913
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 May 2023 18:47:11.2768
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7AadhE6yTZzXqsQEWg4Tl9ncpgXP/7OB+w/oUQ7MoxzsQh/v1uui1h8Fhk8aW/NsSNpQXYmWbueqdcnH1Rd4XA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR12MB5411
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+On 4/28/23 13:55, Mario Limonciello wrote:
+> Dynamic boost control needs to use platform access symbols
+> that look for the PSP master as part of initialization.
+> 
+> So move the PSP master before psp_init() so that dynamic boost
+> control can be initialized properly.
+> 
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+>   drivers/crypto/ccp/psp-dev.c | 7 ++++---
+>   1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/crypto/ccp/psp-dev.c b/drivers/crypto/ccp/psp-dev.c
+> index e3d6955d3265..e9136e398174 100644
+> --- a/drivers/crypto/ccp/psp-dev.c
+> +++ b/drivers/crypto/ccp/psp-dev.c
+> @@ -173,13 +173,14 @@ int psp_dev_init(struct sp_device *sp)
+>   		goto e_err;
+>   	}
+>   
+> +	/* master device must be set for platform access */
+> +	if (psp->sp->set_psp_master_device)
+> +		psp->sp->set_psp_master_device(psp->sp);
+> +
+>   	ret = psp_init(psp);
+>   	if (ret)
+>   		goto e_irq;
 
-Also store the override strings in drm_file so that fdinfo can display
-them.  We still need to keep our original copy as we could need these
-override strings after the device file has been closed and drm_file
-freed.
+If psp_init() fails, should we check for and call clear_psp_master_device now?
 
-Signed-off-by: Rob Clark <robdclark@chromium.org>
----
- drivers/gpu/drm/msm/adreno/adreno_gpu.c | 24 +++++++++++++++++++++++-
- drivers/gpu/drm/msm/msm_drv.c           |  2 ++
- drivers/gpu/drm/msm/msm_gpu.h           | 10 ++++++++++
- 3 files changed, 35 insertions(+), 1 deletion(-)
+Thanks,
+Tom
 
-diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.c b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-index bb38e728864d..a20c2622a61f 100644
---- a/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-+++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-@@ -9,20 +9,21 @@
- #include <linux/ascii85.h>
- #include <linux/interconnect.h>
- #include <linux/firmware/qcom/qcom_scm.h>
- #include <linux/kernel.h>
- #include <linux/of_address.h>
- #include <linux/pm_opp.h>
- #include <linux/slab.h>
- #include <linux/soc/qcom/mdt_loader.h>
- #include <linux/nvmem-consumer.h>
- #include <soc/qcom/ocmem.h>
-+#include <drm/drm_file.h>
- #include "adreno_gpu.h"
- #include "a6xx_gpu.h"
- #include "msm_gem.h"
- #include "msm_mmu.h"
- 
- static u64 address_space_size = 0;
- MODULE_PARM_DESC(address_space_size, "Override for size of processes private GPU address space");
- module_param(address_space_size, ullong, 0600);
- 
- static bool zap_available = true;
-@@ -391,47 +392,68 @@ int adreno_set_param(struct msm_gpu *gpu, struct msm_file_private *ctx,
- 			return -EINVAL;
- 		break;
- 	default:
- 		if (len != 0)
- 			return -EINVAL;
- 	}
- 
- 	switch (param) {
- 	case MSM_PARAM_COMM:
- 	case MSM_PARAM_CMDLINE: {
--		char *str, **paramp;
-+		char *str, *str2, **paramp;
-+		struct drm_file *file = ctx->file;
- 
- 		str = kmalloc(len + 1, GFP_KERNEL);
- 		if (!str)
- 			return -ENOMEM;
- 
- 		if (copy_from_user(str, u64_to_user_ptr(value), len)) {
- 			kfree(str);
- 			return -EFAULT;
- 		}
- 
- 		/* Ensure string is null terminated: */
- 		str[len] = '\0';
- 
-+		/*
-+		 * We need a 2nd copy for drm_file.. this copy can't replace
-+		 * our internal copy in the ctx, because we may need it for
-+		 * recovery/devcoredump after the file is already closed.
-+		 */
-+		str2 = kstrdup(str, GFP_KERNEL);
-+
- 		mutex_lock(&gpu->lock);
- 
- 		if (param == MSM_PARAM_COMM) {
- 			paramp = &ctx->comm;
- 		} else {
- 			paramp = &ctx->cmdline;
- 		}
- 
- 		kfree(*paramp);
- 		*paramp = str;
- 
- 		mutex_unlock(&gpu->lock);
- 
-+		mutex_lock(&file->override_lock);
-+
-+		if (param == MSM_PARAM_COMM) {
-+			paramp = &file->override_comm;
-+		} else {
-+			paramp = &file->override_cmdline;
-+		}
-+
-+		kfree(*paramp);
-+		*paramp = str2;
-+
-+		mutex_unlock(&file->override_lock);
-+
- 		return 0;
- 	}
- 	case MSM_PARAM_SYSPROF:
- 		if (!capable(CAP_SYS_ADMIN))
- 			return -EPERM;
- 		return msm_file_private_set_sysprof(ctx, gpu, value);
- 	default:
- 		DBG("%s: invalid param: %u", gpu->name, param);
- 		return -EINVAL;
- 	}
-diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
-index 81a1371c0307..3a74b5653e96 100644
---- a/drivers/gpu/drm/msm/msm_drv.c
-+++ b/drivers/gpu/drm/msm/msm_drv.c
-@@ -574,20 +574,21 @@ static int context_init(struct drm_device *dev, struct drm_file *file)
- 	struct msm_file_private *ctx;
- 
- 	ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
- 	if (!ctx)
- 		return -ENOMEM;
- 
- 	INIT_LIST_HEAD(&ctx->submitqueues);
- 	rwlock_init(&ctx->queuelock);
- 
- 	kref_init(&ctx->ref);
-+	ctx->file = file;
- 	msm_submitqueue_init(dev, ctx);
- 
- 	ctx->aspace = msm_gpu_create_private_address_space(priv->gpu, current);
- 	file->driver_priv = ctx;
- 
- 	ctx->seqno = atomic_inc_return(&ident);
- 
- 	return 0;
- }
- 
-@@ -596,20 +597,21 @@ static int msm_open(struct drm_device *dev, struct drm_file *file)
- 	/* For now, load gpu on open.. to avoid the requirement of having
- 	 * firmware in the initrd.
- 	 */
- 	load_gpu(dev);
- 
- 	return context_init(dev, file);
- }
- 
- static void context_close(struct msm_file_private *ctx)
- {
-+	ctx->file = NULL;
- 	msm_submitqueue_close(ctx);
- 	msm_file_private_put(ctx);
- }
- 
- static void msm_postclose(struct drm_device *dev, struct drm_file *file)
- {
- 	struct msm_drm_private *priv = dev->dev_private;
- 	struct msm_file_private *ctx = file->driver_priv;
- 
- 	/*
-diff --git a/drivers/gpu/drm/msm/msm_gpu.h b/drivers/gpu/drm/msm/msm_gpu.h
-index 7a4fa1b8655b..671ce89e61b0 100644
---- a/drivers/gpu/drm/msm/msm_gpu.h
-+++ b/drivers/gpu/drm/msm/msm_gpu.h
-@@ -352,20 +352,30 @@ struct msm_gpu_perfcntr {
-  * @seqno:        unique per process seqno
-  */
- struct msm_file_private {
- 	rwlock_t queuelock;
- 	struct list_head submitqueues;
- 	int queueid;
- 	struct msm_gem_address_space *aspace;
- 	struct kref ref;
- 	int seqno;
- 
-+	/**
-+	 * @file: link back to the associated drm_file
-+	 *
-+	 * Note that msm_file_private can outlive the drm_file, ie.
-+	 * after the drm_file is closed but before jobs submitted have
-+	 * been cleaned up.  After the drm_file is closed this will be
-+	 * NULL.
-+	 */
-+	struct drm_file *file;
-+
- 	/**
- 	 * sysprof:
- 	 *
- 	 * The value of MSM_PARAM_SYSPROF set by userspace.  This is
- 	 * intended to be used by system profiling tools like Mesa's
- 	 * pps-producer (perfetto), and restricted to CAP_SYS_ADMIN.
- 	 *
- 	 * Setting a value of 1 will preserve performance counters across
- 	 * context switches.  Setting a value of 2 will in addition
- 	 * suppress suspend.  (Performance counters lose state across
--- 
-2.39.2
-
+>   
+> -	if (sp->set_psp_master_device)
+> -		sp->set_psp_master_device(sp);
+> -
+>   	/* Enable interrupt */
+>   	iowrite32(-1, psp->io_regs + psp->vdata->inten_reg);
+>   
