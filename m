@@ -2,174 +2,302 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 827326F3036
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 12:32:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B56456F303A
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 12:32:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232381AbjEAKcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 06:32:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56188 "EHLO
+        id S232391AbjEAKcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 06:32:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232355AbjEAKcP (ORCPT
+        with ESMTP id S232385AbjEAKck (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 06:32:15 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545D21A5;
-        Mon,  1 May 2023 03:32:13 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f20215fa70so13610475e9.0;
-        Mon, 01 May 2023 03:32:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682937132; x=1685529132;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=88ED5pu6NIUvWB1EVkjbAvR9D0f7HUy1+wauwnGtc9E=;
-        b=aVU9tEIGcAyxX/UVkTd/+LzlZUdCrOBKwiDmszTdXBCg4p6CkkLwC0Jd/BxwWD4gZ9
-         +6vXAbVxueP6wfGjk5cMh0tirC1tp99oQ9bA4PMgX3Be2o3dHF2L2l5kufxDeSYsQrq7
-         5nXnJ/TQ9S5ozS6sxkLWpQ8xCB0GGVgj5V6bopm3gPg+eU+ePy+aSgSTeoK9tS1nuwB6
-         gFjqzkylUYpgrvnFTweGDor/zGD9O8eB1LahWWeYZQkMWRUe0jsYzpgSDpNqtcB8SF0H
-         yOlIDd7D08MRnAm60Qsf7119KL6DaJjPavv7K5mjuewvCA3gJfkv2vyqumAtxGLUW8Et
-         MerQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682937132; x=1685529132;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=88ED5pu6NIUvWB1EVkjbAvR9D0f7HUy1+wauwnGtc9E=;
-        b=aAsep9pN+dRU1IOmMe3L+MlFhfLXZ3J9zz4YFd5Yzf/3C6M7p61VS/4y9ISu9hlYpS
-         rdFs3vW2FiefifCcvo+v+yRZ3acZkU6RyKeT7dLRoNA5p/Qcw6a0mbWBW9LPbeltq+Vj
-         hW/iWHcc5saAGErP1L0W3HuzmUMJCEYLXd2hmKMKetm7+jrPiiU4Y33OVMc1Uc3n37uR
-         Kig2bi9MQb/wN8ubaL9TCPhZfG4e6HvhXPGcZpuQtOCHAM0n4XoBIw2gKKVb5XfcaWcr
-         nQ1PIZvS6PzE9OMz+AaPbaHG5lYuPI963iUpNADKAtcpJnoTq1hKEVkSiJ2/1vMZJrKy
-         PItA==
-X-Gm-Message-State: AC+VfDxmurJz+PnGFf20ZSwS4IuWPC+SW9xg9/ETfFRv7//aQeZcp4RI
-        dzWVe4VhWszAX7/ZiBfsqalZyhJa2xQ=
-X-Google-Smtp-Source: ACHHUZ5eBpHEUMNHy1bFaWquPRPHSuoSuTTuIHLytm54M5fD7iNwBzK81xPAZK6V8c5M+F1XuavaGw==
-X-Received: by 2002:a1c:7502:0:b0:3ed:88f5:160a with SMTP id o2-20020a1c7502000000b003ed88f5160amr9572195wmc.11.1682937131442;
-        Mon, 01 May 2023 03:32:11 -0700 (PDT)
-Received: from ?IPV6:2a01:c23:b9bd:5800:60ec:422b:628c:6ca5? (dynamic-2a01-0c23-b9bd-5800-60ec-422b-628c-6ca5.c23.pool.telefonica.de. [2a01:c23:b9bd:5800:60ec:422b:628c:6ca5])
-        by smtp.googlemail.com with ESMTPSA id jb12-20020a05600c54ec00b003f17003e26esm35339174wmb.15.2023.05.01.03.32.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 May 2023 03:32:10 -0700 (PDT)
-Message-ID: <951be015-c18a-0aec-4c2c-df98803a2e84@gmail.com>
-Date:   Mon, 1 May 2023 12:32:08 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RFC PATCH net-next 5/8] net: phy: realtek: use phy_read_paged
- instead of open coding
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Chen Minqiang <ptpt52@gmail.com>,
-        Chukun Pan <amadeus@jmu.edu.cn>,
-        Yevhen Kolomeiko <jarvis2709@gmail.com>,
-        Alexander Couzens <lynxis@fe80.eu>
-References: <cover.1682163424.git.daniel@makrotopia.org>
- <85eb0791bd614ccfdeccdc6fe39be55e602c521c.1682163424.git.daniel@makrotopia.org>
- <d7eaf73b-282a-df7d-d9a5-530e431701a1@gmail.com>
- <ZEVyk71pBcQZ_NH_@makrotopia.org>
+        Mon, 1 May 2023 06:32:40 -0400
+Received: from HK2P15301CU002.outbound.protection.outlook.com (mail-eastasiaazon11020023.outbound.protection.outlook.com [52.101.128.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C60910DB;
+        Mon,  1 May 2023 03:32:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aFgvfnU9RBIO/uBzVLZ6NeHvtnaJgOkyrlOLPOy9S14lNwi+BrM/NIAlrfPSCXG5kfb3E/bfCvbzqPifcAXFXACsg1foK3VsTuEI18OmyzWTt0ODfT7riz+qgJRoPCca3HbDdjEOHtCk85IJmSMTWgyjYGt2TVmIpv7EZL8Hmjk9mv7Pz8JQJ9DjWY1stA+wBp5fPFKUXHA6OmtV6cYCtuzMc9RHSyP0fEG4WMpzp8Yabaua4I6+syhRI2Aww0TIF3llUZDetpiXjtFAiTVtbzeep2qSWS4I5wPo9TYFBrz4ez/xWv0gtPaZMCPmr7wSYGLBA/Vohx0qNDc56vcQsQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eI/qKiulEsF4wZsAt8Jk3bpYjtahhxJ68XiL45gRZzI=;
+ b=jHdXJiojpnxXCkKR5OCMcS0jMhumYMVIv/NBsEc4hLAbKJ+nPYSgNFqVR42DiWXPsSK4eQrEIbBzBhEUvs/A7klGytjaS0atqZc2MGcmNhu8Jk6wJkcEUv+KagUTOc6m7l15Iy5dLfFrg70YkDE4kdnGA4ZDucPAljGlaF5so+jg/VP0B6uLAmkzCoP8bd78X1TLo/oKuc3fRpdeNFiFfXwNeW9wR413esiBjN1ukQz48bgWIfcA240rBbs1qDVf5MQ3q2NCBtXMwrh688hOrhw2vFgAW6wkhe693EPhDpY3rPqJA7tDw0SfYM0Co0ExvOsKZjGLopRNNEBEsoiQ9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eI/qKiulEsF4wZsAt8Jk3bpYjtahhxJ68XiL45gRZzI=;
+ b=NiBUe/LHtWvCVtcdfA1NS1QULRgtNDCUwxd5SsmsaIPuf0VEqlMrQamZunyS6C1QD690ePR4JrSitsB2YdRum58hX/SjO30NHleSg1dZOhJrNgbU0+KafeGG2QdkMHEvRnFeFJ0RECZg16Ka+h+/rshXgSKhskKJDAFkQMDhULc=
+Received: from PUZP153MB0749.APCP153.PROD.OUTLOOK.COM (2603:1096:301:e6::8) by
+ SI2P153MB0672.APCP153.PROD.OUTLOOK.COM (2603:1096:4:1ff::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6387.5; Mon, 1 May 2023 10:32:26 +0000
+Received: from PUZP153MB0749.APCP153.PROD.OUTLOOK.COM
+ ([fe80::1cc2:aa38:1d02:9a11]) by PUZP153MB0749.APCP153.PROD.OUTLOOK.COM
+ ([fe80::1cc2:aa38:1d02:9a11%2]) with mapi id 15.20.6387.005; Mon, 1 May 2023
+ 10:32:26 +0000
+From:   Saurabh Singh Sengar <ssengar@microsoft.com>
+To:     Tianyu Lan <ltykernel@gmail.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "jgross@suse.com" <jgross@suse.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "kirill@shutemov.name" <kirill@shutemov.name>,
+        "jiangshan.ljs@antgroup.com" <jiangshan.ljs@antgroup.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "ashish.kalra@amd.com" <ashish.kalra@amd.com>,
+        "srutherford@google.com" <srutherford@google.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "anshuman.khandual@arm.com" <anshuman.khandual@arm.com>,
+        "pawan.kumar.gupta@linux.intel.com" 
+        <pawan.kumar.gupta@linux.intel.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "daniel.sneddon@linux.intel.com" <daniel.sneddon@linux.intel.com>,
+        "alexander.shishkin@linux.intel.com" 
+        <alexander.shishkin@linux.intel.com>,
+        "sandipan.das@amd.com" <sandipan.das@amd.com>,
+        "ray.huang@amd.com" <ray.huang@amd.com>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "michael.roth@amd.com" <michael.roth@amd.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "venu.busireddy@oracle.com" <venu.busireddy@oracle.com>,
+        "sterritt@google.com" <sterritt@google.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "samitolvanen@google.com" <samitolvanen@google.com>,
+        "fenghua.yu@intel.com" <fenghua.yu@intel.com>
+CC:     "pangupta@amd.com" <pangupta@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+Subject: RE: [EXTERNAL] [RFC PATCH V5 09/15] x86/hyperv: Add smp support for
+ sev-snp guest
+Thread-Topic: [EXTERNAL] [RFC PATCH V5 09/15] x86/hyperv: Add smp support for
+ sev-snp guest
+Thread-Index: AQHZfAsx7OPEtGqXGkOTjZ7IFQQyZK9FN+7A
+Date:   Mon, 1 May 2023 10:32:26 +0000
+Message-ID: <PUZP153MB07496A03FF7B1FDEEEBE0520BE6E9@PUZP153MB0749.APCP153.PROD.OUTLOOK.COM>
+References: <20230501085726.544209-1-ltykernel@gmail.com>
+ <20230501085726.544209-10-ltykernel@gmail.com>
+In-Reply-To: <20230501085726.544209-10-ltykernel@gmail.com>
+Accept-Language: en-IN, en-US
 Content-Language: en-US
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-In-Reply-To: <ZEVyk71pBcQZ_NH_@makrotopia.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=dc827253-69ca-42f6-a0ff-e1e4081a7d57;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-05-01T10:30:54Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PUZP153MB0749:EE_|SI2P153MB0672:EE_
+x-ms-office365-filtering-correlation-id: 79cfc65a-87a1-4d29-1ec4-08db4a2f5b70
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: rM+Y3LPMABvyWHB19OIgDWlzLI4oY/vLwnc9JVDf2VpfokhA7UWWfjJ59jOmw96MZCd+4IpuZ9XYVuMizRA53a4Tb1SWwx7QxXcCDapY9uY1Y7a32nfk/QAmQ3O832o6nCMttgL5+HTg35mLwDHKpoXJr79V7DDqGPdj4E11n2aVLnZ7WZ+LqRszgMi0ioG8YNFBqPg/pp2qBBc06omavgJ/Oc3DeS9gxSn+a/zpzovVtEg+DQoNvaLkWIEaNzUSyhltkvz5bSjNqnB+lQwaTc7u5OFE538Io38N9yReIwgBYn6e+n5xQxFAwJMVK5gTHOpXW8UHahztxa6AKBQeHeih2oku3HmHoBtDIK8zHB8tQYADF4PPaGjuafLD2Aj7cDHQ1j7nFWm3fhZEZArfrRrBB+LTMLDmRt24CtvhFn5b0xF51NVQNvNilPu24R5huBbGD9HWpgtcAmDBCCsNV/6EuODoAgwuMIlCiYQPKlBvkoud9Y8FL9exVvwVoKLcLfp2UWNQway+29rgGiJ20mNCS0lugs5ESUCHLFGiVtAZlfxnMzxscRvO/CVQkGGLHSBshz4QYFauqA9uGgOWVNEvxnhIqsXrlI7gjx+fHIhPehVNv53fpXeD4SG0Yb+GkH9VGqbq8qGQP9AssnzanqTAimTUF+1MYZvKpdV/9kf4gJKV2lQP0LFuyZEysveY
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZP153MB0749.APCP153.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(376002)(366004)(39860400002)(396003)(451199021)(86362001)(33656002)(38100700002)(82960400001)(38070700005)(122000001)(82950400001)(921005)(7406005)(8676002)(52536014)(7416002)(5660300002)(66946007)(66476007)(66556008)(786003)(76116006)(4326008)(8936002)(66446008)(316002)(41300700001)(64756008)(55016003)(8990500004)(2906002)(83380400001)(71200400001)(110136005)(7696005)(54906003)(10290500003)(478600001)(6506007)(186003)(53546011)(9686003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?PbViEGN14CRFSqRAkiaENdBzToodDC2T5W1CSvVWASd98WExRr2+8ByI5C3b?=
+ =?us-ascii?Q?lsoJV6y2D/zFDbIvKTX42IhggVg1chum5RSmNFvVB0xJ6F+6WK6/5DJ0Wjzc?=
+ =?us-ascii?Q?q+AMxcQ/YATb1WPzzKPTbRkyOlTyvYi3HA2ELICOF0qybdsKPxJGcUpMIe38?=
+ =?us-ascii?Q?uaINRDb/ioINqjd/NE2b4RZKIbl+8kaGfKjURLoVS2sZLN5pCRol3EObBwbi?=
+ =?us-ascii?Q?xXS5fQl2A5cCoHsDdRndlaucK8VP9tjYPRiTL36C4JPP0S8bmim1eRmBQX2P?=
+ =?us-ascii?Q?3iOgTl5rXxKA+2/2tp3ULEozUFncUBf+g6GX7xLBpcEew8oUNHM9krJ8FW4Z?=
+ =?us-ascii?Q?W9Gsp9zHJmQu0jMbbZhfAswo8BqSng+l281xlmOsKj80ZkHije9GvqsluPkP?=
+ =?us-ascii?Q?KRROfCBAuhE/zGfl5XJFk3mfBzvKbDBSXxa0wkIWKcr4rulSCJTIywnG8KgX?=
+ =?us-ascii?Q?YPVhtXEjv97EFIQVMZiH3hRGpBtZfG2dHlEY5/6DLHFuyBSKV2O5QdCDRAHl?=
+ =?us-ascii?Q?gOe6LvEFsqbdnF49TKh1taHIt9ivRf2NiTQVRuOPzr/tNhMLh1NkQMBY6VlO?=
+ =?us-ascii?Q?1grydfVY3WRKnFo3itxqQyM8yeOACPHwNeg6gnOzq9vEiChTNR6+p6XnsT0O?=
+ =?us-ascii?Q?5UDaDziUExPwsrrRmlbJ69IK1sjJw07Nb18jYylakibYMMVjApazF1tfjdwz?=
+ =?us-ascii?Q?QhHVtOd3qhoYntRy0cnifmHnFOm1Zs6ZyZjxPhsge6p4yizL+r1od1dWJ60y?=
+ =?us-ascii?Q?WSe29Tx8f2e5r0QH4WUc1JkGSRUPs8jILmTBEnKqr01MMhs+2aehsn4pEeVg?=
+ =?us-ascii?Q?L62IZavXjt/V4TtqwO1CezNG2A/lVrWzJFL5vE57F1WCiRXinE7AmOApAsya?=
+ =?us-ascii?Q?3tc7xyNdiAfQOjMS0bZAwDrT8wyBTsUhzwHeKu9QzKZC1BguGFTjWHsON7qL?=
+ =?us-ascii?Q?OqmaEkE/Gm3utdKuM0QyPXp0MmLrjcPyqOfZCv3MW8gya1upJDPB6RZEazxe?=
+ =?us-ascii?Q?rGvTTh4tgH6eMEwIJ/tV+c/zCxXyGeIhkEXMHadlierirKZxKPCUJKNu3Q43?=
+ =?us-ascii?Q?lNXIAGiSuMMgHu9U9eZ3igjyRnD7SX0lXNmy6AgOjbuslXQdZY2W0E11uSJr?=
+ =?us-ascii?Q?3e3F3dQ7TNwGG1Cvah/u5ZxlOM2syETZ3biVqaaYJXh+f3JezS6MjhNgoJ/C?=
+ =?us-ascii?Q?QuRDBmoFJTkgCubP3PTd2nARg3ogroooYGruJ4QD59jV1AVeoTFFT2ejP0yW?=
+ =?us-ascii?Q?RhegX8ecGz6tCuaBANxB4qck5SDYbhvKW6As76YImFbRG46omh1FODbR7x9R?=
+ =?us-ascii?Q?rXJGI2g3Ac5OeYjABW15k2VpXn1dgdzTilCikMEK7HAJ9gI+R+ZGr0PJAUnb?=
+ =?us-ascii?Q?pzn9/2VTevoVuDO8dR/SCIkjqQiLUZxN6k5Vi30i14tOVq3ZpSEt1DEiRE/k?=
+ =?us-ascii?Q?NdHhDOHLYZU1Vj9EKoshhFWzi0Bxs1hE90EiPzDM2SBRmXL81zHBgKQaqT3x?=
+ =?us-ascii?Q?ENZO+Y3M3zGt7CsbxrvEOZc4SsbR1ZwnQlNUeVc1VZ5qAvJedApj5wZkcULT?=
+ =?us-ascii?Q?TLJpKJAwRWxie49Nu5iu3Nd6NqgzfUz6ql9ERbxY?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PUZP153MB0749.APCP153.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 79cfc65a-87a1-4d29-1ec4-08db4a2f5b70
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 May 2023 10:32:26.0704
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: B5Yb/4QHGAvuvIOfjDvzaW4wdZoIszAAS++nIwg7uc2fEHQg1+qTBdXiznl7grkjXMZ9KpW1GhiLpayhgOOgkA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2P153MB0672
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23.04.2023 20:01, Daniel Golle wrote:
-> On Sat, Apr 22, 2023 at 05:11:57PM +0200, Heiner Kallweit wrote:
->> On 22.04.2023 13:48, Daniel Golle wrote:
->>> Instead of open coding a paged read, use the phy_read_paged function
->>> in rtlgen_supports_2_5gbps.
->>>
->>> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
->>> ---
->>>  drivers/net/phy/realtek.c | 4 +---
->>>  1 file changed, 1 insertion(+), 3 deletions(-)
->>>
->>> diff --git a/drivers/net/phy/realtek.c b/drivers/net/phy/realtek.c
->>> index f97b5e49fae58..62fb965b6d338 100644
->>> --- a/drivers/net/phy/realtek.c
->>> +++ b/drivers/net/phy/realtek.c
->>> @@ -735,9 +735,7 @@ static bool rtlgen_supports_2_5gbps(struct phy_device *phydev)
->>>  {
->>>  	int val;
->>>  
->>> -	phy_write(phydev, RTL821x_PAGE_SELECT, 0xa61);
->>> -	val = phy_read(phydev, 0x13);
->>> -	phy_write(phydev, RTL821x_PAGE_SELECT, 0);
->>> +	val = phy_read_paged(phydev, 0xa61, 0x13);
->>>  
->>>  	return val >= 0 && val & RTL_SUPPORTS_2500FULL;
->>>  }
->>
->> I remember I had a reason to open-code it, it took me some minutes
->> to recall it.
->> phy_read_paged() calls __phy_read_page() that relies on phydev->drv
->> being set. phydev->drv is set in phy_probe(). And probing is done
->> after matching. __phy_read_paged() should have given you a warning.
->> Did you test this patch? If yes and you didn't get the warning,
->> then apparently I miss something.
->>
-> 
-> Yes, you are right, this change was a bit too naive and causes a
-> NULL pointer dereference e.g. for the r8169 driver which also uses
-> the RealTek Ethernet PHY driver.
-> My main concern and original motivation was the lack of mutex protection
-> for the paged read operation. I suggest to rather make this change
-> instead:
-> 
->>From 4dd2cc9b91ecb25f278a2c55e07e6455e9000e6b Mon Sep 17 00:00:00 2001
-> From: Daniel Golle <daniel@makrotopia.org>
-> Date: Sun, 23 Apr 2023 18:47:45 +0100
-> Subject: [PATCH] net: phy: realtek: make sure paged read is protected by mutex
-> 
-> As we cannot rely on phy_read_paged function before the PHY is
-> identified, the paged read in rtlgen_supports_2_5gbps needs to be open
-> coded as it is being called by the match_phy_device function, ie. before
-> .read_page and .write_page have been populated.
-> 
-> Make sure it is also protected by the MDIO bus mutex and use
-> rtl821x_write_page instead of 3 individually locked MDIO bus operations.
-> 
-> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+
+
+> -----Original Message-----
+> From: Tianyu Lan <ltykernel@gmail.com>
+> Sent: Monday, May 1, 2023 2:27 PM
+> To: luto@kernel.org; tglx@linutronix.de; mingo@redhat.com; bp@alien8.de;
+> dave.hansen@linux.intel.com; x86@kernel.org; hpa@zytor.com;
+> seanjc@google.com; pbonzini@redhat.com; jgross@suse.com; Tianyu Lan
+> <Tianyu.Lan@microsoft.com>; kirill@shutemov.name;
+> jiangshan.ljs@antgroup.com; peterz@infradead.org; ashish.kalra@amd.com;
+> srutherford@google.com; akpm@linux-foundation.org;
+> anshuman.khandual@arm.com; pawan.kumar.gupta@linux.intel.com;
+> adrian.hunter@intel.com; daniel.sneddon@linux.intel.com;
+> alexander.shishkin@linux.intel.com; sandipan.das@amd.com;
+> ray.huang@amd.com; brijesh.singh@amd.com; michael.roth@amd.com;
+> thomas.lendacky@amd.com; venu.busireddy@oracle.com;
+> sterritt@google.com; tony.luck@intel.com; samitolvanen@google.com;
+> fenghua.yu@intel.com
+> Cc: pangupta@amd.com; linux-kernel@vger.kernel.org; kvm@vger.kernel.org;
+> linux-hyperv@vger.kernel.org; linux-arch@vger.kernel.org
+> Subject: [EXTERNAL] [RFC PATCH V5 09/15] x86/hyperv: Add smp support for
+> sev-snp guest
+>=20
+> From: Tianyu Lan <tiala@microsoft.com>
+>=20
+> The wakeup_secondary_cpu callback was populated with wakeup_
+> cpu_via_vmgexit() which doesn't work for Hyper-V and Hyper-V requires to
+> call Hyper-V specific hvcall to start APs. So override it with Hyper-V sp=
+ecific
+> hook to start AP sev_es_save_area data structure.
+>=20
+> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
 > ---
->  drivers/net/phy/realtek.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/net/phy/realtek.c b/drivers/net/phy/realtek.c
-> index f97b5e49fae5..c27ec4e99fc2 100644
-> --- a/drivers/net/phy/realtek.c
-> +++ b/drivers/net/phy/realtek.c
-> @@ -735,9 +735,11 @@ static bool rtlgen_supports_2_5gbps(struct phy_device *phydev)
->  {
->  	int val;
->  
-> -	phy_write(phydev, RTL821x_PAGE_SELECT, 0xa61);
-> -	val = phy_read(phydev, 0x13);
-> -	phy_write(phydev, RTL821x_PAGE_SELECT, 0);
-> +	mutex_lock(&phydev->mdio.bus->mdio_lock);
-
-We have helpers phy_(un)lock_mdio_bus() for this.
-Apart from that: LGTM
-
-> +	rtl821x_write_page(phydev, 0xa61);
-> +	val = __phy_read(phydev, 0x13);
-> +	rtl821x_write_page(phydev, 0);
-> +	mutex_unlock(&phydev->mdio.bus->mdio_lock);
->  
->  	return val >= 0 && val & RTL_SUPPORTS_2500FULL;
+> Change sicne RFC v3:
+>        * Replace struct sev_es_save_area with struct
+>          vmcb_save_area
+>        * Move code from mshyperv.c to ivm.c
+>=20
+> Change since RFC v2:
+>        * Add helper function to initialize segment
+>        * Fix some coding style
+> ---
+>  arch/x86/hyperv/ivm.c             | 89 +++++++++++++++++++++++++++++++
+>  arch/x86/include/asm/mshyperv.h   | 18 +++++++
+>  arch/x86/include/asm/sev.h        | 13 +++++
+>  arch/x86/include/asm/svm.h        | 15 +++++-
+>  arch/x86/kernel/cpu/mshyperv.c    | 13 ++++-
+>  arch/x86/kernel/sev.c             |  4 +-
+>  include/asm-generic/hyperv-tlfs.h | 19 +++++++
+>  7 files changed, 166 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/arch/x86/hyperv/ivm.c b/arch/x86/hyperv/ivm.c index
+> 522eab55c0dd..0ef46f1874e6 100644
+> --- a/arch/x86/hyperv/ivm.c
+> +++ b/arch/x86/hyperv/ivm.c
+> @@ -22,11 +22,15 @@
+>  #include <asm/sev.h>
+>  #include <asm/realmode.h>
+>  #include <asm/e820/api.h>
+> +#include <asm/desc.h>
+>=20
+>  #ifdef CONFIG_AMD_MEM_ENCRYPT
+>=20
+>  #define GHCB_USAGE_HYPERV_CALL	1
+>=20
+> +static u8 ap_start_input_arg[PAGE_SIZE] __bss_decrypted
+> +__aligned(PAGE_SIZE); static u8 ap_start_stack[PAGE_SIZE]
+> +__aligned(PAGE_SIZE);
+> +
+>  union hv_ghcb {
+>  	struct ghcb ghcb;
+>  	struct {
+> @@ -442,6 +446,91 @@ __init void hv_sev_init_mem_and_cpu(void)
+>  	}
 >  }
+>=20
+> +#define hv_populate_vmcb_seg(seg, gdtr_base)			\
+> +do {								\
+> +	if (seg.selector) {					\
+> +		seg.base =3D 0;					\
+> +		seg.limit =3D HV_AP_SEGMENT_LIMIT;		\
+> +		seg.attrib =3D *(u16 *)(gdtr_base + seg.selector + 5);	\
+
+<snip>
+
+> generic/hyperv-tlfs.h b/include/asm-generic/hyperv-tlfs.h
+> index f4e4cc4f965f..959b075591b2 100644
+> --- a/include/asm-generic/hyperv-tlfs.h
+> +++ b/include/asm-generic/hyperv-tlfs.h
+> @@ -149,6 +149,7 @@ union hv_reference_tsc_msr {
+>  #define HVCALL_ENABLE_VP_VTL			0x000f
+>  #define HVCALL_NOTIFY_LONG_SPIN_WAIT		0x0008
+>  #define HVCALL_SEND_IPI				0x000b
+> +#define HVCALL_ENABLE_VP_VTL			0x000f
+
+HVCALL_ENABLE_VP_VTL is already defined.
+
+>  #define HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX	0x0013
+>  #define HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST_EX	0x0014
+>  #define HVCALL_SEND_IPI_EX			0x0015
+> @@ -168,6 +169,7 @@ union hv_reference_tsc_msr {
+>  #define HVCALL_RETARGET_INTERRUPT		0x007e
+>  #define HVCALL_START_VP				0x0099
+>  #define HVCALL_GET_VP_ID_FROM_APIC_ID		0x009a
+> +#define HVCALL_START_VIRTUAL_PROCESSOR		0x0099
+
+We already have HVCALL_START_VP no need of defining HVCALL_START_VIRTUAL_PR=
+OCESSOR.
+- Saurabh
+
+>  #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_SPACE 0x00af  #define
+> HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_LIST 0x00b0  #define
+> HVCALL_MODIFY_SPARSE_GPA_PAGE_HOST_VISIBILITY 0x00db @@ -223,6
+> +225,7 @@ enum HV_GENERIC_SET_FORMAT {
+>  #define HV_STATUS_INVALID_PORT_ID		17
+>  #define HV_STATUS_INVALID_CONNECTION_ID		18
+>  #define HV_STATUS_INSUFFICIENT_BUFFERS		19
+> +#define HV_STATUS_TIME_OUT                      120
+>  #define HV_STATUS_VTL_ALREADY_ENABLED		134
+>=20
+>  /*
+> @@ -783,6 +786,22 @@ struct hv_input_unmap_device_interrupt {
+>  	struct hv_interrupt_entry interrupt_entry;  } __packed;
+>=20
+> +struct hv_enable_vp_vtl_input {
+> +	u64 partitionid;
+> +	u32 vpindex;
+> +	u8 targetvtl;
+> +	u8 padding[3];
+> +	u8 context[0xe0];
+> +} __packed;
+> +
+> +struct hv_start_virtual_processor_input {
+> +	u64 partitionid;
+> +	u32 vpindex;
+> +	u8 targetvtl;
+> +	u8 padding[3];
+> +	u8 context[0xe0];
+> +} __packed;
+> +
+>  #define HV_SOURCE_SHADOW_NONE               0x0
+>  #define HV_SOURCE_SHADOW_BRIDGE_BUS_RANGE   0x1
+>=20
+> --
+> 2.25.1
 
