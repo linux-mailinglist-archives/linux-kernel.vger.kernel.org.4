@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42F0F6F3414
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 18:57:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3B456F341C
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 18:57:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232896AbjEAQ5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 12:57:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59596 "EHLO
+        id S232926AbjEAQ5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 12:57:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232771AbjEAQ4P (ORCPT
+        with ESMTP id S232779AbjEAQ43 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 12:56:15 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C96210A
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 09:55:29 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id d9443c01a7336-1ab07423559so331495ad.3
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 09:55:29 -0700 (PDT)
+        Mon, 1 May 2023 12:56:29 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 322E110CC
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 09:55:33 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-b9a7df507c5so5360397276.1
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 09:55:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682960129; x=1685552129;
+        d=google.com; s=20221208; t=1682960131; x=1685552131;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DK6/s7foZNj5EExVH4gZckioJVPcIxI52cq1C7FfTD8=;
-        b=j+Kr4wFQ8hb6ghgASWLoQmwshyZipq1bE+D/CA603zsc4kB1n7R3CTQw1X9N4pK0pE
-         0zmuTlr7BciP0EtB463YkQ7YcnZO9MQaA53eLGwRosKH+IiuL9AF+xukRwd1DIpRoQoE
-         CuOOiRq7K1VtqSyYvIO65JDUgFMtQPFNC1XFk5UKDZu8zG86BBXEpcIuAsalgfYjpqSk
-         4H7kaQB7eIw3KHROJbChdasmtpmhAOtDolQRdOsPV+jVQQISfSODNw3+xILO7OLY0pMp
-         pmy+NWFCOxFQwMauo6Mv0q9Qa8hd2IlOPM48vsABoana6/QPtONXZz6Lhi9KWaOg0TwZ
-         kOfw==
+        bh=gDL+lQo0P3G6fblFMKJonaRbqsrkB9ljveMgEFO8c80=;
+        b=MVmPTJvnt/d4OHnObDpLo5Yx/m0JxigNMHefGJUQ6YHCHiKWwXI+TPB1lVnlbOYOEt
+         5jgACI5oKYMCB7Pq7cz3X81+bpZcuEUKDUynk+/ZyYCZwjUk5TCfCarGFU4MMvcurlND
+         oln4td3qiCopzaVDD/Q4rMLFlXyQJx4wDKAU0Wzgmky/qZcwJ14zhRRSwMOBlU9Kez/h
+         x9gFamkwY5h9zdy2v/nUepQsOsBIbNt92VQg8iIvlxGC803m7Adm/vEjtGzf8sBaILXc
+         DjUHk8NLlqyBasCJKVPDW64fh5SwGVhMkreauSlsOSNHTVu6NR6T/SSX4RnGRR6l1W62
+         EEqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682960129; x=1685552129;
+        d=1e100.net; s=20221208; t=1682960131; x=1685552131;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DK6/s7foZNj5EExVH4gZckioJVPcIxI52cq1C7FfTD8=;
-        b=cwDXgbG9c2Jkt6/FA3ZScCoR84uRR2Pz+vWByZueyZuJNwHjIZIItkL+rsnLMgzwCX
-         QQWQrdA30IjSYDfuavUrxaJ3Y5Y3Mw9iQEYCOGhdDHwA/eG+uRiqdthsWlg/6W3zcQD8
-         GT8n+oOO/WRsgJ8tyMFprDlhwJEyiEeqqr/MvtZSXjB4NDLdLxrvrYUEU59J61atkIqV
-         b+/A8E7E3LMrCC85EPrWz/UiqpE3MydzOSS8p/GJ+ZDiykBFK3paqyX6gbOAp3SmWUR8
-         RK8FZU3T9WALhaSNuYXzGOnABzTAmL+Jy4HujgNfDbact+GKbWSNYGV8Y2PtkrNTukQF
-         zgPw==
-X-Gm-Message-State: AC+VfDzGTlr/t8xoTa872Jyezad03wTXikmwLmm3ZuvulASBUcFhtRua
-        CfGeDqYi/6eeO6AA8DE1jCJlFuIh7rg=
-X-Google-Smtp-Source: ACHHUZ501oAX8t/t8FRpUPo9PQ1t5ZgNv7pUhAgWb4tueLlYCBA4gtRhgJc8gsKy6W9D1EibQZVYd1jDC2Q=
+        bh=gDL+lQo0P3G6fblFMKJonaRbqsrkB9ljveMgEFO8c80=;
+        b=RyE964qj88Uo2UDdHzuxCOBz1Kp+JdlvNFIDzfr7wyuMm3A98fpPGO9gC9xM46C7ff
+         6nIuOvjZWK//pf5NS33DGr9fv/3D6mZ7GLOarq3v4ZsBaV79LgC5JjBfUYzV2x2s2qPe
+         /4fx2XPpV/Ae1gEhwUWdQcPVfQmOnl/XyFdgraIpFlqfViDClewnJlMQYZMRUQMTAIaP
+         dDl5Xh25dA5nEnstTbmaKXZiGW4RjCzH+ihCy1TPEVsk7XScSa7tNTx4I8h2TC9+5fre
+         g1S7ywdpsVQBqt4gNvCZcar7gRHS+uN99w6zycMefWNQw/UxChXoRJxW4OZzF7971s+4
+         Fcig==
+X-Gm-Message-State: AC+VfDylganZBMHtvRzRFBKfvIRSB0WAB5MvnWERIp7Qw3BWl6EEQmvK
+        QV1oMe0e54xykFDMo1uT/PzOnLjrFaw=
+X-Google-Smtp-Source: ACHHUZ6enP7kBREmhiQ0i0LYDuH3RuGEJuyGpBzYXGRy3FeK34ct4OWkfjl1R+bRIQUodsczhvp1FyVsBhk=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:6d24:3efd:facc:7ac4])
- (user=surenb job=sendgmr) by 2002:a17:902:6a84:b0:1a6:4543:d295 with SMTP id
- n4-20020a1709026a8400b001a64543d295mr4657171plk.5.1682960128744; Mon, 01 May
- 2023 09:55:28 -0700 (PDT)
-Date:   Mon,  1 May 2023 09:54:19 -0700
+ (user=surenb job=sendgmr) by 2002:a25:6b05:0:b0:b8b:f5fb:5986 with SMTP id
+ g5-20020a256b05000000b00b8bf5fb5986mr8475612ybc.10.1682960131180; Mon, 01 May
+ 2023 09:55:31 -0700 (PDT)
+Date:   Mon,  1 May 2023 09:54:20 -0700
 In-Reply-To: <20230501165450.15352-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20230501165450.15352-1-surenb@google.com>
 X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
-Message-ID: <20230501165450.15352-10-surenb@google.com>
-Subject: [PATCH 09/40] mm: introduce __GFP_NO_OBJ_EXT flag to selectively
- prevent slabobj_ext creation
+Message-ID: <20230501165450.15352-11-surenb@google.com>
+Subject: [PATCH 10/40] mm/slab: introduce SLAB_NO_OBJ_EXT to avoid obj_ext creation
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
@@ -95,58 +94,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce __GFP_NO_OBJ_EXT flag in order to prevent recursive allocations
-when allocating slabobj_ext on a slab.
+Slab extension objects can't be allocated before slab infrastructure is
+initialized. Some caches, like kmem_cache and kmem_cache_node, are created
+before slab infrastructure is initialized. Objects from these caches can't
+have extension objects. Introduce SLAB_NO_OBJ_EXT slab flag to mark these
+caches and avoid creating extensions for objects allocated from these
+slabs.
 
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 ---
- include/linux/gfp_types.h | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ include/linux/slab.h | 7 +++++++
+ mm/slab.c            | 2 +-
+ mm/slub.c            | 5 +++--
+ 3 files changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/gfp_types.h b/include/linux/gfp_types.h
-index 6583a58670c5..aab1959130f9 100644
---- a/include/linux/gfp_types.h
-+++ b/include/linux/gfp_types.h
-@@ -53,8 +53,13 @@ typedef unsigned int __bitwise gfp_t;
- #define ___GFP_SKIP_ZERO	0
- #define ___GFP_SKIP_KASAN	0
+diff --git a/include/linux/slab.h b/include/linux/slab.h
+index 6b3e155b70bf..99a146f3cedf 100644
+--- a/include/linux/slab.h
++++ b/include/linux/slab.h
+@@ -147,6 +147,13 @@
  #endif
+ #define SLAB_TEMPORARY		SLAB_RECLAIM_ACCOUNT	/* Objects are short-lived */
+ 
 +#ifdef CONFIG_SLAB_OBJ_EXT
-+#define ___GFP_NO_OBJ_EXT       0x4000000u
++/* Slab created using create_boot_cache */
++#define SLAB_NO_OBJ_EXT         ((slab_flags_t __force)0x20000000U)
 +#else
-+#define ___GFP_NO_OBJ_EXT       0
++#define SLAB_NO_OBJ_EXT         0
 +#endif
- #ifdef CONFIG_LOCKDEP
--#define ___GFP_NOLOCKDEP	0x4000000u
-+#define ___GFP_NOLOCKDEP	0x8000000u
- #else
- #define ___GFP_NOLOCKDEP	0
- #endif
-@@ -99,12 +104,15 @@ typedef unsigned int __bitwise gfp_t;
-  * node with no fallbacks or placement policy enforcements.
++
+ /*
+  * ZERO_SIZE_PTR will be returned for zero sized kmalloc requests.
   *
-  * %__GFP_ACCOUNT causes the allocation to be accounted to kmemcg.
-+ *
-+ * %__GFP_NO_OBJ_EXT causes slab allocation to have no object extension.
-  */
- #define __GFP_RECLAIMABLE ((__force gfp_t)___GFP_RECLAIMABLE)
- #define __GFP_WRITE	((__force gfp_t)___GFP_WRITE)
- #define __GFP_HARDWALL   ((__force gfp_t)___GFP_HARDWALL)
- #define __GFP_THISNODE	((__force gfp_t)___GFP_THISNODE)
- #define __GFP_ACCOUNT	((__force gfp_t)___GFP_ACCOUNT)
-+#define __GFP_NO_OBJ_EXT   ((__force gfp_t)___GFP_NO_OBJ_EXT)
+diff --git a/mm/slab.c b/mm/slab.c
+index bb57f7fdbae1..ccc76f7455e9 100644
+--- a/mm/slab.c
++++ b/mm/slab.c
+@@ -1232,7 +1232,7 @@ void __init kmem_cache_init(void)
+ 	create_boot_cache(kmem_cache, "kmem_cache",
+ 		offsetof(struct kmem_cache, node) +
+ 				  nr_node_ids * sizeof(struct kmem_cache_node *),
+-				  SLAB_HWCACHE_ALIGN, 0, 0);
++				  SLAB_HWCACHE_ALIGN | SLAB_NO_OBJ_EXT, 0, 0);
+ 	list_add(&kmem_cache->list, &slab_caches);
+ 	slab_state = PARTIAL;
  
- /**
-  * DOC: Watermark modifiers
-@@ -249,7 +257,7 @@ typedef unsigned int __bitwise gfp_t;
- #define __GFP_NOLOCKDEP ((__force gfp_t)___GFP_NOLOCKDEP)
+diff --git a/mm/slub.c b/mm/slub.c
+index c87628cd8a9a..507b71372ee4 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -5020,7 +5020,8 @@ void __init kmem_cache_init(void)
+ 		node_set(node, slab_nodes);
  
- /* Room for N __GFP_FOO bits */
--#define __GFP_BITS_SHIFT (26 + IS_ENABLED(CONFIG_LOCKDEP))
-+#define __GFP_BITS_SHIFT (27 + IS_ENABLED(CONFIG_LOCKDEP))
- #define __GFP_BITS_MASK ((__force gfp_t)((1 << __GFP_BITS_SHIFT) - 1))
+ 	create_boot_cache(kmem_cache_node, "kmem_cache_node",
+-		sizeof(struct kmem_cache_node), SLAB_HWCACHE_ALIGN, 0, 0);
++			sizeof(struct kmem_cache_node),
++			SLAB_HWCACHE_ALIGN | SLAB_NO_OBJ_EXT, 0, 0);
  
- /**
+ 	hotplug_memory_notifier(slab_memory_callback, SLAB_CALLBACK_PRI);
+ 
+@@ -5030,7 +5031,7 @@ void __init kmem_cache_init(void)
+ 	create_boot_cache(kmem_cache, "kmem_cache",
+ 			offsetof(struct kmem_cache, node) +
+ 				nr_node_ids * sizeof(struct kmem_cache_node *),
+-		       SLAB_HWCACHE_ALIGN, 0, 0);
++			SLAB_HWCACHE_ALIGN | SLAB_NO_OBJ_EXT, 0, 0);
+ 
+ 	kmem_cache = bootstrap(&boot_kmem_cache);
+ 	kmem_cache_node = bootstrap(&boot_kmem_cache_node);
 -- 
 2.40.1.495.gc816e09b53d-goog
 
