@@ -2,80 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C2216F396D
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 22:52:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5932D6F3965
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 22:51:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229937AbjEAUwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 16:52:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35358 "EHLO
+        id S232532AbjEAUv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 16:51:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229816AbjEAUwa (ORCPT
+        with ESMTP id S230003AbjEAUv1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 16:52:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726BF2D57
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 13:51:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682974300;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FQVLgDOkXyGANqyYjw+hvuQPpe3HsxoxumeTjkX76j8=;
-        b=BFozajfPDoWiDEyzuPkbXgcW3/yn8h4nJ9iSu4BbvK5N/BB9hPeA0AZwsISXxcJNFIZthn
-        dNE/qwttIHy/5e6DY66FtDGNj4ks9bL8EMYB6Vz8PUHFEEHaXESnq6emx3NHdYzMsiWNQb
-        DlZjL0oY2J5KSCITdsnXiChF4NaxAxM=
-Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
- [209.85.210.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-394-N2GvFCR6O-ik5judRakLVQ-1; Mon, 01 May 2023 16:51:39 -0400
-X-MC-Unique: N2GvFCR6O-ik5judRakLVQ-1
-Received: by mail-ot1-f70.google.com with SMTP id 46e09a7af769-6a646c99bacso740686a34.1
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 13:51:39 -0700 (PDT)
+        Mon, 1 May 2023 16:51:27 -0400
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6DA2724
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 13:51:23 -0700 (PDT)
+Received: by mail-il1-x133.google.com with SMTP id e9e14a558f8ab-32f4e0f42a7so3065ab.1
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 13:51:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682974283; x=1685566283;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3ECRePsMeAbJBmX0er6XW8rZYgtfy+mdy7x4uZovHsQ=;
+        b=ovGqqT+/jgloID11ihUlTGIg1XTt182hFuBtu+CKubV9IT1rcKfRb03vjfFUNaRS1q
+         7xvTdeOH5doTg+qldiqNtOFnHXlMEpXW2ZZoGnQjjLpCSikjrBvKWs5XVRfC33zS2PQG
+         Br6ax+lTQhGbWFvgbbvcAm50srSILkCl/WkdA57gMjHT6eChcsFVTRaTwP+bxH89Bf1B
+         0J5zWFuPcjth1usISwwrIQqlx6G1zNDDy7X576mkCCM/UrYLJ2JdnxvNuAnYcC7vbUFt
+         MF34hdGVazuPxZnq+IBG5s4Qr2oUdeTQh5Y706ghGIJg3mMRlVUPMp00QjpLDaWWXdQg
+         NDIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682974298; x=1685566298;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1682974283; x=1685566283;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FQVLgDOkXyGANqyYjw+hvuQPpe3HsxoxumeTjkX76j8=;
-        b=kVWASbngoGYXU/hFQ+fQ+OXsYcxQtJXHfYzxq1/4v+Ush88dAa/USLPLlyfO228aUR
-         fl6NM/oqLMKa8PU9s7fjbcDVGktw862NMV/OLprULEPNtnK/EgmMmF1ctpsRdTUXAQ73
-         56hYzyiLdt+4hv3ViifNFt3ueXl1Ohq+ktaNWAi3hz92b//s5ULWfiJt/3s0Hea4ESzz
-         19c4SZsvgEGTq/mHkph+vIVOSJx7l5caiDRUNzwehwxw/F4f5LAyHDZkUsG9z/FhLlMa
-         kZ7Yjb/BM24YdAAh1LIV2MJ1KazCPeMt5hYrmrl5FXgk2I/oM1h6lX8/vf+zWQ7wXjfY
-         s9TQ==
-X-Gm-Message-State: AC+VfDyBq/u9h5mY9D0BTgnEe/4Sn4eUqWQKoWbxkHNM/1uPSFSt6/nD
-        FxdZnlyucngp4f4PSX+bj+ld5kgCkMa+tk19IDLWBpI9TvkuMZ/HejyUFGHN51mm8++qyY7iV8+
-        d5+iLA2rwc5wIq3nTTsSl4zdSKRI7OirY4EGdD4jo4eq/bcr5cJm+Jy51JzvZ46C95iUOxELVE5
-        D+znMLYykL
-X-Received: by 2002:a9d:65d2:0:b0:6a6:3d94:a0d7 with SMTP id z18-20020a9d65d2000000b006a63d94a0d7mr7435697oth.36.1682974298316;
-        Mon, 01 May 2023 13:51:38 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7RcVBWP4LTBuhRuBL89u3bJ1EZkfUcEQ2zGlAY4bSEKteLZ/6rx+voGuQNzKw0hOIo+JJIWw==
-X-Received: by 2002:a9d:65d2:0:b0:6a6:3d94:a0d7 with SMTP id z18-20020a9d65d2000000b006a63d94a0d7mr7435679oth.36.1682974297845;
-        Mon, 01 May 2023 13:51:37 -0700 (PDT)
-Received: from halaney-x13s.attlocal.net ([2600:1700:1ff0:d0e0::22])
-        by smtp.gmail.com with ESMTPSA id c10-20020a9d67ca000000b0069f153bb37asm12110130otn.62.2023.05.01.13.51.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 May 2023 13:51:37 -0700 (PDT)
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Andrew Halaney <ahalaney@redhat.com>,
-        Brian Masney <bmasney@redhat.com>
-Subject: [PATCH v6 2/2] arm64: dts: qcom: sa8540p-ride: Add ethernet nodes
-Date:   Mon,  1 May 2023 15:51:05 -0500
-Message-Id: <20230501205105.2518373-3-ahalaney@redhat.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230501205105.2518373-1-ahalaney@redhat.com>
-References: <20230501205105.2518373-1-ahalaney@redhat.com>
+        bh=3ECRePsMeAbJBmX0er6XW8rZYgtfy+mdy7x4uZovHsQ=;
+        b=kZ0F6nKxYq5/XvOQdnG43Hk/yJWfqzfLgSdfbalbmOPtDFW09gC2v9mC75/N3QiPby
+         jbO4udWCAADDlT4EE5nq5a8szM5yj7ts6oZ5ExTvfq07bgMEclDehq3OyncCvDSJi3XE
+         cDNeoQMRy4vzB61bUFepiFffxIXjafyW4H/CSIZCABylxGV54aI//4Eu1O91VXAkO5/m
+         MOVZs/dQS7nTf7pu+F1v1yPXubEaBvR8quJb4V1hXtXX8DWtySH0gQHgSyUmWHhqitis
+         M3EgXY2A4Wd8B0c0fEpY217Pf7p057M+5kgvPxpNafpSUTI5BZ7A1mGncVl2NJvTUF5m
+         Aeyg==
+X-Gm-Message-State: AC+VfDy7m4RQ+ntBnTo0JepSBqM5YDNWuCp3wIFAPoQZKPIrBrE0OVjC
+        PKsy64I1p+nqGtgjYNUgFi7+MtgB1JjFdSABCHUz+w==
+X-Google-Smtp-Source: ACHHUZ4JsTJhH4ZvcIqIO54Sg3esy1TPwgXVjYG4hlWJwnHqaUwAp09yJFw9ATHBIqX4b3TdZlhuJZKEYlPNdjiPVMA=
+X-Received: by 2002:a05:6e02:1526:b0:326:3219:85df with SMTP id
+ i6-20020a056e02152600b00326321985dfmr73339ilu.14.1682974282663; Mon, 01 May
+ 2023 13:51:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20230429053506.1962559-1-irogers@google.com> <1859d2ae-0f9c-1b59-210f-44e9adace4ed@linux.intel.com>
+In-Reply-To: <1859d2ae-0f9c-1b59-210f-44e9adace4ed@linux.intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Mon, 1 May 2023 13:51:11 -0700
+Message-ID: <CAP-5=fX=W-Ck21QuC=Onywtn-dfThBPzvGhbj8oLK8VxLwWoiw@mail.gmail.com>
+Subject: Re: [PATCH v3 00/46] Fix perf on Intel hybrid CPUs
+To:     "Liang, Kan" <kan.liang@linux.intel.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ahmad Yasin <ahmad.yasin@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Stephane Eranian <eranian@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Samantha Alt <samantha.alt@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>,
+        Weilin Wang <weilin.wang@intel.com>,
+        Edward Baker <edward.baker@intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        Rob Herring <robh@kernel.org>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        James Clark <james.clark@arm.com>,
+        Suzuki Poulouse <suzuki.poulose@arm.com>,
+        Kang Minchul <tegongkang@gmail.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,301 +100,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable both the MACs found on the board.
+On Mon, May 1, 2023 at 1:35=E2=80=AFPM Liang, Kan <kan.liang@linux.intel.co=
+m> wrote:
+>
+>
+>
+> On 2023-04-29 1:34 a.m., Ian Rogers wrote:
+> > Sample output is contained in the v1 patch set:
+> > https://lore.kernel.org/lkml/bff481ba-e60a-763f-0aa0-3ee53302c480@linux=
+.intel.com/
+> >
+> > Tested on Tigerlake, Skylake and Alderlake CPUs.
+>
+> The metrics and metricgroups tests are failed on a hybrid machine.
+> Seems we need the no group trick for more metrics?
+>
+> ./perf test "perf all metricgroups test"
+> 102: perf all metricgroups test                                      :
+> FAILED!
+>
+>
+> Testing DataSharing
+> Error:
+> The sys_perf_event_open() syscall returned with 22 (Invalid argument)
+> for event (cpu_core/topdown-fe-bound/).
+> /bin/dmesg | grep -i perf may provide additional information.
+>
+> test child finished with -1
+> ---- end ----
+> perf all metricgroups test: FAILED!
+>
+>
+>
+>
+> ./perf test "perf all metrics test"
+> 103: perf all metrics test                                           :
+> FAILED!
+>
+> Testing tma_info_branctest child finished with -1
+> ---- end ----
+> perf all metrics test: FAILED!
+>
+> Testing tma_contested_accesses
+> Metric 'tma_contested_accesses' not printed in:
+> Error:
+> Invalid event (cpu_core/topdown-fe-bound/) in per-thread mode, enable
+> system wide with '-a'.
+>
+> Metric 'tma_dram_bound' not printed in:
+> Error:
+> Invalid event (cpu_core/topdown-mem-bound/) in per-thread mode, enable
+> system wide with '-a'.
+>
+>
+> Metric 'tma_data_sharing' not printed in:
+> Error:
+> Invalid event (cpu_core/topdown-fe-bound/) in per-thread mode, enable
+> system wide with '-a'.
+>
+>
+> Thanks,
+> Kan
 
-ethernet0 and ethernet1 both ultimately go to a series of on board
-switches which aren't managed by this processor.
+This is expected. Metrics test fails on Icelake, metricgroups doesn't
+validate output but I can expect metricgroups like "transaction" to
+have issues. We want to have better tests and this comes under what
+we're hoping to achieve with the Valkyrie project.
 
-ethernet0 is connected to a Marvell 88EA1512 phy via RGMII. That goes to
-the series of switches via SGMII on the "media" side of the phy.
-RGMII_SGMII mode is enabled via devicetree register descriptions.
-The switch on the "media" side has auto-negotiation disabled, so
-configuration from userspace similar to:
-
-        ethtool -s eth0 autoneg off speed 1000 duplex full
-
-is necessary to get traffic flowing on that interface.
-
-ethernet1 is in a mac2mac/fixed-link configuration going to the same
-series of switches directly via RGMII.
-
-Tested-by: Brian Masney <bmasney@redhat.com>
-Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
----
-
-Changes since v5:
-    * Move mtl nodes into ethernet nodes so they're evaluated when
-      running the dtbs_check (Stephen)
-
-Changes since v4:
-    * Remove needless interrupt-parent (Konrad)
-    * Add Tested-by (Brian)
-
-Changes since v3:
-    * Compatible goes first in node (Krzysztof)
-
-Changes since v1 and v2:
-    * None
-
- arch/arm64/boot/dts/qcom/sa8540p-ride.dts | 238 ++++++++++++++++++++++
- 1 file changed, 238 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-index 24fa449d48a6..21e9eaf914dd 100644
---- a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-+++ b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-@@ -151,6 +151,184 @@ vreg_l8g: ldo8 {
- 	};
- };
- 
-+&ethernet0 {
-+	snps,mtl-rx-config = <&ethernet0_mtl_rx_setup>;
-+	snps,mtl-tx-config = <&ethernet0_mtl_tx_setup>;
-+
-+	max-speed = <1000>;
-+	phy-handle = <&rgmii_phy>;
-+	phy-mode = "rgmii-txid";
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&ethernet0_default>;
-+
-+	status = "okay";
-+
-+	mdio {
-+		compatible = "snps,dwmac-mdio";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		/* Marvell 88EA1512 */
-+		rgmii_phy: phy@8 {
-+			reg = <0x8>;
-+
-+			interrupts-extended = <&tlmm 127 IRQ_TYPE_EDGE_FALLING>;
-+
-+			reset-gpios = <&pmm8540c_gpios 1 GPIO_ACTIVE_LOW>;
-+			reset-assert-us = <11000>;
-+			reset-deassert-us = <70000>;
-+
-+			device_type = "ethernet-phy";
-+
-+			/* Set to RGMII_SGMII mode and soft reset. Turn off auto-negotiation
-+			 * from userspace to talk to the switch on the SGMII side of things
-+			 */
-+			marvell,reg-init =
-+				/* Set MODE[2:0] to RGMII_SGMII */
-+				<0x12 0x14 0xfff8 0x4>,
-+				/* Soft reset required after changing MODE[2:0] */
-+				<0x12 0x14 0x7fff 0x8000>;
-+		};
-+	};
-+
-+	ethernet0_mtl_rx_setup: rx-queues-config {
-+		snps,rx-queues-to-use = <1>;
-+		snps,rx-sched-sp;
-+
-+		queue0 {
-+			snps,dcb-algorithm;
-+			snps,map-to-dma-channel = <0x0>;
-+			snps,route-up;
-+			snps,priority = <0x1>;
-+		};
-+
-+		queue1 {
-+			snps,dcb-algorithm;
-+			snps,map-to-dma-channel = <0x1>;
-+			snps,route-ptp;
-+		};
-+
-+		queue2 {
-+			snps,avb-algorithm;
-+			snps,map-to-dma-channel = <0x2>;
-+			snps,route-avcp;
-+		};
-+
-+		queue3 {
-+			snps,avb-algorithm;
-+			snps,map-to-dma-channel = <0x3>;
-+			snps,priority = <0xc>;
-+		};
-+	};
-+
-+	ethernet0_mtl_tx_setup: tx-queues-config {
-+		snps,tx-queues-to-use = <1>;
-+		snps,tx-sched-sp;
-+
-+		queue0 {
-+			snps,dcb-algorithm;
-+		};
-+
-+		queue1 {
-+			snps,dcb-algorithm;
-+		};
-+
-+		queue2 {
-+			snps,avb-algorithm;
-+			snps,send_slope = <0x1000>;
-+			snps,idle_slope = <0x1000>;
-+			snps,high_credit = <0x3e800>;
-+			snps,low_credit = <0xffc18000>;
-+		};
-+
-+		queue3 {
-+			snps,avb-algorithm;
-+			snps,send_slope = <0x1000>;
-+			snps,idle_slope = <0x1000>;
-+			snps,high_credit = <0x3e800>;
-+			snps,low_credit = <0xffc18000>;
-+		};
-+	};
-+};
-+
-+&ethernet1 {
-+	snps,mtl-rx-config = <&ethernet1_mtl_rx_setup>;
-+	snps,mtl-tx-config = <&ethernet1_mtl_tx_setup>;
-+
-+	max-speed = <1000>;
-+	phy-mode = "rgmii-txid";
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&ethernet1_default>;
-+
-+	status = "okay";
-+
-+	fixed-link {
-+		speed = <1000>;
-+		full-duplex;
-+	};
-+
-+	ethernet1_mtl_rx_setup: rx-queues-config {
-+		snps,rx-queues-to-use = <1>;
-+		snps,rx-sched-sp;
-+
-+		queue0 {
-+			snps,dcb-algorithm;
-+			snps,map-to-dma-channel = <0x0>;
-+			snps,route-up;
-+			snps,priority = <0x1>;
-+		};
-+
-+		queue1 {
-+			snps,dcb-algorithm;
-+			snps,map-to-dma-channel = <0x1>;
-+			snps,route-ptp;
-+		};
-+
-+		queue2 {
-+			snps,avb-algorithm;
-+			snps,map-to-dma-channel = <0x2>;
-+			snps,route-avcp;
-+		};
-+
-+		queue3 {
-+			snps,avb-algorithm;
-+			snps,map-to-dma-channel = <0x3>;
-+			snps,priority = <0xc>;
-+		};
-+	};
-+
-+	ethernet1_mtl_tx_setup: tx-queues-config {
-+		snps,tx-queues-to-use = <1>;
-+		snps,tx-sched-sp;
-+
-+		queue0 {
-+			snps,dcb-algorithm;
-+		};
-+
-+		queue1 {
-+			snps,dcb-algorithm;
-+		};
-+
-+		queue2 {
-+			snps,avb-algorithm;
-+			snps,send_slope = <0x1000>;
-+			snps,idle_slope = <0x1000>;
-+			snps,high_credit = <0x3e800>;
-+			snps,low_credit = <0xffc18000>;
-+		};
-+
-+		queue3 {
-+			snps,avb-algorithm;
-+			snps,send_slope = <0x1000>;
-+			snps,idle_slope = <0x1000>;
-+			snps,high_credit = <0x3e800>;
-+			snps,low_credit = <0xffc18000>;
-+		};
-+	};
-+};
-+
- &i2c0 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&i2c0_default>;
-@@ -316,6 +494,66 @@ &xo_board_clk {
- /* PINCTRL */
- 
- &tlmm {
-+	ethernet0_default: ethernet0-default-state {
-+		mdc-pins {
-+			pins = "gpio175";
-+			function = "rgmii_0";
-+			drive-strength = <16>;
-+			bias-pull-up;
-+		};
-+
-+		mdio-pins {
-+			pins = "gpio176";
-+			function = "rgmii_0";
-+			drive-strength = <16>;
-+			bias-pull-up;
-+		};
-+
-+		rgmii-tx-pins {
-+			pins = "gpio183", "gpio184", "gpio185", "gpio186", "gpio187", "gpio188";
-+			function = "rgmii_0";
-+			drive-strength = <16>;
-+			bias-pull-up;
-+		};
-+
-+		rgmii-rx-pins {
-+			pins = "gpio177", "gpio178", "gpio179", "gpio180", "gpio181", "gpio182";
-+			function = "rgmii_0";
-+			drive-strength = <16>;
-+			bias-disable;
-+		};
-+	};
-+
-+	ethernet1_default: ethernet1-default-state {
-+		mdc-pins {
-+			pins = "gpio97";
-+			function = "rgmii_1";
-+			drive-strength = <16>;
-+			bias-pull-up;
-+		};
-+
-+		mdio-pins {
-+			pins = "gpio98";
-+			function = "rgmii_1";
-+			drive-strength = <16>;
-+			bias-pull-up;
-+		};
-+
-+		rgmii-tx-pins {
-+			pins = "gpio105", "gpio106", "gpio107", "gpio108", "gpio109", "gpio110";
-+			function = "rgmii_1";
-+			drive-strength = <16>;
-+			bias-pull-up;
-+		};
-+
-+		rgmii-rx-pins {
-+			pins = "gpio99", "gpio100", "gpio101", "gpio102", "gpio103", "gpio104";
-+			function = "rgmii_1";
-+			drive-strength = <16>;
-+			bias-disable;
-+		};
-+	};
-+
- 	i2c0_default: i2c0-default-state {
- 		/* To USB7002T-I/KDXVA0 USB hub (SIP1 only) */
- 		pins = "gpio135", "gpio136";
--- 
-2.40.0
-
+Thanks,
+Ian
