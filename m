@@ -2,125 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B28036F35C0
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 20:19:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9960B6F35C8
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 20:25:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231995AbjEASTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 14:19:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48772 "EHLO
+        id S232208AbjEASZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 14:25:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbjEASTf (ORCPT
+        with ESMTP id S229688AbjEASZg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 14:19:35 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E96B1997
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 11:19:34 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1aaf702c3ccso91865ad.1
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 11:19:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682965174; x=1685557174;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=x586HEdntjiG3UWvC4VzSehiz+nFWAPjdh7JwBrp8xg=;
-        b=W4ttgpj+tk0PA98qPFHXkYMcTTNGgT8dXJrzRMqAkiUx2G1AGa5w/ZD/aR+Ewn295X
-         gJkoJkJZ/EHMxNW4MmniSmgpIXt/k0/BxI0S9bAst5nFS4tqJQN2F37XE5YiKLzAb5Cz
-         I/XHsS1CrQXeOMtu6sr5DqkgY9iURplfi9Q0TQC3zez4clqsKtBf2dLBIA1DQcp0iDt1
-         4cmJcIADiJc3z+139LXHs81jrcoEoIc0qb284WMlZck7F5akRGeNTEq9oF1mI/QVDT66
-         6zhpSm2Lxt0MFCKb8bR4t3+cQGJ2Ou13HXqu8UppaR3TyU5PfQWVU7fO4R6IoAl63RWM
-         ecCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682965174; x=1685557174;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=x586HEdntjiG3UWvC4VzSehiz+nFWAPjdh7JwBrp8xg=;
-        b=l1rLotmv10BkRrgkRlFC46aHc8pzC91J4cVP5F++1uCZfnNuWJ7I+J5t6stHEBlSN1
-         BFIYUbc6E5d0E4yD7DLX4ebej865PbdnyaSyDhSyPFcJ6gpM3gY6PD2u2F3cquU+B/1m
-         LDel9jFJ02zkWtGcEHXWJpbZuHOtFSKlED6se0waj90fmewG2wb3oFZmxthwZMY+9Nvx
-         HLApzB8BJx52lQh6VHjNI1Rb/mIQeaX9Kjhw4Fuj56S+ZhgdRTo3AAyyLtSzxjlagkoF
-         h9pgqRZAznlzqoIq8x1L3xBAntbghryhIx08w8X0CvHz5hD/4uMzk52yhFmRhvUOu6M+
-         oU9Q==
-X-Gm-Message-State: AC+VfDxzBlS2AdpoSJeJ8ium34F4KXd407F+YjdT1BLAy0nK6LjHnmHm
-        qs4WnMgsRHzPeT1atYX4gdhvBO26lRZSnui4+hgGHw==
-X-Google-Smtp-Source: ACHHUZ5UllUhL9iXbL443z63MmMSkl9/6j81FAS+ovadxdUdMwh1W7AHr88rmYnqWCbHrpS7PAa+JtMq/sHDKLJ4ZU4=
-X-Received: by 2002:a17:902:d504:b0:1a9:3251:e3ae with SMTP id
- b4-20020a170902d50400b001a93251e3aemr6776plg.3.1682965173837; Mon, 01 May
- 2023 11:19:33 -0700 (PDT)
+        Mon, 1 May 2023 14:25:36 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1E413A;
+        Mon,  1 May 2023 11:25:35 -0700 (PDT)
+Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 341IMVxm007847;
+        Mon, 1 May 2023 18:24:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : references : date : in-reply-to : message-id : content-type :
+ mime-version; s=pp1; bh=xx/3hJ+CZLlHDK4Ntj3hDqtJoR/nQrjMLEvEL6by9H4=;
+ b=F+F8+DQR5I0Lm1ickWftFgEacrG1b/Ob/c5wd/dzo7OBlR9FvuNaVEzqvffXWqFDjhtG
+ zVYDBoqxEZF8rO81m6gXAxiFSDatiUG01Gcg4rCudQrF2pbK6t+7opVOCl6APEzXigMJ
+ LOXlCg30KOj9Tjwhe4fvnT9lj9it9jnHAkCxhHq1SuhkK7zjLsLfFiSTGpEKYhKZnOzn
+ qdz0kVXBQ+WBxGmOSZ2osQhypxmohknKJPKXravQ54DtrVj5XLU1N5fZ1zZNpRx3/6Eg
+ nWi14x+ViFrkp9Zp09ct3bjbJeepDyCdIXbIjP2tajfFfZzsogSa0UwAZO4poHoRPK8l 0Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qafew5m7r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 01 May 2023 18:24:54 +0000
+Received: from m0353726.ppops.net (m0353726.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 341IKHb6001603;
+        Mon, 1 May 2023 18:24:54 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qafew5m6t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 01 May 2023 18:24:54 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 341IOpDa023238;
+        Mon, 1 May 2023 18:24:51 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3q8tv6ry5t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 01 May 2023 18:24:51 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 341IOn3H13632224
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 1 May 2023 18:24:49 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 237752004B;
+        Mon,  1 May 2023 18:24:49 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C6B2E20043;
+        Mon,  1 May 2023 18:24:48 +0000 (GMT)
+Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Mon,  1 May 2023 18:24:48 +0000 (GMT)
+From:   Sven Schnelle <svens@linux.ibm.com>
+To:     Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     "Liam R. Howlett" <Liam.Howlett@oracle.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        syzbot+a7c1ec5b1d71ceaa5186@syzkaller.appspotmail.com,
+        stable@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: Re: [PATCH] mm/mempolicy: Fix use-after-free of VMA iterator
+References: <20230410152205.2294819-1-Liam.Howlett@oracle.com>
+        <yt9dildhke9l.fsf@linux.ibm.com>
+        <20230427173247.s5rn6nujoxiatviu@revolver>
+        <5066f333-5021-451d-abdd-07a027d98820@lucifer.local>
+Date:   Mon, 01 May 2023 20:24:48 +0200
+In-Reply-To: <5066f333-5021-451d-abdd-07a027d98820@lucifer.local> (Lorenzo
+        Stoakes's message of "Sun, 30 Apr 2023 14:35:00 +0100")
+Message-ID: <yt9da5yn7vv3.fsf@linux.ibm.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: VBYajAsBVtX0SqlJLITO9ZYUcqVVGhgr
+X-Proofpoint-ORIG-GUID: PIwNWU_xoEM_aeOrGETdiN8XcYyNn6Jb
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <CAGS_qxqmWYzTBkfmFoALoteaG303tJNh1K5N2=Pmykqk+2BeTg@mail.gmail.com>
- <20230501171520.138753-1-sj@kernel.org>
-In-Reply-To: <20230501171520.138753-1-sj@kernel.org>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Mon, 1 May 2023 11:19:22 -0700
-Message-ID: <CAGS_qxqUUX=V+DfYp8LnjxB03OeZVhaXpmg_8zW98zvJLCcZ6A@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] kunit: tool: add subscripts for type annotations
- where appropriate
-To:     SeongJae Park <sj@kernel.org>
-Cc:     brendanhiggins@google.com, davidgow@google.com, rmoar@google.com,
-        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        johannes@sipsolutions.net, Johannes Berg <johannes.berg@intel.com>,
-        regressions@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-01_10,2023-04-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
+ mlxlogscore=783 suspectscore=0 adultscore=0 lowpriorityscore=0 mlxscore=0
+ clxscore=1015 priorityscore=1501 spamscore=0 bulkscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2305010148
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 1, 2023 at 10:15=E2=80=AFAM SeongJae Park <sj@kernel.org> wrote=
-:
+Lorenzo Stoakes <lstoakes@gmail.com> writes:
+
+> On Thu, Apr 27, 2023 at 01:32:47PM -0400, Liam R. Howlett wrote:
+>> * Sven Schnelle <svens@linux.ibm.com> [230427 02:53]:
+>> > "Liam R. Howlett" <Liam.Howlett@oracle.com> writes:
+>> >
+>> > > set_mempolicy_home_node() iterates over a list of VMAs and calls
+>> > > mbind_range() on each VMA, which also iterates over the singular list of
+>> > > the VMA passed in and potentially splits the VMA.  Since the VMA
+>> > > iterator is not passed through, set_mempolicy_home_node() may now point
+>> > > to a stale node in the VMA tree.  This can result in a UAF as reported
+>> > > by syzbot.
+>> > >
+>> > > Avoid the stale maple tree node by passing the VMA iterator through to
+>> > > the underlying call to split_vma().
+>> > >
+>> > > mbind_range() is also overly complicated, since there are two calling
+>> > > functions and one already handles iterating over the VMAs.  Simplify
+>> > > mbind_range() to only handle merging and splitting of the VMAs.
+>> > >
+>> > > Align the new loop in do_mbind() and existing loop in
+>> > > set_mempolicy_home_node() to use the reduced mbind_range() function.
+>> > > This allows for a single location of the range calculation and avoids
+>> > > constantly looking up the previous VMA (since this is a loop over the
+>> > > VMAs).
+>> > >
+>> > > Link: https://lore.kernel.org/linux-mm/000000000000c93feb05f87e24ad@google.com/
+>> > > Reported-and-tested-by: syzbot+a7c1ec5b1d71ceaa5186@syzkaller.appspotmail.com
+>> > > Fixes: 66850be55e8e ("mm/mempolicy: use vma iterator & maple state instead of vma linked list")
+>> > > Cc: <stable@vger.kernel.org>
+>> > > Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+>> > > ---
+>> >
+>> > This breaks the vma02 testcase from ltp on s390:
+>> >
+>> >  ~ # ./vma02
+>> > vma02       0  TINFO  :  pid = 617 addr = 0x3ff8f673000
+>> > vma02       0  TINFO  :  start = 0x3ff8f673000, end = 0x3ff8f674000
+>> > vma02       0  TINFO  :  start = 0x3ff8f674000, end = 0x3ff8f675000
+>> > vma02       0  TINFO  :  start = 0x3ff8f675000, end = 0x3ff8f676000
+>> > vma02       1  TFAIL  :  vma02.c:144: >1 unmerged VMAs.
+>> > Any thoughts?
+>>
+>> No thoughts that I should share.
+>>
+>> I will have to boot my s390 (vm) and have a look.
+>>
+>> Thanks for letting me know.
+>>
+>> Regards,
+>> Liam
 >
-
-[snip]
-
-> >
-> > It seems like support for the subscript wasn't added until Python 3.9.
-> >
-> > I know support for subscripting other types like re.Pattern was added
-> > in 3.9 per https://peps.python.org/pep-0585/ but it doesn't mention
-> > Popen there...
-> > This patch also added typing.IO[str] and concurrent.Future[None], so
-> > those might be problematic too.
-> >
-> > Can you check if the typing.IO and concurrent.Future[None] changes
-> > cause problems?
-> > (I don't have an easy way of testing against older Python versions curr=
-ently).
+> I tracked down what this (almost certainly) was + added fix in [1] as it
+> popped up as a 6.2.y stable bug. It doesn't seem arch-specific so you can
+> put that s390 down :)
 >
-> Thank you for quick reply.  Reverting Popen changes only as below fixed m=
-y
-> issue.  So seems typing.IO and concurrent.Future[None] chages doesn't cau=
-se
-> problems at least for my use case.
+> [1]:https://lore.kernel.org/all/db42467a692d78c654ec5c1953329401bd8a9c34.1682859234.git.lstoakes@gmail.com/
 
-Sounds good.
-Sent https://lore.kernel.org/linux-kselftest/20230501181610.2617032-1-dlaty=
-pov@google.com
-
-I was hoping adding `--python-version 3.7` to the `mypy --strict`
-invocation would help, but it still fails for me :\
-
-$ ./tools/testing/kunit/run_cheks.py
-...
-mypy: FAILED
-> kunit_kernel.py:95: error: Missing type parameters for generic type "Pope=
-n"  [type-arg]
-> kunit_kernel.py:116: error: Missing type parameters for generic type "Pop=
-en"  [type-arg]
-> kunit_kernel.py:145: error: Missing type parameters for generic type "Pop=
-en"  [type-arg]
-> Found 3 errors in 1 file (checked 8 source files)
-
-And here I was, hoping it would complain about code incompatible with
-python 3.7...
-But at the very least, that patch should fix the current problem.
-
-Daniel
+Thanks, just tested, and it solves the issue for me.
