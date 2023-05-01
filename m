@@ -2,117 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9F236F32D8
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 17:26:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85A9D6F32DD
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 17:28:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232682AbjEAP0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 11:26:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52012 "EHLO
+        id S232493AbjEAP20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 11:28:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232818AbjEAP0r (ORCPT
+        with ESMTP id S232193AbjEAP2X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 11:26:47 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F301720
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 08:26:44 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ptVQA-0007EC-Hf; Mon, 01 May 2023 17:26:34 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ptVQ9-000O1a-2f; Mon, 01 May 2023 17:26:33 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ptVQ8-000P7k-A7; Mon, 01 May 2023 17:26:32 +0200
-Date:   Mon, 1 May 2023 17:26:32 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>, mchehab@kernel.org,
-        bleung@chromium.org, groeck@chromium.org,
-        kevin.chiu.17802@gmail.com,
-        scott_chao@wistron.corp-partner.google.com,
-        zoey_wu@wistron.corp-partner.google.com,
-        hellojacky0226@hotmail.com, linux-media@vger.kernel.org,
-        chrome-platform@lists.linux.dev
-Subject: Re: [PATCH AUTOSEL 6.3 34/44] media: cros-ec-cec: Don't exit early
- in .remove() callback
-Message-ID: <20230501152632.ccsvhl2c6ihuizcf@pengutronix.de>
-References: <20230501025632.3253067-1-sashal@kernel.org>
- <20230501025632.3253067-34-sashal@kernel.org>
+        Mon, 1 May 2023 11:28:23 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 942ABAA;
+        Mon,  1 May 2023 08:28:22 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 341FSIYV003625;
+        Mon, 1 May 2023 15:28:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=WxVYXWAROQLyqngVyIjkA6PL1TyrGM+M/4XnTbSf9Js=;
+ b=NikjnHdxgDowrfCxfzuCBzAH7GgfIfY3/8adlGc83PyI4gTVRvFgHP1zqg8uC9RkAk6L
+ qEoKAsma4r1Uz8TKmqBbDr7DhcpSNBOafa4dBSuChGtW5KKWfdnULvwyG+sYrHz0MaxX
+ Rgoz8+VG+S1pQ6ZMgbTno/dbX1HCYj39OfZ3/Sa9MnKNr+nRcTi8sg52S9zVvkneRgmq
+ 3+gerSOuABk59pH/KH7GFsdj3fJSbeEtgRaQvRNtYau1t3Qns1t252B57kgpYYzmp6RC
+ KDQO5gIGUyUS6uleS9KpSlECC9ZoIlniAQlZxlUyurL89yqsDhp0QpdoM3a5oOJBGQbw Ag== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q8ub33vsr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 01 May 2023 15:28:18 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 341FSGhm001480
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 1 May 2023 15:28:16 GMT
+Received: from hu-tdas-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Mon, 1 May 2023 08:28:13 -0700
+From:   Taniya Das <quic_tdas@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>
+CC:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_skakitap@quicinc.com>,
+        Taniya Das <quic_tdas@quicinc.com>
+Subject: [PATCH] clk: qcom: rcg: Update rcg configuration before enabling it
+Date:   Mon, 1 May 2023 20:57:32 +0530
+Message-ID: <20230501152732.9245-1-quic_tdas@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7n6mydw3ndx43nto"
-Content-Disposition: inline
-In-Reply-To: <20230501025632.3253067-34-sashal@kernel.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 8qeVBL17wU7HePPciFAE2GRzCOu06Gat
+X-Proofpoint-ORIG-GUID: 8qeVBL17wU7HePPciFAE2GRzCOu06Gat
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-01_08,2023-04-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
+ mlxscore=0 impostorscore=0 spamscore=0 mlxlogscore=803 lowpriorityscore=0
+ phishscore=0 adultscore=0 priorityscore=1501 bulkscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2305010125
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+If rcg is in disabled state when clk_rcg2_shared_set_rate is called, the
+new configuration is written to the configuration register but it won't be
+effective in h/w yet because update bit won't be set if rcg is in disabled
+state. Since the new configuration is not yet updated in h/w, dirty bit of
+configuration register will be set in such case. Clear the dirty bit and
+update the rcg to proper new configuration by setting the update bit before
+enabling the rcg.
 
---7n6mydw3ndx43nto
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+---
+ drivers/clk/qcom/clk-rcg2.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-Hello,
+diff --git a/drivers/clk/qcom/clk-rcg2.c b/drivers/clk/qcom/clk-rcg2.c
+index 76551534f10d..b36377979f21 100644
+--- a/drivers/clk/qcom/clk-rcg2.c
++++ b/drivers/clk/qcom/clk-rcg2.c
+@@ -980,7 +980,13 @@ static int clk_rcg2_set_force_enable(struct clk_hw *hw)
+ {
+ 	struct clk_rcg2 *rcg = to_clk_rcg2(hw);
+ 	const char *name = clk_hw_get_name(hw);
+-	int ret, count;
++	int ret, count, val;
++
++	if (!__clk_is_enabled(hw->clk)) {
++		regmap_read(rcg->clkr.regmap, rcg->cmd_rcgr + CMD_REG, &val);
++		if (val & CMD_DIRTY_CFG)
++			update_config(rcg);
++	}
 
-On Sun, Apr 30, 2023 at 10:56:22PM -0400, Sasha Levin wrote:
-> From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
->=20
-> [ Upstream commit 0ff7aee24e47beb4306ce050824b54147f2fabfa ]
->=20
-> Exiting early in remove without releasing all acquired resources yields
-> leaks. Note that e.g. memory allocated with devm_zalloc() is freed after
-> .remove() returns, even if the return code was negative.
->=20
-> While blocking_notifier_chain_unregister() won't fail and so the
-> change is somewhat cosmetic, platform driver's .remove callbacks are
-> about to be converted to return void. To prepare that, keep the error
-> message but don't return early.
->=20
-> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+ 	ret = regmap_update_bits(rcg->clkr.regmap, rcg->cmd_rcgr + CMD_REG,
+ 				 CMD_ROOT_EN, CMD_ROOT_EN);
+--
+2.17.1
 
-While I'm positive this change doesn't break anything, it also doesn't
-fix anything and is only cosmetic (+ preparing a later change).
-
-Unless you need it as a dependency I'd say, don't backport it for
-stable.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---7n6mydw3ndx43nto
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmRP2icACgkQj4D7WH0S
-/k70oAgAn7tp2vPVovwRlg3jKhuBdr8BCobUMxPTkbPEHGq+hDgwuQ1p+b+xkPtA
-qpSKLrNcHMS0dyEfk1xoyDmtmnpb3djmOSRzKYEBui3MrOSGaVVhL0rW76LgchEw
-+Wnu0m5OFMiXGSFYKLfYDJFtxdTTBjTSHqu1J+LI9o7QaEMq8cGJfs/FK89JVzZB
-RglMHrsbeYwFvrz38ZjC4HkvVWahW0+iAaG0BYSEb5WloXNgFHfkZh5bsu2GCHQZ
-e87YJFBrojXMtHoVN5hwebZaoHp5QSKCkTa3Vp0AW7yhdJDmRPylGk8WJx48f5tR
-ue9PHkoCzMFqDh6BpkruIyDw7LSwYw==
-=Sfi2
------END PGP SIGNATURE-----
-
---7n6mydw3ndx43nto--
