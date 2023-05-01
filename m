@@ -2,68 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 916826F3164
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 15:04:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F1F06F3165
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 15:05:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232588AbjEANEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 09:04:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49978 "EHLO
+        id S232363AbjEANFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 09:05:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232565AbjEANEJ (ORCPT
+        with ESMTP id S232476AbjEANE7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 09:04:09 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DDF41B3
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 06:04:05 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4f00d3f98deso22429557e87.0
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 06:04:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682946244; x=1685538244;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=M3oovMXPBuInPxEGdlhc2Eac37pu+y5c8Kx0C4orDfE=;
-        b=WKqLumo0wWBiCoZABjqUU0K90Znnd4EerhbnQGv99yUL+W7LFnzF1ty0Qmdy5K1S/1
-         ZYEcsWb8a90qr+FDNz9VilLcoMAZbCHH6VknycKfzcb9YKnJ3aASCaFn0EZtJS4y7Tek
-         7MsxPYDtSN/PhFPMPTMnnZQY76gQ+18X4lxDLlxWYpLYZquriHTtJk9rw9YcFEWcQQEM
-         /gmsdG7rUu+se0Oq1yxQ63P024Evj6zjh9gvI5QHMQa58Btw1pg1xvuB6zqqHASu0ji+
-         genukR1v+V6mdlW0t7azZ9+L5FUun/OkpSEF2zdzfTSSwaFcQ7wEaFXo8Ts4K34ts5Td
-         Xcrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682946244; x=1685538244;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=M3oovMXPBuInPxEGdlhc2Eac37pu+y5c8Kx0C4orDfE=;
-        b=ZEKFDzH4AqQeeuI9NU3oCKuVf31Vs7go5Ei4LMIaznpYwR7NGD2434VtrKVQNAda6T
-         hm/4nrCoGskCMQGV0wN5mXyb4tICzZA7qACyKqRH20niM/pxJlnYUvR5YhSldtI4hoHf
-         LP2+rsxczfzuab6jYn57MGOw5oiAO2aPw9xS4I5sW3tx0G6JHbc3mgbiVPH6QAxnjECE
-         nwPE7otzCLGLXwooMVlkdS9ozg+7YuMBEnPqKDm49Vb5r3PttzSgmY+RTR3jZAWsr/4O
-         Q8QWK5cp5F/14aBDaTllP+h8k+Br3qS9BV3Aend/ka0bOb5mUhsbbR3UWZ0nMnILJULc
-         ztjw==
-X-Gm-Message-State: AC+VfDyt9LVquU558GVSclse3lotiw4Skbszv6CuR4UAufGlBtd7InrG
-        JHgLkvie5qytxmbfO328kAmcxMIqinDJ49ClIyw=
-X-Google-Smtp-Source: ACHHUZ7ZTtFGVyO2sO47NDEfwj6op+CutBcoz+ssyKc1TW1Vp6jY63nbmeuoB7jVyLRKZB48EDv8lg==
-X-Received: by 2002:ac2:4e69:0:b0:4e8:487a:7c2e with SMTP id y9-20020ac24e69000000b004e8487a7c2emr3887479lfs.14.1682946243692;
-        Mon, 01 May 2023 06:04:03 -0700 (PDT)
-Received: from localhost.localdomain (abyl248.neoplus.adsl.tpnet.pl. [83.9.31.248])
-        by smtp.gmail.com with ESMTPSA id c15-20020ac244af000000b004d5a6dcb94fsm4725732lfm.33.2023.05.01.06.04.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 May 2023 06:04:03 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, sboyd@kernel.org
-Cc:     marijn.suijten@somainline.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] clk: qcom: smd-rpm: Keep one rpm handle for all clocks
-Date:   Mon,  1 May 2023 15:04:00 +0200
-Message-Id: <20230501130400.107771-1-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.40.1
+        Mon, 1 May 2023 09:04:59 -0400
+Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AADB18E
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 06:04:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1682946293;
+        bh=OT2ptgbgygPjGNS/XlmNveOphgbtE68SZZIydPl11vU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=IlSsXadH8KCk2gQs3qSlYJEvTNYKdi4PLLvciJjS/zpvwL9vIdDAgNpbj49CuRV1Z
+         NvdT8PGePgJba+56xkTMO0Urt2hmDRCAoA4gaL+tV3vToWj0KlJRwav3QN8rEbxKJ9
+         CHFxqTcYEhWrbg25aO9BGxdHWv5xOk3Dezs5qXr3oCis6llZskJN9LRKPVT/QpJz46
+         1uQJfFvn2EPjEVDdk8vG+7hC16pHq6mgfbe1vAN29ohEAeYC70byB2TvobVgl8bKJ3
+         3ISf/AT1bTkx4RdZL8mcZuenu+PSl+SRc4V4PdYyJbeUirF2CwC9iFGt9FCIiICWxF
+         jvwQCbgpZT0OQ==
+Received: from [172.16.0.91] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4Q93Mn5jsKzxGM;
+        Mon,  1 May 2023 09:04:53 -0400 (EDT)
+Message-ID: <c74b9751-7429-99ad-d46c-c004cb914cb7@efficios.com>
+Date:   Mon, 1 May 2023 09:04:58 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH -next] sched: fix cid_lock kernel-doc warnings
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>
+References: <20230428031111.322-1-rdunlap@infradead.org>
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+In-Reply-To: <20230428031111.322-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,131 +53,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For no apparent reason (as there's just one RPM per SoC), all clocks
-currently store a copy of a pointer to smd_rpm. Introduce a single,
-global one to save up on space in each clk definition.
+On 2023-04-27 23:11, Randy Dunlap wrote:
+> Fix kernel-doc warnings for cid_lock and use_cid_lock.
+> These comments are not in kernel-doc format.
+> 
+> kernel/sched/core.c:11496: warning: Cannot understand  * @cid_lock: Guarantee forward-progress of cid allocation.
+>   on line 11496 - I thought it was a doc line
+> kernel/sched/core.c:11505: warning: Cannot understand  * @use_cid_lock: Select cid allocation behavior: lock-free vs spinlock.
+>   on line 11505 - I thought it was a doc line
+> 
 
-bloat-o-meter reports:
+Right. It made sense to have those as kernel-doc when those were 
+mm_struct fields in previous versions of the patch, but not anymore now 
+that those are stand-alone static variables.
 
-Total: Before=41887, After=40843, chg -2.49%
+Acked-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/clk/qcom/clk-smd-rpm.c | 26 ++++++++++++--------------
- 1 file changed, 12 insertions(+), 14 deletions(-)
+Thanks,
 
-diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
-index 887b945a6fb7..7797499faf31 100644
---- a/drivers/clk/qcom/clk-smd-rpm.c
-+++ b/drivers/clk/qcom/clk-smd-rpm.c
-@@ -156,6 +156,8 @@
- 
- #define to_clk_smd_rpm(_hw) container_of(_hw, struct clk_smd_rpm, hw)
- 
-+static struct qcom_smd_rpm *rpmcc_smd_rpm;
-+
- struct clk_smd_rpm {
- 	const int rpm_res_type;
- 	const int rpm_key;
-@@ -166,7 +168,6 @@ struct clk_smd_rpm {
- 	struct clk_smd_rpm *peer;
- 	struct clk_hw hw;
- 	unsigned long rate;
--	struct qcom_smd_rpm *rpm;
- };
- 
- struct clk_smd_rpm_req {
-@@ -191,12 +192,12 @@ static int clk_smd_rpm_handoff(struct clk_smd_rpm *r)
- 		.value = cpu_to_le32(r->branch ? 1 : INT_MAX),
- 	};
- 
--	ret = qcom_rpm_smd_write(r->rpm, QCOM_SMD_RPM_ACTIVE_STATE,
-+	ret = qcom_rpm_smd_write(rpmcc_smd_rpm, QCOM_SMD_RPM_ACTIVE_STATE,
- 				 r->rpm_res_type, r->rpm_clk_id, &req,
- 				 sizeof(req));
- 	if (ret)
- 		return ret;
--	ret = qcom_rpm_smd_write(r->rpm, QCOM_SMD_RPM_SLEEP_STATE,
-+	ret = qcom_rpm_smd_write(rpmcc_smd_rpm, QCOM_SMD_RPM_SLEEP_STATE,
- 				 r->rpm_res_type, r->rpm_clk_id, &req,
- 				 sizeof(req));
- 	if (ret)
-@@ -214,7 +215,7 @@ static int clk_smd_rpm_set_rate_active(struct clk_smd_rpm *r,
- 		.value = cpu_to_le32(DIV_ROUND_UP(rate, 1000)), /* to kHz */
- 	};
- 
--	return qcom_rpm_smd_write(r->rpm, QCOM_SMD_RPM_ACTIVE_STATE,
-+	return qcom_rpm_smd_write(rpmcc_smd_rpm, QCOM_SMD_RPM_ACTIVE_STATE,
- 				  r->rpm_res_type, r->rpm_clk_id, &req,
- 				  sizeof(req));
- }
-@@ -228,7 +229,7 @@ static int clk_smd_rpm_set_rate_sleep(struct clk_smd_rpm *r,
- 		.value = cpu_to_le32(DIV_ROUND_UP(rate, 1000)), /* to kHz */
- 	};
- 
--	return qcom_rpm_smd_write(r->rpm, QCOM_SMD_RPM_SLEEP_STATE,
-+	return qcom_rpm_smd_write(rpmcc_smd_rpm, QCOM_SMD_RPM_SLEEP_STATE,
- 				  r->rpm_res_type, r->rpm_clk_id, &req,
- 				  sizeof(req));
- }
-@@ -395,7 +396,7 @@ static unsigned long clk_smd_rpm_recalc_rate(struct clk_hw *hw,
- 	return r->rate;
- }
- 
--static int clk_smd_rpm_enable_scaling(struct qcom_smd_rpm *rpm)
-+static int clk_smd_rpm_enable_scaling(void)
- {
- 	int ret;
- 	struct clk_smd_rpm_req req = {
-@@ -404,7 +405,7 @@ static int clk_smd_rpm_enable_scaling(struct qcom_smd_rpm *rpm)
- 		.value = cpu_to_le32(1),
- 	};
- 
--	ret = qcom_rpm_smd_write(rpm, QCOM_SMD_RPM_SLEEP_STATE,
-+	ret = qcom_rpm_smd_write(rpmcc_smd_rpm, QCOM_SMD_RPM_SLEEP_STATE,
- 				 QCOM_SMD_RPM_MISC_CLK,
- 				 QCOM_RPM_SCALING_ENABLE_ID, &req, sizeof(req));
- 	if (ret) {
-@@ -412,7 +413,7 @@ static int clk_smd_rpm_enable_scaling(struct qcom_smd_rpm *rpm)
- 		return ret;
- 	}
- 
--	ret = qcom_rpm_smd_write(rpm, QCOM_SMD_RPM_ACTIVE_STATE,
-+	ret = qcom_rpm_smd_write(rpmcc_smd_rpm, QCOM_SMD_RPM_ACTIVE_STATE,
- 				 QCOM_SMD_RPM_MISC_CLK,
- 				 QCOM_RPM_SCALING_ENABLE_ID, &req, sizeof(req));
- 	if (ret) {
-@@ -1301,12 +1302,11 @@ static int rpm_smd_clk_probe(struct platform_device *pdev)
- {
- 	int ret;
- 	size_t num_clks, i;
--	struct qcom_smd_rpm *rpm;
- 	struct clk_smd_rpm **rpm_smd_clks;
- 	const struct rpm_smd_clk_desc *desc;
- 
--	rpm = dev_get_drvdata(pdev->dev.parent);
--	if (!rpm) {
-+	rpmcc_smd_rpm = dev_get_drvdata(pdev->dev.parent);
-+	if (!rpmcc_smd_rpm) {
- 		dev_err(&pdev->dev, "Unable to retrieve handle to RPM\n");
- 		return -ENODEV;
- 	}
-@@ -1322,14 +1322,12 @@ static int rpm_smd_clk_probe(struct platform_device *pdev)
- 		if (!rpm_smd_clks[i])
- 			continue;
- 
--		rpm_smd_clks[i]->rpm = rpm;
--
- 		ret = clk_smd_rpm_handoff(rpm_smd_clks[i]);
- 		if (ret)
- 			goto err;
- 	}
- 
--	ret = clk_smd_rpm_enable_scaling(rpm);
-+	ret = clk_smd_rpm_enable_scaling();
- 	if (ret)
- 		goto err;
- 
+Mathieu
+
+> Fixes: 223baf9d17f2 ("sched: Fix performance regression introduced by mm_cid")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Cc: "Peter Zijlstra (Intel)" <peterz@infradead.org>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> ---
+>   kernel/sched/core.c |    4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff -- a/kernel/sched/core.c b/kernel/sched/core.c
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -11492,7 +11492,7 @@ void call_trace_sched_update_nr_running(
+>   
+>   #ifdef CONFIG_SCHED_MM_CID
+>   
+> -/**
+> +/*
+>    * @cid_lock: Guarantee forward-progress of cid allocation.
+>    *
+>    * Concurrency ID allocation within a bitmap is mostly lock-free. The cid_lock
+> @@ -11501,7 +11501,7 @@ void call_trace_sched_update_nr_running(
+>    */
+>   DEFINE_RAW_SPINLOCK(cid_lock);
+>   
+> -/**
+> +/*
+>    * @use_cid_lock: Select cid allocation behavior: lock-free vs spinlock.
+>    *
+>    * When @use_cid_lock is 0, the cid allocation is lock-free. When contention is
+
 -- 
-2.40.1
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
 
