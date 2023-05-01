@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 978BC6F2DF5
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 05:18:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D67336F2E2E
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 05:21:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233404AbjEADSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 23:18:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43840 "EHLO
+        id S233231AbjEADVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 23:21:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233624AbjEADP7 (ORCPT
+        with ESMTP id S233395AbjEADRz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 23:15:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9454659C7;
-        Sun, 30 Apr 2023 20:06:34 -0700 (PDT)
+        Sun, 30 Apr 2023 23:17:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52FCD1FF7;
+        Sun, 30 Apr 2023 20:07:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E030F61780;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 48B1060C42;
+        Mon,  1 May 2023 03:05:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCB95C4339B;
         Mon,  1 May 2023 03:05:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 320EFC4339C;
-        Mon,  1 May 2023 03:05:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682910357;
-        bh=z4Kl8L7wxX4xJ2N4SX2g9Q0DC4BQTCOs5TJtelKsGDg=;
+        s=k20201202; t=1682910358;
+        bh=kavk+tuTqy3NvZ1+Ukd9Oi8+V3LFkbsFCBw5hwsMVZc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gtq4TguKX9v2MkpF1aukzQfE5l0S7rB8mhwCZD0rZkHsOp/t7Q79w5WnygHl/vYpr
-         6Zs7dEDSfcCajaS3H4okiggjXpCgWtSjhsWBumrWFLR56OsSXMlkXZKTfdw+aWB7wx
-         P7P4Sg0g/FhZJKpc2iQUQCVxy0ZfEgeqo+cxtcOf00uhbd8vIupw8kr2NIaU0Pz/9n
-         9glV5GLqFmgqd8hnPRFhW5u24sWlrnVy3tieGwwkD8HUrhuVXdo6qAJTos+BSv1Yk8
-         RmaMpbHTA1kteu5uJEnpgXVDTpkYzOsIBZdQ/oZJZowfxVEstxCUMiAWQTNy4BTonx
-         CVaaBI0nVBIyA==
+        b=GM4H1hCY3R52YX3IuO/fhwZ3HcKG3yPrEoI9DsFokEJwSsmWJJ3ZVYkUEpowxeOjK
+         XShuZ9hgbG8e+QqjlIoRZchmbJzyB3U3zRXh6iXBXLBnzLFFim7X1yKc+hKGZWkeom
+         d2LMbZIZr0un9eDv+bSQYy++V3o5hO/QyNVm2AA/1fxTK7/D4UDtiV0/NnGI589XQB
+         KcSsTj0hGJdOghx7iZ64JQu+42bSOqaYiPrpyR2B8QA6Lau6CenKvYveMf9ALnduM5
+         u667C78kr8e65T9cX93l1cqMDtwJ9lTydPjVQgOkm7vef6ty8ymvVeB9xjwbW+1VWR
+         ebA8sf0RFG86w==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Nur Hussein <hussein@unixcat.org>,
-        Thierry Reding <treding@nvidia.com>,
-        Sasha Levin <sashal@kernel.org>, thierry.reding@gmail.com,
-        mperttunen@nvidia.com, airlied@gmail.com, daniel@ffwll.ch,
-        jonathanh@nvidia.com, dri-devel@lists.freedesktop.org,
-        linux-tegra@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 08/12] drm/tegra: Avoid potential 32-bit integer overflow
-Date:   Sun, 30 Apr 2023 23:05:34 -0400
-Message-Id: <20230501030540.3254928-8-sashal@kernel.org>
+Cc:     Tamir Duberstein <tamird@google.com>,
+        Bob Moore <robert.moore@intel.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Sasha Levin <sashal@kernel.org>, linux-acpi@vger.kernel.org,
+        acpica-devel@lists.linuxfoundation.org
+Subject: [PATCH AUTOSEL 5.10 09/12] ACPICA: Avoid undefined behavior: applying zero offset to null pointer
+Date:   Sun, 30 Apr 2023 23:05:35 -0400
+Message-Id: <20230501030540.3254928-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230501030540.3254928-1-sashal@kernel.org>
 References: <20230501030540.3254928-1-sashal@kernel.org>
@@ -50,9 +49,9 @@ MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,WEIRD_PORT autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,35 +59,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nur Hussein <hussein@unixcat.org>
+From: Tamir Duberstein <tamird@google.com>
 
-[ Upstream commit 2429b3c529da29d4277d519bd66d034842dcd70c ]
+[ Upstream commit 05bb0167c80b8f93c6a4e0451b7da9b96db990c2 ]
 
-In tegra_sor_compute_config(), the 32-bit value mode->clock is
-multiplied by 1000, and assigned to the u64 variable pclk. We can avoid
-a potential 32-bit integer overflow by casting mode->clock to u64 before
-we do the arithmetic and assignment.
+ACPICA commit 770653e3ba67c30a629ca7d12e352d83c2541b1e
 
-Signed-off-by: Nur Hussein <hussein@unixcat.org>
-Signed-off-by: Thierry Reding <treding@nvidia.com>
+Before this change we see the following UBSAN stack trace in Fuchsia:
+
+  #0    0x000021e4213b3302 in acpi_ds_init_aml_walk(struct acpi_walk_state*, union acpi_parse_object*, struct acpi_namespace_node*, u8*, u32, struct acpi_evaluate_info*, u8) ../../third_party/acpica/source/components/dispatcher/dswstate.c:682 <platform-bus-x86.so>+0x233302
+  #1.2  0x000020d0f660777f in ubsan_get_stack_trace() compiler-rt/lib/ubsan/ubsan_diag.cpp:41 <libclang_rt.asan.so>+0x3d77f
+  #1.1  0x000020d0f660777f in maybe_print_stack_trace() compiler-rt/lib/ubsan/ubsan_diag.cpp:51 <libclang_rt.asan.so>+0x3d77f
+  #1    0x000020d0f660777f in ~scoped_report() compiler-rt/lib/ubsan/ubsan_diag.cpp:387 <libclang_rt.asan.so>+0x3d77f
+  #2    0x000020d0f660b96d in handlepointer_overflow_impl() compiler-rt/lib/ubsan/ubsan_handlers.cpp:809 <libclang_rt.asan.so>+0x4196d
+  #3    0x000020d0f660b50d in compiler-rt/lib/ubsan/ubsan_handlers.cpp:815 <libclang_rt.asan.so>+0x4150d
+  #4    0x000021e4213b3302 in acpi_ds_init_aml_walk(struct acpi_walk_state*, union acpi_parse_object*, struct acpi_namespace_node*, u8*, u32, struct acpi_evaluate_info*, u8) ../../third_party/acpica/source/components/dispatcher/dswstate.c:682 <platform-bus-x86.so>+0x233302
+  #5    0x000021e4213e2369 in acpi_ds_call_control_method(struct acpi_thread_state*, struct acpi_walk_state*, union acpi_parse_object*) ../../third_party/acpica/source/components/dispatcher/dsmethod.c:605 <platform-bus-x86.so>+0x262369
+  #6    0x000021e421437fac in acpi_ps_parse_aml(struct acpi_walk_state*) ../../third_party/acpica/source/components/parser/psparse.c:550 <platform-bus-x86.so>+0x2b7fac
+  #7    0x000021e4214464d2 in acpi_ps_execute_method(struct acpi_evaluate_info*) ../../third_party/acpica/source/components/parser/psxface.c:244 <platform-bus-x86.so>+0x2c64d2
+  #8    0x000021e4213aa052 in acpi_ns_evaluate(struct acpi_evaluate_info*) ../../third_party/acpica/source/components/namespace/nseval.c:250 <platform-bus-x86.so>+0x22a052
+  #9    0x000021e421413dd8 in acpi_ns_init_one_device(acpi_handle, u32, void*, void**) ../../third_party/acpica/source/components/namespace/nsinit.c:735 <platform-bus-x86.so>+0x293dd8
+  #10   0x000021e421429e98 in acpi_ns_walk_namespace(acpi_object_type, acpi_handle, u32, u32, acpi_walk_callback, acpi_walk_callback, void*, void**) ../../third_party/acpica/source/components/namespace/nswalk.c:298 <platform-bus-x86.so>+0x2a9e98
+  #11   0x000021e4214131ac in acpi_ns_initialize_devices(u32) ../../third_party/acpica/source/components/namespace/nsinit.c:268 <platform-bus-x86.so>+0x2931ac
+  #12   0x000021e42147c40d in acpi_initialize_objects(u32) ../../third_party/acpica/source/components/utilities/utxfinit.c:304 <platform-bus-x86.so>+0x2fc40d
+  #13   0x000021e42126d603 in acpi::acpi_impl::initialize_acpi(acpi::acpi_impl*) ../../src/devices/board/lib/acpi/acpi-impl.cc:224 <platform-bus-x86.so>+0xed603
+
+Add a simple check that avoids incrementing a pointer by zero, but
+otherwise behaves as before. Note that our findings are against ACPICA
+20221020, but the same code exists on master.
+
+Link: https://github.com/acpica/acpica/commit/770653e3
+Signed-off-by: Bob Moore <robert.moore@intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/tegra/sor.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/acpi/acpica/dswstate.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/tegra/sor.c b/drivers/gpu/drm/tegra/sor.c
-index 32c83f2e386ca..9d60d1c4cfcea 100644
---- a/drivers/gpu/drm/tegra/sor.c
-+++ b/drivers/gpu/drm/tegra/sor.c
-@@ -1153,7 +1153,7 @@ static int tegra_sor_compute_config(struct tegra_sor *sor,
- 				    struct drm_dp_link *link)
- {
- 	const u64 f = 100000, link_rate = link->rate * 1000;
--	const u64 pclk = mode->clock * 1000;
-+	const u64 pclk = (u64)mode->clock * 1000;
- 	u64 input, output, watermark, num;
- 	struct tegra_sor_params params;
- 	u32 num_syms_per_line;
+diff --git a/drivers/acpi/acpica/dswstate.c b/drivers/acpi/acpica/dswstate.c
+index 809a0c0536b59..f9ba7695be147 100644
+--- a/drivers/acpi/acpica/dswstate.c
++++ b/drivers/acpi/acpica/dswstate.c
+@@ -576,9 +576,14 @@ acpi_ds_init_aml_walk(struct acpi_walk_state *walk_state,
+ 	ACPI_FUNCTION_TRACE(ds_init_aml_walk);
+ 
+ 	walk_state->parser_state.aml =
+-	    walk_state->parser_state.aml_start = aml_start;
+-	walk_state->parser_state.aml_end =
+-	    walk_state->parser_state.pkg_end = aml_start + aml_length;
++	    walk_state->parser_state.aml_start =
++	    walk_state->parser_state.aml_end =
++	    walk_state->parser_state.pkg_end = aml_start;
++	/* Avoid undefined behavior: applying zero offset to null pointer */
++	if (aml_length != 0) {
++		walk_state->parser_state.aml_end += aml_length;
++		walk_state->parser_state.pkg_end += aml_length;
++	}
+ 
+ 	/* The next_op of the next_walk will be the beginning of the method */
+ 
 -- 
 2.39.2
 
