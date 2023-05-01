@@ -2,76 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02E846F2FBF
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 11:06:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4352D6F2FC2
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 11:06:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232430AbjEAJFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 05:05:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33528 "EHLO
+        id S232144AbjEAJGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 05:06:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232351AbjEAJFm (ORCPT
+        with ESMTP id S232498AbjEAJGD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 05:05:42 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A53671723
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 02:05:28 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4efe8b3f3f7so2677072e87.2
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 02:05:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682931927; x=1685523927;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HQcL6JXC95b5fH8+n8D4snP5Hhmk4OL2MW3VW+pKJ0E=;
-        b=ryOVLyaXPO1JeeCNBToS55jlkVdWfQga1fn6f6J5KLa3q00WDmdYYzsPTn9DQ6kmNG
-         AVLtk/TRhd3Z5K/d80x/Zy+QOUvnhh+LnMwePTkmwtdOzOWwZqxPVMYFxTo0u0cHj+pG
-         ZQKzUIeBbUQQNL7L7M3s1OcyOuQM+lcKKvkc9fA5I8f4yTtf+KSVKvE8EB2JdaqaM9wf
-         sy52vRUHo6d6/HRomTLnJ5TCWBpnqJqwSE8s+pHozwCOwTpSyjX2gR5VfBtV+nOK05xC
-         JysLfxToT2GTYX1aOVewx89219wGbviaT/wvMyUw0L/DhXWZcjnJO6rjO4CF6Vmje1Rg
-         BNOQ==
+        Mon, 1 May 2023 05:06:03 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FFDE101
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 02:05:52 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-329614db215so13529225ab.2
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 02:05:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682931927; x=1685523927;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HQcL6JXC95b5fH8+n8D4snP5Hhmk4OL2MW3VW+pKJ0E=;
-        b=fWOdcGrgJU+s2CH8Oqfjr/c0FfCYwF22aOtV71TNYf11c8tc7ih2e3jrPc5eXdX9Eh
-         08lzjp7Ad97kUYBbTbUeOXvn4inBrT5M0Dw1KbytghDoFOr/kK2jS+kzvKZzJubzr/1F
-         2bqGBvyXWyUjqbsio5VUgH2TQ5hP4DiJwBTU/Fz85soiGn811P/Z3tCrZQgcpvA3jL1d
-         bU001xQaX5nzZza+Qs2R3SJqcSrlgXR3ribMh2fOWr9FRbrsxojAT5d2up0YhMxiL9ww
-         vXtq3MBAFlLCqikZKx2GzbhzCQJd35Zq5Lm4CfUmOgiHNuYr8szrHz7nODr0OJtBSxsB
-         NTGA==
-X-Gm-Message-State: AC+VfDzYjT1Lb4YrqaltphnkUyDQZ3LcXHOEGoNrm5lewgTMO0uqk4/H
-        sf11piSOphSBa1ojnu7UahNkng==
-X-Google-Smtp-Source: ACHHUZ7OZhSvekKdINvRtJUNz3diHP6SmdEY/biR7EfrLtF0h36Io3UWjJnpkBypV21YJPARIGuo2w==
-X-Received: by 2002:ac2:5490:0:b0:4ed:d1d6:c595 with SMTP id t16-20020ac25490000000b004edd1d6c595mr3958731lfk.55.1682931926864;
-        Mon, 01 May 2023 02:05:26 -0700 (PDT)
-Received: from [127.0.1.1] ([85.235.12.238])
-        by smtp.gmail.com with ESMTPSA id f21-20020ac251b5000000b004eb554a1711sm4601208lfk.51.2023.05.01.02.05.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 May 2023 02:05:26 -0700 (PDT)
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 01 May 2023 11:05:23 +0200
-Subject: [PATCH 3/3] ARM: omap2: Rewrite WLAN quirk to use GPIO descriptors
+        d=1e100.net; s=20221208; t=1682931951; x=1685523951;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KhoeRD70on/oigp93ouNpP+4MhwmnlaB7dvFyQVtaVA=;
+        b=Zl351jY/jJpTwCp8ckTtSitDW5WgXZPbdwgj2zxMEGgan1DZOesFst+Lixpm25rC24
+         uNphXqh+DDQ+pPzUMF3tQElNwu0NijFke8dbELPaG5lPc6gEMoknZFZAN0nbfyaJLu59
+         Ot+iAIUaRgNHOgOUNbDbKIevyw5B2NPWjYTU6gFkYrEyqzkoqQ5BI1W7mm8QFkfipjBt
+         du8pw636rK4grDFWAFxG0Ao+tjH1bF9YIQrYulsgx5Z3ggm8Xfb93R4dpKIYI3HFyzuw
+         24oFyTfzxyKwrGkvYufwOnvF8ssYhBIZAb9l1QEThOFU+uXDAdZtf7l0B9joHSvAxQyw
+         Dfow==
+X-Gm-Message-State: AC+VfDzxYxU6LLw85wUcZg6xg9R7tkO4MA1JIPnxSER0wDAv14L6uOUm
+        L8Csj+SKm9CG2S2NTYwNNws4qKg3QI+0fh0aEIQ8irh2weJvxh0=
+X-Google-Smtp-Source: ACHHUZ6lkXYSSop/rfC6wIAmaqxSYHh1CutB+tEupm397xSb9q97wbZSIr7Uh6hoJ97gwb8udkZylLr2Kk2zhIJrgqN3GjO8p+mM
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230430-omap2-pdata-quirks-v1-3-e015f3a3ea46@linaro.org>
-References: <20230430-omap2-pdata-quirks-v1-0-e015f3a3ea46@linaro.org>
-In-Reply-To: <20230430-omap2-pdata-quirks-v1-0-e015f3a3ea46@linaro.org>
-To:     Tony Lindgren <tony@atomide.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Lee Jones <lee@kernel.org>,
-        Andreas Kemnade <andreas@kemnade.info>
-Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-X-Mailer: b4 0.12.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Received: by 2002:a92:ccc8:0:b0:32b:13ad:3e3f with SMTP id
+ u8-20020a92ccc8000000b0032b13ad3e3fmr6690335ilq.3.1682931951513; Mon, 01 May
+ 2023 02:05:51 -0700 (PDT)
+Date:   Mon, 01 May 2023 02:05:51 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000026b5f505fa9e21f1@google.com>
+Subject: [syzbot] Monthly usb report (Apr 2023)
+From:   syzbot <syzbot+list7915d07c2502675e2a16@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,89 +54,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The OMAP2 platform data quirk is using the global GPIO numberspace
-to obtain two WLAN GPIOs to drive power and xcvr reset GPIO
-lines during start-up.
+Hello usb maintainers/developers,
 
-Rewrite the quirk to use a GPIO descriptor table so we avoid using
-global GPIO numbers.
+This is a 31-day syzbot report for the usb subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/usb
 
-This gets rid of the final dependency on the legacy <linux/gpio.h>
-header from the OMAP2/3 platforms.
+During the period, 2 new issues were detected and 4 were fixed.
+In total, 63 issues are still open and 313 have been fixed so far.
 
-Fixes: 92bf78b33b0b ("gpio: omap: use dynamic allocation of base")
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Some of the still happening issues:
+
+Ref  Crashes Repro Title
+<1>  2277    Yes   KMSAN: uninit-value in dib3000mb_attach (2)
+                   https://syzkaller.appspot.com/bug?extid=c88fc0ebe0d5935c70da
+<2>  1758    Yes   WARNING in firmware_fallback_sysfs
+                   https://syzkaller.appspot.com/bug?extid=95f2e2439b97575ec3c0
+<3>  1526    Yes   KMSAN: uninit-value in mii_nway_restart
+                   https://syzkaller.appspot.com/bug?extid=1f53a30781af65d2c955
+<4>  801     Yes   WARNING in ar5523_submit_rx_cmd/usb_submit_urb
+                   https://syzkaller.appspot.com/bug?extid=6101b0c732dea13ea55b
+<5>  645     No    INFO: task hung in usb_get_descriptor (2)
+                   https://syzkaller.appspot.com/bug?extid=e8db9d9e65feff8fa471
+<6>  472     Yes   INFO: task hung in usb_register_dev
+                   https://syzkaller.appspot.com/bug?extid=e761775e8f4a28711f19
+<7>  397     Yes   WARNING in smsusb_term_device
+                   https://syzkaller.appspot.com/bug?extid=40ac6e73326e79ee8ecb
+<8>  279     Yes   INFO: task hung in r871xu_dev_remove
+                   https://syzkaller.appspot.com/bug?extid=f39c1dad0b7db49ca4a8
+<9>  258     No    INFO: task hung in usb_deregister_dev
+                   https://syzkaller.appspot.com/bug?extid=4189d5cde8630463053f
+<10> 252     Yes   INFO: task hung in usbdev_open (2)
+                   https://syzkaller.appspot.com/bug?extid=b73659f5bb96fac34820
+
 ---
- arch/arm/mach-omap2/pdata-quirks.c | 41 ++++++++++++++++++++++++++------------
- 1 file changed, 28 insertions(+), 13 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/arch/arm/mach-omap2/pdata-quirks.c b/arch/arm/mach-omap2/pdata-quirks.c
-index 3264c4e77a8a..c1c0121f478d 100644
---- a/arch/arm/mach-omap2/pdata-quirks.c
-+++ b/arch/arm/mach-omap2/pdata-quirks.c
-@@ -8,7 +8,6 @@
- #include <linux/davinci_emac.h>
- #include <linux/gpio/machine.h>
- #include <linux/gpio/consumer.h>
--#include <linux/gpio.h>
- #include <linux/init.h>
- #include <linux/kernel.h>
- #include <linux/of_platform.h>
-@@ -178,25 +177,41 @@ static void __init am35xx_emac_reset(void)
- 	omap_ctrl_readl(AM35XX_CONTROL_IP_SW_RESET); /* OCP barrier */
- }
- 
--static struct gpio cm_t3517_wlan_gpios[] __initdata = {
--	{ 56,	GPIOF_OUT_INIT_HIGH,	"wlan pwr" },
--	{ 4,	GPIOF_OUT_INIT_HIGH,	"xcvr noe" },
-+static struct gpiod_lookup_table cm_t3517_wlan_gpio_table = {
-+	.dev_id = NULL,
-+	.table = {
-+		GPIO_LOOKUP("gpio-48-53", 8, "power",
-+			    GPIO_ACTIVE_HIGH),
-+		GPIO_LOOKUP("gpio-0-15", 4, "noe",
-+			    GPIO_ACTIVE_HIGH),
-+		{ }
-+	},
- };
- 
- static void __init omap3_sbc_t3517_wifi_init(void)
- {
--	int err = gpio_request_array(cm_t3517_wlan_gpios,
--				ARRAY_SIZE(cm_t3517_wlan_gpios));
--	if (err) {
--		pr_err("SBC-T3517: wl12xx gpios request failed: %d\n", err);
--		return;
--	}
-+	struct gpio_desc *d;
- 
--	gpiod_export(gpio_to_desc(cm_t3517_wlan_gpios[0].gpio), 0);
--	gpiod_export(gpio_to_desc(cm_t3517_wlan_gpios[1].gpio), 0);
-+	gpiod_add_lookup_table(&cm_t3517_wlan_gpio_table);
- 
-+	/* This asserts the RESET line (reverse polarity) */
-+	d = gpiod_get(NULL, "power", GPIOD_OUT_HIGH);
-+	if (IS_ERR(d)) {
-+		pr_err("Unable to get CM T3517 WLAN power GPIO descriptor\n");
-+	} else {
-+		gpiod_set_consumer_name(d, "wlan pwr");
-+		gpiod_export(d, 0);
-+	}
-+
-+	d = gpiod_get(NULL, "noe", GPIOD_OUT_HIGH);
-+	if (IS_ERR(d)) {
-+		pr_err("Unable to get CM T3517 WLAN XCVR NOE GPIO descriptor\n");
-+	} else {
-+		gpiod_set_consumer_name(d, "xcvr noe");
-+		gpiod_export(d, 0);
-+	}
- 	msleep(100);
--	gpio_set_value(cm_t3517_wlan_gpios[1].gpio, 0);
-+	gpiod_set_value(d, 0);
- }
- 
- static struct gpiod_lookup_table omap3_sbc_t3517_usb_gpio_table = {
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
 
--- 
-2.34.1
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
 
+You may send multiple commands in a single email message.
