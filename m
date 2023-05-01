@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B937E6F2D74
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 05:12:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1EEC6F2D77
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 05:12:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232950AbjEADMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 23:12:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36976 "EHLO
+        id S232845AbjEADMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 23:12:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233051AbjEADKQ (ORCPT
+        with ESMTP id S233054AbjEADKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 30 Apr 2023 23:10:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E57B24222;
-        Sun, 30 Apr 2023 20:04:18 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CCDD26A5;
+        Sun, 30 Apr 2023 20:04:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EF8A8617AC;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DD4C61029;
+        Mon,  1 May 2023 03:03:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB978C433D2;
         Mon,  1 May 2023 03:03:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50D73C4339C;
-        Mon,  1 May 2023 03:03:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682910220;
-        bh=lW38JLU3QFhVbWOQXPhF88T4VJz8JtutIhc3gKjsfPk=;
+        s=k20201202; t=1682910222;
+        bh=cv8JJGXNWBr26hY0SkfA4Eso+vQuOnX6tOzJprj6XyI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fv8dm2/IVlNYGt9uaVg23cJLdl5T8Hp+qG25j6sdp1F9eOVm3AjjssBv0lLYDo+lh
-         5nf/L4hgC57PGyNBFrqwviwp3SoL/g2m4hBq0jtJHCmQYSSo+lXsvQuws9eH4uIC/O
-         G4X81G+zJq3Z7VHrFiGuNanKOqCroIEXVTq0xi4dAxV1EURae24qYnQzo2sI5ex2v8
-         GknA13JumHt294/pROxh6Vuw32RXuKCSG1TBU4AlhEicsFsSBXpPP1H1i1lbqJKgWh
-         4K7OGJBUDJr/Sod77u2YoWECUlLGQ2qiSurN75rhEnp063E0B/CQdSfcIS7SANTTpK
-         DHRinWlA/eZSw==
+        b=SlYlSkWGcAZedzaH4az8/BIXMITaWtgg5rU2tp3Iu9hgoLsjtr54yPdtSO9930lu6
+         HPb8QBjHWTXdnOZtav+JQ3C4q/Tt19QXRxO6JyDMJVAzeCeI4GF62dGFJo4uxn10Vi
+         rTCt3iji4F6juaot+5AQ2GpL59TtH8dCRVEhum60BjAh5t79ovaXjEa4vWvTMLVX6t
+         gxcOh74qAuxFMrFIOcSZQOCogUnJyBU4cPDQCPkIRSWw7G067kILgPAd8DntkPg1MT
+         aNPAUO+NFcgzpLlifuaSZErxCiW8iFXgKjZIRquJvfH6llVcoMYX7Pl2xC1zRDIZNz
+         nI3S/h3YWbwUw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Sasha Levin <sashal@kernel.org>, andersson@kernel.org,
-        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
-        linux-remoteproc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 6.1 20/33] remoteproc: stm32_rproc: Add mutex protection for workqueue
-Date:   Sun, 30 Apr 2023 23:02:14 -0400
-Message-Id: <20230501030227.3254266-20-sashal@kernel.org>
+Cc:     Nur Hussein <hussein@unixcat.org>,
+        Thierry Reding <treding@nvidia.com>,
+        Sasha Levin <sashal@kernel.org>, thierry.reding@gmail.com,
+        mperttunen@nvidia.com, airlied@gmail.com, daniel@ffwll.ch,
+        jonathanh@nvidia.com, dri-devel@lists.freedesktop.org,
+        linux-tegra@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 21/33] drm/tegra: Avoid potential 32-bit integer overflow
+Date:   Sun, 30 Apr 2023 23:02:15 -0400
+Message-Id: <20230501030227.3254266-21-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230501030227.3254266-1-sashal@kernel.org>
 References: <20230501030227.3254266-1-sashal@kernel.org>
@@ -51,8 +50,8 @@ MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,56 +60,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+From: Nur Hussein <hussein@unixcat.org>
 
-[ Upstream commit 35bdafda40cc343ad2ba2cce105eba03a70241cc ]
+[ Upstream commit 2429b3c529da29d4277d519bd66d034842dcd70c ]
 
-The workqueue may execute late even after remoteproc is stopped or
-stopping, some resources (rpmsg device and endpoint) have been
-released in rproc_stop_subdevices(), then rproc_vq_interrupt()
-accessing these resources will cause kernel dump.
+In tegra_sor_compute_config(), the 32-bit value mode->clock is
+multiplied by 1000, and assigned to the u64 variable pclk. We can avoid
+a potential 32-bit integer overflow by casting mode->clock to u64 before
+we do the arithmetic and assignment.
 
-Call trace:
-virtqueue_add_inbuf
-virtqueue_add_inbuf
-rpmsg_recv_single
-rpmsg_recv_done
-vring_interrupt
-stm32_rproc_mb_vq_work
-process_one_work
-worker_thread
-kthread
-
-Suggested-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-Link: https://lore.kernel.org/r/20230331160634.3113031-1-arnaud.pouliquen@foss.st.com
-Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+Signed-off-by: Nur Hussein <hussein@unixcat.org>
+Signed-off-by: Thierry Reding <treding@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/remoteproc/stm32_rproc.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/gpu/drm/tegra/sor.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-index 7d782ed9e5896..f618405cf4200 100644
---- a/drivers/remoteproc/stm32_rproc.c
-+++ b/drivers/remoteproc/stm32_rproc.c
-@@ -287,8 +287,16 @@ static void stm32_rproc_mb_vq_work(struct work_struct *work)
- 	struct stm32_mbox *mb = container_of(work, struct stm32_mbox, vq_work);
- 	struct rproc *rproc = dev_get_drvdata(mb->client.dev);
- 
-+	mutex_lock(&rproc->lock);
-+
-+	if (rproc->state != RPROC_RUNNING)
-+		goto unlock_mutex;
-+
- 	if (rproc_vq_interrupt(rproc, mb->vq_id) == IRQ_NONE)
- 		dev_dbg(&rproc->dev, "no message found in vq%d\n", mb->vq_id);
-+
-+unlock_mutex:
-+	mutex_unlock(&rproc->lock);
- }
- 
- static void stm32_rproc_mb_callback(struct mbox_client *cl, void *data)
+diff --git a/drivers/gpu/drm/tegra/sor.c b/drivers/gpu/drm/tegra/sor.c
+index 8af632740673a..77723d5f1d3fd 100644
+--- a/drivers/gpu/drm/tegra/sor.c
++++ b/drivers/gpu/drm/tegra/sor.c
+@@ -1153,7 +1153,7 @@ static int tegra_sor_compute_config(struct tegra_sor *sor,
+ 				    struct drm_dp_link *link)
+ {
+ 	const u64 f = 100000, link_rate = link->rate * 1000;
+-	const u64 pclk = mode->clock * 1000;
++	const u64 pclk = (u64)mode->clock * 1000;
+ 	u64 input, output, watermark, num;
+ 	struct tegra_sor_params params;
+ 	u32 num_syms_per_line;
 -- 
 2.39.2
 
