@@ -2,402 +2,638 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A930D6F2F68
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 10:46:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CFBF6F2F69
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 10:57:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232386AbjEAIqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 04:46:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48124 "EHLO
+        id S229679AbjEAIyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 04:54:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232181AbjEAIpp (ORCPT
+        with ESMTP id S229519AbjEAIyS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 04:45:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25A701BF9;
-        Mon,  1 May 2023 01:45:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 1 May 2023 04:54:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D99E5E76
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 01:53:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682931211;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=kscLclbaWDU8qUyny3Gj/nyiCnBuZ7x+v3e1jnJovqQ=;
+        b=VB4nISPvOPxovZrG0VhPAPULNc9IgxJcdcnqmwI9+1gOsBTv2qhxianXU+3zz47K2lYhpS
+        EUb25qO95i/BIQOQC2eYwQVo+LOPasdZ1XTGNG6nCWV7v0gElDNr0duSgX60UK1AhaTLWO
+        PwcfU9+QShQTSyTzqVvIguZ1uSCWTJk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-179-592b-8clN4SYzGa2TeemlA-1; Mon, 01 May 2023 04:53:27 -0400
+X-MC-Unique: 592b-8clN4SYzGa2TeemlA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A0B361B51;
-        Mon,  1 May 2023 08:45:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B354EC4339C;
-        Mon,  1 May 2023 08:44:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682930699;
-        bh=rulYTavJHhA8ZwocaiHU3PzLTExyBoYBA0lghA9SugY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=HNxaObCA9lyDwDGVwTwMCQoLnBsk8ts0CWOgtKT4HHE6qzZF9tjBSSrKt1xyIG7Qf
-         L+2pOcLf+cFiyCkkLIh3nw1c7nqU4/L5s7TK2dfZsJsPbPt0A01HA7TxN4qQN25yCc
-         +jzWtLSV9KgyBzvcTWZAviBQPMQAXsbCjRN/AFV8ufVnwuqoDLxsDlTsVnnDDBhYuK
-         NjstBFeqaGReiaf6TiietDkZ9HISUXO+0cqctzJU6OLo8DFUKh2GSZILzEOhk62f0C
-         xQHRiBEIcsKI3w5zngnpv+Z2CvQvvu2V6lHT4SpGtzq8HumvhI7r+G09bId5wT4/Xv
-         pptMcaJAf9jqQ==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1ptP9V-00CFJx-9A;
-        Mon, 01 May 2023 09:44:57 +0100
-Date:   Mon, 01 May 2023 09:44:52 +0100
-Message-ID: <86ttwwh24b.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Anup Patel <anup@brainfault.org>
-Cc:     Anup Patel <apatel@ventanamicro.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 5/9] irqchip: Add RISC-V incoming MSI controller driver
-In-Reply-To: <CAAhSdy39OJo1c0Yt9588m_aXc7BJ9OEVm1hCJEbv3Km31hmbkA@mail.gmail.com>
-References: <20230103141409.772298-1-apatel@ventanamicro.com>
-        <20230103141409.772298-6-apatel@ventanamicro.com>
-        <867cxqoic8.wl-maz@kernel.org>
-        <CAAhSdy39OJo1c0Yt9588m_aXc7BJ9OEVm1hCJEbv3Km31hmbkA@mail.gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: anup@brainfault.org, apatel@ventanamicro.com, palmer@dabbelt.com, paul.walmsley@sifive.com, tglx@linutronix.de, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, atishp@atishpatra.org, Alistair.Francis@wdc.com, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7A1C5101A550;
+        Mon,  1 May 2023 08:53:27 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 547B72027043;
+        Mon,  1 May 2023 08:53:27 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: [GIT PULL] KVM changes for Linux 6.4
+Date:   Mon,  1 May 2023 04:53:26 -0400
+Message-Id: <20230501085326.2997739-1-pbonzini@redhat.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 01 May 2023 09:28:16 +0100,
-Anup Patel <anup@brainfault.org> wrote:
->=20
-> On Fri, Jan 13, 2023 at 3:40=E2=80=AFPM Marc Zyngier <maz@kernel.org> wro=
-te:
-> >
-> > On Tue, 03 Jan 2023 14:14:05 +0000,
-> > Anup Patel <apatel@ventanamicro.com> wrote:
-> > >
-> > > The RISC-V advanced interrupt architecture (AIA) specification defines
-> > > a new MSI controller for managing MSIs on a RISC-V platform. This new
-> > > MSI controller is referred to as incoming message signaled interrupt
-> > > controller (IMSIC) which manages MSI on per-HART (or per-CPU) basis.
-> > > (For more details refer https://github.com/riscv/riscv-aia)
-> >
-> > And how about IPIs, which this driver seems to be concerned about?
->=20
-> Okay, I will mention about IPIs in the commit description.
->=20
-> >
-> > >
-> > > This patch adds an irqchip driver for RISC-V IMSIC found on RISC-V
-> > > platforms.
-> > >
-> > > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> > > ---
-> > >  drivers/irqchip/Kconfig             |   14 +-
-> > >  drivers/irqchip/Makefile            |    1 +
-> > >  drivers/irqchip/irq-riscv-imsic.c   | 1174 +++++++++++++++++++++++++=
-++
-> > >  include/linux/irqchip/riscv-imsic.h |   92 +++
-> > >  4 files changed, 1280 insertions(+), 1 deletion(-)
-> > >  create mode 100644 drivers/irqchip/irq-riscv-imsic.c
-> > >  create mode 100644 include/linux/irqchip/riscv-imsic.h
-> > >
-> > > diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-> > > index 9e65345ca3f6..a1315189a595 100644
-> > > --- a/drivers/irqchip/Kconfig
-> > > +++ b/drivers/irqchip/Kconfig
-> > > @@ -29,7 +29,6 @@ config ARM_GIC_V2M
-> > >
-> > >  config GIC_NON_BANKED
-> > >       bool
-> > > -
-> > >  config ARM_GIC_V3
-> > >       bool
-> > >       select IRQ_DOMAIN_HIERARCHY
-> > > @@ -548,6 +547,19 @@ config SIFIVE_PLIC
-> > >       select IRQ_DOMAIN_HIERARCHY
-> > >       select GENERIC_IRQ_EFFECTIVE_AFF_MASK if SMP
-> > >
-> > > +config RISCV_IMSIC
-> > > +     bool
-> > > +     depends on RISCV
-> > > +     select IRQ_DOMAIN_HIERARCHY
-> > > +     select GENERIC_MSI_IRQ_DOMAIN
-> > > +
-> > > +config RISCV_IMSIC_PCI
-> > > +     bool
-> > > +     depends on RISCV_IMSIC
-> > > +     depends on PCI
-> > > +     depends on PCI_MSI
-> > > +     default RISCV_IMSIC
-> >
-> > This should definitely tell you that this driver needs splitting.
->=20
-> The code under "#ifdef CONFIG_RISCV_IMSIC_PCI" is hardly 40 lines
-> so I felt it was too small to deserve its own source file.
+Linus,
 
-It at least needs its own patch.
+The following changes since commit 197b6b60ae7bc51dd0814953c562833143b292aa:
 
->=20
-> >
-> > > +
-> > >  config EXYNOS_IRQ_COMBINER
-> > >       bool "Samsung Exynos IRQ combiner support" if COMPILE_TEST
-> > >       depends on (ARCH_EXYNOS && ARM) || COMPILE_TEST
-> > > diff --git a/drivers/irqchip/Makefile b/drivers/irqchip/Makefile
-> > > index 87b49a10962c..22c723cc6ec8 100644
-> > > --- a/drivers/irqchip/Makefile
-> > > +++ b/drivers/irqchip/Makefile
-> > > @@ -96,6 +96,7 @@ obj-$(CONFIG_QCOM_MPM)                      +=3D ir=
-q-qcom-mpm.o
-> > >  obj-$(CONFIG_CSKY_MPINTC)            +=3D irq-csky-mpintc.o
-> > >  obj-$(CONFIG_CSKY_APB_INTC)          +=3D irq-csky-apb-intc.o
-> > >  obj-$(CONFIG_RISCV_INTC)             +=3D irq-riscv-intc.o
-> > > +obj-$(CONFIG_RISCV_IMSIC)            +=3D irq-riscv-imsic.o
-> > >  obj-$(CONFIG_SIFIVE_PLIC)            +=3D irq-sifive-plic.o
-> > >  obj-$(CONFIG_IMX_IRQSTEER)           +=3D irq-imx-irqsteer.o
-> > >  obj-$(CONFIG_IMX_INTMUX)             +=3D irq-imx-intmux.o
-> > > diff --git a/drivers/irqchip/irq-riscv-imsic.c b/drivers/irqchip/irq-=
-riscv-imsic.c
-> > > new file mode 100644
-> > > index 000000000000..4c16b66738d6
-> > > --- /dev/null
-> > > +++ b/drivers/irqchip/irq-riscv-imsic.c
-> > > @@ -0,0 +1,1174 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +/*
-> > > + * Copyright (C) 2021 Western Digital Corporation or its affiliates.
-> > > + * Copyright (C) 2022 Ventana Micro Systems Inc.
-> > > + */
-> > > +
-> > > +#define pr_fmt(fmt) "riscv-imsic: " fmt
-> > > +#include <linux/bitmap.h>
-> > > +#include <linux/cpu.h>
-> > > +#include <linux/interrupt.h>
-> > > +#include <linux/io.h>
-> > > +#include <linux/iommu.h>
-> > > +#include <linux/irq.h>
-> > > +#include <linux/irqchip.h>
-> > > +#include <linux/irqchip/chained_irq.h>
-> > > +#include <linux/irqchip/riscv-imsic.h>
-> > > +#include <linux/irqdomain.h>
-> > > +#include <linux/module.h>
-> > > +#include <linux/msi.h>
-> > > +#include <linux/of.h>
-> > > +#include <linux/of_address.h>
-> > > +#include <linux/of_irq.h>
-> > > +#include <linux/pci.h>
-> > > +#include <linux/platform_device.h>
-> > > +#include <linux/spinlock.h>
-> > > +#include <linux/smp.h>
-> > > +#include <asm/hwcap.h>
-> > > +
-> > > +#define IMSIC_DISABLE_EIDELIVERY     0
-> > > +#define IMSIC_ENABLE_EIDELIVERY              1
-> > > +#define IMSIC_DISABLE_EITHRESHOLD    1
-> > > +#define IMSIC_ENABLE_EITHRESHOLD     0
-> > > +
-> > > +#define imsic_csr_write(__c, __v)    \
-> > > +do {                                 \
-> > > +     csr_write(CSR_ISELECT, __c);    \
-> > > +     csr_write(CSR_IREG, __v);       \
-> > > +} while (0)
-> > > +
-> > > +#define imsic_csr_read(__c)          \
-> > > +({                                   \
-> > > +     unsigned long __v;              \
-> > > +     csr_write(CSR_ISELECT, __c);    \
-> > > +     __v =3D csr_read(CSR_IREG);       \
-> > > +     __v;                            \
-> > > +})
-> > > +
-> > > +#define imsic_csr_set(__c, __v)              \
-> > > +do {                                 \
-> > > +     csr_write(CSR_ISELECT, __c);    \
-> > > +     csr_set(CSR_IREG, __v);         \
-> > > +} while (0)
-> > > +
-> > > +#define imsic_csr_clear(__c, __v)    \
-> > > +do {                                 \
-> > > +     csr_write(CSR_ISELECT, __c);    \
-> > > +     csr_clear(CSR_IREG, __v);       \
-> > > +} while (0)
-> > > +
-> > > +struct imsic_mmio {
-> > > +     phys_addr_t pa;
-> > > +     void __iomem *va;
-> > > +     unsigned long size;
-> > > +};
-> > > +
-> > > +struct imsic_priv {
-> > > +     /* Global configuration common for all HARTs */
-> > > +     struct imsic_global_config global;
-> > > +
-> > > +     /* MMIO regions */
-> > > +     u32 num_mmios;
-> > > +     struct imsic_mmio *mmios;
-> > > +
-> > > +     /* Global state of interrupt identities */
-> > > +     raw_spinlock_t ids_lock;
-> > > +     unsigned long *ids_used_bimap;
-> > > +     unsigned long *ids_enabled_bimap;
-> > > +     unsigned int *ids_target_cpu;
-> > > +
-> > > +     /* Mask for connected CPUs */
-> > > +     struct cpumask lmask;
-> > > +
-> > > +     /* IPI interrupt identity */
-> > > +     u32 ipi_id;
-> > > +     u32 ipi_lsync_id;
-> > > +
-> > > +     /* IRQ domains */
-> > > +     struct irq_domain *base_domain;
-> > > +     struct irq_domain *pci_domain;
-> > > +     struct irq_domain *plat_domain;
-> > > +};
-> > > +
-> > > +struct imsic_handler {
-> > > +     /* Local configuration for given HART */
-> > > +     struct imsic_local_config local;
-> > > +
-> > > +     /* Pointer to private context */
-> > > +     struct imsic_priv *priv;
-> > > +};
-> > > +
-> > > +static bool imsic_init_done;
-> > > +
-> > > +static int imsic_parent_irq;
-> > > +static DEFINE_PER_CPU(struct imsic_handler, imsic_handlers);
-> > > +
-> > > +const struct imsic_global_config *imsic_get_global_config(void)
-> > > +{
-> > > +     struct imsic_handler *handler =3D this_cpu_ptr(&imsic_handlers);
-> > > +
-> > > +     if (!handler || !handler->priv)
-> > > +             return NULL;
-> > > +
-> > > +     return &handler->priv->global;
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(imsic_get_global_config);
-> > > +
-> > > +const struct imsic_local_config *imsic_get_local_config(unsigned int=
- cpu)
-> > > +{
-> > > +     struct imsic_handler *handler =3D per_cpu_ptr(&imsic_handlers, =
-cpu);
-> > > +
-> > > +     if (!handler || !handler->priv)
-> > > +             return NULL;
-> >
-> > How can this happen?
->=20
-> These are redundant checks. I will drop.
->=20
-> >
-> > > +
-> > > +     return &handler->local;
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(imsic_get_local_config);
-> >
-> > Why are these symbols exported? They have no user, so they shouldn't
-> > even exist here. I also seriously doubt there is a valid use case for
-> > exposing this information to the rest of the kernel.
->=20
-> The imsic_get_global_config() is used by APLIC driver and KVM RISC-V
-> module whereas imsic_get_local_config() is only used by KVM RISC-V.
->=20
-> The KVM RISC-V AIA irqchip patches are available in riscv_kvm_aia_v1
-> branch at: https://github.com/avpatel/linux.git. I have not posted KVM RI=
-SC-V
-> patches due various interdependencies.
+  Linux 6.3-rc4 (2023-03-26 14:40:20 -0700)
 
-Then the symbols can wait, can't they? It'd make more sense if the
-KVM-dependent bits were brought together with the KVM patches.
+are available in the Git repository at:
 
-Even better, you'd use some level of abstraction between KVM and the
-irqchip code. GIC makes some heavy use of irq_set_vcpu_affinity() as a
-private API with KVM, and I'd suggest you look into something similar.
+  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
 
-[...]
+for you to fetch changes up to b3c98052d46948a8d65d2778c7f306ff38366aac:
 
-> > > +#ifdef CONFIG_SMP
-> > > +static void __imsic_id_smp_sync(struct imsic_priv *priv)
-> > > +{
-> > > +     struct imsic_handler *handler;
-> > > +     struct cpumask amask;
-> > > +     int cpu;
-> > > +
-> > > +     cpumask_and(&amask, &priv->lmask, cpu_online_mask);
-> >
-> > Can't this race against a CPU going down?
->=20
-> Yes, it can race if a CPU goes down while we are in this function
-> but this won't be a problem because the imsic_starting_cpu()
-> will unconditionally do imsic_ids_local_sync() when the CPU is
-> brought-up again. I will add a multiline comment block explaining
-> this.
+  Merge tag 'kvm-x86-vmx-6.4' of https://github.com/kvm-x86/linux into HEAD (2023-04-26 15:56:51 -0400)
 
-I'd rather you avoid the race instead of papering over it.
+RISC-V changes are missing because there were KVM changes in Palmer
+Dabbelt's arch pull request; it has just been committed and it has some
+conflicts, but I did my tests last week before you had pulled from
+Palmer.  I have asked the RISC-V people to use shared topic branches
+in the future.
 
->=20
-> >
-> > > +     for_each_cpu(cpu, &amask) {
-> > > +             if (cpu =3D=3D smp_processor_id())
-> > > +                     continue;
-> > > +
-> > > +             handler =3D per_cpu_ptr(&imsic_handlers, cpu);
-> > > +             if (!handler || !handler->priv || !handler->local.msi_v=
-a) {
-> > > +                     pr_warn("CPU%d: handler not initialized\n", cpu=
-);
-> >
-> > How many times are you going to do that? On each failing synchronisatio=
-n?
->=20
-> My bad for adding these paranoid checks. I remove these checks
-> wherever possible.
->=20
-> >
-> > > +                     continue;
-> > > +             }
-> > > +
-> > > +             writel(handler->priv->ipi_lsync_id, handler->local.msi_=
-va);
-> >
-> > As I understand it, this is a "behind the scenes" IPI. Why isn't that
-> > a *real* IPI?
->=20
-> Yes, that's correct. The ID enable bits are per-CPU accessible only
-> via CSRs hence we have a special "behind the scenes" IPI to
-> synchronize state of ID enable bits.
+There are two other conflicts in this pull request:
 
-My question still stands: why isn't this a *real*, Linux visible IPI?
-This sideband signalling makes everything hard to follow, hard to
-debug, and screws up accounting.
+- a trivial one in arch/arm64/kvm/arm.c that is simply due to an extra
+"case" label added in 6.3-rc.
 
-> > Please split the whole guest stuff out. It is totally unused!
->=20
-> The number of guest IDs is used by KVM RISC-V AIA support which
-> is in the pipeline. The KVM RISC-V only need imsic_get_global_config()
-> and imsic_get_local_config(). The "nr_guest_ids" is part of the
-> IMSIC global config.
+- a semantic one that git *won't* catch, due to a function that has
+been renamed (hv_remote_flush_tlb -> hv_flush_remote_tlbs).  See end
+of this message for the resolution (patch to be squashed into the merge).
+If you have CONFIG_HYPERV enabled, incorrect resolution will cause a
+compile failure right away.
 
-And yet it isn't needed for a minimal driver, which what I'd like to
-see at first. Shoving the kitchen sink into an initial patch isn't a
-great way to get it merged.
+Thanks,
 
-      M.
+Paolo
 
---=20
-Without deviation from the norm, progress is not possible.
+----------------------------------------------------------------
+s390:
+
+* More phys_to_virt conversions
+
+* Improvement of AP management for VSIE (nested virtualization)
+
+ARM64:
+
+* Numerous fixes for the pathological lock inversion issue that
+  plagued KVM/arm64 since... forever.
+
+* New framework allowing SMCCC-compliant hypercalls to be forwarded
+  to userspace, hopefully paving the way for some more features
+  being moved to VMMs rather than be implemented in the kernel.
+
+* Large rework of the timer code to allow a VM-wide offset to be
+  applied to both virtual and physical counters as well as a
+  per-timer, per-vcpu offset that complements the global one.
+  This last part allows the NV timer code to be implemented on
+  top.
+
+* A small set of fixes to make sure that we don't change anything
+  affecting the EL1&0 translation regime just after having having
+  taken an exception to EL2 until we have executed a DSB. This
+  ensures that speculative walks started in EL1&0 have completed.
+
+* The usual selftest fixes and improvements.
+
+KVM x86 changes for 6.4:
+
+* Optimize CR0.WP toggling by avoiding an MMU reload when TDP is enabled,
+  and by giving the guest control of CR0.WP when EPT is enabled on VMX
+  (VMX-only because SVM doesn't support per-bit controls)
+
+* Add CR0/CR4 helpers to query single bits, and clean up related code
+  where KVM was interpreting kvm_read_cr4_bits()'s "unsigned long" return
+  as a bool
+
+* Move AMD_PSFD to cpufeatures.h and purge KVM's definition
+
+* Avoid unnecessary writes+flushes when the guest is only adding new PTEs
+
+* Overhaul .sync_page() and .invlpg() to utilize .sync_page()'s optimizations
+  when emulating invalidations
+
+* Clean up the range-based flushing APIs
+
+* Revamp the TDP MMU's reaping of Accessed/Dirty bits to clear a single
+  A/D bit using a LOCK AND instead of XCHG, and skip all of the "handle
+  changed SPTE" overhead associated with writing the entire entry
+
+* Track the number of "tail" entries in a pte_list_desc to avoid having
+  to walk (potentially) all descriptors during insertion and deletion,
+  which gets quite expensive if the guest is spamming fork()
+
+* Disallow virtualizing legacy LBRs if architectural LBRs are available,
+  the two are mutually exclusive in hardware
+
+* Disallow writes to immutable feature MSRs (notably PERF_CAPABILITIES)
+  after KVM_RUN, similar to CPUID features
+
+* Overhaul the vmx_pmu_caps selftest to better validate PERF_CAPABILITIES
+
+* Apply PMU filters to emulated events and add test coverage to the
+  pmu_event_filter selftest
+
+x86 AMD:
+
+* Add support for virtual NMIs
+
+* Fixes for edge cases related to virtual interrupts
+
+x86 Intel:
+
+* Don't advertise XTILE_CFG in KVM_GET_SUPPORTED_CPUID if XTILE_DATA is
+  not being reported due to userspace not opting in via prctl()
+
+* Fix a bug in emulation of ENCLS in compatibility mode
+
+* Allow emulation of NOP and PAUSE for L2
+
+* AMX selftests improvements
+
+* Misc cleanups
+
+MIPS:
+
+* Constify MIPS's internal callbacks (a leftover from the hardware enabling
+  rework that landed in 6.3)
+
+Generic:
+
+* Drop unnecessary casts from "void *" throughout kvm_main.c
+
+* Tweak the layout of "struct kvm_mmu_memory_cache" to shrink the struct
+  size by 8 bytes on 64-bit kernels by utilizing a padding hole
+
+Documentation:
+
+* Fix goof introduced by the conversion to rST
+
+----------------------------------------------------------------
+Aaron Lewis (14):
+      KVM: selftests: Assert that XTILE is XSAVE-enabled
+      KVM: selftests: Assert that both XTILE{CFG,DATA} are XSAVE-enabled
+      KVM: selftests: Move XSAVE and OSXSAVE CPUID checks into AMX's init_regs()
+      KVM: selftests: Check that the palette table exists before using it
+      KVM: selftests: Check that XTILEDATA supports XFD
+      KVM: x86/pmu: Prevent the PMU from counting disallowed events
+      KVM: x86: Add a helper to handle filtering of unpermitted XCR0 features
+      KVM: selftests: Move XGETBV and XSETBV helpers to common code
+      KVM: selftests: Add all known XFEATURE masks to common code
+      KVM: selftests: Add test to verify KVM's supported XCR0
+      KVM: selftests: Add a common helper for the PMU event filter guest code
+      KVM: selftests: Add helpers for PMC asserts in PMU event filter test
+      KVM: selftests: Print detailed info in PMU event filter asserts
+      KVM: selftests: Test the PMU event "Instructions retired"
+
+Ackerley Tng (1):
+      KVM: selftests: Adjust VM's initial stack address to align with SysV ABI spec
+
+Anish Moorthy (1):
+      KVM: selftests: Fix nsec to sec conversion in demand_paging_test
+
+Binbin Wu (5):
+      KVM: x86: Add helpers to query individual CR0/CR4 bits
+      KVM: x86: Use boolean return value for is_{pae,pse,paging}()
+      KVM: SVM: Use kvm_is_cr4_bit_set() to query SMAP/SMEP in "can emulate"
+      KVM: x86: Change return type of is_long_mode() to bool
+      KVM: VMX: Use is_64_bit_mode() to check 64-bit mode in SGX handler
+
+Colin Ian King (2):
+      KVM: selftests: Fix spelling mistake "KVM_HYPERCAL_EXIT_SMC" -> "KVM_HYPERCALL_EXIT_SMC"
+      KVM: selftests: Fix spelling mistake "perrmited" -> "permitted"
+
+David Matlack (3):
+      KVM: x86/mmu: Collapse kvm_flush_remote_tlbs_with_{range,address}() together
+      KVM: x86/mmu: Rename kvm_flush_remote_tlbs_with_address()
+      KVM: x86/mmu: Use gfn_t in kvm_flush_remote_tlbs_range()
+
+Emanuele Giuseppe Esposito (3):
+      kvm: vmx: Add IA32_FLUSH_CMD guest support
+      kvm: svm: Add IA32_FLUSH_CMD guest support
+      kvm: x86: Advertise FLUSH_L1D to user space
+
+Hao Ge (1):
+      KVM: selftests: Close opened file descriptor in stable_tsc_check_supported()
+
+Ivan Orlov (1):
+      KVM: selftests: Add 'malloc' failure check in vcpu_save_state
+
+Jun Miao (1):
+      KVM: Fix comments that refer to the non-existent install_new_memslots()
+
+Lai Jiangshan (16):
+      KVM: x86/mmu: Detect write #PF to shadow pages during FNAME(fetch) walk
+      KVM: x86/mmu: Remove FNAME(is_self_change_mapping)
+      KVM: x86/mmu: Use 64-bit address to invalidate to fix a subtle bug
+      KVM: x86/mmu: Move the check in FNAME(sync_page) as kvm_sync_page_check()
+      KVM: x86/mmu: Check mmu->sync_page pointer in kvm_sync_page_check()
+      KVM: x86/mmu: Set mmu->sync_page as NULL for direct paging
+      KVM: x86/mmu: Move the code out of FNAME(sync_page)'s loop body into mmu.c
+      KVM: x86/mmu: Reduce the update to the spte in FNAME(sync_spte)
+      kvm: x86/mmu: Use KVM_MMU_ROOT_XXX for kvm_mmu_invalidate_addr()
+      KVM: x86/mmu: Use kvm_mmu_invalidate_addr() in kvm_mmu_invpcid_gva()
+      KVM: x86/mmu: Use kvm_mmu_invalidate_addr() in nested_ept_invalidate_addr()
+      KVM: x86/mmu: Allow the roots to be invalid in FNAME(invlpg)
+      KVM: x86/mmu: Remove FNAME(invlpg) and use FNAME(sync_spte) to update vTLB instead.
+      kvm: x86/mmu: Remove @no_dirty_log from FNAME(prefetch_gpte)
+      KVM: x86/mmu: Skip calling mmu->sync_spte() when the spte is 0
+      KVM: x86/mmu: Track tail count in pte_list_desc to optimize guest fork()
+
+Li kunyu (1):
+      kvm: kvm_main: Remove unnecessary (void*) conversions
+
+Like Xu (6):
+      KVM: selftests: Add a helper to read kvm boolean module parameters
+      KVM: selftests: Report enable_pmu module value when test is skipped
+      KVM: x86/pmu: Zero out pmu->all_valid_pmc_idx each time it's refreshed
+      KVM: x86/pmu: Rename pmc_is_enabled() to pmc_is_globally_enabled()
+      KVM: x86/pmu: Rewrite reprogram_counters() to improve performance
+      KVM: x86/pmu: Fix a typo in kvm_pmu_request_counter_reprogam()
+
+Marc Zyngier (33):
+      KVM: arm64: timers: Use a per-vcpu, per-timer accumulator for fractional ns
+      arm64: Add CNTPOFF_EL2 register definition
+      arm64: Add HAS_ECV_CNTPOFF capability
+      KVM: arm64: timers: Use CNTPOFF_EL2 to offset the physical timer
+      KVM: arm64: timers: Allow physical offset without CNTPOFF_EL2
+      KVM: arm64: Expose {un,}lock_all_vcpus() to the rest of KVM
+      KVM: arm64: timers: Allow userspace to set the global counter offset
+      KVM: arm64: timers: Allow save/restoring of the physical timer
+      KVM: arm64: timers: Rationalise per-vcpu timer init
+      KVM: arm64: timers: Abstract per-timer IRQ access
+      KVM: arm64: timers: Move the timer IRQs into arch_timer_vm_data
+      KVM: arm64: Elide kern_hyp_va() in VHE-specific parts of the hypervisor
+      KVM: arm64: timers: Fast-track CNTPCT_EL0 trap handling
+      KVM: arm64: timers: Abstract the number of valid timers per vcpu
+      KVM: arm64: Document KVM_ARM_SET_CNT_OFFSETS and co
+      KVM: arm64: nv: timers: Add a per-timer, per-vcpu offset
+      KVM: arm64: nv: timers: Support hyp timer emulation
+      KVM: arm64: selftests: Add physical timer registers to the sysreg list
+      KVM: arm64: selftests: Deal with spurious timer interrupts
+      KVM: arm64: selftests: Augment existing timer test to handle variable offset
+      KVM: arm64: Expose SMC/HVC width to userspace
+      KVM: arm64: nvhe: Synchronise with page table walker on vcpu run
+      KVM: arm64: Handle 32bit CNTPCTSS traps
+      KVM: arm64: nvhe: Synchronise with page table walker on TLBI
+      KVM: arm64: pkvm: Document the side effects of kvm_flush_dcache_to_poc()
+      KVM: arm64: vhe: Synchronise with page table walker on MMU update
+      KVM: arm64: vhe: Drop extra isb() on guest exit
+      Merge branch kvm-arm64/lock-inversion into kvmarm-master/next
+      Merge branch kvm-arm64/timer-vm-offsets into kvmarm-master/next
+      Merge branch kvm-arm64/selftest/lpa into kvmarm-master/next
+      Merge branch kvm-arm64/selftest/misc-6.4 into kvmarm-master/next
+      Merge branch kvm-arm64/smccc-filtering into kvmarm-master/next
+      Merge branch kvm-arm64/spec-ptw into kvmarm-master/next
+
+Mark Brown (1):
+      KVM: selftests: Comment newly defined aarch64 ID registers
+
+Mathias Krause (7):
+      KVM: x86/mmu: Fix comment typo
+      KVM: x86: Do not unload MMU roots when only toggling CR0.WP with TDP enabled
+      KVM: x86: Ignore CR0.WP toggles in non-paging mode
+      KVM: x86: Make use of kvm_read_cr*_bits() when testing bits
+      KVM: VMX: Make CR0.WP a guest owned bit
+      KVM: x86: Shrink struct kvm_pmu
+      KVM: Shrink struct kvm_mmu_memory_cache
+
+Maxim Levitsky (2):
+      KVM: nSVM: Raise event on nested VM exit if L1 doesn't intercept IRQs
+      KVM: SVM: add wrappers to enable/disable IRET interception
+
+Mingwei Zhang (6):
+      KVM: selftests: Add a fully functional "struct xstate" for x86
+      KVM: selftests: Fix an error in comment of amx_test
+      KVM: selftests: Enable checking on xcomp_bv in amx_test
+      KVM: selftests: Add check of CR0.TS in the #NM handler in amx_test
+      KVM: selftests: Assert that XTILE_DATA is set in IA32_XFD on #NM
+      KVM: selftests: Verify XTILE_DATA in XSTATE isn't affected by IA32_XFD
+
+Nico Boehr (2):
+      KVM: s390: interrupt: fix virtual-physical confusion for next alert GISA
+      KVM: s390: pci: fix virtual-physical confusion on module unload/load
+
+Oliver Upton (20):
+      KVM: arm64: Avoid vcpu->mutex v. kvm->lock inversion in CPU_ON
+      KVM: arm64: Avoid lock inversion when setting the VM register width
+      KVM: arm64: Use config_lock to protect data ordered against KVM_RUN
+      KVM: arm64: Use config_lock to protect vgic state
+      KVM: x86: Redefine 'longmode' as a flag for KVM_EXIT_HYPERCALL
+      KVM: arm64: Add a helper to check if a VM has ran once
+      KVM: arm64: Add vm fd device attribute accessors
+      KVM: arm64: Rename SMC/HVC call handler to reflect reality
+      KVM: arm64: Start handling SMCs from EL1
+      KVM: arm64: Refactor hvc filtering to support different actions
+      KVM: arm64: Use a maple tree to represent the SMCCC filter
+      KVM: arm64: Add support for KVM_EXIT_HYPERCALL
+      KVM: arm64: Introduce support for userspace SMCCC filtering
+      KVM: arm64: Return NOT_SUPPORTED to guest for unknown PSCI version
+      KVM: arm64: Let errors from SMCCC emulation to reach userspace
+      KVM: selftests: Add a helper for SMCCC calls with SMC instruction
+      KVM: selftests: Add test for SMCCC filter
+      KVM: arm64: Prevent userspace from handling SMC64 arch range
+      KVM: arm64: Test that SMC64 arch calls are reserved
+      KVM: arm64: vgic: Don't acquire its_lock before config_lock
+
+Paolo Bonzini (10):
+      KVM: x86/mmu: Avoid indirect call for get_cr3
+      Merge tag 'kvm-s390-next-6.4-1' of https://git.kernel.org/pub/scm/linux/kernel/git/kvms390/linux into HEAD
+      Merge tag 'kvmarm-6.4' of git://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD
+      Merge tag 'kvm-x86-generic-6.4' of https://github.com/kvm-x86/linux into HEAD
+      Merge tag 'kvm-x86-misc-6.4' of https://github.com/kvm-x86/linux into HEAD
+      Merge tag 'kvm-x86-mmu-6.4' of https://github.com/kvm-x86/linux into HEAD
+      Merge tag 'kvm-x86-pmu-6.4' of https://github.com/kvm-x86/linux into HEAD
+      Merge tag 'kvm-x86-selftests-6.4' of https://github.com/kvm-x86/linux into HEAD
+      Merge tag 'kvm-x86-svm-6.4' of https://github.com/kvm-x86/linux into HEAD
+      Merge tag 'kvm-x86-vmx-6.4' of https://github.com/kvm-x86/linux into HEAD
+
+Pierre Morel (1):
+      KVM: s390: vsie: clarifications on setting the APCB
+
+Reiji Watanabe (2):
+      KVM: arm64: Acquire mp_state_lock in kvm_arch_vcpu_ioctl_vcpu_init()
+      KVM: arm64: Have kvm_psci_vcpu_on() use WRITE_ONCE() to update mp_state
+
+Robert Hoo (1):
+      KVM: x86: Remove a redundant guest cpuid check in kvm_set_cr4()
+
+Ryan Roberts (3):
+      KVM: selftests: Fixup config fragment for access_tracking_perf_test
+      KVM: selftests: arm64: Fix pte encode/decode for PA bits > 48
+      KVM: selftests: arm64: Fix ttbr0_el1 encoding for PA bits > 48
+
+Santosh Shukla (5):
+      KVM: nSVM: Don't sync vmcb02 V_IRQ back to vmcb12 if KVM (L0) is intercepting VINTR
+      KVM: nSVM: Disable intercept of VINTR if saved L1 host RFLAGS.IF is 0
+      KVM: SVM: Add definitions for new bits in VMCB::int_ctrl related to vNMI
+      KVM: x86: Add support for SVM's Virtual NMI
+      KVM: nSVM: Implement support for nested VNMI
+
+Sean Christopherson (54):
+      KVM: x86/mmu: Use EMULTYPE flag to track write #PFs to shadow pages
+      KVM: nVMX: Move EVMCS1_SUPPORT_* macros to hyperv.c
+      KVM: VMX: Stub out enable_evmcs static key for CONFIG_HYPERV=n
+      KVM: VMX: Rename "KVM is using eVMCS" static key to match its wrapper
+      KVM: x86/mmu: Sanity check input to kvm_mmu_free_roots()
+      KVM: x86/mmu: Rename slot rmap walkers to add clarity and clean up code
+      KVM: x86/mmu: Replace comment with an actual lockdep assertion on mmu_lock
+      KVM: x86/mmu: Clean up mmu.c functions that put return type on separate line
+      KVM: SVM: Fix benign "bool vs. int" comparison in svm_set_cr0()
+      KVM: x86: Raise an event request when processing NMIs if an NMI is pending
+      KVM: x86: Tweak the code and comment related to handling concurrent NMIs
+      KVM: x86: Save/restore all NMIs when multiple NMIs are pending
+      x86/cpufeatures: Redefine synthetic virtual NMI bit as AMD's "real" vNMI
+      KVM: x86: Route pending NMIs from userspace through process_nmi()
+      x86: KVM: Add common feature flag for AMD's PSFD
+      KVM: x86: Assert that the emulator doesn't load CS with garbage in !RM
+      KVM: MIPS: Make kvm_mips_callbacks const
+      KVM: x86/pmu: Disallow legacy LBRs if architectural LBRs are available
+      KVM: x86: Revert MSR_IA32_FLUSH_CMD.FLUSH_L1D enabling
+      KVM: VMX: Passthrough MSR_IA32_PRED_CMD based purely on host+guest CPUID
+      KVM: SVM: Passthrough MSR_IA32_PRED_CMD based purely on host+guest CPUID
+      KVM: x86: Move MSR_IA32_PRED_CMD WRMSR emulation to common code
+      KVM: x86: Virtualize FLUSH_L1D and passthrough MSR_IA32_FLUSH_CMD
+      KVM: SVM: Return the local "r" variable from svm_set_msr()
+      KVM: x86: Rename kvm_init_msr_list() to clarify it inits multiple lists
+      KVM: x86: Add a helper to query whether or not a vCPU has ever run
+      KVM: x86: Add macros to track first...last VMX feature MSRs
+      KVM: x86: Generate set of VMX feature MSRs using first/last definitions
+      KVM: selftests: Split PMU caps sub-tests to avoid writing MSR after KVM_RUN
+      KVM: x86: Disallow writes to immutable feature MSRs after KVM_RUN
+      KVM: x86/pmu: WARN and bug the VM if PMU is refreshed after vCPU has run
+      KVM: x86/pmu: Zero out LBR capabilities during PMU refresh
+      KVM: selftests: Move 0/initial value PERF_CAPS checks to dedicated sub-test
+      KVM: selftests: Assert that full-width PMC writes are supported if PDCM=1
+      KVM: selftests: Print out failing MSR and value in vcpu_set_msr()
+      KVM: selftests: Verify KVM preserves userspace writes to "durable" MSRs
+      KVM: selftests: Drop now-redundant checks on PERF_CAPABILITIES writes
+      KVM: selftests: Test all fungible features in PERF_CAPABILITIES
+      KVM: selftests: Test all immutable non-format bits in PERF_CAPABILITIES
+      KVM: selftests: Expand negative testing of guest writes to PERF_CAPABILITIES
+      KVM: selftests: Test post-KVM_RUN writes to PERF_CAPABILITIES
+      KVM: selftests: Drop "all done!" printf() from PERF_CAPABILITIES test
+      KVM: selftests: Refactor LBR_FMT test to avoid use of separate macro
+      KVM: selftests: Add negative testcase for PEBS format in PERF_CAPABILITIES
+      KVM: selftests: Verify LBRs are disabled if vPMU is disabled
+      KVM: VMX: Refactor intel_pmu_{g,}set_msr() to align with other helpers
+      KVM: x86: Rename Hyper-V remote TLB hooks to match established scheme
+      KVM: x86/mmu: Move filling of Hyper-V's TLB range struct into Hyper-V code
+      KVM: x86/mmu: Refresh CR0.WP prior to checking for emulated permission faults
+      KVM: nVMX: Emulate NOPs in L2, and PAUSE if it's not intercepted
+      KVM: x86: Filter out XTILE_CFG if XTILE_DATA isn't permitted
+      KVM: selftests: Rework dynamic XFeature helper to take mask, not bit
+      KVM: selftests: Use error codes to signal errors in PMU event filter test
+      KVM: selftests: Copy full counter values from guest in PMU event filter test
+
+Shaoqin Huang (1):
+      KVM: Add the missed title format
+
+Thomas Huth (6):
+      KVM: PPC: Standardize on "int" return types in the powerpc KVM code
+      KVM: s390: Use "int" as return type for kvm_s390_get/set_skeys()
+      KVM: x86: Remove the KVM_GET_NR_MMU_PAGES ioctl
+      KVM: arm64: Limit length in kvm_vm_ioctl_mte_copy_tags() to INT_MAX
+      KVM: Standardize on "int" return types instead of "long" in kvm_main.c
+      KVM: Change return type of kvm_arch_vm_ioctl() to "int"
+
+Tom Rix (1):
+      KVM: x86: set "mitigate_smt_rsb" storage-class-specifier to static
+
+Vipin Sharma (13):
+      KVM: x86/mmu: Add a helper function to check if an SPTE needs atomic write
+      KVM: x86/mmu: Use kvm_ad_enabled() to determine if TDP MMU SPTEs need wrprot
+      KVM: x86/mmu: Consolidate Dirty vs. Writable clearing logic in TDP MMU
+      KVM: x86/mmu: Atomically clear SPTE dirty state in the clear-dirty-log flow
+      KVM: x86/mmu: Drop access tracking checks when clearing TDP MMU dirty bits
+      KVM: x86/mmu: Bypass __handle_changed_spte() when clearing TDP MMU dirty bits
+      KVM: x86/mmu: Remove "record_dirty_log" in __tdp_mmu_set_spte()
+      KVM: x86/mmu: Clear only A-bit (if enabled) when aging TDP MMU SPTEs
+      KVM: x86/mmu: Drop unnecessary dirty log checks when aging TDP MMU SPTEs
+      KVM: x86/mmu: Bypass __handle_changed_spte() when aging TDP MMU SPTEs
+      KVM: x86/mmu: Remove "record_acc_track" in __tdp_mmu_set_spte()
+      KVM: x86/mmu: Remove handle_changed_spte_dirty_log()
+      KVM: x86/mmu: Merge all handle_changed_pte*() functions
+
+Xinghui Li (1):
+      KVM: SVM: Remove a duplicate definition of VMCB_AVIC_APIC_BAR_MASK
+
+Yu Zhang (2):
+      KVM: nVMX: Remove outdated comments in nested_vmx_setup_ctls_msrs()
+      KVM: nVMX: Add helpers to setup VMX control msr configs
+
+ Documentation/virt/kvm/api.rst                     |  75 ++-
+ Documentation/virt/kvm/devices/vm.rst              |  79 +++
+ Documentation/virt/kvm/locking.rst                 |   2 +-
+ arch/arm64/include/asm/kvm_host.h                  |  29 +-
+ arch/arm64/include/asm/kvm_mmu.h                   |   4 +
+ arch/arm64/include/asm/sysreg.h                    |   3 +
+ arch/arm64/include/uapi/asm/kvm.h                  |  36 ++
+ arch/arm64/kernel/cpufeature.c                     |  11 +
+ arch/arm64/kvm/arch_timer.c                        | 550 ++++++++++++++++-----
+ arch/arm64/kvm/arm.c                               | 150 +++++-
+ arch/arm64/kvm/guest.c                             |  39 +-
+ arch/arm64/kvm/handle_exit.c                       |  36 +-
+ arch/arm64/kvm/hyp/include/hyp/switch.h            |  53 ++
+ arch/arm64/kvm/hyp/nvhe/debug-sr.c                 |   2 -
+ arch/arm64/kvm/hyp/nvhe/mem_protect.c              |   7 +
+ arch/arm64/kvm/hyp/nvhe/switch.c                   |  18 +
+ arch/arm64/kvm/hyp/nvhe/timer-sr.c                 |  18 +-
+ arch/arm64/kvm/hyp/nvhe/tlb.c                      |  38 +-
+ arch/arm64/kvm/hyp/vhe/switch.c                    |   7 +-
+ arch/arm64/kvm/hyp/vhe/sysreg-sr.c                 |  12 +
+ arch/arm64/kvm/hypercalls.c                        | 189 ++++++-
+ arch/arm64/kvm/pmu-emul.c                          |  25 +-
+ arch/arm64/kvm/psci.c                              |  37 +-
+ arch/arm64/kvm/reset.c                             |  15 +-
+ arch/arm64/kvm/sys_regs.c                          |  10 +
+ arch/arm64/kvm/trace_arm.h                         |   6 +-
+ arch/arm64/kvm/vgic/vgic-debug.c                   |   8 +-
+ arch/arm64/kvm/vgic/vgic-init.c                    |  36 +-
+ arch/arm64/kvm/vgic/vgic-its.c                     |  33 +-
+ arch/arm64/kvm/vgic/vgic-kvm-device.c              |  85 ++--
+ arch/arm64/kvm/vgic/vgic-mmio-v3.c                 |   4 +-
+ arch/arm64/kvm/vgic/vgic-mmio.c                    |  12 +-
+ arch/arm64/kvm/vgic/vgic-v4.c                      |  11 +-
+ arch/arm64/kvm/vgic/vgic.c                         |  27 +-
+ arch/arm64/kvm/vgic/vgic.h                         |   3 -
+ arch/arm64/tools/cpucaps                           |   1 +
+ arch/arm64/tools/sysreg                            |   4 +
+ arch/mips/include/asm/kvm_host.h                   |   2 +-
+ arch/mips/kvm/mips.c                               |   4 +-
+ arch/mips/kvm/vz.c                                 |   2 +-
+ arch/powerpc/include/asm/kvm_ppc.h                 |  14 +-
+ arch/powerpc/kvm/book3s_64_mmu_hv.c                |  14 +-
+ arch/powerpc/kvm/book3s_64_vio.c                   |   4 +-
+ arch/powerpc/kvm/book3s_hv.c                       |   6 +-
+ arch/powerpc/kvm/book3s_pr.c                       |   4 +-
+ arch/powerpc/kvm/powerpc.c                         |   5 +-
+ arch/riscv/kvm/vm.c                                |   3 +-
+ arch/s390/kvm/interrupt.c                          |   4 +-
+ arch/s390/kvm/kvm-s390.c                           |   7 +-
+ arch/s390/kvm/pci.c                                |   2 +-
+ arch/s390/kvm/vsie.c                               |  50 +-
+ arch/x86/include/asm/cpufeatures.h                 |   9 +-
+ arch/x86/include/asm/kvm-x86-ops.h                 |   6 +-
+ arch/x86/include/asm/kvm_host.h                    |  89 ++--
+ arch/x86/include/asm/svm.h                         |  10 +-
+ arch/x86/include/uapi/asm/kvm.h                    |   3 +
+ arch/x86/kvm/cpuid.c                               |  18 +-
+ arch/x86/kvm/emulate.c                             |   8 +
+ arch/x86/kvm/kvm_cache_regs.h                      |  18 +-
+ arch/x86/kvm/kvm_onhyperv.c                        |  33 +-
+ arch/x86/kvm/kvm_onhyperv.h                        |   5 +-
+ arch/x86/kvm/mmu.h                                 |  28 +-
+ arch/x86/kvm/mmu/mmu.c                             | 524 ++++++++++++--------
+ arch/x86/kvm/mmu/mmu_internal.h                    |  20 +-
+ arch/x86/kvm/mmu/paging_tmpl.h                     | 275 +++--------
+ arch/x86/kvm/mmu/spte.c                            |   2 +-
+ arch/x86/kvm/mmu/tdp_iter.h                        |  48 +-
+ arch/x86/kvm/mmu/tdp_mmu.c                         | 215 +++-----
+ arch/x86/kvm/pmu.c                                 |  25 +-
+ arch/x86/kvm/pmu.h                                 |   2 +-
+ arch/x86/kvm/svm/nested.c                          |  91 +++-
+ arch/x86/kvm/svm/pmu.c                             |   2 +-
+ arch/x86/kvm/svm/svm.c                             | 195 ++++++--
+ arch/x86/kvm/svm/svm.h                             |  29 ++
+ arch/x86/kvm/svm/svm_onhyperv.h                    |   5 +-
+ arch/x86/kvm/vmx/hyperv.c                          | 107 +++-
+ arch/x86/kvm/vmx/hyperv.h                          | 115 +----
+ arch/x86/kvm/vmx/nested.c                          | 126 +++--
+ arch/x86/kvm/vmx/pmu_intel.c                       | 135 ++---
+ arch/x86/kvm/vmx/sgx.c                             |   4 +-
+ arch/x86/kvm/vmx/vmx.c                             |  96 ++--
+ arch/x86/kvm/vmx/vmx.h                             |  20 +-
+ arch/x86/kvm/vmx/vmx_ops.h                         |  22 +-
+ arch/x86/kvm/x86.c                                 | 256 ++++++----
+ arch/x86/kvm/x86.h                                 |  64 ++-
+ include/clocksource/arm_arch_timer.h               |   1 +
+ include/kvm/arm_arch_timer.h                       |  34 +-
+ include/kvm/arm_hypercalls.h                       |   6 +-
+ include/kvm/arm_vgic.h                             |   1 +
+ include/linux/kvm_host.h                           |   7 +-
+ include/linux/kvm_types.h                          |   2 +-
+ include/uapi/linux/kvm.h                           |  14 +-
+ tools/include/uapi/linux/kvm.h                     |   2 +-
+ tools/testing/selftests/kvm/Makefile               |   2 +
+ tools/testing/selftests/kvm/aarch64/arch_timer.c   |  56 ++-
+ tools/testing/selftests/kvm/aarch64/get-reg-list.c |  15 +-
+ tools/testing/selftests/kvm/aarch64/smccc_filter.c | 268 ++++++++++
+ tools/testing/selftests/kvm/config                 |   1 +
+ tools/testing/selftests/kvm/demand_paging_test.c   |   2 +-
+ .../selftests/kvm/include/aarch64/processor.h      |  13 +
+ .../testing/selftests/kvm/include/kvm_util_base.h  |   1 +
+ .../selftests/kvm/include/x86_64/processor.h       | 124 ++++-
+ .../testing/selftests/kvm/lib/aarch64/processor.c  |  91 ++--
+ tools/testing/selftests/kvm/lib/kvm_util.c         |   5 +
+ tools/testing/selftests/kvm/lib/x86_64/processor.c |  36 +-
+ tools/testing/selftests/kvm/x86_64/amx_test.c      | 118 ++---
+ .../selftests/kvm/x86_64/pmu_event_filter_test.c   | 253 +++++-----
+ .../kvm/x86_64/vmx_nested_tsc_scaling_test.c       |   8 +-
+ .../selftests/kvm/x86_64/vmx_pmu_caps_test.c       | 231 +++++++--
+ .../testing/selftests/kvm/x86_64/xcr0_cpuid_test.c | 132 +++++
+ virt/kvm/kvm_main.c                                |  30 +-
+ 111 files changed, 4004 insertions(+), 1850 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/aarch64/smccc_filter.c
+ create mode 100644 tools/testing/selftests/kvm/x86_64/xcr0_cpuid_test.c
+
+
+diff --git a/arch/x86/kvm/kvm_onhyperv.h b/arch/x86/kvm/kvm_onhyperv.h
+index 2d5f669c1ea1..f9ca3e7432b2 100644
+--- a/arch/x86/kvm/kvm_onhyperv.h
++++ b/arch/x86/kvm/kvm_onhyperv.h
+@@ -11,7 +11,7 @@ int hv_flush_remote_tlbs_range(struct kvm *kvm, gfn_t gfn, gfn_t nr_pages);
+ int hv_flush_remote_tlbs(struct kvm *kvm);
+ void hv_track_root_tdp(struct kvm_vcpu *vcpu, hpa_t root_tdp);
+ #else /* !CONFIG_HYPERV */
+-static inline int hv_remote_flush_tlb(struct kvm *kvm)
++static inline int hv_flush_remote_tlbs(struct kvm *kvm)
+ {
+ 	return -EOPNOTSUPP;
+ }
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index a9c940a31f3a..ca32389f3c36 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -3843,13 +3843,13 @@ static void svm_flush_tlb_all(struct kvm_vcpu *vcpu)
+ {
+ 	/*
+ 	 * When running on Hyper-V with EnlightenedNptTlb enabled, remote TLB
+-	 * flushes should be routed to hv_remote_flush_tlb() without requesting
++	 * flushes should be routed to hv_flush_remote_tlbs() without requesting
+ 	 * a "regular" remote flush.  Reaching this point means either there's
+-	 * a KVM bug or a prior hv_remote_flush_tlb() call failed, both of
++	 * a KVM bug or a prior hv_flush_remote_tlbs() call failed, both of
+ 	 * which might be fatal to the guest.  Yell, but try to recover.
+ 	 */
+ 	if (WARN_ON_ONCE(svm_hv_is_enlightened_tlb_enabled(vcpu)))
+-		hv_remote_flush_tlb(vcpu->kvm);
++		hv_flush_remote_tlbs(vcpu->kvm);
+ 
+ 	svm_flush_tlb_asid(vcpu);
+ }
+
