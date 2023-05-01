@@ -2,65 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EC2F6F2F3A
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 09:51:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7704F6F2F3E
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 09:54:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232258AbjEAHvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 03:51:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40882 "EHLO
+        id S232265AbjEAHyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 03:54:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231738AbjEAHvL (ORCPT
+        with ESMTP id S229921AbjEAHx6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 03:51:11 -0400
-Received: from mxout1.routing.net (mxout1.routing.net [IPv6:2a03:2900:1:a::a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1669B10E;
-        Mon,  1 May 2023 00:51:08 -0700 (PDT)
-Received: from mxbox3.masterlogin.de (unknown [192.168.10.78])
-        by mxout1.routing.net (Postfix) with ESMTP id CFD64400E8;
-        Mon,  1 May 2023 07:51:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-        s=20200217; t=1682927467;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Z0oEgBhbgkatdW/gn/4BePOt2CMODf7qHT2G4Wu1GCU=;
-        b=WEMV8dmHrsdCXTVLpmZlng2C0yOQHzsMoiVhnUYlKTzAfpr+qRv33PIv6YdmJq+6IDyQRE
-        GXfJqF4jzDI+NzesOna7gWy/9AKf1xPdRrtA80vyhcKdhWK4cme7p3DLlv2q2CdH3kfrA4
-        f/7i9dUDZCRXEj38fR6TTieADvR9oGE=
-Received: from [127.0.0.1] (fttx-pool-217.61.150.65.bambit.de [217.61.150.65])
-        by mxbox3.masterlogin.de (Postfix) with ESMTPSA id E98873605FA;
-        Mon,  1 May 2023 07:51:05 +0000 (UTC)
-Date:   Mon, 01 May 2023 09:51:06 +0200
-From:   Frank Wunderlich <linux@fw-web.de>
-To:     frank-w@public-files.de,
-        Frank Wunderlich <frank-w@public-files.de>,
-        =?UTF-8?B?Smlhbmp1biBXYW5nICjnjovlu7rlhpsp?= 
-        <Jianjun.Wang@mediatek.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        =?UTF-8?B?SmlleXkgWWFuZyAo5p2o5rSBKQ==?= <Jieyy.Yang@mediatek.com>,
-        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        Ryder Lee <Ryder.Lee@mediatek.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>
-Subject: Re: Aw: [PATCH] PCI: mediatek-gen3: handle PERST after reset
-User-Agent: K-9 Mail for Android
-In-Reply-To: <82F47DB2-CFB9-4DA0-97A7-81F1B939A025@public-files.de>
-References: <20230402131347.99268-1-linux@fw-web.de> <trinity-8c5502f4-34bc-456b-9e4b-37edac37c3ed-1682530907724@3c-app-gmx-bs05> <74149a72313c1b944c870a45b55893e1b9331c8e.camel@mediatek.com> <EF6EF3CD-5741-449E-B7E0-27DF9A6C297D@fw-web.de> <cd7c2672cc7cb97086cdb8d2079ad38c7fd6367f.camel@mediatek.com> <82F47DB2-CFB9-4DA0-97A7-81F1B939A025@public-files.de>
-Message-ID: <D7EAAAC4-B696-422F-A6D6-FF90D351B6F4@fw-web.de>
+        Mon, 1 May 2023 03:53:58 -0400
+Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4931B9;
+        Mon,  1 May 2023 00:53:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1682927637; x=1714463637;
+  h=from:to:subject:date:message-id:references:in-reply-to:
+   content-transfer-encoding:mime-version;
+  bh=iPrh+h3ieEEj/Kn4eNuhKvBtUF/6U4d13Vs5pMGXZkc=;
+  b=qyvo9jVoZFDL24+cD8YMTRNjCnOELs1Kzwv4MNZsCiscPbxg6VGSKfWs
+   rBgTa5IrM6FEfhFyufnUhA+zFr2OrKgsq6bQOzeU586No2jnoNbltZMFz
+   DGJ7tGLCq6wDwI9C5S7EXUu5IvJmcSd8CH04icDe7mednUi62sx+Ez1J4
+   BBBBGttUNa0u8KBKE6W2EMwVzKy6AXRwecn1Oc31GYzNkxXCaBKG8rzlY
+   4OhYNPVm42qS56Sbv14aIcQH0k60EBKRzuzxQKDxG75jrgXtULesz69nS
+   rwBS+sf2XrGAaHn/r5v/9O7BNBuB509RDkeoRYK15a77rIWUMAginv9im
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.99,239,1677513600"; 
+   d="scan'208";a="229519959"
+Received: from mail-dm6nam11lp2170.outbound.protection.outlook.com (HELO NAM11-DM6-obe.outbound.protection.outlook.com) ([104.47.57.170])
+  by ob1.hgst.iphmx.com with ESMTP; 01 May 2023 15:53:56 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=exu07B/eGjJFYqZaXRkM6K3GqHUNKMgsFWbgS4pDC49Sh8d+ZCPl0/g6sVyseeN/CtteD+IeqLXrQjkd40zLG2zjCnOLxJhiIzIgLNlhC/oZ1JlQlQCVoYBbR8obMroTxdwTOdbzZsu6Gmyv721CLYl8ApNTVoR4fUxEp2tfSoV722Yj92V/jXPdXAHC4vDlU8V2pe1vewl35Lmf3iDAKtOMSG5ibMf2t0VlMY+egEy5pQHZWJGtL73epYAsJtd6j+UlA+2NemW3l7UaowlQdrnzHkZXiPSfuTAS7mfrlm7JC3eZRd8DGBDTZ/XwZrwlGpsymTBt+sOa3AIuKTGCKw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iPrh+h3ieEEj/Kn4eNuhKvBtUF/6U4d13Vs5pMGXZkc=;
+ b=av1JKApB8fQ7NcoAO+Lt2j0R+Eyt3LuDBG23BK1PG5jK/5WM1MzcilhcsIvV98eG+NPlI1+N2yAt4HwsoDEt4G7mUqkurgL1sGq1Ex1og1hB3JGHc9JrPDfHdrQJHax4NkGwAgkEL6v70ECd/HEyVeewQiG2y+7UwQh7sDMwa3dgJgg6ZoAhZdizD5zMAuOOB1Rk45tQETaxT8jdyE2eXWw9HWabTmfm7paXAG8mzcmhpE9sokj8v8tRzMzafF5MkL3pPYHdcgiFZi1p+ZOW9vy8KZ8fupBIm2ipftYM2cgsaxF4MQXkfCiV7sMM5QX4eUIjh5emY4GYfFP1Ukn92Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
+ header.d=wdc.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iPrh+h3ieEEj/Kn4eNuhKvBtUF/6U4d13Vs5pMGXZkc=;
+ b=qKN0bWAHQRHDJuFYflWoR1A/Uz/JLH0a4Ejma0zQkGw0x6ENnJaMdDTssKaqM2zmvZM1DVt0hjrsCTVSa2Rs4nxo6l2sy3B3FQDrRqDOluuky5VHmp36atCu0M6aeJ5bCvlxDwTNEpfrcMjwdVyt9Adj5FKsJAG9oyPh94dtYEM=
+Received: from DM6PR04MB6575.namprd04.prod.outlook.com (2603:10b6:5:1b7::7) by
+ DS0PR04MB8598.namprd04.prod.outlook.com (2603:10b6:8:126::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6340.30; Mon, 1 May 2023 07:53:53 +0000
+Received: from DM6PR04MB6575.namprd04.prod.outlook.com
+ ([fe80::188b:9005:b09b:81e2]) by DM6PR04MB6575.namprd04.prod.outlook.com
+ ([fe80::188b:9005:b09b:81e2%6]) with mapi id 15.20.6340.030; Mon, 1 May 2023
+ 07:53:53 +0000
+From:   Avri Altman <Avri.Altman@wdc.com>
+To:     "keosung.park@samsung.com" <keosung.park@samsung.com>,
+        ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
+        "quic_asutoshd@quicinc.com" <quic_asutoshd@quicinc.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "quic_cang@quicinc.com" <quic_cang@quicinc.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] scsi: ufs: core: Fix IO hang that occurs when BKOPS fails
+ in W-LUN suspend
+Thread-Topic: [PATCH] scsi: ufs: core: Fix IO hang that occurs when BKOPS
+ fails in W-LUN suspend
+Thread-Index: AQHZdyR4uWupI4e2VE+ZLqjHWNrDO69FEwkg
+Date:   Mon, 1 May 2023 07:53:52 +0000
+Message-ID: <DM6PR04MB6575A579B58313D1F0BF046CFC6E9@DM6PR04MB6575.namprd04.prod.outlook.com>
+References: <CGME20230425031721epcms2p5d4de65616478c967d466626e20c42a3a@epcms2p5>
+ <20230425031721epcms2p5d4de65616478c967d466626e20c42a3a@epcms2p5>
+In-Reply-To: <20230425031721epcms2p5d4de65616478c967d466626e20c42a3a@epcms2p5>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wdc.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM6PR04MB6575:EE_|DS0PR04MB8598:EE_
+x-ms-office365-filtering-correlation-id: 5e2dd44e-ad33-4533-928c-08db4a193528
+wdcipoutbound: EOP-TRUE
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: qh/mhJUgrq932ga1XEhvgOixiw7eheuPyvV/ycGPitFcirv5k2LsuUm2B+FD2LubGpj5dtnIAil+JUrWEK8Fm/MvkaAUN400PI0jnBw9E12txQDNCUb3u2kDbKfGebox4lJM1Udd0ulBUDHmD9ff/M5C+P8fwMjBHpl/THVj0zq0anQS8MOZCENVCc1lMkpX9RvBhGw7Rnt1Nay/YFoVy8e4QLv8BeF5jIQV3CB0auXGTnHrMxsCRjqX/cYJbeeNFda2YDW7HvcYaNKZ8p1nmkmSrmAowyew6rXd2qJTPASq0LfwkZwo3ygLgAXFZhWYXl4Yh13jnvp3eb7GmT9tcjAuN/XnR043vvDFR1X8d8h7+06Csa9XzUfA1D6dk7ru3BQIFfUKtqKbNFQ5tAqw7s/2BRFD9TV1Kck32vTFCgNcMkRSpSUq7r8tTjml2/sUekWZ4PJ8UYKAl+3FQUd781l+BzLJIVwKE907zWpkWtaFsKVg8Tmy3kSIMvOsq9hS3wa6xdHnEkjMSEnkn9BX8kng/fmqOd0k/e7TWsS0V3U65hDjrskX6/ZhnesaxWyJzOWV+dU9cvG5dzjNjl4fI+q7WL5N2XC/hboJHuDOSKWtzSLW9GDnbRMzrpcuOZYVrZpz2qzdo9jOPcFGZiEkBg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR04MB6575.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(376002)(346002)(396003)(39860400002)(136003)(451199021)(83380400001)(186003)(38100700002)(86362001)(33656002)(38070700005)(921005)(122000001)(82960400001)(55016003)(52536014)(5660300002)(8936002)(8676002)(7416002)(478600001)(66946007)(76116006)(66446008)(66556008)(66476007)(64756008)(7696005)(71200400001)(41300700001)(316002)(110136005)(26005)(6506007)(2906002)(9686003)(15650500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OWthVmVMbkMrNmcwcmFMalBTL1RmUDhUS25RdmNhVE13MHdSMVVmV1Q4disz?=
+ =?utf-8?B?YkhudGppZjZuOG14czdQOFBkOEpZNStLTkZEOFVwTTRxLzJhb1p1RDNsZmpI?=
+ =?utf-8?B?TDVYV0dSM1k3K2x5cWhyTXMyS05VREYyckxBT2lYdUxncDM4TVI3ZFV0d2ZV?=
+ =?utf-8?B?Z1k5V3MzNzRMajJqNFlvRkhQUXFueFdZRFdVanlvdnJ1UkxrRDFTYityU1hQ?=
+ =?utf-8?B?S3VaM1psNmRkMXQ4aXJGK0pLOG5zRHhVcGZvb2IzN3Byd2V2UzBibWxBSnlO?=
+ =?utf-8?B?KytoZXVWVTNTRVFUbkcwMUtDV0tHRWJweTgwU3pKMW1ackJ4bTZBMzdJMkNX?=
+ =?utf-8?B?MU50RUREbml6eHd6WXRnTGMzMXBydFhwRElKU2tzODFCZlhGV1h1QmpZOVU4?=
+ =?utf-8?B?Nkxtdkk1UVNPY2RmL1hrU1JISndVZXdUdVJKT2I4NzVaQjlUd0UzcVlDNUlu?=
+ =?utf-8?B?L3lzTlVZSDRvdjdOM3ZUQmJsaEM0T214ckFud28wZVpMWk9CY2IyUnNQSHlw?=
+ =?utf-8?B?V2V3MHlSUHNUZDJ5RERXdkJVaU80MjNhVnR6dDhxOGpkd2hxNENNNnRnL0RY?=
+ =?utf-8?B?UDB6dEJUMzB3VUhNc1pSRlRhSDY0TGZzWUFMY3VzUUVVRmF1enRTT1Z2aW5V?=
+ =?utf-8?B?WFZOcUdlUVV2d1E5aGJ2ZzJPRG5FZ3lHdFA4dGNkUVhKcWdHVGVEeFFNanI5?=
+ =?utf-8?B?ZWM0SGNHOFBRcFpsWTZKUzc3MkpuTGNhRjZleXVyZ2VQOEl4NGRCWkNuZFpj?=
+ =?utf-8?B?NHVhdGRPZmN6MW04Nm1zT1VhY2xkQVdURU8zZmpxTDFZcDZGbWEzYVFEbXp6?=
+ =?utf-8?B?WDJUT0hDVTNrN1A3WlNrOHQ0Unk5T3ByOG5ocGU0Qzl2a3B5SzdNWVdxY3ZD?=
+ =?utf-8?B?ZkV0YTZCMUhZVU9LejltZDdwT3FjTEZMSHpGTUpWVFlsMWxxbU1xZ3Y4Z0hZ?=
+ =?utf-8?B?Ym95dzNkb0V5c3gvSWVVa1VHbUhsVkxteUFEWVRjelBFbm1jNXljTGJVQmtF?=
+ =?utf-8?B?cnQxQnBZTHdhMkdhMVVYQ2hxVXF5c0RQVlRKQ0JGSkJPc1ZmRnpwMkNxTVBV?=
+ =?utf-8?B?TE0yRDMwaUwrUXZYYVZhNVd6T1g2eitvTHBBVVNXa1M2RFJ0cUhBNHhwRldi?=
+ =?utf-8?B?cndTZTZhOUE2ZlUzQmNFU3p4dWpxUDEvK0g5ckpGZm55WllKakZtaXhsWjhD?=
+ =?utf-8?B?TnM0UTJMbXVBalVTRndyaWsvR041Q0wzZVEvSWZROVJHQkw4RGVnc0tuZDVl?=
+ =?utf-8?B?aUgzc1ptWXhXWlRnelhZendTTmJTbnBLNUJkTis5OGF4amx6Wks4Ym9neHlS?=
+ =?utf-8?B?YjYxZm1QcjJERm1VZEErSFRWaGFacFdVd2lBN2Z6T2g3dmV4WGpCK2NjMDNH?=
+ =?utf-8?B?dE42dmo1L0tjTzFSM0NjZ1lTN2RCNThkWmJjM0ljczFtYXpJd1BsM1duemR3?=
+ =?utf-8?B?SnZ6Q1lpOC9MZ1VTMmFTVkVEVG42dURJamhGSUtUYUppMDNjajVhUlNoQ055?=
+ =?utf-8?B?VXA3NUhJSmxjVHFFdkQ1ck9kZVFuOWtIeTdrSWtFNXdrSDNIbHFmallvOVlJ?=
+ =?utf-8?B?VTFDOWVjZjg3ZzZZcXJHbVZyWFRFRTJwNzg0dHl2M3NOZk1Jc2ZIdUovQzdI?=
+ =?utf-8?B?KzlRd0I2cUlKRmxrTmtQekdDSUtaK2tRbXF4LzJMcmpEYVBuK0t2cUZkamtS?=
+ =?utf-8?B?NkNabGdTVUdDbHFZdnU1NGQvOFU5MXppVGFVUmV0cFRrN0hXM0xQNHdMVEFS?=
+ =?utf-8?B?d0ZHdmxxWmk2S0RnZFE1aUdyc1piYmNvcUp0VUpQRVo4aU5yVnpZUnZoYUpn?=
+ =?utf-8?B?UUZ4SUhCVHR1QVBFRlRFMW5uSGcwT0kyeDJpb1BXY0M0aW5BRGxGQ0Z5MmR6?=
+ =?utf-8?B?bkNFZ3hyWExQYmpjSFgyYjFLVWplN091TWkydFBubDREWkFpbXZzN0l4cEN2?=
+ =?utf-8?B?dkM1emhGRWg0TWY1VkNybEg1ZHp3c1hBb0xLN0toRlVOTE90S2RQY3VuNWtC?=
+ =?utf-8?B?Nkd3WDlQd0lpMHhOUVhjdy9ueFhidFBHTjBhcU1OK0p1QnpNQmJuenIyVGNU?=
+ =?utf-8?B?M1ExWkdYZi8zQUxwdE0zaklQeTcwZUhrc3JTbHRlajUwd1dLQ28zWURBU3Ax?=
+ =?utf-8?Q?L5xe/J7A9rYtqtR/d6mT8pxnZ?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Mail-ID: 076819e0-7339-4474-bb1f-9a846e6c2e93
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?ZjI2T1hkTkg5bWxmYWFIaDd5YkNPU2NmejJFYmNadktWVTdZMHJGQy9nNmVX?=
+ =?utf-8?B?R2svbWJUUFJpY0JJczNGL2VYbFFKd2VTelhtRTRlVGY4cDgwcU1CRHNoWkhH?=
+ =?utf-8?B?YTBtN2x3cnBQSXZ1OWlGb1RrZG5XZmtzV0VvMjlROHZXUW5GTUJsb08yQmZp?=
+ =?utf-8?B?K0RINEx3dEZkQTRpTDE2NWMreTZPSGRZRGFxMEJMR2NaaUJZS2FwNUF2LzNw?=
+ =?utf-8?B?R21XU202aGNmWnBweUtPSkF6b2R2a2pleHZ3ckcwNVdXRzI2NysrdkRrUzYy?=
+ =?utf-8?B?RXpmTTFDZjR1ZWFSWHJDZGY5eWZaMTB5YTRqOFVZZlBhdG9YUG91Sk1jSHJz?=
+ =?utf-8?B?eVZaMUtDVHVWRW12VVdCWlJuNmhWQ2g0S2N6dUJVRGFCZUVlTGhGazJtVkFO?=
+ =?utf-8?B?dklja0VUZlFqOElkNk1tdDcxTzI4YStYdTUyMDZkeVg3WUg4bEVkTWEyeHNn?=
+ =?utf-8?B?Q0FVbTlMR3QrNWY5MVNFa1hQYkpQSWxudFhMNlU0aXFPaWFqbWdGSjhYYVVh?=
+ =?utf-8?B?aWlncklQK1MraVNuRldtbFRtNGNnTUJlcjJySy9zd0gxdzVCdGkySnBqYnFM?=
+ =?utf-8?B?NUdlWnhPV0JqWkp3N2NUT0JNTGYxM3ZKR3RRYnh3MHdnRVowY05yU3pHWlVs?=
+ =?utf-8?B?TnRFZllVbk02RTVqWVlaaEFvMHQxbzdTZUMwbCtmTFRkQ09hNHhzVlVpNVFa?=
+ =?utf-8?B?TDFDWGNMRFc0Unl0MjVkMDlXRmJkQjdtMXRVT01rSUR0V01yTjhkditQU2Zx?=
+ =?utf-8?B?WXVId1V4S2F1ckVWdXBaeVAvMXNkdHl3ODJkdU9HT1puaDB2bGc4T0FieDVJ?=
+ =?utf-8?B?Uys3dHA3UHJNK01tR05URk44Y1Y3VGR2VElZMyt3U1Q1ei95UjJJb2ZuU1Zn?=
+ =?utf-8?B?SjRWUHFySEI2ZFlrbU5wNjVER0haUTV6K1B4d3Y4SENXaVMxcXV6RkVxa1I5?=
+ =?utf-8?B?SzdOSE93Tjhrb1dMb3YwNVRRanA5aEw2cnhsTUZ4aDRWUlZxRVJOREhBaGM0?=
+ =?utf-8?B?eWhNZXBmcHIxTUNRcGU2ZE5UZWQ1VTJyYitxWFlNNytqbW8xbnFtVURNdGdH?=
+ =?utf-8?B?Mk9IMSttUTdIdGV3cTVnditTMnlkNk1LRGRsTVhsczVqNUNiYkJKa2YwTGFp?=
+ =?utf-8?B?dUltOXhObklSaDl5YXJsekEzQWV4T0F1QmJjaXdVMjY1UWlaUGVCYlgxM2dR?=
+ =?utf-8?B?aTlUdGViVi9NVmExQmJQS2krQ3hOSHVFY1F5b3NBZXlFYlp6WUZicGJkUjJx?=
+ =?utf-8?B?dzlBSjhYVVpCdnYvTjVDZFZPOVFsK2pPdyswYmNQZmZWMlQ2RFlHeXFrVUFM?=
+ =?utf-8?B?K0phVTR4WTdBRnpoT0M1c2Z5UkZSN3Fxa3J3eUNvSGRWTmE0b0k5RmxpQk4w?=
+ =?utf-8?B?bHo0OHcwTTZvWkE9PQ==?=
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR04MB6575.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5e2dd44e-ad33-4533-928c-08db4a193528
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 May 2023 07:53:52.9003
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: TVNfQKyBNLb5uA6ui8pUdsjz+1HcyOomC//GvsCig7y1UbP+eG0YxWPips1cmeyFqK1C8tVQoVixAEMgw3TJKA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR04MB8598
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,158 +178,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 29=2E April 2023 11:03:07 MESZ schrieb Frank Wunderlich <frank-w@public-=
-files=2Ede>:
->Hi
->
->Am 29=2E April 2023 05:15:51 MESZ schrieb "Jianjun Wang (=E7=8E=8B=E5=BB=
-=BA=E5=86=9B)" <Jianjun=2EWang@mediatek=2Ecom>:
->>Hi Frank,
->>
->>On Fri, 2023-04-28 at 07:50 +0200, Frank Wunderlich wrote:
->>> External email : Please do not click links or open attachments until
->>> you have verified the sender or the content=2E
->>>=20
->>>=20
->>> Am 27=2E April 2023 10:31:07 MESZ schrieb "Jianjun Wang (=E7=8E=8B=E5=
-=BB=BA=E5=86=9B)" <
->>> Jianjun=2EWang@mediatek=2Ecom>:
->>> > Hi Frank,
->>> >=20
->>> > Seems this patch has huge impact on boot time, I'm curious about
->>> > the
->>> > NVMe detection issue on mt7986, can you share the SSD model that
->>> > you
->>> > are using and the bootup logs with that SSD?
->>>=20
->>> Which "huge" delay do you get in which setup? It adds a 100ms delay
->>> yes,but this seems needed to some devices working=2Ei found several
->>> sources talking about the 100ms wake-up time=2E=2E=2E
->
->>Some products are very sensitive to the bootup time, especially the
->>platforms with many PCIe ports, adding this 100ms delay for each port
->>will cause the bootup time be increased by multiple times(depending on
->>the number of PCIe ports it uses), and also the wake-up time, since the
->>mtk_pcie_starup_port() function will be called on resume stage=2E
->
->Thanks for taking time for analysing it=2E
->
->>> I do not have this issue,but some users in bpi-forum reorted it=2E
->>> Pcie-controller on mt7986/bpi-r3 does simply not detect the nvme and
->>> returned ETIMEDOUT (110)=2E
->>Since we're already comply with the PCIe CEM specification sections
->>2=2E2(PERST# signal)[1], and this issue only occurs on a few platforms,
->
->I see there is the msleep before the reset,where the patch splits reset a=
-nd perst (and add the sleep between)=2E
->
->So imho the best way is to move the existing msleep between these "splitt=
-ed" signals instead of adding a second one=2E I have to verify it with some=
-one who have the issue currently=2E
-
-Seems this does not make it work=2E=2E=2E
-
-Here are the bootlogs with different versions of this patch:
-
-https://forum=2Ebanana-pi=2Eorg/t/bpi-r3-problem-with-pcie/15152/22
-
->>I'll inclined to it's might be a signal quality issue=2E Also I checked
->>the BPI-R3 schematic diagram[2], and noticed that there are no AC
->>Coupling capacitors on the transmitter side, which described in PCIe
->>CEM Spec sections 4=2E7=2E1, but this schematic diagram only have part o=
-f
->>it, can you help to check the board design or share the full schematic
->>diagram for further analysis?=20
->
->I gave the questions to board vendor in forum=2E
->
->>[1]:=20
->>https://git=2Ekernel=2Eorg/pub/scm/linux/kernel/git/torvalds/linux=2Egit=
-/tree/drivers/pci/controller/pcie-mediatek-gen3=2Ec?h=3Dv6=2E3#n344
->>[2]:
->>https://drive=2Egoogle=2Ecom/file/d/1mxKb8CBbnzfNSd_4esmcX_NovxaXjEb8/vi=
-ew
->>
->>Thanks=2E
->>>=20
->>> # dmesg | grep 'pci'
->>> [ 5=2E235564] mtk-pcie-gen3 11280000=2Epcie: host bridge=20
->>> /soc/pcie@11280000 ranges:
->>> [ 5=2E242938] mtk-pcie-gen3 11280000=2Epcie: Parsing ranges property=
-=2E=2E=2E
->>> [ 5=2E249235] mtk-pcie-gen3 11280000=2Epcie: MEM
->>> 0x0020000000=2E=2E0x002fffffff -> 0x0020000000
->>> [ 5=2E478062] mtk-pcie-gen3 11280000=2Epcie: PCIe link down, current
->>> LTSSM state: detect=2Eactive (0x10 00001)
->>> [ 5=2E487491] mtk-pcie-gen3: probe of 11280000=2Epcie failed with erro=
-r
->>> -110
->>>=20
->>> One specific hardware is reported as example:
->>>=20
->>> Adata Legend710 512GB x3
->>>=20
->>> > Thanks=2E
->>> >=20
->>> > On Wed, 2023-04-26 at 19:41 +0200, Frank Wunderlich wrote:
->>> > > External email : Please do not click links or open attachments
->>> > > until
->>> > > you have verified the sender or the content=2E
->>> > >=20
->>> > >=20
->>> > > Hi
->>> > >=20
->>> > > > Gesendet: Sonntag, 02=2E April 2023 um 15:13 Uhr
->>> > > > Von: "Frank Wunderlich" <linux@fw-web=2Ede>
->>> > > > De-assert PERST in separate step after reset signals to fully
->>> > > > comply
->>> > > > the PCIe CEM clause 2=2E2=2E
->>> > > >=20
->>> > > > This fixes some NVME detection issues on mt7986=2E
->>> > > >=20
->>> > > > Fixes: d3bf75b579b9 ("PCI: mediatek-gen3: Add MediaTek Gen3
->>> > > > driver
->>> > > > for MT8192")
->>> > > > Signed-off-by: Frank Wunderlich <frank-w@public-files=2Ede>
->>> > > > ---
->>> > > > Patch is taken from user Ruslan aka RRKh61 (permitted me to
->>> > > > send it
->>> > > > with me as author)=2E
->>> > > >=20
->>> > > >=20
->>> >=20
->>> >=20
->>https://urldefense=2Ecom/v3/__https://forum=2Ebanana-pi=2Eorg/t/bpi-r3-n=
-vme-connection-issue/14563/17__;!!CTRNKA9wMg0ARbw!nCXEM685pkUpoiZYGKptPYccN=
-rWMeN2D3jIO5_irwxZJ7c6ZzEeACIx-V2WeZHAP_0FKlDDIQ0RbDJ892prtoToDv30$
->>> > > > ---
->>> > > >  drivers/pci/controller/pcie-mediatek-gen3=2Ec | 8 +++++++-
->>> > > >  1 file changed, 7 insertions(+), 1 deletion(-)
->>> > > >=20
->>> > > > diff --git a/drivers/pci/controller/pcie-mediatek-gen3=2Ec
->>> > > > b/drivers/pci/controller/pcie-mediatek-gen3=2Ec
->>> > > > index b8612ce5f4d0=2E=2E176b1a04565d 100644
->>> > > > --- a/drivers/pci/controller/pcie-mediatek-gen3=2Ec
->>> > > > +++ b/drivers/pci/controller/pcie-mediatek-gen3=2Ec
->>> > > > @@ -350,7 +350,13 @@ static int mtk_pcie_startup_port(struct
->>> > > > mtk_gen3_pcie *pcie)
->>> > > >       msleep(100);
->Maybe the better way is to drop this msleep when adding the new one below=
- the reset asserts?
->
->>> > > >       /* De-assert reset signals */
->>> > > > -     val &=3D ~(PCIE_MAC_RSTB | PCIE_PHY_RSTB | PCIE_BRG_RSTB |
->>> > > > PCIE_PE_RSTB);
->>> > > > +     val &=3D ~(PCIE_MAC_RSTB | PCIE_PHY_RSTB | PCIE_BRG_RSTB);
->>> > > > +     writel_relaxed(val, pcie->base + PCIE_RST_CTRL_REG);
->>> > > > +
->>> > > > +     msleep(100);
->>> > > > +
->>> > > > +     /* De-assert PERST# signals */
->>> > > > +     val &=3D ~(PCIE_PE_RSTB);
->>> > > >       writel_relaxed(val, pcie->base + PCIE_RST_CTRL_REG);
->>> > > >=20
->>> > > >       /* Check if the link is up or not */
-
-
-regards Frank
+IA0KPiBFdmVuIHdoZW4gdXJnZW50IEJLT1BTIGZhaWxzLCB0aGUgY29uc3VtZXIgd2lsbCBnZXQg
+c3R1Y2sgaW4gcnVudGltZQ0KPiBzdXNwZW5kIHN0YXR1cy4gTGlrZSBjb21taXQgMWE1NjY1ZmM4
+ZDdhICgic2NzaTogdWZzOiBjb3JlOiBXTFVOIHN1c3BlbmQNCj4gU1NVL2VudGVyIGhpYmVybjgg
+ZmFpbCByZWNvdmVyeSIpLCB0cmlnZ2VyIHRoZSBlcnJvciBoYW5kbGVyIGFuZCByZXR1cm4NCj4g
+LUVCVVNZIHRvIGJyZWFrIHRoZSBzdXNwZW5kLg0KPiANCj4gRml4ZXM6IGIyOTRmZjNlMzQ0OSAo
+InNjc2k6IHVmczogY29yZTogRW5hYmxlIHBvd2VyIG1hbmFnZW1lbnQgZm9yIHdsdW4iKQ0KPiBT
+aWduZWQtb2ZmLWJ5OiBLZW9zZW9uZyBQYXJrIDxrZW9zdW5nLnBhcmtAc2Ftc3VuZy5jb20+DQpS
+ZXZpZXdlZC1ieTogQXZyaSBBbHRtYW4gPGF2cmkuYWx0bWFuQHdkYy5jb20+DQoNClRoYW5rcywN
+CkF2cmkNCg0KPiAtLS0NCj4gIGRyaXZlcnMvdWZzL2NvcmUvdWZzaGNkLmMgfCAxMCArKysrKysr
+KystDQo+ICAxIGZpbGUgY2hhbmdlZCwgOSBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pDQo+
+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy91ZnMvY29yZS91ZnNoY2QuYyBiL2RyaXZlcnMvdWZz
+L2NvcmUvdWZzaGNkLmMNCj4gaW5kZXggOTQzNDMyOGJhMzIzLi4yNDk2NmU5YWY3MjAgMTAwNjQ0
+DQo+IC0tLSBhL2RyaXZlcnMvdWZzL2NvcmUvdWZzaGNkLmMNCj4gKysrIGIvZHJpdmVycy91ZnMv
+Y29yZS91ZnNoY2QuYw0KPiBAQCAtOTQ1Nyw4ICs5NDU3LDE2IEBAIHN0YXRpYyBpbnQgX191ZnNo
+Y2Rfd2xfc3VzcGVuZChzdHJ1Y3QgdWZzX2hiYQ0KPiAqaGJhLCBlbnVtIHVmc19wbV9vcCBwbV9v
+cCkNCj4gICAgICAgICAgICAgICAgICAgICAgICAgICogdGhhdCBwZXJmb3JtYW5jZSBtaWdodCBi
+ZSBpbXBhY3RlZC4NCj4gICAgICAgICAgICAgICAgICAgICAgICAgICovDQo+ICAgICAgICAgICAg
+ICAgICAgICAgICAgIHJldCA9IHVmc2hjZF91cmdlbnRfYmtvcHMoaGJhKTsNCj4gLSAgICAgICAg
+ICAgICAgICAgICAgICAgaWYgKHJldCkNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgaWYgKHJl
+dCkgew0KPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIC8qDQo+ICsgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICogSWYgcmV0dXJuIGVyciBpbiBzdXNwZW5kIGZsb3csIElP
+IHdpbGwgaGFuZy4NCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgKiBUcmlnZ2Vy
+IGVycm9yIGhhbmRsZXIgYW5kIGJyZWFrIHN1c3BlbmQgZm9yDQo+ICsgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICogZXJyb3IgcmVjb3ZlcnkuDQo+ICsgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICovDQo+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgdWZzaGNk
+X2ZvcmNlX2Vycm9yX3JlY292ZXJ5KGhiYSk7DQo+ICsgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgcmV0ID0gLUVCVVNZOw0KPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGdv
+dG8gZW5hYmxlX3NjYWxpbmc7DQo+ICsgICAgICAgICAgICAgICAgICAgICAgIH0NCj4gICAgICAg
+ICAgICAgICAgIH0gZWxzZSB7DQo+ICAgICAgICAgICAgICAgICAgICAgICAgIC8qIG1ha2Ugc3Vy
+ZSB0aGF0IGF1dG8gYmtvcHMgaXMgZGlzYWJsZWQgKi8NCj4gICAgICAgICAgICAgICAgICAgICAg
+ICAgdWZzaGNkX2Rpc2FibGVfYXV0b19ia29wcyhoYmEpOw0KPiAtLQ0KPiAyLjE3LjENCg0K
