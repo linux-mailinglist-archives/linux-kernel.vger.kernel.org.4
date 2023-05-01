@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CE9C6F2E32
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 05:24:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 647776F2CFB
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 05:06:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232876AbjEADXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 23:23:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49584 "EHLO
+        id S232557AbjEADGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 23:06:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233371AbjEADWw (ORCPT
+        with ESMTP id S232520AbjEADEK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 23:22:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 374BC7ABA;
-        Sun, 30 Apr 2023 20:08:58 -0700 (PDT)
+        Sun, 30 Apr 2023 23:04:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2300D19BD;
+        Sun, 30 Apr 2023 20:01:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7FD2F60FE0;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 48107616DD;
+        Mon,  1 May 2023 02:59:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70184C433EF;
         Mon,  1 May 2023 02:59:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 472F9C4339B;
-        Mon,  1 May 2023 02:59:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682909978;
-        bh=dk5EWtuiM8lVJnrKszvOT7TER6QdEt3BdEy7DXqdyZU=;
+        s=k20201202; t=1682909980;
+        bh=YKojEJiiV1QvwHI5f0ezVGrRBJg+sS7nU5ba/bX9Vb8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S5FOGm/Bs6+jm/aX1R7pVYNIJkZ8Y7Cv+/ILXO2omC6wc7u4EsLjinSqiMqqIflzn
-         YTDa2yDpjcDwZW3pW/BZ5gzfJ+R7B62ujSjdq9mLpgvEi5OeVEDYQwoUKW6l4dx/ku
-         britw5SNGLbmxinSg+fWEAOi2VmaDsl0K2WxUKrO5gWM6GoBq34MUgHHfXrT2pZKUA
-         Dy8jTMpzswc+oo3j5qETEvLwtPvqBLcKk5sq+xlhKfv7YOCKon6fqQDvzR0P3+4hGI
-         c70AmGnz0zqGoH/WWmSKWYOQUyK4QqAVnBcqjbzAg76p7hqgjVYDL6lKkFOB6yE6fd
-         6x2Q8mYqfVx4Q==
+        b=p9AzbP/kx+wSby7ytTnMivAm3jk1V+SGZZXz941qqCeaVX9eCs+7ZYNfAiDa/v+iJ
+         ThW+a+ZicUbSPKwJ5lWDqFIrytV1nZbsaktsHB8dSFAsOOidhwUoYo8RRSXr/xtLCg
+         npqYgTaCz5kS32kTyZe1s5mmErZHrztaoXsIZvPEbt8WlC+L8LZ0xMuBla+UUVx4IV
+         34NQQAGU7ZG4GRT4dLDIt5vb/JohOqqbgaMhz/4O2oV8j+HFjzysaPpCyPPnR03w43
+         EHsSUa/0J5X0mqRagA/PpqpgFG5M2UeIeqqLSKmcUZu30dFnq6ls7z/NbryxePF58T
+         hlQ3fAX5fzhPA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mukul Joshi <mukul.joshi@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
-        Hawking.Zhang@amd.com, tao.zhou1@amd.com, le.ma@amd.com,
-        lijo.lazar@amd.com, kent.russell@amd.com,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Subject: [PATCH AUTOSEL 6.3 41/44] drm/amdgpu: Enable IH retry CAM on GFX9
-Date:   Sun, 30 Apr 2023 22:56:29 -0400
-Message-Id: <20230501025632.3253067-41-sashal@kernel.org>
+Cc:     Wei Chen <harperchen1110@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, tiffany.lin@mediatek.com,
+        andrew-ct.chen@mediatek.com, yunfei.dong@mediatek.com,
+        matthias.bgg@gmail.com, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH AUTOSEL 6.3 42/44] media: mediatek: vcodec: Fix potential array out-of-bounds in decoder queue_setup
+Date:   Sun, 30 Apr 2023 22:56:30 -0400
+Message-Id: <20230501025632.3253067-42-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230501025632.3253067-1-sashal@kernel.org>
 References: <20230501025632.3253067-1-sashal@kernel.org>
@@ -52,8 +52,8 @@ MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,289 +62,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mukul Joshi <mukul.joshi@amd.com>
+From: Wei Chen <harperchen1110@gmail.com>
 
-[ Upstream commit 318e431b306e966d2ee99e900a11bdc9a701ee83 ]
+[ Upstream commit 8fbcf730cb89c3647f3365226fe7014118fa93c7 ]
 
-This patch enables the IH retry CAM on GFX9 series cards. This
-retry filter is used to prevent sending lots of retry interrupts
-in a short span of time and overflowing the IH ring buffer. This
-will also help reduce CPU interrupt workload.
+variable *nplanes is provided by user via system call argument. The
+possible value of q_data->fmt->num_planes is 1-3, while the value
+of *nplanes can be 1-8. The array access by index i can cause array
+out-of-bounds.
 
-Signed-off-by: Mukul Joshi <mukul.joshi@amd.com>
-Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Fix this bug by checking *nplanes against the array size.
+
+Signed-off-by: Wei Chen <harperchen1110@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_irq.h       |  2 +
- drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c         | 51 +++++++++++------
- drivers/gpu/drm/amd/amdgpu/nbio_v7_4.c        |  2 +-
- drivers/gpu/drm/amd/amdgpu/vega20_ih.c        | 55 +++++++++----------
- drivers/gpu/drm/amd/amdkfd/kfd_svm.c          | 10 +++-
- .../asic_reg/oss/osssys_4_2_0_offset.h        |  6 ++
- .../asic_reg/oss/osssys_4_2_0_sh_mask.h       | 11 ++++
- 7 files changed, 88 insertions(+), 49 deletions(-)
+ drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_irq.h b/drivers/gpu/drm/amd/amdgpu/amdgpu_irq.h
-index e9f2c11ea416c..be243adf3e657 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_irq.h
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_irq.h
-@@ -98,6 +98,8 @@ struct amdgpu_irq {
- 	struct irq_domain		*domain; /* GPU irq controller domain */
- 	unsigned			virq[AMDGPU_MAX_IRQ_SRC_ID];
- 	uint32_t                        srbm_soft_reset;
-+	u32                             retry_cam_doorbell_index;
-+	bool                            retry_cam_enabled;
- };
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
+index 641f533c417fd..173407664cf42 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
+@@ -753,6 +753,13 @@ int vb2ops_vdec_queue_setup(struct vb2_queue *vq, unsigned int *nbuffers,
+ 	}
  
- void amdgpu_irq_disable_all(struct amdgpu_device *adev);
-diff --git a/drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c b/drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c
-index b06170c00dfca..6573903876fd8 100644
---- a/drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c
-+++ b/drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c
-@@ -553,32 +553,49 @@ static int gmc_v9_0_process_interrupt(struct amdgpu_device *adev,
- 	const char *mmhub_cid;
- 	const char *hub_name;
- 	u64 addr;
-+	uint32_t cam_index = 0;
-+	int ret;
- 
- 	addr = (u64)entry->src_data[0] << 12;
- 	addr |= ((u64)entry->src_data[1] & 0xf) << 44;
- 
- 	if (retry_fault) {
--		/* Returning 1 here also prevents sending the IV to the KFD */
-+		if (adev->irq.retry_cam_enabled) {
-+			/* Delegate it to a different ring if the hardware hasn't
-+			 * already done it.
-+			 */
-+			if (entry->ih == &adev->irq.ih) {
-+				amdgpu_irq_delegate(adev, entry, 8);
-+				return 1;
-+			}
-+
-+			cam_index = entry->src_data[2] & 0x3ff;
- 
--		/* Process it onyl if it's the first fault for this address */
--		if (entry->ih != &adev->irq.ih_soft &&
--		    amdgpu_gmc_filter_faults(adev, entry->ih, addr, entry->pasid,
-+			ret = amdgpu_vm_handle_fault(adev, entry->pasid, addr, write_fault);
-+			WDOORBELL32(adev->irq.retry_cam_doorbell_index, cam_index);
-+			if (ret)
-+				return 1;
+ 	if (*nplanes) {
++		if (vq->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE) {
++			if (*nplanes != q_data->fmt->num_planes)
++				return -EINVAL;
 +		} else {
-+			/* Process it onyl if it's the first fault for this address */
-+			if (entry->ih != &adev->irq.ih_soft &&
-+			    amdgpu_gmc_filter_faults(adev, entry->ih, addr, entry->pasid,
- 					     entry->timestamp))
--			return 1;
-+				return 1;
- 
--		/* Delegate it to a different ring if the hardware hasn't
--		 * already done it.
--		 */
--		if (entry->ih == &adev->irq.ih) {
--			amdgpu_irq_delegate(adev, entry, 8);
--			return 1;
--		}
-+			/* Delegate it to a different ring if the hardware hasn't
-+			 * already done it.
-+			 */
-+			if (entry->ih == &adev->irq.ih) {
-+				amdgpu_irq_delegate(adev, entry, 8);
-+				return 1;
-+			}
- 
--		/* Try to handle the recoverable page faults by filling page
--		 * tables
--		 */
--		if (amdgpu_vm_handle_fault(adev, entry->pasid, addr, write_fault))
--			return 1;
-+			/* Try to handle the recoverable page faults by filling page
-+			 * tables
-+			 */
-+			if (amdgpu_vm_handle_fault(adev, entry->pasid, addr, write_fault))
-+				return 1;
++			if (*nplanes != 1)
++				return -EINVAL;
 +		}
- 	}
- 
- 	if (!printk_ratelimit())
-diff --git a/drivers/gpu/drm/amd/amdgpu/nbio_v7_4.c b/drivers/gpu/drm/amd/amdgpu/nbio_v7_4.c
-index 19455a7259391..685abf57ffddc 100644
---- a/drivers/gpu/drm/amd/amdgpu/nbio_v7_4.c
-+++ b/drivers/gpu/drm/amd/amdgpu/nbio_v7_4.c
-@@ -238,7 +238,7 @@ static void nbio_v7_4_ih_doorbell_range(struct amdgpu_device *adev,
- 
- 	if (use_doorbell) {
- 		ih_doorbell_range = REG_SET_FIELD(ih_doorbell_range, BIF_IH_DOORBELL_RANGE, OFFSET, doorbell_index);
--		ih_doorbell_range = REG_SET_FIELD(ih_doorbell_range, BIF_IH_DOORBELL_RANGE, SIZE, 4);
-+		ih_doorbell_range = REG_SET_FIELD(ih_doorbell_range, BIF_IH_DOORBELL_RANGE, SIZE, 8);
- 	} else
- 		ih_doorbell_range = REG_SET_FIELD(ih_doorbell_range, BIF_IH_DOORBELL_RANGE, SIZE, 0);
- 
-diff --git a/drivers/gpu/drm/amd/amdgpu/vega20_ih.c b/drivers/gpu/drm/amd/amdgpu/vega20_ih.c
-index 1706081d054dd..6a8fb1fb48a3d 100644
---- a/drivers/gpu/drm/amd/amdgpu/vega20_ih.c
-+++ b/drivers/gpu/drm/amd/amdgpu/vega20_ih.c
-@@ -38,6 +38,11 @@
- #define mmIH_CHICKEN_ALDEBARAN			0x18d
- #define mmIH_CHICKEN_ALDEBARAN_BASE_IDX		0
- 
-+#define mmIH_RETRY_INT_CAM_CNTL_ALDEBARAN		0x00ea
-+#define mmIH_RETRY_INT_CAM_CNTL_ALDEBARAN_BASE_IDX	0
-+#define IH_RETRY_INT_CAM_CNTL_ALDEBARAN__ENABLE__SHIFT	0x10
-+#define IH_RETRY_INT_CAM_CNTL_ALDEBARAN__ENABLE_MASK	0x00010000L
-+
- static void vega20_ih_set_interrupt_funcs(struct amdgpu_device *adev);
- 
- /**
-@@ -251,36 +256,14 @@ static int vega20_ih_enable_ring(struct amdgpu_device *adev,
- 	return 0;
- }
- 
--/**
-- * vega20_ih_reroute_ih - reroute VMC/UTCL2 ih to an ih ring
-- *
-- * @adev: amdgpu_device pointer
-- *
-- * Reroute VMC and UMC interrupts on primary ih ring to
-- * ih ring 1 so they won't lose when bunches of page faults
-- * interrupts overwhelms the interrupt handler(VEGA20)
-- */
--static void vega20_ih_reroute_ih(struct amdgpu_device *adev)
-+static uint32_t vega20_setup_retry_doorbell(u32 doorbell_index)
- {
--	uint32_t tmp;
-+	u32 val = 0;
- 
--	/* vega20 ih reroute will go through psp this
--	 * function is used for newer asics starting arcturus
--	 */
--	if (adev->ip_versions[OSSSYS_HWIP][0] >= IP_VERSION(4, 2, 1)) {
--		/* Reroute to IH ring 1 for VMC */
--		WREG32_SOC15(OSSSYS, 0, mmIH_CLIENT_CFG_INDEX, 0x12);
--		tmp = RREG32_SOC15(OSSSYS, 0, mmIH_CLIENT_CFG_DATA);
--		tmp = REG_SET_FIELD(tmp, IH_CLIENT_CFG_DATA, CLIENT_TYPE, 1);
--		tmp = REG_SET_FIELD(tmp, IH_CLIENT_CFG_DATA, RING_ID, 1);
--		WREG32_SOC15(OSSSYS, 0, mmIH_CLIENT_CFG_DATA, tmp);
--
--		/* Reroute IH ring 1 for UTCL2 */
--		WREG32_SOC15(OSSSYS, 0, mmIH_CLIENT_CFG_INDEX, 0x1B);
--		tmp = RREG32_SOC15(OSSSYS, 0, mmIH_CLIENT_CFG_DATA);
--		tmp = REG_SET_FIELD(tmp, IH_CLIENT_CFG_DATA, RING_ID, 1);
--		WREG32_SOC15(OSSSYS, 0, mmIH_CLIENT_CFG_DATA, tmp);
--	}
-+	val = REG_SET_FIELD(val, IH_DOORBELL_RPTR, OFFSET, doorbell_index);
-+	val = REG_SET_FIELD(val, IH_DOORBELL_RPTR, ENABLE, 1);
-+
-+	return val;
- }
- 
- /**
-@@ -332,8 +315,6 @@ static int vega20_ih_irq_init(struct amdgpu_device *adev)
- 
- 	for (i = 0; i < ARRAY_SIZE(ih); i++) {
- 		if (ih[i]->ring_size) {
--			if (i == 1)
--				vega20_ih_reroute_ih(adev);
- 			ret = vega20_ih_enable_ring(adev, ih[i]);
- 			if (ret)
- 				return ret;
-@@ -346,6 +327,20 @@ static int vega20_ih_irq_init(struct amdgpu_device *adev)
- 
- 	pci_set_master(adev->pdev);
- 
-+	/* Allocate the doorbell for IH Retry CAM */
-+	adev->irq.retry_cam_doorbell_index = (adev->doorbell_index.ih + 3) << 1;
-+	WREG32_SOC15(OSSSYS, 0, mmIH_DOORBELL_RETRY_CAM,
-+		vega20_setup_retry_doorbell(adev->irq.retry_cam_doorbell_index));
-+
-+	/* Enable IH Retry CAM */
-+	if (adev->ip_versions[OSSSYS_HWIP][0] == IP_VERSION(4, 4, 0))
-+		WREG32_FIELD15(OSSSYS, 0, IH_RETRY_INT_CAM_CNTL_ALDEBARAN,
-+			       ENABLE, 1);
-+	else
-+		WREG32_FIELD15(OSSSYS, 0, IH_RETRY_INT_CAM_CNTL, ENABLE, 1);
-+
-+	adev->irq.retry_cam_enabled = true;
-+
- 	/* enable interrupts */
- 	ret = vega20_ih_toggle_interrupts(adev, true);
- 	if (ret)
-diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_svm.c b/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
-index dc6fd69670509..96a138a395150 100644
---- a/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
-+++ b/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
-@@ -2172,7 +2172,15 @@ static void svm_range_drain_retry_fault(struct svm_range_list *svms)
- 		pr_debug("drain retry fault gpu %d svms %p\n", i, svms);
- 
- 		amdgpu_ih_wait_on_checkpoint_process_ts(pdd->dev->adev,
--						     &pdd->dev->adev->irq.ih1);
-+				pdd->dev->adev->irq.retry_cam_enabled ?
-+				&pdd->dev->adev->irq.ih :
-+				&pdd->dev->adev->irq.ih1);
-+
-+		if (pdd->dev->adev->irq.retry_cam_enabled)
-+			amdgpu_ih_wait_on_checkpoint_process_ts(pdd->dev->adev,
-+				&pdd->dev->adev->irq.ih_soft);
-+
-+
- 		pr_debug("drain retry fault gpu %d svms 0x%p done\n", i, svms);
- 	}
- 	if (atomic_cmpxchg(&svms->drain_pagefaults, drain, 0) != drain)
-diff --git a/drivers/gpu/drm/amd/include/asic_reg/oss/osssys_4_2_0_offset.h b/drivers/gpu/drm/amd/include/asic_reg/oss/osssys_4_2_0_offset.h
-index bd129266ebfd1..a84a7cfaf71e5 100644
---- a/drivers/gpu/drm/amd/include/asic_reg/oss/osssys_4_2_0_offset.h
-+++ b/drivers/gpu/drm/amd/include/asic_reg/oss/osssys_4_2_0_offset.h
-@@ -135,6 +135,8 @@
- #define mmIH_RB_WPTR_ADDR_LO_BASE_IDX                                                                  0
- #define mmIH_DOORBELL_RPTR                                                                             0x0087
- #define mmIH_DOORBELL_RPTR_BASE_IDX                                                                    0
-+#define mmIH_DOORBELL_RETRY_CAM                                                                        0x0088
-+#define mmIH_DOORBELL_RETRY_CAM_BASE_IDX                                                               0
- #define mmIH_RB_CNTL_RING1                                                                             0x008c
- #define mmIH_RB_CNTL_RING1_BASE_IDX                                                                    0
- #define mmIH_RB_BASE_RING1                                                                             0x008d
-@@ -159,6 +161,8 @@
- #define mmIH_RB_WPTR_RING2_BASE_IDX                                                                    0
- #define mmIH_DOORBELL_RPTR_RING2                                                                       0x009f
- #define mmIH_DOORBELL_RPTR_RING2_BASE_IDX                                                              0
-+#define mmIH_RETRY_CAM_ACK                                                                             0x00a4
-+#define mmIH_RETRY_CAM_ACK_BASE_IDX                                                                    0
- #define mmIH_VERSION                                                                                   0x00a5
- #define mmIH_VERSION_BASE_IDX                                                                          0
- #define mmIH_CNTL                                                                                      0x00c0
-@@ -235,6 +239,8 @@
- #define mmIH_MMHUB_ERROR_BASE_IDX                                                                      0
- #define mmIH_MEM_POWER_CTRL                                                                            0x00e8
- #define mmIH_MEM_POWER_CTRL_BASE_IDX                                                                   0
-+#define mmIH_RETRY_INT_CAM_CNTL                                                                        0x00e9
-+#define mmIH_RETRY_INT_CAM_CNTL_BASE_IDX                                                               0
- #define mmIH_REGISTER_LAST_PART2                                                                       0x00ff
- #define mmIH_REGISTER_LAST_PART2_BASE_IDX                                                              0
- #define mmSEM_CLK_CTRL                                                                                 0x0100
-diff --git a/drivers/gpu/drm/amd/include/asic_reg/oss/osssys_4_2_0_sh_mask.h b/drivers/gpu/drm/amd/include/asic_reg/oss/osssys_4_2_0_sh_mask.h
-index 3ea83ea9ce3a4..75c04fc275a0c 100644
---- a/drivers/gpu/drm/amd/include/asic_reg/oss/osssys_4_2_0_sh_mask.h
-+++ b/drivers/gpu/drm/amd/include/asic_reg/oss/osssys_4_2_0_sh_mask.h
-@@ -349,6 +349,17 @@
- #define IH_DOORBELL_RPTR_RING2__ENABLE__SHIFT                                                                 0x1c
- #define IH_DOORBELL_RPTR_RING2__OFFSET_MASK                                                                   0x03FFFFFFL
- #define IH_DOORBELL_RPTR_RING2__ENABLE_MASK                                                                   0x10000000L
-+//IH_RETRY_INT_CAM_CNTL
-+#define IH_RETRY_INT_CAM_CNTL__CAM_SIZE__SHIFT                                                                0x0
-+#define IH_RETRY_INT_CAM_CNTL__BACK_PRESSURE_SKID_VALUE__SHIFT                                                0x8
-+#define IH_RETRY_INT_CAM_CNTL__ENABLE__SHIFT                                                                  0x10
-+#define IH_RETRY_INT_CAM_CNTL__BACK_PRESSURE_ENABLE__SHIFT                                                    0x11
-+#define IH_RETRY_INT_CAM_CNTL__PER_VF_ENTRY_SIZE__SHIFT                                                       0x14
-+#define IH_RETRY_INT_CAM_CNTL__CAM_SIZE_MASK                                                                  0x0000001FL
-+#define IH_RETRY_INT_CAM_CNTL__BACK_PRESSURE_SKID_VALUE_MASK                                                  0x00003F00L
-+#define IH_RETRY_INT_CAM_CNTL__ENABLE_MASK                                                                    0x00010000L
-+#define IH_RETRY_INT_CAM_CNTL__BACK_PRESSURE_ENABLE_MASK                                                      0x00020000L
-+#define IH_RETRY_INT_CAM_CNTL__PER_VF_ENTRY_SIZE_MASK                                                         0x00300000L
- //IH_VERSION
- #define IH_VERSION__MINVER__SHIFT                                                                             0x0
- #define IH_VERSION__MAJVER__SHIFT                                                                             0x8
+ 		for (i = 0; i < *nplanes; i++) {
+ 			if (sizes[i] < q_data->sizeimage[i])
+ 				return -EINVAL;
 -- 
 2.39.2
 
