@@ -2,79 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEAFF6F3861
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 21:44:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 234E66F386D
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 21:46:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231995AbjEAToC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 15:44:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38612 "EHLO
+        id S232604AbjEATqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 15:46:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbjEAToB (ORCPT
+        with ESMTP id S229871AbjEATqJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 15:44:01 -0400
-Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A50301AB
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 12:43:59 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 1BA08C01D; Mon,  1 May 2023 21:43:58 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1682970238; bh=+DVIqAPcioRb471iCCPgn44QlLAG4x958YK8gLftMLo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vX0+X0EzByIEUYPrqnCHBUiqAGdK/8bmnd5kpE9etvfRU2Brb86WhKEkULm7tpX8u
-         8Kx5BRP+jCxd2R+PzDApdAlvkfGkEKg4nlpt9kgWxcDTq9HRnlghCIk0Qgp7DkibHT
-         GlNpzEqfcF1j8McF/e6fsJcaxBPErxhazyvg9t7KPISXNWv2GPGwbozapVWMYaiT8p
-         fCJjRUWDUJyCW6AsDufTcRpkNYp+b6653tb+brBI9cy9ibGyPqyD0kTUCyyzHxYzLe
-         b5XWEcpWpdYjjFRTrrmqbSn1xh11unTUZwix1DLkTd+OAt994jkTJxHjoezzRldF4G
-         7RWVhMYSzdwMA==
+        Mon, 1 May 2023 15:46:09 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93A051AC;
+        Mon,  1 May 2023 12:46:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=5T7SNEFioE5bVYpZBmGJPqGx2AlTDrYehgilC8dKMoA=; b=okXKfCqsbmvFVvMvcb1Ec1FaPX
+        6gXftB2GMFAKmeJvM6Q63hRQ2tgqm7SQPABq799C5KMdO/q+3XkN4kdbmymWBtDXMOgp+WxR11+Am
+        8sEUikYK4F/63MXkSnaGqi+X0RRfoVklBTeLcnBCSK9gM2LdTevn950EOM2jONIUAALm++fEsofdc
+        jMVmS2VGLdb1tB+1dID3vZWH5/kF/klCBHWHnH1j99cYNCAYtMvyuEOl/UQLwtabqZb0YA4sejg5y
+        KHFla7z4jK5je9QDtVqF8mwJwLgsCLOM61ck+KtuxPCyLK0rXNzDRgBo3Y+8zC4RNxxeVUWVMSGk9
+        PjBXuh6A==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35442)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1ptZT7-0001Kz-KS; Mon, 01 May 2023 20:45:53 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1ptZT4-0008N7-Bm; Mon, 01 May 2023 20:45:50 +0100
+Date:   Mon, 1 May 2023 20:45:50 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Shmuel Hazan <shmuel.h@siklu.com>
+Cc:     Marcin Wojtas <mw@semihalf.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        horatiu.vultur@microchip.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v4 0/3] net: mvpp2: tai: add extts support
+Message-ID: <ZFAW7pn3OQsiy/PU@shell.armlinux.org.uk>
+References: <20230430170656.137549-1-shmuel.h@siklu.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230430170656.137549-1-shmuel.h@siklu.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id A6FA9C009;
-        Mon,  1 May 2023 21:43:55 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1682970237; bh=+DVIqAPcioRb471iCCPgn44QlLAG4x958YK8gLftMLo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qWi+576CYSLSpjDg1y/njtImgDrwg1rsPVa5U0/vf3tIwSMzzXJeDGTJPEU4Mxt2X
-         BH0oksLtz3+Ld0wBCoPHm0Qn2QvGSMIgsAjqbuG+15Z9jjBKIVpEiJvM6V0FlgKM9H
-         GuI4MgBLigoTpTeA4p37tKt0DWNL+QO2arqBxTWWhWdIkm7qEy08QlQFrB9u75+OR+
-         yJhhkxMofUuWXCluAIqGoATJHV7smVouGepPkmGKOb7EJ95epvU0KwyM+sKygVSLjb
-         0tO/E1Aqm5IuQEFggsq3acJKLgbpSWP0Mnlfge5bJ91suLfzcp9OqIYucPF/q+9riU
-         xdZ8vKqtgKxww==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id bd218157;
-        Mon, 1 May 2023 19:43:52 +0000 (UTC)
-Date:   Tue, 2 May 2023 04:43:37 +0900
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     Jason Andryuk <jandryuk@gmail.com>
-Cc:     Eric Van Hensbergen <ericvh@kernel.org>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Christian Schoenebeck <linux_oss@crudebyte.com>,
-        v9fs@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fs/9p: Remove INET dependency
-Message-ID: <ZFAWaQbDR1_r5jf-@codewreck.org>
-References: <20230501190602.86281-1-jandryuk@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230501190602.86281-1-jandryuk@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jason Andryuk wrote on Mon, May 01, 2023 at 03:06:00PM -0400:
-> 9pfs can run over assorted transports, so it doesn't have an INET
-> dependency.  Drop it and remove the includes of linux/inet.h.
+Hi,
+
+I've been on a two week vacation, so I'm going to be catching up with a
+lot of email - and I do want to review this before it's merged.
+
+On Sun, Apr 30, 2023 at 08:06:53PM +0300, Shmuel Hazan wrote:
+> This patch series adds support for PTP event capture on the Aramda
+> 80x0/70x0. This feature is mainly used by tools linux ts2phc(3) in order
+> to synchronize a timestamping unit (like the mvpp2's TAI) and a system
+> DPLL on the same PCB. 
 > 
-> This allows configuring 9pfs over Xen with INET disabled.
+> The patch series includes 3 patches: the second one implements the
+> actual extts function.
+> 
+> Changes in v2:
+> 	* Fixed a deadlock in the poll worker.
+> 	* Removed tabs from comments.
+> 
+> Changes in v3:
+> 	* Added more explanation about the change in behavior in mvpp22_tai_start.
+> 	* Explain the reason for choosing 95ms as a polling rate.
+> 
+> Changes in v4:
+> 	* Add additional lock for the polling worker reference count. 
+> 
+> Shmuel Hazan (3):
+>   net: mvpp2: tai: add refcount for ptp worker
+>   net: mvpp2: tai: add extts support
+>   dt-bindings: net: marvell,pp2: add extts docs
+> 
+>  .../devicetree/bindings/net/marvell,pp2.yaml  |  18 +
+>  .../net/ethernet/marvell/mvpp2/mvpp2_tai.c    | 332 ++++++++++++++++--
+>  2 files changed, 316 insertions(+), 34 deletions(-)
+> 
+> 
+> base-commit: 3e7bb4f2461710b70887704af7f175383251088e
+> -- 
+> 2.40.1
+> 
+> 
 
-Good catch.
-Could you add depends on INET to NET_9P_FD in net/9p/Kconfig?
-
-That aside looks good to me; we probably ought to cleanup the includes a
-bit more aggressively...
 -- 
-Dominique
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
