@@ -2,124 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C39EF6F3C81
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 06:01:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2512D6F3C84
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 06:03:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbjEBEBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 00:01:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35230 "EHLO
+        id S229910AbjEBEDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 00:03:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjEBEB0 (ORCPT
+        with ESMTP id S229379AbjEBEDB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 00:01:26 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2072.outbound.protection.outlook.com [40.107.237.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29EDFE4B;
-        Mon,  1 May 2023 21:01:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L6DCIsx9zzqNjAgUwIzJpKEvqDoiIW3kpxFeeZ34pFT+z6/oB90XVUIxMSkUnQg0D5IM5L8Vzo5nCkBUbn2jd69NbbJoXvKPiBpsgRw49XQJpk9q9clxBOxWJWaADNODEVTogontT+fyo/+5X9jnkl4ktdj5W+szhys2bGvBV3v2foJniv4Tanhwi5MNY06w0wGr8QFjzkb40HGW63whWxrzAjhR6VRjTWHgZ5Y9nGJQhfP+SgUYPKTepWgdj15VK4+qsB2VvBirdJmBKKrSDnZbDMsWnijuhpfM+cD0JNwtzHWO2gz583YWwEXqakWdIvkaVXTcjeyNBpOkrBfjDQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=na8HlN+nIIEm8myvWucWjNxw6N+t8vD/aJrdVXUaBR4=;
- b=Ii27sDILB9KyDFdu4h/aP88feXIA/0si9kpk+MR2L6fXVKH8P0z0drGfYSdbj6lEz2bpCzDXevNg/5xozzW9sJA3oD14xvRhs9W5fvRMtGLrf/ycWUnmFeJRkuGM/nrxRP+Z6+BdADWssYKDUWlmOZZtbVbuepTLJdGV9uW/7A6WobeQOdsfYPi7JM7TgVaILQ0xHG3BHxd4lOq/oiwFoPBJpCgaWVhTgvQD+o5EzfapJEgwf/bpMdBA0iCF62pfV59cvOZxJP74ppZxBE4En1uixizsNL4CWbky3IC7wUvAIgqc3OCnMB5E31DhqobLnwSo2dYUCtDJI9+FdyWgLQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=na8HlN+nIIEm8myvWucWjNxw6N+t8vD/aJrdVXUaBR4=;
- b=IQvaVd1I2WjJnnjszXkmYgnauSJI3KncuGC+48h6PWey8QPxtP/xMntiAuaamLMEW4pgbJM8KADn1qScWaK0rWa64VRj+KD9+vQflghPoE28DCxbT6RRpyAM60es/vHsMbd8LWlga4wIeH3NZv2QXmwCqRmVBjv4XDS/ba/8Htk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DS0PR12MB6583.namprd12.prod.outlook.com (2603:10b6:8:d1::12) by
- CY8PR12MB8244.namprd12.prod.outlook.com (2603:10b6:930:72::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6340.30; Tue, 2 May 2023 04:01:22 +0000
-Received: from DS0PR12MB6583.namprd12.prod.outlook.com
- ([fe80::fc3e:a5b4:7568:82bc]) by DS0PR12MB6583.namprd12.prod.outlook.com
- ([fe80::fc3e:a5b4:7568:82bc%5]) with mapi id 15.20.6340.030; Tue, 2 May 2023
- 04:01:22 +0000
-Message-ID: <84bc488b-5b4b-49ec-7e1a-3a88f92476f6@amd.com>
-Date:   Mon, 1 May 2023 21:01:19 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH] pds_core: fix linking without CONFIG_DEBUG_FS
-Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>, Arnd Bergmann <arnd@kernel.org>
-Cc:     Brett Creeley <brett.creeley@amd.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230501150624.3552344-1-arnd@kernel.org>
- <20230501153502.34f194ed@kernel.org>
-From:   Shannon Nelson <shannon.nelson@amd.com>
-In-Reply-To: <20230501153502.34f194ed@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR11CA0073.namprd11.prod.outlook.com
- (2603:10b6:a03:f4::14) To DS0PR12MB6583.namprd12.prod.outlook.com
- (2603:10b6:8:d1::12)
+        Tue, 2 May 2023 00:03:01 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6FC172E;
+        Mon,  1 May 2023 21:02:58 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-9505214c47fso662534266b.1;
+        Mon, 01 May 2023 21:02:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683000177; x=1685592177;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WZQ99yFigo7RP4vUqSoJAW3rFQ5koBxMnAL7Mg6H1Go=;
+        b=dzLkR/vN0o99nOrjWVyYBjVpZuAHBnTfdobKPwCFv3C4ZpLjfSteN68XOM5k7GLaUB
+         D5dN33mWqwGHeSzl+Tzokh8UOSsSh7eRfhdCGGWZT7Y/lXTsKkW0pjKztN42E8F0QzLy
+         21m6hma8M5dAhMR2GRRg0WNH2X7LdaJuFaFLb4x0urbsv2ObHIdrsA+yb34Kjsfmdla9
+         VnjO7eiOiCanudXCkAYzu1ZeGA7jcSLI8Ns3z1CwQLcHEi8cJn1cgMDO4b3QtEKwBuQ3
+         9jLmH/eHkIKGKsK45uZkSsu40EB3uDF9sKKHou99Czx9SaQOnrs3sp7kuw8c8Xr6s+MW
+         Hn3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683000177; x=1685592177;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WZQ99yFigo7RP4vUqSoJAW3rFQ5koBxMnAL7Mg6H1Go=;
+        b=B7UPYSTmRSBXXOzyD5UjAxvXGwpXNcXsMt6VA/dH1hrWS5HdcoPZejHiYxXr444Veu
+         y8YFXjfJJmCkk8eWdMQpPOrRNCw4ZWCSgccjRif8vLavAfjKh5oGfKYI+gY2fFA2jLLi
+         ebQNRa+eDec1mobFl+W/7ojGEt54HWNsDZjggtaRyJ9COCKHMC0YaOu2VVl3338uqX12
+         OhRROxMYkzqVk1iFaYW1v8Te7AES75dbHo+YOJS9AVGKe64rUvaf+8iiAnQu3ot7kQsU
+         hMXyrIP33x2d8c4rl2vSrYfAM2enaFUhQXByhI4Rcb9V1T+b5wY/5l+Mn9QNoPRUV2XF
+         LMkA==
+X-Gm-Message-State: AC+VfDwoGmREOitpbiNW2lOAJpqONn92LBP4V8xri/HCiUoRPkouy4yN
+        vmc62eMyJBjI+dyWwB3Gupaj6LsD/YUYepsOE5c=
+X-Google-Smtp-Source: ACHHUZ5ksb9Cbi7KXDE+COpjHvOA8zH8lTLLPVzsoqV6yRd5bHgOleof/BJ4C3yskxaNZ4NLou/l7pkyqG1HRZEjlCU=
+X-Received: by 2002:a17:907:1689:b0:94f:2d38:896b with SMTP id
+ hc9-20020a170907168900b0094f2d38896bmr18507647ejc.53.1683000176934; Mon, 01
+ May 2023 21:02:56 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR12MB6583:EE_|CY8PR12MB8244:EE_
-X-MS-Office365-Filtering-Correlation-Id: 463cd557-efaa-4dc9-9229-08db4ac1e43b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: U+BDxg1XSbjA/nUTQ/lEy98sXwCzSaLzhe372mF2yHU3jqrtCk5CpSjpd+n4g+2bpshetm1n+GfYOq3syW+7JRH3hPDdvwZhf6HkYbcQB+vstlHuqs4/SoCsn//dJ/5LAF8OoYR2GBQhtitdh1l8YJ+BGWAStSajIAi7Z3rTKNkAMY8M8v9x0YWDf9aqYQtPzCz+7RmMHiWhh7Ey58MB8O/IsltrKlwunH9vN7YBtnmpoH8k+wkBLRICf1CGGamgypNPJfs/BkBdSdW3uJoh2piXW0pKHrnQHtHqLoekPl7sbnKXej7pxSO6GJXQesZDSAt58BnzxxUZW/BHZ8qtTSxUjNAvwuemqX2MECKqRrLajtmp2VDW2WZXZM3FO6etwezl0Ugu0+ZgkCXqa14jubQNgzvTI0prfmrqdgZNpEqkNeHCRHL8wWY33qeQN4hnnOgbd7CdhfjdHvkHPJxqPNxd2MBXDenH1pElGCa1MxqlnjyD5Lksp5tsV/XLd38I9lwXuILCRMW3sWXlNHc6k8Gzew91ms3++avNrx7QLr+L8Q7mDVCZaOxJbIAJM7MA9YF3n3yfiqGjTwshzGH11TAJafl3zQYVGQvyhPAMNDXaZqGZHLjnN7OCKp7CqMJTfJvK/MHwlyAYtCLsRZGCGQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR12MB6583.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(376002)(39860400002)(396003)(346002)(136003)(451199021)(31686004)(316002)(53546011)(26005)(6512007)(6506007)(8936002)(5660300002)(44832011)(8676002)(31696002)(86362001)(478600001)(66476007)(2616005)(186003)(110136005)(66556008)(66946007)(83380400001)(41300700001)(54906003)(36756003)(2906002)(6666004)(6486002)(4326008)(38100700002)(966005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bGdXV3dKS1kvVlNIV29mVitEcklxTW9OSjFIcURBeEwrSDNZcVVoNGJzcnlR?=
- =?utf-8?B?UitDN2dqbmgwZStqUWtyWE9iOThjY3hWSnZMV2pBNUo2bGcxeTJDMVpPeHZY?=
- =?utf-8?B?bDJwTmlVTTFOY3BxUjNVa1h5emRGdTVTOFFtbFhUUG1XR0NUbkQ0WE9QY2FG?=
- =?utf-8?B?Sms5dWI5WHJKaHV4clVZOWdnMnI2bmk0Z2hBeGpaVExuWjYrYXNpREJRVmhD?=
- =?utf-8?B?S2xUYmh1bk9TMEk3UExVcU91bVdBRlZmQytBOFFDTWFTWTZieHE2eWJzKzg2?=
- =?utf-8?B?alE0ZjUwYm9OK2VFSytUY1FTTkxPelp2eVJXb0lIcDhkMnZTRHpuaHFabWFD?=
- =?utf-8?B?Qmo2Myt0eVAyZ0ZsUHo5dFBNcGJLMENtSGZFQnNqUlpURG15cTNQQkNjN0Fs?=
- =?utf-8?B?c011dVo2bmVJRDcxU21yaGNOcVhLSFN2ck1pb293QkNoZ3ZGTTl1cGRuV0tQ?=
- =?utf-8?B?dU5DNWFwcDRlTE1lb25uNTBnSXhTU004VWFqMzFvRVhYUHowZEtFRmMwNFhX?=
- =?utf-8?B?RHp5TUhLZ0UxRlFxOCtjK1VFTk9FSzk3Z2d3VEdNV0tLMktId2NvWWdnM1Vv?=
- =?utf-8?B?OUt3Vkg3RHNXanFGamlrbVZNOTBYNjUvMVE4allWZHcvRFF3M2EycGFhYUNy?=
- =?utf-8?B?R1hPUmhhRnhmdEhzZ2hnV0I0aTFwVFd1bGlwamEwTStmQmQ0UGp4V2txc1Jn?=
- =?utf-8?B?c1E1WmlDWk5DOEdGSFA0SnpDV1JHREJXWjdGQ3VoMlRGQnZ4ZjBZWC9hN2lw?=
- =?utf-8?B?a3p4RDA2Wjk4bmN4SXNCamp2ZlN5N1ozcGJjV0F6SlVVeVA0NjhvOEhCSUV1?=
- =?utf-8?B?VXQ5QVlmQUlQRzlka3VIeUlTYnYxaTJPSk5JZVo3VGFsV216b2pVUG56c3BQ?=
- =?utf-8?B?Nm03Z3ZmbzlNQnB1Mkhvb0dLd1h6RXZYRkxHQ1Z1UTNjK0I0VUE1SHpoM0Nk?=
- =?utf-8?B?K2F3OVphR0E1WmJIL3hianVNTTJ3Rm5kRG9sL01UVXNPTFNBV3VsRjVmNk9G?=
- =?utf-8?B?M2tlMHllZmxGRWRCaUtuK0R2Ym5FSXI0dTR5ZlVBZW84VDlKbStuUEJsUUNG?=
- =?utf-8?B?NTFlQzFRYkVkUkVHd0Zia0tKZEQwL2ljUFpRQXQxc0taRTZBVjRaRkwzWnN3?=
- =?utf-8?B?dit1WHJ6eEFFbXdmOXBjMjNnZGhVVEl3SkxaL0MxUkREYTBWblduUDlwU1Bp?=
- =?utf-8?B?KzR5aS9HNXhqbjRqdWwrQ2RVWFpSQlNqaWRzVmxIdEZnSFNJRzJnOWRKQWpC?=
- =?utf-8?B?ZmtHanhLRjFYWFRLaEpOTXAyanJYamRhNW1SWHBRVWVIVTFqTGxDWWg2ejd4?=
- =?utf-8?B?UU8wTkplMkIxRW4zNVpjL2ZHUDkwOVBTZGdDcmd0cjFkcDdqVWtnblZidTBI?=
- =?utf-8?B?MXBHcS85RTlrUlNiUEV1RTRTNHp5OHRXSVZ0eitzdGp3Z1JHUWxMRlR2MTQ1?=
- =?utf-8?B?V0tWMkVRcG5yMnY3QVBYN01Uc3pXTCs4YUw0TWgxYXdPS1hGQWMxTXdjSThP?=
- =?utf-8?B?V1VtQ2JEN29oNHcxQ1JkR1g5T1lXak5oSlFoRXRJcjN5RnR4bmsvT2VXL1R3?=
- =?utf-8?B?cHRJeC9KYkF2UTdpczIvZC9ncjlwbmtzYUtORXloRmRmR0JNSzl2U1hVV1Jv?=
- =?utf-8?B?WjN4OW51SVplREJ6Zjh3YUo3Mlk4aDBWMlJkRjZCQ3o2bEJkYjBNajM4K2J3?=
- =?utf-8?B?VThKV2JFVW13ajVndlZoYkg1dU0vZXBkUkx5Sk5mWEI4QnB4ZkxhWlQxNWZt?=
- =?utf-8?B?WmY1WTlNTENkSUpSSnVDNWlicmV1ODRQU3d2TjUyOUdINmQ3R3ZQbE1EcGdt?=
- =?utf-8?B?Q2NMUjEyaTg5UGN1dUJqa2dvUVlmY1hzYjE0TFpISHdObklQdFhZU3FIbE9V?=
- =?utf-8?B?djZJZ2Y5SHQ4TGVEZ05IK1NHT1RFbGViZHVJQ2xxREdSOXRVWGdFYVVKVTF6?=
- =?utf-8?B?ZmY0TTVFL01tTzNwNHBwbkMvYjc1eWNJYmdlQW5SRWhybEduc0dJQzJLa3pt?=
- =?utf-8?B?UXlEVUFJTEtXVWFrQUFJbEtPRjhKZVhyQ1lyQlNHaGlISzJrcGN2ZW42bDJs?=
- =?utf-8?B?NFVKUUdVSG0vTVJyN3BnSUV5ZDl0UGRXTjhUOVZkdENQbTRGRTB2NDNWaCt4?=
- =?utf-8?Q?WOP9/32OrkLoVad92ZmQwrDXT?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 463cd557-efaa-4dc9-9229-08db4ac1e43b
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR12MB6583.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2023 04:01:22.2920
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ybdFzqnCQACD9/oK/Yg5iN+bJAeOVlsZlzTOZY3dopf7uiQ0P8tcChfOLNElPx9MoiAPKcSYHYerTKVO7p4rgg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB8244
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+References: <ZEV/EzOM+TJomP66@eg>
+In-Reply-To: <ZEV/EzOM+TJomP66@eg>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 1 May 2023 21:02:44 -0700
+Message-ID: <CAEf4BzZTrjjyyOm3ak9JsssPSh6T_ZmGd677a2rt5e5rBLUrpQ@mail.gmail.com>
+Subject: Re: [PATCH v2] libbpf: Improve version handling when attaching uprobe
+To:     Espen Grindhaug <espen.grindhaug@gmail.com>
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -127,46 +79,509 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/1/23 3:35 PM, Jakub Kicinski wrote:
-> On Mon,  1 May 2023 17:06:14 +0200 Arnd Bergmann wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
->>
->> The debugfs.o file is only built when the fs is enabled:
->>
->> main.c:(.text+0x47c): undefined reference to `pdsc_debugfs_del_dev'
->> main.c:(.text+0x8dc): undefined reference to `pdsc_debugfs_add_dev'
->> main.c:(.exit.text+0x14): undefined reference to `pdsc_debugfs_destroy'
->> main.c:(.init.text+0x8): undefined reference to `pdsc_debugfs_create'
->> dev.c:(.text+0x988): undefined reference to `pdsc_debugfs_add_ident'
->> core.c:(.text+0x6b0): undefined reference to `pdsc_debugfs_del_qcq'
->> core.c:(.text+0x998): undefined reference to `pdsc_debugfs_add_qcq'
->> core.c:(.text+0xf0c): undefined reference to `pdsc_debugfs_add_viftype'
->>
->> Add dummy helper functions for these interfaces.
-> 
-> Debugfs should wrap itself. Doesn't this work:
-> 
-> diff --git a/drivers/net/ethernet/amd/pds_core/Makefile b/drivers/net/ethernet/amd/pds_core/Makefile
-> index 0abc33ce826c..54d1d5b375ce 100644
-> --- a/drivers/net/ethernet/amd/pds_core/Makefile
-> +++ b/drivers/net/ethernet/amd/pds_core/Makefile
-> @@ -9,6 +9,5 @@ pds_core-y := main.o \
->                dev.o \
->                adminq.o \
->                core.o \
-> -             fw.o
-> -
-> -pds_core-$(CONFIG_DEBUG_FS) += debugfs.o
-> +             fw.o \
-> +             debugfs.o
+On Sun, Apr 23, 2023 at 11:55=E2=80=AFAM Espen Grindhaug
+<espen.grindhaug@gmail.com> wrote:
+>
+> This change fixes the handling of versions in elf_find_func_offset.
+> In the previous implementation, we incorrectly assumed that the
+> version information would be present in the string found in the
+> string table.
+>
+> We now look up the correct version string in the version symbol
+> table before constructing the full name and then comparing.
+>
+> This patch adds support for both name@version and name@@version to
+> match output of the various elf parsers.
+>
+> Signed-off-by: Espen Grindhaug <espen.grindhaug@gmail.com>
+> ---
+> Changes since v1:
+> - Added test
+> ---
+>  tools/lib/bpf/libbpf.c                        | 148 +++++++++++++++---
+>  .../selftests/bpf/prog_tests/attach_probe.c   |  37 +++++
+>  .../selftests/bpf/progs/test_attach_probe.c   |  15 ++
+>  3 files changed, 181 insertions(+), 19 deletions(-)
+>
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 49cd304ae3bc..ef5e11ce6241 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -10620,31 +10620,94 @@ static int perf_event_uprobe_open_legacy(const =
+char *probe_name, bool retprobe,
+>  }
+>
+>  /* Return next ELF section of sh_type after scn, or first of that type i=
+f scn is NULL. */
+> -static Elf_Scn *elf_find_next_scn_by_type(Elf *elf, int sh_type, Elf_Scn=
+ *scn)
+> +static Elf_Scn *elf_find_next_scn_by_type(Elf *elf, int sh_type, Elf_Scn=
+ *scn, size_t *idx)
+>  {
+>         while ((scn =3D elf_nextscn(elf, scn)) !=3D NULL) {
+>                 GElf_Shdr sh;
+>
+>                 if (!gelf_getshdr(scn, &sh))
+>                         continue;
+> -               if (sh.sh_type =3D=3D sh_type)
+> +               if (sh.sh_type =3D=3D sh_type) {
+> +                       if (idx)
+> +                               *idx =3D sh.sh_link;
+>                         return scn;
+> +               }
+> +       }
+> +       return NULL;
+> +}
+> +
+> +static Elf_Data *elf_find_data_by_type(Elf *elf, int sh_type, size_t *id=
+x)
+> +{
+> +       Elf_Scn *scn =3D elf_find_next_scn_by_type(elf, sh_type, NULL, id=
+x);
+> +
+> +       if (scn)
+> +               return elf_getdata(scn, NULL);
+> +
+> +       return NULL;
+> +}
+> +
+> +static Elf64_Verdef *elf_verdef_by_offset(Elf_Data *data, size_t offset)
+> +{
+> +       if (offset + sizeof(Elf64_Verdef) > data->d_size)
+> +               return NULL;
+> +
+> +       return (Elf64_Verdef *)((char *) data->d_buf + offset);
+> +}
+> +
+> +static Elf64_Versym *elf_versym_by_idx(Elf_Data *data, size_t idx)
+> +{
+> +       if (idx >=3D data->d_size / sizeof(Elf64_Versym))
+> +               return NULL;
+> +
+> +       return (Elf64_Versym *)(data->d_buf + idx * sizeof(Elf64_Versym))=
+;
+> +}
+> +
+> +static Elf64_Verdaux *elf_verdaux_by_offset(Elf_Data *data, size_t offse=
+t)
+> +{
+> +       if (offset + sizeof(Elf64_Verdaux) > data->d_size)
+> +               return NULL;
+> +
+> +       return (Elf64_Verdaux *)((char *) data->d_buf + offset);
+> +}
+> +
+> +#define ELF_VERSYM_HIDDEN 0x8000
+> +#define ELF_VERSYM_IDX_MASK 0x7fff
+> +
+> +static Elf64_Verdaux *elf_get_verdaux_by_versym(Elf_Data *verdef_data, E=
+lf64_Versym *versym)
+> +{
+> +       size_t offset =3D 0;
+> +
+> +       while (offset + sizeof(Elf64_Verdef) <=3D verdef_data->d_size) {
+> +               Elf64_Verdef *verdef =3D elf_verdef_by_offset(verdef_data=
+, offset);
+> +
+> +               if (!verdef)
+> +                       break;
+> +
+> +               if (verdef->vd_ndx =3D=3D (*versym & ELF_VERSYM_IDX_MASK)=
+)
+> +                       return elf_verdaux_by_offset(verdef_data, offset =
++ verdef->vd_aux);
+> +
+> +               if (verdef->vd_next =3D=3D 0)
+> +                       break;
+> +
+> +               offset +=3D verdef->vd_next;
+>         }
+>         return NULL;
+>  }
 
-Yes, that should do it, and should have been done in the rest of the 
-change that I made after Leon suggested removing the dummy functions 
-that I originally had there [0].
+So all of the above is quite cryptic and unclear. I, for example,
+don't really know how symbol versioning information is laid out in
+ELF, and it's very hard to follow the logic here. Please add comments
+explaining the format and how different sections are related to each
+other.
 
-Tomorrow when I'm back from vacation I can do a couple of follow-up 
-patches for this and for the other config tags that Simon pointed out.
+>
+>  /* Find offset of function name in the provided ELF object. "binary_path=
+" is
+>   * the path to the ELF binary represented by "elf", and only used for er=
+ror
+> - * reporting matters. "name" matches symbol name or name@@LIB for librar=
+y
+> - * functions.
+> + * reporting matters. "name" matches symbol name, name@LIB or name@@LIB =
+for
+> + * library functions.
+>   */
+>  static long elf_find_func_offset(Elf *elf, const char *binary_path, cons=
+t char *name)
+>  {
+>         int i, sh_types[2] =3D { SHT_DYNSYM, SHT_SYMTAB };
+>         bool is_shared_lib, is_name_qualified;
+>         long ret =3D -ENOENT;
+> -       size_t name_len;
+>         GElf_Ehdr ehdr;
+> +       Elf_Data *versym_data =3D NULL;
+> +       Elf_Data *verdef_data =3D NULL;
+> +       size_t verdef_stridx =3D 0;
+>
+>         if (!gelf_getehdr(elf, &ehdr)) {
+>                 pr_warn("elf: failed to get ehdr from %s: %s\n", binary_p=
+ath, elf_errmsg(-1));
+> @@ -10654,9 +10717,12 @@ static long elf_find_func_offset(Elf *elf, const=
+ char *binary_path, const char *
+>         /* for shared lib case, we do not need to calculate relative offs=
+et */
+>         is_shared_lib =3D ehdr.e_type =3D=3D ET_DYN;
+>
+> -       name_len =3D strlen(name);
+> -       /* Does name specify "@@LIB"? */
+> -       is_name_qualified =3D strstr(name, "@@") !=3D NULL;
+> +       /* Does name specify "@@LIB" or "@LIB"? */
+> +       is_name_qualified =3D strstr(name, "@") !=3D NULL;
+> +
+> +       /* Extract version definition and version symbol table */
+> +       versym_data =3D elf_find_data_by_type(elf, SHT_GNU_versym, NULL);
+> +       verdef_data =3D elf_find_data_by_type(elf, SHT_GNU_verdef, &verde=
+f_stridx);
+>
+>         /* Search SHT_DYNSYM, SHT_SYMTAB for symbol. This search order is=
+ used because if
+>          * a binary is stripped, it may only have SHT_DYNSYM, and a fully=
+-statically
+> @@ -10671,10 +10737,10 @@ static long elf_find_func_offset(Elf *elf, cons=
+t char *binary_path, const char *
+>                 const char *sname;
+>                 GElf_Shdr sh;
+>
+> -               scn =3D elf_find_next_scn_by_type(elf, sh_types[i], NULL)=
+;
+> +               scn =3D elf_find_next_scn_by_type(elf, sh_types[i], NULL,=
+ NULL);
+>                 if (!scn) {
+>                         pr_debug("elf: failed to find symbol table ELF se=
+ctions in '%s'\n",
+> -                                binary_path);
+> +                               binary_path);
 
-sln
+please don't change unrelated lines of code
 
-[0] https://lore.kernel.org/netdev/20230409112645.GS14869@unreal/
+>                         continue;
+>                 }
+>                 if (!gelf_getshdr(scn, &sh))
+> @@ -10705,16 +10771,60 @@ static long elf_find_func_offset(Elf *elf, cons=
+t char *binary_path, const char *
+>                         if (!sname)
+>                                 continue;
+>
+> -                       curr_bind =3D GELF_ST_BIND(sym.st_info);
+> +                       if (is_name_qualified) {
+> +                               Elf64_Versym *versym;
+> +                               Elf64_Verdaux *verdaux;
+
+why are we assuming 64-bit binaries?
+
+> +                               int res;
+> +                               char full_name[256];
+>
+> -                       /* User can specify func, func@@LIB or func@@LIB_=
+VERSION. */
+> -                       if (strncmp(sname, name, name_len) !=3D 0)
+> -                               continue;
+> -                       /* ...but we don't want a search for "foo" to mat=
+ch 'foo2" also, so any
+> -                        * additional characters in sname should be of th=
+e form "@@LIB".
+> -                        */
+> -                       if (!is_name_qualified && sname[name_len] !=3D '\=
+0' && sname[name_len] !=3D '@')
+> -                               continue;
+> +                               /* check that name at least starts with s=
+name before building
+> +                                * the full name
+> +                                */
+> +                               if (strncmp(name, sname, strlen(sname)) !=
+=3D 0)
+> +                                       continue;
+> +
+> +                               if (!versym_data || !verdef_data) {
+> +                                       pr_warn("elf: failed to find vers=
+ion definition or version symbol table in '%s'\n",
+> +                                               binary_path);
+> +                                       break;
+> +                               }
+> +
+> +                               versym =3D elf_versym_by_idx(versym_data,=
+ idx);
+> +                               if (!versym) {
+> +                                       pr_warn("elf: failed to lookup ve=
+rsym for '%s' in '%s'\n",
+> +                                               sname, binary_path);
+> +                                       continue;
+> +                               }
+> +
+> +                               verdaux =3D elf_get_verdaux_by_versym(ver=
+def_data, versym);
+> +                               if (!verdaux) {
+> +                                       pr_warn("elf: failed to lookup ve=
+rdaux for '%s' in '%s'\n",
+> +                                               sname, binary_path);
+> +                                       continue;
+> +                               }
+> +
+> +                               res =3D snprintf(full_name, sizeof(full_n=
+ame),
+> +                                              (*versym & ELF_VERSYM_HIDD=
+EN) ? "%s@%s" :
+> +                                                                   "%s@@=
+%s",
+> +                                              sname,
+> +                                              elf_strptr(elf, verdef_str=
+idx,
+> +                                                         verdaux->vda_na=
+me));
+> +
+> +                               if (res < 0 || res >=3D sizeof(full_name)=
+) {
+> +                                       pr_warn("elf: failed to build ful=
+l name for '%s' in '%s'\n",
+> +                                               sname, binary_path);
+> +                                       continue;
+> +                               }
+
+maybe this version fetching part can be extracted into a helper to
+keep the main logic more straightforward?
+
+> +
+> +                               if (strcmp(full_name, name) !=3D 0)
+> +                                       continue;
+> +                       } else {
+> +                               /* If name is not qualified, we want to m=
+atch the symbol name */
+> +                               if (strcmp(sname, name) !=3D 0)
+> +                                       continue;
+> +                       }
+> +
+> +                       curr_bind =3D GELF_ST_BIND(sym.st_info);
+>
+>                         if (ret >=3D 0) {
+>                                 /* handle multiple matches */
+> diff --git a/tools/testing/selftests/bpf/prog_tests/attach_probe.c b/tool=
+s/testing/selftests/bpf/prog_tests/attach_probe.c
+> index 7175af39134f..c3f33f7e9d12 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/attach_probe.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
+
+please split selftests into a separate patch
+
+Also, it's not great that we rely on specific GLIBC versions for
+testing. There is no need to rely on glibc here at all. We have our
+own test executable and shared library, urandom_read and
+liburandom_read.so, which are used exactly for these sort of tests.
+
+While I was trying to understand all this versioning  some more, I've
+wrote a bunch of code already. Please use it as a base and switch
+tests to these new urandom_api() (v1 and v2) functions:
+
+diff --git a/tools/testing/selftests/bpf/Makefile
+b/tools/testing/selftests/bpf/Makefile
+index c49e5403ad0e..ff8685aac28f 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -181,11 +181,12 @@ endif
+
+ # Filter out -static for liburandom_read.so and its dependent targets
+so that static builds
+ # do not fail. Static builds leave urandom_read relying on
+system-wide shared libraries.
+-$(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c
++$(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c
+liburandom_read.map
+        $(call msg,LIB,,$@)
+        $(Q)$(CLANG) $(filter-out -static,$(CFLAGS) $(LDFLAGS))   \
+-                    $^ $(filter-out -static,$(LDLIBS))      \
++                    $(filter %.c,$^) $(filter-out -static,$(LDLIBS))      =
+  \
+                     -fuse-ld=3D$(LLD) -Wl,-znoseparate-code -Wl,--build-id=
+=3Dsha1 \
++                    -Wl,--version-script=3Dliburandom_read.map
+         \
+                     -fPIC -shared -o $@
+
+ $(OUTPUT)/urandom_read: urandom_read.c urandom_read_aux.c
+$(OUTPUT)/liburandom_read.so
+diff --git a/tools/testing/selftests/bpf/urandom_read.c
+b/tools/testing/selftests/bpf/urandom_read.c
+index e92644d0fa75..36ccfeb63443 100644
+--- a/tools/testing/selftests/bpf/urandom_read.c
++++ b/tools/testing/selftests/bpf/urandom_read.c
+@@ -21,6 +21,10 @@ void urand_read_without_sema(int iter_num, int
+iter_cnt, int read_sz);
+ void urandlib_read_with_sema(int iter_num, int iter_cnt, int read_sz);
+ void urandlib_read_without_sema(int iter_num, int iter_cnt, int read_sz);
+
++int urandlib_api(void);
++__asm__(".symver urandlib_api_old,urandlib_api@LIBURANDOM_READ_1.0.0");
++int urandlib_api_old(void);
++
+ unsigned short urand_read_with_sema_semaphore SEC(".probes");
+
+ static __attribute__((noinline))
+@@ -83,6 +87,9 @@ int main(int argc, char *argv[])
+
+        urandom_read(fd, count);
+
++       urandlib_api();
++       urandlib_api_old();
++
+        close(fd);
+        return 0;
+ }
+diff --git a/tools/testing/selftests/bpf/urandom_read_lib1.c
+b/tools/testing/selftests/bpf/urandom_read_lib1.c
+index 86186e24b740..eb02b8a9032c 100644
+--- a/tools/testing/selftests/bpf/urandom_read_lib1.c
++++ b/tools/testing/selftests/bpf/urandom_read_lib1.c
+@@ -11,3 +11,37 @@ void urandlib_read_with_sema(int iter_num, int
+iter_cnt, int read_sz)
+ {
+        STAP_PROBE3(urandlib, read_with_sema, iter_num, iter_cnt, read_sz);
+ }
++
++/* Symbol versioning is different between static and shared library.
++ * Properly versioned symbols are needed for shared library, but
++ * only the symbol of the new version is needed for static library.
++ * Starting with GNU C 10, use symver attribute instead of .symver assembl=
+er
++ * directive, which works better with GCC LTO builds.
++ */
++#if defined(__GNUC__) && __GNUC__ >=3D 10
++
++#define DEFAULT_VERSION(internal_name, api_name, version) \
++       __attribute__((symver(#api_name "@@" #version)))
++#define OMPAT_VERSION(internal_name, api_name, version) \
++       __attribute__((symver(#api_name "@" #version)))
++
++#else
++
++#define COMPAT_VERSION(internal_name, api_name, version) \
++       asm(".symver " #internal_name "," #api_name "@" #version);
++#define DEFAULT_VERSION(internal_name, api_name, version) \
++       asm(".symver " #internal_name "," #api_name "@@" #version);
++
++#endif
++
++COMPAT_VERSION(urandlib_api_v1, urandlib_api, LIBURANDOM_READ_1.0.0)
++int urandlib_api_v1(void)
++{
++       return 1;
++}
++
++DEFAULT_VERSION(urandlib_api_v2, urandlib_api, LIBURANDOM_READ_2.0.0)
++int urandlib_api_v2(void)
++{
++       return 2;
++}
+
+
+> @@ -192,6 +192,41 @@ static void test_uprobe_lib(struct test_attach_probe=
+ *skel)
+>         ASSERT_EQ(skel->bss->uretprobe_byname2_res, 8, "check_uretprobe_b=
+yname2_res");
+>  }
+>
+> +static void test_uprobe_lib_with_versions(struct test_attach_probe *skel=
+)
+> +{
+> +       DECLARE_LIBBPF_OPTS(bpf_uprobe_opts, uprobe_opts);
+> +       char absolute_path[256];
+> +
+> +       /* test attach with a versioned name.
+> +        * realpath has two implementations in libc, only the default ver=
+sion will be used.
+> +        */
+> +       uprobe_opts.func_name =3D "realpath@@GLIBC_2.3";
+> +       uprobe_opts.retprobe =3D false;
+> +       skel->links.handle_uprobe_byversionedname_a =3D
+> +                       bpf_program__attach_uprobe_opts(skel->progs.handl=
+e_uprobe_byversionedname_a,
+> +                                                       0 /* this pid */,
+> +                                                       "libc.so.6",
+> +                                                       0, &uprobe_opts);
+> +       if (!ASSERT_OK_PTR(skel->links.handle_uprobe_byversionedname_a, "=
+attach_handle_uprobe_byversionedname_a"))
+> +               return;
+> +
+> +       uprobe_opts.func_name =3D "realpath@GLIBC_2.2.5";
+> +       uprobe_opts.retprobe =3D false;
+> +       skel->links.handle_uprobe_byversionedname_b =3D
+> +                       bpf_program__attach_uprobe_opts(skel->progs.handl=
+e_uprobe_byversionedname_b,
+> +                                                       0 /* this pid */,
+> +                                                       "libc.so.6",
+> +                                                       0, &uprobe_opts);
+> +       if (!ASSERT_OK_PTR(skel->links.handle_uprobe_byversionedname_b, "=
+attach_handle_uprobe_byversionedname_b"))
+> +               return;
+> +
+> +       /* trigger & validate probes */
+> +       realpath("/", absolute_path);
+> +
+> +       ASSERT_EQ(skel->bss->uprobe_byversionedname_a_res, 13, "check_upr=
+obe_byversionedname_a_res");
+> +       ASSERT_NEQ(skel->bss->uprobe_byversionedname_b_res, 14, "check_up=
+robe_byversionedname_b_res");
+> +}
+> +
+>  static void test_uprobe_ref_ctr(struct test_attach_probe *skel)
+>  {
+>         DECLARE_LIBBPF_OPTS(bpf_uprobe_opts, uprobe_opts);
+> @@ -316,6 +351,8 @@ void test_attach_probe(void)
+>                 test_kprobe_sleepable();
+>         if (test__start_subtest("uprobe-lib"))
+>                 test_uprobe_lib(skel);
+> +       if (test__start_subtest("uprobe-lib-with-versions"))
+> +               test_uprobe_lib_with_versions(skel);
+>         if (test__start_subtest("uprobe-sleepable"))
+>                 test_uprobe_sleepable(skel);
+>         if (test__start_subtest("uprobe-ref_ctr"))
+> diff --git a/tools/testing/selftests/bpf/progs/test_attach_probe.c b/tool=
+s/testing/selftests/bpf/progs/test_attach_probe.c
+> index 68466a6ad18c..079b58901ff8 100644
+> --- a/tools/testing/selftests/bpf/progs/test_attach_probe.c
+> +++ b/tools/testing/selftests/bpf/progs/test_attach_probe.c
+> @@ -17,6 +17,8 @@ int uprobe_byname3_sleepable_res =3D 0;
+>  int uprobe_byname3_res =3D 0;
+>  int uretprobe_byname3_sleepable_res =3D 0;
+>  int uretprobe_byname3_res =3D 0;
+> +int uprobe_byversionedname_a_res =3D 0;
+> +int uprobe_byversionedname_b_res =3D 0;
+>  void *user_ptr =3D 0;
+>
+>  SEC("ksyscall/nanosleep")
+> @@ -121,5 +123,18 @@ int handle_uretprobe_byname3(struct pt_regs *ctx)
+>         return 0;
+>  }
+>
+> +SEC("uprobe")
+> +int BPF_UPROBE(handle_uprobe_byversionedname_a, const char *a, char *b)
+> +{
+> +       uprobe_byversionedname_a_res =3D 13;
+> +       return 0;
+> +}
+> +
+> +SEC("uprobe")
+> +int BPF_UPROBE(handle_uprobe_byversionedname_b, const char *a, char *b)
+> +{
+> +       uprobe_byversionedname_b_res =3D 14;
+> +       return 0;
+> +}
+>
+>  char _license[] SEC("license") =3D "GPL";
+> --
+> 2.34.1
+>
