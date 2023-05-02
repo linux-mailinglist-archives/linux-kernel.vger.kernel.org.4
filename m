@@ -2,150 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2035E6F3D33
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 08:05:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 096E36F3D3A
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 08:13:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233450AbjEBGFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 02:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37738 "EHLO
+        id S233498AbjEBGNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 02:13:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjEBGFl (ORCPT
+        with ESMTP id S232847AbjEBGN2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 02:05:41 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD312D63;
-        Mon,  1 May 2023 23:05:40 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 6864C32009E5;
-        Tue,  2 May 2023 02:05:39 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Tue, 02 May 2023 02:05:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=who-t.net; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1683007539; x=1683093939; bh=ba
-        9RAZXvdpWufyFprLLb/WROhkE667HyPHaNEAwBidY=; b=KwZoHc703NTc7c4P7h
-        jYw0SQGJ97yeFQb+PPK9RL6CpaWsIXvfqACmFqYcHLLmKLvFNAMrhhc3ZsLbQNRc
-        R8EQqDkApomkfyrJoHcaOlzD+0fMoLd8A/fxniE1pxQmdO7MxitgIGHUMLNIz523
-        k7lFWgzX6ZCUUCA+2NJ46jlFu5G2hBf7uO4t47WkpUILNFr/lg91Xs4EsGx2qDt8
-        /Ir4IviFDfrkYRatTSHru6kSVPlXR/CXr4uASPbYDEgMP6mbRL2TVONZ272zSLQK
-        hhsXVcqCKo341SQC/ZBauX/sTT6puaMoV130uY+s6hEqQ8aPpoZRIgNqMn/cHTD1
-        D6og==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1683007539; x=1683093939; bh=ba9RAZXvdpWuf
-        yFprLLb/WROhkE667HyPHaNEAwBidY=; b=Z2tzdSGWvQd+rd7pSZIsSVlqWZDpF
-        2HxVXeblldW9jI46ZXNsjXL7SddAJbvfPyOcIRi8q/g9jF2pPxyio36WjEOCtOFJ
-        9shepKPPcf+vsZiVNyX8z/Zyqkz8crTqQpzKbYy58hhuAz2WYGS6zOsquURFJfSs
-        bZFx2pummEDd6bCSu95XHz9lbvJilyWPMDdLt/d65gzucVkkPn/jd8lZiHa/3eqy
-        Siq9Qs2rwsOLpCXhYEtAz9kqoMucwtMp74LJlDTky3L51cTVjju3tcdDUiHyeTCy
-        lqpNqbRQfM58r1BA0kaA8hFTpbFhNGpdhL36a4FNx2iKZgIH6gq9rgY7A==
-X-ME-Sender: <xms:MqhQZIX5XzV4IwT8IjyODw8iyufE2aL8nau0kcsdNsm9yXpsCglSAg>
-    <xme:MqhQZMnXnJh6BpJiWeDUF6VMKrWGmQ1PHLS3dZET30265Prq56FLXGfekcoHDB9EG
-    iJnzOvUgPJkVWX1tAA>
-X-ME-Received: <xmr:MqhQZMbOUhcTtQ-MVDbgtcykLFPofBrBExCiVYBOtGrsD1GCrlVGf3klo5J04SKK_6kNLphbN94VtY8xJjaevr5il91KytGlikac>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedvhedguddtfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefrvght
-    vghrucfjuhhtthgvrhgvrhcuoehpvghtvghrrdhhuhhtthgvrhgvrhesfihhohdqthdrnh
-    gvtheqnecuggftrfgrthhtvghrnhepkedvkeegheefjefgvddufffhveehjeffvefgiefg
-    kefhudeifedugfetudfgtefgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomhepphgvthgvrhdrhhhuthhtvghrvghrseifhhhoqdhtrdhnvght
-X-ME-Proxy: <xmx:MqhQZHVac-vvxLlSEFRXQda_mk-2U_2FXOEwSfBBkBYwfnELTHPZMg>
-    <xmx:MqhQZClmgvmaTE-Gqpd5fnRXdKTlQ-uGrQzLFhsZxoa7sjfn5nv1tA>
-    <xmx:MqhQZMfxAKG89mpQB1VecrPcP_gvUxh5_esk11128wcKKsvbeFFO7A>
-    <xmx:M6hQZHyv-h5Ok33klD78JHBkdQF3tujrKDlYgrzvHJhlLk5babYHhQ>
-Feedback-ID: i7ce144cd:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 2 May 2023 02:05:37 -0400 (EDT)
-Date:   Tue, 2 May 2023 16:05:31 +1000
-From:   Peter Hutterer <peter.hutterer@who-t.net>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     linux-input@vger.kernel.org,
-        Teng Qi <starmiku1207184332@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Input: avoid calling input_set_abs_val() in the event
- handling core
-Message-ID: <20230502060531.GA857155@quokka>
-References: <ZFBg379uuHjf+YEM@google.com>
+        Tue, 2 May 2023 02:13:28 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EB7C422C
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 23:13:27 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4ecb7fe8fb8so927e87.0
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 23:13:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683008005; x=1685600005;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9RYJXTMkjo99MefNou3S1yVA+HChQgATz9a2fAIHiP8=;
+        b=bzmj3yLEyq0mWdrrOr3ckfZxQGE8s63aQMw7tSPRlIX3cg01ZPk2knJNSXH2OYS0Z0
+         uZu/VVlbhluOQlTEKbeJ7BA7ewRn2lOpLuH0C/QvLglT1kVBqHUoEa015ILPYhnQj2i8
+         KwaJ8g71x1sb/prCyMopEciQmDQ4zXFRjr6/IYbWXCHeRCwqSKxTj1NghVpZVbWl5y53
+         21xTodb/6coSFGdQDh6eHgoGrqCFNFLBefhluXglk9NdMYg5iPawOsJRp/VcOUtt2+H8
+         iCMu04mrClFJ3sxcppmUb4pYbs/AdOQ/s8tsfNo2iK7u/fEvy1CKDZopAz425iiu4WQX
+         aXRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683008005; x=1685600005;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9RYJXTMkjo99MefNou3S1yVA+HChQgATz9a2fAIHiP8=;
+        b=I+OufvtQMVHZm75dFcroD4ln5l2b6VyiGVKEvc97e1adYzeEWgvSSYeAMBv70gODV0
+         nzx7HaFRJicsqtTyxJM1aWJQXrnGf2uHnqEYYxS3tvWyZ3taev/Mo33QTldSluUjpC9n
+         FxN4Y353GZV1Lk4bnBwJPZM8T3XKJeOjkxu31EkogBP2eoouRKSOC10yxorrtZ+qR3LF
+         4NGrdnBOmOrnrPKlv4GbmuHRIAu2GQtGKW03s1JK1LM8aYSpvRMIaP8rwOjzET3cUast
+         sY4YNBJaME4IbLmsGfOIZ7BG5ZE0pddmvAojWv+4Ez0epNkfWi9w1/LvOBxra9P/lUsj
+         e41g==
+X-Gm-Message-State: AC+VfDxLop47De6KeGF227RgcR7TWJklDIVjT0jIpdaohhbuOfhtDZoe
+        4DOcB3beDnSdDyiJjzbeh9Am7sz6vS3cJi+Z6eM+Aw==
+X-Google-Smtp-Source: ACHHUZ7q2XyFfQBq2zl1Oop/t0Vfx9oeA1lce6FEy5SaCdIxYMRSYq/PIxn3sg1WawZ0EpFcNf6c5Xk6XkJvWSinwWY=
+X-Received: by 2002:a05:6512:239a:b0:4ed:b131:3449 with SMTP id
+ c26-20020a056512239a00b004edb1313449mr99041lfv.7.1683008005115; Mon, 01 May
+ 2023 23:13:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZFBg379uuHjf+YEM@google.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <0000000000007337c705fa1060e2@google.com> <CACT4Y+a=xWkNGw_iKibRp4ivSE8OJkWWT0VPQ4N4d1+vj0FMdg@mail.gmail.com>
+ <bdb1fe2d-f904-78f0-d287-5e601f789862@I-love.SAKURA.ne.jp>
+In-Reply-To: <bdb1fe2d-f904-78f0-d287-5e601f789862@I-love.SAKURA.ne.jp>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Tue, 2 May 2023 08:13:11 +0200
+Message-ID: <CACT4Y+YtOXNPJSrmvs=O5UvFPjUQdnSHGhuE_kiLkxzJjH=DNQ@mail.gmail.com>
+Subject: Re: [syzbot] [mm?] KCSAN: data-race in generic_fillattr / shmem_mknod (2)
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        akpm@linux-foundation.org, hughd@google.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com,
+        syzbot <syzbot+702361cf7e3d95758761@syzkaller.appspotmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 01, 2023 at 06:01:19PM -0700, Dmitry Torokhov wrote:
-> input_abs_set_val() can nominally call input_alloc_absinfo() which may
-> allocate memory with GFP_KERNEL flag. This does not happen when
-> input_abs_set_val() is called by the input core to set current MT slot when
-> handling a new input event, but it trips certain static analyzers.
-> 
-> Rearrange the code to access the relevant structures directly.
-> 
-> Reported-by: Teng Qi <starmiku1207184332@gmail.com>
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+On Mon, 1 May 2023 at 07:16, Tetsuo Handa
+<penguin-kernel@i-love.sakura.ne.jp> wrote:
+>
+> On 2023/04/24 17:26, Dmitry Vyukov wrote:
+> >> HEAD commit:    457391b03803 Linux 6.3
+> >> git tree:       upstream
+> >> console output: https://syzkaller.appspot.com/x/log.txt?x=13226cf0280000
+> >> kernel config:  https://syzkaller.appspot.com/x/.config?x=8c81c9a3d360ebcf
+> >> dashboard link: https://syzkaller.appspot.com/bug?extid=702361cf7e3d95758761
+> >> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+> >
+> > I think shmem_mknod() needs to use i_size_write() to update the size.
+> > Writes to i_size are not assumed to be atomic throughout the kernel
+> > code.
+> >
+>
+> I don't think that using i_size_{read,write}() alone is sufficient,
+> for I think that i_size_{read,write}() needs data_race() annotation.
 
-Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
+Agree. Or better proper READ/WRITE_ONCE.
+data_race() is just an annotation, it does not fix the actual data
+race bug that is present there.
+I see there are lots of uses of i_size_read() in complex scenarios
+that involve comparisons of the size. All such racy uses are subject
+to the TOCTOU bug at least.
 
-If git grep is to be believed, this is the only use of
-input_abs_set_val. Maybe removing that function is an option?
 
-Are there external drivers that rely on this (instead of sending an
-event)?
-
-Cheers,
-  Peter
-
-> ---
->  drivers/input/input.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/input/input.c b/drivers/input/input.c
-> index 37e876d45eb9..f791d14ecf23 100644
-> --- a/drivers/input/input.c
-> +++ b/drivers/input/input.c
-> @@ -190,6 +190,7 @@ static int input_handle_abs_event(struct input_dev *dev,
->  				  unsigned int code, int *pval)
+>  include/linux/fs.h |   13 +++++++++++--
+>  mm/shmem.c         |   12 ++++++------
+>  2 files changed, 17 insertions(+), 8 deletions(-)
+>
+> diff --git a/include/linux/fs.h b/include/linux/fs.h
+> index 21a981680856..0d067bbe3ee9 100644
+> --- a/include/linux/fs.h
+> +++ b/include/linux/fs.h
+> @@ -860,6 +860,13 @@ void filemap_invalidate_unlock_two(struct address_space *mapping1,
+>   * the read or for example on x86 they can be still implemented as a
+>   * cmpxchg8b without the need of the lock prefix). For SMP compiles
+>   * and 64bit archs it makes no difference if preempt is enabled or not.
+> + *
+> + * However, when KCSAN is enabled, CPU being capable of reading/updating
+> + * naturally aligned 8 bytes of memory atomically is not sufficient for
+> + * avoiding KCSAN warning, for KCSAN checks whether value has changed between
+> + * before and after of a read operation. But since we don't want to introduce
+> + * seqcount overhead only for suppressing KCSAN warning, tell KCSAN that data
+> + * race on accessing i_size field is acceptable.
+>   */
+>  static inline loff_t i_size_read(const struct inode *inode)
 >  {
->  	struct input_mt *mt = dev->mt;
-> +	bool is_new_slot = false;
->  	bool is_mt_event;
->  	int *pold;
->  
-> @@ -210,6 +211,7 @@ static int input_handle_abs_event(struct input_dev *dev,
->  		pold = &dev->absinfo[code].value;
->  	} else if (mt) {
->  		pold = &mt->slots[mt->slot].abs[code - ABS_MT_FIRST];
-> +		is_new_slot = mt->slot != dev->absinfo[ABS_MT_SLOT].value;
->  	} else {
->  		/*
->  		 * Bypass filtering for multi-touch events when
-> @@ -228,8 +230,8 @@ static int input_handle_abs_event(struct input_dev *dev,
->  	}
->  
->  	/* Flush pending "slot" event */
-> -	if (is_mt_event && mt && mt->slot != input_abs_get_val(dev, ABS_MT_SLOT)) {
-> -		input_abs_set_val(dev, ABS_MT_SLOT, mt->slot);
-> +	if (is_new_slot) {
-> +		dev->absinfo[ABS_MT_SLOT].value = mt->slot;
->  		return INPUT_PASS_TO_HANDLERS | INPUT_SLOT;
->  	}
->  
-> -- 
-> 2.40.1.495.gc816e09b53d-goog
-> 
-> 
-> -- 
-> Dmitry
+> @@ -880,7 +887,8 @@ static inline loff_t i_size_read(const struct inode *inode)
+>         preempt_enable();
+>         return i_size;
+>  #else
+> -       return inode->i_size;
+> +       /* See comment above. */
+> +       return data_race(inode->i_size);
+>  #endif
+>  }
+>
+> @@ -902,7 +910,8 @@ static inline void i_size_write(struct inode *inode, loff_t i_size)
+>         inode->i_size = i_size;
+>         preempt_enable();
+>  #else
+> -       inode->i_size = i_size;
+> +       /* See comment above. */
+> +       data_race(inode->i_size = i_size);
+>  #endif
+>  }
+>
+> diff --git a/mm/shmem.c b/mm/shmem.c
+> index e40a08c5c6d7..a2f20297fb59 100644
+> --- a/mm/shmem.c
+> +++ b/mm/shmem.c
+> @@ -2951,7 +2951,7 @@ shmem_mknod(struct mnt_idmap *idmap, struct inode *dir,
+>                         goto out_iput;
+>
+>                 error = 0;
+> -               dir->i_size += BOGO_DIRENT_SIZE;
+> +               i_size_write(dir, i_size_read(dir) + BOGO_DIRENT_SIZE);
+>                 dir->i_ctime = dir->i_mtime = current_time(dir);
+>                 inode_inc_iversion(dir);
+>                 d_instantiate(dentry, inode);
+> @@ -3027,7 +3027,7 @@ static int shmem_link(struct dentry *old_dentry, struct inode *dir, struct dentr
+>                         goto out;
+>         }
+>
+> -       dir->i_size += BOGO_DIRENT_SIZE;
+> +       i_size_write(dir, i_size_read(dir) + BOGO_DIRENT_SIZE);
+>         inode->i_ctime = dir->i_ctime = dir->i_mtime = current_time(inode);
+>         inode_inc_iversion(dir);
+>         inc_nlink(inode);
+> @@ -3045,7 +3045,7 @@ static int shmem_unlink(struct inode *dir, struct dentry *dentry)
+>         if (inode->i_nlink > 1 && !S_ISDIR(inode->i_mode))
+>                 shmem_free_inode(inode->i_sb);
+>
+> -       dir->i_size -= BOGO_DIRENT_SIZE;
+> +       i_size_write(dir, i_size_read(dir) - BOGO_DIRENT_SIZE);
+>         inode->i_ctime = dir->i_ctime = dir->i_mtime = current_time(inode);
+>         inode_inc_iversion(dir);
+>         drop_nlink(inode);
+> @@ -3132,8 +3132,8 @@ static int shmem_rename2(struct mnt_idmap *idmap,
+>                 inc_nlink(new_dir);
+>         }
+>
+> -       old_dir->i_size -= BOGO_DIRENT_SIZE;
+> -       new_dir->i_size += BOGO_DIRENT_SIZE;
+> +       i_size_write(old_dir, i_size_read(old_dir) - BOGO_DIRENT_SIZE);
+> +       i_size_write(new_dir, i_size_read(new_dir) + BOGO_DIRENT_SIZE);
+>         old_dir->i_ctime = old_dir->i_mtime =
+>         new_dir->i_ctime = new_dir->i_mtime =
+>         inode->i_ctime = current_time(old_dir);
+> @@ -3189,7 +3189,7 @@ static int shmem_symlink(struct mnt_idmap *idmap, struct inode *dir,
+>                 folio_unlock(folio);
+>                 folio_put(folio);
+>         }
+> -       dir->i_size += BOGO_DIRENT_SIZE;
+> +       i_size_write(dir, i_size_read(dir) + BOGO_DIRENT_SIZE);
+>         dir->i_ctime = dir->i_mtime = current_time(dir);
+>         inode_inc_iversion(dir);
+>         d_instantiate(dentry, inode);
+>
+> Maybe we want i_size_add() ?
+>
+> Also, there was a similar report on updating i_{ctime,mtime} to current_time()
+> which means that i_size is not the only field that is causing data race.
+> https://syzkaller.appspot.com/bug?id=067d40ab9ab23a6fa0a8156857ed54e295062a29
+>
+> Hmm, where is the serialization that avoids concurrent
+> shmem_mknod()/shmem_mknod() or shmem_mknod()/shmem_unlink() ?
+> i_size_write() says "need locking around it (normally i_mutex)"...
+>
