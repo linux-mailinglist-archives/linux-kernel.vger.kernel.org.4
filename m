@@ -2,193 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13C7A6F4452
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 14:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63CB66F445B
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 14:55:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234035AbjEBMyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 08:54:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37780 "EHLO
+        id S234271AbjEBMzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 08:55:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233513AbjEBMyS (ORCPT
+        with ESMTP id S234340AbjEBMzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 08:54:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 983CD5FF4
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 05:53:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683032005;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=X2TPQPGBRapYWkLRNRk6kGJOLk5A8AsKc2WUiv6CjPA=;
-        b=ElRw7vqWGmeaDmBIJm+L5gnzuh+lFwUUFqA1MRclkMZ6vfZ58jY9vPLmmUOa5onl8nq7qu
-        V+d9fQOXk9A5p/rvZ6fEORBJr8jSe729f40YtyJ3IQRnGl9jwkPHcosHKZ01I6nPX34frh
-        dhN/cquyIPpS3G5KEr9D+z25p6gsr30=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-663-WLXVnmOXMzis9Pk1F9HH0Q-1; Tue, 02 May 2023 08:53:24 -0400
-X-MC-Unique: WLXVnmOXMzis9Pk1F9HH0Q-1
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-306281812d6so997373f8f.2
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 05:53:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683032003; x=1685624003;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=X2TPQPGBRapYWkLRNRk6kGJOLk5A8AsKc2WUiv6CjPA=;
-        b=Zpfi2TLIoSt4nuty/33lWgdSyTKGpeW+Xunp4Y1fCQ/MF7Y7AULm3jBu9f+RpOYY0t
-         VIAUTlXbOwayg+gWXRqbPeRGKeOkkrPeH92YeHm+QvRBb6HJFSeXBql64hnLAh0k9M4/
-         1MxlT9JDWhISQIgUjrtmD+5E+1WRx3HqF6+l78Mf0lQocUGJXqSx1uY2Wz8zZ2GKNbXn
-         S1mDqiJPgEWH8Ur49nu6077VwjR8YMbr+dyxwKBo8Es3vKhL5T/PReRHKfflZ6tih5DG
-         H+Lw+af+mbB4yrwK6ljNgQYjJiLgiXFjBQd9CR+cla7NfyvVhZGlRQM24vf8bTnQvdQf
-         XWHw==
-X-Gm-Message-State: AC+VfDzSCnmcxkiPXKWpp3cVbeDkqMfLjaUGWFQVi67KaFuv3eCKAGKp
-        08PKxzvObScCnandDHz83tkeW8nOn8JBUiq/cAI+Pg++Q+Qa9soeDSm6KdxCHakNAYGD17svtQI
-        hyK4ivsLy9b+NMYoDyZO3l3xE
-X-Received: by 2002:adf:ef52:0:b0:306:b48:3fc4 with SMTP id c18-20020adfef52000000b003060b483fc4mr8043887wrp.31.1683032003225;
-        Tue, 02 May 2023 05:53:23 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6Cfsg1j/co21vSt2yZ/61REwJ8d2UCVlkvTI/GFET2pOmQ2nrdxza2I7BtE39yTpyDuURYEA==
-X-Received: by 2002:adf:ef52:0:b0:306:b48:3fc4 with SMTP id c18-20020adfef52000000b003060b483fc4mr8043814wrp.31.1683032002215;
-        Tue, 02 May 2023 05:53:22 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c700:2400:6b79:2aa:9602:7016? (p200300cbc70024006b7902aa96027016.dip0.t-ipconnect.de. [2003:cb:c700:2400:6b79:2aa:9602:7016])
-        by smtp.gmail.com with ESMTPSA id u12-20020adfdd4c000000b0030635735a57sm2320577wrm.60.2023.05.02.05.53.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 May 2023 05:53:21 -0700 (PDT)
-Message-ID: <482f0c6e-ca5f-d0c2-1d99-ca26f70565df@redhat.com>
-Date:   Tue, 2 May 2023 14:53:19 +0200
+        Tue, 2 May 2023 08:55:04 -0400
+Received: from m126.mail.126.com (m126.mail.126.com [220.181.12.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E1217CE
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 05:55:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=SG6So
+        /JBg3TDLBHEwTKwAjabX9LbfnrKlI2nbqf0u0w=; b=m/3BIvfWsGH+nVxeDbk1g
+        b2q4SmpOHQkpY9H33y2B7X0yP7sk2X1q80qwvZ6cWp7jWdjlRZzzaPzYmPYnlCMH
+        HJrW7bazcSzQ/LdNb+iaXKn3TAeYg8BaiGqOpjX+h9PhgeGrS6Wy/mbVlEyCvZNV
+        AhiMxYFmaGbxFpxkNoj02M=
+Received: from jiwei-VirtualBox.lenovo.com (unknown [120.244.62.151])
+        by zwqz-smtp-mta-g3-1 (Coremail) with SMTP id _____wA3j_j2B1FkHgLfAA--.26065S2;
+        Tue, 02 May 2023 20:54:15 +0800 (CST)
+From:   jiweisun126@126.com
+To:     linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     kbusch@kernel.org, axboe@fb.com, hch@lst.de, sagi@grimberg.me,
+        ahuang12@lenovo.com, sunjw10@lenovo.com, jiweisun126@126.com
+Subject: [PATCH] nvme: add cond_resched() to nvme_complete_batch()
+Date:   Tue,  2 May 2023 20:54:12 +0800
+Message-Id: <20230502125412.65633-1-jiweisun126@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v6 3/3] mm/gup: disallow FOLL_LONGTERM GUP-fast writing to
- file-backed mappings
-Content-Language: en-US
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Mika Penttila <mpenttil@redhat.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Theodore Ts'o <tytso@mit.edu>, Peter Xu <peterx@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>
-References: <cover.1682981880.git.lstoakes@gmail.com>
- <dee4f4ad6532b0f94d073da263526de334d5d7e0.1682981880.git.lstoakes@gmail.com>
- <20230502111334.GP1597476@hirez.programming.kicks-ass.net>
- <ab66d15a-acd0-4d9b-aa12-49cddd12c6a5@lucifer.local>
- <20230502120810.GD1597538@hirez.programming.kicks-ass.net>
- <20230502124058.GB1597602@hirez.programming.kicks-ass.net>
- <a597947b-6aba-bd8d-7a97-582fa7f88ad2@redhat.com>
- <4529b057-19ae-408b-8433-7d220f1871c0@lucifer.local>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <4529b057-19ae-408b-8433-7d220f1871c0@lucifer.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wA3j_j2B1FkHgLfAA--.26065S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW3XF1fJryxZrWkWw1fWFy8Xwb_yoW3Jr17pr
+        4UX348Cr4xW3W7Zr47JF4UZ3ZrXwnrA3WUXr47Ar93JF18W3s8Xr4UXr4Utr15Gws5Zry3
+        t3Z8Zw1IqryDKaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pEG-niUUUUU=
+X-Originating-IP: [120.244.62.151]
+X-CM-SenderInfo: 5mlzvxpvxqijaw6rjloofrz/1tbiXxpjjWIxn-v56gAAsP
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,LOTS_OF_MONEY,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02.05.23 14:52, Lorenzo Stoakes wrote:
-> On Tue, May 02, 2023 at 02:47:22PM +0200, David Hildenbrand wrote:
->> On 02.05.23 14:40, Peter Zijlstra wrote:
->>> On Tue, May 02, 2023 at 02:08:10PM +0200, Peter Zijlstra wrote:
->>>
->>>>>>
->>>>>>
->>>>>> 	if (folio_test_anon(folio))
->>>>>> 		return true;
->>>>>
->>>>> This relies on the mapping so belongs below the lockdep assert imo.
->>>>
->>>> Oh, right you are.
->>>>
->>>>>>
->>>>>> 	/*
->>>>>> 	 * Having IRQs disabled (as per GUP-fast) also inhibits RCU
->>>>>> 	 * grace periods from making progress, IOW. they imply
->>>>>> 	 * rcu_read_lock().
->>>>>> 	 */
->>>>>> 	lockdep_assert_irqs_disabled();
->>>>>>
->>>>>> 	/*
->>>>>> 	 * Inodes and thus address_space are RCU freed and thus safe to
->>>>>> 	 * access at this point.
->>>>>> 	 */
->>>>>> 	mapping = folio_mapping(folio);
->>>>>> 	if (mapping && shmem_mapping(mapping))
->>>>>> 		return true;
->>>>>>
->>>>>> 	return false;
->>>>>>
->>>>>>> +}
->>>
->>> So arguably you should do *one* READ_ONCE() load of mapping and
->>> consistently use that, this means open-coding both folio_test_anon() and
->>> folio_mapping().
->>
->> Open-coding folio_test_anon() should not be required. We only care about
->> PAGE_MAPPING_FLAGS stored alongside folio->mapping, that will stick around
->> until the anon page was freed.
->>
-> 
-> Ack, good point!
-> 
->> @Lorenzo, you might also want to special-case hugetlb directly using
->> folio_test_hugetlb().
->>
-> 
-> I already am :) I guess you mean when I respin along these lines? Will port
-> that across to.
+From: Jiwei Sun <sunjw10@lenovo.com>
 
-Ha, I only stared at that reply, good! :)
+A soft lockup issue will be triggered when do fio test on a 448-core
+server, such as the following warning:
 
+[  519.743511] watchdog: BUG: soft lockup - CPU#305 stuck for 144s! [fio:11226]
+[  519.744834] CPU: 305 PID: 11226 Comm: fio Kdump: loaded Tainted: G             L     6.3.0 #48
+[  519.744850] Hardware name: Lenovo ThinkSystem SR645 V3 MB,Genoa,DDR5,Oahu,1U/SB27B31174, BIOS KAE111F-2.10 04/17/2023
+[  519.744867] RIP: 0010:__do_softirq+0x93/0x2d3
+[  519.744901] Code: c3 c0 5a ff c7 44 24 08 0a 00 00 00 48 c7 c7 45 6b c5 a0 e8 1f ac fe ff 65 66 c7 05 dd 76 a8 5f 00 00 fb 49 c7 c2 c0 60 20 a1 <eb> 70 48 98 48 c7 c7 f8 fc c5 a0 4d 8d 3c c2 4c 89 fd 48 81 ed c0
+[  519.744916] RSP: 0018:ff6e423a8b584fa0 EFLAGS: 00000202
+[  519.744944] RAX: 0000000000000131 RBX: ff3143f856cd3f80 RCX: 0000000000000000
+[  519.744959] RDX: 000000562c5e4652 RSI: ffffffffa0c56b45 RDI: ffffffffa0c35ab3
+[  519.744974] RBP: 0000000000000000 R08: 0000000000000b01 R09: 0000000000031600
+[  519.744988] R10: ffffffffa12060c0 R11: 00000054ea7837c0 R12: 0000000000000080
+[  519.745003] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+[  519.745017] FS:  00007fa41bb9e000(0000) GS:ff3143f7af840000(0000) knlGS:0000000000000000
+[  519.745032] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  519.745046] CR2: 00007fa3fc05b000 CR3: 00000008d6f56004 CR4: 0000000000771ee0
+[  519.745060] PKRU: 55555554
+[  519.745075] Call Trace:
+[  519.745095]  <IRQ>
+[  519.745160]  ? ftrace_regs_caller_end+0x61/0x61
+[  519.745185]  irq_exit_rcu+0xcd/0x100
+[  519.745217]  sysvec_apic_timer_interrupt+0xa2/0xd0
+[  519.745251]  </IRQ>
+[  519.745265]  <TASK>
+[  519.745292]  asm_sysvec_apic_timer_interrupt+0x1a/0x20
+[  519.745318] RIP: 0010:_raw_spin_unlock_irqrestore+0x1d/0x40
+[  519.745339] Code: 90 90 90 90 90 90 90 90 90 90 90 90 90 f3 0f 1e fa e8 77 9b 0b 20 c6 07 00 0f 1f 00 f7 c6 00 02 00 00 74 01 fb bf 01 00 00 00 <e8> be 65 58 ff 65 8b 05 9f 81 a8 5f 85 c0 74 05 c3 cc cc cc cc 0f
+[  519.745354] RSP: 0018:ff6e423b244279f0 EFLAGS: 00000206
+[  519.745381] RAX: 000000098b346200 RBX: ff3143f0f0fccc00 RCX: 0000000000000286
+[  519.745396] RDX: 0000000000000700 RSI: 0000000000000286 RDI: 0000000000000001
+[  519.745410] RBP: ff3143f835e5c600 R08: 000000058bb02000 R09: 0000000000000000
+[  519.745424] R10: 00000107d08ab6ea R11: 0000000000000800 R12: 0000000000000820
+[  519.745438] R13: ff3143f835e5c610 R14: ff6e423b24427a50 R15: ff3143f90b346200
+[  519.745576]  dma_pool_alloc+0x184/0x200
+[  519.745647]  nvme_prep_rq.part.58+0x416/0x840 [nvme]
+[  519.745760]  nvme_queue_rq+0x7b/0x210 [nvme]
+[  519.745821]  __blk_mq_try_issue_directly+0x153/0x1c0
+[  519.745906]  blk_mq_try_issue_directly+0x15/0x50
+[  519.745935]  blk_mq_submit_bio+0x4c4/0x510
+[  519.746047]  submit_bio_noacct_nocheck+0x331/0x370
+[  519.746135]  blkdev_direct_IO.part.22+0x138/0x5b0
+[  519.746165]  ? __fsnotify_parent+0x119/0x350
+[  519.746274]  blkdev_read_iter+0xe3/0x170
+[  519.746325]  aio_read+0xf6/0x1b0
+[  519.746423]  ? 0xffffffffc066309b
+[  519.746567]  ? io_submit_one+0x18c/0xd60
+[  519.746587]  ? aio_read+0x5/0x1b0
+[  519.746608]  io_submit_one+0x18c/0xd60
+[  519.746672]  ? __x64_sys_io_submit+0x4/0x180
+[  519.746794]  ? __x64_sys_io_submit+0x93/0x180
+[  519.746815]  __x64_sys_io_submit+0x93/0x180
+[  519.746838]  ? __pfx___x64_sys_io_submit+0x10/0x10
+[  519.746923]  do_syscall_64+0x3b/0x90
+[  519.746958]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+[  519.746983] RIP: 0033:0x7fa41b83ee5d
+[  519.747009] Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 93 af 1b 00 f7 d8 64 89 01 48
+[  519.747024] RSP: 002b:00007fff698e8cc8 EFLAGS: 00000246 ORIG_RAX: 00000000000000d1
+[  519.747053] RAX: ffffffffffffffda RBX: 00007fa41bb9df70 RCX: 00007fa41b83ee5d
+[  519.747067] RDX: 000055a53098ba68 RSI: 0000000000000001 RDI: 00007fa3fc05b000
+[  519.747082] RBP: 00007fa3fc05b000 R08: 0000000000000000 R09: 0000000000000048
+[  519.747095] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000001
+[  519.747110] R13: 0000000000000000 R14: 000055a53098ba68 R15: 000055a530989440
+[  519.747245]  </TASK>
+
+and we have collected the corresponding ftrace log,
+  515.948558 |   305)               |              nvme_irq [nvme]() {
++--1503 lines: 515.948560 |   305)               |                blk_mq_complete_request_remote() {---
+  515.948995 |   305)               |                nvme_pci_complete_batch [nvme]() {
+  515.948996 |   305)               |                  nvme_unmap_data [nvme]() {
++--  3 lines: 515.948996 |   305)               |                    dma_unmap_sg_attrs() {---
+  515.948997 |   305)               |                    dma_pool_free() {
+  515.948997 |   305)               |                      _raw_spin_lock_irqsave() {
+  515.948997 |   305)   0.190 us    |                        preempt_count_add();
+  515.948999 |   305) * 14893.70 us |                        native_queued_spin_lock_slowpath();
+  515.963893 |   305) * 14895.59 us |                      }
+  515.963929 |   305)               |                      _raw_spin_unlock_irqrestore() {
+  515.963930 |   305)   0.160 us    |                        preempt_count_sub();
+  515.963930 |   305)   1.011 us    |                      }
+  515.963931 |   305) * 14933.71 us |                    }
++--  9 lines: 515.963931 |   305)               |                    mempool_free() {---
+  515.963933 |   305) * 14937.45 us |                  }
+  515.963933 |   305)   0.160 us    |                  nvme_complete_batch_req [nvme_core]();
+  515.963934 |   305)               |                  nvme_unmap_data [nvme]() {
++--  3 lines: 515.963934 |   305)               |                    dma_unmap_sg_attrs() {---
+  515.963935 |   305)               |                    dma_pool_free() {
+  515.963935 |   305)               |                      _raw_spin_lock_irqsave() {
+  515.963936 |   305)   0.170 us    |                        preempt_count_add();
+  515.963936 |   305) * 19865.82 us |                        native_queued_spin_lock_slowpath();
+  515.983803 |   305) * 19867.21 us |                      }
+  515.983833 |   305)               |                      _raw_spin_unlock_irqrestore() {
+  515.983833 |   305)   0.200 us    |                        preempt_count_sub();
+  515.983834 |   305)   1.312 us    |                      }
+  515.983834 |   305) * 19898.71 us |                    }
++--- 11 lines: 515.983834 |   305)               |                    mempool_free() {---
+  515.983837 |   305) * 19902.73 us |                  }
+  515.983837 |   305)   0.170 us    |                  nvme_complete_batch_req [nvme_core]();
++--40055 lines: 515.983837 |   305)               |                  nvme_unmap_data [nvme]() {---
+  520.816867 |   305) $ 4867871 us  |                }
+  520.816867 |   305) $ 4868309 us  |              }
+  520.816868 |   305) $ 4868310 us  |            }
+
+According to the above two logs, we can know the nvme_irq() cost too much
+time, in the above case, about 4.8 second. And we can also know that the
+main bottlenecks is in the competition for the spin lock pool->lock.
+
+In order to avoid the lockup log, we can enable the nvme irq threading
+by adding nvme.use_threaded_interrupts=1 in cmdline and with preempt=full,
+but for the kernel with preempt=off, the nvme.use_threaded_interrupts=1
+will fail. So, we can add cond_resched() in the loops of the
+nvme_complete_batch().
+
+Reviewed-by: Adrian Huang <ahuang12@lenovo.com>
+Signed-off-by: Jiwei Sun <sunjw10@lenovo.com>
+---
+ drivers/nvme/host/nvme.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/nvme/host/nvme.h b/drivers/nvme/host/nvme.h
+index bf46f122e9e1..e247cb664e9e 100644
+--- a/drivers/nvme/host/nvme.h
++++ b/drivers/nvme/host/nvme.h
+@@ -725,6 +725,7 @@ static __always_inline void nvme_complete_batch(struct io_comp_batch *iob,
+ 	rq_list_for_each(&iob->req_list, req) {
+ 		fn(req);
+ 		nvme_complete_batch_req(req);
++		cond_resched();
+ 	}
+ 	blk_mq_end_request_batch(iob);
+ }
 -- 
-Thanks,
-
-David / dhildenb
+2.27.0
 
