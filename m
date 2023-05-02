@@ -2,121 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 250DB6F43C4
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 14:24:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C531C6F43CC
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 14:25:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233537AbjEBMYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 08:24:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49252 "EHLO
+        id S234031AbjEBMZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 08:25:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233823AbjEBMYv (ORCPT
+        with ESMTP id S233833AbjEBMZR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 08:24:51 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87732E6A
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 05:24:50 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-54f99770f86so52569307b3.1
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 05:24:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683030289; x=1685622289;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rsis98AS5y9CGrS/8TAMA+kRXIi6squrLmsCHxkr5QU=;
-        b=D7Jp0qxIyiWEYcrV8o4HDXvVeyDMa4nuVV9DA5iy1xvb98wyUKXYquMwEgXSjRqrmA
-         ng11lM+5xgUlvm9BvMIrcTo/t0JDONWgNraJPwRCxtVL1NhFQYfDSN8r1tc6SGrfNVmw
-         uURXUmj2pBsJvJrg8oWK8kqvyQ6nmvvOifuI6FupTwfpL0ib51RpQKKEhcK0Bk8IBH6x
-         3ymy4omrZOfPasvL5vhnX04eLcC/KkAn7VcDUn/2i2m3Nut1mhyVCGOPceY8sDV49dWt
-         /NnsAiZcp05m9unSUxG+uRmT0BshumSO3DFsPFhkS841ifTd5JRoeEySkm+e1ShYDvdK
-         apgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683030289; x=1685622289;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rsis98AS5y9CGrS/8TAMA+kRXIi6squrLmsCHxkr5QU=;
-        b=Dbc5/q8qk+Z+uivvgMZxAhr/gr3A2FR2TJJEqTk9SXDkm0RNQsgegYkMHxLFIJI7cx
-         OrehLw8y822pzDHjkSQvsZfprDmITDc7IXl/4HXhBXXIH0YLgFfaWQPRSfBm0XMhSCuH
-         mNXcVuCuZxvPWLMmUuIrj60H0dDHt0dGKp0tUUQfEcXa5yGKUPsTHAEFWoczApkm8N3G
-         ZLa9RghkBk0GZ81X9vlVy1OwSmWnypKP+kC9xoZrtAUZYBJrwFIjYENf2c4WpQGt+CMx
-         z+6SrG+s3XlveoLB5SLiHkJ5AV869CM8yNn+t5d5uOX9KiP+xAAJv6ghetO5MKB/x0cZ
-         WtVw==
-X-Gm-Message-State: AC+VfDzDk3IBjdbJ5qOrhKoTx1pNBIoY5mfm59kWJG+dkY1+8jiyzH+F
-        I7/1GgkH4VDWFOU6/Y9V+cKpGFRvxxG2lvObiRoYIQ==
-X-Google-Smtp-Source: ACHHUZ7eeyre+CuDCWfIJhwjZRbjjp0xunX9LvJHgIBIh5xXRh9pY8dvlc0JPGXbq1IqVaRtaMl4ODqBV5bZwDJP9Q4=
-X-Received: by 2002:a81:5b43:0:b0:55a:3486:6f5b with SMTP id
- p64-20020a815b43000000b0055a34866f5bmr7760150ywb.13.1683030289668; Tue, 02
- May 2023 05:24:49 -0700 (PDT)
+        Tue, 2 May 2023 08:25:17 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A55943A90;
+        Tue,  2 May 2023 05:25:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1683030316; x=1714566316;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AfQaRre7+aO2SPhdUxafi6pwxZAOj0wcrW0qgwl0DRA=;
+  b=vz5Qenk7OuaTD3XCR5GkCwsy22N3JNHkA2fqPju9RelJQvh3ecdD3lKA
+   AN5rEiulaCpM7f9urK1suXsoRGqw4b3NScGojLreBTm5bh3NKi3mvZtrU
+   7pc3CfzkD3mYWKiuiHSGkT5qpMkaCOX98Q9LB0/Q00regjvk0iwnng8+V
+   cbAmjyTW7ra5kPWMCoeUBrwXMfdEdkdG7lrlJ5jCCOcWrUqesTkywQNNF
+   jq3z0YneX15NLNuyKEvVYhB61Pnb/7PYxMaFZ//pcw7T7JwIsJi9mDZqp
+   MMprr1Qt7VQuIS7m4suk17l4dMqDCY4k8ANxwHE0JR6DaB5/vPbq53Q3d
+   w==;
+X-IronPort-AV: E=Sophos;i="5.99,244,1677567600"; 
+   d="scan'208";a="209234570"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 May 2023 05:25:05 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 2 May 2023 05:25:00 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
+ Transport; Tue, 2 May 2023 05:24:59 -0700
+Date:   Tue, 2 May 2023 14:24:59 +0200
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Gavrilov Ilia <Ilia.Gavrilov@infotecs.ru>
+CC:     Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Xin Long <lucien.xin@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "lvc-project@linuxtesting.org" <lvc-project@linuxtesting.org>
+Subject: Re: [PATCH] sctp: fix a potential buffer overflow in
+ sctp_sched_set_sched()
+Message-ID: <20230502122459.inxuqa5rt3iluec4@soft-dev3-1>
+References: <20230502082622.2392659-1-Ilia.Gavrilov@infotecs.ru>
 MIME-Version: 1.0
-References: <20230502103810.12061-1-johan+linaro@kernel.org> <20230502103810.12061-3-johan+linaro@kernel.org>
-In-Reply-To: <20230502103810.12061-3-johan+linaro@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 2 May 2023 15:24:38 +0300
-Message-ID: <CAA8EJpoxL7AFApp-mbbODAu6AKWM7GV2FGzq=O=WKEFZ72-SbQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] phy: qcom-qmp-pcie-msm8996: fix init-count imbalance
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <20230502082622.2392659-1-Ilia.Gavrilov@infotecs.ru>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2 May 2023 at 13:39, Johan Hovold <johan+linaro@kernel.org> wrote:
->
-> The init counter is not decremented on initialisation errors, which
-> prevents retrying initialisation.
->
-> Add the missing decrement on initialisation errors so that the counter
-> reflects the state of the device.
->
-> Fixes: e78f3d15e115 ("phy: qcom-qmp: new qmp phy driver for qcom-chipsets")
-> Cc: stable@vger.kernel.org      # 4.12
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+The 05/02/2023 08:26, Gavrilov Ilia wrote:
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Hi,
 
+> 
+> The 'sched' index value must be checked before accessing an element
+> of the 'sctp_sched_ops' array. Otherwise, it can lead to buffer overflow.
+> 
+> Note that it's harmless since the 'sched' parameter is checked before
+> calling 'sctp_sched_set_sched'.
+
+If the 'sched' parameter is already checked, is it not better to remove
+the check from this function?
+
+> 
+> Found by InfoTeCS on behalf of Linux Verification Center
+> (linuxtesting.org) with SVACE.
+> 
+> Fixes: 5bbbbe32a431 ("sctp: introduce stream scheduler foundations")
+
+I am not sure how much this is net material because as you said, this
+issue can't happen.
+But don't forget to specify the target tree in the subject. You can do
+that when creating the patch using:
+git format-patch ... --subject-prefix "PATCH net"
+
+> Signed-off-by: Ilia.Gavrilov <Ilia.Gavrilov@infotecs.ru>
 > ---
->  drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c
-> index 09824be088c9..0c603bc06e09 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c
-> @@ -379,7 +379,7 @@ static int qmp_pcie_msm8996_com_init(struct qmp_phy *qphy)
->         ret = regulator_bulk_enable(cfg->num_vregs, qmp->vregs);
->         if (ret) {
->                 dev_err(qmp->dev, "failed to enable regulators, err=%d\n", ret);
-> -               goto err_unlock;
-> +               goto err_decrement_count;
->         }
->
->         ret = reset_control_bulk_assert(cfg->num_resets, qmp->resets);
-> @@ -409,7 +409,8 @@ static int qmp_pcie_msm8996_com_init(struct qmp_phy *qphy)
->         reset_control_bulk_assert(cfg->num_resets, qmp->resets);
->  err_disable_regulators:
->         regulator_bulk_disable(cfg->num_vregs, qmp->vregs);
-> -err_unlock:
-> +err_decrement_count:
-> +       qmp->init_count--;
->         mutex_unlock(&qmp->phy_mutex);
->
->         return ret;
+>  net/sctp/stream_sched.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/net/sctp/stream_sched.c b/net/sctp/stream_sched.c
+> index 330067002deb..a339917d7197 100644
+> --- a/net/sctp/stream_sched.c
+> +++ b/net/sctp/stream_sched.c
+> @@ -146,18 +146,19 @@ static void sctp_sched_free_sched(struct sctp_stream *stream)
+>  int sctp_sched_set_sched(struct sctp_association *asoc,
+>                          enum sctp_sched_type sched)
+>  {
+> -       struct sctp_sched_ops *n = sctp_sched_ops[sched];
+> +       struct sctp_sched_ops *n;
+>         struct sctp_sched_ops *old = asoc->outqueue.sched;
+>         struct sctp_datamsg *msg = NULL;
+>         struct sctp_chunk *ch;
+>         int i, ret = 0;
+> 
+> -       if (old == n)
+> -               return ret;
+> -
+>         if (sched > SCTP_SS_MAX)
+>                 return -EINVAL;
+> 
+> +       n = sctp_sched_ops[sched];
+> +       if (old == n)
+> +               return ret;
+> +
+>         if (old)
+>                 sctp_sched_free_sched(&asoc->stream);
+> 
 > --
-> 2.39.2
->
-
+> 2.30.2
 
 -- 
-With best wishes
-Dmitry
+/Horatiu
