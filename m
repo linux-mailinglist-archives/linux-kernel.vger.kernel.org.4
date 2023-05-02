@@ -2,91 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA1576F4BFF
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 23:19:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB8B06F4C0A
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 23:20:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229532AbjEBVTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 17:19:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57080 "EHLO
+        id S229729AbjEBVUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 17:20:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbjEBVTT (ORCPT
+        with ESMTP id S229751AbjEBVUQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 17:19:19 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0E1A1997
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 14:19:11 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-55a8e9e2c53so15715627b3.1
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 14:19:11 -0700 (PDT)
+        Tue, 2 May 2023 17:20:16 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85251735
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 14:19:50 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f0108a7d20so5053926e87.3
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 14:19:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683062351; x=1685654351;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0h/G3jDyFIlsGjKztRY6ZyzstNpimF/rtsReSh8uQhc=;
-        b=KRpm0LIjs28Qed8shWU3rN8qoEPt7Z2dbTHfeBDQWUYQ/eleo/D1hSCVxF8U6UZ+bs
-         F1XMfbU8w5Ga3fHrL9f52m54VFw9b/NoIHxi6VJvUi0wJbHm/C9DZq5Ys2jrTCtfhcm1
-         oBkQ2yn5ZHZ/TfTLorY09e+913thRNTfaqI5mNLT0k9tsDcNET4Mx+BQIf1502z+U6F5
-         zdPY5wpLT0wKF469rWVGVCkKCBVQOBcwk1PBnM9kbNCfxW76JztqaMMAKMKH5t+1tPeB
-         +v6bV47t5nalynw/2xl/re8ehZcjTh36Ag3m136LAbl2iZeuJ0S5NvYOTuc93MhpGwqC
-         v4lA==
+        d=linaro.org; s=google; t=1683062389; x=1685654389;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YL0HTP2hogruEK5o6822RwsE/FsRfHqk/sZ5fYBkYpY=;
+        b=qkxU8X69WCmYeF26b5A6eJHBpvj9iG5fHaRF07ui9uPjUJiuoCJeXA4Nmx5nnfbFS2
+         OzMme+hOaQjL0WjgbUnLjvfFKC214yPVZ3J/k8meWEGph4ZFHHD6rW8WIFnbb3bBLwCg
+         7xsWgZcCE9rDFVs6nJKvU5gUjGNbZhJtiQqY4B1tZqkNaRibRC3EN3dL39etfGKaimUL
+         cwyPP/Y06buZzkR77qMWwRXyZCLqtjFcCbT/vah9b6ilQ/Y79rfZVMtuI7HbwlUhMWKY
+         aWv1KOGd1/kHuSvkrcR9Uv0hQ/AJbmhTqT/Oww0djRU2p+E005cQaBuBj/74jaQtxD1+
+         wlDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683062351; x=1685654351;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0h/G3jDyFIlsGjKztRY6ZyzstNpimF/rtsReSh8uQhc=;
-        b=UoalVyWvKn6MQ2wwTqXCaX51l4LD68txxGU+BmveW/fcWsCZTnClrKJ6Sb+5kuNHY7
-         X0jBQA/Znv+zrrKr4J6VoV+S7azspLyJgzB/oQFyH3NmfYbzPtzPPrOTsFDsEEsHaeZr
-         BR0ihxOwptOSdUURcIQB+TW6nAQicNF7A3DsxEIgezt8s+2ZYlc7FrlCiwDOXDeOSHOZ
-         i0dxwpf7N6J1mL7MEpZleZnR7VYrHyeQJRRd35T6pFH0YLMGl+EXrP4d9rFPMHOryi6F
-         MrTsyTJ19XNgcWrbEXa97Ecxmgfhdf/+nR2hJ0b1cvS+fBrtszsDoi3WilcBwYTeses+
-         xUnA==
-X-Gm-Message-State: AC+VfDz7KttI6oYaVUYAo8BcF7bvqRSnOhefVW0UNDUFsDTwBt0mrbxB
-        9Klb0eGUpp0vxQKO/42ny1kirwKek1VogZJaqaA3Ig==
-X-Google-Smtp-Source: ACHHUZ40eKx7z1zIEK43ZteAtF8Wd9UqjzfberS/RGyfg0Yc35rUPQJQ5+CsgQDyrPQsSFVeJx8PEmL+DqYZgiAtTAc=
-X-Received: by 2002:a0d:e68f:0:b0:54f:6a20:5a19 with SMTP id
- p137-20020a0de68f000000b0054f6a205a19mr17486306ywe.34.1683062351071; Tue, 02
- May 2023 14:19:11 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683062389; x=1685654389;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YL0HTP2hogruEK5o6822RwsE/FsRfHqk/sZ5fYBkYpY=;
+        b=j5nKqNe3DGr1yXf75YtkEmQryU1hP5wqlk0NDYYuES5VFZbs9yxuk20OZp2NI0+cVD
+         xHX7lNx8zlzmG1ejlIm68SQZ9eLuO6c9dTQ9cbQXKNmJNwSFIBrVxMuXhBbYH9mv/uZp
+         96R0iWDC2q4BAmBlhYkMb9R3tyEld2yth0cT+XFyzrqZcZEevyJZH1mPEroJL+A3qlPD
+         z0AId3DQR4kExIOqA4iROLCnpByaAQoD3/B8nis0MhQiteXN2mQzrnDjznuBLy6winta
+         bpBosNMDDCAXwNHou5O9LeIWoIz4Iet2ex14nk+MfL+zxaOB9zc12ynucmN0gq95alf7
+         oStA==
+X-Gm-Message-State: AC+VfDyIJCQX33tS4QQL5qTZLeKHaYy6vj93pgViFLyADUXKr0cGHbOP
+        tWVvLzQ7kRirY6pvyYYkzHXnrQ==
+X-Google-Smtp-Source: ACHHUZ7K353thxP/m/nJc6hXiu7I5BesEV/LnUXH2Py/TJOLlivtli2tg/ZZSu2NGgk22wQz0FACJw==
+X-Received: by 2002:a05:6512:3750:b0:4ed:bf01:3ff3 with SMTP id a16-20020a056512375000b004edbf013ff3mr284376lfs.43.1683062388893;
+        Tue, 02 May 2023 14:19:48 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id o8-20020ac24948000000b004f121c8beddsm1158666lfi.124.2023.05.02.14.19.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 May 2023 14:19:48 -0700 (PDT)
+Message-ID: <0aba48f3-b877-3d67-85a6-f71ba0a56495@linaro.org>
+Date:   Wed, 3 May 2023 00:19:47 +0300
 MIME-Version: 1.0
-References: <20220328000915.15041-1-ansuelsmth@gmail.com> <85eb14ec-f465-7447-ad77-a3dabc666f47@kernel.org>
- <YkKRYnN84D9VZhGj@Ansuel-xps.localdomain> <CAL_Jsq+RQQ-ADMxLPUFwk6S6kGmb6oNDy4k52fnU0EtbUvqmSA@mail.gmail.com>
- <CAMuHMdWNTE48MFy6fqxAsfMWz9b6E7dVNXtXtESP95sxk2PGwA@mail.gmail.com>
- <CAL_JsqJthKTm8bhRF2B=ae1tvtPeYYXx_Tm76qQtSwLtH5C6VA@mail.gmail.com>
- <720a2829-b6b5-411c-ac69-9a53e881f48d@app.fastmail.com> <CAL_JsqKCtmkwzKa01gyG65fH8ye6R3KhR41PJbJhOJ4X9j=znA@mail.gmail.com>
-In-Reply-To: <CAL_JsqKCtmkwzKa01gyG65fH8ye6R3KhR41PJbJhOJ4X9j=znA@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 2 May 2023 23:18:59 +0200
-Message-ID: <CACRpkdZx6vEVnxVt0tW4nYtnbv8g=Dc11sa_3myB3GW4jXk1oA@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/1] Categorize ARM dts directory
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Olof Johansson <olof@lixom.net>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-actions@lists.infradead.org,
-        linux-sunxi@lists.linux.dev,
-        Linux-OMAP <linux-omap@vger.kernel.org>,
-        linux-amlogic@lists.infradead.org, linux-arm-kernel@axis.com,
-        linux-aspeed@lists.ozlabs.org,
-        linux-rpi-kernel@lists.infradead.org,
-        chrome-platform@lists.linux.dev,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-samsung-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        kernel@dh-electronics.com, linux-mediatek@lists.infradead.org,
-        openbmc@lists.ozlabs.org, linux-tegra@vger.kernel.org,
-        "linux-oxnas@groups.io" <linux-oxnas@groups.io>,
-        linux-arm-msm@vger.kernel.org, linux-unisoc@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        linux-realtek-soc@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 2/7] drm/msm/dpu: add DPU_PINGPONG_DSC feature bit
+Content-Language: en-GB
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, andersson@kernel.org
+Cc:     quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
+        marijn.suijten@somainline.org, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1683061382-32651-1-git-send-email-quic_khsieh@quicinc.com>
+ <1683061382-32651-3-git-send-email-quic_khsieh@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1683061382-32651-3-git-send-email-quic_khsieh@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,30 +81,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 2, 2023 at 9:40=E2=80=AFPM Rob Herring <robh+dt@kernel.org> wro=
-te:
+On 03/05/2023 00:02, Kuogee Hsieh wrote:
+> Legacy DPU requires PP block to be involved during DSC setting up.
+> This patch adds DDPU_PINGPONG_DSC feature bit to indicate that both
 
-> I've dusted off my script and made a branch[1] with the result.
-> There's just a couple of fixes needed after the script is run (see the
-> top commit). The cross arch includes are all fixed up by the script.
-> dtbs_install maintains a flat install. I compared the number of .dtbs
-> before and after to check the script.
->
-> I think the only issue remaining is finalizing the mapping of
-> platforms to subdirs. What I have currently is a mixture of SoC
-> families and vendors. The most notable are all the Freescale/NXP
-> platforms, pxa, socfpga, and stm32. It's not consistent with arm64
-> either. Once that's finalized, I still need to go update MAINTAINERS.
+DPU_PINGPONG_DSC
 
-I see my nits were fixed like I wanted them, and it's now mostly a
-mix of soc and vendor names that make sense so from my point of view:
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
+> dpu_hw_pp_setup_dsc() and dpu_hw_pp_dsc_enable() pingpong ops
+> functions are required to complete DSC data path set up and start
+> DSC engine.
 
-NB:
-arch/arm64/boot/dts/arm$
-vexpress-v2m-rs1.dtsi -> ../../../../arm/boot/dts/vexpress-v2m-rs1.dtsi
+Nit: as these ops were already present, I'd say that the lack of the 
+flag means that these operations are not supported and must not be 
+called for DSC setup/teardown.
 
-This still works after the script, yes?
+Nevertheless:
 
-Yours,
-Linus Walleij
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
+> 
+> Reported-by : Marijn Suijten <marijn.suijten@somainline.org>
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h  | 2 ++
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c | 9 ++++++---
+>   2 files changed, 8 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> index 71584cd..c07a6b6 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> @@ -144,6 +144,7 @@ enum {
+>    * @DPU_PINGPONG_SPLIT      PP block supports split fifo
+>    * @DPU_PINGPONG_SLAVE      PP block is a suitable slave for split fifo
+>    * @DPU_PINGPONG_DITHER,    Dither blocks
+> + * @DPU_PINGPONG_DSC,	    PP ops functions required for DSC
+>    * @DPU_PINGPONG_MAX
+>    */
+>   enum {
+> @@ -152,6 +153,7 @@ enum {
+>   	DPU_PINGPONG_SPLIT,
+>   	DPU_PINGPONG_SLAVE,
+>   	DPU_PINGPONG_DITHER,
+> +	DPU_PINGPONG_DSC,
+>   	DPU_PINGPONG_MAX
+>   };
+>   
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
+> index 3822e06..f255a04 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
+> @@ -264,9 +264,12 @@ static void _setup_pingpong_ops(struct dpu_hw_pingpong *c,
+>   	c->ops.get_autorefresh = dpu_hw_pp_get_autorefresh_config;
+>   	c->ops.poll_timeout_wr_ptr = dpu_hw_pp_poll_timeout_wr_ptr;
+>   	c->ops.get_line_count = dpu_hw_pp_get_line_count;
+> -	c->ops.setup_dsc = dpu_hw_pp_setup_dsc;
+> -	c->ops.enable_dsc = dpu_hw_pp_dsc_enable;
+> -	c->ops.disable_dsc = dpu_hw_pp_dsc_disable;
+> +
+> +	if (features & BIT(DPU_PINGPONG_DSC)) {
+> +		c->ops.setup_dsc = dpu_hw_pp_setup_dsc;
+> +		c->ops.enable_dsc = dpu_hw_pp_dsc_enable;
+> +		c->ops.disable_dsc = dpu_hw_pp_dsc_disable;
+> +	}
+>   
+>   	if (test_bit(DPU_PINGPONG_DITHER, &features))
+>   		c->ops.setup_dither = dpu_hw_pp_setup_dither;
+
+-- 
+With best wishes
+Dmitry
+
