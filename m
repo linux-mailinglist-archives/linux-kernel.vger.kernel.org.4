@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E34B6F41FC
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 12:51:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03CF16F4201
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 12:51:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233608AbjEBKv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 06:51:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48364 "EHLO
+        id S233731AbjEBKvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 06:51:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229936AbjEBKv0 (ORCPT
+        with ESMTP id S233614AbjEBKvs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 06:51:26 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C5930EC
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 03:51:24 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4edc63e066fso1913e87.1
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 03:51:23 -0700 (PDT)
+        Tue, 2 May 2023 06:51:48 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B6674EEB
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 03:51:40 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4edc63e066fso1916e87.1
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 03:51:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683024682; x=1685616682;
+        d=google.com; s=20221208; t=1683024698; x=1685616698;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=J9qMzmYwH4A73j9Uo0VGBU0UVYPI6bWM4XwJxhZTK6k=;
-        b=spjwfzaP2Q4oIrn3O0pOUWzYcgaIJ7WSUG8Mv6QnGv0FmeOiw7liCv9b7EGW6maPJd
-         aiM3DmCj5CPWAWMA7T0OVrnb82c0OKPFPn7Go0wV+YCRCJfcFSw2HmS7ITqf0DcIj8Dz
-         MZJMmq4h64zIkh8/oIaoNHfbWt49ReHJ15XSPz1NsEIZQeWFvDm5+ApFEk0qtw/6eac/
-         C5M1Ef3Soh8BZUNSIjwBXE+I3iBdgUoZB9NutUB46vU4H8bJLeve7HWZkyWDZMFE7unW
-         V4ima/3IvIip/B58wygltAfqEdf8joHXM44LCJZAMZxLZx9/Wm/PAvtqjc0Jx4jW+5EK
-         Ox4Q==
+        bh=yN0VnYuPxT7DZIZ2+pLXshy93rpqn1VcdWgF7fHjbY4=;
+        b=n85vAFkV6VGjeZgd3hCvQPxrSeOuwFAmxu74yn0navpMqaHKXfeRv3tmiLg3K/eDwb
+         bsnYNzpCCvdPGoKtsEeFRSVk5iWe+KXiEePc/2DBqvh/JT6DMusp8eB2WWJXmR+Oy6Bc
+         DIkDXmTzWS0ksKCK29zgscShjMV0l0iIBv7aql5hiBMPwTi5nwGuR99W2itnyYZNpd77
+         Yro6rjBl19ceC2MgCgZreMBpfn2N5vzTrKfrBBUFNBAaudAJkRkhV9QP0d32DNAhiEx9
+         oRW753UY26tGungVPvJ63PzHoHobK+HJ73/peksoKYqdEMeoCeWPKozR++VWLBkw7AC9
+         WU0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683024682; x=1685616682;
+        d=1e100.net; s=20221208; t=1683024698; x=1685616698;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=J9qMzmYwH4A73j9Uo0VGBU0UVYPI6bWM4XwJxhZTK6k=;
-        b=dEWCWqCO+6t0oiy6c6eOPKyWHWryL7J1f01jUKzVtSGyHYJOgFgN4plMGtrlX6UUYL
-         Kwpv/VBeoIXJhvVePG/kAaH5dLRO93lKOX45tI+UodHAz/DfySpclIkdSrhVjFjZRJ/J
-         37g2aK/njgwZ+5hIGvMEhaNs98kjuNX873CATQp8q7JqvGAoLzbbpWfM9lHni2VLfZyh
-         t2G0DW/dDv/+QkD/+i80SZu86D7gqXe3h+V1XXCixn/z2eiIrHmLRoXQJyt1kSa6d1BX
-         ITND4gIpt8PmdexWqHlj4k+fN9leJ0gYE/RWmKid049u8+R0QEa1UKmU1vA3YqAKgdER
-         rZww==
-X-Gm-Message-State: AC+VfDxAk13NGzUYCIOGa249BmKyTyyXSfiDQH5gtEPyukKPUj6znXMu
-        4f370XoC0NOtyEZBEzg8M8WDVWoJMrmdAS8EVhScTBjSLl8ABA2q2SF2LQ==
-X-Google-Smtp-Source: ACHHUZ5X3VDSwNP41vasrajEaHyTcoRsJghd3PrH9Ghpcgz/gsr8oY44Azj+ppJ63mGiK1eqPZuNX0xhqQWCp4Cxwu4=
-X-Received: by 2002:a05:6512:3d90:b0:4f1:21a2:901f with SMTP id
- k16-20020a0565123d9000b004f121a2901fmr114730lfv.3.1683024682035; Tue, 02 May
- 2023 03:51:22 -0700 (PDT)
+        bh=yN0VnYuPxT7DZIZ2+pLXshy93rpqn1VcdWgF7fHjbY4=;
+        b=PtOCWqonriAYshGR4x4aj8KvS+MjayWTfTXOVFKnrSG+qoXhp8r834vG2/9REVTGLI
+         aRENmQgPfV4+s+VK8TpJn3xByTbXucUnR4iLV6OSfSql/bFnXPMfmmNr0gO+HODtW4qh
+         yGrXwkSgTF4R+6rqAnPdpHhjkwT4yJTDkF8lDLUixjhUNawWrS2rwyKdQ5qq0jLaBrFu
+         +2S4mD752n3zuZg20VUHA+FqE+JMF01YO8MEw18RxGr4YF2CCrUozusZuXKeVWHeyiHJ
+         7ntlupDenDc7jAoGul13w0GQ8o0Z8P8CpdRrb5xvWbpKPUmnZgXJWAFRY738XbQqqlMl
+         vupg==
+X-Gm-Message-State: AC+VfDzcD/KjbIJwco2D5vA6Bl3zlamaJixUz2j+j8XKCQkKAHovY2+i
+        jzODRa8gvVBashfvxE71dVmPwcS4ELGsiIVHkgGxGQ==
+X-Google-Smtp-Source: ACHHUZ6p67MNbrFznRhfT8DxXBM9UxkRS/QGE9VdMVbsrcev4RyD3O/3xsM0A8j5lhVhckYDXxc7H9+YxzsTDTd8aEA=
+X-Received: by 2002:a05:6512:239a:b0:4ed:b131:3449 with SMTP id
+ c26-20020a056512239a00b004edb1313449mr146492lfv.7.1683024698358; Tue, 02 May
+ 2023 03:51:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <00000000000065594605fab2e72c@google.com>
-In-Reply-To: <00000000000065594605fab2e72c@google.com>
+References: <000000000000690a0b05fab2e75c@google.com>
+In-Reply-To: <000000000000690a0b05fab2e75c@google.com>
 From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 2 May 2023 12:51:09 +0200
-Message-ID: <CACT4Y+bOmSHmau-7o0wzajAc=e=xVYnUkGgYX-jL8iYrPB=JXQ@mail.gmail.com>
+Date:   Tue, 2 May 2023 12:51:26 +0200
+Message-ID: <CACT4Y+av+kMfR+qC7yKd=wOAEBOAaOf2BE5jYX+HPhuiUsmVag@mail.gmail.com>
 Subject: Re: [syzbot] upstream boot error: BUG: unable to handle kernel paging
- request in gpiod_set_value
-To:     syzbot <syzbot+5e3c3df60302959ef641@syzkaller.appspotmail.com>,
+ request in gpiod_set_raw_value_commit
+To:     syzbot <syzbot+691fcab418631dee8be3@syzkaller.appspotmail.com>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>
 Cc:     brgl@bgdev.pl, linus.walleij@linaro.org,
         linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -74,7 +74,7 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Tue, 2 May 2023 at 11:52, syzbot
-<syzbot+5e3c3df60302959ef641@syzkaller.appspotmail.com> wrote:
+<syzbot+691fcab418631dee8be3@syzkaller.appspotmail.com> wrote:
 >
 > Hello,
 >
@@ -83,25 +83,26 @@ On Tue, 2 May 2023 at 11:52, syzbot
 > HEAD commit:    865fdb08197e Merge tag 'input-for-v6.4-rc0' of git://git.=
 k..
 > git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=3D16481bf828000=
+> console output: https://syzkaller.appspot.com/x/log.txt?x=3D149ab84428000=
 0
 > kernel config:  https://syzkaller.appspot.com/x/.config?x=3Dd43eae746231f=
 eb3
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3D5e3c3df60302959=
-ef641
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3D691fcab418631de=
+e8be3
 > compiler:       arm-linux-gnueabi-gcc (Debian 10.2.1-6) 10.2.1 20210110, =
 GNU ld (GNU Binutils for Debian) 2.35.2
 > userspace arch: arm
 >
 > IMPORTANT: if you fix the issue, please add the following tag to the comm=
 it:
-> Reported-by: syzbot+5e3c3df60302959ef641@syzkaller.appspotmail.com
+> Reported-by: syzbot+691fcab418631dee8be3@syzkaller.appspotmail.com
 
 +arm mailing list
 
 Kernel started falling apart on arm during boot in various strange ways.
 
 #syz set subsystems: arm
+
 
 > Movable zone start for each node
 > Early memory node ranges
@@ -172,54 +173,116 @@ o,selinux,bpf,integrity
 > CPU0: Spectre BHB: enabling loop workaround for all CPUs
 > CPU1: thread -1, cpu 1, socket 0, mpidr 80000001
 > 8<--- cut here ---
-> Unable to handle kernel paging request at virtual address 000c01f3 when r=
-ead
-> [000c01f3] *pgd=3D80000080004003, *pmd=3D00000000
-> Internal error: Oops: 206 [#1] PREEMPT SMP ARM
+> Unable to handle kernel paging request at virtual address 831b70d8 when e=
+xecute
+> [831b70d8] *pgd=3D80000080006003, *pmd=3D4000008300071d(bad)
+> Internal error: Oops: 8000020e [#1] PREEMPT SMP ARM
 > Modules linked in:
-> CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.3.0-syzkaller #0
+> CPU: 1 PID: 0 Comm: swapper/1 Not tainted 6.3.0-syzkaller #0
 > Hardware name: ARM-Versatile Express
-> PC is at gpiod_set_value+0x38/0xc0 drivers/gpio/gpiolib.c:3222
-> LR is at gpio_led_set+0x5c/0x60 drivers/leds/leds-gpio.c:54
-> pc : [<80891a24>]    lr : [<8107f408>]    psr: 20000113
-> sp : 82601e90  ip : 82601ea8  fp : 82601ea4
+> PC is at 0x831b70d8
+> LR is at gpiod_set_raw_value_commit+0x4c/0x168 drivers/gpio/gpiolib.c:303=
+0
+> pc : [<831b70d8>]    lr : [<80890618>]    psr: 40000113
+> sp : df85de90  ip : df85dec0  fp : df85debc
 > r10: 00000000  r9 : 827e16e6  r8 : 00000001
-> r7 : dddd1798  r6 : 000000ff  r5 : 00000001  r4 : 835c27a8
-> r3 : 000c0193  r2 : 8107f3ac  r1 : 00000001  r0 : 83194800
-> Flags: nzCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment user
-> Control: 30c5387d  Table: 80003000  DAC: fffffffd
-> Register r0 information: slab kmalloc-1k start 83194800 pointer offset 0 =
-size 1024
+> r7 : 831b7040  r6 : 00000001  r5 : 840b67bc  r4 : 00000003
+> r3 : 831b70d8  r2 : 00000001  r1 : 00000003  r0 : 831b7040
+> Flags: nZcv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
+> Control: 30c5387d  Table: 8470bd40  DAC: 00000000
+> Register r0 information: slab kmalloc-512 start 831b7000 pointer offset 6=
+4 size 512
 > Register r1 information: non-paged memory
-> Register r2 information: non-slab/vmalloc memory
-> Register r3 information: non-paged memory
-> Register r4 information: slab kmalloc-192 start 835c2780 pointer offset 4=
+> Register r2 information: non-paged memory
+> Register r3 information: slab kmalloc-512 start 831b7000 pointer offset 2=
+16 size 512
+> Register r4 information: non-paged memory
+> Register r5 information: slab kmalloc-192 start 840b6780 pointer offset 6=
 0 size 192
-> Register r5 information: non-paged memory
 > Register r6 information: non-paged memory
-> Register r7 information:
-> 8<--- cut here ---
-> Unable to handle kernel paging request at virtual address df943ff8 when r=
-ead
-> [df943ff8] *pgd=3D80000080007003, *pmd=3D83093003, *pte=3D802160e88021666=
-4
-> Internal error: Oops: 207 [#2] PREEMPT SMP ARM
-> Modules linked in:
-> CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.3.0-syzkaller #0
-> Hardware name: ARM-Versatile Express
-> PC is at __find_vmap_area mm/vmalloc.c:841 [inline]
-> PC is at find_vmap_area mm/vmalloc.c:1862 [inline]
-> PC is at find_vm_area mm/vmalloc.c:2623 [inline]
-> PC is at vmalloc_dump_obj+0x38/0xb4 mm/vmalloc.c:4221
-> LR is at __raw_spin_lock include/linux/spinlock_api_smp.h:132 [inline]
-> LR is at _raw_spin_lock+0x18/0x58 kernel/locking/spinlock.c:154
-> pc : [<8047a1f0>]    lr : [<818016fc>]    psr: a0000193
-> sp : 82601cf8  ip : 82601ce0  fp : 82601d0c
-> r10: 8261ae40  r9 : 8261c9a4  r8 : 8285041c
-> r7 : 60000113  r6 : 00000008  r5 : dddd2000  r4 : df944000
-> r3 : 00000000  r2 : 0000215b  r1 : 00000000  r0 : 00000001
-> Flags: NzCv  IRQs off  FIQs on  Mode SVC_32  ISA ARM  Segment user
-> Control: 30c5387d  Table: 80003000  DAC: fffffffd
+> Register r7 information: slab kmalloc-512 start 831b7000 pointer offset 6=
+4 size 512
+> Register r8 information: non-paged memory
+> Register r9 information: non-slab/vmalloc memory
+> Register r10 information: NULL pointer
+> Register r11 information: non-paged memory
+> Register r12 information: non-paged memory
+> Process swapper/1 (pid: 0, stack limit =3D 0xdf85c000)
+> Stack: (0xdf85de90 to 0xdf85e000)
+> de80:                                     00000003 840b67bc 00000001 0000=
+00ff
+> dea0: ddde4798 00000001 827e16e6 00000000 df85decc df85dec0 80890ca8 8089=
+05d8
+> dec0: df85dee4 df85ded0 80891a3c 80890c60 8301daa8 000000ff df85defc df85=
+dee8
+> dee0: 8107f408 808919f8 8301daa8 000000ff df85df0c df85df00 8107d838 8107=
+f3b8
+> df00: df85df24 df85df10 8107db84 8107d80c 8301daa8 840ebb94 df85df44 df85=
+df28
+> df20: 8107ea20 8107db2c 000001fd 8290cee4 00000002 ddde4798 df85df6c df85=
+df48
+> df40: 8107fde8 8107e9f4 00000001 8260c498 831f4680 8260c4e0 00000000 827e=
+16e6
+> df60: df85df7c df85df70 80208efc 8107fd44 df85dfc4 df85df80 80293568 8020=
+8ef4
+> df80: 8029e3c8 818015a4 81f860a0 824af2f8 5b935000 0f6c3d28 df85dfc4 0000=
+0097
+> dfa0: 00000001 831f4680 82850464 80003010 412fc0f1 00000000 df85dfd4 df85=
+dfc8
+> dfc0: 80293af8 802934f8 df85dff4 df85dfd8 80210374 80293ae4 830e0a00 0000=
+0000
+> dfe0: 30c0387d 82850464 00000000 df85dff8 802016f4 80210254 00000000 0000=
+0000
+> Backtrace:
+> [<808905cc>] (gpiod_set_raw_value_commit) from [<80890ca8>] (gpiod_set_va=
+lue_nocheck+0x54/0x58 drivers/gpio/gpiolib.c:3204)
+>  r10:00000000 r9:827e16e6 r8:00000001 r7:ddde4798 r6:000000ff r5:00000001
+>  r4:840b67bc r3:00000003
+> [<80890c54>] (gpiod_set_value_nocheck) from [<80891a3c>] (gpiod_set_value=
++0x50/0xc0 drivers/gpio/gpiolib.c:3223)
+> [<808919ec>] (gpiod_set_value) from [<8107f408>] (gpio_led_set+0x5c/0x60 =
+drivers/leds/leds-gpio.c:54)
+>  r5:000000ff r4:8301daa8
+> [<8107f3ac>] (gpio_led_set) from [<8107d838>] (__led_set_brightness drive=
+rs/leds/led-core.c:47 [inline])
+> [<8107f3ac>] (gpio_led_set) from [<8107d838>] (led_set_brightness_nopm dr=
+ivers/leds/led-core.c:271 [inline])
+> [<8107f3ac>] (gpio_led_set) from [<8107d838>] (led_set_brightness_nosleep=
++0x38/0x5c drivers/leds/led-core.c:287)
+>  r5:000000ff r4:8301daa8
+> [<8107d800>] (led_set_brightness_nosleep) from [<8107db84>] (led_set_brig=
+htness+0x64/0x68 drivers/leds/led-core.c:264)
+> [<8107db20>] (led_set_brightness) from [<8107ea20>] (led_trigger_event dr=
+ivers/leds/led-triggers.c:390 [inline])
+> [<8107db20>] (led_set_brightness) from [<8107ea20>] (led_trigger_event+0x=
+38/0x50 drivers/leds/led-triggers.c:380)
+>  r5:840ebb94 r4:8301daa8
+> [<8107e9e8>] (led_trigger_event) from [<8107fde8>] (ledtrig_cpu+0xb0/0x10=
+0 drivers/leds/trigger/ledtrig-cpu.c:86)
+>  r7:ddde4798 r6:00000002 r5:8290cee4 r4:000001fd
+> [<8107fd38>] (ledtrig_cpu) from [<80208efc>] (arch_cpu_idle_exit+0x14/0x1=
+8 arch/arm/kernel/process.c:98)
+>  r9:827e16e6 r8:00000000 r7:8260c4e0 r6:831f4680 r5:8260c498 r4:00000001
+> [<80208ee8>] (arch_cpu_idle_exit) from [<80293568>] (do_idle+0x7c/0x2f0 k=
+ernel/sched/idle.c:284)
+> [<802934ec>] (do_idle) from [<80293af8>] (cpu_startup_entry+0x20/0x24 ker=
+nel/sched/idle.c:379)
+>  r10:00000000 r9:412fc0f1 r8:80003010 r7:82850464 r6:831f4680 r5:00000001
+>  r4:00000097
+> [<80293ad8>] (cpu_startup_entry) from [<80210374>] (secondary_start_kerne=
+l+0x12c/0x188 arch/arm/kernel/smp.c:482)
+> [<80210248>] (secondary_start_kernel) from [<802016f4>] (__enable_mmu+0x0=
+/0xc arch/arm/kernel/head.S:438)
+>  r7:82850464 r6:30c0387d r5:00000000 r4:830e0a00
+> Code: 831b710c 831b70d8 80216664 802160d0 (00000000)
+> ---[ end trace 0000000000000000 ]---
+> ----------------
+> Code disassembly (best guess):
+>    0:   831b710c        tsthi   fp, #12, 2
+>    4:   831b70d8        tsthi   fp, #216        ; 0xd8
+>    8:   80216664        eorhi   r6, r1, r4, ror #12
+>    c:   802160d0        ldrdhi  r6, [r1], -r0   ; <UNPREDICTABLE>
+> * 10:   00000000        andeq   r0, r0, r0 <-- trapping instruction
 >
 >
 > ---
@@ -249,4 +312,4 @@ ead
 > To unsubscribe from this group and stop receiving emails from it, send an=
  email to syzkaller-bugs+unsubscribe@googlegroups.com.
 > To view this discussion on the web visit https://groups.google.com/d/msgi=
-d/syzkaller-bugs/00000000000065594605fab2e72c%40google.com.
+d/syzkaller-bugs/000000000000690a0b05fab2e75c%40google.com.
