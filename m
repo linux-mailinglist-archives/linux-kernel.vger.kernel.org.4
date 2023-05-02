@@ -2,56 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EE186F436E
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 14:11:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E3AD6F4371
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 14:11:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234190AbjEBMLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 08:11:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38416 "EHLO
+        id S234194AbjEBMLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 08:11:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234189AbjEBMLV (ORCPT
+        with ESMTP id S234212AbjEBMLi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 08:11:21 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E93B65FE7;
-        Tue,  2 May 2023 05:10:56 -0700 (PDT)
+        Tue, 2 May 2023 08:11:38 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E0BA6584
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 05:11:09 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id BF8FD1F8BE;
-        Tue,  2 May 2023 12:10:50 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 883401F8D7;
+        Tue,  2 May 2023 12:10:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1683029450; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1683029456; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=UokXgkWhNqi0xmtTfifqq0OnoWcJAag/Oc0h5DkNreY=;
-        b=KrWOrtFCJedieSykS9Jct4rTuBScw/RdGMiGR1JONhQcMlsDbdJihM1pMvv6wLXAdaIcsf
-        /Fwzw0GF3GmtcjAZgGfp074ngH/Llni/vZRTou42txOR+hmAj0R82XuqJl5XZwRTG6VHWQ
-        TZ7VV1l/7lV2H4/e53JhaCjmOfFZM0I=
+        bh=kLyu6/uv5d/3LqBfrrlbCUTHIoraeKrUgkjBlegFIpI=;
+        b=nQKnqH8TSSG8jGP5M/zAvnksT0hjZeFbpRyrWoEFE/rRqDN6SZefYLCWD3koYqvE0VS/8D
+        GNGI6p4e5DyJ9KcPKdTtV9Cisuq4i4XXJW26oVttsGiw0bDZECZiDnWZq6GGnPBfAvekPe
+        f/hWyvt+4q8hpl8bGwSPC/YPyFW6O+w=
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 78192139C3;
-        Tue,  2 May 2023 12:10:50 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 38FB3139C3;
+        Tue,  2 May 2023 12:10:56 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id MlsRHMr9UGQsMAAAMHmgww
-        (envelope-from <jgross@suse.com>); Tue, 02 May 2023 12:10:50 +0000
+        id oiSKDND9UGRCMAAAMHmgww
+        (envelope-from <jgross@suse.com>); Tue, 02 May 2023 12:10:56 +0000
 From:   Juergen Gross <jgross@suse.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-doc@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, x86@kernel.org
 Cc:     mikelley@microsoft.com, Juergen Gross <jgross@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         "H. Peter Anvin" <hpa@zytor.com>
-Subject: [PATCH v6 12/16] x86/mtrr: add mtrr=debug command line option
-Date:   Tue,  2 May 2023 14:09:27 +0200
-Message-Id: <20230502120931.20719-13-jgross@suse.com>
+Subject: [PATCH v6 13/16] x86/mtrr: use new cache_map in mtrr_type_lookup()
+Date:   Tue,  2 May 2023 14:09:28 +0200
+Message-Id: <20230502120931.20719-14-jgross@suse.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20230502120931.20719-1-jgross@suse.com>
 References: <20230502120931.20719-1-jgross@suse.com>
@@ -67,156 +65,294 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a new command line option "mtrr=debug" for getting debug output
-after building the new cache mode map. The output will include MTRR
-register values and the resulting map.
+Instead of crawling through the MTRR register state, use the new
+cache_map for looking up the cache type(s) of a memory region.
 
-For printing the MTRR register values print_mtrr_state() can be used.
-Just change it to use pr_info() instead of pr_debug() and call it only
-if mtrr=debug was specified.
+This allows now to set the uniform parameter according to the
+uniformity of the cache mode of the region, instead of setting it
+only if the complete region is mapped by a single MTRR. This now
+includes even the region covered by the fixed MTRR registers.
+
+Make sure uniform is always set.
 
 Signed-off-by: Juergen Gross <jgross@suse.com>
+Tested-by: Michael Kelley <mikelley@microsoft.com>
 ---
-V6:
-- new patch (Boris Petkov)
+V3:
+- new patch
+V3.1:
+- fix type_merge() (Michael Kelley)
+V4:
+- fix type_merge() again (Michael Kelley)
 ---
- .../admin-guide/kernel-parameters.txt         |  4 ++
- arch/x86/kernel/cpu/mtrr/generic.c            | 64 +++++++++++++------
- 2 files changed, 49 insertions(+), 19 deletions(-)
+ arch/x86/kernel/cpu/mtrr/generic.c | 228 ++++-------------------------
+ 1 file changed, 32 insertions(+), 196 deletions(-)
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 9e5bab29685f..44a87ada7145 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -3423,6 +3423,10 @@
- 			[HW] Make the MicroTouch USB driver use raw coordinates
- 			('y', default) or cooked coordinates ('n')
- 
-+	mtrr=debug	[X86]
-+			Enable printing debug information related to MTRR
-+			registers at boot time.
-+
- 	mtrr_chunk_size=nn[KMG] [X86]
- 			used for mtrr cleanup. It is largest continuous chunk
- 			that could hold holes aka. UC entries.
 diff --git a/arch/x86/kernel/cpu/mtrr/generic.c b/arch/x86/kernel/cpu/mtrr/generic.c
-index a6dd240a09cb..e002856a5f4e 100644
+index e002856a5f4e..2197e835e98c 100644
 --- a/arch/x86/kernel/cpu/mtrr/generic.c
 +++ b/arch/x86/kernel/cpu/mtrr/generic.c
-@@ -41,6 +41,23 @@ struct cache_map {
- 	u64 fixed:1;
- };
- 
-+static bool mtrr_debug;
-+
-+static int __init mtrr_param_setup(char *str)
-+{
-+	int rc = 0;
-+
-+	if (!str)
-+		return -EINVAL;
-+	if (!strcmp(str, "debug"))
-+		mtrr_debug = true;
-+	else
-+		rc = -EINVAL;
-+
-+	return rc;
-+}
-+early_param("mtrr", mtrr_param_setup);
-+
- /*
-  * CACHE_MAP_MAX is the maximum number of memory ranges in cache_map, where
-  * no 2 adjacent ranges have the same cache mode (those would be merged).
-@@ -519,6 +536,14 @@ void __init mtrr_build_map(void)
- 	pr_info("MTRR map: %u entries (%u fixed + %u variable; max %u), built from %u variable MTRRs\n",
- 		cache_map_n, cache_map_fixed, cache_map_n - cache_map_fixed,
- 		get_cache_map_size(), num_var_ranges + (mtrr_tom2 != 0));
-+
-+	if (mtrr_debug) {
-+		for (i = 0; i < cache_map_n; i++) {
-+			pr_info("%3u: %016llx-%016llx %s\n", i,
-+				cache_map[i].start, cache_map[i].end - 1,
-+				mtrr_attrib_to_str(cache_map[i].type));
-+		}
-+	}
+@@ -164,155 +164,6 @@ static u8 get_effective_type(u8 type1, u8 type2)
+ 	return type1;
  }
  
- /* Copy the cache_map from __initdata memory to dynamically allocated one. */
-@@ -725,8 +750,8 @@ static void __init print_fixed_last(void)
- 	if (!last_fixed_end)
- 		return;
- 
--	pr_debug("  %05X-%05X %s\n", last_fixed_start,
--		 last_fixed_end - 1, mtrr_attrib_to_str(last_fixed_type));
-+	pr_info("  %05X-%05X %s\n", last_fixed_start,
-+		last_fixed_end - 1, mtrr_attrib_to_str(last_fixed_type));
- 
- 	last_fixed_end = 0;
- }
-@@ -764,10 +789,10 @@ static void __init print_mtrr_state(void)
- 	unsigned int i;
- 	int high_width;
- 
--	pr_debug("MTRR default type: %s\n",
--		 mtrr_attrib_to_str(mtrr_state.def_type));
-+	pr_info("MTRR default type: %s\n",
-+		mtrr_attrib_to_str(mtrr_state.def_type));
- 	if (mtrr_state.have_fixed) {
--		pr_debug("MTRR fixed ranges %sabled:\n",
-+		pr_info("MTRR fixed ranges %sabled:\n",
- 			((mtrr_state.enabled & MTRR_STATE_MTRR_ENABLED) &&
- 			 (mtrr_state.enabled & MTRR_STATE_MTRR_FIXED_ENABLED)) ?
- 			 "en" : "dis");
-@@ -782,27 +807,27 @@ static void __init print_mtrr_state(void)
- 		/* tail */
- 		print_fixed_last();
- 	}
--	pr_debug("MTRR variable ranges %sabled:\n",
--		 mtrr_state.enabled & MTRR_STATE_MTRR_ENABLED ? "en" : "dis");
-+	pr_info("MTRR variable ranges %sabled:\n",
-+		mtrr_state.enabled & MTRR_STATE_MTRR_ENABLED ? "en" : "dis");
- 	high_width = (boot_cpu_data.x86_phys_bits - (32 - PAGE_SHIFT) + 3) / 4;
- 
- 	for (i = 0; i < num_var_ranges; ++i) {
- 		if (mtrr_state.var_ranges[i].mask_lo & MTRR_PHYSMASK_V)
--			pr_debug("  %u base %0*X%05X000 mask %0*X%05X000 %s\n",
--				 i,
--				 high_width,
--				 mtrr_state.var_ranges[i].base_hi,
--				 mtrr_state.var_ranges[i].base_lo >> 12,
--				 high_width,
--				 mtrr_state.var_ranges[i].mask_hi,
--				 mtrr_state.var_ranges[i].mask_lo >> 12,
--				 mtrr_attrib_to_str(mtrr_state.var_ranges[i].base_lo &
-+			pr_info("  %u base %0*X%05X000 mask %0*X%05X000 %s\n",
-+				i,
-+				high_width,
-+				mtrr_state.var_ranges[i].base_hi,
-+				mtrr_state.var_ranges[i].base_lo >> 12,
-+				high_width,
-+				mtrr_state.var_ranges[i].mask_hi,
-+				mtrr_state.var_ranges[i].mask_lo >> 12,
-+				mtrr_attrib_to_str(mtrr_state.var_ranges[i].base_lo &
- 						    MTRR_PHYSBASE_TYPE));
- 		else
--			pr_debug("  %u disabled\n", i);
-+			pr_info("  %u disabled\n", i);
- 	}
- 	if (mtrr_tom2)
--		pr_debug("TOM2: %016llx aka %lldM\n", mtrr_tom2, mtrr_tom2>>20);
-+		pr_info("TOM2: %016llx aka %lldM\n", mtrr_tom2, mtrr_tom2>>20);
- }
- 
- /* Grab all of the MTRR state for this CPU into *state */
-@@ -838,7 +863,8 @@ bool __init get_mtrr_state(void)
- 		mtrr_tom2 &= 0xffffff800000ULL;
- 	}
- 
--	print_mtrr_state();
-+	if (mtrr_debug)
-+		print_mtrr_state();
- 
+-/*
+- * Check and return the effective type for MTRR-MTRR type overlap.
+- * Returns true if the effective type is UNCACHEABLE, else returns false
+- */
+-static bool check_type_overlap(u8 *prev, u8 *curr)
+-{
+-	*prev = *curr = get_effective_type(*curr, *prev);
+-
+-	return *prev == MTRR_TYPE_UNCACHABLE;
+-}
+-
+-/**
+- * mtrr_type_lookup_fixed - look up memory type in MTRR fixed entries
+- *
+- * Return the MTRR fixed memory type of 'start'.
+- *
+- * MTRR fixed entries are divided into the following ways:
+- *  0x00000 - 0x7FFFF : This range is divided into eight 64KB sub-ranges
+- *  0x80000 - 0xBFFFF : This range is divided into sixteen 16KB sub-ranges
+- *  0xC0000 - 0xFFFFF : This range is divided into sixty-four 4KB sub-ranges
+- *
+- * Return Values:
+- * MTRR_TYPE_(type)  - Matched memory type
+- * MTRR_TYPE_INVALID - Unmatched
+- */
+-static u8 mtrr_type_lookup_fixed(u64 start, u64 end)
+-{
+-	int idx;
+-
+-	if (start >= 0x100000)
+-		return MTRR_TYPE_INVALID;
+-
+-	/* 0x0 - 0x7FFFF */
+-	if (start < 0x80000) {
+-		idx = 0;
+-		idx += (start >> 16);
+-		return mtrr_state.fixed_ranges[idx];
+-	/* 0x80000 - 0xBFFFF */
+-	} else if (start < 0xC0000) {
+-		idx = 1 * 8;
+-		idx += ((start - 0x80000) >> 14);
+-		return mtrr_state.fixed_ranges[idx];
+-	}
+-
+-	/* 0xC0000 - 0xFFFFF */
+-	idx = 3 * 8;
+-	idx += ((start - 0xC0000) >> 12);
+-	return mtrr_state.fixed_ranges[idx];
+-}
+-
+-/**
+- * mtrr_type_lookup_variable - look up memory type in MTRR variable entries
+- *
+- * Return Value:
+- * MTRR_TYPE_(type) - Matched memory type or default memory type (unmatched)
+- *
+- * Output Arguments:
+- * repeat - Set to 1 when [start:end] spanned across MTRR range and type
+- *	    returned corresponds only to [start:*partial_end].  Caller has
+- *	    to lookup again for [*partial_end:end].
+- *
+- * uniform - Set to 1 when an MTRR covers the region uniformly, i.e. the
+- *	     region is fully covered by a single MTRR entry or the default
+- *	     type.
+- */
+-static u8 mtrr_type_lookup_variable(u64 start, u64 end, u64 *partial_end,
+-				    int *repeat, u8 *uniform)
+-{
+-	int i;
+-	u64 base, mask;
+-	u8 prev_match, curr_match;
+-
+-	*repeat = 0;
+-	*uniform = 1;
+-
+-	prev_match = MTRR_TYPE_INVALID;
+-	for (i = 0; i < num_var_ranges; ++i) {
+-		unsigned short start_state, end_state, inclusive;
+-
+-		if (!(mtrr_state.var_ranges[i].mask_lo & MTRR_PHYSMASK_V))
+-			continue;
+-
+-		base = (((u64)mtrr_state.var_ranges[i].base_hi) << 32) +
+-		       (mtrr_state.var_ranges[i].base_lo & PAGE_MASK);
+-		mask = (((u64)mtrr_state.var_ranges[i].mask_hi) << 32) +
+-		       (mtrr_state.var_ranges[i].mask_lo & PAGE_MASK);
+-
+-		start_state = ((start & mask) == (base & mask));
+-		end_state = ((end & mask) == (base & mask));
+-		inclusive = ((start < base) && (end > base));
+-
+-		if ((start_state != end_state) || inclusive) {
+-			/*
+-			 * We have start:end spanning across an MTRR.
+-			 * We split the region into either
+-			 *
+-			 * - start_state:1
+-			 * (start:mtrr_end)(mtrr_end:end)
+-			 * - end_state:1
+-			 * (start:mtrr_start)(mtrr_start:end)
+-			 * - inclusive:1
+-			 * (start:mtrr_start)(mtrr_start:mtrr_end)(mtrr_end:end)
+-			 *
+-			 * depending on kind of overlap.
+-			 *
+-			 * Return the type of the first region and a pointer
+-			 * to the start of next region so that caller will be
+-			 * advised to lookup again after having adjusted start
+-			 * and end.
+-			 *
+-			 * Note: This way we handle overlaps with multiple
+-			 * entries and the default type properly.
+-			 */
+-			if (start_state)
+-				*partial_end = base + get_mtrr_size(mask);
+-			else
+-				*partial_end = base;
+-
+-			if (unlikely(*partial_end <= start)) {
+-				WARN_ON(1);
+-				*partial_end = start + PAGE_SIZE;
+-			}
+-
+-			end = *partial_end - 1; /* end is inclusive */
+-			*repeat = 1;
+-			*uniform = 0;
+-		}
+-
+-		if ((start & mask) != (base & mask))
+-			continue;
+-
+-		curr_match = mtrr_state.var_ranges[i].base_lo &
+-			     MTRR_PHYSBASE_TYPE;
+-		if (prev_match == MTRR_TYPE_INVALID) {
+-			prev_match = curr_match;
+-			continue;
+-		}
+-
+-		*uniform = 0;
+-		if (check_type_overlap(&prev_match, &curr_match))
+-			return curr_match;
+-	}
+-
+-	if (prev_match != MTRR_TYPE_INVALID)
+-		return prev_match;
+-
+-	return mtrr_state.def_type;
+-}
+-
+ static void rm_map_entry_at(int idx)
+ {
+ 	cache_map_n--;
+@@ -627,6 +478,20 @@ void mtrr_overwrite_state(struct mtrr_var_range *var, unsigned int num_var,
  	mtrr_state_set = 1;
+ }
+ 
++static u8 type_merge(u8 type, u8 new_type, u8 *uniform)
++{
++	u8 effective_type;
++
++	if (type == MTRR_TYPE_INVALID)
++		return new_type;
++
++	effective_type = get_effective_type(type, new_type);
++	if (type != effective_type)
++		*uniform = 0;
++
++	return effective_type;
++}
++
+ /**
+  * mtrr_type_lookup - look up memory type in MTRR
+  *
+@@ -635,66 +500,37 @@ void mtrr_overwrite_state(struct mtrr_var_range *var, unsigned int num_var,
+  * MTRR_TYPE_INVALID - MTRR is disabled
+  *
+  * Output Argument:
+- * uniform - Set to 1 when an MTRR covers the region uniformly, i.e. the
+- *	     region is fully covered by a single MTRR entry or the default
+- *	     type.
++ * uniform - Set to 1 when the returned MTRR type is valid for the whole
++ *	     region, set to 0 else.
+  */
+ u8 mtrr_type_lookup(u64 start, u64 end, u8 *uniform)
+ {
+-	u8 type, prev_type, is_uniform = 1, dummy;
+-	int repeat;
+-	u64 partial_end;
+-
+-	/* Make end inclusive instead of exclusive */
+-	end--;
++	u8 type = MTRR_TYPE_INVALID;
++	unsigned int i;
+ 
+-	if (!mtrr_state_set)
++	if (!mtrr_state_set) {
++		*uniform = 0;	/* Uniformity is unknown. */
+ 		return MTRR_TYPE_INVALID;
++	}
++
++	*uniform = 1;
+ 
+ 	if (!(mtrr_state.enabled & MTRR_STATE_MTRR_ENABLED))
+ 		return MTRR_TYPE_INVALID;
+ 
+-	/*
+-	 * Look up the fixed ranges first, which take priority over
+-	 * the variable ranges.
+-	 */
+-	if ((start < 0x100000) &&
+-	    (mtrr_state.have_fixed) &&
+-	    (mtrr_state.enabled & MTRR_STATE_MTRR_FIXED_ENABLED)) {
+-		is_uniform = 0;
+-		type = mtrr_type_lookup_fixed(start, end);
+-		goto out;
+-	}
+-
+-	/*
+-	 * Look up the variable ranges.  Look of multiple ranges matching
+-	 * this address and pick type as per MTRR precedence.
+-	 */
+-	type = mtrr_type_lookup_variable(start, end, &partial_end,
+-					 &repeat, &is_uniform);
++	for (i = 0; i < cache_map_n && start < end; i++) {
++		if (start >= cache_map[i].end)
++			continue;
++		if (start < cache_map[i].start)
++			type = type_merge(type, mtrr_state.def_type, uniform);
++		type = type_merge(type, cache_map[i].type, uniform);
+ 
+-	/*
+-	 * Common path is with repeat = 0.
+-	 * However, we can have cases where [start:end] spans across some
+-	 * MTRR ranges and/or the default type.  Do repeated lookups for
+-	 * that case here.
+-	 */
+-	while (repeat) {
+-		prev_type = type;
+-		start = partial_end;
+-		is_uniform = 0;
+-		type = mtrr_type_lookup_variable(start, end, &partial_end,
+-						 &repeat, &dummy);
+-
+-		if (check_type_overlap(&prev_type, &type))
+-			goto out;
++		start = cache_map[i].end;
+ 	}
+ 
+-	if (mtrr_tom2 && (start >= (1ULL<<32)) && (end < mtrr_tom2))
+-		type = MTRR_TYPE_WRBACK;
++	if (start < end)
++		type = type_merge(type, mtrr_state.def_type, uniform);
+ 
+-out:
+-	*uniform = is_uniform;
+ 	return type;
+ }
  
 -- 
 2.35.3
