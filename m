@@ -2,88 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ADBD6F4A30
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 21:15:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C88A56F4A39
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 21:18:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbjEBTP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 15:15:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46058 "EHLO
+        id S229522AbjEBTSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 15:18:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjEBTP2 (ORCPT
+        with ESMTP id S229524AbjEBTSq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 15:15:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7664D1BD4
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 12:15:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 122C962071
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 19:15:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F551C4339B;
-        Tue,  2 May 2023 19:15:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1683054926;
-        bh=r8WWjkIMJIaq0ut5/ios1bJTm+k1wBFfceoqsar6VsM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qg6+vslt/PZ2KiRJz8sltxAlarRY+0m4mwAxTUhOyxfJCF8bpSFxmxyYqETIAktFb
-         aNnUkECRskkjEWWSWkjFdGtMxAJ6pVGIDqCP/oQ4YLLqsOLdzBam6uEZAUTYDaufve
-         9ANJ2AMqCAFygybwaTV9MAomqhHeSE/IvEgJGM+w=
-Date:   Tue, 2 May 2023 12:15:25 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH] mm/mmap/vma_merge: always check invariants
-Message-Id: <20230502121525.258f089cbed7e44c113f2d83@linux-foundation.org>
-In-Reply-To: <df548a6ae3fa135eec3b446eb3dae8eb4227da97.1682885809.git.lstoakes@gmail.com>
-References: <df548a6ae3fa135eec3b446eb3dae8eb4227da97.1682885809.git.lstoakes@gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Tue, 2 May 2023 15:18:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B6EF1BFA
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 12:17:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683055079;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WtdaH0LPeSw9dc2vy9g3O4k7nCC9DNn+smmkDs0/Hqw=;
+        b=ONYEMX3mdnIlp95+DJUE0zH6Py1dzWWxjkfWreRh3u4o6PzSAewuc8rvYo0/A5FoxJ3aYY
+        Mw0rh3Ubr609Nf0rcVZBULXTdXBIlXqpYcYzk+HDdQE48t9+3JQOuWSknxpu483JuSxBVV
+        3iDFqmpc+lj7aF0K2CdQfWh5svpJNxI=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-60-AU7ZUIDUNkGsfmlFqiJZBw-1; Tue, 02 May 2023 15:17:57 -0400
+X-MC-Unique: AU7ZUIDUNkGsfmlFqiJZBw-1
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-2f5382db4d1so1226652f8f.0
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 12:17:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683055076; x=1685647076;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WtdaH0LPeSw9dc2vy9g3O4k7nCC9DNn+smmkDs0/Hqw=;
+        b=OBhBVK1nYQR4qvGpxrbgopXpScdD/E8N5PV904lbW2VVvhE46CHSAjBrSSBXE4lV/d
+         7IjdIbjv2UAANo79HzwbNzozoGaEoF6+sLiuTWxntsMxq3mZwjLXw1gyDC+lUSsZy2nk
+         OdrPiudWRyWMJKTW7OUWrHGZouvZTxMmQYZkyPvXzb6HStH3ISUf6ntpFwJ5mBxbgEkh
+         ECu/S3mVrJdPbO8OSJBbwPGWnmqdXEUDN9pugpbfCHyGoayYgq2UeIY8NR6HZPLsFQBv
+         PpKKEW4BrLs53rqdG80+pgIUUnNQNKkFJUU4yWbCtmulbL6OWi8vo04sQ28ChUYyIiXt
+         Cdsw==
+X-Gm-Message-State: AC+VfDw23n42fihcrT9qbHbSGDOz7gdgErJefrWfKKb61/JGYh++kJ6W
+        IgtanKwOPZ65HKGn0fQqeIR1Gxn5h8yoZMrXw6aOUKdUA27j0e1IyypEIH/7nGbbTOwBjHVWsgb
+        2VS+mhyCse3q1TA2CtZOm5h0Ksr4nADJ8
+X-Received: by 2002:a5d:638c:0:b0:2f6:35c3:7752 with SMTP id p12-20020a5d638c000000b002f635c37752mr12336035wru.57.1683055076722;
+        Tue, 02 May 2023 12:17:56 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7q1hw0mtMOej2U52Id4Urx2ErDM6rX7/+WSKxI/ttqG032vRWoBcwZc9nSAYRAqTsdpxhqRA==
+X-Received: by 2002:a5d:638c:0:b0:2f6:35c3:7752 with SMTP id p12-20020a5d638c000000b002f635c37752mr12336023wru.57.1683055076363;
+        Tue, 02 May 2023 12:17:56 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c700:2400:6b79:2aa:9602:7016? (p200300cbc70024006b7902aa96027016.dip0.t-ipconnect.de. [2003:cb:c700:2400:6b79:2aa:9602:7016])
+        by smtp.gmail.com with ESMTPSA id n17-20020a5d4c51000000b002d6f285c0a2sm31727959wrt.42.2023.05.02.12.17.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 May 2023 12:17:55 -0700 (PDT)
+Message-ID: <505b7df8-bb60-7564-af28-b99875eea12a@redhat.com>
+Date:   Tue, 2 May 2023 21:17:53 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v7 3/3] mm/gup: disallow FOLL_LONGTERM GUP-fast writing to
+ file-backed mappings
+Content-Language: en-US
+To:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Mika Penttila <mpenttil@redhat.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Theodore Ts'o <tytso@mit.edu>, Peter Xu <peterx@redhat.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>
+References: <cover.1683044162.git.lstoakes@gmail.com>
+ <b3a4441cade9770e00d24f5ecb75c8f4481785a4.1683044162.git.lstoakes@gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <b3a4441cade9770e00d24f5ecb75c8f4481785a4.1683044162.git.lstoakes@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 30 Apr 2023 21:19:17 +0100 Lorenzo Stoakes <lstoakes@gmail.com> wrote:
+> +static bool folio_longterm_write_pin_allowed(struct folio *folio)
+> +{
+> +	struct address_space *mapping;
+> +
+> +	/*
+> +	 * GUP-fast disables IRQs - this prevents IPIs from causing page tables
+> +	 * to disappear from under us, as well as preventing RCU grace periods
+> +	 * from making progress (i.e. implying rcu_read_lock()).
+> +	 *
+> +	 * This means we can rely on the folio remaining stable for all
+> +	 * architectures, both those that set CONFIG_MMU_GATHER_RCU_TABLE_FREE
+> +	 * and those that do not.
+> +	 *
+> +	 * We get the added benefit that given inodes, and thus address_space,
+> +	 * objects are RCU freed, we can rely on the mapping remaining stable
+> +	 * here with no risk of a truncation or similar race.
+> +	 */
+> +	lockdep_assert_irqs_disabled();
+> +
+> +	/*
+> +	 * If no mapping can be found, this implies an anonymous or otherwise
+> +	 * non-file backed folio so in this instance we permit the pin.
+> +	 *
+> +	 * shmem and hugetlb mappings do not require dirty-tracking so we
+> +	 * explicitly whitelist these.
+> +	 *
+> +	 * Other non dirty-tracked folios will be picked up on the slow path.
+> +	 */
+> +	mapping = folio_mapping(folio);
+> +	return !mapping || shmem_mapping(mapping) || folio_test_hugetlb(folio);
+> +}
 
-> We may still have inconsistent input parameters even if we choose not to
-> merge and the vma_merge() invariant checks are useful for checking this
-> with no production runtime cost (these are only relevant when
-> CONFIG_DEBUG_VM is specified).
-> 
-> Therefore, perform these checks regardless of whether we merge.
-> 
-> This is relevant, as a recent issue (addressed in commit "mm/mempolicy:
-> Correctly update prev when policy is equal on mbind") in the mbind logic
-> was only picked up in the 6.2.y stable branch where these assertions are
-> performed prior to determining mergeability.
-> 
-> Had this remained the same in mainline this issue may have been picked up
-> faster, so moving forward let's always check them.
-> 
+BTW, try_grab_folio() is also called from follow_hugetlb_page(), which 
+is ordinary GUP and has interrupts enabled if I am not wrong.
 
-I'll scoot this into 6.4-rc, given the recent problems in this area.
+-- 
+Thanks,
 
-> --- a/mm/mmap.c
-> +++ b/mm/mmap.c
-> @@ -960,17 +960,17 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
->  		merge_next = true;
->  	}
->  
-> +	/* Verify some invariant that must be enforced by the caller. */
-> +	VM_WARN_ON(prev && addr <= prev->vm_start);
-> +	VM_WARN_ON(curr && (addr != curr->vm_start || end > curr->vm_end));
-> +	VM_WARN_ON(addr >= end);
-
-Maybe converting to VM_WARN_ON_ONCE() would be kinder.
-
+David / dhildenb
 
