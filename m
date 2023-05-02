@@ -2,111 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A42326F3FBD
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 11:03:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A98056F3FC2
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 11:04:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233410AbjEBJDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 05:03:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60164 "EHLO
+        id S233706AbjEBJDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 05:03:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjEBJDJ (ORCPT
+        with ESMTP id S233499AbjEBJDn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 05:03:09 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64DCA2D4A
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 02:03:08 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3427kchj001574;
-        Tue, 2 May 2023 09:02:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=eYQUmLC99szVAF3zHwOE1YAgtRpm9SqAl6mY2ZpeUMY=;
- b=fLnjDLx3Uf5tJ1w38wJop4CQFlr/IFBybrUDkfsw5AEgZ0E26OpdBTZgyY55wF1+s49f
- e5wdxYmNk4jymedAGuc66bSuWno8spdyNHOuTAlUxiQOf6i6KMmRS4ADUe3edufRaLEE
- d/O7z0JUUTNUAnrCswfz/hip1GE1lsNF06vhY1SG0VOApPniGq8Wgy/JZxOqMnON6PfV
- 9ed9dfqHcagjjQjZQkHtjIez+NZkFrJWLbmEVnTGOQqBbtYRYN8AVhPi2Qq4NZLUZ3do
- V2vDHMTXdtNLwxPvgHWxYXLjYGJf8ZiscwzLqsbNVkXce+89z1nU+Wvo2oAt+5hKRk4H kQ== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qakdssbpj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 02 May 2023 09:02:56 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34292tkT009562
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 2 May 2023 09:02:55 GMT
-Received: from hu-pbaronia-blr.qualcomm.com (10.80.80.8) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Tue, 2 May 2023 02:02:51 -0700
-From:   Prathu Baronia <quic_pbaronia@quicinc.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Tejun Heo <tj@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Prathu Baronia <quic_pbaronia@quicinc.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Zqiang <qiang1.zhang@intel.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] kthread: fix spelling typo and grammar in comments
-Date:   Tue, 2 May 2023 14:32:40 +0530
-Message-ID: <20230502090242.3037194-1-quic_pbaronia@quicinc.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 2 May 2023 05:03:43 -0400
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE8A3586
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 02:03:41 -0700 (PDT)
+Received: by mail-il1-x136.google.com with SMTP id e9e14a558f8ab-32f4e0f42a7so53105ab.1
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 02:03:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683018221; x=1685610221;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NKVfIlBvsYHMWDxi0uBcvmDgbiWUYMz6a+J28iJYmJA=;
+        b=2ad2cOPQIGv+I5wDpt6S7LzAQBXSlVZJ+z6YhICzmFlUutg4zMkL7TI279sxH540G8
+         H+P7CZUZpNY1va1AxKMtQw6bX607072FfV/9Tx0qXqIiZKWOvuYFAgV53OPKsvvNOjSw
+         sjB4CPq+byYze/jaktc2S/yGEZprfGz0ENy9in4n5OXSwYe01FnroZwhSHXilCTjBBZT
+         nnCyYjkvLmrJfvnxmxtlDZmJAvXWoxrwT5vzAoqf5b6Rc1DkLGFMeMrmeO1I8cl9xlyH
+         +zahBxiZp7+eCu1P3hgE4IO2jKqatDPLmAIL1S05RXMfmQ23FFFC/0stZWr4f+gdGk0l
+         EXAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683018221; x=1685610221;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NKVfIlBvsYHMWDxi0uBcvmDgbiWUYMz6a+J28iJYmJA=;
+        b=LKTLcAbpbB56foAkzTZBZEE0wFpd0d93P7b4S0S4Fc6N1pEQKIOPew1twkHOXFJ34a
+         LOyAHV8LwxGSU4spA60qi2WVvhSaEdRF1wfVxCWysCbg/Sqbg5Z2W7hVyFruCDrZsa1r
+         vE0XwDSztdferCVwmePcJbHWeR+6LGT3IHpuNrMC7bGSmYnYNJNG4FLvkPhHO2Ib06HZ
+         ahE6W1yJ1GumJYXIdh9Ya+qKszlUzyXm/my0UiE+PHg4ILXQutxkPnfZn0NTRsTDHBOp
+         JPI7X/Ju9gksanP+EInZ6iC0SMJjEiNl1nTR8XsIcRXi/isXzN0GPxKu1w41UIavF2fM
+         MTsQ==
+X-Gm-Message-State: AC+VfDzukEeErYRWPgz1ffg4p5ae+vPIQab5duxlgLb1Y+xdQXjc3fuW
+        D8tKNDAuShEUSNz3HWYB9IZogXL5aY4USxRzXJJ6rA==
+X-Google-Smtp-Source: ACHHUZ747jLD/GDpZ0wLuJpv/ONcTgaCC5dR/I/K0IsHqe5jU64l+X+v7KsS7HlXQ828WToieUmI/aWMNaqocZ39qVc=
+X-Received: by 2002:a05:6e02:1e06:b0:32b:7232:dac6 with SMTP id
+ g6-20020a056e021e0600b0032b7232dac6mr231658ila.18.1683018220705; Tue, 02 May
+ 2023 02:03:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: fkaPjjJKDwvO59jTYou9diyZZQUiYUhB
-X-Proofpoint-ORIG-GUID: fkaPjjJKDwvO59jTYou9diyZZQUiYUhB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-02_05,2023-04-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 phishscore=0 clxscore=1011 priorityscore=1501 mlxscore=0
- suspectscore=0 lowpriorityscore=0 adultscore=0 mlxlogscore=869 spamscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2305020077
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <0000000000002e8a7c05fa9e1a7a@google.com> <bdb29f17-dac3-20a3-c726-963259b95208@gmail.com>
+In-Reply-To: <bdb29f17-dac3-20a3-c726-963259b95208@gmail.com>
+From:   Aleksandr Nogikh <nogikh@google.com>
+Date:   Tue, 2 May 2023 11:03:29 +0200
+Message-ID: <CANp29Y6UGNweLS7kDx+nji9z2hUi8wXVfioKwpYftQmE4ueJZQ@mail.gmail.com>
+Subject: Re: [syzbot] Monthly wireguard report (Apr 2023)
+To:     "J.F. Samuels - K2CIB" <radiowhiz@gmail.com>
+Cc:     syzbot <syzbot+listded2f47f5f1d416c4059@syzkaller.appspotmail.com>,
+        Jason@zx2c4.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        wireguard@lists.zx2c4.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-- `If present` -> `If present,'
-- `reuturn` -> `return`
-- `function exit safely` -> `function to exit safely`
+Hello John,
 
-Signed-off-by: Prathu Baronia <quic_pbaronia@quicinc.com>
----
- kernel/kthread.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Do you mean only these monthly reports or all messages from the mailing lis=
+ts?
 
-diff --git a/kernel/kthread.c b/kernel/kthread.c
-index 7e6751b29101..d7fd133f63dd 100644
---- a/kernel/kthread.c
-+++ b/kernel/kthread.c
-@@ -311,10 +311,10 @@ void __noreturn kthread_exit(long result)
-  * @comp: Completion to complete
-  * @code: The integer value to return to kthread_stop().
-  *
-- * If present complete @comp and the reuturn code to kthread_stop().
-+ * If present, complete @comp and then return code to kthread_stop().
-  *
-  * A kernel thread whose module may be removed after the completion of
-- * @comp can use this function exit safely.
-+ * @comp can use this function to exit safely.
-  *
-  * Does not return.
-  */
--- 
-2.25.1
+You received this specific email because you're subscribed to one of
+the following lists:
 
+linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+wireguard@lists.zx2c4.com (the email was also sent to
+syzkaller-bugs@googlegroups.com, but you're not a member of it -- I've
+just checked).
+
+You could determine the exact one by looking at the "Mailing-list"
+header in the raw message.
+
+--
+Aleksandr
+
+On Mon, May 1, 2023 at 5:56=E2=80=AFPM J.F. Samuels - K2CIB <radiowhiz@gmai=
+l.com> wrote:
+>
+> I don't know how I subscribed to this - wish I knew enough to be of help!
+>
+> Please unsubscribe me from all related lists.
+>
+> Thanks,
+>
+> John
+>
+>
+>
+> On 5/1/2023 5:03 AM, syzbot wrote:
+>
+> Hello wireguard maintainers/developers,
+>
+> This is a 31-day syzbot report for the wireguard subsystem.
+> All related reports/information can be found at:
+> https://syzkaller.appspot.com/upstream/s/wireguard
+>
+> During the period, 1 new issues were detected and 0 were fixed.
+> In total, 4 issues are still open and 13 have been fixed so far.
+>
+> Some of the still happening issues:
+>
+> Ref Crashes Repro Title
+> <1> 620     No    KCSAN: data-race in wg_packet_send_staged_packets / wg_=
+packet_send_staged_packets (3)
+>                   https://syzkaller.appspot.com/bug?extid=3D6ba34f16b98fe=
+40daef1
+> <2> 440     No    KCSAN: data-race in wg_packet_decrypt_worker / wg_packe=
+t_rx_poll (2)
+>                   https://syzkaller.appspot.com/bug?extid=3Dd1de830e4ecda=
+ac83d89
+> <3> 6       No    KASAN: slab-use-after-free Write in enqueue_timer
+>                   https://syzkaller.appspot.com/bug?extid=3Dc2775460db0e1=
+c70018e
+>
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> To disable reminders for individual bugs, reply with the following comman=
+d:
+> #syz set <Ref> no-reminders
+>
+> To change bug's subsystems, reply with:
+> #syz set <Ref> subsystems: new-subsystem
+>
+> You may send multiple commands in a single email message.
+>
+> --
+> You received this message because you are subscribed to the Google Groups=
+ "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgi=
+d/syzkaller-bugs/bdb29f17-dac3-20a3-c726-963259b95208%40gmail.com.
