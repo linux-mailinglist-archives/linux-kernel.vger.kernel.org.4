@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BB8B6F409B
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 12:05:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CCE66F40A2
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 12:06:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233718AbjEBKFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 06:05:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51154 "EHLO
+        id S233648AbjEBKGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 06:06:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231608AbjEBKFT (ORCPT
+        with ESMTP id S229601AbjEBKGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 06:05:19 -0400
-Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 398404EC1
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 03:05:16 -0700 (PDT)
+        Tue, 2 May 2023 06:06:48 -0400
+Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E57B4C2D
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 03:06:46 -0700 (PDT)
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:f07a:92a2:297:162b])
-        by xavier.telenet-ops.be with bizsmtp
-        id rm5C2900X5FQxRj01m5CsF; Tue, 02 May 2023 12:05:13 +0200
+        by laurent.telenet-ops.be with bizsmtp
+        id rm6k2900E5FQxRj01m6k0e; Tue, 02 May 2023 12:06:45 +0200
 Received: from rox.of.borg ([192.168.97.57])
         by ramsan.of.borg with esmtp (Exim 4.95)
         (envelope-from <geert@linux-m68k.org>)
-        id 1ptmse-000ykg-9i;
-        Tue, 02 May 2023 12:05:12 +0200
+        id 1ptmu8-000ykv-GQ;
+        Tue, 02 May 2023 12:06:44 +0200
 Received: from geert by rox.of.borg with local (Exim 4.95)
         (envelope-from <geert@linux-m68k.org>)
-        id 1ptmsi-00AtFX-7Q;
-        Tue, 02 May 2023 12:05:12 +0200
+        id 1ptmuC-00AtHh-Ez;
+        Tue, 02 May 2023 12:06:44 +0200
 From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
+To:     Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Daniel Latypov <dlatypov@google.com>,
         Jonathan Corbet <corbet@lwn.net>
-Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] Documentation: timers: hrtimers: Make hybrid union historical
-Date:   Tue,  2 May 2023 12:05:10 +0200
-Message-Id: <59250a3d1c2c827b5c1833169a6e652ca6a784e6.1683021785.git.geert+renesas@glider.be>
+Subject: [PATCH] Documentation: kunit: Modular tests should not depend on KUNIT=y
+Date:   Tue,  2 May 2023 12:06:38 +0200
+Message-Id: <b403478fc67715f955b8ff40c5c99ba7cc966063.1683021926.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -49,60 +51,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Non-scalar time was removed from the ktime hybrid union in v3.17, and
-the union itself followed suit in v4.10.
+When the documentation was updated for modular tests, the dependency on
+"KUNIT=y" was forgotten to be updated, now encouraging people to create
+tests that cannot be enabled when the KUNIT framework itself is modular.
+Fix this by changing the dependency to "KUNIT".
 
-Make it clear that ktime_t is always a 64bit scalar type, to avoid
-confusing the casual reader.
+Document when it is appropriate (and required) to depend on "KUNIT=y".
 
-While at it, fix a spelling mistake.
-
-Fixes: 24e4a8c3e8868874 ("ktime: Kill non-scalar ktime_t implementation for 2038")
-Fixes: 2456e855354415bf ("ktime: Get rid of the union")
+Fixes: c9ef2d3e3f3b3e56 ("KUnit: Docs: make start.rst example Kconfig follow style.rst")
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
-Randy did several fruitless attempts to fix the typo before.
----
- Documentation/timers/hrtimers.rst | 19 +++++++------------
- 1 file changed, 7 insertions(+), 12 deletions(-)
+ Documentation/dev-tools/kunit/start.rst | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/timers/hrtimers.rst b/Documentation/timers/hrtimers.rst
-index 7ac448908d1ffd97..f88ff8bae89c8acf 100644
---- a/Documentation/timers/hrtimers.rst
-+++ b/Documentation/timers/hrtimers.rst
-@@ -123,17 +123,12 @@ equivalent to timer_delete() and timer_delete_sync()] - so there's no direct
- potential for code sharing either.
+diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
+index c736613c9b199bff..9619a044093042ce 100644
+--- a/Documentation/dev-tools/kunit/start.rst
++++ b/Documentation/dev-tools/kunit/start.rst
+@@ -256,9 +256,12 @@ Now we are ready to write the test cases.
  
- Basic data types: every time value, absolute or relative, is in a
--special nanosecond-resolution type: ktime_t. The kernel-internal
--representation of ktime_t values and operations is implemented via
--macros and inline functions, and can be switched between a "hybrid
--union" type and a plain "scalar" 64bit nanoseconds representation (at
--compile time). The hybrid union type optimizes time conversions on 32bit
--CPUs. This build-time-selectable ktime_t storage format was implemented
--to avoid the performance impact of 64-bit multiplications and divisions
--on 32bit CPUs. Such operations are frequently necessary to convert
--between the storage formats provided by kernel and userspace interfaces
--and the internal time format. (See include/linux/ktime.h for further
--details.)
-+special nanosecond-resolution 64bit type: ktime_t.
-+(Originally, the kernel-internal representation of ktime_t values and
-+operations was implemented via macros and inline functions, and could be
-+switched between a "hybrid union" type and a plain "scalar" 64bit
-+nanoseconds representation (at compile time). This was abandoned in the
-+context of the Y2038 work.)
+ 	config MISC_EXAMPLE_TEST
+ 		tristate "Test for my example" if !KUNIT_ALL_TESTS
+-		depends on MISC_EXAMPLE && KUNIT=y
++		depends on MISC_EXAMPLE && KUNIT
+ 		default KUNIT_ALL_TESTS
  
- hrtimers - rounding of timer values
- -----------------------------------
-@@ -148,7 +143,7 @@ a given clock has - be it low-res, high-res, or artificially-low-res.
- hrtimers - testing and verification
- -----------------------------------
++Note: If your test does not support being built as a loadable module (which is
++discouraged), replace tristate by bool, and depend on KUNIT=y instead of KUNIT.
++
+ 3. Add the following lines to ``drivers/misc/Makefile``:
  
--We used the high-resolution clock subsystem ontop of hrtimers to verify
-+We used the high-resolution clock subsystem on top of hrtimers to verify
- the hrtimer implementation details in praxis, and we also ran the posix
- timer tests in order to ensure specification compliance. We also ran
- tests on low-resolution clocks.
+ .. code-block:: make
 -- 
 2.34.1
 
