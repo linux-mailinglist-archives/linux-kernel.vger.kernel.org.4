@@ -2,220 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20CD56F4CD7
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 00:17:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF86B6F4CD9
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 00:25:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbjEBWRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 18:17:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48358 "EHLO
+        id S229758AbjEBWZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 18:25:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjEBWRT (ORCPT
+        with ESMTP id S229457AbjEBWZ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 18:17:19 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25AB51BDF
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 15:17:18 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-50bc3a5f462so8011a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 15:17:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683065835; x=1685657835;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YmbVvlDH6rILyY6tXnfbqcMncYRrXasXofSLakplJ0U=;
-        b=0Zx+52LbmwmvpVvDaMOEN+kpAVC5twwGRNxWSorANbKdlxAGZE8+JK0s0WrXumY0vl
-         pLJkS4FHqVHawC/xFXRfaTQzPr1BHi9lFU1XwP1AoZXDRD/NafJso0cOAWq1CRUFOFtP
-         pR09AxDXof/RzzQqnluikAR4DMSJ/pRAKkqTubeQWg8oqDYu72RZB5iRn+pyZBsoRcjm
-         qq5P8BUU9VElmmwg7EpXd+LsiyjI/JpZ6fVrsQxW+2W0ewMmGOXiRUHlpqRb0EUnKpjw
-         i5QKmIz5ODns8BkepEfI4HVJBElNyKOxjIM/tLPuuEcZEiHew38+SqGYKKfCe/Va3OHL
-         yd7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683065835; x=1685657835;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YmbVvlDH6rILyY6tXnfbqcMncYRrXasXofSLakplJ0U=;
-        b=TxCWhyetlpnFApj8ojvx/sjqGSaH8A94wRWgZ7Opx27Yb8jKZs1QFQCIza1ERZxwdp
-         pJc3NCN9kfnenG76wGJg8bx6ll/tuJojtmB09npS9qheSoVsFJ5ojnEDla5rmqO73BI/
-         AxZXytP6PTOFRDuXwLf+CNN5qdQxoyqKXaZsPHenKaCT/tuZ2IEUl8zcWROhAunmTTLX
-         QR1Xj/P/IBne/dZbVmHAM6ZvPE78gUbk8v621WNxx3RQ7eL5ANelceVOjlly+RJj3y3U
-         j93/ASkHKzIWE//N7V+pDtlePxpK2q1rRB+1Efy5t7EBc5qm/yhJJSCbP9PjvO+XNi3S
-         XbvA==
-X-Gm-Message-State: AC+VfDwYcUv5QVjgPetsJirEejX7LIUlWdDL2pgwK6gwOUlp/wA0vYln
-        wja+FNjPS6DIFWPI7D1z33Hcmw8hhA26XLIK8M2+OQ==
-X-Google-Smtp-Source: ACHHUZ4+qKsuCEwxxMeuBpwyPkGLYsNmLhN3XhaqFAmIHp0yJGcln44HJ6fyzdv0LRBekMBiLCmXordtNDZASZxGgDg=
-X-Received: by 2002:a05:6402:3213:b0:50a:31d0:bc58 with SMTP id
- g19-20020a056402321300b0050a31d0bc58mr36239eda.2.1683065835533; Tue, 02 May
- 2023 15:17:15 -0700 (PDT)
+        Tue, 2 May 2023 18:25:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2EB610E7;
+        Tue,  2 May 2023 15:25:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 399C062916;
+        Tue,  2 May 2023 22:25:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E3A9C433A4;
+        Tue,  2 May 2023 22:25:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683066327;
+        bh=p6tGDs6cfabXvT/biu59cKim9mysMg3Q5CdtBG9oN3U=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=VnvGj4y0t06kGlOynnuR4B5RpXXLAZtmaEP39DSRpE8zgeDNVN4Yg62o4Y0NB9Sn5
+         6bnGvHLxJiq2RI8I5KBQVbZI4qhIBVBrFFzA/Otx3mmfUkh3cpNZd0R9ycEgFqEIfW
+         wpS1cIJyE9uffrTCCUL56y52GznK68OJAcdzGfzcdtprgWSXCWrWFcBsjQQXTd1Vcz
+         LFQ9HuVd9EQXMAl9VRNWyQXs9b6DH3bpJ8pVYuQo6oCy91VjIn5DF5q9K9ITbB+nkh
+         qBDD0SeRV7FUc8PscJd/nWOnwtYahMr0R3cksIezVqXSXgijzV9ezCP55beJvahWnO
+         O+6qkHVdd6+Iw==
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2a8c51ba511so43413541fa.1;
+        Tue, 02 May 2023 15:25:27 -0700 (PDT)
+X-Gm-Message-State: AC+VfDwl5TYpJdROPp5Ui/1hCrZmE3Et/nKVlRFT8VZIIO7STccht3x1
+        2+kklkplD2tR7XPtDqJubvCVsy/8zgRHOFAqZ6A=
+X-Google-Smtp-Source: ACHHUZ4avdpthadjO3gTttNI6hwHrd0BY/FTJBOc8OGJj8VI9BZbqcEwFzhqWiZTr4yxUlkxlDBcL/zfsHuzd1eGp1k=
+X-Received: by 2002:ac2:5608:0:b0:4ef:f64b:65b4 with SMTP id
+ v8-20020ac25608000000b004eff64b65b4mr380429lfd.26.1683066325488; Tue, 02 May
+ 2023 15:25:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230420010029.2702543-1-elsk@google.com> <CAK7LNAQxmi7GadEs2b6PA-6R1veRRL0+NW-hmpE1HrhzWKX33g@mail.gmail.com>
- <CAABy=s39CCZ1yx11NtdgpTG95hFj6r7Q-g88qWrpdAak6dA7jw@mail.gmail.com>
-In-Reply-To: <CAABy=s39CCZ1yx11NtdgpTG95hFj6r7Q-g88qWrpdAak6dA7jw@mail.gmail.com>
-From:   Yifan Hong <elsk@google.com>
-Date:   Tue, 2 May 2023 15:16:38 -0700
-Message-ID: <CAABy=s17M5Xu_LhfrzP3vton9AK7n30PB9Hm3Z7iAHS+H5WxcA@mail.gmail.com>
-Subject: Re: [PATCH v2] kheaders: Follow symlinks to source files.
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Nicolas Schier <nicolas@fjasle.eu>,
-        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        Matthias Maennich <maennich@google.com>,
-        Daniel Mentz <danielmentz@google.com>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org
+References: <20230502164102.1a51cdb4@gandalf.local.home>
+In-Reply-To: <20230502164102.1a51cdb4@gandalf.local.home>
+From:   Song Liu <song@kernel.org>
+Date:   Tue, 2 May 2023 15:25:13 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW76--qgbEWn8YZY7Hj1GjB9__kfSjWnHz=WNBSV8GyCXQ@mail.gmail.com>
+Message-ID: <CAPhsuW76--qgbEWn8YZY7Hj1GjB9__kfSjWnHz=WNBSV8GyCXQ@mail.gmail.com>
+Subject: Re: [PATCH] ftrace: Allow inline functions not inlined to be traced
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        live-patching@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Ingo Molnar <mingo@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 24, 2023 at 11:32=E2=80=AFAM Yifan Hong <elsk@google.com> wrote=
-:
+On Tue, May 2, 2023 at 1:41=E2=80=AFPM Steven Rostedt <rostedt@goodmis.org>=
+ wrote:
 >
-> On Sun, Apr 23, 2023 at 4:53=E2=80=AFAM Masahiro Yamada <masahiroy@kernel=
-.org> wrote:
-> >
-> > On Thu, Apr 20, 2023 at 10:01=E2=80=AFAM Yifan Hong <elsk@google.com> w=
-rote:
-> > >
-> > > When the kernel is built inside a sandbox container,
-> > > a forest of symlinks to the source files may be
-> > > created in the container. In this case, the generated
-> > > kheaders.tar.xz should follow these symlinks
-> > > to access the source files, instead of packing
-> > > the symlinks themselves.
-> > >
-> > > Signed-off-by: Yifan Hong <elsk@google.com>
-> > > Reviewed-by: Matthias Maennich <maennich@google.com>
-> >
-> >
-> >
-> > Please teach me how to reproduce your problem.
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 >
-> Thanks for your reply. When I say "container", I mean a forest of
-> symlinks that point to the original source files. Here are the steps I
-> do to mimic the sandbox that the container program creates.
+> Over 10 years ago there were many bugs that caused function tracing to
+> crash because some inlined function was not inlined and should not have
+> been traced. This made it hard to debug because when the developer tried
+> to reproduce it, if their compiler still inlined the function, the bug
+> would not trigger. The solution back then was simply to add "notrace" to
+> "inline" which would make sure all functions that are marked inline are
+> never traced even when the compiler decides to not inline them.
 >
-> On an x86 machine, I have a linux tree checkout at /mnt/sdb/linux, and
-> an empty directory at /mnt/sdb/linux2. Then I **created this fake
-> sandbox** in /mnt/sdb/linux2 by doing:
-> ```
-> $ cd /mnt/sdb/linux
-> $ find . -type d -exec mkdir -p /mnt/sdb/linux2/{} \;
-> $ find . -type f -exec ln -sf /mnt/sdb/linux/{} /mnt/sdb/linux2/{} \;
-> ```
+> A lot has changed over the last 10 years.
 >
-> Then, I cross compile an arm64 kernel with tinyconfig. Here are the
-> steps I take:
-> ```
-> export ARCH=3Darm64
-> export SUBARCH=3Darm
-> export CROSS_COMPILE=3D/home/elsk/toolchains/aarch64--glibc--stable-2022.=
-08-1/bin/aarch64-linux-
-> # downloaded from https://toolchains.bootlin.com/
-> make tinyconfig; make menuconfig # then select CONFIG_SYSFS and CONFIG_IK=
-HEADERS
-> make -j64
-> ```
+> 1) ftrace_test_recursion_trylock() is now used by all ftrace hooks which
+>    will prevent the recursive crashes from happening that was caused by
+>    inlined functions being traced.
 >
-> This will show that kheaders_data.tar.xz contains the symlinks, e.g. in m=
-y case:
-> ```
-> $ tar tvf ./kernel/kheaders_data.tar.xz | head
-> [...]
-> lrwxrwxrwx 0/0               0 2023-04-24 11:19
-> ./arch/arm64/include/asm/acenv.h ->
-> /mnt/sdb/linux/./arch/arm64/include/asm/acenv.h
-> ```
+> 2) noinstr is now used to mark pretty much all functions that would also
+>    cause problems if they are traced.
 >
-> However, the issue for me is that these symlinks are no longer useful
-> under sysfs when I am booting the kernel on the target arm64 machine,
-> because it is a different machine (arm64) than the machine (x86) where
-> I compiled this kernel.
+> Today, it is no longer a problem if an inlined function is not inlined an=
+d
+> is traced. Removing notrace from inline has been requested several times
+> over the years. I believe it is now safe to do so.
 >
-> >
-> >
-> >
-> > I built the kernel inside a container,
-> > but I do not see any difference.
-> >
-> >
-> >
-> > We have some symbolic links in include/,
-> > but those reference relative paths.
-> > How building the kernel in a container
-> > makes a difference?
->
-> Please see above; the container contains a forest of symlinks pointing
-> to the original source tree. Then `make` is executed in that container
-> directory.
->
-> >
-> >
-> > masahiro@bc5c2c958b53:/tmp/foo$ tar Jxf kheaders_data.tar.xz
-> > masahiro@bc5c2c958b53:/tmp/foo$ find . -type l
-> > ./include/dt-bindings/clock/qcom,dispcc-sm8350.h
-> > ./include/dt-bindings/clock/qcom,dispcc-sm8150.h
-> > ./include/dt-bindings/input/linux-event-codes.h
-> > masahiro@bc5c2c958b53:/tmp/foo$ find . -type l | xargs ls -l
-> > lrwxrwxrwx 1 masahiro masahiro 20 Apr 23 11:47
-> > ./include/dt-bindings/clock/qcom,dispcc-sm8150.h ->
-> > qcom,dispcc-sm8250.h
-> > lrwxrwxrwx 1 masahiro masahiro 20 Apr 23 11:47
-> > ./include/dt-bindings/clock/qcom,dispcc-sm8350.h ->
-> > qcom,dispcc-sm8250.h
-> > lrwxrwxrwx 1 masahiro masahiro 36 Apr 23 11:47
-> > ./include/dt-bindings/input/linux-event-codes.h ->
-> > ../../uapi/linux/input-event-codes.h
-> >
-> >
-> >
-> >
-> >
-> >
-> >
-> >
-> >
-> >
-> >
-> >
-> > > ---
-> > >  kernel/gen_kheaders.sh | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/kernel/gen_kheaders.sh b/kernel/gen_kheaders.sh
-> > > index 1ef9a87511f5..70a75a9a7535 100755
-> > > --- a/kernel/gen_kheaders.sh
-> > > +++ b/kernel/gen_kheaders.sh
-> > > @@ -87,7 +87,7 @@ find $cpio_dir -type f -print0 |
-> > >  # pre-sorted, as --sort=3Dname might not be available.
-> > >  find $cpio_dir -printf "./%P\n" | LC_ALL=3DC sort | \
-> > >      tar "${KBUILD_BUILD_TIMESTAMP:+--mtime=3D$KBUILD_BUILD_TIMESTAMP=
-}" \
-> > > -    --owner=3D0 --group=3D0 --numeric-owner --no-recursion \
-> > > +    --owner=3D0 --group=3D0 --numeric-owner --no-recursion --derefer=
-ence \
-> > >      -I $XZ -cf $tarfile -C $cpio_dir/ -T - > /dev/null
-> > >
-> > >  echo $headers_md5 > kernel/kheaders.md5
-> > > --
-> > > 2.40.0.634.g4ca3ef3211-goog
-> > >
-> >
-> >
-> > --
-> > Best Regards
-> > Masahiro Yamada
-> >
-> > --
-> > To unsubscribe from this group and stop receiving emails from it, send =
-an email to kernel-team+unsubscribe@android.com.
-> >
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-Gently nagging. Is there anything I need to fix or do to improve this
-patch so it may be accepted? Thank you!
+Acked-by: Song Liu <song@kernel.org>
+
+Thanks!
+Song
+
+> ---
+>  include/linux/compiler_types.h | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+>
+> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_type=
+s.h
+> index 547ea1ff806e..c8f23ba1c339 100644
+> --- a/include/linux/compiler_types.h
+> +++ b/include/linux/compiler_types.h
+> @@ -182,9 +182,8 @@ struct ftrace_likely_data {
+>   * externally visible function. This makes extern inline behave as per g=
+nu89
+>   * semantics rather than c99. This prevents multiple symbol definition e=
+rrors
+>   * of extern inline functions at link time.
+> - * A lot of inline functions can cause havoc with function tracing.
+>   */
+> -#define inline inline __gnu_inline __inline_maybe_unused notrace
+> +#define inline inline __gnu_inline __inline_maybe_unused
+>
+>  /*
+>   * gcc provides both __inline__ and __inline as alternate spellings of
+> @@ -230,7 +229,7 @@ struct ftrace_likely_data {
+>   *     https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D67368
+>   * '__maybe_unused' allows us to avoid defined-but-not-used warnings.
+>   */
+> -# define __no_kasan_or_inline __no_sanitize_address notrace __maybe_unus=
+ed
+> +# define __no_kasan_or_inline __no_sanitize_address __maybe_unused
+>  # define __no_sanitize_or_inline __no_kasan_or_inline
+>  #else
+>  # define __no_kasan_or_inline __always_inline
+> @@ -247,7 +246,7 @@ struct ftrace_likely_data {
+>   * disable all instrumentation. See Kconfig.kcsan where this is mandator=
+y.
+>   */
+>  # define __no_kcsan __no_sanitize_thread __disable_sanitizer_instrumenta=
+tion
+> -# define __no_sanitize_or_inline __no_kcsan notrace __maybe_unused
+> +# define __no_sanitize_or_inline __no_kcsan __maybe_unused
+>  #else
+>  # define __no_kcsan
+>  #endif
+> --
+> 2.39.2
+>
