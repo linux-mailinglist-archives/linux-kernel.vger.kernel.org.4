@@ -2,97 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 076E26F4902
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 19:16:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36F316F4906
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 19:17:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234253AbjEBRQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 13:16:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54394 "EHLO
+        id S234347AbjEBRRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 13:17:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234300AbjEBRQK (ORCPT
+        with ESMTP id S231609AbjEBRR2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 13:16:10 -0400
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5008C10D5;
-        Tue,  2 May 2023 10:16:09 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id BA0F844A;
-        Tue,  2 May 2023 17:16:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net BA0F844A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1683047768; bh=HLjhLmEt6uZUUg5tiAvtcISQ613CriNHuNgTGoABfDY=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=VwxYl2gNXwlcMCTlCGtKRlYSwwcxCZ97K77RZxNTQgFZhIYIysmQxY9Z7Wd4niqlq
-         igK+TdvnFtAAeUQQEDkR6iydK4VT/USiw6gkrqqNBy6EgevgFjymiDRTeROkfE89ez
-         40cXM75Tou2hjNqZFhSBAxaiVakTobJhFc/fJVCMDfI02bPPiQAVhmBaI1fKiy9seI
-         1gge2tOzK4bXdlzuRoyyeftyqoHgyKy+ac1nnKBL1SRp6xdQbBkknWtNr3DIGa6kJT
-         SpcGTeP153GwSsis6FAf4AWlZeyJN/S21CRlcLepsNufLmn/ii6b48O58hRykjJg0a
-         //fDsQ/eymiRA==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Carlos Bilbao <carlos.bilbao@amd.com>
-Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        mauriciofb@gmail.com, Carlos Bilbao <carlos.bilbao@amd.com>
-Subject: Re: [PATCH] docs/sp_SP: Add translation of process/adding-syscalls
-In-Reply-To: <fc88992d-dfda-0265-5199-d6cae3ba3260@amd.com>
-References: <20230315143526.1213813-1-carlos.bilbao@amd.com>
- <fc88992d-dfda-0265-5199-d6cae3ba3260@amd.com>
-Date:   Tue, 02 May 2023 11:16:07 -0600
-Message-ID: <87ilda7iy0.fsf@meer.lwn.net>
+        Tue, 2 May 2023 13:17:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E211B5
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 10:16:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683047802;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FxFefL2TaEuqaJkcFu7xJC55lri7raM2nXvu+Ph57wY=;
+        b=NskkJKtDbddPg8p7HSo0SbpNY11EMgMs/LYk7ZRHA58Tm1eCMGp34dTebNhSbqXwWXtn6N
+        Lh9bxIE7l3DHtG6W86O3FmA2O5WN8myyrfXnuSsxwmI9JjzbtIriQWR1iHCg/FTt8ehRw9
+        JGLKe+lqWqzrP6VbS6idmaoJEV4rAdM=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-457-A2oatiY_O1y9SoJXZOlH-g-1; Tue, 02 May 2023 13:16:41 -0400
+X-MC-Unique: A2oatiY_O1y9SoJXZOlH-g-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f3157128b4so110764135e9.0
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 10:16:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683047800; x=1685639800;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FxFefL2TaEuqaJkcFu7xJC55lri7raM2nXvu+Ph57wY=;
+        b=hWK5hJOMcvnPFJEOrJew3NQgn3xXeRJOCi3YhYdiFnO4OdO7HY8//NMj72wI1/XFXS
+         QobuBWPDyMRd/H45Mk7Sshkd7X/Yg7CZVmqYSXHXLych+dX42P8QR99bMo4EbaCJUfLO
+         7M12qrABCuP1mUnxjrWH+VZEmnWOWliVoX3i6xHM8FQfjiitfllc0oX00KycSZcIdM8U
+         w+9uXuSrN7kMmxOc7UWa1zBwmjN6dEE+B873nMD+NyHyMyNetdOF6wbfr0ogJb6dImNc
+         vz+/s9by4EgoV/kN/YOvlq1TM0HXbnQDY96JuQOGtFsAwwVI2WEUqFIJSwJo4c9C/iF3
+         cd3w==
+X-Gm-Message-State: AC+VfDzN1YHtwTd6N/qJFInX4kKuuKa2AOVrr3ZG8o3y1XQRh1CvGnse
+        6OlEo+0fGsXvpZ/fHTM+/FaO10eipkchzcE8Q76wKy/oZwf0kH935E2lXiQgzr4GooTel4Fn8Dd
+        WFqS38SGd17r3wklb7oGY/jrfjTXF/CV9
+X-Received: by 2002:a05:600c:190e:b0:3f1:96a8:3560 with SMTP id j14-20020a05600c190e00b003f196a83560mr16415002wmq.10.1683047800070;
+        Tue, 02 May 2023 10:16:40 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7oCTXDG5XgtbjQb7PsM2Y4y6C+rc08d37MchNAu0yZOIk2vbjILr1cpDOC4wKU8cadt3Eyqg==
+X-Received: by 2002:a05:600c:190e:b0:3f1:96a8:3560 with SMTP id j14-20020a05600c190e00b003f196a83560mr16414984wmq.10.1683047799651;
+        Tue, 02 May 2023 10:16:39 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c700:2400:6b79:2aa:9602:7016? (p200300cbc70024006b7902aa96027016.dip0.t-ipconnect.de. [2003:cb:c700:2400:6b79:2aa:9602:7016])
+        by smtp.gmail.com with ESMTPSA id y5-20020a1c4b05000000b003e91b9a92c9sm35873689wma.24.2023.05.02.10.16.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 May 2023 10:16:39 -0700 (PDT)
+Message-ID: <03e591ce-debc-bba1-c55e-ce590cc1f38d@redhat.com>
+Date:   Tue, 2 May 2023 19:16:36 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v7 1/3] mm/mmap: separate writenotify and dirty tracking
+ logic
+Content-Language: en-US
+To:     Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Mika Penttila <mpenttil@redhat.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Theodore Ts'o <tytso@mit.edu>, Peter Xu <peterx@redhat.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>
+References: <cover.1683044162.git.lstoakes@gmail.com>
+ <72a90af5a9e4445a33ae44efa710f112c2694cb1.1683044162.git.lstoakes@gmail.com>
+ <56696a72-24fa-958e-e6a1-7a17c9e54081@redhat.com>
+ <f777a151-edfc-4882-8aca-9a926179c5bb@lucifer.local>
+ <bf04a98a-9de6-4532-a36c-59572d22dd7c@lucifer.local>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <bf04a98a-9de6-4532-a36c-59572d22dd7c@lucifer.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Carlos Bilbao <carlos.bilbao@amd.com> writes:
+On 02.05.23 19:09, Lorenzo Stoakes wrote:
+> On Tue, May 02, 2023 at 05:53:46PM +0100, Lorenzo Stoakes wrote:
+>> On Tue, May 02, 2023 at 06:38:53PM +0200, David Hildenbrand wrote:
+>>> On 02.05.23 18:34, Lorenzo Stoakes wrote:
+>>>> vma_wants_writenotify() is specifically intended for setting PTE page table
+>>>> flags, accounting for existing PTE flag state and whether that might
+>>>> already be read-only while mixing this check with a check whether the
+>>>> filesystem performs dirty tracking.
+>>>>
+>>>> Separate out the notions of dirty tracking and a PTE write notify checking
+>>>> in order that we can invoke the dirty tracking check from elsewhere.
+>>>>
+>>>> Note that this change introduces a very small duplicate check of the
+>>>> separated out vm_ops_needs_writenotify(). This is necessary to avoid making
+>>>> vma_needs_dirty_tracking() needlessly complicated (e.g. passing a
+>>>> check_writenotify flag or having it assume this check was already
+>>>> performed). This is such a small check that it doesn't seem too egregious
+>>>> to do this.
+>>>>
+>>>> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+>>>> Reviewed-by: John Hubbard <jhubbard@nvidia.com>
+>>>> Reviewed-by: Mika Penttilä <mpenttil@redhat.com>
+>>>> Reviewed-by: Jan Kara <jack@suse.cz>
+>>>> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+>>>> ---
+>>>>    include/linux/mm.h |  1 +
+>>>>    mm/mmap.c          | 36 +++++++++++++++++++++++++++---------
+>>>>    2 files changed, 28 insertions(+), 9 deletions(-)
+>>>>
+>>>> diff --git a/include/linux/mm.h b/include/linux/mm.h
+>>>> index 27ce77080c79..7b1d4e7393ef 100644
+>>>> --- a/include/linux/mm.h
+>>>> +++ b/include/linux/mm.h
+>>>> @@ -2422,6 +2422,7 @@ extern unsigned long move_page_tables(struct vm_area_struct *vma,
+>>>>    #define  MM_CP_UFFD_WP_ALL                 (MM_CP_UFFD_WP | \
+>>>>    					    MM_CP_UFFD_WP_RESOLVE)
+>>>> +bool vma_needs_dirty_tracking(struct vm_area_struct *vma);
+>>>>    int vma_wants_writenotify(struct vm_area_struct *vma, pgprot_t vm_page_prot);
+>>>>    static inline bool vma_wants_manual_pte_write_upgrade(struct vm_area_struct *vma)
+>>>>    {
+>>>> diff --git a/mm/mmap.c b/mm/mmap.c
+>>>> index 5522130ae606..295c5f2e9bd9 100644
+>>>> --- a/mm/mmap.c
+>>>> +++ b/mm/mmap.c
+>>>> @@ -1475,6 +1475,31 @@ SYSCALL_DEFINE1(old_mmap, struct mmap_arg_struct __user *, arg)
+>>>>    }
+>>>>    #endif /* __ARCH_WANT_SYS_OLD_MMAP */
+>>>> +/* Do VMA operations imply write notify is required? */
+>>>> +static bool vm_ops_needs_writenotify(const struct vm_operations_struct *vm_ops)
+>>>> +{
+>>>> +	return vm_ops && (vm_ops->page_mkwrite || vm_ops->pfn_mkwrite);
+>>>> +}
+>>>> +
+>>>> +/*
+>>>> + * Does this VMA require the underlying folios to have their dirty state
+>>>> + * tracked?
+>>>> + */
+>>>> +bool vma_needs_dirty_tracking(struct vm_area_struct *vma)
+>>>> +{
+>>>
+>>> Sorry for not noticing this earlier, but ...
+>>
+>> pints_owed++
 
-> Hello Jon,
->
-> I applied on top of my most recent docs-next version:
->
-> 0b656310bfc33c5e044df9cf6013df8280ec69cc ("docs/admin-guide/mm/ksm.rst fix
-> intraface -> interface typo")
->
-> and it worked, and make htmldocs too. Could you please tell me what errors
-> or warnings are you experiencing?
+Having tired eyes and jumping back and forth between tasks really seems 
+to start getting expensive ;)
 
-How did you try to apply it?  I get the dreaded:
+>>
+>>>
+>>> what about MAP_PRIVATE mappings? When we write, we populate an anon page,
+>>> which will work as expected ... because we don't have to notify the fs?
+>>>
+>>> I think you really also want the "If it was private or non-writable, the
+>>> write bit is already clear */" part as well and remove "false" in that case.
+>>>
+>>
+>> Not sure a 'write bit is already clear' case is relevant to checking
+>> whether a filesystem dirty tracks? That seems specific entirely to the page
+>> table bits.
+>>
+>> That's why I didn't include it,
+>>
+>> A !VM_WRITE shouldn't be GUP-writable except for FOLL_FORCE, and that
+>> surely could be problematic if VM_MAYWRITE later?
+>>
+>> Thinking about it though a !VM_SHARE should probably can be safely assumed
+>> to not be dirty-trackable, so we probably do need to add a check for
+>> !VM_SHARED -> !vma_needs_dirty_tracking
+>>
+> 
+> On second thoughts, we explicitly check FOLL_FORCE && !is_cow_mapping() in
+> check_vma_flags() so that case cannot occur.
+> 
+> So actually yes we should probably include this on the basis of that and
+> the fact that a FOLL_WRITE operation will CoW the MAP_PRIVATE mapping.
+> 
 
-  Applying: docs/sp_SP: Add translation of process/adding-syscalls
-  error: patch failed: Documentation/translations/sp_SP/process/index.rst:18
-  error: Documentation/translations/sp_SP/process/index.rst: patch does not apply
-  Patch failed at 0001 docs/sp_SP: Add translation of process/adding-syscalls
+Yes, we only allow to FOLL_FORCE write to (exclusive) anonymous pages 
+that are mapped read-only. If it's not that, we trigger a (fake) write 
+fault.
 
-The problem was this hunk:
 
-diff --git a/Documentation/translations/sp_SP/process/index.rst
-b/Documentation/translations/sp_SP/process/index.rst
-index 351bcd3921ba..a0ff2e132c54 100644
---- a/Documentation/translations/sp_SP/process/index.rst
-+++ b/Documentation/translations/sp_SP/process/index.rst
-@@ -18,3 +18,4 @@
-    email-clients
-    programming-language
-    deprecated
-+   adding-syscalls
-
-I have your addition of magic-number.rst applied, you seemingly did not
-when the patch was generated.
-
-Figuring these things out takes time.  Next time something like this
-happens, can you just regenerate the patch against the current tree and
-resend?
-
-Anyway, I've applied it.
-
+-- 
 Thanks,
 
-jon
+David / dhildenb
+
