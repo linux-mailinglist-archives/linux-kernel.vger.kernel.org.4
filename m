@@ -2,257 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D07CA6F4B56
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 22:25:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9648E6F4B5D
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 22:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbjEBUZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 16:25:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55252 "EHLO
+        id S229962AbjEBU2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 16:28:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229976AbjEBUY5 (ORCPT
+        with ESMTP id S229797AbjEBU2u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 16:24:57 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F3F19A5
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 13:24:50 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-b99efd7c335so6147441276.0
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 13:24:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683059090; x=1685651090;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rocmb1807rrqmHexWgUhMdukatSY3k3dt0DBoDYQQ84=;
-        b=MU+gfSqaJcZXaDLvILYPcen+DJlOMwNmFrBFbKRSovZHxrvdwaG8OD3LLS//dpin/v
-         VbPxpiE8cU1T7vAtmTF6dYeGjFpACQQOGybH9aHKcC5v1qu8tP75Rjq53IDWmffZjJrr
-         tKsDUFpXswHNSV7LNAYl9HashXePGs8/8q+rr+D9/JqV7QS7JaaLeNaw5z/oiHChIdRk
-         UE4s9//C6tXLhlQyVF3+Z1jXTOQHY1Ua2URA+4E6vRPa6Kxru/WjNmMPKUxKaXgwJiRm
-         sq3XUJ1lzzhLAW3l6HbWMcyldde6rUUvXKLuFkUxWSDQY/iFYdWKz2F0FVyb5kq4I/a/
-         JBwA==
+        Tue, 2 May 2023 16:28:50 -0400
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057521996;
+        Tue,  2 May 2023 13:28:49 -0700 (PDT)
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-63b51fd2972so3084754b3a.3;
+        Tue, 02 May 2023 13:28:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683059090; x=1685651090;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rocmb1807rrqmHexWgUhMdukatSY3k3dt0DBoDYQQ84=;
-        b=ITybrYFcwqibOhY78kItWw/0edI6uNB9HssUNLz+dGujuownTl12VB5gu+EI37EByW
-         umjQVXZ5LyHRdPPVRd2Rmbqc3SxUQfg+O35VnxrO2ewenZbNXczVsi6eHK5oKQH6ohy/
-         T6Dq30CLlfWyJNfaNV9XazZxK0AM5stpw8988t3YZhLzSsl9paTllsN1OJghOjWpRSbL
-         cLrwelJ3NjAs8ta5ebvYS6JfAudJ+DfP+WlEA6UiIWtlwn0saOqGTFOBkk7+5A7f1hH1
-         MBO0nmCsApJoOepO98waZ3EPB0V2X1P+ZIlwp6J1dmo89zwYDwM9bgQbXlYO/xUnrBHq
-         f4xA==
-X-Gm-Message-State: AC+VfDzIVjUrJBupJW4sAz5ZPiGPcC9OFS8ZCxjU5vFDx3nH61Cbz6r9
-        p6m8zeD1l32hgYzc55OMwWtCBhkBuN98pBUnhm6ygQ==
-X-Google-Smtp-Source: ACHHUZ498EUoOwRRn2rdDuuuK5krmC/as1ueUrWM+kQJuCKq0a3B5NsZWZU/qAtq+dCO/VPCb+cyeEH8kNx+l9uLzbE=
-X-Received: by 2002:a25:588:0:b0:b87:d47e:9bcb with SMTP id
- 130-20020a250588000000b00b87d47e9bcbmr17713528ybf.42.1683059089603; Tue, 02
- May 2023 13:24:49 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683059328; x=1685651328;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XbDeJmwqlhx/Uc/BoBY+MH9m48arvcLqRsgyaqRFpYo=;
+        b=BENuPsWF9gUgg/2bCvwBIXdNUzVy07DMsDRxpWNu2mbLuZssbY3lB2QtUDhgNqoynN
+         f+oQwRCeWJoKGrwqaa7IFjakJvl9Bb4iSCnrtynGy/77guJ46aTnNsX2IJct+Tv+Kw2t
+         rU8+Djnpzj2w3BXH40XMZvj4wQc+rvjEbT46NMWvfRs7tx2KUpDJ3lzUY6KL+1r0ZtPp
+         Gz3tWpNW0+PTQBEOWrvrbSdx7mNcSS+J0QQfAPL1MHiFFiSWBQdlSg1QeFokgL+Gmq7R
+         g3QVVSU/pSgPSnbPYxtych4Mb3q/8IlyXaSdOs1VkUPcJ1vwMvzc6iJ8RAoZ9z+WxjxV
+         Q4bQ==
+X-Gm-Message-State: AC+VfDzWfAEHnQNMgebyY06Wvw2TTQj6FLZxx3OZhe11HlzApBQbY7nI
+        aEdm7ACsxibFujNim7JT+V4=
+X-Google-Smtp-Source: ACHHUZ7ju2RgE6ExuoCnUXJCR3+ngQ3XGa0VOc0I0/8HlKzKRgZ7xBJbT/Odu3V55q3Z3hcDcc7bhg==
+X-Received: by 2002:a05:6a20:958d:b0:ef:e240:b559 with SMTP id iu13-20020a056a20958d00b000efe240b559mr20943594pzb.46.1683059328249;
+        Tue, 02 May 2023 13:28:48 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:c683:a90b:5f41:5878? ([2620:15c:211:201:c683:a90b:5f41:5878])
+        by smtp.gmail.com with ESMTPSA id v13-20020a17090a0c8d00b00246b1b4a3ffsm8200159pja.0.2023.05.02.13.28.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 May 2023 13:28:47 -0700 (PDT)
+Message-ID: <28ea2183-d1ce-f42d-1765-9d07d7481eda@acm.org>
+Date:   Tue, 2 May 2023 13:28:45 -0700
 MIME-Version: 1.0
-References: <20230501165450.15352-1-surenb@google.com> <20230501165450.15352-20-surenb@google.com>
- <20230502175052.43814202@meshulam.tesarici.cz> <CAJuCfpGSLK50eKQ2-CE41qz1oDPM6kC8RmqF=usZKwFXgTBe8g@mail.gmail.com>
- <20230502220909.3f55ae41@meshulam.tesarici.cz>
-In-Reply-To: <20230502220909.3f55ae41@meshulam.tesarici.cz>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Tue, 2 May 2023 13:24:37 -0700
-Message-ID: <CAJuCfpGGB204PKuqjjkPBn_XHL-xLPkn0bF6xc12Bfj8=Qzcrw@mail.gmail.com>
-Subject: Re: [PATCH 19/40] change alloc_pages name in dma_map_ops to avoid
- name conflicts
-To:     =?UTF-8?B?UGV0ciBUZXNhxZnDrWs=?= <petr@tesarici.cz>
-Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
-        mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
-        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
-        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
-        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
-        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
-        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
-        tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
-        paulmck@kernel.org, pasha.tatashin@soleen.com,
-        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
-        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, gregkh@linuxfoundation.org,
-        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] scsi: ufs: core: Use readable 'return 0' in
+ ufshcd_hba_capabilities()
+Content-Language: en-US
+To:     keosung.park@samsung.com, ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
+        "mani@kernel.org" <mani@kernel.org>,
+        "quic_asutoshd@quicinc.com" <quic_asutoshd@quicinc.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <CGME20230502113116epcms2p7b83da0d683e29f667c38f5430b985388@epcms2p7>
+ <20230502113116epcms2p7b83da0d683e29f667c38f5430b985388@epcms2p7>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20230502113116epcms2p7b83da0d683e29f667c38f5430b985388@epcms2p7>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 2, 2023 at 1:09=E2=80=AFPM Petr Tesa=C5=99=C3=ADk <petr@tesaric=
-i.cz> wrote:
->
-> On Tue, 2 May 2023 11:38:49 -0700
-> Suren Baghdasaryan <surenb@google.com> wrote:
->
-> > On Tue, May 2, 2023 at 8:50=E2=80=AFAM Petr Tesa=C5=99=C3=ADk <petr@tes=
-arici.cz> wrote:
-> > >
-> > > On Mon,  1 May 2023 09:54:29 -0700
-> > > Suren Baghdasaryan <surenb@google.com> wrote:
-> > >
-> > > > After redefining alloc_pages, all uses of that name are being repla=
-ced.
-> > > > Change the conflicting names to prevent preprocessor from replacing=
- them
-> > > > when it's not intended.
-> > > >
-> > > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > > > ---
-> > > >  arch/x86/kernel/amd_gart_64.c | 2 +-
-> > > >  drivers/iommu/dma-iommu.c     | 2 +-
-> > > >  drivers/xen/grant-dma-ops.c   | 2 +-
-> > > >  drivers/xen/swiotlb-xen.c     | 2 +-
-> > > >  include/linux/dma-map-ops.h   | 2 +-
-> > > >  kernel/dma/mapping.c          | 4 ++--
-> > > >  6 files changed, 7 insertions(+), 7 deletions(-)
-> > > >
-> > > > diff --git a/arch/x86/kernel/amd_gart_64.c b/arch/x86/kernel/amd_ga=
-rt_64.c
-> > > > index 56a917df410d..842a0ec5eaa9 100644
-> > > > --- a/arch/x86/kernel/amd_gart_64.c
-> > > > +++ b/arch/x86/kernel/amd_gart_64.c
-> > > > @@ -676,7 +676,7 @@ static const struct dma_map_ops gart_dma_ops =
-=3D {
-> > > >       .get_sgtable                    =3D dma_common_get_sgtable,
-> > > >       .dma_supported                  =3D dma_direct_supported,
-> > > >       .get_required_mask              =3D dma_direct_get_required_m=
-ask,
-> > > > -     .alloc_pages                    =3D dma_direct_alloc_pages,
-> > > > +     .alloc_pages_op                 =3D dma_direct_alloc_pages,
-> > > >       .free_pages                     =3D dma_direct_free_pages,
-> > > >  };
-> > > >
-> > > > diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
-> > > > index 7a9f0b0bddbd..76a9d5ca4eee 100644
-> > > > --- a/drivers/iommu/dma-iommu.c
-> > > > +++ b/drivers/iommu/dma-iommu.c
-> > > > @@ -1556,7 +1556,7 @@ static const struct dma_map_ops iommu_dma_ops=
- =3D {
-> > > >       .flags                  =3D DMA_F_PCI_P2PDMA_SUPPORTED,
-> > > >       .alloc                  =3D iommu_dma_alloc,
-> > > >       .free                   =3D iommu_dma_free,
-> > > > -     .alloc_pages            =3D dma_common_alloc_pages,
-> > > > +     .alloc_pages_op         =3D dma_common_alloc_pages,
-> > > >       .free_pages             =3D dma_common_free_pages,
-> > > >       .alloc_noncontiguous    =3D iommu_dma_alloc_noncontiguous,
-> > > >       .free_noncontiguous     =3D iommu_dma_free_noncontiguous,
-> > > > diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-op=
-s.c
-> > > > index 9784a77fa3c9..6c7d984f164d 100644
-> > > > --- a/drivers/xen/grant-dma-ops.c
-> > > > +++ b/drivers/xen/grant-dma-ops.c
-> > > > @@ -282,7 +282,7 @@ static int xen_grant_dma_supported(struct devic=
-e *dev, u64 mask)
-> > > >  static const struct dma_map_ops xen_grant_dma_ops =3D {
-> > > >       .alloc =3D xen_grant_dma_alloc,
-> > > >       .free =3D xen_grant_dma_free,
-> > > > -     .alloc_pages =3D xen_grant_dma_alloc_pages,
-> > > > +     .alloc_pages_op =3D xen_grant_dma_alloc_pages,
-> > > >       .free_pages =3D xen_grant_dma_free_pages,
-> > > >       .mmap =3D dma_common_mmap,
-> > > >       .get_sgtable =3D dma_common_get_sgtable,
-> > > > diff --git a/drivers/xen/swiotlb-xen.c b/drivers/xen/swiotlb-xen.c
-> > > > index 67aa74d20162..5ab2616153f0 100644
-> > > > --- a/drivers/xen/swiotlb-xen.c
-> > > > +++ b/drivers/xen/swiotlb-xen.c
-> > > > @@ -403,6 +403,6 @@ const struct dma_map_ops xen_swiotlb_dma_ops =
-=3D {
-> > > >       .dma_supported =3D xen_swiotlb_dma_supported,
-> > > >       .mmap =3D dma_common_mmap,
-> > > >       .get_sgtable =3D dma_common_get_sgtable,
-> > > > -     .alloc_pages =3D dma_common_alloc_pages,
-> > > > +     .alloc_pages_op =3D dma_common_alloc_pages,
-> > > >       .free_pages =3D dma_common_free_pages,
-> > > >  };
-> > > > diff --git a/include/linux/dma-map-ops.h b/include/linux/dma-map-op=
-s.h
-> > > > index 31f114f486c4..d741940dcb3b 100644
-> > > > --- a/include/linux/dma-map-ops.h
-> > > > +++ b/include/linux/dma-map-ops.h
-> > > > @@ -27,7 +27,7 @@ struct dma_map_ops {
-> > > >                       unsigned long attrs);
-> > > >       void (*free)(struct device *dev, size_t size, void *vaddr,
-> > > >                       dma_addr_t dma_handle, unsigned long attrs);
-> > > > -     struct page *(*alloc_pages)(struct device *dev, size_t size,
-> > > > +     struct page *(*alloc_pages_op)(struct device *dev, size_t siz=
-e,
-> > > >                       dma_addr_t *dma_handle, enum dma_data_directi=
-on dir,
-> > > >                       gfp_t gfp);
-> > > >       void (*free_pages)(struct device *dev, size_t size, struct pa=
-ge *vaddr,
-> > > > diff --git a/kernel/dma/mapping.c b/kernel/dma/mapping.c
-> > > > index 9a4db5cce600..fc42930af14b 100644
-> > > > --- a/kernel/dma/mapping.c
-> > > > +++ b/kernel/dma/mapping.c
-> > > > @@ -570,9 +570,9 @@ static struct page *__dma_alloc_pages(struct de=
-vice *dev, size_t size,
-> > > >       size =3D PAGE_ALIGN(size);
-> > > >       if (dma_alloc_direct(dev, ops))
-> > > >               return dma_direct_alloc_pages(dev, size, dma_handle, =
-dir, gfp);
-> > > > -     if (!ops->alloc_pages)
-> > > > +     if (!ops->alloc_pages_op)
-> > > >               return NULL;
-> > > > -     return ops->alloc_pages(dev, size, dma_handle, dir, gfp);
-> > > > +     return ops->alloc_pages_op(dev, size, dma_handle, dir, gfp);
-> > > >  }
-> > > >
-> > > >  struct page *dma_alloc_pages(struct device *dev, size_t size,
-> > >
-> > > I'm not impressed. This patch increases churn for code which does not
-> > > (directly) benefit from the change, and that for limitations in your
-> > > tooling?
-> > >
-> > > Why not just rename the conflicting uses in your local tree, but then
-> > > remove the rename from the final patch series?
-> >
-> > With alloc_pages function becoming a macro, the preprocessor ends up
-> > replacing all instances of that name, even when it's not used as a
-> > function. That what necessitates this change. If there is a way to
-> > work around this issue without changing all alloc_pages() calls in the
-> > source base I would love to learn it but I'm not quite clear about
-> > your suggestion and if it solves the issue. Could you please provide
-> > more details?
->
-> Ah, right, I admit I did not quite understand why this change is
-> needed. However, this is exactly what I don't like about preprocessor
-> macros. Each macro effectively adds a new keyword to the language.
->
-> I believe everything can be solved with inline functions. What exactly
-> does not work if you rename alloc_pages() to e.g. alloc_pages_caller()
-> and then add an alloc_pages() inline function which calls
-> alloc_pages_caller() with _RET_IP_ as a parameter?
+On 5/2/23 04:31, Keoseong Park wrote:
+> The 'err' variable is the result of ufshcd_hba_init_crypto_capabilities()
+> regardless of MCQ capabilities. Return 'err' immediately when the function
+> error occurs. And if it is not an error, explicitly return 0.
+> 
+> Anyway, if ufshcd_hba_init_crypto_capabilities() returns error, MCQ
+> capabilities is not used because it fails to initialize UFS driver.
+> 
+> Signed-off-by: Keoseong Park <keosung.park@samsung.com>
+> ---
+>   drivers/ufs/core/ufshcd.c | 8 +++++---
+>   1 file changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+> index 9434328ba323..44328eb4158d 100644
+> --- a/drivers/ufs/core/ufshcd.c
+> +++ b/drivers/ufs/core/ufshcd.c
+> @@ -2343,18 +2343,20 @@ static inline int ufshcd_hba_capabilities(struct ufs_hba *hba)
+>   
+>   	/* Read crypto capabilities */
+>   	err = ufshcd_hba_init_crypto_capabilities(hba);
+> -	if (err)
+> +	if (err) {
+>   		dev_err(hba->dev, "crypto setup failed\n");
+> +		return err;
+> +	}
+>   
+>   	hba->mcq_sup = FIELD_GET(MASK_MCQ_SUPPORT, hba->capabilities);
+>   	if (!hba->mcq_sup)
+> -		return err;
+> +		return 0;
+>   
+>   	hba->mcq_capabilities = ufshcd_readl(hba, REG_MCQCAP);
+>   	hba->ext_iid_sup = FIELD_GET(MASK_EXT_IID_SUPPORT,
+>   				     hba->mcq_capabilities);
+>   
+> -	return err;
+> +	return 0;
+>   }
 
-I don't think that would work because we need to inject the codetag at
-the file/line of the actual allocation call. If we pass _REP_IT_ then
-we would have to lookup the codetag associated with that _RET_IP_
-which results in additional runtime overhead.
+The most important change in this patch is that ufshcd_hba_capabilities()
+returns earlier if ufshcd_hba_init_crypto_capabilities() fails. Please
+change the patch title such that it reflects this change instead of the
+other less important change.
 
->
-> Petr T
->
-> --
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kernel-team+unsubscribe@android.com.
->
+Thanks,
+
+Bart.
+
