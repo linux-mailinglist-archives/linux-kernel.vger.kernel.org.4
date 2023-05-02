@@ -2,169 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1DF96F4196
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 12:28:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C3206F419D
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 12:29:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234046AbjEBK2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 06:28:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34980 "EHLO
+        id S233847AbjEBK33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 06:29:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233867AbjEBK1n (ORCPT
+        with ESMTP id S233827AbjEBK20 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 06:27:43 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30AF5559B;
-        Tue,  2 May 2023 03:26:20 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1ptnD7-0004cs-4G; Tue, 02 May 2023 12:26:17 +0200
-Message-ID: <0fd55257-5b26-1969-18b7-97b39c3f620b@leemhuis.info>
-Date:   Tue, 2 May 2023 12:26:16 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+        Tue, 2 May 2023 06:28:26 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2062.outbound.protection.outlook.com [40.107.237.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00FE15270;
+        Tue,  2 May 2023 03:27:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fbkU6Z6Dh5YXlIp11h3PVPvjNY5wyzOSlX5ku9pGbsZGlFMAxWnY+f4GnuE4ZZ9mO+cp/DnMbIBkzIf+tQHcDQ8t4epjYq+Txa/t+8FikVhYKV9AC/ebwjl/ZHrExCqE6MYyQKcieWDKSqnzX5Qc1wWnfBW+6Ildqwjw+/Hi2z5C6y628jyFTvPJdKu+IeQJgexYZf0qiEO78jRgM8sHeRkKwVhW7LgcNFknYr7i6tsDYYDJM5N98YKfCmx7MVbKv1l9CcqSf24n/caNvYro04xbr9Z+VoZZCwLIC5WmAwZW09gXBaN5RPk9yTl07aWr4XT5gkGpDkH7pTWTKvoCBA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LZEscH39tAGkfTrs7ZKxN9bU6qGxu1Erny9xCMSgoNU=;
+ b=iI8ZJvEZyiFbKfZ8B0QOJqu2qM74hSzxW7dkV8rBlTK9Nst3dkVQ32ljOCcVMuR9t+/Sfdgo/6NWR/lcMpIh2IaGsLc2P6c+jtJI3HAwjssbB0JCewAp1oEL0fZefjeY5M7iDUuSwSfpeUKIRpL2r10HbZdzmTElMkkaHuBm87nMbNzIbYMt62F4m2VJuUC/vGmLRDXfPbH3/KwbZBrrrz8QZGJnDlwxUeOxGm3XY35jksAB1zEZDa73O2ltqli6QrcF7GyJ1RUM5LmCgXFvCKiT9Up+LhtPXqtIDrdSEb07k5zgF6CHt8cY5hxCl5ugrYgy7FoH/KpcHywmNCdXHQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LZEscH39tAGkfTrs7ZKxN9bU6qGxu1Erny9xCMSgoNU=;
+ b=fyJXoaCim82VzD71cQaaNCq8YwvozmHFpQsY/Q1omR4sG0Eq5KgjhYiL86fsxtl047hbYh8lEItwOD/G0JSB+W5xcqbeyYhJ6iqZ7u6FtXRwSyNVR+A9u9XaS7JL/NayCafHlYqQHDtNa0JHlbmxhGPqp3qmpxxg1K0nnvYoz5c=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10)
+ by MW4PR12MB7311.namprd12.prod.outlook.com (2603:10b6:303:227::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.31; Tue, 2 May
+ 2023 10:27:23 +0000
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::b4a6:94bb:6895:645]) by PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::b4a6:94bb:6895:645%7]) with mapi id 15.20.6340.030; Tue, 2 May 2023
+ 10:27:23 +0000
+Message-ID: <31dbae6c-4cbe-d7e2-bc78-beed959cbddc@amd.com>
+Date:   Tue, 2 May 2023 15:57:00 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Content-Language: en-US, de-DE
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: [regression] Bug 217386 - intel_powerclamp null pointer dereference
- in Linux 6.3.x
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux kernel regressions list <regressions@lists.linux.dev>
+Subject: Re: [PATCH v3 12/46] perf test: Test more sysfs events
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Ahmad Yasin <ahmad.yasin@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Stephane Eranian <eranian@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Samantha Alt <samantha.alt@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>,
+        Weilin Wang <weilin.wang@intel.com>,
+        Edward Baker <edward.baker@intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        Rob Herring <robh@kernel.org>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Leo Yan <leo.yan@linaro.org>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        James Clark <james.clark@arm.com>,
+        Suzuki Poulouse <suzuki.poulose@arm.com>,
+        Kang Minchul <tegongkang@gmail.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ravi Bangoria <ravi.bangoria@amd.com>
+References: <20230429053506.1962559-1-irogers@google.com>
+ <20230429053506.1962559-13-irogers@google.com>
+From:   Ravi Bangoria <ravi.bangoria@amd.com>
+In-Reply-To: <20230429053506.1962559-13-irogers@google.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1683023180;0714f1ef;
-X-HE-SMSGID: 1ptnD7-0004cs-4G
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN3PR01CA0191.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:be::15) To PH7PR12MB6588.namprd12.prod.outlook.com
+ (2603:10b6:510:210::10)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR12MB6588:EE_|MW4PR12MB7311:EE_
+X-MS-Office365-Filtering-Correlation-Id: 49f99ce2-ee13-4e98-67b4-08db4af7d12e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zD5HoKDUpvQbjE6K2TPq//bmPB1vRAKF7iCGVD9TJNsBREmeo8rtn098f9vhuDPl9JR5Ru8cAJh3mkqHhmfX66zpzKDd+crwtNTrjTSG1YYTATbcG3fDC7xy/QBLJNKLygomymxXdEiOw1wIBozFZZuWrYy0X0lV4hUP604xiVRTzA50mKwJf+DCKYmix4vBYS0vcRhwITUSJO7+iZG+TSPfD+8Vjd/avo8pcCr8YQVCvKVFriqvbLmVuTUiKmjmihkv8uIfMKJd8c6FXiQG03QLzTIzg8Ko83Vrnq3SMdnIbWBdf/NZcxplBweEdEIR1iycMkxcb4Bq0KJPe8XR2Pj0eXUkDYthkVEPEYkweMY8YkV1Dg2sWJOouLYmPse2opk6kd1R+6rZ1wLipT6AMeGfOCuGiSN3blhCB/Tup7pJeqRadEBs0gc59XjCAP947D0ydAlajpVMnTeN1fYEBF30aYdEbFKGgUlEfz25j5JpE1/syOG19MewUpboKXqpp8SzYAkvpKywA1bCSnnlKtIPDhUgrB/ys1k00Nilt/Vkb+16/dywQ4WwQvr1ZveKruljtVnUwZb8dyZTgfPrn6/jSZsOZbTBiZ9Of/ZH1nAUL629358Rgxqtak1UK2GUXZ84xnMcxQyLLDx3Xf5wxNhIklBrM6YK+oIKJBmA7a4m/UT2viiYEhCV/wIQf3NFSnWLTR3UyhZKkQcnzbU59w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6588.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(366004)(376002)(396003)(136003)(346002)(451199021)(6506007)(6512007)(921005)(26005)(186003)(38100700002)(8676002)(8936002)(7406005)(7416002)(5660300002)(41300700001)(36756003)(44832011)(2906002)(478600001)(110136005)(31696002)(6486002)(6666004)(316002)(2616005)(66476007)(66556008)(66946007)(86362001)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dzNQV0x6L3E2My9yS21sQzUwUGFYbUJhRGpTUGZGdjVsVG5PUmhxZWZqMVhJ?=
+ =?utf-8?B?RHNXVGRzQURQR2xxdFQxVFl1cEVHWXlyWWJyQWJTNURzbXNRbjFaYWN5bUxw?=
+ =?utf-8?B?MnRERWNmZ3JHUXdqdVduYlFxS0diWTFsTmhKeSt3SlpsMGFMdk5pN2xIK0hr?=
+ =?utf-8?B?eU0wckQwYUM5Y0VEeVFqMWM0YjNTeWlTOHFEOHJ2OFBhUURGZUJsanBPZkNV?=
+ =?utf-8?B?YlVpZC9hRnRzRWoxYzVEdm9zcno4VHhVRmtBMGJxWkVQbmZzTUM4dU9RY09y?=
+ =?utf-8?B?Qk9OWVhmQmVERVZrUFlUcUN0dmhBTThSVUg3cXRhSi82OEt2OUtWYXlmL3ha?=
+ =?utf-8?B?MnZDY3Z6N3Q0cE9CbzNiTGpzZ1FTZCsyVjZTVFROc1VlY05pNzhmTERBWS9P?=
+ =?utf-8?B?T21tL0VqcVprL3BWUzlZblpMbXU2aktxRFpKREJZc2gvUXdVbVBsM3BZb3Av?=
+ =?utf-8?B?Z1BwR3pGejdTWXBMNEQ5WlFTdDhRYlBkZVhBRi91T2pVZUZ4RmtXZE51UDB1?=
+ =?utf-8?B?ems5RnNncGkyOEMyNjIzZHBDWVU0QTV3UXdaOWIwNzdGMzFZUHVMUU10UnEz?=
+ =?utf-8?B?UDRqNzl6YUdjSEZZOXc0a0toWXF6NFk0bm9pMjg5ZW0yUktPSnBFdlhHZkMx?=
+ =?utf-8?B?OGdLbzU1T3J0d3RZMUhTK1RoTTkvYVBNMXlmams0QjNieU9nejBQUXU2NDlO?=
+ =?utf-8?B?YTZjTFJzd1QwczQ4aENHSXVZVUg2blBRV2V2T2FXOHMyRlhpVXFtaGw2OGVy?=
+ =?utf-8?B?V2tSdGZuSDNKUUp4M3Z6NGlsY0xObGlhYmY3RnNibkVncWRZMlZuclVDbHpW?=
+ =?utf-8?B?L3JGWk1pcEJxNWpPc0JnNlI1TkkwTkNOV3k5dzNWaCtTSFFrQ210bURTYXlH?=
+ =?utf-8?B?dTd0NXlhaWFIOGRjb3gxQUxteGp4dFRJZGVPK1c0UGtFNFdDTytxVkM0Sms0?=
+ =?utf-8?B?UkxJMWFCTnBIcmVERlFjdGpNUzFaZWRvaEFXSjBVQlF6NHlSejRkZGZQbDNh?=
+ =?utf-8?B?MHpDckNFME1tSWQzUlZYbHhWNTc0eEZNWVFFTm9hRkVka1BuLzcrSE1yeXk0?=
+ =?utf-8?B?RVlRUllBZVhUcmpxaldsMDRuZUtXcm1hbENUOG1rRC9mTStmeVJ3dHZNRFNi?=
+ =?utf-8?B?NTc4WDlBblVNeTV1VWYwZkNCUUFadVB5OEo3bERaYmxubHNEQWdyQkdYRzVS?=
+ =?utf-8?B?Z0k0S25nK3ZwS2RRdkdBenVTaGZnOVRjdEVET3NQUGZFaDcweVQ3ZDUxUFlZ?=
+ =?utf-8?B?N0J5RGRlN3ZkL0JPcHlWRUdSbW5Pc3BkZmFmOG15dHZXNnkyb1gyblgxK1dR?=
+ =?utf-8?B?bmN0SkpYSmRtdHRPVWt3ZktiVXM1SnpZemlSSzdwZmZQT3VJZzllVG1BMlR5?=
+ =?utf-8?B?cG45Zlk3Z1A2UDhkMkF2b293VGo5Nm9XNjhFTlRrOW5DQnFBR1lVZ2pKSFh1?=
+ =?utf-8?B?a1Y0M3dsdVQvNmZhZmRBWVJMVmpLaHBUTllXdlJ6eHhDamovMTZqU2wvYUdO?=
+ =?utf-8?B?SksxbE5OVkdEZ2poOVlFejI3bks3L2N3NUErS0ZHcS83a2c2NFJIcmZOQi80?=
+ =?utf-8?B?ZjY5SS9mZnYyaldzNUNvdURGOHVIclVnQXp1ajU0RkpKTjJzc1M0d1hnc2JC?=
+ =?utf-8?B?R1hqUSs4Y3pxOW51M3loTFJnZ2J0eVA3c0hkMC8xK0pwNGxkdkZSSnd1eXQ0?=
+ =?utf-8?B?ZlI3QlpmQlo4ZmRETjJPalhlWkRHSWxWbVQvQ3VleXhvTmJNMk5pdkZta1Vt?=
+ =?utf-8?B?UzkxeEpCWXpyVCtvZk0vckV0MU1WMGJyMU5sQW5QeFNSVEthZmdjUi92N2dS?=
+ =?utf-8?B?eVBKTFg0NVptcFR6dy9zamNhRmVBR1BoclVzSjFJYUdyVFlSaDJPOUNtN3pC?=
+ =?utf-8?B?eUdDUjNzYW5tN3NEeVNyeGQ1Q0phRnRUK0ZOS1pwSWVGTjVtNktBVHpGc1gw?=
+ =?utf-8?B?SVlOLzh1dnc5OFlFMmRtdnk0OTRNbVR1TEhzRzdyajlYMS9oMmRQdzZsNTdm?=
+ =?utf-8?B?RXRtQ0htOXRMWTJRYzdLS3N6WVFaOTJHNExIU09sQXZTSVMxY2ZFZ2QvK0FE?=
+ =?utf-8?B?RWs1ZnBIVGQ0MnF0VUplSDFvTjVQN3Ruc0lFVkIwaHZ6UWZRYytGVm5LMVVa?=
+ =?utf-8?Q?CgIAXfEHQBBP/knJl6Ibu176p?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 49f99ce2-ee13-4e98-67b4-08db4af7d12e
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6588.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2023 10:27:23.3789
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Wd7roxGQky5/tRntqCThuiQyEP7Prxb6OE/+btkeF08bt2q/OWY0a2w4CsrGHTdXUiaaKNHzip609WJECcZsrw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7311
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> @@ -2225,74 +2226,82 @@ static int test_pmu(void)
+>  
+>  static int test__pmu_events(struct test_suite *test __maybe_unused, int subtest __maybe_unused)
+>  {
+> -	struct stat st;
+> -	char path[PATH_MAX];
+> -	struct dirent *ent;
+> -	DIR *dir;
+> -	int ret;
+> +	struct perf_pmu *pmu;
+> +	int ret = TEST_OK;
+>  
+> -	if (!test_pmu())
+> -		return TEST_SKIP;
+> +	perf_pmus__for_each_pmu(pmu) {
 
-Hi, Thorsten here, the Linux kernel's regression tracker.
+'pmus' list might be empty and, if so, we need to fill it first with:
 
-I noticed a regression report in bugzilla.kernel.org. As many (most?)
-kernel developers don't keep an eye on it, I decided to forward it by mail.
+        if (list_empty(&pmus))
+                perf_pmu__scan(NULL);
 
-Note, you have to use bugzilla to reach the reporter, as I sadly[1] can
-not CCed them in mails like this.
+before iterating over it. Other option is to add this code to
+perf_pmus__for_each_pmu() macro itself.
 
-Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217386 :
+With that, the test fails for me:
 
->  Risto A. Paju 2023-05-01 09:49:03 UTC
-> 
-> Created attachment 304199 [details]
-> dmesg-6.3.1
-> 
-> I use intel_powerclamp on a Thinkpad X220i via a custom script for
-> thermal management, and it triggers a kernel bug in Linux 6.3.0 and
-> 6.3.1. The script has a part
-> 
-> awk something > /sys/class/thermal/cooling_device4/cur_state
-> 
-> and the awk process hangs, with the null pointer bug reported in dmesg.
-> 
-> The script has worked fine for years, and for now I've switched back to
-> the 6.2 series for this laptop.
-> 
-> [tag] [reply] [−]
-> Private
-> Comment 1 Risto A. Paju 2023-05-01 12:23:15 UTC
-> 
-> The affected CPU is an i3-2310M. I tested the same on a newer Intel
-> laptop with an i5-7300HQ, and there's no sign of the bug there.
+$ sudo ./perf test 6
+  6: Parse event definition strings                                  :
+  6.1: Test event parsing                                            : Ok
+  6.2: Test parsing of "hybrid" CPU events                           : Skip (not hybrid)
+  6.3: Parsing of all PMU events from sysfs                          : FAILED!
 
-From the dmesg:
+> +		struct stat st;
+> +		char path[PATH_MAX];
+> +		struct dirent *ent;
+> +		DIR *dir;
+> +		int err;
+>  
+> -	snprintf(path, PATH_MAX, "%s/bus/event_source/devices/cpu/events/",
+> -		 sysfs__mountpoint());
+> +		snprintf(path, PATH_MAX, "%s/bus/event_source/devices/%s/events/",
+> +			sysfs__mountpoint(), pmu->name);
+>  
+> -	ret = stat(path, &st);
+> -	if (ret) {
+> -		pr_debug("omitting PMU cpu events tests: %s\n", path);
+> -		return TEST_OK;
+> -	}
+> +		err = stat(path, &st);
+> +		if (err) {
+> +			pr_debug("skipping PMU %s events tests: %s\n", pmu->name, path);
+> +			ret = combine_test_results(ret, TEST_SKIP);
 
-> [   16.495596] Oops: 0002 [#1] PREEMPT SMP PTI
-> [   16.496084] CPU: 0 PID: 2792 Comm: awk Not tainted 6.3.1 #2
-> [   16.496589] Hardware name: LENOVO 428737G/428737G, BIOS 8DET76WW (1.46 ) 06/21/2018
-> [   16.497095] RIP: 0010:idle_inject_set_duration+0x6/0x20
-> [   16.497607] Code: 00 49 c7 c4 f4 ff ff ff eb 92 49 c7 c4 f4 ff ff ff eb 91 cc 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 89 f0 01 d0 74 06 <89> 77 44 89 57 40 c3 cc cc cc cc 66 66 2e 0f 1f 84 00 00 00 00 00
-> [   16.498824] RSP: 0018:ffffc900005e7de8 EFLAGS: 00010206
-> [   16.499461] RAX: 00000000000927c0 RBX: 0000000000000000 RCX: 0000000000001770
-> [   16.500103] RDX: 0000000000001770 RSI: 0000000000091050 RDI: 0000000000000000
-> [   16.500752] RBP: 0000000000000002 R08: 0000000000000001 R09: 000000000000000a
-> [   16.501405] R10: 000000000000000a R11: f000000000000000 R12: 0000000000000000
-> [   16.502071] R13: ffff8881064bd720 R14: ffffc900005e7ea0 R15: ffff8881022283e0
-> [   16.502745] FS:  00007fe494782b80(0000) GS:ffff888216200000(0000) knlGS:0000000000000000
-> [   16.503421] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [   16.504095] CR2: 0000000000000044 CR3: 000000010f94c006 CR4: 00000000000606f0
-> [   16.504783] Call Trace:
-> [   16.505456]  <TASK>
-> [   16.506124]  powerclamp_set_cur_state+0x56/0x200 [intel_powerclamp]
-> [   16.506810]  cur_state_store+0x74/0xd0
-> [   16.507497]  kernfs_fop_write_iter+0x128/0x1c0
-> [   16.508193]  vfs_write+0x2be/0x3f0
-> [   16.508897]  ksys_write+0x5a/0xe0
-> [   16.509794]  do_syscall_64+0x3b/0x90
-> [   16.510607]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
-> [   16.511444] RIP: 0033:0x7fe4948c0be0
-> [   16.512247] Code: 40 00 48 8b 15 49 c2 0d 00 f7 d8 64 89 02 48 c7 c0 ff ff ff ff eb b7 0f 1f 00 80 3d 01 4a 0e 00 00 74 17 b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 58 c3 0f 1f 80 00 00 00 00 48 83 ec 28 48 89
-> [   16.514025] RSP: 002b:00007ffc045bd0d8 EFLAGS: 00000202 ORIG_RAX: 0000000000000001
-> [   16.515180] RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007fe4948c0be0
-> [   16.516346] RDX: 0000000000000002 RSI: 0000562bc4d50990 RDI: 0000000000000001
-> [   16.517543] RBP: 00007fe49499e780 R08: 0000000000000007 R09: 0000562bc4d46da0
-> [   16.518751] R10: 00007fe4947d5f50 R11: 0000000000000202 R12: 0000000000000002
-> [   16.519977] R13: 0000562bc4d50990 R14: 0000000000000002 R15: 00007fe494999d60
-> [   16.521234]  </TASK>
-> [   16.522479] Modules linked in: 
-> [...]
-> [   16.534416] CR2: 0000000000000044
-> [   16.536059] ---[ end trace 0000000000000000 ]---
-> [   16.537819] RIP: 0010:idle_inject_set_duration+0x6/0x20
-> [   16.537827] Code: 00 49 c7 c4 f4 ff ff ff eb 92 49 c7 c4 f4 ff ff ff eb 91 cc 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 89 f0 01 d0 74 06 <89> 77 44 89 57 40 c3 cc cc cc cc 66 66 2e 0f 1f 84 00 00 00 00 00
-> [   16.543180] RSP: 0018:ffffc900005e7de8 EFLAGS: 00010206
-> [   16.543189] RAX: 00000000000927c0 RBX: 0000000000000000 RCX: 0000000000001770
-> [   16.543193] RDX: 0000000000001770 RSI: 0000000000091050 RDI: 0000000000000000
-> [   16.549435] RBP: 0000000000000002 R08: 0000000000000001 R09: 000000000000000a
-> [   16.551087] R10: 000000000000000a R11: f000000000000000 R12: 0000000000000000
-> [   16.551091] R13: ffff8881064bd720 R14: ffffc900005e7ea0 R15: ffff8881022283e0
-> [   16.554264] FS:  00007fe494782b80(0000) GS:ffff888216200000(0000) knlGS:0000000000000000
-> [   16.554270] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [   16.554281] CR2: 0000560363a98298 CR3: 000000010f94c006 CR4: 00000000000606f0
-> [   17.635258] memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=2842 'X'
-
-
-See the ticket for more details.
-
-
-[TLDR for the rest of this mail: I'm adding this report to the list of
-tracked Linux kernel regressions; the text you find below is based on a
-few templates paragraphs you might have encountered already in similar
-form.]
-
-BTW, let me use this mail to also add the report to the list of tracked
-regressions to ensure it's doesn't fall through the cracks:
-
-#regzbot introduced: v6.2..v6.3
-https://bugzilla.kernel.org/show_bug.cgi?id=217386
-#regzbot title: pm: thermal: intel_powerclamp null pointer dereference
-#regzbot ignore-activity
-
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply and tell me -- ideally
-while also telling regzbot about it, as explained by the page listed in
-the footer of this mail.
-
-Developers: When fixing the issue, remember to add 'Link:' tags pointing
-to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
-this thread sees some discussion). See page linked in footer for details.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
-
-[1] because bugzilla.kernel.org tells users upon registration their
-"email address will never be displayed to logged out users"
+combine_test_results(ret, TEST_OK); probably? Since many pmus don't expose
+events via sysfs.
