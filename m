@@ -2,121 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84CEB6F3B25
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 02:00:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 718336F3B27
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 02:01:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232486AbjEBAAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 20:00:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59878 "EHLO
+        id S231995AbjEBABm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 20:01:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjEBAAR (ORCPT
+        with ESMTP id S229379AbjEBABj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 20:00:17 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EDF035AE
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 17:00:16 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-63b7b54642cso2273848b3a.0
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 17:00:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1682985616; x=1685577616;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hVPD7LCIYEjnGcS4W60wPpbqQrrQeR8iu5kz2d7F+Uk=;
-        b=USsZG1TBQuABriuIzboKRMi4j9Qabdy7EQK9cWxLH+f2LtYZitY5S8oGQQmcGAq91i
-         XEBdwCjnNVAgAEyNblON5OK2s0h3os8Ph18kGzoiMW7o+Dhm226fDs74UHKPY1+Xti0r
-         DpYHPyWWI55Xn7kfOvH/E1u04CwGffBgXdbbrnwIm6o5aXxN8NJSmy0NVOLcEW68nwb9
-         9mrK+BXDTF7H+d7Yu1JN+OKPvBGPeGyEkEGXMGAxpEkDv3rvPrYul84INOtt6cWZX00e
-         pxJHBEyfXb34Z4YpB2p0+OWN8yV4DVz/idzFaFv5/I+MkscMfJmGNjY+ypB5PqGMcyK6
-         aVaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682985616; x=1685577616;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hVPD7LCIYEjnGcS4W60wPpbqQrrQeR8iu5kz2d7F+Uk=;
-        b=jB2CWGy/U+sJbBF+kF2ike5BdulValBzyNi4sSVG90fvRS3+GUVaPfaB5xB09tXmKU
-         foA1/fUJV41oZ3+SB/moeII6IM7LFbnmLO1VfNJhiC147/IYhW6TwXYBaZgVQd7vZENS
-         i/TVrFYdr7cb2HMMngdYFPARZtTQejDiaOVTXLJTl2nC8flBI8sPJ6B4Q1WsDXZYChoO
-         msJwLOWg5mnszvYk9/2czuVPfcBER62NFEXOROg5H7VvYeXfb1nnmZb4XAmspbDcMt4c
-         W5gI+p/b+ykKhJZeJKtPMheZ9L3Z54R00l3N+8PQPA5l/xIwfWbGYz6/CoxwVsH4Snwi
-         Kn/Q==
-X-Gm-Message-State: AC+VfDxIhZels2U9diezb9v3p6kC/Qjs15OREklTvmKXTDfX4CAZAH1g
-        C627dJAsmHvu7k+B80JxUxKA4Q==
-X-Google-Smtp-Source: ACHHUZ4WXfPj9SWiDxU7NAUDEKWrYfXvWG9K+1cbxVQF6JOx6c+tN0HQ7ovKzZhJFq3mr4oKwAGNTQ==
-X-Received: by 2002:a05:6a00:181e:b0:624:7c9a:c832 with SMTP id y30-20020a056a00181e00b006247c9ac832mr22721656pfa.8.1682985615800;
-        Mon, 01 May 2023 17:00:15 -0700 (PDT)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id f14-20020a056a00238e00b00640f51801e6sm11176010pfc.159.2023.05.01.17.00.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 May 2023 17:00:15 -0700 (PDT)
-Date:   Mon, 01 May 2023 17:00:15 -0700 (PDT)
-X-Google-Original-Date: Mon, 01 May 2023 16:59:12 PDT (-0700)
-Subject:     Re: [PATCH v1] dt-bindings: riscv: explicitly mention assumption of Zicsr & Zifencei support
-In-Reply-To: <20230427-fence-blurred-c92fb69d4137@wendy>
-CC:     Conor Dooley <conor@kernel.org>,
-        Conor Dooley <conor.dooley@microchip.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Message-ID: <mhng-7defe716-2138-496e-908b-41e7c553da74@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 1 May 2023 20:01:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F0D51FEE;
+        Mon,  1 May 2023 17:01:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A348A62055;
+        Tue,  2 May 2023 00:01:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 766EAC433D2;
+        Tue,  2 May 2023 00:01:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682985697;
+        bh=BNsRcKYRPV8D42UslfOjNLcHiF0qsYMcQ6gMsgBkLLI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=H9EtGwfBO4NmrZz2PdQU6d9T7GY3CIT16EOOk+Ri+q1lfQa3S6hVS8p+wD30qfRs2
+         UIW9vFEUR4NBQe0U5ws4eEihJ6X7+J1CsfoqRyv7Ouxmcc2hmH6ERdufJ8ea6rCGlO
+         3u+qPYf5ZOcU25XjAN+4FWupBtp3603Wye8Ht9ICe6f++HuR4dK+PUnpBan/u3Pfxp
+         KVqUkwcEbq7VIFc+Rb+3Iic2/FhdY5HW2Jz/vgwzG0vQqTTaxC9Vp5omf8E4+97H2w
+         lty/kZWksxC3rIq7VqbKKFMBrjxrofntJ9E3qJlaI+t0BxfsucYLDc4LdOJUJP07yE
+         O3t5GhA+BTFhA==
+Date:   Tue, 2 May 2023 09:01:33 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc:     linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Florent Revest <revest@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org
+Subject: [v8] Re: [PATCH v9 00/11] tracing: Add fprobe events
+Message-Id: <20230502090133.dcfc898a4bb33205c73fb6ea@kernel.org>
+In-Reply-To: <168295372484.3157983.731333785390494141.stgit@mhiramat.roam.corp.google.com>
+References: <168295372484.3157983.731333785390494141.stgit@mhiramat.roam.corp.google.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 27 Apr 2023 03:43:42 PDT (-0700), Conor Dooley wrote:
-> The dt-binding was defined before the extraction of csr access and
-> fence.i into their own extensions, and thus the presence of the I
-> base extension implies Zicsr and Zifencei.
-> There's no harm in adding them obviously, but for backwards
-> compatibility with DTs that existed prior to that extraction, software
-> is unable to differentiate between "i" and "i_zicsr_zifencei" without
-> any further information.
->
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+Oops, the title version is wrong, this is 8th version. Hmm, it must be my typo...
+
+On Tue,  2 May 2023 00:08:45 +0900
+"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+
+> Hi,
+> 
+> Here is the 8th version of improve fprobe and add a basic fprobe event
+> support for ftrace (tracefs) and perf. Here is the previous version.
+> 
+> https://lore.kernel.org/all/168255826500.2565678.17719875734305974633.stgit@mhiramat.roam.corp.google.com/
+> 
+> This version is a minor update for fixing wrong indentation [8/11]
+> and update kconfig help message[6/11].
+> 
+> You can also get this series from:
+> 
+> git://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git topic/fprobe-event-ext
+> 
+> With this fprobe events, we can continue to trace function entry/exit
+> even if the CONFIG_KPROBES_ON_FTRACE is not available. Since
+> CONFIG_KPROBES_ON_FTRACE requires the CONFIG_DYNAMIC_FTRACE_WITH_REGS,
+> it is not available if the architecture only supports
+> CONFIG_DYNAMIC_FTRACE_WITH_ARGS (e.g. arm64). And that means kprobe
+> events can not probe function entry/exit effectively on such architecture.
+> But this problem can be solved if the dynamic events supports fprobe events
+> because fprobe events doesn't use kprobe but ftrace via fprobe.
+> 
+> FPROBE EVENTS
+> =============
+> 
+> Fprobe events allows user to add new events on the entry and exit of kernel
+> functions (which can be ftraced). Unlike kprobe events, the fprobe events
+> can only probe the function entry and exit, and it can only trace the
+> function args, return value, and stacks. (no registers)
+> For probing function body, users can continue to use the kprobe events.
+> 
+> The tracepoint probe events (tprobe events) also allows user to add new
+> events dynamically on the tracepoint. Most of the tracepoint already has
+> trace-events, so this feature is useful if you only want to know a
+> specific parameter, or trace the tracepoints which has no trace-events
+> (e.g. sched_*_tp tracepoints only exposes the tracepoints.)
+> 
+> The fprobe events syntax is;
+> 
+>  f[:[GRP/][EVENT]] FUNCTION [FETCHARGS]
+>  f[MAXACTIVE][:[GRP/][EVENT]] FUNCTION%return [FETCHARGS]
+> 
+> And tracepoint probe events syntax is;
+> 
+>  t[:[GRP/][EVENT]] TRACEPOINT [FETCHARGS]
+> 
+> This series includes BTF argument support for fprobe/tracepoint events,
+> and kprobe events. This allows us to fetch a specific function parameter
+> by name, and all parameters by '$$args'.
+> Note that enabling this feature, you need to enable CONFIG_BPF_SYSCALL and
+> confirm that your arch supports CONFIG_HAVE_FUNCTION_ARG_ACCESS_API.
+> 
+> E.g.
+> 
+>  # echo 't kfree ptr' >> dynamic_events
+>  # echo 'f kfree object' >> dynamic_events
+>  # cat dynamic_events 
+> t:tracepoints/kfree kfree ptr=ptr
+> f:fprobes/kfree__entry kfree object=object
+>  # echo 1 > events/fprobes/enable
+>  # echo 1 > events/tracepoints/enable
+>  # echo > trace
+>  # head -n 20 trace | tail
+> #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
+> #              | |         |   |||||     |         |
+>             tail-84      [000] .....  1324.561958: kfree__entry: (kfree+0x4/0x140) object=0xffff888006383c00
+>             tail-84      [000] ...1.  1324.561961: kfree: (__probestub_kfree+0x4/0x10) ptr=0xffff888006383c00
+>             tail-84      [000] .....  1324.561988: kfree__entry: (kfree+0x4/0x140) object=0x0
+>             tail-84      [000] ...1.  1324.561988: kfree: (__probestub_kfree+0x4/0x10) ptr=0x0
+>             tail-84      [000] .....  1324.561989: kfree__entry: (kfree+0x4/0x140) object=0xffff88800671e600
+>             tail-84      [000] ...1.  1324.561989: kfree: (__probestub_kfree+0x4/0x10) ptr=0xffff88800671e600
+>             tail-84      [000] .....  1324.562368: kfree__entry: (kfree+0x4/0x140) object=0xffff8880065e0580
+>             tail-84      [000] ...1.  1324.562369: kfree: (__probestub_kfree+0x4/0x10) ptr=0xffff8880065e0580
+> 
+> 
+> Thank you,
+> 
 > ---
-> CC: Conor Dooley <conor@kernel.org>
-> CC: Rob Herring <robh+dt@kernel.org>
-> CC: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> CC: Paul Walmsley <paul.walmsley@sifive.com>
-> CC: Palmer Dabbelt <palmer@dabbelt.com>
-> CC: linux-riscv@lists.infradead.org
-> CC: devicetree@vger.kernel.org
-> CC: linux-kernel@vger.kernel.org
-> ---
->  Documentation/devicetree/bindings/riscv/cpus.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Documentation/devicetree/bindings/riscv/cpus.yaml
-> index 4c7ce4a37052..a93bc7eae928 100644
-> --- a/Documentation/devicetree/bindings/riscv/cpus.yaml
-> +++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
-> @@ -85,6 +85,12 @@ properties:
->        User-Level ISA document, available from
->        https://riscv.org/specifications/
->
-> +      Due to revisions of the ISA specification, some deviations
-> +      have arisen over time.
-> +      Notably, riscv,isa was defined prior to the creation of the
-> +      Zicsr and Zifencei extensions and thus "i" implies
-> +      "zicsr_zifencei".
+> 
+> Masami Hiramatsu (Google) (11):
+>       fprobe: Pass return address to the handlers
+>       tracing/probes: Add fprobe events for tracing function entry and exit.
+>       selftests/ftrace: Add fprobe related testcases
+>       tracing/probes: Add tracepoint support on fprobe_events
+>       tracing/probes: Move event parameter fetching code to common parser
+>       tracing/probes: Support function parameters if BTF is available
+>       tracing/probes: Add $$args meta argument for all function args
+>       tracing/probes: Add BTF retval type support
+>       selftests/ftrace: Add tracepoint probe test case
+>       selftests/ftrace: Add BTF arguments test cases
+>       Documentation: tracing/probes: Add fprobe event tracing document
+> 
+> 
+>  Documentation/trace/fprobetrace.rst                |  187 +++
+>  Documentation/trace/index.rst                      |    1 
+>  include/linux/fprobe.h                             |   11 
+>  include/linux/rethook.h                            |    2 
+>  include/linux/trace_events.h                       |    3 
+>  include/linux/tracepoint-defs.h                    |    1 
+>  include/linux/tracepoint.h                         |    5 
+>  kernel/kprobes.c                                   |    1 
+>  kernel/trace/Kconfig                               |   26 
+>  kernel/trace/Makefile                              |    1 
+>  kernel/trace/bpf_trace.c                           |    6 
+>  kernel/trace/fprobe.c                              |   17 
+>  kernel/trace/rethook.c                             |    3 
+>  kernel/trace/trace.c                               |   13 
+>  kernel/trace/trace.h                               |   11 
+>  kernel/trace/trace_eprobe.c                        |   44 -
+>  kernel/trace/trace_fprobe.c                        | 1194 ++++++++++++++++++++
+>  kernel/trace/trace_kprobe.c                        |   33 -
+>  kernel/trace/trace_probe.c                         |  504 +++++++-
+>  kernel/trace/trace_probe.h                         |   43 +
+>  kernel/trace/trace_uprobe.c                        |    8 
+>  lib/test_fprobe.c                                  |   10 
+>  samples/fprobe/fprobe_example.c                    |    6 
+>  .../ftrace/test.d/dynevent/add_remove_btfarg.tc    |   54 +
+>  .../ftrace/test.d/dynevent/add_remove_fprobe.tc    |   26 
+>  .../ftrace/test.d/dynevent/add_remove_tprobe.tc    |   27 
+>  .../ftrace/test.d/dynevent/fprobe_syntax_errors.tc |   99 ++
+>  .../ftrace/test.d/dynevent/tprobe_syntax_errors.tc |   82 +
+>  .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   |   13 
+>  29 files changed, 2291 insertions(+), 140 deletions(-)
+>  create mode 100644 Documentation/trace/fprobetrace.rst
+>  create mode 100644 kernel/trace/trace_fprobe.c
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_btfarg.tc
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_fprobe.tc
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_tprobe.tc
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/tprobe_syntax_errors.tc
+> 
+> --
+> Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-also Zihpm and Zicntr.  I'm going to put this one on for-next, though.
 
-Thanks!
-
-> +
->        While the isa strings in ISA specification are case
->        insensitive, letters in the riscv,isa string must be all
->        lowercase to simplify parsing.
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
