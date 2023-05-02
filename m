@@ -2,232 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9E4B6F3B5A
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 02:20:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AB246F3B5D
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 02:22:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232658AbjEBAUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 20:20:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40412 "EHLO
+        id S233145AbjEBAWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 20:22:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbjEBAUa (ORCPT
+        with ESMTP id S229863AbjEBAW3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 20:20:30 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C72DE9;
-        Mon,  1 May 2023 17:20:28 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3420Jwmp070588;
-        Mon, 1 May 2023 19:19:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1682986798;
-        bh=YPo3G+O2eNb5kCnGEM20hSWgWUlJO5PPCrrYZP1vQt8=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=agCTe61KyoQ+nKtYl31PuRlkorU5QF5IzV9imSErt8Ou3JwpDRJ119aeCTOrBATtI
-         nP2eIikUarqhRIM69GoljEaD/6LwM1WVSo27wsO1G1baFGi2j7jHhUF1AuDVO4mV/Z
-         c9JDQFH+Dbr9HVrGTVoxEy/8Pny9rJwGiEDOSs7A=
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3420JwNn116921
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 1 May 2023 19:19:58 -0500
-Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 1
- May 2023 19:19:58 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 1 May 2023 19:19:58 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3420JwK2012934;
-        Mon, 1 May 2023 19:19:58 -0500
-Date:   Mon, 1 May 2023 19:19:58 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Judith Mendez <jm@ti.com>
-CC:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, <linux-can@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Schuyler Patton <spatton@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
+        Mon, 1 May 2023 20:22:29 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB7110E9;
+        Mon,  1 May 2023 17:22:28 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1aad6f2be8eso25780455ad.3;
+        Mon, 01 May 2023 17:22:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682986948; x=1685578948;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=SEMtZF0VN0xwVsvNM/awj6CEFn2nLNLPzgXwSp1mSEw=;
+        b=gqO+s7nzSwtFbMVqr8LJCptEz9BKlNeP6x7v0Bi2h9b3c+egbQH6WOhidVDBel2pm6
+         Ne0ZFed250Pw1773fu3nlAmgOOQ7xmO3F0FT2k7DAA3IPyKfmZJrPkKptSMivk4adScf
+         TI21mjcJLqHvkySmGJK0ZZuoDDyoMolqnhWPGdYRS5WvR3KNfN5WO1g8pgsOyJ2+uFIn
+         Cdx0Xwx9xYHQWBBluFz+/IJoKAxBxafr3s3boX7VVPyaFirMOA5DCHy3K8ebJx9A0L6F
+         VHJkMXvticNyQ+/EW3CF1244Uo89yHkzYTN84BjS8xMIt/FMK9YK1jZXwRVxnB9UGukm
+         RLMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682986948; x=1685578948;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SEMtZF0VN0xwVsvNM/awj6CEFn2nLNLPzgXwSp1mSEw=;
+        b=jvCJK15sOrLE5IEVVk9KYAukdRLdBDkErSv6nQA/eY18GuXM2QCqAbKpaZFhPawuLv
+         byxb95HWOxawhRPA3Gfj/AqMhrB+t5nHbixIDglpwq18j5zpatNxRty6zygvJztYDlZX
+         xEPiZIaVtpibyNJA91qSgFzA7+Kjda0Zd9E6v0qHZNMooXBEwBv83IVclC5+VOUa1msc
+         umnGepGxudND64TrqJ8oudKWUtYKPs3jvYhjxJE+zpk0F6FbXpYyv2jmHlIWFsCONowd
+         DmGE06b5RWgVPsV5A4r1jZkYo8FpnbB9o/m6xFHd+DChP9MGfG7hx/ISEKaTmb/7kgEz
+         zn5Q==
+X-Gm-Message-State: AC+VfDxhsrWD741pOYXaK6bJJsBWezqrS4zUU3bwIbdPxQpdCG/JK0qX
+        MwhIXGlqSsSOV77iTe/TzLPEgLAHe5w=
+X-Google-Smtp-Source: ACHHUZ6do7fAY3wk/MYY6wxlgl+TUrx6FqEwZ0hc5CW8vC3gEURl0rewZs0kWpdJNqZJoFwOxdZQMg==
+X-Received: by 2002:a17:903:234c:b0:1a6:b247:4316 with SMTP id c12-20020a170903234c00b001a6b2474316mr19639948plh.62.1682986947701;
+        Mon, 01 May 2023 17:22:27 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:b6ce:736b:e4f7:adb])
+        by smtp.gmail.com with ESMTPSA id r21-20020a170902ea5500b001a988a71617sm11660577plg.192.2023.05.01.17.22.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 May 2023 17:22:26 -0700 (PDT)
+Date:   Mon, 1 May 2023 17:22:23 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Maximilian Weigand <mweigand@mweigand.net>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Simon Horman <simon.horman@corigine.com>
-Subject: Re: [PATCH v3 4/4] arm64: dts: ti: Enable MCU MCANs for AM62x
-Message-ID: <20230502001958.6ehl2u5oqqu4wq6n@specked>
-References: <20230501223121.21663-1-jm@ti.com>
- <20230501223121.21663-5-jm@ti.com>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Alistair Francis <alistair@alistair23.me>
+Subject: Re: [PATCH v2 6/6] Input: cyttsp5 - implement proper sleep and
+ wakeup procedures
+Message-ID: <ZFBXvz17jDhEPI6c@google.com>
+References: <20230501113010.891786-1-mweigand@mweigand.net>
+ <20230501113010.891786-7-mweigand@mweigand.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230501223121.21663-5-jm@ti.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230501113010.891786-7-mweigand@mweigand.net>
+X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FSL_HELO_FAKE,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17:31-20230501, Judith Mendez wrote:
-> On AM62x there are no hardware interrupts routed to A53 GIC
-> interrupt controller for MCU MCAN IPs, so MCU MCANs were not
-> added to the MCU dtsi. In this patch series an hrtimer is introduced
-> to MCAN driver to generate software interrupts. Now add MCU MCAN
-> nodes to the MCU dtsi but disable the MCAN devices by default.
-> 
-> AM62x does not carry on-board CAN transceivers, so instead of
-> changing DTB permanently use an overlay to enable MCU MCANs and to
-> add CAN transceiver nodes.
-> 
-> If there is no hardware interrupt and timer method is used, remove
-> interrupt properties and add poll-interval to enable the hrtimer
-> per MCAN node.
-> 
-> This DT overlay can be used with the following EVM:
-> Link: https://www.ti.com/tool/TCAN1042DEVM
-> 
-> Signed-off-by: Judith Mendez <jm@ti.com>
-> ---
-> Changelog:
-> v3:
->  1. Add link for specific board
-> 
->  arch/arm64/boot/dts/ti/Makefile               |  2 +-
->  arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi       | 24 ++++++++
->  .../boot/dts/ti/k3-am625-sk-mcan-mcu.dtso     | 57 +++++++++++++++++++
-NAK - I dont see "DO NOT MERGE" in $subject.
+On Mon, May 01, 2023 at 01:30:10PM +0200, Maximilian Weigand wrote:
+>  struct cyttsp5 {
+>  	struct device *dev;
+>  	struct completion cmd_done;
+> +	struct completion cmd_command_done;
 
-please send this patch addressing previous comments with arch maintainer
-tree not the mcan tree.
+Why do we need separate comletion? Do you observe some additional
+traffic from the controller when powering it off and on?
 
->  3 files changed, 82 insertions(+), 1 deletion(-)
->  create mode 100644 arch/arm64/boot/dts/ti/k3-am625-sk-mcan-mcu.dtso
-> 
-> diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
-> index abe15e76b614..c76be3888e4d 100644
-> --- a/arch/arm64/boot/dts/ti/Makefile
-> +++ b/arch/arm64/boot/dts/ti/Makefile
-> @@ -9,7 +9,7 @@
->  # alphabetically.
->  
->  # Boards with AM62x SoC
-> -k3-am625-sk-mcan-dtbs := k3-am625-sk.dtb k3-am625-sk-mcan-main.dtbo
-> +k3-am625-sk-mcan-dtbs := k3-am625-sk.dtb k3-am625-sk-mcan-main.dtbo k3-am625-sk-mcan-mcu.dtbo
->  dtb-$(CONFIG_ARCH_K3) += k3-am625-beagleplay.dtb
->  dtb-$(CONFIG_ARCH_K3) += k3-am625-sk.dtb
->  dtb-$(CONFIG_ARCH_K3) += k3-am625-sk-mcan.dtb
-> diff --git a/arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi b/arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi
-> index 076601a41e84..20462f457643 100644
-> --- a/arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi
-> @@ -141,4 +141,28 @@
->  		/* Tightly coupled to M4F */
->  		status = "reserved";
->  	};
+> +static int __maybe_unused cyttsp5_suspend(struct device *dev)
+> +{
+> +	struct cyttsp5 *ts = dev_get_drvdata(dev);
 > +
-> +	mcu_mcan1: can@4e00000 {
-> +		compatible = "bosch,m_can";
-> +		reg = <0x00 0x4e00000 0x00 0x8000>,
-> +			  <0x00 0x4e08000 0x00 0x200>;
-> +		reg-names = "message_ram", "m_can";
-> +		power-domains = <&k3_pds 188 TI_SCI_PD_EXCLUSIVE>;
-> +		clocks = <&k3_clks 188 6>, <&k3_clks 188 1>;
-> +		clock-names = "hclk", "cclk";
-> +		bosch,mram-cfg = <0x0 128 64 64 64 64 32 32>;
-> +		status = "disabled";
-> +	};
-> +
-> +	mcu_mcan2: can@4e10000 {
-> +		compatible = "bosch,m_can";
-> +		reg = <0x00 0x4e10000 0x00 0x8000>,
-> +			  <0x00 0x4e18000 0x00 0x200>;
-> +		reg-names = "message_ram", "m_can";
-> +		power-domains = <&k3_pds 189 TI_SCI_PD_EXCLUSIVE>;
-> +		clocks = <&k3_clks 189 6>, <&k3_clks 189 1>;
-> +		clock-names = "hclk", "cclk";
-> +		bosch,mram-cfg = <0x0 128 64 64 64 64 32 32>;
-> +		status = "disabled";
-> +	};
->  };
-> diff --git a/arch/arm64/boot/dts/ti/k3-am625-sk-mcan-mcu.dtso b/arch/arm64/boot/dts/ti/k3-am625-sk-mcan-mcu.dtso
-> new file mode 100644
-> index 000000000000..5145b3de4f9b
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/ti/k3-am625-sk-mcan-mcu.dtso
-> @@ -0,0 +1,57 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/**
-> + * DT overlay for MCAN in MCU domain on AM625 SK
-> + *
-> + * Copyright (C) 2022 Texas Instruments Incorporated - https://www.ti.com/
-> + */
-> +
-> +/dts-v1/;
-> +/plugin/;
-> +
-> +#include "k3-pinctrl.h"
-> +
-> +&{/} {
-> +	transceiver2: can-phy1 {
-> +		compatible = "ti,tcan1042";
-> +		#phy-cells = <0>;
-> +		max-bitrate = <5000000>;
-> +	};
-> +
-> +	transceiver3: can-phy2 {
-> +		compatible = "ti,tcan1042";
-> +		#phy-cells = <0>;
-> +		max-bitrate = <5000000>;
-> +	};
-> +};
-> +
-> +&mcu_pmx0 {
-> +	mcu_mcan1_pins_default: mcu-mcan1-pins-default {
-> +		pinctrl-single,pins = <
-> +			AM62X_IOPAD(0x038, PIN_INPUT, 0) /* (B3) MCU_MCAN0_RX */
-> +			AM62X_IOPAD(0x034, PIN_OUTPUT, 0) /* (D6) MCU_MCAN0_TX */
-> +		>;
-> +	};
-> +
-> +	mcu_mcan2_pins_default: mcu-mcan2-pins-default {
-> +		pinctrl-single,pins = <
-> +			AM62X_IOPAD(0x040, PIN_INPUT, 0) /* (D4) MCU_MCAN1_RX */
-> +			AM62X_IOPAD(0x03C, PIN_OUTPUT, 0) /* (E5) MCU_MCAN1_TX */
-> +		>;
-> +	};
-> +};
-> +
-> +&mcu_mcan1 {
-> +	poll-interval;
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&mcu_mcan1_pins_default>;
-> +	phys = <&transceiver2>;
-> +	status = "okay";
-> +};
-> +
-> +&mcu_mcan2 {
-> +	poll-interval;
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&mcu_mcan2_pins_default>;
-> +	phys = <&transceiver3>;
-> +	status = "okay";
-> +};
-> -- 
-> 2.17.1
-> 
+> +	if (!ts->is_wakeup_source)
+
+I believe the idiomatic way to check this is to call
+device_may_wakeup().
+
+> +		cyttsp5_enter_sleep(ts);
+> +	return 0;
+> +}
+
+Thanks.
 
 -- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+Dmitry
