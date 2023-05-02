@@ -2,149 +2,310 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C9A36F424A
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 13:07:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 193AD6F424D
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 13:08:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233932AbjEBLHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 07:07:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56524 "EHLO
+        id S233537AbjEBLIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 07:08:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233907AbjEBLHP (ORCPT
+        with ESMTP id S233610AbjEBLIL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 07:07:15 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E9F49FA
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 04:07:13 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f00d3f98deso27532592e87.0
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 04:07:12 -0700 (PDT)
+        Tue, 2 May 2023 07:08:11 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7DE469B
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 04:08:08 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id d75a77b69052e-3ef36d814a5so117951cf.0
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 04:08:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683025631; x=1685617631;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PULIHjTL+BqotFHLEBxc5PXwcQ92x+ai+H8UIvev6Xs=;
-        b=AhwpCzFayDP+QLvkYnNRRT0diBdlgwhpXgJ9x/uf9Pt0fa1f88cH3CniFGiddMq76b
-         B4mxAfNpBpptjmVWBPqmn5FBxwfIDhSWWk2Xq581jqywXnXQDGyKbPjGekn3gVkmQcI+
-         oNWVyiqqSiLqVfuRi5bDE560iMUsMv2pZUFXLUN7ZIb1a6VNnEg44oUigHyKeTn6inUb
-         Lx0JZLzbOqSp0MsmFg9d11+g3LY0u6rk1B9ZRiJM9OqJXEkaM/8TpkWbc0osI7xR8htK
-         LH62GR9VS+W+OFZL6o9XgtsB9IuRZjwGt7+/Z6q9Oq6x39HfSW5wyKSSL7S0GUwe6dOK
-         l3jQ==
+        d=google.com; s=20221208; t=1683025688; x=1685617688;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gUDcSuuwf99CjrFj0RS76HPcVODMt0PmeWJoCOYwgTE=;
+        b=JVcxgWfBwSJLmLFXcV2UpK9oE6eAuKV2jxoH2bLjJ8FZyDthd7xCQBMNlkwlhWSTH+
+         OMTXe6sn0Vateyfi73WoXkAHfikxK5ZpIN72T0bYXbjobQlGrsG2kMdd4IN57uPJfeXR
+         S23KjpqcVCUhXNBFu8mKFoKy4LtteQFIiejCN4rgD8bvFXPsms3UTpHi01sS3c19zYg+
+         j/Z4m8WVoHUCuEXeH8pUfk9jBKV6mzmxvHmTLX6wMu4FsitRteud0gG167j+A2zUrkE/
+         iUDvWWEAYa5bmLOBdritazUyKXUdMv+RmdH7JaXilljfvttO8grzJBtjOyieyptxIrk9
+         +qww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683025631; x=1685617631;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PULIHjTL+BqotFHLEBxc5PXwcQ92x+ai+H8UIvev6Xs=;
-        b=PbLiQufSUTpbRuL+4tKESAk0H8GWEXFn9tVRZWP9SDGdo+HPp9/1dZOoF5NkZqXu8r
-         gyW3tRoA6GQR+wQNo6biLMe3UPBrmrkjuj7Z0ii1V0Vu6mZ+x8QgtIo+aOXpgbCDuCrJ
-         H3AhrSm0oTHgURDK95RJRJTxG5gFASn1anf2BQE15aRr1SLGMNbFcJh1mioxmK+EfH2i
-         jBEarEjpGN7bL1nlTmzXcTcln8zOuN0HF44ewZ41LAkmSXK0p1OXOYQ82SSzaHjp7o+I
-         C2c5HEleApHpzyA5IfSwQQ5GJHPffH4DAmHDhKWcQmxwAPxOl+wqESLJUU8fVWCR6oqF
-         F58Q==
-X-Gm-Message-State: AC+VfDz3OzAG/yYLvRjKD5cJmgwRfkhUOhTVRroHdA9UtpgAnsf7gdgd
-        JfXkcXzAKUAwN66GlbsIYWX5ow==
-X-Google-Smtp-Source: ACHHUZ5GIrUX3luVCFDWkL2w6BsQXcfgDLim2NjjmJK5Bhhmz7C+bWShuyFVhZPhQEY7YNIiJf5l3g==
-X-Received: by 2002:a05:6512:eaa:b0:4ef:edb4:2c77 with SMTP id bi42-20020a0565120eaa00b004efedb42c77mr5980804lfb.11.1683025631089;
-        Tue, 02 May 2023 04:07:11 -0700 (PDT)
-Received: from [192.168.1.101] (abyl248.neoplus.adsl.tpnet.pl. [83.9.31.248])
-        by smtp.gmail.com with ESMTPSA id y10-20020a19750a000000b004eff0ce3ae5sm4028269lfe.145.2023.05.02.04.07.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 May 2023 04:07:10 -0700 (PDT)
-Message-ID: <0e76a9f6-f062-2802-d9de-3c0b2b897a4e@linaro.org>
-Date:   Tue, 2 May 2023 13:07:09 +0200
+        d=1e100.net; s=20221208; t=1683025688; x=1685617688;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gUDcSuuwf99CjrFj0RS76HPcVODMt0PmeWJoCOYwgTE=;
+        b=Q7PjttZcA7x3V61phU0odXHkiBTn0n4xANGY+Q/AwVytOCIP3jFyJljKJooEqv6OH2
+         rVqGAoeaHcJ/RQ+ych6lWFllD/JPJj90Qzk9XuR/A3Ea1Tlj8jESERGCJ4pO4jfecatW
+         x0pn7MHGeyLgExWYqFWrUOOfrVf74pqpk5p5oyJh4jNMt/yHQmBGXEvLZs5GhClMuuUe
+         07IHgFqOeJX2l1eFk6D6xjliwakbrAnWwYHTUgWsvFMWJox36tJ32iWBaaxdZa9pNEi7
+         u0zhm119PEiRX4VDHbOAcheb5ErTvuf5JLULe0f0tybdA4+fkPxd1nHVTsiKJqbgam+o
+         /Hyw==
+X-Gm-Message-State: AC+VfDy1ODHzWTqpzayfk6Tr93fQzVgoTpRUvrCnNaDnuQ8vWKDKQZFn
+        SuZl8SOeHY1juB0P21DMV6m0mzD0pZvwpAL+PcEsGA==
+X-Google-Smtp-Source: ACHHUZ5VNbjfoop3PnLll3UVr7Gq+u54wz470Cs5Iae3izwjChmj/xvIAT34WYHo1SyIfmmuFJDRLswvr9cDBjt5ap4=
+X-Received: by 2002:a05:622a:351:b0:3ef:a55:7f39 with SMTP id
+ r17-20020a05622a035100b003ef0a557f39mr350770qtw.12.1683025687876; Tue, 02 May
+ 2023 04:08:07 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v7 9/9] arm64: dts: qcom: sa8540-ride: Enable first port
- of tertiary usb controller
-Content-Language: en-US
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
-        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
-        ahalaney@redhat.com, quic_shazhuss@quicinc.com
-References: <20230501143445.3851-1-quic_kriskura@quicinc.com>
- <20230501143445.3851-10-quic_kriskura@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230501143445.3851-10-quic_kriskura@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <000000000000c5beb705faa6577d@google.com> <20230501212633.GN59213@frogsfrogsfrogs>
+In-Reply-To: <20230501212633.GN59213@frogsfrogsfrogs>
+From:   Aleksandr Nogikh <nogikh@google.com>
+Date:   Tue, 2 May 2023 13:07:56 +0200
+Message-ID: <CANp29Y6YL8t6LMJRar7SMbaMU3ZCUMV1L_C7MFJm9MLLcy7omA@mail.gmail.com>
+Subject: Re: [syzbot] [xfs?] KASAN: slab-out-of-bounds Read in xfs_getbmap
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     syzbot <syzbot+c103d3808a0de5faaf80@syzkaller.appspotmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Darrick,
 
+On Mon, May 1, 2023 at 11:26=E2=80=AFPM Darrick J. Wong <djwong@kernel.org>=
+ wrote:
+>
+> On Mon, May 01, 2023 at 11:53:47AM -0700, syzbot wrote:
+> > Hello,
+> >
+> > syzbot found the following issue on:
+> >
+> > HEAD commit:    58390c8ce1bd Merge tag 'iommu-updates-v6.4' of git://gi=
+t.k..
+> > git tree:       upstream
+> > console+strace: https://syzkaller.appspot.com/x/log.txt?x=3D11e6af2c280=
+000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3D5eadbf0d3c2=
+ece89
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=3Dc103d3808a0de=
+5faaf80
+> > compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for D=
+ebian) 2.35.2
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D12e25f2c2=
+80000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D14945d10280=
+000
+> >
+> > Downloadable assets:
+> > disk image: https://storage.googleapis.com/syzbot-assets/60130779f509/d=
+isk-58390c8c.raw.xz
+> > vmlinux: https://storage.googleapis.com/syzbot-assets/d7f0cdd29b71/vmli=
+nux-58390c8c.xz
+> > kernel image: https://storage.googleapis.com/syzbot-assets/de415ad52ae4=
+/bzImage-58390c8c.xz
+> > mounted in repro: https://storage.googleapis.com/syzbot-assets/c94bae2c=
+94e1/mount_0.gz
+> >
+> > IMPORTANT: if you fix the issue, please add the following tag to the co=
+mmit:
+> > Reported-by: syzbot+c103d3808a0de5faaf80@syzkaller.appspotmail.com
+>
+>
+> #syz test: git://repo/address.git branch-or-commit-hash
 
-On 1.05.2023 16:34, Krishna Kurapati wrote:
-> There is now support for the multiport USB controller this uses so
-> enable it.
-> 
-> The board only has a single port hooked up (despite it being wired up to
-> the multiport IP on the SoC). There's also a USB 2.0 mux hooked up,
-> which by default on boot is selected to mux properly. Grab the gpio
-> controlling that and ensure it stays in the right position so USB 2.0
-> continues to be routed from the external port to the SoC.
-> 
-> Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> ---
-same comments as patch 8
+FWIW it looks like you forgot to substitute the repo and branch,
+therefore syzbot just ignored the patch testing request (it's taught
+not to react on commands with sample arguments).
 
-Konrad
->  arch/arm64/boot/dts/qcom/sa8540p-ride.dts | 22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-> index 24fa449d48a6..53d47593306e 100644
-> --- a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-> +++ b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-> @@ -309,6 +309,19 @@ &usb_2_qmpphy0 {
->  	status = "okay";
->  };
->  
-> +&usb_2 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&usb2_en_state>;
-> +
-> +	status = "okay";
-> +};
-> +
-> +&usb_2_dwc3 {
-> +	dr_mode = "host";
-> +	phy-names = "usb2-port0", "usb3-port0";
-> +	phys = <&usb_2_hsphy0>, <&usb_2_qmpphy0>;
-> +};
-> +
->  &xo_board_clk {
->  	clock-frequency = <38400000>;
->  };
-> @@ -401,4 +414,13 @@ wake-pins {
->  			bias-pull-up;
->  		};
->  	};
-> +
-> +	usb2_en_state: usb2-en-state {
-> +		/* TS3USB221A USB2.0 mux select */
-> +		pins = "gpio24";
-> +		function = "gpio";
-> +		drive-strength = <2>;
-> +		bias-disable;
-> +		output-low;
-> +	};
->  };
+--=20
+Aleksandr
+>
+> --D
+>
+>
+> >
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > BUG: KASAN: slab-out-of-bounds in xfs_getbmap+0x1c06/0x1c90 fs/xfs/xfs_=
+bmap_util.c:561
+> > Read of size 4 at addr ffff88801872aa78 by task syz-executor294/5000
+> >
+> > CPU: 1 PID: 5000 Comm: syz-executor294 Not tainted 6.3.0-syzkaller-1204=
+9-g58390c8ce1bd #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS=
+ Google 04/14/2023
+> > Call Trace:
+> >  <TASK>
+> >  __dump_stack lib/dump_stack.c:88 [inline]
+> >  dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
+> >  print_address_description mm/kasan/report.c:351 [inline]
+> >  print_report+0x163/0x540 mm/kasan/report.c:462
+> >  kasan_report+0x176/0x1b0 mm/kasan/report.c:572
+> >  xfs_getbmap+0x1c06/0x1c90 fs/xfs/xfs_bmap_util.c:561
+> >  xfs_ioc_getbmap+0x243/0x7a0 fs/xfs/xfs_ioctl.c:1481
+> >  xfs_file_ioctl+0xbf5/0x16a0 fs/xfs/xfs_ioctl.c:1949
+> >  vfs_ioctl fs/ioctl.c:51 [inline]
+> >  __do_sys_ioctl fs/ioctl.c:870 [inline]
+> >  __se_sys_ioctl+0xf1/0x160 fs/ioctl.c:856
+> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> >  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > RIP: 0033:0x7fc886bade49
+> > Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 71 15 00 00 90 48 89 f8 48 89=
+ f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 =
+ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> > RSP: 002b:00007fc87f738208 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> > RAX: ffffffffffffffda RBX: 00007fc886c3c7b8 RCX: 00007fc886bade49
+> > RDX: 0000000020000140 RSI: 00000000c0205826 RDI: 0000000000000005
+> > RBP: 00007fc886c3c7b0 R08: 00007fc87f738700 R09: 0000000000000000
+> > R10: 00007fc87f738700 R11: 0000000000000246 R12: 00007fc886c3c7bc
+> > R13: 00007ffdc483022f R14: 00007fc87f738300 R15: 0000000000022000
+> >  </TASK>
+> >
+> > Allocated by task 4450:
+> >  kasan_save_stack mm/kasan/common.c:45 [inline]
+> >  kasan_set_track+0x4f/0x70 mm/kasan/common.c:52
+> >  ____kasan_kmalloc mm/kasan/common.c:374 [inline]
+> >  __kasan_kmalloc+0x98/0xb0 mm/kasan/common.c:383
+> >  kasan_kmalloc include/linux/kasan.h:196 [inline]
+> >  __do_kmalloc_node mm/slab_common.c:966 [inline]
+> >  __kmalloc_node+0xb8/0x230 mm/slab_common.c:973
+> >  kmalloc_node include/linux/slab.h:579 [inline]
+> >  kvmalloc_node+0x72/0x180 mm/util.c:604
+> >  kvmalloc include/linux/slab.h:697 [inline]
+> >  simple_xattr_alloc+0x43/0xa0 fs/xattr.c:1073
+> >  shmem_initxattrs+0x8e/0x1e0 mm/shmem.c:3290
+> >  security_inode_init_security+0x2df/0x3f0 security/security.c:1630
+> >  shmem_mknod+0xba/0x1c0 mm/shmem.c:2947
+> >  lookup_open fs/namei.c:3492 [inline]
+> >  open_last_lookups fs/namei.c:3560 [inline]
+> >  path_openat+0x13df/0x3170 fs/namei.c:3788
+> >  do_filp_open+0x234/0x490 fs/namei.c:3818
+> >  do_sys_openat2+0x13f/0x500 fs/open.c:1356
+> >  do_sys_open fs/open.c:1372 [inline]
+> >  __do_sys_openat fs/open.c:1388 [inline]
+> >  __se_sys_openat fs/open.c:1383 [inline]
+> >  __x64_sys_openat+0x247/0x290 fs/open.c:1383
+> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> >  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> >
+> > The buggy address belongs to the object at ffff88801872aa00
+> >  which belongs to the cache kmalloc-64 of size 64
+> > The buggy address is located 79 bytes to the right of
+> >  allocated 41-byte region [ffff88801872aa00, ffff88801872aa29)
+> >
+> > The buggy address belongs to the physical page:
+> > page:ffffea000061ca80 refcount:1 mapcount:0 mapping:0000000000000000 in=
+dex:0x0 pfn:0x1872a
+> > flags: 0xfff00000000200(slab|node=3D0|zone=3D1|lastcpupid=3D0x7ff)
+> > page_type: 0xffffffff()
+> > raw: 00fff00000000200 ffff888012441640 ffffea0000ad39c0 dead00000000000=
+2
+> > raw: 0000000000000000 0000000080200020 00000001ffffffff 000000000000000=
+0
+> > page dumped because: kasan: bad access detected
+> > page_owner tracks the page as allocated
+> > page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12cc=
+0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY), pid 4439, tgid 4439 (S02sysctl), =
+ts 15189537421, free_ts 15177747790
+> >  set_page_owner include/linux/page_owner.h:31 [inline]
+> >  post_alloc_hook+0x1e6/0x210 mm/page_alloc.c:1722
+> >  prep_new_page mm/page_alloc.c:1729 [inline]
+> >  get_page_from_freelist+0x321c/0x33a0 mm/page_alloc.c:3493
+> >  __alloc_pages+0x255/0x670 mm/page_alloc.c:4759
+> >  alloc_slab_page+0x6a/0x160 mm/slub.c:1851
+> >  allocate_slab mm/slub.c:1998 [inline]
+> >  new_slab+0x84/0x2f0 mm/slub.c:2051
+> >  ___slab_alloc+0xa85/0x10a0 mm/slub.c:3192
+> >  __slab_alloc mm/slub.c:3291 [inline]
+> >  __slab_alloc_node mm/slub.c:3344 [inline]
+> >  slab_alloc_node mm/slub.c:3441 [inline]
+> >  __kmem_cache_alloc_node+0x1b8/0x290 mm/slub.c:3490
+> >  kmalloc_trace+0x2a/0xe0 mm/slab_common.c:1057
+> >  kmalloc include/linux/slab.h:559 [inline]
+> >  load_elf_binary+0x1cdb/0x2830 fs/binfmt_elf.c:910
+> >  search_binary_handler fs/exec.c:1737 [inline]
+> >  exec_binprm fs/exec.c:1779 [inline]
+> >  bprm_execve+0x90e/0x1740 fs/exec.c:1854
+> >  do_execveat_common+0x580/0x720 fs/exec.c:1962
+> >  do_execve fs/exec.c:2036 [inline]
+> >  __do_sys_execve fs/exec.c:2112 [inline]
+> >  __se_sys_execve fs/exec.c:2107 [inline]
+> >  __x64_sys_execve+0x92/0xa0 fs/exec.c:2107
+> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> >  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > page last free stack trace:
+> >  reset_page_owner include/linux/page_owner.h:24 [inline]
+> >  free_pages_prepare mm/page_alloc.c:1302 [inline]
+> >  free_unref_page_prepare+0x903/0xa30 mm/page_alloc.c:2555
+> >  free_unref_page_list+0x596/0x830 mm/page_alloc.c:2696
+> >  release_pages+0x2193/0x2470 mm/swap.c:1042
+> >  tlb_batch_pages_flush mm/mmu_gather.c:97 [inline]
+> >  tlb_flush_mmu_free mm/mmu_gather.c:292 [inline]
+> >  tlb_flush_mmu+0x100/0x210 mm/mmu_gather.c:299
+> >  tlb_finish_mmu+0xd4/0x1f0 mm/mmu_gather.c:391
+> >  exit_mmap+0x3da/0xaf0 mm/mmap.c:3123
+> >  __mmput+0x115/0x3c0 kernel/fork.c:1351
+> >  exec_mmap+0x672/0x700 fs/exec.c:1035
+> >  begin_new_exec+0x665/0xf10 fs/exec.c:1294
+> >  load_elf_binary+0x95d/0x2830 fs/binfmt_elf.c:1001
+> >  search_binary_handler fs/exec.c:1737 [inline]
+> >  exec_binprm fs/exec.c:1779 [inline]
+> >  bprm_execve+0x90e/0x1740 fs/exec.c:1854
+> >  do_execveat_common+0x580/0x720 fs/exec.c:1962
+> >  do_execve fs/exec.c:2036 [inline]
+> >  __do_sys_execve fs/exec.c:2112 [inline]
+> >  __se_sys_execve fs/exec.c:2107 [inline]
+> >  __x64_sys_execve+0x92/0xa0 fs/exec.c:2107
+> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> >  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> >
+> > Memory state around the buggy address:
+> >  ffff88801872a900: 00 00 00 00 00 01 fc fc fc fc fc fc fc fc fc fc
+> >  ffff88801872a980: fa fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
+> > >ffff88801872aa00: 00 00 00 00 00 01 fc fc fc fc fc fc fc fc fc fc
+> >                                                                 ^
+> >  ffff88801872aa80: 00 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc
+> >  ffff88801872ab00: 00 00 00 00 00 00 fc fc fc fc fc fc fc fc fc fc
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >
+> >
+> > ---
+> > This report is generated by a bot. It may contain errors.
+> > See https://goo.gl/tpsmEJ for more information about syzbot.
+> > syzbot engineers can be reached at syzkaller@googlegroups.com.
+> >
+> > syzbot will keep track of this issue. See:
+> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> >
+> > If the bug is already fixed, let syzbot know by replying with:
+> > #syz fix: exact-commit-title
+> >
+> > If you want syzbot to run the reproducer, reply with:
+> > If you attach or paste a git patch, syzbot will apply it before testing=
+.
+> >
+> > If you want to change bug's subsystems, reply with:
+> > #syz set subsystems: new-subsystem
+> > (See the list of subsystem names on the web dashboard)
+> >
+> > If the bug is a duplicate of another bug, reply with:
+> > #syz dup: exact-subject-of-another-report
+> >
+> > If you want to undo deduplication, reply with:
+> > #syz undup
+>
+> --
+> You received this message because you are subscribed to the Google Groups=
+ "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgi=
+d/syzkaller-bugs/20230501212633.GN59213%40frogsfrogsfrogs.
