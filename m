@@ -2,115 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68D766F3F12
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 10:26:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 763E76F3F29
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 10:35:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233716AbjEBI0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 04:26:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38916 "EHLO
+        id S233689AbjEBIfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 04:35:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229936AbjEBI0d (ORCPT
+        with ESMTP id S233158AbjEBIfW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 04:26:33 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A22FE58;
-        Tue,  2 May 2023 01:26:31 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id 98e67ed59e1d1-24df6bbf765so2055230a91.0;
-        Tue, 02 May 2023 01:26:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683015991; x=1685607991;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NThf51HN0Hmw05qsD82aWWnprkGApsME6/ez9gbwYD4=;
-        b=n8/iCIrvfM3Rw8xgWdhUOHvVhQBYT7UyRn4HPztbs65ck1gZ1UK76NurJZEocRb5N3
-         u8MawCk+S/y6KUip1hIe/R5OBrSL+TPGD86QZ4J6LOkWMmhAZZ80kHCVl9CsWrVex8/E
-         aWdKkV9+MswlpLUiDN5ayWNo/0pjjfN9e5OdYLjkYms+IA5xYhRnqbKtyTxnZOIp6ukx
-         Ccrt91MjJ3np5M8A2zHvkopMcW6IMAzM5VHzplBVGDHANnhHnulrDqThZKSUa0/3NQDa
-         KVwFTS2sLGDsoWX8/1V1/CMb6ymh8NBUE03tEc92HA/b2e5N/XCNPvlu+poiASlCHR1a
-         rgWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683015991; x=1685607991;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NThf51HN0Hmw05qsD82aWWnprkGApsME6/ez9gbwYD4=;
-        b=kP1zfEuRTXr7YH/oPYiPQKrUpcSr+qDxnjbXOQD++CZnNn4+k9Q0Fzlu4OqVzSw+ML
-         kMsbK//NAtDfXhmsflsPlD8m5It7PgVxr4SL1gc+iGGbPagBuLwQYIGj/YTCggPTJgiI
-         eIrdrxHl6LufZB3zbF7IwQNufPztWgn/nps8ZDhYeYcUEfv7Z96XOa4qMHAM03BengVR
-         jGxXRe7bo8KtvskkbqIXJ56WxhuyMnKzVelRoBB+7mcL0Hns/6QKiplGkeiBZB7R2lX1
-         C/70RO097XZFa5pefIuTqQvcsBr6UyqTwcfmC2Hj75v7wcS7qMXItuX+9jtpbXsE7zcb
-         aB+w==
-X-Gm-Message-State: AC+VfDwUXlfOR5wS2jPI0AgzAhVq1sN1NcNEM/gW5sFboLngNFtyJrAf
-        OUC1KcSkR4B/EWVgsrf+O3y7Xe7NGU07UWfmGZFuNNH1BAA=
-X-Google-Smtp-Source: ACHHUZ7iAMN0h55/KOpCIA2bWw9W1t85gvPwlR81xT1RPkW9VX5dLbL993keQOYZwQ17tfDsJPGXC6VqZYdornRJbQU=
-X-Received: by 2002:a17:90a:a010:b0:249:6098:b068 with SMTP id
- q16-20020a17090aa01000b002496098b068mr17532296pjp.45.1683015990989; Tue, 02
- May 2023 01:26:30 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230501084401.765169-1-cristian.ciocaltea@collabora.com>
-In-Reply-To: <20230501084401.765169-1-cristian.ciocaltea@collabora.com>
-From:   Vincent Legoll <vincent.legoll@gmail.com>
-Date:   Tue, 2 May 2023 08:26:19 +0000
-Message-ID: <CAEwRq=pKBWsiE1EVf8+k2tZeeEqBpZFgJPCnSN2M005ajbpdmA@mail.gmail.com>
-Subject: Re: [PATCH 0/8] Add RK3588 OTP memory support
-To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Kever Yang <kever.yang@rock-chips.com>,
-        Finley Xiao <finley.xiao@rock-chips.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 2 May 2023 04:35:22 -0400
+X-Greylist: delayed 523 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 02 May 2023 01:35:17 PDT
+Received: from mx0.infotecs.ru (mx0.infotecs.ru [91.244.183.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99FCA3C0C;
+        Tue,  2 May 2023 01:35:17 -0700 (PDT)
+Received: from mx0.infotecs-nt (localhost [127.0.0.1])
+        by mx0.infotecs.ru (Postfix) with ESMTP id 644FD108AF9C;
+        Tue,  2 May 2023 11:26:30 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx0.infotecs.ru 644FD108AF9C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=infotecs.ru; s=mx;
+        t=1683015990; bh=m8D8J1VQUATKJTZzY+gdxzLobO6f59B6cKPL1bk4e0M=;
+        h=From:To:CC:Subject:Date:From;
+        b=gASnqsd8nqMY+YDG/pklyCP2unjn/d8TDsDAWtMBrWnLb1tF4J9BqWuHZzSh71tGJ
+         YYEhTUuM6zlDrBaJht2r0GIg7WrP5u7fq92FnUrQsOoa+aH4ybB39xadhJbR3dCHwm
+         o6NtXsemCP1rS2cAeJwdrMGUq1Z5/e7xl0Z509uQ=
+Received: from msk-exch-01.infotecs-nt (msk-exch-01.infotecs-nt [10.0.7.191])
+        by mx0.infotecs-nt (Postfix) with ESMTP id 5AC0430633DA;
+        Tue,  2 May 2023 11:26:30 +0300 (MSK)
+From:   Gavrilov Ilia <Ilia.Gavrilov@infotecs.ru>
+To:     Neil Horman <nhorman@tuxdriver.com>
+CC:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Xin Long <lucien.xin@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "lvc-project@linuxtesting.org" <lvc-project@linuxtesting.org>
+Subject: [PATCH] sctp: fix a potential buffer overflow in
+ sctp_sched_set_sched()
+Thread-Topic: [PATCH] sctp: fix a potential buffer overflow in
+ sctp_sched_set_sched()
+Thread-Index: AQHZfM/L3fQfyLzenEuG6u7YLaEbHQ==
+Date:   Tue, 2 May 2023 08:26:30 +0000
+Message-ID: <20230502082622.2392659-1-Ilia.Gavrilov@infotecs.ru>
+Accept-Language: ru-RU, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.17.0.10]
+x-exclaimer-md-config: 208ac3cd-1ed4-4982-a353-bdefac89ac0a
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-KLMS-Rule-ID: 1
+X-KLMS-Message-Action: clean
+X-KLMS-AntiSpam-Lua-Profiles: 177098 [May 02 2023]
+X-KLMS-AntiSpam-Version: 5.9.59.0
+X-KLMS-AntiSpam-Envelope-From: Ilia.Gavrilov@infotecs.ru
+X-KLMS-AntiSpam-Rate: 0
+X-KLMS-AntiSpam-Status: not_detected
+X-KLMS-AntiSpam-Method: none
+X-KLMS-AntiSpam-Auth: dkim=none
+X-KLMS-AntiSpam-Info: LuaCore: 510 510 bc345371020d3ce827abc4c710f5f0ecf15eaf2e, {Tracking_from_domain_doesnt_match_to}, 127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;infotecs.ru:7.1.1
+X-MS-Exchange-Organization-SCL: -1
+X-KLMS-AntiSpam-Interceptor-Info: scan successful
+X-KLMS-AntiPhishing: Clean, bases: 2023/05/02 06:48:00
+X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, bases: 2023/05/02 03:46:00 #21204364
+X-KLMS-AntiVirus-Status: Clean, skipped
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+The 'sched' index value must be checked before accessing an element
+of the 'sctp_sched_ops' array. Otherwise, it can lead to buffer overflow.
 
-On Mon, May 1, 2023 at 8:44=E2=80=AFAM Cristian Ciocaltea
-<cristian.ciocaltea@collabora.com> wrote:
-> This patch series adds OTP memory support for Rockchip RK3588 SoC,
-> while also providing a few improvements to the existing rockchip-otp
-> driver, in addition to converting the bindings to dt-schema.
+Note that it's harmless since the 'sched' parameter is checked before
+calling 'sctp_sched_set_sched'.
 
-I tested this on a QuartzPro64 dev board, I applied your series top of my t=
-ree:
-Collabora's rk3588-v6.3 + some DT patches to add support for the qp64 board=
-.
+Found by InfoTeCS on behalf of Linux Verification Center
+(linuxtesting.org) with SVACE.
 
-Here is the output from the commands you told me to try:
+Fixes: 5bbbbe32a431 ("sctp: introduce stream scheduler foundations")
+Signed-off-by: Ilia.Gavrilov <Ilia.Gavrilov@infotecs.ru>
+---
+ net/sctp/stream_sched.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-# ls -1 /sys/bus/nvmem/devices/*/nvmem
-/sys/bus/nvmem/devices/rockchip-otp0/nvmem
-
-#  od -N 64 -A x -t x1z -v /sys/bus/nvmem/devices/rockchip-otp0/nvmem
-000000 52 4b 35 88 91 fe 21 41 5a 43 39 36 00 00 00 00  >RK5...!AZC96....<
-000010 00 00 00 00 0f 0b 0d 0a 0a 0c 25 0e 00 00 00 00  >..........%.....<
-000020 00 00 00 00 00 00 00 00 08 0c 00 00 00 00 00 00  >................<
-000030 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  >................<
-000040
-
-This is working as expected.
-
-You can add my T-B, for the whole series:
-
-Tested-by: Vincent Legoll <vincent.legoll@gmail.com>
-
-Regards
-
---
-Vincent Legoll
+diff --git a/net/sctp/stream_sched.c b/net/sctp/stream_sched.c
+index 330067002deb..a339917d7197 100644
+--- a/net/sctp/stream_sched.c
++++ b/net/sctp/stream_sched.c
+@@ -146,18 +146,19 @@ static void sctp_sched_free_sched(struct sctp_stream =
+*stream)
+ int sctp_sched_set_sched(struct sctp_association *asoc,
+ 			 enum sctp_sched_type sched)
+ {
+-	struct sctp_sched_ops *n =3D sctp_sched_ops[sched];
++	struct sctp_sched_ops *n;
+ 	struct sctp_sched_ops *old =3D asoc->outqueue.sched;
+ 	struct sctp_datamsg *msg =3D NULL;
+ 	struct sctp_chunk *ch;
+ 	int i, ret =3D 0;
+=20
+-	if (old =3D=3D n)
+-		return ret;
+-
+ 	if (sched > SCTP_SS_MAX)
+ 		return -EINVAL;
+=20
++	n =3D sctp_sched_ops[sched];
++	if (old =3D=3D n)
++		return ret;
++
+ 	if (old)
+ 		sctp_sched_free_sched(&asoc->stream);
+=20
+--=20
+2.30.2
