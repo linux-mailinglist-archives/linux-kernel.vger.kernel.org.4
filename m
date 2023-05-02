@@ -2,102 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24BD66F3E03
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 08:59:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81D4F6F3E13
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 09:03:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230004AbjEBG7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 02:59:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60950 "EHLO
+        id S233541AbjEBHDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 03:03:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjEBG7b (ORCPT
+        with ESMTP id S230004AbjEBHDx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 02:59:31 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DF44C95
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 23:59:29 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 3426xR0k027963;
-        Tue, 2 May 2023 08:59:27 +0200
-Date:   Tue, 2 May 2023 08:59:27 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas@t-8ch.de>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tools/nolibc: remove LINUX_REBOOT_ constants
-Message-ID: <ZFC0z8dh+DmVSYyk@1wt.eu>
-References: <20230428-nolibc-reboot-v1-1-0bca02d20ba6@weissschuh.net>
- <ZFCubzgPxBSDiTwq@1wt.eu>
- <c967837e-39c7-48e4-9ee7-65892f13d126@t-8ch.de>
+        Tue, 2 May 2023 03:03:53 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AD1C1FDE
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 00:03:52 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1ptk33-0001uP-Lo; Tue, 02 May 2023 09:03:41 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 104711BBEE2;
+        Tue,  2 May 2023 07:03:40 +0000 (UTC)
+Date:   Tue, 2 May 2023 09:03:39 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Wolfram Sang <wsa@kernel.org>, NXP Linux Team <linux-imx@nxp.com>,
+        "A. Sverdlin" <alexander.sverdlin@siemens.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] i2c: lpi2c: cache peripheral clock rate
+Message-ID: <20230502-grueling-plural-694f7fc7c9ff-mkl@pengutronix.de>
+References: <20230310130815.562418-1-alexander.sverdlin@siemens.com>
+ <4797405.GXAFRqVoOG@steina-w>
+ <ZE4TU0rCw9MSwrmB@sai>
+ <2143344.irdbgypaU6@steina-w>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ywzxrng3y4nbcxxf"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c967837e-39c7-48e4-9ee7-65892f13d126@t-8ch.de>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <2143344.irdbgypaU6@steina-w>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 02, 2023 at 08:47:15AM +0200, Thomas Weißschuh wrote:
-> On 2023-05-02 08:32:15+0200, Willy Tarreau wrote:
-> > On Fri, Apr 28, 2023 at 05:52:11PM +0200, Thomas Weißschuh wrote:
-> > > The same constants and some more have been exposed to userspace via
-> > > linux/reboot.h for a long time.
-> > > 
-> > > To avoid conflicts and trim down nolibc a bit drop the custom
-> > > definitions.
-> > 
-> > For me it breaks the build when including nolibc directly, so most
-> > likely we need to include certain files:
-> 
-> Indeed, sorry no idea how I missed that.
 
-No worries, it happens to me as well and that's the benefit of
-cross-testing ;-)
+--ywzxrng3y4nbcxxf
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> The conflict looks like this:
-> 
->     In file included from nolibc-test.c:18:
->     sysroot/x86/include/linux/reboot.h:10: warning: "LINUX_REBOOT_MAGIC2" redefined
->        10 | #define LINUX_REBOOT_MAGIC2     672274793
->           | 
->     In file included from sysroot/x86/include/nolibc.h:98,
->                      from sysroot/x86/include/errno.h:26,
->                      from sysroot/x86/include/stdio.h:14,
->                      from nolibc-test.c:15:
->     ... and all the other ones.
-> 
-> 
-> 
-> The following trivial fix on top of my patch would fix the problem:
-> 
-> diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-> index 5d624dc63a42..9d27131c224e 100644
-> --- a/tools/include/nolibc/sys.h
-> +++ b/tools/include/nolibc/sys.h
-> @@ -21,6 +21,7 @@
->  #include <linux/auxvec.h>
->  #include <linux/fcntl.h> // for O_* and AT_*
->  #include <linux/stat.h>  // for statx()
-> +#include <linux/reboot.h> // for LINUX_REBOOT_*
->  
->  #include "arch.h"
->  #include "errno.h"
+On 02.05.2023 08:50:06, Alexander Stein wrote:
+> Hello Wolfgang,
+>=20
+> Am Sonntag, 30. April 2023, 09:05:55 CEST schrieb Wolfram Sang:
+> > * PGP Signed by an unknown key
+> >=20
+> > > > IIRC this is a general problem^w limitation of the clock framework,
+> > > > clock providers cannot use clocks themselves in certain callback, e=
+=2Eg.
+> > > > set_rate.
+> > >=20
+> > > Well, that's essentially impossible when this clock provider is attac=
+hed
+> > > via i2c. i2c transfers potentially need to change or prepare clocks.
+> >=20
+> > So, as I get it, this is not a specific lpi2c problem but affecting any
+> > I2C controller driver which uses get_rate() to setup a transfer to a
+> > remote I2C clock provider? And this lockdep warning is a false-positive?
+>=20
+> Yes, IMHO this could potentially occur on every I2C controller driver, if=
+ a=20
+> clock provider while holding the clk_prepare_lock, e.g. during registrati=
+on,=20
+> issues an i2c transfer.
+> I'm not so sure if this is a false-positive, but more like trying to do a=
+=20
+> nested lock.
 
-Indeed it works for me as well.
+It's a general limitation of the clock framework. The clk_prepare_lock()
+is taken by clk_prepare() and by clk_get_rate(). So if you implement a
+clock provider driver that uses I2C, which might use clk_get_rate() it
+might deadlock. However there's a workaround for nested I2C calls:
+533ddeb1e86f "(clk: allow reentrant calls into the clk framework,
+2013-03-28)". This doesn't work for SPI, as it's using a worker thread.
 
-> Want me to send a v2 or will you fix it up on your side?
+| https://elixir.bootlin.com/linux/v6.3/source/drivers/clk/clk.c#L128
 
-It depends. If for you it's a fix and needed for 6.4 (or maybe older),
-then that one is needed with the "//" comment, and it will later
-conflict with your previous cleanup patch that's already queued. If
-you're fine with having it queued for 6.5 only however, then I'll just
-edit your patch and add that above. I tend to think the second solution
-is sufficient given that nobody complained till now ;-)
+regards,
+Marc
 
-Just let me know,
-thanks,
-Willy 
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--ywzxrng3y4nbcxxf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRQtckACgkQvlAcSiqK
+BOhPxwgAr5nYSNP4JEu7xo76JeUQGHdeOk6wmcHDpSmhFJje5gaXzU1knRdxynwV
+OM+EkIYxbuDzvdRwpgg+cdyGUmprQxPiUHMjYasDOR9lv4lSKVKKomDqPXyLBI/r
+jbRkiuslJF6Hrk9y7qxDEo6oGlh86UlNEvwKO4ImFJWDBDTovgjxUXk1wTyP8HPm
+ANOYQMWy+LY1OM3+oR0h/VOAFfRtAr1zrPnhcY6vk1/ZlG8gNzg8r/WSwez4qYKB
+NBxZdcKtGxuuFAl+T8y9aoKa4i2r8YmJtMY0HBDhAcZHQ2MPFyR9wzpAC7rXpKKO
+BQkb/3bMwJ0/XuXcapo2sJrUK7jxSw==
+=1qAJ
+-----END PGP SIGNATURE-----
+
+--ywzxrng3y4nbcxxf--
