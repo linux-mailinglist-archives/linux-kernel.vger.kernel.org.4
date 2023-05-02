@@ -2,122 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85FE96F4415
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 14:47:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A513B6F43F5
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 14:38:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234026AbjEBMro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 08:47:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60946 "EHLO
+        id S234225AbjEBMic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 08:38:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjEBMrm (ORCPT
+        with ESMTP id S233786AbjEBMia (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 08:47:42 -0400
-X-Greylist: delayed 597 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 02 May 2023 05:47:40 PDT
-Received: from bee.tesarici.cz (bee.tesarici.cz [IPv6:2a03:3b40:fe:2d4::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93F76A3;
-        Tue,  2 May 2023 05:47:40 -0700 (PDT)
-Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by bee.tesarici.cz (Postfix) with ESMTPSA id 2CF8014D08D;
-        Tue,  2 May 2023 14:37:38 +0200 (CEST)
-Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
-        t=1683031059; bh=Qr2tHIsVv3G7WfyCHA01MAqL8W2MA7ATI0zo3p6+vZU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=IfEosdQDdG0KdbWIE2Mw4kYzXULwRWeCrunMA9KeSj7bgHgVvejlazncQaRUsj4mk
-         cPzKmfMyWBF/pneu0+Wz1Tc79OAteXzmBVIF+laGLG7fMedy5/+rKBRUG4JXa0brek
-         j/mHCba0NDf+g5QrNCJ9oA++o7fZWNj5XJR8Ww/uOsU1/r1cRL+Ym3szeVpEkot+SQ
-         CPmLY5/NwlfZlklEXZtJMyzmEttSqfpVGGYiYbY1oZJU5at7AavuZZVsxFPid36vj1
-         A5riKtEpBa2mW2yWvT3lFoq/3exjrCXn7nmPFY3STEqu5coB+Uro028za0ObQL3JYi
-         4+VPt2d2SqCBg==
-Date:   Tue, 2 May 2023 14:37:37 +0200
-From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
-        mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
-        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
-        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
-        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
-        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
-        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
-        tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
-        paulmck@kernel.org, pasha.tatashin@soleen.com,
-        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
-        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, gregkh@linuxfoundation.org,
-        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
-Subject: Re: [PATCH 06/40] lib/string.c: strsep_no_empty()
-Message-ID: <20230502143737.1e11f1ac@meshulam.tesarici.cz>
-In-Reply-To: <20230501165450.15352-7-surenb@google.com>
-References: <20230501165450.15352-1-surenb@google.com>
-        <20230501165450.15352-7-surenb@google.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-suse-linux-gnu)
+        Tue, 2 May 2023 08:38:30 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3CAB8526E;
+        Tue,  2 May 2023 05:38:29 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0CDC6C14;
+        Tue,  2 May 2023 05:39:13 -0700 (PDT)
+Received: from [10.57.23.107] (unknown [10.57.23.107])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E32703F64C;
+        Tue,  2 May 2023 05:38:26 -0700 (PDT)
+Message-ID: <07d187de-2e0c-6ea7-d386-56eb5fb50f7d@arm.com>
+Date:   Tue, 2 May 2023 13:38:22 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v2] perf: arm_cspmu: Separate Arm and vendor module
+Content-Language: en-GB
+To:     Besar Wicaksono <bwicaksono@nvidia.com>,
+        "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>
+Cc:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Vikram Sethi <vsethi@nvidia.com>,
+        Richard Wiley <rwiley@nvidia.com>,
+        Eric Funsten <efunsten@nvidia.com>
+References: <20230418062030.45620-1-bwicaksono@nvidia.com>
+ <61e4c2ba-7549-2766-8c94-9de4fc27ecbd@arm.com>
+ <SJ0PR12MB567670F52673F9806BC6EABFA06B9@SJ0PR12MB5676.namprd12.prod.outlook.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <SJ0PR12MB567670F52673F9806BC6EABFA06B9@SJ0PR12MB5676.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon,  1 May 2023 09:54:16 -0700
-Suren Baghdasaryan <surenb@google.com> wrote:
+On 2023-04-28 23:23, Besar Wicaksono wrote:
+> Hi Robin and Suzuki,
+> 
+>> -----Original Message-----
+>> From: Robin Murphy <robin.murphy@arm.com>
+>> Sent: Thursday, April 27, 2023 7:21 AM
+>> To: Besar Wicaksono <bwicaksono@nvidia.com>; suzuki.poulose@arm.com;
+>> catalin.marinas@arm.com; will@kernel.org; mark.rutland@arm.com
+>> Cc: linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org; linux-
+>> tegra@vger.kernel.org; Thierry Reding <treding@nvidia.com>; Jonathan
+>> Hunter <jonathanh@nvidia.com>; Vikram Sethi <vsethi@nvidia.com>; Richard
+>> Wiley <rwiley@nvidia.com>; Eric Funsten <efunsten@nvidia.com>
+>> Subject: Re: [PATCH v2] perf: arm_cspmu: Separate Arm and vendor module
+>>
+>> External email: Use caution opening links or attachments
+>>
+>>
+>> On 2023-04-18 07:20, Besar Wicaksono wrote:
+>>> Arm Coresight PMU driver consists of main standard code and vendor
+>>> backend code. Both are currently built as a single module.
+>>> This patch adds vendor registration API to separate the two to
+>>> keep things modular. Vendor module shall register to the main
+>>> module on loading and trigger device reprobe.
+>>
+>> I think it might be considerably cleaner and safer if the main driver
+>> retained at least some knowledge of the PMIIDR matches and used those to
+>> explicity request the relevant module. Otherwise, not only is there an
+>> awful lot of fiddly complexity here, but there's also quite a burden on
+>> the user to know which modules they have to load to get full
+>> functionality on any given system.
+> 
+> Do you mean like keep the existing match table as a whitelist, and associate
+> each entry with the backend module name to load it from the main driver ?
 
-> From: Kent Overstreet <kent.overstreet@linux.dev>
-> 
-> This adds a new helper which is like strsep, except that it skips empty
-> tokens.
-> 
-> Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> ---
->  include/linux/string.h |  1 +
->  lib/string.c           | 19 +++++++++++++++++++
->  2 files changed, 20 insertions(+)
-> 
-> diff --git a/include/linux/string.h b/include/linux/string.h
-> index c062c581a98b..6cd5451c262c 100644
-> --- a/include/linux/string.h
-> +++ b/include/linux/string.h
-> @@ -96,6 +96,7 @@ extern char * strpbrk(const char *,const char *);
->  #ifndef __HAVE_ARCH_STRSEP
->  extern char * strsep(char **,const char *);
->  #endif
-> +extern char *strsep_no_empty(char **, const char *);
->  #ifndef __HAVE_ARCH_STRSPN
->  extern __kernel_size_t strspn(const char *,const char *);
->  #endif
-> diff --git a/lib/string.c b/lib/string.c
-> index 3d55ef890106..dd4914baf45a 100644
-> --- a/lib/string.c
-> +++ b/lib/string.c
-> @@ -520,6 +520,25 @@ char *strsep(char **s, const char *ct)
->  EXPORT_SYMBOL(strsep);
->  #endif
->  
-> +/**
-> + * strsep_no_empt - Split a string into tokens, but don't return empty tokens
-                ^^^^
-Typo: strsep_no_empty
+It would essentially be a table that matches a PMIIDR filter to a module 
+name. Having looked for existing examples of this kind of usage model, 
+in terms of the overall shape it might look closest to a very 
+stripped-down version of the crypto manager.
 
-Petr T
+>> FYI I've just started working on adding devicetree support, and I do
+>> need the generic architectural functionality to keep working in the
+>> absence of any imp-def backend.
+> 
+> W.r.t the reprobe discussion with Suzuki, this would mean the expected
+> behavior is to attach the device to standard imp as fallback/default.
+> Suzuki, my preference is not supporting delayed reprobe on event->destroy
+> due to the potential access to stale data. We should just fail the backend
+> registration if one of the device is in use.
+
+We shouldn't need to worry about that at all. If requesting an expected 
+implementation module fails and those PMUs end up falling back to 
+baseline functionality, there's no need to actively deny the backend if 
+the module is manually loaded later, it merely won't be used. As far as 
+reprobing goes, it seems reasonable for the user to remove/reload the 
+main module after fixing the backend module availability if it matters 
+to them. Or maybe we could just EPROBE_DEFER instead of falling back to 
+baseline if we know the module is enabled and *should* be available; I 
+don't have a particular preference either way. The main thing is just to 
+have the backend modules work in a simple, intuitive, and mostly 
+automatic manner, without all the complexity of effectively 
+reimplementing a whole custom driver model in between perf and the real 
+driver model.
+
+I think the only really notable thing about this approach is that it 
+would probably need to make sure the PMU probe runs asynchronously from 
+the main module_init.
+
+Thanks,
+Robin.
