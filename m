@@ -2,184 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57A556F49E0
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 20:45:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD9E56F49E5
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 20:47:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229488AbjEBSpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 14:45:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36394 "EHLO
+        id S229508AbjEBSrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 14:47:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjEBSps (ORCPT
+        with ESMTP id S229498AbjEBSrU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 14:45:48 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F911E73;
-        Tue,  2 May 2023 11:45:46 -0700 (PDT)
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 342Ielmu020038;
-        Tue, 2 May 2023 18:45:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=Y5zlNEwOG2ptRaoZlX8s256Y2ftpFkpYD9yVgsF0Q28=;
- b=ciPQzlbQ2rl3+1dUFCETd8dc5/GXxssBrbewrHBqTWF1M71UEFxCv3sBwmYux9LCiaqp
- vYlxBJ5L9ymErmtVhV2vw0AK/1RUfBOkp58J4jDog8J+kPzVcCRAZPbAmZ3kY137aqUW
- 1a1r8PO7iDmnzJ3wio9rkgd3XYETKP5MPrxYpuz9l/9fboeN26lYhvTmYpM43VRsCyCL
- VSRatTmA29wduAFqdIO1pFM38wMMSTwvhq3UHZ73MM3N/ocb+aXIpqhAub69V/Dyon+d
- BXBoQWlNcmMYpfdmX8RBCLZBHmUvnsLPTCqb/KAIQCR8lYVhLeMwMqVwX/eES/cq1bxP VQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qb767sk1m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 02 May 2023 18:45:10 +0000
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 342IfQG8022079;
-        Tue, 2 May 2023 18:45:10 GMT
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qb767sk0c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 02 May 2023 18:45:09 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 342Hthea003792;
-        Tue, 2 May 2023 18:45:08 GMT
-Received: from smtprelay03.dal12v.mail.ibm.com ([9.208.130.98])
-        by ppma05wdc.us.ibm.com (PPS) with ESMTPS id 3q8tv7rs0w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 02 May 2023 18:45:08 +0000
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-        by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 342Ij5NV44368258
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 2 May 2023 18:45:05 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EB0185803F;
-        Tue,  2 May 2023 18:45:04 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 711F358068;
-        Tue,  2 May 2023 18:45:01 +0000 (GMT)
-Received: from [9.60.89.243] (unknown [9.60.89.243])
-        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Tue,  2 May 2023 18:45:01 +0000 (GMT)
-Message-ID: <ce86e956-173f-848a-a1f3-f102134ccd94@linux.ibm.com>
-Date:   Tue, 2 May 2023 14:45:01 -0400
+        Tue, 2 May 2023 14:47:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6292E73
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 11:46:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683053190;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=m2VDNN7GX+FeD3QyzU7peSzD1fbVt8nTpAgV/GryMXg=;
+        b=CDtZli7qNaUyvSitZJlNZjTBUBVOVxsyY3jI6/qBTL+0h4DY8Q9tnnrDPfrFWW/xSXxoq1
+        Qx6W9uqiwWEAnVD8QHSxUUO26372NYyg+Igotoaud6Z/TyYx7TOoS4JpTIy7cgSUuhqob5
+        rQcj1Wzi8J3imlvTTywekWIHRKv/2Hc=
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
+ [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-636--Iu-1nOoPNKU6rS3HvF3Hw-1; Tue, 02 May 2023 14:46:28 -0400
+X-MC-Unique: -Iu-1nOoPNKU6rS3HvF3Hw-1
+Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-76353eb51acso623666439f.0
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 11:46:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683053188; x=1685645188;
+        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=m2VDNN7GX+FeD3QyzU7peSzD1fbVt8nTpAgV/GryMXg=;
+        b=MVs/TuZYkzgaLeBjy4qzMrzfkoXSsnSYK4BfQoqMHF9h/wFUmryYOGuUkvLje4nl10
+         omYTZP64ZQqIUOv38LOrTmXNyTopbnGCQBjGfY2ZoGYNiVan9c4vFIBXYiwOfrF9z9Du
+         nUFYh0/4+6nTmFJuNLVWI+faHmFMZELXyjgTX//HHqKPxDxXG+5A8Ft2hWB5MYw34VYg
+         gkg7T7V2wD41e+fJwURCicD6QVgEbW/xNOUjltJXOv+ie9W8cqKItL7yTLUEuzLp7FTb
+         keV5Z4kM40+k0CvM0rbBk9c0GJ8UNJQgzaqR1SWtHTLOTLtJt/Ri6SWzdkFCobnq7c0t
+         QO1w==
+X-Gm-Message-State: AC+VfDzk90TmFzjKexwJdno7JdDjqd3hDU76907sUAkzRpnvLPMCqokg
+        jBBSHiTuAfKIqE4Z8S+dBp84x2fh+loFkXt4b5smPZTxuwsBbXEdWb9O9U1hKCGDR5mcEaBNb82
+        +qgLyHJTuu5XA/3fjtZZ0vn9I
+X-Received: by 2002:a5d:924e:0:b0:766:59fe:11f3 with SMTP id e14-20020a5d924e000000b0076659fe11f3mr11617136iol.14.1683053188190;
+        Tue, 02 May 2023 11:46:28 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7dq4rSAg8BfqQuD4Y3U0R8u3tH8wzcOS0ObF5dTvXP+f6FdH9JDWt6Gm2UyiVtwUWCGfaU7Q==
+X-Received: by 2002:a5d:924e:0:b0:766:59fe:11f3 with SMTP id e14-20020a5d924e000000b0076659fe11f3mr11617124iol.14.1683053187890;
+        Tue, 02 May 2023 11:46:27 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id a25-20020a6b6c19000000b0075c37601b5csm8625436ioh.4.2023.05.02.11.46.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 May 2023 11:46:27 -0700 (PDT)
+Date:   Tue, 2 May 2023 12:46:25 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+Subject: [GIT PULL] VFIO updates for v6.4-rc1
+Message-ID: <20230502124625.355ec05e.alex.williamson@redhat.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v7 0/3] mm/gup: disallow GUP writing to file-backed
- mappings by default
-Content-Language: en-US
-To:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Mika Penttila <mpenttil@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Dave Chinner <david@fromorbit.com>,
-        "Theodore Ts'o" <tytso@mit.edu>, Peter Xu <peterx@redhat.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>
-References: <cover.1683044162.git.lstoakes@gmail.com>
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-In-Reply-To: <cover.1683044162.git.lstoakes@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 2LCoG5Unst8UUEzla8ABjD356N8l43rZ
-X-Proofpoint-ORIG-GUID: cSQj8we2iuCB-VjCHpIHGE97SoRPJ3ys
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-02_10,2023-04-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- priorityscore=1501 malwarescore=0 suspectscore=0 mlxscore=0 clxscore=1011
- spamscore=0 impostorscore=0 adultscore=0 bulkscore=0 mlxlogscore=733
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2305020160
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/2/23 12:34 PM, Lorenzo Stoakes wrote:
-> Writing to file-backed mappings which require folio dirty tracking using
-> GUP is a fundamentally broken operation, as kernel write access to GUP
-> mappings do not adhere to the semantics expected by a file system.
-> 
-> A GUP caller uses the direct mapping to access the folio, which does not
-> cause write notify to trigger, nor does it enforce that the caller marks
-> the folio dirty.
-> 
-> The problem arises when, after an initial write to the folio, writeback
-> results in the folio being cleaned and then the caller, via the GUP
-> interface, writes to the folio again.
-> 
-> As a result of the use of this secondary, direct, mapping to the folio no
-> write notify will occur, and if the caller does mark the folio dirty, this
-> will be done so unexpectedly.
-> 
-> For example, consider the following scenario:-
-> 
-> 1. A folio is written to via GUP which write-faults the memory, notifying
->    the file system and dirtying the folio.
-> 2. Later, writeback is triggered, resulting in the folio being cleaned and
->    the PTE being marked read-only.
-> 3. The GUP caller writes to the folio, as it is mapped read/write via the
->    direct mapping.
-> 4. The GUP caller, now done with the page, unpins it and sets it dirty
->    (though it does not have to).
-> 
-> This change updates both the PUP FOLL_LONGTERM slow and fast APIs. As
-> pin_user_pages_fast_only() does not exist, we can rely on a slightly
-> imperfect whitelisting in the PUP-fast case and fall back to the slow case
-> should this fail.
-> 
-> v7:
-> - Fixed very silly bug in writeable_file_mapping_allowed() inverting the
->   logic.
-> - Removed unnecessary RCU lock code and replaced with adaptation of Peter's
->   idea.
-> - Removed unnecessary open-coded folio_test_anon() in
->   folio_longterm_write_pin_allowed() and restructured to generally permit
->   NULL folio_mapping().
-> 
+Hi Linus,
 
-FWIW, I realize you are planning another respin, but I went and tried this version out on s390 -- Now when using a memory backend file and vfio-pci on s390 I see vfio_pin_pages_remote failing consistently.  However, the pin_user_pages_fast(FOLL_WRITE | FOLL_LONGTERM) in kvm_s390_pci_aif_enable will still return positive.  
+The following changes since commit 09a9639e56c01c7a00d6c0ca63f4c7c41abe075d:
+
+  Linux 6.3-rc6 (2023-04-09 11:15:57 -0700)
+
+are available in the Git repository at:
+
+  https://github.com/awilliam/linux-vfio.git tags/vfio-v6.4-rc1
+
+for you to fetch changes up to 705b004ee377b789e39ae237519bab714297ac83:
+
+  docs: kvm: vfio: Suggest KVM_DEV_VFIO_GROUP_ADD vs VFIO_GROUP_GET_DEVICE_FD ordering (2023-04-21 13:48:44 -0600)
+
+----------------------------------------------------------------
+VFIO updates for v6.4-rc1
+
+ - Expose and allow R/W access to the PCIe DVSEC capability through
+   vfio-pci, as we already do with the legacy vendor capability.
+   (K V P Satyanarayana)
+
+ - Fix kernel-doc issues with structure definitions. (Simon Horman)
+
+ - Clarify ordering of operations relative to the kvm-vfio device for
+   driver dependencies against the kvm pointer. (Yi Liu)
+
+----------------------------------------------------------------
+K V P, Satyanarayana (1):
+      vfio/pci: Add DVSEC PCI Extended Config Capability to user visible list.
+
+Simon Horman (1):
+      vfio: correct kdoc for ops structures
+
+Yi Liu (1):
+      docs: kvm: vfio: Suggest KVM_DEV_VFIO_GROUP_ADD vs VFIO_GROUP_GET_DEVICE_FD ordering
+
+ Documentation/virt/kvm/devices/vfio.rst | 5 +++++
+ drivers/vfio/pci/vfio_pci_config.c      | 7 +++++++
+ include/linux/vfio.h                    | 5 +++++
+ 3 files changed, 17 insertions(+)
 
