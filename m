@@ -2,136 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A73066F44B2
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 15:08:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B82E6F44A6
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 15:06:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234078AbjEBNIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 09:08:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46716 "EHLO
+        id S233968AbjEBNGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 09:06:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233968AbjEBNIg (ORCPT
+        with ESMTP id S234321AbjEBNGW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 09:08:36 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 582474EF7;
-        Tue,  2 May 2023 06:08:35 -0700 (PDT)
-Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 342D2odX022163;
-        Tue, 2 May 2023 13:05:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=7PCr1N/EjWKnahBlpl4nl2gOWjUa3NEE8IjxvTGFxBw=;
- b=VdGyKI2j9nTO+3BdG91tF7qF7l8tPxInJeZBYgR1Sf1zulpIQqQmpZBizcR90tI/kc6s
- qM7191nEWSL6SqFA/z7vDND5mLh6/09VwMZRWADxmPCEl7Eo0lM4h1MslvjG2h2VjkYC
- H5tL26yy00yXyVEs3G7HSw7JQI0NOOGHU64JvIUKNpt0ugA7kySfWLA29s6hDVM71m/p
- CyklVkVXjBBUHsufo+EthC/MQmzIAUiF6ohrvyd5WR7KHTduwWFKtnJ8zE5mVIOPfCo2
- hVGuBGKPPNS3xsnm76pnh+pjfpZRa2KkWdO6dH9DJ5FoSOD6UR/MFrQBPwVIs60er3+p /g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qb1whacbd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 02 May 2023 13:05:57 +0000
-Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 342D1tDi018540;
-        Tue, 2 May 2023 13:05:07 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qb1whaakm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 02 May 2023 13:05:07 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 341LC9BH005173;
-        Tue, 2 May 2023 13:04:31 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3q8tv6skm1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 02 May 2023 13:04:31 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 342D4TbW6161140
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 2 May 2023 13:04:29 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id ECEC320043;
-        Tue,  2 May 2023 13:04:28 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 152E720040;
-        Tue,  2 May 2023 13:04:28 +0000 (GMT)
-Received: from [9.152.224.114] (unknown [9.152.224.114])
-        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue,  2 May 2023 13:04:28 +0000 (GMT)
-Message-ID: <a6bb0334-9aba-9fd8-6a9a-9d4a931b6da2@linux.ibm.com>
-Date:   Tue, 2 May 2023 15:04:27 +0200
+        Tue, 2 May 2023 09:06:22 -0400
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B83FD65BD
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 06:05:57 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 7A4A61BF20F;
+        Tue,  2 May 2023 13:05:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1683032756;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UK1/+8iK/BJp+Spv6teX9UIXu4Mi0jjl4DYeggLPlyQ=;
+        b=Lq3Pz/u2fJN9OvN6xaMH15oN+1V5wMHc9pIoKKTQsj1oIpqJKk7U1hsYZgaGtYUzJGui5x
+        pMQzABPxl4jwm3UGaHLO1wVYaPqhoyB4A8zrxI+Fl7je4BSsbOYZOxqGzYUjx3PbYTA0d5
+        9BuRCUgFlvHdfuhjq7TEXY7gUmtjg5VOPVdW78GrkgK4bVimf73syTOUkmHf1uLePQHtmU
+        IAtRUtjVRnmI2IRUIimoFDz3Up6gPmTM6CBvjJ9h+0mS/9b1fVBabPFxMR2W4GmtCtPwXC
+        pM5aFvN9e6OLhEG2QJil0u6/3pO6YJ1q+zo1fXUXsDbAOtezfw4xDTncOEsaXg==
+Date:   Tue, 2 May 2023 15:05:53 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
+Cc:     Liang Yang <liang.yang@amlogic.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Yixun Lan <yixun.lan@amlogic.com>, <oxffffaa@gmail.com>,
+        <kernel@sberdevices.ru>, <linux-mtd@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        "yonghui.yu" <yonghui.yu@amlogic.com>
+Subject: Re: [PATCH v1 4/5] mtd: rawnand: meson: clear OOB buffer before
+ read
+Message-ID: <20230502150553.65fdeb7f@xps-13>
+In-Reply-To: <91cb8e19-e782-b847-8d2b-22580c371c34@sberdevices.ru>
+References: <20230412061700.1492474-1-AVKrasnov@sberdevices.ru>
+        <20230413122252.0a8efcd8@xps-13>
+        <569a948e-654a-b21f-8a4f-55dc4b295387@sberdevices.ru>
+        <60fa656e-bda1-1de6-a79e-3e3041cd69a8@sberdevices.ru>
+        <780c0cae-18b6-2652-1c2c-6d398ea60451@amlogic.com>
+        <e7c49f2d-b3c1-8d9b-76fe-c8759b37c7c7@sberdevices.ru>
+        <20230418152505.72fc16da@xps-13>
+        <15a6e415-1489-a81f-fc8f-2372678ad2cb@sberdevices.ru>
+        <ee10bdeb-416c-70f0-d323-7107fe0746e8@amlogic.com>
+        <5e4b395e-bf9d-0123-a0f2-2b378d950b29@sberdevices.ru>
+        <fda1ae91-4bf8-6945-bd0d-b6dabc9cb4bd@sberdevices.ru>
+        <a5010dcf-a8ce-f144-949c-687548cefce7@amlogic.com>
+        <cf27b6b4-a75b-c5a6-32ea-ac20a2984192@sberdevices.ru>
+        <20230502115913.78012d98@xps-13>
+        <2274b432-d1a9-b3cf-4f7b-08c4a4c580b5@sberdevices.ru>
+        <20230502132745.14349770@xps-13>
+        <2b2f5cb4-84f7-65f6-13b2-42f965503023@sberdevices.ru>
+        <20230502141703.29f0bc30@xps-13>
+        <91cb8e19-e782-b847-8d2b-22580c371c34@sberdevices.ru>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v6 3/3] mm/gup: disallow FOLL_LONGTERM GUP-fast writing to
- file-backed mappings
-Content-Language: en-US
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Mika Penttila <mpenttil@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Dave Chinner <david@fromorbit.com>,
-        "Theodore Ts'o" <tytso@mit.edu>, Peter Xu <peterx@redhat.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>
-References: <cover.1682981880.git.lstoakes@gmail.com>
- <dee4f4ad6532b0f94d073da263526de334d5d7e0.1682981880.git.lstoakes@gmail.com>
- <fbad9e18-f727-9703-33cf-545a2d33af76@linux.ibm.com>
- <7d56b424-ba79-4b21-b02c-c89705533852@lucifer.local>
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-In-Reply-To: <7d56b424-ba79-4b21-b02c-c89705533852@lucifer.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: dOx1PHet-0DbZwbqQupqZRedOeMRQ9_W
-X-Proofpoint-GUID: iQ0gyAqn2SKIN_VY8tZq1VPkc8H_DRzV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-02_07,2023-04-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- mlxlogscore=822 adultscore=0 clxscore=1015 phishscore=0 priorityscore=1501
- mlxscore=0 lowpriorityscore=0 impostorscore=0 spamscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2305020108
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -140,44 +85,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Arseniy,
 
+avkrasnov@sberdevices.ru wrote on Tue, 2 May 2023 15:24:09 +0300:
 
-Am 02.05.23 um 14:54 schrieb Lorenzo Stoakes:
-> On Tue, May 02, 2023 at 02:46:28PM +0200, Christian Borntraeger wrote:
->> Am 02.05.23 um 01:11 schrieb Lorenzo Stoakes:
->>> Writing to file-backed dirty-tracked mappings via GUP is inherently broken
->>> as we cannot rule out folios being cleaned and then a GUP user writing to
->>> them again and possibly marking them dirty unexpectedly.
->>>
->>> This is especially egregious for long-term mappings (as indicated by the
->>> use of the FOLL_LONGTERM flag), so we disallow this case in GUP-fast as
->>> we have already done in the slow path.
->>
->> Hmm, does this interfer with KVM on s390 and PCI interpretion of interrupt delivery?
->> It would no longer work with file backed memory, correct?
->>
->> See
->> arch/s390/kvm/pci.c
->>
->> kvm_s390_pci_aif_enable
->> which does have
->> FOLL_WRITE | FOLL_LONGTERM
->> to
->>
-> 
-> Does this memory map a dirty-tracked file? It's kind of hard to dig into where
-> the address originates from without going through a ton of code. In worst case
-> if the fast code doesn't find a whitelist it'll fall back to slow path which
-> explicitly checks for dirty-tracked filesystem.
+> On 02.05.2023 15:17, Miquel Raynal wrote:
+> > Hi Arseniy,
+> >=20
+> > Richard, your input is welcome below :-)
+> >  =20
+> >>>>>>>>> I just checked JFFS2 mount/umount again, here is what i see:
+> >>>>>>>>> 0) First attempt to mount JFFS2.
+> >>>>>>>>> 1) It writes OOB to page N (i'm using raw write). It is cleanma=
+rker value 0x85 0x19 0x03 0x20. Mount is done.
+> >>>>>>>>> 2) Umount JFFS2. Done.
+> >>>>>>>>> 3) Second attempt to mount JFFS2.
+> >>>>>>>>> 4) It reads OOB from page N (i'm using raw read). Value is 0x85=
+ 0x19 0x03 0x20. Done.
+> >>>>>>>>> 5) It reads page N in ECC mode, and i get:
+> >>>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0 jffs2: mtd->read(0x100 bytes from N) r=
+eturned ECC error
+> >>>>>>>>> 6) Mount failed.
+> >>>>>>>>>
+> >>>>>>>>> We already had problem which looks like this on another device.=
+ Solution was to use OOB area which is
+> >>>>>>>>> not covered by ECC for JFFS2 cleanmarkers.       =20
+> >>>>>>>
+> >>>>>>> ok, so there is not ECC parity bytes and mtd->read() returns ECC =
+error.
+> >>>>>>> does it have to use raw write/read on step 1) and 4)?
+> >>>>>>>        =20
+> >>>>>>
+> >>>>>> If i'm using non raw access to OOB, for example write OOB (user by=
+tes) in ECC mode, then
+> >>>>>> steps 1) and 4) and 5) passes ok, but write to this page will be i=
+mpossible (for example JFFS2
+> >>>>>> writes to such pages later) - we can't update ECC codes properly w=
+ithout erasing whole page.
+> >>>>>> Write operation will be done without problem, but read will trigge=
+r ECC errors due to broken
+> >>>>>> ECC codes.
+> >>>>>>
+> >>>>>> In general problem that we discuss is that in current implementati=
+on data and OOB conflicts
+> >>>>>> with each other by sharing same ECC codes, these ECC codes could b=
+e written only once (without
+> >>>>>> erasing), while data and OOB has different callbacks to access and=
+ thus supposed to work
+> >>>>>> separately.     =20
+> >>>>>
+> >>>>> The fact that there might be helpers just for writing OOB areas or =
+just
+> >>>>> in-band areas are optimizations. NAND pages are meant to be written=
+ a
+> >>>>> single time, no matter what portion you write. In some cases, it is
+> >>>>> possible to perform subpage writes if the chip supports it. Pages m=
+ay
+> >>>>> be split into several areas which cover a partial in-band area *and=
+* a
+> >>>>> partial OOB area. If you write into the in-band *or* out-of-band ar=
+eas
+> >>>>> of a given subpage, you *cannot* write the other part later without=
+     =20
+> >>>>
+> >>>> Thanks for details! So in case of JFFS2 it looks like strange, that =
+it tries
+> >>>> to write page after writing clean markers to it before? In the old v=
+endor's
+> >>>> driver OOB write callback is suppressed by return 0 always and JFFS2=
+ works
+> >>>> correctly.   =20
+> >>>
+> >>> Can you point the code you're mentioning? (both what JFFS2 which looks
+> >>> strange to you and the old vendor hack)   =20
+> >>
+> >> Here is version of the old vendor's driver:
+> >>
+> >> https://github.com/kszaq/linux-amlogic/blob/master_new_amports/drivers=
+/amlogic/nand/nand/aml_nand.c#L3260
+> >>
+> >> In my version there is no BUG() there, but it is same driver for the s=
+ame chip.
+> >>
+> >> About JFFS2 - i didn't check its source code, but what I can see using=
+ printk(), is that it first
+> >> tries to write cleanmarker using OOB write callback. Then later it tri=
+es to write to this page, so
+> >> may be it is unexpected behaviour of JFFS2? =20
+> >=20
+> > TBH I am not knowledgeable about JFFS2, maybe Richard can help here.
+> >=20
+> > Are you sure you flash is recognized by JFFS2 as being a NAND device?
+> > Did you enable CONFIG_JFFS2_FS_WRITEBUFFER correctly? Because
+> > cleanmarker seem to be discarded when using a NAND device, and
+> > recognizing the device as a NAND device requires the above option to be
+> > set apparently. =20
+>=20
+> Yes, I have
+>=20
+> CONFIG_JFFS2_FS_WRITEBUFFER=3Dy
+>=20
+> And i see, that jffs2_mark_erased_block() calls jffs2_cleanmarker_oob() w=
+hich checks that we have MTD_NANDFLASH. This
+> check is true, so then jffs2_write_nand_cleanmarker() is called and there=
+ is OOB write in it. So I see opposite thing:
+> cleanmarkers are not discarded with NAND device.=20
 
-It does pin from whatever QEMU uses as backing for the guest.
-> 
-> We can reintroduce a flag to permit exceptions if this is really broken, are you
-> able to test? I don't have an s390 sat around :)
+Excellent. So when cleanmarker_size =3D=3D 0, it means there is no
+cleanmarker. But if it is a NAND device, we write the marker anyway.
 
-Matt (Rosato on cc) probably can. In the end, it would mean having
-   <memoryBacking>
-     <source type="file"/>
-   </memoryBacking>
+Well I guess it used to work on old controllers using a Hamming ECC
+engine not protecting any user OOB bytes, so writing the clean markers
+would simply not lead to ECC bytes being produced/written. Or it might
+have worked as well on controller drivers not enabling the ECC engine
+when performing OOB-only writes. It also requires the chip to be old
+enough to support multiple writes on the same (sub)page as long as the
+written bits do not overlap?
 
-In libvirt I guess.
+Perhaps that's what the hack in the old driver is for. But that's
+IMHO broken in case of unexpected reboot :-)
+
+Miqu=C3=A8l
