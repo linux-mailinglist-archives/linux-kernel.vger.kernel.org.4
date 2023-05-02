@@ -2,125 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 127166F4CE0
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 00:28:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B9E36F4CE3
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 00:32:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbjEBW2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 18:28:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51514 "EHLO
+        id S229846AbjEBWcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 18:32:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229805AbjEBW2J (ORCPT
+        with ESMTP id S229498AbjEBWcH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 18:28:09 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 437BA10E4
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 15:28:08 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-b9246a5f3feso7172956276.1
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 15:28:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683066487; x=1685658487;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lwFGIxh3mR4IxnfjO7Fh/+VSIOsZ1HZ3AsHMkzhJzVc=;
-        b=LV4Xm+Pf/B+mhX6Eux2/d4iyrBd+wh5nhjdM+6mLRXMO0SKOeWUfAlVseraSM1dEGE
-         zp84L/n/KBh/e0R29D/3dwDFGaI3EmTrw4gip9y8rvwrtj6zd510NLG9bCl8vpjqlLk6
-         o2KkipHhztX/aduTGfL4R2o2kOeTZ9dixM84r1Sqyq6Qo6RT5YMk02pcMg+hrqkPPtkf
-         btppu9GSiN7ZpCPLog7vQNKAz5X0GBqCYIc6rYgC6Xgwc7lFXuKzu5gZRkmivJTBYDGs
-         RXlaV1cyEDnI8lJFyjWOkhHyQhdqvPPGPVyeXM4agzscC27+w9gcBgbcS8H8+y6pNjoT
-         HrDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683066487; x=1685658487;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lwFGIxh3mR4IxnfjO7Fh/+VSIOsZ1HZ3AsHMkzhJzVc=;
-        b=Q2yDdYlNxeaffZ8KfpgnjJOnUQwA6QfOFswiHKr9LwEplFGRvFVGU0gajHLBwzbN5M
-         qOL+offoNGAxp/GPJw+h67yuUkvs3hqyvaPdatTgUezFNodWGifdS2CQheIGvWq3Y36g
-         YEV/dZDFWpaNHT9mlVVKWw+nqu45sVajKsXQWhj6MBN6ZTT/9aZ4aYiXwFJr6Dj0I8Ca
-         RpmOXwadH15nIxuDTJBVPjLTacq4roNUwePmdham1f0jaHlQ+uzDKtUbbqX+PVjcJyK5
-         6++F169Nibr0Fy0/sT2+uK7czknATz1vGYhhoxRiz5NjMv6KAFhqTElHD6MVvJW/AJmn
-         8+YA==
-X-Gm-Message-State: AC+VfDyLMiQpGGX49fqcRm7mOfv2HA+1faIG4wmClSln/hYp+AhlEUO2
-        U07YvM1rcOX56wAT7j58gwjbP9R80gIRCu5ZxNf3uA==
-X-Google-Smtp-Source: ACHHUZ429eSlqZEB+CY548Pp/dt5SSi39y/Hd6nprAFMirATPj3cxRLNBRv8xuZqzR4rjXejkS2Zjep2a9MBdAJUsCs=
-X-Received: by 2002:a25:ad91:0:b0:b96:9160:8da4 with SMTP id
- z17-20020a25ad91000000b00b9691608da4mr17677838ybi.17.1683066487198; Tue, 02
- May 2023 15:28:07 -0700 (PDT)
+        Tue, 2 May 2023 18:32:07 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F0FBE6;
+        Tue,  2 May 2023 15:32:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=4ziwPqY5fZJX5OFibBWC7vqGTzpM6kPXEUGtH3YlSng=; b=DPnW9WJ5RQkInjaN80mZqhsHp9
+        3k1yHKbWiP+wYEfj0kya6ArZuDtMiR/xUHX/tEfbDK+msxyYenojAmRJRV3JnIEanKLff8lj++IAa
+        pozzRFZbUnQ4QdBRnKOaqAepwZLmdWB2PIhOfKKkU+zkMh3IfXRPFIc9glHS0F6/bARhDHdmkBxgT
+        v9YSX9v4LV4ij2qJhgMb/wZ7R30VdocxwtVy4yYDsmP9lctTn8w/aZMWOtzDdhbBGpysEeke0KUpF
+        PlbvNJCrm5vewpLnWa2LfTCx5jzSxRgpeTv29srft50MZ6Bcz4Fxi3UMuQluWjNOV0Bx2CQlkbhxe
+        HNWLR0mg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ptyWb-008nk5-81; Tue, 02 May 2023 22:31:09 +0000
+Date:   Tue, 2 May 2023 23:31:09 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, mhocko@suse.com,
+        josef@toxicpanda.com, jack@suse.cz, ldufour@linux.ibm.com,
+        laurent.dufour@fr.ibm.com, michel@lespinasse.org,
+        liam.howlett@oracle.com, jglisse@google.com, vbabka@suse.cz,
+        minchan@google.com, dave@stgolabs.net, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, hdanton@sina.com, apopple@nvidia.com,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH 1/3] mm: handle swap page faults under VMA lock if page
+ is uncontended
+Message-ID: <ZFGPLXIis6tl1QWX@casper.infradead.org>
+References: <20230501175025.36233-1-surenb@google.com>
+ <ZFBvOh8r5WbTVyA8@casper.infradead.org>
+ <CAJuCfpHfAFx9rjv0gHK77LbP-8gd-kFnWw=aqfQTP6pH=zvMNg@mail.gmail.com>
+ <ZFCB+G9KSNE+J9cZ@casper.infradead.org>
+ <CAJuCfpES=G8i99yYXWoeJq9+JVUjX5Bkq_5VNVTVX7QT+Wkfxg@mail.gmail.com>
+ <ZFEmN6G7WRy59Mum@casper.infradead.org>
+ <CAJuCfpFs+Rgpu8v+ddHFwtOx33W5k1sKDdXHM2ej1Upyo_9y4g@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230413034108.1902712-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20230413034108.1902712-3-sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <20230413034108.1902712-3-sathyanarayanan.kuppuswamy@linux.intel.com>
-From:   Chong Cai <chongc@google.com>
-Date:   Tue, 2 May 2023 15:27:53 -0700
-Message-ID: <CALRH0CjQhSzWhpjS2+Wp1xWswyK=eNmBGVpbVGr4sM0tMZT5pQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] virt: tdx-guest: Add Quote generation support
-To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Dionna Amalie Glaze <dionnaglaze@google.com>,
-        Qinkun Bao <qinkun@apache.org>,
-        Guorui Yu <GuoRui.Yu@linux.alibaba.com>,
-        Du Fan <fan.du@intel.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJuCfpFs+Rgpu8v+ddHFwtOx33W5k1sKDdXHM2ej1Upyo_9y4g@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 8:42=E2=80=AFPM Kuppuswamy Sathyanarayanan
-<sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
->
-> In TDX guest, the second stage in attestation process is to send the
-> TDREPORT to QE/QGS to generate the TD Quote. For platforms that does
-> not support communication channels like vsock or TCP/IP, implement
-> support to get TD Quote using hypercall. GetQuote hypercall can be used
-> by the TD guest to request VMM facilitate the Quote generation via
-> QE/QGS. More details about GetQuote hypercall can be found in TDX
-> Guest-Host Communication Interface (GHCI) for Intel TDX 1.0, section
-> titled "TDG.VP.VMCALL<GetQuote>".
->
-> Add support for TDX_CMD_GET_QUOTE IOCTL to allow attestation agent
-> submit GetQuote requests from the user space using GetQuote hypercall.
->
-> Since GetQuote is an asynchronous request hypercall, VMM will use
-> callback interrupt vector configured by SetupEventNotifyInterrupt
-> hypercall to notify the guest about Quote generation completion or
-> failure. So register an IRQ handler for it.
->
-> GetQuote TDVMCALL requires TD guest pass a 4K aligned shared buffer
-> with TDREPORT data as input, which is further used by the VMM to copy
-> the TD Quote result after successful Quote generation. To create the
-> shared buffer, allocate the required memory using alloc_pages() and
-> mark it shared using set_memory_decrypted() in tdx_guest_init(). This
-> buffer will be re-used for GetQuote requests in TDX_CMD_GET_QUOTE
-> IOCTL handler.
->
-> Although this method will reserve a fixed chunk of memory for
-> GetQuote requests during the init time, it is preferable to the
-> alternative choice of allocating/freeing the shared buffer in the
-> TDX_CMD_GET_QUOTE IOCTL handler, which will damage the direct map.
+On Tue, May 02, 2023 at 09:36:03AM -0700, Suren Baghdasaryan wrote:
+> On Tue, May 2, 2023 at 8:03 AM Matthew Wilcox <willy@infradead.org> wrote:
+> >
+> > On Mon, May 01, 2023 at 10:04:56PM -0700, Suren Baghdasaryan wrote:
+> > > On Mon, May 1, 2023 at 8:22 PM Matthew Wilcox <willy@infradead.org> wrote:
+> > > >
+> > > > On Mon, May 01, 2023 at 07:30:13PM -0700, Suren Baghdasaryan wrote:
+> > > > > On Mon, May 1, 2023 at 7:02 PM Matthew Wilcox <willy@infradead.org> wrote:
+> > > > > >
+> > > > > > On Mon, May 01, 2023 at 10:50:23AM -0700, Suren Baghdasaryan wrote:
+> > > > > > > +++ b/mm/memory.c
+> > > > > > > @@ -3711,11 +3711,6 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+> > > > > > >       if (!pte_unmap_same(vmf))
+> > > > > > >               goto out;
+> > > > > > >
+> > > > > > > -     if (vmf->flags & FAULT_FLAG_VMA_LOCK) {
+> > > > > > > -             ret = VM_FAULT_RETRY;
+> > > > > > > -             goto out;
+> > > > > > > -     }
+> > > > > > > -
+> > > > > > >       entry = pte_to_swp_entry(vmf->orig_pte);
+> > > > > > >       if (unlikely(non_swap_entry(entry))) {
+> > > > > > >               if (is_migration_entry(entry)) {
+> > > > > >
+> > > > > > You're missing the necessary fallback in the (!folio) case.
+> > > > > > swap_readpage() is synchronous and will sleep.
+> > > > >
+> > > > > True, but is it unsafe to do that under VMA lock and has to be done
+> > > > > under mmap_lock?
+> > > >
+> > > > ... you were the one arguing that we didn't want to wait for I/O with
+> > > > the VMA lock held?
+> > >
+> > > Well, that discussion was about waiting in folio_lock_or_retry() with
+> > > the lock being held. I argued against it because currently we drop
+> > > mmap_lock lock before waiting, so if we don't drop VMA lock we would
+> > > be changing the current behavior which might introduce new
+> > > regressions. In the case of swap_readpage and swapin_readahead we
+> > > already wait with mmap_lock held, so waiting with VMA lock held does
+> > > not introduce new problems (unless there is a need to hold mmap_lock).
+> > >
+> > > That said, you are absolutely correct that this situation can be
+> > > improved by dropping the lock in these cases too. I just didn't want
+> > > to attack everything at once. I believe after we agree on the approach
+> > > implemented in https://lore.kernel.org/all/20230501175025.36233-3-surenb@google.com
+> > > for dropping the VMA lock before waiting, these cases can be added
+> > > easier. Does that make sense?
+> >
+> > OK, I looked at this path some more, and I think we're fine.  This
+> > patch is only called for SWP_SYNCHRONOUS_IO which is only set for
+> > QUEUE_FLAG_SYNCHRONOUS devices, which are brd, zram and nvdimms
+> > (both btt and pmem).  So the answer is that we don't sleep in this
+> > path, and there's no need to drop the lock.
+> 
+> Yes but swapin_readahead does sleep, so I'll have to handle that case
+> too after this.
 
-Thanks Sathyanarayanan for the work. The patch looks good. Reserving a fixe=
-d
-chunk of memory for GetQuote makes sense to me.
-
-And just want to re-emphasize that the TDVMCALL approach is important for
-many use cases that cannot depend on virtio/vsock.
+Sleeping is OK, we do that in pXd_alloc()!  Do we block on I/O anywhere
+in swapin_readahead()?  It all looks like async I/O to me.
