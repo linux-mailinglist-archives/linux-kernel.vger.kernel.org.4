@@ -2,58 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EC266F3E3E
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 09:12:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0ECE6F3E48
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 09:15:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233480AbjEBHL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 03:11:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35642 "EHLO
+        id S233333AbjEBHPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 03:15:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjEBHLr (ORCPT
+        with ESMTP id S229449AbjEBHPb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 03:11:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177A41FC2;
-        Tue,  2 May 2023 00:11:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A6A8A61180;
-        Tue,  2 May 2023 07:11:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C63C5C433D2;
-        Tue,  2 May 2023 07:11:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683011505;
-        bh=iP0pkPRPF2yyWma5T57Jl+IkunllF4npRD1ZDpsaR2Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KJi7VM57+hCZiS5pBrGaI+NHHdNu1FIF4IW0ha2PSCAiIoxG6tmcNLAbkXg0MA75C
-         +VDM+LebMyBRMM8yVmZr7EVissdk0UXryUkZdicKjBqiNXEWwoUQe846hstBOFfKX7
-         tzcIJoGi/7wv4eXxMhH96/1ekdQvRQphKUy3EE1UaruvbbDccOOIOHAwtTBA6jUU3v
-         GiFL4mFRQqrMIxKAEix6xn+67N5dW1pa3lgg5wvQyPbINHPJ5WF6m0qpvfoO8WyRyf
-         lNVLLGG0RL+qkhNkWlY/EZjM6hkeiQJ+pt+3qywul8y9ZcSzIp88HRGZfdbpMrl6ie
-         Usm6IR1tKzdPA==
-Date:   Tue, 2 May 2023 09:11:40 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] pidfd updates
-Message-ID: <20230502-wunsch-stinktier-46d58b6b57d6@brauner>
-References: <20230421-kurstadt-stempeln-3459a64aef0c@brauner>
- <CAHk-=whOE+wXrxykHK0GimbNmxyr4a07kTpG8dzoceowTz1Yxg@mail.gmail.com>
- <20230425060427.GP3390869@ZenIV>
- <20230425-sturheit-jungautor-97d92d7861e2@brauner>
- <20230427010715.GX3390869@ZenIV>
- <20230427073908.GA3390869@ZenIV>
- <CAHk-=whHbXMF142EGVu4=8bi8=JdexBL--d5FK4gx=x+SUgyaQ@mail.gmail.com>
- <20230427170215.GC3390869@ZenIV>
+        Tue, 2 May 2023 03:15:31 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5759A119
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 00:15:29 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-959a3e2dd27so673930066b.3
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 00:15:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683011728; x=1685603728;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Dtp1yaPEC+fRXRQf1GiiaizhZwEuiFdW7LGcT1sySog=;
+        b=RdNB5sItGdZjMb3ymixPktS4fHSCxz1uwhzsP+8XITmMM1SrTlSipHywAIdBzh3EOA
+         MiffZH4l7NU9LOoucBcOSTDiF1hWJOzh+oBCkdqER4v9Y2NeIRRpPvnl86FAs9XYwO6b
+         dCv3iL+f/wY4Vu+HYt3u9YISRfHOJOTQQPz5H/W/+VQ9gjT+N8X4QIY8GcKfeCaUMZSG
+         /uIQo0HZ0rK6SIPUahUDfKxmGCVTcPORmhmLo6xHdr2rvMQEFZKPKJqVT3Wpks9DTN4g
+         Ksx10GyzlL7WCFvw70iCtPQfKKgfXYPudWbyRLYUYIGSue7Z2EVjIvtsvqVhWBOHPn3P
+         DSuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683011728; x=1685603728;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Dtp1yaPEC+fRXRQf1GiiaizhZwEuiFdW7LGcT1sySog=;
+        b=hdB4QyYgClrnH65SFw/wuq5z+Hw/tazP3iuNdgpeo3jh7NCA+pBzy90ASgJokOObme
+         crQ8TCJsCrRyukB5UCrxi06HEY/HfjgW1/w2qVG/7q4BOQ/web63tNw4QkpwRih+rGmp
+         RhG8RZePILtZHSkkJ3wyxdCnlrXToHm9OdjHMSkXdVpMV94tm/QrL3B1idCjhlXPlG3R
+         bITn5vjXUxZtSCN9sqgE4/fRE8HTM5VIcJl0454qHHsX2jCsLNdjHPB0BNRwAxae/7Hd
+         pqWV+WIzaCZYchFNN9Pw9JwvP29KRgplgAYy4PolUlLjU2DHaVGHDih+dqF2TLmz/a7H
+         zrrw==
+X-Gm-Message-State: AC+VfDy3xD586dU1u+cvuVUSbyQU1PUPF1BT7YAq3MKVXxDQmkT++m2L
+        Ukm46V5RqIvDbcphzJfojP7r8A==
+X-Google-Smtp-Source: ACHHUZ4f4BV375Lqs3dUy6tpZtsKlhKa36DK6PF4+nx/fJp1fDYdxz99rUNDj1w6kFQkzu8qb667Lw==
+X-Received: by 2002:a17:907:9806:b0:958:4387:5772 with SMTP id ji6-20020a170907980600b0095843875772mr14229767ejc.41.1683011727850;
+        Tue, 02 May 2023 00:15:27 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:bafd:1283:b136:5f6a? ([2a02:810d:15c0:828:bafd:1283:b136:5f6a])
+        by smtp.gmail.com with ESMTPSA id fp31-20020a1709069e1f00b0095251a3d66fsm15595581ejc.119.2023.05.02.00.15.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 May 2023 00:15:27 -0700 (PDT)
+Message-ID: <a7d07acf-d79e-3f67-dd48-2a5c3e840d7c@linaro.org>
+Date:   Tue, 2 May 2023 09:15:25 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230427170215.GC3390869@ZenIV>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v4 1/3] dt-bindings: display: panel: Add Samsung S6D7AA0
+ LCD panel controller
+Content-Language: en-US
+To:     Artur Weber <aweber.kernel@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>
+Cc:     Sam Ravnborg <sam@ravnborg.org>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+References: <20230501185103.25939-1-aweber.kernel@gmail.com>
+ <20230501185103.25939-2-aweber.kernel@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230501185103.25939-2-aweber.kernel@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,57 +82,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 06:02:15PM +0100, Al Viro wrote:
-> On Thu, Apr 27, 2023 at 08:21:34AM -0700, Linus Torvalds wrote:
-> > On Thu, Apr 27, 2023 at 12:39 AM Al Viro <viro@zeniv.linux.org.uk> wrote:
-> > >
-> > > int delayed_dup(struct file *file, unsigned flags)
-> > 
-> > Ok, this is strange. Let me think about it.
-> > 
-> > But even without thinking about it, this part I hate:
-> > 
-> > >         struct delayed_dup *p = kmalloc(sizeof(struct delayed_dup), GFP_KERNEL);
-> > 
-> > Sure, if this is only used in unimportant code where performance
-> > doesn't matter, doing a kmalloc is fine.
-> > 
-> > But if that is the only use, I think this is too subtle an interface.
+On 01/05/2023 20:51, Artur Weber wrote:
+> Add bindings for the S6D7AA0 LCD panel controller, including the
+> S6D7AA0-LSL080AL02 panel used in the Samsung Galaxy Tab 3 8.0 family
+> of tablets, and the S6D7AA0-LSL080AL03 and S6D7AA0-LTL101AT01 panels
+> used in the Samsung Galaxy Tab A 8.0 and 9.7 2015.
 > 
-> Still hadn't finished with the zoo...
-> 
-> > Could we instead limit it to "we only have one pending delayed dup",
-> > and make this all be more like the restart-block thing, and be part of
-> > struct task_struct?
-> 
-> Interesting...  FWIW, *anything* that wants several descriptors has
-> special needs - there are some places like that (binder, for one)
-> and they have rather weird code implementing those.
-> 
-> Just to restate the obvious: this is not applicable for the most frequent
-> caller - open(2).  For the reasons that have nothing to do with performance.
-> If opening the file has hard-to-reverse side effects (like directory
-> modification due to O_CREAT), the things are very different.
-> 
-> What I hope for is a small number of patterns, with clear rules for
-> choosing the one that is applicable and helpers for each that would
-> reduce the amount of headache when using it.  And I've no problem
-> with "this particular pattern is not usable if you are adding more
-> than one descriptor" - that's not hard to understand and verify.
-> So I'm fine with doing that for one descriptor only and getting
-> rid of the allocation.
-> 
-> BTW, another pattern is the same sans the "delayed" part.  I.e.
-> "here's an opened file, get a descriptor and either attach the
-> file to it or fput() the damn thing; in any case, file reference
-> is consumed and descriptor-or-error is returned".  That one is
-> definitely only for single descriptor case.
-> 
-> In any case, I want to finish the survey of the callers first, just to
-> see what's there and whether anything is worth nicking.
-> 
-> While we are at it, I want to make close_fd() use a very big red flag.
-> To the point of grepping for new callers in -next and asking the folks
-> who introduce those to explain WTF they are doing...
+> Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
+> ---
+> Changed in v2:
+>  - Updated commit message
+>  - Applied suggestions from Krzysztof Kozlowski
 
-Yeah, I'd fully support this and would be very nice to have.
+What have changed?
+
+> Changed in v3:
+>  - Correctly applied suggestions
+
+What have changed?
+
+> Changed in v4:
+>  - Added LSL080AL03, LTL101AT01 compatibles
+>  - Added description to reset-gpios
+>  - Added vmipi-supply, renamed enable-supply to power-supply
+> ---
+>  .../display/panel/samsung,s6d7aa0.yaml        | 68 +++++++++++++++++++
+>  1 file changed, 68 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/panel/samsung,s6d7aa0.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/display/panel/samsung,s6d7aa0.yaml b/Documentation/devicetree/bindings/display/panel/samsung,s6d7aa0.yaml
+> new file mode 100644
+> index 000000000000..918f62a78ecd
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/display/panel/samsung,s6d7aa0.yaml
+> @@ -0,0 +1,68 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/display/panel/samsung,s6d7aa0.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Samsung S6D7AA0 MIPI-DSI LCD panel controller
+> +
+> +maintainers:
+> +  - Artur Weber <aweber.kernel@gmail.com>
+> +
+> +allOf:
+> +  - $ref: panel-common.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      # 1280x800 LSL080AL02 panel
+> +      - samsung,s6d7aa0-lsl080al02
+
+lsl080al02 is model number also coming from Samsung? I am afraid this
+concatenated two compatibles into one...
+
+> +      # 1024x768 LSL080AL03 panel
+> +      - samsung,s6d7aa0-lsl080al03
+> +      # 1024x768 LTL101AT01 panel
+> +      - samsung,s6d7aa0-ltl101at01
+> +
+> +  reg: true
+> +
+> +  backlight:> +    description: |
+
+If there is going to be new version:
+Do not need '|' unless you need to preserve formatting.
+
+> +      Backlight to use for the panel. If this property is set on panels
+> +      that have DSI-based backlight control (LSL080AL03 and LTL101AT01),
+> +      it overrides the DSI-based backlight.
+> +
+> +  reset-gpios:
+> +    description: Reset GPIO pin, usually GPIO_ACTIVE_LOW.
+> +
+> +  power-supply:
+> +    description: |
+
+Do not need '|' unless you need to preserve formatting.
+
+> +      Main power supply for the panel; the exact voltage differs between
+> +      panels, a
+
+
+Best regards,
+Krzysztof
+
