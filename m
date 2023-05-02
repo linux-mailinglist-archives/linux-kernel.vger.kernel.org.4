@@ -2,85 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63CE36F4508
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 15:35:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C84D6F450A
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 15:36:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234220AbjEBNfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 09:35:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59864 "EHLO
+        id S234245AbjEBNgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 09:36:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233158AbjEBNfE (ORCPT
+        with ESMTP id S233158AbjEBNgA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 09:35:04 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0757A5B85
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 06:35:03 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-94ed7e49541so629490666b.1
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 06:35:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683034501; x=1685626501;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=JVH5AJjja3pPY3sWXOLr3HAvkOpaT8bDdz1vHu3io70=;
-        b=smnsIa775JInjUyX4bAQxoeEaKr4Z+jyqv9zS2Vp25Hy6Fuus5FfvGg6XbFOMvT+g9
-         iofyrIhCMZIZy3YxCfQxlqPadJWmw6OjmMMcQ+lIuC2+0SvTXwpuvDVcEhUrWfKVYl2v
-         wUzeIwoj01OBSN0S7QA2lWEUIUWNBF6iqaWgbdAL707A9ZOQXig6+BUdKj6O9at9Bgpf
-         vauwzJVif5VcrSC1B4f4rpj+4ukF0GvwG2mcW/IzsLjS7Kyh+YDMzSngsV3jLT6iDUc1
-         Ttbyn0hMq8qT0gT+l1XovH0J1N4viM/pBSzw8COx08wv0W3fHql3VmyIOB5cV7zghjw1
-         tOPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683034501; x=1685626501;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JVH5AJjja3pPY3sWXOLr3HAvkOpaT8bDdz1vHu3io70=;
-        b=jtFZy16xs/PkQg/MhCcB5x2OV/TqVbgEa5B6Ds/iWSW5B7S/hwb9dqz5AsOsOIADB+
-         3ZfGfbrp+b9kPJ3yctawjSj0W5SZhXoj3aFK5/mg2V8dAGmNgTukcNDTIegRbCeTxV1r
-         dH8ioG+8b1lCl8BiEtLTEOIXIWrqIDuMk/0HU/ooH+lshTTUVQ1wf44rm6aN0I6S2hCI
-         5IElqo0w1O5V6dfXdXOtF9Xz/fDRyfQJc3JSphfA2XMpH5vbvDADeZQcuTV8OnES15jT
-         oqXTXzVedeJtlB95xYxFsoOVBrwC81Pd69jDanEV/OweN999/D1DsPZf9bPBnAwy62Kd
-         DgcQ==
-X-Gm-Message-State: AC+VfDyVjewQ7Rj1Jvmt3QZavYwEozhZrK+k20YLudVYhj0xN04c+XpQ
-        rg66pXWaXWHOVE8WyqxqaIsw1A0DcM9mfw==
-X-Google-Smtp-Source: ACHHUZ71Nwj8YIRowvMB6/x0odouahdD2qJnabwkYp1IHKOoTqDiDWl1wL087moMnxiNSTgyxN4DQw==
-X-Received: by 2002:a17:906:d54c:b0:95f:a89d:efb7 with SMTP id cr12-20020a170906d54c00b0095fa89defb7mr20039783ejc.69.1683034501103;
-        Tue, 02 May 2023 06:35:01 -0700 (PDT)
-Received: from [192.168.0.131] (catv-89-134-213-173.catv.fixed.vodafone.hu. [89.134.213.173])
-        by smtp.gmail.com with ESMTPSA id k18-20020a1709060cb200b0094ed72b6552sm16158174ejh.98.2023.05.02.06.34.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 May 2023 06:35:00 -0700 (PDT)
-Message-ID: <85c538b01efb6f3fa6ff05ed1a0bc3ff87df7a61.camel@gmail.com>
-Subject: Re: [RFC PATCH 0/1] Add AMDGPU_INFO_GUILTY_APP ioctl
-From:   Timur =?ISO-8859-1?Q?Krist=F3f?= <timur.kristof@gmail.com>
-To:     Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Cc:     =?ISO-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
-        Alex Deucher <alexdeucher@gmail.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        linux-kernel@vger.kernel.org,
-        "Pelloux-Prayer, Pierre-Eric" <pierre-eric.pelloux-prayer@amd.com>,
-        Marek =?UTF-8?Q?Ol=C5=A1=C3=A1k?= <maraeo@gmail.com>,
-        michel.daenzer@mailbox.org,
-        Samuel Pitoiset <samuel.pitoiset@gmail.com>,
-        kernel-dev@igalia.com, Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
-        "Deucher, Alexander" <alexander.deucher@amd.com>
-Date:   Tue, 02 May 2023 15:34:59 +0200
-In-Reply-To: <fcca2934-a556-797c-535d-a66fc67bbe30@amd.com>
-References: <20230501185747.33519-1-andrealmeid@igalia.com>
-         <CADnq5_NXj4W44F_etRQ7HWdVTnf5zARCM3Y_o3EiwWiHj8QMpA@mail.gmail.com>
-         <6ab2ff76-4518-6fac-071e-5d0d5adc4fcd@igalia.com>
-         <cb3d2590-a1f8-fe7e-0bba-638ee80719af@amd.com>
-         <CAFF-SiV0=WNmRW-D9uYUuj68Zq0APxtGLya9KR6FfZ7v0Zf2RQ@mail.gmail.com>
-         <fcca2934-a556-797c-535d-a66fc67bbe30@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.1 (3.48.1-1.fc38) 
+        Tue, 2 May 2023 09:36:00 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2072.outbound.protection.outlook.com [40.107.102.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D9385B85;
+        Tue,  2 May 2023 06:35:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Vo7ew1gZSzf66wfGwAkijtwDxW7QGfkeOHUwifpbf4D+SGzaPsKFVWWeT1nqHDy5wcu/GyeXkNXdtCtmR8ftqR08u/osWwbN/yKhOZpLJn1rJuRLMd752sfdpdbCQSOmHQMpL7yFw4HndZ54Actu8EmhGBkMEZ8+GS0wIecI+YSyyUyRejZmTSL4NVSVTrrDV7X0WIcgc/T2hP7qa4rmH7j30SEhz6paqO6TaGw8aGcRYiOYTlNiN0MzZ2GdvAuTHUQziXgnOObpVNQLJ2QCrCqD60oH3UTSjxo5lz9FBtOsKCDoPyTLli3bncJJvdRnKBT8G0XD7pST/YK1V6nu7Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6gAu2754sL0n6XStq37WO6X4+pyRpzOGFM95E1zP0/0=;
+ b=jE2qzaHQTtQDFyhXygJ/ym2mMPSe5XmtMMR9WLzjLPUdwhdT2rdLfaAy/1moB6QN0vfxEnv97Q/IJMnDkVPb2dkRYKf3FV2lCMX07s1JpFNSWRTT/vNSeUbY4uIz+rZiHRO1t7o6SgS4oMRtIaXoBbxm9IiRRE0GtzU4vhGV2tMK2o45+dGVJn8AmS7mJ5t8i24Au7iYrGc6q1mCrcll4alb1jk/PL4dpJobUa8mFXwy/ocb+qG20b6zyu7zJlPe2pyF7XWSM6emS8GSXVSXg8EOM9lHip148s1tLT1XSnnl+3OkXu+Hr4+PEJfxl54s1fqfjAEwfe+CuimRsZezvA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6gAu2754sL0n6XStq37WO6X4+pyRpzOGFM95E1zP0/0=;
+ b=35rjDTYfcChaTrbVSMm90mMXgmusxpt2wv3biFqux7pqt6gfX5yk6NpOnnR82u15AvFmr4SRs8rhJks5QSL/c3U+fHej/eBlY13Pf3clSKdA9xpefOEw2L3ScEX365KPX4DhzztMbH0ExxHvOJaYu+PQxJolQ0lwzS3tCbbgnhk=
+Received: from DS7PR03CA0333.namprd03.prod.outlook.com (2603:10b6:8:55::15) by
+ IA1PR12MB6459.namprd12.prod.outlook.com (2603:10b6:208:3a9::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.31; Tue, 2 May
+ 2023 13:35:56 +0000
+Received: from DS1PEPF0000E637.namprd02.prod.outlook.com
+ (2603:10b6:8:55:cafe::5) by DS7PR03CA0333.outlook.office365.com
+ (2603:10b6:8:55::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.20 via Frontend
+ Transport; Tue, 2 May 2023 13:35:55 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DS1PEPF0000E637.mail.protection.outlook.com (10.167.17.69) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6363.21 via Frontend Transport; Tue, 2 May 2023 13:35:55 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 2 May
+ 2023 08:35:54 -0500
+From:   Michal Simek <michal.simek@amd.com>
+To:     <linux-kernel@vger.kernel.org>, <monstr@monstr.eu>,
+        <michal.simek@xilinx.com>, <git@xilinx.com>
+CC:     Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
+        Andrew Davis <afd@ti.com>,
+        Ashok Reddy Soma <ashok.reddy.soma@xilinx.com>,
+        "Geert Uytterhoeven" <geert+renesas@glider.be>,
+        Harini Katakam <harini.katakam@amd.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Parth Gajjar <parth.gajjar@amd.com>,
+        Piyush Mehta <piyush.mehta@xilinx.com>,
+        "Radhey Shyam Pandey" <radhey.shyam.pandey@amd.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Robert Hancock <robert.hancock@calian.com>,
+        Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>,
+        Srinivas Neeli <srinivas.neeli@xilinx.com>,
+        Tanmay Shah <tanmay.shah@amd.com>,
+        Vishal Sagar <vishal.sagar@amd.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: [PATCH 00/23] arm64: zynqmp: Misc zynqmp changes
+Date:   Tue, 2 May 2023 15:35:28 +0200
+Message-ID: <cover.1683034376.git.michal.simek@amd.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS1PEPF0000E637:EE_|IA1PR12MB6459:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8cb4b0f9-40a7-4549-7781-08db4b12282d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: KAHGkiOa9u4aVE5YBSW4u9ipiqtU/O6fLPKWGJhn1EDkRI8SRquxgd6ZD0P/s3mP42YyExkFx3MLQQ4QxGNsev3zxrg7ODxOuDiI4YhVrEleTDmGycNlWSC+FzEAXGEwpc9XsC2FMab6KHBli5I04E6HE6OwfjnO4XiyLBm30nwXXz19pPHd8q59zqAekCxC2DdeQ25xMN5QF3+/25AQXNBLcYueKmzTA1f7PrHNSnuYVKOKJsWHGf1iySsJirOWYdUOzOFSW4myBs5GVOGGaHh07CUJd5/kT9yRDvn+FFMNHVyA1Y6THJHzPTRzII7GUYAbz9N1rsUfhrfRLHaGJEACyEjAcWCfbfNC69+8z1YfwXWskmNtmQRb2CbqldUWKD0KgT0GO2sSYHK8HeU3TdAfo9H/7r5e7DSAerHIYp+6AcONUHUOLn6iblUINKG71qMsRdOWxEJpCX5DW37J6hIEn1j/IFmVhFhLVVXr+vqWL3DZu6pecA32jaNDt7SYuc1sjvylqDWncfmhrLB3KoY5YEjopnQgNfgMj1ONLWfBiuVzlk9YbnWISpivGOGxyHyOALXVq6oJuTB6p9aDhRFtiVu6tVi8l0LZnL0Qt1exvvxIqY9hlSisL1yRUoo3fupe9WE9/Dg0j4p6EyIqS9dY9UOgcXMtVeRIelUX3gFh8FuuNRjmjFalyLcnBgj7P81vS81ZhVBfCuCLTWbSkRWQUX79JbMLJ7kmAXZwWYgsV9Aela5MCToxb38X223C
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(376002)(396003)(136003)(451199021)(46966006)(40470700004)(36840700001)(110136005)(336012)(426003)(26005)(54906003)(2616005)(2906002)(47076005)(36860700001)(83380400001)(44832011)(186003)(16526019)(7416002)(81166007)(82740400003)(70206006)(70586007)(356005)(40460700003)(5660300002)(966005)(8676002)(8936002)(41300700001)(40480700001)(36756003)(86362001)(316002)(82310400005)(6666004)(478600001)(4326008)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2023 13:35:55.7838
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8cb4b0f9-40a7-4549-7781-08db4b12282d
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000E637.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6459
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -89,137 +119,72 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-On Tue, 2023-05-02 at 13:14 +0200, Christian K=C3=B6nig wrote:
-> >=20
-> > Christian K=C3=B6nig <christian.koenig@amd.com> ezt =C3=ADrta (id=C5=91=
-pont: 2023.
-> > m=C3=A1j. 2., Ke 9:59):
-> > =C2=A0
-> > > Am 02.05.23 um 03:26 schrieb Andr=C3=A9 Almeida:
-> > > =C2=A0> Em 01/05/2023 16:24, Alex Deucher escreveu:
-> > > =C2=A0>> On Mon, May 1, 2023 at 2:58=E2=80=AFPM Andr=C3=A9 Almeida
-> > > <andrealmeid@igalia.com>=20
-> > > =C2=A0>> wrote:
-> > > =C2=A0>>>
-> > > =C2=A0>>> I know that devcoredump is also used for this kind of
-> > > information,=20
-> > > =C2=A0>>> but I believe
-> > > =C2=A0>>> that using an IOCTL is better for interfacing Mesa + Linux
-> > > rather=20
-> > > =C2=A0>>> than parsing
-> > > =C2=A0>>> a file that its contents are subjected to be changed.
-> > > =C2=A0>>
-> > > =C2=A0>> Can you elaborate a bit on that?=C2=A0 Isn't the whole point=
- of
-> > > devcoredump
-> > > =C2=A0>> to store this sort of information?
-> > > =C2=A0>>
-> > > =C2=A0>
-> > > =C2=A0> I think that devcoredump is something that you could use to
-> > > submit to=20
-> > > =C2=A0> a bug report as it is, and then people can read/parse as they
-> > > want,=20
-> > > =C2=A0> not as an interface to be read by Mesa... I'm not sure that
-> > > it's=20
-> > > =C2=A0> something that I would call an API. But I might be wrong, if
-> > > you know=20
-> > > =C2=A0> something that uses that as an API please share.
-> > > =C2=A0>
-> > > =C2=A0> Anyway, relying on that for Mesa would mean that we would nee=
-d
-> > > to=20
-> > > =C2=A0> ensure stability for the file content and format, making it
-> > > less=20
-> > > =C2=A0> flexible to modify in the future and probe to bugs, while the
-> > > IOCTL is=20
-> > > =C2=A0> well defined and extensible. Maybe the dump from Mesa +
-> > > devcoredump=20
-> > > =C2=A0> could be complementary information to a bug report.
-> > > =C2=A0
-> > > =C2=A0Neither using an IOCTL nor devcoredump is a good approach for
-> > > this since=20
-> > > =C2=A0the values read from the hw register are completely unreliable.
-> > > They=20
-> > > =C2=A0could not be available because of GFXOFF or they could be
-> > > overwritten or=20
-> > > =C2=A0not even updated by the CP in the first place because of a hang
-> > > etc....
-> > > =C2=A0
-> > > =C2=A0If you want to track progress inside an IB what you do instead
-> > > is to=20
-> > > =C2=A0insert intermediate fence write commands into the IB. E.g.
-> > > something=20
-> > > =C2=A0like write value X to location Y when this executes.
-> > > =C2=A0
-> > > =C2=A0This way you can not only track how far the IB processed, but
-> > > also in=20
-> > > =C2=A0which stages of processing we where when the hang occurred. E.g=
-.
-> > > End of=20
-> > > =C2=A0Pipe, End of Shaders, specific shader stages etc...
-> > > =C2=A0
-> > >=20
-> > =C2=A0
-> > Currently our biggest challenge in the userspace driver is
-> > debugging "random" GPU hangs. We have many dozens of bug reports
-> > from users which are like: "play the game for X hours and it will
-> > eventually hang the GPU". With the currently available tools, it is
-> > impossible for us to tackle these issues. Andr=C3=A9's proposal would b=
-e
-> > a step in improving this situation.
-> >=20
-> > We already do something like what you suggest, but there are
-> > multiple problems with that approach:
-> > =C2=A0
-> > 1. we can only submit 1 command buffer at a time because we won't
-> > know which IB hanged
-> > 2. we can't use chaining because we don't know where in the IB it
-> > hanged
-> > 3. it needs userspace to insert (a lot of) extra commands such as
-> > extra synchronization and memory writes
-> > 4. It doesn't work when GPU recovery is enabled because the
-> > information is already gone when we detect the hang
-> >=20
-> =C2=A0You can still submit multiple IBs and even chain them. All you need
-> to do is to insert into each IB commands which write to an extra
-> memory location with the IB executed and the position inside the IB.
->=20
-> =C2=A0The write data command allows to write as many dw as you want (up t=
-o
-> multiple kb). The only potential problem is when you submit the same
-> IB multiple times.
->=20
-> =C2=A0And yes that is of course quite some extra overhead, but I think
-> that should be manageable.
+the series is syncing the latest dt changes based on board status and the
+latest DT schema.
+The patches are based on
+https://lore.kernel.org/all/20230321070619.29440-1-parth.gajjar@amd.com/
 
-Thanks, this sounds doable and would solve the limitation of how many
-IBs are submitted at a time. However it doesn't address the problem
-that enabling this sort of debugging will still have extra overhead.
-
-I don't mean the overhead from writing a couple of dwords for the
-trace, but rather, the overhead from needing to emit flushes or top of
-pipe events or whatever else we need so that we can tell which command
-hung the GPU.
-
-> =C2=A0
-> > In my opinion, the correct solution to those problems would be if
-> > the kernel could give userspace the necessary information about a
-> > GPU hang before a GPU reset.
-> > =C2=A0=C2=A0
-> =C2=A0The fundamental problem here is that the kernel doesn't have that
-> information either. We know which IB timed out and can potentially do
-> a devcoredump when that happens, but that's it.
+Thanks,
+Michal
 
 
-Is it really not possible to know such a fundamental thing as what the
-GPU was doing when it hung? How are we supposed to do any kind of
-debugging without knowing that?
+Amit Kumar Mahapatra (2):
+  arm64: zynqmp: Set qspi tx-buswidth to 4
+  arm64: zynqmp: Add mtd partition for secure OS storage area
 
-I wonder what AMD's Windows driver team is doing with this problem,
-surely they must have better tools to deal with GPU hangs?
+Ashok Reddy Soma (1):
+  arm64: zynqmp: Fix usb node drive strength and slew rate
 
-Best regards,
-Timur
+Michal Simek (15):
+  arm64: zynqmp: Describe TI phy as ethernet-phy-id
+  arm64: zynqmp: Fix usb reset over bootmode pins on zcu100
+  arm64: zynqmp: Sync node name address with reg (mailbox)
+  arm64: zynqmp: Add dmas, dp, rtc, watchdogs and opp nodes for SOM
+  arm64: zynqmp: Use assigned-clock-rates for setting up SD clock in SOM
+  arm64: zynqmp: Used fixed-partitions for QSPI in k26
+  arm64: zynqmp: Add gpio labels for modepin gpio
+  arm64: zynqmp: Add pinctrl emmc description to SM-K26
+  arm64: zynqmp: Switch to ethernet-phy-id in kv260
+  arm64: zynqmp: Setup clock for DP and DPDMA
+  arm64: zynqmp: Enable DP driver for SOMs
+  arm64: zynqmp: Rename ams_ps/pl node names
+  arm64: zynqmp: Enable AMS on SOM and other zcu10x boards
+  arm64: zynqmp: Describe bus-width for SD card on KV260
+  arm64: zynqmp: Add phase tags marking
 
+Piyush Mehta (1):
+  arm64: zynqmp: Disable USB3.0 for zc1751-xm016-dc2
 
+Radhey Shyam Pandey (2):
+  arm64: zynqmp: Add L2 cache nodes
+  arm64: zynqmp: Add pmu interrupt-affinity
+
+Sai Krishna Potthuri (1):
+  arm64: zynqmp: Add resets property to sdhci nodes
+
+Srinivas Neeli (1):
+  arm64: zynqmp: Add linux,code for gpio button
+
+ .../arm64/boot/dts/xilinx/zynqmp-clk-ccf.dtsi |  15 +-
+ .../boot/dts/xilinx/zynqmp-sck-kv-g-revA.dtso |  20 +-
+ .../boot/dts/xilinx/zynqmp-sck-kv-g-revB.dtso |  20 +-
+ .../boot/dts/xilinx/zynqmp-sm-k26-revA.dts    | 321 +++++++++++++-----
+ .../boot/dts/xilinx/zynqmp-zc1232-revA.dts    |   2 +-
+ .../boot/dts/xilinx/zynqmp-zc1254-revA.dts    |   2 +-
+ .../boot/dts/xilinx/zynqmp-zc1275-revA.dts    |   2 +-
+ .../dts/xilinx/zynqmp-zc1751-xm015-dc1.dts    |  10 +-
+ .../dts/xilinx/zynqmp-zc1751-xm016-dc2.dts    |  10 +-
+ .../dts/xilinx/zynqmp-zc1751-xm018-dc4.dts    |   2 +-
+ .../boot/dts/xilinx/zynqmp-zcu100-revC.dts    |  32 +-
+ .../boot/dts/xilinx/zynqmp-zcu102-revA.dts    |  42 ++-
+ .../boot/dts/xilinx/zynqmp-zcu102-revB.dts    |  25 +-
+ .../boot/dts/xilinx/zynqmp-zcu104-revA.dts    |  42 ++-
+ .../boot/dts/xilinx/zynqmp-zcu104-revC.dts    |  42 ++-
+ .../boot/dts/xilinx/zynqmp-zcu106-revA.dts    |  29 +-
+ .../boot/dts/xilinx/zynqmp-zcu111-revA.dts    |  29 +-
+ arch/arm64/boot/dts/xilinx/zynqmp.dtsi        |  33 +-
+ 18 files changed, 513 insertions(+), 165 deletions(-)
+
+-- 
+2.36.1
 
