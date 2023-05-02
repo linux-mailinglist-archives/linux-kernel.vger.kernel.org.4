@@ -2,105 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E109C6F49AD
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 20:30:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EE106F49AF
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 20:30:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234359AbjEBSal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 14:30:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58222 "EHLO
+        id S234397AbjEBSao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 14:30:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234248AbjEBSaj (ORCPT
+        with ESMTP id S234323AbjEBSal (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 14:30:39 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B90B1727
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 11:30:38 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id 98e67ed59e1d1-24e01ba9e03so1900787a91.1
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 11:30:38 -0700 (PDT)
+        Tue, 2 May 2023 14:30:41 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1417D172E;
+        Tue,  2 May 2023 11:30:40 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id d75a77b69052e-3ef32014101so42033351cf.3;
+        Tue, 02 May 2023 11:30:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google; t=1683052237; x=1685644237;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pAQhEZIUqoIg0WnQQGu+sRHru4VeOPDcrcJOWO8mzYM=;
-        b=QjM/2sf2VRIXbJlIzRfspouLF6OuZM13jytkJSo3lm29qCdTX3iy9oFho8ke4D04d6
-         +fvfL7eI22XqKz84cG+LDpkPDr9sOlvKINQQLOdwgTfEkbG/w1xgS1i7TagtJipDNBIJ
-         cntbWwggh4Gt23pMnbxqAxN0HmsNc+SUBdKZs=
+        d=gmail.com; s=20221208; t=1683052239; x=1685644239;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=h5KPY5V6nk7zcKsejg06UhQdXAoI4rxf/Iee2Sdzh0s=;
+        b=huvapiP1o/a5ROF+RrV3LRzVcl8VvchFqlWxmMyY0NsJlusefbB0XvV8hgh3gac6fo
+         fqGq1g63D/En+ZAO6WAdGfLrFNH9C8RkAXnoKz2h9frRYIYjUPjRKoSrewvawZIe/GG/
+         ywI+pevRMWLaUqjPPy8faM0HkoJhrfxh3gDXhnwhl8jh99aaADOFeVogqj308IH7+KGj
+         1tB3pTQayl8TKnvnR1TsUmh88QYiKArDHl+PDtBEJl5XwAdv5GIkXirh1H64z4cEEal5
+         zCd8qPqpJ3raiW4C26zqSdD9DXeozCbVKNWuSNT+FmQiS7tddDCkih+UGCBgft+8QE/b
+         Acvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683052237; x=1685644237;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pAQhEZIUqoIg0WnQQGu+sRHru4VeOPDcrcJOWO8mzYM=;
-        b=K0JunTXcMB6mAHmejMTuVF/JLdumV5EI5ZHa3eESBCqWTfKo9KTyzON04n3i/V/b7M
-         +zU6Lg1SbsziUH1YMDfWAGoPWwvp3LeaX3DK0byC9Z+BCPpptO8PMyC7QDe/6wl15b1U
-         EAthL1dXlMIpxwMbIDg9eu22wFngjouQNdSbBtsSyOKeblROHJLeHaRRRmL9MR0aES14
-         Pf0crFA5TKzbUNTrK5DRn7iiuvwxRCh8SXUkXnPDeqNa9F/O8E0BewDTG0G1P9tyPisw
-         0d/i5CvrfgG7wLVvbrwxsrGtuj05FcAHXAW/OHQmq5+5uBra4UhbC802sJh+p53Ix4gh
-         0GCA==
-X-Gm-Message-State: AC+VfDwTRLaZoihajlrxMI3+g39lL/d4goEykW7KMLrfEdrQC4LKAVBC
-        aa1gzjojdYtO9mSNsTbwRwv+DyS/Qkvp/gAV/+Oy
-X-Google-Smtp-Source: ACHHUZ44v9vV7G6qU3mFhTW1gmFkmFApbCz7Px2x6Eyp75qSLo/vyu2HGH0wO8TM3A3QDhzJO/gbUVlzC/Dwiaqo1rs=
-X-Received: by 2002:a17:90a:195b:b0:23d:3549:82b7 with SMTP id
- 27-20020a17090a195b00b0023d354982b7mr19010390pjh.46.1683052237457; Tue, 02
- May 2023 11:30:37 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683052239; x=1685644239;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=h5KPY5V6nk7zcKsejg06UhQdXAoI4rxf/Iee2Sdzh0s=;
+        b=h2te7cM2mUmc2WofklWcEQNEbMJRDTw6GqYVKIAyBh3xNHchLmQZ+LyVOtU29sf1fv
+         Al0DAIzfBZc5l+mHxISTZ4XvcNlSVyMaot7LMRpNrVBadbIDosmpdXq88ZddYdofiKDC
+         v75o/Rox8VD0fd0zIp9u27RWaJzsws8XdaSHS859tdniBqENyYy/2hcsxnrzfK9pAQXo
+         0fy3yYV+jnYtWRD4HBdYRilLNCwAwYe4rX1bidZICW7mnnam6SjnUF8faSiuVS5x4Moi
+         nK2Fg3x+Q31LGDK7uLtGzd2HBJ2dX6FXCwkEVGVhP0ml4bcIkwHUhhbtBe5dn7TV42xM
+         uWRQ==
+X-Gm-Message-State: AC+VfDy8cOxvgFaydqffPOWdELCpm1pYrjPBvN5HI8jtjkyGKwzHhLRM
+        yYr5eThYaRzV7w5EIZSHXAc=
+X-Google-Smtp-Source: ACHHUZ4cr3QjY4+z+dN7SsjEHvHkOPquQGdAxCy3mXR0QlFgJ/dhUGxFG6VteZXVkN2h21ws6YF9/A==
+X-Received: by 2002:ac8:5a8b:0:b0:3ef:327d:ac78 with SMTP id c11-20020ac85a8b000000b003ef327dac78mr25703066qtc.36.1683052239136;
+        Tue, 02 May 2023 11:30:39 -0700 (PDT)
+Received: from [10.69.71.131] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id c136-20020ae9ed8e000000b007468b183a65sm9918474qkg.30.2023.05.02.11.30.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 May 2023 11:30:38 -0700 (PDT)
+Message-ID: <5e00b4c7-8d3f-e1b2-4359-5ee8fdf92ea9@gmail.com>
+Date:   Tue, 2 May 2023 11:30:36 -0700
 MIME-Version: 1.0
-References: <mhng-f3c5429e-4361-4068-b88c-fb528681881a@palmer-ri-x1c9a>
-In-Reply-To: <mhng-f3c5429e-4361-4068-b88c-fb528681881a@palmer-ri-x1c9a>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Wed, 3 May 2023 00:00:26 +0530
-Message-ID: <CAOnJCULybsPrygGe6easQUgFTXOSUFQ+nOPEYp57F-vkvhuHLQ@mail.gmail.com>
-Subject: Re: Atish is looking at the excessive bouncing
-To:     Palmer Dabbelt <palmer@rivosinc.com>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
-Cc:     linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH net 2/2] net: dsa: mt7530: fix network connectivity with
+ multiple CPU ports
+Content-Language: en-US
+To:     arinc9.unal@gmail.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?Q?Ren=c3=a9_van_Dorst?= <opensource@vdorst.com>
+Cc:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Richard van Schagen <richard@routerhints.com>,
+        Richard van Schagen <vschagen@cs.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230501121538.57968-1-arinc.unal@arinc9.com>
+ <20230501121538.57968-2-arinc.unal@arinc9.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230501121538.57968-2-arinc.unal@arinc9.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 2, 2023 at 11:17=E2=80=AFAM Palmer Dabbelt <palmer@rivosinc.com=
-> wrote:
->
-> We're not sure what happened, but it looks like a lot of people are
-> getting dropped from the list due to excessive bounces.  Seems to have
-> started recently, possibly today or over the weekend.  We've always had
-> some issues with the bounces, but they're a lot worse.
->
-
-All the bounces are related to the gmail server which treats genuine
-patches as bounce messages.
-mailman server disables the membership if it gets too many bounce
-backs from the recipient.
-It seems the mailman server can't do much about it until the issue is
-fixed in the gmail server.
-We have increased the bounce threshold significantly in order to avoid
-disabling subscriptions.
-If you still get one, please reenable it manually. You should receive
-one reminder email for that as well.
-There is no other solution at this time. Sorry for the inconvenience.
-
-I have included the broader kernel mailing list in the hope to see if
-anybody else is also facing similar problems.
-It would be great if anybody working for the Google/gmail team can
-raise this issue internally.
-
-> Sorry for the headaches.
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
 
+On 5/1/2023 5:15 AM, arinc9.unal@gmail.com wrote:
+> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+> 
+> On mt753x_cpu_port_enable() there's code that enables flooding for the CPU
+> port only. Since mt753x_cpu_port_enable() runs twice when both CPU ports
+> are enabled, port 6 becomes the only port to forward the frames to. But
+> port 5 is the active port, so no frames received from the user ports will
+> be forwarded to port 5 which breaks network connectivity.
+> 
+> Every bit of the BC_FFP, UNM_FFP, and UNU_FFP bits represents a port. Fix
+> this issue by setting the bit that corresponds to the CPU port without
+> overwriting the other bits.
+> 
+> Clear the bits beforehand only for the MT7531 switch. According to the
+> documents MT7621 Giga Switch Programming Guide v0.3 and MT7531 Reference
+> Manual for Development Board v1.0, after reset, the BC_FFP, UNM_FFP, and
+> UNU_FFP bits are set to 1 for MT7531, 0 for MT7530.
+> 
+> Tested-by: Arınç ÜNAL <arinc.unal@arinc9.com>
 
---=20
-Regards,
-Atish
+This tag is implied by your Signed-off-by tag. No Fixes tag for this one?
+-- 
+Florian
