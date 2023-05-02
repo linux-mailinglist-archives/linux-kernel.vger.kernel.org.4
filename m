@@ -2,65 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFF856F4784
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 17:42:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E6EA6F4786
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 17:43:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234198AbjEBPmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 11:42:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53952 "EHLO
+        id S234389AbjEBPnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 11:43:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233331AbjEBPmv (ORCPT
+        with ESMTP id S233331AbjEBPn2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 11:42:51 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B521A6
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 08:42:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683042170; x=1714578170;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to;
-  bh=s53ckWSCPCD27YqdcQdt7WZr3VrH45zL/WyjwkVkJsY=;
-  b=ZzTEapToq4Xf83IU6V++A/408o2XaF2DxQP5Sdy5pHs/NCjxvlCwa3Vk
-   ibggqqq/XsCTNxfyBIMkNYWlSM4CrNr02ATIHcH6510O1XxDaMcjpAs9E
-   C3GhYUHOnlRetGOvXIB2S9Is3oW3E9FvRVj2oCx1mYJX6Zoo6ejFBk1UI
-   bI933bHOy6/dtFDvGzY8v1R7Y4PH+wYctbU+XgM63eJeh4/JSnhrBjiyk
-   Tl/l9WfVMIynjkoLY7kxO4Wni5JdOXnWXoG3kQV8fSx82LlZuWdNb/QU0
-   GGHVDgHKJEvhk0rZI0v6bNsQgF1UtB5PmsjypWV/w8Ukx9RPwRP6YIkWz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="413891000"
-X-IronPort-AV: E=Sophos;i="5.99,244,1677571200"; 
-   d="scan'208";a="413891000"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2023 08:42:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="673700928"
-X-IronPort-AV: E=Sophos;i="5.99,244,1677571200"; 
-   d="scan'208";a="673700928"
-Received: from vsanka-mobl.amr.corp.intel.com (HELO [10.212.168.155]) ([10.212.168.155])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2023 08:42:49 -0700
-Content-Type: multipart/mixed; boundary="------------Ze0LFxpBo0szqDF8dkE4MQ9Q"
-Message-ID: <641a9348-a052-6bb5-e6c7-64acb6405328@intel.com>
-Date:   Tue, 2 May 2023 08:42:48 -0700
+        Tue, 2 May 2023 11:43:28 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0491AE
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 08:43:27 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f00d41df22so29117819e87.1
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 08:43:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1683042205; x=1685634205;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ksBtAvIT0tt+UGPpxO6Jblux7JGuQy9A1nRJOgAb9pI=;
+        b=px5MHukmh1ug97m+YREdCGgo5TYWBkkeuiP1JpoH4jJuen9G2YruZPJ2pwUikB5Jjs
+         OII9ImsB414NzKGuby4YETq4QlnDMxEn5O1fxOs/6bCrLnDKISoXpQt6AIltksRQuXDD
+         uKyYJrMZ6zZuyV3grj7SjD6sdqGuUokOrIsfbQWCxVyWC3JgazKweGYCUrq3tapfy0cw
+         9MCXz+ld4bKorpOOfJkqtn1miDLL6sHboEn7F9UM7aIReSkx88lAcCWtuiHN5JrNCYif
+         MgRVmRur/HIZuPV7hxggJ6DrDQL5Jxo/AoNH/NPdzslaBnCPpkdvILMcV0l0W6GM2Gk7
+         9GCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683042205; x=1685634205;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ksBtAvIT0tt+UGPpxO6Jblux7JGuQy9A1nRJOgAb9pI=;
+        b=QOPUoqBx1jJnSLlOcaDYwfKCTmZeTfF++p7xXdH7cNgBSJ6fPF8UawnS7w4SiSEnXQ
+         YJ53aQA7Kam3BEmXKeangGmFbLHaYCYnvFfEsIHbs+OWYEsla6Jm/VNnkOGkIMdj3A8i
+         exMBLp3HiwQGM9Kkg6Qs4++euVbllj6Yl17MtQIa8ForvnJKGy2QnIBXtO2PPnKKmW0F
+         vRe3A7ILZ6J9t/AMYwFhMpyEWwa47Oy/bnkOoW1fpe1lmXq3xC97X8VDAbpYBuvqeWzB
+         EJS9nMUW5gttWNuZJfDzL3/7GbrzHpBNcc0nGFwV/mTEoeo/WJX5XnG5yNOAW+cJAtpz
+         pwcw==
+X-Gm-Message-State: AC+VfDxLVnB81zNJVIYLMrTXgz4Hhs95lxVKAqYPQviU2MWwVzqbnxkb
+        N59UApVu+em1/0S9dippvR09P0Meqlo4+cHmqXBMZA==
+X-Google-Smtp-Source: ACHHUZ7gOdNromrFXE3GdvxQuypVtOi6MPPmvNTGlbEjC9mOtLkpHNBvPHRmxBsZYzJ6VP57vLjqq2EPZjRl+q3IfzY=
+X-Received: by 2002:a05:6512:b83:b0:4ec:8cc6:55d9 with SMTP id
+ b3-20020a0565120b8300b004ec8cc655d9mr88318lfv.9.1683042205630; Tue, 02 May
+ 2023 08:43:25 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [GIT PULL] x86/mm for 6.4
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kirill.shutemov@linux.intel.com,
-        Peter Zijlstra <peterz@infradead.org>
-References: <20230427225647.1101172-1-dave.hansen@linux.intel.com>
- <CAHk-=wgrdOm8RwO+u8bydrbgs0wXJV_9mBYAtzX9d9hEY7a25A@mail.gmail.com>
- <CAHk-=wiHvdgbLxayyCsRU45JnKCZkCOpEJPfOvE3eYCnGjVcSA@mail.gmail.com>
- <20230429003822.n3mglslg666j3npp@box.shutemov.name>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20230429003822.n3mglslg666j3npp@box.shutemov.name>
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+References: <202305021414.EuPdM9kv-lkp@intel.com>
+In-Reply-To: <202305021414.EuPdM9kv-lkp@intel.com>
+From:   Evan Green <evan@rivosinc.com>
+Date:   Tue, 2 May 2023 08:42:49 -0700
+Message-ID: <CALs-Hsuw5WCmphzFNEnM5dRzqvoBscppcKb2ukVrU+uyGXBedA@mail.gmail.com>
+Subject: Re: arch/riscv/kernel/cpufeature.c:34:1: sparse: sparse: symbol
+ '__pcpu_scope_misaligned_access_speed' was not declared. Should it be static?
+To:     kernel test robot <lkp@intel.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,89 +72,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------Ze0LFxpBo0szqDF8dkE4MQ9Q
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Conor, this one was fixed by your patch to include cpufeature.h in
+cpufeature.c, right?
+-Evan
 
-On 4/28/23 17:38, Kirill A. Shutemov wrote:
-> BTW, I think the static check can be relaxed. Checking size against
-> PAGE_SIZE is rather conservative: there's 8 TB (or 4 PB for 5-level
-> paging) guard hole at the begging of kernel address space.
-
-Whatever we relax it to, let's make sure we get a note in
-Documentation/x86/x86_64/mm.rst.  But that's totally minor and we can
-fix it up later.
-
-Have anyone seen any actual code generation difference between:
-
-	return (long)ptr >= 0;
-
-and
-
-        return !((unsigned long)ptr & (1UL<<(BITS_PER_LONG-1)));
-
-?  I'm seeing gcc generate the same code for both the <=PAGE_SIZE side
-and the 'sum' side.
-
-It's longer, but I'd rather read the explicit "check bit 63" than the
-positive/negative address space thing.  I certainly grok both, but have
-to think through the "(long)ptr >= 0" check every time.
-
-I guess it also wouldn't matter as much either if we hid it in a helper
-like the attached patch and I didn't have to read it twice. ;)
---------------Ze0LFxpBo0szqDF8dkE4MQ9Q
-Content-Type: text/x-patch; charset=UTF-8; name="ptr_in_user_half.patch"
-Content-Disposition: attachment; filename="ptr_in_user_half.patch"
-Content-Transfer-Encoding: base64
-
-ZGlmZiAtLWdpdCBhL2FyY2gveDg2L2luY2x1ZGUvYXNtL3VhY2Nlc3MuaCBiL2FyY2gveDg2
-L2luY2x1ZGUvYXNtL3VhY2Nlc3MuaAppbmRleCAxMjMxMzVkNjBmNzIuLjdiYjExZDVhN2Y4
-ZiAxMDA2NDQKLS0tIGEvYXJjaC94ODYvaW5jbHVkZS9hc20vdWFjY2Vzcy5oCisrKyBiL2Fy
-Y2gveDg2L2luY2x1ZGUvYXNtL3VhY2Nlc3MuaApAQCAtNzcsMTUgKzc3LDI4IEBAIHN0YXRp
-YyBpbmxpbmUgdW5zaWduZWQgbG9uZyBfX3VudGFnZ2VkX2FkZHJfcmVtb3RlKHN0cnVjdCBt
-bV9zdHJ1Y3QgKm1tLAogCiAjaWZkZWYgQ09ORklHX1g4Nl82NAogLyoKLSAqIE9uIHg4Ni02
-NCwgd2UgbWF5IGhhdmUgdGFnIGJpdHMgaW4gdGhlIHVzZXIgcG9pbnRlci4gUmF0aGVyIHRo
-YW4KLSAqIG1hc2sgdGhlbSBvZmYsIGp1c3QgY2hhbmdlIHRoZSBydWxlcyBmb3IgX19hY2Nl
-c3Nfb2soKS4KKyAqIFRoZSB2aXJ0dWFsIGFkZHJlc3Mgc3BhY2Ugc3BhY2UgaXMgbG9naWNh
-bGx5IGRpdmlkZWQgaW50byBhIGtlcm5lbAorICogaGFsZiBhbmQgYSB1c2VyIGhhbGYuICBX
-aGVuIGNhc3QgdG8gYSBzaWduZWQgdHlwZSwgdXNlciBwb2ludGVycworICogYXJlIHBvc2l0
-aXZlIGFuZCBrZXJuZWwgcG9pbnRlcnMgYXJlIG5lZ2F0aXZlLgorICovCitzdGF0aWMgaW5s
-aW5lIGJvb2wgcHRyX2luX3VzZXJfaGFsZih2b2lkICpwdHIpCit7CisJcmV0dXJuIChsb25n
-KXB0ciA+PSAwOworfQorCisvKgorICogVXNlciBwb2ludGVycyBjYW4gaGF2ZSB0YWcgYml0
-cyBvbiB4ODYtNjQuICBUaGlzIHNjaGVtZSB0b2xlcmF0ZXMKKyAqIGFyYml0cmFyeSB2YWx1
-ZXMgaW4gdGhvc2UgYml0cyByYXRoZXIgbWFza2luZyB0aGVtIG9mZi4KKyAqCisgKiBFbmZv
-cmNlIHR3byBydWxlczoKKyAqIDEuICdwdHInIG11c3QgYmUgaW4gdGhlIHVzZXIgaGFsZiBv
-ZiB0aGUgYWRkcmVzcyBzcGFjZQorICogMi4gJ3B0citzaXplJyBtdXN0IG5vdCBvdmVyZmxv
-dyAoYmFjayBpbnRvIHRoZSBrZXJuZWwgaGFsZikKICAqCi0gKiBNYWtlIHRoZSBydWxlIGJl
-IHRoYXQgJ3B0citzaXplJyBtdXN0IG5vdCBvdmVyZmxvdywgYW5kIG11c3Qgbm90Ci0gKiBo
-YXZlIHRoZSBoaWdoIGJpdCBzZXQuIENvbXBpbGVycyBnZW5lcmFsbHkgdW5kZXJzdGFuZCBh
-Ym91dAotICogdW5zaWduZWQgb3ZlcmZsb3cgYW5kIHRoZSBDRiBiaXQgYW5kIGdlbmVyYXRl
-IHJlYXNvbmFibGUgY29kZSBmb3IKLSAqIHRoaXMuIEFsdGhvdWdoIGl0IGxvb2tzIGxpa2Ug
-dGhlIGNvbWJpbmF0aW9uIGNvbmZ1c2VzIGF0IGxlYXN0Ci0gKiBjbGFuZyAoYW5kIGluc3Rl
-YWQgb2YganVzdCBkb2luZyBhbiAiYWRkIiBmb2xsb3dlZCBieSBhIHRlc3Qgb2YKLSAqIFNG
-IGFuZCBDRiwgeW91J2xsIHNlZSB0aGF0IHVubmVjZXNzYXJ5IGNvbXBhcmlzb24pLgorICog
-Q29tcGlsZXJzIGdlbmVyYWxseSB1bmRlcnN0YW5kIGFib3V0ICB1bnNpZ25lZCBvdmVyZmxv
-dyBhbmQgdGhlIENGCisgKiBiaXQgYW5kIGdlbmVyYXRlIHJlYXNvbmFibGUgY29kZSBmb3Ig
-dGhpcy4gQWx0aG91Z2ggaXQgbG9va3MgbGlrZQorICogdGhlIGNvbWJpbmF0aW9uIGNvbmZ1
-c2VzIGF0IGxlYXN0IGNsYW5nIChhbmQgaW5zdGVhZCBvZiBqdXN0IGRvaW5nCisgKiBhbiAi
-YWRkIiBmb2xsb3dlZCBieSBhIHRlc3Qgb2YgU0YgYW5kIENGLCB5b3UnbGwgc2VlIHRoYXQK
-KyAqIHVubmVjZXNzYXJ5IGNvbXBhcmlzb24pLgogICoKICAqIEZvciB0aGUgY29tbW9uIGNh
-c2Ugb2Ygc21hbGwgc2l6ZXMgdGhhdCBjYW4gYmUgY2hlY2tlZCBhdCBjb21waWxlCiAgKiB0
-aW1lLCBkb24ndCBldmVuIGJvdGhlciB3aXRoIHRoZSBhZGRpdGlvbiwgYW5kIGp1c3QgY2hl
-Y2sgdGhhdCB0aGUKQEAgLTkzLDExICsxMDYsMTYgQEAgc3RhdGljIGlubGluZSB1bnNpZ25l
-ZCBsb25nIF9fdW50YWdnZWRfYWRkcl9yZW1vdGUoc3RydWN0IG1tX3N0cnVjdCAqbW0sCiAg
-Ki8KIHN0YXRpYyBpbmxpbmUgYm9vbCBfX2FjY2Vzc19vayhjb25zdCB2b2lkIF9fdXNlciAq
-cHRyLCB1bnNpZ25lZCBsb25nIHNpemUpCiB7CisJLyoKKwkgKiBDaGVjayBvbmx5IHRoZSBw
-b2ludGVyIChub3QgcHRyK3NpemUpIGZvciBzbWFsbCBhY2Nlc3Nlcy4KKwkgKiBUaGlzIGlz
-IE9LIGJlY2F1c2UgdGhlIGtlcm5lbCBhZGRyZXNzIHNwYWNlIGJlZ2lucyB3aXRoIGEKKwkg
-KiA+PVBBR0VfU0laRSBndWFyZCBob2xlLgorCSAqLwogCWlmIChfX2J1aWx0aW5fY29uc3Rh
-bnRfcChzaXplIDw9IFBBR0VfU0laRSkgJiYgc2l6ZSA8PSBQQUdFX1NJWkUpIHsKLQkJcmV0
-dXJuIChsb25nKXB0ciA+PSAwOworCQlyZXR1cm4gcHRyX2luX3VzZXJfaGFsZihwdHIpOwog
-CX0gZWxzZSB7CiAJCXVuc2lnbmVkIGxvbmcgc3VtID0gc2l6ZSArICh1bnNpZ25lZCBsb25n
-KXB0cjsKLQkJcmV0dXJuIChsb25nKSBzdW0gPj0gMCAmJiBzdW0gPj0gKHVuc2lnbmVkIGxv
-bmcpcHRyOworCQlyZXR1cm4gcHRyX2luX3VzZXJfaGFsZihwdHIpICYmIHN1bSA+PSAodW5z
-aWduZWQgbG9uZylwdHI7CiAJfQogfQogI2RlZmluZSBfX2FjY2Vzc19vayBfX2FjY2Vzc19v
-awo=
-
---------------Ze0LFxpBo0szqDF8dkE4MQ9Q--
+On Mon, May 1, 2023 at 11:50=E2=80=AFPM kernel test robot <lkp@intel.com> w=
+rote:
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
+t master
+> head:   865fdb08197e657c59e74a35fa32362b12397f58
+> commit: 62a31d6e38bd0faef7c956b358d651f7bdc4ae0c RISC-V: hwprobe: Support=
+ probing of misaligned access performance
+> date:   13 days ago
+> config: riscv-randconfig-s052-20230430 (https://download.01.org/0day-ci/a=
+rchive/20230502/202305021414.EuPdM9kv-lkp@intel.com/config)
+> compiler: riscv64-linux-gcc (GCC) 12.1.0
+> reproduce:
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
+n/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # apt-get install sparse
+>         # sparse version: v0.6.4-39-gce1a6720-dirty
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.=
+git/commit/?id=3D62a31d6e38bd0faef7c956b358d651f7bdc4ae0c
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/=
+git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout 62a31d6e38bd0faef7c956b358d651f7bdc4ae0c
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-12.1.0 make.cro=
+ss C=3D1 CF=3D'-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=3Dbuild_dir ARCH=
+=3Driscv olddefconfig
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-12.1.0 make.cro=
+ss C=3D1 CF=3D'-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=3Dbuild_dir ARCH=
+=3Driscv SHELL=3D/bin/bash arch/riscv/kernel/
+>
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202305021414.EuPdM9kv-lkp@i=
+ntel.com/
+>
+> sparse warnings: (new ones prefixed by >>)
+>    WARNING: invalid argument to '-march': '_zihintpause'
+> >> arch/riscv/kernel/cpufeature.c:34:1: sparse: sparse: symbol '__pcpu_sc=
+ope_misaligned_access_speed' was not declared. Should it be static?
+>
+> vim +/__pcpu_scope_misaligned_access_speed +34 arch/riscv/kernel/cpufeatu=
+re.c
+>
+>     30
+>     31  /**
+>     32   * riscv_isa_extension_base() - Get base extension word
+>     33   *
+>   > 34   * @isa_bitmap: ISA bitmap to use
+>     35   * Return: base extension word as unsigned long value
+>     36   *
+>     37   * NOTE: If isa_bitmap is NULL then Host ISA bitmap will be used.
+>     38   */
+>     39  unsigned long riscv_isa_extension_base(const unsigned long *isa_b=
+itmap)
+>     40  {
+>     41          if (!isa_bitmap)
+>     42                  return riscv_isa[0];
+>     43          return isa_bitmap[0];
+>     44  }
+>     45  EXPORT_SYMBOL_GPL(riscv_isa_extension_base);
+>     46
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests
