@@ -2,153 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E755C6F3F60
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 10:41:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 274F76F3F63
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 10:43:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233884AbjEBIlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 04:41:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47164 "EHLO
+        id S233767AbjEBInB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 04:43:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233867AbjEBIlP (ORCPT
+        with ESMTP id S231964AbjEBIm6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 04:41:15 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 600771BEF;
-        Tue,  2 May 2023 01:41:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=gMkzwyLT/Xyxf8is/5S3+NSRKbTsmvleiqsCtxbzf8o=; b=lDgKY8pWgvaQIksEJVeLu2NKWR
-        Jlz7kaZrEA+JA08BM+1VseVQkG441GBvgR24tACB+EBymntVCAzDbXHNJs1PdwckLuCJlKBb+QCyx
-        nY3snqpW8fW+ykTn+5iqEC6yhVNvhO30scPF0Od5GxTNLIqtOuKQBQ3Y8tZ/aUANje1j7rD4QOWGm
-        mK9OYMECjI/W9QFLwtxockb7D8sXqbrgXFHkY0udMrbB3iCKl2XYmFt4cVbywBY6fMcyDnepaIgTN
-        /xT2sCi2HHWkHPLOoGNVEm439P3xjVSCTT4r9HimGel44cnWCXtAhsIEx24kI82KFIbVFnX4V6N7x
-        aYOzgNfQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ptlY8-00892R-Q5; Tue, 02 May 2023 08:39:52 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C18EE3002BF;
-        Tue,  2 May 2023 10:39:47 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 3061A23C5C347; Tue,  2 May 2023 10:39:47 +0200 (CEST)
-Date:   Tue, 2 May 2023 10:39:47 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Jan Kara <jack@suse.cz>
-Cc:     "Kirill A . Shutemov" <kirill@shutemov.name>,
-        David Hildenbrand <david@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Jason Gunthorpe <jgg@nvidia.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Mika Penttila <mpenttil@redhat.com>,
-        David Howells <dhowells@redhat.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH v5] mm/gup: disallow GUP writing to file-backed mappings
- by default
-Message-ID: <20230502083947.GE1597476@hirez.programming.kicks-ass.net>
-References: <6ddc7ac4-4091-632a-7b2c-df2005438ec4@redhat.com>
- <20230428160925.5medjfxkyvmzfyhq@box.shutemov.name>
- <39cc0f26-8fc2-79dd-2e84-62238d27fd98@redhat.com>
- <20230428162207.o3ejmcz7rzezpt6n@box.shutemov.name>
- <ZEv2196tk5yWvgW5@x1n>
- <173337c0-14f4-3246-15ff-7fbf03861c94@redhat.com>
- <20230428165623.pqchgi5gtfhxd5b5@box.shutemov.name>
- <1039c830-acec-d99b-b315-c2a6e26c34ca@redhat.com>
- <20230428234332.2vhprztuotlqir4x@box.shutemov.name>
- <20230502080016.4tgmqb4sy2ztfgrd@quack3>
+        Tue, 2 May 2023 04:42:58 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00C9A469D;
+        Tue,  2 May 2023 01:42:55 -0700 (PDT)
+Received: from ip4d1634d3.dynamic.kabel-deutschland.de ([77.22.52.211] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1ptlay-0006Md-K6; Tue, 02 May 2023 10:42:48 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Kever Yang <kever.yang@rock-chips.com>,
+        Finley Xiao <finley.xiao@rock-chips.com>,
+        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+Subject: Re: [PATCH 2/8] dt-bindings: nvmem: rockchip-otp: Add compatible for RK3588
+Date:   Tue, 02 May 2023 10:42:47 +0200
+Message-ID: <5471965.k3LOHGUjKi@diego>
+In-Reply-To: <20230501084401.765169-3-cristian.ciocaltea@collabora.com>
+References: <20230501084401.765169-1-cristian.ciocaltea@collabora.com>
+ <20230501084401.765169-3-cristian.ciocaltea@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230502080016.4tgmqb4sy2ztfgrd@quack3>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 02, 2023 at 10:00:16AM +0200, Jan Kara wrote:
-> On Sat 29-04-23 02:43:32, Kirill A . Shutemov wrote:
-> > I think I found relevant snippet of code that solves similar issue.
-> > get_futex_key() uses RCU to stabilize page->mapping after GUP_fast:
-> > 
-> > 
-> > 		/*
-> > 		 * The associated futex object in this case is the inode and
-> > 		 * the page->mapping must be traversed. Ordinarily this should
-> > 		 * be stabilised under page lock but it's not strictly
-> > 		 * necessary in this case as we just want to pin the inode, not
-> > 		 * update the radix tree or anything like that.
-> > 		 *
-> > 		 * The RCU read lock is taken as the inode is finally freed
-> > 		 * under RCU. If the mapping still matches expectations then the
-> > 		 * mapping->host can be safely accessed as being a valid inode.
-> > 		 */
-> > 		rcu_read_lock();
-> > 
-> > 		if (READ_ONCE(page->mapping) != mapping) {
-> > 			rcu_read_unlock();
-> > 			put_page(page);
-> > 
-> > 			goto again;
-> > 		}
-> > 
-> > 		inode = READ_ONCE(mapping->host);
-> > 		if (!inode) {
-> > 			rcu_read_unlock();
-> > 			put_page(page);
-> > 
-> > 			goto again;
-> > 		}
-> > 
-> > I think something similar can be used inside GUP_fast too.
-> 
-> Yeah, inodes (and thus struct address_space) is RCU protected these days so
-> grabbing RCU lock in gup_fast() will get you enough protection for checking
-> aops if you are careful (like the futex code is).
+Hi,
 
-GUP_fast has IRQs disabled per definition, there is no need to then also
-use rcu_read_lock().
+Am Montag, 1. Mai 2023, 10:43:54 CEST schrieb Cristian Ciocaltea:
+> Document the OTP memory found on Rockchip RK3588 SoC.
+
+nit: I guess the changed clock and resets configuration for rk3588 variants
+could be mentioned in the commit message.
+
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+
+> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+> ---
+>  .../bindings/nvmem/rockchip-otp.yaml          | 71 ++++++++++++++++---
+>  1 file changed, 60 insertions(+), 11 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/nvmem/rockchip-otp.yaml b/Documentation/devicetree/bindings/nvmem/rockchip-otp.yaml
+> index 658ceed14ee2..84a11382c6e7 100644
+> --- a/Documentation/devicetree/bindings/nvmem/rockchip-otp.yaml
+> +++ b/Documentation/devicetree/bindings/nvmem/rockchip-otp.yaml
+> @@ -9,34 +9,31 @@ title: Rockchip internal OTP (One Time Programmable) memory
+>  maintainers:
+>    - Heiko Stuebner <heiko@sntech.de>
+>  
+> -allOf:
+> -  - $ref: nvmem.yaml#
+> -
+>  properties:
+>    compatible:
+>      enum:
+>        - rockchip,px30-otp
+>        - rockchip,rk3308-otp
+> +      - rockchip,rk3588-otp
+>  
+>    reg:
+>      maxItems: 1
+>  
+>    clocks:
+>      minItems: 3
+> -    maxItems: 3
+> +    maxItems: 4
+>  
+>    clock-names:
+> -    items:
+> -      - const: otp
+> -      - const: apb_pclk
+> -      - const: phy
+> +    minItems: 3
+> +    maxItems: 4
+>  
+>    resets:
+> -    maxItems: 1
+> +    minItems: 1
+> +    maxItems: 3
+>  
+>    reset-names:
+> -    items:
+> -      - const: phy
+> +    minItems: 1
+> +    maxItems: 3
+>  
+>  required:
+>    - compatible
+> @@ -46,6 +43,58 @@ required:
+>    - resets
+>    - reset-names
+>  
+> +allOf:
+> +  - $ref: nvmem.yaml#
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - rockchip,px30-otp
+> +              - rockchip,rk3308-otp
+> +    then:
+> +      properties:
+> +        clocks:
+> +          minItems: 3
+> +          maxItems: 3
+> +        clock-names:
+> +          items:
+> +            - const: otp
+> +            - const: apb_pclk
+> +            - const: phy
+> +        resets:
+> +          maxItems: 1
+> +        reset-names:
+> +          items:
+> +            - const: phy
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - rockchip,rk3588-otp
+> +    then:
+> +      properties:
+> +        clocks:
+> +          minItems: 4
+> +          maxItems: 4
+> +        clock-names:
+> +          items:
+> +            - const: otpc
+> +            - const: apb
+> +            - const: arb
+> +            - const: phy
+> +        resets:
+> +          minItems: 1
+> +          maxItems: 3
+> +        reset-names:
+> +          items:
+> +            - const: otpc
+> +            - const: apb
+> +            - const: arb
+> +
+>  unevaluatedProperties: false
+>  
+>  examples:
+> 
+
+
+
+
