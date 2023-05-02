@@ -2,111 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39F3B6F45F7
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 16:22:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C774A6F45FA
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 16:24:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234399AbjEBOWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 10:22:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40258 "EHLO
+        id S234154AbjEBOX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 10:23:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234105AbjEBOWq (ORCPT
+        with ESMTP id S234105AbjEBOX4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 10:22:46 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9887E10E9;
-        Tue,  2 May 2023 07:22:45 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 390E51F8A6;
-        Tue,  2 May 2023 14:22:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1683037364; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=y6T6GuDQfJbO43/1w1VH6Uivf7Fp4Qwl962Lj1m6+Lo=;
-        b=zgCrmh7GvS0UCf3/prJ/RboMX2Ki4PzsGnEyDNmlTehNdNLon7THEZKq5ISDaYttXVdHvn
-        LSOzCGzD61p5zdqaDXeCQhaJNbVxKk+iiCTe10KcEQnHDXlYm4pRgHEnZnm2i7B6BFdbag
-        tuJQLV7vBxGs3mDQXtCRIelkksRaA+U=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1683037364;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=y6T6GuDQfJbO43/1w1VH6Uivf7Fp4Qwl962Lj1m6+Lo=;
-        b=Y6is8m8YF1YqTPPmsh9/sRZt7MNTOyZw+M4CQkHbxAjyznZhS70hG0YJfNYvBGP5ybSEj9
-        7KR7fQ+ANb6bouBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2A935139C3;
-        Tue,  2 May 2023 14:22:44 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Mk9eCrQcUWT6ewAAMHmgww
-        (envelope-from <dwagner@suse.de>); Tue, 02 May 2023 14:22:44 +0000
-Date:   Tue, 2 May 2023 16:22:43 +0200
-From:   Daniel Wagner <dwagner@suse.de>
-To:     Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-Cc:     Hannes Reinecke <hare@suse.de>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Shin'ichiro Kawasaki <shinichiro@fastmail.com>
-Subject: Re: [PATCH REPOST blktests v2 4/9] nvme: Use runtime fio background
- jobs
-Message-ID: <cds6ccjotmwbwckpuhefedr3vizx4gkuqor5z4hhfodbj5hbwe@wb4tp2p7lk3b>
-References: <20230421060505.10132-1-dwagner@suse.de>
- <20230421060505.10132-5-dwagner@suse.de>
- <72ecc5fc-0ff4-5592-3293-f4204633fc8e@suse.de>
- <4ckg7ymu73lfs7zlsby3com6k24qgovkaqky5jmgeoubs7azhh@jtvovyjluekv>
- <bnr5gwlxyfixvajlpzm75mfmizgvq4uibb2b4t5tqij3jmkqrl@ialjk5an7nla>
+        Tue, 2 May 2023 10:23:56 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F1A6C7;
+        Tue,  2 May 2023 07:23:55 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-54f99770f86so54797907b3.1;
+        Tue, 02 May 2023 07:23:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683037434; x=1685629434;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=c0tlagjndETqb4vyl9KGLxF15wJn4anPJZnJmgfkl/c=;
+        b=K0PkrtQ+McSujB9A84EzlIqNHv14cBXmdu0ZfjZR66RfrojtRlfd1cM89jykYnoLas
+         ahin8shKK2L9dFH6MUWrR55xDe8f8gh5x9odaYy4mgE7Pr+Bg3XSDh+uqQiFcMK48cBw
+         tzaoPg/s531lh3IhLmKWRF5rlfBCTxm1mJUs/XJHd2SqUwbJqgZTOk9EE7/iVclcXygo
+         LKjBGqwshg8Eyf7N9FLItvApIk3tw7tGZui91egVoayoQJSvp4u2k1fOt6fb6yctB69P
+         0aiJn3KQjVKeoLpjwXJ2TNkBPeFyAU3REy3BwpbtWZgKMJxjOBSAMrfB4Cln6O2B1P7D
+         s8dQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683037434; x=1685629434;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=c0tlagjndETqb4vyl9KGLxF15wJn4anPJZnJmgfkl/c=;
+        b=Fpah8PIDxNHNQswxrsY8JYHdS9JL0P9Li2d+d6twNANN0RvnlFSww9mCXgOgjstyX3
+         glF+Xp8nUgUWzSamUIkkZC7amuYwaSeNXKcd28XB6hdkBPDewvgTxIvFSO62gHIh9fGI
+         2Bpr89YnVzpVIiYF5YOkLvUGuOk6jSc9mEN2MFm3B/7AOw/ZpnH2+9wu/Kkc4mOMmXcn
+         qLa+lM9i+feEX83p40CpkazpxoHRDfkxc8Ax+5VAYulZBX742pPirhkKMm1iPyMLDNz9
+         5stDeS9mq48mlXRgWMSQwq9OKaIVcLQaX9C8mOEah8pO4mTrVkcPE0un0hh7epCFpnJC
+         68Hg==
+X-Gm-Message-State: AC+VfDyZejIoeC5+z83xT5pVxolVwwFR44RXwbsqBNUMbE7oIrwgxO7m
+        FyUQ6eMxgfOOfTF5+632HYdzK7VzicWWwKKZlIc=
+X-Google-Smtp-Source: ACHHUZ612ecIhlT53wUK861pkbcYeetJfXMcpglfdDpv12oWa8U2/fHmhebQXi0TgNnTn4mW2dnC+YzD9TX5x1MML18=
+X-Received: by 2002:a0d:d087:0:b0:55a:613c:8480 with SMTP id
+ s129-20020a0dd087000000b0055a613c8480mr5494440ywd.51.1683037434369; Tue, 02
+ May 2023 07:23:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bnr5gwlxyfixvajlpzm75mfmizgvq4uibb2b4t5tqij3jmkqrl@ialjk5an7nla>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <ZFD6UgOFeUCbbIOC@corigine.com> <20230502130316.2680585-1-Ilia.Gavrilov@infotecs.ru>
+In-Reply-To: <20230502130316.2680585-1-Ilia.Gavrilov@infotecs.ru>
+From:   Xin Long <lucien.xin@gmail.com>
+Date:   Tue, 2 May 2023 10:23:35 -0400
+Message-ID: <CADvbK_cFyMqw1BxTtq9nz2T-V=hLL4fwiUd_vv0pPkzA=v3Faw@mail.gmail.com>
+Subject: Re: [PATCH net v2] sctp: fix a potential buffer overflow in sctp_sched_set_sched()
+To:     Gavrilov Ilia <Ilia.Gavrilov@infotecs.ru>
+Cc:     Simon Horman <simon.horman@corigine.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "lvc-project@linuxtesting.org" <lvc-project@linuxtesting.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 04:29:57AM +0000, Shinichiro Kawasaki wrote:
-> On Apr 21, 2023 / 08:57, Daniel Wagner wrote:
-> > On Fri, Apr 21, 2023 at 08:29:22AM +0200, Hannes Reinecke wrote:
-> >  > --- a/tests/nvme/040
-> > > > +++ b/tests/nvme/040
-> > > > @@ -38,7 +38,8 @@ test() {
-> > > >   	# start fio job
-> > > >   	echo "starting background fio"
-> > > >   	_run_fio_rand_io --filename="/dev/${nvmedev}n1" --size=1g \
-> > > > -		--group_reporting --ramp_time=5  &> /dev/null &
-> > > > +		--group_reporting --ramp_time=5 \
-> > > > +		--time_based --runtime=1m &> /dev/null &
-> > > >   	sleep 5
-> > > >   	# do reset/remove operation
-> > > 
-> > > Wouldn't it be better to let _run_fio_rand_io pick the correct size?
-> > 
-> > Yes, makes sense.
-> 
-> If you do I/O size change for the test cases nvme/032 and nvme/040, could you
-> confirm the runtime reduction of the test cases? IIUC, the fio process stops
-> due to process kill or an I/O error, then I/O size reduction will not change
-> runtime of the test cases, I guess.
+On Tue, May 2, 2023 at 9:03=E2=80=AFAM Gavrilov Ilia <Ilia.Gavrilov@infotec=
+s.ru> wrote:
+>
+> The 'sched' index value must be checked before accessing an element
+> of the 'sctp_sched_ops' array. Otherwise, it can lead to buffer overflow.
+>
+> Note that it's harmless since the 'sched' parameter is checked before
+> calling 'sctp_sched_set_sched'.
+>
+> Found by InfoTeCS on behalf of Linux Verification Center
+> (linuxtesting.org) with SVACE.
+>
+> Fixes: 5bbbbe32a431 ("sctp: introduce stream scheduler foundations")
+> Reviewed-by: Simon Horman <simon.horman@corigine.com>
+> Signed-off-by: Ilia.Gavrilov <Ilia.Gavrilov@infotecs.ru>
+> ---
+> V2:
+>  - Change the order of local variables
+>  - Specify the target tree in the subject
+>  net/sctp/stream_sched.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+>
+> diff --git a/net/sctp/stream_sched.c b/net/sctp/stream_sched.c
+> index 330067002deb..4d076a9b8592 100644
+> --- a/net/sctp/stream_sched.c
+> +++ b/net/sctp/stream_sched.c
+> @@ -146,18 +146,19 @@ static void sctp_sched_free_sched(struct sctp_strea=
+m *stream)
+>  int sctp_sched_set_sched(struct sctp_association *asoc,
+>                          enum sctp_sched_type sched)
+>  {
+> -       struct sctp_sched_ops *n =3D sctp_sched_ops[sched];
+>         struct sctp_sched_ops *old =3D asoc->outqueue.sched;
+>         struct sctp_datamsg *msg =3D NULL;
+> +       struct sctp_sched_ops *n;
+>         struct sctp_chunk *ch;
+>         int i, ret =3D 0;
+>
+> -       if (old =3D=3D n)
+> -               return ret;
+> -
+>         if (sched > SCTP_SS_MAX)
+>                 return -EINVAL;
+>
+> +       n =3D sctp_sched_ops[sched];
+> +       if (old =3D=3D n)
+> +               return ret;
+> +
+>         if (old)
+>                 sctp_sched_free_sched(&asoc->stream);
+>
+> --
+> 2.30.2
 
-The fio process doesn't survive the reset and the deletion of the controller.
-
-> IMO, --time_based --runtime=1m is good to ensure that fio runs long enough,
-> even when nvme device size is configured with small size.
-
-I've updated the time to 'infinity' and added a 'kill $pid' after reset and
-delete. Though the process should be gone till then but making the test a bit
-more robust should hurt.
+Reviewed-by: Xin Long <lucien.xin@gmail.com>
