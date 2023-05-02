@@ -2,234 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9795D6F493B
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 19:40:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77ECC6F493E
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 19:41:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234260AbjEBRkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 13:40:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36846 "EHLO
+        id S232184AbjEBRlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 13:41:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233942AbjEBRkv (ORCPT
+        with ESMTP id S234437AbjEBRlv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 13:40:51 -0400
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38412EE
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 10:40:50 -0700 (PDT)
-Received: by mail-il1-x131.google.com with SMTP id e9e14a558f8ab-32f4e0f42a7so127945ab.1
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 10:40:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683049249; x=1685641249;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=H7zwT9U3Q7DJabdbJ+tKTAKmuAVSsUfjeiCdQzr1Lqw=;
-        b=1yiTfOHI79peXlm0E6+h9E32HLEcYSlJE0Zm5YBx91HiUeUI4d/2Q6RZmLIatKJo88
-         YiYQd4BusAd52HweaBckBQNxZxb6buqjk8CwJa9kpAaiuXUAJd5lpG0RddJy4JjcI19c
-         ZOQi4bHLWA3apCdB2ufkpzbb3sMRRsGxVK1eJ6r8+plBsVmcxBa2L2hy4OObU/+kHIWS
-         TCQ6rez/lyWj/6mocKuRKasaREiu6tJX4F2pPQUphIkvqey9Qnt6VEFecFq2bZaIQG/l
-         Ewz0eZBycDz0j/hkfxai3V0eO3i0vkJiknkqXrhRkj/0sH60aJCg5tgmvJ4QHd/tZeZv
-         lvrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683049249; x=1685641249;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=H7zwT9U3Q7DJabdbJ+tKTAKmuAVSsUfjeiCdQzr1Lqw=;
-        b=Upd0mCLLy7r6ERYnwheKugAtKAlNE6vhNYLndEIVwJakoiI6n68LwJ25ygEPHQ0sXS
-         1pgsynqcx1wAGRhmIhQ9jvkruFbyksYzoCM425uhyrfJV8skLS7Oq8RtfFVR/6NXYYTb
-         6LObo1f1psQdoK4rIObnbPWXdLlB1SAOAOmQ6mbtCKoo7pvZKHane4TDw2ci1fThuDxi
-         If0LGAkWnXTT2QymxgaPZszhp8BJ0mcLcvnLVIFi1eib1NwhYFQkoCKHhz2VPWx+JWHe
-         8pR8W/39Zx7tjxf+SK/djVcrNsYkCnF7K1V8amDYsr0OJil6GeTRZLSByn9HviHURkTy
-         CgEw==
-X-Gm-Message-State: AC+VfDyiOXqXZKOzIeYgWLdoZS81nm7z67X24ujISTtR6usIB0Wt+jcG
-        AIAvv3HAE5SSfbsKloikKsfqYE7FRhEhVvtMWsGfZQ==
-X-Google-Smtp-Source: ACHHUZ6YzhZt+Ehy6aXWrwYKYsdOrWKZI2pGYiARfOmu63ybIgxhSCZ7A7G8L/YlD+NGWuW7FqIY818IC4vYxU0KQpA=
-X-Received: by 2002:a05:6e02:194a:b0:331:399c:57c5 with SMTP id
- x10-20020a056e02194a00b00331399c57c5mr192255ilu.3.1683049249296; Tue, 02 May
- 2023 10:40:49 -0700 (PDT)
+        Tue, 2 May 2023 13:41:51 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2087.outbound.protection.outlook.com [40.107.223.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61CBDC3;
+        Tue,  2 May 2023 10:41:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZjdbYef3cgFU0YHr1dWl+MqSPmVqHredtckBMo1gA86gGvDE+4UNySQwPHhqqwkDRSPAM3R0ZrdI4giphpu9MAL8dGeNBHSGTmTxmeRKv+yKXHk3J6bLXmv6HCOykt2ui2+cNVwCeg4i39Z6PBpSQjImwkUCxitBFSSsoDhFWmbAnMALK4B128z4zqd/rWAplML0DnGSxLpH3iLXY7M42NA+49X/Q3vzCDEYVW/X7Ay00ikq1cGM3jbWF4M4dGmcz5QUKjon8yUIaTk+S0MugbdaAURcSYd2eg7rZewihFEItuVdlZVOdNi/NjzTDr39dY5FDqnVyONmdEwbtZxpWg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2Y68f86rlg26ncTi7MRdWfYxV6CtPY4Le/9FCMH5Q44=;
+ b=A/W+a2Oiyb+Kx+ga6UGR2qBMtT8w13d0UZblQigugEqJTicO/VDHPqwz7vw62RabFcJpioZezXCO0qqeo5OH6SvH00cjM8oeYtucohLDvyk8UTqwpfkN7c3zR92XCYvSHBdbEijW9Y1/8wLtIEN8W2TW8O33Bd0IqtyjhuOMj3sUF899gnRpxcvC2WA1Vpsjed45w0a6VRVIHnSO2S6PApFEB8ZnUPS1WwByT1lhZeNj6hPJQ298Gpl9zBXBrRJ4rmqcFj0kRWUSu2NWI/ari8lMu5xmNAbzfQPFTs1mxTtKkti+Iy7UGQQmIieBNw4CtHsiIoh85fFWsG3uX78Ayg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.232) smtp.rcpttodomain=lists.linux-foundation.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2Y68f86rlg26ncTi7MRdWfYxV6CtPY4Le/9FCMH5Q44=;
+ b=YE7o2+Ff5qnEq8OoGUfegrsPXXdL6mdX2jJaNqYgM8YnNOfsHRD1hkqyIWpsPvlE+VZFqSe9TXK158381teJtVh6lGd7q2xWtTnboj1qMejXIGAbI7gZo++R5usrGdQCP37Ep/J6gVeXbU0yvOkem8eK4QpLRkb5FcCjSBtFUwLg6kFy40P49JRY69u84KLjtoZzmKZMALA3tsLVMfsnG2ismV7oGS6Z2aEndIaxLtc3DgjwOd+mfn9haQXF39neUXTViD8Q6T66zW5b4VuoqGLUzQGJ8indirNy75ReoUO/QyLg504dprih5kjy+nkCNguRbjaHz7PYfbFd05iZ5w==
+Received: from BN8PR03CA0016.namprd03.prod.outlook.com (2603:10b6:408:94::29)
+ by BN9PR12MB5147.namprd12.prod.outlook.com (2603:10b6:408:118::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.31; Tue, 2 May
+ 2023 17:41:47 +0000
+Received: from BN8NAM11FT048.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:94:cafe::94) by BN8PR03CA0016.outlook.office365.com
+ (2603:10b6:408:94::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.20 via Frontend
+ Transport; Tue, 2 May 2023 17:41:47 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.232) by
+ BN8NAM11FT048.mail.protection.outlook.com (10.13.177.117) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6363.21 via Frontend Transport; Tue, 2 May 2023 17:41:47 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
+ (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Tue, 2 May 2023
+ 10:41:38 -0700
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.37; Tue, 2 May 2023 10:41:37 -0700
+Received: from vdi.nvidia.com (10.127.8.9) by mail.nvidia.com (10.126.190.180)
+ with Microsoft SMTP Server id 15.2.986.37 via Frontend Transport; Tue, 2 May
+ 2023 10:41:36 -0700
+From:   Feng Liu <feliu@nvidia.com>
+To:     <virtualization@lists.linux-foundation.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <bpf@vger.kernel.org>
+CC:     Jason Wang <jasowang@redhat.com>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        Feng Liu <feliu@nvidia.com>, William Tu <witu@nvidia.com>,
+        Parav Pandit <parav@nvidia.com>
+Subject: [PATCH net v2] virtio_net: Fix error unwinding of XDP initialization
+Date:   Tue, 2 May 2023 13:41:34 -0400
+Message-ID: <20230502174134.32276-1-feliu@nvidia.com>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 MIME-Version: 1.0
-References: <20230429053506.1962559-1-irogers@google.com> <20230429053506.1962559-28-irogers@google.com>
- <56dd818d-3f2a-59ba-3c56-af45f488ad8d@amd.com>
-In-Reply-To: <56dd818d-3f2a-59ba-3c56-af45f488ad8d@amd.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 2 May 2023 10:40:37 -0700
-Message-ID: <CAP-5=fWzD0+jPEZ1gZp7Zj+gzb8NB-BDZvtstcx-dPNQr0n8Tw@mail.gmail.com>
-Subject: Re: [PATCH v3 27/46] perf print-events: Print legacy cache events for
- each PMU
-To:     Ravi Bangoria <ravi.bangoria@amd.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Ahmad Yasin <ahmad.yasin@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Stephane Eranian <eranian@google.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Samantha Alt <samantha.alt@intel.com>,
-        Caleb Biggers <caleb.biggers@intel.com>,
-        Weilin Wang <weilin.wang@intel.com>,
-        Edward Baker <edward.baker@intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        Rob Herring <robh@kernel.org>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Sumanth Korikkar <sumanthk@linux.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Leo Yan <leo.yan@linaro.org>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        James Clark <james.clark@arm.com>,
-        Suzuki Poulouse <suzuki.poulose@arm.com>,
-        Kang Minchul <tegongkang@gmail.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT048:EE_|BN9PR12MB5147:EE_
+X-MS-Office365-Filtering-Correlation-Id: e0eb4fc4-2250-446c-aaea-08db4b3480c7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tBnGmMjTOo+1tWu6gNwV22XwORnesxGLcpZWSN05XRpIK3RMvOa6s6gvU+654urDx5qs6OtEEvdMV99xzOV3a0Hl56HMkVYnKJf2cSnBjC13b99z56HTeIFmux0RHkJ/ogM8DQ0oAeU3kmaghOARwXGEenkaYiWK7YAIkJsPvyM+CV36p4FHits6L9KOw8VMzcZyGLJQ5RvdE+knO9sTV0JdmDi0gN9eIjpSrwOoiOOUkPLRXLg56kcHyEh2n/4MeBumOF+EqmuaA35DR1/VsBhR7CifjJBl/W00ycH95WhQaHSHavgZolFfiA4Br7DPM6sHwhyPEf5fkIy/Wdd/iEWOG37vimeawViuUcrJnI0CnrUfUnkQrtmkofUiUKW2iTSlokQBGfamTdYefVe4vy+PxqLVebc9d7+HIZxMp8aZWdYRyhkoRssSdFngBwJvG0Pq1YUSXRdQsWgJAzcYnQdYGQ8+D+dwxnTcfWv5g0TT/L12uILcFOXewStofYag4A9QrzR82c0PcNkRtX21HYq2T77Nf810uIDcjw8bC1Defwq+hULZWfFD5JNGnb4qYEH/GZ5fCvf2tXCxNUrkVArquggFjtUqOR/7j8EzB5x5B4nrg85l9OGqtcIbFTQLi0XTs/avDyFZlFYnSuNNO6GDdev3HB3Pn4NfyJyvT+/F4iXgP6s1ZJ7qj/1tIqM8aH/Ew2i3ssvOCVC2GlQdsg==
+X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(396003)(376002)(136003)(451199021)(40470700004)(46966006)(36840700001)(82740400003)(186003)(7636003)(356005)(1076003)(26005)(107886003)(36860700001)(47076005)(2616005)(336012)(83380400001)(426003)(5660300002)(8676002)(8936002)(82310400005)(2906002)(36756003)(40460700003)(40480700001)(110136005)(86362001)(54906003)(478600001)(7696005)(316002)(41300700001)(70586007)(4326008)(70206006);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2023 17:41:47.1821
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e0eb4fc4-2250-446c-aaea-08db4b3480c7
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT048.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5147
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 2, 2023 at 3:48=E2=80=AFAM Ravi Bangoria <ravi.bangoria@amd.com=
-> wrote:
->
-> On 29-Apr-23 11:04 AM, Ian Rogers wrote:
-> > Mirroring parse_events_add_cache, list the legacy name alongside its
-> > alias with the PMU. Remove the now unnecessary hybrid logic.
->
-> Before patch:
->
-> ```
-> $ sudo ./perf list
->   ...
->   duration_time                                      [Tool event]
->   user_time                                          [Tool event]
->   system_time                                        [Tool event]
->   L1-dcache-loads                                    [Hardware cache even=
-t]
->   L1-dcache-load-misses                              [Hardware cache even=
-t]
->   L1-dcache-prefetches                               [Hardware cache even=
-t]
->   L1-icache-loads                                    [Hardware cache even=
-t]
->   L1-icache-load-misses                              [Hardware cache even=
-t]
->   dTLB-loads                                         [Hardware cache even=
-t]
->   dTLB-load-misses                                   [Hardware cache even=
-t]
->   iTLB-loads                                         [Hardware cache even=
-t]
->   iTLB-load-misses                                   [Hardware cache even=
-t]
->   branch-loads                                       [Hardware cache even=
-t]
->   branch-load-misses                                 [Hardware cache even=
-t]
->   branch-brs OR cpu/branch-brs/                      [Kernel PMU event]
->   branch-instructions OR cpu/branch-instructions/    [Kernel PMU event]
->   branch-misses OR cpu/branch-misses/                [Kernel PMU event]
->   ...
-> ```
->
-> After patch:
->
-> ```
-> $ sudo ./perf list
->   ...
->   duration_time                                      [Tool event]
->   user_time                                          [Tool event]
->   system_time                                        [Tool event]
->
-> cpu:
->   L1-dcache-loads OR cpu/L1-dcache-loads/
->   L1-dcache-load-misses OR cpu/L1-dcache-load-misses/
->   L1-dcache-prefetches OR cpu/L1-dcache-prefetches/
->   L1-icache-loads OR cpu/L1-icache-loads/
->   L1-icache-load-misses OR cpu/L1-icache-load-misses/
->   dTLB-loads OR cpu/dTLB-loads/
->   dTLB-load-misses OR cpu/dTLB-load-misses/
->   iTLB-loads OR cpu/iTLB-loads/
->   iTLB-load-misses OR cpu/iTLB-load-misses/
->   branch-loads OR cpu/branch-loads/
->   branch-load-misses OR cpu/branch-load-misses/
->   branch-brs OR cpu/branch-brs/                      [Kernel PMU event]
->   branch-instructions OR cpu/branch-instructions/    [Kernel PMU event]
->   branch-misses OR cpu/branch-misses/                [Kernel PMU event]
->   ...
-> ```
->\
-> Is this intentional change?
+When initializing XDP in virtnet_open(), some rq xdp initialization
+may hit an error causing net device open failed. However, previous
+rqs have already initialized XDP and enabled NAPI, which is not the
+expected behavior. Need to roll back the previous rq initialization
+to avoid leaks in error unwinding of init code.
 
-Yep, but I think the commit message should call it out, so I'll change
-it in v4. When we have an alias the event type descriptor isn't shown,
-this is pre-existing perf list behavior but I think we may want to
-tweak it as I like the event type descriptor.
+Also extract a helper function of disable queue pairs, and use newly
+introduced helper function in error unwinding and virtnet_close;
 
-> > -     for (int type =3D 0; type < PERF_COUNT_HW_CACHE_MAX; type++) {
-> > -             for (int op =3D 0; op < PERF_COUNT_HW_CACHE_OP_MAX; op++)=
+Fixes: 754b8a21a96d ("virtio_net: setup xdp_rxq_info")
+Signed-off-by: Feng Liu <feliu@nvidia.com>
+Reviewed-by: William Tu <witu@nvidia.com>
+Reviewed-by: Parav Pandit <parav@nvidia.com>
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
+Acked-by: Michael S. Tsirkin <mst@redhat.com>
+---
+ drivers/net/virtio_net.c | 31 +++++++++++++++++++++----------
+ 1 file changed, 21 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+index 8d8038538fc4..5cd78e154d14 100644
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c
+@@ -1868,6 +1868,13 @@ static int virtnet_poll(struct napi_struct *napi, int budget)
+ 	return received;
+ }
+ 
++static void virtnet_disable_qp(struct virtnet_info *vi, int qp_index)
++{
++	virtnet_napi_tx_disable(&vi->sq[qp_index].napi);
++	napi_disable(&vi->rq[qp_index].napi);
++	xdp_rxq_info_unreg(&vi->rq[qp_index].xdp_rxq);
++}
++
+ static int virtnet_open(struct net_device *dev)
  {
-> > -                     /* skip invalid cache type */
-> > -                     if (!evsel__is_cache_op_valid(type, op))
-> > -                             continue;
-> > +     while ((pmu =3D perf_pmu__scan(pmu)) !=3D NULL) {
-> > +             /*
-> > +              * Skip uncore PMUs for performance. Software PMUs can op=
-en
-> > +              * PERF_TYPE_HW_CACHE, so skip.
->
-> This statement is bit confusing. Can you please explain how SW pmus can
-> open cache events.
+ 	struct virtnet_info *vi = netdev_priv(dev);
+@@ -1883,20 +1890,27 @@ static int virtnet_open(struct net_device *dev)
+ 
+ 		err = xdp_rxq_info_reg(&vi->rq[i].xdp_rxq, dev, i, vi->rq[i].napi.napi_id);
+ 		if (err < 0)
+-			return err;
++			goto err_xdp_info_reg;
+ 
+ 		err = xdp_rxq_info_reg_mem_model(&vi->rq[i].xdp_rxq,
+ 						 MEM_TYPE_PAGE_SHARED, NULL);
+-		if (err < 0) {
+-			xdp_rxq_info_unreg(&vi->rq[i].xdp_rxq);
+-			return err;
+-		}
++		if (err < 0)
++			goto err_xdp_reg_mem_model;
+ 
+ 		virtnet_napi_enable(vi->rq[i].vq, &vi->rq[i].napi);
+ 		virtnet_napi_tx_enable(vi, vi->sq[i].vq, &vi->sq[i].napi);
+ 	}
+ 
+ 	return 0;
++
++	/* error unwinding of xdp init */
++err_xdp_reg_mem_model:
++	xdp_rxq_info_unreg(&vi->rq[i].xdp_rxq);
++err_xdp_info_reg:
++	for (i = i - 1; i >= 0; i--)
++		virtnet_disable_qp(vi, i);
++
++	return err;
+ }
+ 
+ static int virtnet_poll_tx(struct napi_struct *napi, int budget)
+@@ -2305,11 +2319,8 @@ static int virtnet_close(struct net_device *dev)
+ 	/* Make sure refill_work doesn't re-enable napi! */
+ 	cancel_delayed_work_sync(&vi->refill);
+ 
+-	for (i = 0; i < vi->max_queue_pairs; i++) {
+-		virtnet_napi_tx_disable(&vi->sq[i].napi);
+-		napi_disable(&vi->rq[i].napi);
+-		xdp_rxq_info_unreg(&vi->rq[i].xdp_rxq);
+-	}
++	for (i = 0; i < vi->max_queue_pairs; i++)
++		virtnet_disable_qp(vi, i);
+ 
+ 	return 0;
+ }
+-- 
+2.37.1 (Apple Git-137.1)
 
-If the type is PERF_TYPE_HW_CACHE (3) and the extended type is
-PERF_TYPE_SOFTWARE (1) then this yields the encoding '3:0x100000000'
-which will succeed perf_event_open:
-```
-$ perf stat -vv -e '3:0x100000000' true
-Using CPUID GenuineIntel-6-8D-1
-intel_pt default config: tsc,mtc,mtc_period=3D3,psb_period=3D3,pt,branch
-Control descriptor is not initialized
-------------------------------------------------------------
-perf_event_attr:
- type                             3
- size                             128
- config                           0x100000000
- sample_type                      IDENTIFIER
- read_format                      TOTAL_TIME_ENABLED|TOTAL_TIME_RUNNING
- disabled                         1
- inherit                          1
- enable_on_exec                   1
- exclude_guest                    1
-------------------------------------------------------------
-sys_perf_event_open: pid 2128955  cpu -1  group_fd -1  flags 0x8 =3D 3
-3:0x100000000: -1: 265630 261923 261923
-3:0x100000000: 265630 261923 261923
-
-Performance counter stats for 'true':
-
-          265,630      3:0x100000000
-
-      0.000844251 seconds time elapsed
-
-      0.000911000 seconds user
-      0.000000000 seconds sys
-```
-I agree this isn't expected, but if I don't exclude the PMU type the
-print events will list it as an alias. I'll try to improve the comment
-in v4.
-
-Thanks,
-Ian
