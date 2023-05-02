@@ -2,103 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F5C46F45FC
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 16:24:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DF276F4607
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 16:24:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234440AbjEBOYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 10:24:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41080 "EHLO
+        id S234292AbjEBOYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 10:24:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233998AbjEBOYA (ORCPT
+        with ESMTP id S234072AbjEBOYo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 10:24:00 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C597191;
-        Tue,  2 May 2023 07:23:59 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id ffacd0b85a97d-306342d7668so967294f8f.1;
-        Tue, 02 May 2023 07:23:58 -0700 (PDT)
+        Tue, 2 May 2023 10:24:44 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 564AB11A;
+        Tue,  2 May 2023 07:24:43 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1aaebed5bd6so20628785ad.1;
+        Tue, 02 May 2023 07:24:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683037437; x=1685629437;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kfItElVK3b/VLS4J5wK0572UKi844kpJ9g4fvuAZ23g=;
-        b=U1xlpkbonMZA1UHiVaKAc3+O86Jbhu+NtZS4LuwiOXhl2iBchXEFPWErADUExIv9IP
-         8sL2Kqn7giAmdRn8y0dDeQGgq10XBISvYJy5xoVi8H/mHc6yCYWXZC8frxuuEk1wmYeF
-         FIhhNGQDtfULIZ0r/HpOmKBNKnKatHaO3IbQ93UQyZ+PQ7KtR5PN6W6mvoofSir9NZch
-         KHgSpIIBssTNwpxN0bhhL4JqkdONzc9eqhlQrOQZ5lmqmmnvn4k6304TfCXCw6ge/JVR
-         XImbO8I3twcGwm18nSIKIHd8VJXkIXMtFwBPpvUPhUqd5R4goPZfGZI3JAPmVRxGV+Qu
-         8TdQ==
+        d=gmail.com; s=20221208; t=1683037483; x=1685629483;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=s1aeen3ZK+Eot6IC/oOTAkZg5Jx6a7diThkYUUdZei0=;
+        b=o7eV6bV5rpKciv6EIj9ga4Omoc8JiajzV/SXD9s6GTpCIHwLsqIeUrnFZuC+xAIaiW
+         WjEsJu1B2GKv/VlyiP9foiCAZE6F++nD+BWDCHQtjX8GXp25FXxTTDqEhJfEaCmCRZnW
+         r/TojnhdtU1uIxMuMFFOdIT7Ow7MxYnqTZbrKtm4QgaRKGsCrFqUlZThCmVisJrJf8LM
+         /bNVZ2wUIhggAaUQvPy2HmP3xLnCZxM2nh9Oy/B1JiqMdIiCPGs2rAsKMpXcHd+3R9I1
+         ZjnOJ4VKyNowo/00zxs8soF2kfewUpLu4llf08zWCp8MVLdUhOzj6mQ/SdBcj0q0dUoG
+         ml+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683037437; x=1685629437;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kfItElVK3b/VLS4J5wK0572UKi844kpJ9g4fvuAZ23g=;
-        b=efsexEEpL48taS/anN77SwR6BKuLEHh5CENnC8+SWzBW2T2RZR4ctspvx1U2HqLJl/
-         ZhEecT+j0MJtIzozrkG8qvRkg8bHu+qOuOUN+qMQfFmeiUeInFzVvBVUtPR+qdJq8ipp
-         Of7iiDMnRyOxgo6vV7/Op65GDP3uCW+zVh1W9vDWw92kmMGbXSaah2RtR4y/0fFhm9cU
-         giqwMvJBx3bS6svGC1/niKfEXfoQlL2VPxPrHB5VMHWXbdltyayFoZZA3+WtSdd4REp/
-         Iw3NjExZ12belozKVkhxDvQQM+QciP4ywTIPSCDJHm2eQP2BloNZq4p+CHMMCEpleR1U
-         bOrw==
-X-Gm-Message-State: AC+VfDzoyia8VjKEsDezoo+oRyajNKVVhOrMPk9N/dSQ6K1qJDYVP4+y
-        vjZf2gQN9jGDyOryRNQ+P8s=
-X-Google-Smtp-Source: ACHHUZ4vnS5LbIAZPa1gxZd2ymGV28rja7jG4Eb6qXU5MVmFiPH6p1L++UB74M6pF6QGggxbnu89gg==
-X-Received: by 2002:a05:6000:110f:b0:306:35fa:202b with SMTP id z15-20020a056000110f00b0030635fa202bmr1937849wrw.6.1683037437253;
-        Tue, 02 May 2023 07:23:57 -0700 (PDT)
-Received: from [192.168.1.131] (cgn-89-1-213-9.nc.de. [89.1.213.9])
-        by smtp.gmail.com with ESMTPSA id a13-20020a056000100d00b003063c130ef1sm147115wrx.112.2023.05.02.07.23.56
+        d=1e100.net; s=20221208; t=1683037483; x=1685629483;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=s1aeen3ZK+Eot6IC/oOTAkZg5Jx6a7diThkYUUdZei0=;
+        b=Vp2KYB/dVQooHRvtO8Cmoq54GsyIemxX5WZAWRDTGMc68kaMwhnuNGoPX44aT3f164
+         S1EHovAn8zb+glJD/iT73jrYOHem6dhdCJsb1/pYIj6wnQ3WJP3jP8INve/bPdR5qhNz
+         L0etZk+4P5tNHF2lU7m5DN5rUBwhjn4n0gmgKzQQP6jSnNv9lw9hNEKm5W2i5FSiBACQ
+         1H3T6TAzfgWv1r/k6OzqhVnZXsXyaIcZTA+qOKD+0GRJukU8fBihYhSOrgFI0shA8812
+         MezhUACyIqj6PX/ZVFnPtkcBBR77OI1tqMLnvjjCBglVJDrQPPisvEnxW5JbcFdXlEhF
+         0t0A==
+X-Gm-Message-State: AC+VfDztUjedFvOFemq5vhf2EG6JFitV6VqzgCUuaXvQk0+eWmSlmDYX
+        4BE4f2wZm3Te0tRC7HqhWo0ot0ldkQLJWQ==
+X-Google-Smtp-Source: ACHHUZ7J8Aas1J2Rc20jnb1KGckFkPjq+j4uXL85mWslpQ5/EpkOpe4cYomHtpe0qtAoy+AsMW7sBg==
+X-Received: by 2002:a17:902:d349:b0:1a9:2823:dad3 with SMTP id l9-20020a170902d34900b001a92823dad3mr18355696plk.42.1683037482638;
+        Tue, 02 May 2023 07:24:42 -0700 (PDT)
+Received: from localhost (118-208-214-188.tpgi.com.au. [118.208.214.188])
+        by smtp.gmail.com with ESMTPSA id x10-20020a170902b40a00b001ab05aaaf8fsm2012505plr.104.2023.05.02.07.24.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 May 2023 07:23:56 -0700 (PDT)
-Message-ID: <5aaba4d1-f7e2-9d30-5f15-0713f9fc6a8c@gmail.com>
-Date:   Tue, 2 May 2023 16:23:54 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 3/6] dt-bindings: input: cypress,tt21000 - fix
- interrupt type in dts example
-Content-Language: en-US
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Alistair Francis <alistair@alistair23.me>
-References: <20230501113010.891786-1-mweigand@mweigand.net>
- <20230501113010.891786-4-mweigand@mweigand.net> <ZFBYIZc5zKs6dpHF@google.com>
-From:   Maximilian Weigand <mweigand2017@gmail.com>
-In-Reply-To: <ZFBYIZc5zKs6dpHF@google.com>
+        Tue, 02 May 2023 07:24:41 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Date:   Wed, 03 May 2023 00:24:24 +1000
+Message-Id: <CSBUZL6M3MSS.316JRNGXVMLB@wheely>
+Subject: Re: [PATCH] Remove HAVE_VIRT_CPU_ACCOUNTING_GEN option
+From:   "Nicholas Piggin" <npiggin@gmail.com>
+To:     "Palmer Dabbelt" <palmer@dabbelt.com>
+Cc:     "Arnd Bergmann" <arnd@arndb.de>, <linux-arch@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <vgupta@kernel.org>,
+        <linux-snps-arc@lists.infradead.org>, <bcain@quicinc.com>,
+        <linux-hexagon@vger.kernel.org>, <chenhuacai@kernel.org>,
+        <loongarch@lists.linux.dev>, <geert@linux-m68k.org>,
+        <linux-m68k@lists.linux-m68k.org>, <monstr@monstr.eu>,
+        <tsbogend@alpha.franken.de>, <linux-mips@vger.kernel.org>,
+        <dinguyen@kernel.org>, <jonas@southpole.se>,
+        <stefan.kristiansson@saunalahti.fi>, <shorne@gmail.com>,
+        <linux-openrisc@vger.kernel.org>,
+        <James.Bottomley@HansenPartnership.com>, <deller@gmx.de>,
+        <linux-parisc@vger.kernel.org>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        <aou@eecs.berkeley.edu>, <linux-riscv@lists.infradead.org>,
+        <ysato@users.sourceforge.jp>, <dalias@libc.org>,
+        <glaubitz@physik.fu-berlin.de>, <linux-sh@vger.kernel.org>,
+        <davem@davemloft.net>, <sparclinux@vger.kernel.org>,
+        <richard@nod.at>, <anton.ivanov@cambridgegreys.com>,
+        <johannes@sipsolutions.net>, <linux-um@lists.infradead.org>,
+        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
+        <khilman@baylibre.com>, <frederic@kernel.org>
+X-Mailer: aerc 0.14.0
+References: <20230429063348.125544-1-npiggin@gmail.com>
+ <mhng-7ec0443b-2201-41b7-996c-78c3a61f0230@palmer-ri-x1c9a>
+In-Reply-To: <mhng-7ec0443b-2201-41b7-996c-78c3a61f0230@palmer-ri-x1c9a>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Sun Apr 30, 2023 at 6:14 AM AEST, Palmer Dabbelt wrote:
+> On Fri, 28 Apr 2023 23:33:48 PDT (-0700), npiggin@gmail.com wrote:
+> > This option was created in commit 554b0004d0ec4 ("vtime: Add
+> > HAVE_VIRT_CPU_ACCOUNTING_GEN Kconfig") for architectures to indicate
+> > they support the 64-bit cputime_t required for VIRT_CPU_ACCOUNTING_GEN.
+> >
+> > The cputime_t type has since been removed, so this doesn't have any
+> > meaning. Remove it.
+> >
+> > Cc: linux-arch@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Cc: Vineet Gupta <vgupta@kernel.org>
+> > Cc: linux-snps-arc@lists.infradead.org
+> > Cc: Brian Cain <bcain@quicinc.com>
+> > Cc: linux-hexagon@vger.kernel.org
+> > Cc: Huacai Chen <chenhuacai@kernel.org>
+> > Cc: loongarch@lists.linux.dev
+> > Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> > Cc: linux-m68k@lists.linux-m68k.org
+> > Cc: Michal Simek <monstr@monstr.eu>
+> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> > Cc: linux-mips@vger.kernel.org
+> > Cc: Dinh Nguyen <dinguyen@kernel.org>
+> > Cc: Jonas Bonn <jonas@southpole.se>
+> > Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
+> > Cc: Stafford Horne <shorne@gmail.com>
+> > Cc: linux-openrisc@vger.kernel.org
+> > Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+> > Cc: Helge Deller <deller@gmx.de>
+> > Cc: linux-parisc@vger.kernel.org
+> > Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> > Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> > Cc: Albert Ou <aou@eecs.berkeley.edu>
+> > Cc: linux-riscv@lists.infradead.org
+> > Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+> > Cc: Rich Felker <dalias@libc.org>
+> > Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+> > Cc: linux-sh@vger.kernel.org
+> > Cc: "David S. Miller" <davem@davemloft.net>
+> > Cc: sparclinux@vger.kernel.org
+> > Cc: Richard Weinberger <richard@nod.at>
+> > Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+> > Cc: Johannes Berg <johannes@sipsolutions.net>
+> > Cc: linux-um@lists.infradead.org
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Ingo Molnar <mingo@redhat.com>
+> > Cc: Borislav Petkov <bp@alien8.de>
+> > Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> > Cc: x86@kernel.org
+> > Cc: "H. Peter Anvin" <hpa@zytor.com>
+> > Cc: Kevin Hilman <khilman@baylibre.com>
+> > Cc: Frederic Weisbecker <frederic@kernel.org>
+> > Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+> > ---
+> > Hi,
+> >
+> > Could we tidy this? I don't know what tree it can go in, timers,
+> > sched, asm-generic, probably doesn't matter.
+> >
+> > The only thing this actually does is gate VIRT_CPU_ACCOUNTING_GEN and
+> > NO_HZ_FULL so if your arch has some other issue that requires this
+> > then the documentation needs to change. Any concerns from the archs?
+> > I.e., 32-bit that does *not* define HAVE_VIRT_CPU_ACCOUNTING_GEN
+> > which looks to be:
+> >
+> > arc
+> > hexagon
+> > loongarch 32-bit with SMP
+> > m68k
+> > microblaze
+> > mips 32-bit with SMP
+> > nios2
+> > openrisc
+> > parisc 32-bit
+> > riscv 32-bit
+>
+> Nothing's jumping out, though I haven't tested this yet so I'm not 100%. =
+=20
+> I assume this isn't aimed for this merge window, given the timing? =20
 
-On 02.05.23 02:24, Dmitry Torokhov wrote:
-> On Mon, May 01, 2023 at 01:30:07PM +0200, Maximilian Weigand wrote:
->> Triggering the interrupt of the IRQ_TYPE_LEVEL_LOW type can lead to
->> probing issues with the device for the current driver (encountered on
->> the Pine64 PineNote). Basically the interrupt would be triggered before
->> certain commands were sent to the device, leading to a race between the
->> device responding fast enough and the irq handler fetching a data frame
->> from it. Actually all devices currently using the driver already use a
->> falling edge trigger.
-> 
-> I'd prefer we adjusted the driver to handle level interrupts properly.
+No, maybe the next one though.
 
-Ok, I will have a look at that. Just to be clear: The driver should work
-only with level interrupts, or should it optimally support both level
-and falling edge triggers?
+> Probably best to give this sort of thing time to bake in linux-next, but=
+=20
+> I doubt anyone is even paying attention to rv32/NO_HZ_FULL so no big=20
+> deal either way on my end.
+>
+> Acked-by: Palmer Dabbelt <palmer@rivosinc.com> # RISC-V
 
-Thanks and best regards
-
-Maximilian
+Thanks,
+Nick
