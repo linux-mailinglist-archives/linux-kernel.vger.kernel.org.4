@@ -2,159 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69A296F45F5
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 16:22:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39F3B6F45F7
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 16:22:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234379AbjEBOWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 10:22:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40002 "EHLO
+        id S234399AbjEBOWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 10:22:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjEBOWd (ORCPT
+        with ESMTP id S234105AbjEBOWq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 10:22:33 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31774C7;
-        Tue,  2 May 2023 07:22:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683037352; x=1714573352;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=okhpxlRDEQALG8h9nFGRMtX82IOIMhVCPENvPmmTTwE=;
-  b=M3ekXbAINca4tBa5rFdTtocydRJ8VLLYrf5Q9dU7NWasjnZKyhTXLtZn
-   Cfx0vSJPKz5/TBXAkKQ8jzlHlHK1aHzt9mqdYyE0Zu82lfv0IYNSwEqV3
-   XUOIItpeH+fkFaqMPJcaKEgPalRYcYDpPK3nNcYulYDrSJfBuaIYHOnFs
-   vWfCSsIWDImaJ7yQYtyqVwtV+MLqaUfwpdDAd5nshefBFeE43UDHrfqlM
-   VYg7HUcAeYl/v6l7yKUzi1pB2SX+v3gHIrGW31uMNmehSalH2bzsvy0mO
-   uuVkrPazjjhBqx2/yWZbdBAVrH1e4Gesvh0rVrS/VSuOWnyXyMe23chmT
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="348453637"
-X-IronPort-AV: E=Sophos;i="5.99,244,1677571200"; 
-   d="scan'208";a="348453637"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2023 07:22:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="726758659"
-X-IronPort-AV: E=Sophos;i="5.99,244,1677571200"; 
-   d="scan'208";a="726758659"
-Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 02 May 2023 07:22:27 -0700
-Received: from kbuild by e3434d64424d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ptqte-000165-2O;
-        Tue, 02 May 2023 14:22:26 +0000
-Date:   Tue, 2 May 2023 22:21:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ajay Kaher <akaher@vmware.com>, rostedt@goodmis.org,
-        mhiramat@kernel.org, shuah@kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, chinglinyu@google.com,
-        namit@vmware.com, srivatsab@vmware.com, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, vsirnapalli@vmware.com, tkundu@vmware.com,
-        er.ajay.kaher@gmail.com, Ajay Kaher <akaher@vmware.com>
-Subject: Re: [PATCH v2 4/9] eventfs: adding eventfs file, directory remove
- function
-Message-ID: <202305022234.nOgIYubz-lkp@intel.com>
-References: <1683026600-13485-5-git-send-email-akaher@vmware.com>
+        Tue, 2 May 2023 10:22:46 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9887E10E9;
+        Tue,  2 May 2023 07:22:45 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 390E51F8A6;
+        Tue,  2 May 2023 14:22:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1683037364; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=y6T6GuDQfJbO43/1w1VH6Uivf7Fp4Qwl962Lj1m6+Lo=;
+        b=zgCrmh7GvS0UCf3/prJ/RboMX2Ki4PzsGnEyDNmlTehNdNLon7THEZKq5ISDaYttXVdHvn
+        LSOzCGzD61p5zdqaDXeCQhaJNbVxKk+iiCTe10KcEQnHDXlYm4pRgHEnZnm2i7B6BFdbag
+        tuJQLV7vBxGs3mDQXtCRIelkksRaA+U=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1683037364;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=y6T6GuDQfJbO43/1w1VH6Uivf7Fp4Qwl962Lj1m6+Lo=;
+        b=Y6is8m8YF1YqTPPmsh9/sRZt7MNTOyZw+M4CQkHbxAjyznZhS70hG0YJfNYvBGP5ybSEj9
+        7KR7fQ+ANb6bouBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2A935139C3;
+        Tue,  2 May 2023 14:22:44 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Mk9eCrQcUWT6ewAAMHmgww
+        (envelope-from <dwagner@suse.de>); Tue, 02 May 2023 14:22:44 +0000
+Date:   Tue, 2 May 2023 16:22:43 +0200
+From:   Daniel Wagner <dwagner@suse.de>
+To:     Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+Cc:     Hannes Reinecke <hare@suse.de>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Shin'ichiro Kawasaki <shinichiro@fastmail.com>
+Subject: Re: [PATCH REPOST blktests v2 4/9] nvme: Use runtime fio background
+ jobs
+Message-ID: <cds6ccjotmwbwckpuhefedr3vizx4gkuqor5z4hhfodbj5hbwe@wb4tp2p7lk3b>
+References: <20230421060505.10132-1-dwagner@suse.de>
+ <20230421060505.10132-5-dwagner@suse.de>
+ <72ecc5fc-0ff4-5592-3293-f4204633fc8e@suse.de>
+ <4ckg7ymu73lfs7zlsby3com6k24qgovkaqky5jmgeoubs7azhh@jtvovyjluekv>
+ <bnr5gwlxyfixvajlpzm75mfmizgvq4uibb2b4t5tqij3jmkqrl@ialjk5an7nla>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1683026600-13485-5-git-send-email-akaher@vmware.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <bnr5gwlxyfixvajlpzm75mfmizgvq4uibb2b4t5tqij3jmkqrl@ialjk5an7nla>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ajay,
+On Fri, Apr 28, 2023 at 04:29:57AM +0000, Shinichiro Kawasaki wrote:
+> On Apr 21, 2023 / 08:57, Daniel Wagner wrote:
+> > On Fri, Apr 21, 2023 at 08:29:22AM +0200, Hannes Reinecke wrote:
+> >  > --- a/tests/nvme/040
+> > > > +++ b/tests/nvme/040
+> > > > @@ -38,7 +38,8 @@ test() {
+> > > >   	# start fio job
+> > > >   	echo "starting background fio"
+> > > >   	_run_fio_rand_io --filename="/dev/${nvmedev}n1" --size=1g \
+> > > > -		--group_reporting --ramp_time=5  &> /dev/null &
+> > > > +		--group_reporting --ramp_time=5 \
+> > > > +		--time_based --runtime=1m &> /dev/null &
+> > > >   	sleep 5
+> > > >   	# do reset/remove operation
+> > > 
+> > > Wouldn't it be better to let _run_fio_rand_io pick the correct size?
+> > 
+> > Yes, makes sense.
+> 
+> If you do I/O size change for the test cases nvme/032 and nvme/040, could you
+> confirm the runtime reduction of the test cases? IIUC, the fio process stops
+> due to process kill or an I/O error, then I/O size reduction will not change
+> runtime of the test cases, I guess.
 
-kernel test robot noticed the following build warnings:
+The fio process doesn't survive the reset and the deletion of the controller.
 
-[auto build test WARNING on shuah-kselftest/next]
-[also build test WARNING on shuah-kselftest/fixes linus/master rostedt-trace/for-next v6.3 next-20230428]
-[cannot apply to rostedt-trace/for-next-urgent]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> IMO, --time_based --runtime=1m is good to ensure that fio runs long enough,
+> even when nvme device size is configured with small size.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ajay-Kaher/eventfs-introducing-struct-tracefs_inode/20230502-192949
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git next
-patch link:    https://lore.kernel.org/r/1683026600-13485-5-git-send-email-akaher%40vmware.com
-patch subject: [PATCH v2 4/9] eventfs: adding eventfs file, directory remove function
-config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20230502/202305022234.nOgIYubz-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/9a36b39da0c3fbfe15a3c3a0ed71b52013bac292
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Ajay-Kaher/eventfs-introducing-struct-tracefs_inode/20230502-192949
-        git checkout 9a36b39da0c3fbfe15a3c3a0ed71b52013bac292
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash fs/tracefs/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305022234.nOgIYubz-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> fs/tracefs/event_inode.c:379:6: warning: no previous prototype for 'eventfs_remove_rec' [-Wmissing-prototypes]
-     379 | void eventfs_remove_rec(struct eventfs_file *ef)
-         |      ^~~~~~~~~~~~~~~~~~
-   fs/tracefs/event_inode.c:58:13: warning: 'eventfs_up_read' defined but not used [-Wunused-function]
-      58 | static void eventfs_up_read(struct rw_semaphore *eventfs_rwsem)
-         |             ^~~~~~~~~~~~~~~
-   fs/tracefs/event_inode.c:47:13: warning: 'eventfs_down_read' defined but not used [-Wunused-function]
-      47 | static void eventfs_down_read(struct rw_semaphore *eventfs_rwsem)
-         |             ^~~~~~~~~~~~~~~~~
-   fs/tracefs/event_inode.c:31:29: warning: 'eventfs_dentry_to_rwsem' defined but not used [-Wunused-function]
-      31 | static struct rw_semaphore *eventfs_dentry_to_rwsem(struct dentry *dentry)
-         |                             ^~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/eventfs_remove_rec +379 fs/tracefs/event_inode.c
-
-   371	
-   372	/**
-   373	 * eventfs_remove_rec - remove eventfs dir or file from list
-   374	 * @ef: a pointer to eventfs_file to be removed.
-   375	 *
-   376	 * This function recursively remove eventfs_file which
-   377	 * contains info of file or dir.
-   378	 */
- > 379	void eventfs_remove_rec(struct eventfs_file *ef)
-   380	{
-   381		struct eventfs_file *ef_child, *n;
-   382	
-   383		if (!ef)
-   384			return;
-   385	
-   386		if (ef->ei) {
-   387			/* search for nested folders or files */
-   388			list_for_each_entry_safe(ef_child, n, &ef->ei->e_top_files, list) {
-   389				eventfs_remove_rec(ef_child);
-   390			}
-   391			kfree(ef->ei);
-   392		}
-   393	
-   394		if (ef->created && ef->dentry) {
-   395			d_invalidate(ef->dentry);
-   396			dput(ef->dentry);
-   397		}
-   398		list_del(&ef->list);
-   399		kfree(ef->name);
-   400		kfree(ef);
-   401	}
-   402	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+I've updated the time to 'infinity' and added a 'kill $pid' after reset and
+delete. Though the process should be gone till then but making the test a bit
+more robust should hurt.
