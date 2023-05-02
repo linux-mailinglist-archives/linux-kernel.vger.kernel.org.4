@@ -2,129 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52B916F3B9E
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 03:04:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F058F6F3BA5
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 03:06:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232827AbjEBBD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 21:03:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51114 "EHLO
+        id S233286AbjEBBGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 21:06:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbjEBBD5 (ORCPT
+        with ESMTP id S232991AbjEBBGI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 21:03:57 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67BF73581;
-        Mon,  1 May 2023 18:03:56 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1aad6f2be8eso26100965ad.3;
-        Mon, 01 May 2023 18:03:56 -0700 (PDT)
+        Mon, 1 May 2023 21:06:08 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DFF83C19;
+        Mon,  1 May 2023 18:05:52 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-63b5465fc13so2389552b3a.3;
+        Mon, 01 May 2023 18:05:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682989436; x=1685581436;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q6lzbnAwJquhvg8Kc/5cCYxx0EHomQmC+dFR+xtNtk8=;
-        b=Vai3xjNJJUuYG3xmFiuayY6WSUKQjZcnx04cUUXf3vd5WvxTTngtIrxhtU5HH7qoAr
-         EWHpEU/ElKl69rJxRpRHTWBssTVrGmAZPu/7LLdBnQtIy334h2HRY0yy4cLEjDTcx+C5
-         qOGl18lGo1jROw8h9brzNux2gkcRcUokz1Sf1rUhsgBCUeYPNX4JbnatgjkIBCY0ifbG
-         BUWeXS2wY7+CCXnbAb6ePlN5Pu2QGPONELqGsxuKRsigWzGZWgQrL12weILoWetpCQaf
-         0vr0vCLjl1GmRHUJ+Bygaj+Z3RxeSJXU3jOOfuwp7T0ZDO/jZFfauERhqDXNLUhN95TF
-         fBVw==
+        d=gmail.com; s=20221208; t=1682989551; x=1685581551;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=u6KvYmG6iKLAMHd7vkBOqn94kNNGYev+CUO7axt/3Ec=;
+        b=Gs+6By193FhxXRhpOqSjVLXXF7EyDRAAejY2VpLNrjFnvJlzkhj6XnGPVMwsw/Xq54
+         LyYhFqDbi/OvQNt97O4SXohp7Qo221vNnI4nseGo3J3zKbwBKOu/+dGBsfBaTiDfbXcC
+         BZGlPdIM+MxRu2XGepI7exzL41Kw48lPj6EVNjFDtkEjAnx/Lo5evCa8JnQrQRMg/xwi
+         pb7fFeCqwVNqT8+jK+5yGu+ptWjU5iygYwDBVFBBZrKCWDkxcrgox5Q8z445S+uvUDiv
+         6G//ZUlJC8UdPD3yT9Ir3R8WKMMqhPdZ/fvqKcsyPNBO3i923HA372U0ag9Yy+Tp5BCu
+         m3WA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682989436; x=1685581436;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Q6lzbnAwJquhvg8Kc/5cCYxx0EHomQmC+dFR+xtNtk8=;
-        b=N8bkq9ZI9PtfP3gYZwC/e3MLB296NvGw329PNIfZg36AcvnWac5ZV5MyTrV/LWzY9a
-         VUi9fOV6TCAdzYRMVSsGXYt3bzx37UnoESGLemUBCmOMq3N7mCrX8s7weTqhlg+ohBS3
-         iVAp1vekFion69BFDUcZGUY+5HePtSeznEsSJq/iRC8wTqKCcMcIdF7oLHDuD/YM868p
-         +Uzoqo41956nNopEprCjCbq+JGsIuJ5u57pq+Jxi8cloikGgwiRNMxwXYq39I0luINoc
-         s4C/mySgYh/knGxZv4aoTqIj5Set95+7jlOwXCAeYnPHpl4B5TcBM7HQuVYU4BK1B93y
-         xS1A==
-X-Gm-Message-State: AC+VfDwshMDKwI+Vl4oYwGoSRCRF0tI6JUmEJEfF/g67mRlscVFpzrNJ
-        /hxE03uqdZabLeziGnwEUlE=
-X-Google-Smtp-Source: ACHHUZ5nfwVUGRCYPoQqfWJL6ELphCOi/xskoMP9EeTdBpXuF9SCfq6t5qNDRBkyWuQgK4obUOw90g==
-X-Received: by 2002:a17:903:1210:b0:1aa:cddd:57d8 with SMTP id l16-20020a170903121000b001aacddd57d8mr12101778plh.30.1682989435775;
-        Mon, 01 May 2023 18:03:55 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:b6ce:736b:e4f7:adb])
-        by smtp.gmail.com with ESMTPSA id d6-20020a170902b70600b001a934af187esm18245064pls.153.2023.05.01.18.03.54
+        d=1e100.net; s=20221208; t=1682989551; x=1685581551;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=u6KvYmG6iKLAMHd7vkBOqn94kNNGYev+CUO7axt/3Ec=;
+        b=PWmpMPgVB5SxFlNpGLe25CxHVsQ6QgzjX867l8tY5LgOnnPzlgDF6hNI9wJZjEDKx5
+         YfHYOIDBBCoONwMbbu7OfAIp9sonVA3hOfQU1v09wx5C7bjuNQ6M7EqYjYuXi9Yu+QT1
+         /NfWRb11i/8Wo3dQXzAhEn/Qm9aIUO6rObMmSwC8Wqjp7ODLhVlLZEsFNAjGmJBlzQVT
+         ZSAjTAp6TUfHfEMqRBPpHWW2LmIwEySUEhzqzbeBaayM04TKBtqx/7+s67i1fxLDQs5+
+         ZleV2OkelXrlBpGOA1Z/eu+xOMef86nx9VZdeYCKmqd9msbHrEpE2LKFrGhV+pXa9w6M
+         SECg==
+X-Gm-Message-State: AC+VfDy4mrV4hW5OeGV1Nn1uiQK7QQnO0MYRJo2qBfG5M7ZMoGLWneCo
+        4GQ/7QUaHF56+nT/4xJb+ds8ShSM5dQkDegb
+X-Google-Smtp-Source: ACHHUZ4ngoQ7ohSxrNtlyRwdY/M+Wmel/KQQoo9L21BpjGtXxf0YTlp8Awswni/nvFNX47qFMBMitQ==
+X-Received: by 2002:a05:6a00:2e18:b0:62d:8376:3712 with SMTP id fc24-20020a056a002e1800b0062d83763712mr15725872pfb.28.1682989551282;
+        Mon, 01 May 2023 18:05:51 -0700 (PDT)
+Received: from yoga ([2400:1f00:13:5ac8:de82:eedb:43ac:e372])
+        by smtp.gmail.com with ESMTPSA id m15-20020a056a00080f00b00627e87f51a5sm16001440pfk.161.2023.05.01.18.05.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 May 2023 18:03:55 -0700 (PDT)
-Date:   Mon, 1 May 2023 18:03:52 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     starmiku1207184332@gmail.com
-Cc:     rydberg@bitmath.org, linux-input@vger.kernel.org,
+        Mon, 01 May 2023 18:05:50 -0700 (PDT)
+Date:   Tue, 2 May 2023 06:35:43 +0530
+From:   Anup Sharma <anupnewsmail@gmail.com>
+To:     hverkuil@xs4all.nl, mchehab@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drivers: input: input: Fix possible sleep-in-atomic bug
- in input_alloc_absinfo()
-Message-ID: <ZFBheCRW5fbzVK1V@google.com>
-References: <20230425074951.1042694-1-starmiku1207184332@gmail.com>
+Subject: [PATCH] staging: media: usbvision: Remove comparision to NULL
+Message-ID: <ZFBh54sbwiRFKyG+@yoga>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230425074951.1042694-1-starmiku1207184332@gmail.com>
-X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FSL_HELO_FAKE,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Teng Qi,
+Remove comparison to null in file usbvision-core.c and usbvision-i2c.c.
 
-On Tue, Apr 25, 2023 at 07:49:51AM +0000, starmiku1207184332@gmail.com wrote:
-> From: Teng Qi <starmiku1207184332@gmail.com>
-> 
-> input_alloc_absinfo() may cause the kernel to sleep by calling kcalloc() with
-> the GFP_KERNEL flag. It may be called by input_event() holding spinlock through
-> the following call path: 
-> 
-> input_event(), 433
-> input_handle_event(), 399
-> input_get_disposition(), 294
-> input_handle_abs_event(), 232
-> input_abs_set_val(), Clang suggests it calls input_alloc_absinfo()
-> 	unconditionally
-> input_alloc_absinfo(), 483
-> kcalloc(..., GFP_KERNEL)
-> 
-> This call path can potentially trigger a sleep-in-atomic bug. To prevent this
-> potential bug, we modify input_alloc_absinfo() to use the GFP_ATOMIC flag
-> instead of the GFP_KERNEL flag.
+Signed-off-by: Anup Sharma <anupnewsmail@gmail.com>
+---
+ drivers/staging/media/usbvision/usbvision-core.c | 8 ++++----
+ drivers/staging/media/usbvision/usbvision-i2c.c  | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-This can not happen in practice, and changing the allocation type to
-GFP_ATOMIC hurts the other code. We can avoid the issue by not using the
-helper and have input core access the slot info directly. I CCed you on
-a patch doing so.
-
-> The possible bug is detected by a static code analysis tool.
-> 
-> Signed-off-by: Teng Qi <starmiku1207184332@gmail.com>
-> ---
->  drivers/input/input.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/input/input.c b/drivers/input/input.c
-> index 37e876d45eb9..eefc4c85a693 100644
-> --- a/drivers/input/input.c
-> +++ b/drivers/input/input.c
-> @@ -480,7 +480,7 @@ void input_alloc_absinfo(struct input_dev *dev)
->  	if (dev->absinfo)
->  		return;
->  
-> -	dev->absinfo = kcalloc(ABS_CNT, sizeof(*dev->absinfo), GFP_KERNEL);
-> +	dev->absinfo = kcalloc(ABS_CNT, sizeof(*dev->absinfo), GFP_ATOMIC);
->  	if (!dev->absinfo) {
->  		dev_err(dev->dev.parent ?: &dev->dev,
->  			"%s: unable to allocate memory\n", __func__);
-> -- 
-> 2.25.1
-> 
-
-Thanks.
-
+diff --git a/drivers/staging/media/usbvision/usbvision-core.c b/drivers/staging/media/usbvision/usbvision-core.c
+index e35dee35b068..a38104b2a0f9 100644
+--- a/drivers/staging/media/usbvision/usbvision-core.c
++++ b/drivers/staging/media/usbvision/usbvision-core.c
+@@ -349,7 +349,7 @@ int usbvision_scratch_alloc(struct usb_usbvision *usbvision)
+ {
+ 	usbvision->scratch = vmalloc_32(scratch_buf_size);
+ 	scratch_reset(usbvision);
+-	if (usbvision->scratch == NULL) {
++	if (!usbvision->scratch) {
+ 		dev_err(&usbvision->dev->dev,
+ 			"%s: unable to allocate %d bytes for scratch\n",
+ 				__func__, scratch_buf_size);
+@@ -374,7 +374,7 @@ int usbvision_decompress_alloc(struct usb_usbvision *usbvision)
+ 	int IFB_size = MAX_FRAME_WIDTH * MAX_FRAME_HEIGHT * 3 / 2;
+ 
+ 	usbvision->intra_frame_buffer = vmalloc_32(IFB_size);
+-	if (usbvision->intra_frame_buffer == NULL) {
++	if (!usbvision->intra_frame_buffer) {
+ 		dev_err(&usbvision->dev->dev,
+ 			"%s: unable to allocate %d for compr. frame buffer\n",
+ 				__func__, IFB_size);
+@@ -2284,7 +2284,7 @@ int usbvision_init_isoc(struct usb_usbvision *usbvision)
+ 		struct urb *urb;
+ 
+ 		urb = usb_alloc_urb(USBVISION_URB_FRAMES, GFP_KERNEL);
+-		if (urb == NULL)
++		if (!urb)
+ 			return -ENOMEM;
+ 		usbvision->sbuf[buf_idx].urb = urb;
+ 		usbvision->sbuf[buf_idx].data =
+@@ -2343,7 +2343,7 @@ void usbvision_stop_isoc(struct usb_usbvision *usbvision)
+ 	int buf_idx, err_code, reg_value;
+ 	int sb_size = USBVISION_URB_FRAMES * usbvision->isoc_packet_size;
+ 
+-	if ((usbvision->streaming == stream_off) || (usbvision->dev == NULL))
++	if ((usbvision->streaming == stream_off) || (!usbvision->dev))
+ 		return;
+ 
+ 	/* Unschedule all of the iso td's */
+diff --git a/drivers/staging/media/usbvision/usbvision-i2c.c b/drivers/staging/media/usbvision/usbvision-i2c.c
+index 6e4df3335b1b..3bba93293463 100644
+--- a/drivers/staging/media/usbvision/usbvision-i2c.c
++++ b/drivers/staging/media/usbvision/usbvision-i2c.c
+@@ -233,7 +233,7 @@ int usbvision_i2c_register(struct usb_usbvision *usbvision)
+ 				&usbvision->i2c_adap,
+ 				"tuner", 0, v4l2_i2c_tuner_addrs(type));
+ 
+-		if (sd == NULL)
++		if (!sd)
+ 			return -ENODEV;
+ 		if (usbvision->tuner_type != -1) {
+ 			tun_setup.mode_mask = T_ANALOG_TV | T_RADIO;
 -- 
-Dmitry
+2.34.1
+
