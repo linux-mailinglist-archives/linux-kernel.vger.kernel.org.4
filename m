@@ -2,260 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97D716F42BF
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 13:26:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 861436F42D5
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 13:30:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233926AbjEBL01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 07:26:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40096 "EHLO
+        id S234065AbjEBLag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 07:30:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233286AbjEBL0V (ORCPT
+        with ESMTP id S233981AbjEBLaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 07:26:21 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 004C355B3;
-        Tue,  2 May 2023 04:25:58 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f19afc4f60so21803475e9.1;
-        Tue, 02 May 2023 04:25:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683026756; x=1685618756;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kRs10HvNSyY4aofcI1ZBj0OmWfT5cmFsMr/bJt88upc=;
-        b=XbCA26o8ji4R6knYZSzqsn4arwaV1Ls0n54VsyC3sh0XCRguzgo6WYIfgRd6ISDSt5
-         EBSoA9d4ff6fzLEyt8lDCARZg417MLQF6Cda/Sj/INzQf8UAiKe9xq0jxanbbaCXb5ca
-         ird2BaI1KxOxusUCTot0hGE3b9bTAKbhtLRXrHuQGz9T8uWtgcTXX8dIbFH7KEZ4Kx3x
-         hkafrI1ZIb5hjjqlu7SHj32Whz0HqU8FAWd32BMv5U68yhvj+Y+9qvyWPtF3JeOa0fAk
-         0LZ+VwuYrUAvzeXVUWDYBhwsrMj6iQZb8+GlJtH8P8givV/slC/aXYHm9iipyqYaaUke
-         iRuQ==
+        Tue, 2 May 2023 07:30:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C6CD5260
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 04:29:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683026866;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=k1xWxQUPrqXW2bGySEuDkOkWRAsXj0s5JI7VBrKLuwQ=;
+        b=LMhHuCTOsstP2FnleLhanaZUKWKafnEppeKP8eTD/5+HL1q1LMcBg2QGHf4DBAWoNowUvG
+        BzCCr8v/8KBLzuC517loU2eAu1RGJTjfi9WzyczI2QIjlMDfaQfAhRUepS/0fB/+VeoDTe
+        kv/0IClE3uRP/fmJ9vXtTJr1C9eSZeg=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-475-R9CBRYLxMdiGOMlp7m9dsw-1; Tue, 02 May 2023 07:27:44 -0400
+X-MC-Unique: R9CBRYLxMdiGOMlp7m9dsw-1
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-2f625d521abso2157974f8f.3
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 04:27:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683026756; x=1685618756;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kRs10HvNSyY4aofcI1ZBj0OmWfT5cmFsMr/bJt88upc=;
-        b=Xdz41b+r+0Qfl0a+GgeimCOSw0dik0TtG4B75On2Q0szcX1w/5bmcL5X6dDYSMcbi7
-         kQM1wKNBkT+dpivHJRvzKjfl1JcJ60w6CMCVTGB+TQ+eG9SM8WbwFEDibmpHJLTpbJMp
-         V83Tl0zFge+hrZLmi+DLhjoM3qu/vAtsQof2vNDJAytkiDEX1aN3CEgAkd/hLGRap3XS
-         1XmrwSDo+IbxNA7SAqvTeUEv39EDxUUbMo7byjbiLVVo5Do+Kaqy3FYXCfLJDH+Ah19e
-         SzycoTi81ov5lQHt4PIr9SUL/ZQrthMNbF5o3kJOcD4RWg7LyVjA7WX1uqxLEVfUVB3G
-         REWw==
-X-Gm-Message-State: AC+VfDwyOgxvqojOFM11FxYpuZN6X1Lufw1MNhDhGNKxqP5XTjORujY/
-        dF6GYzfBg9ULQVXkqww6FgU=
-X-Google-Smtp-Source: ACHHUZ5LhZMn8zC/XVOdRH0O9q5eFynI6mY/ADOayr/C7Ur8HRCDGD1BQqumNxthDJQRB5HwenjdKQ==
-X-Received: by 2002:a5d:544c:0:b0:306:264d:5667 with SMTP id w12-20020a5d544c000000b00306264d5667mr6360015wrv.41.1683026756161;
-        Tue, 02 May 2023 04:25:56 -0700 (PDT)
-Received: from localhost (host86-156-84-164.range86-156.btcentralplus.com. [86.156.84.164])
-        by smtp.gmail.com with ESMTPSA id s4-20020adfeb04000000b003047f7a7ad1sm21455310wrn.71.2023.05.02.04.25.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 May 2023 04:25:55 -0700 (PDT)
-Date:   Tue, 2 May 2023 12:25:54 +0100
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Mika Penttila <mpenttil@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Theodore Ts'o <tytso@mit.edu>, Peter Xu <peterx@redhat.com>
-Subject: Re: [PATCH v6 3/3] mm/gup: disallow FOLL_LONGTERM GUP-fast writing
- to file-backed mappings
-Message-ID: <ab66d15a-acd0-4d9b-aa12-49cddd12c6a5@lucifer.local>
-References: <cover.1682981880.git.lstoakes@gmail.com>
- <dee4f4ad6532b0f94d073da263526de334d5d7e0.1682981880.git.lstoakes@gmail.com>
- <20230502111334.GP1597476@hirez.programming.kicks-ass.net>
+        d=1e100.net; s=20221208; t=1683026863; x=1685618863;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=k1xWxQUPrqXW2bGySEuDkOkWRAsXj0s5JI7VBrKLuwQ=;
+        b=Jy6wQAHVeDDCsab2/G6dfczZQg69wdkdYtphT2Oia3Fhf3Z07mm4yDnpbFTlEOoako
+         QhoBEwG+0fGf5BX+Lrhc2iNpwKAK5FfAl5SHl459DdErBLM2ThRaoDS95sVcpqtYNOON
+         ECZVRxF1I+CIU9MoUAwUPaGGvtBtvoECCB+qa7cg/r15YGXeT5x7/rzLfquVZUVjjCHL
+         T2cX5uCfspveCsagyOhBW//bz2U2BpD9DpkBKUKkaqicy3h8UyFj61G884WqzpCM146a
+         j+GnaB8WV9/iSJ1Cr3Pp0vq1HflTYO6X04BWzc/TIZRfcYpMJO9r7lG0Kco8ssoAt+Oo
+         AuIQ==
+X-Gm-Message-State: AC+VfDy4U75QVh1euU4jsQWK20x0bDebX3MEKWMlr2yRcLlwq4JDzas/
+        MDm+NYxexnEvss7RSlri3LthZXNpPy8lnCmH891RoAnmQxFTPZTDEyhDolyXJ+LVT+ozj1ha2Sq
+        p57sTCCFHi9hav7cYtOmPlIju
+X-Received: by 2002:adf:fac8:0:b0:306:36ee:3c17 with SMTP id a8-20020adffac8000000b0030636ee3c17mr1491307wrs.71.1683026863591;
+        Tue, 02 May 2023 04:27:43 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4BZQJgC+V3WzGUyoEJ6zZCSeZcJ7b9ZWkx8TUXcEPQ1lZk5m3i7yEcnB6gve9DXP+2P5Jswg==
+X-Received: by 2002:adf:fac8:0:b0:306:36ee:3c17 with SMTP id a8-20020adffac8000000b0030636ee3c17mr1491293wrs.71.1683026863240;
+        Tue, 02 May 2023 04:27:43 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c700:2400:6b79:2aa:9602:7016? (p200300cbc70024006b7902aa96027016.dip0.t-ipconnect.de. [2003:cb:c700:2400:6b79:2aa:9602:7016])
+        by smtp.gmail.com with ESMTPSA id p17-20020a056000019100b002fda1b12a0bsm30878929wrx.2.2023.05.02.04.27.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 May 2023 04:27:42 -0700 (PDT)
+Message-ID: <5574983a-3b32-f519-9012-a66b319fc6a8@redhat.com>
+Date:   Tue, 2 May 2023 13:27:41 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230502111334.GP1597476@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 1/1] mm: change per-VMA lock statistics to be disabled by
+ default
+Content-Language: en-US
+To:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
+Cc:     torvalds@linux-foundation.org, lstoakes@gmail.com, vbabka@suse.cz,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+References: <20230428173533.18158-1-surenb@google.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230428173533.18158-1-surenb@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 02, 2023 at 01:13:34PM +0200, Peter Zijlstra wrote:
-> On Tue, May 02, 2023 at 12:11:49AM +0100, Lorenzo Stoakes wrote:
-> > @@ -95,6 +96,77 @@ static inline struct folio *try_get_folio(struct page *page, int refs)
-> >  	return folio;
-> >  }
-> >
-> > +#ifdef CONFIG_MMU_GATHER_RCU_TABLE_FREE
-> > +static bool stabilise_mapping_rcu(struct folio *folio)
-> > +{
-> > +	struct address_space *mapping = READ_ONCE(folio->mapping);
-> > +
-> > +	rcu_read_lock();
-> > +
-> > +	return mapping == READ_ONCE(folio->mapping);
->
-> This doesn't make sense; why bother reading the same thing twice?
+On 28.04.23 19:35, Suren Baghdasaryan wrote:
+> Change CONFIG_PER_VMA_LOCK_STATS to be disabled by default, as most
+> users don't need it. Add configuration help to clarify its usage.
+> 
+> Fixes: 52f238653e45 ("mm: introduce per-VMA lock statistics")
+> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> ---
+>   mm/Kconfig.debug | 10 ++++++++--
+>   1 file changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/Kconfig.debug b/mm/Kconfig.debug
+> index 6dae63b46368..a925415b4d10 100644
+> --- a/mm/Kconfig.debug
+> +++ b/mm/Kconfig.debug
+> @@ -274,6 +274,12 @@ config DEBUG_KMEMLEAK_AUTO_SCAN
+>   config PER_VMA_LOCK_STATS
+>   	bool "Statistics for per-vma locks"
+>   	depends on PER_VMA_LOCK
+> -	default y
+>   	help
+> -	  Statistics for per-vma locks.
+> +	  Say Y here to enable success, retry and failure counters of page
+> +	  faults handled under protection of per-vma locks. When enabled, the
+> +	  counters are exposed in /proc/vmstat. This information is useful for
+> +	  kernel developers to evaluate effectiveness of per-vma locks and to
+> +	  identify pathological cases. Counting these events introduces a small
+> +	  overhead in the page fault path.
+> +
+> +	  If in doubt, say N.
 
-The intent is to see whether the folio->mapping has been truncated from
-underneath us, as per the futex code that Kirill referred to which does
-something similar [1].
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
->
-> Who cares if the thing changes from before; what you care about is that
-> the value you see has stable storage, this doesn't help with that.
->
-> > +}
-> > +
-> > +static void unlock_rcu(void)
-> > +{
-> > +	rcu_read_unlock();
-> > +}
-> > +#else
-> > +static bool stabilise_mapping_rcu(struct folio *)
-> > +{
-> > +	return true;
-> > +}
-> > +
-> > +static void unlock_rcu(void)
-> > +{
-> > +}
-> > +#endif
->
-> Anyway, this all can go away. RCU can't progress while you have
-> interrupts disabled anyway.
+-- 
+Thanks,
 
-There seems to be other code in the kernel that assumes that this is not
-the case, i.e. the futex code, though not sure if that's being run with
-IRQs disabled... if not and it's absolutely certain that we need no special
-handling for the RCU case, then happy days and more than glad to remove
-this bit.
+David / dhildenb
 
-I'm far from an expert on RCU (I need to gain a better understanding of it)
-so I'm deferring how best to proceed on _this part_ to the community.
-
->
-> > +/*
-> > + * Used in the GUP-fast path to determine whether a FOLL_PIN | FOLL_LONGTERM |
-> > + * FOLL_WRITE pin is permitted for a specific folio.
-> > + *
-> > + * This assumes the folio is stable and pinned.
-> > + *
-> > + * Writing to pinned file-backed dirty tracked folios is inherently problematic
-> > + * (see comment describing the writeable_file_mapping_allowed() function). We
-> > + * therefore try to avoid the most egregious case of a long-term mapping doing
-> > + * so.
-> > + *
-> > + * This function cannot be as thorough as that one as the VMA is not available
-> > + * in the fast path, so instead we whitelist known good cases.
-> > + *
-> > + * The folio is stable, but the mapping might not be. When truncating for
-> > + * instance, a zap is performed which triggers TLB shootdown. IRQs are disabled
-> > + * so we are safe from an IPI, but some architectures use an RCU lock for this
-> > + * operation, so we acquire an RCU lock to ensure the mapping is stable.
-> > + */
-> > +static bool folio_longterm_write_pin_allowed(struct folio *folio)
-> > +{
-> > +	bool ret;
-> > +
-> > +	/* hugetlb mappings do not require dirty tracking. */
-> > +	if (folio_test_hugetlb(folio))
-> > +		return true;
-> > +
->
-> This:
->
-> > +	if (stabilise_mapping_rcu(folio)) {
-> > +		struct address_space *mapping = folio_mapping(folio);
->
-> And this is 3rd read of folio->mapping, just for giggles?
-
-I like to giggle :)
-
-Actually this is to handle the various cases in which the mapping might not
-be what we want (i.e. have PAGE_MAPPING_FLAGS set) which doesn't appear to
-have a helper exposed for a check. Given previous review about duplication
-I felt best to reuse this even though it does access again... yes I felt
-weird about doing that.
-
->
-> > +
-> > +		/*
-> > +		 * Neither anonymous nor shmem-backed folios require
-> > +		 * dirty tracking.
-> > +		 */
-> > +		ret = folio_test_anon(folio) ||
-> > +			(mapping && shmem_mapping(mapping));
-> > +	} else {
-> > +		/* If the mapping is unstable, fallback to the slow path. */
-> > +		ret = false;
-> > +	}
-> > +
-> > +	unlock_rcu();
-> > +
-> > +	return ret;
->
-> then becomes:
->
->
-> 	if (folio_test_anon(folio))
-> 		return true;
-
-This relies on the mapping so belongs below the lockdep assert imo.
-
->
-> 	/*
-> 	 * Having IRQs disabled (as per GUP-fast) also inhibits RCU
-> 	 * grace periods from making progress, IOW. they imply
-> 	 * rcu_read_lock().
-> 	 */
-> 	lockdep_assert_irqs_disabled();
->
-> 	/*
-> 	 * Inodes and thus address_space are RCU freed and thus safe to
-> 	 * access at this point.
-> 	 */
-> 	mapping = folio_mapping(folio);
-> 	if (mapping && shmem_mapping(mapping))
-> 		return true;
->
-> 	return false;
->
-> > +}
-
-I'm more than happy to do this (I'd rather drop the RCU bits if possible)
-but need to be sure it's safe.
