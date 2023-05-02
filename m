@@ -2,114 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAB2D6F4D90
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 01:22:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12E3D6F4D97
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 01:31:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbjEBXWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 19:22:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60560 "EHLO
+        id S229924AbjEBXbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 19:31:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229792AbjEBXWR (ORCPT
+        with ESMTP id S229566AbjEBXbv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 19:22:17 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8632128;
-        Tue,  2 May 2023 16:22:16 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1aaf70676b6so22033025ad.3;
-        Tue, 02 May 2023 16:22:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683069736; x=1685661736;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=lgMQUkd3KBDP4s/1XVkXehFFe7sxYiQlnhryYVxOB2g=;
-        b=LWUbpa+uQUvwwOdRlC0Pk8VuQuXmYewaovZXseTz+3OTIOpNQVPsyFmtKmg+mQflnf
-         6CJjEYFqEU1oQwEprovsS3r+IFbWbUlDL29RCSIiSunLp/6K3ir45sl4ED4kijVHXeJv
-         ynUn6JBn5eM2K9LEL3vEFUuNT4JfDpQoTrzjceyayADfyrbtAc88FdPS5YpmXf4KcKi3
-         0tudcbM5NyucVvb4cmIzW+zaPT0WZVLVSQWDhcoSfqx7YrniVedMp6gFRlxmo6aROglp
-         XAVWn+ogeeQB+3h2xKJROvCpfQMJOenMQla30Nc7GgQIXxsgX5EuzKRjzTyDnGGv9iDH
-         OUVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683069736; x=1685661736;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lgMQUkd3KBDP4s/1XVkXehFFe7sxYiQlnhryYVxOB2g=;
-        b=MnEhx1xswGPUr/oRD19ESR+WVVJjumnt+20v26buUP7fmkZcwV6QdCLd5248NX3Jo3
-         OLz2n17v5xGrfNRzXkx9oFKVxUyzVl3ufvvRqujOp2swkpS+LkTXceRF70uEpIN3k/Bg
-         KSBquRQWpGdn9Z/oghwtbJowDYZ4SWxtox6nPxRM06zqBnavsrXJsOFb6MGB5uhOCEjm
-         2+s0jjxdCA4CcabyEZQSoo5XXCfegpsTRs9GL7mKqYkVxE4Xg9PCdAKf7zUFWvvD+dMt
-         wc/IKeE867SejbFLE548lC6FkH8ybpPOAHmc1h5Rq3MIL1yy3YYWRpyTvILjAcd9vcou
-         jhGQ==
-X-Gm-Message-State: AC+VfDydCTwxQ58mG0BiPmeBJ7t2zo0qUF824HuYaE77sYgQ1N3171JP
-        LPqde25ifx0Nz36Vw8eIaC4=
-X-Google-Smtp-Source: ACHHUZ5DMcJ8Ahx9RqFPEqh7DOK/oauMWI1cqqdWGQgaKPvztWrt/1/A0htAGrVIMuVYpSe559X3TQ==
-X-Received: by 2002:a17:902:b78a:b0:1a6:d4cb:eeb3 with SMTP id e10-20020a170902b78a00b001a6d4cbeeb3mr94494pls.63.1683069735961;
-        Tue, 02 May 2023 16:22:15 -0700 (PDT)
-Received: from ubuntu777.domain.name (36-228-87-104.dynamic-ip.hinet.net. [36.228.87.104])
-        by smtp.gmail.com with ESMTPSA id q16-20020a170902dad000b00194caf3e975sm20261704plx.208.2023.05.02.16.22.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 May 2023 16:22:15 -0700 (PDT)
-From:   Min-Hua Chen <minhuadotchen@gmail.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Miklos Szeredi <miklos@szeredi.hu>
-Cc:     Min-Hua Chen <minhuadotchen@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-unionfs@vger.kernel.org
-Subject: [PATCH] fs: fix incorrect fmode_t casts
-Date:   Wed,  3 May 2023 07:22:08 +0800
-Message-Id: <20230502232210.119063-1-minhuadotchen@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 2 May 2023 19:31:51 -0400
+Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9877F3591
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 16:31:46 -0700 (PDT)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id D5ED1C01D; Wed,  3 May 2023 01:31:44 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1683070304; bh=6sjh6l6NERLsu+JXUQWin9N0CADzXow+URLH3qXqjjw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=P3Hv3qoBmvA2YVtjpyNUs+nF5IJ/J44szGSFt1JURWHL/ojSGsv/FGfDEr+mojxp7
+         fx03JZV1THs4MXhxSxKROhJyd2sbOlXfbQuCD88+/3dMWOLVFQh64gJA/qxdf5zB0n
+         QrCyRWkCj5nwnh13j7PMjovfWf9+2mIlHkRC4ZWfBlRHxEKEBOfVpAYUgrFrjOlgxQ
+         btfvzczW/qgeThngnFzs3R1K/2+DyDw33F3MKbYapTWvMumBfH0xOqbkN2grUSrnAU
+         aes9sl9pXZxMdtMGbyld4baeNgY2vYUrItiyn9EXSZs5fouq1OVUxz8Yx4O2pjq4oP
+         4eNiMN9KwO6yg==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 7C83FC009;
+        Wed,  3 May 2023 01:31:42 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1683070304; bh=6sjh6l6NERLsu+JXUQWin9N0CADzXow+URLH3qXqjjw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=P3Hv3qoBmvA2YVtjpyNUs+nF5IJ/J44szGSFt1JURWHL/ojSGsv/FGfDEr+mojxp7
+         fx03JZV1THs4MXhxSxKROhJyd2sbOlXfbQuCD88+/3dMWOLVFQh64gJA/qxdf5zB0n
+         QrCyRWkCj5nwnh13j7PMjovfWf9+2mIlHkRC4ZWfBlRHxEKEBOfVpAYUgrFrjOlgxQ
+         btfvzczW/qgeThngnFzs3R1K/2+DyDw33F3MKbYapTWvMumBfH0xOqbkN2grUSrnAU
+         aes9sl9pXZxMdtMGbyld4baeNgY2vYUrItiyn9EXSZs5fouq1OVUxz8Yx4O2pjq4oP
+         4eNiMN9KwO6yg==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id e9aa5fcf;
+        Tue, 2 May 2023 23:31:39 +0000 (UTC)
+Date:   Wed, 3 May 2023 08:31:24 +0900
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     Jason Andryuk <jandryuk@gmail.com>
+Cc:     Eric Van Hensbergen <ericvh@kernel.org>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Christian Schoenebeck <linux_oss@crudebyte.com>,
+        v9fs@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fs/9p: Remove INET dependency
+Message-ID: <ZFGdTDrPa1LD899y@codewreck.org>
+References: <20230501190602.86281-1-jandryuk@gmail.com>
+ <ZFAWaQbDR1_r5jf-@codewreck.org>
+ <CAKf6xptMDRVet-C_1H7txPb_J_xq+XnNxwrQVbNWL_2JGnbHgw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAKf6xptMDRVet-C_1H7txPb_J_xq+XnNxwrQVbNWL_2JGnbHgw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use __FMODE_NONOTIFY instead of FMODE_NONOTIFY to fixes
-the following sparce warnings:
-fs/overlayfs/file.c:48:37: sparse: warning: restricted fmode_t degrades to integer
-fs/overlayfs/file.c:128:13: sparse: warning: restricted fmode_t degrades to integer
-fs/open.c:1159:21: sparse: warning: restricted fmode_t degrades to integer
+Jason Andryuk wrote on Tue, May 02, 2023 at 08:03:15AM -0400:
+> > Good catch.
+> > Could you add depends on INET to NET_9P_FD in net/9p/Kconfig?
+> 
+> trans_fd.o builds without INET and without UNIX.  Looks like trying to
+> use either TCP or UNIX sockets would lead to runtime errors, but it
+> also supports generic file descriptors.  That could be useful for
+> someone.   Since it builds, would it be okay to leave this patch
+> unchanged, or do you still want the depends added?  Leaving the patch
+> unchanged provides more flexibility, though the runtime errors may
+> surprise users.  While I built a Xen kernel without INET or UNIX, that
+> is an unusual scenario.  Typically INET and UNIX sockets will be built
+> in anyway even without a depends.
 
-Signed-off-by: Min-Hua Chen <minhuadotchen@gmail.com>
----
- fs/open.c           | 2 +-
- fs/overlayfs/file.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hmm, good point; the socket interface is common between INET and
+UNIX.. And you're right about the ability to use plain fd as well.
 
-diff --git a/fs/open.c b/fs/open.c
-index 4478adcc4f3a..9d5edcedcbb7 100644
---- a/fs/open.c
-+++ b/fs/open.c
-@@ -1156,7 +1156,7 @@ inline struct open_how build_open_how(int flags, umode_t mode)
- inline int build_open_flags(const struct open_how *how, struct open_flags *op)
- {
- 	u64 flags = how->flags;
--	u64 strip = FMODE_NONOTIFY | O_CLOEXEC;
-+	u64 strip = __FMODE_NONOTIFY | O_CLOEXEC;
- 	int lookup_flags = 0;
- 	int acc_mode = ACC_MODE(flags);
- 
-diff --git a/fs/overlayfs/file.c b/fs/overlayfs/file.c
-index 7c04f033aadd..0801917f932e 100644
---- a/fs/overlayfs/file.c
-+++ b/fs/overlayfs/file.c
-@@ -35,7 +35,7 @@ static char ovl_whatisit(struct inode *inode, struct inode *realinode)
- }
- 
- /* No atime modification nor notify on underlying */
--#define OVL_OPEN_FLAGS (O_NOATIME | FMODE_NONOTIFY)
-+#define OVL_OPEN_FLAGS (O_NOATIME | __FMODE_NONOTIFY)
- 
- static struct file *ovl_open_realfile(const struct file *file,
- 				      const struct path *realpath)
+How about 'imply INET'? That will automatically select INET when
+enabled, but allow someone to disable it explicitly.
+
+It's rare enough that I didn't know about it though, just found it in
+Documentation/kbuild/kconfig-language.rst ...
+I guess this version is fine as is if you think it's too minor, I agree
+kernels without INET ought to be rare enough and if it builds for
+randconfig tests I'm fine with this.
+
 -- 
-2.34.1
-
+Dominique Martinet | Asmadeus
