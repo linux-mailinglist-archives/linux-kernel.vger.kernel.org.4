@@ -2,78 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 830116F3E14
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 09:04:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E96F6F3E1A
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 09:05:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233565AbjEBHEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 03:04:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33840 "EHLO
+        id S229586AbjEBHFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 03:05:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233271AbjEBHET (ORCPT
+        with ESMTP id S233271AbjEBHE5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 03:04:19 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60213170A
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 00:04:12 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-50685f1b6e0so6251229a12.0
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 00:04:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vrull.eu; s=google; t=1683011051; x=1685603051;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=P7CQXDkwoowND2m6nRMECIol5dyfAR/h73O7TZ21l3M=;
-        b=VgG/P5FAAd+6svo7p4jPDlu7DiQ/k645BvLb7KRJ57zT/pCp00CEw0iaDHJ1zgcK5s
-         Gbr6jCqPl8cwuI3BNFj72n+njSXmYRho5GLil2z0WpXlS/vspmCnlbjVmZv4ngE5gM3p
-         PokkSAN52ERJD1tcIJ/1h3moLbDZOpHwcU9ZzjR5LxitMKg+9VF3vUcFBZe6PibSVHMX
-         o1CD3Q4DNyNLOiJv8heIcyb8ta2PoqNIyAFCr0uY/WNfy1R4+KbgcsPgFY7JiOaPHvaS
-         0AlYnE13LaadDmBJ/LwbKlG2RKXDuvn4F4s5oGft3ez2LMT90Ol4ZtzaPkJj+6bt5S/6
-         xlSQ==
+        Tue, 2 May 2023 03:04:57 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DFAA358C
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 00:04:56 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-7606d44d4cfso202132639f.1
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 00:04:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683011051; x=1685603051;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=P7CQXDkwoowND2m6nRMECIol5dyfAR/h73O7TZ21l3M=;
-        b=DymYibQg1i2Mwf6HNFtC9wOwV7C1ldlSIztMT9mcwrsZ8f4Tw/wPPef25Be/dIxyT8
-         qulZq7v5aX6CWLrcdeKNY+cLCPp22LPy1AG+tzNjxkJWogu78Ddy67VmgonPFhZKRKpn
-         E3GIYof7YK5r17gbD0CbCKa9ZgQ54QwF9Lxm8FuPzvbV/yExzSb6ZwOvaseQAnmDqmXh
-         hhMT3CpnZB8H9G+Udyea6MNHFtF9HKFhxxd0BIA/thuaYpB384pLZ8KU5IqVUnte1fPC
-         x/1rHdNSJk0IfjybLU8QKEUPgVM4PLex3FgkmLEvW9cuquyvEfG28WeEGblpZw9xy1FO
-         rFYQ==
-X-Gm-Message-State: AC+VfDzuNqesZ5QpaC4iuF4Cztms8/OvNnVxh36376FPHO6cS4bJOSTg
-        ZFWFoGJpfBFVS/iDCg9lMs2KoI+xGLoc2k097FvGjQ==
-X-Google-Smtp-Source: ACHHUZ6PxvhOwj3+3FqLOiM5HUopTbzkpm1TAKW7GrRJaC/1TpbK6FubQ4i1c96XJiFhAT/BERbrI3bFo0VsqNcupzA=
-X-Received: by 2002:aa7:c51a:0:b0:506:9ece:60cb with SMTP id
- o26-20020aa7c51a000000b005069ece60cbmr7180092edq.38.1683011050658; Tue, 02
- May 2023 00:04:10 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683011095; x=1685603095;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IvwFSRaBneGGy3kqK/gS4fRT4DEczswbV9/2OkaaV9Y=;
+        b=HxqSRVkiroAEy8mBNyb2Qqucat2inqyQp/oxrKXAXLkvXq9h+s7U1CKYfvaoMOZD9/
+         VD8ypsz823tcP5aSmHecqfdpQmmr9L0sfJlbLxCmCpkxdMWsMNe3HcX3nQk1Q4ayYDvd
+         Z2o1gYeq6bevvwCpu0Ur1OLfSXcnnMB3R2omca0LUHG2+0xXjbueMG9WDia3WhbHgJgF
+         hCvTu5uirm7u4rqzD+peBPBR3RY5FAboYFGW6R7MI8RU97cX8HmYF1IP6LLMHuNUbxnF
+         q78aJ/EYHLU8fUUH41cZyfF9lu89MZEcxg5iyhQML751/OfPwBJO1nZDtdUHMyybmkXf
+         b1Eg==
+X-Gm-Message-State: AC+VfDyRQhgLYYeyQdaZJqi5a3MgeFQtVwOkCvx3uQZXpaYEwt9aAKGF
+        E+a5qLMGZt1V5ntDeEkWpxm33negoAjm901tROZTTKTMK5WY
+X-Google-Smtp-Source: ACHHUZ56tIvjBxbcf/QfASLo5rAibKdP5WdTg90WvsuD2hvTEIy753UZUZxJk3pNqSWt6o4GZNjxunbBkQ6+VPNNobPCFRq06I37
 MIME-Version: 1.0
-References: <20230424194911.264850-1-heiko.stuebner@vrull.eu>
- <87ednz7roh.fsf@all.your.base.are.belong.to.us> <7DD2C38C-CBB3-41EE-A195-50E4C2451B7E@jrtc27.com>
-In-Reply-To: <7DD2C38C-CBB3-41EE-A195-50E4C2451B7E@jrtc27.com>
-From:   Philipp Tomsich <philipp.tomsich@vrull.eu>
-Date:   Tue, 2 May 2023 09:03:59 +0200
-Message-ID: <CAAeLtUADqnwrgBjhDd+iNfwhMU6YBiMUZzeopVMAh0Jq19W9JA@mail.gmail.com>
-Subject: Re: [PATCH 0/4] Expose the isa-string via the AT_BASE_PLATFORM aux vector
-To:     Jessica Clarke <jrtc27@jrtc27.com>
-Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Kito Cheng <kito.cheng@sifive.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        matthias.bgg@gmail.com,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Greentime Hu <greentime.hu@sifive.com>, nick.knight@sifive.com,
-        christoph.muellner@vrull.eu, richard.henderson@linaro.org,
-        arnd@arndb.de, linux-kernel@vger.kernel.org,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>
+X-Received: by 2002:a02:6345:0:b0:40f:83e7:a965 with SMTP id
+ j66-20020a026345000000b0040f83e7a965mr7257929jac.4.1683011095783; Tue, 02 May
+ 2023 00:04:55 -0700 (PDT)
+Date:   Tue, 02 May 2023 00:04:55 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000084706805fab08e27@google.com>
+Subject: [syzbot] [fs?] KASAN: stack-out-of-bounds Read in proc_pid_stack
+From:   syzbot <syzbot+01e9a564dc6b3289cea3@syzkaller.appspotmail.com>
+To:     brauner@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,200 +54,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 1 May 2023 at 22:08, Jessica Clarke <jrtc27@jrtc27.com> wrote:
->
-> On 1 May 2023, at 20:55, Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> wrote:
-> >
-> > Heiko Stuebner <heiko@sntech.de> writes:
-> >
-> >> From: Heiko Stuebner <heiko.stuebner@vrull.eu>
-> >>
-> >> The hwprobing infrastructure was merged recently [0] and contains a
-> >> mechanism to probe both extensions but also microarchitecural features
-> >> on a per-core level of detail.
-> >>
-> >> While discussing the solution internally we identified some possible i=
-ssues,
-> >> tried to understand the underlying issue and come up with a solution f=
-or it.
-> >> All these deliberations overlapped with hwprobing being merged, but th=
-at
-> >> shouldn't really be an issue, as both have their usability - see below=
-.
-> >> Also please see the "Things to consider" at the bottom!
-> >>
-> >>
-> >> Possible issues:
-> >> - very much limited to Linux
-> >> - schedulers run processes on all cores by default, so will need
-> >>  the common set of extensions in most cases
-> >
-> > ...which hwprobe has support for via the CPU mask. no?
-> >
-> >> - each new extensions requires an uapi change, requiring at least
-> >>  two pieces of software to be changed
-> >> - adding another extension requires a review process (only known
-> >>  extensions can be exposed to user-space)
-> >> - vendor extensions have special needs and therefore possibly
-> >>  don=E2=80=99t fit well
-> >>
-> >>
-> >> Limited to Linux:
-> >> -----------------
-> >>
-> >> The syscall and its uapi is Linux-specific and other OSes probably
-> >> will not defer to our review process and requirements just to get
-> >> new bits in. Instead most likely they'll build their own systems,
-> >> leading to fragmentation.
-> >
-> > There are a number of examples where multiple OSs have followed what
-> > Linux does, and vice versa. I'd say the opposite -- today system
-> > builders do not do their own solution, but review what's out there and
-> > mimics existing ones.
->
-> Where they can. But if the interface is =E2=80=9Cmake architecture-depend=
-ent
-> syscall X=E2=80=9D that=E2=80=99s not going to fly on other OSes where sy=
-scalls are not
-> architecture-dependent. Similarly if it=E2=80=99s =E2=80=9Cgo read auxarg=
- Y=E2=80=9D where Y is
-> architecture-dependent and the OS in question has
-> architecture-independent auxargs. Or the system doesn=E2=80=99t even have
-> auxargs. Now, at the end of the day, I couldn=E2=80=99t care less what Li=
-nux
-> does to communicate the information to userspace, what matters is what
-> the userspace interface is that random IFUNCs are going to make use of.
-> Something which seems to be woefully lacking from this discussion. Is
-> the interface going to just be syscall(2)? Or is there going to be some
-> higher-level interface that other OSes *do* have a hope of being able
-> to implement?
->
-> > Personally I think this argument is moot, and will not matter much for
-> > fragmentation.
-> >
-> >> Feature on all cores:
-> >> ---------------------
-> >>
-> >> Arnd previously ([1]) commented in the discussion, that there
-> >> should not be a need for optimization towards hardware with an
-> >> asymmetric set of features. We believe so as well, especially
-> >> when talking about an interface that helps processes to identify
-> >> the optimized routines they can execute.
-> >>
-> >> Of course seeing it with this finality might not take into account
-> >> the somewhat special nature of RISC-V, but nevertheless it describes
-> >> the common case for programs very well.
-> >>
-> >> For starters the scheduler in its default behaviour, will try to use a=
-ny
-> >> available core, so the standard program behaviour will always need the
-> >> intersection of available extensions over all cores.
-> >>
-> >>
-> >> Limiting program execution to specific cores will likely always be a
-> >> special use case and already requires Linux-specific syscalls to
-> >> select the set of cores.
-> >>
-> >> So while it can come in handy to get per-core information down the roa=
-d
-> >> via the hwprobing interface, most programs will just want to know if
-> >> they can use a extension on just any core.
-> >>
-> >>
-> >> Review process:
-> >> ---------------
-> >>
-> >> There are so many (multi-letter-)extensions already with even more in
-> >> the pipeline. To expose all of them, each will require a review proces=
-s
-> >> and uapi change that will make defining all of them slow as the
-> >> kernel needs patching after which userspace needs to sync in the new
-> >> api header.
-> >>
-> >>
-> >> Vendor-extensions:
-> >> ------------------
-> >>
-> >> Vendor extensions are special in their own right.
-> >> Userspace probably will want to know about them, but we as the kernel
-> >> don't want to care about them too much (except as errata), as they're
-> >> not part of the official RISC-V ISA spec.
-> >>
-> >> Getting vendor extensions from the dt to userspace via hwprobe would
-> >> require coordination efforts and as vendors have the tendency to inven=
-t
-> >> things during their development process before trying to submit change=
-s
-> >> upstream this likely would result in conflicts with assigned ids down
-> >> the road. Which in turn then may create compatibility-issues with
-> >> userspace builds built on top of the mainline kernel or a pre-
-> >> existing vendor kernel.
-> >>
-> >> The special case also is that vendor A could in theory implement an
-> >> extension from vendor B. So this would require to actually assign
-> >> separate hwprobe keys to vendors (key for xthead extensions, key for
-> >> xventana extensions, etc). This in turn would require vendors to
-> >> come to the mainline kernel to get assigned a key (which in reality
-> >> probably won't happen), which would then make the kernel community
-> >> sort of an id authority.
-> >>
-> >>
-> >>
-> >>
-> >> To address these, the attached patch series adds a second interface
-> >> for the common case and "just" exposes the isa-string via the
-> >> AT_BASE_PLATFORM aux vector.
-> >
-> > *A second interface* introduced the second hwprobe landed. Really?
-> > Start a discussion on how to extend hwprobe instead.
->
-> I=E2=80=99ve been trying to push for something other than this for months=
-, but
-> RVI took no interest in dealing with it until it got closer to these
-> landing, at which point finally some action was taken. But even then,
-> heels were dragged, and it took hwprobe being landed to force them to
-> finally publish things. But of course too late, so now the ecosystem is
-> forever screwed thanks to their inaction.
+Hello,
 
-I am similarly frustrated as I had been asking for a universally
-acceptable solution since August 2021 (and Kito gave a presentation on
-the issue at LPC21) that was meant to avoid system calls; however, the
-design of hwprobe has happened outside of RVI and without getting RVI
-involved to drive coordination between members.
+syzbot found the following issue on:
 
-The bottleneck (in cases like this one) at RVI is that it is
-volunteer-driven and dependent on the buy-in of its membership: there
-are no technical resources except for us company delegates.  If
-members decide to work a gap without involving RVI, then the chances
-of fragmentation are high.  Nothing we can do about that, as RVI is
-not a traffic cop.
+HEAD commit:    950b879b7f02 riscv: Fixup race condition on PG_dcache_clea..
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git fixes
+console output: https://syzkaller.appspot.com/x/log.txt?x=10c4c1f7c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ecebece1b90c0342
+dashboard link: https://syzkaller.appspot.com/bug?extid=01e9a564dc6b3289cea3
+compiler:       riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: riscv64
 
-> All I wanted was some simple extension string -> version number function
-> as a standardised userspace interface... because at the end of the day
-> people just want to know =E2=80=9Ccan I use extension Y?=E2=80=9D, possib=
-ly with a
-> minimum version. But maybe there=E2=80=99s some hope that Linux libcs wil=
-l
-> translate such queries into poking at this hwprobe thing. Though god
-> knows what they=E2=80=99re going to do about vendor extensions, especiall=
-y if
-> those vendor extensions only get supported in vendor forks of the
-> kernel (who=E2=80=99s allocating their encodings? Xvendorfoo exists to
-> namespace them and give vendors control...).
+Unfortunately, I don't have any reproducer for this issue yet.
 
-The support for vendor extensions without a central registry remains
-the strongest reason for a different interface, as RISC-V has the
-flexibility to add vendor extensions as one of its strongest selling
-points.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+01e9a564dc6b3289cea3@syzkaller.appspotmail.com
 
-It is a pity that the current interface was designed without involving
-RVI (and that I had to ask my team to put together a patch set for
-further discussion, given that none of the other major vendors in RVI
-stepped forward).  I guarantee that plenty of reviewers would have
-highlighted that a central registry (even if it is just a kernel
-header) should be avoided.
+==================================================================
+BUG: KASAN: stack-out-of-bounds in walk_stackframe+0x128/0x2fe arch/riscv/kernel/stacktrace.c:58
+Read of size 8 at addr ff200000030a79b0 by task syz-executor.1/7894
 
-So what is the best way to support vendor-defined/vendor-specific
-extensions without a central registry?
+CPU: 0 PID: 7894 Comm: syz-executor.1 Tainted: G        W          6.2.0-rc1-syzkaller #0
+Hardware name: riscv-virtio,qemu (DT)
+Call Trace:
+[<ffffffff8000b9ea>] dump_backtrace+0x2e/0x3c arch/riscv/kernel/stacktrace.c:121
+[<ffffffff83402b96>] show_stack+0x34/0x40 arch/riscv/kernel/stacktrace.c:127
+[<ffffffff83442726>] __dump_stack lib/dump_stack.c:88 [inline]
+[<ffffffff83442726>] dump_stack_lvl+0xe0/0x14c lib/dump_stack.c:106
+[<ffffffff83409674>] print_address_description mm/kasan/report.c:306 [inline]
+[<ffffffff83409674>] print_report+0x1e4/0x4c0 mm/kasan/report.c:417
+[<ffffffff804ead14>] kasan_report+0xb8/0xe6 mm/kasan/report.c:517
+[<ffffffff804ebea4>] check_region_inline mm/kasan/generic.c:183 [inline]
+[<ffffffff804ebea4>] __asan_load8+0x7e/0xa6 mm/kasan/generic.c:256
+[<ffffffff8000b782>] walk_stackframe+0x128/0x2fe arch/riscv/kernel/stacktrace.c:58
+[<ffffffff8000bc66>] arch_stack_walk+0x2c/0x3c arch/riscv/kernel/stacktrace.c:154
+[<ffffffff80190822>] stack_trace_save_tsk+0x14a/0x1bc kernel/stacktrace.c:150
+[<ffffffff80697822>] proc_pid_stack+0x146/0x1ee fs/proc/base.c:456
+[<ffffffff80698bb0>] proc_single_show+0x9c/0x148 fs/proc/base.c:777
+[<ffffffff805af580>] traverse.part.0+0x74/0x2ca fs/seq_file.c:111
+[<ffffffff805aff02>] traverse fs/seq_file.c:101 [inline]
+[<ffffffff805aff02>] seq_read_iter+0x72c/0x934 fs/seq_file.c:195
+[<ffffffff805b0224>] seq_read+0x11a/0x16e fs/seq_file.c:162
+[<ffffffff805453ea>] do_loop_readv_writev fs/read_write.c:756 [inline]
+[<ffffffff805453ea>] do_loop_readv_writev fs/read_write.c:743 [inline]
+[<ffffffff805453ea>] do_iter_read+0x324/0x3c2 fs/read_write.c:798
+[<ffffffff805455f8>] vfs_readv+0xfe/0x166 fs/read_write.c:916
+[<ffffffff80549c66>] do_preadv fs/read_write.c:1008 [inline]
+[<ffffffff80549c66>] __do_sys_preadv fs/read_write.c:1058 [inline]
+[<ffffffff80549c66>] sys_preadv+0x182/0x1fa fs/read_write.c:1053
+[<ffffffff80005ff6>] ret_from_syscall+0x0/0x2
 
-Philipp.
+The buggy address belongs to the virtual mapping at
+ [ff200000030a0000, ff200000030a9000) created by:
+ kernel_clone+0xee/0x914 kernel/fork.c:2681
+
+The buggy address belongs to the physical page:
+page:ff1c0000024e5f00 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x9397c
+memcg:ff6000000ffd7202
+flags: 0xffe000000000000(node=0|zone=0|lastcpupid=0x7ff)
+raw: 0ffe000000000000 0000000000000000 0000000000000122 0000000000000000
+raw: 0000000000000000 0000000000000000 00000001ffffffff ff6000000ffd7202
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x102dc2(GFP_HIGHUSER|__GFP_NOWARN|__GFP_ZERO), pid 7873, tgid 7873 (syz-executor.1), ts 4012100669800, free_ts 4010400733200
+ __set_page_owner+0x32/0x182 mm/page_owner.c:190
+ set_page_owner include/linux/page_owner.h:31 [inline]
+ post_alloc_hook+0xf8/0x11a mm/page_alloc.c:2524
+ prep_new_page mm/page_alloc.c:2531 [inline]
+ get_page_from_freelist+0xc0e/0x1118 mm/page_alloc.c:4283
+ __alloc_pages+0x1b0/0x165a mm/page_alloc.c:5549
+ alloc_pages+0x132/0x25e mm/mempolicy.c:2286
+ vm_area_alloc_pages mm/vmalloc.c:2989 [inline]
+ __vmalloc_area_node mm/vmalloc.c:3057 [inline]
+ __vmalloc_node_range+0x81c/0xdb4 mm/vmalloc.c:3227
+ alloc_thread_stack_node kernel/fork.c:311 [inline]
+ dup_task_struct kernel/fork.c:987 [inline]
+ copy_process+0x210e/0x4068 kernel/fork.c:2097
+ kernel_clone+0xee/0x914 kernel/fork.c:2681
+ __do_sys_clone+0xec/0x120 kernel/fork.c:2822
+ sys_clone+0x32/0x44 kernel/fork.c:2790
+ ret_from_syscall+0x0/0x2
+page last free stack trace:
+ __reset_page_owner+0x4a/0xf8 mm/page_owner.c:148
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1446 [inline]
+ free_pcp_prepare+0x254/0x48e mm/page_alloc.c:1496
+ free_unref_page_prepare mm/page_alloc.c:3369 [inline]
+ free_unref_page_list+0x11e/0x736 mm/page_alloc.c:3510
+ release_pages+0x85a/0xbb2 mm/swap.c:1076
+ free_pages_and_swap_cache+0x76/0x88 mm/swap_state.c:311
+ tlb_batch_pages_flush+0x86/0x10c mm/mmu_gather.c:97
+ tlb_flush_mmu_free mm/mmu_gather.c:292 [inline]
+ tlb_flush_mmu mm/mmu_gather.c:299 [inline]
+ tlb_finish_mmu+0xcc/0x280 mm/mmu_gather.c:391
+ exit_mmap+0x190/0x686 mm/mmap.c:3096
+ __mmput+0x98/0x290 kernel/fork.c:1207
+ mmput+0x74/0x88 kernel/fork.c:1229
+ exit_mm kernel/exit.c:563 [inline]
+ do_exit+0x602/0x17be kernel/exit.c:854
+ do_group_exit+0x8e/0x15e kernel/exit.c:1012
+ __do_sys_exit_group kernel/exit.c:1023 [inline]
+ __wake_up_parent+0x0/0x4a kernel/exit.c:1021
+ ret_from_syscall+0x0/0x2
+
+Memory state around the buggy address:
+ ff200000030a7880: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ff200000030a7900: 00 00 00 00 00 00 00 00 f1 f1 f1 f1 00 00 f2 f2
+>ff200000030a7980: 00 00 00 f3 f3 f3 f3 f3 00 00 00 00 00 00 00 00
+                                     ^
+ ff200000030a7a00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ff200000030a7a80: 00 00 00 00 00 00 00 00 00 00 00 00 f1 f1 f1 f1
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
