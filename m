@@ -2,109 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE7886F465F
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 16:52:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E4F86F465E
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 16:52:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234388AbjEBOwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 10:52:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51236 "EHLO
+        id S234285AbjEBOwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 10:52:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234410AbjEBOvz (ORCPT
+        with ESMTP id S233929AbjEBOvv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 10:51:55 -0400
-Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58A010E6;
-        Tue,  2 May 2023 07:51:48 -0700 (PDT)
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 2 May 2023 10:51:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8215D19AC;
+        Tue,  2 May 2023 07:51:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4Q9jhd2jwKz9sdK;
-        Tue,  2 May 2023 16:51:45 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mariushoch.de;
-        s=MBO0001; t=1683039105;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OCfcf6FSM/bUYl403EMZyHDqpdSAF9tPFEUHDQUYu2E=;
-        b=CObgluT8g4B7ZcUl430iOjj2Uv0J7Zl0Rwbp3njGw0qTdArA2BPGZB3MoNLwgVcVvMDAQ8
-        h91i07Dsw0OexvV0e6UeBc+bG/B1Ua9ZkC36RwipEyukOQz6ai0bGsSXP/oEwIk80hesAy
-        fEP6QB068g2kTYK5TdXhnwcgilMikK/YCX61Y6mb4Qh5ofUSk5XB4Uahg5Lc3RdNV/+o9F
-        RRlpDsw761pGKoupAFFAq+aKqodXJBKwfklLlyOjirVjEE2tkluC3/WBu013dEq5WAODpS
-        u03AOwk5Hj5Dd7L/jT29XJ+h3J0u02Dh2yFlayP8a+7354pbiFLsloITIh+bjQ==
-Message-ID: <e669d656-1474-ad95-4667-3a6ae79605e3@mariushoch.de>
-Date:   Tue, 2 May 2023 16:51:42 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 206A96228E;
+        Tue,  2 May 2023 14:51:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C544C433EF;
+        Tue,  2 May 2023 14:51:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683039109;
+        bh=J+ew9hMgs9WohOp8pQurJdXVNAtdA3K9ozUlYGq/D7c=;
+        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
+        b=YnQDMJI5X2Gj3HTToS5ANeHlgJRsis6aEiWWyBIIK38BbA471B56BqehBgLZwsZBn
+         efhOeeWIs0QrTJUy01/MimnNI365lvCQ0VU/nCR2S2395yuA8HTHLxn+uz1InWse33
+         FTSZL1ntMLgcWd35DnIUSydp+8SKjHgU/+ZA44nD+oKL/J1A4nu0p61OzvjFW/ljj+
+         HGF2flMHLjDMSYfGinHyQuNg2YPKgqVOB/9iIaC6oxYsXm93m6NLylqJNSMH8Pj9A/
+         gMQ/xOj821d8KXPgPeU+CtsOyiztUXHQxuCFYMP2M340iL8tEifSG8o4FhG/ST8RgQ
+         A7EEC3Q31Xx8g==
+Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-6a5f7341850so2856432a34.2;
+        Tue, 02 May 2023 07:51:49 -0700 (PDT)
+X-Gm-Message-State: AC+VfDz1SpQ49UtFWOkc439GCtvStZ+Kyzb279xYrNBa8m3oL75lcx5n
+        ssvPRKNzwqnnJR45/sgnaEi2botYWHxo7VqWN70=
+X-Google-Smtp-Source: ACHHUZ6bDPEpyhNC0XRtf3AqJ7LstTvdhAez7GSZQv6bvRBZSVBR2f9qlH3DfvpYno8y8SXYo27WuqCni+7LxL+Etao=
+X-Received: by 2002:a4a:4f81:0:b0:54c:b507:2616 with SMTP id
+ c123-20020a4a4f81000000b0054cb5072616mr1017978oob.3.1683039108652; Tue, 02
+ May 2023 07:51:48 -0700 (PDT)
 MIME-Version: 1.0
-Subject: Re: [PATCH v3 4/6] iio: st_sensors: Add ACPI support for lsm303d to
- the LSM9DS0 IMU driver
-To:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Denis Ciocca <denis.ciocca@st.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Marius Hoch <marius@mariushoch.de>
-References: <20230415231130.115094-1-mail@mariushoch.de>
- <20230415231130.115094-5-mail@mariushoch.de>
-Content-Language: en-US
-From:   Marius Hoch <mail@mariushoch.de>
-In-Reply-To: <20230415231130.115094-5-mail@mariushoch.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 4Q9jhd2jwKz9sdK
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Received: by 2002:a8a:1086:0:b0:4d3:d9bf:b562 with HTTP; Tue, 2 May 2023
+ 07:51:48 -0700 (PDT)
+In-Reply-To: <CAAn9K_u5OFb5Fv-2_3v9=VZ-WCcRaBmPMyYRkJ5UTCazkDa=8w@mail.gmail.com>
+References: <20230502080254.51928-1-cc85nod@gmail.com> <CAAn9K_u5OFb5Fv-2_3v9=VZ-WCcRaBmPMyYRkJ5UTCazkDa=8w@mail.gmail.com>
+From:   Namjae Jeon <linkinjeon@kernel.org>
+Date:   Tue, 2 May 2023 23:51:48 +0900
+X-Gmail-Original-Message-ID: <CAKYAXd_nhyS1JF++OEM38TyM7-5KYG1OwV+WRAkf2G+2R+at+A@mail.gmail.com>
+Message-ID: <CAKYAXd_nhyS1JF++OEM38TyM7-5KYG1OwV+WRAkf2G+2R+at+A@mail.gmail.com>
+Subject: Re: [PATCH] ksmbd: fix null-ptr-deref in smb2_get_info_filesystem
+To:     =?UTF-8?B?5by15pm66Ku6?= <cc85nod@gmail.com>
+Cc:     sfrench@samba.org, senozhatsky@chromium.org, tom@talpey.com,
+        linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+2023-05-02 17:30 GMT+09:00, =E5=BC=B5=E6=99=BA=E8=AB=BA <cc85nod@gmail.com>=
+:
+> Sorry, I missed to add the curly brackets, I will resend new commit.
+This issue was reported and it's already been fixed.
 
-On 16/04/2023 01:11, Marius Hoch wrote:
-<snip>
-> diff --git a/drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_spi.c b/drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_spi.c
-> index 997b5ff792be..55f3738193af 100644
-> --- a/drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_spi.c
-> +++ b/drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_spi.c
-> @@ -37,6 +37,12 @@ static const struct spi_device_id st_lsm9ds0_id_table[] = {
->   };
->   MODULE_DEVICE_TABLE(spi, st_lsm9ds0_id_table);
->   
-> +static const struct acpi_device_id st_lsm9ds0_acpi_match[] = {
-> +	{"ACCL0001", (kernel_ulong_t)LSM303D_IMU_DEV_NAME},
-> +	{ },
-> +};
-> +MODULE_DEVICE_TABLE(acpi, st_lsm9ds0_acpi_match);
-> +
->   static const struct regmap_config st_lsm9ds0_regmap_config = {
->   	.reg_bits	= 8,
->   	.val_bits	= 8,
-> @@ -72,6 +78,7 @@ static struct spi_driver st_lsm9ds0_driver = {
->   	.driver = {
->   		.name = "st-lsm9ds0-spi",
->   		.of_match_table = st_lsm9ds0_of_match,
-> +		.acpi_match_table = st_lsm9ds0_acpi_match,
->   	},
->   	.probe = st_lsm9ds0_spi_probe,
->   	.id_table = st_lsm9ds0_id_table,
-I just realized that these changes (the SPI ones, not the I2C ones) are 
-entirely superfluous, and I'm not sure why I added this in the first 
-place. In the Lenovo Yoga Tablet 2 series (which seem to be the only 
-devices exposing this as "ACCL0001"), the device is accessible via I2C. 
-Just to make sure, I re-tested the patch chain without this change.
-
-@Jonathan: Shall I upload an entirely new patch set (v4), do this in a 
-separate new clean up commit, or do you want to just drop these changes 
-to drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_spi.c? I'm fine with any of 
-these options.
-
-Cheers,
-Marius
+Thanks.
+>
+> Pumpkin <cc85nod@gmail.com> =E6=96=BC 2023=E5=B9=B45=E6=9C=882=E6=97=A5 =
+=E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=884:03=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+>> We do not assign path for those shares which have KSMBD_SHARE_FLAG_PIPE
+>> flag, so we need to check if path is NULL before use it.
+>>
+>> [    8.067958]
+>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>> [    8.068413] BUG: KASAN: null-ptr-deref in strlen+0xa/0x40
+>> [    8.068747] Read of size 1 at addr 0000000000000000 by task
+>> kworker/0:2/45
+>> ...
+>> [    8.070638] Call Trace:
+>> [    8.070797]  <TASK>
+>> [    8.070931]  dump_stack_lvl+0x33/0x50
+>> [    8.071351]  kasan_report+0xae/0xe0
+>> [    8.071766]  strlen+0xa/0x40
+>> [    8.071948]  getname_kernel+0x10/0x1a0
+>> [    8.072182]  kern_path+0x10/0x40
+>> [    8.072385]  smb2_get_info_filesystem+0xf9/0xc70
+>> [    8.076519]  smb2_query_info+0x36b/0x1fd0
+>> [    8.079913]  handle_ksmbd_work+0x274/0x810
+>> [    8.080165]  process_one_work+0x419/0x760
+>> [    8.080421]  worker_thread+0x2a2/0x6f0
+>> [    8.080916]  kthread+0x160/0x190
+>> [    8.081423]  ret_from_fork+0x1f/0x30
+>> [    8.081648]  </TASK>
+>>
+>> Signed-off-by: Pumpkin <cc85nod@gmail.com>
+>> ---
+>>  fs/ksmbd/smb2pdu.c | 3 +++
+>>  1 file changed, 3 insertions(+)
+>>
+>> diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
+>> index aa823b13d..798b193cf 100644
+>> --- a/fs/ksmbd/smb2pdu.c
+>> +++ b/fs/ksmbd/smb2pdu.c
+>> @@ -4906,6 +4906,9 @@ static int smb2_get_info_filesystem(struct
+>> ksmbd_work *work,
+>>         int rc =3D 0, len;
+>>         int fs_infoclass_size =3D 0;
+>>
+>> +       if (share->path =3D=3D NULL)
+>> +               return -EIO;
+>> +
+>>         rc =3D kern_path(share->path, LOOKUP_NO_SYMLINKS, &path);
+>>         if (rc) {
+>>                 pr_err("cannot create vfs path\n");
+>> --
+>> 2.39.2 (Apple Git-143)
+>>
+>>
+>
