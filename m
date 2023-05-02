@@ -2,135 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 256806F4DB2
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 01:38:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5312B6F4DCC
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 01:41:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229829AbjEBXiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 19:38:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35954 "EHLO
+        id S229497AbjEBXlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 19:41:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbjEBXiJ (ORCPT
+        with ESMTP id S229492AbjEBXlG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 19:38:09 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7396E3594;
-        Tue,  2 May 2023 16:38:07 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 11EB51FD8E;
-        Tue,  2 May 2023 23:38:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1683070686; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FT4wWIFE9IpebB/66dG6JpLGUoIaaQlGJ8KBJQi7+T0=;
-        b=l5k/TelchZJdm/qSeeM4RDGq1WWPUF/0XIRJYvKp0I/akn1Xd8EHAJ2Wh2SvcHTB9ZZOF4
-        8yrjroNWQ7LV87PuOd/r2wVGA6pFr1feUUymzy2TjayxyTQeoH4riu7eEEBtqvM8ycVzzt
-        +SwTyS61Lp8vhgs2yJntQwhcr42RX7A=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1683070686;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FT4wWIFE9IpebB/66dG6JpLGUoIaaQlGJ8KBJQi7+T0=;
-        b=3jhnf0pMgzOGgpWWjzF7HUgqHr+xPS0oBIme40Mvp/M1kB/3bUkrjbcVKwzZqzZE9Dop7u
-        RVF/aYTpP6/jfHDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 69AB7139C3;
-        Tue,  2 May 2023 23:38:05 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 1iHWBt2eUWRjfwAAMHmgww
-        (envelope-from <mpdesouza@suse.com>); Tue, 02 May 2023 23:38:05 +0000
-Date:   Tue, 2 May 2023 20:38:01 -0300
-From:   Marcos Paulo de Souza <mpdesouza@suse.de>
-To:     Nicolai Stange <nstange@suse.de>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Marcos Paulo de Souza <mpdesouza@suse.com>,
-        Lukas Hruska <lhruska@suse.cz>
-Subject: Re: [PATCH v7 00/10] livepatch: klp-convert tool
-Message-ID: <dlivegt4sjm632m3sete73me3i2rceojfo4q4hji5ubvdcn2ly@f3tx6y5kqmkc>
-References: <20230306140824.3858543-1-joe.lawrence@redhat.com>
- <20230314202356.kal22jracaw5442y@daedalus>
- <ZBTNvEPrCcRj3F1C@redhat.com>
- <20230317232010.7uq6tt4ty35eo5hm@treble>
- <873556ag24.fsf@suse.de>
+        Tue, 2 May 2023 19:41:06 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1E6D3591;
+        Tue,  2 May 2023 16:41:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=ixUAA5uNhzAoOQPplItQehmJAKqUj/F6wVFG7dDKyGE=; b=NN/kZVDqglULqT5zSsS1VhodAV
+        aKhTZx9jkdKv7e9TJYl21DqMmeyd0Nr8RDdfm4IESQLh4/rFC4WQCMMHxR51/BJepYp9mbu93G65K
+        gLlUU3nlqrvK8r6N9D4SJ0SGp/2wCzC29UAFmaOrli7gsefN3Wlw3XiBaF2/0r7AOHaF0YGMGjKje
+        lbV6KW9MkdCwLXKxd1zkPT9DxPqMjjHHCcxH4vGjUG9hhW61rSGngnjW5NMlAxzLs82bMpzbwjy23
+        2D7p8emkLqCgtj7bsJbJj7RovfeP8mr0qB6SbhcmOwSOpLSV1z2AGupvV0gjPRVIT7K1e00Dx4xeY
+        KJ9r20gA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ptzbd-008rny-Jj; Tue, 02 May 2023 23:40:25 +0000
+Date:   Wed, 3 May 2023 00:40:25 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, mhocko@suse.com,
+        josef@toxicpanda.com, jack@suse.cz, ldufour@linux.ibm.com,
+        laurent.dufour@fr.ibm.com, michel@lespinasse.org,
+        liam.howlett@oracle.com, jglisse@google.com, vbabka@suse.cz,
+        minchan@google.com, dave@stgolabs.net, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, hdanton@sina.com, apopple@nvidia.com,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH 1/3] mm: handle swap page faults under VMA lock if page
+ is uncontended
+Message-ID: <ZFGfaSA7buH0yBv7@casper.infradead.org>
+References: <20230501175025.36233-1-surenb@google.com>
+ <ZFBvOh8r5WbTVyA8@casper.infradead.org>
+ <CAJuCfpHfAFx9rjv0gHK77LbP-8gd-kFnWw=aqfQTP6pH=zvMNg@mail.gmail.com>
+ <ZFCB+G9KSNE+J9cZ@casper.infradead.org>
+ <CAJuCfpES=G8i99yYXWoeJq9+JVUjX5Bkq_5VNVTVX7QT+Wkfxg@mail.gmail.com>
+ <ZFEmN6G7WRy59Mum@casper.infradead.org>
+ <CAJuCfpFs+Rgpu8v+ddHFwtOx33W5k1sKDdXHM2ej1Upyo_9y4g@mail.gmail.com>
+ <ZFGPLXIis6tl1QWX@casper.infradead.org>
+ <CAJuCfpGgc_bCEAE5LrhYPk=qXMU=owgiABTO9ZNqaBx-xfrOuQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <873556ag24.fsf@suse.de>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAJuCfpGgc_bCEAE5LrhYPk=qXMU=owgiABTO9ZNqaBx-xfrOuQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 12:06:43PM +0200, Nicolai Stange wrote:
-> Josh Poimboeuf <jpoimboe@kernel.org> writes:
-> 
-> > On Fri, Mar 17, 2023 at 04:29:48PM -0400, Joe Lawrence wrote:
-> >> Have you tried retrofitting klp-convert into any real-world livepatch?
-> >> I'm curious as to your observations on the overall experience, or
-> >> thoughts on the sympos annotation style noted above.
+On Tue, May 02, 2023 at 04:04:59PM -0700, Suren Baghdasaryan wrote:
+> On Tue, May 2, 2023 at 3:31â€¯PM Matthew Wilcox <willy@infradead.org> wrote:
 > >
-> > On a related note, the patch creation process (of which klp-convert
-> > would be part of) needs to be documented.
+> > On Tue, May 02, 2023 at 09:36:03AM -0700, Suren Baghdasaryan wrote:
+> > > On Tue, May 2, 2023 at 8:03â€¯AM Matthew Wilcox <willy@infradead.org> wrote:
+> > > >
+> > > > On Mon, May 01, 2023 at 10:04:56PM -0700, Suren Baghdasaryan wrote:
+> > > > > On Mon, May 1, 2023 at 8:22â€¯PM Matthew Wilcox <willy@infradead.org> wrote:
+> > > > > >
+> > > > > > On Mon, May 01, 2023 at 07:30:13PM -0700, Suren Baghdasaryan wrote:
+> > > > > > > On Mon, May 1, 2023 at 7:02â€¯PM Matthew Wilcox <willy@infradead.org> wrote:
+> > > > > > > >
+> > > > > > > > On Mon, May 01, 2023 at 10:50:23AM -0700, Suren Baghdasaryan wrote:
+> > > > > > > > > +++ b/mm/memory.c
+> > > > > > > > > @@ -3711,11 +3711,6 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+> > > > > > > > >       if (!pte_unmap_same(vmf))
+> > > > > > > > >               goto out;
+> > > > > > > > >
+> > > > > > > > > -     if (vmf->flags & FAULT_FLAG_VMA_LOCK) {
+> > > > > > > > > -             ret = VM_FAULT_RETRY;
+> > > > > > > > > -             goto out;
+> > > > > > > > > -     }
+> > > > > > > > > -
+> > > > > > > > >       entry = pte_to_swp_entry(vmf->orig_pte);
+> > > > > > > > >       if (unlikely(non_swap_entry(entry))) {
+> > > > > > > > >               if (is_migration_entry(entry)) {
+> > > > > > > >
+> > > > > > > > You're missing the necessary fallback in the (!folio) case.
+> > > > > > > > swap_readpage() is synchronous and will sleep.
+> > > > > > >
+> > > > > > > True, but is it unsafe to do that under VMA lock and has to be done
+> > > > > > > under mmap_lock?
+> > > > > >
+> > > > > > ... you were the one arguing that we didn't want to wait for I/O with
+> > > > > > the VMA lock held?
+> > > > >
+> > > > > Well, that discussion was about waiting in folio_lock_or_retry() with
+> > > > > the lock being held. I argued against it because currently we drop
+> > > > > mmap_lock lock before waiting, so if we don't drop VMA lock we would
+> > > > > be changing the current behavior which might introduce new
+> > > > > regressions. In the case of swap_readpage and swapin_readahead we
+> > > > > already wait with mmap_lock held, so waiting with VMA lock held does
+> > > > > not introduce new problems (unless there is a need to hold mmap_lock).
+> > > > >
+> > > > > That said, you are absolutely correct that this situation can be
+> > > > > improved by dropping the lock in these cases too. I just didn't want
+> > > > > to attack everything at once. I believe after we agree on the approach
+> > > > > implemented in https://lore.kernel.org/all/20230501175025.36233-3-surenb@google.com
+> > > > > for dropping the VMA lock before waiting, these cases can be added
+> > > > > easier. Does that make sense?
+> > > >
+> > > > OK, I looked at this path some more, and I think we're fine.  This
+> > > > patch is only called for SWP_SYNCHRONOUS_IO which is only set for
+> > > > QUEUE_FLAG_SYNCHRONOUS devices, which are brd, zram and nvdimms
+> > > > (both btt and pmem).  So the answer is that we don't sleep in this
+> > > > path, and there's no need to drop the lock.
+> > >
+> > > Yes but swapin_readahead does sleep, so I'll have to handle that case
+> > > too after this.
 > >
-> > If I remember correctly, the proper safe usage of klp-convert requires a
-> > kernel built with -flive-patching, plus some scripting and/or manual
-> > processes.
+> > Sleeping is OK, we do that in pXd_alloc()!  Do we block on I/O anywhere
+> > in swapin_readahead()?  It all looks like async I/O to me.
 > 
-> Not always, I think: -flive-patching or IPA optimizations in general
-> aren't a concern in the context of data symbols. From a quick glance, it
-> seems like the selftests introduced as part of this patchset are
-> all restricted to this usecase.
+> Hmm. I thought that we have synchronous I/O in the following paths:
+>     swapin_readahead()->swap_cluster_readahead()->swap_readpage()
+>     swapin_readahead()->swap_vma_readahead()->swap_readpage()
+> but just noticed that in both cases swap_readpage() is called with the
+> synchronous parameter being false. So you are probably right here...
+> Does that mean swapin_readahead() might return a page which does not
+> have its content swapped-in yet?
 
-<snip>
-
-> What do you think, does it make sense to eventually have such a bare
-> minimum klp-convert merged in-tree, independently of the ongoing
-> discussion around the livepatch preparation processes, respectively (the
-> lack of) documentation around it? If yes, Lukas, now on CC, is
-> interested in this topic and would be willing to help out in any form
-> desired: either by contributing to Joe's work here or, if deemed more
-> feasible, to start out completely new from scratch -- dependent on your
-> opinion on the proposed, more minimal approach as well as on Joe's plans
-> around klp-convert.
-> 
-> Looking forward to hearing your feedback!
-
-So guys, any feedback? Ping :)
-
-> 
-> Thanks,
-> 
-> Nicolai
-> 
-> (*) We've been experimenting with building the relocation records
->     manually by various means, e.g. with GNU as' .reloc directive as an
->     example, but this all turned out impractical for various
->     reasons. Most noteworthy, because the records' offsets wouldn't get
->     adjusted properly when linking AFAIR.
-> 
-> (**) by some other means than directly with kpatch-build
-> 
-> -- 
-> SUSE Software Solutions Germany GmbH, Frankenstraße 146, 90461 Nürnberg, Germany
-> GF: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
-> (HRB 36809, AG Nürnberg)
+That's my understanding.  In that case it's !uptodate and still locked.
+The folio_lock_or_retry() will wait for the read to complete unless
+we've told it we'd rather retry.
