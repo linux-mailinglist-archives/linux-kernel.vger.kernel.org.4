@@ -2,37 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08D596F3CEF
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 07:32:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 093766F3CF0
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 07:32:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233481AbjEBFcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 01:32:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53350 "EHLO
+        id S233499AbjEBFcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 01:32:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231610AbjEBFcD (ORCPT
+        with ESMTP id S231610AbjEBFcj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 01:32:03 -0400
+        Tue, 2 May 2023 01:32:39 -0400
 Received: from n169-114.mail.139.com (n169-114.mail.139.com [120.232.169.114])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 809F62D4B
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 22:32:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29AA7E41
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 22:32:35 -0700 (PDT)
 X-RM-TagInfo: emlType=0                                       
 X-RM-SPAM:                                                                                        
 X-RM-SPAM-FLAG: 00000000
 Received: from localhost.localdomain (unknown[183.194.159.16])
-        by rmsmtp-lg-appmail-38-12052 (RichMail) with SMTP id 2f146450a03fece-e31a3;
-        Tue, 02 May 2023 13:31:45 +0800 (CST)
-X-RM-TRANSID: 2f146450a03fece-e31a3
+        by rmsmtp-lg-appmail-37-12051 (RichMail) with SMTP id 2f136450a064f71-e31da;
+        Tue, 02 May 2023 13:32:23 +0800 (CST)
+X-RM-TRANSID: 2f136450a064f71-e31da
 From:   Shenghao Ding <13916275206@139.com>
-To:     devicetree@vger.kernel.org
-Cc:     krzysztof.kozlowski+dt@linaro.org, broonie@kernel.org,
-        lgirdwood@gmail.com, kevin-lu@ti.com, shenghao-ding@ti.com,
-        alsa-devel@alsa-project.org, robh+dt@kernel.org,
+To:     broonie@kernel.org, lgirdwood@gmail.com, perex@perex.cz,
+        pierre-louis.bossart@linux.intel.com
+Cc:     kevin-lu@ti.com, shenghao-ding@ti.com, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org, x1077012@ti.com, peeyush@ti.com,
         navada@ti.com, gentuser@gmail.com,
         Shenghao Ding <13916275206@139.com>
-Subject: [PATCH v1 2/5] ASoC: dt-bindings: Add tas2781 amplifier
-Date:   Tue,  2 May 2023 13:31:35 +0800
-Message-Id: <20230502053135.27019-1-13916275206@139.com>
+Subject: [PATCH v1 1/5] ASoC: tas2781: Add Header file for tas2781 driver
+Date:   Tue,  2 May 2023 13:32:15 +0800
+Message-Id: <20230502053215.27047-1-13916275206@139.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -46,110 +45,403 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Create tas2781.yaml for tas2781 driver.
+Create Header file for  tas2781 driver.
 
 Signed-off-by: Shenghao Ding <13916275206@139.com>
 
 ---
 Changes in v1:
- - Submit together with tas2781 codec driver code
+ - Initial
  Changes to be committed:
-	new file:   Documentation/devicetree/bindings/sound/ti,tas2781.yaml
+	new file:   include/sound/tas2781-dsp.h
+	new file:   include/sound/tas2781.h
 ---
- .../devicetree/bindings/sound/ti,tas2781.yaml | 84 +++++++++++++++++++
- 1 file changed, 84 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/sound/ti,tas2781.yaml
+ include/sound/tas2781-dsp.h | 189 ++++++++++++++++++++++++++++++++++++
+ include/sound/tas2781.h     | 179 ++++++++++++++++++++++++++++++++++
+ 2 files changed, 368 insertions(+)
+ create mode 100644 include/sound/tas2781-dsp.h
+ create mode 100644 include/sound/tas2781.h
 
-diff --git a/Documentation/devicetree/bindings/sound/ti,tas2781.yaml b/Documentation/devicetree/bindings/sound/ti,tas2781.yaml
+diff --git a/include/sound/tas2781-dsp.h b/include/sound/tas2781-dsp.h
 new file mode 100644
-index 000000000000..028151c388bf
+index 000000000000..091c3ffade17
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/sound/ti,tas2781.yaml
-@@ -0,0 +1,84 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+# Copyright (C) 2022 - 2023 Texas Instruments Incorporated
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/sound/ti,tas2781.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/include/sound/tas2781-dsp.h
+@@ -0,0 +1,189 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++//
++// ALSA SoC Texas Instruments TAS2781 Audio Smart Amplifier
++//
++// Copyright (C) 2022 - 2023 Texas Instruments Incorporated
++// https://www.ti.com
++//
++// The TAS2781 driver implements a flexible and configurable
++// algo coefficient setting for one, two, or even multiple
++// TAS2781 chips.
++//
++// Author: Shenghao Ding <shenghao-ding@ti.com>
++// Author: Kevin Lu <kevin-lu@ti.com>
++//
 +
-+title: Texas Instruments TAS2781 SmartAMP
++#ifndef __TASDEVICE_DSP_H__
++#define __TASDEVICE_DSP_H__
 +
-+maintainers:
-+  - Shenghao Ding <shenghao-ding@ti.com>
++#define MAIN_ALL_DEVICES			0x0d
++#define MAIN_DEVICE_A				0x01
++#define MAIN_DEVICE_B				0x08
++#define MAIN_DEVICE_C				0x10
++#define MAIN_DEVICE_D				0x14
++#define COEFF_DEVICE_A				0x03
++#define COEFF_DEVICE_B				0x0a
++#define COEFF_DEVICE_C				0x11
++#define COEFF_DEVICE_D				0x15
++#define PRE_DEVICE_A				0x04
++#define PRE_DEVICE_B				0x0b
++#define PRE_DEVICE_C				0x12
++#define PRE_DEVICE_D				0x16
 +
-+description:
-+  The TAS2781 is a mono, digital input Class-D audio amplifier
-+  optimized for efficiently driving high peak power into small
-+  loudspeakers. Integrated an on-chip DSP supports Texas Instruments
-+  Smart Amp speaker protection algorithm. The integrated speaker
-+  voltage and current sense provides for real time
-+  monitoring of loudspeaker behavior.
++#define PPC3_VERSION				0x4100
++#define RCA_CONFIGID_BYPASS_ALL			0
++#define TASDEVICE_DEVICE_SUM			8
++#define TASDEVICE_CONFIG_SUM			64
 +
-+properties:
-+  compatible:
-+    enum:
-+      - ti,tas2781
++enum channel {
++	top_left_Chn,
++	top_right_chn,
++	bottom_left_Chn,
++	bottom_right_chn,
++	max_chn,
++};
 +
-+  reg:
-+    description: I2C address of the primary device.
-+    items:
-+      minimum: 0x38
-+      maximum: 0x40
++enum tasdevice_dsp_dev_idx {
++	TASDEVICE_DSP_TAS_2555 = 0,
++	TASDEVICE_DSP_TAS_2555_STEREO,
++	TASDEVICE_DSP_TAS_2557_MONO,
++	TASDEVICE_DSP_TAS_2557_DUAL_MONO,
++	TASDEVICE_DSP_TAS_2559,
++	TASDEVICE_DSP_TAS_2563,
++	TASDEVICE_DSP_TAS_2563_DUAL_MONO = 7,
++	TASDEVICE_DSP_TAS_2563_QUAD,
++	TASDEVICE_DSP_TAS_2563_21,
++	TASDEVICE_DSP_TAS_2781,
++	TASDEVICE_DSP_TAS_2781_DUAL_MONO,
++	TASDEVICE_DSP_TAS_2781_21,
++	TASDEVICE_DSP_TAS_2781_QUAD,
++	TASDEVICE_DSP_TAS_MAX_DEVICE
++};
 +
-+  reset-gpios:
-+    maxItems: 1
++struct tasdevice_fw_fixed_hdr {
++	unsigned int fwsize;
++	unsigned int ppcver;
++	unsigned int drv_ver;
++};
 +
-+  interrupts:
-+    maxItems: 1
++struct tasdevice_dspfw_hdr {
++	struct tasdevice_fw_fixed_hdr fixed_hdr;
++	unsigned short device_family;
++	unsigned short device;
++	unsigned char ndev;
++};
 +
-+  ti,audio-slots:
-+    $ref: /schemas/types.yaml#/definitions/uint32-array
-+    minItems: 1
-+    maxItems: 4
-+    description:
-+      I2C address of the device for different audio slots,
-+      useless in mono case.
++struct tasdev_blk {
++	int nr_retry;
++	unsigned int type;
++	unsigned char is_pchksum_present;
++	unsigned char pchksum;
++	unsigned char is_ychksum_present;
++	unsigned char ychksum;
++	unsigned int nr_cmds;
++	unsigned int blk_size;
++	unsigned int nr_subblocks;
++	unsigned char *data;
++};
 +
-+  ti,broadcast-addr:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description:
-+      Generic I2C address for all the tas2781 devices in
-+      purpose of I2C broadcast during the multi-device
-+      writes, useless in mono case.
++struct tasdevice_data {
++	char name[64];
++	unsigned int nr_blk;
++	struct tasdev_blk *dev_blks;
++};
 +
-+  '#sound-dai-cells':
-+    const: 1
++struct tasdevice_prog {
++	unsigned int prog_size;
++	struct tasdevice_data dev_data;
++};
 +
-+required:
-+  - compatible
-+  - reg
++struct tasdevice_config {
++	unsigned int cfg_size;
++	char name[64];
++	struct tasdevice_data dev_data;
++};
 +
-+additionalProperties: false
++struct tasdevice_calibration {
++	struct tasdevice_data dev_data;
++};
 +
-+examples:
-+  - |
-+   #include <dt-bindings/gpio/gpio.h>
-+   i2c {
-+     /* example with quad support, such as tablet or pad device */
-+     #address-cells = <1>;
-+     #size-cells = <0>;
-+     quad: codec@38 {
-+       compatible = "ti,tas2781";
-+       reg = <0x38>;
-+       #sound-dai-cells = <1>;
-+       reset-gpios = < &gpio1 10 GPIO_ACTIVE_HIGH >;
-+       interrupt-parent = <&gpio1>;
-+       interrupts = <15>;
-+       ti,audio-slots = < 0x38 /* topleft-channel */
-+                          0x39 /* topright-channel */
-+                          0x3a /* bottomleft-channel */
-+                          0x3b /* bottomright-channel */
-+                        >;
-+       ti,broadcast-addr = <0x40>;
-+     };
-+   };
-+...
++struct tasdevice_fw {
++	struct tasdevice_dspfw_hdr fw_hdr;
++	unsigned short nr_programs;
++	struct tasdevice_prog *programs;
++	unsigned short nr_configurations;
++	struct tasdevice_config *configs;
++	unsigned short nr_calibrations;
++	struct tasdevice_calibration *calibrations;
++	struct device *dev;
++};
++
++enum tasdevice_dsp_fw_state {
++	TASDEVICE_DSP_FW_NONE = 0,
++	TASDEVICE_DSP_FW_PENDING,
++	TASDEVICE_DSP_FW_FAIL,
++	TASDEVICE_DSP_FW_ALL_OK,
++};
++
++enum tasdevice_bin_blk_type {
++	TASDEVICE_BIN_BLK_COEFF = 1,
++	TASDEVICE_BIN_BLK_POST_POWER_UP,
++	TASDEVICE_BIN_BLK_PRE_SHUTDOWN,
++	TASDEVICE_BIN_BLK_PRE_POWER_UP,
++	TASDEVICE_BIN_BLK_POST_SHUTDOWN
++};
++
++struct tasdevice_rca_hdr {
++	unsigned int img_sz;
++	unsigned int checksum;
++	unsigned int binary_version_num;
++	unsigned int drv_fw_version;
++	unsigned char plat_type;
++	unsigned char dev_family;
++	unsigned char reserve;
++	unsigned char ndev;
++	unsigned char devs[TASDEVICE_DEVICE_SUM];
++	unsigned int nconfig;
++	unsigned int config_size[TASDEVICE_CONFIG_SUM];
++};
++
++struct tasdev_blk_data {
++	unsigned char dev_idx;
++	unsigned char block_type;
++	unsigned short yram_checksum;
++	unsigned int block_size;
++	unsigned int n_subblks;
++	unsigned char *regdata;
++};
++
++struct tasdevice_config_info {
++	unsigned int nblocks;
++	unsigned int real_nblocks;
++	unsigned char active_dev;
++	struct tasdev_blk_data **blk_data;
++};
++
++struct tasdevice_rca {
++	struct tasdevice_rca_hdr fw_hdr;
++	int ncfgs;
++	struct tasdevice_config_info **cfg_info;
++	int profile_cfg_id;
++};
++
++void tasdevice_select_cfg_blk(void *context, int conf_no,
++	unsigned char block_type);
++void tasdevice_config_info_remove(void *context);
++void tasdevice_dsp_remove(void *context);
++int tasdevice_dsp_parser(void *context);
++int tasdevice_rca_parser(void *context, const struct firmware *fmw);
++void tasdevice_dsp_remove(void *context);
++void tasdevice_calbin_remove(void *context);
++int tasdevice_select_tuningprm_cfg(void *context, int prm,
++	int cfg_no, int rca_conf_no);
++int tasdevice_prmg_load(void *context, int prm_no);
++int tasdevice_prmg_calibdata_load(void *context, int prm_no);
++void tasdevice_tuning_switch(void *context, int state);
++int tas2781_load_calibration(void *context, char *file_name,
++	enum channel i);
++
++#endif
+diff --git a/include/sound/tas2781.h b/include/sound/tas2781.h
+new file mode 100644
+index 000000000000..7df637ad3be1
+--- /dev/null
++++ b/include/sound/tas2781.h
+@@ -0,0 +1,179 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++//
++// ALSA SoC Texas Instruments TAS2781 Audio Smart Amplifier
++//
++// Copyright (C) 2022 - 2023 Texas Instruments Incorporated
++// https://www.ti.com
++//
++// The TAS2781 driver implements a flexible and configurable
++// algo coefficient setting for one, two, or even multiple
++// TAS2781 chips.
++//
++// Author: Shenghao Ding <shenghao-ding@ti.com>
++// Author: Kevin Lu <kevin-lu@ti.com>
++//
++
++#ifndef __TAS2781_H__
++#define __TAS2781_H__
++
++#include <linux/kernel.h>
++#include "tas2781-dsp.h"
++
++/* version number */
++#define TAS2781_DRV_VER			1
++#define SMARTAMP_MODULE_NAME		"tas2781"
++#define TAS2781_GLOBAL_ADDR	0x40
++#define TASDEVICE_RATES			(SNDRV_PCM_RATE_44100 |\
++	SNDRV_PCM_RATE_48000 | SNDRV_PCM_RATE_96000 |\
++	SNDRV_PCM_RATE_88200)
++#define TASDEVICE_MAX_CHANNELS		8
++
++#define TASDEVICE_FORMATS		(SNDRV_PCM_FMTBIT_S16_LE | \
++	SNDRV_PCM_FMTBIT_S24_LE | \
++	SNDRV_PCM_FMTBIT_S32_LE)
++
++/*PAGE Control Register (available in page0 of each book) */
++#define TASDEVICE_PAGE_SELECT		0x00
++#define TASDEVICE_BOOKCTL_PAGE		0x00
++#define TASDEVICE_BOOKCTL_REG		127
++#define TASDEVICE_BOOK_ID(reg)		(reg / (256 * 128))
++#define TASDEVICE_PAGE_ID(reg)		((reg % (256 * 128)) / 128)
++#define TASDEVICE_PAGE_REG(reg)		((reg % (256 * 128)) % 128)
++#define TASDEVICE_PGRG(reg)		(reg % (256 * 128))
++#define TASDEVICE_REG(book, page, reg)	(((book * 256 * 128) + \
++					(page * 128)) + reg)
++
++/*Software Reset */
++#define TAS2781_REG_SWRESET		TASDEVICE_REG(0x0, 0X0, 0x02)
++#define TAS2781_REG_SWRESET_RESET	BIT(0)
++
++/* Enable Global addresses */
++#define TAS2781_MISC_CFG2		TASDEVICE_REG(0x0, 0X0, 0x07)
++#define TAS2781_GLOBAL_ADDR_MASK	BIT(1)
++#define TAS2781_GLOBAL_ADDR_ENABLE	BIT(1)
++
++/*I2C Checksum */
++#define TASDEVICE_I2CChecksum		TASDEVICE_REG(0x0, 0x0, 0x7E)
++
++/* Volume control */
++#define TAS2781_DVC_LVL			TASDEVICE_REG(0x0, 0x0, 0x1A)
++#define TAS2781_AMP_LEVEL		TASDEVICE_REG(0x0, 0x0, 0x03)
++#define TAS2781_AMP_LEVEL_MASK		GENMASK(5, 1)
++
++#define TASDEVICE_CMD_SING_W		0x1
++#define TASDEVICE_CMD_BURST		0x2
++#define TASDEVICE_CMD_DELAY		0x3
++#define TASDEVICE_CMD_FIELD_W		0x4
++
++enum audio_device {
++	TAS2781	= 0,
++};
++
++struct tasdevice {
++	struct tasdevice_fw *cali_data_fmw;
++	unsigned int dev_addr;
++	unsigned int err_code;
++	unsigned char cur_book;
++	short cur_prog;
++	short cur_conf;
++	bool is_loading;
++	bool is_loaderr;
++};
++
++/*
++ * This item is used to store the generic i2c address of
++ * all the tas2781 devices for I2C broadcast during the multi-device
++ * writes, useless in mono case.
++ */
++struct global_addr {
++	int ref_cnt;
++	unsigned int dev_addr;
++	unsigned char cur_book;
++};
++
++struct tasdevice_irqinfo {
++	int irq_gpio;
++	int irq;
++};
++
++struct calidata {
++	unsigned char *data;
++	unsigned long total_sz;
++};
++
++struct tasdevice_priv {
++	struct tasdevice tasdevice[max_chn];
++	struct tasdevice_irqinfo irq_info;
++	struct global_addr glb_addr;
++	struct tasdevice_rca rcabin;
++	struct tasdevice_fw *fmw;
++	struct regmap *regmap;
++	struct mutex codec_lock;
++	struct calidata cali_data;
++	struct gpio_desc *reset;
++	struct device *dev;
++	struct tm tm;
++
++	unsigned char crc8_lkp_tbl[CRC8_TABLE_SIZE];
++	unsigned char cal_binaryname[max_chn][64];
++	unsigned char coef_binaryname[64];
++	unsigned char rca_binaryname[64];
++	unsigned char dev_name[32];
++	unsigned char ndev;
++	unsigned int magic_num;
++	unsigned int chip_id;
++	unsigned int sysclk;
++	const char *acpi_subsystem_id;
++	int index;
++	int cur_prog;
++	int cur_conf;
++	int fw_state;
++	void *client;
++	void *codec;
++	bool isacpi;
++	bool playback_started;
++	void (*set_global_mode)(struct tasdevice_priv *tas_priv);
++	int (*fw_parse_variable_header)(struct tasdevice_priv *tas_priv,
++		const struct firmware *fmw, int offset);
++	int (*fw_parse_program_data)(struct tasdevice_priv *tas_priv,
++		struct tasdevice_fw *tas_fmw,
++		const struct firmware *fmw, int offset);
++	int (*fw_parse_configuration_data)(struct tasdevice_priv *tas_priv,
++		struct tasdevice_fw *tas_fmw,
++		const struct firmware *fmw, int offset);
++	int (*tasdevice_load_block)(struct tasdevice_priv *tas_priv,
++		struct tasdev_blk *block);
++};
++
++const DECLARE_TLV_DB_SCALE(dvc_tlv, -10000, 100, 0);
++const DECLARE_TLV_DB_SCALE(amp_vol_tlv, 1100, 50, 0);
++
++void tas2781_reset(struct tasdevice_priv *tas_dev);
++int tascodec_init(struct tasdevice_priv *tas_priv, void *codec,
++	void (*cont)(const struct firmware *fw, void *context));
++struct tasdevice_priv *tasdevice_kzalloc(struct i2c_client *i2c);
++int tasdevice_init(struct tasdevice_priv *tas_priv);
++void tasdevice_remove(struct tasdevice_priv *tas_priv);
++int tasdevice_dev_read(struct tasdevice_priv *tas_priv,
++	enum channel chn, unsigned int reg, unsigned int *value);
++int tasdevice_dev_write(struct tasdevice_priv *tas_priv,
++	enum channel chn, unsigned int reg, unsigned int value);
++int tasdevice_dev_bulk_write(
++	struct tasdevice_priv *tas_priv, enum channel chn,
++	unsigned int reg, unsigned char *p_data, unsigned int n_length);
++int tasdevice_dev_bulk_read(struct tasdevice_priv *tas_priv,
++	enum channel chn, unsigned int reg, unsigned char *p_data,
++	unsigned int n_length);
++int tasdevice_dev_update_bits(
++	struct tasdevice_priv *tasdevice, enum channel chn,
++	unsigned int reg, unsigned int mask, unsigned int value);
++int tasdevice_amp_putvol(struct tasdevice_priv *tas_priv,
++	struct snd_ctl_elem_value *ucontrol, struct soc_mixer_control *mc);
++int tasdevice_amp_getvol(struct tasdevice_priv *tas_priv,
++	struct snd_ctl_elem_value *ucontrol, struct soc_mixer_control *mc);
++int tasdevice_digital_putvol(struct tasdevice_priv *tas_priv,
++	struct snd_ctl_elem_value *ucontrol, struct soc_mixer_control *mc);
++int tasdevice_digital_getvol(struct tasdevice_priv *tas_priv,
++	struct snd_ctl_elem_value *ucontrol, struct soc_mixer_control *mc);
++
++#endif /* __TAS2781_H__ */
 -- 
 2.34.1
 
