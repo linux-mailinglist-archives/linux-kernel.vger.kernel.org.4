@@ -2,69 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E6EA6F4786
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 17:43:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C41046F478F
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 17:46:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234389AbjEBPnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 11:43:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54382 "EHLO
+        id S234598AbjEBPqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 11:46:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233331AbjEBPn2 (ORCPT
+        with ESMTP id S233781AbjEBPqe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 11:43:28 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0491AE
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 08:43:27 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f00d41df22so29117819e87.1
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 08:43:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1683042205; x=1685634205;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ksBtAvIT0tt+UGPpxO6Jblux7JGuQy9A1nRJOgAb9pI=;
-        b=px5MHukmh1ug97m+YREdCGgo5TYWBkkeuiP1JpoH4jJuen9G2YruZPJ2pwUikB5Jjs
-         OII9ImsB414NzKGuby4YETq4QlnDMxEn5O1fxOs/6bCrLnDKISoXpQt6AIltksRQuXDD
-         uKyYJrMZ6zZuyV3grj7SjD6sdqGuUokOrIsfbQWCxVyWC3JgazKweGYCUrq3tapfy0cw
-         9MCXz+ld4bKorpOOfJkqtn1miDLL6sHboEn7F9UM7aIReSkx88lAcCWtuiHN5JrNCYif
-         MgRVmRur/HIZuPV7hxggJ6DrDQL5Jxo/AoNH/NPdzslaBnCPpkdvILMcV0l0W6GM2Gk7
-         9GCw==
+        Tue, 2 May 2023 11:46:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF41D1B0
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 08:45:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683042346;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/jXCvdd7DNygReOZu9LsiaslZNiW9u3JpZSmEUHzOZk=;
+        b=BRDgSKTa7nEr1bdpIOCLfMzyYKhcvH67DYXXiOtVdse65imeItlGx7cPyskdmJrDhtUxSx
+        VShIzmQG6kdkGrYEMu2AfQB3BQOzWFWF9jLSeXsOv5mwaf1gkvt9MdUPwHcUJ8mNWtDaZo
+        HLLzommqUg5nvKfIH/iccKV8E99Fj1Y=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-360-hfAWL_8jPCijmOmQVnHNxg-1; Tue, 02 May 2023 11:45:45 -0400
+X-MC-Unique: hfAWL_8jPCijmOmQVnHNxg-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f321e60feaso13218745e9.0
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 08:45:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683042205; x=1685634205;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ksBtAvIT0tt+UGPpxO6Jblux7JGuQy9A1nRJOgAb9pI=;
-        b=QOPUoqBx1jJnSLlOcaDYwfKCTmZeTfF++p7xXdH7cNgBSJ6fPF8UawnS7w4SiSEnXQ
-         YJ53aQA7Kam3BEmXKeangGmFbLHaYCYnvFfEsIHbs+OWYEsla6Jm/VNnkOGkIMdj3A8i
-         exMBLp3HiwQGM9Kkg6Qs4++euVbllj6Yl17MtQIa8ForvnJKGy2QnIBXtO2PPnKKmW0F
-         vRe3A7ILZ6J9t/AMYwFhMpyEWwa47Oy/bnkOoW1fpe1lmXq3xC97X8VDAbpYBuvqeWzB
-         EJS9nMUW5gttWNuZJfDzL3/7GbrzHpBNcc0nGFwV/mTEoeo/WJX5XnG5yNOAW+cJAtpz
-         pwcw==
-X-Gm-Message-State: AC+VfDxLVnB81zNJVIYLMrTXgz4Hhs95lxVKAqYPQviU2MWwVzqbnxkb
-        N59UApVu+em1/0S9dippvR09P0Meqlo4+cHmqXBMZA==
-X-Google-Smtp-Source: ACHHUZ7gOdNromrFXE3GdvxQuypVtOi6MPPmvNTGlbEjC9mOtLkpHNBvPHRmxBsZYzJ6VP57vLjqq2EPZjRl+q3IfzY=
-X-Received: by 2002:a05:6512:b83:b0:4ec:8cc6:55d9 with SMTP id
- b3-20020a0565120b8300b004ec8cc655d9mr88318lfv.9.1683042205630; Tue, 02 May
- 2023 08:43:25 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683042344; x=1685634344;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/jXCvdd7DNygReOZu9LsiaslZNiW9u3JpZSmEUHzOZk=;
+        b=NKYpdDvWUkyuHz4WtWt3e5kk/KC+OWaAjLikANTNmI6VPqRSHy51p/oa+r5GjfQ5ii
+         o129sdcrx55N6dg/j1fwu2U8zWOEKT1IUlLh7clPM4rbKDPdakZJDCrX73CudnIBP8gr
+         hMIUf745eKYSIEX7ZU6yRQmlvnps1QIcAG4QOmCdz8JJ0uF1ymBYTJj9mSq2UVmciU7V
+         sH8bKRMp475B1k0uk9yZEKoVzW3I4Ux1W5LJJci0UuckRC8EGGRp5hQ0GxtmqysUsKVX
+         bWnsjLvhbeQnTt7+4LpdA9SqmXVWlRp5/qql5IrtACiUBTQx3dL5xRLlpeFrWR1n/pSA
+         WQPA==
+X-Gm-Message-State: AC+VfDx/7rRSXLFqkOLQI5sqIUJRqC30a9kR0/P1VxiCK0CNgmb3xDxE
+        NaV5j6HaXK9d+N85VvmYeB5SPKjQkqcdBG5mQt0uRNIcTFV3vbAToX1lVugBpOc8cayRMAU3Bk1
+        AHIfrN4+Q5eQ2C+F5WzUi8RwJ
+X-Received: by 2002:a7b:c3c4:0:b0:3f3:3a81:32b with SMTP id t4-20020a7bc3c4000000b003f33a81032bmr5684942wmj.15.1683042343899;
+        Tue, 02 May 2023 08:45:43 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6iCnNxLty4fpwGjWmlTk0Cw9dYjc5Qp9Xj7jiPRTTMbQu6pqQFr0IF1EjCkXU8IZxvcKndbQ==
+X-Received: by 2002:a7b:c3c4:0:b0:3f3:3a81:32b with SMTP id t4-20020a7bc3c4000000b003f33a81032bmr5684921wmj.15.1683042343556;
+        Tue, 02 May 2023 08:45:43 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c700:2400:6b79:2aa:9602:7016? (p200300cbc70024006b7902aa96027016.dip0.t-ipconnect.de. [2003:cb:c700:2400:6b79:2aa:9602:7016])
+        by smtp.gmail.com with ESMTPSA id f25-20020a7bc8d9000000b003f0b1b8cd9bsm35846962wml.4.2023.05.02.08.45.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 May 2023 08:45:42 -0700 (PDT)
+Message-ID: <4fd5f74f-3739-f469-fd8a-ad0ea22ec966@redhat.com>
+Date:   Tue, 2 May 2023 17:45:40 +0200
 MIME-Version: 1.0
-References: <202305021414.EuPdM9kv-lkp@intel.com>
-In-Reply-To: <202305021414.EuPdM9kv-lkp@intel.com>
-From:   Evan Green <evan@rivosinc.com>
-Date:   Tue, 2 May 2023 08:42:49 -0700
-Message-ID: <CALs-Hsuw5WCmphzFNEnM5dRzqvoBscppcKb2ukVrU+uyGXBedA@mail.gmail.com>
-Subject: Re: arch/riscv/kernel/cpufeature.c:34:1: sparse: sparse: symbol
- '__pcpu_scope_misaligned_access_speed' was not declared. Should it be static?
-To:     kernel test robot <lkp@intel.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@nvidia.com>, Peter Xu <peterx@redhat.com>
+Cc:     Matthew Rosato <mjrosato@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Mika Penttila <mpenttil@redhat.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Theodore Ts'o <tytso@mit.edu>
+References: <ce3aa7b9-723c-6ad3-3f03-3f1736e1c253@redhat.com>
+ <ff99f2d8-804d-924f-3c60-b342ffc2173c@linux.ibm.com>
+ <ad60d5d2-cfdf-df9f-aef1-7a0d3facbece@redhat.com>
+ <ZFEVQmFGL3GxZMaf@nvidia.com>
+ <1ffbbfb7-6bca-0ab0-1a96-9ca81d5fa373@redhat.com>
+ <ZFEYblElll3pWtn5@nvidia.com>
+ <f0acd8e4-8df8-dfae-b6b2-30eea3b14609@redhat.com>
+ <3c17e07a-a7f9-18fc-fa99-fa55a5920803@linux.ibm.com>
+ <ZFEqTo+l/S8IkBQm@nvidia.com> <ZFEtKe/XcnC++ACZ@x1n>
+ <ZFEt/ot6VKOgW1mT@nvidia.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v6 3/3] mm/gup: disallow FOLL_LONGTERM GUP-fast writing to
+ file-backed mappings
+In-Reply-To: <ZFEt/ot6VKOgW1mT@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,75 +135,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Conor, this one was fixed by your patch to include cpufeature.h in
-cpufeature.c, right?
--Evan
+On 02.05.23 17:36, Jason Gunthorpe wrote:
+> On Tue, May 02, 2023 at 11:32:57AM -0400, Peter Xu wrote:
+>>> How does s390 avoid mmu notifiers without having lots of problems?? It
+>>> is not really optional to hook the invalidations if you need to build
+>>> a shadow page table..
+>>
+>> Totally no idea on s390 details, but.. per my read above, if the firmware
+>> needs to make sure the page is always available (so no way to fault it in
+>> on demand), which means a longterm pinning seems appropriate here.
+>>
+>> Then if pinned a must, there's no need for mmu notifiers (as the page will
+>> simply not be invalidated anyway)?
+> 
+> And what if someone deliberately changes the mapping?  memory hotplug
+> in the VM, or whatever?
 
-On Mon, May 1, 2023 at 11:50=E2=80=AFPM kernel test robot <lkp@intel.com> w=
-rote:
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
-t master
-> head:   865fdb08197e657c59e74a35fa32362b12397f58
-> commit: 62a31d6e38bd0faef7c956b358d651f7bdc4ae0c RISC-V: hwprobe: Support=
- probing of misaligned access performance
-> date:   13 days ago
-> config: riscv-randconfig-s052-20230430 (https://download.01.org/0day-ci/a=
-rchive/20230502/202305021414.EuPdM9kv-lkp@intel.com/config)
-> compiler: riscv64-linux-gcc (GCC) 12.1.0
-> reproduce:
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
-n/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # apt-get install sparse
->         # sparse version: v0.6.4-39-gce1a6720-dirty
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.=
-git/commit/?id=3D62a31d6e38bd0faef7c956b358d651f7bdc4ae0c
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/=
-git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout 62a31d6e38bd0faef7c956b358d651f7bdc4ae0c
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-12.1.0 make.cro=
-ss C=3D1 CF=3D'-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=3Dbuild_dir ARCH=
-=3Driscv olddefconfig
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-12.1.0 make.cro=
-ss C=3D1 CF=3D'-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=3Dbuild_dir ARCH=
-=3Driscv SHELL=3D/bin/bash arch/riscv/kernel/
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202305021414.EuPdM9kv-lkp@i=
-ntel.com/
->
-> sparse warnings: (new ones prefixed by >>)
->    WARNING: invalid argument to '-march': '_zihintpause'
-> >> arch/riscv/kernel/cpufeature.c:34:1: sparse: sparse: symbol '__pcpu_sc=
-ope_misaligned_access_speed' was not declared. Should it be static?
->
-> vim +/__pcpu_scope_misaligned_access_speed +34 arch/riscv/kernel/cpufeatu=
-re.c
->
->     30
->     31  /**
->     32   * riscv_isa_extension_base() - Get base extension word
->     33   *
->   > 34   * @isa_bitmap: ISA bitmap to use
->     35   * Return: base extension word as unsigned long value
->     36   *
->     37   * NOTE: If isa_bitmap is NULL then Host ISA bitmap will be used.
->     38   */
->     39  unsigned long riscv_isa_extension_base(const unsigned long *isa_b=
-itmap)
->     40  {
->     41          if (!isa_bitmap)
->     42                  return riscv_isa[0];
->     43          return isa_bitmap[0];
->     44  }
->     45  EXPORT_SYMBOL_GPL(riscv_isa_extension_base);
->     46
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests
+Besides s390 not supporting memory hotplug in VMs (yet): if the guest 
+wants a different guest physical address, I guess that's the problem of 
+the guest, and it can update it:
+
+KVM_S390_ZPCIOP_REG_AEN is triggered from QEMU via 
+s390_pci_kvm_aif_enable(), triggered by the guest via a special instruction.
+
+If the hypervisor changes the mapping, it's just the same thing as 
+mixing e.g. MADV_DONTNEED with longterm pinning in vfio: don't do it. 
+And if you do it, you get to keep the mess you created for your VM.
+
+Linux will make sure to not change the mapping: for example, page 
+migration of a pinned page will fail.
+
+But maybe I am missing something important here.
+
+-- 
+Thanks,
+
+David / dhildenb
+
