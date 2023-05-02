@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51D1D6F3BAE
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 03:08:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 453296F3BB1
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 03:08:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233352AbjEBBIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 21:08:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54186 "EHLO
+        id S232363AbjEBBI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 21:08:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233245AbjEBBIO (ORCPT
+        with ESMTP id S230391AbjEBBIQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 21:08:14 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF5F35A8
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 18:08:13 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id ca18e2360f4ac-76937f5f9c5so44393739f.1
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 18:08:13 -0700 (PDT)
+        Mon, 1 May 2023 21:08:16 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B4811A
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 18:08:15 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id ca18e2360f4ac-7666121cf5dso55451839f.0
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 18:08:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682989693; x=1685581693;
+        d=gmail.com; s=20221208; t=1682989694; x=1685581694;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HhrMWjFte7goMFkthyl+3kO5kW7x7TcIvC2UAKwMf6E=;
-        b=ID1JuvXXaLMCf95WTEkk2TJJKto2G0IwIyP5dukwdxsKvv6+k9wvTf0ZW/8rB6Iq9G
-         Zr9cdfS0Zm+DAwfcYuSXj3csRRYTcq+dqgwfOOiWevPX6vSU8C8yq8DhL6Mn2SwZ5k5m
-         6Gx+4MXd56NJr9DFfDZ3Wm0SsfSgXsUDx1sNzDzfAcWZ/0G9P7CtwcwnBPAG2kUe/fV+
-         Q+t++OufgZxqNj1XmNls0xVCt/cYMiFq9CPQQv6tKwAnU1EdD4xWF+TPj+sSLixJZmH6
-         cYS+sGVy/YHVhOYzIx2a1YkrWkqPdWwquZmf0cUr4AGdwbap/KgrtTcXTnJ947vaX1Jy
-         UZ3A==
+        bh=v0duPWgTIsXWR+LqC+JicpRWC9rG9dOi1hmp+K9AKt4=;
+        b=oAJ1HEpecrB2Q6BRpL9rdawMEoPUyuLAfbZul0lkxVERtwEr0Pyslu/QBfGALP1vGf
+         FW2D2BmSQbZc4Ge43oVD+clOIBN30ayCgAjWrlixkuij6syeE8/Ty47txlKBOGvyat1I
+         6GJ2puGIwLAGWAMu5/YvxvMUePnjUmEdMyCHEEbcCjkMH3NrABW+z74FRbIMaB8dFuvf
+         yqgHr9sHVZZEgBFCV1xTUPWFCWfDykx24oAQP8mQBk3chFdbSvdsuhA3LwZzM1Wit/y2
+         awR7O7dw95WIJjIi96DY6NfO3SlaTrHb/Hi4BfNbml+KRTD/IZyjB68rGkzZzovbKjv0
+         7wow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682989693; x=1685581693;
+        d=1e100.net; s=20221208; t=1682989694; x=1685581694;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=HhrMWjFte7goMFkthyl+3kO5kW7x7TcIvC2UAKwMf6E=;
-        b=YLEl3Wed4gEkPD6RjVu7EalPvagC8oaatcANFLL0aXi9TAaqpwwQeMZQSImlTv1AGq
-         rCbWesWiKc4cP6kj9TDLN7el/XLvz0jK1C67XTBFKNqQc2CtMdDBmeGBzeOVSQVz25z5
-         3jREaWf5NiiEQ5C5pcyR00oRST4OBopDiqoD+j7c9rE3pDzUHIFRa1OMdW/kKZuLrdD2
-         urLKDWZcw4Poq8CGNU3Zc7RGg+pfYWwuToMWPuTaP4XsUgHHJi5Qp1n+MQ4BSN/2Dk8C
-         NFwTvV4Ow78CU2rDslpOuQk9Ni58pBvPt48hAgA3/VFvqNhV7a1Y8hPoSx4SSd/i0Vqw
-         xgEQ==
-X-Gm-Message-State: AC+VfDytJ1QpWbhDP6LzWDuz0/Uv6Ua/adnD+SUrgFxZE7mN539riy7N
-        EPSrmGf0XhQ/iZju/0fKwYQ=
-X-Google-Smtp-Source: ACHHUZ6jgYXGX6mtJyfGHfUHNtSJtYe7P86rVbqtcMJ4m+zA6lQ0bmX9P7E+oHlh4NkdFCZqHx4ikA==
-X-Received: by 2002:a6b:f007:0:b0:766:41fa:e26c with SMTP id w7-20020a6bf007000000b0076641fae26cmr11441794ioc.10.1682989692703;
-        Mon, 01 May 2023 18:08:12 -0700 (PDT)
+        bh=v0duPWgTIsXWR+LqC+JicpRWC9rG9dOi1hmp+K9AKt4=;
+        b=jsbY/Mks5zWgsMYy1jWftqbFTGknm2NH6ZWZKWHKO46Ul1r6xSH5D3wzW25HluJeoY
+         iE7mWFSIIwujG0jWD/nmZ6hPV0mBnosakMsJoTHITfS32nMmrMYknMaI07emEPeFX/PM
+         9V7yE1stR+8Yhk2InCQTVHM5QD4IZBzhhHtGU/0PxFJFvGKXMBxynYZ4vWirHI8vXmp0
+         +dWFA/C0Baleqfq+eHuOzRotQBs8G2V7ROLg8Jiomi8JJ3Zai1j5mbJORa8ssLk9fu1K
+         4C0g6m02qFN80RvrOf8uSII7ltUplaXyBq4nu5dN5HXMyD9aordnDPWYvanfaCq8Tlec
+         dB4w==
+X-Gm-Message-State: AC+VfDxnIbKQlItor0+mhiRN5hp0gko/9Rg9zn3VsOHs9aRVMyBA80Py
+        4dIzffsEYaU8+khxKA67f5o=
+X-Google-Smtp-Source: ACHHUZ7dizlXI6hVaZ+RaY3BNeTDSUd8Ko7VO83X/pt9wJ4lPY8NsLPsumX4egRDWFTB6cv/DCWPzw==
+X-Received: by 2002:a5d:9c94:0:b0:758:1fa5:f086 with SMTP id p20-20020a5d9c94000000b007581fa5f086mr9384657iop.17.1682989694343;
+        Mon, 01 May 2023 18:08:14 -0700 (PDT)
 Received: from aford-B741.lan ([2601:447:d001:897f:8257:a536:d7fc:1919])
-        by smtp.gmail.com with ESMTPSA id f16-20020a056638329000b0040fb5d5429fsm4836329jav.131.2023.05.01.18.08.11
+        by smtp.gmail.com with ESMTPSA id f16-20020a056638329000b0040fb5d5429fsm4836329jav.131.2023.05.01.18.08.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 May 2023 18:08:12 -0700 (PDT)
+        Mon, 01 May 2023 18:08:13 -0700 (PDT)
 From:   Adam Ford <aford173@gmail.com>
 To:     dri-devel@lists.freedesktop.org
 Cc:     marex@denx.de, aford@beaconembedded.com,
         Adam Ford <aford173@gmail.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
         Andrzej Hajda <andrzej.hajda@intel.com>,
         Neil Armstrong <neil.armstrong@linaro.org>,
         Robert Foss <rfoss@kernel.org>,
@@ -66,10 +65,11 @@ Cc:     marex@denx.de, aford@beaconembedded.com,
         Inki Dae <inki.dae@samsung.com>,
         Jagan Teki <jagan@amarulasolutions.com>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V3 3/7] drm: bridge: samsung-dsim: Fetch pll-clock-frequency automatically
-Date:   Mon,  1 May 2023 20:07:55 -0500
-Message-Id: <20230502010759.17282-4-aford173@gmail.com>
+Subject: [PATCH V3 4/7] drm: bridge: samsung-dsim: Select GENERIC_PHY_MIPI_DPHY
+Date:   Mon,  1 May 2023 20:07:56 -0500
+Message-Id: <20230502010759.17282-5-aford173@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230502010759.17282-1-aford173@gmail.com>
 References: <20230502010759.17282-1-aford173@gmail.com>
@@ -85,43 +85,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make the pll-clock-frequency optional.  If it's present, use it
-to maintain backwards compatibility with existing hardware.  If it
-is absent, read clock rate of "sclk_mipi" to determine the rate.
+In order to support variable DPHY timings, it's necessary
+to enable GENERIC_PHY_MIPI_DPHY so phy_mipi_dphy_get_default_config
+can be used to determine the nominal values for a given resolution
+and refresh rate.
 
 Signed-off-by: Adam Ford <aford173@gmail.com>
-Tested-by: Chen-Yu Tsai <wenst@chromium.org>
 ---
- drivers/gpu/drm/bridge/samsung-dsim.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/bridge/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c b/drivers/gpu/drm/bridge/samsung-dsim.c
-index bf4b33d2de76..2dc02a9e37c0 100644
---- a/drivers/gpu/drm/bridge/samsung-dsim.c
-+++ b/drivers/gpu/drm/bridge/samsung-dsim.c
-@@ -1726,12 +1726,20 @@ static int samsung_dsim_parse_dt(struct samsung_dsim *dsi)
- {
- 	struct device *dev = dsi->dev;
- 	struct device_node *node = dev->of_node;
-+	struct clk *pll_clk;
- 	int ret;
- 
- 	ret = samsung_dsim_of_read_u32(node, "samsung,pll-clock-frequency",
- 				       &dsi->pll_clk_rate);
--	if (ret < 0)
--		return ret;
-+
-+	/* If it doesn't exist, read it from the clock instead of failing */
-+	if (ret < 0) {
-+		pll_clk = devm_clk_get(dev, "sclk_mipi");
-+		if (!IS_ERR(pll_clk))
-+			dsi->pll_clk_rate = clk_get_rate(pll_clk);
-+		else
-+			return PTR_ERR(pll_clk);
-+	}
- 
- 	ret = samsung_dsim_of_read_u32(node, "samsung,burst-clock-frequency",
- 				       &dsi->burst_clk_rate);
+diff --git a/drivers/gpu/drm/bridge/Kconfig b/drivers/gpu/drm/bridge/Kconfig
+index f076a09afac0..82c68b042444 100644
+--- a/drivers/gpu/drm/bridge/Kconfig
++++ b/drivers/gpu/drm/bridge/Kconfig
+@@ -227,6 +227,7 @@ config DRM_SAMSUNG_DSIM
+ 	select DRM_KMS_HELPER
+ 	select DRM_MIPI_DSI
+ 	select DRM_PANEL_BRIDGE
++	select GENERIC_PHY_MIPI_DPHY
+ 	help
+ 	  The Samsung MIPI DSIM bridge controller driver.
+ 	  This MIPI DSIM bridge can be found it on Exynos SoCs and
 -- 
 2.39.2
 
