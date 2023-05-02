@@ -2,134 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C774A6F45FA
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 16:24:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F5C46F45FC
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 16:24:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234154AbjEBOX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 10:23:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41040 "EHLO
+        id S234440AbjEBOYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 10:24:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234105AbjEBOX4 (ORCPT
+        with ESMTP id S233998AbjEBOYA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 10:23:56 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F1A6C7;
-        Tue,  2 May 2023 07:23:55 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-54f99770f86so54797907b3.1;
-        Tue, 02 May 2023 07:23:55 -0700 (PDT)
+        Tue, 2 May 2023 10:24:00 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C597191;
+        Tue,  2 May 2023 07:23:59 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id ffacd0b85a97d-306342d7668so967294f8f.1;
+        Tue, 02 May 2023 07:23:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683037434; x=1685629434;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=c0tlagjndETqb4vyl9KGLxF15wJn4anPJZnJmgfkl/c=;
-        b=K0PkrtQ+McSujB9A84EzlIqNHv14cBXmdu0ZfjZR66RfrojtRlfd1cM89jykYnoLas
-         ahin8shKK2L9dFH6MUWrR55xDe8f8gh5x9odaYy4mgE7Pr+Bg3XSDh+uqQiFcMK48cBw
-         tzaoPg/s531lh3IhLmKWRF5rlfBCTxm1mJUs/XJHd2SqUwbJqgZTOk9EE7/iVclcXygo
-         LKjBGqwshg8Eyf7N9FLItvApIk3tw7tGZui91egVoayoQJSvp4u2k1fOt6fb6yctB69P
-         0aiJn3KQjVKeoLpjwXJ2TNkBPeFyAU3REy3BwpbtWZgKMJxjOBSAMrfB4Cln6O2B1P7D
-         s8dQ==
+        d=gmail.com; s=20221208; t=1683037437; x=1685629437;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kfItElVK3b/VLS4J5wK0572UKi844kpJ9g4fvuAZ23g=;
+        b=U1xlpkbonMZA1UHiVaKAc3+O86Jbhu+NtZS4LuwiOXhl2iBchXEFPWErADUExIv9IP
+         8sL2Kqn7giAmdRn8y0dDeQGgq10XBISvYJy5xoVi8H/mHc6yCYWXZC8frxuuEk1wmYeF
+         FIhhNGQDtfULIZ0r/HpOmKBNKnKatHaO3IbQ93UQyZ+PQ7KtR5PN6W6mvoofSir9NZch
+         KHgSpIIBssTNwpxN0bhhL4JqkdONzc9eqhlQrOQZ5lmqmmnvn4k6304TfCXCw6ge/JVR
+         XImbO8I3twcGwm18nSIKIHd8VJXkIXMtFwBPpvUPhUqd5R4goPZfGZI3JAPmVRxGV+Qu
+         8TdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683037434; x=1685629434;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=c0tlagjndETqb4vyl9KGLxF15wJn4anPJZnJmgfkl/c=;
-        b=Fpah8PIDxNHNQswxrsY8JYHdS9JL0P9Li2d+d6twNANN0RvnlFSww9mCXgOgjstyX3
-         glF+Xp8nUgUWzSamUIkkZC7amuYwaSeNXKcd28XB6hdkBPDewvgTxIvFSO62gHIh9fGI
-         2Bpr89YnVzpVIiYF5YOkLvUGuOk6jSc9mEN2MFm3B/7AOw/ZpnH2+9wu/Kkc4mOMmXcn
-         qLa+lM9i+feEX83p40CpkazpxoHRDfkxc8Ax+5VAYulZBX742pPirhkKMm1iPyMLDNz9
-         5stDeS9mq48mlXRgWMSQwq9OKaIVcLQaX9C8mOEah8pO4mTrVkcPE0un0hh7epCFpnJC
-         68Hg==
-X-Gm-Message-State: AC+VfDyZejIoeC5+z83xT5pVxolVwwFR44RXwbsqBNUMbE7oIrwgxO7m
-        FyUQ6eMxgfOOfTF5+632HYdzK7VzicWWwKKZlIc=
-X-Google-Smtp-Source: ACHHUZ612ecIhlT53wUK861pkbcYeetJfXMcpglfdDpv12oWa8U2/fHmhebQXi0TgNnTn4mW2dnC+YzD9TX5x1MML18=
-X-Received: by 2002:a0d:d087:0:b0:55a:613c:8480 with SMTP id
- s129-20020a0dd087000000b0055a613c8480mr5494440ywd.51.1683037434369; Tue, 02
- May 2023 07:23:54 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683037437; x=1685629437;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kfItElVK3b/VLS4J5wK0572UKi844kpJ9g4fvuAZ23g=;
+        b=efsexEEpL48taS/anN77SwR6BKuLEHh5CENnC8+SWzBW2T2RZR4ctspvx1U2HqLJl/
+         ZhEecT+j0MJtIzozrkG8qvRkg8bHu+qOuOUN+qMQfFmeiUeInFzVvBVUtPR+qdJq8ipp
+         Of7iiDMnRyOxgo6vV7/Op65GDP3uCW+zVh1W9vDWw92kmMGbXSaah2RtR4y/0fFhm9cU
+         giqwMvJBx3bS6svGC1/niKfEXfoQlL2VPxPrHB5VMHWXbdltyayFoZZA3+WtSdd4REp/
+         Iw3NjExZ12belozKVkhxDvQQM+QciP4ywTIPSCDJHm2eQP2BloNZq4p+CHMMCEpleR1U
+         bOrw==
+X-Gm-Message-State: AC+VfDzoyia8VjKEsDezoo+oRyajNKVVhOrMPk9N/dSQ6K1qJDYVP4+y
+        vjZf2gQN9jGDyOryRNQ+P8s=
+X-Google-Smtp-Source: ACHHUZ4vnS5LbIAZPa1gxZd2ymGV28rja7jG4Eb6qXU5MVmFiPH6p1L++UB74M6pF6QGggxbnu89gg==
+X-Received: by 2002:a05:6000:110f:b0:306:35fa:202b with SMTP id z15-20020a056000110f00b0030635fa202bmr1937849wrw.6.1683037437253;
+        Tue, 02 May 2023 07:23:57 -0700 (PDT)
+Received: from [192.168.1.131] (cgn-89-1-213-9.nc.de. [89.1.213.9])
+        by smtp.gmail.com with ESMTPSA id a13-20020a056000100d00b003063c130ef1sm147115wrx.112.2023.05.02.07.23.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 May 2023 07:23:56 -0700 (PDT)
+Message-ID: <5aaba4d1-f7e2-9d30-5f15-0713f9fc6a8c@gmail.com>
+Date:   Tue, 2 May 2023 16:23:54 +0200
 MIME-Version: 1.0
-References: <ZFD6UgOFeUCbbIOC@corigine.com> <20230502130316.2680585-1-Ilia.Gavrilov@infotecs.ru>
-In-Reply-To: <20230502130316.2680585-1-Ilia.Gavrilov@infotecs.ru>
-From:   Xin Long <lucien.xin@gmail.com>
-Date:   Tue, 2 May 2023 10:23:35 -0400
-Message-ID: <CADvbK_cFyMqw1BxTtq9nz2T-V=hLL4fwiUd_vv0pPkzA=v3Faw@mail.gmail.com>
-Subject: Re: [PATCH net v2] sctp: fix a potential buffer overflow in sctp_sched_set_sched()
-To:     Gavrilov Ilia <Ilia.Gavrilov@infotecs.ru>
-Cc:     Simon Horman <simon.horman@corigine.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "lvc-project@linuxtesting.org" <lvc-project@linuxtesting.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 3/6] dt-bindings: input: cypress,tt21000 - fix
+ interrupt type in dts example
+Content-Language: en-US
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Alistair Francis <alistair@alistair23.me>
+References: <20230501113010.891786-1-mweigand@mweigand.net>
+ <20230501113010.891786-4-mweigand@mweigand.net> <ZFBYIZc5zKs6dpHF@google.com>
+From:   Maximilian Weigand <mweigand2017@gmail.com>
+In-Reply-To: <ZFBYIZc5zKs6dpHF@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 2, 2023 at 9:03=E2=80=AFAM Gavrilov Ilia <Ilia.Gavrilov@infotec=
-s.ru> wrote:
->
-> The 'sched' index value must be checked before accessing an element
-> of the 'sctp_sched_ops' array. Otherwise, it can lead to buffer overflow.
->
-> Note that it's harmless since the 'sched' parameter is checked before
-> calling 'sctp_sched_set_sched'.
->
-> Found by InfoTeCS on behalf of Linux Verification Center
-> (linuxtesting.org) with SVACE.
->
-> Fixes: 5bbbbe32a431 ("sctp: introduce stream scheduler foundations")
-> Reviewed-by: Simon Horman <simon.horman@corigine.com>
-> Signed-off-by: Ilia.Gavrilov <Ilia.Gavrilov@infotecs.ru>
-> ---
-> V2:
->  - Change the order of local variables
->  - Specify the target tree in the subject
->  net/sctp/stream_sched.c | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
->
-> diff --git a/net/sctp/stream_sched.c b/net/sctp/stream_sched.c
-> index 330067002deb..4d076a9b8592 100644
-> --- a/net/sctp/stream_sched.c
-> +++ b/net/sctp/stream_sched.c
-> @@ -146,18 +146,19 @@ static void sctp_sched_free_sched(struct sctp_strea=
-m *stream)
->  int sctp_sched_set_sched(struct sctp_association *asoc,
->                          enum sctp_sched_type sched)
->  {
-> -       struct sctp_sched_ops *n =3D sctp_sched_ops[sched];
->         struct sctp_sched_ops *old =3D asoc->outqueue.sched;
->         struct sctp_datamsg *msg =3D NULL;
-> +       struct sctp_sched_ops *n;
->         struct sctp_chunk *ch;
->         int i, ret =3D 0;
->
-> -       if (old =3D=3D n)
-> -               return ret;
-> -
->         if (sched > SCTP_SS_MAX)
->                 return -EINVAL;
->
-> +       n =3D sctp_sched_ops[sched];
-> +       if (old =3D=3D n)
-> +               return ret;
-> +
->         if (old)
->                 sctp_sched_free_sched(&asoc->stream);
->
-> --
-> 2.30.2
+Hi,
 
-Reviewed-by: Xin Long <lucien.xin@gmail.com>
+On 02.05.23 02:24, Dmitry Torokhov wrote:
+> On Mon, May 01, 2023 at 01:30:07PM +0200, Maximilian Weigand wrote:
+>> Triggering the interrupt of the IRQ_TYPE_LEVEL_LOW type can lead to
+>> probing issues with the device for the current driver (encountered on
+>> the Pine64 PineNote). Basically the interrupt would be triggered before
+>> certain commands were sent to the device, leading to a race between the
+>> device responding fast enough and the irq handler fetching a data frame
+>> from it. Actually all devices currently using the driver already use a
+>> falling edge trigger.
+> 
+> I'd prefer we adjusted the driver to handle level interrupts properly.
+
+Ok, I will have a look at that. Just to be clear: The driver should work
+only with level interrupts, or should it optimally support both level
+and falling edge triggers?
+
+Thanks and best regards
+
+Maximilian
