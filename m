@@ -2,74 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACFCD6F3D08
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 07:36:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AE906F3D0C
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 07:38:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233541AbjEBFg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 01:36:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56752 "EHLO
+        id S233532AbjEBFiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 01:38:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233540AbjEBFgW (ORCPT
+        with ESMTP id S233286AbjEBFiR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 01:36:22 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35AFB46A8
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 22:36:09 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-63b7096e2e4so2634576b3a.2
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 22:36:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683005768; x=1685597768;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=P5pQrJTTCZJZZKPmjIiq+X+xkUImdFCCiZ3e7a6lOiY=;
-        b=fZP5Z2rmGEmEpMy/cc4ZqxwatyLd6N1517X/g3uf1SrKVGaZW/O0PmycIWhrUpTajl
-         r3ICQ65PAG96adg0yLWV3BYu8Io1tOKqCxKo7QyouVeng7Uv1GnYf6luRWhbqcvKo0Y8
-         lhTMNeAxOgQ/96CNfMBQNnGTEesOCzfPE6rTpr3653xNSDPZ3CMKcO0xdx8TnyKG0u0y
-         aeHN39S3FzCqWfdH7hBmIl+aMdj2+VIXsJkCCix5kialup04MsjsUmv10/3nBUqlrErr
-         aniplwSJ3sJvvni0BQ4M67c2ipOEpcTZyBYeojhiWj7MwJYnSTFiPDGSqTGERTeMU5u1
-         HWOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683005768; x=1685597768;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=P5pQrJTTCZJZZKPmjIiq+X+xkUImdFCCiZ3e7a6lOiY=;
-        b=LXcGzB7tsgMHCroCz4K3tAByPMXmsw1YgZLU//gosWRbi56LX5scCQJq+S01omU2Tb
-         +3vFgZRTTpCqmbfexxjfNDQpZ1inZEAsXo6NGYn1SxyGyydvQw9sa5W+eVM48KsXTEZ0
-         WPbwb9pQ1LNKzWQlfpBoyixxfD3iFbdb7rUmabwKEqRLmDYrdSNcxayH+BhwAvgk+eWO
-         KMjudqGnYmLFuqArjCU0gAwpZGrB+qqffk1w53Vf160R74jRttURFmlFBkbHAY3fFUty
-         sWQVYsBgiSiEbM4BIVSN/yQTx7ErDSeCRx2BBSrrKjgVddAIaAnviG+DydBeBT5YnMVX
-         87yw==
-X-Gm-Message-State: AC+VfDzmis9EXew2xhH0KE5/vbhsDS54j+9UMLhaoEHBvdlHHt0UeOrn
-        WID+vOgLo2ZqymF56s7IrOE5fw==
-X-Google-Smtp-Source: ACHHUZ4tSd8e/JnDsfq3JN6L/4ZDpvPlKlRCROwvaxatf/we7R8ZNaa88ly1NpuHJ+TXY3Txe/QJRw==
-X-Received: by 2002:a17:902:aa85:b0:1a5:22f3:220d with SMTP id d5-20020a170902aa8500b001a522f3220dmr15482431plr.49.1683005768487;
-        Mon, 01 May 2023 22:36:08 -0700 (PDT)
-Received: from localhost.localdomain ([2401:4900:1f3b:58fa:39f6:37e1:bb9a:a094])
-        by smtp.gmail.com with ESMTPSA id j12-20020a170902690c00b001a6a6169d45sm18870369plk.168.2023.05.01.22.36.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 May 2023 22:36:08 -0700 (PDT)
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-phy@lists.infradead.org
-Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
-        andersson@kernel.org, bhupesh.sharma@linaro.org,
-        bhupesh.linux@gmail.com, krzysztof.kozlowski@linaro.org,
-        robh+dt@kernel.org, konrad.dybcio@linaro.org, kishon@kernel.org,
-        vkoul@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        dmitry.baryshkov@linaro.org
-Subject: [PATCH v10 4/4] arm64: dts: qcom: qrb4210-rb2: Enable USB node
-Date:   Tue,  2 May 2023 11:05:34 +0530
-Message-Id: <20230502053534.1240553-5-bhupesh.sharma@linaro.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230502053534.1240553-1-bhupesh.sharma@linaro.org>
-References: <20230502053534.1240553-1-bhupesh.sharma@linaro.org>
+        Tue, 2 May 2023 01:38:17 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F77E52;
+        Mon,  1 May 2023 22:38:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683005895; x=1714541895;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IbzAOE6Ia8T4XdxydP/sh8DuUMvMcKuaOuf20lN87z4=;
+  b=XMNbqxsImiCusydzRTolLYdiBQZvoLyAjsXwGMQpY4qzeRlwvAIyCwoi
+   dJnqwvb6z4FbeGxTrGIKMIiFZETeGP8YX3xMw3i/t/1zIfaREtCj3ooPU
+   A1XI9H6A/q/eIyFPZb7jOiG0K+F7bfFsguL0M/O8rc34cndUnumk6TKHO
+   2tY2WbI9XxfwL6+TR/jkLdJUjBuH27uT8I0TeAFoIJS7Z5hhTlHDSA06r
+   aSv3obMPHz/A7DaHCbneap7wjje/pDyyDQnfm0a2M+iRJ0VEkq2bWxEm4
+   jxxUPTUEfb1KeZ7PmQ1Zg0VnJyyDmH6drz1cVVOyS6FMwdVSx4abB4pBU
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="351292743"
+X-IronPort-AV: E=Sophos;i="5.99,243,1677571200"; 
+   d="scan'208";a="351292743"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2023 22:38:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="785545764"
+X-IronPort-AV: E=Sophos;i="5.99,243,1677571200"; 
+   d="scan'208";a="785545764"
+Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 01 May 2023 22:38:14 -0700
+Received: from kbuild by e3434d64424d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ptiiL-0000s6-0Z;
+        Tue, 02 May 2023 05:38:13 +0000
+Date:   Tue, 2 May 2023 13:37:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Costa Shulyupin <costa.shul@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Costa Shulyupin <costa.shul@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] docs: consolidate human interface subsystems
+Message-ID: <202305021306.dKifEdb7-lkp@intel.com>
+References: <20230501154258.277866-1-costa.shul@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230501154258.277866-1-costa.shul@redhat.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,49 +67,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable the USB controller and HS/SS PHYs on qrb4210-rb2 board.
+Hi Costa,
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
----
- arch/arm64/boot/dts/qcom/qrb4210-rb2.dts | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+kernel test robot noticed the following build warnings:
 
-diff --git a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-index dc80f0bca767..eae3024ce003 100644
---- a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-+++ b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-@@ -222,6 +222,30 @@ &uart4 {
- 	status = "okay";
- };
- 
-+&usb {
-+	status = "okay";
-+};
-+
-+&usb_dwc3 {
-+	maximum-speed = "super-speed";
-+	dr_mode = "peripheral";
-+};
-+
-+&usb_hsphy {
-+	vdd-supply = <&vreg_l4a_0p9>;
-+	vdda-pll-supply = <&vreg_l12a_1p8>;
-+	vdda-phy-dpdm-supply = <&vreg_l15a_3p128>;
-+
-+	status = "okay";
-+};
-+
-+&usb_qmpphy {
-+	vdda-phy-supply = <&vreg_l4a_0p9>;
-+	vdda-pll-supply = <&vreg_l12a_1p8>;
-+
-+	status = "okay";
-+};
-+
- &xo_board {
- 	clock-frequency = <19200000>;
- };
+[auto build test WARNING on lwn/docs-next]
+[also build test WARNING on linus/master v6.3 next-20230428]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Costa-Shulyupin/docs-consolidate-human-interface-subsystems/20230501-234438
+base:   git://git.lwn.net/linux.git docs-next
+patch link:    https://lore.kernel.org/r/20230501154258.277866-1-costa.shul%40redhat.com
+patch subject: [PATCH v2] docs: consolidate human interface subsystems
+reproduce:
+        # https://github.com/intel-lab-lkp/linux/commit/2df620e4b9e2c2827f8a5519f6c266e9e5ef85be
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Costa-Shulyupin/docs-consolidate-human-interface-subsystems/20230501-234438
+        git checkout 2df620e4b9e2c2827f8a5519f6c266e9e5ef85be
+        make menuconfig
+        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
+        make htmldocs
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305021306.dKifEdb7-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> Documentation/subsystem-apis.rst:14: WARNING: Title underline too short.
+
+vim +14 Documentation/subsystem-apis.rst
+
+    12	
+    13	Human interfaces
+  > 14	---------------
+    15	
+
 -- 
-2.38.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
