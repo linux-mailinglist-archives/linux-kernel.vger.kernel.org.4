@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 670006F4D1D
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 00:46:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 461FF6F4D20
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 00:47:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230348AbjEBWqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 18:46:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34754 "EHLO
+        id S229674AbjEBWrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 18:47:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbjEBWpm (ORCPT
+        with ESMTP id S230397AbjEBWqq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 18:45:42 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C0212D69
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 15:45:24 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-5289f93ad94so2353883a12.0
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 15:45:24 -0700 (PDT)
+        Tue, 2 May 2023 18:46:46 -0400
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC31C3AA2
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 15:46:16 -0700 (PDT)
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-559f142fce7so71447187b3.3
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 15:46:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683067453; x=1685659453;
+        d=google.com; s=20221208; t=1683067459; x=1685659459;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zMkOwzwif+XT0+nBV5mOmwMnUg0kBSArT43+8IsF+QA=;
-        b=DiVr58NKnqrNa0PQ4s2HvZYJODLIFvfXb8It+Z4M5+iCIdFJl7S7DAEMKsQ69BcuSf
-         bYCLu0BHbbJQLd77EJSH/gAjXR/uE9dl+P49sOB0DUsD6hy7B3RcRtyXcRd8LoTulUGX
-         crklksll2IrovGv52zukTueeu2ssNuKvDU2+2uFy32gLhv5zaXAR/MGgu/CeJ8bk81Zs
-         LYuK6W0utDlAPgW4EsrwYLrBFdoyj1YB+Zo8jNjv8sQ6m3lwmtLZ9J+s3zOKRAAl4RmL
-         QMny6ECo4pJZ4eM5axsLEZn4fvwHTrJw3P5pAEGTqZXepeUJ6HHwTtE0hSBM/+NMrkqU
-         nuwA==
+        bh=udIESTQJWghJ0eXfw1zjkQa1ohgrnaNqFMimydoVXZk=;
+        b=gojl9HwHH6dSomxA0iNDxmuQP/iGSlTIAnnlpuwgAwND6HM9nhykps55V9hrixO7GH
+         JqqMikZyvzC9grNkp52yXWH6Zx8COeV321VVi53ed6Xx8I3VGnICqY3cYUJAos95eVe2
+         qlUatBbFGGJYZbckoX48NQC1R/fhQj9H3NkdcNHtr1s5y4UDCtzjeHOyOWD8N+MYnRVa
+         yrMpVe6C4X4UOmZucbVlNOGBrWOEaLM6AoPH2wUReYOcjyTBWPLhXsP2srxjBxt9d72A
+         V2uhVYBNstyLerh3Mhaj/PktKJLTji+8nYZi7xFblE0D3UtQJCVrQkfxufV/hUCrFGK5
+         v8ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683067453; x=1685659453;
+        d=1e100.net; s=20221208; t=1683067459; x=1685659459;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zMkOwzwif+XT0+nBV5mOmwMnUg0kBSArT43+8IsF+QA=;
-        b=Fn57CiDidlOOrD2fWkSXAkklskMtq0xsUCuqTZWU8bmrVGmW8CBFfWaMJtmzvtZigE
-         gkQSeeym1rK96vIEYED//2qrbP33OeVp+mLBu+HsJyiOiFxFqVkQcNVQp86gYY3lIVvJ
-         Uaop3nY17ywT9b7xxlc16uYjbrfUJ2Cec4sipAMUBrSx4aEUJkGrw+ERDx1TFt4rZGZ6
-         F0OZUEc4+B2SCUl9nSQYokTEfYmK7EKv50AD06bXy8Q5aygBn8igZ/LuE8etulUUk3QB
-         /tWB+LUe/mD/MVS1E9tiNUAoZQObfomV9JUuMAiDZnIU9Pka1f4UDYblHsf8NVdvRYGo
-         Ph/w==
-X-Gm-Message-State: AC+VfDzwRNO12Ct3R1rqOap5qPW+pleHU7ZjM1/s/RPAcQkL/39smp99
-        LAniCxwETTAK4Ymgm4Z3fry/eZw/Kkxy
-X-Google-Smtp-Source: ACHHUZ7ap0xtN41qtnwK/fzVQw9n9WtCXHcFSd4DNZI35fUjtZVM5Xpb1//5i3q2RLMUaEOVVhPNP2dYHZv8
+        bh=udIESTQJWghJ0eXfw1zjkQa1ohgrnaNqFMimydoVXZk=;
+        b=BmrFIwdEfvcMuNMee09l3QGn0EYxf/IIl6PXDB1E6dyXcF/Ea9dIBVC0/aWbLCcEZL
+         iLF1x+828N8k9DfqkjXzPeXTI8/2158LQdFfw5lc+9MUMVuzbkJzOWCMS8H0RzpjfZ7k
+         lbYG7aIIo+dH2x7SmbbLgVB0B/afrF2g6hVZwP840tPsGNGjk3+NXGiKWgQvKReHnAeH
+         usowdCe2BC3+DbfgL6jeIlT/YdVSbOflfhEhPddiKK7geyZrWKueZvIwLFyIK/SeVL/t
+         2OIB8EmGmnMdMnGhHlyRd0cbLo6ROCX7FPbQZxIFHNO+QNic29S8YoEwHNWou8iiOgUR
+         FQyg==
+X-Gm-Message-State: AC+VfDwaFrGt4SkVzIBMNjjMVMY/wepb7uLxwEcMJoFmiwAiXICAFlmg
+        NmNbmimWfxS8TtsyfJsR+++UiJ6gvKHQ
+X-Google-Smtp-Source: ACHHUZ5zFcnSGoYy10fGDH40vDdIwUQ+uQ6vQnbd4Izu2cHsmeAi8zbJBTEGQqFzRAOUO0v/SGTjrmnnvfNE
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:e70c:446b:d23b:982e])
- (user=irogers job=sendgmr) by 2002:a63:2aca:0:b0:51f:54dc:1646 with SMTP id
- q193-20020a632aca000000b0051f54dc1646mr17578pgq.7.1683067453102; Tue, 02 May
- 2023 15:44:13 -0700 (PDT)
-Date:   Tue,  2 May 2023 15:38:49 -0700
+ (user=irogers job=sendgmr) by 2002:a81:ad58:0:b0:559:f1b0:6eb with SMTP id
+ l24-20020a81ad58000000b00559f1b006ebmr6888406ywk.4.1683067459645; Tue, 02 May
+ 2023 15:44:19 -0700 (PDT)
+Date:   Tue,  2 May 2023 15:38:50 -0700
 In-Reply-To: <20230502223851.2234828-1-irogers@google.com>
-Message-Id: <20230502223851.2234828-43-irogers@google.com>
+Message-Id: <20230502223851.2234828-44-irogers@google.com>
 Mime-Version: 1.0
 References: <20230502223851.2234828-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
-Subject: [PATCH v4 42/44] perf metrics: Be PMU specific in event match
+Subject: [PATCH v4 43/44] perf stat: Don't disable TopdownL1 metric on hybrid
 From:   Ian Rogers <irogers@google.com>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Kan Liang <kan.liang@linux.intel.com>,
@@ -91,68 +91,40 @@ Cc:     Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ids/events from a metric are turned into an event string and parsed;
-setup_metric_events matches the id back to the parsed evsel. With
-hybrid the same event may exist on both PMUs with the same name and be
-being used by metrics at the same time. A metric on cpu_core therefore
-shouldn't match against evsels on cpu_atom, or the metric will compute
-the wrong value. Make the matching sensitive to the PMU being parsed.
+Now that hybrid bugs are fixed sufficient to run TopdownL1 metrics,
+don't implicitly disable them for hybrid.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/metricgroup.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ tools/perf/builtin-stat.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
-index 4245b23d8efe..490561f430f2 100644
---- a/tools/perf/util/metricgroup.c
-+++ b/tools/perf/util/metricgroup.c
-@@ -274,7 +274,7 @@ static int setup_metric_events(const char *pmu, struct hashmap *ids,
- 	const char *metric_id;
- 	struct evsel *ev;
- 	size_t ids_size, matched_events, i;
--	bool all_pmus = !strcmp(pmu, "all");
-+	bool all_pmus = !strcmp(pmu, "all") || !perf_pmu__is_hybrid(pmu);
- 
- 	*out_metric_events = NULL;
- 	ids_size = hashmap__size(ids);
-@@ -287,7 +287,10 @@ static int setup_metric_events(const char *pmu, struct hashmap *ids,
- 	evlist__for_each_entry(metric_evlist, ev) {
- 		struct expr_id_data *val_ptr;
- 
--		if (!all_pmus && strcmp(ev->pmu_name, pmu))
-+		/* Don't match events for the wrong hybrid PMU. */
-+		if (!all_pmus && ev->pmu_name &&
-+		    perf_pmu__is_hybrid(ev->pmu_name) &&
-+		    strcmp(ev->pmu_name, pmu))
- 			continue;
- 		/*
- 		 * Check for duplicate events with the same name. For
-@@ -304,6 +307,7 @@ static int setup_metric_events(const char *pmu, struct hashmap *ids,
- 		 * about this event.
+diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+index f4e572f9de6b..67dc69270ae4 100644
+--- a/tools/perf/builtin-stat.c
++++ b/tools/perf/builtin-stat.c
+@@ -1900,12 +1900,7 @@ static int add_default_attributes(void)
+ 		 * Add TopdownL1 metrics if they exist. To minimize
+ 		 * multiplexing, don't request threshold computation.
  		 */
- 		if (hashmap__find(ids, metric_id, &val_ptr)) {
-+			pr_debug("Matched metric-id %s to %s\n", metric_id, evsel__name(ev));
- 			metric_events[matched_events++] = ev;
+-		/*
+-		 * TODO: TopdownL1 is disabled on hybrid CPUs to avoid a crashes
+-		 * caused by exposing latent bugs. This is fixed properly in:
+-		 * https://lore.kernel.org/lkml/bff481ba-e60a-763f-0aa0-3ee53302c480@linux.intel.com/
+-		 */
+-		if (metricgroup__has_metric(pmu, "TopdownL1") && !perf_pmu__has_hybrid()) {
++		if (metricgroup__has_metric(pmu, "TopdownL1")) {
+ 			struct evlist *metric_evlist = evlist__new();
+ 			struct evsel *metric_evsel;
  
- 			if (matched_events >= ids_size)
-@@ -1592,7 +1596,7 @@ static int parse_groups(struct evlist *perf_evlist,
- 		ret = setup_metric_events(fake_pmu ? "all" : m->pmu, m->pctx->ids,
- 					  metric_evlist, &metric_events);
- 		if (ret) {
--			pr_debug("Cannot resolve IDs for %s: %s\n",
-+			pr_err("Cannot resolve IDs for %s: %s\n",
- 				m->metric_name, m->metric_expr);
- 			goto out;
- 		}
 -- 
 2.40.1.495.gc816e09b53d-goog
 
