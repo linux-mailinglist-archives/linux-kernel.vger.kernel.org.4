@@ -2,184 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CC136F47E2
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 18:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56D076F47F3
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 18:07:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234602AbjEBQAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 12:00:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37646 "EHLO
+        id S233273AbjEBQH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 12:07:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234661AbjEBQAg (ORCPT
+        with ESMTP id S229457AbjEBQHY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 12:00:36 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A36E40F7;
-        Tue,  2 May 2023 09:00:33 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-3062c1e7df8so1815260f8f.1;
-        Tue, 02 May 2023 09:00:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683043232; x=1685635232;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=k2Qjj4J2QVS6E2WwvS7hIj33LnIvaIzNxIftN5wfh5k=;
-        b=B5tpiBn1yYsDx6uA2yL6fh/eKiWy7z1jl57c/Y/LBE+sMmdW/sxsuYXzTnLN1xAhUf
-         aI8haoVSdQofqR8wCoHrVisw+ejVRZoRIkII4AXf9YnGJ9nso5oFESEKjfXtAxeM48Cq
-         KQhB4Kb6Xt3trALiZSZUDJpS1T0LvKyNkEOLnoYD8BUMyPrLS96wWe9b5EXzAXamNhEz
-         2x7b3GswjbkK6g5ouwND4PLtZV4oiG/DiuSu2vfBhlRlZDZ6PT+r/nB0FjTUsC2UJ9Ws
-         864RwLoGZLVJJ3lFAlAoO831G56km3Y/LZe2B1gLy/lBzj0Elbfw9DvXWXe6he8mKVrH
-         1xqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683043232; x=1685635232;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=k2Qjj4J2QVS6E2WwvS7hIj33LnIvaIzNxIftN5wfh5k=;
-        b=lwyV0e0ZX4X6qCEh2kWYmh5Y0j+GFW/dRFC6givjj02XRBVGv5PM2fEYYSnRLRvsD8
-         /PBJR2s70OPaU7tTNKc5xlglPmJ1VrNmeB8vfFXvG1T7iFK+vR+PY1HDF1xCpNSDeMoR
-         DX4y0D8n4QjrR4/MIJsF6VrsE17hHIddIKoWgt9MPSWc4Q6brUBURuW+52c4ygNuvIgs
-         qvfYSdw1n3SSFlV6AL++DsoYYFYk9S4TI8pJ8f6wxz+htXnfTJ88o3MPsgevydwvgWp2
-         E1K0/mJEmlBfr77BITliUIRLpE8UrnQgEn4KNb4o0Aho2PsFCDk/iEeP9sOAENAuQmoU
-         WZWQ==
-X-Gm-Message-State: AC+VfDxu1UhPS+VDdnfS55zZcWg6LyBtZIueoDeFmWcRJTxmuPNFMV+g
-        eI6RUVArKuJ737OQHtnNciA=
-X-Google-Smtp-Source: ACHHUZ6s1EAJEBgbHny09eQlPTJ+1OymgLdTQ2UByJxCsNR8mRXDrVDy5fn0HmL6hBnELTLmvUtf8Q==
-X-Received: by 2002:a5d:4c8c:0:b0:306:2a46:4b11 with SMTP id z12-20020a5d4c8c000000b003062a464b11mr6178283wrs.43.1683043231975;
-        Tue, 02 May 2023 09:00:31 -0700 (PDT)
-Received: from Ansuel-xps. ([176.201.39.129])
-        by smtp.gmail.com with ESMTPSA id o17-20020a5d4751000000b003063a92bbf5sm1297780wrs.70.2023.05.02.09.00.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 May 2023 09:00:31 -0700 (PDT)
-Message-ID: <6451339f.5d0a0220.88ec5.8829@mx.google.com>
-X-Google-Original-Message-ID: <ZFEzncaVV/MqzQ69@Ansuel-xps.>
-Date:   Tue, 2 May 2023 18:00:29 +0200
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Jonathan Corbet <corbet@lwn.net>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 08/11] leds: trigger: netdev: add support for LED hw
- control
-References: <20230427001541.18704-1-ansuelsmth@gmail.com>
- <20230427001541.18704-9-ansuelsmth@gmail.com>
- <d2c86cf0-d57f-4358-9765-3983a145e1ab@lunn.ch>
+        Tue, 2 May 2023 12:07:24 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5FBD1997;
+        Tue,  2 May 2023 09:07:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683043643; x=1714579643;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=I2QZzh9qzfdA9J2tzysHsjo8wxyPgdS/fULekpS2MxY=;
+  b=SaDX/cbyrYqWsQWRUqNL/jikPr4MQnNnmit81WvwgMmjTVpHVy6IRemF
+   grJ+s9eonlk3/XjqoZ8hPngiX63BU6SLPj0mU11MsGrzRTBR689MOaWyF
+   mocVWAVRRt9qmrRL0qlSN+nqt6z2FOXAG+IFMhS2O76Z7PEZoLJBbX0W8
+   EC41utJMdM5zmfPBFyLH6erU0i7OxQzUPjxPZyokg14K3F+ETRru3a+/Z
+   Yp65CuW1DUdBo+xX/FXm9M8cyWGbsRlpMv1lmdtkZ8nU8XCO9qChtp5hh
+   RYs3kMEpq5dRs2C/tZtFglplrzn0Y89ZxtJkpgXNpGtPKmiT4xqhKoq6Y
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="337563677"
+X-IronPort-AV: E=Sophos;i="5.99,244,1677571200"; 
+   d="scan'208";a="337563677"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2023 09:04:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="696238977"
+X-IronPort-AV: E=Sophos;i="5.99,244,1677571200"; 
+   d="scan'208";a="696238977"
+Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 02 May 2023 09:04:30 -0700
+Received: from kbuild by e3434d64424d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ptsUP-000196-0O;
+        Tue, 02 May 2023 16:04:29 +0000
+Date:   Wed, 3 May 2023 00:04:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ajay Kaher <akaher@vmware.com>, rostedt@goodmis.org,
+        mhiramat@kernel.org, shuah@kernel.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, chinglinyu@google.com,
+        namit@vmware.com, srivatsab@vmware.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, vsirnapalli@vmware.com, tkundu@vmware.com,
+        er.ajay.kaher@gmail.com, Ajay Kaher <akaher@vmware.com>
+Subject: Re: [PATCH v2 4/9] eventfs: adding eventfs file, directory remove
+ function
+Message-ID: <202305022354.fzV9RKTT-lkp@intel.com>
+References: <1683026600-13485-5-git-send-email-akaher@vmware.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d2c86cf0-d57f-4358-9765-3983a145e1ab@lunn.ch>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1683026600-13485-5-git-send-email-akaher@vmware.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 30, 2023 at 07:55:13PM +0200, Andrew Lunn wrote:
-> On Thu, Apr 27, 2023 at 02:15:38AM +0200, Christian Marangi wrote:
-> > Add support for LED hw control for the netdev trigger.
-> > 
-> > The trigger on calling set_baseline_state to configure a new mode, will
-> > do various check to verify if hw control can be used for the requested
-> > mode in the validate_requested_mode() function.
-> > 
-> > It will first check if the LED driver supports hw control for the netdev
-> > trigger, then will check if the requested mode are in the trigger mode
-> > mask and finally will call hw_control_set() to apply the requested mode.
-> > 
-> > To use such mode, interval MUST be set to the default value and net_dev
-> > MUST be empty. If one of these 2 value are not valid, hw control will
-> > never be used and normal software fallback is used.
-> > 
-> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > ---
-> >  drivers/leds/trigger/ledtrig-netdev.c | 52 +++++++++++++++++++++++++++
-> >  1 file changed, 52 insertions(+)
-> > 
-> > diff --git a/drivers/leds/trigger/ledtrig-netdev.c b/drivers/leds/trigger/ledtrig-netdev.c
-> > index 8cd876647a27..61bc19fd0c7a 100644
-> > --- a/drivers/leds/trigger/ledtrig-netdev.c
-> > +++ b/drivers/leds/trigger/ledtrig-netdev.c
-> > @@ -68,6 +68,13 @@ static void set_baseline_state(struct led_netdev_data *trigger_data)
-> >  	int current_brightness;
-> >  	struct led_classdev *led_cdev = trigger_data->led_cdev;
-> >  
-> > +	/* Already validated, hw control is possible with the requested mode */
-> > +	if (trigger_data->hw_control) {
-> > +		led_cdev->hw_control_set(led_cdev, trigger_data->mode);
-> > +
-> > +		return;
-> > +	}
-> > +
-> >  	current_brightness = led_cdev->brightness;
-> >  	if (current_brightness)
-> >  		led_cdev->blink_brightness = current_brightness;
-> > @@ -95,6 +102,51 @@ static void set_baseline_state(struct led_netdev_data *trigger_data)
-> >  static int validate_requested_mode(struct led_netdev_data *trigger_data,
-> >  				   unsigned long mode, bool *can_use_hw_control)
-> >  {
-> > +	unsigned int interval = atomic_read(&trigger_data->interval);
-> > +	unsigned long hw_supported_mode, hw_mode = 0, sw_mode = 0;
-> > +	struct led_classdev *led_cdev = trigger_data->led_cdev;
-> > +	unsigned long default_interval = msecs_to_jiffies(50);
-> > +	bool force_sw = false;
-> > +	int i, ret;
-> > +
-> > +	hw_supported_mode = led_cdev->trigger_supported_flags_mask;
-> > +
-> 
-> > +		if (interval == default_interval && !trigger_data->net_dev &&
-> > +		    !force_sw && test_bit(i, &hw_supported_mode))
-> > +			set_bit(i, &hw_mode);
-> > +		else
-> > +			set_bit(i, &sw_mode);
-> > +	}
-> > +
-> 
-> > +	/* Check if the requested mode is supported */
-> > +	ret = led_cdev->hw_control_is_supported(led_cdev, hw_mode);
-> > +	if (ret)
-> > +		return ret;
-> 
-> Hi Christian
-> 
-> What is the purpose of led_cdev->trigger_supported_flags_mask? I don't
-> see why it is needed when you are also going to ask the PHY if it can
-> support the specific blink pattern the user is requesting.
+Hi Ajay,
 
-The idea is to have a place where a trigger can quickly check the single
-mode supported before the entire mode map is validated, but I understand
-that this can totally be dropped with some extra code from both trigger
-and LED driver.
+kernel test robot noticed the following build warnings:
 
-While refactoring the netdev triger mode validation I notice it was very
-handy and simplified the check logic having a mask of the single mode
-supported. But this might be not needed for now and we can think of a
-better approach later when we will introduce hardware only modes.
+[auto build test WARNING on shuah-kselftest/next]
+[also build test WARNING on shuah-kselftest/fixes linus/master v6.3 next-20230428]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> 
-> The problem i have with the Marvell PHY, and other PHYs i've looked at
-> datasheets for, is that hardware does not work like this. It has a
-> collection of blinking modes, which are a mixture of link speeds, rx
-> activity, and tx activity. It supports just a subset of all
-> possibilities.
-> 
-> I think this function can be simplified. Simply ask the LED via
-> hw_control_is_supported() does it support this mode. If yes, offload
-> it, if not use software blinking.
+url:    https://github.com/intel-lab-lkp/linux/commits/Ajay-Kaher/eventfs-introducing-struct-tracefs_inode/20230502-192949
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git next
+patch link:    https://lore.kernel.org/r/1683026600-13485-5-git-send-email-akaher%40vmware.com
+patch subject: [PATCH v2 4/9] eventfs: adding eventfs file, directory remove function
+config: i386-randconfig-a011-20230501 (https://download.01.org/0day-ci/archive/20230502/202305022354.fzV9RKTT-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/9a36b39da0c3fbfe15a3c3a0ed71b52013bac292
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ajay-Kaher/eventfs-introducing-struct-tracefs_inode/20230502-192949
+        git checkout 9a36b39da0c3fbfe15a3c3a0ed71b52013bac292
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/tracefs/ kernel/trace/
 
-Yep, I will consider dropping it to slim this series even further.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305022354.fzV9RKTT-lkp@intel.com/
 
-> 
->     Andrew
+All warnings (new ones prefixed by >>):
+
+>> fs/tracefs/event_inode.c:379:6: warning: no previous prototype for function 'eventfs_remove_rec' [-Wmissing-prototypes]
+   void eventfs_remove_rec(struct eventfs_file *ef)
+        ^
+   fs/tracefs/event_inode.c:379:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void eventfs_remove_rec(struct eventfs_file *ef)
+   ^
+   static 
+   fs/tracefs/event_inode.c:31:29: warning: unused function 'eventfs_dentry_to_rwsem' [-Wunused-function]
+   static struct rw_semaphore *eventfs_dentry_to_rwsem(struct dentry *dentry)
+                               ^
+   fs/tracefs/event_inode.c:47:13: warning: unused function 'eventfs_down_read' [-Wunused-function]
+   static void eventfs_down_read(struct rw_semaphore *eventfs_rwsem)
+               ^
+   fs/tracefs/event_inode.c:58:13: warning: unused function 'eventfs_up_read' [-Wunused-function]
+   static void eventfs_up_read(struct rw_semaphore *eventfs_rwsem)
+               ^
+   4 warnings generated.
+
+
+vim +/eventfs_remove_rec +379 fs/tracefs/event_inode.c
+
+   371	
+   372	/**
+   373	 * eventfs_remove_rec - remove eventfs dir or file from list
+   374	 * @ef: a pointer to eventfs_file to be removed.
+   375	 *
+   376	 * This function recursively remove eventfs_file which
+   377	 * contains info of file or dir.
+   378	 */
+ > 379	void eventfs_remove_rec(struct eventfs_file *ef)
+   380	{
+   381		struct eventfs_file *ef_child, *n;
+   382	
+   383		if (!ef)
+   384			return;
+   385	
+   386		if (ef->ei) {
+   387			/* search for nested folders or files */
+   388			list_for_each_entry_safe(ef_child, n, &ef->ei->e_top_files, list) {
+   389				eventfs_remove_rec(ef_child);
+   390			}
+   391			kfree(ef->ei);
+   392		}
+   393	
+   394		if (ef->created && ef->dentry) {
+   395			d_invalidate(ef->dentry);
+   396			dput(ef->dentry);
+   397		}
+   398		list_del(&ef->list);
+   399		kfree(ef->name);
+   400		kfree(ef);
+   401	}
+   402	
 
 -- 
-	Ansuel
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
