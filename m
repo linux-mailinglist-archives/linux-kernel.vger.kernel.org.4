@@ -2,313 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 772256F43DE
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 14:27:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DCBA6F43E8
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 14:31:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234037AbjEBM1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 08:27:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51402 "EHLO
+        id S234037AbjEBMbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 08:31:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233537AbjEBM1r (ORCPT
+        with ESMTP id S233664AbjEBMbK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 08:27:47 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 921AE55B2;
-        Tue,  2 May 2023 05:27:45 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f178da219bso36034405e9.1;
-        Tue, 02 May 2023 05:27:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683030464; x=1685622464;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZN+pooP8nd+FXQmX2bQBwmYVFsxwnGNnZBxQw0pqYZA=;
-        b=pnedyj4oEvrOpSDxWQpNYOPf1Yxqe5RF0zu0rC20hWNl+D3yv7xKL1usMcIfA/yM4S
-         /8BfK39477afR6q8Z3jp3yG3WXJMcYTUaLo2KsuOC6f315SSD233kSRZneWMBB9KLyQe
-         vpgLMgDAUd2LzM9S4J8FnfcPv7I/hodf1mBBHPrDJfi82uqdzC3I8/2+jCU3JwfAh9Ok
-         ViL9nuzGqA7IAFWkBweZCMgVTyuIZWzwXbUMPT3yQWBlqoS12JyHgpWmysya2Q+9swPc
-         AScrvbJgA15fgZa/qWiMoyj4XrARkayt4lWa8EFFZyT+kloFfeLF1MNUOv0RBDCmrj3S
-         1qLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683030464; x=1685622464;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZN+pooP8nd+FXQmX2bQBwmYVFsxwnGNnZBxQw0pqYZA=;
-        b=NCTU9ymcz9rV8DsFcQXzgpcmr6teArPYV3Ac5FFBAz9n8+do0VijQLpI8jZDye/5v0
-         P+EzbFSJzJAMPP6PR5KIbLRyMw+Ht7zIQE3v3V75lWFY40mGhAiBwEgum3n43CtVbsLq
-         qG3QTywzRvO7tIaj9/A5jPnRVn2Ot3lc2tI9TAiXeDmJrffk0ulYcgp/yJ1wUvLMV1SJ
-         0tGOIczozIprMckJu3wzGgwU8GWXqAPFwuGIa51r0cO5ukSeMbiA4hD9gqU0BrSOU5jg
-         YfRPlydT81+sEHuHT0Ts4wPZ7N0y0EcNgJ2/sUXgepDmO+p/7bIpU48PaS4ht1hfJQLt
-         dEtw==
-X-Gm-Message-State: AC+VfDwO3kviWLVgjNRZOGfpzK2SGsqWZKv1HqdEABy1hZdnEAYk+ikp
-        t69VOZcMSnLPVU8h04iovhzZ7BvWt4kkcg==
-X-Google-Smtp-Source: ACHHUZ4+DQOWWJ1+EFDDG7oTmHd8+g/1rY3vrIA73s5XXOKVAggQWkPQcEm0YidgqeEZ5RK9+IFzLw==
-X-Received: by 2002:a05:600c:2309:b0:3ea:f73e:9d8a with SMTP id 9-20020a05600c230900b003eaf73e9d8amr12689569wmo.30.1683030463792;
-        Tue, 02 May 2023 05:27:43 -0700 (PDT)
-Received: from localhost (host86-156-84-164.range86-156.btcentralplus.com. [86.156.84.164])
-        by smtp.gmail.com with ESMTPSA id p5-20020a05600c468500b003f18141a016sm38543498wmo.18.2023.05.02.05.27.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 May 2023 05:27:43 -0700 (PDT)
-Date:   Tue, 2 May 2023 13:27:42 +0100
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Mika Penttila <mpenttil@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Theodore Ts'o <tytso@mit.edu>, Peter Xu <peterx@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>
-Subject: Re: [PATCH v6 3/3] mm/gup: disallow FOLL_LONGTERM GUP-fast writing
- to file-backed mappings
-Message-ID: <44ee78e9-6cc9-4aee-92fd-e5335576a55c@lucifer.local>
-References: <cover.1682981880.git.lstoakes@gmail.com>
- <dee4f4ad6532b0f94d073da263526de334d5d7e0.1682981880.git.lstoakes@gmail.com>
- <20230502111334.GP1597476@hirez.programming.kicks-ass.net>
- <ab66d15a-acd0-4d9b-aa12-49cddd12c6a5@lucifer.local>
- <20230502120810.GD1597538@hirez.programming.kicks-ass.net>
+        Tue, 2 May 2023 08:31:10 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2082.outbound.protection.outlook.com [40.107.94.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7964A12C
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 05:31:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lg7sDEyZTb6HKxsNNBpAc6bbjskOsba3PZ1gt0Xua2Gq3h++qH39Fb9U7fLIp6WWnALMOlRsMJSWFxmvdWI3OZe32DJuvi/TwWEiiR5DJiicbZq05lpHZP38p4KCejHhtEFzyFJKWlGlONixBawnuiCmZhNP1RR4P7YOrQhYfFoP8u7xKTU+i+6hbfPz8YacajSkWU/ez47I4MXkGoU8Qo36PcUS+pg/7rAJPr2+2Tklo34LmlY9gTnz4OAGz3pjH0pRzQ95FNp018z+odIYUreJZoji15HzRNRRCjSqLBVs0aUIKOJU5Zx8gOU4UiTEDJ92Ww3Hu0/WMUyDEWqKQA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6Qe6IzxohWTJvPMw9o0EKEnXl+KjXYPfB9HndJQJ1+w=;
+ b=odd8O99O4uOcOQ789+Xh8renz/R8Pn2csyOTBcoN6UuTnJAiN25BASVwquJvSQDnRSseHOsLA51Zhck1e0wJaoNdX5OKuqfqEzaXBAuZPu/gll/qUyaGBSTYG7aiKIliKwq4SADAxY2i6oLAo6kpsuR6ZUXAx9W9ZQ6RjbJjgcIybjGD+YWr/4/dgFeldJ1hX20UiPvOSThKJq21v1LFQubMhiL4Le1GXd9vnnlBFvXDnSIIR5caTlgxrkwPun7EGG2Yy2saIj5qRC9MzxdcDXcQMH87f4F3b4kplevYwwh0jqMtphU1yQK5rFQ7H3k0cj+tjdzK5TvG6HfvlIIzlg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6Qe6IzxohWTJvPMw9o0EKEnXl+KjXYPfB9HndJQJ1+w=;
+ b=TKfETPPkDVh0LUCmNcsvwjDEREc6Z0HS2/ZMr5e7aa072Cdlcrnt8USMXCUD8h0e6w647O6Z5SbXSrrw+hsHEEoiGv9NPflkKJwOh0mSl3Cs+o6nkrs1FUDxm1oEJKlhbdJbqDNv4bMtdEf/ZzQH5JxzD0cevqERzp6Knah+sac=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB6280.namprd12.prod.outlook.com (2603:10b6:8:a2::11) by
+ CY8PR12MB7147.namprd12.prod.outlook.com (2603:10b6:930:5d::19) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6340.30; Tue, 2 May 2023 12:31:07 +0000
+Received: from DM4PR12MB6280.namprd12.prod.outlook.com
+ ([fe80::fe53:2742:10f9:b8f1]) by DM4PR12MB6280.namprd12.prod.outlook.com
+ ([fe80::fe53:2742:10f9:b8f1%9]) with mapi id 15.20.6340.031; Tue, 2 May 2023
+ 12:31:07 +0000
+Message-ID: <5c384fc1-4f4b-2ef1-2349-060448f81be6@amd.com>
+Date:   Tue, 2 May 2023 08:32:32 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] drm/amd/display: mark amdgpu_dm_connector_funcs_force
+ static
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+Cc:     Stylon Wang <stylon.wang@amd.com>,
+        kernel test robot <lkp@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, Alex Hung <alex.hung@amd.com>,
+        Qingqing Zhuo <qingqing.zhuo@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>, linux-kernel@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org, Hans de Goede <hdegoede@redhat.com>,
+        Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        Hersen Wu <hersenxs.wu@amd.com>,
+        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        Wenchieh Chien <wenchieh.chien@amd.com>,
+        David Airlie <airlied@gmail.com>
+References: <20230501143213.1571373-1-arnd@kernel.org>
+Content-Language: en-US
+From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
+In-Reply-To: <20230501143213.1571373-1-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YQBPR0101CA0161.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:e::34) To DM4PR12MB6280.namprd12.prod.outlook.com
+ (2603:10b6:8:a2::11)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230502120810.GD1597538@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB6280:EE_|CY8PR12MB7147:EE_
+X-MS-Office365-Filtering-Correlation-Id: 188ae03e-2963-4097-86e1-08db4b0919ff
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dBBcQ1tsEWbLa91C4zHJl1oTKyqmtHv9H6+bObRxSukoRYrPy3ErKMZxh08Kuyc0b0ZnFXTGE9iaBQpg+oYJ9Jd5hbrRaZvrrShinccb3AUVoGibLAbN+gowMMajpZZGyRXQK3Cczz+ScdluwBc4lcqwMegQne0XZR7w02bqMHSpkWLf+7wIxpSL/U2ijrY3bHNO/W4jyoASnoFBP/8eU6e3qB/bN3UyE9dtJAD0jnj3zA846HMxys/AVzjwnDysmCLWnmPU0l2jLQP6IxzS+1itijyGxa6pX1bb4pZHWX4verX3jWT9f1eEib7ueP02zCW80+lSIv5yyR/t/zkaqPbUfhGjPvp1Ype9iBxNVbcmqJC9lmM8Ecf/fQ60H7DAn49hu2Ypx/IzSAXdpiUouJW4llS7Q5y+jb8fc+GeuJDAe735ISO59q5/lbvdemutyxX+RenCEVhyK9ITj6KB6v6gwqonbb9IvriC0nDoGn1kKY/RQozwVIpGg1yVqtabAFo2QUgDcHg7MOHkrPeo90jbp91Bfv97gJ/Lmn59CzcuBE4U1YlmtWswtX0IWfnw+kESPifMfKg4i0YP6ateABRO0Mm4bFAJnNGlyad9vA+2tvW0yfrQYhq6QkKgAiOvZSYfLkAqfHIUIEyhJ3TYMw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6280.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(39860400002)(346002)(396003)(376002)(366004)(451199021)(41300700001)(44832011)(5660300002)(8676002)(8936002)(2616005)(86362001)(31696002)(83380400001)(2906002)(110136005)(6486002)(54906003)(6506007)(6512007)(26005)(6666004)(31686004)(36756003)(53546011)(478600001)(316002)(4326008)(66556008)(66476007)(66946007)(38100700002)(6636002)(186003)(966005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WDRWNzJVakF1TVhFZ2NGbEIrWWlDUWFjNXlVNWVEQVFnVU45bmFsNHdiZnFj?=
+ =?utf-8?B?VHVxWW9rN1p6WWFoT0tJWGpwMFpKdm0zMEpuMm53VjQvbkcxYlRxcTFBNW1B?=
+ =?utf-8?B?djE0NVh6QXFhY3BTVTFYeWlZYitpem14aisvNUJ2SDFleDZpQzhobzdiRk1n?=
+ =?utf-8?B?dVcxOEpLZEVsc0FJMWVCeHI4YkZvNVZaYThYY2xidFVINjlhUUlwcXlDUFd1?=
+ =?utf-8?B?bXpIdjlKWm0xajFhMVp0OGh6bmRlSjljdGdlZFVPQ0hSaHRJVmpYOHdlbE1a?=
+ =?utf-8?B?YWJBWlFCNXJFZGs4ekcrOTg4Z1F6RUFGMXNuU2Qvc0lHTFBZemtUVlI4aElK?=
+ =?utf-8?B?Zm41ZkZQY1RWZlNGY0JPT0UrSGNRaXpuU1JoQVh2bEhIakhGdmo0cTZWaXdZ?=
+ =?utf-8?B?Z2NkNVdubEtObmxObk5pZmxhUTZSdnpVVHNxd2RMVFFPZFdOWEhDMmVRMm1v?=
+ =?utf-8?B?cDVBYjEwc3FXUU9LbS9WTDBzT3JnVkN0OVdpSDJFZEZhVGgwMnkwQmpHOERU?=
+ =?utf-8?B?M1hOR3N2MXRqc3hJQlMrTHYxMTgvcE9xTWZFYkl3WU5XK3NsbW5WMjBnczhJ?=
+ =?utf-8?B?YUE1THBvUm40NDlIblVrTFBBSFhZUGtuUUUzOW92Q0Rwa3NKQ0tQMENlTURr?=
+ =?utf-8?B?elM3aUlCMmFKY0g0bnhrWExxOUVVcnp2UGFqajdCNzdKYzNFa0NVb1VrOGR6?=
+ =?utf-8?B?bzdNbjRwaHVoTHJobEQzbHFvaDNYU1Q4cUZTMjQ0WTMwanNUVWI2bG9neEQv?=
+ =?utf-8?B?MjJZWG81U1NXSmJZSkRUMUlUU3BoNE1lakJ4OTl5YzlONTZsMjhPczFiUEtl?=
+ =?utf-8?B?TWZuejY0elltOTFZSUtnK3pxVGZqTlFiVEMxMi9WRUEvL2YrV2gwNG1seXB3?=
+ =?utf-8?B?MXl5VndCRXZEMkxiZnhYOTNTNW9QaFg4d20wN2RadHRyRWhLR1JPVHZoQzZa?=
+ =?utf-8?B?dWFRc1JwbVJhOG83c2JrdG02L2lVa2ZDU0s2UTc0a0drTng4UTFad0NlMk9Y?=
+ =?utf-8?B?Z2xVTE5OWkwyM2F1OW9EVTFWNmk3dnRxQnFOb0MrWEg5ZlFSejZmamVrOURx?=
+ =?utf-8?B?ZGlRQ2xUdDhMMXU0RVpSK1VkZHVGYVMrQnNBMHFLVlFDeG9yWlRQNHFybmVZ?=
+ =?utf-8?B?RzBDRzhrQTNHODFYaHRBM2FYNW9YNnZoRTRPNElRR0VFT0FGSEdvUHlTUkVn?=
+ =?utf-8?B?SXBSOFZ3emZEMGJpMzFNNWp1MUhRQlFrMEFRWFdEVzZsSlhvZ200MmpHV1Z3?=
+ =?utf-8?B?WWNMeEVQWjBsZEkzSmllUHZFYjJuMGhLaUhYZWE4ZkdteU45Ky9hdVRZMzZM?=
+ =?utf-8?B?MEZxemRrWHRBei83ZTF3ZHpiNkE2WjNLYVdLTjR1Uy8rR0FIVm1zc1NYaTZR?=
+ =?utf-8?B?M1NmdjV4b1RibVY4U01MRHR0endZN1JBaTZoR3lQeU5qU0ZqNGEvOG1KNGJs?=
+ =?utf-8?B?YlJJVlQ1eGZMc1ZFYm4zUFF0MElKWVpIYS94T2h1eGxITHZyamZuZlkwTjVi?=
+ =?utf-8?B?cnR0VFhtbXhnM2Y2VER2ZGNMTVM4SW5MSHlYY25YbU9HUjBGVGVEN3BHU0ZL?=
+ =?utf-8?B?RERCV0tubGZBN0lENVZwWmxjbGJRdWFyaktUTUVwZGp1ZkZMbzgwWmd4Z1k5?=
+ =?utf-8?B?UW1Tanl5bUExQ0hQd3F1Vkk2MTQxMlVOV0dRN2ZGYW1UR2xabkhRMUkwWk10?=
+ =?utf-8?B?RjFya2hSc3g3dUZZaEZGZnZpQ1pjZVBhT3I1T2NjRFIvOFNSZ0ZxQk5qQlc3?=
+ =?utf-8?B?MmlpNjQ1UHVKTHhPNTFFV3lETUhrSnRPaElVK1hIdk0zb3ltTXhBeXNZQStt?=
+ =?utf-8?B?NjBJbHVOSnliYWpPdUJpU3B1TmR2cHJmNHFoOW4wTEk0MUpaZEdZU1ZyOFdo?=
+ =?utf-8?B?U2VQRW85ekppd3hvWXFqNGF0VXIraVBZK3dMenVNSlh3bHZKTUpMSm9RcEdE?=
+ =?utf-8?B?NEpvNjZibkJNcUF2WE1qQmdndmVQQnp1N0hReWY4bUFiVHJUeFhyUDM5OEsv?=
+ =?utf-8?B?NkVFcjdnb1hSTEtNdWoweGVKYTYyL2d4UmY4eDRVL2s2SlplVjRZbTJLTmV0?=
+ =?utf-8?B?SGZQWUdYYmRuNlFvL3V2UXg0WWd4YVBkQWhOYjhBZnB4VXdyTjVWak9kUU5X?=
+ =?utf-8?Q?KLgW75sj1our9xBSrd7yBmphZ?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 188ae03e-2963-4097-86e1-08db4b0919ff
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6280.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2023 12:31:06.8586
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5Re95nrFukeyINPxaBQtEZHh8K6nUJPJAHUEZBJq28ERZZJqvipVlUpmUU/GR5jFilmLoR2QXZwVb/POky6A9g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7147
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 02, 2023 at 02:08:10PM +0200, Peter Zijlstra wrote:
-> On Tue, May 02, 2023 at 12:25:54PM +0100, Lorenzo Stoakes wrote:
-> > On Tue, May 02, 2023 at 01:13:34PM +0200, Peter Zijlstra wrote:
-> > > On Tue, May 02, 2023 at 12:11:49AM +0100, Lorenzo Stoakes wrote:
-> > > > @@ -95,6 +96,77 @@ static inline struct folio *try_get_folio(struct page *page, int refs)
-> > > >  	return folio;
-> > > >  }
-> > > >
-> > > > +#ifdef CONFIG_MMU_GATHER_RCU_TABLE_FREE
-> > > > +static bool stabilise_mapping_rcu(struct folio *folio)
-> > > > +{
-> > > > +	struct address_space *mapping = READ_ONCE(folio->mapping);
-> > > > +
-> > > > +	rcu_read_lock();
-> > > > +
-> > > > +	return mapping == READ_ONCE(folio->mapping);
-> > >
-> > > This doesn't make sense; why bother reading the same thing twice?
-> >
-> > The intent is to see whether the folio->mapping has been truncated from
-> > underneath us, as per the futex code that Kirill referred to which does
-> > something similar [1].
->
-> Yeah, but per that 3rd load you got nothing here. Also that futex code
-> did the early load to deal with the !mapping case, but you're not doing
-> that.
->
+On 5/1/23 10:31, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> A global function without a header prototype has made it into
+> linux-next during the merge window:
+> 
+> drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:6339:6: error: no previous prototype for 'amdgpu_dm_connector_funcs_force' [-Werror=missing-prototypes]
+> 
+> Mark the function static instead, as there are no other
+> callers outside this file.
+> 
+> Fixes: 0ba4a784a145 ("drm/amd/display: implement force function in amdgpu_dm_connector_funcs")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: https://lore.kernel.org/oe-kbuild-all/202304251640.JClqTim9-lkp@intel.com/
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-OK I drafted a response three times then deleted which shows you how this
-stuff messes with your mind :)
+Applied, thanks!
 
-I realise now that literally it is checking whether the previous !mapping
-case and lack of action taken on that was valid for futex, rendering this
-pointless for the logic here.
+> ---
+> This was previously reported by a bot for the drm-next tree but remains
+> broken in linux-next-20230428. Sending it out as I needed this fix
+> for my local builds.
+> ---
+>   drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> index 3647d21d688f..2bbb2988942d 100644
+> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> @@ -6336,7 +6336,7 @@ amdgpu_dm_connector_late_register(struct drm_connector *connector)
+>   	return 0;
+>   }
+>   
+> -void amdgpu_dm_connector_funcs_force(struct drm_connector *connector)
+> +static void amdgpu_dm_connector_funcs_force(struct drm_connector *connector)
+>   {
+>   	struct amdgpu_dm_connector *aconnector = to_amdgpu_dm_connector(connector);
+>   	struct dc_link *dc_link = aconnector->dc_link;
+-- 
+Hamza
 
-We do check !mapping later but obviously with the 'stable' mapping whose
-relation to pre-rcu lock is irrelevant.
-
-Thanks for patiently explaining this :) RCU remains an area I need to take
-a closer look at generally.
-
-> > > Who cares if the thing changes from before; what you care about is that
-> > > the value you see has stable storage, this doesn't help with that.
-> > >
-> > > > +}
-> > > > +
-> > > > +static void unlock_rcu(void)
-> > > > +{
-> > > > +	rcu_read_unlock();
-> > > > +}
-> > > > +#else
-> > > > +static bool stabilise_mapping_rcu(struct folio *)
-> > > > +{
-> > > > +	return true;
-> > > > +}
-> > > > +
-> > > > +static void unlock_rcu(void)
-> > > > +{
-> > > > +}
-> > > > +#endif
-> > >
-> > > Anyway, this all can go away. RCU can't progress while you have
-> > > interrupts disabled anyway.
-> >
-> > There seems to be other code in the kernel that assumes that this is not
-> > the case,
->
-> Yeah, so Paul went back on forth on that a bit. It used to be true in
-> the good old days when everything was simple. Then Paul made things
-> complicated by separating out sched-RCU bh-RCU and 'regular' RCU
-> flavours.
->
-> At that point disabling IRQs would only (officially) inhibit sched and
-> bh RCU flavours, but not the regular RCU.
->
-> But then some years ago Linus convinced Paul that having all these
-> separate RCU flavours with separate QS rules was a big pain in the
-> backside and Paul munged them all together again.
->
-> So now, anything that inhibits any of the RCU flavours inhibits them
-> all. So disabling IRQs is sufficient.
->
-> > i.e. the futex code, though not sure if that's being run with
-> > IRQs disabled...
->
-> That futex code runs in preemptible context, per the lock_page() that
-> can sleep etc.. :-)
-
-OK I am actually really happy to hear this because this means I can go
-simplify this code significantly!
-
->
-> > > > +/*
-> > > > + * Used in the GUP-fast path to determine whether a FOLL_PIN | FOLL_LONGTERM |
-> > > > + * FOLL_WRITE pin is permitted for a specific folio.
-> > > > + *
-> > > > + * This assumes the folio is stable and pinned.
-> > > > + *
-> > > > + * Writing to pinned file-backed dirty tracked folios is inherently problematic
-> > > > + * (see comment describing the writeable_file_mapping_allowed() function). We
-> > > > + * therefore try to avoid the most egregious case of a long-term mapping doing
-> > > > + * so.
-> > > > + *
-> > > > + * This function cannot be as thorough as that one as the VMA is not available
-> > > > + * in the fast path, so instead we whitelist known good cases.
-> > > > + *
-> > > > + * The folio is stable, but the mapping might not be. When truncating for
-> > > > + * instance, a zap is performed which triggers TLB shootdown. IRQs are disabled
-> > > > + * so we are safe from an IPI, but some architectures use an RCU lock for this
-> > > > + * operation, so we acquire an RCU lock to ensure the mapping is stable.
-> > > > + */
-> > > > +static bool folio_longterm_write_pin_allowed(struct folio *folio)
-> > > > +{
-> > > > +	bool ret;
-> > > > +
-> > > > +	/* hugetlb mappings do not require dirty tracking. */
-> > > > +	if (folio_test_hugetlb(folio))
-> > > > +		return true;
-> > > > +
-> > >
-> > > This:
-> > >
-> > > > +	if (stabilise_mapping_rcu(folio)) {
-> > > > +		struct address_space *mapping = folio_mapping(folio);
-> > >
-> > > And this is 3rd read of folio->mapping, just for giggles?
-> >
-> > I like to giggle :)
-> >
-> > Actually this is to handle the various cases in which the mapping might not
-> > be what we want (i.e. have PAGE_MAPPING_FLAGS set) which doesn't appear to
-> > have a helper exposed for a check. Given previous review about duplication
-> > I felt best to reuse this even though it does access again... yes I felt
-> > weird about doing that.
->
-> Right, I had a peek inside folio_mapping(), but the point is that this
-> 3rd load might see yet *another* value of mapping from the prior two
-> loads, rendering them somewhat worthless.
->
-> > > > +
-> > > > +		/*
-> > > > +		 * Neither anonymous nor shmem-backed folios require
-> > > > +		 * dirty tracking.
-> > > > +		 */
-> > > > +		ret = folio_test_anon(folio) ||
-> > > > +			(mapping && shmem_mapping(mapping));
-> > > > +	} else {
-> > > > +		/* If the mapping is unstable, fallback to the slow path. */
-> > > > +		ret = false;
-> > > > +	}
-> > > > +
-> > > > +	unlock_rcu();
-> > > > +
-> > > > +	return ret;
-> > >
-> > > then becomes:
-> > >
-> > >
-> > > 	if (folio_test_anon(folio))
-> > > 		return true;
-> >
-> > This relies on the mapping so belongs below the lockdep assert imo.
->
-> Oh, right you are.
->
-> > >
-> > > 	/*
-> > > 	 * Having IRQs disabled (as per GUP-fast) also inhibits RCU
-> > > 	 * grace periods from making progress, IOW. they imply
-> > > 	 * rcu_read_lock().
-> > > 	 */
-> > > 	lockdep_assert_irqs_disabled();
-> > >
-> > > 	/*
-> > > 	 * Inodes and thus address_space are RCU freed and thus safe to
-> > > 	 * access at this point.
-> > > 	 */
-> > > 	mapping = folio_mapping(folio);
-> > > 	if (mapping && shmem_mapping(mapping))
-> > > 		return true;
-> > >
-> > > 	return false;
-> > >
-> > > > +}
-> >
-> > I'm more than happy to do this (I'd rather drop the RCU bits if possible)
-> > but need to be sure it's safe.
->
-> GUP-fast as a whole relies on it :-)
-
-Indeed, the only question was what happened with
-CONFIG_MMU_GATHER_RCU_TABLE_FREE arches which appeared to require special
-handling, but I'm very happy to hear they don't!
-
-Will respin along the lines of your suggestion.
