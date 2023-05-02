@@ -2,196 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62EB26F4744
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 17:31:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B8DC6F474A
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 17:33:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234268AbjEBPbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 11:31:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48468 "EHLO
+        id S234306AbjEBPd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 11:33:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234176AbjEBPbb (ORCPT
+        with ESMTP id S234254AbjEBPdx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 11:31:31 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 572C5197
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 08:31:29 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f004cc54f4so5139866e87.3
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 08:31:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683041485; x=1685633485;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GoJQYLN9+L2vo//E4FPW+gR4+BR6F8D80HI3lzLvkwM=;
-        b=uqZp8ZiBtNP+mnlO4cyVx9iYmYWhKgXTXqfzB8xUSuH95IiMEBZT9ZRTmzOfYjuKtH
-         rYgKn+AORrJ7nKDpbwk2TjucLsdS05oYZNdbqQRHjhTdn8xLaW1/7zR/aMgRdmW28J85
-         9mPnKVYhox4OuX06Blz8WiIscMbgKOQ70seeI3BKZoXhNUaq5xizS8eJ7qu3Rb2voWor
-         1qKFmkcSgDte5qeuI6z22c9lVC9izVngvAZ8Gv2kGZKZGUdoEdtdATG1si+HA4RjuiTI
-         pfuEbe4D3XGLs758kn/RVMuHb0VAxLJqqlQKcv6qelQk7ItbPwn4DwXRTNNC/MHj6bpF
-         YzwQ==
+        Tue, 2 May 2023 11:33:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70279F1
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 08:33:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683041584;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qVyMlYQrCOCJQlbTbssjDOURAbJMXiphryUuhr0Mq9s=;
+        b=Ck/16+aj5YWxq9ugHUWRtNQ+CsXGyzwYHLrKotDnz6ncmW99tBCswB88XSPw+SZG0qQIdu
+        YROPQmuvUqnQE8dRoo96txkoLKYwyeITelW07lNMTe17BWDyiRtTNUzshb9mJo9El19Dij
+        JI0G5Q3mXJqxHPkFNMfzocpEkhp2LyY=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-408-NcrfOwCKM7a7qd-TzePbCA-1; Tue, 02 May 2023 11:33:03 -0400
+X-MC-Unique: NcrfOwCKM7a7qd-TzePbCA-1
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-74deffa28efso19526385a.1
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 08:33:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683041485; x=1685633485;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GoJQYLN9+L2vo//E4FPW+gR4+BR6F8D80HI3lzLvkwM=;
-        b=Ibz6qocYbOrM6Rd27MScH1XcWrrdfYQ+ze4KQtxvpwULdY62FIz80097fDAU/xQlFF
-         fAiX/8czkW0zU4866ijmF5uOo/zYEiYNP8tp6K6pr4wppveIS7+sNRYziL9iuO2aWzix
-         NCRKb9jmEnclxUuKVE71lKfMc2zbsLkpMmXQ2/oCV08TiypmLzHid3rbxYKmnVo3cFKf
-         rREKwIEiQjHMP5Ese3NP8dH35ElABxZ3P2tW1t0X6HHjwTsVXuXT3Q6rjusSvvRmg/iL
-         DN/KdUnRzJ+AHdsjl9xsNsLqFtCKl+SznOqdVKIdnzGjUyWMHqEv1BtzJEJRarAm4Gyc
-         3dsg==
-X-Gm-Message-State: AC+VfDyKEK/cLrrdV7K9nAvI6p5g5Q8Bh2P6w0/2xzH/MucKDQkEvrSz
-        pUPtX0KaVWvxdnhSJuPFc3tNhQ==
-X-Google-Smtp-Source: ACHHUZ51SVSBDDVPKnQnishgpr1pLCdOwbhgoqe5mZ1r5oKxWYpc0PJDXL8PfEmCInG1t7hJAhQZMg==
-X-Received: by 2002:ac2:5fa4:0:b0:4f0:18e2:c0d7 with SMTP id s4-20020ac25fa4000000b004f018e2c0d7mr139274lfe.60.1683041485360;
-        Tue, 02 May 2023 08:31:25 -0700 (PDT)
-Received: from [192.168.1.101] (abyl248.neoplus.adsl.tpnet.pl. [83.9.31.248])
-        by smtp.gmail.com with ESMTPSA id w15-20020ac2442f000000b004f09126b291sm1542450lfl.213.2023.05.02.08.31.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 May 2023 08:31:24 -0700 (PDT)
-Message-ID: <64e12896-4043-e01a-1a1b-aafc441b268e@linaro.org>
-Date:   Tue, 2 May 2023 17:31:23 +0200
+        d=1e100.net; s=20221208; t=1683041583; x=1685633583;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qVyMlYQrCOCJQlbTbssjDOURAbJMXiphryUuhr0Mq9s=;
+        b=ZS/EBTHgusw7RUyX2BQ2yafZWvSswRiOs9E0wsTxdkfNZv/3e5Vzu16PJCEab6S72J
+         QsVDKHw01u6/Wunbc1avFALScuqZ2luX0FDQxtBAEyV8LLxbskWtzZOiqIYdRiiLWDnN
+         nbMBXosSqIYJuQ439Qs6EhT/VNJnd3fmfIUrUfiXJbGBaSLraM6evE1fxcJloV06uewI
+         YIsgLQMiypaQMfbrPZgbQBuCWtvUhauOwhn1R9+VosOAr5Nf3juT77IxkTmYvqGpUGMS
+         y9naK9n73PXtH0NCi8O/6+KpZIoGs0kYF6/LlwHlhfYWlFanwtKZOs320gsuHfIGyNrd
+         S8Iw==
+X-Gm-Message-State: AC+VfDyH03gYxUqA50a0gRVpIYunVeeShXaryLv+LrQSCD8WzVCqcFIz
+        Tsc4+RqHAduO6JJdrfH7xAN8bAAVv7yTssg6jpXsuRUyiS6quyIfi3ZnInTXhNKzQX1nLU32SKd
+        8y3B38QECUfo1ftL6myjwbD5M
+X-Received: by 2002:a05:6214:4102:b0:5ef:55d8:7164 with SMTP id kc2-20020a056214410200b005ef55d87164mr4078009qvb.5.1683041582859;
+        Tue, 02 May 2023 08:33:02 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6ccuD8/o8IUQHBuYySeI12ByFV75gf5qFhRsuq92iWZyQjMkHy5mj41RjKZD3b/nlfQUiruw==
+X-Received: by 2002:a05:6214:4102:b0:5ef:55d8:7164 with SMTP id kc2-20020a056214410200b005ef55d87164mr4077964qvb.5.1683041582540;
+        Tue, 02 May 2023 08:33:02 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
+        by smtp.gmail.com with ESMTPSA id i3-20020a05620a27c300b0074236d3a149sm9758731qkp.92.2023.05.02.08.32.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 May 2023 08:33:00 -0700 (PDT)
+Date:   Tue, 2 May 2023 11:32:57 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Matthew Rosato <mjrosato@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Mika Penttila <mpenttil@redhat.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Theodore Ts'o <tytso@mit.edu>
+Subject: Re: [PATCH v6 3/3] mm/gup: disallow FOLL_LONGTERM GUP-fast writing
+ to file-backed mappings
+Message-ID: <ZFEtKe/XcnC++ACZ@x1n>
+References: <ZFER5ROgCUyywvfe@nvidia.com>
+ <ce3aa7b9-723c-6ad3-3f03-3f1736e1c253@redhat.com>
+ <ff99f2d8-804d-924f-3c60-b342ffc2173c@linux.ibm.com>
+ <ad60d5d2-cfdf-df9f-aef1-7a0d3facbece@redhat.com>
+ <ZFEVQmFGL3GxZMaf@nvidia.com>
+ <1ffbbfb7-6bca-0ab0-1a96-9ca81d5fa373@redhat.com>
+ <ZFEYblElll3pWtn5@nvidia.com>
+ <f0acd8e4-8df8-dfae-b6b2-30eea3b14609@redhat.com>
+ <3c17e07a-a7f9-18fc-fa99-fa55a5920803@linux.ibm.com>
+ <ZFEqTo+l/S8IkBQm@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 4/4] ARM: dts: qcom: msm8974-hammerhead: Add vibrator
-Content-Language: en-US
-To:     Luca Weiss <luca@z3ntu.xyz>, ~postmarketos/upstreaming@lists.sr.ht,
-        phone-devel@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Brian Masney <masneyb@onstation.org>
-Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <20230427-hammerhead-vibra-v1-0-e87eeb94da51@z3ntu.xyz>
- <20230427-hammerhead-vibra-v1-4-e87eeb94da51@z3ntu.xyz>
- <fc22fd34-6cce-c175-d845-cf4435b4b0be@linaro.org>
- <112204300.nniJfEyVGO@z3ntu.xyz>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <112204300.nniJfEyVGO@z3ntu.xyz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZFEqTo+l/S8IkBQm@nvidia.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, May 02, 2023 at 12:20:46PM -0300, Jason Gunthorpe wrote:
+> On Tue, May 02, 2023 at 10:54:35AM -0400, Matthew Rosato wrote:
+> > On 5/2/23 10:15 AM, David Hildenbrand wrote:
+> > > On 02.05.23 16:04, Jason Gunthorpe wrote:
+> > >> On Tue, May 02, 2023 at 03:57:30PM +0200, David Hildenbrand wrote:
+> > >>> On 02.05.23 15:50, Jason Gunthorpe wrote:
+> > >>>> On Tue, May 02, 2023 at 03:47:43PM +0200, David Hildenbrand wrote:
+> > >>>>>> Eventually we want to implement a mechanism where we can dynamically pin in response to RPCIT.
+> > >>>>>
+> > >>>>> Okay, so IIRC we'll fail starting the domain early, that's good. And if we
+> > >>>>> pin all guest memory (instead of small pieces dynamically), there is little
+> > >>>>> existing use for file-backed RAM in such zPCI configurations (because memory
+> > >>>>> cannot be reclaimed either way if it's all pinned), so likely there are no
+> > >>>>> real existing users.
+> > >>>>
+> > >>>> Right, this is VFIO, the physical HW can't tolerate not having pinned
+> > >>>> memory, so something somewhere is always pinning it.
+> > >>>>
+> > >>>> Which, again, makes it weird/wrong that this KVM code is pinning it
+> > >>>> again :\
+> > >>>
+> > >>> IIUC, that pinning is not for ordinary IOMMU / KVM memory access. It's for
+> > >>> passthrough of (adapter) interrupts.
+> > >>>
+> > >>> I have to speculate, but I guess for hardware to forward interrupts to the
+> > >>> VM, it has to pin the special guest memory page that will receive the
+> > >>> indications, to then configure (interrupt) hardware to target the interrupt
+> > >>> indications to that special guest page (using a host physical address).
+> > >>
+> > >> Either the emulated access is "CPU" based happening through the KVM
+> > >> page table so it should use mmu_notifier locking.
+> > >>
+> > >> Or it is "DMA" and should go through an IOVA through iommufd pinning
+> > >> and locking.
+> > >>
+> > >> There is no other ground, nothing in KVM should be inventing its own
+> > >> access methodology.
+> > > 
+> > > I might be wrong, but this seems to be a bit different.
+> > >
+> > > It cannot tolerate page faults (needs a host physical address), so
+> > > memory notifiers don't really apply. (as a side note, KVM on s390x
+> > > does not use mmu notifiers as we know them)
+> >
+> > The host physical address is one shared between underlying firmware
+> > and the host kvm.  Either might make changes to the referenced page
+> > and then issue an alert to the guest via a mechanism called GISA,
+> > giving impetus to the guest to look at that page and process the
+> > event.  As you say, firmware can't tolerate the page being
+> > unavailable; it's expecting that once we feed it that location it's
+> > always available until we remove it (kvm_s390_pci_aif_disable).
+> 
+> That is a CPU access delegated to the FW without any locking scheme to
+> make it safe with KVM :\
+> 
+> It would have been better if FW could inject it through the kvm page
+> tables so it has some coherency.
+> 
+> Otherwise you have to call this "DMA", I think.
+> 
+> How does s390 avoid mmu notifiers without having lots of problems?? It
+> is not really optional to hook the invalidations if you need to build
+> a shadow page table..
 
+Totally no idea on s390 details, but.. per my read above, if the firmware
+needs to make sure the page is always available (so no way to fault it in
+on demand), which means a longterm pinning seems appropriate here.
 
-On 2.05.2023 17:28, Luca Weiss wrote:
-> On Dienstag, 2. Mai 2023 12:40:40 CEST Konrad Dybcio wrote:
->> On 27.04.2023 22:34, Luca Weiss wrote:
->>> The Nexus 5 has a vibrator connected to the clock output of GP1_CLK
->>> which we can use with the clk-pwm driver, then we can use that pwm with
->>> pwm-vibrator to get haptics functionality.
->>>
->>> This patch is based on Brian Masney's previous patch with clk-vibrator.
->>>
->>> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
->>> ---
->>>
->>>  .../dts/qcom-msm8974-lge-nexus5-hammerhead.dts     | 35
->>>  ++++++++++++++++++++++ 1 file changed, 35 insertions(+)
->>>
->>> diff --git a/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
->>> b/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts index
->>> ab35f2d644c0..fea8a6be9021 100644
->>> --- a/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
->>> +++ b/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
->>> @@ -41,6 +41,25 @@ key-volume-down {
->>>
->>>  		};
->>>  	
->>>  	};
->>>
->>> +	clk_pwm: pwm {
->>> +		compatible = "clk-pwm";
->>> +		clocks = <&mmcc CAMSS_GP1_CLK>;
->>
->> Are you sure it's <&mmcc CAMSS_GP1_CLK> and not <&gcc GCC_GP1_CLK>?
-> 
-> Quite sure.
-> 
-> The driver uses:
-> 
-> 	cam_gp1_clk = clk_get(&pdev->dev, "cam_gp1_clk");
-> 
-> and this comes from the clock-8974.c driver
-> 
-> 	CLK_LOOKUP("cam_gp1_clk", camss_gp1_clk.c, "vibrator"),
-> 
-> Regards
-> Luca
-ugh that hurts my brain but fine, maybe the camss clock had a
-pad closer to the vibrator pcb traces..
+Then if pinned a must, there's no need for mmu notifiers (as the page will
+simply not be invalidated anyway)?
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Thanks,
 
-Konrad
-> 
->>
->> Konrad
->>
->>> +
->>> +		pinctrl-0 = <&vibrator_pin>;
->>> +		pinctrl-names = "default";
->>> +
->>> +		#pwm-cells = <2>;
->>> +	};
->>> +
->>> +	vibrator {
->>> +		compatible = "pwm-vibrator";
->>> +		pwms = <&clk_pwm 0 100000>;
->>> +		pwm-names = "enable";
->>> +
->>> +		vcc-supply = <&pm8941_l19>;
->>> +		enable-gpios = <&tlmm 60 GPIO_ACTIVE_HIGH>;
->>> +	};
->>> +
->>>
->>>  	vreg_wlan: wlan-regulator {
->>>  	
->>>  		compatible = "regulator-fixed";
->>>
->>> @@ -637,6 +656,22 @@ shutdown-pins {
->>>
->>>  			function = "gpio";
->>>  		
->>>  		};
->>>  	
->>>  	};
->>>
->>> +
->>> +	vibrator_pin: vibrator-state {
->>> +		core-pins {
->>> +			pins = "gpio27";
->>> +			function = "gp1_clk";
->>> +			drive-strength = <6>;
->>> +			bias-disable;
->>> +		};
->>> +
->>> +		enable-pins {
->>> +			pins = "gpio60";
->>> +			function = "gpio";
->>> +			drive-strength = <2>;
->>> +			bias-disable;
->>> +		};
->>> +	};
->>>
->>>  };
->>>  
->>>  &usb {
-> 
-> 
-> 
-> 
+-- 
+Peter Xu
+
