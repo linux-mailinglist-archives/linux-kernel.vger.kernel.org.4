@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE0066F4B0B
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 22:12:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6CAA6F4B0E
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 22:12:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbjEBUMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 16:12:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45244 "EHLO
+        id S229902AbjEBUMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 16:12:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbjEBUMb (ORCPT
+        with ESMTP id S229520AbjEBUMg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 16:12:31 -0400
+        Tue, 2 May 2023 16:12:36 -0400
 Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5AC10FF
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 13:12:30 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-b9e50081556so3379097276.3
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 13:12:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7B661FE2
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 13:12:34 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-b9a7e76b32bso5335474276.1
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 13:12:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683058349; x=1685650349;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=PxtEaaNRJEnS8gUq7TvU2r4SfUgelfPOgo5JiP3hUpo=;
-        b=BYEMeUVTavoTcRxgokm9LZOiUo7JnHslNZEV71QJ15VCAvQjDYwvQHxDp2GbTG40ky
-         jG2xF68/iZX42EldBxCWvGasW0z36zT9XC1HFjr04Y697ZGrsWbiwH2FA3zv1TtdktJI
-         55wsjAMD/JNIzadT0P2aX0LbJlXXDdBrpC+GmJBScI84NR/3vbTpABptoKLhg91pELnJ
-         ZuB7VbtRpx+HBXi/6wB6WZLOPfNdjpWyFCMJQiN1NG7xXqLQAt3cQH0KBgMiTmqWaWDl
-         TLaP3TxZgsfeHl6em2N7yxiTF+tiX72e521bm6Gb7UjxnkW8hG3L0ZbkQZOAvzPTQcE6
-         FxIA==
+        d=google.com; s=20221208; t=1683058354; x=1685650354;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kxjFQ3K/e3w2fi3vlktbb/W0MlBQT457KX1eDyfRC9Y=;
+        b=xsqOvq8tW2JJmE0CQGqFwsr5wkv/acIKYPM2xEurXXyvDMSNIxNYvkeIT+6p+En05m
+         a5AieWxpum8iBxJXyi6yXrM6iB7jFzYwDoXpLa/1DnyH0FXrHwhlADKR37ViSYIn6YIS
+         h1yZxyXZyQLtyjMbQy+f/PoOevJTYw8pgDo9ViSr5KS15mv1NvJjVmfw+xrmyzdADkwo
+         +WbLDDl71vtD5dIYr8ZDUbnEUjrdRn6e18XTQizc2uwXZN/xEgGWYuNnw2SayBID5sv6
+         AzKSUKsvnyuQf2DO+ygnTzDw0zZWfNlzp+oakUhlTRRud/oLzJ2In8bWXVCSPmWYzlce
+         TPUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683058349; x=1685650349;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PxtEaaNRJEnS8gUq7TvU2r4SfUgelfPOgo5JiP3hUpo=;
-        b=gafNx7W/0x0SZ8/H7p4j0ljJFgvLYNvvJcc9K0xvOdQ5KYA6xtlwnIJKR3SluA2m+H
-         fbEh7mtbQAMLy5dqZ9rC4kR2cm667ebEm5sMPrM8jQVSQJIJNV3sMlvYj6FUVpxlG/ky
-         5HQP6cuY7a1mLt7LRlMMIV2MSaCYnzDbcl0LiLIgASkgaBgQSs12T+Y58MFxSJs4JILJ
-         s8rPQ+Jit4ZhBr6voGrKwNSEVqe0U9qbsi3CPbTkqt7Ci7ecww13DapMBleIRD6M/hoJ
-         BYIL12r/sjo7/S6uWRGfNsQUFGIgcApSF/rRX9Cnsiy/Vj5g2VSDCWPUIvlcimdvBktw
-         k1OQ==
-X-Gm-Message-State: AC+VfDy6OSklRFCSpfGoga0jxejiGg2CrLxNkONzmNhfIx2/j37tmfUh
-        qJMwSV97wXPKjByP4gKU+AAgdpC6+tomUQ==
-X-Google-Smtp-Source: ACHHUZ71vmhsscaNHlobIISSRxVBPUvmF6vJFmZpp0ShentSMNd8RVevcFg864koEGGNqYEDfNo3/RpT+CLYXQ==
+        d=1e100.net; s=20221208; t=1683058354; x=1685650354;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kxjFQ3K/e3w2fi3vlktbb/W0MlBQT457KX1eDyfRC9Y=;
+        b=YJNYL8mYkaFWx5NsKd+j6u7/2Ot0FBbS3Webew3KA3ftMNfrgkD4cjyg9cnmiEGzX6
+         RSqyvTOtB2rVjJ4ssnQwNDfx+kE9BB7TEs7Fcq2HdavzCKf43sMIqHNWvc/QtU/EZ50U
+         A5TiVEciMukYARBMEF2temhuqx8JgTNGXRCXnvLSMYxmK5LEOk5Yuq570H67kZP9wl9E
+         f2WhyS3121BxvcmukZawI0TFYc+YJTiJohUeX1LiXVeDOusbU8tWRfW45dhULrX+rY0p
+         vZ5krPnLMD/DjDdbtH15vEauMY1ZXFvf3K0ey5hz9Vx5rF8Lzslj/E3z6Blg0yhybmJf
+         kY8g==
+X-Gm-Message-State: AC+VfDzuyrqSTdba++gjFaG2OSJ0xhjVEx+w0+8uH1KBNorbtcMBgC6q
+        N5Oq7DbcQl2f1n00IVPdsrd8+vEWbquc4Q==
+X-Google-Smtp-Source: ACHHUZ7o8RkcrSEOjSM3cJhifgxCs7beiWhdUh8WCIXABu5JJep3dzShxb2EyRvRA+twSi7PmQOt6E9q8d0b+g==
 X-Received: from xllamas.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5070])
- (user=cmllamas job=sendgmr) by 2002:a25:adcf:0:b0:b9d:894f:c9a8 with SMTP id
- d15-20020a25adcf000000b00b9d894fc9a8mr5202420ybe.0.1683058349442; Tue, 02 May
- 2023 13:12:29 -0700 (PDT)
-Date:   Tue,  2 May 2023 20:12:17 +0000
+ (user=cmllamas job=sendgmr) by 2002:a25:e710:0:b0:b8f:35c1:e63e with SMTP id
+ e16-20020a25e710000000b00b8f35c1e63emr11506603ybh.6.1683058353588; Tue, 02
+ May 2023 13:12:33 -0700 (PDT)
+Date:   Tue,  2 May 2023 20:12:18 +0000
+In-Reply-To: <20230502201220.1756319-1-cmllamas@google.com>
 Mime-Version: 1.0
+References: <20230502201220.1756319-1-cmllamas@google.com>
 X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
-Message-ID: <20230502201220.1756319-1-cmllamas@google.com>
-Subject: [PATCH 1/3] Revert "binder_alloc: add missing mmap_lock calls when
- using the VMA"
+Message-ID: <20230502201220.1756319-2-cmllamas@google.com>
+Subject: [PATCH 2/3] Revert "android: binder: stop saving a pointer to the VMA"
 From:   Carlos Llamas <cmllamas@google.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "=?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?=" <arve@android.com>,
@@ -62,9 +63,9 @@ To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Carlos Llamas <cmllamas@google.com>,
         Suren Baghdasaryan <surenb@google.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Liam Howlett <liam.howlett@oracle.com>
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>
 Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
-        stable@vger.kernel.org
+        Liam Howlett <liam.howlett@oracle.com>, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -76,80 +77,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 44e602b4e52f70f04620bbbf4fe46ecb40170bde.
+This reverts commit a43cfc87caaf46710c8027a8c23b8a55f1078f19.
 
-This caused a performance regression particularly when pages are getting
-reclaimed. We don't need to acquire the mmap_lock to determine when the
-binder buffer has been fully initialized. A subsequent patch will bring
-back the lockless approach for this.
+This patch fixed an issue reported by syzkaller in [1]. However, this
+turned out to be only a band-aid in binder. The root cause, as bisected
+by syzkaller, was fixed by commit 5789151e48ac ("mm/mmap: undo ->mmap()
+when mas_preallocate() fails"). We no longer need the patch for binder.
 
-[cmllamas: resolved trivial conflicts with renaming of alloc->mm]
+Reverting such patch allows us to have a lockless access to alloc->vma
+in specific cases where the mmap_lock is not required. This approach
+avoids the contention that caused a performance regression.
 
-Fixes: 44e602b4e52f ("binder_alloc: add missing mmap_lock calls when using the VMA")
+[1] https://lore.kernel.org/all/0000000000004a0dbe05e1d749e0@google.com
+
+[cmllamas: resolved conflicts with rework of alloc->mm and removal of
+ binder_alloc_set_vma() also fixed comment section]
+
+Fixes: a43cfc87caaf ("android: binder: stop saving a pointer to the VMA")
 Cc: Liam Howlett <liam.howlett@oracle.com>
 Cc: Suren Baghdasaryan <surenb@google.com>
 Cc: stable@vger.kernel.org
 Signed-off-by: Carlos Llamas <cmllamas@google.com>
 ---
- drivers/android/binder_alloc.c | 31 ++++++++++---------------------
- 1 file changed, 10 insertions(+), 21 deletions(-)
+ drivers/android/binder_alloc.c          | 17 +++++++++--------
+ drivers/android/binder_alloc.h          |  4 ++--
+ drivers/android/binder_alloc_selftest.c |  2 +-
+ 3 files changed, 12 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/android/binder_alloc.c b/drivers/android/binder_alloc.c
-index 55a3c3c2409f..92c814ec44fe 100644
+index 92c814ec44fe..eb082b33115b 100644
 --- a/drivers/android/binder_alloc.c
 +++ b/drivers/android/binder_alloc.c
-@@ -380,15 +380,12 @@ static struct binder_buffer *binder_alloc_new_buf_locked(
- 	size_t size, data_offsets_size;
- 	int ret;
+@@ -213,7 +213,7 @@ static int binder_update_page_range(struct binder_alloc *alloc, int allocate,
  
--	mmap_read_lock(alloc->mm);
- 	if (!binder_alloc_get_vma(alloc)) {
--		mmap_read_unlock(alloc->mm);
- 		binder_alloc_debug(BINDER_DEBUG_USER_ERROR,
- 				   "%d: binder_alloc_buf, no vma\n",
- 				   alloc->pid);
- 		return ERR_PTR(-ESRCH);
+ 	if (mm) {
+ 		mmap_read_lock(mm);
+-		vma = vma_lookup(mm, alloc->vma_addr);
++		vma = alloc->vma;
  	}
--	mmap_read_unlock(alloc->mm);
  
- 	data_offsets_size = ALIGN(data_size, sizeof(void *)) +
- 		ALIGN(offsets_size, sizeof(void *));
-@@ -916,25 +913,17 @@ void binder_alloc_print_pages(struct seq_file *m,
- 	 * Make sure the binder_alloc is fully initialized, otherwise we might
- 	 * read inconsistent state.
- 	 */
+ 	if (!vma && need_mm) {
+@@ -314,9 +314,11 @@ static inline struct vm_area_struct *binder_alloc_get_vma(
+ {
+ 	struct vm_area_struct *vma = NULL;
+ 
+-	if (alloc->vma_addr)
+-		vma = vma_lookup(alloc->mm, alloc->vma_addr);
 -
--	mmap_read_lock(alloc->mm);
--	if (binder_alloc_get_vma(alloc) == NULL) {
--		mmap_read_unlock(alloc->mm);
--		goto uninitialized;
--	}
--
--	mmap_read_unlock(alloc->mm);
--	for (i = 0; i < alloc->buffer_size / PAGE_SIZE; i++) {
--		page = &alloc->pages[i];
--		if (!page->page_ptr)
--			free++;
--		else if (list_empty(&page->lru))
--			active++;
--		else
--			lru++;
-+	if (binder_alloc_get_vma(alloc) != NULL) {
-+		for (i = 0; i < alloc->buffer_size / PAGE_SIZE; i++) {
-+			page = &alloc->pages[i];
-+			if (!page->page_ptr)
-+				free++;
-+			else if (list_empty(&page->lru))
-+				active++;
-+			else
-+				lru++;
-+		}
- 	}
--
--uninitialized:
- 	mutex_unlock(&alloc->mutex);
- 	seq_printf(m, "  pages: %d:%d:%d\n", active, lru, free);
- 	seq_printf(m, "  pages high watermark: %zu\n", alloc->pages_high);
++	if (alloc->vma) {
++		/* Look at description in binder_alloc_set_vma */
++		smp_rmb();
++		vma = alloc->vma;
++	}
+ 	return vma;
+ }
+ 
+@@ -775,7 +777,7 @@ int binder_alloc_mmap_handler(struct binder_alloc *alloc,
+ 	buffer->free = 1;
+ 	binder_insert_free_buffer(alloc, buffer);
+ 	alloc->free_async_space = alloc->buffer_size / 2;
+-	alloc->vma_addr = vma->vm_start;
++	alloc->vma = vma;
+ 
+ 	return 0;
+ 
+@@ -805,8 +807,7 @@ void binder_alloc_deferred_release(struct binder_alloc *alloc)
+ 
+ 	buffers = 0;
+ 	mutex_lock(&alloc->mutex);
+-	BUG_ON(alloc->vma_addr &&
+-	       vma_lookup(alloc->mm, alloc->vma_addr));
++	BUG_ON(alloc->vma);
+ 
+ 	while ((n = rb_first(&alloc->allocated_buffers))) {
+ 		buffer = rb_entry(n, struct binder_buffer, rb_node);
+@@ -958,7 +959,7 @@ int binder_alloc_get_allocated_count(struct binder_alloc *alloc)
+  */
+ void binder_alloc_vma_close(struct binder_alloc *alloc)
+ {
+-	alloc->vma_addr = 0;
++	alloc->vma = 0;
+ }
+ 
+ /**
+diff --git a/drivers/android/binder_alloc.h b/drivers/android/binder_alloc.h
+index 0f811ac4bcff..138d1d5af9ce 100644
+--- a/drivers/android/binder_alloc.h
++++ b/drivers/android/binder_alloc.h
+@@ -75,7 +75,7 @@ struct binder_lru_page {
+ /**
+  * struct binder_alloc - per-binder proc state for binder allocator
+  * @mutex:              protects binder_alloc fields
+- * @vma_addr:           vm_area_struct->vm_start passed to mmap_handler
++ * @vma:                vm_area_struct passed to mmap_handler
+  *                      (invariant after mmap)
+  * @mm:                 copy of task->mm (invariant after open)
+  * @buffer:             base of per-proc address space mapped via mmap
+@@ -99,7 +99,7 @@ struct binder_lru_page {
+  */
+ struct binder_alloc {
+ 	struct mutex mutex;
+-	unsigned long vma_addr;
++	struct vm_area_struct *vma;
+ 	struct mm_struct *mm;
+ 	void __user *buffer;
+ 	struct list_head buffers;
+diff --git a/drivers/android/binder_alloc_selftest.c b/drivers/android/binder_alloc_selftest.c
+index 43a881073a42..c2b323bc3b3a 100644
+--- a/drivers/android/binder_alloc_selftest.c
++++ b/drivers/android/binder_alloc_selftest.c
+@@ -287,7 +287,7 @@ void binder_selftest_alloc(struct binder_alloc *alloc)
+ 	if (!binder_selftest_run)
+ 		return;
+ 	mutex_lock(&binder_selftest_lock);
+-	if (!binder_selftest_run || !alloc->vma_addr)
++	if (!binder_selftest_run || !alloc->vma)
+ 		goto done;
+ 	pr_info("STARTED\n");
+ 	binder_selftest_alloc_offset(alloc, end_offset, 0);
 -- 
 2.40.1.495.gc816e09b53d-goog
 
