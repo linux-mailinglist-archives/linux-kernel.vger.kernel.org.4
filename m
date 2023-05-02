@@ -2,141 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC6FE6F42FC
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 13:46:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7954A6F4309
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 13:48:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233821AbjEBLqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 07:46:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52550 "EHLO
+        id S234032AbjEBLsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 07:48:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233513AbjEBLqv (ORCPT
+        with ESMTP id S233842AbjEBLs3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 07:46:51 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11A104496
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 04:46:50 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f315712406so165058995e9.0
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 04:46:49 -0700 (PDT)
+        Tue, 2 May 2023 07:48:29 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2090.outbound.protection.outlook.com [40.107.93.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A10B5260;
+        Tue,  2 May 2023 04:48:24 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RKWbeayv6aAp+lizteJwVywEPVM4IlghwZhv4O1TCGG9e/5+lZ9JPXgf3H7hANmYnB3QCS6vI1Urh7mv61qK65kFpZrXah5R1pwWNfW241AcgON8Sr0yATt4XkzIc97oMJ/2tsHsGMTwBHpqVh9iJPvW6Jqxo2bh5pJKut5ASVW6TriYzCI/zK1iPqW9WmYaXoKdsLt9pLDgt94Tjk6odoTmKdz6G7Xx/S4GDKAxGmwuxYkE23gojAUkIctYJCcu37dZ5tddYDAm/lIBMZoQx/fBa7JoP6n4x0KibEAFXi9zekr0QIOhG19FQrsHwScRQIi3z7WX5iA6zBykfWQ/OQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dicO62inzHtDKMcnz3u8DP4nWLy949Ej23cWl98UQD4=;
+ b=g0pxS506l89gpBQ0Tdv3UIq7LXGxE5jwiRlIOLOPNXs5wakUa+etkiyj4aiRPJJAX70y9SNY66z5YkEDZkqfM1HRsC7womZs8zL25xahG9jnSW0z6WET2JVupiCPLaW48bi/FwOn72mfu0AA3GA2kmN15hEAZQ66isGb+7Kem4TBhbPAaiHwD8HM+ZAxrXQMD55fXdYlv5hEmLxTIUkaIOV/8VFTcAYGHdflj78eHNLLbf/Wm7CBgT6Vjeup0ocmUR17HPlkDW0kR16vrHyx+xJuhiGvn0QF9nPDz3+3kygLSJR/3Rg2gq57giiQ0rT/YY+rbXPVG5l22L4rgYZOYQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683028008; x=1685620008;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yTFNSvlNK9OLSuNfUZudfwb4eJQZN05dqmNmwC73cTc=;
-        b=WDt4HwZKuTxhtTFvJzdvkyKlqlRuoWlMnrUZ7gi/kwR0y5kWfoD4CBneeatP/SmgiU
-         At4yXcBE9n+u6xCrOk1V7OFqkEfkHZ1LGpyjvnaP/vMCNk6fyNh/21JKEuQBlow73Fb1
-         hu7GhIr8AxoJ0DUgf0KyvjgnlnMyVV1Syf80qiN+hrcbPJKvZ0SiCAquvrzY4WquuR4/
-         hzA8uVhPQHSYYBYG6iz8sFM0rsS86bOpAUuryjsYU5/ZNF0PlRTBFBnMjqI93f4YrX1p
-         SmHo6jSiub/2+rnF9ZvpdI6Asfn94Thf6s78TDHLsRA3QmH52m/wy+95uLKnsJPO5v4M
-         VhgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683028008; x=1685620008;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yTFNSvlNK9OLSuNfUZudfwb4eJQZN05dqmNmwC73cTc=;
-        b=TkTAmpLGZMP92lfgpIQ5xXjwgP3FJzVdUgB7kE5LO86Qf5FAlQA2uK43rrI1p0uzJv
-         Ge41R7ybyKIiX1jPXe61y1pbIJlGEH5/AbzF2j7QO3MDaBG7WjMeXwyeVZnh00KFPQQi
-         C8dzDs0XuAYAQjbX2cTjOsE1y4iCuG2PKRoP6w2NnnXMQaQKTCcz/7g2ti5D5yCC9Vpw
-         QsTSMfkFvbHikZyjQXqQe2OmeNacWCKGWpZxdgzC8TgvGHHwpiJrA3zmflCGkDgTMnZI
-         XNK390ju3A2tEqPg4NNhBibfX3E5/jpYjzQtyALUsLwvNtzPODAib7TBzUZI6fiqFnvT
-         z2sA==
-X-Gm-Message-State: AC+VfDzravxO7mFTQxvKadL9jp2uDbwIkwgY7BxmjhCXsQQPYQO8dQBv
-        zDM9QzijhKB2eMwOkQ0msvA2qw==
-X-Google-Smtp-Source: ACHHUZ5rR7wCjfAAKk7jnBh8uBGAfKGBbPcT4RpfbFNkbLYg30cHXAdl/ws1cFihoZd3fLf1/QWhIA==
-X-Received: by 2002:a05:6000:128e:b0:2fb:b869:bc08 with SMTP id f14-20020a056000128e00b002fbb869bc08mr13523307wrx.23.1683028008490;
-        Tue, 02 May 2023 04:46:48 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id o2-20020a05600c4fc200b003f1738e64c0sm38899117wmq.20.2023.05.02.04.46.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 May 2023 04:46:46 -0700 (PDT)
-Date:   Tue, 2 May 2023 14:46:42 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     oe-kbuild@lists.linux.dev, Zheng Wang <zyytlz.wz@163.com>,
-        matt.hsiao@hpe.com
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev, arnd@arndb.de,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        hackerzheng666@gmail.com, 1395428693sheep@gmail.com,
-        alex000young@gmail.com, Zheng Wang <zyytlz.wz@163.com>
-Subject: Re: [PATCH] misc: hpilo: Fix use after free bug in ilo_remove due to
- race condition with ilo_open
-Message-ID: <cabf202f-a58e-4637-9d55-b0382360c27e@kili.mountain>
-MIME-Version: 1.0
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dicO62inzHtDKMcnz3u8DP4nWLy949Ej23cWl98UQD4=;
+ b=WEwvNEy91yE98dll1REiD8LEp9nokkDkiaoTtaU99iwLzJw+pU03ylZT523YI8rZazdLij4+LaFbHvfSrUg9tLE6A7atKqx669zNToIKoGAW+uomN7IK3M3x7LthXRrT4j2JAUbJfAYdReU6F6U+imtkRSNQYTD3Ig+APoGFrUo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by DM6PR13MB3898.namprd13.prod.outlook.com (2603:10b6:5:248::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.31; Tue, 2 May
+ 2023 11:48:21 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6340.031; Tue, 2 May 2023
+ 11:48:21 +0000
+Date:   Tue, 2 May 2023 13:48:15 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Gavrilov Ilia <Ilia.Gavrilov@infotecs.ru>
+Cc:     Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Xin Long <lucien.xin@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "lvc-project@linuxtesting.org" <lvc-project@linuxtesting.org>
+Subject: Re: [PATCH] sctp: fix a potential buffer overflow in
+ sctp_sched_set_sched()
+Message-ID: <ZFD4fw4FXWlAjNgK@corigine.com>
+References: <20230502082622.2392659-1-Ilia.Gavrilov@infotecs.ru>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230417165246.467723-1-zyytlz.wz@163.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230502082622.2392659-1-Ilia.Gavrilov@infotecs.ru>
+X-ClientProxiedBy: AM0PR02CA0142.eurprd02.prod.outlook.com
+ (2603:10a6:20b:28d::9) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|DM6PR13MB3898:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8e724009-5166-415d-94ee-08db4b0320ef
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: x7JBYPKNu38VCuhU3PLo0I4zI0hdG9ooY+76RcsGmDSqXoRAVFmcOg5HJfgxEmNe8q+o4ZVamAn3W0yBIOk6zK3w14+rIdpLZI2dm8IvCXqgCGrkjtPzQ5Y8PhxFBbpktbPoa+SuktM30uCD0o04XIiyvb1i8trwXBXz0rH4f9wAFMa9Gl5z6BdZqqV4Mfmxu9BPYq+mWnl7/yUaDl6rL/sHvsIPQbI8HM/vQWch2GV5gCGFPq2EsMFo3zBT2KOrb69DZnaJTDtPemGNid3RvOTKl5moL3/RFl/vPn2wS7xPxtvn9UjCou6fXsA1uC2w8+kKOxYZZC+8K0F9W1hmr2MRHK72LQCXTi+MzW5bTbkZl7OZ7vR1BbX13CHmBb2CWO/wf3Z9P845ZVMw1Cou3ESX4l842SaeVOIcGa2roRfKy3PgUyIBnz1Lfsn3Za724XdZHvSxn+OWx7HVBm4pumh/XpPyivm5XEYhoL8HW7hEZgx9jlkXEJ4SG8ILT4qf8jneFWCwNl/0Aw5jqlc59vK8fQJgc46HBQgIPdIWGYxgBKbrVYEox1hU70zh343z1zVtGu3s2/zunslj0xbETnvZMu8ipyNDH97EBfRGUjE=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(346002)(396003)(376002)(39830400003)(451199021)(66476007)(66556008)(4326008)(316002)(6486002)(6666004)(38100700002)(6916009)(186003)(6506007)(6512007)(66946007)(478600001)(36756003)(54906003)(86362001)(5660300002)(83380400001)(41300700001)(44832011)(7416002)(8676002)(8936002)(2906002)(4744005)(2616005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?FxndpVfVcc2duwZId/Lp1QxhY34m04BhWD58GoXEWHor8ttq13ild/jEBNMK?=
+ =?us-ascii?Q?JE0Rfg2iHkzR0swyTstoHD7i5MAEdXiSCSqCMwJ97fle1FEixEkc3UgbuEwJ?=
+ =?us-ascii?Q?AwGIGfnw2KvN4CmTjlTx0w/iX9lWTQqUzEvdgaicPqOMLmTEV9NjdFn7cWVm?=
+ =?us-ascii?Q?R80SodtmxtYxqEPbnrL1flJaWyDR+O+B48pHUFIovxsdqFSov36R6Qn6ph0s?=
+ =?us-ascii?Q?VSpH6PlKcpUzJmgro/aj8NgLVKUNb8bhEEYqMHAWwWhZn6rBpQTflzuCgTRK?=
+ =?us-ascii?Q?Az+wXheNiGtLOz4ZBKuUeqRvcohaGqZpojRtLYxowuN2Pdd4T9pBIqMd2ip4?=
+ =?us-ascii?Q?VwqF4UbKo3FFd8g2YQRWMn8GogN4LS1ylALIQg3/IlnH+/wMZvBxbPbjsDIt?=
+ =?us-ascii?Q?RMqg4Cy/CkNZiXYMR7Y0a2mp3IQ6qp1SD+W/FqjCqF8lBRIQhvAVx9yT+VaI?=
+ =?us-ascii?Q?LPx0BDroulafwo/DUgbzh6TjMMiO/5/NVS37pJKbw6H2uk6NXrgfjLo+ObTt?=
+ =?us-ascii?Q?AgRDMWlWtJYRuxOzy9lyvfK5eahU6MuhrudOtAnuB65+P7TdOb4HwzoQFaeB?=
+ =?us-ascii?Q?B30AuumpeG9xp9GO0Bh3Di8s7DyE2XIdSmhOXjs0/7Etm5Eq7COVdHDjUC1Z?=
+ =?us-ascii?Q?BnLIudDXTUN5khswaKKjr/NZzfKiRC2Z4EiQxaB9p03rXOpyZlPFFY4hQ/+6?=
+ =?us-ascii?Q?kXF6U/hyoUsjPdaXxIuXdCP1ELY5Mhy6AEJScAAXkvUlHTOmGk+RJ9JL5NeU?=
+ =?us-ascii?Q?lRihtyHIzvjlJqW387gTWwW0BPxKR00ViIfTFn0d/lnm94+fX0JZ3jTooI4I?=
+ =?us-ascii?Q?POZVYbRxQyIP0upuJ29+2FiShLU54euC5CqW6DTDHhMlTH0N1ZgnQAmJR9W1?=
+ =?us-ascii?Q?LtZd/Ilz7o4WqMTIN6/euiz994BNuhVhNUI/mET5xtctiMvaWPYbWO8HgiO+?=
+ =?us-ascii?Q?XgMNWA8pxHL/Atpu7EU6DhBySzwip/1Xmg2c0v9qLEZkngVbBSfzBiYfsDll?=
+ =?us-ascii?Q?x2DRjoPG4jlQy813ziGlytsgW+pEMdmHiG28FZQFf6pEjclmlS//glNJ/ZHq?=
+ =?us-ascii?Q?4tNrvR1xOJCWpvzOOIYeHlYGUH9CSrRBqea2SETEfqM1A8tsase9zzRJwfri?=
+ =?us-ascii?Q?yuu2Ae1cBMdd09BBBqIeYZC4F7N14+z0gc1RsqO2iiXkQIiQcFh9aqIwVlUl?=
+ =?us-ascii?Q?UwiP8a8/bqjYmQ/9p+zHxRqxUvx+qa9+i1dF5XKOIhp085XcY7J6//zhv3m7?=
+ =?us-ascii?Q?nT5VOtpcNsQ5tFPmUT97fz3gs1/Ldc73n4AESQxi/bWSG/UTSZgMrEkADfIN?=
+ =?us-ascii?Q?3j+veWoRuV/9i3b7pl0rBtVaXkQ5Ovxqyy4j5I4f/J8gyp6vUUDudSIRx/CK?=
+ =?us-ascii?Q?ijh7tjj2kthT18BBo0tUHIE6Dt9+XG0bo66FEEaNCMMcCtGcqj/ErLCnmPpv?=
+ =?us-ascii?Q?fcEl9b/JozbPQ6PafbiVyPMa/eTo94+8K55DF0CMvX6cBdI7RqjwgVrNEMPU?=
+ =?us-ascii?Q?AI1CAPKR/hwbtRQPWGiuyIEFUZt1KmOnK66dWPnMH9IhWwKxaD9SE47reSCX?=
+ =?us-ascii?Q?RI/intsq7C2LHnHFSjZfXHSB/c8AausUUhFylETfVGf6hOc6rF8360uU0wCK?=
+ =?us-ascii?Q?2RVPJ2z8O2fa5dKGEqV8/MY8aw6HsJQ9PJsgjIRgxTGjrsMz5/rKCkhcdbcJ?=
+ =?us-ascii?Q?pAZ5RQ=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8e724009-5166-415d-94ee-08db4b0320ef
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2023 11:48:21.3956
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: xRwT0B3Ub9kgVBc593uIWnNwt/HZ7QLyHTk10/TlAzUGJ2TWnFk1iKuuO3cR7KQbarXZR0g/agk41MDJT7TJ0bPpZzWIuHW11yqfbvV0C38=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR13MB3898
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zheng,
+On Tue, May 02, 2023 at 08:26:30AM +0000, Gavrilov Ilia wrote:
+> The 'sched' index value must be checked before accessing an element
+> of the 'sctp_sched_ops' array. Otherwise, it can lead to buffer overflow.
+> 
+> Note that it's harmless since the 'sched' parameter is checked before
+> calling 'sctp_sched_set_sched'.
+> 
+> Found by InfoTeCS on behalf of Linux Verification Center
+> (linuxtesting.org) with SVACE.
+> 
+> Fixes: 5bbbbe32a431 ("sctp: introduce stream scheduler foundations")
+> Signed-off-by: Ilia.Gavrilov <Ilia.Gavrilov@infotecs.ru>
 
-kernel test robot noticed the following build warnings:
-
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Zheng-Wang/misc-hpilo-Fix-use-after-free-bug-in-ilo_remove-due-to-race-condition-with-ilo_open/20230418-005502
-base:   char-misc/char-misc-testing
-patch link:    https://lore.kernel.org/r/20230417165246.467723-1-zyytlz.wz%40163.com
-patch subject: [PATCH] misc: hpilo: Fix use after free bug in ilo_remove due  to race condition with ilo_open
-config: i386-randconfig-m021 (https://download.01.org/0day-ci/archive/20230430/202304300909.ALHN6Vry-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <error27@gmail.com>
-| Link: https://lore.kernel.org/r/202304300909.ALHN6Vry-lkp@intel.com/
-
-smatch warnings:
-drivers/misc/hpilo.c:755 ilo_delete() warn: can 'ilo_hw' even be NULL?
-
-vim +/ilo_hw +755 drivers/misc/hpilo.c
-
-13a22f45e6cb1e Zheng Wang      2023-04-18  749  static void ilo_delete(struct kref *kref)
-13a22f45e6cb1e Zheng Wang      2023-04-18  750  {
-13a22f45e6cb1e Zheng Wang      2023-04-18  751  	int i, minor;
-13a22f45e6cb1e Zheng Wang      2023-04-18  752  	struct ilo_hwinfo *ilo_hw = container_of(kref, struct ilo_hwinfo, refcnt);
-13a22f45e6cb1e Zheng Wang      2023-04-18  753  	struct pci_dev *pdev = ilo_hw->ilo_dev;
-89bcb05d9bbf8b David Altobelli 2008-07-02  754  
-ebf1b764aa5cb3 Mark Rusk       2012-11-06 @755  	if (!ilo_hw)
-                                                            ^^^^^^^
-
-->refcnt member isn't the first struct member so this NULL check
-doesn't make sense.  Generally checking container_of() is ugly.  Some
-people do it and add BUILD_BUG_ON() to ensure that they're checking the
-first struct member but really it's best to avoid that if possible.
-
-ebf1b764aa5cb3 Mark Rusk       2012-11-06  756  		return;
-ebf1b764aa5cb3 Mark Rusk       2012-11-06  757  
-89bcb05d9bbf8b David Altobelli 2008-07-02  758  	clear_device(ilo_hw);
-89bcb05d9bbf8b David Altobelli 2008-07-02  759  
-89bcb05d9bbf8b David Altobelli 2008-07-02  760  	minor = MINOR(ilo_hw->cdev.dev);
-98dcd59dd063dd Camuso, Tony    2012-06-10  761  	for (i = minor; i < minor + max_ccb; i++)
-89bcb05d9bbf8b David Altobelli 2008-07-02  762  		device_destroy(ilo_class, MKDEV(ilo_major, i));
-89bcb05d9bbf8b David Altobelli 2008-07-02  763  
-89bcb05d9bbf8b David Altobelli 2008-07-02  764  	cdev_del(&ilo_hw->cdev);
-9f7048412163d8 David Altobelli 2009-08-17  765  	ilo_disable_interrupts(ilo_hw);
-9f7048412163d8 David Altobelli 2009-08-17  766  	free_irq(pdev->irq, ilo_hw);
-89bcb05d9bbf8b David Altobelli 2008-07-02  767  	ilo_unmap_device(pdev, ilo_hw);
-89bcb05d9bbf8b David Altobelli 2008-07-02  768  	pci_release_regions(pdev);
-bcdee04ea7ae04 Jiri Slaby      2012-09-13  769  	/*
-bcdee04ea7ae04 Jiri Slaby      2012-09-13  770  	 * pci_disable_device(pdev) used to be here. But this PCI device has
-bcdee04ea7ae04 Jiri Slaby      2012-09-13  771  	 * two functions with interrupt lines connected to a single pin. The
-bcdee04ea7ae04 Jiri Slaby      2012-09-13  772  	 * other one is a USB host controller. So when we disable the PIN here
-bcdee04ea7ae04 Jiri Slaby      2012-09-13  773  	 * e.g. by rmmod hpilo, the controller stops working. It is because
-bcdee04ea7ae04 Jiri Slaby      2012-09-13  774  	 * the interrupt link is disabled in ACPI since it is not refcounted
-bcdee04ea7ae04 Jiri Slaby      2012-09-13  775  	 * yet. See acpi_pci_link_free_irq called from acpi_pci_irq_disable.
-bcdee04ea7ae04 Jiri Slaby      2012-09-13  776  	 */
-89bcb05d9bbf8b David Altobelli 2008-07-02  777  	kfree(ilo_hw);
-98dcd59dd063dd Camuso, Tony    2012-06-10  778  	ilo_hwdev[(minor / max_ccb)] = 0;
-89bcb05d9bbf8b David Altobelli 2008-07-02  779  }
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
