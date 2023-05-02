@@ -2,185 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 716D66F482E
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 18:19:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 629406F4834
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 18:20:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233911AbjEBQT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 12:19:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48230 "EHLO
+        id S233920AbjEBQT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 12:19:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233880AbjEBQTU (ORCPT
+        with ESMTP id S233922AbjEBQTu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 12:19:20 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2059.outbound.protection.outlook.com [40.107.220.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2920018E;
-        Tue,  2 May 2023 09:19:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ev4aXIbU0YErP34f5ZL7ZbqmL0z2nJQ2m8RBGU59e7Qcfg7dvO+0UbJkK0FTpr4gF6mUxjKh12b5Jkcc6tRqhfQo4MUkO7XnVXAxQh6ZuCAJLVBCecx0ptEu4i3Yv/r+6C4Tr07HciPY1yAlQJZwLBMFW1l0FnNZ83pE9GuaW/sAEDcgPwHS1pn6eXVqoL5Og9XBetATZel9L6oHk/MFu7iVDfvV6i+t8KS34ODgsnXO/rE1MFP8xE0z+IL8jUQtuft3Gdb29d/xMt7of7pSbMXuJuloHot8QlicJ0g//9Osza+n+pToxuFXaoenEe+hc3aXKjaGoctFWe5+FcVCSg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ky/VLcY/dge9jtSJ+ToY4py5kMkqSqKN48VhmAgdf2Q=;
- b=DhaERCUh3HXvOVkphG0NHVwMfTuO9dxgT6YNSgupBEe/U+2DbxwxAp8wLLJckknSQJkOSMYArofDqtX0T4FqG6ngvanv4OeRWP/mLwy7ivursbZb/+72+6DsBEX58o779KqMXoWG8Ys5eFCvSKwMmysaNG5aBhpK7BWSh6ycDlPNzU2rVVIQ0CoBG4dJ6PMeGfVbBgYyRNaqwqsaj6xB9pYXwy4DFpa0dujYk9WPWwWBrP3HRgjXlu20lQWM3ExDx9PQUVm5sZL3BXQgsGl/2cuMFJ/oOnUO5K6XyWhzyBKUDJVf+E8xu8cyAboyJrfSzz0tMfRVQ+NZnUHXmdIp2w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ky/VLcY/dge9jtSJ+ToY4py5kMkqSqKN48VhmAgdf2Q=;
- b=pxkX/PLul8LLi52bLw21iTMxFwTU5ZyCd1QAZIbSMzxwgk3SJUeOfBj0KCVTtfdBIhR+67V1zot6c2PROx72vBKzN+PmAQZpBbfwy3lVyVH4+X5zOpAJwWoFtcwYX2hKg6ofeF6qhUq9ksWh8P4dFMHr11Qst9d5Bjiv+2JF9BN/R7k8WyvfasLYo1ejiWKI1YNnmjTtG7o6J7O4JGEy1ePfdSz+8g0ak7gqPUUp0a3aiVqGoxc63rsSXR3KWMUkH2CZpX8AfwrftAxa/+A1cWiNjO91h3aJGrxIvDOYVoc3sbg0O1FJA19lO4BRw78pWLjYBsjGnG04SyG2z4XrcQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by MW3PR12MB4506.namprd12.prod.outlook.com (2603:10b6:303:53::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.31; Tue, 2 May
- 2023 16:19:17 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab%6]) with mapi id 15.20.6340.030; Tue, 2 May 2023
- 16:19:17 +0000
-Date:   Tue, 2 May 2023 13:19:15 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Peter Xu <peterx@redhat.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
+        Tue, 2 May 2023 12:19:50 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 919CE1992
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 09:19:45 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id e9e14a558f8ab-3311833ba3dso114285ab.0
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 09:19:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683044385; x=1685636385;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6CMyijs+XNrKux/SQRcQVuldFctn4dvQkkq0tZYcvyY=;
+        b=rzKBaXoDGM+0wyev7OMKFK8+fyj11vVAS2euLP3VSuPPGHa22qBjScIViNWdXSF6WC
+         K4yFjq9NKBWaY+WQi6Erw7TSLPH0bsj4U91NxkRbTzWym61W5rQMK/MMkjWFQk8zm8+Z
+         JGSYPIDoMCaUoaBBy6PRLEGDpbHKCk/uMt468odXDcB0Ndbejsrh30URbB7L4k9Jd8i8
+         KlEP08EQuTV6pD2R0TZ9r4XIAr3Wg9P9QYwf+7UO4xrKt8WnqFGnrjkgTA+9eKD+ZyWy
+         TtEpPt0L+OnHjwbFuvCyg6s3ZiXmJCchRVuJc5tzQd9SNX5VxZ72LtaOKNsdjxah6TVW
+         hNQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683044385; x=1685636385;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6CMyijs+XNrKux/SQRcQVuldFctn4dvQkkq0tZYcvyY=;
+        b=RxORnbvCd7vPZimBeWJ97f5cRa+Fw8BET8+wf9wpov/BvABfDsdCpqh8mHayH2jDlJ
+         8e9y2eiOlMHcrRNd9IKcc3H2AInM1b3Rtvx17OfBjYb1MApEweg+mxbSRvLcfe6L4ndJ
+         sPsp7NmSD+zacHGZkhLOnpISCrmWbd4baa3Z+qBln74890sWRB9vehxr9dmuEPXnYCb9
+         rVf8ghQS3hOLlEx3akn9Dwpc+3llol1EipC0OA3P4vpBIXwuunYuLmvJ6D+cZwYOk7Ly
+         t5F4byw7eWfsmo0QNKLyDpndD+PILOA28OdDWH80x+81YtEPh3nlnX64tiL682Ep/o3c
+         HR4w==
+X-Gm-Message-State: AC+VfDxPWQNp++AOdpXPdDkeqONthwy8nM8ByXsIv+HEeX9yYh0wOW+K
+        BxdwKbKoxgxjOo6RGB7CrMSK1O5T7ToHGHydyb8C3Q==
+X-Google-Smtp-Source: ACHHUZ7FLgkyhcnnIXkXfwOL6Q9i02uNPMkVWwVsmOFu/Du+tyrnxMHiS1Tdp0RijGB97br0MjJbrKVwAGN9k5QpjM0=
+X-Received: by 2002:a05:6e02:1ba6:b0:330:eb79:91ad with SMTP id
+ n6-20020a056e021ba600b00330eb7991admr254048ili.9.1683044384639; Tue, 02 May
+ 2023 09:19:44 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230429053506.1962559-1-irogers@google.com> <20230429053506.1962559-15-irogers@google.com>
+ <e3a87977-02a1-eb34-593e-844adc6669b7@amd.com>
+In-Reply-To: <e3a87977-02a1-eb34-593e-844adc6669b7@amd.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Tue, 2 May 2023 09:19:32 -0700
+Message-ID: <CAP-5=fWY2SYdiogQoxEkAMAc8+_S5Mt3PgO1_=AhbKY3aicgYg@mail.gmail.com>
+Subject: Re: [PATCH v3 14/46] perf test: Mask config then test
+To:     Ravi Bangoria <ravi.bangoria@amd.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Ahmad Yasin <ahmad.yasin@intel.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Stephane Eranian <eranian@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Samantha Alt <samantha.alt@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>,
+        Weilin Wang <weilin.wang@intel.com>,
+        Edward Baker <edward.baker@intel.com>,
         Mark Rutland <mark.rutland@arm.com>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
         Jiri Olsa <jolsa@kernel.org>,
         Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
         Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Mika Penttila <mpenttil@redhat.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Theodore Ts'o <tytso@mit.edu>
-Subject: Re: [PATCH v6 3/3] mm/gup: disallow FOLL_LONGTERM GUP-fast writing
- to file-backed mappings
-Message-ID: <ZFE4A7HbM9vGhACI@nvidia.com>
-References: <1ffbbfb7-6bca-0ab0-1a96-9ca81d5fa373@redhat.com>
- <ZFEYblElll3pWtn5@nvidia.com>
- <f0acd8e4-8df8-dfae-b6b2-30eea3b14609@redhat.com>
- <3c17e07a-a7f9-18fc-fa99-fa55a5920803@linux.ibm.com>
- <ZFEqTo+l/S8IkBQm@nvidia.com>
- <ZFEtKe/XcnC++ACZ@x1n>
- <ZFEt/ot6VKOgW1mT@nvidia.com>
- <4fd5f74f-3739-f469-fd8a-ad0ea22ec966@redhat.com>
- <ZFE07gfyp0aTsSmL@nvidia.com>
- <1f29fe90-1482-7435-96bd-687e991a4e5b@redhat.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1f29fe90-1482-7435-96bd-687e991a4e5b@redhat.com>
-X-ClientProxiedBy: MN2PR01CA0044.prod.exchangelabs.com (2603:10b6:208:23f::13)
- To LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|MW3PR12MB4506:EE_
-X-MS-Office365-Filtering-Correlation-Id: 314b91c9-f0d7-4f48-e83a-08db4b28f9e4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +yv5ZBqqRRQK1WTaU9ORkybCbO4E9ITbm9d5DsuUMQ4wCJQMI+tfEdiTxv2FIivOxUj2wx3eL9ge/sQMEvm9PBt40818GJO5nQdiLzssr32dtjKWnt6aIKgd5xenq1s2tzZIErhgEBaXDpxyYP/2IIpfBdnUkO16QKloilNNgncw0VBiDBOqIs2mFQ6XO9sXam/qUKM2KXO/QTMVAJbL5KY/GdZxfplJB5BwzME8Vmm3LEro3d1fRgjA8cJRyGxKoXKYxoLXwIyOTiynxlbZB9hOddrr2j3B3QsdnGMlz3e8DpXCBLiME0EiEJc0+S2TnYyIfkAqOcPeR6KSnX5sZx1kIZqNmaDJX5fMHf0n06wWiN9whpJFJIFjlOgBJO836u0wu5W3tzUcb99Ff0JoDJBZBN0EHpIpNLhbaXwO+5x+LYgQxWq5hEEj5NSozopRV9ZwDmF/mnuL9yv8Lw0Ka7SapskaBMFfto8rNoFtVRIO6jhOOjVBQ0xDVx1fGRB72X+gOvmXIDMiWqJjImaOy3w585WKClC3/hRhuXOB1tJN3mQWzm/l5xtcdmIaKF+W
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(39860400002)(396003)(136003)(366004)(451199021)(38100700002)(7406005)(86362001)(7416002)(8676002)(8936002)(5660300002)(6916009)(66476007)(4326008)(66946007)(66556008)(41300700001)(316002)(4744005)(2906002)(6512007)(6506007)(26005)(6486002)(186003)(83380400001)(36756003)(2616005)(478600001)(54906003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?W5SyE0O0tmVu/rVkUGSWlrQgcG/a5cZM5FOEWNZY9AF+njYJNwlo0j/Xwuuh?=
- =?us-ascii?Q?+5tT/WpLFLewx0HQwddkh79krqWitlqtLBr1S/F6sZc4oC1DMcyH6H1poVH5?=
- =?us-ascii?Q?epR8arC045CDJFmqJ+PLFSTF8zPVtc8HJkWWIqTrPHV53CGb/ug4CZck6GS/?=
- =?us-ascii?Q?cTHu2QoKF/yXcFaPWezNoaSBccLti2rSC9Fbbr8AaYnMdNx/c9Yqz7TMeTEu?=
- =?us-ascii?Q?00hl0TbImsYf6O5yBHEPgwkjCl5vL1uMF8erBBhq/OsG9CeVRq7c/Il/dnEx?=
- =?us-ascii?Q?MMNNkJzFvjOkUTt92hNTPqKA8DvyAeasFc06jnsILTNIKJo8wMZeCHdG6pVH?=
- =?us-ascii?Q?5oC3aw2MO9y4dfOxgaOUrRk9JuRgcu9U78ZnQi7H2Y8/ooG1AgQpd7JuD629?=
- =?us-ascii?Q?Y4MSyK9fZ3/k85MxS9O9QWmjKvSeout2uVBpvrsCmw0E6vbx3PuxtcKdJjO0?=
- =?us-ascii?Q?PJPeYlwGzvqYDkhuvIjFBRFxdMulGj5V2AytzR+XeJreIxyVjPPHdCmVnWb+?=
- =?us-ascii?Q?4xPmxZEOb6pOl9DLOvCqRdUZ4MV5bduGbFFpAyUWX1vb2UCtqxcH7o5yBY0L?=
- =?us-ascii?Q?K5nqVZhXdNsj6GzDqEnN+WhwCULPQUVaESFU9vbSnhYx8fcScdMRmLCXN43u?=
- =?us-ascii?Q?74hK6qOQAcY1qigQtq1tqh/ox3+VfK21Ojz9s2G2byBxAvdyttFcn7cngvjI?=
- =?us-ascii?Q?vcfRidsDrrUm7HuOuJmTqd2qv60m5ouiNtE/+UEQ5e70B+MOJEz3KNKoJrfy?=
- =?us-ascii?Q?Ogiz3QB5dCOfvtqGGbXTLRKBi/IZgc3G59jRKd5DlfI3Npl1Ii3ml1q8+pUH?=
- =?us-ascii?Q?B84b+f9q4HLfGrH8+AV7ZqWm9zSet81wiVRpLf1CGTSEg4Jd9T8E8LhmN2l/?=
- =?us-ascii?Q?CURctKHf0CPK/5O5odvrZVo8dPV1Aw+hMdy7nSigMjIwjfXhrkqJxEg/NeHy?=
- =?us-ascii?Q?C6qQU6LdSsGNACRD/kPcE5e/lNYwbeMHkA5DRr8fb+0EZsWex4PMbOVUl7tm?=
- =?us-ascii?Q?ymIxqxhwwjTw6N3D0Bmp6K9Gn8yATEqE0S+5B/FvK7Rr1qqQllyrF1IDfUma?=
- =?us-ascii?Q?goW3NemGn/fSOm38VDxcsh9BfBgRxNZnvUmmmgGld9E8S9PTTD4jGZnxB6Zg?=
- =?us-ascii?Q?tUWEdHG0xUIRFbpTtnsReBKTiVi9wA7akJAvsjnb+hvOArLgcRcdFc0+TLs0?=
- =?us-ascii?Q?GasxEMrLIjVbxLcfgTNjSnSgzcYQbdDIgHerRpXtc+4OhI9as/fICA8EdXn8?=
- =?us-ascii?Q?920ZWESsI3aNuAwBzhRuR2Ku/CP0wXViY5hKoWulbUe0CnDYxZuJghaW6MJy?=
- =?us-ascii?Q?ddixp45+yesUGGDWx9GF+auMn8R1i/cY5Zx5loFpWkM6UkMuC3yaE1qeOI0M?=
- =?us-ascii?Q?s3uN/ir2yAHIKXBhZ7PPCeilAWroNpfFoOj/p7Vqoi7qwiFbBP4zsXz+T3C2?=
- =?us-ascii?Q?8yfuEJW16HtHxvbSqB5g6Tk13hXaAARuVeQNqLGTi6RzsxFxkbMQ5A6RnmRW?=
- =?us-ascii?Q?UnU9JMwBwM+cmb2CpSrHIQ1hjBPbT03mcVaNywFIJrQqixHRMHRAKN4nIlb1?=
- =?us-ascii?Q?qCDDy7/Qpvx3FOcyr6YyS7rnyIHhwkJmrZJrSHxB?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 314b91c9-f0d7-4f48-e83a-08db4b28f9e4
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2023 16:19:16.9719
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: U8eUn7mYLiAMFsIAC2QL+HOjm7Fj0h0CQi7LGPDcyaYS/44pBcLLgpD1RttvwzgO
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4506
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Florian Fischer <florian.fischer@muhq.space>,
+        Rob Herring <robh@kernel.org>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Leo Yan <leo.yan@linaro.org>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        James Clark <james.clark@arm.com>,
+        Suzuki Poulouse <suzuki.poulose@arm.com>,
+        Kang Minchul <tegongkang@gmail.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 02, 2023 at 06:12:39PM +0200, David Hildenbrand wrote:
+On Tue, May 2, 2023 at 3:44=E2=80=AFAM Ravi Bangoria <ravi.bangoria@amd.com=
+> wrote:
+>
+> > @@ -87,7 +92,7 @@ static int test__checkevent_raw(struct evlist *evlist=
+)
+> >
+> >       TEST_ASSERT_VAL("wrong number of entries", 1 =3D=3D evlist->core.=
+nr_entries);
+> >       TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW =3D=3D evsel->core.at=
+tr.type);
+> > -     TEST_ASSERT_VAL("wrong config", 0x1a =3D=3D evsel->core.attr.conf=
+ig);
+> > +     TEST_ASSERT_VAL("wrong config", test_config(evsel, 0x1a));
+>
+> Extended 'type' via 'config' is applicable only to HW and HW_CACHE types.
+> I think we should not apply test_config() for other types. Even if they
+> are ineffective in these tests (because we are not setting upper bits),
+> they are semantically wrong IMO.
+>
+> In fact, AMD EventSelect is 12 bits and upper 4 bits are located at 35:32
+> in PerfEvtSel register. So for RAW events, upper bits MUST NOT be ignored=
+.
 
-> > It missses the general architectural point why we have all these
-> > shootdown mechanims in other places - plares are not supposed to make
-> > these kinds of assumptions. When the userspace unplugs the memory from
-> > KVM or unmaps it from VFIO it is not still being accessed by the
-> > kernel.
-> 
-> Yes. Like having memory in a vfio iommu v1 and doing the same (mremap,
-> munmap, MADV_DONTNEED, ...). Which is why we disable MADV_DONTNEED (e.g.,
-> virtio-balloon) in QEMU with vfio.
+Thanks Ravi, this is important and I'll update the tests as you
+suggest. I'd been iterating on this, which is why the test is this
+way. We have two parsing cases, one where the type is explicitly given
+like:
+$ perf stat -e '4:0xC0' true
+and another where the raw config is wildcard applied like:
+$ perf stat -e 'rC0' true
+The question is which PMUs should the 0xC0 raw event be opened on? The
+answer in the code is to ignore all PMUs that aren't the "core" PMUs,
+so cpu, cpu_atom, cpu_core, armv8... This matches existing behavior
+but it wasn't clear to me that this was intentional. I think in the
+future the wildcard application can be made more efficient to ignore
+unnecessary PMUs and avoid the sysfs scan. Something that is a bit of
+an issue in the event parsing is what exactly should be applied by
+wildcard matching and there are inconsistencies.
 
-That is different, VFIO has it's own contract how it consumes the
-memory from the MM and VFIO breaks all this stuff.
+Thanks,
+Ian
 
-But when you tell VFIO to unmap the memory it doesn't keep accessing
-it in the background like this does.
-
-Jason
+> > @@ -139,8 +142,7 @@ static int test__checkevent_symbolic_alias(struct e=
+vlist *evlist)
+> >
+> >       TEST_ASSERT_VAL("wrong number of entries", 1 =3D=3D evlist->core.=
+nr_entries);
+> >       TEST_ASSERT_VAL("wrong type", PERF_TYPE_SOFTWARE =3D=3D evsel->co=
+re.attr.type);
+> > -     TEST_ASSERT_VAL("wrong config",
+> > -                     PERF_COUNT_SW_PAGE_FAULTS =3D=3D evsel->core.attr=
+.config);
+> > +     TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_SW_=
+PAGE_FAULTS));
+>
+> Ditto for PERF_TYPE_SOFTWARE. We should not use test_config().
+>
+>
+> > @@ -160,7 +162,7 @@ static int test__checkevent_breakpoint(struct evlis=
+t *evlist)
+> >
+> >       TEST_ASSERT_VAL("wrong number of entries", 1 =3D=3D evlist->core.=
+nr_entries);
+> >       TEST_ASSERT_VAL("wrong type", PERF_TYPE_BREAKPOINT =3D=3D evsel->=
+core.attr.type);
+> > -     TEST_ASSERT_VAL("wrong config", 0 =3D=3D evsel->core.attr.config)=
+;
+> > +     TEST_ASSERT_VAL("wrong config", test_config(evsel, 0));
+>
+> Ditto for PERF_TYPE_BREAKPOINT.
