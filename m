@@ -2,54 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA7276F4285
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 13:19:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3CF26F4286
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 13:19:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233143AbjEBLTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 07:19:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34434 "EHLO
+        id S233907AbjEBLTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 07:19:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjEBLTG (ORCPT
+        with ESMTP id S233871AbjEBLTQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 07:19:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8BD7A4
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 04:19:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7714262331
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 11:19:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A95FC433EF;
-        Tue,  2 May 2023 11:19:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683026344;
-        bh=Nq40uZ7fxt3ZgHa/fq73UnZ8ah1ib0VIWnSEhVYGrbk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=C6b8RLOGa0oeSMGyHmlrb3fNJo3NQQzDi6fK1Uz+3lFL+j/9pX4vj+LMMrwn7oQR/
-         TWYRx29KxBIreoAiuR6u3fNmD0bz5cd6U9dbKMgrcxWo4ZW1L4n21VBSn519duMQig
-         358XMzzS1ThJYIw0VY6B3SNNx+oxhbQCgRV6H45SAbvMmJdZ5uva+fy2+GF8DT3vfg
-         n+IdehbijBZyjTNBc6TGSXTBtmWflTZL/ZyoJ9jiD1RqpS1Dv4ToxkIT3Bv1aRz4DC
-         PNkTNd48bIAetE+wzX1szsUp9iuQYeZmiYqQzwSOb/K+TaMEVpxNO0O5VrfDwVzPGb
-         BEyJ9ybaEbsoQ==
-Date:   Tue, 2 May 2023 13:19:02 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Victor Hassan <victor@allwinnertech.com>, fweisbec@gmail.com,
-        mingo@kernel.org, jindong.yue@nxp.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] tick/broadcast: Do not set oneshot_mask except
- was_periodic was true
-Message-ID: <ZFDxph8YDPjwvbej@lothringen>
-References: <20230412003425.11323-1-victor@allwinnertech.com>
- <87sfd0yi4g.ffs@tglx>
- <ZD/uWdz7dKLKlUqH@localhost.localdomain>
- <87jzy42a74.ffs@tglx>
+        Tue, 2 May 2023 07:19:16 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E75C9
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 04:19:14 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f192c23fffso21656705e9.3
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 04:19:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683026353; x=1685618353;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TMjdo4O02u+tpFEhZP9Wls75XLkok8xEL1r9/5OuF+Q=;
+        b=WBdUYPakvTnEh67swv1MqMGVbXY2WvVli9Y51IR2me03hlxW1R+L2q1da6SltViBtZ
+         ySz9yARFiAMriFbyyEbe2/wPoR/ngj+q8nrzRnE0d2C+XY9dWSCHHdKJyzUE4/PFo5HF
+         16thIl5KC1DvL0OSuXE/W2GxYGuqMxFY6Z2sOccYBWHZYyF87Smsl1hw46M4F/AdXAt1
+         YftSM5S/ybrujQfnRbbCXKM8SCIcNrhoNfQU3T/4yrX4LBIG0iIsPjEiozah2ENh6Wbk
+         QDy+O8Z5YlM6EW29GM0qd/nmzck696MqrG8zmKaY4ODjCjpTpZDogYeAd9D8OBmGjVU2
+         Kvvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683026353; x=1685618353;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TMjdo4O02u+tpFEhZP9Wls75XLkok8xEL1r9/5OuF+Q=;
+        b=e/+bnztqEtRTq4z4K31TwO5HcgCNper51JNHA9ZX9cjDdDacyYiScvge/afi2Y8cjr
+         5ze7WhihE52acnF3ZbJHbAKXFqKRKJx/VIY11MdjHaTWxp9TCu3/rc/Crt7mCYH4LSOA
+         b889CBUEqzGINKHfo5/tXitz5NQ+dPgNh/HmVm3rmSE7HXHSbxOt0ZdrVyyVn1qgxDT8
+         XPtLcu9SjaQDlZUTfAswQN+FpAQk3j+/rEqRtuIzPLPye8U9Sy6Y1umNuWqOuZj/E8rg
+         2wCYZNYcprNIe2nsv3UlSKpl4tznFM8v5u9NCaXunba/Is6jPAlNtn7Q8vEgS2/NK+9C
+         q5pA==
+X-Gm-Message-State: AC+VfDwUjid9fjvpvCx/u+YJ6r/n9FjxdiQY085qpBBctSGyamXbrgJM
+        7IAZhlLD36+rqr2DgpyjhUGhDwAsr1F/+Zv7mIM=
+X-Google-Smtp-Source: ACHHUZ6gWRtAX9s096mOp1U4DiSn5ZXBPTBKwOl+m0vTot2sXSiXUTpMGXlsbfXhGZCP0lSYDpA6/g==
+X-Received: by 2002:a1c:7317:0:b0:3f1:89a2:e705 with SMTP id d23-20020a1c7317000000b003f189a2e705mr11654626wmb.0.1683026352943;
+        Tue, 02 May 2023 04:19:12 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id t15-20020adfe44f000000b002f00793bd7asm30572021wrm.27.2023.05.02.04.19.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 May 2023 04:19:11 -0700 (PDT)
+Date:   Tue, 2 May 2023 14:19:04 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     oe-kbuild@lists.linux.dev, Takashi Iwai <tiwai@suse.de>
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: drivers/gpu/drm/udl/udl_main.c:259 udl_get_urb_locked() warn: can
+ 'unode' even be NULL?
+Message-ID: <e35cd818-d2f7-4d5e-abf8-b3448ca224aa@kili.mountain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87jzy42a74.ffs@tglx>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,113 +70,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 11:32:15PM +0200, Thomas Gleixner wrote:
-> On Wed, Apr 19 2023 at 15:36, Frederic Weisbecker wrote:
-> This path is taken during the switch from periodic to oneshot mode. The
-> way how this works is:
-> 
-> boot()
->   setup_periodic()
->     setup_periodic_broadcast()
-> 
->   // From here on everything depends on the periodic broadcasting
-> 
->   highres_clocksource_becomes_available()
->     tick_clock_notify() <- Set's the .check_clocks bit on all CPUs
-> 
-> Now the first CPU which observes that bit switches to oneshot mode, but
-> the other CPUs might be waiting for the periodic broadcast at that
-> point. So the periodic to oneshot transition does:
-> 
->   		cpumask_copy(tmpmask, tick_broadcast_mask);
-> 		/* Remove the local CPU as it is obviously not idle */
->   		cpumask_clear_cpu(cpu, tmpmask);
-> 		cpumask_or(tick_broadcast_oneshot_mask, tick_broadcast_oneshot_mask, tmpmask);
-> 
-> I.e. it makes sure that _ALL_ not yet converted CPUs will get woken up
-> by the new oneshot broadcast handler. 
-> 
-> Now when the other CPUs will observe the check_clock bit after that they
-> need to clear their bit in the oneshot mask while switching themself
-> from periodic to oneshot one otherwise the next tick_broadcast_enter()
-> would do nothing. That's all serialized by broadcast lock, so no race.
-> 
-> But that has nothing to do with switching the underlying clockevent
-> device. At that point all CPUs are already in oneshot mode and
-> tick_broadcast_oneshot_mask is correct.
-> 
-> So that will take the other code path:
-> 
->     if (bc->event_handler == tick_handle_oneshot_broadcast) {
->        // not taken because the new device is not yet set up
->        return;
->     }
-> 
->     if (from_periodic) {
->        // not taken because the switchover already happened
->        // Here is where the cpumask magic happens
->     }
->
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   2caeeb9d4a1bccd923b7918427f9e9ef7151ddd8
+commit: c5c354a3a4728045e1342166394c615d75d45377 drm/udl: Fix inconsistent urbs.count value during udl_free_urb_list()
+config: parisc-randconfig-m031-20230421 (https://download.01.org/0day-ci/archive/20230423/202304230801.ncoG1XDr-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 12.1.0
 
-I see, I guess I got lost somewhere into the tree of the possible
-callchains :)
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <error27@gmail.com>
+| Link: https://lore.kernel.org/r/202304230801.ncoG1XDr-lkp@intel.com/
 
-tick_broadcast_setup_oneshot()
-	tick_broadcast_switch_to_oneshot
-		tick_install_broadcast_device
-			tick_check_new_device
-				clockevents_notify_released
-					clockevents_register_device (new device)
-				clockevents_register_device (new device)
-		tick_switch_to_oneshot
-			tick_init_highres
-				 hrtimer_switch_to_hres
-					hrtimer_run_queues (timer softirq)
-			tick_nohz_switch_to_nohz
-				tick_check_oneshot_change (test and clear check_clock)
-					hrtimer_run_queues (timer softirq))
-	tick_device_uses_broadcast
-		tick_setup_device
-			tick_install_replacement
-				clockevents_replace
-					__clockevents_unbind
-						clockevents_unbind
-							unbind_device_store (sysfs)
-							clockevents_unbind_device (driver)
-			tick_check_new_device
-				clockevents_notify_released
-					clockevents_register_device (new device)
-				clockevents_register_device (new device)
-	tick_broadcast_control
-		tick_broadcast_enable (cpuidle driver register, cpu up, ...)
-		tick_broadcast_disable (cpuidle driver unregister, ...)
-		tick_broadcast_force (amd apic bug setup)
+smatch warnings:
+drivers/gpu/drm/udl/udl_main.c:259 udl_get_urb_locked() warn: can 'unode' even be NULL?
 
+vim +/unode +259 drivers/gpu/drm/udl/udl_main.c
 
-Ok I get the check_clock game. But then, why do we need to reprogram
-again the broadcast device to fire in one jiffy if the caller is
-tick_nohz_switch_to_nohz() (that is the (bc->event_handler ==
-tick_handle_oneshot_broadcast) branch)? In that case the broadcast device
-should have been programmed already by the CPU that first switched the
-current broadcast device, right?
+c5c354a3a47280 Takashi Iwai 2022-09-08  236  static struct urb *udl_get_urb_locked(struct udl_device *udl, long timeout)
+5320918b9a8786 Dave Airlie  2010-12-15  237  {
+c5c354a3a47280 Takashi Iwai 2022-09-08  238  	struct urb_node *unode;
+5320918b9a8786 Dave Airlie  2010-12-15  239  
+c5c354a3a47280 Takashi Iwai 2022-09-08  240  	assert_spin_locked(&udl->urbs.lock);
+5320918b9a8786 Dave Airlie  2010-12-15  241  
+acd45c56790a3b Takashi Iwai 2022-08-04  242  	/* Wait for an in-flight buffer to complete and get re-queued */
+acd45c56790a3b Takashi Iwai 2022-08-04  243  	if (!wait_event_lock_irq_timeout(udl->urbs.sleep,
+c5c354a3a47280 Takashi Iwai 2022-09-08  244  					 !udl->urbs.count ||
+acd45c56790a3b Takashi Iwai 2022-08-04  245  					 !list_empty(&udl->urbs.list),
+acd45c56790a3b Takashi Iwai 2022-08-04  246  					 udl->urbs.lock, timeout)) {
+acd45c56790a3b Takashi Iwai 2022-08-04  247  		DRM_INFO("wait for urb interrupted: available: %d\n",
+acd45c56790a3b Takashi Iwai 2022-08-04  248  			 udl->urbs.available);
+c5c354a3a47280 Takashi Iwai 2022-09-08  249  		return NULL;
+acd45c56790a3b Takashi Iwai 2022-08-04  250  	}
+5320918b9a8786 Dave Airlie  2010-12-15  251  
+c5c354a3a47280 Takashi Iwai 2022-09-08  252  	if (!udl->urbs.count)
+c5c354a3a47280 Takashi Iwai 2022-09-08  253  		return NULL;
+c5c354a3a47280 Takashi Iwai 2022-09-08  254  
+acd45c56790a3b Takashi Iwai 2022-08-04  255  	unode = list_first_entry(&udl->urbs.list, struct urb_node, entry);
 
-> > For the case where the other CPUs have already installed their
-> > tick devices and if that function is called with from_periodic=true,
-> > the other CPUs will notice the oneshot change on their next call to
-> > tick_broadcast_enter() thanks to the lock, right? So the tick broadcast
-> > will keep firing until all CPUs have been through idle once and called
-> > tick_broadcast_exit(), right? Because only them can clear themselves
-> > from tick_broadcast_oneshot_mask, am I understanding this correctly?
-> 
-> No. See above. It's about the check_clock bit handling on the other
-> CPUs.
-> 
-> It seems I failed miserably to explain that coherently with the tons of
-> comments added. Hrmpf :(
+Use list_first_entry_or_null() if this list can be empty.
 
-Don't pay too much attention, confusion is my vehicle to explore any code
-that I'm not used to. But yes I must confess the
-(bc->event_handler == tick_handle_oneshot_broadcast) may deserve a comment
-remaining where we come from (ie: low-res hrtimer softirq).
+ed9605a66b62f2 Takashi Iwai 2022-09-08  256  	list_del_init(&unode->entry);
+                                                               ^^^^^^^^^^^^
+dereference.
 
-Thanks.
+5320918b9a8786 Dave Airlie  2010-12-15  257  	udl->urbs.available--;
+5320918b9a8786 Dave Airlie  2010-12-15  258  
+acd45c56790a3b Takashi Iwai 2022-08-04 @259  	return unode ? unode->urb : NULL;
+
+Returns from list_first_entry() should never be checked for NULL.
+
+5320918b9a8786 Dave Airlie  2010-12-15  260  }
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
+
