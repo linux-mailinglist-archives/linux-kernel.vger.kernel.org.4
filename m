@@ -2,109 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EE826F4661
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 16:52:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE7886F465F
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 16:52:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234410AbjEBOwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 10:52:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51194 "EHLO
+        id S234388AbjEBOwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 10:52:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234456AbjEBOwe (ORCPT
+        with ESMTP id S234410AbjEBOvz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 10:52:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2EB71BD8
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 07:51:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683039093;
+        Tue, 2 May 2023 10:51:55 -0400
+Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58A010E6;
+        Tue,  2 May 2023 07:51:48 -0700 (PDT)
+Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4Q9jhd2jwKz9sdK;
+        Tue,  2 May 2023 16:51:45 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mariushoch.de;
+        s=MBO0001; t=1683039105;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=rlI4i5NkJUU4v3/TaCr79bgC9FfiCXPR9/G1iFN8MDM=;
-        b=e7wJfl3u7dvVlqBn98sebqIvPAuP84wG9PpOrJWJt9Bd9dWbpabKSyLsdwMm5DmbE7AFwb
-        EkB0KJG3mvmhxyJ/PCIn26GyXx/+PQq3rRRG723zp3Jm61oirRYMG2rK7gaJ8PHKOe/bdF
-        kjBjnZnSjsdlGWumwZU7kczrQG/cZ0E=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-313-6CnRVIbVOGmUfGAL4yfkSQ-1; Tue, 02 May 2023 10:51:32 -0400
-X-MC-Unique: 6CnRVIbVOGmUfGAL4yfkSQ-1
-Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-61b60166509so8779416d6.1
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 07:51:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683039092; x=1685631092;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rlI4i5NkJUU4v3/TaCr79bgC9FfiCXPR9/G1iFN8MDM=;
-        b=hn0nbSBW1fXHWM5PqsaoxptHyOnFUxWBfILNDABCX35lSRbqFTLeZm1N9pojFSB+86
-         AEi+N6n9n5Od7P74MwVWIPLMBAjOpX5vbCLuMX8Mz+bCyk6mv9YfSOKrypuxs0LelvFu
-         fmQC/zVgx+EzqOY0uYR1F8AGK+aCcrvPWtl6xdtVMFOzTdNJ71aJx/EWRlAL8SDT+zBp
-         aqwJt9L4hVz+hV0E5LKJDCQws483QaI0hoJNR/ZLTTT35BZQzpQaK9PLVhFt1bg7SS4p
-         J90az8Dmh/gwd5ISkrWjqU6ZmuKupblC1NB7QbGj6579cAcGJLnq5P6rPS7RH+nNyb+g
-         SHkQ==
-X-Gm-Message-State: AC+VfDzqv8OhQhSmKlMzgyyv61pyno7eeUwHdP1jb8uezsYy7/NpqQKr
-        ZPpjzH9HmCjk0lVbq7l6gZcqvON+QCZ5eNjOwmTXOZhBIkODShHU/YgpEwl9kthH8BOfnyp4NwO
-        SnyH09ItnugCDhpj4OvxlHrTK
-X-Received: by 2002:a05:6214:1305:b0:5ab:28aa:2429 with SMTP id pn5-20020a056214130500b005ab28aa2429mr6745870qvb.30.1683039092282;
-        Tue, 02 May 2023 07:51:32 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6dDegzBLcQBdCcxYpqd+dYi2UlOninPF6u15FNk6D4g/uiioJP24FRBYakE8yyzmhtVJMY5w==
-X-Received: by 2002:a05:6214:1305:b0:5ab:28aa:2429 with SMTP id pn5-20020a056214130500b005ab28aa2429mr6745835qvb.30.1683039092025;
-        Tue, 02 May 2023 07:51:32 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id j13-20020a0cf50d000000b005dd8b9345besm9613655qvm.86.2023.05.02.07.51.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 May 2023 07:51:31 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com
-Cc:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] btrfs: replace else-statement with initialization
-Date:   Tue,  2 May 2023 10:51:29 -0400
-Message-Id: <20230502145129.2927253-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OCfcf6FSM/bUYl403EMZyHDqpdSAF9tPFEUHDQUYu2E=;
+        b=CObgluT8g4B7ZcUl430iOjj2Uv0J7Zl0Rwbp3njGw0qTdArA2BPGZB3MoNLwgVcVvMDAQ8
+        h91i07Dsw0OexvV0e6UeBc+bG/B1Ua9ZkC36RwipEyukOQz6ai0bGsSXP/oEwIk80hesAy
+        fEP6QB068g2kTYK5TdXhnwcgilMikK/YCX61Y6mb4Qh5ofUSk5XB4Uahg5Lc3RdNV/+o9F
+        RRlpDsw761pGKoupAFFAq+aKqodXJBKwfklLlyOjirVjEE2tkluC3/WBu013dEq5WAODpS
+        u03AOwk5Hj5Dd7L/jT29XJ+h3J0u02Dh2yFlayP8a+7354pbiFLsloITIh+bjQ==
+Message-ID: <e669d656-1474-ad95-4667-3a6ae79605e3@mariushoch.de>
+Date:   Tue, 2 May 2023 16:51:42 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v3 4/6] iio: st_sensors: Add ACPI support for lsm303d to
+ the LSM9DS0 IMU driver
+To:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Denis Ciocca <denis.ciocca@st.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Marius Hoch <marius@mariushoch.de>
+References: <20230415231130.115094-1-mail@mariushoch.de>
+ <20230415231130.115094-5-mail@mariushoch.de>
+Content-Language: en-US
+From:   Marius Hoch <mail@mariushoch.de>
+In-Reply-To: <20230415231130.115094-5-mail@mariushoch.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 4Q9jhd2jwKz9sdK
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A small optimization
-Move the default value of transid to its initialization
-and remove the else-statement.
+Hi,
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- fs/btrfs/ioctl.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+On 16/04/2023 01:11, Marius Hoch wrote:
+<snip>
+> diff --git a/drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_spi.c b/drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_spi.c
+> index 997b5ff792be..55f3738193af 100644
+> --- a/drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_spi.c
+> +++ b/drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_spi.c
+> @@ -37,6 +37,12 @@ static const struct spi_device_id st_lsm9ds0_id_table[] = {
+>   };
+>   MODULE_DEVICE_TABLE(spi, st_lsm9ds0_id_table);
+>   
+> +static const struct acpi_device_id st_lsm9ds0_acpi_match[] = {
+> +	{"ACCL0001", (kernel_ulong_t)LSM303D_IMU_DEV_NAME},
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(acpi, st_lsm9ds0_acpi_match);
+> +
+>   static const struct regmap_config st_lsm9ds0_regmap_config = {
+>   	.reg_bits	= 8,
+>   	.val_bits	= 8,
+> @@ -72,6 +78,7 @@ static struct spi_driver st_lsm9ds0_driver = {
+>   	.driver = {
+>   		.name = "st-lsm9ds0-spi",
+>   		.of_match_table = st_lsm9ds0_of_match,
+> +		.acpi_match_table = st_lsm9ds0_acpi_match,
+>   	},
+>   	.probe = st_lsm9ds0_spi_probe,
+>   	.id_table = st_lsm9ds0_id_table,
+I just realized that these changes (the SPI ones, not the I2C ones) are 
+entirely superfluous, and I'm not sure why I added this in the first 
+place. In the Lenovo Yoga Tablet 2 series (which seem to be the only 
+devices exposing this as "ACCL0001"), the device is accessible via I2C. 
+Just to make sure, I re-tested the patch chain without this change.
 
-diff --git a/fs/btrfs/ioctl.c b/fs/btrfs/ioctl.c
-index 25833b4eeaf5..4694301aa91e 100644
---- a/fs/btrfs/ioctl.c
-+++ b/fs/btrfs/ioctl.c
-@@ -3132,14 +3132,13 @@ static noinline long btrfs_ioctl_start_sync(struct btrfs_root *root,
- static noinline long btrfs_ioctl_wait_sync(struct btrfs_fs_info *fs_info,
- 					   void __user *argp)
- {
--	u64 transid;
-+	u64 transid = 0;  /* current trans */
- 
- 	if (argp) {
- 		if (copy_from_user(&transid, argp, sizeof(transid)))
- 			return -EFAULT;
--	} else {
--		transid = 0;  /* current trans */
- 	}
-+
- 	return btrfs_wait_for_commit(fs_info, transid);
- }
- 
--- 
-2.27.0
+@Jonathan: Shall I upload an entirely new patch set (v4), do this in a 
+separate new clean up commit, or do you want to just drop these changes 
+to drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_spi.c? I'm fine with any of 
+these options.
 
+Cheers,
+Marius
