@@ -2,98 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F2AD6F42F3
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 13:43:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 783256F42F7
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 13:43:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234011AbjEBLnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 07:43:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51130 "EHLO
+        id S234062AbjEBLnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 07:43:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233618AbjEBLnL (ORCPT
+        with ESMTP id S234044AbjEBLn1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 07:43:11 -0400
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15FBB2123;
-        Tue,  2 May 2023 04:43:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1683027787;
-        bh=VIXlwaAodrWp8Vhxz+WDa3KoUpXUVVhKJac+yTw3JPY=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=Jhl+sztrOwEDjtwmne5HQU6aXLKSFxkGsV+GqvMXCULQnVptmMOy46lcJn8TJD2nV
-         Cz4FiICRD0fpyV2EVDrJ/+oCA0F64UjfFbcIL0QFb5f/iutLKwDLAAC08nsVf2C0sW
-         PW2yXp5dIH6OPPlm4jB3q1u314n26v1FRt3YM0EM=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 5D7531285DD9;
-        Tue,  2 May 2023 07:43:07 -0400 (EDT)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
- by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id WKKGlZO_O65L; Tue,  2 May 2023 07:43:07 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1683027787;
-        bh=VIXlwaAodrWp8Vhxz+WDa3KoUpXUVVhKJac+yTw3JPY=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=Jhl+sztrOwEDjtwmne5HQU6aXLKSFxkGsV+GqvMXCULQnVptmMOy46lcJn8TJD2nV
-         Cz4FiICRD0fpyV2EVDrJ/+oCA0F64UjfFbcIL0QFb5f/iutLKwDLAAC08nsVf2C0sW
-         PW2yXp5dIH6OPPlm4jB3q1u314n26v1FRt3YM0EM=
-Received: from [IPv6:2601:5c4:4302:c21::a774] (unknown [IPv6:2601:5c4:4302:c21::a774])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 32CE21285C64;
-        Tue,  2 May 2023 07:43:01 -0400 (EDT)
-Message-ID: <2f5ebe8a9ce8471906a85ef092c1e50cfd7ddecd.camel@HansenPartnership.com>
-Subject: Re: [PATCH 01/40] lib/string_helpers: Drop space in
- string_get_size's output
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
-        mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
-        roman.gushchin@linux.dev, mgorman@suse.de, willy@infradead.org,
-        liam.howlett@oracle.com, corbet@lwn.net, void@manifault.com,
-        peterz@infradead.org, juri.lelli@redhat.com, ldufour@linux.ibm.com,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, peterx@redhat.com, david@redhat.com,
-        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
-        nathan@kernel.org, dennis@kernel.org, tj@kernel.org,
-        muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
-        pasha.tatashin@soleen.com, yosryahmed@google.com,
-        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
-        andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, gregkh@linuxfoundation.org,
-        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org,
-        Andy Shevchenko <andy@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Noralf =?ISO-8859-1?Q?Tr=EF=BF=BDnnes?= <noralf@tronnes.org>
-Date:   Tue, 02 May 2023 07:42:59 -0400
-In-Reply-To: <ZFCA2FF+9MI8LI5i@moria.home.lan>
-References: <20230501165450.15352-1-surenb@google.com>
-         <20230501165450.15352-2-surenb@google.com>
-         <ouuidemyregstrijempvhv357ggp4tgnv6cijhasnungsovokm@jkgvyuyw2fti>
-         <ZFAUj+Q+hP7cWs4w@moria.home.lan>
-         <b6b472b65b76e95bb4c7fc7eac1ee296fdbb64fd.camel@HansenPartnership.com>
-         <ZFCA2FF+9MI8LI5i@moria.home.lan>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+        Tue, 2 May 2023 07:43:27 -0400
+Received: from mx0.infotecs.ru (mx0.infotecs.ru [91.244.183.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B3EF5260;
+        Tue,  2 May 2023 04:43:21 -0700 (PDT)
+Received: from mx0.infotecs-nt (localhost [127.0.0.1])
+        by mx0.infotecs.ru (Postfix) with ESMTP id 9519A10C5D49;
+        Tue,  2 May 2023 14:43:19 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx0.infotecs.ru 9519A10C5D49
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=infotecs.ru; s=mx;
+        t=1683027800; bh=g9nMPuV2t04Nj1TYYz2m1R/YfuvNWdvcdKhGD9xYWOM=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=ARKv7XTC3RgexeweLypba3qRfZAW4UnGviPuORFvYiM+G1rJ0HweWQ+3+5XFW7LiR
+         1W/ycBCa66deEj4h9XVThXDj0vGacJllb+azcC7tsDe/jukcQblVTgo5qXZoOmat7B
+         FU5HQ/RF2RVLq6XtTV+syaZijNec6BoqvbQSUBP4=
+Received: from msk-exch-01.infotecs-nt (msk-exch-01.infotecs-nt [10.0.7.191])
+        by mx0.infotecs-nt (Postfix) with ESMTP id 8E26830C6672;
+        Tue,  2 May 2023 14:43:19 +0300 (MSK)
+From:   Gavrilov Ilia <Ilia.Gavrilov@infotecs.ru>
+To:     Simon Horman <simon.horman@corigine.com>
+CC:     Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Patrick McHardy <kaber@trash.net>,
+        "netfilter-devel@vger.kernel.org" <netfilter-devel@vger.kernel.org>,
+        "coreteam@netfilter.org" <coreteam@netfilter.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "lvc-project@linuxtesting.org" <lvc-project@linuxtesting.org>
+Subject: Re: [PATCH] netfilter: nf_conntrack_sip: fix the
+ ct_sip_parse_numerical_param() return value.
+Thread-Topic: [PATCH] netfilter: nf_conntrack_sip: fix the
+ ct_sip_parse_numerical_param() return value.
+Thread-Index: AQHZfOtKNP7qiBEqO0uSGzSI9t28iA==
+Date:   Tue, 2 May 2023 11:43:19 +0000
+Message-ID: <d0a92686-acc4-4fd8-0505-60a8394d05d8@infotecs.ru>
+References: <20230426150414.2768070-1-Ilia.Gavrilov@infotecs.ru>
+ <ZEwdd7Xj4fQtCXoe@corigine.com>
+In-Reply-To: <ZEwdd7Xj4fQtCXoe@corigine.com>
+Accept-Language: ru-RU, en-US
+Content-Language: ru-RU
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.17.0.10]
+x-exclaimer-md-config: 208ac3cd-1ed4-4982-a353-bdefac89ac0a
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <EB2CC5FD9002C444885CAC781D174509@infotecs.ru>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-KLMS-Rule-ID: 1
+X-KLMS-Message-Action: clean
+X-KLMS-AntiSpam-Lua-Profiles: 177105 [May 02 2023]
+X-KLMS-AntiSpam-Version: 5.9.59.0
+X-KLMS-AntiSpam-Envelope-From: Ilia.Gavrilov@infotecs.ru
+X-KLMS-AntiSpam-Rate: 0
+X-KLMS-AntiSpam-Status: not_detected
+X-KLMS-AntiSpam-Method: none
+X-KLMS-AntiSpam-Auth: dkim=none
+X-KLMS-AntiSpam-Info: LuaCore: 510 510 bc345371020d3ce827abc4c710f5f0ecf15eaf2e, {Tracking_msgid_8}, {Tracking_from_domain_doesnt_match_to}, infotecs.ru:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
+X-MS-Exchange-Organization-SCL: -1
+X-KLMS-AntiSpam-Interceptor-Info: scan successful
+X-KLMS-AntiPhishing: Clean, bases: 2023/05/02 06:48:00
+X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, bases: 2023/05/02 09:07:00 #21205017
+X-KLMS-AntiVirus-Status: Clean, skipped
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,60 +87,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-05-01 at 23:17 -0400, Kent Overstreet wrote:
-> On Mon, May 01, 2023 at 10:22:18PM -0400, James Bottomley wrote:
-> > It is not used just for debug.  It's used all over the kernel for
-> > printing out device sizes.  The output mostly goes to the kernel
-> > print buffer, so it's anyone's guess as to what, if any, tools are
-> > parsing it, but the concern about breaking log parsers seems to be
-> > a valid one.
-> 
-> Ok, there is sd_print_capacity() - but who in their right mind would
-> be trying to scrape device sizes, in human readable units,
-
-If you bother to google "kernel log parser", you'll discover it's quite
-an active area which supports a load of company business models.
-
->  from log messages when it's available in sysfs/procfs (actually, is
-> it in sysfs? if not, that's an oversight) in more reasonable units?
-
-It's not in sysfs, no.  As aren't a lot of things, which is why log
-parsing for system monitoring is big business.
-
-> Correct me if I'm wrong, but I've yet to hear about kernel log
-> messages being consider a stable interface, and this seems a bit out
-> there.
-
-It might not be listed as stable, but when it's known there's a large
-ecosystem out there consuming it we shouldn't break it just because you
-feel like it.  You should have a good reason and the break should be
-unavoidable.  I wanted my output in a particular form so I thought I'd
-change everyone else's output as well isn't a good reason and it only
-costs a couple of lines to avoid.
-
-> But, you did write the code :)
-> 
-> > > If someone raises a specific objection we'll do something
-> > > different, otherwise I think standardizing on what userspace
-> > > tooling already parses is a good idea.
-> > 
-> > If you want to omit the space, why not simply add your own
-> > variant?  A string_get_size_nospace() which would use most of the
-> > body of this one as a helper function but give its own snprintf
-> > format string at the end.  It's only a couple of lines longer as a
-> > patch and has the bonus that it definitely wouldn't break anything
-> > by altering an existing output.
-> 
-> I'm happy to do that - I just wanted to post this version first to
-> see if we can avoid the fragmentation and do a bit of standardizing
-> with how everything else seems to do that.
-
-What fragmentation?  To do this properly you move the whole of the
-current function to a helper which takes a format sting, say with a
-double underscore prefix, then the existing function and what you want
-become one line additions calling the helper with their specific format
-string.  There's no fragmentation of the base function at all.
-
-James
-
-
+T24gNC8yOC8yMyAyMjoyNCwgU2ltb24gSG9ybWFuIHdyb3RlOg0KPiBPbiBXZWQsIEFwciAyNiwg
+MjAyMyBhdCAwMzowNDozMVBNICswMDAwLCBHYXZyaWxvdiBJbGlhIHdyb3RlOg0KPj4gY3Rfc2lw
+X3BhcnNlX251bWVyaWNhbF9wYXJhbSgpIHJldHVybnMgb25seSAwIG9yIDEgbm93Lg0KPj4gQnV0
+IHByb2Nlc3NfcmVnaXN0ZXJfcmVxdWVzdCgpIGFuZCBwcm9jZXNzX3JlZ2lzdGVyX3Jlc3BvbnNl
+KCkgaW1wbHkNCj4+IGNoZWNraW5nIGZvciBhIG5lZ2F0aXZlIHZhbHVlIGlmIHBhcnNpbmcgb2Yg
+YSBudW1lcmljYWwgaGVhZGVyIHBhcmFtZXRlcg0KPj4gZmFpbGVkLiBMZXQncyBmaXggaXQuDQo+
+Pg0KPj4gRm91bmQgYnkgSW5mb1RlQ1Mgb24gYmVoYWxmIG9mIExpbnV4IFZlcmlmaWNhdGlvbiBD
+ZW50ZXINCj4+IChsaW51eHRlc3Rpbmcub3JnKSB3aXRoIFNWQUNFLg0KPj4NCj4+IEZpeGVzOiAw
+ZjMyYTQwZmM5MWEgKCJbTkVURklMVEVSXTogbmZfY29ubnRyYWNrX3NpcDogY3JlYXRlIHNpZ25h
+bGxpbmcgZXhwZWN0YXRpb25zIikNCj4+IFNpZ25lZC1vZmYtYnk6IElsaWEuR2F2cmlsb3YgPEls
+aWEuR2F2cmlsb3ZAaW5mb3RlY3MucnU+DQo+IA0KPiBIaSBHYXZyaWxvdiwNCj4gDQoNCkhpIFNp
+bW9uLCB0aGFuayB5b3UgZm9yIHlvdXIgYW5zd2VyLg0KDQo+IGFsdGhvdWdoIGl0IGlzIGEgc2xp
+Z2h0bHkgdW51c3VhbCBjb252ZW50aW9uIGZvciBrZXJuZWwgY29kZSwNCj4gSSBiZWxpZXZlIHRo
+ZSBpbnRlbnRpb24gaXMgdGhhdCB0aGlzIGZ1bmN0aW9uIHJldHVybnMgMCB3aGVuDQo+IGl0IGZh
+aWxzICh0byBwYXJzZSkgYW5kIDEgb24gc3VjY2Vzcy4gU28gSSB0aGluayB0aGF0IHBhcnQgaXMg
+ZmluZS4NCj4gDQo+IFdoYXQgc2VlbXMgYSBiaXQgYnJva2VuIGlzIHRoZSB3YXkgdGhhdCBjYWxs
+ZXJzIHVzZSB0aGUgcmV0dXJuIHZhbHVlLg0KPiANCj4gMS4gVGhlIGNhbGwgaW4gcHJvY2Vzc19y
+ZWdpc3Rlcl9yZXNwb25zZSgpIGxvb2tzIGxpa2UgdGhpczoNCj4gDQo+IAlyZXQgPSBjdF9zaXBf
+cGFyc2VfbnVtZXJpY2FsX3BhcmFtKC4uLikNCj4gCWlmIChyZXQgPCAwKSB7DQo+IAkJbmZfY3Rf
+aGVscGVyX2xvZyhza2IsIGN0LCAiY2Fubm90IHBhcnNlIGV4cGlyZXMiKTsNCj4gCQlyZXR1cm4g
+TkZfRFJPUDsNCj4gCX0NCj4gDQo+ICAgICAgQnV0IHJldCBjYW4gb25seSBiZSAwIG9yIDEsIHNv
+IHRoZSBlcnJvciBoYW5kbGluZyBpcyBuZXZlciBpbm9rZWQsDQo+ICAgICAgYW5kIGEgZmFpbHVy
+ZSB0byBwYXJzZSBpcyBpZ25vcmVkLiBJIGd1ZXNzIGZhaWx1cmUgZG9lc24ndCBvY2N1ciBpbg0K
+PiAgICAgIHByYWN0aWNlLg0KPiANCj4gICAgICBJIHN1c3BlY3QgdGhpcyBzaG91bGQgYmU6DQo+
+IA0KPiAJcmV0ID0gY3Rfc2lwX3BhcnNlX251bWVyaWNhbF9wYXJhbSguLi4pDQo+IAlpZiAoIXJl
+dCkgew0KPiAJCW5mX2N0X2hlbHBlcl9sb2coc2tiLCBjdCwgImNhbm5vdCBwYXJzZSBleHBpcmVz
+Iik7DQo+IAkJcmV0dXJuIE5GX0RST1A7DQo+IAl9DQo+IA0KDQpjdF9zaXBfcGFyc2VfbnVtZXJp
+Y2FsX3BhcmFtKCkgcmV0dXJucyAwIGluIHRvIGNhc2VzIDEpIHdoZW4gdGhlIA0KcGFyYW1ldGVy
+ICdleHBpcmVzPScgaXNuJ3QgZm91bmQgaW4gdGhlIGhlYWRlciBvciAyKSBpdCdzIGluY29ycmVj
+dGx5IHNldC4NCkluIHRoZSBmaXJzdCBjYXNlLCB0aGUgcmV0dXJuIHZhbHVlIHNob3VsZCBiZSBp
+Z25vcmVkLCBzaW5jZSB0aGlzIGlzIGEgDQpub3JtYWwgc2l0dWF0aW9uDQpJbiB0aGUgc2Vjb25k
+IGNhc2UsIGl0J3MgYmV0dGVyIHRvIHdyaXRlIHRvIHRoZSBsb2cgYW5kIHJldHVybiBORl9EUk9Q
+LCANCm9yIGlnbm9yZSBpdCB0b28sIHRoZW4gY2hlY2tpbmcgdGhlIHJldHVybiB2YWx1ZSBjYW4g
+YmUgcmVtb3ZlZCBhcyANCnVubmVjZXNzYXJ5Lg0KDQoNCj4gMi4gVGhlIGNhbGxwcm9jZXNzX3Jl
+Z2lzdGVyX3JlcXVlc3QoKSBsb29rcyBsaWtlIHRoaXM6DQo+IA0KPiAgICAgICAgICBpZiAoY3Rf
+c2lwX3BhcnNlX251bWVyaWNhbF9wYXJhbSguLi4pKSB7DQo+ICAgICAgICAgICAgICAgICAgbmZf
+Y3RfaGVscGVyX2xvZyhza2IsIGN0LCAiY2Fubm90IHBhcnNlIGV4cGlyZXMiKTsNCj4gICAgICAg
+ICAgICAgICAgICByZXR1cm4gTkZfRFJPUDsNCj4gICAgICAgICAgfQ0KPiANCj4gICAgIEJ1dCB0
+aGlzIHNlZW1zIHRvIHRyZWF0IHN1Y2Nlc3MgYXMgYW4gZXJyb3IgYW5kIHZpY2UgdmVyc2EuDQo+
+IA0KPiAgICAgICAgICBpZiAoIWN0X3NpcF9wYXJzZV9udW1lcmljYWxfcGFyYW0oLi4uKSkgew0K
+PiAgICAgICAgICAgICAgICAgIG5mX2N0X2hlbHBlcl9sb2coc2tiLCBjdCwgImNhbm5vdCBwYXJz
+ZSBleHBpcmVzIik7DQo+ICAgICAgICAgICAgICAgICAgcmV0dXJuIE5GX0RST1A7DQo+ICAgICAg
+ICAgIH0NCj4gDQo+ICAgIE9yLCBiZXR0ZXI6DQo+IA0KPiAgICAgICAgICByZXQgPSBjdF9zaXBf
+cGFyc2VfbnVtZXJpY2FsX3BhcmFtKC4uLik7DQo+IAlpZiAoIXJldCkgew0KPiAJCS4uLg0KPiAJ
+fQ0KPiANCg0KSGVyZSBpcyB0aGUgc2FtZSBhcyBpbiBwcm9jZXNzX3JlZ2lzdGVyX3Jlc3BvbnNl
+KCkNCg0KcmV0ID0gY3Rfc2lwX3BhcnNlX251bWVyaWNhbF9wYXJhbSguLi4pOw0KaWYgKHJldCA8
+IDApIHsNCiAgICAuLi4NCiAgICByZXR1cm4gTkZfRFJPUDsNCn0NCg0KTWF5YmUgaXQncyBiZXR0
+ZXIgdG8gcmVtb3ZlIHRoZSBjaGVjayBhbHRvZ2V0aGVyPw0KDQoNCg0KPiANCj4gMy4gVGhlIGlu
+dm9jYXRpb24gaW4gbmZfbmF0X3NpcCgpIGxvb2tzIGxpa2UgdGhpczoNCj4gDQo+IAlpZiAoY3Rf
+c2lwX3BhcnNlX251bWVyaWNhbF9wYXJhbSguLi4pID4gMCAmJg0KPiAJICAgIC4uLikNCj4gCSAg
+ICAuLi4NCj4gDQo+ICAgICBUaGlzIHNlZW1zIGNvcnJlY3QgdG8gbWUuDQoNCkkgYWdyZWUsIGV2
+ZXJ5dGhpbmcgc2VlbXMgY29ycmVjdCBoZXJlDQoNCj4gDQo+PiAtLS0NCj4+ICAgbmV0L25ldGZp
+bHRlci9uZl9jb25udHJhY2tfc2lwLmMgfCAyICstDQo+PiAgIDEgZmlsZSBjaGFuZ2VkLCAxIGlu
+c2VydGlvbigrKSwgMSBkZWxldGlvbigtKQ0KPj4NCj4+IGRpZmYgLS1naXQgYS9uZXQvbmV0Zmls
+dGVyL25mX2Nvbm50cmFja19zaXAuYyBiL25ldC9uZXRmaWx0ZXIvbmZfY29ubnRyYWNrX3NpcC5j
+DQo+PiBpbmRleCA3N2Y1ZTgyZDhlM2YuLmQwZWFjMjdmNmJhMCAxMDA2NDQNCj4+IC0tLSBhL25l
+dC9uZXRmaWx0ZXIvbmZfY29ubnRyYWNrX3NpcC5jDQo+PiArKysgYi9uZXQvbmV0ZmlsdGVyL25m
+X2Nvbm50cmFja19zaXAuYw0KPj4gQEAgLTYxMSw3ICs2MTEsNyBAQCBpbnQgY3Rfc2lwX3BhcnNl
+X251bWVyaWNhbF9wYXJhbShjb25zdCBzdHJ1Y3QgbmZfY29ubiAqY3QsIGNvbnN0IGNoYXIgKmRw
+dHIsDQo+PiAgIAlzdGFydCArPSBzdHJsZW4obmFtZSk7DQo+PiAgIAkqdmFsID0gc2ltcGxlX3N0
+cnRvdWwoc3RhcnQsICZlbmQsIDApOw0KPj4gICAJaWYgKHN0YXJ0ID09IGVuZCkNCj4+IC0JCXJl
+dHVybiAwOw0KPj4gKwkJcmV0dXJuIC0xOw0KPj4gICAJaWYgKG1hdGNob2ZmICYmIG1hdGNobGVu
+KSB7DQo+PiAgIAkJKm1hdGNob2ZmID0gc3RhcnQgLSBkcHRyOw0KPj4gICAJCSptYXRjaGxlbiA9
+IGVuZCAtIHN0YXJ0Ow0KPj4gLS0gDQo+PiAyLjMwLjINCj4+DQoNCg==
