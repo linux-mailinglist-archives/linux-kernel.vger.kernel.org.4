@@ -2,202 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDE286F3C3E
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 05:06:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CF9A6F3C3F
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 05:09:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233434AbjEBDGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 23:06:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54688 "EHLO
+        id S233462AbjEBDJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 23:09:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232653AbjEBDG1 (ORCPT
+        with ESMTP id S233453AbjEBDJq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 23:06:27 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9F6C3AB3
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 20:06:25 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-3f0a2f8216fso32861cf.0
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 20:06:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682996785; x=1685588785;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TdqFMAjqlQvUvc50H/u0uZmgUhJHOGvPzLI8RH3+DdU=;
-        b=ncQ3a/JBnU2daB+Lbk7kY9jTbhmW+ye4pjwNEo2AcvtJww94H1DSj/+8jLWzwMU7c6
-         Z/sMMaVJRLZl2IYjclI2CYjVcfQkL9cH9FiLqJvuwV6k1I1Lhqcj1kM/VbsJF/JgRr8h
-         AEtp2wRSWSmexX9ajogi56GarPYk9LKYR/ByAvF4zfktfd7drfNTzdqDFh2Ou48V9qnj
-         B7MZC4yzDREuZ53xaAPVWo8CO0iwNcJ6cVzIQqy1ep4yAk2vt5iqQZZShFwsDOs22/vG
-         +9hEgx6gmlyFotoWBDEvT3wO0/A608UZKDFgQJsjKSDdt7RzMdxtwfLpM2zEr6wI0YYC
-         AJrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682996785; x=1685588785;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TdqFMAjqlQvUvc50H/u0uZmgUhJHOGvPzLI8RH3+DdU=;
-        b=BV65kL4F9/b0r25lDVA3xdr9GPukdzLI0sZ86iMU1KCwknj2C3KCN8nUyrz5FMqMES
-         Eb7zlz+l5J3K8furkhzPZnKVojAS/ZzfQFwrh+3zYKQu8djUyygfRltBeKe0xmfuDHo7
-         XrijmK8vvR6CF5xP9YmMXcK+zs41OnV2q+Ddgb+ko9xrzh/TjFV6GNISNBnEukw2cyZN
-         YRcJLZTi/EBgOXgLe1tsbCgXDBVb3XcFWvVGBlEZP51At/KZIHZuiTo0HUay5S2gFmwI
-         3HTN4yR7oIClEiwqv6vfpDiocWjS/23MoXPIFcbbP291rFcjzTe+IM5l/KjxECIc9+pr
-         BhhQ==
-X-Gm-Message-State: AC+VfDxokzz9FnijuCQdI9ZMoKrhtpGqHPrLv9IW8nrPsjml7WzF4+uq
-        wUdjaYKSXVZ0FugOWNewRz1yigAv0I6lxN4T6LIe
-X-Google-Smtp-Source: ACHHUZ6xkBXKQzMok6OokiVuAlgdLIOasM5wYm3veUnbXzP4/5vOr8fH7euHBTN3t2SHEXPblrGmKUZeihKberN1ADA=
-X-Received: by 2002:a05:622a:1ca:b0:3f1:bb90:c006 with SMTP id
- t10-20020a05622a01ca00b003f1bb90c006mr129548qtw.11.1682996784971; Mon, 01 May
- 2023 20:06:24 -0700 (PDT)
+        Mon, 1 May 2023 23:09:46 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2084.outbound.protection.outlook.com [40.107.223.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0BA330FB;
+        Mon,  1 May 2023 20:09:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WJT2prOtp8vS/jeqVYkR0ejjGTYaegTY6eOU5Py6LmNyE8cL+prXhlXuWiV1iG8mkDdSgXnIp123OK7U5wEx/eM3nTgx4QC7Zys0QG7AU/UPQKpIi39k8lx4/1SCBAjT+L4TyQWxjRnsQ+FyM7z08l2kO6n0aQZg7zwhN27CBAnWcHn2BVE900HO4Ej24SZDl5C14ibyro58EQVvEn3GhpHIk8vzMNN4FFkIQr7gowbx3v3uN+drnbGKBilzhCv3gvS8MUIbxLujh0dXBWkKNcdbfYSSEFSw5BhzATOvHfXnJMe8nKO/NT02LX1uSMKl8G0Y7ms+7Le2sZtQXUAh3g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GLax830yorPv8kIg/mLVby48g/vv71I7vxHSSXTIVEI=;
+ b=IYKu/bcxcFgSx2Tzo/QDTQ2dM82eFUYZDsGd/SDaEs7A2GQTn42H/wmmjok+7XCGlLY2U67nBWzzUgVz09zvdv/ZWYmJ8OU5WUuAj2TkB73m3/6Kt5D+pWwLt2tAxFgU1C3gGM9Hi0yKdpev7/2xVNouIKQTcVQRrqKgoYuhpCJRZAlhtxF5w7gItuQlUMVGAE5TE6M5dFn1pVxVh790yhmoHg57syhRHhPpzV6HT7iQ0QnF+Se/dmdWE36TqlLeKjA4RS+e3NIqd2lAsoI528ddlNnKUqbPSDxYDQ8A7L14BErx9LLt3HB4aMHxG309gd6Qnoma1ohhv1vjCCLlAA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GLax830yorPv8kIg/mLVby48g/vv71I7vxHSSXTIVEI=;
+ b=PSy0Ckrq+T5x5ngM7HNbfDJB6vi2WjdU/+pfUS1LECcKn53PqK/GMV5Y1KKql8ZciiexNCghvckuvrmBnZuiV2wUcH01a1gvCsC6MGtqbW0djoPIuoHgoMlrV9NGIfCTb07qQ0TO88hB29/KXWdKD54BeSqZ0rKscPrKIRgd24k=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10)
+ by LV2PR12MB5846.namprd12.prod.outlook.com (2603:10b6:408:175::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.30; Tue, 2 May
+ 2023 03:09:42 +0000
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::b4a6:94bb:6895:645]) by PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::b4a6:94bb:6895:645%7]) with mapi id 15.20.6340.030; Tue, 2 May 2023
+ 03:09:41 +0000
+Message-ID: <90a2a0dd-62e1-93a2-6d8a-50c68823078b@amd.com>
+Date:   Tue, 2 May 2023 08:38:10 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 3/3] perf test: Add selftest to test IBS invocation via
+ core pmu events
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>
+Cc:     peterz@infradead.org, namhyung@kernel.org, eranian@google.com,
+        acme@kernel.org, mark.rutland@arm.com, jolsa@kernel.org,
+        bp@alien8.de, kan.liang@linux.intel.com, adrian.hunter@intel.com,
+        maddy@linux.ibm.com, x86@kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sandipan.das@amd.com, ananth.narayan@amd.com,
+        santosh.shukla@amd.com, Ravi Bangoria <ravi.bangoria@amd.com>
+References: <20230425142205.762-1-ravi.bangoria@amd.com>
+ <20230425142205.762-4-ravi.bangoria@amd.com>
+ <CAP-5=fVnfNEKK_UPuRprSVuCgQG-X-hCM6Jq3AKRHYfBiqisKw@mail.gmail.com>
+From:   Ravi Bangoria <ravi.bangoria@amd.com>
+In-Reply-To: <CAP-5=fVnfNEKK_UPuRprSVuCgQG-X-hCM6Jq3AKRHYfBiqisKw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: PN2PR01CA0223.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:ea::16) To PH7PR12MB6588.namprd12.prod.outlook.com
+ (2603:10b6:510:210::10)
 MIME-Version: 1.0
-References: <fb8d80434b2148e78c0032c6c70a8b4d@huawei.com> <CANDhNCqfBdh8zUd+LseTTQKpmJ27Uid+ZV_+FNckZPNc2Oy3-w@mail.gmail.com>
- <f2b7fdba4ead429bb4dd38a9ccb3735a@huawei.com>
-In-Reply-To: <f2b7fdba4ead429bb4dd38a9ccb3735a@huawei.com>
-From:   John Stultz <jstultz@google.com>
-Date:   Mon, 1 May 2023 20:06:13 -0700
-Message-ID: <CANDhNCoaMPj-aa1VKJoVawBgZWOiZpvZ5cnvVJq4F_d-miTNcA@mail.gmail.com>
-Subject: Re: [Question] softlockup in run_timer_softirq
-To:     "liujian (CE)" <liujian56@huawei.com>,
-        Frank Woo <frankwoo@google.com>,
-        Rhine Wu <Rhinewuwu@google.com>
-Cc:     "tglx@linutronix.de" <tglx@linutronix.de>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR12MB6588:EE_|LV2PR12MB5846:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4ebf07e8-1790-4d51-e5a5-08db4abaabec
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: CldT8x2shCcenrOno0bvMrIZIQv4a3dMG87czp1PIG/S//EjcW05b0rNJfFxY8p1XJQKLZ24Db9tK6HBPcISTUT9Oe0p8StkX1OrLqJXr+/thVdeJuefn4bugGHjuxjrhycLYxYORo+twIPs4CK//0WlOcIJDcgnU4KgTZQ5KkVpEM/GRtZhjRU1BSQDzS8FjilOvP8DudFiL77hIzusQC9X+9TBqeSUsX3f0T9iR+9H3RMvFXy8mwn+/aUvG2tcu8a9H9e5LuFGYn1jgj1Txu+VAYrn2LoLzGWKPwiquZ3o1ntqGFWY6Hi+3wbblIBLcgI8TZBXDTnQEi3yus+loToPt8U8HfGoq8tQrsio6VF9aOMic3tf1gr+VCOVLLAI0pV00uool8XDKYgHef99kgPzVAuXphNEPoesa1InVOpToFryVo7Nzjdl55iX46oF9v2jZ7jObTErJ8PU4DpWOl0jns2e8QZyBzLt2FbG6CwXnsUMlrI8U1XmCNpVu1+T6IbQhzynzLqSQ6B847NTCRBnVK9TkqzAqMHthecNHjqr0r9Mp9P5KurSGekyhaV1z84/5mfCPLCU5YikWevJZQqYQ6vJz9dJPgv7W7Jjg1Zhil84qsKXQU2MvBEPx8Z8lYEc/XaPVI3wJgl00HEz6Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6588.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(136003)(346002)(376002)(366004)(451199021)(83380400001)(6486002)(4326008)(6916009)(478600001)(2616005)(186003)(6666004)(53546011)(6506007)(26005)(6512007)(2906002)(5660300002)(38100700002)(36756003)(316002)(66946007)(41300700001)(66476007)(8676002)(66556008)(8936002)(44832011)(86362001)(7416002)(31696002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UVpPcDJ2Y2JiK3VSU2tSbGp1Z2Z5b2tabEJPR3ZpRks1Ly81RHpFSmU3ZEIr?=
+ =?utf-8?B?Ui81STBKL3crRU9kN1g3V0dvMHN5WFZjSTdkbWlNVXpYcFgydExGVEF1SWVQ?=
+ =?utf-8?B?YlgrQklQUTRvUlRueXdRYXVtLzNVcHRxbFpvNXBXMkhleHFmSkxxMXBvUEhJ?=
+ =?utf-8?B?QVlqZHZVTlUxVWg1RjRZMFM0d0RoQVd5YTE1WnpnZjRNdzd6U21rdDVNR1hB?=
+ =?utf-8?B?SHdVVW9LWHhGdkF0ZmUzUjNnNU9ZN0xFTllYR0N3bUZPSWM0YWlTMzdHc0JZ?=
+ =?utf-8?B?MmlSQ1JvVlI4V2FXaTU2ZTlYemcxcXJSMFVPNEpEY0VKVHo5d3Z1YjdqTFhM?=
+ =?utf-8?B?bklMS2VBSzFDNVNQZGQ1cWxhSGZZbnQwb0FBNVlEaExMQm5Nd1lNL3R4Tk5P?=
+ =?utf-8?B?Wkp2NjJhai81L1JkdzBJSGFHVEdkU3RFbmltV1VMc0V5RUVkZ3J0SVJwZmZq?=
+ =?utf-8?B?T3dJa2JWU1k4eVpWVFRZdCtPQzh6bFdYdGlKNjd6M1YydjRUbE5zQmMxekZW?=
+ =?utf-8?B?Z25XOGxyZXpqRldyRGRNZU5EaGpTL3dpYno3UHhBOUZRcUVTRlRmKzVKK2Z3?=
+ =?utf-8?B?aDI0UFpDaHdid3Z4RkkxWXhlYlVkL2RKemluWUtqSWxVSkw1czJPZGxzdTJn?=
+ =?utf-8?B?TmtERmRXR0VndFdjNHFMamo0TzRoa3NrTWJqYm5ZOEhuWE8wZCtIaFdkSWxP?=
+ =?utf-8?B?blRjMXdTaFNSWkRWMGgvQmtqeHVtMUdabUExS2VJc2U4aHRKNE9tMnhod2tE?=
+ =?utf-8?B?a3VLTnpTTEJ1N0Rmdmt0QkkxeUI2VDk1bXhLTWR0eENyNmUrdFFndm8xVGdI?=
+ =?utf-8?B?ZTRZTk5HUlhUejFmVTJNajhDMVFzZWg2WGRZSS8vNHY0M2svMHhmN1FWRENy?=
+ =?utf-8?B?NERTT2N2TEpEQlJRT2lIcTF0dyszYUJVRzl4ME9EZWNmY2NTaFQ2NGF1T0FN?=
+ =?utf-8?B?SC9qTWtISVk4bHdMWndlMzZHZEtLakRCMWNETFczWlpBMnM4YktBeEI0RXVX?=
+ =?utf-8?B?clNRL1BqUDQyMHUzdWlpakFkcGhoYldoZThKVW9lRTBtVjd3cDZHVDZUYUt3?=
+ =?utf-8?B?bXRwbDNxbjlZVHpseVJUYlQ1RWFoR2s1YzEyUW9oL29ycW0rckhBTmRIMTVo?=
+ =?utf-8?B?UlROWnZZSjBWaHR4S3lhdVVVQzdPMGkvZ0ZkVDFoSXZobzQyRGFWN1JLTm43?=
+ =?utf-8?B?NUk4eEtDVzVjUXZ1OHE5NHJ0VXIrL2hIbWdVakNYVXRvNU9LcmNuREdGcFlp?=
+ =?utf-8?B?SnFWdjkvQ1BxSHZDOE8wbDZ6L1NHUVdubmJnSzVmcW1TbmpjQzhwZFgzSXJS?=
+ =?utf-8?B?NWtXTXl5dk9vWHE3aFB5WEd5djNXeHFQZ0hLUlJBdFlJSEFITjBJWlljUFBK?=
+ =?utf-8?B?dyt3NklJQ1pqREp3MUFvZDZxVTZhVklwUDZ1REs0aThMQ0h0VmFBYXY4Z1Nq?=
+ =?utf-8?B?NjNrZWRET2Q4M0tkVjg3ZlBVVTltQmxYU01xTUFuNVoxNU4zcDF0NkRPRXdT?=
+ =?utf-8?B?UUxBTFZueXIzV3FyQWtPcVhENUJNeVNNVTdHaVpQeVZHanVnbVJJZTN4Y3pn?=
+ =?utf-8?B?SmVUdUlnZnE5TmZWdjlnSkZKSXF0bFc4Y3lwczBTby92TFJpTC9IWCtKd3Yv?=
+ =?utf-8?B?aHpiT2d2blVTTlM1cktKQjlpb2xZanB4VVNpelNDQTVUOEhRYWt3U3VCRnhx?=
+ =?utf-8?B?WXdna2N2TEtkOXU1bHJRalhIdXZCUXVrbFFNQmE4Rjc0Um5ubzAvOVdndEdt?=
+ =?utf-8?B?b1ZDbDRWR1pEUHJUditIdlNYeWd4ZUxoQWpCR0hYa1BEM0c0cDBnb2tyaHJG?=
+ =?utf-8?B?UG1WelE1WGE2NFRPQlA3bzJQNkFCT3h3NGQwUWRiaW5EZVVTOUF5b1dwUTU0?=
+ =?utf-8?B?c2hVVmwzRVhDVXNyRDRZRTJrMWs0bDlvaGtyVVMxVWtIRVp4Q0MzWmpJKytW?=
+ =?utf-8?B?QjZvVmFobVZ5NFRPTjVDTjBwcUF1VDNvSzFBeFBXSUxaSDZjck11V0g1MVZW?=
+ =?utf-8?B?YXFTdDB1RzhkRVUvaGNYWHZGaFJEdW1LZkdTWWlpV0V0VVg0SUNxV0RFZTA2?=
+ =?utf-8?B?RWFpdGlYVXEwMERLZzJRTzI4UXJnQjNobE9tVTBDek8reE4wQjRwbDg0eVI4?=
+ =?utf-8?Q?QqkfDj6p4f5tyhMmPT5EcampK?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4ebf07e8-1790-4d51-e5a5-08db4abaabec
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6588.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2023 03:09:41.7081
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tvjcqXFgJGjqm27qVQMS4KqJpLQSmbRkqpo8LbiLcnrp2kU1L+9XwF97WlhWxiNXWj9LwDwYU3b1AHmNgIGeNg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5846
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 15, 2023 at 12:34=E2=80=AFAM liujian (CE) <liujian56@huawei.com=
-> wrote:
-> > On Fri, Feb 10, 2023 at 1:51 AM liujian (CE) <liujian56@huawei.com> wro=
-te:
-> > >
-> > > During the syz test, we encountered many problems with various timer
-> > > handler functions softlockup.
-> > >
-> > > We analyze __run_timers() and find the following problem.
-> > >
-> > > In the while loop of __run_timers(), because there are too many timer=
-s
-> > > or improper timer handler functions, if the processing time of the
-> > > expired timers is always greater than the time wheel's next_expiry,
-> > > the function will loop infinitely.
-> > >
-> > > The following extreme test case can be used to reproduce the problem.
-> > > An extreme test case[1] is constructed to reproduce the problem.
-> >
-> > Thanks for reporting and sending out this data:
-> >
-> > First, any chance you might submit this as a in-kernel-stress test?
-> > Maybe utilizing the kernel/torture.c framework?
-> >
-> Okay,   I'll learn this framework and do this thing.
-> > (Though the test may need to occasionally take a break so the system ca=
-n
-> > eventually catch up)
-> >
-> > > Is this a problem or an unreasonable use?
-> > >
-> > > Can we limit the running time of __run_timers() [2]?
-> > >
-> > > Does anyone have a good idea to solve this problem?
-> >
-> > So your patch reminds me of Peter's softirq_needs_break() logic:
-> >
-> > https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/log/?h=
-=3Dco
-> > re/softirq
-> >
-> > Maybe it could extend that series for the timer softirq as well?
-> >
-> Thank you. Yes.
-> Base on the patchset and the extended patch for timer [1], the soft locku=
-p problem does not occur.
->
-> By the way, I see this is a very old patchset?  Will this patchset push t=
-he main line? @John @Peter
->
->
->  [1]
-> Author: Liu Jian <liujian56@huawei.com>
-> Date:   Tue Feb 14 09:53:46 2023 +0800
->
->     softirq, timer: Use softirq_needs_break()
->
->     In the while loop of __run_timers(), because there are too many timer=
-s or
->     improper timer handler functions, if the processing time of the expir=
-ed
->     timers is always greater than the time wheel's next_expiry, the funct=
-ion
->     will loop infinitely.
->
->     To prevent this, use the timeout/break logic provided by SoftIRQs.If =
-the
->     running time exceeds the limit, break the loop and an additional
->     TIMER_SOFTIRQ is triggered.
->
->     Signed-off-by: Liu Jian <liujian56@huawei.com>
->
-> diff --git a/kernel/time/timer.c b/kernel/time/timer.c
-> index 63a8ce7177dd..70744a469a39 100644
-> --- a/kernel/time/timer.c
-> +++ b/kernel/time/timer.c
-> @@ -1992,7 +1992,7 @@ void timer_clear_idle(void)
->   * __run_timers - run all expired timers (if any) on this CPU.
->   * @base: the timer vector to be processed.
->   */
-> -static inline void __run_timers(struct timer_base *base)
-> +static inline void __run_timers(struct timer_base *base, struct softirq_=
-action *h)
->  {
->         struct hlist_head heads[LVL_DEPTH];
->         int levels;
-> @@ -2020,6 +2020,12 @@ static inline void __run_timers(struct timer_base =
-*base)
->
->                 while (levels--)
->                         expire_timers(base, heads + levels);
-> +
-> +               if (softirq_needs_break(h)) {
-> +                       if (time_after_eq(jiffies, base->next_expiry))
-> +                               __raise_softirq_irqoff(TIMER_SOFTIRQ);
-> +                       break;
-> +               }
->         }
->         raw_spin_unlock_irq(&base->lock);
->         timer_base_unlock_expiry(base);
-> @@ -2032,9 +2038,9 @@ static __latent_entropy void run_timer_softirq(stru=
-ct softirq_action *h)
->  {
->         struct timer_base *base =3D this_cpu_ptr(&timer_bases[BASE_STD]);
->
-> -       __run_timers(base);
-> +       __run_timers(base, h);
->         if (IS_ENABLED(CONFIG_NO_HZ_COMMON))
-> -               __run_timers(this_cpu_ptr(&timer_bases[BASE_DEF]));
-> +               __run_timers(this_cpu_ptr(&timer_bases[BASE_DEF]), h);
->  }
->
->  /*
+On 30-Apr-23 2:39 AM, Ian Rogers wrote:
+> On Tue, Apr 25, 2023 at 7:23 AM Ravi Bangoria <ravi.bangoria@amd.com> wrote:
+>>
+>> IBS pmu can be invoked via fixed set of core pmu events with 'precise_ip'
+>> set to 1. Add a simple event open test for all these events.
+>>
+>> Without kernel fix:
+>>   $ sudo ./perf test -vv 76
+>>    76: AMD IBS via core pmu                                      :
+>>   --- start ---
+>>   test child forked, pid 6553
+>>   Using CPUID AuthenticAMD-25-1-1
+>>   type: 0x0, config: 0x0, fd: 3  -  Pass
+>>   type: 0x0, config: 0x1, fd: -1  -  Pass
+>>   type: 0x4, config: 0x76, fd: -1  -  Fail
+>>   type: 0x4, config: 0xc1, fd: -1  -  Fail
+>>   type: 0x4, config: 0x12, fd: -1  -  Pass
+>>   test child finished with -1
+>>   ---- end ----
+>>   AMD IBS via core pmu: FAILED!
+>>
+>> With kernel fix:
+>>   $ sudo ./perf test -vv 76
+>>    76: AMD IBS via core pmu                                      :
+>>   --- start ---
+>>   test child forked, pid 7526
+>>   Using CPUID AuthenticAMD-25-1-1
+>>   type: 0x0, config: 0x0, fd: 3  -  Pass
+>>   type: 0x0, config: 0x1, fd: -1  -  Pass
+>>   type: 0x4, config: 0x76, fd: 3  -  Pass
+>>   type: 0x4, config: 0xc1, fd: 3  -  Pass
+>>   type: 0x4, config: 0x12, fd: -1  -  Pass
+>>   test child finished with 0
+>>   ---- end ----
+>>   AMD IBS via core pmu: Ok
+>>
+>> Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
+> 
+> Thanks Ravi, as the test is AMD specific I think it makes sense to place it in:
+> tools/perf/arch/x86/tests
+> and then to update the test list in:
+> tools/perf/arch/x86/tests/arch-tests.c
 
-So I wanted to revive this old thread, as Frank Woo mentioned his team
-has seen a similar issue as well.
+Sure, will respin.
 
-Liujian: I'm curious if you've made any further progress with your
-adapted patch ontop of PeterZ's softirq_needs_break patch series?
-
-Might it be worth re-submitting the whole series for consideration upstream=
-?
-
-thanks
--john
+Thanks,
+Ravi
