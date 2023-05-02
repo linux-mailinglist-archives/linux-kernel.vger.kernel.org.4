@@ -2,75 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D89D86F3CAA
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 06:23:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7180B6F3CAE
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 06:25:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233062AbjEBEXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 00:23:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39890 "EHLO
+        id S233273AbjEBEZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 00:25:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbjEBEXg (ORCPT
+        with ESMTP id S232991AbjEBEZY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 00:23:36 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91ADA2702;
-        Mon,  1 May 2023 21:23:34 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3424Fxm1018799;
-        Tue, 2 May 2023 04:23:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id; s=qcppdkim1;
- bh=+seufsEQ3Wmk+uAlzrZ+bZtXlZRjYpxMjHUrcgQ18cE=;
- b=fEWMzq7Z2figQfYeAPu0caCvNAvFRZi2+yCbR5eyPa/4YhqlIKefKdEMZbYiZRQNLkwA
- PZETQWC62hFE3MdUPGFpSdcFmmAg4LTosGZTNZrEmIfo8lHfaK0srTP+CvhzqJ1Zj2tA
- Bgy0N7xcHbPTsFFxcfjvaP1uiDBpvE5sTVI6/cAByR9fUQp4eNsybCtWoRJBG8bRATnV
- TiM6UqEVkBKyye9AzRGNgGkTtbmu3vsHJ29c8NUlI/DgCRyVjoArwz7voDhqdirZD9/i
- KVVNJjU6fO/8qVz7Li2UQO6oVyQEQ3tqk/beKrxHELjHhqF0d2nn1QViX20SaS+PgEGt oQ== 
-Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qan8ggmhh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 02 May 2023 04:23:29 +0000
-Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 3424NQ2r008861;
-        Tue, 2 May 2023 04:23:26 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3q8vaks3ex-1;
-        Tue, 02 May 2023 04:23:26 +0000
-Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3424NPCk008855;
-        Tue, 2 May 2023 04:23:25 GMT
-Received: from hyd-lablnx377.qualcomm.com (hyd-lablnx377.qualcomm.com [10.204.178.226])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3424NPLt008854;
-        Tue, 02 May 2023 04:23:25 +0000
-Received: by hyd-lablnx377.qualcomm.com (Postfix, from userid 4035820)
-        id CB3DC20B88; Tue,  2 May 2023 09:53:24 +0530 (IST)
-From:   Sai Teja Aluvala <quic_saluvala@quicinc.com>
-To:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com
-Cc:     linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        quic_hemantg@quicinc.com, quic_bgodavar@quicinc.com,
-        jiangzp@google.com, mmandlik@google.com,
-        Sai Teja Aluvala <quic_saluvala@quicinc.com>
-Subject: [PATCH v2 2/2] Bluetooth: hci_qca: Add qcomm devcoredump support
-Date:   Tue,  2 May 2023 09:53:20 +0530
-Message-Id: <1683001400-29905-1-git-send-email-quic_saluvala@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: bZRZbuSjAWAJC9U8rpN_HyQm1Dtl3k1z
-X-Proofpoint-ORIG-GUID: bZRZbuSjAWAJC9U8rpN_HyQm1Dtl3k1z
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-02_01,2023-04-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
- lowpriorityscore=0 suspectscore=0 mlxscore=0 priorityscore=1501
- mlxlogscore=999 impostorscore=0 bulkscore=0 phishscore=0 clxscore=1015
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2305020035
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        Tue, 2 May 2023 00:25:24 -0400
+Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D44354223
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 21:25:00 -0700 (PDT)
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [10.196.197.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4Q9RnP2ySvz9skf
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 06:24:57 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+        t=1683001497;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=8JIidON7ObJRXtw6ghF6hznpzFYqEMz6CIXHrODRrKU=;
+        b=jIu6qPSq/IaTiQaEfSDfUlpoGNd6GFwI2Cd5lIIvwcgr1S3RDCcx/wXdFGuTYY1YykNT+3
+        3kj+ZlHV55238xjhjnz27EiKyD0tNr7BrU9xbNMbJ042QcANiUuqodUEydvrQyLG+xrpxE
+        9PFS9a0m4zY3wjfucq+irlB89+tdAQt84xXEkUYLqGX36CdeBLVeHO0ire0vNT7toNwRgK
+        KvECfPN/srm+TEqTwJRYidc7t3o16JIbUDWwuRVoNKkv/VSLxBTpAmOPWzHOzyaC1boh+C
+        yzEZJhaLr7TEU1tyt+TjLbpVUGQ5yo1RQOvTmKUJ/pOJJI1guE8vjtbQZpKfLg==
+Message-ID: <9b3b99e518a340f3182ad92a66511063b6e55aa8.camel@mailbox.org>
+Subject: Library: [RFC PATCH 2/3] btree_blue - A simple btree with fast
+ linear traverse
+From:   liuwf <liuwf@mailbox.org>
+To:     linux-kernel@vger.kernel.org
+Date:   Tue, 02 May 2023 00:24:46 -0400
+Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MBO-RS-META: eh7t1nfjkpxbzm5hn1c8udg4qtscm3it
+X-MBO-RS-ID: 833422a9e3da9fe9149
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,369 +53,370 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Intercept debug exception events from QCA controller and put them into
-a devcoredump using hci devcoredump APIs of hci_core
+Library: [RFC PATCH 2/3] btree_blue - A simple btree with fast linear traverse
 
-Signed-off-by: Sai Teja Aluvala <quic_saluvala@quicinc.com>
-Reviewed-by: Manish Mandlik <mmandlik@google.com>
+From: Liu Weifeng 4019c26b5c0d5f6b <liuwf@mailbox.org>
 
-V2:
---
-Updated to work with the updated HCI devcoredump API.
 
-V1:
---
-Initial Patch
+Signed-off-by: Liu Weifeng 4019c26b5c0d5f6b <liuwf@mailbox.org>
 ---
- drivers/bluetooth/hci_qca.c | 190 ++++++++++++++++++++++++++++++++------------
- 1 file changed, 138 insertions(+), 52 deletions(-)
+ include/linux/btree_blue.h |   4 +-
+ lib/btree_blue.c           | 170 +++++++++++++++++++++++++------------
+ 2 files changed, 118 insertions(+), 56 deletions(-)
 
-diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
-index ca98f6d..c94a414 100644
---- a/drivers/bluetooth/hci_qca.c
-+++ b/drivers/bluetooth/hci_qca.c
-@@ -77,6 +77,7 @@ enum qca_flags {
- 	QCA_MEMDUMP_COLLECTION,
- 	QCA_HW_ERROR_EVENT,
- 	QCA_SSR_TRIGGERED,
-+	QCA_COREDUMP_TRIGGERED,
- 	QCA_BT_OFF,
- 	QCA_ROM_FW
+diff --git a/include/linux/btree_blue.h b/include/linux/btree_blue.h
+index 2f1a7781c77b..62217b96cb4e 100644
+--- a/include/linux/btree_blue.h
++++ b/include/linux/btree_blue.h
+@@ -17,16 +17,16 @@ struct btree_blue_node_cb;
+ 
+ struct btree_blue_head {
+ 	unsigned long *node;
+-	mempool_t *mempool;
+ 
+ 	u16 node_size;
++	u16 leaf_size;
+ 	u16 stub_base;
+ 	u8 keylen;
+ 	u8 slot_width;
+ 	u8 height;
+ 	u8 reserved[1];
+ 
+-	u16 vols[MAX_TREE_HEIGHT + 1];
++	u16 slot_vols[MAX_TREE_HEIGHT + 1];
  };
-@@ -116,9 +117,7 @@ enum qca_memdump_states {
- 	QCA_MEMDUMP_TIMEOUT,
+ 
+ void *btree_blue_alloc(gfp_t gfp_mask, void *pool_data);
+diff --git a/lib/btree_blue.c b/lib/btree_blue.c
+index ddde34f23139..62f7baa43044 100644
+--- a/lib/btree_blue.c
++++ b/lib/btree_blue.c
+@@ -32,8 +32,10 @@ struct btree_blue_stub {
+ 	unsigned long *next;
  };
  
--struct qca_memdump_data {
--	char *memdump_buf_head;
--	char *memdump_buf_tail;
-+struct qca_memdump_info {
- 	u32 current_seq_no;
- 	u32 received_dump;
- 	u32 ram_dump_size;
-@@ -159,13 +158,15 @@ struct qca_data {
- 	struct work_struct ws_tx_vote_off;
- 	struct work_struct ctrl_memdump_evt;
- 	struct delayed_work ctrl_memdump_timeout;
--	struct qca_memdump_data *qca_memdump;
-+	struct qca_memdump_info *qca_memdump;
- 	unsigned long flags;
- 	struct completion drop_ev_comp;
- 	wait_queue_head_t suspend_wait_q;
- 	enum qca_memdump_states memdump_state;
- 	struct mutex hci_memdump_lock;
+-static struct kmem_cache *btree_blue_cachep;
++static struct kmem_cache *btree_blue_cache_node;
++static struct kmem_cache *btree_blue_cache_leaf;
  
-+	u16 fw_version;
-+	u16 controller_id;
- 	/* For debugging purpose */
- 	u64 ibs_sent_wacks;
- 	u64 ibs_sent_slps;
-@@ -232,6 +233,7 @@ static void qca_regulator_disable(struct qca_serdev *qcadev);
- static void qca_power_shutdown(struct hci_uart *hu);
- static int qca_power_off(struct hci_dev *hdev);
- static void qca_controller_memdump(struct work_struct *work);
-+static void qca_dmp_hdr(struct hci_dev *hdev, struct sk_buff *skb);
- 
- static enum qca_btsoc_type qca_soc_type(struct hci_uart *hu)
++/*
+ void *btree_blue_alloc(gfp_t gfp_mask, void *pool_data)
  {
-@@ -543,7 +545,8 @@ static void qca_controller_memdump_timeout(struct work_struct *work)
- 	mutex_lock(&qca->hci_memdump_lock);
- 	if (test_bit(QCA_MEMDUMP_COLLECTION, &qca->flags)) {
- 		qca->memdump_state = QCA_MEMDUMP_TIMEOUT;
--		if (!test_bit(QCA_HW_ERROR_EVENT, &qca->flags)) {
-+		if ((!test_bit(QCA_HW_ERROR_EVENT, &qca->flags)) ||
-+			(!test_bit(QCA_COREDUMP_TRIGGERED, &qca->flags))) {
- 			/* Inject hw error event to reset the device
- 			 * and driver.
- 			 */
-@@ -976,6 +979,28 @@ static int qca_recv_acl_data(struct hci_dev *hdev, struct sk_buff *skb)
- 	return hci_recv_frame(hdev, skb);
+ 	return kmem_cache_alloc(btree_blue_cachep, gfp_mask);
+@@ -45,18 +47,36 @@ void btree_blue_free(void *element, void *pool_data)
+ 	kmem_cache_free(btree_blue_cachep, element);
+ }
+ EXPORT_SYMBOL_GPL(btree_blue_free);
++*/
+ 
+ static unsigned long *btree_blue_node_alloc(struct btree_blue_head *head,
+-					    gfp_t gfp)
++					    int level, gfp_t gfp)
+ {
+ 	unsigned long *node;
++	int size;
++
++	if (likely(level == 1)) {
++		size = head->leaf_size;
++		node = kmem_cache_alloc(btree_blue_cache_leaf, gfp);
++	} else {
++		size = head->node_size;
++		node = kmem_cache_alloc(btree_blue_cache_node, gfp);
++	}
+ 
+-	node = mempool_alloc(head->mempool, gfp);
+ 	if (likely(node))
+-		memset(node, 0, head->node_size);
++		memset(node, 0, size);
++
+ 	return node;
  }
  
-+static void qca_dmp_hdr(struct hci_dev *hdev, struct sk_buff *skb)
++static void btree_blue_node_free(unsigned long *node, int level)
 +{
-+	struct hci_uart *hu = hci_get_drvdata(hdev);
-+	struct qca_data *qca = hu->priv;
-+	char buf[80];
-+
-+	snprintf(buf, sizeof(buf), "Controller Name: 0x%x\n",
-+		qca->controller_id);
-+	skb_put_data(skb, buf, strlen(buf));
-+
-+	snprintf(buf, sizeof(buf), "Firmware Version: 0x%x\n",
-+		qca->fw_version);
-+	skb_put_data(skb, buf, strlen(buf));
-+
-+	snprintf(buf, sizeof(buf), "Vendor:Qualcomm\n");
-+	skb_put_data(skb, buf, strlen(buf));
-+
-+	snprintf(buf, sizeof(buf), "Driver: %s\n",
-+		hu->serdev->dev.driver->name);
-+	skb_put_data(skb, buf, strlen(buf));
++	if (likely(level == 1))
++		kmem_cache_free(btree_blue_cache_leaf, node);
++	else
++		kmem_cache_free(btree_blue_cache_node, node);
 +}
 +
- static void qca_controller_memdump(struct work_struct *work)
+ static int longcmp(const unsigned long *l1, const unsigned long *l2, size_t n)
  {
- 	struct qca_data *qca = container_of(work, struct qca_data,
-@@ -983,13 +1008,11 @@ static void qca_controller_memdump(struct work_struct *work)
- 	struct hci_uart *hu = qca->hu;
- 	struct sk_buff *skb;
- 	struct qca_memdump_event_hdr *cmd_hdr;
--	struct qca_memdump_data *qca_memdump = qca->qca_memdump;
-+	struct qca_memdump_info *qca_memdump = qca->qca_memdump;
- 	struct qca_dump_size *dump;
--	char *memdump_buf;
--	char nullBuff[QCA_DUMP_PACKET_SIZE] = { 0 };
- 	u16 seq_no;
--	u32 dump_size;
- 	u32 rx_size;
-+	int ret = 0;
- 	enum qca_btsoc_type soc_type = qca_soc_type(hu);
+ 	size_t i;
+@@ -422,9 +442,12 @@ void *btree_blue_prev_or_next(struct btree_blue_head *head,
+ 		return NULL;
  
- 	while ((skb = skb_dequeue(&qca->rx_memdump_q))) {
-@@ -1005,7 +1028,7 @@ static void qca_controller_memdump(struct work_struct *work)
+ 	slots_nr = node->slots_info.slots_nr;
++	i = geteqv(head, node, key);
++	/*
+ 	for (i = 0; i < slots_nr; i++)
+ 		if (keycmp(head, node, i, key) == 0)
+ 			break;
++	*/
+ 	if (i == slots_nr)
+ 		return NULL;
+ 
+@@ -516,10 +539,12 @@ size_t btree_blue_traverse_from_key(struct btree_blue_head *head,
+ 		return total;
+ 
+ 	slots_nr = node->slots_info.slots_nr;
++	i = geteqv(head, node, key);
++	/*
+ 	for (i = 0; i < slots_nr; i++)
+ 		if (keycmp(head, node, i, (unsigned long *)key) == 0)
+ 			break;
+-
++	*/
+ 	if (i == slots_nr)
+ 		return total;
+ 
+@@ -619,7 +644,8 @@ static int btree_blue_grow(struct btree_blue_head *head, gfp_t gfp)
+ {
+ 	struct btree_blue_node_cb *node, *node_h;
+ 
+-	node = (struct btree_blue_node_cb *)btree_blue_node_alloc(head, gfp);
++	node = (struct btree_blue_node_cb *)btree_blue_node_alloc(
++		head, head->height + 1, gfp);
+ 	if (!node)
+ 		return -ENOMEM;
+ 
+@@ -648,9 +674,10 @@ static void btree_blue_shrink(struct btree_blue_head *head)
+ 	BUG_ON(node->slots_info.slots_nr > 1);
+ 
+ 	head->node = bval(head, node, 0);
++	btree_blue_node_free((unsigned long *)node, head->height);
+ 	head->height--;
+ 
+-	mempool_free(node, head->mempool);
++	//mempool_free(node, head->mempool);
+ }
+ 
+ static int btree_blue_insert_level(struct btree_blue_head *head,
+@@ -684,13 +711,13 @@ static int btree_blue_insert_level(struct btree_blue_head *head,
+ 
+ 	slots_nr = cb->slots_info.slots_nr;
+ 
+-	if (slots_nr == head->vols[level]) {
++	if (slots_nr == head->slot_vols[level]) {
+ 		/* need to split node */
+ 		struct btree_blue_node_cb *cb_prev;
+ 		struct btree_blue_stub *stub, *stub_new, *stub_prev;
+ 
+ 		cb_new = (struct btree_blue_node_cb *)btree_blue_node_alloc(
+-			head, gfp);
++			head, level, gfp);
+ 		if (!cb_new)
+ 			return -ENOMEM;
+ 
+@@ -698,7 +725,8 @@ static int btree_blue_insert_level(struct btree_blue_head *head,
+ 					      bkey(head, cb, slots_nr / 2 - 1),
+ 					      cb_new, level + 1, cb_p, gfp);
+ 		if (err) {
+-			mempool_free(cb_new, head->mempool);
++			//mempool_free(cb_new, head->mempool);
++			btree_blue_node_free((unsigned long *)cb_new, level);
+ 			return err;
  		}
  
- 		if (!qca_memdump) {
--			qca_memdump = kzalloc(sizeof(struct qca_memdump_data),
-+			qca_memdump = kzalloc(sizeof(struct qca_memdump_info),
- 					      GFP_ATOMIC);
- 			if (!qca_memdump) {
- 				mutex_unlock(&qca->hci_memdump_lock);
-@@ -1031,44 +1054,49 @@ static void qca_controller_memdump(struct work_struct *work)
- 			set_bit(QCA_IBS_DISABLED, &qca->flags);
- 			set_bit(QCA_MEMDUMP_COLLECTION, &qca->flags);
- 			dump = (void *) skb->data;
--			dump_size = __le32_to_cpu(dump->dump_size);
--			if (!(dump_size)) {
-+			qca_memdump->ram_dump_size = __le32_to_cpu(dump->dump_size);
-+			if (!(qca_memdump->ram_dump_size)) {
- 				bt_dev_err(hu->hdev, "Rx invalid memdump size");
- 				kfree(qca_memdump);
- 				kfree_skb(skb);
--				qca->qca_memdump = NULL;
- 				mutex_unlock(&qca->hci_memdump_lock);
- 				return;
+@@ -728,7 +756,7 @@ static int btree_blue_insert_level(struct btree_blue_head *head,
+ 		}
+ 	}
+ 
+-	BUG_ON(slots_nr >= head->vols[level]);
++	BUG_ON(slots_nr >= head->slot_vols[level]);
+ 
+ 	/* shift and insert */
+ 	//pos = shift_slots_on_insert(head, cb, pos, level);
+@@ -784,7 +812,8 @@ static void merge(struct btree_blue_head *head, int level,
+ 	setval(head, cb_parent, lpos + 1, cb_left);
+ 	/* Remove left (formerly right) child from parent */
+ 	btree_blue_remove_level(head, bkey(head, cb_parent, lpos), level + 1);
+-	mempool_free(cb_right, head->mempool);
++	//mempool_free(cb_right, head->mempool);
++	btree_blue_node_free((unsigned long *)cb_right, level);
+ }
+ 
+ static void rebalance(struct btree_blue_head *head, unsigned long *key,
+@@ -826,7 +855,8 @@ static void rebalance(struct btree_blue_head *head, unsigned long *key,
  			}
+ 		}
  
--			bt_dev_info(hu->hdev, "QCA collecting dump of size:%u",
--				    dump_size);
- 			queue_delayed_work(qca->workqueue,
- 					   &qca->ctrl_memdump_timeout,
--					   msecs_to_jiffies(MEMDUMP_TIMEOUT_MS)
--					  );
--
--			skb_pull(skb, sizeof(dump_size));
--			memdump_buf = vmalloc(dump_size);
--			qca_memdump->ram_dump_size = dump_size;
--			qca_memdump->memdump_buf_head = memdump_buf;
--			qca_memdump->memdump_buf_tail = memdump_buf;
--		}
-+					   msecs_to_jiffies(MEMDUMP_TIMEOUT_MS));
-+			skb_pull(skb, sizeof(qca_memdump->ram_dump_size));
-+			qca_memdump->current_seq_no = 0;
-+			qca_memdump->received_dump = 0;
-+			ret = hci_devcd_init(hu->hdev, qca_memdump->ram_dump_size);
-+			bt_dev_info(hu->hdev, "hci_devcd_init Return:%d",
-+				    ret);
-+			if (ret < 0) {
-+				kfree(qca->qca_memdump);
-+				qca->qca_memdump = NULL;
-+				qca->memdump_state = QCA_MEMDUMP_COLLECTED;
-+				cancel_delayed_work(&qca->ctrl_memdump_timeout);
-+				clear_bit(QCA_MEMDUMP_COLLECTION, &qca->flags);
-+				mutex_unlock(&qca->hci_memdump_lock);
-+				return;
-+			}
+-		mempool_free(cb_child, head->mempool);
++		//mempool_free(cb_child, head->mempool);
++		btree_blue_node_free((unsigned long *)cb_child, level);
+ 		return;
+ 	}
  
--		memdump_buf = qca_memdump->memdump_buf_tail;
-+			bt_dev_info(hu->hdev, "QCA collecting dump of size:%u",
-+				    qca_memdump->ram_dump_size);
-+
-+		}
+@@ -839,7 +869,7 @@ static void rebalance(struct btree_blue_head *head, unsigned long *key,
+ 		cb_left = bval(head, cb_parent, i - 1);
+ 		slots_nr_left = cb_left->slots_info.slots_nr;
  
- 		/* If sequence no 0 is missed then there is no point in
- 		 * accepting the other sequences.
- 		 */
--		if (!memdump_buf) {
-+		if (!test_bit(QCA_MEMDUMP_COLLECTION, &qca->flags)) {
- 			bt_dev_err(hu->hdev, "QCA: Discarding other packets");
- 			kfree(qca_memdump);
- 			kfree_skb(skb);
--			qca->qca_memdump = NULL;
- 			mutex_unlock(&qca->hci_memdump_lock);
+-		if (slots_nr_left + slots_nr <= head->vols[level]) {
++		if (slots_nr_left + slots_nr <= head->slot_vols[level]) {
+ 			merge(head, level, cb_left, cb_child, cb_parent, i - 1);
  			return;
  		}
+@@ -849,7 +879,7 @@ static void rebalance(struct btree_blue_head *head, unsigned long *key,
+ 		cb_right = bval(head, cb_parent, i + 1);
+ 		slots_nr_right = cb_right->slots_info.slots_nr;
+ 
+-		if (slots_nr + slots_nr_right <= head->vols[level]) {
++		if (slots_nr + slots_nr_right <= head->slot_vols[level]) {
+ 			merge(head, level, cb_child, cb_right, cb_parent, i);
+ 			return;
+ 		}
+@@ -891,7 +921,7 @@ static void *btree_blue_remove_level(struct btree_blue_head *head,
+ 	_shift_slots(head, cb, pos, pos + 1, slots_nr - pos - 1);
+ 	cb->slots_info.slots_nr--;
+ 
+-	if (cb->slots_info.slots_nr < head->vols[level] / 2 - 2) {
++	if (cb->slots_info.slots_nr < head->slot_vols[level] / 2 - 2) {
+ 		if (level < head->height)
+ 			rebalance(head, key, level, cb, cb_p);
+ 		else if (cb->slots_info.slots_nr == 1)
+@@ -910,35 +940,12 @@ void *btree_blue_remove(struct btree_blue_head *head, unsigned long *key)
+ }
+ EXPORT_SYMBOL_GPL(btree_blue_remove);
+ 
+-static inline void __btree_blue_init(struct btree_blue_head *head,
+-				     int node_size, int keylen, int flags)
+-{
+-	int vol;
 -
- 		/* There could be chance of missing some packets from
- 		 * the controller. In such cases let us store the dummy
- 		 * packets in the buffer.
-@@ -1078,8 +1106,8 @@ static void qca_controller_memdump(struct work_struct *work)
- 		 * bits, so skip this checking for missing packet.
- 		 */
- 		while ((seq_no > qca_memdump->current_seq_no + 1) &&
--		       (soc_type != QCA_QCA6390) &&
--		       seq_no != QCA_LAST_SEQUENCE_NUM) {
-+			(soc_type != QCA_QCA6390) &&
-+			seq_no != QCA_LAST_SEQUENCE_NUM) {
- 			bt_dev_err(hu->hdev, "QCA controller missed packet:%d",
- 				   qca_memdump->current_seq_no);
- 			rx_size = qca_memdump->received_dump;
-@@ -1090,43 +1118,38 @@ static void qca_controller_memdump(struct work_struct *work)
- 					   qca_memdump->received_dump);
- 				break;
- 			}
--			memcpy(memdump_buf, nullBuff, QCA_DUMP_PACKET_SIZE);
--			memdump_buf = memdump_buf + QCA_DUMP_PACKET_SIZE;
-+			hci_devcd_append_pattern(hu->hdev, 0x00,
-+				QCA_DUMP_PACKET_SIZE);
- 			qca_memdump->received_dump += QCA_DUMP_PACKET_SIZE;
- 			qca_memdump->current_seq_no++;
- 		}
- 
--		rx_size = qca_memdump->received_dump + skb->len;
-+		rx_size = qca_memdump->received_dump  + skb->len;
- 		if (rx_size <= qca_memdump->ram_dump_size) {
- 			if ((seq_no != QCA_LAST_SEQUENCE_NUM) &&
--			    (seq_no != qca_memdump->current_seq_no))
-+			    (seq_no != qca_memdump->current_seq_no)) {
- 				bt_dev_err(hu->hdev,
- 					   "QCA memdump unexpected packet %d",
- 					   seq_no);
-+			}
- 			bt_dev_dbg(hu->hdev,
- 				   "QCA memdump packet %d with length %d",
- 				   seq_no, skb->len);
--			memcpy(memdump_buf, (unsigned char *)skb->data,
--			       skb->len);
--			memdump_buf = memdump_buf + skb->len;
--			qca_memdump->memdump_buf_tail = memdump_buf;
--			qca_memdump->current_seq_no = seq_no + 1;
--			qca_memdump->received_dump += skb->len;
-+			hci_devcd_append(hu->hdev, skb);
-+			qca_memdump->current_seq_no += 1;
-+			qca_memdump->received_dump = rx_size;
- 		} else {
- 			bt_dev_err(hu->hdev,
--				   "QCA memdump received %d, no space for packet %d",
--				   qca_memdump->received_dump, seq_no);
-+				   "QCA memdump received no space for packet %d",
-+				    qca_memdump->current_seq_no);
- 		}
--		qca->qca_memdump = qca_memdump;
--		kfree_skb(skb);
-+
- 		if (seq_no == QCA_LAST_SEQUENCE_NUM) {
- 			bt_dev_info(hu->hdev,
--				    "QCA memdump Done, received %d, total %d",
--				    qca_memdump->received_dump,
--				    qca_memdump->ram_dump_size);
--			memdump_buf = qca_memdump->memdump_buf_head;
--			dev_coredumpv(&hu->serdev->dev, memdump_buf,
--				      qca_memdump->received_dump, GFP_KERNEL);
-+				"QCA memdump Done, received %d, total %d",
-+				qca_memdump->received_dump,
-+				qca_memdump->ram_dump_size);
-+			hci_devcd_complete(hu->hdev);
- 			cancel_delayed_work(&qca->ctrl_memdump_timeout);
- 			kfree(qca->qca_memdump);
- 			qca->qca_memdump = NULL;
-@@ -1537,8 +1560,8 @@ static void qca_hw_error(struct hci_dev *hdev, u8 code)
- 	mutex_lock(&qca->hci_memdump_lock);
- 	if (qca->memdump_state != QCA_MEMDUMP_COLLECTED) {
- 		bt_dev_err(hu->hdev, "clearing allocated memory due to memdump timeout");
-+		hci_devcd_abort(hu->hdev);
- 		if (qca->qca_memdump) {
--			vfree(qca->qca_memdump->memdump_buf_head);
- 			kfree(qca->qca_memdump);
- 			qca->qca_memdump = NULL;
- 		}
-@@ -1577,7 +1600,8 @@ static void qca_cmd_timeout(struct hci_dev *hdev)
- 	mutex_lock(&qca->hci_memdump_lock);
- 	if (qca->memdump_state != QCA_MEMDUMP_COLLECTED) {
- 		qca->memdump_state = QCA_MEMDUMP_TIMEOUT;
--		if (!test_bit(QCA_HW_ERROR_EVENT, &qca->flags)) {
-+		if ((!test_bit(QCA_HW_ERROR_EVENT, &qca->flags)) ||
-+			(!test_bit(QCA_COREDUMP_TRIGGERED, &qca->flags))) {
- 			/* Inject hw error event to reset the device
- 			 * and driver.
- 			 */
-@@ -1702,6 +1726,65 @@ static int qca_power_on(struct hci_dev *hdev)
- 	return ret;
- }
- 
-+static void hci_coredump_qca(struct hci_dev *hdev)
-+{
-+	struct hci_uart *hu = hci_get_drvdata(hdev);
-+	struct qca_data *qca = hu->priv;
-+	struct sk_buff *skb;
-+
-+
-+	set_bit(QCA_COREDUMP_TRIGGERED, &qca->flags);
-+	bt_dev_info(hdev, "Enter mem_dump_status: %d", qca->memdump_state);
-+
-+	if (qca->memdump_state == QCA_MEMDUMP_IDLE) {
-+		/* we need to crash the SOC
-+		 * and wait here for 8 seconds to get the dump packets.
-+		 * This will block main thread to be on hold until we
-+		 * collect dump.
-+		 */
-+		set_bit(QCA_SSR_TRIGGERED, &qca->flags);
-+		set_bit(QCA_MEMDUMP_COLLECTION, &qca->flags);
-+
-+		skb = bt_skb_alloc(QCA_CRASHBYTE_PACKET_LEN, GFP_KERNEL);
-+		if (!skb) {
-+			bt_dev_err(hu->hdev, "Failed to allocate memory for skb packet");
-+			return;
-+		}
-+
-+		/* We forcefully crash the controller, by sending 0xfb byte for
-+		 * 1024 times. We also might have chance of losing data, To be
-+		 * on safer side we send 1096 bytes to the SoC.
-+		 */
-+		memset(skb_put(skb, QCA_CRASHBYTE_PACKET_LEN), QCA_MEMDUMP_BYTE,
-+			QCA_CRASHBYTE_PACKET_LEN);
-+		hci_skb_pkt_type(skb) = HCI_COMMAND_PKT;
-+		bt_dev_info(hu->hdev, "crash the soc to collect controller dump");
-+
-+		switch (qca->tx_ibs_state) {
-+		case HCI_IBS_TX_WAKING:
-+			/* Transient state; just keep packet for later */
-+			skb_queue_tail(&qca->tx_wait_q, skb);
-+			break;
-+		case HCI_IBS_TX_AWAKE:
-+			skb_queue_tail(&qca->txq, skb);
-+			hci_uart_tx_wakeup(hu);
-+			break;
-+		case HCI_IBS_TX_ASLEEP:
-+			skb_queue_tail(&qca->tx_wait_q, skb);
-+			qca->tx_ibs_state = HCI_IBS_TX_WAKING;
-+			/* Schedule a work queue to wake up device */
-+			queue_work(qca->workqueue, &qca->ws_awake_device);
-+			break;
-+		}
-+	} else if (qca->memdump_state == QCA_MEMDUMP_COLLECTING) {
-+		/* Let us wait here until memory dump collected or
-+		 * memory dump timer expired.
-+		 */
-+		bt_dev_info(hdev, "waiting for dump to complete");
-+	}
-+	clear_bit(QCA_COREDUMP_TRIGGERED, &qca->flags);
-+}
-+
- static int qca_setup(struct hci_uart *hu)
+-	head->node = NULL;
+-	head->height = 0;
+-	head->node_size = node_size;
+-	head->keylen = (keylen * BITS_PER_BYTE) / BITS_PER_LONG;
+-	head->slot_width =
+-		(VALUE_LEN * BITS_PER_BYTE) / BITS_PER_LONG + head->keylen;
+-
+-	vol = (node_size - sizeof(struct btree_blue_node_cb)) /
+-	      (head->slot_width * sizeof(long));
+-	for (int i = 2; i < MAX_TREE_HEIGHT + 1; i++)
+-		head->vols[i] = vol;
+-	vol = (node_size - sizeof(struct btree_blue_node_cb) -
+-	       sizeof(struct btree_blue_stub)) /
+-	      (head->slot_width * sizeof(long));
+-	head->vols[0] = head->vols[1] = vol;
+-
+-	head->stub_base = sizeof(struct btree_blue_node_cb) +
+-			  head->vols[1] * (head->slot_width * sizeof(long));
+-}
+-
+ int __must_check btree_blue_init(struct btree_blue_head *head,
+ 				 int node_size_in_byte, int key_len_in_byte,
+ 				 int flags)
  {
- 	struct hci_dev *hdev = hu->hdev;
-@@ -1816,6 +1899,9 @@ static int qca_setup(struct hci_uart *hu)
- 		hu->hdev->set_bdaddr = qca_set_bdaddr_rome;
- 	else
- 		hu->hdev->set_bdaddr = qca_set_bdaddr;
-+	qca->fw_version = le16_to_cpu(ver.patch_ver);
-+	qca->controller_id = le16_to_cpu(ver.rom_ver);
-+	hci_devcd_register(hdev, hci_coredump_qca, qca_dmp_hdr, NULL);
++	int x;
++
+ 	if (node_size_in_byte % L1_CACHE_BYTES)
+ 		return -EINVAL;
  
- 	return ret;
+@@ -950,27 +957,78 @@ int __must_check btree_blue_init(struct btree_blue_head *head,
+ 	    (key_len_in_byte != 2 * sizeof(unsigned long)))
+ 		return -EINVAL;
+ 
+-	btree_blue_cachep = kmem_cache_create("btree_blue_node_buf",
+-					      node_size_in_byte, 0,
+-					      SLAB_HWCACHE_ALIGN, NULL);
+-	if (!btree_blue_cachep)
+-		return -ENOMEM;
++	//__btree_blue_init(head, node_size_in_byte, key_len_in_byte, flags);
+ 
+-	__btree_blue_init(head, node_size_in_byte, key_len_in_byte, flags);
++	//head->mempool =
++	//	mempool_create(0, btree_blue_alloc, btree_blue_free, NULL);
++	//if (!head->mempool)
++	//	return -ENOMEM;
++	//return 0;
+ 
+-	head->mempool =
+-		mempool_create(0, btree_blue_alloc, btree_blue_free, NULL);
+-	if (!head->mempool)
++	head->node = NULL;
++	head->height = 0;
++
++	head->keylen = (key_len_in_byte * BITS_PER_BYTE) / BITS_PER_LONG;
++	head->slot_width =
++		(VALUE_LEN * BITS_PER_BYTE) / BITS_PER_LONG + head->keylen;
++
++	//head->node_size = node_size;
++
++	if (node_size_in_byte > 512)
++		x = 512;
++	else
++		x = node_size_in_byte;
++	head->node_size = x;
++	head->leaf_size = node_size_in_byte;
++
++	btree_blue_cache_node = kmem_cache_create("btree_blue_cache_node",
++						  head->node_size, 0,
++						  SLAB_HWCACHE_ALIGN, NULL);
++	if (!btree_blue_cache_node)
+ 		return -ENOMEM;
++
++	btree_blue_cache_leaf = kmem_cache_create("btree_blue_cache_leaf",
++						  head->leaf_size, 0,
++						  SLAB_HWCACHE_ALIGN, NULL);
++	if (!btree_blue_cache_leaf)
++		return -ENOMEM;
++
++	for (int i = 2; i < MAX_TREE_HEIGHT + 1; i++) {
++		x = (head->node_size - sizeof(struct btree_blue_node_cb)) /
++		    (head->slot_width * sizeof(long));
++		head->slot_vols[i] = x;
++	}
++
++	x = (head->leaf_size - sizeof(struct btree_blue_node_cb) -
++	     sizeof(struct btree_blue_stub)) /
++	    (head->slot_width * sizeof(long));
++	head->slot_vols[0] = head->slot_vols[1] = x;
++
++	head->stub_base =
++		sizeof(struct btree_blue_node_cb) +
++		head->slot_vols[1] * (head->slot_width * sizeof(long));
++
+ 	return 0;
  }
+ EXPORT_SYMBOL_GPL(btree_blue_init);
+ 
+ void btree_blue_destroy(struct btree_blue_head *head)
+ {
+-	mempool_free(head->node, head->mempool);
+-	mempool_destroy(head->mempool);
+-	head->mempool = NULL;
++	//mempool_free(head->node, head->mempool);
++	//mempool_destroy(head->mempool);
++	//head->mempool = NULL;
++
++	if (btree_blue_cache_node) {
++		kmem_cache_destroy(btree_blue_cache_node);
++		btree_blue_cache_node = NULL;
++	}
++
++	if (btree_blue_cache_leaf) {
++		kmem_cache_destroy(btree_blue_cache_leaf);
++		btree_blue_cache_leaf = NULL;
++	}
++
++	head->node = NULL;
+ }
+ EXPORT_SYMBOL_GPL(btree_blue_destroy);
+ 
+@@ -981,7 +1039,11 @@ static int __init btree_blue_module_init(void)
+ 
+ static void __exit btree_blue_module_exit(void)
+ {
+-	kmem_cache_destroy(btree_blue_cachep);
++	if (btree_blue_cache_node)
++		kmem_cache_destroy(btree_blue_cache_node);
++
++	if (btree_blue_cache_leaf)
++		kmem_cache_destroy(btree_blue_cache_leaf);
+ }
+ 
+ module_init(btree_blue_module_init);
 -- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc.
+2.30.2
+
 
