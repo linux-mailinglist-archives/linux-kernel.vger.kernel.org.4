@@ -2,146 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CB406F41AE
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 12:32:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A727F6F41B3
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 12:35:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234034AbjEBKcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 06:32:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38196 "EHLO
+        id S233779AbjEBKfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 06:35:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234023AbjEBKcD (ORCPT
+        with ESMTP id S233642AbjEBKe3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 06:32:03 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EBE75273;
-        Tue,  2 May 2023 03:30:15 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-956ff2399b1so747256666b.3;
-        Tue, 02 May 2023 03:30:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683023414; x=1685615414;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yoz9JAbN5f+BVMAIJU5OP6UpMSWt3PXfSC9zASQ8+H0=;
-        b=qPJ2Hw6amNfB8lmXOrdvIl9FoT5xySIqwZYWNum7nfccE3LyonUmxVC4xvOcGkIACz
-         307kXPO/NEqxiW/gL534TetAjXFMoxa712gCWzKQ9ryZyTyQGMomA1FstyAd9rudnxDJ
-         7fxgC6AH+COjiSwLoolMULeoK+VOXPx+4clNKCXfmDkRZ6m4hSGBl+TNH9oRewB4vJ7s
-         GGDFrB5+hrF9djGr072zaTtShx1WWAkMkalYHIxnaA/YwcHurRqoQVgEEGcgHzSDCIV5
-         TcF93MCyDjYjmn8HxsAncCUR7fkPNCJmvVqGqCCZtOSZA9/R8phHp/VwRwXcb4ea7wMM
-         ejrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683023414; x=1685615414;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yoz9JAbN5f+BVMAIJU5OP6UpMSWt3PXfSC9zASQ8+H0=;
-        b=gcGVJyfRTWBVUL0f08RkYXuHH1NBWUH2YB1Fis8XfVFwAEUOJ6nW8mBf0E4Tqt5G9G
-         mQFCADBwfhiHM9W2KtheliLn1y3HFPOQw8PymzWvCfoCzjyT9XVIViN4nB54JOr4MvA8
-         wXS83Ruckb1wHrZ/RFl4JUDfQ3VFkcFYmxq6ecu7SDq7xLrOG6uc6htPylPAWIs/oyD1
-         eOAfAy6ubMwuXULdHicAsC1Q+hug630Og1h7tnwcJARt+E2FG4bdy3PKt16xnoJcOIS2
-         Cmg3rFVPAtlvLlYDYReNGJU8PCIHVfBB2Vjcq3+q+gdU4duyv5kS6p8U8NiNDU7py5T3
-         U0Jg==
-X-Gm-Message-State: AC+VfDzGE23YqpQJwx3aKVBw+jdUi1sU9M7Mgbcm/k0qSvIwZ/XPYKWr
-        MMR+2tSB+gGzqUMa+PzqksU=
-X-Google-Smtp-Source: ACHHUZ6YZ5pgw9VrLJ2fqMsSEx0tEiCLwIYXUGSFpKeEuP8/APOwu3MjFq79vENWW/sdJ/Brfn0IHw==
-X-Received: by 2002:a17:907:94cc:b0:948:b9ea:3302 with SMTP id dn12-20020a17090794cc00b00948b9ea3302mr15065573ejc.1.1683023413633;
-        Tue, 02 May 2023 03:30:13 -0700 (PDT)
-Received: from orome (p200300e41f053a00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f05:3a00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id u13-20020a170906c40d00b0094aa087578csm16154555ejz.171.2023.05.02.03.30.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 May 2023 03:30:13 -0700 (PDT)
-Date:   Tue, 2 May 2023 12:30:11 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sumit Gupta <sumitg@nvidia.com>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: tegra194: Fix an error handling path in
- tegra194_cpufreq_probe()
-Message-ID: <ZFDmMydAy4CiJjfQ@orome>
-References: <30b17e2219abc3a9a137d28bb51e53732bba5103.1682428267.git.christophe.jaillet@wanadoo.fr>
+        Tue, 2 May 2023 06:34:29 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E70765B9E;
+        Tue,  2 May 2023 03:33:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683023603; x=1714559603;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JjmFOFCQElte7wpPb4geFbfte6KiNN1TzHhEdZpVTvs=;
+  b=kBaGDRTEojPR7ZTSNsm4+PRkYkBZbGkITIuaVyQkSVxDsIp9ua+Vg89c
+   GIaG49S3K0k3IFqYTvIv7cjP8BaReebb1ezUbWh7jTNq8FuKNwwrqK1SX
+   JAgpwqQac/EE0pcsj+H4CT8VBH/EG5BeAIWiMf57jftjrZlZTlx+CldrR
+   ejY3R6/bSDbcWdcv3xiqNsmGTKorsEC9NkRYfYunALG4O/47Jog85a2aJ
+   kHRvd/9R1KQ8rrus5TazDAZXa7DFHWEEip6032RrnfOUZfOrZjbE+12/L
+   S7MbQQ0hM/U8q3JiyChgjck8YlQllTIvKDPwTWLLOekq9v3oogae6ZDnV
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="413805464"
+X-IronPort-AV: E=Sophos;i="5.99,244,1677571200"; 
+   d="scan'208";a="413805464"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2023 03:33:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="726702165"
+X-IronPort-AV: E=Sophos;i="5.99,244,1677571200"; 
+   d="scan'208";a="726702165"
+Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 02 May 2023 03:33:21 -0700
+Received: from kbuild by e3434d64424d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ptnJx-0000zQ-0O;
+        Tue, 02 May 2023 10:33:21 +0000
+Date:   Tue, 2 May 2023 18:33:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Oswald Buddenhagen <oswald.buddenhagen@gmx.de>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Takashi Iwai <tiwai@suse.de>, linux-doc@vger.kernel.org
+Subject: htmldocs:
+ Documentation/sound/kernel-api/writing-an-alsa-driver.rst:3997: WARNING:
+ Literal block expected; none found.
+Message-ID: <202305021822.4U6XOvGf-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="gK1WG8+Pg3vMnVql"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <30b17e2219abc3a9a137d28bb51e53732bba5103.1682428267.git.christophe.jaillet@wanadoo.fr>
-User-Agent: Mutt/2.2.10 (2023-03-25)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   865fdb08197e657c59e74a35fa32362b12397f58
+commit: 4d421eebe1465d94b95867dd025385dc3d661f9b ALSA: docs: writing-an-alsa-driver.rst: polishing
+date:   11 days ago
+reproduce:
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4d421eebe1465d94b95867dd025385dc3d661f9b
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 4d421eebe1465d94b95867dd025385dc3d661f9b
+        make menuconfig
+        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
+        make htmldocs
 
---gK1WG8+Pg3vMnVql
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305021822.4U6XOvGf-lkp@intel.com/
 
-On Tue, Apr 25, 2023 at 03:11:19PM +0200, Christophe JAILLET wrote:
-> If the probe needs to be deferred, some resources still need to be
-> released. So branch to the error handling path instead of returning
-> directly.
->=20
-> Fixes: f41e1442ac5b ("cpufreq: tegra194: add OPP support and set bandwidt=
-h")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
-> Compile tested-only
-> ---
->  drivers/cpufreq/tegra194-cpufreq.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/cpufreq/tegra194-cpufreq.c b/drivers/cpufreq/tegra19=
-4-cpufreq.c
-> index c8d03346068a..36dad5ea5947 100644
-> --- a/drivers/cpufreq/tegra194-cpufreq.c
-> +++ b/drivers/cpufreq/tegra194-cpufreq.c
-> @@ -686,8 +686,10 @@ static int tegra194_cpufreq_probe(struct platform_de=
-vice *pdev)
-> =20
->  	/* Check for optional OPPv2 and interconnect paths on CPU0 to enable IC=
-C scaling */
->  	cpu_dev =3D get_cpu_device(0);
-> -	if (!cpu_dev)
-> -		return -EPROBE_DEFER;
-> +	if (!cpu_dev) {
-> +		err =3D -EPROBE_DEFER;
-> +		goto err_free_res;
-> +	}
+All warnings (new ones prefixed by >>):
 
-I think ultimately it'd be better to try get_cpu_device(0) earlier so
-that we don't do all that work upfront before we fail. However, it looks
-like there's some other improvements that could be done in that area, so
-this looks like a good fix in the meantime:
+>> Documentation/sound/kernel-api/writing-an-alsa-driver.rst:3997: WARNING: Literal block expected; none found.
+>> Documentation/sound/kernel-api/writing-an-alsa-driver.rst:4009: WARNING: Unexpected indentation.
 
-Acked-by: Thierry Reding <treding@nvidia.com>
+vim +3997 Documentation/sound/kernel-api/writing-an-alsa-driver.rst
 
---gK1WG8+Pg3vMnVql
-Content-Type: application/pgp-signature; name="signature.asc"
+7ddedebb03b7ec Takashi Iwai       2016-09-29  3994  
+4d421eebe1465d Oswald Buddenhagen 2023-04-21  3995     Suppose you have a file xyz.c. Add the following two lines::
+7ddedebb03b7ec Takashi Iwai       2016-09-29  3996  
+7ddedebb03b7ec Takashi Iwai       2016-09-29 @3997    snd-xyz-objs := xyz.o
+7ddedebb03b7ec Takashi Iwai       2016-09-29  3998    obj-$(CONFIG_SND_XYZ) += snd-xyz.o
+7ddedebb03b7ec Takashi Iwai       2016-09-29  3999  
+7ddedebb03b7ec Takashi Iwai       2016-09-29  4000  2. Create the Kconfig entry
+7ddedebb03b7ec Takashi Iwai       2016-09-29  4001  
+4d421eebe1465d Oswald Buddenhagen 2023-04-21  4002     Add the new entry of Kconfig for your xyz driver::
+4d421eebe1465d Oswald Buddenhagen 2023-04-21  4003  
+4d421eebe1465d Oswald Buddenhagen 2023-04-21  4004    config SND_XYZ
+4d421eebe1465d Oswald Buddenhagen 2023-04-21  4005      tristate "Foobar XYZ"
+4d421eebe1465d Oswald Buddenhagen 2023-04-21  4006      depends on SND
+4d421eebe1465d Oswald Buddenhagen 2023-04-21  4007      select SND_PCM
+4d421eebe1465d Oswald Buddenhagen 2023-04-21  4008      help
+4d421eebe1465d Oswald Buddenhagen 2023-04-21 @4009        Say Y here to include support for Foobar XYZ soundcard.
+4d421eebe1465d Oswald Buddenhagen 2023-04-21  4010        To compile this driver as a module, choose M here:
+4d421eebe1465d Oswald Buddenhagen 2023-04-21  4011        the module will be called snd-xyz.
+4d421eebe1465d Oswald Buddenhagen 2023-04-21  4012  
 
------BEGIN PGP SIGNATURE-----
+:::::: The code at line 3997 was first introduced by commit
+:::::: 7ddedebb03b7ec030c528ebacdd43e45373476e3 ALSA: doc: ReSTize writing-an-alsa-driver document
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmRQ5jMACgkQ3SOs138+
-s6G2Wg//TRLHO0MURhGFW5IfnB5xXcvKaHVeurXxBdRWI4KuA8CQv5+2plHnEci6
-BlU7+GHpOB+3Ch+bfnUVuhFN4WleYecoD69FS9GxwLaYukg7R7ynqVhYX/tccT1w
-lzkZFUzYqrJMxY4ZAKMD14PmnY7tm/DFQO8Ht7Iu1DWKCRVZTd1udfXpqw4z8spc
-ndm1uxVz3d2ojvkhevIWOpHYpsCXgbzYMasi1lHpbui/RGUyr6JE1L2CY23+Ne4s
-KcF/QrhXWRXs6+s40Xi7rQrAgtj/evq0wOlly/YGLBtP4mKpQB1T/o8MlF0NfW3x
-iQoKEAfBIbmOYodXCYjrZvj8ftq7pOtQbzXWW67wzjOxyDuXc/j2XVodHdoDtJ+0
-VSabbpTT+RQsXDM61RxBqeH56mXl6TpJaBLL/reh6BVRESmTPfaqXOkw12BXLYhZ
-IHDOfbuXvHAT1fhJjOWj2yxiqOhwcsIJVIyQlrBfUIjjf1AKOkaUGgiO4jffHjSG
-uYyglby74dbDWqLXnotxaMpSNRSCY94kxEw99p2MtsAb/HTOzCpw2SX/PGBePjwI
-XJCyZ54FOIBBvi+0LBZhjbDitkbILO0zvPZ6etx99jFC2ZRndIqLks22WO/B0h34
-mHYcuakHBmhjbnPK+Yt8YbNQtgUo2O401FTHT/Cm78Y5vYybem4=
-=WBsp
------END PGP SIGNATURE-----
+:::::: TO: Takashi Iwai <tiwai@suse.de>
+:::::: CC: Takashi Iwai <tiwai@suse.de>
 
---gK1WG8+Pg3vMnVql--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
