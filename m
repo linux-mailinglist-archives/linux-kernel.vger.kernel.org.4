@@ -2,133 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85FA96F4576
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 15:48:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E661B6F457C
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 15:49:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234286AbjEBNsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 09:48:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46684 "EHLO
+        id S234334AbjEBNtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 09:49:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234188AbjEBNsO (ORCPT
+        with ESMTP id S233998AbjEBNtC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 09:48:14 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2079.outbound.protection.outlook.com [40.107.243.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D12F0F7;
-        Tue,  2 May 2023 06:47:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PpUmVnZdzyJ4C3Kfzx+6Uui5OVjK68uoJppDgJIYsJ3hMRStgm8UZ0HikwAaXuFRBR3upNQu6dGOcQMCTHUqDVn/bqSz5/K7+KROQI0jgjRdW7z38MZMmfKOIx+UPsgdQjPsGH1z5SK3l3VO3VlTe5clctg4Ou7VKxW1OlONeze8Y444SN08nKeRBpQvH6+lpG2ahtT7AQVSgs5yDlnm2o/ePZ65rYi5IIkY7qNvHD/SyUGsE66M5Y1zvtToQaD2hfNP/JAEJROyk19N1zIKwo1masOzMofGh8/NDyNJN+Gx/Ku+wATu9gQAn1zXYG/MUyyZLSUXqRB0Cg6tU2bSSQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Gy0AN5R1CfjsEyNLYTxG91wPGDIm3nORggRUnJaeYmg=;
- b=V1WM+tz2wk+4sg/5rtbKMY52GzpdVVcM0bn4QrDjyYBRZocoO+aa/H4QnOO5534N1roz3iqKNoodozSoCKMxXrECvbCn4+WbeA1XCpziGabbYSm3h9bXU2vWmgdeONYpquGNAz3/byUKXJw77qYHeb8BYkcA/CM38PWL6BBOVD1i3L5bZTZa0KQVUZ9miLaw0cUcqmU96XnN6C4SUPJ6KHU2ze5mXdigh+/MVl2GUeaU0Y43Ol+tlychXLuktTGS76teIi7TdIZFYHnvu+DHtMi1Yf7KUgv6Irah1RwJZJA+5Uszt8qDCxM87jWrUtj2UOjURcE2AokeqmeWhwlFVw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Gy0AN5R1CfjsEyNLYTxG91wPGDIm3nORggRUnJaeYmg=;
- b=Gtsz0HpPvVr5JSvQk+mQ+dg4YRFLgR39xyRusPIg2jHiIbf2dNCuRYSRo7LOGynls0rmARaJ/nq8A9QbdathWtbTYIWn1E/HK1muzGopKcPlbipDdm18ZCTdjuX6XuR1qchEupeSGhGDEmSY6gN9B/UB0tRj/B6/V6ZNU7US+C4=
-Received: from DS7PR05CA0047.namprd05.prod.outlook.com (2603:10b6:8:2f::26) by
- SA1PR12MB8644.namprd12.prod.outlook.com (2603:10b6:806:384::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.30; Tue, 2 May
- 2023 13:47:47 +0000
-Received: from DM6NAM11FT062.eop-nam11.prod.protection.outlook.com
- (2603:10b6:8:2f:cafe::cc) by DS7PR05CA0047.outlook.office365.com
- (2603:10b6:8:2f::26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.20 via Frontend
- Transport; Tue, 2 May 2023 13:47:46 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT062.mail.protection.outlook.com (10.13.173.40) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6363.20 via Frontend Transport; Tue, 2 May 2023 13:47:46 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 2 May
- 2023 08:47:45 -0500
-From:   Michal Simek <michal.simek@amd.com>
-To:     <linux-kernel@vger.kernel.org>, <monstr@monstr.eu>,
-        <michal.simek@xilinx.com>, <git@xilinx.com>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-spi@vger.kernel.org>
-Subject: [PATCH] dt-bindings: spi: zynqmp-qspi: Add power-domains and iommus properties
-Date:   Tue, 2 May 2023 15:47:42 +0200
-Message-ID: <87563d1a920458dff134bb92b27645471f4d9fca.1683035258.git.michal.simek@amd.com>
-X-Mailer: git-send-email 2.36.1
+        Tue, 2 May 2023 09:49:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E459C65B6
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 06:47:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683035269;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=J3J2uAw/ly+PNbny+QW1yUQ6DEbuSoPG3Zwu6k/I8hM=;
+        b=fozI/mZc92pFL+/0eqXM3yQCfGfxEs2OJ8Ej0lP6qiI7zyeYU2nFSNzP5myYt21CmZ+uws
+        D3VVy/Mqp6z0WQpvHaWNv6ZKXCEfnMswAAwGuiUmb96k3WpdxO+A6pviy+mPMW+TzVfJk8
+        5KTFTf+mh3BLGDDbB/aab3fzHbr0BVI=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-656-m-y9Gdw8P3-JWF-DLiLm-A-1; Tue, 02 May 2023 09:47:48 -0400
+X-MC-Unique: m-y9Gdw8P3-JWF-DLiLm-A-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f16f50aeb5so12484045e9.3
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 06:47:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683035267; x=1685627267;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=J3J2uAw/ly+PNbny+QW1yUQ6DEbuSoPG3Zwu6k/I8hM=;
+        b=V65y5AoUdrwbCsaa4td2wYah0VzhU1re5h8pjM0GVoSdpoNwrYwgBlSUvfhQRNhLAf
+         fG+d94nVtECaBeE+5TU8Rg3uZZUMW3bR5AuySC/gJ8ntaFJ63xfSaB6ktue9YYfVWRZ+
+         jlMmLvmxKojFmJ7uM7ienqV1rirdPzu1re3Bw00I8cSnMfZOCqYOlRcSLPoCk9a81YpE
+         0PlIIfZCiJREgs/+YdeoBkSAxppBeVSI5Ha+BR7m1bzbBGI1+nxnYY55EcByQSESTmyw
+         XrLAr0egEM7PF6/80Sw9HXG9OKb1rESGgFwhDmiPa1xvzpQighdY/b7gKnekwz1QgQll
+         Qk4w==
+X-Gm-Message-State: AC+VfDxMRgZ6PPXi/W53Ga22gELZDrTOzTqEQgcP/nA/PPpwTvRO8KW/
+        oGGg+ws+0XqLBeng7FggJqOXP9kZOe3JKbDASFs74d9ojU7g86Mum5eElI5kD3Nbqj74Zy+eyLD
+        uWCmKASQ8072Y+NU521766CLn
+X-Received: by 2002:a1c:7404:0:b0:3f1:92aa:4eb8 with SMTP id p4-20020a1c7404000000b003f192aa4eb8mr13150699wmc.16.1683035267229;
+        Tue, 02 May 2023 06:47:47 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5erONwJ74D2u4zUQpg0uPdUPwazWaMyXU9Kn1O6BpFG7TQ1T86Oqm9RgmLypMPcZwuJndm2g==
+X-Received: by 2002:a1c:7404:0:b0:3f1:92aa:4eb8 with SMTP id p4-20020a1c7404000000b003f192aa4eb8mr13150657wmc.16.1683035266844;
+        Tue, 02 May 2023 06:47:46 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c700:2400:6b79:2aa:9602:7016? (p200300cbc70024006b7902aa96027016.dip0.t-ipconnect.de. [2003:cb:c700:2400:6b79:2aa:9602:7016])
+        by smtp.gmail.com with ESMTPSA id u19-20020a05600c00d300b003f17eaae2c9sm35746626wmm.1.2023.05.02.06.47.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 May 2023 06:47:45 -0700 (PDT)
+Message-ID: <ad60d5d2-cfdf-df9f-aef1-7a0d3facbece@redhat.com>
+Date:   Tue, 2 May 2023 15:47:43 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v6 3/3] mm/gup: disallow FOLL_LONGTERM GUP-fast writing to
+ file-backed mappings
+Content-Language: en-US
+To:     Matthew Rosato <mjrosato@linux.ibm.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Mika Penttila <mpenttil@redhat.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Theodore Ts'o <tytso@mit.edu>, Peter Xu <peterx@redhat.com>
+References: <cover.1682981880.git.lstoakes@gmail.com>
+ <dee4f4ad6532b0f94d073da263526de334d5d7e0.1682981880.git.lstoakes@gmail.com>
+ <fbad9e18-f727-9703-33cf-545a2d33af76@linux.ibm.com>
+ <7d56b424-ba79-4b21-b02c-c89705533852@lucifer.local>
+ <a6bb0334-9aba-9fd8-6a9a-9d4a931b6da2@linux.ibm.com>
+ <ZFEL20GQdomXGxko@nvidia.com>
+ <c4f790fb-b18a-341a-6965-455163ec06d1@redhat.com>
+ <ZFER5ROgCUyywvfe@nvidia.com>
+ <ce3aa7b9-723c-6ad3-3f03-3f1736e1c253@redhat.com>
+ <ff99f2d8-804d-924f-3c60-b342ffc2173c@linux.ibm.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <ff99f2d8-804d-924f-3c60-b342ffc2173c@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT062:EE_|SA1PR12MB8644:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1d173196-24ae-4f88-d994-08db4b13cffd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: c/qWmYzJpRf6yhqCyFE34kU5t86ETE8RBKJWOz2H4Eqqt96RV+Ce3TN11BvtZY4mhc2LukYhBF37slpxDzGpShlA0wCtCNH3WHrTGCc8Hx0YvbwXarUq/Tjh8zeXVleUy4O2oBYTq0slhxiziodY/c6N8HSSJmfWsmSZ/+13Z7VXEUzEzIibAKGf7JGBZMhZ9GMJYg2i1WlZpmT1kt4primRQlKxFR8/wepMw+iGb5swYr/asPIdWLLwvedcTznq0dd22lj2vjXD0kH5gCWKMP7jFsVMiB6r1ttLPkUSexZtPiHH1pNk1Ht6p666PQ52gMIAPYG8noM30u2C7xpZLs6tp0jBvMinQPGZbhJX0hFlxStHR5GefM6sSM6fz+l2OsiholxmVR9PhW54UdKSdrIZrqRHHjk2qCLZfSN4wxDFOxYeL41TtGS33Fot+jx6xZMC7u+JnYtXXuuvbsBhBljWcYzrQ8Z0UdlLud1gEVZ06vwOv4HUoOkPgpxD6PCwYMY3gfV0FlY+xQcvYAxMqEoYdE+KVeIzWuX0/Zsy+b3MCvqwu5T0qs2PSh9kvUYG+rZLIjL4JYWPIrfldbFLFkzWHA8KftdDQHCkb6VyeBpKjvwatLF2b5ItClRfWHvX5Ajrvw9QUAjaIWArOcvYy2iQGD3fF/kQc6NpYLD9qsiN9BrulIz8K/2kQIN/ZFelrvVFCsmbR0xIHkg+IqDRj77HS82dnqLfMQD81MXG4vgdxw3NTCKhOqkFyNTC9RQD
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(396003)(39860400002)(136003)(451199021)(40470700004)(46966006)(36840700001)(16526019)(70586007)(356005)(4326008)(186003)(82740400003)(316002)(40460700003)(478600001)(82310400005)(110136005)(70206006)(54906003)(6666004)(36756003)(86362001)(40480700001)(36860700001)(4744005)(2906002)(2616005)(426003)(26005)(336012)(83380400001)(47076005)(5660300002)(8676002)(44832011)(8936002)(81166007)(41300700001)(2101003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2023 13:47:46.8257
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1d173196-24ae-4f88-d994-08db4b13cffd
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT062.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB8644
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Describe optional power-domain property to fix dts_check warnings. The
-similar change was done by commit 0aec3958c88f ("dt-bindings: gpio: zynq:
-Add power-domains").
-And also by commit 84fa8f159022 ("dt-bindings: arm: coresight-tmc: Add
-'iommu' property") for iommus property.
+On 02.05.23 15:43, Matthew Rosato wrote:
+> On 5/2/23 9:39 AM, David Hildenbrand wrote:
+>> On 02.05.23 15:36, Jason Gunthorpe wrote:
+>>> On Tue, May 02, 2023 at 03:28:40PM +0200, David Hildenbrand wrote:
+>>>> On 02.05.23 15:10, Jason Gunthorpe wrote:
+>>>>> On Tue, May 02, 2023 at 03:04:27PM +0200, Christian Borntraeger wrote:
+>>>>> \> > We can reintroduce a flag to permit exceptions if this is really broken, are you
+>>>>>>> able to test? I don't have an s390 sat around :)
+>>>>>>
+>>>>>> Matt (Rosato on cc) probably can. In the end, it would mean having
+>>>>>>      <memoryBacking>
+>>>>>>        <source type="file"/>
+>>>>>>      </memoryBacking>
+>>>>>
+>>>>> This s390 code is the least of the problems, after this series VFIO
+>>>>> won't startup at all with this configuration.
+>>>>
+>>>> Good question if the domain would fail to start. I recall that IOMMUs for
+>>>> zPCI are special on s390x. [1]
+>>>
+>>> Not upstream they aren't.
+>>>
+>>>> Well, zPCI is special. I cannot immediately tell when we would trigger
+>>>> long-term pinning.
+>>>
+>>> zPCI uses the standard IOMMU stuff, so it uses a normal VFIO container
+>>> and the normal pin_user_pages() path.
+>>
+>>
+>> @Christian, Matthew: would we pin all guest memory when starting the domain (IIRC, like on x86-64) and fail early, or only when the guest issues rpcit instructions to map individual pages?
+>>
+> 
+> Eventually we want to implement a mechanism where we can dynamically pin in response to RPCIT.
+> 
 
-Signed-off-by: Michal Simek <michal.simek@amd.com>
----
+Okay, so IIRC we'll fail starting the domain early, that's good. And if 
+we pin all guest memory (instead of small pieces dynamically), there is 
+little existing use for file-backed RAM in such zPCI configurations 
+(because memory cannot be reclaimed either way if it's all pinned), so 
+likely there are no real existing users.
 
- Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml | 6 ++++++
- 1 file changed, 6 insertions(+)
+> However, per Jason's prior suggestion, the initial implementation for s390 nesting via iommufd will pin all of guest memory when starting the domain.  I have something already working via iommufd built on top of the nesting infrastructure patches and QEMU iommufd series that are floating around; needs some cleanup, hoping to send an RFC in the coming weeks.  I can CC you if you'd like.
 
-diff --git a/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml b/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml
-index 20f77246d365..226d8b493b57 100644
---- a/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml
-+++ b/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml
-@@ -32,6 +32,12 @@ properties:
-   clocks:
-     maxItems: 2
- 
-+  iommus:
-+    maxItems: 1
-+
-+  power-domains:
-+    maxItems: 1
-+
- required:
-   - compatible
-   - reg
+Yes, please.
+
 -- 
-2.36.1
+Thanks,
+
+David / dhildenb
 
