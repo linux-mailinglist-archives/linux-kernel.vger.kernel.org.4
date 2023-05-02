@@ -2,111 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAE796F4CD5
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 00:15:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20CD56F4CD7
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 00:17:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbjEBWPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 18:15:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47896 "EHLO
+        id S229681AbjEBWRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 18:17:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjEBWPq (ORCPT
+        with ESMTP id S229457AbjEBWRT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 18:15:46 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97BD31BDF;
-        Tue,  2 May 2023 15:15:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683065745; x=1714601745;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0I5ig81uZ02aMnVMkminXlKbbHCg627kqdairoEgsuE=;
-  b=jKWFKLIY3FXQLG7vyYXCFxZ8Jj7bIezT9iZUXPx39aNqlZJatEdpBLDI
-   GuB9/ZAgHqXoy+fYhX6a6IbDdTHgaLoNL68BbWc0rrpBh+3e7X/aCmV06
-   z+hGiDxohihLAc+qZRg3bPZOr9HpZ9Vn6shh/TYg2Vr+V5wQ3YKMpfRVx
-   zyYFDvP034ATW6Igvc10rk2BH5e1mReaINNL+ZoDj1pCBstGeZEyFZWWT
-   FW5Ci4OfJq0YKw7/fFgInZqqWtlAyWuxchUXKvCTupQ/ZWJregMklC3pb
-   r8eQE1j/GN4RNyZ2pn3SPu6sxsDJjjb81pJn3Pn2c3sRFQ6kf0c7TexQX
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="351496616"
-X-IronPort-AV: E=Sophos;i="5.99,245,1677571200"; 
-   d="scan'208";a="351496616"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2023 15:15:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="870717195"
-X-IronPort-AV: E=Sophos;i="5.99,245,1677571200"; 
-   d="scan'208";a="870717195"
-Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 02 May 2023 15:15:41 -0700
-Received: from kbuild by e3434d64424d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ptyHc-0001JS-0Y;
-        Tue, 02 May 2023 22:15:40 +0000
-Date:   Wed, 3 May 2023 06:15:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ajay Kaher <akaher@vmware.com>, rostedt@goodmis.org,
-        mhiramat@kernel.org, shuah@kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, chinglinyu@google.com,
-        namit@vmware.com, srivatsab@vmware.com, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, vsirnapalli@vmware.com, tkundu@vmware.com,
-        er.ajay.kaher@gmail.com, Ajay Kaher <akaher@vmware.com>
-Subject: Re: [PATCH v2 4/9] eventfs: adding eventfs file, directory remove
- function
-Message-ID: <202305030611.Kas747Ev-lkp@intel.com>
-References: <1683026600-13485-5-git-send-email-akaher@vmware.com>
+        Tue, 2 May 2023 18:17:19 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25AB51BDF
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 15:17:18 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-50bc3a5f462so8011a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 15:17:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683065835; x=1685657835;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YmbVvlDH6rILyY6tXnfbqcMncYRrXasXofSLakplJ0U=;
+        b=0Zx+52LbmwmvpVvDaMOEN+kpAVC5twwGRNxWSorANbKdlxAGZE8+JK0s0WrXumY0vl
+         pLJkS4FHqVHawC/xFXRfaTQzPr1BHi9lFU1XwP1AoZXDRD/NafJso0cOAWq1CRUFOFtP
+         pR09AxDXof/RzzQqnluikAR4DMSJ/pRAKkqTubeQWg8oqDYu72RZB5iRn+pyZBsoRcjm
+         qq5P8BUU9VElmmwg7EpXd+LsiyjI/JpZ6fVrsQxW+2W0ewMmGOXiRUHlpqRb0EUnKpjw
+         i5QKmIz5ODns8BkepEfI4HVJBElNyKOxjIM/tLPuuEcZEiHew38+SqGYKKfCe/Va3OHL
+         yd7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683065835; x=1685657835;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YmbVvlDH6rILyY6tXnfbqcMncYRrXasXofSLakplJ0U=;
+        b=TxCWhyetlpnFApj8ojvx/sjqGSaH8A94wRWgZ7Opx27Yb8jKZs1QFQCIza1ERZxwdp
+         pJc3NCN9kfnenG76wGJg8bx6ll/tuJojtmB09npS9qheSoVsFJ5ojnEDla5rmqO73BI/
+         AxZXytP6PTOFRDuXwLf+CNN5qdQxoyqKXaZsPHenKaCT/tuZ2IEUl8zcWROhAunmTTLX
+         QR1Xj/P/IBne/dZbVmHAM6ZvPE78gUbk8v621WNxx3RQ7eL5ANelceVOjlly+RJj3y3U
+         j93/ASkHKzIWE//N7V+pDtlePxpK2q1rRB+1Efy5t7EBc5qm/yhJJSCbP9PjvO+XNi3S
+         XbvA==
+X-Gm-Message-State: AC+VfDwYcUv5QVjgPetsJirEejX7LIUlWdDL2pgwK6gwOUlp/wA0vYln
+        wja+FNjPS6DIFWPI7D1z33Hcmw8hhA26XLIK8M2+OQ==
+X-Google-Smtp-Source: ACHHUZ4+qKsuCEwxxMeuBpwyPkGLYsNmLhN3XhaqFAmIHp0yJGcln44HJ6fyzdv0LRBekMBiLCmXordtNDZASZxGgDg=
+X-Received: by 2002:a05:6402:3213:b0:50a:31d0:bc58 with SMTP id
+ g19-20020a056402321300b0050a31d0bc58mr36239eda.2.1683065835533; Tue, 02 May
+ 2023 15:17:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1683026600-13485-5-git-send-email-akaher@vmware.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230420010029.2702543-1-elsk@google.com> <CAK7LNAQxmi7GadEs2b6PA-6R1veRRL0+NW-hmpE1HrhzWKX33g@mail.gmail.com>
+ <CAABy=s39CCZ1yx11NtdgpTG95hFj6r7Q-g88qWrpdAak6dA7jw@mail.gmail.com>
+In-Reply-To: <CAABy=s39CCZ1yx11NtdgpTG95hFj6r7Q-g88qWrpdAak6dA7jw@mail.gmail.com>
+From:   Yifan Hong <elsk@google.com>
+Date:   Tue, 2 May 2023 15:16:38 -0700
+Message-ID: <CAABy=s17M5Xu_LhfrzP3vton9AK7n30PB9Hm3Z7iAHS+H5WxcA@mail.gmail.com>
+Subject: Re: [PATCH v2] kheaders: Follow symlinks to source files.
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Nicolas Schier <nicolas@fjasle.eu>,
+        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        Matthias Maennich <maennich@google.com>,
+        Daniel Mentz <danielmentz@google.com>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ajay,
+On Mon, Apr 24, 2023 at 11:32=E2=80=AFAM Yifan Hong <elsk@google.com> wrote=
+:
+>
+> On Sun, Apr 23, 2023 at 4:53=E2=80=AFAM Masahiro Yamada <masahiroy@kernel=
+.org> wrote:
+> >
+> > On Thu, Apr 20, 2023 at 10:01=E2=80=AFAM Yifan Hong <elsk@google.com> w=
+rote:
+> > >
+> > > When the kernel is built inside a sandbox container,
+> > > a forest of symlinks to the source files may be
+> > > created in the container. In this case, the generated
+> > > kheaders.tar.xz should follow these symlinks
+> > > to access the source files, instead of packing
+> > > the symlinks themselves.
+> > >
+> > > Signed-off-by: Yifan Hong <elsk@google.com>
+> > > Reviewed-by: Matthias Maennich <maennich@google.com>
+> >
+> >
+> >
+> > Please teach me how to reproduce your problem.
+>
+> Thanks for your reply. When I say "container", I mean a forest of
+> symlinks that point to the original source files. Here are the steps I
+> do to mimic the sandbox that the container program creates.
+>
+> On an x86 machine, I have a linux tree checkout at /mnt/sdb/linux, and
+> an empty directory at /mnt/sdb/linux2. Then I **created this fake
+> sandbox** in /mnt/sdb/linux2 by doing:
+> ```
+> $ cd /mnt/sdb/linux
+> $ find . -type d -exec mkdir -p /mnt/sdb/linux2/{} \;
+> $ find . -type f -exec ln -sf /mnt/sdb/linux/{} /mnt/sdb/linux2/{} \;
+> ```
+>
+> Then, I cross compile an arm64 kernel with tinyconfig. Here are the
+> steps I take:
+> ```
+> export ARCH=3Darm64
+> export SUBARCH=3Darm
+> export CROSS_COMPILE=3D/home/elsk/toolchains/aarch64--glibc--stable-2022.=
+08-1/bin/aarch64-linux-
+> # downloaded from https://toolchains.bootlin.com/
+> make tinyconfig; make menuconfig # then select CONFIG_SYSFS and CONFIG_IK=
+HEADERS
+> make -j64
+> ```
+>
+> This will show that kheaders_data.tar.xz contains the symlinks, e.g. in m=
+y case:
+> ```
+> $ tar tvf ./kernel/kheaders_data.tar.xz | head
+> [...]
+> lrwxrwxrwx 0/0               0 2023-04-24 11:19
+> ./arch/arm64/include/asm/acenv.h ->
+> /mnt/sdb/linux/./arch/arm64/include/asm/acenv.h
+> ```
+>
+> However, the issue for me is that these symlinks are no longer useful
+> under sysfs when I am booting the kernel on the target arm64 machine,
+> because it is a different machine (arm64) than the machine (x86) where
+> I compiled this kernel.
+>
+> >
+> >
+> >
+> > I built the kernel inside a container,
+> > but I do not see any difference.
+> >
+> >
+> >
+> > We have some symbolic links in include/,
+> > but those reference relative paths.
+> > How building the kernel in a container
+> > makes a difference?
+>
+> Please see above; the container contains a forest of symlinks pointing
+> to the original source tree. Then `make` is executed in that container
+> directory.
+>
+> >
+> >
+> > masahiro@bc5c2c958b53:/tmp/foo$ tar Jxf kheaders_data.tar.xz
+> > masahiro@bc5c2c958b53:/tmp/foo$ find . -type l
+> > ./include/dt-bindings/clock/qcom,dispcc-sm8350.h
+> > ./include/dt-bindings/clock/qcom,dispcc-sm8150.h
+> > ./include/dt-bindings/input/linux-event-codes.h
+> > masahiro@bc5c2c958b53:/tmp/foo$ find . -type l | xargs ls -l
+> > lrwxrwxrwx 1 masahiro masahiro 20 Apr 23 11:47
+> > ./include/dt-bindings/clock/qcom,dispcc-sm8150.h ->
+> > qcom,dispcc-sm8250.h
+> > lrwxrwxrwx 1 masahiro masahiro 20 Apr 23 11:47
+> > ./include/dt-bindings/clock/qcom,dispcc-sm8350.h ->
+> > qcom,dispcc-sm8250.h
+> > lrwxrwxrwx 1 masahiro masahiro 36 Apr 23 11:47
+> > ./include/dt-bindings/input/linux-event-codes.h ->
+> > ../../uapi/linux/input-event-codes.h
+> >
+> >
+> >
+> >
+> >
+> >
+> >
+> >
+> >
+> >
+> >
+> >
+> > > ---
+> > >  kernel/gen_kheaders.sh | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/kernel/gen_kheaders.sh b/kernel/gen_kheaders.sh
+> > > index 1ef9a87511f5..70a75a9a7535 100755
+> > > --- a/kernel/gen_kheaders.sh
+> > > +++ b/kernel/gen_kheaders.sh
+> > > @@ -87,7 +87,7 @@ find $cpio_dir -type f -print0 |
+> > >  # pre-sorted, as --sort=3Dname might not be available.
+> > >  find $cpio_dir -printf "./%P\n" | LC_ALL=3DC sort | \
+> > >      tar "${KBUILD_BUILD_TIMESTAMP:+--mtime=3D$KBUILD_BUILD_TIMESTAMP=
+}" \
+> > > -    --owner=3D0 --group=3D0 --numeric-owner --no-recursion \
+> > > +    --owner=3D0 --group=3D0 --numeric-owner --no-recursion --derefer=
+ence \
+> > >      -I $XZ -cf $tarfile -C $cpio_dir/ -T - > /dev/null
+> > >
+> > >  echo $headers_md5 > kernel/kheaders.md5
+> > > --
+> > > 2.40.0.634.g4ca3ef3211-goog
+> > >
+> >
+> >
+> > --
+> > Best Regards
+> > Masahiro Yamada
+> >
+> > --
+> > To unsubscribe from this group and stop receiving emails from it, send =
+an email to kernel-team+unsubscribe@android.com.
+> >
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on shuah-kselftest/next]
-[also build test WARNING on shuah-kselftest/fixes linus/master rostedt-trace/for-next v6.3 next-20230428]
-[cannot apply to rostedt-trace/for-next-urgent]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ajay-Kaher/eventfs-introducing-struct-tracefs_inode/20230502-192949
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git next
-patch link:    https://lore.kernel.org/r/1683026600-13485-5-git-send-email-akaher%40vmware.com
-patch subject: [PATCH v2 4/9] eventfs: adding eventfs file, directory remove function
-config: i386-randconfig-s002 (https://download.01.org/0day-ci/archive/20230503/202305030611.Kas747Ev-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/9a36b39da0c3fbfe15a3c3a0ed71b52013bac292
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Ajay-Kaher/eventfs-introducing-struct-tracefs_inode/20230502-192949
-        git checkout 9a36b39da0c3fbfe15a3c3a0ed71b52013bac292
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 olddefconfig
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash fs/tracefs/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305030611.Kas747Ev-lkp@intel.com/
-
-sparse warnings: (new ones prefixed by >>)
->> fs/tracefs/event_inode.c:379:6: sparse: sparse: symbol 'eventfs_remove_rec' was not declared. Should it be static?
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Gently nagging. Is there anything I need to fix or do to improve this
+patch so it may be accepted? Thank you!
