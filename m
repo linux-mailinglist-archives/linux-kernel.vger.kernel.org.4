@@ -2,123 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFC646F47DE
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 18:00:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A1D96F47E4
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 18:00:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234595AbjEBQAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 12:00:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37230 "EHLO
+        id S234678AbjEBQAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 12:00:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234643AbjEBQA2 (ORCPT
+        with ESMTP id S234661AbjEBQAp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 12:00:28 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83C7C30F5
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 09:00:26 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-50b9ef67f35so5730741a12.2
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 09:00:26 -0700 (PDT)
+        Tue, 2 May 2023 12:00:45 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 270A13A9B;
+        Tue,  2 May 2023 09:00:41 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2a8ba23a2abso39471471fa.2;
+        Tue, 02 May 2023 09:00:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1683043225; x=1685635225;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4StunhIfVGG09XAY12DZV9Q+WSw3HvDD5jZ9fqE8opo=;
-        b=KbV7ljsEHPUtaLe+yaVHKpFHTeqKAG9rPmSIODIqXYaShdrCS3VOCb4EtE2fVEsskm
-         LE+QmSvCy9SEtV3H7QGlTVeS4V66VdC1+R98ZKjc+Q3yU/+9osy8u6UJe3ZRIH+nZKrd
-         65D8bAXf3vZk7z9qizaXc26zwIDY8rrqMBYiU=
+        d=gmail.com; s=20221208; t=1683043239; x=1685635239;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eOscjZRE2kRGfBRAgK+YuOAkiZKv/9Xhgl259n6HHD8=;
+        b=ULs8Q+OAhTdDuL84xJdiokUXzHzLNVyWArenYjGvP1XxLpA57fuVABb2gUwKVI+v3X
+         uAoezZ46LWDJBpjphtVz1bP+H1tWClkdZiLEEchzp1VTxZ7UkzCvtXLH85iVLtuNyBWp
+         zX7o8qChacRm0mLKBMYCXsYLEPmYiXS684ohfxxXOxhojzhN26L/TRJFmpNHmBMHnyvQ
+         V2VSfR5L/ljIuqTxhW9Ew+U0EexZsLuXn9Qrof4rQx5QJnf8uO127dbFohfAXuO4H2q/
+         KZZMCYXuhKZLTdsKGlQBjRYfO6zmkmgHAh8O9AdanCvZRHmZOH7WoxW3FtokvtVVnnv4
+         aa+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683043225; x=1685635225;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4StunhIfVGG09XAY12DZV9Q+WSw3HvDD5jZ9fqE8opo=;
-        b=Lb65wFrnM/SSzi1BjOFSueY7hnGduT5Re12zrcDV05WnqlaGX+iAuxnb2SvK8OmWas
-         TP/x9y2mV3ysxrtml5TMjGOYzItPKElmMWXd7oPPVAhXwHcLdU/vS7Pr6TeZpVpJc57q
-         H5bbiTktgp7pciHHrRJ03KW9uO9XTB/sGocAkXRR7675ZThCMXCzh84Q8IlOoLxUY5sQ
-         dUCyndcwLD5UtMztWGQ7LC0flOUJ/AoOu/Mkr/srFqrXBZiLYILBtYhbcM034QapPC6X
-         PVooVv21c2kFnC8bm6QdKUcGd43htUtWZT+Hu7aTB/fbsi4M5HPZZlJvPCZWCPKtRfIc
-         w/AQ==
-X-Gm-Message-State: AC+VfDwU50dY6c/uaYRaNvcGKGDHX8vo9w21G96yQHdpWh2wAPe3hHGC
-        mf/uQF+WfQ0426TAP+BBGjbqnbRR7Jl4RCBMgSgloQ==
-X-Google-Smtp-Source: ACHHUZ6n3EOihbEE3JbQ5szPZeF5gs4D1w5Rr/2NeCBJ5C8Iq3+KrGqPNhZo0CBLB3lIr9S5D46KxA==
-X-Received: by 2002:aa7:cd87:0:b0:50b:de1f:8786 with SMTP id x7-20020aa7cd87000000b0050bde1f8786mr423308edv.16.1683043224730;
-        Tue, 02 May 2023 09:00:24 -0700 (PDT)
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com. [209.85.218.47])
-        by smtp.gmail.com with ESMTPSA id r19-20020a056402019300b0050bc5acfcc0sm2302850edv.24.2023.05.02.09.00.23
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 May 2023 09:00:23 -0700 (PDT)
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-95678d891d6so823471466b.1
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 09:00:23 -0700 (PDT)
-X-Received: by 2002:a17:907:a40b:b0:94e:5708:1564 with SMTP id
- sg11-20020a170907a40b00b0094e57081564mr442854ejc.22.1683043223131; Tue, 02
- May 2023 09:00:23 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683043239; x=1685635239;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eOscjZRE2kRGfBRAgK+YuOAkiZKv/9Xhgl259n6HHD8=;
+        b=FA3ROfvymLHwphPn6Nk7gfyatZugUawG4bS52sVk+6zhr/9vTvVzuMhUbeInB/vcwh
+         xC8LL7Ajz0ETBhsuEf5w2Ua8DNx5ibHjGD3CogzHhqNqon5xH/4ttEkfrqXKskxzTYIa
+         MhbDmJXFnRlFhqGyUsgxhL35+1wSPVCDu368yiVPkRZPDvJS+UKxpfvoodYwL1alHZSk
+         Yqz41hegl5bf1tyqPjgQys3rr6PEzEL5HMsUmD7fXUwrrWJcND3f+DTKWRlTrX9HLeoM
+         2oDJOU3mFPKGUID7X4+VF+W+wxIImfC7CrCImmlx7iO+f7uvh8o9+HHA498qXH7tGECa
+         b8lg==
+X-Gm-Message-State: AC+VfDxqM67MJVfp3TjkGhyL3rcVMuetlh6eqqYc6wgEQlppgcDohpMh
+        MakHeWBRFjf1MX2skIsIuLvDxn5IlOI=
+X-Google-Smtp-Source: ACHHUZ4AAUeFcYiXKC+0RnlCNa80VNnACAiB3koGh0zDekVxTctb4wPvV5E5Jw8taj3CHh+O92hKag==
+X-Received: by 2002:ac2:561a:0:b0:4f0:13e2:ed99 with SMTP id v26-20020ac2561a000000b004f013e2ed99mr115975lfd.12.1683043239085;
+        Tue, 02 May 2023 09:00:39 -0700 (PDT)
+Received: from fedora (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
+        by smtp.gmail.com with ESMTPSA id q8-20020ac25a08000000b004ecb06acbb3sm5401968lfn.281.2023.05.02.09.00.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 May 2023 09:00:37 -0700 (PDT)
+Date:   Tue, 2 May 2023 19:00:24 +0300
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] iio: bu27034: Ensure reset is written
+Message-ID: <ZFEzmA/0whRO6IFv@fedora>
 MIME-Version: 1.0
-References: <20230427225647.1101172-1-dave.hansen@linux.intel.com>
- <CAHk-=wgrdOm8RwO+u8bydrbgs0wXJV_9mBYAtzX9d9hEY7a25A@mail.gmail.com>
- <CAHk-=wiHvdgbLxayyCsRU45JnKCZkCOpEJPfOvE3eYCnGjVcSA@mail.gmail.com>
- <20230429003822.n3mglslg666j3npp@box.shutemov.name> <641a9348-a052-6bb5-e6c7-64acb6405328@intel.com>
-In-Reply-To: <641a9348-a052-6bb5-e6c7-64acb6405328@intel.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 2 May 2023 09:00:06 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgnGoj8qZg3SRh1Z1-mU=b3ryydXZykUuarnrAn6LuHBw@mail.gmail.com>
-Message-ID: <CAHk-=wgnGoj8qZg3SRh1Z1-mU=b3ryydXZykUuarnrAn6LuHBw@mail.gmail.com>
-Subject: Re: [GIT PULL] x86/mm for 6.4
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kirill.shutemov@linux.intel.com,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="dohUr8GHFqpjSqLp"
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 2, 2023 at 8:42=E2=80=AFAM Dave Hansen <dave.hansen@intel.com> =
-wrote:
->
-> Have anyone seen any actual code generation difference between:
->
->         return (long)ptr >=3D 0;
->
-> and
->
->         return !((unsigned long)ptr & (1UL<<(BITS_PER_LONG-1)));
 
-No, as far as I know, they both generate the same code.
+--dohUr8GHFqpjSqLp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> It's longer, but I'd rather read the explicit "check bit 63" than the
-> positive/negative address space thing.  I certainly grok both, but have
-> to think through the "(long)ptr >=3D 0" check every time.
+The reset bit must be always written to the hardware no matter what value
+is in a cache or register. Ensure this by using regmap_write_bits()
+instead of the regmap_update_bits(). Furthermore, the RESET bit may be
+self-clearing, so mark the SYSTEM_CONTROL register volatile to guarantee
+we do also read the right state - should we ever need to read it.
 
-I'm very much the other way. I think it's much clearer to say "check
-the sign bit".
+Signed-off by: Matti Vaittinen <mazziesaccount@gmail.com>
+Fixes: e52afbd61039 ("iio: light: ROHM BU27034 Ambient Light Sensor")
 
-Doing the explicit bit check means that I have to look at what the bit
-number is, and that is a much more complex expression.
+---
+I haven't verified if the reset bit is self-clearin as I did temporarily
+give away the HW.
 
-In fact, I'd find it easier to read
+In worst case the bit is not self clearing - but we don't really
+get performance penalty even if we set the register volatile because the
+SYSTEM_CONTROL register only has the part-ID and the reset fields. The
+part-ID is only read once at probe.
 
-       return !((unsigned long)ptr & (1UL<< 63));
+---
+ drivers/iio/light/rohm-bu27034.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-just because then you go "Oh, checking bit 63" without having to parse
-the expression.
+diff --git a/drivers/iio/light/rohm-bu27034.c b/drivers/iio/light/rohm-bu27=
+034.c
+index 25c9b79574a5..740ebd86b6e5 100644
+--- a/drivers/iio/light/rohm-bu27034.c
++++ b/drivers/iio/light/rohm-bu27034.c
+@@ -231,6 +231,9 @@ struct bu27034_result {
+=20
+ static const struct regmap_range bu27034_volatile_ranges[] =3D {
+ 	{
++		.range_min =3D BU27034_REG_SYSTEM_CONTROL,
++		.range_max =3D BU27034_REG_SYSTEM_CONTROL,
++	}, {
+ 		.range_min =3D BU27034_REG_MODE_CONTROL4,
+ 		.range_max =3D BU27034_REG_MODE_CONTROL4,
+ 	}, {
+@@ -1272,7 +1275,7 @@ static int bu27034_chip_init(struct bu27034_data *dat=
+a)
+ 	int ret, sel;
+=20
+ 	/* Reset */
+-	ret =3D regmap_update_bits(data->regmap, BU27034_REG_SYSTEM_CONTROL,
++	ret =3D regmap_write_bits(data->regmap, BU27034_REG_SYSTEM_CONTROL,
+ 			   BU27034_MASK_SW_RESET, BU27034_MASK_SW_RESET);
+ 	if (ret)
+ 		return dev_err_probe(data->dev, ret, "Sensor reset failed\n");
 
-But even then I find the '!' is easy to miss, so you really have to parse i=
-t.
+base-commit: 7fcbd72176076c44b47e8f68f0223c02c411f420
+--=20
+2.40.0
 
-But:
 
-> I guess it also wouldn't matter as much either if we hid it in a helper
-> like the attached patch and I didn't have to read it twice. ;)
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
 
-Yeah, I think that's a good solution.
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
 
-                 Linus
+--dohUr8GHFqpjSqLp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmRRM40ACgkQeFA3/03a
+ocU1Awf8D8Y7JyIoqDRcOcZTe1sTfU4Kamm+vdjzMCK/0HfzX23JKyK5OhOez80x
+3XWGmzOklKTlRRlMSd/f7HsGozK6FNtdf2WS5kJBCsxp1DTO1w32lujTDcbQyzOF
+anoxRgLhDB5JQAKbBmpU/PGWrkUwa47mdgCKP1iCXQQoSKnDHGt8GYm+4lEX77zU
+jp2kTfuZaoLaXBgcMcZeiYRBwuWVHk1bmmXq6QXtrwAn7OuPk265vt2qhtSBx13k
+lFts4Wgeoc5TChH3AAstXFB6CU+AIXE4V1OklhCaFDHvdVvf4I88lGWh2k8b8S29
+TGWVa+VrNpfhyibdsrXCSiizoTdBdw==
+=dBhE
+-----END PGP SIGNATURE-----
+
+--dohUr8GHFqpjSqLp--
