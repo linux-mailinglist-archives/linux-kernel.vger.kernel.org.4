@@ -2,180 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 088106F456D
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 15:46:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52E986F4567
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 15:45:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233664AbjEBNqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 09:46:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44804 "EHLO
+        id S234396AbjEBNpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 09:45:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233824AbjEBNqo (ORCPT
+        with ESMTP id S233977AbjEBNpj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 09:46:44 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 360195B87;
-        Tue,  2 May 2023 06:46:26 -0700 (PDT)
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 342Dd2Q0007879;
-        Tue, 2 May 2023 13:43:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=px5fz1lhMlci981JXGzeSbNgqRiYbjczd1JHXYOP/ZA=;
- b=aPR9yx6JmDE6fk+wCxcRdlp3bZBP51g3NhfgmWe2LPsTOzsmnW2AilKJKtdlX3Le77cA
- 5BYqSDYgWG/PaR1lcq13EvBHavNlMaEPoRXT0fMjEJYFz332zpFE8R5eIlMKNVgcD4ZX
- gtfnIHaWNeQyIshdg4RZ5o/IIa2/SyYaMekp/EXJ6slAkPog3aULrlur++9fhwpNV/43
- Xjx+DvWbECrUpX2McHZf7iz/4E/naSDZK6c8nKKA2kUWzPhn9bMyMpOOIbeICxMV9RFE
- /ufz6zGpEPikF2CtL50YPCZ7qOwTUA4tgjUsLbQcnFMQ4EJnuTeKHPvyJoXwiVyJV9dU ag== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qb36uh6ew-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 02 May 2023 13:43:55 +0000
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 342DdUY7009344;
-        Tue, 2 May 2023 13:43:54 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qb36uh6e7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 02 May 2023 13:43:54 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 342DL1Zc026692;
-        Tue, 2 May 2023 13:43:52 GMT
-Received: from smtprelay02.dal12v.mail.ibm.com ([9.208.130.97])
-        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3q8tv93fpx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 02 May 2023 13:43:52 +0000
-Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-        by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 342DhnCB14156340
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 2 May 2023 13:43:50 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 980DA5804E;
-        Tue,  2 May 2023 13:43:49 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0ADF75803F;
-        Tue,  2 May 2023 13:43:45 +0000 (GMT)
-Received: from [9.60.89.243] (unknown [9.60.89.243])
-        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Tue,  2 May 2023 13:43:44 +0000 (GMT)
-Message-ID: <ff99f2d8-804d-924f-3c60-b342ffc2173c@linux.ibm.com>
-Date:   Tue, 2 May 2023 09:43:44 -0400
+        Tue, 2 May 2023 09:45:39 -0400
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 380E2170A
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 06:45:19 -0700 (PDT)
+Received: by mail-ot1-x333.google.com with SMTP id 46e09a7af769-6a5f03551fdso2690176a34.0
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 06:45:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683035116; x=1685627116;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M8MTHJ52iLYQD5hklUS87Ar+YGmPytygVAeYV0UnYw0=;
+        b=gYOWyPkt4QQAkSbtqPXdKGoGuU5TqFuXt5BI8IYWr4O97at9XkZOF9GUL6M0yxJ3t8
+         KuFcLSVV8ZgFDgojs0nVoUPKEIpOXgstyVO5lHyJvkqwRHHcbQIKrgeG8QPCoAq8Ck2k
+         LC0A1cr4NF5sVli9HXrbR6TcZaM7sh+7T9gHKH39ADFdeW4k9D02WsBK+Iar9iJbu3jI
+         3W7e9KpIsevBjuyGNewuizv6IZ9oG+txj4WAGckJXMLBYov4NAk0hmn8Q2NVB8Wh0Q8/
+         DHB8BrMl9dY+9uH5ex0YReP7Dz6+B2xgm/Iz+FZqkzUZP3IwyDVfomVbn3+LDPD3GUDy
+         BaqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683035116; x=1685627116;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=M8MTHJ52iLYQD5hklUS87Ar+YGmPytygVAeYV0UnYw0=;
+        b=Vbcl/PRmd9Ro53oI9gJtv/HArXG88ZXiY02001jNO2GyQ4xmHfZlPJDFutHdpYHasD
+         JKDH9Ay6Er0jMZCADE1YeMwFQ1c0rAHPLOsWKyR8rDWtNrrfuRGl9PpSmhqzMS0Ja0qR
+         ZTMpEQbyKhlqB3KhdZiSByjrZSF4U6n6M3CJxacDKdioWaoyA9j8CC/uaUZOM+5Ka1ki
+         7pjQUb/hvXa7VO0EA510PkeUyuHoFpAKkZp/NYE+ZgiHQuucErBBiyVQjDug262J/A30
+         MmQr86QnnDE3viggPT2uZM9CDmh6hchkHpxhOWsRfXsSdvjjV0K+Rx93v8muumT84WsU
+         TWbg==
+X-Gm-Message-State: AC+VfDxdcHlVgiHMu5v2ivasjhUxsqIdRccOvwLcXpFnkT6EsF//Y48z
+        2FvypNeo1S3LC9Hxq3JbrdaWb1wcyiiOknQ4F8o=
+X-Google-Smtp-Source: ACHHUZ4ChQ+Ujphil3bnlZK25JwgSAA0QglzMgdEbCBRYR+E7nBTcEI62kwCTYWU1AwTEa3KQIPD+F2XaGSfPbmLYmA=
+X-Received: by 2002:a05:6808:159a:b0:392:3ba:3a28 with SMTP id
+ t26-20020a056808159a00b0039203ba3a28mr6660179oiw.11.1683035116619; Tue, 02
+ May 2023 06:45:16 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v6 3/3] mm/gup: disallow FOLL_LONGTERM GUP-fast writing to
- file-backed mappings
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
+References: <20230501185747.33519-1-andrealmeid@igalia.com>
+ <CADnq5_NXj4W44F_etRQ7HWdVTnf5zARCM3Y_o3EiwWiHj8QMpA@mail.gmail.com>
+ <6ab2ff76-4518-6fac-071e-5d0d5adc4fcd@igalia.com> <cb3d2590-a1f8-fe7e-0bba-638ee80719af@amd.com>
+ <CAFF-SiV0=WNmRW-D9uYUuj68Zq0APxtGLya9KR6FfZ7v0Zf2RQ@mail.gmail.com>
+ <fcca2934-a556-797c-535d-a66fc67bbe30@amd.com> <85c538b01efb6f3fa6ff05ed1a0bc3ff87df7a61.camel@gmail.com>
+In-Reply-To: <85c538b01efb6f3fa6ff05ed1a0bc3ff87df7a61.camel@gmail.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Tue, 2 May 2023 09:45:05 -0400
+Message-ID: <CADnq5_NHtFbwT=x8u7GYc4ESL_HVFzjgtOd3AnVFBYMrjZq55w@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/1] Add AMDGPU_INFO_GUILTY_APP ioctl
+To:     =?UTF-8?Q?Timur_Krist=C3=B3f?= <timur.kristof@gmail.com>
+Cc:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
         linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Mika Penttila <mpenttil@redhat.com>,
-        Dave Chinner <david@fromorbit.com>,
-        "Theodore Ts'o" <tytso@mit.edu>, Peter Xu <peterx@redhat.com>
-References: <cover.1682981880.git.lstoakes@gmail.com>
- <dee4f4ad6532b0f94d073da263526de334d5d7e0.1682981880.git.lstoakes@gmail.com>
- <fbad9e18-f727-9703-33cf-545a2d33af76@linux.ibm.com>
- <7d56b424-ba79-4b21-b02c-c89705533852@lucifer.local>
- <a6bb0334-9aba-9fd8-6a9a-9d4a931b6da2@linux.ibm.com>
- <ZFEL20GQdomXGxko@nvidia.com>
- <c4f790fb-b18a-341a-6965-455163ec06d1@redhat.com>
- <ZFER5ROgCUyywvfe@nvidia.com>
- <ce3aa7b9-723c-6ad3-3f03-3f1736e1c253@redhat.com>
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-In-Reply-To: <ce3aa7b9-723c-6ad3-3f03-3f1736e1c253@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: EDlDpG77ZR5IQW6YD5-hC-0XpAeIHDNl
-X-Proofpoint-GUID: fTJcjKwNHb_cwPrukmedXipjMdSd6keM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-02_08,2023-04-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 spamscore=0 mlxscore=0 clxscore=1015 bulkscore=0
- suspectscore=0 mlxlogscore=999 impostorscore=0 adultscore=0 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2305020115
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        "Pelloux-Prayer, Pierre-Eric" <pierre-eric.pelloux-prayer@amd.com>,
+        =?UTF-8?B?TWFyZWsgT2zFocOhaw==?= <maraeo@gmail.com>,
+        michel.daenzer@mailbox.org,
+        Samuel Pitoiset <samuel.pitoiset@gmail.com>,
+        kernel-dev@igalia.com, Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
+        "Deucher, Alexander" <alexander.deucher@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/2/23 9:39 AM, David Hildenbrand wrote:
-> On 02.05.23 15:36, Jason Gunthorpe wrote:
->> On Tue, May 02, 2023 at 03:28:40PM +0200, David Hildenbrand wrote:
->>> On 02.05.23 15:10, Jason Gunthorpe wrote:
->>>> On Tue, May 02, 2023 at 03:04:27PM +0200, Christian Borntraeger wrote:
->>>> \> > We can reintroduce a flag to permit exceptions if this is really broken, are you
->>>>>> able to test? I don't have an s390 sat around :)
->>>>>
->>>>> Matt (Rosato on cc) probably can. In the end, it would mean having
->>>>>     <memoryBacking>
->>>>>       <source type="file"/>
->>>>>     </memoryBacking>
->>>>
->>>> This s390 code is the least of the problems, after this series VFIO
->>>> won't startup at all with this configuration.
->>>
->>> Good question if the domain would fail to start. I recall that IOMMUs for
->>> zPCI are special on s390x. [1]
->>
->> Not upstream they aren't.
->>
->>> Well, zPCI is special. I cannot immediately tell when we would trigger
->>> long-term pinning.
->>
->> zPCI uses the standard IOMMU stuff, so it uses a normal VFIO container
->> and the normal pin_user_pages() path.
-> 
-> 
-> @Christian, Matthew: would we pin all guest memory when starting the domain (IIRC, like on x86-64) and fail early, or only when the guest issues rpcit instructions to map individual pages?
-> 
+On Tue, May 2, 2023 at 9:35=E2=80=AFAM Timur Krist=C3=B3f <timur.kristof@gm=
+ail.com> wrote:
+>
+> Hi,
+>
+> On Tue, 2023-05-02 at 13:14 +0200, Christian K=C3=B6nig wrote:
+> > >
+> > > Christian K=C3=B6nig <christian.koenig@amd.com> ezt =C3=ADrta (id=C5=
+=91pont: 2023.
+> > > m=C3=A1j. 2., Ke 9:59):
+> > >
+> > > > Am 02.05.23 um 03:26 schrieb Andr=C3=A9 Almeida:
+> > > >  > Em 01/05/2023 16:24, Alex Deucher escreveu:
+> > > >  >> On Mon, May 1, 2023 at 2:58=E2=80=AFPM Andr=C3=A9 Almeida
+> > > > <andrealmeid@igalia.com>
+> > > >  >> wrote:
+> > > >  >>>
+> > > >  >>> I know that devcoredump is also used for this kind of
+> > > > information,
+> > > >  >>> but I believe
+> > > >  >>> that using an IOCTL is better for interfacing Mesa + Linux
+> > > > rather
+> > > >  >>> than parsing
+> > > >  >>> a file that its contents are subjected to be changed.
+> > > >  >>
+> > > >  >> Can you elaborate a bit on that?  Isn't the whole point of
+> > > > devcoredump
+> > > >  >> to store this sort of information?
+> > > >  >>
+> > > >  >
+> > > >  > I think that devcoredump is something that you could use to
+> > > > submit to
+> > > >  > a bug report as it is, and then people can read/parse as they
+> > > > want,
+> > > >  > not as an interface to be read by Mesa... I'm not sure that
+> > > > it's
+> > > >  > something that I would call an API. But I might be wrong, if
+> > > > you know
+> > > >  > something that uses that as an API please share.
+> > > >  >
+> > > >  > Anyway, relying on that for Mesa would mean that we would need
+> > > > to
+> > > >  > ensure stability for the file content and format, making it
+> > > > less
+> > > >  > flexible to modify in the future and probe to bugs, while the
+> > > > IOCTL is
+> > > >  > well defined and extensible. Maybe the dump from Mesa +
+> > > > devcoredump
+> > > >  > could be complementary information to a bug report.
+> > > >
+> > > >  Neither using an IOCTL nor devcoredump is a good approach for
+> > > > this since
+> > > >  the values read from the hw register are completely unreliable.
+> > > > They
+> > > >  could not be available because of GFXOFF or they could be
+> > > > overwritten or
+> > > >  not even updated by the CP in the first place because of a hang
+> > > > etc....
+> > > >
+> > > >  If you want to track progress inside an IB what you do instead
+> > > > is to
+> > > >  insert intermediate fence write commands into the IB. E.g.
+> > > > something
+> > > >  like write value X to location Y when this executes.
+> > > >
+> > > >  This way you can not only track how far the IB processed, but
+> > > > also in
+> > > >  which stages of processing we where when the hang occurred. E.g.
+> > > > End of
+> > > >  Pipe, End of Shaders, specific shader stages etc...
+> > > >
+> > > >
+> > >
+> > > Currently our biggest challenge in the userspace driver is
+> > > debugging "random" GPU hangs. We have many dozens of bug reports
+> > > from users which are like: "play the game for X hours and it will
+> > > eventually hang the GPU". With the currently available tools, it is
+> > > impossible for us to tackle these issues. Andr=C3=A9's proposal would=
+ be
+> > > a step in improving this situation.
+> > >
+> > > We already do something like what you suggest, but there are
+> > > multiple problems with that approach:
+> > >
+> > > 1. we can only submit 1 command buffer at a time because we won't
+> > > know which IB hanged
+> > > 2. we can't use chaining because we don't know where in the IB it
+> > > hanged
+> > > 3. it needs userspace to insert (a lot of) extra commands such as
+> > > extra synchronization and memory writes
+> > > 4. It doesn't work when GPU recovery is enabled because the
+> > > information is already gone when we detect the hang
+> > >
+> >  You can still submit multiple IBs and even chain them. All you need
+> > to do is to insert into each IB commands which write to an extra
+> > memory location with the IB executed and the position inside the IB.
+> >
+> >  The write data command allows to write as many dw as you want (up to
+> > multiple kb). The only potential problem is when you submit the same
+> > IB multiple times.
+> >
+> >  And yes that is of course quite some extra overhead, but I think
+> > that should be manageable.
+>
+> Thanks, this sounds doable and would solve the limitation of how many
+> IBs are submitted at a time. However it doesn't address the problem
+> that enabling this sort of debugging will still have extra overhead.
+>
+> I don't mean the overhead from writing a couple of dwords for the
+> trace, but rather, the overhead from needing to emit flushes or top of
+> pipe events or whatever else we need so that we can tell which command
+> hung the GPU.
+>
+> >
+> > > In my opinion, the correct solution to those problems would be if
+> > > the kernel could give userspace the necessary information about a
+> > > GPU hang before a GPU reset.
+> > >
+> >  The fundamental problem here is that the kernel doesn't have that
+> > information either. We know which IB timed out and can potentially do
+> > a devcoredump when that happens, but that's it.
+>
+>
+> Is it really not possible to know such a fundamental thing as what the
+> GPU was doing when it hung? How are we supposed to do any kind of
+> debugging without knowing that?
+>
+> I wonder what AMD's Windows driver team is doing with this problem,
+> surely they must have better tools to deal with GPU hangs?
 
-Eventually we want to implement a mechanism where we can dynamically pin in response to RPCIT.
+For better or worse, most teams internally rely on scan dumps via JTAG
+which sort of limits the usefulness outside of AMD, but also gives you
+the exact state of the hardware when it's hung so the hardware teams
+prefer it.
 
-However, per Jason's prior suggestion, the initial implementation for s390 nesting via iommufd will pin all of guest memory when starting the domain.  I have something already working via iommufd built on top of the nesting infrastructure patches and QEMU iommufd series that are floating around; needs some cleanup, hoping to send an RFC in the coming weeks.  I can CC you if you'd like.
+Alex
