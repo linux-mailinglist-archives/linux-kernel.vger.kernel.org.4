@@ -2,224 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6CB06F3F26
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 10:35:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 167A06F3F31
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 10:36:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233648AbjEBIfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 04:35:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42140 "EHLO
+        id S233834AbjEBIgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 04:36:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbjEBIfE (ORCPT
+        with ESMTP id S233730AbjEBIgM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 04:35:04 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA0B210CC
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 01:35:01 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id 3f1490d57ef6-b9a7e639656so5897793276.0
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 01:35:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683016501; x=1685608501;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=EQzmsLXS8o53Z/tJTwR8dBrkRh8cGnQKwsG++ZUM2Rw=;
-        b=c38iWqoEsV2Ak6ZcqLGqtUG9fKxZwCiTxUe6opQW4xHF2//ciLjPAXSCwCkNIWhnUE
-         r7HVF0jPrO1eBnG3aH62ge5xzY7l3xtGxztlwaHJHom9tlIZ1dxTgi/qgVkOKYcfwPK+
-         f+VztAoZAyiAM3TGJ/sa2kZJVxZQnuqDvtxLs8XmahPiwWHFpTx7lYRFoEfCthesNAQs
-         99pXmMimCxFyvNswavo9rNBF3pMQhVBvP60GRPnjE8ECT1BjjW/a844NMgutFOuvBg+5
-         Rke6snxWBgVN6I1E7oqv4nv8WQdEjfkfFR5tIRXPvcMm9+BDfEFJTTI5VwyqxjDmCphp
-         MFAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683016501; x=1685608501;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EQzmsLXS8o53Z/tJTwR8dBrkRh8cGnQKwsG++ZUM2Rw=;
-        b=I23LT5mxI4AMEQLQZcYhPrvsAEbNPOmWj7xa1tRf+rrGRX/NouV1Jbuz0EpUKWa6Kt
-         CDrgvV3Vy/z/odMcoFZDqyun4NEVEvGxolZK2xl9jd/HeJ03zM1bWxNk3NOckAeJOJBY
-         bmZtZnfFttl2t5OsqR6h2zUGlUR5PejnNeZAFZyOrWMoYTHqLuvFaWDGzdpUJ7yuttDA
-         CKhKb9Dwk7oifkvf6T514JmJO36zDezgaezW4bwU+kTnRjKXsX3AQGuDxvE+mSO82Z2L
-         tEqWPL1qdYuUZP2F5hu4mfM4x88a4FRUc/Ucb/0sFzLSXhc3UI2dFjIKpqn5LLp55Xpm
-         yBhw==
-X-Gm-Message-State: AC+VfDyDvp+/fPg5VmMVGmj4EwyFZT7PyR2xn+q02HFB9H1z7vHN96Hu
-        Ok3Rwf3bBN8Vf2JfkY0e5jiaLFIrT1vIrEPNP/Wcmg==
-X-Google-Smtp-Source: ACHHUZ7prVyExhhCDfZ9wbdVmvLpHPC8RmEbBTxceN5puB7edxWSnc7AxGder2kHWuuyjnb5ts+y/AKRZDjsq/tajN0=
-X-Received: by 2002:a25:d7d7:0:b0:b9a:66b7:673e with SMTP id
- o206-20020a25d7d7000000b00b9a66b7673emr17241022ybg.43.1683016501059; Tue, 02
- May 2023 01:35:01 -0700 (PDT)
+        Tue, 2 May 2023 04:36:12 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2BD53C0C;
+        Tue,  2 May 2023 01:36:10 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3425sB1B026504;
+        Tue, 2 May 2023 08:35:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=en/rqbzVDVFW3N4jmBnPEFVCyRAdO2t3jK2BNMgSnT4=;
+ b=fCIM3+m8T2rVdO6zyvyBpQtX1RCG8JyBZ048tsSnEOnZkuw5+nt7d/H6K7Gmpn5gcMyF
+ wVmYkqkrABBIQWGMARUwAh7R38l/b5HIyagcq08Bz8R/hbrR5WiPtfRZvqCt2avFxloy
+ kPOCWxDMPK7F9jANVKEG0cZDQC7ONW23vreh0bNvS1ZFom2gmpe552p7ZO5yH5Jfy6/l
+ NfFQdD2vl36TeRl4VBBwZAdr9hLRDUm1s+7vNjOL/opst1eYXOyxmJ6p8DYXnOjLN6vZ
+ B1IZzAj2wCRsaK/MuehS6Uxi0rYki83QGLnAO/hVepvYpE7bu247OZwCXlwS1jcsFDkG bA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qaj3whejd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 02 May 2023 08:35:57 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3428ZRdu017247
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 2 May 2023 08:35:27 GMT
+Received: from [10.216.63.8] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 2 May 2023
+ 01:35:21 -0700
+Message-ID: <a001c9c0-f186-f125-daab-e646790badfe@quicinc.com>
+Date:   Tue, 2 May 2023 14:05:18 +0530
 MIME-Version: 1.0
-References: <20230421124938.21974-1-quic_devipriy@quicinc.com>
- <20230421124938.21974-7-quic_devipriy@quicinc.com> <CAA8EJpoqq=3o1K=yDaim=e11nEN5n+phJUSd1d5BT_VJkdv6xg@mail.gmail.com>
- <d6b5e395-6d4b-7b5d-f24f-f7dd2e901c00@quicinc.com>
-In-Reply-To: <d6b5e395-6d4b-7b5d-f24f-f7dd2e901c00@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 2 May 2023 11:34:50 +0300
-Message-ID: <CAA8EJpoaZFArA=CGg_WP5SUXWsn++M82RB21gYuy84NPfNJd+w@mail.gmail.com>
-Subject: Re: [PATCH V3 6/6] PCI: qcom: Add support for IPQ9574
-To:     Devi Priya <quic_devipriy@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
-        bhelgaas@google.com, krzysztof.kozlowski+dt@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, mani@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-clk@vger.kernel.org, quic_srichara@quicinc.com,
-        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
-        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
-        quic_ipkumar@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v7 1/9] dt-bindings: usb: qcom,dwc3: Add bindings for
+ SC8280 Multiport
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        "Wesley Cheng" <quic_wcheng@quicinc.com>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
+        <quic_jackp@quicinc.com>, <quic_harshq@quicinc.com>,
+        <ahalaney@redhat.com>, <quic_shazhuss@quicinc.com>
+References: <20230501143445.3851-1-quic_kriskura@quicinc.com>
+ <20230501143445.3851-2-quic_kriskura@quicinc.com>
+ <df24efb2-8279-ef15-a118-2a24885288c8@linaro.org>
+Content-Language: en-US
+From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <df24efb2-8279-ef15-a118-2a24885288c8@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: J0WQoSAGcmx7nxtxjsXEi25MzVRR-PSP
+X-Proofpoint-ORIG-GUID: J0WQoSAGcmx7nxtxjsXEi25MzVRR-PSP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-02_04,2023-04-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ mlxlogscore=954 bulkscore=0 adultscore=0 spamscore=0 malwarescore=0
+ phishscore=0 clxscore=1015 impostorscore=0 lowpriorityscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2305020075
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2 May 2023 at 09:36, Devi Priya <quic_devipriy@quicinc.com> wrote:
->
->
->
-> On 4/22/2023 5:35 AM, Dmitry Baryshkov wrote:
-> > On Fri, 21 Apr 2023 at 15:51, Devi Priya <quic_devipriy@quicinc.com> wrote:
-> >>
-> >> The IPQ9574 platform has 4 Gen3 PCIe controllers: two single-lane
-> >> and two dual-lane based on SNPS core 5.70a
-> >> The Qcom IP rev is 1.27.0 and Synopsys IP rev is 5.80a
-> >> Added a new compatible 'qcom,pcie-ipq9574' and 'ops_1_27_0'
-> >> which reuses all the members of 'ops_2_9_0' except for the post_init
-> >> as the SLV_ADDR_SPACE_SIZE configuration differs between 2_9_0
-> >> and 1_27_0.
-> >> Also, modified get_resources of 'ops 2_9_0' to get the clocks
-> >> from the device tree and modelled the post init sequence as
-> >> a common function to avoid code redundancy.
-> >>
-> >> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
-> >> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
-> >> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
-> >> ---
-> >>   Changes in V3:
-> >>          - Rebased on top of linux-next/master
-> >>
-> >>   drivers/pci/controller/dwc/pcie-qcom.c | 61 ++++++++++++++++++--------
-> >>   1 file changed, 43 insertions(+), 18 deletions(-)
-> >>
-> >> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> >> index 4ab30892f6ef..3682ecdead1f 100644
-> >> --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> >> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> >> @@ -107,6 +107,7 @@
-> >>
-> >>   /* PARF_SLV_ADDR_SPACE_SIZE register value */
-> >>   #define SLV_ADDR_SPACE_SZ                      0x10000000
-> >> +#define SLV_ADDR_SPACE_SZ_1_27_0               0x08000000
-> >>
-> >>   /* PARF_MHI_CLOCK_RESET_CTRL register fields */
-> >>   #define AHB_CLK_EN                             BIT(0)
-> >> @@ -202,10 +203,10 @@ struct qcom_pcie_resources_2_7_0 {
-> >>          struct reset_control *rst;
-> >>   };
-> >>
-> >> -#define QCOM_PCIE_2_9_0_MAX_CLOCKS             5
-> >>   struct qcom_pcie_resources_2_9_0 {
-> >> -       struct clk_bulk_data clks[QCOM_PCIE_2_9_0_MAX_CLOCKS];
-> >> +       struct clk_bulk_data *clks;
-> >>          struct reset_control *rst;
-> >> +       int num_clks;
-> >>   };
-> >>
-> >>   union qcom_pcie_resources {
-> >> @@ -1050,17 +1051,10 @@ static int qcom_pcie_get_resources_2_9_0(struct qcom_pcie *pcie)
-> >>          struct qcom_pcie_resources_2_9_0 *res = &pcie->res.v2_9_0;
-> >>          struct dw_pcie *pci = pcie->pci;
-> >>          struct device *dev = pci->dev;
-> >> -       int ret;
-> >>
-> >> -       res->clks[0].id = "iface";
-> >> -       res->clks[1].id = "axi_m";
-> >> -       res->clks[2].id = "axi_s";
-> >> -       res->clks[3].id = "axi_bridge";
-> >> -       res->clks[4].id = "rchng";
-> >> -
-> >> -       ret = devm_clk_bulk_get(dev, ARRAY_SIZE(res->clks), res->clks);
-> >> -       if (ret < 0)
-> >> -               return ret;
-> >> +       res->num_clks = devm_clk_bulk_get_all(dev, &res->clks);
-> >> +       if (res->clks < 0)
-> >> +               return res->num_clks;
-> >>
-> >>          res->rst = devm_reset_control_array_get_exclusive(dev);
-> >>          if (IS_ERR(res->rst))
-> >> @@ -1073,7 +1067,7 @@ static void qcom_pcie_deinit_2_9_0(struct qcom_pcie *pcie)
-> >>   {
-> >>          struct qcom_pcie_resources_2_9_0 *res = &pcie->res.v2_9_0;
-> >>
-> >> -       clk_bulk_disable_unprepare(ARRAY_SIZE(res->clks), res->clks);
-> >> +       clk_bulk_disable_unprepare(res->num_clks, res->clks);
-> >>   }
-> >>
-> >>   static int qcom_pcie_init_2_9_0(struct qcom_pcie *pcie)
-> >> @@ -1102,19 +1096,16 @@ static int qcom_pcie_init_2_9_0(struct qcom_pcie *pcie)
-> >>
-> >>          usleep_range(2000, 2500);
-> >>
-> >> -       return clk_bulk_prepare_enable(ARRAY_SIZE(res->clks), res->clks);
-> >> +       return clk_bulk_prepare_enable(res->num_clks, res->clks);
-> >>   }
-> >>
-> >> -static int qcom_pcie_post_init_2_9_0(struct qcom_pcie *pcie)
-> >> +static int qcom_pcie_post_init(struct qcom_pcie *pcie)
-> >>   {
-> >>          struct dw_pcie *pci = pcie->pci;
-> >>          u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
-> >>          u32 val;
-> >>          int i;
-> >>
-> >> -       writel(SLV_ADDR_SPACE_SZ,
-> >> -               pcie->parf + PARF_SLV_ADDR_SPACE_SIZE);
-> >> -
-> >>          val = readl(pcie->parf + PARF_PHY_CTRL);
-> >>          val &= ~PHY_TEST_PWR_DOWN;
-> >>          writel(val, pcie->parf + PARF_PHY_CTRL);
-> >> @@ -1151,6 +1142,26 @@ static int qcom_pcie_post_init_2_9_0(struct qcom_pcie *pcie)
-> >>          return 0;
-> >>   }
-> >>
-> >> +static int qcom_pcie_post_init_1_27_0(struct qcom_pcie *pcie)
-> >> +{
-> >> +       writel(SLV_ADDR_SPACE_SZ_1_27_0,
-> >> +              pcie->parf + PARF_SLV_ADDR_SPACE_SIZE);
-> >> +
-> >> +       qcom_pcie_post_init(pcie);
-> >> +
-> >> +       return 0;
-> >> +}
-> >> +
-> >> +static int qcom_pcie_post_init_2_9_0(struct qcom_pcie *pcie)
-> >> +{
-> >> +       writel(SLV_ADDR_SPACE_SZ,
-> >> +              pcie->parf + PARF_SLV_ADDR_SPACE_SIZE);
-> >> +
-> >> +       qcom_pcie_post_init(pcie);
-> >> +
-> >> +       return 0;
-> >> +}
-> >
-> > I'm not sure about moving the SLV_ADDR_SPACE_SIZE initialization from
-> > init() to post_init(). Probably a better solution might be to have two
-> > init() callbacks and to call the common function from both of them.
-> >
-> Hi Dmitry, Originally, the SLV_ADDR_SPACE_SIZE initialization was done
-> part of post_init() callback only and we haven't moved it from init() to
-> post_init().We have just added two post_init() callbacks to
-> handle the SLV_ADDR_SPACE_SIZE initialization accordingly for 1_27_0 and
-> 2_9_0.
 
-Ack, I see then.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+On 5/2/2023 1:18 PM, Krzysztof Kozlowski wrote:
+> On 01/05/2023 16:34, Krishna Kurapati wrote:
+>> Add the compatible string for SC8280 Multiport USB controller from
+>> Qualcomm.
+>>
+>> There are 4 power event irq interrupts supported by this controller
+>> (one for each port of multiport). Added all the 4 as non-optional
+>> interrupts for SC8280XP-MP
+>>
+>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>> ---
+>>   .../devicetree/bindings/usb/qcom,dwc3.yaml    | 21 +++++++++++++++++++
+>>   1 file changed, 21 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+>> index d84281926f10..2c96da1ce5b8 100644
+>> --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+>> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+>> @@ -26,6 +26,7 @@ properties:
+>>             - qcom,sc7180-dwc3
+>>             - qcom,sc7280-dwc3
+>>             - qcom,sc8280xp-dwc3
+>> +          - qcom,sc8280xp-dwc3-mp
+> 
+> SC8280xp comes with two USB controllers: one single-port and one multi-port?
 
--- 
-With best wishes
-Dmitry
+Hi Krzysztof,
+
+   SC8280XP comes with 3 controllers. The first two are single port 
+controller and the third one is a multiport controller. In DTSI:
+usb_0 / usb1: have compatible set to : "qcom,sc8280xp-dwc3"
+
+And multiport controller has it set to "qcom,sc8280xp-dwc3-mp"
+
+
+>>             - qcom,sdm660-dwc3
+>>             - qcom,sdm670-dwc3
+>>             - qcom,sdm845-dwc3
+>> @@ -455,6 +456,26 @@ allOf:
+>>               - const: dm_hs_phy_irq
+>>               - const: ss_phy_irq
+>>   
+>> +  - if:
+>> +      properties:
+>> +        compatible:
+>> +          contains:
+>> +            enum:
+>> +              - qcom,sc8280xp-dwc3-mp
+> 
+> You miss entries for all other constraints.
+>
+Let me add the clock properties as well.
+
+Regards,
+Krishna,
