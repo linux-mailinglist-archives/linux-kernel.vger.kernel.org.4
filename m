@@ -2,203 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 212716F3D16
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 07:39:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8BC16F3D11
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 07:39:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233567AbjEBFjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 01:39:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59132 "EHLO
+        id S233537AbjEBFjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 01:39:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbjEBFjU (ORCPT
+        with ESMTP id S230004AbjEBFjR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 01:39:20 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8269AE52;
-        Mon,  1 May 2023 22:39:19 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3425GU1H031986;
-        Tue, 2 May 2023 05:39:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=PrAFe7ea7BirIRPVaDBoFpQItMlnOPom8nGljtcwk9Y=;
- b=FqKeMCvI3uJXUuU0UL20EgdHCgG/UUKE+x3ZWZIIvg7ugm5ceZ59U5jPsJ8nmds5n8fC
- /zUaYt9fZeVuU6UWbA+L39Rdo4oQDEH+u6XkVkv0Oj3gdY5j83doBObdqotzQMyB5GEX
- KuUdF8rnTK+h9trR3sFIurrZD+n+hrzz8L0Q32ag4R/9XluL9kKv6pwEZKpt5erJ6XuV
- 5hJB09GMedTci0y4b7rfiURg7tKAurer5kAqm9tlWeRX5k8BiXC+FF9RMrUokAJuDhdE
- J8lV96P+PPknawqZ++B1ZQAfLpuZUfkKH3+2m+xVmntnYV593WETLPb8VHWJhtavnrb+ kw== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q8ufc5dpj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 02 May 2023 05:39:13 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3425cwn5010848
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 2 May 2023 05:38:58 GMT
-Received: from [10.242.243.253] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 1 May 2023
- 22:38:50 -0700
-Message-ID: <fa1f011a-9f18-5799-dbf3-ad5b1893f57b@quicinc.com>
-Date:   Tue, 2 May 2023 11:08:39 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH V3 3/6] dt-bindings: PCI: qcom: Add IPQ9574
-To:     Rob Herring <robh@kernel.org>
-CC:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <lpieralisi@kernel.org>,
-        <kw@linux.com>, <bhelgaas@google.com>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <mani@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <quic_srichara@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
-        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
-        <quic_ipkumar@quicinc.com>
-References: <20230421124938.21974-1-quic_devipriy@quicinc.com>
- <20230421124938.21974-4-quic_devipriy@quicinc.com>
- <20230425173330.GA1985131-robh@kernel.org>
+        Tue, 2 May 2023 01:39:17 -0400
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2105.outbound.protection.outlook.com [40.107.114.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1AADA7;
+        Mon,  1 May 2023 22:39:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NJOPtUrv5uOxQs4ufm9t7lcduz3oTmAS7QhvXz3qoFOJk/4qKv3BchSAI8imbKqT2nA02cKaB/hpe6h/yyY7QUmsfJYQb2aLCkCUBrMx4A4fp2UnYXBEFJEvcv8bVs3qMphJKYmFJmpxQ2fSexvWh9zreKN4xwstqg1EBv9FXHxk+Mk6FUbtOXOx0dGeLlmSOFpdcnPQShb4KJ6/L12n5Pehkb8i4hJoaef8qP5h0pGiuxk1Y3UOCTw8TahOcOksJzsgnUh7MI17kq6SFsb5rJmfRMfwanYCcGv3TkTtAiMiuogWfQNdisWJorxIR3ePLxwffwE1MIJxQ5zMTKgJeA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8vpTlrKJKLnryuQ1+6l8mXlFKJFGbOay3mirt4XZwF8=;
+ b=I2T9J3WDX4RrzZbyQa8Y8Yv3LqdbCeFh3ZmbwVwoJHbbv4ARi3HbEfd37X1Oo9AE68AnmcXN140k6dyov6ZGrw8FqM6o5uV5JUW/FInfVEZbozZ1Q1HI34QDeHZM5rwrApRqoaTWhMbUvQBDEhX5w1H44DZsTYu4WO4eKkChn8o4VVdhFAdSJ+Ciyezd7hKcSYVtDzWqmtrUBoSRlrWjT4E/kqnFC2EsmquNY4PMWdVhqvgY+iZtJpCQGwlCG/gtKqpdDPzpXYsa/hG5ljLKkF6gNB63NHxMHHMs2+oQpJF9tEA5MLGYgJ3H8cpnCz4kErlrgapPrM61oJwE8DGU7w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8vpTlrKJKLnryuQ1+6l8mXlFKJFGbOay3mirt4XZwF8=;
+ b=H64HzD3eSGkwZRilA6q6BtLyLpwgwD0ZBYehog0jXeCyi/d29O1K1srPBnd9LbKvDbYH/2+NcLQunIGKgoFPnVrUqDciUGhqnE2LA//tYor26LO7EJGhbc34LnBSyN+/VruAQ9zkXXsFFgrLAVUfNJT+RkuER7/cwifXwKAdqgI=
+Received: from TY2PR01MB3788.jpnprd01.prod.outlook.com (2603:1096:404:dd::14)
+ by TYWPR01MB9389.jpnprd01.prod.outlook.com (2603:1096:400:1a4::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.31; Tue, 2 May
+ 2023 05:39:11 +0000
+Received: from TY2PR01MB3788.jpnprd01.prod.outlook.com
+ ([fe80::8b5:5f09:5a0f:370]) by TY2PR01MB3788.jpnprd01.prod.outlook.com
+ ([fe80::8b5:5f09:5a0f:370%7]) with mapi id 15.20.6340.031; Tue, 2 May 2023
+ 05:39:11 +0000
+From:   Chris Paterson <Chris.Paterson2@renesas.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+CC:     "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "patches@kernelci.org" <patches@kernelci.org>,
+        "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>,
+        "pavel@denx.de" <pavel@denx.de>,
+        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "sudipm.mukherjee@gmail.com" <sudipm.mukherjee@gmail.com>,
+        "srw@sladewatkins.net" <srw@sladewatkins.net>,
+        "rwarsow@gmx.de" <rwarsow@gmx.de>
+Subject: RE: [PATCH 6.2 00/15] 6.2.14-rc1 review
+Thread-Topic: [PATCH 6.2 00/15] 6.2.14-rc1 review
+Thread-Index: AQHZecSpB3jQ4X9gB0GFjN/aHuIEj69GfCFg
+Date:   Tue, 2 May 2023 05:39:11 +0000
+Message-ID: <TY2PR01MB378886087FBE653B525422A9B76F9@TY2PR01MB3788.jpnprd01.prod.outlook.com>
+References: <20230428112040.137898986@linuxfoundation.org>
+In-Reply-To: <20230428112040.137898986@linuxfoundation.org>
+Accept-Language: en-GB, en-US
 Content-Language: en-US
-From:   Devi Priya <quic_devipriy@quicinc.com>
-In-Reply-To: <20230425173330.GA1985131-robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Rrfp5iF_YPZ1tvVUs0Qeb6soHz_aEy6n
-X-Proofpoint-GUID: Rrfp5iF_YPZ1tvVUs0Qeb6soHz_aEy6n
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-02_02,2023-04-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
- adultscore=0 malwarescore=0 clxscore=1015 priorityscore=1501
- suspectscore=0 spamscore=0 bulkscore=0 lowpriorityscore=0 impostorscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2305020049
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TY2PR01MB3788:EE_|TYWPR01MB9389:EE_
+x-ms-office365-filtering-correlation-id: 036fc2c4-d051-4cc6-ffc5-08db4acf8e7a
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: I5qfF4PI3f9VxcDqsexSgRUlrKrcebwCvoZXvoj8ZE5QociAPrJQ6o1xvSX7JGR4hiBRFphNrhxtIkdq8BQo2Kk4P7vG5KZZwzLZGxDo4v/vdrdH9cAdW9Y0mDvikGgNe2i/2OP5ksnqx5H5eviP21p7hP0UI/WFbFdSAzTBMkKj9UbguHBNClVG1As5TE+mR+K9fcYzcMztHkTnDRikN6j9MEtWc2Hz/jDiCsHYFcF+AZ1ytpy4dGNzRZ2WdKlzth/4OW9Ivciosj/AAH6pUsTpeCb9igdK96L/VxwnE6XD33TLiNH+qJRbkLi3xew1/jUo/GiVXFTZILUhQ3yMKeDL9R44/4DbiGNBFiANSD+LQuFueiXv1w7YEL3izAyKpp9rgK4VYYo1F9e1Ll+NCauBw+O5HSi6DdrFlIU31XVUGHSVzkqZBZ6f+Vj0LYc6NjZR2DMFCojfUDiNL/jntpMbCFCBC7lbZwLh/5eKLJCvzPrWUQ/wfR6y68Nhc98YnLPfwFl5t1qGfdrsTcCf58X60JcV8Ojbfw7p+D17WQMFonGlObpP1yv2ZAnv4Y4vswJ/2+cRUBgafhMlyhnfaX1vuQgl67tXc12/qXfgYRugH9HEQL6lry8ql7tq8D7M5Zyi+cLOPmvV3XZqOL1JDA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR01MB3788.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39860400002)(376002)(136003)(346002)(396003)(451199021)(7696005)(316002)(66946007)(66476007)(66556008)(66446008)(64756008)(71200400001)(38070700005)(54906003)(4326008)(41300700001)(110136005)(76116006)(86362001)(33656002)(966005)(26005)(6506007)(8936002)(5660300002)(52536014)(7416002)(2906002)(8676002)(478600001)(55016003)(4744005)(122000001)(186003)(9686003)(38100700002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-3?Q?cIrT60sGcrJFklthHt8Zx7TrUVJwPHrV51dDfV3MfNe6a/vxkhol+B4v/d?=
+ =?iso-8859-3?Q?pcT6ib699vrZBG8USzpcmmqdItFWdetGEgvwRTE2XGhst1bzI8vFRK9JPL?=
+ =?iso-8859-3?Q?7dERYiOgT4Lpv2sVlU+r/HZuQ3ZucznhxpyAoU7DqG8yTo2LpgXBjNy9r9?=
+ =?iso-8859-3?Q?wp/BOFJ4xYMbKHV6z51vF6uarwjNgR/GL9d4WYtTgw8kVa7XgfFr5x9cK3?=
+ =?iso-8859-3?Q?80UrMQogPp13DyW9312vDajQqazao/TF/X1Oay5ErBIghKuDZCdF2ChfnP?=
+ =?iso-8859-3?Q?Lxm+dxTKFuebdSxyYMYu7GXl0TM/7Rl7XNDYUXsMBgQYl7tsJtSd16iP23?=
+ =?iso-8859-3?Q?emtu1sBSvFrNK6iRM2bEuqgX6XqcS9HpPukFts0jJMHvgLt27dWKHEgpES?=
+ =?iso-8859-3?Q?Sx/EijNs9qordbe1zlCC499XiKCzB8xCrfF1U8To6McLVZfNozRnSO+TBN?=
+ =?iso-8859-3?Q?RX22LeAy2OnFspmVecanErvV1wCbzaxPJczH+/F3xmeQ75oJaunyMSRchg?=
+ =?iso-8859-3?Q?m5Kihem7ER1gTqK8mdbi4PN9yR6fn+WFjqWUjgNFdDvpigAjlLAZMYHRkZ?=
+ =?iso-8859-3?Q?vcuz2YwHtAF+JecGzCok6OPtvWqRp25W2IXZEm+8ZarGCqf3W2qCJGUwJF?=
+ =?iso-8859-3?Q?xdOFUutvlhllitUgKgLmvh0CqaQm4Qqs5D8Sr6PVpXC7TCAOAsfE0oF6Xk?=
+ =?iso-8859-3?Q?8bA/6D/QPXjD4oGj0IqaXbNj3b/mQkF7zfZZPdQLeD7cyPZ3sIw8I58ko4?=
+ =?iso-8859-3?Q?cfaRWo5gv3RcTsk5OM7Q2pYY/c8A09MzmPY7JiYQVOSOjn05T0otXx3ulA?=
+ =?iso-8859-3?Q?MsNzuhYkMgm+ymQrNF77Mnocfob5DyrsJoZTr6alkbquiIpCzA4B6KX68K?=
+ =?iso-8859-3?Q?2XSLU3c0UFJIxBmvX8eqF14WUjgCjkds325QVY7+6V+SIpFta+Zpo1IVEc?=
+ =?iso-8859-3?Q?Cb37TT2il0iVdw9tqBjoYvwormIGd+6jsf0eCwXrwZrxP+lSp4TfTVyVCE?=
+ =?iso-8859-3?Q?5H/qEdbCsVfz4rq3wcYNfTzZT92+boGaAlGL8jq8xQhmXC3lOMsJzcX+kz?=
+ =?iso-8859-3?Q?k/RLsnuv81r/WIegCkb0BCqI5MvLBuL4NEaOwrv7DidTKRiyKv9X4ljiGC?=
+ =?iso-8859-3?Q?NtmR2cl5wm7rtAo7dJFTswkHUNlfeYbpdvOKuIyV2PJ8MfMgf1V9dqLL5F?=
+ =?iso-8859-3?Q?qExMeKkpyJFXXn0ocv2WA+lxopDpNHA6COLdIYuVGpObqadyi/oVKWY4OT?=
+ =?iso-8859-3?Q?aOpwEhwkqgBYNVMXaco+HabqGnIAt9RpSM8bwInc2Yk4mND/TVPE2WxA/v?=
+ =?iso-8859-3?Q?eCKSfpLtWtDOVqnqUEvDKshBNth0SefF8ribHwCHKgBGzuwsDyiitYPH4z?=
+ =?iso-8859-3?Q?OhF/DX4qrSqSUMWMcC12zJyMXwXbrcf5ytWs7jPWqBTIMu79CwkIJjKYr6?=
+ =?iso-8859-3?Q?Wp7Avbn6vX6OUJNrhw/hQCWbL4MYGXkcGWbH1HkP2XT/JWuUpib/srTgPK?=
+ =?iso-8859-3?Q?Kuf9Mb66N5/7twcd5o19diRfYK6mb3Ksgu9R/X/CZ48klimeIfaIAzlYfJ?=
+ =?iso-8859-3?Q?uk2eYle2ZvAy1j9n9F+fXylv56ZKaC6oJYiIdDjoTPOXTWgmg4bUAYQH5q?=
+ =?iso-8859-3?Q?OSKyPBJ2ISVojL/Im7Uk6ZenVhHFQZKJDJOHzN2cskbDriIDumeIbpdg?=
+ =?iso-8859-3?Q?=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-3"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TY2PR01MB3788.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 036fc2c4-d051-4cc6-ffc5-08db4acf8e7a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 May 2023 05:39:11.1729
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: YzKjQDlxhuwzk7yMXQMcfHh/x5uWP2R6QGannEHGQ8oT61mNI/bYUd7pqx9F3mLdIQV+yKf05NtobZuNpmyeC6WV0E+QpFaXIIs6OnoraFU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWPR01MB9389
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Greg,
 
+> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Sent: Friday, April 28, 2023 12:28 PM
+>=20
+> This is the start of the stable review cycle for the 6.2.14 release.
+> There are 15 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
+> Responses should be made by Sun, 30 Apr 2023 11:20:30 +0000.
+> Anything received after that time might be too late.
 
-On 4/25/2023 11:03 PM, Rob Herring wrote:
-> On Fri, Apr 21, 2023 at 06:19:35PM +0530, Devi Priya wrote:
->> Add bindings for PCIe hosts on IPQ9574 platform and allow
->> msi-parent property.
-> 
-> Go see the long discussion about why msi-parent with msi-map is wrong.
-> If something changed, explain that here.
-Sure, okay
+Sorry it's late. Weekend & national holidays in the UK etc...
 
-Thanks,
-Devi Priya
-> 
->>
->> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
->> ---
->>   Changes in V3:
->> 	- Rebased on linux-next/master
->>
->>   .../devicetree/bindings/pci/qcom,pcie.yaml    | 40 +++++++++++++++++++
->>   1 file changed, 40 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
->> index 81971be4e554..a92cecc5fe6f 100644
->> --- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
->> +++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
->> @@ -26,6 +26,7 @@ properties:
->>             - qcom,pcie-ipq8064-v2
->>             - qcom,pcie-ipq8074
->>             - qcom,pcie-ipq8074-gen3
->> +          - qcom,pcie-ipq9574
->>             - qcom,pcie-msm8996
->>             - qcom,pcie-qcs404
->>             - qcom,pcie-sa8540p
->> @@ -113,6 +114,8 @@ properties:
->>     power-domains:
->>       maxItems: 1
->>   
->> +  msi-parent: true
->> +
->>     perst-gpios:
->>       description: GPIO controlled connection to PERST# signal
->>       maxItems: 1
->> @@ -138,6 +141,8 @@ anyOf:
->>     - required:
->>         - msi-map
->>         - msi-map-mask
->> +  - required:
->> +      - msi-parent
->>   
->>   allOf:
->>     - $ref: /schemas/pci/pci-bus.yaml#
->> @@ -171,6 +176,7 @@ allOf:
->>               enum:
->>                 - qcom,pcie-ipq6018
->>                 - qcom,pcie-ipq8074-gen3
->> +              - qcom,pcie-ipq9574
->>       then:
->>         properties:
->>           reg:
->> @@ -382,6 +388,39 @@ allOf:
->>               - const: ahb # AHB Reset
->>               - const: axi_m_sticky # AXI Master Sticky reset
->>   
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            enum:
->> +              - qcom,pcie-ipq9574
->> +    then:
->> +      properties:
->> +        clocks:
->> +          minItems: 6
->> +          maxItems: 6
->> +        clock-names:
->> +          items:
->> +            - const: ahb  # AHB clock
->> +            - const: aux  # Auxiliary clock
->> +            - const: axi_m # AXI Master clock
->> +            - const: axi_s # AXI Slave clock
->> +            - const: axi_bridge # AXI bridge clock
->> +            - const: rchng
->> +        resets:
->> +          minItems: 8
->> +          maxItems: 8
->> +        reset-names:
->> +          items:
->> +            - const: pipe # PIPE reset
->> +            - const: sticky # Core Sticky reset
->> +            - const: axi_s_sticky # AXI Slave Sticky reset
->> +            - const: axi_s # AXI Slave reset
->> +            - const: axi_m_sticky # AXI Master Sticky reset
->> +            - const: axi_m # AXI Master reset
->> +            - const: aux # AUX Reset
->> +            - const: ahb # AHB Reset
->> +
->>     - if:
->>         properties:
->>           compatible:
->> @@ -767,6 +806,7 @@ allOf:
->>                   - qcom,pcie-ipq8064v2
->>                   - qcom,pcie-ipq8074
->>                   - qcom,pcie-ipq8074-gen3
->> +                - qcom,pcie-ipq9574
->>                   - qcom,pcie-qcs404
->>       then:
->>         required:
->> -- 
->> 2.17.1
->>
+CIP configurations built and booted with Linux 6.2.14-rc1 (a451b003c306):
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/pipelines/8=
+52034529
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/commits/lin=
+ux-6.2.y
+
+Tested-by: Chris Paterson (CIP) <chris.paterson2@renesas.com>
+
+Kind regards, Chris
