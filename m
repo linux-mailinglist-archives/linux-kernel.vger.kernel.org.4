@@ -2,162 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C38666F3DBE
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 08:49:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 803A06F3DC2
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 08:50:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233621AbjEBGtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 02:49:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53558 "EHLO
+        id S233578AbjEBGub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 02:50:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233439AbjEBGto (ORCPT
+        with ESMTP id S233507AbjEBGuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 02:49:44 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433641A6;
-        Mon,  1 May 2023 23:49:43 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id 98e67ed59e1d1-24e2bbec3d5so193054a91.3;
-        Mon, 01 May 2023 23:49:43 -0700 (PDT)
+        Tue, 2 May 2023 02:50:19 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8E7D4237;
+        Mon,  1 May 2023 23:50:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683010182; x=1685602182;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yr1OMD7GQzrwg0jgDUJeq8+KPoArZtCkfJLUdDH22rA=;
-        b=RlCy7AObH1tppBffuhwTrxyaD8caRZi0L5Gi9f0M+/nXAdB0xmwzM7KCQ2CLWRUcL3
-         dSGq1cWgzFWr7iCl9aJzPbcyY5KBP0CGru9xzTxGzXaeEgJljmEvlvu8xa5QkZBsPPRH
-         LyAeZj0e5c6e2eD/xGg4/2UBjQvu0EzeRgiIG+BE+4zpPFjVObyWe7YqhcBiBhS8UM+W
-         0UceYyxaNgFSvgfDdBiQtFzFWhzH9GQmrnyScXqEYW6+ZiTyvb+uAyJ0EKuSYhWAl39i
-         PpHcO4PlPMdT/6lbY+EA94GdrVZYjhQ3SZW5aERA1hslJ1dXTryItJ8rHYp9iE76PVWl
-         PhcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683010182; x=1685602182;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yr1OMD7GQzrwg0jgDUJeq8+KPoArZtCkfJLUdDH22rA=;
-        b=HGsYv8iieU/OOP8JAZBAv6f2KZAAy3PWTiJaqObpERnh9jxq7eD3LwJL+TSLbp+2E3
-         ANLKLvNfi7GTCOHQrhsLkPDZxdR8IY/3rBeq+MQnOymAt7FKGAzpg0hs6T09rHfDmVR4
-         nLMKIJ9z5x0l2kuUwptgTnY/m1sZ37y6bFvvjab1A2QrlfZKWSa2GzltvU4xayx+BKER
-         hwUNB09YJmD2Z2mIM/i0w2yRtGrIJ6yLJTM2354dmmgTckwS0F6kmd2CpJoQbTWk3U6A
-         m9ZM5KnDAfpYedUX9Tndq+5lc3si3q67N3W6iBnH4PK+7H/0uuVl9RXAl4jLtJDuQfdJ
-         UjXA==
-X-Gm-Message-State: AC+VfDzZCukppeIufw1EbrJAampLYmd3K1DPGAdbp9DgSiZlAQ9nT6wf
-        twrTrIwFA1fDthW09eU7AZs=
-X-Google-Smtp-Source: ACHHUZ6XaWHhFMAf1i83OTvD8IMgN9ZoYaaWoKrS3XVm8v4KVP16y9uSFcoFpVYaidUFpF9ALsuanA==
-X-Received: by 2002:a17:90a:bb0f:b0:249:842d:312f with SMTP id u15-20020a17090abb0f00b00249842d312fmr16495568pjr.4.1683010182438;
-        Mon, 01 May 2023 23:49:42 -0700 (PDT)
-Received: from [172.19.1.47] (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id a7-20020a170902ecc700b00194c90ca320sm2417826plh.204.2023.05.01.23.49.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 May 2023 23:49:42 -0700 (PDT)
-Message-ID: <6da2239a-32e7-c8c0-6be9-55f11b66ca1b@gmail.com>
-Date:   Tue, 2 May 2023 14:49:37 +0800
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1683010209; x=1714546209;
+  h=from:to:subject:date:message-id:in-reply-to:references:
+   mime-version:content-transfer-encoding;
+  bh=YkZqd9ppIY7yEIAiINZ3ndGmS/bfhayyJibhgAwO8Ds=;
+  b=Vrod4UF0J7aSDZ83RWJ5VxHmEWki6MczMcAplYsmpEfQ1lXc3+eeFfWM
+   tYMQrNWj36DGUQKqiy857CgCIxD5CjIGsxZbQljXtgBmT1M0AZad5TUGC
+   m+/9MA1t6p5WqaSht0DOttgnyVJ9+0qidVfoYByuKGEN2uUH4vPgfAXuM
+   UxPMs5qRJ1iKbxdj/ILTSeZ7OmTR1GeCElyqQwmPP5RSfB5oHggOxJKEg
+   T4ousCzXUhIvOZhHimYrlJLM681gCgYEZvTXLLBt2tOhI1Rd2gKf9LSeP
+   uzK4+f1vKevbv0DDJRLwLhR/ddlVD5bu251zIjnj3HAITS01prVqam3LH
+   g==;
+X-IronPort-AV: E=Sophos;i="5.99,243,1677538800"; 
+   d="scan'208";a="30655272"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 02 May 2023 08:50:06 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Tue, 02 May 2023 08:50:06 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Tue, 02 May 2023 08:50:06 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1683010206; x=1714546206;
+  h=from:to:subject:date:message-id:in-reply-to:references:
+   mime-version:content-transfer-encoding;
+  bh=YkZqd9ppIY7yEIAiINZ3ndGmS/bfhayyJibhgAwO8Ds=;
+  b=dPrYNrEwCA6bui24GyFYdJ6BXqoQavuC/GRQo02bZvpTFrwe4O4LykyE
+   m/CWzysdUm/95BL8+v+nkBd4xkRiLrQOZCfHmkgCZKSGMVc7Wl4yKMmST
+   kEoEN2FXoPmhViE8ozvQgMUwpHSIED/9tAUV12Xo4R4WEIY0DzQIpbdNU
+   9+jI/2RfXD76RZ8Gk9RkSa6MnuauZQbsw/0ksJaYvn7e0z0Roivwy2spt
+   2JolWpXZ4hIdGBNlIPof5zPaD2+WB5RXW7hl9m/8N1PQ8fSE/3o+iMC8k
+   mfWumxNqCruVPlSdRa23JOHJ+E5ZVKp5a3wo+SxaZhoI5ZSy9GMFc/+6U
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.99,243,1677538800"; 
+   d="scan'208";a="30655271"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 02 May 2023 08:50:06 +0200
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 80EF4280056;
+        Tue,  2 May 2023 08:50:06 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Wolfram Sang <wsa@kernel.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "A. Sverdlin" <alexander.sverdlin@siemens.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] i2c: lpi2c: cache peripheral clock rate
+Date:   Tue, 02 May 2023 08:50:06 +0200
+Message-ID: <2143344.irdbgypaU6@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <ZE4TU0rCw9MSwrmB@sai>
+References: <20230310130815.562418-1-alexander.sverdlin@siemens.com> <4797405.GXAFRqVoOG@steina-w> <ZE4TU0rCw9MSwrmB@sai>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v8 05/11] dt-bindings: arm: Add initial bindings for
- Nuvoton platform
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        lee@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, tmaimon77@gmail.com, catalin.marinas@arm.com,
-        will@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-serial@vger.kernel.org, arnd@arndb.de, schung@nuvoton.com,
-        mjchen@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
-References: <20230425102418.185783-1-ychuang570808@gmail.com>
- <20230425102418.185783-6-ychuang570808@gmail.com>
- <2b79021d-3793-5f2d-8659-5d0d8fc78017@linaro.org>
- <ded0c68a-e0b3-b106-e24d-7d9087c6ca4c@gmail.com>
- <34d70271-ff07-aea8-bcb7-81d39a55167c@linaro.org>
- <10ee47df-df1f-5c44-7d2b-d367ab7a6f29@gmail.com>
- <8d3e330a-8478-2087-3e37-65c1f7767ee7@linaro.org>
-From:   Jacky Huang <ychuang570808@gmail.com>
-In-Reply-To: <8d3e330a-8478-2087-3e37-65c1f7767ee7@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Krzysztof,
+Hello Wolfgang,
 
+Am Sonntag, 30. April 2023, 09:05:55 CEST schrieb Wolfram Sang:
+> * PGP Signed by an unknown key
+>=20
+> > > IIRC this is a general problem^w limitation of the clock framework,
+> > > clock providers cannot use clocks themselves in certain callback, e.g.
+> > > set_rate.
+> >=20
+> > Well, that's essentially impossible when this clock provider is attached
+> > via i2c. i2c transfers potentially need to change or prepare clocks.
+>=20
+> So, as I get it, this is not a specific lpi2c problem but affecting any
+> I2C controller driver which uses get_rate() to setup a transfer to a
+> remote I2C clock provider? And this lockdep warning is a false-positive?
 
-On 2023/5/2 下午 02:46, Krzysztof Kozlowski wrote:
-> On 02/05/2023 08:40, Jacky Huang wrote:
->> Dear Krzysztof,
->>
->>
->>
->> On 2023/5/2 下午 02:31, Krzysztof Kozlowski wrote:
->>> On 02/05/2023 03:31, Jacky Huang wrote:
->>>> Dear Krzysztof,
->>>>
->>>>
->>>> On 2023/5/1 下午 05:50, Krzysztof Kozlowski wrote:
->>>>> On 25/04/2023 12:24, Jacky Huang wrote:
->>>>>> From: Jacky Huang <ychuang3@nuvoton.com>
->>>>>>
->>>>>> Move 'nuvoton,npcm-gcr.yaml' from 'arm/npcm' to 'soc/nuvoton'.
->>>>>> Rename the '/arm/npcm' directory to 'arm/nuvoton'. Additionally, add
->>>>>> bindings for ARMv8-based Nuvoton SoCs and platform boards, and include
->>>>>> the initial bindings for ma35d1 series development boards.
->>>>>>
->>>>>> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
->>>>>> ---
->>>>>>     .../bindings/arm/nuvoton/nuvoton,ma35d1.yaml  | 30 +++++++++++++++++++
->>>>>>     .../npcm.yaml => nuvoton/nuvoton,npcm.yaml}   |  2 +-
->>>>>>     .../nuvoton/nuvoton,npcm-gcr.yaml}            |  2 +-
->>>>>>     3 files changed, 32 insertions(+), 2 deletions(-)
->>>>>>     create mode 100644 Documentation/devicetree/bindings/arm/nuvoton/nuvoton,ma35d1.yaml
->>>>> I don't see any improvements here. Path in maintainers is still broken.
->>>>>
->>>>> Best regards,
->>>>> Krzysztof
->>>>>
->>>> Does this line cover
->>>> 'Documentation/devicetree/bindings/arm/nuvoton/nuvoton,ma35d1.yaml'?
->>>> ==>  F:    Documentation/devicetree/bindings/*/*/*ma35*
->>>>
->>>> I ran 'get_maintainer.pl' on this patch, and it was able to find
->>>> maintainers and looked good.
->>>> I also ran 'make htmldocs' and did not see any warnings or errors
->>>> related to the .yaml files
->>>> in this patch. However, I am still unsure where the problem lies. Can
->>>> you suggest any
->>>> tools I can use to check for errors? I would greatly appreciate any
->>>> guidance you can provide.
->>> Apply the patches 1 to 5 and then check if all paths from maintainers
->>> are correct. I believe the path
->>> Documentation/devicetree/bindings/arm/npcm/ is not.
->>>
->>> I think I told the same last time with explanation that this patch must
->>> correct path.
->>>
->>> Best regards,
->>> Krzysztof
->>>
->> Okay, I think I should combine the patch 11 (for MAINTAINER)  into patch 5.
-> I don't know what's there. The path which is changed (invalidated) here,
-> should be updated here.
->
-> Best regards,
-> Krzysztof
->
+Yes, IMHO this could potentially occur on every I2C controller driver, if a=
+=20
+clock provider while holding the clk_prepare_lock, e.g. during registration=
+,=20
+issues an i2c transfer.
+I'm not so sure if this is a false-positive, but more like trying to do a=20
+nested lock.
 
-I got it and learn the rule. Thank you very much.
-I will fix it.
-
-Best Regards,
-Jacky Huang
+Best regards
+Alexander
+=2D-=20
+TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
+Amtsgericht M=FCnchen, HRB 105018
+Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
+http://www.tq-group.com/
 
 
