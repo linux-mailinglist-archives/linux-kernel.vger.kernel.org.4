@@ -2,75 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F1276F4009
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 11:24:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C2BA6F4025
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 11:28:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233333AbjEBJYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 05:24:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37312 "EHLO
+        id S233398AbjEBJ2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 05:28:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbjEBJYA (ORCPT
+        with ESMTP id S229863AbjEBJ2p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 05:24:00 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB8599D
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 02:23:58 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-3062db220a3so1225311f8f.0
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 02:23:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chrisdown.name; s=google; t=1683019437; x=1685611437;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cPQ+I02M2Wh0nyZ6SBeHE4F+/b7hBFlIk7+0/isVN/4=;
-        b=DaDBrBy5OTJ9rKXdMreBf3UswRW7Q9dli05QjI65HOAE7/XYwd89Zo5eMvMaRB0rZj
-         j8EcYH78qwyYQ7YWWtjsu3ckMh+qLU/1KGbhSe3gjG/L8Yww77UCwNQ3scegS1CxdSPC
-         02l6fhPmUsl6NnzUWFch+GKeqgsh40U2CgM7s=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683019437; x=1685611437;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cPQ+I02M2Wh0nyZ6SBeHE4F+/b7hBFlIk7+0/isVN/4=;
-        b=Rul2K7sMnAvC9Ni6ldRonPh+eXa1H/vsUqgyh6jxp82fjrC8fcnYVxE30gDSz1lmv7
-         RHMQWwDvmK5kvGZVjkTTkrT0nxwxK9z2PUIVuKU8tNk+HnBh/OTLWClLA9Mxm1B6B2eF
-         +kZhZ3euYhEGM+ShIrg/RAi6XECQdpgA6+pJ0yvy2YwwkSe/QoHYYuQRGzbtOuXHAOjM
-         K7b8Np3ybrP3B/+pQdRzSFR9wWOyHvs6gywlisNJiVnBf8V6bQ2xB5mbiZjexRa1VYXI
-         Aho43DFSnNL0n8RHvyHwL/xoslbV2FZLTP6+PmLDwQcKildbdVepzQIDu+Pe8dGB4j2Z
-         fQlA==
-X-Gm-Message-State: AC+VfDwWVsKFqIRWqXJPQY2cLwbijEIQ5FqpSHTEe16ku3S6WEniaF97
-        SaqEjC/DKty8nvGoH7xF+dJN3g==
-X-Google-Smtp-Source: ACHHUZ7EAQprDIPdbYv0+8b4Fzc4jpLZEmePL6HPVCd0PC1DNernb4NfvvKgYEOk9NNOnGQgiRAnug==
-X-Received: by 2002:a05:6000:11c5:b0:2f5:83a8:a9a9 with SMTP id i5-20020a05600011c500b002f583a8a9a9mr11132749wrx.16.1683019437226;
-        Tue, 02 May 2023 02:23:57 -0700 (PDT)
-Received: from localhost ([2a01:4b00:8432:8600:5ee4:2aff:fe50:f48d])
-        by smtp.gmail.com with ESMTPSA id u19-20020a05600c00d300b003f17eaae2c9sm34986717wmm.1.2023.05.02.02.23.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 May 2023 02:23:56 -0700 (PDT)
-Date:   Tue, 2 May 2023 10:23:56 +0100
-From:   Chris Down <chris@chrisdown.name>
-To:     calumlikesapplepie@gmail.com
-Cc:     Petr Mladek <pmladek@suse.com>, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>, kernel-team@fb.com,
-        mj@atrey.karlin.mff.cuni.cz
-Subject: Re: [PATCH v5 2/2] printk: console: Remove sysrq exception
-Message-ID: <ZFDWrNRvJoJQeC91@chrisdown.name>
-References: <cover.1682427812.git.chris@chrisdown.name>
- <4d3846bf2543de20aa071b2a12de924eea3e9574.1682427812.git.chris@chrisdown.name>
- <ZEp9dXwHCYNPidjC@alley>
- <9531fc38cfebb5b4587967f6ec73d983fd9325ce.camel@gmail.com>
+        Tue, 2 May 2023 05:28:45 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE9F49FD;
+        Tue,  2 May 2023 02:28:41 -0700 (PDT)
+Received: from ip4d1634d3.dynamic.kabel-deutschland.de ([77.22.52.211] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1ptmJ5-0006fd-IQ; Tue, 02 May 2023 11:28:23 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Tianling Shen <cnsztl@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>, Andy Yan <andyshrk@163.com>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Brian Norris <briannorris@chromium.org>,
+        Andrew Lunn <andrew@lunn.ch>, Shawn Guo <shawnguo@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Maya Matuszczyk <maccraft123mc@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        Tianling Shen <cnsztl@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] arm64: dts: rockchip: Add Lunzn Fastrhino R66S
+Date:   Tue, 02 May 2023 11:28:22 +0200
+Message-ID: <5782501.VdNmn5OnKV@diego>
+In-Reply-To: <20230428013738.30735-2-cnsztl@gmail.com>
+References: <20230428013738.30735-1-cnsztl@gmail.com>
+ <20230428013738.30735-2-cnsztl@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <9531fc38cfebb5b4587967f6ec73d983fd9325ce.camel@gmail.com>
-User-Agent: Mutt/2.2.10 (2023-03-25)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,14 +56,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Calum,
+Hi,
 
-This patch is almost at completion and already changes the way kernel.printk 
-works. I'm sure we'd all be happy to look at proposed changes in another 
-patchset, but I'm not likely to add more changes to this one. In general, 
-there's plenty of historical baggage in printk space, but changing it requires 
-careful thought about API/ABI compatibility, new designs, and compatibility.
+Am Freitag, 28. April 2023, 03:37:37 CEST schrieb Tianling Shen:
+> Lunzn Fastrhino R66S is a high-performance mini router.
+> 
+> Specification:
+> - Rockchip RK3568
+> - 1/2GB LPDDR4 RAM
+> - SD card slot
+> - M.2 Connector
+> - 2x USB 3.0 Port
+> - 2x 2500 Base-T (PCIe, r8125b)
+> - 12v DC Jack
+> 
+> Signed-off-by: Tianling Shen <cnsztl@gmail.com>
+> ---
+>  arch/arm64/boot/dts/rockchip/Makefile         |   1 +
+>  .../dts/rockchip/rk3568-fastrhino-r66s.dts    |  27 +
+>  .../dts/rockchip/rk3568-fastrhino-r66s.dtsi   | 507 ++++++++++++++++++
+>  3 files changed, 535 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/rockchip/rk3568-fastrhino-r66s.dts
+>  create mode 100644 arch/arm64/boot/dts/rockchip/rk3568-fastrhino-r66s.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
+> index 2d585bbb8f3a..15089a78555a 100644
+> --- a/arch/arm64/boot/dts/rockchip/Makefile
+> +++ b/arch/arm64/boot/dts/rockchip/Makefile
+> @@ -85,6 +85,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-box-demo.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-lubancat-1.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-bpi-r2-pro.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-evb1-v10.dtb
+> +dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-fastrhino-r66s.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-lubancat-2.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-nanopi-r5c.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-nanopi-r5s.dtb
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3568-fastrhino-r66s.dts b/arch/arm64/boot/dts/rockchip/rk3568-fastrhino-r66s.dts
+> new file mode 100644
+> index 000000000000..fc9e1bdab128
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/rockchip/rk3568-fastrhino-r66s.dts
+> @@ -0,0 +1,27 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+> +
+> +#include "rk3568-fastrhino-r66s.dtsi"
+> +
+> +/ {
+> +	model = "Lunzn FastRhino R66S";
+> +	compatible = "lunzn,fastrhino-r66s", "rockchip,rk3568";
+> +
+> +	aliases {
+> +		mmc0 = &sdmmc0;
+> +	};
+> +};
+> +
+> +&sdmmc0 {
 
-Thanks,
+that whole element seems to be duplicated from rk3568-fastrhino-r66s.dtsi?
+I don't think we need to declare that twice. If something really changes,
+please only declare the new properties when going from dtsi to dts.
 
-Chris
+> +	max-frequency = <150000000>;
+> +	no-sdio;
+> +	no-mmc;
+> +	bus-width = <4>;
+> +	cap-mmc-highspeed;
+> +	cap-sd-highspeed;
+> +	disable-wp;
+> +	vmmc-supply = <&vcc3v3_sd>;
+> +	vqmmc-supply = <&vccio_sd>;
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&sdmmc0_bus4 &sdmmc0_clk &sdmmc0_cmd &sdmmc0_det>;
+> +	status = "okay";
+> +};
+
+Thanks
+Heiko
+
+
