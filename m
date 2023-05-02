@@ -2,57 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5908D6F3C14
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 04:19:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AE966F3CED
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 07:27:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233001AbjEBCTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 22:19:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45554 "EHLO
+        id S233416AbjEBF0x convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 2 May 2023 01:26:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231915AbjEBCTj (ORCPT
+        with ESMTP id S231610AbjEBF0v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 22:19:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4E91468D;
-        Mon,  1 May 2023 19:19:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C757261FEF;
-        Tue,  2 May 2023 02:19:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1451C433EF;
-        Tue,  2 May 2023 02:18:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682993940;
-        bh=/ZshWXbkJAwJ3w5jxnFmXGG6dcyY5NQhIKW41FzqCqY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ByEr2hgO5b/okdhtySkMegMjNPPigvUzliCB8tShJTJUtsFnicV40BetzYARBy6Wp
-         i2jQFiAed+/u0BgRFZgBZmuAXwKBnA67hb6hCE/6pzcKKoZbEGoQMr/jdO4No/wza1
-         WPrihi27QsFxlT6TFXnIcw8ZixOKSYyG8YgmZ5kuVu2sWI/3o/PQDFGM/BI7R8cdVU
-         255YN0o6zSZsBvL4qXhY6R/qB79e4OdPlZGiUtrPn67zlZSUr1rd4/qMa++XOJnnRz
-         LFaWtiEtVenkAPQEcTxa9t64pQdMVPtm4umsbS9I7WrsBA5ACCNpP+4sil8+j+CaaK
-         cdOYmstYAvc0Q==
-From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To:     linux-trace-kernel@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        mhiramat@kernel.org, Florent Revest <revest@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org
-Subject: [PATCH v9.1 11/11] Documentation: tracing/probes: Add fprobe event tracing document
-Date:   Tue,  2 May 2023 11:18:56 +0900
-Message-ID:  <168299393654.3242086.4099482065080890890.stgit@mhiramat.roam.corp.google.com>
-X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
-In-Reply-To:  <168299383880.3242086.7182498102007986127.stgit@mhiramat.roam.corp.google.com>
-References:  <168299383880.3242086.7182498102007986127.stgit@mhiramat.roam.corp.google.com>
-User-Agent: StGit/0.19
+        Tue, 2 May 2023 01:26:51 -0400
+X-Greylist: delayed 1098 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 01 May 2023 22:26:48 PDT
+Received: from repostorp.tmes.trendmicro.eu (repostorp.tmes.trendmicro.eu [18.185.115.139])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FE71FEE
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 22:26:47 -0700 (PDT)
+Received: from 89.96.76.22_.trendmicro.com (unknown [172.21.178.36])
+        by repostorp.tmes.trendmicro.eu (Postfix) with SMTP id B8F041000853A;
+        Tue,  2 May 2023 05:08:27 +0000 (UTC)
+X-TM-MAIL-RECEIVED-TIME: 1683003902.483000
+X-TM-MAIL-UUID: 3ec21861-7a86-42d4-a560-9f0ff553d206
+Received: from EXCH000EDG.int.milano (unknown [89.96.76.22])
+        by repre01.tmes.trendmicro.eu (Trend Micro Email Security) with ESMTP id 7636D100003AD;
+        Tue,  2 May 2023 05:05:02 +0000 (UTC)
+Received: from EXCH000HUB.int.milano (10.4.32.33) by EXCH000EDG.int.milano
+ (89.96.76.22) with Microsoft SMTP Server (TLS) id 8.3.389.2; Tue, 2 May 2023
+ 04:10:02 +0200
+Received: from EXCHSRVR04.int.milano ([10.4.32.36]) by EXCH000HUB.int.milano
+ ([10.4.32.33]) with mapi; Tue, 2 May 2023 04:19:36 +0200
+From:   Gregoraci Antonio <Antonio.Gregoraci@istitutotumori.mi.it>
+To:     "21@hotmail.com" <21@hotmail.com>
+Content-Class: urn:content-classes:message
+Date:   Tue, 2 May 2023 04:19:35 +0200
+Subject: ciaoi/hola
+Thread-Topic: ciaoi/hola
+Thread-Index: AQHZfJyJQNS3sn313kCMIg4VdjlM2A==
+Message-ID: <DCA15BFBCFA11D4DAAB69864B5B767D7022DA376D35B@EXCHSRVR04.int.milano>
+Accept-Language: it-IT, en-US
+Content-Language: it-IT
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+acceptlanguage: it-IT, en-US
+Content-Type: text/plain; charset="Windows-1252"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-TM-AS-ERS: 89.96.76.22-0.0.0.0
+X-TMASE-Version: StarCloud-1.3-9.1.1007-27600.004
+X-TMASE-Result: 10--5.227400-7.000000
+X-TMASE-MatchedRID: JccYzf/alo2Z92UT4XKzJLrGtoyxDGsveQdcpJtf6Y9dnu0Ib701SwHh
+        /n3IojRHZbYzO9ATSR8iCJj+nG0qavLhF3ODt/qxK1L6TVkdgzvlCdi2vYBU/StbLOivsnLTeOW
+        ogtc/Q+ahrVMGjoVW2dAxpCUwUcRX/hmVMkfK7SzUx9DKYBHnGKd2IUv0yPeefmP+r6TihalqvC
+        uMGQ0jzVrpCKOpM18cDPgUX1cE9O7XOxm24IXrxtH1f5d8nY/hPp0VRG6+qR71fgKy39PDlkeEP
+        abtlRsaejwREYpHOiWWyPdl51RNjgZggDg9vQE5YiI8iyJSkA3PjA1BmHzE8+RXFolGtZQMKxg3
+        Xnh5/+zDiMdHGmnNPbRtAWPTXnKS1iTsGwm9KyqJD4Nwayf7WMEE+9IiWn84I+mdUIK7OD5DkWN
+        prDyYFJk4XfWG6Q5wQGLcrfmCk/qcIa7X43Dj+RZPalguHC34Ket9cEJP1Bi3uEP3hiATS9zrRQ
+        ttYVPeCx4e+jnEj2mZrBKqCt7bePcCWN+BhqOU86OXreFgYUsZskwWqoib3O5SxpUwKMktfrqNW
+        IucyHbg+QiHC8Fzei38M+247Q7BEONKxfrChoJKQwOq4OdJRVjKpSEColRJEzBS/LIYH/e0/17g
+        tnMCM+LzNWBegCW2Pt8/Kr/G3CkLbigRnpKlKSBuGJWwgxAra7leoU/OMhNYsCaawSIuKfUA+hX
+        yvvRqBjeoP9+0RhGI1kgtEwqqqCT5Li5QT8gqftwZ3X11IV0=
+X-TMASE-XGENCLOUD: be3d1900-246c-45a6-ae1b-12737999e55d-0-0-200-0
+X-TM-Deliver-Signature: 7F24806DD1A607B604DA7D2016113915
+X-TM-Addin-Auth: JVX57R5BtpuuoC33s0rJknJgODteylMekhQmh9my5PfLo0zMN6S2W7AQqrC
+        uKxSWDzUm0/BXMVWMb8GgL5F8Lp/CwV9Bz//r/7mJ4kTQP1BIfcKaGcdMWXt0vZQAXsNMCQwpHE
+        SHGolBkepvhYeacV6wnYuNy/ZnVkzh3FrLOJMnNuJLYMJID4+/IsyBSEkzAsFmtykmJ/KzWg1E/
+        2YDJooiaJxZC+MtydHvCYL37khp0s3CdyxNRMI+LNP35p5aLMDRhzab6JiwYVjEuDLjFipUeV4A
+        Eg3b2fYMzkDAGuwVb62IBtKFlZgI0uVSJb3r.qw+/xPgBa/Krcpu897SNsdbtalo1P6V99+k7C5
+        xdlLVrGpjUxUrwjxZUwOPh63irGM4/+1rqq10Uf2K64K3/r2oWB8uKePT6odt75uRn5suCOJZlB
+        Q8m4y7aMIozhnLaF+i3/WdebqM3RJlTR2NLdB2Tz8CXEGuXp8P/tRtpTG5m8E9QEvJqjLOyp0Pa
+        JjB0A2dKCOa+T4y23hac5clWvDeGdKz6yFr58SG/MGT9i7/IVCkzOuw0LvlcW7aU3ib+epmIrgs
+        ygK4Q5jShZhorpqtMShkKfjkCluEMBBvG3Sr8UOrstXRr2myGUpiv/lh0ExoC00X8J0za0wVBAi
+        JM5A==
+X-TM-Addin-ProductCode: EMS
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,224 +81,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Hola y ¿cómo estás? Hay un proyecto que me gustaría discutir con ustedes. todo disponible. Por favor, comuníquese conmigo directamente a mi correo privado.   ( drcc7072@gmail.com )
 
-Add a documentation about fprobe event tracing including
-tracepoint probe event and BTF argument.
 
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
----
- Changes in v7:
-  - Update about BTF auto type casting for $retval.
----
- Documentation/trace/fprobetrace.rst |  187 +++++++++++++++++++++++++++++++++++
- Documentation/trace/index.rst       |    1 
- 2 files changed, 188 insertions(+)
- create mode 100644 Documentation/trace/fprobetrace.rst
 
-diff --git a/Documentation/trace/fprobetrace.rst b/Documentation/trace/fprobetrace.rst
-new file mode 100644
-index 000000000000..df3cf273bd43
---- /dev/null
-+++ b/Documentation/trace/fprobetrace.rst
-@@ -0,0 +1,187 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+==========================
-+Fprobe-based Event Tracing
-+==========================
-+
-+.. Author: Masami Hiramatsu <mhiramat@kernel.org>
-+
-+Overview
-+--------
-+
-+Fprobe event is similar to the kprobe event, but limited to probe on
-+the function entry and exit only. It is good enough for many use cases
-+which only traces some specific functions.
-+
-+This document also covers tracepoint probe events (tprobe) since this
-+is also works only on the tracepoint entry. User can trace a part of
-+tracepoint argument, or the tracepoint without trace-event, which is
-+not exposed on tracefs.
-+
-+As same as other dynamic events, fprobe events and tracepoint probe
-+events are defined via `dynamic_events` interface file on tracefs.
-+
-+Synopsis of fprobe-events
-+-------------------------
-+::
-+
-+  f[:[GRP1/][EVENT1]] SYM [FETCHARGS]                       : Probe on function entry
-+  f[MAXACTIVE][:[GRP1/][EVENT1]] SYM%return [FETCHARGS]     : Probe on function exit
-+  t[:[GRP2/][EVENT2]] TRACEPOINT [FETCHARGS]                : Probe on tracepoint
-+
-+ GRP1           : Group name for fprobe. If omitted, use "fprobes" for it.
-+ GRP2           : Group name for tprobe. If omitted, use "tracepoints" for it.
-+ EVENT1         : Event name for fprobe. If omitted, the event name is
-+                  "SYM__entry" or "SYM__exit".
-+ EVENT2         : Event name for tprobe. If omitted, the event name is
-+                  the same as "TRACEPOINT", but if the "TRACEPOINT" starts
-+                  with a digit character, "_TRACEPOINT" is used.
-+ MAXACTIVE      : Maximum number of instances of the specified function that
-+                  can be probed simultaneously, or 0 for the default value
-+                  as defined in Documentation/trace/fprobes.rst
-+
-+ FETCHARGS      : Arguments. Each probe can have up to 128 args.
-+  ARG           : Fetch "ARG" function argument using BTF (only for function
-+                  entry or tracepoint.) (\*1)
-+  @ADDR         : Fetch memory at ADDR (ADDR should be in kernel)
-+  @SYM[+|-offs] : Fetch memory at SYM +|- offs (SYM should be a data symbol)
-+  $stackN       : Fetch Nth entry of stack (N >= 0)
-+  $stack        : Fetch stack address.
-+  $argN         : Fetch the Nth function argument. (N >= 1) (\*2)
-+  $retval       : Fetch return value.(\*3)
-+  $comm         : Fetch current task comm.
-+  +|-[u]OFFS(FETCHARG) : Fetch memory at FETCHARG +|- OFFS address.(\*4)(\*5)
-+  \IMM          : Store an immediate value to the argument.
-+  NAME=FETCHARG : Set NAME as the argument name of FETCHARG.
-+  FETCHARG:TYPE : Set TYPE as the type of FETCHARG. Currently, basic types
-+                  (u8/u16/u32/u64/s8/s16/s32/s64), hexadecimal types
-+                  (x8/x16/x32/x64), "char", "string", "ustring", "symbol", "symstr"
-+                  and bitfield are supported.
-+
-+  (\*1) This is available only when BTF is enabled.
-+  (\*2) only for the probe on function entry (offs == 0).
-+  (\*3) only for return probe.
-+  (\*4) this is useful for fetching a field of data structures.
-+  (\*5) "u" means user-space dereference.
-+
-+For the details of TYPE, see :file:`Documentation/trace/kprobetrace.rst`.
-+
-+BTF arguments
-+-------------
-+BTF (BPF Type Format) argument allows user to trace function and tracepoint
-+parameters by its name instead of `$argN`. This feature is available if the
-+kernel is configured with CONFIG_BPF_SYSCALL and CONFIG_DEBUG_INFO_BTF.
-+If user only specify the BTF argument, the event's argument name is also
-+automatically set by the given name. ::
-+
-+ # echo 'f:myprobe vfs_read count pos' >> dynamic_events
-+ # cat dynamic_events
-+ f:fprobes/myprobe vfs_read count=count pos=pos
-+
-+It also chooses the fetch type from BTF information. For example, in the above
-+example, the `count` is unsigned long, and the `pos` is a pointer. Thus, both
-+are converted to 64bit unsigned long, but only `pos` has `%Lx` print-format ::
-+
-+ # cat events/fprobes/myprobe/format
-+ name: myprobe
-+ ID: 1313
-+ format:
-+ 	field:unsigned short common_type;	offset:0;	size:2;	signed:0;
-+ 	field:unsigned char common_flags;	offset:2;	size:1;	signed:0;
-+ 	field:unsigned char common_preempt_count;	offset:3;	size:1;	signed:0;
-+ 	field:int common_pid;	offset:4;	size:4;	signed:1;
-+
-+ 	field:unsigned long __probe_ip;	offset:8;	size:8;	signed:0;
-+ 	field:u64 count;	offset:16;	size:8;	signed:0;
-+ 	field:u64 pos;	offset:24;	size:8;	signed:0;
-+
-+ print fmt: "(%lx) count=%Lu pos=0x%Lx", REC->__probe_ip, REC->count, REC->pos
-+
-+If user unsures the name of arguments, `$$args` will be helpful. The `$$args`
-+is expanded to all function arguments of the function or the tracepoint. ::
-+
-+ # echo 'f:myprobe vfs_read $$args' >> dynamic_events
-+ # cat dynamic_events
-+ f:fprobes/myprobe vfs_read file=file buf=buf count=count pos=pos
-+
-+BTF also affects the $retval. If user doesn't set any type, the retval type is
-+automatically picked from the BTF. If the function returns 'void', $retval is
-+rejected.
-+
-+Usage examples
-+--------------
-+Here is an example to add fprobe events on `vfs_read()` function entry
-+and exit, with BTF arguments.
-+::
-+
-+  # echo 'f vfs_read $$args' >> dynamic_events
-+  # echo 'f vfs_read%return $retval' >> dynamic_events
-+  # cat dynamic_events
-+ f:fprobes/vfs_read__entry vfs_read file=file buf=buf count=count pos=pos
-+ f:fprobes/vfs_read__exit vfs_read%return arg1=$retval
-+  # echo 1 > events/fprobes/enable
-+  # head -n 20 trace | tail
-+ #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-+ #              | |         |   |||||     |         |
-+               sh-70      [000] ...1.   335.883195: vfs_read__entry: (vfs_read+0x4/0x340) file=0xffff888005cf9a80 buf=0x7ffef36c6879 count=1 pos=0xffffc900005aff08
-+               sh-70      [000] .....   335.883208: vfs_read__exit: (ksys_read+0x75/0x100 <- vfs_read) arg1=1
-+               sh-70      [000] ...1.   335.883220: vfs_read__entry: (vfs_read+0x4/0x340) file=0xffff888005cf9a80 buf=0x7ffef36c6879 count=1 pos=0xffffc900005aff08
-+               sh-70      [000] .....   335.883224: vfs_read__exit: (ksys_read+0x75/0x100 <- vfs_read) arg1=1
-+               sh-70      [000] ...1.   335.883232: vfs_read__entry: (vfs_read+0x4/0x340) file=0xffff888005cf9a80 buf=0x7ffef36c687a count=1 pos=0xffffc900005aff08
-+               sh-70      [000] .....   335.883237: vfs_read__exit: (ksys_read+0x75/0x100 <- vfs_read) arg1=1
-+               sh-70      [000] ...1.   336.050329: vfs_read__entry: (vfs_read+0x4/0x340) file=0xffff888005cf9a80 buf=0x7ffef36c6879 count=1 pos=0xffffc900005aff08
-+               sh-70      [000] .....   336.050343: vfs_read__exit: (ksys_read+0x75/0x100 <- vfs_read) arg1=1
-+
-+You can see all function arguments and return values are recorded as signed int.
-+
-+Also, here is tracepoint events on `sched_switch` tracepoint. To compare the
-+result, this also enables the `sched_switch` traceevent too.
-+::
-+
-+  # echo 't sched_switch $$args' >> dynamic_events
-+  # echo 1 > events/sched/sched_switch/enable
-+  # echo 1 > events/tracepoints/sched_switch/enable
-+  # echo > trace
-+  # head -n 20 trace | tail
-+ #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-+ #              | |         |   |||||     |         |
-+               sh-70      [000] d..2.  3912.083993: sched_switch: prev_comm=sh prev_pid=70 prev_prio=120 prev_state=S ==> next_comm=swapper/0 next_pid=0 next_prio=120
-+               sh-70      [000] d..3.  3912.083995: sched_switch: (__probestub_sched_switch+0x4/0x10) preempt=0 prev=0xffff88800664e100 next=0xffffffff828229c0 prev_state=1
-+           <idle>-0       [000] d..2.  3912.084183: sched_switch: prev_comm=swapper/0 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcu_preempt next_pid=16 next_prio=120
-+           <idle>-0       [000] d..3.  3912.084184: sched_switch: (__probestub_sched_switch+0x4/0x10) preempt=0 prev=0xffffffff828229c0 next=0xffff888004208000 prev_state=0
-+      rcu_preempt-16      [000] d..2.  3912.084196: sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=120 prev_state=I ==> next_comm=swapper/0 next_pid=0 next_prio=120
-+      rcu_preempt-16      [000] d..3.  3912.084196: sched_switch: (__probestub_sched_switch+0x4/0x10) preempt=0 prev=0xffff888004208000 next=0xffffffff828229c0 prev_state=1026
-+           <idle>-0       [000] d..2.  3912.085191: sched_switch: prev_comm=swapper/0 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcu_preempt next_pid=16 next_prio=120
-+           <idle>-0       [000] d..3.  3912.085191: sched_switch: (__probestub_sched_switch+0x4/0x10) preempt=0 prev=0xffffffff828229c0 next=0xffff888004208000 prev_state=0
-+
-+As you can see, the `sched_switch` trace-event shows *cooked* parameters, on
-+the other hand, the `sched_switch` tracepoint probe event shows *raw*
-+parameters. This means you can dereference any field values in the task
-+structure pointed by the `prev` and `next` arguments.
-+
-+For example, usually `task_struct::start_time` is not traced, but with this
-+traceprobe event, you can trace it as below.
-+::
-+
-+  # echo 't sched_switch comm=+1896(next):string start_time=+1728(next):u64' > dynamic_events
-+  # head -n 20 trace | tail
-+ #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-+ #              | |         |   |||||     |         |
-+               sh-70      [000] d..3.  5606.686577: sched_switch: (__probestub_sched_switch+0x4/0x10) comm="rcu_preempt" usage=1 start_time=245000000
-+      rcu_preempt-16      [000] d..3.  5606.686602: sched_switch: (__probestub_sched_switch+0x4/0x10) comm="sh" usage=1 start_time=1596095526
-+               sh-70      [000] d..3.  5606.686637: sched_switch: (__probestub_sched_switch+0x4/0x10) comm="swapper/0" usage=2 start_time=0
-+           <idle>-0       [000] d..3.  5606.687190: sched_switch: (__probestub_sched_switch+0x4/0x10) comm="rcu_preempt" usage=1 start_time=245000000
-+      rcu_preempt-16      [000] d..3.  5606.687202: sched_switch: (__probestub_sched_switch+0x4/0x10) comm="swapper/0" usage=2 start_time=0
-+           <idle>-0       [000] d..3.  5606.690317: sched_switch: (__probestub_sched_switch+0x4/0x10) comm="kworker/0:1" usage=1 start_time=137000000
-+      kworker/0:1-14      [000] d..3.  5606.690339: sched_switch: (__probestub_sched_switch+0x4/0x10) comm="swapper/0" usage=2 start_time=0
-+           <idle>-0       [000] d..3.  5606.692368: sched_switch: (__probestub_sched_switch+0x4/0x10) comm="kworker/0:1" usage=1 start_time=137000000
-+
-+Currently, to find the offset of a specific field in the data structure,
-+you need to build kernel with debuginfo and run `perf probe` command with
-+`-D` option. e.g.
-+::
-+
-+ # perf probe -D "__probestub_sched_switch next->comm:string next->start_time"
-+ p:probe/__probestub_sched_switch __probestub_sched_switch+0 comm=+1896(%cx):string start_time=+1728(%cx):u64
-+
-+And replace the `%cx` with the `next`.
-diff --git a/Documentation/trace/index.rst b/Documentation/trace/index.rst
-index ea25a9220f92..5092d6c13af5 100644
---- a/Documentation/trace/index.rst
-+++ b/Documentation/trace/index.rst
-@@ -13,6 +13,7 @@ Linux Tracing Technologies
-    kprobes
-    kprobetrace
-    uprobetracer
-+   fprobetrace
-    tracepoints
-    events
-    events-kmem
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+============================================================================================================
+La presente comunicazione, che potrebbe contenere informazioni riservate e/o protette da segreto professionale, è indirizzata esclusivamente ai destinatari della medesima qui indicati. Ogni informazione qui contenuta, che non sia relativa alla nostra attività caratteristica, deve essere considerata come non inviata. Nel caso in cui abbiate ricevuto per errore la presente comunicazione, vogliate cortesemente darcene immediata notizia, rispondendo a questo stesso indirizzo di e-mail, e poi procedere alla cancellazione di questo messaggio dal Vostro sistema. E' strettamente proibito e potrebbe essere fonte di violazione di legge qualsiasi uso, comunicazione, copia o diffusione dei contenuti di questa comunicazione da parte di chi la abbia ricevuta per errore o in violazione degli scopi della presente. Ricordiamo che la tecnologia di trasmissione utilizzata non consente di garantire l’autenticità del mittente né l’integrità dei dati
+
+This communication, which may contain confidential and/or legally privileged information, is intended solely for the use of the intended addressees. All information or advice contained in this communication is subject to the terms and conditions provided by the agreement governing each particular client engagement. If you have received this communication in error, please notify us immediately by responding to this email; then please delete it from your system. Any use, disclosure, copying or distribution of the contents of this communication by a not-intended recipient or in violation of the purposes of this communication is strictly prohibited and may be unlawful. The transmission technology used to send this mail can grant neither the sender identity nor the data integrity
+
 
