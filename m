@@ -2,216 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DB2A6F4268
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 13:15:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4848C6F4279
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 13:16:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233143AbjEBLO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 07:14:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60008 "EHLO
+        id S233907AbjEBLQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 07:16:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjEBLOy (ORCPT
+        with ESMTP id S233871AbjEBLQt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 07:14:54 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5FAA4;
-        Tue,  2 May 2023 04:14:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=qSL9OkS9lUf+/Y0rKTYhB5gamqdgUqvemLYpwvoIblc=; b=nyzYxVwkDYSGs+p8GZKdRUmbVj
-        Guk04quwpkt4KIxKlgvRq3hDoGXk8vII7ZwOwysVQJCDxD43IcwITOv8Ukdr45u9zmDX6QMz4+ZLF
-        LqkGMCkKLaN//YYSjQyG5rR4N3Zm3NnDNwEoajETpYIv0qstEhNJpklrqzN+7T7GAfsy1KwEUWIp3
-        2ZzcofszrGMZajnGYhtwC+KoakXv3sPRbf2mmipIl0Okn41UYHFcjQqBRK0YkzxsIQRNfunJH19jn
-        gmExS18rx3m3bAnr1WnkjVxjqHvFlbaQ4e4wrs7y3THRwDT87WlmVeGXRICl7RWDw8PvbZ2LrvrCF
-        9u27uBeQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1ptnwv-00GI5F-13;
-        Tue, 02 May 2023 11:13:37 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BEDB2300348;
-        Tue,  2 May 2023 13:13:34 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 79C6A23C5C34E; Tue,  2 May 2023 13:13:34 +0200 (CEST)
-Date:   Tue, 2 May 2023 13:13:34 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Mika Penttila <mpenttil@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Theodore Ts'o <tytso@mit.edu>, Peter Xu <peterx@redhat.com>
-Subject: Re: [PATCH v6 3/3] mm/gup: disallow FOLL_LONGTERM GUP-fast writing
- to file-backed mappings
-Message-ID: <20230502111334.GP1597476@hirez.programming.kicks-ass.net>
-References: <cover.1682981880.git.lstoakes@gmail.com>
- <dee4f4ad6532b0f94d073da263526de334d5d7e0.1682981880.git.lstoakes@gmail.com>
+        Tue, 2 May 2023 07:16:49 -0400
+Received: from mx4.securetransport.de (mx4.securetransport.de [178.254.6.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4227159D8;
+        Tue,  2 May 2023 04:16:40 -0700 (PDT)
+Received: from mail.dh-electronics.com (unknown [77.24.89.57])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx4.securetransport.de (Postfix) with ESMTPSA id BE6347200BB;
+        Tue,  2 May 2023 13:15:52 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dh-electronics.com;
+        s=dhelectronicscom; t=1683026154;
+        bh=Icos1CRSpLsU5WPpF2CpjE8xWcpBrCeK308FlAHPLcU=;
+        h=From:To:CC:Subject:Date:From;
+        b=V6+am2fGLm88Kp1Q9umhI5nohbx0qHTpEJ9eA21EciwTPH2sMfyQojmTgaLP/6mwn
+         81J/GW0SY6Fa+jpF1RSJ0qJhrfXlpSwUQgF6UHDEzoj7BBJyjT5qudP7kHhKovWAg5
+         pSaj1DUt5+9thtCGle5IMBYysS6ZpTcPAyqY6JbXurJQbOjrFpRy+3R8Y0n4eruPW3
+         EJJz54SjDMXN8B8TqsW6F8FslrlIlFwMVfQX9g+Vns9AWhgHQOdo3PN2fNnTwezTEC
+         6hIyjIw+bAmCUZNhSSMfqdPN1Z8qANWzHV/0fiN379lD/SbDewpCjrF1Xrn7VdOW5F
+         XF8oaXVMx4NZw==
+Received: from DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) by
+ DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Tue, 2 May 2023 13:15:41 +0200
+Received: from localhost.localdomain (172.16.51.25) by
+ DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26 via Frontend Transport; Tue, 2 May 2023 13:15:40 +0200
+From:   Christoph Niedermaier <cniedermaier@dh-electronics.com>
+To:     <linux-arm-kernel@lists.infradead.org>
+CC:     Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Marek Vasut <marex@denx.de>, Fabio Estevam <festevam@denx.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        <kernel@dh-electronics.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] ARM: dts: imx6ull-dhcor: Set and limit the mode for PMIC buck 1, 2 and 3
+Date:   Tue, 2 May 2023 13:14:24 +0200
+Message-ID: <20230502111424.3114-1-cniedermaier@dh-electronics.com>
+X-Mailer: git-send-email 2.11.0
+X-klartext: yes
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <dee4f4ad6532b0f94d073da263526de334d5d7e0.1682981880.git.lstoakes@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 02, 2023 at 12:11:49AM +0100, Lorenzo Stoakes wrote:
-> @@ -95,6 +96,77 @@ static inline struct folio *try_get_folio(struct page *page, int refs)
->  	return folio;
->  }
->  
-> +#ifdef CONFIG_MMU_GATHER_RCU_TABLE_FREE
-> +static bool stabilise_mapping_rcu(struct folio *folio)
-> +{
-> +	struct address_space *mapping = READ_ONCE(folio->mapping);
-> +
-> +	rcu_read_lock();
-> +
-> +	return mapping == READ_ONCE(folio->mapping);
+According to Renesas Electronics (formerly Dialog Semiconductor), the
+standard AUTO mode of the PMIC DA9061 can lead to stability problems
+depending on the hardware revision. It is recommended to set a defined
+mode such as PFM or PWM permanently. So set and limit the mode for
+buck 1, 2 and 3 to a fixed one.
 
-This doesn't make sense; why bother reading the same thing twice?
+Fixes: 611b6c891e40 ("ARM: dts: imx6ull-dhcom: Add DH electronics DHCOM i.MX6ULL SoM and PDK2 board")
 
-Who cares if the thing changes from before; what you care about is that
-the value you see has stable storage, this doesn't help with that.
+Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
+Reviewed-by: Marek Vasut <marex@denx.de>
+---
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: Li Yang <leoyang.li@nxp.com>
+Cc: Marek Vasut <marex@denx.de>
+Cc: Fabio Estevam <festevam@denx.de>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: kernel@dh-electronics.com
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+To: linux-arm-kernel@lists.infradead.org
+---
+ arch/arm/boot/dts/imx6ull-dhcor-som.dtsi | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-> +}
-> +
-> +static void unlock_rcu(void)
-> +{
-> +	rcu_read_unlock();
-> +}
-> +#else
-> +static bool stabilise_mapping_rcu(struct folio *)
-> +{
-> +	return true;
-> +}
-> +
-> +static void unlock_rcu(void)
-> +{
-> +}
-> +#endif
+diff --git a/arch/arm/boot/dts/imx6ull-dhcor-som.dtsi b/arch/arm/boot/dts/imx6ull-dhcor-som.dtsi
+index 5882c7565f64..32a6022625d9 100644
+--- a/arch/arm/boot/dts/imx6ull-dhcor-som.dtsi
++++ b/arch/arm/boot/dts/imx6ull-dhcor-som.dtsi
+@@ -8,6 +8,7 @@
+ #include <dt-bindings/input/input.h>
+ #include <dt-bindings/leds/common.h>
+ #include <dt-bindings/pwm/pwm.h>
++#include <dt-bindings/regulator/dlg,da9063-regulator.h>
+ #include "imx6ull.dtsi"
+ 
+ / {
+@@ -84,16 +85,20 @@
+ 
+ 		regulators {
+ 			vdd_soc_in_1v4: buck1 {
++				regulator-allowed-modes = <DA9063_BUCK_MODE_SLEEP>; /* PFM */
+ 				regulator-always-on;
+ 				regulator-boot-on;
++				regulator-initial-mode = <DA9063_BUCK_MODE_SLEEP>;
+ 				regulator-max-microvolt = <1400000>;
+ 				regulator-min-microvolt = <1400000>;
+ 				regulator-name = "vdd_soc_in_1v4";
+ 			};
+ 
+ 			vcc_3v3: buck2 {
++				regulator-allowed-modes = <DA9063_BUCK_MODE_SYNC>; /* PWM */
+ 				regulator-always-on;
+ 				regulator-boot-on;
++				regulator-initial-mode = <DA9063_BUCK_MODE_SYNC>;
+ 				regulator-max-microvolt = <3300000>;
+ 				regulator-min-microvolt = <3300000>;
+ 				regulator-name = "vcc_3v3";
+@@ -106,8 +111,10 @@
+ 			 * the voltage is set to 1.5V.
+ 			 */
+ 			vcc_ddr_1v35: buck3 {
++				regulator-allowed-modes = <DA9063_BUCK_MODE_SYNC>; /* PWM */
+ 				regulator-always-on;
+ 				regulator-boot-on;
++				regulator-initial-mode = <DA9063_BUCK_MODE_SYNC>;
+ 				regulator-max-microvolt = <1500000>;
+ 				regulator-min-microvolt = <1500000>;
+ 				regulator-name = "vcc_ddr_1v35";
+-- 
+2.11.0
 
-Anyway, this all can go away. RCU can't progress while you have
-interrupts disabled anyway.
-
-> +/*
-> + * Used in the GUP-fast path to determine whether a FOLL_PIN | FOLL_LONGTERM |
-> + * FOLL_WRITE pin is permitted for a specific folio.
-> + *
-> + * This assumes the folio is stable and pinned.
-> + *
-> + * Writing to pinned file-backed dirty tracked folios is inherently problematic
-> + * (see comment describing the writeable_file_mapping_allowed() function). We
-> + * therefore try to avoid the most egregious case of a long-term mapping doing
-> + * so.
-> + *
-> + * This function cannot be as thorough as that one as the VMA is not available
-> + * in the fast path, so instead we whitelist known good cases.
-> + *
-> + * The folio is stable, but the mapping might not be. When truncating for
-> + * instance, a zap is performed which triggers TLB shootdown. IRQs are disabled
-> + * so we are safe from an IPI, but some architectures use an RCU lock for this
-> + * operation, so we acquire an RCU lock to ensure the mapping is stable.
-> + */
-> +static bool folio_longterm_write_pin_allowed(struct folio *folio)
-> +{
-> +	bool ret;
-> +
-> +	/* hugetlb mappings do not require dirty tracking. */
-> +	if (folio_test_hugetlb(folio))
-> +		return true;
-> +
-
-This:
-
-> +	if (stabilise_mapping_rcu(folio)) {
-> +		struct address_space *mapping = folio_mapping(folio);
-
-And this is 3rd read of folio->mapping, just for giggles?
-
-> +
-> +		/*
-> +		 * Neither anonymous nor shmem-backed folios require
-> +		 * dirty tracking.
-> +		 */
-> +		ret = folio_test_anon(folio) ||
-> +			(mapping && shmem_mapping(mapping));
-> +	} else {
-> +		/* If the mapping is unstable, fallback to the slow path. */
-> +		ret = false;
-> +	}
-> +
-> +	unlock_rcu();
-> +
-> +	return ret;
-
-then becomes:
-
-
-	if (folio_test_anon(folio))
-		return true;
-
-	/*
-	 * Having IRQs disabled (as per GUP-fast) also inhibits RCU
-	 * grace periods from making progress, IOW. they imply
-	 * rcu_read_lock().
-	 */
-	lockdep_assert_irqs_disabled();
-
-	/*
-	 * Inodes and thus address_space are RCU freed and thus safe to
-	 * access at this point.
-	 */
-	mapping = folio_mapping(folio);
-	if (mapping && shmem_mapping(mapping))
-		return true;
-
-	return false;
-
-> +}
