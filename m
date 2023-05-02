@@ -2,158 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E38966F4B0F
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 22:12:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E66DA6F4B11
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 22:13:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbjEBUMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 16:12:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45378 "EHLO
+        id S229534AbjEBUNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 16:13:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbjEBUMh (ORCPT
+        with ESMTP id S229629AbjEBUNV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 16:12:37 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 981AF1FC4
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 13:12:36 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-55a42c22300so48385527b3.2
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 13:12:36 -0700 (PDT)
+        Tue, 2 May 2023 16:13:21 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0FA19A7
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 13:12:59 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-50bc4b88998so5500876a12.3
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 13:12:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683058356; x=1685650356;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VMIztS2TNwPWi8y+6jVOhYQ7jYaHWdPJl8c/QL2NrEY=;
-        b=vQlQykZ5uh/16XZqfDggy9giUk9u4L5cMszHyutb9jXZOteX3TlrL/HOqx9UkTOLiT
-         p3tRhBkLYOgTRbxTtbLi2Tny2dzCqPk9AHO/ZbislK7TlzxNPJifN4qKVffH5lLCY++D
-         xMClbgbIJLFfFSjHgvZlOAGgPd0tj+Him+dRX/76AV9bcP5WzwGHBhOgfUhq/NDJJNmL
-         59YF0JvwcNmQ015tapHXY9Q5D7rASjUc5yReEUhP5T78kxhNsvsVkYl12BX/Sy6BgNZu
-         B/2vOtSiHdlhvV6PCCkhGP45QhB4DTmxg6UcMrCueloiYQSGqr7Vm8CUp8t6Cmb+aqar
-         AbLg==
+        d=linaro.org; s=google; t=1683058378; x=1685650378;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=P/xq/tzHtej/fzK6I1AmmjIHpO+eMLtvnYIVKZW+7ZU=;
+        b=DazVRNWHg3hg8ml1vKRlpWVmXWmZxVY/GsbgFCWvkyqvPN4PR5paGnNNNKO9CTznhH
+         JssG8hxbhzhOMHSHsLXawl9yWBh4eWWGQCHTD8biSjaywnpiNEm0cUAIkhGymrhqomqB
+         34sJqpHbDZ34SYMbb4eIiI4LxURoFt2RAxCZA+QD19xXORRacMdr6WtZFNrz+bX8LlFw
+         RVgpFEhinNYFT9cZMFVkpKhNuombPaGtVEh5JVOEcQ5rErL27sNbPEI6f2yg2RQdGP/8
+         h6QUDCpjWr1ItVJ4j1pHyxMZCVAEg4uaCW6n4wzNkaqkPjcy888pbcrvryGst5UtaTit
+         mesQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683058356; x=1685650356;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VMIztS2TNwPWi8y+6jVOhYQ7jYaHWdPJl8c/QL2NrEY=;
-        b=l6GLI47Hv86vp076eFtkq+E7d0tsmGAKRtY0W3KNxQGIYfKagvf9yeTpicIC0PbWla
-         l2/PbWneJ/NuGNR7MkY1gaVmsKXwsY/RGQQQ+qcLzkZ4kmuWZMvVAm0pbVzP/nZMyBmX
-         HKvc6RiOBkTWDcnzvd2xjdoCpvGuo8Y43Hh0RheDtRkBIt3vkX8ZF9CKkwoX9lDP3/lU
-         5MO5js/gLa3MtwFyDgsKukvX+whP+A8Wl6h5lLTF/5YA8TvVmib09ndFcoCAugabxP6B
-         +G4xKZ0ackVN/3hX4n2G+/pI03t1lPvQWWA1YcyMltnX5oxxmwZ8RYW+gcnY33CtAPKq
-         897A==
-X-Gm-Message-State: AC+VfDzl88zcgh4OdhaT/8GOgcTVqdk+tq+IuL/H29j8r1ok+tqZHpx1
-        BYT6kbvQtCnSfIA1sXMoehRiClk7Yju6zA==
-X-Google-Smtp-Source: ACHHUZ5LCvzhAYVMOiqdp21gwJ4dCMIkLjoIb5K22efre2i1f9fvCbNB0ZSEg4gg39aEP4G726g7J4liKCcyTQ==
-X-Received: from xllamas.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5070])
- (user=cmllamas job=sendgmr) by 2002:a81:ac49:0:b0:55a:8e39:57a7 with SMTP id
- z9-20020a81ac49000000b0055a8e3957a7mr2299204ywj.6.1683058355888; Tue, 02 May
- 2023 13:12:35 -0700 (PDT)
-Date:   Tue,  2 May 2023 20:12:19 +0000
-In-Reply-To: <20230502201220.1756319-1-cmllamas@google.com>
-Mime-Version: 1.0
-References: <20230502201220.1756319-1-cmllamas@google.com>
-X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
-Message-ID: <20230502201220.1756319-3-cmllamas@google.com>
-Subject: [PATCH 3/3] binder: add lockless binder_alloc_(set|get)_vma()
-From:   Carlos Llamas <cmllamas@google.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "=?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?=" <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Carlos Llamas <cmllamas@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
-        Liam Howlett <liam.howlett@oracle.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1683058378; x=1685650378;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=P/xq/tzHtej/fzK6I1AmmjIHpO+eMLtvnYIVKZW+7ZU=;
+        b=RDa9CpIaHbgDfff92x+m87Gf4ICIT1ZkMovTqJ7fB8zWfY0If3mEkz7qnqwpowQKkh
+         4BgMqwtUDBL1OqpVyCkflhX/NecIXGlmQq2AlDFna0sjVLhYFbgm0m/DCoTYQdM1UG72
+         KORZ8sCFWdf4WU3Vcjc7wQ1gOrL9sfOp+M0VtVuWkttACRE1i/d3Eg3bQ/OKopoydx27
+         YdqfowW92n+PmzOUhyAwe4j+cx6692grTZreHsZ22WV7hJPnRmd3ZAU73YfyUHI45Npq
+         jl4VurSAtHRP3ArDm08kmkZa1BnBTaXf8paFzI8aM5WWozl6fyaA1FEc1chNnz6A7HyE
+         AJkw==
+X-Gm-Message-State: AC+VfDwmQaN/lxs36A+nupRdyyY1pcYSqNnW9oHxbGoZ+VbXBaUxshem
+        roH2SRPdRPLaU0Of526hCvOl5w==
+X-Google-Smtp-Source: ACHHUZ6hcb+/wiMhyfbpB59/j6QyIW4RQ3+kUtH2G6Lsf9FdAhsCzVoLpKYvti1Cummm+uTzwurNPA==
+X-Received: by 2002:a05:6402:1a48:b0:50b:c56a:feec with SMTP id bf8-20020a0564021a4800b0050bc56afeecmr6393797edb.17.1683058378156;
+        Tue, 02 May 2023 13:12:58 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:37be:eda5:e303:19e0? ([2a02:810d:15c0:828:37be:eda5:e303:19e0])
+        by smtp.gmail.com with ESMTPSA id b11-20020a056402138b00b004bd6e3ed196sm13386727edv.86.2023.05.02.13.12.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 May 2023 13:12:57 -0700 (PDT)
+Message-ID: <041b6dbf-c55a-02da-350c-a6a968485482@linaro.org>
+Date:   Tue, 2 May 2023 22:12:56 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH] Revert "arm64: dts: zynqmp: Add address-cells property to
+ interrupt controllers"
+Content-Language: en-US
+To:     Michal Simek <michal.simek@amd.com>, linux-kernel@vger.kernel.org,
+        monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com
+Cc:     Harini Katakam <harini.katakam@amd.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Robert Hancock <robert.hancock@calian.com>,
+        Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>,
+        Tanmay Shah <tanmay.shah@amd.com>,
+        Vishal Sagar <vishal.sagar@amd.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <e3312910db0922bb8c24a8e681de41709ca11bdf.1683035456.git.michal.simek@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <e3312910db0922bb8c24a8e681de41709ca11bdf.1683035456.git.michal.simek@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bring back the original lockless design in binder_alloc to determine
-whether the buffer setup has been completed by the ->mmap() handler.
-However, this time use smp_load_acquire() and smp_store_release() to
-wrap all the ordering in a single macro call.
+On 02/05/2023 15:51, Michal Simek wrote:
+> This reverts commit c6badbd2d321c19d4f55ee56b0ef12bb3352feac.
+> 
+> Long time ago this was discussed with Rob at link below that there is no
+> need to add address-cells to gpio and interrupt nodes that's why reverting
+> this patch for ZynqMP.
+> Also there is no visible DTC warning which was seen in past.
+> 
+> Link: https://lore.kernel.org/r/91e3405245c89f134676449cf3822285798d2ed2.1612189652.git.michal.simek@xilinx.com
+> Signed-off-by: Michal Simek <michal.simek@amd.com>
 
-Also, add comments to make it evident that binder uses alloc->vma to
-determine when the binder_alloc has been fully initialized. In these
-scenarios acquiring the mmap_lock is not required.
+That seems right:
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#interrupt-map
 
-Fixes: a43cfc87caaf ("android: binder: stop saving a pointer to the VMA")
-Cc: Liam Howlett <liam.howlett@oracle.com>
-Cc: Suren Baghdasaryan <surenb@google.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Carlos Llamas <cmllamas@google.com>
----
- drivers/android/binder_alloc.c | 24 ++++++++++++++----------
- 1 file changed, 14 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/android/binder_alloc.c b/drivers/android/binder_alloc.c
-index eb082b33115b..e7c9d466f8e8 100644
---- a/drivers/android/binder_alloc.c
-+++ b/drivers/android/binder_alloc.c
-@@ -309,17 +309,18 @@ static int binder_update_page_range(struct binder_alloc *alloc, int allocate,
- 	return vma ? -ENOMEM : -ESRCH;
- }
- 
-+static inline void binder_alloc_set_vma(struct binder_alloc *alloc,
-+		struct vm_area_struct *vma)
-+{
-+	/* pairs with smp_load_acquire in binder_alloc_get_vma() */
-+	smp_store_release(&alloc->vma, vma);
-+}
-+
- static inline struct vm_area_struct *binder_alloc_get_vma(
- 		struct binder_alloc *alloc)
- {
--	struct vm_area_struct *vma = NULL;
--
--	if (alloc->vma) {
--		/* Look at description in binder_alloc_set_vma */
--		smp_rmb();
--		vma = alloc->vma;
--	}
--	return vma;
-+	/* pairs with smp_store_release in binder_alloc_set_vma() */
-+	return smp_load_acquire(&alloc->vma);
- }
- 
- static bool debug_low_async_space_locked(struct binder_alloc *alloc, int pid)
-@@ -382,6 +383,7 @@ static struct binder_buffer *binder_alloc_new_buf_locked(
- 	size_t size, data_offsets_size;
- 	int ret;
- 
-+	/* Check binder_alloc is fully initialized */
- 	if (!binder_alloc_get_vma(alloc)) {
- 		binder_alloc_debug(BINDER_DEBUG_USER_ERROR,
- 				   "%d: binder_alloc_buf, no vma\n",
-@@ -777,7 +779,9 @@ int binder_alloc_mmap_handler(struct binder_alloc *alloc,
- 	buffer->free = 1;
- 	binder_insert_free_buffer(alloc, buffer);
- 	alloc->free_async_space = alloc->buffer_size / 2;
--	alloc->vma = vma;
-+
-+	/* Signal binder_alloc is fully initialized */
-+	binder_alloc_set_vma(alloc, vma);
- 
- 	return 0;
- 
-@@ -959,7 +963,7 @@ int binder_alloc_get_allocated_count(struct binder_alloc *alloc)
-  */
- void binder_alloc_vma_close(struct binder_alloc *alloc)
- {
--	alloc->vma = 0;
-+	binder_alloc_set_vma(alloc, NULL);
- }
- 
- /**
--- 
-2.40.1.495.gc816e09b53d-goog
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
 
