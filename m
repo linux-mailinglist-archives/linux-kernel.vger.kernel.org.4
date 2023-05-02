@@ -2,201 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 432DB6F43AF
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 14:22:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 839266F43B4
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 14:23:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234215AbjEBMWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 08:22:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46950 "EHLO
+        id S233842AbjEBMXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 08:23:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234197AbjEBMWW (ORCPT
+        with ESMTP id S229533AbjEBMXM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 08:22:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A86DB;
-        Tue,  2 May 2023 05:22:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 2 May 2023 08:23:12 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 608F7F5;
+        Tue,  2 May 2023 05:23:10 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 1CF3B1F8BE;
+        Tue,  2 May 2023 12:23:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1683030189; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rpq/YOA2Q6NcOyBEqPAtPKwqdnVr3RL2S8jyTOYKx38=;
+        b=E5aokJVmN+jHpsNd8DP9p105k0emCQTSinruXmu1ftje8AFOFPqifHIr20RRU45v5R0EkX
+        3+6Ybnq8FpRRlcJ1+403QG6JiojNfSG/tigO1MGc3nD2+PDhHJvBGzWMuSG//jEr46Xoap
+        qvMgIEcWCV64sDbPjzXHNLVvQHEWqnU=
+Received: from suse.cz (unknown [10.100.201.202])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D0281623C6;
-        Tue,  2 May 2023 12:22:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C1D2C433EF;
-        Tue,  2 May 2023 12:22:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683030140;
-        bh=F0jPa7tNnQ7D5aJHQ4nzmWOU1N0VFYe0lBrk9O1VlPE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rk6YMvjU9y/Qp3ns9rsftJIWNO8/ESFTf+Z9h2R3TytencJLZiVoZ3TWpLcd+5uWl
-         RnkW77KMyU/VgjCjV3fibO3kfBkgcgNnOym89+3IGbHOEtsC1l2UvKKjA8cLARdSYL
-         8yEexMexUq06xN72hlervrUJ26BrSpHFMPuHfXw4vv2OYA25tuYsXY0+TSiPTcxszh
-         RUe8PPTQNU2eWCdBn4L+Pvf5JmkcrbtU6Xv3VXruPjTtkXlkGyIkV6maTN/ZNjhVPD
-         QX9jxCN6oMYvhOBTGF4l/WbfG17eFQP1AmYyh2a51Gtth5wjWi+DnLY5zsuXyZtobO
-         IJRDAGyiuBF1w==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1ptp1S-0003lW-CA; Tue, 02 May 2023 14:22:23 +0200
-Date:   Tue, 2 May 2023 14:22:22 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/7] arm64: dts: qcom: sc8280xp-crd: Add QMP to
- SuperSpeed graph
-Message-ID: <ZFEAfv2GnGeblk-x@hovoldconsulting.com>
-References: <20230425034010.3789376-1-quic_bjorande@quicinc.com>
- <20230425034010.3789376-7-quic_bjorande@quicinc.com>
+        by relay2.suse.de (Postfix) with ESMTPS id 231412C141;
+        Tue,  2 May 2023 12:23:08 +0000 (UTC)
+Date:   Tue, 2 May 2023 14:23:07 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Konrad =?iso-8859-1?Q?Gr=E4fe?= <k.graefe@gateware.de>,
+        Quentin Schulz <quentin.schulz@theobroma-systems.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Felipe Balbi <balbi@ti.com>, stable@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] vsprintf: Add %p[mM]U for uppercase MAC address
+Message-ID: <ZFEAq7r-awo0OYzp@alley>
+References: <2023042625-rendition-distort-fe06@gregkh>
+ <20230427115120.241954-1-k.graefe@gateware.de>
+ <c075b668-8194-6aea-484c-0223f164cb4d@rasmusvillemoes.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230425034010.3789376-7-quic_bjorande@quicinc.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c075b668-8194-6aea-484c-0223f164cb4d@rasmusvillemoes.dk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 24, 2023 at 08:40:09PM -0700, Bjorn Andersson wrote:
-> With support for the QMP combo phy to react to USB Type-C switch events,
-> introduce it as the next hop for the SuperSpeed lanes of the two USB
-> Type-C connectors, and connect the output of the DisplayPort controller
-> to the QMP combo phy.
+On Fri 2023-04-28 08:56:59, Rasmus Villemoes wrote:
+> On 27/04/2023 13.51, Konrad Gräfe wrote:
+> > The CDC-ECM specification requires an USB gadget to send the host MAC
+> > address as uppercase hex string. This change adds the appropriate
+> > modifier.
 > 
-> This allows the TCPM to perform orientation switching of both USB and
-> DisplayPort signals.
-> 
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> ---
->  arch/arm64/boot/dts/qcom/sc8280xp-crd.dts | 28 ++++++++++++++++---
->  arch/arm64/boot/dts/qcom/sc8280xp.dtsi    | 34 +++++++++++++++++++++++
->  2 files changed, 58 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-> index 547277924ea3..33c973661fa5 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-> @@ -64,7 +64,7 @@ port@1 {
->  					reg = <1>;
->  
->  					pmic_glink_con0_ss: endpoint {
-> -						remote-endpoint = <&mdss0_dp0_out>;
-> +						remote-endpoint = <&usb_0_qmpphy_out>;
->  					};
->  				};
->  
-> @@ -99,7 +99,7 @@ port@1 {
->  					reg = <1>;
->  
->  					pmic_glink_con1_ss: endpoint {
-> -						remote-endpoint = <&mdss0_dp1_out>;
-> +						remote-endpoint = <&usb_1_qmpphy_out>;
->  					};
->  				};
->  
-> @@ -412,7 +412,7 @@ &mdss0_dp0 {
->  
->  &mdss0_dp0_out {
->  	data-lanes = <0 1>;
-> -	remote-endpoint = <&pmic_glink_con0_ss>;
-> +	remote-endpoint = <&usb_0_qmpphy_dp_in>;
->  };
+> Thinking more about it, I'm not sure this is appropriate, not for a
+> single user like this. vsprintf() should not and cannot satisfy all
+> possible string formatting requirements for the whole kernel. The %pX
+> extensions are convenient for use with printk() and friends where one
+> needs what in other languages would be "string interpolation" (because
+> then the caller doesn't need to deal with temporary stack buffers and
+> pass them as %s arguments), but for single items like this, snprintf()
+> is not necessarily the right tool for the job.
+>
+> In this case, the caller can just as well call string_upper() on the
+> result
 
-It's a bit hard to follow what going on when using place holder nodes
-from the dtsi like this (instead of describing all the ports directly in
-the board dts). IIRC we went a bit back and forth over this earlier and
-we already use this scheme for the display port controllers, so I guess
-this is the price we pay for being consistent.
+I tend to agree with Rasmus. string_upper() is a super-easy solution.
+One user does not look worth adding all the churn into vsprintf().
 
->  &mdss0_dp1 {
-> @@ -421,7 +421,7 @@ &mdss0_dp1 {
->  
->  &mdss0_dp1_out {
->  	data-lanes = <0 1>;
-> -	remote-endpoint = <&pmic_glink_con1_ss>;
-> +	remote-endpoint = <&usb_1_qmpphy_dp_in>;
->  };
->  
->  &mdss0_dp3 {
-> @@ -670,9 +670,19 @@ &usb_0_qmpphy {
->  	vdda-phy-supply = <&vreg_l9d>;
->  	vdda-pll-supply = <&vreg_l4d>;
->  
-> +	orientation-switch;
-> +
->  	status = "okay";
->  };
->  
-> +&usb_0_qmpphy_dp_in {
-> +	remote-endpoint = <&mdss0_dp0_out>;
-> +};
-> +
-> +&usb_0_qmpphy_out {
-> +	remote-endpoint = <&pmic_glink_con0_ss>;
-> +};
-> +
->  &usb_0_role_switch {
->  	remote-endpoint = <&pmic_glink_con0_hs>;
->  };
-> @@ -697,9 +707,19 @@ &usb_1_qmpphy {
->  	vdda-phy-supply = <&vreg_l4b>;
->  	vdda-pll-supply = <&vreg_l3b>;
->  
-> +	orientation-switch;
-> +
->  	status = "okay";
->  };
->  
-> +&usb_1_qmpphy_dp_in {
-> +	remote-endpoint = <&mdss0_dp1_out>;
-> +};
-> +
-> +&usb_1_qmpphy_out {
-> +	remote-endpoint = <&pmic_glink_con1_ss>;
-> +};
-> +
->  &usb_1_role_switch {
->  	remote-endpoint = <&pmic_glink_con1_hs>;
->  };
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> index 0e691bb0120c..1eb3a295e8fa 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> @@ -3006,6 +3006,23 @@ usb_0_qmpphy: phy@88eb000 {
->  			#phy-cells = <1>;
->  
->  			status = "disabled";
-> +
-> +			ports {
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +
-> +				port@0 {
-> +					reg = <0>;
-> +
-> +					usb_0_qmpphy_out: endpoint {};
-> +				};
-> +
-> +				port@1 {
-> +					reg = <1>;
-> +
-> +					usb_0_qmpphy_dp_in: endpoint {};
-> +				};
-> +			};
->  		};
-
-The binding describes three ports, where dp-in is port 2.
-
-Perhaps you don't need to describe ss-in yet, but shouldn't the port
-numbers match? Should some of these be described as required in the
-binding?
-
-Johan
+Best Regards,
+Petr
