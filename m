@@ -2,90 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 345966F4ADA
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 22:04:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 727F46F4AE5
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 22:07:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbjEBUD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 16:03:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39464 "EHLO
+        id S229794AbjEBUHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 16:07:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbjEBUDy (ORCPT
+        with ESMTP id S229629AbjEBUHC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 16:03:54 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B809F1997;
-        Tue,  2 May 2023 13:03:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683057829; x=1714593829;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=DyYgu8EaagPkfyeH/Mvma9nZqR7FqJ8nacbfBWhR9Wc=;
-  b=QvHfI0K6mPtT159OUS3L5OZj81wiqTs/FsuptJA5e1VOM4dev3i3+4+b
-   ip3fd0X7lmH3A2MFYqu0aveCNccTAosJ8r/kNvQSlQF/7MnLOWHYs3fbO
-   Dg6W7WeNPaMGOClHDySUFi4pCl8EzVrZaVQfbeltF12yp+poBaTA0PTYG
-   EunkPNME7KP/sAsOiZHiH9Yz5zhHbCKABGpE5pqvY0BzTR2CtfdIHj9xB
-   X3ox3iaQPEbJuo8i6RSh9EuP/VKofSQ5PYL+/+VdYlINLgmwRfNgBZtKI
-   KClvTCjA2CplXH9VB4kbsfFDUz/RwPM0yRX1UcuRLT/GugWIOMt2B6E41
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="350567698"
-X-IronPort-AV: E=Sophos;i="5.99,245,1677571200"; 
-   d="scan'208";a="350567698"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2023 13:03:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="942578101"
-X-IronPort-AV: E=Sophos;i="5.99,245,1677571200"; 
-   d="scan'208";a="942578101"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga006.fm.intel.com with ESMTP; 02 May 2023 13:03:45 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ptwDv-008DIu-06;
-        Tue, 02 May 2023 23:03:43 +0300
-Date:   Tue, 2 May 2023 23:03:42 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Konrad =?iso-8859-1?Q?Gr=E4fe?= <k.graefe@gateware.de>
-Cc:     Quentin Schulz <quentin.schulz@theobroma-systems.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] vsprintf: Add %p[mM]U for uppercase MAC address
-Message-ID: <ZFFsni5znI4hS953@smile.fi.intel.com>
-References: <20230427115120.241954-2-k.graefe@gateware.de>
- <20230428064905.145858-1-k.graefe@gateware.de>
+        Tue, 2 May 2023 16:07:02 -0400
+Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AFD91997;
+        Tue,  2 May 2023 13:06:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1683057967; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=iT9g+M0S+e+kRek4sdOtHe0l/mzpHdAoLIaIEuCqJR6VKV8I3ajk8qHrspCs0wjpbn5pSvgHcRY67yOIN5xlAW17IDoGHE1e0b2CuR1sEEf9SZbQ33fy99Le56jVcI3jGOLlVhL5XHi4iaWuRGLQUlxkDo4Nb+6a9KwstviZIi0=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1683057967; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=jRzQaQYMyheL6/9XvWrDvecv1EQ6rZdy4z1HdYKesGo=; 
+        b=e35bLITHWvU4k3TnGL4PYr+iHwWlVDWcJxjGPRuKsdwAnZ9ClpqsOmVUccrqCQ8Y4jgDlKjxQIomNwrXIKs/q8j7g7CxinYnNw7W8ol3a5mcd49jAwL+KCeOtk19M1hfIxS16kbVI0OWtG+YLvjVFZT9RAJP0Su5ze0UG1CUBfI=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1683057967;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=jRzQaQYMyheL6/9XvWrDvecv1EQ6rZdy4z1HdYKesGo=;
+        b=HwUlBdNPExWNS3ZRm5TUZIeayBebk5apv+VrpEbHIRrfU6SY3qArHdodzmiSDME8
+        +7xbYgJ9gLd+Xtd22VzsnsHVarFvKcD9L4hJHrdYY7gKyZ1NP+5EddBcp4H7SQsoqEI
+        oyflG8ls/YY7SHqW7gO//lvUUtDVX2orxAyUqFj0=
+Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
+        with SMTPS id 168305796648833.62395961631171; Tue, 2 May 2023 13:06:06 -0700 (PDT)
+Message-ID: <c9765637-4601-0a7d-7e5e-4c3e9d52d90f@arinc9.com>
+Date:   Tue, 2 May 2023 23:05:41 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH net 2/2] net: dsa: mt7530: fix network connectivity with
+ multiple CPU ports
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?Q?Ren=c3=a9_van_Dorst?= <opensource@vdorst.com>
+Cc:     Richard van Schagen <richard@routerhints.com>,
+        Richard van Schagen <vschagen@cs.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230501121538.57968-1-arinc.unal@arinc9.com>
+ <20230501121538.57968-2-arinc.unal@arinc9.com>
+ <5e00b4c7-8d3f-e1b2-4359-5ee8fdf92ea9@gmail.com>
+Content-Language: en-US
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <5e00b4c7-8d3f-e1b2-4359-5ee8fdf92ea9@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230428064905.145858-1-k.graefe@gateware.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 08:49:04AM +0200, Konrad Gr�fe wrote:
-> The CDC-ECM specification requires an USB gadget to send the host MAC
-> address as uppercase hex string. This change adds the appropriate
-> modifier.
+On 02/05/2023 21:30, Florian Fainelli wrote:
+> 
+> 
+> On 5/1/2023 5:15 AM, arinc9.unal@gmail.com wrote:
+>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>
+>> On mt753x_cpu_port_enable() there's code that enables flooding for the 
+>> CPU
+>> port only. Since mt753x_cpu_port_enable() runs twice when both CPU ports
+>> are enabled, port 6 becomes the only port to forward the frames to. But
+>> port 5 is the active port, so no frames received from the user ports will
+>> be forwarded to port 5 which breaks network connectivity.
+>>
+>> Every bit of the BC_FFP, UNM_FFP, and UNU_FFP bits represents a port. Fix
+>> this issue by setting the bit that corresponds to the CPU port without
+>> overwriting the other bits.
+>>
+>> Clear the bits beforehand only for the MT7531 switch. According to the
+>> documents MT7621 Giga Switch Programming Guide v0.3 and MT7531 Reference
+>> Manual for Development Board v1.0, after reset, the BC_FFP, UNM_FFP, and
+>> UNU_FFP bits are set to 1 for MT7531, 0 for MT7530.
+>>
+>> Tested-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> 
+> This tag is implied by your Signed-off-by tag. No Fixes tag for this one?
 
-Why not teaching %ph to provide an uppercase? Would be much more useful than
-this.
+I've put it with v2. Let me send v3 to remove the tested-by and add your 
+reviewed-by to the other patch.
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Arınç
