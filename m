@@ -2,79 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 610A06F461D
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 16:29:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04A1E6F4622
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 16:32:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234286AbjEBO3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 10:29:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44932 "EHLO
+        id S234372AbjEBOcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 10:32:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234094AbjEBO3a (ORCPT
+        with ESMTP id S234212AbjEBOcn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 10:29:30 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B48C9186;
-        Tue,  2 May 2023 07:29:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ELVVbw+54Ch0+43hfmruTFJjfFtCPHuCtqF3FOZLWUg=; b=g6eJOOGyCZpxMJcZ9yJoCd1AkW
-        2IkBBSA32Oo0CTWn86cEPm2abQyr6zxmX9+QTElcddtTBR4RaOC61lOPB28TuaREMOa2wYLayK/xV
-        FoVhwKpwjOt7jF3g1kfQywXcqG3cIbxnW7/lZu7EAm4agzRj/7wISg6iZqRchmiM8+9iPpWvIWcI2
-        2O5CaiAcYoNk/NY7VB63QeNbmTStykUos/zP+fBTZbzowDUWBWJBb4hbKiQnRxNiDaIZukmxjn4z3
-        rBmy8mzsnFH4Wjh50AadBku1oeCN2tD/XryfULi2xIFup0LvJAgKiLPfOLsMophIqdjunqZcjC0J9
-        4n8EVpyA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ptqzm-008Nj4-ED; Tue, 02 May 2023 14:28:46 +0000
-Date:   Tue, 2 May 2023 15:28:46 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, mhocko@suse.com,
-        josef@toxicpanda.com, jack@suse.cz, ldufour@linux.ibm.com,
-        laurent.dufour@fr.ibm.com, michel@lespinasse.org,
-        liam.howlett@oracle.com, jglisse@google.com, vbabka@suse.cz,
-        minchan@google.com, dave@stgolabs.net, punit.agrawal@bytedance.com,
-        lstoakes@gmail.com, hdanton@sina.com, apopple@nvidia.com,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH 2/3] mm: drop VMA lock before waiting for migration
-Message-ID: <ZFEeHqzBJ6iOsRN+@casper.infradead.org>
-References: <20230501175025.36233-1-surenb@google.com>
- <20230501175025.36233-2-surenb@google.com>
+        Tue, 2 May 2023 10:32:43 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4318919F
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 07:32:41 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-b9d8e8898eeso5728015276.1
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 07:32:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683037960; x=1685629960;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=i0++0+/Ug+3JSWLaIqYWRl4j9BK08vqn/6MzYdH3xVU=;
+        b=lq5bCU7hkAiaR1vzgXDVSiZj3Xf23I0UFt7KFomYM+XQ7+/5ES1SK9t+BJ/546wpXg
+         kcXHiRzUr3f38IUFmcCGEEwdpkGfGMg3R/g3081ynaq0wG88n1LLAQmTDe6wBQnoSMYb
+         wMmc48OdYEYj0JJSwIb8oIvotyDBJfRuNCR4RYnZO0vscKYwx/Mv85mne+/wnHyhTqwt
+         N2YwWhfXSWziagxEOqGANQm7e5QzOUnCBnzFvvUXIta09rOeC6C2oQmmZRVCn3Yoeccj
+         HECaotp6W3M2v6H++wb8mVNdHt/31VT6VuQPBO8lrK82BDTzVKdLAOix7qtYgiKEg1LZ
+         Bycg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683037960; x=1685629960;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=i0++0+/Ug+3JSWLaIqYWRl4j9BK08vqn/6MzYdH3xVU=;
+        b=kwYGHJcnUAdzg9FlnOuJ/FGKe/w+4jqxgJTx0irlW6w/u+sMJ+hqhLQ3cwNoIWnfgF
+         BJQ1oxNil+jOA/vLwzp3qialrH1gfePJuqVLFl5J+ZOBHy8fFNjwpxBKOM547POMxnNq
+         I4Jsfp9P2D/B9qpRbjSUiZa2MneY5afXNuGcC/eaN5uocYDcmTbEHsihJWPBEzXe1NBU
+         QMS9VCi/7pcB3zeIZO7mwg1jBZywstYxQd9hNmvkhbtOOKOquTJTDZ1JvLRlXtcAqIeg
+         SjL+ia0HVvsWSe6h0M3QPAxYVlUvWgUhmja5Ajx17Ereq1clolhJLHxmkfUe+gYIyzbY
+         aMtw==
+X-Gm-Message-State: AC+VfDz/OdptG36H5jY9u99pt4LP+Lh3VlQyBCyS6MyBdzSPAKfwxGrn
+        81Mtk7D17KDLtLSUNIryRpNRDsxRd86lDmI/jpbX0A==
+X-Google-Smtp-Source: ACHHUZ7tjnkLLgQaXdBvE5eFMPW6xkR6z/FwUQkv+DxYwSsyPxdEOseu2rsUDojNZvfE/SQmivtt+QYdkCmuFVE9TNk=
+X-Received: by 2002:a25:c1c2:0:b0:b9e:8a15:753b with SMTP id
+ r185-20020a25c1c2000000b00b9e8a15753bmr1235964ybf.16.1683037960504; Tue, 02
+ May 2023 07:32:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230501175025.36233-2-surenb@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <f61599a9ef23767c2d66e5af9c975f05ef1cec6b.1682430069.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <f61599a9ef23767c2d66e5af9c975f05ef1cec6b.1682430069.git.christophe.jaillet@wanadoo.fr>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 2 May 2023 16:32:04 +0200
+Message-ID: <CAPDyKFqWD+w82N5AB0CJ867nPvg4tdHWuKDx=784qSXY4K6tNA@mail.gmail.com>
+Subject: Re: [PATCH] mmc: sdhci-cadence: Fix an error handling path in sdhci_cdns_probe()
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Brad Larson <blarson@amd.com>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-mmc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 01, 2023 at 10:50:24AM -0700, Suren Baghdasaryan wrote:
-> migration_entry_wait does not need VMA lock, therefore it can be dropped
-> before waiting. Introduce VM_FAULT_VMA_UNLOCKED to indicate that VMA
-> lock was dropped while in handle_mm_fault().
-> Note that once VMA lock is dropped, the VMA reference can't be used as
-> there are no guarantees it was not freed.
+On Tue, 25 Apr 2023 at 15:41, Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
+>
+> If devm_reset_control_get_optional_exclusive() fails, some resources still
+> need to be released. So branch to the error handling path instead of
+> returning directly.
+>
+> Fixes: aad53d4ee756 ("mmc: sdhci-cadence: Support mmc hardware reset")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-How about we introduce:
+Applied for fixes, thanks!
 
-void vmf_end_read(struct vm_fault *vmf)
-{
-	if (!vmf->vma)
-		return;
-	vma_end_read(vmf->vma);
-	vmf->vma = NULL;
-}
+Kind regards
+Uffe
 
-Now we don't need a new flag, and calling vmf_end_read() is idempotent.
-
-Oh, argh, we create the vmf too late.  We really need to hoist the
-creation of vm_fault to the callers of handle_mm_fault().
-
+> ---
+>  drivers/mmc/host/sdhci-cadence.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/mmc/host/sdhci-cadence.c b/drivers/mmc/host/sdhci-cadence.c
+> index b24aa27da50c..d2f625054689 100644
+> --- a/drivers/mmc/host/sdhci-cadence.c
+> +++ b/drivers/mmc/host/sdhci-cadence.c
+> @@ -540,9 +540,11 @@ static int sdhci_cdns_probe(struct platform_device *pdev)
+>
+>         if (host->mmc->caps & MMC_CAP_HW_RESET) {
+>                 priv->rst_hw = devm_reset_control_get_optional_exclusive(dev, NULL);
+> -               if (IS_ERR(priv->rst_hw))
+> -                       return dev_err_probe(mmc_dev(host->mmc), PTR_ERR(priv->rst_hw),
+> -                                            "reset controller error\n");
+> +               if (IS_ERR(priv->rst_hw)) {
+> +                       ret = dev_err_probe(mmc_dev(host->mmc), PTR_ERR(priv->rst_hw),
+> +                                           "reset controller error\n");
+> +                       goto free;
+> +               }
+>                 if (priv->rst_hw)
+>                         host->mmc_host_ops.card_hw_reset = sdhci_cdns_mmc_hw_reset;
+>         }
+> --
+> 2.34.1
+>
