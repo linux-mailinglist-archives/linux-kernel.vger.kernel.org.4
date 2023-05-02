@@ -2,229 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E9DF6F41F8
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 12:48:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E34B6F41FC
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 12:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233711AbjEBKsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 06:48:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47824 "EHLO
+        id S233608AbjEBKv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 06:51:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjEBKs3 (ORCPT
+        with ESMTP id S229936AbjEBKv0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 06:48:29 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2081.outbound.protection.outlook.com [40.107.220.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2906C172B;
-        Tue,  2 May 2023 03:48:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SdZvCZQfSfF5EI73E1vrG8Ij9bThsbNfUW12oL3hMycxXmbbHTu84mtgCoyieL/pYiplS8WXsS6S1X7Q64gFuksjC8wNybgB7s99ze+gWv9NJBKeZKuUrTLU6WhjRH6Yn6+wbcX4sT/7arD2G0WHbbTTVOquWRTmtvK8EmqgxhKsPzMoivUMKvyYFq5zTgx8xAL6unYJ5DrFk3/YEtGL31Igtl2Kh495dbimI8kHRL9JKNTLxwIV19Cu5bmRRcZ40Tf9zcFCHthIUT9LxI+U3YRQv8XYcOa5mxSkC0mQPSLLr4u0zPFO+MSEi/h/Wu5WDVhRN+9PXnU1Ph6n1mTfHw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=syLMu3YQQdA1gSqRKGLuffBCBiK/9nD4S7f1TiINeYM=;
- b=a7IifP3dpDixgwfagAs+/x82XXosVgADFx+OBG1H4zaPo4g3ubjqNfaUqYLz+5GAuHFU1Vbh4QsKg/gSwsxueY3pPPazXggOt7kNA/99qPhku7IuOklBpOkV9abPmvUGiEY84fcfkHjbtwzLT0KL8+XK3KdEkk5EQHWoujvM7ETWtc8Hy7pkop4sJRwEtm47SSH9EQwu5yijBoYd3m4zirTQLVA7LiWFd9oRcihiEFi5Xx7NRwkc5GBazRCeL+hKuszkRgkNXR5IM/0mBNaFV4M04t+atg8oKovXQ29cUNsXKXZQZSKT00/w/s+UXWpRBu2lXxEuDKNx8o7W2+HJyQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=syLMu3YQQdA1gSqRKGLuffBCBiK/9nD4S7f1TiINeYM=;
- b=pA8W78eBPtG2yXDs0X0zuUfPUYCdApo/vq1FBmGn7HiplWpdX/z4qGOSpVRWCxMR3OEuppQMLIvesM7holetISZvk+3Wa2l9odNHkDwPl17beKuA5Z+yG/aGmwvQjGSrJdJn7DirCeaZYyWO/0yMxq1FEK7OXUQpIOAZssL9ixQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10)
- by PH7PR12MB7377.namprd12.prod.outlook.com (2603:10b6:510:20c::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.30; Tue, 2 May
- 2023 10:48:24 +0000
-Received: from PH7PR12MB6588.namprd12.prod.outlook.com
- ([fe80::b4a6:94bb:6895:645]) by PH7PR12MB6588.namprd12.prod.outlook.com
- ([fe80::b4a6:94bb:6895:645%7]) with mapi id 15.20.6340.030; Tue, 2 May 2023
- 10:48:24 +0000
-Message-ID: <56dd818d-3f2a-59ba-3c56-af45f488ad8d@amd.com>
-Date:   Tue, 2 May 2023 16:18:00 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 27/46] perf print-events: Print legacy cache events for
- each PMU
-Content-Language: en-US
-To:     Ian Rogers <irogers@google.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Ahmad Yasin <ahmad.yasin@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Stephane Eranian <eranian@google.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Samantha Alt <samantha.alt@intel.com>,
-        Caleb Biggers <caleb.biggers@intel.com>,
-        Weilin Wang <weilin.wang@intel.com>,
-        Edward Baker <edward.baker@intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        Rob Herring <robh@kernel.org>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Sumanth Korikkar <sumanthk@linux.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Leo Yan <leo.yan@linaro.org>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        James Clark <james.clark@arm.com>,
-        Suzuki Poulouse <suzuki.poulose@arm.com>,
-        Kang Minchul <tegongkang@gmail.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ravi Bangoria <ravi.bangoria@amd.com>
-References: <20230429053506.1962559-1-irogers@google.com>
- <20230429053506.1962559-28-irogers@google.com>
-From:   Ravi Bangoria <ravi.bangoria@amd.com>
-In-Reply-To: <20230429053506.1962559-28-irogers@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN2PR01CA0203.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:e9::15) To PH7PR12MB6588.namprd12.prod.outlook.com
- (2603:10b6:510:210::10)
+        Tue, 2 May 2023 06:51:26 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C5930EC
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 03:51:24 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4edc63e066fso1913e87.1
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 03:51:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683024682; x=1685616682;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=J9qMzmYwH4A73j9Uo0VGBU0UVYPI6bWM4XwJxhZTK6k=;
+        b=spjwfzaP2Q4oIrn3O0pOUWzYcgaIJ7WSUG8Mv6QnGv0FmeOiw7liCv9b7EGW6maPJd
+         aiM3DmCj5CPWAWMA7T0OVrnb82c0OKPFPn7Go0wV+YCRCJfcFSw2HmS7ITqf0DcIj8Dz
+         MZJMmq4h64zIkh8/oIaoNHfbWt49ReHJ15XSPz1NsEIZQeWFvDm5+ApFEk0qtw/6eac/
+         C5M1Ef3Soh8BZUNSIjwBXE+I3iBdgUoZB9NutUB46vU4H8bJLeve7HWZkyWDZMFE7unW
+         V4ima/3IvIip/B58wygltAfqEdf8joHXM44LCJZAMZxLZx9/Wm/PAvtqjc0Jx4jW+5EK
+         Ox4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683024682; x=1685616682;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=J9qMzmYwH4A73j9Uo0VGBU0UVYPI6bWM4XwJxhZTK6k=;
+        b=dEWCWqCO+6t0oiy6c6eOPKyWHWryL7J1f01jUKzVtSGyHYJOgFgN4plMGtrlX6UUYL
+         Kwpv/VBeoIXJhvVePG/kAaH5dLRO93lKOX45tI+UodHAz/DfySpclIkdSrhVjFjZRJ/J
+         37g2aK/njgwZ+5hIGvMEhaNs98kjuNX873CATQp8q7JqvGAoLzbbpWfM9lHni2VLfZyh
+         t2G0DW/dDv/+QkD/+i80SZu86D7gqXe3h+V1XXCixn/z2eiIrHmLRoXQJyt1kSa6d1BX
+         ITND4gIpt8PmdexWqHlj4k+fN9leJ0gYE/RWmKid049u8+R0QEa1UKmU1vA3YqAKgdER
+         rZww==
+X-Gm-Message-State: AC+VfDxAk13NGzUYCIOGa249BmKyTyyXSfiDQH5gtEPyukKPUj6znXMu
+        4f370XoC0NOtyEZBEzg8M8WDVWoJMrmdAS8EVhScTBjSLl8ABA2q2SF2LQ==
+X-Google-Smtp-Source: ACHHUZ5X3VDSwNP41vasrajEaHyTcoRsJghd3PrH9Ghpcgz/gsr8oY44Azj+ppJ63mGiK1eqPZuNX0xhqQWCp4Cxwu4=
+X-Received: by 2002:a05:6512:3d90:b0:4f1:21a2:901f with SMTP id
+ k16-20020a0565123d9000b004f121a2901fmr114730lfv.3.1683024682035; Tue, 02 May
+ 2023 03:51:22 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR12MB6588:EE_|PH7PR12MB7377:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1074937d-9bf9-4d2d-1c5f-08db4afac094
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: eoxp3PHQJboJeDDINc3AFduwuh99OZap2iN7ebjfOpy+Qv2SfYCpmZzagsuCwoX4PIKatUESAIU4sISHGK3U6NJZZVyCN3xAQ1Rufqw0PO0OrSBTXXXjwf/GFNMhU+IS6l57kmzrOIx72jPTBL77VBamsL8sIOzbUF0Wl6f0NPaMlnVlqkEar8ucrT8Wpdi9rHAFavq5fbjCOoQRUzoXhnRYzqWy9R4hFrbDRYX+9sucBl7GrtZrAurGZ3yAjdk8kn5QZUm9axT9ZE/hjSag1NoLz3xm/i8aaW8lzSAdalEvMTefwtLbrXzY/B+WEAlgXIwUL7Vm/E4cXU/yykwsIuGOswNoI6dnOmUuzeiizS9sJux+ZX2FACxKhvN/Djw47b1b9tGfvZFIFMI5nFOUY0MVjlTB55J1iKiJHB71bwVKe4hj6+dsHE7PdSDQb9/+W/tCPaxFwVdkWeOrZFOSNlINsIQB8LTjTWqJf0ALz3N+p8sDnnlqHjaAJqECqu3U1oY35XFBZEQo0v/0l0FPy2SGFYJ9erBUtFyDEZ9+48QXQRedJX5fjtT+cAno+4oc3xjqdi1H69ixik88aweLcOO+gGDMBdzWCyt9o6uO620qxdWsaQsd81w0hyYxkLUrVS9/Kk0FvRt7E+He9qfrqASoTmTM0Z5H7EL5E3q4X0g=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6588.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(366004)(39860400002)(396003)(136003)(346002)(451199021)(186003)(66556008)(66476007)(66946007)(921005)(316002)(478600001)(6486002)(110136005)(31696002)(86362001)(36756003)(6666004)(6512007)(26005)(6506007)(2906002)(2616005)(38100700002)(53546011)(7406005)(7416002)(31686004)(5660300002)(8676002)(44832011)(8936002)(41300700001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WFUvdmdGemRvZUdCcDFXLzhIdHpZaGRQZzQ2NGdldU4xb212aVRXdFB2RFBk?=
- =?utf-8?B?MjQ0UXh0MThlaTlSRDBMODRheStQbElyeExGNnErY0NFK21WNWM3Rkh2bVJO?=
- =?utf-8?B?RVc4Vjlza1p2VHozVHh4QkVHc0Y1bzVPNWpjMlFJYnJzclRHU21LK0JPdHN3?=
- =?utf-8?B?SG5DVVRNRUJqWG9KU1ZNczZad3FvQllDemNXU3Vlc1h2TmViNFJ1NHhNY093?=
- =?utf-8?B?ditKbDFIMUNBMVJTaTBSMUoyS1lDcmxQclpKY3F4SGhyMFgzZWJ2bHpqaG5V?=
- =?utf-8?B?Z3Ywa3BNSWpGSlBmNGRoalJ0VFRYK1FDSmlPRmNuMU5ieE5MZDBxcjhXY0s1?=
- =?utf-8?B?V1RSUWdHTFdGcE1IOTViOTBLNnk2NSs1NnJrZmtYa3lWZWdLM0ZaT29vYzdp?=
- =?utf-8?B?N0RpeTFLZkxSVFVBM1ZrVmtuZVY2dGNOM1RrY0VBQkNHbVN4VDhBcU5hMzlZ?=
- =?utf-8?B?V01rYmJtSjhaV1FxdkpsSGY5VHg5SjViS090bTdtb1JUOWxETnF6UDBLbTBt?=
- =?utf-8?B?S3ZXTkkzelRPeDJkYzUxVVlvODFlOG41QlkyL0p4enVzc1pFNkZyRzdMdGNm?=
- =?utf-8?B?Z2M4SFl1ejkxc2hDQjJhUXpuejRpaytrUEQrc01xQS9QMDhGUzJ2OXRqWUJC?=
- =?utf-8?B?SkgzZjJ6Y3VrcHlzNWxPN0VBNk41dHVQSkN6OWRnMHNVYjk0aUFyMHVLMDZX?=
- =?utf-8?B?R1VLclNxR29QTVFWZHE1Rlk4WE5KcU1QblRuSGgvaUNrdUtTVkc5aEFjbWxS?=
- =?utf-8?B?eUNwbWlDTmNxQlk2NndFcFcrK1BlT1Jid1JZa2Jka3R1d0t0Rk8ydk1vTHhT?=
- =?utf-8?B?b0Y0MWdHYi8xYmp5RnJhR1BRNnpIcFZ1N0lWZERIRDNUdXVnMEVzWFNESklQ?=
- =?utf-8?B?blFLeVpTK1FpcU1Cb0JhNzF5aTI5VkJUYmdNQThCRDhpVWlyV2Q3WUdENVNo?=
- =?utf-8?B?SjFBZVhUVjdTb3QvYW1UL2gzYys0TXRyb3VrRDVQb3U2MjJrdzR5WHlramdV?=
- =?utf-8?B?UTFxaDBvazhJd3BWbnBXaXpNYUZXNk1oR0pBb3ZUc1JxS0llQXhrbjdCcnYx?=
- =?utf-8?B?K2t5aWdYN20wRWh0N1JiWlNtdTRCQkEzN2FFUitoR1A4dU1VT05sZ1NhS2lw?=
- =?utf-8?B?cWNDUjZMWU1PeVcrM1JIRW1KZHVzaldtVlYweitQUEhVQVJ0U0lETVVTemFy?=
- =?utf-8?B?d05lU01LNGhsYjlKalJtREZXdU1ucDV3ejRWLzhaM3laeXlzNElvUU5Fbnpp?=
- =?utf-8?B?SGtoTXQ4QzNRUGt6ajF1aGYzZDlBMStWOFp3cW1lQmxObEZvNzJkUkUxaUJv?=
- =?utf-8?B?Y1NJTld0cXR3TzZFditWT3djS0NhQ3RDUmU3WGt0YnF0TDBNZ2RId0xobkh4?=
- =?utf-8?B?dkZFSVFTN0Fubm05anZnTElaWDFScnRHRmVUY2VkcWYwZzFMMFpLSXBnRDY0?=
- =?utf-8?B?T2txUGNSMkZ4VHFac3FYZnFiMndlS0c5MldCd3B3azNGUmZCdWtkektEVDhW?=
- =?utf-8?B?L2xOVE9yTDc3RFcwek95VzFHQkdHK2dXNmhQcldGSlppTzJHbjM3aDNKdXdm?=
- =?utf-8?B?a01ySmo5VTN3RG9vcTZ3Q2FDUVlFaWlreFo0WHZvNlJjVlZyNzYyeWFVZ0x6?=
- =?utf-8?B?RVplVFl0NmVQcVlld0pVczhKOG8xZ3F5cGZHdmp1VlpJMWxmT3ZkN3l3cm5Q?=
- =?utf-8?B?Z0I1Z0UzY2ZRanhiZk82WEY1NUZIREdBZDZzTFlJdmVnaGVNeVhHajVjMEJO?=
- =?utf-8?B?RUd5ckVXVmJDaFd3YlQ1UTY2NE9IaCtEcDFCRWJDZ2MxSnhYT0wybUNXb0E5?=
- =?utf-8?B?eGxrQnpId0NuTUFFbjlDN2JMUVhLeXA4SUhTSnJtc2lYcVIrNEliQ1pJNENq?=
- =?utf-8?B?cW0rMUttZExabzg4YS9wWXRqTFBOaDFWVXpmYUhBaXk5b2hleXhqTlZCelF0?=
- =?utf-8?B?QjViQnBtVVNIK1NzR29uVmtKVHlQRzFqbVZCWTVEOE9aays2TlRVWlIrdms3?=
- =?utf-8?B?eTlaeTh2YUswa2szSEk5YWxybGsxb2JHSkU0SytnVkREa2hZTTdTYnc5eEV6?=
- =?utf-8?B?d3pabnRBUk9EN05zUkNocHU0T05BUnByVlBTRExUM2tFRGlwYmc2ME5YWUJB?=
- =?utf-8?Q?RiuwKKZC51SLEwlAKNf3Ub82A?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1074937d-9bf9-4d2d-1c5f-08db4afac094
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6588.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2023 10:48:23.9847
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xnuWWSCVmCXl4nKCUA1GeLG/X29+x+nZwfMFu8KcXGTF/1Mig8CY5oRQpOb+63HCub0CXfy4Ni5HChpKo2nx0g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7377
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <00000000000065594605fab2e72c@google.com>
+In-Reply-To: <00000000000065594605fab2e72c@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Tue, 2 May 2023 12:51:09 +0200
+Message-ID: <CACT4Y+bOmSHmau-7o0wzajAc=e=xVYnUkGgYX-jL8iYrPB=JXQ@mail.gmail.com>
+Subject: Re: [syzbot] upstream boot error: BUG: unable to handle kernel paging
+ request in gpiod_set_value
+To:     syzbot <syzbot+5e3c3df60302959ef641@syzkaller.appspotmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     brgl@bgdev.pl, linus.walleij@linaro.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29-Apr-23 11:04 AM, Ian Rogers wrote:
-> Mirroring parse_events_add_cache, list the legacy name alongside its
-> alias with the PMU. Remove the now unnecessary hybrid logic.
+On Tue, 2 May 2023 at 11:52, syzbot
+<syzbot+5e3c3df60302959ef641@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following issue on:
+>
+> HEAD commit:    865fdb08197e Merge tag 'input-for-v6.4-rc0' of git://git.=
+k..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=3D16481bf828000=
+0
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3Dd43eae746231f=
+eb3
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3D5e3c3df60302959=
+ef641
+> compiler:       arm-linux-gnueabi-gcc (Debian 10.2.1-6) 10.2.1 20210110, =
+GNU ld (GNU Binutils for Debian) 2.35.2
+> userspace arch: arm
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the comm=
+it:
+> Reported-by: syzbot+5e3c3df60302959ef641@syzkaller.appspotmail.com
 
-Before patch:
++arm mailing list
 
-```
-$ sudo ./perf list
-  ...
-  duration_time                                      [Tool event]
-  user_time                                          [Tool event]
-  system_time                                        [Tool event]
-  L1-dcache-loads                                    [Hardware cache event]
-  L1-dcache-load-misses                              [Hardware cache event]
-  L1-dcache-prefetches                               [Hardware cache event]
-  L1-icache-loads                                    [Hardware cache event]
-  L1-icache-load-misses                              [Hardware cache event]
-  dTLB-loads                                         [Hardware cache event]
-  dTLB-load-misses                                   [Hardware cache event]
-  iTLB-loads                                         [Hardware cache event]
-  iTLB-load-misses                                   [Hardware cache event]
-  branch-loads                                       [Hardware cache event]
-  branch-load-misses                                 [Hardware cache event]
-  branch-brs OR cpu/branch-brs/                      [Kernel PMU event]
-  branch-instructions OR cpu/branch-instructions/    [Kernel PMU event]
-  branch-misses OR cpu/branch-misses/                [Kernel PMU event]
-  ...
-```
+Kernel started falling apart on arm during boot in various strange ways.
 
-After patch:
+#syz set subsystems: arm
 
-```
-$ sudo ./perf list
-  ...
-  duration_time                                      [Tool event]
-  user_time                                          [Tool event]
-  system_time                                        [Tool event]
-
-cpu:
-  L1-dcache-loads OR cpu/L1-dcache-loads/
-  L1-dcache-load-misses OR cpu/L1-dcache-load-misses/
-  L1-dcache-prefetches OR cpu/L1-dcache-prefetches/
-  L1-icache-loads OR cpu/L1-icache-loads/
-  L1-icache-load-misses OR cpu/L1-icache-load-misses/
-  dTLB-loads OR cpu/dTLB-loads/
-  dTLB-load-misses OR cpu/dTLB-load-misses/
-  iTLB-loads OR cpu/iTLB-loads/
-  iTLB-load-misses OR cpu/iTLB-load-misses/
-  branch-loads OR cpu/branch-loads/
-  branch-load-misses OR cpu/branch-load-misses/
-  branch-brs OR cpu/branch-brs/                      [Kernel PMU event]
-  branch-instructions OR cpu/branch-instructions/    [Kernel PMU event]
-  branch-misses OR cpu/branch-misses/                [Kernel PMU event]
-  ...
-```
-
-Is this intentional change?
-
-
-> -	for (int type = 0; type < PERF_COUNT_HW_CACHE_MAX; type++) {
-> -		for (int op = 0; op < PERF_COUNT_HW_CACHE_OP_MAX; op++) {
-> -			/* skip invalid cache type */
-> -			if (!evsel__is_cache_op_valid(type, op))
-> -				continue;
-> +	while ((pmu = perf_pmu__scan(pmu)) != NULL) {
-> +		/*
-> +		 * Skip uncore PMUs for performance. Software PMUs can open
-> +		 * PERF_TYPE_HW_CACHE, so skip.
-
-This statement is bit confusing. Can you please explain how SW pmus can
-open cache events.
+> Movable zone start for each node
+> Early memory node ranges
+>   node   0: [mem 0x0000000080000000-0x00000000ffffffff]
+> Initmem setup node 0 [mem 0x0000000080000000-0x00000000ffffffff]
+> percpu: Embedded 19 pages/cpu s47048 r8192 d22584 u77824
+> Kernel command line: root=3D/dev/vda console=3DttyAMA0  earlyprintk=3Dser=
+ial net.ifnames=3D0 sysctl.kernel.hung_task_all_cpu_backtrace=3D1 ima_polic=
+y=3Dtcb nf-conntrack-ftp.ports=3D20000 nf-conntrack-tftp.ports=3D20000 nf-c=
+onntrack-sip.ports=3D20000 nf-conntrack-irc.ports=3D20000 nf-conntrack-sane=
+.ports=3D20000 binder.debug_mask=3D0 rcupdate.rcu_expedited=3D1 rcupdate.rc=
+u_cpu_stall_cputime=3D1 no_hash_pointers page_owner=3Don sysctl.vm.nr_hugep=
+ages=3D4 sysctl.vm.nr_overcommit_hugepages=3D4 secretmem.enable=3D1 sysctl.=
+max_rcu_stall_to_panic=3D1 msr.allow_writes=3Doff coredump_filter=3D0xffff =
+root=3D/dev/vda console=3DttyAMA0 vmalloc=3D512M smp.csd_lock_timeout=3D300=
+000 watchdog_thresh=3D165 workqueue.watchdog_thresh=3D420 sysctl.net.core.n=
+etdev_unregister_timeout_secs=3D420 dummy_hcd.num=3D2 panic_on_warn=3D1
+> Unknown kernel command line parameters "earlyprintk=3Dserial page_owner=
+=3Don", will be passed to user space.
+> Dentry cache hash table entries: 262144 (order: 8, 1048576 bytes, linear)
+> Inode-cache hash table entries: 131072 (order: 7, 524288 bytes, linear)
+> Built 1 zonelists, mobility grouping on.  Total pages: 520868
+> allocated 2097152 bytes of page_ext
+> mem auto-init: stack:off, heap alloc:on, heap free:off
+> software IO TLB: area num 2.
+> software IO TLB: mapped [mem 0x00000000d9a47000-0x00000000dda47000] (64MB=
+)
+> Memory: 1952316K/2097152K available (24576K kernel code, 2364K rwdata, 84=
+04K rodata, 2048K init, 868K bss, 128452K reserved, 16384K cma-reserved, 52=
+4288K highmem)
+> SLUB: HWalign=3D64, Order=3D0-3, MinObjects=3D0, CPUs=3D2, Nodes=3D1
+> trace event string verifier disabled
+> rcu: Preemptible hierarchical RCU implementation.
+> rcu:    RCU restricting CPUs from NR_CPUS=3D8 to nr_cpu_ids=3D2.
+> rcu:    RCU callback double-/use-after-free debug is enabled.
+>         All grace periods are expedited (rcu_expedited).
+>         Trampoline variant of Tasks RCU enabled.
+>         Tracing variant of Tasks RCU enabled.
+> rcu: RCU calculated value of scheduler-enlistment delay is 10 jiffies.
+> rcu: Adjusting geometry for rcu_fanout_leaf=3D16, nr_cpu_ids=3D2
+> NR_IRQS: 16, nr_irqs: 16, preallocated irqs: 16
+> GIC physical location is 0x2c001000
+> rcu: srcu_init: Setting srcu_struct sizes based on contention.
+> sched_clock: 32 bits at 24MHz, resolution 41ns, wraps every 89478484971ns
+> clocksource: arm,sp804: mask: 0xffffffff max_cycles: 0xffffffff, max_idle=
+_ns: 1911260446275 ns
+> arch_timer: cp15 timer(s) running at 62.50MHz (virt).
+> clocksource: arch_sys_counter: mask: 0x1ffffffffffffff max_cycles: 0x1cd4=
+2e208c, max_idle_ns: 881590405314 ns
+> sched_clock: 57 bits at 63MHz, resolution 16ns, wraps every 4398046511096=
+ns
+> Switching to timer-based delay loop, resolution 16ns
+> Console: colour dummy device 80x30
+> Calibrating delay loop (skipped), value calculated using timer frequency.=
+. 125.00 BogoMIPS (lpj=3D625000)
+> pid_max: default: 32768 minimum: 301
+> LSM: initializing lsm=3Dlockdown,capability,landlock,yama,safesetid,tomoy=
+o,selinux,bpf,integrity
+> landlock: Up and running.
+> Yama: becoming mindful.
+> TOMOYO Linux initialized
+> SELinux:  Initializing.
+> LSM support for eBPF active
+> stackdepot: allocating hash table of 131072 entries via kvcalloc
+> Mount-cache hash table entries: 4096 (order: 2, 16384 bytes, linear)
+> Mountpoint-cache hash table entries: 4096 (order: 2, 16384 bytes, linear)
+> CPU: Testing write buffer coherency: ok
+> CPU0: Spectre BHB: enabling loop workaround for all CPUs
+> CPU1: thread -1, cpu 1, socket 0, mpidr 80000001
+> 8<--- cut here ---
+> Unable to handle kernel paging request at virtual address 000c01f3 when r=
+ead
+> [000c01f3] *pgd=3D80000080004003, *pmd=3D00000000
+> Internal error: Oops: 206 [#1] PREEMPT SMP ARM
+> Modules linked in:
+> CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.3.0-syzkaller #0
+> Hardware name: ARM-Versatile Express
+> PC is at gpiod_set_value+0x38/0xc0 drivers/gpio/gpiolib.c:3222
+> LR is at gpio_led_set+0x5c/0x60 drivers/leds/leds-gpio.c:54
+> pc : [<80891a24>]    lr : [<8107f408>]    psr: 20000113
+> sp : 82601e90  ip : 82601ea8  fp : 82601ea4
+> r10: 00000000  r9 : 827e16e6  r8 : 00000001
+> r7 : dddd1798  r6 : 000000ff  r5 : 00000001  r4 : 835c27a8
+> r3 : 000c0193  r2 : 8107f3ac  r1 : 00000001  r0 : 83194800
+> Flags: nzCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment user
+> Control: 30c5387d  Table: 80003000  DAC: fffffffd
+> Register r0 information: slab kmalloc-1k start 83194800 pointer offset 0 =
+size 1024
+> Register r1 information: non-paged memory
+> Register r2 information: non-slab/vmalloc memory
+> Register r3 information: non-paged memory
+> Register r4 information: slab kmalloc-192 start 835c2780 pointer offset 4=
+0 size 192
+> Register r5 information: non-paged memory
+> Register r6 information: non-paged memory
+> Register r7 information:
+> 8<--- cut here ---
+> Unable to handle kernel paging request at virtual address df943ff8 when r=
+ead
+> [df943ff8] *pgd=3D80000080007003, *pmd=3D83093003, *pte=3D802160e88021666=
+4
+> Internal error: Oops: 207 [#2] PREEMPT SMP ARM
+> Modules linked in:
+> CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.3.0-syzkaller #0
+> Hardware name: ARM-Versatile Express
+> PC is at __find_vmap_area mm/vmalloc.c:841 [inline]
+> PC is at find_vmap_area mm/vmalloc.c:1862 [inline]
+> PC is at find_vm_area mm/vmalloc.c:2623 [inline]
+> PC is at vmalloc_dump_obj+0x38/0xb4 mm/vmalloc.c:4221
+> LR is at __raw_spin_lock include/linux/spinlock_api_smp.h:132 [inline]
+> LR is at _raw_spin_lock+0x18/0x58 kernel/locking/spinlock.c:154
+> pc : [<8047a1f0>]    lr : [<818016fc>]    psr: a0000193
+> sp : 82601cf8  ip : 82601ce0  fp : 82601d0c
+> r10: 8261ae40  r9 : 8261c9a4  r8 : 8285041c
+> r7 : 60000113  r6 : 00000008  r5 : dddd2000  r4 : df944000
+> r3 : 00000000  r2 : 0000215b  r1 : 00000000  r0 : 00000001
+> Flags: NzCv  IRQs off  FIQs on  Mode SVC_32  ISA ARM  Segment user
+> Control: 30c5387d  Table: 80003000  DAC: fffffffd
+>
+>
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+>
+> If the bug is already fixed, let syzbot know by replying with:
+> #syz fix: exact-commit-title
+>
+> If you want to change bug's subsystems, reply with:
+> #syz set subsystems: new-subsystem
+> (See the list of subsystem names on the web dashboard)
+>
+> If the bug is a duplicate of another bug, reply with:
+> #syz dup: exact-subject-of-another-report
+>
+> If you want to undo deduplication, reply with:
+> #syz undup
+>
+> --
+> You received this message because you are subscribed to the Google Groups=
+ "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgi=
+d/syzkaller-bugs/00000000000065594605fab2e72c%40google.com.
