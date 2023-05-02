@@ -2,118 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD9E56F49E5
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 20:47:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A273C6F49EA
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 20:49:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229508AbjEBSrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 14:47:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36976 "EHLO
+        id S229508AbjEBSt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 14:49:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjEBSrU (ORCPT
+        with ESMTP id S229498AbjEBSty (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 14:47:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6292E73
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 11:46:30 -0700 (PDT)
+        Tue, 2 May 2023 14:49:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 438CA10C6
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 11:49:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683053190;
+        s=mimecast20190719; t=1683053348;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=m2VDNN7GX+FeD3QyzU7peSzD1fbVt8nTpAgV/GryMXg=;
-        b=CDtZli7qNaUyvSitZJlNZjTBUBVOVxsyY3jI6/qBTL+0h4DY8Q9tnnrDPfrFWW/xSXxoq1
-        Qx6W9uqiwWEAnVD8QHSxUUO26372NYyg+Igotoaud6Z/TyYx7TOoS4JpTIy7cgSUuhqob5
-        rQcj1Wzi8J3imlvTTywekWIHRKv/2Hc=
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
- [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
+         in-reply-to:in-reply-to:references:references;
+        bh=DZ0W+FU8PsLfAAZv9zbz/cngBwAlCp+YIRm01kljAiE=;
+        b=WEQWVkoCRuowfnvASph77+4Thuq+xphdcVA6CEuicnmj5DXqDhKhYMsMR/SbLgN9C3Zv9Z
+        ADYuPfWKjJ5w+Kd/daYE5+s+RRQMXhknqlqEV7IVroLu5tU9guAdLWX/EE8mBWleZ6CZGJ
+        z2JW7aE+a9iIIEcyVfy7E2QT/mVd0UE=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-636--Iu-1nOoPNKU6rS3HvF3Hw-1; Tue, 02 May 2023 14:46:28 -0400
-X-MC-Unique: -Iu-1nOoPNKU6rS3HvF3Hw-1
-Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-76353eb51acso623666439f.0
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 11:46:28 -0700 (PDT)
+ us-mta-359-vJC9gA-qMBqzA7GO8Y4j5g-1; Tue, 02 May 2023 14:49:07 -0400
+X-MC-Unique: vJC9gA-qMBqzA7GO8Y4j5g-1
+Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-61b591eb0cfso13534936d6.2
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 11:49:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683053188; x=1685645188;
-        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=m2VDNN7GX+FeD3QyzU7peSzD1fbVt8nTpAgV/GryMXg=;
-        b=MVs/TuZYkzgaLeBjy4qzMrzfkoXSsnSYK4BfQoqMHF9h/wFUmryYOGuUkvLje4nl10
-         omYTZP64ZQqIUOv38LOrTmXNyTopbnGCQBjGfY2ZoGYNiVan9c4vFIBXYiwOfrF9z9Du
-         nUFYh0/4+6nTmFJuNLVWI+faHmFMZELXyjgTX//HHqKPxDxXG+5A8Ft2hWB5MYw34VYg
-         gkg7T7V2wD41e+fJwURCicD6QVgEbW/xNOUjltJXOv+ie9W8cqKItL7yTLUEuzLp7FTb
-         keV5Z4kM40+k0CvM0rbBk9c0GJ8UNJQgzaqR1SWtHTLOTLtJt/Ri6SWzdkFCobnq7c0t
-         QO1w==
-X-Gm-Message-State: AC+VfDzk90TmFzjKexwJdno7JdDjqd3hDU76907sUAkzRpnvLPMCqokg
-        jBBSHiTuAfKIqE4Z8S+dBp84x2fh+loFkXt4b5smPZTxuwsBbXEdWb9O9U1hKCGDR5mcEaBNb82
-        +qgLyHJTuu5XA/3fjtZZ0vn9I
-X-Received: by 2002:a5d:924e:0:b0:766:59fe:11f3 with SMTP id e14-20020a5d924e000000b0076659fe11f3mr11617136iol.14.1683053188190;
-        Tue, 02 May 2023 11:46:28 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7dq4rSAg8BfqQuD4Y3U0R8u3tH8wzcOS0ObF5dTvXP+f6FdH9JDWt6Gm2UyiVtwUWCGfaU7Q==
-X-Received: by 2002:a5d:924e:0:b0:766:59fe:11f3 with SMTP id e14-20020a5d924e000000b0076659fe11f3mr11617124iol.14.1683053187890;
-        Tue, 02 May 2023 11:46:27 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id a25-20020a6b6c19000000b0075c37601b5csm8625436ioh.4.2023.05.02.11.46.27
+        d=1e100.net; s=20221208; t=1683053346; x=1685645346;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DZ0W+FU8PsLfAAZv9zbz/cngBwAlCp+YIRm01kljAiE=;
+        b=CpmlYPWWcKyQumzbnpFqO3ojiF/8C/w0gSI5qq0zV4dV12X6iONlTwWRcQ37TPfbzM
+         byyq/4Qf37rn5KEVnuY5I52fp5016GxVZbTvcyM5C6IfK6PmIeSyu5w+PjKcJPeR8yUX
+         KJEldKoMoTW9O8rCsW8mT+yP1RRi3y6lsY+akJjhCwZaXQNNHlGYknZqYK0p5YJSHSnk
+         OH/wgk/MhS1lcs2Ym8v2Iz4eU0izKuWpzIgkKmihb9bprhHcB6wHlIjLmafPLCmqjdLg
+         jPJo1Bm7Ejp9/3ZGxl5idmjviIkwj+JZ4KgNOaqTJkmH4so/D0+/fMAFlfxiuHU25N61
+         gaiQ==
+X-Gm-Message-State: AC+VfDxlzmSnRQLI7pxtS7pRxWEauB3ZAWmsHQB4GLrucZ29ooRd5Dgp
+        8l3CTFs5KN0AoFrABFCQMJtqDjpE8SlWyuqNA6xJ1lL8lAfDcIUmm2GyyhHNYwtII7unec318qP
+        D0de8yeDsJiJhbHZoGfmX/Kmr
+X-Received: by 2002:ad4:596b:0:b0:616:5c8b:59d with SMTP id eq11-20020ad4596b000000b006165c8b059dmr6197888qvb.20.1683053346398;
+        Tue, 02 May 2023 11:49:06 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5Wy2JnTAhWuNet9cEToNtvnh6Rgxw5wsbBieiyINBFnufP8DZTowekkRqdmisuq2+jBHV9JA==
+X-Received: by 2002:ad4:596b:0:b0:616:5c8b:59d with SMTP id eq11-20020ad4596b000000b006165c8b059dmr6197852qvb.20.1683053346170;
+        Tue, 02 May 2023 11:49:06 -0700 (PDT)
+Received: from fedora (modemcable181.5-202-24.mc.videotron.ca. [24.202.5.181])
+        by smtp.gmail.com with ESMTPSA id y10-20020ad445aa000000b006057140e017sm9063235qvu.89.2023.05.02.11.49.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 May 2023 11:46:27 -0700 (PDT)
-Date:   Tue, 2 May 2023 12:46:25 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
-Subject: [GIT PULL] VFIO updates for v6.4-rc1
-Message-ID: <20230502124625.355ec05e.alex.williamson@redhat.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+        Tue, 02 May 2023 11:49:05 -0700 (PDT)
+Date:   Tue, 2 May 2023 14:49:03 -0400
+From:   Adrien Thierry <athierry@redhat.com>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Shazad Hussain <quic_shazhuss@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v1 0/6] arm64: qcom: sa8775p: add support for USB
+Message-ID: <ZFFbH7bH0pCDdoN1@fedora>
+References: <20230421133922.8520-1-quic_shazhuss@quicinc.com>
+ <ZEcEGJiikEC2wIVE@fedora>
+ <CAA8EJpr27=2jAXbamN6J7yF+7G=L5Af8+XReB5UnFuihcEwMQA@mail.gmail.com>
+ <ZEgV+H3yZLp48Dlc@fedora>
+ <3dc6e993-bcca-4e0d-5aca-686fcc8b5b73@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3dc6e993-bcca-4e0d-5aca-686fcc8b5b73@linaro.org>
 X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hi Dmitry,
 
-The following changes since commit 09a9639e56c01c7a00d6c0ca63f4c7c41abe075d:
+On Sat, Apr 29, 2023 at 12:41:39AM +0300, Dmitry Baryshkov wrote:
+> On 25/04/2023 21:03, Adrien Thierry wrote:
+> > Hi Dmitry,
+> > 
+> > > Semi-random suggestion, but could you please try using
+> > > clk_regmap_phy_mux/clk_regmap_phy_mux_ops for USB pipe clk src?
+> > 
+> > Which specific clock are you refering to? I'm not very familiar with
+> > those, in the device tree I'm seeing "pipe" clocks for usb_0 and usb_1
+> > phys, but not for usb_2, which is the one that's causing issues.
+> > 
+> 
+> Ah, I see. Could you please try adding the 'qcom,select-utmi-as-pipe-clk'
+> property to the usb_2 host node and running the test again?
+>
 
-  Linux 6.3-rc6 (2023-04-09 11:15:57 -0700)
+Thanks for the suggestion. I tested this but unfortunately the issue is
+still happening.
 
-are available in the Git repository at:
+Best,
 
-  https://github.com/awilliam/linux-vfio.git tags/vfio-v6.4-rc1
-
-for you to fetch changes up to 705b004ee377b789e39ae237519bab714297ac83:
-
-  docs: kvm: vfio: Suggest KVM_DEV_VFIO_GROUP_ADD vs VFIO_GROUP_GET_DEVICE_FD ordering (2023-04-21 13:48:44 -0600)
-
-----------------------------------------------------------------
-VFIO updates for v6.4-rc1
-
- - Expose and allow R/W access to the PCIe DVSEC capability through
-   vfio-pci, as we already do with the legacy vendor capability.
-   (K V P Satyanarayana)
-
- - Fix kernel-doc issues with structure definitions. (Simon Horman)
-
- - Clarify ordering of operations relative to the kvm-vfio device for
-   driver dependencies against the kvm pointer. (Yi Liu)
-
-----------------------------------------------------------------
-K V P, Satyanarayana (1):
-      vfio/pci: Add DVSEC PCI Extended Config Capability to user visible list.
-
-Simon Horman (1):
-      vfio: correct kdoc for ops structures
-
-Yi Liu (1):
-      docs: kvm: vfio: Suggest KVM_DEV_VFIO_GROUP_ADD vs VFIO_GROUP_GET_DEVICE_FD ordering
-
- Documentation/virt/kvm/devices/vfio.rst | 5 +++++
- drivers/vfio/pci/vfio_pci_config.c      | 7 +++++++
- include/linux/vfio.h                    | 5 +++++
- 3 files changed, 17 insertions(+)
+Adrien
 
