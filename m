@@ -2,102 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B23B26F4919
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 19:23:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2DFB6F491E
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 19:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbjEBRX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 13:23:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57722 "EHLO
+        id S234466AbjEBRZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 13:25:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232402AbjEBRX0 (ORCPT
+        with ESMTP id S234109AbjEBRYr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 13:23:26 -0400
+        Tue, 2 May 2023 13:24:47 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28606E43;
-        Tue,  2 May 2023 10:23:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1C4E61;
+        Tue,  2 May 2023 10:24:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=C6e/8ch2eiLA3MhI/SDDmmseytmUgb05EwRd/AY6faE=; b=lYH/Im62obo8CLQo3d1z7OxM7G
-        zg20c66BCFqbOPkxy7fYV/VkvAd9TfywyQ9BqaGqllwMiqAMKqdwKmqUe9D6QDk9TGEaDNfLGHdvQ
-        QhrXDgYDf5e4zXRxjfxjBHIHVnSZhzAJ6eKr2M1mEhiD+JJCRcMOFSNBo9S9vPZ9PpioWTkDWybas
-        vo+c2F+r6FMmmafjil3/fr+u4sZJ6Y6ahyjePqfI6e54HOd+Ho2lChGO9p6QcxJY2stOHsGkkhj+e
-        T5FjO7EWYn9pLEQv6lJFMKuughpqndTY0ADrd8LMAXZM3CGr6e4q00jkFAPORv4mtWidTcXEIOLQp
-        7OWTpSKg==;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=hrcCJlzTEWTjYDj+PsLFsdbovv7vXKPWKk6sNRy/lTs=; b=qHun9WZXPvt4wdHJ6P0pkB1o/5
+        E/ri8TDaZGkBh0zusE18HSRSMDEwT0FEz+LpLM3rUN86dbm7KPkxy6/RUQ8Ur4lh2mA5I2yp9Y+rO
+        VJiZz9HytEWqnZ79cpEpij8B4bbKSaN/Bn5y+u0/bd/1ub9wKIX7Dfh8KwfjVEwUbCyEKF9hfmndm
+        Pd1iqy5s+flkn2iVMeoxFgK9yUU04jnWWkGf2RvPZxQj/y2lSvPl22O6ivV7EPRDECuU+NayXGWk5
+        GTflEOThiCrz1ZEVg/psUxh0iZsOJ1VEgQHS8Ba0GD7LzEGquQggZsjJTdOrT+TLKeDxm8mRn0XqB
+        B5dR7HxA==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ptti1-008YU3-7O; Tue, 02 May 2023 17:22:37 +0000
+        id 1pttjS-008YZ8-Ta; Tue, 02 May 2023 17:24:07 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 20013300379;
-        Tue,  2 May 2023 19:22:32 +0200 (CEST)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 72CC9300165;
+        Tue,  2 May 2023 19:24:05 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 92DB726941AA0; Tue,  2 May 2023 19:22:32 +0200 (CEST)
-Date:   Tue, 2 May 2023 19:22:32 +0200
+        id 1FBF72122BC96; Tue,  2 May 2023 19:24:04 +0200 (CEST)
+Date:   Tue, 2 May 2023 19:24:04 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Mika Penttila <mpenttil@redhat.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Theodore Ts'o <tytso@mit.edu>, Peter Xu <peterx@redhat.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>
-Subject: Re: [PATCH v7 3/3] mm/gup: disallow FOLL_LONGTERM GUP-fast writing
- to file-backed mappings
-Message-ID: <20230502172231.GH1597538@hirez.programming.kicks-ass.net>
-References: <cover.1683044162.git.lstoakes@gmail.com>
- <b3a4441cade9770e00d24f5ecb75c8f4481785a4.1683044162.git.lstoakes@gmail.com>
- <1691115d-dba4-636b-d736-6a20359a67c3@redhat.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     tj@kernel.org, hannes@cmpxchg.org, lizefan.x@bytedance.com,
+        johunt@akamai.com, mhocko@suse.com, keescook@chromium.org,
+        quic_sudaraja@quicinc.com, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/1] psi: remove 500ms min window size limitation for
+ triggers
+Message-ID: <20230502172404.GI1597538@hirez.programming.kicks-ass.net>
+References: <20230303011346.3342233-1-surenb@google.com>
+ <CAJuCfpHcgu5Cti0t+U=S1C5-0ZgebhxzrOnhDiSu5qCyuq5_Wg@mail.gmail.com>
+ <CAJuCfpE_aB6KQZj6A0NTCcv09bJ26L1hECDho3M2OyiNoMfFEA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1691115d-dba4-636b-d736-6a20359a67c3@redhat.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJuCfpE_aB6KQZj6A0NTCcv09bJ26L1hECDho3M2OyiNoMfFEA@mail.gmail.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -105,54 +64,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 02, 2023 at 07:13:49PM +0200, David Hildenbrand wrote:
-> [...]
+On Tue, May 02, 2023 at 10:20:34AM -0700, Suren Baghdasaryan wrote:
+> On Thu, Mar 2, 2023 at 5:16 PM Suren Baghdasaryan <surenb@google.com> wrote:
+> >
+> > On Thu, Mar 2, 2023 at 5:13 PM Suren Baghdasaryan <surenb@google.com> wrote:
+> > >
+> > > Current 500ms min window size for psi triggers limits polling interval
+> > > to 50ms to prevent polling threads from using too much cpu bandwidth by
+> > > polling too frequently. However the number of cgroups with triggers is
+> > > unlimited, so this protection can be defeated by creating multiple
+> > > cgroups with psi triggers (triggers in each cgroup are served by a single
+> > > "psimon" kernel thread).
+> > > Instead of limiting min polling period, which also limits the latency of
+> > > psi events, it's better to limit psi trigger creation to authorized users
+> > > only, like we do for system-wide psi triggers (/proc/pressure/* files can
+> > > be written only by processes with CAP_SYS_RESOURCE capability). This also
+> > > makes access rules for cgroup psi files consistent with system-wide ones.
+> > > Add a CAP_SYS_RESOURCE capability check for cgroup psi file writers and
+> > > remove the psi window min size limitation.
+> > >
+> > > Suggested-by: Sudarshan Rajagopalan <quic_sudaraja@quicinc.com>
+> > > Link: https://lore.kernel.org/all/cover.1676067791.git.quic_sudaraja@quicinc.com/
+> > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > > Acked-by: Michal Hocko <mhocko@suse.com>
+> > > Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+> >
+> > Forgot to change the --to field from Tejun to PeterZ.
+> > Peter, just to clarify, this change is targeted for inclusion in your tree.
 > 
-> > +{
-> > +	struct address_space *mapping;
-> > +
-> > +	/*
-> > +	 * GUP-fast disables IRQs - this prevents IPIs from causing page tables
-> > +	 * to disappear from under us, as well as preventing RCU grace periods
-> > +	 * from making progress (i.e. implying rcu_read_lock()).
-> > +	 *
-> > +	 * This means we can rely on the folio remaining stable for all
-> > +	 * architectures, both those that set CONFIG_MMU_GATHER_RCU_TABLE_FREE
-> > +	 * and those that do not.
-> > +	 *
-> > +	 * We get the added benefit that given inodes, and thus address_space,
-> > +	 * objects are RCU freed, we can rely on the mapping remaining stable
-> > +	 * here with no risk of a truncation or similar race.
-> > +	 */
-> > +	lockdep_assert_irqs_disabled();
-> > +
-> > +	/*
-> > +	 * If no mapping can be found, this implies an anonymous or otherwise
-> > +	 * non-file backed folio so in this instance we permit the pin.
-> > +	 *
-> > +	 * shmem and hugetlb mappings do not require dirty-tracking so we
-> > +	 * explicitly whitelist these.
-> > +	 *
-> > +	 * Other non dirty-tracked folios will be picked up on the slow path.
-> > +	 */
-> > +	mapping = folio_mapping(folio);
-> > +	return !mapping || shmem_mapping(mapping) || folio_test_hugetlb(folio);
-> 
-> "Folios in the swap cache return the swap mapping" -- you might disallow
-> pinning anonymous pages that are in the swap cache.
-> 
-> I recall that there are corner cases where we can end up with an anon page
-> that's mapped writable but still in the swap cache ... so you'd fallback to
-> the GUP slow path (acceptable for these corner cases, I guess), however
-> especially the comment is a bit misleading then.
-> 
-> So I'd suggest not dropping the folio_test_anon() check, or open-coding it
-> ... which will make this piece of code most certainly easier to get when
-> staring at folio_mapping(). Or to spell it out in the comment (usually I
-> prefer code over comments).
+> I think this patch slipped through the cracks. Peter, could you please
+> take it into your tree?
 
-So how stable is folio->mapping at this point? Can two subsequent reads
-get different values? (eg. an actual mapping and NULL)
-
-If so, folio_mapping() itself seems to be missing a READ_ONCE() to avoid
-the compiler from emitting the load multiple times.
+Sorry, yes, got lost. I'll go queue it for post -rc1. No urgency with
+this right?
