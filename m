@@ -2,93 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 303916F444B
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 14:52:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC97D6F444E
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 14:53:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234278AbjEBMwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 08:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36790 "EHLO
+        id S233787AbjEBMxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 08:53:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234273AbjEBMwj (ORCPT
+        with ESMTP id S233513AbjEBMxi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 08:52:39 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410E15BBD
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 05:52:36 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f18335a870so22640015e9.0
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 05:52:36 -0700 (PDT)
+        Tue, 2 May 2023 08:53:38 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980C45252
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 05:53:37 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-b922aa3725fso7517675276.0
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 05:53:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683031955; x=1685623955;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=z5nhvdWhebkMYO4GW1JxCEEWKCb3+y/3CByFzV8Cg/c=;
-        b=CxaCtcuzOTNy7f/1wJAHyAIhOYhUOJ0mbsaDVqtncXXmwAROV60TU3lViUssIFHZu2
-         Y31y022xEnfx8eiUwsx+QVJP1HHcEr9E7MF9OAEtz+3wjnUoLQ8r4mfsTctwf+iYAq9g
-         1EfUl5kzbDGIwguNiog2N1myfzcyrSokUyTkrb+YK3DlXmdsbVNoSgMhYenDhugsIG/7
-         ECjfMJHoaogu02mSajg8uaGajCLr/UXPgoopLCfD/CYWJNN871od1JuyqDKPy3R0zXwS
-         YybhLrnyrZ4wNSzKFfQfvNX3SwtEMq2Zy4VnJXLnukb8qhR3NnI5b9oRKSgPRb8Xuq8p
-         qegA==
+        d=google.com; s=20221208; t=1683032017; x=1685624017;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=yD3RHOmw2YonU9lq/qLKI0ISZtFJQuh0JdGUDdx5IQ4=;
+        b=Nd8aPNd3NegOIXfFnsIObxs6yMD8V4tXgHyCuXTTN/BZDFLwElKICS86m6HIeGPcJo
+         sa21trMsksNhMFTJpnRHFOxe6gNFa2PqBhWUMgMEqBNGYcOmhcrg8ei2+afLGBQtW/1I
+         YIMFA+EfZnd6QWWaANQ6O85meD1Xgamv1yPKfhukbtXAhHP9s5JJiBaZJQdgAi8CTqMJ
+         Qw+6goOIKN8vyJJALi4cHybsIVUi6VKK1rXv+P7sExw7GiS2FJJRPFi1pw8zKYjxwhbK
+         Ccmy/M8HU8QnaK9dBM6FoQA3CxY0dQgSjB+fxgTqTuEnRE+Rb8jAuL2v7MM0U9luLK2k
+         Agjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683031955; x=1685623955;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=z5nhvdWhebkMYO4GW1JxCEEWKCb3+y/3CByFzV8Cg/c=;
-        b=RNACA6wK0Z6lLMdwLmFT5Fk8Exn3yJqpQByiqVHDX5K3wBWElM3myfPMCaVC0Stcq+
-         yM/jqKSvpYmyrySmkY4oWGLcbIFOa+MZ54r3lyCDkHzWXePizobM5GMb5gY506+XRXCz
-         XQzHBMnEidYfLF8d3Jedpo3M50LcWs+csE39D44l9QBIZjL8BQo2YmoZUrTGE6iqPPXd
-         EOd99oXVMeC+2WfdjDVkJuOY50dfHkyliEMWOOmK2jqBhicI4zjLiJ4kYNSM8IFWbk/L
-         tSap+KoDYRGzz71p7ALjfZJI0tDbh3Fo0/lmaH1OgVrcBAIMk1v89pxwMfmepNZCKnUA
-         65ww==
-X-Gm-Message-State: AC+VfDzD9qnfMSE2X1gLK6yDvQVErYxa7QppR0ZKnSlNzCboRkCISeOM
-        11SyIYK+OHBSjqZVlB4MpMbG+3okjlGH/iei7h8=
-X-Google-Smtp-Source: ACHHUZ6l8mKcdy9L6W76xeUt3EbwO1UlAd+EWeiolYIzQNmUagEuLN6MiyY6NL3j25PcHAYCehExSw==
-X-Received: by 2002:a05:600c:ac8:b0:3f1:72f8:6a92 with SMTP id c8-20020a05600c0ac800b003f172f86a92mr11860067wmr.20.1683031954701;
-        Tue, 02 May 2023 05:52:34 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id t14-20020a05600c450e00b003f0a6a1f969sm39293362wmo.46.2023.05.02.05.52.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 May 2023 05:52:33 -0700 (PDT)
-Date:   Tue, 2 May 2023 15:52:29 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Jinhong Zhu <jinhongzhu@hust.edu.cn>
-Cc:     martin.petersen@oracle.com, GR-QLogic-Storage-Upstream@marvell.com,
-        error27@gmail.com, jejb@linux.ibm.com, jhasan@marvell.com,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        skashyap@marvell.com
-Subject: Re: Re: [PATCH] qedf: Fix NULL dereference in error handling
-Message-ID: <e5d627aa-5bb4-4b24-bdb2-6cf26195d431@kili.mountain>
-References: <yq1fs8ok4v9.fsf@ca-mkp.ca.oracle.com>
- <20230425125823.2325-1-jinhongzhu@hust.edu.cn>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230425125823.2325-1-jinhongzhu@hust.edu.cn>
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1683032017; x=1685624017;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yD3RHOmw2YonU9lq/qLKI0ISZtFJQuh0JdGUDdx5IQ4=;
+        b=fjlzCJio6cdmU6ug/vg9fAdFZ2Sw2Vvgom0Jaw/UB1DjS95u2RbBZZ/7PeIOZ62Rx6
+         QAWfm84mY59ZOE3zla/vaS9wp7Kj2TQxiGZvlWaXuGT9N4CB2PTCNXf6yov8rz8U4NlF
+         gBHpOtGqzf1d88zKbBdQh7KqTcCDXnU24SnO3frpLnnhqHt2Q3lNN0tGGHO9ZrBso+0K
+         cs+vClzNxsVOqyHSoKLTxWnFGHg2sfo1BXibKUHd7FeT1xGoWhsGTqAQHJApcg92WKmy
+         ZJ75MT/f8fQz1ZCkH3h1K5SKLgbnFOjijAJxZTiyxLL/imBAMRDRT6KAfU5dkudnqBBV
+         mTGg==
+X-Gm-Message-State: AC+VfDxtrpYyu+cwGyRimxDmXHx1D6gb7x3SUjB6hSwfjZCVRP9uFx5a
+        HGlw3k86VFeazrtl9qhxwfAHwcJFgIiUCLw=
+X-Google-Smtp-Source: ACHHUZ5gPH29sQUYLHBCrXjx3vdTmEARKf1rg93iTFELyjd4V+wNVN9mwS0ZUXmZdt8eM/8Fc88lx09nESpYrVE=
+X-Received: from aliceryhl.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:6c8])
+ (user=aliceryhl job=sendgmr) by 2002:a05:6902:100e:b0:b8f:47c4:58ed with SMTP
+ id w14-20020a056902100e00b00b8f47c458edmr10400410ybt.9.1683032016822; Tue, 02
+ May 2023 05:53:36 -0700 (PDT)
+Date:   Tue,  2 May 2023 12:53:06 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
+Message-ID: <20230502125306.358283-1-aliceryhl@google.com>
+Subject: [PATCH] rust: str: add conversion from `CStr` to `CString`
+From:   Alice Ryhl <aliceryhl@google.com>
+To:     Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>
+Cc:     Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        "=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?=" <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Alice Ryhl <aliceryhl@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 08:58:23PM +0800, Jinhong Zhu wrote:
-> >> Fixes: 09e062ce83cb ("qedf: Fix NULL dereference in error handling")
-> 
-> >This commit does not appear to exist in Linus' tree.
-> 
-> Sorry for the wrong fixes tag.
-> 
-> This is the correct one.
-> 
-> Fixes: 61d8658b4a43 ("scsi: qedf: Add QLogic FastLinQ offload FCoE driver framework.")
+These methods can be used to copy the data in a temporary c string into
+a separate allocation, so that it can be accessed later even if the
+original is deallocated.
 
-You need to send a v2 patch.  I have written a blog about this process.
+The API in this file mirrors the standard library API for the `&str` and
+`String` types. The `ToOwned` trait is not implemented because it
+assumes that allocations are infallible.
 
-https://staticthinking.wordpress.com/2022/07/27/how-to-send-a-v2-patch/
+Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+---
+ rust/kernel/str.rs | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-regards,
-dan carpenter
+diff --git a/rust/kernel/str.rs b/rust/kernel/str.rs
+index b771310fa4a4..54935ff3a610 100644
+--- a/rust/kernel/str.rs
++++ b/rust/kernel/str.rs
+@@ -2,6 +2,7 @@
+ 
+ //! String representations.
+ 
++use alloc::collections::TryReserveError;
+ use alloc::vec::Vec;
+ use core::fmt::{self, Write};
+ use core::ops::{self, Deref, Index};
+@@ -199,6 +200,12 @@ impl CStr {
+     pub unsafe fn as_str_unchecked(&self) -> &str {
+         unsafe { core::str::from_utf8_unchecked(self.as_bytes()) }
+     }
++
++    /// Convert this [`CStr`] into a [`CString`] by allocating memory and
++    /// copying over the string data.
++    pub fn to_cstring(&self) -> Result<CString, TryReserveError> {
++        CString::try_from(self)
++    }
+ }
+ 
+ impl fmt::Display for CStr {
+@@ -584,6 +591,20 @@ impl Deref for CString {
+     }
+ }
+ 
++impl<'a> TryFrom<&'a CStr> for CString {
++    type Error = TryReserveError;
++
++    fn try_from(cstr: &'a CStr) -> Result<CString, TryReserveError> {
++        let len = cstr.len_with_nul();
++        let mut buf = Vec::try_with_capacity(len)?;
++        buf.try_extend_from_slice(cstr.as_bytes_with_nul())?;
++
++        // INVARIANT: The CStr and CString types have the same invariants for
++        // the string data, and we copied it over without changes.
++        Ok(CString { buf })
++    }
++}
++
+ /// A convenience alias for [`core::format_args`].
+ #[macro_export]
+ macro_rules! fmt {
+
+base-commit: ea76e08f4d901a450619831a255e9e0a4c0ed162
+-- 
+2.40.1.495.gc816e09b53d-goog
 
