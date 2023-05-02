@@ -2,148 +2,350 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC00F6F4C2A
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 23:27:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A25E26F4C29
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 23:27:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbjEBV1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 17:27:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33510 "EHLO
+        id S229564AbjEBV1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 17:27:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjEBV1K (ORCPT
+        with ESMTP id S229502AbjEBV1H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 17:27:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915041704
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 14:26:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683062782;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1zc7E43mDugyj5NEnd93trnYdgLQsKcvQy7NWFtl2VU=;
-        b=KG2lhN2AgtHVgEv322yBE61gVbiyM/zDFhmt+Frp7/B8/jAXkUT6MVBgv8RUxZJk0mEVds
-        Fpb2GS58C68EEO44yLHx3LYaEqHpsU0SrSTLEcAtTLp/7xT3bxEFIKIuXhaZffxusC/XT2
-        Dlo+4bKflZourDkEFrmMGqnPCzeBeu8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-403-h9qpYmFjMQu-UNgu6fOiTA-1; Tue, 02 May 2023 17:26:18 -0400
-X-MC-Unique: h9qpYmFjMQu-UNgu6fOiTA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 33D3C811E7E;
-        Tue,  2 May 2023 21:26:18 +0000 (UTC)
-Received: from [10.22.10.239] (unknown [10.22.10.239])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5A78C112132E;
-        Tue,  2 May 2023 21:26:17 +0000 (UTC)
-Message-ID: <f2bd7b1e-190e-1d08-f085-b4cae36fb5be@redhat.com>
-Date:   Tue, 2 May 2023 17:26:17 -0400
+        Tue, 2 May 2023 17:27:07 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59FB31710;
+        Tue,  2 May 2023 14:27:05 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-b9e2b65d006so3675071276.3;
+        Tue, 02 May 2023 14:27:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683062824; x=1685654824;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=knJwrsz/sIaCpvJlUBXXveg4rz275IOOMyO2S8skkn0=;
+        b=FJFilFFe+xcy0Goi384A3gDjzqh7Mpu2K0IiO0fXyu9H/2M9/ZqZtN0+JfztjniGaH
+         xNFxefNlAxu0F1hRaQqHO6LVePxhrrk84DXos5DnbJhXTQj9WI8pYTLDH+7UiuwtOU6W
+         TognYxinD4urmTZ8fDh+xy2xLQLJ3LEJ+VfeAnujsiN2mi8nVBgrctHp/Bog+O7OCgKK
+         9a5v8WK/R0tYTuVJ5wd66LnWvGcSWQhcBYRrYQxGUZBVHCzK0JX1aFMPOQ01wWYNtsFB
+         fF5ri9piz9HbHyAYkVDkds+XtluySg97e/zBp6qKxjMh+Sh28za4YeWvxT2w3YX1G55D
+         ePVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683062824; x=1685654824;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=knJwrsz/sIaCpvJlUBXXveg4rz275IOOMyO2S8skkn0=;
+        b=DSNGZpaPrQDIoDo2WSwfINuRQEBTrMbiUY1HolxZfmTv6vsXRIKwPQsu2yvzO4FgbG
+         ivFTtct/UNbnfrmYYGME+a2vwBasF8BV0nPzxNNbRUicH8F0PzhaZ1HEiiFWOxyStQ7V
+         DBM0Y0H4uXWCYsiQnq1xnaDJIDjY7Un7k/b1sNfn87t7AVEh6kKHMWqIz40WsK2Tm05H
+         wsmWcQxRxTjuy1enKm+QhF8yd9bPv89jYErooHL2FK5j3pMuuIsmp0aNfkU8FiNJ/uos
+         i1HzqUOj4gj1KBJrndI1eADu/CEyeHJJOpw2SrfWyxMOhMuTc599mFrq3D9B6773196j
+         OySQ==
+X-Gm-Message-State: AC+VfDw0YuPlwhe0SH2P/GSzpajJWCBdwHV1xyp+veq025TwLHaxILW1
+        TobpIIl3dlEnC0IOPknAbpgA04ooEoA0bJSj0zM=
+X-Google-Smtp-Source: ACHHUZ67XFCw3cwTsEZASwArZ6eMGgnCmgBwASY6jVyY4SqJlTx9++fkBScoIcBRK/7P3UhkeQJ28OyjpkRGAs8HeYA=
+X-Received: by 2002:a25:58c4:0:b0:b99:e0ff:5f16 with SMTP id
+ m187-20020a2558c4000000b00b99e0ff5f16mr14580089ybb.18.1683062824368; Tue, 02
+ May 2023 14:27:04 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH 0/5] cgroup/cpuset: A new "isolcpus" paritition
-Content-Language: en-US
-To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>
-References: <ZDdNy2NAfj2_1CbW@slm.duckdns.org>
- <1b8d9128-d076-7d37-767d-11d6af314662@redhat.com>
- <ZDdYOI9LB87ra2t_@slm.duckdns.org>
- <9862da55-5f41-24c3-f3bb-4045ccf24b2e@redhat.com>
- <226cb2da-e800-6531-4e57-cbf991022477@redhat.com>
- <ZDmFLfII8EUX_ocY@slm.duckdns.org>
- <c61ca9d0-c514-fb07-c2f2-3629e8898984@redhat.com>
- <ZDmOjeBVsIcgSLIV@slm.duckdns.org>
- <60ec12dc-943c-b8f0-8b6f-97c5d332144c@redhat.com>
- <46d26abf-a725-b924-47fa-4419b20bbc02@redhat.com>
- <jqkf7jkuyxqiupmxmdbmpnbpojub2pjsz3oogwncmwqdghlsgk@phsqzirmmlyl>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <jqkf7jkuyxqiupmxmdbmpnbpojub2pjsz3oogwncmwqdghlsgk@phsqzirmmlyl>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <1682535272-32249-1-git-send-email-justinpopo6@gmail.com>
+ <1682535272-32249-4-git-send-email-justinpopo6@gmail.com> <ZFFn3UdlapiTlCam@corigine.com>
+In-Reply-To: <ZFFn3UdlapiTlCam@corigine.com>
+From:   Justin Chen <justinpopo6@gmail.com>
+Date:   Tue, 2 May 2023 14:26:53 -0700
+Message-ID: <CAJx26kV9E7M5ULoPqT8eJ5byaUEZDtW6v25f3DT04xs4NGcd6g@mail.gmail.com>
+Subject: Re: [PATCH v2 net-next 3/6] net: bcmasp: Add support for ASP2.0
+ Ethernet controller
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        bcm-kernel-feedback-list@broadcom.com, justin.chen@broadcom.com,
+        f.fainelli@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, opendmb@gmail.com,
+        andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
+        richardcochran@gmail.com, sumit.semwal@linaro.org,
+        christian.koenig@amd.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/2/23 14:01, Michal Koutný wrote:
-> Hello.
+On Tue, May 2, 2023 at 12:44=E2=80=AFPM Simon Horman <simon.horman@corigine=
+.com> wrote:
 >
-> The previous thread arrived incomplete to me, so I respond to the last
-> message only. Point me to a message URL if it was covered.
+> On Wed, Apr 26, 2023 at 11:54:29AM -0700, Justin Chen wrote:
+> > Add support for the Broadcom ASP 2.0 Ethernet controller which is first
+> > introduced with 72165. This controller features two distinct Ethernet
+> > ports that can be independently operated.
+> >
+> > This patch supports:
+> >
+> > - Wake-on-LAN using magic packets
+> > - basic ethtool operations (link, counters, message level)
+> > - MAC destination address filtering (promiscuous, ALL_MULTI, etc.)
+> >
+> > Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> > Signed-off-by: Justin Chen <justinpopo6@gmail.com>
 >
-> On Fri, Apr 14, 2023 at 03:06:27PM -0400, Waiman Long <longman@redhat.com> wrote:
->> Below is a draft of the new cpuset.cpus.reserve cgroupfs file:
->>
->>    cpuset.cpus.reserve
->>          A read-write multiple values file which exists on all
->>          cpuset-enabled cgroups.
->>
->>          It lists the reserved CPUs to be used for the creation of
->>          child partitions.  See the section on "cpuset.cpus.partition"
->>          below for more information on cpuset partition.  These reserved
->>          CPUs should be a subset of "cpuset.cpus" and will be mutually
->>          exclusive of "cpuset.cpus.effective" when used since these
->>          reserved CPUs cannot be used by tasks in the current cgroup.
->>
->>          There are two modes for partition CPUs reservation -
->>          auto or manual.  The system starts up in auto mode where
->>          "cpuset.cpus.reserve" will be set automatically when valid
->>          child partitions are created and users don't need to touch the
->>          file at all.  This mode has the limitation that the parent of a
->>          partition must be a partition root itself.  So child partition
->>          has to be created one-by-one from the cgroup root down.
->>
->>          To enable the creation of a partition down in the hierarchy
->>          without the intermediate cgroups to be partition roots,
-> Why would be this needed? Owning a CPU (a resource) must logically be
-> passed all the way from root to the target cgroup, i.e. this is
-> expressed by valid partitioning down to given level.
+> ...
 >
->>          one
->>          has to turn on the manual reservation mode by writing directly
->>          to "cpuset.cpus.reserve" with a value different from its
->>          current value.  By distributing the reserve CPUs down the cgroup
->>          hierarchy to the parent of the target cgroup, this target cgroup
->>          can be switched to become a partition root if its "cpuset.cpus"
->>          is a subset of the set of valid reserve CPUs in its parent.
-> level n
-> `- level n+1
->     cpuset.cpus	// these are actually configured by "owner" of level n
->     cpuset.cpus.partition // similrly here, level n decides if child is a partition
+> > diff --git a/drivers/net/ethernet/broadcom/asp2/bcmasp.c b/drivers/net/=
+ethernet/broadcom/asp2/bcmasp.c
 >
-> I.e. what would be level n/cpuset.cpus.reserve good for when it can
-> directly control level n+1/cpuset.cpus?
+> ...
+>
+> > +static int bcmasp_netfilt_get_reg_offset(struct bcmasp_priv *priv,
+> > +                                      struct bcmasp_net_filter *nfilt,
+> > +                                      enum asp_netfilt_reg_type reg_ty=
+pe,
+> > +                                      u32 offset)
+> > +{
+> > +     u32 block_index, filter_sel;
+> > +
+> > +     if (offset < 32) {
+> > +             block_index =3D ASP_RX_FILTER_NET_L2;
+> > +             filter_sel =3D nfilt->hw_index;
+> > +     } else if (offset < 64) {
+> > +             block_index =3D ASP_RX_FILTER_NET_L2;
+> > +             filter_sel =3D nfilt->hw_index + 1;
+> > +     } else if (offset < 96) {
+> > +             block_index =3D ASP_RX_FILTER_NET_L3_0;
+> > +             filter_sel =3D nfilt->hw_index;
+> > +     } else if (offset < 128) {
+> > +             block_index =3D ASP_RX_FILTER_NET_L3_0;
+> > +             filter_sel =3D nfilt->hw_index + 1;
+> > +     } else if (offset < 160) {
+> > +             block_index =3D ASP_RX_FILTER_NET_L3_1;
+> > +             filter_sel =3D nfilt->hw_index;
+> > +     } else if (offset < 192) {
+> > +             block_index =3D ASP_RX_FILTER_NET_L3_1;
+> > +             filter_sel =3D nfilt->hw_index + 1;
+> > +     } else if (offset < 224) {
+> > +             block_index =3D ASP_RX_FILTER_NET_L4;
+> > +             filter_sel =3D nfilt->hw_index;
+> > +     } else if (offset < 256) {
+> > +             block_index =3D ASP_RX_FILTER_NET_L4;
+> > +             filter_sel =3D nfilt->hw_index + 1;
+> > +     }
+>
+> block_index and filter_sel are uninitialised if offset doesn't match any
+> of the conditions above. Can that happen?
+>
 
-In the new scheme, the available cpus are still directly passed down to 
-a descendant cgroup. However, isolated CPUs (or more generally CPUs 
-dedicated to a partition) have to be exclusive. So what the 
-cpuset.cpus.reserve does is to identify those exclusive CPUs that can be 
-excluded from the effective_cpus of the parent cgroups before they are 
-claimed by a child partition. Currently this is done automatically when 
-a child partition is created off a parent partition root. The new scheme 
-will break it into 2 separate steps without the requirement that the 
-parent of a partition has to be a partition root itself.
+Nope. This is a helper function for netfilter read and write reg, we
+check offset sizes in those functions.
 
-Cheers,
-Longman
+> > +
+> > +     switch (reg_type) {
+> > +     case ASP_NETFILT_MATCH:
+> > +             return ASP_RX_FILTER_NET_PAT(filter_sel, block_index,
+> > +                                          (offset % 32));
+> > +     case ASP_NETFILT_MASK:
+> > +             return ASP_RX_FILTER_NET_MASK(filter_sel, block_index,
+> > +                                           (offset % 32));
+> > +     default:
+> > +             return -EINVAL;
+> > +     }
+> > +}
+>
+> ...
+>
+> > +static void bcmasp_netfilt_tcpip4_wr(struct bcmasp_priv *priv,
+> > +                                  struct bcmasp_net_filter *nfilt,
+> > +                                  struct ethtool_tcpip4_spec *match,
+> > +                                  struct ethtool_tcpip4_spec *mask,
+> > +                                  u32 offset)
+> > +{
+> > +     __be16 val_16, mask_16;
+> > +
+> > +     val_16 =3D htons(ETH_P_IP);
+> > +     mask_16 =3D 0xFFFF;
+>
+> mask_17 is __be16, but 0xFFFF is host byte order.
+>
+> Please make sure there are no new warnings when building with W=3D1 C=3D1=
+.
+>
+> ...
+>
+> > +/* If no network filter found, return open filter.
+> > + * If no more open filters return NULL
+> > + */
+> > +struct bcmasp_net_filter *bcmasp_netfilt_get_init(struct bcmasp_intf *=
+intf,
+> > +                                               int loc, bool wake_filt=
+er,
+> > +                                               bool init)
+> > +{
+> > +     struct bcmasp_priv *priv =3D intf->parent;
+> > +     struct bcmasp_net_filter *nfilter =3D NULL;
+> > +     int i, open_index =3D -1;
+>
+> Please use reverse xmas tree - longest line to shortest - for local
+> variable declarations in networking code.
+>
+> You can check for this using https://github.com/ecree-solarflare/xmastree
+>
+> ...
+>
+> > +static int bcmasp_combine_set_filter(struct bcmasp_intf *intf,
+> > +                                  unsigned char *addr, unsigned char *=
+mask,
+> > +                                  int i)
+> > +{
+> > +     u64 addr1, addr2, mask1, mask2, mask3;
+> > +     struct bcmasp_priv *priv =3D intf->parent;
+> > +
+> > +     /* Switch to u64 to help with the calculations */
+> > +     addr1 =3D ether_addr_to_u64(priv->mda_filters[i].addr);
+> > +     mask1 =3D ether_addr_to_u64(priv->mda_filters[i].mask);
+> > +     addr2 =3D ether_addr_to_u64(addr);
+> > +     mask2 =3D ether_addr_to_u64(mask);
+> > +
+> > +     /* Check if one filter resides within the other */
+> > +     mask3 =3D mask1 & mask2;
+> > +     if (mask3 =3D=3D mask1 && ((addr1 & mask1) =3D=3D (addr2 & mask1)=
+)) {
+> > +             /* Filter 2 resides within fitler 1, so everthing is good=
+ */
+>
+> nit: s/fitler/filter/
+>
+> Please consider running ./scripts/checkpatch.pl --codespell
+>
+> ...
+>
+> > +static void bcmasp_update_mib_counters(struct bcmasp_intf *priv)
+> > +{
+> > +     int i, j =3D 0;
+> > +
+> > +     for (i =3D 0; i < BCMASP_STATS_LEN; i++) {
+> > +             const struct bcmasp_stats *s;
+> > +             u16 offset =3D 0;
+> > +             u32 val =3D 0;
+> > +             char *p;
+> > +
+> > +             s =3D &bcmasp_gstrings_stats[i];
+> > +             switch (s->type) {
+> > +             case BCMASP_STAT_NETDEV:
+> > +             case BCMASP_STAT_SOFT:
+> > +                     continue;
+> > +             case BCMASP_STAT_RUNT:
+> > +                     offset +=3D BCMASP_STAT_OFFSET;
+> > +                     fallthrough;
+> > +             case BCMASP_STAT_MIB_TX:
+> > +                     offset +=3D BCMASP_STAT_OFFSET;
+> > +                     fallthrough;
+> > +             case BCMASP_STAT_MIB_RX:
+> > +                     val =3D umac_rl(priv, UMC_MIB_START + j + offset)=
+;
+> > +                     offset =3D 0;     /* Reset Offset */
+> > +                     break;
+> > +             case BCMASP_STAT_RX_EDPKT:
+> > +                     val =3D rx_edpkt_core_rl(priv->parent, s->reg_off=
+set);
+> > +                     break;
+> > +             case BCMASP_STAT_RX_CTRL:
+> > +                     offset =3D bcmasp_stat_fixup_offset(priv, s);
+> > +                     if (offset !=3D ASP_RX_CTRL_FB_FILT_OUT_FRAME_COU=
+NT)
+> > +                             offset +=3D sizeof(u32) * priv->port;
+> > +                     val =3D rx_ctrl_core_rl(priv->parent, offset);
+> > +                     break;
+> > +             }
+> > +
+> > +             j +=3D s->stat_sizeof;
+> > +             p =3D (char *)priv + s->stat_offset;
+> > +             *(u32 *)p =3D val;
+>
+> Is p always 32bit aligned?
+>
 
-claimed by a partition and will be excluded from the effective_cpus of 
-the parent
+Nope. I can make sure it is 32 bit aligned.
 
+Acked, the other comments. Will submit v3 when net-next window is
+open. Thank you for the review.
+
+Justin
+
+> > +     }
+> > +}
+> > +
+> > +static void bcmasp_get_ethtool_stats(struct net_device *dev,
+> > +                                  struct ethtool_stats *stats,
+> > +                                  u64 *data)
+> > +{
+> > +     struct bcmasp_intf *priv =3D netdev_priv(dev);
+> > +     int i, j =3D 0;
+> > +
+> > +     if (netif_running(dev))
+> > +             bcmasp_update_mib_counters(priv);
+> > +
+> > +     dev->netdev_ops->ndo_get_stats(dev);
+> > +
+> > +     for (i =3D 0; i < BCMASP_STATS_LEN; i++) {
+> > +             const struct bcmasp_stats *s;
+> > +             char *p;
+> > +
+> > +             s =3D &bcmasp_gstrings_stats[i];
+> > +             if (!bcmasp_stat_available(priv, s->type))
+> > +                     continue;
+> > +             if (s->type =3D=3D BCMASP_STAT_NETDEV)
+> > +                     p =3D (char *)&dev->stats;
+> > +             else
+> > +                     p =3D (char *)priv;
+> > +             p +=3D s->stat_offset;
+> > +             if (sizeof(unsigned long) !=3D sizeof(u32) &&
+> > +                 s->stat_sizeof =3D=3D sizeof(unsigned long))
+> > +                     data[j] =3D *(unsigned long *)p;
+> > +             else
+> > +                     data[j] =3D *(u32 *)p;
+>
+> Maybe memcpy would make this a little easier to read.
+>
+> > +             j++;
+> > +     }
+> > +}
+>
+> ...
+>
+> > diff --git a/drivers/net/ethernet/broadcom/asp2/bcmasp_intf.c b/drivers=
+/net/ethernet/broadcom/asp2/bcmasp_intf.c
+>
+> ...
+>
+> > +static int bcmasp_init_rx(struct bcmasp_intf *intf)
+> > +{
+> > +     struct device *kdev =3D &intf->parent->pdev->dev;
+> > +     struct net_device *ndev =3D intf->ndev;
+> > +     void *p;
+> > +     dma_addr_t dma;
+> > +     struct page *buffer_pg;
+> > +     u32 reg;
+> > +     int ret;
+> > +
+> > +     intf->rx_buf_order =3D get_order(RING_BUFFER_SIZE);
+> > +     buffer_pg =3D alloc_pages(GFP_KERNEL, intf->rx_buf_order);
+> > +
+> > +     dma =3D dma_map_page(kdev, buffer_pg, 0, RING_BUFFER_SIZE,
+> > +                        DMA_FROM_DEVICE);
+> > +     if (dma_mapping_error(kdev, dma)) {
+> > +             netdev_err(ndev, "Cannot allocate RX buffer\n");
+>
+> I think the core will log an error on allocation failure,
+> so the message above is not needed.
+>
+> > +             __free_pages(buffer_pg, intf->rx_buf_order);
+> > +             return -ENOMEM;
+> > +     }
+>
+> ...
