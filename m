@@ -2,156 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A46D6F455F
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 15:44:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 088106F456D
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 15:46:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234465AbjEBNnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 09:43:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36820 "EHLO
+        id S233664AbjEBNqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 09:46:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234513AbjEBNmw (ORCPT
+        with ESMTP id S233824AbjEBNqo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 09:42:52 -0400
+        Tue, 2 May 2023 09:46:44 -0400
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57D056A53;
-        Tue,  2 May 2023 06:42:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 360195B87;
+        Tue,  2 May 2023 06:46:26 -0700 (PDT)
 Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 342Dd5mD007993;
-        Tue, 2 May 2023 13:41:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=iFaCTqGqZoIlS2U6AthjISaQLDuN0XAiJI4clbfAzlE=;
- b=l8hYwA+trtcflDmakAhIsZFuk9aqqnBPrEWz8W1ep2AW92SdO3gD0J1z4TXLlAjLZBcY
- 8QXFM2eUV5ZHF7+uSQz+hjI2e3f5EiYVHuVk0QV+tiAyqjCqpwMnCZUqqcsisnYcj2Rf
- 6J3j6MeSY94yJ16JD6nn2MsiNDARTCtfvgWJf7DA4HvgK2FPM5WXPsnUVUVuUxjK7Rqq
- uWUMHRbNlt/n0W0SzA+0pR93Wy0TJVglY/FY4mXItDk/sADLlMccgtvqTs7a8uRTfYHv
- PkFreOvXw984+0XwQNL43pVTv75DUwolXuXeli0hu6af3vVsJOSUuQmodnIWjQHuTKj1 Sw== 
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 342Dd2Q0007879;
+        Tue, 2 May 2023 13:43:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=px5fz1lhMlci981JXGzeSbNgqRiYbjczd1JHXYOP/ZA=;
+ b=aPR9yx6JmDE6fk+wCxcRdlp3bZBP51g3NhfgmWe2LPsTOzsmnW2AilKJKtdlX3Le77cA
+ 5BYqSDYgWG/PaR1lcq13EvBHavNlMaEPoRXT0fMjEJYFz332zpFE8R5eIlMKNVgcD4ZX
+ gtfnIHaWNeQyIshdg4RZ5o/IIa2/SyYaMekp/EXJ6slAkPog3aULrlur++9fhwpNV/43
+ Xjx+DvWbECrUpX2McHZf7iz/4E/naSDZK6c8nKKA2kUWzPhn9bMyMpOOIbeICxMV9RFE
+ /ufz6zGpEPikF2CtL50YPCZ7qOwTUA4tgjUsLbQcnFMQ4EJnuTeKHPvyJoXwiVyJV9dU ag== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qb36uh3y1-1
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qb36uh6ew-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 02 May 2023 13:41:06 +0000
+        Tue, 02 May 2023 13:43:55 +0000
 Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 342DdT5Y009271;
-        Tue, 2 May 2023 13:41:06 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qb36uh3rq-1
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 342DdUY7009344;
+        Tue, 2 May 2023 13:43:54 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qb36uh6e7-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 02 May 2023 13:41:05 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3428snLY031369;
-        Tue, 2 May 2023 13:40:51 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3q8tv6sb2q-1
+        Tue, 02 May 2023 13:43:54 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 342DL1Zc026692;
+        Tue, 2 May 2023 13:43:52 GMT
+Received: from smtprelay02.dal12v.mail.ibm.com ([9.208.130.97])
+        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3q8tv93fpx-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 02 May 2023 13:40:51 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 342Dendi20316836
+        Tue, 02 May 2023 13:43:52 +0000
+Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
+        by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 342DhnCB14156340
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 2 May 2023 13:40:49 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 073562004B;
-        Tue,  2 May 2023 13:40:49 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 374F620049;
-        Tue,  2 May 2023 13:40:48 +0000 (GMT)
-Received: from [9.171.18.35] (unknown [9.171.18.35])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue,  2 May 2023 13:40:48 +0000 (GMT)
-Message-ID: <e9fb74a702bb304757fea84a978704de62df666d.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 21/38] parport: PC style parport depends on HAS_IOPORT
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>
-Date:   Tue, 02 May 2023 15:40:47 +0200
-In-Reply-To: <e2ce3f02-988c-423d-a1c1-2796ab95026c@app.fastmail.com>
-References: <20230314121216.413434-1-schnelle@linux.ibm.com>
-         <20230314121216.413434-22-schnelle@linux.ibm.com>
-         <e2ce3f02-988c-423d-a1c1-2796ab95026c@app.fastmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.1 (3.48.1-1.fc38) 
+        Tue, 2 May 2023 13:43:50 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 980DA5804E;
+        Tue,  2 May 2023 13:43:49 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0ADF75803F;
+        Tue,  2 May 2023 13:43:45 +0000 (GMT)
+Received: from [9.60.89.243] (unknown [9.60.89.243])
+        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Tue,  2 May 2023 13:43:44 +0000 (GMT)
+Message-ID: <ff99f2d8-804d-924f-3c60-b342ffc2173c@linux.ibm.com>
+Date:   Tue, 2 May 2023 09:43:44 -0400
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v6 3/3] mm/gup: disallow FOLL_LONGTERM GUP-fast writing to
+ file-backed mappings
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Mika Penttila <mpenttil@redhat.com>,
+        Dave Chinner <david@fromorbit.com>,
+        "Theodore Ts'o" <tytso@mit.edu>, Peter Xu <peterx@redhat.com>
+References: <cover.1682981880.git.lstoakes@gmail.com>
+ <dee4f4ad6532b0f94d073da263526de334d5d7e0.1682981880.git.lstoakes@gmail.com>
+ <fbad9e18-f727-9703-33cf-545a2d33af76@linux.ibm.com>
+ <7d56b424-ba79-4b21-b02c-c89705533852@lucifer.local>
+ <a6bb0334-9aba-9fd8-6a9a-9d4a931b6da2@linux.ibm.com>
+ <ZFEL20GQdomXGxko@nvidia.com>
+ <c4f790fb-b18a-341a-6965-455163ec06d1@redhat.com>
+ <ZFER5ROgCUyywvfe@nvidia.com>
+ <ce3aa7b9-723c-6ad3-3f03-3f1736e1c253@redhat.com>
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+In-Reply-To: <ce3aa7b9-723c-6ad3-3f03-3f1736e1c253@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: HD0fEbiuVhUrxQBye-iKHLFIye-5M8Ii
-X-Proofpoint-GUID: seYpEKnBqUk9_qmLztdg5NtiD5KP2qO8
+X-Proofpoint-ORIG-GUID: EDlDpG77ZR5IQW6YD5-hC-0XpAeIHDNl
+X-Proofpoint-GUID: fTJcjKwNHb_cwPrukmedXipjMdSd6keM
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-05-02_08,2023-04-27_01,2023-02-09_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
  phishscore=0 spamscore=0 mlxscore=0 clxscore=1015 bulkscore=0
- suspectscore=0 mlxlogscore=297 impostorscore=0 adultscore=0 malwarescore=0
+ suspectscore=0 mlxlogscore=999 impostorscore=0 adultscore=0 malwarescore=0
  lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2303200000 definitions=main-2305020115
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-03-14 at 15:12 +0100, Arnd Bergmann wrote:
-> > On Tue, Mar 14, 2023, at 13:11, Niklas Schnelle wrote:
-> > > > In a future patch HAS_IOPORT=3Dn will result in inb()/outb() and fr=
-iends
-> > > > not being declared. As PC style parport uses these functions we nee=
-d to
-> > > > handle this dependency.
-> > > >=20
-> > > > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> > > > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> >=20
-> > > >=20
-> > > >  menuconfig PARPORT
-> > > >  	tristate "Parallel port support"
-> > > > -	depends on HAS_IOMEM
-> >=20
-> > I would leave this dependency, or maybe make it 'HAS_IOMEM || HAS_IOPOR=
-T'.
-> > at least the parport_atari driver uses MMIO instead of PIO.
-> >=20
-> > > >  	help
-> > > >  	  If you want to use devices connected to your machine's parallel=
- port
-> > > >  	  (the connector at the computer with 25 holes), e.g. printer, ZI=
-P
-> > > > @@ -42,7 +41,8 @@ if PARPORT
-> > > >=20
-> > > >  config PARPORT_PC
-> > > >  	tristate "PC-style hardware"
-> > > > -	depends on ARCH_MIGHT_HAVE_PC_PARPORT || (PCI && !S390)
-> > > > +	depends on ARCH_MIGHT_HAVE_PC_PARPORT
-> > > > +	depends on HAS_IOPORT
-> > > >  	help
-> > > >  	  You should say Y here if you have a PC-style parallel port. All
-> > > >  	  IBM PC compatible computers and some Alphas have PC-style
-> >=20
-> > This would revert 66bcd06099bb ("parport_pc: Also enable driver for
-> > PCI systems"), so I think this is wrong. You can drop the !S390
-> > by adding HAS_IOPORT as a dependency, but the other line should still
-> > be=20
-> >=20
-> >        depends on ARCH_MIGHT_HAVE_PC_PARPORT || PCI
-> >    =20
-> >=20
-> >     Arnd
+On 5/2/23 9:39 AM, David Hildenbrand wrote:
+> On 02.05.23 15:36, Jason Gunthorpe wrote:
+>> On Tue, May 02, 2023 at 03:28:40PM +0200, David Hildenbrand wrote:
+>>> On 02.05.23 15:10, Jason Gunthorpe wrote:
+>>>> On Tue, May 02, 2023 at 03:04:27PM +0200, Christian Borntraeger wrote:
+>>>> \> > We can reintroduce a flag to permit exceptions if this is really broken, are you
+>>>>>> able to test? I don't have an s390 sat around :)
+>>>>>
+>>>>> Matt (Rosato on cc) probably can. In the end, it would mean having
+>>>>>     <memoryBacking>
+>>>>>       <source type="file"/>
+>>>>>     </memoryBacking>
+>>>>
+>>>> This s390 code is the least of the problems, after this series VFIO
+>>>> won't startup at all with this configuration.
+>>>
+>>> Good question if the domain would fail to start. I recall that IOMMUs for
+>>> zPCI are special on s390x. [1]
+>>
+>> Not upstream they aren't.
+>>
+>>> Well, zPCI is special. I cannot immediately tell when we would trigger
+>>> long-term pinning.
+>>
+>> zPCI uses the standard IOMMU stuff, so it uses a normal VFIO container
+>> and the normal pin_user_pages() path.
+> 
+> 
+> @Christian, Matthew: would we pin all guest memory when starting the domain (IIRC, like on x86-64) and fail early, or only when the guest issues rpcit instructions to map individual pages?
+> 
 
-Ok changed for v4. Just saw that commit even nicely references our lack
-of I/O ports :-)
+Eventually we want to implement a mechanism where we can dynamically pin in response to RPCIT.
 
+However, per Jason's prior suggestion, the initial implementation for s390 nesting via iommufd will pin all of guest memory when starting the domain.  I have something already working via iommufd built on top of the nesting infrastructure patches and QEMU iommufd series that are floating around; needs some cleanup, hoping to send an RFC in the coming weeks.  I can CC you if you'd like.
