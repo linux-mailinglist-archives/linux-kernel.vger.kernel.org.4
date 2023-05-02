@@ -2,150 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E309B6F4598
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 15:55:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 166746F459A
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 15:55:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234209AbjEBNzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 09:55:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52780 "EHLO
+        id S234400AbjEBNzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 09:55:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234255AbjEBNzI (ORCPT
+        with ESMTP id S234365AbjEBNzN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 09:55:08 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2041.outbound.protection.outlook.com [40.107.93.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C32C180
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 06:55:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TmIt0j1POCGnbHAZUQOPZYjXfEdxWtFXFBTbJyRmR3szVYT3wgH6TFiK5vjdAxJTchNCoTMnDRnsSso4RE9MYHKW74FXwKFNdmanhDAisrna1kxIPmIl83+3Aq+0Uc6jsb1uOt47VmUTU9gMjjx5bNJSB8k7CHndpK/3a3bhztM5lrRjLjXeh7jyHrg/jxb4W7Jyd7QAsUlE86TAjgmOZs4WgmHX0GJr6m684exAttCsDC/WOjviobnVgC0h2B0oFqIQNtqQ9fx4fFcmp16p3BAkq5GcXNchLH0YjG9sWbgY/Am07/+dNOKWCtABMtf/z6b6YxY0HNkkdi/qCY0XpQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UxcShBJjYvM4SWNhV6wOd+Ma5NXetG3pASdYFiRes84=;
- b=CFSGK3CfeLpSmS1jfaBHQ+LSCH6+cTg5HNwIDgh7GtxYSr9E+bqxpH2EoisMJhLYNn9QQ26Ugt54/Iuhk3R9h8HAvqX5laIqV925/MgZZtIq38DFmcdzCS76yMt3IguNvI/ru4R0z9vgsXRMNX2Xk0HIyMHNea/8f/DWNTdPPt40RDJzPTE17DHJvHkCsoiPfTqV15P1RJqZZfhmDJ8w99SszGsZyg0L3VpHP90pVprl07XrX6UQdEzkJ/D42Zmv7x7wPHE7zu0Bzhjxef3BlkzL4IcnFni8Q5htQCPGbkHnxJdrVMqPzcwBkIztfTYMDpFT432K7fHHkrxiGLRMZQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UxcShBJjYvM4SWNhV6wOd+Ma5NXetG3pASdYFiRes84=;
- b=PujFcEvCWHzt7B93wl9v5kaXCaehvYid5Y7aRwjG5OtA7w7zQyC9Ufi9+hZ/NxxVYXo4S3oxK/+MUur03n6DULAD/LBmPMMKNL7dCqh6z7hQNQiWti6G3mMmT0GrIs5hpCagz5shFqoo5H8+zmFxEjJKPz4B4QUhCbhs7PsOO/4=
-Received: from DM6PR01CA0005.prod.exchangelabs.com (2603:10b6:5:296::10) by
- PH0PR12MB7814.namprd12.prod.outlook.com (2603:10b6:510:288::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.31; Tue, 2 May
- 2023 13:55:04 +0000
-Received: from DM6NAM11FT033.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:296:cafe::2) by DM6PR01CA0005.outlook.office365.com
- (2603:10b6:5:296::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.20 via Frontend
- Transport; Tue, 2 May 2023 13:55:04 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT033.mail.protection.outlook.com (10.13.172.221) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6363.21 via Frontend Transport; Tue, 2 May 2023 13:55:04 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 2 May
- 2023 08:55:02 -0500
-From:   Michal Simek <michal.simek@amd.com>
-To:     <linux-kernel@vger.kernel.org>, <monstr@monstr.eu>,
-        <michal.simek@xilinx.com>, <git@xilinx.com>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>, Kirill Tkhai <tkhai@ya.ru>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Qais Yousef <qyousef@layalina.io>,
-        Stephen Hemminger <stephen@networkplumber.org>
-Subject: [PATCH] MAINTAINERS: Update Michal Simek's email
-Date:   Tue, 2 May 2023 15:55:00 +0200
-Message-ID: <bd073d026f8c367a9cfb45d26d39f26e40c665dc.1683035692.git.michal.simek@amd.com>
-X-Mailer: git-send-email 2.36.1
+        Tue, 2 May 2023 09:55:13 -0400
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 818123AB2;
+        Tue,  2 May 2023 06:55:12 -0700 (PDT)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-19288cce249so447521fac.0;
+        Tue, 02 May 2023 06:55:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683035712; x=1685627712;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3JDA/PhIA0G0O8d1Tw0il5CJD7WwGew6nVyEwWH6lvQ=;
+        b=U0yfWYoxRlWeKcALRu7aKMAwi5A8oOs+4Z+5+g2s0ANcfWoRm3X2iBFya84RSgbiVH
+         MowHXnYm3q5ir7KqhjmvtNaNr0K5e2Oae+QOl2X84ff8x9VkSzOPzrMeiOdW54dhEfkv
+         O33nVKePRa2YNQHNQRVM5/C/S/1uycn/BZBQ8rV/RLxs9DcOAJcDQhyNl7jlDUUw9R6J
+         M9msNW/pqbtyDLnscBRax/fj4ZiWBvJCzPTSHwVGJdznODiHV7wU5cpnl60FgVn+gfhS
+         gDjrfr+7Y+rZpSKoxAvjtO9ZFE/3A7rgOyunE2sZ9Fnosmosl3EesHoqxLB5MK2O5831
+         BWmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683035712; x=1685627712;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3JDA/PhIA0G0O8d1Tw0il5CJD7WwGew6nVyEwWH6lvQ=;
+        b=aQnzz7G7DQ1Fz8Lk8LWAbneuEv5cyt5nyC/0KsG6xPMnC/xzw4Wy7GCcNwfcu9kuCz
+         0wAoVGUCdJJSPR6T4mXYNJou21XtIEMp/zQzRPyAQPnqjCj1V60U3McjdjXaglNc3srC
+         7L5j1I7arJMInmFVju109xdnd5i0zlAh7U+jgXVVCzwBNJrwINmdoj2deyqFu7MJYq+U
+         uC2/6Os7ZPQ02E5cufi136eta7iSfffMnofVCdIrGuXQUpf5IGOKOaQDHrl2Z8WAXx2p
+         Ic4v2pDxKznFQPXPKdLWsiOaYermLuEgO4Eo09mAo+Z9cZl+nEa4jTd1K3iKxV/tKjg3
+         aZCA==
+X-Gm-Message-State: AC+VfDzX4NZkFEexSY4QC2E8UD75FTxtbQDJv3Cs46xT7CjN1L37N0GA
+        oiNakrKY/z92DglT4K0NUuQ=
+X-Google-Smtp-Source: ACHHUZ5X1USdDCg3uqZzHTIADD4uVJj38sSm5V1NZkTOyKDu70KEXr87H+7xExpqkz1CG5AxhcPrqg==
+X-Received: by 2002:a05:6871:595:b0:184:5428:d6bb with SMTP id u21-20020a056871059500b001845428d6bbmr8447737oan.57.1683035711614;
+        Tue, 02 May 2023 06:55:11 -0700 (PDT)
+Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
+        by smtp.gmail.com with ESMTPSA id p16-20020a4a95d0000000b005251e3f92ecsm1057071ooi.47.2023.05.02.06.55.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 May 2023 06:55:10 -0700 (PDT)
+Message-ID: <1271ca9a-e7ca-e76f-3ae8-23a490994bd5@gmail.com>
+Date:   Tue, 2 May 2023 10:55:06 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT033:EE_|PH0PR12MB7814:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9d70697c-524c-4054-5b12-08db4b14d4d3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YaThIhXkx0B/XIogBbBaGdVtkCgQgFZCFQCLpmJqHtP+ycMDwa9tR9Crx2FOjYe+uizCGxQz9xC3l/dVv723juwH9Heg+LF2SijHYNeaRgnzO/gBenJ+SkKxFoBUi7iXcNZygu5077UcjF0NCmm4tRODsBuioetmIqFRTCdIEbcGQLB5NBj034kzt9nxdlwrbSYB2BDVuqRohWHHK/9z83ng+fzd7xdcjQOsQr3w4h+8hGaXJ8Zl0UaB1C1GExVzAzdkRnHP70LTdZdqZNHqCWthGsn0vSvjyvNFe7ZlQrhDJiUiKZxhG/6yHljB17aONnZRCfNS3nITlOvy3U0JEsEq18YygOmyo7a9uM+OHbABhX9xiaYx6IsHNX5NUYHsRPdDypracvgUumLsrdc8Mz6LXYK3j5HQJCjNwDxytJYWtL76mAbRlH9Na1HZWaPvO8Jv/WGy2nJy7nw95mX6yTNeRYaFcyo0XZID/R1Gt8xH9O/18eaczfPucIMIfmDHCBkX22Mcsak60lbgbW/sDvGLsuIVN7JYwwGWALcYOLesRcmyzm7LMU+yzvJctaILpAaNJO4yJeU31msRrEpkhBELyxipY2Ly41dhUbSLUwrUER8YTZ5pUtOKA75ZKp1qBe6PzmsVusmrqaIBclgPih1vMNh2ZXGMI1XJl1XNN+7ITMz7EzjzqsixAMF/Pb5JOTMxsxtnwkBNKPSUWmIpoOCCiH6UOZ8y2pp3mpSfYqmK18GlhsD5HLlEOG+8DjF0
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(346002)(136003)(39860400002)(451199021)(36840700001)(40470700004)(46966006)(356005)(81166007)(41300700001)(2616005)(426003)(336012)(82310400005)(36860700001)(82740400003)(316002)(5660300002)(4326008)(83380400001)(86362001)(7416002)(70586007)(70206006)(44832011)(16526019)(186003)(26005)(36756003)(966005)(40480700001)(2906002)(110136005)(8936002)(8676002)(47076005)(54906003)(478600001)(40460700003)(36900700001)(2101003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2023 13:55:04.4326
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9d70697c-524c-4054-5b12-08db4b14d4d3
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT033.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7814
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH] rust: str: add conversion from `CStr` to `CString`
+To:     Alice Ryhl <aliceryhl@google.com>, Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>
+Cc:     Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev
+References: <20230502125306.358283-1-aliceryhl@google.com>
+Content-Language: en-US
+From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+In-Reply-To: <20230502125306.358283-1-aliceryhl@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-@xilinx.com is still working but better to switch to new amd.com after
-AMD/Xilinx acquisition.
+On 5/2/23 09:53, Alice Ryhl wrote:
+> These methods can be used to copy the data in a temporary c string into
+> a separate allocation, so that it can be accessed later even if the
+> original is deallocated.
+> 
+> The API in this file mirrors the standard library API for the `&str` and
+> `String` types. The `ToOwned` trait is not implemented because it
+> assumes that allocations are infallible.
+> 
+> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+> ---
+>  rust/kernel/str.rs | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+> 
+> diff --git a/rust/kernel/str.rs b/rust/kernel/str.rs
+> index b771310fa4a4..54935ff3a610 100644
+> --- a/rust/kernel/str.rs
+> +++ b/rust/kernel/str.rs
+> @@ -2,6 +2,7 @@
+>  
+>  //! String representations.
+>  
+> +use alloc::collections::TryReserveError;
+>  use alloc::vec::Vec;
+>  use core::fmt::{self, Write};
+>  use core::ops::{self, Deref, Index};
+> @@ -199,6 +200,12 @@ impl CStr {
+>      pub unsafe fn as_str_unchecked(&self) -> &str {
+>          unsafe { core::str::from_utf8_unchecked(self.as_bytes()) }
+>      }
+> +
+> +    /// Convert this [`CStr`] into a [`CString`] by allocating memory and
+> +    /// copying over the string data.
+> +    pub fn to_cstring(&self) -> Result<CString, TryReserveError> {
+> +        CString::try_from(self)
+> +    }
+>  }
+>  
+>  impl fmt::Display for CStr {
+> @@ -584,6 +591,20 @@ impl Deref for CString {
+>      }
+>  }
+>  
+> +impl<'a> TryFrom<&'a CStr> for CString {
+> +    type Error = TryReserveError;
+> +
+> +    fn try_from(cstr: &'a CStr) -> Result<CString, TryReserveError> {
+> +        let len = cstr.len_with_nul();
+> +        let mut buf = Vec::try_with_capacity(len)?;
+> +        buf.try_extend_from_slice(cstr.as_bytes_with_nul())?;
+> +
+> +        // INVARIANT: The CStr and CString types have the same invariants for
+> +        // the string data, and we copied it over without changes.
+> +        Ok(CString { buf })
+> +    }
+> +}
+> +
+>  /// A convenience alias for [`core::format_args`].
+>  #[macro_export]
+>  macro_rules! fmt {
+> 
+> base-commit: ea76e08f4d901a450619831a255e9e0a4c0ed162
 
-Signed-off-by: Michal Simek <michal.simek@amd.com>
----
-
- .mailmap    | 1 +
- MAINTAINERS | 4 ++--
- 2 files changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/.mailmap b/.mailmap
-index adfed592f88b..d3eb862f71ab 100644
---- a/.mailmap
-+++ b/.mailmap
-@@ -328,6 +328,7 @@ Maxime Ripard <mripard@kernel.org> <maxime.ripard@bootlin.com>
- Maxime Ripard <mripard@kernel.org> <maxime.ripard@free-electrons.com>
- Mayuresh Janorkar <mayur@ti.com>
- Michael Buesch <m@bues.ch>
-+Michal Simek <michal.simek@amd.com> <michal.simek@xilinx.com>
- Michel Dänzer <michel@tungstengraphics.com>
- Michel Lespinasse <michel@lespinasse.org>
- Michel Lespinasse <michel@lespinasse.org> <walken@google.com>
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7575d3992fcf..643f9feeb09a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3037,7 +3037,7 @@ F:	drivers/video/fbdev/wm8505fb*
- F:	drivers/video/fbdev/wmt_ge_rops.*
- 
- ARM/ZYNQ ARCHITECTURE
--M:	Michal Simek <michal.simek@xilinx.com>
-+M:	Michal Simek <michal.simek@amd.com>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- S:	Supported
- W:	http://wiki.xilinx.com
-@@ -23104,7 +23104,7 @@ F:	drivers/net/can/xilinx_can.c
- XILINX GPIO DRIVER
- M:	Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
- R:	Srinivas Neeli <srinivas.neeli@xilinx.com>
--R:	Michal Simek <michal.simek@xilinx.com>
-+R:	Michal Simek <michal.simek@amd.com>
- S:	Maintained
- F:	Documentation/devicetree/bindings/gpio/xlnx,gpio-xilinx.yaml
- F:	Documentation/devicetree/bindings/gpio/gpio-zynq.yaml
--- 
-2.36.1
-
+Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
