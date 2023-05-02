@@ -2,74 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4510F6F3C37
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 04:55:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE5166F3C36
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 04:55:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232653AbjEBCuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 22:50:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52326 "EHLO
+        id S233241AbjEBCxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 22:53:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231397AbjEBCuW (ORCPT
+        with ESMTP id S232790AbjEBCxN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 22:50:22 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97ABB3AB8
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 19:50:21 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-7639ebbef32so470866539f.2
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 19:50:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682995821; x=1685587821;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VtgYAOm4mEvO4wck6c4SokUyB0mN/mF2sqtpCYuKcws=;
-        b=CU+92NAy4ZSyTs5djgos5cJT+MdW3AC79KxqgrkKVjtf6/5UvNMcT50iyqFP8KV6dv
-         dwksCxPTGI6+wxc2qEuYwZt0k5chKY/MQVVSZ8KtRky0muiHrBpJL2u2JDpuNXejJnTp
-         spJOtVCTSrnH4Eu3g//vy8hfyum0S1WUPzfVe6qDlfdLntoqkIf7netzhYWBizK9MCxI
-         gTMw6wPwgSZLSmYXNcWP4k8A17VES68zpotBSDsFcNqRE6CpKqgTLcRrMHx9OeEFA7Yw
-         lVW4M6jI4kcsct5ZKz66PIGqfsKcnLUVFoKR+hi9R8JXAQ4MHfmHMe0eZ3L84kzFonh8
-         lERQ==
-X-Gm-Message-State: AC+VfDzBjcKGPHLqP7HRxpGOUvvdF7wMlnPWamEKBhvyMnv6xZZHZoEG
-        HxZYE8pTLfczC0dPBD+WZWlzi7pcI5au6peg/hyLz74347x0
-X-Google-Smtp-Source: ACHHUZ7mFH7s2jke2+ezG8hvV58qOIeiBILQTJlhtJPbw9L9a666QwHasIhNO+b6WSR1/rI9Sh4oWMI4VYnrtlBtOXJLe/xcf/hS
-MIME-Version: 1.0
-X-Received: by 2002:a05:6638:2152:b0:40f:9c3a:8ce2 with SMTP id
- z18-20020a056638215200b0040f9c3a8ce2mr7027825jaj.5.1682995820941; Mon, 01 May
- 2023 19:50:20 -0700 (PDT)
-Date:   Mon, 01 May 2023 19:50:20 -0700
-In-Reply-To: <20230502022438.3394-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000010daaf05faad0056@google.com>
-Subject: Re: [syzbot] [kernel?] BUG: unable to handle kernel NULL pointer
- dereference in tty_write_room
-From:   syzbot <syzbot+4e24c3e417773c914ee4@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+        Mon, 1 May 2023 22:53:13 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C229D1BD5
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 19:53:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1682995917; i=efault@gmx.de;
+        bh=DF6/JrJ9nhIq2aWBHx6BcQtQTQQ2CBQJ0eB3wxrEH5A=;
+        h=X-UI-Sender-Class:Subject:From:To:Cc:Date:In-Reply-To:References;
+        b=jbvynz2kwqI3qsYTgCmhTAQUMjeskGGbde2Mj+P17Eq90eOimICcwLapiecbyxiD1
+         GyUKm6gOUsmqft6jvKfyS9L94Wqlkmq8KkqnXTWITfW6ES9wmOZGbXMXGaAefdJ+YF
+         9Pddg369oi3St//YQbURi/6wCwxEmtPGduxfCU+5wyJa+Dfzpb7s5IRzjZsAKXXi61
+         yjTGwuKoj5bLt2E+6ooXb5fgAMIfrW/420+z+wgi/USeMgNCbrZVBJFEtsffUpFvpQ
+         b3W6yvutb+afOWxHlE1elZjpE7xGb4hmpp0m0Qd2PS37VJT0JQq7jgMR64uroi9U3Q
+         eaqWaXBzaY2Tw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from homer.fritz.box ([212.114.172.88]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MQMuR-1pXryv3VSb-00MJ87; Tue, 02
+ May 2023 04:51:56 +0200
+Message-ID: <4e271e7d95fe862c9f201b6f04b16b1423ae3dcb.camel@gmx.de>
+Subject: Re: [PATCH v8 2/2] sched/fair: Introduce SIS_CURRENT to wake up
+ short task on current CPU
+From:   Mike Galbraith <efault@gmx.de>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Chen Yu <yu.c.chen@intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Tim Chen <tim.c.chen@intel.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        Abel Wu <wuyun.abel@bytedance.com>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+        Honglei Wang <wanghonglei@didichuxing.com>,
+        Len Brown <len.brown@intel.com>,
+        Chen Yu <yu.chen.surf@gmail.com>,
+        Tianchen Ding <dtcccc@linux.alibaba.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Josh Don <joshdon@google.com>,
+        kernel test robot <yujie.liu@intel.com>,
+        Arjan Van De Ven <arjan.van.de.ven@intel.com>,
+        Aaron Lu <aaron.lu@intel.com>, linux-kernel@vger.kernel.org
+Date:   Tue, 02 May 2023 04:51:51 +0200
+In-Reply-To: <20230501184920.GC1597476@hirez.programming.kicks-ass.net>
+References: <cover.1682661027.git.yu.c.chen@intel.com>
+         <4081178486e025c89dbb7cc0e62bbfab95fc794a.1682661027.git.yu.c.chen@intel.com>
+         <20230501134827.GB1597538@hirez.programming.kicks-ass.net>
+         <ce70393575869d65449a59d321a109f10ac82676.camel@gmx.de>
+         <20230501184920.GC1597476@hirez.programming.kicks-ass.net>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.42.4 
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:jAqgkww3ScP5tuPJcp6Jg54UTYvHJBTLd3fs5yohevm+gk8nPJ3
+ c9Dg706Bs4jc34+rn/O5MKcY2oWdZKJ93hTy2aQ78A6zrkqihBmEnERSyPI2tzCDh6DCT+9
+ idSEQmGqEbEp/c3HN2CUab0HGQZJOEeX9QUFC99rz18LS8YA8uWAlv5b+OrXgNymOQ2gGOg
+ idd7ZB5BKhYXfrG0sUKtw==
+UI-OutboundReport: notjunk:1;M01:P0:grUpVZ0UAKQ=;a7KL5LQWvwQBExc3l7d83JV7AB7
+ YiIzTJ/iSQx8vNy8ki0TAA9Kic+QML92p54uOM1EXqOWtohh7WuYnPbqjcnBLaeDP7lu1N9PU
+ HS1Mvi2cnGvWN/lz5tvOdlx/ydL7O3fKMu+bSn817qWXFe/cAaHhcop2le3upvjs36KR0ZZFZ
+ oOpAQLuKuPpVUp6O04f02M2T1C7+mTLRJR35pmXTnKfVu+rn02h/ZqdRmG1W6JvRw+uNKOYHg
+ NuUo+NJexeo0lwpFykte0YvUldYPhdCLD3LNbTbUitnd27M7WLgBcW9qjXJM/5ReSWODdfq2e
+ BF5hwLOQUSLuocHfEAb8gWM4744QSLCtS2CrA9T23EmD8rqtwjW1XG5k6vy0P54hHORyepExc
+ yI8yrEzcgPCj3D3DjW3k3HXXQzmc0m1e9ukLcg8e+tv5RtSirUrBxMbcMiBS23Se/ixUrM0G5
+ qbmX7NQygdxa8fa8dD2r0uXJ/INgS5gmwB3xdrRMtP2HLulnVSJwT9JOiv8vzFBs9kw9+oOWb
+ pl98tL7ysurv1sxUx0R4jg4kMN1CA7ZOzsTXVRuZuazAXb165C+RUgG+BwpUoKghsyNJnfJCj
+ B7R/uCeCfK2amoMMQBkIESGIabYC9Sakb1wP4kA80La2TgbaiG/8G1aweOtGTCfOkgta/H5c7
+ q76QsV0wCIjKl50DxJJndDd3dnPpxbfQM3bq1corYbE0lM//ytNW0iqiUUlLempEdtxIvOdlA
+ V+IKpNAOIaIWDfPkYCcr7jeTJpwCWJ16O8V9OhSB3eST9K4eec9g1Lal0bJ8R5Nn0pEbaBkcM
+ W8HH+Jheu7CUQJYOcX0Y2Pp1dRzcHG04dzFtaTK6/bH2ugsY8WHzSsIPggnwSlb2twvHPUWSP
+ 3PXO1TQR3KcUWhouLRDX78IEoD0HEP3ryebfEqM7TjZUYMcV6ZEKTPciksVaKyiaR8y4RQBub
+ asg33VHR5IGBx/X4pMC2rZXoc3c=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, 2023-05-01 at 20:49 +0200, Peter Zijlstra wrote:
+> On Mon, May 01, 2023 at 05:32:05PM +0200, Mike Galbraith wrote:
+> > On Mon, 2023-05-01 at 15:48 +0200, Peter Zijlstra wrote:
+> > >
+> > > Throughput=C2=A0 646.55 MB/sec=C2=A0=C2=A0 2 clients=C2=A0=C2=A0 2 p=
+rocs=C2=A0 max_latency=3D0.104 ms
+> > > Throughput 1361.06 MB/sec=C2=A0=C2=A0 5 clients=C2=A0=C2=A0 5 procs=
+=C2=A0 max_latency=3D0.100 ms
+> > > Throughput 1889.82 MB/sec=C2=A0 10 clients=C2=A0 10 procs=C2=A0 max_=
+latency=3D0.154 ms
+> > > Throughput 2406.57 MB/sec=C2=A0 20 clients=C2=A0 20 procs=C2=A0 max_=
+latency=3D3.667 ms
+> > > Throughput 2318.00 MB/sec=C2=A0 40 clients=C2=A0 40 procs=C2=A0 max_=
+latency=3D0.390 ms
+> > > Throughput 2384.85 MB/sec=C2=A0 80 clients=C2=A0 80 procs=C2=A0 max_=
+latency=3D1.371 ms
+> > >
+> > >
+> > > So what's going on here? I don't see anything exciting happening at =
+the
+> > > 40 mark. At the same time, I can't seem to reproduce Mike's latency =
+pile
+> > > up either :/
+> >
+> > Are you running tbench in the GUI so the per second output stimulates
+> > assorted goo?=C2=A0 I'm using KDE fwtw.
+>
+> Nah, the IVB-EP is headless, doesn't even have systemd on, still running
+> sysvinit.
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Turns out load distribution on Yu's box wasn't going wonky way early
+after all, so WA_WEIGHT's evil side is off topic wrt $subject.  Hohum.
 
-Reported-and-tested-by: syzbot+4e24c3e417773c914ee4@syzkaller.appspotmail.com
-
-Tested on:
-
-commit:         58390c8c Merge tag 'iommu-updates-v6.4' of git://git.k..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=136a4928280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5eadbf0d3c2ece89
-dashboard link: https://syzkaller.appspot.com/bug?extid=4e24c3e417773c914ee4
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=14758e2c280000
-
-Note: testing is done by a robot and is best-effort only.
+	-Mike
