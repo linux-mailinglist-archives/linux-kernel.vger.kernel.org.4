@@ -2,128 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 763E76F3F29
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 10:35:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F64C6F3F15
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 10:29:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233689AbjEBIfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 04:35:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42426 "EHLO
+        id S233697AbjEBI3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 04:29:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233158AbjEBIfW (ORCPT
+        with ESMTP id S233276AbjEBI3P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 04:35:22 -0400
-X-Greylist: delayed 523 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 02 May 2023 01:35:17 PDT
-Received: from mx0.infotecs.ru (mx0.infotecs.ru [91.244.183.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99FCA3C0C;
-        Tue,  2 May 2023 01:35:17 -0700 (PDT)
-Received: from mx0.infotecs-nt (localhost [127.0.0.1])
-        by mx0.infotecs.ru (Postfix) with ESMTP id 644FD108AF9C;
-        Tue,  2 May 2023 11:26:30 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx0.infotecs.ru 644FD108AF9C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=infotecs.ru; s=mx;
-        t=1683015990; bh=m8D8J1VQUATKJTZzY+gdxzLobO6f59B6cKPL1bk4e0M=;
-        h=From:To:CC:Subject:Date:From;
-        b=gASnqsd8nqMY+YDG/pklyCP2unjn/d8TDsDAWtMBrWnLb1tF4J9BqWuHZzSh71tGJ
-         YYEhTUuM6zlDrBaJht2r0GIg7WrP5u7fq92FnUrQsOoa+aH4ybB39xadhJbR3dCHwm
-         o6NtXsemCP1rS2cAeJwdrMGUq1Z5/e7xl0Z509uQ=
-Received: from msk-exch-01.infotecs-nt (msk-exch-01.infotecs-nt [10.0.7.191])
-        by mx0.infotecs-nt (Postfix) with ESMTP id 5AC0430633DA;
-        Tue,  2 May 2023 11:26:30 +0300 (MSK)
-From:   Gavrilov Ilia <Ilia.Gavrilov@infotecs.ru>
-To:     Neil Horman <nhorman@tuxdriver.com>
-CC:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Xin Long <lucien.xin@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "lvc-project@linuxtesting.org" <lvc-project@linuxtesting.org>
-Subject: [PATCH] sctp: fix a potential buffer overflow in
- sctp_sched_set_sched()
-Thread-Topic: [PATCH] sctp: fix a potential buffer overflow in
- sctp_sched_set_sched()
-Thread-Index: AQHZfM/L3fQfyLzenEuG6u7YLaEbHQ==
-Date:   Tue, 2 May 2023 08:26:30 +0000
-Message-ID: <20230502082622.2392659-1-Ilia.Gavrilov@infotecs.ru>
-Accept-Language: ru-RU, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.17.0.10]
-x-exclaimer-md-config: 208ac3cd-1ed4-4982-a353-bdefac89ac0a
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 2 May 2023 04:29:15 -0400
+Received: from outbound-smtp06.blacknight.com (outbound-smtp06.blacknight.com [81.17.249.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F3734230
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 01:29:12 -0700 (PDT)
+Received: from mail.blacknight.com (pemlinmail05.blacknight.ie [81.17.254.26])
+        by outbound-smtp06.blacknight.com (Postfix) with ESMTPS id C2DA6C2B2A
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 09:29:10 +0100 (IST)
+Received: (qmail 24126 invoked from network); 2 May 2023 08:29:10 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.21.103])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 2 May 2023 08:29:10 -0000
+Date:   Tue, 2 May 2023 09:29:04 +0100
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Ying <ying.huang@intel.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        Hillf Danton <hdanton@sina.com>, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Gao Xiang <hsiangkao@linux.alibaba.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Yu Zhao <yuzhao@google.com>
+Subject: Re: [PATCH v3] migrate_pages: Avoid blocking for IO in
+ MIGRATE_SYNC_LIGHT
+Message-ID: <20230502082904.je47t3g6dnmrcbz7@techsingularity.net>
+References: <20230428135414.v3.1.Ia86ccac02a303154a0b8bc60567e7a95d34c96d3@changeid>
 MIME-Version: 1.0
-X-KLMS-Rule-ID: 1
-X-KLMS-Message-Action: clean
-X-KLMS-AntiSpam-Lua-Profiles: 177098 [May 02 2023]
-X-KLMS-AntiSpam-Version: 5.9.59.0
-X-KLMS-AntiSpam-Envelope-From: Ilia.Gavrilov@infotecs.ru
-X-KLMS-AntiSpam-Rate: 0
-X-KLMS-AntiSpam-Status: not_detected
-X-KLMS-AntiSpam-Method: none
-X-KLMS-AntiSpam-Auth: dkim=none
-X-KLMS-AntiSpam-Info: LuaCore: 510 510 bc345371020d3ce827abc4c710f5f0ecf15eaf2e, {Tracking_from_domain_doesnt_match_to}, 127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;infotecs.ru:7.1.1
-X-MS-Exchange-Organization-SCL: -1
-X-KLMS-AntiSpam-Interceptor-Info: scan successful
-X-KLMS-AntiPhishing: Clean, bases: 2023/05/02 06:48:00
-X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, bases: 2023/05/02 03:46:00 #21204364
-X-KLMS-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <20230428135414.v3.1.Ia86ccac02a303154a0b8bc60567e7a95d34c96d3@changeid>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 'sched' index value must be checked before accessing an element
-of the 'sctp_sched_ops' array. Otherwise, it can lead to buffer overflow.
+On Fri, Apr 28, 2023 at 01:54:38PM -0700, Douglas Anderson wrote:
+> The MIGRATE_SYNC_LIGHT mode is intended to block for things that will
+> finish quickly but not for things that will take a long time. Exactly
+> how long is too long is not well defined, but waits of tens of
+> milliseconds is likely non-ideal.
+> 
+> When putting a Chromebook under memory pressure (opening over 90 tabs
+> on a 4GB machine) it was fairly easy to see delays waiting for some
+> locks in the kcompactd code path of > 100 ms. While the laptop wasn't
+> amazingly usable in this state, it was still limping along and this
+> state isn't something artificial. Sometimes we simply end up with a
+> lot of memory pressure.
+> 
+> Putting the same Chromebook under memory pressure while it was running
+> Android apps (though not stressing them) showed a much worse result
+> (NOTE: this was on a older kernel but the codepaths here are similar).
+> Android apps on ChromeOS currently run from a 128K-block,
+> zlib-compressed, loopback-mounted squashfs disk. If we get a page
+> fault from something backed by the squashfs filesystem we could end up
+> holding a folio lock while reading enough from disk to decompress 128K
+> (and then decompressing it using the somewhat slow zlib algorithms).
+> That reading goes through the ext4 subsystem (because it's a loopback
+> mount) before eventually ending up in the block subsystem. This extra
+> jaunt adds extra overhead. Without much work I could see cases where
+> we ended up blocked on a folio lock for over a second. With more
+> extreme memory pressure I could see up to 25 seconds.
+> 
+> We considered adding a timeout in the case of MIGRATE_SYNC_LIGHT for
+> the two locks that were seen to be slow [1] and that generated much
+> discussion. After discussion, it was decided that we should avoid
+> waiting for the two locks during MIGRATE_SYNC_LIGHT if they were being
+> held for IO. We'll continue with the unbounded wait for the more full
+> SYNC modes.
+> 
+> With this change, I couldn't see any slow waits on these locks with my
+> previous testcases.
+> 
+> NOTE: The reason I stated digging into this originally isn't because
+> some benchmark had gone awry, but because we've received in-the-field
+> crash reports where we have a hung task waiting on the page lock
+> (which is the equivalent code path on old kernels). While the root
+> cause of those crashes is likely unrelated and won't be fixed by this
+> patch, analyzing those crash reports did point out these very long
+> waits seemed like something good to fix. With this patch we should no
+> longer hang waiting on these locks, but presumably the system will
+> still be in a bad shape and hang somewhere else.
+> 
+> [1] https://lore.kernel.org/r/20230421151135.v2.1.I2b71e11264c5c214bc59744b9e13e4c353bc5714@changeid
+> 
+> Suggested-by: Matthew Wilcox <willy@infradead.org>
+> Cc: Mel Gorman <mgorman@techsingularity.net>
+> Cc: Hillf Danton <hdanton@sina.com>
+> Cc: Gao Xiang <hsiangkao@linux.alibaba.com>
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
 
-Note that it's harmless since the 'sched' parameter is checked before
-calling 'sctp_sched_set_sched'.
+Acked-by: Mel Gorman <mgorman@techsingularity.net>
 
-Found by InfoTeCS on behalf of Linux Verification Center
-(linuxtesting.org) with SVACE.
-
-Fixes: 5bbbbe32a431 ("sctp: introduce stream scheduler foundations")
-Signed-off-by: Ilia.Gavrilov <Ilia.Gavrilov@infotecs.ru>
----
- net/sctp/stream_sched.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
-
-diff --git a/net/sctp/stream_sched.c b/net/sctp/stream_sched.c
-index 330067002deb..a339917d7197 100644
---- a/net/sctp/stream_sched.c
-+++ b/net/sctp/stream_sched.c
-@@ -146,18 +146,19 @@ static void sctp_sched_free_sched(struct sctp_stream =
-*stream)
- int sctp_sched_set_sched(struct sctp_association *asoc,
- 			 enum sctp_sched_type sched)
- {
--	struct sctp_sched_ops *n =3D sctp_sched_ops[sched];
-+	struct sctp_sched_ops *n;
- 	struct sctp_sched_ops *old =3D asoc->outqueue.sched;
- 	struct sctp_datamsg *msg =3D NULL;
- 	struct sctp_chunk *ch;
- 	int i, ret =3D 0;
-=20
--	if (old =3D=3D n)
--		return ret;
--
- 	if (sched > SCTP_SS_MAX)
- 		return -EINVAL;
-=20
-+	n =3D sctp_sched_ops[sched];
-+	if (old =3D=3D n)
-+		return ret;
-+
- 	if (old)
- 		sctp_sched_free_sched(&asoc->stream);
-=20
---=20
-2.30.2
+-- 
+Mel Gorman
+SUSE Labs
