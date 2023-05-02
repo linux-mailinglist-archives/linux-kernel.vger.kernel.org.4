@@ -2,137 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9943C6F4B63
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 22:30:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 400F46F4B66
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 22:31:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230023AbjEBUar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 16:30:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57290 "EHLO
+        id S230030AbjEBUb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 16:31:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbjEBUap (ORCPT
+        with ESMTP id S229506AbjEBUb2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 16:30:45 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 926F819A2
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 13:30:43 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-3063208beedso2064025f8f.1
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 13:30:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683059442; x=1685651442;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OBB7l/srr+tP4GZyp5fCjE97P649+PUzRDgdEV6rGZA=;
-        b=dzmHK68LA8m7RO25h4HY6aS89fDoz6/gk8GyjJqsBUWSqcqLpZALgof0p5cuJDhiDY
-         LQ6uEX/cwgjhXp2ZIt6aawymZkuTbtrC0ehq4HJMTsudelWIodaou3JXcHiHpTszu7Z0
-         M5vxgpZjG12VSxAVtn2ECgjDb1dX/Iii+yH66jyuwXkyKHwz6cwCyS2hBF1t11zHfuuH
-         5qE/ooVZeOUMOvmFuYMAoz/yGMpSrO4fw8lmL62ZZgip0VXh7YlFnfdsU4OyZi9YkizO
-         Aj1brV69RIdD0O/g+KKM4wu9FGA3cUzIQnWT67f8/+Ik2Tf8jtEoSSw0vZ4UwhxPkkAO
-         Id3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683059442; x=1685651442;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OBB7l/srr+tP4GZyp5fCjE97P649+PUzRDgdEV6rGZA=;
-        b=K5St3R3mv8exRlG/FZGGaz8hrmMuZn+OaXeF8m7ybSQRcGFN0V8NDPWjTjAqSFZO1v
-         A3KBUBkXThF5N/MAxnXv1noJr9KziLk53FzGHvkaZ+a0zlVdzNtTF9vi7caUkN5a2kX2
-         L29Lt9reK8wS5QnMcr6KYzt/Wx+s3NCqUd929DK2Qw8RdUTUGppsPFVAP+BPYms+mPYM
-         enO2BR2X4lFlbxNDiEdTQVwieKoX68D3MqeQ8wobwxdGhob5y3//AQyydeU/NpB5oCri
-         DGsdoiMJYFEUeFw67K3/SGafuK37xIVhOEw51TOepvrA9xxVfbaOwlpxSRdF7AXbN+ff
-         SNEA==
-X-Gm-Message-State: AC+VfDyWmOiza9sBAS8vg5eYCyElOWUu6l1ZWOHGOoVcD+cKMs91VP1o
-        n3Oo9gn7s7OaP5BoX9KtJ3ob5w==
-X-Google-Smtp-Source: ACHHUZ4+zjK+OPKjMDt90TGnAGS5p9jXdecgcEwVnd6F5u6m6lP2kq4YpJSbU2wiyE8/PM4yYXvjsQ==
-X-Received: by 2002:adf:ec04:0:b0:2f6:ca0d:ec1c with SMTP id x4-20020adfec04000000b002f6ca0dec1cmr14541297wrn.10.1683059442008;
-        Tue, 02 May 2023 13:30:42 -0700 (PDT)
-Received: from [192.168.0.15] (cpc76484-cwma10-2-0-cust274.7-3.cable.virginm.net. [82.31.201.19])
-        by smtp.gmail.com with ESMTPSA id m6-20020a5d6246000000b002feea065cc9sm31808215wrv.111.2023.05.02.13.30.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 May 2023 13:30:41 -0700 (PDT)
-Message-ID: <7abff69e-52ce-a781-5e0a-fac4782d26ee@linaro.org>
-Date:   Tue, 2 May 2023 21:30:40 +0100
+        Tue, 2 May 2023 16:31:28 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CAD01997;
+        Tue,  2 May 2023 13:31:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1683059486; x=1714595486;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sUTAVcZcBbhnLtROQFfVTP0OU46Nf/1sMr7JZtnbx38=;
+  b=uJAftZ64Q0ZFj3Q7VKlOy5I7SP1imc9zATusbOuS08EuadxuxEJFw0qX
+   9iVS/np5enGIUUlzbUqm2vuNkqRSZMwEmP42TqjeZZO9HFMDeo5D4eWH9
+   lp04pshWZEwpnt69SE6QbNK4Fr5MvydwY4qshD5UDp9fkhfYoBEjRNuT+
+   YMjs5e5qlg/i0RYIxyrEOMvfUtazDww+SC/1AoQZJaeWsb10dY4iaMrr+
+   EHDjsfiJweDLljbvix1nKipjuNGZw8BkJqqqhJOYGNsUP3iSxKKQZxZuh
+   iNut3SSYANp+xE7fXrzp2Dt1iB0CiOJNbgklnF8cLtAiJB5HhlkdrC8ae
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.99,245,1677567600"; 
+   d="scan'208";a="213347705"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 May 2023 13:31:21 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 2 May 2023 13:31:18 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
+ Transport; Tue, 2 May 2023 13:31:18 -0700
+Date:   Tue, 2 May 2023 22:31:17 +0200
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Shenwei Wang <shenwei.wang@nxp.com>
+CC:     Wei Fang <wei.fang@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Clark Wang <xiaoning.wang@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <imx@lists.linux.dev>, Gagandeep Singh <g.singh@nxp.com>
+Subject: Re: [PATCH 1/1] net: fec: enable the XDP_TX support
+Message-ID: <20230502203117.2hwozz2azlvu6h4d@soft-dev3-1>
+References: <20230502193219.673637-1-shenwei.wang@nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] Change the interrupt from level_low to edge_falling
-Content-Language: en-US
-To:     tremblay.gabriel@gmail.com, Bjorn Andersson <andersson@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230502-gtremblay-x13s-keyboard-v1-1-6bc3e59b0d39@gmail.com>
-From:   Caleb Connolly <caleb.connolly@linaro.org>
-In-Reply-To: <20230502-gtremblay-x13s-keyboard-v1-1-6bc3e59b0d39@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <20230502193219.673637-1-shenwei.wang@nxp.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The 05/02/2023 14:32, Shenwei Wang wrote:
 
+Hi Shenwei,
 
-On 02/05/2023 19:31, Gabriel Tremblay via B4 Relay wrote:
-> From: Gabriel Tremblay <tremblay.gabriel@gmail.com>
 > 
+> Enable the XDP_TX path and correct the return value of the xmit function.
+
+I think this patch should be split in 2. One that adds support for
+XDP_TX which needs to go in net-next, and one where you fix the
+return value of the function 'fec_enect_xdp_xmit' which needs to
+go in net.
+Other than that it looks fine, just a small comment bellow.
+
 > 
+> If any individual frame cannot transmit due to lack of BD entries, the
+> function would still return success for sending all frames. This results
+> in prematurely indicating frames were sent when they were actually dropped.
 > 
+> The patch resolves the issue by ensureing the return value properly
+> indicates the actual number of frames successfully transmitted, rather than
+> potentially reporting success for all frames when some could not transmit.
+> 
+> Fixes: 6d6b39f180b8 ("net: fec: add initial XDP support")
+> Signed-off-by: Gagandeep Singh <g.singh@nxp.com>
+> Signed-off-by: Shenwei Wang <shenwei.wang@nxp.com>
 > ---
-> Lenovo's x13s internal keyboard shows responsivity issues when fast
-> typing occurs. The problem is not replicated with external HID keyboard.
+>  drivers/net/ethernet/freescale/fec_main.c | 27 ++++++++++++++++-------
+>  1 file changed, 19 insertions(+), 8 deletions(-)
 > 
-> This fix tries to alleviate the problem but requires further testing
-> and commenting.
+> diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
+> index 160c1b3525f5..dfc1bcc9a8db 100644
+> --- a/drivers/net/ethernet/freescale/fec_main.c
+> +++ b/drivers/net/ethernet/freescale/fec_main.c
+> @@ -75,6 +75,10 @@
 > 
-> Signed-off-by: Gabriel Tremblay <tremblay.gabriel@gmail.com>
+>  static void set_multicast_list(struct net_device *ndev);
+>  static void fec_enet_itr_coal_set(struct net_device *ndev);
+> +static int fec_enet_xdp_xmit(struct net_device *dev,
+> +                            int num_frames,
+> +                            struct xdp_frame **frames,
+> +                            u32 flags);
 
-Hi Gabriel,
+Sometimes, I received comments at my patches not to have forward
+declaration of the functions.
 
-Thanks for the patch. Just a small thing to improve: The subject line
-should include some reference to which part of the kernel you're
-changing as a prefix, so in this case something like:
-
-arm64: dts: qcom: sc8280xp-x13s: use falling edge for keyboard interrupt
-
-might be a more suitable subject line. You can usually look at previous
-commits to figure out what the right prefix is, to see commits which
-touched a specific file you can do something like this:
-
-$ git log --oneline \
-	arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-
-I don't own an x13s so I can't comment on the change, but hopefully this
-is helpful for a v2 or any future patches!
-
-> ---
->  arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> index bdcba719fc38..e8d7f02c9bf3 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> @@ -639,7 +639,7 @@ keyboard@68 {
->  		reg = <0x68>;
->  
->  		hid-descr-addr = <0x1>;
-> -		interrupts-extended = <&tlmm 104 IRQ_TYPE_LEVEL_LOW>;
-> +		interrupts-extended = <&tlmm 104 IRQ_TYPE_EDGE_FALLING>;
->  		vdd-supply = <&vreg_misc_3p3>;
->  		vddl-supply = <&vreg_s10b>;
->  
+>  #define DRIVER_NAME    "fec"
 > 
-> ---
-> base-commit: 84e2893b4573da3bc0c9f24e2005442e420e3831
-> change-id: 20230502-gtremblay-x13s-keyboard-289935f922e2
+> @@ -1517,6 +1521,7 @@ fec_enet_run_xdp(struct fec_enet_private *fep, struct bpf_prog *prog,
+>  {
+>         unsigned int sync, len = xdp->data_end - xdp->data;
+>         u32 ret = FEC_ENET_XDP_PASS;
+> +       struct xdp_frame *xdp_frame;
+>         struct page *page;
+>         int err;
+>         u32 act;
+> @@ -1545,11 +1550,12 @@ fec_enet_run_xdp(struct fec_enet_private *fep, struct bpf_prog *prog,
+>                 }
+>                 break;
 > 
-> Best regards,
+> -       default:
+> -               bpf_warn_invalid_xdp_action(fep->netdev, prog, act);
+> -               fallthrough;
+> -
+>         case XDP_TX:
+> +               xdp_frame = xdp_convert_buff_to_frame(xdp);
+> +               ret = fec_enet_xdp_xmit(fep->netdev, 1, &xdp_frame, 0);
+> +               break;
+> +
+> +       default:
+>                 bpf_warn_invalid_xdp_action(fep->netdev, prog, act);
+>                 fallthrough;
+> 
+> @@ -3798,7 +3804,8 @@ static int fec_enet_txq_xmit_frame(struct fec_enet_private *fep,
+>         entries_free = fec_enet_get_free_txdesc_num(txq);
+>         if (entries_free < MAX_SKB_FRAGS + 1) {
+>                 netdev_err(fep->netdev, "NOT enough BD for SG!\n");
+> -               return NETDEV_TX_OK;
+> +               xdp_return_frame(frame);
+> 
+>         struct fec_enet_private *fep = netdev_priv(dev);
+>         struct fec_enet_priv_tx_q *txq;
+>         int cpu = smp_processor_id();
+> +       unsigned int sent_frames = 0;
+>         struct netdev_queue *nq;
+>         unsigned int queue;
+>         int i;
+> @@ -3866,8 +3874,11 @@ static int fec_enet_xdp_xmit(struct net_device *dev,
+> 
+>         __netif_tx_lock(nq, cpu);
+> 
+> -       for (i = 0; i < num_frames; i++)
+> -               fec_enet_txq_xmit_frame(fep, txq, frames[i]);
+> +       for (i = 0; i < num_frames; i++) {
+> +               if (fec_enet_txq_xmit_frame(fep, txq, frames[i]) != 0)
+> +                       break;
+> +               sent_frames++;
+> +       }
+> 
+>         /* Make sure the update to bdp and tx_skbuff are performed. */
+>         wmb();
+> @@ -3877,7 +3888,7 @@ static int fec_enet_xdp_xmit(struct net_device *dev,
+> 
+>         __netif_tx_unlock(nq);
+> 
+> -       return num_frames;
+> +       return sent_frames;
+>  }
+> 
+>  static const struct net_device_ops fec_netdev_ops = {
+> --
+> 2.34.1
+> 
 
 -- 
-Kind Regards,
-Caleb (they/them)
+/Horatiu
