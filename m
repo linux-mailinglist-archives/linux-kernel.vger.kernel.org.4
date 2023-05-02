@@ -2,151 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC4F66F3BD0
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 03:28:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2AD6F3BD5
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 03:31:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232467AbjEBB2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 21:28:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33166 "EHLO
+        id S233018AbjEBBb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 21:31:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232267AbjEBB21 (ORCPT
+        with ESMTP id S229822AbjEBBbZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 21:28:27 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4E8B1FD8
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 18:28:25 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-1924a23ddb7so11644403fac.0
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 18:28:25 -0700 (PDT)
+        Mon, 1 May 2023 21:31:25 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C08A1BEF;
+        Mon,  1 May 2023 18:31:24 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1ab032d9266so9484505ad.0;
+        Mon, 01 May 2023 18:31:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1682990905; x=1685582905;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7mVH6+bWUcuKUF/qKwIgPR0gD6lIVpcYINT4JISpC94=;
-        b=P9fppIss2OxfjULIXvdy+dUX9w7PEVRop13j86caNUW0bBs6C3/wQSOOYO3cSMJtjc
-         ihPHtbEIVh4by3RpqOVqh6TeH5TRE4WC6Co4o4k3dMbyB0lgaMEEGof1fwKOkTEK1glf
-         AuFI2se8mKywLPekgTqxP320UZ0MMV0U29UiLdWUptUQubbBRYA1uinapXGRIR2IvQiD
-         7lNS1CY5aalCpYBAShhxplpZZSpD2DKbUWgbHpZEn8cVN9e8x5T4y2vxao2EkDWbh7pS
-         G4QZTcE6knoEB0E870EGK119fD4LHTea7plc+p6aDdf+8XHQSeTfxb3VXfJShGGoXlmp
-         iT3A==
+        d=gmail.com; s=20221208; t=1682991084; x=1685583084;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3UiPi93XxKnJZMKFtiJdn8rcY/Fce5ICdXhxYOZLt7g=;
+        b=eth/IVwicIFgK8HA1XDSLyb6VLbPTLyzYwkwQcEmLwCPkzxJVDGxL6inORC2A34Z2J
+         FZCZYM2a2fTcnBGN0jW8n9HS3hYWcxzvM9FGywG0dkoMGWLiDNMd9KJxRHjMy3VL2a+g
+         nn8ZPY7TCTup/d9Y5q/RrOVWxEyWCusDi2XOhsDBsQWwPD/ZUgSiACkZowehrEj5LM0J
+         93YVmj87JQO4uz7OPLfkNoomiRz8hC2UXXa2akAqEXJnnWNeclwVnIyM81dlord4HcZq
+         UCApej9G6fdrWoSdGxPcgiLr+daRGm+LsXuqpedlLbfE1YKKk1CzmyoeRrmiExVqmXCZ
+         kZlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682990905; x=1685582905;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7mVH6+bWUcuKUF/qKwIgPR0gD6lIVpcYINT4JISpC94=;
-        b=bFJgOmwi4A1fefV9G2tlMtl4C15vpnM3FMAgwLK94o0mZ3A4Zd/W4GVRL2DLkrSzdt
-         hYPNuyvDotnI1l/DqmC17h/FGnrkf3WGbu3H6hjlFzS1Amtzkt3Xc6y+Yim5xF1qAZr0
-         WD++fZIyqFFVFAB+HtGM92x0k6QunF7OlnduID8r7ScDq6YdBCrH+FVCvxUaxn6BBqBV
-         l03sIwdqdQFpwTRJXlNvPhm1WIAbqTWtRLNbSEAfmbqsMEOUMzpzoozo9GHjHHMtoCC7
-         xYu3wGy6ezaRiVajxDblhg62QaZVdBjmfULDuLCI/8/kFvZe4kEhwsB3+CwsghiGUW09
-         M1YQ==
-X-Gm-Message-State: AC+VfDwHFwMBLVmAk7vBfwe/d1e/yWunwX5STmgwxqVh512oElvyx81J
-        QqOdDSWQk+HSI1pDUtHGceEAsw==
-X-Google-Smtp-Source: ACHHUZ6GSw2x3VDmZQX5TJwpmEs67OpnyMp9mprjr4us96mcsrPP3CnY/k1sZeNeHVZjlquWpmBpGQ==
-X-Received: by 2002:a05:6808:8f1:b0:38e:467f:fee3 with SMTP id d17-20020a05680808f100b0038e467ffee3mr6754306oic.29.1682990904854;
-        Mon, 01 May 2023 18:28:24 -0700 (PDT)
-Received: from sunil-laptop ([2409:4071:6e87:a073:45c:9455:55ad:4703])
-        by smtp.gmail.com with ESMTPSA id p203-20020acaf1d4000000b0038cabfcb3ccsm12099517oih.15.2023.05.01.18.28.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 May 2023 18:28:24 -0700 (PDT)
-Date:   Tue, 2 May 2023 06:58:07 +0530
-From:   Sunil V L <sunilvl@ventanamicro.com>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
-        linux-crypto@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        llvm@lists.linux.dev, Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Len Brown <lenb@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Weili Qian <qianweili@huawei.com>,
-        Zhou Wang <wangzhou1@hisilicon.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Marc Zyngier <maz@kernel.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Andrew Jones <ajones@ventanamicro.com>
-Subject: Re: [PATCH V4 13/23] RISC-V: cpufeature: Add ACPI support in
- riscv_fill_hwcap()
-Message-ID: <ZFBnJ/7TWTBpPZm0@sunil-laptop>
-References: <20230404182037.863533-1-sunilvl@ventanamicro.com>
- <20230404182037.863533-14-sunilvl@ventanamicro.com>
- <20230429-voucher-tutor-715fd4f6c24e@spud>
+        d=1e100.net; s=20221208; t=1682991084; x=1685583084;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3UiPi93XxKnJZMKFtiJdn8rcY/Fce5ICdXhxYOZLt7g=;
+        b=C+djaZ3lAY/VAo1pHpVBLALTyk2tC2X5o1afzZjxEOqXKyH0grO9NjMNyj4Rqlf5/f
+         mDORKHZBeRVCX6+S27Ln6gbu3xJk+ZecqdXeyI9JSX+EaRdphgCF0J8W8+QJ10nVAsDh
+         ONoqhYY8MSY0zIeARHrNeiMoBHrNaUiDcXRlLwRrYACoCAsE8AtvFnHfWm8w3AyAhFD6
+         qWSOu72g8x8TB8d8+dqvuI0nFrs3iIRsFsAuTMXQ7Gcmo1w8kGrVvazEVJstIoJkJJl/
+         +eqVn14fPNDbgbmxrHv54DoFQpQYkjQc6fbuRx04+etacK2mtwb9JlHouPLaejuPMQT8
+         VWBg==
+X-Gm-Message-State: AC+VfDxUsdI10Djii7bJhfz0IFC0K1dmBNCbjCSNICgZF+2aqKdxHmxh
+        itLe/Z46ftlOcO4H/4bBQO4=
+X-Google-Smtp-Source: ACHHUZ54DEsjzfPJFYIrD41DzqrmDV4UclbY63nLz0F0Xw9gBVL6xTBmdtV4bBR5dePMxArsAvWpzg==
+X-Received: by 2002:a17:902:c950:b0:1a1:9020:f9c7 with SMTP id i16-20020a170902c95000b001a19020f9c7mr18185423pla.44.1682991083602;
+        Mon, 01 May 2023 18:31:23 -0700 (PDT)
+Received: from [172.19.1.47] (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
+        by smtp.gmail.com with ESMTPSA id y18-20020a170903011200b001a674fb0dd8sm18621719plc.247.2023.05.01.18.31.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 01 May 2023 18:31:23 -0700 (PDT)
+Message-ID: <ded0c68a-e0b3-b106-e24d-7d9087c6ca4c@gmail.com>
+Date:   Tue, 2 May 2023 09:31:18 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230429-voucher-tutor-715fd4f6c24e@spud>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v8 05/11] dt-bindings: arm: Add initial bindings for
+ Nuvoton platform
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lee@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, tmaimon77@gmail.com, catalin.marinas@arm.com,
+        will@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-serial@vger.kernel.org, arnd@arndb.de, schung@nuvoton.com,
+        mjchen@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
+References: <20230425102418.185783-1-ychuang570808@gmail.com>
+ <20230425102418.185783-6-ychuang570808@gmail.com>
+ <2b79021d-3793-5f2d-8659-5d0d8fc78017@linaro.org>
+Content-Language: en-US
+From:   Jacky Huang <ychuang570808@gmail.com>
+In-Reply-To: <2b79021d-3793-5f2d-8659-5d0d8fc78017@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 29, 2023 at 11:31:20AM +0100, Conor Dooley wrote:
-> Hey Sunil,
-> 
-> On Tue, Apr 04, 2023 at 11:50:27PM +0530, Sunil V L wrote:
-> 
-> > @@ -103,14 +109,36 @@ void __init riscv_fill_hwcap(void)
-> >  
-> >  	bitmap_zero(riscv_isa, RISCV_ISA_EXT_MAX);
-> >  
-> > -	for_each_of_cpu_node(node) {
-> > +	if (!acpi_disabled) {
-> > +		status = acpi_get_table(ACPI_SIG_RHCT, 0, &rhct);
-> > +		if (ACPI_FAILURE(status))
-> > +			return;
-> > +	}
-> > +
-> > +	for_each_possible_cpu(cpu) {
-> >  		unsigned long this_hwcap = 0;
-> >  		DECLARE_BITMAP(this_isa, RISCV_ISA_EXT_MAX);
-> >  		const char *temp;
-> >  
-> > -		if (of_property_read_string(node, "riscv,isa", &isa)) {
-> > -			pr_warn("Unable to find \"riscv,isa\" devicetree entry\n");
-> > -			continue;
-> > +		if (acpi_disabled) {
-> > +			node = of_cpu_device_node_get(cpu);
-> > +			if (node) {
-> > +				rc = of_property_read_string(node, "riscv,isa", &isa);
-> > +				of_node_put(node);
-> > +				if (rc) {
-> > +					pr_warn("Unable to find \"riscv,isa\" devicetree entry\n");
-> > +					continue;
-> > +				}
-> > +			} else {
-> > +				pr_warn("Unable to find cpu node\n");
-> > +				continue;
-> 
-> I was poking at this the last few days and went back to look at the ACPI
-> code again. Is there a reason we don't do early-return here? IOW:
-> 
-> 	node = of_cpu_device_node_get(cpu);
-> 	if (!node) {
-> 		pr_warn()
-> 		continue;
-> 	}
-> 
-> 	rc = of_property_read_string(node, "riscv,isa", &isa);
-> 	of_node_put(node);
-> 	if (rc) {
-> 		pr_warn();
-> 		continue;
-> 	}
-> 
-This looks better. Will update when I send the next revision of the
-series. Thank you!, Conor.
+Dear Krzysztof,
+
+
+On 2023/5/1 下午 05:50, Krzysztof Kozlowski wrote:
+> On 25/04/2023 12:24, Jacky Huang wrote:
+>> From: Jacky Huang <ychuang3@nuvoton.com>
+>>
+>> Move 'nuvoton,npcm-gcr.yaml' from 'arm/npcm' to 'soc/nuvoton'.
+>> Rename the '/arm/npcm' directory to 'arm/nuvoton'. Additionally, add
+>> bindings for ARMv8-based Nuvoton SoCs and platform boards, and include
+>> the initial bindings for ma35d1 series development boards.
+>>
+>> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
+>> ---
+>>   .../bindings/arm/nuvoton/nuvoton,ma35d1.yaml  | 30 +++++++++++++++++++
+>>   .../npcm.yaml => nuvoton/nuvoton,npcm.yaml}   |  2 +-
+>>   .../nuvoton/nuvoton,npcm-gcr.yaml}            |  2 +-
+>>   3 files changed, 32 insertions(+), 2 deletions(-)
+>>   create mode 100644 Documentation/devicetree/bindings/arm/nuvoton/nuvoton,ma35d1.yaml
+> I don't see any improvements here. Path in maintainers is still broken.
+>
+> Best regards,
+> Krzysztof
+>
+
+Does this line cover 
+'Documentation/devicetree/bindings/arm/nuvoton/nuvoton,ma35d1.yaml'?
+==>  F:    Documentation/devicetree/bindings/*/*/*ma35*
+
+I ran 'get_maintainer.pl' on this patch, and it was able to find 
+maintainers and looked good.
+I also ran 'make htmldocs' and did not see any warnings or errors 
+related to the .yaml files
+in this patch. However, I am still unsure where the problem lies. Can 
+you suggest any
+tools I can use to check for errors? I would greatly appreciate any 
+guidance you can provide.
+
+
+Best Regards,
+Jacky Huang
+
