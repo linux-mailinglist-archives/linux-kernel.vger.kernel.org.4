@@ -2,64 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 746FA6F4B4C
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 22:24:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D07CA6F4B56
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 22:25:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbjEBUYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 16:24:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54584 "EHLO
+        id S229990AbjEBUZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 16:25:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbjEBUYS (ORCPT
+        with ESMTP id S229976AbjEBUY5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 16:24:18 -0400
-Received: from smtp.smtpout.orange.fr (smtp-15.smtpout.orange.fr [80.12.242.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F3219AB
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 13:24:15 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id twXgppIyTDWLHtwXgpzUGe; Tue, 02 May 2023 22:24:13 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1683059053;
-        bh=PMrwAhXdyGkz9ytuGeyKVuEYfwV4KQf3cPRbS20fhZU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=MSxDoOzDIu/DiFTeig656t6lYDc/5KleISt5cSLrSnmdxSpe5lubkW36EctN9mU76
-         Iq2tRyJ3Y+QATWBHdIUf1fXn61S0We2PvD86m0W7tCTHOZ5SYyZlb7YapCbVQ9CWT2
-         dLGxi+FID4GpeRUO6V/7Hz7j16fTKyOeypOOc52E1rD/e+cUIP6IZxeSkiI/91Z6o2
-         2mfdT38mOIukQ6vGkb0XGT/fmgu2vXZpRJgZv1b6rKvSkLjL55EJ5PFEJ6X9tQ+UGg
-         4TILE30vzjSjVaj8aZ4kQ/Dbb71TypClXpVoxJWQGoV6FH0Nc1Buzo3gv9P3eRhQW0
-         b5tE4r1jDlVJA==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 02 May 2023 22:24:13 +0200
-X-ME-IP: 86.243.2.178
-Message-ID: <b1ee9be3-60db-31ea-97dd-916dc80f237c@wanadoo.fr>
-Date:   Tue, 2 May 2023 22:24:08 +0200
+        Tue, 2 May 2023 16:24:57 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F3F19A5
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 13:24:50 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-b99efd7c335so6147441276.0
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 13:24:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683059090; x=1685651090;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rocmb1807rrqmHexWgUhMdukatSY3k3dt0DBoDYQQ84=;
+        b=MU+gfSqaJcZXaDLvILYPcen+DJlOMwNmFrBFbKRSovZHxrvdwaG8OD3LLS//dpin/v
+         VbPxpiE8cU1T7vAtmTF6dYeGjFpACQQOGybH9aHKcC5v1qu8tP75Rjq53IDWmffZjJrr
+         tKsDUFpXswHNSV7LNAYl9HashXePGs8/8q+rr+D9/JqV7QS7JaaLeNaw5z/oiHChIdRk
+         UE4s9//C6tXLhlQyVF3+Z1jXTOQHY1Ua2URA+4E6vRPa6Kxru/WjNmMPKUxKaXgwJiRm
+         sq3XUJ1lzzhLAW3l6HbWMcyldde6rUUvXKLuFkUxWSDQY/iFYdWKz2F0FVyb5kq4I/a/
+         JBwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683059090; x=1685651090;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rocmb1807rrqmHexWgUhMdukatSY3k3dt0DBoDYQQ84=;
+        b=ITybrYFcwqibOhY78kItWw/0edI6uNB9HssUNLz+dGujuownTl12VB5gu+EI37EByW
+         umjQVXZ5LyHRdPPVRd2Rmbqc3SxUQfg+O35VnxrO2ewenZbNXczVsi6eHK5oKQH6ohy/
+         T6Dq30CLlfWyJNfaNV9XazZxK0AM5stpw8988t3YZhLzSsl9paTllsN1OJghOjWpRSbL
+         cLrwelJ3NjAs8ta5ebvYS6JfAudJ+DfP+WlEA6UiIWtlwn0saOqGTFOBkk7+5A7f1hH1
+         MBO0nmCsApJoOepO98waZ3EPB0V2X1P+ZIlwp6J1dmo89zwYDwM9bgQbXlYO/xUnrBHq
+         f4xA==
+X-Gm-Message-State: AC+VfDzIVjUrJBupJW4sAz5ZPiGPcC9OFS8ZCxjU5vFDx3nH61Cbz6r9
+        p6m8zeD1l32hgYzc55OMwWtCBhkBuN98pBUnhm6ygQ==
+X-Google-Smtp-Source: ACHHUZ498EUoOwRRn2rdDuuuK5krmC/as1ueUrWM+kQJuCKq0a3B5NsZWZU/qAtq+dCO/VPCb+cyeEH8kNx+l9uLzbE=
+X-Received: by 2002:a25:588:0:b0:b87:d47e:9bcb with SMTP id
+ 130-20020a250588000000b00b87d47e9bcbmr17713528ybf.42.1683059089603; Tue, 02
+ May 2023 13:24:49 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 net-next 3/6] net: bcmasp: Add support for ASP2.0
- Ethernet controller
-Content-Language: fr
-To:     Justin Chen <justinpopo6@gmail.com>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        bcm-kernel-feedback-list@broadcom.com
-Cc:     justin.chen@broadcom.com, f.fainelli@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, opendmb@gmail.com,
-        andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        richardcochran@gmail.com, sumit.semwal@linaro.org,
-        christian.koenig@amd.com
-References: <1682535272-32249-1-git-send-email-justinpopo6@gmail.com>
- <1682535272-32249-4-git-send-email-justinpopo6@gmail.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <1682535272-32249-4-git-send-email-justinpopo6@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20230501165450.15352-1-surenb@google.com> <20230501165450.15352-20-surenb@google.com>
+ <20230502175052.43814202@meshulam.tesarici.cz> <CAJuCfpGSLK50eKQ2-CE41qz1oDPM6kC8RmqF=usZKwFXgTBe8g@mail.gmail.com>
+ <20230502220909.3f55ae41@meshulam.tesarici.cz>
+In-Reply-To: <20230502220909.3f55ae41@meshulam.tesarici.cz>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 2 May 2023 13:24:37 -0700
+Message-ID: <CAJuCfpGGB204PKuqjjkPBn_XHL-xLPkn0bF6xc12Bfj8=Qzcrw@mail.gmail.com>
+Subject: Re: [PATCH 19/40] change alloc_pages name in dma_map_ops to avoid
+ name conflicts
+To:     =?UTF-8?B?UGV0ciBUZXNhxZnDrWs=?= <petr@tesarici.cz>
+Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
+        mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
+        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
+        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
+        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
+        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
+        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
+        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
+        tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
+        paulmck@kernel.org, pasha.tatashin@soleen.com,
+        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
+        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
+        ndesaulniers@google.com, gregkh@linuxfoundation.org,
+        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+        glider@google.com, elver@google.com, dvyukov@google.com,
+        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
+        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,149 +98,161 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 26/04/2023 à 20:54, Justin Chen a écrit :
-> Add support for the Broadcom ASP 2.0 Ethernet controller which is first
-> introduced with 72165. This controller features two distinct Ethernet
-> ports that can be independently operated.
-> 
-> This patch supports:
-> 
-> - Wake-on-LAN using magic packets
-> - basic ethtool operations (link, counters, message level)
-> - MAC destination address filtering (promiscuous, ALL_MULTI, etc.)
-> 
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> Signed-off-by: Justin Chen <justinpopo6@gmail.com>
-> ---
+On Tue, May 2, 2023 at 1:09=E2=80=AFPM Petr Tesa=C5=99=C3=ADk <petr@tesaric=
+i.cz> wrote:
+>
+> On Tue, 2 May 2023 11:38:49 -0700
+> Suren Baghdasaryan <surenb@google.com> wrote:
+>
+> > On Tue, May 2, 2023 at 8:50=E2=80=AFAM Petr Tesa=C5=99=C3=ADk <petr@tes=
+arici.cz> wrote:
+> > >
+> > > On Mon,  1 May 2023 09:54:29 -0700
+> > > Suren Baghdasaryan <surenb@google.com> wrote:
+> > >
+> > > > After redefining alloc_pages, all uses of that name are being repla=
+ced.
+> > > > Change the conflicting names to prevent preprocessor from replacing=
+ them
+> > > > when it's not intended.
+> > > >
+> > > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > > > ---
+> > > >  arch/x86/kernel/amd_gart_64.c | 2 +-
+> > > >  drivers/iommu/dma-iommu.c     | 2 +-
+> > > >  drivers/xen/grant-dma-ops.c   | 2 +-
+> > > >  drivers/xen/swiotlb-xen.c     | 2 +-
+> > > >  include/linux/dma-map-ops.h   | 2 +-
+> > > >  kernel/dma/mapping.c          | 4 ++--
+> > > >  6 files changed, 7 insertions(+), 7 deletions(-)
+> > > >
+> > > > diff --git a/arch/x86/kernel/amd_gart_64.c b/arch/x86/kernel/amd_ga=
+rt_64.c
+> > > > index 56a917df410d..842a0ec5eaa9 100644
+> > > > --- a/arch/x86/kernel/amd_gart_64.c
+> > > > +++ b/arch/x86/kernel/amd_gart_64.c
+> > > > @@ -676,7 +676,7 @@ static const struct dma_map_ops gart_dma_ops =
+=3D {
+> > > >       .get_sgtable                    =3D dma_common_get_sgtable,
+> > > >       .dma_supported                  =3D dma_direct_supported,
+> > > >       .get_required_mask              =3D dma_direct_get_required_m=
+ask,
+> > > > -     .alloc_pages                    =3D dma_direct_alloc_pages,
+> > > > +     .alloc_pages_op                 =3D dma_direct_alloc_pages,
+> > > >       .free_pages                     =3D dma_direct_free_pages,
+> > > >  };
+> > > >
+> > > > diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+> > > > index 7a9f0b0bddbd..76a9d5ca4eee 100644
+> > > > --- a/drivers/iommu/dma-iommu.c
+> > > > +++ b/drivers/iommu/dma-iommu.c
+> > > > @@ -1556,7 +1556,7 @@ static const struct dma_map_ops iommu_dma_ops=
+ =3D {
+> > > >       .flags                  =3D DMA_F_PCI_P2PDMA_SUPPORTED,
+> > > >       .alloc                  =3D iommu_dma_alloc,
+> > > >       .free                   =3D iommu_dma_free,
+> > > > -     .alloc_pages            =3D dma_common_alloc_pages,
+> > > > +     .alloc_pages_op         =3D dma_common_alloc_pages,
+> > > >       .free_pages             =3D dma_common_free_pages,
+> > > >       .alloc_noncontiguous    =3D iommu_dma_alloc_noncontiguous,
+> > > >       .free_noncontiguous     =3D iommu_dma_free_noncontiguous,
+> > > > diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-op=
+s.c
+> > > > index 9784a77fa3c9..6c7d984f164d 100644
+> > > > --- a/drivers/xen/grant-dma-ops.c
+> > > > +++ b/drivers/xen/grant-dma-ops.c
+> > > > @@ -282,7 +282,7 @@ static int xen_grant_dma_supported(struct devic=
+e *dev, u64 mask)
+> > > >  static const struct dma_map_ops xen_grant_dma_ops =3D {
+> > > >       .alloc =3D xen_grant_dma_alloc,
+> > > >       .free =3D xen_grant_dma_free,
+> > > > -     .alloc_pages =3D xen_grant_dma_alloc_pages,
+> > > > +     .alloc_pages_op =3D xen_grant_dma_alloc_pages,
+> > > >       .free_pages =3D xen_grant_dma_free_pages,
+> > > >       .mmap =3D dma_common_mmap,
+> > > >       .get_sgtable =3D dma_common_get_sgtable,
+> > > > diff --git a/drivers/xen/swiotlb-xen.c b/drivers/xen/swiotlb-xen.c
+> > > > index 67aa74d20162..5ab2616153f0 100644
+> > > > --- a/drivers/xen/swiotlb-xen.c
+> > > > +++ b/drivers/xen/swiotlb-xen.c
+> > > > @@ -403,6 +403,6 @@ const struct dma_map_ops xen_swiotlb_dma_ops =
+=3D {
+> > > >       .dma_supported =3D xen_swiotlb_dma_supported,
+> > > >       .mmap =3D dma_common_mmap,
+> > > >       .get_sgtable =3D dma_common_get_sgtable,
+> > > > -     .alloc_pages =3D dma_common_alloc_pages,
+> > > > +     .alloc_pages_op =3D dma_common_alloc_pages,
+> > > >       .free_pages =3D dma_common_free_pages,
+> > > >  };
+> > > > diff --git a/include/linux/dma-map-ops.h b/include/linux/dma-map-op=
+s.h
+> > > > index 31f114f486c4..d741940dcb3b 100644
+> > > > --- a/include/linux/dma-map-ops.h
+> > > > +++ b/include/linux/dma-map-ops.h
+> > > > @@ -27,7 +27,7 @@ struct dma_map_ops {
+> > > >                       unsigned long attrs);
+> > > >       void (*free)(struct device *dev, size_t size, void *vaddr,
+> > > >                       dma_addr_t dma_handle, unsigned long attrs);
+> > > > -     struct page *(*alloc_pages)(struct device *dev, size_t size,
+> > > > +     struct page *(*alloc_pages_op)(struct device *dev, size_t siz=
+e,
+> > > >                       dma_addr_t *dma_handle, enum dma_data_directi=
+on dir,
+> > > >                       gfp_t gfp);
+> > > >       void (*free_pages)(struct device *dev, size_t size, struct pa=
+ge *vaddr,
+> > > > diff --git a/kernel/dma/mapping.c b/kernel/dma/mapping.c
+> > > > index 9a4db5cce600..fc42930af14b 100644
+> > > > --- a/kernel/dma/mapping.c
+> > > > +++ b/kernel/dma/mapping.c
+> > > > @@ -570,9 +570,9 @@ static struct page *__dma_alloc_pages(struct de=
+vice *dev, size_t size,
+> > > >       size =3D PAGE_ALIGN(size);
+> > > >       if (dma_alloc_direct(dev, ops))
+> > > >               return dma_direct_alloc_pages(dev, size, dma_handle, =
+dir, gfp);
+> > > > -     if (!ops->alloc_pages)
+> > > > +     if (!ops->alloc_pages_op)
+> > > >               return NULL;
+> > > > -     return ops->alloc_pages(dev, size, dma_handle, dir, gfp);
+> > > > +     return ops->alloc_pages_op(dev, size, dma_handle, dir, gfp);
+> > > >  }
+> > > >
+> > > >  struct page *dma_alloc_pages(struct device *dev, size_t size,
+> > >
+> > > I'm not impressed. This patch increases churn for code which does not
+> > > (directly) benefit from the change, and that for limitations in your
+> > > tooling?
+> > >
+> > > Why not just rename the conflicting uses in your local tree, but then
+> > > remove the rename from the final patch series?
+> >
+> > With alloc_pages function becoming a macro, the preprocessor ends up
+> > replacing all instances of that name, even when it's not used as a
+> > function. That what necessitates this change. If there is a way to
+> > work around this issue without changing all alloc_pages() calls in the
+> > source base I would love to learn it but I'm not quite clear about
+> > your suggestion and if it solves the issue. Could you please provide
+> > more details?
+>
+> Ah, right, I admit I did not quite understand why this change is
+> needed. However, this is exactly what I don't like about preprocessor
+> macros. Each macro effectively adds a new keyword to the language.
+>
+> I believe everything can be solved with inline functions. What exactly
+> does not work if you rename alloc_pages() to e.g. alloc_pages_caller()
+> and then add an alloc_pages() inline function which calls
+> alloc_pages_caller() with _RET_IP_ as a parameter?
 
-[...]
+I don't think that would work because we need to inject the codetag at
+the file/line of the actual allocation call. If we pass _REP_IT_ then
+we would have to lookup the codetag associated with that _RET_IP_
+which results in additional runtime overhead.
 
-> +void bcmasp_disable_all_filters(struct bcmasp_intf *intf)
-> +{
-> +	struct bcmasp_priv *priv = intf->parent;
-> +	unsigned int i;
-
-Hi,
-
-Nit: Some loop index are unsigned int, but most are int.
-This could be done consistantly.
-
-> +
-> +	/* Disable all filters held by this port */
-> +	for (i = ASP_RX_FILT_MDA_RES_COUNT(intf); i < NUM_MDA_FILTERS; i++) {
-> +		if (priv->mda_filters[i].en &&
-> +		    priv->mda_filters[i].port == intf->port)
-> +			bcmasp_en_mda_filter(intf, 0, i);
-> +	}
-> +}
-
-[...]
-
-> +static int bcmasp_probe(struct platform_device *pdev)
-> +{
-> +	struct device_node *ports_node, *intf_node;
-> +	const struct bcmasp_plat_data *pdata;
-> +	struct device *dev = &pdev->dev;
-> +	int ret, i, count = 0, port;
-> +	struct bcmasp_priv *priv;
-> +	struct bcmasp_intf *intf;
-> +
-> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	priv->irq = platform_get_irq(pdev, 0);
-> +	if (priv->irq <= 0) {
-> +		dev_err(dev, "invalid interrupt\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	priv->clk = devm_clk_get_optional_enabled(dev, "sw_asp");
-> +	if (IS_ERR(priv->clk)) {
-> +		dev_err(dev, "failed to request clock\n");
-> +		return PTR_ERR(priv->clk);
-> +	}
-> +
-> +	/* Base from parent node */
-> +	priv->base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(priv->base)) {
-> +		dev_err(dev, "failed to iomap\n");
-> +		return PTR_ERR(priv->base);
-> +	}
-> +
-> +	ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(40));
-> +	if (ret)
-> +		ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
-
-I don't think that this fallback is needed.
-See [1].
-
-More over, using dev_err_probe() would slighly simplify the probe 
-function. (saves a few LoC, logs the error code in a human reading format)
-
-[1]: 
-https://lore.kernel.org/lkml/86bf852e-4220-52d4-259d-3455bc24def1@wanadoo.fr/T/#m022abc0051ede3ba1feeb06cefd59e2a8a5c7864
-
-> +	if (ret) {
-> +		dev_err(&pdev->dev, "unable to set DMA mask: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-
-[...]
-
-> +static int __maybe_unused bcmasp_suspend(struct device *d)
-> +{
-> +	struct bcmasp_priv *priv = dev_get_drvdata(d);
-> +	struct bcmasp_intf *intf;
-> +	unsigned int i;
-
-Same
-
-> +	int ret = 0;
-
-no need to initialize, but it is mostmy a matter of taste.
-
-> +
-> +	for (i = 0; i < priv->intf_count; i++) {
-> +		intf = priv->intfs[i];
-> +		if (!intf)
-> +			continue;
-> +
-> +		ret = bcmasp_interface_suspend(intf);
-> +		if (ret)
-> +			break;
-> +	}
-> +
-> +	ret = clk_prepare_enable(priv->clk);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* Whether Wake-on-LAN is enabled or not, we can always disable
-> +	 * the shared TX clock
-> +	 */
-> +	bcmasp_core_clock_set(priv, 0, ASP_CTRL_CLOCK_CTRL_ASP_TX_DISABLE);
-> +
-> +	bcmasp_core_clock_select(priv, true);
-> +
-> +	clk_disable_unprepare(priv->clk);
-> +
-> +	return ret;
-> +}
-> +
-> +static int __maybe_unused bcmasp_resume(struct device *d)
-> +{
-> +	struct bcmasp_priv *priv = dev_get_drvdata(d);
-> +	struct bcmasp_intf *intf;
-> +	unsigned int i;
-
-same
-
-> +	int ret = 0;
-
-no need to initialize, but it is mostmy a matter of taste.
-
-Just my 2c,
-CJ
-
-
+>
+> Petr T
+>
+> --
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to kernel-team+unsubscribe@android.com.
+>
