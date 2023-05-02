@@ -2,75 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD3BB6F495D
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 19:58:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47A146F495F
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 19:59:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233872AbjEBR6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 13:58:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45142 "EHLO
+        id S234433AbjEBR6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 13:58:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234549AbjEBR6R (ORCPT
+        with ESMTP id S234564AbjEBR6Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 13:58:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB401704
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 10:58:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D38A627D8
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 17:57:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C59C6C4339E;
-        Tue,  2 May 2023 17:57:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683050276;
-        bh=3iPCe2Ie0CJR0DbrVmvyG2MloAx3aMWRYMZPEHQ/b8s=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=I+DM/omwaO3bSKBsMHTya0U8PeG54Px10HfzBZPCVXLJVESVWUVaPgqtWXTt80Ps9
-         dxds+tRHdr08ntwM8+/+AufLaKbrDKgFqx64xFL1REpOk01H7GjdO8n24TYoVEWyDx
-         dTOqJ5uoJYDAQTnuV3q+v1EGttwkZzPNver7mxAfhMNoYNi69192f7uvDBA/ocGG/U
-         eGcWXx51Cov7Yp9DsOry/CgITUmmXtcaxe98lOWWB80MR0gNgTTnWr7PzFzJGMlnty
-         IiORCSsLq5YA0VZnVAkG1NYKpOiYvdbC8F3iPoV+4zDdSmoEUzrcuJdm8dDRS5s8H7
-         /Iu42jv0oA6dQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B41BAE5FFC9;
-        Tue,  2 May 2023 17:57:56 +0000 (UTC)
-Subject: Re: [GIT PULL] Backlight for v6.4
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230502163129.GL620451@google.com>
-References: <20230502163129.GL620451@google.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230502163129.GL620451@google.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/lee/backlight.git backlight-next-6.4
-X-PR-Tracked-Commit-Id: fb200218b40b7864f64f1a47de61e035d8934e92
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: d7b3ffe2d7e476f11d73b74093006aa936f59e8b
-Message-Id: <168305027673.6897.9122268974026356816.pr-tracker-bot@kernel.org>
-Date:   Tue, 02 May 2023 17:57:56 +0000
-To:     Lee Jones <lee@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Lee Jones <lee@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 2 May 2023 13:58:24 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A6183
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 10:58:23 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-64115e652eeso36666459b3a.0
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 10:58:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=networkplumber-org.20221208.gappssmtp.com; s=20221208; t=1683050303; x=1685642303;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tiE1DWJVu6SR5fUQri2EkqUC06NuFzPAjn+VDe/bbX0=;
+        b=a0zP5mMWN/KjUOhGaEfPf8s4GKxrE/biIQPS8edlBr0BnWsUKt+pKjQLHRdaP8j5PS
+         VX1XEEGEg+HLO7JfJlt4fgOQ1fJk1MOLyVigx1xJSDwgvaBueNg889SV/9Qzf+8LuJ6q
+         wO/tzIlmWSO/MjB35RBTm8IfWyJsq0GZAg0rpD053LEIVzybo4ES1xvQHznAI+XjtdXY
+         Q7rT5Ovf8xYv5DjefiHXWQPZUjk7T0fMT7VpBU2nGTNTs+Cv1BD45hdyHmmgdd5gVNOM
+         R1cHAMIn5BaDJdkMExyPI14x3Ab8tAjj283Bn3RgtSekq5QD5Bj1bsHgP2vbPxIyC3Pp
+         CnrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683050303; x=1685642303;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tiE1DWJVu6SR5fUQri2EkqUC06NuFzPAjn+VDe/bbX0=;
+        b=GKDu9mPvkrFc0Q+eZ2MQKV9chxJN5/rpIZNDp6+HmQHmskRfq+UNhKKZX/ymhQV7ZB
+         VttG+oOMFPogCu8IPHN3XLDYjCeubEY8E0jCC7kYKp6vojRifiBs6YeGXSrx/FzB89Tk
+         Me2n+v8v3TKKd/kEz4D8LlDa4v3Ej6EKFzbuNL8W8uqx7i3JEkSA9Tvm6B48n/8Wa6PZ
+         DcukHTcv/pnHpO+xG5omuHBUp4D/j8MdzO0ADtJO7iS9BqZK6xg4E9FRzBAMg5+SfIhl
+         aT8kyhVuXzBM5VFXI+aBBliD5nwdmgCCIBiDnMrtGWi64EFf1X2Gw+U/nkgxtSeJGKjs
+         fApA==
+X-Gm-Message-State: AC+VfDxNjvdlFExgIVXhTTFEmjSBicjOgkRUPkbS2xQrGD9U94LMQdGF
+        kKywYn/dzdS+qel3chZ38gtZa9C6w6CSziJxP399Hw==
+X-Google-Smtp-Source: ACHHUZ69sAcGtuvOJ3Hdq1uWU7dgus/z7Ditm8fZh+kuofxEiQ76vpCMTrCfqNdnQubuxw4bWhWcqg==
+X-Received: by 2002:a05:6a20:72a6:b0:f2:817c:2038 with SMTP id o38-20020a056a2072a600b000f2817c2038mr22302768pzk.18.1683050302978;
+        Tue, 02 May 2023 10:58:22 -0700 (PDT)
+Received: from hermes.local (204-195-120-218.wavecable.com. [204.195.120.218])
+        by smtp.gmail.com with ESMTPSA id n12-20020a056a00212c00b0063f172b1c47sm20469544pfj.35.2023.05.02.10.58.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 May 2023 10:58:22 -0700 (PDT)
+Date:   Tue, 2 May 2023 10:58:20 -0700
+From:   Stephen Hemminger <stephen@networkplumber.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Ganesh Babu <ganesh.babu@ekinops.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] net: mroute6.h: change type of mif6c_pifi to __u32
+Message-ID: <20230502105820.2c27630d@hermes.local>
+In-Reply-To: <20230502085718.0551a86d@kernel.org>
+References: <PAZP264MB4064279CBAB0D7672726F4A1FC889@PAZP264MB4064.FRAP264.PROD.OUTLOOK.COM>
+        <20230328191456.43d2222e@kernel.org>
+        <PAZP264MB406414BA18689729DDE24F3DFC659@PAZP264MB4064.FRAP264.PROD.OUTLOOK.COM>
+        <20230502085718.0551a86d@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Tue, 2 May 2023 17:31:29 +0100:
+On Tue, 2 May 2023 08:57:18 -0700
+Jakub Kicinski <kuba@kernel.org> wrote:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/lee/backlight.git backlight-next-6.4
+> On Tue, 2 May 2023 08:07:10 +0000 Ganesh Babu wrote:
+> > Thank you for your response. Regarding the proposed change to
+> > the mif6ctl structure in mroute6.h, I would like to clarify,
+> > that changing the datatype of mif6c_pifi from __u16 to __u32
+> > will not change the offset of the structure members, which
+> > means that the size of the structure remains the same and
+> > the ABI remains compatible. Furthermore, ifindex is treated
+> > as an integer in all the subsystems of the kernel and not
+> > as a 16-bit value. Therefore, changing the datatype of
+> > mif6c_pifi from __u16 to __u32 is a natural and expected
+> > change that aligns with the existing practice in the kernel.
+> > I understand that the mif6ctl structure is part of the uAPI
+> > and changing its geometry is not allowed. However, in this
+> > case, we are not changing the geometry of the structure,
+> > as the size of the structure remains the same and the offset
+> > of the structure members will not change. Thus, the proposed
+> > change will not affect the ABI or the user API. Instead, it
+> > will allow the kernel to handle 32-bit ifindex values without
+> > any issues, which is essential for the smooth functioning of
+> > the PIM6 protocol. I hope this explanation clarifies any
+> > concerns you may have had. Let me know if you have any further
+> > questions or need any more details.  
+> 
+> Please don't top post on the list.
+> 
+> How does the hole look on big endian? Does it occupy the low or 
+> the high bytes?
+> 
+> There's also the problem of old user space possibly not initializing
+> the hole, and passing in garbage.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/d7b3ffe2d7e476f11d73b74093006aa936f59e8b
+Looks like multicast routing is one of the last places with no netlink
+API, and only ioctl. There is no API to modify multicast routes in iproute2.
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
