@@ -2,230 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57DD46F49D0
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 20:39:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F2EE6F49D4
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 20:41:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233837AbjEBSjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 14:39:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33268 "EHLO
+        id S233644AbjEBSk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 14:40:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232184AbjEBSjD (ORCPT
+        with ESMTP id S229945AbjEBSk4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 14:39:03 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173D61BF
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 11:39:01 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-559eae63801so53019117b3.2
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 11:39:01 -0700 (PDT)
+        Tue, 2 May 2023 14:40:56 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E99701735
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 11:40:52 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-63b70ca0a84so4788924b3a.2
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 11:40:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683052740; x=1685644740;
+        d=gmail.com; s=20221208; t=1683052852; x=1685644852;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7OMnp8U2QsJWbp6tha1jAHM6ardwied5yoCJwV56xmU=;
-        b=3ehzpeirHytbRrfF5r15fGVpzpJxZb0E9v2Om0wdN+yxZYUTa6qWTLOkd2mbDRoF7W
-         pnmov0ApI+qMvdAzFDA6SgZGTRYRpWWsYOopta6Rj30LnCXbPu9oQBdK0uh0n1fbuy01
-         vsylwS4eNoSnK4OdPa0qDxCeqjOu7PunOoJTEi+RY4izp9SK5YNPQKHVdbCsFRn4WM2A
-         p7jtWEQHZwcMmuy2lRysHMVwpnEcRz/iqKNa76N07gsayvlYQtmcsOsujw7J6qYIBTdy
-         xedsqCxK32iKWHMMSwGqO7eBE4zSMlkGqF+0tcmMmy368s/N5nkgeAf/BqbdsSOgzCG8
-         xgHw==
+        bh=j9I/fY681zol8PqXhiDG/vchs4lKKtE1w7jrrREjGas=;
+        b=YZt7oVm86x/C+bmILbyE8jSQ+gAV8VbWITg5sCCiZJebKRtlzUNGBdX7uqi07EeVNO
+         5SciqNs64BH0ZuhcaepLxfP1PAgpYdqvU99XqBrZFcviFXEiUiNCuLZndVSciiTtMw21
+         JkcINtBLQ1yRY6jEVcCKZUBPGsKkMWXr4zyc0Gn9hfLr8AImsMBO2I4g3hr6yoni5DvO
+         ioA7dSYKp3JK1UTUw5Si5uUiK44T7cLYrxbZYunV4S9vveKzJ+U8cWmzl73k+6zt57X/
+         k9kf+oUncbNiB469BJ+2ma1JmotO9+NvGmeUqKc4i3gs6p7JmukLTtx7om4PfG2tibFc
+         OHDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683052740; x=1685644740;
+        d=1e100.net; s=20221208; t=1683052852; x=1685644852;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7OMnp8U2QsJWbp6tha1jAHM6ardwied5yoCJwV56xmU=;
-        b=ap0h0d9vl/VL7TH8ok3vqzu0mVQHTWEIwUwgfjAJ6I9/aXaPu/h2ZHC2xjzBLuNdVG
-         BHvohQQ3oK1lkv/QdTzPaodN5yMsy+Zaed0cZs5wSGNgTpg2Lhu5x6HygNBPCguwxYwu
-         AhAJCOLCyK7SYoat5lq2k56KFeIeMD5X/joy4DXSRCWYgrMianf/l5Et3JffRsejqoV7
-         cVH4LKC2crW1AS2cIZIi4c8gwJ32YXMP7lMAxDboKRou8Pj2mG8P9ORjk/3jpS7iKDOB
-         Spry2+os2c2WlEtSP2qOEK6sVL0D7GPvwnNP9Ffux4bsqtXPmLeedOv8KY+u9aQXKus5
-         uyXg==
-X-Gm-Message-State: AC+VfDyUBwpniF40+giYjl3sVRmPzTz3k58pgIppXXr++P4N6Yi8JqcD
-        9bPksyXtCpkRPMxv94EcYUf4RgWUzYcEge9KY0Pb9g==
-X-Google-Smtp-Source: ACHHUZ45HYLTxHMIOq01xnBNZQQ3FvjzAGWMuhj5eqXhI0sjJMLvrbYm8scdp84P5QMdOuWonlr1sN9pxx8UWuINaFw=
-X-Received: by 2002:a25:420f:0:b0:b9e:4fbc:8a7f with SMTP id
- p15-20020a25420f000000b00b9e4fbc8a7fmr5707930yba.1.1683052740029; Tue, 02 May
- 2023 11:39:00 -0700 (PDT)
+        bh=j9I/fY681zol8PqXhiDG/vchs4lKKtE1w7jrrREjGas=;
+        b=aFUrccLe62I3i+jO5CjxCMDRjuVV5U6rNp8blHWbBQJWFSwEQXPBHfzBxp8ldwcaUN
+         MO/8cnbDezGKJYdAPPDi28TfPtJzzKWn95VQCV4868mCYDyVuwP2bWKHyhhvo3Glt54e
+         fMAYLQBs8fI3uow3orY0hbofpM0Z3O8SdJgRBu82pMvI9O68RPtyFsIlNmj2Hm9wmMDQ
+         ecF2oosBocRvsLHGrTwEbOhwB3e4pNxKaxQtcllbzOhdqTfYOojPvlEmHlFR3RG55WSh
+         KxuCWabyC/nDFUfRU1FVXtdpkRzGHlcbQ7bi6TqHyw0nNZTzq0Ul9rL7+auxZiKd5YEL
+         UgMg==
+X-Gm-Message-State: AC+VfDxkVRo79TTMQ8lwKJ/zfKw1eLZ6JNz5rn/IB1sOyk2kt9gZpo+D
+        tyyCP40+wys18rfOjhiGrMyeAwrFENriIZTU+g6IcIXr
+X-Google-Smtp-Source: ACHHUZ6PKezicQDj/QRPnP6gMfGXmHL2EzMCzyXxonGT4aSmO1mb09WzaNBULelXXyu5pc/A2moM1SAPoskVoe4fv4s=
+X-Received: by 2002:a05:6a21:918c:b0:c6:c0c1:b1fe with SMTP id
+ tp12-20020a056a21918c00b000c6c0c1b1femr18593162pzb.57.1683052852144; Tue, 02
+ May 2023 11:40:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230501165450.15352-1-surenb@google.com> <20230501165450.15352-20-surenb@google.com>
- <20230502175052.43814202@meshulam.tesarici.cz>
-In-Reply-To: <20230502175052.43814202@meshulam.tesarici.cz>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Tue, 2 May 2023 11:38:49 -0700
-Message-ID: <CAJuCfpGSLK50eKQ2-CE41qz1oDPM6kC8RmqF=usZKwFXgTBe8g@mail.gmail.com>
-Subject: Re: [PATCH 19/40] change alloc_pages name in dma_map_ops to avoid
- name conflicts
-To:     =?UTF-8?B?UGV0ciBUZXNhxZnDrWs=?= <petr@tesarici.cz>
-Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
-        mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
-        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
-        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
-        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
-        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
-        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
-        tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
-        paulmck@kernel.org, pasha.tatashin@soleen.com,
-        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
-        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, gregkh@linuxfoundation.org,
-        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
+References: <CGME20230502010811eucas1p1df7fcdcb3e3d363d39eb711f19618628@eucas1p1.samsung.com>
+ <20230502010759.17282-1-aford173@gmail.com> <05fb14ea-1083-8efd-dad0-a0e707af8131@samsung.com>
+In-Reply-To: <05fb14ea-1083-8efd-dad0-a0e707af8131@samsung.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Tue, 2 May 2023 13:40:41 -0500
+Message-ID: <CAHCN7xKEUOWy=_ABdbwZzYURc-sD9HrR4LGXroBaWo82tHzZUw@mail.gmail.com>
+Subject: Re: [PATCH V3 0/7] drm: bridge: samsung-dsim: Support variable clocking
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     dri-devel@lists.freedesktop.org, marex@denx.de,
+        aford@beaconembedded.com, Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Inki Dae <inki.dae@samsung.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 2, 2023 at 8:50=E2=80=AFAM Petr Tesa=C5=99=C3=ADk <petr@tesaric=
-i.cz> wrote:
+On Tue, May 2, 2023 at 3:35=E2=80=AFAM Marek Szyprowski
+<m.szyprowski@samsung.com> wrote:
 >
-> On Mon,  1 May 2023 09:54:29 -0700
-> Suren Baghdasaryan <surenb@google.com> wrote:
->
-> > After redefining alloc_pages, all uses of that name are being replaced.
-> > Change the conflicting names to prevent preprocessor from replacing the=
-m
-> > when it's not intended.
+> On 02.05.2023 03:07, Adam Ford wrote:
+> > This series fixes the blanking pack size and the PMS calculation.  It t=
+hen
+> > adds support to allows the DSIM to dynamically DPHY clocks, and support
+> > non-burst mode while allowing the removal of the hard-coded clock value=
+s
+> > for the PLL for imx8m mini/nano/plus, and it allows the removal of the
+> > burst-clock device tree entry when burst-mode isn't supported by connec=
+ted
+> > devices like an HDMI brige.  In that event, the HS clock is set to the =
+value
+> > requested by the bridge chip.
 > >
-> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > This has been tested on both an i.MX8M Nano and i.MX8M Plus, and should=
+ work
+> > on i.MX8M Mini as well.
+> >
+> > Adam Ford (6):
+> >    drm: bridge: samsung-dsim: Fix PMS Calculator on imx8m[mnp]
+> >    drm: bridge: samsung-dsim: Fetch pll-clock-frequency automatically
+> >    drm: bridge: samsung-dsim: Select GENERIC_PHY_MIPI_DPHY
+> >    drm: bridge: samsung-dsim: Dynamically configure DPHY timing
+> >    drm: bridge: samsung-dsim: Support non-burst mode
+> >    drm: bridge: samsung-dsim: Let blanking calcuation work in non-burst
+> >      mode
+> >
+> > Lucas Stach (1):
+> >    drm: bridge: samsung-dsim: fix blanking packet size calculation
+> >
+> >   drivers/gpu/drm/bridge/Kconfig        |   1 +
+> >   drivers/gpu/drm/bridge/samsung-dsim.c | 150 ++++++++++++++++++++++---=
+-
+> >   include/drm/bridge/samsung-dsim.h     |   5 +
+> >   3 files changed, 136 insertions(+), 20 deletions(-)
+>
+> Works fine (=3D doesn't break) on Exynos.
+>
+Thank is great news.  Thank you for testing!
+
+> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+
+adam
+>
+>
+> >
 > > ---
-> >  arch/x86/kernel/amd_gart_64.c | 2 +-
-> >  drivers/iommu/dma-iommu.c     | 2 +-
-> >  drivers/xen/grant-dma-ops.c   | 2 +-
-> >  drivers/xen/swiotlb-xen.c     | 2 +-
-> >  include/linux/dma-map-ops.h   | 2 +-
-> >  kernel/dma/mapping.c          | 4 ++--
-> >  6 files changed, 7 insertions(+), 7 deletions(-)
+> > V3:  When checking if the bust-clock is present, only check for it
+> >       in the device tree, and don't check the presence of the
+> >       MIPI_DSI_MODE_VIDEO_BURST flag as it breaks an existing Exynos
+> >       board.
 > >
-> > diff --git a/arch/x86/kernel/amd_gart_64.c b/arch/x86/kernel/amd_gart_6=
-4.c
-> > index 56a917df410d..842a0ec5eaa9 100644
-> > --- a/arch/x86/kernel/amd_gart_64.c
-> > +++ b/arch/x86/kernel/amd_gart_64.c
-> > @@ -676,7 +676,7 @@ static const struct dma_map_ops gart_dma_ops =3D {
-> >       .get_sgtable                    =3D dma_common_get_sgtable,
-> >       .dma_supported                  =3D dma_direct_supported,
-> >       .get_required_mask              =3D dma_direct_get_required_mask,
-> > -     .alloc_pages                    =3D dma_direct_alloc_pages,
-> > +     .alloc_pages_op                 =3D dma_direct_alloc_pages,
-> >       .free_pages                     =3D dma_direct_free_pages,
-> >  };
+> >       Add a new patch to the series to select GENERIC_PHY_MIPI_DPHY in
+> >       Kconfig otherwise the build breaks on the 32-bit Exynos.
 > >
-> > diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
-> > index 7a9f0b0bddbd..76a9d5ca4eee 100644
-> > --- a/drivers/iommu/dma-iommu.c
-> > +++ b/drivers/iommu/dma-iommu.c
-> > @@ -1556,7 +1556,7 @@ static const struct dma_map_ops iommu_dma_ops =3D=
- {
-> >       .flags                  =3D DMA_F_PCI_P2PDMA_SUPPORTED,
-> >       .alloc                  =3D iommu_dma_alloc,
-> >       .free                   =3D iommu_dma_free,
-> > -     .alloc_pages            =3D dma_common_alloc_pages,
-> > +     .alloc_pages_op         =3D dma_common_alloc_pages,
-> >       .free_pages             =3D dma_common_free_pages,
-> >       .alloc_noncontiguous    =3D iommu_dma_alloc_noncontiguous,
-> >       .free_noncontiguous     =3D iommu_dma_free_noncontiguous,
-> > diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-ops.c
-> > index 9784a77fa3c9..6c7d984f164d 100644
-> > --- a/drivers/xen/grant-dma-ops.c
-> > +++ b/drivers/xen/grant-dma-ops.c
-> > @@ -282,7 +282,7 @@ static int xen_grant_dma_supported(struct device *d=
-ev, u64 mask)
-> >  static const struct dma_map_ops xen_grant_dma_ops =3D {
-> >       .alloc =3D xen_grant_dma_alloc,
-> >       .free =3D xen_grant_dma_free,
-> > -     .alloc_pages =3D xen_grant_dma_alloc_pages,
-> > +     .alloc_pages_op =3D xen_grant_dma_alloc_pages,
-> >       .free_pages =3D xen_grant_dma_free_pages,
-> >       .mmap =3D dma_common_mmap,
-> >       .get_sgtable =3D dma_common_get_sgtable,
-> > diff --git a/drivers/xen/swiotlb-xen.c b/drivers/xen/swiotlb-xen.c
-> > index 67aa74d20162..5ab2616153f0 100644
-> > --- a/drivers/xen/swiotlb-xen.c
-> > +++ b/drivers/xen/swiotlb-xen.c
-> > @@ -403,6 +403,6 @@ const struct dma_map_ops xen_swiotlb_dma_ops =3D {
-> >       .dma_supported =3D xen_swiotlb_dma_supported,
-> >       .mmap =3D dma_common_mmap,
-> >       .get_sgtable =3D dma_common_get_sgtable,
-> > -     .alloc_pages =3D dma_common_alloc_pages,
-> > +     .alloc_pages_op =3D dma_common_alloc_pages,
-> >       .free_pages =3D dma_common_free_pages,
-> >  };
-> > diff --git a/include/linux/dma-map-ops.h b/include/linux/dma-map-ops.h
-> > index 31f114f486c4..d741940dcb3b 100644
-> > --- a/include/linux/dma-map-ops.h
-> > +++ b/include/linux/dma-map-ops.h
-> > @@ -27,7 +27,7 @@ struct dma_map_ops {
-> >                       unsigned long attrs);
-> >       void (*free)(struct device *dev, size_t size, void *vaddr,
-> >                       dma_addr_t dma_handle, unsigned long attrs);
-> > -     struct page *(*alloc_pages)(struct device *dev, size_t size,
-> > +     struct page *(*alloc_pages_op)(struct device *dev, size_t size,
-> >                       dma_addr_t *dma_handle, enum dma_data_direction d=
-ir,
-> >                       gfp_t gfp);
-> >       void (*free_pages)(struct device *dev, size_t size, struct page *=
-vaddr,
-> > diff --git a/kernel/dma/mapping.c b/kernel/dma/mapping.c
-> > index 9a4db5cce600..fc42930af14b 100644
-> > --- a/kernel/dma/mapping.c
-> > +++ b/kernel/dma/mapping.c
-> > @@ -570,9 +570,9 @@ static struct page *__dma_alloc_pages(struct device=
- *dev, size_t size,
-> >       size =3D PAGE_ALIGN(size);
-> >       if (dma_alloc_direct(dev, ops))
-> >               return dma_direct_alloc_pages(dev, size, dma_handle, dir,=
- gfp);
-> > -     if (!ops->alloc_pages)
-> > +     if (!ops->alloc_pages_op)
-> >               return NULL;
-> > -     return ops->alloc_pages(dev, size, dma_handle, dir, gfp);
-> > +     return ops->alloc_pages_op(dev, size, dma_handle, dir, gfp);
-> >  }
+> >       Change vco_min variable name to min_freq
 > >
-> >  struct page *dma_alloc_pages(struct device *dev, size_t size,
+> >       Added tested-by from Chen-Yu Tsai
+> >
+> > V2:  Instead of using my packet blanking calculation, this integrates
+> >       on from Lucas Stach which gets modified later in the series to
+> >       cache the value of the HS-clock instead of having to do the
+> >       calucations again.
+> >
+> >       Instead of completely eliminating the PLL clock frequency from
+> >       the device tree, this makes it optional to avoid breaking some
+> >       Samsung devices.  When the samsung,pll-clock-frequency is not
+> >       found, it reads the value of the clock named "sclk_mipi"
+> >       This also maintains backwords compatibility with older device
+> >       trees.
+> >
+> >       This also changes the DPHY calcuation from a Look-up table,
+> >       a reverse engineered algorithm which uses
+> >       phy_mipi_dphy_get_default_config to determine the standard
+> >       nominal values and calculates the cycles necessary to update
+> >       the DPHY timings accordingly.
+> >
 >
-> I'm not impressed. This patch increases churn for code which does not
-> (directly) benefit from the change, and that for limitations in your
-> tooling?
->
-> Why not just rename the conflicting uses in your local tree, but then
-> remove the rename from the final patch series?
-
-With alloc_pages function becoming a macro, the preprocessor ends up
-replacing all instances of that name, even when it's not used as a
-function. That what necessitates this change. If there is a way to
-work around this issue without changing all alloc_pages() calls in the
-source base I would love to learn it but I'm not quite clear about
-your suggestion and if it solves the issue. Could you please provide
-more details?
-
->
-> Just my two cents,
-> Petr T
->
+> Best regards
 > --
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kernel-team+unsubscribe@android.com.
+> Marek Szyprowski, PhD
+> Samsung R&D Institute Poland
 >
