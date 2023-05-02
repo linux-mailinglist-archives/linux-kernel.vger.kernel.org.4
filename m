@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63D946F4D1A
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 00:45:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65CEA6F4D1F
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 00:46:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbjEBWpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 18:45:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34664 "EHLO
+        id S229498AbjEBWqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 18:46:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230333AbjEBWpY (ORCPT
+        with ESMTP id S230360AbjEBWqZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 18:45:24 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94CEB4200
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 15:45:03 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-b9e2b65f2eeso4325052276.2
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 15:45:03 -0700 (PDT)
+        Tue, 2 May 2023 18:46:25 -0400
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 444673AB2
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 15:45:51 -0700 (PDT)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-55a04468981so75132807b3.0
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 15:45:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683067417; x=1685659417;
+        d=google.com; s=20221208; t=1683067425; x=1685659425;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z5la9qJcqL6gBH6h4UORwyXdD/ZlzmqtItJD5+R0Siw=;
-        b=o+yo5QO2m0Arr3Ssf8bJlRG++UZNEHFNdoC52cVkU6VcrPtyd85tgK2ep2b4NIR1F7
-         svxp4QSwm/55im0KW8ePdCqUQNIqdMYhEfFhoWAmhXQ3nQHIpCJZhm1DnKcGq7swhlbL
-         TYIbA/aX+U5TLZl5eyVfKQF97J1Saf9gw+MaR6S33C7d25zbuWJjOdocSz2DR+AHbij0
-         NWpmhzTFaAbQYMqMunjTlnqbLKs95kiXbWB52wUS559hByrHHYdvLq8haSpSnPSDVw2R
-         GJPg8BfZSgpGrprpblYrBHWyWQAgyP9VKEyuhBCAlLErW3VTrcUkvFe4R+t+eHcI2DRi
-         mxag==
+        bh=+u0fif1vqEW0/J+d1lw722skZP4Uon5UbkaqbwSy+30=;
+        b=Q4zTcsdmA2DZnQaI4yinZojAyvDnycTbYavNcwKkCZEDKv3zr9OC3ZR2HNS4l7XQn4
+         Wk5xZe7MPleFDXSIinUgNSAyNpFTHRxJxXBaFFe67qYv0T7XAPCfIesQEoyEef2d4+C5
+         zxuwEyaiy0Nc01WhCk9oUsi1WYFd7ccL/QhvVlWu10OhMfiJxpq7M/PiTgUMf9HpwvvD
+         Stj+E/AQHkYrILDnUAcU1oKEOepjo/Iq6857UrlCv7pRDgNejTn0fulIFGirlGBcMXqL
+         LZFnmUNsTQ3Wtmwhub3GI/kCJlZCCJCKoYo4UdQHT7MW36KxnDxb11GLv+bDpQ8REA4i
+         TEfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683067417; x=1685659417;
+        d=1e100.net; s=20221208; t=1683067425; x=1685659425;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z5la9qJcqL6gBH6h4UORwyXdD/ZlzmqtItJD5+R0Siw=;
-        b=cTOlb83Sm5YUpmBkZ10LsBwcjsyNvjNm/grS2DL/pgKYP0C+NdR2+s3AOtzZM7IBn2
-         dSU1vXV3Qgi++hYdZqQ8d3PTf0cercp8YGCWAYjg+wHylWacXVP4slke+yzoo478LjCA
-         3ujg6+C8vDah58+I+Lscq/PuVkmhvGOklOZj7m2U3CNq0BdUTHXxjdzvnAvTJqmE7zve
-         gxswjtbd1zTXPVC5wAFaoMHp2ebGEHZxQB2USYDwhF/gSu7UAijqlHlWstIs0f6AeDFU
-         /7CZ9De6oW8960xc7lGBsGD0l6zITTqLU+bFrjQJhBx/ja58yrSA0DkCRYXs2NahuVqv
-         GMjw==
-X-Gm-Message-State: AC+VfDyEykddowagQeV0erqvdEo0KxZRXWqPmYkKPaQgILJKypZt9oew
-        8IIl8FZM0UOiv0h3wcigVqWsPqHQ+w6q
-X-Google-Smtp-Source: ACHHUZ7R624gU7PAQPBwrYcf7FXoTBGq+e/cbUC9fM+4MWzco4gFBqz9uOkKNurXZKUOfK60Mtf/IBgIVwfT
+        bh=+u0fif1vqEW0/J+d1lw722skZP4Uon5UbkaqbwSy+30=;
+        b=NsvB+z3Nt2xrHeVaT5M1sEZUtkRo7n1SpGKtBGXYtrW7LVXSyfpYEYh35B4nXRPETl
+         evTtg0eAOYbchWumHk0iY24G6nyoaXDmZo1tN4QyiARM6JlMIgFpdD98L1VIOn6rBfuH
+         7DgILmqMVL3e/LyyJBVUS/LVTX0fgqXs8919IFCoktAiGlDZOdN+hjElOZ9Q1odAoCq4
+         ZjiQzz9ww3R+joaWp07AWmjCgaOXPvucdNjuljDYDO4jed1tEwPGpboNv3+8WA71tq+4
+         MC02FZZZYE8soN9uItf3cHiQpsPos5GJDcgwAWUdGnDn4mxFg6tMo/fwHNXh1OlDqfBq
+         Wibg==
+X-Gm-Message-State: AC+VfDwvxC6bEsDgKcrltNdM6LSxKFxjjJ+MoqVWjaZke7uXsjEJvW5L
+        AsHAzQM1cNEqk/z4Dz77BU4ek7tLwJPU
+X-Google-Smtp-Source: ACHHUZ71/u2ByJA/xBRV82K5e9QUs1aUmfSldDJJJJbHoXvIas+/dVi9n+nEZhLjBsObp1H5sPtkZpVrojnX
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:e70c:446b:d23b:982e])
- (user=irogers job=sendgmr) by 2002:a25:13c1:0:b0:b39:b0d3:9a7f with SMTP id
- 184-20020a2513c1000000b00b39b0d39a7fmr7344538ybt.7.1683067417109; Tue, 02 May
- 2023 15:43:37 -0700 (PDT)
-Date:   Tue,  2 May 2023 15:38:44 -0700
+ (user=irogers job=sendgmr) by 2002:a05:690c:725:b0:54f:bb71:c7b3 with SMTP id
+ bt5-20020a05690c072500b0054fbb71c7b3mr11277965ywb.9.1683067425138; Tue, 02
+ May 2023 15:43:45 -0700 (PDT)
+Date:   Tue,  2 May 2023 15:38:45 -0700
 In-Reply-To: <20230502223851.2234828-1-irogers@google.com>
-Message-Id: <20230502223851.2234828-38-irogers@google.com>
+Message-Id: <20230502223851.2234828-39-irogers@google.com>
 Mime-Version: 1.0
 References: <20230502223851.2234828-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
-Subject: [PATCH v4 37/44] perf parse-events: Don't reorder atom cpu events
+Subject: [PATCH v4 38/44] perf metrics: Be PMU specific for referenced metrics.
 From:   Ian Rogers <irogers@google.com>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Kan Liang <kan.liang@linux.intel.com>,
@@ -91,45 +91,443 @@ Cc:     Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On hybrid systems the topdown events don't share a fixed counter on
-the atom core, so they don't require the sorting the perf metric
-supporting PMUs do.
+Hybrid systems may define the same metric for different PMUs, this can
+cause confusion of events. To avoid this make the referenced metric
+searches PMU specific, matching that in the table.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/arch/x86/util/evlist.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/perf/builtin-stat.c          |  6 +-
+ tools/perf/pmu-events/jevents.py   |  4 +-
+ tools/perf/pmu-events/pmu-events.h |  1 +
+ tools/perf/util/metricgroup.c      | 94 +++++++++++++++++++++---------
+ tools/perf/util/metricgroup.h      |  2 +-
+ 5 files changed, 75 insertions(+), 32 deletions(-)
 
-diff --git a/tools/perf/arch/x86/util/evlist.c b/tools/perf/arch/x86/util/evlist.c
-index d4193479a364..1b6065841fb0 100644
---- a/tools/perf/arch/x86/util/evlist.c
-+++ b/tools/perf/arch/x86/util/evlist.c
-@@ -6,6 +6,7 @@
- #include "util/event.h"
- #include "util/pmu-hybrid.h"
- #include "topdown.h"
-+#include "evsel.h"
- 
- static int ___evlist__add_default_attrs(struct evlist *evlist,
- 					struct perf_event_attr *attrs,
-@@ -67,8 +68,7 @@ int arch_evlist__add_default_attrs(struct evlist *evlist,
- 
- int arch_evlist__cmp(const struct evsel *lhs, const struct evsel *rhs)
- {
--	if (topdown_sys_has_perf_metrics() &&
--	    (!lhs->pmu_name || !strncmp(lhs->pmu_name, "cpu", 3))) {
-+	if (topdown_sys_has_perf_metrics() && evsel__sys_has_perf_metrics(lhs)) {
- 		/* Ensure the topdown slots comes first. */
- 		if (strcasestr(lhs->name, "slots"))
+diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+index 06a1d71a49a5..bb1a4ecd7558 100644
+--- a/tools/perf/builtin-stat.c
++++ b/tools/perf/builtin-stat.c
+@@ -1794,7 +1794,7 @@ static int add_default_attributes(void)
+ 		 * will use this approach. To determine transaction support
+ 		 * on an architecture test for such a metric name.
+ 		 */
+-		if (!metricgroup__has_metric("transaction")) {
++		if (!metricgroup__has_metric("all", "transaction")) {
+ 			pr_err("Missing transaction metrics");
  			return -1;
+ 		}
+@@ -1823,7 +1823,7 @@ static int add_default_attributes(void)
+ 			smi_reset = true;
+ 		}
+ 
+-		if (!metricgroup__has_metric("smi")) {
++		if (!metricgroup__has_metric("all", "smi")) {
+ 			pr_err("Missing smi metrics");
+ 			return -1;
+ 		}
+@@ -1903,7 +1903,7 @@ static int add_default_attributes(void)
+ 		 * caused by exposing latent bugs. This is fixed properly in:
+ 		 * https://lore.kernel.org/lkml/bff481ba-e60a-763f-0aa0-3ee53302c480@linux.intel.com/
+ 		 */
+-		if (metricgroup__has_metric("TopdownL1") && !perf_pmu__has_hybrid()) {
++		if (metricgroup__has_metric("all", "TopdownL1") && !perf_pmu__has_hybrid()) {
+ 			struct evlist *metric_evlist = evlist__new();
+ 			struct evsel *metric_evsel;
+ 
+diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
+index f57a8f274025..b18dd2fcbf04 100755
+--- a/tools/perf/pmu-events/jevents.py
++++ b/tools/perf/pmu-events/jevents.py
+@@ -51,8 +51,8 @@ _json_event_attributes = [
+ 
+ # Attributes that are in pmu_metric rather than pmu_event.
+ _json_metric_attributes = [
+-    'metric_name', 'metric_group', 'metric_expr', 'metric_threshold', 'desc',
+-    'long_desc', 'unit', 'compat', 'metricgroup_no_group', 'aggr_mode',
++    'pmu', 'metric_name', 'metric_group', 'metric_expr', 'metric_threshold',
++    'desc', 'long_desc', 'unit', 'compat', 'metricgroup_no_group', 'aggr_mode',
+     'event_grouping'
+ ]
+ # Attributes that are bools or enum int values, encoded as '0', '1',...
+diff --git a/tools/perf/pmu-events/pmu-events.h b/tools/perf/pmu-events/pmu-events.h
+index 80349685cf4d..3549e6971a4d 100644
+--- a/tools/perf/pmu-events/pmu-events.h
++++ b/tools/perf/pmu-events/pmu-events.h
+@@ -51,6 +51,7 @@ struct pmu_event {
+ };
+ 
+ struct pmu_metric {
++	const char *pmu;
+ 	const char *metric_name;
+ 	const char *metric_group;
+ 	const char *metric_expr;
+diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
+index 1afc8d7a5838..17478eb33bdc 100644
+--- a/tools/perf/util/metricgroup.c
++++ b/tools/perf/util/metricgroup.c
+@@ -123,6 +123,7 @@ struct metric {
+ 	 * within the expression.
+ 	 */
+ 	struct expr_parse_ctx *pctx;
++	const char *pmu;
+ 	/** The name of the metric such as "IPC". */
+ 	const char *metric_name;
+ 	/** Modifier on the metric such as "u" or NULL for none. */
+@@ -216,6 +217,7 @@ static struct metric *metric__new(const struct pmu_metric *pm,
+ 	if (!m->pctx)
+ 		goto out_err;
+ 
++	m->pmu = pm->pmu ?: "cpu";
+ 	m->metric_name = pm->metric_name;
+ 	m->modifier = NULL;
+ 	if (modifier) {
+@@ -259,11 +261,12 @@ static bool contains_metric_id(struct evsel **metric_events, int num_events,
+ /**
+  * setup_metric_events - Find a group of events in metric_evlist that correspond
+  *                       to the IDs from a parsed metric expression.
++ * @pmu: The PMU for the IDs.
+  * @ids: the metric IDs to match.
+  * @metric_evlist: the list of perf events.
+  * @out_metric_events: holds the created metric events array.
+  */
+-static int setup_metric_events(struct hashmap *ids,
++static int setup_metric_events(const char *pmu, struct hashmap *ids,
+ 			       struct evlist *metric_evlist,
+ 			       struct evsel ***out_metric_events)
+ {
+@@ -271,6 +274,7 @@ static int setup_metric_events(struct hashmap *ids,
+ 	const char *metric_id;
+ 	struct evsel *ev;
+ 	size_t ids_size, matched_events, i;
++	bool all_pmus = !strcmp(pmu, "all");
+ 
+ 	*out_metric_events = NULL;
+ 	ids_size = hashmap__size(ids);
+@@ -283,6 +287,8 @@ static int setup_metric_events(struct hashmap *ids,
+ 	evlist__for_each_entry(metric_evlist, ev) {
+ 		struct expr_id_data *val_ptr;
+ 
++		if (!all_pmus && strcmp(ev->pmu_name, pmu))
++			continue;
+ 		/*
+ 		 * Check for duplicate events with the same name. For
+ 		 * example, uncore_imc/cas_count_read/ will turn into 6
+@@ -355,8 +361,13 @@ static bool match_metric(const char *n, const char *list)
+ 	return false;
+ }
+ 
+-static bool match_pm_metric(const struct pmu_metric *pm, const char *metric)
++static bool match_pm_metric(const struct pmu_metric *pm, const char *pmu, const char *metric)
+ {
++	const char *pm_pmu = pm->pmu ?: "cpu";
++
++	if (strcmp(pmu, "all") && strcmp(pm_pmu, pmu))
++		return false;
++
+ 	return match_metric(pm->metric_group, metric) ||
+ 	       match_metric(pm->metric_name, metric);
+ }
+@@ -766,6 +777,7 @@ struct visited_metric {
+ 
+ struct metricgroup_add_iter_data {
+ 	struct list_head *metric_list;
++	const char *pmu;
+ 	const char *metric_name;
+ 	const char *modifier;
+ 	int *ret;
+@@ -779,7 +791,8 @@ struct metricgroup_add_iter_data {
+ 	const struct pmu_metrics_table *table;
+ };
+ 
+-static bool metricgroup__find_metric(const char *metric,
++static bool metricgroup__find_metric(const char *pmu,
++				     const char *metric,
+ 				     const struct pmu_metrics_table *table,
+ 				     struct pmu_metric *pm);
+ 
+@@ -798,6 +811,7 @@ static int add_metric(struct list_head *metric_list,
+  * resolve_metric - Locate metrics within the root metric and recursively add
+  *                    references to them.
+  * @metric_list: The list the metric is added to.
++ * @pmu: The PMU name to resolve metrics on, or "all" for all PMUs.
+  * @modifier: if non-null event modifiers like "u".
+  * @metric_no_group: Should events written to events be grouped "{}" or
+  *                   global. Grouping is the default but due to multiplexing the
+@@ -813,6 +827,7 @@ static int add_metric(struct list_head *metric_list,
+  *       architecture perf is running upon.
+  */
+ static int resolve_metric(struct list_head *metric_list,
++			  const char *pmu,
+ 			  const char *modifier,
+ 			  bool metric_no_group,
+ 			  bool metric_no_threshold,
+@@ -842,7 +857,7 @@ static int resolve_metric(struct list_head *metric_list,
+ 	hashmap__for_each_entry(root_metric->pctx->ids, cur, bkt) {
+ 		struct pmu_metric pm;
+ 
+-		if (metricgroup__find_metric(cur->pkey, table, &pm)) {
++		if (metricgroup__find_metric(pmu, cur->pkey, table, &pm)) {
+ 			pending = realloc(pending,
+ 					(pending_cnt + 1) * sizeof(struct to_resolve));
+ 			if (!pending)
+@@ -993,9 +1008,12 @@ static int __add_metric(struct list_head *metric_list,
+ 	}
+ 	if (!ret) {
+ 		/* Resolve referenced metrics. */
+-		ret = resolve_metric(metric_list, modifier, metric_no_group,
++		const char *pmu = pm->pmu ?: "cpu";
++
++		ret = resolve_metric(metric_list, pmu, modifier, metric_no_group,
+ 				     metric_no_threshold, user_requested_cpu_list,
+-				     system_wide, root_metric, &visited_node, table);
++				     system_wide, root_metric, &visited_node,
++				     table);
+ 	}
+ 	if (ret) {
+ 		if (is_root)
+@@ -1008,6 +1026,7 @@ static int __add_metric(struct list_head *metric_list,
+ }
+ 
+ struct metricgroup__find_metric_data {
++	const char *pmu;
+ 	const char *metric;
+ 	struct pmu_metric *pm;
+ };
+@@ -1017,6 +1036,10 @@ static int metricgroup__find_metric_callback(const struct pmu_metric *pm,
+ 					     void *vdata)
+ {
+ 	struct metricgroup__find_metric_data *data = vdata;
++	const char *pm_pmu = pm->pmu ?: "cpu";
++
++	if (strcmp(data->pmu, "all") && strcmp(pm_pmu, data->pmu))
++		return 0;
+ 
+ 	if (!match_metric(pm->metric_name, data->metric))
+ 		return 0;
+@@ -1025,11 +1048,13 @@ static int metricgroup__find_metric_callback(const struct pmu_metric *pm,
+ 	return 1;
+ }
+ 
+-static bool metricgroup__find_metric(const char *metric,
++static bool metricgroup__find_metric(const char *pmu,
++				     const char *metric,
+ 				     const struct pmu_metrics_table *table,
+ 				     struct pmu_metric *pm)
+ {
+ 	struct metricgroup__find_metric_data data = {
++		.pmu = pmu,
+ 		.metric = metric,
+ 		.pm = pm,
+ 	};
+@@ -1083,7 +1108,7 @@ static int metricgroup__add_metric_sys_event_iter(const struct pmu_metric *pm,
+ 	struct metricgroup_add_iter_data *d = data;
+ 	int ret;
+ 
+-	if (!match_pm_metric(pm, d->metric_name))
++	if (!match_pm_metric(pm, d->pmu, d->metric_name))
+ 		return 0;
+ 
+ 	ret = add_metric(d->metric_list, pm, d->modifier, d->metric_no_group,
+@@ -1128,6 +1153,7 @@ static int metric_list_cmp(void *priv __maybe_unused, const struct list_head *l,
+ 
+ struct metricgroup__add_metric_data {
+ 	struct list_head *list;
++	const char *pmu;
+ 	const char *metric_name;
+ 	const char *modifier;
+ 	const char *user_requested_cpu_list;
+@@ -1144,7 +1170,7 @@ static int metricgroup__add_metric_callback(const struct pmu_metric *pm,
+ 	struct metricgroup__add_metric_data *data = vdata;
+ 	int ret = 0;
+ 
+-	if (pm->metric_expr && match_pm_metric(pm, data->metric_name)) {
++	if (pm->metric_expr && match_pm_metric(pm, data->pmu, data->metric_name)) {
+ 		bool metric_no_group = data->metric_no_group ||
+ 			match_metric(data->metric_name, pm->metricgroup_no_group);
+ 
+@@ -1159,6 +1185,7 @@ static int metricgroup__add_metric_callback(const struct pmu_metric *pm,
+ 
+ /**
+  * metricgroup__add_metric - Find and add a metric, or a metric group.
++ * @pmu: The PMU name to search for metrics on, or "all" for all PMUs.
+  * @metric_name: The name of the metric or metric group. For example, "IPC"
+  *               could be the name of a metric and "TopDownL1" the name of a
+  *               metric group.
+@@ -1172,7 +1199,7 @@ static int metricgroup__add_metric_callback(const struct pmu_metric *pm,
+  * @table: The table that is searched for metrics, most commonly the table for the
+  *       architecture perf is running upon.
+  */
+-static int metricgroup__add_metric(const char *metric_name, const char *modifier,
++static int metricgroup__add_metric(const char *pmu, const char *metric_name, const char *modifier,
+ 				   bool metric_no_group, bool metric_no_threshold,
+ 				   const char *user_requested_cpu_list,
+ 				   bool system_wide,
+@@ -1186,6 +1213,7 @@ static int metricgroup__add_metric(const char *metric_name, const char *modifier
+ 	{
+ 		struct metricgroup__add_metric_data data = {
+ 			.list = &list,
++			.pmu = pmu,
+ 			.metric_name = metric_name,
+ 			.modifier = modifier,
+ 			.metric_no_group = metric_no_group,
+@@ -1210,6 +1238,7 @@ static int metricgroup__add_metric(const char *metric_name, const char *modifier
+ 			.fn = metricgroup__add_metric_sys_event_iter,
+ 			.data = (void *) &(struct metricgroup_add_iter_data) {
+ 				.metric_list = &list,
++				.pmu = pmu,
+ 				.metric_name = metric_name,
+ 				.modifier = modifier,
+ 				.metric_no_group = metric_no_group,
+@@ -1239,6 +1268,7 @@ static int metricgroup__add_metric(const char *metric_name, const char *modifier
+ /**
+  * metricgroup__add_metric_list - Find and add metrics, or metric groups,
+  *                                specified in a list.
++ * @pmu: A pmu to restrict the metrics to, or "all" for all PMUS.
+  * @list: the list of metrics or metric groups. For example, "IPC,CPI,TopDownL1"
+  *        would match the IPC and CPI metrics, and TopDownL1 would match all
+  *        the metrics in the TopDownL1 group.
+@@ -1251,7 +1281,8 @@ static int metricgroup__add_metric(const char *metric_name, const char *modifier
+  * @table: The table that is searched for metrics, most commonly the table for the
+  *       architecture perf is running upon.
+  */
+-static int metricgroup__add_metric_list(const char *list, bool metric_no_group,
++static int metricgroup__add_metric_list(const char *pmu, const char *list,
++					bool metric_no_group,
+ 					bool metric_no_threshold,
+ 					const char *user_requested_cpu_list,
+ 					bool system_wide, struct list_head *metric_list,
+@@ -1270,7 +1301,7 @@ static int metricgroup__add_metric_list(const char *list, bool metric_no_group,
+ 		if (modifier)
+ 			*modifier++ = '\0';
+ 
+-		ret = metricgroup__add_metric(metric_name, modifier,
++		ret = metricgroup__add_metric(pmu, metric_name, modifier,
+ 					      metric_no_group, metric_no_threshold,
+ 					      user_requested_cpu_list,
+ 					      system_wide, metric_list, table);
+@@ -1460,7 +1491,8 @@ static int parse_ids(bool metric_no_merge, struct perf_pmu *fake_pmu,
+ 	return ret;
+ }
+ 
+-static int parse_groups(struct evlist *perf_evlist, const char *str,
++static int parse_groups(struct evlist *perf_evlist,
++			const char *pmu, const char *str,
+ 			bool metric_no_group,
+ 			bool metric_no_merge,
+ 			bool metric_no_threshold,
+@@ -1478,7 +1510,7 @@ static int parse_groups(struct evlist *perf_evlist, const char *str,
+ 
+ 	if (metric_events_list->nr_entries == 0)
+ 		metricgroup__rblist_init(metric_events_list);
+-	ret = metricgroup__add_metric_list(str, metric_no_group, metric_no_threshold,
++	ret = metricgroup__add_metric_list(pmu, str, metric_no_group, metric_no_threshold,
+ 					   user_requested_cpu_list,
+ 					   system_wide, &metric_list, table);
+ 	if (ret)
+@@ -1535,6 +1567,11 @@ static int parse_groups(struct evlist *perf_evlist, const char *str,
+ 					    strcmp(m->modifier, n->modifier)))
+ 					continue;
+ 
++				if ((!m->pmu && n->pmu) ||
++				    (m->pmu && !n->pmu) ||
++				    (m->pmu && n->pmu && strcmp(m->pmu, n->pmu)))
++					continue;
++
+ 				if (expr__subset_of_ids(n->pctx, m->pctx)) {
+ 					pr_debug("Events in '%s' fully contained within '%s'\n",
+ 						 m->metric_name, n->metric_name);
+@@ -1552,7 +1589,8 @@ static int parse_groups(struct evlist *perf_evlist, const char *str,
+ 
+ 			metric_evlist = m->evlist;
+ 		}
+-		ret = setup_metric_events(m->pctx->ids, metric_evlist, &metric_events);
++		ret = setup_metric_events(fake_pmu ? "all" : m->pmu, m->pctx->ids,
++					  metric_evlist, &metric_events);
+ 		if (ret) {
+ 			pr_debug("Cannot resolve IDs for %s: %s\n",
+ 				m->metric_name, m->metric_expr);
+@@ -1623,7 +1661,7 @@ int metricgroup__parse_groups(struct evlist *perf_evlist,
+ 	if (!table)
+ 		return -EINVAL;
+ 
+-	return parse_groups(perf_evlist, str, metric_no_group, metric_no_merge,
++	return parse_groups(perf_evlist, "all", str, metric_no_group, metric_no_merge,
+ 			    metric_no_threshold, user_requested_cpu_list, system_wide,
+ 			    /*fake_pmu=*/NULL, metric_events, table);
+ }
+@@ -1633,7 +1671,7 @@ int metricgroup__parse_groups_test(struct evlist *evlist,
+ 				   const char *str,
+ 				   struct rblist *metric_events)
+ {
+-	return parse_groups(evlist, str,
++	return parse_groups(evlist, "all", str,
+ 			    /*metric_no_group=*/false,
+ 			    /*metric_no_merge=*/false,
+ 			    /*metric_no_threshold=*/false,
+@@ -1642,28 +1680,32 @@ int metricgroup__parse_groups_test(struct evlist *evlist,
+ 			    &perf_pmu__fake, metric_events, table);
+ }
+ 
++struct metricgroup__has_metric_data {
++	const char *pmu;
++	const char *metric;
++};
+ static int metricgroup__has_metric_callback(const struct pmu_metric *pm,
+ 					    const struct pmu_metrics_table *table __maybe_unused,
+ 					    void *vdata)
+ {
+-	const char *metric = vdata;
+-
+-	if (match_metric(pm->metric_name, metric) ||
+-	    match_metric(pm->metric_group, metric))
+-		return 1;
++	struct metricgroup__has_metric_data *data = vdata;
+ 
+-	return 0;
++	return match_pm_metric(pm, data->pmu, data->metric) ? 1 : 0;
+ }
+ 
+-bool metricgroup__has_metric(const char *metric)
++bool metricgroup__has_metric(const char *pmu, const char *metric)
+ {
+ 	const struct pmu_metrics_table *table = pmu_metrics_table__find();
++	struct metricgroup__has_metric_data data = {
++		.pmu = pmu,
++		.metric = metric,
++	};
+ 
+ 	if (!table)
+ 		return false;
+ 
+-	return pmu_metrics_table_for_each_metric(table, metricgroup__has_metric_callback,
+-						(void *)metric) ? true : false;
++	return pmu_metrics_table_for_each_metric(table, metricgroup__has_metric_callback, &data)
++		? true : false;
+ }
+ 
+ static int metricgroup__topdown_max_level_callback(const struct pmu_metric *pm,
+diff --git a/tools/perf/util/metricgroup.h b/tools/perf/util/metricgroup.h
+index 77472e35705e..08e9b9e953ec 100644
+--- a/tools/perf/util/metricgroup.h
++++ b/tools/perf/util/metricgroup.h
+@@ -80,7 +80,7 @@ int metricgroup__parse_groups_test(struct evlist *evlist,
+ 				   struct rblist *metric_events);
+ 
+ void metricgroup__print(const struct print_callbacks *print_cb, void *print_state);
+-bool metricgroup__has_metric(const char *metric);
++bool metricgroup__has_metric(const char *pmu, const char *metric);
+ unsigned int metricgroups__topdown_max_level(void);
+ int arch_get_runtimeparam(const struct pmu_metric *pm);
+ void metricgroup__rblist_exit(struct rblist *metric_events);
 -- 
 2.40.1.495.gc816e09b53d-goog
 
