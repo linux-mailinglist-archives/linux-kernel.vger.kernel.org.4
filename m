@@ -2,77 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 406556F3B56
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 02:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D09F56F3B51
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 02:18:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233156AbjEBATD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 20:19:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39714 "EHLO
+        id S232790AbjEBASa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 20:18:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbjEBATA (ORCPT
+        with ESMTP id S229863AbjEBAS2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 20:19:00 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C7BE7A;
-        Mon,  1 May 2023 17:18:58 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3420IKXI070147;
-        Mon, 1 May 2023 19:18:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1682986700;
-        bh=2xPdfbXKkI18fLVNxuoUgjV/EL3yFDxzUN/5cXRRZLI=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=Mp/GBj9c16keBA5h6AuWULyZfvxUqiRJBBzqLd4CLjResFov0q+TNRXLxarWevtAr
-         45Wfog2h9QF8doTMlFTw8WKX19BYhTvqBLMjZxOVdi4ykSALiWZi1OBzrc07WU2l+u
-         XhL3TtEg5n+72xSYecQs0U1+3kt97oAqmNELXxg0=
-Received: from DFLE107.ent.ti.com (dfle107.ent.ti.com [10.64.6.28])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3420IKTX056702
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 1 May 2023 19:18:20 -0500
-Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 1
- May 2023 19:18:20 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 1 May 2023 19:18:19 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3420IJ8I011856;
-        Mon, 1 May 2023 19:18:19 -0500
-Date:   Mon, 1 May 2023 19:18:19 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Judith Mendez <jm@ti.com>
-CC:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, <linux-can@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Schuyler Patton <spatton@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Simon Horman <simon.horman@corigine.com>
-Subject: Re: [PATCH v4 3/4] DO_NOT_MERGE arm64: dts: ti: Add AM62x MCAN MAIN
- domain transceiver overlay
-Message-ID: <20230502001819.ik3srlbfs663wuwg@harmful>
-References: <20230501224624.13866-1-jm@ti.com>
- <20230501224624.13866-4-jm@ti.com>
+        Mon, 1 May 2023 20:18:28 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4737EF1
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 17:18:26 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4efe8991b8aso3917890e87.0
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 17:18:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682986704; x=1685578704;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=u0KH7PrTyqIakLJHa4OE7SkEBnSW+9Gc8LTx1FKiD9A=;
+        b=jRJtlARzzOFJ7dZjVWdprwLXYlniLT4F4G63wNFKX54kHOyyhXxP17Yu/RI43Yk9Vs
+         8tXPfd1w9Ubn88Wv7aU2YhP6M8nTsaSLZPIoQYoKpw+BJhdmFCaX1+y7ynFgML9aGB7p
+         hY2HsDYiIQIP6lCYivLcCvGZJWz8E5vb5XQZGj7IWX11rmxLaDeDROlyh7oPUKqupFYj
+         5l7tVz2UTqeTmF89iqNAda4sB47jNKBlqlDZFAU17fRYPb/zqvXOEEWrfHXEGxeJ1dAj
+         lVnJLdz0Xo3tS19wIeX2iDjXM2e9q8SgVK/uC1jyXYkMDOIS3Rexc3Dol2yqsjqoi4ay
+         MIyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682986704; x=1685578704;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=u0KH7PrTyqIakLJHa4OE7SkEBnSW+9Gc8LTx1FKiD9A=;
+        b=b8JgVAImKB/6I4z5m7cG66X9c0WuZBmg1QpC/BlQOGmVH2SpdkLkEIo57GEptg57/w
+         iQHu/NdVDll3otMjcz8Lxi6B31IISrL89EnCqE4QMeVIzahf8sTpAW/HGno/Pg+VHylL
+         ar9/9T32mCkhwdK02fSIaqfYtTM02COy9dykuP8Sp88782XCv8mNb9BBnm7yfAKh/tWY
+         zE7dHQnvm4arWp04ztr2x5uOcB6rHQDc0YIJOvuS4ABeEOqO52tyUADKJGLbqXwKkYL2
+         2lRpErgpQYYfCgnctbY4IJBhhiuCp4OyfhKeJppqrDHhCz1YsvZi47/1XWG3r2WZ/Ny0
+         /sdw==
+X-Gm-Message-State: AC+VfDzx7koEngxL/rsayZabRLxR5unlhpyZa1EfTlNy9AwrCIWaoLZS
+        ZniDV6YOveYafGbdThFKYYQOXify6FiAuOR3dDQ=
+X-Google-Smtp-Source: ACHHUZ5Teo45WCl2GPwJFhVFP2cBsMeFY0S4HCU1zQ08cS5w4XptLFpKequThz/vVtRAA7fOrqAMNQ==
+X-Received: by 2002:ac2:515e:0:b0:4ef:f6c9:b977 with SMTP id q30-20020ac2515e000000b004eff6c9b977mr3837302lfd.49.1682986704534;
+        Mon, 01 May 2023 17:18:24 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id j6-20020ac24546000000b004ed4fa5f20fsm5045572lfm.25.2023.05.01.17.18.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 01 May 2023 17:18:24 -0700 (PDT)
+Message-ID: <82e61752-dc76-9714-d2e1-13962c4217ee@linaro.org>
+Date:   Tue, 2 May 2023 03:18:23 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230501224624.13866-4-jm@ti.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v9 3/4] arm64: dts: qcom: sm6115: Add USB SS qmp phy node
+Content-Language: en-GB
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-phy@lists.infradead.org
+Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
+        andersson@kernel.org, bhupesh.linux@gmail.com,
+        krzysztof.kozlowski@linaro.org, robh+dt@kernel.org,
+        konrad.dybcio@linaro.org, kishon@kernel.org, vkoul@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+References: <20230501192432.1220727-1-bhupesh.sharma@linaro.org>
+ <20230501192432.1220727-4-bhupesh.sharma@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230501192432.1220727-4-bhupesh.sharma@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,104 +81,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17:46-20230501, Judith Mendez wrote:
-> Add an overlay for main domain MCAN on AM62x SK. The AM62x
-> SK board does not have on-board CAN transceiver so instead
-> of changing the DTB permanently, add an overlay to enable
-> MAIN domain MCAN and support for 1 CAN transceiver.
+On 01/05/2023 22:24, Bhupesh Sharma wrote:
+> Add USB superspeed qmp phy node to dtsi.
 > 
-> This DT overlay can be used with the following EVM:
-> Link: https://www.ti.com/tool/TCAN1042DEVM
+> Make sure that the various board dts files (which include sm4250.dtsi file)
+> continue to work as intended.
 > 
-> Signed-off-by: Judith Mendez <jm@ti.com>
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 > ---
-> Changelog:
-> v3:
->  1. Add link for specific board
->  
->  arch/arm64/boot/dts/ti/Makefile               |  2 ++
->  .../boot/dts/ti/k3-am625-sk-mcan-main.dtso    | 35 +++++++++++++++++++
->  2 files changed, 37 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/ti/k3-am625-sk-mcan-main.dtso
+>   .../boot/dts/qcom/sm4250-oneplus-billie2.dts  |  3 ++
+>   arch/arm64/boot/dts/qcom/sm6115.dtsi          | 29 +++++++++++++++++--
+>   .../boot/dts/qcom/sm6115p-lenovo-j606f.dts    |  3 ++
+>   3 files changed, 33 insertions(+), 2 deletions(-)
 > 
-> diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
-> index c83c9d772b81..abe15e76b614 100644
-> --- a/arch/arm64/boot/dts/ti/Makefile
-> +++ b/arch/arm64/boot/dts/ti/Makefile
-> @@ -9,8 +9,10 @@
->  # alphabetically.
->  
->  # Boards with AM62x SoC
-> +k3-am625-sk-mcan-dtbs := k3-am625-sk.dtb k3-am625-sk-mcan-main.dtbo
-
-NAK.
-https://lore.kernel.org/all/4e406c96-3f47-1695-324f-a9e45be8c142@ti.com/
-
-Same reasons - we don't want specific instance based overlays please -
-that would'nt make sense - maxbitrate will depend on transceiver so it
-has nothing to do with mcan-main or mcan-mcu and has everything to do
-with the board that is plugged in.
-
->  dtb-$(CONFIG_ARCH_K3) += k3-am625-beagleplay.dtb
->  dtb-$(CONFIG_ARCH_K3) += k3-am625-sk.dtb
-> +dtb-$(CONFIG_ARCH_K3) += k3-am625-sk-mcan.dtb
->  dtb-$(CONFIG_ARCH_K3) += k3-am62-lp-sk.dtb
->  
->  # Boards with AM62Ax SoC
-> diff --git a/arch/arm64/boot/dts/ti/k3-am625-sk-mcan-main.dtso b/arch/arm64/boot/dts/ti/k3-am625-sk-mcan-main.dtso
-> new file mode 100644
-> index 000000000000..0a7b2f394f87
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/ti/k3-am625-sk-mcan-main.dtso
-
-If you are going down this road: am625-sk-tcan10242d.dsto (enable main
-and mcu?) or something reasonable. Though looking at the pins, I fail
-to see how this physically plugs into AM625-SK (I am hoping the answer
-isn't breadboard or jumper wires..).
-
-
-
-> @@ -0,0 +1,35 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/**
-> + * DT overlay for MCAN transceiver in main domain on AM625 SK
-> + *
-> + * Copyright (C) 2022 Texas Instruments Incorporated - https://www.ti.com/
-> + */
+> diff --git a/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts b/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
+> index a1f0622db5a0..75951fd439df 100644
+> --- a/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
+> +++ b/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
+> @@ -242,6 +242,9 @@ &usb {
+>   &usb_dwc3 {
+>   	maximum-speed = "high-speed";
+>   	dr_mode = "peripheral";
 > +
-> +/dts-v1/;
-> +/plugin/;
+> +	phys = <&usb_hsphy>;
+> +	phy-names = "usb2-phy";
+>   };
+>   
+>   &usb_hsphy {
+> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> index 631ca327e064..21d00b0295a1 100644
+> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> @@ -661,6 +661,31 @@ usb_hsphy: phy@1613000 {
+>   			status = "disabled";
+>   		};
+>   
+> +		usb_qmpphy: phy@1615000 {
+> +			compatible = "qcom,sm6115-qmp-usb3-phy";
+> +			reg = <0x0 0x01615000 0x0 0x200>;
+
+I replied with R-B, but then I noticed that the length of the region is 
+bad. What is the maximum offset that is used by the driver? I know that 
+it is bigger than 0x200.
+
 > +
-> +#include "k3-pinctrl.h"
+> +			clocks = <&gcc GCC_AHB2PHY_USB_CLK>,
+> +				 <&gcc GCC_USB3_PRIM_CLKREF_CLK>,
+> +				 <&gcc GCC_USB3_PRIM_PHY_COM_AUX_CLK>,
+> +				 <&gcc GCC_USB3_PRIM_PHY_PIPE_CLK>;
+> +			clock-names = "cfg_ahb",
+> +				      "ref",
+> +				      "com_aux",
+> +				      "pipe";
 > +
-> +&{/} {
-> +	transceiver1: can-phy0 {
-> +		compatible = "ti,tcan1042";
-> +		#phy-cells = <0>;
-> +		max-bitrate = <5000000>;
-> +	};
-> +};
+> +			resets = <&gcc GCC_USB3_PHY_PRIM_SP0_BCR>,
+> +				 <&gcc GCC_USB3PHY_PHY_PRIM_SP0_BCR>;
+> +			reset-names = "phy", "phy_phy";
 > +
-> +&main_pmx0 {
-> +	main_mcan0_pins_default: main-mcan0-pins-default {
-> +		pinctrl-single,pins = <
-> +			AM62X_IOPAD(0x1dc, PIN_INPUT, 0) /* (E15) MCAN0_RX */
-> +			AM62X_IOPAD(0x1d8, PIN_OUTPUT, 0) /* (C15) MCAN0_TX */
-> +		>;
-> +	};
-> +};
+> +			#clock-cells = <0>;
+> +			clock-output-names = "usb3_phy_pipe_clk_src";
 > +
-> +&main_mcan0 {
-> +	status = "okay";
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&main_mcan0_pins_default>;
-> +	phys = <&transceiver1>;
-> +};
-> -- 
-> 2.17.1
-> 
+> +			#phy-cells = <0>;
+> +
+> +			status = "disabled";
+> +		};
+> +
+>   		qfprom@1b40000 {
+>   			compatible = "qcom,sm6115-qfprom", "qcom,qfprom";
+>   			reg = <0x0 0x01b40000 0x0 0x7000>;
+> @@ -1111,8 +1136,8 @@ usb_dwc3: usb@4e00000 {
+>   				compatible = "snps,dwc3";
+>   				reg = <0x0 0x04e00000 0x0 0xcd00>;
+>   				interrupts = <GIC_SPI 255 IRQ_TYPE_LEVEL_HIGH>;
+> -				phys = <&usb_hsphy>;
+> -				phy-names = "usb2-phy";
+> +				phys = <&usb_hsphy>, <&usb_qmpphy>;
+> +				phy-names = "usb2-phy", "usb3-phy";
+>   				iommus = <&apps_smmu 0x120 0x0>;
+>   				snps,dis_u2_susphy_quirk;
+>   				snps,dis_enblslpm_quirk;
+> diff --git a/arch/arm64/boot/dts/qcom/sm6115p-lenovo-j606f.dts b/arch/arm64/boot/dts/qcom/sm6115p-lenovo-j606f.dts
+> index ea3340d31110..81fdcaf48926 100644
+> --- a/arch/arm64/boot/dts/qcom/sm6115p-lenovo-j606f.dts
+> +++ b/arch/arm64/boot/dts/qcom/sm6115p-lenovo-j606f.dts
+> @@ -306,6 +306,9 @@ &usb {
+>   &usb_dwc3 {
+>   	maximum-speed = "high-speed";
+>   	dr_mode = "peripheral";
+> +
+> +	phys = <&usb_hsphy>;
+> +	phy-names = "usb2-phy";
+>   };
+>   
+>   &usb_hsphy {
 
 -- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+With best wishes
+Dmitry
+
