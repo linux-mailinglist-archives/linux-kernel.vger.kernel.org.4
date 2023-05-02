@@ -2,61 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED1AE6F44D8
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 15:14:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33A7A6F44E3
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 15:20:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234012AbjEBNOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 09:14:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51696 "EHLO
+        id S233771AbjEBNTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 09:19:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233664AbjEBNOV (ORCPT
+        with ESMTP id S229457AbjEBNT3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 09:14:21 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9645E55AE;
-        Tue,  2 May 2023 06:13:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683033239; x=1714569239;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=UKS6eb6mm7wnEJz0YAhtu/APb6Zrywv1tOaxnDfoKl8=;
-  b=YCe01avSvMO1vEYvkeOqKZm6X50q9Gn2NQW1W2qu6XI+bY5BVoiNyYhy
-   qa7oIfoM3dRt2lPQ9ZHqw7q2GC36HW3eZH8W2qZ8nApHjIL/1cSmNcERF
-   AEu9fdgP0zUagPscI1IvHzusuxzpCV2b814xkcv45xdH/SGoB0lIkdZFi
-   A36RMUfhqYYg0kWLfhWdMxax2XZr2taC0uyNMQ7vLIdngR+6oInE7/E8w
-   mLrDcJ0vXRgNQpF2PGUUO4AhTEmBCeLPro/EAEoQYoQRy4a9rBjQQXc98
-   uYpKnqDS8/SbOBw1+abOawKEmYhf9AnZo9NyqKurUUCDJH2h2rDjshd7a
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="347210487"
-X-IronPort-AV: E=Sophos;i="5.99,244,1677571200"; 
-   d="scan'208";a="347210487"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2023 06:13:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="690278833"
-X-IronPort-AV: E=Sophos;i="5.99,244,1677571200"; 
-   d="scan'208";a="690278833"
-Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.70])
-  by orsmga007.jf.intel.com with SMTP; 02 May 2023 06:13:56 -0700
-Received: by stinkbox (sSMTP sendmail emulation); Tue, 02 May 2023 16:13:55 +0300
-Date:   Tue, 2 May 2023 16:13:55 +0300
-From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-To:     Kurt Garloff <kurt@garloff.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, stable@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org
-Subject: Re: 6.1.23: 0fc6fea41c71 breaks GPD Pocket 3 modeset
-Message-ID: <ZFEMkypQy1I4vprK@intel.com>
-References: <4115dc28-45b6-cad1-1e38-39e5a0484a8a@garloff.de>
+        Tue, 2 May 2023 09:19:29 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DEFA5B87;
+        Tue,  2 May 2023 06:19:28 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3CC2B1F8C4;
+        Tue,  2 May 2023 13:19:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1683033567; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=X6pmLXaIP92O+42lHElbilcuYtyXI0aaCgcPWEIGhNs=;
+        b=lChvKPHqaLxkunCNmmwMvq/Vkym78EMnsImduafFgSNkhQ8p+/x79wmSpYUdLrfeE/PSny
+        7z3zm7/L+EbvQGLa4muacIEeNa9d/rK0S0zR5ZU0o/cTaekuqmExVr/h0AjaPEx2GSGKeV
+        uTDbdm0dcS+YXwPz176/qE2vENUwTOQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1683033567;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=X6pmLXaIP92O+42lHElbilcuYtyXI0aaCgcPWEIGhNs=;
+        b=/o1fQ6Bn2kXO2MZVvv6jlMBG087zAk+KyUBzIUmXFGEXu1Wx06aA85WFRDL9NPjxSZtcZM
+        QGYDD0gxUYc8LfAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2D320134FB;
+        Tue,  2 May 2023 13:19:27 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 6buhCt8NUWQEVwAAMHmgww
+        (envelope-from <dwagner@suse.de>); Tue, 02 May 2023 13:19:27 +0000
+Date:   Tue, 2 May 2023 15:19:26 +0200
+From:   Daniel Wagner <dwagner@suse.de>
+To:     Hannes Reinecke <hare@suse.de>
+Cc:     linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org, Chaitanya Kulkarni <kch@nvidia.com>,
+        Shin'ichiro Kawasaki <shinichiro@fastmail.com>
+Subject: Re: [PATCH REPOST blktests v2 3/9] common-xfs: Make size argument
+ optional for _xfs_run_fio_verify_io
+Message-ID: <pjzkjnq7gv574bcnfmuf5n3ehgygqp2b2ybuburc7rty5iwhwf@dc6fkxg3wt5h>
+References: <20230421060505.10132-1-dwagner@suse.de>
+ <20230421060505.10132-4-dwagner@suse.de>
+ <1089a043-a40c-6b49-f0a0-38ca3bcd8f91@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4115dc28-45b6-cad1-1e38-39e5a0484a8a@garloff.de>
-X-Patchwork-Hint: comment
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <1089a043-a40c-6b49-f0a0-38ca3bcd8f91@suse.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,39 +73,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 29, 2023 at 09:55:45PM +0200, Kurt Garloff wrote:
-> Hi Ville,
+On Fri, Apr 21, 2023 at 08:27:35AM +0200, Hannes Reinecke wrote:
+> > +		avail="$(df --output=avail "${mount_dir}" | awk 'NR==2 {print $1}')"
 > 
-> While
-> 0fc6fea41c71 drm/i915: Disable DC states for all commits
-> (cherry picked from commit 41b4c7fe72b6105a4b49395eea9aa40cef94288d)
-> does look correct to me, it does break modesetting on the GPD Pocket 3,
-> a i7-1195G7 laptop. I run the kernel with
-> fbcon=rotate:1 video=DSI-1:panel_orientation=right_side_up \
-> mem_sleep_default=s2idle
-> No special i915 parameters.
-> Hardware is described here:
-> https://wiki.archlinux.org/title/GPD_Pocket_3
+> df --output=avail "${mount_dir}" | tail -1
+
+ok.
+
+> > +		sz="$(printf "%d" $((avail / 1024 - 1 )))m"
 > 
-> I disected this patch which was merged (backported) for 6.1.23.
-> I currently run 6.1.26 with it reverted.
+> sz=$((avail / 1024 - 1))
 > 
-> Without reverting it, when fbcon is switched to show the splash
-> screen (GPD logo with Ubuntu added in on working kernels), the
-> screen remains black (backlight on, but nothing displayed) and
-> nothing happens any more.
+> > +	fi
+> > +
+> >   	_run_fio_verify_io --size="$sz" --directory="${mount_dir}/"
+> 
+> _run_fio_verify_io --size="${sz}m" --directory="${mount_dir}/"
 
-Please file a bug at
-https://gitlab.freedesktop.org/drm/intel/issues/new
-
-Boot both kernels (revert vs. no revert), passing
-'drm.debug=0xe log_buf_len=4M' to the kernel cmdline,
-and attach the resulting dmesg from each to the bug.
-
-Also would be good if you try to reproduce on the
-latest drm-tip (git://anongit.freedesktop.org/drm-tip drm-tip)
-as well.
-
--- 
-Ville Syrjälä
-Intel
+$sz might already contain the 'm', so can't do this here.
