@@ -2,187 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC54C6F466F
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 16:54:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CDF86F452D
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 15:39:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234508AbjEBOyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 10:54:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53450 "EHLO
+        id S233975AbjEBNho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 09:37:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233656AbjEBOyN (ORCPT
+        with ESMTP id S233872AbjEBNhf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 10:54:13 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 096C294;
-        Tue,  2 May 2023 07:54:09 -0700 (PDT)
-Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 342EdZdk028872;
-        Tue, 2 May 2023 14:51:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=tvKXBWnlz0b5+aQlCNEu6+3OmKoLlKf53S2AiWh20Gw=;
- b=qm9m5dEZtOLmivZUrVzml2i80JCmcJlovyIs0CX7sqBrmYldckjgWJ0jTqwUiT3JOLRX
- TYvWyTY2X0eR+PbzUu+SHKl7A4DYz/Amilf7PjvUlFmjyHzUdnL5UfeQqcrwxZh2XjPz
- ivFOJoH/cBEJUZ8YCHQ89pbQbLOpBM4laf9C4cAcrtvfPbAnxGV0upEtvSMjnMU1kCb3
- oSSNyUmxB9aoz2J5hw2Riuxy2A11KAZ45iVZkazU7LP1OggfrOLHgWjUGAPG56cKIf68
- Pl6cyerz5wHv/yNResTo9aP3u03WK0UNb9yQPi5bJi5BX8mPdvWG24N9okn4L0OvGJqJ 6A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qb3cy2xkc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 02 May 2023 14:51:23 +0000
-Received: from m0353727.ppops.net (m0353727.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 342Ee3I7031001;
-        Tue, 2 May 2023 14:51:22 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qb3cy2xej-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 02 May 2023 14:51:22 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 342ASRsp004760;
-        Tue, 2 May 2023 13:35:41 GMT
-Received: from smtprelay05.dal12v.mail.ibm.com ([9.208.130.101])
-        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3q8tv83d3s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 02 May 2023 13:35:41 +0000
-Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-        by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 342DZcZY42074434
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 2 May 2023 13:35:38 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 62E845803F;
-        Tue,  2 May 2023 13:35:38 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id ED27458056;
-        Tue,  2 May 2023 13:35:33 +0000 (GMT)
-Received: from [9.60.89.243] (unknown [9.60.89.243])
-        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Tue,  2 May 2023 13:35:33 +0000 (GMT)
-Message-ID: <651bfe55-6e2a-0337-d755-c8d606f5317e@linux.ibm.com>
-Date:   Tue, 2 May 2023 09:35:33 -0400
+        Tue, 2 May 2023 09:37:35 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2077.outbound.protection.outlook.com [40.107.92.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104E66A67;
+        Tue,  2 May 2023 06:36:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cVBNAbNe3oBughD6XQxRZW2T+EUO5DSuEhWVl7JYqfj4Y7ixRpqKiXwErcOqizdvDo2QEbPOWudmeReSlevbxtJ/sc8K1/myhDLS4Idkacj3tpWEGvDyNS0NZrmFZ+qkBPcTPnT3ZxyFAKootrwmyaM/VIQTviey+FL+QuUdiibwrELovJQaW4N8YeRHC4zcZMUYKw0opuPppipIt4R879pvOueeXlHm3lQqsXwDL6TTMWC1J0YbMMFUG3OrAOMgw33cg0/S+MGH3+SurL+07uEqTkXVs/lu+8+FicJJuBqF3soPf3+XJ6GuVUR6J5lyNHzhlrGpSN9GvrZxVWKX9A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0XYWvYBsJgFC/Uolu8upj50xk2GLhvkzlH+sSaDQO4c=;
+ b=LudX1TPMToVLWWU2ydVTB7c8XrtxQY3pBiEURnRs1TUbxqje+MU8Gk2HTEYjb4C1G7XYFes9M28a6VopexkJqztOUZZd8BABIryGkwRyh5/T17dlO+QKUJ8bZg0zVJ0A4cOOelu0Y3kgb9mrWUH7Zg96FwXKowM+n4tiMGeZnJdWnSxE8WZFvZOimYFRiNgL9YrNuo9q2H4frPcJIGxyvDEc1a0HVm9rT4Jn1KQSqBPYJOUYEsdaI+HhG8NXi6ggii6e/XtjpWgXDF5nV2xM9kxs7Fey9TTLKPYOP17kzAM3KUQmzNFfSiIJr7oTyKsHtBtNRZCiwrCcy9eJmsnzlQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0XYWvYBsJgFC/Uolu8upj50xk2GLhvkzlH+sSaDQO4c=;
+ b=rMa9MyG2yibMALmoPpmUHZT0ny3cWpQx7oi6lQ650E4xes0WU6XhoI9GHQ57jmrkSEf/K7FZL3nSXIkECX4asfdToOEGV0j2rHfTeNqwHu1AUCQNqYVt4egySyQA487qM71ZxrYsiqINyMeNrtyaMp6QhXgoKWlpaw3iEwU53Yk=
+Received: from DM6PR10CA0018.namprd10.prod.outlook.com (2603:10b6:5:60::31) by
+ DM4PR12MB6062.namprd12.prod.outlook.com (2603:10b6:8:b2::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6363.20; Tue, 2 May 2023 13:36:37 +0000
+Received: from DS1PEPF0000E636.namprd02.prod.outlook.com
+ (2603:10b6:5:60:cafe::3d) by DM6PR10CA0018.outlook.office365.com
+ (2603:10b6:5:60::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.31 via Frontend
+ Transport; Tue, 2 May 2023 13:36:37 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DS1PEPF0000E636.mail.protection.outlook.com (10.167.17.68) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6363.21 via Frontend Transport; Tue, 2 May 2023 13:36:37 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 2 May
+ 2023 08:36:17 -0500
+From:   Michal Simek <michal.simek@amd.com>
+To:     <linux-kernel@vger.kernel.org>, <monstr@monstr.eu>,
+        <michal.simek@xilinx.com>, <git@xilinx.com>
+CC:     Harini Katakam <harini.katakam@amd.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Parth Gajjar <parth.gajjar@amd.com>,
+        "Piyush Mehta" <piyush.mehta@xilinx.com>,
+        Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Robert Hancock" <robert.hancock@calian.com>,
+        Tanmay Shah <tanmay.shah@amd.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: [PATCH 06/23] arm64: zynqmp: Sync node name address with reg (mailbox)
+Date:   Tue, 2 May 2023 15:35:34 +0200
+Message-ID: <5d8e80383912b8ff75409764efb75f3b85917087.1683034376.git.michal.simek@amd.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <cover.1683034376.git.michal.simek@amd.com>
+References: <cover.1683034376.git.michal.simek@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v6 3/3] mm/gup: disallow FOLL_LONGTERM GUP-fast writing to
- file-backed mappings
-To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Mika Penttila <mpenttil@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Dave Chinner <david@fromorbit.com>,
-        "Theodore Ts'o" <tytso@mit.edu>, Peter Xu <peterx@redhat.com>
-References: <cover.1682981880.git.lstoakes@gmail.com>
- <dee4f4ad6532b0f94d073da263526de334d5d7e0.1682981880.git.lstoakes@gmail.com>
- <fbad9e18-f727-9703-33cf-545a2d33af76@linux.ibm.com>
- <7d56b424-ba79-4b21-b02c-c89705533852@lucifer.local>
- <a6bb0334-9aba-9fd8-6a9a-9d4a931b6da2@linux.ibm.com>
-Content-Language: en-US
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-In-Reply-To: <a6bb0334-9aba-9fd8-6a9a-9d4a931b6da2@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: ZPrSR9updbvWPwyMNBfY5bx1g1NlsSpS
-X-Proofpoint-ORIG-GUID: 15UZwaO7bNwP-hIqLmrVVyC5p7mTDFXL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-02_09,2023-04-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
- malwarescore=0 priorityscore=1501 lowpriorityscore=0 adultscore=0
- suspectscore=0 mlxscore=0 spamscore=0 impostorscore=0 mlxlogscore=965
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2305020124
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS1PEPF0000E636:EE_|DM4PR12MB6062:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5772367f-7501-470b-2d74-08db4b1240d4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: EOCsGALA3aguuT8nmpLXZjRXJKOV911nw20sEwPZUUFjdSd87hACofo1zulO0ePqhIwQnvqZpPU9qHjAQryfqsxAchVEvJ+c8GOuWDhc7bz/pfsHV8ZZxBeAH/dwVQHiSIL2xkuKq2DOkSovY1OBcFCsW1wOdZr+Qg9GpAx3QMMWT62+KvFBcCTBZCttaCTHuOzoXxH1JF75MQF4/Z7I59HaJgYSeniY0ctaWxwf3Frt2QurKsLB7QQobc4+IF7F30zhxWTIo1RxpeTP8KpkUIiRxFq02cc9mrevo6vFSYT9kCsNiIu9SOp01+V2N8x40zmPLwDWtM1wG16ZHiug1RXprQcEH6svLFFJTY0ZsNB4CdVkUHPjO9xzzAUzuguUITRxiT/GqeJ5PDgJfqvCy8M4U+eqpMGKUgmPKKleo0HX0gKW3E/i2yF1P5Um3tIcpC2/hA3suJBvASr3fSCDAmyGb8S5W6QNrWGoDQoPIr+e3uBOCI9dG1Ol9QJ0tDxwP+ovktWtxH4npCAuHWMWyt8uH8mPW1ry/eH0HaEEsJSqnnYAYbkto+11iyFxueDc9e0rSuakQaxsY48DrsNsSW+9TGu/02SOoq/H1UaxJ8XRWG179LaDpeQZ5/7SNtvbA+T9T0L2F1iQs9baXZ94HdKaeWBTtMnIDxNSsEGqNGcU8PAK75PDsVqoXE5mUXFZ+PdyWc0e8bkMEF83U0WcSAae5AaHgp2P4mTGOPY5eRfqLMYdOQ3bsuR3wDVpMYWR
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(39860400002)(346002)(376002)(451199021)(40470700004)(36840700001)(46966006)(4744005)(2906002)(40460700003)(186003)(16526019)(86362001)(26005)(82310400005)(15650500001)(36860700001)(83380400001)(40480700001)(336012)(426003)(47076005)(82740400003)(81166007)(356005)(36756003)(2616005)(6666004)(41300700001)(316002)(8676002)(8936002)(110136005)(54906003)(70586007)(70206006)(4326008)(478600001)(7416002)(44832011)(5660300002)(36900700001)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2023 13:36:37.1417
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5772367f-7501-470b-2d74-08db4b1240d4
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000E636.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6062
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/2/23 9:04 AM, Christian Borntraeger wrote:
-> 
-> 
-> Am 02.05.23 um 14:54 schrieb Lorenzo Stoakes:
->> On Tue, May 02, 2023 at 02:46:28PM +0200, Christian Borntraeger wrote:
->>> Am 02.05.23 um 01:11 schrieb Lorenzo Stoakes:
->>>> Writing to file-backed dirty-tracked mappings via GUP is inherently broken
->>>> as we cannot rule out folios being cleaned and then a GUP user writing to
->>>> them again and possibly marking them dirty unexpectedly.
->>>>
->>>> This is especially egregious for long-term mappings (as indicated by the
->>>> use of the FOLL_LONGTERM flag), so we disallow this case in GUP-fast as
->>>> we have already done in the slow path.
->>>
->>> Hmm, does this interfer with KVM on s390 and PCI interpretion of interrupt delivery?
->>> It would no longer work with file backed memory, correct?
->>>
->>> See
->>> arch/s390/kvm/pci.c
->>>
->>> kvm_s390_pci_aif_enable
->>> which does have
->>> FOLL_WRITE | FOLL_LONGTERM
->>> to
->>>
->>
->> Does this memory map a dirty-tracked file? It's kind of hard to dig into where
->> the address originates from without going through a ton of code. In worst case
->> if the fast code doesn't find a whitelist it'll fall back to slow path which
->> explicitly checks for dirty-tracked filesystem.
-> 
-> It does pin from whatever QEMU uses as backing for the guest.
->>
->> We can reintroduce a flag to permit exceptions if this is really broken, are you
->> able to test? I don't have an s390 sat around :)
-> 
-> Matt (Rosato on cc) probably can. In the end, it would mean having
->   <memoryBacking>
->     <source type="file"/>
->   </memoryBacking>
-> 
-> In libvirt I guess.
+Address in node name should match with the first reg property in DT.
 
-I am running with this series applied using a QEMU guest with memory-backend-file (using the above libvirt snippet) for a few different PCI device types and AEN forwarding (e.g. what is setup in kvm_s390_pci_aif_enable) is still working.
+Signed-off-by: Michal Simek <michal.simek@amd.com>
+---
+
+ arch/arm64/boot/dts/xilinx/zynqmp.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+index c2d80c7967e9..61c7045eb992 100644
+--- a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
++++ b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+@@ -135,7 +135,7 @@ zynqmp_ipi: zynqmp_ipi {
+ 		#size-cells = <2>;
+ 		ranges;
+ 
+-		ipi_mailbox_pmu1: mailbox@ff990400 {
++		ipi_mailbox_pmu1: mailbox@ff9905c0 {
+ 			reg = <0x0 0xff9905c0 0x0 0x20>,
+ 			      <0x0 0xff9905e0 0x0 0x20>,
+ 			      <0x0 0xff990e80 0x0 0x20>,
+-- 
+2.36.1
 
