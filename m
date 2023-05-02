@@ -2,68 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C0906F49B5
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 20:31:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D83FE6F49BE
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 20:33:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234425AbjEBSb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 14:31:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59036 "EHLO
+        id S233856AbjEBSdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 14:33:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233959AbjEBSb1 (ORCPT
+        with ESMTP id S231609AbjEBSdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 14:31:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D126919AC;
-        Tue,  2 May 2023 11:31:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 71A9A627CA;
-        Tue,  2 May 2023 18:31:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C1A95C433D2;
-        Tue,  2 May 2023 18:31:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683052280;
-        bh=roX7J2C0cryIH4aFs82eea9tajAAQbquDLz9EWJ4Moo=;
-        h=From:Date:Subject:To:Cc:Reply-To:From;
-        b=OUOgWCiTr3qm3yoKkf+0dTdaeN1e0aW64AGHh5bhzZi8wrNmFmIHXIBKrNEOXPC7G
-         N1y8IxqSWnn+2eLrKQwjUBLtGuTnLY3RMloepvWBgqpmbx2GWdne2zF4Wr+1M0cFHS
-         uaffoc/z/okLGmZUaUl2zP+14qQJkRmLxtxwlQzDfiqJKnfdilGtiUY3hT2kInOzkH
-         UjA60H+nKjFFthiM02UEnElogeKnUsAmUpeUE9D4VN9N0hFDlUngyDyuwtxhRdPTiP
-         mhlluV0blQmVV4bQA23iXkWEWyyH3xT7iroJQSxnEXeUSN6Fo3txe9pHVfsW2SYpl4
-         RSFnEg7oNZ+zg==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by smtp.lore.kernel.org (Postfix) with ESMTP id AE069C77B78;
-        Tue,  2 May 2023 18:31:20 +0000 (UTC)
-From:   Gabriel Tremblay via B4 Relay 
-        <devnull+tremblay.gabriel.gmail.com@kernel.org>
-Date:   Tue, 02 May 2023 14:31:14 -0400
-Subject: [PATCH] Change the interrupt from level_low to edge_falling
+        Tue, 2 May 2023 14:33:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1785A10FF
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 11:32:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683052375;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NhpWzKFV6WuY3k3TP6SkZOGPmg0MohvKMd0v7Ellcl4=;
+        b=JCg9RcGSxA4TMuaMiyKxJxrLvtGLm03qcFq7gTwqX7X69Rs2XCC8SNOUvxVf8+O8ZP1SuP
+        PGq+9z/dcsK5KaaJHXkItf/l5+/duVby9lloVpvuUc6DxEDimPTGfwzAyAUYu2vL2rwH0U
+        Kn8RRfVKhRdf37WIBUKoZ/Dzi1/AgOE=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-436-a_KWirKzOAm1qf6sLwfQSg-1; Tue, 02 May 2023 14:32:54 -0400
+X-MC-Unique: a_KWirKzOAm1qf6sLwfQSg-1
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-306362a1607so876072f8f.1
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 11:32:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683052373; x=1685644373;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NhpWzKFV6WuY3k3TP6SkZOGPmg0MohvKMd0v7Ellcl4=;
+        b=XPOKHNuAMZZFRCs30F5XPlOPhSzBD0rbulVaCfuvZTRsbwRtXePHLOFkkxGIC1xKr5
+         3j8npgHxftIHoQlvsXuNBAxNdtdlYH0aPzh11iawUBK9MGVhhULt1TZpWqoJEL0aydcp
+         ehgDvkKVNN2tYMR8xuwjPxs4hMZUT2RzxwWbCZSxGNYN1JQK8y7KUKNL0h9DSK83g4XU
+         qlARD5yOTeD+ATDKuQ8aCLgL23LAH47B3EgtrN2q+Qq3qKABE9S5iR3e41gwLyEeMjwH
+         tBoX8dSH2WadWahFEiURwfUUwWV6NpQakMeVQj0aivzwpc1ABiII2SUz3X7LnPnpJS7p
+         qsnQ==
+X-Gm-Message-State: AC+VfDyxvx9HOhOw53LFs5S08AwPxxhx0T96Wx3wbYRtsP6q16TniQ9a
+        /4ki3DGzxv4+7Uss/i4D1+59dUhl/ptuvuSEaKjFJ3RJ94NmvqSbpXPuhU7KRoype/mlV9DBlqX
+        2fG13x7VOntqEPftsqnTbMXo6OIozCqVC7bvHQA==
+X-Received: by 2002:adf:e38b:0:b0:2dc:cad4:87b9 with SMTP id e11-20020adfe38b000000b002dccad487b9mr11784989wrm.68.1683052372746;
+        Tue, 02 May 2023 11:32:52 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7NTwwDePG2g45V+TgxsNxz1VA7838wfE2TMtMS4WPnQUULqKPl7ToB/3+9718Vn306lnc9dA==
+X-Received: by 2002:adf:e38b:0:b0:2dc:cad4:87b9 with SMTP id e11-20020adfe38b000000b002dccad487b9mr11784980wrm.68.1683052372419;
+        Tue, 02 May 2023 11:32:52 -0700 (PDT)
+Received: from redhat.com ([2.52.10.43])
+        by smtp.gmail.com with ESMTPSA id i11-20020adfe48b000000b002c3f81c51b6sm31546095wrm.90.2023.05.02.11.32.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 May 2023 11:32:51 -0700 (PDT)
+Date:   Tue, 2 May 2023 14:32:48 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Feng Liu <feliu@nvidia.com>
+Cc:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        Jason Wang <jasowang@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        William Tu <witu@nvidia.com>, Parav Pandit <parav@nvidia.com>
+Subject: Re: [PATCH net v2] virtio_net: Fix error unwinding of XDP
+ initialization
+Message-ID: <20230502143148-mutt-send-email-mst@kernel.org>
+References: <20230502174134.32276-1-feliu@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230502-gtremblay-x13s-keyboard-v1-1-6bc3e59b0d39@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAPFWUWQC/zXNQQqDMBCF4avIrDs0ThSaXqV0MdExhraxTEpRx
- Ls3Cl3+PD7eClk0SoZrtYLKN+Y4pRL1qYJu5BQEY18ayJA1rSEMH5WXf/KCc20zPmTxE2uPdHH
- OtoMjEoKiPWdBr5y6cfe+OQf5031/qwxxPp5v9237AVB2ldOJAAAA
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Gabriel Tremblay <tremblay.gabriel@gmail.com>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1683052280; l=1193;
- i=tremblay.gabriel@gmail.com; s=20230502; h=from:subject:message-id;
- bh=nbP1Xx1KAt958LpS5KvFFCWaYnFLYSX2Yz32vSKwDHU=;
- b=faBX9jx+sw9zzbs1OOJBCsG/3856f4GkZfvQqQ38ycrkKmFhL/mIyyzW1Lp+daHZlpOK7/PJZ
- hxMDIG9RBBdCfD19KjPfkiBjUBQg0fEv9Dh0H/kTAUS83Kol88Ly/sL
-X-Developer-Key: i=tremblay.gabriel@gmail.com; a=ed25519;
- pk=QBcAw+03yiRPOAXsWfAlyaNIhBRPIH3l8tURId7/7Nw=
-X-Endpoint-Received: by B4 Relay for tremblay.gabriel@gmail.com/20230502 with auth_id=45
-X-Original-From: Gabriel Tremblay <tremblay.gabriel@gmail.com>
-Reply-To: <tremblay.gabriel@gmail.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230502174134.32276-1-feliu@nvidia.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,41 +82,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gabriel Tremblay <tremblay.gabriel@gmail.com>
+On Tue, May 02, 2023 at 01:41:34PM -0400, Feng Liu wrote:
+> When initializing XDP in virtnet_open(), some rq xdp initialization
+> may hit an error causing net device open failed. However, previous
+> rqs have already initialized XDP and enabled NAPI, which is not the
+> expected behavior. Need to roll back the previous rq initialization
+> to avoid leaks in error unwinding of init code.
+> 
+> Also extract a helper function of disable queue pairs, and use newly
+> introduced helper function in error unwinding and virtnet_close;
+> 
+> Fixes: 754b8a21a96d ("virtio_net: setup xdp_rxq_info")
+> Signed-off-by: Feng Liu <feliu@nvidia.com>
+> Reviewed-by: William Tu <witu@nvidia.com>
+> Reviewed-by: Parav Pandit <parav@nvidia.com>
+> Reviewed-by: Simon Horman <simon.horman@corigine.com>
+> Acked-by: Michael S. Tsirkin <mst@redhat.com>
+> ---
+>  drivers/net/virtio_net.c | 31 +++++++++++++++++++++----------
+>  1 file changed, 21 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index 8d8038538fc4..5cd78e154d14 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -1868,6 +1868,13 @@ static int virtnet_poll(struct napi_struct *napi, int budget)
+>  	return received;
+>  }
+>  
+> +static void virtnet_disable_qp(struct virtnet_info *vi, int qp_index)
+> +{
+> +	virtnet_napi_tx_disable(&vi->sq[qp_index].napi);
+> +	napi_disable(&vi->rq[qp_index].napi);
+> +	xdp_rxq_info_unreg(&vi->rq[qp_index].xdp_rxq);
+> +}
+> +
+>  static int virtnet_open(struct net_device *dev)
+>  {
+>  	struct virtnet_info *vi = netdev_priv(dev);
+> @@ -1883,20 +1890,27 @@ static int virtnet_open(struct net_device *dev)
+>  
+>  		err = xdp_rxq_info_reg(&vi->rq[i].xdp_rxq, dev, i, vi->rq[i].napi.napi_id);
+>  		if (err < 0)
+> -			return err;
+> +			goto err_xdp_info_reg;
+>  
+>  		err = xdp_rxq_info_reg_mem_model(&vi->rq[i].xdp_rxq,
+>  						 MEM_TYPE_PAGE_SHARED, NULL);
+> -		if (err < 0) {
+> -			xdp_rxq_info_unreg(&vi->rq[i].xdp_rxq);
+> -			return err;
+> -		}
+> +		if (err < 0)
+> +			goto err_xdp_reg_mem_model;
+>  
+>  		virtnet_napi_enable(vi->rq[i].vq, &vi->rq[i].napi);
+>  		virtnet_napi_tx_enable(vi, vi->sq[i].vq, &vi->sq[i].napi);
+>  	}
+>  
+>  	return 0;
+> +
+> +	/* error unwinding of xdp init */
 
+btw we don't really need this comment - it's how all
+error handling is done anyways.
+if you need to roll v3, you can drop it.
 
-
----
-Lenovo's x13s internal keyboard shows responsivity issues when fast
-typing occurs. The problem is not replicated with external HID keyboard.
-
-This fix tries to alleviate the problem but requires further testing
-and commenting.
-
-Signed-off-by: Gabriel Tremblay <tremblay.gabriel@gmail.com>
----
- arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-index bdcba719fc38..e8d7f02c9bf3 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-@@ -639,7 +639,7 @@ keyboard@68 {
- 		reg = <0x68>;
- 
- 		hid-descr-addr = <0x1>;
--		interrupts-extended = <&tlmm 104 IRQ_TYPE_LEVEL_LOW>;
-+		interrupts-extended = <&tlmm 104 IRQ_TYPE_EDGE_FALLING>;
- 		vdd-supply = <&vreg_misc_3p3>;
- 		vddl-supply = <&vreg_s10b>;
- 
-
----
-base-commit: 84e2893b4573da3bc0c9f24e2005442e420e3831
-change-id: 20230502-gtremblay-x13s-keyboard-289935f922e2
-
-Best regards,
--- 
-Gabriel Tremblay <tremblay.gabriel@gmail.com>
+> +err_xdp_reg_mem_model:
+> +	xdp_rxq_info_unreg(&vi->rq[i].xdp_rxq);
+> +err_xdp_info_reg:
+> +	for (i = i - 1; i >= 0; i--)
+> +		virtnet_disable_qp(vi, i);
+> +
+> +	return err;
+>  }
+>  
+>  static int virtnet_poll_tx(struct napi_struct *napi, int budget)
+> @@ -2305,11 +2319,8 @@ static int virtnet_close(struct net_device *dev)
+>  	/* Make sure refill_work doesn't re-enable napi! */
+>  	cancel_delayed_work_sync(&vi->refill);
+>  
+> -	for (i = 0; i < vi->max_queue_pairs; i++) {
+> -		virtnet_napi_tx_disable(&vi->sq[i].napi);
+> -		napi_disable(&vi->rq[i].napi);
+> -		xdp_rxq_info_unreg(&vi->rq[i].xdp_rxq);
+> -	}
+> +	for (i = 0; i < vi->max_queue_pairs; i++)
+> +		virtnet_disable_qp(vi, i);
+>  
+>  	return 0;
+>  }
+> -- 
+> 2.37.1 (Apple Git-137.1)
 
