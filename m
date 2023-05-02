@@ -2,86 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1417B6F3E77
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 09:39:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B2FD6F3E7B
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 09:41:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233552AbjEBHjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 03:39:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44670 "EHLO
+        id S233390AbjEBHlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 03:41:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbjEBHjR (ORCPT
+        with ESMTP id S233167AbjEBHlA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 03:39:17 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A36CE7A
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 00:39:16 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-50bc570b4a3so3618549a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 00:39:16 -0700 (PDT)
+        Tue, 2 May 2023 03:41:00 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DAA9E7A
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 00:40:59 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-50b383222f7so4324820a12.3
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 00:40:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683013154; x=1685605154;
+        d=linaro.org; s=google; t=1683013258; x=1685605258;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=scTz1jek6y5+l9SdnFhQuw4xm0TqGFxUx1QJtMkBaKs=;
-        b=a78uGnmVax8AdRjW7AZExnTkFv0eZsYVvkFy9hSpCNS7BQWv/JTxTXGsGlZC+zElEj
-         KoKYLSHCYTr/1zL7bF2dOMQpw7GaKekzYVJhwCaPG8i8/e6EzraLOtrvdCCbNgcX5Xmf
-         CJ/kv6zdhMDyHqFX/SXg3u3lGfxOkIpNvQkUFn4JVGKd/fzgbhkH/gUAREsh2DKlZmqp
-         ZXMowX4HX2Vod+P3AwaYLgLokcFMX2nWav0jQS1A5bDmEtRaXKP8sI3h6uaiTzrDmGl9
-         SQMfnLmKxhWomqVPS56m1w7efyVqycAZ9FzAyfWfEszYmkk1PtmMj0wvRnWLL0wn4VDb
-         J/mQ==
+        bh=SoUt7yH66Q/K8nPBWlvpIiBfL6kSg4OZf+O79INR/oE=;
+        b=XWEiELZLGQCzow2WaTnvNiIPRAbIgBLqAnIZGkA5bNP77nVgdFJ4KVp3SRCacPtc20
+         Jls4LyAH+FZEzPtqPBPzjZIRirbrkpEcNZw4aPC7dPBk+oqboqAy/OFK4E9N9+ElxtK3
+         AE4BpHsFpWuXdfzIqZPYI7V8Bppar1egeWNucTMpx6TF/A4/pnB7v+xHXBTi7Qk9XBtc
+         CpGZ95uhyypM8sgZ1Cvt1d2jGAov0ciPp+I4JdRs5cmUExy3pe/5xDFyQc855H9YFUFn
+         U5FKv5JMewoOkZPZVHhUlUKvrPX0Vv9xLH6ZfKxSowpVJ/caw23r/4FWroyy4bspmHIE
+         yKSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683013154; x=1685605154;
+        d=1e100.net; s=20221208; t=1683013258; x=1685605258;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=scTz1jek6y5+l9SdnFhQuw4xm0TqGFxUx1QJtMkBaKs=;
-        b=DhsLCtLxF6n7igRrEv9Z+DbCFPwsOYvLZwcVy3IlgDyV99V2jLn+ERVh8BpDJ8ZjVu
-         DINvTtLRstC2DVFjsJYywJx2XkQcdn72OPDq64vtLm85O3k/2OS9wiDj80t3uEgXAVrU
-         BkfuGnZ9oUe4IqxSIN357y47XmE2D94vLQ56YzVIkpeswqIdwqIYtvUOnZq1Hjaycwcx
-         nXwCsT9TEkc4mP83xFMhTKxuHuRUriaee834ohVhW0/sMzrBaKbBdSy+sIRYKGYhGYaG
-         KlErhSVO//Yz10jWRqDbQ5efEewKcME5JNc3qq9lbZoRPlStXcsNQfdEZOTB/mq0qIjc
-         y0WQ==
-X-Gm-Message-State: AC+VfDxf63DsfBDKdP/ywwnnYByo486qlrewOykWuVaJYym5+YvEIzeL
-        38Gb80q6wWPwBj4VK4MRWOmlQQ==
-X-Google-Smtp-Source: ACHHUZ7YOKbuPjna9OS0ZMD0EoDB8ZuNxcxOz3Ez7c4/r1mSyr0N11xwD8t8vZieZrHbXmRjDxFyaA==
-X-Received: by 2002:aa7:c758:0:b0:50b:c3a0:40e5 with SMTP id c24-20020aa7c758000000b0050bc3a040e5mr5612751eds.21.1683013154607;
-        Tue, 02 May 2023 00:39:14 -0700 (PDT)
+        bh=SoUt7yH66Q/K8nPBWlvpIiBfL6kSg4OZf+O79INR/oE=;
+        b=BZqTFAboMrcHavI9w6VslDX+fLF2QXQaF/SlrL7HfYWIwRR8zhB58VQRRkFsQ8D7ln
+         1eL6R8+y8HyOm2spxfSt+Q+7TuIlluO3PGYtJZVWlHca2f2UIAK6+8+3TrPrezA+FXnr
+         +0mwAXez92AkOL3jMvM4s6ngCIRxoKmIFcLZtf5i5asG/Z1HM5o2mcz2xMchICdZGYgD
+         52zKSbGy6cv3RdygHJVt9mtE2wnB9eSezfVwQ/WaXyW8jCMwaZOxoOEl/hvuNTKjTeEg
+         ogJc+j0DxLT9sUc+oJTXhZimcynfLV2lmgtysUQGi2zeJgZt0/q5uB9NW+BUxUmiCEGH
+         c9Og==
+X-Gm-Message-State: AC+VfDz5qmo9hIh/FFO6KEe+gjrhiWkNccvnvVMfzJbK9q+gbZrIr9Jp
+        xuxI0Kft+gdkqQDtwzKqT8rMMA==
+X-Google-Smtp-Source: ACHHUZ7j8lXUAx3NbLI5D7HhgS0GjRNrm01YgFj4KZS8wCP4vg8VUQ562+4HE9EN+NwcILShF1jz1Q==
+X-Received: by 2002:a17:907:ea9:b0:960:c5fe:a35a with SMTP id ho41-20020a1709070ea900b00960c5fea35amr12427402ejc.64.1683013257802;
+        Tue, 02 May 2023 00:40:57 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:bafd:1283:b136:5f6a? ([2a02:810d:15c0:828:bafd:1283:b136:5f6a])
-        by smtp.gmail.com with ESMTPSA id q9-20020aa7da89000000b005069175dcb7sm13212239eds.58.2023.05.02.00.39.12
+        by smtp.gmail.com with ESMTPSA id y10-20020a056402134a00b0050bc27a4967sm2589125edw.21.2023.05.02.00.40.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 May 2023 00:39:13 -0700 (PDT)
-Message-ID: <e29a7911-065a-04e2-f04f-027a0646362c@linaro.org>
-Date:   Tue, 2 May 2023 09:39:12 +0200
+        Tue, 02 May 2023 00:40:56 -0700 (PDT)
+Message-ID: <2653e0d1-6570-7469-51da-b539b5c14299@linaro.org>
+Date:   Tue, 2 May 2023 09:40:55 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.1
-Subject: Re: [PATCH v14 5/6] dt-bindings: clock: meson: add A1 Peripherals
- clock controller bindings
+Subject: Re: [PATCH v4 2/2] dt-bindings: usb: snps,dwc3: Add the compatible
+ name 'snps,dwc3-rtk-soc'
 Content-Language: en-US
-To:     Christian Hewitt <christianshewitt@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     Dmitry Rokosov <ddrokosov@sberdevices.ru>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Jerome Brunet <jbrunet@baylibre.com>, mturquette@baylibre.com,
-        sboyd@kernel.org, Rob Herring <robh+dt@kernel.org>,
+To:     Stanley Chang <stanley_chang@realtek.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>, jian.hu@amlogic.com,
-        kernel@sberdevices.ru, rockosov@gmail.com,
-        AML <linux-amlogic@lists.infradead.org>,
-        linux-clk@vger.kernel.org, devicetree <devicetree@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org, Rob Herring <robh@kernel.org>
-References: <20230426095805.15338-1-ddrokosov@sberdevices.ru>
- <20230426095805.15338-6-ddrokosov@sberdevices.ru>
- <CAFBinCCdoaNuQymcjp5j9MHn2jpPWMqXe-+EgBo=5Ot8Bwaofw@mail.gmail.com>
- <2F9DDB93-5EE7-4B5D-AFB5-052968081E0A@gmail.com>
+        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230502050452.27276-1-stanley_chang@realtek.com>
+ <20230502050452.27276-2-stanley_chang@realtek.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <2F9DDB93-5EE7-4B5D-AFB5-052968081E0A@gmail.com>
+In-Reply-To: <20230502050452.27276-2-stanley_chang@realtek.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,30 +81,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/05/2023 03:38, Christian Hewitt wrote:
->> On 1 May 2023, at 7:51 pm, Martin Blumenstingl <martin.blumenstingl@googlemail.com> wrote:
->>
->> Hi Dmitry,
->>
->> On Wed, Apr 26, 2023 at 11:58 AM Dmitry Rokosov
->> <ddrokosov@sberdevices.ru> wrote:
->>>
->>> Add the documentation for Amlogic A1 Peripherals clock driver,
->>> and A1 Peripherals clock controller bindings.
->> Maybe a native English speaker can comment on whether it's
->> "peripheral" or "peripherals".
+On 02/05/2023 07:04, Stanley Chang wrote:
+> Add a new compatible name 'snps,dwc3-rtk-soc' of DT for realtek dwc3
+> core to adjust the global register start address
 > 
-> I’m not a grammar specialist, but I would write:
-> 
-> “Add documentation and bindings for the Amlogic A1 SoC peripherals
-> clock driver”
-> 
-> Peripherals is the correct plural but reads better when you add
-> context on the type of peripherals.
+> The RTK DHC SoCs were designed, the global register address offset at
 
-Drop the "driver" references - from the binding itself and from commit
-msg. The bindings are for hardware, not for the driver, so: "for the
-Amlogic A1 SoC peripherals clock controller.".
+What are: "RTK" and "DHC"? These are manufactured by Synopsys as you
+suggest in the patch?
+
+
+> 0x8100. The default address offset is constant at DWC3_GLOBALS_REGS_START
+> (0xc100). Therefore, add the compatible name of device-tree to specify
+> the SoC custom's global register start address.
+> 
+> Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
+
+Based on your email, rtk could mean Realtek, so the compatible is
+clearly wrong.
+
+> ---
+>  v3 to v4 change:
+> Use the compatible name to specify the global register address offset.
+> If the compatible name is "snps,dwc3-rtk-soc", then the offset use 0x8100.
+> Otherwise, the offset is default value 0xc100.
+> 
 
 Best regards,
 Krzysztof
