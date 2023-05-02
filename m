@@ -2,135 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 816F76F4595
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 15:54:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFD556F4599
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 15:55:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234190AbjEBNyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 09:54:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52106 "EHLO
+        id S234422AbjEBNzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 09:55:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbjEBNx7 (ORCPT
+        with ESMTP id S234408AbjEBNzP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 09:53:59 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2088.outbound.protection.outlook.com [40.107.220.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DD38E9;
-        Tue,  2 May 2023 06:53:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eBsvAIvmafHE/efn0UwlLwGiW8jDB2WE2EuyZBLqUGq0XrAOJMV/aM3ny5SldGElqg+4rQvVZmseTEO3qF05wNYwdsnJab8UOx1bvrIoenCzDe/vxmf93Q4PMjlfM/cB2QmT/ND3Cs0+74m1qwqvW/RPrxOhppzIqj3saT/998XOevAvLEhb1K87wG4vJGV4P/EC+S00ELLrSlCdI4rR9rTpn4OGoF+P9RIDtSQeqCqE3qdUrA3U0vG3uQH8flZaCayO+5GCc+eM55FJslAjJ4ZVTNLT4qyVgrcBGtCFE55S2qLrKV9/xJNu9/Y6sLiLjWKAbs3F0k5lp/66PiZnKA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=y35OiaIke8BzC7ox+rDD+4ZtSNoW0nj/JbGbGsk96Is=;
- b=mHPOd73braktkqmZBT3YLTAbPFdG9P96pyV/2lAwYxCCR+IIF46b13QVmo2x7O1oDKoLW4swJymQe/JFX9MjJtgRed0EHvLB5rpAjlAADjkIh0pVf2jGUN7TELr96PtrJ+chebh/YTmaMUK1Y/JCy0QDeSXmGREj9QT0NYQHh+pMnKI6j8aBZScvj0nuf5Kf1H3IZIYq3PwOhMU+icW5hxRA+e5qyswLvo3r1owGrHJKQEiXTXrv8gbCKtfg6MMwTXoDi1F2/0g3zUrQaeeGXLYx7xn6TRxLHsyCQ8zCFw4gYhReec7mqF02q+AgZeoYmSRd+YKNElhKh1T+xAgtjQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=y35OiaIke8BzC7ox+rDD+4ZtSNoW0nj/JbGbGsk96Is=;
- b=asbIVCaEcOecCRQP/+rzF3vxgqPHkTtjhpMIyVeNQ09JOkr/b5YMZrcTS5ElLe+vOkAwydZDkq6c7L3Fy0Px0xKPoXfANIlrSY5/+IIcjU2sHnEpqnEe8MxqsHqzkc3cS9hri4ele7Jm7fp0zXXA5WYa8QKnCbGOQz6H4KNc3bo=
-Received: from DS7PR03CA0182.namprd03.prod.outlook.com (2603:10b6:5:3b6::7) by
- SA1PR12MB7412.namprd12.prod.outlook.com (2603:10b6:806:2b2::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6277.34; Tue, 2 May 2023 13:53:56 +0000
-Received: from DM6NAM11FT012.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3b6:cafe::af) by DS7PR03CA0182.outlook.office365.com
- (2603:10b6:5:3b6::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.31 via Frontend
- Transport; Tue, 2 May 2023 13:53:56 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT012.mail.protection.outlook.com (10.13.173.109) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6363.20 via Frontend Transport; Tue, 2 May 2023 13:53:55 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 2 May
- 2023 08:53:37 -0500
-From:   Michal Simek <michal.simek@amd.com>
-To:     <linux-kernel@vger.kernel.org>, <monstr@monstr.eu>,
-        <michal.simek@xilinx.com>, <git@xilinx.com>
-CC:     Varalaxmi Bingi <varalaxmi.bingi@amd.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH] ARM: zynq: dts: Setting default i2c clock frequency to 400kHz
-Date:   Tue, 2 May 2023 15:53:35 +0200
-Message-ID: <4dde5d1eb8e4572dae4295a19a4c83002a58e5da.1683035611.git.michal.simek@amd.com>
-X-Mailer: git-send-email 2.36.1
+        Tue, 2 May 2023 09:55:15 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9412449B;
+        Tue,  2 May 2023 06:55:13 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1a66e7a52d3so28160995ad.0;
+        Tue, 02 May 2023 06:55:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683035713; x=1685627713;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OtDG78lsF+fPLCI3Bu6R8mmS7IAEKSK44SfSSK62yEQ=;
+        b=sUeb8DpcI9qJ7BfUs5EDtDiAZ+/Lzvm8vsvnyc3tctb10tAIroUvfTC5crgm1odtGA
+         EZXSc9WI4Knc1NKFfUMMlD1nXM0eYD8UVrzssL5b0cWeMZzInA4zMngztvsUxf87PByK
+         Ph6OYT4ihvHFffqnh6VffwbGq4cuCEauiKO+7tZRjGAtwjGGlXgsF4EcwBD0dCmgXq4y
+         hTsELhdyHOdaSywPjr2s2Ty1alGE2G0KLhlR/NEMPQDR5aozubVgj3LJxukPvnBZYOco
+         VD0WQLTFjhU0muuthbOKKhZTRwUdW8qrvDNTyGLjQf1r5rJopu6CtxUvTvbTW+odPfFT
+         gNkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683035713; x=1685627713;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OtDG78lsF+fPLCI3Bu6R8mmS7IAEKSK44SfSSK62yEQ=;
+        b=lMeAqpEyxv/MiEZcbQOrt7Hq1F/zH47B5MN1Zuk0YCoPom5r5ReH8sCQc0lV5TorOq
+         Ch+q0Lisi+h0aDIx4HQQsHbz3pE6aArwIe8WTK+YTOJ78MJzDPfjZUmEuE9qgv5YUkqQ
+         TE0kzva5axWkwf9qu/p/FBWhqAdo2PdhsVfp/Ja/byTKklbV69LnSnlQadWPxs9vFxj+
+         h9EoA/Pc/3a4UM8ncvKdiCjvcxEf+U/2O7iZwaCkX+vUWMxmqT++KwEj5ZWJ4FTlzhhl
+         kgxa5QI6CTPQldZ0P+R4VGwhtTOXLF2KnwZtbK08hCBcRENOKHHqWBq7F3JSKT6ypBy0
+         Ywlg==
+X-Gm-Message-State: AC+VfDyEnMsuH29iCQVX2gB8SA2sprmYXsD+61r5OIAwosJVp2uU/8ON
+        cjXa9BwePOun0wc5UyhTIyjwuLCJcyY=
+X-Google-Smtp-Source: ACHHUZ7DeInHVfAfYZ22GsC4kcFN6f/dkzYAtsUYOB4o+CgyTpUfedoFFZbn35SDfP5T0CYCPn26JQ==
+X-Received: by 2002:a17:903:4d:b0:1aa:dba2:d155 with SMTP id l13-20020a170903004d00b001aadba2d155mr9903572pla.48.1683035713298;
+        Tue, 02 May 2023 06:55:13 -0700 (PDT)
+Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id s17-20020a170902a51100b001a967558656sm15959491plq.42.2023.05.02.06.54.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 May 2023 06:55:09 -0700 (PDT)
+Message-ID: <64790637-279a-a1ca-292b-f9f1fac69f14@gmail.com>
+Date:   Tue, 2 May 2023 22:54:45 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT012:EE_|SA1PR12MB7412:EE_
-X-MS-Office365-Filtering-Correlation-Id: 28531aad-25d5-46ac-a0b7-08db4b14ac0f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: IU1KmrWyh3y1mn9IJyR1QOeEQusnU6x9TfqMv6pGY5WFMqW+f87YaIsXh+NolI/AhLug2G9y6sH9/4p39V8b1cleCZPH2HYezZFKx+HI1VwJJelFcTWCBkEo+GTUoHmxz4i/EK4QW6uQbHGednzG7vIUVZ1gW5x7gYr0Zr94y3t7276HYSExE3UjaauMxot1YzzukZxTOvbGP6VGkV9K3z9vNeX5VIfUQ/C8g4nVlNitaven16N38IiTPkSg6E0+fxo/7gv8PryXkoSU8Y+WRyRqv4Hlq35ngZg5fk/4jX45FTtHuf4cbOAvoREMFfGwEbLnb2x7aCQkf7X30iUcog/vdWn++Kl7kSynYbNGBk6ZipOMOUj5N0QRWnMQggMVlkEXJDjI6+JttUS4u1JFTHJoBkzmpKM7ZKpqCtwkzEJe4bXyqZjb4V9Vk0u4FynIf4hWCFn1gjlj7+dhMSq5hUz1QEZSfyK98fiGTPo9E16QZq+ifnqNVrTEw8UslHQrLeXzuIVPA2m17jVe0l7po5/SM70y6ksUjVPka0EHZFrQ3JTfnUIzzN4Lz3pCh5jw780fSbBhpHaaiBPBVrsyX8IVzVkEor6WIxjsunjFDZ+5QDDCLXJth2FNucn5QwiJAYeaA1rtpe3jfsJXQHb7S21eMOEbAEKMdCHNM4BYkk2c278lgBXy9fLlqSk3IvJIH08NSPefpkMutaocy4ICgkgG+uY288NZ3f7H89zEvCqgOpRQbpJrTHv6Hh4iiEdm
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(396003)(346002)(376002)(451199021)(46966006)(40470700004)(36840700001)(426003)(336012)(2616005)(40480700001)(82310400005)(26005)(186003)(16526019)(5660300002)(54906003)(8676002)(316002)(478600001)(110136005)(70206006)(4326008)(70586007)(2906002)(82740400003)(81166007)(41300700001)(356005)(36756003)(86362001)(83380400001)(36860700001)(47076005)(4744005)(44832011)(8936002)(40460700003)(36900700001)(2101003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2023 13:53:55.9629
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 28531aad-25d5-46ac-a0b7-08db4b14ac0f
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT012.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7412
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] docs/ja_JP/SubmittingPatches: fix typo of Reviewd
+To:     Deming Wang <wangdeming@inspur.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        corbet@lwn.net, shibata@linuxfoundation.org,
+        Akira Yokosawa <akiyks@gmail.com>
+References: <20230502010157.1655-1-wangdeming@inspur.com>
+Content-Language: en-US
+From:   Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <20230502010157.1655-1-wangdeming@inspur.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Varalaxmi Bingi <varalaxmi.bingi@amd.com>
-
-Setting default i2c clock frequency for Zynq to maximum rate of 400kHz.
-Current default value is 100kHz.
-
-Signed-off-by: Varalaxmi Bingi <varalaxmi.bingi@amd.com>
-Signed-off-by: Michal Simek <michal.simek@amd.com>
----
-
- arch/arm/boot/dts/zynq-7000.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/arch/arm/boot/dts/zynq-7000.dtsi b/arch/arm/boot/dts/zynq-7000.dtsi
-index cd9931f6bcbd..a7db3f3009f2 100644
---- a/arch/arm/boot/dts/zynq-7000.dtsi
-+++ b/arch/arm/boot/dts/zynq-7000.dtsi
-@@ -149,6 +149,7 @@ i2c0: i2c@e0004000 {
- 			clocks = <&clkc 38>;
- 			interrupt-parent = <&intc>;
- 			interrupts = <0 25 4>;
-+			clock-frequency = <400000>;
- 			reg = <0xe0004000 0x1000>;
- 			#address-cells = <1>;
- 			#size-cells = <0>;
-@@ -160,6 +161,7 @@ i2c1: i2c@e0005000 {
- 			clocks = <&clkc 39>;
- 			interrupt-parent = <&intc>;
- 			interrupts = <0 48 4>;
-+			clock-frequency = <400000>;
- 			reg = <0xe0005000 0x1000>;
- 			#address-cells = <1>;
- 			#size-cells = <0>;
--- 
-2.36.1
-
+Wy1DQyBrb3N1a2UsIGhlIGRvZXNuJ3QgcmV2aWV3IGphX0pQIGRvY3MgYW55bW9yZV0NCg0K
+SGksDQoNCk9uIE1vbiwgMSBNYXkgMjAyMyAyMTowMTo1NyAtMDQwMCwgRGVtaW5nIFdhbmcg
+d3JvdGU6DQo+IFdlIHNob3VsZCB1c2UgdGhlIFJldmlld2VkIHJlcGxhY2UgdGhlIFJldmll
+d2QuDQoNCkNhbid0IHBhcnNlIC4uLg0KDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBEZW1pbmcg
+V2FuZyA8d2FuZ2RlbWluZ0BpbnNwdXIuY29tPg0KPiAtLS0NCj4gIERvY3VtZW50YXRpb24v
+dHJhbnNsYXRpb25zL2phX0pQL1N1Ym1pdHRpbmdQYXRjaGVzIHwgMiArLQ0KPiAgMSBmaWxl
+IGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pDQoNClRoaXMgbG9va3Mg
+bGlrZSBhIHJlc2VuZCBvZiBhIHBhdGNoIHlvdSBwb3N0ZWQgZWFybGllciB3aXRoIHRoZSBj
+aGFyc2V0DQppbiB0aGUgbWFpbCBoZWFkZXIgZml4ZWQuDQoNCldoZW4geW91IGRvIHJlc2Vu
+ZCwgcGxlYXNlIG1ha2UgaXQgb2J2aW91cyBmb3IgcmV2aWV3ZXJzIGl0IGlzIGEgcmVzZW5k
+Lg0KDQpJbiB0aGlzIGNhc2UsIHlvdSBoYXZlIGNoYW5nZWQgdGhlIHRpdGxlIGFuZCBjaGFu
+Z2Vsb2cgdGV4dCwgc28gaXQNCnNob3VsZCBoYXZlIGJlZW4gc2VudCBhcyBhIHYyLg0KDQpZ
+b3UgYXJlIGF0dGVtcHRpbmcgdG8gZml4IGFuIGlzc3VlIGluIGEgdHJhbnNsYXRpb24gb2YN
+ClN1Ym1pdHRpbmdQYXRjaGVzIChvcmlnaW5hbCBvbmUgaXMgbm93IHN1Ym1pdHRpbmctcGF0
+Y2hlcy5yc3QNCnVuZGVyIERvY3VtZW50YXRpb24vcHJvY2Vzcy8pLCBzbyBwbGVhc2UgZm9s
+bG93IHRoZSBjb252ZW50aW9ucw0KZGVzY3JpYmVkIHRoZXJlLiANCg0KQW55d2F5LCBKb24g
+bWlnaHQganVzdCBwaWNrIHRoaXMgb25lIHdpdGggaGlzIGVkaXQgb2YgY2hhbmdlbG9nLg0K
+DQpTbyAoYWdhaW4pLA0KDQpSZXZpZXdlZC1ieTogQWtpcmEgWW9rb3Nhd2EgPGFraXlrc0Bn
+bWFpbC5jb20+DQoNCj4gDQo+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL3RyYW5zbGF0
+aW9ucy9qYV9KUC9TdWJtaXR0aW5nUGF0Y2hlcyBiL0RvY3VtZW50YXRpb24vdHJhbnNsYXRp
+b25zL2phX0pQL1N1Ym1pdHRpbmdQYXRjaGVzDQo+IGluZGV4IDA0ZGViNzdiMjBjNi4uNTMz
+NGRiNDcxNzQ0IDEwMDY0NA0KPiAtLS0gYS9Eb2N1bWVudGF0aW9uL3RyYW5zbGF0aW9ucy9q
+YV9KUC9TdWJtaXR0aW5nUGF0Y2hlcw0KPiArKysgYi9Eb2N1bWVudGF0aW9uL3RyYW5zbGF0
+aW9ucy9qYV9KUC9TdWJtaXR0aW5nUGF0Y2hlcw0KPiBAQCAtNDUwLDcgKzQ1MCw3IEBAIFJl
+dmlld2VkLWJ5OiDjgr/jgrDjga/jgIHjgZ3jgozjgajjga/nlbDjgarjgorjgIHkuIvoqJjj
+ga7jg6zjg5Pjg6Xjg7zjgqLlrqPoqIANCj4gICAgICAgICAgICAgIOeKtuazgeOBq+OBiuOB
+hOOBpuOBneOBruWuo+iogOOBl+OBn+ebrueahOOChOapn+iDveOBjOato+OBl+OBj+Wun+eP
+vuOBmeOCi+OBk+OBqOOBq+mWouOBl+OBpuOAgQ0KPiAgICAgICAgICAgICAg44GE44GL44Gq
+44KL5L+d6Ki844KC44GX44Gq44GEKOeJueOBq+OBqeOBk+OBi+OBp+aYjuekuuOBl+OBquOB
+hOmZkOOCiinjgIINCj4gIA0KPiAtUmV2aWV3ZC1ieSDjgr/jgrDjga/jgZ3jga7jg5Hjg4Pj
+g4HjgYzjgqvjg7zjg43jg6vjgavlr77jgZfjgabpganliIfjgarkv67mraPjgafjgYLjgaPj
+gabjgIHmt7HliLvjgarmioDooZPnmoQNCj4gK1Jldmlld2VkLWJ5IOOCv+OCsOOBr+OBneOB
+ruODkeODg+ODgeOBjOOCq+ODvOODjeODq+OBq+WvvuOBl+OBpumBqeWIh+OBquS/ruato+OB
+p+OBguOBo+OBpuOAgea3seWIu+OBquaKgOihk+eahA0KPiAg5ZWP6aGM44KS5q6L44GX44Gm
+44GE44Gq44GE44Go44GE44GG5oSP6KaL44Gu5a6j6KiA44Gn44GZ44CC6IiI5ZGz44Gu44GC
+44KL44Os44OT44Ol44O844Ki44Gv6Kqw44Gn44KCKOODrOODk+ODpeODvA0KPiAg5L2c5qWt
+44KS57WC44GI44Gf44KJKeODkeODg+ODgeOBq+WvvuOBl+OBpiBSZXZpZXdlZC1ieSDjgr/j
+grDjgpLmj5DnpLrjgafjgY3jgb7jgZnjgILjgZPjga7jgr/jgrDjga8NCj4gIOODrOODk+OD
+peODvOOCouOBruWvhOS4juOCkuOCr+ODrOOCuOODg+ODiOOBmeOCi+WDjeOBjeOAgeODrOOD
+k+ODpeODvOOBrumAsuaNl+OBruW6puWQiOOBhOOCkuODoeODs+ODhuODiuOBqw0K
