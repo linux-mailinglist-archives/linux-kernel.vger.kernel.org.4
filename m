@@ -2,101 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 498906F41D8
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 12:39:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFE1B6F41D9
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 12:39:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233496AbjEBKjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 06:39:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39746 "EHLO
+        id S233565AbjEBKjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 06:39:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233888AbjEBKiv (ORCPT
+        with ESMTP id S233832AbjEBKjE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 06:38:51 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F47459F0;
-        Tue,  2 May 2023 03:37:54 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 342AbZoT5026435, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 342AbZoT5026435
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Tue, 2 May 2023 18:37:35 +0800
-Received: from RTEXMBS05.realtek.com.tw (172.21.6.98) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Tue, 2 May 2023 18:37:39 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS05.realtek.com.tw (172.21.6.98) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Tue, 2 May 2023 18:37:39 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
- RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
- 15.01.2375.007; Tue, 2 May 2023 18:37:39 +0800
-From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
-        <stanley_chang@realtek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v4 2/2] dt-bindings: usb: snps,dwc3: Add the compatible name 'snps,dwc3-rtk-soc'
-Thread-Topic: [PATCH v4 2/2] dt-bindings: usb: snps,dwc3: Add the compatible
- name 'snps,dwc3-rtk-soc'
-Thread-Index: AQHZfLOhYfbzHfxzYE2TNUg+fEIenq9GE1eAgACG7nD//4ryAIAAh9bw//+RWQCAAIlt4A==
-Date:   Tue, 2 May 2023 10:37:39 +0000
-Message-ID: <c44baa9fae5c445c90103cd2e129ab0b@realtek.com>
-References: <20230502050452.27276-1-stanley_chang@realtek.com>
- <20230502050452.27276-2-stanley_chang@realtek.com>
- <2653e0d1-6570-7469-51da-b539b5c14299@linaro.org>
- <bc5cd630d96f44bcaad7f95f2f45aac1@realtek.com>
- <49d2b103-de1e-637a-1bf0-aaba1c6afaf4@linaro.org>
- <a04e70f97bcb48048edb2f6db7bb6c25@realtek.com>
- <f51b4dc9-e1da-7c9c-1e39-c8510569db9d@linaro.org>
-In-Reply-To: <f51b4dc9-e1da-7c9c-1e39-c8510569db9d@linaro.org>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
+        Tue, 2 May 2023 06:39:04 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 043F359DE
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 03:38:06 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 0383A5FD31;
+        Tue,  2 May 2023 13:38:04 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1683023884;
+        bh=lHmQ9OUHChl15VP559Y0PqcWhHblA7lT610Z0d2GIMU=;
+        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
+        b=SaZmeuWBJh06+e+TW45ejq/DzpYw0zO97oEI4fssQVPICWlUFfsynapZmXy85eOcp
+         k0b+OeX3Y+xeDSkA2DLNx6wnyLdL1XFFk9keU46HF7g8AtcqS5K/yR0WAHm24IYRYC
+         LwSAn9NPLMbQhjeGGzP3bR/iw7k+P4Qk29xTK7WJ3PsgFKe2YmGStOxvOsCy3RB+te
+         75NmE3lkKz0dSiF3jB2CsRmd96Z8Knx0CiXlBUwJ36kgsommQCpHnScw4mwh3oEfVD
+         R8XG2uav20ppZlzbj5vzougjyS944gh8LO+0l9AWDwAV6NzuSBOCWlXsncRsfF+o8H
+         OBNUC91gq3mDA==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Tue,  2 May 2023 13:38:02 +0300 (MSK)
+From:   =?koi8-r?B?8s/Nwc7P1yDhzMXL08XKIPfB08nM2MXXyd4=?= 
+        <AVRomanov@sberdevices.ru>
+To:     "minchan@kernel.org" <minchan@kernel.org>,
+        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+CC:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>
+Subject: Re: [RFC PATCH v1 0/5] Introduce objects folding mechanism
+Thread-Topic: [RFC PATCH v1 0/5] Introduce objects folding mechanism
+Thread-Index: AQHZcb6HWf5sffHx/k6nmlw8gBQWuq9GroMA
+Date:   Tue, 2 May 2023 10:38:02 +0000
+Message-ID: <20230502103752.sb3mwkdqhdzxlt65@cab-wsm-0029881>
+References: <20230418062503.62121-1-avromanov@sberdevices.ru>
+In-Reply-To: <20230418062503.62121-1-avromanov@sberdevices.ru>
+Accept-Language: ru-RU, en-US
+Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.190.159]
-x-kse-serverinfo: RTEXMBS05.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+x-originating-ip: [172.16.0.25]
+Content-Type: text/plain; charset="koi8-r"
+Content-ID: <9DEC1EF139199848A543125A8622170A@sberdevices.ru>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/02 09:07:00 #21205017
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgS3J6eXN6dG9mLA0KDQo+ID4+Pj4gT24gMDIvMDUvMjAyMyAwNzowNCwgU3RhbmxleSBDaGFu
-ZyB3cm90ZToNCj4gPj4+Pj4gQWRkIGEgbmV3IGNvbXBhdGlibGUgbmFtZSAnc25wcyxkd2MzLXJ0
-ay1zb2MnIG9mIERUIGZvciByZWFsdGVrDQo+ID4+Pj4+IGR3YzMgY29yZSB0byBhZGp1c3QgdGhl
-IGdsb2JhbCByZWdpc3RlciBzdGFydCBhZGRyZXNzDQo+ID4+Pj4+DQo+ID4+Pj4+IFRoZSBSVEsg
-REhDIFNvQ3Mgd2VyZSBkZXNpZ25lZCwgdGhlIGdsb2JhbCByZWdpc3RlciBhZGRyZXNzIG9mZnNl
-dA0KPiA+Pj4+PiBhdA0KPiA+Pj4+DQo+ID4+Pj4gV2hhdCBhcmU6ICJSVEsiIGFuZCAiREhDIj8g
-VGhlc2UgYXJlIG1hbnVmYWN0dXJlZCBieSBTeW5vcHN5cyBhcw0KPiA+Pj4+IHlvdSBzdWdnZXN0
-IGluIHRoZSBwYXRjaD8NCj4gPj4+DQo+ID4+PiBSVEsgaXMgUmVhbHRlay4NCj4gPj4+IERIQyBp
-cyB0aGUgZGVwYXJ0bWVudCBuYW1lIGluIFJlYWx0ZWsgYW5kIHRoZSBhYmJyZXZpYXRpb24gb2Yg
-dGhlDQo+ID4+PiBEaWdpdGFsDQo+ID4+IEhvbWUgQ2VudGVyLg0KPiA+Pj4gVGhlIFVTQiBjb250
-cm9sbGVyIG9mIFJUSyBESEMgU29DcyB1c2VkIHRoZSBEV0MzIElQIG9mIFN5bm9wc3lzLg0KPiA+
-Pg0KPiA+PiBUaGVuIGVudGlyZSBjb21wYXRpYmxlIGlzIG5vdCBjb3JyZWN0LiBWZW5kb3IgaXMg
-UmVhbHRlayBub3QgU3lub3BzeXMuDQo+ID4+IERIQyBpcyBub3QgZXZlbiBkZXZpY2UgbmFtZS4g
-VXNlIHJlYWwgZGV2aWNlIG5hbWVzLg0KPiA+DQo+ID4gU28sIGNhbiB3ZSB1c2UgdGhlIGNvbXBh
-dGlibGUgbmFtZSBhcyAncmVhbHRlayxkd2MzJyA/DQo+IA0KPiBkd2MzIGlzIG5vdCBhIHJlYWwg
-ZGV2aWNlIG5hbWUgZm9yIFJlYWx0ZWsuDQoNCldlIHN0aWxsIHVzZSBkd2MzIElQIGluIFJlYWx0
-ZWsncyBTb0MuIFdoeSBpcyB0aGUgbmFtZSAiZHdjMyIgaW5hcHByb3ByaWF0ZT8NCg0KU2hvdWxk
-IGNvbXBhdGliaWxpdHkgbmFtZXMgdXNlIHRoZSBTb0MgbmFtZT8NCkZvciBleGFtcGxlLCBvdXIg
-U29DIG5hbWUNClJURDEyOXgsIFJURDEzOXgsIFJURDE2MXgsIFJURDE2MXhCLCBldGMuDQpTaG91
-bGQgd2UgdXNlIHRoZXNlIG5hbWVzIGluIGNvbXBhdGlibGUgbmFtZXM/DQoicmVhbHRlaywgcnRk
-MTI5eCIsICJyZWFsdGVrLCBydGQxMzl4IiwgInJlYWx0ZWssIHJ0ZDE2MXgiLi4uZXRjLg0KDQpU
-aGFua3MsDQpTdGFubGV5DQo=
+Hello!
+
+On Tue, Apr 18, 2023 at 09:24:58AM +0300, Alexey Romanov wrote:
+> Hello!
+>=20
+> This RFC series adds feature which allows fold identical
+> zsmalloc objects into a single one.
+>=20
+> Based on ZRAM version:
+> https://lore.kernel.org/lkml/Y3w8%2Fq%2FHoSbqamoD@google.com/t/
+>=20
+> Let's imagine that 3 objects with the same content got into zsmalloc:
+>=20
+> +----------------+   +----------------+   +----------------+
+> |    handle 1    |   |    handle 2    |   |    handle 3    |
+> +-------+--------+   +-------+--------+   +--------+-------+
+>         |                    |                     |
+>         |                    |                     |
+> +-------v--------+   +-------v---------+  +--------v-------+
+> |zsmalloc  object|   |zsmalloc  object |  |zsmalloc  object|
+> ++--------------++   +-+-------------+-+  ++--------------++
+>  +--------------+      +-------------+     +--------------+
+>  | buffer: "abc"|      |buffer: "abc"|     | buffer: "abc"|
+>  +--------------+      +-------------+     +--------------+
+>=20
+> As you can see, the data is duplicated. Fold mechanism saves
+> (after scanning objects) only one zsmalloc object. Here's
+> what happens after the scan and fold:
+>=20
+> +----------------+   +----------------+   +----------------+
+> |    handle 1    |   |    handle 2    |   |    handle 3    |
+> +-------+--------+   +-------+--------+   +--------+-------+
+>         |                    |                     |
+>         |                    |                     |
+>         |           +--------v---------+           |
+>         +-----------> zsmalloc  object <-----------+
+>                     +--+-------------+-+
+>                        +-------------+
+>                        |buffer: "abc"|
+>                        +-------------+
+>=20
+> Thus, we reduced the amount of memory occupied by 3 times.
+>=20
+> This mechanism doesn't affect the perf of the zsmalloc itself in
+> any way (maybe just a little bit on the zs_free() function).
+> In order to describe each such identical object, we (constantly)
+> need sizeof(fold_rbtree_node) bytes. Also, all struct size_class now
+> have new field struct rb_root fold_rbtree.
+>=20
+> Testing on my system (8GB RAM + 1Gb ZRAM SWAP) showed that at high
+> loads, on average, when calling the fold mechanism, we can save
+> up to 15-20% of the memory usage.
+>=20
+> This patch series adds a new sysfs node into ZRAM - trigger folding
+> and provides new field in mm_stat. This field shows how many pages
+> freed during folding:
+>=20
+>   $ cat /sys/block/zram0/mm_stat
+>     431452160 332984392 339894272 0 339894272 282 0 51374 51374 0
+>=20
+>   $ echo 1 > /sys/block/zram0/fold
+>=20
+>   $ cat /sys/block/zram/mm_stat
+>     431452160 270376848 287301504 0 339894272 282 0 51374 51374 6593
+>=20
+> Alexey Romanov (5):
+>   mm/zsmalloc: use ARRAY_SIZE in isolate_zspage()
+>   mm/zsmalloc: get rid of PAGE_MASK
+>   mm/zsmalloc: introduce objects folding mechanism
+>   zram: add fold sysfs knob
+>   zram: add pages_folded to stats
+>=20
+>  Documentation/admin-guide/blockdev/zram.rst |   2 +
+>  drivers/block/zram/zram_drv.c               |  30 +-
+>  include/linux/zsmalloc.h                    |   4 +
+>  mm/Kconfig                                  |   9 +
+>  mm/zsmalloc.c                               | 484 +++++++++++++++++++-
+>  5 files changed, 513 insertions(+), 16 deletions(-)
+>=20
+> --=20
+> 2.38.1
+>=20
+
+Really sorry for the noise, but could you comment on my patchset and
+results? We have moved away from the terms and concepts used in the
+patent we discussed in the ZRAM version, and I believe we can safely use
+these changes in zsmalloc.
+
+--=20
+Thank you,
+Alexey=
