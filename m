@@ -2,166 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E57926F4D65
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 01:05:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BCFD6F4D79
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 01:15:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbjEBXFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 19:05:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54416 "EHLO
+        id S229914AbjEBXPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 19:15:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbjEBXFW (ORCPT
+        with ESMTP id S229449AbjEBXPp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 19:05:22 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F26CB40DE
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 16:05:11 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-b99f0a0052fso6203056276.3
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 16:05:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683068711; x=1685660711;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TUKDQYPWqgHcO1XQ1Dc3esJ/u5Dg98+S6HrK92DBIP4=;
-        b=irnUbCMInaRspFhs3sQBArEm1VLRoaQ9dsFTug/GipTofQOyfj68J22hJg25cBpCFa
-         neyxbrNX9aQ9z5xXk15pWRUaUwR+5QgJM8TqriRmL8ztfmvqQCN4MiiWE1B0wFHGiiHx
-         4GM4VR0O4EVzRz0QvQBpwHUEvFYxjOBbz5Hcn165JzmykAzr96NDzGbVwj/GDj8htxHG
-         r8qhF1b9SyF6Tuk3/OUl6CvUBQYyDi5DzhjLXkL+YkHMWIjVDlJ1JSl5Ewmicn8HBlTm
-         CjRhSDMWUV8w9jW9ymx/+nARIPsvY6dtlPmlqwsOWMivijJCRtT8eYEiUldUJT2XQDZW
-         GYrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683068711; x=1685660711;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TUKDQYPWqgHcO1XQ1Dc3esJ/u5Dg98+S6HrK92DBIP4=;
-        b=RB9VqnbygnSug9xc6nB2qY8mvl1roYetcBWcqYUNiR4ejAl62c23RpvcnXbxPtW5ZL
-         GC5z8kpzl2dBAXg6pN7Q0SgoCS3T7Crr/tVzycf/pTaMyfCpUagu/RDVChLleQGLuFRu
-         L5a2/zj1PcC6pbKYFv6yaNcdOAImRMAxaBiiPGT35Hwxrc28mGN+8bLuTwmgfHzL3aUV
-         WEqgEQhqzVeAF0MmLKfw9NvY1Mwp+sXe3/OGPtijga4Qgd2+guQvYF7r58dQcr3BRZFd
-         SddRpme5TnzDqaob40Wn37cgGkSp1rEsIQ6IEoGOXaPKGgNK6doDD5pgxoN9wjBjqPit
-         JeKQ==
-X-Gm-Message-State: AC+VfDzIro5QB7QSUMhVNWnWjtZkiYNFS4H5frs8q3+F74WrNeowC1EX
-        VVYAjv7EoII9Pz3lCb9U0qPr0c/j/8mElHtWo/3eXw==
-X-Google-Smtp-Source: ACHHUZ7jsYrkoiEy4cySESG4HDKDzMYd6UFgrTHZJlXYGIrBwQiXUk/zzGx2KyuHlp7BIdqF6rvzDKznYWKiH5AXqvU=
-X-Received: by 2002:a25:e792:0:b0:b9d:8613:6936 with SMTP id
- e140-20020a25e792000000b00b9d86136936mr14622784ybh.50.1683068710692; Tue, 02
- May 2023 16:05:10 -0700 (PDT)
+        Tue, 2 May 2023 19:15:45 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A06C26A9;
+        Tue,  2 May 2023 16:15:44 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 342NFRNJ005676;
+        Tue, 2 May 2023 18:15:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1683069327;
+        bh=rO3x08YYa6XbuAIULHSQ31VQY29fYqGzY1482CJ8rv8=;
+        h=From:To:CC:Subject:Date;
+        b=o5exQk9RRn6KLYJ2ZO1ehv5iIQmyduMRToO20o91GG2t89Gh8aL1uadVGqDuYSF0h
+         SrSoUCMB+N0lrW+wXn1VWS9zO/Jd1AS0+Ojg6/ILFv1axDzpNRmbGHDHxk2fAmiwzh
+         g9zumZK0HD45AGvgxt16iARz2DhdGFyLOdYzxNdI=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 342NFRkp081509
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 2 May 2023 18:15:27 -0500
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 2
+ May 2023 18:15:27 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 2 May 2023 18:15:27 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 342NFRxQ073381;
+        Tue, 2 May 2023 18:15:27 -0500
+From:   Hari Nagalla <hnagalla@ti.com>
+To:     <nm@ti.com>, <vigneshr@ti.com>
+CC:     <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3 0/3] Add R5F and C71 DSP nodes for J784S4 SoC
+Date:   Tue, 2 May 2023 18:15:24 -0500
+Message-ID: <20230502231527.25879-1-hnagalla@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20230501175025.36233-1-surenb@google.com> <ZFBvOh8r5WbTVyA8@casper.infradead.org>
- <CAJuCfpHfAFx9rjv0gHK77LbP-8gd-kFnWw=aqfQTP6pH=zvMNg@mail.gmail.com>
- <ZFCB+G9KSNE+J9cZ@casper.infradead.org> <CAJuCfpES=G8i99yYXWoeJq9+JVUjX5Bkq_5VNVTVX7QT+Wkfxg@mail.gmail.com>
- <ZFEmN6G7WRy59Mum@casper.infradead.org> <CAJuCfpFs+Rgpu8v+ddHFwtOx33W5k1sKDdXHM2ej1Upyo_9y4g@mail.gmail.com>
- <ZFGPLXIis6tl1QWX@casper.infradead.org>
-In-Reply-To: <ZFGPLXIis6tl1QWX@casper.infradead.org>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Tue, 2 May 2023 16:04:59 -0700
-Message-ID: <CAJuCfpGgc_bCEAE5LrhYPk=qXMU=owgiABTO9ZNqaBx-xfrOuQ@mail.gmail.com>
-Subject: Re: [PATCH 1/3] mm: handle swap page faults under VMA lock if page is uncontended
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, mhocko@suse.com,
-        josef@toxicpanda.com, jack@suse.cz, ldufour@linux.ibm.com,
-        laurent.dufour@fr.ibm.com, michel@lespinasse.org,
-        liam.howlett@oracle.com, jglisse@google.com, vbabka@suse.cz,
-        minchan@google.com, dave@stgolabs.net, punit.agrawal@bytedance.com,
-        lstoakes@gmail.com, hdanton@sina.com, apopple@nvidia.com,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 2, 2023 at 3:31=E2=80=AFPM Matthew Wilcox <willy@infradead.org>=
- wrote:
->
-> On Tue, May 02, 2023 at 09:36:03AM -0700, Suren Baghdasaryan wrote:
-> > On Tue, May 2, 2023 at 8:03=E2=80=AFAM Matthew Wilcox <willy@infradead.=
-org> wrote:
-> > >
-> > > On Mon, May 01, 2023 at 10:04:56PM -0700, Suren Baghdasaryan wrote:
-> > > > On Mon, May 1, 2023 at 8:22=E2=80=AFPM Matthew Wilcox <willy@infrad=
-ead.org> wrote:
-> > > > >
-> > > > > On Mon, May 01, 2023 at 07:30:13PM -0700, Suren Baghdasaryan wrot=
-e:
-> > > > > > On Mon, May 1, 2023 at 7:02=E2=80=AFPM Matthew Wilcox <willy@in=
-fradead.org> wrote:
-> > > > > > >
-> > > > > > > On Mon, May 01, 2023 at 10:50:23AM -0700, Suren Baghdasaryan =
-wrote:
-> > > > > > > > +++ b/mm/memory.c
-> > > > > > > > @@ -3711,11 +3711,6 @@ vm_fault_t do_swap_page(struct vm_fa=
-ult *vmf)
-> > > > > > > >       if (!pte_unmap_same(vmf))
-> > > > > > > >               goto out;
-> > > > > > > >
-> > > > > > > > -     if (vmf->flags & FAULT_FLAG_VMA_LOCK) {
-> > > > > > > > -             ret =3D VM_FAULT_RETRY;
-> > > > > > > > -             goto out;
-> > > > > > > > -     }
-> > > > > > > > -
-> > > > > > > >       entry =3D pte_to_swp_entry(vmf->orig_pte);
-> > > > > > > >       if (unlikely(non_swap_entry(entry))) {
-> > > > > > > >               if (is_migration_entry(entry)) {
-> > > > > > >
-> > > > > > > You're missing the necessary fallback in the (!folio) case.
-> > > > > > > swap_readpage() is synchronous and will sleep.
-> > > > > >
-> > > > > > True, but is it unsafe to do that under VMA lock and has to be =
-done
-> > > > > > under mmap_lock?
-> > > > >
-> > > > > ... you were the one arguing that we didn't want to wait for I/O =
-with
-> > > > > the VMA lock held?
-> > > >
-> > > > Well, that discussion was about waiting in folio_lock_or_retry() wi=
-th
-> > > > the lock being held. I argued against it because currently we drop
-> > > > mmap_lock lock before waiting, so if we don't drop VMA lock we woul=
-d
-> > > > be changing the current behavior which might introduce new
-> > > > regressions. In the case of swap_readpage and swapin_readahead we
-> > > > already wait with mmap_lock held, so waiting with VMA lock held doe=
-s
-> > > > not introduce new problems (unless there is a need to hold mmap_loc=
-k).
-> > > >
-> > > > That said, you are absolutely correct that this situation can be
-> > > > improved by dropping the lock in these cases too. I just didn't wan=
-t
-> > > > to attack everything at once. I believe after we agree on the appro=
-ach
-> > > > implemented in https://lore.kernel.org/all/20230501175025.36233-3-s=
-urenb@google.com
-> > > > for dropping the VMA lock before waiting, these cases can be added
-> > > > easier. Does that make sense?
-> > >
-> > > OK, I looked at this path some more, and I think we're fine.  This
-> > > patch is only called for SWP_SYNCHRONOUS_IO which is only set for
-> > > QUEUE_FLAG_SYNCHRONOUS devices, which are brd, zram and nvdimms
-> > > (both btt and pmem).  So the answer is that we don't sleep in this
-> > > path, and there's no need to drop the lock.
-> >
-> > Yes but swapin_readahead does sleep, so I'll have to handle that case
-> > too after this.
->
-> Sleeping is OK, we do that in pXd_alloc()!  Do we block on I/O anywhere
-> in swapin_readahead()?  It all looks like async I/O to me.
+This series adds the R5F cluster and C71 DSP processor nodes for
+J784S4 SoC.
 
-Hmm. I thought that we have synchronous I/O in the following paths:
-    swapin_readahead()->swap_cluster_readahead()->swap_readpage()
-    swapin_readahead()->swap_vma_readahead()->swap_readpage()
-but just noticed that in both cases swap_readpage() is called with the
-synchronous parameter being false. So you are probably right here...
-Does that mean swapin_readahead() might return a page which does not
-have its content swapped-in yet?
+The first patch adds R5F cluster nodes to the MAIN and MCU voltage
+domains of J784S4 SoC. The second patch adds the C71 DSP processor
+nodes to the MAIN voltage domain of J784S4 SoC and the third patch
+reserves the IPC shared memory for Virtio/Vring buffers.
+
+Changes in V3:
+- Add memory reservations for remote proc IPC in board file.
+V2: https://lore.kernel.org/all/20230330141536.22480-1-hnagalla@ti.com/ 
+
+Changes in V2:
+- Removed default disable of R5F nodes in the SoC device tree.
+- Consolidated R5F nodes into one patch.
+V1: https://lore.kernel.org/all/20230329093627.30719-1-hnagalla@ti.com/
+
+Hari Nagalla (3):
+  arm64: dts: ti: k3-j784s4-main: Add R5F cluster nodes
+  arm64: dts: ti: k3-j784s4-main: Add C71x DSP nodes
+  arm64: dts: ti: k3-j784s4-evm: Reserve memory for remote proc IPC
+
+ arch/arm64/boot/dts/ti/k3-j784s4-evm.dts      | 318 ++++++++++++++++++
+ arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi    | 168 +++++++++
+ .../boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi     |  40 +++
+ 3 files changed, 526 insertions(+)
+
+-- 
+2.34.1
+
