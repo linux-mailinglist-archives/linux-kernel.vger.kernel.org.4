@@ -2,247 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5A4E6F48FD
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 19:14:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01E2F6F4900
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 19:15:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233920AbjEBROp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 13:14:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53022 "EHLO
+        id S234184AbjEBRPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 13:15:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234222AbjEBROm (ORCPT
+        with ESMTP id S233697AbjEBRPd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 13:14:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E29D210EB
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 10:13:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683047637;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tThVxt1nuGUymGM3Mj1B1ERCCnE2U7N2IjH5Ucb4/08=;
-        b=iFBphMLVXYwmpFoxyeCXAUApOgsa2vpo3eztqcU9od6cSvkbJqyutjKjt28604Dr/A/XxS
-        dAL7PK55M/rHWdleYeJzcWKppJfXNIZnwaOIvqylpuKZl3oSHCi3ffoYYUmSh6qggwjKsY
-        YGdmiqx7BTNf/U48e+xXw+muWNJjgYs=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-77-jDMbXDqLN2WU5TqcDKcipQ-1; Tue, 02 May 2023 13:13:54 -0400
-X-MC-Unique: jDMbXDqLN2WU5TqcDKcipQ-1
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3062e5d0cd3so870701f8f.3
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 10:13:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683047633; x=1685639633;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        Tue, 2 May 2023 13:15:33 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45FF1C0
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 10:15:31 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-63b64a32fd2so4651665b3a.2
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 10:15:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1683047730; x=1685639730;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=tThVxt1nuGUymGM3Mj1B1ERCCnE2U7N2IjH5Ucb4/08=;
-        b=DMSjswLK26wgDTgOoHjjQK6Dk8jO+O5YGQU1ZyJCugJ8yFVcl99x0eaFRAMK5iM/1u
-         U5eahKtiUfu0XMPALvnWgBUMtN9LfEdBKWj22UPlA/3aR0YgiBVGDLAcnbg3ztf5vFvf
-         54eFXG1zpfEFIFxPuKUjYY1X+cpbvyDtRhPiVAuGlfYhepQQKnIROpXoFF7ClWA3W/mV
-         j9dywBc8EAfUhCrXpj+CGl23RKB+4VDgigtem/hSqaefPSLrRzU3O4GCXQwo45qu9nhZ
-         j0q936w4wJhzvPpFbWEEGECioXphQ4P8RLNg8mYDN47q6TCkptsudxwPvcAdiH43QTec
-         E0OA==
-X-Gm-Message-State: AC+VfDxgkMfvzXgBWV1R8NnozH2JW7CGrIsQV4vdeYT2u5BMZpcT1WKS
-        67NxSxiqOu3T8fKtFWlgWOb9ENcRnTqyMpYj5I7VfL8v+crjm6j32bFW+LTVBqyzPdepibutkJj
-        qZxX7uwE3+QWSWIKBD8N3+B2P
-X-Received: by 2002:adf:fe02:0:b0:2d2:29a4:4457 with SMTP id n2-20020adffe02000000b002d229a44457mr12812791wrr.13.1683047632639;
-        Tue, 02 May 2023 10:13:52 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5MdjSLMNym55tU5r7M2pAs93jqzP8q4u+jG7QWacNZyS3DMZ/LgP/rzfEA9/8iHAVgzgcXOg==
-X-Received: by 2002:adf:fe02:0:b0:2d2:29a4:4457 with SMTP id n2-20020adffe02000000b002d229a44457mr12812755wrr.13.1683047632213;
-        Tue, 02 May 2023 10:13:52 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c700:2400:6b79:2aa:9602:7016? (p200300cbc70024006b7902aa96027016.dip0.t-ipconnect.de. [2003:cb:c700:2400:6b79:2aa:9602:7016])
-        by smtp.gmail.com with ESMTPSA id q11-20020a5d574b000000b003049d7b9f4csm17477958wrw.32.2023.05.02.10.13.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 May 2023 10:13:51 -0700 (PDT)
-Message-ID: <1691115d-dba4-636b-d736-6a20359a67c3@redhat.com>
-Date:   Tue, 2 May 2023 19:13:49 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US
-To:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Mika Penttila <mpenttil@redhat.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Theodore Ts'o <tytso@mit.edu>, Peter Xu <peterx@redhat.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>
-References: <cover.1683044162.git.lstoakes@gmail.com>
- <b3a4441cade9770e00d24f5ecb75c8f4481785a4.1683044162.git.lstoakes@gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v7 3/3] mm/gup: disallow FOLL_LONGTERM GUP-fast writing to
- file-backed mappings
-In-Reply-To: <b3a4441cade9770e00d24f5ecb75c8f4481785a4.1683044162.git.lstoakes@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        bh=+A8Sw/GbyUDc6OouvqtsYaVPbEunyRKH6rDdt34P9UU=;
+        b=dsL7jHbGE034WUTc07mFN2pmj7q1QdhVaYAnhUusn2VlN42D987eVEVrsRfbMg2mdq
+         TIiXlbQEj8y/8pyeiyQs9hxpuektYOc0bg7AsjYFvf91tBTlOKr4il/jgAvH1KVO4K5h
+         rjWXwl/gkE3Jk2YR+BtrSOit9oneXJVvOYkW1VukSIgqPAAW7zZZFg2gfBrc+Bb48+na
+         lidGeyKXyfqUtlgsbf7zLUsND13oN7jnoWCQtxFfsJfBmjKcpfb/JLWDZ9VnM0ytv8zd
+         iZ+jiZBaDul86jSR5m9O7FUP4C6vRW9G6EyYGETAwtVW76uMVqxX+GjYMxo4hOBj3k6f
+         b54Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683047730; x=1685639730;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+A8Sw/GbyUDc6OouvqtsYaVPbEunyRKH6rDdt34P9UU=;
+        b=CTbVgszRkBhT1uyru/t81RD97GMRoSphOOUVUi5olyZQjSHVaT97/Jr3ORLwu3GbrO
+         yDK7PGWEeATSBEQopDYXNiXNK86ugbhN/c/WzzHSfgJYgFWkV/5Z5DUcGouqbiyRYOoD
+         YJPjt9e71xb2I8zwY/InTliyf77JBxxW8UyjzNJSTeJK9UtuNmzYza4t8ypaniqypn/8
+         kgtigwRW5nmR945NWF6Vp5FabU2udcggrDMLZwxfP3Dx+JEH65tOMqY5FugdUT8uXOZl
+         QlGnfvLMtLa3njKmEsW7x0DOZFTnkTYL2AT3tJHVJ5ILLH4JlHZ8rzD9CUuq0vYeBKF4
+         xaNw==
+X-Gm-Message-State: AC+VfDyHWNCvr+M7qa2Q+N+wtnWRF5/FLkOvWjzR66gkMKfTKPxcOnF8
+        zBdhiz/rKRV9zwHZnbG1wA+hDg==
+X-Google-Smtp-Source: ACHHUZ5swfbozraNarhMeYBm10PBdqGxzIJMEQxji86jnf86amM1DM0VBEs/+AN6eLoOq84GFcYR+Q==
+X-Received: by 2002:a05:6a20:7d95:b0:f4:98d2:591d with SMTP id v21-20020a056a207d9500b000f498d2591dmr23657544pzj.5.1683047730546;
+        Tue, 02 May 2023 10:15:30 -0700 (PDT)
+Received: from localhost ([135.180.227.0])
+        by smtp.gmail.com with ESMTPSA id p11-20020a635b0b000000b0050bd4bb900csm7393064pgb.71.2023.05.02.10.15.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 May 2023 10:15:29 -0700 (PDT)
+Date:   Tue, 02 May 2023 10:15:29 -0700 (PDT)
+X-Google-Original-Date: Tue, 02 May 2023 10:15:27 PDT (-0700)
+Subject:     Re: [PATCH 0/4] Expose the isa-string via the AT_BASE_PLATFORM aux vector
+In-Reply-To: <CAAeLtUCqyARVaY2YtVXWc_cucMOCbQ2RAd2y35pun_MMagEN_w@mail.gmail.com>
+CC:     bjorn@kernel.org, jrtc27@jrtc27.com, heiko@sntech.de,
+        linux-riscv@lists.infradead.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        kito.cheng@sifive.com, Conor Dooley <conor.dooley@microchip.com>,
+        matthias.bgg@gmail.com, heinrich.schuchardt@canonical.com,
+        greentime.hu@sifive.com, nick.knight@sifive.com,
+        christoph.muellner@vrull.eu,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        heiko.stuebner@vrull.eu
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     philipp.tomsich@vrull.eu
+Message-ID: <mhng-4b9e3d86-2f0b-47da-8a5d-bd383a0171d6@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[...]
+On Tue, 02 May 2023 02:13:10 PDT (-0700), philipp.tomsich@vrull.eu wrote:
+> On Tue, 2 May 2023 at 09:58, Björn Töpel <bjorn@kernel.org> wrote:
+>>
+>> Philipp Tomsich <philipp.tomsich@vrull.eu> writes:
+>>
+>> > It is a pity that the current interface was designed without involving
+>> > RVI (and that I had to ask my team to put together a patch set for
+>> > further discussion, given that none of the other major vendors in RVI
+>> > stepped forward).  I guarantee that plenty of reviewers would have
+>> > highlighted that a central registry (even if it is just a kernel
+>> > header) should be avoided.
+>>
+>> Are you claiming that the hwprobe work was not done in the open, but
+>> secretly merged? That is not only incorrect, but rude to upstream RISC-V
+>> Linux developers. I suggest you review how you interact with upstream
+>> kernel work.
+>
+> Please don't put words into my mouth...
+>
+> I was merely pointing out that there was no engagement by the RVI
+> member companies (in regard to this mechanism) within RVI, which would
+> have prevented Jessica's issue.
+> This would have also helped to address the concerns on vendor-defined
+> extensions.
+>
+> Also who do you refer to when you say "how _you_ interact"?  If it is
+> RVI that you refer to: it doesn't interact with upstream work
+> directly, as it doesn't own any engineering resources.
+> RVI provides a forum for member companies to come to an
+> understanding/design and then have the member companies perform the
+> work and take it upstream.
 
-> +{
-> +	struct address_space *mapping;
-> +
-> +	/*
-> +	 * GUP-fast disables IRQs - this prevents IPIs from causing page tables
-> +	 * to disappear from under us, as well as preventing RCU grace periods
-> +	 * from making progress (i.e. implying rcu_read_lock()).
-> +	 *
-> +	 * This means we can rely on the folio remaining stable for all
-> +	 * architectures, both those that set CONFIG_MMU_GATHER_RCU_TABLE_FREE
-> +	 * and those that do not.
-> +	 *
-> +	 * We get the added benefit that given inodes, and thus address_space,
-> +	 * objects are RCU freed, we can rely on the mapping remaining stable
-> +	 * here with no risk of a truncation or similar race.
-> +	 */
-> +	lockdep_assert_irqs_disabled();
-> +
-> +	/*
-> +	 * If no mapping can be found, this implies an anonymous or otherwise
-> +	 * non-file backed folio so in this instance we permit the pin.
-> +	 *
-> +	 * shmem and hugetlb mappings do not require dirty-tracking so we
-> +	 * explicitly whitelist these.
-> +	 *
-> +	 * Other non dirty-tracked folios will be picked up on the slow path.
-> +	 */
-> +	mapping = folio_mapping(folio);
-> +	return !mapping || shmem_mapping(mapping) || folio_test_hugetlb(folio);
+I'm not even sure what you're looking for here: if RVI doesn't want to 
+work upstream, then complaining that RVI isn't part of upstream 
+discussions is pretty pointless.
 
-"Folios in the swap cache return the swap mapping" -- you might disallow 
-pinning anonymous pages that are in the swap cache.
+>> Why didn't RVI get involved in the review of the series? The expectation
+>> cannot be that all open source projects go to RVI, but rather the other
+>> way around.
+>
+> That is exactly the point I was making and which you seem to miss: RVI
+> does not own any engineering resources and depends solely on its
+> member companies to project into open source projects.
+>
+>> Take a look at commit ea3de9ce8aa2 ("RISC-V: Add a syscall for HW
+>> probing"). Your team was very much involved in the review.
+>
+> I am aware, as I had reviewed and commented on these are well.
+> And my only request (was and) is that we need to figure out a way to
+> efficiently deal with vendor-defined extensions.
 
-I recall that there are corner cases where we can end up with an anon 
-page that's mapped writable but still in the swap cache ... so you'd 
-fallback to the GUP slow path (acceptable for these corner cases, I 
-guess), however especially the comment is a bit misleading then.
-
-So I'd suggest not dropping the folio_test_anon() check, or open-coding 
-it ... which will make this piece of code most certainly easier to get 
-when staring at folio_mapping(). Or to spell it out in the comment 
-(usually I prefer code over comments).
-
-> +}
-> +
->   /**
->    * try_grab_folio() - Attempt to get or pin a folio.
->    * @page:  pointer to page to be grabbed
-> @@ -123,6 +170,8 @@ static inline struct folio *try_get_folio(struct page *page, int refs)
->    */
->   struct folio *try_grab_folio(struct page *page, int refs, unsigned int flags)
->   {
-> +	bool is_longterm = flags & FOLL_LONGTERM;
-> +
->   	if (unlikely(!(flags & FOLL_PCI_P2PDMA) && is_pci_p2pdma_page(page)))
->   		return NULL;
->   
-> @@ -136,8 +185,7 @@ struct folio *try_grab_folio(struct page *page, int refs, unsigned int flags)
->   		 * right zone, so fail and let the caller fall back to the slow
->   		 * path.
->   		 */
-> -		if (unlikely((flags & FOLL_LONGTERM) &&
-> -			     !is_longterm_pinnable_page(page)))
-> +		if (unlikely(is_longterm && !is_longterm_pinnable_page(page)))
->   			return NULL;
->   
->   		/*
-> @@ -148,6 +196,16 @@ struct folio *try_grab_folio(struct page *page, int refs, unsigned int flags)
->   		if (!folio)
->   			return NULL;
->   
-> +		/*
-> +		 * Can this folio be safely pinned? We need to perform this
-> +		 * check after the folio is stabilised.
-> +		 */
-> +		if ((flags & FOLL_WRITE) && is_longterm &&
-> +		    !folio_longterm_write_pin_allowed(folio)) {
-> +			folio_put_refs(folio, refs);
-> +			return NULL;
-> +		}
-
-So we perform this change before validating whether the PTE changed.
-
-Hmm, naturally, I would have done it afterwards.
-
-IIRC, without IPI syncs during TLB flush (i.e., 
-CONFIG_MMU_GATHER_RCU_TABLE_FREE), there is the possibility that
-(1) We lookup the pte
-(2) The page was unmapped and free
-(3) The page gets reallocated and used
-(4) We pin the page
-(5) We dereference page->mapping
-
-If we then de-reference page->mapping that gets used by whoever 
-allocated it for something completely different (not a pointer to 
-something reasonable), I wonder if we might be in trouble.
-
-Checking first, whether the PTE changed makes sure that what we pinned 
-and what we're looking at is what we expected.
-
-... I can spot that the page_is_secretmem() check is also done before 
-that. But it at least makes sure that it's still an LRU page before 
-staring at the mapping (making it a little safer?).
-
-BUT, I keep messing up this part of the story. Maybe it all works as 
-expected because we will be synchronizing RCU somehow before actually 
-freeing the page in the !IPI case. ... but I think that's only true for 
-page tables with CONFIG_MMU_GATHER_RCU_TABLE_FREE.
-
--- 
-Thanks,
-
-David / dhildenb
-
+Maybe you should go talk to you team, then?  Handling vendor extensions 
+via hwprobe has been discussed, sounds like you're confused again.
