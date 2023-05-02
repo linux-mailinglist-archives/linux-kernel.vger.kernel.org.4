@@ -2,89 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 839266F43B4
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 14:23:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B8686F43B8
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 14:23:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233842AbjEBMXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 08:23:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47892 "EHLO
+        id S229703AbjEBMXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 08:23:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjEBMXM (ORCPT
+        with ESMTP id S234032AbjEBMX2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 08:23:12 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 608F7F5;
-        Tue,  2 May 2023 05:23:10 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 1CF3B1F8BE;
-        Tue,  2 May 2023 12:23:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1683030189; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rpq/YOA2Q6NcOyBEqPAtPKwqdnVr3RL2S8jyTOYKx38=;
-        b=E5aokJVmN+jHpsNd8DP9p105k0emCQTSinruXmu1ftje8AFOFPqifHIr20RRU45v5R0EkX
-        3+6Ybnq8FpRRlcJ1+403QG6JiojNfSG/tigO1MGc3nD2+PDhHJvBGzWMuSG//jEr46Xoap
-        qvMgIEcWCV64sDbPjzXHNLVvQHEWqnU=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 231412C141;
-        Tue,  2 May 2023 12:23:08 +0000 (UTC)
-Date:   Tue, 2 May 2023 14:23:07 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Konrad =?iso-8859-1?Q?Gr=E4fe?= <k.graefe@gateware.de>,
-        Quentin Schulz <quentin.schulz@theobroma-systems.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Felipe Balbi <balbi@ti.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] vsprintf: Add %p[mM]U for uppercase MAC address
-Message-ID: <ZFEAq7r-awo0OYzp@alley>
-References: <2023042625-rendition-distort-fe06@gregkh>
- <20230427115120.241954-1-k.graefe@gateware.de>
- <c075b668-8194-6aea-484c-0223f164cb4d@rasmusvillemoes.dk>
+        Tue, 2 May 2023 08:23:28 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E5049F0
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 05:23:25 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-b9a6f17f2b6so24517517276.1
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 05:23:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683030204; x=1685622204;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=C9d4XFb7xb8OHKeS57hfPSsM1vaS6gs1EOIjHEvSu+U=;
+        b=pdk+LOCbnHtCE3mOZ70HW38W2/zkGMStOeJYjOd3f5bCG4RM4eja3TJmykQ+LwcgjX
+         bwXXUezRFTBXTaH9ZAUMZPHaKXgC/gFjbOOq8S5FocUhpec1mmFmIXI0PNf72lo0tvk5
+         ZxNai/BAFSS0vmx+cDHyE07xJt2EGzDK65UibW9yJaJwKrVxMmYwRzmZfruwQEd0PgZN
+         DqrnNUxbnczKuAnVex2KIm0pVYJQs0MjP6FGopp34ZRflwf8pJRqQcMbosH1J+9Ca0YC
+         LJt52bEACoCSVZxw5LXbK5nKB45NwCG8PvpZ0UUtP/Jgkrrc83jNmqabA5pM2HuDw/3t
+         pvEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683030204; x=1685622204;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=C9d4XFb7xb8OHKeS57hfPSsM1vaS6gs1EOIjHEvSu+U=;
+        b=SqZs9qNTvopXzJifXK6K9zYtf+aK6VqjK9nDF/Xn6f5qCVrw8TK7ORsBwUl9UqCppx
+         KalOqIWwdvQOGTUoWQJsOv8quDsV+x11nhaEBjIYmre45j9Zf/Y+R2VlkeC9h7995TUv
+         fUrBQDjIq9ljaKV35vRiZmfcLyYuP5BKyUSHGHE8T3zcHcgDn0Gx+0Q5OdEied8ZkK+a
+         sEWj9hLmMICuN28zrDj328Y26G8XDfhkQKCGZPSd6mFJp1OX5CLw9BAShgtaEIrg3xZt
+         399eShLuASXV+qwkW5ikc5Lc4FRAi+BAX1RgPQODmM5IzeX/8wZWRr4ATanhowQe+vbq
+         q3rw==
+X-Gm-Message-State: AC+VfDwHSX8ju8H1/QBw5Voz04rbJxTZLROmFqU04syZOJzsaBPKOj9L
+        u3xtCcVMeyHFUf0WQ776xz11t4I46rFKcu2aWMVcu8sgjj4tXk3m
+X-Google-Smtp-Source: ACHHUZ4oPkdNhxDZb/SBbRSl2WZqfg7TLqI/32eUmaj3j9TxrZekC7RtQQ9woWJQKcpALFYENvuc3afd/BaL03v2q3s=
+X-Received: by 2002:a81:9809:0:b0:55a:9000:59bf with SMTP id
+ p9-20020a819809000000b0055a900059bfmr2554786ywg.22.1683030204676; Tue, 02 May
+ 2023 05:23:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c075b668-8194-6aea-484c-0223f164cb4d@rasmusvillemoes.dk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230501105832.1185477-1-bhupesh.sharma@linaro.org>
+ <20230501105832.1185477-4-bhupesh.sharma@linaro.org> <1aaff58a-f07b-1e2a-e27b-df41eacd19e7@linaro.org>
+In-Reply-To: <1aaff58a-f07b-1e2a-e27b-df41eacd19e7@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 2 May 2023 15:23:13 +0300
+Message-ID: <CAA8EJpog9cbB_y4zyeECkXRjOGznEATpztAOYsMx61NgyH3Xqg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] arm64: dts: qcom: qrb4210-rb2: Enable aDSP and
+ cDSP remoteproc nodes
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org, agross@kernel.org,
+        andersson@kernel.org, linux-kernel@vger.kernel.org,
+        bhupesh.linux@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski@linaro.org, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 2023-04-28 08:56:59, Rasmus Villemoes wrote:
-> On 27/04/2023 13.51, Konrad Gräfe wrote:
-> > The CDC-ECM specification requires an USB gadget to send the host MAC
-> > address as uppercase hex string. This change adds the appropriate
-> > modifier.
-> 
-> Thinking more about it, I'm not sure this is appropriate, not for a
-> single user like this. vsprintf() should not and cannot satisfy all
-> possible string formatting requirements for the whole kernel. The %pX
-> extensions are convenient for use with printk() and friends where one
-> needs what in other languages would be "string interpolation" (because
-> then the caller doesn't need to deal with temporary stack buffers and
-> pass them as %s arguments), but for single items like this, snprintf()
-> is not necessarily the right tool for the job.
+On Tue, 2 May 2023 at 14:58, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
 >
-> In this case, the caller can just as well call string_upper() on the
-> result
+>
+>
+> On 1.05.2023 12:58, Bhupesh Sharma wrote:
+> > Enable the aDSP and cDSP remoteproc nodes on Qualcomm QRB4210 RB2 board.
+> >
+> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> > ---
+> >  arch/arm64/boot/dts/qcom/qrb4210-rb2.dts | 10 ++++++++++
+> >  1 file changed, 10 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
+> > index bff6ba1d689f..3ab46499d3fa 100644
+> > --- a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
+> > +++ b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
+> > @@ -34,6 +34,16 @@ &qupv3_id_0 {
+> >       status = "okay";
+> >  };
+> >
+> > +&remoteproc_adsp {
+> > +     status = "okay";
+> > +     firmware-name = "qcom/sm6115/adsp.mdt";
+> status last
+> also, don't we want to use .mbn (squashed binary)?
 
-I tend to agree with Rasmus. string_upper() is a super-easy solution.
-One user does not look worth adding all the churn into vsprintf().
+Yes, please. Also, just to make sure, are sm6115 and qrb4210 binaries
+fully compatible? We already have a mess of sdm845 vs sda845.
 
-Best Regards,
-Petr
+>
+> Konrad
+> > +};
+> > +
+> > +&remoteproc_cdsp {
+> > +     status = "okay";
+> > +     firmware-name = "qcom/sm6115/cdsp.mdt";
+> > +};
+> > +
+> >  &rpm_requests {
+> >       regulators {
+> >               compatible = "qcom,rpm-pm6125-regulators";
+
+
+
+-- 
+With best wishes
+Dmitry
