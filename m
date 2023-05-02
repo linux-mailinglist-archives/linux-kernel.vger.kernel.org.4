@@ -2,111 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B2FD6F3E7B
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 09:41:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F9DA6F3E7C
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 09:41:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233390AbjEBHlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 03:41:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45188 "EHLO
+        id S233684AbjEBHl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 03:41:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233167AbjEBHlA (ORCPT
+        with ESMTP id S233167AbjEBHlZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 03:41:00 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DAA9E7A
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 00:40:59 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-50b383222f7so4324820a12.3
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 00:40:59 -0700 (PDT)
+        Tue, 2 May 2023 03:41:25 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 377C3E7A
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 00:41:24 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-517bad1b8c5so3366675a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 00:41:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683013258; x=1685605258;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SoUt7yH66Q/K8nPBWlvpIiBfL6kSg4OZf+O79INR/oE=;
-        b=XWEiELZLGQCzow2WaTnvNiIPRAbIgBLqAnIZGkA5bNP77nVgdFJ4KVp3SRCacPtc20
-         Jls4LyAH+FZEzPtqPBPzjZIRirbrkpEcNZw4aPC7dPBk+oqboqAy/OFK4E9N9+ElxtK3
-         AE4BpHsFpWuXdfzIqZPYI7V8Bppar1egeWNucTMpx6TF/A4/pnB7v+xHXBTi7Qk9XBtc
-         CpGZ95uhyypM8sgZ1Cvt1d2jGAov0ciPp+I4JdRs5cmUExy3pe/5xDFyQc855H9YFUFn
-         U5FKv5JMewoOkZPZVHhUlUKvrPX0Vv9xLH6ZfKxSowpVJ/caw23r/4FWroyy4bspmHIE
-         yKSw==
+        d=google.com; s=20221208; t=1683013283; x=1685605283;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=4L2V9c4CmIAtK3KFjaBFh5H6J9gLqid7KK9E18ZFAsY=;
+        b=buBabAKCzebIEoI0YvCo/l96UaflEhqn7hv/Q+Mi/cHHkpKuMH0Zue5iWzUfOvn8NO
+         nRXOxjpEY2DKW/iQu/tT8mHID+TnbtSuBLqkFH5xRdG6gru0Bzxzdu+w89s8WKBOLbmb
+         Dq1iqiiNlFtmVJ2xg8wW7u4SKG4d00ZG+BM2kwgZYuQLsS8NO2Yr3MIPRngr5/gDJDGy
+         bpt1UiH99ZsnByKISJ8HsyQMGDth2eUZfWGmNK/SppducYy3c/GVWh3SyUPAp6lHEJHK
+         oo3t1xDNKvK464q2aDg8tbbNtbnbfr4Nq9wcoZq2CNNMz4FC2odazqaEAxy2vYzGnHk4
+         AcbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683013258; x=1685605258;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SoUt7yH66Q/K8nPBWlvpIiBfL6kSg4OZf+O79INR/oE=;
-        b=BZqTFAboMrcHavI9w6VslDX+fLF2QXQaF/SlrL7HfYWIwRR8zhB58VQRRkFsQ8D7ln
-         1eL6R8+y8HyOm2spxfSt+Q+7TuIlluO3PGYtJZVWlHca2f2UIAK6+8+3TrPrezA+FXnr
-         +0mwAXez92AkOL3jMvM4s6ngCIRxoKmIFcLZtf5i5asG/Z1HM5o2mcz2xMchICdZGYgD
-         52zKSbGy6cv3RdygHJVt9mtE2wnB9eSezfVwQ/WaXyW8jCMwaZOxoOEl/hvuNTKjTeEg
-         ogJc+j0DxLT9sUc+oJTXhZimcynfLV2lmgtysUQGi2zeJgZt0/q5uB9NW+BUxUmiCEGH
-         c9Og==
-X-Gm-Message-State: AC+VfDz5qmo9hIh/FFO6KEe+gjrhiWkNccvnvVMfzJbK9q+gbZrIr9Jp
-        xuxI0Kft+gdkqQDtwzKqT8rMMA==
-X-Google-Smtp-Source: ACHHUZ7j8lXUAx3NbLI5D7HhgS0GjRNrm01YgFj4KZS8wCP4vg8VUQ562+4HE9EN+NwcILShF1jz1Q==
-X-Received: by 2002:a17:907:ea9:b0:960:c5fe:a35a with SMTP id ho41-20020a1709070ea900b00960c5fea35amr12427402ejc.64.1683013257802;
-        Tue, 02 May 2023 00:40:57 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:bafd:1283:b136:5f6a? ([2a02:810d:15c0:828:bafd:1283:b136:5f6a])
-        by smtp.gmail.com with ESMTPSA id y10-20020a056402134a00b0050bc27a4967sm2589125edw.21.2023.05.02.00.40.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 May 2023 00:40:56 -0700 (PDT)
-Message-ID: <2653e0d1-6570-7469-51da-b539b5c14299@linaro.org>
-Date:   Tue, 2 May 2023 09:40:55 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v4 2/2] dt-bindings: usb: snps,dwc3: Add the compatible
- name 'snps,dwc3-rtk-soc'
-Content-Language: en-US
-To:     Stanley Chang <stanley_chang@realtek.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230502050452.27276-1-stanley_chang@realtek.com>
- <20230502050452.27276-2-stanley_chang@realtek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230502050452.27276-2-stanley_chang@realtek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1683013283; x=1685605283;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4L2V9c4CmIAtK3KFjaBFh5H6J9gLqid7KK9E18ZFAsY=;
+        b=FaVAUCN1GC/r5s9Pr8WfCC0+r5hHKGQ1+HPyYEhFOZZc9VwoFlfCZBlWYeTXPkAx0+
+         XpwM0ErBr4pox4NNNeMmd6KvxEeUEbvSBKENC/jgfREhUzdfiN8wRVfYIZV+hlzauX1Q
+         8D+htaoLCN2lRvRc5eD2nUfgCuSJ2qIZVLz3vGSwBc/mZDnJH1a+KRXbw7K5DARa6UJR
+         goYVl870nKDKyxL80+Afh46IFdNtPr7BKTBw3j6iC/bx6pOBpZGrvAIecygrkLBKOXQA
+         iM+kiLaPhOXSlwD3M3TpMRTupFFmwl7idpcx3F7rh8axnV1hbhf2XT6C+Uuj0qPmZdB+
+         CVSA==
+X-Gm-Message-State: AC+VfDyIR7Hs/bbl+G4XkK0QmOCUzbepFyciy5ajHRT10uyyz/hhxDZJ
+        rGrWwwLazRBJARSPfa/cEMLkSGaJyimS
+X-Google-Smtp-Source: ACHHUZ6N4sXR/rmHOtONduuauPYGhL1OTBsYWaPVnhILOdVwKsdHmT9krrtc3mSlv0Y81sha5+9tXNDH73S1
+X-Received: from meowing-l.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3eba])
+ (user=maskray job=sendgmr) by 2002:a63:2a0d:0:b0:528:9f8f:1b92 with SMTP id
+ q13-20020a632a0d000000b005289f8f1b92mr4016671pgq.4.1683013283612; Tue, 02 May
+ 2023 00:41:23 -0700 (PDT)
+Date:   Tue,  2 May 2023 07:41:05 +0000
+Mime-Version: 1.0
+Message-ID: <20230502074105.1541926-1-maskray@google.com>
+Subject: [PATCH v3] arm64: lds: move .got section out of .text
+From:   Fangrui Song <maskray@google.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Bill Wendling <morbo@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Fangrui Song <maskray@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/05/2023 07:04, Stanley Chang wrote:
-> Add a new compatible name 'snps,dwc3-rtk-soc' of DT for realtek dwc3
-> core to adjust the global register start address
-> 
-> The RTK DHC SoCs were designed, the global register address offset at
+Currently, the .got section is placed within the output section .text.
+However, when .got is non-empty, the SHF_WRITE flag is set for .text
+when linked by lld. GNU ld recognizes .text as a special section and
+ignores the SHF_WRITE flag. By renaming .text, we can also get the
+SHF_WRITE flag.
 
-What are: "RTK" and "DHC"? These are manufactured by Synopsys as you
-suggest in the patch?
+The kernel has performed R_AARCH64_RELATIVE resolving very early, and can
+then assume that .got is read-only. Let's move .got to the vmlinux_rodata
+pseudo-segment.
 
+As Ard Biesheuvel notes:
 
-> 0x8100. The default address offset is constant at DWC3_GLOBALS_REGS_START
-> (0xc100). Therefore, add the compatible name of device-tree to specify
-> the SoC custom's global register start address.
-> 
-> Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
+"This matters to consumers of the vmlinux ELF representation of the
+kernel image, such as syzkaller, which disregards writable PT_LOAD
+segments when resolving code symbols. The kernel itself does not care
+about this distinction, but given that the GOT contains data and not
+code, it does not require executable permissions, and therefore does
+not belong in .text to begin with."
 
-Based on your email, rtk could mean Realtek, so the compatible is
-clearly wrong.
+Signed-off-by: Fangrui Song <maskray@google.com>
+Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
 
-> ---
->  v3 to v4 change:
-> Use the compatible name to specify the global register address offset.
-> If the compatible name is "snps,dwc3-rtk-soc", then the offset use 0x8100.
-> Otherwise, the offset is default value 0xc100.
-> 
+--
+Changes from v1 (https://lore.kernel.org/lkml/20230428050442.180913-1-maskray@google.com/)
+* move .got to the vmlinux_rodata pseudo-segment as suggested by Ard Biesheuvel
 
-Best regards,
-Krzysztof
+Changes from v2 (https://lore.kernel.org/r/all/20230501222551.1254686-1-maskray@google.com/)
+* add Ard Biesheuvel's Reviewed-by tag and addition to the commit message.
+---
+ arch/arm64/kernel/vmlinux.lds.S | 19 +++++++++----------
+ 1 file changed, 9 insertions(+), 10 deletions(-)
+
+diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.lds.S
+index b9202c2ee18e..3cd7e76cc562 100644
+--- a/arch/arm64/kernel/vmlinux.lds.S
++++ b/arch/arm64/kernel/vmlinux.lds.S
+@@ -181,10 +181,17 @@ SECTIONS
+ 			KPROBES_TEXT
+ 			HYPERVISOR_TEXT
+ 			*(.gnu.warning)
+-		. = ALIGN(16);
+-		*(.got)			/* Global offset table		*/
+ 	}
+ 
++	. = ALIGN(SEGMENT_ALIGN);
++	_etext = .;			/* End of text section */
++
++	/* everything from this point to __init_begin will be marked RO NX */
++	RO_DATA(PAGE_SIZE)
++
++	HYPERVISOR_DATA_SECTIONS
++
++	.got : { *(.got) }
+ 	/*
+ 	 * Make sure that the .got.plt is either completely empty or it
+ 	 * contains only the lazy dispatch entries.
+@@ -193,14 +200,6 @@ SECTIONS
+ 	ASSERT(SIZEOF(.got.plt) == 0 || SIZEOF(.got.plt) == 0x18,
+ 	       "Unexpected GOT/PLT entries detected!")
+ 
+-	. = ALIGN(SEGMENT_ALIGN);
+-	_etext = .;			/* End of text section */
+-
+-	/* everything from this point to __init_begin will be marked RO NX */
+-	RO_DATA(PAGE_SIZE)
+-
+-	HYPERVISOR_DATA_SECTIONS
+-
+ 	/* code sections that are never executed via the kernel mapping */
+ 	.rodata.text : {
+ 		TRAMP_TEXT
+-- 
+2.40.1.495.gc816e09b53d-goog
 
