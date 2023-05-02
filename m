@@ -2,73 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74FDC6F4090
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 12:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FD9A6F409A
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 12:05:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233713AbjEBKAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 06:00:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50254 "EHLO
+        id S233001AbjEBKFU convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 2 May 2023 06:05:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbjEBKAu (ORCPT
+        with ESMTP id S230004AbjEBKFS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 06:00:50 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA4FDF9
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 03:00:49 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 639BD1F8BE;
-        Tue,  2 May 2023 10:00:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1683021648; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EQGFmprAkf6SOGmZcALNchoLIXzx1I6PSxS66a6jet8=;
-        b=xQ6JaecBwap2jvpIJ31SWlM85SFeS5pVbSmJrTo8OcH8F+BJl7Bn+3GZHGG4pRq3YgMFK7
-        UTSSsOlEhV5ox5haOFuEl/z9ln+zEQ49zYyjI0uz11RCqGbHwtULOI+FNLc+VdR6ZC9bTg
-        /5k3CGJ3kuqBHRJ+CFo/uavxNGinkOQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1683021648;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EQGFmprAkf6SOGmZcALNchoLIXzx1I6PSxS66a6jet8=;
-        b=FquHuOLlZRQgEkHms/NYY7NkRXmeTQlbefmtFXMHofFnlEWcLdee1WSLeDp4v9FRmyYbwh
-        GUYS/XhGVKDhFeDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4681C139C3;
-        Tue,  2 May 2023 10:00:48 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id fqmEEFDfUGTlZwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 02 May 2023 10:00:48 +0000
-Message-ID: <a0182cf5-5d1d-8a3d-2cf7-8862a70edd11@suse.cz>
-Date:   Tue, 2 May 2023 12:00:48 +0200
+        Tue, 2 May 2023 06:05:18 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70B404EC0;
+        Tue,  2 May 2023 03:05:15 -0700 (PDT)
+Received: from ip4d1634d3.dynamic.kabel-deutschland.de ([77.22.52.211] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1ptmsX-0006v1-8j; Tue, 02 May 2023 12:05:01 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Tianling Shen <cnsztl@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Peter Geis <pgwipeout@gmail.com>, Andy Yan <andyshrk@163.com>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Brian Norris <briannorris@chromium.org>,
+        Andrew Lunn <andrew@lunn.ch>, Shawn Guo <shawnguo@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Maya Matuszczyk <maccraft123mc@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] arm64: dts: rockchip: Add Lunzn Fastrhino R66S
+Date:   Tue, 02 May 2023 12:04:59 +0200
+Message-ID: <5045149.1BCLMh4Saa@diego>
+In-Reply-To: <CAOP2_TgrPwvkXayyWkb5H-+X-Nr85G65YoAfs4_+zUfK=_+VHA@mail.gmail.com>
+References: <20230428013738.30735-1-cnsztl@gmail.com> <4763863.6tgchFWduM@diego>
+ <CAOP2_TgrPwvkXayyWkb5H-+X-Nr85G65YoAfs4_+zUfK=_+VHA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 1/1] mm: change per-VMA lock statistics to be disabled by
- default
-Content-Language: en-US
-To:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
-Cc:     torvalds@linux-foundation.org, lstoakes@gmail.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
-References: <20230428173533.18158-1-surenb@google.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20230428173533.18158-1-surenb@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,37 +55,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/28/23 19:35, Suren Baghdasaryan wrote:
-> Change CONFIG_PER_VMA_LOCK_STATS to be disabled by default, as most
-> users don't need it. Add configuration help to clarify its usage.
+Am Dienstag, 2. Mai 2023, 11:53:58 CEST schrieb Tianling Shen:
+> Hi Heiko,
 > 
-> Fixes: 52f238653e45 ("mm: introduce per-VMA lock statistics")
-> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
-
-> ---
->  mm/Kconfig.debug | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
+> On Tue, May 2, 2023 at 5:30 PM Heiko Stübner <heiko@sntech.de> wrote:
+> >
+> > Am Dienstag, 2. Mai 2023, 11:28:22 CEST schrieb Heiko Stübner:
+> > > Hi,
+> > >
+> > > Am Freitag, 28. April 2023, 03:37:37 CEST schrieb Tianling Shen:
+> > > > Lunzn Fastrhino R66S is a high-performance mini router.
+> > > >
+> > > > Specification:
+> > > > - Rockchip RK3568
+> > > > - 1/2GB LPDDR4 RAM
+> > > > - SD card slot
+> > > > - M.2 Connector
+> > > > - 2x USB 3.0 Port
+> > > > - 2x 2500 Base-T (PCIe, r8125b)
+> > > > - 12v DC Jack
+> > > >
+> > > > Signed-off-by: Tianling Shen <cnsztl@gmail.com>
+> > > > ---
+> > > >  arch/arm64/boot/dts/rockchip/Makefile         |   1 +
+> > > >  .../dts/rockchip/rk3568-fastrhino-r66s.dts    |  27 +
+> > > >  .../dts/rockchip/rk3568-fastrhino-r66s.dtsi   | 507 ++++++++++++++++++
+> > > >  3 files changed, 535 insertions(+)
+> > > >  create mode 100644 arch/arm64/boot/dts/rockchip/rk3568-fastrhino-r66s.dts
+> > > >  create mode 100644 arch/arm64/boot/dts/rockchip/rk3568-fastrhino-r66s.dtsi
+> > > >
+> > > > diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
+> > > > index 2d585bbb8f3a..15089a78555a 100644
+> > > > --- a/arch/arm64/boot/dts/rockchip/Makefile
+> > > > +++ b/arch/arm64/boot/dts/rockchip/Makefile
+> > > > @@ -85,6 +85,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-box-demo.dtb
+> > > >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-lubancat-1.dtb
+> > > >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-bpi-r2-pro.dtb
+> > > >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-evb1-v10.dtb
+> > > > +dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-fastrhino-r66s.dtb
+> > > >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-lubancat-2.dtb
+> > > >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-nanopi-r5c.dtb
+> > > >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-nanopi-r5s.dtb
+> > > > diff --git a/arch/arm64/boot/dts/rockchip/rk3568-fastrhino-r66s.dts b/arch/arm64/boot/dts/rockchip/rk3568-fastrhino-r66s.dts
+> > > > new file mode 100644
+> > > > index 000000000000..fc9e1bdab128
+> > > > --- /dev/null
+> > > > +++ b/arch/arm64/boot/dts/rockchip/rk3568-fastrhino-r66s.dts
+> > > > @@ -0,0 +1,27 @@
+> > > > +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+> > > > +
+> > > > +#include "rk3568-fastrhino-r66s.dtsi"
+> > > > +
+> > > > +/ {
+> > > > +   model = "Lunzn FastRhino R66S";
+> > > > +   compatible = "lunzn,fastrhino-r66s", "rockchip,rk3568";
+> > > > +
+> > > > +   aliases {
+> > > > +           mmc0 = &sdmmc0;
+> > > > +   };
+> > > > +};
+> > > > +
+> > > > +&sdmmc0 {
+> > >
+> > > that whole element seems to be duplicated from rk3568-fastrhino-r66s.dtsi?
+> > > I don't think we need to declare that twice. If something really changes,
+> > > please only declare the new properties when going from dtsi to dts.
+> >
+> > Looking at patch3 I see the explanation :-) .
+> >
+> > The base dtsi should not contain the &sdmmc0 node, and it should
+> > only be included in the rk3568-fastrhino-r66s.dts, right?
+> >
 > 
-> diff --git a/mm/Kconfig.debug b/mm/Kconfig.debug
-> index 6dae63b46368..a925415b4d10 100644
-> --- a/mm/Kconfig.debug
-> +++ b/mm/Kconfig.debug
-> @@ -274,6 +274,12 @@ config DEBUG_KMEMLEAK_AUTO_SCAN
->  config PER_VMA_LOCK_STATS
->  	bool "Statistics for per-vma locks"
->  	depends on PER_VMA_LOCK
-> -	default y
->  	help
-> -	  Statistics for per-vma locks.
-> +	  Say Y here to enable success, retry and failure counters of page
-> +	  faults handled under protection of per-vma locks. When enabled, the
-> +	  counters are exposed in /proc/vmstat. This information is useful for
-> +	  kernel developers to evaluate effectiveness of per-vma locks and to
-> +	  identify pathological cases. Counting these events introduces a small
-> +	  overhead in the page fault path.
-> +
-> +	  If in doubt, say N.
+> Yes, nice catch!
+> 
+> And I found another error in the R68S dts file (gmac pcfg pull type).
+> Unfortunately I don't have this board right now, and I'm still waiting
+> for the test result from my friend. Suppose sending v2 in the next few
+> days.
+
+no worries, send when you're ready :-)
+
+Heiko
+
 
