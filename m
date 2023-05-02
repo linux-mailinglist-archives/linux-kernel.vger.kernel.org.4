@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E9016F3FA5
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 10:52:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B9576F3FAB
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 10:56:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233672AbjEBIwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 04:52:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55852 "EHLO
+        id S233654AbjEBI4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 04:56:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbjEBIwc (ORCPT
+        with ESMTP id S233167AbjEBI4I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 04:52:32 -0400
+        Tue, 2 May 2023 04:56:08 -0400
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B1EA1980;
-        Tue,  2 May 2023 01:52:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D4711980;
+        Tue,  2 May 2023 01:56:06 -0700 (PDT)
 Received: from ip4d1634d3.dynamic.kabel-deutschland.de ([77.22.52.211] helo=diego.localnet)
         by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <heiko@sntech.de>)
-        id 1ptlkE-0006Sv-Q9; Tue, 02 May 2023 10:52:22 +0200
+        id 1ptlnk-0006UF-1A; Tue, 02 May 2023 10:56:00 +0200
 From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -33,12 +33,12 @@ To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
 Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
         kernel@collabora.com
-Subject: Re: [PATCH 6/8] nvmem: rockchip-otp: Improve probe error handling
-Date:   Tue, 02 May 2023 10:52:22 +0200
-Message-ID: <6406454.LM0AJKV5NW@diego>
-In-Reply-To: <20230501084401.765169-7-cristian.ciocaltea@collabora.com>
+Subject: Re: [PATCH 7/8] nvmem: rockchip-otp: Add support for RK3588
+Date:   Tue, 02 May 2023 10:55:59 +0200
+Message-ID: <4584570.QkHrqEjB74@diego>
+In-Reply-To: <20230501084401.765169-8-cristian.ciocaltea@collabora.com>
 References: <20230501084401.765169-1-cristian.ciocaltea@collabora.com>
- <20230501084401.765169-7-cristian.ciocaltea@collabora.com>
+ <20230501084401.765169-8-cristian.ciocaltea@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -51,11 +51,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Montag, 1. Mai 2023, 10:43:58 CEST schrieb Cristian Ciocaltea:
-> Enhance error handling in the probe function by making use of
-> dev_err_probe(), which ensures the error code is always printed, in
-> addition to the specified error message.
+Am Montag, 1. Mai 2023, 10:43:59 CEST schrieb Cristian Ciocaltea:
+> Add support for the OTP memory device found on the Rockchip RK3588 SoC.
 > 
+> While here, remove the unnecessary 'void *' casts in the OF device ID
+> table.
+> 
+> Co-developed-by: Finley Xiao <finley.xiao@rock-chips.com>
+> Signed-off-by: Finley Xiao <finley.xiao@rock-chips.com>
 > Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 
 Reviewed-by: Heiko Stuebner <heiko@sntech.de>
