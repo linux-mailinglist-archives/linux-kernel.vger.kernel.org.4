@@ -2,139 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FF626F4AE2
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 22:06:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7092E6F4AE9
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 22:08:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbjEBUGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 16:06:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40252 "EHLO
+        id S229801AbjEBUIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 16:08:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjEBUGm (ORCPT
+        with ESMTP id S229791AbjEBUIH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 16:06:42 -0400
-Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C10198C;
-        Tue,  2 May 2023 13:06:37 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.west.internal (Postfix) with ESMTP id EB34B2B066FC;
-        Tue,  2 May 2023 16:06:32 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 02 May 2023 16:06:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1683057992; x=1683065192; bh=5x
-        TPMX3pv0srvr+ZsZiut6qJVZAYp0ChcBRbjNGHX30=; b=ZTvsHN9+uxpCL7FksS
-        kwo3JrlnKSMBz/v6oovLN4gFfPuDwcis1zK1a7zX+U4EMCkEskzl8t9L3thdkkyp
-        uYpHqLLEV8Y2/gwcUusIJLNIe8UPFQZDbvrgmfRa1pY2hBUtlVdJ/9XlRWissH8L
-        RZUqWVGEZqc7kbQToz2df+wMKPzvJZz7OfH9fm/KKJfI4vdjYI50mKj4FFphTWtO
-        15HBxbJh0hY7E5UW3e2N1yL6hg5QoeHpQ3aNrNchnn1WlChZDtrEj2EiD/5MCGDF
-        40wwVa0xZ+AZ/o0IY+iQ3jM0Z1ruvVGOOHGjtm7BF+wspVkvTB48vtzziLBeW8k7
-        q61A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1683057992; x=1683065192; bh=5xTPMX3pv0srv
-        r+ZsZiut6qJVZAYp0ChcBRbjNGHX30=; b=PU/7+KxYrASE8LNYfBiYFyUBHfHyC
-        l+jhzmQBZAlBIO7EvQqNGSc1CmBFJf/RgZVQKMnPT5dOAs+EUf/U0nUYSNRtg8Co
-        PzwAszRrzyl9Bj01mORZO8Iy7Pbm1Exx9HGDXLmQLfNT/EqHRH7kOp3xs314GtbL
-        rDRPiHOPVfbZqPMsLcG97h9UMnWTdKQdNtHM+pCUcGCTFS7dUGxwWiyoQ7PfZ+3K
-        9xLpTd1yhPC9o5H73dTxWPQtmoY+hZcnopHUvwXwz3kk7Z15u87rIiHztLfs24rT
-        q53zbLCDTHvpwvaxqrctfu8Q4n4okdhysDgOXqX/nncLC5HQ0cdYfOtdA==
-X-ME-Sender: <xms:R21RZMlQBaLMhGObVjBBPDKtv1QgEyEhRzx179kO5ggChyEPxTx0tQ>
-    <xme:R21RZL0XGtLduJZvCo-pJW5VS-DW7npsNWdYiCxnKOUs_dT2K3sCLou3ehz-XykP_
-    NnO0QGZDzR-VUm4l1M>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedviedgudeghecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:R21RZKpBDKaqeHli7lfYc369Oa_vqRdwUIZba0FfKx21xYpELI9Nig>
-    <xmx:R21RZIkd0u9WmHoox2AO07O0aYwAiw9yp1D8axvKmsMalWfC0g6YnQ>
-    <xmx:R21RZK1tjycpPbv3cFlRKNc0IpX6pBZh8MoYB9AdqV7SOp0rhgOg0Q>
-    <xmx:SG1RZD7KQd0sqq2OL80mg5nQwQw1Kh3gjL_wjLEfaQNvdLYFSTRtleJE-BU>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id ED568B60086; Tue,  2 May 2023 16:06:30 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-386-g2404815117-fm-20230425.001-g24048151
-Mime-Version: 1.0
-Message-Id: <67d6a188-041f-4604-99a3-548c41af0693@app.fastmail.com>
-In-Reply-To: <20230502130223.14719-6-tzimmermann@suse.de>
-References: <20230502130223.14719-1-tzimmermann@suse.de>
- <20230502130223.14719-6-tzimmermann@suse.de>
-Date:   Tue, 02 May 2023 22:06:10 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Thomas Zimmermann" <tzimmermann@suse.de>,
-        "Helge Deller" <deller@gmx.de>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Javier Martinez Canillas" <javierm@redhat.com>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        "Vineet Gupta" <vgupta@kernel.org>,
-        "Huacai Chen" <chenhuacai@kernel.org>,
-        "WANG Xuerui" <kernel@xen0n.name>,
-        "David S . Miller" <davem@davemloft.net>,
-        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-        "Sam Ravnborg" <sam@ravnborg.org>
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, sparclinux@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-parisc@vger.kernel.org
-Subject: Re: [PATCH v3 5/6] fbdev: Move framebuffer I/O helpers into <asm/fb.h>
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Tue, 2 May 2023 16:08:07 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFCB81996
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 13:08:05 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-959a3e2dc72so850869766b.2
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 13:08:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683058084; x=1685650084;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RqIi6IvcdeuU0KYQE4Z8uSC27gkyAcL78XpC/FHuojo=;
+        b=z0PGfQl1sdu0SPr1lcAsrKinpMmdDtmFFNAQNUrPQQohxTUGannTjljIHqGwrDl/yX
+         I6s2ZkoNRBmbD1Z0jELAJXiBUWVRG56d0lFzubKXsHLHVZBXJ5EwLtQ/JRJ+4w9GsBcI
+         soEGIPgwqTTQC/MbbP49KJehYOGz5RShaPorm7TtT1E5BxV52QtftwQNrVs9fu4qNA78
+         HsH+TTPoDbLBJQKJElXMvf+d/3CLWYigDKcURXLI8k/Ez605TtB/Kjf3NPvRX+r6NCGn
+         X9SgpUxsBhlp+eX7wVLXp6qjJmnOvnFBA1T023iR2AF3CLuViQXrVJhlejD6UiGhk/Tn
+         u/bA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683058084; x=1685650084;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RqIi6IvcdeuU0KYQE4Z8uSC27gkyAcL78XpC/FHuojo=;
+        b=NvigUt0qlz6CXlXJy1CeQmPE3qDC0aNlwMnCtqQP0JBCrQ4cVOZYiZHaZ/KT/keMlP
+         dqx5nC3azwpV+2+JO203Uo9EiFVJbghCPpwLUN18xRCF4F/hWvJi9IwkKMBw9afDOpW8
+         wstDVvyrT5crf0jnS0jGFJq3TtiG4aMnnJcLghR+oHYVLv7CkWs67lme3rYjeS5luQCf
+         F1IGFhxxseWuq/t9GpkHzKLdvc2H4fJGJ5UokRebo4Sc8f1Tyj4IrMh9tGL92bT4LcVm
+         1a89l9FAJ+zb3QGrEUutiQmfuGnzgE+wYqtj1z0bwbgeVnt1NDVSizYE3DH3/zXKfltJ
+         PnIw==
+X-Gm-Message-State: AC+VfDyMpv+Edt3IIfBI3onXkc+ni6Uy8sn0RW2M/T8lTO12fLUr6GP8
+        LIaJtMO/EO3KAw2trKyoIrOD0g==
+X-Google-Smtp-Source: ACHHUZ7f0OZxRF1W5f7zHOtmLIacEffm2Y54nHgHHQa7Nlc8GDC5YkXBLpB86wa2xsrxeWY1Rk97uw==
+X-Received: by 2002:a17:907:1ca5:b0:94e:4489:f24d with SMTP id nb37-20020a1709071ca500b0094e4489f24dmr1251365ejc.61.1683058084097;
+        Tue, 02 May 2023 13:08:04 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:37be:eda5:e303:19e0? ([2a02:810d:15c0:828:37be:eda5:e303:19e0])
+        by smtp.gmail.com with ESMTPSA id bv13-20020a170907934d00b009584c5bcbc7sm13457255ejc.49.2023.05.02.13.08.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 May 2023 13:08:03 -0700 (PDT)
+Message-ID: <154c67fc-3c4c-f65d-cf23-9c127175472f@linaro.org>
+Date:   Tue, 2 May 2023 22:08:02 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v1 1/2] dt-binding: cdns,usb3: Add clock and reset
+Content-Language: en-US
+To:     Minda Chen <minda.chen@starfivetech.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <20230502081805.112149-1-minda.chen@starfivetech.com>
+ <20230502081805.112149-2-minda.chen@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230502081805.112149-2-minda.chen@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 2, 2023, at 15:02, Thomas Zimmermann wrote:
-> Implement framebuffer I/O helpers, such as fb_read*() and fb_write*(),
-> in the architecture's <asm/fb.h> header file or the generic one.
->
-> The common case has been the use of regular I/O functions, such as
-> __raw_readb() or memset_io(). A few architectures used plain system-
-> memory reads and writes. Sparc used helpers for its SBus.
->
-> The architectures that used special cases provide the same code in
-> their __raw_*() I/O helpers. So the patch replaces this code with the
-> __raw_*() functions and moves it to <asm-generic/fb.h> for all
-> architectures.
->
-> v3:
-> 	* implement all architectures with generic helpers
-> 	* support reordering and native byte order (Geert, Arnd)
+On 02/05/2023 10:18, Minda Chen wrote:
+> To support generic clock and reset init in Cadence USBSS
+> controller. Add clock and reset dts configuration.
+> 
+> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
 
-This looks good for the read/write helpers, but I'm a little
-worried about the memset and memcpy functions, since they do
-change behavior on some architectures:
+Subject prefix: dt-bindings
 
-- on sparc64, fb_mem{set,cpy} uses ASI_PHYS_BYPASS_EC_E (like __raw_readb)
-  while mem{set_,cpy_from,cpy_to} uses ASI_PHYS_BYPASS_EC_E_L (like readb)
-  I don't know the effect of that, but it seems intentional
+> ---
+>  Documentation/devicetree/bindings/usb/cdns,usb3.yaml | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
+> index cae46c4982ad..7bffd8fb1e38 100644
+> --- a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
+> @@ -42,6 +42,18 @@ properties:
+>        - const: otg
+>        - const: wakeup
+>  
+> +  clocks:
+> +    minItems: 1
 
-- on loongarch and csky, the _io variants avoid unaligned access,
-  while the normal memcpy/memset is probably broken, so your
-  patch is a bugfix
+no, this must maxItems.
 
-- on ia64, the _io variants use bytewise access and avoid any longer
-  loads and stores, so your patch probably makes things slower.
+> +
+> +  clock-names:
+> +    minItems: 1
 
-It's probably safe to deal with all the above by either adding
-architecture specific overrides to the current version, or
-by doing the semantic changes before the move to asm/fb.h, but
-one way or the other I'd prefer this to be separate from the
-consolidation patch that should not have any changes in behavior.
+Drop entire property, not useful without descriptive name.
 
-     Arnd
+> +
+> +  resets:
+> +    minItems: 1
+
+instead maxItems.
+
+> +
+> +  reset-names:
+> +    minItems: 1
+
+Drop entire property, not useful without descriptive name.
+
+> +
+>    dr_mode:
+>      enum: [host, otg, peripheral]
+>  
+
+Best regards,
+Krzysztof
+
