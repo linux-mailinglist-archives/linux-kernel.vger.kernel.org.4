@@ -2,176 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9564B6F48F4
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 19:12:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54A2D6F48F9
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 19:13:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233949AbjEBRMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 13:12:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52124 "EHLO
+        id S232830AbjEBRNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 13:13:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233832AbjEBRMk (ORCPT
+        with ESMTP id S233697AbjEBRNw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 13:12:40 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB776F5
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 10:12:36 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-518d6f87a47so1816738a12.3
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 10:12:36 -0700 (PDT)
+        Tue, 2 May 2023 13:13:52 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B177DAB
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 10:13:50 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-94f109b1808so803568366b.1
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 10:13:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683047556; x=1685639556;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LQpsXa7PF6SfkNDRVYWe/pXw7LrZqwM+ndclXY8TsRA=;
-        b=C43MRsCeJjlHRny0ujP2/WrWk7SuBq+T0iec7sTyuUJCtuy2gOVBMk6xF+njks3r8b
-         iaHC8zvlhYdXVfFEIlS64AfFZlAUKc6V/+XV73g1rO1YWbs/QjNlnR8c8rbd9OZwbsav
-         ucmm0mYAIA7SDeYN87XmItw5hU1/H8cwITnbs9dhYLmJvTRVsHacVPu4GfjyC0sriUS3
-         Zmg0KEofgoQYlmUEer4zXwgoOD8bgHAGREE+tAkj2GsCjbCFvNxxyWSj1kYhtCl/kBhW
-         mrH8bwK5YOTLcXEfFBmIjwOCnYPUI9AtmywcgEtYj7PQ79gI0bzLCRNxRbMZosi3SgXQ
-         rO/A==
+        d=linaro.org; s=google; t=1683047629; x=1685639629;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8c7YTMrMqO6NiIk6aRyvvE9OvrnJpW6uZRx0Qb7U3uQ=;
+        b=zgnIXfrpmrq8W4s5EAIhf5gir1yUUW0Rx0zxLklNwXeuXbpmB0SdDfZCVD+E7FPEd9
+         6BhmsZ8/TcTnHL/BRfxgeQsmwDzUlStLP6i6H4vYmaH1ucMz1rchhg7qraphC84lkE6h
+         qxYtaHUSHhRC9026P2XwfrfhVy+80eLLtV6CG2d2jkv+K0r22dU0VkYbvBgTqcbvOKLu
+         3ZlHQvmP+ei9HoEBBcypNWv54MqVWa1WN56hjGrukmu+RnchIxiQV2L+crzXA0scMgm3
+         g90zJp+CSjAvRhguupJW9Yt085pjePwHvk3JL7sZB6FgOnpG+CzZJ96j6TBTOsTPdYph
+         ce0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683047556; x=1685639556;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LQpsXa7PF6SfkNDRVYWe/pXw7LrZqwM+ndclXY8TsRA=;
-        b=jWMOGNlff4lPBTRPrI2AsGeVlsCA+OMhxIw3TlTa0zqb0wQUSPszIiE9N39e2QBG5t
-         P/pUjD2hbSynjapcBoEItDiBPIb3K4B0mLDqy+PANxhi4avYjWVj8U/aV7kj1QZkIITh
-         1aNxMiwxNd2YJhg6lpSstDHobrxDbhPhQM31iGjbvaOzk7xkVZnAiBnNyi7TEML4PRAJ
-         uzueGXBVp23Zr+1D6BuM3zxUuUlzHHnjQxstlJoOwOfIOCGhuNhssoH4aMe9Q81GeIaf
-         6X8UuWKI6rT5WuFw3dGbAYBCS+4V+fJxIt+G2mDCnnlMKjBEJxskkVuTu8z9sdLDKAy+
-         BdoA==
-X-Gm-Message-State: AC+VfDwnNTQbKFYu7kOBkkhd8q1ZKKflxOos8zWQV1hBUPiIFT+uY39t
-        nwUTYKJ0K86kiIpDwkq7bvkEBSK/BkU=
-X-Google-Smtp-Source: ACHHUZ6OGEbCDRyibiyEFmgXDoP74gBZmGkJmylBe5G97Pc5W9DviG/PDug9EqNO9adU8DJr2OhNI5d1W8M=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a63:8741:0:b0:513:e029:d172 with SMTP id
- i62-20020a638741000000b00513e029d172mr4555521pge.12.1683047556207; Tue, 02
- May 2023 10:12:36 -0700 (PDT)
-Date:   Tue, 2 May 2023 10:12:34 -0700
-In-Reply-To: <20230502112502.14859-1-yanjiewtw@gmail.com>
-Mime-Version: 1.0
-References: <20230502112502.14859-1-yanjiewtw@gmail.com>
-Message-ID: <ZFFEgptZg1P367F7@google.com>
-Subject: Re: [PATCH] docs: clarify KVM related kernel parameters' descriptions
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yan-Jie Wang <yanjiewtw@gmail.com>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Avi Kivity <avi@redhat.com>,
-        Ching-Chun Huang <jserv@ccns.ncku.edu.tw>, trivial@kernel.org,
-        kvm@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1683047629; x=1685639629;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8c7YTMrMqO6NiIk6aRyvvE9OvrnJpW6uZRx0Qb7U3uQ=;
+        b=l+rUqndH4e2inFuBp7vKYi2KCjafKebcGRL6T3ouxVhJcStdi0AvzVNDJu25JjNVWN
+         1pJX2DPx7eUnJOBkbn2nvN6l5EbqEPQ5kFuAcTiTHCde6x/QVPV3QzM/nTa5YgUmj/yi
+         xQWuqH/+TqfyPydUKKHp2iV6p2SqChs3Y/7purTv1bSh5Z8+/yqUw17/oYXgO9actvgC
+         x8xD7cTjSX7qLDTmG4JU2VfC1Q/eV/6BLKgGAX+aejELOJfNi7l6WPH71GF2D+lH4iza
+         Q36wgrswPH0vo3FR5ZnSEf1xQx8uWEIAoST4Q409N7IJuEPkCw7hLs1cL2fngLgYkVL2
+         40cA==
+X-Gm-Message-State: AC+VfDwtGvEJSPqCc9lKMjjTz3NvmrXnCC2tLFptNJYubmePYRDQDdEj
+        wjdBeY8gYADopxq+vVOSQOllxSv3qAA257iNj0ezJQ==
+X-Google-Smtp-Source: ACHHUZ6e7VBIhBT7ojisZ4f6uNBoZ8irQ8thLSU1xgomR8S5YlRCSGV/kFmz1qTvVSqYSp9UjDOPng==
+X-Received: by 2002:a17:907:608b:b0:88f:a236:69e6 with SMTP id ht11-20020a170907608b00b0088fa23669e6mr596274ejc.7.1683047629100;
+        Tue, 02 May 2023 10:13:49 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:37be:eda5:e303:19e0? ([2a02:810d:15c0:828:37be:eda5:e303:19e0])
+        by smtp.gmail.com with ESMTPSA id cw22-20020a170906479600b0095f06c0247asm8879918ejc.209.2023.05.02.10.13.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 May 2023 10:13:48 -0700 (PDT)
+Message-ID: <96feebd6-ce0c-576d-0747-647706692846@linaro.org>
+Date:   Tue, 2 May 2023 19:13:47 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v2 5/8] dt-bindings: power: supply: max77658: Add ADI
+ MAX77658 Battery
+To:     "Arslanbenzer, Zeynep" <Zeynep.Arslanbenzer@analog.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "lee@kernel.org" <lee@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "sre@kernel.org" <sre@kernel.org>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "broonie@kernel.org" <broonie@kernel.org>
+References: <20230322055628.4441-1-Zeynep.Arslanbenzer@analog.com>
+ <20230322055628.4441-6-Zeynep.Arslanbenzer@analog.com>
+ <afeecd42-ecda-4d92-bbb5-6dcff84fca7d@linaro.org>
+ <MN2PR03MB5197BC6AEE58EFE098AF08358B6E9@MN2PR03MB5197.namprd03.prod.outlook.com>
+ <1f520e8a-7785-f4dc-2f9b-d6afd1e3f671@linaro.org>
+ <MN2PR03MB5197EB4B34DC82C62EF5A3798B6F9@MN2PR03MB5197.namprd03.prod.outlook.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <MN2PR03MB5197EB4B34DC82C62EF5A3798B6F9@MN2PR03MB5197.namprd03.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 02, 2023, Yan-Jie Wang wrote:
-> The descriptions of certain KVM related kernel parameters can be
-> ambiguous and confusing. They state 'Disable ...,' which implies that
-> setting them to 1 would disable the associated features or options,
-> when in fact the opposite is true.
+On 02/05/2023 17:05, Arslanbenzer, Zeynep wrote:
+> On Tue, 2 May 2023, Krzysztof Kozlowski wrote:
+>> On 01/05/2023 22:20, Arslanbenzer, Zeynep wrote:
+>>
+>>>> You already said it above.
+>>>>
+>>>>> +      in battery.yaml, with the following properties being required:
+>>>>> +      - alert-celsius
+>>>>> +
+>>>>> +required:
+>>>>> +  - compatible
+>>>>
+>>>> Why reg and monitored-batter are not required?
+>>>>
+>>> If no monitored-battery information is supplied, we set default values for alert-celsius.
+>>
+>> So the device can operate without battery? Interesting... are you sure, you can physically remove battery and device will work?
+>>
 > 
-> This commit addresses this issue by revising the descriptions of these
-> parameters to make their intended behavior clear.
-
-Less wrong perhaps, but IMO the actual behavior is still not captured, and from
-a certain perspective the existing "Disable" verbiage better reflects how/when
-most users would actually want to explicitly set a param.
-
-Rather than commit one way or the other, what about reworking the descriptions
-using this as a template?  E.g. state that the param controls something, state
-the default and use that to communicate that 1==enabled, and then, when appropriate,
-clarify that KVM disables (or in some cases ignores) params if hardware doesn't
-support the related feature(s).
-
-	kvm-intel.ept=	[KVM,Intel] Control KVM's use of Extended Page Tables,
-			a.k.a. Two-Dimensional Page Tables.  Default is 1
-			(enabled).  Disabled by KVM if hardware lacks support
-			for EPT.
-
+> I mean if battery info is not supplied, we use default values.
 > 
-> Signed-off-by: Yan-Jie Wang <yanjiewtw@gmail.com>
-> ---
->  Documentation/admin-guide/kernel-parameters.txt | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
-> 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index 9e5bab29685f..cc5abb3d54b9 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -2552,10 +2552,10 @@
->  			on the ratio, such that a page is zapped after 1 hour on average.
->  
->  	kvm-amd.nested=	[KVM,AMD] Allow nested virtualization in KVM/SVM.
+> ret = power_supply_get_battery_info(fg->battery, &info);
+> if (ret) {
+>     dev_err(fg->dev, "Unable to get battery info\n");
+>     fg->temp_alert_min = info->temp_alert_min;
+>     fg->temp_alert_max = info->temp_alert_max;
+> } else {
+>     fg->temp_alert_min = -128;
+>     fg->temp_alert_max = 127;
+> }
 
-Eh, I don't see any reason to have this one say "allow" instead of "enable/disable".
+You speak about driver, but I speak about hardware. The bindings are for
+the latter.
 
-> -			Default is 1 (enabled)
-> +			Default is 1 (allow)
->  
-> -	kvm-amd.npt=	[KVM,AMD] Disable nested paging (virtualized MMU)
-> -			for all guests.
-> +	kvm-amd.npt=	[KVM,AMD] Enable nested paging (virtualized MMU)
-> +			for all guests on capable AMD chips.
->  			Default is 1 (enabled) if in 64-bit or 32-bit PAE mode.
->  
->  	kvm-arm.mode=
-> @@ -2602,12 +2602,12 @@
->  			Format: <integer>
->  			Default: 5
->  
-> -	kvm-intel.ept=	[KVM,Intel] Disable extended page tables
-> +	kvm-intel.ept=	[KVM,Intel] Enable extended page tables
->  			(virtualized MMU) support on capable Intel chips.
->  			Default is 1 (enabled)
->  
->  	kvm-intel.emulate_invalid_guest_state=
-> -			[KVM,Intel] Disable emulation of invalid guest state.
-> +			[KVM,Intel] Enable emulation of invalid guest state.
->  			Ignored if kvm-intel.enable_unrestricted_guest=1, as
->  			guest state is never invalid for unrestricted guests.
->  			This param doesn't apply to nested guests (L2), as KVM
-> @@ -2615,7 +2615,7 @@
->  			Default is 1 (enabled)
->  
->  	kvm-intel.flexpriority=
-> -			[KVM,Intel] Disable FlexPriority feature (TPR shadow).
-> +			[KVM,Intel] Enable FlexPriority feature (TPR shadow).
->  			Default is 1 (enabled)
->  
->  	kvm-intel.nested=
-> @@ -2623,7 +2623,7 @@
->  			Default is 0 (disabled)
+Best regards,
+Krzysztof
 
-Heh, kvm-intel.nested has been enabled by default for quite some time.  Can you
-fix that up too?
-
->  
->  	kvm-intel.unrestricted_guest=
-> -			[KVM,Intel] Disable unrestricted guest feature
-> +			[KVM,Intel] Enable unrestricted guest feature
->  			(virtualized real and unpaged mode) on capable
->  			Intel chips. Default is 1 (enabled)
->  
-> @@ -2639,7 +2639,7 @@
->  
->  			Default is cond (do L1 cache flush in specific instances)
->  
-> -	kvm-intel.vpid=	[KVM,Intel] Disable Virtual Processor Identification
-> +	kvm-intel.vpid=	[KVM,Intel] Enable Virtual Processor Identification
->  			feature (tagged TLBs) on capable Intel chips.
->  			Default is 1 (enabled)
->  
-> 
-> base-commit: 865fdb08197e657c59e74a35fa32362b12397f58
-> -- 
-> 2.34.1
-> 
