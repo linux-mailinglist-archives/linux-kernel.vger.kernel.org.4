@@ -2,151 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FD7C6F4562
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 15:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A46D6F455F
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 15:44:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234409AbjEBNoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 09:44:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37004 "EHLO
+        id S234465AbjEBNnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 09:43:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234477AbjEBNoQ (ORCPT
+        with ESMTP id S234513AbjEBNmw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 09:44:16 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DFB17A84;
-        Tue,  2 May 2023 06:43:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683035027; x=1714571027;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=P63kc43UhIKv9Q4LXJ5JiMCSLZz5VKwB49mJBEQrQ3w=;
-  b=Q2il9T4xSpwpfFAQzxyqS+jPY3bqnRC3PHOjShZagGNR4ZLAXV65GIbC
-   1t/4nuGqmZ2Eqd/xyrXgd0NkWG7zAlk1EW9knQHMxqbK+26dnDiqma86q
-   JdbXDz/qLCzcJEpE126bGP08Dh1Bo8L/Ms6wUZFbd2ZYAMkMQf97HDg+o
-   0OKzbIW9Dh7hR90QZ1DmzWxKH1Ky9EQlF50p4rTjnuOBxJGW4Zw6+roSh
-   ubpy979pvdHsQVWADkzBlOpJBmHWMBHXX0/LYHKJSu79Hh2JzIsFIaS/p
-   7VOCa0ItEVakNr1/mVQu0ntXPa2HL08oz3Hgx9U94wbyRh9QFxWYf/lsJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="413842516"
-X-IronPort-AV: E=Sophos;i="5.99,244,1677571200"; 
-   d="scan'208";a="413842516"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2023 06:41:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="696183092"
-X-IronPort-AV: E=Sophos;i="5.99,244,1677571200"; 
-   d="scan'208";a="696183092"
-Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 02 May 2023 06:41:26 -0700
-Received: from kbuild by e3434d64424d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ptqFx-000153-16;
-        Tue, 02 May 2023 13:41:25 +0000
-Date:   Tue, 2 May 2023 21:40:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ajay Kaher <akaher@vmware.com>, rostedt@goodmis.org,
-        mhiramat@kernel.org, shuah@kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, chinglinyu@google.com,
-        namit@vmware.com, srivatsab@vmware.com, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, vsirnapalli@vmware.com, tkundu@vmware.com,
-        er.ajay.kaher@gmail.com, Ajay Kaher <akaher@vmware.com>
-Subject: Re: [PATCH v2 8/9] eventfs: moving tracing/events to eventfs
-Message-ID: <202305022138.cJMVU9RM-lkp@intel.com>
-References: <1683026600-13485-9-git-send-email-akaher@vmware.com>
+        Tue, 2 May 2023 09:42:52 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57D056A53;
+        Tue,  2 May 2023 06:42:19 -0700 (PDT)
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 342Dd5mD007993;
+        Tue, 2 May 2023 13:41:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=iFaCTqGqZoIlS2U6AthjISaQLDuN0XAiJI4clbfAzlE=;
+ b=l8hYwA+trtcflDmakAhIsZFuk9aqqnBPrEWz8W1ep2AW92SdO3gD0J1z4TXLlAjLZBcY
+ 8QXFM2eUV5ZHF7+uSQz+hjI2e3f5EiYVHuVk0QV+tiAyqjCqpwMnCZUqqcsisnYcj2Rf
+ 6J3j6MeSY94yJ16JD6nn2MsiNDARTCtfvgWJf7DA4HvgK2FPM5WXPsnUVUVuUxjK7Rqq
+ uWUMHRbNlt/n0W0SzA+0pR93Wy0TJVglY/FY4mXItDk/sADLlMccgtvqTs7a8uRTfYHv
+ PkFreOvXw984+0XwQNL43pVTv75DUwolXuXeli0hu6af3vVsJOSUuQmodnIWjQHuTKj1 Sw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qb36uh3y1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 02 May 2023 13:41:06 +0000
+Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 342DdT5Y009271;
+        Tue, 2 May 2023 13:41:06 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qb36uh3rq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 02 May 2023 13:41:05 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3428snLY031369;
+        Tue, 2 May 2023 13:40:51 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3q8tv6sb2q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 02 May 2023 13:40:51 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 342Dendi20316836
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 2 May 2023 13:40:49 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 073562004B;
+        Tue,  2 May 2023 13:40:49 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 374F620049;
+        Tue,  2 May 2023 13:40:48 +0000 (GMT)
+Received: from [9.171.18.35] (unknown [9.171.18.35])
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue,  2 May 2023 13:40:48 +0000 (GMT)
+Message-ID: <e9fb74a702bb304757fea84a978704de62df666d.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 21/38] parport: PC style parport depends on HAS_IOPORT
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>
+Date:   Tue, 02 May 2023 15:40:47 +0200
+In-Reply-To: <e2ce3f02-988c-423d-a1c1-2796ab95026c@app.fastmail.com>
+References: <20230314121216.413434-1-schnelle@linux.ibm.com>
+         <20230314121216.413434-22-schnelle@linux.ibm.com>
+         <e2ce3f02-988c-423d-a1c1-2796ab95026c@app.fastmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.1 (3.48.1-1.fc38) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1683026600-13485-9-git-send-email-akaher@vmware.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: HD0fEbiuVhUrxQBye-iKHLFIye-5M8Ii
+X-Proofpoint-GUID: seYpEKnBqUk9_qmLztdg5NtiD5KP2qO8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-02_08,2023-04-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ phishscore=0 spamscore=0 mlxscore=0 clxscore=1015 bulkscore=0
+ suspectscore=0 mlxlogscore=297 impostorscore=0 adultscore=0 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2305020115
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ajay,
+On Tue, 2023-03-14 at 15:12 +0100, Arnd Bergmann wrote:
+> > On Tue, Mar 14, 2023, at 13:11, Niklas Schnelle wrote:
+> > > > In a future patch HAS_IOPORT=3Dn will result in inb()/outb() and fr=
+iends
+> > > > not being declared. As PC style parport uses these functions we nee=
+d to
+> > > > handle this dependency.
+> > > >=20
+> > > > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> > > > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> >=20
+> > > >=20
+> > > >  menuconfig PARPORT
+> > > >  	tristate "Parallel port support"
+> > > > -	depends on HAS_IOMEM
+> >=20
+> > I would leave this dependency, or maybe make it 'HAS_IOMEM || HAS_IOPOR=
+T'.
+> > at least the parport_atari driver uses MMIO instead of PIO.
+> >=20
+> > > >  	help
+> > > >  	  If you want to use devices connected to your machine's parallel=
+ port
+> > > >  	  (the connector at the computer with 25 holes), e.g. printer, ZI=
+P
+> > > > @@ -42,7 +41,8 @@ if PARPORT
+> > > >=20
+> > > >  config PARPORT_PC
+> > > >  	tristate "PC-style hardware"
+> > > > -	depends on ARCH_MIGHT_HAVE_PC_PARPORT || (PCI && !S390)
+> > > > +	depends on ARCH_MIGHT_HAVE_PC_PARPORT
+> > > > +	depends on HAS_IOPORT
+> > > >  	help
+> > > >  	  You should say Y here if you have a PC-style parallel port. All
+> > > >  	  IBM PC compatible computers and some Alphas have PC-style
+> >=20
+> > This would revert 66bcd06099bb ("parport_pc: Also enable driver for
+> > PCI systems"), so I think this is wrong. You can drop the !S390
+> > by adding HAS_IOPORT as a dependency, but the other line should still
+> > be=20
+> >=20
+> >        depends on ARCH_MIGHT_HAVE_PC_PARPORT || PCI
+> >    =20
+> >=20
+> >     Arnd
 
-kernel test robot noticed the following build warnings:
+Ok changed for v4. Just saw that commit even nicely references our lack
+of I/O ports :-)
 
-[auto build test WARNING on shuah-kselftest/next]
-[also build test WARNING on shuah-kselftest/fixes linus/master]
-[cannot apply to rostedt-trace/for-next-urgent]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ajay-Kaher/eventfs-introducing-struct-tracefs_inode/20230502-192949
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git next
-patch link:    https://lore.kernel.org/r/1683026600-13485-9-git-send-email-akaher%40vmware.com
-patch subject: [PATCH v2 8/9] eventfs: moving tracing/events to eventfs
-config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20230502/202305022138.cJMVU9RM-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/2fe2002efb23a715f5eb7a58891ff85f4e37b084
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Ajay-Kaher/eventfs-introducing-struct-tracefs_inode/20230502-192949
-        git checkout 2fe2002efb23a715f5eb7a58891ff85f4e37b084
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash kernel/trace/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305022138.cJMVU9RM-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   kernel/trace/trace_events.c: In function 'event_create_dir':
->> kernel/trace/trace_events.c:2424:24: warning: variable 'd_events' set but not used [-Wunused-but-set-variable]
-    2424 |         struct dentry *d_events;
-         |                        ^~~~~~~~
-
-
-vim +/d_events +2424 kernel/trace/trace_events.c
-
-ac343da7bc9048 Masami Hiramatsu         2020-09-10  2417  
-1473e4417c79f1 Steven Rostedt           2009-02-24  2418  static int
-7f1d2f8210195c Steven Rostedt (Red Hat  2015-05-05  2419) event_create_dir(struct dentry *parent, struct trace_event_file *file)
-1473e4417c79f1 Steven Rostedt           2009-02-24  2420  {
-2425bcb9240f8c Steven Rostedt (Red Hat  2015-05-05  2421) 	struct trace_event_call *call = file->event_call;
-ae63b31e4d0e2e Steven Rostedt           2012-05-03  2422  	struct trace_array *tr = file->tr;
-2fe2002efb23a7 Ajay Kaher               2023-05-02  2423  	struct eventfs_file *ef_subsystem = NULL;
-ae63b31e4d0e2e Steven Rostedt           2012-05-03 @2424  	struct dentry *d_events;
-de7b2973903c6c Mathieu Desnoyers        2014-04-08  2425  	const char *name;
-fd99498989f3b3 Steven Rostedt           2009-02-28  2426  	int ret;
-1473e4417c79f1 Steven Rostedt           2009-02-24  2427  
-6ecc2d1ca39177 Steven Rostedt           2009-02-27  2428  	/*
-6ecc2d1ca39177 Steven Rostedt           2009-02-27  2429  	 * If the trace point header did not define TRACE_SYSTEM
-6ecc2d1ca39177 Steven Rostedt           2009-02-27  2430  	 * then the system would be called "TRACE_SYSTEM".
-6ecc2d1ca39177 Steven Rostedt           2009-02-27  2431  	 */
-ae63b31e4d0e2e Steven Rostedt           2012-05-03  2432  	if (strcmp(call->class->system, TRACE_SYSTEM) != 0) {
-2fe2002efb23a7 Ajay Kaher               2023-05-02  2433  		ef_subsystem = event_subsystem_dir(tr, call->class->system, file, parent);
-2fe2002efb23a7 Ajay Kaher               2023-05-02  2434  		if (!ef_subsystem)
-ae63b31e4d0e2e Steven Rostedt           2012-05-03  2435  			return -ENOMEM;
-ae63b31e4d0e2e Steven Rostedt           2012-05-03  2436  	} else
-ae63b31e4d0e2e Steven Rostedt           2012-05-03  2437  		d_events = parent;
-6ecc2d1ca39177 Steven Rostedt           2009-02-27  2438  
-687fcc4aee4567 Steven Rostedt (Red Hat  2015-05-13  2439) 	name = trace_event_name(call);
-2fe2002efb23a7 Ajay Kaher               2023-05-02  2440  	file->ef = eventfs_add_dir(name, ef_subsystem, &tr->eventfs_rwsem);
-2fe2002efb23a7 Ajay Kaher               2023-05-02  2441  	if (IS_ERR(file->ef)) {
-8434dc9340cd2e Steven Rostedt (Red Hat  2015-01-20  2442) 		pr_warn("Could not create tracefs '%s' directory\n", name);
-1473e4417c79f1 Steven Rostedt           2009-02-24  2443  		return -1;
-1473e4417c79f1 Steven Rostedt           2009-02-24  2444  	}
-1473e4417c79f1 Steven Rostedt           2009-02-24  2445  
-9b63776fa3ca96 Steven Rostedt           2012-05-10  2446  	if (call->class->reg && !(call->flags & TRACE_EVENT_FL_IGNORE_ENABLE))
-2fe2002efb23a7 Ajay Kaher               2023-05-02  2447  		eventfs_add_file("enable", TRACE_MODE_WRITE, file->ef, file,
-620a30e97febc8 Oleg Nesterov            2013-07-31  2448  				  &ftrace_enable_fops);
-1473e4417c79f1 Steven Rostedt           2009-02-24  2449  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
