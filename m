@@ -2,90 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B4D46F4194
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 12:28:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1DF96F4196
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 12:28:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234010AbjEBK22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 06:28:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35644 "EHLO
+        id S234046AbjEBK2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 06:28:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233911AbjEBK1k (ORCPT
+        with ESMTP id S233867AbjEBK1n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 06:27:40 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A7B4EED
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 03:26:17 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-94f1d0d2e03so612167566b.0
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 03:26:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683023176; x=1685615176;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Y+VcOBuPZ9Z6a80tOn//2hFrGUX4xkAkZldzuFsuPH8=;
-        b=qr3J9ipcosMHDXmRvIvE5R9kCb45BRSvttmk05Vu3qiiyuL/xmn4oMezVu65IeVt6J
-         g/rcpXX0b6ge20z1gQf+ht4R1mdAh+ED5/Xx0zIzM/jLGJLOsqMN0VahZV5elWK7vTIc
-         cNcfHIthwFsgZePnnlEW2ASPZhmO03givYSvF1LUOq0FRyQpVhSKgmSe0q+AeEkXw+/X
-         YplF35ms1Pn7Ue0A7PHpGMAn9znYPq1frA28NzVljMKNCTs23L+2aLEuiiIArPyMAb+w
-         wIiYpw/satrJpNjLI2Nb2O3gd8qriOy1ZLtknvPI/qUVEh9acJrrydWFeOPG9yPCzXcn
-         BTww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683023176; x=1685615176;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y+VcOBuPZ9Z6a80tOn//2hFrGUX4xkAkZldzuFsuPH8=;
-        b=dQeS669DHB3hPrWPABz+y8bGSzkgh3LkpyNfJz3VXeaX0wmw4OOVJkOb/qAmVdfTiM
-         kGG86AkzTXG4gtuQ2zlqP8AINiZGoED713+prS2dIzxUimdnaYxMhDMdgWWcozkDo55w
-         ax79CP1sAzAAhTxQH/k1K+34zTBKHTNk8VP+V/Z6HMg+cLF8VSzlO9EmSb3WPYMHpYdg
-         4hzg+ebSZlMgArQnpwSIFdkEpFuN+gutN/MkmghwstHrzzlpua9zgjkreYDsTFFx5SND
-         XvALgbciWXra4p37hDo/96O5svPKznh6qXOF0+2rB+Malx8rkoxwEtp5sMzkUIsfET/w
-         ScnA==
-X-Gm-Message-State: AC+VfDy8IU405F96wVGs0+L6wYkc6ejt+pTQbMWQFU6r/XdyVVzPL9mP
-        KTFsv4Y1CffIiLIDa7HEBPQlsw==
-X-Google-Smtp-Source: ACHHUZ73eZoSNWO8O/kr6zY6yMMGXUMAmeVST3CQP9jC3dSuRhCXNIN06aw+TR22xaH76y2JRiEVuw==
-X-Received: by 2002:a17:907:988:b0:94a:171:83b1 with SMTP id bf8-20020a170907098800b0094a017183b1mr13689748ejc.2.1683023176109;
-        Tue, 02 May 2023 03:26:16 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:bafd:1283:b136:5f6a? ([2a02:810d:15c0:828:bafd:1283:b136:5f6a])
-        by smtp.gmail.com with ESMTPSA id a13-20020a1709066d4d00b0094a9b9c4979sm15788738ejt.88.2023.05.02.03.26.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 May 2023 03:26:15 -0700 (PDT)
-Message-ID: <a5e18c4f-b906-5c9d-ec93-836401dcd3ea@linaro.org>
-Date:   Tue, 2 May 2023 12:26:14 +0200
+        Tue, 2 May 2023 06:27:43 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30AF5559B;
+        Tue,  2 May 2023 03:26:20 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1ptnD7-0004cs-4G; Tue, 02 May 2023 12:26:17 +0200
+Message-ID: <0fd55257-5b26-1969-18b7-97b39c3f620b@leemhuis.info>
+Date:   Tue, 2 May 2023 12:26:16 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH net-next V7] dt-bindings: net: xlnx,axi-ethernet: convert
- bindings document to yaml
-Content-Language: en-US
-To:     "Gaddam, Sarath Babu Naidu" <sarath.babu.naidu.gaddam@amd.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>
-Cc:     "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
-        "radhey.shyam.pandey@xilinx.com" <radhey.shyam.pandey@xilinx.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Sarangi, Anirudha" <anirudha.sarangi@amd.com>,
-        "Katakam, Harini" <harini.katakam@amd.com>,
-        "git (AMD-Xilinx)" <git@amd.com>
-References: <20230308061223.1358637-1-sarath.babu.naidu.gaddam@amd.com>
- <5d074e6b-7fe1-ab7f-8690-cfb1bead6927@linaro.org>
- <MW5PR12MB559880B0E220BDBD64E06D2487889@MW5PR12MB5598.namprd12.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <MW5PR12MB559880B0E220BDBD64E06D2487889@MW5PR12MB5598.namprd12.prod.outlook.com>
+ Thunderbird/102.10.0
+Content-Language: en-US, de-DE
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: [regression] Bug 217386 - intel_powerclamp null pointer dereference
+ in Linux 6.3.x
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux kernel regressions list <regressions@lists.linux.dev>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1683023180;0714f1ef;
+X-HE-SMSGID: 1ptnD7-0004cs-4G
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,62 +47,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/03/2023 14:52, Gaddam, Sarath Babu Naidu wrote:
+
+Hi, Thorsten here, the Linux kernel's regression tracker.
+
+I noticed a regression report in bugzilla.kernel.org. As many (most?)
+kernel developers don't keep an eye on it, I decided to forward it by mail.
+
+Note, you have to use bugzilla to reach the reporter, as I sadly[1] can
+not CCed them in mails like this.
+
+Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217386 :
+
+>  Risto A. Paju 2023-05-01 09:49:03 UTC
 > 
+> Created attachment 304199 [details]
+> dmesg-6.3.1
 > 
->> -----Original Message-----
->> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Sent: Tuesday, March 14, 2023 9:22 PM
->> To: Gaddam, Sarath Babu Naidu
->> <sarath.babu.naidu.gaddam@amd.com>; davem@davemloft.net;
->> edumazet@google.com; kuba@kernel.org; pabeni@redhat.com;
->> robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org
->> Cc: michal.simek@xilinx.com; radhey.shyam.pandey@xilinx.com;
->> netdev@vger.kernel.org; devicetree@vger.kernel.org; linux-arm-
->> kernel@lists.infradead.org; linux-kernel@vger.kernel.org; Sarangi,
->> Anirudha <anirudha.sarangi@amd.com>; Katakam, Harini
->> <harini.katakam@amd.com>; git (AMD-Xilinx) <git@amd.com>
->> Subject: Re: [PATCH net-next V7] dt-bindings: net: xlnx,axi-ethernet:
->> convert bindings document to yaml
->>
->> On 08/03/2023 07:12, Sarath Babu Naidu Gaddam wrote:
->>> From: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
->>>
->>> Convert the bindings document for Xilinx AXI Ethernet Subsystem from
->>> txt to yaml. No changes to existing binding description.
->>>
->>
->> (...)
->>
->>> +properties:
->>> +  compatible:
->>> +    enum:
->>> +      - xlnx,axi-ethernet-1.00.a
->>> +      - xlnx,axi-ethernet-1.01.a
->>> +      - xlnx,axi-ethernet-2.01.a
->>> +
->>> +  reg:
->>> +    description:
->>> +      Address and length of the IO space, as well as the address
->>> +      and length of the AXI DMA controller IO space, unless
->>> +      axistream-connected is specified, in which case the reg
->>> +      attribute of the node referenced by it is used.
->>
->> Did you test it with axistream-connected? The schema and description
->> feel contradictory and tests would point the issue.
+> I use intel_powerclamp on a Thinkpad X220i via a custom script for
+> thermal management, and it triggers a kernel bug in Linux 6.3.0 and
+> 6.3.1. The script has a part
 > 
-> Thanks for review comments. We tested with axistream-connected and
-> did not observe any errors. Do you anticipate any issues/errors ?
+> awk something > /sys/class/thermal/cooling_device4/cur_state
+> 
+> and the awk process hangs, with the null pointer bug reported in dmesg.
+> 
+> The script has worked fine for years, and for now I've switched back to
+> the 6.2 series for this laptop.
+> 
+> [tag] [reply] [−]
+> Private
+> Comment 1 Risto A. Paju 2023-05-01 12:23:15 UTC
+> 
+> The affected CPU is an i3-2310M. I tested the same on a newer Intel
+> laptop with an i5-7300HQ, and there's no sign of the bug there.
 
-Yes, I anticipate errors. What you wrote here looks incorrect based on
-the schema.
+From the dmesg:
 
-Also, See also my further comments (or you ignored them?).
+> [   16.495596] Oops: 0002 [#1] PREEMPT SMP PTI
+> [   16.496084] CPU: 0 PID: 2792 Comm: awk Not tainted 6.3.1 #2
+> [   16.496589] Hardware name: LENOVO 428737G/428737G, BIOS 8DET76WW (1.46 ) 06/21/2018
+> [   16.497095] RIP: 0010:idle_inject_set_duration+0x6/0x20
+> [   16.497607] Code: 00 49 c7 c4 f4 ff ff ff eb 92 49 c7 c4 f4 ff ff ff eb 91 cc 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 89 f0 01 d0 74 06 <89> 77 44 89 57 40 c3 cc cc cc cc 66 66 2e 0f 1f 84 00 00 00 00 00
+> [   16.498824] RSP: 0018:ffffc900005e7de8 EFLAGS: 00010206
+> [   16.499461] RAX: 00000000000927c0 RBX: 0000000000000000 RCX: 0000000000001770
+> [   16.500103] RDX: 0000000000001770 RSI: 0000000000091050 RDI: 0000000000000000
+> [   16.500752] RBP: 0000000000000002 R08: 0000000000000001 R09: 000000000000000a
+> [   16.501405] R10: 000000000000000a R11: f000000000000000 R12: 0000000000000000
+> [   16.502071] R13: ffff8881064bd720 R14: ffffc900005e7ea0 R15: ffff8881022283e0
+> [   16.502745] FS:  00007fe494782b80(0000) GS:ffff888216200000(0000) knlGS:0000000000000000
+> [   16.503421] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   16.504095] CR2: 0000000000000044 CR3: 000000010f94c006 CR4: 00000000000606f0
+> [   16.504783] Call Trace:
+> [   16.505456]  <TASK>
+> [   16.506124]  powerclamp_set_cur_state+0x56/0x200 [intel_powerclamp]
+> [   16.506810]  cur_state_store+0x74/0xd0
+> [   16.507497]  kernfs_fop_write_iter+0x128/0x1c0
+> [   16.508193]  vfs_write+0x2be/0x3f0
+> [   16.508897]  ksys_write+0x5a/0xe0
+> [   16.509794]  do_syscall_64+0x3b/0x90
+> [   16.510607]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+> [   16.511444] RIP: 0033:0x7fe4948c0be0
+> [   16.512247] Code: 40 00 48 8b 15 49 c2 0d 00 f7 d8 64 89 02 48 c7 c0 ff ff ff ff eb b7 0f 1f 00 80 3d 01 4a 0e 00 00 74 17 b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 58 c3 0f 1f 80 00 00 00 00 48 83 ec 28 48 89
+> [   16.514025] RSP: 002b:00007ffc045bd0d8 EFLAGS: 00000202 ORIG_RAX: 0000000000000001
+> [   16.515180] RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007fe4948c0be0
+> [   16.516346] RDX: 0000000000000002 RSI: 0000562bc4d50990 RDI: 0000000000000001
+> [   16.517543] RBP: 00007fe49499e780 R08: 0000000000000007 R09: 0000562bc4d46da0
+> [   16.518751] R10: 00007fe4947d5f50 R11: 0000000000000202 R12: 0000000000000002
+> [   16.519977] R13: 0000562bc4d50990 R14: 0000000000000002 R15: 00007fe494999d60
+> [   16.521234]  </TASK>
+> [   16.522479] Modules linked in: 
+> [...]
+> [   16.534416] CR2: 0000000000000044
+> [   16.536059] ---[ end trace 0000000000000000 ]---
+> [   16.537819] RIP: 0010:idle_inject_set_duration+0x6/0x20
+> [   16.537827] Code: 00 49 c7 c4 f4 ff ff ff eb 92 49 c7 c4 f4 ff ff ff eb 91 cc 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 89 f0 01 d0 74 06 <89> 77 44 89 57 40 c3 cc cc cc cc 66 66 2e 0f 1f 84 00 00 00 00 00
+> [   16.543180] RSP: 0018:ffffc900005e7de8 EFLAGS: 00010206
+> [   16.543189] RAX: 00000000000927c0 RBX: 0000000000000000 RCX: 0000000000001770
+> [   16.543193] RDX: 0000000000001770 RSI: 0000000000091050 RDI: 0000000000000000
+> [   16.549435] RBP: 0000000000000002 R08: 0000000000000001 R09: 000000000000000a
+> [   16.551087] R10: 000000000000000a R11: f000000000000000 R12: 0000000000000000
+> [   16.551091] R13: ffff8881064bd720 R14: ffffc900005e7ea0 R15: ffff8881022283e0
+> [   16.554264] FS:  00007fe494782b80(0000) GS:ffff888216200000(0000) knlGS:0000000000000000
+> [   16.554270] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   16.554281] CR2: 0000560363a98298 CR3: 000000010f94c006 CR4: 00000000000606f0
+> [   17.635258] memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=2842 'X'
 
-You can come many months after my review to ask about details, to be
-sure I will forget the topic.
+
+See the ticket for more details.
 
 
-Best regards,
-Krzysztof
+[TLDR for the rest of this mail: I'm adding this report to the list of
+tracked Linux kernel regressions; the text you find below is based on a
+few templates paragraphs you might have encountered already in similar
+form.]
 
+BTW, let me use this mail to also add the report to the list of tracked
+regressions to ensure it's doesn't fall through the cracks:
+
+#regzbot introduced: v6.2..v6.3
+https://bugzilla.kernel.org/show_bug.cgi?id=217386
+#regzbot title: pm: thermal: intel_powerclamp null pointer dereference
+#regzbot ignore-activity
+
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply and tell me -- ideally
+while also telling regzbot about it, as explained by the page listed in
+the footer of this mail.
+
+Developers: When fixing the issue, remember to add 'Link:' tags pointing
+to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
+this thread sees some discussion). See page linked in footer for details.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
+
+[1] because bugzilla.kernel.org tells users upon registration their
+"email address will never be displayed to logged out users"
