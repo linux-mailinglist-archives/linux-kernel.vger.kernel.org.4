@@ -2,77 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E938D6F45EE
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 16:20:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 757746F45F0
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 16:21:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234379AbjEBOT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 10:19:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38314 "EHLO
+        id S234409AbjEBOVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 10:21:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233849AbjEBOTu (ORCPT
+        with ESMTP id S233849AbjEBOVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 10:19:50 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484C3E9
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 07:19:49 -0700 (PDT)
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Tue, 2 May 2023 10:21:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 178F395
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 07:21:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id A5CFC3F445
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 14:19:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1683037183;
-        bh=YEbt8fJaJHySlZTdZRpdSbFwcXzeFhKie6WmHehZH00=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=DKVJ+Zur1RXebmECPN8zKujN1W7Z+zyKs5JZkbep/04ljj6a8tHRn+Ha9tfFYtT3m
-         /ODtKG5LnGXbNXNVl1a5urwdQHq6R8a0cSSGW+0PUngZj45518GuXnHrKeGl2C5yNh
-         F4z5HmM6UpnIDWceuj0ssVus40G9jLkFKe1owrWlmOHQMd0P5TqMh5jdoTTeq4FHKc
-         ObD51jGVNAKtU5oEKaG1je47tPRFEjRyoGpjC4/hMKZFEZq85AOmah5ASg9hsaAopQ
-         USL7FaJf4X1RdiaTkA09xjqXS/qYAJETEhg2jA3h/zhse4j7hl64L//udFrhPReOlJ
-         rHWG/B0KwgrRQ==
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-94a356c74e0so383231166b.2
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 07:19:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683037183; x=1685629183;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YEbt8fJaJHySlZTdZRpdSbFwcXzeFhKie6WmHehZH00=;
-        b=YBmda+JNpaBEllbM4CVsRanwCPogW4BDoLXXLFYFQ5RivkmX7Tg15OsoR4ShiqNF60
-         JlWXhXuAj30q+u48pW4eFXD0d1xyE/Q0Xcxt5A1Qt7Qq1YK+vvGbWlRPJIeHkfV8o0FD
-         pPpQNU6ybnQUvfIYnSOzf7RuNmNqzlPit4sVB/XdOUnYwaRejzo3t0lYzBZHn0Rh0Ue7
-         2RB4O+cs019qykY0bWP36s4F7goNrOJlpyeU9Y+wH/Tt44QcSMXf74H6fFK4bUsEOkiV
-         WQCBoCAHrk5kkZGFINPIBnmUUpebEYPvyqWYt76e/yQfWO0nqNKDhpLMh/6ML8b5OLBD
-         /9/w==
-X-Gm-Message-State: AC+VfDzszRKZpI0nl8gyZjQY2V+x4ZmnrnvgjaioR+F8A7Qe1RMZZw3v
-        zgAnwDniFZVr0TulDYt6zK923F2ugQdo724ULQvPGuJyueb29splX9ZRhk//oHH4NDJPAVAwftG
-        VFEt3m3HBMqsLe/UEmq7UvQ9Z+4kBNmThzAAVCw80aozS3FDzVc1h
-X-Received: by 2002:a17:907:36c7:b0:94f:6025:be53 with SMTP id bj7-20020a17090736c700b0094f6025be53mr82663ejc.50.1683037182991;
-        Tue, 02 May 2023 07:19:42 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6DXO/3B64V8bJw9amh7S0N0hZheD2NW4YD1COF7NlvNtn+ZJpanfL+e6CluGemZjs9V5YXTA==
-X-Received: by 2002:a17:907:36c7:b0:94f:6025:be53 with SMTP id bj7-20020a17090736c700b0094f6025be53mr82651ejc.50.1683037182694;
-        Tue, 02 May 2023 07:19:42 -0700 (PDT)
-Received: from amikhalitsyn.. ([62.168.35.11])
-        by smtp.gmail.com with ESMTPSA id tk5-20020a170907c28500b0095004c87676sm16000802ejc.199.2023.05.02.07.19.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 May 2023 07:19:42 -0700 (PDT)
-From:   Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-To:     mortonm@chromium.org
-Cc:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] LSM: SafeSetID: fix UID printed instead of GID
-Date:   Tue,  2 May 2023 16:18:32 +0200
-Message-Id: <20230502141832.217234-1-aleksandr.mikhalitsyn@canonical.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A6A986241A
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 14:21:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0661CC433EF;
+        Tue,  2 May 2023 14:21:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683037280;
+        bh=asliVNBY/st5F3nTupJNy+o9LWLCvC1CAL3wn6OSEf8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=G48dLF53wNhKD4VSzQeUVDntT+bpVgE0ddCvZzRLsfLnZabL0FZcPNTrfe03o2XPn
+         absPYIgQpsXRRj/5XwY+eWh8uU7wb0mNCCGn/PefsS7Vd1rSI4XQSyESo07hHJWwi+
+         +F1A5OsmeUN+xZHnf9ptQDdFYkSI7i6QwuFgZwabCRQ34ZDoGFG9blCVb6Z5wH37Nh
+         0s1pBR+GIHL2s6XlhG/f4pu2c7HeqySpvHN0vJKodxvbPpWNV7iQDixnBxnalIzJ++
+         NtZh8ADCyI2DUBXVe5etrnVU/19hXY504QcV6FfU6rg8dmu/2D9qmwfYrh5+wimoNd
+         ejpkDR50KDSfw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1ptqsX-00CVEM-JR;
+        Tue, 02 May 2023 15:21:17 +0100
+Date:   Tue, 02 May 2023 15:21:17 +0100
+Message-ID: <86pm7ihl0i.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Justin Forbes <jforbes@fedoraproject.org>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Mike Rapoport <rppt@kernel.org>, Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        jmforbes@linuxtx.org, Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH] Revert arm64: drop ranges in definition of ARCH_FORCE_MAX_ORDER
+In-Reply-To: <ZFEZLZHBosQK9xaH@arm.com>
+References: <20230428153646.823736-1-jforbes@fedoraproject.org>
+        <ZEv76qfIiJcUvdql@arm.com>
+        <ZE1pcwi95nPdlKzN@kernel.org>
+        <CAFbkSA3SzjWZ_Q8XC6-_Kzc+jmUN6sG7vzbSD5X1bRvPUaJg3Q@mail.gmail.com>
+        <ZE3mdYajdFnvl1by@kernel.org>
+        <CAFbkSA0O-4YgNt-7KPhvx+vhvRNc38PO8E--GVAWKVgHK-_9Mw@mail.gmail.com>
+        <ZFEZLZHBosQK9xaH@arm.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: jforbes@fedoraproject.org, catalin.marinas@arm.com, rppt@kernel.org, will@kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, jmforbes@linuxtx.org, akpm@linux-foundation.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,29 +75,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pr_warn message clearly says that GID should be printed,
-but we have UID there. Let's fix that.
+On Tue, 02 May 2023 15:07:41 +0100,
+Catalin Marinas <catalin.marinas@arm.com> wrote:
+>=20
+> On Mon, May 01, 2023 at 04:24:38PM -0500, Justin Forbes wrote:
+> > On Sat, Apr 29, 2023 at 11:02=E2=80=AFPM Mike Rapoport <rppt@kernel.org=
+> wrote:
+> > > Why the default MAX_ORDER was not acceptable on arm64 server machines=
+ but
+> > > it is fine on, say, x86 and s390?
+> > > I'm not asking how you made it possible in Fedora and RHEL, I'm askin=
+g why
+> > > did you switch from the default order at all.
+> >=20
+> > Because the MAX_ORDER on aarch64 with 4K pages is more tuned to the
+> > needs of the average edge client, not so much those of a server class
+> > machine.  And I get it, I would say well over 90% of the Fedora users
+> > running aarch64 are indeed running on a rPi or similar with a small
+> > memory footprint, and workloads which match that.  But we do support
+> > and run a 4K page size aarch64 kernel on proper server class hardware,
+> > running typical server workloads, and RHEL has a lot more users in the
+> > server class than edge clients.   RHEL could probably default to 64K
+> > pages, and most users would be happy with that. Fedora certainly could
+> > not.=20
+>=20
+> I was talking to Marc Zyngier earlier and he reckons the need for a
+> higher MAX_ORDER is the GIC driver ITS allocation for Thunder-X. I'm
+> happy to make ARCH_MAX_ORDER higher in defconfig (12, 13?) if
+> CONFIG_ARCH_THUNDER. Mobile vendors won't enable this platform.
 
-Found accidentaly during the work on isolated user namespaces.
+In any case, I'd like to know exactly *what* requires it. The only
+platform I know would benefit from this is the old TX1, but this
+machine is more a boat anchor than a real server.
 
-Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
----
- security/safesetid/lsm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+	M.
 
-diff --git a/security/safesetid/lsm.c b/security/safesetid/lsm.c
-index e806739f7868..6191e5ba0f70 100644
---- a/security/safesetid/lsm.c
-+++ b/security/safesetid/lsm.c
-@@ -131,7 +131,7 @@ static int safesetid_security_capable(const struct cred *cred,
- 		 * set*gid() (e.g. setting up userns gid mappings).
- 		 */
- 		pr_warn("Operation requires CAP_SETGID, which is not available to GID %u for operations besides approved set*gid transitions\n",
--			__kuid_val(cred->uid));
-+			__kuid_val(cred->gid));
- 		return -EPERM;
- 	default:
- 		/* Error, the only capabilities were checking for is CAP_SETUID/GID */
--- 
-2.34.1
-
+--=20
+Without deviation from the norm, progress is not possible.
