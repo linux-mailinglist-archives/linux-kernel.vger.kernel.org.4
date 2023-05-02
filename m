@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB5326F3CB7
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 06:28:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98ACB6F3CB9
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 06:29:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233367AbjEBE2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 00:28:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42364 "EHLO
+        id S233384AbjEBE3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 00:29:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233151AbjEBE2y (ORCPT
+        with ESMTP id S233235AbjEBE2y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 2 May 2023 00:28:54 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5F5F273A;
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CABB130E1;
         Mon,  1 May 2023 21:28:50 -0700 (PDT)
 From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
         s=mail; t=1683001728;
-        bh=qFEajWvVlStRcKllCItBDHDpRzStSprf9+KoOJV74tA=;
+        bh=FVAGAMsfB/9ZOt6WpZqigpx8Wc9v/TnjxkE0rIT4oYg=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=PM+IzfIt5/Z2JTAhnSub3LQITSndz4ruxbPKfwrIFZ7az2Bp0KLnzt6RLUznuMU7k
-         NlFW+t+LCfEuYJCOo7UdXkNXpPKw9md+feY4pBnwJIo1Za1bFXgk5mYohPVbC0dwQJ
-         I+trX8tC524rxT9j0ImOOsj1KriZNWRIVKp+YrNA=
-Date:   Tue, 02 May 2023 06:28:44 +0200
-Subject: [PATCH v2 1/2] HID: lg4ff: explicitly include linux/leds.h
+        b=ZLOya9fvHRuaat03BDMkgYsFnOPbirmWjk4hywCGkEwnCc+RmvVn5ituZmP0zvVFP
+         N2dx9gAXShdTnEXRH51uDOhWsYtAr+a0WUJIf6FbkBddShpdbl4dPgcF5QZwaEwS2T
+         D35k0NlIO9Cf3MC+bP2nsGo5BYOylDE5dovvRtSg=
+Date:   Tue, 02 May 2023 06:28:45 +0200
+Subject: [PATCH v2 2/2] power: supply: remove unneeded include of
+ linux/leds.h
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20230212-include-power_supply-leds-v2-1-e9910a3f5837@weissschuh.net>
+Message-Id: <20230212-include-power_supply-leds-v2-2-e9910a3f5837@weissschuh.net>
 References: <20230212-include-power_supply-leds-v2-0-e9910a3f5837@weissschuh.net>
 In-Reply-To: <20230212-include-power_supply-leds-v2-0-e9910a3f5837@weissschuh.net>
 To:     Sebastian Reichel <sre@kernel.org>, Jiri Kosina <jikos@kernel.org>,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-input@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        linux-input@vger.kernel.org,
         =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1683001727; l=714;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1683001727; l=808;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=qFEajWvVlStRcKllCItBDHDpRzStSprf9+KoOJV74tA=;
- b=YdHBbqFXjpQWMH67rf1otRSXNwuxB4SQ0KuepjxAIZMcH3bNVcaxs2Sg7kLD0ZUEtrDGFsGbX
- 8nYgxhwkz/RDHA52ziJiCIZ5kCogsQviBCw+UQ/ShkS+Gb+dPxVQ4rJ
+ bh=FVAGAMsfB/9ZOt6WpZqigpx8Wc9v/TnjxkE0rIT4oYg=;
+ b=YqdN6JIcUaOMAjZobPUyAAMZ1rz+dTe5E3M8l8cZttXp67ba/cbVYIoo4CbjtZ/UEfrACldSP
+ veABqKbSV+oD9SL95GIGWtGZtxeAxeSJU7bv4SGpdNle6X6qb5Zfdo5
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -53,28 +54,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of relying on an accidental, transitive inclusion of linux/leds.h
-use it directly.
+Instead of including the full linux/leds.h header file a single
+forward-declaration is enough.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202304301551.baBXvI9d-lkp@intel.com/
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- drivers/hid/hid-lg4ff.c | 1 +
- 1 file changed, 1 insertion(+)
+ include/linux/power_supply.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/hid/hid-lg4ff.c b/drivers/hid/hid-lg4ff.c
-index e3fcf1353fb3..d55d04c140b9 100644
---- a/drivers/hid/hid-lg4ff.c
-+++ b/drivers/hid/hid-lg4ff.c
-@@ -15,6 +15,7 @@
- #include <linux/input.h>
- #include <linux/usb.h>
- #include <linux/hid.h>
-+#include <linux/leds.h>
+diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+index a427f13c757f..dc5e17e8c919 100644
+--- a/include/linux/power_supply.h
++++ b/include/linux/power_supply.h
+@@ -14,10 +14,11 @@
  
- #include "usbhid/usbhid.h"
- #include "hid-lg.h"
+ #include <linux/device.h>
+ #include <linux/workqueue.h>
+-#include <linux/leds.h>
+ #include <linux/spinlock.h>
+ #include <linux/notifier.h>
+ 
++struct led_trigger;
++
+ /*
+  * All voltages, currents, charges, energies, time and temperatures in uV,
+  * µA, µAh, µWh, seconds and tenths of degree Celsius unless otherwise
 
 -- 
 2.40.1
