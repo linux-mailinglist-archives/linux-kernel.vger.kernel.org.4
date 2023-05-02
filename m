@@ -2,77 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B1DF6F3E98
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 09:51:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C82A6F3EA3
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 09:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233706AbjEBHvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 03:51:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49470 "EHLO
+        id S233513AbjEBH4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 03:56:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233696AbjEBHu6 (ORCPT
+        with ESMTP id S229822AbjEBH4L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 03:50:58 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 094624496;
-        Tue,  2 May 2023 00:50:56 -0700 (PDT)
+        Tue, 2 May 2023 03:56:11 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BEF430F9;
+        Tue,  2 May 2023 00:56:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683013857; x=1714549857;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=gKKgWxQpCuWmOuFkCXz8DH5UejGSkjM2udqvopsWWAo=;
-  b=AvFngH6xN3yubi9yuheanXHrtxsm7zY+mNGwjexwjRigKFlNzE5sYkPa
-   2DEFr9JPCASlp+mIkYkwbREYqaNBWXUA413Muxp6gImkXwdAEWUfr/hvX
-   QTgaX4uhu0Gsi+5V1PFSQbJJTfBQOxNYMRaMs5ih0znqG8OMxkRxxa7tE
-   jiEnO5nbXnjXUg53+gngup8o228KN2y6E1Rs6wXvUdp/MH9H3OUwMD71u
-   aXQwlgWEiiVlcMQET4ZdX6a+8VvxwXNjCwHAeTHvc9Wj/pmNmQM/bMwLa
-   lxemYjcYNhymN2x1nCJY65jq/xCSxtFXIc6i5PsKZ7u1PCI79BpGO7T8z
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="328706328"
+  t=1683014170; x=1714550170;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version:content-transfer-encoding;
+  bh=nrkr4HYmMNERiR03z1fTM4+8ZBGmodVVyRAkn4iTZe4=;
+  b=iA1CKD9QN/r5BedDyY96UN8tEqmADQ8p/7gWi0GV/hZg/dWYsvbDKHMq
+   33vb2IpxrE1rAveWR9F7Z1IYquO5t65yUi9FLPwi9LRq3f06Sosy/sqoR
+   a6+HAEYb/2sJC5u5rv4iUAuURiqvgxGYB4nMevSeNFn6gUsl6pxIZMVBF
+   M1jkSVzwLlGtyBRb3TUyT9qHHp32yL9v+hHMAyERpTAN5q+0q8yDFxBHk
+   Xo/es4qt5ZESY7ksYC9Z8pqSYfuuSxyWRlPzg7MjeRsEKnFGtDdb3ZGzd
+   7rT9sPR44NwgT5PZGYcjIMbeQOX06tmfleBeXBPDeTc99TD6PKVof79XY
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="332689690"
 X-IronPort-AV: E=Sophos;i="5.99,243,1677571200"; 
-   d="scan'208";a="328706328"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2023 00:50:56 -0700
+   d="scan'208";a="332689690"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2023 00:56:09 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="785579118"
+X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="807752489"
 X-IronPort-AV: E=Sophos;i="5.99,243,1677571200"; 
-   d="scan'208";a="785579118"
-Received: from petrush-mobl3.ger.corp.intel.com (HELO [10.213.196.106]) ([10.213.196.106])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2023 00:50:53 -0700
-Message-ID: <b615ba5e-c15a-226b-959b-e76216015f83@linux.intel.com>
-Date:   Tue, 2 May 2023 08:50:51 +0100
+   d="scan'208";a="807752489"
+Received: from xinpan-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.35.163])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2023 00:55:50 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
+Cc:     kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de,
+        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+        corbet@lwn.net, void@manifault.com, peterz@infradead.org,
+        juri.lelli@redhat.com, ldufour@linux.ibm.com,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, peterx@redhat.com, david@redhat.com,
+        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
+        nathan@kernel.org, dennis@kernel.org, tj@kernel.org,
+        muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
+        pasha.tatashin@soleen.com, yosryahmed@google.com,
+        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
+        andreyknvl@gmail.com, keescook@chromium.org,
+        ndesaulniers@google.com, gregkh@linuxfoundation.org,
+        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+        glider@google.com, elver@google.com, dvyukov@google.com,
+        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
+        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+        surenb@google.com, kernel-team@android.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        iommu@lists.linux.dev, linux-arch@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
+        cgroups@vger.kernel.org, Andy Shevchenko <andy@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
+Subject: Re: [PATCH 01/40] lib/string_helpers: Drop space in
+ string_get_size's output
+In-Reply-To: <20230501165450.15352-2-surenb@google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20230501165450.15352-1-surenb@google.com>
+ <20230501165450.15352-2-surenb@google.com>
+Date:   Tue, 02 May 2023 10:55:47 +0300
+Message-ID: <877ctr2mm4.fsf@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 8/9] drm/fdinfo: Add comm/cmdline override fields
-Content-Language: en-US
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Christopher Healy <healych@amazon.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Rob Clark <robdclark@chromium.org>,
-        David Airlie <airlied@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230427175340.1280952-1-robdclark@gmail.com>
- <20230427175340.1280952-9-robdclark@gmail.com>
- <135ff649-e50c-50f4-55ba-a1b615865e02@linux.intel.com>
- <CAF6AEGvKnPgtna4yjN56mMjCLqpjs8B8K152VWxmPs1NdY78vA@mail.gmail.com>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <CAF6AEGvKnPgtna4yjN56mMjCLqpjs8B8K152VWxmPs1NdY78vA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,184 +95,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 01 May 2023, Suren Baghdasaryan <surenb@google.com> wrote:
+> From: Kent Overstreet <kent.overstreet@linux.dev>
+>
+> Previously, string_get_size() outputted a space between the number and
+> the units, i.e.
+>   9.88 MiB
+>
+> This changes it to
+>   9.88MiB
+>
+> which allows it to be parsed correctly by the 'sort -h' command.
 
-On 01/05/2023 17:58, Rob Clark wrote:
-> On Fri, Apr 28, 2023 at 4:05 AM Tvrtko Ursulin
-> <tvrtko.ursulin@linux.intel.com> wrote:
->>
->>
->> On 27/04/2023 18:53, Rob Clark wrote:
->>> From: Rob Clark <robdclark@chromium.org>
->>>
->>> These are useful in particular for VM scenarios where the process which
->>> has opened to drm device file is just a proxy for the real user in a VM
->>> guest.
->>>
->>> Signed-off-by: Rob Clark <robdclark@chromium.org>
->>> ---
->>>    Documentation/gpu/drm-usage-stats.rst | 18 ++++++++++++++++++
->>>    drivers/gpu/drm/drm_file.c            | 15 +++++++++++++++
->>>    include/drm/drm_file.h                | 19 +++++++++++++++++++
->>>    3 files changed, 52 insertions(+)
->>>
->>> diff --git a/Documentation/gpu/drm-usage-stats.rst b/Documentation/gpu/drm-usage-stats.rst
->>> index 58dc0d3f8c58..e4877cf8089c 100644
->>> --- a/Documentation/gpu/drm-usage-stats.rst
->>> +++ b/Documentation/gpu/drm-usage-stats.rst
->>> @@ -73,6 +73,24 @@ scope of each device, in which case `drm-pdev` shall be present as well.
->>>    Userspace should make sure to not double account any usage statistics by using
->>>    the above described criteria in order to associate data to individual clients.
->>>
->>> +- drm-comm-override: <valstr>
->>> +
->>> +Returns the client executable override string.  Some drivers support letting
->>> +userspace override this in cases where the userspace is simply a "proxy".
->>> +Such as is the case with virglrenderer drm native context, where the host
->>> +process is just forwarding command submission, etc, from guest userspace.
->>> +This allows the proxy to make visible the executable name of the actual
->>> +app in the VM guest.
->>> +
->>> +- drm-cmdline-override: <valstr>
->>> +
->>> +Returns the client cmdline override string.  Some drivers support letting
->>> +userspace override this in cases where the userspace is simply a "proxy".
->>> +Such as is the case with virglrenderer drm native context, where the host
->>> +process is just forwarding command submission, etc, from guest userspace.
->>> +This allows the proxy to make visible the cmdline of the actual app in the
->>> +VM guest.
->>
->> Perhaps it would be okay to save space here by not repeating the
->> description, like:
->>
->> drm-comm-override: <valstr>
->> drm-cmdline-override: <valstr>
->>
->> Long description blah blah...
->> This allows the proxy to make visible the _executable name *and* command
->> line_ blah blah..
->>
->>> +
->>>    Utilization
->>>    ^^^^^^^^^^^
->>>
->>> diff --git a/drivers/gpu/drm/drm_file.c b/drivers/gpu/drm/drm_file.c
->>> index 9321eb0bf020..d7514c313af1 100644
->>> --- a/drivers/gpu/drm/drm_file.c
->>> +++ b/drivers/gpu/drm/drm_file.c
->>> @@ -178,6 +178,8 @@ struct drm_file *drm_file_alloc(struct drm_minor *minor)
->>>        spin_lock_init(&file->master_lookup_lock);
->>>        mutex_init(&file->event_read_lock);
->>>
->>> +     mutex_init(&file->override_lock);
->>> +
->>>        if (drm_core_check_feature(dev, DRIVER_GEM))
->>>                drm_gem_open(dev, file);
->>>
->>> @@ -292,6 +294,8 @@ void drm_file_free(struct drm_file *file)
->>>        WARN_ON(!list_empty(&file->event_list));
->>>
->>>        put_pid(file->pid);
->>> +     kfree(file->override_comm);
->>> +     kfree(file->override_cmdline);
->>>        kfree(file);
->>>    }
->>>
->>> @@ -995,6 +999,17 @@ void drm_show_fdinfo(struct seq_file *m, struct file *f)
->>>                           PCI_SLOT(pdev->devfn), PCI_FUNC(pdev->devfn));
->>>        }
->>>
->>> +     mutex_lock(&file->override_lock);
->>
->> You could add a fast unlocked check before taking the mutex for no risk
->> apart a transient false negative. For 99.9999% of userspace it would
->> mean no pointless lock/unlock cycle.
-> 
-> I'm not sure I get your point?  This needs to be serialized against
-> userspace setting the override values
+The former is easier for humans to parse, and that should be
+preferred. 'sort -h' is supposed to compare "human readable numbers", so
+arguably sort does not do its job here.
 
-if (file->override_comm || file->override_cmdline) {
-	mutex_lock(&file->override_lock);
-	if (file->override_comm)
-		drm_printf(&p, "drm-comm-override:\t%s\n",
-			   file->override_comm);
-	if (file->override_cmdline)
-		drm_printf(&p, "drm-cmdline-override:\t%s\n",
-			   file->override_cmdline);
-	mutext_unlock(&file->override_lock);
-}
+BR,
+Jani.
 
-No risk apart for a transient false negative (which is immaterial for 
-userspace since fdinfo reads are not ordered versus the override setting 
-anyway) and 99.9% of deployments can get by not needing to pointlessly 
-cycle the lock.
+>
+> Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> Cc: Andy Shevchenko <andy@kernel.org>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+> Cc: Paul Mackerras <paulus@samba.org>
+> Cc: "Michael S. Tsirkin" <mst@redhat.com>
+> Cc: Jason Wang <jasowang@redhat.com>
+> Cc: "Noralf Tr=C3=B8nnes" <noralf@tronnes.org>
+> Cc: Jens Axboe <axboe@kernel.dk>
+> ---
+>  lib/string_helpers.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/lib/string_helpers.c b/lib/string_helpers.c
+> index 230020a2e076..593b29fece32 100644
+> --- a/lib/string_helpers.c
+> +++ b/lib/string_helpers.c
+> @@ -126,8 +126,7 @@ void string_get_size(u64 size, u64 blk_size, const en=
+um string_size_units units,
+>  	else
+>  		unit =3D units_str[units][i];
+>=20=20
+> -	snprintf(buf, len, "%u%s %s", (u32)size,
+> -		 tmp, unit);
+> +	snprintf(buf, len, "%u%s%s", (u32)size, tmp, unit);
+>  }
+>  EXPORT_SYMBOL(string_get_size);
 
-> 
->>
->>> +     if (file->override_comm) {
->>> +             drm_printf(&p, "drm-comm-override:\t%s\n",
->>> +                        file->override_comm);
->>> +     }
->>> +     if (file->override_cmdline) {
->>> +             drm_printf(&p, "drm-cmdline-override:\t%s\n",
->>> +                        file->override_cmdline);
->>> +     }
->>> +     mutex_unlock(&file->override_lock);
->>> +
->>>        if (dev->driver->show_fdinfo)
->>>                dev->driver->show_fdinfo(&p, file);
->>>    }
->>> diff --git a/include/drm/drm_file.h b/include/drm/drm_file.h
->>> index 1339e925af52..604d05fa6f0c 100644
->>> --- a/include/drm/drm_file.h
->>> +++ b/include/drm/drm_file.h
->>> @@ -370,6 +370,25 @@ struct drm_file {
->>>         */
->>>        struct drm_prime_file_private prime;
->>>
->>> +     /**
->>> +      * @comm: Overridden task comm
->>> +      *
->>> +      * Accessed under override_lock
->>> +      */
->>> +     char *override_comm;
->>> +
->>> +     /**
->>> +      * @cmdline: Overridden task cmdline
->>> +      *
->>> +      * Accessed under override_lock
->>> +      */
->>> +     char *override_cmdline;
->>> +
->>> +     /**
->>> +      * @override_lock: Serialize access to override_comm and override_cmdline
->>> +      */
->>> +     struct mutex override_lock;
->>> +
->>
->> I don't think this should go to drm just yet though. Only one driver can
->> make use of it so I'd leave it for later and print from msm_show_fdinfo
->> for now.
-> 
-> This was my original approach but danvet asked that it be moved into
-> drm for consistency across drivers.  (And really, I want the in-flight
-> amd and intel native-context stuff to motivate adding similar features
-> to amdgpu/i915/xe.)
-
-IMO if implementation is not shared, not even by using helpers, I don't 
-think data storage should be either, but it's not a deal breaker.
-
-Regards,
-
-Tvrtko
-
-> 
-> BR,
-> -R
-> 
->> Regards,
->>
->> Tvrtko
->>
->>>        /* private: */
->>>    #if IS_ENABLED(CONFIG_DRM_LEGACY)
->>>        unsigned long lock_count; /* DRI1 legacy lock count */
+--=20
+Jani Nikula, Intel Open Source Graphics Center
