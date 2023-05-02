@@ -2,367 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DB356F4715
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 17:26:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63F246F471A
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 17:26:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234274AbjEBP02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 11:26:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43186 "EHLO
+        id S234498AbjEBP0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 11:26:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234556AbjEBP0Y (ORCPT
+        with ESMTP id S230332AbjEBP0v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 11:26:24 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F1026BC;
-        Tue,  2 May 2023 08:26:21 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id A531421B0D;
-        Tue,  2 May 2023 15:26:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1683041179; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CXWn7FssbrSs8MRrutlOtshdeBbrP/crYQCwv1Iexd0=;
-        b=XxDdHFZlQui1F2WlF8bhbf41oWW6Fr9rAfk13WKktw/+Jtw97yL5A1Sttz4uqgqOcjRNii
-        pj4J+Cp+HRg6BC0SrBdlXBmUXIj6XkAHYUWf0RbaKYkK6ZbWB8Cclv6Li0bhCJwINGjccy
-        EBYuacjqAOW4uoLsHujhtJf/7MKOnXE=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id AA2872C141;
-        Tue,  2 May 2023 15:26:18 +0000 (UTC)
-Date:   Tue, 2 May 2023 17:26:18 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Ian Rogers <irogers@google.com>, ravi.v.shankar@intel.com,
-        Marc Zyngier <maz@kernel.org>,
-        linux-perf-users@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>,
-        kgdb-bugreport@lists.sourceforge.net, ito-yuichi@fujitsu.com,
-        linux-arm-kernel@lists.infradead.org,
-        Stephen Boyd <swboyd@chromium.org>,
-        Masayoshi Mizuma <msys.mizuma@gmail.com>,
-        ricardo.neri@intel.com, Lecopzer Chen <lecopzer.chen@mediatek.com>,
-        Chen-Yu Tsai <wens@csie.org>, Andi Kleen <ak@linux.intel.com>,
-        Colin Cross <ccross@android.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        Alexander Potapenko <glider@google.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Juergen Gross <jgross@suse.com>,
-        Kees Cook <keescook@chromium.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Liam Howlett <liam.howlett@oracle.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-Subject: shared code: was: Re: [PATCH v3] hardlockup: detect hard lockups
- using secondary (buddy) CPUs
-Message-ID: <ZFErmshcrcikrSU1@alley>
-References: <20230501082341.v3.1.I6bf789d21d0c3d75d382e7e51a804a7a51315f2c@changeid>
-MIME-Version: 1.0
+        Tue, 2 May 2023 11:26:51 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2101.outbound.protection.outlook.com [40.107.244.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAB830EB;
+        Tue,  2 May 2023 08:26:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=f1vfo9Enbpioq4NfC35nw0ObYesHy9OU0o6YTtiqQXcgTd/VPHbM0dCER5umNQF1WyPMMFnuc98s8HSXC4YZMD1gyVh8dOepprNUqv8zT0MlzqD8ArVz1jQ4IHfslKzqxinGDwkWhBUfZGB1zXqZFM/iijW1odZ6oDa4s+RnEeBbriIQ5YnuD4IotdPJinHcTZ45ACs584T1Z4dqzLtX/eAsQ6yxuQ4/JAM+YC4+g9wkA3Q/idbapHypAikzth/LymFBi/LtdKc9O78FbX/dTKG/Wi8yZO0i28eoki1LBVoQnsj6WVOCKtMzDb7UiF5pPV8E2Ug596cC5GfcXcIIOg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iKSSL1MuqPlVL7uJ+UaFiY9t6QrKipil9fXXzsd7Lx8=;
+ b=UgNKyDVY9Q5ChaQYTtkUbrlXW9KyBndROWXqJGnKOzZauRGVPmembk6JtkPVMUFGZfCU5vOMYCG8teAJz9v6Zi9YbWcUIvxevP7sxPSNakgEdH321LzL2BIa+GgO6/3mOMpDoSpEJEWi/Fcqs+dBNW0kKJY0+Bv8gJKwPw9Tl2PGWsAnOwvOkVM/pKGKH+Uc1r35emqIzlVkYF/xj8aRTfXC2vNo7NAExVhOTQdGyFCvui5bu10VP4KpFoCKZNRgHQY5/nFUbo4C0hX9TIwPHyOhRwkZ+dLV2sID3ldSNWjQW1a8f2vSEn9tCKIHCTRqn34TnL9wcGJ2ar+XGobACQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iKSSL1MuqPlVL7uJ+UaFiY9t6QrKipil9fXXzsd7Lx8=;
+ b=dBvXzU3cXs/2GC78x4R5+wvggDOvkydDE/ERETfynBrWEj0EbFs7tTfJXHTTt+P3LwvOuTZeLTbxeQxTIhwhjP+2sAxFY5aU+0G2iAIQvekv4PKlKGwlbrRp5QGY+T2cLrwxjDXbqBzMoq/w9LLau6hTe+xdcDh6M+wHrrWKbFM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by SN4PR13MB5812.namprd13.prod.outlook.com (2603:10b6:806:21c::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.20; Tue, 2 May
+ 2023 15:26:38 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6340.031; Tue, 2 May 2023
+ 15:26:38 +0000
+Date:   Tue, 2 May 2023 17:26:30 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Dominique Martinet <asmadeus@codewreck.org>
+Cc:     Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Christian Schoenebeck <linux_oss@crudebyte.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, v9fs@lists.linux.dev,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH 5/5] 9p: remove dead stores (variable set again without
+ being read)
+Message-ID: <ZFErpgo7sq+49H0q@corigine.com>
+References: <20230427-scan-build-v1-0-efa05d65e2da@codewreck.org>
+ <20230427-scan-build-v1-5-efa05d65e2da@codewreck.org>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230501082341.v3.1.I6bf789d21d0c3d75d382e7e51a804a7a51315f2c@changeid>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230427-scan-build-v1-5-efa05d65e2da@codewreck.org>
+X-ClientProxiedBy: AM8P251CA0001.EURP251.PROD.OUTLOOK.COM
+ (2603:10a6:20b:21b::6) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SN4PR13MB5812:EE_
+X-MS-Office365-Filtering-Correlation-Id: dd8d8e6c-5cb2-4345-29b1-08db4b219f0f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: WXsrObXhUbj87weM59e5vAKCPyvhTHaSrLN6oTiYVH4EoIgvU6FE28VCNH4h1FfnDRd1fDfz3zrIdMGBah5XEDg9QSg3E+OP/ZWRF4TSgcGEe5okVHEt5bK2WVOI/xFUU8CZUsyWHPGX195URBWL9YqyL3Eab3QG2oXwBW9+dUMOb2trYAWEf3JK301zI1fIwUW5MJAFUm/vvSHInShx4cfrG/xqCqmt2uds5Bl5Hvn/XHFTM5KwrAwlNeozW0MxvpGKkzvDcqdIxk3nCgPDB+9lWad6YHH7ibVkY9QmZkX4lSpXrskYUzP8UiI9Sv62ZK0K3kwzJO3T0dDTzNT6sJcXAOlejenBPfmoz7+NU4tpEKf9Jtf9M/M4wlm+MvkkvW5hv9n44ZOjXcldHBv7aYsbPPyWzxkeTPQdRJRPi9qDFJphdQBtMCEyN3CzvachSt3yQCW3zydFdCKdLskX/+4CxFHFkaPAfzonHdllmtNGUbVU87vp83oDJRWx9mF/Xv10EEagEzJQl/xgtT1P+DcI7HjNoT31eRKr4ap0HIvlfUMp37psZfNUXiIK9tg4ac4bTKC+xtMXsvJHD55vCYejSaxhJCXn0hPsJLuAQP9ZMbQkquaHgeoJw9KxFjzQYIQoE7taEaAMcqY12B6zTQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(39830400003)(376002)(136003)(346002)(451199021)(41300700001)(66946007)(66556008)(66476007)(6916009)(4326008)(54906003)(6666004)(478600001)(6486002)(86362001)(316002)(36756003)(83380400001)(6512007)(6506007)(8676002)(8936002)(44832011)(5660300002)(4744005)(7416002)(2906002)(2616005)(186003)(38100700002)(67856001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/wY0lDuzSSooCFvIOL5TcYw/ouSZMLsAL6S5JxaJhy6xovnNj1wRZdb4ssjl?=
+ =?us-ascii?Q?2eN+2gGYJy4DhSV3s3QYUuSvexO9/AqGR2oBqtLqmX2d62gvDbDJNKN/OquT?=
+ =?us-ascii?Q?Sh41XHgjw/Rrp8D/XRQ0R3q+sQUsEMFasMlmQGNhLMS7LW+fwV3FCxmDedwn?=
+ =?us-ascii?Q?cVMSMzxFMLTLr7cGr3OUkLF77c/T3zyYySRhgW8En+f9kTQomZDXvqPOscwt?=
+ =?us-ascii?Q?admMvZfSmrL3nzgBOxk5nPRkCcKLSoftL2AsKFXBcOmjHD4yeaQzahFspuRe?=
+ =?us-ascii?Q?KFoUqPmjM71gSMsETvVRMFGTmm0ZPocoUHjzLd4i1Z+fSYeSECgsoX3a9JYH?=
+ =?us-ascii?Q?r8WFwSx5jo0fpMjDS6TD3bSLmXIYTLnFcqByBN4W4OSqHR6mGsfDRuQ3zHf7?=
+ =?us-ascii?Q?hSGBS/B7prkSd99pCl2LZmm+59vYjpdqAhVZ61MIfHozbadffynsV43QV8BD?=
+ =?us-ascii?Q?1MzeKufqd8DGsCG9lKcv/fHQqNnjW1L0j4zSpQFmqZCdU31CGNFCpgXH7AAy?=
+ =?us-ascii?Q?ZD1UMV2L/xv33XJUEX8/2J2lb2kX2vTvqpJae/776Gg43J//RU2iRuvlFysa?=
+ =?us-ascii?Q?mHbzYIUx44QGR15U52XhvSZdAEZeu0NUC5L0YCnyHAP0ATn57m2GWcZqpqjM?=
+ =?us-ascii?Q?TiBs+6qAAcziTKDQxIZvJ95tyJzqoer8+J1WiOV1frh4mYQFkOrrYONUXV1f?=
+ =?us-ascii?Q?PdCJcTz08e7+j6jiCYuk2xAG7bEmMIHX0URbdkg9Cw8yPMlN7egDX82xhb1E?=
+ =?us-ascii?Q?IASznh803J7QDIkEObXI7TAhTanrieFLL+5u3A9rLiAJUwu7u5WxlS0mDt/m?=
+ =?us-ascii?Q?x3ZV3lDSESbCsI4FOFBeMwvlbEfZDvZD+hmHjLR/qRtEx4g+Wopv+nQ2gt/U?=
+ =?us-ascii?Q?aPpT7Eq/WOAoRmL60ZUYAkQUCI7iUgntiWydkpGBU1yCOMMP1+CT6oFnOIy2?=
+ =?us-ascii?Q?O/VLxdu050GRLmlleLrmRTqeAUFI2z7qgQ6KQoMt8OovZSqkZZsi4dikT3P8?=
+ =?us-ascii?Q?whTE3jXMsxYsjd+Y7RBaelP+yF7qMMEn1yPh0jHnYx36CZzOaD6N1EzpTLGW?=
+ =?us-ascii?Q?EwpcL0xIAoMF36nu8hzPpHhfKi3m5I4Oh9i3hFvsav75sfS6io1jIObo8n7c?=
+ =?us-ascii?Q?+WDbYJu05tndu193H1sKCVsp8RxMBQmPKMVl53t9SBj9gOj+gR+crSyduOFq?=
+ =?us-ascii?Q?o56Rkhq8gCmfqLNK7m422LvFZp8v9Q/vkKUES2Y6stFM8+0S058RVLvUpW5R?=
+ =?us-ascii?Q?v6onsiIlAnW/wsILGh+5XDRlpLbV9DbFS1CROsWoxgqnRMh8rwHI2MVNKmw7?=
+ =?us-ascii?Q?THxrzBuA1/nvZGqeg8NTqm2fNkHZZWgA6mEr0V7YuHMPsiQq9vtaync4Rhsq?=
+ =?us-ascii?Q?S+49zzgECj8oGVj6JtSmxo8GqdbGgh0mmBflHOFciThYoo1ohVmKboA/5bTg?=
+ =?us-ascii?Q?uu29JE3ZBMpJy5FKSmhsNAOYSjOFAcTG1uV6SdwYnJyo34e/2ovD20/bZQMR?=
+ =?us-ascii?Q?jjENbxhl8ZdRopzy/2xXJKQ+ivGebBxCSaaXZXdfUaWoSUTe2gZzk0zc7f+g?=
+ =?us-ascii?Q?41+5GY2O4sRw0EnnC77PJGZdyWDb3sBqD7oDGtTgKusaMwo0DYpzs7lw4K4k?=
+ =?us-ascii?Q?ZpF8K1IHTdCffI2OBL1fxEDE1HAtK1bx0BiPD6XV2ZEuTptifJXaht5zGsDe?=
+ =?us-ascii?Q?HkqzvA=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dd8d8e6c-5cb2-4345-29b1-08db4b219f0f
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2023 15:26:38.1512
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: CnJF9PfbemARxExphEgZ7HqiWANBuufv3seRpYJvYEsaHiGCxoA0Ot8h0nZMTq91Uujcnc/eytlSJqYnGRS+iNeCtqnUHiJJuZBrTkJMKI0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR13MB5812
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2023-05-01 08:24:46, Douglas Anderson wrote:
-> From: Colin Cross <ccross@android.com>
+On Thu, Apr 27, 2023 at 08:23:38PM +0900, Dominique Martinet wrote:
+> The 9p code for some reason used to initialize variables outside of the
+> declaration, e.g. instead of just initializing the variable like this:
 > 
-> Implement a hardlockup detector that doesn't doesn't need any extra
-> arch-specific support code to detect lockups. Instead of using
-> something arch-specific we will use the buddy system, where each CPU
-> watches out for another one. Specifically, each CPU will use its
-> softlockup hrtimer to check that the next CPU is processing hrtimer
-> interrupts by verifying that a counter is increasing.
+> int retval = 0
 > 
-> --- a/include/linux/nmi.h
-> +++ b/include/linux/nmi.h
-> @@ -134,6 +144,7 @@ void lockup_detector_reconfigure(void);
->  static inline void touch_nmi_watchdog(void)
->  {
->  	arch_touch_nmi_watchdog();
-> +	buddy_cpu_touch_watchdog();
+> We would be doing this:
+> 
+> int retval;
+> retval = 0;
+> 
+> This is perfectly fine and the compiler will just optimize dead stores
+> anyway, but scan-build seems to think this is a problem and there are
+> many of these warnings making the output of scan-build full of such
+> warnings:
+> fs/9p/vfs_inode.c:916:2: warning: Value stored to 'retval' is never read [deadcode.DeadStores]
+>         retval = 0;
+>         ^        ~
+> 
+> I have no strong opinion here, but if we want to regularily run
 
-	touch_buddy_watchdog();    ??? to follow the naming scheme?
+s/regularily/regularly/
 
->  	touch_softlockup_watchdog();
->  }
->  
-> --- a/kernel/watchdog.c
-> +++ b/kernel/watchdog.c
-> @@ -106,6 +108,13 @@ void __weak watchdog_nmi_disable(unsigned int cpu)
->  	hardlockup_detector_perf_disable();
->  }
->  
-> +#else
-> +
-> +int __weak watchdog_nmi_enable(unsigned int cpu) { return 0; }
-> +void __weak watchdog_nmi_disable(unsigned int cpu) { return; }
+> scan-build we should fix these just to silence the messages.
+> 
+> I've confirmed these all are indeed ok to remove.
 
-Honestly, the mix of softlockup and hardlockup code was a hard to
-follow even before this patch. And it is going to be worse.
+Likewise, these look good to me.
 
-Anyway, the buddy watchdog is not using NMI at all. It should not
-get enable using a function called *_nmi_enabled().
+> Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
 
-Also some comments are not longer valid, for example:
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
-static void watchdog_enable(unsigned int cpu)
-{
-[...]
-	/* Enable the perf event */
-	if (watchdog_enabled & NMI_WATCHDOG_ENABLED)
-		watchdog_nmi_enable(cpu);
-
-
-I do not know. Maybe, fixing the mess is beyond any hope.
-But we shold not make it worse.
-
-I suggest to rename/shuffle at least functions touched
-by this patchset to improve the meaning.
-
-Sigh, it is hard to find a reasonable names. The code
-already uses:
-
-    + watchdog_*
-    + watchdog_nmi_
-
-    + softlockup_*
-
-    + lockup_detector_*
-    + hardlockup_detector_perf_*
-
-and sysctl:
-
-		.procname       = "watchdog",
-		.procname	= "watchdog_thresh",
-		.procname       = "nmi_watchdog",
-		.procname	= "watchdog_cpumask",
-		.procname       = "soft_watchdog",
-		.procname	= "softlockup_panic",
-		.procname	= "softlockup_all_cpu_backtrace",
-		.procname	= "hardlockup_panic",
-		.procname	= "hardlockup_all_cpu_backtrace",
-
-
-So, I suggest, to use the names:
-
-
-    + watchdog_*
-
-	+ for the common infrastructure
-	+ keep it in watchdog.c
-
-    + hardlockup_detector_* or
-      hardlockup_watchdog_* or
-      watchdog_hld_*
-
-	+ for the common hardlockup stuff.
-	+ it t can stay in watchdog.c to keep shuffling bearable
-
-
-    + hardlockup_detector_nmi_* or
-      hardlockup_watchdog_nmi_* or
-      watchdog_hld_nmi_* or
-      watchdog_nmi_*
-
-	+ for the arch specific hardlockup stuff that is
-	  using NMI interrupts.
-
-	+ it might either stay in watchdog_hld.c
-	  or be moved to watchdog_nmi.c or
-	  watchdog_hld_nmi.c
-
-    + hardlockup_detector_buddy_* or
-      hardlockup_watchdog_buddy_* or
-      watchdog_hld_buddy_*
-      watchdog_buddy_*
-
-	+ for the arch specific hardlockup stuff that is
-	  using buddy monitoring
-
-	+ it might either be added to watchdog_hld.c
-	  or be moved to watchdog_buddy.c or
-	  watchdog_hld_buddy.c
-
-
-Opinion:
-
-     The buddy watchdog might actually be used also for
-     softlockup detector. So, watchdog_buddy_* API
-     and watchdog_buddy.c might make sense.
-
-
-> +
-> +#endif /* CONFIG_HARDLOCKUP_DETECTOR */
-> +
->  /* Return 0, if a NMI watchdog is available. Error code otherwise */
->  int __weak __init watchdog_nmi_probe(void)
->  {
-> @@ -364,6 +373,9 @@ static enum hrtimer_restart watchdog_timer_fn(struct hrtimer *hrtimer)
->  	/* kick the hardlockup detector */
->  	watchdog_interrupt_count();
->  
-> +	/* test for hardlockups */
-> +	watchdog_check_hardlockup();
-
-  rename watchdog_buddy_check_hardlockup(); ???
-
-> +
->  	/* kick the softlockup detector */
->  	if (completion_done(this_cpu_ptr(&softlockup_completion))) {
->  		reinit_completion(this_cpu_ptr(&softlockup_completion));
-> --- /dev/null
-> +++ b/kernel/watchdog_buddy_cpu.c
-> @@ -0,0 +1,141 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <linux/cpu.h>
-> +#include <linux/cpumask.h>
-> +#include <linux/kernel.h>
-> +#include <linux/nmi.h>
-> +#include <linux/percpu-defs.h>
-> +
-> +static DEFINE_PER_CPU(bool, watchdog_touch);
-> +static DEFINE_PER_CPU(bool, hard_watchdog_warn);
-> +static cpumask_t __read_mostly watchdog_cpus;
-> +
-> +static unsigned long hardlockup_allcpu_dumped;
-> +
-> +int __init watchdog_nmi_probe(void)
-> +{
-> +	return 0;
-> +}
-
-This is pretty strange. It shows that it was added a hacky way.
-
-> +
-> +notrace void buddy_cpu_touch_watchdog(void)
-> +{
-> +	/*
-> +	 * Using __raw here because some code paths have
-> +	 * preemption enabled.  If preemption is enabled
-> +	 * then interrupts should be enabled too, in which
-> +	 * case we shouldn't have to worry about the watchdog
-> +	 * going off.
-> +	 */
-> +	raw_cpu_write(watchdog_touch, true);
-> +}
-> +EXPORT_SYMBOL_GPL(buddy_cpu_touch_watchdog);
-
-Cut&pasted arch_touch_nmi_watchdog().
-
-> +
-> +static unsigned int watchdog_next_cpu(unsigned int cpu)
-> +{
-> +	cpumask_t cpus = watchdog_cpus;
-> +	unsigned int next_cpu;
-> +
-> +	next_cpu = cpumask_next(cpu, &cpus);
-> +	if (next_cpu >= nr_cpu_ids)
-> +		next_cpu = cpumask_first(&cpus);
-> +
-> +	if (next_cpu == cpu)
-> +		return nr_cpu_ids;
-> +
-> +	return next_cpu;
-> +}
-> +
-[...]
-> +static int is_hardlockup_buddy_cpu(unsigned int cpu)
-> +{
-> +	unsigned long hrint = per_cpu(hrtimer_interrupts, cpu);
-> +
-> +	if (per_cpu(hrtimer_interrupts_saved, cpu) == hrint)
-> +		return 1;
-> +
-> +	per_cpu(hrtimer_interrupts_saved, cpu) = hrint;
-> +	return 0;
-
-This is cut&pasted is_hardlockup(). And the __this_cpu_* API
-is replaced by per_cpu_* API.
-
-> +}
-> +
-> +void watchdog_check_hardlockup(void)
-> +{
-> +	unsigned int next_cpu;
-> +
-> +	/*
-> +	 * Test for hardlockups every 3 samples. The sample period is
-> +	 *  watchdog_thresh * 2 / 5, so 3 samples gets us back to slightly over
-> +	 *  watchdog_thresh (over by 20%).
-> +	 */
-> +	if (__this_cpu_read(hrtimer_interrupts) % 3 != 0)
-> +		return;
-> +
-> +	/* check for a hardlockup on the next CPU */
-> +	next_cpu = watchdog_next_cpu(smp_processor_id());
-> +	if (next_cpu >= nr_cpu_ids)
-> +		return;
-> +
-> +	/* Match with smp_wmb() in watchdog_nmi_enable() / watchdog_nmi_disable() */
-> +	smp_rmb();
-> +
-> +	if (per_cpu(watchdog_touch, next_cpu) == true) {
-> +		per_cpu(watchdog_touch, next_cpu) = false;
-> +		return;
-> +	}
-> +
-> +	if (is_hardlockup_buddy_cpu(next_cpu)) {
-> +		/* only warn once */
-> +		if (per_cpu(hard_watchdog_warn, next_cpu) == true)
-> +			return;
-> +
-> +		/*
-> +		 * Perform all-CPU dump only once to avoid multiple hardlockups
-> +		 * generating interleaving traces
-> +		 */
-> +		if (sysctl_hardlockup_all_cpu_backtrace &&
-> +				!test_and_set_bit(0, &hardlockup_allcpu_dumped))
-> +			trigger_allbutself_cpu_backtrace();
-> +
-> +		if (hardlockup_panic)
-> +			panic("Watchdog detected hard LOCKUP on cpu %u", next_cpu);
-> +		else
-> +			WARN(1, "Watchdog detected hard LOCKUP on cpu %u", next_cpu);
-> +
-> +		per_cpu(hard_watchdog_warn, next_cpu) = true;
-> +	} else {
-> +		per_cpu(hard_watchdog_warn, next_cpu) = false;
-
-Also this cut&pastes a lots of code from watchdog_overflow_callback().
-
-I wonder if we could somehow share the code between the two hardlockup
-detectors. It would be win-win. It might help a lot with maintenance.
-
-Best Regards,
-Petr
