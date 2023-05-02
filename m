@@ -2,54 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1FBC6F4C0E
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 23:20:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE8956F4C12
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 23:21:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbjEBVU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 17:20:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58334 "EHLO
+        id S229666AbjEBVVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 17:21:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbjEBVUZ (ORCPT
+        with ESMTP id S229559AbjEBVVX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 17:20:25 -0400
-Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8D7B1FE3
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 14:20:06 -0700 (PDT)
-Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-32f240747cdso1201625ab.1
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 14:20:06 -0700 (PDT)
+        Tue, 2 May 2023 17:21:23 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40E6D19AD
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 14:21:12 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-9619095f479so499669266b.1
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 14:21:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1683062469; x=1685654469;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RzcMzqLnc5vNL8n9f33rayTWsgoEsdQ3LWpXeai0x68=;
+        b=L6GWhipoouv400oFasis646RDfDksMeWYa6MWc4l/P5HCkcxY+oYOIBoT3b4/YqDS4
+         416f1ec2Bpkjb6SIXQ/KYtEKTPJgvC5RLSbGNwrQKXOol0gfHnJvQje2SJ1xRPAWTR/1
+         KqHvgX3/ofniDRw1NCL5oOdAoNBIQnK2dQ0xU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683062406; x=1685654406;
-        h=cc:to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=B/h400Ue9gkiTpCmgjrJJ7oyBbnQwK+MrRj/EZBd5W0=;
-        b=TFGuqVpUCLM3GirXFnQ64+3mJwNaOXtYiMDtyQlV5Y7MG+EX7u1OfG/4a2hqm6ikQn
-         bOSXug0+p4/q/tKCEcn3ZOYYLk5NTg5IvKe5Ml/s0jKXWoq4UVcD3kpavxL+OG0JOz1M
-         NRRZc4Fns77Ry+rMjyHaWlTgPChZcNwGsdKh1QPZAS0vbBfR2s2H9iJhI+lHQrLf/jpc
-         CFYuZ0kOoYjndgtUstaCl2KnYei0NTARpzYWHbEJVZDdkI0pLRbNlWTp17ofA9hf/wRu
-         tUU0E0Rk8fsiP9MhYQ0JmFyi0H+g+WVJW/gFpHa48r2dIl8nOCoDgEDe80dI+bceGF55
-         vZ4Q==
-X-Gm-Message-State: AC+VfDy1VMkRfcVuxoX2AFkxJdueVRQh1O4+O5aWih/Ch/OJ0WKR3eDh
-        AJygtuHCiS8yQ+wErbsEXu8i7WjW4/EGy9OtyaQt9a/71Sh7
-X-Google-Smtp-Source: ACHHUZ4M0kQdXdeLW4Vus3Z02VxMJ3Zqbc5vWVOCW+LdPC6eO8XHje3lEc4WI1H0Wpuh5Mzrqbl6tE9givQQpW0qOY0wum6hJ6KL
+        d=1e100.net; s=20221208; t=1683062469; x=1685654469;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RzcMzqLnc5vNL8n9f33rayTWsgoEsdQ3LWpXeai0x68=;
+        b=c9W/StdOrA4aQ8N4bFMTuTUQb2RUvv6G9hwD8Pdsz4Bf812EW0SCrlDLOYsHNblQOk
+         i8fGCWRhYMrhKtJoa82tWAShW+3Z4d5/4v8fu6IW8ErQu8uhiQw1Kpv34rBptYmanqyp
+         SBezTBSlBrwYVZD9qThOT/4Y78d0MEQdcjr/+YbNEHvhX54F6JgeJO0EDKaFQ8bzvesD
+         Ap/4PNAPJWS5B0VN1FldqM4XrG/W/XgNjiSDKoM8av//sm8VqD726kj/5YOShpqfl7Dy
+         kq3lRsEV7hzt6SqTxe+EGlDcfM0CO+jY/bsRiHC6Lrjkry4++9DoNqh5IjuC+dMw1tdV
+         TTBg==
+X-Gm-Message-State: AC+VfDyiThlus0NNnl4JLxsjuwtU+VjnyNYt/p8XrigniQcNEoVUFniw
+        fp2tKmU9q5ero4/Axn/+GA0tBBCF2YttjSzLZsqPrQ==
+X-Google-Smtp-Source: ACHHUZ6ZCh59tscPFHz6x0cSL2A04xxAHGlt0aRCowP1lcrLsi5n7pDMHfZ0Xb6xv1cG5aiEDDQ9hw==
+X-Received: by 2002:a17:907:31c3:b0:94f:788:6bc with SMTP id xf3-20020a17090731c300b0094f078806bcmr1820001ejb.37.1683062469236;
+        Tue, 02 May 2023 14:21:09 -0700 (PDT)
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com. [209.85.128.47])
+        by smtp.gmail.com with ESMTPSA id ia1-20020a170907a06100b009614fea69e8sm4448563ejc.74.2023.05.02.14.21.06
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 May 2023 14:21:07 -0700 (PDT)
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-3f256b84f14so59895e9.0
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 14:21:06 -0700 (PDT)
+X-Received: by 2002:a05:600c:1e20:b0:3f1:70d1:21a6 with SMTP id
+ ay32-20020a05600c1e2000b003f170d121a6mr66599wmb.0.1683062466606; Tue, 02 May
+ 2023 14:21:06 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:3421:b0:760:ec54:6069 with SMTP id
- n33-20020a056602342100b00760ec546069mr14770062ioz.2.1683062406005; Tue, 02
- May 2023 14:20:06 -0700 (PDT)
-Date:   Tue, 02 May 2023 14:20:05 -0700
-In-Reply-To: <20230502212003.GA15394@frogsfrogsfrogs>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d84b2605fabc8058@google.com>
-Subject: Re: [syzbot] [xfs?] KASAN: slab-out-of-bounds Read in xfs_getbmap
-From:   syzbot <syzbot+c103d3808a0de5faaf80@syzkaller.appspotmail.com>
-To:     djwong@kernel.org
-Cc:     djwong@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+References: <20230428135414.v3.1.Ia86ccac02a303154a0b8bc60567e7a95d34c96d3@changeid>
+ <20230430085300.3173-1-hdanton@sina.com>
+In-Reply-To: <20230430085300.3173-1-hdanton@sina.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 2 May 2023 14:20:54 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WLHZfNN5cGMUEnvv17obVK-MLmWHJHx=MV55Q1YxczOA@mail.gmail.com>
+Message-ID: <CAD=FV=WLHZfNN5cGMUEnvv17obVK-MLmWHJHx=MV55Q1YxczOA@mail.gmail.com>
+Subject: Re: [PATCH v3] migrate_pages: Avoid blocking for IO in MIGRATE_SYNC_LIGHT
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Matthew Wilcox <willy@infradead.org>,
+        Yu Zhao <yuzhao@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,184 +81,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Mon, May 01, 2023 at 11:53:47AM -0700, syzbot wrote:
->> Hello,
->> 
->> syzbot found the following issue on:
->> 
->> HEAD commit:    58390c8ce1bd Merge tag 'iommu-updates-v6.4' of git://git.k..
->> git tree:       upstream
->> console+strace: https://syzkaller.appspot.com/x/log.txt?x=11e6af2c280000
->> kernel config:  https://syzkaller.appspot.com/x/.config?x=5eadbf0d3c2ece89
->> dashboard link: https://syzkaller.appspot.com/bug?extid=c103d3808a0de5faaf80
->> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
->> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12e25f2c280000
->> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14945d10280000
->> 
->> Downloadable assets:
->> disk image: https://storage.googleapis.com/syzbot-assets/60130779f509/disk-58390c8c.raw.xz
->> vmlinux: https://storage.googleapis.com/syzbot-assets/d7f0cdd29b71/vmlinux-58390c8c.xz
->> kernel image: https://storage.googleapis.com/syzbot-assets/de415ad52ae4/bzImage-58390c8c.xz
->> mounted in repro: https://storage.googleapis.com/syzbot-assets/c94bae2c94e1/mount_0.gz
->> 
->> IMPORTANT: if you fix the issue, please add the following tag to the commit:
->> Reported-by: syzbot+c103d3808a0de5faaf80@syzkaller.appspotmail.com
->> 
->> ==================================================================
->> BUG: KASAN: slab-out-of-bounds in xfs_getbmap+0x1c06/0x1c90 fs/xfs/xfs_bmap_util.c:561
->> Read of size 4 at addr ffff88801872aa78 by task syz-executor294/5000
->> 
->> CPU: 1 PID: 5000 Comm: syz-executor294 Not tainted 6.3.0-syzkaller-12049-g58390c8ce1bd #0
->> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
->> Call Trace:
->>  <TASK>
->>  __dump_stack lib/dump_stack.c:88 [inline]
->>  dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
->>  print_address_description mm/kasan/report.c:351 [inline]
->>  print_report+0x163/0x540 mm/kasan/report.c:462
->>  kasan_report+0x176/0x1b0 mm/kasan/report.c:572
->>  xfs_getbmap+0x1c06/0x1c90 fs/xfs/xfs_bmap_util.c:561
->>  xfs_ioc_getbmap+0x243/0x7a0 fs/xfs/xfs_ioctl.c:1481
->>  xfs_file_ioctl+0xbf5/0x16a0 fs/xfs/xfs_ioctl.c:1949
->>  vfs_ioctl fs/ioctl.c:51 [inline]
->>  __do_sys_ioctl fs/ioctl.c:870 [inline]
->>  __se_sys_ioctl+0xf1/0x160 fs/ioctl.c:856
->>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->>  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
->>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->> RIP: 0033:0x7fc886bade49
->> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 71 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
->> RSP: 002b:00007fc87f738208 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
->> RAX: ffffffffffffffda RBX: 00007fc886c3c7b8 RCX: 00007fc886bade49
->> RDX: 0000000020000140 RSI: 00000000c0205826 RDI: 0000000000000005
->> RBP: 00007fc886c3c7b0 R08: 00007fc87f738700 R09: 0000000000000000
->> R10: 00007fc87f738700 R11: 0000000000000246 R12: 00007fc886c3c7bc
->> R13: 00007ffdc483022f R14: 00007fc87f738300 R15: 0000000000022000
->>  </TASK>
->> 
->> Allocated by task 4450:
->>  kasan_save_stack mm/kasan/common.c:45 [inline]
->>  kasan_set_track+0x4f/0x70 mm/kasan/common.c:52
->>  ____kasan_kmalloc mm/kasan/common.c:374 [inline]
->>  __kasan_kmalloc+0x98/0xb0 mm/kasan/common.c:383
->>  kasan_kmalloc include/linux/kasan.h:196 [inline]
->>  __do_kmalloc_node mm/slab_common.c:966 [inline]
->>  __kmalloc_node+0xb8/0x230 mm/slab_common.c:973
->>  kmalloc_node include/linux/slab.h:579 [inline]
->>  kvmalloc_node+0x72/0x180 mm/util.c:604
->>  kvmalloc include/linux/slab.h:697 [inline]
->>  simple_xattr_alloc+0x43/0xa0 fs/xattr.c:1073
->>  shmem_initxattrs+0x8e/0x1e0 mm/shmem.c:3290
->>  security_inode_init_security+0x2df/0x3f0 security/security.c:1630
->>  shmem_mknod+0xba/0x1c0 mm/shmem.c:2947
->>  lookup_open fs/namei.c:3492 [inline]
->>  open_last_lookups fs/namei.c:3560 [inline]
->>  path_openat+0x13df/0x3170 fs/namei.c:3788
->>  do_filp_open+0x234/0x490 fs/namei.c:3818
->>  do_sys_openat2+0x13f/0x500 fs/open.c:1356
->>  do_sys_open fs/open.c:1372 [inline]
->>  __do_sys_openat fs/open.c:1388 [inline]
->>  __se_sys_openat fs/open.c:1383 [inline]
->>  __x64_sys_openat+0x247/0x290 fs/open.c:1383
->>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->>  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
->>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->> 
->> The buggy address belongs to the object at ffff88801872aa00
->>  which belongs to the cache kmalloc-64 of size 64
->> The buggy address is located 79 bytes to the right of
->>  allocated 41-byte region [ffff88801872aa00, ffff88801872aa29)
->> 
->> The buggy address belongs to the physical page:
->> page:ffffea000061ca80 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1872a
->> flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
->> page_type: 0xffffffff()
->> raw: 00fff00000000200 ffff888012441640 ffffea0000ad39c0 dead000000000002
->> raw: 0000000000000000 0000000080200020 00000001ffffffff 0000000000000000
->> page dumped because: kasan: bad access detected
->> page_owner tracks the page as allocated
->> page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12cc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY), pid 4439, tgid 4439 (S02sysctl), ts 15189537421, free_ts 15177747790
->>  set_page_owner include/linux/page_owner.h:31 [inline]
->>  post_alloc_hook+0x1e6/0x210 mm/page_alloc.c:1722
->>  prep_new_page mm/page_alloc.c:1729 [inline]
->>  get_page_from_freelist+0x321c/0x33a0 mm/page_alloc.c:3493
->>  __alloc_pages+0x255/0x670 mm/page_alloc.c:4759
->>  alloc_slab_page+0x6a/0x160 mm/slub.c:1851
->>  allocate_slab mm/slub.c:1998 [inline]
->>  new_slab+0x84/0x2f0 mm/slub.c:2051
->>  ___slab_alloc+0xa85/0x10a0 mm/slub.c:3192
->>  __slab_alloc mm/slub.c:3291 [inline]
->>  __slab_alloc_node mm/slub.c:3344 [inline]
->>  slab_alloc_node mm/slub.c:3441 [inline]
->>  __kmem_cache_alloc_node+0x1b8/0x290 mm/slub.c:3490
->>  kmalloc_trace+0x2a/0xe0 mm/slab_common.c:1057
->>  kmalloc include/linux/slab.h:559 [inline]
->>  load_elf_binary+0x1cdb/0x2830 fs/binfmt_elf.c:910
->>  search_binary_handler fs/exec.c:1737 [inline]
->>  exec_binprm fs/exec.c:1779 [inline]
->>  bprm_execve+0x90e/0x1740 fs/exec.c:1854
->>  do_execveat_common+0x580/0x720 fs/exec.c:1962
->>  do_execve fs/exec.c:2036 [inline]
->>  __do_sys_execve fs/exec.c:2112 [inline]
->>  __se_sys_execve fs/exec.c:2107 [inline]
->>  __x64_sys_execve+0x92/0xa0 fs/exec.c:2107
->>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->>  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
->>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->> page last free stack trace:
->>  reset_page_owner include/linux/page_owner.h:24 [inline]
->>  free_pages_prepare mm/page_alloc.c:1302 [inline]
->>  free_unref_page_prepare+0x903/0xa30 mm/page_alloc.c:2555
->>  free_unref_page_list+0x596/0x830 mm/page_alloc.c:2696
->>  release_pages+0x2193/0x2470 mm/swap.c:1042
->>  tlb_batch_pages_flush mm/mmu_gather.c:97 [inline]
->>  tlb_flush_mmu_free mm/mmu_gather.c:292 [inline]
->>  tlb_flush_mmu+0x100/0x210 mm/mmu_gather.c:299
->>  tlb_finish_mmu+0xd4/0x1f0 mm/mmu_gather.c:391
->>  exit_mmap+0x3da/0xaf0 mm/mmap.c:3123
->>  __mmput+0x115/0x3c0 kernel/fork.c:1351
->>  exec_mmap+0x672/0x700 fs/exec.c:1035
->>  begin_new_exec+0x665/0xf10 fs/exec.c:1294
->>  load_elf_binary+0x95d/0x2830 fs/binfmt_elf.c:1001
->>  search_binary_handler fs/exec.c:1737 [inline]
->>  exec_binprm fs/exec.c:1779 [inline]
->>  bprm_execve+0x90e/0x1740 fs/exec.c:1854
->>  do_execveat_common+0x580/0x720 fs/exec.c:1962
->>  do_execve fs/exec.c:2036 [inline]
->>  __do_sys_execve fs/exec.c:2112 [inline]
->>  __se_sys_execve fs/exec.c:2107 [inline]
->>  __x64_sys_execve+0x92/0xa0 fs/exec.c:2107
->>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->>  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
->>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->> 
->> Memory state around the buggy address:
->>  ffff88801872a900: 00 00 00 00 00 01 fc fc fc fc fc fc fc fc fc fc
->>  ffff88801872a980: fa fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
->> >ffff88801872aa00: 00 00 00 00 00 01 fc fc fc fc fc fc fc fc fc fc
->>                                                                 ^
->>  ffff88801872aa80: 00 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc
->>  ffff88801872ab00: 00 00 00 00 00 00 fc fc fc fc fc fc fc fc fc fc
->> ==================================================================
->> 
->> 
->> ---
->> This report is generated by a bot. It may contain errors.
->> See https://goo.gl/tpsmEJ for more information about syzbot.
->> syzbot engineers can be reached at syzkaller@googlegroups.com.
->> 
->> syzbot will keep track of this issue. See:
->> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
->> 
->> If the bug is already fixed, let syzbot know by replying with:
->> #syz fix: exact-commit-title
->> 
->> If you want syzbot to run the reproducer, reply with:
-> #syz test: upstream
+Hi,
 
-want 2 args (repo, branch), got 4
+On Sun, Apr 30, 2023 at 1:53=E2=80=AFAM Hillf Danton <hdanton@sina.com> wro=
+te:
+>
+> On 28 Apr 2023 13:54:38 -0700 Douglas Anderson <dianders@chromium.org>
+> > The MIGRATE_SYNC_LIGHT mode is intended to block for things that will
+> > finish quickly but not for things that will take a long time. Exactly
+> > how long is too long is not well defined, but waits of tens of
+> > milliseconds is likely non-ideal.
+> >
+> > When putting a Chromebook under memory pressure (opening over 90 tabs
+> > on a 4GB machine) it was fairly easy to see delays waiting for some
+> > locks in the kcompactd code path of > 100 ms. While the laptop wasn't
+> > amazingly usable in this state, it was still limping along and this
+> > state isn't something artificial. Sometimes we simply end up with a
+> > lot of memory pressure.
+>
+> Given longer than 100ms stall, this can not be a correct fix if the
+> hardware fails to do more than ten IOs a second.
+>
+> OTOH given some pages reclaimed for compaction to make forward progress
+> before kswapd wakes kcompactd up, this can not be a fix without spotting
+> the cause of the stall.
 
->
-> (does that work?)
->
-> --D
+Right that the system is in pretty bad shape when this happens and
+it's not very effective at doing IO or much of anything because it's
+under bad memory pressure.
+
+I guess my first thought is that, when this happens then a process
+holding the lock gets preempted and doesn't get scheduled back in for
+a while. That _should_ be possible, right? In the case where I'm
+reproducing this then all the CPUs would be super busy madly trying to
+compress / decompress zram, so it doesn't surprise me that a process
+could get context switched out for a while.
+
+-Doug
