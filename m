@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E9816F4071
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 11:53:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E9586F4072
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 11:53:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233664AbjEBJxV convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 2 May 2023 05:53:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47228 "EHLO
+        id S233676AbjEBJxY convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 2 May 2023 05:53:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233647AbjEBJxC (ORCPT
+        with ESMTP id S233645AbjEBJxC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 2 May 2023 05:53:02 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826763A90
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF2F54C1D
         for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 02:52:57 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-763a89d850aso214524939f.2
+Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-3294c5e1c03so56811125ab.3
         for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 02:52:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20221208; t=1683021177; x=1685613177;
         h=content-transfer-encoding:to:from:subject:message-id:date
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=1vikVBvsLI5HDIVu840mMsYLutm2GK4CYpSss0kBN2A=;
-        b=LZQVduUKBW3+FsZYGKp3A31DWO+MK09gDrEF9rGh9w/bbbsQwghnSplmI2SSTWOnKP
-         uk86uPRIAM77IWVFkXWfT/yRrlLMLOxxit9nup8cGw94S0//vDBFYQvf4WgQWlAaoV0B
-         TOHmj2oZE8ytRj7jEiy2XnJ3qxAMqdEXfVL6NsqPEqvlM6JploRtS2+X/qVnIlKFUGjA
-         ZsWtRlJbaxnkyFgQ1fmio4il8Sx7v8vL1h3+3jWG3vR/z4ayDp6Vj0RbGWztVtLfO5ZB
-         Wqs+URFbQ784NiuVN3a4V9OXZ4oKSnum/W6/2AZy3tvStE1f66nAKHHHQ+hCmNW+Zd4e
-         TmuA==
-X-Gm-Message-State: AC+VfDyEz6stmpBtjs7sbX9h8KlS6dE+Q3FAUn2dpzbaDqlVn7dRl1VK
-        3u3UpKs+voS5VAD4bbnrHZCIdqEBuJLMl/R/qRIiBZT7sqSa
-X-Google-Smtp-Source: ACHHUZ4k7ywFNbb5MbG4BhQg/EXw7m5QnIt7dRIRm6+gUMZjpe4m6NU4v8uF3THDQ/NrKrUvrMl/Mn8Tx9vh/osGI0b7lRUQRWrc
+        bh=exaz0o1lSln1lUsylPPMvUAA9RmqL0AVBuQ21q+c7Bw=;
+        b=M5i5KDzEQT2MKsrzLegMY02cF8lwyQ+LA10IpwZnL3yu/OckRdv1YENbLu7Exr/GQD
+         Bu9DHvZhECEa2LC/iPyKRdagUQ/wcRPdCa21aYdg/Fn/rbe3EvqrD6TydhYU24ry4dWy
+         MpXiNH8yh/YIxxTjlgOLL/yaXt9USApNhLfL/ve0epPpBWCSzm2hA1ZlnKfKjF+dhyok
+         HlsmIK0n+0qdolkJmJBHKiuXe9MGJ/bbYEQGi5Jjp5BFaSqzmW6DP1HT/Ng9iGSSsFkl
+         ghREIj7SkYHJbOIquU4q+WkfqRurYzdAVy+J1/LyWxUIQjDEwz9dhFpJ7xJWb0KkZNlz
+         AGqg==
+X-Gm-Message-State: AC+VfDwZpypvaGSiQJGBzClL/t0fuw+JzNKAS79UMFJxR/cM9BDaBSjA
+        qci/HwA3L2PighbKdmHgtzVDxAbgyczMKI+idh/IAPIwGeTL
+X-Google-Smtp-Source: ACHHUZ6r2Y0r3qDT7KjNYIkzj/IrFNdiS2X2PheeRfOr8ODMXvScMxfMdPFB2gmC6iA1bNcdoecP+sAbVozoU3Dpmzi+uxL5juiV
 MIME-Version: 1.0
-X-Received: by 2002:a02:8668:0:b0:40f:cf8b:7c74 with SMTP id
- e95-20020a028668000000b0040fcf8b7c74mr7557544jai.0.1683021176852; Tue, 02 May
- 2023 02:52:56 -0700 (PDT)
-Date:   Tue, 02 May 2023 02:52:56 -0700
+X-Received: by 2002:a92:c68f:0:b0:325:e315:f2bc with SMTP id
+ o15-20020a92c68f000000b00325e315f2bcmr8508206ilg.3.1683021177094; Tue, 02 May
+ 2023 02:52:57 -0700 (PDT)
+Date:   Tue, 02 May 2023 02:52:57 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000065594605fab2e72c@google.com>
+Message-ID: <000000000000690a0b05fab2e75c@google.com>
 Subject: [syzbot] upstream boot error: BUG: unable to handle kernel paging
- request in gpiod_set_value
-From:   syzbot <syzbot+5e3c3df60302959ef641@syzkaller.appspotmail.com>
+ request in gpiod_set_raw_value_commit
+From:   syzbot <syzbot+691fcab418631dee8be3@syzkaller.appspotmail.com>
 To:     brgl@bgdev.pl, linus.walleij@linaro.org,
         linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
         syzkaller-bugs@googlegroups.com
@@ -64,14 +64,14 @@ syzbot found the following issue on:
 
 HEAD commit:    865fdb08197e Merge tag 'input-for-v6.4-rc0' of git://git.k..
 git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=16481bf8280000
+console output: https://syzkaller.appspot.com/x/log.txt?x=149ab844280000
 kernel config:  https://syzkaller.appspot.com/x/.config?x=d43eae746231feb3
-dashboard link: https://syzkaller.appspot.com/bug?extid=5e3c3df60302959ef641
+dashboard link: https://syzkaller.appspot.com/bug?extid=691fcab418631dee8be3
 compiler:       arm-linux-gnueabi-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 userspace arch: arm
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5e3c3df60302959ef641@syzkaller.appspotmail.com
+Reported-by: syzbot+691fcab418631dee8be3@syzkaller.appspotmail.com
 
 Movable zone start for each node
 Early memory node ranges
@@ -123,49 +123,83 @@ CPU: Testing write buffer coherency: ok
 CPU0: Spectre BHB: enabling loop workaround for all CPUs
 CPU1: thread -1, cpu 1, socket 0, mpidr 80000001
 8<--- cut here ---
-Unable to handle kernel paging request at virtual address 000c01f3 when read
-[000c01f3] *pgd=80000080004003, *pmd=00000000
-Internal error: Oops: 206 [#1] PREEMPT SMP ARM
+Unable to handle kernel paging request at virtual address 831b70d8 when execute
+[831b70d8] *pgd=80000080006003, *pmd=4000008300071d(bad)
+Internal error: Oops: 8000020e [#1] PREEMPT SMP ARM
 Modules linked in:
-CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.3.0-syzkaller #0
+CPU: 1 PID: 0 Comm: swapper/1 Not tainted 6.3.0-syzkaller #0
 Hardware name: ARM-Versatile Express
-PC is at gpiod_set_value+0x38/0xc0 drivers/gpio/gpiolib.c:3222
-LR is at gpio_led_set+0x5c/0x60 drivers/leds/leds-gpio.c:54
-pc : [<80891a24>]    lr : [<8107f408>]    psr: 20000113
-sp : 82601e90  ip : 82601ea8  fp : 82601ea4
+PC is at 0x831b70d8
+LR is at gpiod_set_raw_value_commit+0x4c/0x168 drivers/gpio/gpiolib.c:3030
+pc : [<831b70d8>]    lr : [<80890618>]    psr: 40000113
+sp : df85de90  ip : df85dec0  fp : df85debc
 r10: 00000000  r9 : 827e16e6  r8 : 00000001
-r7 : dddd1798  r6 : 000000ff  r5 : 00000001  r4 : 835c27a8
-r3 : 000c0193  r2 : 8107f3ac  r1 : 00000001  r0 : 83194800
-Flags: nzCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment user
-Control: 30c5387d  Table: 80003000  DAC: fffffffd
-Register r0 information: slab kmalloc-1k start 83194800 pointer offset 0 size 1024
+r7 : 831b7040  r6 : 00000001  r5 : 840b67bc  r4 : 00000003
+r3 : 831b70d8  r2 : 00000001  r1 : 00000003  r0 : 831b7040
+Flags: nZcv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
+Control: 30c5387d  Table: 8470bd40  DAC: 00000000
+Register r0 information: slab kmalloc-512 start 831b7000 pointer offset 64 size 512
 Register r1 information: non-paged memory
-Register r2 information: non-slab/vmalloc memory
-Register r3 information: non-paged memory
-Register r4 information: slab kmalloc-192 start 835c2780 pointer offset 40 size 192
-Register r5 information: non-paged memory
+Register r2 information: non-paged memory
+Register r3 information: slab kmalloc-512 start 831b7000 pointer offset 216 size 512
+Register r4 information: non-paged memory
+Register r5 information: slab kmalloc-192 start 840b6780 pointer offset 60 size 192
 Register r6 information: non-paged memory
-Register r7 information:
-8<--- cut here ---
-Unable to handle kernel paging request at virtual address df943ff8 when read
-[df943ff8] *pgd=80000080007003, *pmd=83093003, *pte=802160e880216664
-Internal error: Oops: 207 [#2] PREEMPT SMP ARM
-Modules linked in:
-CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.3.0-syzkaller #0
-Hardware name: ARM-Versatile Express
-PC is at __find_vmap_area mm/vmalloc.c:841 [inline]
-PC is at find_vmap_area mm/vmalloc.c:1862 [inline]
-PC is at find_vm_area mm/vmalloc.c:2623 [inline]
-PC is at vmalloc_dump_obj+0x38/0xb4 mm/vmalloc.c:4221
-LR is at __raw_spin_lock include/linux/spinlock_api_smp.h:132 [inline]
-LR is at _raw_spin_lock+0x18/0x58 kernel/locking/spinlock.c:154
-pc : [<8047a1f0>]    lr : [<818016fc>]    psr: a0000193
-sp : 82601cf8  ip : 82601ce0  fp : 82601d0c
-r10: 8261ae40  r9 : 8261c9a4  r8 : 8285041c
-r7 : 60000113  r6 : 00000008  r5 : dddd2000  r4 : df944000
-r3 : 00000000  r2 : 0000215b  r1 : 00000000  r0 : 00000001
-Flags: NzCv  IRQs off  FIQs on  Mode SVC_32  ISA ARM  Segment user
-Control: 30c5387d  Table: 80003000  DAC: fffffffd
+Register r7 information: slab kmalloc-512 start 831b7000 pointer offset 64 size 512
+Register r8 information: non-paged memory
+Register r9 information: non-slab/vmalloc memory
+Register r10 information: NULL pointer
+Register r11 information: non-paged memory
+Register r12 information: non-paged memory
+Process swapper/1 (pid: 0, stack limit = 0xdf85c000)
+Stack: (0xdf85de90 to 0xdf85e000)
+de80:                                     00000003 840b67bc 00000001 000000ff
+dea0: ddde4798 00000001 827e16e6 00000000 df85decc df85dec0 80890ca8 808905d8
+dec0: df85dee4 df85ded0 80891a3c 80890c60 8301daa8 000000ff df85defc df85dee8
+dee0: 8107f408 808919f8 8301daa8 000000ff df85df0c df85df00 8107d838 8107f3b8
+df00: df85df24 df85df10 8107db84 8107d80c 8301daa8 840ebb94 df85df44 df85df28
+df20: 8107ea20 8107db2c 000001fd 8290cee4 00000002 ddde4798 df85df6c df85df48
+df40: 8107fde8 8107e9f4 00000001 8260c498 831f4680 8260c4e0 00000000 827e16e6
+df60: df85df7c df85df70 80208efc 8107fd44 df85dfc4 df85df80 80293568 80208ef4
+df80: 8029e3c8 818015a4 81f860a0 824af2f8 5b935000 0f6c3d28 df85dfc4 00000097
+dfa0: 00000001 831f4680 82850464 80003010 412fc0f1 00000000 df85dfd4 df85dfc8
+dfc0: 80293af8 802934f8 df85dff4 df85dfd8 80210374 80293ae4 830e0a00 00000000
+dfe0: 30c0387d 82850464 00000000 df85dff8 802016f4 80210254 00000000 00000000
+Backtrace: 
+[<808905cc>] (gpiod_set_raw_value_commit) from [<80890ca8>] (gpiod_set_value_nocheck+0x54/0x58 drivers/gpio/gpiolib.c:3204)
+ r10:00000000 r9:827e16e6 r8:00000001 r7:ddde4798 r6:000000ff r5:00000001
+ r4:840b67bc r3:00000003
+[<80890c54>] (gpiod_set_value_nocheck) from [<80891a3c>] (gpiod_set_value+0x50/0xc0 drivers/gpio/gpiolib.c:3223)
+[<808919ec>] (gpiod_set_value) from [<8107f408>] (gpio_led_set+0x5c/0x60 drivers/leds/leds-gpio.c:54)
+ r5:000000ff r4:8301daa8
+[<8107f3ac>] (gpio_led_set) from [<8107d838>] (__led_set_brightness drivers/leds/led-core.c:47 [inline])
+[<8107f3ac>] (gpio_led_set) from [<8107d838>] (led_set_brightness_nopm drivers/leds/led-core.c:271 [inline])
+[<8107f3ac>] (gpio_led_set) from [<8107d838>] (led_set_brightness_nosleep+0x38/0x5c drivers/leds/led-core.c:287)
+ r5:000000ff r4:8301daa8
+[<8107d800>] (led_set_brightness_nosleep) from [<8107db84>] (led_set_brightness+0x64/0x68 drivers/leds/led-core.c:264)
+[<8107db20>] (led_set_brightness) from [<8107ea20>] (led_trigger_event drivers/leds/led-triggers.c:390 [inline])
+[<8107db20>] (led_set_brightness) from [<8107ea20>] (led_trigger_event+0x38/0x50 drivers/leds/led-triggers.c:380)
+ r5:840ebb94 r4:8301daa8
+[<8107e9e8>] (led_trigger_event) from [<8107fde8>] (ledtrig_cpu+0xb0/0x100 drivers/leds/trigger/ledtrig-cpu.c:86)
+ r7:ddde4798 r6:00000002 r5:8290cee4 r4:000001fd
+[<8107fd38>] (ledtrig_cpu) from [<80208efc>] (arch_cpu_idle_exit+0x14/0x18 arch/arm/kernel/process.c:98)
+ r9:827e16e6 r8:00000000 r7:8260c4e0 r6:831f4680 r5:8260c498 r4:00000001
+[<80208ee8>] (arch_cpu_idle_exit) from [<80293568>] (do_idle+0x7c/0x2f0 kernel/sched/idle.c:284)
+[<802934ec>] (do_idle) from [<80293af8>] (cpu_startup_entry+0x20/0x24 kernel/sched/idle.c:379)
+ r10:00000000 r9:412fc0f1 r8:80003010 r7:82850464 r6:831f4680 r5:00000001
+ r4:00000097
+[<80293ad8>] (cpu_startup_entry) from [<80210374>] (secondary_start_kernel+0x12c/0x188 arch/arm/kernel/smp.c:482)
+[<80210248>] (secondary_start_kernel) from [<802016f4>] (__enable_mmu+0x0/0xc arch/arm/kernel/head.S:438)
+ r7:82850464 r6:30c0387d r5:00000000 r4:830e0a00
+Code: 831b710c 831b70d8 80216664 802160d0 (00000000) 
+---[ end trace 0000000000000000 ]---
+----------------
+Code disassembly (best guess):
+   0:	831b710c 	tsthi	fp, #12, 2
+   4:	831b70d8 	tsthi	fp, #216	; 0xd8
+   8:	80216664 	eorhi	r6, r1, r4, ror #12
+   c:	802160d0 	ldrdhi	r6, [r1], -r0	; <UNPREDICTABLE>
+* 10:	00000000 	andeq	r0, r0, r0 <-- trapping instruction
 
 
 ---
