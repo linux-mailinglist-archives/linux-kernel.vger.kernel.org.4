@@ -2,171 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0ECE6F3E48
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 09:15:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08BC16F3E4D
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 09:16:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233333AbjEBHPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 03:15:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36542 "EHLO
+        id S233443AbjEBHQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 03:16:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjEBHPb (ORCPT
+        with ESMTP id S233282AbjEBHQO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 03:15:31 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5759A119
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 00:15:29 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-959a3e2dd27so673930066b.3
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 00:15:29 -0700 (PDT)
+        Tue, 2 May 2023 03:16:14 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B77120
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 00:16:12 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4efea87c578so1082e87.1
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 00:16:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683011728; x=1685603728;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Dtp1yaPEC+fRXRQf1GiiaizhZwEuiFdW7LGcT1sySog=;
-        b=RdNB5sItGdZjMb3ymixPktS4fHSCxz1uwhzsP+8XITmMM1SrTlSipHywAIdBzh3EOA
-         MiffZH4l7NU9LOoucBcOSTDiF1hWJOzh+oBCkdqER4v9Y2NeIRRpPvnl86FAs9XYwO6b
-         dCv3iL+f/wY4Vu+HYt3u9YISRfHOJOTQQPz5H/W/+VQ9gjT+N8X4QIY8GcKfeCaUMZSG
-         /uIQo0HZ0rK6SIPUahUDfKxmGCVTcPORmhmLo6xHdr2rvMQEFZKPKJqVT3Wpks9DTN4g
-         Ksx10GyzlL7WCFvw70iCtPQfKKgfXYPudWbyRLYUYIGSue7Z2EVjIvtsvqVhWBOHPn3P
-         DSuw==
+        d=google.com; s=20221208; t=1683011771; x=1685603771;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=frxBoEeJNDB+d2pXfCOD/oCy09nPTGWCy5xHMtID2dw=;
+        b=nKP1bphkBwXDScEsXIpjLiCJzdJSuMZB2/hvYXwUAzGYUJLa6UIjcjh4h4h+dK06kh
+         +7j5kX9h8W9vvrmCqLMUsSUEF5Dk/9QPqI+Mi6dQqTLYU73F5wuqPj/grXLm8+ddcFaY
+         OvVD/6jVhcTXjIRVINdumGNy3pzRuJAJmVTf0MJck0soXrOzXUo+dETxKJEiIJhwjBMp
+         VbSNCz35G6EpCRsjdp+q1kFU6+voRpXUXCeS1RGxyPLla9N85oMrYbMDxWpYrhC+SqzZ
+         FZP0TGiNgbKuUdDjW4p7k2gvjzvmWv1a68Q9TInGczO6/Zuu31PxIfrlfjGq6FaVEFEJ
+         jy2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683011728; x=1685603728;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Dtp1yaPEC+fRXRQf1GiiaizhZwEuiFdW7LGcT1sySog=;
-        b=hdB4QyYgClrnH65SFw/wuq5z+Hw/tazP3iuNdgpeo3jh7NCA+pBzy90ASgJokOObme
-         crQ8TCJsCrRyukB5UCrxi06HEY/HfjgW1/w2qVG/7q4BOQ/web63tNw4QkpwRih+rGmp
-         RhG8RZePILtZHSkkJ3wyxdCnlrXToHm9OdjHMSkXdVpMV94tm/QrL3B1idCjhlXPlG3R
-         bITn5vjXUxZtSCN9sqgE4/fRE8HTM5VIcJl0454qHHsX2jCsLNdjHPB0BNRwAxae/7Hd
-         pqWV+WIzaCZYchFNN9Pw9JwvP29KRgplgAYy4PolUlLjU2DHaVGHDih+dqF2TLmz/a7H
-         zrrw==
-X-Gm-Message-State: AC+VfDy3xD586dU1u+cvuVUSbyQU1PUPF1BT7YAq3MKVXxDQmkT++m2L
-        Ukm46V5RqIvDbcphzJfojP7r8A==
-X-Google-Smtp-Source: ACHHUZ4f4BV375Lqs3dUy6tpZtsKlhKa36DK6PF4+nx/fJp1fDYdxz99rUNDj1w6kFQkzu8qb667Lw==
-X-Received: by 2002:a17:907:9806:b0:958:4387:5772 with SMTP id ji6-20020a170907980600b0095843875772mr14229767ejc.41.1683011727850;
-        Tue, 02 May 2023 00:15:27 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:bafd:1283:b136:5f6a? ([2a02:810d:15c0:828:bafd:1283:b136:5f6a])
-        by smtp.gmail.com with ESMTPSA id fp31-20020a1709069e1f00b0095251a3d66fsm15595581ejc.119.2023.05.02.00.15.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 May 2023 00:15:27 -0700 (PDT)
-Message-ID: <a7d07acf-d79e-3f67-dd48-2a5c3e840d7c@linaro.org>
-Date:   Tue, 2 May 2023 09:15:25 +0200
+        d=1e100.net; s=20221208; t=1683011771; x=1685603771;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=frxBoEeJNDB+d2pXfCOD/oCy09nPTGWCy5xHMtID2dw=;
+        b=JtZwR5lFTnLVNWB7kl0TxjFOsDcax8NW2/vqAMRsJjZzeFZ0COjOPLXfDhpri0tYEu
+         4E10oZgubOpu4mO5oD1486uZvfF7a6XwCgCtiO0Ph1yz1RGHF7vsfUtZDqjpc7Ogt1W9
+         v34SL0fR7oblS02DlfwN89FUfRnWJL49+Oigf184ijx4/Rm8/3SBCYqnEdaHXInaqjk+
+         4IrKptd8l3hDf5qjss4045Bw0JYFdMnDv2tzgyQrw3qUnFgvhvGwc0tgvLVWlsv59nQc
+         B7sBjZspngt8XUeTemCgvf6ijyXZRPmZMZrEJP0a1Zcz4Wm8jFxgd7tsvwxTM4YCiER1
+         CGnA==
+X-Gm-Message-State: AC+VfDxdzV77eie83HT4M+8T6b/54wWeyVGHl34aj0MUbToLKIMC2rpb
+        VYeOmFQzlsghXC332wAguWath/Azh9cd3cA5wlWjMw==
+X-Google-Smtp-Source: ACHHUZ7nia9SJx252ioVT1htKwOLOmX1xqJ9CLrjMe8StMcqYw4XgK7bFhz0VhYRw3zGSdmDxWRoEzEDTj4TBkvV/jE=
+X-Received: by 2002:a05:6512:33c6:b0:4f1:21a2:9003 with SMTP id
+ d6-20020a05651233c600b004f121a29003mr126680lfg.6.1683011770564; Tue, 02 May
+ 2023 00:16:10 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v4 1/3] dt-bindings: display: panel: Add Samsung S6D7AA0
- LCD panel controller
-Content-Language: en-US
-To:     Artur Weber <aweber.kernel@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>
-Cc:     Sam Ravnborg <sam@ravnborg.org>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-References: <20230501185103.25939-1-aweber.kernel@gmail.com>
- <20230501185103.25939-2-aweber.kernel@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230501185103.25939-2-aweber.kernel@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <00000000000084706805fab08e27@google.com>
+In-Reply-To: <00000000000084706805fab08e27@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Tue, 2 May 2023 09:15:57 +0200
+Message-ID: <CACT4Y+aGfOE7R+LoocX7aW2XObY4aCAsAydwvL+Ni_NUt6JfJA@mail.gmail.com>
+Subject: Re: [syzbot] [fs?] KASAN: stack-out-of-bounds Read in proc_pid_stack
+To:     syzbot <syzbot+01e9a564dc6b3289cea3@syzkaller.appspotmail.com>
+Cc:     brauner@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        alexghiti@rivosinc.com, Palmer Dabbelt <palmer@dabbelt.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/05/2023 20:51, Artur Weber wrote:
-> Add bindings for the S6D7AA0 LCD panel controller, including the
-> S6D7AA0-LSL080AL02 panel used in the Samsung Galaxy Tab 3 8.0 family
-> of tablets, and the S6D7AA0-LSL080AL03 and S6D7AA0-LTL101AT01 panels
-> used in the Samsung Galaxy Tab A 8.0 and 9.7 2015.
-> 
-> Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
+On Tue, 2 May 2023 at 09:05, syzbot
+<syzbot+01e9a564dc6b3289cea3@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following issue on:
+>
+> HEAD commit:    950b879b7f02 riscv: Fixup race condition on PG_dcache_clea..
+> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git fixes
+> console output: https://syzkaller.appspot.com/x/log.txt?x=10c4c1f7c80000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=ecebece1b90c0342
+> dashboard link: https://syzkaller.appspot.com/bug?extid=01e9a564dc6b3289cea3
+> compiler:       riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> userspace arch: riscv64
+>
+> Unfortunately, I don't have any reproducer for this issue yet.
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+01e9a564dc6b3289cea3@syzkaller.appspotmail.com
+>
+> ==================================================================
+> BUG: KASAN: stack-out-of-bounds in walk_stackframe+0x128/0x2fe arch/riscv/kernel/stacktrace.c:58
+> Read of size 8 at addr ff200000030a79b0 by task syz-executor.1/7894
+>
+> CPU: 0 PID: 7894 Comm: syz-executor.1 Tainted: G        W          6.2.0-rc1-syzkaller #0
+> Hardware name: riscv-virtio,qemu (DT)
+> Call Trace:
+> [<ffffffff8000b9ea>] dump_backtrace+0x2e/0x3c arch/riscv/kernel/stacktrace.c:121
+> [<ffffffff83402b96>] show_stack+0x34/0x40 arch/riscv/kernel/stacktrace.c:127
+> [<ffffffff83442726>] __dump_stack lib/dump_stack.c:88 [inline]
+> [<ffffffff83442726>] dump_stack_lvl+0xe0/0x14c lib/dump_stack.c:106
+> [<ffffffff83409674>] print_address_description mm/kasan/report.c:306 [inline]
+> [<ffffffff83409674>] print_report+0x1e4/0x4c0 mm/kasan/report.c:417
+> [<ffffffff804ead14>] kasan_report+0xb8/0xe6 mm/kasan/report.c:517
+> [<ffffffff804ebea4>] check_region_inline mm/kasan/generic.c:183 [inline]
+> [<ffffffff804ebea4>] __asan_load8+0x7e/0xa6 mm/kasan/generic.c:256
+> [<ffffffff8000b782>] walk_stackframe+0x128/0x2fe arch/riscv/kernel/stacktrace.c:58
+
++riscv maintainers
+
+I think this is an issue in riscv stack walking.
+If it's imprecise or walks stacks of running tasks, it needs to use
+READ_ONCE_NOCHECK.
+
+#syz set subsystems: riscv
+
+
+> [<ffffffff8000bc66>] arch_stack_walk+0x2c/0x3c arch/riscv/kernel/stacktrace.c:154
+> [<ffffffff80190822>] stack_trace_save_tsk+0x14a/0x1bc kernel/stacktrace.c:150
+> [<ffffffff80697822>] proc_pid_stack+0x146/0x1ee fs/proc/base.c:456
+> [<ffffffff80698bb0>] proc_single_show+0x9c/0x148 fs/proc/base.c:777
+> [<ffffffff805af580>] traverse.part.0+0x74/0x2ca fs/seq_file.c:111
+> [<ffffffff805aff02>] traverse fs/seq_file.c:101 [inline]
+> [<ffffffff805aff02>] seq_read_iter+0x72c/0x934 fs/seq_file.c:195
+> [<ffffffff805b0224>] seq_read+0x11a/0x16e fs/seq_file.c:162
+> [<ffffffff805453ea>] do_loop_readv_writev fs/read_write.c:756 [inline]
+> [<ffffffff805453ea>] do_loop_readv_writev fs/read_write.c:743 [inline]
+> [<ffffffff805453ea>] do_iter_read+0x324/0x3c2 fs/read_write.c:798
+> [<ffffffff805455f8>] vfs_readv+0xfe/0x166 fs/read_write.c:916
+> [<ffffffff80549c66>] do_preadv fs/read_write.c:1008 [inline]
+> [<ffffffff80549c66>] __do_sys_preadv fs/read_write.c:1058 [inline]
+> [<ffffffff80549c66>] sys_preadv+0x182/0x1fa fs/read_write.c:1053
+> [<ffffffff80005ff6>] ret_from_syscall+0x0/0x2
+>
+> The buggy address belongs to the virtual mapping at
+>  [ff200000030a0000, ff200000030a9000) created by:
+>  kernel_clone+0xee/0x914 kernel/fork.c:2681
+>
+> The buggy address belongs to the physical page:
+> page:ff1c0000024e5f00 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x9397c
+> memcg:ff6000000ffd7202
+> flags: 0xffe000000000000(node=0|zone=0|lastcpupid=0x7ff)
+> raw: 0ffe000000000000 0000000000000000 0000000000000122 0000000000000000
+> raw: 0000000000000000 0000000000000000 00000001ffffffff ff6000000ffd7202
+> page dumped because: kasan: bad access detected
+> page_owner tracks the page as allocated
+> page last allocated via order 0, migratetype Unmovable, gfp_mask 0x102dc2(GFP_HIGHUSER|__GFP_NOWARN|__GFP_ZERO), pid 7873, tgid 7873 (syz-executor.1), ts 4012100669800, free_ts 4010400733200
+>  __set_page_owner+0x32/0x182 mm/page_owner.c:190
+>  set_page_owner include/linux/page_owner.h:31 [inline]
+>  post_alloc_hook+0xf8/0x11a mm/page_alloc.c:2524
+>  prep_new_page mm/page_alloc.c:2531 [inline]
+>  get_page_from_freelist+0xc0e/0x1118 mm/page_alloc.c:4283
+>  __alloc_pages+0x1b0/0x165a mm/page_alloc.c:5549
+>  alloc_pages+0x132/0x25e mm/mempolicy.c:2286
+>  vm_area_alloc_pages mm/vmalloc.c:2989 [inline]
+>  __vmalloc_area_node mm/vmalloc.c:3057 [inline]
+>  __vmalloc_node_range+0x81c/0xdb4 mm/vmalloc.c:3227
+>  alloc_thread_stack_node kernel/fork.c:311 [inline]
+>  dup_task_struct kernel/fork.c:987 [inline]
+>  copy_process+0x210e/0x4068 kernel/fork.c:2097
+>  kernel_clone+0xee/0x914 kernel/fork.c:2681
+>  __do_sys_clone+0xec/0x120 kernel/fork.c:2822
+>  sys_clone+0x32/0x44 kernel/fork.c:2790
+>  ret_from_syscall+0x0/0x2
+> page last free stack trace:
+>  __reset_page_owner+0x4a/0xf8 mm/page_owner.c:148
+>  reset_page_owner include/linux/page_owner.h:24 [inline]
+>  free_pages_prepare mm/page_alloc.c:1446 [inline]
+>  free_pcp_prepare+0x254/0x48e mm/page_alloc.c:1496
+>  free_unref_page_prepare mm/page_alloc.c:3369 [inline]
+>  free_unref_page_list+0x11e/0x736 mm/page_alloc.c:3510
+>  release_pages+0x85a/0xbb2 mm/swap.c:1076
+>  free_pages_and_swap_cache+0x76/0x88 mm/swap_state.c:311
+>  tlb_batch_pages_flush+0x86/0x10c mm/mmu_gather.c:97
+>  tlb_flush_mmu_free mm/mmu_gather.c:292 [inline]
+>  tlb_flush_mmu mm/mmu_gather.c:299 [inline]
+>  tlb_finish_mmu+0xcc/0x280 mm/mmu_gather.c:391
+>  exit_mmap+0x190/0x686 mm/mmap.c:3096
+>  __mmput+0x98/0x290 kernel/fork.c:1207
+>  mmput+0x74/0x88 kernel/fork.c:1229
+>  exit_mm kernel/exit.c:563 [inline]
+>  do_exit+0x602/0x17be kernel/exit.c:854
+>  do_group_exit+0x8e/0x15e kernel/exit.c:1012
+>  __do_sys_exit_group kernel/exit.c:1023 [inline]
+>  __wake_up_parent+0x0/0x4a kernel/exit.c:1021
+>  ret_from_syscall+0x0/0x2
+>
+> Memory state around the buggy address:
+>  ff200000030a7880: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>  ff200000030a7900: 00 00 00 00 00 00 00 00 f1 f1 f1 f1 00 00 f2 f2
+> >ff200000030a7980: 00 00 00 f3 f3 f3 f3 f3 00 00 00 00 00 00 00 00
+>                                      ^
+>  ff200000030a7a00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>  ff200000030a7a80: 00 00 00 00 00 00 00 00 00 00 00 00 f1 f1 f1 f1
+> ==================================================================
+>
+>
 > ---
-> Changed in v2:
->  - Updated commit message
->  - Applied suggestions from Krzysztof Kozlowski
-
-What have changed?
-
-> Changed in v3:
->  - Correctly applied suggestions
-
-What have changed?
-
-> Changed in v4:
->  - Added LSL080AL03, LTL101AT01 compatibles
->  - Added description to reset-gpios
->  - Added vmipi-supply, renamed enable-supply to power-supply
-> ---
->  .../display/panel/samsung,s6d7aa0.yaml        | 68 +++++++++++++++++++
->  1 file changed, 68 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/display/panel/samsung,s6d7aa0.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/display/panel/samsung,s6d7aa0.yaml b/Documentation/devicetree/bindings/display/panel/samsung,s6d7aa0.yaml
-> new file mode 100644
-> index 000000000000..918f62a78ecd
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/display/panel/samsung,s6d7aa0.yaml
-> @@ -0,0 +1,68 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/display/panel/samsung,s6d7aa0.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Samsung S6D7AA0 MIPI-DSI LCD panel controller
-> +
-> +maintainers:
-> +  - Artur Weber <aweber.kernel@gmail.com>
-> +
-> +allOf:
-> +  - $ref: panel-common.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      # 1280x800 LSL080AL02 panel
-> +      - samsung,s6d7aa0-lsl080al02
-
-lsl080al02 is model number also coming from Samsung? I am afraid this
-concatenated two compatibles into one...
-
-> +      # 1024x768 LSL080AL03 panel
-> +      - samsung,s6d7aa0-lsl080al03
-> +      # 1024x768 LTL101AT01 panel
-> +      - samsung,s6d7aa0-ltl101at01
-> +
-> +  reg: true
-> +
-> +  backlight:> +    description: |
-
-If there is going to be new version:
-Do not need '|' unless you need to preserve formatting.
-
-> +      Backlight to use for the panel. If this property is set on panels
-> +      that have DSI-based backlight control (LSL080AL03 and LTL101AT01),
-> +      it overrides the DSI-based backlight.
-> +
-> +  reset-gpios:
-> +    description: Reset GPIO pin, usually GPIO_ACTIVE_LOW.
-> +
-> +  power-supply:
-> +    description: |
-
-Do not need '|' unless you need to preserve formatting.
-
-> +      Main power supply for the panel; the exact voltage differs between
-> +      panels, a
-
-
-Best regards,
-Krzysztof
-
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+>
+> If the bug is already fixed, let syzbot know by replying with:
+> #syz fix: exact-commit-title
+>
+> If you want to change bug's subsystems, reply with:
+> #syz set subsystems: new-subsystem
+> (See the list of subsystem names on the web dashboard)
+>
+> If the bug is a duplicate of another bug, reply with:
+> #syz dup: exact-subject-of-another-report
+>
+> If you want to undo deduplication, reply with:
+> #syz undup
+>
+> --
+> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/00000000000084706805fab08e27%40google.com.
