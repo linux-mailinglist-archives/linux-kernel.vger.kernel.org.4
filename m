@@ -2,105 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CDEB6F4259
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 13:13:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DB2A6F4268
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 13:15:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233588AbjEBLNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 07:13:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59256 "EHLO
+        id S233143AbjEBLO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 07:14:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233851AbjEBLM7 (ORCPT
+        with ESMTP id S229457AbjEBLOy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 07:12:59 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 578C6F9;
-        Tue,  2 May 2023 04:12:57 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1ptnwE-0005l8-N6; Tue, 02 May 2023 13:12:54 +0200
-Message-ID: <5a070053-2151-56d7-26a2-03871e1e4e8e@leemhuis.info>
-Date:   Tue, 2 May 2023 13:12:51 +0200
+        Tue, 2 May 2023 07:14:54 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5FAA4;
+        Tue,  2 May 2023 04:14:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=qSL9OkS9lUf+/Y0rKTYhB5gamqdgUqvemLYpwvoIblc=; b=nyzYxVwkDYSGs+p8GZKdRUmbVj
+        Guk04quwpkt4KIxKlgvRq3hDoGXk8vII7ZwOwysVQJCDxD43IcwITOv8Ukdr45u9zmDX6QMz4+ZLF
+        LqkGMCkKLaN//YYSjQyG5rR4N3Zm3NnDNwEoajETpYIv0qstEhNJpklrqzN+7T7GAfsy1KwEUWIp3
+        2ZzcofszrGMZajnGYhtwC+KoakXv3sPRbf2mmipIl0Okn41UYHFcjQqBRK0YkzxsIQRNfunJH19jn
+        gmExS18rx3m3bAnr1WnkjVxjqHvFlbaQ4e4wrs7y3THRwDT87WlmVeGXRICl7RWDw8PvbZ2LrvrCF
+        9u27uBeQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1ptnwv-00GI5F-13;
+        Tue, 02 May 2023 11:13:37 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BEDB2300348;
+        Tue,  2 May 2023 13:13:34 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 79C6A23C5C34E; Tue,  2 May 2023 13:13:34 +0200 (CEST)
+Date:   Tue, 2 May 2023 13:13:34 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Mika Penttila <mpenttil@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Theodore Ts'o <tytso@mit.edu>, Peter Xu <peterx@redhat.com>
+Subject: Re: [PATCH v6 3/3] mm/gup: disallow FOLL_LONGTERM GUP-fast writing
+ to file-backed mappings
+Message-ID: <20230502111334.GP1597476@hirez.programming.kicks-ass.net>
+References: <cover.1682981880.git.lstoakes@gmail.com>
+ <dee4f4ad6532b0f94d073da263526de334d5d7e0.1682981880.git.lstoakes@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v9 1/6] media: verisilicon: Do not set context src/dst
- formats in reset functions
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>
-Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kernel@collabora.com, robert.mader@collabora.com,
-        nicolas.dufresne@collabora.co.uk, ezequiel@vanguardiasur.com.ar,
-        festevam@gmail.com, p.zabel@pengutronix.de, mchehab@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        hverkuil-cisco@xs4all.nl, linux-imx@nxp.com,
-        regressions@lists.linux.dev
-References: <20230220104849.398203-1-benjamin.gaignard@collabora.com>
- <20230220104849.398203-2-benjamin.gaignard@collabora.com>
- <26addb7d-bb9d-34e8-d4fe-e323ff488101@collabora.com>
- <dcd317db-3c24-895d-572b-1b139c370ff7@leemhuis.info>
- <05da00c0-2180-62ee-6276-8553ad9341c4@collabora.com>
-Content-Language: en-US, de-DE
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <05da00c0-2180-62ee-6276-8553ad9341c4@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1683025977;3af8922a;
-X-HE-SMSGID: 1ptnwE-0005l8-N6
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dee4f4ad6532b0f94d073da263526de334d5d7e0.1682981880.git.lstoakes@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02.05.23 08:56, Benjamin Gaignard wrote:
-> Le 01/05/2023 à 09:21, Thorsten Leemhuis a écrit :
->> On 27.04.23 00:19, Shreeya Patel wrote:
->>> On 20/02/23 16:18, Benjamin Gaignard wrote:
->>>> Setting context source and destination formats should only be done
->>>> in hantro_set_fmt_out() and hantro_set_fmt_cap() after check that
->>>> the targeted queue is not busy.
->>>> Remove these calls from hantro_reset_encoded_fmt() and
->>>> hantro_reset_raw_fmt() to clean the driver.
->>>>
->>>> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
->>> KernelCI found this patch causes a regression in the
->>> baseline.dmesg.alert test [1] on rk3399-rock-pi-4b [2],
->>> see the bisection report for more details [3].
->>>
->>> Let us know if you have any questions.
->>>
->>> [1]
->>> https://github.com/kernelci/kernelci-core/blob/main/config/rootfs/debos/overlays/baseline/opt/kernelci/dmesg.sh
->>> [2] https://linux.kernelci.org/test/case/id/6442e825f19134d74c2e865d/
->>> [3] https://groups.io/g/kernelci-results/message/40740
->> Thx for the report. FWIW, regzbot noticed there is a patch that refers
->> to the culprit that might have been landed in next after your test ran
->> for the last time (and meanwhile it was mainlined): f100ce3bbd6 ("media:
->> verisilicon: Fix crash when probing encoder")
-> 
-> Yes that patch should fix the probing issue.
-> Marek is working on an additional one to fix pixel format negotiation
-> but that doesn't impact the boot.
+On Tue, May 02, 2023 at 12:11:49AM +0100, Lorenzo Stoakes wrote:
+> @@ -95,6 +96,77 @@ static inline struct folio *try_get_folio(struct page *page, int refs)
+>  	return folio;
+>  }
+>  
+> +#ifdef CONFIG_MMU_GATHER_RCU_TABLE_FREE
+> +static bool stabilise_mapping_rcu(struct folio *folio)
+> +{
+> +	struct address_space *mapping = READ_ONCE(folio->mapping);
+> +
+> +	rcu_read_lock();
+> +
+> +	return mapping == READ_ONCE(folio->mapping);
 
-Great, thx for the reply.
+This doesn't make sense; why bother reading the same thing twice?
 
-Shreeya, normally I believe developers in cases like this and would have
-included
+Who cares if the thing changes from before; what you care about is that
+the value you see has stable storage, this doesn't help with that.
 
- #regzbot fix: f100ce3bbd6
+> +}
+> +
+> +static void unlock_rcu(void)
+> +{
+> +	rcu_read_unlock();
+> +}
+> +#else
+> +static bool stabilise_mapping_rcu(struct folio *)
+> +{
+> +	return true;
+> +}
+> +
+> +static void unlock_rcu(void)
+> +{
+> +}
+> +#endif
 
-in this mail (without the space in front of the #) to mark the
-regression as resolved. Would that be okay for you and other kernel.ci
-people? Or do you want to confirm this first?
+Anyway, this all can go away. RCU can't progress while you have
+interrupts disabled anyway.
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
+> +/*
+> + * Used in the GUP-fast path to determine whether a FOLL_PIN | FOLL_LONGTERM |
+> + * FOLL_WRITE pin is permitted for a specific folio.
+> + *
+> + * This assumes the folio is stable and pinned.
+> + *
+> + * Writing to pinned file-backed dirty tracked folios is inherently problematic
+> + * (see comment describing the writeable_file_mapping_allowed() function). We
+> + * therefore try to avoid the most egregious case of a long-term mapping doing
+> + * so.
+> + *
+> + * This function cannot be as thorough as that one as the VMA is not available
+> + * in the fast path, so instead we whitelist known good cases.
+> + *
+> + * The folio is stable, but the mapping might not be. When truncating for
+> + * instance, a zap is performed which triggers TLB shootdown. IRQs are disabled
+> + * so we are safe from an IPI, but some architectures use an RCU lock for this
+> + * operation, so we acquire an RCU lock to ensure the mapping is stable.
+> + */
+> +static bool folio_longterm_write_pin_allowed(struct folio *folio)
+> +{
+> +	bool ret;
+> +
+> +	/* hugetlb mappings do not require dirty tracking. */
+> +	if (folio_test_hugetlb(folio))
+> +		return true;
+> +
+
+This:
+
+> +	if (stabilise_mapping_rcu(folio)) {
+> +		struct address_space *mapping = folio_mapping(folio);
+
+And this is 3rd read of folio->mapping, just for giggles?
+
+> +
+> +		/*
+> +		 * Neither anonymous nor shmem-backed folios require
+> +		 * dirty tracking.
+> +		 */
+> +		ret = folio_test_anon(folio) ||
+> +			(mapping && shmem_mapping(mapping));
+> +	} else {
+> +		/* If the mapping is unstable, fallback to the slow path. */
+> +		ret = false;
+> +	}
+> +
+> +	unlock_rcu();
+> +
+> +	return ret;
+
+then becomes:
+
+
+	if (folio_test_anon(folio))
+		return true;
+
+	/*
+	 * Having IRQs disabled (as per GUP-fast) also inhibits RCU
+	 * grace periods from making progress, IOW. they imply
+	 * rcu_read_lock().
+	 */
+	lockdep_assert_irqs_disabled();
+
+	/*
+	 * Inodes and thus address_space are RCU freed and thus safe to
+	 * access at this point.
+	 */
+	mapping = folio_mapping(folio);
+	if (mapping && shmem_mapping(mapping))
+		return true;
+
+	return false;
+
+> +}
