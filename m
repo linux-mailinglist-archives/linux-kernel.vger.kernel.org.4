@@ -2,78 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2CE66F3E1F
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 09:05:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EC266F3E3E
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 09:12:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233590AbjEBHFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 03:05:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34602 "EHLO
+        id S233480AbjEBHL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 03:11:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjEBHFc (ORCPT
+        with ESMTP id S229449AbjEBHLr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 03:05:32 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66AF53A86
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 00:05:31 -0700 (PDT)
-Date:   Tue, 2 May 2023 09:05:29 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1683011130; bh=OmQ34Rt6+vUMv4eAB/iwE7zXiWGswmkgDUkuNsvIZFg=;
+        Tue, 2 May 2023 03:11:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177A41FC2;
+        Tue,  2 May 2023 00:11:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A6A8A61180;
+        Tue,  2 May 2023 07:11:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C63C5C433D2;
+        Tue,  2 May 2023 07:11:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683011505;
+        bh=iP0pkPRPF2yyWma5T57Jl+IkunllF4npRD1ZDpsaR2Y=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Lkguk+wfk7eKJE3WMxtM7C+8ukUtebYNhHjLVlPyNyRgpA6sXnv4oxCPRyczl9XnA
-         I8IvOu6dSAd3ngOiMQg277j3anBOxTq4Lm+JlTVKmuhSZjkregtrJJp4XJ4iZEq2Lx
-         J4i4LdpCQlrAHrB8sxG6uJS9oZ1CQ/Qp4HdDDUFo=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tools/nolibc: remove LINUX_REBOOT_ constants
-Message-ID: <781b8ce2-bc3e-4eef-b466-fc0e26f64bb5@t-8ch.de>
-References: <20230428-nolibc-reboot-v1-1-0bca02d20ba6@weissschuh.net>
- <ZFCubzgPxBSDiTwq@1wt.eu>
- <c967837e-39c7-48e4-9ee7-65892f13d126@t-8ch.de>
- <ZFC0z8dh+DmVSYyk@1wt.eu>
+        b=KJi7VM57+hCZiS5pBrGaI+NHHdNu1FIF4IW0ha2PSCAiIoxG6tmcNLAbkXg0MA75C
+         +VDM+LebMyBRMM8yVmZr7EVissdk0UXryUkZdicKjBqiNXEWwoUQe846hstBOFfKX7
+         tzcIJoGi/7wv4eXxMhH96/1ekdQvRQphKUy3EE1UaruvbbDccOOIOHAwtTBA6jUU3v
+         GiFL4mFRQqrMIxKAEix6xn+67N5dW1pa3lgg5wvQyPbINHPJ5WF6m0qpvfoO8WyRyf
+         lNVLLGG0RL+qkhNkWlY/EZjM6hkeiQJ+pt+3qywul8y9ZcSzIp88HRGZfdbpMrl6ie
+         Usm6IR1tKzdPA==
+Date:   Tue, 2 May 2023 09:11:40 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] pidfd updates
+Message-ID: <20230502-wunsch-stinktier-46d58b6b57d6@brauner>
+References: <20230421-kurstadt-stempeln-3459a64aef0c@brauner>
+ <CAHk-=whOE+wXrxykHK0GimbNmxyr4a07kTpG8dzoceowTz1Yxg@mail.gmail.com>
+ <20230425060427.GP3390869@ZenIV>
+ <20230425-sturheit-jungautor-97d92d7861e2@brauner>
+ <20230427010715.GX3390869@ZenIV>
+ <20230427073908.GA3390869@ZenIV>
+ <CAHk-=whHbXMF142EGVu4=8bi8=JdexBL--d5FK4gx=x+SUgyaQ@mail.gmail.com>
+ <20230427170215.GC3390869@ZenIV>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZFC0z8dh+DmVSYyk@1wt.eu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230427170215.GC3390869@ZenIV>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-02 08:59:27+0200, Willy Tarreau wrote:
-
-<snip>
-
-> > The following trivial fix on top of my patch would fix the problem:
+On Thu, Apr 27, 2023 at 06:02:15PM +0100, Al Viro wrote:
+> On Thu, Apr 27, 2023 at 08:21:34AM -0700, Linus Torvalds wrote:
+> > On Thu, Apr 27, 2023 at 12:39 AM Al Viro <viro@zeniv.linux.org.uk> wrote:
+> > >
+> > > int delayed_dup(struct file *file, unsigned flags)
 > > 
-> > diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-> > index 5d624dc63a42..9d27131c224e 100644
-> > --- a/tools/include/nolibc/sys.h
-> > +++ b/tools/include/nolibc/sys.h
-> > @@ -21,6 +21,7 @@
-> >  #include <linux/auxvec.h>
-> >  #include <linux/fcntl.h> // for O_* and AT_*
-> >  #include <linux/stat.h>  // for statx()
-> > +#include <linux/reboot.h> // for LINUX_REBOOT_*
-> >  
-> >  #include "arch.h"
-> >  #include "errno.h"
+> > Ok, this is strange. Let me think about it.
+> > 
+> > But even without thinking about it, this part I hate:
+> > 
+> > >         struct delayed_dup *p = kmalloc(sizeof(struct delayed_dup), GFP_KERNEL);
+> > 
+> > Sure, if this is only used in unimportant code where performance
+> > doesn't matter, doing a kmalloc is fine.
+> > 
+> > But if that is the only use, I think this is too subtle an interface.
 > 
-> Indeed it works for me as well.
+> Still hadn't finished with the zoo...
 > 
-> > Want me to send a v2 or will you fix it up on your side?
+> > Could we instead limit it to "we only have one pending delayed dup",
+> > and make this all be more like the restart-block thing, and be part of
+> > struct task_struct?
 > 
-> It depends. If for you it's a fix and needed for 6.4 (or maybe older),
-> then that one is needed with the "//" comment, and it will later
-> conflict with your previous cleanup patch that's already queued. If
-> you're fine with having it queued for 6.5 only however, then I'll just
-> edit your patch and add that above. I tend to think the second solution
-> is sufficient given that nobody complained till now ;-)
+> Interesting...  FWIW, *anything* that wants several descriptors has
+> special needs - there are some places like that (binder, for one)
+> and they have rather weird code implementing those.
+> 
+> Just to restate the obvious: this is not applicable for the most frequent
+> caller - open(2).  For the reasons that have nothing to do with performance.
+> If opening the file has hard-to-reverse side effects (like directory
+> modification due to O_CREAT), the things are very different.
+> 
+> What I hope for is a small number of patterns, with clear rules for
+> choosing the one that is applicable and helpers for each that would
+> reduce the amount of headache when using it.  And I've no problem
+> with "this particular pattern is not usable if you are adding more
+> than one descriptor" - that's not hard to understand and verify.
+> So I'm fine with doing that for one descriptor only and getting
+> rid of the allocation.
+> 
+> BTW, another pattern is the same sans the "delayed" part.  I.e.
+> "here's an opened file, get a descriptor and either attach the
+> file to it or fput() the damn thing; in any case, file reference
+> is consumed and descriptor-or-error is returned".  That one is
+> definitely only for single descriptor case.
+> 
+> In any case, I want to finish the survey of the callers first, just to
+> see what's there and whether anything is worth nicking.
+> 
+> While we are at it, I want to make close_fd() use a very big red flag.
+> To the point of grepping for new callers in -next and asking the folks
+> who introduce those to explain WTF they are doing...
 
-This is absolutely not urgent. 6.5 is fine.
-
-Thomas
+Yeah, I'd fully support this and would be very nice to have.
