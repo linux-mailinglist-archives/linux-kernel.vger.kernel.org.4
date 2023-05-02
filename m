@@ -2,138 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF8EB6F3EE4
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 10:15:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 304AD6F3EE6
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 10:17:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233367AbjEBIPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 04:15:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59518 "EHLO
+        id S233462AbjEBIQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 04:16:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjEBIPd (ORCPT
+        with ESMTP id S229449AbjEBIQ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 04:15:33 -0400
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74801DD;
-        Tue,  2 May 2023 01:15:30 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 0A58D5803C3;
-        Tue,  2 May 2023 04:15:27 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 02 May 2023 04:15:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1683015327; x=1683022527; bh=ghjR7QqLTKl0Wa6Qp/pmJnR12EKA7bqxYQW
-        ouqZ3mAY=; b=G/ReWH/CR4stPP8pBvKE2oH2tiIxeT1Y9djsugPvcan1vwLCNKB
-        +CmHc2S3racpCMakxZ1qQRdhDmpzbTSxPsJLCIAsBgFwKTe+QJwmoUIe5cxfT6Wy
-        tgZI7GBK40sokCJo7woyfvbYgCDiIcu9MJqEUid0mCHXVNlzPDjNZzJJBtLrLhF9
-        X/mbJHalC7bJ1Xs6/CKvhniyT1ORP+ioH4B0Q9MMwa1hEm8wfe270mide7U5ucC4
-        jYc1KiyRZtz0ezseY2LvXW4OKb5R6V9gMew5kODf8MnejtSKgLd/xIANaAqpsh7o
-        O3SUD5day0+7MZzwDONO0PUZT+hvXwYxYyA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1683015327; x=1683022527; bh=ghjR7QqLTKl0Wa6Qp/pmJnR12EKA7bqxYQW
-        ouqZ3mAY=; b=Y/xWbzku7vrNHNzte8uy72nMxc+pbAIi4IeA/XfvwUvtiZV9Est
-        bPyNKEthPJpnwnx5/Y68ss9jDEmHmeNI9uaomvywj4LEhNdN2/6OUB0Ap6qjjHvb
-        OQIPRGrLOJBmcaLg/XgkHAzTOPE5Xwu/E3de9zryJ4QMstqpCG+bbbWHvXXdfXgL
-        L+W8t5CYwFrU7f8XrnzjjIYPTrCSQ2/hUzXAWg8+DhkBUcIkmt6eVQO+8Sms9yZ1
-        Z+nDtml+a4kCprv84LWaOxgu+YrgM2G6hBbX6r3CD52Qvxv2Jvyac8zhWROAt9xl
-        Ftb8duEVIIhaiX5H6fsUSxaLGjuOvtdmUyw==
-X-ME-Sender: <xms:nsZQZGG99LYs7t6dhgAngkbsv9osgUeFMS5nCv0_eqkMW790xp5pVg>
-    <xme:nsZQZHXku8NWvKl4XxdR48yR-0RVaLsU5fwZmJq18kazWD7vv8gAEIoPKVDAKkTuy
-    5prPVni2U8mfnd5sN8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedviecutefuodetggdotefrodftvfcurf
-    hrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhepgeefjeehvdelvdffieejieejiedvvdfhleeivdelveehjeelteegudektdfgjeev
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
-    gusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:nsZQZAK8fS_X5YYcPQ8tmCY5TK5FJ7gjlJsS0RCSCVoEK-Zwdrq3Yw>
-    <xmx:nsZQZAFFLoJhNSVEvLGVyQfmt0zeZphfcdHG8-tw9pYY47GFwhKrNA>
-    <xmx:nsZQZMUL4rbP96pvZI76ZCUHun2qRq8vNtMGMdc-nT5M5xb0isYJ2g>
-    <xmx:n8ZQZPq1o7msWppgt2EUHhnFGcmwGcb09Ud671-g5_97NEtVzT49Eg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 1C690B60086; Tue,  2 May 2023 04:15:26 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-374-g72c94f7a42-fm-20230417.001-g72c94f7a
-Mime-Version: 1.0
-Message-Id: <720a2829-b6b5-411c-ac69-9a53e881f48d@app.fastmail.com>
-In-Reply-To: <CAL_JsqJthKTm8bhRF2B=ae1tvtPeYYXx_Tm76qQtSwLtH5C6VA@mail.gmail.com>
-References: <20220328000915.15041-1-ansuelsmth@gmail.com>
- <85eb14ec-f465-7447-ad77-a3dabc666f47@kernel.org>
- <YkKRYnN84D9VZhGj@Ansuel-xps.localdomain>
- <CAL_Jsq+RQQ-ADMxLPUFwk6S6kGmb6oNDy4k52fnU0EtbUvqmSA@mail.gmail.com>
- <CAMuHMdWNTE48MFy6fqxAsfMWz9b6E7dVNXtXtESP95sxk2PGwA@mail.gmail.com>
- <CAL_JsqJthKTm8bhRF2B=ae1tvtPeYYXx_Tm76qQtSwLtH5C6VA@mail.gmail.com>
-Date:   Tue, 02 May 2023 10:15:03 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Rob Herring" <robh+dt@kernel.org>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Olof Johansson" <olof@lixom.net>
-Cc:     "Christian Marangi" <ansuelsmth@gmail.com>,
-        "Krzysztof Kozlowski" <krzk@kernel.org>,
-        "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-actions@lists.infradead.org,
-        linux-sunxi@lists.linux.dev,
-        Linux-OMAP <linux-omap@vger.kernel.org>,
-        linux-amlogic@lists.infradead.org, linux-arm-kernel@axis.com,
-        linux-aspeed@lists.ozlabs.org,
-        linux-rpi-kernel@lists.infradead.org,
-        chrome-platform@lists.linux.dev,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-samsung-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        kernel@dh-electronics.com, linux-mediatek@lists.infradead.org,
-        openbmc@lists.ozlabs.org, linux-tegra@vger.kernel.org,
-        "linux-oxnas@groups.io" <linux-oxnas@groups.io>,
-        linux-arm-msm@vger.kernel.org, linux-unisoc@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        linux-realtek-soc@lists.infradead.org
-Subject: Re: [RFC PATCH 0/1] Categorize ARM dts directory
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 2 May 2023 04:16:58 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9533E107
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 01:16:57 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 495506605634;
+        Tue,  2 May 2023 09:16:55 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1683015416;
+        bh=SSwmXETI5ywApoRMU7RMUhj/O68+be0mDEk19Wze6fw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ovl6U0mDiCQ4dRXGcVpcvlX2tyT6AUyz+GCn+OLx5sgj1uCD/TzUfLZMhizga94YL
+         pL3GCUVaZfSIHAHBhn8nMGJpSURD3ywxZQzCnJHXM2zgMVa3WmY8b7uem4ZQdAEfPk
+         sbF9/BrAu/UzCULs0pmeMVn6z+ouVcx9WVJAYW5s0H0bpM3ajlnDDHNcVrNWw7fxDa
+         9qOoavR0VtdNluymUTGDKHKt9uPIgNfcjetEd26eSRQeSt8mrbItdUx+rHa+VpmaMd
+         anXs3jbUJ6LJZw6Z5sHTuSQLQccy3q1Dlb6vQZtLoI5o0jTRTX9nIEpD+fmquXztfV
+         mCyyOuCwGJlNA==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     chunkuang.hu@kernel.org
+Cc:     p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, wenst@chromium.org,
+        kernel@collabora.com
+Subject: [PATCH 00/11] MediaTek DDP GAMMA - 12-bit LUT support
+Date:   Tue,  2 May 2023 10:16:39 +0200
+Message-Id: <20230502081650.25947-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.40.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 25, 2023, at 17:57, Rob Herring wrote:
-> On Tue, Apr 25, 2023 at 2:28=E2=80=AFAM Geert Uytterhoeven <geert@linu=
-x-m68k.org> wrote:
->
->> Does your script also cater for .dts files not matching any pattern,
->> but including a .dtsi file that does match a pattern?
->
-> I assume I built everything after moving, but maybe not...
->
-> That's all just "details". First, we need agreement on a) moving
-> things to subdirs and b) doing it 1-by-1 or all at once. So far we've
-> been stuck on a) for being 'too much churn'.
+This series adds support for GAMMA IP requiring and/or supporting
+a 12-bits LUT using a slightly different register layout and programming
+sequence for multiple LUT banks: this IP version is currently found
+on a number of SoCs, not only including the Chromebook/IoT oriented
+Kompanio 1200/1380 MT8195/MT8195T, but also Smartphone chips such as
+the Dimensity 9200 (MT6985) and others.
 
-Sorry for missing most of the discussion last week. The script sounds
-fine to me, the only reason I didn't want to do this in the past is that
-we had the plan to move platforms out of the kernel tree to an external
-repository and I wanted to do this platform at a time and also only move
-each one once. I don't think that is going to happen anytime soon now,
-so let's just do your script.
+This series was tested on MT8195, MT8192, MT8173, MT6795:
+ * MT6795, MT8192, MT8173: No regression, works fine.
+ * MT8195: Color correction is finally working!
 
-Can you send me the script and/or a pull request of the resulting
-tree based on my soc/dt branch? Everything is merged upstream,
-and I think git-merge would handle the remaining merges with any
-other changes in mainline.
+AngeloGioacchino Del Regno (10):
+  drm/mediatek: gamma: Reduce indentation in mtk_gamma_set_common()
+  drm/mediatek: gamma: Support SoC specific LUT size
+  drm/mediatek: gamma: Improve and simplify HW LUT calculation
+  drm/mediatek: gamma: Enable the Gamma LUT table only after programming
+  drm/mediatek: gamma: Use bitfield macros
+  drm/mediatek: gamma: Support specifying number of bits per LUT
+    component
+  drm/mediatek: gamma: Support multi-bank gamma LUT
+  drm/mediatek: gamma: Add support for 12-bit LUT and MT8195
+  drm/mediatek: gamma: Make sure relay mode is disabled
+  drm/mediatek: gamma: Program gamma LUT type for descending or rising
 
-        Arnd
+Jason-JH.Lin (1):
+  drm/mediatek: gamma: Adjust mtk_drm_gamma_set_common parameters
+
+ drivers/gpu/drm/mediatek/mtk_disp_aal.c     |   2 +-
+ drivers/gpu/drm/mediatek/mtk_disp_drv.h     |   3 +-
+ drivers/gpu/drm/mediatek/mtk_disp_gamma.c   | 194 ++++++++++++++++----
+ drivers/gpu/drm/mediatek/mtk_drm_crtc.c     |   4 +-
+ drivers/gpu/drm/mediatek/mtk_drm_crtc.h     |   1 -
+ drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h |   9 +
+ 6 files changed, 177 insertions(+), 36 deletions(-)
+
+-- 
+2.40.1
+
