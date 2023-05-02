@@ -2,240 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36F316F4906
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 19:17:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9B976F4912
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 19:20:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234347AbjEBRRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 13:17:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54904 "EHLO
+        id S233888AbjEBRUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 13:20:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231609AbjEBRR2 (ORCPT
+        with ESMTP id S233167AbjEBRUr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 13:17:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E211B5
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 10:16:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683047802;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FxFefL2TaEuqaJkcFu7xJC55lri7raM2nXvu+Ph57wY=;
-        b=NskkJKtDbddPg8p7HSo0SbpNY11EMgMs/LYk7ZRHA58Tm1eCMGp34dTebNhSbqXwWXtn6N
-        Lh9bxIE7l3DHtG6W86O3FmA2O5WN8myyrfXnuSsxwmI9JjzbtIriQWR1iHCg/FTt8ehRw9
-        JGLKe+lqWqzrP6VbS6idmaoJEV4rAdM=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-457-A2oatiY_O1y9SoJXZOlH-g-1; Tue, 02 May 2023 13:16:41 -0400
-X-MC-Unique: A2oatiY_O1y9SoJXZOlH-g-1
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f3157128b4so110764135e9.0
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 10:16:41 -0700 (PDT)
+        Tue, 2 May 2023 13:20:47 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7718CA1
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 10:20:46 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-b9a6ab9ede3so5849260276.2
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 10:20:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683048045; x=1685640045;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5xwUxHSl9WxBYX8EA+OtIHBIGktuHw8bbETo8ZwlLgw=;
+        b=2Th2r05beLRKstRqgsFh8Vvg1TDSxZlv1zBS1P+U7o2IGwmzxIbw+dVnbN+6CP+eYb
+         kEPmHx6Id+yViOJXDLtz4UZVDk3x5xmfFi2N7fMwYvlkKLj5fLlcp5Mnfyb+b3EPqkns
+         Uhh2iOk/MQe9cKXIWLoGyVV9YcVl8TgcWQiUKdPE9cb+Nu6pYR8TcloSpLW9gf5gmiWZ
+         jNEZgN6SDuvFgiPsaFU6LVXtIAdXZLz1YLXxroRnh4W2hSFXbkBUFRIPyXo9gu5eyQfr
+         kVLstlwzW3hWXZprM5Y2i9aKruqaIm/ZGYyw0jpLqwtrFBFD9kBYAIaKBuOrKINO+IB+
+         MMOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683047800; x=1685639800;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FxFefL2TaEuqaJkcFu7xJC55lri7raM2nXvu+Ph57wY=;
-        b=hWK5hJOMcvnPFJEOrJew3NQgn3xXeRJOCi3YhYdiFnO4OdO7HY8//NMj72wI1/XFXS
-         QobuBWPDyMRd/H45Mk7Sshkd7X/Yg7CZVmqYSXHXLych+dX42P8QR99bMo4EbaCJUfLO
-         7M12qrABCuP1mUnxjrWH+VZEmnWOWliVoX3i6xHM8FQfjiitfllc0oX00KycSZcIdM8U
-         w+9uXuSrN7kMmxOc7UWa1zBwmjN6dEE+B873nMD+NyHyMyNetdOF6wbfr0ogJb6dImNc
-         vz+/s9by4EgoV/kN/YOvlq1TM0HXbnQDY96JuQOGtFsAwwVI2WEUqFIJSwJo4c9C/iF3
-         cd3w==
-X-Gm-Message-State: AC+VfDzN1YHtwTd6N/qJFInX4kKuuKa2AOVrr3ZG8o3y1XQRh1CvGnse
-        6OlEo+0fGsXvpZ/fHTM+/FaO10eipkchzcE8Q76wKy/oZwf0kH935E2lXiQgzr4GooTel4Fn8Dd
-        WFqS38SGd17r3wklb7oGY/jrfjTXF/CV9
-X-Received: by 2002:a05:600c:190e:b0:3f1:96a8:3560 with SMTP id j14-20020a05600c190e00b003f196a83560mr16415002wmq.10.1683047800070;
-        Tue, 02 May 2023 10:16:40 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7oCTXDG5XgtbjQb7PsM2Y4y6C+rc08d37MchNAu0yZOIk2vbjILr1cpDOC4wKU8cadt3Eyqg==
-X-Received: by 2002:a05:600c:190e:b0:3f1:96a8:3560 with SMTP id j14-20020a05600c190e00b003f196a83560mr16414984wmq.10.1683047799651;
-        Tue, 02 May 2023 10:16:39 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c700:2400:6b79:2aa:9602:7016? (p200300cbc70024006b7902aa96027016.dip0.t-ipconnect.de. [2003:cb:c700:2400:6b79:2aa:9602:7016])
-        by smtp.gmail.com with ESMTPSA id y5-20020a1c4b05000000b003e91b9a92c9sm35873689wma.24.2023.05.02.10.16.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 May 2023 10:16:39 -0700 (PDT)
-Message-ID: <03e591ce-debc-bba1-c55e-ce590cc1f38d@redhat.com>
-Date:   Tue, 2 May 2023 19:16:36 +0200
+        d=1e100.net; s=20221208; t=1683048045; x=1685640045;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5xwUxHSl9WxBYX8EA+OtIHBIGktuHw8bbETo8ZwlLgw=;
+        b=NeW/uz2yvnBl3B867Crhkvrclo1imnv0gB6zp7xxM4FGWJvZwRM7DyhB5VQWhxg1jD
+         du7s7K+YsxqUI5cGfRJKk0VmfvFduQc08Abi04/1Vk6+WqPcfr4ZNBdY+mLm6ODc/tr0
+         yR6P87XKoDV/iGwtAoGtEGk6Di66TnB5vv3ANFVwtQziHscypk/Msk/c3L/vInZYyty5
+         VC7V6tjVlxXoQg1O7fj6rHE+3YWvBW+xi2rM0Auy0QXHTFQEru+vRiGr2+54B8dzCC4I
+         c0GrtD6ljGmPjYyED25kRmqdqbDVHb5U0K0EcOIzfU+VTD0p04peDYIwopueWcYMuCJC
+         KEUg==
+X-Gm-Message-State: AC+VfDxLqGmTfXD1M2StbvIJzn+sonhZ9K4J3snR7iaP+bMWEA/FiXas
+        kSzy1FS+0zWnCGRVoDmDrqYmngq+djEnO8Dj/pujmg==
+X-Google-Smtp-Source: ACHHUZ5BPCF2CKRubN5VcRAVI0/kbwYSQNoK3HbrxC9x+FXFK6CFt2hDzxdfts5hpjRgfPxX1Rvz7pU7xt5HFFdUGNY=
+X-Received: by 2002:a25:2b41:0:b0:b8e:df64:f00f with SMTP id
+ r62-20020a252b41000000b00b8edf64f00fmr16154502ybr.34.1683048045445; Tue, 02
+ May 2023 10:20:45 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v7 1/3] mm/mmap: separate writenotify and dirty tracking
- logic
-Content-Language: en-US
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Mika Penttila <mpenttil@redhat.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Theodore Ts'o <tytso@mit.edu>, Peter Xu <peterx@redhat.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>
-References: <cover.1683044162.git.lstoakes@gmail.com>
- <72a90af5a9e4445a33ae44efa710f112c2694cb1.1683044162.git.lstoakes@gmail.com>
- <56696a72-24fa-958e-e6a1-7a17c9e54081@redhat.com>
- <f777a151-edfc-4882-8aca-9a926179c5bb@lucifer.local>
- <bf04a98a-9de6-4532-a36c-59572d22dd7c@lucifer.local>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <bf04a98a-9de6-4532-a36c-59572d22dd7c@lucifer.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230303011346.3342233-1-surenb@google.com> <CAJuCfpHcgu5Cti0t+U=S1C5-0ZgebhxzrOnhDiSu5qCyuq5_Wg@mail.gmail.com>
+In-Reply-To: <CAJuCfpHcgu5Cti0t+U=S1C5-0ZgebhxzrOnhDiSu5qCyuq5_Wg@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 2 May 2023 10:20:34 -0700
+Message-ID: <CAJuCfpE_aB6KQZj6A0NTCcv09bJ26L1hECDho3M2OyiNoMfFEA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] psi: remove 500ms min window size limitation for triggers
+To:     peterz@infradead.org
+Cc:     tj@kernel.org, hannes@cmpxchg.org, lizefan.x@bytedance.com,
+        johunt@akamai.com, mhocko@suse.com, keescook@chromium.org,
+        quic_sudaraja@quicinc.com, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02.05.23 19:09, Lorenzo Stoakes wrote:
-> On Tue, May 02, 2023 at 05:53:46PM +0100, Lorenzo Stoakes wrote:
->> On Tue, May 02, 2023 at 06:38:53PM +0200, David Hildenbrand wrote:
->>> On 02.05.23 18:34, Lorenzo Stoakes wrote:
->>>> vma_wants_writenotify() is specifically intended for setting PTE page table
->>>> flags, accounting for existing PTE flag state and whether that might
->>>> already be read-only while mixing this check with a check whether the
->>>> filesystem performs dirty tracking.
->>>>
->>>> Separate out the notions of dirty tracking and a PTE write notify checking
->>>> in order that we can invoke the dirty tracking check from elsewhere.
->>>>
->>>> Note that this change introduces a very small duplicate check of the
->>>> separated out vm_ops_needs_writenotify(). This is necessary to avoid making
->>>> vma_needs_dirty_tracking() needlessly complicated (e.g. passing a
->>>> check_writenotify flag or having it assume this check was already
->>>> performed). This is such a small check that it doesn't seem too egregious
->>>> to do this.
->>>>
->>>> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
->>>> Reviewed-by: John Hubbard <jhubbard@nvidia.com>
->>>> Reviewed-by: Mika Penttilä <mpenttil@redhat.com>
->>>> Reviewed-by: Jan Kara <jack@suse.cz>
->>>> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
->>>> ---
->>>>    include/linux/mm.h |  1 +
->>>>    mm/mmap.c          | 36 +++++++++++++++++++++++++++---------
->>>>    2 files changed, 28 insertions(+), 9 deletions(-)
->>>>
->>>> diff --git a/include/linux/mm.h b/include/linux/mm.h
->>>> index 27ce77080c79..7b1d4e7393ef 100644
->>>> --- a/include/linux/mm.h
->>>> +++ b/include/linux/mm.h
->>>> @@ -2422,6 +2422,7 @@ extern unsigned long move_page_tables(struct vm_area_struct *vma,
->>>>    #define  MM_CP_UFFD_WP_ALL                 (MM_CP_UFFD_WP | \
->>>>    					    MM_CP_UFFD_WP_RESOLVE)
->>>> +bool vma_needs_dirty_tracking(struct vm_area_struct *vma);
->>>>    int vma_wants_writenotify(struct vm_area_struct *vma, pgprot_t vm_page_prot);
->>>>    static inline bool vma_wants_manual_pte_write_upgrade(struct vm_area_struct *vma)
->>>>    {
->>>> diff --git a/mm/mmap.c b/mm/mmap.c
->>>> index 5522130ae606..295c5f2e9bd9 100644
->>>> --- a/mm/mmap.c
->>>> +++ b/mm/mmap.c
->>>> @@ -1475,6 +1475,31 @@ SYSCALL_DEFINE1(old_mmap, struct mmap_arg_struct __user *, arg)
->>>>    }
->>>>    #endif /* __ARCH_WANT_SYS_OLD_MMAP */
->>>> +/* Do VMA operations imply write notify is required? */
->>>> +static bool vm_ops_needs_writenotify(const struct vm_operations_struct *vm_ops)
->>>> +{
->>>> +	return vm_ops && (vm_ops->page_mkwrite || vm_ops->pfn_mkwrite);
->>>> +}
->>>> +
->>>> +/*
->>>> + * Does this VMA require the underlying folios to have their dirty state
->>>> + * tracked?
->>>> + */
->>>> +bool vma_needs_dirty_tracking(struct vm_area_struct *vma)
->>>> +{
->>>
->>> Sorry for not noticing this earlier, but ...
->>
->> pints_owed++
+On Thu, Mar 2, 2023 at 5:16=E2=80=AFPM Suren Baghdasaryan <surenb@google.co=
+m> wrote:
+>
+> On Thu, Mar 2, 2023 at 5:13=E2=80=AFPM Suren Baghdasaryan <surenb@google.=
+com> wrote:
+> >
+> > Current 500ms min window size for psi triggers limits polling interval
+> > to 50ms to prevent polling threads from using too much cpu bandwidth by
+> > polling too frequently. However the number of cgroups with triggers is
+> > unlimited, so this protection can be defeated by creating multiple
+> > cgroups with psi triggers (triggers in each cgroup are served by a sing=
+le
+> > "psimon" kernel thread).
+> > Instead of limiting min polling period, which also limits the latency o=
+f
+> > psi events, it's better to limit psi trigger creation to authorized use=
+rs
+> > only, like we do for system-wide psi triggers (/proc/pressure/* files c=
+an
+> > be written only by processes with CAP_SYS_RESOURCE capability). This al=
+so
+> > makes access rules for cgroup psi files consistent with system-wide one=
+s.
+> > Add a CAP_SYS_RESOURCE capability check for cgroup psi file writers and
+> > remove the psi window min size limitation.
+> >
+> > Suggested-by: Sudarshan Rajagopalan <quic_sudaraja@quicinc.com>
+> > Link: https://lore.kernel.org/all/cover.1676067791.git.quic_sudaraja@qu=
+icinc.com/
+> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > Acked-by: Michal Hocko <mhocko@suse.com>
+> > Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+>
+> Forgot to change the --to field from Tejun to PeterZ.
+> Peter, just to clarify, this change is targeted for inclusion in your tre=
+e.
 
-Having tired eyes and jumping back and forth between tasks really seems 
-to start getting expensive ;)
-
->>
->>>
->>> what about MAP_PRIVATE mappings? When we write, we populate an anon page,
->>> which will work as expected ... because we don't have to notify the fs?
->>>
->>> I think you really also want the "If it was private or non-writable, the
->>> write bit is already clear */" part as well and remove "false" in that case.
->>>
->>
->> Not sure a 'write bit is already clear' case is relevant to checking
->> whether a filesystem dirty tracks? That seems specific entirely to the page
->> table bits.
->>
->> That's why I didn't include it,
->>
->> A !VM_WRITE shouldn't be GUP-writable except for FOLL_FORCE, and that
->> surely could be problematic if VM_MAYWRITE later?
->>
->> Thinking about it though a !VM_SHARE should probably can be safely assumed
->> to not be dirty-trackable, so we probably do need to add a check for
->> !VM_SHARED -> !vma_needs_dirty_tracking
->>
-> 
-> On second thoughts, we explicitly check FOLL_FORCE && !is_cow_mapping() in
-> check_vma_flags() so that case cannot occur.
-> 
-> So actually yes we should probably include this on the basis of that and
-> the fact that a FOLL_WRITE operation will CoW the MAP_PRIVATE mapping.
-> 
-
-Yes, we only allow to FOLL_FORCE write to (exclusive) anonymous pages 
-that are mapped read-only. If it's not that, we trigger a (fake) write 
-fault.
-
-
--- 
+I think this patch slipped through the cracks. Peter, could you please
+take it into your tree?
 Thanks,
+Suren.
 
-David / dhildenb
-
+> Thanks!
+>
+> > ---
+> >  kernel/cgroup/cgroup.c | 10 ++++++++++
+> >  kernel/sched/psi.c     |  4 +---
+> >  2 files changed, 11 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+> > index 935e8121b21e..b600a6baaeca 100644
+> > --- a/kernel/cgroup/cgroup.c
+> > +++ b/kernel/cgroup/cgroup.c
+> > @@ -3867,6 +3867,12 @@ static __poll_t cgroup_pressure_poll(struct kern=
+fs_open_file *of,
+> >         return psi_trigger_poll(&ctx->psi.trigger, of->file, pt);
+> >  }
+> >
+> > +static int cgroup_pressure_open(struct kernfs_open_file *of)
+> > +{
+> > +       return (of->file->f_mode & FMODE_WRITE && !capable(CAP_SYS_RESO=
+URCE)) ?
+> > +               -EPERM : 0;
+> > +}
+> > +
+> >  static void cgroup_pressure_release(struct kernfs_open_file *of)
+> >  {
+> >         struct cgroup_file_ctx *ctx =3D of->priv;
+> > @@ -5266,6 +5272,7 @@ static struct cftype cgroup_psi_files[] =3D {
+> >         {
+> >                 .name =3D "io.pressure",
+> >                 .file_offset =3D offsetof(struct cgroup, psi_files[PSI_=
+IO]),
+> > +               .open =3D cgroup_pressure_open,
+> >                 .seq_show =3D cgroup_io_pressure_show,
+> >                 .write =3D cgroup_io_pressure_write,
+> >                 .poll =3D cgroup_pressure_poll,
+> > @@ -5274,6 +5281,7 @@ static struct cftype cgroup_psi_files[] =3D {
+> >         {
+> >                 .name =3D "memory.pressure",
+> >                 .file_offset =3D offsetof(struct cgroup, psi_files[PSI_=
+MEM]),
+> > +               .open =3D cgroup_pressure_open,
+> >                 .seq_show =3D cgroup_memory_pressure_show,
+> >                 .write =3D cgroup_memory_pressure_write,
+> >                 .poll =3D cgroup_pressure_poll,
+> > @@ -5282,6 +5290,7 @@ static struct cftype cgroup_psi_files[] =3D {
+> >         {
+> >                 .name =3D "cpu.pressure",
+> >                 .file_offset =3D offsetof(struct cgroup, psi_files[PSI_=
+CPU]),
+> > +               .open =3D cgroup_pressure_open,
+> >                 .seq_show =3D cgroup_cpu_pressure_show,
+> >                 .write =3D cgroup_cpu_pressure_write,
+> >                 .poll =3D cgroup_pressure_poll,
+> > @@ -5291,6 +5300,7 @@ static struct cftype cgroup_psi_files[] =3D {
+> >         {
+> >                 .name =3D "irq.pressure",
+> >                 .file_offset =3D offsetof(struct cgroup, psi_files[PSI_=
+IRQ]),
+> > +               .open =3D cgroup_pressure_open,
+> >                 .seq_show =3D cgroup_irq_pressure_show,
+> >                 .write =3D cgroup_irq_pressure_write,
+> >                 .poll =3D cgroup_pressure_poll,
+> > diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+> > index 02e011cabe91..0945f956bf80 100644
+> > --- a/kernel/sched/psi.c
+> > +++ b/kernel/sched/psi.c
+> > @@ -160,7 +160,6 @@ __setup("psi=3D", setup_psi);
+> >  #define EXP_300s       2034            /* 1/exp(2s/300s) */
+> >
+> >  /* PSI trigger definitions */
+> > -#define WINDOW_MIN_US 500000   /* Min window size is 500ms */
+> >  #define WINDOW_MAX_US 10000000 /* Max window size is 10s */
+> >  #define UPDATES_PER_WINDOW 10  /* 10 updates per window */
+> >
+> > @@ -1278,8 +1277,7 @@ struct psi_trigger *psi_trigger_create(struct psi=
+_group *group,
+> >         if (state >=3D PSI_NONIDLE)
+> >                 return ERR_PTR(-EINVAL);
+> >
+> > -       if (window_us < WINDOW_MIN_US ||
+> > -               window_us > WINDOW_MAX_US)
+> > +       if (window_us =3D=3D 0 || window_us > WINDOW_MAX_US)
+> >                 return ERR_PTR(-EINVAL);
+> >
+> >         /* Check threshold */
+> > --
+> > 2.40.0.rc0.216.gc4246ad0f0-goog
+> >
