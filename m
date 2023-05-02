@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAC3D6F3F97
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 10:49:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DADB36F3F9A
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 10:50:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233666AbjEBItV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 04:49:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49712 "EHLO
+        id S234016AbjEBIuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 04:50:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233747AbjEBIsr (ORCPT
+        with ESMTP id S233404AbjEBIuE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 04:48:47 -0400
+        Tue, 2 May 2023 04:50:04 -0400
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359FF5247;
-        Tue,  2 May 2023 01:47:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CAA759C4;
+        Tue,  2 May 2023 01:48:58 -0700 (PDT)
 Received: from ip4d1634d3.dynamic.kabel-deutschland.de ([77.22.52.211] helo=diego.localnet)
         by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <heiko@sntech.de>)
-        id 1ptlfj-0006Pn-4p; Tue, 02 May 2023 10:47:43 +0200
+        id 1ptlgo-0006Qg-Vb; Tue, 02 May 2023 10:48:51 +0200
 From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -33,12 +33,12 @@ To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
 Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
         kernel@collabora.com
-Subject: Re: [PATCH 3/8] nvmem: rockchip-otp: Add clocks and reg_read to rockchip_data
-Date:   Tue, 02 May 2023 10:47:41 +0200
-Message-ID: <6064284.AJdgDx1Vlc@diego>
-In-Reply-To: <20230501084401.765169-4-cristian.ciocaltea@collabora.com>
+Subject: Re: [PATCH 4/8] nvmem: rockchip-otp: Generalize rockchip_otp_wait_status()
+Date:   Tue, 02 May 2023 10:48:50 +0200
+Message-ID: <9368839.G0QQBjFxQf@diego>
+In-Reply-To: <20230501084401.765169-5-cristian.ciocaltea@collabora.com>
 References: <20230501084401.765169-1-cristian.ciocaltea@collabora.com>
- <20230501084401.765169-4-cristian.ciocaltea@collabora.com>
+ <20230501084401.765169-5-cristian.ciocaltea@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -51,37 +51,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Montag, 1. Mai 2023, 10:43:55 CEST schrieb Cristian Ciocaltea:
-> In preparation to support new Rockchip OTP memory devices with different
-> clock configurations and register layout, extend rockchip_data struct
-> with the related members: clocks, num_clks, reg_read.
-> 
-> Additionally, to avoid managing redundant driver data, drop num_clks
-> member from rockchip_otp struct and update all references to point to
-> the equivalent member in rockchip_data.
+Am Montag, 1. Mai 2023, 10:43:56 CEST schrieb Cristian Ciocaltea:
+> In preparation to support additional Rockchip OTP memory devices with
+> different register layout, generalize rockchip_otp_wait_status() to
+> accept a new parameter for specifying the offset of the status register.
 > 
 > Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-> ---
->  drivers/nvmem/rockchip-otp.c | 79 ++++++++++++++++++++++--------------
->  1 file changed, 49 insertions(+), 30 deletions(-)
-> 
-> diff --git a/drivers/nvmem/rockchip-otp.c b/drivers/nvmem/rockchip-otp.c
-> index 9f53bcce2f87..a5b234e60735 100644
-> --- a/drivers/nvmem/rockchip-otp.c
-> +++ b/drivers/nvmem/rockchip-otp.c
-> @@ -54,21 +54,19 @@
->  
->  #define OTPC_TIMEOUT			10000
->  
-> +struct rockchip_data {
-> +	int size;
-> +	const char * const *clocks;
-> +	int num_clks;
 
-nit: might be nice to use either "clocks" or "clks" as part for both names
-
-
-other than that
 Reviewed-by: Heiko Stuebner <heiko@sntech.de>
 
 
