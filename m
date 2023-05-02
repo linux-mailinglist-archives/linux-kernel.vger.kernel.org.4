@@ -2,175 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3AC26F438C
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 14:17:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E86C16F43AC
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 14:22:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234177AbjEBMRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 08:17:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44374 "EHLO
+        id S234191AbjEBMWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 08:22:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234187AbjEBMRN (ORCPT
+        with ESMTP id S233955AbjEBMWK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 08:17:13 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED5630E8
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 05:17:07 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 2ED8540014;
-        Tue,  2 May 2023 12:17:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1683029826;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4WtAk/oO17QNSG+MVFQT+biwAhXZn5Gzxzievf+xDyU=;
-        b=TxUhuHagSMChb0MUZjPqcqj1NgRhBR1NzWL1NTGB9ytH+m8Rvb9B5G5q+dJRYBCVUPJn7H
-        XKmvBjcrNYMXC+oBhR8GMwca+u4UX7DRSoOy1fLlhyxuq+7sILdjiENtGdUIByXWqEY37l
-        NhWBK9rhuaEFgDwk2LGmFJ0noK9KQ4y0oJWlnn/UaSx7ag/b5/POIO1MmIJhOx07ymeIsO
-        Qv6Oi4EjLMuWgqitdeu8dfL2XqCLEiKUQQMZDXZesdjs6/9qc1yKhXL20XRZJTFdscA4iC
-        CrLpV2X2ywqfKWLJkmS4TNfPqeKuoyfLiX+hFb6i/Nodnn3xyZIjAALORMbFGQ==
-Date:   Tue, 2 May 2023 14:17:03 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
-Cc:     Liang Yang <liang.yang@amlogic.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Yixun Lan <yixun.lan@amlogic.com>, <oxffffaa@gmail.com>,
-        <kernel@sberdevices.ru>, <linux-mtd@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        "yonghui.yu" <yonghui.yu@amlogic.com>
-Subject: Re: [PATCH v1 4/5] mtd: rawnand: meson: clear OOB buffer before
- read
-Message-ID: <20230502141703.29f0bc30@xps-13>
-In-Reply-To: <2b2f5cb4-84f7-65f6-13b2-42f965503023@sberdevices.ru>
-References: <20230412061700.1492474-1-AVKrasnov@sberdevices.ru>
-        <20230413102200.309fbe9c@xps-13>
-        <b3279de4-e89d-db03-a515-a6aa52ab90d3@sberdevices.ru>
-        <20230413122252.0a8efcd8@xps-13>
-        <569a948e-654a-b21f-8a4f-55dc4b295387@sberdevices.ru>
-        <60fa656e-bda1-1de6-a79e-3e3041cd69a8@sberdevices.ru>
-        <780c0cae-18b6-2652-1c2c-6d398ea60451@amlogic.com>
-        <e7c49f2d-b3c1-8d9b-76fe-c8759b37c7c7@sberdevices.ru>
-        <20230418152505.72fc16da@xps-13>
-        <15a6e415-1489-a81f-fc8f-2372678ad2cb@sberdevices.ru>
-        <ee10bdeb-416c-70f0-d323-7107fe0746e8@amlogic.com>
-        <5e4b395e-bf9d-0123-a0f2-2b378d950b29@sberdevices.ru>
-        <fda1ae91-4bf8-6945-bd0d-b6dabc9cb4bd@sberdevices.ru>
-        <a5010dcf-a8ce-f144-949c-687548cefce7@amlogic.com>
-        <cf27b6b4-a75b-c5a6-32ea-ac20a2984192@sberdevices.ru>
-        <20230502115913.78012d98@xps-13>
-        <2274b432-d1a9-b3cf-4f7b-08c4a4c580b5@sberdevices.ru>
-        <20230502132745.14349770@xps-13>
-        <2b2f5cb4-84f7-65f6-13b2-42f965503023@sberdevices.ru>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Tue, 2 May 2023 08:22:10 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D64E5D
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 05:21:54 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-55a1462f9f6so24464027b3.3
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 05:21:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683030114; x=1685622114;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=v0ELEJaxmyMHE86NJZXf/OVqd45Nxv6qSnG8aCn1dms=;
+        b=y6cdTbHtduWu7yW0MFh2JTL5r7bTmocpHVvi/ntHauHi9Pq1/Lwpyp0tqSH90CEmtt
+         QVTGSTTKyr4dvyE/IFh4omLV7T6G3lUecQ+kbwN907BmQXh7YbYLGsqCeQyJiLuxtni7
+         OoALzyjcB4WMMAz14TWrXvVgqPbWh0npyEATXdnzWwdKvog1LWYiDb4zCMA5RMrIAx0Z
+         /PPzWNc01T6ShhCT9Sli1ILKVAZxRiePuqEzTPj3PEBo5fDDUvGKYnjwgFhApSWfbSYw
+         WQckJYCh0p3S1VlpxWWri4cE86+1r67CZD1DtT2C4MbfIanbqPtjn2Rwohx9ackRQtkV
+         a8DA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683030114; x=1685622114;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=v0ELEJaxmyMHE86NJZXf/OVqd45Nxv6qSnG8aCn1dms=;
+        b=kNU1+CN7dmIB1/KveACDTRFYyec8dGIMjY8lJMuUL6y8XBLuUfzTithX7JdjVb3E+o
+         Yxe3OjPPcBUKrrz6kkzYz+gT7XTaerZAe/s+Bt8gXgnFKTI16lFZRNPjUKQF6X0XULJ5
+         CqjcsO6gA9eqASpHQd9R0454Rxpyz8hk9khyOdYfCr4qpcTE9uyEmIrVJJFtSMQcTCi3
+         aOsDOmDZPhANvJsQijmnDR2ok1rLE4UjwkWsmGsdDHzsvMadZ3aq9QlM6TvecHxwwfpg
+         e+4mBFNI+B5OldfNu6mXtg9Q64aJgbnktuKJmU97j1EJeaXmETAZvUowjb1d6NNaLM4n
+         +NTw==
+X-Gm-Message-State: AC+VfDwfCV/3F0RiDBuZaNrPidvOZ3a181MyAtdiTpz/jiuI8l3lzif1
+        VAzlXE7eTKRWajhwhdEIZF9G9XV5FcNg3z7bVQ+j+g==
+X-Google-Smtp-Source: ACHHUZ54VmADvQKJKh71p0TlnN2S++HjGqYIsN12v/Jh03QvzM5HJOh/pgSCZ25PyQYThKrtg4nK0QGV68jadmQa8+Q=
+X-Received: by 2002:a81:4e0b:0:b0:55a:985e:8ad1 with SMTP id
+ c11-20020a814e0b000000b0055a985e8ad1mr2264034ywb.33.1683030114110; Tue, 02
+ May 2023 05:21:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <1682492417-20496-1-git-send-email-quic_dikshita@quicinc.com> <4434859f-a5b2-a9da-8dad-3f2c4f48cd27@linaro.org>
+In-Reply-To: <4434859f-a5b2-a9da-8dad-3f2c4f48cd27@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 2 May 2023 15:21:43 +0300
+Message-ID: <CAA8EJprKLxeHO98TayzaS-U+O9JYvVe1zDKU+XPmrKxkQ_Sp3w@mail.gmail.com>
+Subject: Re: [PATCH] venus: add support for 10 bit decoding.
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Dikshita Agarwal <quic_dikshita@quicinc.com>,
+        linux-media@vger.kernel.org, stanimir.k.varbanov@gmail.com,
+        quic_vgarodia@quicinc.com, agross@kernel.org, andersson@kernel.org,
+        mchehab@kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arseniy,
+On Tue, 2 May 2023 at 14:53, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>
+>
+>
+> On 26.04.2023 09:00, Dikshita Agarwal wrote:
+> > - Add support for V4L2_PIX_FMT_P010 color format.
+> > - Add handling of bit depth change from firmware.
+> > - Return P010 as preferred format for 10 bit decode.
+> Sounds like this should be 3 separate patches, preferably with
+> some insight in each commit message.
 
-Richard, your input is welcome below :-)
+Absolutely. I think there were several 'split one patch per feature'
+feedbacks for the previous series.
 
-> >>>>>>> I just checked JFFS2 mount/umount again, here is what i see:
-> >>>>>>> 0) First attempt to mount JFFS2.
-> >>>>>>> 1) It writes OOB to page N (i'm using raw write). It is cleanmark=
-er value 0x85 0x19 0x03 0x20. Mount is done.
-> >>>>>>> 2) Umount JFFS2. Done.
-> >>>>>>> 3) Second attempt to mount JFFS2.
-> >>>>>>> 4) It reads OOB from page N (i'm using raw read). Value is 0x85 0=
-x19 0x03 0x20. Done.
-> >>>>>>> 5) It reads page N in ECC mode, and i get:
-> >>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0 jffs2: mtd->read(0x100 bytes from N) ret=
-urned ECC error
-> >>>>>>> 6) Mount failed.
-> >>>>>>>
-> >>>>>>> We already had problem which looks like this on another device. S=
-olution was to use OOB area which is
-> >>>>>>> not covered by ECC for JFFS2 cleanmarkers.     =20
-> >>>>>
-> >>>>> ok, so there is not ECC parity bytes and mtd->read() returns ECC er=
-ror.
-> >>>>> does it have to use raw write/read on step 1) and 4)?
-> >>>>>      =20
-> >>>>
-> >>>> If i'm using non raw access to OOB, for example write OOB (user byte=
-s) in ECC mode, then
-> >>>> steps 1) and 4) and 5) passes ok, but write to this page will be imp=
-ossible (for example JFFS2
-> >>>> writes to such pages later) - we can't update ECC codes properly wit=
-hout erasing whole page.
-> >>>> Write operation will be done without problem, but read will trigger =
-ECC errors due to broken
-> >>>> ECC codes.
-> >>>>
-> >>>> In general problem that we discuss is that in current implementation=
- data and OOB conflicts
-> >>>> with each other by sharing same ECC codes, these ECC codes could be =
-written only once (without
-> >>>> erasing), while data and OOB has different callbacks to access and t=
-hus supposed to work
-> >>>> separately.   =20
-> >>>
-> >>> The fact that there might be helpers just for writing OOB areas or ju=
-st
-> >>> in-band areas are optimizations. NAND pages are meant to be written a
-> >>> single time, no matter what portion you write. In some cases, it is
-> >>> possible to perform subpage writes if the chip supports it. Pages may
-> >>> be split into several areas which cover a partial in-band area *and* a
-> >>> partial OOB area. If you write into the in-band *or* out-of-band areas
-> >>> of a given subpage, you *cannot* write the other part later without  =
- =20
-> >>
-> >> Thanks for details! So in case of JFFS2 it looks like strange, that it=
- tries
-> >> to write page after writing clean markers to it before? In the old ven=
-dor's
-> >> driver OOB write callback is suppressed by return 0 always and JFFS2 w=
-orks
-> >> correctly. =20
-> >=20
-> > Can you point the code you're mentioning? (both what JFFS2 which looks
-> > strange to you and the old vendor hack) =20
->=20
-> Here is version of the old vendor's driver:
->=20
-> https://github.com/kszaq/linux-amlogic/blob/master_new_amports/drivers/am=
-logic/nand/nand/aml_nand.c#L3260
->=20
-> In my version there is no BUG() there, but it is same driver for the same=
- chip.
->=20
-> About JFFS2 - i didn't check its source code, but what I can see using pr=
-intk(), is that it first
-> tries to write cleanmarker using OOB write callback. Then later it tries =
-to write to this page, so
-> may be it is unexpected behaviour of JFFS2?
+>
+> Konrad
+> >
+> > Signed-off-by: Vikash Garodia <quic_vgarodia@quicinc.com>
+> > Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
+> > ---
+> >  drivers/media/platform/qcom/venus/helpers.c        | 25 ++++++++++++++++++++++
+> >  drivers/media/platform/qcom/venus/hfi_plat_bufs.h  |  3 +++
+> >  .../media/platform/qcom/venus/hfi_plat_bufs_v6.c   |  9 +++++++-
+> >  drivers/media/platform/qcom/venus/vdec.c           | 18 +++++++++++++---
+> >  4 files changed, 51 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/media/platform/qcom/venus/helpers.c b/drivers/media/platform/qcom/venus/helpers.c
+> > index ab6a29f..193215c 100644
+> > --- a/drivers/media/platform/qcom/venus/helpers.c
+> > +++ b/drivers/media/platform/qcom/venus/helpers.c
+> > @@ -612,6 +612,8 @@ static u32 to_hfi_raw_fmt(u32 v4l2_fmt)
+> >               return HFI_COLOR_FORMAT_NV12_UBWC;
+> >       case V4L2_PIX_FMT_QC10C:
+> >               return HFI_COLOR_FORMAT_YUV420_TP10_UBWC;
+> > +     case V4L2_PIX_FMT_P010:
+> > +             return HFI_COLOR_FORMAT_P010;
+> >       default:
+> >               break;
+> >       }
+> > @@ -639,12 +641,16 @@ static int platform_get_bufreq(struct venus_inst *inst, u32 buftype,
+> >       if (is_dec) {
+> >               params.width = inst->width;
+> >               params.height = inst->height;
+> > +             params.out_width = inst->out_width;
+> > +             params.out_height = inst->out_height;
+> >               params.codec = inst->fmt_out->pixfmt;
+> >               params.hfi_color_fmt = to_hfi_raw_fmt(inst->fmt_cap->pixfmt);
+> >               params.dec.max_mbs_per_frame = mbs_per_frame_max(inst);
+> >               params.dec.buffer_size_limit = 0;
+> >               params.dec.is_secondary_output =
+> >                       inst->opb_buftype == HFI_BUFFER_OUTPUT2;
+> > +             if (params.dec.is_secondary_output)
+> > +                     params.hfi_dpb_color_fmt = inst->dpb_fmt;
+> >               params.dec.is_interlaced =
+> >                       inst->pic_struct != HFI_INTERLACE_FRAME_PROGRESSIVE;
+> >       } else {
+> > @@ -1764,6 +1770,25 @@ int venus_helper_get_out_fmts(struct venus_inst *inst, u32 v4l2_fmt,
+> >       if (!caps)
+> >               return -EINVAL;
+> >
+> > +     if (inst->bit_depth == VIDC_BITDEPTH_10 &&
+> > +         inst->session_type == VIDC_SESSION_TYPE_DEC) {
+> > +             found_ubwc =
+> > +                     find_fmt_from_caps(caps, HFI_BUFFER_OUTPUT,
+> > +                                        HFI_COLOR_FORMAT_YUV420_TP10_UBWC);
+> > +             found = find_fmt_from_caps(caps, HFI_BUFFER_OUTPUT2,
+> > +                                        fmt);
+> > +             if (found_ubwc && found) {
+> > +                     /*
+> > +                      * Hard-code DPB buffers to be 10bit UBWC
+> > +                      * until V4L2 is able to expose compressed/tiled
+> > +                      * formats to applications.
+> > +                      */
+> > +                     *out_fmt = HFI_COLOR_FORMAT_YUV420_TP10_UBWC;
+> > +                     *out2_fmt = fmt;
+> > +                     return 0;
+> > +             }
+> > +     }
+> > +
+> >       if (ubwc) {
+> >               ubwc_fmt = fmt | HFI_COLOR_FORMAT_UBWC_BASE;
+> >               found_ubwc = find_fmt_from_caps(caps, HFI_BUFFER_OUTPUT,
+> > diff --git a/drivers/media/platform/qcom/venus/hfi_plat_bufs.h b/drivers/media/platform/qcom/venus/hfi_plat_bufs.h
+> > index 52a51a3..25e6074 100644
+> > --- a/drivers/media/platform/qcom/venus/hfi_plat_bufs.h
+> > +++ b/drivers/media/platform/qcom/venus/hfi_plat_bufs.h
+> > @@ -12,8 +12,11 @@
+> >  struct hfi_plat_buffers_params {
+> >       u32 width;
+> >       u32 height;
+> > +     u32 out_width;
+> > +     u32 out_height;
+> >       u32 codec;
+> >       u32 hfi_color_fmt;
+> > +     u32 hfi_dpb_color_fmt;
+> >       enum hfi_version version;
+> >       u32 num_vpp_pipes;
+> >       union {
+> > diff --git a/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c b/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c
+> > index ea25c45..08caab1 100644
+> > --- a/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c
+> > +++ b/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c
+> > @@ -1185,6 +1185,7 @@ static int bufreq_dec(struct hfi_plat_buffers_params *params, u32 buftype,
+> >       enum hfi_version version = params->version;
+> >       u32 codec = params->codec;
+> >       u32 width = params->width, height = params->height, out_min_count;
+> > +     u32 out_width = params->out_width, out_height = params->out_height;
+> >       struct dec_bufsize_ops *dec_ops;
+> >       bool is_secondary_output = params->dec.is_secondary_output;
+> >       bool is_interlaced = params->dec.is_interlaced;
+> > @@ -1235,7 +1236,13 @@ static int bufreq_dec(struct hfi_plat_buffers_params *params, u32 buftype,
+> >               bufreq->count_min = out_min_count;
+> >               bufreq->size =
+> >                       venus_helper_get_framesz_raw(params->hfi_color_fmt,
+> > -                                                  width, height);
+> > +                                                  out_width, out_height);
+> > +
+> > +             if (buftype == HFI_BUFFER_OUTPUT &&
+> > +                 params->dec.is_secondary_output)
+> > +                     bufreq->size =
+> > +                             venus_helper_get_framesz_raw(params->hfi_dpb_color_fmt,
+> > +                                                          out_width, out_height);
+> >       } else if (buftype == HFI_BUFFER_INTERNAL_SCRATCH(version)) {
+> >               bufreq->size = dec_ops->scratch(width, height, is_interlaced);
+> >       } else if (buftype == HFI_BUFFER_INTERNAL_SCRATCH_1(version)) {
+> > diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
+> > index 4ceaba3..99d0e96 100644
+> > --- a/drivers/media/platform/qcom/venus/vdec.c
+> > +++ b/drivers/media/platform/qcom/venus/vdec.c
+> > @@ -43,6 +43,10 @@ static const struct venus_format vdec_formats[] = {
+> >               .num_planes = 1,
+> >               .type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+> >       }, {
+> > +             .pixfmt = V4L2_PIX_FMT_P010,
+> > +             .num_planes = 1,
+> > +             .type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+> > +     }, {
+> >               .pixfmt = V4L2_PIX_FMT_MPEG4,
+> >               .num_planes = 1,
+> >               .type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+> > @@ -697,6 +701,9 @@ static int vdec_set_work_route(struct venus_inst *inst)
+> >  }
+> >
+> >  #define is_ubwc_fmt(fmt) (!!((fmt) & HFI_COLOR_FORMAT_UBWC_BASE))
+> > +#define is_10bit_ubwc_fmt(fmt) (!!((fmt) & HFI_COLOR_FORMAT_10_BIT_BASE & \
+> > +                                 HFI_COLOR_FORMAT_UBWC_BASE))
+> > +
+> >
+> >  static int vdec_output_conf(struct venus_inst *inst)
+> >  {
+> > @@ -744,7 +751,7 @@ static int vdec_output_conf(struct venus_inst *inst)
+> >               inst->opb_fmt = out2_fmt;
+> >               inst->dpb_buftype = HFI_BUFFER_OUTPUT;
+> >               inst->dpb_fmt = out_fmt;
+> > -     } else if (is_ubwc_fmt(out2_fmt)) {
+> > +     } else if (is_ubwc_fmt(out2_fmt) || is_10bit_ubwc_fmt(out_fmt)) {
+> >               inst->opb_buftype = HFI_BUFFER_OUTPUT;
+> >               inst->opb_fmt = out_fmt;
+> >               inst->dpb_buftype = HFI_BUFFER_OUTPUT2;
+> > @@ -1420,7 +1427,7 @@ static void vdec_buf_done(struct venus_inst *inst, unsigned int buf_type,
+> >  static void vdec_event_change(struct venus_inst *inst,
+> >                             struct hfi_event_data *ev_data, bool sufficient)
+> >  {
+> > -     static const struct v4l2_event ev = {
+> > +     struct v4l2_event ev = {
+> >               .type = V4L2_EVENT_SOURCE_CHANGE,
+> >               .u.src_change.changes = V4L2_EVENT_SRC_CH_RESOLUTION };
+> >       struct device *dev = inst->core->dev_dec;
+> > @@ -1461,8 +1468,13 @@ static void vdec_event_change(struct venus_inst *inst,
+> >       inst->out_width = ev_data->width;
+> >       inst->out_height = ev_data->height;
+> >
+> > -     if (inst->bit_depth != ev_data->bit_depth)
+> > +     if (inst->bit_depth != ev_data->bit_depth) {
+> >               inst->bit_depth = ev_data->bit_depth;
+> > +             if (inst->bit_depth == VIDC_BITDEPTH_10)
+> > +                     inst->fmt_cap = &vdec_formats[3];
+> > +             else
+> > +                     inst->fmt_cap = &vdec_formats[0];
+> > +     }
+> >
+> >       if (inst->pic_struct != ev_data->pic_struct)
+> >               inst->pic_struct = ev_data->pic_struct;
 
-TBH I am not knowledgeable about JFFS2, maybe Richard can help here.
 
-Are you sure you flash is recognized by JFFS2 as being a NAND device?
-Did you enable CONFIG_JFFS2_FS_WRITEBUFFER correctly? Because
-cleanmarker seem to be discarded when using a NAND device, and
-recognizing the device as a NAND device requires the above option to be
-set apparently.
 
-Thanks,
-Miqu=C3=A8l
+-- 
+With best wishes
+Dmitry
