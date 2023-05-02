@@ -2,68 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E3BE6F40C3
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 12:10:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E17776F40D3
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 12:14:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233754AbjEBKKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 06:10:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53876 "EHLO
+        id S233753AbjEBKOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 06:14:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbjEBKKQ (ORCPT
+        with ESMTP id S233737AbjEBKO2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 06:10:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 868315261
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 03:09:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1183061C64
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 10:09:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DF92C433A1;
-        Tue,  2 May 2023 10:09:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683022198;
-        bh=8gNEyWWACUeeP7m7t0N/tXXQmwetfjaFAJPzW/qAkvc=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=rPttr6hAeJqsGZPJsVvwf3Xw/k8Ltqgxi8wlnPBL01CGAamhvCP2yKD9IkMvFdZ8F
-         xDgbjnVL9VsPawKuoxQb2NUIYnLcsPiRLzfQR4buUDu3zGtFMbPUo1g23PrLpDyVv+
-         C6sStexoJUt9LY4Ah16xc+MpHUQt772yvzW9RlaCSLA6x6UvLXQhFTjjP8gRVecNtz
-         D1kS1M11/IheHMV76bbKH1m6gzxrTRaHxNVd796hXuPHKi9iHep2pgQlPn0JCTn1N9
-         5Z2rXEOij+5McZnr92Tfp5zdwIulrW00FqrjeA01tRTb6s4aygIelR5ZawVfRCAobd
-         GJVdEy0eb2/2Q==
-From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To:     Philipp Tomsich <philipp.tomsich@vrull.eu>
-Cc:     Jessica Clarke <jrtc27@jrtc27.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Kito Cheng <kito.cheng@sifive.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        matthias.bgg@gmail.com,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Greentime Hu <greentime.hu@sifive.com>, nick.knight@sifive.com,
-        christoph.muellner@vrull.eu, richard.henderson@linaro.org,
-        arnd@arndb.de, linux-kernel@vger.kernel.org,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>
-Subject: Re: [PATCH 0/4] Expose the isa-string via the AT_BASE_PLATFORM aux
- vector
-In-Reply-To: <CAAeLtUCqyARVaY2YtVXWc_cucMOCbQ2RAd2y35pun_MMagEN_w@mail.gmail.com>
-References: <20230424194911.264850-1-heiko.stuebner@vrull.eu>
- <87ednz7roh.fsf@all.your.base.are.belong.to.us>
- <7DD2C38C-CBB3-41EE-A195-50E4C2451B7E@jrtc27.com>
- <CAAeLtUADqnwrgBjhDd+iNfwhMU6YBiMUZzeopVMAh0Jq19W9JA@mail.gmail.com>
- <87jzxrnp01.fsf@all.your.base.are.belong.to.us>
- <CAAeLtUCqyARVaY2YtVXWc_cucMOCbQ2RAd2y35pun_MMagEN_w@mail.gmail.com>
-Date:   Tue, 02 May 2023 12:09:55 +0200
-Message-ID: <87pm7j9h8s.fsf@all.your.base.are.belong.to.us>
+        Tue, 2 May 2023 06:14:28 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3994C2123;
+        Tue,  2 May 2023 03:14:24 -0700 (PDT)
+Received: from fsav111.sakura.ne.jp (fsav111.sakura.ne.jp [27.133.134.238])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 342ADoYD095814;
+        Tue, 2 May 2023 19:13:50 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav111.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav111.sakura.ne.jp);
+ Tue, 02 May 2023 19:13:50 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav111.sakura.ne.jp)
+Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 342ADig8095778
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Tue, 2 May 2023 19:13:50 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <237a9064-78bb-1fe9-4293-1409a705d2d1@I-love.SAKURA.ne.jp>
+Date:   Tue, 2 May 2023 19:13:43 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [syzbot] [mm?] KCSAN: data-race in generic_fillattr / shmem_mknod
+ (2)
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+To:     linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Cc:     akpm@linux-foundation.org, hughd@google.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com,
+        syzbot <syzbot+702361cf7e3d95758761@syzkaller.appspotmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>
+References: <0000000000007337c705fa1060e2@google.com>
+ <CACT4Y+a=xWkNGw_iKibRp4ivSE8OJkWWT0VPQ4N4d1+vj0FMdg@mail.gmail.com>
+ <bdb1fe2d-f904-78f0-d287-5e601f789862@I-love.SAKURA.ne.jp>
+ <a2c2308a-729a-ec18-18e7-36d00b25207d@I-love.SAKURA.ne.jp>
+Content-Language: en-US
+In-Reply-To: <a2c2308a-729a-ec18-18e7-36d00b25207d@I-love.SAKURA.ne.jp>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,74 +61,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Philipp Tomsich <philipp.tomsich@vrull.eu> writes:
+On 2023/05/01 23:05, Tetsuo Handa wrote:
+>> Also, there was a similar report on updating i_{ctime,mtime} to current_time()
+>> which means that i_size is not the only field that is causing data race.
+>> https://syzkaller.appspot.com/bug?id=067d40ab9ab23a6fa0a8156857ed54e295062a29
+> 
+> Do we want to as well wrap i_{ctime,mtime} using data_race() ?
+> 
 
-> On Tue, 2 May 2023 at 09:58, Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> wro=
-te:
->>
->> Philipp Tomsich <philipp.tomsich@vrull.eu> writes:
->>
->> > It is a pity that the current interface was designed without involving
->> > RVI (and that I had to ask my team to put together a patch set for
->> > further discussion, given that none of the other major vendors in RVI
->> > stepped forward).  I guarantee that plenty of reviewers would have
->> > highlighted that a central registry (even if it is just a kernel
->> > header) should be avoided.
->>
->> Are you claiming that the hwprobe work was not done in the open, but
->> secretly merged? That is not only incorrect, but rude to upstream RISC-V
->> Linux developers. I suggest you review how you interact with upstream
->> kernel work.
->
-> Please don't put words into my mouth...
->
-> I was merely pointing out that there was no engagement by the RVI
-> member companies (in regard to this mechanism) within RVI, which would
-> have prevented Jessica's issue.
-> This would have also helped to address the concerns on vendor-defined
-> extensions.
->=20
-> Also who do you refer to when you say "how _you_ interact"?  If it is
-> RVI that you refer to: it doesn't interact with upstream work
-> directly, as it doesn't own any engineering resources.
-> RVI provides a forum for member companies to come to an
-> understanding/design and then have the member companies perform the
-> work and take it upstream.
+I think we need to use inode_lock_shared()/inode_unlock_shared() when calling
+generic_fillattr(), for i_{ctime,mtime} (128bits) are too large to copy atomically.
 
-Thank you for clearing that up. I guess I was grouping RVI/RVI members
-into one. Many of the RVI members have active kernel developers. One
-could argue that the if there was a concern about current work, that it
-would have been raised by members to RVI, no? But that's another
-discussion, and maybe one that should be done between RVI members.
+Is it safe to call inode_lock_shared()/inode_unlock_shared() from generic_fillattr()?
+Is some filesystem already holding inode lock before calling generic_fillattr()?
 
-Apologies if I offended you, that was not my intention. If that was the
-case; I'm very sorry, Philipp! I can say, that the timing of this series
-made me a bit wary. My reading was "Oh, THEY didn't include us, and
-going behind our back! Here's OUR solution!". Happy that wasn't the
-case!
-
-I'm convinced that we (upstream developers; some working for RVI member
-companies, some not) still can make vendor-defined extensions work.
-
->> Why didn't RVI get involved in the review of the series? The expectation
->> cannot be that all open source projects go to RVI, but rather the other
->> way around.
->
-> That is exactly the point I was making and which you seem to miss: RVI
-> does not own any engineering resources and depends solely on its
-> member companies to project into open source projects.
-
-Ok.
-
->> Take a look at commit ea3de9ce8aa2 ("RISC-V: Add a syscall for HW
->> probing"). Your team was very much involved in the review.
->
-> I am aware, as I had reviewed and commented on these are well.
-> And my only request (was and) is that we need to figure out a way to
-> efficiently deal with vendor-defined extensions.
-
-Awesome, that makes two of us! Let's try to do that by collaborating on
-what's upstream, and building on top of that.
-
-
-Bj=C3=B6rn
