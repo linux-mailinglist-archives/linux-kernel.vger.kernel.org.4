@@ -2,122 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 788EC6F4CC0
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 00:09:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CBA96F4CC5
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 00:11:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbjEBWIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 18:08:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44782 "EHLO
+        id S229649AbjEBWLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 18:11:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbjEBWIs (ORCPT
+        with ESMTP id S229610AbjEBWLJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 18:08:48 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2088.outbound.protection.outlook.com [40.107.21.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762AF2718;
-        Tue,  2 May 2023 15:08:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Mmtb5E9gNLSSW1her0ZafSP9c6ljYQsR6sn6BQrRd2A5z70zz9rv1bOpUI6bHmz5Myc1wTJ1RUe1JvDnr4nLHW/A6lCeWn3ke33V3n9e2uuw6r7xq4cbdUkhmd7xFK+uK4i/XxHW75Vcbu7g4QJ/R1eV7YPzZGB+bT8i1dFJ/1bTEj9+CvW3TuCRe+48HeRkaRNy4+JKKmtkUTx+zIi2awbcXY7CDUyZ2RF1R9oZZkZ9Di6yLwAnrcSdeXl6Z6WXoB/7YxEx3gU2GafMrmnf51l11uELE5PHLA2enRYYeyavIdS6KsoFtyANCfoifAterbDTESi1OWoXl6gvxDlGcw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Z/URwLz8UVdnAwxQunp4zr4XBH25d6pXSNWRB0wLBBA=;
- b=Aa4DdY7e/dtbxku8bGkwSQJ5skJg+VaztNQqMvN7dyQezIbmZcfEo2ElB+rSiWbklctAapx1+aHM9UkO8hAwUKqfNFDf1XZ04VcMcrMTOrjTt9mLrfOemEhRFfTJ4VjlgPgBrNKQzlTtKEpbTwSdySk2pZS5Q7uOScEQ0DRaZwjpzmEhu3Zs5Kc2BRkUkG5O4PNaXX8a2WEbCJjpKVPuumGSPI1t46KHQWOqccdihVumTxGErCg0/zcZIyEOT+7JrVeQJAwWEBCGZSKg1ilg+LVHCYCPJ9p5Ea2fo0F6QO9WfRgPyo9AHK6sLsAF3g3SP8GOy7FzbUCf0jga+RVbEw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Z/URwLz8UVdnAwxQunp4zr4XBH25d6pXSNWRB0wLBBA=;
- b=k3b/ZTuibIdb8bMgY8gtqNm7Q3gX+2ZjVucdwTnhv/wwGSnZkc5ojFtYby5NvO4zwN/WTH+8CzQZ4gFMn9d3qd6WktjFINfehv/VUV9UvKNDrWw57B0NqYHgVFZLP2jvrUJwkhX7GMW7qFNM7l0hhY2BGgoPek0yQpxe6OZIqL8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB9185.eurprd04.prod.outlook.com (2603:10a6:102:231::11)
- by PA4PR04MB8016.eurprd04.prod.outlook.com (2603:10a6:102:cb::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.31; Tue, 2 May
- 2023 22:08:44 +0000
-Received: from PAXPR04MB9185.eurprd04.prod.outlook.com
- ([fe80::28fb:82ec:7a6:62f3]) by PAXPR04MB9185.eurprd04.prod.outlook.com
- ([fe80::28fb:82ec:7a6:62f3%5]) with mapi id 15.20.6340.031; Tue, 2 May 2023
- 22:08:44 +0000
-From:   Shenwei Wang <shenwei.wang@nxp.com>
-To:     Wei Fang <wei.fang@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Shenwei Wang <shenwei.wang@nxp.com>,
-        Clark Wang <xiaoning.wang@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        imx@lists.linux.dev
-Subject: [PATCH v2 net 2/2] net: fec: restructuring the functions to avoid forward declarations
-Date:   Tue,  2 May 2023 17:08:18 -0500
-Message-Id: <20230502220818.691444-2-shenwei.wang@nxp.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230502220818.691444-1-shenwei.wang@nxp.com>
-References: <20230502220818.691444-1-shenwei.wang@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BYAPR02CA0069.namprd02.prod.outlook.com
- (2603:10b6:a03:54::46) To PAXPR04MB9185.eurprd04.prod.outlook.com
- (2603:10a6:102:231::11)
+        Tue, 2 May 2023 18:11:09 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C3801FFF
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 15:11:06 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-50b8d2eed3dso5845047a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 15:11:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683065465; x=1685657465;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XMksZkaGlpKMqsslbFNXZJQ62LtJSRzM3HzCusN12Ms=;
+        b=xcEtWBcd2JAnnRup9l8GHssko4lY5Zfp9XqYRvhW6MqkW6YEMLPcbSEpSSjahyV8le
+         v2OIrsQSxRaCe9DxR+bxAmwpOocg7p/oy0hRriipSkDhqzEr/PM9qB1GjgEwkHThb0Ww
+         A42/qn/czzeBA3SvFNH8M0lE0nptHdKuTX9rIR87l43wKxcVrziW3XzAIa3Clm/M0Md9
+         c8sx8zpf1Nzk+GbmiAVHxJE1+O2nlFPhboPou97tzoVmyjFx6lxdVRDtACLbaaQePlL6
+         IGdSKlsSy6lBu3YhKVlD2WV19ohIHoLoHfnDgSLHn+6KRwaXL30j4OHdmmWki0CeIvBb
+         ySvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683065465; x=1685657465;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XMksZkaGlpKMqsslbFNXZJQ62LtJSRzM3HzCusN12Ms=;
+        b=gHXSzhZo2qMEnwr2AeRya+2B2cmnTJqwuQrzKmhHXd/ipjCjJPrTwceC+8tuR2XYv/
+         /CMsdR/0rC2Ecm/bO98pg24QOnvZbpQgW18PPO3FG59hyYpiZNs/Sg20Hi/BACdVuDDv
+         bYrNHkN/au3/ABmARbRcsK4eGPxCMvPyZVHevrBklZfrhsgco8ML4EjYIjtChFSt9fco
+         199Jgr68JRIiqqo5NRj8SFySjOaV2YonMH4fNGVIZzgh/2Y0u3CI8ZY1fsjRB1y8oYSa
+         4r6kZTqrhEo0v/io++X/qiZeZJmq8+uLUTcSVaNcjww7n7ajxpFfGTrsRrI1XcVxBfaq
+         ot0w==
+X-Gm-Message-State: AC+VfDxHmAg/ziDoerwz88sqtu/suzSEhyoap0gJDYgsw4wMZebdilAL
+        k3BYwR9vkPnVkUQsseeCtiezMIfa0GSxah1CWt/JpA==
+X-Google-Smtp-Source: ACHHUZ4TSvgIsqU6L5mrgHClztzRp2Icxk76FLea1y67tqvap8CZ1vg3n0Yq9kJA1ygzdOL480aWcVrzfFjXOkWvOPM=
+X-Received: by 2002:aa7:cb87:0:b0:50b:d34c:4710 with SMTP id
+ r7-20020aa7cb87000000b0050bd34c4710mr2844855edt.5.1683065464838; Tue, 02 May
+ 2023 15:11:04 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB9185:EE_|PA4PR04MB8016:EE_
-X-MS-Office365-Filtering-Correlation-Id: 890f6969-f5c2-46fc-721b-08db4b59cb43
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NsQQTHuUcIC0vmBiFKE0B5H18g+6IlPsQaHeqgJ4PWwsppnP3/PLpIcFIoniafHY/Fvked63SR4e8dwZXYQQTKAYylsRxGJjltknnoDiiaUeZp9blTYTokw3D26dVvkyNe5wA+SgUozlJO0aLVEn9lOrqlaN2GLhZyahbE0clyhTSN/s/6QcrN7/lQarGCqFy2tGup3LuIBApewb3ciQRQPOCQ8kmy5K7id7iVsza9Tkku8PfpWj13eJh3Br6AMZzhGSltj3LTIFU7Y7HvrBCYxr2M2NPn3T1Et/NuHG6Re20Qy755MLHJjbrPrHKywalqaCebENgfS5m6YFuXyTsL2jfcDN2FGhYi2bKaLw6UTzVqyZ3HQdxtTrTfpWjzOMukBSGoEhoP3/14ipeifKsqxksLZYjomcIu8XOiqBniIW8qnVbpkSQzLkDddXUVO6XGYmwL4QInxyo9K6yiYXrSJzpnNgDP+NRKM8ATFrIHog0hpd+MuYQ5ZIpEI80aX5TcFT+rDcPU0B4gyEVzGDKQ8Q4L77SAUR9YVGdIhUyJoukKSCMyWdmqiDWGEjKzIdOojhXYyxcTTSz1GENxRCLUzKNLEDYuNDc8Y+w4W+/v8=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9185.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(136003)(376002)(366004)(396003)(451199021)(54906003)(2616005)(478600001)(83380400001)(6486002)(6666004)(6506007)(26005)(1076003)(6512007)(52116002)(110136005)(4326008)(66946007)(66556008)(66476007)(316002)(55236004)(186003)(7416002)(41300700001)(8676002)(5660300002)(8936002)(44832011)(38350700002)(38100700002)(2906002)(86362001)(36756003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZVd/cHyjgU9tOEHwOVgiZzIPXFV3+bsWsuIvZg0puRYFCV8kcGAIy8aG/v7c?=
- =?us-ascii?Q?Gqzv86RnlbDuyAiNU4BdKIhK0ZZ8XyXtWpOVVEQeJqp6GhwlJYWMNIqpHIjG?=
- =?us-ascii?Q?rxNbckNOzxcmm3W082tsOW+idZHcAbKwT5MwIrwDiT5BSg1cItxe0OdZEEt+?=
- =?us-ascii?Q?541z+b37qCVmAylVnScWbQqvXE2jRrERLSgEW42XrqSBydRW1YMO4HTdLdTK?=
- =?us-ascii?Q?23B60X8eebmVIFUPsvl8QKrqpvqAqpDgBiOrzNW03ttRhSt6BkpCMAvzWaIu?=
- =?us-ascii?Q?vVu41ZAoyTqnAZJK9q7ckpkbwgORUIDMeCy2cjbER1W+0G6Vr3KpDbAY2Nol?=
- =?us-ascii?Q?NReGCEmoW3oiAz4qvCpcM8uJg/SQq7A19KUoGSk35L+JEpjK8GzsubGAzp3h?=
- =?us-ascii?Q?k8pGW7n1/LBT+KTpvt6neoj25VubOeKbua4EatETbDamgoYynk7pPM9V3pgP?=
- =?us-ascii?Q?B4JFJOpw5vc2WDKQ5dixMrxOVGQzjUQZypZVdqTsXwiVya2z+NxQU5xfdVZ6?=
- =?us-ascii?Q?Adph4c+ly32qXpj/kNxGULinXP0Z9G3/acSFFQCLpGp3mQzZt2YKczrfw1qt?=
- =?us-ascii?Q?T2EcwtcajEmu5iTCPhP6NsqL8T/8diNJ0zQJtUarQsbA+nKeft+crEPXHibV?=
- =?us-ascii?Q?+UA5nJUYCkvARImCQ7CBIFanDoIAyaWg6xsuFqlwgOL2TfVPoTEFLSlTRGqV?=
- =?us-ascii?Q?kLS5+VeafxTGTfKbH1Yih2R6dIVn1VzmFCd9G92Hdieet8I1SFYIHLZHRPjQ?=
- =?us-ascii?Q?tzxd797pp4sWQ1sbZQeHVKy64xgAxXus7soo7vjr9hVEweo4CGZEFvwl/O1c?=
- =?us-ascii?Q?5heU19Svho1vA24VpBKmGSmV7GTsY/hFAbVd6VALt7WAq/cyD+vOnnSYwP87?=
- =?us-ascii?Q?IWwWQQqyDP1yobhm9KMljUkv645yAYjoXmrzMJ/BkGWVen1pa4tzpGAqjyh2?=
- =?us-ascii?Q?uuAgNEcBJIZqgnfjavadZwk+dmZZ7UfwZXxOrk+mWd90cHruyHIWfn62SE9z?=
- =?us-ascii?Q?TvoEopO5olm9EDs8VrDNA85NIbfhmaVhI/swXostst77YyYyWggBRts5AOC6?=
- =?us-ascii?Q?KQ/cpEaQUlU+Jqt+jMIJFTELh6J7hgx+LhtfslFLpj2oQRmkHd8KuJNmZ0Cp?=
- =?us-ascii?Q?t+Hxh+aSvbLBxWQxTsH9PvUKJGGTtMhxBDYH25VdtDk/bmjXkn60lYHr0D35?=
- =?us-ascii?Q?WsJBAbSyaz9doBGirAZvjgsNIFLnPifD2/I+V0tcN09fLiAipxBDgzm+3oPX?=
- =?us-ascii?Q?PVhwVe45eua0RmXJcGQ03W9oMXefOmZF4kET3fjhzyCHqvgWW0nmUOtN5Ok4?=
- =?us-ascii?Q?psoY70sh//so0fjws6IyTg0J6FVyT4HZZLRRQps8j3BntWOaOa28LV0vQ5GE?=
- =?us-ascii?Q?oACpMJgRB1puais2ZdoZnpW1NukSWY9wxVvV0gAoBp+nJyH6wbgKwLy5edu6?=
- =?us-ascii?Q?glQa6PK4vYkqX4exmxTsb031f/ZDcbtIzMw1fry9X3vFanD11V7ADC2EM9tU?=
- =?us-ascii?Q?gBpcBy3xWivVhdnm+AWjiKsOglVtSqL65b63CwHw0KooVG2YtNmaVFo+cAu+?=
- =?us-ascii?Q?P5NnzXAAw+o6GUFLCsq4OfDJo0Cl1A1+3t0N630F?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 890f6969-f5c2-46fc-721b-08db4b59cb43
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9185.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2023 22:08:43.9748
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FJWDHUJl/xkTJdh3jy8zuGUUz/wqWnsHA13SjS+/YzqEnZ651Mm3Wkz3iotIaOJ3tpx37VUkVM50WkZiLtQqsw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB8016
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20230502160839.361544-1-roman.gushchin@linux.dev>
+ <CAJD7tkZ7Vnk6J9cJoj66wAUzmSeAopFpuXrtxZCsCtPCvvwzuQ@mail.gmail.com> <ZFGCy1d/wM+JC7xS@P9FQF9L96D.corp.robot.car>
+In-Reply-To: <ZFGCy1d/wM+JC7xS@P9FQF9L96D.corp.robot.car>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Tue, 2 May 2023 15:10:28 -0700
+Message-ID: <CAJD7tkZhRrtS3pBRC1xb46f7MTXnOhcok=QHQOiSgmXtoj5JWQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] mm: kmem: fix a NULL pointer dereference in obj_stock_flush_required()
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        linux-kernel@vger.kernel.org,
+        syzbot+774c29891415ab0fd29d@syzkaller.appspotmail.com,
+        Dmitry Vyukov <dvyukov@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -125,250 +77,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The patch reorganizes functions related to XDP frame transmission, moving
-them above the fec_enet_run_xdp implementation. This eliminates the need
-for forward declarations of these functions.
+On Tue, May 2, 2023 at 2:38=E2=80=AFPM Roman Gushchin <roman.gushchin@linux=
+.dev> wrote:
+>
+> On Tue, May 02, 2023 at 01:15:02PM -0700, Yosry Ahmed wrote:
+> > On Tue, May 2, 2023 at 9:09=E2=80=AFAM Roman Gushchin <roman.gushchin@l=
+inux.dev> wrote:
+> > >
+> > > KCSAN found an issue in obj_stock_flush_required():
+> > > stock->cached_objcg can be reset between the check and dereference:
+> > >
+> > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > > BUG: KCSAN: data-race in drain_all_stock / drain_obj_stock
+> > >
+> > > write to 0xffff888237c2a2f8 of 8 bytes by task 19625 on cpu 0:
+> > >  drain_obj_stock+0x408/0x4e0 mm/memcontrol.c:3306
+> > >  refill_obj_stock+0x9c/0x1e0 mm/memcontrol.c:3340
+> > >  obj_cgroup_uncharge+0xe/0x10 mm/memcontrol.c:3408
+> > >  memcg_slab_free_hook mm/slab.h:587 [inline]
+> > >  __cache_free mm/slab.c:3373 [inline]
+> > >  __do_kmem_cache_free mm/slab.c:3577 [inline]
+> > >  kmem_cache_free+0x105/0x280 mm/slab.c:3602
+> > >  __d_free fs/dcache.c:298 [inline]
+> > >  dentry_free fs/dcache.c:375 [inline]
+> > >  __dentry_kill+0x422/0x4a0 fs/dcache.c:621
+> > >  dentry_kill+0x8d/0x1e0
+> > >  dput+0x118/0x1f0 fs/dcache.c:913
+> > >  __fput+0x3bf/0x570 fs/file_table.c:329
+> > >  ____fput+0x15/0x20 fs/file_table.c:349
+> > >  task_work_run+0x123/0x160 kernel/task_work.c:179
+> > >  resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+> > >  exit_to_user_mode_loop+0xcf/0xe0 kernel/entry/common.c:171
+> > >  exit_to_user_mode_prepare+0x6a/0xa0 kernel/entry/common.c:203
+> > >  __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+> > >  syscall_exit_to_user_mode+0x26/0x140 kernel/entry/common.c:296
+> > >  do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
+> > >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > >
+> > > read to 0xffff888237c2a2f8 of 8 bytes by task 19632 on cpu 1:
+> > >  obj_stock_flush_required mm/memcontrol.c:3319 [inline]
+> > >  drain_all_stock+0x174/0x2a0 mm/memcontrol.c:2361
+> > >  try_charge_memcg+0x6d0/0xd10 mm/memcontrol.c:2703
+> > >  try_charge mm/memcontrol.c:2837 [inline]
+> > >  mem_cgroup_charge_skmem+0x51/0x140 mm/memcontrol.c:7290
+> > >  sock_reserve_memory+0xb1/0x390 net/core/sock.c:1025
+> > >  sk_setsockopt+0x800/0x1e70 net/core/sock.c:1525
+> > >  udp_lib_setsockopt+0x99/0x6c0 net/ipv4/udp.c:2692
+> > >  udp_setsockopt+0x73/0xa0 net/ipv4/udp.c:2817
+> > >  sock_common_setsockopt+0x61/0x70 net/core/sock.c:3668
+> > >  __sys_setsockopt+0x1c3/0x230 net/socket.c:2271
+> > >  __do_sys_setsockopt net/socket.c:2282 [inline]
+> > >  __se_sys_setsockopt net/socket.c:2279 [inline]
+> > >  __x64_sys_setsockopt+0x66/0x80 net/socket.c:2279
+> > >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> > >  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+> > >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > >
+> > > value changed: 0xffff8881382d52c0 -> 0xffff888138893740
+> > >
+> > > Reported by Kernel Concurrency Sanitizer on:
+> > > CPU: 1 PID: 19632 Comm: syz-executor.0 Not tainted 6.3.0-rc2-syzkalle=
+r-00387-g534293368afa #0
+> > > Hardware name: Google Google Compute Engine/Google Compute Engine, BI=
+OS Google 03/02/2023
+> > >
+> > > Fix it by using READ_ONCE()/WRITE_ONCE() for all accesses to
+> > > stock->cached_objcg.
+> >
+> > I believe all read accesses other than obj_stock_flush_required() are
+> > done under the lock, so READ_ONCE() wouldn't be needed AFAICT. Having
+> > READ_ONCE() only around the racy read can be useful to document the
+> > racy read and differentiate it from others.
+> >
+> > With that said, it's also inconvenient to keep track moving forward of
+> > which reading sites are racy, and it may be simpler to just annotate
+> > all readers with READ_ONCE().
+> >
+> > I am not sure which approach is better, just thinking out loud.
+>
+> Yeah, I wasn't sure either. I believe that all changes except the origina=
+l
+> READ_ONCE() are not leading to any meaningful asm changes, so it's a matt=
+er
+> of taste.
+>
+> The reason why I went with the "change them all" approach:
+> reads without READ_ONCE() and subsequent writes with WRITE_ONCE()
+> inside a single function looked really weird.
+>
 
-Fixes: 6d6b39f180b8 ("net: fec: add initial XDP support")
-Signed-off-by: Shenwei Wang <shenwei.wang@nxp.com>
----
- drivers/net/ethernet/freescale/fec_main.c | 216 +++++++++++-----------
- 1 file changed, 108 insertions(+), 108 deletions(-)
+Agreed. It might be worth adding a comment somewhere documenting this.
+It's not very hard to dig though, so whatever you think is best.
 
-diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
-index 42ec6ca3bf03..14f9907f3ca2 100644
---- a/drivers/net/ethernet/freescale/fec_main.c
-+++ b/drivers/net/ethernet/freescale/fec_main.c
-@@ -1511,6 +1511,114 @@ static void fec_enet_update_cbd(struct fec_enet_priv_rx_q *rxq,
- 	bdp->cbd_bufaddr = cpu_to_fec32(phys_addr);
- }
- 
-+static int
-+fec_enet_xdp_get_tx_queue(struct fec_enet_private *fep, int index)
-+{
-+	if (unlikely(index < 0))
-+		return 0;
-+
-+	return (index % fep->num_tx_queues);
-+}
-+
-+static int fec_enet_txq_xmit_frame(struct fec_enet_private *fep,
-+				   struct fec_enet_priv_tx_q *txq,
-+				   struct xdp_frame *frame)
-+{
-+	unsigned int index, status, estatus;
-+	struct bufdesc *bdp, *last_bdp;
-+	dma_addr_t dma_addr;
-+	int entries_free;
-+
-+	entries_free = fec_enet_get_free_txdesc_num(txq);
-+	if (entries_free < MAX_SKB_FRAGS + 1) {
-+		netdev_err(fep->netdev, "NOT enough BD for SG!\n");
-+		xdp_return_frame(frame);
-+		return NETDEV_TX_BUSY;
-+	}
-+
-+	/* Fill in a Tx ring entry */
-+	bdp = txq->bd.cur;
-+	last_bdp = bdp;
-+	status = fec16_to_cpu(bdp->cbd_sc);
-+	status &= ~BD_ENET_TX_STATS;
-+
-+	index = fec_enet_get_bd_index(bdp, &txq->bd);
-+
-+	dma_addr = dma_map_single(&fep->pdev->dev, frame->data,
-+				  frame->len, DMA_TO_DEVICE);
-+	if (dma_mapping_error(&fep->pdev->dev, dma_addr))
-+		return FEC_ENET_XDP_CONSUMED;
-+
-+	status |= (BD_ENET_TX_INTR | BD_ENET_TX_LAST);
-+	if (fep->bufdesc_ex)
-+		estatus = BD_ENET_TX_INT;
-+
-+	bdp->cbd_bufaddr = cpu_to_fec32(dma_addr);
-+	bdp->cbd_datlen = cpu_to_fec16(frame->len);
-+
-+	if (fep->bufdesc_ex) {
-+		struct bufdesc_ex *ebdp = (struct bufdesc_ex *)bdp;
-+
-+		if (fep->quirks & FEC_QUIRK_HAS_AVB)
-+			estatus |= FEC_TX_BD_FTYPE(txq->bd.qid);
-+
-+		ebdp->cbd_bdu = 0;
-+		ebdp->cbd_esc = cpu_to_fec32(estatus);
-+	}
-+
-+	index = fec_enet_get_bd_index(last_bdp, &txq->bd);
-+	txq->tx_skbuff[index] = NULL;
-+
-+	/* Send it on its way.  Tell FEC it's ready, interrupt when done,
-+	 * it's the last BD of the frame, and to put the CRC on the end.
-+	 */
-+	status |= (BD_ENET_TX_READY | BD_ENET_TX_TC);
-+	bdp->cbd_sc = cpu_to_fec16(status);
-+
-+	/* If this was the last BD in the ring, start at the beginning again. */
-+	bdp = fec_enet_get_nextdesc(last_bdp, &txq->bd);
-+
-+	txq->bd.cur = bdp;
-+
-+	return 0;
-+}
-+
-+static int fec_enet_xdp_xmit(struct net_device *dev,
-+			     int num_frames,
-+			     struct xdp_frame **frames,
-+			     u32 flags)
-+{
-+	struct fec_enet_private *fep = netdev_priv(dev);
-+	struct fec_enet_priv_tx_q *txq;
-+	int cpu = smp_processor_id();
-+	unsigned int sent_frames = 0;
-+	struct netdev_queue *nq;
-+	unsigned int queue;
-+	int i;
-+
-+	queue = fec_enet_xdp_get_tx_queue(fep, cpu);
-+	txq = fep->tx_queue[queue];
-+	nq = netdev_get_tx_queue(fep->netdev, queue);
-+
-+	__netif_tx_lock(nq, cpu);
-+
-+	for (i = 0; i < num_frames; i++) {
-+		if (fec_enet_txq_xmit_frame(fep, txq, frames[i]) != 0)
-+			break;
-+		sent_frames++;
-+	}
-+
-+	/* Make sure the update to bdp and tx_skbuff are performed. */
-+	wmb();
-+
-+	/* Trigger transmission start */
-+	writel(0, txq->bd.reg_desc_active);
-+
-+	__netif_tx_unlock(nq);
-+
-+	return sent_frames;
-+}
-+
- static u32
- fec_enet_run_xdp(struct fec_enet_private *fep, struct bpf_prog *prog,
- 		 struct xdp_buff *xdp, struct fec_enet_priv_rx_q *rxq, int index)
-@@ -3777,114 +3885,6 @@ static int fec_enet_bpf(struct net_device *dev, struct netdev_bpf *bpf)
- 	}
- }
- 
--static int
--fec_enet_xdp_get_tx_queue(struct fec_enet_private *fep, int index)
--{
--	if (unlikely(index < 0))
--		return 0;
--
--	return (index % fep->num_tx_queues);
--}
--
--static int fec_enet_txq_xmit_frame(struct fec_enet_private *fep,
--				   struct fec_enet_priv_tx_q *txq,
--				   struct xdp_frame *frame)
--{
--	unsigned int index, status, estatus;
--	struct bufdesc *bdp, *last_bdp;
--	dma_addr_t dma_addr;
--	int entries_free;
--
--	entries_free = fec_enet_get_free_txdesc_num(txq);
--	if (entries_free < MAX_SKB_FRAGS + 1) {
--		netdev_err(fep->netdev, "NOT enough BD for SG!\n");
--		xdp_return_frame(frame);
--		return NETDEV_TX_BUSY;
--	}
--
--	/* Fill in a Tx ring entry */
--	bdp = txq->bd.cur;
--	last_bdp = bdp;
--	status = fec16_to_cpu(bdp->cbd_sc);
--	status &= ~BD_ENET_TX_STATS;
--
--	index = fec_enet_get_bd_index(bdp, &txq->bd);
--
--	dma_addr = dma_map_single(&fep->pdev->dev, frame->data,
--				  frame->len, DMA_TO_DEVICE);
--	if (dma_mapping_error(&fep->pdev->dev, dma_addr))
--		return FEC_ENET_XDP_CONSUMED;
--
--	status |= (BD_ENET_TX_INTR | BD_ENET_TX_LAST);
--	if (fep->bufdesc_ex)
--		estatus = BD_ENET_TX_INT;
--
--	bdp->cbd_bufaddr = cpu_to_fec32(dma_addr);
--	bdp->cbd_datlen = cpu_to_fec16(frame->len);
--
--	if (fep->bufdesc_ex) {
--		struct bufdesc_ex *ebdp = (struct bufdesc_ex *)bdp;
--
--		if (fep->quirks & FEC_QUIRK_HAS_AVB)
--			estatus |= FEC_TX_BD_FTYPE(txq->bd.qid);
--
--		ebdp->cbd_bdu = 0;
--		ebdp->cbd_esc = cpu_to_fec32(estatus);
--	}
--
--	index = fec_enet_get_bd_index(last_bdp, &txq->bd);
--	txq->tx_skbuff[index] = NULL;
--
--	/* Send it on its way.  Tell FEC it's ready, interrupt when done,
--	 * it's the last BD of the frame, and to put the CRC on the end.
--	 */
--	status |= (BD_ENET_TX_READY | BD_ENET_TX_TC);
--	bdp->cbd_sc = cpu_to_fec16(status);
--
--	/* If this was the last BD in the ring, start at the beginning again. */
--	bdp = fec_enet_get_nextdesc(last_bdp, &txq->bd);
--
--	txq->bd.cur = bdp;
--
--	return 0;
--}
--
--static int fec_enet_xdp_xmit(struct net_device *dev,
--			     int num_frames,
--			     struct xdp_frame **frames,
--			     u32 flags)
--{
--	struct fec_enet_private *fep = netdev_priv(dev);
--	struct fec_enet_priv_tx_q *txq;
--	int cpu = smp_processor_id();
--	unsigned int sent_frames = 0;
--	struct netdev_queue *nq;
--	unsigned int queue;
--	int i;
--
--	queue = fec_enet_xdp_get_tx_queue(fep, cpu);
--	txq = fep->tx_queue[queue];
--	nq = netdev_get_tx_queue(fep->netdev, queue);
--
--	__netif_tx_lock(nq, cpu);
--
--	for (i = 0; i < num_frames; i++) {
--		if (fec_enet_txq_xmit_frame(fep, txq, frames[i]) != 0)
--			break;
--		sent_frames++;
--	}
--
--	/* Make sure the update to bdp and tx_skbuff are performed. */
--	wmb();
--
--	/* Trigger transmission start */
--	writel(0, txq->bd.reg_desc_active);
--
--	__netif_tx_unlock(nq);
--
--	return sent_frames;
--}
--
- static const struct net_device_ops fec_netdev_ops = {
- 	.ndo_open		= fec_enet_open,
- 	.ndo_stop		= fec_enet_close,
--- 
-2.34.1
-
+> >
+> > >
+> > > Fixes: bf4f059954dc ("mm: memcg/slab: obj_cgroup API")
+> > > Reported-by: syzbot+774c29891415ab0fd29d@syzkaller.appspotmail.com
+> > > Reported-by: Dmitry Vyukov <dvyukov@google.com>
+> > > Link:
+> > > https://lore.kernel.org/linux-mm/CACT4Y+ZfucZhM60YPphWiCLJr6+SGFhT+jj=
+m8k1P-a_8Kkxsjg@mail.gmail.com/T/#t
+> > > Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+> >
+> > With the above said, I don't feel strongly either way, the patch looks
+> > good AFAICT:
+> > Reviewed-by: Yosry Ahmed <yosryahmed@google.com>
+>
+> Thanks!
