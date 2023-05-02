@@ -2,92 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E9076F419F
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 12:29:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CF796F41A1
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 12:30:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233001AbjEBK3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 06:29:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35096 "EHLO
+        id S233764AbjEBKad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 06:30:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233870AbjEBK2h (ORCPT
+        with ESMTP id S233864AbjEBK3Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 06:28:37 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E0B30CA
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 03:28:06 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-95316faa3a8so723881566b.2
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 03:28:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683023285; x=1685615285;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Wqd93aNECfZIIUkAvlmaD8fXXrRjBdmwtaQb0yapHxI=;
-        b=c75B+WHrK3Ojj0utRU31iQI+Ebymm9/nKHez/ap/eyqo2vjpzr48Z2AkIQrheNYGQB
-         cBYYar+YRkF9XPsH4naZ3bPgPkya2uL4KZcZdi9t4QDjHAm6re3Gia87Te7beR10Q7F1
-         4oILqmpbzfZSQtM9I4QYjxaP3PFg9Jle+1b0UhEziAA3aXEDSuOtAwiIW61nRV1a2EWB
-         SiFNBOX3D2rtz9d68B4SHm6lY/MB8YOvX+YxG0HHPQsyWYR2WUEBmqUn0QZfjGw/Zlzy
-         xzHRTulGp6iQl2tjFiTSrI1+JEoWyvqY+FjfRRYQ6lyOoV2yaxlD7H4x91Twq56tswyX
-         /BiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683023285; x=1685615285;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wqd93aNECfZIIUkAvlmaD8fXXrRjBdmwtaQb0yapHxI=;
-        b=VGKKWpk9y4SdKrXqPhAyPtUNSBhiZUDt7U78m3rQiDyrAqEUQpzqLAzd+Sb6IOWSq/
-         VnOPbUrbJIku/OOLb2h20dxc4hDt2I3GZO1fgXegP8q1Cx/Hser+FRx5jsr6tpyIQjT5
-         SrurQCnPIWNbSptnWGhZwXrCpFU92M6qUinlHylAaKnnpVgzckUmGzEFjuydxk9Hdrrp
-         uUiifuDZiarShMPlu5lnr5ZwPWq7Wmy2xGN3W4Gv6dE2ljL0jt2QIopD6S/nJmm28sDE
-         2N4krb/SKmfQLMM1fP4re+M1xuoWV8XBlhPKaZxAphWo3C04u40IxHlcsN2CpN9SHlyb
-         ILHA==
-X-Gm-Message-State: AC+VfDwqNQ5y4o10MRYYPQfBh35mxd9cpmGgVvZY2z/ngdOoAMyTq3OA
-        jxD/tenYMDZN2qpFyxq7XDHTrQ==
-X-Google-Smtp-Source: ACHHUZ6xKE5OQ1aUkpe0sTeaLjdNFiuH8CIzUPZxWC1Eb+v23BRFtrYMccIop4BXahiHbZJDbGX4qg==
-X-Received: by 2002:a17:907:2d8f:b0:946:2fa6:3b85 with SMTP id gt15-20020a1709072d8f00b009462fa63b85mr16985359ejc.36.1683023284914;
-        Tue, 02 May 2023 03:28:04 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:bafd:1283:b136:5f6a? ([2a02:810d:15c0:828:bafd:1283:b136:5f6a])
-        by smtp.gmail.com with ESMTPSA id kw15-20020a170907770f00b0094f8ff0d899sm15618402ejc.45.2023.05.02.03.28.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 May 2023 03:28:04 -0700 (PDT)
-Message-ID: <04112f5c-231d-559a-39f9-d183e8985a87@linaro.org>
-Date:   Tue, 2 May 2023 12:28:02 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH net-next V7] dt-bindings: net: xlnx,axi-ethernet: convert
- bindings document to yaml
-Content-Language: en-US
-To:     "Gaddam, Sarath Babu Naidu" <sarath.babu.naidu.gaddam@amd.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>
-Cc:     "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
-        "radhey.shyam.pandey@xilinx.com" <radhey.shyam.pandey@xilinx.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
+        Tue, 2 May 2023 06:29:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 374AA5FC8
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 03:28:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C6BF61EBA
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 10:28:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB4AAC433EF;
+        Tue,  2 May 2023 10:28:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683023318;
+        bh=ICdHmHkqIvGRRD92AKqXdsbOz7Gc1Fats03WPwlJmPY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=RtkyytQK1Gu1sNgCWib48B5aAeBI9Ga+3aqkoSKa/pf/H2i7mVZt0Myvhw0Jrdfuf
+         6K7rsIl2+Nur5WytryPDf/ooMdDqme34UvDKac91bt3xaHhHZcLB42f4nqfjoyhzFb
+         XnH7wySGj0TJcTsA5YGSieThblVJpf67LsyJxWT7VbbwSAoBPgnv5W/f4HXCfg/yCK
+         R+wdL7IkqDRR7ZCossy2OyH+6lzOrpIpt3pog/KMctPyo09AnXDdAqXD6zIWr0ROk5
+         V8S2l7hw7oKGOz3xBKMLg/u0SjRFg/5Mdvw7O8fimb2w/UzMcseHQs7OFUNbSkKQz3
+         VOaeCS9/4BPlw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1ptnFL-00CSOi-IM;
+        Tue, 02 May 2023 11:28:35 +0100
+Date:   Tue, 02 May 2023 11:28:35 +0100
+Message-ID: <86r0rzgh7w.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     "Gowans, James" <jgowans@amazon.com>
+Cc:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Raslan, KarimAllah" <karahmed@amazon.com>,
+        "Woodhouse, David" <dwmw@amazon.co.uk>,
+        "zouyipeng@huawei.com" <zouyipeng@huawei.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Sarangi, Anirudha" <anirudha.sarangi@amd.com>,
-        "Katakam, Harini" <harini.katakam@amd.com>,
-        "git (AMD-Xilinx)" <git@amd.com>
-References: <20230308061223.1358637-1-sarath.babu.naidu.gaddam@amd.com>
- <5d074e6b-7fe1-ab7f-8690-cfb1bead6927@linaro.org>
- <MW5PR12MB559880B0E220BDBD64E06D2487889@MW5PR12MB5598.namprd12.prod.outlook.com>
- <MW5PR12MB5598678BB9AB6EC2FFC424F487889@MW5PR12MB5598.namprd12.prod.outlook.com>
- <MW5PR12MB559857065E298E7A8485305D876F9@MW5PR12MB5598.namprd12.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <MW5PR12MB559857065E298E7A8485305D876F9@MW5PR12MB5598.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        "Sironi, Filippo" <sironi@amazon.de>,
+        "chris.zjh@huawei.com" <chris.zjh@huawei.com>
+Subject: Re: [PATCH] irq: fasteoi handler re-runs on concurrent invoke
+In-Reply-To: <7fdfb01590d8e502f384aa0bb0dc9c614caa5dfc.camel@amazon.com>
+References: <20230317095300.4076497-1-jgowans@amazon.com>
+        <87h6tp5lkt.wl-maz@kernel.org>
+        <0869847124f982c50d0f8d0ede996004f90a5576.camel@amazon.com>
+        <86pm89kyyt.wl-maz@kernel.org>
+        <7fdfb01590d8e502f384aa0bb0dc9c614caa5dfc.camel@amazon.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: jgowans@amazon.com, tglx@linutronix.de, karahmed@amazon.com, dwmw@amazon.co.uk, zouyipeng@huawei.com, linux-kernel@vger.kernel.org, sironi@amazon.de, chris.zjh@huawei.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,149 +75,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/05/2023 12:09, Gaddam, Sarath Babu Naidu wrote:
+Catching up...
+
+On Tue, 18 Apr 2023 11:56:07 +0100,
+"Gowans, James" <jgowans@amazon.com> wrote:
 > 
+> On Wed, 2023-04-12 at 14:32 +0100, Marc Zyngier wrote:
+> > 
+> > From c96d2ab37fe273724f1264fba5f4913259875d56 Mon Sep 17 00:00:00 2001
+> > From: Marc Zyngier <maz@kernel.org>
+> > Date: Mon, 10 Apr 2023 10:56:32 +0100
+> > Subject: [PATCH] irqchip/gicv3-its: Force resend of LPIs taken while
+> > already
+> >  in-progress
 > 
->> -----Original Message-----
->> From: Gaddam, Sarath Babu Naidu
->> <sarath.babu.naidu.gaddam@amd.com>
->> Sent: Tuesday, March 28, 2023 9:31 PM
->> To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>;
->> davem@davemloft.net; edumazet@google.com; kuba@kernel.org;
->> pabeni@redhat.com; robh+dt@kernel.org;
->> krzysztof.kozlowski+dt@linaro.org
->> Cc: michal.simek@xilinx.com; radhey.shyam.pandey@xilinx.com;
->> netdev@vger.kernel.org; devicetree@vger.kernel.org; linux-arm-
->> kernel@lists.infradead.org; linux-kernel@vger.kernel.org; Sarangi,
->> Anirudha <anirudha.sarangi@amd.com>; Katakam, Harini
->> <harini.katakam@amd.com>; git (AMD-Xilinx) <git@amd.com>
->> Subject: RE: [PATCH net-next V7] dt-bindings: net: xlnx,axi-ethernet:
->> convert bindings document to yaml
->>
->>
->>
->>> -----Original Message-----
->>> From: Gaddam, Sarath Babu Naidu
->>> <sarath.babu.naidu.gaddam@amd.com>
->>> Sent: Tuesday, March 28, 2023 6:22 PM
->>> To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>;
->>> davem@davemloft.net; edumazet@google.com; kuba@kernel.org;
->>> pabeni@redhat.com; robh+dt@kernel.org;
->>> krzysztof.kozlowski+dt@linaro.org
->>> Cc: michal.simek@xilinx.com; radhey.shyam.pandey@xilinx.com;
->>> netdev@vger.kernel.org; devicetree@vger.kernel.org; linux-arm-
->>> kernel@lists.infradead.org; linux-kernel@vger.kernel.org; Sarangi,
->>> Anirudha <anirudha.sarangi@amd.com>; Katakam, Harini
->>> <harini.katakam@amd.com>; git (AMD-Xilinx) <git@amd.com>
->>> Subject: RE: [PATCH net-next V7] dt-bindings: net: xlnx,axi-ethernet:
->>> convert bindings document to yaml
->>>
->>>
->>>
->>>> -----Original Message-----
->>>> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>> Sent: Tuesday, March 14, 2023 9:22 PM
->>>> To: Gaddam, Sarath Babu Naidu
->>>> <sarath.babu.naidu.gaddam@amd.com>; davem@davemloft.net;
->>>> edumazet@google.com; kuba@kernel.org; pabeni@redhat.com;
->>>> robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org
->>>> Cc: michal.simek@xilinx.com; radhey.shyam.pandey@xilinx.com;
->>>> netdev@vger.kernel.org; devicetree@vger.kernel.org; linux-arm-
->>>> kernel@lists.infradead.org; linux-kernel@vger.kernel.org; Sarangi,
->>>> Anirudha <anirudha.sarangi@amd.com>; Katakam, Harini
->>>> <harini.katakam@amd.com>; git (AMD-Xilinx) <git@amd.com>
->>>> Subject: Re: [PATCH net-next V7] dt-bindings: net: xlnx,axi-ethernet:
->>>> convert bindings document to yaml
->>>>
->>>> On 08/03/2023 07:12, Sarath Babu Naidu Gaddam wrote:
->>>>> From: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
->>>>>
->>>>> Convert the bindings document for Xilinx AXI Ethernet Subsystem
->>> from
->>>>> txt to yaml. No changes to existing binding description.
->>>>>
->>>>
->>>> (...)
->>>>
->>>>> +properties:
->>>>> +  compatible:
->>>>> +    enum:
->>>>> +      - xlnx,axi-ethernet-1.00.a
->>>>> +      - xlnx,axi-ethernet-1.01.a
->>>>> +      - xlnx,axi-ethernet-2.01.a
->>>>> +
->>>>> +  reg:
->>>>> +    description:
->>>>> +      Address and length of the IO space, as well as the address
->>>>> +      and length of the AXI DMA controller IO space, unless
->>>>> +      axistream-connected is specified, in which case the reg
->>>>> +      attribute of the node referenced by it is used.
->>>>
->>>> Did you test it with axistream-connected? The schema and description
->>>> feel contradictory and tests would point the issue.
->>>
->>> Thanks for review comments. We tested with axistream-connected and
->> did
->>> not observe any errors. Do you anticipate any issues/errors ?
->>
->> Just to add more details, we have tested it using below dt node
->>
->> 	axienet@0 {
->> 	        axistream-connected = <&dma>;
->>                         reg = <0x00 0x80000000 0x00 0x40000>;
->>                         compatible = "xlnx,axi-ethernet-2.01.a";
->>                         clock-names = "s_axi_lite_clk\0axis_clk\0ref_clk";
->>                         clocks = <0x03 0x47 0x03 0x47 0x18>;
->>                         phy-mode = "sgmii";
->>                         xlnx,rxcsum = <0x02>;
->>                         xlnx,rxmem = <0x1000>;
->>                         xlnx,txcsum = <0x02>;
->>                         pcs-handle = <0x19>;
->>                         phy-handle = <0x78>;
->>                         dmas = <0x17 0x00 0x17 0x01>;
->>                         dma-names = "tx_chan0\0rx_chan0";
->>                         mac-address = [ff ff ff ff ff ff];
->>                         managed = "in-band-status";
->>                         phandle = <0x79>;
->> 		mdio {
->>                                 #address-cells = <0x01>;
->>                                 #size-cells = <0x00>;
->>
->>                                 phy@0 {
->>                                         compatible = "ethernet-phy-ieee802.3-c22";
->>                                         reg = <0x00>;
->>                                         phandle = <0x78>;
->>                                 };
->>
->>                                 ethernet-phy@2 {
->>                                         device_type = "ethernet-phy";
->>                                         reg = <0x02>;
->>                                         phandle = <0x19>;
->>                                 };
->>                         };
->> 	};
->> This DT node works with our board. "&dma" is the dma DT node  and to
->> test the second case where dma  address and length  included  in the
->> axienet reg's property as below "reg = <0x00 0x80000000 0x00 0x40000
->> 0x0 0x80040000 0x0 0x1000>;"
->>
->> I did not observe any issue with above two cases. Used below command
->> to validate the yaml using above DT node.
->> make dtbs_check
->> DT_SCHEMA_FILES=Documentation/devicetree/bindings/net/xlnx,axi-
->> ethernet.yaml
->>
+> Perhaps you can pillage some of my commit message to explain the race here
+> when you send this patch?
+
+Sure. At the moment, we're still far from a final patch though.
+
+> > 
+> > Signed-off-by: Marc Zyngier <maz@kernel.org>
+> > 
+> > diff --git a/include/linux/irq.h b/include/linux/irq.h
+> > index b1b28affb32a..4b2a7cc96eb2 100644
+> > --- a/include/linux/irq.h
+> > +++ b/include/linux/irq.h
+> > @@ -223,6 +223,8 @@ struct irq_data {
+> >   *                               irq_chip::irq_set_affinity() when
+> > deactivated.
+> >   * IRQD_IRQ_ENABLED_ON_SUSPEND - Interrupt is enabled on suspend by irq
+> > pm if
+> >   *                               irqchip have flag
+> > IRQCHIP_ENABLE_WAKEUP_ON_SUSPEND set.
+> > + * IRQD_RESEND_WHEN_IN_PROGRESS - Interrupt may fire when already in
+> > progress,
+> > + *                               needs resending.
+> >   */
+> >  enum {
+> >         IRQD_TRIGGER_MASK               = 0xf,
+> > @@ -249,6 +251,7 @@ enum {
+> >         IRQD_HANDLE_ENFORCE_IRQCTX      = (1 << 28),
+> >         IRQD_AFFINITY_ON_ACTIVATE       = (1 << 29),
+> >         IRQD_IRQ_ENABLED_ON_SUSPEND     = (1 << 30),
+> > +       IRQD_RESEND_WHEN_IN_PROGRESS    = (1 << 31),
+> >  };
 > 
-> Hi Krzysztof,  Can you please comment If above explanation is acceptable ?
-> I will address remaining review comments and send the next version.
+> Do we really want a new flag here? I'd be keen to fix this race for all
+> drivers, not just those who know to set this flag. I think the patch
+> you're suggesting is pretty close to being safe to enable generally? If so
+> my preference is for one less config option - just run it always.
 
-The DTS you pointed obviously cannot work with the binding - it has
-obvious mistakes. Starting with phy-mode. So whatever you did, was not
-correct testing. Since nothing from your code is upstream, I cannot
-verify it.
+I contend that this really is a GICv3 architectural bug. The lack of
+an active state on LPIs leads to it, and as far as I can tell, no
+other interrupt architecture has the same issue. So the onus should be
+on the GIC, the GIC only, and only the parts of the GIC that require
+it (SPIs, PPIs and SGIs are fine, either because they have an active
+state, or because the lock isn't dropped when calling the handler).
 
-Upstream your DTS first.
+Thanks,
 
-Best regards,
-Krzysztof
+	M.
 
+-- 
+Without deviation from the norm, progress is not possible.
