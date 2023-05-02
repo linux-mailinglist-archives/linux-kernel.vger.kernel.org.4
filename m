@@ -2,59 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFFFF6F3E67
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 09:31:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AA276F3E69
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 09:32:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233642AbjEBHbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 03:31:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42114 "EHLO
+        id S233660AbjEBHcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 03:32:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjEBHbu (ORCPT
+        with ESMTP id S233421AbjEBHcF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 03:31:50 -0400
+        Tue, 2 May 2023 03:32:05 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB9D273A
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 00:31:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C526F49E6;
+        Tue,  2 May 2023 00:32:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1932961B09
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 07:31:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B8ADC433D2
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 07:31:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683012708;
-        bh=SCcISGzqjznr/fAixNNQBNpYk2QD40v7io7ccSJe5ck=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=HRThcAQUp8APx9O/rmQNTud64ub/95lvDrTHWwbcxo4zADRBpZTj/EYgNlGH8Z3Vc
-         ikOMSDGgx7jELTcwsjzCk8NynJbpX08LSSCpgDaZ1/DmU0fSnaCYyrltrpH7Nh1ytx
-         GswDSt+HCtkziqm2IZ6yIxHypAzaFPAqMaFUj7aVahZakyXc4MU3fFlvLy6G+oPqTB
-         shvOf7cAwd9D3QfL5EoJ8TKlJCVzlCkKJz82uEcXBVXdBKmdq4FGK9Tsbmc+UNC9Ly
-         xeqf4Rg3Aek+B4RkjFID/5GGXeYkgQ/zsXTxeTzNryCCV0oJ748PIWipwd+KaIlHVw
-         X6Y7bCug0d5Ig==
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2a7b02615f1so33741531fa.0
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 00:31:48 -0700 (PDT)
-X-Gm-Message-State: AC+VfDzJNlw/exP/xb10TXpRTNSs2HOOm1+Y1VDFTaz5eKrNEYLQ+NMI
-        UcZLH7Qrs9d7utCG6ZxblRf2/Qf3C1CKQe5M3dA=
-X-Google-Smtp-Source: ACHHUZ7WTDd4R0vSpQizgtxVmzWmqSviYr6JCtDOpRsKz1W6jrFcdlDYDkXcbEOU0CgKYUyIMvRfRZxOq3k72H05ZIM=
-X-Received: by 2002:a19:ae0b:0:b0:4e9:5f90:748 with SMTP id
- f11-20020a19ae0b000000b004e95f900748mr4037635lfc.9.1683012706521; Tue, 02 May
- 2023 00:31:46 -0700 (PDT)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 38BCB616D1;
+        Tue,  2 May 2023 07:32:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57593C433D2;
+        Tue,  2 May 2023 07:31:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1683012719;
+        bh=kbruTmo20DpxTDB0eWn7jlMNnZFnWEFG3y1RqNeyt7o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fM7m0la+bi7iQHrLY30pSwMz1UnofrX3isig85wK0wZcHx44ghsTrDiXdtFM6DPSx
+         RZSx+LExuXVwLWd0y1MzCHVBpOGv4FTQiz0MqEqq0gWV++TlVMPeaxzETDid0gFeGW
+         Rsbt4ZrvPW1iEu/ImxDjqMTJ5HGnVU1j0QqkmCiQ=
+Date:   Tue, 2 May 2023 16:31:56 +0900
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Chris Clayton <chris2553@googlemail.com>
+Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org, lwn@lwn.net,
+        jslaby@suse.cz
+Subject: Re: Linux 6.3.1
+Message-ID: <2023050201-bluish-habitable-474a@gregkh>
+References: <2023050123-resubmit-silica-ac32@gregkh>
+ <c2ac55a4-aaf5-2f49-be08-d326fe0c17f8@googlemail.com>
+ <2023050202-slouchy-princess-e7dd@gregkh>
+ <2023050225-brutishly-enlarging-c54e@gregkh>
 MIME-Version: 1.0
-References: <20230501222551.1254686-1-maskray@google.com>
-In-Reply-To: <20230501222551.1254686-1-maskray@google.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 2 May 2023 09:31:35 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXFWQdK-81K_04BLaTDvYvQS+kc=5q90960BkJX6uYFExg@mail.gmail.com>
-Message-ID: <CAMj1kXFWQdK-81K_04BLaTDvYvQS+kc=5q90960BkJX6uYFExg@mail.gmail.com>
-Subject: Re: [PATCH v2] arm64: lds: move .got section out of .text
-To:     Fangrui Song <maskray@google.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Bill Wendling <morbo@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2023050225-brutishly-enlarging-c54e@gregkh>
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -65,81 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2 May 2023 at 00:25, Fangrui Song <maskray@google.com> wrote:
->
-> Currently, the .got section is placed within the output section .text.
-> However, when .got is non-empty, the SHF_WRITE flag is set for .text
-> when linked by lld. GNU ld recognizes .text as a special section and
-> ignores the SHF_WRITE flag. By renaming .text, we can also get the
-> SHF_WRITE flag.
->
-> The kernel has performed R_AARCH64_RELATIVE resolving very early, and can
-> then assume that .got is read-only. Let's move .got to the vmlinux_rodata
-> pseudo-segment. The change avoids a section with both executable and
-> writable permissions.
->
+On Tue, May 02, 2023 at 08:43:47AM +0900, Greg Kroah-Hartman wrote:
+> On Tue, May 02, 2023 at 06:40:03AM +0900, Greg Kroah-Hartman wrote:
+> > On Mon, May 01, 2023 at 07:22:56AM +0100, Chris Clayton wrote:
+> > > 6.3.1 FTBFS thusly:
+> > 
+> > What is "FTBFS"?
+> > 
+> > > drivers/net/wireguard/timers.c: In function 'wg_expired_retransmit_handshake':
+> > > <command-line>: error: format '%d' expects argument of type 'int', but argument 6 has type 'long unsigned int'
+> > > [-Werror=format=]
+> > > <command-line>: note: in expansion of macro 'KBUILD_MODNAME'
+> > > ./include/linux/dynamic_debug.h:223:29: note: in expansion of macro 'pr_fmt'
+> > >   223 |                 func(&id, ##__VA_ARGS__);                       \
+> > >       |                             ^~~~~~~~~~~
+> > 
+> > <snip>
+> > 
+> > > There's a patch to drivers/net/wireguard/timers.c that fixes these errors and you can find it at
+> > > 2d4ee16d969c97996e80e4c9cb6de0acaff22c9f in Linus' tree.
+> > 
+> > Thanks for this report, we'll queue it up soon.
+> 
+> Odd, that commit is in 6.2 already, so how are you applying this to
+> 6.3.y?
 
-Maybe add
+And this is only a gcc13 issue, right?  So it's not a regression, it's
+always been there, nothing new caused it in this release from what I can
+tell.
 
-"This matters to consumers of the vmlinux ELF representation of the
-kernel image, such as syzkaller, which disregards writable PT_LOAD
-segments when resolving code symbols. The kernel itself does not care
-about this distinction, but given that the GOT contains data and not
-code, it does not require executable permissions, and therefore does
-not belong in .text to begin with."
+Actually I don't see how this is an issue in 6.3.1 anyway, as again, the
+proposed fix you gave is in 6.2, so what really is happening here?
 
+confused,
 
-> Signed-off-by: Fangrui Song <maskray@google.com>
->
-
-Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
-
-> --
-> Changes from v1 (https://lore.kernel.org/lkml/20230428050442.180913-1-maskray@google.com/)
-> * move .got to the vmlinux_rodata pseudo-segment as suggested by Ard Biesheuvel
-> ---
->  arch/arm64/kernel/vmlinux.lds.S | 19 +++++++++----------
->  1 file changed, 9 insertions(+), 10 deletions(-)
->
-> diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.lds.S
-> index b9202c2ee18e..3cd7e76cc562 100644
-> --- a/arch/arm64/kernel/vmlinux.lds.S
-> +++ b/arch/arm64/kernel/vmlinux.lds.S
-> @@ -181,10 +181,17 @@ SECTIONS
->                         KPROBES_TEXT
->                         HYPERVISOR_TEXT
->                         *(.gnu.warning)
-> -               . = ALIGN(16);
-> -               *(.got)                 /* Global offset table          */
->         }
->
-> +       . = ALIGN(SEGMENT_ALIGN);
-> +       _etext = .;                     /* End of text section */
-> +
-> +       /* everything from this point to __init_begin will be marked RO NX */
-> +       RO_DATA(PAGE_SIZE)
-> +
-> +       HYPERVISOR_DATA_SECTIONS
-> +
-> +       .got : { *(.got) }
->         /*
->          * Make sure that the .got.plt is either completely empty or it
->          * contains only the lazy dispatch entries.
-> @@ -193,14 +200,6 @@ SECTIONS
->         ASSERT(SIZEOF(.got.plt) == 0 || SIZEOF(.got.plt) == 0x18,
->                "Unexpected GOT/PLT entries detected!")
->
-> -       . = ALIGN(SEGMENT_ALIGN);
-> -       _etext = .;                     /* End of text section */
-> -
-> -       /* everything from this point to __init_begin will be marked RO NX */
-> -       RO_DATA(PAGE_SIZE)
-> -
-> -       HYPERVISOR_DATA_SECTIONS
-> -
->         /* code sections that are never executed via the kernel mapping */
->         .rodata.text : {
->                 TRAMP_TEXT
-> --
-> 2.40.1.495.gc816e09b53d-goog
->
+greg k-h
