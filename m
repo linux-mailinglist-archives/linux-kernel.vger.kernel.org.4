@@ -2,146 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 564126F432F
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 13:58:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B9446F4332
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 13:58:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234085AbjEBL6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 07:58:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58658 "EHLO
+        id S234089AbjEBL6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 07:58:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233998AbjEBL6L (ORCPT
+        with ESMTP id S234068AbjEBL6s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 07:58:11 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D5F3E45
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 04:58:10 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1ptodz-00072b-Gd; Tue, 02 May 2023 13:58:07 +0200
-Message-ID: <b61b60cb-0e8e-0a27-5f7b-71e7639e02f6@leemhuis.info>
-Date:   Tue, 2 May 2023 13:58:06 +0200
+        Tue, 2 May 2023 07:58:48 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B46041727
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 04:58:45 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4effb818c37so4221050e87.3
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 04:58:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683028724; x=1685620724;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6ZLjR/b8+keXd4JwUhwNrpQMc/9k78bL8mpWHNXC7FY=;
+        b=d9CnNyNC4Dr5bGdHR5X2sSmBg1SLH/sERPVg49DEiZOcOYQ/pp/YQJvwNYzkFKv7ZD
+         oO3U1Lkvuyi9EQcc0TqtwsBZd1HZ23ng+3puBWyDJedXi36eeC6ycfFsYHPyY1DG2gRw
+         14R2fUD90CnRrhnoTwEdXjIh4SneCbYaZEKzCCqZr9E5ZBKvFxR/cQeB9uNmbDnuKPnY
+         PmUt9/xG/+X0VRP5u9VPKBw86EDm/9Q5TupgvqKRISjIkKPdR8W3fSgYByUu3cEMIW2/
+         J6+0o6OCDV1clo2AhIx9BqNaNVmGl5feqb1fqmr04DAu7sLKxn5xJ39UZeqQnfdbo8Ew
+         szuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683028724; x=1685620724;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6ZLjR/b8+keXd4JwUhwNrpQMc/9k78bL8mpWHNXC7FY=;
+        b=HFAuaEt3ofJfAWs2o3db4c2ZfeOCL5miAysNfB4w4ESkcxW2QHIzoK8o+NdzhtXyzK
+         n4dIqb6sLduUj38wNob+PPnTuzBhe62czPqRD3XwbjjwjvGmr+r2hhNkR9+AOef6BfTY
+         JQIwIUXZF8zQAqFlZtUTiXvIxiVgG9EeTYQxbVGUzNmAJHfmE9diZzjOEqRSSEegYtgw
+         gVLBKA+zyXy+BoPSoyaLMUUfPdV/aAxqs9sYe5bc7FturgqbwqEvAZOnZc0rrKSDBNw1
+         Mmz8i1ZQD5KhTiJ52gJF9/0pVs7B7lUmjJblZqsBEb9BaL8XlZUegQoSfCC70k7cjv3p
+         U+/g==
+X-Gm-Message-State: AC+VfDw4iyu2mZ7TVYet233ilCDcbhW8hSAr/gtQw6+YTa6kchpWbKdC
+        kat7vyj2cWkuGbqybHKE/rbuSQ==
+X-Google-Smtp-Source: ACHHUZ6DBCWxeubXScpmVueBxthXP0zHmxD3gmdHnO6MGzNPzscZeBHyG7NUjv6mx3wCmoM7LLeXrg==
+X-Received: by 2002:ac2:5228:0:b0:4ee:e0c7:434d with SMTP id i8-20020ac25228000000b004eee0c7434dmr5108578lfl.51.1683028724007;
+        Tue, 02 May 2023 04:58:44 -0700 (PDT)
+Received: from [192.168.1.101] (abyl248.neoplus.adsl.tpnet.pl. [83.9.31.248])
+        by smtp.gmail.com with ESMTPSA id g13-20020a19ac0d000000b004dc4b00a1eesm5286239lfc.261.2023.05.02.04.58.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 May 2023 04:58:43 -0700 (PDT)
+Message-ID: <1aaff58a-f07b-1e2a-e27b-df41eacd19e7@linaro.org>
+Date:   Tue, 2 May 2023 13:58:42 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4] Makefile.compiler: replace cc-ifversion with
- compiler-specific macros
-Content-Language: en-US, de-DE
-To:     Shreeya Patel <shreeya.patel@collabora.com>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Michal Marek <michal.lkml@markovi.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Bill Wendling <morbo@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        regressions@lists.linux.dev, kernelci@lists.linux.dev,
-        "gustavo.padovan@collabora.com" <gustavo.padovan@collabora.com>,
-        Guillaume Charles Tucker <guillaume.tucker@collabora.com>,
-        ricardo.canuelo@collabora.com, denys.f@collabora.com
-References: <CAK7LNAT_cMLGLBz7ugaLpJD3QmZmY8FK56x9nihvWeYhJpi2ag@mail.gmail.com>
- <20220919170828.3718437-1-ndesaulniers@google.com>
- <597ef55f-e7c1-ab60-b4aa-0071ff4b5e0e@collabora.com>
- <325ae81d-b3a5-71b3-39e9-96408968ab0b@leemhuis.info>
- <1209349b-9634-c1ca-d2ee-182e8dec2de5@collabora.com>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <1209349b-9634-c1ca-d2ee-182e8dec2de5@collabora.com>
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v2 3/3] arm64: dts: qcom: qrb4210-rb2: Enable aDSP and
+ cDSP remoteproc nodes
+Content-Language: en-US
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org
+Cc:     agross@kernel.org, andersson@kernel.org,
+        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski@linaro.org,
+        devicetree@vger.kernel.org
+References: <20230501105832.1185477-1-bhupesh.sharma@linaro.org>
+ <20230501105832.1185477-4-bhupesh.sharma@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230501105832.1185477-4-bhupesh.sharma@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1683028690;14359791;
-X-HE-SMSGID: 1ptodz-00072b-Gd
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02.05.23 11:48, Shreeya Patel wrote:
-> On 28/04/23 13:11, Thorsten Leemhuis wrote:
->> On 27.04.23 13:53, Shreeya Patel wrote:
->>> On 19/09/22 22:38, Nick Desaulniers wrote:
->>>> cc-ifversion is GCC specific. Replace it with compiler specific
->>>> variants. Update the users of cc-ifversion to use these new macros.
->>>>
->>>> Link: https://github.com/ClangBuiltLinux/linux/issues/350
->>>> Link:
->>>> https://lore.kernel.org/llvm/CAGG=3QWSAUakO42kubrCap8fp-gm1ERJJAYXTnP1iHk_wrH=BQ@mail.gmail.com/
->>>> Suggested-by: Bill Wendling <morbo@google.com>
->>>> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
->>>> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
->>> KernelCI found this patch causes a regression in the
->>> baseline.logintest on qemu_arm-virt-gicv3-uefi [1],
->>> see the bisection report for more details [2].
->>>
->>> Let me know if you have any questions.
->>>
->>> [1] https://linux.kernelci.org/test/case/id/644596a0beca2ead032e8669/
->>> [2] https://groups.io/g/kernelci-results/message/40804> [...]
->>> #regzbot introduced: 88b61e3bff93
->> How much of this text is auto generated? I ask for two reasons:
+
+
+On 1.05.2023 12:58, Bhupesh Sharma wrote:
+> Enable the aDSP and cDSP remoteproc nodes on Qualcomm QRB4210 RB2 board.
 > 
-> None of this text is auto generated yet but we plan to do it soon once
-> we think the format of the reporting email is good enough for people to
-> understand
-> and look into it. Which is why your comments are really helpful here.
-
-Thx, glad to hear that. FWIW and YMMV, but I'm not sure if fully
-automating things is a good idea, as a bad report or two might be enough
-to make some developers start ignoring kernelci reports; a quick human
-review with small adjustments might help prevent that, as it's hard to
-get that ship turned around later (that's why regzbot up to this day
-doesn't send any mails automatically).
-
->> * You made regzbot track this, which is great, but didn't specify a
->> title. That is fine in general, if the subject round about says what the
->> regression is about. But in this case it doesn't; hence it would be
->> great if you in the future could specify one through "#regzbot title:"
->> or adjust the mail's subject (I guess the former is what developers will
->> prefer).
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> ---
+>  arch/arm64/boot/dts/qcom/qrb4210-rb2.dts | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 > 
-> Noted. If I think the title is not very explanatory then I'll change it
-> to reflect the problem in future.
+> diff --git a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
+> index bff6ba1d689f..3ab46499d3fa 100644
+> --- a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
+> +++ b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
+> @@ -34,6 +34,16 @@ &qupv3_id_0 {
+>  	status = "okay";
+>  };
+>  
+> +&remoteproc_adsp {
+> +	status = "okay";
+> +	firmware-name = "qcom/sm6115/adsp.mdt";
+status last
+also, don't we want to use .mbn (squashed binary)?
 
-Many thx!
-
-> [...]
-> 
-> I understand that it might be more helpful to atleast put little more
-> information about what is causing the regression here.
-> I'll provide some more details in future for it to be easy for
-> developers to look into it.
-
-Yeah, especially a obvious "what's the actual problem (in 10 words or
-less)" afaics would have been really good here.
-
->> To check if those were old or new problems, I tired to go back in the
->> history and on page 9 found an entry for the last succeeding test. But
->> clicking on the logs got me a 404 :-/
->>
->> Then I looked at the logs on [1] again and in the html view "Boot
->> result: FAIL". Is that the actual problem?
-> 
-> Unfortunately, we do have some broken links in the current KernelCI
-> dashboard [...]
-
-Happens :-D
-
-> What I can do from my side is to attach logs of the working kernel if I
-> can get them through LAVA.
-> But one thing to note is that even LAVA stores limited logs and we won't
-> be able to provide them always like in this case
-> since the regression has been happening from a long time.
-
-Before going down that route I'd work out with Nick why things work for
-him, maybe all that isn't needed.
-
-> Thanks for your input though, we will work on it and get a better format
-> ready for reporting the regressions.
-
-Thx for your work!
-
-Ciao, Thorsten
+Konrad
+> +};
+> +
+> +&remoteproc_cdsp {
+> +	status = "okay";
+> +	firmware-name = "qcom/sm6115/cdsp.mdt";
+> +};
+> +
+>  &rpm_requests {
+>  	regulators {
+>  		compatible = "qcom,rpm-pm6125-regulators";
