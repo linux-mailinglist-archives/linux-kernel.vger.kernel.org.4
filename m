@@ -2,153 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF86B6F4CD9
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 00:25:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BDDA6F4CDD
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 00:27:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbjEBWZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 18:25:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
+        id S229797AbjEBW1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 18:27:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjEBWZ3 (ORCPT
+        with ESMTP id S229457AbjEBW13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 18:25:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2EB610E7;
-        Tue,  2 May 2023 15:25:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 2 May 2023 18:27:29 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C5E010E7;
+        Tue,  2 May 2023 15:27:27 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 399C062916;
-        Tue,  2 May 2023 22:25:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E3A9C433A4;
-        Tue,  2 May 2023 22:25:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683066327;
-        bh=p6tGDs6cfabXvT/biu59cKim9mysMg3Q5CdtBG9oN3U=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=VnvGj4y0t06kGlOynnuR4B5RpXXLAZtmaEP39DSRpE8zgeDNVN4Yg62o4Y0NB9Sn5
-         6bnGvHLxJiq2RI8I5KBQVbZI4qhIBVBrFFzA/Otx3mmfUkh3cpNZd0R9ycEgFqEIfW
-         wpS1cIJyE9uffrTCCUL56y52GznK68OJAcdzGfzcdtprgWSXCWrWFcBsjQQXTd1Vcz
-         LFQ9HuVd9EQXMAl9VRNWyQXs9b6DH3bpJ8pVYuQo6oCy91VjIn5DF5q9K9ITbB+nkh
-         qBDD0SeRV7FUc8PscJd/nWOnwtYahMr0R3cksIezVqXSXgijzV9ezCP55beJvahWnO
-         O+6qkHVdd6+Iw==
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2a8c51ba511so43413541fa.1;
-        Tue, 02 May 2023 15:25:27 -0700 (PDT)
-X-Gm-Message-State: AC+VfDwl5TYpJdROPp5Ui/1hCrZmE3Et/nKVlRFT8VZIIO7STccht3x1
-        2+kklkplD2tR7XPtDqJubvCVsy/8zgRHOFAqZ6A=
-X-Google-Smtp-Source: ACHHUZ4avdpthadjO3gTttNI6hwHrd0BY/FTJBOc8OGJj8VI9BZbqcEwFzhqWiZTr4yxUlkxlDBcL/zfsHuzd1eGp1k=
-X-Received: by 2002:ac2:5608:0:b0:4ef:f64b:65b4 with SMTP id
- v8-20020ac25608000000b004eff64b65b4mr380429lfd.26.1683066325488; Tue, 02 May
- 2023 15:25:25 -0700 (PDT)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 58A8B21F42;
+        Tue,  2 May 2023 22:27:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1683066446; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VYMMl6QukjJ+AWKIxzwYKmP/x77nkL2kqwU3yC0/IAE=;
+        b=twfR7/D1Mak2ce6QwCqeTdus/uNI/7WRnQBvtx+NzXxn0Fj5eKkbNVZAK7QhBvYLti8zL7
+        AiNmE4199XoBMBtHzSn9dcoznncO9bmqgACe9SnzsjqwNTuCORcM6MUay4wJbyzTFM6rvZ
+        bqUL4+t/6cqzpUiWOZiSFZkM3NHvDmY=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0DB9C134FB;
+        Tue,  2 May 2023 22:27:26 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id IwtUAk6OUWTwYgAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Tue, 02 May 2023 22:27:26 +0000
+Date:   Wed, 3 May 2023 00:27:24 +0200
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>
+Subject: Re: [RFC PATCH 0/5] cgroup/cpuset: A new "isolcpus" paritition
+Message-ID: <ZFGOTHQj3k5rzmyR@blackbook>
+References: <ZDdYOI9LB87ra2t_@slm.duckdns.org>
+ <9862da55-5f41-24c3-f3bb-4045ccf24b2e@redhat.com>
+ <226cb2da-e800-6531-4e57-cbf991022477@redhat.com>
+ <ZDmFLfII8EUX_ocY@slm.duckdns.org>
+ <c61ca9d0-c514-fb07-c2f2-3629e8898984@redhat.com>
+ <ZDmOjeBVsIcgSLIV@slm.duckdns.org>
+ <60ec12dc-943c-b8f0-8b6f-97c5d332144c@redhat.com>
+ <46d26abf-a725-b924-47fa-4419b20bbc02@redhat.com>
+ <jqkf7jkuyxqiupmxmdbmpnbpojub2pjsz3oogwncmwqdghlsgk@phsqzirmmlyl>
+ <f2bd7b1e-190e-1d08-f085-b4cae36fb5be@redhat.com>
 MIME-Version: 1.0
-References: <20230502164102.1a51cdb4@gandalf.local.home>
-In-Reply-To: <20230502164102.1a51cdb4@gandalf.local.home>
-From:   Song Liu <song@kernel.org>
-Date:   Tue, 2 May 2023 15:25:13 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW76--qgbEWn8YZY7Hj1GjB9__kfSjWnHz=WNBSV8GyCXQ@mail.gmail.com>
-Message-ID: <CAPhsuW76--qgbEWn8YZY7Hj1GjB9__kfSjWnHz=WNBSV8GyCXQ@mail.gmail.com>
-Subject: Re: [PATCH] ftrace: Allow inline functions not inlined to be traced
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        live-patching@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Ingo Molnar <mingo@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <f2bd7b1e-190e-1d08-f085-b4cae36fb5be@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 2, 2023 at 1:41=E2=80=AFPM Steven Rostedt <rostedt@goodmis.org>=
- wrote:
->
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
->
-> Over 10 years ago there were many bugs that caused function tracing to
-> crash because some inlined function was not inlined and should not have
-> been traced. This made it hard to debug because when the developer tried
-> to reproduce it, if their compiler still inlined the function, the bug
-> would not trigger. The solution back then was simply to add "notrace" to
-> "inline" which would make sure all functions that are marked inline are
-> never traced even when the compiler decides to not inline them.
->
-> A lot has changed over the last 10 years.
->
-> 1) ftrace_test_recursion_trylock() is now used by all ftrace hooks which
->    will prevent the recursive crashes from happening that was caused by
->    inlined functions being traced.
->
-> 2) noinstr is now used to mark pretty much all functions that would also
->    cause problems if they are traced.
->
-> Today, it is no longer a problem if an inlined function is not inlined an=
-d
-> is traced. Removing notrace from inline has been requested several times
-> over the years. I believe it is now safe to do so.
->
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-
-Acked-by: Song Liu <song@kernel.org>
-
-Thanks!
-Song
-
-> ---
->  include/linux/compiler_types.h | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
->
-> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_type=
-s.h
-> index 547ea1ff806e..c8f23ba1c339 100644
-> --- a/include/linux/compiler_types.h
-> +++ b/include/linux/compiler_types.h
-> @@ -182,9 +182,8 @@ struct ftrace_likely_data {
->   * externally visible function. This makes extern inline behave as per g=
-nu89
->   * semantics rather than c99. This prevents multiple symbol definition e=
-rrors
->   * of extern inline functions at link time.
-> - * A lot of inline functions can cause havoc with function tracing.
->   */
-> -#define inline inline __gnu_inline __inline_maybe_unused notrace
-> +#define inline inline __gnu_inline __inline_maybe_unused
->
->  /*
->   * gcc provides both __inline__ and __inline as alternate spellings of
-> @@ -230,7 +229,7 @@ struct ftrace_likely_data {
->   *     https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D67368
->   * '__maybe_unused' allows us to avoid defined-but-not-used warnings.
->   */
-> -# define __no_kasan_or_inline __no_sanitize_address notrace __maybe_unus=
+On Tue, May 02, 2023 at 05:26:17PM -0400, Waiman Long <longman@redhat.com> =
+wrote:
+> In the new scheme, the available cpus are still directly passed down to a
+> descendant cgroup. However, isolated CPUs (or more generally CPUs dedicat=
 ed
-> +# define __no_kasan_or_inline __no_sanitize_address __maybe_unused
->  # define __no_sanitize_or_inline __no_kasan_or_inline
->  #else
->  # define __no_kasan_or_inline __always_inline
-> @@ -247,7 +246,7 @@ struct ftrace_likely_data {
->   * disable all instrumentation. See Kconfig.kcsan where this is mandator=
-y.
->   */
->  # define __no_kcsan __no_sanitize_thread __disable_sanitizer_instrumenta=
-tion
-> -# define __no_sanitize_or_inline __no_kcsan notrace __maybe_unused
-> +# define __no_sanitize_or_inline __no_kcsan __maybe_unused
->  #else
->  # define __no_kcsan
->  #endif
-> --
-> 2.39.2
->
+> to a partition) have to be exclusive. So what the cpuset.cpus.reserve does
+> is to identify those exclusive CPUs that can be excluded from the
+> effective_cpus of the parent cgroups before they are claimed by a child
+> partition. Currently this is done automatically when a child partition is
+> created off a parent partition root. The new scheme will break it into 2
+> separate steps without the requirement that the parent of a partition has=
+ to
+> be a partition root itself.
+
+new scheme
+  1st step:
+  echo C >p/cpuset.cpus.reserve
+  # p/cpuset.cpus.effective =3D=3D A-C (1)
+  2nd step (claim):
+  echo C' >p/c/cpuset.cpus # C'=E2=8A=86C
+  echo root >p/c/cpuset.cpus.partition
+
+current scheme
+  1st step (configure):
+  echo C >p/c/cpuset.cpus
+  2nd step (reserve & claim):
+  echo root >p/c/cpuset.cpus.partition
+  # p/cpuset.cpus.effective =3D=3D A-C (2)
+
+As long as p/c is unpopulated, (1) and (2) are equal situations.
+Why is the (different) two step procedure needed?
+
+Also the relaxation of requirement of a parent being a partition
+confuses me -- if the parent is not a partition, i.e. it has no
+exclusive ownership of CPUs but it can still "give" it to children -- is
+child partition meant to be exclusive? (IOW can parent siblings reserve
+some same CPUs?)
+
+Thanks,
+Michal
