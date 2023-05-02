@@ -2,112 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E167A6F4978
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 20:08:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 891F86F4987
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 20:12:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233721AbjEBSIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 14:08:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49736 "EHLO
+        id S234043AbjEBSM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 14:12:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233644AbjEBSIK (ORCPT
+        with ESMTP id S233523AbjEBSMZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 14:08:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94CCAF3
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 11:07:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683050840;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=N6mCYnN9DA30kBXb3G+hAjObknC+PiKLk5wLjv+kTMk=;
-        b=DkhZpXjifUHWN5zwM4AMiTSbAVJS4xfqvZn8PRzQMS2iHtHCE4v+nw9t3GLqy9LNHCmcWy
-        NSC1RyXgRXPL+W3JuMG7BpP7acUEze9aTz4jzzo1+SVBCxARhLi0LzrU/uof8MAfdG9jgx
-        DdpjAfWMwzMKPEoni+g4A15HkRRq7j8=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-281-T9P0zxT8NzGJakVshLzSqQ-1; Tue, 02 May 2023 14:07:19 -0400
-X-MC-Unique: T9P0zxT8NzGJakVshLzSqQ-1
-Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-61afc445dd5so18069796d6.3
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 11:07:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683050838; x=1685642838;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=N6mCYnN9DA30kBXb3G+hAjObknC+PiKLk5wLjv+kTMk=;
-        b=ZkqxehTJMb1mVJ3/JVmSWNR+TUkqWMGG+LBCZYMIeV/l6rI8QZWjSkT3RmzU5nI3X3
-         LOEjQwRfoMLF3Is1iS514v0rXldB3HcenLhNcMYiZC95aBhCBj8VnwsoMK9tbdjWHLJx
-         gZU+JHWEQYSF+gfhgrmJfwB/kqieWE8jP08DviEiplMFwTwVLL9whdCzq0+8sO/TQHQ5
-         GkYP1W7jQMtndaeo/DB4KVeJMuvRBzBaa2cj+ygqsNPyZR+YHvA30vEvpUzwDQl2i9xA
-         v3u00p6dlBsmF9bO7ma+UkuN8J6ZFijx/mAVC6cuSWccHEKjW31gYr1IZpvrjlitF+OT
-         jCGg==
-X-Gm-Message-State: AC+VfDx5ZIHbGyC734XL8epoAIskWn3dwpbScVBUC0W/OmS0KLFdNfqc
-        FzVQSwYWRvnVBtO+Z0GVVeU6FRPtCYG1UFk/Rre4eAK66D4Dp909ab0TuINzyzaeuFFKIfHjwfi
-        xsArAkZx21ZneE+XEToJ/6Z1P
-X-Received: by 2002:a05:6214:c4c:b0:5cc:e059:efa3 with SMTP id r12-20020a0562140c4c00b005cce059efa3mr7170300qvj.23.1683050838390;
-        Tue, 02 May 2023 11:07:18 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ60IbjRgAV7pfKjXBYm8E1s/ey98/EL5Ltf5kTf0FlgrhKbA+fTrMRqMeiGCtcFDaLjSZ8dkg==
-X-Received: by 2002:a05:6214:c4c:b0:5cc:e059:efa3 with SMTP id r12-20020a0562140c4c00b005cce059efa3mr7170265qvj.23.1683050838119;
-        Tue, 02 May 2023 11:07:18 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id y15-20020a0c8ecf000000b005e7648f9b78sm9626671qvb.109.2023.05.02.11.07.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 May 2023 11:07:17 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     chuck.lever@oracle.com, jlayton@kernel.org,
-        trond.myklebust@hammerspace.com, anna@kernel.org
-Cc:     linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] lockd: define nlm_port_min,max with CONFIG_SYSCTL
-Date:   Tue,  2 May 2023 14:07:13 -0400
-Message-Id: <20230502180713.2930022-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Tue, 2 May 2023 14:12:25 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CEC4197;
+        Tue,  2 May 2023 11:12:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683051143; x=1714587143;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=U0sG9yZo/74wvsF1+m0dJT/5G45+XpYD3sb3gmNWYeA=;
+  b=XLcnJYuPFZpejUhF9d5ecgD5vD/HU2nBxtBv4bJC+KBE0ZFAwjE5dTsh
+   UPlJQMTyC4U5SdfmasDXGGPWzntNHwhRJ2xgjE62O/bxi2p1TMLrk6EI4
+   NglTMEkRaeuRW8MTC35u3QDHJs3YvrNegTJv8pZsvVPeA63ZiOyW5unUb
+   A9zLG2TZ8Kl/rzXyzlSOKXSgeJN/MaxvHzq320YT9UzWNI62Pg74LID98
+   ZicJD4s+w0tS7grvMzlSP0RQy37Hztg1ofCPVV0V9YmarMo3jnbqONN2K
+   sT5s44Vtpo2mMULPePdacfDXshhPRvzeISdoGiVCrmzeD6Pm/5MTRk9XJ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="347292910"
+X-IronPort-AV: E=Sophos;i="5.99,244,1677571200"; 
+   d="scan'208";a="347292910"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2023 11:08:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="696288855"
+X-IronPort-AV: E=Sophos;i="5.99,244,1677571200"; 
+   d="scan'208";a="696288855"
+Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 02 May 2023 11:08:33 -0700
+Received: from kbuild by e3434d64424d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ptuQS-0001Ca-1k;
+        Tue, 02 May 2023 18:08:32 +0000
+Date:   Wed, 3 May 2023 02:07:42 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ajay Kaher <akaher@vmware.com>, rostedt@goodmis.org,
+        mhiramat@kernel.org, shuah@kernel.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, chinglinyu@google.com,
+        namit@vmware.com, srivatsab@vmware.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, vsirnapalli@vmware.com, tkundu@vmware.com,
+        er.ajay.kaher@gmail.com, Ajay Kaher <akaher@vmware.com>
+Subject: Re: [PATCH v2 8/9] eventfs: moving tracing/events to eventfs
+Message-ID: <202305030116.Gu6yyvKj-lkp@intel.com>
+References: <1683026600-13485-9-git-send-email-akaher@vmware.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1683026600-13485-9-git-send-email-akaher@vmware.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-gcc with W=1 and ! CONFIG_SYSCTL
-fs/lockd/svc.c:80:51: error: ‘nlm_port_max’ defined but not used [-Werror=unused-const-variable=]
-   80 | static const int                nlm_port_min = 0, nlm_port_max = 65535;
-      |                                                   ^~~~~~~~~~~~
-fs/lockd/svc.c:80:33: error: ‘nlm_port_min’ defined but not used [-Werror=unused-const-variable=]
-   80 | static const int                nlm_port_min = 0, nlm_port_max = 65535;
-      |                                 ^~~~~~~~~~~~
+Hi Ajay,
 
-The only use of these variables is when CONFIG_SYSCTL
-is defined, so their definition should be likewise conditional.
+kernel test robot noticed the following build warnings:
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- fs/lockd/svc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+[auto build test WARNING on shuah-kselftest/next]
+[also build test WARNING on shuah-kselftest/fixes linus/master v6.3 next-20230428]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/fs/lockd/svc.c b/fs/lockd/svc.c
-index bb94949bc223..04ba95b83d16 100644
---- a/fs/lockd/svc.c
-+++ b/fs/lockd/svc.c
-@@ -77,9 +77,9 @@ static const unsigned long	nlm_grace_period_min = 0;
- static const unsigned long	nlm_grace_period_max = 240;
- static const unsigned long	nlm_timeout_min = 3;
- static const unsigned long	nlm_timeout_max = 20;
--static const int		nlm_port_min = 0, nlm_port_max = 65535;
- 
- #ifdef CONFIG_SYSCTL
-+static const int		nlm_port_min = 0, nlm_port_max = 65535;
- static struct ctl_table_header * nlm_sysctl_table;
- #endif
- 
+url:    https://github.com/intel-lab-lkp/linux/commits/Ajay-Kaher/eventfs-introducing-struct-tracefs_inode/20230502-192949
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git next
+patch link:    https://lore.kernel.org/r/1683026600-13485-9-git-send-email-akaher%40vmware.com
+patch subject: [PATCH v2 8/9] eventfs: moving tracing/events to eventfs
+config: i386-randconfig-a011-20230501 (https://download.01.org/0day-ci/archive/20230503/202305030116.Gu6yyvKj-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/2fe2002efb23a715f5eb7a58891ff85f4e37b084
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ajay-Kaher/eventfs-introducing-struct-tracefs_inode/20230502-192949
+        git checkout 2fe2002efb23a715f5eb7a58891ff85f4e37b084
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash kernel/trace/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305030116.Gu6yyvKj-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> kernel/trace/trace_events.c:2424:17: warning: variable 'd_events' set but not used [-Wunused-but-set-variable]
+           struct dentry *d_events;
+                          ^
+   1 warning generated.
+
+
+vim +/d_events +2424 kernel/trace/trace_events.c
+
+ac343da7bc9048 Masami Hiramatsu         2020-09-10  2417  
+1473e4417c79f1 Steven Rostedt           2009-02-24  2418  static int
+7f1d2f8210195c Steven Rostedt (Red Hat  2015-05-05  2419) event_create_dir(struct dentry *parent, struct trace_event_file *file)
+1473e4417c79f1 Steven Rostedt           2009-02-24  2420  {
+2425bcb9240f8c Steven Rostedt (Red Hat  2015-05-05  2421) 	struct trace_event_call *call = file->event_call;
+ae63b31e4d0e2e Steven Rostedt           2012-05-03  2422  	struct trace_array *tr = file->tr;
+2fe2002efb23a7 Ajay Kaher               2023-05-02  2423  	struct eventfs_file *ef_subsystem = NULL;
+ae63b31e4d0e2e Steven Rostedt           2012-05-03 @2424  	struct dentry *d_events;
+de7b2973903c6c Mathieu Desnoyers        2014-04-08  2425  	const char *name;
+fd99498989f3b3 Steven Rostedt           2009-02-28  2426  	int ret;
+1473e4417c79f1 Steven Rostedt           2009-02-24  2427  
+6ecc2d1ca39177 Steven Rostedt           2009-02-27  2428  	/*
+6ecc2d1ca39177 Steven Rostedt           2009-02-27  2429  	 * If the trace point header did not define TRACE_SYSTEM
+6ecc2d1ca39177 Steven Rostedt           2009-02-27  2430  	 * then the system would be called "TRACE_SYSTEM".
+6ecc2d1ca39177 Steven Rostedt           2009-02-27  2431  	 */
+ae63b31e4d0e2e Steven Rostedt           2012-05-03  2432  	if (strcmp(call->class->system, TRACE_SYSTEM) != 0) {
+2fe2002efb23a7 Ajay Kaher               2023-05-02  2433  		ef_subsystem = event_subsystem_dir(tr, call->class->system, file, parent);
+2fe2002efb23a7 Ajay Kaher               2023-05-02  2434  		if (!ef_subsystem)
+ae63b31e4d0e2e Steven Rostedt           2012-05-03  2435  			return -ENOMEM;
+ae63b31e4d0e2e Steven Rostedt           2012-05-03  2436  	} else
+ae63b31e4d0e2e Steven Rostedt           2012-05-03  2437  		d_events = parent;
+6ecc2d1ca39177 Steven Rostedt           2009-02-27  2438  
+687fcc4aee4567 Steven Rostedt (Red Hat  2015-05-13  2439) 	name = trace_event_name(call);
+2fe2002efb23a7 Ajay Kaher               2023-05-02  2440  	file->ef = eventfs_add_dir(name, ef_subsystem, &tr->eventfs_rwsem);
+2fe2002efb23a7 Ajay Kaher               2023-05-02  2441  	if (IS_ERR(file->ef)) {
+8434dc9340cd2e Steven Rostedt (Red Hat  2015-01-20  2442) 		pr_warn("Could not create tracefs '%s' directory\n", name);
+1473e4417c79f1 Steven Rostedt           2009-02-24  2443  		return -1;
+1473e4417c79f1 Steven Rostedt           2009-02-24  2444  	}
+1473e4417c79f1 Steven Rostedt           2009-02-24  2445  
+9b63776fa3ca96 Steven Rostedt           2012-05-10  2446  	if (call->class->reg && !(call->flags & TRACE_EVENT_FL_IGNORE_ENABLE))
+2fe2002efb23a7 Ajay Kaher               2023-05-02  2447  		eventfs_add_file("enable", TRACE_MODE_WRITE, file->ef, file,
+620a30e97febc8 Oleg Nesterov            2013-07-31  2448  				  &ftrace_enable_fops);
+1473e4417c79f1 Steven Rostedt           2009-02-24  2449  
+
 -- 
-2.27.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
