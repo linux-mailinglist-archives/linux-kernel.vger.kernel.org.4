@@ -2,173 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AE966F3CED
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 07:27:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F5B66F3C26
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 04:22:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233416AbjEBF0x convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 2 May 2023 01:26:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52590 "EHLO
+        id S233443AbjEBCWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 22:22:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231610AbjEBF0v (ORCPT
+        with ESMTP id S233181AbjEBCWf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 01:26:51 -0400
-X-Greylist: delayed 1098 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 01 May 2023 22:26:48 PDT
-Received: from repostorp.tmes.trendmicro.eu (repostorp.tmes.trendmicro.eu [18.185.115.139])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FE71FEE
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 22:26:47 -0700 (PDT)
-Received: from 89.96.76.22_.trendmicro.com (unknown [172.21.178.36])
-        by repostorp.tmes.trendmicro.eu (Postfix) with SMTP id B8F041000853A;
-        Tue,  2 May 2023 05:08:27 +0000 (UTC)
-X-TM-MAIL-RECEIVED-TIME: 1683003902.483000
-X-TM-MAIL-UUID: 3ec21861-7a86-42d4-a560-9f0ff553d206
-Received: from EXCH000EDG.int.milano (unknown [89.96.76.22])
-        by repre01.tmes.trendmicro.eu (Trend Micro Email Security) with ESMTP id 7636D100003AD;
-        Tue,  2 May 2023 05:05:02 +0000 (UTC)
-Received: from EXCH000HUB.int.milano (10.4.32.33) by EXCH000EDG.int.milano
- (89.96.76.22) with Microsoft SMTP Server (TLS) id 8.3.389.2; Tue, 2 May 2023
- 04:10:02 +0200
-Received: from EXCHSRVR04.int.milano ([10.4.32.36]) by EXCH000HUB.int.milano
- ([10.4.32.33]) with mapi; Tue, 2 May 2023 04:19:36 +0200
-From:   Gregoraci Antonio <Antonio.Gregoraci@istitutotumori.mi.it>
-To:     "21@hotmail.com" <21@hotmail.com>
-Content-Class: urn:content-classes:message
-Date:   Tue, 2 May 2023 04:19:35 +0200
-Subject: ciaoi/hola
-Thread-Topic: ciaoi/hola
-Thread-Index: AQHZfJyJQNS3sn313kCMIg4VdjlM2A==
-Message-ID: <DCA15BFBCFA11D4DAAB69864B5B767D7022DA376D35B@EXCHSRVR04.int.milano>
-Accept-Language: it-IT, en-US
-Content-Language: it-IT
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-acceptlanguage: it-IT, en-US
-Content-Type: text/plain; charset="Windows-1252"
-Content-Transfer-Encoding: 8BIT
+        Mon, 1 May 2023 22:22:35 -0400
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E931C40C5;
+        Mon,  1 May 2023 19:22:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1682994147;
+        bh=XleaLi6oRjXtfe2D7RhL/bXb9kAyYfGf1xyiXtDlQDk=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=B3+pvvNt1nRN8hRoSXjf3I4ybVi/EDboNnvLeMqv3k3o/5KuewFLsQ2LIIO45T87D
+         dmw9Bza7VZEKEtygO+CQeSy7CBK508rzVVZKe8uhSLnG5n4AwGQmHHjTyQBjyKut87
+         W4mECobpPwTueeG1X8Y0LfbxM9hzHFolb5i0L6ew=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 554B4128648F;
+        Mon,  1 May 2023 22:22:27 -0400 (EDT)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+ by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
+ with ESMTP id XSNGV24ZawPq; Mon,  1 May 2023 22:22:27 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1682994146;
+        bh=XleaLi6oRjXtfe2D7RhL/bXb9kAyYfGf1xyiXtDlQDk=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=m6bYz5hNQXdxoZ5NOAcJ2JFL0kL9SDAdXRGd+EFNCj+3OnfQ3+swh//Kmg4+1ZxnT
+         /vAaVHfPpqrg0q8i1pJguyqq2gnSLJOdqlrDbhqXY73Dx/2yBSTryYz6FylsmhHOQk
+         kWyP5cXIJTuLLvuvIQl6DHYlZBed/Vghiiim+rwE=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::c14])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 25B2E1285C64;
+        Mon,  1 May 2023 22:22:21 -0400 (EDT)
+Message-ID: <b6b472b65b76e95bb4c7fc7eac1ee296fdbb64fd.camel@HansenPartnership.com>
+Subject: Re: [PATCH 01/40] lib/string_helpers: Drop space in
+ string_get_size's output
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Kent Overstreet <kent.overstreet@linux.dev>,
+        Suren Baghdasaryan <surenb@google.com>,
+        akpm@linux-foundation.org, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de,
+        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
+        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
+        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
+        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
+        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
+        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
+        tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
+        paulmck@kernel.org, pasha.tatashin@soleen.com,
+        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
+        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
+        ndesaulniers@google.com, gregkh@linuxfoundation.org,
+        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+        glider@google.com, elver@google.com, dvyukov@google.com,
+        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
+        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        kasan-dev@googlegroups.com, cgroups@vger.kernel.org,
+        Andy Shevchenko <andy@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Noralf =?ISO-8859-1?Q?Tr=EF=BF=BDnnes?= <noralf@tronnes.org>
+Date:   Mon, 01 May 2023 22:22:18 -0400
+In-Reply-To: <ZFAUj+Q+hP7cWs4w@moria.home.lan>
+References: <20230501165450.15352-1-surenb@google.com>
+         <20230501165450.15352-2-surenb@google.com>
+         <ouuidemyregstrijempvhv357ggp4tgnv6cijhasnungsovokm@jkgvyuyw2fti>
+         <ZFAUj+Q+hP7cWs4w@moria.home.lan>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
 MIME-Version: 1.0
-X-TM-AS-ERS: 89.96.76.22-0.0.0.0
-X-TMASE-Version: StarCloud-1.3-9.1.1007-27600.004
-X-TMASE-Result: 10--5.227400-7.000000
-X-TMASE-MatchedRID: JccYzf/alo2Z92UT4XKzJLrGtoyxDGsveQdcpJtf6Y9dnu0Ib701SwHh
-        /n3IojRHZbYzO9ATSR8iCJj+nG0qavLhF3ODt/qxK1L6TVkdgzvlCdi2vYBU/StbLOivsnLTeOW
-        ogtc/Q+ahrVMGjoVW2dAxpCUwUcRX/hmVMkfK7SzUx9DKYBHnGKd2IUv0yPeefmP+r6TihalqvC
-        uMGQ0jzVrpCKOpM18cDPgUX1cE9O7XOxm24IXrxtH1f5d8nY/hPp0VRG6+qR71fgKy39PDlkeEP
-        abtlRsaejwREYpHOiWWyPdl51RNjgZggDg9vQE5YiI8iyJSkA3PjA1BmHzE8+RXFolGtZQMKxg3
-        Xnh5/+zDiMdHGmnNPbRtAWPTXnKS1iTsGwm9KyqJD4Nwayf7WMEE+9IiWn84I+mdUIK7OD5DkWN
-        prDyYFJk4XfWG6Q5wQGLcrfmCk/qcIa7X43Dj+RZPalguHC34Ket9cEJP1Bi3uEP3hiATS9zrRQ
-        ttYVPeCx4e+jnEj2mZrBKqCt7bePcCWN+BhqOU86OXreFgYUsZskwWqoib3O5SxpUwKMktfrqNW
-        IucyHbg+QiHC8Fzei38M+247Q7BEONKxfrChoJKQwOq4OdJRVjKpSEColRJEzBS/LIYH/e0/17g
-        tnMCM+LzNWBegCW2Pt8/Kr/G3CkLbigRnpKlKSBuGJWwgxAra7leoU/OMhNYsCaawSIuKfUA+hX
-        yvvRqBjeoP9+0RhGI1kgtEwqqqCT5Li5QT8gqftwZ3X11IV0=
-X-TMASE-XGENCLOUD: be3d1900-246c-45a6-ae1b-12737999e55d-0-0-200-0
-X-TM-Deliver-Signature: 7F24806DD1A607B604DA7D2016113915
-X-TM-Addin-Auth: JVX57R5BtpuuoC33s0rJknJgODteylMekhQmh9my5PfLo0zMN6S2W7AQqrC
-        uKxSWDzUm0/BXMVWMb8GgL5F8Lp/CwV9Bz//r/7mJ4kTQP1BIfcKaGcdMWXt0vZQAXsNMCQwpHE
-        SHGolBkepvhYeacV6wnYuNy/ZnVkzh3FrLOJMnNuJLYMJID4+/IsyBSEkzAsFmtykmJ/KzWg1E/
-        2YDJooiaJxZC+MtydHvCYL37khp0s3CdyxNRMI+LNP35p5aLMDRhzab6JiwYVjEuDLjFipUeV4A
-        Eg3b2fYMzkDAGuwVb62IBtKFlZgI0uVSJb3r.qw+/xPgBa/Krcpu897SNsdbtalo1P6V99+k7C5
-        xdlLVrGpjUxUrwjxZUwOPh63irGM4/+1rqq10Uf2K64K3/r2oWB8uKePT6odt75uRn5suCOJZlB
-        Q8m4y7aMIozhnLaF+i3/WdebqM3RJlTR2NLdB2Tz8CXEGuXp8P/tRtpTG5m8E9QEvJqjLOyp0Pa
-        JjB0A2dKCOa+T4y23hac5clWvDeGdKz6yFr58SG/MGT9i7/IVCkzOuw0LvlcW7aU3ib+epmIrgs
-        ygK4Q5jShZhorpqtMShkKfjkCluEMBBvG3Sr8UOrstXRr2myGUpiv/lh0ExoC00X8J0za0wVBAi
-        JM5A==
-X-TM-Addin-ProductCode: EMS
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hola y ¿cómo estás? Hay un proyecto que me gustaría discutir con ustedes. todo disponible. Por favor, comuníquese conmigo directamente a mi correo privado.   ( drcc7072@gmail.com )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-============================================================================================================
-La presente comunicazione, che potrebbe contenere informazioni riservate e/o protette da segreto professionale, è indirizzata esclusivamente ai destinatari della medesima qui indicati. Ogni informazione qui contenuta, che non sia relativa alla nostra attività caratteristica, deve essere considerata come non inviata. Nel caso in cui abbiate ricevuto per errore la presente comunicazione, vogliate cortesemente darcene immediata notizia, rispondendo a questo stesso indirizzo di e-mail, e poi procedere alla cancellazione di questo messaggio dal Vostro sistema. E' strettamente proibito e potrebbe essere fonte di violazione di legge qualsiasi uso, comunicazione, copia o diffusione dei contenuti di questa comunicazione da parte di chi la abbia ricevuta per errore o in violazione degli scopi della presente. Ricordiamo che la tecnologia di trasmissione utilizzata non consente di garantire l’autenticità del mittente né l’integrità dei dati
-
-This communication, which may contain confidential and/or legally privileged information, is intended solely for the use of the intended addressees. All information or advice contained in this communication is subject to the terms and conditions provided by the agreement governing each particular client engagement. If you have received this communication in error, please notify us immediately by responding to this email; then please delete it from your system. Any use, disclosure, copying or distribution of the contents of this communication by a not-intended recipient or in violation of the purposes of this communication is strictly prohibited and may be unlawful. The transmission technology used to send this mail can grant neither the sender identity nor the data integrity
-
+On Mon, 2023-05-01 at 15:35 -0400, Kent Overstreet wrote:
+> On Mon, May 01, 2023 at 11:13:15AM -0700, Davidlohr Bueso wrote:
+> > On Mon, 01 May 2023, Suren Baghdasaryan wrote:
+> > 
+> > > From: Kent Overstreet <kent.overstreet@linux.dev>
+> > > 
+> > > Previously, string_get_size() outputted a space between the
+> > > number and the units, i.e.
+> > > Â 9.88 MiB
+> > > 
+> > > This changes it to
+> > > Â 9.88MiB
+> > > 
+> > > which allows it to be parsed correctly by the 'sort -h' command.
+> > 
+> > Wouldn't this break users that already parse it the current way?
+> 
+> It's not impossible - but it's not used in very many places and we
+> wouldn't be printing in human-readable units if it was meant to be
+> parsed - it's mainly used for debug output currently.
+
+It is not used just for debug.  It's used all over the kernel for
+printing out device sizes.  The output mostly goes to the kernel print
+buffer, so it's anyone's guess as to what, if any, tools are parsing
+it, but the concern about breaking log parsers seems to be a valid one.
+
+> If someone raises a specific objection we'll do something different,
+> otherwise I think standardizing on what userspace tooling already
+> parses is a good idea.
+
+If you want to omit the space, why not simply add your own variant?  A
+string_get_size_nospace() which would use most of the body of this one
+as a helper function but give its own snprintf format string at the
+end.  It's only a couple of lines longer as a patch and has the bonus
+that it definitely wouldn't break anything by altering an existing
+output.
+
+James
 
