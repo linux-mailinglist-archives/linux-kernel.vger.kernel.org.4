@@ -2,93 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BC376F45F3
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 16:22:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69A296F45F5
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 16:22:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234260AbjEBOV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 10:21:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39328 "EHLO
+        id S234379AbjEBOWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 10:22:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234255AbjEBOV5 (ORCPT
+        with ESMTP id S229533AbjEBOWd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 10:21:57 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8270AE9;
-        Tue,  2 May 2023 07:21:56 -0700 (PDT)
-Received: from [192.168.1.131] ([89.1.213.9]) by mrelayeu.kundenserver.de
- (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MFshF-1q1pl938Xv-00HMw8; Tue, 02 May 2023 16:21:36 +0200
-Message-ID: <d25cb52e-568c-637e-2708-e5d5d8b43b73@mweigand.net>
-Date:   Tue, 2 May 2023 16:21:35 +0200
+        Tue, 2 May 2023 10:22:33 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31774C7;
+        Tue,  2 May 2023 07:22:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683037352; x=1714573352;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=okhpxlRDEQALG8h9nFGRMtX82IOIMhVCPENvPmmTTwE=;
+  b=M3ekXbAINca4tBa5rFdTtocydRJ8VLLYrf5Q9dU7NWasjnZKyhTXLtZn
+   Cfx0vSJPKz5/TBXAkKQ8jzlHlHK1aHzt9mqdYyE0Zu82lfv0IYNSwEqV3
+   XUOIItpeH+fkFaqMPJcaKEgPalRYcYDpPK3nNcYulYDrSJfBuaIYHOnFs
+   vWfCSsIWDImaJ7yQYtyqVwtV+MLqaUfwpdDAd5nshefBFeE43UDHrfqlM
+   VYg7HUcAeYl/v6l7yKUzi1pB2SX+v3gHIrGW31uMNmehSalH2bzsvy0mO
+   uuVkrPazjjhBqx2/yWZbdBAVrH1e4Gesvh0rVrS/VSuOWnyXyMe23chmT
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="348453637"
+X-IronPort-AV: E=Sophos;i="5.99,244,1677571200"; 
+   d="scan'208";a="348453637"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2023 07:22:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="726758659"
+X-IronPort-AV: E=Sophos;i="5.99,244,1677571200"; 
+   d="scan'208";a="726758659"
+Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 02 May 2023 07:22:27 -0700
+Received: from kbuild by e3434d64424d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ptqte-000165-2O;
+        Tue, 02 May 2023 14:22:26 +0000
+Date:   Tue, 2 May 2023 22:21:37 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ajay Kaher <akaher@vmware.com>, rostedt@goodmis.org,
+        mhiramat@kernel.org, shuah@kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, chinglinyu@google.com,
+        namit@vmware.com, srivatsab@vmware.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, vsirnapalli@vmware.com, tkundu@vmware.com,
+        er.ajay.kaher@gmail.com, Ajay Kaher <akaher@vmware.com>
+Subject: Re: [PATCH v2 4/9] eventfs: adding eventfs file, directory remove
+ function
+Message-ID: <202305022234.nOgIYubz-lkp@intel.com>
+References: <1683026600-13485-5-git-send-email-akaher@vmware.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 6/6] Input: cyttsp5 - implement proper sleep and wakeup
- procedures
-Content-Language: en-US
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Alistair Francis <alistair@alistair23.me>
-References: <20230501113010.891786-1-mweigand@mweigand.net>
- <20230501113010.891786-7-mweigand@mweigand.net> <ZFBXvz17jDhEPI6c@google.com>
-From:   Maximilian Weigand <mweigand@mweigand.net>
-In-Reply-To: <ZFBXvz17jDhEPI6c@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:k4ULv17YXMKTOkv6rlSNa1PjfF/ZPiL5SEta1j2EQ9eWxP9Ayvk
- ZbeeVxNbJaaeatLJDIHAoDPUzZFRarKWFCvF8xBYgrdVzut5xoZqj2P836URrnb/6Pjb31y
- NqEoBIMTdgJayqqLqBhOszUafQXY7gN6gqrKo6CLXzhSmiTUfbVUlNgsuFcJX2tFEeYJt5x
- +BqFgU8671+OTk0vCutZw==
-UI-OutboundReport: notjunk:1;M01:P0:7h04iMSCeOE=;3W+iz5QPr9D5XEnfuIce8D5mr4l
- OW9KIWFyf+vQRozEthO6X6GHsHDDFJ0kfgWFaVelTth1DYBIk9FmEneVwVA4AXtp7H9OrIFOi
- r6568X7M8UvkR0rWK7HJJ7TesGdcbx2qgcmHL3wrUIdWExCsMn+FZcQCswn0J1g7e9y8Xa7Zv
- nUTQFYUqkCEqStFhH8jL/9fUewdpAg+gWAbPp1rP6M1Aaooel/cY+E11VyosC94Fq4QASp170
- eWkmvmmxG1W8UZo5e3ZsSTQVdsoXmmnEztP4GeQrE3SbqqWJdo/XQgfPDHZMvKcYLWMq8+Zxl
- M2XUPEs1TJvRER1ruDqbznTyTUblS7/3h+dX8V1Uv568nDoh1GISk+LUnEo9PU2SkG41tTSta
- ecYGH0WoIJNySUsrxb1Lvi53Sh1N2g7SyR2y7URQtqAjkjC8tidVhGjvii5jagKft/+obZAsr
- vC5bfGsuTZ71ugobcRtpa3G+e1juzhjIQWOU17SxLtwdnzukk4iOgg2QhcM1kUzmM+ILNUss5
- y3gkHA5J8nwMrHZ/o/KQUOPi7+XPvYk+jXle871MSikIptZ1SASu5EqYK4lnBfB6pREl2nMf7
- 052WmXxCh6i3SFIjuC3DJCUEc09AE0tk7X9vwF8uE7ih6HopTboQs9Ca/qgmvmdTnacQDuNQj
- 8jkC6XfyVwkEVRICA1N7kyhca5bLbeDjW+KrXwLF1Q==
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1683026600-13485-5-git-send-email-akaher@vmware.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Ajay,
 
-On 02.05.23 02:22, Dmitry Torokhov wrote:
-> On Mon, May 01, 2023 at 01:30:10PM +0200, Maximilian Weigand wrote:
->>  struct cyttsp5 {
->>  	struct device *dev;
->>  	struct completion cmd_done;
->> +	struct completion cmd_command_done;
-> 
-> Why do we need separate comletion? Do you observe some additional
-> traffic from the controller when powering it off and on?
+kernel test robot noticed the following build warnings:
 
-I checked and indeed there is no overlap in the different command types,
-so one completion will work. I will reformat correspondingly.
+[auto build test WARNING on shuah-kselftest/next]
+[also build test WARNING on shuah-kselftest/fixes linus/master rostedt-trace/for-next v6.3 next-20230428]
+[cannot apply to rostedt-trace/for-next-urgent]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
->> +static int __maybe_unused cyttsp5_suspend(struct device *dev)
->> +{
->> +	struct cyttsp5 *ts = dev_get_drvdata(dev);
->> +
->> +	if (!ts->is_wakeup_source)
-> 
-> I believe the idiomatic way to check this is to call
-> device_may_wakeup().
+url:    https://github.com/intel-lab-lkp/linux/commits/Ajay-Kaher/eventfs-introducing-struct-tracefs_inode/20230502-192949
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git next
+patch link:    https://lore.kernel.org/r/1683026600-13485-5-git-send-email-akaher%40vmware.com
+patch subject: [PATCH v2 4/9] eventfs: adding eventfs file, directory remove function
+config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20230502/202305022234.nOgIYubz-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/9a36b39da0c3fbfe15a3c3a0ed71b52013bac292
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ajay-Kaher/eventfs-introducing-struct-tracefs_inode/20230502-192949
+        git checkout 9a36b39da0c3fbfe15a3c3a0ed71b52013bac292
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash fs/tracefs/
 
-Thanks for pointing that out. I will fix that, too.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305022234.nOgIYubz-lkp@intel.com/
 
-Thanks for the feedback and best regards
+All warnings (new ones prefixed by >>):
 
-Maximilian
+>> fs/tracefs/event_inode.c:379:6: warning: no previous prototype for 'eventfs_remove_rec' [-Wmissing-prototypes]
+     379 | void eventfs_remove_rec(struct eventfs_file *ef)
+         |      ^~~~~~~~~~~~~~~~~~
+   fs/tracefs/event_inode.c:58:13: warning: 'eventfs_up_read' defined but not used [-Wunused-function]
+      58 | static void eventfs_up_read(struct rw_semaphore *eventfs_rwsem)
+         |             ^~~~~~~~~~~~~~~
+   fs/tracefs/event_inode.c:47:13: warning: 'eventfs_down_read' defined but not used [-Wunused-function]
+      47 | static void eventfs_down_read(struct rw_semaphore *eventfs_rwsem)
+         |             ^~~~~~~~~~~~~~~~~
+   fs/tracefs/event_inode.c:31:29: warning: 'eventfs_dentry_to_rwsem' defined but not used [-Wunused-function]
+      31 | static struct rw_semaphore *eventfs_dentry_to_rwsem(struct dentry *dentry)
+         |                             ^~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/eventfs_remove_rec +379 fs/tracefs/event_inode.c
+
+   371	
+   372	/**
+   373	 * eventfs_remove_rec - remove eventfs dir or file from list
+   374	 * @ef: a pointer to eventfs_file to be removed.
+   375	 *
+   376	 * This function recursively remove eventfs_file which
+   377	 * contains info of file or dir.
+   378	 */
+ > 379	void eventfs_remove_rec(struct eventfs_file *ef)
+   380	{
+   381		struct eventfs_file *ef_child, *n;
+   382	
+   383		if (!ef)
+   384			return;
+   385	
+   386		if (ef->ei) {
+   387			/* search for nested folders or files */
+   388			list_for_each_entry_safe(ef_child, n, &ef->ei->e_top_files, list) {
+   389				eventfs_remove_rec(ef_child);
+   390			}
+   391			kfree(ef->ei);
+   392		}
+   393	
+   394		if (ef->created && ef->dentry) {
+   395			d_invalidate(ef->dentry);
+   396			dput(ef->dentry);
+   397		}
+   398		list_del(&ef->list);
+   399		kfree(ef->name);
+   400		kfree(ef);
+   401	}
+   402	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
