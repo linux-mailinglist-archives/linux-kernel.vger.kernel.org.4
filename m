@@ -2,190 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DEFF6F3E80
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 09:46:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E4486F3E85
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 09:47:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233584AbjEBHqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 03:46:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46842 "EHLO
+        id S233521AbjEBHrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 03:47:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233167AbjEBHqi (ORCPT
+        with ESMTP id S233167AbjEBHr3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 03:46:38 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B46701BC7
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 00:46:36 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f09b4a1584so20913625e9.2
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 00:46:36 -0700 (PDT)
+        Tue, 2 May 2023 03:47:29 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69916273A
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 00:47:27 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-50bc37e1525so4191695a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 00:47:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683013595; x=1685605595;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OR9YpJn1XmXl3Ur0RRGrvM6I+ArJCgZTqUBRtnIQvME=;
-        b=FJ3zAj+RDHf4b7+E9OTJr+7SDCvUicN1UEdSiMGqfFqCL6r8rfn5/zDeQwMngS4IRR
-         yUb4a5inKTmz9Ef++XRGQYTKa8WYnY9XW/G5qKCcP3/cjBxYTpb6G0X16cHr3DlY117Y
-         emsAuKhus2tM9OAWNLO3SbALLsw64qBfgY2WBUEPzbFNTn2oc6FZVkXiEtkFv/r7N0ZH
-         5iMpGgcyV6WzvbA/td/yr/rnb36RxLlcaHdNHSMEA7MGKjJJkTZ97AE6Jnav5ce7vlj4
-         rnHJy1E+mhO4YryXCDy+NSnVthbiFlvHvMxxIHKF9izPSS4Xp56/KCr4yqeHH8j9q8tj
-         5QFA==
+        d=linaro.org; s=google; t=1683013646; x=1685605646;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zp3GUACI6gZnc6hq2YXqqK8rip6hMVeCHJ8zCs7UA9Y=;
+        b=p9myWsRTWJHFmlbKC8/mfyK/gNGNwdH5XNqLDTNg3qhVc9+61HxNOMyePDQg+krFfI
+         4kaHOpd8+DG1p/ros/TRm+SYxgSjYbTUmyeF532NDW7ydubr/pa2/mYDfaF0cLfpC5AM
+         ooN0SXvl/ZFUoXLiXEG727d8chpUze8tfCOKWK1m5PJffaYwtvbDxzRB/qKdxhbHsYoW
+         KOl/mkQZxJKnuin8NCn+Rs0uRTfl1BWSxMmmqUMwj6K4Od3v9MVmU0kFxbxRNKVqI7Oj
+         N9WDGG0/0V0Bc8o+ZDybF6IGHHC29ULIBMqdoh4ajniFf/FCq7JnxyycEUsAq1ktVJSI
+         1pyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683013595; x=1685605595;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OR9YpJn1XmXl3Ur0RRGrvM6I+ArJCgZTqUBRtnIQvME=;
-        b=WVrPvKww5eaiqNvDGrK9Nt2X5mCHJ9/SH67qM8puCf+saqf4d6JJT90iGvyTq4VUn7
-         lqoPUHKain3xk4KpP2VBVW/1KkuBz6K+RlTEYfZ/HW762nb3Ma2d9vsqkn0meKx/dck+
-         12rXeB977fAAauSX0nfvb4Yk5EDb2Hy6gbvuHE4s50ch3yPPgUnsWRVu+ei4s97FBHdt
-         YI304Z7NZS4CDE9hRePL9wvv2rd1VJ8q0tPJ1pSYiUqb6oDWmn4IKfXuWZKG71WLTXvO
-         dBCvlCE8yWqHhBPq/U39JuwvO1pLHJgRroWpnkJxjqdw+VIFFd675BMcP7WiEUHoEjHa
-         cOrQ==
-X-Gm-Message-State: AC+VfDy3Y1i+YSXBR09/FZhPdRLW2e96OcIT8o0wmyLLFReDIuuh6OAr
-        MK9qqjn0OnTSSiDIDJCa2gU=
-X-Google-Smtp-Source: ACHHUZ4Z/HfrPUlnrmtGlOLEbKEp7/fLkwmU2jsyp311hPN2hRmhdn1ZW0lpXljWY1CXaFwbFQ4akQ==
-X-Received: by 2002:a05:6000:11c5:b0:2f5:83a8:a9a9 with SMTP id i5-20020a05600011c500b002f583a8a9a9mr10911632wrx.16.1683013594719;
-        Tue, 02 May 2023 00:46:34 -0700 (PDT)
-Received: from localhost (host86-156-84-164.range86-156.btcentralplus.com. [86.156.84.164])
-        by smtp.gmail.com with ESMTPSA id o3-20020a05600c378300b003ef5f77901dsm34412183wmr.45.2023.05.02.00.46.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 May 2023 00:46:33 -0700 (PDT)
-Date:   Tue, 2 May 2023 08:46:33 +0100
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     kernel test robot <lkp@intel.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>
-Subject: Re: [PATCH v6 3/3] mm/gup: disallow FOLL_LONGTERM GUP-fast writing
- to file-backed mappings
-Message-ID: <db733020-c6c7-43f9-9cbf-0e5fb18b2f01@lucifer.local>
-References: <dee4f4ad6532b0f94d073da263526de334d5d7e0.1682981880.git.lstoakes@gmail.com>
- <202305021142.vBYXxxEh-lkp@intel.com>
+        d=1e100.net; s=20221208; t=1683013646; x=1685605646;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zp3GUACI6gZnc6hq2YXqqK8rip6hMVeCHJ8zCs7UA9Y=;
+        b=iMi1FjNf6pywWaXziRCe1BEE+JukCM5VLBpeiHTCinWuJFBeb7aJL643aOXhST24oa
+         Ptdb0DCmykAjJlWwoX5s2gJPKwEmIfAbwgZbBfax3n+s/72UfgApnhr6BOrqVbCZj5Yp
+         sUUDiT2Jl3YBJDg0EhjJ8oF8a5maPIuHdvU3SIBMpPAMh/FglfTRcsZlwI6+UaQ9GbUK
+         moD3LhPh/mUYW7yfOh0SUr7mhuiSJG7w6sXg9JmQrMIlRtWvNfYBSdkv1hj7+ppXgzfk
+         z9OYbrFyKBHFnCZB0myqRw4N4tEmwalHa/IXwTcgsHa7qilt2Zj8/+GXJdBgU7BHjVz6
+         i7AA==
+X-Gm-Message-State: AC+VfDwTUBbP0vV1UaPnCdHW16YYymQ8cXX5Ln7L0exOdJw/cYEFajnh
+        JJUZu8vP1jzdU/sF/Eht0vbPdg==
+X-Google-Smtp-Source: ACHHUZ7uSHKaeGUlnLUaOcTHvWUxqioqNqTsDF8JizJz9zyZhMz1sRyVNzmvWC4V3uVPp4kimv5F/g==
+X-Received: by 2002:aa7:cb07:0:b0:508:3ff8:afe7 with SMTP id s7-20020aa7cb07000000b005083ff8afe7mr6620002edt.6.1683013645896;
+        Tue, 02 May 2023 00:47:25 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:bafd:1283:b136:5f6a? ([2a02:810d:15c0:828:bafd:1283:b136:5f6a])
+        by smtp.gmail.com with ESMTPSA id k2-20020a056402048200b00501c96564b5sm12457061edv.93.2023.05.02.00.47.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 May 2023 00:47:25 -0700 (PDT)
+Message-ID: <57d2405f-7bd2-0ca3-a119-55b7bf0f36f9@linaro.org>
+Date:   Tue, 2 May 2023 09:47:23 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202305021142.vBYXxxEh-lkp@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v7 7/9] arm64: dts: qcom: sc8280xp: Add multiport
+ controller node for SC8280
+Content-Language: en-US
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
+        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
+        ahalaney@redhat.com, quic_shazhuss@quicinc.com
+References: <20230501143445.3851-1-quic_kriskura@quicinc.com>
+ <20230501143445.3851-8-quic_kriskura@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230501143445.3851-8-quic_kriskura@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 02, 2023 at 11:33:29AM +0800, kernel test robot wrote:
-> Hi Lorenzo,
->
-> kernel test robot noticed the following build warnings:
->
-> [auto build test WARNING on akpm-mm/mm-everything]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Lorenzo-Stoakes/mm-mmap-separate-writenotify-and-dirty-tracking-logic/20230502-071520
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-> patch link:    https://lore.kernel.org/r/dee4f4ad6532b0f94d073da263526de334d5d7e0.1682981880.git.lstoakes%40gmail.com
-> patch subject: [PATCH v6 3/3] mm/gup: disallow FOLL_LONGTERM GUP-fast writing to file-backed mappings
-> config: arm-randconfig-r013-20230502 (https://download.01.org/0day-ci/archive/20230502/202305021142.vBYXxxEh-lkp@intel.com/config)
-> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b1465cd49efcbc114a75220b153f5a055ce7911f)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm cross compiling tool for clang build
->         # apt-get install binutils-arm-linux-gnueabi
->         # https://github.com/intel-lab-lkp/linux/commit/602bb9fab888bd9176b8eeb80a0da68499c343ed
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Lorenzo-Stoakes/mm-mmap-separate-writenotify-and-dirty-tracking-logic/20230502-071520
->         git checkout 602bb9fab888bd9176b8eeb80a0da68499c343ed
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202305021142.vBYXxxEh-lkp@intel.com/
->
-> All warnings (new ones prefixed by >>):
->
-> >> mm/gup.c:114:49: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
->    static bool stabilise_mapping_rcu(struct folio *)
->                                                    ^
->    1 warning generated.
->
->
-> vim +114 mm/gup.c
->
->    108
->    109	static void unlock_rcu(void)
->    110	{
->    111		rcu_read_unlock();
->    112	}
->    113	#else
->  > 114	static bool stabilise_mapping_rcu(struct folio *)
->    115	{
->    116		return true;
->    117	}
->    118
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests
+On 01/05/2023 16:34, Krishna Kurapati wrote:
+> Add USB and DWC3 node for tertiary port of SC8280 along with multiport
+> IRQ's and phy's. This will be used as a base for SA8295P and SA8295-Ride
+> platforms.
+> 
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 64 ++++++++++++++++++++++++++
+>  1 file changed, 64 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> index 8fa9fbfe5d00..0e4fb286956b 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> @@ -3133,6 +3133,70 @@ usb_1_role_switch: endpoint {
+>  			};
+>  		};
+>  
+> +		usb_2: usb@a4f8800 {
 
-Am slightly surprised that's a C2x extension :)
+Nodes are ordered by unit address, more or less.
 
--fix patch attached
+> +			compatible = "qcom,sc8280xp-dwc3-mp", "qcom,dwc3";
+> +			reg = <0 0x0a4f8800 0 0x400>;
+> +			#address-cells = <2>;
+> +			#size-cells = <2>;
+> +			ranges;
+> +
+> +			clocks = <&gcc GCC_CFG_NOC_USB3_MP_AXI_CLK>,
+> +				 <&gcc GCC_USB30_MP_MASTER_CLK>,
+> +				 <&gcc GCC_AGGRE_USB3_MP_AXI_CLK>,
+> +				 <&gcc GCC_USB30_MP_SLEEP_CLK>,
+> +				 <&gcc GCC_USB30_MP_MOCK_UTMI_CLK>,
+> +				 <&gcc GCC_AGGRE_USB_NOC_AXI_CLK>,
+> +				 <&gcc GCC_AGGRE_USB_NOC_NORTH_AXI_CLK>,
+> +				 <&gcc GCC_AGGRE_USB_NOC_SOUTH_AXI_CLK>,
+> +				 <&gcc GCC_SYS_NOC_USB_AXI_CLK>;
+> +			clock-names = "cfg_noc", "core", "iface", "sleep", "mock_utmi",
+> +				      "noc_aggr", "noc_aggr_north", "noc_aggr_south", "noc_sys";
+> +
+> +			assigned-clocks = <&gcc GCC_USB30_MP_MOCK_UTMI_CLK>,
+> +					  <&gcc GCC_USB30_MP_MASTER_CLK>;
+> +			assigned-clock-rates = <19200000>, <200000000>;
+> +
+> +			interrupts-extended = <&pdc 127 IRQ_TYPE_EDGE_RISING>,
+> +						<&pdc 126 IRQ_TYPE_EDGE_RISING>,
+> +						<&pdc 16 IRQ_TYPE_LEVEL_HIGH>,
+> +						<GIC_SPI 130 IRQ_TYPE_LEVEL_HIGH>,
+> +						<GIC_SPI 135 IRQ_TYPE_LEVEL_HIGH>,
+> +						<GIC_SPI 857 IRQ_TYPE_LEVEL_HIGH>,
+> +						<GIC_SPI 856 IRQ_TYPE_LEVEL_HIGH>;
 
-----8<----
-From 829cb87ddd84e4496310b12d26e65de11d5b9e53 Mon Sep 17 00:00:00 2001
-From: Lorenzo Stoakes <lstoakes@gmail.com>
-Date: Tue, 2 May 2023 08:40:48 +0100
-Subject: [PATCH] mm/gup: disallow FOLL_LONGTERM GUP-fast writing to
- file-backed mappings
+Does not look aligned.
 
-Fix compiler warning.
+> +
+> +			interrupt-names = "dp_hs_phy_irq", "dm_hs_phy_irq",
+> +						"ss_phy_irq", "pwr_event_1",
 
-Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
----
- mm/gup.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Does not look aligned.
 
-diff --git a/mm/gup.c b/mm/gup.c
-index 431618048a03..ffc3caf120fc 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -111,7 +111,7 @@ static void unlock_rcu(void)
- 	rcu_read_unlock();
- }
- #else
--static bool stabilise_mapping_rcu(struct folio *)
-+static bool stabilise_mapping_rcu(struct folio *folio)
- {
- 	return true;
- }
---
-2.40.1
+> +						"pwr_event_2", "pwr_event_3",
+> +						"pwr_event_4";
+> +
+> +			power-domains = <&gcc USB30_MP_GDSC>;
+> +
+> +			resets = <&gcc GCC_USB30_MP_BCR>;
+> +
+> +			interconnects = <&aggre1_noc MASTER_USB3_1 0 &mc_virt SLAVE_EBI1 0>,
+> +					<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_USB3_1 0>;
+> +			interconnect-names = "usb-ddr", "apps-usb";
+> +
+> +			required-opps = <&rpmhpd_opp_nom>;
+> +
+
+Please open the DTSI and look how this is organized there. I don't think
+doing this differently - with different order - helps to review.
+required-opps is next to power-domains.
+
+> +			status = "disabled";
+> +
+> +			usb_2_dwc3: usb@a400000 {
+> +				compatible = "snps,dwc3";
+> +				reg = <0 0x0a400000 0 0xcd00>;
+> +				interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
+> +				iommus = <&apps_smmu 0x800 0x0>;
+> +				phys = <&usb_2_hsphy0>, <&usb_2_qmpphy0>,
+> +					<&usb_2_hsphy1>, <&usb_2_qmpphy1>,
+> +					<&usb_2_hsphy2>,
+> +					<&usb_2_hsphy3>;
+> +				phy-names = "usb2-port0", "usb3-port0",
+> +						"usb2-port1", "usb3-port1",
+> +						"usb2-port2",
+> +						"usb2-port3";
+> +			};
+> +		};
+> +
+>  		mdss0: display-subsystem@ae00000 {
+>  			compatible = "qcom,sc8280xp-mdss";
+>  			reg = <0 0x0ae00000 0 0x1000>;
+
+Best regards,
+Krzysztof
+
