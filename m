@@ -2,186 +2,467 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DF276F4607
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 16:24:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D0076F4613
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 16:26:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234292AbjEBOYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 10:24:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41942 "EHLO
+        id S234188AbjEBO0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 10:26:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234072AbjEBOYo (ORCPT
+        with ESMTP id S232885AbjEBO0V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 10:24:44 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 564AB11A;
-        Tue,  2 May 2023 07:24:43 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1aaebed5bd6so20628785ad.1;
-        Tue, 02 May 2023 07:24:43 -0700 (PDT)
+        Tue, 2 May 2023 10:26:21 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BB6C10C7
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 07:26:17 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id 3f1490d57ef6-b9a6f17f2b6so25189478276.1
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 07:26:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683037483; x=1685629483;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s1aeen3ZK+Eot6IC/oOTAkZg5Jx6a7diThkYUUdZei0=;
-        b=o7eV6bV5rpKciv6EIj9ga4Omoc8JiajzV/SXD9s6GTpCIHwLsqIeUrnFZuC+xAIaiW
-         WjEsJu1B2GKv/VlyiP9foiCAZE6F++nD+BWDCHQtjX8GXp25FXxTTDqEhJfEaCmCRZnW
-         r/TojnhdtU1uIxMuMFFOdIT7Ow7MxYnqTZbrKtm4QgaRKGsCrFqUlZThCmVisJrJf8LM
-         /bNVZ2wUIhggAaUQvPy2HmP3xLnCZxM2nh9Oy/B1JiqMdIiCPGs2rAsKMpXcHd+3R9I1
-         ZjnOJ4VKyNowo/00zxs8soF2kfewUpLu4llf08zWCp8MVLdUhOzj6mQ/SdBcj0q0dUoG
-         ml+g==
+        d=linaro.org; s=google; t=1683037576; x=1685629576;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=GJdz+RxMdVbJfQQ04WAtIoaksa7fGjauI7FBWcJ4zT8=;
+        b=fLmmlpOLSHmSSYQvnGknXVafSYdvnSejtO7b6qmBLSMwdCrv6qcQpF5845o8c+DKjX
+         vv//8SLu3umpEJB3dK1YwSFIvXd0jtrkErA7+4ZZB0lJ/q+HGLEpaasCayoRAoxxDKis
+         WCKbeLMWuA/P9N3UaY0yunUz6mFN4OxaOVOQmkQG1Camnu/kGZNnSNK6Eo6gl9FAiW8Y
+         TpWG5klHdTubxGUjJXfMZPsNqgAg2pujVG0O0RZQp6p3PFzcDvamIQtfGTnH7YeGqzNn
+         psm8lP3EKThtuSztfp18zn0CO32ETdf/khXwh+gOmrlYvz/nHWtiOlOKCiC2I3exnfx4
+         wPWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683037483; x=1685629483;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=s1aeen3ZK+Eot6IC/oOTAkZg5Jx6a7diThkYUUdZei0=;
-        b=Vp2KYB/dVQooHRvtO8Cmoq54GsyIemxX5WZAWRDTGMc68kaMwhnuNGoPX44aT3f164
-         S1EHovAn8zb+glJD/iT73jrYOHem6dhdCJsb1/pYIj6wnQ3WJP3jP8INve/bPdR5qhNz
-         L0etZk+4P5tNHF2lU7m5DN5rUBwhjn4n0gmgKzQQP6jSnNv9lw9hNEKm5W2i5FSiBACQ
-         1H3T6TAzfgWv1r/k6OzqhVnZXsXyaIcZTA+qOKD+0GRJukU8fBihYhSOrgFI0shA8812
-         MezhUACyIqj6PX/ZVFnPtkcBBR77OI1tqMLnvjjCBglVJDrQPPisvEnxW5JbcFdXlEhF
-         0t0A==
-X-Gm-Message-State: AC+VfDztUjedFvOFemq5vhf2EG6JFitV6VqzgCUuaXvQk0+eWmSlmDYX
-        4BE4f2wZm3Te0tRC7HqhWo0ot0ldkQLJWQ==
-X-Google-Smtp-Source: ACHHUZ7J8Aas1J2Rc20jnb1KGckFkPjq+j4uXL85mWslpQ5/EpkOpe4cYomHtpe0qtAoy+AsMW7sBg==
-X-Received: by 2002:a17:902:d349:b0:1a9:2823:dad3 with SMTP id l9-20020a170902d34900b001a92823dad3mr18355696plk.42.1683037482638;
-        Tue, 02 May 2023 07:24:42 -0700 (PDT)
-Received: from localhost (118-208-214-188.tpgi.com.au. [118.208.214.188])
-        by smtp.gmail.com with ESMTPSA id x10-20020a170902b40a00b001ab05aaaf8fsm2012505plr.104.2023.05.02.07.24.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 May 2023 07:24:41 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 03 May 2023 00:24:24 +1000
-Message-Id: <CSBUZL6M3MSS.316JRNGXVMLB@wheely>
-Subject: Re: [PATCH] Remove HAVE_VIRT_CPU_ACCOUNTING_GEN option
-From:   "Nicholas Piggin" <npiggin@gmail.com>
-To:     "Palmer Dabbelt" <palmer@dabbelt.com>
-Cc:     "Arnd Bergmann" <arnd@arndb.de>, <linux-arch@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <vgupta@kernel.org>,
-        <linux-snps-arc@lists.infradead.org>, <bcain@quicinc.com>,
-        <linux-hexagon@vger.kernel.org>, <chenhuacai@kernel.org>,
-        <loongarch@lists.linux.dev>, <geert@linux-m68k.org>,
-        <linux-m68k@lists.linux-m68k.org>, <monstr@monstr.eu>,
-        <tsbogend@alpha.franken.de>, <linux-mips@vger.kernel.org>,
-        <dinguyen@kernel.org>, <jonas@southpole.se>,
-        <stefan.kristiansson@saunalahti.fi>, <shorne@gmail.com>,
-        <linux-openrisc@vger.kernel.org>,
-        <James.Bottomley@HansenPartnership.com>, <deller@gmx.de>,
-        <linux-parisc@vger.kernel.org>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        <aou@eecs.berkeley.edu>, <linux-riscv@lists.infradead.org>,
-        <ysato@users.sourceforge.jp>, <dalias@libc.org>,
-        <glaubitz@physik.fu-berlin.de>, <linux-sh@vger.kernel.org>,
-        <davem@davemloft.net>, <sparclinux@vger.kernel.org>,
-        <richard@nod.at>, <anton.ivanov@cambridgegreys.com>,
-        <johannes@sipsolutions.net>, <linux-um@lists.infradead.org>,
-        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
-        <khilman@baylibre.com>, <frederic@kernel.org>
-X-Mailer: aerc 0.14.0
-References: <20230429063348.125544-1-npiggin@gmail.com>
- <mhng-7ec0443b-2201-41b7-996c-78c3a61f0230@palmer-ri-x1c9a>
-In-Reply-To: <mhng-7ec0443b-2201-41b7-996c-78c3a61f0230@palmer-ri-x1c9a>
+        d=1e100.net; s=20221208; t=1683037576; x=1685629576;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GJdz+RxMdVbJfQQ04WAtIoaksa7fGjauI7FBWcJ4zT8=;
+        b=TWJcPPNR9mBVMNfNj8tx6N+lGu2dDj1iETejI9kIckS+iIjoHDxtFYhmYcFKTDJb3Y
+         GHXxgqkgMS7tAuT63HnheX6OYJO+K9rcTG4k4OtUVMlnTiMPOnN87h0xVKBiA0qYVeq2
+         XjVh4ivznvUs8//Z1fHTp7uXk9Z8mKX26m4X2tJZ+0vqpsQPLdz2mIQp1vFOSxc3+gEz
+         m1aKKw0096kuQD9QW2y5sMN7GYJfu4xrooXm1TaFDhnGAgr3HYy7+SjuMCU3/ZFr6JYQ
+         oE5Lq5h3J6UHPCHgPLrsIf4LAZKQlALBrUz/bsLYGaH3bKd/AzTL2OHCX3f0Yexuo8zf
+         UVbg==
+X-Gm-Message-State: AC+VfDzkF1h1zpycBDBxfaEzLhjBsO231qBLIsv9ZxzZ4wDLYEaWbSMt
+        VzbA5ePcql1q3XorlqrjEkCS7S7IdMpLVWPh8/32Ww==
+X-Google-Smtp-Source: ACHHUZ4cOPkpEByei84s84MHYL126xdaDpBoG4kKIuHgRC/VdknKRU8MQ5+5xRLu/hQbcf5g2r09NnYyS7atmgjuQnA=
+X-Received: by 2002:a81:92cf:0:b0:54f:6831:fe08 with SMTP id
+ j198-20020a8192cf000000b0054f6831fe08mr15274102ywg.14.1683037576174; Tue, 02
+ May 2023 07:26:16 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230430-nokia770-regression-v1-0-97704e36b094@linaro.org> <20230430-nokia770-regression-v1-3-97704e36b094@linaro.org>
+In-Reply-To: <20230430-nokia770-regression-v1-3-97704e36b094@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 2 May 2023 16:25:39 +0200
+Message-ID: <CAPDyKFoPa3PZGFBO4njSfEd6H0rdc6KKwPFvE1x6Xx13thKv8g@mail.gmail.com>
+Subject: Re: [PATCH 3/4] ARM/mmc: Convert old mmci-omap to GPIO descriptors
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Helge Deller <deller@gmx.de>, linux-omap@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-mmc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun Apr 30, 2023 at 6:14 AM AEST, Palmer Dabbelt wrote:
-> On Fri, 28 Apr 2023 23:33:48 PDT (-0700), npiggin@gmail.com wrote:
-> > This option was created in commit 554b0004d0ec4 ("vtime: Add
-> > HAVE_VIRT_CPU_ACCOUNTING_GEN Kconfig") for architectures to indicate
-> > they support the 64-bit cputime_t required for VIRT_CPU_ACCOUNTING_GEN.
-> >
-> > The cputime_t type has since been removed, so this doesn't have any
-> > meaning. Remove it.
-> >
-> > Cc: linux-arch@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Cc: Vineet Gupta <vgupta@kernel.org>
-> > Cc: linux-snps-arc@lists.infradead.org
-> > Cc: Brian Cain <bcain@quicinc.com>
-> > Cc: linux-hexagon@vger.kernel.org
-> > Cc: Huacai Chen <chenhuacai@kernel.org>
-> > Cc: loongarch@lists.linux.dev
-> > Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> > Cc: linux-m68k@lists.linux-m68k.org
-> > Cc: Michal Simek <monstr@monstr.eu>
-> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> > Cc: linux-mips@vger.kernel.org
-> > Cc: Dinh Nguyen <dinguyen@kernel.org>
-> > Cc: Jonas Bonn <jonas@southpole.se>
-> > Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
-> > Cc: Stafford Horne <shorne@gmail.com>
-> > Cc: linux-openrisc@vger.kernel.org
-> > Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-> > Cc: Helge Deller <deller@gmx.de>
-> > Cc: linux-parisc@vger.kernel.org
-> > Cc: Paul Walmsley <paul.walmsley@sifive.com>
-> > Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> > Cc: Albert Ou <aou@eecs.berkeley.edu>
-> > Cc: linux-riscv@lists.infradead.org
-> > Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-> > Cc: Rich Felker <dalias@libc.org>
-> > Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-> > Cc: linux-sh@vger.kernel.org
-> > Cc: "David S. Miller" <davem@davemloft.net>
-> > Cc: sparclinux@vger.kernel.org
-> > Cc: Richard Weinberger <richard@nod.at>
-> > Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
-> > Cc: Johannes Berg <johannes@sipsolutions.net>
-> > Cc: linux-um@lists.infradead.org
-> > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > Cc: Ingo Molnar <mingo@redhat.com>
-> > Cc: Borislav Petkov <bp@alien8.de>
-> > Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> > Cc: x86@kernel.org
-> > Cc: "H. Peter Anvin" <hpa@zytor.com>
-> > Cc: Kevin Hilman <khilman@baylibre.com>
-> > Cc: Frederic Weisbecker <frederic@kernel.org>
-> > Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
-> > ---
-> > Hi,
-> >
-> > Could we tidy this? I don't know what tree it can go in, timers,
-> > sched, asm-generic, probably doesn't matter.
-> >
-> > The only thing this actually does is gate VIRT_CPU_ACCOUNTING_GEN and
-> > NO_HZ_FULL so if your arch has some other issue that requires this
-> > then the documentation needs to change. Any concerns from the archs?
-> > I.e., 32-bit that does *not* define HAVE_VIRT_CPU_ACCOUNTING_GEN
-> > which looks to be:
-> >
-> > arc
-> > hexagon
-> > loongarch 32-bit with SMP
-> > m68k
-> > microblaze
-> > mips 32-bit with SMP
-> > nios2
-> > openrisc
-> > parisc 32-bit
-> > riscv 32-bit
+On Sun, 30 Apr 2023 at 11:22, Linus Walleij <linus.walleij@linaro.org> wrote:
 >
-> Nothing's jumping out, though I haven't tested this yet so I'm not 100%. =
-=20
-> I assume this isn't aimed for this merge window, given the timing? =20
-
-No, maybe the next one though.
-
-> Probably best to give this sort of thing time to bake in linux-next, but=
-=20
-> I doubt anyone is even paying attention to rv32/NO_HZ_FULL so no big=20
-> deal either way on my end.
+> A recent change to the OMAP driver making it use a dynamic GPIO
+> base created problems with some old OMAP1 board files, among
+> them Nokia 770, SX1 and also the OMAP2 Nokia n8x0.
 >
-> Acked-by: Palmer Dabbelt <palmer@rivosinc.com> # RISC-V
+> Fix up all instances of GPIOs being used for the MMC driver
+> by pushing the handling of power, slot selection and MMC
+> "cover" into the driver as optional GPIOs.
+>
+> This is maybe not the most perfect solution as the MMC
+> framework have some central handlers for some of the
+> stuff, but it at least makes the situtation better and
+> solves the immediate issue.
+>
+> Fixes: 92bf78b33b0b ("gpio: omap: use dynamic allocation of base")
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 
-Thanks,
-Nick
+This looks like it's best funneled through the soc maintainer's tree(s), right?
+
+Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
+
+Kind regards
+Uffe
+
+> ---
+>  arch/arm/mach-omap1/board-nokia770.c   | 43 ++++++-----------
+>  arch/arm/mach-omap1/board-sx1-mmc.c    |  1 -
+>  arch/arm/mach-omap2/board-n8x0.c       | 85 +++++++++++-----------------------
+>  drivers/mmc/host/omap.c                | 46 +++++++++++++++++-
+>  include/linux/platform_data/mmc-omap.h |  2 -
+>  5 files changed, 83 insertions(+), 94 deletions(-)
+>
+> diff --git a/arch/arm/mach-omap1/board-nokia770.c b/arch/arm/mach-omap1/board-nokia770.c
+> index 509afcd42823..53a4a44d5f4a 100644
+> --- a/arch/arm/mach-omap1/board-nokia770.c
+> +++ b/arch/arm/mach-omap1/board-nokia770.c
+> @@ -162,27 +162,23 @@ static struct omap_usb_config nokia770_usb_config __initdata = {
+>
+>  #if IS_ENABLED(CONFIG_MMC_OMAP)
+>
+> -#define NOKIA770_GPIO_MMC_POWER                41
+> -#define NOKIA770_GPIO_MMC_SWITCH       23
+> -
+> -static int nokia770_mmc_set_power(struct device *dev, int slot, int power_on,
+> -                               int vdd)
+> -{
+> -       gpio_set_value(NOKIA770_GPIO_MMC_POWER, power_on);
+> -       return 0;
+> -}
+> -
+> -static int nokia770_mmc_get_cover_state(struct device *dev, int slot)
+> -{
+> -       return gpio_get_value(NOKIA770_GPIO_MMC_SWITCH);
+> -}
+> +static struct gpiod_lookup_table nokia770_mmc_gpio_table = {
+> +       .dev_id = "mmci-omap",
+> +       .table = {
+> +               /* Slot index 0, VSD power, GPIO 41 */
+> +               GPIO_LOOKUP_IDX("gpio-32-47", 9,
+> +                               "vsd", 0, GPIO_ACTIVE_HIGH),
+> +               /* Slot index 0, switch, GPIO 23 */
+> +               GPIO_LOOKUP_IDX("gpio-16-31", 7,
+> +                               "cover", 0, GPIO_ACTIVE_HIGH),
+> +               { }
+> +       },
+> +};
+>
+>  static struct omap_mmc_platform_data nokia770_mmc2_data = {
+>         .nr_slots                       = 1,
+>         .max_freq                       = 12000000,
+>         .slots[0]       = {
+> -               .set_power              = nokia770_mmc_set_power,
+> -               .get_cover_state        = nokia770_mmc_get_cover_state,
+>                 .ocr_mask               = MMC_VDD_32_33|MMC_VDD_33_34,
+>                 .name                   = "mmcblk",
+>         },
+> @@ -192,20 +188,7 @@ static struct omap_mmc_platform_data *nokia770_mmc_data[OMAP16XX_NR_MMC];
+>
+>  static void __init nokia770_mmc_init(void)
+>  {
+> -       int ret;
+> -
+> -       ret = gpio_request(NOKIA770_GPIO_MMC_POWER, "MMC power");
+> -       if (ret < 0)
+> -               return;
+> -       gpio_direction_output(NOKIA770_GPIO_MMC_POWER, 0);
+> -
+> -       ret = gpio_request(NOKIA770_GPIO_MMC_SWITCH, "MMC cover");
+> -       if (ret < 0) {
+> -               gpio_free(NOKIA770_GPIO_MMC_POWER);
+> -               return;
+> -       }
+> -       gpio_direction_input(NOKIA770_GPIO_MMC_SWITCH);
+> -
+> +       gpiod_add_lookup_table(&nokia770_mmc_gpio_table);
+>         /* Only the second MMC controller is used */
+>         nokia770_mmc_data[1] = &nokia770_mmc2_data;
+>         omap1_init_mmc(nokia770_mmc_data, OMAP16XX_NR_MMC);
+> diff --git a/arch/arm/mach-omap1/board-sx1-mmc.c b/arch/arm/mach-omap1/board-sx1-mmc.c
+> index f1c160924dfe..f183a8448a7b 100644
+> --- a/arch/arm/mach-omap1/board-sx1-mmc.c
+> +++ b/arch/arm/mach-omap1/board-sx1-mmc.c
+> @@ -9,7 +9,6 @@
+>   * Copyright (C) 2007 Instituto Nokia de Tecnologia - INdT
+>   */
+>
+> -#include <linux/gpio.h>
+>  #include <linux/platform_device.h>
+>
+>  #include "hardware.h"
+> diff --git a/arch/arm/mach-omap2/board-n8x0.c b/arch/arm/mach-omap2/board-n8x0.c
+> index 3353b0a923d9..baa2f0341aed 100644
+> --- a/arch/arm/mach-omap2/board-n8x0.c
+> +++ b/arch/arm/mach-omap2/board-n8x0.c
+> @@ -11,6 +11,7 @@
+>  #include <linux/clk.h>
+>  #include <linux/delay.h>
+>  #include <linux/gpio.h>
+> +#include <linux/gpio/machine.h>
+>  #include <linux/init.h>
+>  #include <linux/io.h>
+>  #include <linux/irq.h>
+> @@ -170,22 +171,32 @@ static struct spi_board_info n800_spi_board_info[] __initdata = {
+>   * GPIO23 and GPIO9            slot 2 EMMC on N810
+>   *
+>   */
+> -#define N8X0_SLOT_SWITCH_GPIO  96
+> -#define N810_EMMC_VSD_GPIO     23
+> -#define N810_EMMC_VIO_GPIO     9
+> -
+>  static int slot1_cover_open;
+>  static int slot2_cover_open;
+>  static struct device *mmc_device;
+>
+> -static int n8x0_mmc_switch_slot(struct device *dev, int slot)
+> -{
+> -#ifdef CONFIG_MMC_DEBUG
+> -       dev_dbg(dev, "Choose slot %d\n", slot + 1);
+> -#endif
+> -       gpio_set_value(N8X0_SLOT_SWITCH_GPIO, slot);
+> -       return 0;
+> -}
+> +static struct gpiod_lookup_table nokia8xx_mmc_gpio_table = {
+> +       .dev_id = "mmci-omap",
+> +       .table = {
+> +               /* Slot switch, GPIO 96 */
+> +               GPIO_LOOKUP("gpio-80-111", 16,
+> +                           "switch", GPIO_ACTIVE_HIGH),
+> +               { }
+> +       },
+> +};
+> +
+> +static struct gpiod_lookup_table nokia810_mmc_gpio_table = {
+> +       .dev_id = "mmci-omap",
+> +       .table = {
+> +               /* Slot index 1, VSD power, GPIO 23 */
+> +               GPIO_LOOKUP_IDX("gpio-16-31", 7,
+> +                               "vsd", 1, GPIO_ACTIVE_HIGH),
+> +               /* Slot index 1, VIO power, GPIO 9 */
+> +               GPIO_LOOKUP_IDX("gpio-0-15", 9,
+> +                               "vsd", 1, GPIO_ACTIVE_HIGH),
+> +               { }
+> +       },
+> +};
+>
+>  static int n8x0_mmc_set_power_menelaus(struct device *dev, int slot,
+>                                         int power_on, int vdd)
+> @@ -256,31 +267,13 @@ static int n8x0_mmc_set_power_menelaus(struct device *dev, int slot,
+>         return 0;
+>  }
+>
+> -static void n810_set_power_emmc(struct device *dev,
+> -                                        int power_on)
+> -{
+> -       dev_dbg(dev, "Set EMMC power %s\n", power_on ? "on" : "off");
+> -
+> -       if (power_on) {
+> -               gpio_set_value(N810_EMMC_VSD_GPIO, 1);
+> -               msleep(1);
+> -               gpio_set_value(N810_EMMC_VIO_GPIO, 1);
+> -               msleep(1);
+> -       } else {
+> -               gpio_set_value(N810_EMMC_VIO_GPIO, 0);
+> -               msleep(50);
+> -               gpio_set_value(N810_EMMC_VSD_GPIO, 0);
+> -               msleep(50);
+> -       }
+> -}
+> -
+>  static int n8x0_mmc_set_power(struct device *dev, int slot, int power_on,
+>                               int vdd)
+>  {
+>         if (board_is_n800() || slot == 0)
+>                 return n8x0_mmc_set_power_menelaus(dev, slot, power_on, vdd);
+>
+> -       n810_set_power_emmc(dev, power_on);
+> +       /* The n810 power will be handled by GPIO code in the driver */
+>
+>         return 0;
+>  }
+> @@ -418,13 +411,6 @@ static void n8x0_mmc_shutdown(struct device *dev)
+>  static void n8x0_mmc_cleanup(struct device *dev)
+>  {
+>         menelaus_unregister_mmc_callback();
+> -
+> -       gpio_free(N8X0_SLOT_SWITCH_GPIO);
+> -
+> -       if (board_is_n810()) {
+> -               gpio_free(N810_EMMC_VSD_GPIO);
+> -               gpio_free(N810_EMMC_VIO_GPIO);
+> -       }
+>  }
+>
+>  /*
+> @@ -433,7 +419,6 @@ static void n8x0_mmc_cleanup(struct device *dev)
+>   */
+>  static struct omap_mmc_platform_data mmc1_data = {
+>         .nr_slots                       = 0,
+> -       .switch_slot                    = n8x0_mmc_switch_slot,
+>         .init                           = n8x0_mmc_late_init,
+>         .cleanup                        = n8x0_mmc_cleanup,
+>         .shutdown                       = n8x0_mmc_shutdown,
+> @@ -463,14 +448,9 @@ static struct omap_mmc_platform_data mmc1_data = {
+>
+>  static struct omap_mmc_platform_data *mmc_data[OMAP24XX_NR_MMC];
+>
+> -static struct gpio n810_emmc_gpios[] __initdata = {
+> -       { N810_EMMC_VSD_GPIO, GPIOF_OUT_INIT_LOW,  "MMC slot 2 Vddf" },
+> -       { N810_EMMC_VIO_GPIO, GPIOF_OUT_INIT_LOW,  "MMC slot 2 Vdd"  },
+> -};
+> -
+>  static void __init n8x0_mmc_init(void)
+>  {
+> -       int err;
+> +       gpiod_add_lookup_table(&nokia8xx_mmc_gpio_table);
+>
+>         if (board_is_n810()) {
+>                 mmc1_data.slots[0].name = "external";
+> @@ -483,20 +463,7 @@ static void __init n8x0_mmc_init(void)
+>                  */
+>                 mmc1_data.slots[1].name = "internal";
+>                 mmc1_data.slots[1].ban_openended = 1;
+> -       }
+> -
+> -       err = gpio_request_one(N8X0_SLOT_SWITCH_GPIO, GPIOF_OUT_INIT_LOW,
+> -                              "MMC slot switch");
+> -       if (err)
+> -               return;
+> -
+> -       if (board_is_n810()) {
+> -               err = gpio_request_array(n810_emmc_gpios,
+> -                                        ARRAY_SIZE(n810_emmc_gpios));
+> -               if (err) {
+> -                       gpio_free(N8X0_SLOT_SWITCH_GPIO);
+> -                       return;
+> -               }
+> +               gpiod_add_lookup_table(&nokia810_mmc_gpio_table);
+>         }
+>
+>         mmc1_data.nr_slots = 2;
+> diff --git a/drivers/mmc/host/omap.c b/drivers/mmc/host/omap.c
+> index ce78edfb402b..a14af21f12da 100644
+> --- a/drivers/mmc/host/omap.c
+> +++ b/drivers/mmc/host/omap.c
+> @@ -26,6 +26,7 @@
+>  #include <linux/clk.h>
+>  #include <linux/scatterlist.h>
+>  #include <linux/slab.h>
+> +#include <linux/gpio/consumer.h>
+>  #include <linux/platform_data/mmc-omap.h>
+>
+>
+> @@ -111,6 +112,9 @@ struct mmc_omap_slot {
+>         struct mmc_request      *mrq;
+>         struct mmc_omap_host    *host;
+>         struct mmc_host         *mmc;
+> +       struct gpio_desc        *vsd;
+> +       struct gpio_desc        *vio;
+> +       struct gpio_desc        *cover;
+>         struct omap_mmc_slot_data *pdata;
+>  };
+>
+> @@ -133,6 +137,7 @@ struct mmc_omap_host {
+>         int                     irq;
+>         unsigned char           bus_mode;
+>         unsigned int            reg_shift;
+> +       struct gpio_desc        *slot_switch;
+>
+>         struct work_struct      cmd_abort_work;
+>         unsigned                abort:1;
+> @@ -216,8 +221,13 @@ static void mmc_omap_select_slot(struct mmc_omap_slot *slot, int claimed)
+>
+>         if (host->current_slot != slot) {
+>                 OMAP_MMC_WRITE(host, CON, slot->saved_con & 0xFC00);
+> -               if (host->pdata->switch_slot != NULL)
+> -                       host->pdata->switch_slot(mmc_dev(slot->mmc), slot->id);
+> +               if (host->slot_switch)
+> +                       /*
+> +                        * With two slots and a simple GPIO switch, setting
+> +                        * the GPIO to 0 selects slot ID 0, setting it to 1
+> +                        * selects slot ID 1.
+> +                        */
+> +                       gpiod_set_value(host->slot_switch, slot->id);
+>                 host->current_slot = slot;
+>         }
+>
+> @@ -297,6 +307,9 @@ static void mmc_omap_release_slot(struct mmc_omap_slot *slot, int clk_enabled)
+>  static inline
+>  int mmc_omap_cover_is_open(struct mmc_omap_slot *slot)
+>  {
+> +       /* If we have a GPIO then use that */
+> +       if (slot->cover)
+> +               return gpiod_get_value(slot->cover);
+>         if (slot->pdata->get_cover_state)
+>                 return slot->pdata->get_cover_state(mmc_dev(slot->mmc),
+>                                                     slot->id);
+> @@ -1106,6 +1119,11 @@ static void mmc_omap_set_power(struct mmc_omap_slot *slot, int power_on,
+>
+>         host = slot->host;
+>
+> +       if (slot->vsd)
+> +               gpiod_set_value(slot->vsd, power_on);
+> +       if (slot->vio)
+> +               gpiod_set_value(slot->vio, power_on);
+> +
+>         if (slot->pdata->set_power != NULL)
+>                 slot->pdata->set_power(mmc_dev(slot->mmc), slot->id, power_on,
+>                                         vdd);
+> @@ -1240,6 +1258,23 @@ static int mmc_omap_new_slot(struct mmc_omap_host *host, int id)
+>         slot->power_mode = MMC_POWER_UNDEFINED;
+>         slot->pdata = &host->pdata->slots[id];
+>
+> +       /* Check for some optional GPIO controls */
+> +       slot->vsd = gpiod_get_index_optional(host->dev, "vsd",
+> +                                            id, GPIOD_OUT_LOW);
+> +       if (IS_ERR(slot->vsd))
+> +               return dev_err_probe(host->dev, PTR_ERR(slot->vsd),
+> +                                    "error looking up VSD GPIO\n");
+> +       slot->vio = gpiod_get_index_optional(host->dev, "vio",
+> +                                            id, GPIOD_OUT_LOW);
+> +       if (IS_ERR(slot->vio))
+> +               return dev_err_probe(host->dev, PTR_ERR(slot->vio),
+> +                                    "error looking up VIO GPIO\n");
+> +       slot->cover = gpiod_get_index_optional(host->dev, "cover",
+> +                                               id, GPIOD_IN);
+> +       if (IS_ERR(slot->cover))
+> +               return dev_err_probe(host->dev, PTR_ERR(slot->cover),
+> +                                    "error looking up cover switch GPIO\n");
+> +
+>         host->slots[id] = slot;
+>
+>         mmc->caps = 0;
+> @@ -1349,6 +1384,13 @@ static int mmc_omap_probe(struct platform_device *pdev)
+>         if (IS_ERR(host->virt_base))
+>                 return PTR_ERR(host->virt_base);
+>
+> +       host->slot_switch = gpiod_get_optional(host->dev, "switch",
+> +                                              GPIOD_OUT_LOW);
+> +       if (IS_ERR(host->slot_switch))
+> +               return dev_err_probe(host->dev, PTR_ERR(host->slot_switch),
+> +                                    "error looking up slot switch GPIO\n");
+> +
+> +
+>         INIT_WORK(&host->slot_release_work, mmc_omap_slot_release_work);
+>         INIT_WORK(&host->send_stop_work, mmc_omap_send_stop_work);
+>
+> diff --git a/include/linux/platform_data/mmc-omap.h b/include/linux/platform_data/mmc-omap.h
+> index 91051e9907f3..054d0c3c5ec5 100644
+> --- a/include/linux/platform_data/mmc-omap.h
+> +++ b/include/linux/platform_data/mmc-omap.h
+> @@ -20,8 +20,6 @@ struct omap_mmc_platform_data {
+>          * maximum frequency on the MMC bus */
+>         unsigned int max_freq;
+>
+> -       /* switch the bus to a new slot */
+> -       int (*switch_slot)(struct device *dev, int slot);
+>         /* initialize board-specific MMC functionality, can be NULL if
+>          * not supported */
+>         int (*init)(struct device *dev);
+>
+> --
+> 2.34.1
+>
