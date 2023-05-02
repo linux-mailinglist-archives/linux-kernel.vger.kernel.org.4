@@ -2,138 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 023826F42BB
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 13:26:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97D716F42BF
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 13:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233899AbjEBL0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 07:26:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40008 "EHLO
+        id S233926AbjEBL01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 07:26:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233676AbjEBL0Q (ORCPT
+        with ESMTP id S233286AbjEBL0V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 07:26:16 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB845B87
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 04:25:42 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-2f9b9aa9d75so2179515f8f.0
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 04:25:41 -0700 (PDT)
+        Tue, 2 May 2023 07:26:21 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 004C355B3;
+        Tue,  2 May 2023 04:25:58 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f19afc4f60so21803475e9.1;
+        Tue, 02 May 2023 04:25:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683026740; x=1685618740;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RJzvEROU1I0AevkJiXtddfuqNvgmTpgqOUa6ujqv61M=;
-        b=cnhYBoZ0ai5qnsG00jozYpiSV0m20NYrDDRu32Z19HzBgq92VPvYTwbGdrKoDFMixb
-         XxGbdC0qJmKDt3yzJ7xByueCfaWibMgw46nGOTp8t1thvMjjjBOg4PqLHW6RNyXCMd95
-         KD8O6zs2Huc90j0nRvGyjyrBma9oT7bhB22/14MGpZh4BEALp/jca6Ptghjtg0rjLu0a
-         Zl1D0LRtwT+MI63yjf+aLi8xYy4pae6tiFNV6Vo0cOIKNwzhflW1RENO2VenanJOvNKE
-         9YFcm/QmOFCB/cee0TM6rnqzZt0sB4F5GMRZJptJkRDsB2M/JuEAqbG/W4fqjsJbQOeg
-         29tQ==
+        d=gmail.com; s=20221208; t=1683026756; x=1685618756;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kRs10HvNSyY4aofcI1ZBj0OmWfT5cmFsMr/bJt88upc=;
+        b=XbCA26o8ji4R6knYZSzqsn4arwaV1Ls0n54VsyC3sh0XCRguzgo6WYIfgRd6ISDSt5
+         EBSoA9d4ff6fzLEyt8lDCARZg417MLQF6Cda/Sj/INzQf8UAiKe9xq0jxanbbaCXb5ca
+         ird2BaI1KxOxusUCTot0hGE3b9bTAKbhtLRXrHuQGz9T8uWtgcTXX8dIbFH7KEZ4Kx3x
+         hkafrI1ZIb5hjjqlu7SHj32Whz0HqU8FAWd32BMv5U68yhvj+Y+9qvyWPtF3JeOa0fAk
+         0LZ+VwuYrUAvzeXVUWDYBhwsrMj6iQZb8+GlJtH8P8givV/slC/aXYHm9iipyqYaaUke
+         iRuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683026740; x=1685618740;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RJzvEROU1I0AevkJiXtddfuqNvgmTpgqOUa6ujqv61M=;
-        b=HbxwwOQjBBKn2gt2D8G4XRqD6+MX6cu6pcRBMAqIAE2eYz3KsbN903fQtlgOfUD9hr
-         ss9kdcYLGwDCihhXiZ30Elt+nZtsHByxlbnoMvAu3qfji1leX8rxMoEFoKUfRPcBvMiY
-         AdMLiIpUB/4UJA6Rh8Xj6nu3Nw2NnfCU2aQPD+coGJNnSRaDKcJElyjljGs0NsErA3uA
-         cs2Ga/gEnfG8UhAg7u9NZhypsLp6fi+XqHfnijcv4nOreVgGWEMECiLQdIPI7INCpz5G
-         nH/TI9Q7gphB0mhkmS5wMj3dpsrH4v5wVufEbz3nzHFl1HoevNWMwAn+pvtCG0Fehhh9
-         9jkw==
-X-Gm-Message-State: AC+VfDwQ+F30Vc/FJ7XRSmETruJJTNbRfiD8FhCcS/f2VDaSBZ5eHaaW
-        Q+v/0t1eQmc12Fg0txRtOGNOwd9lPngIV7o0Ng8=
-X-Google-Smtp-Source: ACHHUZ5bdcMzV/x8+C6Jaz9Z7hwcuXWKtcl3BvyOAv1Gy3BkuEWz+IzW81eCe7IMMfMTB444O0YZgQ==
-X-Received: by 2002:a5d:5703:0:b0:306:2c01:4f08 with SMTP id a3-20020a5d5703000000b003062c014f08mr5310520wrv.21.1683026739973;
-        Tue, 02 May 2023 04:25:39 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id f4-20020a0560001b0400b002ffbf2213d4sm30844127wrz.75.2023.05.02.04.25.37
+        d=1e100.net; s=20221208; t=1683026756; x=1685618756;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kRs10HvNSyY4aofcI1ZBj0OmWfT5cmFsMr/bJt88upc=;
+        b=Xdz41b+r+0Qfl0a+GgeimCOSw0dik0TtG4B75On2Q0szcX1w/5bmcL5X6dDYSMcbi7
+         kQM1wKNBkT+dpivHJRvzKjfl1JcJ60w6CMCVTGB+TQ+eG9SM8WbwFEDibmpHJLTpbJMp
+         V83Tl0zFge+hrZLmi+DLhjoM3qu/vAtsQof2vNDJAytkiDEX1aN3CEgAkd/hLGRap3XS
+         1XmrwSDo+IbxNA7SAqvTeUEv39EDxUUbMo7byjbiLVVo5Do+Kaqy3FYXCfLJDH+Ah19e
+         SzycoTi81ov5lQHt4PIr9SUL/ZQrthMNbF5o3kJOcD4RWg7LyVjA7WX1uqxLEVfUVB3G
+         REWw==
+X-Gm-Message-State: AC+VfDwyOgxvqojOFM11FxYpuZN6X1Lufw1MNhDhGNKxqP5XTjORujY/
+        dF6GYzfBg9ULQVXkqww6FgU=
+X-Google-Smtp-Source: ACHHUZ5LhZMn8zC/XVOdRH0O9q5eFynI6mY/ADOayr/C7Ur8HRCDGD1BQqumNxthDJQRB5HwenjdKQ==
+X-Received: by 2002:a5d:544c:0:b0:306:264d:5667 with SMTP id w12-20020a5d544c000000b00306264d5667mr6360015wrv.41.1683026756161;
+        Tue, 02 May 2023 04:25:56 -0700 (PDT)
+Received: from localhost (host86-156-84-164.range86-156.btcentralplus.com. [86.156.84.164])
+        by smtp.gmail.com with ESMTPSA id s4-20020adfeb04000000b003047f7a7ad1sm21455310wrn.71.2023.05.02.04.25.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 May 2023 04:25:38 -0700 (PDT)
-Date:   Tue, 2 May 2023 14:25:34 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     oe-kbuild@lists.linux.dev,
-        John Johansen <john.johansen@canonical.com>
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: security/apparmor/policy_unpack.c:1212 verify_profile() warn: can
- 'rules' even be NULL?
-Message-ID: <b698c4c5-abdf-452b-ba8a-c805ab12a7e1@kili.mountain>
+        Tue, 02 May 2023 04:25:55 -0700 (PDT)
+Date:   Tue, 2 May 2023 12:25:54 +0100
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Mika Penttila <mpenttil@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Theodore Ts'o <tytso@mit.edu>, Peter Xu <peterx@redhat.com>
+Subject: Re: [PATCH v6 3/3] mm/gup: disallow FOLL_LONGTERM GUP-fast writing
+ to file-backed mappings
+Message-ID: <ab66d15a-acd0-4d9b-aa12-49cddd12c6a5@lucifer.local>
+References: <cover.1682981880.git.lstoakes@gmail.com>
+ <dee4f4ad6532b0f94d073da263526de334d5d7e0.1682981880.git.lstoakes@gmail.com>
+ <20230502111334.GP1597476@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230502111334.GP1597476@hirez.programming.kicks-ass.net>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   173ea743bf7a9eef04460e03b00ba267cc52aee2
-commit: 1ad22fcc4d0d2fb2e0f35aed555a86d016d5e590 apparmor: rework profile->rules to be a list
-config: i386-randconfig-m021-20230424 (https://download.01.org/0day-ci/archive/20230425/202304252318.ote3mtCz-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+On Tue, May 02, 2023 at 01:13:34PM +0200, Peter Zijlstra wrote:
+> On Tue, May 02, 2023 at 12:11:49AM +0100, Lorenzo Stoakes wrote:
+> > @@ -95,6 +96,77 @@ static inline struct folio *try_get_folio(struct page *page, int refs)
+> >  	return folio;
+> >  }
+> >
+> > +#ifdef CONFIG_MMU_GATHER_RCU_TABLE_FREE
+> > +static bool stabilise_mapping_rcu(struct folio *folio)
+> > +{
+> > +	struct address_space *mapping = READ_ONCE(folio->mapping);
+> > +
+> > +	rcu_read_lock();
+> > +
+> > +	return mapping == READ_ONCE(folio->mapping);
+>
+> This doesn't make sense; why bother reading the same thing twice?
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <error27@gmail.com>
-| Link: https://lore.kernel.org/r/202304252318.ote3mtCz-lkp@intel.com/
+The intent is to see whether the folio->mapping has been truncated from
+underneath us, as per the futex code that Kirill referred to which does
+something similar [1].
 
-New smatch warnings:
-security/apparmor/policy_unpack.c:1212 verify_profile() warn: can 'rules' even be NULL?
+>
+> Who cares if the thing changes from before; what you care about is that
+> the value you see has stable storage, this doesn't help with that.
+>
+> > +}
+> > +
+> > +static void unlock_rcu(void)
+> > +{
+> > +	rcu_read_unlock();
+> > +}
+> > +#else
+> > +static bool stabilise_mapping_rcu(struct folio *)
+> > +{
+> > +	return true;
+> > +}
+> > +
+> > +static void unlock_rcu(void)
+> > +{
+> > +}
+> > +#endif
+>
+> Anyway, this all can go away. RCU can't progress while you have
+> interrupts disabled anyway.
 
-Old smatch warnings:
-security/apparmor/policy_unpack.c:175 aa_loaddata_kref() warn: can 'd' even be NULL?
-security/apparmor/policy_unpack.c:488 unpack_trans_table() warn: impossible condition '(size > (1 << 24)) => (0-u16max > 16777216)'
-security/apparmor/policy_unpack.c:544 unpack_trans_table() error: uninitialized symbol 'table'.
-security/apparmor/policy_unpack.c:735 unpack_pdb() warn: unsigned 'policy->size' is never less than zero.
-security/apparmor/policy_unpack.c:1081 unpack_profile() warn: passing zero to 'ERR_PTR'
+There seems to be other code in the kernel that assumes that this is not
+the case, i.e. the futex code, though not sure if that's being run with
+IRQs disabled... if not and it's absolutely certain that we need no special
+handling for the RCU case, then happy days and more than glad to remove
+this bit.
 
-vim +/rules +1212 security/apparmor/policy_unpack.c
+I'm far from an expert on RCU (I need to gain a better understanding of it)
+so I'm deferring how best to proceed on _this part_ to the community.
 
-736ec752d95e91 John Johansen 2010-07-29  1208  static int verify_profile(struct aa_profile *profile)
-736ec752d95e91 John Johansen 2010-07-29  1209  {
-1ad22fcc4d0d2f John Johansen 2022-09-05  1210  	struct aa_ruleset *rules = list_first_entry(&profile->rules,
-1ad22fcc4d0d2f John Johansen 2022-09-05  1211  						    typeof(*rules), list);
-1ad22fcc4d0d2f John Johansen 2022-09-05 @1212  	if (!rules)
+>
+> > +/*
+> > + * Used in the GUP-fast path to determine whether a FOLL_PIN | FOLL_LONGTERM |
+> > + * FOLL_WRITE pin is permitted for a specific folio.
+> > + *
+> > + * This assumes the folio is stable and pinned.
+> > + *
+> > + * Writing to pinned file-backed dirty tracked folios is inherently problematic
+> > + * (see comment describing the writeable_file_mapping_allowed() function). We
+> > + * therefore try to avoid the most egregious case of a long-term mapping doing
+> > + * so.
+> > + *
+> > + * This function cannot be as thorough as that one as the VMA is not available
+> > + * in the fast path, so instead we whitelist known good cases.
+> > + *
+> > + * The folio is stable, but the mapping might not be. When truncating for
+> > + * instance, a zap is performed which triggers TLB shootdown. IRQs are disabled
+> > + * so we are safe from an IPI, but some architectures use an RCU lock for this
+> > + * operation, so we acquire an RCU lock to ensure the mapping is stable.
+> > + */
+> > +static bool folio_longterm_write_pin_allowed(struct folio *folio)
+> > +{
+> > +	bool ret;
+> > +
+> > +	/* hugetlb mappings do not require dirty tracking. */
+> > +	if (folio_test_hugetlb(folio))
+> > +		return true;
+> > +
+>
+> This:
+>
+> > +	if (stabilise_mapping_rcu(folio)) {
+> > +		struct address_space *mapping = folio_mapping(folio);
+>
+> And this is 3rd read of folio->mapping, just for giggles?
 
-It's so weird to see these old warnings show up suddenly...  Anyway,
-use list_first_entry_or_null if we expect that the list is empty.
-Otherwise, Oops.
+I like to giggle :)
 
-1ad22fcc4d0d2f John Johansen 2022-09-05  1213  		return 0;
-1ad22fcc4d0d2f John Johansen 2022-09-05  1214  
-1ad22fcc4d0d2f John Johansen 2022-09-05  1215  	if ((rules->file.dfa && !verify_dfa_xindex(rules->file.dfa,
-1ad22fcc4d0d2f John Johansen 2022-09-05  1216  						  rules->file.trans.size)) ||
-1ad22fcc4d0d2f John Johansen 2022-09-05  1217  	    (rules->policy.dfa &&
-1ad22fcc4d0d2f John Johansen 2022-09-05  1218  	     !verify_dfa_xindex(rules->policy.dfa, rules->policy.trans.size))) {
-7572fea31e3e5c John Johansen 2020-11-13  1219  		audit_iface(profile, NULL, NULL,
-7572fea31e3e5c John Johansen 2020-11-13  1220  			    "Unpack: Invalid named transition", NULL, -EPROTO);
-736ec752d95e91 John Johansen 2010-07-29  1221  		return -EPROTO;
-736ec752d95e91 John Johansen 2010-07-29  1222  	}
-736ec752d95e91 John Johansen 2010-07-29  1223  
-1ad22fcc4d0d2f John Johansen 2022-09-05  1224  	if (!verify_perms(&rules->file)) {
-670f31774ab6bf John Johansen 2022-08-26  1225  		audit_iface(profile, NULL, NULL,
-670f31774ab6bf John Johansen 2022-08-26  1226  			    "Unpack: Invalid perm index", NULL, -EPROTO);
-670f31774ab6bf John Johansen 2022-08-26  1227  		return -EPROTO;
-670f31774ab6bf John Johansen 2022-08-26  1228  	}
-1ad22fcc4d0d2f John Johansen 2022-09-05  1229  	if (!verify_perms(&rules->policy)) {
-670f31774ab6bf John Johansen 2022-08-26  1230  		audit_iface(profile, NULL, NULL,
-670f31774ab6bf John Johansen 2022-08-26  1231  			    "Unpack: Invalid perm index", NULL, -EPROTO);
-670f31774ab6bf John Johansen 2022-08-26  1232  		return -EPROTO;
-670f31774ab6bf John Johansen 2022-08-26  1233  	}
-217af7e2f4deb6 John Johansen 2022-07-29  1234  	if (!verify_perms(&profile->attach.xmatch)) {
-670f31774ab6bf John Johansen 2022-08-26  1235  		audit_iface(profile, NULL, NULL,
-670f31774ab6bf John Johansen 2022-08-26  1236  			    "Unpack: Invalid perm index", NULL, -EPROTO);
-670f31774ab6bf John Johansen 2022-08-26  1237  		return -EPROTO;
-670f31774ab6bf John Johansen 2022-08-26  1238  	}
-670f31774ab6bf John Johansen 2022-08-26  1239  
-736ec752d95e91 John Johansen 2010-07-29  1240  	return 0;
-736ec752d95e91 John Johansen 2010-07-29  1241  }
+Actually this is to handle the various cases in which the mapping might not
+be what we want (i.e. have PAGE_MAPPING_FLAGS set) which doesn't appear to
+have a helper exposed for a check. Given previous review about duplication
+I felt best to reuse this even though it does access again... yes I felt
+weird about doing that.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+>
+> > +
+> > +		/*
+> > +		 * Neither anonymous nor shmem-backed folios require
+> > +		 * dirty tracking.
+> > +		 */
+> > +		ret = folio_test_anon(folio) ||
+> > +			(mapping && shmem_mapping(mapping));
+> > +	} else {
+> > +		/* If the mapping is unstable, fallback to the slow path. */
+> > +		ret = false;
+> > +	}
+> > +
+> > +	unlock_rcu();
+> > +
+> > +	return ret;
+>
+> then becomes:
+>
+>
+> 	if (folio_test_anon(folio))
+> 		return true;
 
+This relies on the mapping so belongs below the lockdep assert imo.
+
+>
+> 	/*
+> 	 * Having IRQs disabled (as per GUP-fast) also inhibits RCU
+> 	 * grace periods from making progress, IOW. they imply
+> 	 * rcu_read_lock().
+> 	 */
+> 	lockdep_assert_irqs_disabled();
+>
+> 	/*
+> 	 * Inodes and thus address_space are RCU freed and thus safe to
+> 	 * access at this point.
+> 	 */
+> 	mapping = folio_mapping(folio);
+> 	if (mapping && shmem_mapping(mapping))
+> 		return true;
+>
+> 	return false;
+>
+> > +}
+
+I'm more than happy to do this (I'd rather drop the RCU bits if possible)
+but need to be sure it's safe.
