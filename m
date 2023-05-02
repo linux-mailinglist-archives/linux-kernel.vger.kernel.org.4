@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CED606F4115
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 12:21:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D606D6F412B
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 12:21:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233827AbjEBKVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 06:21:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59190 "EHLO
+        id S233884AbjEBKVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 06:21:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233792AbjEBKUr (ORCPT
+        with ESMTP id S233834AbjEBKVH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 06:20:47 -0400
+        Tue, 2 May 2023 06:21:07 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FE15240
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 03:20:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA985270
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 03:20:57 -0700 (PDT)
 Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <p.zabel@pengutronix.de>)
-        id 1ptn7l-0003el-2Q; Tue, 02 May 2023 12:20:45 +0200
+        id 1ptn7v-0003h8-Jv; Tue, 02 May 2023 12:20:55 +0200
 From:   Philipp Zabel <p.zabel@pengutronix.de>
 To:     linux-kernel@vger.kernel.org
 Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Hal Feng <hal.feng@starfivetech.com>,
         Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH] reset: mpfs: select AUXILIARY_BUS
-Date:   Tue,  2 May 2023 12:20:41 +0200
-Message-Id: <20230502102041.1418397-1-p.zabel@pengutronix.de>
+Subject: [PATCH] reset: starfive: select AUXILIARY_BUS
+Date:   Tue,  2 May 2023 12:20:50 +0200
+Message-Id: <20230502102050.1418417-1-p.zabel@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -47,28 +47,28 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 CONFIG_AUXILIARY_BUS is not a user-visible symbol, replace 'depends on'
 with 'select'.
 
-Cc: Conor Dooley <conor.dooley@microchip.com>
-Cc: Daire McNamara <daire.mcnamara@microchip.com>
+Cc: Emil Renner Berthing <kernel@esmil.dk>
+Cc: Hal Feng <hal.feng@starfivetech.com>
 Suggested-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
 ---
- drivers/reset/Kconfig | 3 ++-
+ drivers/reset/starfive/Kconfig | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
-index 6aa8f243b30c..086cb23debba 100644
---- a/drivers/reset/Kconfig
-+++ b/drivers/reset/Kconfig
-@@ -154,7 +154,8 @@ config RESET_PISTACHIO
+diff --git a/drivers/reset/starfive/Kconfig b/drivers/reset/starfive/Kconfig
+index 1fa706a2c3dc..d832339f61bc 100644
+--- a/drivers/reset/starfive/Kconfig
++++ b/drivers/reset/starfive/Kconfig
+@@ -13,7 +13,8 @@ config RESET_STARFIVE_JH7100
  
- config RESET_POLARFIRE_SOC
- 	bool "Microchip PolarFire SoC (MPFS) Reset Driver"
--	depends on AUXILIARY_BUS && MCHP_CLK_MPFS
-+	depends on MCHP_CLK_MPFS
+ config RESET_STARFIVE_JH7110
+ 	bool "StarFive JH7110 Reset Driver"
+-	depends on AUXILIARY_BUS && CLK_STARFIVE_JH7110_SYS
++	depends on CLK_STARFIVE_JH7110_SYS
 +	select AUXILIARY_BUS
- 	default MCHP_CLK_MPFS
+ 	select RESET_STARFIVE_JH71X0
+ 	default ARCH_STARFIVE
  	help
- 	  This driver supports peripheral reset for the Microchip PolarFire SoC
 -- 
 2.39.2
 
