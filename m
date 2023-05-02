@@ -2,105 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 815366F3BBB
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 03:12:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A84116F3BBE
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 03:16:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231608AbjEBBMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 21:12:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57646 "EHLO
+        id S231799AbjEBBQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 21:16:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232402AbjEBBMt (ORCPT
+        with ESMTP id S232402AbjEBBQJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 21:12:49 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 476703A8B
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 18:12:45 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-24df4ecdb87so1319796a91.0
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 18:12:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682989965; x=1685581965;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=47MTC43+cqs0cncIRVUMCVwlp631DYCAqlKsiStJTh4=;
-        b=27wJElmW7Qf2QnbHUpeOj5uvR8x9QZPbhuU4EN//QC4lhvOx9HUVgfX7TnrnLX4a74
-         QujhUvNJTBK8c9MrL7GvI/8Qk7uug59q0oddpzfP8ekJOuaxhtwjx0mU+0qx7afaf6EX
-         ehQx4NriLqW1Vzz3XLieSX8ZU7EEt+XzvZwZfCxesgtTgw/3tfK672G/EDuE3fcIYoWf
-         pUO1bqyAlJ2wj71hLlMhUSY9SBOv2ymOo8r1m++3CZbQLWdXYaQUK/6UdB34/kdtUZKZ
-         aJq/22k5TzAH/Fq+Z5z+0+x/HyjVzZ991SuKo1R6R4gL6T7f7g2YIKdZsQHSfUdbxLy9
-         z2KQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682989965; x=1685581965;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=47MTC43+cqs0cncIRVUMCVwlp631DYCAqlKsiStJTh4=;
-        b=IoiVuMFVNeWcY9LNCeYD03G4qhTWs+0zKbM2EJCFK1W/EdsEXaBKNY2J70liy2VSho
-         xYfPxgNdq10JyBqgkkBl+GEgEDx3AfXDi4atPXW140XAbXQPJOsJMMnVxsTSWSM2fxkf
-         YvQoqjer1NKZo+ycz4oi9kSgPQ/xml+Q1JfZ2igRjA8SxTdYuUCpOb+HPPU1cpeooLiL
-         cW3VEOuaab4ljR4z8JuvkqMFVHap2k3JeVqVyqGRrqkaGySpA9uqauuZaFjZGNVPCzx3
-         K/zDQI4RXUJptLNlQCbbS4JiQplc5tkAk4U7TDQvW7OVG6LuMGqoYIOBfEj2Krq6aHkL
-         nn4g==
-X-Gm-Message-State: AC+VfDwbedUZCtyEAinwzbI/shj8pqVoDEzUc+Xw7HsQDbcdOdsX+2iW
-        qFbx57HsbG3obDipyaHMg+ETV86+Zc1ZgkeXgN2x6Q==
-X-Google-Smtp-Source: ACHHUZ63MmDcXlqUQU8eyZkTFnid5k643yum7VrgBeVELwK3cTeXsBskvkNr3yGhBKfryeEiik6nw4+nw8x42CwZtMo=
-X-Received: by 2002:a17:90b:4acf:b0:22c:59c3:8694 with SMTP id
- mh15-20020a17090b4acf00b0022c59c38694mr15946312pjb.44.1682989964612; Mon, 01
- May 2023 18:12:44 -0700 (PDT)
+        Mon, 1 May 2023 21:16:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C27A3A9C;
+        Mon,  1 May 2023 18:16:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9731861BFD;
+        Tue,  2 May 2023 01:16:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BA18C433EF;
+        Tue,  2 May 2023 01:16:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682990167;
+        bh=mpizqtC9n7gms+NgcPrguFcPPmQI6Fuzo7V2f0cMDa4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RzXIqAlcvmLbZKzQCurP61KJBmXAQpcTUBtXyghMwpEF613okk/tcfVTZ4vJYyJR2
+         rbbysmSArzN9JXJtwh3s8OxrbOqwxK3ZYh3zztRzCteqa49JDhVxi+f/NJsaV10v9s
+         Xi3XoJnTXZ5caQqMH+9yZvx5Q337twKn9IkyB4X8UFuv978XhuSlKE86iqVGdU1rw2
+         Ik/xirR+8zL08M1yNSRPga+V5JXF15a0D67Xe9yzLOiMMO+yjHGsStmB588WhVR+mX
+         I/lSf9tu3V0b5F8Y/m2yCwM/ljx6lJq4cWRs0jnqGnFyYXWg8YinVwUMpQvff0004J
+         kMH7NDkcRckOw==
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jerry Snitselaar <jsnitsel@redhat.com>
+Subject: [PATCH v2 0/2] Fix TPM 1.2 resume
+Date:   Tue,  2 May 2023 04:15:56 +0300
+Message-Id: <20230502011558.10743-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230406004018.1439952-1-drosen@google.com> <20230406004018.1439952-2-drosen@google.com>
- <CAEf4BzbyX3i6k5eL6D-5enU+u58nVn_fK28zNBJ4w_Vm-+RiMQ@mail.gmail.com> <CAADnVQ+jQG95kVqkajr=zz2-vs24XedEXcBgSx29oAjqUsFn2g@mail.gmail.com>
-In-Reply-To: <CAADnVQ+jQG95kVqkajr=zz2-vs24XedEXcBgSx29oAjqUsFn2g@mail.gmail.com>
-From:   Daniel Rosenberg <drosen@google.com>
-Date:   Mon, 1 May 2023 18:12:33 -0700
-Message-ID: <CA+PiJmST4WUH061KaxJ4kRL=fqy3X6+Wgb2E2rrLT5OYjUzxfQ@mail.gmail.com>
-Subject: Re: [PATCH 1/3] bpf: verifier: Accept dynptr mem as mem in helpers
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Joanne Koong <joannelkoong@gmail.com>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mykola Lysenko <mykolal@fb.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Android Kernel Team <kernel-team@android.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 6, 2023 at 3:13=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> +1
-> All of the DYNPTR_TYPE_FLAG_MASK flags cannot appear in type =3D=3D reg->=
-type
-> here.
-> They are either dynamic flags inside bpf_dynptr_kern->size
-> or in arg_type.
-> Like in bpf_dynptr_from_mem_proto.
+During TPM 1.2 resume, the first PCR read operation used inside
+tpm1_do_selftest() fails. Fix the bugs preventing resume from working.
 
-Looking at this a bit more, I believe this is to enforce packet
-restrictions for DYNPTR_TYPE_SKB and DYNPTR_TYPE_XDP. When a helper
-function alters a packet, dynptr slices of it are invalidated. If I
-remove that annotation entirely, then the invalid_data_slice family of
-tests fail. bpf_dynptr_from_mem_proto is fine since that's just local
-dynptrs, which don't have any extra limitations.
+v2:
+* Added Jerry's reviewed-by's.
+* Rebased to 865fdb08197e ("Merge tag 'input-for-v6.4-rc0' of git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input").
+* Mirrored patches to linux-next.
+
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: Jason A. Donenfeld <Jason@zx2c4.com>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Jerry Snitselaar <jsnitsel@redhat.com>
+
+Link: https://lore.kernel.org/linux-integrity/CS6UJMSTVA4L.FRQ5VL1I1EF4@suppilovahvero/T/#m236d62184229cc035605143fde10933bcde60065
+Jarkko Sakkinen (2):
+  tpm_tis: Use tpm_chip_{start,stop} decoration inside tpm_tis_resume
+  tpm: Prevent hwrng from activating during resume
+
+ drivers/char/tpm/tpm-chip.c      |  4 +++
+ drivers/char/tpm/tpm-interface.c | 10 ++++++++
+ drivers/char/tpm/tpm_tis_core.c  | 43 ++++++++++++++------------------
+ include/linux/tpm.h              |  1 +
+ 4 files changed, 34 insertions(+), 24 deletions(-)
+
+-- 
+2.39.2
+
