@@ -2,167 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 803706F4668
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 16:53:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EA0F6F4677
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 16:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234482AbjEBOxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 10:53:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52970 "EHLO
+        id S234515AbjEBO50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 10:57:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234408AbjEBOxr (ORCPT
+        with ESMTP id S233656AbjEBO5Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 10:53:47 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A870F212A
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 07:53:39 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-b9a6869dd3cso5819689276.2
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 07:53:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683039219; x=1685631219;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rSWq6ufcNwqR6jShOa+WlN0AdC1KgJTfOHM3kYDaQ94=;
-        b=HCGdZE2flZzr2fd2/1VfLcQgo/FYFKRYVlYlVeFe/TanV11z7mDpPPZcWH35L2LT3l
-         kFfthSkyKjxR4rJ5q69WR5yiPVJrVWNG5elEjoJQPdc+l5ByYEo4ZZBJMEEW0HWH2b97
-         2U5AHqBoCyWU5ogrF94ucI754ZFtZlBomCug7v2xfG15bp7MSTu6KbVsVyXaZDbLgpr7
-         3ZHWN5NfjkcsyfMJjnXyiBgX9si5i5XLqlDGKp/EzAjt0+Ath3ntM3kU06RgsrthYvJ6
-         5tuaxo6eWOjGDNzKxjzsmbe521/4ejWLEfNBbpwhpeUlm5KnMfRst5PAnp3KMsf1A2vm
-         G4+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683039219; x=1685631219;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rSWq6ufcNwqR6jShOa+WlN0AdC1KgJTfOHM3kYDaQ94=;
-        b=gjeVlQNsiHOJYvntq9iWIBkh4hxyb/mIYcQp1wG7WjimLb8yCdzntpVYN6hi5l7ncJ
-         JAEVcoOTyt0m9UeIwyPLg7HZCs0VNnVOd7bQdj8W09sg0HssYTSMbt71e06gQKwzSHxM
-         B/u+QilozoTKvjFRoaxAWhPFZmabijHFKoa/rnQj+w0WL4uALHtHZ7cNI+owa1W/T1L1
-         B5xFxB41WtbjJ0Td6uyuufOcwFkhTBVHt+yVEQAl3ljWb+L4CWLPGUrQHTAxYs0aH6A1
-         mUyOdHFF3D5q3cwj8WX6DaCyewn66K/ysKd1Xf4MJKRKljXHad9XQP20bwg47ThTa6gZ
-         4Xmg==
-X-Gm-Message-State: AC+VfDz3gNExxImGVeukIzP/I+v/gdG0XBGarFGOBlkmb9WMpI9x/aLi
-        rAgVQx7cTyjJhYCdudJak1elbtZxb4HTmo6FR3yAPQ==
-X-Google-Smtp-Source: ACHHUZ5jjzC6wz/P4PZED0NI1OnrteBXG7BZ4g1KlIM0VGi6rlDkkbWYK4WpqCmWqpPQ1OXzcDt8w580B52FoeX2Bl4=
-X-Received: by 2002:a25:b31c:0:b0:b9d:a328:1128 with SMTP id
- l28-20020a25b31c000000b00b9da3281128mr12202370ybj.13.1683039218841; Tue, 02
- May 2023 07:53:38 -0700 (PDT)
+        Tue, 2 May 2023 10:57:24 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48D95213B;
+        Tue,  2 May 2023 07:57:23 -0700 (PDT)
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 342Ee516012859;
+        Tue, 2 May 2023 14:54:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=32y/nZeIEZmOi40iSqF/tJSaM/6yk3pyClxTBL1CuRM=;
+ b=pzEkjajBsqQK2aUX4AyPJSGIOPFiAn65gKlCk/dI1aTd9VrKwFHbRV9BZ+5JV9BIYe9c
+ TP5qassSUSpB5UHJ8PgfOd+IQpT/k5BctPPOPd+F3r7/cW51wWM+xdKpfqCaSFizH/0l
+ dt4+trmvVscrWQnQbqHeZb7T1Oa8cWzSkRnY8kvKz4zEkeD31h8xzy8cklCk1Rqqex4A
+ 2BCpqLQODg+LWaFcdxR7tcdJ5VJL6KHipFlBUh8A+UCsiJLRTDhKj/DzJs2ENZPhVg4L
+ Y1bX9wfihMhkVbTTh/eYJi/vA3ZPyKkQe0JdxY/TIFCghNBCM71NTm0bU6wurcJCr+9D SA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qb43shfdh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 02 May 2023 14:54:50 +0000
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 342EomgO020546;
+        Tue, 2 May 2023 14:54:48 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qb43shf8f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 02 May 2023 14:54:48 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 342DWDbf011286;
+        Tue, 2 May 2023 14:54:44 GMT
+Received: from smtprelay02.dal12v.mail.ibm.com ([9.208.130.97])
+        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3q8tv7uskc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 02 May 2023 14:54:44 +0000
+Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
+        by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 342Ese1H23920954
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 2 May 2023 14:54:40 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 76AAD5804E;
+        Tue,  2 May 2023 14:54:40 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DDAD958056;
+        Tue,  2 May 2023 14:54:35 +0000 (GMT)
+Received: from [9.60.89.243] (unknown [9.60.89.243])
+        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Tue,  2 May 2023 14:54:35 +0000 (GMT)
+Message-ID: <3c17e07a-a7f9-18fc-fa99-fa55a5920803@linux.ibm.com>
+Date:   Tue, 2 May 2023 10:54:35 -0400
 MIME-Version: 1.0
-References: <20230323093141.4070840-1-peng.fan@oss.nxp.com>
- <20230323093141.4070840-2-peng.fan@oss.nxp.com> <ZDN00vwyCOzFrDYt@google.com>
- <DU0PR04MB94172C2BBB554E472576B2BA889B9@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <DU0PR04MB9417185EB8243ED2D60A6E43889B9@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <CAPDyKFruZOP65k0SEEmCGtopp8ywJA92ChGZs2ZR=nVxqUC0OQ@mail.gmail.com> <fcfd3b04-ce51-af95-5d94-cc244d75727f@oss.nxp.com>
-In-Reply-To: <fcfd3b04-ce51-af95-5d94-cc244d75727f@oss.nxp.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 2 May 2023 16:53:03 +0200
-Message-ID: <CAPDyKFp0a4QtLL8yE9pPw2DbCKsjB5UyYeuy2rWB=FEfm5+MqQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] input: imx_sc_key: add wakeup support
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Peng Fan <peng.fan@oss.nxp.com>
-Cc:     Peng Fan <peng.fan@nxp.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v6 3/3] mm/gup: disallow FOLL_LONGTERM GUP-fast writing to
+ file-backed mappings
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Mika Penttila <mpenttil@redhat.com>,
+        Dave Chinner <david@fromorbit.com>,
+        "Theodore Ts'o" <tytso@mit.edu>, Peter Xu <peterx@redhat.com>
+References: <7d56b424-ba79-4b21-b02c-c89705533852@lucifer.local>
+ <a6bb0334-9aba-9fd8-6a9a-9d4a931b6da2@linux.ibm.com>
+ <ZFEL20GQdomXGxko@nvidia.com>
+ <c4f790fb-b18a-341a-6965-455163ec06d1@redhat.com>
+ <ZFER5ROgCUyywvfe@nvidia.com>
+ <ce3aa7b9-723c-6ad3-3f03-3f1736e1c253@redhat.com>
+ <ff99f2d8-804d-924f-3c60-b342ffc2173c@linux.ibm.com>
+ <ad60d5d2-cfdf-df9f-aef1-7a0d3facbece@redhat.com>
+ <ZFEVQmFGL3GxZMaf@nvidia.com>
+ <1ffbbfb7-6bca-0ab0-1a96-9ca81d5fa373@redhat.com>
+ <ZFEYblElll3pWtn5@nvidia.com>
+ <f0acd8e4-8df8-dfae-b6b2-30eea3b14609@redhat.com>
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+In-Reply-To: <f0acd8e4-8df8-dfae-b6b2-30eea3b14609@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: CxJFWMTr1AwlmvE516RFOxxqp85_cQ7r
+X-Proofpoint-ORIG-GUID: uXjpuXEqJyPIOFcBwIU_BPTS0bXnzkZb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-02_09,2023-04-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
+ phishscore=0 spamscore=0 clxscore=1015 bulkscore=0 lowpriorityscore=0
+ mlxscore=0 priorityscore=1501 mlxlogscore=842 suspectscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2305020124
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 20 Apr 2023 at 09:54, Peng Fan <peng.fan@oss.nxp.com> wrote:
->
-> Dmitry,Ulf
->
-> On 4/18/2023 4:32 PM, Ulf Hansson wrote:
-> > On Wed, 12 Apr 2023 at 17:58, Peng Fan <peng.fan@nxp.com> wrote:
-> >>
-> >> +Ulf
-> >>
-> >>> Subject: RE: [PATCH 2/2] input: imx_sc_key: add wakeup support
-> >>>
-> >>>> Subject: Re: [PATCH 2/2] input: imx_sc_key: add wakeup support
-> >>>>
-> >>>> On Thu, Mar 23, 2023 at 05:31:41PM +0800, Peng Fan (OSS) wrote:
-> >>>>> From: Peng Fan <peng.fan@nxp.com>
-> >>>>>
-> >>>>> Add support for waking up from system wide suspend.
-> >>>>>
-> >>>>> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> >>>>> ---
-> >>>>>   drivers/input/keyboard/imx_sc_key.c | 2 ++
-> >>>>>   1 file changed, 2 insertions(+)
-> >>>>>
-> >>>>> diff --git a/drivers/input/keyboard/imx_sc_key.c
-> >>>> b/drivers/input/keyboard/imx_sc_key.c
-> >>>>> index d18839f1f4f6..234f23cf9990 100644
-> >>>>> --- a/drivers/input/keyboard/imx_sc_key.c
-> >>>>> +++ b/drivers/input/keyboard/imx_sc_key.c
-> >>>>> @@ -151,6 +151,8 @@ static int imx_sc_key_probe(struct
-> >>>> platform_device *pdev)
-> >>>>>    priv->input = input;
-> >>>>>    platform_set_drvdata(pdev, priv);
-> >>>>>
-> >>>>> + device_init_wakeup(&pdev->dev,
-> >>>> device_property_read_bool(&pdev->dev, "wakeup-source"));
-> >>>>> +
-> >>>>
-> >>>> I wonder - could we move this to the device core?
-> >>>
-> >>> I see lots device drivers parse wakeup-source, so I also follow That. Not sure
-> >>> whether could move this feature to device core, but anyway I could give a
-> >>> try.
-> >>
-> >> Do you think it is feasible to move device_init_wakeup into device core
-> >> part?
-> >
-> > Not sure it would really improve things that much. Subsystems/drivers
-> > need to make additional configurations based upon whether this DT
-> > property is set anyway.
-> >
-> > Perhaps an option is to make this a part of the common input subsystem
-> > helper functions instead? Other subsystems do this, but I am not sure
-> > how feasible that would be in the input case.
->
-> How do you think of below patch?
+On 5/2/23 10:15 AM, David Hildenbrand wrote:
+> On 02.05.23 16:04, Jason Gunthorpe wrote:
+>> On Tue, May 02, 2023 at 03:57:30PM +0200, David Hildenbrand wrote:
+>>> On 02.05.23 15:50, Jason Gunthorpe wrote:
+>>>> On Tue, May 02, 2023 at 03:47:43PM +0200, David Hildenbrand wrote:
+>>>>>> Eventually we want to implement a mechanism where we can dynamically pin in response to RPCIT.
+>>>>>
+>>>>> Okay, so IIRC we'll fail starting the domain early, that's good. And if we
+>>>>> pin all guest memory (instead of small pieces dynamically), there is little
+>>>>> existing use for file-backed RAM in such zPCI configurations (because memory
+>>>>> cannot be reclaimed either way if it's all pinned), so likely there are no
+>>>>> real existing users.
+>>>>
+>>>> Right, this is VFIO, the physical HW can't tolerate not having pinned
+>>>> memory, so something somewhere is always pinning it.
+>>>>
+>>>> Which, again, makes it weird/wrong that this KVM code is pinning it
+>>>> again :\
+>>>
+>>> IIUC, that pinning is not for ordinary IOMMU / KVM memory access. It's for
+>>> passthrough of (adapter) interrupts.
+>>>
+>>> I have to speculate, but I guess for hardware to forward interrupts to the
+>>> VM, it has to pin the special guest memory page that will receive the
+>>> indications, to then configure (interrupt) hardware to target the interrupt
+>>> indications to that special guest page (using a host physical address).
+>>
+>> Either the emulated access is "CPU" based happening through the KVM
+>> page table so it should use mmu_notifier locking.
+>>
+>> Or it is "DMA" and should go through an IOVA through iommufd pinning
+>> and locking.
+>>
+>> There is no other ground, nothing in KVM should be inventing its own
+>> access methodology.
+> 
+> I might be wrong, but this seems to be a bit different.
+> 
+> It cannot tolerate page faults (needs a host physical address), so memory notifiers don't really apply. (as a side note, KVM on s390x does not use mmu notifiers as we know them)
 
-Seems reasonable to me, but I can't really tell if this makes sense
-for all input drivers.
+The host physical address is one shared between underlying firmware and the host kvm.  Either might make changes to the referenced page and then issue an alert to the guest via a mechanism called GISA, giving impetus to the guest to look at that page and process the event.  As you say, firmware can't tolerate the page being unavailable; it's expecting that once we feed it that location it's always available until we remove it (kvm_s390_pci_aif_disable).
 
-Dmitry?
+> 
+> It's kind-of like DMA, but it's not really DMA.  It's the CPU delivering interrupts for a specific device. So we're configuring the interrupt controller I guess to target a guest memory page.
+> 
+> But I have way too little knowledge about zPCI and the code in question here. And if it could be converted to iommufd (and if that's really the right mechanism to use here).
+> 	
+> Hopefully Matthew knows the details and if this really needs to be special :)
 
->
-> diff --git a/drivers/input/input.c b/drivers/input/input.c
-> index 37e876d45eb9..a98a9f37e1f5 100644
-> --- a/drivers/input/input.c
-> +++ b/drivers/input/input.c
-> @@ -2402,6 +2402,10 @@ int input_register_device(struct input_dev *dev)
->                          __func__, dev_name(&dev->dev));
->                  devres_add(dev->dev.parent, devres);
->          }
-> +
-> +       if (device_property_read_bool(input->dev.parent, "wakeup-source"))
-> +               device_init_wakeup(&pdev->dev, true);
-> +
->          return 0;
->
->   err_device_del:
->
+I think I need to have a look at mmu_notifiers to understand that better, but in the end firmware still needs a reliable page to deliver events to.
+ 
 
-Kind regards
-Uffe
