@@ -2,178 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D126F6F4322
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 13:55:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 320956F4321
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 13:55:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234062AbjEBLzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 07:55:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56052 "EHLO
+        id S234052AbjEBLzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 07:55:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234042AbjEBLzR (ORCPT
+        with ESMTP id S229936AbjEBLzQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 07:55:17 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D08E4215
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 04:55:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=dzvpN0+w90EwBz+zdtgyM49dx/7XkY+tOVhNgkIPFxU=; b=CZOAitSoNJncwBVckZd8bEEaYu
-        +8OjWm1Q5lTP+4GbjTFFqts8Ojvbu9JR4QYJ8wAkbRa0S3fQHXuUGBNVCGPxRNQnpr8+3RoZxVaB6
-        c7aZLkYmGJoFVLRchQoi7IO36JdTzpCydFaPQ8PWoyP+e7I3VGi2ugahtGKpDRPpCKRVcMCD8N1Md
-        Jjmv5KtWmb2ot08T8nh06JpZ7hGSo9+zuaB/QB/925/nfMkKAtkuDbP6NgEjqmO3Oa1Uz1Ezm5ftj
-        42kGzuUS/LS1ImL4uuR4wA569dtXqXtPI0Ir8JxAK5hYCMPs5H+KWclt8PiINqK6CINUiZznaaXpr
-        HDcsq8fQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1ptoaE-00GIQD-1N;
-        Tue, 02 May 2023 11:54:14 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 650FC3002BF;
-        Tue,  2 May 2023 13:54:08 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 4A8C923C5C350; Tue,  2 May 2023 13:54:08 +0200 (CEST)
-Date:   Tue, 2 May 2023 13:54:08 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Chen Yu <yu.c.chen@intel.com>
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Tim Chen <tim.c.chen@intel.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
-        Abel Wu <wuyun.abel@bytedance.com>,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
-        Honglei Wang <wanghonglei@didichuxing.com>,
-        Len Brown <len.brown@intel.com>,
-        Chen Yu <yu.chen.surf@gmail.com>,
-        Tianchen Ding <dtcccc@linux.alibaba.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Josh Don <joshdon@google.com>,
-        kernel test robot <yujie.liu@intel.com>,
-        Arjan Van De Ven <arjan.van.de.ven@intel.com>,
-        Aaron Lu <aaron.lu@intel.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 2/2] sched/fair: Introduce SIS_CURRENT to wake up
- short task on current CPU
-Message-ID: <20230502115408.GC1597538@hirez.programming.kicks-ass.net>
-References: <cover.1682661027.git.yu.c.chen@intel.com>
- <4081178486e025c89dbb7cc0e62bbfab95fc794a.1682661027.git.yu.c.chen@intel.com>
- <20230501134827.GB1597538@hirez.programming.kicks-ass.net>
- <ZE/gT7bkmIFkLdkg@chenyu5-mobl1>
-MIME-Version: 1.0
+        Tue, 2 May 2023 07:55:16 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2122.outbound.protection.outlook.com [40.107.244.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D12049C6;
+        Tue,  2 May 2023 04:55:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fN1oYrwfLBKm8xdOQxjCW7WA+Gw1LQxPuHeMEGLWFdZ8OxtKkpMDbpbfz/6s1m/Xj+0Ak8Gvv1WyoELgegfadQ8KFYKsBtkFAQ/bUv0l3WTC5eHRCDEzyvJ7ts+XTxE9JNIXvRXMCwcA1QNIcA+BSq+44Gbq+ywNb3WHZVODadnfWuyiZuC0nJsrXiveFIueEnandmaQpqSOxU7NRr2MzZeaukQH1lmI8EuXbX+hO8UhjHQWXTboX9mBA6o8mPnbRdg9OT+UaMsTN1PAcZf1iMzGDAWjErp8m68ZHACYSZdZ8W1uQ7aGc/4ZCwxKqGuPdnGvDc0S/8EG2f6OScCc2g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LwlhMZ8PSjxyu4YaluINCyOvEuGXA2RcHgQvtuXeaw4=;
+ b=e0CJnDYeUNpveeXZ5ATPk10goCp7ZNobX45aQrKi/lRLcmPfoNtBn+sLSMPbOp/R52L0eDaeh9pra5pKWxlmwV5Bi90nbWXh+sMAPYqHr2Cl32lGVntKkUyb+lPh/asfbOSqvn1jExkNws6ZFpVbiBDUGrPE/RmLvLszoveLREbdllRJeaOvzRCbrIdy6o888fw6K4HB03xhEaChjrmqSu/wkf6MqbxLm5KezEPpUAnBnqS1JyjMnVyv58T7XtfT9+jEtsDjwf3mhk9TahOVTNwYkY0DqZl1pzxTLR/YT6jLpLk8hR5PH6tINvDiJooDw8HTHXOSBFZr2M43Moanpg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LwlhMZ8PSjxyu4YaluINCyOvEuGXA2RcHgQvtuXeaw4=;
+ b=Fr5AudOr8yHD3hXq/G1zuFrsq7Exb9WeoVFzmnK8JVjUtf9vw63OCgggdJB5YjI2UKaVjbkLZLBjRf/u8m/wsjQdKcC8fsS38da7RZ5NVbAXtWfkoaYvnxPmP6r6PBKlVb3Ma1maQ0dY+qnVeuL6FS0SBFjKPF1Wext+4eycNKM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by BLAPR13MB4721.namprd13.prod.outlook.com (2603:10b6:208:327::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.31; Tue, 2 May
+ 2023 11:55:12 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6340.031; Tue, 2 May 2023
+ 11:55:12 +0000
+Date:   Tue, 2 May 2023 13:55:04 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Ratheesh Kannoth <rkannoth@marvell.com>
+Cc:     Sai Krishna Gajula <saikrishnag@marvell.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "leon@kernel.org" <leon@kernel.org>,
+        Sunil Kovvuri Goutham <sgoutham@marvell.com>,
+        Geethasowjanya Akula <gakula@marvell.com>,
+        Linu Cherian <lcherian@marvell.com>,
+        Jerin Jacob Kollanukkaran <jerinj@marvell.com>,
+        Hariprasad Kelam <hkelam@marvell.com>,
+        Subbaraya Sundeep Bhatta <sbhatta@marvell.com>
+Subject: Re: [EXT] Re: [net PATCH v4 09/10] octeontx2-af: Skip PFs if not
+ enabled
+Message-ID: <ZFD6GIS+lrVn4AJs@corigine.com>
+References: <20230426074345.750135-1-saikrishnag@marvell.com>
+ <20230426074345.750135-10-saikrishnag@marvell.com>
+ <ZEj2UYNavsn0xE/D@corigine.com>
+ <MWHPR1801MB1918C1AE94BB287FE29FC76BD36F9@MWHPR1801MB1918.namprd18.prod.outlook.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZE/gT7bkmIFkLdkg@chenyu5-mobl1>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <MWHPR1801MB1918C1AE94BB287FE29FC76BD36F9@MWHPR1801MB1918.namprd18.prod.outlook.com>
+X-ClientProxiedBy: AS4P250CA0006.EURP250.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5df::8) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BLAPR13MB4721:EE_
+X-MS-Office365-Filtering-Correlation-Id: ed00a6b0-738a-42bf-2636-08db4b0415ba
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: yNZZerde+Q/9up11wdkQnKVbB/lEBvRxdDNibVw8wyj/Aza0foET8/urBxCG2Pk/JqWdH9eB4ZO67QuzF/8sUEnAJf96w9H9aX4imi4P7bXUWvFkfqbUQLkIemOenCYtZJgCDSz4u+bTBbMQZMvA+4esJiU+IPPwq31GAXgUBi8PANOdaxBJrIn80insrjJqWtahxUYWYUQIQJlQ0PXU15uLSGbgHtrj0yzHKP4JqW6XlUnpDKqtyZf17zJH9Arx8gBkLpwJRp1sv5e0GkOmNGDkzz+nFOpkvBwcyBs5gXhvb0Eq8egbQExyQYwCbL62+eu3UGBNj/ajjRHJ8gIVRlDkWwMjHBBVMIGKqLJ2Lc4D31s8V9CXLbJbcvSgeImQTjJbCz+nl9RXYUBx/V2YaBavrFKQJGPtZCv+aDj0eZQBjclDiieGkzehmsTvTaNIvA8bZk/LKY7+Ma1GOC5Gib9V91mguYIgA5eK/X60WWWkoA63ekk1crUolJFGyeRxNYriDQgA7km5iOubyzaVT1HxI95So52MVrNJdIUiICT/HXp3ZBBikdzfa79VTGH0jLzwEvhKsmOs2db2XvB2RqC3OvFFRcWI61WyAhsxHg8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(376002)(396003)(39830400003)(366004)(451199021)(38100700002)(478600001)(8936002)(8676002)(86362001)(66946007)(6916009)(66476007)(36756003)(4326008)(66556008)(41300700001)(54906003)(83380400001)(44832011)(7416002)(2906002)(186003)(316002)(53546011)(6506007)(6512007)(2616005)(5660300002)(6666004)(6486002)(67856001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9omMJ/8wIwEQBvb7xuVFrQBhXQ3kwfxz/BalOFdnJEQpeGEuP7WJHWHPGsnt?=
+ =?us-ascii?Q?5ukJ7rvEeCy+c9QwngSvubT1oe1YYCrlsxN44iaYx1+At0IFxllDf7odS32+?=
+ =?us-ascii?Q?Vyam+aT5UE0KHa+PLKa6RtU2QRJI4OTTaZrsCpoVdSYQzC8lQMA/+ltqtpjJ?=
+ =?us-ascii?Q?UX5rxojFlVYpJKxNoyBmie/5jhVcA2CT/rnPdKT2g3Uoy4OTU8ypJSxf3jrs?=
+ =?us-ascii?Q?i9AMJfLpA/P5f+dqnVf/JeVoH/PZauaYpP5OTuFvNa4QrNrYz61ftsYMRO2O?=
+ =?us-ascii?Q?vT8cNHhfhXXLGibiUWOyGrJqFDhhtUqXCmYA9CeEwA/I07w/25SVNXs/L12+?=
+ =?us-ascii?Q?NdLs3hB2u1tLapElNxEGYWQLnEe5FgsHsHNKnnQyhnQf6DRJ2K8qXUnZSW+K?=
+ =?us-ascii?Q?vPYcgdHaQ14mwU7PzKjT4ahyUmKgjYR+c4ROgxlcoS/E4MFcJKlEygrG50Nq?=
+ =?us-ascii?Q?pLu0o3q/2ywRsPbFxLToXQV6v/1sGFj+4zdA4cctMkrmiJ/u49N76jHr7SHh?=
+ =?us-ascii?Q?2FqxsZi+rZyEItMsg/njT61vUZJRuhCONYaaZnPmqp+aXeKYvLlG8eiesVEL?=
+ =?us-ascii?Q?i+NfTJxduB/acDiPYKuLbnWPbNmTg/gn0t8pDtutQBlCKmJwNjcgXV4zbBvI?=
+ =?us-ascii?Q?Jq2h49rGksl8L7bJNE5+Zp7m0S7wFCepVqbv/kOs3cxpGa+DDAKmSHrHzrUS?=
+ =?us-ascii?Q?fQjkLXk1SiNzppWQBwMSAy2P1xaseT496v2fZIuWbQPkzNFLF1UlAvadb98T?=
+ =?us-ascii?Q?xGad657/c3rarP/oVKOrIgYQzu7MDZcwEkcNA3iOjg9vcn01mRpVN+Dch2jn?=
+ =?us-ascii?Q?DZdUsfiARjH+dN5fMjWGSthl+E/2cgJB6Aym7hoZ3XgK0fEKOdmioPbCuUIQ?=
+ =?us-ascii?Q?8j7RQWdM1G1tEfqY8YlqRMwzmCn9WElqjCcIXoALQaVeOZVButzGfeoecteo?=
+ =?us-ascii?Q?LLoF51wTZuM50Wpc9tui1E4fOVMNGimsQV+hys4E+1mtINA2Mlnx50GWb3qg?=
+ =?us-ascii?Q?3GydHUtIhSyNWE10BWgYRZVECmNnvoUXtBw2fjJSmeX3o2R1ZoemMPTLXToT?=
+ =?us-ascii?Q?GgsRQ8O3jC1RrrgOK0kDjoDTgVZcySbTv0qEQVseLxR0ce2oMOKHc70tHZWe?=
+ =?us-ascii?Q?9PFAyam+87PlSAZM5kVYeh7PBkxIzdFIjnThNlUk0KrqxbJ0XJUKg3tFuce9?=
+ =?us-ascii?Q?GbK3pwC1THBJJE+phh0RWKWR5QrUfDMij8mYLq1Nmn0N5JdjQqqrzgIS6hkQ?=
+ =?us-ascii?Q?1HXVAo7xhq8Pan+hvd49V794hgiNmFNAprgIcn/ys8qcButoxoEU3ARv+DPt?=
+ =?us-ascii?Q?f9mRXVi9V93DyJzGUNDXCSJ+hvVAlSjVhHqT6sW82uyHAtGJJo/miXs+Dox/?=
+ =?us-ascii?Q?AFMy+f/5Vm1QT4s12lNZwvar9LqZr/JAU3VH8Fkrzo+gFYRSseFtojSxFtY6?=
+ =?us-ascii?Q?+zXBpP5QhkzGnrsQXyH97turK8yk/iQalczemjTLDTawFs9QK4rYbRvxrpw4?=
+ =?us-ascii?Q?DR+n9gfgYrpnc9aFRuGK/Ki3GJzHYrIQkff+7vEfie88MNaJ+wn1DOQtwVgr?=
+ =?us-ascii?Q?vGJNP3jhKKVKHpkjsc1XqO6JGckKmpazmYzIRbWmVbcypTHBxvc4UyI2SvHU?=
+ =?us-ascii?Q?joaYwPQEidxjngjYXQhldipooX57PMfH0H/iNdi5Jw+Sp3e/4bZ5coH/+/A7?=
+ =?us-ascii?Q?qYxM9A=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ed00a6b0-738a-42bf-2636-08db4b0415ba
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2023 11:55:12.0966
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: gaRMOLeRlYJt5fvnvRYEfR5KULAHfg4Lsmatq1YIlzkr3sxb3NmK756BK6WXoBWOHhkU4t4wDqdvoEQgvPF/IfuL6mF92620kkjD9/BcsF4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR13MB4721
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 01, 2023 at 11:52:47PM +0800, Chen Yu wrote:
-
-> > So,... I've been poking around with this a bit today and I'm not seeing
-> > it. On my ancient IVB-EP (2*10*2) with the code as in
-> > queue/sched/core I get:
+On Tue, May 02, 2023 at 03:10:53AM +0000, Ratheesh Kannoth wrote:
+> Hi Simon,
+> 
+> Thanks for your review. Please find replies inline. 
+> 
+> -Ratheesh
+> 
+> > -----Original Message-----
+> > From: Simon Horman <simon.horman@corigine.com>
+> > Sent: Wednesday, April 26, 2023 3:31 PM
+> > To: Sai Krishna Gajula <saikrishnag@marvell.com>
+> > Cc: davem@davemloft.net; edumazet@google.com; kuba@kernel.org;
+> > pabeni@redhat.com; netdev@vger.kernel.org; linux-
+> > kernel@vger.kernel.org; leon@kernel.org; Sunil Kovvuri Goutham
+> > <sgoutham@marvell.com>; Geethasowjanya Akula <gakula@marvell.com>;
+> > Linu Cherian <lcherian@marvell.com>; Jerin Jacob Kollanukkaran
+> > <jerinj@marvell.com>; Hariprasad Kelam <hkelam@marvell.com>;
+> > Subbaraya Sundeep Bhatta <sbhatta@marvell.com>; Ratheesh Kannoth
+> > <rkannoth@marvell.com>
+> > Subject: [EXT] Re: [net PATCH v4 09/10] octeontx2-af: Skip PFs if not enabled
 > > 
-> > netperf                   NO_SIS_CURRENT          %
-> >                                      SIS_CURRENT
-> > ----------------------- -------------------------------
-> > TCP_SENDFILE-1  : Avg:    42001      40783.4   -2.89898
-> > TCP_SENDFILE-10 : Avg:    37065.1    36604.4   -1.24295
-> > TCP_SENDFILE-20 : Avg:    21004.4    21356.9   1.67822
-> > TCP_SENDFILE-40 : Avg:    7079.93    7231.3    2.13802
-> > TCP_SENDFILE-80 : Avg:    3582.98    3615.85   0.917393
-
-> > TCP_STREAM-1    : Avg:    37134.5    35095.4   -5.49112
-> > TCP_STREAM-10   : Avg:    31260.7    31588.1   1.04732
-> > TCP_STREAM-20   : Avg:    17996.6    17937.4   -0.328951
-> > TCP_STREAM-40   : Avg:    7710.4     7790.62   1.04041
-> > TCP_STREAM-80   : Avg:    2601.51    2903.89   11.6232
-
-> > TCP_RR-1        : Avg:    81167.8    83541.3   2.92419
-> > TCP_RR-10       : Avg:    71123.2    69447.9   -2.35549
-> > TCP_RR-20       : Avg:    50905.4    52157.2   2.45907
-> > TCP_RR-40       : Avg:    46289.2    46350.7   0.13286
-> > TCP_RR-80       : Avg:    22024.4    22229.2   0.929878
-
-> > UDP_RR-1        : Avg:    95997.2    96553.3   0.579288
-> > UDP_RR-10       : Avg:    83878.5    78998.6   -5.81782
-> > UDP_RR-20       : Avg:    61838.8    62926     1.75812
-> > UDP_RR-40       : Avg:    56456.1    57115.2   1.16746
-> > UDP_RR-80       : Avg:    27635.2    27784.8   0.541339
-
-> > UDP_STREAM-1    : Avg:    52808.2    51908.6   -1.70352
-> > UDP_STREAM-10   : Avg:    43115      43561.2   1.03491
-> > UDP_STREAM-20   : Avg:    18798.7    20066     6.74142
-> > UDP_STREAM-40   : Avg:    13070.5    13110.2   0.303737
-> > UDP_STREAM-80   : Avg:    6248.86    6413.09   2.62816
-
-
-> > tbench
-
-> > WA_WEIGHT, WA_BIAS, NO_SIS_CURRENT (aka, mainline)
+> > External Email
 > > 
-> > Throughput  649.46 MB/sec   2 clients   2 procs  max_latency=0.092 ms
-> > Throughput 1370.93 MB/sec   5 clients   5 procs  max_latency=0.140 ms
-> > Throughput 1904.14 MB/sec  10 clients  10 procs  max_latency=0.470 ms
-> > Throughput 2406.15 MB/sec  20 clients  20 procs  max_latency=0.276 ms
-> > Throughput 2419.40 MB/sec  40 clients  40 procs  max_latency=0.414 ms
-> > Throughput 2426.00 MB/sec  80 clients  80 procs  max_latency=1.366 ms
+> > ----------------------------------------------------------------------
+> > On Wed, Apr 26, 2023 at 01:13:44PM +0530, Sai Krishna wrote:
+> > > From: Ratheesh Kannoth <rkannoth@marvell.com>
+> > >
+> > > Fiwmware enables set of PFs and allocate mbox resources based on the
+> > > number of enabled PFs. Current driver tries to initialize the mbox
+> > > resources even for disabled PFs, which may waste the resources.
+> > > This patch fixes the issue by skipping the mbox initialization of
+> > > disabled PFs.
 > > 
-> > WA_WEIGHT, WA_BIAS, SIS_CURRENT (aka, with patches on)
-> > 
-> > Throughput  646.55 MB/sec   2 clients   2 procs  max_latency=0.104 ms
-> > Throughput 1361.06 MB/sec   5 clients   5 procs  max_latency=0.100 ms
-> > Throughput 1889.82 MB/sec  10 clients  10 procs  max_latency=0.154 ms
-> > Throughput 2406.57 MB/sec  20 clients  20 procs  max_latency=3.667 ms
-> > Throughput 2318.00 MB/sec  40 clients  40 procs  max_latency=0.390 ms
-> > Throughput 2384.85 MB/sec  80 clients  80 procs  max_latency=1.371 ms
-> > 
-> > 
-> > So what's going on here? I don't see anything exciting happening at the
-> > 40 mark. At the same time, I can't seem to reproduce Mike's latency pile
-> > up either :/
-> > 
-> Thank you very much for trying this patch. This patch was found to mainly
-> benefit system with large number of CPUs in 1 LLC. Previously I tested
-> it on Sapphire Rapids(2x56C/224T) and Ice Lake Server(2x32C/128T)[1], it
-> seems to have benefit on them. The benefit seems to come from:
-> 1. reducing the waker stacking among many CPUs within 1 LLC
+> > FWIIW, this feels more like an enhancement than a fix to me.
+>
+> [Ratheesh Kannoth] I agree, commit message convey this change as
+> enhancement. But this Code change fixes a crash in driver.  We will
+> modify the commit message as below in next Patchset version.  " Firmware
+> enables PFs and allocate mbox resources for each of the PFs.  Currently
+> PF driver configures mbox resources without checking whether PF is
+> enabled or not. This results in crash. This patch fixes this issue by
+> skipping disabled PF's mbox initialization. "
 
-I should be seeing that at 10 cores per LLC. And when we look at the
-tbench results (never the most stable -- let me run a few more of those)
-it looks like SIS_CURRENT is actually making that worse.
-
-That latency spike at 20 seems stable for me -- and 3ms is rather small,
-I've seen it up to 11ms (but typical in the 4-6 range). This does not
-happen with NO_SIS_CURRENT and is a fairly big point against these
-patches.
-
-> 2. reducing the C2C overhead within 1 LLC
-
-This is due to how L3 became non-inclusive with Skylake? I can't see
-that because I don't have anything that recent :/
-
-> So far I did not received performance difference from LKP on desktop
-> test boxes. Let me queue the full test on some desktops to confirm
-> if this change has any impact on them.
-
-Right, so I've updated my netperf results above to have a relative
-difference between NO_SIS_CURRENT and SIS_CURRENT and I see some losses
-at the low end. For servers that gets compensated at the high end, but
-desktops tend to not get there much.
-
-
+Thanks, much appreciated.
