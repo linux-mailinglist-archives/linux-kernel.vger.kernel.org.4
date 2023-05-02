@@ -2,325 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 750A06F44D4
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 15:13:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDE556F44DD
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 15:15:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234217AbjEBNNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 09:13:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50488 "EHLO
+        id S234037AbjEBNP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 09:15:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233977AbjEBNNd (ORCPT
+        with ESMTP id S230426AbjEBNP1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 09:13:33 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532276A4B
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 06:13:24 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f1728c2a57so37823175e9.0
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 06:13:24 -0700 (PDT)
+        Tue, 2 May 2023 09:15:27 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7F093
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 06:15:26 -0700 (PDT)
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 342AKmx0009007;
+        Tue, 2 May 2023 13:13:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2023-03-30;
+ bh=lLAeP5LWcrcOLm9HYIgsZJ3t6WcQ7r5KhudnE5P6ARg=;
+ b=rBbeR3zQ+AiTaGsFHdRuLFvAQhM+lBwfIE/cIDJXi1fX28jf4hXkVgVad9GH8FjgHDSO
+ hIPjiJdawjzFC3y0wrWR+cjauTcV/VEsx+Si79ZCagn/YeqAz056MAaueVLl0S9v/L1y
+ 4LaDZo92EoA5iHxhw0KT4mfs91bWlflVpkmwS2xYTsaPhqpeLBPcdHNiqOiLfPYTe68J
+ rP7bkL5uZezi+bJJ3sjdriNRwh1j1UTQoT10o5sGx7wXDX+9x20nDdMZ6iGPyPxYg7sO
+ t0b3BVWuYrFEjA4Ad/ghp/rWxLvoGpOn7ilYpjf0C+lIr4EeDL8jBchccK4ySoOqYSGN AQ== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3q8t5fmq5m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 02 May 2023 13:13:21 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 342CmIf1009890;
+        Tue, 2 May 2023 13:13:21 GMT
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2168.outbound.protection.outlook.com [104.47.58.168])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3q8sp67dc5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 02 May 2023 13:13:20 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=C/cT0soyEyjaG7px7rYJ9JD+zieOsanRUKKmD6XIJqCfJNVUqE+5e0Ja8DtBe79ORvOJJD7gFy4daLhuYQn2R0gDiDdB1/7wPOhFlnqB+L6M1fm++TwXaQ99JYumI+TdDEBNu5ASgdq7q6Q6lsvB9Txf7kztWcfOR0Uqvg84dlXWCZyO/l24zpe/51IngUjEwKBaJ2K5RMwUx91Oh8IqVvc27+prNYna6vetOi1yDAEtxjzCPeOinCSjnsSJLPOB2KKcq9AcccrRX2Y94UlwEEc8fXVF7XyWxl2zdCKBvRNKveBRD19Ji9mWQBpTEKE+0JExAzQ5ouokC6E0rYEe8Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lLAeP5LWcrcOLm9HYIgsZJ3t6WcQ7r5KhudnE5P6ARg=;
+ b=Z6ZURbGGpWwOH/B7etMo0VStU3tTKmxqwkGr8Lb/OfdSSr7VgokKr+TbNDGVUL8sHkhbOSXkRqxj8ifhkEimfxgeBghfyBkg9YM8PyaR1dgKd2kCql5Ev511/Cy80+aW8fJtiFzbgi0eCZdfWP5YMqOoLkKTJD5D2VhYzIyT8F4+C9vkFYGhnZDpR36xGf/y27dkagMlMNvGcD0H9rjj2yHRSaX5eTuMYpgn2eCB+wVQOITZ6xJZxdyYr/sGSVEPUpsWCoEaT9XzboTt2UWV0muByjTM0y0KEfi86o63mT9QIt+GvSqL2YC2nE42g0iyyafO5Mr70HguqAkKwh+mUA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1683033202; x=1685625202;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KPuAqu8UmFLStBWTtOYIoUzS/U74OANm4eYADPKV204=;
-        b=Xyl7xnQvZhjARg6e51wsWy63ffv7m8cmBYtafiqDbJkuS7dsXcrP+PVoaKN/1kr2Ug
-         +RZ3ICcBdjO81nZTXTS675WEC8wVCo6PU+idYgNVPPbwxCzKSGvdUWoTW48MTDI0KFyx
-         c4GWX4nwP/yzZEPS2Pj2/1vf6mCVTYjw5IpgRqsyIQaF5vKXLcPMRX1NOpQR2QetL/U3
-         bL66BXpSX9KdzkoJQ4Xrwsd0ugVje+2fYVHmDZ8Z7gfa7mkVJeih9PkhvYgL9qEV2EO2
-         lRBTJn79Qc1dauMRpPtoY025A5ziPnjfdDWnG5HRCmsdCPtGnFq7MRoCoqyKyUou6jd8
-         A0kA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683033202; x=1685625202;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KPuAqu8UmFLStBWTtOYIoUzS/U74OANm4eYADPKV204=;
-        b=M9thuXAFJHRg+jdqLdgccQp+5D8vuhmb1Cg16Hu4bIt2kKkdCe53l4ULk7Rm4Eto1T
-         jmIfY88ZvW7EBhGKHrFL3dC2vZbvQNfaInppOC3/2qWsWd3n1yUFlla9ZfZWtyzMOyTw
-         +9WPnMRBm0gQfNMKz3hELiT8o6hh7K2Ek5OrTbGfr1ij6qiQjf57d6IjHpLHINUONI9T
-         IGR8PJUuPi2bd47qJ+nlQuxYv9iCHTTfg8KCZ+FRjdYKHmRgiJ79HHxYah210CjJnCQb
-         PdJd95MTc748ioJrEr/AjgbPIa7sOeMoE1Njc6zW31MP73MmiGEdLFriyr8jisw8caqF
-         TH6Q==
-X-Gm-Message-State: AC+VfDy2+0XaLt8zfbj93ML4QLm9hPbUDbZAOj3VDyBGnAhAIcMOV+8J
-        xj8akmoSrNjXBViEX2scexFsgaKSma9KMNKVd2aVKA==
-X-Google-Smtp-Source: ACHHUZ5QBk0q33khPWtebjZo1mvkJrpTZT3rTkp/XGw33FJRzT67c/W+HWfxY3Sh6kerK1RmCEK8tkCDF93o5bgbQN4=
-X-Received: by 2002:adf:ea11:0:b0:2f1:e162:d48 with SMTP id
- q17-20020adfea11000000b002f1e1620d48mr11427959wrm.47.1683033202610; Tue, 02
- May 2023 06:13:22 -0700 (PDT)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lLAeP5LWcrcOLm9HYIgsZJ3t6WcQ7r5KhudnE5P6ARg=;
+ b=UDAZMesy+jD/R1PtIL+BHzOa4KDxGCpNT6sn3D1CAg08eFf7Hj6HeW/u+d9oRzaHW9JrDSDM7mveB0sWSfvZtR45cATztC0VWIy6TO7vzBkXiuqu+Evw/1M0r502tHaT1ZS4Ix//pL6JyoRp7NUpZdCPJUIattJRkyQ8f9lRA0w=
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
+ by SJ2PR10MB7670.namprd10.prod.outlook.com (2603:10b6:a03:53b::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.30; Tue, 2 May
+ 2023 13:13:18 +0000
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::8bb9:2bb7:3930:b5da]) by SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::8bb9:2bb7:3930:b5da%7]) with mapi id 15.20.6340.030; Tue, 2 May 2023
+ 13:13:18 +0000
+Date:   Tue, 2 May 2023 09:13:15 -0400
+From:   "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+To:     Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH] mm/mmap/vma_merge: always check invariants
+Message-ID: <20230502131315.fiq3tbc46f4mozum@revolver>
+Mail-Followup-To: "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+References: <df548a6ae3fa135eec3b446eb3dae8eb4227da97.1682885809.git.lstoakes@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <df548a6ae3fa135eec3b446eb3dae8eb4227da97.1682885809.git.lstoakes@gmail.com>
+User-Agent: NeoMutt/20220429
+X-ClientProxiedBy: YT4PR01CA0300.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:10e::25) To SN6PR10MB3022.namprd10.prod.outlook.com
+ (2603:10b6:805:d8::25)
 MIME-Version: 1.0
-References: <00000000000084706805fab08e27@google.com> <CACT4Y+aGfOE7R+LoocX7aW2XObY4aCAsAydwvL+Ni_NUt6JfJA@mail.gmail.com>
- <83578cb3-2528-cfab-21bc-cfeccd8124dd@ghiti.fr> <CACT4Y+ZGsMCqsaV9DQDsTFWH7cCMY9GCtdZTGdVBPqOERPRQzw@mail.gmail.com>
- <CAHVXubiNbmcv=87gkMsUOFvmdKt5i-osvnuuEkju6gMqzwOBVw@mail.gmail.com> <CACT4Y+YBWKdn5tSE5EbcTJ+DfCO4yRLny_6QExhWB8nNXNT2Ww@mail.gmail.com>
-In-Reply-To: <CACT4Y+YBWKdn5tSE5EbcTJ+DfCO4yRLny_6QExhWB8nNXNT2Ww@mail.gmail.com>
-From:   Alexandre Ghiti <alexghiti@rivosinc.com>
-Date:   Tue, 2 May 2023 15:13:11 +0200
-Message-ID: <CAHVXubiYTtDx98E9kRyC8cFVrDPHu88SCGndyj06Eqs55K2cGQ@mail.gmail.com>
-Subject: Re: [syzbot] [fs?] KASAN: stack-out-of-bounds Read in proc_pid_stack
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     Alexandre Ghiti <alex@ghiti.fr>,
-        syzbot <syzbot+01e9a564dc6b3289cea3@syzkaller.appspotmail.com>,
-        brauner@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR10MB3022:EE_|SJ2PR10MB7670:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6f055dbb-8315-43d9-d786-08db4b0eff03
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HoSoCM5q1IanpDhCYWz3xULZNfYaMwYrcCBEA3ADvTr2OVqq5jd8BQAYkG0G6guCreYpmA2Hs2+4EMgaNHCFsFlMYVzpweqSinm8PDKKcCsToRJmqilYjjZlpQuOoB+mozY4TCjk2L5GoshYukM+INxhqOgmZvd4T8v2sSJ0vUsYpaf/aMoeD61WGlUZvoBfbbdZ8ypY7WE7WJgZi7ljEfqrtX091ehP2rLMDxFf8LZ8cfQaj72wPfohwiOtlBQYvkuPY6n97t3Pt+jT53ZkwidYu7yjO+7Uf5lKNeaWwrszJ7c09MCl15p5LKEAwd6283B0FGGHYaUphcqcT4GjcTrhgfqPPUDgWpMJg9ecXowWfnqt1KsB9r1Xi55vI5sGA49NkXJrLxTq2SSQscjD+KBvbQxFxvu2z+yjmUv8u2Rj2qmYoFpPJ2KGZbdTKouOL8Tple9p+qIolM0eqNUXQAVIbdeGkNXeWc9EX4XjMrVrPJIbu5FrwpY7Xx3vbt+25dudJtoUj6YVUKuHmqNWplvcWZn4Q41jID65zBIpLXy1/mkqv0dmSGCs32pyKJBE
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(366004)(396003)(39860400002)(346002)(136003)(376002)(451199021)(5660300002)(8936002)(41300700001)(8676002)(316002)(66556008)(33716001)(86362001)(2906002)(38100700002)(186003)(478600001)(83380400001)(6666004)(26005)(6486002)(6506007)(1076003)(6512007)(9686003)(54906003)(4326008)(66946007)(6916009)(66476007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?x1KB15lstY8Q9tSNTA7Tk5XRldQZlOI7iyjvAOwj5yHgI4Low+YFHZXPvfzq?=
+ =?us-ascii?Q?7F/OOVFbJmUHO5cP5DjPM2Joo9WMZiXB/U1x2g5C6nOiC1yC7DJ6KJOqBSMh?=
+ =?us-ascii?Q?r3c17D64IPCkuY4YtSdVUPPmeurTt9JLVlSuE5uIcLEdjK/P8uizVa0/uwcf?=
+ =?us-ascii?Q?WDM0CtHs8FJTwYiHYED/zKAV7rmw3iKEnyvcAxiaHwRm0nWqNIF0TnqGPF5l?=
+ =?us-ascii?Q?lkidYihYNvLNmPv22OhjFmGP8SL2yrSCeeg4FrUZbJfD4Lfb/GQKppxmv6lx?=
+ =?us-ascii?Q?s78rnkTYS0e2Wj7y9ORJyO1xXR/3F6OStxx4M6/+SyyTIAoUvNp4Yw8At6MG?=
+ =?us-ascii?Q?p1pwdUTJq5UIx9IDN4CW5J/Zt11TM6hqV3H8B1+mlVd17U2dq1+PdpSioYZk?=
+ =?us-ascii?Q?zYuRVozJtU3emw+Y15UukkZ20NA1C05BlahV2t/SiUKdXiaWyCRGZtHnaZki?=
+ =?us-ascii?Q?gaVUocPLNy2b39okU8erQRdszs5ojZHbYjkCsIuUbD6I3TCRAtCXpYMm/yXv?=
+ =?us-ascii?Q?0zhOctkse76V9lcsdJfrUWXK+517JJdTvLBuvNPr6GpBZIpsEJo1tJQ+s7nS?=
+ =?us-ascii?Q?SHop56Smcv39aFlwdCa0x2hJqP5jOXHTZl+zWNUpsDoPdhqEHzih0VjmL4uT?=
+ =?us-ascii?Q?9s9yFj4qqz+j/gjpEHlWjRuQvtED5jxBFebxkfgInGWmfDMOPrkEnfKcx9iK?=
+ =?us-ascii?Q?O50XOl4KNl+xcJJfxVT66czy9g0YMdFAApUJ7NsPIeqDNCBeLlGux0K4BCqc?=
+ =?us-ascii?Q?XGkWCRhiUhb4MObgHinq8Kn/d/bURRSRv2xZM0yxPTfStvYR2IUYWAGyqByL?=
+ =?us-ascii?Q?PHd/WOVJeaHTmnZRryRqfboBPRO+twi29TKjqraQ7KvtRBsrxIfQOwQ63ObG?=
+ =?us-ascii?Q?9pYaCHcnjBrEeizjgHl7TJAaMhh5CnGCVlEP1O/DrLx2n+4ofPHcmCBnyfRm?=
+ =?us-ascii?Q?d/pqe80P2aND1NPMlqybx4vBZ+mNdIQRWiSTecHflje8a26MudV/hNeRZSla?=
+ =?us-ascii?Q?zxARMPRGTbde/1ax6hCmTqspZBj8oUeQ8xtDHaFSnkS723qh+2fEbTgY2knh?=
+ =?us-ascii?Q?Hk6gu1wzUvpBly3IYGMUkZxkj0HGVA4LnuEfciJGNuuX5uE66RtmkHJo5DTs?=
+ =?us-ascii?Q?OcKIHUInJ1lviVZMpX/dzMqENxGmOjHdVjeFPtFTWNE5dpm/YC89ahFdPfWW?=
+ =?us-ascii?Q?R76Q7/2qX4KRNUi4YE7WBs7QSSumBuXkQfOkpZXtt9fyjmhc3U/oU/BgKKEN?=
+ =?us-ascii?Q?Z1XLCDcKAElJ6EOuZCuqPJAMIvnyzonRBcYzu2LHCIjiGLx5fM3EP7itR4bn?=
+ =?us-ascii?Q?TFeMhubf7ppOpUQV1piThmXQQvHecFU2ojxpyNcNRR03QVDlSU68LiFVqaYj?=
+ =?us-ascii?Q?6m2GWDT1jwKuzZwfxb6KVsGcYe+0V7IMLJ/35U/IaonWGF+wdp8LYbLSO21w?=
+ =?us-ascii?Q?E1EA2zsz3Fa48cMtI1djEgjZmCtEnZQ8kEHIW0+noE6hdMw3J76NERgXS1eq?=
+ =?us-ascii?Q?0Y7rBlZaoxqNoyNoamyV1z0Ywsl2/YFzjfJZGeNGEG8HGWg31QWXqXtFqouC?=
+ =?us-ascii?Q?VXlMTs7tRlebLWu9OOW5KosaiYsXRAOrj3Wj7bw2pg65G+xLOLu273M+5SKI?=
+ =?us-ascii?Q?fw=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: TkeXA1rRWaFSnm2Gk4PNdOA6OqPf/TBsNwnZ4buAUwkaxCauHQSM/RI/fy425DY6PPQB1zPFOW4FAFx92ajTJ7XQGIsAN4nIhwbLL8ChcZBap2wGtJW8n1yMfgVPhpTrPp83BquNhjT9rhzU5NWb+Uv7VaqmscYgYcRFY31nVxwKRO7qOvTHuBXxE8v2faEh0UITsjjTDhpzjgC7L9L/s/A9qUpU1BvTD9Pf1N+w7oUeoSrd5T9d3aAgBF/2V6f5rzNWHkAO7ckW8WDr+ZoXUp4isZ/+mFxKTDaA4bAMyjuIq7Ki8hvchprLZQhYnV8Pe3IWDk6/kupOSAkCMhXWk08b7OB3DxFrXoe8AFft+60DcorrBKGcHGiYKCehlmMRVEBgju+dMM6LLp5VbzeOgwbGotFwo6qPL+nvJlu3MC8q5tXfxsyrXNju2G7jod4CH5m9Z46jymsTrAiaty08ZOEG+E+s1Skm49dtYuabJArWHv2hL/8UiEH1xyZXLqZMxRfZKCiofMuQ+VaIlmn5swXo7C61N1JUZH4ZeL1u57uF+5Y2+TCXlkVQ6Ocg7Oam2cj5d7nZA1lsrBLw9ubzM2Ai/1q9VzGUHXFTnTLHCk61Grg7FOPBLIRDzycwnb8ulH+GSGtyhD1ky3dCiaHkNd0Oa8ytcCFnNm9EqKrO1LJd6qAdMhCfjRtpj/m9Hy38R4bym7wjFHs9NCrCesF9Po0n2m0BKOWJfpl9ep1ownsO9QI0JyFGW4p8g2q+Sk8uzo92qeVzkPeaT1FTOzyw1gfkSc9Ifg0+/NLfskyqbHhTQpnO5UuX/gO1Zey0TJMidMzFOrIc5Znt8exKi0C3gyoRQNKqtWSj54qGLziFy+wg9OwjTxqcrt7A3bImi8b0UnIBjR4NmO7jI4PSoVR1NQ==
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6f055dbb-8315-43d9-d786-08db4b0eff03
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2023 13:13:18.4962
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ZCEIA/GL0CjSQk3i4XljeKE+ZwMitsUJTAI/a0VgqEJLkhTCfA3/3lC+J3awUR4/uEI08brl5HPIKHm7rAOT9g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR10MB7670
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-02_08,2023-04-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0 spamscore=0
+ mlxlogscore=785 bulkscore=0 suspectscore=0 mlxscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2305020112
+X-Proofpoint-GUID: Hk52TNFhTj1_furpYO21hhI4PzNWE20G
+X-Proofpoint-ORIG-GUID: Hk52TNFhTj1_furpYO21hhI4PzNWE20G
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 2, 2023 at 2:50=E2=80=AFPM Dmitry Vyukov <dvyukov@google.com> w=
-rote:
->
-> On Tue, 2 May 2023 at 14:46, Alexandre Ghiti <alexghiti@rivosinc.com> wro=
-te:
-> > > > On 5/2/23 09:15, Dmitry Vyukov wrote:
-> > > > > On Tue, 2 May 2023 at 09:05, syzbot
-> > > > > <syzbot+01e9a564dc6b3289cea3@syzkaller.appspotmail.com> wrote:
-> > > > >> Hello,
-> > > > >>
-> > > > >> syzbot found the following issue on:
-> > > > >>
-> > > > >> HEAD commit:    950b879b7f02 riscv: Fixup race condition on PG_d=
-cache_clea..
-> > > > >> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/ri=
-scv/linux.git fixes
-> > > > >> console output: https://syzkaller.appspot.com/x/log.txt?x=3D10c4=
-c1f7c80000
-> > > > >> kernel config:  https://syzkaller.appspot.com/x/.config?x=3Deceb=
-ece1b90c0342
-> > > > >> dashboard link: https://syzkaller.appspot.com/bug?extid=3D01e9a5=
-64dc6b3289cea3
-> > > > >> compiler:       riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 2=
-0210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > > > >> userspace arch: riscv64
-> > > > >>
-> > > > >> Unfortunately, I don't have any reproducer for this issue yet.
-> > > > >>
-> > > > >> IMPORTANT: if you fix the issue, please add the following tag to=
- the commit:
-> > > > >> Reported-by: syzbot+01e9a564dc6b3289cea3@syzkaller.appspotmail.c=
-om
-> > > > >>
-> > > > >> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > > > >> BUG: KASAN: stack-out-of-bounds in walk_stackframe+0x128/0x2fe a=
-rch/riscv/kernel/stacktrace.c:58
-> > > > >> Read of size 8 at addr ff200000030a79b0 by task syz-executor.1/7=
-894
-> > > > >>
-> > > > >> CPU: 0 PID: 7894 Comm: syz-executor.1 Tainted: G        W       =
-   6.2.0-rc1-syzkaller #0
-> > > > >> Hardware name: riscv-virtio,qemu (DT)
-> > > > >> Call Trace:
-> > > > >> [<ffffffff8000b9ea>] dump_backtrace+0x2e/0x3c arch/riscv/kernel/=
-stacktrace.c:121
-> > > > >> [<ffffffff83402b96>] show_stack+0x34/0x40 arch/riscv/kernel/stac=
-ktrace.c:127
-> > > > >> [<ffffffff83442726>] __dump_stack lib/dump_stack.c:88 [inline]
-> > > > >> [<ffffffff83442726>] dump_stack_lvl+0xe0/0x14c lib/dump_stack.c:=
-106
-> > > > >> [<ffffffff83409674>] print_address_description mm/kasan/report.c=
-:306 [inline]
-> > > > >> [<ffffffff83409674>] print_report+0x1e4/0x4c0 mm/kasan/report.c:=
-417
-> > > > >> [<ffffffff804ead14>] kasan_report+0xb8/0xe6 mm/kasan/report.c:51=
-7
-> > > > >> [<ffffffff804ebea4>] check_region_inline mm/kasan/generic.c:183 =
-[inline]
-> > > > >> [<ffffffff804ebea4>] __asan_load8+0x7e/0xa6 mm/kasan/generic.c:2=
-56
-> > > > >> [<ffffffff8000b782>] walk_stackframe+0x128/0x2fe arch/riscv/kern=
-el/stacktrace.c:58
-> > > > > +riscv maintainers
-> > > > >
-> > > > > I think this is an issue in riscv stack walking.
-> > > > > If it's imprecise or walks stacks of running tasks, it needs to u=
-se
-> > > > > READ_ONCE_NOCHECK.
-> > > > >
-> > > > > #syz set subsystems: riscv
-> > > >
-> > > >
-> > > > This fix was merged in 6.3: commit 76950340cf03 ("riscv: Use
-> > > > READ_ONCE_NOCHECK in imprecise unwinding stack mode").
-> > >
-> > > Oh, I see, syzbot riscv build is still broken due to:
-> > > https://syzkaller.appspot.com/bug?id=3D502e4cca2c3c985c2125ffa945b8e6=
-36b7b100d7
-> >
-> > The fix for that was merged in 6.3-rc2 too (commit 2d311f480b52
-> > ("riscv, bpf: Fix patch_text implicit declaration")): but the fixes
-> > branch is still based on top of Linux 6.3-rc1 (Aleksandr mentioned
-> > that already).
->
-> Is riscv-fixes the right branch to test?
-> Is there one that is updated regularly?
-> syzbot generally requires a fresh tree. Provided there are dozens of
-> bugs being found and fixed every week, if a tree becomes too old, it
-> just produces already fixed bugs that waste time.
+* Lorenzo Stoakes <lstoakes@gmail.com> [230430 16:19]:
+> We may still have inconsistent input parameters even if we choose not to
+> merge and the vma_merge() invariant checks are useful for checking this
+> with no production runtime cost (these are only relevant when
+> CONFIG_DEBUG_VM is specified).
+> 
+> Therefore, perform these checks regardless of whether we merge.
+> 
+> This is relevant, as a recent issue (addressed in commit "mm/mempolicy:
+> Correctly update prev when policy is equal on mbind") in the mbind logic
+> was only picked up in the 6.2.y stable branch where these assertions are
+> performed prior to determining mergeability.
+> 
+> Had this remained the same in mainline this issue may have been picked up
+> faster, so moving forward let's always check them.
+> 
+> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
 
-I would say that testing only the latest rcX is the best bet for us as
-the fixes branch always lags on rc1, but @Palmer/@Conor may have
-another opinion.
+Reviewed-by: Liam R. Howlett <Liam.Howlett@oracle.com>
 
->
-> https://lore.kernel.org/all/00000000000049382505ebef4a0c@google.com/T/#md=
-2075a04dd463fefe31f73e098672a69d948a1ce
-> >
-> > That's weird, I think this one was merged in v6.1-rc2 (commit
-> > 5c20a3a9df19 ("RISC-V: Fix compilation without RISCV_ISA_ZICBOM")).
-> >
-> > >
-> > > so it still tests an older build.
-> >
-> > FYI, the latest fixes for KASAN were merged in 6.4 (or are about to).
-> >
-> > Thanks,
-> >
-> > Alex
-> >
-> > >
-> > > #syz fix:
-> > > riscv: Use READ_ONCE_NOCHECK in imprecise unwinding stack mode
-> > >
-> > > > >> [<ffffffff8000bc66>] arch_stack_walk+0x2c/0x3c arch/riscv/kernel=
-/stacktrace.c:154
-> > > > >> [<ffffffff80190822>] stack_trace_save_tsk+0x14a/0x1bc kernel/sta=
-cktrace.c:150
-> > > > >> [<ffffffff80697822>] proc_pid_stack+0x146/0x1ee fs/proc/base.c:4=
-56
-> > > > >> [<ffffffff80698bb0>] proc_single_show+0x9c/0x148 fs/proc/base.c:=
-777
-> > > > >> [<ffffffff805af580>] traverse.part.0+0x74/0x2ca fs/seq_file.c:11=
-1
-> > > > >> [<ffffffff805aff02>] traverse fs/seq_file.c:101 [inline]
-> > > > >> [<ffffffff805aff02>] seq_read_iter+0x72c/0x934 fs/seq_file.c:195
-> > > > >> [<ffffffff805b0224>] seq_read+0x11a/0x16e fs/seq_file.c:162
-> > > > >> [<ffffffff805453ea>] do_loop_readv_writev fs/read_write.c:756 [i=
-nline]
-> > > > >> [<ffffffff805453ea>] do_loop_readv_writev fs/read_write.c:743 [i=
-nline]
-> > > > >> [<ffffffff805453ea>] do_iter_read+0x324/0x3c2 fs/read_write.c:79=
-8
-> > > > >> [<ffffffff805455f8>] vfs_readv+0xfe/0x166 fs/read_write.c:916
-> > > > >> [<ffffffff80549c66>] do_preadv fs/read_write.c:1008 [inline]
-> > > > >> [<ffffffff80549c66>] __do_sys_preadv fs/read_write.c:1058 [inlin=
-e]
-> > > > >> [<ffffffff80549c66>] sys_preadv+0x182/0x1fa fs/read_write.c:1053
-> > > > >> [<ffffffff80005ff6>] ret_from_syscall+0x0/0x2
-> > > > >>
-> > > > >> The buggy address belongs to the virtual mapping at
-> > > > >>   [ff200000030a0000, ff200000030a9000) created by:
-> > > > >>   kernel_clone+0xee/0x914 kernel/fork.c:2681
-> > > > >>
-> > > > >> The buggy address belongs to the physical page:
-> > > > >> page:ff1c0000024e5f00 refcount:1 mapcount:0 mapping:000000000000=
-0000 index:0x0 pfn:0x9397c
-> > > > >> memcg:ff6000000ffd7202
-> > > > >> flags: 0xffe000000000000(node=3D0|zone=3D0|lastcpupid=3D0x7ff)
-> > > > >> raw: 0ffe000000000000 0000000000000000 0000000000000122 00000000=
-00000000
-> > > > >> raw: 0000000000000000 0000000000000000 00000001ffffffff ff600000=
-0ffd7202
-> > > > >> page dumped because: kasan: bad access detected
-> > > > >> page_owner tracks the page as allocated
-> > > > >> page last allocated via order 0, migratetype Unmovable, gfp_mask=
- 0x102dc2(GFP_HIGHUSER|__GFP_NOWARN|__GFP_ZERO), pid 7873, tgid 7873 (syz-e=
-xecutor.1), ts 4012100669800, free_ts 4010400733200
-> > > > >>   __set_page_owner+0x32/0x182 mm/page_owner.c:190
-> > > > >>   set_page_owner include/linux/page_owner.h:31 [inline]
-> > > > >>   post_alloc_hook+0xf8/0x11a mm/page_alloc.c:2524
-> > > > >>   prep_new_page mm/page_alloc.c:2531 [inline]
-> > > > >>   get_page_from_freelist+0xc0e/0x1118 mm/page_alloc.c:4283
-> > > > >>   __alloc_pages+0x1b0/0x165a mm/page_alloc.c:5549
-> > > > >>   alloc_pages+0x132/0x25e mm/mempolicy.c:2286
-> > > > >>   vm_area_alloc_pages mm/vmalloc.c:2989 [inline]
-> > > > >>   __vmalloc_area_node mm/vmalloc.c:3057 [inline]
-> > > > >>   __vmalloc_node_range+0x81c/0xdb4 mm/vmalloc.c:3227
-> > > > >>   alloc_thread_stack_node kernel/fork.c:311 [inline]
-> > > > >>   dup_task_struct kernel/fork.c:987 [inline]
-> > > > >>   copy_process+0x210e/0x4068 kernel/fork.c:2097
-> > > > >>   kernel_clone+0xee/0x914 kernel/fork.c:2681
-> > > > >>   __do_sys_clone+0xec/0x120 kernel/fork.c:2822
-> > > > >>   sys_clone+0x32/0x44 kernel/fork.c:2790
-> > > > >>   ret_from_syscall+0x0/0x2
-> > > > >> page last free stack trace:
-> > > > >>   __reset_page_owner+0x4a/0xf8 mm/page_owner.c:148
-> > > > >>   reset_page_owner include/linux/page_owner.h:24 [inline]
-> > > > >>   free_pages_prepare mm/page_alloc.c:1446 [inline]
-> > > > >>   free_pcp_prepare+0x254/0x48e mm/page_alloc.c:1496
-> > > > >>   free_unref_page_prepare mm/page_alloc.c:3369 [inline]
-> > > > >>   free_unref_page_list+0x11e/0x736 mm/page_alloc.c:3510
-> > > > >>   release_pages+0x85a/0xbb2 mm/swap.c:1076
-> > > > >>   free_pages_and_swap_cache+0x76/0x88 mm/swap_state.c:311
-> > > > >>   tlb_batch_pages_flush+0x86/0x10c mm/mmu_gather.c:97
-> > > > >>   tlb_flush_mmu_free mm/mmu_gather.c:292 [inline]
-> > > > >>   tlb_flush_mmu mm/mmu_gather.c:299 [inline]
-> > > > >>   tlb_finish_mmu+0xcc/0x280 mm/mmu_gather.c:391
-> > > > >>   exit_mmap+0x190/0x686 mm/mmap.c:3096
-> > > > >>   __mmput+0x98/0x290 kernel/fork.c:1207
-> > > > >>   mmput+0x74/0x88 kernel/fork.c:1229
-> > > > >>   exit_mm kernel/exit.c:563 [inline]
-> > > > >>   do_exit+0x602/0x17be kernel/exit.c:854
-> > > > >>   do_group_exit+0x8e/0x15e kernel/exit.c:1012
-> > > > >>   __do_sys_exit_group kernel/exit.c:1023 [inline]
-> > > > >>   __wake_up_parent+0x0/0x4a kernel/exit.c:1021
-> > > > >>   ret_from_syscall+0x0/0x2
-> > > > >>
-> > > > >> Memory state around the buggy address:
-> > > > >>   ff200000030a7880: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00=
- 00
-> > > > >>   ff200000030a7900: 00 00 00 00 00 00 00 00 f1 f1 f1 f1 00 00 f2=
- f2
-> > > > >>> ff200000030a7980: 00 00 00 f3 f3 f3 f3 f3 00 00 00 00 00 00 00 =
-00
-> > > > >>                                       ^
-> > > > >>   ff200000030a7a00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00=
- 00
-> > > > >>   ff200000030a7a80: 00 00 00 00 00 00 00 00 00 00 00 00 f1 f1 f1=
- f1
-> > > > >> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > > > >>
-> > > > >>
-> > > > >> ---
-> > > > >> This report is generated by a bot. It may contain errors.
-> > > > >> See https://goo.gl/tpsmEJ for more information about syzbot.
-> > > > >> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> > > > >>
-> > > > >> syzbot will keep track of this issue. See:
-> > > > >> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> > > > >>
-> > > > >> If the bug is already fixed, let syzbot know by replying with:
-> > > > >> #syz fix: exact-commit-title
-> > > > >>
-> > > > >> If you want to change bug's subsystems, reply with:
-> > > > >> #syz set subsystems: new-subsystem
-> > > > >> (See the list of subsystem names on the web dashboard)
-> > > > >>
-> > > > >> If the bug is a duplicate of another bug, reply with:
-> > > > >> #syz dup: exact-subject-of-another-report
-> > > > >>
-> > > > >> If you want to undo deduplication, reply with:
-> > > > >> #syz undup
-> > > > >>
-> > > > >> --
-> > > > >> You received this message because you are subscribed to the Goog=
-le Groups "syzkaller-bugs" group.
-> > > > >> To unsubscribe from this group and stop receiving emails from it=
-, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> > > > >> To view this discussion on the web visit https://groups.google.c=
-om/d/msgid/syzkaller-bugs/00000000000084706805fab08e27%40google.com.
-> > > > > _______________________________________________
-> > > > > linux-riscv mailing list
-> > > > > linux-riscv@lists.infradead.org
-> > > > > http://lists.infradead.org/mailman/listinfo/linux-riscv
+> ---
+>  mm/mmap.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/mm/mmap.c b/mm/mmap.c
+> index 5522130ae606..13678edaa22c 100644
+> --- a/mm/mmap.c
+> +++ b/mm/mmap.c
+> @@ -960,17 +960,17 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
+>  		merge_next = true;
+>  	}
+>  
+> +	/* Verify some invariant that must be enforced by the caller. */
+> +	VM_WARN_ON(prev && addr <= prev->vm_start);
+> +	VM_WARN_ON(curr && (addr != curr->vm_start || end > curr->vm_end));
+> +	VM_WARN_ON(addr >= end);
+> +
+>  	if (!merge_prev && !merge_next)
+>  		return NULL; /* Not mergeable. */
+>  
+>  	res = vma = prev;
+>  	remove = remove2 = adjust = NULL;
+>  
+> -	/* Verify some invariant that must be enforced by the caller. */
+> -	VM_WARN_ON(prev && addr <= prev->vm_start);
+> -	VM_WARN_ON(curr && (addr != curr->vm_start || end > curr->vm_end));
+> -	VM_WARN_ON(addr >= end);
+> -
+>  	/* Can we merge both the predecessor and the successor? */
+>  	if (merge_prev && merge_next &&
+>  	    is_mergeable_anon_vma(prev->anon_vma, next->anon_vma, NULL)) {
+> -- 
+> 2.40.1
+> 
