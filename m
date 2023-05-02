@@ -2,227 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F5726F3DBF
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 08:49:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C38666F3DBE
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 08:49:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233541AbjEBGtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 02:49:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53560 "EHLO
+        id S233621AbjEBGtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 02:49:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233545AbjEBGtp (ORCPT
+        with ESMTP id S233439AbjEBGto (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 02:49:45 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24AD7FE
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 23:49:43 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4efea87c578so1012e87.1
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 23:49:43 -0700 (PDT)
+        Tue, 2 May 2023 02:49:44 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433641A6;
+        Mon,  1 May 2023 23:49:43 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id 98e67ed59e1d1-24e2bbec3d5so193054a91.3;
+        Mon, 01 May 2023 23:49:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683010181; x=1685602181;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tcwqORhs3tyDWF48bL9fAbbUN7pV9jcTVJGJFepysVM=;
-        b=pfWDPNCCjFcIfahJv/gbAFwSjqPq4bPSOJ0Rgi6oneMqGErIlSNUyMfDm0/C8hzV0S
-         GIyDV+DgcM9jHhps4PYCq+dUMbaxfC7rVGzXkYsxnicvji0jPmLVkweAVQ+B2vNIQbY4
-         yTYj7UErqqbEiT0tUIh56+LlQNFoEzxZa5+v/rOm6z4FZF+KInhnC6UZB1Qg3zZQo3Eh
-         1D5cMet62k76jg88Nm+zjskkf2cDBu22RiojS5Te13sMYrxXFUdfIvpSVzwhbvkwMT8l
-         IM0tXoqcY4PNT3beheAb8HPqbIj9yBaP1g3Szo4qQ+R7dfzoRFvHDbGKl50uqhMt3nW6
-         I9Vw==
+        d=gmail.com; s=20221208; t=1683010182; x=1685602182;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yr1OMD7GQzrwg0jgDUJeq8+KPoArZtCkfJLUdDH22rA=;
+        b=RlCy7AObH1tppBffuhwTrxyaD8caRZi0L5Gi9f0M+/nXAdB0xmwzM7KCQ2CLWRUcL3
+         dSGq1cWgzFWr7iCl9aJzPbcyY5KBP0CGru9xzTxGzXaeEgJljmEvlvu8xa5QkZBsPPRH
+         LyAeZj0e5c6e2eD/xGg4/2UBjQvu0EzeRgiIG+BE+4zpPFjVObyWe7YqhcBiBhS8UM+W
+         0UceYyxaNgFSvgfDdBiQtFzFWhzH9GQmrnyScXqEYW6+ZiTyvb+uAyJ0EKuSYhWAl39i
+         PpHcO4PlPMdT/6lbY+EA94GdrVZYjhQ3SZW5aERA1hslJ1dXTryItJ8rHYp9iE76PVWl
+         PhcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683010181; x=1685602181;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tcwqORhs3tyDWF48bL9fAbbUN7pV9jcTVJGJFepysVM=;
-        b=TcNnEpM8/kr2ffLatiRWnru7+Cfs8zOEN8/o7xla7wTl5W5rJU4Z3tCuiTb9w2VNKl
-         HNLFOQH+AoPoxxnFGp2mvivY5tG0h19hJvy9urml9BEx7M9rg4eKycL1yLVPugoDfwas
-         okpIIq+CY9lnhx+q7w5W/ZQ1GASL8dI9M2UqT1/kVVSwqNafyqzJzGm863OclOAVh3C/
-         Y6cta+HVASRIwINAouUosWB+7+Rrm1l5F9xBQxQYj1YKhxFUbCWu8riWv/PTrmpfBED5
-         AhL0AQc5WTq/iwQOBAkpTTxQmIjGPcRGhKWOn1ocDAD+hjppgq40o1HP1KEmlRIfAgWd
-         uK8A==
-X-Gm-Message-State: AC+VfDyKfn+rvpy/oxJwQwPrhpB28jiKYHKdoTRBHkOImWizronw1vWP
-        mPgcaSk6EGyzRC1bJM04T8n8TkgoA6b8InHxBY1QVg==
-X-Google-Smtp-Source: ACHHUZ4PdMBmZ55IKlcXYQt35Fct44ayM6Qpkype+JiCkjyt9JFocQKJgENsm9Ai41S+OozjI+fL9FTdDQwO6D8lq+8=
-X-Received: by 2002:a05:6512:3f03:b0:4e8:3f1e:de43 with SMTP id
- y3-20020a0565123f0300b004e83f1ede43mr99368lfa.7.1683010180732; Mon, 01 May
- 2023 23:49:40 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683010182; x=1685602182;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yr1OMD7GQzrwg0jgDUJeq8+KPoArZtCkfJLUdDH22rA=;
+        b=HGsYv8iieU/OOP8JAZBAv6f2KZAAy3PWTiJaqObpERnh9jxq7eD3LwJL+TSLbp+2E3
+         ANLKLvNfi7GTCOHQrhsLkPDZxdR8IY/3rBeq+MQnOymAt7FKGAzpg0hs6T09rHfDmVR4
+         nLMKIJ9z5x0l2kuUwptgTnY/m1sZ37y6bFvvjab1A2QrlfZKWSa2GzltvU4xayx+BKER
+         hwUNB09YJmD2Z2mIM/i0w2yRtGrIJ6yLJTM2354dmmgTckwS0F6kmd2CpJoQbTWk3U6A
+         m9ZM5KnDAfpYedUX9Tndq+5lc3si3q67N3W6iBnH4PK+7H/0uuVl9RXAl4jLtJDuQfdJ
+         UjXA==
+X-Gm-Message-State: AC+VfDzZCukppeIufw1EbrJAampLYmd3K1DPGAdbp9DgSiZlAQ9nT6wf
+        twrTrIwFA1fDthW09eU7AZs=
+X-Google-Smtp-Source: ACHHUZ6XaWHhFMAf1i83OTvD8IMgN9ZoYaaWoKrS3XVm8v4KVP16y9uSFcoFpVYaidUFpF9ALsuanA==
+X-Received: by 2002:a17:90a:bb0f:b0:249:842d:312f with SMTP id u15-20020a17090abb0f00b00249842d312fmr16495568pjr.4.1683010182438;
+        Mon, 01 May 2023 23:49:42 -0700 (PDT)
+Received: from [172.19.1.47] (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
+        by smtp.gmail.com with ESMTPSA id a7-20020a170902ecc700b00194c90ca320sm2417826plh.204.2023.05.01.23.49.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 01 May 2023 23:49:42 -0700 (PDT)
+Message-ID: <6da2239a-32e7-c8c0-6be9-55f11b66ca1b@gmail.com>
+Date:   Tue, 2 May 2023 14:49:37 +0800
 MIME-Version: 1.0
-References: <00000000000025a04405fa6c69a0@google.com>
-In-Reply-To: <00000000000025a04405fa6c69a0@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 2 May 2023 08:49:27 +0200
-Message-ID: <CACT4Y+Z8UdWZprJt7pRUf0PRipcEYMrDhFeSKQvKpAbT6jGaVw@mail.gmail.com>
-Subject: Re: [syzbot] upstream boot error: Internal error in corrupted
-To:     syzbot <syzbot+b94704ab726aaea4a3a3@syzkaller.appspotmail.com>
-Cc:     linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v8 05/11] dt-bindings: arm: Add initial bindings for
+ Nuvoton platform
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lee@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, tmaimon77@gmail.com, catalin.marinas@arm.com,
+        will@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-serial@vger.kernel.org, arnd@arndb.de, schung@nuvoton.com,
+        mjchen@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
+References: <20230425102418.185783-1-ychuang570808@gmail.com>
+ <20230425102418.185783-6-ychuang570808@gmail.com>
+ <2b79021d-3793-5f2d-8659-5d0d8fc78017@linaro.org>
+ <ded0c68a-e0b3-b106-e24d-7d9087c6ca4c@gmail.com>
+ <34d70271-ff07-aea8-bcb7-81d39a55167c@linaro.org>
+ <10ee47df-df1f-5c44-7d2b-d367ab7a6f29@gmail.com>
+ <8d3e330a-8478-2087-3e37-65c1f7767ee7@linaro.org>
+From:   Jacky Huang <ychuang570808@gmail.com>
+In-Reply-To: <8d3e330a-8478-2087-3e37-65c1f7767ee7@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 28 Apr 2023 at 23:46, syzbot
-<syzbot+b94704ab726aaea4a3a3@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    6e98b09da931 Merge tag 'net-next-6.4' of git://git.kernel=
-...
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=3D1305324028000=
-0
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D5d0e7ab221001=
-b97
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3Db94704ab726aaea=
-4a3a3
-> compiler:       arm-linux-gnueabi-gcc (Debian 10.2.1-6) 10.2.1 20210110, =
-GNU ld (GNU Binutils for Debian) 2.35.2
-> userspace arch: arm
->
-> IMPORTANT: if you fix the issue, please add the following tag to the comm=
-it:
-> Reported-by: syzbot+b94704ab726aaea4a3a3@syzkaller.appspotmail.com
+Dear Krzysztof,
 
-+arm mailing list
 
-Kernel started falling apart on arm during boot in various strange ways.
+On 2023/5/2 下午 02:46, Krzysztof Kozlowski wrote:
+> On 02/05/2023 08:40, Jacky Huang wrote:
+>> Dear Krzysztof,
+>>
+>>
+>>
+>> On 2023/5/2 下午 02:31, Krzysztof Kozlowski wrote:
+>>> On 02/05/2023 03:31, Jacky Huang wrote:
+>>>> Dear Krzysztof,
+>>>>
+>>>>
+>>>> On 2023/5/1 下午 05:50, Krzysztof Kozlowski wrote:
+>>>>> On 25/04/2023 12:24, Jacky Huang wrote:
+>>>>>> From: Jacky Huang <ychuang3@nuvoton.com>
+>>>>>>
+>>>>>> Move 'nuvoton,npcm-gcr.yaml' from 'arm/npcm' to 'soc/nuvoton'.
+>>>>>> Rename the '/arm/npcm' directory to 'arm/nuvoton'. Additionally, add
+>>>>>> bindings for ARMv8-based Nuvoton SoCs and platform boards, and include
+>>>>>> the initial bindings for ma35d1 series development boards.
+>>>>>>
+>>>>>> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
+>>>>>> ---
+>>>>>>     .../bindings/arm/nuvoton/nuvoton,ma35d1.yaml  | 30 +++++++++++++++++++
+>>>>>>     .../npcm.yaml => nuvoton/nuvoton,npcm.yaml}   |  2 +-
+>>>>>>     .../nuvoton/nuvoton,npcm-gcr.yaml}            |  2 +-
+>>>>>>     3 files changed, 32 insertions(+), 2 deletions(-)
+>>>>>>     create mode 100644 Documentation/devicetree/bindings/arm/nuvoton/nuvoton,ma35d1.yaml
+>>>>> I don't see any improvements here. Path in maintainers is still broken.
+>>>>>
+>>>>> Best regards,
+>>>>> Krzysztof
+>>>>>
+>>>> Does this line cover
+>>>> 'Documentation/devicetree/bindings/arm/nuvoton/nuvoton,ma35d1.yaml'?
+>>>> ==>  F:    Documentation/devicetree/bindings/*/*/*ma35*
+>>>>
+>>>> I ran 'get_maintainer.pl' on this patch, and it was able to find
+>>>> maintainers and looked good.
+>>>> I also ran 'make htmldocs' and did not see any warnings or errors
+>>>> related to the .yaml files
+>>>> in this patch. However, I am still unsure where the problem lies. Can
+>>>> you suggest any
+>>>> tools I can use to check for errors? I would greatly appreciate any
+>>>> guidance you can provide.
+>>> Apply the patches 1 to 5 and then check if all paths from maintainers
+>>> are correct. I believe the path
+>>> Documentation/devicetree/bindings/arm/npcm/ is not.
+>>>
+>>> I think I told the same last time with explanation that this patch must
+>>> correct path.
+>>>
+>>> Best regards,
+>>> Krzysztof
+>>>
+>> Okay, I think I should combine the patch 11 (for MAINTAINER)  into patch 5.
+> I don't know what's there. The path which is changed (invalidated) here,
+> should be updated here.
+>
+> Best regards,
+> Krzysztof
+>
 
-#syz set subsystems: arm
+I got it and learn the rule. Thank you very much.
+I will fix it.
 
-> Initmem setup node 0 [mem 0x0000000080000000-0x00000000ffffffff]
-> percpu: Embedded 18 pages/cpu s44168 r8192 d21368 u73728
-> Built 1 zonelists, mobility grouping on.  Total pages: 520868
-> Kernel command line: root=3D/dev/vda console=3DttyAMA0  earlyprintk=3Dser=
-ial net.ifnames=3D0 sysctl.kernel.hung_task_all_cpu_backtrace=3D1 ima_polic=
-y=3Dtcb nf-conntrack-ftp.ports=3D20000 nf-conntrack-tftp.ports=3D20000 nf-c=
-onntrack-sip.ports=3D20000 nf-conntrack-irc.ports=3D20000 nf-conntrack-sane=
-.ports=3D20000 binder.debug_mask=3D0 rcupdate.rcu_expedited=3D1 rcupdate.rc=
-u_cpu_stall_cputime=3D1 no_hash_pointers page_owner=3Don sysctl.vm.nr_hugep=
-ages=3D4 sysctl.vm.nr_overcommit_hugepages=3D4 secretmem.enable=3D1 sysctl.=
-max_rcu_stall_to_panic=3D1 msr.allow_writes=3Doff coredump_filter=3D0xffff =
-root=3D/dev/vda console=3DttyAMA0 vmalloc=3D512M smp.csd_lock_timeout=3D300=
-000 watchdog_thresh=3D165 workqueue.watchdog_thresh=3D420 sysctl.net.core.n=
-etdev_unregister_timeout_secs=3D420 dummy_hcd.num=3D2 panic_on_warn=3D1
-> Unknown kernel command line parameters "earlyprintk=3Dserial page_owner=
-=3Don", will be passed to user space.
-> Dentry cache hash table entries: 262144 (order: 8, 1048576 bytes, linear)
-> Inode-cache hash table entries: 131072 (order: 7, 524288 bytes, linear)
-> allocated 2097152 bytes of page_ext
-> mem auto-init: stack:off, heap alloc:on, heap free:off
-> software IO TLB: area num 2.
-> software IO TLB: mapped [mem 0x00000000d9a49000-0x00000000dda49000] (64MB=
-)
-> Memory: 1954376K/2097152K available (22528K kernel code, 2360K rwdata, 83=
-80K rodata, 2048K init, 868K bss, 126392K reserved, 16384K cma-reserved, 52=
-4288K highmem)
-> SLUB: HWalign=3D64, Order=3D0-3, MinObjects=3D0, CPUs=3D2, Nodes=3D1
-> trace event string verifier disabled
-> rcu: Preemptible hierarchical RCU implementation.
-> rcu:    RCU restricting CPUs from NR_CPUS=3D8 to nr_cpu_ids=3D2.
-> rcu:    RCU callback double-/use-after-free debug is enabled.
->         All grace periods are expedited (rcu_expedited).
->         Trampoline variant of Tasks RCU enabled.
->         Tracing variant of Tasks RCU enabled.
-> rcu: RCU calculated value of scheduler-enlistment delay is 10 jiffies.
-> rcu: Adjusting geometry for rcu_fanout_leaf=3D16, nr_cpu_ids=3D2
-> NR_IRQS: 16, nr_irqs: 16, preallocated irqs: 16
-> GIC physical location is 0x2c001000
-> rcu: srcu_init: Setting srcu_struct sizes based on contention.
-> sched_clock: 32 bits at 24MHz, resolution 41ns, wraps every 89478484971ns
-> clocksource: arm,sp804: mask: 0xffffffff max_cycles: 0xffffffff, max_idle=
-_ns: 1911260446275 ns
-> arch_timer: cp15 timer(s) running at 62.50MHz (virt).
-> clocksource: arch_sys_counter: mask: 0x1ffffffffffffff max_cycles: 0x1cd4=
-2e208c, max_idle_ns: 881590405314 ns
-> sched_clock: 57 bits at 63MHz, resolution 16ns, wraps every 4398046511096=
-ns
-> Switching to timer-based delay loop, resolution 16ns
-> Console: colour dummy device 80x30
-> Calibrating delay loop (skipped), value calculated using timer frequency.=
-. 125.00 BogoMIPS (lpj=3D625000)
-> pid_max: default: 32768 minimum: 301
-> LSM: initializing lsm=3Dlockdown,capability,landlock,yama,safesetid,tomoy=
-o,selinux,bpf,integrity
-> landlock: Up and running.
-> Yama: becoming mindful.
-> TOMOYO Linux initialized
-> SELinux:  Initializing.
-> LSM support for eBPF active
-> stackdepot: allocating hash table of 131072 entries via kvcalloc
-> Mount-cache hash table entries: 4096 (order: 2, 16384 bytes, linear)
-> Mountpoint-cache hash table entries: 4096 (order: 2, 16384 bytes, linear)
-> CPU: Testing write buffer coherency: ok
-> CPU0: Spectre BHB: enabling loop workaround for all CPUs
-> CPU1: thread -1, cpu 1, socket 0, mpidr 80000001
-> Insufficient stack space to handle exception!
-> Task stack:     [0xdf85c000..0xdf85e000]
-> IRQ stack:      [0xdf804000..0xdf806000]
-> Overflow stack: [0x82a14000..0x82a15000]
-> Internal error: kernel stack overflow: 0 [#1] PREEMPT SMP ARM
-> Modules linked in:
-> CPU: 1 PID: 0 Comm: swapper/1 Not tainted 6.3.0-syzkaller #0
-> Hardware name: ARM-Versatile Express
-> PC is at 0x0
-> LR is at debug_smp_processor_id+0x20/0x24 lib/smp_processor_id.c:60
-> pc : [<00000000>]    lr : [<817ec4c8>]    psr: 20000193
-> sp : 00000000  ip : df805f80  fp : 00000000
-> r10: 825e0afd  r9 : 828fb980  r8 : 00000000
-> r7 : 00000000  r6 : 00000000  r5 : 00000000  r4 : 00000000
-> r3 : 00000001  r2 : 817eb958  r1 : 81d982d4  r0 : 00000001
-> Flags: nzCv  IRQs off  FIQs on  Mode SVC_32  ISA ARM  Segment none
-> Control: 30c5387d  Table: 80003000  DAC: 00000000
-> Register r0 information: non-paged memory
-> Register r1 information: non-slab/vmalloc memory
-> Register r2 information: non-slab/vmalloc memory
-> Register r3 information: non-paged memory
-> Register r4 information: NULL pointer
-> Register r5 information: NULL pointer
-> Register r6 information: NULL pointer
-> Register r7 information: NULL pointer
-> Register r8 information: NULL pointer
-> Register r9 information:
-> ------------[ cut here ]------------
-> WARNING: CPU: 1 PID: 0 at mm/slub.c:4650 __kmem_obj_info+0x1c4/0x21c mm/s=
-lub.c:4650
-> Modules linked in:
->
->
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
->
-> If the bug is already fixed, let syzbot know by replying with:
-> #syz fix: exact-commit-title
->
-> If you want to change bug's subsystems, reply with:
-> #syz set subsystems: new-subsystem
-> (See the list of subsystem names on the web dashboard)
->
-> If the bug is a duplicate of another bug, reply with:
-> #syz dup: exact-subject-of-another-report
->
-> If you want to undo deduplication, reply with:
-> #syz undup
->
-> --
-> You received this message because you are subscribed to the Google Groups=
- "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgi=
-d/syzkaller-bugs/00000000000025a04405fa6c69a0%40google.com.
+Best Regards,
+Jacky Huang
+
+
