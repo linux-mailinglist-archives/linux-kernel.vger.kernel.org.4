@@ -2,195 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6C8A6F4A70
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 21:37:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1DE76F4A7C
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 21:40:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229625AbjEBThK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 15:37:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54216 "EHLO
+        id S229526AbjEBTkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 15:40:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjEBThI (ORCPT
+        with ESMTP id S229441AbjEBTkh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 15:37:08 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 967661BF9;
-        Tue,  2 May 2023 12:37:07 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f18dacd392so26600615e9.0;
-        Tue, 02 May 2023 12:37:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683056226; x=1685648226;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yAN6Tx0XQ5cbgXparCHR/XEVN6lZoL4POmuLsxZAKdE=;
-        b=k8kErdOPVqPjXe1UVr8CE/r8s1h4neD6cqHotJu9TowY8FOBIbOn+5Ho9ZTcDCagRk
-         /XQzmVQnTYSOtm4WXN+YcYgnIVypug7+S+yvYzavsLrJJaDl3qd8/9WwOTa/UoKghyGo
-         NUlKZ6xBdsjrqeAlsaefz8tdfEVcA6NFDLZ5vh3zQUugFLoVs+e+0KHh9Lrp3le77uTF
-         FVOS0g558WHu+VX3dSGsRy5SrfkcF3tIGvfwKbSTagyG/arJM13RThshZmv2XxHYpwAC
-         AP9tdMAwmJwBH5VsPgI5xQ+ODO651sEuQ2Yj/V01JnjkBFUmuaF4qQDQuDmFV7hJ67aX
-         LcPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683056226; x=1685648226;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yAN6Tx0XQ5cbgXparCHR/XEVN6lZoL4POmuLsxZAKdE=;
-        b=BLivDXTsNdfsBxe+oLRmLI5+9Gcc/aLDtZlXrF1StJ3xNWh2EMuevLyOB6fqrjkXTo
-         VuMY7F1NKi0e7FFyWUhOOqJTLhbAy+kLCrzqHSXgKLQhgEbD3YD4aFe5QzPw2i6ztQo5
-         AIr7HL2K54rEq5yAMLUYRQb/9IGY6JYi2ljACHfvc6JFsJSHNX7DioZPBKAIzX6e4qz8
-         SdgQJupiwff8TZj2zgMdBjCyQuVBaiUl6Xx42/0/NP3NC3KHS/N+OcClsI40tNpLaXLM
-         go4K4fdK7NlMoRO2/CBUCOQqE8ngLjmR+h8BR5vHQ+8cdptLSyh3G0y1tAwhHw5oIsE0
-         CFTA==
-X-Gm-Message-State: AC+VfDyn0bfCJ+6gXUD43knKfEgQtc5On0EQADe97MU5rr5IKr75xNPN
-        5A3hJU+/QVy+EzW5Rc3numg=
-X-Google-Smtp-Source: ACHHUZ7A2jMMtWzk7T9cgrRfNHzt/pitx4iisIgGusHr6EWYS363YI6sIGUZvgHUP7w7dxyOLghViw==
-X-Received: by 2002:a1c:7907:0:b0:3f1:8ef0:7e2f with SMTP id l7-20020a1c7907000000b003f18ef07e2fmr12767978wme.25.1683056225811;
-        Tue, 02 May 2023 12:37:05 -0700 (PDT)
-Received: from localhost (host86-156-84-164.range86-156.btcentralplus.com. [86.156.84.164])
-        by smtp.gmail.com with ESMTPSA id t24-20020a1c7718000000b003f3195be0a0sm16618019wmi.31.2023.05.02.12.37.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 May 2023 12:37:05 -0700 (PDT)
-Date:   Tue, 2 May 2023 20:37:04 +0100
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>,
-        Peter Zijlstra <peterz@infradead.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Mika Penttila <mpenttil@redhat.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Theodore Ts'o <tytso@mit.edu>, Peter Xu <peterx@redhat.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>
-Subject: Re: [PATCH v7 3/3] mm/gup: disallow FOLL_LONGTERM GUP-fast writing
- to file-backed mappings
-Message-ID: <b1144819-2d03-4e63-b0e7-0fda6130de7d@lucifer.local>
-References: <cover.1683044162.git.lstoakes@gmail.com>
- <b3a4441cade9770e00d24f5ecb75c8f4481785a4.1683044162.git.lstoakes@gmail.com>
- <1691115d-dba4-636b-d736-6a20359a67c3@redhat.com>
- <20230502172231.GH1597538@hirez.programming.kicks-ass.net>
- <406fd43a-a051-5fbe-6f66-a43f5e7e7573@redhat.com>
- <3a8c672d-4e6c-4705-9d6c-509d3733eb05@lucifer.local>
- <ZFFfhhwibxHKwDbZ@nvidia.com>
- <968fa174-6720-4adf-9107-c777ee0d8da4@lucifer.local>
- <434c60e6-7ac4-229b-5db0-5175afbcfff5@redhat.com>
+        Tue, 2 May 2023 15:40:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 290869E;
+        Tue,  2 May 2023 12:40:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B2E7D620AE;
+        Tue,  2 May 2023 19:40:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18AD3C4339E;
+        Tue,  2 May 2023 19:40:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683056435;
+        bh=9Dokck6Jc4naZGVhGmqgJoJLIGEOHwC1dkDJ1O4Mipg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=iGl2fDpG6u+V7nw9XiF//RgP2qeZBecdfPEueb6HbN4e9bmh+rMmyTGvoJLh7U0IN
+         LT34Sz26U9ehDgNU9xWS2cGEUZMofynDqCr3NMtbyMjGcM7Ig7XSHoWMlWBe61LHXK
+         foLe03MQ+bujtF/31rycC13DeFqREes6CUthTP2NucBb4VgBQHzmK8qPa10Q9tcJfT
+         kGl1UrAJYytqHUS+kOaWhu7l1nLj3tflKoPvaGU5xVR382p8EsxG5UXDV4YqhNrt0H
+         gKKH9JwAQNWbY4QwmuAxfFPQMrV5eeoP/Nm8Xjp3aXp2elQ+yUvR0d0n0PahunLwSd
+         cPLAVqB30txpQ==
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2ab25e8a4a7so42562611fa.3;
+        Tue, 02 May 2023 12:40:34 -0700 (PDT)
+X-Gm-Message-State: AC+VfDzz4UFGujsu7oNd6erhc3aE43prRHFuJi1VoB6g0h/RU/rMPrjt
+        w8YGHihaI1wzdcDXtg3QuRn5oWdubKmfNswUEQ==
+X-Google-Smtp-Source: ACHHUZ4oET00FnB+Fs3paO2KFWP6eBEztecawKM1A53Y541JaZi1w2Ra1iVebif6hgPcY0x6Ou0Xe91anOEl+A8jdBw=
+X-Received: by 2002:a2e:8801:0:b0:2a8:b995:ffe5 with SMTP id
+ x1-20020a2e8801000000b002a8b995ffe5mr4898960ljh.25.1683056432976; Tue, 02 May
+ 2023 12:40:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <434c60e6-7ac4-229b-5db0-5175afbcfff5@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220328000915.15041-1-ansuelsmth@gmail.com> <85eb14ec-f465-7447-ad77-a3dabc666f47@kernel.org>
+ <YkKRYnN84D9VZhGj@Ansuel-xps.localdomain> <CAL_Jsq+RQQ-ADMxLPUFwk6S6kGmb6oNDy4k52fnU0EtbUvqmSA@mail.gmail.com>
+ <CAMuHMdWNTE48MFy6fqxAsfMWz9b6E7dVNXtXtESP95sxk2PGwA@mail.gmail.com>
+ <CAL_JsqJthKTm8bhRF2B=ae1tvtPeYYXx_Tm76qQtSwLtH5C6VA@mail.gmail.com> <720a2829-b6b5-411c-ac69-9a53e881f48d@app.fastmail.com>
+In-Reply-To: <720a2829-b6b5-411c-ac69-9a53e881f48d@app.fastmail.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Tue, 2 May 2023 14:40:19 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqKCtmkwzKa01gyG65fH8ye6R3KhR41PJbJhOJ4X9j=znA@mail.gmail.com>
+Message-ID: <CAL_JsqKCtmkwzKa01gyG65fH8ye6R3KhR41PJbJhOJ4X9j=znA@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/1] Categorize ARM dts directory
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Olof Johansson <olof@lixom.net>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-actions@lists.infradead.org,
+        linux-sunxi@lists.linux.dev,
+        Linux-OMAP <linux-omap@vger.kernel.org>,
+        linux-amlogic@lists.infradead.org, linux-arm-kernel@axis.com,
+        linux-aspeed@lists.ozlabs.org,
+        linux-rpi-kernel@lists.infradead.org,
+        chrome-platform@lists.linux.dev,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        kernel@dh-electronics.com, linux-mediatek@lists.infradead.org,
+        openbmc@lists.ozlabs.org, linux-tegra@vger.kernel.org,
+        "linux-oxnas@groups.io" <linux-oxnas@groups.io>,
+        linux-arm-msm@vger.kernel.org, linux-unisoc@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        linux-realtek-soc@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 02, 2023 at 09:33:45PM +0200, David Hildenbrand wrote:
-> On 02.05.23 21:25, Lorenzo Stoakes wrote:
-> > On Tue, May 02, 2023 at 04:07:50PM -0300, Jason Gunthorpe wrote:
-> > > On Tue, May 02, 2023 at 07:17:14PM +0100, Lorenzo Stoakes wrote:
-> > >
-> > > > On a specific point - if mapping turns out to be NULL after we confirm
-> > > > stable PTE, I'd be inclined to reject and let the slow path take care of
-> > > > it, would you agree that that's the correct approach?
-> > >
-> > > I think in general if GUP fast detects any kind of race it should bail
-> > > to the slow path.
-> > >
-> > > The races it tries to resolve itself should have really safe and
-> > > obvious solutions.
-> > >
-> > > I think this comment is misleading:
-> > >
-> > > > +	/*
-> > > > +	 * GUP-fast disables IRQs - this prevents IPIs from causing page tables
-> > > > +	 * to disappear from under us, as well as preventing RCU grace periods
-> > > > +	 * from making progress (i.e. implying rcu_read_lock()).
-> > >
-> > > True, but that is not important here since we are not reading page
-> > > tables
-> > >
-> > > > +	 * This means we can rely on the folio remaining stable for all
-> > > > +	 * architectures, both those that set CONFIG_MMU_GATHER_RCU_TABLE_FREE
-> > > > +	 * and those that do not.
-> > >
-> > > Not really clear. We have a valid folio refcount here, that is all.
-> >
-> > Some of this is a product of mixed signals from different commenters and
-> > my being perhaps a little _too_ willing to just go with the flow.
-> >
-> > With interrupts disabled and IPI blocked, plus the assurances that
-> > interrupts being disabled implied the RCU version of page table
-> > manipulation is also blocked, my understanding was that remapping in this
-> > process to another page could not occur.
-> >
-> > Of course the folio is 'stable' in the sense we have a refcount on it, but
-> > it is unlocked so things can change.
-> >
-> > I'm guessing the RCU guarantees in the TLB logic are not as solid as IPI,
-> > because in the IPI case it seems to me you couldn't even clear the PTE
-> > entry before getting to the page table case.
-> >
-> > Otherwise, I'm a bit uncertain actually as to how we can get to the point
-> > where the folio->mapping is being manipulated. Is this why?
+On Tue, May 2, 2023 at 3:15=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> I'll just stress again that I think there are cases where we unmap and free
-> a page without synchronizing against GUP-fast using an IPI or RCU.
+> On Tue, Apr 25, 2023, at 17:57, Rob Herring wrote:
+> > On Tue, Apr 25, 2023 at 2:28=E2=80=AFAM Geert Uytterhoeven <geert@linux=
+-m68k.org> wrote:
+> >
+> >> Does your script also cater for .dts files not matching any pattern,
+> >> but including a .dtsi file that does match a pattern?
+> >
+> > I assume I built everything after moving, but maybe not...
+> >
+> > That's all just "details". First, we need agreement on a) moving
+> > things to subdirs and b) doing it 1-by-1 or all at once. So far we've
+> > been stuck on a) for being 'too much churn'.
+>
+> Sorry for missing most of the discussion last week. The script sounds
+> fine to me, the only reason I didn't want to do this in the past is that
+> we had the plan to move platforms out of the kernel tree to an external
+> repository and I wanted to do this platform at a time and also only move
+> each one once. I don't think that is going to happen anytime soon now,
+> so let's just do your script.
+>
+> Can you send me the script and/or a pull request of the resulting
+> tree based on my soc/dt branch? Everything is merged upstream,
+> and I think git-merge would handle the remaining merges with any
+> other changes in mainline.
 
-OK that explains why we need to be careful. Don't worry I am going to move the
-check after we confirm PTE entry hasn't changed.
+I've dusted off my script and made a branch[1] with the result.
+There's just a couple of fixes needed after the script is run (see the
+top commit). The cross arch includes are all fixed up by the script.
+dtbs_install maintains a flat install. I compared the number of .dtbs
+before and after to check the script.
 
->
-> That's one of the reasons why we recheck if the PTE changed to back off, so
-> I've been told.
->
-> I'm happy if someone proves me wrong and a page we just (temporarily) pinned
-> cannot have been freed+reused in the meantime.
+I think the only issue remaining is finalizing the mapping of
+platforms to subdirs. What I have currently is a mixture of SoC
+families and vendors. The most notable are all the Freescale/NXP
+platforms, pxa, socfpga, and stm32. It's not consistent with arm64
+either. Once that's finalized, I still need to go update MAINTAINERS.
 
-Let's play it safe for now :)
+Here's the current mapping:
 
->
-> --
-> Thanks,
->
-> David / dhildenb
->
+vendor_map =3D {
+    'alphascale' : 'alphascale',
+    'alpine' : 'alpine',
+    'artpec' : 'axis',
+    'axm' : 'lsi',
+    'cx9' : 'cnxt',
+    'ecx' : 'calxeda',
+    'highbank' : 'calxeda',
+    'ep7' : 'cirrus',
+    'mxs': 'mxs',
+    'imx23': 'mxs',
+    'imx28': 'mxs',
+    'sun' : 'allwinner',
+    'imx': 'imx',
+    'e6' : 'imx',
+    'e7' : 'imx',
+    'mba6' : 'imx',
+    'ls': 'fsl',
+    'vf': 'fsl',
+    'qcom': 'qcom',
+    'am3' : 'ti',
+    'am4' : 'ti',
+    'am5' : 'ti',
+    'dra' : 'ti',
+    'keystone' : 'ti',
+    'omap' : 'ti',
+    'compulab' : 'ti',
+    'logicpd' : 'ti',
+    'elpida' : 'ti',
+    'motorola' : 'ti',
+    'twl' : 'ti',
+    'da' : 'ti',
+    'dm' : 'ti',
+    'nspire' : 'nspire',
+    'armada' : 'marvell',
+    'dove' : 'marvell',
+    'kirkwood' : 'marvell',
+    'orion' : 'marvell',
+    'mvebu' : 'marvell',
+    'mmp' : 'marvell',
+    'berlin' : 'berlin',
+    'pxa2' : 'pxa',
+    'pxa3' : 'pxa',
+    'pxa' : 'marvell',
+    'arm-' : 'arm',
+    'integ' : 'arm',
+    'mps' : 'arm',
+    've' : 'arm',
+    'aspeed' : 'aspeed',
+    'ast2' : 'aspeed',
+    'facebook' : 'aspeed',
+    'ibm' : 'aspeed',
+    'openbmc' : 'aspeed',
+    'en7' : 'airoha',
+    'at91' : 'microchip',
+    'sama' : 'microchip',
+    'sam9' : 'microchip',
+    'usb_' : 'microchip',
+    'tny_' : 'microchip',
+    'mpa1600' : 'microchip',
+    'animeo_ip' : 'microchip',
+    'aks-cdu' : 'microchip',
+    'ethernut5' : 'microchip',
+    'evk-pro3' : 'microchip',
+    'pm9g45' : 'microchip',
+    'ge86' : 'microchip',
+    'bcm' : 'brcm',
+    'exynos' : 'samsung',
+    's3c' : 'samsung',
+    's5p' : 'samsung',
+    'gemini' : 'gemini',
+    'hi3' : 'hisilicon',
+    'hip' : 'hisilicon',
+    'hisi' : 'hisilicon',
+    'sd5' : 'hisilicon',
+    'hpe' : 'hpe',
+    'intel': 'intel',
+    'mt' : 'mediatek',
+    'meson' : 'meson',
+    'moxa' : 'moxa',
+    'mstar' : 'mstar',
+    'nuvo' : 'nuvoton',
+    'lpc' : 'lpc',
+    'lan96' : 'microchip',
+    'owl' : 'actions',
+    'ox8' : 'oxsemi',
+    'rda' : 'rda',
+    'rtd' : 'realtek',
+    'r7' : 'renesas',
+    'r8' : 'renesas',
+    'r9' : 'renesas',
+    'emev2' : 'renesas',
+    'sh73a' : 'renesas',
+    'gr-' : 'renesas',
+    'iwg' : 'renesas',
+    'rk' : 'rockchip',
+    'rv11' : 'rockchip',
+    'rockchip' : 'rockchip',
+    'socfpga' : 'socfpga',
+    'stm' : 'stm32',
+    'sti' : 'sti',
+    'st-pin' : 'sti',
+    'ste' : 'st-ericsson',
+    'spear' : 'spear',
+    'axp' : 'allwinner',
+    'tegra' : 'nvidia',
+    'milbeaut' : 'socionext',
+    'uniph' : 'socionext',
+    'vt8500' : 'vt8500',
+    'wm8' : 'vt8500',
+    'xen' : 'xen',
+    'zx' : 'zte',
+    'zynq' : 'xilinx',
+}
+
+Rob
+
+[1] git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git arm-dts-mo=
+ve-v2
