@@ -2,176 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D83FE6F49BE
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 20:33:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7BFC6F49BC
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 20:33:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233856AbjEBSdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 14:33:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59780 "EHLO
+        id S234061AbjEBSde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 14:33:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231609AbjEBSdk (ORCPT
+        with ESMTP id S229703AbjEBSdb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 14:33:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1785A10FF
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 11:32:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683052375;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NhpWzKFV6WuY3k3TP6SkZOGPmg0MohvKMd0v7Ellcl4=;
-        b=JCg9RcGSxA4TMuaMiyKxJxrLvtGLm03qcFq7gTwqX7X69Rs2XCC8SNOUvxVf8+O8ZP1SuP
-        PGq+9z/dcsK5KaaJHXkItf/l5+/duVby9lloVpvuUc6DxEDimPTGfwzAyAUYu2vL2rwH0U
-        Kn8RRfVKhRdf37WIBUKoZ/Dzi1/AgOE=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-436-a_KWirKzOAm1qf6sLwfQSg-1; Tue, 02 May 2023 14:32:54 -0400
-X-MC-Unique: a_KWirKzOAm1qf6sLwfQSg-1
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-306362a1607so876072f8f.1
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 11:32:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683052373; x=1685644373;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        Tue, 2 May 2023 14:33:31 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F2E9B
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 11:33:27 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id 3f1490d57ef6-b99f0a0052fso5863983276.3
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 11:33:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683052406; x=1685644406;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NhpWzKFV6WuY3k3TP6SkZOGPmg0MohvKMd0v7Ellcl4=;
-        b=XPOKHNuAMZZFRCs30F5XPlOPhSzBD0rbulVaCfuvZTRsbwRtXePHLOFkkxGIC1xKr5
-         3j8npgHxftIHoQlvsXuNBAxNdtdlYH0aPzh11iawUBK9MGVhhULt1TZpWqoJEL0aydcp
-         ehgDvkKVNN2tYMR8xuwjPxs4hMZUT2RzxwWbCZSxGNYN1JQK8y7KUKNL0h9DSK83g4XU
-         qlARD5yOTeD+ATDKuQ8aCLgL23LAH47B3EgtrN2q+Qq3qKABE9S5iR3e41gwLyEeMjwH
-         tBoX8dSH2WadWahFEiURwfUUwWV6NpQakMeVQj0aivzwpc1ABiII2SUz3X7LnPnpJS7p
-         qsnQ==
-X-Gm-Message-State: AC+VfDyxvx9HOhOw53LFs5S08AwPxxhx0T96Wx3wbYRtsP6q16TniQ9a
-        /4ki3DGzxv4+7Uss/i4D1+59dUhl/ptuvuSEaKjFJ3RJ94NmvqSbpXPuhU7KRoype/mlV9DBlqX
-        2fG13x7VOntqEPftsqnTbMXo6OIozCqVC7bvHQA==
-X-Received: by 2002:adf:e38b:0:b0:2dc:cad4:87b9 with SMTP id e11-20020adfe38b000000b002dccad487b9mr11784989wrm.68.1683052372746;
-        Tue, 02 May 2023 11:32:52 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7NTwwDePG2g45V+TgxsNxz1VA7838wfE2TMtMS4WPnQUULqKPl7ToB/3+9718Vn306lnc9dA==
-X-Received: by 2002:adf:e38b:0:b0:2dc:cad4:87b9 with SMTP id e11-20020adfe38b000000b002dccad487b9mr11784980wrm.68.1683052372419;
-        Tue, 02 May 2023 11:32:52 -0700 (PDT)
-Received: from redhat.com ([2.52.10.43])
-        by smtp.gmail.com with ESMTPSA id i11-20020adfe48b000000b002c3f81c51b6sm31546095wrm.90.2023.05.02.11.32.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 May 2023 11:32:51 -0700 (PDT)
-Date:   Tue, 2 May 2023 14:32:48 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Feng Liu <feliu@nvidia.com>
-Cc:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        Jason Wang <jasowang@redhat.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        William Tu <witu@nvidia.com>, Parav Pandit <parav@nvidia.com>
-Subject: Re: [PATCH net v2] virtio_net: Fix error unwinding of XDP
- initialization
-Message-ID: <20230502143148-mutt-send-email-mst@kernel.org>
-References: <20230502174134.32276-1-feliu@nvidia.com>
+        bh=1HVL3xDTGrQVKytv3307oE4wI2qXt6O5pXdSbfIsmfw=;
+        b=1qOKHMcI8DulkSfoRMvX8Pr+Zk5uyPKcuzTjDblLNP1XefPQJkSAxIcSan4hxrkYmM
+         mijXYJDbwYfBriku1yo2jZFFkuGOQV27nGEoociEa+x4EBkt6xdc8TTdBr8ExPJqJxj3
+         I+cfPJCKCtCybq2dUPwiVCF4ankuJVJJAVwM7AetAdBoRpl61AdRNAdTS18dObY9arIk
+         e9qSsTvg8C0oNmcsYUHHNiUOhvlpSnEvLmwlJBc13gXCsXeR7WXU4bYyLgUPMLC/5oWj
+         1vsg/b1NFVc8TUatQihkDpPMckBOmQMwujeGiTah+4Xw72cOHRDooXz8s6AG9qHHNqgj
+         yg7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683052406; x=1685644406;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1HVL3xDTGrQVKytv3307oE4wI2qXt6O5pXdSbfIsmfw=;
+        b=A0Mc+2M8NwaltaCSPyk+VwTrNPD4+gM3jRTa/qM8PGQ8opqd1Iysv7Foez3r9xIC1B
+         cxfGKPf8jWs+ExaUqjeKamqxibwpYX36kxAf8RmXTZho3canA8GV6T9ckEfjZzd0ZsXt
+         Rk5JXGs66LskDtAT3G1asWUpG3G4rml9RcRwKY2VkVvifPnUgD0oqZAfY/ZBrymbbhq2
+         kagskYZc5b6wqPW/Mvx4rli1Tw25OL3/I642ya1oFRfVqTrXb6zuwbCZG6pGZsg1C+nY
+         G5vaU25TjubiG8Fi/bhPLM3fMkd3l9OmebUNFzXChk60SEnFIuSX+/RspO3ANvR7r0NE
+         rJAQ==
+X-Gm-Message-State: AC+VfDzz3/wQs063QgNY17FNsiOAwN9XU+aC77rSF5QMtBhZ7bhRU+SO
+        P7cuLBKKFElwfhdK62bh1t7uiubtIV2Fe/sdEqh1XQ==
+X-Google-Smtp-Source: ACHHUZ4Ewf11C+rTiwahBlNL1qKIj3O23xR+7SsYrPD/20BDq48yN50kv92ybg7MVXiIqETdHq5IqlKzhO8SvqkLc+8=
+X-Received: by 2002:a25:4115:0:b0:b9e:9159:6a0c with SMTP id
+ o21-20020a254115000000b00b9e91596a0cmr1235704yba.6.1683052406321; Tue, 02 May
+ 2023 11:33:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230502174134.32276-1-feliu@nvidia.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230501165450.15352-1-surenb@google.com> <20230501165450.15352-10-surenb@google.com>
+ <20230502145014.24b28e64@meshulam.tesarici.cz>
+In-Reply-To: <20230502145014.24b28e64@meshulam.tesarici.cz>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 2 May 2023 11:33:15 -0700
+Message-ID: <CAJuCfpGA9SMwyQ44XHRHHVf32MPu4o6wy1Q6H=AfJy61Ez-06Q@mail.gmail.com>
+Subject: Re: [PATCH 09/40] mm: introduce __GFP_NO_OBJ_EXT flag to selectively
+ prevent slabobj_ext creation
+To:     =?UTF-8?B?UGV0ciBUZXNhxZnDrWs=?= <petr@tesarici.cz>
+Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
+        mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
+        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
+        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
+        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
+        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
+        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
+        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
+        tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
+        paulmck@kernel.org, pasha.tatashin@soleen.com,
+        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
+        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
+        ndesaulniers@google.com, gregkh@linuxfoundation.org,
+        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+        glider@google.com, elver@google.com, dvyukov@google.com,
+        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
+        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 02, 2023 at 01:41:34PM -0400, Feng Liu wrote:
-> When initializing XDP in virtnet_open(), some rq xdp initialization
-> may hit an error causing net device open failed. However, previous
-> rqs have already initialized XDP and enabled NAPI, which is not the
-> expected behavior. Need to roll back the previous rq initialization
-> to avoid leaks in error unwinding of init code.
-> 
-> Also extract a helper function of disable queue pairs, and use newly
-> introduced helper function in error unwinding and virtnet_close;
-> 
-> Fixes: 754b8a21a96d ("virtio_net: setup xdp_rxq_info")
-> Signed-off-by: Feng Liu <feliu@nvidia.com>
-> Reviewed-by: William Tu <witu@nvidia.com>
-> Reviewed-by: Parav Pandit <parav@nvidia.com>
-> Reviewed-by: Simon Horman <simon.horman@corigine.com>
-> Acked-by: Michael S. Tsirkin <mst@redhat.com>
-> ---
->  drivers/net/virtio_net.c | 31 +++++++++++++++++++++----------
->  1 file changed, 21 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> index 8d8038538fc4..5cd78e154d14 100644
-> --- a/drivers/net/virtio_net.c
-> +++ b/drivers/net/virtio_net.c
-> @@ -1868,6 +1868,13 @@ static int virtnet_poll(struct napi_struct *napi, int budget)
->  	return received;
->  }
->  
-> +static void virtnet_disable_qp(struct virtnet_info *vi, int qp_index)
-> +{
-> +	virtnet_napi_tx_disable(&vi->sq[qp_index].napi);
-> +	napi_disable(&vi->rq[qp_index].napi);
-> +	xdp_rxq_info_unreg(&vi->rq[qp_index].xdp_rxq);
-> +}
-> +
->  static int virtnet_open(struct net_device *dev)
->  {
->  	struct virtnet_info *vi = netdev_priv(dev);
-> @@ -1883,20 +1890,27 @@ static int virtnet_open(struct net_device *dev)
->  
->  		err = xdp_rxq_info_reg(&vi->rq[i].xdp_rxq, dev, i, vi->rq[i].napi.napi_id);
->  		if (err < 0)
-> -			return err;
-> +			goto err_xdp_info_reg;
->  
->  		err = xdp_rxq_info_reg_mem_model(&vi->rq[i].xdp_rxq,
->  						 MEM_TYPE_PAGE_SHARED, NULL);
-> -		if (err < 0) {
-> -			xdp_rxq_info_unreg(&vi->rq[i].xdp_rxq);
-> -			return err;
-> -		}
-> +		if (err < 0)
-> +			goto err_xdp_reg_mem_model;
->  
->  		virtnet_napi_enable(vi->rq[i].vq, &vi->rq[i].napi);
->  		virtnet_napi_tx_enable(vi, vi->sq[i].vq, &vi->sq[i].napi);
->  	}
->  
->  	return 0;
-> +
-> +	/* error unwinding of xdp init */
+On Tue, May 2, 2023 at 5:50=E2=80=AFAM Petr Tesa=C5=99=C3=ADk <petr@tesaric=
+i.cz> wrote:
+>
+> On Mon,  1 May 2023 09:54:19 -0700
+> Suren Baghdasaryan <surenb@google.com> wrote:
+>
+> > Introduce __GFP_NO_OBJ_EXT flag in order to prevent recursive allocatio=
+ns
+> > when allocating slabobj_ext on a slab.
+> >
+> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > ---
+> >  include/linux/gfp_types.h | 12 ++++++++++--
+> >  1 file changed, 10 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/include/linux/gfp_types.h b/include/linux/gfp_types.h
+> > index 6583a58670c5..aab1959130f9 100644
+> > --- a/include/linux/gfp_types.h
+> > +++ b/include/linux/gfp_types.h
+> > @@ -53,8 +53,13 @@ typedef unsigned int __bitwise gfp_t;
+> >  #define ___GFP_SKIP_ZERO     0
+> >  #define ___GFP_SKIP_KASAN    0
+> >  #endif
+> > +#ifdef CONFIG_SLAB_OBJ_EXT
+> > +#define ___GFP_NO_OBJ_EXT       0x4000000u
+> > +#else
+> > +#define ___GFP_NO_OBJ_EXT       0
+> > +#endif
+> >  #ifdef CONFIG_LOCKDEP
+> > -#define ___GFP_NOLOCKDEP     0x4000000u
+> > +#define ___GFP_NOLOCKDEP     0x8000000u
+>
+> So now we have two flags that depend on config options, but the first
+> one is always allocated in fact. I wonder if you could use an enum to
+> let the compiler allocate bits. Something similar to what Muchun Song
+> did with section flags.
+>
+> See commit ed7802dd48f7a507213cbb95bb4c6f1fe134eb5d for reference.
 
-btw we don't really need this comment - it's how all
-error handling is done anyways.
-if you need to roll v3, you can drop it.
+Thanks for the reference. I'll take a closer look and will try to clean it =
+up.
 
-> +err_xdp_reg_mem_model:
-> +	xdp_rxq_info_unreg(&vi->rq[i].xdp_rxq);
-> +err_xdp_info_reg:
-> +	for (i = i - 1; i >= 0; i--)
-> +		virtnet_disable_qp(vi, i);
-> +
-> +	return err;
->  }
->  
->  static int virtnet_poll_tx(struct napi_struct *napi, int budget)
-> @@ -2305,11 +2319,8 @@ static int virtnet_close(struct net_device *dev)
->  	/* Make sure refill_work doesn't re-enable napi! */
->  	cancel_delayed_work_sync(&vi->refill);
->  
-> -	for (i = 0; i < vi->max_queue_pairs; i++) {
-> -		virtnet_napi_tx_disable(&vi->sq[i].napi);
-> -		napi_disable(&vi->rq[i].napi);
-> -		xdp_rxq_info_unreg(&vi->rq[i].xdp_rxq);
-> -	}
-> +	for (i = 0; i < vi->max_queue_pairs; i++)
-> +		virtnet_disable_qp(vi, i);
->  
->  	return 0;
->  }
-> -- 
-> 2.37.1 (Apple Git-137.1)
+>
+> >  #else
+> >  #define ___GFP_NOLOCKDEP     0
+> >  #endif
+> > @@ -99,12 +104,15 @@ typedef unsigned int __bitwise gfp_t;
+> >   * node with no fallbacks or placement policy enforcements.
+> >   *
+> >   * %__GFP_ACCOUNT causes the allocation to be accounted to kmemcg.
+> > + *
+> > + * %__GFP_NO_OBJ_EXT causes slab allocation to have no object
+> > extension. */
+> >  #define __GFP_RECLAIMABLE ((__force gfp_t)___GFP_RECLAIMABLE)
+> >  #define __GFP_WRITE  ((__force gfp_t)___GFP_WRITE)
+> >  #define __GFP_HARDWALL   ((__force gfp_t)___GFP_HARDWALL)
+> >  #define __GFP_THISNODE       ((__force gfp_t)___GFP_THISNODE)
+> >  #define __GFP_ACCOUNT        ((__force gfp_t)___GFP_ACCOUNT)
+> > +#define __GFP_NO_OBJ_EXT   ((__force gfp_t)___GFP_NO_OBJ_EXT)
+> >
+> >  /**
+> >   * DOC: Watermark modifiers
+> > @@ -249,7 +257,7 @@ typedef unsigned int __bitwise gfp_t;
+> >  #define __GFP_NOLOCKDEP ((__force gfp_t)___GFP_NOLOCKDEP)
+> >
+> >  /* Room for N __GFP_FOO bits */
+> > -#define __GFP_BITS_SHIFT (26 + IS_ENABLED(CONFIG_LOCKDEP))
+> > +#define __GFP_BITS_SHIFT (27 + IS_ENABLED(CONFIG_LOCKDEP))
+>
+> If the above suggestion is implemented, this could be changed to
+> something like __GFP_LAST_BIT (the enum's last identifier).
 
+Ack.
+
+Thanks for reviewing!
+Suren.
+
+>
+> Petr T
