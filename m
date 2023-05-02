@@ -2,104 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E864D6F470A
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 17:24:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6A516F4710
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 17:25:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234538AbjEBPYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 11:24:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41484 "EHLO
+        id S234586AbjEBPY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 11:24:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234529AbjEBPYC (ORCPT
+        with ESMTP id S234555AbjEBPYs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 11:24:02 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A0CC2733;
-        Tue,  2 May 2023 08:24:01 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 2887F221E4;
-        Tue,  2 May 2023 15:24:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1683041040; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CW2LmtNuVSk94mDGCMJ1mJ80jVCNsh4d9/7vaIxHDh4=;
-        b=zmNqwLSpBWozv3WsgFDqblkqkj9YdB1XZJul6aUiQSjbiUCMHugcr7A/qB/Fc8IZEgsQuy
-        W5QfK5czrPgcnazCSULSiL7uuPkMs+eozDD0QfQIt8ZSFFR3hmCYWD4F7G/QyyCJ5IwVwO
-        NIFVSlNrRVnz1UsSSyNMx1F255/Ky/0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1683041040;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CW2LmtNuVSk94mDGCMJ1mJ80jVCNsh4d9/7vaIxHDh4=;
-        b=QPq4qeoLoFSA33UzVko5Z22yyv8ooaSf9wwviyeAHUoGDVBMTeOEUBFtQ6Gt3OJt7/tFNo
-        DTzIsExRsdEGGQCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C9F9F134FB;
-        Tue,  2 May 2023 15:23:59 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id erhcLw8rUWQGIAAAMHmgww
-        (envelope-from <mdoucha@suse.cz>); Tue, 02 May 2023 15:23:59 +0000
-Message-ID: <e61e2dd0-3ce6-e849-8ce8-2b9aeb236c69@suse.cz>
-Date:   Tue, 2 May 2023 17:23:59 +0200
+        Tue, 2 May 2023 11:24:48 -0400
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 974C2D7;
+        Tue,  2 May 2023 08:24:47 -0700 (PDT)
+Received: from g550jk.localnet (unknown [62.108.10.64])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 770B8C76A8;
+        Tue,  2 May 2023 15:24:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1683041085; bh=I4YH0QUgucwT4uc2YEZJwhH8Sc7vUD+EOfEVy1pje6g=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=TJEg+z4W2c402E+BIoIKKoPkijwmwHPsPKWhrXs0GUDZ0zsFdZ4p7acjJtX38lYwE
+         TEQbmNXprxLn1/p6gGejI+iD71rlqCEkmN6HNuypI3kyS5//fLkH6LLt50Ypc7IbZW
+         IcOklYrjDGto3mpf6AEGQrkARMhHum6umHdZ7m7Y=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     Brian Masney <bmasney@redhat.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Brian Masney <masneyb@onstation.org>,
+        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 3/4] Input: pwm-vibra - add support for enable GPIO
+Date:   Tue, 02 May 2023 17:24:44 +0200
+Message-ID: <45489141.fMDQidcC6G@z3ntu.xyz>
+In-Reply-To: <8a54d0ec-8a22-9ffd-43a4-55da988fbeb1@linaro.org>
+References: <20230427-hammerhead-vibra-v1-0-e87eeb94da51@z3ntu.xyz>
+ <8250064.NyiUUSuA9g@z3ntu.xyz>
+ <8a54d0ec-8a22-9ffd-43a4-55da988fbeb1@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Petr Vorel <pvorel@suse.cz>
-Cc:     Minchan Kim <minchan@kernel.org>, ltp@lists.linux.it,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Nitin Gupta <ngupta@vflare.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Yang Xu <xuyang2018.jy@fujitsu.com>
-References: <20221107191136.18048-1-pvorel@suse.cz>
- <Y2l3vJb1y2Jynf50@google.com> <3ac740c0-954b-5e68-b413-0adc7bc5a2b5@suse.cz>
- <Y22b3wWs2QfMjJHi@google.com> <9489dd1c-012c-8b5d-b670-a27213da287a@suse.cz>
- <Y3zlrBQ8fgJyNm7G@pevik> <Y4WMxqyVlAt0Sp3g@google.com>
-Content-Language: en-US
-From:   Martin Doucha <mdoucha@suse.cz>
-Subject: Re: [PATCH 0/1] Possible bug in zram on ppc64le on vfat
-In-Reply-To: <Y4WMxqyVlAt0Sp3g@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29. 11. 22 5:38, Sergey Senozhatsky wrote:
-> On (22/11/22 16:07), Petr Vorel wrote:
->> Martin, thanks a lot for reruning tests. I wonder problems on /dev/zero is a
->> kernel bug or just problem which should be workarounded.
+On Dienstag, 2. Mai 2023 12:39:10 CEST Konrad Dybcio wrote:
+> On 28.04.2023 18:06, Luca Weiss wrote:
+> > On Freitag, 28. April 2023 01:29:27 CEST Brian Masney wrote:
+> >> On Thu, Apr 27, 2023 at 10:34:28PM +0200, Luca Weiss wrote:
+> >>> Some pwm vibrators have a dedicated enable GPIO that needs to be set
+> >>> high so that the vibrator works. Add support for that optionally.
+> >>> 
+> >>> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> >> 
+> >> Hi Luca,
+> >> 
+> >> Thank you for picking up this work!
+> >> 
+> >>> +	vibrator->enable_gpio = devm_gpiod_get_optional(&pdev->dev,
+> > 
+> > "enable",
+> > 
+> >>> +
+> > 
+> > GPIOD_OUT_LOW);
+> > 
+> >>> +	err = PTR_ERR_OR_ZERO(vibrator->enable_gpio);
+> >>> +	if (err) {
+> >>> +		if (err != -EPROBE_DEFER)
+> >>> +			dev_err(&pdev->dev, "Failed to request enable
+> > 
+> > gpio: %d\n",
+> > 
+> >>> +				err);
+> >>> +		return err;
+> >>> +	}
+> >>> +
 > 
-> Hmm. Does CONFIG_KASAN show anything interesting?
+> Looks like your email client messes with the replies.. perhaps it tries
+> to round them to n characters forcefully?
 
-Sorry for the delay. We've tried to reproduce the bug with CONFIG_KASAN 
-enabled but the only affected arch is PPC64LE and KASAN is not available 
-there at all. Our kernel maintainers confirmed that if we need KASAN to 
-debug this, we're out of luck.
+Quite possible, I'm using KMail with Options -> Wordwrap turned on, otherwise 
+I have to manually wrap everything but with this on there doesn't seem to be a 
+way to get over that limit, even when posting links etc - or when quoting 
+existing text.
 
--- 
-Martin Doucha   mdoucha@suse.cz
-QA Engineer for Software Maintenance
-SUSE LINUX, s.r.o.
-CORSO IIa
-Krizikova 148/34
-186 00 Prague 8
-Czech Republic
+Regards
+Luca
+
+> 
+> Konrad
+> 
+> >> Take a look at dev_err_probe() to remove the -EPROBE_DEFER check.
+> > 
+> > The input subsystem doesn't like dev_err_probe for some reason, you should
+> > quickly find examples of that being rejected on the mailing list (or see
+> > "git grep dev_err_probe drivers/input/")
+> > 
+> >> With that fixed:
+> >> 
+> >> Reviewed-by: Brian Masney <bmasney@redhat.com>
+> > 
+> > Thanks for the reviews!
+
+
+
 
