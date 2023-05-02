@@ -2,111 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A68FC6F4557
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 15:42:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 723846F451B
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 15:37:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234444AbjEBNls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 09:41:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37462 "EHLO
+        id S233817AbjEBNhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 09:37:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234397AbjEBNlE (ORCPT
+        with ESMTP id S234313AbjEBNhe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 09:41:04 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2057.outbound.protection.outlook.com [40.107.101.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167526189;
-        Tue,  2 May 2023 06:40:32 -0700 (PDT)
+        Tue, 2 May 2023 09:37:34 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E3AF6A65;
+        Tue,  2 May 2023 06:36:54 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EyxrmO3kHTP/gVp3RbmVnfTvyLv9iwG3oCqC98dwb5I6ufQffaII9SitK1zgvgcshIm6LRmzyelTqKF9xmiCvFTBUYHvuYd+svxienfZUVFBvajAz0MuaqpshOWb51kcoBIkoN9ofwqLFrzA1enUrJUfFkg0nc49cVhd+rngc1UIR4mRXhQgPeULyH0fwvuHI4G7eiGd55dAVcdDzv5XGqk1EI+h7yzvlohj3ennTnnzXcOIPw7MVLba2ZUfgh98zuBjYXyYxHRm2xQ3NCmSchvfWhdtfg6iAt+Si8fvWrEAt/smspnzgdmS/+vIJQd+EjC1F7whw4zDGssOu4XI6A==
+ b=QZf/vu9jgbXr4oN+RbevspXdeqIignokT/g05HTxF2NTvzllaEo+MSI0ixNoFOYmsNlhgBNpvV2JYJARE6d3RWe50rVjECbNK35bNUE2z39rSCXwAEzqxYC0dfm2RFgLwAjr0zu2zfglHGHzdvdu/cNu1rV8cyNki7ZVhlgWtbBm7viByZG3Gh7bcIpQMqBcFsYfWqUYyRT+TBvE4BWMWHZYoO2/SqWc5Ilbu5Dr12oZge5MnDl6qAG9W5VJH7opC153BaQThjmVoLzo2/J5rvbhdwkFLyQxmJkvRB+j1SjBMI8fr3O9ZgieXbTirQQvVZaJYmZh7aEfOlBikECx+Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nDyOsaEKWMexbMyEOdfZ3fg075U0MSF6yVl5CtldHHY=;
- b=ANkVvs6ddqaGd+fg6EBUcz8n+go5hFD9PqHVOgR9d1asN2nXSeJVwEWrkXx0nqFE0rSwjGmuiwUM2fPY6xffljXloSYTcW8K+g29MdNF+sq4e7HloQe3kH7K6IK9ZfINFQvmp8j/X0UKu0SPbQLA17VL6KRGyhWAIa/3jbkJ7439r5SLYztYHKNK2qR9hfkfhzcWoag+CpAY+khVcB4NkKCffGnnKWHbfmlM6JuXJnjEbKTaJnca0bHhS9BXJswNv13BbR2G0yQK1vgpuhcB/lFgAMtMOLW8FPR59UoFs6TAuQjZundsKPNkwKYSM93qy09Wh8bE9Re7TEAYzRa4qg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ bh=oKdsxuq1Ut15NDYBBPox8iVGp/GgBNamaDiC6ZpJvNw=;
+ b=GYj2058PcZ1jTEEBh0UsOb9ti561ndd9X6Qucog617xTnJv6DLpNN453T2likjnh3IS8M9Pp8evLNOBM9Mf++MqP7mJh9N+ssJq8E9MoLspoDX+LWslArBUdrIPsknACccqGg7ufIaS3E4+byMrL6ajl4uAfmQeCzcMmqfDs2jDny/X/BJhjow/SqFdYMDvNPem1n6VZhQL4ce66uhZ0r/NT7+iw5Her3IjiqCT+oog30/c02XyJ1flmX/jq+jQYRqK4c7KaphoGyb0uH4XDhvoHya+gH42LBRSH4Ty8YKBaJZxQtNbognbZqOFw1gi0ydd40y0Log3oA6DpgYvx8w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nDyOsaEKWMexbMyEOdfZ3fg075U0MSF6yVl5CtldHHY=;
- b=cmDGxzIAm+MUignqRAVcKuonjmJPIOBaKRgeMZ8CQ8q6JfH+axg2rHB4ZoMSkpdv+rcHMR/QTvqB/5AUhrBp9JSfqCvxCn/Ho132PMIEeUxH4+xF3XPJlUDpEFiE5fryzlax4L1tlmtQNA6NHBOSfM+ocKm4sQn3MMTLIthiArQ=
-Received: from DM6PR10CA0001.namprd10.prod.outlook.com (2603:10b6:5:60::14) by
- PH8PR12MB6697.namprd12.prod.outlook.com (2603:10b6:510:1cc::12) with
+ bh=oKdsxuq1Ut15NDYBBPox8iVGp/GgBNamaDiC6ZpJvNw=;
+ b=V25o/tbVuxZrNjoGP6USigO83Px5Sk/Icwu0m3KmBKphakQXQIpvQka4J+hoHbMY1+8VnF7mDZ7FzChphPTClsje7ShrmGucDAVURrFIa61EcSfrU3KX/y2ObC3tkf6c26KzL9Sk9oJjkh4R/V7uC2A7oiEF63rNFntUfWvj1K7uJZRYnHdlv/VvKhJFQ5vQfJ9MWaF8xZKdcpGK9xi1yL82ZoDfI6YXeAQ/GUIp6pYnIGX9t7r+Epz49cjOgqgx7TA7evKoCostI+a+j175Hu9pMKYJr4Si1YtxkAwjfgxhnlPX9S109q3Pv+vpxwNkKqKuL6jNGSWgEp+HykVuFg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by BL1PR12MB5286.namprd12.prod.outlook.com (2603:10b6:208:31d::6) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.30; Tue, 2 May
- 2023 13:39:29 +0000
-Received: from DM6NAM11FT014.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:60:cafe::f0) by DM6PR10CA0001.outlook.office365.com
- (2603:10b6:5:60::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.20 via Frontend
- Transport; Tue, 2 May 2023 13:39:28 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT014.mail.protection.outlook.com (10.13.173.132) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6363.20 via Frontend Transport; Tue, 2 May 2023 13:39:28 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 2 May
- 2023 08:39:04 -0500
-From:   Michal Simek <michal.simek@amd.com>
-To:     <linux-kernel@vger.kernel.org>, <monstr@monstr.eu>,
-        <michal.simek@xilinx.com>, <git@xilinx.com>
-CC:     Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
-        Harini Katakam <harini.katakam@amd.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Parth Gajjar <parth.gajjar@amd.com>,
-        Piyush Mehta <piyush.mehta@xilinx.com>,
-        Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Robert Hancock <robert.hancock@calian.com>,
-        "Sai Krishna Potthuri" <lakshmi.sai.krishna.potthuri@xilinx.com>,
-        Srinivas Neeli <srinivas.neeli@xilinx.com>,
-        Tanmay Shah <tanmay.shah@amd.com>,
-        Vishal Sagar <vishal.sagar@amd.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH 23/23] arm64: zynqmp: Add phase tags marking
-Date:   Tue, 2 May 2023 15:35:51 +0200
-Message-ID: <48b554aef75d11e6ad2ef7d21f22accb35432112.1683034376.git.michal.simek@amd.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <cover.1683034376.git.michal.simek@amd.com>
-References: <cover.1683034376.git.michal.simek@amd.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.31; Tue, 2 May
+ 2023 13:36:38 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab%6]) with mapi id 15.20.6340.030; Tue, 2 May 2023
+ 13:36:38 +0000
+Date:   Tue, 2 May 2023 10:36:37 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Mika Penttila <mpenttil@redhat.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Theodore Ts'o <tytso@mit.edu>, Peter Xu <peterx@redhat.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>
+Subject: Re: [PATCH v6 3/3] mm/gup: disallow FOLL_LONGTERM GUP-fast writing
+ to file-backed mappings
+Message-ID: <ZFER5ROgCUyywvfe@nvidia.com>
+References: <cover.1682981880.git.lstoakes@gmail.com>
+ <dee4f4ad6532b0f94d073da263526de334d5d7e0.1682981880.git.lstoakes@gmail.com>
+ <fbad9e18-f727-9703-33cf-545a2d33af76@linux.ibm.com>
+ <7d56b424-ba79-4b21-b02c-c89705533852@lucifer.local>
+ <a6bb0334-9aba-9fd8-6a9a-9d4a931b6da2@linux.ibm.com>
+ <ZFEL20GQdomXGxko@nvidia.com>
+ <c4f790fb-b18a-341a-6965-455163ec06d1@redhat.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c4f790fb-b18a-341a-6965-455163ec06d1@redhat.com>
+X-ClientProxiedBy: MN2PR07CA0008.namprd07.prod.outlook.com
+ (2603:10b6:208:1a0::18) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT014:EE_|PH8PR12MB6697:EE_
-X-MS-Office365-Filtering-Correlation-Id: 25618646-c487-4d76-9338-08db4b12a724
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BL1PR12MB5286:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3ccd8407-d032-462f-4b4a-08db4b12413a
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: x/WBX0n7k6ZIkTuWJ+PMYDN0CCerGhsH7EQVteFfinFdrqx/4pc5tseNJFsVAV+nF8qxWWd1tFHWf2Dl6JIqAVXihQkYW58E1c8lNKucCBjgfepISwD0LRVS6wT7UhMXLqdBNJH3Xt9dU4hKZbRJlMS7/Y54HDvJcZVLvQKTbkz3BC6U+3k1Hdh19ZaWVPaJ2iRX6zW57MZ3DJwo5e2V75OxQBOA6mjSqI8R/B2KWah3PEDDSl12Hte4yZYfYshF1PiRJZo7DwDtcGbamJKkkuA2Pg9PGs/ghWvuFysfCtN51z7LF5aMSZk908S0rikBNkOgRfWJVyfJmqkA3cO5KjFbVrh6x6RF0lPcerRieVVYXv7JT9UDqtubu1tiPyFh9NRLRJoe6pE0yT7KS6ystBfvNAdccns/btAvOBoxIHMfTFLn2uKDqDNLTkBP25m44vL5GF/BTVtDe246CV96lj2x37XgGwgIMU8G5wQZGFHYPkWz+MxlBhfcpII+CPyh5/dwLWZeF3LcmdI997B1VGeLnXw5m7K4jpXBsCizYlozge5dfMEWedwlslKRAkgA5XoWVQXzsXPR4x/1k2hkm3cTOyCFyfpHWB4L/io6pBUDG0QOd7Rj1GySkHCwOC6X5Mrs0qEEOZw1nAO39r91R5rq82dNcVJ+GdhN/hbADLqxKOZLiMJfZU7Uxd5dtq1cmgKOJoWIuINWSNZJO64HPj/kzEIfxFzi7SoPbhXiwQNFuKXUWMHg3W4r5Mog7Tba
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(376002)(396003)(136003)(451199021)(46966006)(40470700004)(36840700001)(40460700003)(86362001)(5660300002)(7416002)(4326008)(8676002)(82740400003)(8936002)(70206006)(70586007)(81166007)(44832011)(356005)(316002)(41300700001)(40480700001)(2906002)(336012)(186003)(16526019)(26005)(6666004)(36860700001)(47076005)(426003)(83380400001)(36756003)(2616005)(82310400005)(110136005)(54906003)(478600001)(2101003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2023 13:39:28.7962
+X-Microsoft-Antispam-Message-Info: NXwmitepPsGdMZE97EHntuecjkMIm3TpOTNs8/55Qyn/FPKysX5YWtioLZFk0pJBTN8hD4oAKc3v2T4s9KiLtul18+n9lxyCyg2pPm9RJq7jVdbwO9SdwP2RJzw5VR7lql1RHtw4Xeqzwasts9IZfW4LYVzQpHA+9hrMlay1w1W/asFZZxpZaZy5kFIzbcZCYBFjMMtX/iIoRn6geQ8scjRUAWDez8BE3vONvra4fBkLj3leem3gRNR5Hh15orMS21FBxYodX7EnjDX8Q+c7DA+DxiVE02utl3D1KAZyYsC8DvrF/CYneXFlC5OZSEuFJYjfxsxMS0XFqt4KasYorhQ30hpaNQReZrDXZHmHaTlxD0zh0vP5yoUqFg0G886V4oxqHxix5XPjSHl0z+CI1uTqB9SVdP66j0MsuWiwwaTvVf8behLZTKDI4ClKQvaq+Emw/LFgHUuZOidNr2/6XoJuCRE/o0pl3jAnJY8oiZcEJIJosNYF/1hJcfpGhzZhi6tadsTfq2nGwvy9jM726gLeNkpt9nHAc6P2Aj97e93YjpKI+8SUKAwTDfxjPI5hjobh1ui/SgXpFFXOPmw+4d0T/QS06YIiPIDoC3XwzDo=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(366004)(376002)(136003)(396003)(451199021)(8936002)(2906002)(38100700002)(41300700001)(7416002)(7406005)(8676002)(5660300002)(36756003)(86362001)(6486002)(6506007)(6512007)(26005)(966005)(53546011)(54906003)(478600001)(2616005)(83380400001)(186003)(4326008)(6916009)(66476007)(66556008)(66946007)(316002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?pc/I/jKn9+zmO+S+FIOXNgfgt1BZk5RFOg6TN3ARJ+oKLVUqvOwGcz5wpm95?=
+ =?us-ascii?Q?y1vBoTqsejRwlZqnWda1ZXFY25rcReLIwiel0abNMVDrHE3W6rQ5KvJs9qBv?=
+ =?us-ascii?Q?3W895KW+93iZ0X39HlipjUASSJ6PHVKphSrnlZHUtFMGlyJULnZQMvN5O2CB?=
+ =?us-ascii?Q?TmVlMTc0mHhtAuqbA9M+RSTp7l624Z6yIWHwRzNYWZgQb3MSRhCSrhcaKg9r?=
+ =?us-ascii?Q?yQWgP8T1QDiBkXuid1ydhlVkDJRHlZfXV2D2axIkNvnE1cczOZS/gkVfLCQ2?=
+ =?us-ascii?Q?LViZe8k/Lcmu2gAYIwohhUX01qIZSAmcUQLFbzrAI1GTsBtUz6xXFn3OHdqR?=
+ =?us-ascii?Q?FJ9IXC0C19QHl/SChIkTSm8QyR1kXlEnA0WARwx7c2u4ory5PBuPlPee4HdD?=
+ =?us-ascii?Q?RNtrMtI5neF9KQkOY9yNdOxfuVsMHgE1YEyFWgdbPQtSwYqVZfngE4Vun8cM?=
+ =?us-ascii?Q?H1s8I7CbmcsQY//PR0aQWII9ttl6AVwBy3aJ/9fVK/fMCbaRErz6VdM4AHn1?=
+ =?us-ascii?Q?bdQwfScQD3SKMHA54XFzlleSQgBQIrh7+pj6odg/WOrrj4IRR9NmkwytHaxj?=
+ =?us-ascii?Q?DNE+P1Hb2XS3ZwE3XtjUyyIs2fvKWgI1PYs/GO5DHJ0G6NMD8MAns7gUBKKE?=
+ =?us-ascii?Q?l7AhWrOhGUgjyftXtySkukwjU9kBWc+XaXEZ01dWftgbTrEwRL9bpFhvhgF2?=
+ =?us-ascii?Q?DbtIH29OvLzRaOwIX0rwQv/KX+WSQIAvY7BkUSitjQxGvouQ3jy1p8nneu+w?=
+ =?us-ascii?Q?9KC6xWIKV+By9qi6ANmvtvvLZSSkW8B5yMS797W3voxlFmelDwN7fkz6A+MA?=
+ =?us-ascii?Q?QC2suzUnhUqJY7sBPhkfUoJkOoEkbjRJBHbPom9wuCJhXwxfSPfh0eWb3Q22?=
+ =?us-ascii?Q?Gnhea/eZURKQ4B7disDi4TgciIFz38t8VEUJ74baA7TXMGE6poAlCGUiG5Eq?=
+ =?us-ascii?Q?7SlGEnYBt+3MoAoBRIB0B9MAMAje4v53z0uEDKoYxIxt9YU111oYMWoSFP57?=
+ =?us-ascii?Q?VZ1YrFf0ijUeqm0ag4i90cscL1Nt0ZapVgHp1FtdaRU69is8Hkp4JfbvUV36?=
+ =?us-ascii?Q?mcB7IQIvVOc7C/ghqr4gJ6DxMVKheQvmXaV2w9H1O2+nYQbatXmIRkhpQG6R?=
+ =?us-ascii?Q?ff+iFGrvT+SeypZvJiDPVBnE9JfWkroYDnVIATvNIzM5t+OEhCtYkk1eigVc?=
+ =?us-ascii?Q?ZdJjpWhjIjK/kG8o36f6oQvOMGlat/zVkt3xCUEJK5mFG89qJWb+0DjHw6Xo?=
+ =?us-ascii?Q?vYySeq7c6c5EeBG9hQWK1Qg1l2rnRmvG+ibllxzOmuB0kD32T0dM/N0FkU+S?=
+ =?us-ascii?Q?LdhlrAswfaTfFluDFW8bFc3oe3G4uqRik8mRwGS/qP7G0aW0pxozcOQWRYhW?=
+ =?us-ascii?Q?iT3KqV9HoSTfI/dije3xtWYkhM+FAqZhSE9lLhb1fn8GEsgO5/SWUtSnkzv+?=
+ =?us-ascii?Q?PvUwJXibLVwAFCg+ECw82btHii8j2NGyza6iw9/fMoaCqnMIvaXEV4BpNoC2?=
+ =?us-ascii?Q?dKO266XAwqGcJjIK4ApsDnnpCPzNf6keVTOWWrcetgt4Ti4WUsJF4Frstkgj?=
+ =?us-ascii?Q?QShb+2Y0mk4e311JZdmRQC/qtCUwtXvS3TM2kJhB?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3ccd8407-d032-462f-4b4a-08db4b12413a
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2023 13:36:38.0998
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 25618646-c487-4d76-9338-08db4b12a724
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT014.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6697
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: gk6R+D79M1NZF97mZbnBR4UpfvIL1wwuNiTzQXd0mObWcN9ggWH8udarSplUJ+12
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5286
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -115,187 +162,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-bootph-all as phase tag was added to dt-schema
-(dtschema/schemas/bootph.yaml) to cover U-Boot challenges with DT.
-That's why add it also to Linux to be aligned with bootloader requirement.
+On Tue, May 02, 2023 at 03:28:40PM +0200, David Hildenbrand wrote:
+> On 02.05.23 15:10, Jason Gunthorpe wrote:
+> > On Tue, May 02, 2023 at 03:04:27PM +0200, Christian Borntraeger wrote:
+> > \> > We can reintroduce a flag to permit exceptions if this is really broken, are you
+> > > > able to test? I don't have an s390 sat around :)
+> > > 
+> > > Matt (Rosato on cc) probably can. In the end, it would mean having
+> > >    <memoryBacking>
+> > >      <source type="file"/>
+> > >    </memoryBacking>
+> > 
+> > This s390 code is the least of the problems, after this series VFIO
+> > won't startup at all with this configuration.
+> 
+> Good question if the domain would fail to start. I recall that IOMMUs for
+> zPCI are special on s390x. [1]
 
-Signed-off-by: Michal Simek <michal.simek@amd.com>
----
+Not upstream they aren't.
 
----
- arch/arm64/boot/dts/xilinx/zynqmp-clk-ccf.dtsi    |  6 ++++++
- arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts |  3 +++
- arch/arm64/boot/dts/xilinx/zynqmp.dtsi            | 12 ++++++++++++
- 3 files changed, 21 insertions(+)
+> Well, zPCI is special. I cannot immediately tell when we would trigger
+> long-term pinning.
 
-diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-clk-ccf.dtsi b/arch/arm64/boot/dts/xilinx/zynqmp-clk-ccf.dtsi
-index 581221fdadf1..719ea5d5ae88 100644
---- a/arch/arm64/boot/dts/xilinx/zynqmp-clk-ccf.dtsi
-+++ b/arch/arm64/boot/dts/xilinx/zynqmp-clk-ccf.dtsi
-@@ -11,30 +11,35 @@
- #include <dt-bindings/clock/xlnx-zynqmp-clk.h>
- / {
- 	pss_ref_clk: pss_ref_clk {
-+		bootph-all;
- 		compatible = "fixed-clock";
- 		#clock-cells = <0>;
- 		clock-frequency = <33333333>;
- 	};
- 
- 	video_clk: video_clk {
-+		bootph-all;
- 		compatible = "fixed-clock";
- 		#clock-cells = <0>;
- 		clock-frequency = <27000000>;
- 	};
- 
- 	pss_alt_ref_clk: pss_alt_ref_clk {
-+		bootph-all;
- 		compatible = "fixed-clock";
- 		#clock-cells = <0>;
- 		clock-frequency = <0>;
- 	};
- 
- 	gt_crx_ref_clk: gt_crx_ref_clk {
-+		bootph-all;
- 		compatible = "fixed-clock";
- 		#clock-cells = <0>;
- 		clock-frequency = <108000000>;
- 	};
- 
- 	aux_ref_clk: aux_ref_clk {
-+		bootph-all;
- 		compatible = "fixed-clock";
- 		#clock-cells = <0>;
- 		clock-frequency = <27000000>;
-@@ -43,6 +48,7 @@ aux_ref_clk: aux_ref_clk {
- 
- &zynqmp_firmware {
- 	zynqmp_clk: clock-controller {
-+		bootph-all;
- 		#clock-cells = <1>;
- 		compatible = "xlnx,zynqmp-clk";
- 		clocks = <&pss_ref_clk>, <&video_clk>, <&pss_alt_ref_clk>,
-diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts b/arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts
-index 78ff6a9b3144..8afdf4408a78 100644
---- a/arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts
-+++ b/arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts
-@@ -243,17 +243,20 @@ tpm@0 { /* slm9670 - U144 */
- 
- &i2c1 {
- 	status = "okay";
-+	bootph-all;
- 	clock-frequency = <400000>;
- 	scl-gpios = <&gpio 24 GPIO_ACTIVE_HIGH>;
- 	sda-gpios = <&gpio 25 GPIO_ACTIVE_HIGH>;
- 
- 	eeprom: eeprom@50 { /* u46 - also at address 0x58 */
-+		bootph-all;
- 		compatible = "st,24c64", "atmel,24c64"; /* st m24c64 */
- 		reg = <0x50>;
- 		/* WP pin EE_WP_EN connected to slg7x644092@68 */
- 	};
- 
- 	eeprom_cc: eeprom@51 { /* required by spec - also at address 0x59 */
-+		bootph-all;
- 		compatible = "st,24c64", "atmel,24c64"; /* st m24c64 */
- 		reg = <0x51>;
- 	};
-diff --git a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
-index d01d4334c95f..51b8349dcacd 100644
---- a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
-+++ b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
-@@ -127,6 +127,7 @@ rproc_1_fw_image: memory@3ef00000 {
- 	};
- 
- 	zynqmp_ipi: zynqmp_ipi {
-+		bootph-all;
- 		compatible = "xlnx,zynqmp-ipi-mailbox";
- 		interrupt-parent = <&gic>;
- 		interrupts = <0 35 4>;
-@@ -136,6 +137,7 @@ zynqmp_ipi: zynqmp_ipi {
- 		ranges;
- 
- 		ipi_mailbox_pmu1: mailbox@ff9905c0 {
-+			bootph-all;
- 			reg = <0x0 0xff9905c0 0x0 0x20>,
- 			      <0x0 0xff9905e0 0x0 0x20>,
- 			      <0x0 0xff990e80 0x0 0x20>,
-@@ -152,6 +154,7 @@ ipi_mailbox_pmu1: mailbox@ff9905c0 {
- 	dcc: dcc {
- 		compatible = "arm,dcc";
- 		status = "disabled";
-+		bootph-all;
- 	};
- 
- 	pmu {
-@@ -177,8 +180,10 @@ zynqmp_firmware: zynqmp-firmware {
- 			compatible = "xlnx,zynqmp-firmware";
- 			#power-domain-cells = <1>;
- 			method = "smc";
-+			bootph-all;
- 
- 			zynqmp_power: zynqmp-power {
-+				bootph-all;
- 				compatible = "xlnx,zynqmp-power";
- 				interrupt-parent = <&gic>;
- 				interrupts = <0 35 4>;
-@@ -258,6 +263,7 @@ r5f-1 {
- 
- 	amba: axi {
- 		compatible = "simple-bus";
-+		bootph-all;
- 		#address-cells = <2>;
- 		#size-cells = <2>;
- 		ranges;
-@@ -699,6 +705,7 @@ pcie_intc: legacy-interrupt-controller {
- 		};
- 
- 		qspi: spi@ff0f0000 {
-+			bootph-all;
- 			compatible = "xlnx,zynqmp-qspi-1.0";
- 			status = "disabled";
- 			clock-names = "ref_clk", "pclk";
-@@ -745,6 +752,7 @@ sata: ahci@fd0c0000 {
- 		};
- 
- 		sdhci0: mmc@ff160000 {
-+			bootph-all;
- 			compatible = "xlnx,zynqmp-8.9a", "arasan,sdhci-8.9a";
- 			status = "disabled";
- 			interrupt-parent = <&gic>;
-@@ -759,6 +767,7 @@ sdhci0: mmc@ff160000 {
- 		};
- 
- 		sdhci1: mmc@ff170000 {
-+			bootph-all;
- 			compatible = "xlnx,zynqmp-8.9a", "arasan,sdhci-8.9a";
- 			status = "disabled";
- 			interrupt-parent = <&gic>;
-@@ -851,6 +860,7 @@ ttc3: timer@ff140000 {
- 		};
- 
- 		uart0: serial@ff000000 {
-+			bootph-all;
- 			compatible = "xlnx,zynqmp-uart", "cdns,uart-r1p12";
- 			status = "disabled";
- 			interrupt-parent = <&gic>;
-@@ -861,6 +871,7 @@ uart0: serial@ff000000 {
- 		};
- 
- 		uart1: serial@ff010000 {
-+			bootph-all;
- 			compatible = "xlnx,zynqmp-uart", "cdns,uart-r1p12";
- 			status = "disabled";
- 			interrupt-parent = <&gic>;
-@@ -982,6 +993,7 @@ zynqmp_dpdma: dma-controller@fd4c0000 {
- 		};
- 
- 		zynqmp_dpsub: display@fd4a0000 {
-+			bootph-all;
- 			compatible = "xlnx,zynqmp-dpsub-1.7";
- 			status = "disabled";
- 			reg = <0x0 0xfd4a0000 0x0 0x1000>,
--- 
-2.36.1
+zPCI uses the standard IOMMU stuff, so it uses a normal VFIO container
+and the normal pin_user_pages() path.
 
+> [1] https://www.mail-archive.com/qemu-devel@nongnu.org/msg875728.html
+
+AFIACT this is talking about the nested IOMMU translation stuff.
+RPCIT is the hypercall to invalidate the nested IOMMU table. I expect s390 is
+going to have another go at implementing this using iommufd.
+
+The stuff in that series like KVM_S390_ZPCIOP_REG_IOAT didn't make it
+upstream.
+
+Jason
