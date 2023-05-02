@@ -2,189 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D620C6F3BFC
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 04:13:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 790506F3C00
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 04:17:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233368AbjEBCNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 22:13:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42046 "EHLO
+        id S233380AbjEBCR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 22:17:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230484AbjEBCNT (ORCPT
+        with ESMTP id S230484AbjEBCRZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 22:13:19 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 539943AA1;
-        Mon,  1 May 2023 19:13:15 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 6761C32009C1;
-        Mon,  1 May 2023 22:13:12 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Mon, 01 May 2023 22:13:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=who-t.net; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1682993592; x=1683079992; bh=Zw
-        QOGXyH976reVvtHf/drdDDqvM/gzeddwkfAWhnysg=; b=iYnrUyMaKRRDLpli1p
-        okM2naedtNZKVePrq0/f2NPcT9DS/NSiwp5a19fEyhIoxtBWSr+4hnE3g6YQ/pYw
-        JZU0Rj9kwnaTnEgtsM7hVIZ6NIhnEa1MJDwtYbCOK3sPpkPUx3J6xLMSbryoWTXn
-        K19eWQ7DM2Et7nFa9zQ5lZoupii42bReJw+JPrPqr0b1WKuF0a2IPsxx6A+K6+IM
-        Bn2uVfVXGwWyoXENbmMUKzLw6QQIlTzfwCYwWI1GRt5zlNvTbT0kT/myZlaI31pe
-        NDbLPvnwPIDI5+DkKUVwuWuZR3ytHkaK59aYQg6l9W7tYwrHqJR90UZ6i2LW5mhX
-        XXhA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1682993592; x=1683079992; bh=ZwQOGXyH976re
-        VvtHf/drdDDqvM/gzeddwkfAWhnysg=; b=IWQD49l/9/wpBAbKvFo0iCH4lqJ4i
-        9Cur5dQJjUSwd6/d6DkrdztdAlXNS/7bRhNTlc7Bw5blrs111zdbtZ1Td2JcWJEz
-        m+6ooDW/fQkvNt4f4Aq5JDBsqGAmdGO7/HpIYtfTTsDyUKKudQghPBV4s+JkpkMZ
-        AsTCqopwtbNdk3KVRLHtChP8ITEUmKVVge02mT9OkZEHzCSLwWLi4s97P9aAOkjI
-        cJ2UyuUCJh9YPASPZI480HGrq0VmsMZlIz7fLBhSHh40Fb+7H/yiYds3B9FRb1iV
-        s2yYSG9yQxfeqaXeYKgOqcq86GYifc/iyYeRQ1dzuJHXbBf8Ao3ExUG+A==
-X-ME-Sender: <xms:t3FQZHEGWcDEVllbpJQrbk1ln2qjrZcxjPiocvc2QPxFfv9aVyrxgw>
-    <xme:t3FQZEVg0xewT9z1UZUG0uhclRy1LW5Ps-ErNhH5u-awBMr2KEOaH4ATgQ90MlPXM
-    FGYCFDbq4GUtctj01c>
-X-ME-Received: <xmr:t3FQZJJTepqOtLidERGkJ5625tps85BahwwObptvktU5OrPdCAtQimNlRDwe3yFgtoLXcQCvPFy7NoScQmZ77hoQ7LBY18XT_ETj>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedvhedgheeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheprfgvthgv
-    rhcujfhuthhtvghrvghruceophgvthgvrhdrhhhuthhtvghrvghrseifhhhoqdhtrdhnvg
-    htqeenucggtffrrghtthgvrhhnpeekvdekgeehfeejgfdvudffhfevheejffevgfeigfek
-    hfduieefudfgtedugfetgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
-    grihhlfhhrohhmpehpvghtvghrrdhhuhhtthgvrhgvrhesfihhohdqthdrnhgvth
-X-ME-Proxy: <xmx:t3FQZFEtpph31Hwr6PUl0v-F_wiUIFqjvtKSkmdQgUOC08KYkhxw_g>
-    <xmx:t3FQZNXVZ4zBB4hSDALTYXEZud2LbzuOGHJMjVZ8jzMAtduYwCaTHw>
-    <xmx:t3FQZAMGlmmlxnmr4Q5lsOSo3J5UVMgDISp-0qo_3PPZyHwOvHMgBg>
-    <xmx:uHFQZAQJKmsB1X6e2NYYJ2D-rxu1UhWhKecq9e3BnV27HQLN8xWcwA>
-Feedback-ID: i7ce144cd:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 1 May 2023 22:13:09 -0400 (EDT)
-Date:   Tue, 2 May 2023 12:13:05 +1000
-From:   Peter Hutterer <peter.hutterer@who-t.net>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Biswarup Pal <biswarupp@google.com>, kernel-team@android.com,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Call input_set_timestamp for events injected using uinput
-Message-ID: <20230502021305.GA798180@quokka>
-References: <20230427000152.1407471-1-biswarupp@google.com>
- <ZFBh948No3IAV2hf@google.com>
+        Mon, 1 May 2023 22:17:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D581230EA;
+        Mon,  1 May 2023 19:17:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5463D6208E;
+        Tue,  2 May 2023 02:17:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1133EC4339B;
+        Tue,  2 May 2023 02:17:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682993842;
+        bh=UtSIxSFYf3c1tokbMNWGDHpcjx1Gc1a0IuguMOoCqHk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=MT+WogSX4WOA24K9yMV70qk6A9E9AAP+Sn4XJ8ogvjC1/V31oT6H1vps+k0VlM4PF
+         M4LE4IY3X1Z/3pxM/SLw3zcA9Oo11jkwg38BbD7b4U6CJdRuEA/9AcKHiKaKlMYnVN
+         8X4d4ZbPmDXRU2GBzJe84kgY6DUBStHqzL5Lg8osC/j+nUCCZLt7fSBS1WpqzCMZ/u
+         A30yLsUdrZwGSJluo7IkImufK3lYsP7G0Cl9ib3JsR4XPsKAwY/n9HfQCv+SVULUJ5
+         oBuuqH/Syf6Rbl2Msy+TXkTclrGYawqJpiWntqlryjjWmRxkGLtadOI8xf2QpgoCg0
+         9Pft2iPqYc/Pw==
+From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To:     linux-trace-kernel@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        mhiramat@kernel.org, Florent Revest <revest@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org
+Subject: [PATCH v9.1 00/11] tracing: Add fprobe/tracepoint events
+Date:   Tue,  2 May 2023 11:17:19 +0900
+Message-ID:  <168299383880.3242086.7182498102007986127.stgit@mhiramat.roam.corp.google.com>
+X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZFBh948No3IAV2hf@google.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for the CC, I would've missed that.
+Hi,
 
-On Mon, May 01, 2023 at 06:05:59PM -0700, Dmitry Torokhov wrote:
-> On Thu, Apr 27, 2023 at 12:01:51AM +0000, Biswarup Pal wrote:
-> > Currently, uinput doesn't use the input_set_timestamp API, so any
-> > event injected using uinput is not accurately timestamped in terms of
-> > measuring when the actual event happened. Hence, call the
-> > input_set_timestamp API from uinput in order to provide a more
-> > accurate sense of time for the event. Propagate only the timestamps
-> > which are a) positive, b) within a pre-defined offset (10 secs) from
-> > the current time, and c) not in the future.
-> 
-> This makes sense to me. Peter, do you see any issues?
+Here is the version 9.1 :) of improve fprobe and add a basic fprobe event
+support for ftrace (tracefs) and perf. Here is the previous version.
 
-nope, this looks good and has my 
-Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net> 
+https://lore.kernel.org/all/168295372484.3157983.731333785390494141.stgit@mhiramat.roam.corp.google.com/
 
-afaict any code that has compiler warnings enabled should have this on
-zero anyway. It'd be really nice to pass a timestamp down to uinput but
-that's obviously a lot more involved.
+This version fixes a build error with CONFIG_MODULES=n reported by
+kernel test bot ([4/11]).
 
-Cheers,
-  Peter
+You can also get this series from:
 
-> 
-> Thanks!
-> 
-> > 
-> > Signed-off-by: Biswarup Pal <biswarupp@google.com>
-> > ---
-> >  drivers/input/misc/uinput.c | 34 ++++++++++++++++++++++++++++++++++
-> >  1 file changed, 34 insertions(+)
-> > 
-> > diff --git a/drivers/input/misc/uinput.c b/drivers/input/misc/uinput.c
-> > index f2593133e524..d98212d55108 100644
-> > --- a/drivers/input/misc/uinput.c
-> > +++ b/drivers/input/misc/uinput.c
-> > @@ -33,6 +33,7 @@
-> >  #define UINPUT_NAME		"uinput"
-> >  #define UINPUT_BUFFER_SIZE	16
-> >  #define UINPUT_NUM_REQUESTS	16
-> > +#define UINPUT_TIMESTAMP_ALLOWED_OFFSET_SECS 10
-> >  
-> >  enum uinput_state { UIST_NEW_DEVICE, UIST_SETUP_COMPLETE, UIST_CREATED };
-> >  
-> > @@ -569,11 +570,40 @@ static int uinput_setup_device_legacy(struct uinput_device *udev,
-> >  	return retval;
-> >  }
-> >  
-> > +/*
-> > + * Returns true if the given timestamp is valid (i.e., if all the following
-> > + * conditions are satisfied), false otherwise.
-> > + * 1) given timestamp is positive
-> > + * 2) it's within the allowed offset before the current time
-> > + * 3) it's not in the future
-> > + */
-> > +static bool is_valid_timestamp(const ktime_t timestamp)
-> > +{
-> > +	ktime_t zero_time;
-> > +	ktime_t current_time;
-> > +	ktime_t min_time;
-> > +	ktime_t offset;
-> > +
-> > +	zero_time = ktime_set(0, 0);
-> > +	if (ktime_compare(zero_time, timestamp) >= 0)
-> > +		return false;
-> > +
-> > +	current_time = ktime_get();
-> > +	offset = ktime_set(UINPUT_TIMESTAMP_ALLOWED_OFFSET_SECS, 0);
-> > +	min_time = ktime_sub(current_time, offset);
-> > +
-> > +	if (ktime_after(min_time, timestamp) || ktime_after(timestamp, current_time))
-> > +		return false;
-> > +
-> > +	return true;
-> > +}
-> > +
-> >  static ssize_t uinput_inject_events(struct uinput_device *udev,
-> >  				    const char __user *buffer, size_t count)
-> >  {
-> >  	struct input_event ev;
-> >  	size_t bytes = 0;
-> > +	ktime_t timestamp;
-> >  
-> >  	if (count != 0 && count < input_event_size())
-> >  		return -EINVAL;
-> > @@ -588,6 +618,10 @@ static ssize_t uinput_inject_events(struct uinput_device *udev,
-> >  		if (input_event_from_user(buffer + bytes, &ev))
-> >  			return -EFAULT;
-> >  
-> > +		timestamp = ktime_set(ev.input_event_sec, ev.input_event_usec * NSEC_PER_USEC);
-> > +		if (is_valid_timestamp(timestamp))
-> > +			input_set_timestamp(udev->dev, timestamp);
-> > +
-> >  		input_event(udev->dev, ev.type, ev.code, ev.value);
-> >  		bytes += input_event_size();
-> >  		cond_resched();
-> > -- 
-> > 2.40.1.495.gc816e09b53d-goog
-> > 
-> 
-> -- 
-> Dmitry
+git://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git topic/fprobe-event-ext
+
+With this fprobe events, we can continue to trace function entry/exit
+even if the CONFIG_KPROBES_ON_FTRACE is not available. Since
+CONFIG_KPROBES_ON_FTRACE requires the CONFIG_DYNAMIC_FTRACE_WITH_REGS,
+it is not available if the architecture only supports
+CONFIG_DYNAMIC_FTRACE_WITH_ARGS (e.g. arm64). And that means kprobe
+events can not probe function entry/exit effectively on such architecture.
+But this problem can be solved if the dynamic events supports fprobe events
+because fprobe events doesn't use kprobe but ftrace via fprobe.
+
+FPROBE EVENTS
+=============
+
+Fprobe events allows user to add new events on the entry and exit of kernel
+functions (which can be ftraced). Unlike kprobe events, the fprobe events
+can only probe the function entry and exit, and it can only trace the
+function args, return value, and stacks. (no registers)
+For probing function body, users can continue to use the kprobe events.
+
+The tracepoint probe events (tprobe events) also allows user to add new
+events dynamically on the tracepoint. Most of the tracepoint already has
+trace-events, so this feature is useful if you only want to know a
+specific parameter, or trace the tracepoints which has no trace-events
+(e.g. sched_*_tp tracepoints only exposes the tracepoints.)
+
+The fprobe events syntax is;
+
+ f[:[GRP/][EVENT]] FUNCTION [FETCHARGS]
+ f[MAXACTIVE][:[GRP/][EVENT]] FUNCTION%return [FETCHARGS]
+
+And tracepoint probe events syntax is;
+
+ t[:[GRP/][EVENT]] TRACEPOINT [FETCHARGS]
+
+This series includes BTF argument support for fprobe/tracepoint events,
+and kprobe events. This allows us to fetch a specific function parameter
+by name, and all parameters by '$$args'.
+Note that enabling this feature, you need to enable CONFIG_BPF_SYSCALL and
+confirm that your arch supports CONFIG_HAVE_FUNCTION_ARG_ACCESS_API.
+
+E.g.
+
+ # echo 't kfree ptr' >> dynamic_events
+ # echo 'f kfree object' >> dynamic_events
+ # cat dynamic_events 
+t:tracepoints/kfree kfree ptr=ptr
+f:fprobes/kfree__entry kfree object=object
+ # echo 1 > events/fprobes/enable
+ # echo 1 > events/tracepoints/enable
+ # echo > trace
+ # head -n 20 trace | tail
+#           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
+#              | |         |   |||||     |         |
+            tail-84      [000] .....  1324.561958: kfree__entry: (kfree+0x4/0x140) object=0xffff888006383c00
+            tail-84      [000] ...1.  1324.561961: kfree: (__probestub_kfree+0x4/0x10) ptr=0xffff888006383c00
+            tail-84      [000] .....  1324.561988: kfree__entry: (kfree+0x4/0x140) object=0x0
+            tail-84      [000] ...1.  1324.561988: kfree: (__probestub_kfree+0x4/0x10) ptr=0x0
+            tail-84      [000] .....  1324.561989: kfree__entry: (kfree+0x4/0x140) object=0xffff88800671e600
+            tail-84      [000] ...1.  1324.561989: kfree: (__probestub_kfree+0x4/0x10) ptr=0xffff88800671e600
+            tail-84      [000] .....  1324.562368: kfree__entry: (kfree+0x4/0x140) object=0xffff8880065e0580
+            tail-84      [000] ...1.  1324.562369: kfree: (__probestub_kfree+0x4/0x10) ptr=0xffff8880065e0580
+
+
+Thank you,
+
+---
+
+Masami Hiramatsu (Google) (11):
+      fprobe: Pass return address to the handlers
+      tracing/probes: Add fprobe events for tracing function entry and exit.
+      selftests/ftrace: Add fprobe related testcases
+      tracing/probes: Add tracepoint support on fprobe_events
+      tracing/probes: Move event parameter fetching code to common parser
+      tracing/probes: Support function parameters if BTF is available
+      tracing/probes: Add $$args meta argument for all function args
+      tracing/probes: Add BTF retval type support
+      selftests/ftrace: Add tracepoint probe test case
+      selftests/ftrace: Add BTF arguments test cases
+      Documentation: tracing/probes: Add fprobe event tracing document
+
+
+ Documentation/trace/fprobetrace.rst                |  187 +++
+ Documentation/trace/index.rst                      |    1 
+ include/linux/fprobe.h                             |   11 
+ include/linux/rethook.h                            |    2 
+ include/linux/trace_events.h                       |    3 
+ include/linux/tracepoint-defs.h                    |    1 
+ include/linux/tracepoint.h                         |    5 
+ kernel/kprobes.c                                   |    1 
+ kernel/trace/Kconfig                               |   26 
+ kernel/trace/Makefile                              |    1 
+ kernel/trace/bpf_trace.c                           |    6 
+ kernel/trace/fprobe.c                              |   17 
+ kernel/trace/rethook.c                             |    3 
+ kernel/trace/trace.c                               |   13 
+ kernel/trace/trace.h                               |   11 
+ kernel/trace/trace_eprobe.c                        |   44 -
+ kernel/trace/trace_fprobe.c                        | 1198 ++++++++++++++++++++
+ kernel/trace/trace_kprobe.c                        |   33 -
+ kernel/trace/trace_probe.c                         |  504 +++++++-
+ kernel/trace/trace_probe.h                         |   43 +
+ kernel/trace/trace_uprobe.c                        |    8 
+ lib/test_fprobe.c                                  |   10 
+ samples/fprobe/fprobe_example.c                    |    6 
+ .../ftrace/test.d/dynevent/add_remove_btfarg.tc    |   54 +
+ .../ftrace/test.d/dynevent/add_remove_fprobe.tc    |   26 
+ .../ftrace/test.d/dynevent/add_remove_tprobe.tc    |   27 
+ .../ftrace/test.d/dynevent/fprobe_syntax_errors.tc |   99 ++
+ .../ftrace/test.d/dynevent/tprobe_syntax_errors.tc |   82 +
+ .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   |   13 
+ 29 files changed, 2295 insertions(+), 140 deletions(-)
+ create mode 100644 Documentation/trace/fprobetrace.rst
+ create mode 100644 kernel/trace/trace_fprobe.c
+ create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_btfarg.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_fprobe.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_tprobe.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/tprobe_syntax_errors.tc
+
+--
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
