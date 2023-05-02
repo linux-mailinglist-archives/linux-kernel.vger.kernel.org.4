@@ -2,101 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 033836F4351
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 14:09:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBA106F4354
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 14:09:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234125AbjEBMJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 08:09:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35540 "EHLO
+        id S232830AbjEBMJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 08:09:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233554AbjEBMJE (ORCPT
+        with ESMTP id S233784AbjEBMJv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 08:09:04 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27C0F358B;
-        Tue,  2 May 2023 05:09:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=pz1BFTrMbjtmTLSMUAMwv5KDjqVuW0L+OFuL8UBqI6M=; b=UKrjov+EaCK9CHW/8De9JD8ppd
-        WIAvUqI3xCyhKeUEWy4dg8GrMF+zoqXiitSmj2yLsjJX0In/tnDn/SnOJ9OVUF6SZHXf8cPpDv2KE
-        rQ08+4D83uNLFOaaJ2q9zRzM+XirpW5wcRZ0o9EhGPYg91REe8sz6VwLFkn+kslAqtCMzi0BJcgEi
-        2mr1mvcT0Gp95Sl5NZZEslKSWB2BTNGr+UHLLJMIQkfBdBgAuQbzT9kDg2CBJnJzMrLvk0Kvuyj12
-        uaKVqyt/rexm5oBsVlZbGOAF6Y7t+B9aFsOSgAjh7TQJeIMXCkXoyKQBxq5l4v4HqLq1hhn/9fIjc
-        G2Q4Popw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1ptonk-00GIcJ-0E;
-        Tue, 02 May 2023 12:08:13 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        Tue, 2 May 2023 08:09:51 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96EBA4EC8;
+        Tue,  2 May 2023 05:09:43 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B838C300165;
-        Tue,  2 May 2023 14:08:10 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 784D023C5C351; Tue,  2 May 2023 14:08:10 +0200 (CEST)
-Date:   Tue, 2 May 2023 14:08:10 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Mika Penttila <mpenttil@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Theodore Ts'o <tytso@mit.edu>, Peter Xu <peterx@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>
-Subject: Re: [PATCH v6 3/3] mm/gup: disallow FOLL_LONGTERM GUP-fast writing
- to file-backed mappings
-Message-ID: <20230502120810.GD1597538@hirez.programming.kicks-ass.net>
-References: <cover.1682981880.git.lstoakes@gmail.com>
- <dee4f4ad6532b0f94d073da263526de334d5d7e0.1682981880.git.lstoakes@gmail.com>
- <20230502111334.GP1597476@hirez.programming.kicks-ass.net>
- <ab66d15a-acd0-4d9b-aa12-49cddd12c6a5@lucifer.local>
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 23DE021A10;
+        Tue,  2 May 2023 12:09:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1683029382; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=5isj2N5NCBHlgNEX7kDR8L5F10upbDgKEvNgnzD7pjU=;
+        b=lCdfsFMOgUvQOOjznQ29dhIfCPfBATrhqs0ygxXq+WuLpchDR8rfeWRUqFg4gsVq1hAZso
+        M6yRbkcUUeSN+OZpt0kdpNk+01NuOD3H4axIM8mN+INEgVDTKNBob6uRoIMwSVTHqsAyiH
+        tXY30Kqoaqh0gDh5kUwQuvMJsIBgFwg=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9635D139C3;
+        Tue,  2 May 2023 12:09:41 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id bPRFI4X9UGRmLwAAMHmgww
+        (envelope-from <jgross@suse.com>); Tue, 02 May 2023 12:09:41 +0000
+From:   Juergen Gross <jgross@suse.com>
+To:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-hyperv@vger.kernel.org, linux-doc@vger.kernel.org
+Cc:     mikelley@microsoft.com, Juergen Gross <jgross@suse.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org, Jonathan Corbet <corbet@lwn.net>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: [PATCH v6 00/16] x86/mtrr: fix handling with PAT but without MTRR
+Date:   Tue,  2 May 2023 14:09:15 +0200
+Message-Id: <20230502120931.20719-1-jgross@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ab66d15a-acd0-4d9b-aa12-49cddd12c6a5@lucifer.local>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -104,173 +69,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 02, 2023 at 12:25:54PM +0100, Lorenzo Stoakes wrote:
-> On Tue, May 02, 2023 at 01:13:34PM +0200, Peter Zijlstra wrote:
-> > On Tue, May 02, 2023 at 12:11:49AM +0100, Lorenzo Stoakes wrote:
-> > > @@ -95,6 +96,77 @@ static inline struct folio *try_get_folio(struct page *page, int refs)
-> > >  	return folio;
-> > >  }
-> > >
-> > > +#ifdef CONFIG_MMU_GATHER_RCU_TABLE_FREE
-> > > +static bool stabilise_mapping_rcu(struct folio *folio)
-> > > +{
-> > > +	struct address_space *mapping = READ_ONCE(folio->mapping);
-> > > +
-> > > +	rcu_read_lock();
-> > > +
-> > > +	return mapping == READ_ONCE(folio->mapping);
-> >
-> > This doesn't make sense; why bother reading the same thing twice?
-> 
-> The intent is to see whether the folio->mapping has been truncated from
-> underneath us, as per the futex code that Kirill referred to which does
-> something similar [1].
+This series tries to fix the rather special case of PAT being available
+without having MTRRs (either due to CONFIG_MTRR being not set, or
+because the feature has been disabled e.g. by a hypervisor).
 
-Yeah, but per that 3rd load you got nothing here. Also that futex code
-did the early load to deal with the !mapping case, but you're not doing
-that.
+The main use cases are Xen PV guests and SEV-SNP guests running under
+Hyper-V.
 
-> > Who cares if the thing changes from before; what you care about is that
-> > the value you see has stable storage, this doesn't help with that.
-> >
-> > > +}
-> > > +
-> > > +static void unlock_rcu(void)
-> > > +{
-> > > +	rcu_read_unlock();
-> > > +}
-> > > +#else
-> > > +static bool stabilise_mapping_rcu(struct folio *)
-> > > +{
-> > > +	return true;
-> > > +}
-> > > +
-> > > +static void unlock_rcu(void)
-> > > +{
-> > > +}
-> > > +#endif
-> >
-> > Anyway, this all can go away. RCU can't progress while you have
-> > interrupts disabled anyway.
-> 
-> There seems to be other code in the kernel that assumes that this is not
-> the case,
+Instead of trying to work around all the issues by adding if statements
+here and there, just try to use the complete available infrastructure
+by setting up a read-only MTRR state when needed.
 
-Yeah, so Paul went back on forth on that a bit. It used to be true in
-the good old days when everything was simple. Then Paul made things
-complicated by separating out sched-RCU bh-RCU and 'regular' RCU
-flavours.
+In the Xen PV case the current MTRR MSR values can be read from the
+hypervisor, while for the SEV-SNP case all needed is to set the
+default caching mode to "WB".
 
-At that point disabling IRQs would only (officially) inhibit sched and
-bh RCU flavours, but not the regular RCU.
+I have added more cleanup which has been discussed when looking into
+the most recent failures.
 
-But then some years ago Linus convinced Paul that having all these
-separate RCU flavours with separate QS rules was a big pain in the
-backside and Paul munged them all together again.
+Note that I couldn't test the Hyper-V related change (patch 3).
 
-So now, anything that inhibits any of the RCU flavours inhibits them
-all. So disabling IRQs is sufficient.
+Running on bare metal and with Xen didn't show any problems with the
+series applied.
 
-> i.e. the futex code, though not sure if that's being run with
-> IRQs disabled...
+It should be noted that patches 9+10 are replacing today's way to
+lookup the MTRR cache type for a memory region from looking at the
+MTRR register values to building a memory map with the cache types.
+This should make the lookup much faster and much easier to understand.
 
-That futex code runs in preemptible context, per the lock_page() that
-can sleep etc.. :-)
+Changes in V2:
+- replaced former patches 1+2 with new patches 1-4, avoiding especially
+  the rather hacky approach of V1, while making all the MTRR type
+  conflict tests available for the Xen PV case
+- updated patch 6 (was patch 4 in V1)
 
-> > > +/*
-> > > + * Used in the GUP-fast path to determine whether a FOLL_PIN | FOLL_LONGTERM |
-> > > + * FOLL_WRITE pin is permitted for a specific folio.
-> > > + *
-> > > + * This assumes the folio is stable and pinned.
-> > > + *
-> > > + * Writing to pinned file-backed dirty tracked folios is inherently problematic
-> > > + * (see comment describing the writeable_file_mapping_allowed() function). We
-> > > + * therefore try to avoid the most egregious case of a long-term mapping doing
-> > > + * so.
-> > > + *
-> > > + * This function cannot be as thorough as that one as the VMA is not available
-> > > + * in the fast path, so instead we whitelist known good cases.
-> > > + *
-> > > + * The folio is stable, but the mapping might not be. When truncating for
-> > > + * instance, a zap is performed which triggers TLB shootdown. IRQs are disabled
-> > > + * so we are safe from an IPI, but some architectures use an RCU lock for this
-> > > + * operation, so we acquire an RCU lock to ensure the mapping is stable.
-> > > + */
-> > > +static bool folio_longterm_write_pin_allowed(struct folio *folio)
-> > > +{
-> > > +	bool ret;
-> > > +
-> > > +	/* hugetlb mappings do not require dirty tracking. */
-> > > +	if (folio_test_hugetlb(folio))
-> > > +		return true;
-> > > +
-> >
-> > This:
-> >
-> > > +	if (stabilise_mapping_rcu(folio)) {
-> > > +		struct address_space *mapping = folio_mapping(folio);
-> >
-> > And this is 3rd read of folio->mapping, just for giggles?
-> 
-> I like to giggle :)
-> 
-> Actually this is to handle the various cases in which the mapping might not
-> be what we want (i.e. have PAGE_MAPPING_FLAGS set) which doesn't appear to
-> have a helper exposed for a check. Given previous review about duplication
-> I felt best to reuse this even though it does access again... yes I felt
-> weird about doing that.
+Changes in V3:
+- dropped patch 5 of V2, as already applied
+- split patch 1 of V2 into 2 patches
+- new patches 6-10
+- addressed comments
 
-Right, I had a peek inside folio_mapping(), but the point is that this
-3rd load might see yet *another* value of mapping from the prior two
-loads, rendering them somewhat worthless.
+Changes in V4:
+- addressed comments
 
-> > > +
-> > > +		/*
-> > > +		 * Neither anonymous nor shmem-backed folios require
-> > > +		 * dirty tracking.
-> > > +		 */
-> > > +		ret = folio_test_anon(folio) ||
-> > > +			(mapping && shmem_mapping(mapping));
-> > > +	} else {
-> > > +		/* If the mapping is unstable, fallback to the slow path. */
-> > > +		ret = false;
-> > > +	}
-> > > +
-> > > +	unlock_rcu();
-> > > +
-> > > +	return ret;
-> >
-> > then becomes:
-> >
-> >
-> > 	if (folio_test_anon(folio))
-> > 		return true;
-> 
-> This relies on the mapping so belongs below the lockdep assert imo.
+Changes in V5
+- addressed comments
+- some other small fixes
+- new patches 3, 8 and 15
 
-Oh, right you are.
+Changes in V6:
+- patch 1 replaces patches 1+2 of V5
+- new patches 8+12
+- addressed comments
 
-> >
-> > 	/*
-> > 	 * Having IRQs disabled (as per GUP-fast) also inhibits RCU
-> > 	 * grace periods from making progress, IOW. they imply
-> > 	 * rcu_read_lock().
-> > 	 */
-> > 	lockdep_assert_irqs_disabled();
-> >
-> > 	/*
-> > 	 * Inodes and thus address_space are RCU freed and thus safe to
-> > 	 * access at this point.
-> > 	 */
-> > 	mapping = folio_mapping(folio);
-> > 	if (mapping && shmem_mapping(mapping))
-> > 		return true;
-> >
-> > 	return false;
-> >
-> > > +}
-> 
-> I'm more than happy to do this (I'd rather drop the RCU bits if possible)
-> but need to be sure it's safe.
+Juergen Gross (16):
+  x86/mtrr: remove physical address size calculation
+  x86/mtrr: replace some constants with defines
+  x86/mtrr: support setting MTRR state for software defined MTRRs
+  x86/hyperv: set MTRR state when running as SEV-SNP Hyper-V guest
+  x86/xen: set MTRR state when running as Xen PV initial domain
+  x86/mtrr: replace vendor tests in MTRR code
+  x86/mtrr: have only one set_mtrr() variant
+  x86/mtrr: move 32-bit code from mtrr.c to legacy.c
+  x86/mtrr: allocate mtrr_value array dynamically
+  x86/mtrr: add get_effective_type() service function
+  x86/mtrr: construct a memory map with cache modes
+  x86/mtrr: add mtrr=debug command line option
+  x86/mtrr: use new cache_map in mtrr_type_lookup()
+  x86/mtrr: don't let mtrr_type_lookup() return MTRR_TYPE_INVALID
+  x86/mm: only check uniform after calling mtrr_type_lookup()
+  x86/mtrr: remove unused code
 
-GUP-fast as a whole relies on it :-)
+ .../admin-guide/kernel-parameters.txt         |   4 +
+ arch/x86/hyperv/ivm.c                         |   4 +
+ arch/x86/include/asm/mtrr.h                   |  43 +-
+ arch/x86/include/uapi/asm/mtrr.h              |   6 +-
+ arch/x86/kernel/cpu/mtrr/Makefile             |   2 +-
+ arch/x86/kernel/cpu/mtrr/amd.c                |   2 +-
+ arch/x86/kernel/cpu/mtrr/centaur.c            |  11 +-
+ arch/x86/kernel/cpu/mtrr/cleanup.c            |  22 +-
+ arch/x86/kernel/cpu/mtrr/cyrix.c              |   2 +-
+ arch/x86/kernel/cpu/mtrr/generic.c            | 677 ++++++++++++------
+ arch/x86/kernel/cpu/mtrr/legacy.c             |  90 +++
+ arch/x86/kernel/cpu/mtrr/mtrr.c               | 195 ++---
+ arch/x86/kernel/cpu/mtrr/mtrr.h               |  18 +-
+ arch/x86/kernel/setup.c                       |   2 +
+ arch/x86/mm/pgtable.c                         |  24 +-
+ arch/x86/xen/enlighten_pv.c                   |  52 ++
+ 16 files changed, 721 insertions(+), 433 deletions(-)
+ create mode 100644 arch/x86/kernel/cpu/mtrr/legacy.c
+
+-- 
+2.35.3
+
