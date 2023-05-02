@@ -2,116 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A273C6F49EA
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 20:49:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CC2F6F49F3
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 20:53:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229508AbjEBSt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 14:49:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38050 "EHLO
+        id S229559AbjEBSxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 14:53:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjEBSty (ORCPT
+        with ESMTP id S229508AbjEBSxe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 14:49:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 438CA10C6
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 11:49:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683053348;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DZ0W+FU8PsLfAAZv9zbz/cngBwAlCp+YIRm01kljAiE=;
-        b=WEQWVkoCRuowfnvASph77+4Thuq+xphdcVA6CEuicnmj5DXqDhKhYMsMR/SbLgN9C3Zv9Z
-        ADYuPfWKjJ5w+Kd/daYE5+s+RRQMXhknqlqEV7IVroLu5tU9guAdLWX/EE8mBWleZ6CZGJ
-        z2JW7aE+a9iIIEcyVfy7E2QT/mVd0UE=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-359-vJC9gA-qMBqzA7GO8Y4j5g-1; Tue, 02 May 2023 14:49:07 -0400
-X-MC-Unique: vJC9gA-qMBqzA7GO8Y4j5g-1
-Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-61b591eb0cfso13534936d6.2
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 11:49:06 -0700 (PDT)
+        Tue, 2 May 2023 14:53:34 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D7D6E78;
+        Tue,  2 May 2023 11:53:33 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f178da21b5so27542825e9.3;
+        Tue, 02 May 2023 11:53:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683053612; x=1685645612;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=TKK6aVpjuVU0zocvvzx2NbMr8G38Leo7ZXygkcERGR4=;
+        b=jT2Ze1BFSPANcjCx4YcSDsjU1FiI4f5SmDTIL5/oTgcpjUvLjtzuLvRH05Bo5BUlYA
+         qVEKklhBVPjmFaFDEMRVR+ue7Gtso382k3buRqEG6lWw87eXFHlSWfUFyjMyUW9R0MWH
+         4xmD3hAU3EhxU5P6CIAoSu9SCbn+dxxiD6eq3TCe1ufBZhHEzauGYyXQJqZLvo6j6W80
+         ls4t0c6POelCUOF3mcMCzYXkWAf0cF1oKxZ5TO203hnDDNYN1Lcnqs4OdSnV5pG1yVks
+         k+tMkFqvqzWwkX0nAqGkIZEQZ1fkoGmZi8S9B0ZmI1rfitvHnxspT7dy6bGjbUYqceuN
+         GCVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683053346; x=1685645346;
+        d=1e100.net; s=20221208; t=1683053612; x=1685645612;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DZ0W+FU8PsLfAAZv9zbz/cngBwAlCp+YIRm01kljAiE=;
-        b=CpmlYPWWcKyQumzbnpFqO3ojiF/8C/w0gSI5qq0zV4dV12X6iONlTwWRcQ37TPfbzM
-         byyq/4Qf37rn5KEVnuY5I52fp5016GxVZbTvcyM5C6IfK6PmIeSyu5w+PjKcJPeR8yUX
-         KJEldKoMoTW9O8rCsW8mT+yP1RRi3y6lsY+akJjhCwZaXQNNHlGYknZqYK0p5YJSHSnk
-         OH/wgk/MhS1lcs2Ym8v2Iz4eU0izKuWpzIgkKmihb9bprhHcB6wHlIjLmafPLCmqjdLg
-         jPJo1Bm7Ejp9/3ZGxl5idmjviIkwj+JZ4KgNOaqTJkmH4so/D0+/fMAFlfxiuHU25N61
-         gaiQ==
-X-Gm-Message-State: AC+VfDxlzmSnRQLI7pxtS7pRxWEauB3ZAWmsHQB4GLrucZ29ooRd5Dgp
-        8l3CTFs5KN0AoFrABFCQMJtqDjpE8SlWyuqNA6xJ1lL8lAfDcIUmm2GyyhHNYwtII7unec318qP
-        D0de8yeDsJiJhbHZoGfmX/Kmr
-X-Received: by 2002:ad4:596b:0:b0:616:5c8b:59d with SMTP id eq11-20020ad4596b000000b006165c8b059dmr6197888qvb.20.1683053346398;
-        Tue, 02 May 2023 11:49:06 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5Wy2JnTAhWuNet9cEToNtvnh6Rgxw5wsbBieiyINBFnufP8DZTowekkRqdmisuq2+jBHV9JA==
-X-Received: by 2002:ad4:596b:0:b0:616:5c8b:59d with SMTP id eq11-20020ad4596b000000b006165c8b059dmr6197852qvb.20.1683053346170;
-        Tue, 02 May 2023 11:49:06 -0700 (PDT)
-Received: from fedora (modemcable181.5-202-24.mc.videotron.ca. [24.202.5.181])
-        by smtp.gmail.com with ESMTPSA id y10-20020ad445aa000000b006057140e017sm9063235qvu.89.2023.05.02.11.49.04
+        bh=TKK6aVpjuVU0zocvvzx2NbMr8G38Leo7ZXygkcERGR4=;
+        b=hLXjBniekhV5CFSmcgrX3kpfmkTbdSekZ8RPLv7GyrhavZ437ifPmNI6tj6+Hkpcug
+         EJQFh4FiatIi9Bb+BhSe6AEF1JM/RA0XF3YoQwtYBOgm3uFa19lWAO40Z33wKl+7McJd
+         nPIaH8FBjRcgu2/3NmLRJ1t/siGzCGFcE096WEmbg2/pg4JVAokCSTD1CDpiz/tDoMEi
+         5qwBMlg5gLKK+7aZzepvOCpHLKE9rR5oCYztoJYL1XmBhtET5LhbAl1x7Gesti7nU1zI
+         59mZ9WjXO0/Tsz9nc0/7m25WOT2AMZFpqAYTAxKrav9rHyKAnjOLHtO54hZNX/0Qj19p
+         pQuQ==
+X-Gm-Message-State: AC+VfDy+9UQRxAj5pfOJNuXuo329B5oz2/+rh1UuM6LYt0wMcSgmq9h3
+        XvJnTl0JN+1FSW/LPy42qzI=
+X-Google-Smtp-Source: ACHHUZ7qBkKeVcJYF3HVFy70TfXWnSC+pmhIvAlKW7Ydykfbneuk4r/VXOqXv1LhyTw5KsdoKuYxAg==
+X-Received: by 2002:a05:6000:124b:b0:306:31b7:abe4 with SMTP id j11-20020a056000124b00b0030631b7abe4mr4532656wrx.14.1683053611747;
+        Tue, 02 May 2023 11:53:31 -0700 (PDT)
+Received: from localhost (host86-156-84-164.range86-156.btcentralplus.com. [86.156.84.164])
+        by smtp.gmail.com with ESMTPSA id b5-20020a056000054500b002e5ff05765esm32028462wrf.73.2023.05.02.11.53.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 May 2023 11:49:05 -0700 (PDT)
-Date:   Tue, 2 May 2023 14:49:03 -0400
-From:   Adrien Thierry <athierry@redhat.com>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Shazad Hussain <quic_shazhuss@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v1 0/6] arm64: qcom: sa8775p: add support for USB
-Message-ID: <ZFFbH7bH0pCDdoN1@fedora>
-References: <20230421133922.8520-1-quic_shazhuss@quicinc.com>
- <ZEcEGJiikEC2wIVE@fedora>
- <CAA8EJpr27=2jAXbamN6J7yF+7G=L5Af8+XReB5UnFuihcEwMQA@mail.gmail.com>
- <ZEgV+H3yZLp48Dlc@fedora>
- <3dc6e993-bcca-4e0d-5aca-686fcc8b5b73@linaro.org>
+        Tue, 02 May 2023 11:53:31 -0700 (PDT)
+Date:   Tue, 2 May 2023 19:53:30 +0100
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     Matthew Rosato <mjrosato@linux.ibm.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Mika Penttila <mpenttil@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Theodore Ts'o <tytso@mit.edu>, Peter Xu <peterx@redhat.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>
+Subject: Re: [PATCH v7 0/3] mm/gup: disallow GUP writing to file-backed
+ mappings by default
+Message-ID: <92fd5d71-ef9b-4971-944a-2a7bd74b5970@lucifer.local>
+References: <cover.1683044162.git.lstoakes@gmail.com>
+ <ce86e956-173f-848a-a1f3-f102134ccd94@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3dc6e993-bcca-4e0d-5aca-686fcc8b5b73@linaro.org>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <ce86e956-173f-848a-a1f3-f102134ccd94@linux.ibm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry,
-
-On Sat, Apr 29, 2023 at 12:41:39AM +0300, Dmitry Baryshkov wrote:
-> On 25/04/2023 21:03, Adrien Thierry wrote:
-> > Hi Dmitry,
-> > 
-> > > Semi-random suggestion, but could you please try using
-> > > clk_regmap_phy_mux/clk_regmap_phy_mux_ops for USB pipe clk src?
-> > 
-> > Which specific clock are you refering to? I'm not very familiar with
-> > those, in the device tree I'm seeing "pipe" clocks for usb_0 and usb_1
-> > phys, but not for usb_2, which is the one that's causing issues.
-> > 
-> 
-> Ah, I see. Could you please try adding the 'qcom,select-utmi-as-pipe-clk'
-> property to the usb_2 host node and running the test again?
+On Tue, May 02, 2023 at 02:45:01PM -0400, Matthew Rosato wrote:
+> On 5/2/23 12:34 PM, Lorenzo Stoakes wrote:
+> > Writing to file-backed mappings which require folio dirty tracking using
+> > GUP is a fundamentally broken operation, as kernel write access to GUP
+> > mappings do not adhere to the semantics expected by a file system.
+> >
+> > A GUP caller uses the direct mapping to access the folio, which does not
+> > cause write notify to trigger, nor does it enforce that the caller marks
+> > the folio dirty.
+> >
+> > The problem arises when, after an initial write to the folio, writeback
+> > results in the folio being cleaned and then the caller, via the GUP
+> > interface, writes to the folio again.
+> >
+> > As a result of the use of this secondary, direct, mapping to the folio no
+> > write notify will occur, and if the caller does mark the folio dirty, this
+> > will be done so unexpectedly.
+> >
+> > For example, consider the following scenario:-
+> >
+> > 1. A folio is written to via GUP which write-faults the memory, notifying
+> >    the file system and dirtying the folio.
+> > 2. Later, writeback is triggered, resulting in the folio being cleaned and
+> >    the PTE being marked read-only.
+> > 3. The GUP caller writes to the folio, as it is mapped read/write via the
+> >    direct mapping.
+> > 4. The GUP caller, now done with the page, unpins it and sets it dirty
+> >    (though it does not have to).
+> >
+> > This change updates both the PUP FOLL_LONGTERM slow and fast APIs. As
+> > pin_user_pages_fast_only() does not exist, we can rely on a slightly
+> > imperfect whitelisting in the PUP-fast case and fall back to the slow case
+> > should this fail.
+> >
+> > v7:
+> > - Fixed very silly bug in writeable_file_mapping_allowed() inverting the
+> >   logic.
+> > - Removed unnecessary RCU lock code and replaced with adaptation of Peter's
+> >   idea.
+> > - Removed unnecessary open-coded folio_test_anon() in
+> >   folio_longterm_write_pin_allowed() and restructured to generally permit
+> >   NULL folio_mapping().
+> >
+>
+> FWIW, I realize you are planning another respin, but I went and tried this version out on s390 -- Now when using a memory backend file and vfio-pci on s390 I see vfio_pin_pages_remote failing consistently.  However, the pin_user_pages_fast(FOLL_WRITE | FOLL_LONGTERM) in kvm_s390_pci_aif_enable will still return positive.
 >
 
-Thanks for the suggestion. I tested this but unfortunately the issue is
-still happening.
+Hey thanks very much for checking that :)
 
-Best,
+This version will unconditionally apply the retriction to non-FOLL_LONGTERM
+by mistake (ugh) but vfio_pin_pages_remote() does seem to be setting
+FOLL_LONGTERM anyway so this seems a legitimate test.
 
-Adrien
+Interesting the _fast() variant succeeds...
 
+David, Jason et al. can speak more to the ins and outs of these
+virtualisation cases which I am not so familiar with, but I wonder if we do
+need a flag to provide an exception for VFIO.
