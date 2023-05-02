@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA0A06F3BB7
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 03:08:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85B296F3BB5
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 03:08:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233378AbjEBBIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 21:08:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54308 "EHLO
+        id S233394AbjEBBId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 21:08:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232580AbjEBBIT (ORCPT
+        with ESMTP id S233338AbjEBBIT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 1 May 2023 21:08:19 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5F73AAB
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 18:08:16 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id e9e14a558f8ab-3311691ebd0so1416645ab.1
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 18:08:16 -0700 (PDT)
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C75D40D0
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 18:08:18 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id e9e14a558f8ab-3310e9368eeso5471105ab.0
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 18:08:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682989696; x=1685581696;
+        d=gmail.com; s=20221208; t=1682989698; x=1685581698;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lFK1TzRb+WofFBaYOMfgaKdiEVNH7eD9PTVjCEw9DwY=;
-        b=sbCNxbaHm/4Ns0b0+O4D6S3b909ab9R4JIc6mVPhYCgppojoxTQL7UP4ZdTQQmUkXQ
-         sRiuw1/O0tTB8WXfVTSY6wDQNqDNyU0vPEAtj0MUol5REjp1p3g9jvevBpH7myCb7bw1
-         bkCUbqR4rr7iO1M4261UGgcsLE8DfPC0fKBiH7UjDdfBnqSGyGdaUHay2LlZ+sbMOEyy
-         ousGnAP0NOZxqdI37sY9Yf9L3EMGFkrNTwSLKZHfJ4rRMTtdzHrAvaeaqnsjIyipWL9i
-         3qan6Q4Px653UIgZJAZanEyY6kbRIaqm5mvqUEJP2tP7jKQg2KjkFbSR9x3sTkHSf656
-         5CZg==
+        bh=LILHGDPu6PO8q8DSVW+PJ0k8lNeferhINno8wB3FCRc=;
+        b=ODN1m4Vvr99jSc5D+ktc9kqN9l0wREObKD2jZ82mb/T09ybjsKvdPnQKZgSEPzg+Wr
+         cOWG1i4r7WnsFgctCGcr1iSXJoKN9/VP2RBn16nAyUywLVzHJ20PenJI0V2ZTzbcFRQh
+         9fi3c5cuq/hK6u0xwonLVbDTkZiKPJJzzOdkD+Hssd0ATZR1083DUs6YZwlPZuT8OhpC
+         bWf+ZBz1Rcx3WHiF+XNgKiaW7jH5x+wBZbvEkAvoPQNXVGUaRnh4rbjF4H+llZ/7fYkT
+         7BXa3Mcywh2PLAhyHhiVQmY+994phYiq7SoEWAQjoInFTpomEIJZrBW6byMPnRXdRL1m
+         uUzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682989696; x=1685581696;
+        d=1e100.net; s=20221208; t=1682989698; x=1685581698;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=lFK1TzRb+WofFBaYOMfgaKdiEVNH7eD9PTVjCEw9DwY=;
-        b=BaTB7EAl4FOgcacik0/tP2N1RhELMrZMeDtqYTP2ODspyKD/VwjkXnhFNsCgBQc71n
-         YnoI+4P5XT+ZLbLLoTikypcxMUB6Kg/uH2wI7+NRRk5EGMOb1moeaSnuVT3mXbwKJPib
-         O57HYkwwygokTYzuVjzorEEm+ObeyoLxG8rrYVsVOf7kpSwE0hSuk/4J3yuqlduh4s4M
-         NOEcKMRHAQ266nIL0OTBpW5x2eDgvePN/nUCiNE5zvlw7drwTq1uIVCVxPXdF7pWN0be
-         Q6QuabmqtdeApz8y74roDEeey098wpMEU1bfE3TtEmicfpjvHpwNOvdANJY0i5BkGxYc
-         rOlg==
-X-Gm-Message-State: AC+VfDxBRr1rGMa5EeWqKyQICTk8cKsfLInNFtIS5lBssM9cfzhlZS5e
-        5GkBgf8a6FgqlHSPVsb02mM=
-X-Google-Smtp-Source: ACHHUZ6oXvc/Tm8pSKJtWxjgaQbf1O1pDYMnUGAp/ExDVDOTTgZfVeMUcAIVcCB70gmFKzggiizX+Q==
-X-Received: by 2002:a92:c711:0:b0:331:250a:a61b with SMTP id a17-20020a92c711000000b00331250aa61bmr248226ilp.8.1682989696008;
-        Mon, 01 May 2023 18:08:16 -0700 (PDT)
+        bh=LILHGDPu6PO8q8DSVW+PJ0k8lNeferhINno8wB3FCRc=;
+        b=dFMlpsq8DLWtaTvJhbNcdhCxGh9r05n+pOeqUdMlibRmbH1PjkfZU15SCFNjNqyjnJ
+         E6W6J0MHdts3XFswjVcDKRS0fVbTXkvL0z74XevBsQ+E14boKulE+yV6dwSrG01dGT+b
+         7fkSEleOyFJogPRbdJE0YC9zJe7uKUigUSgMKcB1KWu6JJBPx4ilJhovqY99mP915IFC
+         YqqfoexEV0zwEMhbQsq6xw7N1eCT+c5QRq7LIL7TVjZLWsFVViU7QpDxONCZesd6Ev4r
+         7mc2vi7CDmfVcTD6aD06H7fO9S0GgmYBJtl3F6DZ3X/U/8CYrGO783upzllgvr5PjWPT
+         40hg==
+X-Gm-Message-State: AC+VfDx28+vXZ2+tzMJh1+1bVsgL2ndr7VPkogzAIe4b51rdsk6Oo10s
+        aj43CjB2R9ZzZ2u0aoa4IA4=
+X-Google-Smtp-Source: ACHHUZ4FJUXKa+bW+vrwgDvkvQRTJ4p11bch6fOmM9Fp4+QmSSWor7Ek7oQqKCbAkFachRJ5gpYQOw==
+X-Received: by 2002:a92:c94c:0:b0:329:3f00:79e1 with SMTP id i12-20020a92c94c000000b003293f0079e1mr9698503ilq.18.1682989697613;
+        Mon, 01 May 2023 18:08:17 -0700 (PDT)
 Received: from aford-B741.lan ([2601:447:d001:897f:8257:a536:d7fc:1919])
-        by smtp.gmail.com with ESMTPSA id f16-20020a056638329000b0040fb5d5429fsm4836329jav.131.2023.05.01.18.08.14
+        by smtp.gmail.com with ESMTPSA id f16-20020a056638329000b0040fb5d5429fsm4836329jav.131.2023.05.01.18.08.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 May 2023 18:08:15 -0700 (PDT)
+        Mon, 01 May 2023 18:08:17 -0700 (PDT)
 From:   Adam Ford <aford173@gmail.com>
 To:     dri-devel@lists.freedesktop.org
 Cc:     marex@denx.de, aford@beaconembedded.com,
@@ -66,11 +66,10 @@ Cc:     marex@denx.de, aford@beaconembedded.com,
         Inki Dae <inki.dae@samsung.com>,
         Jagan Teki <jagan@amarulasolutions.com>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V3 5/7] drm: bridge: samsung-dsim: Dynamically configure DPHY timing
-Date:   Mon,  1 May 2023 20:07:57 -0500
-Message-Id: <20230502010759.17282-6-aford173@gmail.com>
+Subject: [PATCH V3 6/7] drm: bridge: samsung-dsim: Support non-burst mode
+Date:   Mon,  1 May 2023 20:07:58 -0500
+Message-Id: <20230502010759.17282-7-aford173@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230502010759.17282-1-aford173@gmail.com>
 References: <20230502010759.17282-1-aford173@gmail.com>
@@ -86,181 +85,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DPHY timings are currently hard coded. Since the input
-clock can be variable, the phy timings need to be variable
-too.  Add an additional variable to the driver data to enable
-this feature to prevent breaking boards that don't support it.
+The high-speed clock is hard-coded to the burst-clock
+frequency specified in the device tree.  However, when
+using devices like certain bridge chips without burst mode
+and varying resolutions and refresh rates, it may be
+necessary to set the high-speed clock dynamically based
+on the desired pixel clock for the connected device.
 
-The phy_mipi_dphy_get_default_config function configures the
-DPHY timings in pico-seconds, and a small macro converts those
-timings into clock cycles based on the pixel clock rate.
+This also removes the need to set a clock speed from
+the device tree for non-burst mode operation, since the
+pixel clock rate is the rate requested from the attached
+device like an HDMI bridge chip.  This should have no
+impact for people using burst-mode and setting the burst
+clock rate is still required for those users.
 
 Signed-off-by: Adam Ford <aford173@gmail.com>
 Tested-by: Chen-Yu Tsai <wenst@chromium.org>
 ---
- drivers/gpu/drm/bridge/samsung-dsim.c | 79 +++++++++++++++++++++++----
- include/drm/bridge/samsung-dsim.h     |  1 +
- 2 files changed, 70 insertions(+), 10 deletions(-)
+ drivers/gpu/drm/bridge/samsung-dsim.c | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c b/drivers/gpu/drm/bridge/samsung-dsim.c
-index 2dc02a9e37c0..99642230a54a 100644
+index 99642230a54a..53099461cdc2 100644
 --- a/drivers/gpu/drm/bridge/samsung-dsim.c
 +++ b/drivers/gpu/drm/bridge/samsung-dsim.c
-@@ -18,9 +18,7 @@
- #include <linux/media-bus-format.h>
- #include <linux/of_device.h>
- #include <linux/phy/phy.h>
--
- #include <video/mipi_display.h>
--
- #include <drm/bridge/samsung-dsim.h>
- #include <drm/drm_panel.h>
- #include <drm/drm_print.h>
-@@ -218,6 +216,8 @@
+@@ -657,11 +657,21 @@ static unsigned long samsung_dsim_set_pll(struct samsung_dsim *dsi,
  
- #define OLD_SCLK_MIPI_CLK_NAME		"pll_clk"
- 
-+#define PS_TO_CYCLE(PS, MHz) DIV64_U64_ROUND_CLOSEST(((PS) * (MHz)), 1000000000000ULL)
-+
- static const char *const clk_names[5] = {
- 	"bus_clk",
- 	"sclk_mipi",
-@@ -487,6 +487,7 @@ static const struct samsung_dsim_driver_data imx8mm_dsi_driver_data = {
- 	.m_min = 64,
- 	.m_max = 1023,
- 	.min_freq = 1050,
-+	.dynamic_dphy = 1,
- };
- 
- static const struct samsung_dsim_driver_data *
-@@ -698,13 +699,50 @@ static void samsung_dsim_set_phy_ctrl(struct samsung_dsim *dsi)
- 	const struct samsung_dsim_driver_data *driver_data = dsi->driver_data;
- 	const unsigned int *reg_values = driver_data->reg_values;
+ static int samsung_dsim_enable_clock(struct samsung_dsim *dsi)
+ {
+-	unsigned long hs_clk, byte_clk, esc_clk;
++	unsigned long hs_clk, byte_clk, esc_clk, pix_clk;
+ 	unsigned long esc_div;
  	u32 reg;
 +	struct drm_display_mode *m = &dsi->mode;
 +	int bpp = mipi_dsi_pixel_format_to_bpp(dsi->format);
-+	struct phy_configure_opts_mipi_dphy cfg;
-+	int clk_prepare, lpx, clk_zero, clk_post, clk_trail;
-+	int hs_exit, hs_prepare, hs_zero, hs_trail;
-+	unsigned long long clock_in_hz = m->clock * 1000;
- 
- 	if (driver_data->has_freqband)
- 		return;
- 
-+	/* The dynamic_phy has the ability to adjust PHY Timing settings */
-+	if (driver_data->dynamic_dphy) {
-+		phy_mipi_dphy_get_default_config(clock_in_hz, bpp, dsi->lanes, &cfg);
 +
-+		/*
-+		 * TODO:
-+		 * The tech reference manual for i.MX8M Mini/Nano/Plus
-+		 * doesn't state what the definition of the PHYTIMING
-+		 * bits are beyond their address and bit position.
-+		 * After reviewing NXP's downstream code, it appears
-+		 * that the various PHYTIMING registers take the number
-+		 * of cycles and use various dividers on them.  This
-+		 * calculation does not result in an exact match to the
-+		 * downstream code, but it is very close, and it appears
-+		 * to sync at a variety of resolutions. If someone
-+		 * can get a more accurate mathematical equation needed
-+		 * for these registers, this should be updated.
-+		 */
++	/* m->clock is in KHz */
++	pix_clk = m->clock * 1000;
 +
-+		lpx = PS_TO_CYCLE(cfg.lpx, clock_in_hz);
-+		hs_exit = PS_TO_CYCLE(cfg.hs_exit, clock_in_hz);
-+		clk_prepare = PS_TO_CYCLE(cfg.clk_prepare, clock_in_hz);
-+		clk_zero = PS_TO_CYCLE(cfg.clk_zero, clock_in_hz);
-+		clk_post = PS_TO_CYCLE(cfg.clk_post, clock_in_hz);
-+		clk_trail = PS_TO_CYCLE(cfg.clk_trail, clock_in_hz);
-+		hs_prepare = PS_TO_CYCLE(cfg.hs_prepare, clock_in_hz);
-+		hs_zero = PS_TO_CYCLE(cfg.hs_zero, clock_in_hz);
-+		hs_trail = PS_TO_CYCLE(cfg.hs_trail, clock_in_hz);
-+	}
-+
- 	/* B D-PHY: D-PHY Master & Slave Analog Block control */
- 	reg = reg_values[PHYCTRL_ULPS_EXIT] | reg_values[PHYCTRL_VREG_LP] |
- 		reg_values[PHYCTRL_SLEW_UP];
-+
- 	samsung_dsim_write(dsi, DSIM_PHYCTRL_REG, reg);
- 
- 	/*
-@@ -712,7 +750,11 @@ static void samsung_dsim_set_phy_ctrl(struct samsung_dsim *dsi)
- 	 * T HS-EXIT: Time that the transmitter drives LP-11 following a HS
- 	 *	burst
- 	 */
--	reg = reg_values[PHYTIMING_LPX] | reg_values[PHYTIMING_HS_EXIT];
-+	if (driver_data->dynamic_dphy)
-+		reg  = DSIM_PHYTIMING_LPX(lpx) | DSIM_PHYTIMING_HS_EXIT(hs_exit);
++	/* Use burst_clk_rate if available, otherwise use the pix_clk */
++	if (dsi->burst_clk_rate)
++		hs_clk = samsung_dsim_set_pll(dsi, dsi->burst_clk_rate);
 +	else
-+		reg = reg_values[PHYTIMING_LPX] | reg_values[PHYTIMING_HS_EXIT];
-+
- 	samsung_dsim_write(dsi, DSIM_PHYTIMING_REG, reg);
++		hs_clk = samsung_dsim_set_pll(dsi, DIV_ROUND_UP(pix_clk * bpp, dsi->lanes));
  
- 	/*
-@@ -728,10 +770,17 @@ static void samsung_dsim_set_phy_ctrl(struct samsung_dsim *dsi)
- 	 * T CLK-TRAIL: Time that the transmitter drives the HS-0 state after
- 	 *	the last payload clock bit of a HS transmission burst
- 	 */
--	reg = reg_values[PHYTIMING_CLK_PREPARE] |
--		reg_values[PHYTIMING_CLK_ZERO] |
--		reg_values[PHYTIMING_CLK_POST] |
--		reg_values[PHYTIMING_CLK_TRAIL];
-+	if (driver_data->dynamic_dphy) {
-+		reg = DSIM_PHYTIMING1_CLK_PREPARE(clk_prepare)	|
-+		      DSIM_PHYTIMING1_CLK_ZERO(clk_zero)	|
-+		      DSIM_PHYTIMING1_CLK_POST(clk_post)	|
-+		      DSIM_PHYTIMING1_CLK_TRAIL(clk_trail);
-+	} else {
-+		reg = reg_values[PHYTIMING_CLK_PREPARE] |
-+		      reg_values[PHYTIMING_CLK_ZERO] |
-+		      reg_values[PHYTIMING_CLK_POST] |
-+		      reg_values[PHYTIMING_CLK_TRAIL];
-+	}
+-	hs_clk = samsung_dsim_set_pll(dsi, dsi->burst_clk_rate);
+ 	if (!hs_clk) {
+ 		dev_err(dsi->dev, "failed to configure DSI PLL\n");
+ 		return -EFAULT;
+@@ -1800,10 +1810,11 @@ static int samsung_dsim_parse_dt(struct samsung_dsim *dsi)
+ 			return PTR_ERR(pll_clk);
+ 	}
  
- 	samsung_dsim_write(dsi, DSIM_PHYTIMING1_REG, reg);
++	/* If it doesn't exist, use pixel clock instead of failing */
+ 	ret = samsung_dsim_of_read_u32(node, "samsung,burst-clock-frequency",
+ 				       &dsi->burst_clk_rate);
+ 	if (ret < 0)
+-		return ret;
++		dsi->burst_clk_rate = 0;
  
-@@ -744,8 +793,17 @@ static void samsung_dsim_set_phy_ctrl(struct samsung_dsim *dsi)
- 	 * T HS-TRAIL: Time that the transmitter drives the flipped differential
- 	 *	state after last payload data bit of a HS transmission burst
- 	 */
--	reg = reg_values[PHYTIMING_HS_PREPARE] | reg_values[PHYTIMING_HS_ZERO] |
--		reg_values[PHYTIMING_HS_TRAIL];
-+
-+	if (driver_data->dynamic_dphy) {
-+		reg = DSIM_PHYTIMING2_HS_PREPARE(hs_prepare) |
-+		      DSIM_PHYTIMING2_HS_ZERO(hs_zero) |
-+		      DSIM_PHYTIMING2_HS_TRAIL(hs_trail);
-+	} else {
-+		reg = reg_values[PHYTIMING_HS_PREPARE] |
-+		      reg_values[PHYTIMING_HS_ZERO] |
-+		      reg_values[PHYTIMING_HS_TRAIL];
-+	}
-+
- 	samsung_dsim_write(dsi, DSIM_PHYTIMING2_REG, reg);
- }
- 
-@@ -1337,7 +1395,8 @@ static int samsung_dsim_init(struct samsung_dsim *dsi)
- 	samsung_dsim_enable_clock(dsi);
- 	if (driver_data->wait_for_reset)
- 		samsung_dsim_wait_for_reset(dsi);
--	samsung_dsim_set_phy_ctrl(dsi);
-+	if (!driver_data->has_freqband)
-+		samsung_dsim_set_phy_ctrl(dsi);
- 	samsung_dsim_init_link(dsi);
- 
- 	dsi->state |= DSIM_STATE_INITIALIZED;
-diff --git a/include/drm/bridge/samsung-dsim.h b/include/drm/bridge/samsung-dsim.h
-index a1a5b2b89a7a..76ea8a1720cc 100644
---- a/include/drm/bridge/samsung-dsim.h
-+++ b/include/drm/bridge/samsung-dsim.h
-@@ -62,6 +62,7 @@ struct samsung_dsim_driver_data {
- 	const unsigned int *reg_values;
- 	u16 m_min;
- 	u16 m_max;
-+	bool dynamic_dphy;
- };
- 
- struct samsung_dsim_host_ops {
+ 	ret = samsung_dsim_of_read_u32(node, "samsung,esc-clock-frequency",
+ 				       &dsi->esc_clk_rate);
 -- 
 2.39.2
 
