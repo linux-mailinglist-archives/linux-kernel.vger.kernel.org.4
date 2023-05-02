@@ -2,157 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BEC46F4624
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 16:33:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 626BA6F4644
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 16:41:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234467AbjEBOcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 10:32:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45962 "EHLO
+        id S234433AbjEBOlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 10:41:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234212AbjEBOcs (ORCPT
+        with ESMTP id S234100AbjEBOlV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 10:32:48 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7796171C
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 07:32:46 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-55a8e9e2c53so10657567b3.1
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 07:32:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683037966; x=1685629966;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=K/9S8w6sFTa6GILgNFmzXECaTf8pY2QzuFGmdKo49z4=;
-        b=a8CrsUqqNJYwZQY5NqHO+zTZgByfW4d3Lrn9Jel6hRpXgWKf8OojeG4VUSRHufngr2
-         4rHtISOzhxfAs6ALWX9O67ywsIf2V7YXomA1JiI+wkmnJWwcqz8h/Nf9IZNuuV5OyAsa
-         BD7HvBQH+hwMRE3K8OBIn9BucC9bLHqI3LEEG+SfO0/z00/Ghg3/LM70xuAEcngllUeG
-         shUX3J/MTUMVnOPirMy5pYrK+63JiVJneyF5UBvKnuz66MpV5wiGIlA2WaQ8Kvv4+cWx
-         ysqOKg7KXT7OR3lK6ual5T+Ez6SeFH03ZA0ogtXUgp9f3apwnnnsktu3wnOf8/ny0lH4
-         Bf5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683037966; x=1685629966;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=K/9S8w6sFTa6GILgNFmzXECaTf8pY2QzuFGmdKo49z4=;
-        b=diGA1waGOt+Y6Etkp2ONAwG7znjD3EImaySnRnBEAIzV6lWE4baWlh+dawH8Q3Qw8q
-         6ANRJxIwCtytNEd8JYGHbDI8jNpks/9iH9DOcOoSzlE+m0pZjHQXuckl1Wl2kCXqg5t4
-         yAXUY+Kx7FTWQhAOse6FMEwfgRTpFjhRN4ODmJRkQMguE57G42wvUuYo3jZ3CuVulKpJ
-         t3ZGZrw87hv+9AainsipvlPb8roVBxpD6dDNNGAK8cTN3JefN4Z2xX5Tukk3+v1P9zoJ
-         crnt7kBG75yf3VFdlMy5i2TNwEpSGxkTqNkZRr9ZJo/NTWMfoC59vXYkz0r122hhbR4q
-         wpUA==
-X-Gm-Message-State: AC+VfDwZGGwCF5Ladz+bgxphimiS9nQhQVTOSV4VV5Pp5y7rGCv7zpe0
-        Je0PVSEhyDztjl2XkvIZ738v4ptdt+dnFzb/DXfxwg==
-X-Google-Smtp-Source: ACHHUZ57QZAKiVlS6+m+c+PabgA/MZ6dCvjvFla7z07yFMRPlsbaxoIormzWW9l7qPXy3Be7dkx+nUZD4pct+GWh04g=
-X-Received: by 2002:a0d:d444:0:b0:55a:a9b6:6da with SMTP id
- w65-20020a0dd444000000b0055aa9b606damr1215123ywd.11.1683037965902; Tue, 02
- May 2023 07:32:45 -0700 (PDT)
+        Tue, 2 May 2023 10:41:21 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF36132;
+        Tue,  2 May 2023 07:41:19 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 342E0msI008194;
+        Tue, 2 May 2023 14:41:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=maLp4v4b86vYTdaDoabx9qEBEre+sII+3ILZ6N9+I0k=;
+ b=CSfctH2bHlqeqWhyoKqKYhJtZbq5nxBpv2mIXrr+WDNtVuprqDzUrFBTTmZSYEJRV8HR
+ UCxb8rZhTVSxZm4/Z2gROvLouM+3UJhFOIbPRWtlko6mGR51z1RJDY0hywAj4+nACSmj
+ jOEEjduLA4Px637lpvcMd2t0mc34ERldPUx4AHMNpoB+Z34ag1DDWw35uhw+C6kQg0XY
+ 6I0RPuTqbr/JuaKvS6SKXKpsx2/WxOeMi9+QAz0gyvATIZO0zOgJ1f/dopb+sUlP5BnF
+ ihWmV+jm/gmltzayGKrIhmyYReJRLQFUk+w7phDGTsk5Z8A82xpasssiS9tTJv9Eaeuy Nw== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qaj3wjaqw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 02 May 2023 14:41:03 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 342Ef2Nu003318
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 2 May 2023 14:41:02 GMT
+Received: from [10.110.121.148] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 2 May 2023
+ 07:41:02 -0700
+Message-ID: <9c842eb0-be78-9ad7-7219-8807f0a16abf@quicinc.com>
+Date:   Tue, 2 May 2023 07:41:01 -0700
 MIME-Version: 1.0
-References: <59c17ada35664b818b7bd83752119b2d@hyperstone.com>
-In-Reply-To: <59c17ada35664b818b7bd83752119b2d@hyperstone.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 2 May 2023 16:32:10 +0200
-Message-ID: <CAPDyKFoUbzjYyQCe5P48cqo5GrGwmjDWdbddnqWjskO8qyB4Zw@mail.gmail.com>
-Subject: Re: [PATCHv2] mmc: block: ensure error propagation for non-blk
-To:     Christian Loehle <CLoehle@hyperstone.com>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Avri Altman <avri.altman@wdc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v4 2/2] firmware: arm_scmi: Augment SMC/HVC to allow
+ optional parameters
+To:     Sudeep Holla <sudeep.holla@arm.com>
+CC:     <f.fainelli@gmail.com>, <cristian.marussi@arm.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230409181918.29270-1-quic_nkela@quicinc.com>
+ <20230418185659.29745-1-quic_nkela@quicinc.com>
+ <20230418185659.29745-3-quic_nkela@quicinc.com>
+ <6f806e8a-1f12-5793-66eb-d7497839ad14@quicinc.com>
+ <20230502104638.kdncvotcuax2db3f@bogus>
+Content-Language: en-US
+From:   Nikunj Kela <quic_nkela@quicinc.com>
+In-Reply-To: <20230502104638.kdncvotcuax2db3f@bogus>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: aMotvKfMkAUJXmDUFK2rXUoMMhiYgyN1
+X-Proofpoint-ORIG-GUID: aMotvKfMkAUJXmDUFK2rXUoMMhiYgyN1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-02_08,2023-04-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ mlxlogscore=999 bulkscore=0 adultscore=0 spamscore=0 malwarescore=0
+ phishscore=0 clxscore=1015 impostorscore=0 lowpriorityscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2305020123
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 26 Apr 2023 at 18:59, Christian Loehle <CLoehle@hyperstone.com> wrote:
->
-> Requests to the mmc layer usually come through a block device IO.
-> The exceptions are the ioctl interface, RPMB chardev ioctl
-> and debugfs, which issue their own blk_mq requests through
-> blk_execute_rq and do not query the BLK_STS error but the
-> mmcblk-internal drv_op_result. This patch ensures that drv_op_result
-> defaults to an error and has to be overwritten by the operation
-> to be considered successful.
->
-> The behavior leads to a bug where the request never propagates
-> the error, e.g. by directly erroring out at mmc_blk_mq_issue_rq if
-> mmc_blk_part_switch fails. The ioctl caller of the rpmb chardev then
-> can never see an error (BLK_STS_IOERR, but drv_op_result is unchanged)
-> and thus may assume that their call executed successfully when it did not.
->
-> While always checking the blk_execute_rq return value would be
-> advised, let's eliminate the error by always setting
-> drv_op_result as -EIO to be overwritten on success (or other error)
->
-> Fixes: 614f0388f580 ("mmc: block: move single ioctl() commands to block requests")
-> Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
 
-Applied for fixes and by adding a stable tag, thanks!
-
-Kind regards
-Uffe
-
-
-> ---
-> v2: Adopted Adrians suggestions to set the error before calling
->         and rewrote commit message
->  drivers/mmc/core/block.c | 5 +++++
->  1 file changed, 5 insertions(+)
->
-> diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
-> index 672ab90c4b2d..0ff294f07465 100644
-> --- a/drivers/mmc/core/block.c
-> +++ b/drivers/mmc/core/block.c
-> @@ -266,6 +266,7 @@ static ssize_t power_ro_lock_store(struct device *dev,
->                 goto out_put;
->         }
->         req_to_mmc_queue_req(req)->drv_op = MMC_DRV_OP_BOOT_WP;
-> +       req_to_mmc_queue_req(req)->drv_op_result = -EIO;
->         blk_execute_rq(req, false);
->         ret = req_to_mmc_queue_req(req)->drv_op_result;
->         blk_mq_free_request(req);
-> @@ -653,6 +654,7 @@ static int mmc_blk_ioctl_cmd(struct mmc_blk_data *md,
->         idatas[0] = idata;
->         req_to_mmc_queue_req(req)->drv_op =
->                 rpmb ? MMC_DRV_OP_IOCTL_RPMB : MMC_DRV_OP_IOCTL;
-> +       req_to_mmc_queue_req(req)->drv_op_result = -EIO;
->         req_to_mmc_queue_req(req)->drv_op_data = idatas;
->         req_to_mmc_queue_req(req)->ioc_count = 1;
->         blk_execute_rq(req, false);
-> @@ -724,6 +726,7 @@ static int mmc_blk_ioctl_multi_cmd(struct mmc_blk_data *md,
->         }
->         req_to_mmc_queue_req(req)->drv_op =
->                 rpmb ? MMC_DRV_OP_IOCTL_RPMB : MMC_DRV_OP_IOCTL;
-> +       req_to_mmc_queue_req(req)->drv_op_result = -EIO;
->         req_to_mmc_queue_req(req)->drv_op_data = idata;
->         req_to_mmc_queue_req(req)->ioc_count = n;
->         blk_execute_rq(req, false);
-> @@ -2808,6 +2811,7 @@ static int mmc_dbg_card_status_get(void *data, u64 *val)
->         if (IS_ERR(req))
->                 return PTR_ERR(req);
->         req_to_mmc_queue_req(req)->drv_op = MMC_DRV_OP_GET_CARD_STATUS;
-> +       req_to_mmc_queue_req(req)->drv_op_result = -EIO;
->         blk_execute_rq(req, false);
->         ret = req_to_mmc_queue_req(req)->drv_op_result;
->         if (ret >= 0) {
-> @@ -2846,6 +2850,7 @@ static int mmc_ext_csd_open(struct inode *inode, struct file *filp)
->                 goto out_free;
->         }
->         req_to_mmc_queue_req(req)->drv_op = MMC_DRV_OP_GET_EXT_CSD;
-> +       req_to_mmc_queue_req(req)->drv_op_result = -EIO;
->         req_to_mmc_queue_req(req)->drv_op_data = &ext_csd;
->         blk_execute_rq(req, false);
->         err = req_to_mmc_queue_req(req)->drv_op_result;
-> --
-> 2.37.3
->
->
-> Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
-> Managing Director: Dr. Jan Peter Berns.
-> Commercial register of local courts: Freiburg HRB381782
->
+On 5/2/2023 3:46 AM, Sudeep Holla wrote:
+> On Mon, May 01, 2023 at 07:39:29AM -0700, Nikunj Kela wrote:
+>> Reminder: Please review this patch! Thanks
+>>
+> Since the current merge window is open, there is no rush and hence I had put
+> this on hold until merge window close. Anyways, it looks good in general.
+> Couple of minor nits below:
+Sure, thanks!
+>> On 4/18/2023 11:56 AM, Nikunj Kela wrote:
+>>> This patch add support for passing shmem channel address as parameters
+>>> in smc/hvc call. The address is split into 4KB-page and offset.
+>>> This patch is useful when multiple scmi instances are using same smc-id
+>>> and firmware needs to distinguish among the instances.
+>>>
+> Drop the term "patch". You can refer it as change. It is not match after
+> it is applied to the git.
+ACK!
+>>> Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
+>>> ---
+>>>    drivers/firmware/arm_scmi/driver.c |  1 +
+>>>    drivers/firmware/arm_scmi/smc.c    | 14 +++++++++++++-
+>>>    2 files changed, 14 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/firmware/arm_scmi/driver.c b/drivers/firmware/arm_scmi/driver.c
+>>> index e7d97b59963b..b5957cc12fee 100644
+>>> --- a/drivers/firmware/arm_scmi/driver.c
+>>> +++ b/drivers/firmware/arm_scmi/driver.c
+>>> @@ -2914,6 +2914,7 @@ static const struct of_device_id scmi_of_match[] = {
+>>>    #endif
+>>>    #ifdef CONFIG_ARM_SCMI_TRANSPORT_SMC
+>>>    	{ .compatible = "arm,scmi-smc", .data = &scmi_smc_desc},
+>>> +	{ .compatible = "arm,scmi-smc-param", .data = &scmi_smc_desc},
+>>>    #endif
+>>>    #ifdef CONFIG_ARM_SCMI_TRANSPORT_VIRTIO
+>>>    	{ .compatible = "arm,scmi-virtio", .data = &scmi_virtio_desc},
+>>> diff --git a/drivers/firmware/arm_scmi/smc.c b/drivers/firmware/arm_scmi/smc.c
+>>> index 93272e4bbd12..71e080b70df5 100644
+>>> --- a/drivers/firmware/arm_scmi/smc.c
+>>> +++ b/drivers/firmware/arm_scmi/smc.c
+>>> @@ -20,6 +20,11 @@
+>>>    #include "common.h"
+>>> +#define SHMEM_SHIFT 12
+>>> +#define SHMEM_SIZE (_AC(1, UL) << SHMEM_SHIFT)
+>>> +#define SHMEM_PAGE(x) ((unsigned long)((x) >> SHMEM_SHIFT))
+> Since we are dealing with 4kB pages only, I prefer to do:
+> #define SHMEM_SIZE     (SZ_4K)
+> #define SHMEM_SHIFT    12
+> #define SHMEM_PAGE(x) (_UL((x) >> SHMEM_SHIFT))
+ACK!
+>>> +#define SHMEM_OFFSET(x) ((x) & (SHMEM_SIZE - 1))
+>>> +
+> Also it is definitely worth adding comment about supporting just 4kB pages
+> and limitations associated with it here(e.g. we can support up to 44 bit
+> address) and also parameters to the SMC call so that others get clear
+> idea on how to use it if they need that in the future.
+ACK!
+>>>    /**
+>>>     * struct scmi_smc - Structure representing a SCMI smc transport
+>>>     *
+>>> @@ -30,6 +35,7 @@
+>>>     * @inflight: Atomic flag to protect access to Tx/Rx shared memory area.
+>>>     *	      Used when operating in atomic mode.
+>>>     * @func_id: smc/hvc call function id
+>>> + * @param: physical address of the shmem channel
+>>>     */
+>>>    struct scmi_smc {
+>>> @@ -40,6 +46,7 @@ struct scmi_smc {
+>>>    #define INFLIGHT_NONE	MSG_TOKEN_MAX
+>>>    	atomic_t inflight;
+>>>    	u32 func_id;
+>>> +	phys_addr_t param;
+>>>    };
+>>>    static irqreturn_t smc_msg_done_isr(int irq, void *data)
+>>> @@ -137,6 +144,8 @@ static int smc_chan_setup(struct scmi_chan_info *cinfo, struct device *dev,
+>>>    	if (ret < 0)
+>>>    		return ret;
+>>> +	if (of_device_is_compatible(dev->of_node, "arm,scmi-smc-param"))
+>>> +		scmi_info->param = res.start;
+>>>    	/*
+>>>    	 * If there is an interrupt named "a2p", then the service and
+>>>    	 * completion of a message is signaled by an interrupt rather than by
+>>> @@ -179,6 +188,8 @@ static int smc_send_message(struct scmi_chan_info *cinfo,
+>>>    {
+>>>    	struct scmi_smc *scmi_info = cinfo->transport_info;
+>>>    	struct arm_smccc_res res;
+>>> +	unsigned long page = SHMEM_PAGE(scmi_info->param);
+>>> +	unsigned long offset = SHMEM_OFFSET(scmi_info->param);
+> While I see you initialise param in smc_chan_setup, I wonder why the page
+> and offset itself be initialised once and reused instead of computing the
+> same fixed value on every smc_send_message. You can probably have param_page
+> and param_offset stashed instead of just single param value ?
+Yeah, I did think of that but then I dropped it since in the earlier 
+versions of patches when I was using a flag to identify smc32/smc64 
+convention used, I was told to not include it in the scmi_info struct, 
+instead compute using local variable. Anyway, I will use the two values 
+as advised!
+>>>    	/*
+>>>    	 * Channel will be released only once response has been
+>>> @@ -188,7 +199,8 @@ static int smc_send_message(struct scmi_chan_info *cinfo,
+>>>    	shmem_tx_prepare(scmi_info->shmem, xfer, cinfo);
+>>> -	arm_smccc_1_1_invoke(scmi_info->func_id, 0, 0, 0, 0, 0, 0, 0, &res);
+>>> +	arm_smccc_1_1_invoke(scmi_info->func_id, page, offset, 0, 0, 0, 0, 0,
+>>> +			     &res);
+>>>    	/* Only SMCCC_RET_NOT_SUPPORTED is valid error code */
+>>>    	if (res.a0) {
