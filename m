@@ -2,145 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 166746F459A
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 15:55:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 148656F45B5
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 16:00:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234400AbjEBNzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 09:55:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52926 "EHLO
+        id S234404AbjEBOAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 10:00:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234365AbjEBNzN (ORCPT
+        with ESMTP id S233934AbjEBOAE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 09:55:13 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 818123AB2;
-        Tue,  2 May 2023 06:55:12 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-19288cce249so447521fac.0;
-        Tue, 02 May 2023 06:55:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683035712; x=1685627712;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3JDA/PhIA0G0O8d1Tw0il5CJD7WwGew6nVyEwWH6lvQ=;
-        b=U0yfWYoxRlWeKcALRu7aKMAwi5A8oOs+4Z+5+g2s0ANcfWoRm3X2iBFya84RSgbiVH
-         MowHXnYm3q5ir7KqhjmvtNaNr0K5e2Oae+QOl2X84ff8x9VkSzOPzrMeiOdW54dhEfkv
-         O33nVKePRa2YNQHNQRVM5/C/S/1uycn/BZBQ8rV/RLxs9DcOAJcDQhyNl7jlDUUw9R6J
-         M9msNW/pqbtyDLnscBRax/fj4ZiWBvJCzPTSHwVGJdznODiHV7wU5cpnl60FgVn+gfhS
-         gDjrfr+7Y+rZpSKoxAvjtO9ZFE/3A7rgOyunE2sZ9Fnosmosl3EesHoqxLB5MK2O5831
-         BWmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683035712; x=1685627712;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3JDA/PhIA0G0O8d1Tw0il5CJD7WwGew6nVyEwWH6lvQ=;
-        b=aQnzz7G7DQ1Fz8Lk8LWAbneuEv5cyt5nyC/0KsG6xPMnC/xzw4Wy7GCcNwfcu9kuCz
-         0wAoVGUCdJJSPR6T4mXYNJou21XtIEMp/zQzRPyAQPnqjCj1V60U3McjdjXaglNc3srC
-         7L5j1I7arJMInmFVju109xdnd5i0zlAh7U+jgXVVCzwBNJrwINmdoj2deyqFu7MJYq+U
-         uC2/6Os7ZPQ02E5cufi136eta7iSfffMnofVCdIrGuXQUpf5IGOKOaQDHrl2Z8WAXx2p
-         Ic4v2pDxKznFQPXPKdLWsiOaYermLuEgO4Eo09mAo+Z9cZl+nEa4jTd1K3iKxV/tKjg3
-         aZCA==
-X-Gm-Message-State: AC+VfDzX4NZkFEexSY4QC2E8UD75FTxtbQDJv3Cs46xT7CjN1L37N0GA
-        oiNakrKY/z92DglT4K0NUuQ=
-X-Google-Smtp-Source: ACHHUZ5X1USdDCg3uqZzHTIADD4uVJj38sSm5V1NZkTOyKDu70KEXr87H+7xExpqkz1CG5AxhcPrqg==
-X-Received: by 2002:a05:6871:595:b0:184:5428:d6bb with SMTP id u21-20020a056871059500b001845428d6bbmr8447737oan.57.1683035711614;
-        Tue, 02 May 2023 06:55:11 -0700 (PDT)
-Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id p16-20020a4a95d0000000b005251e3f92ecsm1057071ooi.47.2023.05.02.06.55.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 May 2023 06:55:10 -0700 (PDT)
-Message-ID: <1271ca9a-e7ca-e76f-3ae8-23a490994bd5@gmail.com>
-Date:   Tue, 2 May 2023 10:55:06 -0300
+        Tue, 2 May 2023 10:00:04 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07258180;
+        Tue,  2 May 2023 07:00:02 -0700 (PDT)
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 342De8Jg012268;
+        Tue, 2 May 2023 13:57:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=HT4J2CFHCJVnEcgJs7IQS5KKzDCpc3al8oNVMkDJMP8=;
+ b=ZHlcpkvEMxYEZIyl85rv+vb/VsLKbj+OAGJOwES3fD9LAWjTE3uD/vARVtVxq1JLHkWj
+ 3d2sNtzDnuWVSNaKaSgc5QUSPSkGdL3JN8RalthpxJ/FhG1aAvA6OdgS64tunMMaYybc
+ 5mXrw7rcYkUn/tczXTXV2o7FmwPzM4JENefbcTPt7SfI8k+Mi5tTiGNVq6uNGM0JhIOh
+ iUudPmFTN/6+IUs5+D8VGlLREK1t7v8/9XL/YsXbUqplx1uIZhKTYsdpQbrhxwIcOY9v
+ ugm8pIpntgnLhXhL0CkCRdUxQMfX2A2iRQorPp2uEIvxaEsKFCsIzLM1JvsLqwEGDt5m eA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qb2gptxe7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 02 May 2023 13:57:21 +0000
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 342DePHG013471;
+        Tue, 2 May 2023 13:57:13 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qb2gptwxn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 02 May 2023 13:57:12 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 342DHdVH026752;
+        Tue, 2 May 2023 13:56:56 GMT
+Received: from smtprelay05.dal12v.mail.ibm.com ([9.208.130.101])
+        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3q8tv93j00-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 02 May 2023 13:56:56 +0000
+Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
+        by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 342Dur6p39715206
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 2 May 2023 13:56:53 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DD93758062;
+        Tue,  2 May 2023 13:56:52 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4DE4158054;
+        Tue,  2 May 2023 13:56:48 +0000 (GMT)
+Received: from [9.60.89.243] (unknown [9.60.89.243])
+        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Tue,  2 May 2023 13:56:48 +0000 (GMT)
+Message-ID: <1d4c9258-9423-7411-e722-8f6865b18886@linux.ibm.com>
+Date:   Tue, 2 May 2023 09:56:47 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH] rust: str: add conversion from `CStr` to `CString`
-To:     Alice Ryhl <aliceryhl@google.com>, Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>
-Cc:     Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev
-References: <20230502125306.358283-1-aliceryhl@google.com>
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v6 3/3] mm/gup: disallow FOLL_LONGTERM GUP-fast writing to
+ file-backed mappings
 Content-Language: en-US
-From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-In-Reply-To: <20230502125306.358283-1-aliceryhl@google.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>,
+        David Hildenbrand <david@redhat.com>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Mika Penttila <mpenttil@redhat.com>,
+        Dave Chinner <david@fromorbit.com>,
+        "Theodore Ts'o" <tytso@mit.edu>, Peter Xu <peterx@redhat.com>
+References: <dee4f4ad6532b0f94d073da263526de334d5d7e0.1682981880.git.lstoakes@gmail.com>
+ <fbad9e18-f727-9703-33cf-545a2d33af76@linux.ibm.com>
+ <7d56b424-ba79-4b21-b02c-c89705533852@lucifer.local>
+ <a6bb0334-9aba-9fd8-6a9a-9d4a931b6da2@linux.ibm.com>
+ <ZFEL20GQdomXGxko@nvidia.com>
+ <c4f790fb-b18a-341a-6965-455163ec06d1@redhat.com>
+ <ZFER5ROgCUyywvfe@nvidia.com>
+ <ce3aa7b9-723c-6ad3-3f03-3f1736e1c253@redhat.com>
+ <ff99f2d8-804d-924f-3c60-b342ffc2173c@linux.ibm.com>
+ <ad60d5d2-cfdf-df9f-aef1-7a0d3facbece@redhat.com>
+ <ZFEVQmFGL3GxZMaf@nvidia.com>
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+In-Reply-To: <ZFEVQmFGL3GxZMaf@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: RHePs_ok-HHHFFzfwdrT-a5YRt5zdN_o
+X-Proofpoint-ORIG-GUID: xOWsx5DlvAxgj0nnNjjobcc8ozIeW4QV
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-02_08,2023-04-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 malwarescore=0 mlxscore=0 bulkscore=0 impostorscore=0
+ mlxlogscore=815 spamscore=0 phishscore=0 adultscore=0 clxscore=1015
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2305020115
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/2/23 09:53, Alice Ryhl wrote:
-> These methods can be used to copy the data in a temporary c string into
-> a separate allocation, so that it can be accessed later even if the
-> original is deallocated.
+On 5/2/23 9:50 AM, Jason Gunthorpe wrote:
+> On Tue, May 02, 2023 at 03:47:43PM +0200, David Hildenbrand wrote:
+>>> Eventually we want to implement a mechanism where we can dynamically pin in response to RPCIT.
+>>
+>> Okay, so IIRC we'll fail starting the domain early, that's good. And if we
+>> pin all guest memory (instead of small pieces dynamically), there is little
+>> existing use for file-backed RAM in such zPCI configurations (because memory
+>> cannot be reclaimed either way if it's all pinned), so likely there are no
+>> real existing users.
 > 
-> The API in this file mirrors the standard library API for the `&str` and
-> `String` types. The `ToOwned` trait is not implemented because it
-> assumes that allocations are infallible.
-> 
-> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
-> ---
->  rust/kernel/str.rs | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
-> 
-> diff --git a/rust/kernel/str.rs b/rust/kernel/str.rs
-> index b771310fa4a4..54935ff3a610 100644
-> --- a/rust/kernel/str.rs
-> +++ b/rust/kernel/str.rs
-> @@ -2,6 +2,7 @@
->  
->  //! String representations.
->  
-> +use alloc::collections::TryReserveError;
->  use alloc::vec::Vec;
->  use core::fmt::{self, Write};
->  use core::ops::{self, Deref, Index};
-> @@ -199,6 +200,12 @@ impl CStr {
->      pub unsafe fn as_str_unchecked(&self) -> &str {
->          unsafe { core::str::from_utf8_unchecked(self.as_bytes()) }
->      }
-> +
-> +    /// Convert this [`CStr`] into a [`CString`] by allocating memory and
-> +    /// copying over the string data.
-> +    pub fn to_cstring(&self) -> Result<CString, TryReserveError> {
-> +        CString::try_from(self)
-> +    }
->  }
->  
->  impl fmt::Display for CStr {
-> @@ -584,6 +591,20 @@ impl Deref for CString {
->      }
->  }
->  
-> +impl<'a> TryFrom<&'a CStr> for CString {
-> +    type Error = TryReserveError;
-> +
-> +    fn try_from(cstr: &'a CStr) -> Result<CString, TryReserveError> {
-> +        let len = cstr.len_with_nul();
-> +        let mut buf = Vec::try_with_capacity(len)?;
-> +        buf.try_extend_from_slice(cstr.as_bytes_with_nul())?;
-> +
-> +        // INVARIANT: The CStr and CString types have the same invariants for
-> +        // the string data, and we copied it over without changes.
-> +        Ok(CString { buf })
-> +    }
-> +}
-> +
->  /// A convenience alias for [`core::format_args`].
->  #[macro_export]
->  macro_rules! fmt {
-> 
-> base-commit: ea76e08f4d901a450619831a255e9e0a4c0ed162
+> Right, this is VFIO, the physical HW can't tolerate not having pinned
+> memory, so something somewhere is always pinning it.
 
-Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+I might have mis-explained above.
+
+With iommufd nesting, we will pin everything upfront as a starting point.  
+
+The current usage of vfio type1 iommu for s390 does not pin the entirety of guest memory upfront, it happens as guest RPCITs occur / type1 mappings are made.
+
+> 
+> Which, again, makes it weird/wrong that this KVM code is pinning it
+> again :\
+> 
+> Jason
+
