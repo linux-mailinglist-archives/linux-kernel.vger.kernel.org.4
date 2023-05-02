@@ -2,67 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C7356F43C9
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 14:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F4696F43D5
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 14:26:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234043AbjEBMZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 08:25:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49570 "EHLO
+        id S233872AbjEBM0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 08:26:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234245AbjEBMZO (ORCPT
+        with ESMTP id S232830AbjEBM02 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 08:25:14 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D285BBF
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 05:25:11 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-55a829411b5so13218187b3.1
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 05:25:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683030310; x=1685622310;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=q4Hw5C2nBtTZEgNPrdfSn+t6iOR/tfBPufkhXcH+Kxg=;
-        b=QQ4wxKtCss6/4ZKcVhJ58uIueD7f6I9RxpE+EjGkvaKQ7NCSo9GJkNcFeAMq17BqKX
-         5XGp45Pg8BCDAPEAOZ0QokGy8QiQtRaMel18hgI8JcnSWOiMVRA4Z887w4td9DKo7rOE
-         kWSjSfmlFWMCFK5/WWkwEvj0emiW0F1efObLgJ0w/pBQDXtTt8Uh4yxDP5kqgc+HeJhH
-         ayr4pephHfHFTTiFzSe+89TldMyyXoqGmdvNEIiXVXIKldgNqLmJEkBc0ld0CTHSrQNP
-         MrfoHNWJcyPmoeSeRT2Pxuit5hsfH2qtekwZ8psK8rRqveQrlFYPUDEbt16OZyeilFER
-         vcQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683030310; x=1685622310;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=q4Hw5C2nBtTZEgNPrdfSn+t6iOR/tfBPufkhXcH+Kxg=;
-        b=VdwWGx4OHqg0okIh7mGauAx0hM9yjHe5rQWrai2s8C2EPcgheFOwcOooFYoXp3CazC
-         FMw78FVReljO23YyuAEkNUtWD0mJEJLJjLBrQvS9dC4QHtfYxxc/VB1DTbwkWAiHbG6j
-         fySk8a899CybiG/yZexT2rLbpETAughnzdne+nyvraGSXuG5LDeUuQ7VCdC72Dq8OODh
-         DXXqSIYbKlQ4V064p+6ILmfTyygH8JVk+sQcNMSD63AFXpICUqFjm+ptp1QcJtEiYtaB
-         kEdc4BU+GQdg5dEjFU57f3xr4hTdW8V7uPksYTx0Ap+kb0TpHCC58zZT+BBYtCQCg0hX
-         Ceaw==
-X-Gm-Message-State: AC+VfDykfSo/YH9ETF2aunTJ/pzrzouKULHvCD3DBiBXjtYyDTV/muZ4
-        qGj5/q8k2XT3kNurAJKq8B0+eQkiRqp2ag03gsJSfA==
-X-Google-Smtp-Source: ACHHUZ6v6SYwJgYmFk960nJNzc2XOxvg20x2ZYqapVYmLFWHnVY6odJTA9csZyCbabHxlhfojWaHkIb5SPxpM3Rt1AY=
-X-Received: by 2002:a0d:c683:0:b0:556:ce0a:5a16 with SMTP id
- i125-20020a0dc683000000b00556ce0a5a16mr15407859ywd.44.1683030310357; Tue, 02
- May 2023 05:25:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230502103810.12061-1-johan+linaro@kernel.org> <20230502103810.12061-2-johan+linaro@kernel.org>
-In-Reply-To: <20230502103810.12061-2-johan+linaro@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 2 May 2023 15:24:59 +0300
-Message-ID: <CAA8EJpppgFK4N61XT+=VXTfWYVjA16Maoo+hEo4YyaB7HfGiCQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] phy: qcom-qmp-combo: fix init-count imbalance
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Vinod Koul <vkoul@kernel.org>,
+        Tue, 2 May 2023 08:26:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B3EE6A;
+        Tue,  2 May 2023 05:26:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 13B98623D1;
+        Tue,  2 May 2023 12:26:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B614C433EF;
+        Tue,  2 May 2023 12:26:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683030386;
+        bh=+tUawv5EiBg4sqiRbzAHZDe9om3TRYdvWox2tHvlSzE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BGHceCY6xP7mDbZltsp5coAmNywdFwO3NYphny/G+DLVhtX3SpVVcIBBvo9MIfDSO
+         Tre5lOjjXPdwLrYugKH+/Ay6m4KlEJXKFPuLrFbVPkHzYAwTQnyja7/bwSqMSqDyTr
+         J+U1GK9IekqBukX1SDRrZy996kb8DOFc6Cxa9nhWHXWxZWUBLUUX02Pb1I3bwU/lOe
+         pXK00VzQJK4mA4IE/TAHIhVnWc4PwKoYWUj8/Azhzae1tldMT9FI8h+VFOY890iGFo
+         plUE8p6r2qoP82JsYPRcfHPoz4mGC3Jz95/P4WxUySlPJrZzkFYVF7SVL2u4kmVeyc
+         hCceoQgLWTjmw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1ptp5R-0003n8-Gn; Tue, 02 May 2023 14:26:29 +0200
+Date:   Tue, 2 May 2023 14:26:29 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
         Kishon Vijay Abraham I <kishon@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/7] phy: qcom-qmp-combo: Support orientation switching
+Message-ID: <ZFEBdT4Yh4fBItHk@hovoldconsulting.com>
+References: <20230425034010.3789376-1-quic_bjorande@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230425034010.3789376-1-quic_bjorande@quicinc.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,24 +63,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2 May 2023 at 13:39, Johan Hovold <johan+linaro@kernel.org> wrote:
->
-> The init counter is not decremented on initialisation errors, which
-> prevents retrying initialisation and can lead to the runtime suspend
-> callback attempting to disable resources that have never been enabled.
->
-> Add the missing decrement on initialisation errors so that the counter
-> reflects the state of the device.
->
-> Fixes: e78f3d15e115 ("phy: qcom-qmp: new qmp phy driver for qcom-chipsets")
-> Cc: stable@vger.kernel.org      # 4.12
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->  drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+On Mon, Apr 24, 2023 at 08:40:03PM -0700, Bjorn Andersson wrote:
+> This adds support for USB and DisplayPort orientation switching to the
+> QMP combo PHY, as well as updating the sc8280xp devices to include the
+> QMP in the SuperSpeed graph.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Nice and clean series!
 
--- 
-With best wishes
-Dmitry
+I've tested it a bit on the X13s and verified that DP works on both
+ports and in both orientations. Coldplug also appears to work reliably.
+
+Tested-by: Johan Hovold <johan+linaro@kernel.org>	# X13s
+
+> Bjorn Andersson (7):
+>   dt-bindings: phy: qcom,sc8280xp-qmp-usb43dp: Add ports and
+>     orientation-switch
+>   phy: qcom-qmp-combo: Move phy_mutex out of com_init/exit
+>   phy: qcom-qmp-combo: Introduce orientation variable
+>   phy: qcom-qmp-combo: Introduce orientation switching
+>   phy: qcom-qmp-combo: Introduce drm_bridge
+>   arm64: dts: qcom: sc8280xp-crd: Add QMP to SuperSpeed graph
+>   arm64: dts: qcom: sc8280xp-x13s: Add QMP to SuperSpeed graph
+> 
+>  .../phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml    |  51 ++++
+>  arch/arm64/boot/dts/qcom/sc8280xp-crd.dts     |  28 ++-
+>  .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    |  28 ++-
+>  arch/arm64/boot/dts/qcom/sc8280xp.dtsi        |  34 +++
+>  drivers/phy/qualcomm/phy-qcom-qmp-combo.c     | 227 ++++++++++++++----
+>  5 files changed, 309 insertions(+), 59 deletions(-)
+
+Johan
