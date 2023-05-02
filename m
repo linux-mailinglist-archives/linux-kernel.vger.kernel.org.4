@@ -2,139 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE9176F4AB3
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 21:58:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8E516F4ABD
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 22:01:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229745AbjEBT6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 15:58:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34476 "EHLO
+        id S229736AbjEBUBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 16:01:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjEBT6v (ORCPT
+        with ESMTP id S229496AbjEBUBU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 15:58:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D988E19A7
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 12:58:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683057485;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aKHeKqZ6mdgIeuKnPtdj2k6l6vY7S9mG2MmFei8RXi4=;
-        b=Z315wsyMyOkmDSjKFMGSwUrlxAuP0RUw8y4ckDHTcnTO7W1A6FhxmcMX/CeUyV/wG6L+SR
-        wIRk08OwipXpL+8O8JeRIeAWePbWuLC0WWCM9W0x5lIM54vKllcC/+KilaRvU8+yTMU6RI
-        jrxIwI/l3AQRCFUfsuyfFMT+1eTeZZU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-548-dz7xzQJCPRCcb_wYvyeVtg-1; Tue, 02 May 2023 15:58:02 -0400
-X-MC-Unique: dz7xzQJCPRCcb_wYvyeVtg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 417D8A0F386;
-        Tue,  2 May 2023 19:58:01 +0000 (UTC)
-Received: from [10.22.10.239] (unknown [10.22.10.239])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CBAAB492B03;
-        Tue,  2 May 2023 19:58:00 +0000 (UTC)
-Message-ID: <3005132d-7d05-0b7f-09f4-1956e42b6e2a@redhat.com>
-Date:   Tue, 2 May 2023 15:58:00 -0400
+        Tue, 2 May 2023 16:01:20 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B64D10FF;
+        Tue,  2 May 2023 13:01:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683057679; x=1714593679;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=XNLfq1FKE5HOh8rOGIhhAA4qWJQTxU3C5Z2Bm9Da1bg=;
+  b=hUAXw2vnebwa8AAVwofdj18whP0L71vW+jselfduEgd0Wp9LswCCww8Z
+   1vawo4jLsNmnyv7y1YwPk43s8jnvknwHD2G7Ogpu356LCppyEsFX4V2m1
+   5cGKwEH461TqgVQhiXJUpTzmlC0SjlfC/1f6A6MSeG9EcMmkWH19Zigge
+   9skox8iNRdfm2KGjeNv+Aib37cwYCgaD/wDAUdnvsQXQAK/48rcQIKacQ
+   6U53/dxZ6LpQNGT8HXHjzQgjSglDOPvfPNEdl3b41P2TbkxLG9cNQS0oA
+   HBsz+DKNqXBIJkKy02R4ZMNyUxpQ7oidSKQs96v08bt1caBQbiz5wJ73e
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="351472440"
+X-IronPort-AV: E=Sophos;i="5.99,245,1677571200"; 
+   d="scan'208";a="351472440"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2023 13:01:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="761246188"
+X-IronPort-AV: E=Sophos;i="5.99,245,1677571200"; 
+   d="scan'208";a="761246188"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga008.fm.intel.com with ESMTP; 02 May 2023 13:01:14 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ptwBU-008DEp-1k;
+        Tue, 02 May 2023 23:01:12 +0300
+Date:   Tue, 2 May 2023 23:01:12 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     'Rasmus Villemoes' <linux@rasmusvillemoes.dk>,
+        Konrad =?iso-8859-1?Q?Gr=E4fe?= <k.graefe@gateware.de>,
+        Quentin Schulz <quentin.schulz@theobroma-systems.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Felipe Balbi <balbi@ti.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH v3 1/2] vsprintf: Add %p[mM]U for uppercase MAC address
+Message-ID: <ZFFsCHzbS6B0+Jbp@smile.fi.intel.com>
+References: <2023042625-rendition-distort-fe06@gregkh>
+ <20230427115120.241954-1-k.graefe@gateware.de>
+ <c075b668-8194-6aea-484c-0223f164cb4d@rasmusvillemoes.dk>
+ <954a3b8d5be0487e8ead23bef450fabe@AcuMS.aculab.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH 1/3] cgroup: Drop unused function for cgroup_path
-Content-Language: en-US
-To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        Rik van Riel <riel@surriel.com>,
-        Jiri Wiesner <jwiesner@suse.de>
-References: <20230502133847.14570-1-mkoutny@suse.com>
- <20230502133847.14570-2-mkoutny@suse.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20230502133847.14570-2-mkoutny@suse.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <954a3b8d5be0487e8ead23bef450fabe@AcuMS.aculab.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/2/23 09:38, Michal Koutný wrote:
-> There is no current user and there are alternative methods to obtain
-> task's cgroup path.
->
-> Signed-off-by: Michal Koutný <mkoutny@suse.com>
-> ---
->   kernel/cgroup/cgroup.c | 39 ---------------------------------------
->   1 file changed, 39 deletions(-)
->
-> diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-> index 625d7483951c..55e5f0110e3b 100644
-> --- a/kernel/cgroup/cgroup.c
-> +++ b/kernel/cgroup/cgroup.c
-> @@ -2378,45 +2378,6 @@ int cgroup_path_ns(struct cgroup *cgrp, char *buf, size_t buflen,
->   }
->   EXPORT_SYMBOL_GPL(cgroup_path_ns);
->   
-> -/**
-> - * task_cgroup_path - cgroup path of a task in the first cgroup hierarchy
-> - * @task: target task
-> - * @buf: the buffer to write the path into
-> - * @buflen: the length of the buffer
-> - *
-> - * Determine @task's cgroup on the first (the one with the lowest non-zero
-> - * hierarchy_id) cgroup hierarchy and copy its path into @buf.  This
-> - * function grabs cgroup_mutex and shouldn't be used inside locks used by
-> - * cgroup controller callbacks.
-> - *
-> - * Return value is the same as kernfs_path().
-> - */
-> -int task_cgroup_path(struct task_struct *task, char *buf, size_t buflen)
-> -{
-> -	struct cgroup_root *root;
-> -	struct cgroup *cgrp;
-> -	int hierarchy_id = 1;
-> -	int ret;
-> -
-> -	cgroup_lock();
-> -	spin_lock_irq(&css_set_lock);
-> -
-> -	root = idr_get_next(&cgroup_hierarchy_idr, &hierarchy_id);
-> -
-> -	if (root) {
-> -		cgrp = task_cgroup_from_root(task, root);
-> -		ret = cgroup_path_ns_locked(cgrp, buf, buflen, &init_cgroup_ns);
-> -	} else {
-> -		/* if no hierarchy exists, everyone is in "/" */
-> -		ret = strscpy(buf, "/", buflen);
-> -	}
-> -
-> -	spin_unlock_irq(&css_set_lock);
-> -	cgroup_unlock();
-> -	return ret;
-> -}
-> -EXPORT_SYMBOL_GPL(task_cgroup_path);
-> -
->   /**
->    * cgroup_attach_lock - Lock for ->attach()
->    * @lock_threadgroup: whether to down_write cgroup_threadgroup_rwsem
+On Fri, Apr 28, 2023 at 07:46:14AM +0000, David Laight wrote:
+> From: Rasmus Villemoes
+> > Sent: 28 April 2023 07:57
+> > On 27/04/2023 13.51, Konrad Gr�fe wrote:
+> > > The CDC-ECM specification requires an USB gadget to send the host MAC
+> > > address as uppercase hex string. This change adds the appropriate
+> > > modifier.
+> > 
+> > Thinking more about it, I'm not sure this is appropriate, not for a
+> > single user like this. vsprintf() should not and cannot satisfy all
+> > possible string formatting requirements for the whole kernel. The %pX
+> > extensions are convenient for use with printk() and friends where one
+> > needs what in other languages would be "string interpolation" (because
+> > then the caller doesn't need to deal with temporary stack buffers and
+> > pass them as %s arguments), but for single items like this, snprintf()
+> > is not necessarily the right tool for the job.
+> > 
+> > In this case, the caller can just as well call string_upper() on the
+> > result, or not use sprintf() at all and do a tiny loop with
+> > hex_byte_pack_upper().
+> 
+> Or snprintf with "%02X:%02X:%02X:%02X:%02X:%02X".
 
-I went to a few of earlier Linux version down to v3.11. 
-task_cgroup_path() doesn't seems to have any users in my few attempts. 
-Anyway,
+Of course this is a step back. Why? Have you read actually what we have in %p
+extensions already?
 
-Reviewed-by: Waiman Long <longman@redhat.com>
+Also, what about stack?
+
+Entire %pm/M exists due to reversed order. Otherwise it's an alias to %6phD or
+alike.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
