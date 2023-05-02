@@ -2,428 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32A846F44F6
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 15:27:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 400D46F44FB
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 15:29:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234119AbjEBN1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 09:27:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56562 "EHLO
+        id S234159AbjEBN3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 09:29:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233981AbjEBN1O (ORCPT
+        with ESMTP id S233793AbjEBN3d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 09:27:14 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6B9E5FE8
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 06:27:09 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4ec8148f73eso4466399e87.1
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 06:27:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google; t=1683034027; x=1685626027;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=KQ9fhPJG2Y/6Knf/bB3jEwtwDnnjW9NY0l1i398fVX8=;
-        b=YrshEjVnjE6RpscFe00p3aqOjgUK/CJMpQZrP+7dXsRf4XjN8EDtCWChZs2HvFfHxA
-         vHcx+ZaSerEsZn8BgacGkXx+58a35VllAtCYy4eN2o/wvX3s0dBIxb9Ub3ianZWMbiDv
-         51dZrQjEAs7xaFFDaQZAlPRSWnuPmYmHAMQWcireomnG0eCKkRw+jKhndFvupREzNuJw
-         Gl7LnjoZyBPNXos8d9Hj0Kpgcm5GFCEgBpHIV4n24BbDWXFwSuBLphWSKiLCPvMjdqnW
-         wNYVux6kS3Zxrct8UnlABQgQA02zP8rxl0uxgVrONNTI6WN2zZCzYWH/QDSKCntYHXFp
-         wNJQ==
+        Tue, 2 May 2023 09:29:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915215B8E
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 06:28:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683034125;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IROBYfVezUGUOMHt+Xf+RoziNZv7xK7RsTQX0q9IseM=;
+        b=HwCmDOsxVeDP30hvheU4OJ+dXmcM7Cnj/B8kPx2//x4qVUhWecQCHF431MMymBlEIRcXlV
+        jSsd5L2mUd0fnRuQAsLP1HHbGNLEuoD180qSXZySxoXVpxfNnX8hUWyRB/jro4Qj/HgUl7
+        SkiF7FBIYnreHJtAh/d1d+TqH0gTrk4=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-306-Qs_tP9dmNoystyplRNMcGw-1; Tue, 02 May 2023 09:28:44 -0400
+X-MC-Unique: Qs_tP9dmNoystyplRNMcGw-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f3157128b4so105404055e9.0
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 06:28:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683034027; x=1685626027;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1683034123; x=1685626123;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=KQ9fhPJG2Y/6Knf/bB3jEwtwDnnjW9NY0l1i398fVX8=;
-        b=GXAhjXty0wqBWO0ocawnC7CKgFE7/PVBy5iMywItbk7sJ70axG7UGzNbmus5EcAu2K
-         +yU9sXudAZTeL8FnU7/eScDVh0zdE7hX8+Q6VaAW/T6eNOn9/zy0I5Bwl84o4QL6hH2v
-         eYdNxI2JXosDFqs9XWqGpMyuw5+gMClBc64VnYH1iiGSD7ILigB/H5TKcmg/K+/8+5xy
-         Zzi0HvcaYjwJHf+/G1nvF4XC7IY+kwoyX903AQWW3tgdtfDKf2jjoamOQI0l7PBh6mUG
-         y2Zn7rsr430/aHZVvPE9KQi5gT06BcbMLn5IhXvwhAcaL8Il/9YIMIIqS724St7+LUKc
-         VzMg==
-X-Gm-Message-State: AC+VfDxIMJI9Do82niZVUtmWq1ILRuzhC88CMzo4v6k1p8ftHP3NVpPd
-        KwOs+ogBmwR5/NODEctSTBBneKYzjkd0hMyYJuI=
-X-Google-Smtp-Source: ACHHUZ6xIH36cull7lATgnlY9kxs50FaMkcO1K6T346X1BrKVWY2yXbZ2oWOwu0Y8+l7uY7Hx7M0zQ==
-X-Received: by 2002:a19:ac43:0:b0:4f1:1de7:1aac with SMTP id r3-20020a19ac43000000b004f11de71aacmr1810249lfc.20.1683034027281;
-        Tue, 02 May 2023 06:27:07 -0700 (PDT)
-Received: from jazctssd.c.googlers.com.com (138.58.228.35.bc.googleusercontent.com. [35.228.58.138])
-        by smtp.gmail.com with ESMTPSA id l17-20020ac24a91000000b00498f67cbfa9sm5372301lfp.22.2023.05.02.06.27.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 May 2023 06:27:06 -0700 (PDT)
-From:   Grzegorz Jaszczyk <jaz@semihalf.com>
-X-Google-Original-From: Grzegorz Jaszczyk <jaszczyk@google.com>
-To:     linux-kernel@vger.kernel.org, alex.williamson@redhat.com
-Cc:     dmy@semihalf.com, tn@semihalf.com, dbehr@google.com,
-        dbehr@chromium.org, upstream@semihalf.com, dtor@google.com,
-        jgg@ziepe.ca, kevin.tian@intel.com, cohuck@redhat.com,
-        abhsahu@nvidia.com, yishaih@nvidia.com, yi.l.liu@intel.com,
-        kvm@vger.kernel.org, libvir-list@redhat.com,
-        Grzegorz Jaszczyk <jaz@semihalf.com>
-Subject: [PATCH v3] vfio/pci: Propagate ACPI notifications to user-space via eventfd
-Date:   Tue,  2 May 2023 13:27:00 +0000
-Message-ID: <20230502132700.654528-1-jaszczyk@google.com>
-X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
+        bh=IROBYfVezUGUOMHt+Xf+RoziNZv7xK7RsTQX0q9IseM=;
+        b=C2wtOx2BIa4myw/AAV+z6urV+JZU4coPE/QZoASDYidPmXByw3WfvPAR7YFzg0SUjq
+         HtaHunkx7cDBqaRNQo2i9YjugmxVWOdwFsH14OBIUFaewhHYqFl/xNfZkR6LFlaacATU
+         NoXqa/j3RP1ip4xxituXM9F7+5kPHxJMjqW6aIWSGNm50wgcy7fHtIgRUu424qyFD3jy
+         YSrfP/FmEufs7TZjMFlKtbdrkmbrn3UJah17l9yCX5ksyab/xRFN4syivxoqmHZlZJVH
+         ZSbzKZsPkNHvbw6h332yaCyZB3YXsajs+og+VTiy3nrZAfhBG2/8AOhrrekYksTcmoz3
+         UEZQ==
+X-Gm-Message-State: AC+VfDxpGK7P7dj+GW+n18vAHZIqlFqzJvqdHPWa1qZesfR5jN6/3S4u
+        EPaWegjOrWwLRblz3skJmHMMkRJfRfwtitJx6+7smOEKiqJDEJZNE43Jbj2jGxkUMqABFYwEQXq
+        Nxyh52lLACWD4KhUvcXqIIp0H
+X-Received: by 2002:a7b:c7c4:0:b0:3f1:6f57:6fd1 with SMTP id z4-20020a7bc7c4000000b003f16f576fd1mr12572122wmk.9.1683034123615;
+        Tue, 02 May 2023 06:28:43 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4zyzv2s4Kee5M/SxJ733JQIlFSdNxIYqlUKU4njxydWjKV07txCkKBkKlNa6sh0b/vYPOUXQ==
+X-Received: by 2002:a7b:c7c4:0:b0:3f1:6f57:6fd1 with SMTP id z4-20020a7bc7c4000000b003f16f576fd1mr12572106wmk.9.1683034123289;
+        Tue, 02 May 2023 06:28:43 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c700:2400:6b79:2aa:9602:7016? (p200300cbc70024006b7902aa96027016.dip0.t-ipconnect.de. [2003:cb:c700:2400:6b79:2aa:9602:7016])
+        by smtp.gmail.com with ESMTPSA id p5-20020a05600c468500b003f18141a016sm38716313wmo.18.2023.05.02.06.28.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 May 2023 06:28:42 -0700 (PDT)
+Message-ID: <c4f790fb-b18a-341a-6965-455163ec06d1@redhat.com>
+Date:   Tue, 2 May 2023 15:28:40 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@nvidia.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>
+Cc:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Mika Penttila <mpenttil@redhat.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Theodore Ts'o <tytso@mit.edu>, Peter Xu <peterx@redhat.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>
+References: <cover.1682981880.git.lstoakes@gmail.com>
+ <dee4f4ad6532b0f94d073da263526de334d5d7e0.1682981880.git.lstoakes@gmail.com>
+ <fbad9e18-f727-9703-33cf-545a2d33af76@linux.ibm.com>
+ <7d56b424-ba79-4b21-b02c-c89705533852@lucifer.local>
+ <a6bb0334-9aba-9fd8-6a9a-9d4a931b6da2@linux.ibm.com>
+ <ZFEL20GQdomXGxko@nvidia.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v6 3/3] mm/gup: disallow FOLL_LONGTERM GUP-fast writing to
+ file-backed mappings
+In-Reply-To: <ZFEL20GQdomXGxko@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Grzegorz Jaszczyk <jaz@semihalf.com>
+On 02.05.23 15:10, Jason Gunthorpe wrote:
+> On Tue, May 02, 2023 at 03:04:27PM +0200, Christian Borntraeger wrote:
+> \> > We can reintroduce a flag to permit exceptions if this is really broken, are you
+>>> able to test? I don't have an s390 sat around :)
+>>
+>> Matt (Rosato on cc) probably can. In the end, it would mean having
+>>    <memoryBacking>
+>>      <source type="file"/>
+>>    </memoryBacking>
+> 
+> This s390 code is the least of the problems, after this series VFIO
+> won't startup at all with this configuration.
 
-To allow pass-through devices receiving ACPI notifications, permit to
-register ACPI notify handler (via introduced new ioctl) for a given
-device. The handler role is to receive and propagate such ACPI
-notifications to the user-space through the user provided eventfd. This
-allows VMM to receive and propagate them further to the VM, where the
-actual driver for pass-through device resides and can react to device
-specific notifications accordingly.
+Good question if the domain would fail to start. I recall that IOMMUs 
+for zPCI are special on s390x. [1]
 
-The eventfd usage ensures VMM and device isolation: it allows to use a
-dedicated channel associated with the device for such events, such that
-the VMM has direct access.
+Well, zPCI is special. I cannot immediately tell when we would trigger 
+long-term pinning.
 
-Since the eventfd counter is used as ACPI notification value
-placeholder, the eventfd signaling needs to be serialized in order to
-not end up with notification values being coalesced. Therefore ACPI
-notification values are buffered and signalized one by one, when the
-previous notification value has been consumed.
+[1] https://www.mail-archive.com/qemu-devel@nongnu.org/msg875728.html
 
-Signed-off-by: Grzegorz Jaszczyk <jaz@semihalf.com>
----
-Changelog v2..v3:
-- Fix compilation warnings when building with "W=1"
-Changelog v1..v2:
-- The v2 implementation is actually completely different then v1:
-  instead of using acpi netlink events for propagating ACPI
-  notifications to the user space take advantage of eventfd, which can
-  provide better VMM and device isolation: it allows to use a dedicated
-  channel associated with the device for such events, such that the VMM
-  has direct access.
-- Using eventfd counter as notification value placeholder was suggested
-  in v1 and requires additional serialization logic introduced in v2.
-- Since the vfio-pci supports non-ACPI platforms address !CONFIG_ACPI
-  case.
-- v1 discussion: https://patchwork.kernel.org/project/kvm/patch/20230307220553.631069-1-jaz@semihalf.com/
----
- drivers/vfio/pci/vfio_pci_core.c | 214 +++++++++++++++++++++++++++++++
- include/linux/vfio_pci_core.h    |  11 ++
- include/uapi/linux/vfio.h        |  15 +++
- 3 files changed, 240 insertions(+)
-
-diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
-index a5ab416cf476..2d6101e89fde 100644
---- a/drivers/vfio/pci/vfio_pci_core.c
-+++ b/drivers/vfio/pci/vfio_pci_core.c
-@@ -10,6 +10,7 @@
- 
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
-+#include <linux/acpi.h>
- #include <linux/aperture.h>
- #include <linux/device.h>
- #include <linux/eventfd.h>
-@@ -679,6 +680,70 @@ void vfio_pci_core_disable(struct vfio_pci_core_device *vdev)
- }
- EXPORT_SYMBOL_GPL(vfio_pci_core_disable);
- 
-+struct notification_queue {
-+	int notification_val;
-+	struct list_head notify_val_next;
-+};
-+
-+#if IS_ENABLED(CONFIG_ACPI)
-+static void vfio_pci_core_acpi_notify(acpi_handle handle, u32 event, void *data)
-+{
-+	struct vfio_pci_core_device *vdev = (struct vfio_pci_core_device *)data;
-+	struct vfio_acpi_notification *acpi_notify = vdev->acpi_notification;
-+	struct notification_queue *entry;
-+
-+	entry = kmalloc(sizeof(*entry), GFP_KERNEL);
-+	if (!entry)
-+		return;
-+
-+	entry->notification_val = event;
-+	INIT_LIST_HEAD(&entry->notify_val_next);
-+
-+	mutex_lock(&acpi_notify->notification_list_lock);
-+	list_add_tail(&entry->notify_val_next, &acpi_notify->notification_list);
-+	mutex_unlock(&acpi_notify->notification_list_lock);
-+
-+	schedule_work(&acpi_notify->acpi_notification_work);
-+}
-+
-+static void vfio_pci_acpi_notify_close_device(struct vfio_pci_core_device *vdev)
-+{
-+	struct vfio_acpi_notification *acpi_notify = vdev->acpi_notification;
-+	struct pci_dev *pdev = vdev->pdev;
-+	struct acpi_device *adev = ACPI_COMPANION(&pdev->dev);
-+	struct notification_queue *entry, *entry_tmp;
-+	u64 cnt;
-+
-+	if (!acpi_notify || !acpi_notify->acpi_notify_trigger)
-+		return;
-+
-+	acpi_remove_notify_handler(adev->handle, ACPI_DEVICE_NOTIFY,
-+				   vfio_pci_core_acpi_notify);
-+
-+	eventfd_ctx_remove_wait_queue(acpi_notify->acpi_notify_trigger,
-+				      &acpi_notify->wait, &cnt);
-+
-+	flush_work(&acpi_notify->acpi_notification_work);
-+
-+	mutex_lock(&acpi_notify->notification_list_lock);
-+	list_for_each_entry_safe(entry, entry_tmp,
-+				 &acpi_notify->notification_list,
-+				 notify_val_next) {
-+		list_del(&entry->notify_val_next);
-+		kfree(entry);
-+	}
-+	mutex_unlock(&acpi_notify->notification_list_lock);
-+
-+	eventfd_ctx_put(acpi_notify->acpi_notify_trigger);
-+
-+	kfree(acpi_notify);
-+
-+	vdev->acpi_notification = NULL;
-+}
-+#else
-+static void vfio_pci_acpi_notify_close_device(struct vfio_pci_core_device *vdev) {}
-+#endif /* CONFIG_ACPI */
-+
- void vfio_pci_core_close_device(struct vfio_device *core_vdev)
- {
- 	struct vfio_pci_core_device *vdev =
-@@ -705,6 +770,8 @@ void vfio_pci_core_close_device(struct vfio_device *core_vdev)
- 		vdev->req_trigger = NULL;
- 	}
- 	mutex_unlock(&vdev->igate);
-+
-+	vfio_pci_acpi_notify_close_device(vdev);
- }
- EXPORT_SYMBOL_GPL(vfio_pci_core_close_device);
- 
-@@ -882,6 +949,151 @@ int vfio_pci_core_register_dev_region(struct vfio_pci_core_device *vdev,
- }
- EXPORT_SYMBOL_GPL(vfio_pci_core_register_dev_region);
- 
-+#if IS_ENABLED(CONFIG_ACPI)
-+static int vfio_pci_eventfd_wakeup(wait_queue_entry_t *wait, unsigned int mode,
-+				   int sync, void *key)
-+{
-+	struct vfio_acpi_notification *acpi_notify =
-+		container_of(wait, struct vfio_acpi_notification, wait);
-+	__poll_t flags = key_to_poll(key);
-+
-+	/*
-+	 * eventfd_read signalize EPOLLOUT at the end of its function - this
-+	 * means previous eventfd with its notification value was consumed so
-+	 * the next notification can be signalized now if pending - schedule
-+	 * proper work.
-+	 */
-+	if (flags & EPOLLOUT) {
-+		mutex_unlock(&acpi_notify->notification_lock);
-+		schedule_work(&acpi_notify->acpi_notification_work);
-+	}
-+
-+	return 0;
-+}
-+
-+static void vfio_pci_ptable_queue_proc(struct file *file,
-+				       wait_queue_head_t *wqh, poll_table *pt)
-+{
-+	struct vfio_acpi_notification *acpi_notify =
-+		container_of(pt, struct vfio_acpi_notification, pt);
-+
-+	add_wait_queue(wqh, &acpi_notify->wait);
-+}
-+
-+static void acpi_notification_work_fn(struct work_struct *work)
-+{
-+	struct vfio_acpi_notification *acpi_notify;
-+	struct notification_queue *entry;
-+
-+	acpi_notify = container_of(work, struct vfio_acpi_notification,
-+				   acpi_notification_work);
-+
-+	mutex_lock(&acpi_notify->notification_list_lock);
-+	if (list_empty(&acpi_notify->notification_list) || !acpi_notify->acpi_notify_trigger)
-+		goto out;
-+
-+	/*
-+	 * If the previous eventfd was not yet consumed by user-space lets hold
-+	 * on and exit. The notification function will be rescheduled when
-+	 * signaling eventfd will be possible (when the EPOLLOUT will be
-+	 * signalized and unlocks notify_events).
-+	 */
-+	if (!mutex_trylock(&acpi_notify->notification_lock))
-+		goto out;
-+
-+	entry = list_first_entry(&acpi_notify->notification_list,
-+				 struct notification_queue, notify_val_next);
-+
-+	list_del(&entry->notify_val_next);
-+	mutex_unlock(&acpi_notify->notification_list_lock);
-+
-+	eventfd_signal(acpi_notify->acpi_notify_trigger, entry->notification_val);
-+
-+	kfree(entry);
-+
-+	return;
-+out:
-+	mutex_unlock(&acpi_notify->notification_list_lock);
-+}
-+
-+static int vfio_pci_ioctl_acpi_notify_eventfd(struct vfio_pci_core_device *vdev, struct
-+				       vfio_irq_info __user *arg)
-+{
-+	struct file *acpi_notify_trigger_file;
-+	struct vfio_acpi_notification *acpi_notify;
-+	struct pci_dev *pdev = vdev->pdev;
-+	struct acpi_device *adev = ACPI_COMPANION(&pdev->dev);
-+	struct vfio_acpi_notify_eventfd entry;
-+	struct eventfd_ctx *efdctx;
-+	acpi_status status;
-+
-+	if (!adev)
-+		return -ENODEV;
-+
-+	if (copy_from_user(&entry, arg, sizeof(entry)))
-+		return -EFAULT;
-+
-+	if (entry.notify_eventfd < 0)
-+		return -EINVAL;
-+
-+	efdctx = eventfd_ctx_fdget(entry.notify_eventfd);
-+	if (IS_ERR(efdctx))
-+		return PTR_ERR(efdctx);
-+
-+	vdev->acpi_notification = kzalloc(sizeof(*acpi_notify), GFP_KERNEL);
-+	if (!vdev->acpi_notification)
-+		return -ENOMEM;
-+
-+	acpi_notify = vdev->acpi_notification;
-+
-+	INIT_WORK(&acpi_notify->acpi_notification_work, acpi_notification_work_fn);
-+	INIT_LIST_HEAD(&acpi_notify->notification_list);
-+
-+	acpi_notify->acpi_notify_trigger = efdctx;
-+
-+	mutex_init(&acpi_notify->notification_lock);
-+
-+	/*
-+	 * Install custom wake-up handler to be notified whenever underlying
-+	 * eventfd is consumed by the user-space.
-+	 */
-+	init_waitqueue_func_entry(&acpi_notify->wait, vfio_pci_eventfd_wakeup);
-+	init_poll_funcptr(&acpi_notify->pt, vfio_pci_ptable_queue_proc);
-+
-+	acpi_notify_trigger_file = eventfd_fget(entry.notify_eventfd);
-+	vfs_poll(acpi_notify_trigger_file, &acpi_notify->pt);
-+
-+	status = acpi_install_notify_handler(adev->handle, ACPI_DEVICE_NOTIFY,
-+					vfio_pci_core_acpi_notify, (void *)vdev);
-+
-+	if (ACPI_FAILURE(status)) {
-+		u64 cnt;
-+
-+		pci_err(pdev, "Failed to install notify handler: %s",
-+			acpi_format_exception(status));
-+
-+		eventfd_ctx_remove_wait_queue(acpi_notify->acpi_notify_trigger,
-+					      &acpi_notify->wait, &cnt);
-+
-+		flush_work(&acpi_notify->acpi_notification_work);
-+
-+		eventfd_ctx_put(acpi_notify->acpi_notify_trigger);
-+
-+		kfree(acpi_notify);
-+
-+		return -ENODEV;
-+	}
-+
-+	return 0;
-+}
-+#else
-+static int vfio_pci_ioctl_acpi_notify_eventfd(struct vfio_pci_core_device *vdev, struct
-+				       vfio_irq_info __user *arg)
-+{
-+	return -ENODEV;
-+}
-+#endif /* CONFIG_ACPI */
-+
- static int vfio_pci_ioctl_get_info(struct vfio_pci_core_device *vdev,
- 				   struct vfio_device_info __user *arg)
- {
-@@ -1398,6 +1610,8 @@ long vfio_pci_core_ioctl(struct vfio_device *core_vdev, unsigned int cmd,
- 		return vfio_pci_ioctl_reset(vdev, uarg);
- 	case VFIO_DEVICE_SET_IRQS:
- 		return vfio_pci_ioctl_set_irqs(vdev, uarg);
-+	case VFIO_ACPI_NOTIFY_EVENTFD:
-+		return vfio_pci_ioctl_acpi_notify_eventfd(vdev, uarg);
- 	default:
- 		return -ENOTTY;
- 	}
-diff --git a/include/linux/vfio_pci_core.h b/include/linux/vfio_pci_core.h
-index 367fd79226a3..3711e8a1c6f0 100644
---- a/include/linux/vfio_pci_core.h
-+++ b/include/linux/vfio_pci_core.h
-@@ -49,6 +49,16 @@ struct vfio_pci_region {
- 	u32				flags;
- };
- 
-+struct vfio_acpi_notification {
-+	struct eventfd_ctx	*acpi_notify_trigger;
-+	struct work_struct	acpi_notification_work;
-+	struct list_head	notification_list;
-+	struct mutex		notification_list_lock;
-+	struct mutex		notification_lock;
-+	poll_table		pt;
-+	wait_queue_entry_t	wait;
-+};
-+
- struct vfio_pci_core_device {
- 	struct vfio_device	vdev;
- 	struct pci_dev		*pdev;
-@@ -96,6 +106,7 @@ struct vfio_pci_core_device {
- 	struct mutex		vma_lock;
- 	struct list_head	vma_list;
- 	struct rw_semaphore	memory_lock;
-+	struct vfio_acpi_notification	*acpi_notification;
- };
- 
- /* Will be exported for vfio pci drivers usage */
-diff --git a/include/uapi/linux/vfio.h b/include/uapi/linux/vfio.h
-index 0552e8dcf0cb..d4b602d8f4b2 100644
---- a/include/uapi/linux/vfio.h
-+++ b/include/uapi/linux/vfio.h
-@@ -1622,6 +1622,21 @@ struct vfio_iommu_spapr_tce_remove {
- };
- #define VFIO_IOMMU_SPAPR_TCE_REMOVE	_IO(VFIO_TYPE, VFIO_BASE + 20)
- 
-+/**
-+ * VFIO_ACPI_NOTIFY_EVENTFD - _IOW(VFIO_TYPE, VFIO_BASE + 21, struct vfio_acpi_notify_eventfd)
-+ *
-+ * Register ACPI notify handler for a given device which will allow to receive
-+ * and propagate ACPI notifications to the user-space through the user provided
-+ * eventfd.
-+ *
-+ * Return: 0 on success, -errno on failure.
-+ */
-+struct vfio_acpi_notify_eventfd {
-+	__s32 notify_eventfd;
-+	__u32 reserved;
-+};
-+#define VFIO_ACPI_NOTIFY_EVENTFD	_IO(VFIO_TYPE, VFIO_BASE + 21)
-+
- /* ***************************************************************** */
- 
- #endif /* _UAPIVFIO_H */
 -- 
-2.40.1.495.gc816e09b53d-goog
+Thanks,
+
+David / dhildenb
 
