@@ -2,147 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0FD86F3D99
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 08:38:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 471616F3DA0
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 08:39:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233569AbjEBGiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 02:38:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49640 "EHLO
+        id S233592AbjEBGjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 02:39:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230484AbjEBGiv (ORCPT
+        with ESMTP id S233577AbjEBGjT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 02:38:51 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE012D41
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 23:38:49 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4efea87c578so974e87.1
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 23:38:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683009527; x=1685601527;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=jBnKG88FbOtu4DyujgxvWWXru5qVkGeMGCnWkCLNuM4=;
-        b=S2yk3LQbBnxcOzVurIfQwWTX+SaRIVWzrpyo1gXHhKp8RXjID11CwVMUz1vIueF0Vo
-         MsaP/W/IOfubuAlMN5Khy4zssu0w997WqHSUB1KzLAguG3zySG920BPOm4V8uJuymARS
-         mqyUXtP8/pCXEfkQDhlbKg6fDc7/jwbga6gRXzgkYOAzsAvoFH1FKpKWXxQnKnu7VNIR
-         cFWMzG8p15cwp0YD6ramdAVC4BwCkTLPa/13AyKEIj+dmarFasViaFHby/9/MurBejKU
-         by3f5nc81UyFiJ+/xm0gBFSy/ERVlm5Tycx3gAmk6PLLx/Qhayal11ULDGW04Ip74uED
-         YtxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683009527; x=1685601527;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jBnKG88FbOtu4DyujgxvWWXru5qVkGeMGCnWkCLNuM4=;
-        b=WOcPJKz3FrhpGbQ8OYNuW/jCO11Svzh8o+fSuEprN9/S4Lhq6FqAjCZE8601jwWFw9
-         RSHqDiAXEKrWF5Y1D/3kzvNQd1UTJr7TbnAxrWR5y7WbQQXlACMgA497HsVzYyeq1Azy
-         IPfieg8wcod90bMvmGusG6Qeip7yzNDJp6k5R+YKwgdoSyx9b+wAFGS11owvnmxmb1RE
-         MErlrUztUQzPdTDD7cVST+cSCu8UUyweQ2RRWFk46R5PGEB11AEdloZGIFqkHvlWgswj
-         zzXN9ggEqT0b3pALbigeiJM0Vq16g7TNQ0A3Ob+bPCfRitWzYHFgRLzcY2x2ccAVszS4
-         nqKw==
-X-Gm-Message-State: AC+VfDy93sPMqeGcvICdClUMT3v+fnqewiZHG2dRRYW6hseo/4Sew6me
-        VJARhW7JozFTkaraQ5Gc/n9CrVvjRXuWDpLa0SXFqQ==
-X-Google-Smtp-Source: ACHHUZ6/n9AVg/H9dSG2L8bTpRxnxtyZ6DmqZqsblEL9aNbQG6772mk7CDCWOIQp3YwUFxaEbf9kTWXrUQ98j0WBQSs=
-X-Received: by 2002:a05:6512:3d90:b0:4ea:e5e2:c893 with SMTP id
- k16-20020a0565123d9000b004eae5e2c893mr79590lfv.1.1683009527427; Mon, 01 May
- 2023 23:38:47 -0700 (PDT)
+        Tue, 2 May 2023 02:39:19 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F5D4497;
+        Mon,  1 May 2023 23:39:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683009557; x=1714545557;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JHmOyhknu72fwCyTp0J5ERbzi4vLQDGwzRbCdXl/ONg=;
+  b=mqIIYCG2Rrcsw9qATlBfmxhAnFhugEsqSbr40FeMP0NXUTwe9NqKaKOv
+   M24cZ/56ynw3QiVdLrOMn7n3CMM2e0VkzdKiaS8l8xJa4n4E/Sq7pvvbd
+   IZYCT1sBcnoWn2BL+dCW6q9hvmeEsNklBhU3USYE5n+knGJjVgdDQY+j9
+   lVQERCt6tjlK1Es0JBiFHj1IIg7z3TAGqaPneDWxXmZqEYBy8poa+oy+I
+   dVH7Yj0qS33ce+UNZb2su4rxwlwOWm/w8vm/HTeFUAdb9IarWg1pbPd8j
+   AXhUHoK9LyAfTHxtNRdiMS3Fez/NXj41gh+akCLCnUItprqDD8rMQpD/g
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="345798439"
+X-IronPort-AV: E=Sophos;i="5.99,243,1677571200"; 
+   d="scan'208";a="345798439"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2023 23:39:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="942330850"
+X-IronPort-AV: E=Sophos;i="5.99,243,1677571200"; 
+   d="scan'208";a="942330850"
+Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 01 May 2023 23:39:14 -0700
+Received: from kbuild by e3434d64424d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ptjfO-0000tI-0f;
+        Tue, 02 May 2023 06:39:14 +0000
+Date:   Tue, 2 May 2023 14:38:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bharat Bhushan <bbhushan2@marvell.com>, wim@linux-watchdog.org,
+        linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sgoutham@marvell.com
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Bharat Bhushan <bbhushan2@marvell.com>
+Subject: Re: [PATCH 2/2 v3] Watchdog: Add marvell octeontx2 watchdog driver
+Message-ID: <202305021447.bgPFpj8n-lkp@intel.com>
+References: <20230425081926.9234-2-bbhushan2@marvell.com>
 MIME-Version: 1.0
-References: <00000000000070ccd705fa79afe9@google.com>
-In-Reply-To: <00000000000070ccd705fa79afe9@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 2 May 2023 08:38:35 +0200
-Message-ID: <CACT4Y+Y6qkdhEtTb1XNrhd759ybEHk6138o7yK7kr-+OKcDHKQ@mail.gmail.com>
-Subject: Re: [syzbot] upstream boot error: BUG: unable to handle kernel paging
- request in gic_handle_irq
-To:     syzbot <syzbot+4aee2040dfac273d198e@syzkaller.appspotmail.com>
-Cc:     geert+renesas@glider.be, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, magnus.damm@gmail.com,
-        maz@kernel.org, syzkaller-bugs@googlegroups.com,
-        tglx@linutronix.de,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230425081926.9234-2-bbhushan2@marvell.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 29 Apr 2023 at 15:37, syzbot
-<syzbot+4aee2040dfac273d198e@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    cec24b8b6bb8 Merge tag 'char-misc-6.4-rc1' of git://git.ke..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=11334c30280000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=c159a5b5ee7dcf56
-> dashboard link: https://syzkaller.appspot.com/bug?extid=4aee2040dfac273d198e
-> compiler:       arm-linux-gnueabi-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> userspace arch: arm
->
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+4aee2040dfac273d198e@syzkaller.appspotmail.com
+Hi Bharat,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on groeck-staging/hwmon-next linus/master v6.3 next-20230428]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Bharat-Bhushan/Watchdog-Add-marvell-octeontx2-watchdog-driver/20230425-162039
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20230425081926.9234-2-bbhushan2%40marvell.com
+patch subject: [PATCH 2/2 v3] Watchdog: Add marvell octeontx2 watchdog driver
+config: um-allyesconfig (https://download.01.org/0day-ci/archive/20230502/202305021447.bgPFpj8n-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/5b2d826a13c7553b51784a1fb56606bfda9f81d9
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Bharat-Bhushan/Watchdog-Add-marvell-octeontx2-watchdog-driver/20230425-162039
+        git checkout 5b2d826a13c7553b51784a1fb56606bfda9f81d9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=um olddefconfig
+        make W=1 O=build_dir ARCH=um SHELL=/bin/bash drivers/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305021447.bgPFpj8n-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/watchdog/octeontx2_wdt.c:13:10: fatal error: asm/arch_timer.h: No such file or directory
+      13 | #include <asm/arch_timer.h>
+         |          ^~~~~~~~~~~~~~~~~~
+   compilation terminated.
 
 
-+arm mailing list
+vim +13 drivers/watchdog/octeontx2_wdt.c
 
-Kernel started falling apart on arm during boot in various strange ways.
+    12	
+  > 13	#include <asm/arch_timer.h>
+    14	
 
-#syz set subsystems: arm
-
-> 8<--- cut here ---
-> Unable to handle kernel paging request at virtual address df80a00c when read
-> [df80a00c] *pgd=80000080007003, *pmd=82893003, *pte=80216680
-> Internal error: Oops: 207 [#1] PREEMPT SMP ARM
-> Modules linked in:
-> CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.3.0-syzkaller #0
-> Hardware name: ARM-Versatile Express
-> PC is at __raw_readl arch/arm/include/asm/io.h:113 [inline]
-> PC is at gic_handle_irq+0x1c/0x7c drivers/irqchip/irq-gic.c:344
-> LR is at generic_handle_arch_irq+0x60/0x80 kernel/irq/handle.c:238
-> pc : [<8086e724>]    lr : [<817e3dd0>]    psr: 20000193
-> sp : 82401e70  ip : 82401e90  fp : 82401e8c
-> r10: 825dfffd  r9 : 8241ae40  r8 : 00000000
-> r7 : df80a00c  r6 : 81f1590c  r5 : df80a000  r4 : 8240cde8
-> r3 : 8086e708  r2 : 00904870  r1 : 81f4ff24  r0 : 82401eb8
-> Flags: nzCv  IRQs off  FIQs on  Mode SVC_32  ISA ARM  Segment user
-> Control: 30c5387d  Table: 80003000  DAC: fffffffd
-> Register r0 information:
-> 8<--- cut here ---
-> Unable to handle kernel paging request at virtual address fffffff7 when read
-> [fffffff7] *pgd=80000080007003, *pmd=deffd003, *pte=00000000
-> Internal error: Oops: 207 [#2] PREEMPT SMP ARM
->
->
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
->
-> If the bug is already fixed, let syzbot know by replying with:
-> #syz fix: exact-commit-title
->
-> If you want to change bug's subsystems, reply with:
-> #syz set subsystems: new-subsystem
-> (See the list of subsystem names on the web dashboard)
->
-> If the bug is a duplicate of another bug, reply with:
-> #syz dup: exact-subject-of-another-report
->
-> If you want to undo deduplication, reply with:
-> #syz undup
->
-> --
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/00000000000070ccd705fa79afe9%40google.com.
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
