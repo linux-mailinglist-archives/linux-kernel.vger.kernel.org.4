@@ -2,145 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1EEC6F484A
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 18:32:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 149B26F484F
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 18:33:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234029AbjEBQci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 12:32:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54318 "EHLO
+        id S234075AbjEBQdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 12:33:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233521AbjEBQch (ORCPT
+        with ESMTP id S234042AbjEBQdQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 12:32:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24D17199C
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 09:31:56 -0700 (PDT)
+        Tue, 2 May 2023 12:33:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 046AC1BD6
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 09:32:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683045115;
+        s=mimecast20190719; t=1683045149;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=0DdbmHAr/eARhTQm66JpoJt0fKm43fZTeq7P598vL5w=;
-        b=cLfdG0gqZt9GbzO4MWVeYMhqW+Ba59wEMbhwLw+q+T9l2VAIr0rIuyPawCc8KpH+yn19KB
-        tGMCb/eFCCRqThdaIWDyNAgjbkTiqgoNLDUQQd2i2Q0UaEfkiu3SoLU65OPqFBg3k89lCB
-        OMXbaoWYKv6PSgHwAsvvZOs9TZ2gO5g=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=r1Y9ZHlSDmHQJFAVnELAl0311AMMIMNb4a19zH7pdjw=;
+        b=dDham+9XI17xYA3sgv7XlxWUWmE8eqTWi2COMao/YJuCKF949TSXAcIqRfoTEm+5Sz94eZ
+        uVOVKSY5tkWKIL+tnVYMzxyGso7tQpZ4AZhabmaAiPo8MYhXjid9MUWB87DHvM9/olFbs3
+        nfor2wJuAPPWfszY2ZpA5rppAS1q1mw=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-214-1pud9ojXM2a-suFOGEfVQg-1; Tue, 02 May 2023 12:31:54 -0400
-X-MC-Unique: 1pud9ojXM2a-suFOGEfVQg-1
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-2fa5d643cd8so1123716f8f.2
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 09:31:53 -0700 (PDT)
+ us-mta-19-aBHCMtVJPlSQcpx7m99qag-1; Tue, 02 May 2023 12:32:27 -0400
+X-MC-Unique: aBHCMtVJPlSQcpx7m99qag-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f1745d08b5so14434945e9.1
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 09:32:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683045113; x=1685637113;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0DdbmHAr/eARhTQm66JpoJt0fKm43fZTeq7P598vL5w=;
-        b=JlmR93y6q43D75u7kFp8kW0MLMJ7dv7emJGCHi+Z6fo3PjCv2oICAbfdGXsvEF6mjT
-         COd7yMxeXdaV5sOFazlNUca5Z/Er5fdjL6/qU5+G6jC4mXu89R01GdG9liCUygpbvDRf
-         3e72GFjiJssMapwkYHZ2A4Ri876Ja1gdFLyz5EtX8rUXoFKx6vJd/hxDLyI+unJb8Gf8
-         ipz9cblIVr5L+w7KLtQcLKVjtubDM/EXcvE7jm7GcKqtoDIOUzP6neMQa5RhyLXzCPq3
-         GmXII2HLBgkOcXaiF7A276C/xT9oYIlxmwzpojcyXk53u8tXAbgNXtGSkexPIt9F/7Rp
-         L2EA==
-X-Gm-Message-State: AC+VfDxJCkrN1xspqooGHYEzlsgHBkKdDFJPS1wgoz/wJe3VxRTLapTo
-        K3QiO5a7YPJY4nct5N0JK8hwQANJN6iQ0xPtrtC70TDwWYrMocIuiimI/c9JKyh8Fo2K6CWezwx
-        teGdy22XLHTC8COJOKxN+SUod
-X-Received: by 2002:adf:e9cd:0:b0:306:2fd1:a91f with SMTP id l13-20020adfe9cd000000b003062fd1a91fmr4147025wrn.61.1683045112928;
-        Tue, 02 May 2023 09:31:52 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7EkPVTMb4YL3uV/CKjSTJe4H5ZUct+Bkd8tJ9blXCxBITCBNyVwa94yAZ3bF3D+tqITo6SDQ==
-X-Received: by 2002:adf:e9cd:0:b0:306:2fd1:a91f with SMTP id l13-20020adfe9cd000000b003062fd1a91fmr4147006wrn.61.1683045112660;
-        Tue, 02 May 2023 09:31:52 -0700 (PDT)
-Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id jb12-20020a05600c54ec00b003f17003e26esm39217262wmb.15.2023.05.02.09.31.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 May 2023 09:31:52 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>, linux-input@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] Input: tests - miscellaneous fixes
-In-Reply-To: <CAMuHMdVmfj8L24QbMGn54jW96rYkvX1gizmvgvEB7T3Jwevd+g@mail.gmail.com>
-References: <cover.1683022164.git.geert+renesas@glider.be>
- <CAMuHMdVmfj8L24QbMGn54jW96rYkvX1gizmvgvEB7T3Jwevd+g@mail.gmail.com>
-Date:   Tue, 02 May 2023 18:31:51 +0200
-Message-ID: <878re6y9s8.fsf@minerva.mail-host-address-is-not-set>
+        d=1e100.net; s=20221208; t=1683045146; x=1685637146;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=r1Y9ZHlSDmHQJFAVnELAl0311AMMIMNb4a19zH7pdjw=;
+        b=aE1XHOVeBRCcchTmo7ieEZcVy3WwdOLhiRilMonOWVBTRy4lLBrZbHx2ka8Zu8MY2S
+         yx1gSWS+WtT3lehjgIsyHCRqwoOW4eYvfWQvzeqzyUy4gqzZvAeZPkL2YBmfqWTPDaCp
+         YSQIl0Wi+3i4TBBj+FD9hVR9iKDAyxq18WKPZUcD9azuqeEhItJNXsxmNgpvGpFTnx+n
+         XLDTmgjFJqiH2eihwB6bXB2Zj4dq0dQGKMuLxORn6j3kPm4rXGYc2dw8b6f/iEZCwoOl
+         9hPD36osdos3NGiUktkS1ONtn5H8C6lJP9FqL12Pqle3/3IcEvk6VE+HmCiROp+sJX4G
+         g3Aw==
+X-Gm-Message-State: AC+VfDwAFKxaAKW1omBfcvGzOlh6S0m4mqPh8s9/D3iGllSa6MHMroUv
+        M/2Ymh7KvPoiqq9C9d0R+PNqKdtgmYfuy+L5BTX26Mw0hZUR8LCjBP1ZCldsvts2n2DDrBIUhvD
+        KrlYWcPfO8a9Bbv0ZxVl0e1FS
+X-Received: by 2002:a1c:ed13:0:b0:3f1:70a2:ceb5 with SMTP id l19-20020a1ced13000000b003f170a2ceb5mr12419700wmh.13.1683045146468;
+        Tue, 02 May 2023 09:32:26 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7p+ImTRga1SD1m+KPY+ssu9CtAR9wKLd9W6rRm22/MRxLwFhs/WFpL//bdAy4L2m8Bf5dmkg==
+X-Received: by 2002:a1c:ed13:0:b0:3f1:70a2:ceb5 with SMTP id l19-20020a1ced13000000b003f170a2ceb5mr12419652wmh.13.1683045146112;
+        Tue, 02 May 2023 09:32:26 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c700:2400:6b79:2aa:9602:7016? (p200300cbc70024006b7902aa96027016.dip0.t-ipconnect.de. [2003:cb:c700:2400:6b79:2aa:9602:7016])
+        by smtp.gmail.com with ESMTPSA id m36-20020a05600c3b2400b003edc4788fa0sm40176251wms.2.2023.05.02.09.32.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 May 2023 09:32:25 -0700 (PDT)
+Message-ID: <6681789f-f70e-820d-a185-a17e638dfa53@redhat.com>
+Date:   Tue, 2 May 2023 18:32:23 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Peter Xu <peterx@redhat.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Mika Penttila <mpenttil@redhat.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Theodore Ts'o <tytso@mit.edu>
+References: <1ffbbfb7-6bca-0ab0-1a96-9ca81d5fa373@redhat.com>
+ <ZFEYblElll3pWtn5@nvidia.com>
+ <f0acd8e4-8df8-dfae-b6b2-30eea3b14609@redhat.com>
+ <3c17e07a-a7f9-18fc-fa99-fa55a5920803@linux.ibm.com>
+ <ZFEqTo+l/S8IkBQm@nvidia.com> <ZFEtKe/XcnC++ACZ@x1n>
+ <ZFEt/ot6VKOgW1mT@nvidia.com>
+ <4fd5f74f-3739-f469-fd8a-ad0ea22ec966@redhat.com>
+ <ZFE07gfyp0aTsSmL@nvidia.com>
+ <1f29fe90-1482-7435-96bd-687e991a4e5b@redhat.com>
+ <ZFE4A7HbM9vGhACI@nvidia.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v6 3/3] mm/gup: disallow FOLL_LONGTERM GUP-fast writing to
+ file-backed mappings
+In-Reply-To: <ZFE4A7HbM9vGhACI@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Geert Uytterhoeven <geert@linux-m68k.org> writes:
-
-Hello Geert,
-
-> Hi Javier,
->
-> On Tue, May 2, 2023 at 12:17=E2=80=AFPM Geert Uytterhoeven
-> <geert+renesas@glider.be> wrote:
->> This patch series fixes a crash in the new input selftest, and makes the
->> test available when the KUnit framework is modular.
+On 02.05.23 18:19, Jason Gunthorpe wrote:
+> On Tue, May 02, 2023 at 06:12:39PM +0200, David Hildenbrand wrote:
+> 
+>>> It missses the general architectural point why we have all these
+>>> shootdown mechanims in other places - plares are not supposed to make
+>>> these kinds of assumptions. When the userspace unplugs the memory from
+>>> KVM or unmaps it from VFIO it is not still being accessed by the
+>>> kernel.
 >>
->> Unfortunately test 3 still fails for me (tested on Koelsch (R-Car M2-W)
->> and ARAnyM):
->>
->>         KTAP version 1
->>         # Subtest: input_core
->>         1..3
->>     input: Test input device as /devices/virtual/input/input1
->>         ok 1 input_test_polling
->>     input: Test input device as /devices/virtual/input/input2
->>         ok 2 input_test_timestamp
->>     input: Test input device as /devices/virtual/input/input3
->>         # input_test_match_device_id: ASSERTION FAILED at # drivers/inpu=
-t/tests/input_test.c:99
->>         Expected input_match_device_id(input_dev, &id) to be true, but i=
-s false
->>         not ok 3 input_test_match_device_id
->>     # input_core: pass:2 fail:1 skip:0 total:3
->>     # Totals: pass:2 fail:1 skip:0 total:3
->>     not ok 1 input_core
->
-> Adding more debug code shows that it's the test on evbit [1] in
-> input_match_device_id() that fails.
-> Looking at your input_test_match_device_id(), I think you expect
-> the checks for the various bitmaps to be gated by
-> "if (id->flags & INPUT_DEVICE_ID_MATCH_EVBIT)", like is done for the
-> other checks?
->
-> [1] https://elixir.bootlin.com/linux/latest/source/drivers/input/input.c#=
-L1021
->
+>> Yes. Like having memory in a vfio iommu v1 and doing the same (mremap,
+>> munmap, MADV_DONTNEED, ...). Which is why we disable MADV_DONTNEED (e.g.,
+>> virtio-balloon) in QEMU with vfio.
+> 
+> That is different, VFIO has it's own contract how it consumes the
+> memory from the MM and VFIO breaks all this stuff.
+> 
+> But when you tell VFIO to unmap the memory it doesn't keep accessing
+> it in the background like this does.
 
-That's correct. In input_test_init(), the input dev is marked as capable
-of emitting EV_KEY BTN_LEFT and BTN_RIGHT. The goal of that test was to
-check this.
+To me, this is similar to when QEMU (user space) triggers 
+KVM_S390_ZPCIOP_DEREG_AEN, to tell KVM to disable AIF and stop using the 
+page (1) When triggered by the guest explicitly (2) when resetting the 
+VM (3) when resetting the virtual PCI device / configuration.
 
-That is, check if matches by the input dev capabilities in which case the
-__set_bit(EV_KEY, ...) would make the match true and __set_bit(EV_ABS, ..)
-would make the condition false.
+Interrupt gets unregistered from HW (which stops using the page), the 
+pages get unpinned. Pages get no longer used.
 
-But maybe I misunderstood how the input_set_capability() and __set_bit()
-functions work ?
+I guess I am still missing (a) how this is fundamentally different (b) 
+how it could be done differently.
 
-I'll take a look to this tomorrow, thanks a lot for your report!
+I'd really be happy to learn how a better approach would look like that 
+does not use longterm pinnings.
 
---=20
-Best regards,
+I don't see an easy way to not use longterm pinnings. When using mmu 
+notifiers and getting notified about unmapping of a page (for whatever 
+reason ... migration, swapout, unmap), you'd have to disable aif. But 
+when to reenable it (maybe there would be a way)? Also, I'm not sure if 
+this could even be visible by the guest, if it's suddenly no longer enabled.
 
-Javier Martinez Canillas
-Core Platforms
-Red Hat
+Something for the s390x people to explore ... if HW would be providing a 
+way to deal with that somehow.
+
+-- 
+Thanks,
+
+David / dhildenb
 
