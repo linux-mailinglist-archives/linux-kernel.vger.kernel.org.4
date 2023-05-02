@@ -2,115 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 727F46F4AE5
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 22:07:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FF626F4AE2
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 22:06:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbjEBUHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 16:07:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40612 "EHLO
+        id S229717AbjEBUGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 16:06:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjEBUHC (ORCPT
+        with ESMTP id S229475AbjEBUGm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 16:07:02 -0400
-Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AFD91997;
-        Tue,  2 May 2023 13:06:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1683057967; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=iT9g+M0S+e+kRek4sdOtHe0l/mzpHdAoLIaIEuCqJR6VKV8I3ajk8qHrspCs0wjpbn5pSvgHcRY67yOIN5xlAW17IDoGHE1e0b2CuR1sEEf9SZbQ33fy99Le56jVcI3jGOLlVhL5XHi4iaWuRGLQUlxkDo4Nb+6a9KwstviZIi0=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1683057967; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=jRzQaQYMyheL6/9XvWrDvecv1EQ6rZdy4z1HdYKesGo=; 
-        b=e35bLITHWvU4k3TnGL4PYr+iHwWlVDWcJxjGPRuKsdwAnZ9ClpqsOmVUccrqCQ8Y4jgDlKjxQIomNwrXIKs/q8j7g7CxinYnNw7W8ol3a5mcd49jAwL+KCeOtk19M1hfIxS16kbVI0OWtG+YLvjVFZT9RAJP0Su5ze0UG1CUBfI=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1683057967;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=jRzQaQYMyheL6/9XvWrDvecv1EQ6rZdy4z1HdYKesGo=;
-        b=HwUlBdNPExWNS3ZRm5TUZIeayBebk5apv+VrpEbHIRrfU6SY3qArHdodzmiSDME8
-        +7xbYgJ9gLd+Xtd22VzsnsHVarFvKcD9L4hJHrdYY7gKyZ1NP+5EddBcp4H7SQsoqEI
-        oyflG8ls/YY7SHqW7gO//lvUUtDVX2orxAyUqFj0=
-Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
-        with SMTPS id 168305796648833.62395961631171; Tue, 2 May 2023 13:06:06 -0700 (PDT)
-Message-ID: <c9765637-4601-0a7d-7e5e-4c3e9d52d90f@arinc9.com>
-Date:   Tue, 2 May 2023 23:05:41 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH net 2/2] net: dsa: mt7530: fix network connectivity with
- multiple CPU ports
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?Q?Ren=c3=a9_van_Dorst?= <opensource@vdorst.com>
-Cc:     Richard van Schagen <richard@routerhints.com>,
-        Richard van Schagen <vschagen@cs.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230501121538.57968-1-arinc.unal@arinc9.com>
- <20230501121538.57968-2-arinc.unal@arinc9.com>
- <5e00b4c7-8d3f-e1b2-4359-5ee8fdf92ea9@gmail.com>
-Content-Language: en-US
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <5e00b4c7-8d3f-e1b2-4359-5ee8fdf92ea9@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 2 May 2023 16:06:42 -0400
+Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C10198C;
+        Tue,  2 May 2023 13:06:37 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailnew.west.internal (Postfix) with ESMTP id EB34B2B066FC;
+        Tue,  2 May 2023 16:06:32 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 02 May 2023 16:06:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1683057992; x=1683065192; bh=5x
+        TPMX3pv0srvr+ZsZiut6qJVZAYp0ChcBRbjNGHX30=; b=ZTvsHN9+uxpCL7FksS
+        kwo3JrlnKSMBz/v6oovLN4gFfPuDwcis1zK1a7zX+U4EMCkEskzl8t9L3thdkkyp
+        uYpHqLLEV8Y2/gwcUusIJLNIe8UPFQZDbvrgmfRa1pY2hBUtlVdJ/9XlRWissH8L
+        RZUqWVGEZqc7kbQToz2df+wMKPzvJZz7OfH9fm/KKJfI4vdjYI50mKj4FFphTWtO
+        15HBxbJh0hY7E5UW3e2N1yL6hg5QoeHpQ3aNrNchnn1WlChZDtrEj2EiD/5MCGDF
+        40wwVa0xZ+AZ/o0IY+iQ3jM0Z1ruvVGOOHGjtm7BF+wspVkvTB48vtzziLBeW8k7
+        q61A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1683057992; x=1683065192; bh=5xTPMX3pv0srv
+        r+ZsZiut6qJVZAYp0ChcBRbjNGHX30=; b=PU/7+KxYrASE8LNYfBiYFyUBHfHyC
+        l+jhzmQBZAlBIO7EvQqNGSc1CmBFJf/RgZVQKMnPT5dOAs+EUf/U0nUYSNRtg8Co
+        PzwAszRrzyl9Bj01mORZO8Iy7Pbm1Exx9HGDXLmQLfNT/EqHRH7kOp3xs314GtbL
+        rDRPiHOPVfbZqPMsLcG97h9UMnWTdKQdNtHM+pCUcGCTFS7dUGxwWiyoQ7PfZ+3K
+        9xLpTd1yhPC9o5H73dTxWPQtmoY+hZcnopHUvwXwz3kk7Z15u87rIiHztLfs24rT
+        q53zbLCDTHvpwvaxqrctfu8Q4n4okdhysDgOXqX/nncLC5HQ0cdYfOtdA==
+X-ME-Sender: <xms:R21RZMlQBaLMhGObVjBBPDKtv1QgEyEhRzx179kO5ggChyEPxTx0tQ>
+    <xme:R21RZL0XGtLduJZvCo-pJW5VS-DW7npsNWdYiCxnKOUs_dT2K3sCLou3ehz-XykP_
+    NnO0QGZDzR-VUm4l1M>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedviedgudeghecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:R21RZKpBDKaqeHli7lfYc369Oa_vqRdwUIZba0FfKx21xYpELI9Nig>
+    <xmx:R21RZIkd0u9WmHoox2AO07O0aYwAiw9yp1D8axvKmsMalWfC0g6YnQ>
+    <xmx:R21RZK1tjycpPbv3cFlRKNc0IpX6pBZh8MoYB9AdqV7SOp0rhgOg0Q>
+    <xmx:SG1RZD7KQd0sqq2OL80mg5nQwQw1Kh3gjL_wjLEfaQNvdLYFSTRtleJE-BU>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id ED568B60086; Tue,  2 May 2023 16:06:30 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-386-g2404815117-fm-20230425.001-g24048151
+Mime-Version: 1.0
+Message-Id: <67d6a188-041f-4604-99a3-548c41af0693@app.fastmail.com>
+In-Reply-To: <20230502130223.14719-6-tzimmermann@suse.de>
+References: <20230502130223.14719-1-tzimmermann@suse.de>
+ <20230502130223.14719-6-tzimmermann@suse.de>
+Date:   Tue, 02 May 2023 22:06:10 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Thomas Zimmermann" <tzimmermann@suse.de>,
+        "Helge Deller" <deller@gmx.de>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        "Javier Martinez Canillas" <javierm@redhat.com>,
+        "Daniel Vetter" <daniel@ffwll.ch>,
+        "Vineet Gupta" <vgupta@kernel.org>,
+        "Huacai Chen" <chenhuacai@kernel.org>,
+        "WANG Xuerui" <kernel@xen0n.name>,
+        "David S . Miller" <davem@davemloft.net>,
+        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+        "Sam Ravnborg" <sam@ravnborg.org>
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, sparclinux@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-parisc@vger.kernel.org
+Subject: Re: [PATCH v3 5/6] fbdev: Move framebuffer I/O helpers into <asm/fb.h>
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/05/2023 21:30, Florian Fainelli wrote:
-> 
-> 
-> On 5/1/2023 5:15 AM, arinc9.unal@gmail.com wrote:
->> From: Arınç ÜNAL <arinc.unal@arinc9.com>
->>
->> On mt753x_cpu_port_enable() there's code that enables flooding for the 
->> CPU
->> port only. Since mt753x_cpu_port_enable() runs twice when both CPU ports
->> are enabled, port 6 becomes the only port to forward the frames to. But
->> port 5 is the active port, so no frames received from the user ports will
->> be forwarded to port 5 which breaks network connectivity.
->>
->> Every bit of the BC_FFP, UNM_FFP, and UNU_FFP bits represents a port. Fix
->> this issue by setting the bit that corresponds to the CPU port without
->> overwriting the other bits.
->>
->> Clear the bits beforehand only for the MT7531 switch. According to the
->> documents MT7621 Giga Switch Programming Guide v0.3 and MT7531 Reference
->> Manual for Development Board v1.0, after reset, the BC_FFP, UNM_FFP, and
->> UNU_FFP bits are set to 1 for MT7531, 0 for MT7530.
->>
->> Tested-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> 
-> This tag is implied by your Signed-off-by tag. No Fixes tag for this one?
+On Tue, May 2, 2023, at 15:02, Thomas Zimmermann wrote:
+> Implement framebuffer I/O helpers, such as fb_read*() and fb_write*(),
+> in the architecture's <asm/fb.h> header file or the generic one.
+>
+> The common case has been the use of regular I/O functions, such as
+> __raw_readb() or memset_io(). A few architectures used plain system-
+> memory reads and writes. Sparc used helpers for its SBus.
+>
+> The architectures that used special cases provide the same code in
+> their __raw_*() I/O helpers. So the patch replaces this code with the
+> __raw_*() functions and moves it to <asm-generic/fb.h> for all
+> architectures.
+>
+> v3:
+> 	* implement all architectures with generic helpers
+> 	* support reordering and native byte order (Geert, Arnd)
 
-I've put it with v2. Let me send v3 to remove the tested-by and add your 
-reviewed-by to the other patch.
+This looks good for the read/write helpers, but I'm a little
+worried about the memset and memcpy functions, since they do
+change behavior on some architectures:
 
-Arınç
+- on sparc64, fb_mem{set,cpy} uses ASI_PHYS_BYPASS_EC_E (like __raw_readb)
+  while mem{set_,cpy_from,cpy_to} uses ASI_PHYS_BYPASS_EC_E_L (like readb)
+  I don't know the effect of that, but it seems intentional
+
+- on loongarch and csky, the _io variants avoid unaligned access,
+  while the normal memcpy/memset is probably broken, so your
+  patch is a bugfix
+
+- on ia64, the _io variants use bytewise access and avoid any longer
+  loads and stores, so your patch probably makes things slower.
+
+It's probably safe to deal with all the above by either adding
+architecture specific overrides to the current version, or
+by doing the semantic changes before the move to asm/fb.h, but
+one way or the other I'd prefer this to be separate from the
+consolidation patch that should not have any changes in behavior.
+
+     Arnd
