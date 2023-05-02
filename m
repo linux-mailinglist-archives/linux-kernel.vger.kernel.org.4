@@ -2,47 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB95D6F430B
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 13:49:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A91C76F4319
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 13:53:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233930AbjEBLtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 07:49:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54360 "EHLO
+        id S233975AbjEBLxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 07:53:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229936AbjEBLtU (ORCPT
+        with ESMTP id S229936AbjEBLxQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 07:49:20 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC87383;
-        Tue,  2 May 2023 04:49:16 -0700 (PDT)
-Received: from kwepemm600019.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Q9dYN1LyKzpTwx;
-        Tue,  2 May 2023 19:45:12 +0800 (CST)
-Received: from [10.136.112.228] (10.136.112.228) by
- kwepemm600019.china.huawei.com (7.193.23.64) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 2 May 2023 19:49:12 +0800
-From:   "Fengtao (fengtao, Euler)" <fengtao40@huawei.com>
-To:     <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
-        <davem@davemloft.net>, <kuba@kernel.org>,
-        <stephen@networkplumber.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <yanan@huawei.com>, <caowangbao@huawei.com>
-Subject: BUG: KASAN: stack-out-of-bounds in __ip_options_echo
-Message-ID: <05324dd2-3620-8f07-60a0-051814913ff8@huawei.com>
-Date:   Tue, 2 May 2023 19:49:11 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Tue, 2 May 2023 07:53:16 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA42049E7
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 04:53:12 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4edcdfa8638so4422115e87.2
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 04:53:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683028391; x=1685620391;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=r+vglhm+bDOJd4J/XyU1wbi0B7CYN6778bxrbgNwu8M=;
+        b=XpbJ0Jmb7b9iJiwUNXj980qlB0TLLKK5sJgEucCQyCrkpTSZ9jEyN6awif0qLS3ETi
+         nt3AtmxIdP3Wxi7fz5FPLH2byBEIOrIKdGrJtP5yg816D65k5XkCeSf6K7Hlbo44IP5i
+         4R1C4aYGcmh5x62dO06f7Xhh8ZdgBLvvuvqsOVpMHBu4MtkBryfFg7GMy+0W7g0B5k4W
+         HmOeu8DosClTVGXwq0+kWLCxwvM3RJPtPjcun7S4ca8zFX/jUSiNzZBG3FiEq5kPJPI4
+         C1QpO75fwREFLYcfpWQ7jSwJ0ORX5tuWYQI0b+cGBH+81bbKry4lv9sbnBmaaLJsVsuG
+         dW3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683028391; x=1685620391;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=r+vglhm+bDOJd4J/XyU1wbi0B7CYN6778bxrbgNwu8M=;
+        b=btgd5rgQD2p22tls4ucKwOyleZS7ggfmxFoYXPvPICjjRY1SdvxKhj/p10yf09aHcY
+         qPH0RdEuTjMWKxewKP/qjbffhOjYahCh0+FLJZVLWsiMt29j5ifnO85A8NexPPhplOFn
+         8qZqCTtphS2kuT2Nwo83h7br7PLJUl3Nhl3djWPWM5aslj5LkdYFNOMDAUr3njiDVZnv
+         OPvmHxe8rmnNopCXNvviQ0/RSbbebG09oelJnvjkSVPEY3Dz4VbGrsmicIM7/XHgM1b7
+         hZLs5G4o1Ib4DOXY4pPZYAL6vo9GEKgoAM821nxWplNzKe/ADDwZoNL0+7V2b1YAy/HA
+         yrzw==
+X-Gm-Message-State: AC+VfDw1yy7T3/3j4VtY70Xe1hXQdOalUPzxIAmcsUkDwHRmOQOtlPdo
+        b/z0kDCBBcRraxYlctZDnB2KiQ==
+X-Google-Smtp-Source: ACHHUZ4ISG19cH2dnrwpmI8cD5vPRDXErDC4hzJR3u8iZqSJ/XhHRvR86NiEt9QrNEd4xrEiJkOyEQ==
+X-Received: by 2002:ac2:4438:0:b0:4b3:d6e1:26bb with SMTP id w24-20020ac24438000000b004b3d6e126bbmr4633699lfl.29.1683028390665;
+        Tue, 02 May 2023 04:53:10 -0700 (PDT)
+Received: from [192.168.1.101] (abyl248.neoplus.adsl.tpnet.pl. [83.9.31.248])
+        by smtp.gmail.com with ESMTPSA id c20-20020ac25314000000b004f00d7fcf0fsm2693850lfh.26.2023.05.02.04.53.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 May 2023 04:53:10 -0700 (PDT)
+Message-ID: <4434859f-a5b2-a9da-8dad-3f2c4f48cd27@linaro.org>
+Date:   Tue, 2 May 2023 13:53:08 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH] venus: add support for 10 bit decoding.
 Content-Language: en-US
+To:     Dikshita Agarwal <quic_dikshita@quicinc.com>,
+        linux-media@vger.kernel.org, stanimir.k.varbanov@gmail.com,
+        quic_vgarodia@quicinc.com, agross@kernel.org, andersson@kernel.org,
+        mchehab@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <1682492417-20496-1-git-send-email-quic_dikshita@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <1682492417-20496-1-git-send-email-quic_dikshita@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.136.112.228]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600019.china.huawei.com (7.193.23.64)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,209 +77,180 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,all
 
-We found the following crash on stable-5.10(reproduce in kasan kernel).
 
-------------[ cut here ]------------
-[ 2203.651571] BUG: KASAN: stack-out-of-bounds in __ip_options_echo+0x589/0x800
-[ 2203.653327] Write of size 4 at addr ffff88811a388f27 by task swapper/3/0
+On 26.04.2023 09:00, Dikshita Agarwal wrote:
+> - Add support for V4L2_PIX_FMT_P010 color format.
+> - Add handling of bit depth change from firmware.
+> - Return P010 as preferred format for 10 bit decode.
+Sounds like this should be 3 separate patches, preferably with
+some insight in each commit message.
 
-[ 2203.655460] CPU: 3 PID: 0 Comm: swapper/3 Kdump: loaded Not tainted 5.10.0-60.18.0.50.h856.kasan.eulerosv2r11.x86_64 #1
-[ 2203.655466] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.10.2-0-g5f4c7b1-20181220_000000-szxrtosci10000 04/01/2014
-[ 2203.655475] Call Trace:
-[ 2203.655481]  <IRQ>
-[ 2203.655501]  dump_stack+0x9c/0xd3
-[ 2203.655514]  print_address_description.constprop.0+0x19/0x170
-[ 2203.655522]  ? __ip_options_echo+0x589/0x800
-[ 2203.655530]  __kasan_report.cold+0x6c/0x84
-[ 2203.655569]  ? resolve_normal_ct+0x301/0x430 [nf_conntrack]
-[ 2203.655576]  ? __ip_options_echo+0x589/0x800
-[ 2203.655586]  kasan_report+0x3a/0x50
-[ 2203.655594]  check_memory_region+0xfd/0x1f0
-[ 2203.655601]  memcpy+0x39/0x60
-[ 2203.655608]  __ip_options_echo+0x589/0x800
-[ 2203.655616]  ? ip_options_build+0x390/0x390
-[ 2203.655628]  ? _raw_spin_trylock+0x91/0xe0
-[ 2203.655635]  ? _raw_spin_lock_bh+0xe0/0xe0
-[ 2203.655647]  ? icmp_global_allow+0x9d/0x120
-[ 2203.655654]  __icmp_send+0x59a/0x960
-[ 2203.655662]  ? icmpv4_global_allow+0x90/0x90
-[ 2203.655675]  ? nf_nat_cleanup_conntrack+0xe0/0xe0 [nf_nat]
-[ 2203.655702]  ? tcp_print_conntrack+0xb0/0xb0 [nf_conntrack]
-[ 2203.655709]  ? memset+0x20/0x50
-[ 2203.655719]  ? nf_nat_setup_info+0x2fb/0x480 [nf_nat]
-[ 2203.655729]  ? get_unique_tuple+0x390/0x390 [nf_nat]
-[ 2203.655735]  ? tcp_mt+0x456/0x550
-[ 2203.655747]  ? ipt_do_table+0x776/0xa40 [ip_tables]
-[ 2203.655755]  nf_send_unreach+0x129/0x3d0 [nf_reject_ipv4]
-[ 2203.655763]  reject_tg+0x77/0x1bf [ipt_REJECT]
-[ 2203.655772]  ipt_do_table+0x691/0xa40 [ip_tables]
-[ 2203.655783]  ? ip_tables_net_init+0x20/0x20 [ip_tables]
-[ 2203.655794]  ? nf_nat_icmp_reply_translation+0x380/0x380 [nf_nat]
-[ 2203.655804]  ? nf_nat_ipv4_local_fn+0x1ba/0x290 [nf_nat]
-[ 2203.655812]  ? iptable_filter_net_pre_exit+0x50/0x50 [iptable_filter]
-[ 2203.655821]  nf_hook_slow+0x69/0x100
-[ 2203.655828]  __ip_local_out+0x21e/0x2b0
-[ 2203.655836]  ? ip_finish_output+0x190/0x190
-[ 2203.655842]  ? ip_route_output_flow+0x114/0x1b0
-[ 2203.655850]  ? ip_forward_options+0x330/0x330
-[ 2203.655857]  ip_local_out+0x28/0x90
-[ 2203.655868]  ipvlan_process_v4_outbound+0x21e/0x260 [ipvlan]
-[ 2203.655878]  ? ipvlan_process_v6_forward+0x280/0x280 [ipvlan]
-[ 2203.655887]  ? dst_release.part.0+0x3a/0xb0
-[ 2203.655931]  ipvlan_xmit_mode_l3+0x3bd/0x400 [ipvlan]
-[ 2203.655942]  ? ipvlan_xmit_mode_l2+0x3a0/0x3a0 [ipvlan]
-[ 2203.655950]  ? skb_network_protocol+0xd5/0x2d0
-[ 2203.655957]  ? skb_crc32c_csum_help+0x50/0x50
-[ 2203.655967]  ipvlan_queue_xmit+0xb3/0x190 [ipvlan]
-[ 2203.655977]  ipvlan_start_xmit+0x2e/0xb0 [ipvlan]
-[ 2203.655984]  xmit_one.constprop.0+0xe1/0x280
-[ 2203.655992]  dev_hard_start_xmit+0x62/0x100
-[ 2203.656000]  sch_direct_xmit+0x215/0x640
-[ 2203.656009]  ? pvclock_clocksource_read+0xf6/0x1d0
-[ 2203.656015]  ? qdisc_free_cb+0x80/0x80
-[ 2203.656022]  ? dequeue_skb+0x1d7/0x810
-[ 2203.656028]  __qdisc_run+0x153/0x1f0
-[ 2203.656035]  ? sch_direct_xmit+0x640/0x640
-[ 2203.656046]  ? netem_dequeue+0x621/0x700 [sch_netem]
-[ 2203.656053]  ? _raw_spin_lock+0x7a/0xd0
-[ 2203.656060]  ? _raw_spin_lock_irq+0xd0/0xd0
-[ 2203.656069]  __dev_queue_xmit+0x77f/0x1030
-[ 2203.656082]  ? netdev_core_pick_tx+0x160/0x160
-[ 2203.656126]  ? stack_trace_consume_entry+0x60/0x90
-[ 2203.656139]  ? pollwake+0x123/0x180
-[ 2203.656159]  ? selinux_peerlbl_enabled+0x81/0x90
-[ 2203.656173]  ip_finish_output2+0x59b/0xc20
-[ 2203.656184]  ? ip_rcv+0xbf/0x1b0
-[ 2203.656195]  ? ip_reply_glue_bits+0x80/0x80
-[ 2203.656206]  ? napi_poll+0x14f/0x420
-[ 2203.656213]  ? __do_softirq+0xfd/0x402
-[ 2203.656220]  ? asm_call_irq_on_stack+0x12/0x20
-[ 2203.656228]  ? do_softirq_own_stack+0x37/0x50
-[ 2203.656235]  ? get_stack_info_noinstr+0x14/0x110
-[ 2203.656244]  __ip_finish_output.part.0+0x318/0x3d0
-[ 2203.656258]  ? ip_finish_output_gso+0x130/0x130
-[ 2203.656277]  ? get_stack_info+0x32/0xa0
-[ 2203.656289]  ? get_stack_info_noinstr+0x14/0x110
-[ 2203.656301]  ? get_stack_info_noinstr+0x14/0x110
-[ 2203.656312]  ip_finish_output+0x168/0x190
-[ 2203.656320]  ip_output+0x12d/0x220
-[ 2203.656327]  ? ip_mc_output+0x500/0x500
-[ 2203.656335]  ? secondary_startup_64_no_verify+0xc2/0xcb
-[ 2203.656343]  ? __ip_finish_output+0xb0/0xb0
-[ 2203.656349]  ? ipv4_dst_check+0x8b/0xb0
-[ 2203.656357]  __ip_queue_xmit+0x392/0x880
-[ 2203.656369]  ? __ip_queue_xmit+0x880/0x880
-[ 2203.656380]  __tcp_transmit_skb+0x1088/0x11c0
-[ 2203.656395]  ? tcp_event_new_data_sent+0x190/0x190
-[ 2203.656402]  ? __tcp_select_window+0x490/0x490
-[ 2203.656407]  ? tcp_trim_head+0x240/0x240
-[ 2203.656414]  ? ipv4_dst_check+0x8b/0xb0
-[ 2203.656421]  ? tcp_retrans_try_collapse+0x58/0x200
-[ 2203.656428]  ? __sk_dst_check+0x7f/0xe0
-[ 2203.656436]  __tcp_retransmit_skb+0x475/0xa30
-[ 2203.656452]  ? tcp_retrans_try_collapse+0x200/0x200
-[ 2203.656465]  ? tcp_mark_skb_lost+0x158/0x1c0
-[ 2203.656477]  ? rb_next+0x1e/0x90
-[ 2203.656484]  ? tcp_timeout_mark_lost+0x1b7/0x230
-[ 2203.656492]  ? bictcp_cwnd_event+0x15/0xa0
-[ 2203.656498]  ? bictcp_state+0x18c/0x1a0
-[ 2203.656505]  tcp_retransmit_skb+0x2d/0x190
-[ 2203.656512]  tcp_retransmit_timer+0x3af/0x9a0
-[ 2203.656519]  tcp_write_timer_handler+0x3ba/0x510
-[ 2203.656529]  tcp_write_timer+0x55/0x180
-[ 2203.656536]  ? tcp_write_timer_handler+0x510/0x510
-[ 2203.656542]  call_timer_fn+0x3f/0x1d0
-[ 2203.656549]  ? tcp_write_timer_handler+0x510/0x510
-[ 2203.656555]  expire_timers+0x160/0x200
-[ 2203.656562]  run_timer_softirq+0x1f4/0x480
-[ 2203.656569]  ? expire_timers+0x200/0x200
-[ 2203.656576]  ? pvclock_clocksource_read+0xf6/0x1d0
-[ 2203.656584]  ? kvm_sched_clock_read+0xd/0x20
-[ 2203.656590]  ? sched_clock+0x5/0x10
-[ 2203.656598]  ? sched_clock_cpu+0x18/0x130
-[ 2203.656606]  __do_softirq+0xfd/0x402
-[ 2203.656613]  asm_call_irq_on_stack+0x12/0x20
-[ 2203.656617]  </IRQ>
-[ 2203.656623]  do_softirq_own_stack+0x37/0x50
-[ 2203.656631]  irq_exit_rcu+0x134/0x1a0
-[ 2203.656639]  sysvec_apic_timer_interrupt+0x36/0x80
-[ 2203.656646]  asm_sysvec_apic_timer_interrupt+0x12/0x20
-[ 2203.656654] RIP: 0010:default_idle+0x13/0x20
-[ 2203.656663] Code: 89 f0 5d 41 5c 41 5d 41 5e c3 cc cc cc cc cc cc cc cc cc cc cc cc cc 0f 1f 44 00 00 0f 1f 44 00 00 0f 00 2d 9f 32 57 00 fb f4 <c3> cc cc cc cc 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 41 54 be 08
-[ 2203.656668] RSP: 0018:ffff88810036fe78 EFLAGS: 00000256
-[ 2203.656676] RAX: ffffffffaf2a87f0 RBX: ffff888100360000 RCX: ffffffffaf290191
-[ 2203.656681] RDX: 0000000000098b5e RSI: 0000000000000004 RDI: ffff88811a3c4f60
-[ 2203.656686] RBP: 0000000000000000 R08: 0000000000000001 R09: ffff88811a3c4f63
-[ 2203.656690] R10: ffffed10234789ec R11: 0000000000000001 R12: 0000000000000003
-[ 2203.656695] R13: ffff888100360000 R14: 0000000000000000 R15: 0000000000000000
-[ 2203.656703]  ? __cpuidle_text_start+0x8/0x8
-[ 2203.656713]  ? rcu_eqs_enter.constprop.0+0x81/0xa0
-[ 2203.656722]  ? __cpuidle_text_start+0x8/0x8
-[ 2203.656729]  default_idle_call+0x5a/0x150
-[ 2203.656735]  cpuidle_idle_call+0x1c6/0x220
-[ 2203.656742]  ? arch_cpu_idle_exit+0x40/0x40
-[ 2203.656748]  ? kvm_sched_clock_read+0xd/0x20
-[ 2203.656754]  ? sched_clock+0x5/0x10
-[ 2203.656760]  ? sched_clock_cpu+0x18/0x130
-[ 2203.656767]  ? kvm_clock_get_cycles+0xd/0x20
-[ 2203.656774]  ? tsc_verify_tsc_adjust+0x11f/0x160
-[ 2203.656780]  do_idle+0xab/0x100
-[ 2203.656786]  cpu_startup_entry+0x19/0x20
-[ 2203.656793]  secondary_startup_64_no_verify+0xc2/0xcb
-
-[ 2203.657409] The buggy address belongs to the page:
-[ 2203.658648] page:0000000027a9842f refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x11a388
-[ 2203.658665] flags: 0x17ffffc0001000(reserved|node=0|zone=2|lastcpupid=0x1fffff)
-[ 2203.658675] raw: 0017ffffc0001000 ffffea000468e208 ffffea000468e208 0000000000000000
-[ 2203.658682] raw: 0000000000000000 0000000000000000 00000001ffffffff 0000000000000000
-[ 2203.658686] page dumped because: kasan: bad access detected
-------------[ cut here ]------------
-
-To reproduce(ipvlan with IPVLAN_MODE_L3):
-Env setting:
-------------
-modprobe ipvlan ipvlan_default_mode=1
-sysctl net.ipv4.conf.eth0.forwarding=1
-iptables -t nat -A POSTROUTING -s 20.0.0.0/255.255.255.0 -o eth0 -j MASQUERADE
-ip link add gw link eth0 type ipvlan
-ip -4 addr add 20.0.0.254/24 dev gw
-ip netns add net1
-ip link add ipv1 link eth0 type ipvlan
-ip link set ipv1 netns net1
-ip netns exec net1 ip link set ipv1 up
-ip netns exec net1 ip -4 addr add 20.0.0.4/24 dev ipv1
-ip netns exec net1 route add default gw 20.0.0.254
-ip netns exec net1 tc qdisc add dev ipv1 root netem loss 10%
-ifconfig gw up
-iptables -t filter -A OUTPUT -p tcp --dport 8888 -j REJECT --reject-with icmp-port-unreachable
-------------
-And then excute the shell(curl any address of eth0 can reach):
-------------
-#!/bin/bash
-for((i=1;i<=100000;i++))
-do
-        ip netns exec net1 curl x.x.x.x:8888
-done
-------------
-
-I am not sure this issue is releated with ipvlan, but I am suspect the problem is something wrong with qdisc.
-I already check netem and fq, all of them will panic in 10~20mins; But, fq_codel is ok:
-ip netns exec net1 tc qdisc add dev ipv1 root netem loss 10% --> panic
-ip netns exec net1 tc qdisc add dev ipv1 root fq             --> panic
-ip netns exec net1 tc qdisc add dev ipv1 root fq_codel       --> not panic after 4 hours(I will continue testing)
-
-reject_tg(skb, &acpar)
-	nf_send_unreach(skb, ICMP_PROT_UNREACH, hook)
-		icmp_send(skb_in, ICMP_DEST_UNREACH, code, 0)
-			__icmp_send(skb_in, type, code, info, &IPCB(skb_in)->opt)
-				__ip_options_echo(net, &icmp_param.replyopts.opt.opt, skb_in, opt)
-					memcpy(&dptr[doffset-1], &start[soffset-1], 4);
-
-If skb enqueue the qdisc, fq_skb_cb(skb)->time_to_send is changed which is actually skb->cb, and IPCB(skb_in)->opt will be used in __ip_options_echo;
-Is it possible that memcpy is out of bounds and lead to stack overflow.
-
-It will be welcomed if anyone have any ideas.
-
-Thanks!
+Konrad
+> 
+> Signed-off-by: Vikash Garodia <quic_vgarodia@quicinc.com>
+> Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
+> ---
+>  drivers/media/platform/qcom/venus/helpers.c        | 25 ++++++++++++++++++++++
+>  drivers/media/platform/qcom/venus/hfi_plat_bufs.h  |  3 +++
+>  .../media/platform/qcom/venus/hfi_plat_bufs_v6.c   |  9 +++++++-
+>  drivers/media/platform/qcom/venus/vdec.c           | 18 +++++++++++++---
+>  4 files changed, 51 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/media/platform/qcom/venus/helpers.c b/drivers/media/platform/qcom/venus/helpers.c
+> index ab6a29f..193215c 100644
+> --- a/drivers/media/platform/qcom/venus/helpers.c
+> +++ b/drivers/media/platform/qcom/venus/helpers.c
+> @@ -612,6 +612,8 @@ static u32 to_hfi_raw_fmt(u32 v4l2_fmt)
+>  		return HFI_COLOR_FORMAT_NV12_UBWC;
+>  	case V4L2_PIX_FMT_QC10C:
+>  		return HFI_COLOR_FORMAT_YUV420_TP10_UBWC;
+> +	case V4L2_PIX_FMT_P010:
+> +		return HFI_COLOR_FORMAT_P010;
+>  	default:
+>  		break;
+>  	}
+> @@ -639,12 +641,16 @@ static int platform_get_bufreq(struct venus_inst *inst, u32 buftype,
+>  	if (is_dec) {
+>  		params.width = inst->width;
+>  		params.height = inst->height;
+> +		params.out_width = inst->out_width;
+> +		params.out_height = inst->out_height;
+>  		params.codec = inst->fmt_out->pixfmt;
+>  		params.hfi_color_fmt = to_hfi_raw_fmt(inst->fmt_cap->pixfmt);
+>  		params.dec.max_mbs_per_frame = mbs_per_frame_max(inst);
+>  		params.dec.buffer_size_limit = 0;
+>  		params.dec.is_secondary_output =
+>  			inst->opb_buftype == HFI_BUFFER_OUTPUT2;
+> +		if (params.dec.is_secondary_output)
+> +			params.hfi_dpb_color_fmt = inst->dpb_fmt;
+>  		params.dec.is_interlaced =
+>  			inst->pic_struct != HFI_INTERLACE_FRAME_PROGRESSIVE;
+>  	} else {
+> @@ -1764,6 +1770,25 @@ int venus_helper_get_out_fmts(struct venus_inst *inst, u32 v4l2_fmt,
+>  	if (!caps)
+>  		return -EINVAL;
+>  
+> +	if (inst->bit_depth == VIDC_BITDEPTH_10 &&
+> +	    inst->session_type == VIDC_SESSION_TYPE_DEC) {
+> +		found_ubwc =
+> +			find_fmt_from_caps(caps, HFI_BUFFER_OUTPUT,
+> +					   HFI_COLOR_FORMAT_YUV420_TP10_UBWC);
+> +		found = find_fmt_from_caps(caps, HFI_BUFFER_OUTPUT2,
+> +					   fmt);
+> +		if (found_ubwc && found) {
+> +			/*
+> +			 * Hard-code DPB buffers to be 10bit UBWC
+> +			 * until V4L2 is able to expose compressed/tiled
+> +			 * formats to applications.
+> +			 */
+> +			*out_fmt = HFI_COLOR_FORMAT_YUV420_TP10_UBWC;
+> +			*out2_fmt = fmt;
+> +			return 0;
+> +		}
+> +	}
+> +
+>  	if (ubwc) {
+>  		ubwc_fmt = fmt | HFI_COLOR_FORMAT_UBWC_BASE;
+>  		found_ubwc = find_fmt_from_caps(caps, HFI_BUFFER_OUTPUT,
+> diff --git a/drivers/media/platform/qcom/venus/hfi_plat_bufs.h b/drivers/media/platform/qcom/venus/hfi_plat_bufs.h
+> index 52a51a3..25e6074 100644
+> --- a/drivers/media/platform/qcom/venus/hfi_plat_bufs.h
+> +++ b/drivers/media/platform/qcom/venus/hfi_plat_bufs.h
+> @@ -12,8 +12,11 @@
+>  struct hfi_plat_buffers_params {
+>  	u32 width;
+>  	u32 height;
+> +	u32 out_width;
+> +	u32 out_height;
+>  	u32 codec;
+>  	u32 hfi_color_fmt;
+> +	u32 hfi_dpb_color_fmt;
+>  	enum hfi_version version;
+>  	u32 num_vpp_pipes;
+>  	union {
+> diff --git a/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c b/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c
+> index ea25c45..08caab1 100644
+> --- a/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c
+> +++ b/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c
+> @@ -1185,6 +1185,7 @@ static int bufreq_dec(struct hfi_plat_buffers_params *params, u32 buftype,
+>  	enum hfi_version version = params->version;
+>  	u32 codec = params->codec;
+>  	u32 width = params->width, height = params->height, out_min_count;
+> +	u32 out_width = params->out_width, out_height = params->out_height;
+>  	struct dec_bufsize_ops *dec_ops;
+>  	bool is_secondary_output = params->dec.is_secondary_output;
+>  	bool is_interlaced = params->dec.is_interlaced;
+> @@ -1235,7 +1236,13 @@ static int bufreq_dec(struct hfi_plat_buffers_params *params, u32 buftype,
+>  		bufreq->count_min = out_min_count;
+>  		bufreq->size =
+>  			venus_helper_get_framesz_raw(params->hfi_color_fmt,
+> -						     width, height);
+> +						     out_width, out_height);
+> +
+> +		if (buftype == HFI_BUFFER_OUTPUT &&
+> +		    params->dec.is_secondary_output)
+> +			bufreq->size =
+> +				venus_helper_get_framesz_raw(params->hfi_dpb_color_fmt,
+> +							     out_width, out_height);
+>  	} else if (buftype == HFI_BUFFER_INTERNAL_SCRATCH(version)) {
+>  		bufreq->size = dec_ops->scratch(width, height, is_interlaced);
+>  	} else if (buftype == HFI_BUFFER_INTERNAL_SCRATCH_1(version)) {
+> diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
+> index 4ceaba3..99d0e96 100644
+> --- a/drivers/media/platform/qcom/venus/vdec.c
+> +++ b/drivers/media/platform/qcom/venus/vdec.c
+> @@ -43,6 +43,10 @@ static const struct venus_format vdec_formats[] = {
+>  		.num_planes = 1,
+>  		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+>  	}, {
+> +		.pixfmt = V4L2_PIX_FMT_P010,
+> +		.num_planes = 1,
+> +		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+> +	}, {
+>  		.pixfmt = V4L2_PIX_FMT_MPEG4,
+>  		.num_planes = 1,
+>  		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+> @@ -697,6 +701,9 @@ static int vdec_set_work_route(struct venus_inst *inst)
+>  }
+>  
+>  #define is_ubwc_fmt(fmt) (!!((fmt) & HFI_COLOR_FORMAT_UBWC_BASE))
+> +#define is_10bit_ubwc_fmt(fmt) (!!((fmt) & HFI_COLOR_FORMAT_10_BIT_BASE & \
+> +				    HFI_COLOR_FORMAT_UBWC_BASE))
+> +
+>  
+>  static int vdec_output_conf(struct venus_inst *inst)
+>  {
+> @@ -744,7 +751,7 @@ static int vdec_output_conf(struct venus_inst *inst)
+>  		inst->opb_fmt = out2_fmt;
+>  		inst->dpb_buftype = HFI_BUFFER_OUTPUT;
+>  		inst->dpb_fmt = out_fmt;
+> -	} else if (is_ubwc_fmt(out2_fmt)) {
+> +	} else if (is_ubwc_fmt(out2_fmt) || is_10bit_ubwc_fmt(out_fmt)) {
+>  		inst->opb_buftype = HFI_BUFFER_OUTPUT;
+>  		inst->opb_fmt = out_fmt;
+>  		inst->dpb_buftype = HFI_BUFFER_OUTPUT2;
+> @@ -1420,7 +1427,7 @@ static void vdec_buf_done(struct venus_inst *inst, unsigned int buf_type,
+>  static void vdec_event_change(struct venus_inst *inst,
+>  			      struct hfi_event_data *ev_data, bool sufficient)
+>  {
+> -	static const struct v4l2_event ev = {
+> +	struct v4l2_event ev = {
+>  		.type = V4L2_EVENT_SOURCE_CHANGE,
+>  		.u.src_change.changes = V4L2_EVENT_SRC_CH_RESOLUTION };
+>  	struct device *dev = inst->core->dev_dec;
+> @@ -1461,8 +1468,13 @@ static void vdec_event_change(struct venus_inst *inst,
+>  	inst->out_width = ev_data->width;
+>  	inst->out_height = ev_data->height;
+>  
+> -	if (inst->bit_depth != ev_data->bit_depth)
+> +	if (inst->bit_depth != ev_data->bit_depth) {
+>  		inst->bit_depth = ev_data->bit_depth;
+> +		if (inst->bit_depth == VIDC_BITDEPTH_10)
+> +			inst->fmt_cap = &vdec_formats[3];
+> +		else
+> +			inst->fmt_cap = &vdec_formats[0];
+> +	}
+>  
+>  	if (inst->pic_struct != ev_data->pic_struct)
+>  		inst->pic_struct = ev_data->pic_struct;
