@@ -2,126 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24FBE6F4770
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 17:38:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFF856F4784
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 17:42:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234539AbjEBPig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 11:38:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52796 "EHLO
+        id S234198AbjEBPmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 11:42:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233523AbjEBPie (ORCPT
+        with ESMTP id S233331AbjEBPmv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 11:38:34 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2123.outbound.protection.outlook.com [40.107.93.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CC0D1A6;
-        Tue,  2 May 2023 08:38:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HMcRYybqqOnKbHVyYoySYvCcHrGmlI89uNZM4hYCgYC/uGTBKBWv80SbZqFeNPOLQIHKrgpvetdYzCBTmfmavbeLKhYxz5qk1xhYOVQMRABOJbjpIhWNuOp1DTex6VAAcilD58ycAPJGJ9KoYlQOXiIvsVtfgGhx/Fqj/JGE9z2xaMZzKAm90yEO52AF6ZgoG7t05Z8IWD90PW6jvnoh0dffMAc/FeNm3zkb5u9r1QUmF8HtgZ92L7f1cs32ogj60FSJMP5vtY1c5IpYqEibYEr6Pg2WjHl9IGgYxUWaDRnAWgay+jZAdj7PUKkqQnfbP5JFgCFli9Ndg1RXDZCQbA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QcfgxxaEKPw05EfrHW4PemwrZ7zNA79ocKiFWHdlJ6s=;
- b=NWn4RTztPsP5jn5TxP1h8ZWCy58GPhsxGiW4jkx16pM1JSNmFQCKUkgnMFkjdgOPC+f82hem6FQH4aGmZibYl8MKhZscDuPsaG9aKQ6WjjaD4T1/bLrRuhktspcfAnLeItGo/mnipXsA+Rxg3DPQrWbK1P1SkbjUoSwTn6pyr+pJ5o3XaVptUgD5GvCJ0XkRZMtbyMF3FjZ/JC5x1QNfJJn304/h3FSiZd+tMk+4K97lSwdFOwS1y/j5ZOxt8QhCf0ZU3hPsJ4KaLPrlWOP8JeqNXrAertUP5jofXaYs8bPtBagKS06IQXy1ElFg4FSVi3Rv2DTSyBljZCVpZ9Y0Kg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QcfgxxaEKPw05EfrHW4PemwrZ7zNA79ocKiFWHdlJ6s=;
- b=pmNnyAbMmxvFUiCXVAZysUAk58Pir67bXKTUQEvCs72q3WIezU1mGBHIJ/eYqz1kFFkhukZiX5sTfSz4bFzZfIyG2y+XKT7b1qYhcZ9P3j9MsCW9+kD5TtTGyp8FEx28HlF9uD66MSGRmzYR8WzBeqBIB9Gxxh2xp2bJ/DpXKzo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by SJ0PR13MB6026.namprd13.prod.outlook.com (2603:10b6:a03:3dc::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.30; Tue, 2 May
- 2023 15:38:26 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6340.031; Tue, 2 May 2023
- 15:38:26 +0000
-Date:   Tue, 2 May 2023 17:38:19 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Gavrilov Ilia <Ilia.Gavrilov@infotecs.ru>
-Cc:     Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Patrick McHardy <kaber@trash.net>,
-        "netfilter-devel@vger.kernel.org" <netfilter-devel@vger.kernel.org>,
-        "coreteam@netfilter.org" <coreteam@netfilter.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "lvc-project@linuxtesting.org" <lvc-project@linuxtesting.org>
-Subject: Re: [PATCH] netfilter: nf_conntrack_sip: fix the
- ct_sip_parse_numerical_param() return value.
-Message-ID: <ZFEuazEvNWHfEH93@corigine.com>
-References: <20230426150414.2768070-1-Ilia.Gavrilov@infotecs.ru>
- <ZEwdd7Xj4fQtCXoe@corigine.com>
- <d0a92686-acc4-4fd8-0505-60a8394d05d8@infotecs.ru>
- <ZFEYpNsp/hBEJAGU@corigine.com>
- <f9d9ac80-704a-91d7-b120-449b921e8bb0@infotecs.ru>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f9d9ac80-704a-91d7-b120-449b921e8bb0@infotecs.ru>
-X-ClientProxiedBy: AM0PR03CA0055.eurprd03.prod.outlook.com (2603:10a6:208::32)
- To PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+        Tue, 2 May 2023 11:42:51 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B521A6
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 08:42:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683042170; x=1714578170;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to;
+  bh=s53ckWSCPCD27YqdcQdt7WZr3VrH45zL/WyjwkVkJsY=;
+  b=ZzTEapToq4Xf83IU6V++A/408o2XaF2DxQP5Sdy5pHs/NCjxvlCwa3Vk
+   ibggqqq/XsCTNxfyBIMkNYWlSM4CrNr02ATIHcH6510O1XxDaMcjpAs9E
+   C3GhYUHOnlRetGOvXIB2S9Is3oW3E9FvRVj2oCx1mYJX6Zoo6ejFBk1UI
+   bI933bHOy6/dtFDvGzY8v1R7Y4PH+wYctbU+XgM63eJeh4/JSnhrBjiyk
+   Tl/l9WfVMIynjkoLY7kxO4Wni5JdOXnWXoG3kQV8fSx82LlZuWdNb/QU0
+   GGHVDgHKJEvhk0rZI0v6bNsQgF1UtB5PmsjypWV/w8Ukx9RPwRP6YIkWz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="413891000"
+X-IronPort-AV: E=Sophos;i="5.99,244,1677571200"; 
+   d="scan'208";a="413891000"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2023 08:42:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="673700928"
+X-IronPort-AV: E=Sophos;i="5.99,244,1677571200"; 
+   d="scan'208";a="673700928"
+Received: from vsanka-mobl.amr.corp.intel.com (HELO [10.212.168.155]) ([10.212.168.155])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2023 08:42:49 -0700
+Content-Type: multipart/mixed; boundary="------------Ze0LFxpBo0szqDF8dkE4MQ9Q"
+Message-ID: <641a9348-a052-6bb5-e6c7-64acb6405328@intel.com>
+Date:   Tue, 2 May 2023 08:42:48 -0700
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SJ0PR13MB6026:EE_
-X-MS-Office365-Filtering-Correlation-Id: b1d6de8d-6e4e-4bb1-6589-08db4b234599
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YqTOxyUcxCpU4km2FWS/2Vt8rFsWUVF7bHpR0rj+tyZNtwlBHuTCsIpUaml2w9BogEbtUfsk5KDNJqlOazTgTt9lADG2sH1IpcB6qdxQ8h9FJPILTM+wcQILP2Ybr6cfNHElRQcufe5vL9en11BCVJ0yuoR1fm0Al9CzHaHCA2JLjKcrUKrR69Nfu7iy9lhIa2netK8ygAfkq+0u7gujUplbMebb3G5oomulv/Gn5a2yjVkyqUk24pIlTmtru9EsJB2Zkt37uW6OWbZkeQ6017ZhuJM9ZzXEXUp3ZAlrMBke2z2ic0II5V3uxM5lOm/uKp3Dv2rYZYqR+3gJOBadRalokZkE8Cnh36k+GxmC720B9GTIVqCiXGFiXGPAMpn+GkjWJ6oiuh6W4W0l4lA0E37Ql8MBEKLYM3OPcJd0ptVm5eoKEUKVZ8+Jei3RMCe5jP+YgAuPHN+f/gSl0WH/LfrsjT+dUkimn5bb/BQdehOu8nk/zRrbR0wKjftZbhtNKfIOPn+q4dXkJsUS0R3vD8+5sKxV78pb6KT+ed8pq/lPLdnI/1GxLB3C+ymG5cwJ
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(136003)(376002)(39830400003)(366004)(451199021)(316002)(53546011)(6506007)(6512007)(41300700001)(83380400001)(66476007)(2616005)(186003)(66556008)(66946007)(4326008)(38100700002)(6486002)(6666004)(6916009)(54906003)(36756003)(2906002)(86362001)(7416002)(5660300002)(8936002)(44832011)(8676002)(478600001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?yB0N//JYt890UZHKYmsT+r82b2z+DqJRaHP8EH59OAQtCs6zRBaMUQWZAQIs?=
- =?us-ascii?Q?Fex+cfAMtoTftcUK1k1nVy8CDGBqJjA0xcEsGs1czUWNQnFIXKPcMv50L08n?=
- =?us-ascii?Q?10k1iOOalDHbNNdwGNSwdPu/NnNrXa468V1ps+A8X4zNSIfc+PWZvwDpwHxb?=
- =?us-ascii?Q?h6vcYXBbhJ0HS3L49rttftlXIIEd5mOxdePVSGY/wJID0/jczcSQV5ZU2SXz?=
- =?us-ascii?Q?3V3an5E5I8F/3avh+we/mr+cBENxk9pcldac9UbIgC6z9xvReIZ5ifuHNZs+?=
- =?us-ascii?Q?J2xIg2IOZTY84w0RbPS9RNEjBpS83KIGFAh4AOZyXFiQ+JpyEYpvf9PLrj5N?=
- =?us-ascii?Q?qW7iETmngm4AJCCchzMZKCkc2SE8LJ+yK3mEiC20Vp9OjGu+O9KnH4uU4GXa?=
- =?us-ascii?Q?OjMYRu28/vxPUMty+TQN1etsQe6eR8elc1hhchOinWVHXpXrmSJrhBmHeZnK?=
- =?us-ascii?Q?umFA6sJvW9Hv54a18zhuzJJM1zf5yd1/ZJyFx9Yb5U4q7fULP62BBVR8hd9Q?=
- =?us-ascii?Q?GsMJxl9dYUHFaonSnyWLU3Roudr0p/VU4VpBiA5h3seFAtlPcB+yq9J90Tzk?=
- =?us-ascii?Q?5In55GJ1+JhZ3nTdXEHl4gVqiuKyECSwBnt2ktPokkIg7ZWoD8sWgYQ/Oll1?=
- =?us-ascii?Q?g8j1RSREqpvRv39Ufhw5sozr3DPVtaYbBmm4S/4xDsBF/h1fl1IdFiN4J7Dm?=
- =?us-ascii?Q?7E6LnLNytHAsQ68QnzbzW4+wP1THIgkfF9JIp0ZOAe/c7+78T/9R1/bjgvXB?=
- =?us-ascii?Q?nZ7wD1Tm9lSYjbTx5VecISa74MdIFJxbPWqi3GQlXzo84xpRteW26OpfnueV?=
- =?us-ascii?Q?o8gIkQldKw2S+cZPlUpUP2NZA3o36PkV+xGBhmHHK3uU8q6CHbQyj3dB8ve/?=
- =?us-ascii?Q?SrqhUWMMv/Kkn6ForTfNoxUef4mpUIhZaY9R51ZYOmkUNeiVZCwmLceUOIg2?=
- =?us-ascii?Q?P2wfOVy2MwkPk2nhhK8yHscl59NjZudeONN2jitu1MTyUyVkZL9/CZn/l26m?=
- =?us-ascii?Q?MPn1E5Rju4FW9Fo/yCJWKO/7pmqMzz/lSUuhxoBLsEQ7AUMoJp6xviyeE459?=
- =?us-ascii?Q?MroadxYkqvEpsnTA3Nsmqno0frIoAQhFhDcxL1KF+888T3EVavV/ESzCIkLk?=
- =?us-ascii?Q?rOqqDL3AQTnwe8Riq6mqFSJFhcp7SXSn7GyU6irvBdKEFUja+5LgNozeM1Jr?=
- =?us-ascii?Q?lMxRJXR4MjB/RChf4x9FgfoZrt+W5zwPOE+V2LjdSBm7XP2mSE01PHTBmaJP?=
- =?us-ascii?Q?PhglRZ8Oh+SyKmGY9m1v5rVmC2ddeTqlskOhSLetSD8VTCxIclZNgfAOFhUf?=
- =?us-ascii?Q?DEW7ZInOiGVOhlkTlRViB1TNqL59fp540aB0Sk/4kqH2ik/Upd22BBHYpRdj?=
- =?us-ascii?Q?aaRPWcBefIyNyc94OHHdlWutEA5b+DpwLlvcMIb6IGXaIhQvEq5QZAsc0BKP?=
- =?us-ascii?Q?zSI1VdTfUb+WMlSrD1jdDfPigQfIElbFFu3duBsleB8ip0O7++x/f/F26B+K?=
- =?us-ascii?Q?KB4tK8TIJotpyrHAd0GHHG7ZZn1N91dwoQ7MpHq7vYVP6T2/DgsvKwZKYuP/?=
- =?us-ascii?Q?ZiWhyi8lm8MrnT8ytf/UGqw59u0+x2ZJsfIcnCW+O6QOx/mWpgj9IDfCmIY2?=
- =?us-ascii?Q?4jkdcOVSigEJLrzx1PgMx5zcF3q1RWhxxibfOJkAPcxFtAchAT8jmUE75g2x?=
- =?us-ascii?Q?g1nOww=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b1d6de8d-6e4e-4bb1-6589-08db4b234599
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2023 15:38:26.8382
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7QrgtfTbgmVR1gj6vCBJKM6N9VDdq1dGUtFlcU0rv3+QzigtjOlcRoLHF8eu28ZP6NexF+YnrTOOvIhkgbiy6fwQ0XQ7Aavplia+3k7JlFw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR13MB6026
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [GIT PULL] x86/mm for 6.4
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kirill.shutemov@linux.intel.com,
+        Peter Zijlstra <peterz@infradead.org>
+References: <20230427225647.1101172-1-dave.hansen@linux.intel.com>
+ <CAHk-=wgrdOm8RwO+u8bydrbgs0wXJV_9mBYAtzX9d9hEY7a25A@mail.gmail.com>
+ <CAHk-=wiHvdgbLxayyCsRU45JnKCZkCOpEJPfOvE3eYCnGjVcSA@mail.gmail.com>
+ <20230429003822.n3mglslg666j3npp@box.shutemov.name>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230429003822.n3mglslg666j3npp@box.shutemov.name>
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -129,73 +68,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 02, 2023 at 02:16:09PM +0000, Gavrilov Ilia wrote:
-> On 5/2/23 17:05, Simon Horman wrote:
-> > On Tue, May 02, 2023 at 11:43:19AM +0000, Gavrilov Ilia wrote:
-> >> On 4/28/23 22:24, Simon Horman wrote:
-> >>> On Wed, Apr 26, 2023 at 03:04:31PM +0000, Gavrilov Ilia wrote:
-> >>>> ct_sip_parse_numerical_param() returns only 0 or 1 now.
-> >>>> But process_register_request() and process_register_response() imply
-> >>>> checking for a negative value if parsing of a numerical header parameter
-> >>>> failed. Let's fix it.
-> >>>>
-> >>>> Found by InfoTeCS on behalf of Linux Verification Center
-> >>>> (linuxtesting.org) with SVACE.
-> >>>>
-> >>>> Fixes: 0f32a40fc91a ("[NETFILTER]: nf_conntrack_sip: create signalling expectations")
-> >>>> Signed-off-by: Ilia.Gavrilov <Ilia.Gavrilov@infotecs.ru>
-> >>>
-> >>> Hi Gavrilov,
-> >>>
-> >>
-> >> Hi Simon, thank you for your answer.
-> >>
-> >>> although it is a slightly unusual convention for kernel code,
-> >>> I believe the intention is that this function returns 0 when
-> >>> it fails (to parse) and 1 on success. So I think that part is fine.
-> >>>
-> >>> What seems a bit broken is the way that callers use the return value.
-> >>>
-> >>> 1. The call in process_register_response() looks like this:
-> >>>
-> >>> 	ret = ct_sip_parse_numerical_param(...)
-> >>> 	if (ret < 0) {
-> >>> 		nf_ct_helper_log(skb, ct, "cannot parse expires");
-> >>> 		return NF_DROP;
-> >>> 	}
-> >>>
-> >>>       But ret can only be 0 or 1, so the error handling is never inoked,
-> >>>       and a failure to parse is ignored. I guess failure doesn't occur in
-> >>>       practice.
-> >>>
-> >>>       I suspect this should be:
-> >>>
-> >>> 	ret = ct_sip_parse_numerical_param(...)
-> >>> 	if (!ret) {
-> >>> 		nf_ct_helper_log(skb, ct, "cannot parse expires");
-> >>> 		return NF_DROP;
-> >>> 	}
-> >>>
-> >>
-> >> ct_sip_parse_numerical_param() returns 0 in to cases 1) when the
-> >> parameter 'expires=' isn't found in the header or 2) it's incorrectly set.
-> >> In the first case, the return value should be ignored, since this is a
-> >> normal situation
-> >> In the second case, it's better to write to the log and return NF_DROP,
-> >> or ignore it too, then checking the return value can be removed as
-> >> unnecessary.
-> > 
-> > Sorry, I think I misunderstood the intention of your patch earlier.
-> > 
-> > Do I (now) understand correctly that you are proposing a tristate?
-> > 
-> > a) return 1 if value is found; *val is set
-> > b) return 0 if value is not found; *val is unchanged
-> > c) return -1 on error; *val is undefined
-> 
-> Yes, it seems to me that this was originally intended.
+This is a multi-part message in MIME format.
+--------------Ze0LFxpBo0szqDF8dkE4MQ9Q
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Thanks. With my new found understanding, this looks good to me.
+On 4/28/23 17:38, Kirill A. Shutemov wrote:
+> BTW, I think the static check can be relaxed. Checking size against
+> PAGE_SIZE is rather conservative: there's 8 TB (or 4 PB for 5-level
+> paging) guard hole at the begging of kernel address space.
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+Whatever we relax it to, let's make sure we get a note in
+Documentation/x86/x86_64/mm.rst.  But that's totally minor and we can
+fix it up later.
 
+Have anyone seen any actual code generation difference between:
+
+	return (long)ptr >= 0;
+
+and
+
+        return !((unsigned long)ptr & (1UL<<(BITS_PER_LONG-1)));
+
+?  I'm seeing gcc generate the same code for both the <=PAGE_SIZE side
+and the 'sum' side.
+
+It's longer, but I'd rather read the explicit "check bit 63" than the
+positive/negative address space thing.  I certainly grok both, but have
+to think through the "(long)ptr >= 0" check every time.
+
+I guess it also wouldn't matter as much either if we hid it in a helper
+like the attached patch and I didn't have to read it twice. ;)
+--------------Ze0LFxpBo0szqDF8dkE4MQ9Q
+Content-Type: text/x-patch; charset=UTF-8; name="ptr_in_user_half.patch"
+Content-Disposition: attachment; filename="ptr_in_user_half.patch"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL2FyY2gveDg2L2luY2x1ZGUvYXNtL3VhY2Nlc3MuaCBiL2FyY2gveDg2
+L2luY2x1ZGUvYXNtL3VhY2Nlc3MuaAppbmRleCAxMjMxMzVkNjBmNzIuLjdiYjExZDVhN2Y4
+ZiAxMDA2NDQKLS0tIGEvYXJjaC94ODYvaW5jbHVkZS9hc20vdWFjY2Vzcy5oCisrKyBiL2Fy
+Y2gveDg2L2luY2x1ZGUvYXNtL3VhY2Nlc3MuaApAQCAtNzcsMTUgKzc3LDI4IEBAIHN0YXRp
+YyBpbmxpbmUgdW5zaWduZWQgbG9uZyBfX3VudGFnZ2VkX2FkZHJfcmVtb3RlKHN0cnVjdCBt
+bV9zdHJ1Y3QgKm1tLAogCiAjaWZkZWYgQ09ORklHX1g4Nl82NAogLyoKLSAqIE9uIHg4Ni02
+NCwgd2UgbWF5IGhhdmUgdGFnIGJpdHMgaW4gdGhlIHVzZXIgcG9pbnRlci4gUmF0aGVyIHRo
+YW4KLSAqIG1hc2sgdGhlbSBvZmYsIGp1c3QgY2hhbmdlIHRoZSBydWxlcyBmb3IgX19hY2Nl
+c3Nfb2soKS4KKyAqIFRoZSB2aXJ0dWFsIGFkZHJlc3Mgc3BhY2Ugc3BhY2UgaXMgbG9naWNh
+bGx5IGRpdmlkZWQgaW50byBhIGtlcm5lbAorICogaGFsZiBhbmQgYSB1c2VyIGhhbGYuICBX
+aGVuIGNhc3QgdG8gYSBzaWduZWQgdHlwZSwgdXNlciBwb2ludGVycworICogYXJlIHBvc2l0
+aXZlIGFuZCBrZXJuZWwgcG9pbnRlcnMgYXJlIG5lZ2F0aXZlLgorICovCitzdGF0aWMgaW5s
+aW5lIGJvb2wgcHRyX2luX3VzZXJfaGFsZih2b2lkICpwdHIpCit7CisJcmV0dXJuIChsb25n
+KXB0ciA+PSAwOworfQorCisvKgorICogVXNlciBwb2ludGVycyBjYW4gaGF2ZSB0YWcgYml0
+cyBvbiB4ODYtNjQuICBUaGlzIHNjaGVtZSB0b2xlcmF0ZXMKKyAqIGFyYml0cmFyeSB2YWx1
+ZXMgaW4gdGhvc2UgYml0cyByYXRoZXIgbWFza2luZyB0aGVtIG9mZi4KKyAqCisgKiBFbmZv
+cmNlIHR3byBydWxlczoKKyAqIDEuICdwdHInIG11c3QgYmUgaW4gdGhlIHVzZXIgaGFsZiBv
+ZiB0aGUgYWRkcmVzcyBzcGFjZQorICogMi4gJ3B0citzaXplJyBtdXN0IG5vdCBvdmVyZmxv
+dyAoYmFjayBpbnRvIHRoZSBrZXJuZWwgaGFsZikKICAqCi0gKiBNYWtlIHRoZSBydWxlIGJl
+IHRoYXQgJ3B0citzaXplJyBtdXN0IG5vdCBvdmVyZmxvdywgYW5kIG11c3Qgbm90Ci0gKiBo
+YXZlIHRoZSBoaWdoIGJpdCBzZXQuIENvbXBpbGVycyBnZW5lcmFsbHkgdW5kZXJzdGFuZCBh
+Ym91dAotICogdW5zaWduZWQgb3ZlcmZsb3cgYW5kIHRoZSBDRiBiaXQgYW5kIGdlbmVyYXRl
+IHJlYXNvbmFibGUgY29kZSBmb3IKLSAqIHRoaXMuIEFsdGhvdWdoIGl0IGxvb2tzIGxpa2Ug
+dGhlIGNvbWJpbmF0aW9uIGNvbmZ1c2VzIGF0IGxlYXN0Ci0gKiBjbGFuZyAoYW5kIGluc3Rl
+YWQgb2YganVzdCBkb2luZyBhbiAiYWRkIiBmb2xsb3dlZCBieSBhIHRlc3Qgb2YKLSAqIFNG
+IGFuZCBDRiwgeW91J2xsIHNlZSB0aGF0IHVubmVjZXNzYXJ5IGNvbXBhcmlzb24pLgorICog
+Q29tcGlsZXJzIGdlbmVyYWxseSB1bmRlcnN0YW5kIGFib3V0ICB1bnNpZ25lZCBvdmVyZmxv
+dyBhbmQgdGhlIENGCisgKiBiaXQgYW5kIGdlbmVyYXRlIHJlYXNvbmFibGUgY29kZSBmb3Ig
+dGhpcy4gQWx0aG91Z2ggaXQgbG9va3MgbGlrZQorICogdGhlIGNvbWJpbmF0aW9uIGNvbmZ1
+c2VzIGF0IGxlYXN0IGNsYW5nIChhbmQgaW5zdGVhZCBvZiBqdXN0IGRvaW5nCisgKiBhbiAi
+YWRkIiBmb2xsb3dlZCBieSBhIHRlc3Qgb2YgU0YgYW5kIENGLCB5b3UnbGwgc2VlIHRoYXQK
+KyAqIHVubmVjZXNzYXJ5IGNvbXBhcmlzb24pLgogICoKICAqIEZvciB0aGUgY29tbW9uIGNh
+c2Ugb2Ygc21hbGwgc2l6ZXMgdGhhdCBjYW4gYmUgY2hlY2tlZCBhdCBjb21waWxlCiAgKiB0
+aW1lLCBkb24ndCBldmVuIGJvdGhlciB3aXRoIHRoZSBhZGRpdGlvbiwgYW5kIGp1c3QgY2hl
+Y2sgdGhhdCB0aGUKQEAgLTkzLDExICsxMDYsMTYgQEAgc3RhdGljIGlubGluZSB1bnNpZ25l
+ZCBsb25nIF9fdW50YWdnZWRfYWRkcl9yZW1vdGUoc3RydWN0IG1tX3N0cnVjdCAqbW0sCiAg
+Ki8KIHN0YXRpYyBpbmxpbmUgYm9vbCBfX2FjY2Vzc19vayhjb25zdCB2b2lkIF9fdXNlciAq
+cHRyLCB1bnNpZ25lZCBsb25nIHNpemUpCiB7CisJLyoKKwkgKiBDaGVjayBvbmx5IHRoZSBw
+b2ludGVyIChub3QgcHRyK3NpemUpIGZvciBzbWFsbCBhY2Nlc3Nlcy4KKwkgKiBUaGlzIGlz
+IE9LIGJlY2F1c2UgdGhlIGtlcm5lbCBhZGRyZXNzIHNwYWNlIGJlZ2lucyB3aXRoIGEKKwkg
+KiA+PVBBR0VfU0laRSBndWFyZCBob2xlLgorCSAqLwogCWlmIChfX2J1aWx0aW5fY29uc3Rh
+bnRfcChzaXplIDw9IFBBR0VfU0laRSkgJiYgc2l6ZSA8PSBQQUdFX1NJWkUpIHsKLQkJcmV0
+dXJuIChsb25nKXB0ciA+PSAwOworCQlyZXR1cm4gcHRyX2luX3VzZXJfaGFsZihwdHIpOwog
+CX0gZWxzZSB7CiAJCXVuc2lnbmVkIGxvbmcgc3VtID0gc2l6ZSArICh1bnNpZ25lZCBsb25n
+KXB0cjsKLQkJcmV0dXJuIChsb25nKSBzdW0gPj0gMCAmJiBzdW0gPj0gKHVuc2lnbmVkIGxv
+bmcpcHRyOworCQlyZXR1cm4gcHRyX2luX3VzZXJfaGFsZihwdHIpICYmIHN1bSA+PSAodW5z
+aWduZWQgbG9uZylwdHI7CiAJfQogfQogI2RlZmluZSBfX2FjY2Vzc19vayBfX2FjY2Vzc19v
+awo=
+
+--------------Ze0LFxpBo0szqDF8dkE4MQ9Q--
