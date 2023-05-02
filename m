@@ -2,126 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3CF26F4286
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 13:19:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA2996F428C
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 13:20:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233907AbjEBLTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 07:19:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34634 "EHLO
+        id S233927AbjEBLUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 07:20:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233871AbjEBLTQ (ORCPT
+        with ESMTP id S233787AbjEBLUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 07:19:16 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E75C9
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 04:19:14 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f192c23fffso21656705e9.3
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 04:19:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683026353; x=1685618353;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TMjdo4O02u+tpFEhZP9Wls75XLkok8xEL1r9/5OuF+Q=;
-        b=WBdUYPakvTnEh67swv1MqMGVbXY2WvVli9Y51IR2me03hlxW1R+L2q1da6SltViBtZ
-         ySz9yARFiAMriFbyyEbe2/wPoR/ngj+q8nrzRnE0d2C+XY9dWSCHHdKJyzUE4/PFo5HF
-         16thIl5KC1DvL0OSuXE/W2GxYGuqMxFY6Z2sOccYBWHZYyF87Smsl1hw46M4F/AdXAt1
-         YftSM5S/ybrujQfnRbbCXKM8SCIcNrhoNfQU3T/4yrX4LBIG0iIsPjEiozah2ENh6Wbk
-         QDy+O8Z5YlM6EW29GM0qd/nmzck696MqrG8zmKaY4ODjCjpTpZDogYeAd9D8OBmGjVU2
-         Kvvg==
+        Tue, 2 May 2023 07:20:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F83526E
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 04:19:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683026360;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZGX3oXDmepVSSgXg/ywOi6E6HyMIWMvPLV7WEL89H4A=;
+        b=Z4tI/d+YJuUicCSiAJxRZk+M6Pvyp7Vw+nn3322oLVQzOblWeKEaRKy4kaSqBiFvpw+ltq
+        uWR1upyfW4vOgMlR0YNmWNQPREXynNM1YgS1SSNhvH2RorqOpteahPHzpkD2yVqofqSiRe
+        nPMnYaeQP/UlQBFE4yoHC2Hxvy7kqTg=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-353-4yeR6X9OPPWgtTi33zHgoA-1; Tue, 02 May 2023 07:19:19 -0400
+X-MC-Unique: 4yeR6X9OPPWgtTi33zHgoA-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f33f8ffa05so10887395e9.1
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 04:19:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683026353; x=1685618353;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TMjdo4O02u+tpFEhZP9Wls75XLkok8xEL1r9/5OuF+Q=;
-        b=e/+bnztqEtRTq4z4K31TwO5HcgCNper51JNHA9ZX9cjDdDacyYiScvge/afi2Y8cjr
-         5ze7WhihE52acnF3ZbJHbAKXFqKRKJx/VIY11MdjHaTWxp9TCu3/rc/Crt7mCYH4LSOA
-         b889CBUEqzGINKHfo5/tXitz5NQ+dPgNh/HmVm3rmSE7HXHSbxOt0ZdrVyyVn1qgxDT8
-         XPtLcu9SjaQDlZUTfAswQN+FpAQk3j+/rEqRtuIzPLPye8U9Sy6Y1umNuWqOuZj/E8rg
-         2wCYZNYcprNIe2nsv3UlSKpl4tznFM8v5u9NCaXunba/Is6jPAlNtn7Q8vEgS2/NK+9C
-         q5pA==
-X-Gm-Message-State: AC+VfDwUjid9fjvpvCx/u+YJ6r/n9FjxdiQY085qpBBctSGyamXbrgJM
-        7IAZhlLD36+rqr2DgpyjhUGhDwAsr1F/+Zv7mIM=
-X-Google-Smtp-Source: ACHHUZ6gWRtAX9s096mOp1U4DiSn5ZXBPTBKwOl+m0vTot2sXSiXUTpMGXlsbfXhGZCP0lSYDpA6/g==
-X-Received: by 2002:a1c:7317:0:b0:3f1:89a2:e705 with SMTP id d23-20020a1c7317000000b003f189a2e705mr11654626wmb.0.1683026352943;
-        Tue, 02 May 2023 04:19:12 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id t15-20020adfe44f000000b002f00793bd7asm30572021wrm.27.2023.05.02.04.19.10
+        d=1e100.net; s=20221208; t=1683026358; x=1685618358;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZGX3oXDmepVSSgXg/ywOi6E6HyMIWMvPLV7WEL89H4A=;
+        b=eI6Ff2fNLGEptAr1yFHrav6fh1HB8GvKEYICGKbnGxmGLbr8QYRHGohIbF5ds3/Uh0
+         uU9CMrDd1CIDjJjirk4UADbIChvNWCHU8GilBFuxIl7k3XAT5BPBKPyNU1fyOaTL5raJ
+         paNKdYdQPriYdmfUtHhecesVhKTR+wuu3NfKvd7ovGDvvZVXbGDHj6jz3plUTIkXXXwh
+         aWewa2xq/BfPG2TNDAgn2lkm4rThzK8IrmrmTbyGuZhZTQucJEmBZJkKkZhMDLNIAqXv
+         emFnEWMdbmRWqm+ltEU9H9wBK2Kb5bv547+Bnb6M4QbEd7tiF4a1Dc5c0MyomEoy4Sc4
+         QIwA==
+X-Gm-Message-State: AC+VfDxOGWu4Yi8f9jM1fmloUhQoJgLn+iZLfUWDLk7ZjTUcSgxvfUh7
+        KQBneSQVbfIWVmmeWE3vMMD4KL1SOM5s/AgHR+s/H7y4HWjvBuuTKZR3NHgPLgwMX2l7fBmTafT
+        RzcuLFz85LAbcmIDIYBpvKny+
+X-Received: by 2002:a05:600c:364f:b0:3f3:1cb7:b2a6 with SMTP id y15-20020a05600c364f00b003f31cb7b2a6mr11124414wmq.6.1683026358452;
+        Tue, 02 May 2023 04:19:18 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4tPcGFK34P936+hkNtJFObgUIXbAcsn7dPF/bQ8zykBW5U1fcHtQfnTagWvTYqne2fpRN3+g==
+X-Received: by 2002:a05:600c:364f:b0:3f3:1cb7:b2a6 with SMTP id y15-20020a05600c364f00b003f31cb7b2a6mr11124394wmq.6.1683026358161;
+        Tue, 02 May 2023 04:19:18 -0700 (PDT)
+Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id 25-20020a05600c025900b003ed2c0a0f37sm35039778wmj.35.2023.05.02.04.19.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 May 2023 04:19:11 -0700 (PDT)
-Date:   Tue, 2 May 2023 14:19:04 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     oe-kbuild@lists.linux.dev, Takashi Iwai <tiwai@suse.de>
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: drivers/gpu/drm/udl/udl_main.c:259 udl_get_urb_locked() warn: can
- 'unode' even be NULL?
-Message-ID: <e35cd818-d2f7-4d5e-abf8-b3448ca224aa@kili.mountain>
+        Tue, 02 May 2023 04:19:17 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>
+Cc:     linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: Re: [PATCH 2/2] Input: tests - modular KUnit tests should not
+ depend on KUNIT=y
+In-Reply-To: <483c4f520e4acc6357ebba3e605977b4c56374df.1683022164.git.geert+renesas@glider.be>
+References: <cover.1683022164.git.geert+renesas@glider.be>
+ <483c4f520e4acc6357ebba3e605977b4c56374df.1683022164.git.geert+renesas@glider.be>
+Date:   Tue, 02 May 2023 13:19:16 +0200
+Message-ID: <87ildbx9or.fsf@minerva.mail-host-address-is-not-set>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   2caeeb9d4a1bccd923b7918427f9e9ef7151ddd8
-commit: c5c354a3a4728045e1342166394c615d75d45377 drm/udl: Fix inconsistent urbs.count value during udl_free_urb_list()
-config: parisc-randconfig-m031-20230421 (https://download.01.org/0day-ci/archive/20230423/202304230801.ncoG1XDr-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 12.1.0
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <error27@gmail.com>
-| Link: https://lore.kernel.org/r/202304230801.ncoG1XDr-lkp@intel.com/
+Hello Geert,
 
-smatch warnings:
-drivers/gpu/drm/udl/udl_main.c:259 udl_get_urb_locked() warn: can 'unode' even be NULL?
+I've only been Cc'ed in patch #2.
 
-vim +/unode +259 drivers/gpu/drm/udl/udl_main.c
+Geert Uytterhoeven <geert+renesas@glider.be> writes:
 
-c5c354a3a47280 Takashi Iwai 2022-09-08  236  static struct urb *udl_get_urb_locked(struct udl_device *udl, long timeout)
-5320918b9a8786 Dave Airlie  2010-12-15  237  {
-c5c354a3a47280 Takashi Iwai 2022-09-08  238  	struct urb_node *unode;
-5320918b9a8786 Dave Airlie  2010-12-15  239  
-c5c354a3a47280 Takashi Iwai 2022-09-08  240  	assert_spin_locked(&udl->urbs.lock);
-5320918b9a8786 Dave Airlie  2010-12-15  241  
-acd45c56790a3b Takashi Iwai 2022-08-04  242  	/* Wait for an in-flight buffer to complete and get re-queued */
-acd45c56790a3b Takashi Iwai 2022-08-04  243  	if (!wait_event_lock_irq_timeout(udl->urbs.sleep,
-c5c354a3a47280 Takashi Iwai 2022-09-08  244  					 !udl->urbs.count ||
-acd45c56790a3b Takashi Iwai 2022-08-04  245  					 !list_empty(&udl->urbs.list),
-acd45c56790a3b Takashi Iwai 2022-08-04  246  					 udl->urbs.lock, timeout)) {
-acd45c56790a3b Takashi Iwai 2022-08-04  247  		DRM_INFO("wait for urb interrupted: available: %d\n",
-acd45c56790a3b Takashi Iwai 2022-08-04  248  			 udl->urbs.available);
-c5c354a3a47280 Takashi Iwai 2022-09-08  249  		return NULL;
-acd45c56790a3b Takashi Iwai 2022-08-04  250  	}
-5320918b9a8786 Dave Airlie  2010-12-15  251  
-c5c354a3a47280 Takashi Iwai 2022-09-08  252  	if (!udl->urbs.count)
-c5c354a3a47280 Takashi Iwai 2022-09-08  253  		return NULL;
-c5c354a3a47280 Takashi Iwai 2022-09-08  254  
-acd45c56790a3b Takashi Iwai 2022-08-04  255  	unode = list_first_entry(&udl->urbs.list, struct urb_node, entry);
+> While KUnit tests that cannot be built as a loadable module must depend
+> on "KUNIT=y", this is not true for modular tests, where it adds an
+> unnecessary limitation.
+>
+> Fix this by relaxing the dependency to "KUNIT".
+>
+> Fixes: fdefcbdd6f361841 ("Input: Add KUnit tests for some of the input core helper functions")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
 
-Use list_first_entry_or_null() if this list can be empty.
-
-ed9605a66b62f2 Takashi Iwai 2022-09-08  256  	list_del_init(&unode->entry);
-                                                               ^^^^^^^^^^^^
-dereference.
-
-5320918b9a8786 Dave Airlie  2010-12-15  257  	udl->urbs.available--;
-5320918b9a8786 Dave Airlie  2010-12-15  258  
-acd45c56790a3b Takashi Iwai 2022-08-04 @259  	return unode ? unode->urb : NULL;
-
-Returns from list_first_entry() should never be checked for NULL.
-
-5320918b9a8786 Dave Airlie  2010-12-15  260  }
+Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Best regards,
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
 
