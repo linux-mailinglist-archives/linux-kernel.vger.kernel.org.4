@@ -2,277 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 039566F4199
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 12:29:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E9076F419F
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 12:29:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234000AbjEBK3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 06:29:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35626 "EHLO
+        id S233001AbjEBK3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 06:29:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234030AbjEBK2V (ORCPT
+        with ESMTP id S233870AbjEBK2h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 06:28:21 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5549F59DA
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 03:27:06 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 13713222D0;
-        Tue,  2 May 2023 10:27:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1683023225; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nCyc2xZoho/avdYY6/wusEY7DFkr2ZdiyJYZWZEOf7Q=;
-        b=o6y5VzLkLzxIz5UpyRfV9Il3A5pFs6U45Bqqnz9LRJ/mIM3fTseyuvtgSUgGUouQIfUW9v
-        2wd4w3RdJdeBceBfxkZNphHNOl2wADoNN2cxajr2kKcY5tgRiYeDAuzaPbs/BxhTdUUx8Z
-        +8uacEceEVankuYXtQ5Y7kH8CEYPTuE=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 51D7F2C141;
-        Tue,  2 May 2023 10:27:04 +0000 (UTC)
-Date:   Tue, 2 May 2023 12:27:03 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     calumlikesapplepie@gmail.com
-Cc:     Chris Down <chris@chrisdown.name>, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>, kernel-team@fb.com,
-        mj@atrey.karlin.mff.cuni.cz
-Subject: Re: [PATCH v5 2/2] printk: console: Remove sysrq exception
-Message-ID: <ZFDld5skJaxxEuEu@alley>
-References: <cover.1682427812.git.chris@chrisdown.name>
- <4d3846bf2543de20aa071b2a12de924eea3e9574.1682427812.git.chris@chrisdown.name>
- <ZEp9dXwHCYNPidjC@alley>
- <9531fc38cfebb5b4587967f6ec73d983fd9325ce.camel@gmail.com>
+        Tue, 2 May 2023 06:28:37 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E0B30CA
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 03:28:06 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-95316faa3a8so723881566b.2
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 03:28:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683023285; x=1685615285;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Wqd93aNECfZIIUkAvlmaD8fXXrRjBdmwtaQb0yapHxI=;
+        b=c75B+WHrK3Ojj0utRU31iQI+Ebymm9/nKHez/ap/eyqo2vjpzr48Z2AkIQrheNYGQB
+         cBYYar+YRkF9XPsH4naZ3bPgPkya2uL4KZcZdi9t4QDjHAm6re3Gia87Te7beR10Q7F1
+         4oILqmpbzfZSQtM9I4QYjxaP3PFg9Jle+1b0UhEziAA3aXEDSuOtAwiIW61nRV1a2EWB
+         SiFNBOX3D2rtz9d68B4SHm6lY/MB8YOvX+YxG0HHPQsyWYR2WUEBmqUn0QZfjGw/Zlzy
+         xzHRTulGp6iQl2tjFiTSrI1+JEoWyvqY+FjfRRYQ6lyOoV2yaxlD7H4x91Twq56tswyX
+         /BiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683023285; x=1685615285;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wqd93aNECfZIIUkAvlmaD8fXXrRjBdmwtaQb0yapHxI=;
+        b=VGKKWpk9y4SdKrXqPhAyPtUNSBhiZUDt7U78m3rQiDyrAqEUQpzqLAzd+Sb6IOWSq/
+         VnOPbUrbJIku/OOLb2h20dxc4hDt2I3GZO1fgXegP8q1Cx/Hser+FRx5jsr6tpyIQjT5
+         SrurQCnPIWNbSptnWGhZwXrCpFU92M6qUinlHylAaKnnpVgzckUmGzEFjuydxk9Hdrrp
+         uUiifuDZiarShMPlu5lnr5ZwPWq7Wmy2xGN3W4Gv6dE2ljL0jt2QIopD6S/nJmm28sDE
+         2N4krb/SKmfQLMM1fP4re+M1xuoWV8XBlhPKaZxAphWo3C04u40IxHlcsN2CpN9SHlyb
+         ILHA==
+X-Gm-Message-State: AC+VfDwqNQ5y4o10MRYYPQfBh35mxd9cpmGgVvZY2z/ngdOoAMyTq3OA
+        jxD/tenYMDZN2qpFyxq7XDHTrQ==
+X-Google-Smtp-Source: ACHHUZ6xKE5OQ1aUkpe0sTeaLjdNFiuH8CIzUPZxWC1Eb+v23BRFtrYMccIop4BXahiHbZJDbGX4qg==
+X-Received: by 2002:a17:907:2d8f:b0:946:2fa6:3b85 with SMTP id gt15-20020a1709072d8f00b009462fa63b85mr16985359ejc.36.1683023284914;
+        Tue, 02 May 2023 03:28:04 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:bafd:1283:b136:5f6a? ([2a02:810d:15c0:828:bafd:1283:b136:5f6a])
+        by smtp.gmail.com with ESMTPSA id kw15-20020a170907770f00b0094f8ff0d899sm15618402ejc.45.2023.05.02.03.28.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 May 2023 03:28:04 -0700 (PDT)
+Message-ID: <04112f5c-231d-559a-39f9-d183e8985a87@linaro.org>
+Date:   Tue, 2 May 2023 12:28:02 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9531fc38cfebb5b4587967f6ec73d983fd9325ce.camel@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH net-next V7] dt-bindings: net: xlnx,axi-ethernet: convert
+ bindings document to yaml
+Content-Language: en-US
+To:     "Gaddam, Sarath Babu Naidu" <sarath.babu.naidu.gaddam@amd.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>
+Cc:     "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
+        "radhey.shyam.pandey@xilinx.com" <radhey.shyam.pandey@xilinx.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Sarangi, Anirudha" <anirudha.sarangi@amd.com>,
+        "Katakam, Harini" <harini.katakam@amd.com>,
+        "git (AMD-Xilinx)" <git@amd.com>
+References: <20230308061223.1358637-1-sarath.babu.naidu.gaddam@amd.com>
+ <5d074e6b-7fe1-ab7f-8690-cfb1bead6927@linaro.org>
+ <MW5PR12MB559880B0E220BDBD64E06D2487889@MW5PR12MB5598.namprd12.prod.outlook.com>
+ <MW5PR12MB5598678BB9AB6EC2FFC424F487889@MW5PR12MB5598.namprd12.prod.outlook.com>
+ <MW5PR12MB559857065E298E7A8485305D876F9@MW5PR12MB5598.namprd12.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <MW5PR12MB559857065E298E7A8485305D876F9@MW5PR12MB5598.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun 2023-04-30 19:00:42, calumlikesapplepie@gmail.com wrote:
-> > > --- a/drivers/tty/sysrq.c
-> > > +++ b/drivers/tty/sysrq.c
-> > > @@ -101,12 +102,26 @@ __setup("sysrq_always_enabled",
-> > > sysrq_always_enabled_setup);
-> > >  static void sysrq_handle_loglevel(int key)
-> > >  {
-> > >         int i;
-> > > +       int cookie;
-> > > +       int warned = 0;
-> > > +       struct console *con;
-> > >  
-> > >         i = key - '0';
-> > >         console_loglevel = CONSOLE_LOGLEVEL_DEFAULT;
-> > >         pr_info("Loglevel set to %d\n", i);
-> > >         console_loglevel = i;
-> > > +
-> > > +       cookie = console_srcu_read_lock();
-> > > +       for_each_console_srcu(con) {
-> > > +               if (!warned && per_console_loglevel_is_set(con)) {
-> > > +                       warned = 1;
-> > > +                       pr_warn("Overriding per-console loglevel
-> > > from sysrq\n");
-> > > +               }
-> > > +               con->level = -1;
-> > 
-> > Please, use WRITE_ONCE(con->level, -1) to make sure that it will be
-> > atomic.
-> > 
-> > READ_ONCE()/WRITE_ONCE() should always be used when the values
-> > are read/written using RCU synchronization. Otherwise the compiler
-> > might do some optimizations and read/write bytes separately.
-> > 
+On 02/05/2023 12:09, Gaddam, Sarath Babu Naidu wrote:
 > 
-> I would argue we remove this whole logic, and just go to a nice and
-> simple printk at KERN_EMERG priority.  Why add interactions with the
-> SRCU subsystem in code that we need to run even in the event of some
-> massive SRCU bug?  This code will be both infrequently tested and make
-> a bad day worse if it's problematic.
-
-Any bug in SRCU should not break this sysrq code.
-console_srcu_read_lock()/unlock() are non-blocking operations.
-
-The problem might be in a path calling synchronize_srcu()
-but it is not sysrq case, definitely.
-
-> > > +       }
-> > > +       console_srcu_read_unlock(cookie);
-> > >  }
-> > 
-> > Also we should safe/set/restore "ignore_per_console_loglevel"
-> > in __handle_sysrq(). It already does the same with
-> > "console_loglevel".
-> > 
-> > __handle_sysrq() increases the loglevel to show all
-> > messages printed by the sysrq handler on all consoles.
-> > Many handlers print some information that might be useful
-> > for debugging.
 > 
-> Actually, it doesn't!  Be kinda cool if it did, but there is a
-> legitimate reason for it not to: some sysrq messages, like the list of
-> all processes in the system, are extremely long, and so you might want
-> to print them to a file but not every console.  Instead, it prints
-> exactly one message with the increased log level visibility: an info-
-> priority message that states the "action message" of the sysrq, before
-> returning to the default log level.
-
-Ah, I forgot and misread the code. It really prints only the single
-line with updated console loglevel.
-
-> In other words: magic sysrq messages are printed to every console,
-> because they are deemed to be important emergencies that no user should
-> miss, even if they told the kernel it better be actively on fire if it
-> wants to talk. Cool.  However, they are not marked as emergency
-> priority.  Instead, they're marked as info priority, but do a dance
-> with kernel log level to ensure they get printed everywhere.
-
-I have different theory why it works this way, see below.
-
-
-> So I dove into git history, only to find that the log-level shifting code was
-> added with the initial import from bitkeeper.
-[...]
-> Sysrq.c does not exist in the previous kernel version.
->
-> https://mirrors.edge.kernel.org/pub/linux/kernel/v2.1/linux-2.1.43.tar.gz
-
-It seems that the original code actually printed all messages with
-the updated console_loglevel.
-
-It was modified to printk only the first line or help by:
-
-commit 2433aae9cbfbe77b5c5af11e6174d390e06053a6
-Author: linus1 <torvalds@athlon.transmeta.com>
-Date:   Sun Sep 23 11:00:00 2001 -0600
-
-    v2.4.10.1 -> v2.4.10.2
-    
-      - me/Al Viro: fix bdget() oops with block device modules that don't
-      clean up after they exit
-      - Alan Cox: continued merging (drivers, license tags)
-      - David Miller: sparc update, network fixes
-      - Christoph Hellwig: work around broken drivers that add a gendisk more
-      than once
-      - Jakub Jelinek: handle more ELF loading special cases
-      - Trond Myklebust: NFS client and lockd reclaimer cleanups/fixes
-      - Greg KH: USB updates
-      - Mikael Pettersson: sparate out local APIC / IO-APIC config options
-
-, see
-https://github.com/mpe/linux-fullhistory/commit/2433aae9cbfbe77b5c5af11e6174d390e06053a6
-
-I do not see any explanation for this. I guess that the too long
-output caused some problems.
-
-> No, I could not find the email where this patch was first submitted. 
-> It may not exist on the internet; it certainly doesn't in the parts
-> where Google looks.
+>> -----Original Message-----
+>> From: Gaddam, Sarath Babu Naidu
+>> <sarath.babu.naidu.gaddam@amd.com>
+>> Sent: Tuesday, March 28, 2023 9:31 PM
+>> To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>;
+>> davem@davemloft.net; edumazet@google.com; kuba@kernel.org;
+>> pabeni@redhat.com; robh+dt@kernel.org;
+>> krzysztof.kozlowski+dt@linaro.org
+>> Cc: michal.simek@xilinx.com; radhey.shyam.pandey@xilinx.com;
+>> netdev@vger.kernel.org; devicetree@vger.kernel.org; linux-arm-
+>> kernel@lists.infradead.org; linux-kernel@vger.kernel.org; Sarangi,
+>> Anirudha <anirudha.sarangi@amd.com>; Katakam, Harini
+>> <harini.katakam@amd.com>; git (AMD-Xilinx) <git@amd.com>
+>> Subject: RE: [PATCH net-next V7] dt-bindings: net: xlnx,axi-ethernet:
+>> convert bindings document to yaml
+>>
+>>
+>>
+>>> -----Original Message-----
+>>> From: Gaddam, Sarath Babu Naidu
+>>> <sarath.babu.naidu.gaddam@amd.com>
+>>> Sent: Tuesday, March 28, 2023 6:22 PM
+>>> To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>;
+>>> davem@davemloft.net; edumazet@google.com; kuba@kernel.org;
+>>> pabeni@redhat.com; robh+dt@kernel.org;
+>>> krzysztof.kozlowski+dt@linaro.org
+>>> Cc: michal.simek@xilinx.com; radhey.shyam.pandey@xilinx.com;
+>>> netdev@vger.kernel.org; devicetree@vger.kernel.org; linux-arm-
+>>> kernel@lists.infradead.org; linux-kernel@vger.kernel.org; Sarangi,
+>>> Anirudha <anirudha.sarangi@amd.com>; Katakam, Harini
+>>> <harini.katakam@amd.com>; git (AMD-Xilinx) <git@amd.com>
+>>> Subject: RE: [PATCH net-next V7] dt-bindings: net: xlnx,axi-ethernet:
+>>> convert bindings document to yaml
+>>>
+>>>
+>>>
+>>>> -----Original Message-----
+>>>> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>>> Sent: Tuesday, March 14, 2023 9:22 PM
+>>>> To: Gaddam, Sarath Babu Naidu
+>>>> <sarath.babu.naidu.gaddam@amd.com>; davem@davemloft.net;
+>>>> edumazet@google.com; kuba@kernel.org; pabeni@redhat.com;
+>>>> robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org
+>>>> Cc: michal.simek@xilinx.com; radhey.shyam.pandey@xilinx.com;
+>>>> netdev@vger.kernel.org; devicetree@vger.kernel.org; linux-arm-
+>>>> kernel@lists.infradead.org; linux-kernel@vger.kernel.org; Sarangi,
+>>>> Anirudha <anirudha.sarangi@amd.com>; Katakam, Harini
+>>>> <harini.katakam@amd.com>; git (AMD-Xilinx) <git@amd.com>
+>>>> Subject: Re: [PATCH net-next V7] dt-bindings: net: xlnx,axi-ethernet:
+>>>> convert bindings document to yaml
+>>>>
+>>>> On 08/03/2023 07:12, Sarath Babu Naidu Gaddam wrote:
+>>>>> From: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+>>>>>
+>>>>> Convert the bindings document for Xilinx AXI Ethernet Subsystem
+>>> from
+>>>>> txt to yaml. No changes to existing binding description.
+>>>>>
+>>>>
+>>>> (...)
+>>>>
+>>>>> +properties:
+>>>>> +  compatible:
+>>>>> +    enum:
+>>>>> +      - xlnx,axi-ethernet-1.00.a
+>>>>> +      - xlnx,axi-ethernet-1.01.a
+>>>>> +      - xlnx,axi-ethernet-2.01.a
+>>>>> +
+>>>>> +  reg:
+>>>>> +    description:
+>>>>> +      Address and length of the IO space, as well as the address
+>>>>> +      and length of the AXI DMA controller IO space, unless
+>>>>> +      axistream-connected is specified, in which case the reg
+>>>>> +      attribute of the node referenced by it is used.
+>>>>
+>>>> Did you test it with axistream-connected? The schema and description
+>>>> feel contradictory and tests would point the issue.
+>>>
+>>> Thanks for review comments. We tested with axistream-connected and
+>> did
+>>> not observe any errors. Do you anticipate any issues/errors ?
+>>
+>> Just to add more details, we have tested it using below dt node
+>>
+>> 	axienet@0 {
+>> 	        axistream-connected = <&dma>;
+>>                         reg = <0x00 0x80000000 0x00 0x40000>;
+>>                         compatible = "xlnx,axi-ethernet-2.01.a";
+>>                         clock-names = "s_axi_lite_clk\0axis_clk\0ref_clk";
+>>                         clocks = <0x03 0x47 0x03 0x47 0x18>;
+>>                         phy-mode = "sgmii";
+>>                         xlnx,rxcsum = <0x02>;
+>>                         xlnx,rxmem = <0x1000>;
+>>                         xlnx,txcsum = <0x02>;
+>>                         pcs-handle = <0x19>;
+>>                         phy-handle = <0x78>;
+>>                         dmas = <0x17 0x00 0x17 0x01>;
+>>                         dma-names = "tx_chan0\0rx_chan0";
+>>                         mac-address = [ff ff ff ff ff ff];
+>>                         managed = "in-band-status";
+>>                         phandle = <0x79>;
+>> 		mdio {
+>>                                 #address-cells = <0x01>;
+>>                                 #size-cells = <0x00>;
+>>
+>>                                 phy@0 {
+>>                                         compatible = "ethernet-phy-ieee802.3-c22";
+>>                                         reg = <0x00>;
+>>                                         phandle = <0x78>;
+>>                                 };
+>>
+>>                                 ethernet-phy@2 {
+>>                                         device_type = "ethernet-phy";
+>>                                         reg = <0x02>;
+>>                                         phandle = <0x19>;
+>>                                 };
+>>                         };
+>> 	};
+>> This DT node works with our board. "&dma" is the dma DT node  and to
+>> test the second case where dma  address and length  included  in the
+>> axienet reg's property as below "reg = <0x00 0x80000000 0x00 0x40000
+>> 0x0 0x80040000 0x0 0x1000>;"
+>>
+>> I did not observe any issue with above two cases. Used below command
+>> to validate the yaml using above DT node.
+>> make dtbs_check
+>> DT_SCHEMA_FILES=Documentation/devicetree/bindings/net/xlnx,axi-
+>> ethernet.yaml
+>>
 > 
-> Now, printk did support priority levels at this point: without the
-> emails discussing the patch, therefore, it's impossible to say why
-> Martin decided all those years ago to use this technique.  It's
-> probably a moot point anyways.
+> Hi Krzysztof,  Can you please comment If above explanation is acceptable ?
+> I will address remaining review comments and send the next version.
 
-I agree that it is pretty questionable. I am not sure about
-the exact motivation.
+The DTS you pointed obviously cannot work with the binding - it has
+obvious mistakes. Starting with phy-mode. So whatever you did, was not
+correct testing. Since nothing from your code is upstream, I cannot
+verify it.
 
-Well, sysrq is primary used when the system is not responsive.
-It is good to know that it is being handled by printing
-the first line at least. And it is handy when it does this
-out of box.
+Upstream your DTS first.
 
-IMHO, the debug output is not printed because it might be too
-much for slow consoles. It might actually be an advantage to
-distinguish the log level of the various messages. It allows
-to filter the messages on the console.
+Best regards,
+Krzysztof
 
-Note that the console loglevel could be set by sysrq-0 .. 9.
-
-One use case might be to print the debug messages into
-the internal log buffer and then trigger crash to
-produce crash dump. It would allow to see the log even
-when it is not shown to the console. And the log might
-be much easier way than digging the information from
-the various structures in the crashdump.
-
-> The fact that sysrq messages behave in this way isn't well documented,
-> and is definitely harmful.  Users might (rightfully) assume that if
-> they set the log level to 1, they will not see any messages that are
-> not of EMERGENCY or ALERT priority.
-
-sysrq does not know in which state the system is. It might be
-called even on a normally running system. Will the EMERGENCY
-or ALERT be correct in that case?
-
-> If your system experiences a sysrq, either you have some weird backup
-> software that is using the wrong interface
-
-Is there any backup system doing this? Or is it just some wild theory?
-
-> , or someone with extremely
-> privileged access to your system believes that there is something so
-> fundamentally wrong with your system that they need to bypass the
-> entirety of userspace and much of the kernel to get something done.
-
-My understanding is that sysrq is primary used when userspace
-does not longer work. IMHO, the original use-case was to
-trigger it from the keyboard.
-
-> Either of those situations are at least as important as a typo in a
-> password for sudo; which is given a CRITICAL priority.  
->
-> Lets not add a pile of code in order to maintain a behavior that no
-> sane userspace will be depending on, and which might even be causing
-> bugs in sane userspaces.  Like, for instance, systemd-journald deciding
-> not to write out journals when I instruct my kernel to do an emergency
-> sync.
-
-Honestly, I am not sure what would be your preferred behavior.
-It might be because I am not a native speaker. And the mail is
-really long.
-
-Is the problem that systemd-journald did not write the log?
-Or is the problem that it did eat 15% CPU?
-
-Eating 15% CPU looks like a bug. The fact that it did not write
-anything might be because of the OOM situation. Most things get
-blocked when there is no memory.
-
-What exact sysrq behavior would you suggest, please?
-
-
-> > 4. Add ignore_per_console_loglevel parameter, use it
-> >    in per_console_loglevel_is_set(), do_syslog(),
-> >    and __handle_sysrq().
-> 
-> In other words: sysrq's use of the printk subsystem in this way is
-> unique, and thus almost certainly a bad idea.
-
-sysrq is very old interface. Various people might expect different
-behavior depending on the use case. It might be impossible to
-make all people happy.
-
-Changing the default behavior a significant way might be seen as a regression.
-Especially, printing all messages with EMERGENCY loglevel looks like
-a pretty bad idea because it would prevent any filtering on the
-console level.
-
-My feeling is that your primary problem is somewhere else,
-systemd-journald or OOM behavior.
-
-Best Regards,
-Petr
