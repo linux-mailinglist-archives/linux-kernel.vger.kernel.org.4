@@ -2,75 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A5366F3F8C
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 10:48:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30A606F3F96
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 10:49:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233151AbjEBIsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 04:48:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50078 "EHLO
+        id S233983AbjEBItR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 04:49:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjEBIre (ORCPT
+        with ESMTP id S233585AbjEBIsp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 04:47:34 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA9255FF1
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 01:46:18 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-94f7a0818aeso573555266b.2
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 01:46:18 -0700 (PDT)
+        Tue, 2 May 2023 04:48:45 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07C14C2B
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 01:47:41 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-50bceaf07b8so1585414a12.3
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 01:47:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683017174; x=1685609174;
+        d=linaro.org; s=google; t=1683017260; x=1685609260;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Zw0ZB17Cle846OeF2XGobwdDDoFs+jkGlDpNy6ccfBw=;
-        b=iDuDax8k95dE5ZwEAuti1Tiz2XgW+YmLRi7TJV6jCaqw6lbFFO9fjLp6oxrXBWxMQK
-         nhx/hJgHeCCRbHlwcLNVWKdIn/o349sZaxUVo0Jb39jxZ/v2e/32dD1jz1tLUN4iB5bM
-         ACtECUEuqoQjKpee6Rr/QKYLdqJSLsPv8TU9WOuVZb2jrL20HGI2Opo29gohHQk9eB2q
-         uHAiXN4JL8xXHABVSam0uEsADNVwFJpHQgqrbQ4KE12Itn7qwJgPgvaJSz0nKHFHq4y+
-         X2PzwF36TUyNSJ8KeHMGSm63h1LpzqPYDc/Od/Zsjj2ipB7sOyzpv9FIShPC5yL6xt5p
-         lDog==
+        bh=sCflCmx5CoveGF/v/9+Y+5fkMVwZkJVQ2C0NfAviXuo=;
+        b=jfSZLnSQ7eGu+JLRyXFjIPROXJzAOkbNbawnzcyHatN1RxRnbULg5LNS9bPF4m+9VA
+         FdWsLO4VWRYqChh1hWTldOX5pfkl4riNFSSSWrI8Cn0b5SuDynZrZu13khAQ/NVQx6My
+         JVeLBMBlgvVdz2b2Z7Zt3fy8zqVOAYXnU3SjhekdwxngD4ZktHm+EoLDiHByfDfpL2Nd
+         ZVDH1oQdqsFUkwYyo8Fx63S12c8GDvh8w7+Rc+MK9rJ+84IAjB2HXNNUaZdYkK/JeL0D
+         HLvn4UI91CLASIecCEPcPw0mwvc0SRqTu1vUgEyfDiQB1rZzqdXVgmJTWkJF0LTW4IsH
+         yOlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683017174; x=1685609174;
+        d=1e100.net; s=20221208; t=1683017260; x=1685609260;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Zw0ZB17Cle846OeF2XGobwdDDoFs+jkGlDpNy6ccfBw=;
-        b=mACz97WwLIFLnJKvovtVZg8fGddSxFG93RGpHMfWT73/mhmiOnZ/HfIbgfmYO3/QmJ
-         1K82g+g936cgraIt8muP1Igw7WDvkvJT6LMfJ/Ump5ixLcYYVPfJexx1bOE/bLRsKo0L
-         rxowHaN8WpGLjGaPsUqjfmVMoVHn1915bYQZHVGcIpQwID3RqMG3eLYw/pE6UHkeLaBw
-         iv/8yROlcJfvnCKEDFiuEms3Mf5CblTwBV4rLVQFXUJe1z4JhkqTJAC6Zb05Nw8OOCdC
-         hLYfa2yZ3QfQxYifTmBI9kH8a0s62Y9K9GP6U/H7PLt6Derl8t9Fk46GKqt7EUNWDmLw
-         UuTQ==
-X-Gm-Message-State: AC+VfDwTsBVq41eSoAeIWSegn7BTo4FuvPuOFqsUUiBOxtnoU7RvMn6o
-        spGY4VmuP3k0sLqqOuRavwBVhg==
-X-Google-Smtp-Source: ACHHUZ4zLrbfZlvsZe1+vBIsZru/9xib2IJ9u2zGFrd/YXBeWhWgfNbG3TEWBxfrj1euW+12LrzS1g==
-X-Received: by 2002:a17:907:c21:b0:960:7643:c972 with SMTP id ga33-20020a1709070c2100b009607643c972mr16747769ejc.55.1683017173820;
-        Tue, 02 May 2023 01:46:13 -0700 (PDT)
+        bh=sCflCmx5CoveGF/v/9+Y+5fkMVwZkJVQ2C0NfAviXuo=;
+        b=EgHbG+YSmEZDDUCikyB71c5kr/7DBSoqwDWn27yOL0r8U5kqCeEd/VkXwGZhas5k5b
+         0vdOSJl03gsJ+B/AI5al6a/lIaXrfWjFLqv1e7L8n5xyVtr/hUEzWEClIWZ/86ICGeY1
+         T2VDkYvOmauhHFI4BqnrBDOwzUiGWqwYeOFfUyaiFnRkxSe2/cAwr0/p89DowC2gPcLY
+         +eUaTCRnK4DlKIN5BLGAjFOse6ME/6oKqhIkYFqxEEDmbXDVgsN+ZffGvGxbuQ3DtUnU
+         mVwr4RLxgN7Musmog8OUqNFRkuhxSzFMLUs5SASJxkTNycUCDB05xkW7JdmTE6peCa+I
+         b5fA==
+X-Gm-Message-State: AC+VfDy0g1aRJSeZERN5pKunsAXYjfoSTS6GEKOrYECPXmU2hWO0bi9V
+        Kt1uIsrjdqJfZ/Tu2kG045ISsA==
+X-Google-Smtp-Source: ACHHUZ63B0Ahr5OE/6ydoe7FknwEhIFEj7JmTTSg83HbaHGsBbokJ8+Be0zQlKhO6TeLKYXynAHw6Q==
+X-Received: by 2002:a05:6402:1285:b0:506:8838:45cc with SMTP id w5-20020a056402128500b00506883845ccmr7733735edv.6.1683017260075;
+        Tue, 02 May 2023 01:47:40 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:bafd:1283:b136:5f6a? ([2a02:810d:15c0:828:bafd:1283:b136:5f6a])
-        by smtp.gmail.com with ESMTPSA id qw35-20020a1709066a2300b0095ef7268ba9sm8444490ejc.41.2023.05.02.01.46.12
+        by smtp.gmail.com with ESMTPSA id m18-20020a056402051200b0050bcd197549sm887925edv.38.2023.05.02.01.47.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 May 2023 01:46:13 -0700 (PDT)
-Message-ID: <cfb17cbc-b8cf-c3ce-cf77-7e13e12c42eb@linaro.org>
-Date:   Tue, 2 May 2023 10:46:11 +0200
+        Tue, 02 May 2023 01:47:38 -0700 (PDT)
+Message-ID: <0f2dea5a-b6f7-b659-f41e-55d1777b4dd1@linaro.org>
+Date:   Tue, 2 May 2023 10:47:36 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.1
-Subject: Re: [PATCH v14 2/4] dt-bindings: i2c: Add Maxim MAX735x/MAX736x
- variants
+Subject: Re: [PATCH v7 1/9] dt-bindings: usb: qcom,dwc3: Add bindings for
+ SC8280 Multiport
 Content-Language: en-US
-To:     Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Peter Rosin <peda@axentia.se>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230501091552.847240-1-patrick.rudolph@9elements.com>
- <20230501091552.847240-3-patrick.rudolph@9elements.com>
- <fd20cad6-34f9-5f3c-abe7-cdf3a93d712c@axentia.se>
- <CALNFmy1gxUD-C62SH5GxA=fq8eKYxiOHe8wqXGsVdzsyiJc6Xg@mail.gmail.com>
+        Felipe Balbi <balbi@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
+        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
+        ahalaney@redhat.com, quic_shazhuss@quicinc.com
+References: <20230501143445.3851-1-quic_kriskura@quicinc.com>
+ <20230501143445.3851-2-quic_kriskura@quicinc.com>
+ <df24efb2-8279-ef15-a118-2a24885288c8@linaro.org>
+ <a001c9c0-f186-f125-daab-e646790badfe@quicinc.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CALNFmy1gxUD-C62SH5GxA=fq8eKYxiOHe8wqXGsVdzsyiJc6Xg@mail.gmail.com>
+In-Reply-To: <a001c9c0-f186-f125-daab-e646790badfe@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -83,18 +92,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/05/2023 08:52, Patrick Rudolph wrote:
-> Hi Peter,
-> it could indeed cause problems when VDD1 != VDD2 and at both needs to
-> be enabled.
-> The pca9846 datasheet seems to refer to VDD1 as VDD. Thus I could add
-> an optional "vdd2" regulator to the binding and driver.
+On 02/05/2023 10:35, Krishna Kurapati PSSNV wrote:
 > 
-> Please let me know if that's what you had in mind.
+> 
+> On 5/2/2023 1:18 PM, Krzysztof Kozlowski wrote:
+>> On 01/05/2023 16:34, Krishna Kurapati wrote:
+>>> Add the compatible string for SC8280 Multiport USB controller from
+>>> Qualcomm.
+>>>
+>>> There are 4 power event irq interrupts supported by this controller
+>>> (one for each port of multiport). Added all the 4 as non-optional
+>>> interrupts for SC8280XP-MP
+>>>
+>>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>>> ---
+>>>   .../devicetree/bindings/usb/qcom,dwc3.yaml    | 21 +++++++++++++++++++
+>>>   1 file changed, 21 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+>>> index d84281926f10..2c96da1ce5b8 100644
+>>> --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+>>> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+>>> @@ -26,6 +26,7 @@ properties:
+>>>             - qcom,sc7180-dwc3
+>>>             - qcom,sc7280-dwc3
+>>>             - qcom,sc8280xp-dwc3
+>>> +          - qcom,sc8280xp-dwc3-mp
+>>
+>> SC8280xp comes with two USB controllers: one single-port and one multi-port?
+> 
+> Hi Krzysztof,
+> 
+>    SC8280XP comes with 3 controllers. The first two are single port 
+> controller and the third one is a multiport controller. In DTSI:
+> usb_0 / usb1: have compatible set to : "qcom,sc8280xp-dwc3"
+> 
+> And multiport controller has it set to "qcom,sc8280xp-dwc3-mp"
 
-Don't top post.
+OK, then this looks fine.
 
-In such case vdd-supply should not be used for VDD2.
+Please add the compatible to existing allOf:if:then to constrain clocks
+and other pieces. If none of existing if:then: matches your case, add
+new one.
 
 Best regards,
 Krzysztof
