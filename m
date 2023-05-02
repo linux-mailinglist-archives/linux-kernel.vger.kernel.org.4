@@ -2,72 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D9716F4DB1
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 01:38:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 256806F4DB2
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 01:38:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbjEBXiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 19:38:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35950 "EHLO
+        id S229829AbjEBXiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 19:38:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjEBXiI (ORCPT
+        with ESMTP id S229544AbjEBXiJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 19:38:08 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1C4F3591;
-        Tue,  2 May 2023 16:38:06 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f00d41df22so722671e87.1;
-        Tue, 02 May 2023 16:38:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683070685; x=1685662685;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6OQxInFdspH8goMZiAQFIMKvayrdCwcSWW5RpkKMAVs=;
-        b=rxwYpimfPHfiaLUYvMZSGzeu4lLfKnxa5lLprs1ayA/SCOBpxHk76Z9C11I8IEn3dk
-         bvKtFzBQjuaO7sSg7VoB/a66Yx4qUm7oNzsQZg+NYWiHvaWHJzELhwr8BjrxRDuQYS5s
-         3vyaGyN4Cs+yK1CHUTrjIbxgiQKJuWLU9SLTAcYz7AESzItR112/2AAGDOxZkjLt+O1p
-         QYs0Y+oemevj0PRP29NY3VH7oUI25qZHohWrIHDxASGXkng+oLUCTGSksk6HINPZFBg8
-         PdWRd9bakYmdTgmieZUgVFLievAojX48jBlp21kqCQ6tAFERmuvgNGt/+57haHzg9mJ0
-         J+dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683070685; x=1685662685;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6OQxInFdspH8goMZiAQFIMKvayrdCwcSWW5RpkKMAVs=;
-        b=S9knXRWL64xvtEmtjf12waDRPwOCTmfoiFZkJwmurL6pdr1SM2Xsm+lsx1/eu1veIl
-         liWa2ieaCUJUosXPsgDmWydWCJHcpTcqAczyjk38M7nSfddWymLrc0onF+oPwTG1k5sH
-         Wv1kA8G5IE/BpCKti2g3hQRewtwKkHcuxz8G4/x707/kwoJrHk0/gIGuLigx2IQX1Wda
-         PTkNplfkUd1S28qyLztEe1pZLiJId3vny3+xMkUjxjz2CdtQ11DUk8QhFys1HF1zai5H
-         m/ntE/OOEMJm/HuaOb5c1RApeTzM4w2qMXJCcLdv6t92YZOs92jrmdpc+Wacm0grFWe6
-         OpFg==
-X-Gm-Message-State: AC+VfDx/PQPZrQdK/L6JbzcKq1sbABQsfVMpyhI5hB9laajdaPjZm/6O
-        dodklSFPRKYheJ2yiAaQQryCluRfLGi6bcPCs/Q=
-X-Google-Smtp-Source: ACHHUZ4Su0H7dh/63X/8lI+nOZziTVVMVxrq4qKi72IDv95LwiyE0a3aXRPOPr3H8pU/DCEKRH1kU/UtdNkbvhmMJNw=
-X-Received: by 2002:a05:6512:3f1c:b0:4ec:9d13:9d09 with SMTP id
- y28-20020a0565123f1c00b004ec9d139d09mr51247lfa.34.1683070684774; Tue, 02 May
- 2023 16:38:04 -0700 (PDT)
+        Tue, 2 May 2023 19:38:09 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7396E3594;
+        Tue,  2 May 2023 16:38:07 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 11EB51FD8E;
+        Tue,  2 May 2023 23:38:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1683070686; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FT4wWIFE9IpebB/66dG6JpLGUoIaaQlGJ8KBJQi7+T0=;
+        b=l5k/TelchZJdm/qSeeM4RDGq1WWPUF/0XIRJYvKp0I/akn1Xd8EHAJ2Wh2SvcHTB9ZZOF4
+        8yrjroNWQ7LV87PuOd/r2wVGA6pFr1feUUymzy2TjayxyTQeoH4riu7eEEBtqvM8ycVzzt
+        +SwTyS61Lp8vhgs2yJntQwhcr42RX7A=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1683070686;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FT4wWIFE9IpebB/66dG6JpLGUoIaaQlGJ8KBJQi7+T0=;
+        b=3jhnf0pMgzOGgpWWjzF7HUgqHr+xPS0oBIme40Mvp/M1kB/3bUkrjbcVKwzZqzZE9Dop7u
+        RVF/aYTpP6/jfHDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 69AB7139C3;
+        Tue,  2 May 2023 23:38:05 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 1iHWBt2eUWRjfwAAMHmgww
+        (envelope-from <mpdesouza@suse.com>); Tue, 02 May 2023 23:38:05 +0000
+Date:   Tue, 2 May 2023 20:38:01 -0300
+From:   Marcos Paulo de Souza <mpdesouza@suse.de>
+To:     Nicolai Stange <nstange@suse.de>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Marcos Paulo de Souza <mpdesouza@suse.com>,
+        Lukas Hruska <lhruska@suse.cz>
+Subject: Re: [PATCH v7 00/10] livepatch: klp-convert tool
+Message-ID: <dlivegt4sjm632m3sete73me3i2rceojfo4q4hji5ubvdcn2ly@f3tx6y5kqmkc>
+References: <20230306140824.3858543-1-joe.lawrence@redhat.com>
+ <20230314202356.kal22jracaw5442y@daedalus>
+ <ZBTNvEPrCcRj3F1C@redhat.com>
+ <20230317232010.7uq6tt4ty35eo5hm@treble>
+ <873556ag24.fsf@suse.de>
 MIME-Version: 1.0
-References: <20230424124852.12625-1-johan+linaro@kernel.org> <20230424124852.12625-2-johan+linaro@kernel.org>
-In-Reply-To: <20230424124852.12625-2-johan+linaro@kernel.org>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Tue, 2 May 2023 16:37:51 -0700
-Message-ID: <CABBYNZLBQjWVb=z8mffi4RmeKS-+RDLV+XF8bR2MiJ-ZOaFVHA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] Bluetooth: fix debugfs registration
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <873556ag24.fsf@suse.de>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,78 +81,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Johan,
+On Tue, Apr 11, 2023 at 12:06:43PM +0200, Nicolai Stange wrote:
+> Josh Poimboeuf <jpoimboe@kernel.org> writes:
+> 
+> > On Fri, Mar 17, 2023 at 04:29:48PM -0400, Joe Lawrence wrote:
+> >> Have you tried retrofitting klp-convert into any real-world livepatch?
+> >> I'm curious as to your observations on the overall experience, or
+> >> thoughts on the sympos annotation style noted above.
+> >
+> > On a related note, the patch creation process (of which klp-convert
+> > would be part of) needs to be documented.
+> >
+> > If I remember correctly, the proper safe usage of klp-convert requires a
+> > kernel built with -flive-patching, plus some scripting and/or manual
+> > processes.
+> 
+> Not always, I think: -flive-patching or IPA optimizations in general
+> aren't a concern in the context of data symbols. From a quick glance, it
+> seems like the selftests introduced as part of this patchset are
+> all restricted to this usecase.
 
-On Mon, Apr 24, 2023 at 5:50=E2=80=AFAM Johan Hovold <johan+linaro@kernel.o=
-rg> wrote:
->
-> Since commit ec6cef9cd98d ("Bluetooth: Fix SMP channel registration for
-> unconfigured controllers") the debugfs interface for unconfigured
-> controllers will be created when the controller is configured.
->
-> There is however currently nothing preventing a controller from being
-> configured multiple time (e.g. setting the device address using btmgmt)
-> which results in failed attempts to register the already registered
-> debugfs entries:
->
->         debugfs: File 'features' in directory 'hci0' already present!
->         debugfs: File 'manufacturer' in directory 'hci0' already present!
->         debugfs: File 'hci_version' in directory 'hci0' already present!
->         ...
->         debugfs: File 'quirk_simultaneous_discovery' in directory 'hci0' =
-already present!
->
-> Add a controller flag to avoid trying to register the debugfs interface
-> more than once.
->
-> Fixes: ec6cef9cd98d ("Bluetooth: Fix SMP channel registration for unconfi=
-gured controllers")
-> Cc: stable@vger.kernel.org      # 4.0
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->  include/net/bluetooth/hci.h | 1 +
->  net/bluetooth/hci_sync.c    | 3 +++
->  2 files changed, 4 insertions(+)
->
-> diff --git a/include/net/bluetooth/hci.h b/include/net/bluetooth/hci.h
-> index 400f8a7d0c3f..b8bca65bcd79 100644
-> --- a/include/net/bluetooth/hci.h
-> +++ b/include/net/bluetooth/hci.h
-> @@ -335,6 +335,7 @@ enum {
->  enum {
->         HCI_SETUP,
->         HCI_CONFIG,
-> +       HCI_DEBUGFS_CREATED,
->         HCI_AUTO_OFF,
->         HCI_RFKILLED,
->         HCI_MGMT,
-> diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
-> index 632be1267288..a8785126df75 100644
-> --- a/net/bluetooth/hci_sync.c
-> +++ b/net/bluetooth/hci_sync.c
-> @@ -4501,6 +4501,9 @@ static int hci_init_sync(struct hci_dev *hdev)
->             !hci_dev_test_flag(hdev, HCI_CONFIG))
->                 return 0;
->
-> +       if (hci_dev_test_and_set_flag(hdev, HCI_DEBUGFS_CREATED))
-> +               return 0;
+<snip>
 
-Can't we just use HCI_SETUP like we do with in create_basic:
+> What do you think, does it make sense to eventually have such a bare
+> minimum klp-convert merged in-tree, independently of the ongoing
+> discussion around the livepatch preparation processes, respectively (the
+> lack of) documentation around it? If yes, Lukas, now on CC, is
+> interested in this topic and would be willing to help out in any form
+> desired: either by contributing to Joe's work here or, if deemed more
+> feasible, to start out completely new from scratch -- dependent on your
+> opinion on the proposed, more minimal approach as well as on Joe's plans
+> around klp-convert.
+> 
+> Looking forward to hearing your feedback!
 
-    if (hci_dev_test_flag(hdev, HCI_SETUP))
-        hci_debugfs_create_basic(hdev);
+So guys, any feedback? Ping :)
 
-Actually we might as well move these checks directly inside the
-hci_debugfs function to make sure these only take effect during the
-setup/first init.
-
->         hci_debugfs_create_common(hdev);
->
->         if (lmp_bredr_capable(hdev))
-> --
-> 2.39.2
->
-
-
---=20
-Luiz Augusto von Dentz
+> 
+> Thanks,
+> 
+> Nicolai
+> 
+> (*) We've been experimenting with building the relocation records
+>     manually by various means, e.g. with GNU as' .reloc directive as an
+>     example, but this all turned out impractical for various
+>     reasons. Most noteworthy, because the records' offsets wouldn't get
+>     adjusted properly when linking AFAIR.
+> 
+> (**) by some other means than directly with kpatch-build
+> 
+> -- 
+> SUSE Software Solutions Germany GmbH, Frankenstraße 146, 90461 Nürnberg, Germany
+> GF: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
+> (HRB 36809, AG Nürnberg)
