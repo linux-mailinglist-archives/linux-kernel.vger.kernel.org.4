@@ -2,167 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3BC36F45A1
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 15:58:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29A5A6F45A4
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 15:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234423AbjEBN61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 09:58:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54714 "EHLO
+        id S234434AbjEBN6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 09:58:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233998AbjEBN6Y (ORCPT
+        with ESMTP id S234418AbjEBN60 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 09:58:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B6A180
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 06:57:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683035856;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BFKZppZmpvZn37NH6T+y3WQHfsa5GEZZMAq/yDgIM88=;
-        b=SBQeuithexmoHOGfYqdB3Xg9kiLElAIoKMqwWx/eC/2oz9SJlx4j8O659/dars36YDBLCn
-        WwffOlkt2KjmDQzY5rIO0qg5f40AtQmoKm6R1WKsaFTWaNvxpSTVPB8DAY7Y5EPtNMMwvw
-        bAnUuXmUyiMKRIl+sH/rHtY6DGmUGV4=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-412-tGLJ5JpVO6ypYOU_oiV1wg-1; Tue, 02 May 2023 09:57:34 -0400
-X-MC-Unique: tGLJ5JpVO6ypYOU_oiV1wg-1
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-3f187a7a626so11545945e9.0
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 06:57:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683035853; x=1685627853;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BFKZppZmpvZn37NH6T+y3WQHfsa5GEZZMAq/yDgIM88=;
-        b=NoqmdlQ35xDj/c1w4RlaTN8QCKOMgNWfwFhrKVJZoDHH/nWvifuBQk5g5Og6LVMg4F
-         1bBK80PR8V51hQplG9SGKGglIgebYfl+vNRJUkr3GTA6cNN5uIcTrilw1eGyLxZz7ppd
-         LKzipPuK7zSBTq+EfOLJDvtK4jf3CQJd3JLJWiqRXmaMkc/WFPFXWWbIzeG0H9GEf6T4
-         mf3H6I2V8Ivzcv9FYUIYCpugghelT59tY6maWBWEhBWlRa+sBvYlLRjbMMnr+d5G2Bk9
-         eglCOkwUCuzinYW2O8URmipaIKLXTqDmV8dTH3R3WWYdKeNjbxFWbVCC3OJRxsXmPkoa
-         SKMg==
-X-Gm-Message-State: AC+VfDyoEVCku19acS5315idnWPMZL1cm7AuKvhOGtI4EYkBjF5QfJs9
-        HjwJFEZLMYPHv28dmPC5Qk0u9912zC+c5Hsg2UgBwJDpcWdHcquaIZr5rSh8u1xAlG9TQ5RmH6K
-        IEzY2DeQml7k42a39kTMNdvSH
-X-Received: by 2002:a05:600c:3787:b0:3f1:9540:d5fe with SMTP id o7-20020a05600c378700b003f19540d5femr11730780wmr.21.1683035853688;
-        Tue, 02 May 2023 06:57:33 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4h+z02B2dd70XZKfnqJ5spQ0OHCTBKNIKA8Em6ryzkITiNSlT8DvH2K/BVtegqd1JIECFQbA==
-X-Received: by 2002:a05:600c:3787:b0:3f1:9540:d5fe with SMTP id o7-20020a05600c378700b003f19540d5femr11730752wmr.21.1683035853338;
-        Tue, 02 May 2023 06:57:33 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c700:2400:6b79:2aa:9602:7016? (p200300cbc70024006b7902aa96027016.dip0.t-ipconnect.de. [2003:cb:c700:2400:6b79:2aa:9602:7016])
-        by smtp.gmail.com with ESMTPSA id p8-20020a05600c358800b003f1738d0d13sm51382271wmq.1.2023.05.02.06.57.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 May 2023 06:57:32 -0700 (PDT)
-Message-ID: <1ffbbfb7-6bca-0ab0-1a96-9ca81d5fa373@redhat.com>
-Date:   Tue, 2 May 2023 15:57:30 +0200
+        Tue, 2 May 2023 09:58:26 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2054.outbound.protection.outlook.com [40.107.95.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477971992;
+        Tue,  2 May 2023 06:58:24 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=R9DefO2PaoIbMbtkoVBv31JNp0+7xiO2ozJrKndAQjIFXxJ5kZfxw0YqNzQ3TExx4XzP4HCZ/I11Lrybh4plDYI7sZ4bwZB++5OcgaoOB0rH27MK+NNeiL3zD5Gpj16yZHq+1dSQcmc5BQXQmZCOKR0KI3NZzXj7ydmbhwBA5ucKzlafn2F07D8Hndfm6KmE4d6Os+ciJ01uOG5Vr8nVWSIrOZV1zPn4RHuh/0G32IWJvkgGPhlXyatYPBiv+aJhE87NEBak3cSH+D9BeLqrGqxKeR82SnQHihlB/RMzv39Vod/HntA0w2LYkpXJIzKYVHBW6LAuapjLBxNGT8rQPw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Bh7pa9vhdO3G5dNtnLVwFGBTIMR3CqI79+Iuioj3BMU=;
+ b=DGpykMti/ZVZUFY41vp4Fu5bI4lWO0iJvtxnpGNTkjSJAbKzolrbn6aEcuiwjvBsyIpY6lRuAzPrblEjEbV8QIMHQRxXgcaNCeSaDlROimyxYfqcdxQnB8yQ2XTDc5e3BWVb6rJTS037dbrb5uvFFxWHtV0knXLuBwW/MtBWe1kphpQx/1d7hJ51EMQDTg9o+M2lhElkJjU545ne5plehVSocrq8j+ISvQ+nQSb+OMHAGLsBKJEH3J+xPvSlPopar1R9udQqC77Gx0fGVSX0AYYXBi/HuR/8E+JYVfca1k//qhmHkVdYxY9cnvGqohED+po59AQ5gF86lctO3zepfg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Bh7pa9vhdO3G5dNtnLVwFGBTIMR3CqI79+Iuioj3BMU=;
+ b=oAwsIBJJRbF7/f54DHs/HQp8rMVdDi4odfFSF70d2gMnXKplfQOIjDrs2Xo4uqwYrIj6PzUXjPqKm7f8L1heYPL1aceD6sRLVZWOxnAfdEBbJBLH4PV+wTaae1lSQQT/BIRtme74kkvasXaxZCc7VoyFQSH6qrdy4NbNjKpMqQk=
+Received: from MW4PR03CA0177.namprd03.prod.outlook.com (2603:10b6:303:8d::32)
+ by BL1PR12MB5319.namprd12.prod.outlook.com (2603:10b6:208:317::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.31; Tue, 2 May
+ 2023 13:58:20 +0000
+Received: from CO1NAM11FT017.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:8d:cafe::44) by MW4PR03CA0177.outlook.office365.com
+ (2603:10b6:303:8d::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.31 via Frontend
+ Transport; Tue, 2 May 2023 13:58:20 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT017.mail.protection.outlook.com (10.13.175.108) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6363.20 via Frontend Transport; Tue, 2 May 2023 13:58:20 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 2 May
+ 2023 08:58:18 -0500
+From:   Michal Simek <michal.simek@amd.com>
+To:     <linux-kernel@vger.kernel.org>, <monstr@monstr.eu>,
+        <michal.simek@xilinx.com>, <git@xilinx.com>
+CC:     Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: [PATCH] arm64: zynqmp: Change zc1275 board name to zcu1275
+Date:   Tue, 2 May 2023 15:58:15 +0200
+Message-ID: <79bc2c83929be5536cbf10883519e82cead21dce.1683035888.git.michal.simek@amd.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Matthew Rosato <mjrosato@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Mika Penttila <mpenttil@redhat.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Theodore Ts'o <tytso@mit.edu>, Peter Xu <peterx@redhat.com>
-References: <dee4f4ad6532b0f94d073da263526de334d5d7e0.1682981880.git.lstoakes@gmail.com>
- <fbad9e18-f727-9703-33cf-545a2d33af76@linux.ibm.com>
- <7d56b424-ba79-4b21-b02c-c89705533852@lucifer.local>
- <a6bb0334-9aba-9fd8-6a9a-9d4a931b6da2@linux.ibm.com>
- <ZFEL20GQdomXGxko@nvidia.com>
- <c4f790fb-b18a-341a-6965-455163ec06d1@redhat.com>
- <ZFER5ROgCUyywvfe@nvidia.com>
- <ce3aa7b9-723c-6ad3-3f03-3f1736e1c253@redhat.com>
- <ff99f2d8-804d-924f-3c60-b342ffc2173c@linux.ibm.com>
- <ad60d5d2-cfdf-df9f-aef1-7a0d3facbece@redhat.com>
- <ZFEVQmFGL3GxZMaf@nvidia.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v6 3/3] mm/gup: disallow FOLL_LONGTERM GUP-fast writing to
- file-backed mappings
-In-Reply-To: <ZFEVQmFGL3GxZMaf@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT017:EE_|BL1PR12MB5319:EE_
+X-MS-Office365-Filtering-Correlation-Id: 110dcc5e-4889-4496-18bd-08db4b154998
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: OCNG9mBiyB6yCRJzRFZwr/20wnnJMdrc7Mbus5qkqLm0gH3gzXRkCk5jDZ15QN72S8ZRJ4GicqjsZ5TtpB22drOxA/wqyS4AR03+dmc0HVJRmbeO+3A+1XuqDGgzUglbu/2BHS5ubJQnBc9yUIcETFgdQKFKcMb9is3teCL275Jw7Iji/KfTTF2DggWluynBy+al0piLq3CeJNYBKXL/txIau5oywp+PMIdXyAmwp3f/H2lw7ZOdYWOvH1gQ5cCBW17zhvvnJBDM+psqT5+6fVyH8IOJrCZ/C6/si+iKB8O1FKrnPcPE95llU2WQTqV1towKHUCK000tjCVTbuRoKvxy7CvftK+3a3NCxEzT6KMk5VPnAf3BHbP33uN7op/VQQl47cEbwQeIzZbUQsn0PsBvtOplizCqxx7IpLkm2Fzkx1o+X3LGFi4XH868Ttl3q15ADDMjZ26rgsx31aRlTGt7E1NVWAQmzAORJUUyB/oTeKsFP1JslpmXM9w5l69F7rGU6a4OaxGRFqX05EOXg8Ki3BD2nsPEFMEKW4GA4IaW/qPGpKb6IkAytN4ed8lgGbRztN4pOp5hCER9+YgvJrpWLf1nDs8sU6Z3uyWnXo5CkEFOQ5vKsqZFnI+125OkNvXn+Nq403o3NBmuY3/lyl0bexaovcedrLXk3tk/SBaVrTY9OTwzRvU1FYURQHIytbsFzFmrt1WegNgkZH8sQiRtVOxR3b9vSCClzswi/NnyZdXJrdrsk860Cs3eXXxz
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(396003)(39860400002)(136003)(451199021)(46966006)(40470700004)(36840700001)(86362001)(36756003)(966005)(110136005)(4326008)(316002)(70586007)(70206006)(6666004)(54906003)(41300700001)(8676002)(40480700001)(82310400005)(5660300002)(2616005)(2906002)(44832011)(8936002)(36860700001)(478600001)(82740400003)(81166007)(356005)(16526019)(186003)(26005)(47076005)(83380400001)(336012)(426003)(40460700003)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2023 13:58:20.2439
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 110dcc5e-4889-4496-18bd-08db4b154998
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT017.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5319
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02.05.23 15:50, Jason Gunthorpe wrote:
-> On Tue, May 02, 2023 at 03:47:43PM +0200, David Hildenbrand wrote:
->>> Eventually we want to implement a mechanism where we can dynamically pin in response to RPCIT.
->>
->> Okay, so IIRC we'll fail starting the domain early, that's good. And if we
->> pin all guest memory (instead of small pieces dynamically), there is little
->> existing use for file-backed RAM in such zPCI configurations (because memory
->> cannot be reclaimed either way if it's all pinned), so likely there are no
->> real existing users.
-> 
-> Right, this is VFIO, the physical HW can't tolerate not having pinned
-> memory, so something somewhere is always pinning it.
-> 
-> Which, again, makes it weird/wrong that this KVM code is pinning it
-> again :\
+Internal board zc1275 was released also to public which ends up with adding
+missing 'u' to board name. Reflect this change by renaming DT files.
 
-IIUC, that pinning is not for ordinary IOMMU / KVM memory access. It's 
-for passthrough of (adapter) interrupts.
+Signed-off-by: Michal Simek <michal.simek@amd.com>
+---
 
-I have to speculate, but I guess for hardware to forward interrupts to 
-the VM, it has to pin the special guest memory page that will receive 
-the indications, to then configure (interrupt) hardware to target the 
-interrupt indications to that special guest page (using a host physical 
-address).
 
+For more information about board please take a look at:
+https://www.xilinx.com/products/boards-and-kits/zcu1275.html
+
+---
+ Documentation/devicetree/bindings/arm/xilinx.yaml           | 6 +++---
+ arch/arm64/boot/dts/xilinx/Makefile                         | 2 +-
+ .../{zynqmp-zc1275-revA.dts => zynqmp-zcu1275-revA.dts}     | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
+ rename arch/arm64/boot/dts/xilinx/{zynqmp-zc1275-revA.dts => zynqmp-zcu1275-revA.dts} (87%)
+
+diff --git a/Documentation/devicetree/bindings/arm/xilinx.yaml b/Documentation/devicetree/bindings/arm/xilinx.yaml
+index 969cfe6dc434..b3071d10ea65 100644
+--- a/Documentation/devicetree/bindings/arm/xilinx.yaml
++++ b/Documentation/devicetree/bindings/arm/xilinx.yaml
+@@ -61,10 +61,10 @@ properties:
+           - const: xlnx,zynqmp-zc1254
+           - const: xlnx,zynqmp
+ 
+-      - description: Xilinx internal board zc1275
++      - description: Xilinx evaluation board zcu1275
+         items:
+-          - const: xlnx,zynqmp-zc1275-revA
+-          - const: xlnx,zynqmp-zc1275
++          - const: xlnx,zynqmp-zcu1275-revA
++          - const: xlnx,zynqmp-zcu1275
+           - const: xlnx,zynqmp
+ 
+       - description: Xilinx 96boards compatible board zcu100
+diff --git a/arch/arm64/boot/dts/xilinx/Makefile b/arch/arm64/boot/dts/xilinx/Makefile
+index 686d50752b00..5e40c0b4fa0a 100644
+--- a/arch/arm64/boot/dts/xilinx/Makefile
++++ b/arch/arm64/boot/dts/xilinx/Makefile
+@@ -2,7 +2,6 @@
+ dtb-$(CONFIG_ARCH_ZYNQMP) += avnet-ultra96-rev1.dtb
+ dtb-$(CONFIG_ARCH_ZYNQMP) += zynqmp-zc1232-revA.dtb
+ dtb-$(CONFIG_ARCH_ZYNQMP) += zynqmp-zc1254-revA.dtb
+-dtb-$(CONFIG_ARCH_ZYNQMP) += zynqmp-zc1275-revA.dtb
+ dtb-$(CONFIG_ARCH_ZYNQMP) += zynqmp-zc1751-xm015-dc1.dtb
+ dtb-$(CONFIG_ARCH_ZYNQMP) += zynqmp-zc1751-xm016-dc2.dtb
+ dtb-$(CONFIG_ARCH_ZYNQMP) += zynqmp-zc1751-xm017-dc3.dtb
+@@ -17,6 +16,7 @@ dtb-$(CONFIG_ARCH_ZYNQMP) += zynqmp-zcu104-revA.dtb
+ dtb-$(CONFIG_ARCH_ZYNQMP) += zynqmp-zcu104-revC.dtb
+ dtb-$(CONFIG_ARCH_ZYNQMP) += zynqmp-zcu106-revA.dtb
+ dtb-$(CONFIG_ARCH_ZYNQMP) += zynqmp-zcu111-revA.dtb
++dtb-$(CONFIG_ARCH_ZYNQMP) += zynqmp-zcu1275-revA.dtb
+ 
+ dtb-$(CONFIG_ARCH_ZYNQMP) += zynqmp-sm-k26-revA.dtb
+ dtb-$(CONFIG_ARCH_ZYNQMP) += zynqmp-smk-k26-revA.dtb
+diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zc1275-revA.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zcu1275-revA.dts
+similarity index 87%
+rename from arch/arm64/boot/dts/xilinx/zynqmp-zc1275-revA.dts
+rename to arch/arm64/boot/dts/xilinx/zynqmp-zcu1275-revA.dts
+index 676b8550a625..ad641e01ac7b 100644
+--- a/arch/arm64/boot/dts/xilinx/zynqmp-zc1275-revA.dts
++++ b/arch/arm64/boot/dts/xilinx/zynqmp-zcu1275-revA.dts
+@@ -14,8 +14,8 @@
+ #include "zynqmp-clk-ccf.dtsi"
+ 
+ / {
+-	model = "ZynqMP ZC1275 RevA";
+-	compatible = "xlnx,zynqmp-zc1275-revA", "xlnx,zynqmp-zc1275", "xlnx,zynqmp";
++	model = "ZynqMP ZCU1275 RevA";
++	compatible = "xlnx,zynqmp-zcu1275-revA", "xlnx,zynqmp-zcu1275", "xlnx,zynqmp";
+ 
+ 	aliases {
+ 		serial0 = &uart0;
 -- 
-Thanks,
-
-David / dhildenb
+2.36.1
 
