@@ -2,117 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA7CF6F4DDE
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 01:52:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76DB76F4DE7
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 01:56:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbjEBXwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 19:52:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39748 "EHLO
+        id S230019AbjEBX4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 19:56:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjEBXwP (ORCPT
+        with ESMTP id S229556AbjEBX4J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 19:52:15 -0400
-Received: from mp-relay-02.fibernetics.ca (mp-relay-02.fibernetics.ca [208.85.217.137])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB85030E4;
-        Tue,  2 May 2023 16:52:13 -0700 (PDT)
-Received: from mailpool-fe-01.fibernetics.ca (mailpool-fe-01.fibernetics.ca [208.85.217.144])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mp-relay-02.fibernetics.ca (Postfix) with ESMTPS id 7630B75874;
-        Tue,  2 May 2023 23:52:12 +0000 (UTC)
-Received: from localhost (mailpool-mx-01.fibernetics.ca [208.85.217.140])
-        by mailpool-fe-01.fibernetics.ca (Postfix) with ESMTP id 641F63364A;
-        Tue,  2 May 2023 23:52:12 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at 
-X-Spam-Score: -0.199
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-Received: from mailpool-fe-01.fibernetics.ca ([208.85.217.144])
-        by localhost (mail-mx-01.fibernetics.ca [208.85.217.140]) (amavisd-new, port 10024)
-        with ESMTP id nH8Ha2tdXozh; Tue,  2 May 2023 23:52:12 +0000 (UTC)
-Received: from [192.168.48.17] (host-192.252-165-26.dyn.295.ca [192.252.165.26])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dgilbert@interlog.com)
-        by mail.ca.inter.net (Postfix) with ESMTPSA id 6F18D33649;
-        Tue,  2 May 2023 23:52:11 +0000 (UTC)
-Message-ID: <585941de-3e17-d5aa-311b-17773c6fbf1f@interlog.com>
-Date:   Tue, 2 May 2023 19:52:10 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Reply-To: dgilbert@interlog.com
-Subject: Re: [PATCH v2 0/6] scsi:scsi_debug: Add error injection for single
- device
-To:     Wenchao Hao <haowenchao2@huawei.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     linfeilong@huawei.com, louhongxiang@huawei.com
-References: <20230428013320.347050-1-haowenchao2@huawei.com>
-Content-Language: en-CA
-From:   Douglas Gilbert <dgilbert@interlog.com>
-In-Reply-To: <20230428013320.347050-1-haowenchao2@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Tue, 2 May 2023 19:56:09 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 876BA2680
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 16:56:06 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-b9968fb4a8cso8280751276.0
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 16:56:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683071765; x=1685663765;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Rm6kQ1RPOx/wKEQB/Wr7FhtY/sYHUQli9SfLyNwvoqI=;
+        b=uld2PwCrMn+4Zi5vIkxMBtu7gCaRSzRQfkoghLE434QzitskKqtSqPR4P7SDJjYTWT
+         YDaTn99Hu63b5Q3sBMCMhh5S0Dl5gK5yHH6bxjmGPf/XmEUG1oqp19/fO/4zeyF1W+r5
+         t5AjPjQRwn55Oe+h09+nxyP3KkDlqI0mzpA/difTAhShjIsfmWQGH9A2h60vzrFn6Ybs
+         ozXNeb3UpB5kggiT5mEQhrFgxpNfa37n4ydUSFU0WPewwjhmldheAk5wezK37UBLv/qB
+         a88RjweKfn6lynAg/tWRRIW76S7u9xQvheBv38LXWdv07U5IMEo7aJRQUx28g9h7UAmu
+         wdYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683071765; x=1685663765;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Rm6kQ1RPOx/wKEQB/Wr7FhtY/sYHUQli9SfLyNwvoqI=;
+        b=OutpjOWZMCGkErAuUFK7LIz+7FKKZBokHYagR2Dhmu9khAgQWOuWyopRNNa+NXomzQ
+         AvrRMNDLGmNTo5qsyQgWamWBpynFAfnCc0Q5LldIZM2gN+OFlKtttmIX2JXNYLYOEDQO
+         I4ji0OTIkPCnGUpVk/J6kEznngIquCnnVKvlNPU5wlGCbuLXFM+slDF7nD/LbE45SYEy
+         Nvt8Kv1kYkZDWMf2Re9pMf7GDHL/T+cwAm0POhdndik8F51uQdymzFtw/A1pUgbRzAU+
+         BO7SDnC2hvUTVoeGVWli7raLft9Z/dD58MxQEjAlVnGCmg7H4/gv7EtZqYNm2AsSDI/U
+         CUFA==
+X-Gm-Message-State: AC+VfDxK47qlqUfy6aZiK6Mn26ijezp0Nq3FlYwmWzSFtJKxxIAdgUrO
+        D5RgIrHO/45ET4WhcBiv7gkYqRikES1fg5qPpw==
+X-Google-Smtp-Source: ACHHUZ7l2Zyul066g8u0v9VFJHFuMm0nrivTqlRpLBeSkQrDswmmTDc47Xoso9TMDtxKFKBZC3JCAlwv721Bc0rhqQ==
+X-Received: from ackerleytng-ctop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:13f8])
+ (user=ackerleytng job=sendgmr) by 2002:a25:3794:0:b0:b9e:6d41:54c4 with SMTP
+ id e142-20020a253794000000b00b9e6d4154c4mr1685511yba.8.1683071765688; Tue, 02
+ May 2023 16:56:05 -0700 (PDT)
+Date:   Tue,  2 May 2023 23:56:01 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
+Message-ID: <cover.1683069252.git.ackerleytng@google.com>
+Subject: [PATCH 0/2] Fix fallocate error in hugetlbfs when fallocating again
+From:   Ackerley Tng <ackerleytng@google.com>
+To:     akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        mike.kravetz@oracle.com, muchun.song@linux.dev,
+        willy@infradead.org, sidhartha.kumar@oracle.com,
+        jhubbard@nvidia.com
+Cc:     vannapurve@google.com, erdemaktas@google.com,
+        Ackerley Tng <ackerleytng@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-27 21:33, Wenchao Hao wrote:
-> The original error injection mechanism was based on scsi_host which
-> could not inject fault for a single SCSI device.
-> 
-> This patchset provides the ability to inject errors for a single
-> SCSI device. Now we supports inject timeout errors, queuecommand
-> errors, and hostbyte, driverbyte, statusbyte, and sense data for
-> specific SCSI Command.
-> 
-> The first two patch add an debugfs interface to add and inquiry single
-> device's error injection info; the third patch defined how to remove
-> an injection which has been added. The following 3 patches use the
-> injection info and generate the related error type.
-> 
-> V2:
->    - Using debugfs rather than sysfs attribute interface to manage error
-> 
-> Wenchao Hao (6):
->    scsi:scsi_debug: create scsi_debug directory in the debugfs filesystem
->    scsi:scsi_debug: Add interface to manage single device's error inject
->    scsi:scsi_debug: Define grammar to remove added error injection
->    scsi:scsi_debug: timeout command if the error is injected
->    scsi:scsi_debug: Return failed value if the error is injected
->    scsi:scsi_debug: set command's result and sense data if the error is
->      injected
-> 
->   drivers/scsi/scsi_debug.c | 318 ++++++++++++++++++++++++++++++++++++++
->   1 file changed, 318 insertions(+)
+When fallocate() is used twice on the same offset, it should succeed
+and return 0 to userspace. The second fallocate() in
+test_multiple_fallocates() in the following code will return -EEXIST
+for hugetlbfs, but not tmpfs/shmem.
 
-Been playing around with this patchset and it seems to work as expected. Took me
-a while to work my way through interface description at the beginning of
-   [PATCH v2 2/6] scsi:scsi_debug: Add interface to manage single device's error 
-inject
+#define _GNU_SOURCE
+#include <fcntl.h>
+#include <linux/falloc.h>
+#include <linux/memfd.h>
+#include <sys/mman.h>
+#include <stdio.h>
+#include <unistd.h>
 
-so I cut and paste it into my scsi_debug.html page and did some work on it, see:
-    https://doug-gilbert.github.io/scsi_debug.html
+void test_multiple_fallocates(unsigned int flags)
+{
+	int fd = memfd_create("foo", flags);
 
-There is a new chapter titled: Per device error injection
-Kept the ASCII art so it could be ported back to [PATCH v2 2/6]'s description
-if Wenchao is agreeable.
+	if (fallocate(fd, 0, 0, 0x1000))
+		printf("error with fallocate %m\n");
 
-So for the whole series:
-   Acked-by: Douglas Gilbert <dgilbert@interlog.com>
+	if (fallocate(fd, 0, 0, 0x1000))
+		printf("error with second fallocate %m\n");
+}
 
+int main(void) {
 
-One suggestion for later work: perhaps the Command opcode field could be
-expanded to: x8[,x16] so optionally a Service Action (in hex) could be
-given (e.g. '9e,10' for the READ CAPACITY (16) command).
+	printf("Testing tmpfs:\n");
+	test_multiple_fallocates(0);
 
-Doug Gilbert
+	printf("Testing hugetlbfs:\n");
+	test_multiple_fallocates(MFD_HUGETLB | MFD_HUGE_2MB);
 
+}
+
+This patch series replaces page_cache_next_miss(), used to determine a
+page cache hit, with a more direct filemap_has_folio() (a new
+function).
+
+I hope that this is also the desired refactoring as mentioned in [1].
+
+[1] https://lore.kernel.org/all/Y8oqEOICcNV762IA@casper.infradead.org/
+
+---
+
+Ackerley Tng (2):
+  mm: filemap: Add filemap_has_folio function
+  fs: hugetlbfs: Fix logic to skip allocation on hit in page cache
+
+ fs/hugetlbfs/inode.c    |  6 +-----
+ include/linux/pagemap.h |  1 +
+ mm/filemap.c            | 17 +++++++++++++++++
+ 3 files changed, 19 insertions(+), 5 deletions(-)
+
+--
+2.40.1.495.gc816e09b53d-goog
