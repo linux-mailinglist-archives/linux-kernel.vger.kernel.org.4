@@ -2,194 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BCAB6F4B2A
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 22:17:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4B7D6F4B2E
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 22:18:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbjEBURH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 16:17:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50050 "EHLO
+        id S229617AbjEBUSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 16:18:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjEBURE (ORCPT
+        with ESMTP id S229461AbjEBUR7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 16:17:04 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B2F21FE3
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 13:16:50 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id e9e14a558f8ab-3311833ba3dso153055ab.0
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 13:16:50 -0700 (PDT)
+        Tue, 2 May 2023 16:17:59 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0B082681
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 13:17:40 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so9066059a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 13:17:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683058610; x=1685650610;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Rld5ybTKQ6TnPbSfs5BNPMPd6l7llksJVQ7eLenv4TY=;
-        b=hcUfAjSFSEHsDi5Xg7PaULZGb74SHlouCuI7bp5i8RylqblFX+wGW3P697iZfG42kR
-         jPyF+9wT6l28WsF3+oiqXxX6vJqBt1XJKpqj4pguoZamuJ5rXESZco+UL0Y4vBNWwlu7
-         jFIPH3/Fqo+dmFIN4aOvn1E4JsjZBmAdX8gpcaYHea4F339SSnJ3WmjLtdV/rJZdP6En
-         HKnvCMP7B1Qdd8Dg0CEsrEV/MHWLWlAw8mG9YpsRK+FSVVGT0g8mMgDu21/kKQGe4nHO
-         ZL2DKN3v2kqOtS/h0A2huEr4QZWRpTiXmIL0Z8jsbOUFO0mIY7bGkIqWh/JUF4UsbXAg
-         9d0Q==
+        d=linaro.org; s=google; t=1683058659; x=1685650659;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AkGULLyqF8CC2Bp6dAKyvnTxkPczQ+NJ3Bki8TOIHmw=;
+        b=EcF2SP95UU/BhrdQNCz/A2zrvTL2Tda6Lq1WpiPhMiUhlVa2laHS7RftgJifUWyWAt
+         KOL+0CrXzcsAkxschr/TxSFNmgTspOUdrwoYogekNJt/8owN6UI4dvmkLBuACC57+fCe
+         H3/xnvAqcjD/ftNvZpOpCKwn91SVve7sSNPORfrjJUjT6h3tLyCq7+VD1LxK6EOhbdzP
+         EvapYtN49f7iSQDxH7jlfD/tLM8Pezx9Msu7QXB7PcdioxpIIiKFvHq0C0w6u3IRYllp
+         ZTUsTIyAbGPqz9ArmklWlHP8hXHL5hwHAxDPmPHRQAG5uGCWEZ/JSGZGa0uuW7j5NNCJ
+         Vl4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683058610; x=1685650610;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Rld5ybTKQ6TnPbSfs5BNPMPd6l7llksJVQ7eLenv4TY=;
-        b=T7T6jxoFBDhb+ByQQG1zUZuiRn/i1xKFy2ZuiMjijDE4xJsIIy8rfJWzgV18xV/qsz
-         3HjLEREyF94eFdQH6zdf2rdGtRuUoVG5WTJ0M3WasW3urlESfwNyzVe4lNpKwAdW0tDW
-         AmY5uRp1WbBYGimcNaTHFr/8xw644vR9oo7Du3AwHCyaKLZJDMK4EU4JHme0tX1mUXCp
-         dRAe2YcWorUsU3pzkhxpWFR/tCB9fbHb3c4MSzWRGOK18gcb9CDIN/nHkBh6dmQXClgr
-         el9k8Fkvl6ngc9QXBtPrBUL1wOZXVrCbP/hJWeNeiHuzWNTKTOPbyjplESSJ0tI6AY1o
-         rHwA==
-X-Gm-Message-State: AC+VfDzSzNASrlblxQuvesX58k3QoA1pdVxdjuD9T+eD8wpvkpDd1IxK
-        7HpUtFY2xbt3RpOSaMIrMqi2aj02WkFIVseiKcYjbQ==
-X-Google-Smtp-Source: ACHHUZ5TeqJNjsrq9npV6a4cuF9kIkKkKG7+MLjwQOL/lHh4sbdYaXRcgHLsZuOMMAaRKkiGkXdF7muyXn0BWvYj+UI=
-X-Received: by 2002:a05:6e02:1c0e:b0:32f:7703:63bb with SMTP id
- l14-20020a056e021c0e00b0032f770363bbmr46519ilh.19.1683058609755; Tue, 02 May
- 2023 13:16:49 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683058659; x=1685650659;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AkGULLyqF8CC2Bp6dAKyvnTxkPczQ+NJ3Bki8TOIHmw=;
+        b=iLIiPIX0+UT3z7GKURuMymoeKTYd5+6D8QcCrMMV9QOGegzqD2KSIZMs4n953GP2jT
+         pcd/qxhUytl8yWNFy+0N6rZyxbrfYgrBQ0G88QBcPikbvMvMV+XRV9jrubpRmuGYGnoI
+         SfxBTdwgsZs+yOO1Nd13POEFdtyepgyw8gpP86bHzRqdtGuNU6NcIqOYScp3nhHoWWZU
+         Rxb6LTZW+Qu1AcF8MzvnZSga82T6PRP7tuD6IToHGjO2U28z2Wk3Em5gGaVnu06bdx3q
+         Rq6tXrusUw36OL/d8ChTMQIux9G1SKsAPSvmo6UEcm8ervUahpRjlzgB0TMDWYzg6dqf
+         fQLQ==
+X-Gm-Message-State: AC+VfDzK8U3Vuu8svPp5TEzGXBc1oX+c92ZJQBTMR92Eh34/DSguF1RJ
+        RP6ewMeOAAk9Hf1+pWsIwmFjZKzYPnKr3rdCslG40Q==
+X-Google-Smtp-Source: ACHHUZ7zGxsr0DvWKldqTBk/QCFwJTKsjmi/LPUolHgqBsjr3CFTWtkh536KoXTyH1F/P/6HHjoqoA==
+X-Received: by 2002:a17:907:c28:b0:957:802:497d with SMTP id ga40-20020a1709070c2800b009570802497dmr1261507ejc.9.1683058659249;
+        Tue, 02 May 2023 13:17:39 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:37be:eda5:e303:19e0? ([2a02:810d:15c0:828:37be:eda5:e303:19e0])
+        by smtp.gmail.com with ESMTPSA id kw15-20020a170907770f00b0094f8ff0d899sm16154857ejc.45.2023.05.02.13.17.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 May 2023 13:17:38 -0700 (PDT)
+Message-ID: <f5431f96-0b3b-e2f8-2136-862ed529987c@linaro.org>
+Date:   Tue, 2 May 2023 22:17:37 +0200
 MIME-Version: 1.0
-References: <20230429053506.1962559-1-irogers@google.com> <20230429053506.1962559-33-irogers@google.com>
- <a5153c87-044a-655d-acb4-aff9c33ab686@amd.com>
-In-Reply-To: <a5153c87-044a-655d-acb4-aff9c33ab686@amd.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 2 May 2023 13:16:38 -0700
-Message-ID: <CAP-5=fVBB2b8WdUhcsPph=W5YzgdXcj13qcOxEGh5+h918whFQ@mail.gmail.com>
-Subject: Re: [PATCH v3 32/46] perf stat: Make cputype filter generic
-To:     Ravi Bangoria <ravi.bangoria@amd.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Ahmad Yasin <ahmad.yasin@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Stephane Eranian <eranian@google.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Samantha Alt <samantha.alt@intel.com>,
-        Caleb Biggers <caleb.biggers@intel.com>,
-        Weilin Wang <weilin.wang@intel.com>,
-        Edward Baker <edward.baker@intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        Rob Herring <robh@kernel.org>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Sumanth Korikkar <sumanthk@linux.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Leo Yan <leo.yan@linaro.org>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        James Clark <james.clark@arm.com>,
-        Suzuki Poulouse <suzuki.poulose@arm.com>,
-        Kang Minchul <tegongkang@gmail.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH] dt-bindings: spi: zynqmp-qspi: Add power-domains and
+ iommus properties
+Content-Language: en-US
+To:     Michal Simek <michal.simek@amd.com>, linux-kernel@vger.kernel.org,
+        monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org
+References: <87563d1a920458dff134bb92b27645471f4d9fca.1683035258.git.michal.simek@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <87563d1a920458dff134bb92b27645471f4d9fca.1683035258.git.michal.simek@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 2, 2023 at 3:52=E2=80=AFAM Ravi Bangoria <ravi.bangoria@amd.com=
-> wrote:
->
-> On 29-Apr-23 11:04 AM, Ian Rogers wrote:
-> > Rather than limit the --cputype argument for "perf list" and "perf
-> > stat" to hybrid PMUs of just cpu_atom and cpu_core, allow any PMU.
->
-> I've couple of doubts:
->
-> 1. Can you please explain intention to do this esp for perf list. Since, =
-IIUC,
->    `perf list --unit` option provide the same functionality.
->
-> 2. Since we are already specifying pmu name for non-standerd/arch-specifi=
-c
->    events like `pmu/attributes/`, I'm not sure where `perf stat --cputype=
-=3Dpmu`
->    is useful. Can you please explain perf stat usability aspect for non-h=
-ybrid
->    pmus.
->
-> 3. What am I missing here:
->
->    $ sudo ./perf stat --cputype=3Damd_df -e amd_l3/event=3D0x4,umask=3D0x=
-ff/ -C 0 -- sleep 1
->     Performance counter stats for 'CPU(s) 0':
->
->            108,267      amd_l3/event=3D0x4,umask=3D0xff/
->
->        1.061290167 seconds time elapsed
->
-> 3. Also, IMHO, using --cputype option to specify _pmu name_ is bit odd.
->
-> >
-> > Note, that if cpu_atom isn't mounted but a filter of cpu_atom is
-> > requested, then this will now fail. As such a filter would never
-> > succeed, no events can come from that unmounted PMU, then this
-> > behavior could never have been useful and failing is clearer.
->
-> I'm hitting a segfault if I use non-existing pmu:
->
-> $ sudo ./perf list --cputype=3Drandom
-> WARNING: cputype is not supported!
-> Segmentation fault
->
->
-> > @@ -443,8 +443,8 @@ int cmd_list(int argc, const char **argv)
-> >                           "Print information on the perf event names an=
-d expressions used internally by events."),
-> >               OPT_BOOLEAN(0, "deprecated", &default_ps.deprecated,
-> >                           "Print deprecated events."),
-> > -             OPT_STRING(0, "cputype", &hybrid_name, "hybrid cpu type",
-> > -                        "Limit PMU or metric printing to the given hyb=
-rid PMU (e.g. core or atom)."),
-> > +             OPT_STRING(0, "cputype", &cputype, "cpu type",
-> > +                        "Limit PMU or metric printing to the given PMU=
- (e.g. cpu, core or atom)."),
->
-> man perf-list does not describe --cputype. I think we should add it as pa=
-rt
-> of this patch?
->
-> Similarly, man perf-stat also needs to be updated.
+On 02/05/2023 15:47, Michal Simek wrote:
+> Describe optional power-domain property to fix dts_check warnings. The
+> similar change was done by commit 0aec3958c88f ("dt-bindings: gpio: zynq:
+> Add power-domains").
+> And also by commit 84fa8f159022 ("dt-bindings: arm: coresight-tmc: Add
+> 'iommu' property") for iommus property.
 
-Ok, these changes are just keeping existing functionality. I don't
-disagree with making these changes but I think we can follow up with
-them. Or probably just deprecate the option.
+I am a bit pedantic, but you cannot use such arguments for this change.
+Just because some other unrelated device (Coresight or GPIO controller)
+has IOMMU does not mean your device has it as well. You know, some
+device has reset-gpios, so shall you add it here?
 
-> > +const struct perf_pmu *perf_pmus__pmu_for_pmu_filter(const char *str)
-> > +{
-> > +     struct perf_pmu *pmu =3D NULL;
-> > +
-> > +     while ((pmu =3D perf_pmu__scan(pmu)) !=3D NULL) {
-> > +             if (!strcmp(pmu->name, str))
-> > +                     return pmu;
-> > +             /* Ignore "uncore_" prefix. */
-> > +             if (!strncmp(pmu->name, "uncore_", 7)) {
-> > +                     if (!strcmp(pmu->name + 7, str))
-> > +                             return pmu;
->
-> Any specific reason to ignore "uncore_"? IMHO, ignoring prefix of some
-> pmus and not of others is bit confusing for naive user.
+The argument could be something around: The foo bar uses IOMMU and
+belongs to a power domain.
 
-It is trying to be consistent with the event parser:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/too=
-ls/perf/util/parse-events.y#n326
-where uncore is consumed. Fun fact, as numbers are consumed after a
-PMU name and the underscore is optional, i915 as a PMU can be matched
-in parsing with a PMU name of just "i".
+Please re-phrase the commit msg.
 
-Thanks,
-Ian
+
+Best regards,
+Krzysztof
+
