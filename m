@@ -2,113 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D43616F3CE1
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 07:07:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08D596F3CEF
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 07:32:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233271AbjEBFHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 01:07:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50762 "EHLO
+        id S233481AbjEBFcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 01:32:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231808AbjEBFHF (ORCPT
+        with ESMTP id S231610AbjEBFcD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 01:07:05 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EEEE30F3;
-        Mon,  1 May 2023 22:07:04 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f18dacd392so18697845e9.0;
-        Mon, 01 May 2023 22:07:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20221208; t=1683004023; x=1685596023;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZAJMVIT/KHYFMrxlleemTF6g4qpV2R5xLi0xj6uNV8M=;
-        b=k4GtJq2oDk2Kknrh8Vg/oGIRFE4n7FPwb8a3PgRwTISa7UR9v3wyXQwCWFkqTZvuB5
-         9hOryxxKz4ScHPSSTxkTF6oapgCU9tA+tMMM7/U8LMnP6KOAoLGa2jj4G0yFwU63pRaw
-         W2zsTwHwq1TgvBCs7KdhH65SEoG6bn1ZDH8TU2KMZQHskJ66LQ+EsaHBQpIHxh4dk9kb
-         YY6/kkk9CSBIcIiYo8ZtnDQHKKThBG5VeJ0XfAJubYvlHV7F+DVmKWwFM/kk71F1KLY8
-         IN7XZFsgLm9y+bLmCr5D/tpZixus2yJYRqggEmHyHidFwd8xZJxyZRozW9DJXG8aZlX+
-         Uwsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683004023; x=1685596023;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZAJMVIT/KHYFMrxlleemTF6g4qpV2R5xLi0xj6uNV8M=;
-        b=YQ49sasyFfq2i1fy+caZVNH02jCx0o+0hjQL1HnPB1ZKPqfDHEp/AwYCIIhMRbpiVe
-         AczCq7tmM7yxY/e6+EmDE1NeV1m+wCvZMB3Kmvtm3v1S6nBbimFcSEr5/7PxW/IZOvTi
-         0Ig3VuvgciYL1gWK0HTZLyfWDCiws7HYB3cKIRFxacanXZdvPO72HXm5WUVQxG2uKzFA
-         aLsUNspelbUXmFmFwvfFHvlzTyJE7SerH82owqsQnRC3vcv24LXpHRmFR7yF7DNeLNN8
-         LTOCUwcwDgUU6yYa59m1W9G6hS6THLhoIn1XaCX05QWgucGBJkUiD3U7ZQltvZmHB1Ls
-         J0lw==
-X-Gm-Message-State: AC+VfDw8e1Hu1wpYhLVK2rrrvaUNYsWOxFWbX3bnzZt9YgOdk6pjZ5Lp
-        UjkJKklFzAg6uWZbQyr9Sn4=
-X-Google-Smtp-Source: ACHHUZ6p/Mo4FTEB1faetZlKlr+HXytds5dbqVKzhrYQRF3MlUvOXV7Pzc0/U7dTu1Yi4xRQUFQBHg==
-X-Received: by 2002:a5d:610e:0:b0:306:2a1a:d265 with SMTP id v14-20020a5d610e000000b003062a1ad265mr4555819wrt.58.1683004022917;
-        Mon, 01 May 2023 22:07:02 -0700 (PDT)
-Received: from [192.168.1.10] (95f1f744.skybroadband.com. [149.241.247.68])
-        by smtp.googlemail.com with ESMTPSA id m7-20020adfe0c7000000b003048477729asm19746994wri.81.2023.05.01.22.07.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 May 2023 22:07:02 -0700 (PDT)
-Message-ID: <8b59fa15-e027-ae40-1bcc-fdf7c4c21c56@googlemail.com>
-Date:   Tue, 2 May 2023 06:07:00 +0100
+        Tue, 2 May 2023 01:32:03 -0400
+Received: from n169-114.mail.139.com (n169-114.mail.139.com [120.232.169.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 809F62D4B
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 22:32:00 -0700 (PDT)
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM:                                                                                        
+X-RM-SPAM-FLAG: 00000000
+Received: from localhost.localdomain (unknown[183.194.159.16])
+        by rmsmtp-lg-appmail-38-12052 (RichMail) with SMTP id 2f146450a03fece-e31a3;
+        Tue, 02 May 2023 13:31:45 +0800 (CST)
+X-RM-TRANSID: 2f146450a03fece-e31a3
+From:   Shenghao Ding <13916275206@139.com>
+To:     devicetree@vger.kernel.org
+Cc:     krzysztof.kozlowski+dt@linaro.org, broonie@kernel.org,
+        lgirdwood@gmail.com, kevin-lu@ti.com, shenghao-ding@ti.com,
+        alsa-devel@alsa-project.org, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org, x1077012@ti.com, peeyush@ti.com,
+        navada@ti.com, gentuser@gmail.com,
+        Shenghao Ding <13916275206@139.com>
+Subject: [PATCH v1 2/5] ASoC: dt-bindings: Add tas2781 amplifier
+Date:   Tue,  2 May 2023 13:31:35 +0800
+Message-Id: <20230502053135.27019-1-13916275206@139.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: Linux 6.3.1
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, stable@vger.kernel.org, lwn@lwn.net,
-        jslaby@suse.cz
-References: <2023050123-resubmit-silica-ac32@gregkh>
- <c2ac55a4-aaf5-2f49-be08-d326fe0c17f8@googlemail.com>
- <2023050202-slouchy-princess-e7dd@gregkh>
- <2023050225-brutishly-enlarging-c54e@gregkh>
-Content-Language: en-GB
-From:   Chris Clayton <chris2553@googlemail.com>
-In-Reply-To: <2023050225-brutishly-enlarging-c54e@gregkh>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Create tas2781.yaml for tas2781 driver.
+
+Signed-off-by: Shenghao Ding <13916275206@139.com>
+
+---
+Changes in v1:
+ - Submit together with tas2781 codec driver code
+ Changes to be committed:
+	new file:   Documentation/devicetree/bindings/sound/ti,tas2781.yaml
+---
+ .../devicetree/bindings/sound/ti,tas2781.yaml | 84 +++++++++++++++++++
+ 1 file changed, 84 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/sound/ti,tas2781.yaml
+
+diff --git a/Documentation/devicetree/bindings/sound/ti,tas2781.yaml b/Documentation/devicetree/bindings/sound/ti,tas2781.yaml
+new file mode 100644
+index 000000000000..028151c388bf
+--- /dev/null
++++ b/Documentation/devicetree/bindings/sound/ti,tas2781.yaml
+@@ -0,0 +1,84 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright (C) 2022 - 2023 Texas Instruments Incorporated
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/sound/ti,tas2781.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Texas Instruments TAS2781 SmartAMP
++
++maintainers:
++  - Shenghao Ding <shenghao-ding@ti.com>
++
++description:
++  The TAS2781 is a mono, digital input Class-D audio amplifier
++  optimized for efficiently driving high peak power into small
++  loudspeakers. Integrated an on-chip DSP supports Texas Instruments
++  Smart Amp speaker protection algorithm. The integrated speaker
++  voltage and current sense provides for real time
++  monitoring of loudspeaker behavior.
++
++properties:
++  compatible:
++    enum:
++      - ti,tas2781
++
++  reg:
++    description: I2C address of the primary device.
++    items:
++      minimum: 0x38
++      maximum: 0x40
++
++  reset-gpios:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  ti,audio-slots:
++    $ref: /schemas/types.yaml#/definitions/uint32-array
++    minItems: 1
++    maxItems: 4
++    description:
++      I2C address of the device for different audio slots,
++      useless in mono case.
++
++  ti,broadcast-addr:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description:
++      Generic I2C address for all the tas2781 devices in
++      purpose of I2C broadcast during the multi-device
++      writes, useless in mono case.
++
++  '#sound-dai-cells':
++    const: 1
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++   #include <dt-bindings/gpio/gpio.h>
++   i2c {
++     /* example with quad support, such as tablet or pad device */
++     #address-cells = <1>;
++     #size-cells = <0>;
++     quad: codec@38 {
++       compatible = "ti,tas2781";
++       reg = <0x38>;
++       #sound-dai-cells = <1>;
++       reset-gpios = < &gpio1 10 GPIO_ACTIVE_HIGH >;
++       interrupt-parent = <&gpio1>;
++       interrupts = <15>;
++       ti,audio-slots = < 0x38 /* topleft-channel */
++                          0x39 /* topright-channel */
++                          0x3a /* bottomleft-channel */
++                          0x3b /* bottomright-channel */
++                        >;
++       ti,broadcast-addr = <0x40>;
++     };
++   };
++...
+-- 
+2.34.1
 
 
-On 02/05/2023 00:43, Greg Kroah-Hartman wrote:
-> On Tue, May 02, 2023 at 06:40:03AM +0900, Greg Kroah-Hartman wrote:
->> On Mon, May 01, 2023 at 07:22:56AM +0100, Chris Clayton wrote:
->>> 6.3.1 FTBFS thusly:
->>
->> What is "FTBFS"?
->>
-
-Fails to build from source
-
->>> drivers/net/wireguard/timers.c: In function 'wg_expired_retransmit_handshake':
->>> <command-line>: error: format '%d' expects argument of type 'int', but argument 6 has type 'long unsigned int'
->>> [-Werror=format=]
->>> <command-line>: note: in expansion of macro 'KBUILD_MODNAME'
->>> ./include/linux/dynamic_debug.h:223:29: note: in expansion of macro 'pr_fmt'
->>>   223 |                 func(&id, ##__VA_ARGS__);                       \
->>>       |                             ^~~~~~~~~~~
->>
->> <snip>
->>
->>> There's a patch to drivers/net/wireguard/timers.c that fixes these errors and you can find it at
->>> 2d4ee16d969c97996e80e4c9cb6de0acaff22c9f in Linus' tree.
->>
->> Thanks for this report, we'll queue it up soon.
-> 
-> Odd, that commit is in 6.2 already, so how are you applying this to
-> 6.3.y?
-> 
-> Confused,
-> 
-> greg k-h
