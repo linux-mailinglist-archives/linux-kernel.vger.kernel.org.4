@@ -2,107 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEBC16F4435
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 14:50:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE8746F443E
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 14:50:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234159AbjEBMuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 08:50:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34558 "EHLO
+        id S234264AbjEBMui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 08:50:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234305AbjEBMt6 (ORCPT
+        with ESMTP id S234164AbjEBMuf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 08:49:58 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C3D5252;
-        Tue,  2 May 2023 05:49:52 -0700 (PDT)
-Received: from [192.168.1.90] (unknown [188.27.34.213])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Tue, 2 May 2023 08:50:35 -0400
+X-Greylist: delayed 161 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 02 May 2023 05:50:21 PDT
+Received: from bee.tesarici.cz (bee.tesarici.cz [IPv6:2a03:3b40:fe:2d4::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC4AC59E7;
+        Tue,  2 May 2023 05:50:20 -0700 (PDT)
+Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 837F46602121;
-        Tue,  2 May 2023 13:49:50 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1683031791;
-        bh=1SBHvxpiiP3vO8FDcUxSdgWcAeK19kTJhEfXoSg3Bz8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=lVX3TX5nOP8T7DAc8DnTniZmRwQkSATanSOambI0L6/HJZCEogsIFtChW2g8t24bU
-         8KHdn8iVUlYv9kBuDsz0gI1UzjMBwHtUsvO+mhG5O+5g+aZnJNXJssb6WiPYtN47Rm
-         f0jJjslUabz66qmeaGQgvzakgmbGyIq+tRd2BTaaaV2Pb/jynGbtfzOQm7bCV9mZMh
-         /sDwpb07Ht05krpJVuU8BW4Jyk4Pey1OoFD/dDTVyefXM+0xA3Ehq4FG484w3MlLxj
-         cGWVHbZh+SvUHODfwkwJbGf2nvOORl6R+nVjv54/gBNzHRTDpawHaL6KKRponweb6J
-         Sm9+7MvfEGnAg==
-Message-ID: <70d71afc-5191-2995-9975-7a2871c226aa@collabora.com>
-Date:   Tue, 2 May 2023 15:49:47 +0300
+        by bee.tesarici.cz (Postfix) with ESMTPSA id 11C1F14D391;
+        Tue,  2 May 2023 14:50:16 +0200 (CEST)
+Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
+        t=1683031817; bh=7Jx1V6HXo4qXXJ5gzNb9WgNbQl2iBAjQx92+mbN9mcI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=LdYat1pxvtqHcsyEsr0xSmJ80I9UQQAdwuWNsIlmRhcDv+RP+JqFNQRT+nYc9G7uP
+         dXPpgO79Zyo5DI2T6iRH+RieaWMoILvCo+t0ga1IpmjPazX2dudxt9IHa/Q1eVW8Rh
+         npJAxuinpIG3jaAdl3urTCU5KvJB8xckJUgufKO4oRJxNsCTGApQSCpiehfAf9XW2g
+         55qZn04dxosxPP6JwtR/XcAxhlpiWK6SFfOBMCcvmnxf+hMduxm0neIM19D6X3o7mp
+         /hFiYxv9D35v34aGYGGZPSYkcyumwUEB7pS25ZX4SffsQ4FOhXKIFk8+GhJJd8+bil
+         9cEFx4TVmGUMg==
+Date:   Tue, 2 May 2023 14:50:14 +0200
+From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
+        mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
+        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
+        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
+        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
+        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
+        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
+        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
+        tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
+        paulmck@kernel.org, pasha.tatashin@soleen.com,
+        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
+        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
+        ndesaulniers@google.com, gregkh@linuxfoundation.org,
+        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+        glider@google.com, elver@google.com, dvyukov@google.com,
+        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
+        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
+Subject: Re: [PATCH 09/40] mm: introduce __GFP_NO_OBJ_EXT flag to
+ selectively prevent slabobj_ext creation
+Message-ID: <20230502145014.24b28e64@meshulam.tesarici.cz>
+In-Reply-To: <20230501165450.15352-10-surenb@google.com>
+References: <20230501165450.15352-1-surenb@google.com>
+        <20230501165450.15352-10-surenb@google.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 3/8] nvmem: rockchip-otp: Add clocks and reg_read to
- rockchip_data
-Content-Language: en-US
-To:     =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Kever Yang <kever.yang@rock-chips.com>,
-        Finley Xiao <finley.xiao@rock-chips.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-References: <20230501084401.765169-1-cristian.ciocaltea@collabora.com>
- <20230501084401.765169-4-cristian.ciocaltea@collabora.com>
- <6064284.AJdgDx1Vlc@diego>
-From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-In-Reply-To: <6064284.AJdgDx1Vlc@diego>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/2/23 11:47, Heiko Stübner wrote:
-> Am Montag, 1. Mai 2023, 10:43:55 CEST schrieb Cristian Ciocaltea:
->> In preparation to support new Rockchip OTP memory devices with different
->> clock configurations and register layout, extend rockchip_data struct
->> with the related members: clocks, num_clks, reg_read.
->>
->> Additionally, to avoid managing redundant driver data, drop num_clks
->> member from rockchip_otp struct and update all references to point to
->> the equivalent member in rockchip_data.
->>
->> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
->> ---
->>  drivers/nvmem/rockchip-otp.c | 79 ++++++++++++++++++++++--------------
->>  1 file changed, 49 insertions(+), 30 deletions(-)
->>
->> diff --git a/drivers/nvmem/rockchip-otp.c b/drivers/nvmem/rockchip-otp.c
->> index 9f53bcce2f87..a5b234e60735 100644
->> --- a/drivers/nvmem/rockchip-otp.c
->> +++ b/drivers/nvmem/rockchip-otp.c
->> @@ -54,21 +54,19 @@
->>  
->>  #define OTPC_TIMEOUT			10000
->>  
->> +struct rockchip_data {
->> +	int size;
->> +	const char * const *clocks;
->> +	int num_clks;
+On Mon,  1 May 2023 09:54:19 -0700
+Suren Baghdasaryan <surenb@google.com> wrote:
+
+> Introduce __GFP_NO_OBJ_EXT flag in order to prevent recursive allocations
+> when allocating slabobj_ext on a slab.
 > 
-> nit: might be nice to use either "clocks" or "clks" as part for both names
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> ---
+>  include/linux/gfp_types.h | 12 ++++++++++--
+>  1 file changed, 10 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/linux/gfp_types.h b/include/linux/gfp_types.h
+> index 6583a58670c5..aab1959130f9 100644
+> --- a/include/linux/gfp_types.h
+> +++ b/include/linux/gfp_types.h
+> @@ -53,8 +53,13 @@ typedef unsigned int __bitwise gfp_t;
+>  #define ___GFP_SKIP_ZERO	0
+>  #define ___GFP_SKIP_KASAN	0
+>  #endif
+> +#ifdef CONFIG_SLAB_OBJ_EXT
+> +#define ___GFP_NO_OBJ_EXT       0x4000000u
+> +#else
+> +#define ___GFP_NO_OBJ_EXT       0
+> +#endif
+>  #ifdef CONFIG_LOCKDEP
+> -#define ___GFP_NOLOCKDEP	0x4000000u
+> +#define ___GFP_NOLOCKDEP	0x8000000u
 
-Indeed, will handle this in v2.
+So now we have two flags that depend on config options, but the first
+one is always allocated in fact. I wonder if you could use an enum to
+let the compiler allocate bits. Something similar to what Muchun Song
+did with section flags.
 
-> other than that
-> Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+See commit ed7802dd48f7a507213cbb95bb4c6f1fe134eb5d for reference.
 
-Thanks,
-Cristian
+>  #else
+>  #define ___GFP_NOLOCKDEP	0
+>  #endif
+> @@ -99,12 +104,15 @@ typedef unsigned int __bitwise gfp_t;
+>   * node with no fallbacks or placement policy enforcements.
+>   *
+>   * %__GFP_ACCOUNT causes the allocation to be accounted to kmemcg.
+> + *
+> + * %__GFP_NO_OBJ_EXT causes slab allocation to have no object
+> extension. */
+>  #define __GFP_RECLAIMABLE ((__force gfp_t)___GFP_RECLAIMABLE)
+>  #define __GFP_WRITE	((__force gfp_t)___GFP_WRITE)
+>  #define __GFP_HARDWALL   ((__force gfp_t)___GFP_HARDWALL)
+>  #define __GFP_THISNODE	((__force gfp_t)___GFP_THISNODE)
+>  #define __GFP_ACCOUNT	((__force gfp_t)___GFP_ACCOUNT)
+> +#define __GFP_NO_OBJ_EXT   ((__force gfp_t)___GFP_NO_OBJ_EXT)
+>  
+>  /**
+>   * DOC: Watermark modifiers
+> @@ -249,7 +257,7 @@ typedef unsigned int __bitwise gfp_t;
+>  #define __GFP_NOLOCKDEP ((__force gfp_t)___GFP_NOLOCKDEP)
+>  
+>  /* Room for N __GFP_FOO bits */
+> -#define __GFP_BITS_SHIFT (26 + IS_ENABLED(CONFIG_LOCKDEP))
+> +#define __GFP_BITS_SHIFT (27 + IS_ENABLED(CONFIG_LOCKDEP))
+
+If the above suggestion is implemented, this could be changed to
+something like __GFP_LAST_BIT (the enum's last identifier).
+
+Petr T
