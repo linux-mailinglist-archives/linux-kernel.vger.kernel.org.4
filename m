@@ -2,124 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 304636F3BF2
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 03:51:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 461A56F3BF3
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 03:52:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233294AbjEBBvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 21:51:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37948 "EHLO
+        id S233311AbjEBBwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 21:52:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231608AbjEBBvO (ORCPT
+        with ESMTP id S230008AbjEBBw3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 21:51:14 -0400
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3698A30CF;
-        Mon,  1 May 2023 18:51:13 -0700 (PDT)
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-3062678861fso1564775f8f.0;
-        Mon, 01 May 2023 18:51:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682992271; x=1685584271;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TNyrpU7tvbNFLr00b0UkT0J+lENE3vJhw2P346SQMpo=;
-        b=BCuztcCH4htXQOJSN386EAU0pa+BMKGwY4R3cPISNnGOIx4ZgXYYWlE3bqqNTboEdg
-         j1yiVbGPg2nkAuIfcqZpGw7xyTAZGticKYKlKy8rZ9J78Hd/G27My5GPU8pZwZ+6GoHG
-         JZY336D+uHux/Z6SC78ASZWuNFWkHTcSR04Ej0Sz5F++l5E8US+aMNWs1DKgB4LyrWTY
-         VW3jpZM/A43gLzJCI0dFvPdjojaJRyfpauGSWuX6EPR1SDUdaeYWNCdbpoNe/Mt4xrth
-         dP5w7OGKmHy1Qqbo/mkBHf7RxNvREo9XmCnEDWZcsRJyxANoeQpKa+HkI9wikWz5ej2j
-         Pg9Q==
-X-Gm-Message-State: AC+VfDyN6RoXv2coqGnOYldPcgsX/UnqJXPvroRN7ieJHqLENIUTgKp8
-        YQUdfuyB78lfsmCpkp7fVm4=
-X-Google-Smtp-Source: ACHHUZ4oFZ3aVUKqG35t1gvcum6lP5hqKSDt3WDjDTuJOz2/M+ydprx3aNUSbEwbd9JyL/DZAccL0Q==
-X-Received: by 2002:adf:ec04:0:b0:2f9:a798:602c with SMTP id x4-20020adfec04000000b002f9a798602cmr10900635wrn.12.1682992271083;
-        Mon, 01 May 2023 18:51:11 -0700 (PDT)
-Received: from costa-tp.bos2.lab ([2a00:a040:1a3:c11b:3ae6:1732:e587:a81f])
-        by smtp.gmail.com with ESMTPSA id f11-20020adffccb000000b002f90a75b843sm29486846wrs.117.2023.05.01.18.51.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 May 2023 18:51:10 -0700 (PDT)
-From:   Costa Shulyupin <costa.shul@redhat.com>
-To:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>
-Cc:     Costa Shulyupin <costa.shul@redhat.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v3] docs: consolidate human interface subsystems
-Date:   Tue,  2 May 2023 04:50:40 +0300
-Message-Id: <20230502015040.329394-1-costa.shul@redhat.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <0754e279-ae06-9b57-f655-cc7cc9eb6ecb@infradead.org>
-References: <0754e279-ae06-9b57-f655-cc7cc9eb6ecb@infradead.org>
+        Mon, 1 May 2023 21:52:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 159051FE2
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 18:52:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A852B6209C
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 01:52:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA1B8C4339B;
+        Tue,  2 May 2023 01:52:24 +0000 (UTC)
+Date:   Mon, 1 May 2023 21:52:20 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shrikanth Hegde <sshegde@linux.vnet.ibm.com>,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
+        naveen.n.rao@linux.vnet.ibm.com
+Subject: Re: [PATCH v4 00/12] sched: Avoid unnecessary migrations within SMT
+ domains
+Message-ID: <20230501215220.2591dd22@gandalf.local.home>
+In-Reply-To: <20230502014254.GA1219@ranerica-svr.sc.intel.com>
+References: <20230406203148.19182-1-ricardo.neri-calderon@linux.intel.com>
+        <20230429153219.GC1495785@hirez.programming.kicks-ass.net>
+        <20230502014254.GA1219@ranerica-svr.sc.intel.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=true
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-to make the page more organized as requested
+On Mon, 1 May 2023 18:42:55 -0700
+Ricardo Neri <ricardo.neri-calderon@linux.intel.com> wrote:
 
-Signed-off-by: Costa Shulyupin <costa.shul@redhat.com>
----
-Changes:
-- fixed typo
-- fixed underline
+> I am sorry changelogs are not sufficiently clear. I thought stating the
+> overall goal in the cover letter was enough. In the future, would you
+> prefer that I repeat the cover letter instead of referring to it? Should
+> individual changelogs state the overall goal?
 
----
- Documentation/subsystem-apis.rst | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+Yes. Every commit should have a change log that explains why that commit
+was done without having to look elsewhere.
 
-diff --git a/Documentation/subsystem-apis.rst b/Documentation/subsystem-apis.rst
-index b51f38527e14..287799ee2419 100644
---- a/Documentation/subsystem-apis.rst
-+++ b/Documentation/subsystem-apis.rst
-@@ -10,6 +10,18 @@ is taken directly from the kernel source, with supplemental material added
- as needed (or at least as we managed to add it — probably *not* all that is
- needed).
- 
-+Human interfaces
-+----------------
-+
-+.. toctree::
-+   :maxdepth: 1
-+
-+   input/index
-+   hid/index
-+   sound/index
-+   gpu/index
-+   fb/index
-+
- **Fixme**: much more organizational work is needed here.
- 
- .. toctree::
-@@ -22,9 +34,7 @@ needed).
-    block/index
-    cdrom/index
-    cpu-freq/index
--   fb/index
-    fpga/index
--   hid/index
-    i2c/index
-    iio/index
-    isdn/index
-@@ -40,12 +50,9 @@ needed).
-    w1/index
-    watchdog/index
-    virt/index
--   input/index
-    hwmon/index
--   gpu/index
-    accel/index
-    security/index
--   sound/index
-    crypto/index
-    filesystems/index
-    mm/index
--- 
-2.40.0
+The cover letter should be the summary of what the patches do. But 5 to 10
+years from now, when a git bisect comes across a commit, there's no
+guarantee that a cover letter will be easily found. The change log may be
+the only thing a developer debugging some code will have to understand what
+the change was for.
 
+I'm guilty of having poor change logs which I myself suffered from, as I
+don't remember what I meant. So I've been more adamant on adding more
+detail to my change logs which has saved me a few times.
+
+-- Steve
