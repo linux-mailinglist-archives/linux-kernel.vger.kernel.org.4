@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48B806F436C
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 14:11:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D7DB6F436D
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 14:11:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234080AbjEBMLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 08:11:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37930 "EHLO
+        id S234173AbjEBML3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 08:11:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234148AbjEBMLH (ORCPT
+        with ESMTP id S234171AbjEBMLR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 08:11:07 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3849659F6
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 05:10:35 -0700 (PDT)
+        Tue, 2 May 2023 08:11:17 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DF459FA
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 05:10:42 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id A467A21E57;
-        Tue,  2 May 2023 12:10:33 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 5E2142225C;
+        Tue,  2 May 2023 12:10:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1683029433; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1683029439; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=bZxyQRt/yrkvsCuSBp3GRmGhot3fCxU/5bmk8IYlVXE=;
-        b=h4ig5p68zyj7w+Prtp0LSrsGUHVIqvAYzHTQ1SsVfPHchwaGf+iO2/BY9mYvogjv4Zv0mE
-        FcemY3Ruri+norMMTKMXBjQyK7cAIZnQ8JXAyt6yiklzKJI11o+lB1V9hbcoJ4uW7Uqgsi
-        VdXEFoSKzGJMKoJIg36vcnE0SubV/Vk=
+        bh=oOpgBV0+omk7fDWKz1A1GeqrS6LU5ZyU3wjqQk4HBv4=;
+        b=aRpPaRY7wbWUOC22ExpKgXITJImcgArvtXJ6bzrgqUDF+b/R9yrYhp3sOqag5LMiNu/PsH
+        CFNLiWWRXDtSb4qTVhDFOsv4M1gOi3nPpfrHiGUfQ9UTebzktfP3kk+adioMMemYpadqOr
+        CTSGhp5BMwnOu9vsxNVxCsBXOmammhU=
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 65CAC139C3;
-        Tue,  2 May 2023 12:10:33 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1A9C1139C3;
+        Tue,  2 May 2023 12:10:39 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id TYqNF7n9UGQAMAAAMHmgww
-        (envelope-from <jgross@suse.com>); Tue, 02 May 2023 12:10:33 +0000
+        id hQwMBb/9UGQOMAAAMHmgww
+        (envelope-from <jgross@suse.com>); Tue, 02 May 2023 12:10:39 +0000
 From:   Juergen Gross <jgross@suse.com>
 To:     linux-kernel@vger.kernel.org, x86@kernel.org
 Cc:     mikelley@microsoft.com, Juergen Gross <jgross@suse.com>,
@@ -47,9 +47,9 @@ Cc:     mikelley@microsoft.com, Juergen Gross <jgross@suse.com>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         "H. Peter Anvin" <hpa@zytor.com>
-Subject: [PATCH v6 09/16] x86/mtrr: allocate mtrr_value array dynamically
-Date:   Tue,  2 May 2023 14:09:24 +0200
-Message-Id: <20230502120931.20719-10-jgross@suse.com>
+Subject: [PATCH v6 10/16] x86/mtrr: add get_effective_type() service function
+Date:   Tue,  2 May 2023 14:09:25 +0200
+Message-Id: <20230502120931.20719-11-jgross@suse.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20230502120931.20719-1-jgross@suse.com>
 References: <20230502120931.20719-1-jgross@suse.com>
@@ -65,61 +65,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The mtrr_value[] array is a static variable, which is used only in a
-few configurations. Consuming 6kB is ridiculous for this case,
-especially as the array doesn't need to be that large and it can easily
-be allocated dynamically.
+Add a service function for obtaining the effective cache mode of
+overlapping MTRR registers.
+
+Make use of that function in check_type_overlap().
 
 Signed-off-by: Juergen Gross <jgross@suse.com>
 Tested-by: Michael Kelley <mikelley@microsoft.com>
 ---
-V5:
-- check for allocation failure (Kai Huang, Boris Petkov)
-- add #ifdef
-V6:
-- rebase
+V3:
+- new patch
 ---
- arch/x86/kernel/cpu/mtrr/legacy.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ arch/x86/kernel/cpu/mtrr/generic.c | 39 +++++++++++++++---------------
+ 1 file changed, 19 insertions(+), 20 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/mtrr/legacy.c b/arch/x86/kernel/cpu/mtrr/legacy.c
-index 7d379fb26cce..d25882fcf181 100644
---- a/arch/x86/kernel/cpu/mtrr/legacy.c
-+++ b/arch/x86/kernel/cpu/mtrr/legacy.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0-only
+diff --git a/arch/x86/kernel/cpu/mtrr/generic.c b/arch/x86/kernel/cpu/mtrr/generic.c
+index cd887327ba3a..44e035a8e9fb 100644
+--- a/arch/x86/kernel/cpu/mtrr/generic.c
++++ b/arch/x86/kernel/cpu/mtrr/generic.c
+@@ -86,31 +86,30 @@ static u64 get_mtrr_size(u64 mask)
+ 	return size;
+ }
  
- #include <linux/types.h>
-+#include <linux/slab.h>
- #include <linux/syscore_ops.h>
- #include <asm/cpufeature.h>
- #include <asm/mtrr.h>
-@@ -38,12 +39,15 @@ struct mtrr_value {
- 	unsigned long	lsize;
- };
- 
--static struct mtrr_value mtrr_value[MTRR_MAX_VAR_RANGES];
-+static struct mtrr_value *mtrr_value;
- 
- static int mtrr_save(void)
- {
- 	int i;
- 
-+	if (!mtrr_value)
-+		return -ENOMEM;
++static u8 get_effective_type(u8 type1, u8 type2)
++{
++	if (type1 == MTRR_TYPE_UNCACHABLE || type2 == MTRR_TYPE_UNCACHABLE)
++		return MTRR_TYPE_UNCACHABLE;
 +
- 	for (i = 0; i < num_var_ranges; i++) {
- 		mtrr_if->get(i, &mtrr_value[i].lbase,
- 				&mtrr_value[i].lsize,
-@@ -72,6 +76,8 @@ static struct syscore_ops mtrr_syscore_ops = {
- 
- void mtrr_register_syscore(void)
- {
-+	mtrr_value = kcalloc(num_var_ranges, sizeof(*mtrr_value), GFP_KERNEL);
++	if ((type1 == MTRR_TYPE_WRBACK && type2 == MTRR_TYPE_WRTHROUGH) ||
++	    (type1 == MTRR_TYPE_WRTHROUGH && type2 == MTRR_TYPE_WRBACK))
++		return MTRR_TYPE_WRTHROUGH;
 +
- 	/*
- 	 * The CPU has no MTRR and seems to not support SMP. They have
- 	 * specific drivers, we use a tricky method to support
++	if (type1 != type2)
++		return MTRR_TYPE_UNCACHABLE;
++
++	return type1;
++}
++
+ /*
+  * Check and return the effective type for MTRR-MTRR type overlap.
+- * Returns 1 if the effective type is UNCACHEABLE, else returns 0
++ * Returns true if the effective type is UNCACHEABLE, else returns false
+  */
+-static int check_type_overlap(u8 *prev, u8 *curr)
++static bool check_type_overlap(u8 *prev, u8 *curr)
+ {
+-	if (*prev == MTRR_TYPE_UNCACHABLE || *curr == MTRR_TYPE_UNCACHABLE) {
+-		*prev = MTRR_TYPE_UNCACHABLE;
+-		*curr = MTRR_TYPE_UNCACHABLE;
+-		return 1;
+-	}
+-
+-	if ((*prev == MTRR_TYPE_WRBACK && *curr == MTRR_TYPE_WRTHROUGH) ||
+-	    (*prev == MTRR_TYPE_WRTHROUGH && *curr == MTRR_TYPE_WRBACK)) {
+-		*prev = MTRR_TYPE_WRTHROUGH;
+-		*curr = MTRR_TYPE_WRTHROUGH;
+-	}
++	*prev = *curr = get_effective_type(*curr, *prev);
+ 
+-	if (*prev != *curr) {
+-		*prev = MTRR_TYPE_UNCACHABLE;
+-		*curr = MTRR_TYPE_UNCACHABLE;
+-		return 1;
+-	}
+-
+-	return 0;
++	return *prev == MTRR_TYPE_UNCACHABLE;
+ }
+ 
+ /**
 -- 
 2.35.3
 
