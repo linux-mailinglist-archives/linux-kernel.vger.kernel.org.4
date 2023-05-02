@@ -2,136 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E9E46F3BB6
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 03:08:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 815366F3BBB
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 03:12:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233381AbjEBBIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 21:08:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54500 "EHLO
+        id S231608AbjEBBMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 21:12:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbjEBBIY (ORCPT
+        with ESMTP id S232402AbjEBBMt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 21:08:24 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 276943C05
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 18:08:20 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id ca18e2360f4ac-760f8ffb27fso54745639f.2
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 18:08:20 -0700 (PDT)
+        Mon, 1 May 2023 21:12:49 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 476703A8B
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 18:12:45 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-24df4ecdb87so1319796a91.0
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 18:12:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682989699; x=1685581699;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=google.com; s=20221208; t=1682989965; x=1685581965;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Jt34JDLxnLF4emWyf1lG0eNX4wErgdNt3MF2LAiRUok=;
-        b=ba5k0haqGFBpnokW2fsW6cgx1k8UVFRl+YUYNzTh2wXKxm2MLB3RAtLueTHIHh4LQ9
-         PSLpTchmXnh/Y4tH4whjgc/o4VOcBkIBMM7FVAeVsWA2hbUPx2es/pvK7V/3AXf+a2TG
-         HfwGAxePidTEls0Mae/BiVjq8y7qOk1S1x3OgVwfIO/eWyTB5ghXh5FU262qwuX6y+OC
-         N9XJqm+ns40tTiHnvvwPFkVC4bUSjCBt9h/LXszU34Z+L3jJZykXGqg0m5O6/GPHvpyk
-         W8SS4hQidzh8KbRm74hZZlJ2bL/MK7DBojMxOzHBaF7I7Umw4rcCpXEfhxEqA7XaUVN6
-         oQAg==
+        bh=47MTC43+cqs0cncIRVUMCVwlp631DYCAqlKsiStJTh4=;
+        b=27wJElmW7Qf2QnbHUpeOj5uvR8x9QZPbhuU4EN//QC4lhvOx9HUVgfX7TnrnLX4a74
+         QujhUvNJTBK8c9MrL7GvI/8Qk7uug59q0oddpzfP8ekJOuaxhtwjx0mU+0qx7afaf6EX
+         ehQx4NriLqW1Vzz3XLieSX8ZU7EEt+XzvZwZfCxesgtTgw/3tfK672G/EDuE3fcIYoWf
+         pUO1bqyAlJ2wj71hLlMhUSY9SBOv2ymOo8r1m++3CZbQLWdXYaQUK/6UdB34/kdtUZKZ
+         aJq/22k5TzAH/Fq+Z5z+0+x/HyjVzZ991SuKo1R6R4gL6T7f7g2YIKdZsQHSfUdbxLy9
+         z2KQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682989699; x=1685581699;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1682989965; x=1685581965;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Jt34JDLxnLF4emWyf1lG0eNX4wErgdNt3MF2LAiRUok=;
-        b=GY7LkQe04hX/hLfolw52h67faIQdDzDgT8PJz6gWfORMDXx1iF517lY86OUw/NtO2p
-         FJAalWmd7TmO+BRGoFZfsM28bhNbuKCi+YzaSFv/xVyV6BE/Tf/e3milUJQkXQNmLaAe
-         DCJQP4Gr3USALCCdMyTk3iiy0MSM6NLXEeoFlCku/HlX6HGxUhDyQ8nibU8CO4IaqPEw
-         J9OvW41Ei6YMia8l8F8AcJgNKbQ6gp1MZGW1E30CBe1mlQwnCaS261T77CkjHEjFwXaB
-         b1jRpWgKI2fd94pNcealYC0YZFh9JLvkD2HEH2RwEeb6WclAfe/0mJEWbV34ivpCWom6
-         Sjeg==
-X-Gm-Message-State: AC+VfDwWg7v1RwNaOVwd2P0gklGKS0AVy+1/cWbDAjrt5NxuNEvpBYKO
-        znD2vf9BuelGBR647R+RMZk=
-X-Google-Smtp-Source: ACHHUZ7m/eXYG5H16OfNIrIbiJbKernXBlESGdRLz4ThO5RZogp1NpcrJG2OGRFK/xeJ0Zy7SGbN3g==
-X-Received: by 2002:a5d:97d7:0:b0:763:d799:cbd1 with SMTP id k23-20020a5d97d7000000b00763d799cbd1mr9065795ios.16.1682989699336;
-        Mon, 01 May 2023 18:08:19 -0700 (PDT)
-Received: from aford-B741.lan ([2601:447:d001:897f:8257:a536:d7fc:1919])
-        by smtp.gmail.com with ESMTPSA id f16-20020a056638329000b0040fb5d5429fsm4836329jav.131.2023.05.01.18.08.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 May 2023 18:08:18 -0700 (PDT)
-From:   Adam Ford <aford173@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     marex@denx.de, aford@beaconembedded.com,
-        Adam Ford <aford173@gmail.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Inki Dae <inki.dae@samsung.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V3 7/7] drm: bridge: samsung-dsim: Let blanking calcuation work in non-burst mode
-Date:   Mon,  1 May 2023 20:07:59 -0500
-Message-Id: <20230502010759.17282-8-aford173@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230502010759.17282-1-aford173@gmail.com>
-References: <20230502010759.17282-1-aford173@gmail.com>
+        bh=47MTC43+cqs0cncIRVUMCVwlp631DYCAqlKsiStJTh4=;
+        b=IoiVuMFVNeWcY9LNCeYD03G4qhTWs+0zKbM2EJCFK1W/EdsEXaBKNY2J70liy2VSho
+         xYfPxgNdq10JyBqgkkBl+GEgEDx3AfXDi4atPXW140XAbXQPJOsJMMnVxsTSWSM2fxkf
+         YvQoqjer1NKZo+ycz4oi9kSgPQ/xml+Q1JfZ2igRjA8SxTdYuUCpOb+HPPU1cpeooLiL
+         cW3VEOuaab4ljR4z8JuvkqMFVHap2k3JeVqVyqGRrqkaGySpA9uqauuZaFjZGNVPCzx3
+         K/zDQI4RXUJptLNlQCbbS4JiQplc5tkAk4U7TDQvW7OVG6LuMGqoYIOBfEj2Krq6aHkL
+         nn4g==
+X-Gm-Message-State: AC+VfDwbedUZCtyEAinwzbI/shj8pqVoDEzUc+Xw7HsQDbcdOdsX+2iW
+        qFbx57HsbG3obDipyaHMg+ETV86+Zc1ZgkeXgN2x6Q==
+X-Google-Smtp-Source: ACHHUZ63MmDcXlqUQU8eyZkTFnid5k643yum7VrgBeVELwK3cTeXsBskvkNr3yGhBKfryeEiik6nw4+nw8x42CwZtMo=
+X-Received: by 2002:a17:90b:4acf:b0:22c:59c3:8694 with SMTP id
+ mh15-20020a17090b4acf00b0022c59c38694mr15946312pjb.44.1682989964612; Mon, 01
+ May 2023 18:12:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230406004018.1439952-1-drosen@google.com> <20230406004018.1439952-2-drosen@google.com>
+ <CAEf4BzbyX3i6k5eL6D-5enU+u58nVn_fK28zNBJ4w_Vm-+RiMQ@mail.gmail.com> <CAADnVQ+jQG95kVqkajr=zz2-vs24XedEXcBgSx29oAjqUsFn2g@mail.gmail.com>
+In-Reply-To: <CAADnVQ+jQG95kVqkajr=zz2-vs24XedEXcBgSx29oAjqUsFn2g@mail.gmail.com>
+From:   Daniel Rosenberg <drosen@google.com>
+Date:   Mon, 1 May 2023 18:12:33 -0700
+Message-ID: <CA+PiJmST4WUH061KaxJ4kRL=fqy3X6+Wgb2E2rrLT5OYjUzxfQ@mail.gmail.com>
+Subject: Re: [PATCH 1/3] bpf: verifier: Accept dynptr mem as mem in helpers
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Joanne Koong <joannelkoong@gmail.com>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mykola Lysenko <mykolal@fb.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Android Kernel Team <kernel-team@android.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The blanking calculation currently uses burst_clk_rate for calculating
-the settings. Since it's possible to use this in non-burst mode, it's
-possible that where won't be burst_clk_rate.  Instead, cache the
-clock rate configured from of samsung_dsim_set_pll and use it instead.
+On Thu, Apr 6, 2023 at 3:13=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> +1
+> All of the DYNPTR_TYPE_FLAG_MASK flags cannot appear in type =3D=3D reg->=
+type
+> here.
+> They are either dynamic flags inside bpf_dynptr_kern->size
+> or in arg_type.
+> Like in bpf_dynptr_from_mem_proto.
 
-Signed-off-by: Adam Ford <aford173@gmail.com>
-Tested-by: Chen-Yu Tsai <wenst@chromium.org>
----
- drivers/gpu/drm/bridge/samsung-dsim.c | 4 +++-
- include/drm/bridge/samsung-dsim.h     | 1 +
- 2 files changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c b/drivers/gpu/drm/bridge/samsung-dsim.c
-index 53099461cdc2..1dc913db2cb3 100644
---- a/drivers/gpu/drm/bridge/samsung-dsim.c
-+++ b/drivers/gpu/drm/bridge/samsung-dsim.c
-@@ -652,6 +652,8 @@ static unsigned long samsung_dsim_set_pll(struct samsung_dsim *dsi,
- 		reg = samsung_dsim_read(dsi, DSIM_STATUS_REG);
- 	} while ((reg & DSIM_PLL_STABLE) == 0);
- 
-+	dsi->hs_clock = fout;
-+
- 	return fout;
- }
- 
-@@ -960,7 +962,7 @@ static void samsung_dsim_set_display_mode(struct samsung_dsim *dsi)
- 	u32 reg;
- 
- 	if (dsi->mode_flags & MIPI_DSI_MODE_VIDEO) {
--		int byte_clk_khz = dsi->burst_clk_rate / 1000 / 8;
-+		int byte_clk_khz = dsi->hs_clock / 1000 / 8;
- 		int hfp = (m->hsync_start - m->hdisplay) * byte_clk_khz / m->clock;
- 		int hbp = (m->htotal - m->hsync_end) * byte_clk_khz / m->clock;
- 		int hsa = (m->hsync_end - m->hsync_start) * byte_clk_khz / m->clock;
-diff --git a/include/drm/bridge/samsung-dsim.h b/include/drm/bridge/samsung-dsim.h
-index 76ea8a1720cc..14176e6e9040 100644
---- a/include/drm/bridge/samsung-dsim.h
-+++ b/include/drm/bridge/samsung-dsim.h
-@@ -94,6 +94,7 @@ struct samsung_dsim {
- 
- 	u32 pll_clk_rate;
- 	u32 burst_clk_rate;
-+	u32 hs_clock;
- 	u32 esc_clk_rate;
- 	u32 lanes;
- 	u32 mode_flags;
--- 
-2.39.2
-
+Looking at this a bit more, I believe this is to enforce packet
+restrictions for DYNPTR_TYPE_SKB and DYNPTR_TYPE_XDP. When a helper
+function alters a packet, dynptr slices of it are invalidated. If I
+remove that annotation entirely, then the invalid_data_slice family of
+tests fail. bpf_dynptr_from_mem_proto is fine since that's just local
+dynptrs, which don't have any extra limitations.
