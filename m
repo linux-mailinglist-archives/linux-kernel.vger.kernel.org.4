@@ -2,119 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 598276F3EC8
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 10:06:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 029B16F3EDA
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 10:12:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233775AbjEBIGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 04:06:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55168 "EHLO
+        id S233455AbjEBIMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 04:12:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233513AbjEBIGc (ORCPT
+        with ESMTP id S233490AbjEBIMj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 04:06:32 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D7F5449E;
-        Tue,  2 May 2023 01:06:31 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3426YXwR032524;
-        Tue, 2 May 2023 08:06:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=qN5+zXe/mGo52OpBCXGTbW/YqY/DClj8/shREL9Brdk=;
- b=COjEsUYimAgJGQXoMwH43sDE88OZkzlHmHgD+RdnE62f9jzHbq4sFp7WAoI1P7ndzk4a
- dhj8UGQyIB3wDWBjE7hHjQVsNUe4Fy4Bu34+0aXR4wmRcJWOEr5/Y4gQuLGFBssgaDHh
- 9Ya6ZqjD2f8zgGxjetwkh+qxfop8+JofjpQbdm8T2UhFPmrdIVCRN2TyqgSE5CZu5gGq
- yXZZNT/xaBI6Pu43fDPdf6z/i9WEy+hsGuNM5puTn0fpYo3jwBtokT3P7bGzvHsCM4+i
- as+H4fj0wNJxUgJQ6DYHews6p73xc9DnenEMAB/IV6zlkmfnnfcb29MM8vqUEVCdpXmu JA== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qamtwh1rs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 02 May 2023 08:06:21 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34286L2Z020860
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 2 May 2023 08:06:21 GMT
-Received: from varda-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Tue, 2 May 2023 01:06:15 -0700
-Date:   Tue, 2 May 2023 13:36:12 +0530
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <amitk@kernel.org>,
-        <thara.gopinath@gmail.com>, <rafael@kernel.org>,
-        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Praveenkumar I <quic_ipkumar@quicinc.com>
-Subject: Re: [PATCH 4/4] arm64: dts: qcom: ipq9574: add thermal zone nodes
-Message-ID: <20230502080611.GB26126@varda-linux.qualcomm.com>
-References: <cover.1682682753.git.quic_varada@quicinc.com>
- <1bda63e18f7257f60cc1082b423aca129abfa3b0.1682682753.git.quic_varada@quicinc.com>
- <f449aa76-b3df-5a30-2b82-eaf3faeb1072@linaro.org>
+        Tue, 2 May 2023 04:12:39 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59276DD;
+        Tue,  2 May 2023 01:12:36 -0700 (PDT)
+Received: from [192.168.4.220] ([91.47.48.20]) by mrelayeu.kundenserver.de
+ (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MbRXj-1qVIpj1Rk1-00bwHO; Tue, 02 May 2023 10:06:22 +0200
+Message-ID: <10a2e893-18b6-d9c2-1db7-3d500cc0891c@in-circuit.de>
+Date:   Tue, 2 May 2023 10:06:20 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <f449aa76-b3df-5a30-2b82-eaf3faeb1072@linaro.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: mda3YUi52I7Pe_9iZkgkrWD4S8B7yL0Q
-X-Proofpoint-GUID: mda3YUi52I7Pe_9iZkgkrWD4S8B7yL0Q
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-02_04,2023-04-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- priorityscore=1501 mlxlogscore=999 suspectscore=0 bulkscore=0
- clxscore=1015 adultscore=0 lowpriorityscore=0 phishscore=0 spamscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2305020071
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v3 0/2] arm: dts: sunxi: Add ICnova A20 ADB4006 board
+ support
+Content-Language: de-DE
+From:   Ludwig Kormann <ludwig.kormann@in-circuit.de>
+To:     samuel@sholland.org, jernej.skrabec@gmail.com, wens@csie.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        andre.przywara@arm.com
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20230420102409.1394618-1-ludwig.kormann@in-circuit.de>
+Organization: In-Circuit GmbH
+In-Reply-To: <20230420102409.1394618-1-ludwig.kormann@in-circuit.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:BZP4xb+RWZ7PqlXjFE/uNSiirW28Q+PM1TXFqzYbS0oaUj9wJdZ
+ jD0KwhUB+YexK2scZoHXG2GKeFXakH38VefYWHKtbp0SX1PEcHbzI0nY1nDNLRK4DWMM4oo
+ P+x+Uj0ZACMSLSpKCVbThkexaRsCT/aO0+eQVhGJRSvlYj2Le+Miv4AvVZUhdIQIkG7IRdE
+ xIUiBQyyaQ9joF/dW8S+Q==
+UI-OutboundReport: notjunk:1;M01:P0:MdRMuQvq/c8=;VRnsa4oOgrw0cnDmn+nEh2j5fQr
+ pDOXgA/fyya5YU4mfJIFWUOry8IubeHJJRydIxjNs8qNJ6KeguneZ5924Nw+vpehuXEmF9BIe
+ +PsXBJ48AqtDbQht20uYsfHnfZJyresWMuSmox2oXW4VkEd+SQwb0Q7bo65W2J8KCMPTPmOSf
+ zwYi8c+Z4CeHHGx6iy9lxh+JeNSTs6cTXU2jEVMsfZjFWazQgHDLuGTqrlw/p6Bx19JW8AcT5
+ CzJQsc/nv2aB1GxUP1Ply2AR5IoBJa6bruT74S0vc1zLPzJ2wp+9ZC3mC855A8EaAgbjvjNYB
+ w8UlQRGpKE7ud4TFLRFdWmVeINKeUgWEuS4M6wkW1rFMWHvG1KejjlEheFGH1eyzgHOtBb98P
+ fsauQYofyswOVVGmGd0B4GdMPRFLGaI7SzJgynYvfYBlYin7ehtubq90nnVHyl6RnCcZE67qs
+ dJpCI54ecOrpwTvJr+tm/cqshScTpcG3djWbBDxO5nKQ4cJad+Egl7DswWhWJZ511E49Q5jpj
+ JcDg8OXp9Q+pVHCQOXIexdQ2Mqh1Jdl29oBJmhsa/DKQdDC8hKl/tghpEme0palYs5V4OLfnC
+ xCi7WD2PPfXl7cXncHF2Po78X+wye9CMr+rpI9FxRjdbmMr3ivA+Zw/toZdKBiG3RFf8+cf7K
+ pSE+Uq8RH2zMtaYAbArmsvcErgSxW1VQtyQmGxE2vA==
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 01, 2023 at 09:14:32AM +0200, Krzysztof Kozlowski wrote:
-> On 28/04/2023 16:52, Varadarajan Narayanan wrote:
-> > This patch adds thermal zone nodes for the various
-> > sensors present in IPQ9574
-> >
-> > Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
-> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> > ---
-> >  arch/arm64/boot/dts/qcom/ipq9574.dtsi | 208 ++++++++++++++++++++++++++++++++++
-> >  1 file changed, 208 insertions(+)
-> >
-> > diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> > index 7cd5bdb..a7cb2b4c 100644
-> > --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> > @@ -947,6 +947,214 @@
-> >  		};
-> >  	};
-> >
-> > +	thermal_zones: thermal-zones {
-> > +		tsens_tz_sensor3 {
->
-> No underscores in node names.
->
-> Don't invent your own names, use the ones we already have everywhere.
+Hello,
 
-Thanks for the feedback. Will change and post and new version.
+thanks for the reviews so far!
 
--Varada
+Is there anything I can do / need to do for my patch series for it to 
+get merged before -rc1?
 
+The patch series was based on the "for-next" branch in jernej's tree, 
+but it seems that it was too late for the "dt-for-6.4" merge.
+
+So I'm just trying to understand in general what the best way in this 
+situation would be:
+- wait if someone else takes the patch series before -rc1
+- wait for -rc1 and rebase, rework, send a new version of the patch 
+series (because of the planned restructuring of the ARM dts directory)
+- wait for -rc3 (?) and rebase & rework the patch series for jernej's 
+tree for the "dt-for-6.5" branch
+
+Thanks for your help.
+
+kind regards
+Ludwig Kormann
+
+
+Am 20.04.23 um 12:24 schrieb Ludwig Kormann:
+> Add board support for ICnova A20 SomPi compute module on
+> ICnova ADB4006 development board.
 >
-> Best regards,
-> Krzysztof
+> v3:
+> - drop stray blank lines at end of files
+> - separate patch for bindings
+> - update licensing to "GPL-2.0 OR MIT"
+> - fix typo: ICNova -> ICnova
+>
+> v2:
+> - use short licensing header
+> - remove deprecated elements from led nodes
+> - disable csi power supply
+> - add missing pins in usbphy node
+> - split dts into SoM dtsi and carrier board dts
+>
+> v1 of this patch was sent to the uboot mailing list [1].
+>
+> [1] https://lists.denx.de/pipermail/u-boot/2023-April/514605.html
+>
+> Ludwig Kormann (2):
+>    dt-bindings: arm: sunxi: add ICnova A20 ADB4006 binding
+>    arm: dts: sunxi: Add ICnova A20 ADB4006 board
+>
+>   .../devicetree/bindings/arm/sunxi.yaml        |   6 +
+>   arch/arm/boot/dts/Makefile                    |   1 +
+>   .../boot/dts/sun7i-a20-icnova-a20-adb4006.dts | 137 ++++++++++++++++++
+>   arch/arm/boot/dts/sun7i-a20-icnova-a20.dtsi   |  62 ++++++++
+>   4 files changed, 206 insertions(+)
+>   create mode 100644 arch/arm/boot/dts/sun7i-a20-icnova-a20-adb4006.dts
+>   create mode 100644 arch/arm/boot/dts/sun7i-a20-icnova-a20.dtsi
 >
