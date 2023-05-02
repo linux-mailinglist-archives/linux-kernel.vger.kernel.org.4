@@ -2,101 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A70606F3DB7
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 08:47:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B01F6F3DC3
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 08:50:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233620AbjEBGrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 02:47:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53000 "EHLO
+        id S233280AbjEBGud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 02:50:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233569AbjEBGrW (ORCPT
+        with ESMTP id S233648AbjEBGuY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 02:47:22 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E90B19B0
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 23:47:18 -0700 (PDT)
-Date:   Tue, 2 May 2023 08:47:15 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1683010036; bh=QX2OOLcfGpNlKl3zjd9j0gHhX42jLgoW5/8PmXR8oJE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WyNxJX1Ry6ZDFUXmFpepZhEBvARAxDoPFJateKZF4N6qbwdS3cQDQzOPT7gGsRMCD
-         9xSvQan76KW1IWHJFhriHEy46Jh4PFHNjHS/j47y/rjvevkfreNClie2UY/Tv469U1
-         dlJuEkiSi8vrYSa2kM3sKMoG3d6qIhiszKSeogzY=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tools/nolibc: remove LINUX_REBOOT_ constants
-Message-ID: <c967837e-39c7-48e4-9ee7-65892f13d126@t-8ch.de>
-References: <20230428-nolibc-reboot-v1-1-0bca02d20ba6@weissschuh.net>
- <ZFCubzgPxBSDiTwq@1wt.eu>
+        Tue, 2 May 2023 02:50:24 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBD0E1FDE
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 23:50:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683010217; x=1714546217;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ztAK8ZWHCZIgy7zFVBRCxIKxEVTa7UuYRJ6a2knQErg=;
+  b=V7K3XL+6/ml5yUIXYeW+1W9sX6SAU2BPjmgav1xlbLoKlLmfApu1B84Y
+   iV5Atxs/U8pc5BFc6mWeWNVPtLT2VGQLeY4NPs51YOGnK/xsxv+qqqgJc
+   lICzRf2XIB1/C41dVJaNL4WO8bVFRhtA1eRHKb54O5nTsZJfwBwxsaq4i
+   tf4uMJVoZuWLaDO7CmYoh9LQFWDHVO8jrD1Cvx4KodQS7wWmiUb59VxXI
+   fwWCWqclbNHj8JO9aZh3OzX6F6ESwgysGJmsTCQLxA90i/0d4w+2+4m+L
+   FtoSg0FhW0vhM63efNiltOkzZHSrUgz0iycd601AndfSe56Z4vnVqYHKH
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="411456298"
+X-IronPort-AV: E=Sophos;i="5.99,243,1677571200"; 
+   d="scan'208";a="411456298"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2023 23:50:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="765647735"
+X-IronPort-AV: E=Sophos;i="5.99,243,1677571200"; 
+   d="scan'208";a="765647735"
+Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 01 May 2023 23:50:15 -0700
+Received: from kbuild by e3434d64424d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ptjq2-0000tU-11;
+        Tue, 02 May 2023 06:50:14 +0000
+Date:   Tue, 2 May 2023 14:49:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Evan Green <evan@rivosinc.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>
+Subject: arch/riscv/kernel/cpufeature.c:34:1: sparse: sparse: symbol
+ '__pcpu_scope_misaligned_access_speed' was not declared. Should it be
+ static?
+Message-ID: <202305021414.EuPdM9kv-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZFCubzgPxBSDiTwq@1wt.eu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-02 08:32:15+0200, Willy Tarreau wrote:
-> On Fri, Apr 28, 2023 at 05:52:11PM +0200, Thomas Weißschuh wrote:
-> > The same constants and some more have been exposed to userspace via
-> > linux/reboot.h for a long time.
-> > 
-> > To avoid conflicts and trim down nolibc a bit drop the custom
-> > definitions.
-> 
-> For me it breaks the build when including nolibc directly, so most
-> likely we need to include certain files:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   865fdb08197e657c59e74a35fa32362b12397f58
+commit: 62a31d6e38bd0faef7c956b358d651f7bdc4ae0c RISC-V: hwprobe: Support probing of misaligned access performance
+date:   13 days ago
+config: riscv-randconfig-s052-20230430 (https://download.01.org/0day-ci/archive/20230502/202305021414.EuPdM9kv-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=62a31d6e38bd0faef7c956b358d651f7bdc4ae0c
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 62a31d6e38bd0faef7c956b358d651f7bdc4ae0c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
 
-Indeed, sorry no idea how I missed that.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305021414.EuPdM9kv-lkp@intel.com/
 
->   In file included from /g/public/linux/master/tools/include/nolibc/nolibc.h:99,
->                    from <command-line>:
->   /g/public/linux/master/tools/include/nolibc/sys.h: In function 'reboot':
->   /g/public/linux/master/tools/include/nolibc/sys.h:972:30: error: 'LINUX_REBOOT_MAGIC1' undeclared (first use in this function)
->     972 |         int ret = sys_reboot(LINUX_REBOOT_MAGIC1, LINUX_REBOOT_MAGIC2, cmd, 0);
->         |                              ^~~~~~~~~~~~~~~~~~~
->   /g/public/linux/master/tools/include/nolibc/sys.h:972:30: note: each undeclared identifier is reported only once for each function it appears in
-> 
-> I suspect it might be like the S_* macros for stat() that we had to
-> guard against. What build conflict did you meet ? I would like as well
-> to redefine the least possible and if we can make sure to fix the
-> conflict efficiently without breaking code, that would be better.
+sparse warnings: (new ones prefixed by >>)
+   WARNING: invalid argument to '-march': '_zihintpause'
+>> arch/riscv/kernel/cpufeature.c:34:1: sparse: sparse: symbol '__pcpu_scope_misaligned_access_speed' was not declared. Should it be static?
 
-The conflict looks like this:
+vim +/__pcpu_scope_misaligned_access_speed +34 arch/riscv/kernel/cpufeature.c
 
-    In file included from nolibc-test.c:18:
-    sysroot/x86/include/linux/reboot.h:10: warning: "LINUX_REBOOT_MAGIC2" redefined
-       10 | #define LINUX_REBOOT_MAGIC2     672274793
-          | 
-    In file included from sysroot/x86/include/nolibc.h:98,
-                     from sysroot/x86/include/errno.h:26,
-                     from sysroot/x86/include/stdio.h:14,
-                     from nolibc-test.c:15:
-    ... and all the other ones.
+    30	
+    31	/**
+    32	 * riscv_isa_extension_base() - Get base extension word
+    33	 *
+  > 34	 * @isa_bitmap: ISA bitmap to use
+    35	 * Return: base extension word as unsigned long value
+    36	 *
+    37	 * NOTE: If isa_bitmap is NULL then Host ISA bitmap will be used.
+    38	 */
+    39	unsigned long riscv_isa_extension_base(const unsigned long *isa_bitmap)
+    40	{
+    41		if (!isa_bitmap)
+    42			return riscv_isa[0];
+    43		return isa_bitmap[0];
+    44	}
+    45	EXPORT_SYMBOL_GPL(riscv_isa_extension_base);
+    46	
 
-
-
-The following trivial fix on top of my patch would fix the problem:
-
-diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index 5d624dc63a42..9d27131c224e 100644
---- a/tools/include/nolibc/sys.h
-+++ b/tools/include/nolibc/sys.h
-@@ -21,6 +21,7 @@
- #include <linux/auxvec.h>
- #include <linux/fcntl.h> // for O_* and AT_*
- #include <linux/stat.h>  // for statx()
-+#include <linux/reboot.h> // for LINUX_REBOOT_*
- 
- #include "arch.h"
- #include "errno.h"
-
-
-Want me to send a v2 or will you fix it up on your side?
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
