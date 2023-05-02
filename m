@@ -2,167 +2,364 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45A6A6F3EB0
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 10:00:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED7116F3EC1
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 10:05:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233723AbjEBIAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 04:00:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52284 "EHLO
+        id S233738AbjEBIFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 04:05:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbjEBIAU (ORCPT
+        with ESMTP id S233729AbjEBIFB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 04:00:20 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E5AE5D;
-        Tue,  2 May 2023 01:00:19 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 9E54422316;
-        Tue,  2 May 2023 08:00:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1683014417; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NP9x04IpamZ+4J4+YQ6L241Lqle1HdNEDLK94FhKL1s=;
-        b=i0Ht6owzagxVsusrh+k5TXS/6F2cGI8FuxyGJtxaFJRM4m4Tbvw8zxYpoPAbak19HBxF5W
-        cxJXamUCHUZLnK6iJcMa2ugn7dBT0o4+Usv0KcVpqAJ9chkraDeslIW2T4hEJ5YlEX4YME
-        8K8Dtc7Sx2s/ac0VicMWDMCjyyb5saQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1683014417;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NP9x04IpamZ+4J4+YQ6L241Lqle1HdNEDLK94FhKL1s=;
-        b=F85KhN7n9ZQMG5OTs4r7YsDZdS0LgI/nHqlYSWjEfVtH7P6F5XG6gXBa2RHb8jxNFawQrD
-        W5FFX4gWEOqqNXDg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6DE96134FB;
-        Tue,  2 May 2023 08:00:17 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id HTxOGxHDUGTwIwAAMHmgww
-        (envelope-from <jack@suse.cz>); Tue, 02 May 2023 08:00:17 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id A2D8AA0735; Tue,  2 May 2023 10:00:16 +0200 (CEST)
-Date:   Tue, 2 May 2023 10:00:16 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     "Kirill A . Shutemov" <kirill@shutemov.name>
-Cc:     David Hildenbrand <david@redhat.com>, Peter Xu <peterx@redhat.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Jason Gunthorpe <jgg@nvidia.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Mika Penttila <mpenttil@redhat.com>,
-        David Howells <dhowells@redhat.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH v5] mm/gup: disallow GUP writing to file-backed mappings
- by default
-Message-ID: <20230502080016.4tgmqb4sy2ztfgrd@quack3>
-References: <62ec50da-5f73-559c-c4b3-bde4eb215e08@redhat.com>
- <6ddc7ac4-4091-632a-7b2c-df2005438ec4@redhat.com>
- <20230428160925.5medjfxkyvmzfyhq@box.shutemov.name>
- <39cc0f26-8fc2-79dd-2e84-62238d27fd98@redhat.com>
- <20230428162207.o3ejmcz7rzezpt6n@box.shutemov.name>
- <ZEv2196tk5yWvgW5@x1n>
- <173337c0-14f4-3246-15ff-7fbf03861c94@redhat.com>
- <20230428165623.pqchgi5gtfhxd5b5@box.shutemov.name>
- <1039c830-acec-d99b-b315-c2a6e26c34ca@redhat.com>
- <20230428234332.2vhprztuotlqir4x@box.shutemov.name>
+        Tue, 2 May 2023 04:05:01 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7875449E;
+        Tue,  2 May 2023 01:04:59 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3427loBA015750;
+        Tue, 2 May 2023 08:04:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ content-transfer-encoding : in-reply-to; s=qcppdkim1;
+ bh=Wwm9DE/KjzOB4GGIfiFTmouYOCBj5Hbw47wN2154+40=;
+ b=G8CCF1LisWskr4v88wTEJwfQWnWZn1rMWiXynVCGchMX1mzWjqCyeLFCgK+pZvSL6/yq
+ W+pQzrgYMGBu8RJ81Xu5umU7xBubTcKcQUr8EoESUR3E07+6kU2kjHZVPaMAfXk+Xxr7
+ O53rcPFpO050hrDuEgISNGN7Li9GTMnNCFYVGEKikUUC8CinMZDeb6P6io3fdUIcLEc1
+ MyGvIVgExxV8XcxMZAb27ObBctFo5CA9jWs3cg1fgHBBn5hsxvVky+gn2XWbvZ8U7Zit
+ enVZjjM0nqdZNl7Yuyva75vIFVpUsqGPpMkHHlTkVJIdWClirBmd+07gayFuXuMz3jz7 yA== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qahhk9g98-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 02 May 2023 08:04:51 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34284o9f028517
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 2 May 2023 08:04:50 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Tue, 2 May 2023 01:04:45 -0700
+Date:   Tue, 2 May 2023 13:34:41 +0530
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <amitk@kernel.org>,
+        <thara.gopinath@gmail.com>, <rafael@kernel.org>,
+        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Praveenkumar I <quic_ipkumar@quicinc.com>
+Subject: Re: [PATCH 4/4] arm64: dts: qcom: ipq9574: add thermal zone nodes
+Message-ID: <20230502080440.GA26126@varda-linux.qualcomm.com>
+References: <cover.1682682753.git.quic_varada@quicinc.com>
+ <1bda63e18f7257f60cc1082b423aca129abfa3b0.1682682753.git.quic_varada@quicinc.com>
+ <CAA8EJpq0RXGf8_oBa_XF0+nOg31ouMUVJ3LhNRh_HtmgJvCJHQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Disposition: inline
-In-Reply-To: <20230428234332.2vhprztuotlqir4x@box.shutemov.name>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAA8EJpq0RXGf8_oBa_XF0+nOg31ouMUVJ3LhNRh_HtmgJvCJHQ@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: eGiewxL5nQp5kl7PnE8UPH9_xPk1YdxO
+X-Proofpoint-GUID: eGiewxL5nQp5kl7PnE8UPH9_xPk1YdxO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-02_04,2023-04-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
+ mlxlogscore=999 phishscore=0 spamscore=0 lowpriorityscore=0 malwarescore=0
+ suspectscore=0 impostorscore=0 priorityscore=1501 mlxscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2305020070
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat 29-04-23 02:43:32, Kirill A . Shutemov wrote:
-> I think I found relevant snippet of code that solves similar issue.
-> get_futex_key() uses RCU to stabilize page->mapping after GUP_fast:
-> 
-> 
-> 		/*
-> 		 * The associated futex object in this case is the inode and
-> 		 * the page->mapping must be traversed. Ordinarily this should
-> 		 * be stabilised under page lock but it's not strictly
-> 		 * necessary in this case as we just want to pin the inode, not
-> 		 * update the radix tree or anything like that.
-> 		 *
-> 		 * The RCU read lock is taken as the inode is finally freed
-> 		 * under RCU. If the mapping still matches expectations then the
-> 		 * mapping->host can be safely accessed as being a valid inode.
-> 		 */
-> 		rcu_read_lock();
-> 
-> 		if (READ_ONCE(page->mapping) != mapping) {
-> 			rcu_read_unlock();
-> 			put_page(page);
-> 
-> 			goto again;
-> 		}
-> 
-> 		inode = READ_ONCE(mapping->host);
-> 		if (!inode) {
-> 			rcu_read_unlock();
-> 			put_page(page);
-> 
-> 			goto again;
-> 		}
-> 
-> I think something similar can be used inside GUP_fast too.
+On Fri, Apr 28, 2023 at 10:49:34PM +0300, Dmitry Baryshkov wrote:
+> On Fri, 28 Apr 2023 at 17:53, Varadarajan Narayanan
+> <quic_varada@quicinc.com> wrote:
+> >
+> > This patch adds thermal zone nodes for the various
+> > sensors present in IPQ9574
+> >
+> > Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > ---
+> >  arch/arm64/boot/dts/qcom/ipq9574.dtsi | 208 ++++++++++++++++++++++++++++++++++
+> >  1 file changed, 208 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> > index 7cd5bdb..a7cb2b4c 100644
+> > --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> > @@ -947,6 +947,214 @@
+> >                 };
+> >         };
+> >
+> > +       thermal_zones: thermal-zones {
+> > +               tsens_tz_sensor3 {
+>
+> Please provide sensible names for all thermal zones. Please follow the
+> examples in other DT files.
 
-Yeah, inodes (and thus struct address_space) is RCU protected these days so
-grabbing RCU lock in gup_fast() will get you enough protection for checking
-aops if you are careful (like the futex code is).
+Ok.
 
-								Honza
+> > +                       polling-delay-passive = <0>;
+> > +                       polling-delay = <0>;
+> > +                       thermal-sensors = <&tsens 3>;
+> > +
+> > +                       trips {
+> > +                               cpu-critical {
+> > +                                       temperature = <125000>;
+>
+> Can it really go up to 125 °C?
 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+The SoC product requirement is 120°C. It is capable of 125°C.
+This was tested inside a thermal chamber and ensured that it
+hits 125°C and system reboots at that temperature.
+
+> > +                                       hysteresis = <1000>;
+> > +                                       type = "critical";
+> > +                               };
+>
+> Please provide also a passive trip point, so that the passive cooling
+> can be engaged.
+
+The linux kernel cannot take any steps to initiate cooling for
+components other than the 4 CPU cores. The f/w that runs on these
+IP blocks have to take steps to initiate cooling. Additionally,
+the passive temperature for the non-cpu sensors are not
+characterised yet and I don't have the values now.
+
+We have these nodes to be able to read the temperature of the
+other blocks via the sysfs entry /sys/devices/virtual/thermal/*/temp
+Have given the critical trip point so that the setup is rebooted
+if the critical temperature is reached.
+
+Have given passive trip point for the CPU core related thermal
+nodes (tsens_tz_sensor10, tsens_tz_sensor11, tsens_tz_sensor12
+and tsens_tz_sensor13).
+
+If this is not acceptable, please let me know. Will remove the
+non-cpu nodes and post a patch with just the CPU entries.
+
+Thanks
+Varada
+
+> > +                       };
+> > +               };
+> > +
+> > +               tsens_tz_sensor4 {
+> > +                       polling-delay-passive = <0>;
+> > +                       polling-delay = <0>;
+> > +                       thermal-sensors = <&tsens 4>;
+> > +
+> > +                       trips {
+> > +                               cpu-critical {
+> > +                                       temperature = <125000>;
+> > +                                       hysteresis = <1000>;
+> > +                                       type = "critical";
+> > +                               };
+> > +                       };
+> > +               };
+> > +
+> > +               tsens_tz_sensor5 {
+> > +                       polling-delay-passive = <0>;
+> > +                       polling-delay = <0>;
+> > +                       thermal-sensors = <&tsens 5>;
+> > +
+> > +                       trips {
+> > +                               cpu-critical {
+> > +                                       temperature = <125000>;
+> > +                                       hysteresis = <1000>;
+> > +                                       type = "critical";
+> > +                               };
+> > +                       };
+> > +               };
+> > +
+> > +               tsens_tz_sensor6 {
+> > +                       polling-delay-passive = <0>;
+> > +                       polling-delay = <0>;
+> > +                       thermal-sensors = <&tsens 6>;
+> > +
+> > +                       trips {
+> > +                               cpu-critical {
+> > +                                       temperature = <125000>;
+> > +                                       hysteresis = <1000>;
+> > +                                       type = "critical";
+> > +                               };
+> > +                       };
+> > +               };
+> > +
+> > +               tsens_tz_sensor7 {
+> > +                       polling-delay-passive = <0>;
+> > +                       polling-delay = <0>;
+> > +                       thermal-sensors = <&tsens 7>;
+> > +
+> > +                       trips {
+> > +                               cpu-critical {
+> > +                                       temperature = <125000>;
+> > +                                       hysteresis = <1000>;
+> > +                                       type = "critical";
+> > +                               };
+> > +                       };
+> > +               };
+> > +
+> > +               tsens_tz_sensor8 {
+> > +                       polling-delay-passive = <0>;
+> > +                       polling-delay = <0>;
+> > +                       thermal-sensors = <&tsens 8>;
+> > +
+> > +                       trips {
+> > +                               cpu-critical {
+> > +                                       temperature = <125000>;
+> > +                                       hysteresis = <1000>;
+> > +                                       type = "critical";
+> > +                               };
+> > +                       };
+> > +               };
+> > +
+> > +               tsens_tz_sensor9 {
+> > +                       polling-delay-passive = <0>;
+> > +                       polling-delay = <0>;
+> > +                       thermal-sensors = <&tsens 9>;
+> > +
+> > +                       trips {
+> > +                               cpu-critical {
+> > +                                       temperature = <125000>;
+> > +                                       hysteresis = <1000>;
+> > +                                       type = "critical";
+> > +                               };
+> > +                       };
+> > +               };
+> > +
+> > +               tsens_tz_sensor10 {
+> > +                       polling-delay-passive = <0>;
+> > +                       polling-delay = <0>;
+> > +                       thermal-sensors = <&tsens 10>;
+> > +
+> > +                       trips {
+> > +                               cpu-critical {
+> > +                                       temperature = <120000>;
+> > +                                       hysteresis = <10000>;
+> > +                                       type = "critical";
+> > +                               };
+> > +
+> > +                               cpu-passive {
+> > +                                       temperature = <110000>;
+> > +                                       hysteresis = <1000>;
+> > +                                       type = "passive";
+> > +                               };
+> > +                       };
+> > +               };
+> > +
+> > +               tsens_tz_sensor11 {
+> > +                       polling-delay-passive = <0>;
+> > +                       polling-delay = <0>;
+> > +                       thermal-sensors = <&tsens 11>;
+> > +
+> > +                       trips {
+> > +                               cpu-critical {
+> > +                                       temperature = <120000>;
+> > +                                       hysteresis = <10000>;
+> > +                                       type = "critical";
+> > +                               };
+> > +
+> > +                               cpu-passive {
+> > +                                       temperature = <110000>;
+> > +                                       hysteresis = <1000>;
+> > +                                       type = "passive";
+> > +                               };
+> > +                       };
+> > +               };
+> > +
+> > +               tsens_tz_sensor12 {
+> > +                       polling-delay-passive = <0>;
+> > +                       polling-delay = <0>;
+> > +                       thermal-sensors = <&tsens 12>;
+> > +
+> > +                       trips {
+> > +                               cpu-critical {
+> > +                                       temperature = <120000>;
+> > +                                       hysteresis = <10000>;
+> > +                                       type = "critical";
+> > +                               };
+> > +
+> > +                               cpu-passive {
+> > +                                       temperature = <110000>;
+> > +                                       hysteresis = <1000>;
+> > +                                       type = "passive";
+> > +                               };
+> > +                       };
+> > +               };
+> > +
+> > +               tsens_tz_sensor13 {
+> > +                       polling-delay-passive = <0>;
+> > +                       polling-delay = <0>;
+> > +                       thermal-sensors = <&tsens 13>;
+> > +
+> > +                       trips {
+> > +                               cpu-critical {
+> > +                                       temperature = <120000>;
+> > +                                       hysteresis = <10000>;
+> > +                                       type = "critical";
+> > +                               };
+> > +
+> > +                               cpu-passive {
+> > +                                       temperature = <110000>;
+> > +                                       hysteresis = <1000>;
+> > +                                       type = "passive";
+> > +                               };
+> > +                       };
+> > +               };
+> > +
+> > +               tsens_tz_sensor14 {
+> > +                       polling-delay-passive = <0>;
+> > +                       polling-delay = <0>;
+> > +                       thermal-sensors = <&tsens 14>;
+> > +
+> > +                       trips {
+> > +                               cpu-critical {
+> > +                                       temperature = <125000>;
+> > +                                       hysteresis = <1000>;
+> > +                                       type = "critical";
+> > +                               };
+> > +                       };
+> > +               };
+> > +
+> > +               tsens_tz_sensor15 {
+> > +                       polling-delay-passive = <0>;
+> > +                       polling-delay = <0>;
+> > +                       thermal-sensors = <&tsens 15>;
+> > +
+> > +                       trips {
+> > +                               cpu-critical {
+> > +                                       temperature = <125000>;
+> > +                                       hysteresis = <1000>;
+> > +                                       type = "critical";
+> > +                               };
+> > +                       };
+> > +               };
+> > +       };
+> > +
+> >         timer {
+> >                 compatible = "arm,armv8-timer";
+> >                 interrupts = <GIC_PPI 2 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+> > --
+> > 2.7.4
+> >
+>
+>
+> --
+> With best wishes
+> Dmitry
