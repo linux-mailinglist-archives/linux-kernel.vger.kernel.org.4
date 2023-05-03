@@ -2,69 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 020516F623F
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 01:53:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 811886F623D
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 01:52:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbjECXxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 19:53:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45292 "EHLO
+        id S229581AbjECXwc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 19:52:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbjECXw6 (ORCPT
+        with ESMTP id S229499AbjECXwa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 19:52:58 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FBD69038
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 16:52:51 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-51fcf5d1e44so5067691a12.3
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 16:52:51 -0700 (PDT)
+        Wed, 3 May 2023 19:52:30 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB1178A57;
+        Wed,  3 May 2023 16:52:28 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-957dbae98b4so898805266b.1;
+        Wed, 03 May 2023 16:52:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683157971; x=1685749971;
+        d=gmail.com; s=20221208; t=1683157947; x=1685749947;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qIk186o9zoU+mH9r76xErzn/99J8aYL+vdhv+aIdc+U=;
-        b=SqfLZAXg/l88TDO+OsrXZVcZFb6V6f1Q+efyB31p2r9PNxlRc3eTU52bgTZRc+jQYq
-         DuX+kmZM38KFAEPH9tqVJZO7ED+df11RKSSXsKOA3jH5bSUSivfS2TdDkHpb8lj+QI1T
-         2zyJ9Rn7faPmjPqhhJRmx4PBguV2dpspCQjVS1q1O+lCuyO6DU7mgGKC7vNQaZDEnM9R
-         Nr83bdxfjPEKs/N8AQh+D3B1fWfhMu+SIE/GPBRnmd5xJW9CCMLrkPm16GvfluGgZFOX
-         m5P1g/+3x+4vDYjdZbJfCHgvhNXvWR9TFx82p9z+dULbdSNKWosOnBryG6ekyWTNstTh
-         4oxA==
+        bh=Kzq+0S+9Qb55VFJhQtIPR/JmvKERRCMD4v+Ql+odqSc=;
+        b=J8jQ9VIZOJOYHi+NTQ8HJqGVAAnvRta3CV+4MCEqth9UpwHBOrhZNRhunei3OJStYU
+         3dRqHS7AoeFQjltv3+9F+fjsvM57x1+mKLfhSDzQEDs+XR+5h8SgHwGoZvTXsnnTtcJ6
+         lYZU5o439Opeh5sM5Ns80AWcnU+Xz9upPZAOQ3i9u9coHVo4+ziQPuFsNtcwv6gATQNy
+         gljeTEn44gAadufipi/5gyhLprt5GzAS4MpuzP7SP5K/pYTg4/2APvMMeOmuMMAG5Yzz
+         VzklYzIO5zhViCCb7hY6GPhZsTWdIfpZp1gV36hr4Fw4ZrTSderOv52qF/+WgeXWpQix
+         Dzdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683157971; x=1685749971;
+        d=1e100.net; s=20221208; t=1683157947; x=1685749947;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qIk186o9zoU+mH9r76xErzn/99J8aYL+vdhv+aIdc+U=;
-        b=YaSUGawawhCMPsHHsHRzPJc8T2bECVHNvzxowu8x/V3/qbzyoZfxeBqDMuRZo/rA2H
-         HcrjouwhG8+Ng5utSZk3XiW5yPO8jwQCXR2K1C2AYDNhC1HtgsEryGHzpKXNAHkYpNiG
-         SppvUpzTzlwEEdhbCOQ7+7pnUNlIwn8Hgi7iLB767C3JLnjs5/lTBhh7+kbFOuep+gnD
-         UXWRwcZfokqBFGaHJMiYaXycfG8doncYtJMrXEF/G0qXa04UFyLdP7hBeRxb3pjkZfmn
-         TklhwLRZul7kWr8pFIhCmcywMOfaEY1ayINjErBHDk9Q+CFkDqEnbfrW4xbdckEYVOdK
-         Z2Ag==
-X-Gm-Message-State: AC+VfDz/ED0BOExuiVmX1h/E7zR6xmKaF3mH1JtGegg7Yml4YEmgC1i6
-        u3Y+v6C/OvcCXvdLBOr2B3pFKiy1JBlrIWSPtJCYcg==
-X-Google-Smtp-Source: ACHHUZ6IvK70ra4SbMwggP39kQV39c9YHLb6NIq/oUHesC3ufy/d/lgHtkxwpjTxLgX6H0Oi5Yq7MhZjRGw8RemgCx8=
-X-Received: by 2002:a17:90a:883:b0:24e:20df:e74d with SMTP id
- v3-20020a17090a088300b0024e20dfe74dmr334855pjc.18.1683157970566; Wed, 03 May
- 2023 16:52:50 -0700 (PDT)
+        bh=Kzq+0S+9Qb55VFJhQtIPR/JmvKERRCMD4v+Ql+odqSc=;
+        b=Abr/nPQEzXf5yeslYWG0nmSwrssgzYHffwgY5oFIP7XdJMDbDElpbWhIVf5g8S0wEN
+         baQG2F4Wxq2+2YQT9urEWYmIWd5Ar9GEjc7K5hE2o7+OXXmeDTrJEXf9XJM6szdnRd8X
+         vWcHDgdNwevPKiMF5l/z8kGq75n5DoJZPE7MyMBRuKwJUlkpEqxGgCY9eKebFxmaQbDG
+         rQ6I57qBqRq2Bgzhd0soliNIIOd5N7q6P9uGiAyO9aqeOQURabrA8OLy/meY8arpvzjo
+         CUaYVPJuyethh6EYPaTDRaZcRyBOMHmlpCAE+PAjLpmiDcibWzpwQrCVUq4f3d9Vl35g
+         zCJw==
+X-Gm-Message-State: AC+VfDzDnhQeVagF4Fya2cyuksKXP1XloPTkHTFPUMaXlxycaARd0fAY
+        DlgkUUxXM5gVvE8am1tqdfcj8a+Xcwl3DvGj2+8=
+X-Google-Smtp-Source: ACHHUZ5J0UaeP5nWPnm79c1X+6XiydeUXuzsu/eu9LNVllDGjcMPcd9PPmwyFou9dgb4c9hJSmUzHcR2P36p2DCG5G4=
+X-Received: by 2002:a17:906:58cc:b0:94e:f349:2a30 with SMTP id
+ e12-20020a17090658cc00b0094ef3492a30mr4880171ejs.58.1683157947147; Wed, 03
+ May 2023 16:52:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230503003144.3782774-1-royluo@google.com> <20230503230053.mbhh6p2h4qakfc65@synopsys.com>
-In-Reply-To: <20230503230053.mbhh6p2h4qakfc65@synopsys.com>
-From:   Roy Luo <royluo@google.com>
-Date:   Wed, 3 May 2023 16:52:14 -0700
-Message-ID: <CA+zupgxGesS5MVUW6uHAzA7QzS_gq-CYQdfP+ZBVCv_2NSDVeQ@mail.gmail.com>
-Subject: Re: [PATCH v1] usb: dwc3: Add error logs for unknown endpoint events
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "badhri@google.com" <badhri@google.com>
+References: <20220421003152.339542-1-alobakin@pm.me> <20220421003152.339542-3-alobakin@pm.me>
+ <20230414095457.GG63923@kunlun.suse.cz> <9952dc32-f464-c85a-d812-946d6b0ac734@intel.com>
+ <20230414162821.GK63923@kunlun.suse.cz> <CAEf4BzYx=dSXp-TkpjzyhSP+9WY71uR4Xq4Um5YzerbfOtJOfA@mail.gmail.com>
+ <20230421073904.GJ15906@kitsune.suse.cz> <CACdoK4+KdM-sQKMO9WXk7kTL-x=Renjd0MuvSRT3JKbtzByyHQ@mail.gmail.com>
+In-Reply-To: <CACdoK4+KdM-sQKMO9WXk7kTL-x=Renjd0MuvSRT3JKbtzByyHQ@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 3 May 2023 16:52:15 -0700
+Message-ID: <CAEf4BzZgWwPJCkw1XKY03Vtb6B4_iE3dBbjqMB=upM0O=OYRXQ@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf 02/11] bpftool: define a local bpf_perf_link to fix
+ accessing its fields
+To:     Quentin Monnet <quentin@isovalent.com>
+Cc:     =?UTF-8?Q?Michal_Such=C3=A1nek?= <msuchanek@suse.de>,
+        Alexander Lobakin <aleksander.lobakin@intel.com>,
+        Alexander Lobakin <alobakin@mailbox.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Shung-Hsi Yu <shung-hsi.yu@suse.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Song Liu <songliubraving@fb.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,88 +83,158 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 3, 2023 at 4:01=E2=80=AFPM Thinh Nguyen <Thinh.Nguyen@synopsys.=
-com> wrote:
+On Wed, May 3, 2023 at 4:44=E2=80=AFPM Quentin Monnet <quentin@isovalent.co=
+m> wrote:
 >
-> On Wed, May 03, 2023, Roy Luo wrote:
-> > In cases where the controller somehow fails to write to event buffer
-> > memory (e.g. due to incorrect MMU config), the driver would receive
-> > all-zero dwc3 events. However, the abnormal event is silently dropped
-> > as a regular ep0out event.
->
-> When it does happen, will these prints flood the dmesg log?
-
-When this does happen, the driver cannot do the required actions to
-move things forward in correspondence to the HW events (e.g.
-Xfercomplete, reset, connection done, etc.).
-Therefore, the controller might throw some events in the beginning but
-it would cease quickly until the host does a new move that triggers
-the controller to send new events.
-
->
-> > Add error logs when an unknown endpoint event is received to highlight
-> > the anamoly.
->
-> anomaly?
-
-Thanks for catching this typo, will fix it in the next patchset.
-
->
+> On Fri, 21 Apr 2023 at 08:39, Michal Such=C3=A1nek <msuchanek@suse.de> wr=
+ote:
 > >
-> > Signed-off-by: Roy Luo <royluo@google.com>
-> > ---
-> >  drivers/usb/dwc3/ep0.c    | 2 ++
-> >  drivers/usb/dwc3/gadget.c | 2 ++
-> >  2 files changed, 4 insertions(+)
+> > On Thu, Apr 20, 2023 at 04:07:38PM -0700, Andrii Nakryiko wrote:
+> > > On Fri, Apr 14, 2023 at 9:28=E2=80=AFAM Michal Such=C3=A1nek <msuchan=
+ek@suse.de> wrote:
+> > > >
+> > > > On Fri, Apr 14, 2023 at 05:18:27PM +0200, Alexander Lobakin wrote:
+> > > > > From: Michal Such=C3=A1nek <msuchanek@suse.de>
+> > > > > Date: Fri, 14 Apr 2023 11:54:57 +0200
+> > > > >
+> > > > > > Hello,
+> > > > >
+> > > > > Hey-hey,
+> > > > >
+> > > > > >
+> > > > > > On Thu, Apr 21, 2022 at 12:38:58AM +0000, Alexander Lobakin wro=
+te:
+> > > > > >> When building bpftool with !CONFIG_PERF_EVENTS:
+> > > > > >>
+> > > > > >> skeleton/pid_iter.bpf.c:47:14: error: incomplete definition of=
+ type 'struct bpf_perf_link'
+> > > > > >>         perf_link =3D container_of(link, struct bpf_perf_link,=
+ link);
+> > > > > >>                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~~
+> > > > > >> tools/bpf/bpftool/bootstrap/libbpf/include/bpf/bpf_helpers.h:7=
+4:22: note: expanded from macro 'container_of'
+> > > > > >>                 ((type *)(__mptr - offsetof(type, member)));  =
+  \
+> > > > > >>                                    ^~~~~~~~~~~~~~~~~~~~~~
+> > > > > >> tools/bpf/bpftool/bootstrap/libbpf/include/bpf/bpf_helpers.h:6=
+8:60: note: expanded from macro 'offsetof'
+> > > > > >>  #define offsetof(TYPE, MEMBER)  ((unsigned long)&((TYPE *)0)-=
+>MEMBER)
+> > > > > >>                                                   ~~~~~~~~~~~^
+> > > > > >> skeleton/pid_iter.bpf.c:44:9: note: forward declaration of 'st=
+ruct bpf_perf_link'
+> > > > > >>         struct bpf_perf_link *perf_link;
+> > > > > >>                ^
+> > > > > >>
+> > > > > >> &bpf_perf_link is being defined and used only under the ifdef.
+> > > > > >> Define struct bpf_perf_link___local with the `preserve_access_=
+index`
+> > > > > >> attribute inside the pid_iter BPF prog to allow compiling on a=
+ny
+> > > > > >> configs. CO-RE will substitute it with the real struct bpf_per=
+f_link
+> > > > > >> accesses later on.
+> > > > > >> container_of() is not CO-REd, but it is a noop for
+> > > > > >> bpf_perf_link <-> bpf_link and the local copy is a full mirror=
+ of
+> > > > > >> the original structure.
+> > > > > >>
+> > > > > >> Fixes: cbdaf71f7e65 ("bpftool: Add bpf_cookie to link output")
+> > > > > >
+> > > > > > This does not solve the problem completely. Kernels that don't =
+have
+> > > > > > CONFIG_PERF_EVENTS in the first place are also missing the enum=
+ value
+> > > > > > BPF_LINK_TYPE_PERF_EVENT which is used as the condition for han=
+dling the
+> > > > > > cookie.
+> > > > >
+> > > > > Sorry, I haven't been working with my home/private stuff for more=
+ than a
+> > > > > year already. I may get back to it some day when I'm tired of Lua=
+ (curse
+> > > > > words, sorry :D), but for now the series is "a bit" abandoned.
+> > > >
+> > > > This part still appllies and works for me with the caveat that
+> > > > BPF_LINK_TYPE_PERF_EVENT also needs to be defined.
+> > > >
+> > > > > I think there was alternative solution proposed there, which prom=
+ised to
+> > > > > be more flexible. But IIRC it also doesn't touch the enum (was it=
+ added
+> > > > > recently? Because it was building just fine a year ago on config =
+without
+> > > > > perf events).
+> > > >
+> > > > It was added in 5.15. Not sure there is a kernel.org LTS kernel usa=
+ble
+> > > > for CO-RE that does not have it, technically 5.4 would work if it w=
+as
+> > > > built monolithic, it does not have module BTF, only kernel IIRC.
+> > > >
+> > > > Nonetheless, the approach to handling features completely missing i=
+n the
+> > > > running kernel should be figured out one way or another. I would be
+> > > > surprised if this was the last feature to be added that bpftool nee=
+ds to
+> > > > know about.
+> > >
+> > > Are we talking about bpftool built from kernel sources or from Github=
+?
+> > > Kernel source version should have access to latest UAPI headers and s=
+o
+> > > BPF_LINK_TYPE_PERF_EVENT should be available. Github version, if it
+> > > doesn't do that already, can use UAPI headers distributed (and used
+> > > for building) with libbpf through submodule.
 > >
-> > diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
-> > index 953b752a5052..8c9560a9999e 100644
-> > --- a/drivers/usb/dwc3/ep0.c
-> > +++ b/drivers/usb/dwc3/ep0.c
-> > @@ -1207,5 +1207,7 @@ void dwc3_ep0_interrupt(struct dwc3 *dwc,
-> >                       dep->flags &=3D ~DWC3_EP_TRANSFER_STARTED;
-> >               }
-> >               break;
-> > +     default:
-> > +             dev_err(dwc->dev, "unknown endpoint event %d\n", event->e=
-ndpoint_event);
+> > It does have a copy of the uapi headers but apparently does not use
+> > them. Using them directly might cause conflict with vmlinux.h, though.
 >
-> Can we add a break here?
-
-Sure ,will do it in the next patchset.
-
+> Indeed, using the UAPI header here conflicts with vmlinux.h.
 >
-> >       }
-> >  }
-> > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> > index c0ca4d12f95d..054f6f297e17 100644
-> > --- a/drivers/usb/dwc3/gadget.c
-> > +++ b/drivers/usb/dwc3/gadget.c
-> > @@ -3803,6 +3803,8 @@ static void dwc3_endpoint_interrupt(struct dwc3 *=
-dwc,
-> >               break;
-> >       case DWC3_DEPEVT_RXTXFIFOEVT:
-> >               break;
-> > +     default:
-> > +             dev_err(dwc->dev, "unknown endpoint event %d\n", event->e=
-ndpoint_event);
+> Looking again at some code I started last year but never finalised, I
+> used the following approach, redefining BPF_LINK_TYPE_PERF_EVENT with
+> CO-RE:
 >
-> and here too.
-
-Sure ,will do.
-
+>     enum bpf_link_type___local {
+>         BPF_LINK_TYPE_PERF_EVENT___local =3D 7,
+>     };
 >
-> >       }
-> >  }
-> >
-> >
-> > base-commit: c8c655c34e33544aec9d64b660872ab33c29b5f1
-> > --
-> > 2.40.1.495.gc816e09b53d-goog
-> >
+> Then guarding accordingly in iter():
+>
+>     [...]
+>     if (obj_type =3D=3D BPF_OBJ_LINK &&
+>         bpf_core_enum_value_exists(enum bpf_link_type___local,
+>                        BPF_LINK_TYPE_PERF_EVENT___local)) {
+>         struct bpf_link *link =3D (struct bpf_link *) file->private_data;
+>
+>         if (link->type =3D=3D bpf_core_enum_value(enum bpf_link_type___lo=
+cal,
+>                   BPF_LINK_TYPE_PERF_EVENT___local)) {
+>             e.has_bpf_cookie =3D true;
+>             e.bpf_cookie =3D get_bpf_cookie(link);
+>         }
+>     }
+>     [...]
+>
+> Would that approach make sense? I had a VM around with kernel 5.8, and
+> bpftool compiles there with that change. If I remember correctly, some
+> older kernel versions required yet more CO-RE work in pid_iter.bpf.c,
+> and at some point I was struggling, which is why I never submitted
+> this set.
+>
+> If this approach looks correct to you Andrii, I can resubmit these
+> patches with my addition so we can at least fix the build on 5.8
+> onwards.
+
+Yep, why not? In general, if using vmlinux.h makes life harder and
+there is just a small set of types and enums BPF program needs, for
+the sake of support of old kernels/distros it might be cleaner just to
+define relevant structs, enums, etc explicitly and add
+__attribute__((preserve_access_index)) to them to make the
+CO-RE-relocatable
+
 >
 > Thanks,
-> Thinh
-
-Regards,
-Roy Luo
+> Quentin
