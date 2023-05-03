@@ -2,142 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61BE36F5D5A
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 19:55:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F5F86F5D58
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 19:55:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbjECRz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 13:55:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43540 "EHLO
+        id S229811AbjECRzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 13:55:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjECRzZ (ORCPT
+        with ESMTP id S229455AbjECRy7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 13:55:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88CB010FF
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 10:54:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683136476;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cKPUL7FZWA4e+itJ2WAtXLunhkYaY3Bk3M9ZOMdUVpQ=;
-        b=hbM85wjG5OqYg/6yF//dDtyBCiqICqD/YvlKsnu2vkIU53VC4mr/94yTYdIqe8adof3ILw
-        JnLfoPEMHfzb8S9I9q9Vlb3+wXIK5eaq+RWYMDqaZPUAFO2BsdOQ2MSYRjqPvMkmr5FyLQ
-        GpHV8Cmq0jxDbEmuSUBTIGwsh7eBmCE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-385-JW0PGHQoOkygat9G0REsvg-1; Wed, 03 May 2023 13:54:32 -0400
-X-MC-Unique: JW0PGHQoOkygat9G0REsvg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E7798886462;
-        Wed,  3 May 2023 17:54:27 +0000 (UTC)
-Received: from [10.22.17.228] (unknown [10.22.17.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E1D64C15BAD;
-        Wed,  3 May 2023 17:54:26 +0000 (UTC)
-Message-ID: <a3011e82-9e44-9292-dd51-e557d31930c2@redhat.com>
-Date:   Wed, 3 May 2023 13:54:26 -0400
+        Wed, 3 May 2023 13:54:59 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A78231708
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 10:54:58 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-959a3e2dd27so1053150566b.3
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 10:54:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1683136497; x=1685728497;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=af2o5qnqMCwqTalPYr17vqDObiqD6tO8pD94nAo//yg=;
+        b=O1qtBSRcPr7GjPKh+6lXdoKCRoYckSAQdUPlgyIUv/5EggO9NJILtbP2/bTuw7ickN
+         Hzrg/Up3Xm3aoxA4MIcO+k+5HjtvcbvY2k/315hsxTdz6SpazkpBySaAwf4N9j3SS+K4
+         D6yXAsWcHUP9UrdDzAwTXUGkzg2MYTOjEUEzo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683136497; x=1685728497;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=af2o5qnqMCwqTalPYr17vqDObiqD6tO8pD94nAo//yg=;
+        b=Gxu6gNy9zvHncmBlXAqFVCEsbiru0xI9Nckn7GFnlPvJ9nCpO510M0m9Nl6sQPxzt+
+         XTAZRqD0acWrF8N/508++UzCbzoyza8IeEVcgkdjr8lnjBxVKycs5r3Z5SkTTxbJu40e
+         RE9e45eOG1UbWTatORpzsJC6FQ53XaoYkob9E5kFMkX5GhNolNJV3oK2R5HN+smyht0q
+         1DAiIFVp8S4USm8NAiDOmdkTGnLKzw6nPLn5Cmjg6Bq/A+aG7wnUS98X5AhxLfCXFhhx
+         EdRIfIiMYZNG5eEL4tyRwhSkMVE8eM/wMt6i9dz6YqMDlAVEss67LJLsSSsILnQp62Rz
+         CiZA==
+X-Gm-Message-State: AC+VfDwZvcVXlVjtZrI782Ucc0snIqGD82LjJ4yD0i/6EKVo3hAQaU5J
+        YVGtxwfOnSRaTqp59TE9+x4PsE5MpYsPQit9NNHLlA==
+X-Google-Smtp-Source: ACHHUZ4wH4SAsE5NQRKu2rZR4YC6NRyyvfvHWYa0TvAuxOu6EB4GQSoHYBa88jzue5LyhVALw+GbRg==
+X-Received: by 2002:a17:907:3d8d:b0:94a:6b4b:6b52 with SMTP id he13-20020a1709073d8d00b0094a6b4b6b52mr3850422ejc.76.1683136496893;
+        Wed, 03 May 2023 10:54:56 -0700 (PDT)
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com. [209.85.218.42])
+        by smtp.gmail.com with ESMTPSA id n25-20020a1709062bd900b0094fa472a7c4sm17638142ejg.161.2023.05.03.10.54.55
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 May 2023 10:54:56 -0700 (PDT)
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-959a3e2dd27so1053146566b.3
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 10:54:55 -0700 (PDT)
+X-Received: by 2002:a17:906:da8a:b0:94f:553:6fd6 with SMTP id
+ xh10-20020a170906da8a00b0094f05536fd6mr3895127ejb.24.1683136495726; Wed, 03
+ May 2023 10:54:55 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 1/6] cgroup/cpuset: Rename functions dealing with
- DEADLINE accounting
-Content-Language: en-US
-To:     Juri Lelli <juri.lelli@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Qais Yousef <qyousef@layalina.io>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hao Luo <haoluo@google.com>
-Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
-        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
-        bristot@redhat.com, mathieu.poirier@linaro.org,
-        cgroups@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
-        Quentin Perret <qperret@google.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>
-References: <20230503072228.115707-1-juri.lelli@redhat.com>
- <20230503072228.115707-2-juri.lelli@redhat.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20230503072228.115707-2-juri.lelli@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230427225647.1101172-1-dave.hansen@linux.intel.com>
+ <CAHk-=wgrdOm8RwO+u8bydrbgs0wXJV_9mBYAtzX9d9hEY7a25A@mail.gmail.com>
+ <CAHk-=wiHvdgbLxayyCsRU45JnKCZkCOpEJPfOvE3eYCnGjVcSA@mail.gmail.com>
+ <20230429003822.n3mglslg666j3npp@box.shutemov.name> <641a9348-a052-6bb5-e6c7-64acb6405328@intel.com>
+ <CAHk-=wgnGoj8qZg3SRh1Z1-mU=b3ryydXZykUuarnrAn6LuHBw@mail.gmail.com>
+ <CAHk-=wgN=GY2A0htYQQRmPaLCorWnFatY_XO0X2w_m9xXQDcPA@mail.gmail.com>
+ <f5983c42-82a5-1cd8-c717-67bfd72377dc@intel.com> <CAHk-=wgpOqujY210W9-KJPEfD42W_bvUdLwF-PAvyxJQ92tzDg@mail.gmail.com>
+ <CAHk-=wj7q6Ng5uemZtrDnhtcfrgkzX5Z18eKZj94FY5d2quP6A@mail.gmail.com>
+In-Reply-To: <CAHk-=wj7q6Ng5uemZtrDnhtcfrgkzX5Z18eKZj94FY5d2quP6A@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 3 May 2023 10:54:38 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgokAgkTVpEHM7c8oP9mca5s21RcxksF8h3FwWFJbCu3w@mail.gmail.com>
+Message-ID: <CAHk-=wgokAgkTVpEHM7c8oP9mca5s21RcxksF8h3FwWFJbCu3w@mail.gmail.com>
+Subject: Re: [GIT PULL] x86/mm for 6.4
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kirill.shutemov@linux.intel.com,
+        Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, May 3, 2023 at 9:38=E2=80=AFAM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> So I'm going to just remove the 'sign' games entirely. They are
+> completely broken in 'untagged_addr_remote()', they _used_ to be
+> completely broken in 'untagged_addr()', and it looks like it's all
+> unnecessary.
 
-On 5/3/23 03:22, Juri Lelli wrote:
-> rebuild_root_domains() and update_tasks_root_domain() have neutral
-> names, but actually deal with DEADLINE bandwidth accounting.
->
-> Rename them to use 'dl_' prefix so that intent is more clear.
->
-> No functional change.
->
-> Suggested-by: Qais Yousef <qyousef@layalina.io>
-> Signed-off-by: Juri Lelli <juri.lelli@redhat.com>
-> ---
->   kernel/cgroup/cpuset.c | 8 ++++----
->   1 file changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index e4ca2dd2b764..428ab46291e2 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -1066,7 +1066,7 @@ static int generate_sched_domains(cpumask_var_t **domains,
->   	return ndoms;
->   }
->   
-> -static void update_tasks_root_domain(struct cpuset *cs)
-> +static void dl_update_tasks_root_domain(struct cpuset *cs)
->   {
->   	struct css_task_iter it;
->   	struct task_struct *task;
-> @@ -1079,7 +1079,7 @@ static void update_tasks_root_domain(struct cpuset *cs)
->   	css_task_iter_end(&it);
->   }
->   
-> -static void rebuild_root_domains(void)
-> +static void dl_rebuild_rd_accounting(void)
->   {
->   	struct cpuset *cs = NULL;
->   	struct cgroup_subsys_state *pos_css;
-> @@ -1107,7 +1107,7 @@ static void rebuild_root_domains(void)
->   
->   		rcu_read_unlock();
->   
-> -		update_tasks_root_domain(cs);
-> +		dl_update_tasks_root_domain(cs);
->   
->   		rcu_read_lock();
->   		css_put(&cs->css);
-> @@ -1121,7 +1121,7 @@ partition_and_rebuild_sched_domains(int ndoms_new, cpumask_var_t doms_new[],
->   {
->   	mutex_lock(&sched_domains_mutex);
->   	partition_sched_domains_locked(ndoms_new, doms_new, dattr_new);
-> -	rebuild_root_domains();
-> +	dl_rebuild_rd_accounting();
->   	mutex_unlock(&sched_domains_mutex);
->   }
->   
-Reviewed-by: Waiman Long <longman@redhat.com>
+Ok, I've pushed out my changes to the 'x86-uaccess-cleanup' branch.
 
+I think it's all good, but it would be really nice to hear it's been
+tested on a setup that actually has LAM (simulator? or maybe there is
+actual hw inside Intel)
+
+And any other commentary is appreciated,
+
+              Linus
