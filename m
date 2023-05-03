@@ -2,190 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A17546F5A73
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 16:55:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 601FF6F5A79
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 16:55:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbjECOzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 10:55:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36150 "EHLO
+        id S230248AbjECOzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 10:55:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbjECOzJ (ORCPT
+        with ESMTP id S229988AbjECOzn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 10:55:09 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC05420B;
-        Wed,  3 May 2023 07:55:08 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id DBC0222929;
-        Wed,  3 May 2023 14:55:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1683125706; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HhvrVC97XBYmFSXZA3+Mafjkd40eBdeyxxUiArLGfFM=;
-        b=pRFgvKCL7PFHtPhgQ9QNUrZk37Bp+UyZOrndeXiL99om1bhlr+MVlhHGkmY7CCAuGq7oTG
-        KyYqS4NcIVXLqtpLaPALZhQQlDyYRwzp591EWsG56187vQIvayBTPHRxygG3ybWT6BJdjv
-        oSgUS5RP1DLwyMkDmCLJFKj/ffJfXHw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1683125706;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HhvrVC97XBYmFSXZA3+Mafjkd40eBdeyxxUiArLGfFM=;
-        b=8SWl2HwLTNqxEG13HZ5zDyZE9sStVDEaRpczQzdfBAmkT9pzgYsHRx1a4zB9vM9rgEL1N8
-        DN00+Jk6pt6xD5Aw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7495B1331F;
-        Wed,  3 May 2023 14:55:06 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id b8LcGsp1UmSHUwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 03 May 2023 14:55:06 +0000
-Message-ID: <dd921bae-0145-09e2-24b1-f08d89a78eba@suse.de>
-Date:   Wed, 3 May 2023 16:55:05 +0200
+        Wed, 3 May 2023 10:55:43 -0400
+Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BAB6526B
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 07:55:42 -0700 (PDT)
+Received: by mail-ua1-x934.google.com with SMTP id a1e0cc1a2514c-77d508ba6faso413317241.2
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 07:55:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683125741; x=1685717741;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :reply-to:mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1o3TDsmabgBewcVwpqP80qF6wI2yiYJ2QQkuG02ZCd0=;
+        b=lJ5gznFzSlQ5Ml+5omFF8hQ3FNlj1hjA7kuGJiyjII1MWTiYJJKCftyEtbnuX05HCk
+         9PYeBmloZi1Dr91C7DAVkGuhjA9MpmVsxB/+p8B+c72RdJpAL8U7n5zQqPHm3ztvIOur
+         tLUSGgwJcSJJByc3v2gMhFQ7bvhxu4ITQ4NIAsieUipmzXmfaxm7FjENAULz07lGDrFR
+         NuJj+gdIer7ylAsngJvVSoULhlwHBqFTzhN44GEmoAG0Nahkcxz/KhkXOvTi+oCEUCHw
+         38TxyLBhOguYj3WHYGMJc3sAGnM8FJvl03o3SjTgMgQzbYIeD6oa1Jfzj8ev9hW+mz3T
+         n7kQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683125741; x=1685717741;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1o3TDsmabgBewcVwpqP80qF6wI2yiYJ2QQkuG02ZCd0=;
+        b=EhcB59aVdhzV485ZD2UndzFrMvmptDGj9QDs/ii44Vp6ykrmcTogkQUDTg5M67l4V0
+         PmFBOrklpcKcqFhUIPKrhhanCEC8b+ejzoW9OhQSKkjXP0RTRE8hU6DgnXooD8KzrlbA
+         +XAtSUSDCN043zjE0Dnw3sJMjy4L3nMyNrToNRDaQik6ibzzfw2axlZzgxKTC1u9JxZl
+         8nlDq4ZrSA1WuV+LGH1ctzRXVJ6udH7/rMCLu3sJ31pqOH1ZBX5ykampYnoZCOxIsg5H
+         YzwLRvFbwJvH4jvCNSVGnaKPRLydXZFaCO+Fc9toJNap0vPeUjMDCIcW7BHugEWmeyKE
+         Y7Pw==
+X-Gm-Message-State: AC+VfDw96Qj9ECTeRY6lgTCxXeUzh7fWGC7b44BcLXDl4eKsaD2NtAgK
+        GIkS4C62ytSq3w3old7rqSGk/Zrw+Xx7gwQAOQs=
+X-Google-Smtp-Source: ACHHUZ45jDdwNjVH5mHQzajHmtgbXbVYpj3l9YaVlgeG4fb+eI/Z+HwUUK0dTe0z1j0LRi9D2gAVXbbkBouj98be/jI=
+X-Received: by 2002:a67:f707:0:b0:430:4241:d78e with SMTP id
+ m7-20020a67f707000000b004304241d78emr1345974vso.28.1683125740890; Wed, 03 May
+ 2023 07:55:40 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 5/6] fbdev: Move framebuffer I/O helpers into
- <asm/fb.h>
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>, Helge Deller <deller@gmx.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        "David S . Miller" <davem@davemloft.net>,
-        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Sam Ravnborg <sam@ravnborg.org>
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, sparclinux@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-parisc@vger.kernel.org
-References: <20230502130223.14719-1-tzimmermann@suse.de>
- <20230502130223.14719-6-tzimmermann@suse.de>
- <67d6a188-041f-4604-99a3-548c41af0693@app.fastmail.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <67d6a188-041f-4604-99a3-548c41af0693@app.fastmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------UDwmwmIfL482P7WlMrqweUEs"
-X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Reply-To: mrstheresenina112@gmail.com
+Sender: peterhhenry4352@gmail.com
+Received: by 2002:a05:612c:14f:b0:38c:fa1c:2d3a with HTTP; Wed, 3 May 2023
+ 07:55:40 -0700 (PDT)
+From:   "Mrs. Therese Nina" <mrstheresenina112@gmail.com>
+Date:   Wed, 3 May 2023 07:55:40 -0700
+X-Google-Sender-Auth: gghKug8jdNCHvwSik4n2Fcl3_Vc
+Message-ID: <CADzTqjTmO=q4AiSWyLEOusJdoONh=U33injY9FTO-Zrkcqg4Tw@mail.gmail.com>
+Subject: Hello Dear
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=7.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,LOTS_OF_MONEY,MONEY_FRAUD_5,
+        MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:934 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [mrstheresenina112[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [peterhhenry4352[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [mrstheresenina112[at]gmail.com]
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  2.2 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  3.1 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  1.1 MONEY_FRAUD_5 Lots of money and many fraud phrases
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------UDwmwmIfL482P7WlMrqweUEs
-Content-Type: multipart/mixed; boundary="------------WF70DbsrzaM72ML8O0Xlqhcn";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Arnd Bergmann <arnd@arndb.de>, Helge Deller <deller@gmx.de>,
- Geert Uytterhoeven <geert@linux-m68k.org>,
- Javier Martinez Canillas <javierm@redhat.com>,
- Daniel Vetter <daniel@ffwll.ch>, Vineet Gupta <vgupta@kernel.org>,
- Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
- "David S . Miller" <davem@davemloft.net>,
- "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
- Sam Ravnborg <sam@ravnborg.org>
-Cc: linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
- Linux-Arch <linux-arch@vger.kernel.org>, linux-snps-arc@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
- loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
- sparclinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-parisc@vger.kernel.org
-Message-ID: <dd921bae-0145-09e2-24b1-f08d89a78eba@suse.de>
-Subject: Re: [PATCH v3 5/6] fbdev: Move framebuffer I/O helpers into
- <asm/fb.h>
-References: <20230502130223.14719-1-tzimmermann@suse.de>
- <20230502130223.14719-6-tzimmermann@suse.de>
- <67d6a188-041f-4604-99a3-548c41af0693@app.fastmail.com>
-In-Reply-To: <67d6a188-041f-4604-99a3-548c41af0693@app.fastmail.com>
+Hello Good Morning
 
---------------WF70DbsrzaM72ML8O0Xlqhcn
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+I write you this letter from the heart full of sincerity and tension,
+My Name is Mrs. Therese Nina, from Norway, I know that this message
+will be a surprise to you. Firstly, I am married to Mr. Patrick Nina,
+A gold merchant who owns a small gold Mine in Austria; He died of
+cardiovascular disease in mid-March 2011. During his lifetime he
+deposited the sum of =E2=82=AC 8.5 Million Euro in a bank in Vienna, the
+Capital city of Austria.
 
-SGkNCg0KQW0gMDIuMDUuMjMgdW0gMjI6MDYgc2NocmllYiBBcm5kIEJlcmdtYW5uOg0KPiBP
-biBUdWUsIE1heSAyLCAyMDIzLCBhdCAxNTowMiwgVGhvbWFzIFppbW1lcm1hbm4gd3JvdGU6
-DQo+PiBJbXBsZW1lbnQgZnJhbWVidWZmZXIgSS9PIGhlbHBlcnMsIHN1Y2ggYXMgZmJfcmVh
-ZCooKSBhbmQgZmJfd3JpdGUqKCksDQo+PiBpbiB0aGUgYXJjaGl0ZWN0dXJlJ3MgPGFzbS9m
-Yi5oPiBoZWFkZXIgZmlsZSBvciB0aGUgZ2VuZXJpYyBvbmUuDQo+Pg0KPj4gVGhlIGNvbW1v
-biBjYXNlIGhhcyBiZWVuIHRoZSB1c2Ugb2YgcmVndWxhciBJL08gZnVuY3Rpb25zLCBzdWNo
-IGFzDQo+PiBfX3Jhd19yZWFkYigpIG9yIG1lbXNldF9pbygpLiBBIGZldyBhcmNoaXRlY3R1
-cmVzIHVzZWQgcGxhaW4gc3lzdGVtLQ0KPj4gbWVtb3J5IHJlYWRzIGFuZCB3cml0ZXMuIFNw
-YXJjIHVzZWQgaGVscGVycyBmb3IgaXRzIFNCdXMuDQo+Pg0KPj4gVGhlIGFyY2hpdGVjdHVy
-ZXMgdGhhdCB1c2VkIHNwZWNpYWwgY2FzZXMgcHJvdmlkZSB0aGUgc2FtZSBjb2RlIGluDQo+
-PiB0aGVpciBfX3Jhd18qKCkgSS9PIGhlbHBlcnMuIFNvIHRoZSBwYXRjaCByZXBsYWNlcyB0
-aGlzIGNvZGUgd2l0aCB0aGUNCj4+IF9fcmF3XyooKSBmdW5jdGlvbnMgYW5kIG1vdmVzIGl0
-IHRvIDxhc20tZ2VuZXJpYy9mYi5oPiBmb3IgYWxsDQo+PiBhcmNoaXRlY3R1cmVzLg0KPj4N
-Cj4+IHYzOg0KPj4gCSogaW1wbGVtZW50IGFsbCBhcmNoaXRlY3R1cmVzIHdpdGggZ2VuZXJp
-YyBoZWxwZXJzDQo+PiAJKiBzdXBwb3J0IHJlb3JkZXJpbmcgYW5kIG5hdGl2ZSBieXRlIG9y
-ZGVyIChHZWVydCwgQXJuZCkNCj4gDQo+IFRoaXMgbG9va3MgZ29vZCBmb3IgdGhlIHJlYWQv
-d3JpdGUgaGVscGVycywgYnV0IEknbSBhIGxpdHRsZQ0KPiB3b3JyaWVkIGFib3V0IHRoZSBt
-ZW1zZXQgYW5kIG1lbWNweSBmdW5jdGlvbnMsIHNpbmNlIHRoZXkgZG8NCj4gY2hhbmdlIGJl
-aGF2aW9yIG9uIHNvbWUgYXJjaGl0ZWN0dXJlczoNCj4gDQo+IC0gb24gc3BhcmM2NCwgZmJf
-bWVte3NldCxjcHl9IHVzZXMgQVNJX1BIWVNfQllQQVNTX0VDX0UgKGxpa2UgX19yYXdfcmVh
-ZGIpDQo+ICAgIHdoaWxlIG1lbXtzZXRfLGNweV9mcm9tLGNweV90b30gdXNlcyBBU0lfUEhZ
-U19CWVBBU1NfRUNfRV9MIChsaWtlIHJlYWRiKQ0KPiAgICBJIGRvbid0IGtub3cgdGhlIGVm
-ZmVjdCBvZiB0aGF0LCBidXQgaXQgc2VlbXMgaW50ZW50aW9uYWwNCj4gDQo+IC0gb24gbG9v
-bmdhcmNoIGFuZCBjc2t5LCB0aGUgX2lvIHZhcmlhbnRzIGF2b2lkIHVuYWxpZ25lZCBhY2Nl
-c3MsDQo+ICAgIHdoaWxlIHRoZSBub3JtYWwgbWVtY3B5L21lbXNldCBpcyBwcm9iYWJseSBi
-cm9rZW4sIHNvIHlvdXINCj4gICAgcGF0Y2ggaXMgYSBidWdmaXgNCj4gDQo+IC0gb24gaWE2
-NCwgdGhlIF9pbyB2YXJpYW50cyB1c2UgYnl0ZXdpc2UgYWNjZXNzIGFuZCBhdm9pZCBhbnkg
-bG9uZ2VyDQo+ICAgIGxvYWRzIGFuZCBzdG9yZXMsIHNvIHlvdXIgcGF0Y2ggcHJvYmFibHkg
-bWFrZXMgdGhpbmdzIHNsb3dlci4NCj4gDQo+IEl0J3MgcHJvYmFibHkgc2FmZSB0byBkZWFs
-IHdpdGggYWxsIHRoZSBhYm92ZSBieSBlaXRoZXIgYWRkaW5nDQo+IGFyY2hpdGVjdHVyZSBz
-cGVjaWZpYyBvdmVycmlkZXMgdG8gdGhlIGN1cnJlbnQgdmVyc2lvbiwgb3INCj4gYnkgZG9p
-bmcgdGhlIHNlbWFudGljIGNoYW5nZXMgYmVmb3JlIHRoZSBtb3ZlIHRvIGFzbS9mYi5oLCBi
-dXQNCj4gb25lIHdheSBvciB0aGUgb3RoZXIgSSdkIHByZWZlciB0aGlzIHRvIGJlIHNlcGFy
-YXRlIGZyb20gdGhlDQo+IGNvbnNvbGlkYXRpb24gcGF0Y2ggdGhhdCBzaG91bGQgbm90IGhh
-dmUgYW55IGNoYW5nZXMgaW4gYmVoYXZpb3IuDQoNCkkgdGhpbmsgSSdsbCBhZGQgYXJjaGl0
-ZWN0dXJlIG92ZXJyaWRlcyB0aGF0IGNvbnRhaW4gdGhlIGN1cnJlbnQgY29kZSwgDQpldmVu
-IGlmIHRoZXkgY29udGFpbiBzb21lIGZvcmNlLWNhc3Rpbmcgd3J0IF9faW9tZW0uIElmIGFu
-eW9uZSB3YW50cyB0byANCmZpeCB0aGUgaXNzdWVzLCB0aGV5IGNhbiB0aGVuIGFkZHJlc3Mg
-dGhlbSBlYXNpbHkuDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCj4gDQo+ICAgICAgIEFy
-bmQNCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Bl
-cg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpGcmFua2Vuc3RyYXNz
-ZSAxNDYsIDkwNDYxIE51ZXJuYmVyZywgR2VybWFueQ0KR0Y6IEl2byBUb3RldiwgQW5kcmV3
-IE15ZXJzLCBBbmRyZXcgTWNEb25hbGQsIEJvdWRpZW4gTW9lcm1hbg0KSFJCIDM2ODA5IChB
-RyBOdWVybmJlcmcpDQo=
+I am not in good health in which I sleep every night without knowing
+if I may be alive to see the next day. I am suffering from long term
+cancer and presently I am partially suffering from a stroke illness
+which has become almost impossible for me to move around, I have
+decided to donate what I have to you for the support of helping
+Motherless babies less privileged Widows' because I am dying and
+diagnosed with cancer for about two years ago.
 
---------------WF70DbsrzaM72ML8O0Xlqhcn--
+I need a very honest person who can claim this money and use it for
+Charity works, for orphanages, widows and also build schools for less
+privilege that will be named after my late husband and my name; and I
+will give you more information on how the fund will be transferred to
+your bank account.
 
---------------UDwmwmIfL482P7WlMrqweUEs
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmRSdcoFAwAAAAAACgkQlh/E3EQov+Cj
-zg/9HFoysElKHNgvZ1o3nHmqKL2VPV2VUUDyIhkVoSgQOj/I9DBMYb1J8nrkwkB5rOWOm1TrLl82
-RFsBF6W152p9NqSrOxHrGS2K6+8U6cC3foWbdtuhxOz+KseTK997YLSF/+t2KoMi+u9GHVSImntd
-lYAbjFF9P8bbF6caCwfNtMolODw1qhMrcIFN3w3o+y4LhMIK6qF87PlsosJHvVl9VqQaMSzmNQkW
-CH2Xc0s0rRaPU5acg8IjYM0IqCuiAWcK/V+Q2UvM2UAXLtdWGeUYcTABN4YMLUrHp/9yj2ojgCXe
-BQK/gZ6xCYurVyDtHW3snwcZztsycF8egMnp3SKeQLKm98fx6+xMVamjdnJL9OFN0RF4uraKL7/2
-86YhpfnjWeDDQHE01wWG5INLJhCteNbHJHtiqM6/K+m5jhkNhwcOo9n+1IdF73HCAnwarzDTutsU
-DoEItP7vwqQwW1JFIm8U8gNTkkL/jqAlkbdqjfT8cj7O+sBW7yRB7jMdhQScNccg/1aBcSWQ+zDF
-JfKZO8Ms651aEP6ZWJXLCNlOVxmP5desgjax2qx75v5QSdzzeQRgKoDfqCvy9oTwEqTMzK79c5gP
-E2vhUaybCer9Q3ZkGoaWwt8HBEFCTkyh46TcbO1YiX6lq2rjgADep+w+1DxULkdBs8ZX0F9NFmGg
-6Nk=
-=cYZ4
------END PGP SIGNATURE-----
-
---------------UDwmwmIfL482P7WlMrqweUEs--
+Warm Regards
+Mrs. Therese Nina
