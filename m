@@ -2,95 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1767D6F5575
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 11:57:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0AB16F557C
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 11:58:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbjECJ5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 05:57:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52270 "EHLO
+        id S229802AbjECJ62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 05:58:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjECJ5d (ORCPT
+        with ESMTP id S229667AbjECJ6Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 05:57:33 -0400
-Received: from out-29.mta0.migadu.com (out-29.mta0.migadu.com [IPv6:2001:41d0:1004:224b::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF31F30D6
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 02:57:28 -0700 (PDT)
-Date:   Wed, 3 May 2023 05:57:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1683107846;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sUxQsWcAayZPSDpvKJX6MVjvEYhxJEaesagDt8ESMoA=;
-        b=HUCOH/N80slFi5vErQvwXmQRVJPgvs7X0vQd0axDTlMk/yD6uS8UUgewhyEcC5YpGdd9lD
-        Nfp4W/DmTbgBenfdi4cDwJFHiY7ZMVbWxr9EavpMuZfK1GaSdppyvarZLa7ZfejwjalZfu
-        dEG41/SPqlqOodTMCQ2OgtLp+yIUXFg=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Petr =?utf-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        akpm@linux-foundation.org, vbabka@suse.cz, hannes@cmpxchg.org,
-        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
-        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
-        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
-        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
-        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
-        tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
-        paulmck@kernel.org, pasha.tatashin@soleen.com,
-        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
-        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, gregkh@linuxfoundation.org,
-        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
-Subject: Re: [PATCH 00/40] Memory allocation profiling
-Message-ID: <ZFIv+30UH7+ySCZr@moria.home.lan>
-References: <20230501165450.15352-1-surenb@google.com>
- <ZFIMaflxeHS3uR/A@dhcp22.suse.cz>
- <ZFIOfb6/jHwLqg6M@moria.home.lan>
- <ZFISlX+mSx4QJDK6@dhcp22.suse.cz>
- <20230503115051.30b8a97f@meshulam.tesarici.cz>
+        Wed, 3 May 2023 05:58:25 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA543C01
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 02:58:22 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2ac7707e34fso2443651fa.1
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 02:58:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google; t=1683107901; x=1685699901;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=tBpbf4XISWJtBVaZwAOtHjLjUmCzvCogGOFBVPRRTeM=;
+        b=eC+qsf6xglZKV7CIhF7hjQId46jGm5iibiBcAS5+hNCOFLrwCctuk9zhKSQhP11MG4
+         FzzE7GtFUQPe3xg3H3NsE7+/BtBNwb9JiONgBSJXQxJM/ii3584RhveoKLDUc/ta991P
+         FUPi3lYbvlSeajspGQTA+hsRtnQ4fGnu0QzRY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683107901; x=1685699901;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tBpbf4XISWJtBVaZwAOtHjLjUmCzvCogGOFBVPRRTeM=;
+        b=bHiK7cPZ0qAJcPQ/QsVR0JRBjTLQ17VXeff5pPMbq94AiIMYHvk+MNYYAlyPn9FzTC
+         2+hpw44tCo1QaFhu/c91lZgUC/Efp+BjKf9C/Av9/KGJpfmYCKH/tRDmTyzR6Tec6rAm
+         aiT/mh1EzX6Ni1XSYXAxLUlZMgEV1Ogds+Mkp6F4/qgp/zxwztEU5jk92ieH1dJ80sYX
+         TtdgfDL8NDcpU9FKQJ+HiuQWqhi/X9OgpWM83QCcD0yy54mO1d/3ZCTVJmhFkFRRbw69
+         D+WtVQHCwVkL37BtX510sci4HZB967pO+VuUHUs1TU9BaQ5/KnLuKFIySdHPyQOm3gOZ
+         aLjg==
+X-Gm-Message-State: AC+VfDwTl+L3Nc+2azHj1mmSl2tQ86FEuY6D5/EhungfzLtxMoc9ewcF
+        Ts7zRtXB+ob3/4WZ3JrFfRw6sQ==
+X-Google-Smtp-Source: ACHHUZ55GS6xfViVrIMSKR3rL04uqNDXxkXbVQ848BwHSw2kedpGC8skunVtYg7im52sUoxJ3dvnaA==
+X-Received: by 2002:a2e:b0eb:0:b0:2ac:767c:ae14 with SMTP id h11-20020a2eb0eb000000b002ac767cae14mr231428ljl.19.1683107900758;
+        Wed, 03 May 2023 02:58:20 -0700 (PDT)
+Received: from prevas-ravi.k200.local ([87.54.42.112])
+        by smtp.gmail.com with ESMTPSA id b10-20020a2e988a000000b002ac77768608sm74050ljj.100.2023.05.03.02.58.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 May 2023 02:58:20 -0700 (PDT)
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+To:     Cosmin Tanislav <cosmin.tanislav@analog.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Cosmin Tanislav <demonsingur@gmail.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] iio: addac: ad74413: fix resistance input processing
+Date:   Wed,  3 May 2023 11:58:17 +0200
+Message-Id: <20230503095817.452551-1-linux@rasmusvillemoes.dk>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230503115051.30b8a97f@meshulam.tesarici.cz>
-X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 03, 2023 at 11:50:51AM +0200, Petr Tesařík wrote:
-> If anyone ever wants to use this code tagging framework for something
-> else, they will also have to convert relevant functions to macros,
-> slowly changing the kernel to a minefield where local identifiers,
-> struct, union and enum tags, field names and labels must avoid name
-> conflict with a tagged function. For now, I have to remember that
-> alloc_pages is forbidden, but the list may grow.
+On success, ad74413r_get_single_adc_result() returns IIO_VAL_INT aka
+1. So currently, the IIO_CHAN_INFO_PROCESSED case is effectively
+equivalent to the IIO_CHAN_INFO_RAW case, and we never call
+ad74413r_adc_to_resistance_result() to convert the adc measurement to
+ohms.
 
-Also, since you're not actually a kernel contributor yet...
+Check ret for being negative rather than non-zero.
 
-It's not really good decorum to speculate in code review about things
-that can be answered by just reading the code. If you're going to
-comment, please do the necessary work to make sure you're saying
-something that makes sense.
+Fixes: fea251b6a5dbd (iio: addac: add AD74413R driver)
+Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+---
+ drivers/iio/addac/ad74413r.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/iio/addac/ad74413r.c b/drivers/iio/addac/ad74413r.c
+index 07e9f6ae16a8..e3366cf5eb31 100644
+--- a/drivers/iio/addac/ad74413r.c
++++ b/drivers/iio/addac/ad74413r.c
+@@ -1007,7 +1007,7 @@ static int ad74413r_read_raw(struct iio_dev *indio_dev,
+ 
+ 		ret = ad74413r_get_single_adc_result(indio_dev, chan->channel,
+ 						     val);
+-		if (ret)
++		if (ret < 0)
+ 			return ret;
+ 
+ 		ad74413r_adc_to_resistance_result(*val, val);
+-- 
+2.37.2
+
