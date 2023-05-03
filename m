@@ -2,163 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B77F6F5F24
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 21:32:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 899556F5F3F
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 21:39:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbjECTcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 15:32:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51700 "EHLO
+        id S229894AbjECTjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 15:39:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjECTcL (ORCPT
+        with ESMTP id S229481AbjECTjb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 15:32:11 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1EE57AA0
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 12:32:02 -0700 (PDT)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 343HomnJ017464;
-        Wed, 3 May 2023 19:31:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type :
- content-transfer-encoding : in-reply-to : mime-version; s=corp-2023-03-30;
- bh=xcIeBINQRNHRxvcz2Oan0QNui+BXXVeoXn13xbr4IgM=;
- b=z9dbs7QsyBAmCjtilh7V1Yzxi/pyKasJ2jU/tyrHnKXn89VKlmqM+tjDS4vgQOS5g+Nn
- Zlczc3d2TDoY66lrbgHBv8KDZ6Cu5098vMT8rYY1UPGsDs++oBAzi27uQLl3psxI3vC+
- /v9PFbN7jBjTu0bo6edpcla1AeY1X2qrdAomqubVrBNmZhIo3ehIvdWPOUKxY9tfXsIf
- bYE2WW44OPyitcG+CQdJLXGD5dxLVhD4JmTP7HpP06a3rUVG3m6YojM5lNtlIKxLhXGq
- /HfzMZDq7p//cSlFQFCFLr5WTm09OjpETYZbaeXmOqM9YvELMm74eR92gy0Q9xtqamKv Yw== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3q8u4ar33n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 03 May 2023 19:31:55 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 343JOhpo020756;
-        Wed, 3 May 2023 19:31:55 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2108.outbound.protection.outlook.com [104.47.58.108])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3q8sp7j4uf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 03 May 2023 19:31:55 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CuoqjmmmGoH4ICk1kO6vmSs/ZU+8fGMPkoLTDtmKXtmXFJEFRGFRF0Ss7I/yoOT2QqReRDjaSX9Mr5Y6Tfa2heyCYYd2L8inc0a1c4xKFCZx06B8Qvod1ZVWb9ij457AYCL6d1ZWYhH/lCNJJ4qi16A9Zfia6cNDKhoEiyLB5YXxNl29p2oCzx5lgbWIbywW/6HmhYVCl4o5dpbAyaGReElkmTHjfxsyZX6iN9uSNN5EkAA+3h/vuG7DD1OTKvU2PMQoDgbpM2DmD5loTUY7nJMbauvJW+6zQMvkLh0Od+VNmEmyrFj+p+jrIdQwegSqGbIwy6RfqNUVanFUXkzI5A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xcIeBINQRNHRxvcz2Oan0QNui+BXXVeoXn13xbr4IgM=;
- b=QUfPq2TlKROTDC7nsSCGkN5HCLKkmk3YFQOK6oXcWs2xhxo9XgZJE8XkWCrJZCWvq+REX0i8HUq2GHh4Kqw4zfmeheOyekUITOrxZMikz1c0k9GgoVxg6zYPYstQUNAP51BdWtCcri3Spbex+7o23S/3t7ltxdNwk0QneZF8Xkjso9G0XdBR4AFsao4cc828anBEBMKequmDnzeMZRYxPSAAHZ7aYm5NsjG9TquZowB7a/o6rKM4RrJkBwKYjbRZqDJTdA3D8aaLvjCc7AsfaG3y5AesOeYAHNZ8NEy2UGsCBuPJoCKr1O7KHC3TzR1bsS5qAM8LjUbosOEAdcsbjg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xcIeBINQRNHRxvcz2Oan0QNui+BXXVeoXn13xbr4IgM=;
- b=Xf31ZboVZSQUU0/GwZep+5L2Zrsw9Tgf/T/qudVFxKBc4hMj9V8Peg2OY0BVpPCFTK6kLcLyVNiA6KkeOsT3EJpuc2/HlwFZ4oNjdS8iMK/pvjYqVwk+K2u8qnov5U8zjjCfupAVjQwb3qk8diwcaiFJE9EXTKVssNGhlo/oC80=
-Received: from BL0PR10MB3011.namprd10.prod.outlook.com (2603:10b6:208:7e::29)
- by SA2PR10MB4730.namprd10.prod.outlook.com (2603:10b6:806:117::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.20; Wed, 3 May
- 2023 19:31:53 +0000
-Received: from BL0PR10MB3011.namprd10.prod.outlook.com
- ([fe80::7fc1:adad:b2d5:a1aa]) by BL0PR10MB3011.namprd10.prod.outlook.com
- ([fe80::7fc1:adad:b2d5:a1aa%7]) with mapi id 15.20.6340.031; Wed, 3 May 2023
- 19:31:53 +0000
-Date:   Wed, 3 May 2023 15:31:50 -0400
-From:   "Liam R. Howlett" <Liam.Howlett@Oracle.com>
-To:     Petr =?utf-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        maple-tree@lists.infradead.org
-Subject: Re: [PATCH 10/34] maple_tree: Use MAS_BUG_ON() when setting a leaf
- node as a parent
-Message-ID: <20230503193150.ey6zx3wgxycssewe@revolver>
-Mail-Followup-To: "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-        Petr =?utf-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        maple-tree@lists.infradead.org
-References: <20230425140955.3834476-1-Liam.Howlett@oracle.com>
- <20230425140955.3834476-11-Liam.Howlett@oracle.com>
- <20230428120822.26aaa9c8@meshulam.tesarici.cz>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230428120822.26aaa9c8@meshulam.tesarici.cz>
-User-Agent: NeoMutt/20220429
-X-ClientProxiedBy: YT3PR01CA0132.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:83::16) To BL0PR10MB3011.namprd10.prod.outlook.com
- (2603:10b6:208:7e::29)
+        Wed, 3 May 2023 15:39:31 -0400
+X-Greylist: delayed 436 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 03 May 2023 12:39:29 PDT
+Received: from mail1.perex.cz (mail1.perex.cz [77.48.224.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DFB2619E
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 12:39:29 -0700 (PDT)
+Received: from mail1.perex.cz (localhost [127.0.0.1])
+        by smtp1.perex.cz (Perex's E-mail Delivery System) with ESMTP id 668F011E6;
+        Wed,  3 May 2023 21:32:09 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.perex.cz 668F011E6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=perex.cz; s=default;
+        t=1683142329; bh=134enEbGMk+lh5qLFrd6rCqMfaAzngLEWDoCerDp574=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=mH1R4hNdkw8mc5omaYOxBvqB+s5qmt34wH6OTqYXyqhtLd+v5/ly3hUNwGdvhf8wb
+         arX4muFNRvDyhnoLlqXydwS43CBhirbD6HeSl1N2/cX8uT2TWV/mx1mDndmqsx/yiP
+         ss92gGVOymJwisBmUZ0Hw/HYgbRRiVgNGOinb5KE=
+Received: from [192.168.100.98] (unknown [192.168.100.98])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: perex)
+        by mail1.perex.cz (Perex's E-mail Delivery System) with ESMTPSA;
+        Wed,  3 May 2023 21:32:03 +0200 (CEST)
+Message-ID: <7b80ef1e-23dd-c523-0663-4bf311c1823a@perex.cz>
+Date:   Wed, 3 May 2023 21:32:02 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL0PR10MB3011:EE_|SA2PR10MB4730:EE_
-X-MS-Office365-Filtering-Correlation-Id: 78077189-a40c-4614-3082-08db4c0d0c5b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Ai73aqmWpkR3mlH+oxKy2pVnebiVln4FvFVSHgUOcmKmpsb5quBA/96eQM0DaciGsysx94AsttwUDAD8t91w11rYJk+g2LMOxKtFzpeY3LDDRqxNSzsCTao2w2sCxgkeKowUU6ZQD7wln0HkNuUlqmLLAu8VCWKqWdzrtqI8ogrClz7NTjYP8HttHkPeNC1qWvmDarYdWgtZ01vtpfxGmpD2fn+6jcKkwlYdQq2a+nLVCnZ1KhJA7T2RdqYhMOb6F0VI1sUItFA2YzZpRKIKTzJvcfJ9GC6VY9U/kiJJAKrh1ooSuLY0rkUspEl8JkXEmvkkl6xSXoV85uJx6a3SEQ/WIelcKyVVTclGLiRsi4cmSoMS91FFdWBS7OGyYotYKwlzPno9xGUEPnCXDoPFziZJY7l8txa5qLaiNOpwx+hnHc9eaGtHNPvGFJTBILcOs6wgdCwD6ydltXlKSYtEjwiTpkSCSZP+KRldGO3VBU2bBMvBjPp7moxq3ZraB5LeW1dfNu5htX/TAJUK7tWCtkrSc2VFWGZ4TRL+L6lF5tXtdJjqpcEDhOPGoWmBG422
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR10MB3011.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(396003)(366004)(39860400002)(376002)(346002)(136003)(451199021)(41300700001)(8936002)(8676002)(5660300002)(2906002)(86362001)(38100700002)(6486002)(558084003)(186003)(478600001)(9686003)(6512007)(6506007)(1076003)(26005)(66556008)(66476007)(6916009)(4326008)(33716001)(66946007)(316002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Z1pRK0tXdVBzQk5aMkN6K0FzbVBQM1NuaHFZTDVRSWVseHJKakxVcGVaT1dh?=
- =?utf-8?B?ajQ1YlpHcXFjK0xhWWhlVXdCMDdVV0hQVWtVY2lJKzhvUGcxTGpkaW9aRnJx?=
- =?utf-8?B?WDZaVUFVNnpRc3RmdWxvSFZxMDM4cXMzUXYwdVVrVVBURlh2VVRiRnY1TFBs?=
- =?utf-8?B?R0I5VTkyTERDQXZFWGxwNmdMWHBkRmtnYUNxd2xTUG9UQ3lSRkZTdDBCMFpp?=
- =?utf-8?B?R0F4SFlmZUplWm96bmxMdHZkUDN5bG1taUZualQvWUxGYVp6MnhaSnZOTy9l?=
- =?utf-8?B?RXpnOU9vcUd6bTN2V3l4YnhaeUcxeStMY1p6bENucjJHaDNRWUljbURUZzZH?=
- =?utf-8?B?K2lUNkRxWWZYMi9RdVAwZnhFN0RTUWVNY0lWaFYvVG1ndmFHdE4xTkNnZ0la?=
- =?utf-8?B?SjBVZnJ4VUFRUWRocDJWYjY0Ymdjc2lzSUo2b2YyNUF5VCs5d2dWbzVOdzVu?=
- =?utf-8?B?Z290Ni9kMXBtMGs4KzM5WUhVZEpYMWJvOTF4bG5UVU9GdFJ6VTNLdDVrUWJs?=
- =?utf-8?B?czh2WlJiMmNxTTJMMCtSd25ORHNjYVZIdnFGZGZWcXVBWVpuZkNqSVp5TXZG?=
- =?utf-8?B?REFQcXZ6TDJ3WlZiYWJEYmZwNTVNZVhPelIwYVlkZlliVDFmVisxNjkzc0Zt?=
- =?utf-8?B?NFFFNGFzczFsZmxTNWwyd2d3djRUUTVzcUtLaFdMNzFGYVhhd0RzMjZXL2tN?=
- =?utf-8?B?VmRYNlNhUjlsaVNBZXRudkYyem1oNzhpQnBNdGgwSi96MllrZTRFTFJ1b3g1?=
- =?utf-8?B?RzlkQUUvUjVRMzdJTEdTcTRMRG0yNHFhZzljUEtaVkRpcSthWGoxdWliYXAw?=
- =?utf-8?B?UlBPeVFYd2NyZ2pmL2tPMVozMTlYMnZqMTdSVmJ1djJ6MFhuUnBpYTgrYjNX?=
- =?utf-8?B?MjJxc0FwS1N5cHdQVFJNQ1psOWZoamZEU2piQzBvbUE0Tytqb3RNV3E5NEE3?=
- =?utf-8?B?czJGM0QxSGoxTkhNc0dzc2xWSHQ2blErTi9YM2RBZkVId0ZLeUhUdnlkeWpq?=
- =?utf-8?B?bFJNWDlvd1l4aUNwYlBsb3pKb2VHVUUrL01uTTh2K0JBdlhJNWhQQml3WE85?=
- =?utf-8?B?dFJ0ZmVXWERBV20zRzJhWkJjRmlXSEhzMzlaSVN3bkRzL0dEdmxGZ2VlbXZR?=
- =?utf-8?B?UHM1ZlBRbVg5Z2pGVWpNZWhBMjZIRVZQNnBKMytSQnhtQUFwRWNncm83NnRM?=
- =?utf-8?B?eVBVOWNjWFlJcjQ4M3VVU242SittTUFmbXhyZkttZVpWZjFnK1BQQUl0N3ZV?=
- =?utf-8?B?RnZDSWR5Q1NYZHMzNnY5UnZZOG1xVXNFTEU5V2RRV21WUmxXSTNtSWd0dzBr?=
- =?utf-8?B?ZkN1QWRUWThuS1hRNHcraThML3doZkpkNEhYQk1LZVloSjBBdTN2RktIaHFS?=
- =?utf-8?B?OXdaK1N3TkFmSDcvSkVrUmJSb3NNTEdlQ2FLNDVZKzFGR3BSNUFuU2RHOGlO?=
- =?utf-8?B?eFdvY0VIeG90Tjc2ZEVpenZDaWwwdk82SG9uV0o0enJMS0NEcDg0Z0lmN2Rv?=
- =?utf-8?B?ZzB2d2E0TjVnMmMwZ1J2TWczVndmTGFCZEVpSE1RYnZucUxpTGM2R0J4QlFa?=
- =?utf-8?B?ZGl4c0NkYXlOMmpNcXo3cUZyYU0vZjk0bHAwYlhFd0lxaENReHE0bHI1ai81?=
- =?utf-8?B?VnRCcGx0dllVdVBsNmtVSFdyS2JrZWtaODlZZVB1bjNHQkNCWmVyWFhUVnZQ?=
- =?utf-8?B?QnNWclh0VWt4bldmakNZcU9ISnN1Y2VLL0NQdlNQbmU2R3dxd1JzYVBkb2Nq?=
- =?utf-8?B?cTlBME5rREJjRGxCRVlHcW81ZG5QTnozN3IxQnZCVkduRjNtdUU0N2U0QlpX?=
- =?utf-8?B?cFZtZ0RuR2xJS3o2eFExZWdXZ25ZNDhiNW9hM1dFT1hva3hOWGlaT2d0MzND?=
- =?utf-8?B?OTZPRlEzSkxRY0JNSExHTHNWMnZ1NE5lclFicU5iTUVVcEtLUUI5NmJWbHV6?=
- =?utf-8?B?TnkwelFQdTQ4U2ErRVNGUmo3RzJxTlB5ckp4MUlsT1pjSjYwaW5JeXVQV1BD?=
- =?utf-8?B?MVdZQ01wKytvN0sweFZrYzg5ODJkV2N6YlNEY3BVTWFJOFcxSUVzaFFBMmcv?=
- =?utf-8?B?b2dtUHBXcEJEYTlIYzJEVUNxVS9UN2d3amZzUXI3KzQwOU9WVGdyN1VvOFhq?=
- =?utf-8?B?S1J3WGhWZHptOGFqM0NSN0tETStNa3JhZkNTRk1vSGwrK0ZJeVNPMGNTbVFu?=
- =?utf-8?B?QlE9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: SVwHCd9xTWq6rX0Qr5L/MRA4NDV1+JZVymrDfFUwf6fkJSbLuiXSGL9S0FA3e4h57KEmc033yd4DwvJ2Hw6JJIF6ByvjHXwnyqhdR30h39qCDuoU8z/o68ojSDexjMLxrXAfa6TZQees+CdtIt0CIgREG0yXqflbUu4MDy9SWXVM95NyoXPzILHcLQWfmtoMQ7ca55Wx8iOFjKKoWcK50Mf1QkY3yHW/gd+S2d8hOXIeZplpZ4vxzcxCdhiSDypQ3U0QCoXkcw+CtkEsYvsCIaUwvGeJk6eCpNZdmGP5YbGVRbGK3DCrG1BnYbfoDoYDyJXtU02yewdkNP/g5ZPL392Ssx0CYJSqW5gavvAtSejH4LCfKsGxjc1IcRv86Iuh7qIt95SrqI7oVZWvHtFbYZ18phRVWMqotMrTwAUV5Vc5IuL4Zi4ghDhSJ5fHLGLkwIjqPhxWY8tEkNEMjTbK7AVcKseB4yAUTQX3w5Ertu0CKXtkugjW1INJG46Y2r6SNvPzLMND/aWInGEofi1NPopf3IrY7wV8vuN8L56PXtSuXaZz84zixC4vYCJEsW1dzm9pTeARqBnZwlkRYiBS7jlqMDjxEfiqQuH7eVWSEp7+Y23BOzJDKp5UXOazdrmHliWLOH8bn6+v4oP2j86YMGI4Gzmfcy9xBjmnoTBDO2M/HuKrPt32BnrjKNGu4DX/OU5fv/S0FicpU1Ni8+9XGqywiCuxzxgBdgTuvRLwDTUY7XuIxVQBcCqsx1+6WMkI9LKan9pSWPV9DmquwXh+lTXALf8WTBTvIR0r5NiFNC7zdRpWFmxrUSSnlV5Z5zElhukVpRaXN2JT/e/R+8sgUfyyfC4IcuEUK7zGFoJCib7KKbxb3aQzeJWCKQEw7IVb3K2WbDpEZ13mHRIuNbdnOlgAGzo1sxHKaGQigaoHiiI=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 78077189-a40c-4614-3082-08db4c0d0c5b
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR10MB3011.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 May 2023 19:31:53.0173
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LR7Boj1DRuDKeO95DF32jRMYWMMTKVus+DwslZ2Y5KxWL53JcQ8uGgtjEW0S6iIu+FWtxO5FOkcPpYNN7s5lyQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR10MB4730
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-03_14,2023-05-03_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 spamscore=0
- mlxlogscore=704 phishscore=0 malwarescore=0 adultscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2305030168
-X-Proofpoint-GUID: 0ej--5A0i0x_JpINuhBkRh3hzCRE5h_1
-X-Proofpoint-ORIG-GUID: 0ej--5A0i0x_JpINuhBkRh3hzCRE5h_1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Content-Language: en-US
+To:     Takashi Iwai <tiwai@suse.de>,
+        Oswald Buddenhagen <oswald.buddenhagen@gmx.de>
+Cc:     Jeff Chua <jeff.chua.linux@gmail.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        ALSA development <alsa-devel@alsa-project.org>
+References: <CAAJw_ZsbTVd3Es373x_wTNDF7RknGhCD0r+NKUSwAO7HpLAkYA@mail.gmail.com>
+ <ZE9ngFLRqLkN6faH@ugly> <87wn1pmm4d.wl-tiwai@suse.de>
+From:   Jaroslav Kysela <perex@perex.cz>
+Subject: Re: linux-6.4 alsa sound broken
+In-Reply-To: <87wn1pmm4d.wl-tiwai@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -166,16 +62,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Petr Tesa=C5=99=C3=ADk <petr@tesarici.cz> [230428 06:08]:
-> On Tue, 25 Apr 2023 10:09:31 -0400
-> "Liam R. Howlett" <Liam.Howlett@oracle.com> wrote:
->=20
-> > Use MAS_BUG_ON() to dump the maple state and tree in the unlikely even
->                                                                     ^^^^
-> nitpick: event
+On 03. 05. 23 18:10, Takashi Iwai wrote:
+> On Mon, 01 May 2023 09:17:20 +0200,
+> Oswald Buddenhagen wrote:
+>>
+>> On Mon, May 01, 2023 at 11:59:12AM +0800, Jeff Chua wrote:
+>>> Latest git pull from Linus's tree ... playing a simple sound file will
+>>> resulted in a lot of echo.
+>>>
+>> how _exactly_ does it sound?
+>> have you recorded a file through loopback for us to investigate? best
+>> would be a short sample of a clean wave (sine or sawtooth) with some
+>> leading and trailing silence.
+>>
+>>> Running on Lenovo X1 with ..
+>>> 00:1f.3 Audio device: Intel Corporation Alder Lake PCH-P High
+>>> Definition Audio Controller (rev 01)
+>>>
+>>> I've bisected and reverted the following patch fixed the problem.
+>>>
+>> this seems weird. so my first thought is: are you _sure_ that your
+>> bisect isn't "contaminated" somehow? is the effect consistent across
+>> several reboots with the same build? does re-applying my patch
+>> immediately re-introduce the problem?
+>>
+>> - this code is about silencing. getting dropouts or no playback at all
+>> would be plausible, while echo (that is, repetition) seems surprising.
+>>    theoretically, the driver may be setting a bad fill_silence()
+>> callback   which copies some garbage instead of zeroing, but the HDA
+>> driver   doesn't set one at all (i.e., uses the default one).
+>> - this code must be explicitly enabled, which for all i know is done
+>> by   almost nothing. what players did you try? did you get consistent
+>> results? did you try taking out audio servers from the equation?
+>> - the affected hardware belongs to the extremely widely used HDA
+>> family,   which at the layer the patch is even remotely connected with
+>> is   completely standardized. so _a lot_ of people should be affected,
+>> and   we should be getting reports like yours by the dozen. are we?
+>>
+>> of course i can't exclude the possibility that my patch is affected by
+>> an uninitialized variable or memory corruption (or in the worst case
+>> causes it), which would of course have very hard to predict
+>> effects. but that should be investigated properly instead of just
+>> reverting, lest we might be papering over a much more serious problem.
+> 
+> Oswald, this looks like a real regression by the patch.
+> Specially, this happens with dmix, and the issue doesn't seem specific
+> to the driver.  It happens also with USB-audio, not only with
+> HD-audio.  Just aplay /usr/share/sounds/alsa/Side_Left.wav or whatever
+> there with the dmix config showed the problem.
+> 
+> The dmix uses the silence_size=boundary as a fill-all operation, and
+> it's a free-wheel mode, so supposedly something was overlooked in your
+> code refactoring.
+> 
+> Could you check it and address quickly?  I'd like to fix it before
+> 6.4-rc1 release, so if no fix comes up in a couple of days, I'll have
+> to revert the change for 6.4-rc1.
 
-Thanks, I will fix this in v2.
+I would revert this patch. It seems that this "do silence right after the playback is finished" mechanism is not handled in the updated code (and I overlooked that, too):
 
->=20
-> Petr T
->=20
+-       ofs = runtime->status->hw_ptr;
+-       frames = new_hw_ptr - ofs;
+-       if ((snd_pcm_sframes_t)frames < 0)
+-           frames += runtime->boundary;
+-       runtime->silence_filled -= frames;
+-       if ((snd_pcm_sframes_t)runtime->silence_filled < 0) {
+-           runtime->silence_filled = 0;
+-           runtime->silence_start = new_hw_ptr;
+-       } else {
+-           runtime->silence_start = ofs;
+-       }
+
+It requires to track the old and new hw_ptr, so the removal of the new_hw_ptr argument is not valid. I don't see any easy way to fix this.
+
+I would probably fix the snd_pcm_playback_hw_avail() call with the old hw_ptr which seems like the only one issue with the original code, because it makes the threshold inaccurate (it is expected to fill more silent samples). Another issue is wrong silence_start for the incremental silence calls.
+
+The patch to fix the original code may look like:
+
+diff --git a/sound/core/pcm_lib.c b/sound/core/pcm_lib.c
+index af1eb136feb0..70795a83e50a 100644
+--- a/sound/core/pcm_lib.c
++++ b/sound/core/pcm_lib.c
+@@ -45,7 +45,7 @@ static int fill_silence_frames(struct snd_pcm_substream *substream,
+  void snd_pcm_playback_silence(struct snd_pcm_substream *substream, snd_pcm_uframes_t new_hw_ptr)
+  {
+  	struct snd_pcm_runtime *runtime = substream->runtime;
+-	snd_pcm_uframes_t frames, ofs, transfer;
++	snd_pcm_uframes_t start, frames, ofs, transfer;
+  	int err;
+  
+  	if (runtime->silence_size < runtime->boundary) {
+@@ -63,12 +63,17 @@ void snd_pcm_playback_silence(struct snd_pcm_substream *substream, snd_pcm_ufram
+  		}
+  		if (runtime->silence_filled >= runtime->buffer_size)
+  			return;
++		/* use appl_ptr as a temporary variable */
++		appl_ptr = runtime->status->hw_ptr;
++		runtime->status->hw_ptr = new_hw_ptr;
+  		noise_dist = snd_pcm_playback_hw_avail(runtime) + runtime->silence_filled;
++		runtime->status->hw_ptr = appl_ptr;
+  		if (noise_dist >= (snd_pcm_sframes_t) runtime->silence_threshold)
+  			return;
+  		frames = runtime->silence_threshold - noise_dist;
+  		if (frames > runtime->silence_size)
+  			frames = runtime->silence_size;
++		start = (runtime->silence_start + runtime->silence_filled) % runtime->boundary;
+  	} else {
+  		if (new_hw_ptr == ULONG_MAX) {	/* initialization */
+  			snd_pcm_sframes_t avail = snd_pcm_playback_hw_avail(runtime);
+@@ -92,12 +97,13 @@ void snd_pcm_playback_silence(struct snd_pcm_substream *substream, snd_pcm_ufram
+  			}
+  		}
+  		frames = runtime->buffer_size - runtime->silence_filled;
++		start = runtime->silence_start;
+  	}
+  	if (snd_BUG_ON(frames > runtime->buffer_size))
+  		return;
+  	if (frames == 0)
+  		return;
+-	ofs = runtime->silence_start % runtime->buffer_size;
++	ofs = start % runtime->buffer_size;
+  	while (frames > 0) {
+  		transfer = ofs + frames > runtime->buffer_size ? runtime->buffer_size - ofs : frames;
+  		err = fill_silence_frames(substream, ofs, transfer);
+
+I'll post a complete patch when we agree on this solution. The runtime->status->hw_ptr may not be even preserved, because it is no used in the rest of code in snd_pcm_update_hw_ptr0(), but the code looks more sane.
+
+					Jaroslav
+
+-- 
+Jaroslav Kysela <perex@perex.cz>
+Linux Sound Maintainer; ALSA Project; Red Hat, Inc.
+
