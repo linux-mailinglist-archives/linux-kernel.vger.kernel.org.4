@@ -2,156 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06BE76F5FF0
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 22:15:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18F276F5FF7
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 22:18:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230107AbjECUP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 16:15:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48798 "EHLO
+        id S230064AbjECUSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 16:18:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbjECUPx (ORCPT
+        with ESMTP id S229972AbjECUSE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 16:15:53 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA4568A49
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 13:15:23 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-b9a879cd49cso8100637276.0
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 13:15:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683144920; x=1685736920;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fJv5xHBTJjNv/pix2rgh9sMW7sCnrk66nOy29HPAlus=;
-        b=UCO8xAxPQELEnJ5Z/+6POOiyN0vC8Y3LS4oWyDMuhEhZvFzcfiun+ebWGPwrO+pD6P
-         oaWSGqmefHbl5lAEiPf5lmUVnYEfPjsrvltc8OpHClJDRLqR0c6JCt2K4/o8XHiKCVdf
-         J53ZnSfM4WQ/BqrKp+eVl6M1p/n6Qe+G3n50PB19Uzdxt6cKRczUS8ApWupvLyGowGSr
-         nGY8DkG6nB+Z74vkrN7ka4kE+r+AVY9ut3CcNzBfOZ5eIHL+qS/vkhlLgZTTLFk7Q8GU
-         5cYkPlXWlkK/9gZow1krRfzsVVYIijdz+900Nl7CuaPdx5c8WOD0aSivErWELXWkx49V
-         I4sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683144920; x=1685736920;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fJv5xHBTJjNv/pix2rgh9sMW7sCnrk66nOy29HPAlus=;
-        b=Jw0qAEDHWS4oyeH9vLB2XQG/hHDDHMeW476soOH5skza+KMAH4zD48j9gVyP2zzue3
-         SWwSEKRG0b+rzC6K5+K4UpWfs9gsHvXwDQ4zRhtB+ZHZqhAERPtqWdfIX/v52GQpmsR4
-         5oCUTOKAyDJSDaxZEaUjHAtcpR4BlQSnCIk7gnTIxKpwHsp2nG+lgVzjVxzoUimlX54u
-         gWKZ+8BCUtO0Wfl2sT0m5CAnDygfg5OFYko+oQfi5En1HwOl9Ytqqffnq/ObIWZ30JDl
-         fMw5E6PE1LMhCzYET73VlAqbb97Qjnx3yTW02pM2cGtK4XDjKMGq2C9JbV0xzV3N2saW
-         ldvA==
-X-Gm-Message-State: AC+VfDxIDthyFoyAeBx9dhUHolHXtMGqrXICICgqVVNtXFJNFk7uXwGL
-        Ka3jWOsK6fH+7xf/kCzXEHjDZNYlA4I8McKrUOoHHw==
-X-Google-Smtp-Source: ACHHUZ7mImQ/1wXTYz0SIgMaa2LSNhSdXyURzMfJt6GpNMGuq33NeGKiMX4mFybM8LMTHwiJs7q6jFVMM1TC3F7btJ0=
-X-Received: by 2002:a25:2b45:0:b0:b8e:db20:eccf with SMTP id
- r66-20020a252b45000000b00b8edb20eccfmr22508398ybr.55.1683144919429; Wed, 03
- May 2023 13:15:19 -0700 (PDT)
+        Wed, 3 May 2023 16:18:04 -0400
+Received: from mail1.perex.cz (mail1.perex.cz [77.48.224.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E5983D5
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 13:18:02 -0700 (PDT)
+Received: from mail1.perex.cz (localhost [127.0.0.1])
+        by smtp1.perex.cz (Perex's E-mail Delivery System) with ESMTP id 1191711E2;
+        Wed,  3 May 2023 22:17:59 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.perex.cz 1191711E2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=perex.cz; s=default;
+        t=1683145079; bh=ELmmvbckSK75KaWBTnF2Wu4uBtvMsSVV2a5Pe97bN0E=;
+        h=Date:To:References:From:Subject:In-Reply-To:From;
+        b=SqVcTC5Ufiq0UoAbnxz75sap52Yjzqe3EQ9wfAdnsXFnva1oaRgiNYLHsjtO+BDrc
+         NZWC9De0MDA9mIlIKy+OIM3Gp/7BZWwKyxDoQflf2G2wwt6AgFcSZaY2l6yPuFpz5P
+         qllsK7dUIk0vBE/DgDVq6jnshfG2IUc0Fr3Lkvsg=
+Received: from [192.168.100.98] (unknown [192.168.100.98])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: perex)
+        by mail1.perex.cz (Perex's E-mail Delivery System) with ESMTPSA;
+        Wed,  3 May 2023 22:17:53 +0200 (CEST)
+Message-ID: <ce9116be-748c-9f8b-390a-a20661914f14@perex.cz>
+Date:   Wed, 3 May 2023 22:17:53 +0200
 MIME-Version: 1.0
-References: <ZFIVtB8JyKk0ddA5@moria.home.lan> <ZFKNZZwC8EUbOLMv@slm.duckdns.org>
- <20230503180726.GA196054@cmpxchg.org> <ZFKlrP7nLn93iIRf@slm.duckdns.org>
- <ZFKqh5Dh93UULdse@slm.duckdns.org> <ZFKubD/lq7oB4svV@moria.home.lan>
- <ZFKu6zWA00AzArMF@slm.duckdns.org> <ZFKxcfqkUQ60zBB_@slm.duckdns.org>
- <CAJuCfpEPkCJZO2svT-GfmpJ+V-jSLyFDKM_atnqPVRBKtzgtnQ@mail.gmail.com>
- <ZFK6pwOelIlhV8Bm@slm.duckdns.org> <ZFK9XMSzOBxIFOHm@slm.duckdns.org>
-In-Reply-To: <ZFK9XMSzOBxIFOHm@slm.duckdns.org>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 3 May 2023 13:14:57 -0700
-Message-ID: <CAJuCfpE4YD_BumqFf2-NC8KS9D+kq0s_o4gRyWAH-WK4SgqUbA@mail.gmail.com>
-Subject: Re: [PATCH 00/40] Memory allocation profiling
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
-        vbabka@suse.cz, roman.gushchin@linux.dev, mgorman@suse.de,
-        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
-        corbet@lwn.net, void@manifault.com, peterz@infradead.org,
-        juri.lelli@redhat.com, ldufour@linux.ibm.com,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, peterx@redhat.com, david@redhat.com,
-        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
-        nathan@kernel.org, dennis@kernel.org, muchun.song@linux.dev,
-        rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com,
-        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
-        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, gregkh@linuxfoundation.org,
-        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Content-Language: en-US
+To:     Takashi Iwai <tiwai@suse.de>,
+        Jeff Chua <jeff.chua.linux@gmail.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        ALSA development <alsa-devel@alsa-project.org>
+References: <CAAJw_ZsbTVd3Es373x_wTNDF7RknGhCD0r+NKUSwAO7HpLAkYA@mail.gmail.com>
+ <ZE9ngFLRqLkN6faH@ugly> <87wn1pmm4d.wl-tiwai@suse.de>
+ <7b80ef1e-23dd-c523-0663-4bf311c1823a@perex.cz> <ZFK9ZSm34Z3hQPF4@ugly>
+From:   Jaroslav Kysela <perex@perex.cz>
+Subject: Re: linux-6.4 alsa sound broken
+In-Reply-To: <ZFK9ZSm34Z3hQPF4@ugly>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 3, 2023 at 1:00=E2=80=AFPM Tejun Heo <tj@kernel.org> wrote:
->
-> Hello,
->
-> On Wed, May 03, 2023 at 09:48:55AM -1000, Tejun Heo wrote:
-> > > If so, that's the idea behind the context capture feature so that we
-> > > can enable it on specific allocations only after we determine there i=
-s
-> > > something interesting there. So, with low-cost persistent tracking we
-> > > can determine the suspects and then pay some more to investigate thos=
-e
-> > > suspects in more detail.
-> >
-> > Yeah, I was wondering whether it'd be useful to have that configurable =
-so
-> > that it'd be possible for a user to say "I'm okay with the cost, please
-> > track more context per allocation". Given that tracking the immediate c=
-aller
-> > is already a huge improvement and narrowing it down from there using
-> > existing tools shouldn't be that difficult, I don't think this is a blo=
-cker
-> > in any way. It just bothers me a bit that the code is structured so tha=
-t
-> > source line is the main abstraction.
->
-> Another related question. So, the reason for macro'ing stuff is needed is
-> because you want to print the line directly from kernel, right?
+On 03. 05. 23 22:00, Oswald Buddenhagen wrote:
+> On Wed, May 03, 2023 at 09:32:02PM +0200, Jaroslav Kysela wrote:
+>> On 03. 05. 23 18:10, Takashi Iwai wrote:
+>>> The dmix uses the silence_size=boundary as a fill-all operation, and
+>>> it's a free-wheel mode, so supposedly something was overlooked in your
+>>> code refactoring.
+>>>
+>>> Could you check it and address quickly?  I'd like to fix it before
+>>> 6.4-rc1 release, so if no fix comes up in a couple of days, I'll have
+>>> to revert the change for 6.4-rc1.
+>>
+>> I would revert this patch.
+> 
+>> It seems that this "do silence right after the playback is finished"
+>> mechanism is not handled in the updated code (and I overlooked that,
+>> too):
+>>
+> no, there is nothing wrong with the code _per se_.
+> 
+> what's happening is that the dmix plugin doesn't update the application
+> pointer, and somehow gets away with it.
 
-The main reason is because we want to inject a code tag at the
-location of the call. If we have a code tag injected at every
-allocation call, then finding the allocation counter (code tag) to
-operate takes no time.
+Dmix uses the free mode, because multiple applications can write to the 
+buffer. We cannot do application pointer updates in the shared resource.
 
-> Is that
-> really necessary? Values from __builtin_return_address() can easily be
-> printed out as function+offset from kernel which already gives most of th=
-e
-> necessary information for triaging and mapping that back to source line f=
-rom
-> userspace isn't difficult. Wouldn't using __builtin_return_address() make
-> the whole thing a lot simpler?
+> anyway, this means that we need to revert the code path for top-up mode,
+> which means reverting most of the patch's "meat".
+> i think i can do better than your proposal, but not today anymore.
 
-If we do that we have to associate that address with the allocation
-counter at runtime on the first allocation and look it up on all
-following allocations. That introduces the overhead which we are
-trying to avoid by using macros.
+Ok, let's see. I tried to be minimalistic to fix bugs and then we can talk 
+about the improvements.
 
->
-> Thanks.
->
-> --
-> tejun
+> fwiw, the echo results from the plugin apparently summing up the samples
+> in the buffer without clearing it first, that is, it relies on the
+> auto-silencing doing the clearing, which the patch broke under the given
+> circumstances. rather obvious in retrospect.
+
+Dmix does not know which samples were updated by other applications. The 
+application tracks only own samples.
+
+						Jaroslav
+
+-- 
+Jaroslav Kysela <perex@perex.cz>
+Linux Sound Maintainer; ALSA Project; Red Hat, Inc.
+
