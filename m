@@ -2,207 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EA7E6F4E95
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 03:32:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 505706F4E96
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 03:32:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbjECBcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 21:32:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32868 "EHLO
+        id S229618AbjECBc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 21:32:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjECBcs (ORCPT
+        with ESMTP id S229606AbjECBcy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 21:32:48 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8560E1BCA
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 18:32:46 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-2f9b9aa9d75so2769851f8f.0
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 18:32:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683077564; x=1685669564;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mTZgBzt/Dt27iMmQO6dhb2LS1gvv1g1KyF6acTixJxs=;
-        b=O5S0To9nyxHcJIw7kPTikmqTRPb8hGKGfJiX/+CaUyeBf/Q8KNQLEa5qQG7qOvFFiw
-         CYsfOJ7l4XASubNxVyVApEX3Bl8ME+BvLsmqnS1g/MpfUqgX3eWAfB7LkMTyA3/44KTV
-         E6ldthUiLttApU2v+jWdw4olhg8atOZJWE9U9BFeTr4Tu/QEjekRGMPBFc0/omb2gC4D
-         dnuzDaxjCI7QyW6Lxzc7kDZXsZ2w67pDeVr8DvaBQmaNAjJRmI2mp4E9mrJ1BnsoYQSf
-         zMHaX0ZXKLm5nsetB8esqGry5Kv3k3CRAZmIE8brVX8X4l3Zf1mtk5xJwhAo+nl1PlBI
-         NJOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683077564; x=1685669564;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mTZgBzt/Dt27iMmQO6dhb2LS1gvv1g1KyF6acTixJxs=;
-        b=Unj7NALvm9FJ8aEib0kkfhVFr56TZ4cqYSYgvmNflquZrnsZh5zsQlykZlX/E9G8En
-         7rGEoB5J0icQdvqLpGbd99/Kq8zIChTNfsab1TexaBPR6mbwjFTDAqG43yZuPCkVQptD
-         F96BBANCkO53Ccyr3RqgkmwbnumNXqSTGQzcCg7lSWcVo/NeqTCIV8HuNd3HDkNptf/l
-         UYfPaFu+eogMJrxO91Pq7j1rUu2ShM3uT7GX0qKL+cShDtNsE/TMrom/TSBmq5v6oTgr
-         kbWKagDkpJuMBMeZ+wEN3PvPaLZ9LaIGtFw/HWgU8eLhe6bez8uGqO2xsameUxQKnY9S
-         mo7g==
-X-Gm-Message-State: AC+VfDwIIedY3qmY9x/tIGY2w9vgU4Drt/XYlvQx0a7hFOqNcSfysKF3
-        cd1iUsh9FTXcjmCogVjNnLI=
-X-Google-Smtp-Source: ACHHUZ4wJxiINWHqiPZ1tK0Urj08OmEq65prz3nTqgIPb9vpzcA8vu2n1QK7yL9oCdNarP6qzxagjQ==
-X-Received: by 2002:a05:6000:1191:b0:306:34f6:de8a with SMTP id g17-20020a056000119100b0030634f6de8amr3239356wrx.71.1683077563489;
-        Tue, 02 May 2023 18:32:43 -0700 (PDT)
-Received: from solport.. (24.red-83-42-52.dynamicip.rima-tde.net. [83.42.52.24])
-        by smtp.gmail.com with ESMTPSA id h7-20020a5d6e07000000b003048084a57asm22744019wrz.79.2023.05.02.18.32.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 May 2023 18:32:42 -0700 (PDT)
-From:   =?UTF-8?q?Joan=20Bruguera=20Mic=C3=B3?= <joanbrugueram@gmail.com>
-To:     Qi Zheng <zhengqi.arch@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Joan=20Bruguera=20Mic=C3=B3?= <joanbrugueram@gmail.com>
-Subject: [PATCH] mm: shrinkers: fix race condition on debugfs cleanup
-Date:   Wed,  3 May 2023 01:32:32 +0000
-Message-Id: <20230503013232.299211-1-joanbrugueram@gmail.com>
-X-Mailer: git-send-email 2.40.1
+        Tue, 2 May 2023 21:32:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E4E2700;
+        Tue,  2 May 2023 18:32:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 447BF629D9;
+        Wed,  3 May 2023 01:32:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D17A2C433EF;
+        Wed,  3 May 2023 01:32:35 +0000 (UTC)
+Date:   Tue, 2 May 2023 21:32:33 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: [PATCH] ftrace: Add MODIFIED flag to show if IPMODIFY or direct was
+ attached
+Message-ID: <20230502213233.004e3ae4@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When something registers and unregisters many shrinkers, such as:
-    for x in $(seq 10000); do unshare -Ui true; done
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-Sometimes the following error is printed to the kernel log:
-    debugfs: Directory '...' with parent 'shrinker' already present!
+If a function had ever had IPMODIFY or DIRECT attached to it, where this
+is how live kernel patching and BPF overrides work, mark them and display
+an "M" in the enabled_functions and touched_functions files. This can be
+used for debugging. If a function had been modified and later there's a bug
+in the code related to that function, this can be used to know if the cause
+is possibly from a live kernel patch or a BPF program that changed the
+behavior of the code.
 
-This occurs since commit badc28d4924b ("mm: shrinkers: fix deadlock in
-shrinker debugfs") / v6.2: Since the call to `debugfs_remove_recursive`
-was moved outside the `shrinker_rwsem`/`shrinker_mutex` lock, but the call
- to `ida_free` stayed inside, a newly registered shrinker can be
- re-assigned that ID and attempt to create the debugfs directory before
-the directory from the previous shrinker has been removed.
+Also update the documentation on the enabled_functions and
+touched_functions output, as it was missing direct callers and CALL_OPS.
+And include this new modify attribute.
 
-The locking changes in commit f95bdb700bc6 ("mm: vmscan: make global slab
-shrink lockless") made the race condition more likely, though it existed
-before then.
-
-Commit badc28d4924b ("mm: shrinkers: fix deadlock in shrinker debugfs")
-could be reverted since the issue is addressed should no longer occur
-since the count and scan operations are lockless since commit 20cd1892fcc3
-("mm: shrinkers: make count and scan in shrinker debugfs lockless").
-However, since this is a contended lock, prefer instead moving `ida_free`
-outside the lock to avoid the race.
-
-Fixes: badc28d4924b ("mm: shrinkers: fix deadlock in shrinker debugfs")
-Signed-off-by: Joan Bruguera Micó <joanbrugueram@gmail.com>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- include/linux/shrinker.h | 13 +++++++++++--
- mm/shrinker_debug.c      | 15 ++++++++++-----
- mm/vmscan.c              |  5 +++--
- 3 files changed, 24 insertions(+), 9 deletions(-)
+ Documentation/trace/ftrace.rst | 25 +++++++++++++++++++++++++
+ include/linux/ftrace.h         |  4 +++-
+ kernel/trace/ftrace.c          | 12 +++++++++---
+ 3 files changed, 37 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/shrinker.h b/include/linux/shrinker.h
-index 7bde8e1c228a..224293b2dd06 100644
---- a/include/linux/shrinker.h
-+++ b/include/linux/shrinker.h
-@@ -107,7 +107,10 @@ extern void synchronize_shrinkers(void);
+diff --git a/Documentation/trace/ftrace.rst b/Documentation/trace/ftrace.rst
+index aaebb821912e..d5766229c71a 100644
+--- a/Documentation/trace/ftrace.rst
++++ b/Documentation/trace/ftrace.rst
+@@ -350,6 +350,19 @@ of ftrace. Here is a list of some of the key files:
+ 	an 'I' will be displayed on the same line as the function that
+ 	can be overridden.
  
- #ifdef CONFIG_SHRINKER_DEBUG
- extern int shrinker_debugfs_add(struct shrinker *shrinker);
--extern struct dentry *shrinker_debugfs_remove(struct shrinker *shrinker);
-+extern struct dentry *shrinker_debugfs_detach(struct shrinker *shrinker,
-+					      int *debugfs_id);
-+extern void shrinker_debugfs_remove(struct dentry *debugfs_entry,
-+				    int debugfs_id);
- extern int __printf(2, 3) shrinker_debugfs_rename(struct shrinker *shrinker,
- 						  const char *fmt, ...);
- #else /* CONFIG_SHRINKER_DEBUG */
-@@ -115,10 +118,16 @@ static inline int shrinker_debugfs_add(struct shrinker *shrinker)
- {
- 	return 0;
- }
--static inline struct dentry *shrinker_debugfs_remove(struct shrinker *shrinker)
-+static inline struct dentry *shrinker_debugfs_detach(struct shrinker *shrinker,
-+						     int *debugfs_id)
- {
-+	*debugfs_id = -1;
- 	return NULL;
- }
-+static inline void shrinker_debugfs_remove(struct dentry *debugfs_entry,
-+					   int debugfs_id)
-+{
-+}
- static inline __printf(2, 3)
- int shrinker_debugfs_rename(struct shrinker *shrinker, const char *fmt, ...)
- {
-diff --git a/mm/shrinker_debug.c b/mm/shrinker_debug.c
-index 3f83b10c5031..fe10436d9911 100644
---- a/mm/shrinker_debug.c
-+++ b/mm/shrinker_debug.c
-@@ -237,7 +237,8 @@ int shrinker_debugfs_rename(struct shrinker *shrinker, const char *fmt, ...)
- }
- EXPORT_SYMBOL(shrinker_debugfs_rename);
- 
--struct dentry *shrinker_debugfs_remove(struct shrinker *shrinker)
-+struct dentry *shrinker_debugfs_detach(struct shrinker *shrinker,
-+				       int *debugfs_id)
- {
- 	struct dentry *entry = shrinker->debugfs_entry;
- 
-@@ -246,14 +247,18 @@ struct dentry *shrinker_debugfs_remove(struct shrinker *shrinker)
- 	kfree_const(shrinker->name);
- 	shrinker->name = NULL;
- 
--	if (entry) {
--		ida_free(&shrinker_debugfs_ida, shrinker->debugfs_id);
--		shrinker->debugfs_entry = NULL;
--	}
-+	*debugfs_id = entry ? shrinker->debugfs_id : -1;
-+	shrinker->debugfs_entry = NULL;
- 
- 	return entry;
- }
- 
-+void shrinker_debugfs_remove(struct dentry *debugfs_entry, int debugfs_id)
-+{
-+	debugfs_remove_recursive(debugfs_entry);
-+	ida_free(&shrinker_debugfs_ida, debugfs_id);
-+}
++	If a non ftrace trampoline is attached (BPF) a 'D' will be displayed.
++	Note, normal ftrace trampolines can also be attached, but only one
++	"direct" trampoline can be attached to a given function at a time.
 +
- static int __init shrinker_debugfs_init(void)
- {
- 	struct shrinker *shrinker;
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index 5bde07409303..c7d0faa343e0 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -805,6 +805,7 @@ EXPORT_SYMBOL(register_shrinker);
- void unregister_shrinker(struct shrinker *shrinker)
- {
- 	struct dentry *debugfs_entry;
-+	int debugfs_id;
++	Some architectures can not call direct trampolines, but instead have
++	the ftrace ops function located above the function entry point. In
++	such cases an 'O' will be displayed.
++
++	If a function had either the "ip modify" or a "direct" call attached to
++	it in the past, a 'M' will be shown. This flag is never cleared. It is
++	used to know if a function was every modified by the ftrace infrastructure,
++	and can be used for debugging.
++
+ 	If the architecture supports it, it will also show what callback
+ 	is being directly called by the function. If the count is greater
+ 	than 1 it most likely will be ftrace_ops_list_func().
+@@ -359,6 +372,18 @@ of ftrace. Here is a list of some of the key files:
+ 	its address will be printed as well as the function that the
+ 	trampoline calls.
  
- 	if (!(shrinker->flags & SHRINKER_REGISTERED))
- 		return;
-@@ -814,13 +815,13 @@ void unregister_shrinker(struct shrinker *shrinker)
- 	shrinker->flags &= ~SHRINKER_REGISTERED;
- 	if (shrinker->flags & SHRINKER_MEMCG_AWARE)
- 		unregister_memcg_shrinker(shrinker);
--	debugfs_entry = shrinker_debugfs_remove(shrinker);
-+	debugfs_entry = shrinker_debugfs_detach(shrinker, &debugfs_id);
- 	mutex_unlock(&shrinker_mutex);
++  touched_functions:
++
++	This file contains all the functions that ever had a function callback
++	to it via the ftrace infrastructure. It has the same format as
++	enabled_functions but shows all functions that have every been
++	traced.
++
++	To see any function that has every been modified by "ip modify" or a
++	direct trampoline, one can perform the following command:
++
++	grep ' M ' /sys/kernel/tracing/touched_functions
++
+   function_profile_enabled:
  
- 	atomic_inc(&shrinker_srcu_generation);
- 	synchronize_srcu(&shrinker_srcu);
+ 	When set it will enable all functions with either the function
+diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
+index 327046f1278d..7dffd740e784 100644
+--- a/include/linux/ftrace.h
++++ b/include/linux/ftrace.h
+@@ -549,6 +549,7 @@ bool is_ftrace_trampoline(unsigned long addr);
+  *  CALL_OPS - the record can use callsite-specific ops
+  *  CALL_OPS_EN - the function is set up to use callsite-specific ops
+  *  TOUCHED  - A callback was added since boot up
++ *  MODIFIED - The function had IPMODIFY or DIRECT attached to it
+  *
+  * When a new ftrace_ops is registered and wants a function to save
+  * pt_regs, the rec->flags REGS is set. When the function has been
+@@ -569,9 +570,10 @@ enum {
+ 	FTRACE_FL_CALL_OPS	= (1UL << 22),
+ 	FTRACE_FL_CALL_OPS_EN	= (1UL << 21),
+ 	FTRACE_FL_TOUCHED	= (1UL << 20),
++	FTRACE_FL_MODIFIED	= (1UL << 19),
+ };
  
--	debugfs_remove_recursive(debugfs_entry);
-+	shrinker_debugfs_remove(debugfs_entry, debugfs_id);
+-#define FTRACE_REF_MAX_SHIFT	20
++#define FTRACE_REF_MAX_SHIFT	19
+ #define FTRACE_REF_MAX		((1UL << FTRACE_REF_MAX_SHIFT) - 1)
  
- 	kfree(shrinker->nr_deferred);
- 	shrinker->nr_deferred = NULL;
+ #define ftrace_rec_count(rec)	((rec)->flags & FTRACE_REF_MAX)
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index db8532a4d5c8..885845fc851d 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -46,7 +46,8 @@
+ #include "trace_stat.h"
+ 
+ /* Flags that do not get reset */
+-#define FTRACE_NOCLEAR_FLAGS	(FTRACE_FL_DISABLED | FTRACE_FL_TOUCHED)
++#define FTRACE_NOCLEAR_FLAGS	(FTRACE_FL_DISABLED | FTRACE_FL_TOUCHED | \
++				 FTRACE_FL_MODIFIED)
+ 
+ #define FTRACE_INVALID_FUNCTION		"__ftrace_invalid_address__"
+ 
+@@ -2273,6 +2274,10 @@ static int ftrace_check_record(struct dyn_ftrace *rec, bool enable, bool update)
+ 					rec->flags &= ~FTRACE_FL_TRAMP_EN;
+ 			}
+ 
++			/* Keep track of anything that modifies the function */
++			if (rec->flags & (FTRACE_FL_DIRECT | FTRACE_FL_IPMODIFY))
++				rec->flags |= FTRACE_FL_MODIFIED;
++
+ 			if (flag & FTRACE_FL_DIRECT) {
+ 				/*
+ 				 * If there's only one user (direct_ops helper)
+@@ -3866,12 +3871,13 @@ static int t_show(struct seq_file *m, void *v)
+ 	if (iter->flags & (FTRACE_ITER_ENABLED | FTRACE_ITER_TOUCHED)) {
+ 		struct ftrace_ops *ops;
+ 
+-		seq_printf(m, " (%ld)%s%s%s%s",
++		seq_printf(m, " (%ld)%s%s%s%s%s",
+ 			   ftrace_rec_count(rec),
+ 			   rec->flags & FTRACE_FL_REGS ? " R" : "  ",
+ 			   rec->flags & FTRACE_FL_IPMODIFY ? " I" : "  ",
+ 			   rec->flags & FTRACE_FL_DIRECT ? " D" : "  ",
+-			   rec->flags & FTRACE_FL_CALL_OPS ? " O" : "  ");
++			   rec->flags & FTRACE_FL_CALL_OPS ? " O" : "  ",
++			   rec->flags & FTRACE_FL_MODIFIED ? " M " : "   ");
+ 		if (rec->flags & FTRACE_FL_TRAMP_EN) {
+ 			ops = ftrace_find_tramp_ops_any(rec);
+ 			if (ops) {
 -- 
-2.40.1
+2.39.2
 
