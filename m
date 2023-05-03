@@ -2,159 +2,332 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 439486F4F3E
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 05:47:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72BDF6F4F42
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 05:49:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbjECDr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 23:47:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33712 "EHLO
+        id S229575AbjECDtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 23:49:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjECDrs (ORCPT
+        with ESMTP id S229656AbjECDsv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 23:47:48 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066F33C14;
-        Tue,  2 May 2023 20:47:46 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 1801D3200B88;
-        Tue,  2 May 2023 23:47:45 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Tue, 02 May 2023 23:47:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1683085664; x=
-        1683172064; bh=qJF/y3PUtn5/2JZtl7kI9dJefyoiVSOcY3IKgthNpIc=; b=z
-        ySnQ1rBAnzidl6iL0pwfcaV7q1BhJw7K8Z7Gnxg+eWmliFMapKVb5x4C5tMnYIeI
-        cGCvsTxLAV4Bxi5DuvP60YET7SQYI0Cve51cwXF5DOypi9VECATBXGq9KEatcUHY
-        Oe1WT9JwIBJBMwx8opbIxeSA4xSniYADfOiQaMKp1LxcbngPLEvlJ0HW07C++HJp
-        6ihMgw5X8VwpBEu8uWbrz5JXf6xX3ZENWQZXh+fTshrLedsGzStgwCXFya/GiO0w
-        Cjcunb7cz5X9Qpjf2pQoH3ZLjzIH3VFz7z1jbz1roJjErX48qq3qqeCfTyVs15Wu
-        bMJq8bTP7KlzYUzutz+YQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1683085664; x=
-        1683172064; bh=qJF/y3PUtn5/2JZtl7kI9dJefyoiVSOcY3IKgthNpIc=; b=F
-        q4CSQVoiVKJBh109TYziJStlzxq1sjjUmGriCCBd38wb9kuFlkd3E08E4XGFhfZ9
-        NYbVWIIpEmBmEupXYwGoF4Q7hjROkHISgaGAF38xDJTv+lIVVusS4qvj2SBY16vH
-        m4ncYsmRxv88s/Eyv3CtKaiMAlWoc9t2cIqybsZDmNgF11IJ60a/3nA4XGx9wvNA
-        xsi+1H0eEN0SR0cNSSsstVdOVWwbTIhYEh1IJaqg6XaJUSimuoeVDAZQJw/ulWaY
-        SedOObQrBG48FFcktNmyIj8GGzBCvgSLAM6P+QrKm8RDUs6RPZV/LufLMJCDZ9Vn
-        P3/rM+MNEKyAdVOXcHPgg==
-X-ME-Sender: <xms:YNlRZBEFbFuN_2YGOoSjn0odGphkeebWYlk1-3ZgTgL4v-CpfGE0mA>
-    <xme:YNlRZGWKLav97EaSgh7cUr_84y7l7ldC2mLIn_iozexPGp2Mk6aV0caIHMDzdxX8I
-    7vpzLLToRs_RBosY4U>
-X-ME-Received: <xmr:YNlRZDIDN-8Z4Z7Q6oVrNjraN_0pprjhM5hpBdVcpZaRpJFElgRMUZbSQv27>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedvjedgjeefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtke
-    ertdertddtnecuhfhrohhmpedfnfhukhgvucffrdculfhonhgvshdfuceolhhukhgvsehl
-    jhhonhgvshdruggvvheqnecuggftrfgrthhtvghrnhepgfetfedugfetudeuheetjefhue
-    fggfelleetvdevtefhueeujeefvdegleevhefgnecuvehluhhsthgvrhfuihiivgepuden
-    ucfrrghrrghmpehmrghilhhfrhhomheplhhukhgvsehljhhonhgvshdruggvvh
-X-ME-Proxy: <xmx:YNlRZHG0RtoAcJjiVoXXTYLT20r_w2IsLriJmA0_yIL0Vx21ZEi8Rg>
-    <xmx:YNlRZHUeqAjaZf0E9tf5HBY2snKSPsSPzvFWxwceNfK_VOqtyGZGnw>
-    <xmx:YNlRZCOytMVG7m_0pt38xUxRmkihz2dqus9i8iimYp9zGDLbyoAytA>
-    <xmx:YNlRZCQZphj9di9Rep5XOKq2CFkwNLPNnlIhM-hf1fT-ncug7cbZPQ>
-Feedback-ID: i5ec1447f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 2 May 2023 23:47:41 -0400 (EDT)
-From:   "Luke D. Jones" <luke@ljones.dev>
-To:     linux-input@vger.kernel.org
-Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com,
-        rydberg@bitmath.org, linux-kernel@vger.kernel.org,
-        "Luke D. Jones" <luke@ljones.dev>
-Subject: [PATCH 3/3] HID: asus: reformat the hotkey mapping block
-Date:   Wed,  3 May 2023 15:47:11 +1200
-Message-Id: <20230503034711.253439-3-luke@ljones.dev>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230503034711.253439-1-luke@ljones.dev>
-References: <20230503034711.253439-1-luke@ljones.dev>
+        Tue, 2 May 2023 23:48:51 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C0D440C1;
+        Tue,  2 May 2023 20:48:49 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3433hkqb001750;
+        Wed, 3 May 2023 03:48:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=jzRZ4VINQAnrN02BfG9cMV8owTs5ZN+Vg9eF8ltvbxs=;
+ b=goTDoBPkaMYUmWoLk4zuf9v3ZsK50f4zcamJRIMeGXFhPxMt8V6vpxIGht/sIq5Ujvx8
+ sDIBwFv468sAEfNsaP0hNWh5Kpgf5MA2lfibaOrKE61HFJP1yahv89O9b9IFipa4/SFy
+ gXrcZiSKckJ+pk3Y8eNuj/mm2v+vdkygn+N7Cawg9tTBPgjA0IswVBoD3U8+tJ6O39Sl
+ 2SSrpB/8lG1uf9/2bH156CuQuSKQp2etxBSpqgNAfXbO5o82kUYbPTmmT4ffm8yUDuFg
+ +D2Wt41kSzt4M7Hu7Opw+/de2K7p1opbZQlXIkkUGyLnRyKRtP1GXY6HdJYIyxeDsJMO Iw== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qbeb2r5bw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 03 May 2023 03:48:26 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3433mPbO004629
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 3 May 2023 03:48:25 GMT
+Received: from [10.217.216.230] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 2 May 2023
+ 20:48:19 -0700
+Message-ID: <2b60b5cd-df7e-0686-cdcb-4a7ccac360cf@quicinc.com>
+Date:   Wed, 3 May 2023 09:18:15 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v7 3/9] usb: dwc3: core: Access XHCI address space
+ temporarily to read port info
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        "Wesley Cheng" <quic_wcheng@quicinc.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "quic_pkondeti@quicinc.com" <quic_pkondeti@quicinc.com>,
+        "quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
+        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>,
+        "quic_harshq@quicinc.com" <quic_harshq@quicinc.com>,
+        "ahalaney@redhat.com" <ahalaney@redhat.com>,
+        "quic_shazhuss@quicinc.com" <quic_shazhuss@quicinc.com>
+References: <20230501143445.3851-1-quic_kriskura@quicinc.com>
+ <20230501143445.3851-4-quic_kriskura@quicinc.com>
+ <20230502214133.fovxi3vfh2s6ujpz@synopsys.com>
+Content-Language: en-US
+From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <20230502214133.fovxi3vfh2s6ujpz@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: ApILEFcp42okD7NXz2O9R0_Pr_nFRe6N
+X-Proofpoint-GUID: ApILEFcp42okD7NXz2O9R0_Pr_nFRe6N
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-02_14,2023-04-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ impostorscore=0 spamscore=0 bulkscore=0 mlxscore=0 phishscore=0
+ malwarescore=0 adultscore=0 clxscore=1015 priorityscore=1501
+ mlxlogscore=999 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2305030030
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Older formatting of this block was beginning to get somewhat cluttered.
-Condensing the block and putting comments to the side makes it easier
-to read and scan the scancodes plus keycodes.
 
-Signed-off-by: Luke D. Jones <luke@ljones.dev>
----
- drivers/hid/hid-asus.c | 44 ++++++++++++------------------------------
- 1 file changed, 12 insertions(+), 32 deletions(-)
 
-diff --git a/drivers/hid/hid-asus.c b/drivers/hid/hid-asus.c
-index 918d0d05ca88..2bc14e076739 100644
---- a/drivers/hid/hid-asus.c
-+++ b/drivers/hid/hid-asus.c
-@@ -885,38 +885,18 @@ static int asus_input_mapping(struct hid_device *hdev,
- 		case 0xc5: asus_map_key_clear(KEY_KBDILLUMDOWN);		break;
- 		case 0xc7: asus_map_key_clear(KEY_KBDILLUMTOGGLE);	break;
- 
--		/* ASUS touchpad toggle */
--		case 0x6b: asus_map_key_clear(KEY_F21);			break;
-+		case 0x6b: asus_map_key_clear(KEY_F21);		break; /* ASUS touchpad toggle */
-+		case 0x38: asus_map_key_clear(KEY_PROG1);	break; /* ROG key */
-+		case 0xba: asus_map_key_clear(KEY_PROG2);	break; /* Fn+C ASUS Splendid */
-+		case 0x5c: asus_map_key_clear(KEY_PROG3);	break; /* Fn+Space Power4Gear */
-+		case 0x99: asus_map_key_clear(KEY_PROG4);	break; /* Fn+F5 "fan" symbol */
-+		case 0xae: asus_map_key_clear(KEY_PROG4);	break; /* Fn+F5 "fan" symbol */
-+		case 0x92: asus_map_key_clear(KEY_CALC);	break; /* Fn+Ret "Calc" symbol */
-+		case 0xb2: asus_map_key_clear(KEY_PROG2);	break; /* Fn+Left previous aura */
-+		case 0xb3: asus_map_key_clear(KEY_PROG3);	break; /* Fn+Left next aura */
-+		case 0x6a: asus_map_key_clear(KEY_F13);		break; /* Screenpad toggle */
-+		case 0x4b: asus_map_key_clear(KEY_F14);		break; /* Arrows/Pg-Up/Dn toggle */
- 
--		/* ROG key */
--		case 0x38: asus_map_key_clear(KEY_PROG1);		break;
--
--		/* Fn+C ASUS Splendid */
--		case 0xba: asus_map_key_clear(KEY_PROG2);		break;
--
--		/* Fn+Space Power4Gear Hybrid */
--		case 0x5c: asus_map_key_clear(KEY_PROG3);		break;
--
--		/* Fn+F5 "fan" symbol on FX503VD */
--		case 0x99: asus_map_key_clear(KEY_PROG4);		break;
--
--		/* Fn+F5 "fan" symbol on N-Key keyboard */
--		case 0xae: asus_map_key_clear(KEY_PROG4);		break;
--
--		/* Fn+Ret "Calc" symbol on N-Key keyboard */
--		case 0x92: asus_map_key_clear(KEY_CALC);		break;
--
--		/* Fn+Left Aura mode previous on N-Key keyboard */
--		case 0xb2: asus_map_key_clear(KEY_PROG2);		break;
--
--		/* Fn+Right Aura mode next on N-Key keyboard */
--		case 0xb3: asus_map_key_clear(KEY_PROG3);		break;
--
--		/* Screenpad toggle on N-Key keyboard */
--		case 0x6a: asus_map_key_clear(KEY_F13);		break;
--
--		/* Arrows/Page-up/Down toggle on N-Key keyboard */
--		case 0x4b: asus_map_key_clear(KEY_F14);		break;
- 
- 		default:
- 			/* ASUS lazily declares 256 usages, ignore the rest,
-@@ -1319,4 +1299,4 @@ static struct hid_driver asus_driver = {
- };
- module_hid_driver(asus_driver);
- 
--MODULE_LICENSE("GPL");
-+MODULE_LICENSE("GPL");
-\ No newline at end of file
--- 
-2.40.0
+On 5/3/2023 3:11 AM, Thinh Nguyen wrote:
+> Hi,
+> 
+> On Mon, May 01, 2023, Krishna Kurapati wrote:
+>> Currently host-only capable DWC3 controllers support Multiport.
+>> Temporarily map XHCI address space for host-only controllers and parse
+>> XHCI Extended Capabilities registers to read number of usb2 ports and
+>> usb3 ports present on multiport controller. Each USB Port is at least HS
+>> capable.
+>>
+>> The port info for usb2 and usb3 phy are identified as num_usb2_ports
+>> and num_usb3_ports. The intention is as follows:
+>>
+>> Wherever we need to perform phy operations like:
+>>
+>> LOOP_OVER_NUMBER_OF_AVAILABLE_PORTS()
+>> {
+>> 	phy_set_mode(dwc->usb2_generic_phy[i], PHY_MODE_USB_HOST);
+>> 	phy_set_mode(dwc->usb3_generic_phy[i], PHY_MODE_USB_HOST);
+>> }
+>>
+>> If number of usb2 ports is 3, loop can go from index 0-2 for
+>> usb2_generic_phy. If number of usb3-ports is 2, we don't know for sure,
+>> if the first 2 ports are SS capable or some other ports like (2 and 3)
+>> are SS capable. So instead, num_usb2_ports is used to loop around all
+>> phy's (both hs and ss) for performing phy operations. If any
+>> usb3_generic_phy turns out to be NULL, phy operation just bails out.
+>>
+>> num_usb3_ports is used to modify GUSB3PIPECTL registers while setting up
+>> phy's as we need to know how many SS capable ports are there for this.
+>>
+>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>> ---
+>>   drivers/usb/dwc3/core.c | 68 +++++++++++++++++++++++++++++++++++++++++
+>>   drivers/usb/dwc3/core.h | 58 +++++++++++++++++++++++++++++++++++
+>>   2 files changed, 126 insertions(+)
+>>
+>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+>> index 0beaab932e7d..b8ac7bcee391 100644
+>> --- a/drivers/usb/dwc3/core.c
+>> +++ b/drivers/usb/dwc3/core.c
+>> @@ -1767,6 +1767,59 @@ static int dwc3_get_clocks(struct dwc3 *dwc)
+>>   	return 0;
+>>   }
+>>   
+>> +static int dwc3_read_port_info(struct dwc3 *dwc)
+>> +{
+>> +	void __iomem		*regs;
+>> +	u32			offset;
+>> +	u32			temp;
+>> +	u8			major_revision;
+>> +	int			ret = 0;
+>> +
+>> +	/*
+>> +	 * Remap xHCI address space to access XHCI ext cap regs,
+>> +	 * since it is needed to get port info.
+>> +	 */
+>> +	regs = ioremap(dwc->xhci_resources[0].start,
+>> +				resource_size(&dwc->xhci_resources[0]));
+>> +	if (IS_ERR(regs))
+>> +		return PTR_ERR(regs);
+>> +
+>> +	offset = dwc3_xhci_find_next_ext_cap(regs, 0,
+>> +					XHCI_EXT_CAPS_PROTOCOL);
+>> +	while (offset) {
+>> +		temp = readl(regs + offset);
+>> +		major_revision = XHCI_EXT_PORT_MAJOR(temp);
+>> +
+>> +		temp = readl(regs + offset + 0x08);
+>> +		if (major_revision == 0x03) {
+>> +			dwc->num_usb3_ports += XHCI_EXT_PORT_COUNT(temp);
+>> +		} else if (major_revision <= 0x02) {
+>> +			dwc->num_usb2_ports += XHCI_EXT_PORT_COUNT(temp);
+>> +		} else {
+>> +			dev_err(dwc->dev, "port revision seems wrong\n");
+> 
+> Can we print this instead:
+> 	dev_err(dwc->dev, "Unrecognized port major revision %d\n", major_revision);
+> 
+>> +			ret = -EINVAL;
+>> +			goto unmap_reg;
+>> +		}
+>> +
+>> +		offset = dwc3_xhci_find_next_ext_cap(regs, offset,
+>> +						XHCI_EXT_CAPS_PROTOCOL);
+>> +	}
+>> +
+>> +	temp = readl(regs + DWC3_XHCI_HCSPARAMS1);
+>> +	if (HCS_MAX_PORTS(temp) != (dwc->num_usb3_ports + dwc->num_usb2_ports)) {
+>> +		dev_err(dwc->dev, "inconsistency in port info\n");
+> 
+> Can we print this instead:
+> 	dev_err(dwc->dev, "Mismatched reported MAXPORTS (%d)\n", HCS_MAX_PORTS(temp));
+> 
+>> +		ret = -EINVAL;
+>> +		goto unmap_reg;
+>> +	}
+>> +
+>> +	dev_dbg(dwc->dev,
+>> +		"hs-ports: %d ss-ports: %d\n", dwc->num_usb2_ports, dwc->num_usb3_ports);
+>> +
+>> +unmap_reg:
+>> +	iounmap(regs);
+>> +	return ret;
+>> +}
+>> +
+>>   static int dwc3_probe(struct platform_device *pdev)
+>>   {
+>>   	struct device		*dev = &pdev->dev;
+>> @@ -1774,6 +1827,7 @@ static int dwc3_probe(struct platform_device *pdev)
+>>   	void __iomem		*regs;
+>>   	struct dwc3		*dwc;
+>>   	int			ret;
+>> +	unsigned int		hw_mode;
+>>   
+>>   	dwc = devm_kzalloc(dev, sizeof(*dwc), GFP_KERNEL);
+>>   	if (!dwc)
+>> @@ -1843,6 +1897,20 @@ static int dwc3_probe(struct platform_device *pdev)
+>>   			goto err_disable_clks;
+>>   	}
+>>   
+>> +	/*
+>> +	 * Currently DWC3 controllers that are host-only capable
+>> +	 * support Multiport
+>> +	 */
+>> +	hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
+>> +	if (hw_mode == DWC3_GHWPARAMS0_MODE_HOST) {
+>> +		ret = dwc3_read_port_info(dwc);
+>> +		if (ret)
+>> +			goto err_disable_clks;
+>> +	} else {
+>> +		dwc->num_usb2_ports = 1;
+>> +		dwc->num_usb3_ports = 1;
+>> +	}
+>> +
+>>   	spin_lock_init(&dwc->lock);
+>>   	mutex_init(&dwc->mutex);
+>>   
+>> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+>> index d56457c02996..21312703e053 100644
+>> --- a/drivers/usb/dwc3/core.h
+>> +++ b/drivers/usb/dwc3/core.h
+>> @@ -35,6 +35,17 @@
+>>   
+>>   #define DWC3_MSG_MAX	500
+>>   
+>> +/* Define XHCI Extcap register offsets for getting multiport info */
+>> +#define XHCI_HCC_PARAMS_OFFSET	0x10
+>> +#define DWC3_XHCI_HCSPARAMS1	0x04
+>> +#define XHCI_EXT_CAPS_PROTOCOL	2
+>> +#define XHCI_HCC_EXT_CAPS(x)    (((x) >> 16) & 0xffff)
+>> +#define XHCI_EXT_CAPS_ID(x)     (((x) >> 0) & 0xff)
+>> +#define XHCI_EXT_CAPS_NEXT(x)   (((x) >> 8) & 0xff)
+>> +#define XHCI_EXT_PORT_MAJOR(x)  (((x) >> 24) & 0xff)
+>> +#define XHCI_EXT_PORT_COUNT(x)  (((x) >> 8) & 0xff)
+>> +#define HCS_MAX_PORTS(x)        (((x) >> 24) & 0x7f)
+>> +
+>>   /* Global constants */
+>>   #define DWC3_PULL_UP_TIMEOUT	500	/* ms */
+>>   #define DWC3_BOUNCE_SIZE	1024	/* size of a superspeed bulk */
+>> @@ -1025,6 +1036,8 @@ struct dwc3_scratchpad_array {
+>>    * @usb_psy: pointer to power supply interface.
+>>    * @usb2_phy: pointer to USB2 PHY
+>>    * @usb3_phy: pointer to USB3 PHY
+>> + * @num_usb2_ports: number of usb2 ports.
+>> + * @num_usb3_ports: number of usb3 ports.
+>>    * @usb2_generic_phy: pointer to USB2 PHY
+>>    * @usb3_generic_phy: pointer to USB3 PHY
+>>    * @phys_ready: flag to indicate that PHYs are ready
+>> @@ -1162,6 +1175,9 @@ struct dwc3 {
+>>   	struct usb_phy		*usb2_phy;
+>>   	struct usb_phy		*usb3_phy;
+>>   
+>> +	u32			num_usb2_ports;
+>> +	u32			num_usb3_ports;
+> 
+> can we use u8?
+> 
+>> +
+>>   	struct phy		*usb2_generic_phy;
+>>   	struct phy		*usb3_generic_phy;
+>>   
+>> @@ -1650,4 +1666,46 @@ static inline void dwc3_ulpi_exit(struct dwc3 *dwc)
+>>   { }
+>>   #endif
+>>   
+>> +/**
+>> + * dwc3_xhci_find_next_ext_cap - Find the offset of the extended capabilities
+>> + *					with capability ID id.
+>> + *
+>> + * @base	PCI MMIO registers base address.
+>> + * @start	address at which to start looking, (0 or HCC_PARAMS to start at
+>> + *		beginning of list)
+>> + * @id		Extended capability ID to search for, or 0 for the next
+>> + *		capability
+> 
+> I know that this is a duplicate from the xhci driver, but can we fix the
+> kerneldoc style as in other places if we're going to keep it?
+> 
 
+Hi Thinh,
+
+  Isn't this same as other functions ?
+
+/**
+  * <function name> - description
+  * @params
+  *
+  */
+
+I missed the function name in comments last time, but added it in this 
+version.
+
+Checkpatch too didn't give any errors/warnings other than alignment. Can 
+you help point out any other mistake in this function doc/comments so 
+that I can fix it in next version.
+
+>> + *
+>> + * Returns the offset of the next matching extended capability structure.
+>> + * Some capabilities can occur several times, e.g., the XHCI_EXT_CAPS_PROTOCOL,
+>> + * and this provides a way to find them all.
+>> + */
+>> +static inline int dwc3_xhci_find_next_ext_cap(void __iomem *base, u32 start, int id)
+> 
+> This is a bit much for an inline function, can we just keep it in core.c
+> as a static function >
+Sure, will move this to core.c
+
+Regards,
+Krishna,
