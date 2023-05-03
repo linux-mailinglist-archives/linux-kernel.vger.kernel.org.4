@@ -2,216 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E38F6F4E52
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 03:04:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FFB66F4E55
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 03:06:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229532AbjECBEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 21:04:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53622 "EHLO
+        id S229544AbjECBF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 21:05:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjECBEf (ORCPT
+        with ESMTP id S229441AbjECBF5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 21:04:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2C1B2D61;
-        Tue,  2 May 2023 18:04:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C8EB629CC;
-        Wed,  3 May 2023 01:04:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94028C433AE;
-        Wed,  3 May 2023 01:04:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683075872;
-        bh=3tzUPFXqJgNCRsublfj+ZgGaTs7KzeK4/lauS5NgXbw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=QoGLyyHrVl2A+YTplbrnYiMEIz6wk+jP9SV8dz5UCtY76MWzNfxcDGsWDt7XzaFbR
-         Xr4LoafVLAa94EjThKoFMtXLMkvCzIlI51WqQfPmq+42ZRGmwhqCuG73rtNFS7wUkc
-         +fEXrSTR/j+xouT44ufNnuT7bR771W/YBDuqC0FtyyPhTIzbPY4lJHmmC4JrKp+LqL
-         VUXrPWi4q/OV1Ezdi6st//MbXuMfXSMqmAVFzsUiMTdstEd3wZmJZlVLjAXQcv6nMA
-         7k3X1222URsa6zFwyiuGaddxH/mAzA1qAvda1W1zjhNGD1pbVwdRUepxFlVrtRcox8
-         yQNSGRSC9H6BA==
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2a8b3ecf59fso46418061fa.0;
-        Tue, 02 May 2023 18:04:32 -0700 (PDT)
-X-Gm-Message-State: AC+VfDxrX1RTlyh35LQ1lyIfjVDZ9XSpUGaNTrbWR3iI+zmU2KY74l9I
-        wqQLSzBVjWvuMwcKlKrtaLj1AvVmhDES5zIw/w==
-X-Google-Smtp-Source: ACHHUZ4mSLqb1ExsMkOjNsdZYIFyOMFO5WWfDnvfwZvuM9fv3TyrxmQhN6hT67g4AYdNW/MVo7uZ6IBv6mL14dd4tuc=
-X-Received: by 2002:a2e:8402:0:b0:2a8:d103:dc8 with SMTP id
- z2-20020a2e8402000000b002a8d1030dc8mr4705375ljg.2.1683075870337; Tue, 02 May
- 2023 18:04:30 -0700 (PDT)
+        Tue, 2 May 2023 21:05:57 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C3D42D61
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 18:05:55 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-55b7630a736so5434197b3.1
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 18:05:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683075955; x=1685667955;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=m4150D4K6PFkw/p8ZQzw3oDIGR67QJcGBtSkoT4wUnc=;
+        b=VT/lpwegPmHfVwQRL263/dFBOGViLcIOmDFEKSDN0JoXp3qHS1srQa34+xoWI2Bo9d
+         YAYLzTw+/PUqOwvAjrk4Ftff8F5kJWlKfFXLm6SaNUq9sMQIEBd9rc7Y5AZ8mLD4/gub
+         P+kVvr9ZVRY31CA33v0UJCQVMLkj77IGdF4r9KJwyIFqNBZisXI+Doy/0kXlk/GNwh8k
+         z+LPUjrG+aqA4j2X7/gCMWy17ZSZ2BwqdcFI/QRv5WL4oWVVT1mr8sG4aD6IKapKQSwu
+         6mPF3QhOongfrXuWyvUfMuO8ddN1xX1lXjXEaGjKSoOoUaiURn0+HFK99RDAGm9pYQkF
+         x4lQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683075955; x=1685667955;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=m4150D4K6PFkw/p8ZQzw3oDIGR67QJcGBtSkoT4wUnc=;
+        b=bCeIELrKpfwrkybyWNVuGXpwuIeAgOdCqZBZy2sbskxOfI2REPjaiYJHaih4xoJ/c5
+         wj9h8mCZnv28hhvGxf0/sddVrA6d8UD6kHlDAwJ5uU8IR7NLErKi6gLIWYffqGDHS4Zl
+         kyVQis8GjAyYxD0c2xXS7FGyoRdE3Ygnmn6g6uD7C5wiRWH6D0BvxiOC4p5cG/geFCRx
+         OddjP9X3gM8i+cJG9xqNgMKgpU50Oh3/3l2tOyDMn6bMATR2t622HwDwFxO+728434Yg
+         ZbMpHxsu0zRSkQj949E/P5wPqbM16kbsNeOfW+y2WjUxZUH9dzGHhWteYcOFLelSlIZo
+         qRAQ==
+X-Gm-Message-State: AC+VfDwjvUkbcd3rf+sF/+yGVF3yWJxY/d853ny3gFgtK3XICppJ81FR
+        9wtziy+lRQFSy/HgaQCdkDfnkCEsiujDy40+jlBq2Q==
+X-Google-Smtp-Source: ACHHUZ7cagiPfB6DVMqItZRu7qL1h7Wan4Y5rk+T4jkv3yUULWQ9G2mryIrQk1F+sybOs2QQQ1mH3gTdh8agGtHShnk=
+X-Received: by 2002:a81:7507:0:b0:55a:20d5:1e38 with SMTP id
+ q7-20020a817507000000b0055a20d51e38mr10843182ywc.40.1683075954559; Tue, 02
+ May 2023 18:05:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220328000915.15041-1-ansuelsmth@gmail.com> <85eb14ec-f465-7447-ad77-a3dabc666f47@kernel.org>
- <YkKRYnN84D9VZhGj@Ansuel-xps.localdomain> <CAL_Jsq+RQQ-ADMxLPUFwk6S6kGmb6oNDy4k52fnU0EtbUvqmSA@mail.gmail.com>
- <CAMuHMdWNTE48MFy6fqxAsfMWz9b6E7dVNXtXtESP95sxk2PGwA@mail.gmail.com>
- <CAL_JsqJthKTm8bhRF2B=ae1tvtPeYYXx_Tm76qQtSwLtH5C6VA@mail.gmail.com>
- <720a2829-b6b5-411c-ac69-9a53e881f48d@app.fastmail.com> <CAL_JsqKCtmkwzKa01gyG65fH8ye6R3KhR41PJbJhOJ4X9j=znA@mail.gmail.com>
- <d4b52074-d11c-4c7a-ad74-b2fce64c6d30@gmail.com>
-In-Reply-To: <d4b52074-d11c-4c7a-ad74-b2fce64c6d30@gmail.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Tue, 2 May 2023 20:04:17 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqKRcMSijAdiP_BpyBGRuMhscZ12QFcLBAeZ+TcaQg7r4g@mail.gmail.com>
-Message-ID: <CAL_JsqKRcMSijAdiP_BpyBGRuMhscZ12QFcLBAeZ+TcaQg7r4g@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/1] Categorize ARM dts directory
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Olof Johansson <olof@lixom.net>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-actions@lists.infradead.org,
-        linux-sunxi@lists.linux.dev,
-        Linux-OMAP <linux-omap@vger.kernel.org>,
-        linux-amlogic@lists.infradead.org, linux-arm-kernel@axis.com,
-        linux-aspeed@lists.ozlabs.org,
-        linux-rpi-kernel@lists.infradead.org,
-        chrome-platform@lists.linux.dev,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-samsung-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        kernel@dh-electronics.com, linux-mediatek@lists.infradead.org,
-        openbmc@lists.ozlabs.org, linux-tegra@vger.kernel.org,
-        "linux-oxnas@groups.io" <linux-oxnas@groups.io>,
-        linux-arm-msm@vger.kernel.org, linux-unisoc@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        linux-realtek-soc@lists.infradead.org
+References: <20230501175025.36233-1-surenb@google.com> <ZFBvOh8r5WbTVyA8@casper.infradead.org>
+ <CAJuCfpHfAFx9rjv0gHK77LbP-8gd-kFnWw=aqfQTP6pH=zvMNg@mail.gmail.com>
+ <ZFCB+G9KSNE+J9cZ@casper.infradead.org> <CAJuCfpES=G8i99yYXWoeJq9+JVUjX5Bkq_5VNVTVX7QT+Wkfxg@mail.gmail.com>
+ <ZFEmN6G7WRy59Mum@casper.infradead.org> <CAJuCfpFs+Rgpu8v+ddHFwtOx33W5k1sKDdXHM2ej1Upyo_9y4g@mail.gmail.com>
+ <ZFGPLXIis6tl1QWX@casper.infradead.org> <CAJuCfpGgc_bCEAE5LrhYPk=qXMU=owgiABTO9ZNqaBx-xfrOuQ@mail.gmail.com>
+ <ZFGfaSA7buH0yBv7@casper.infradead.org>
+In-Reply-To: <ZFGfaSA7buH0yBv7@casper.infradead.org>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 2 May 2023 18:05:43 -0700
+Message-ID: <CAJuCfpHzzsGn0iqD0g56MpBO4=7Tf5XJ1uvMr-mh9RmC3Z91Gw@mail.gmail.com>
+Subject: Re: [PATCH 1/3] mm: handle swap page faults under VMA lock if page is uncontended
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, mhocko@suse.com,
+        josef@toxicpanda.com, jack@suse.cz, ldufour@linux.ibm.com,
+        laurent.dufour@fr.ibm.com, michel@lespinasse.org,
+        liam.howlett@oracle.com, jglisse@google.com, vbabka@suse.cz,
+        minchan@google.com, dave@stgolabs.net, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, hdanton@sina.com, apopple@nvidia.com,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 2, 2023 at 6:02=E2=80=AFPM Florian Fainelli <f.fainelli@gmail.c=
-om> wrote:
+On Tue, May 2, 2023 at 4:40=E2=80=AFPM Matthew Wilcox <willy@infradead.org>=
+ wrote:
 >
-> On 5/2/23 12:40, Rob Herring wrote:
-> > On Tue, May 2, 2023 at 3:15=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wr=
-ote:
-> >>
-> >> On Tue, Apr 25, 2023, at 17:57, Rob Herring wrote:
-> >>> On Tue, Apr 25, 2023 at 2:28=E2=80=AFAM Geert Uytterhoeven <geert@lin=
-ux-m68k.org> wrote:
-> >>>
-> >>>> Does your script also cater for .dts files not matching any pattern,
-> >>>> but including a .dtsi file that does match a pattern?
-> >>>
-> >>> I assume I built everything after moving, but maybe not...
-> >>>
-> >>> That's all just "details". First, we need agreement on a) moving
-> >>> things to subdirs and b) doing it 1-by-1 or all at once. So far we've
-> >>> been stuck on a) for being 'too much churn'.
-> >>
-> >> Sorry for missing most of the discussion last week. The script sounds
-> >> fine to me, the only reason I didn't want to do this in the past is th=
-at
-> >> we had the plan to move platforms out of the kernel tree to an externa=
-l
-> >> repository and I wanted to do this platform at a time and also only mo=
-ve
-> >> each one once. I don't think that is going to happen anytime soon now,
-> >> so let's just do your script.
-> >>
-> >> Can you send me the script and/or a pull request of the resulting
-> >> tree based on my soc/dt branch? Everything is merged upstream,
-> >> and I think git-merge would handle the remaining merges with any
-> >> other changes in mainline.
+> On Tue, May 02, 2023 at 04:04:59PM -0700, Suren Baghdasaryan wrote:
+> > On Tue, May 2, 2023 at 3:31=E2=80=AFPM Matthew Wilcox <willy@infradead.=
+org> wrote:
+> > >
+> > > On Tue, May 02, 2023 at 09:36:03AM -0700, Suren Baghdasaryan wrote:
+> > > > On Tue, May 2, 2023 at 8:03=E2=80=AFAM Matthew Wilcox <willy@infrad=
+ead.org> wrote:
+> > > > >
+> > > > > On Mon, May 01, 2023 at 10:04:56PM -0700, Suren Baghdasaryan wrot=
+e:
+> > > > > > On Mon, May 1, 2023 at 8:22=E2=80=AFPM Matthew Wilcox <willy@in=
+fradead.org> wrote:
+> > > > > > >
+> > > > > > > On Mon, May 01, 2023 at 07:30:13PM -0700, Suren Baghdasaryan =
+wrote:
+> > > > > > > > On Mon, May 1, 2023 at 7:02=E2=80=AFPM Matthew Wilcox <will=
+y@infradead.org> wrote:
+> > > > > > > > >
+> > > > > > > > > On Mon, May 01, 2023 at 10:50:23AM -0700, Suren Baghdasar=
+yan wrote:
+> > > > > > > > > > +++ b/mm/memory.c
+> > > > > > > > > > @@ -3711,11 +3711,6 @@ vm_fault_t do_swap_page(struct v=
+m_fault *vmf)
+> > > > > > > > > >       if (!pte_unmap_same(vmf))
+> > > > > > > > > >               goto out;
+> > > > > > > > > >
+> > > > > > > > > > -     if (vmf->flags & FAULT_FLAG_VMA_LOCK) {
+> > > > > > > > > > -             ret =3D VM_FAULT_RETRY;
+> > > > > > > > > > -             goto out;
+> > > > > > > > > > -     }
+> > > > > > > > > > -
+> > > > > > > > > >       entry =3D pte_to_swp_entry(vmf->orig_pte);
+> > > > > > > > > >       if (unlikely(non_swap_entry(entry))) {
+> > > > > > > > > >               if (is_migration_entry(entry)) {
+> > > > > > > > >
+> > > > > > > > > You're missing the necessary fallback in the (!folio) cas=
+e.
+> > > > > > > > > swap_readpage() is synchronous and will sleep.
+> > > > > > > >
+> > > > > > > > True, but is it unsafe to do that under VMA lock and has to=
+ be done
+> > > > > > > > under mmap_lock?
+> > > > > > >
+> > > > > > > ... you were the one arguing that we didn't want to wait for =
+I/O with
+> > > > > > > the VMA lock held?
+> > > > > >
+> > > > > > Well, that discussion was about waiting in folio_lock_or_retry(=
+) with
+> > > > > > the lock being held. I argued against it because currently we d=
+rop
+> > > > > > mmap_lock lock before waiting, so if we don't drop VMA lock we =
+would
+> > > > > > be changing the current behavior which might introduce new
+> > > > > > regressions. In the case of swap_readpage and swapin_readahead =
+we
+> > > > > > already wait with mmap_lock held, so waiting with VMA lock held=
+ does
+> > > > > > not introduce new problems (unless there is a need to hold mmap=
+_lock).
+> > > > > >
+> > > > > > That said, you are absolutely correct that this situation can b=
+e
+> > > > > > improved by dropping the lock in these cases too. I just didn't=
+ want
+> > > > > > to attack everything at once. I believe after we agree on the a=
+pproach
+> > > > > > implemented in https://lore.kernel.org/all/20230501175025.36233=
+-3-surenb@google.com
+> > > > > > for dropping the VMA lock before waiting, these cases can be ad=
+ded
+> > > > > > easier. Does that make sense?
+> > > > >
+> > > > > OK, I looked at this path some more, and I think we're fine.  Thi=
+s
+> > > > > patch is only called for SWP_SYNCHRONOUS_IO which is only set for
+> > > > > QUEUE_FLAG_SYNCHRONOUS devices, which are brd, zram and nvdimms
+> > > > > (both btt and pmem).  So the answer is that we don't sleep in thi=
+s
+> > > > > path, and there's no need to drop the lock.
+> > > >
+> > > > Yes but swapin_readahead does sleep, so I'll have to handle that ca=
+se
+> > > > too after this.
+> > >
+> > > Sleeping is OK, we do that in pXd_alloc()!  Do we block on I/O anywhe=
+re
+> > > in swapin_readahead()?  It all looks like async I/O to me.
 > >
-> > I've dusted off my script and made a branch[1] with the result.
-> > There's just a couple of fixes needed after the script is run (see the
-> > top commit). The cross arch includes are all fixed up by the script.
-> > dtbs_install maintains a flat install. I compared the number of .dtbs
-> > before and after to check the script.
-> >
-> > I think the only issue remaining is finalizing the mapping of
-> > platforms to subdirs. What I have currently is a mixture of SoC
-> > families and vendors. The most notable are all the Freescale/NXP
-> > platforms, pxa, socfpga, and stm32. It's not consistent with arm64
-> > either. Once that's finalized, I still need to go update MAINTAINERS.
-> >
-> > Here's the current mapping:
-> >
-> > vendor_map =3D {
-> >      'alphascale' : 'alphascale',
-> >      'alpine' : 'alpine',
-> >      'artpec' : 'axis',
-> >      'axm' : 'lsi',
-> >      'cx9' : 'cnxt',
-> >      'ecx' : 'calxeda',
-> >      'highbank' : 'calxeda',
-> >      'ep7' : 'cirrus',
-> >      'mxs': 'mxs',
-> >      'imx23': 'mxs',
-> >      'imx28': 'mxs',
-> >      'sun' : 'allwinner',
-> >      'imx': 'imx',
-> >      'e6' : 'imx',
-> >      'e7' : 'imx',
-> >      'mba6' : 'imx',
-> >      'ls': 'fsl',
-> >      'vf': 'fsl',
-> >      'qcom': 'qcom',
-> >      'am3' : 'ti',
-> >      'am4' : 'ti',
-> >      'am5' : 'ti',
-> >      'dra' : 'ti',
-> >      'keystone' : 'ti',
-> >      'omap' : 'ti',
-> >      'compulab' : 'ti',
-> >      'logicpd' : 'ti',
-> >      'elpida' : 'ti',
-> >      'motorola' : 'ti',
-> >      'twl' : 'ti',
-> >      'da' : 'ti',
-> >      'dm' : 'ti',
-> >      'nspire' : 'nspire',
-> >      'armada' : 'marvell',
-> >      'dove' : 'marvell',
-> >      'kirkwood' : 'marvell',
-> >      'orion' : 'marvell',
-> >      'mvebu' : 'marvell',
-> >      'mmp' : 'marvell',
-> >      'berlin' : 'berlin',
-> >      'pxa2' : 'pxa',
-> >      'pxa3' : 'pxa',
-> >      'pxa' : 'marvell',
-> >      'arm-' : 'arm',
-> >      'integ' : 'arm',
-> >      'mps' : 'arm',
-> >      've' : 'arm',
-> >      'aspeed' : 'aspeed',
-> >      'ast2' : 'aspeed',
-> >      'facebook' : 'aspeed',
-> >      'ibm' : 'aspeed',
-> >      'openbmc' : 'aspeed',
-> >      'en7' : 'airoha',
-> >      'at91' : 'microchip',
-> >      'sama' : 'microchip',
-> >      'sam9' : 'microchip',
-> >      'usb_' : 'microchip',
-> >      'tny_' : 'microchip',
-> >      'mpa1600' : 'microchip',
-> >      'animeo_ip' : 'microchip',
-> >      'aks-cdu' : 'microchip',
-> >      'ethernut5' : 'microchip',
-> >      'evk-pro3' : 'microchip',
-> >      'pm9g45' : 'microchip',
-> >      'ge86' : 'microchip',
-> >      'bcm' : 'brcm',
+> > Hmm. I thought that we have synchronous I/O in the following paths:
+> >     swapin_readahead()->swap_cluster_readahead()->swap_readpage()
+> >     swapin_readahead()->swap_vma_readahead()->swap_readpage()
+> > but just noticed that in both cases swap_readpage() is called with the
+> > synchronous parameter being false. So you are probably right here...
+> > Does that mean swapin_readahead() might return a page which does not
+> > have its content swapped-in yet?
 >
-> How about we use 'broadcom' here, to follow what arm64 does? I could
-> rename arch/mips/boot/dts/brcm to arch/mips/boot/dts/broadcom for
-> consistency, too?
+> That's my understanding.  In that case it's !uptodate and still locked.
+> The folio_lock_or_retry() will wait for the read to complete unless
+> we've told it we'd rather retry.
 
-Okay, though if starting clean I'd somewhat prefer to use the vendor
-prefix. I guess since arm and arm64 share dtsi files, they should
-match.
-
-Rob
+Ok, and we already drop the locks in folio_lock_or_retry() when
+needed. Sounds like we cover this case with this patchset?
