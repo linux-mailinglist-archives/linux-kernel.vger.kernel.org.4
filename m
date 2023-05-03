@@ -2,84 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 916806F5D52
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 19:52:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C385A6F5D54
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 19:52:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229962AbjECRw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 13:52:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42334 "EHLO
+        id S229984AbjECRwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 13:52:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjECRwY (ORCPT
+        with ESMTP id S229539AbjECRwa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 13:52:24 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515D95FDF;
-        Wed,  3 May 2023 10:52:23 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 343EdIY7018729;
-        Wed, 3 May 2023 17:52:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=7XSpeuGQyPG8mqbzx7ScViHW766udxu9uXTfxj5yISo=;
- b=R5bp73hhc4yyBYxWo/DqAosS0GBU0vv6Xdp4NLTCGMA6JJ2ZqF9MMTipXsArFX9yplHI
- d755TEkcXwMZfeTxijgFw+/6ayHbNFp6DJ2WJvL0D6VIKGaAgLR1AISrlcqJoBmQV9Vm
- 6M33Cmv8PnJwbd9LlAby5U1lRYhVhyx4H3B90SrMP9tnH3Pebqu7KbVfMr8iAxzdwvtL
- alK54bIkngyJequcsXcjTKxnbAtu4S6v4FozAWQVfELY5RSdbaIDpY6eKQ84YNW59HXJ
- 25CRxDJdOly8IWWd/jy6PY6cWTVguDzcCj9UdGZKWkda5+9LpKpTDJ1AIr0YMYOuymSa 2A== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qbn0a92md-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 03 May 2023 17:52:12 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 343HqC8V025135
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 3 May 2023 17:52:12 GMT
-Received: from [10.71.110.189] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 3 May 2023
- 10:51:48 -0700
-Message-ID: <9e357eff-a649-90cb-0fc2-7ab6a8eb6f19@quicinc.com>
-Date:   Wed, 3 May 2023 10:51:47 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 4/7] drm/msm/dpu: add PINGPONG_NONE to disconnect DSC
- from PINGPONG
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-CC:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
-        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
-        <andersson@kernel.org>, <quic_abhinavk@quicinc.com>,
-        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1683061382-32651-1-git-send-email-quic_khsieh@quicinc.com>
- <1683061382-32651-5-git-send-email-quic_khsieh@quicinc.com>
- <csyytksa77vbi2hwwv25voocdf3khsbp2kxtd4jcucoobcpjdv@6xkqzk33dn5u>
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-In-Reply-To: <csyytksa77vbi2hwwv25voocdf3khsbp2kxtd4jcucoobcpjdv@6xkqzk33dn5u>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: qL1jMA-pgKqqX7BRycRayBOLeI2kaTZd
-X-Proofpoint-ORIG-GUID: qL1jMA-pgKqqX7BRycRayBOLeI2kaTZd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-03_12,2023-05-03_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 spamscore=0 phishscore=0 mlxlogscore=999 mlxscore=0
- malwarescore=0 priorityscore=1501 impostorscore=0 clxscore=1015
- adultscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2305030153
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        Wed, 3 May 2023 13:52:30 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE4B57A93
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 10:52:28 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-55a9614c154so41222797b3.2
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 10:52:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683136348; x=1685728348;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RZYSjSUR1TVNLCONU/ktPYm4b5B8g2ry+YtlqDqVDwA=;
+        b=06jHQvfsD3SDUJMSu6ULA+Lqi2Rheb3urP5pez8MV1dafSxYy0/iecp7i3W9YM8kw0
+         Z8sDp7LJx6LxY6887Lp9tpfA2PRnZ+5qsmf/2ne9kOhMV6oNSgGhzuXqwMC3i6HQpw8p
+         D8X9p8yhzKfJ/bgSYEC5uIPGefibu0HxTKSIOIWINb3PnNySA5vrkGDdfiFHPxJVa3eg
+         fzeTNSZPX/rk1YdIOuq6L93DdQc6YUPO6bt/7O5Wu9R3mWPc7MGSncLmqdQi7vfNKPNv
+         eNUJWumFkZPqhtINkPq+WqdkN0g7gmfclLzeSV9JpuQEB/g+6NsZV9V3lB08IqjbYy4P
+         Yf/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683136348; x=1685728348;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RZYSjSUR1TVNLCONU/ktPYm4b5B8g2ry+YtlqDqVDwA=;
+        b=MxcEocSlPbaTFSzraQfaMWqAfguK792/4Hd7atEs4wrz/kg5DjlbMwaJQpGCA4EGvo
+         XUUWlgoJcj7AWpgv5OUHQjEkBxq6cUfhuSeh/A+9xkClCOFT+kTlxuxqtKMADnwFwzGc
+         1msMQ23/+frGip3F59jOffb9zxkZlTqRtNjHvebmricZ1mvGmsCc3PsAaClh7Zwt895a
+         sh/yNjCuRWM/Aii6jRCu4hE2wXmBtOdw20ygso+y/+eo4jpBj2ruvp6Lnd9+VBdwbUV1
+         8TQ7mamTqOjI9rISNrP9HEEn9AJTUx+5tV5AKOedPHGlWbrgDTOlvEScH/PdsFLrRe1Y
+         AI/g==
+X-Gm-Message-State: AC+VfDz6x2tTCiGwHvRBGe+W17MA+B8k4AHSmbyExC3JmmxrGvgShARV
+        /QlJHMRRJGVWD/4Fy9u2PfH/8PhA3KJ/wA==
+X-Google-Smtp-Source: ACHHUZ59iAxehhHtXCF+bq4Cz843yfeiUKwoHIntE4kQjpxt94wcmUOFlOiSBWPXCkx4jhERPUtGCVXYZdfeOw==
+X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:262e])
+ (user=shakeelb job=sendgmr) by 2002:a81:4054:0:b0:534:d71f:14e6 with SMTP id
+ m20-20020a814054000000b00534d71f14e6mr12118393ywn.9.1683136347929; Wed, 03
+ May 2023 10:52:27 -0700 (PDT)
+Date:   Wed, 3 May 2023 17:52:26 +0000
+In-Reply-To: <20230428132406.2540811-2-yosryahmed@google.com>
+Mime-Version: 1.0
+References: <20230428132406.2540811-1-yosryahmed@google.com> <20230428132406.2540811-2-yosryahmed@google.com>
+Message-ID: <20230503175226.nyjmmbnohm6xxckd@google.com>
+Subject: Re: [PATCH v2 1/2] memcg: use seq_buf_do_printk() with mem_cgroup_print_oom_meminfo()
+From:   Shakeel Butt <shakeelb@google.com>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Petr Mladek <pmladek@suse.com>, Chris Li <chrisl@kernel.org>,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Michal Hocko <mhocko@suse.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,121 +75,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Apr 28, 2023 at 01:24:05PM +0000, Yosry Ahmed wrote:
+> Currently, we format all the memcg stats into a buffer in
+> mem_cgroup_print_oom_meminfo() and use pr_info() to dump it to the logs.
+> However, this buffer is large in size. Although it is currently working
+> as intended, ther is a dependency between the memcg stats buffer and the
+> printk record size limit.
+> 
+> If we add more stats in the future and the buffer becomes larger than
+> the printk record size limit, or if the prink record size limit is
+> reduced, the logs may be truncated.
+> 
+> It is safer to use seq_buf_do_printk(), which will automatically break
+> up the buffer at line breaks and issue small printk() calls.
+> 
+> Refactor the code to move the seq_buf from memory_stat_format() to its
+> callers, and use seq_buf_do_printk() to print the seq_buf in
+> mem_cgroup_print_oom_meminfo().
+> 
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> Acked-by: Michal Hocko <mhocko@suse.com>
+> Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
 
-On 5/3/2023 1:03 AM, Marijn Suijten wrote:
-> On 2023-05-02 14:02:59, Kuogee Hsieh wrote:
->> During DSC setup, the crossbar mux need to be programmed to engage
->> DSC to specified PINGPONG. Hence during tear down, the crossbar mux
->> need to be reset to disengage DSC from PINGPONG. This patch add
->> PINGPONG_NONE to serve as disable to reset crossbar mux.
-> This patch doesn't *just add* PINGPONG_NONE to reset the crossbar; that
-> functionality was already available thanks to a `bool enable` function
-> parameter.  Instead it should explain why you think PINGPONG_NONE is
-> more convenient than passing a bool that warrants this replacement.
-> (Hint: I think because you don't have a hw_pp->idx available in the
->   teardown path, and/or its value is not relevant for the disable case
->   anyway.)
->
-> In addition I don't see this series use PINGPONG_NONE anywhere yet: will
-> that be added in the DSC 1.2 series for DP (to support hotplug)?
-
-PINGPONG_NONE will be used to tear down DSC data path later at DP DSC 
-patch series.
-
-Current it is not used because DSI does not do tear down.
-
->
->> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->> ---
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 2 +-
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c  | 7 +++----
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h  | 1 -
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h | 3 ++-
->>   4 files changed, 6 insertions(+), 7 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
->> index 1dc5dbe..d9ad334 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
->> @@ -1839,7 +1839,7 @@ static void dpu_encoder_dsc_pipe_cfg(struct dpu_hw_dsc *hw_dsc,
->>   		hw_pp->ops.setup_dsc(hw_pp);
->>   
->>   	if (hw_dsc->ops.dsc_bind_pingpong_blk)
->> -		hw_dsc->ops.dsc_bind_pingpong_blk(hw_dsc, true, hw_pp->idx);
->> +		hw_dsc->ops.dsc_bind_pingpong_blk(hw_dsc, hw_pp->idx);
->>   
->>   	if (hw_pp->ops.enable_dsc)
->>   		hw_pp->ops.enable_dsc(hw_pp);
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c
->> index 4a6bbcc..3e68d47 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c
->> @@ -157,7 +157,6 @@ static void dpu_hw_dsc_config_thresh(struct dpu_hw_dsc *hw_dsc,
->>   
->>   static void dpu_hw_dsc_bind_pingpong_blk(
->>   		struct dpu_hw_dsc *hw_dsc,
->> -		bool enable,
->>   		const enum dpu_pingpong pp)
->>   {
->>   	struct dpu_hw_blk_reg_map *c = &hw_dsc->hw;
->> @@ -166,13 +165,13 @@ static void dpu_hw_dsc_bind_pingpong_blk(
->>   
->>   	dsc_ctl_offset = DSC_CTL(hw_dsc->idx);
->>   
->> -	if (enable)
->> +	if (pp)
->>   		mux_cfg = (pp - PINGPONG_0) & 0x7;
->>   
->>   	DRM_DEBUG_KMS("%s dsc:%d %s pp:%d\n",
->> -			enable ? "Binding" : "Unbinding",
->> +			pp ? "Binding" : "Unbinding",
->>   			hw_dsc->idx - DSC_0,
->> -			enable ? "to" : "from",
->> +			pp ? "to" : "from",
->>   			pp - PINGPONG_0);
-> PINGPONG_NONE - PINGPONG_0 = -1, so this whole debug log likely needs to
-> be rewritten for the disable case as we don't know what PINGPONG it is
-> being unbound from.  How about:
->
-> 	if (pp)
-> 		DRM_DEBUG_KMS("Binding dsc:%d to pp:%d\n",
-> 				hw_dsc->idx - DSC_0,
-> 				pp - PINGPONG_0);
-> 	else
-> 		DRM_DEBUG_KMS("Unbinding dsc:%d from any pp\n",
-> 				hw_dsc->idx - DSC_0);
->
-> - Marijn
->
->>   
->>   	DPU_REG_WRITE(c, dsc_ctl_offset, mux_cfg);
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h
->> index 287ec5f..138080a 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h
->> @@ -44,7 +44,6 @@ struct dpu_hw_dsc_ops {
->>   				  struct drm_dsc_config *dsc);
->>   
->>   	void (*dsc_bind_pingpong_blk)(struct dpu_hw_dsc *hw_dsc,
->> -				  bool enable,
->>   				  enum dpu_pingpong pp);
->>   };
->>   
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h
->> index 2d9192a..56826a9 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h
->> @@ -191,7 +191,8 @@ enum dpu_dsc {
->>   };
->>   
->>   enum dpu_pingpong {
->> -	PINGPONG_0 = 1,
->> +	PINGPONG_NONE,
->> +	PINGPONG_0,
->>   	PINGPONG_1,
->>   	PINGPONG_2,
->>   	PINGPONG_3,
->> -- 
->> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
->> a Linux Foundation Collaborative Project
->>
+Acked-by: Shakeel Butt <shakeelb@google.com>
