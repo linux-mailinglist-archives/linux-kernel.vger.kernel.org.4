@@ -2,86 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1441E6F5F44
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 21:40:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EECEF6F5F4C
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 21:41:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbjECTkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 15:40:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56270 "EHLO
+        id S229965AbjECTl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 15:41:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjECTkq (ORCPT
+        with ESMTP id S229481AbjECTlY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 15:40:46 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ACE86A63;
-        Wed,  3 May 2023 12:40:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=VorYlWQvvEamK0tp9BEBG0k8GWiLXWZL2H2lBJZo/Q4=; b=aIVe1Vmc68PpIeaXlpQaOQBTSy
-        yMrvsmEpiDW5r7bSkzuceaJ3YXSN3/xeI0Q8aG4wLq/2TOPJTUXjhq+8WZ+t3YGbjXpWkM4rei4tn
-        eUr9zpZyN8vnra1DwqJSu5lWG6mEzECGEsDSeVdHqIjc/4wcvvwiGyeowFgUEdd5gDzE=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1puIL0-00BrLE-5n; Wed, 03 May 2023 21:40:30 +0200
-Date:   Wed, 3 May 2023 21:40:30 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Shenwei Wang <shenwei.wang@nxp.com>
-Cc:     Simon Horman <horms@kernel.org>, Wei Fang <wei.fang@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Clark Wang <xiaoning.wang@nxp.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "imx@lists.linux.dev" <imx@lists.linux.dev>
-Subject: Re: [EXT] Re: [PATCH v2 net 2/2] net: fec: restructuring the
- functions to avoid forward declarations
-Message-ID: <48d0de18-942e-4a1a-9774-792fe16db6c1@lunn.ch>
-References: <20230502220818.691444-1-shenwei.wang@nxp.com>
- <20230502220818.691444-2-shenwei.wang@nxp.com>
- <6dff0a5b-c74b-4516-8461-26fcd5d615f3@lunn.ch>
- <PAXPR04MB9185BD38BA486104EE5B7213896C9@PAXPR04MB9185.eurprd04.prod.outlook.com>
- <ZFJ+9Ij+jOJO1+wu@kernel.org>
- <PAXPR04MB918564D93054CEDF255DA251896C9@PAXPR04MB9185.eurprd04.prod.outlook.com>
- <ZFKw5seP5WclDCG2@kernel.org>
- <PAXPR04MB9185FA526B63311C3899BD9C896C9@PAXPR04MB9185.eurprd04.prod.outlook.com>
+        Wed, 3 May 2023 15:41:24 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F5E7AAD
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 12:41:21 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-b9ef06cb784so2160072276.0
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 12:41:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683142881; x=1685734881;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7eRiiP2JCtlxvX+BHzTjXxhFfE3xb3L5Tko5xVivHIc=;
+        b=njnY9/ZTWcA0YQLoTf3TUMfGQMs6qBR8x/WiO3YJ4m2rgzn9gPgiVmWeEd3meHgQOd
+         veIE13lp/BEBibiOOZUNO+WD2iQQwInbq0mORyd3+wLWSUTFkhmbMs6fl3Tqmd3D0D5p
+         V+y4b3/jKL+G7UEO8JQopzaWcrHdBR+imlq/VrwTOp1569eYFHFfi9pD7I53OyaoPSYd
+         tj72nQLogAXIm5Pv95noTQ1YRpRrtHa+Dymto/1ndku51s0fuH/R0nkRvqq+7WbyeTBe
+         or08gvlkQ55RtNC4M9pq8YNpCVr1Dsrvti1RMiJ42Ynp3MHUq3DPU/4MOuwmbk5VuygM
+         Oy2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683142881; x=1685734881;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7eRiiP2JCtlxvX+BHzTjXxhFfE3xb3L5Tko5xVivHIc=;
+        b=K1eDU9wblCaJggLArlz68BcQi3TaYhwcEJ9LoqfeghfXPiD548polHF7zSOhB1bJWE
+         oZ3ldFUS3t3v6ceSGmvQ+i+G8F7p/bA7GxeBiHl5yiwtYU3tHHMC61NAMSuXDTdhSSFq
+         WfBeB1Jq57fv6P5JMN3HdGmo2L1bndqOsa3SeD9jjlv3YDgnaUWqnH+E8WoacDdwoGmC
+         6G2SRQvDO/ywZ271Mt7qVNRuTY4v6CsqGVarOI4Mrr+LgU5gLCTMhsaxcctPlXOBFPhm
+         TvYBuPLTZBUXSQM9wcWtYLoT/om+ppnjiij8cPfmOfl3rFKhl6i7cvMLZCs+IxXjlZ02
+         EHiw==
+X-Gm-Message-State: AC+VfDwos4/Oc2xFfI8xSJrHSC6pXu1NWu5GBux72pAbtQdm9nkmkX+W
+        qSPuVKoK989SgJUonBYni3bv33EnPkwOIZp5hsbTmw==
+X-Google-Smtp-Source: ACHHUZ4RFT+eYjp8zpqFQpuduTlyNDeYqB8fD0xjOEnMllgaLgM5ug7v5zBN549JMpsUAooBfYdYqk6S3BpMrYkFeqQ=
+X-Received: by 2002:a25:308a:0:b0:b9a:38b2:8069 with SMTP id
+ w132-20020a25308a000000b00b9a38b28069mr18330170ybw.6.1683142880244; Wed, 03
+ May 2023 12:41:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PAXPR04MB9185FA526B63311C3899BD9C896C9@PAXPR04MB9185.eurprd04.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <ZFIMaflxeHS3uR/A@dhcp22.suse.cz> <ZFIOfb6/jHwLqg6M@moria.home.lan>
+ <ZFISlX+mSx4QJDK6@dhcp22.suse.cz> <ZFIVtB8JyKk0ddA5@moria.home.lan>
+ <ZFKNZZwC8EUbOLMv@slm.duckdns.org> <20230503180726.GA196054@cmpxchg.org>
+ <ZFKlrP7nLn93iIRf@slm.duckdns.org> <ZFKqh5Dh93UULdse@slm.duckdns.org>
+ <ZFKubD/lq7oB4svV@moria.home.lan> <ZFKu6zWA00AzArMF@slm.duckdns.org> <ZFKxcfqkUQ60zBB_@slm.duckdns.org>
+In-Reply-To: <ZFKxcfqkUQ60zBB_@slm.duckdns.org>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 3 May 2023 12:41:08 -0700
+Message-ID: <CAJuCfpEPkCJZO2svT-GfmpJ+V-jSLyFDKM_atnqPVRBKtzgtnQ@mail.gmail.com>
+Subject: Re: [PATCH 00/40] Memory allocation profiling
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
+        vbabka@suse.cz, roman.gushchin@linux.dev, mgorman@suse.de,
+        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+        corbet@lwn.net, void@manifault.com, peterz@infradead.org,
+        juri.lelli@redhat.com, ldufour@linux.ibm.com,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, peterx@redhat.com, david@redhat.com,
+        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
+        nathan@kernel.org, dennis@kernel.org, muchun.song@linux.dev,
+        rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com,
+        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
+        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
+        ndesaulniers@google.com, gregkh@linuxfoundation.org,
+        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+        glider@google.com, elver@google.com, dvyukov@google.com,
+        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
+        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        kasan-dev@googlegroups.com, cgroups@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Hi Simon,
-> 
-> I'm a bit confused.
-> 
-> Are you suggesting that I submit the following restructuring patch for 'net' at this time?
-> [PATCH v2 net 2/2] net: fec: restructuring the functions to avoid forward declarations
-> 
-> Thanks,
-> Shenwei
+On Wed, May 3, 2023 at 12:09=E2=80=AFPM Tejun Heo <tj@kernel.org> wrote:
+>
+> On Wed, May 03, 2023 at 08:58:51AM -1000, Tejun Heo wrote:
+> > On Wed, May 03, 2023 at 02:56:44PM -0400, Kent Overstreet wrote:
+> > > On Wed, May 03, 2023 at 08:40:07AM -1000, Tejun Heo wrote:
+> > > > > Yeah, easy / default visibility argument does make sense to me.
+> > > >
+> > > > So, a bit of addition here. If this is the thrust, the debugfs part=
+ seems
+> > > > rather redundant, right? That's trivially obtainable with tracing /=
+ bpf and
+> > > > in a more flexible and performant manner. Also, are we happy with r=
+ecording
+> > > > just single depth for persistent tracking?
 
-Submit the fix to 'net'. But only the fix.
+IIUC, by single depth you mean no call stack capturing?
+If so, that's the idea behind the context capture feature so that we
+can enable it on specific allocations only after we determine there is
+something interesting there. So, with low-cost persistent tracking we
+can determine the suspects and then pay some more to investigate those
+suspects in more detail.
 
-Once a week, net gets merged to net-next, so the fix will also appear
-in net-next. You can then do the cleanup in net-next.
+> > >
+> > > Not sure what you're envisioning?
+> > >
+> > > I'd consider the debugfs interface pretty integral; it's much more
+> > > discoverable for users, and it's hardly any code out of the whole
+> > > patchset.
+> >
+> > You can do the same thing with a bpftrace one liner tho. That's rather
+> > difficult to beat.
 
-   Andrew
+debugfs seemed like a natural choice for such information. If another
+interface is more appropriate I'm happy to explore that.
+
+>
+> Ah, shit, I'm an idiot. Sorry. I thought allocations was under /proc and
+> allocations.ctx under debugfs. I meant allocations.ctx is redundant.
+
+Do you mean that we could display allocation context in
+debugfs/allocations file (for the allocations which we explicitly
+enabled context capturing)?
+
+>
+> Thanks.
+>
+> --
+> tejun
