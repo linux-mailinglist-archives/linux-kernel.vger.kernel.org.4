@@ -2,158 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3B6E6F5B20
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 17:28:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AE2F6F5B22
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 17:29:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230470AbjECP2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 11:28:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53168 "EHLO
+        id S230373AbjECP3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 11:29:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230313AbjECP2h (ORCPT
+        with ESMTP id S230335AbjECP3K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 11:28:37 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA0259F0
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 08:28:36 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id e9e14a558f8ab-32f4e0f42a7so300015ab.1
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 08:28:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683127715; x=1685719715;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/qowq5eaooF5EfPDAG5Prg8rQoyyfy/TivcsC5fJA/c=;
-        b=GYG7QQSW5O90ohyO56EoNemZ7golNZP54UQ7SwhViEZwYjPVlpDLUDtVHomYEcYPGF
-         CeImdwOT7GlNrGqL9YWnk7GMt/uiDzc3vqMWuAByGYVYq72yG19hcVom4JAmVlIG0Cz9
-         Ar171qPLcGSUpXcBJy5cav2bTRHixBsdpvWg/yYRPLOotuBhoZGb8NL8Lgro/ZKQlOzr
-         N2O9NXpQs9YOXvQaHcamZXREvV5NVzktBCNTHmn09pJEJAGnylsk7e9LHk0SUn4OGa6H
-         3MGJzWH4D9ugjyyr3h5Fx5Uq0vfa3dX55RI11YQiitESGO5xp28yXLc76rWEBHhxNev4
-         5Ilw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683127715; x=1685719715;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/qowq5eaooF5EfPDAG5Prg8rQoyyfy/TivcsC5fJA/c=;
-        b=cWY8v7p8pKGrIzLdQIWBFXC8r7qgGrQ+6w1/ppJHwlpAkm1jp+XniuCtCyCKItWzuZ
-         Pj/FHpeYoKIvluH4xYflWN07HXnA+p+2SRXPTseNS0rv4ymxTefBG0YEAbMgokvgJRLo
-         cCeVFdwU6HgOY1pRGauNcULYwlom7ashGGFIpGuEdWAkcYH8L7+ihB7gtkSL4q9C8w/B
-         1psciIuXAiC7ett2r1iu1xt9zwP9J7QHVhxlVGlrRO8HIR89D2gywTe9l6fvahkn7omZ
-         v/U28Zlzv2rXY7Ycr0vLCZ2H2S6UVtWeYYkY58uHezd2mTG4oW9FGtkETQCOneIyi3Zs
-         ulhg==
-X-Gm-Message-State: AC+VfDxcswkexmqAWP2SElUFIdv7zSOjyVb7dbYKemuUR0wJi7a8/dK+
-        84TRD16hTZ6mi5ExZvSKcxNgkUOCRci2MomXA16DZQ==
-X-Google-Smtp-Source: ACHHUZ6/tku7n9gduYI3Ggu24QNVh8G7eHSwi8IiNVBHgEwrkq2UCalGSwj6EMkEVCO6RNIRFOwS7PSpCZVlhcePiFE=
-X-Received: by 2002:a05:6e02:1cad:b0:325:d0d8:2ddb with SMTP id
- x13-20020a056e021cad00b00325d0d82ddbmr251489ill.15.1683127715219; Wed, 03 May
- 2023 08:28:35 -0700 (PDT)
+        Wed, 3 May 2023 11:29:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 381475592
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 08:29:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CACFD618EA
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 15:29:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 698D9C433EF;
+        Wed,  3 May 2023 15:29:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683127744;
+        bh=c5fHNZL9gOzBsNhK0yGMsJoyKVL5D1e08PMrRpEg6W4=;
+        h=Date:To:References:From:Subject:In-Reply-To:From;
+        b=Fj95HdonyQmZbSiFkZHqpx3KwX9ypTLHx4FgwR4mZ4N8x6dgwXuj2ytfnByfZTOsv
+         cpkmVXfgCoWf/k8OljZNJKEnDn9gAxhLVIa40sRfFBCJ7GI4wbM/iBp0yGeH6WHXAV
+         2k1s2ZcObPDTo3lqPjNq/akF4C4tCECmlMhUEPBo03SAFKgfNSP1nReBzIhMbmhIOG
+         tfF9Ejt01gVUIEsUF55+lw+ZgfDdWkzMmxV4pTGztBejxD19jZRcH4NDq6cqWdGpqD
+         OW0cXa+MfJZ+iwdiovYT97HsDShiW4FqXin/mZupp513c0w1PNnG762lZBnsqW0qzK
+         as0pz7TP1A9DA==
+Message-ID: <5540e94e-d744-bf51-6344-95c8a173e89a@kernel.org>
+Date:   Wed, 3 May 2023 23:28:57 +0800
 MIME-Version: 1.0
-References: <87sfcn7uot.fsf@oldenburg.str.redhat.com> <CAP-5=fXZv+KCdCN05wVUcAwDCZAgXjWunoaviGBQEiUPqNwOmg@mail.gmail.com>
- <ZEx0IQAtBatrRDCR@kernel.org> <ZEx0xAamEl66qk2w@kernel.org>
- <874jot69ks.fsf@oldenburg.str.redhat.com> <87zg6l4utl.fsf@oldenburg.str.redhat.com>
- <ZFJ39HKzBUg64QPO@kernel.org>
-In-Reply-To: <ZFJ39HKzBUg64QPO@kernel.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 3 May 2023 08:28:22 -0700
-Message-ID: <CAP-5=fUukHuVsPS_Am6VTGvpuiEVo=2X=BuN2feh+ibhnSFAUg@mail.gmail.com>
-Subject: Re: [PATCH v2] perf: Avoid implicit function declarations in
- lexer/parse interface
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Florian Weimer <fweimer@redhat.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "Justin M. Forbes" <jforbes@fedoraproject.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+To:     syzbot <syzbot+eb6201248f684e99b9f8@syzkaller.appspotmail.com>,
+        jaegeuk@kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <0000000000000534da05faa4d3d4@google.com>
+Content-Language: en-US
+From:   Chao Yu <chao@kernel.org>
+Subject: Re: [syzbot] [f2fs?] WARNING: lock held when returning to user space
+ in f2fs_write_single_data_page
+In-Reply-To: <0000000000000534da05faa4d3d4@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 3, 2023 at 8:04=E2=80=AFAM Arnaldo Carvalho de Melo <acme@kerne=
-l.org> wrote:
->
-> Em Wed, May 03, 2023 at 11:40:06AM +0200, Florian Weimer escreveu:
-> > * Florian Weimer:
-> > > * Arnaldo Carvalho de Melo:
->
-> > >>> Thanks, applied. BTW b4 coulnd't find this message (nor the origina=
-l):
->
-> > > Yes, vger drops the message after accepting it for some reason, proba=
-bly
-> > > something in the patch contents.  I tried to resubmit from a complete=
-ly
-> > > separate account, no luck.
-> > >
-> > >> Not so fast, removed it for now:
-> > >>
-> > >>   CC      /tmp/build/perf-tools-next/util/parse-events-bison.o
-> > >> In file included from util/pmu.y:14:
-> > >> /tmp/build/perf-tools-next/util/pmu-flex.h:496:1: error: unknown typ=
-e name =E2=80=98YYSTYPE=E2=80=99
-> > >>   496 |
-> > >>       | ^
-> > >> /tmp/build/perf-tools-next/util/pmu-flex.h:498:19: error: unknown ty=
-pe name =E2=80=98YYSTYPE=E2=80=99
-> > >>   498 |
-> > >>       |                   ^
-> > >> /tmp/build/perf-tools-next/util/pmu-flex.h:546:17: error: unknown ty=
-pe name =E2=80=98YYSTYPE=E2=80=99
-> > >>   546 | extern int yylex \
-> > >>       |                 ^~
-> > >> util/pmu-bison.c: In function =E2=80=98perf_pmu_parse=E2=80=99:
-> > >> /tmp/build/perf-tools-next/util/pmu-bison.c:69:25: error: implicit d=
-eclaration of function =E2=80=98perf_pmu_lex=E2=80=99; did you mean =E2=80=
-=98perf_pmu_free=E2=80=99? [-Werror=3Dimplicit-function-declaration]
-> > >>    69 | #define yylex           perf_pmu_lex
-> > >>       |                         ^~~~~~~~~~~~
-> > >> util/pmu-bison.c:1007:16: note: in expansion of macro =E2=80=98yylex=
-=E2=80=99
-> > >
-> > > This appears to be related to some BPF filter stuff that is only in
-> > > perf-next, not mainline.
-> > >
-> > > Is this the right tree on which to base the patch?
-> > >
-> > >   <https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/>
-> > >
-> > > Branch perf-tools-next?
-> >
-> > Sorry, it doesn't build even without my patch:
-> >
-> > make[4]: *** No rule to make target 'zip.h', needed by '/tmp/build/libb=
-pf/staticobjs/libbpf.o'.  Stop.
->
-> I'm noticing this, but then I haven't merged with upstream yet, I bet
-> this is something upstream after merging the bpf branch... Nope, I just
-> did a test merge of what is in
-> git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git perf-tools
-> with upstream and it builds without problems on:
->
-> [acme@quaco perf-tools]$ head -2 /etc/os-release
-> NAME=3D"Fedora Linux"
-> VERSION=3D"37 (Workstation Edition)"
-> [acme@quaco perf-tools]$
->
-> I'll check on f38 and rawhide.
->
-> - Arnaldo
+On 2023/5/2 1:05, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    58390c8ce1bd Merge tag 'iommu-updates-v6.4' of git://git.k..
+> git tree:       upstream
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=136e6ef8280000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=5eadbf0d3c2ece89
+> dashboard link: https://syzkaller.appspot.com/bug?extid=eb6201248f684e99b9f8
+> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16bbb03c280000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=140d36f8280000
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/60130779f509/disk-58390c8c.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/d7f0cdd29b71/vmlinux-58390c8c.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/de415ad52ae4/bzImage-58390c8c.xz
+> mounted in repro: https://storage.googleapis.com/syzbot-assets/dc89d01cd6e9/mount_0.gz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+eb6201248f684e99b9f8@syzkaller.appspotmail.com
 
-The zip.c and zip.h in libbpf are new, perhaps it is a fixdeps issue?
-Perhaps doing a clean build and retrying will address the problem.
+#syz test https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git dev-test
 
-Thanks,
-Ian
+> 
+> syz-executor768: attempt to access beyond end of device
+> loop0: rw=2049, sector=77824, nr_sectors = 2048 limit=63271
+> syz-executor768: attempt to access beyond end of device
+> loop0: rw=2049, sector=79872, nr_sectors = 2048 limit=63271
+> ================================================
+> WARNING: lock held when returning to user space!
+> 6.3.0-syzkaller-12049-g58390c8ce1bd #0 Not tainted
+> ------------------------------------------------
+> syz-executor768/4998 is leaving the kernel with locks still held!
+> 1 lock held by syz-executor768/4998:
+>   #0: ffff88807e800448 (&sbi->node_write){++++}-{3:3}, at: f2fs_down_read fs/f2fs/f2fs.h:2087 [inline]
+>   #0: ffff88807e800448 (&sbi->node_write){++++}-{3:3}, at: f2fs_write_single_data_page+0xa10/0x1d50 fs/f2fs/data.c:2842
+> 
+> 
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> 
+> If the bug is already fixed, let syzbot know by replying with:
+> #syz fix: exact-commit-title
+> 
+> If you want syzbot to run the reproducer, reply with:
+> #syz test: git://repo/address.git branch-or-commit-hash
+> If you attach or paste a git patch, syzbot will apply it before testing.
+> 
+> If you want to change bug's subsystems, reply with:
+> #syz set subsystems: new-subsystem
+> (See the list of subsystem names on the web dashboard)
+> 
+> If the bug is a duplicate of another bug, reply with:
+> #syz dup: exact-subject-of-another-report
+> 
+> If you want to undo deduplication, reply with:
+> #syz undup
