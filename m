@@ -2,200 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C1786F5DBF
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 20:17:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 908736F5DC6
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 20:19:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbjECSRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 14:17:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56064 "EHLO
+        id S229907AbjECSTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 14:19:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjECSRo (ORCPT
+        with ESMTP id S229624AbjECSTb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 14:17:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE599D;
-        Wed,  3 May 2023 11:17:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C6FCE62F3D;
-        Wed,  3 May 2023 18:17:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23FB8C4339E;
-        Wed,  3 May 2023 18:17:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683137862;
-        bh=Gj6JEc2gVWCMBqql0XgZQBxIte8DfSjdof0+6MhArAY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=AZTHF1J9UDBOFDf/8S+SpNAajK8IIT5PhwgiY3yVKtCfll7n32Dh59DtC+GN5wJBL
-         ELSxqJR7QrSjp+78xD2Pll+Mdyv4UHiFPHC/EOkaXJT4JVlNAAOF9XwyinjmEZa0Ha
-         yy2Du8iyFEs2CxQW5ZO9Mi6iTlC75+eXPvgDSTCtQPmDPjQDViLdN2azuILq7NUYcO
-         1iV7n5iXoueDLr5RN/hVaHjANHmrdxxqlr1DjpQCe3vWJq+xEhr/wNlVENC/ZdHdMb
-         xEButz2vMYjtW2uFB60Bi3jWW/QCw/bpfls40YGrQRV8OjOs+eljt4CmSm5uAuthdW
-         2KWlIDRceDfeg==
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2ac75500798so10698541fa.0;
-        Wed, 03 May 2023 11:17:42 -0700 (PDT)
-X-Gm-Message-State: AC+VfDwQiMyyaiZLPvBsreYViAHAszU376rHFQQig1zSUDYmggmNShgQ
-        WxsgaRsLuVsCHY8XajRegpx/vduuM+ibMvv1/TU=
-X-Google-Smtp-Source: ACHHUZ6rXUzMWdWGCfIf2IPEXVbd/Va1NLcvNLD8qyKoxLqGxcHDyA8DAw+GhBfSBbsL+SAVejVEb3mUuXFyB77wBIE=
-X-Received: by 2002:a2e:8e96:0:b0:2ab:4a0d:7f3a with SMTP id
- z22-20020a2e8e96000000b002ab4a0d7f3amr254321ljk.30.1683137860113; Wed, 03 May
- 2023 11:17:40 -0700 (PDT)
+        Wed, 3 May 2023 14:19:31 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3C230E4;
+        Wed,  3 May 2023 11:19:27 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1aaec6f189cso31880385ad.3;
+        Wed, 03 May 2023 11:19:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683137967; x=1685729967;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=b8EyOQL7PrYcjENM7voIrei4tZKK2YZzqm7TQH+pwlU=;
+        b=aZNjJ0sKerUq7u8EB+b0HNpoznz9cBQhrzzOvNvOKeztEz5atXm5CLpSRLxWpTflSR
+         bxO698PfKyTFFeXOCQw+L4viOYGAfhQwycSh4dwa8tVAX89FbIuNkNMzVF/32CZveUnN
+         lmZCFzArGY1PfzDmPf0qgKFQkNfkLEuxrzW+qQ+ci+jVIdPpjFyLGv4gyshMjEWMn+PU
+         6c620nyXugQ2Wyt655L7CulVWSS+LO7irrkNzBdN5DIP2Vi2A2FOlTEtiS0NgBoGOQ5u
+         6Yk7eTdeaMiyAwzgTLQwCB5153Vyr42Hf0ig6bVEn7Dn5xAQCmOPEPEY1yGnR7rX1ltt
+         av/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683137967; x=1685729967;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=b8EyOQL7PrYcjENM7voIrei4tZKK2YZzqm7TQH+pwlU=;
+        b=Dn8vtbStq97LKpfhj1Jj7NVZgkYKHNlgUqMjQ8ndQszD5X0NREyJqJMYMo+arZevY1
+         kKYjokDP2kdOLQyQTq1CgwILp7Ra8gnREwULDaz1fBG96byZurCjrCbs6fWr2TyR9Z0r
+         p56ANpKNIyHMFHgPJE5OxoX6r5tUpqSvliSNKzE/q/4uzyX2NM1DQ7iVdBluVYgd1nCY
+         AkwRlcatoRZmuHiE84v0pwYfnN8b1mwtFwTFHAiBuf0t1l48hXqxmfTaNIIdvRD4GTjW
+         AWtPAnpYLeFTc54XkJmXcPxEO3IHnGBIpp3+gPHJEqMdzUIci/CietRVAm/ZH6hcijiz
+         uAzg==
+X-Gm-Message-State: AC+VfDyx5gCT7p77nfgwqI9HAbaM31EucJMI0Pf7/NcmR4vHM/An7x/M
+        Z1WBqfWiwqI5o+TdqaDQVWY=
+X-Google-Smtp-Source: ACHHUZ5kZePZEgjP5lSOR3ffglK7m6ZeFxMZWbG24/SHqDcb/SSEB/aGUwMNUi2KVWf0aSPpse9LEA==
+X-Received: by 2002:a17:903:11c9:b0:1ab:16e0:ef49 with SMTP id q9-20020a17090311c900b001ab16e0ef49mr1056514plh.24.1683137966573;
+        Wed, 03 May 2023 11:19:26 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:6454])
+        by smtp.gmail.com with ESMTPSA id s2-20020a170902988200b0019a7d58e595sm21845154plp.143.2023.05.03.11.19.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 May 2023 11:19:26 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 3 May 2023 08:19:24 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
+        Michal Hocko <mhocko@suse.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        akpm@linux-foundation.org, vbabka@suse.cz,
+        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
+        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
+        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
+        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
+        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
+        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
+        muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
+        pasha.tatashin@soleen.com, yosryahmed@google.com,
+        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
+        andreyknvl@gmail.com, keescook@chromium.org,
+        ndesaulniers@google.com, gregkh@linuxfoundation.org,
+        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+        glider@google.com, elver@google.com, dvyukov@google.com,
+        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
+        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        kasan-dev@googlegroups.com, cgroups@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>
+Subject: Re: [PATCH 00/40] Memory allocation profiling
+Message-ID: <ZFKlrP7nLn93iIRf@slm.duckdns.org>
+References: <20230501165450.15352-1-surenb@google.com>
+ <ZFIMaflxeHS3uR/A@dhcp22.suse.cz>
+ <ZFIOfb6/jHwLqg6M@moria.home.lan>
+ <ZFISlX+mSx4QJDK6@dhcp22.suse.cz>
+ <ZFIVtB8JyKk0ddA5@moria.home.lan>
+ <ZFKNZZwC8EUbOLMv@slm.duckdns.org>
+ <20230503180726.GA196054@cmpxchg.org>
 MIME-Version: 1.0
-References: <20230424165726.2245548-1-ardb@kernel.org> <ecbcc066-3636-9620-8db9-2c066d16e717@amd.com>
- <CAMj1kXG8ZrdEUNTiSCet+aT+1ZyrbguFsGtNhVV+XgCssZgj9w@mail.gmail.com>
- <a6846282-95c8-274a-accc-ffa54205489c@amd.com> <8f85787a-1fa5-8f59-6047-b3a791291bfd@amd.com>
-In-Reply-To: <8f85787a-1fa5-8f59-6047-b3a791291bfd@amd.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 3 May 2023 20:17:28 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXFfHJDXW2xWTjT5xy_-8MdeS9HhcMh3=DKFZ3+vhaUFcA@mail.gmail.com>
-Message-ID: <CAMj1kXFfHJDXW2xWTjT5xy_-8MdeS9HhcMh3=DKFZ3+vhaUFcA@mail.gmail.com>
-Subject: Re: [PATCH 0/6] efi/x86: Avoid legacy decompressor during EFI boot
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Evgeniy Baskov <baskov@ispras.ru>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Peter Jones <pjones@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Dave Young <dyoung@redhat.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230503180726.GA196054@cmpxchg.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 3 May 2023 at 19:58, Tom Lendacky <thomas.lendacky@amd.com> wrote:
->
-> On 5/2/23 11:08, Tom Lendacky wrote:
-> > On 5/2/23 08:39, Ard Biesheuvel wrote:
-> >> On Tue, 2 May 2023 at 15:37, Tom Lendacky <thomas.lendacky@amd.com> wrote:
-> >>>
-> >>> On 4/24/23 11:57, Ard Biesheuvel wrote:
-> >>>> This series is conceptually a combination of Evgeny's series [0] and
-> >>>> mine [1], both of which attempt to make the early decompressor code more
-> >>>> amenable to executing in the EFI environment with stricter handling of
-> >>>> memory permissions.
-> >>>>
-> >>>> My series [1] implemented zboot for x86, by getting rid of the entire
-> >>>> x86 decompressor, and replacing it with existing EFI code that does the
-> >>>> same but in a generic way. The downside of this is that only EFI boot is
-> >>>> supported, making it unviable for distros, which need to support BIOS
-> >>>> boot and hybrid EFI boot modes that omit the EFI stub.
-> >>>>
-> >>>> Evgeny's series [0] adapted the entire decompressor code flow to allow
-> >>>> it to execute in the EFI context as well as the bare metal context, and
-> >>>> this involves changes to the 1:1 mapping code and the page fault
-> >>>> handlers etc, none of which are really needed when doing EFI boot in the
-> >>>> first place.
-> >>>>
-> >>>> So this series attempts to occupy the middle ground here: it makes
-> >>>> minimal changes to the existing decompressor so some of it can be called
-> >>>> from the EFI stub. Then, it reimplements the EFI boot flow to decompress
-> >>>> the kernel and boot it directly, without relying on the trampoline code,
-> >>>> page table code or page fault handling code. This allows us to get rid
-> >>>> of quite a bit of unsavory EFI stub code, and replace it with two clear
-> >>>> invocations of the EFI firmware APIs to clear NX restrictions from
-> >>>> allocations that have been populated with executable code.
-> >>>>
-> >>>> The only code that is being reused is the decompression library itself,
-> >>>> along with the minimal ELF parsing that is required to copy the ELF
-> >>>> segments in place, and the relocation processing that fixes up absolute
-> >>>> symbol references to refer to the correct virtual addresses.
-> >>>>
-> >>>> Note that some of Evgeny's changes to clean up the PE/COFF header
-> >>>> generation will still be needed, but I've omitted those here for
-> >>>> brevity.
-> >>>
-> >>> I tried booting an SEV and an SEV-ES guest using this and both failed
-> >>> to boot:
-> >>>
-> >>> EFI stub: WARNING: Decompression failed: Out of memory while allocating
-> >>> z_stream
-> >>>
-> >>> I'll have to take a closer look as to why, but it might be a couple of
-> >>> days before I can get to it.
-> >>>
-> >>
-> >> Thanks Tom.
-> >>
-> >> The internal malloc() seems to be failing, which is often caused by
-> >> BSS clearing problems. Could you elaborate a little bit on the boot
-> >> environment you are using here?
-> >
-> > I'm using Qemu v7.2.1 as my VMM, Linux 6.3 with your series applied for my
-> > host/hypervisor and guest kernel and the current OVMF tree built using
-> > OvmfPkgX64.dsc.
-> >
-> > I was originally using the current merge window Linux, but moved to the
-> > release version just to . With the release version SEV and SEV-ES still
-> > fail to
-> > boot, but SEV actually #GPs now. And some of the register contents look
-> > like encrypted data:
-> >
-> > ConvertPages: range 1000000 - 4FA1FFF covers multiple entries
-> > !!!! X64 Exception Type - 0D(#GP - General Protection)  CPU Apic ID -
-> > 00000000 !!!!
-> > ExceptionData - 0000000000000000
-> > RIP  - 00000000597E71C1, CS  - 0000000000000038, RFLAGS - 0000000000210206
-> > RAX  - 1FBA02A45943B920, RCX - 0000000000AF7009, RDX - A9DAE761B64A1F1B
-> > RBX  - 1FBA02A45943B8C0, RSP - 000000007FD97320, RBP - 0000000002000000
-> > RSI  - 0000000001000000, RDI - 1FBA02A45943DE68
-> > R8   - 0000000003EF3C94, R9  - 0000000000000000, R10 - 000000007D7C6018
-> > R11  - 0000000000000000, R12 - 0000000001000000, R13 - 00000000597EDD98
-> > R14  - 0000000001000000, R15 - 000000007E0A5198
-> > DS   - 0000000000000030, ES  - 0000000000000030, FS  - 0000000000000030
-> > GS   - 0000000000000030, SS  - 0000000000000030
-> > CR0  - 0000000080010033, CR2 - 0000000000000000, CR3 - 000000007FA01000
-> > CR4  - 0000000000000668, CR8 - 0000000000000000
-> > DR0  - 0000000000000000, DR1 - 0000000000000000, DR2 - 0000000000000000
-> > DR3  - 0000000000000000, DR6 - 00000000FFFF0FF0, DR7 - 0000000000000400
-> > GDTR - 000000007F7DC000 0000000000000047, LDTR - 0000000000000000
-> > IDTR - 000000007F34C018 0000000000000FFF,   TR - 0000000000000000
-> > FXSAVE_STATE - 000000007FD96F80
-> > !!!! Find image based on IP(0x597E71C1)
-> > /root/kernels/ovmf-build-X64/Build/OvmfX64/DEBUG_GCC5/X64/MdeModulePkg/Universal/Variable/RuntimeDxe/VariableRuntimeDxe/DEBUG/Variable
-> > RuntimeDxe.dll (ImageBase=0000000000D4792C, EntryPoint=0000000000D50CC3) !!!!
-> >
-> > So, yes, probably an area of memory that was zeroes when mapped
-> > unencrypted, but wasn't cleared after changing the mapping to
-> > encrypted.
->
-> Yes, looks like a bss clearing issue. If I add __section(".data") to
-> free_mem_ptr and free_mem_end_ptr in arch/x86/boot/compressed/misc.c and
-> to malloc_ptr and malloc_cnt in include/linux/decompress/mm.h, then I can
-> boot an SEV guest.
->
-> However, an SEV-ES guest is triple faulting. This looks to be because
-> we're still on the EFI CS of 0x38 after switching GDTs in
-> arch/x86/kernel/head_64.S by calling startup_64_setup_env(). Before
-> switching to the kernel CS, we take a #VC (from CPUID calls in sme_enable)
-> and things blow up on the iretq. Moving the block headed by the comment
-> "Now switch to __KERNEL_CS so IRET works reliably" to just after calling
-> startup_64_setup_env() fixes it and an SEV-ES guest can boot.
->
-> This worked before because I believe we switched off the EFI CS as part of
-> the kernel decompressor support and so this bug wasn't exposed. But this
-> needs to be fixed regardless of this series.
->
+Hello,
 
-Very interesting. I was under the assumption that everything that goes
-on in sev_enable() in the decompressor would be rather indispensable
-to boot in SEV mode (which I only spotted today) so I am quite
-surprised that things just appear to work. (There is some 32-bit SEV
-code in the decompressor as well that obviously never gets called when
-booting in long mode, but I hadn't quite grasped how much other SEV
-code there actually is)
+On Wed, May 03, 2023 at 02:07:26PM -0400, Johannes Weiner wrote:
+...
+> > * Because tracking starts when the script starts running, it doesn't know
+> >   anything which has happened upto that point, so you gotta pay attention to
+> >   handling e.g. handling frees which don't match allocs. It's kinda annoying
+> >   but not a huge problem usually. There are ways to build in BPF progs into
+> >   the kernel and load it early but I haven't experiemnted with it yet
+> >   personally.
+> 
+> Yeah, early loading is definitely important, especially before module
+> loading etc.
+> 
+> One common usecase is that we see a machine in the wild with a high
+> amount of kernel memory disappearing somewhere that isn't voluntarily
+> reported in vmstat/meminfo. Reproducing it isn't always
+> practical. Something that records early and always (with acceptable
+> runtime overhead) would be the holy grail.
+> 
+> Matching allocs to frees is doable using the pfn as the key for pages,
+> and virtual addresses for slab objects.
+> 
+> The biggest issue I had when I tried with bpf was losing updates to
+> the map. IIRC there is some trylocking going on to avoid deadlocks
+> from nested contexts (alloc interrupted, interrupt frees). It doesn't
+> sound like an unsolvable problem, though.
+
+(cc'ing Alexei and Andrii)
+
+This is the same thing that I hit with sched_ext. BPF plugged it for
+struct_ops but I wonder whether it can be done for specific maps / progs -
+ie. just declare that a given map or prog is not to be accessed from NMI and
+bypass the trylock deadlock avoidance mechanism. But, yeah, this should be
+addressed from BPF side.
+
+> Another minor thing was the stack trace map exploding on a basically
+> infinite number of unique interrupt stacks. This could probably also
+> be solved by extending the trace extraction API to cut the frames off
+> at the context switch boundary.
+> 
+> Taking a step back though, given the multitude of allocation sites in
+> the kernel, it's a bit odd that the only accounting we do is the tiny
+> fraction of voluntary vmstat/meminfo reporting. We try to cover the
+> biggest consumers with this of course, but it's always going to be
+> incomplete and is maintenance overhead too. There are on average
+> several gigabytes in unknown memory (total - known vmstats) on our
+> machines. It's difficult to detect regressions easily. And it's per
+> definition the unexpected cornercases that are the trickiest to track
+> down. So it might be doable with BPF, but it does feel like the kernel
+> should do a better job of tracking out of the box and without
+> requiring too much plumbing and somewhat fragile kernel allocation API
+> tracking and probing from userspace.
+
+Yeah, easy / default visibility argument does make sense to me.
+
+Thanks.
+
+-- 
+tejun
