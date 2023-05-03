@@ -2,131 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E7D46F5C2B
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 18:36:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C80B6F5C2F
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 18:38:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229497AbjECQge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 12:36:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60072 "EHLO
+        id S229692AbjECQi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 12:38:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbjECQgV (ORCPT
+        with ESMTP id S229490AbjECQiY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 12:36:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 091967A84;
-        Wed,  3 May 2023 09:36:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 53B6462EBE;
-        Wed,  3 May 2023 16:36:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37D37C433D2;
-        Wed,  3 May 2023 16:36:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683131766;
-        bh=O3m/u3ocvZ9zeQzZekMGUUnTmnwHWmHggwDg5mrYb2s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QmqAZ5Sh5JmnqWJidSWnctf26DAw65oz5DWa7piONtMBsNffqtp5WvDrrhkCKZtfN
-         RZuFMd9h3QiPxobDIzysv6Po4DTcwxojLvHpm6RoEPx4OnU/3mb/woqRy0SXZYPmaL
-         n4YtuH4yONhKUUpkCOXlixs6Oi1xXJPF9tBBXBzlrevo21xBdC+O7esAOmimzu2kbj
-         vk507USReGKPsmxFdlnz876y5nq6B2nHgAe0B/C9lSVn/z7sF5iQYl0kOwCKdP4ygF
-         ArXGFziZ+VuxiqxR4Ez260tkYb1NODOQswbHeT1NkQ/2y1lFEBL5b9DXcE4N76dXv6
-         4XZ+v3ojfFvSg==
-Date:   Wed, 3 May 2023 18:36:03 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-tip-commits@vger.kernel.org,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org
-Subject: Re: [tip: timers/core] timers/nohz: Switch to ONESHOT_STOPPED in the
- low-res handler when the tick is stopped
-Message-ID: <ZFKNc+ysfDX+iAsF@lothringen>
-References: <20220422141446.915024-1-npiggin@gmail.com>
- <165089105607.4207.3022534114716811208.tip-bot2@tip-bot2>
+        Wed, 3 May 2023 12:38:24 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 562C13C01
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 09:38:23 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-9536df4b907so1095749666b.0
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 09:38:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1683131901; x=1685723901;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CO3/wYgoteeIW67yC+Tl9a59Mskq9ceqxtoEpa1lobg=;
+        b=U3V6bMySLKAg6LVk8UPeUuN3y20ze+uC6keiE//AvpxAHHjLxpLgwbX5+U8B+H+OzG
+         BIwHzjJxgiDL0l8fqRs4dHxvhbaaNpvXpkxOji9Iv8SWyZZioX7XFzlQZj0+u3PRJ1kr
+         HTB0kBlM++ukjBH6tM98i5M0uvfDnc2jzt5Jo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683131901; x=1685723901;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CO3/wYgoteeIW67yC+Tl9a59Mskq9ceqxtoEpa1lobg=;
+        b=S4XSv6lgobRh+YOx2JDGdWyV3FWq+wVeuXpfXqcO+beBrfn5WyXamvD87qez3ypvq1
+         8O+LbOza6OIyFi/PE7A+yvjevfJc+pMlHtKN+w/O8w3UCPdu4Iai/dpgZeHodw+3SA+k
+         K5G0qN38F5PoqVzQrV0d1WGEChVuolQI9Q6cOoJKpucABZCQIRbDz99DACzs4bLGOzfc
+         wo5GmJfPICMEo+HWVJ9lcuT8JusQ+tRoIr4hgI7u9cUuTRHL1rGwT9IjdMp2TrcGafB+
+         i3E4Phkp4mqYqIi/oqbruKZ1VpqQqyUJq25XSfIK52YvldkgpvidPFZVadSKWvkq/Skq
+         0Few==
+X-Gm-Message-State: AC+VfDyb9sFRVR5NkadXUdBYCJu2A8MXSgUKYG9KmI3G5fyyctIvfbV1
+        JIkHxoww5pTCq/U5HCvj922UoOv8+VansjR5U1MFGg==
+X-Google-Smtp-Source: ACHHUZ7jdBbfn6SeFscpMkGWZ4oZgHsuJWxkqFkku39+xynqCO8rXvdYPqBN3yoqZG+WO31u85cw1A==
+X-Received: by 2002:a17:907:805:b0:94f:cee:56f2 with SMTP id wv5-20020a170907080500b0094f0cee56f2mr4184925ejb.4.1683131901514;
+        Wed, 03 May 2023 09:38:21 -0700 (PDT)
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com. [209.85.218.41])
+        by smtp.gmail.com with ESMTPSA id i25-20020a170906851900b0094f1b8901e1sm17539486ejx.68.2023.05.03.09.38.20
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 May 2023 09:38:20 -0700 (PDT)
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-94f6c285d22so1088857466b.2
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 09:38:20 -0700 (PDT)
+X-Received: by 2002:a17:907:845:b0:961:8fcd:53c2 with SMTP id
+ ww5-20020a170907084500b009618fcd53c2mr3430082ejb.64.1683131900304; Wed, 03
+ May 2023 09:38:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <165089105607.4207.3022534114716811208.tip-bot2@tip-bot2>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230427225647.1101172-1-dave.hansen@linux.intel.com>
+ <CAHk-=wgrdOm8RwO+u8bydrbgs0wXJV_9mBYAtzX9d9hEY7a25A@mail.gmail.com>
+ <CAHk-=wiHvdgbLxayyCsRU45JnKCZkCOpEJPfOvE3eYCnGjVcSA@mail.gmail.com>
+ <20230429003822.n3mglslg666j3npp@box.shutemov.name> <641a9348-a052-6bb5-e6c7-64acb6405328@intel.com>
+ <CAHk-=wgnGoj8qZg3SRh1Z1-mU=b3ryydXZykUuarnrAn6LuHBw@mail.gmail.com>
+ <CAHk-=wgN=GY2A0htYQQRmPaLCorWnFatY_XO0X2w_m9xXQDcPA@mail.gmail.com>
+ <f5983c42-82a5-1cd8-c717-67bfd72377dc@intel.com> <CAHk-=wgpOqujY210W9-KJPEfD42W_bvUdLwF-PAvyxJQ92tzDg@mail.gmail.com>
+In-Reply-To: <CAHk-=wgpOqujY210W9-KJPEfD42W_bvUdLwF-PAvyxJQ92tzDg@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 3 May 2023 09:38:03 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wj7q6Ng5uemZtrDnhtcfrgkzX5Z18eKZj94FY5d2quP6A@mail.gmail.com>
+Message-ID: <CAHk-=wj7q6Ng5uemZtrDnhtcfrgkzX5Z18eKZj94FY5d2quP6A@mail.gmail.com>
+Subject: Re: [GIT PULL] x86/mm for 6.4
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kirill.shutemov@linux.intel.com,
+        Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 12:50:56PM -0000, tip-bot2 for Nicholas Piggin wrote:
-> The following commit has been merged into the timers/core branch of tip:
-> 
-> Commit-ID:     62c1256d544747b38e77ca9b5bfe3a26f9592576
-> Gitweb:        https://git.kernel.org/tip/62c1256d544747b38e77ca9b5bfe3a26f9592576
-> Author:        Nicholas Piggin <npiggin@gmail.com>
-> AuthorDate:    Sat, 23 Apr 2022 00:14:46 +10:00
-> Committer:     Thomas Gleixner <tglx@linutronix.de>
-> CommitterDate: Mon, 25 Apr 2022 14:45:22 +02:00
-> 
-> timers/nohz: Switch to ONESHOT_STOPPED in the low-res handler when the tick is stopped
-> 
-> When tick_nohz_stop_tick() stops the tick and high resolution timers are
-> disabled, then the clock event device is not put into ONESHOT_STOPPED
-> mode. This can lead to spurious timer interrupts with some clock event
-> device drivers that don't shut down entirely after firing.
-> 
-> Eliminate these by putting the device into ONESHOT_STOPPED mode at points
-> where it is not being reprogrammed. When there are no timers active, then
-> tick_program_event() with KTIME_MAX can be used to stop the device. When
-> there is a timer active, the device can be stopped at the next tick (any
-> new timer added by timers will reprogram the tick).
+On Tue, May 2, 2023 at 6:17=E2=80=AFPM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> And in the process I found another broken
+> thing:__untagged_addr_remote() is very very buggy.
+>
+> The reason?
+>
+>         long sign =3D addr >> 63;
+>
+> that does *not* do at all what '__untagged_addr()' does, because while
+> 'sign' is a signed long, 'addr' is an *unsigned* long.
+>
+> So the actual shift ends up being done as an unsigned shift, and then
+> just the result is assigned to a signed variable.
+>
+> End result? 'sign' ends up being 0 for user space (intentional) or 1
+> for kernel space (not intentional)..
 
-I'm confused by the above, why are we handling the timer active part here?
+Looking around, this same bug used to exists for the normal
+(non-remote) case too, until it was accidentally fixed when changing
+that to use inline asm and the alternatives code.
 
-> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Link: https://lore.kernel.org/r/20220422141446.915024-1-npiggin@gmail.com
-> ---
->  kernel/time/tick-sched.c | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
-> index 2d76c91..b1b105d 100644
-> --- a/kernel/time/tick-sched.c
-> +++ b/kernel/time/tick-sched.c
-> @@ -928,6 +928,8 @@ static void tick_nohz_stop_tick(struct tick_sched *ts, int cpu)
->  	if (unlikely(expires == KTIME_MAX)) {
->  		if (ts->nohz_mode == NOHZ_MODE_HIGHRES)
->  			hrtimer_cancel(&ts->sched_timer);
-> +		else
-> +			tick_program_event(KTIME_MAX, 1);
->  		return;
->  	}
->  
-> @@ -1364,9 +1366,15 @@ static void tick_nohz_handler(struct clock_event_device *dev)
->  	tick_sched_do_timer(ts, now);
->  	tick_sched_handle(ts, regs);
->  
-> -	/* No need to reprogram if we are running tickless  */
-> -	if (unlikely(ts->tick_stopped))
-> +	if (unlikely(ts->tick_stopped)) {
-> +		/*
-> +		 * The clockevent device is not reprogrammed, so change the
-> +		 * clock event device to ONESHOT_STOPPED to avoid spurious
-> +		 * interrupts on devices which might not be truly one shot.
-> +		 */
-> +		tick_program_event(KTIME_MAX, 1);
+At that point the non-remote case got an explicit 'sar' instruction,
+and the result really was ~0 for kernel mode addresses.
 
-More specifically why are we stopping the tick here entirely and
-unconditionally? If the tick is stopped (actually meaning it is delayed
-or _might_ be totally stopped), then the next tick is going to be re-evaluated
-shortly after:
+> Why does it do that "shift-by-63" game there, instead of making
+> tlbstate_untag_mask just have bit #63 always set?
 
-* On the idle loop if within idle
-* On IRQ exit if nohz_full
+And it turns out that bit #63 really _is_ always set, so I think the
+solution to this all is to remove the sign games in untag_addr()
+entirely.
 
-And then tick_nohz_stop_tick() will be called and stop the tick entirely
-if necessary.
+Untagging a kernel address will "corrupt" it, but it will stay a
+kernel address (well, it will stay a "high bit set" address), which is
+all we care about anyway.
 
-Am I missing something else?
+If somebody actually tries to untag a kernel address, that would be a
+bug anyway, as far as I can tell.
 
-Thanks.
+So I'm going to just remove the 'sign' games entirely. They are
+completely broken in 'untagged_addr_remote()', they _used_ to be
+completely broken in 'untagged_addr()', and it looks like it's all
+unnecessary.
+
+           Linus
