@@ -2,110 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7CF06F6237
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 01:50:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE6D06F623A
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 01:51:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229639AbjECXuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 19:50:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42792 "EHLO
+        id S229721AbjECXv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 19:51:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbjECXtz (ORCPT
+        with ESMTP id S229524AbjECXvZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 19:49:55 -0400
-Received: from dispatch1-us1.ppe-hosted.com (dispatch1-us1.ppe-hosted.com [148.163.129.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BFE38A6C
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 16:49:53 -0700 (PDT)
-X-Virus-Scanned: Proofpoint Essentials engine
-Received: from mail3.candelatech.com (mail2.candelatech.com [208.74.158.173])
-        by mx1-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTP id D788BC40067;
-        Wed,  3 May 2023 23:49:50 +0000 (UTC)
-Received: from [192.168.100.159] (50-251-239-81-static.hfc.comcastbusiness.net [50.251.239.81])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail3.candelatech.com (Postfix) with ESMTPSA id 23B4513C2B0;
-        Wed,  3 May 2023 16:49:51 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail3.candelatech.com 23B4513C2B0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=candelatech.com;
-        s=default; t=1683157791;
-        bh=XALtbwbcOBSbPJpwrY4JfEAx3ICt0e7TO0hiS2sJnI4=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=pg6Z+rLUdoNg5zcZ0c6fcIp8qOXW4CPGV/lj2xDATSIV/pesEN+z85tk9Xgc028Dg
-         JDt7tASfefbqfvujpGm9l8F1zJepao+DeEaTcQAFBtoabnvWS0bJi35o4G4z7/aNpr
-         siE2SUoIH8MlCJoalP+l9JwoLqyHJcPqsN3gGHq8=
-Message-ID: <f12a8f23-5aac-b615-300c-38001b9583c2@candelatech.com>
-Date:   Wed, 3 May 2023 16:49:50 -0700
+        Wed, 3 May 2023 19:51:25 -0400
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A40C99001
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 16:51:21 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-760eead6a4aso370859339f.3
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 16:51:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683157881; x=1685749881;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vcZ85UohRTnIlpcVoJh324dST1aeKdAB/UA/Qi32hS0=;
+        b=dflLvWWnvNiviZfXaHWqIWT1kuHlL9C68G6rA+UMUkHaElpvH7MHJa3Q+j3jjTVyI+
+         hMPhqbZioDbzpX9iahJyK39xQXeBxkCpOFptjT8AroqsVIdSoxCssqIL/OIDMcI1jgv+
+         3YZgtZj662QQ5Lx0rzeoPQMk6uPAoG2Q2mZetQ75B+67TjYeM0tVnozZECrQJ791iJiU
+         jN1SajxXIvewm3mMEYNGzN0r9OyP7wDUZ4xkFcjQPejwcRXKoM1kkkAt4m/22Vs1a94O
+         EIauaPgsnW/kstbWBor5JbR30V6SdQOUMKMe/pTyDZcJx2FgvUIPSX8o3uNJNDC/JUWb
+         adow==
+X-Gm-Message-State: AC+VfDxI2ETsSwVtrAk65vvmG5erESWZE/qyvefpGqsWQ5pdN3E5bxmQ
+        FVeYoHTlkLFn2MN+8Ey34Dyl0Df6bLMhhcnI7ZlNfpe6mZDR
+X-Google-Smtp-Source: ACHHUZ7Bf2UNPAy6HXsUp7lRc0mXPoN88gh/boNNoZyrLkLf7rtC9mZT8aNT0c9J8Qez6j0MPSy/gM8e2N9XAxh1nMIZgRQwIOzs
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: Hang loading initrd since last Friday.
-Content-Language: en-US
-To:     Linux regressions mailing list <regressions@lists.linux.dev>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <9d87defc-5376-d690-b483-bc314e4f568b@candelatech.com>
- <ZFHHh/m0pkOYIzo7@debian.me>
- <ebb280e4-d381-0bf8-d134-0318c5cfdf83@leemhuis.info>
-From:   Ben Greear <greearb@candelatech.com>
-Organization: Candela Technologies
-In-Reply-To: <ebb280e4-d381-0bf8-d134-0318c5cfdf83@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-MDID: 1683157792-XA8JeW0ymIKj
-X-MDID-O: us5;ut7;1683157792;XA8JeW0ymIKj;<greearb@candelatech.com>;3e693a8d56a8eeb61aa6e0137c1c1bf1
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:3306:0:b0:40f:8b6d:c549 with SMTP id
+ c6-20020a023306000000b0040f8b6dc549mr11170398jae.2.1683157880999; Wed, 03 May
+ 2023 16:51:20 -0700 (PDT)
+Date:   Wed, 03 May 2023 16:51:20 -0700
+In-Reply-To: <00000000000065fe6705cad8850e@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000991adc05fad2bb84@google.com>
+Subject: Re: [syzbot] [can?] WARNING in j1939_session_deactivate
+From:   syzbot <syzbot+535e5aae63c0d0433473@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, idosch@nvidia.com, jacob.e.keller@intel.com,
+        jiri@nvidia.com, kernel@pengutronix.de, kuba@kernel.org,
+        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux@rempel-privat.de, mkl@pengutronix.de, netdev@vger.kernel.org,
+        pabeni@redhat.com, robin@protonic.nl, socketcan@hartkopp.net,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/2/23 21:46, Linux regression tracking (Thorsten Leemhuis) wrote:
-> On 03.05.23 04:31, Bagas Sanjaya wrote:
->> On Tue, May 02, 2023 at 02:03:33PM -0700, Ben Greear wrote:
->>>
->>> Pulling today's upstream 6.3+ tree, my system now hangs loading initrd.
-> 
-> Just to understand this properly: you mean after the boot loader said it
-> loaded the initramfs, not when the kernel starts using it?
+syzbot suspects this issue was fixed by commit:
 
-I am bisecting...it appears to be .config related.  If I skip enabling things
-during bisect, then I do not see the problem.  But I copied my original buggy .config
-into an otherwise good kernel commit, and now it fails.  I'm manually bisecting
-the .config settings....
+commit b20b8aec6ffc07bb547966b356780cd344f20f5b
+Author: Ido Schimmel <idosch@nvidia.com>
+Date:   Wed Feb 15 07:31:39 2023 +0000
 
-Thanks,
-Ben
+    devlink: Fix netdev notifier chain corruption
 
-> 
->>>   Nothing useful is seen on
->>> serial console after that.  This was working late last week.  Other older kernels boot OK, so
->>> I think is is related to the kernel.
->>
->> What is your setup (especially kernel config)?
->>
->> Is v6.3 works for you? I haven't seen this regression on my computer
->> using v6.3.
-> 
-> Ben, you just to be sure might want to check if a kernel image that
-> currently works still boots if you regenerate its initramfs: maybe the
-> initramfs generator or something it uses changed recently and is causing
-> your problem. I've seen a case or two where that was the case.
-> 
->>> I have not yet started bisect, curious if this is already know problem.
->> Certainly you should try bisection.
-> 
-> Yeah.
-> 
-> BTW: What kind of platform is this?
-> 
-> Ciao, Thorsten
-> 
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=120779c4280000
+start commit:   7cd8b1542a7b ptp_pch: Load module automatically if ID matc..
+git tree:       net
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9290a409049988d4
+dashboard link: https://syzkaller.appspot.com/bug?extid=535e5aae63c0d0433473
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1488b8e0b00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14eabe3f300000
 
--- 
-Ben Greear <greearb@candelatech.com>
-Candela Technologies Inc  http://www.candelatech.com
+If the result looks correct, please mark the issue as fixed by replying with:
 
+#syz fix: devlink: Fix netdev notifier chain corruption
 
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
