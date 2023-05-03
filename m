@@ -2,70 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 718D16F5DF8
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 20:32:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3846F5E04
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 20:35:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230225AbjECScz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 14:32:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37278 "EHLO
+        id S230193AbjECSfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 14:35:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbjECScr (ORCPT
+        with ESMTP id S230470AbjECSew (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 14:32:47 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 975044684;
-        Wed,  3 May 2023 11:32:43 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f1cfed93e2so55859105e9.3;
-        Wed, 03 May 2023 11:32:43 -0700 (PDT)
+        Wed, 3 May 2023 14:34:52 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E155583C5;
+        Wed,  3 May 2023 11:34:31 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-94a342f7c4cso1063902666b.0;
+        Wed, 03 May 2023 11:34:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683138762; x=1685730762;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1683138870; x=1685730870;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tnjo0GPsUMLtbgipB+jFFEAt1dS72xwdMdksvi1BCQo=;
-        b=N03XwXpKNA2E1AUBC6mLwh7IMQ3fgeBYZTE4GtUw72lpmBKmC90XKEyJl1Z04uY/rr
-         UGsBqkO+xBL9B8hAqSwl3IiPjwSHcKiO3ec3tdpF2X74MM7pdbW9zdvI3yzo/Q/uQ1EH
-         s6XKmx51/vtYZibFlH62zbdrsvCqld3oWPeL3KFkevvVf0ajts05yrZK1b3BDYEYmjte
-         Zdig5Mzxh0EysPCPG5uWFQpYYleWHY5xbxrDHCru6m/A2bDofRex/QmEC/jpNmuEOEwD
-         SPqrQGZjJbPDHKrbIrSSjo0II+FZ9yPpsFWePIbejQdeRNqgHET52I74M42scAdsA/qF
-         vsZg==
+        bh=xyL6ErGxtGK4gbcrXbY7+L3d/vbQkgK7HxYu2bCcYGY=;
+        b=Hyfqv2D/Vmdm2qFvoJ0/03cG9FwKp7F/gSIeqr4sgYcvejyBB87r94IUaNBhST7yVE
+         npRmmDaVs6LIVUbsUBG9t7M/UqpLPq+eftmvOBtGnYdRyHTXJjwJ6zesj+es8PaF5XHU
+         wQyE6sZfQ7VrBdLweKkk5Klq17iffIxZntoTmFywSrNt3Svyed2Eo8eiPNrba4aDEOPV
+         fPhImEWYSmvpS/IeAHtnG66QU3GSEUBLm9uq0DfOdC4NwBIDciwxNCEznXKkCIQQXj9X
+         vsupHh8Lu1hhe2h13Z4vKrlmL1PwA+QCTlrB+U2QRdVT/mGKSnD03QdOChUCv6figHdh
+         QUOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683138762; x=1685730762;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1683138870; x=1685730870;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tnjo0GPsUMLtbgipB+jFFEAt1dS72xwdMdksvi1BCQo=;
-        b=i8sNwEon37uHIwFGXLZHpsVAUReQjxpKsBhOBib03GnfSR9oqp3Gj/iswJG8t02/1k
-         fxsbmHBWVN1apLy/t+fW3sqe9eHeSk+jTLhxL3iUMu7DKXq/5Zo3UMgEuHHL+1VQw0Cw
-         wpir1iFC8txBWGPTL75C8zKepyvrJiRKUfPKcJJ7+ahMJHop3BT6fmY8e32ZA0gBoRHz
-         +GUevrvd/5ZlX1A7TMtMSs7k4meCJ1fd2sqKz/pfw4BxQBUtB5in25DYx/PG1QI1WBQ4
-         +b1ro1yUve1d1uCGOD2+voSJBTLk/GpNfJ7Qs8AN5jFFxDLQ5sVyVqYV1eLEOdqEvwTZ
-         o2Zw==
-X-Gm-Message-State: AC+VfDwznGjwzMiwxLKjFJw214YZzqvyESahIjHQeWZ6oBei1pbpPf9J
-        a32nnwIhBdqOdg1dbQkbchk=
-X-Google-Smtp-Source: ACHHUZ7V6piwmo+mncPslAtNBLQcTTdJZ12eIjuFrRAkrUryjv55B7xSqgs01e2CBQt/D1REoH8YYg==
-X-Received: by 2002:a05:600c:b41:b0:3f1:79ad:f3a8 with SMTP id k1-20020a05600c0b4100b003f179adf3a8mr15676745wmr.16.1683138761885;
-        Wed, 03 May 2023 11:32:41 -0700 (PDT)
-Received: from suse.localnet (host-212-171-7-24.retail.telecomitalia.it. [212.171.7.24])
-        by smtp.gmail.com with ESMTPSA id l18-20020a05600012d200b002ceacff44c7sm34635164wrx.83.2023.05.03.11.32.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 May 2023 11:32:41 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     raghuhack78@gmail.com, Raghu H <raghuhack78@gmail.com>
-Cc:     linux-cxl@vger.kernel.org,
-        Alison Schofield <alison.schofield@intel.com>,
-        ira.weiny@intel.com, bwidawsk@kernel.org, dan.j.williams@intel.com,
-        vishal.l.verma@intel.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] cxl/mbox: Remove redundant dev_err() after failed mem
- alloc
-Date:   Wed, 03 May 2023 20:32:37 +0200
-Message-ID: <3235466.44csPzL39Z@suse>
-In-Reply-To: <20230428012235.119333-2-raghuhack78@gmail.com>
-References: <20230428012235.119333-1-raghuhack78@gmail.com>
- <20230428012235.119333-2-raghuhack78@gmail.com>
+        bh=xyL6ErGxtGK4gbcrXbY7+L3d/vbQkgK7HxYu2bCcYGY=;
+        b=Fx7aXC0okIDAFpEsl9oq03lQgVGRbZFF9iPzu+ARlyXCpBNn0GCsDYe8+cPJ8hl8pZ
+         W5bhOymR15V62UWzJTbTDe1204jBG+dOay0u9FfA148Av9l5/DMfFdli63nULRdqxftR
+         TiIiTz1uK68WW2TmaPbH+pn5qcO7juBRTaXUED0bd19IWFSiCZlJcwqpRn1vQzRQCuHK
+         3MLabC1o4Zoa56W3Yj88mVhMTBXqtNuw3rXKEnycOvjPzzesWPePEX2+7pu0R2D5Xy2q
+         ZUkFE60bhIZGDWBaNAqHBcaa3dmIHLVXR0GL4SvtvtynxqGEgEVvkLIDiW/fFvPDUfkj
+         btKA==
+X-Gm-Message-State: AC+VfDyEkAo5O04FlTkjb4map6LSVND7FCSdHjp+zXmU3YCCqQRC1KuR
+        7cQvMZa1IK+1wTzKyum9KF+w+W3w6TisLQWKznZMC9M/
+X-Google-Smtp-Source: ACHHUZ7a+hQOAcN6OMpUgSZPHGzi8ZUj4EGszToNKziX2RB/Nt4YhgZDxNyVmWXTjd/63KKAyBsdDGJOjhhvuxX4Dmk=
+X-Received: by 2002:a17:907:9705:b0:94e:1764:b0b5 with SMTP id
+ jg5-20020a170907970500b0094e1764b0b5mr4372303ejc.69.1683138870113; Wed, 03
+ May 2023 11:34:30 -0700 (PDT)
 MIME-Version: 1.0
+References: <20230406004018.1439952-1-drosen@google.com> <20230406004018.1439952-3-drosen@google.com>
+ <CAEf4BzakRfffU9+wLBNfhBi1dKxs03ibopJsMyEF6JAM-QJWjw@mail.gmail.com> <CA+PiJmQJ8m_W_SF3GPe9pqnwJX0gbkWuuOz-WXHWcA7JExgMyg@mail.gmail.com>
+In-Reply-To: <CA+PiJmQJ8m_W_SF3GPe9pqnwJX0gbkWuuOz-WXHWcA7JExgMyg@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 3 May 2023 11:34:17 -0700
+Message-ID: <CAEf4BzbQthAhS_TzOuMecz45SXMf5zDL1c2XQ6xS6C5jpx-y+A@mail.gmail.com>
+Subject: Re: [PATCH 2/3] bpf: Allow NULL buffers in bpf_dynptr_slice(_rw)
+To:     Daniel Rosenberg <drosen@google.com>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Joanne Koong <joannelkoong@gmail.com>,
+        Mykola Lysenko <mykolal@fb.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -76,52 +82,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On venerd=EC 28 aprile 2023 03:22:34 CEST Raghu H wrote:
-> Issue found with checkpatch
->=20
-> A return of errno should be good enough if the memory allocation fails,
-> the error message here is redundatant
+On Fri, Apr 28, 2023 at 6:58=E2=80=AFPM Daniel Rosenberg <drosen@google.com=
+> wrote:
+>
+> On Thu, Apr 6, 2023 at 2:09=E2=80=AFPM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
+> >
+> > would this work correctly if someone passes a non-null buffer with too
+> > small size? Can you please add a test for this use case.
+> >
+> Working on a test case for this, but the test case I wrote fails
+> without my patches.
+> I'm just declaring a buffer of size 9 on the stack, and then passing
+> in bpf_dynptr_slice that buffer, and size 10. That's passing the
+> verifier just fine. In fact, it loads successfully up to size 16. I'm
+> guessing that's adjusting for alignment? Still feels very strange. Is
+> that expected behavior?
 
-Typo: it's "redundant". No problem, I think you shouldn't resend only for t=
-he=20
-purpose to fix this. But...
-
-> as per the coding style, removing it.
->=20
-> Signed-off-by: Raghu H <raghuhack78@gmail.com>
-
-Is "Raghu H" the name you sign legal documents with?=20
-
-If not, please send a new version signed-off-by your full legal name.=20
-Otherwise... sorry for the noise.
-
-Thanks,
-
-=46abio
-
-> ---
->  drivers/cxl/core/mbox.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->=20
-> diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
-> index f2addb457172..11ea145b4b1f 100644
-> --- a/drivers/cxl/core/mbox.c
-> +++ b/drivers/cxl/core/mbox.c
-> @@ -1112,10 +1112,8 @@ struct cxl_dev_state *cxl_dev_state_create(struct
-> device *dev) struct cxl_dev_state *cxlds;
->=20
->  	cxlds =3D devm_kzalloc(dev, sizeof(*cxlds), GFP_KERNEL);
-> -	if (!cxlds) {
-> -		dev_err(dev, "No memory available\n");
-> +	if (!cxlds)
->  		return ERR_PTR(-ENOMEM);
-> -	}
->=20
->  	mutex_init(&cxlds->mbox_mutex);
->  	mutex_init(&cxlds->event.log_lock);
-> --
-> 2.39.2
-
-
-
-
+pointer to stack is trickier (verifier will just mark part of stack as
+overwritten with random data), it's best to use map value pointer as a
+source of buffer. So try using ARRAY map with small value_size, do
+lookup_elem, check for NULL, and pass non-NULL pointer as a buffer.
