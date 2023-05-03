@@ -2,183 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B00E6F5360
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 10:36:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D60C6F5335
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 10:34:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbjECIgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 04:36:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54780 "EHLO
+        id S229632AbjECIeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 04:34:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjECIfL (ORCPT
+        with ESMTP id S229713AbjECIet (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 04:35:11 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE34F4EE7
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 01:34:57 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-94eee951c70so786390166b.3
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 01:34:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683102896; x=1685694896;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RKXe+0lIfwy/hoC6Q/hB1sfMQ+ty9Wsj1woFdQCY7+o=;
-        b=oTmHERwURtYowEbOhsdjlBElVU56uTSujBYryGwaA4nmO6I7hEsQgvTTuOPcujdLpj
-         +t3XMGxFDsE332VGiC/54o1lDCbkSLy1osJIk+MoQBLmJI8JMyQoPhiGzhnTMYP+hT2A
-         LEhGwTakEv9uqIwur7uMvIHpHmEdmsyBM6IwMfbIdSgyIaQnUtwYcL8/xkIXAK2H2T3+
-         AIIK+1i4pDtV5+ml0/Bn4cjvX2k+w5CHF7lVJ5LL36Ny2BXNaEP8YXrlkGDdbqHoqzrP
-         csVJC6AvkO3sMeL8maLauLiQpWlcuun19/DBFEqM9StMhrvL1iim2ciBZZEWyiNkdqGR
-         oalA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683102896; x=1685694896;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RKXe+0lIfwy/hoC6Q/hB1sfMQ+ty9Wsj1woFdQCY7+o=;
-        b=XcnzkaI6Axo7/YZx5u5Rlt8GWVEpQ6sYqPh/wPmv5l0WkeVSo9DpzUHMKXkhrVe15e
-         u6vXuwDseAR5XMyCAVHbVMo3/FrYXiYB/rerDVqm7a9alB8J1M+jhYORoE+S3Q/XkT5E
-         7+oUgTYJ8G/pxguKsA2DInpeuf1yu+FM+yfXtx6MUDh1WAwnODwBaZnH5KbD5QJ6WhSa
-         WXWK//q6Uyp2mqkJWEMGmKH3oflDtgQ4eNJ5zP1GuG5N4AWxz1MOmbo8ffKqWy9CGUov
-         qQtRSj1+bjwemU71XE+G6OmrGK4QRrnhXpTAEf9VzEtbiApUWup7zDS5CBnyLf5i83eo
-         D96g==
-X-Gm-Message-State: AC+VfDx7X/lFyhAEpEXcwoWFvjd9qsL2CCyR2g/ORbMTfYJhiaYw8iiL
-        m0gf8OZ76F3QfIMouOEFD22/I+3XSagswwbVYbwgeA==
-X-Google-Smtp-Source: ACHHUZ54SmU1rXcXVFPIu75CyjtBvtdahZczabFaZ0bwQm2AsOxeoMspuMu+x+JDpcZq9sutqKu8oMDngYDT08mOsfY=
-X-Received: by 2002:a17:906:4fc8:b0:94d:8b66:46cb with SMTP id
- i8-20020a1709064fc800b0094d8b6646cbmr2559292ejw.3.1683102895630; Wed, 03 May
- 2023 01:34:55 -0700 (PDT)
+        Wed, 3 May 2023 04:34:49 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91DAC49F0;
+        Wed,  3 May 2023 01:34:47 -0700 (PDT)
+Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:8234:977e:ebbe:d70b])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id AD6DB6602338;
+        Wed,  3 May 2023 09:34:45 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1683102886;
+        bh=KaqkJvEMba9WXHV9EWAyvWYFN18VeoPcjrsUhdVX16g=;
+        h=From:To:Cc:Subject:Date:From;
+        b=CgmRKEkTGgIx1oEyBFrOUg0/jrYKx20PgHF5wGTgZYvuPKx/k2BmTLcXwDBvBa/5L
+         /M+Vv1Q4XO1GbiCLQ6tHEIlJ5TztDqgPsgBETHtO7eaREav4QSKUJkicStLlIOaySs
+         mhHTRCIa6yI2L0fEomcSgDPPZu2kMzFJuiRiSQN79oAZOPjs/Fm5Xe/zxix8MPQXZN
+         LvgZPptlHAXkzuK+fz+gvo6zGVZ3Opa7dTcLAaJ8ifXXQ+zpXk1QVu5QMs+k3T5dTa
+         XT5k0hgIpkpddtYP7EqOCwdHYZmF/RsK85Jf3Qr9yqDeJah4YVvjbYG/8ynQgTtfX1
+         MRD/g+UN7sCUg==
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        mchehab@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
+        hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.com
+Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [PATCH v7 00/13] AV1 stateless decoder for RK3588
+Date:   Wed,  3 May 2023 10:34:25 +0200
+Message-Id: <20230503083438.85139-1-benjamin.gaignard@collabora.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230501175025.36233-1-surenb@google.com> <ZFBvOh8r5WbTVyA8@casper.infradead.org>
- <CAJuCfpHfAFx9rjv0gHK77LbP-8gd-kFnWw=aqfQTP6pH=zvMNg@mail.gmail.com>
- <ZFCB+G9KSNE+J9cZ@casper.infradead.org> <CAJuCfpES=G8i99yYXWoeJq9+JVUjX5Bkq_5VNVTVX7QT+Wkfxg@mail.gmail.com>
- <ZFEmN6G7WRy59Mum@casper.infradead.org> <CAJuCfpFs+Rgpu8v+ddHFwtOx33W5k1sKDdXHM2ej1Upyo_9y4g@mail.gmail.com>
- <ZFGPLXIis6tl1QWX@casper.infradead.org> <CAJuCfpGgc_bCEAE5LrhYPk=qXMU=owgiABTO9ZNqaBx-xfrOuQ@mail.gmail.com>
-In-Reply-To: <CAJuCfpGgc_bCEAE5LrhYPk=qXMU=owgiABTO9ZNqaBx-xfrOuQ@mail.gmail.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Wed, 3 May 2023 01:34:13 -0700
-Message-ID: <CAJD7tkZJ1VPB+bA0cjHHcehoMW2fT96-h=C5pRHD=Z+SJXYosA@mail.gmail.com>
-Subject: Re: [PATCH 1/3] mm: handle swap page faults under VMA lock if page is uncontended
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     Matthew Wilcox <willy@infradead.org>, akpm@linux-foundation.org,
-        hannes@cmpxchg.org, mhocko@suse.com, josef@toxicpanda.com,
-        jack@suse.cz, ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
-        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com, hdanton@sina.com,
-        apopple@nvidia.com, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 2, 2023 at 4:05=E2=80=AFPM Suren Baghdasaryan <surenb@google.co=
-m> wrote:
->
-> On Tue, May 2, 2023 at 3:31=E2=80=AFPM Matthew Wilcox <willy@infradead.or=
-g> wrote:
-> >
-> > On Tue, May 02, 2023 at 09:36:03AM -0700, Suren Baghdasaryan wrote:
-> > > On Tue, May 2, 2023 at 8:03=E2=80=AFAM Matthew Wilcox <willy@infradea=
-d.org> wrote:
-> > > >
-> > > > On Mon, May 01, 2023 at 10:04:56PM -0700, Suren Baghdasaryan wrote:
-> > > > > On Mon, May 1, 2023 at 8:22=E2=80=AFPM Matthew Wilcox <willy@infr=
-adead.org> wrote:
-> > > > > >
-> > > > > > On Mon, May 01, 2023 at 07:30:13PM -0700, Suren Baghdasaryan wr=
-ote:
-> > > > > > > On Mon, May 1, 2023 at 7:02=E2=80=AFPM Matthew Wilcox <willy@=
-infradead.org> wrote:
-> > > > > > > >
-> > > > > > > > On Mon, May 01, 2023 at 10:50:23AM -0700, Suren Baghdasarya=
-n wrote:
-> > > > > > > > > +++ b/mm/memory.c
-> > > > > > > > > @@ -3711,11 +3711,6 @@ vm_fault_t do_swap_page(struct vm_=
-fault *vmf)
-> > > > > > > > >       if (!pte_unmap_same(vmf))
-> > > > > > > > >               goto out;
-> > > > > > > > >
-> > > > > > > > > -     if (vmf->flags & FAULT_FLAG_VMA_LOCK) {
-> > > > > > > > > -             ret =3D VM_FAULT_RETRY;
-> > > > > > > > > -             goto out;
-> > > > > > > > > -     }
-> > > > > > > > > -
-> > > > > > > > >       entry =3D pte_to_swp_entry(vmf->orig_pte);
-> > > > > > > > >       if (unlikely(non_swap_entry(entry))) {
-> > > > > > > > >               if (is_migration_entry(entry)) {
-> > > > > > > >
-> > > > > > > > You're missing the necessary fallback in the (!folio) case.
-> > > > > > > > swap_readpage() is synchronous and will sleep.
-> > > > > > >
-> > > > > > > True, but is it unsafe to do that under VMA lock and has to b=
-e done
-> > > > > > > under mmap_lock?
-> > > > > >
-> > > > > > ... you were the one arguing that we didn't want to wait for I/=
-O with
-> > > > > > the VMA lock held?
-> > > > >
-> > > > > Well, that discussion was about waiting in folio_lock_or_retry() =
-with
-> > > > > the lock being held. I argued against it because currently we dro=
-p
-> > > > > mmap_lock lock before waiting, so if we don't drop VMA lock we wo=
-uld
-> > > > > be changing the current behavior which might introduce new
-> > > > > regressions. In the case of swap_readpage and swapin_readahead we
-> > > > > already wait with mmap_lock held, so waiting with VMA lock held d=
-oes
-> > > > > not introduce new problems (unless there is a need to hold mmap_l=
-ock).
-> > > > >
-> > > > > That said, you are absolutely correct that this situation can be
-> > > > > improved by dropping the lock in these cases too. I just didn't w=
-ant
-> > > > > to attack everything at once. I believe after we agree on the app=
-roach
-> > > > > implemented in https://lore.kernel.org/all/20230501175025.36233-3=
--surenb@google.com
-> > > > > for dropping the VMA lock before waiting, these cases can be adde=
-d
-> > > > > easier. Does that make sense?
-> > > >
-> > > > OK, I looked at this path some more, and I think we're fine.  This
-> > > > patch is only called for SWP_SYNCHRONOUS_IO which is only set for
-> > > > QUEUE_FLAG_SYNCHRONOUS devices, which are brd, zram and nvdimms
-> > > > (both btt and pmem).  So the answer is that we don't sleep in this
-> > > > path, and there's no need to drop the lock.
-> > >
-> > > Yes but swapin_readahead does sleep, so I'll have to handle that case
-> > > too after this.
-> >
-> > Sleeping is OK, we do that in pXd_alloc()!  Do we block on I/O anywhere
-> > in swapin_readahead()?  It all looks like async I/O to me.
->
-> Hmm. I thought that we have synchronous I/O in the following paths:
->     swapin_readahead()->swap_cluster_readahead()->swap_readpage()
->     swapin_readahead()->swap_vma_readahead()->swap_readpage()
-> but just noticed that in both cases swap_readpage() is called with the
-> synchronous parameter being false. So you are probably right here...
+This series implement AV1 stateless decoder for RK3588 SoC.
+The hardware support 8 and 10 bits bitstreams up to 7680x4320.
+AV1 feature like film grain or scaling are done by the postprocessor.
+The driver can produce NV12_4L4, NV12_10LE40_4L4, NV12 and P010 pixels formats.
+Even if Rockchip have named the hardware VPU981 it looks like a VC9000 but 
+with a different registers mapping.
 
-In both swap_cluster_readahead() and swap_vma_readahead() it looks
-like if the readahead window is 1 (aka we are not reading ahead), then
-we jump to directly calling read_swap_cache_async() passing do_poll =3D
-true, which means we may end up calling swap_readpage() passing
-synchronous =3D true.
+The full branch can be found here:
+https://gitlab.collabora.com/linux/for-upstream/-/commits/rk3588_av1_decoder_v7
 
-I am not familiar with readahead heuristics, so I am not sure how
-common this is, but it's something to think about.
+Fluster score is: 200/239 while testing AV1-TEST-VECTORS with GStreamer-AV1-V4L2SL-Gst1.0.
+The failing tests are:
+- the 2 tests with 2 spatial layers: few errors in luma/chroma values
+- tests with resolution < hardware limit (64x64)
+- 10bits film grain test: bad macroblocks while decoding, the same 8bits
+  test is working fine.
 
-> Does that mean swapin_readahead() might return a page which does not
-> have its content swapped-in yet?
->
+Changes in v7:
+- Rebased on media_tree master branch.
+- Fix warnings exposed by W=1
+- Fix Angelo's comments
+
+Changes in v6:
+- Rename NV12_10LE40_4L4 pixel format into NV15_4L4.
+- Add defines for post-proc selection.
+- Change patch order as requested by Nicolas.
+- Fix frame-larger-than warning.
+
+Changes in v5:
+- Add a patch to initialize bit_depth field of V4L2_CTRL_TYPE_AV1_SEQUENCE
+  ioctl.
+
+Changes in v4:
+- Squash "Save bit depth for AV1 decoder" and "Check AV1 bitstreams bit
+  depth" patches.
+- Double motion vectors buffer size.
+- Fix the various errors reported by Hans.
+
+Changes in v3:
+- Fix arrays loops limites.
+- Remove unused field.
+- Reset raw pixel formats list when bit depth or film grain feature
+  values change.
+- Enable post-processor P010 support
+
+Changes in v2:
+- Remove useless +1 in sbs computation. 
+- Describe NV12_10LE40_4L4 pixels format.
+- Post-processor could generate P010.
+- Fix comments done on v1.
+- The last patch make sure that only post-processed formats are used when film
+  grain feature is enabled.
+
+Benjamin
+
+
+Benjamin Gaignard (12):
+  dt-bindings: media: rockchip-vpu: Add rk3588 vpu compatible
+  media: AV1: Make sure that bit depth in correctly initialize
+  media: Add NV15_4L4 pixel format
+  media: verisilicon: Get bit depth for V4L2_PIX_FMT_NV15_4L4
+  media: verisilicon: Add AV1 decoder mode and controls
+  media: verisilicon: Check AV1 bitstreams bit depth
+  media: verisilicon: Compute motion vectors size for AV1 frames
+  media: verisilicon: Add AV1 entropy helpers
+  media: verisilicon: Add Rockchip AV1 decoder
+  media: verisilicon: Add film grain feature to AV1 driver
+  media: verisilicon: Enable AV1 decoder on rk3588
+  media: verisilicon: Conditionally ignore native formats
+
+Nicolas Dufresne (1):
+  v4l2-common: Add support for fractional bpp
+
+ .../bindings/media/rockchip-vpu.yaml          |    1 +
+ .../media/v4l/pixfmt-yuv-planar.rst           |   16 +
+ drivers/media/platform/verisilicon/Makefile   |    3 +
+ drivers/media/platform/verisilicon/hantro.h   |    8 +
+ .../media/platform/verisilicon/hantro_drv.c   |   68 +-
+ .../media/platform/verisilicon/hantro_hw.h    |  102 +
+ .../platform/verisilicon/hantro_postproc.c    |    9 +-
+ .../media/platform/verisilicon/hantro_v4l2.c  |   67 +-
+ .../media/platform/verisilicon/hantro_v4l2.h  |    8 +-
+ .../verisilicon/rockchip_av1_entropymode.c    | 4424 +++++++++++++++++
+ .../verisilicon/rockchip_av1_entropymode.h    |  272 +
+ .../verisilicon/rockchip_av1_filmgrain.c      |  401 ++
+ .../verisilicon/rockchip_av1_filmgrain.h      |   36 +
+ .../verisilicon/rockchip_vpu981_hw_av1_dec.c  | 2232 +++++++++
+ .../verisilicon/rockchip_vpu981_regs.h        |  477 ++
+ .../platform/verisilicon/rockchip_vpu_hw.c    |  134 +
+ drivers/media/v4l2-core/v4l2-common.c         |  162 +-
+ drivers/media/v4l2-core/v4l2-ctrls-core.c     |    5 +
+ drivers/media/v4l2-core/v4l2-ioctl.c          |    1 +
+ include/media/v4l2-common.h                   |    2 +
+ include/uapi/linux/videodev2.h                |    1 +
+ 21 files changed, 8326 insertions(+), 103 deletions(-)
+ create mode 100644 drivers/media/platform/verisilicon/rockchip_av1_entropymode.c
+ create mode 100644 drivers/media/platform/verisilicon/rockchip_av1_entropymode.h
+ create mode 100644 drivers/media/platform/verisilicon/rockchip_av1_filmgrain.c
+ create mode 100644 drivers/media/platform/verisilicon/rockchip_av1_filmgrain.h
+ create mode 100644 drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c
+ create mode 100644 drivers/media/platform/verisilicon/rockchip_vpu981_regs.h
+
+-- 
+2.34.1
+
