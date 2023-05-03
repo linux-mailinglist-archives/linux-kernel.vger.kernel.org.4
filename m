@@ -2,146 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09DB76F5BB7
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 18:08:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAA416F5BBA
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 18:08:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230064AbjECQIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 12:08:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42502 "EHLO
+        id S230321AbjECQIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 12:08:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbjECQIT (ORCPT
+        with ESMTP id S229971AbjECQIn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 12:08:19 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD4545591
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 09:08:17 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-331632be774so24239455ab.0
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 09:08:17 -0700 (PDT)
+        Wed, 3 May 2023 12:08:43 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662CB5598
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 09:08:42 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1aae803a5eeso24450635ad.0
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 09:08:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683130122; x=1685722122;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KcYtuxqAgVGBgurjFyNHaXvrsul7KgRgwWzw0ovjlnc=;
+        b=hphZ8wd1Zv16lpYBkNFzoEJuAl578cQ/7U3agitk1KpY+w61rX7jQTq7slBGzNJF3i
+         cdot16MZ+dvGln6swYXBKA5HxxOzlR+SIfdfe5JTv9Gmlj6q96nq5LoN3fzrc+++FVRN
+         YDSGNGX+yRf71f37+QYCEZbuXOc75aPyh1rTOXofCG2glR+cWdpvijltvb4A4z8+DCQ6
+         rk77AjIUPJOHV9Zm3eKRG1YAptSufEUzz77KMlUZ6X0V8a8FvYvWfnepOYrupv2zePKz
+         cQan+Bj2BdctFglNRSkg5Mg77ykxGZav25pPDtU33IziPp3uXUGLyeHyHT5yP45x9JIk
+         4HVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683130097; x=1685722097;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
+        d=1e100.net; s=20221208; t=1683130122; x=1685722122;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=71jW7uIgVuYpWXUeJPoBc8ZU2WGP1l3iT3lCqvQhsNw=;
-        b=fFC8YnLQoYKS51z2uQS6WuJ9s6mCLYu+iDZQgnRWJiv/AVMbwH3CTw1bfWUuhUEpdU
-         LcAQoxp9xWmMVjtyTqqyCTvzlfVzI/vWYBHsfcbjvkF5d4KOeDZO+fj1WbV1uC/y4Txf
-         5fBMnhpTq3YS7O3ahqTYdOjW2wtiycO7P/VZjDTzDWx9KT8B3WeQoAF9Fznr4sqc+Joo
-         tu7OMLNhC4tDFcLDjRvpA/4O+vWFp3YdihZEUKF61mm8J2IUZpGcYY0lI8TLtB3Ma4sH
-         q4FIRgB13z3siTF6yTsdWLj36k8HBRO2JJvsAGZkyZM82fRJo9aD31Fyw+4JEGait6Jd
-         Y8fg==
-X-Gm-Message-State: AC+VfDzEqhUBgWaQnvFcz3kJVHquqyGme0n0RfSU73lu12l17tYhBUUK
-        A6hHIsr2bg6upqP62s5Z4IKzxW4cCmbyk4vFwQ4NL+xzbzlr
-X-Google-Smtp-Source: ACHHUZ5oNa7yODoox6OXvj+QKQaJpHjPNCQC3VoAcxeVIxTFcbjncOxN6PIpXxwJaThLQmNOXxcWkYI0bpXcNRNhh5X8TyBi8vON
-MIME-Version: 1.0
-X-Received: by 2002:a5d:8044:0:b0:760:c237:bdd7 with SMTP id
- b4-20020a5d8044000000b00760c237bdd7mr1775222ior.1.1683130096756; Wed, 03 May
- 2023 09:08:16 -0700 (PDT)
-Date:   Wed, 03 May 2023 09:08:16 -0700
-In-Reply-To: <5540e94e-d744-bf51-6344-95c8a173e89a@kernel.org>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000872ce405facc4319@google.com>
-Subject: Re: [syzbot] [f2fs?] WARNING: lock held when returning to user space
- in f2fs_write_single_data_page
-From:   syzbot <syzbot+eb6201248f684e99b9f8@syzkaller.appspotmail.com>
-To:     chao@kernel.org, jaegeuk@kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+        bh=KcYtuxqAgVGBgurjFyNHaXvrsul7KgRgwWzw0ovjlnc=;
+        b=JQwsAfFHjO47wn3mZKxmlOMfYrbua1V5WoJlj5IiGgrhMoBJRnEL+ATk97Ij+OF0s2
+         gYIShyJfZz+BDypasHgrxJBaMWO15eWTWJPIXbtnUpF19MnSlGljt3yNJteMNFqJ2skB
+         OT2Onmk1KBT1u2qgnbg7Ze4h/kty8BISI27qzsOuSjdsDp9kyojqK373Ng/Iqnvo/0DD
+         dbPMBh9KRu4qCtJlMo2Hk05ZekxeFTbYK4lL9g3bwwy19w8AH9f1rrJcI3b5TjwV0IsU
+         ocHCswYK7xX0p6/d+vY7hlLyEhg9WcOI0/uN9snQUHC89DUAEUfbGx8K4/hv4WJKg+ht
+         Zgbw==
+X-Gm-Message-State: AC+VfDzCdwGRW5k84vYb3YhjCenPPmuNhc0Qtw+LDG75xka9Fpq+pzPX
+        IImG9ayz0BBbmklJyQq5oLweI4AMKkQ=
+X-Google-Smtp-Source: ACHHUZ7zOoQNTe0gVzNkwyUHwCla1VhS8hV2cBXkj3VC8I62zL/0MfHWKFCkq5D1dps+apmi88hMmf+JZ3k=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:902:b591:b0:1a5:15bb:e3cb with SMTP id
+ a17-20020a170902b59100b001a515bbe3cbmr152997pls.12.1683130121699; Wed, 03 May
+ 2023 09:08:41 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Wed,  3 May 2023 09:08:35 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
+Message-ID: <20230503160838.3412617-1-seanjc@google.com>
+Subject: [PATCH v2 0/3] KVM: x86: SGX vs. XCR0 cleanups
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kai Huang <kai.huang@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Stop adjusting the guest's CPUID info for the allowed XFRM (a.k.a. XCR0)
+for SGX enclaves.  Past me didn't understand the roles and responsibilities
+between userspace and KVM with respect to CPUID leafs, i.e. I thought I was
+being helpful by having KVM adjust the entries.
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-general protection fault in f2fs_quota_on
+This is clearly an ABI change, but QEMU does the right thing and AFAIK no
+other VMMs support SGX (yet), so I'm hopeful/confident that we can excise
+the ugly before userspace starts depending on the bad behavior.
+ 
+v2:
+ - Collect reviews/testing. [Kai]
+ - Require FP+SSE to always be set in XFRM, and exempt them from the XFRM
+   vs. XCR0 check. [Kai]
 
-general protection fault, probably for non-canonical address 0xdffffc00000000e6: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000730-0x0000000000000737]
-CPU: 0 PID: 5450 Comm: syz-executor.0 Not tainted 6.3.0-syzkaller-05651-gfd78b242ba1b #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-RIP: 0010:__lock_acquire+0x69/0x2000 kernel/locking/lockdep.c:4942
-Code: df 0f b6 04 30 84 c0 0f 85 5a 16 00 00 83 3d c1 51 e9 0c 00 0f 84 02 11 00 00 83 3d f0 89 74 0b 00 74 2b 4c 89 f0 48 c1 e8 03 <80> 3c 30 00 74 12 4c 89 f7 e8 c9 54 76 00 48 be 00 00 00 00 00 fc
-RSP: 0018:ffffc90005a1faf8 EFLAGS: 00010002
-RAX: 00000000000000e6 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: dffffc0000000000 RDI: 0000000000000730
-RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000000 R11: dffffc0000000001 R12: 0000000000000001
-R13: 0000000000000000 R14: 0000000000000730 R15: ffff888077f13b80
-FS:  00007fc1c2b17700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055800180a000 CR3: 00000000706b1000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5691
- down_write+0x3a/0x50 kernel/locking/rwsem.c:1573
- f2fs_down_write fs/f2fs/f2fs.h:2125 [inline]
- f2fs_quota_on+0x120/0x320 fs/f2fs/super.c:2916
- __do_sys_quotactl fs/quota/quota.c:960 [inline]
- __se_sys_quotactl+0x2b5/0x810 fs/quota/quota.c:916
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fc1c1e8c169
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fc1c2b17168 EFLAGS: 00000246 ORIG_RAX: 00000000000000b3
-RAX: ffffffffffffffda RBX: 00007fc1c1fac050 RCX: 00007fc1c1e8c169
-RDX: 0000000000000000 RSI: 0000000020000080 RDI: ffffffff80000202
-RBP: 00007fc1c1ee7ca1 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000020008040 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffd3e2e112f R14: 00007fc1c2b17300 R15: 0000000000022000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:__lock_acquire+0x69/0x2000 kernel/locking/lockdep.c:4942
-Code: df 0f b6 04 30 84 c0 0f 85 5a 16 00 00 83 3d c1 51 e9 0c 00 0f 84 02 11 00 00 83 3d f0 89 74 0b 00 74 2b 4c 89 f0 48 c1 e8 03 <80> 3c 30 00 74 12 4c 89 f7 e8 c9 54 76 00 48 be 00 00 00 00 00 fc
-RSP: 0018:ffffc90005a1faf8 EFLAGS: 00010002
-RAX: 00000000000000e6 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: dffffc0000000000 RDI: 0000000000000730
-RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000000 R11: dffffc0000000001 R12: 0000000000000001
-R13: 0000000000000000 R14: 0000000000000730 R15: ffff888077f13b80
-FS:  00007fc1c2b17700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055800180a000 CR3: 00000000706b1000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	df 0f                	fisttps (%rdi)
-   2:	b6 04                	mov    $0x4,%dh
-   4:	30 84 c0 0f 85 5a 16 	xor    %al,0x165a850f(%rax,%rax,8)
-   b:	00 00                	add    %al,(%rax)
-   d:	83 3d c1 51 e9 0c 00 	cmpl   $0x0,0xce951c1(%rip)        # 0xce951d5
-  14:	0f 84 02 11 00 00    	je     0x111c
-  1a:	83 3d f0 89 74 0b 00 	cmpl   $0x0,0xb7489f0(%rip)        # 0xb748a11
-  21:	74 2b                	je     0x4e
-  23:	4c 89 f0             	mov    %r14,%rax
-  26:	48 c1 e8 03          	shr    $0x3,%rax
-* 2a:	80 3c 30 00          	cmpb   $0x0,(%rax,%rsi,1) <-- trapping instruction
-  2e:	74 12                	je     0x42
-  30:	4c 89 f7             	mov    %r14,%rdi
-  33:	e8 c9 54 76 00       	callq  0x765501
-  38:	48                   	rex.W
-  39:	be 00 00 00 00       	mov    $0x0,%esi
-  3e:	00 fc                	add    %bh,%ah
+v1: https://lore.kernel.org/all/20230405005911.423699-1-seanjc@google.com
+
+Sean Christopherson (3):
+  KVM: VMX: Don't rely _only_ on CPUID to enforce XCR0 restrictions for
+    ECREATE
+  KVM: x86: Don't adjust guest's CPUID.0x12.1 (allowed SGX enclave XFRM)
+  KVM: x86: Open code supported XCR0 calculation in
+    kvm_vcpu_after_set_cpuid()
+
+ arch/x86/kvm/cpuid.c   | 43 ++++++++++--------------------------------
+ arch/x86/kvm/vmx/sgx.c | 11 +++++++++--
+ 2 files changed, 19 insertions(+), 35 deletions(-)
 
 
-Tested on:
+base-commit: 5c291b93e5d665380dbecc6944973583f9565ee5
+-- 
+2.40.1.495.gc816e09b53d-goog
 
-commit:         fd78b242 f2fs: fix potential deadlock due to unpaired ..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git dev-test
-console output: https://syzkaller.appspot.com/x/log.txt?x=11d46838280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=86e4eb913e90d4b2
-dashboard link: https://syzkaller.appspot.com/bug?extid=eb6201248f684e99b9f8
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Note: no patches were applied.
