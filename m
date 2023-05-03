@@ -2,120 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38E916F598A
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 16:09:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E02D6F598F
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 16:11:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbjECOJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 10:09:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36642 "EHLO
+        id S229886AbjECOK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 10:10:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbjECOJj (ORCPT
+        with ESMTP id S229830AbjECOK4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 10:09:39 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF7244BE
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 07:09:37 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-50bc3088b7aso7848606a12.3
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 07:09:37 -0700 (PDT)
+        Wed, 3 May 2023 10:10:56 -0400
+Received: from mail-ed1-x54a.google.com (mail-ed1-x54a.google.com [IPv6:2a00:1450:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D77359F7
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 07:10:54 -0700 (PDT)
+Received: by mail-ed1-x54a.google.com with SMTP id 4fb4d7f45d1cf-50bcbb5724aso2831634a12.1
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 07:10:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683122976; x=1685714976;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mK68NYi4Md501UpiqLonzXIdRt1tnNyCrIythi7sS+M=;
-        b=noHAyyyWDYLPP6JO/zozkSkR2vkzidbvTevSRwNzUbJtQSxqGAz6P6BoNIlrpA2tgX
-         0Ax7FwFNNxXaxvq4AjYH3l57NVqojg41eZVsE2h5SSsCehHN+iCbJvkvSGd5t6soY04T
-         oMX9YalyuVn63F8wnmCgYqHfrYekJjagE9II6StQoP6XZQHZbEY+/hyuCD/VkdXgCBJJ
-         ejNtLOpI5Cjr2+mHCvoXIgJou5lWthj2vGJ0qlsnLJtAX4PQdKnckJvCw95W4LD5WWot
-         GA/UjQy6yVG2Rz1QebCVbZENPCi1x8UzZEZ9T2O3ZzsITG5rCjBsrDWkKyHVVosoSrIt
-         RDZg==
+        d=google.com; s=20221208; t=1683123053; x=1685715053;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=PscYnQxei+RrA3NkIhxRI+jonTcqCawkESGLIumeLz8=;
+        b=i6wbV3qzZv6N/1ImH/nzBnfPh7xlGmGxBUX8RJPeTpz3tkVH4mRLomkibMuRQlKsUu
+         Mqee2m33k6mtzRHeQ2Vuw4bVPr03n/SZALHA+gNsfJNF+zqbWVnKSFnV0QNCBXO/WyRj
+         71xunrtFeEha39pnex5dhZSGZySmNlv4pz/07QSarAu+3Sa/HY+MzLbu/QtHAsBziPJI
+         bd+P3Lh8NFBr/9hxE+DXRJt0Uc528bq198eDXLISEIAdqdgIhH6TCEqOM2TPfXsWh3nH
+         REsCRFj2VCIum6c5B2luTkXrsQ40hKLLav9bfRMsgA1At64d1Fd+9EbzeLqpoiz7FPm2
+         igwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683122976; x=1685714976;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mK68NYi4Md501UpiqLonzXIdRt1tnNyCrIythi7sS+M=;
-        b=RrWoycjzDPQucSqfsomtRmOr6NiruX+/1xDOpkWFpXTiqBLyeFW87PaM0C8ATcfemM
-         pHpD+NcrCbG2iDOwZfR4JEzIVdF3Tmd+nK7OGy7hWgGZ80Q+XrQDX7Sf3ysdRyUcYwsb
-         gmIF7aZnefJkdkwzA4dRNj3R5uQ7mWvIX61oL8BxcGVEsm4BF6dzXql1jFiFbEnJc2UZ
-         Q0MKlfDnIc8hUrf9Nb3v2p8D8zJtu16GaJ4QuzyU/DCfV4Oy1U9KzSls10+GUFEBEXSJ
-         X67vtiGcABcNDeTny+L/an9iz59KJjr4vkk9nJXZVSVbczqnoz1pSnXLQq7htOVNjcvO
-         lHCA==
-X-Gm-Message-State: AC+VfDydcg1pe+WXQcRtUKg1qBimMI7uTh2mzD6T569RQG6pHwo5BZT9
-        gCo9DKNaENjwMKs9WtKCK/SpKQ==
-X-Google-Smtp-Source: ACHHUZ7MpB081+GYrlSXGSVot5dVaOLY86f0bU3jAd2a2xjuJu5mlKxTH5nx1WwtH/pn1/saQX/7nw==
-X-Received: by 2002:a17:906:58cf:b0:94f:2852:1d2b with SMTP id e15-20020a17090658cf00b0094f28521d2bmr3247307ejs.72.1683122976003;
-        Wed, 03 May 2023 07:09:36 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:db42:e3d0:c55a:8cf1? ([2a02:810d:15c0:828:db42:e3d0:c55a:8cf1])
-        by smtp.gmail.com with ESMTPSA id h20-20020a1709070b1400b009658f5a90d2sm127868ejl.189.2023.05.03.07.09.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 May 2023 07:09:35 -0700 (PDT)
-Message-ID: <0537e5be-87c3-c551-ac12-d2cdf5b18b07@linaro.org>
-Date:   Wed, 3 May 2023 16:09:34 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v2] dt-bindings: dma: xilinx: Add power-domains to
- xlnx,zynqmp-dpdma
-Content-Language: en-US
-To:     Michal Simek <michal.simek@amd.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-kernel@vger.kernel.org, monstr@monstr.eu,
-        michal.simek@xilinx.com, git@xilinx.com,
-        Hyun Kwon <hyun.kwon@xilinx.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, devicetree@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <30424f5886ef42419f65c2d5131ad30881c727a4.1683100816.git.michal.simek@amd.com>
- <20230503125125.GE32586@pendragon.ideasonboard.com>
- <a5ff9c0f-6ee9-8b1a-5f77-fb56176bce22@amd.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <a5ff9c0f-6ee9-8b1a-5f77-fb56176bce22@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1683123053; x=1685715053;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PscYnQxei+RrA3NkIhxRI+jonTcqCawkESGLIumeLz8=;
+        b=gxlDydSjhD0AkMtAlCMDmrfv6QwG1EQLT1mVyIbJiRkMaJbe9CSKfIHkG4jNIbgtt1
+         QAl3XRvFKnPWV/WccrYPwfAelnJkTlSyerLYlSEFSbe0O8JZJ0z/n8HdkpDKvgJ3fME9
+         K35yz1ON8Gcz2CUvoksU+WUpByGrTpKAg7VrvkfQc1+lKWxE2uz0DCOOxByT1NTf0CUk
+         RY8ymtVRKZVTM8Nml3jGUvNzcyjy35o90PjF0PBee4MQhk0X4BIGtz7txVbGaRzjRHyx
+         8BuSHZrlR1ZKdLuJ34BZW3/ydNllWJGhXTQGPD1TwpOz4Zd/MjNwNwCLUYc+x+tRdhmu
+         Z9Dg==
+X-Gm-Message-State: AC+VfDynBE817ikHKKpjIlgciLMbOls/TNU1NtZdXcaZ94ib48SAq2u/
+        Wg8gAVg/set8eg5NJkrX97uKcxGXIce4n2M=
+X-Google-Smtp-Source: ACHHUZ5Hcg3R5FNZVjC+7aM4byx27feeE4qcNWau4AL9D22yakKsHM7tbn/7f1WVJnfTEROqkMSdky1OhrWE7ws=
+X-Received: from aliceryhl.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:6c8])
+ (user=aliceryhl job=sendgmr) by 2002:a50:d482:0:b0:50b:d28d:a95c with SMTP id
+ s2-20020a50d482000000b0050bd28da95cmr2144272edi.4.1683123052719; Wed, 03 May
+ 2023 07:10:52 -0700 (PDT)
+Date:   Wed,  3 May 2023 14:10:16 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
+Message-ID: <20230503141016.683634-1-aliceryhl@google.com>
+Subject: [PATCH v2] rust: str: add conversion from `CStr` to `CString`
+From:   Alice Ryhl <aliceryhl@google.com>
+To:     Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>
+Cc:     Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        "=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?=" <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
+        Alice Ryhl <aliceryhl@google.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
+        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/05/2023 15:27, Michal Simek wrote:
-> Hi,
-> 
-> On 5/3/23 14:51, Laurent Pinchart wrote:
->> Hi Michal,
->>
->> Thank you for the patch.
->>
->> On Wed, May 03, 2023 at 10:00:20AM +0200, Michal Simek wrote:
->>> DP DMA has own power domain that's why describe optional power-domain
->>> property.
->>
->> As far as I understand, the property should always be specified, the
->> only reason why it's not mandatory is backward-compatibility (I would
->> make it mandatory, as I think proper validation of new DT is more
->> important than avoiding breaking validation - but not operation! - of
->> old DT, but that's a separate story). If my understanding is correct,
->> could you please update the example in the bindings to add the
->> power-domains property ?
-> 
-> backward compatible - of course
-> always specified - if pd driver is enabled it must be there. If not it doesn't 
-> do anything - just describes it.
-> 
-> I am not in a position to decide this. But if dt folks agree with your ask I am 
-> happy to make it mandatory and extend example.
+These methods can be used to copy the data in a temporary c string into
+a separate allocation, so that it can be accessed later even if the
+original is deallocated.
 
-By making it mandatory in the bindings only, not in the driver, no real
-ABI gets broken. Linux won't stop booting if property is missing.
-Therefore if device is always part of power domain and it is actually
-required, then sure - making it required is useful.
+The API in this change mirrors the standard library API for the `&str`
+and `String` types. The `ToOwned` trait is not implemented because it
+assumes that allocations are infallible.
 
-Best regards,
-Krzysztof
+Reviewed-by: Benno Lossin <benno.lossin@proton.me>
+Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+---
+ rust/kernel/str.rs | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+
+diff --git a/rust/kernel/str.rs b/rust/kernel/str.rs
+index b771310fa4a4..f3dc5b24ea55 100644
+--- a/rust/kernel/str.rs
++++ b/rust/kernel/str.rs
+@@ -2,6 +2,7 @@
+ 
+ //! String representations.
+ 
++use alloc::alloc::AllocError;
+ use alloc::vec::Vec;
+ use core::fmt::{self, Write};
+ use core::ops::{self, Deref, Index};
+@@ -199,6 +200,12 @@ impl CStr {
+     pub unsafe fn as_str_unchecked(&self) -> &str {
+         unsafe { core::str::from_utf8_unchecked(self.as_bytes()) }
+     }
++
++    /// Convert this [`CStr`] into a [`CString`] by allocating memory and
++    /// copying over the string data.
++    pub fn to_cstring(&self) -> Result<CString, AllocError> {
++        CString::try_from(self)
++    }
+ }
+ 
+ impl fmt::Display for CStr {
+@@ -584,6 +591,21 @@ impl Deref for CString {
+     }
+ }
+ 
++impl<'a> TryFrom<&'a CStr> for CString {
++    type Error = AllocError;
++
++    fn try_from(cstr: &'a CStr) -> Result<CString, AllocError> {
++        let mut buf = Vec::new();
++
++        buf.try_extend_from_slice(cstr.as_bytes_with_nul())
++            .map_err(|_| AllocError)?;
++
++        // INVARIANT: The `CStr` and `CString` types have the same invariants for
++        // the string data, and we copied it over without changes.
++        Ok(CString { buf })
++    }
++}
++
+ /// A convenience alias for [`core::format_args`].
+ #[macro_export]
+ macro_rules! fmt {
+
+base-commit: ea76e08f4d901a450619831a255e9e0a4c0ed162
+-- 
+2.40.1.521.gf1e218fcd8-goog
 
