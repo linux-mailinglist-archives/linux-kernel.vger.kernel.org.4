@@ -2,118 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F397A6F5EBD
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 21:00:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4874F6F5EC1
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 21:00:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbjECTAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 15:00:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33214 "EHLO
+        id S229882AbjECTAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 15:00:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229986AbjECTAG (ORCPT
+        with ESMTP id S230029AbjECTAm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 15:00:06 -0400
-X-Greylist: delayed 138804 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 03 May 2023 12:00:05 PDT
-Received: from mout-p-103.mailbox.org (mout-p-103.mailbox.org [IPv6:2001:67c:2050:0:465::103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 692A572A5
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 12:00:04 -0700 (PDT)
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-103.mailbox.org (Postfix) with ESMTPS id 4QBR8d46lqz9sZK;
-        Wed,  3 May 2023 21:00:01 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-        t=1683140401;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=kd4WwoqlDq8W1IwkIvxY9uUCOlAljhhWlJJQqwLWlE8=;
-        b=BG/F0nPUX2yAea6wYXJ1ndute0ps9hFS8otigOWBln6cYAMxT/HBjVGozB/TPmhirB7GrD
-        Iy7tQnjqSG4FY/P/lBhYpSq5OMPjfq9N4RBn0w5yEwKi0L08Zl/Q4Ycd1FUK2IcnygM1nN
-        8ZSfv4YEtji/GC1+aABrXGOxcJGihqAZv+PIWHiFZuwyFiEnRYyx16NjjbJsy5XJK6Bzz/
-        bkcbZkk1m3wfTibQWWOQPZR7HqcCOeSA8DNEq17Oy05iHIlryEEKsmSge7ftx8eRvE2rJ8
-        EPxqX3RTTcOcnSUvV0Blia9efhczDHIew4qDqqbdLQIzWnSGbGNesJZW6znokg==
-Message-ID: <6159a755f5d13763a3dda36781d56d27c29445cd.camel@mailbox.org>
-Subject: About me and about btree_blue
-From:   liuwf <liuwf@mailbox.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     joern@purestorage.com, torvalds@linux-foundation.org
-Date:   Wed, 03 May 2023 14:59:51 -0400
-Content-Type: text/plain; charset="UTF-8"
+        Wed, 3 May 2023 15:00:42 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26ABD7690;
+        Wed,  3 May 2023 12:00:41 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1ab14cb3aaeso15705555ad.2;
+        Wed, 03 May 2023 12:00:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683140440; x=1685732440;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=TixecA9/pAM4HarsIzbsqo9aEePqi7NlMoMwpBqZ4sg=;
+        b=nj0vJNwdVVt0leIQqG7LNcDsn0HBv/2LB5bpwahmUCsC/miRMRioHYtWRmIyKRa4q7
+         /LerloBVswHzbFX9CCyUDnpxP/IQ/6PnLLqQpfWnc1NbH+CLoy/qomCuLXbQ/hm7GXbY
+         9K1llkLMVIzXH+9erLCPKYeKOCMjPHTi+/CtZTNMV7mXRuC6JsIf5ggN/rnrAz1NhNXa
+         eh05/yDdnx52+JINCk6ZeL/o57hnKkS0hVq+XSd3MGLHBk2Mi4AWCPwwxseywCc+V8EF
+         Yaorgf1eIpLSqB3Zpcj6GvY7Tq1yLUSj/1p4qXhmSy1aAY4pRffG6YTjpr/A2bnDbK8l
+         sQJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683140440; x=1685732440;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TixecA9/pAM4HarsIzbsqo9aEePqi7NlMoMwpBqZ4sg=;
+        b=TaHG4aqH+Cm/jBDGmbBFWxrdk3YZv4kNhts8Ldj6s/L39kekVmjZagdKJi3c5anOuD
+         Fy69eLqJ99M8n7IzuFOLg9F8xFliZoDRhTgR/1RDtbXevKQi9VIK+QfG7Z+gTY5abCZ0
+         6eIGB2LKsT814hkTtoV+YW+46QV954QRVbd4FOeU6H5CkASLWNXYQWLckgOTLe+nyPyz
+         dD/AoNYObQUTCYeTBixSeDz9N5zsROw2ozDoxEksM+Mtt50S2EVk43h3uMx8EbWyv7m8
+         nkom+fcIBi+pxDr10qZJ9Sto3WX5TwC77sR+jvixS7eUWgkfajKNVhIiOt2T2JdOHRk1
+         3d+Q==
+X-Gm-Message-State: AC+VfDxHGIesQO5eCdecst7EbwfRWyiu1d/oMt/6Q3M/a32ojk1GG1M4
+        q0w4+1rI6z7CK+YFhFszZ9o=
+X-Google-Smtp-Source: ACHHUZ6pUVtfnjx3yCSyP11V3DoOQqy3SF3n3ZcLqHfmDMnSaaQgXO4Z1nHM4fwjQoyk8033mvq5hQ==
+X-Received: by 2002:a17:902:b198:b0:1a1:b174:836c with SMTP id s24-20020a170902b19800b001a1b174836cmr1001919plr.16.1683140440270;
+        Wed, 03 May 2023 12:00:40 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:9390:e396:49ef:54dc])
+        by smtp.gmail.com with ESMTPSA id be12-20020a170902aa0c00b001a6a53c3b04sm21958039plb.306.2023.05.03.12.00.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 May 2023 12:00:39 -0700 (PDT)
+Date:   Wed, 3 May 2023 12:00:36 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     "Limonciello, Mario" <mlimonci@amd.com>
+Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        linux-input@vger.kernel.org,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [regression] Bug 217394 - IRQ override skipping breaks the Aya
+ Neo Air Plus 6800U keyboard buttons
+Message-ID: <ZFKvVKMesT+3NthN@google.com>
+References: <01ea5c8e-ed2f-7568-f6ed-896329e7b673@leemhuis.info>
+ <68d017d9-d815-01d4-23c1-49c0aaf5f20b@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MBO-RS-META: 4oem9ibemxog7hfng3whnq3fy6zybd8h
-X-MBO-RS-ID: 7f9a269307bee5c6c5e
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <68d017d9-d815-01d4-23c1-49c0aaf5f20b@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, May 03, 2023 at 11:11:33AM -0500, Limonciello, Mario wrote:
+> +linux-input
+> 
+> On 5/3/2023 7:58 AM, Linux regression tracking (Thorsten Leemhuis) wrote:
+> > Hi, Thorsten here, the Linux kernel's regression tracker.
+> > 
+> > I noticed a regression report in bugzilla.kernel.org. As many (most?)
+> > kernel developers don't keep an eye on it, I decided to forward it by mail.
+> > 
+> > Chuanhong Guo, apparently it's cause by a change of yours.
+> > 
+> > Note, you have to use bugzilla to reach the reporter, as I sadly[1] can
+> > not CCed them in mails like this.
+> > 
+> > Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217394 :
+> > 
+> > >   Matthew 2023-05-03 02:28:33 UTC
+> > > 
+> > > Reverting the changes found in this patch fixes the issue:
+> > > > https://lore.kernel.org/all/20220712020058.90374-1-gch981213@gmail.com/
+> > > With that patch the AT Translated Set 2 Keyboard doesn't show up with the evtest and is not usable.
+> > > 
+> > > Hardware:
+> > > 
+> > > Aya Neo Air Plus
+> > > AMD Ryzen 7 6800U
+> > See the ticket for more details.
+> > 
+> > BTW: there apparently is another IRQ override needed for a different
+> > machine. See https://bugzilla.kernel.org/show_bug.cgi?id=216804#c8 for
+> > details (ignore the comments before that, the quirk entry for that
+> > machine was merged; comment 8 and all related to it really should have a
+> > separate bug; that's also why this partly fall through the cracks here
+> > :-/ ). The user is currently trying to create a patch.
+> > 
+> Something I'm wondering about is if it's possible for i8042 to detect the
+> polarity is incorrect when it probes and
+> to try to correct it.
+> 
+> If we could do that we can probably drop 9946e39fe8d0 ("ACPI: resource: skip
+> IRQ override on AMD Zen platforms")
+> to fix this issue along with all the other quirks that have collected over
+> time on i8042 polarity issues.
+> 
 
-With several days of upgrading since btree_blue's first RFC posted in kernel
-mailling list, currently btree_blue can be observed 40% or more faster than
-the original lib/btree in random inserts/deletes, and 10x (1000%) faster than 
-rbtree when traversing a 1M keys in a tree.  
+8042 is shared between multiple platforms and is quite fragile as it is.
+If there are issues in AMD firmware and you know the polarity that is
+needed for 8042 on these platforms you should add a proper fixup for
+override. Maybe you should only skip override for IRQ 1?
 
-Basically, btree_blue under linux run 2xx ms or even 1xx ms per 1M operations,
-this rate may be prudently comparing with Google's btree, the later is single-
-thread btree(fixme) at a rate level of 1xx ~ 2xx ms per 1M operations also. 
+Thanks.
 
-I'm agreed wtih Linus's comments on my RFC, multi-thread frendly trees are 
-more important than signle-thread one in high-perf required cases. Besides, 
-I'm also afraid that btree_blue is still needed to be faster when used in some
-cases - even if those cases may not be easily replaced by multi-thread trees. 
-
-Imaging one is waiting to check-out at the gate after selected his goods, 
-there are a dozen of cashing channels in the mall - that's fine, and, even 
-though there is no one else queued in any of those cashing channels except 
-himself, a question still exists for him: how much time is used to service him
-singly ? normally we are seviced within 3 or 5 minutes, if the time is 15 
-minutes or more our shopping experience may be different - even if there are
-a dozen of cashing channels.
-
-The perf rise in my patchs are not based on a group of stamp-collectors. In 
-today's linux kernel community, it is a challenge for almost any twenty percent 
-advances, because any present codes we can see (btree, rbtree. etc.) are 
-excellent enough. In fact, the only reason for me to choose the name 
-btree_blue is that I'm quite concerned my patch's perf if it is slower than
-original one after I added several features to it, I don't think anyone will 
-be happy to accept or give a review for a mediocre patch, so I decide to give
-the temporary name to it rather than call it lib/btree's patch before post it 
-out. But I still think it is good for me to call it as btree's patches even if
-it's relatively fast and have more features, because that presents a faith - 
-every people offer his idea to make things better - the Linux spirit.
-
-Two months before I posted a patch for btrfs after I decided to give some in-
-depth studies to the file system again, which is one of my favourit.That patch 
-targets to one of two code-paths in btrfs free space sub-system - a less normal
-code-path, only run in a diffiuclt condition when the level of free space is 
-lower. I am glad that I used a simple trick to rise the path's perf more than
-200% from fstest result, but the patch has not been reviewed too. After that 
-patch I found there are several places in another code-path - the mainline 
-code-path of btrfs free space sub-system - may be given some improvments. 
-
-In fact, a known developer of btrfs has also noticed problems and offered a set
-of patchs to fix them several years ago. If I'm right, that set of patchs were
-not applied finally, and this is a bit beyond me. I searched all btrfs mailling
-list and found no info about their discussions on the thing, I guess they 
-discussed in other occasions and dicided they had no needs for that set of 
-patchs. But I still have some puzzle for the issue, and I think personally it
-maybe better if another data structure is used in those cases. so I try to get
-a btree-like thing to estimate the probability of applying in btrfs. I viewed
-lib/btree and felt only one tiny pity for it - there is lack of a linear 
-travesal in it(fixme). The good thing is that, Joern Engel's btree is elegant
-and fast, so I decided to add several features based on it. As my said in 
-previous patchs I found it is a challenge to keep the same perf and effective
-with the original one when features added, so I have to do several optimizings
-on it - that the btree's patch come from.
-
-In next days I think I need some time to add several more APIs to the patchs
-first and refine it, any opions is welcome.
-
-
+-- 
+Dmitry
