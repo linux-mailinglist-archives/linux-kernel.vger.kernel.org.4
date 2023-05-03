@@ -2,50 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 231AC6F567B
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 12:45:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F4B26F567E
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 12:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230124AbjECKpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 06:45:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50850 "EHLO
+        id S230020AbjECKqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 06:46:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbjECKpZ (ORCPT
+        with ESMTP id S229693AbjECKqi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 06:45:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBBA9527B;
-        Wed,  3 May 2023 03:45:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4525762C9F;
-        Wed,  3 May 2023 10:45:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18FABC433D2;
-        Wed,  3 May 2023 10:45:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683110722;
-        bh=jFhJJzglMovoWeUdVs32BFDrfQeh19yt3oCYgTntU+M=;
-        h=Date:From:To:Cc:Subject:From;
-        b=jZUJUBlK+itvnZkSaYHjSQiY7fg6vhjNtM/Wbx3Vn1V9kdT1+XSm6jDOg+22PPu4I
-         XM5/pVBbYU8FagDUxUmJmY3BmeU90gqq9k7YO5uRuhxt2mkJtXh0n7BChw0tj5kqJ5
-         9vVNEan2JYe9TO1U04dtmFJfUu6XzEdamagLdpbI3Cm5YCcRdpPmkkFLT3rMvFSVH1
-         DcfpunBQtO3LOPtVqE2FjtSbBoLEMdinMsQUg0NUkzPa/zgC6RNZVe/YXyCrUl4FBk
-         CDCbheTQ0qcW9FchPCp12o9T7ymVjvXXrV81wB3oakBGAjH/CRD4u6l3moMCgzb2M3
-         6TwMwZ4Wbqi3Q==
-Date:   Wed, 3 May 2023 16:15:18 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        dma <dmaengine@vger.kernel.org>
-Subject: [GIT PULL]: dmaengine updates for v6.4-rc1
-Message-ID: <ZFI7PrQHKum6Wuxf@matsya>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="vbNFPw5MNjo4YBpY"
-Content-Disposition: inline
+        Wed, 3 May 2023 06:46:38 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A14BB49DE
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 03:46:34 -0700 (PDT)
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230503104632epoutp0150c823596b7f1e231009e4f1efbb2251~bnFkmJIa41408914089epoutp01j
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 10:46:32 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230503104632epoutp0150c823596b7f1e231009e4f1efbb2251~bnFkmJIa41408914089epoutp01j
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1683110792;
+        bh=WBo+Gtt5+fa6g5qjUIPdBB+ssnPfrBNghApCsFJRoCo=;
+        h=Subject:Reply-To:From:To:CC:Date:References:From;
+        b=Ac3IemXeKwlZZUNIk93boTjrocnyFS8/ogaVnqdpWLm3yA9sKdC+Q+OxiNEh79/i+
+         mafHH06nICsPX+btFDA//YftVcdjTyP7AOCwSbpluPlro6+0hQvmmFtXTeOOOiOatF
+         tG4TC9ltqCylQP/y8XyPQcIKmEwl+9xJeYCRrEEU=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
+        20230503104631epcas2p4a09cc4d1324f05d21c1451160058db17~bnFjfm2LO1511615116epcas2p4k;
+        Wed,  3 May 2023 10:46:31 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.100]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4QBDCB3L80z4x9Pv; Wed,  3 May
+        2023 10:46:30 +0000 (GMT)
+X-AuditID: b6c32a45-465ff70000020cc1-13-64523b86678c
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        8F.87.03265.68B32546; Wed,  3 May 2023 19:46:30 +0900 (KST)
+Mime-Version: 1.0
+Subject: [PATCH] scsi: ufs: core: Return earlier if
+ ufshcd_hba_init_crypto_capabilities() fails
+Reply-To: keosung.park@samsung.com
+Sender: Keoseong Park <keosung.park@samsung.com>
+From:   Keoseong Park <keosung.park@samsung.com>
+To:     ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
+        "quic_asutoshd@quicinc.com" <quic_asutoshd@quicinc.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>
+CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20230503104630epcms2p8b82734102ffb920531e9264604086372@epcms2p8>
+Date:   Wed, 03 May 2023 19:46:30 +0900
+X-CMS-MailID: 20230503104630epcms2p8b82734102ffb920531e9264604086372
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrDJsWRmVeSWpSXmKPExsWy7bCmmW6bdVCKwYmNkhYP5m1js3j58yqb
+        xcGHnSwW0z78ZLZ4eUjTYtGNbUwWl3fNYbPovr6DzWL58X9MFgs75rJYLN16k9GB2+PyFW+P
+        CYsOMHq0nNzP4vF9fQebx8ent1g8Ju6p8+jbsorR4/MmOY/2A91MAZxR2TYZqYkpqUUKqXnJ
+        +SmZeem2St7B8c7xpmYGhrqGlhbmSgp5ibmptkouPgG6bpk5QLcqKZQl5pQChQISi4uV9O1s
+        ivJLS1IVMvKLS2yVUgtScgrMC/SKE3OLS/PS9fJSS6wMDQyMTIEKE7Izrl5bylpwlaPi1Zp3
+        rA2MXexdjJwcEgImEquv72ftYuTiEBLYwSix4PApli5GDg5eAUGJvzuEQWqEBRIl1i+YwwZi
+        CwkoSXQt3MoMETeQWDd9D5jNJqAnMeX3HUaQOSICPcwSHbeWsYIkmAXqJHbP+cMGsYxXYkb7
+        UxYIW1pi+/KtjBC2hsSPZb3MELaoxM3Vb9lh7PfH5kPViEi03jsLVSMo8eDnbqi4pETrma1Q
+        8+slWt+fYgc5QkJgAqNE47E/UIP0Ja51bARbzCvgK7H842ywOIuAqsTJ2z+gml0kDs88yQxx
+        tLzE9rdzmEEBwSygKbF+lz6IKSGgLHHkFgtEBZ9Ex+G/7DBvNWz8jZW9Y94TJghbTeLRgi2s
+        ELaMxMU555gnMCrNQoT0LCR7ZyHsXcDIvIpRLLWgODc9tdiowBAeucn5uZsYwclWy3UH4+S3
+        H/QOMTJxMB5ilOBgVhLh/VDolyLEm5JYWZValB9fVJqTWnyI0RTo44nMUqLJ+cB0n1cSb2hi
+        aWBiZmZobmRqYK4kzittezJZSCA9sSQ1OzW1ILUIpo+Jg1OqgUl88u7gwt/TeR/2RQr++PDj
+        zhx3yyXyN/32FCz228Ox5dRs5SfXivX4Qs9s9giaZjDZRV/s7KSYzDkKFcFbZsrm7TlimFd3
+        3k/G9JYBp3vG3N613VuPmlxObHt1n+VMwRcHj1cF4vLLTZYcYX1T/NW4un7RlekSk6L61K8H
+        7/f1+SHNLP+D4cn8K+YrtpoVclXutJupoLxk4Y9a5k0PXs2R9udU9chIvHFPvGjhgz3W2f+y
+        Tku4nGtI2xCVtumnq4jBth7m0Ie9NkFnfwUklPvvOqt44MaE6bp/o1/criph1Fz/KU/O747s
+        7UdnbX2vrRI8U939YJLFRX63Q0yivrmvvmwL1ZhREXtc43/b5XdKLMUZiYZazEXFiQCbR6a4
+        PwQAAA==
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230503104630epcms2p8b82734102ffb920531e9264604086372
+References: <CGME20230503104630epcms2p8b82734102ffb920531e9264604086372@epcms2p8>
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,223 +103,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The 'err' variable is used only as the result of
+ufshcd_hba_init_crypto_capabilities(), so return 'err' immediately when
+failed. If it is not an error, explicitly return 0.
 
---vbNFPw5MNjo4YBpY
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Keoseong Park <keosung.park@samsung.com>
+---
+ drivers/ufs/core/ufshcd.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-Hello Linus,
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index 9434328ba323..44328eb4158d 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -2343,18 +2343,20 @@ static inline int ufshcd_hba_capabilities(struct ufs_hba *hba)
+ 
+ 	/* Read crypto capabilities */
+ 	err = ufshcd_hba_init_crypto_capabilities(hba);
+-	if (err)
++	if (err) {
+ 		dev_err(hba->dev, "crypto setup failed\n");
++		return err;
++	}
+ 
+ 	hba->mcq_sup = FIELD_GET(MASK_MCQ_SUPPORT, hba->capabilities);
+ 	if (!hba->mcq_sup)
+-		return err;
++		return 0;
+ 
+ 	hba->mcq_capabilities = ufshcd_readl(hba, REG_MCQCAP);
+ 	hba->ext_iid_sup = FIELD_GET(MASK_EXT_IID_SUPPORT,
+ 				     hba->mcq_capabilities);
+ 
+-	return err;
++	return 0;
+ }
+ 
+ /**
+-- 
+2.17.1
 
-Here is the Pull request for dmaengine subsystem. Sorry I was busy with
-Linaro connect and travels last week so sending this and others a  bit
-later that I would prefer
-
-We have couple of controller additions, big pile of idxd support and
-driver updates as usual for this cycle.
-
-The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
-
-  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git tags/dm=
-aengine-6.4-rc1
-
-for you to fetch changes up to f2dc327131b5cbb2cbb467cec23836f2e9d4cf46:
-
-  dmaengine: idxd: add per wq PRS disable (2023-04-12 23:18:46 +0530)
-
-----------------------------------------------------------------
-dmaengine updates for v6.4
-
- New support:
- - Apple admac t8112 device support
- - StarFive JH7110 DMA controller
-
- Updates:
- - Big pile of idxd updates to support IAA 2.0 device capabilities, DSA
-   2.0 Event Log and completion record faulting features and new DSA
-   operations
- - at_xdmac supend & resume updates and driver code cleanup
- - k3-udma supend & resume support
- - k3-psil thread support for J784s4
-
-----------------------------------------------------------------
-Apurva Nandan (1):
-      dmaengine: ti: k3-psil: Add PSI-L thread support for J784s4
-
-Biju Das (2):
-      dmaengine: sh: rz-dmac: Add reset support
-      dt-bindings: dma: rz-dmac: Document clock-names and reset-names
-
-Bjorn Helgaas (3):
-      dmaengine: ioat: use PCI core macros for PCIe Capability
-      dmaengine: ioat: Drop redundant pci_enable_pcie_error_reporting()
-      dmaengine: idxd: Remove unnecessary aer.h include
-
-Christophe JAILLET (3):
-      dmaengine: imx-dma: Remove a redundant memset() call
-      dmaengine: mv_xor_v2: Fix an error code.
-      dmaengine: mv_xor_v2: Use some clk_ helper functions to simplify code
-
-Claudiu Beznea (7):
-      dmaengine: at_xdmac: disable/enable clock directly on suspend/resume
-      dmaengine: at_xdmac: fix imbalanced runtime PM reference counter
-      dmaengine: at_xdmac: do not resume channels paused by consumers
-      dmaengine: at_xdmac: restore the content of grws register
-      dmaengine: at_xdmac: do not enable all cyclic channels
-      dmaengine: at_xdmac: add a warning message regarding for unpaused cha=
-nnels
-      dmaengine: at_xdmac: align declaration of ret with the rest of variab=
-les
-
-Dave Jiang (17):
-      dmaengine: idxd: reformat swerror output to standard Linux bitmap out=
-put
-      dmaengine: idxd: expose IAA CAP register via sysfs knob
-      dmaengine: idxd: make misc interrupt one shot
-      dmaengine: idxd: add event log size sysfs attribute
-      dmaengine: idxd: setup event log configuration
-      dmaengine: idxd: add interrupt handling for event log
-      dmanegine: idxd: add debugfs for event log dump
-      dmaengine: idxd: add per DSA wq workqueue for processing cr faults
-      dmaengine: idxd: create kmem cache for event log fault items
-      dmaengine: idxd: process user page faults for completion record
-      dmaengine: idxd: add descs_completed field for completion record
-      dmaengine: idxd: process batch descriptor completion record faults
-      dmaengine: idxd: add per file user counters for completion record fau=
-lts
-      dmaengine: idxd: add a device to represent the file opened
-      dmaengine: idxd: expose fault counters to sysfs
-      dmaengine: idxd: add pid to exported sysfs attribute for opened file
-      dmaengine: idxd: add per wq PRS disable
-
-Dmitry Baryshkov (1):
-      dma: gpi: remove spurious unlock in gpi_ch_init
-
-Fenghua Yu (4):
-      dmaengine: idxd: Add descriptor definitions for 16 bytes of pattern i=
-n memory fill operation
-      dmaengine: idxd: Add descriptor definitions for DIX generate operation
-      dmaengine: idxd: Add descriptor definitions for translation fetch ope=
-ration
-      dmaengine: idxd: add idxd_copy_cr() to copy user completion record du=
-ring page fault handling
-
-Geert Uytterhoeven (1):
-      dmaengine: sh: rz-dmac: Remove unused rz_dmac_chan.*_word_size
-
-Harini Katakam (1):
-      dmaengine: zynqmp_dma: Sync DMA and coherent masks
-
-Janne Grunau (1):
-      dt-bindings: dma: apple,admac: Add t8112-admac compatible
-
-Konrad Dybcio (1):
-      dt-bindings: dmaengine: qcom: gpi: Add QCM2290 GPI DMA
-
-Mark Salter (1):
-      dmaengine: tegra: explicitly select DMA_VIRTUAL_CHANNELS
-
-Rob Herring (4):
-      dmaengine: Use of_property_present() for testing DT property presence
-      dmaengine: bestcomm: Use of_address_to_resource()
-      dmaengine: qcom_hidma: Add explicit platform_device.h and of_device.h=
- includes
-      dt-bindings: dma: Drop unneeded quotes
-
-Shunsuke Mie (2):
-      dmaengine: dw-edma: Fix to change for continuous transfer
-      dmaengine: dw-edma: Fix to enable to issue dma request on DMA process=
-ing
-
-Tom Rix (3):
-      dmaengine: tegra-apb: remove unused tdma_read function
-      dmaengine: ti: edma: remove unused edma_and function
-      dmaengine: dw-edma: remove unused readq_ch and writeq_ch functions
-
-Vignesh Raghavendra (2):
-      dmaengine: ti: k3-udma: Add system suspend/resume support
-      dmaengine: ti: k3-udma: Workaround errata i2234
-
-Walker Chen (3):
-      dmaengine: dw-axi-dmac: Add support for StarFive JH7110 DMA
-      dmaengine: dw-axi-dmac: Increase polling time to DMA transmission com=
-pletion status
-      dt-bindings: dma: snps,dw-axi-dmac: constrain the items of resets for=
- JH7110 dma
-
- Documentation/ABI/stable/sysfs-driver-dma-idxd     |  51 +++
- .../devicetree/bindings/dma/apple,admac.yaml       |   1 +
- .../devicetree/bindings/dma/qcom,gpi.yaml          |   1 +
- .../devicetree/bindings/dma/renesas,rz-dmac.yaml   |  14 +
- .../devicetree/bindings/dma/snps,dw-axi-dmac.yaml  |  23 +-
- .../devicetree/bindings/dma/ti/k3-udma.yaml        |   2 +-
- .../bindings/dma/xilinx/xlnx,zynqmp-dma-1.0.yaml   |   2 +-
- .../bindings/dma/xilinx/xlnx,zynqmp-dpdma.yaml     |   2 +-
- drivers/dma/Kconfig                                |   1 +
- drivers/dma/at_xdmac.c                             | 107 +++++--
- drivers/dma/bestcomm/sram.c                        |  19 +-
- drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c     |  40 ++-
- drivers/dma/dw-axi-dmac/dw-axi-dmac.h              |   1 +
- drivers/dma/dw-edma/dw-edma-core.c                 |  27 +-
- drivers/dma/dw-edma/dw-edma-v0-core.c              |  56 ----
- drivers/dma/idxd/Makefile                          |   2 +-
- drivers/dma/idxd/cdev.c                            | 334 +++++++++++++++++=
---
- drivers/dma/idxd/debugfs.c                         | 138 ++++++++
- drivers/dma/idxd/device.c                          | 113 ++++++-
- drivers/dma/idxd/idxd.h                            |  67 ++++
- drivers/dma/idxd/init.c                            |  60 +++-
- drivers/dma/idxd/irq.c                             | 210 ++++++++++--
- drivers/dma/idxd/registers.h                       | 126 +++++++-
- drivers/dma/idxd/sysfs.c                           | 146 ++++++++-
- drivers/dma/imx-dma.c                              |   1 -
- drivers/dma/ioat/init.c                            |  12 +-
- drivers/dma/ioat/registers.h                       |   7 -
- drivers/dma/mv_xor_v2.c                            |  35 +-
- drivers/dma/of-dma.c                               |   2 +-
- drivers/dma/qcom/gpi.c                             |   1 -
- drivers/dma/qcom/hidma_mgmt.c                      |   2 +
- drivers/dma/sh/rz-dmac.c                           |  18 +-
- drivers/dma/tegra20-apb-dma.c                      |   5 -
- drivers/dma/ti/Makefile                            |   3 +-
- drivers/dma/ti/edma.c                              |   8 -
- drivers/dma/ti/k3-psil-j784s4.c                    | 354 +++++++++++++++++=
-++++
- drivers/dma/ti/k3-psil-priv.h                      |   1 +
- drivers/dma/ti/k3-psil.c                           |   1 +
- drivers/dma/ti/k3-udma.c                           |  75 ++++-
- drivers/dma/xilinx/zynqmp_dma.c                    |   6 +-
- include/linux/dma/ti-cppi5.h                       |   1 +
- include/uapi/linux/idxd.h                          |  48 ++-
- 42 files changed, 1863 insertions(+), 260 deletions(-)
- create mode 100644 drivers/dma/idxd/debugfs.c
- create mode 100644 drivers/dma/ti/k3-psil-j784s4.c
-
---=20
-~Vinod
-
---vbNFPw5MNjo4YBpY
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEE+vs47OPLdNbVcHzyfBQHDyUjg0cFAmRSOz4ACgkQfBQHDyUj
-g0dI5BAArCTgR/HDyVtV41nuYlKP8IEx5FgoKUE8Y/M1PCeL3fTn+gSkCTe3OAbA
-sqJWUGBnd3MvxqSE0VCf9Yj612Y7YtQi3cxxC9F5BfJX3NBdKLJAYUyYUJfgvyNl
-FhubNp1AUbzWZ7czf0zoEp2skt49CYQuYHixkF2uTysAgiDV89P9Jpz7QEYO6Vsh
-ClUiLbx95JdPhxxenoJ4F++E20KspipLGz737Exf2NROMLNc5P6b+ZAW7Btbb6eR
-a8sjZ+20pjN/LkjwSX68PB8iMz2PD1z7FfnhgfJrds2I/a47mISdzl6Vi9yQjIpV
-59q7z5SJHBKsdbC0+c6fLJYz0/oCqOrnlIoFtkJ9PeRqcyysGbvcCvK85M2JF/qR
-2cgyD6sTYbxhv0hDT0jtLvDuKyS2ekAJXIM7cVQsHKKHm8jSYGZ+NWdNA5ZCx6+R
-WZ8VNYcmlkPUz0U0u7bA71QoSwihGCMi8TtYRWnESk+yUWzz95qYs7xQQkIfduhe
-je5twu3EDWfaVLGMwvN4GYQYDznIzZsmAwEvZUERqdvoFG89CvIAeQKUvjZIDQv0
-WJNBvKWUkKex7iefHb8cwGJP1hN0eFTYOl1S6y4ETK7fKTuj2qCfx5hrM8vYLoxd
-BWQbfn0HYWjzuzUnhfsddPcQimZfLZpmhJ2KQItTuaf8/fEWt2U=
-=CtCu
------END PGP SIGNATURE-----
-
---vbNFPw5MNjo4YBpY--
