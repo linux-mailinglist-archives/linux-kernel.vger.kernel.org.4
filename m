@@ -2,146 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D03E6F5915
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 15:28:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38DE76F5916
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 15:29:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230008AbjECN16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 09:27:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48628 "EHLO
+        id S230061AbjECN3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 09:29:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230157AbjECN1x (ORCPT
+        with ESMTP id S229587AbjECN3w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 09:27:53 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F35AC187
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 06:27:48 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-272-JMRr_rtRNKmaWdX7u8fSMw-1; Wed, 03 May 2023 14:27:46 +0100
-X-MC-Unique: JMRr_rtRNKmaWdX7u8fSMw-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 3 May
- 2023 14:27:44 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Wed, 3 May 2023 14:27:44 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Adrien Delorme' <delorme.ade@outlook.com>,
-        Pavel Begunkov <asml.silence@gmail.com>
-CC:     "axboe@kernel.dk" <axboe@kernel.dk>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "dccp@vger.kernel.org" <dccp@vger.kernel.org>,
-        "dsahern@kernel.org" <dsahern@kernel.org>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
-        "kuba@kernel.org" <kuba@kernel.org>, "leit@fb.com" <leit@fb.com>,
-        "leitao@debian.org" <leitao@debian.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "marcelo.leitner@gmail.com" <marcelo.leitner@gmail.com>,
-        "matthieu.baerts@tessares.net" <matthieu.baerts@tessares.net>,
-        "mptcp@lists.linux.dev" <mptcp@lists.linux.dev>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "willemb@google.com" <willemb@google.com>,
-        "willemdebruijn.kernel@gmail.com" <willemdebruijn.kernel@gmail.com>
-Subject: RE: [PATCH 0/5] add initial io_uring_cmd support for sockets
-Thread-Topic: [PATCH 0/5] add initial io_uring_cmd support for sockets
-Thread-Index: AQHZfPcbeWikE8uGs0CEhT1cqCE61a9Ido9ggAASYTA=
-Date:   Wed, 3 May 2023 13:27:44 +0000
-Message-ID: <9233101ff5794556a0873832ebad4445@AcuMS.aculab.com>
-References: <GV1P193MB200533CC9A694C4066F4807CEA6F9@GV1P193MB2005.EURP193.PROD.OUTLOOK.COM>
- <49866ae2-db19-083c-6498-e7d9d62e8267@gmail.com>
- <GV1P193MB2005214F383309B8466C6361EA6C9@GV1P193MB2005.EURP193.PROD.OUTLOOK.COM>
-In-Reply-To: <GV1P193MB2005214F383309B8466C6361EA6C9@GV1P193MB2005.EURP193.PROD.OUTLOOK.COM>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 3 May 2023 09:29:52 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D017D102
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 06:29:49 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f315712406so24642575e9.0
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 06:29:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1683120588; x=1685712588;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=deSB4fIzPnCGZiJ3i9xLJtD0CU45qpjA+sWGoKWKUYk=;
+        b=P6X3TRMHoG+rkJdvTekJ3DvRzhOlOd98RZFcaLQwc2yMSDrcW8khyUfkvZLzjeH5jT
+         kikNDJRwJ3d0QFX9rSJPkDnPT2fLprt6K0YVTH4QC0Tjq3HMviVb5Qye1mdaNePJ7mFy
+         y9Hfy6toqXloAMZk5M6VD4C+7P1zN5pT5BeIvaAEK4rWjCsX8/Sk/BlLOoux0FEtduHo
+         ns76MMO9x9nlsoQFWbRyaUEz8sJZRez9me2R28r9wA3OAqVuWdCEI9Xt3mZ3xEiu2/89
+         m7DAzTQHKnYFRHdGuyz8OpEniwopSged0tFexCur05n+NxDzDx1Y4iMUI7EbpPRnDbqK
+         h1GQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683120588; x=1685712588;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=deSB4fIzPnCGZiJ3i9xLJtD0CU45qpjA+sWGoKWKUYk=;
+        b=BtXYOtQaWWTB+oVpJywPfB/zn/mE3VUIPhxnAVdCQYuwlJCDOYxjuXAyZTWtPNW+Am
+         BGnl6RhFA2cQBEmHZul56NLYnGVyhSfIq1oBctujszzW5ghL2A3vDQDN2KWzSJpNwcQY
+         Npw0Cvx/UoY7o5mTH6oZ6PAL5602QMJIk8k6EYP9xjIp3X0SP1V4ey8mGQQb0qrbi+8R
+         BwcgrKw5R8zi6V9zKLMc8RsGQyv3DN69MiXT1LfM13DywkbpkD/4Kx4Vn7xcvE+qM7Rr
+         RzzNkRiXw7B/4amdBxD23lXTeggFj8hiKgj+LXwqrxs/bihWP41zAj5kVIAdHq7pMU1v
+         aMwQ==
+X-Gm-Message-State: AC+VfDyJQZTt2es/7E27OW/lL9QieZm1pAH+9BGdWDht4zDinD5b1xRo
+        ZAEsSZEc9Nd6g8eB1Fg6dDE3bQ==
+X-Google-Smtp-Source: ACHHUZ5JYxXSGYVXBWKXLWOgyMLBzj4sVENusZvcV6ir59PZM/QBkq26fkAqKyxQIe+hosR55uRuOQ==
+X-Received: by 2002:adf:e649:0:b0:306:2aea:466a with SMTP id b9-20020adfe649000000b003062aea466amr37625wrn.28.1683120588314;
+        Wed, 03 May 2023 06:29:48 -0700 (PDT)
+Received: from airbuntu (host109-154-46-114.range109-154.btcentralplus.com. [109.154.46.114])
+        by smtp.gmail.com with ESMTPSA id j3-20020a5d6183000000b002faaa9a1721sm33946616wru.58.2023.05.03.06.29.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 May 2023 06:29:47 -0700 (PDT)
+Date:   Wed, 3 May 2023 14:29:43 +0100
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     David Dai <davidai@google.com>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Qais Yousef <qyousef@google.com>,
+        Quentin Perret <qperret@google.com>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v1] sched/uclamp: Introduce
+ SCHED_FLAG_RESET_UCLAMP_ON_FORK flag
+Message-ID: <20230503132943.sz22x4zlln4xagjj@airbuntu>
+References: <20230416213406.2966521-1-davidai@google.com>
+ <20230419175414.ycnlaperdkjxgypx@airbuntu>
+ <20230428115755.7uklfd4fmpoee4dp@airbuntu>
+ <CAGETcx9xjLzQ2b3FraPsmG=w6=4pYU-tzW-na0Fd5qyrU+C+Yw@mail.gmail.com>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAGETcx9xjLzQ2b3FraPsmG=w6=4pYU-tzW-na0Fd5qyrU+C+Yw@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogQWRyaWVuIERlbG9ybWUNCj4gU2VudDogMDMgTWF5IDIwMjMgMTQ6MTENCj4gDQo+IEZy
-b20gQWRyaWVuIERlbG9ybWUNCj4gPiBGcm9twqA6IFBhdmVsIEJlZ3Vua292DQo+ID4gU2VudCA6
-IDIgTWF5IDIwMjMgMTU6MDQNCj4gPiBPbiA1LzIvMjMgMTA6MjEsIEFkcmllbiBEZWxvcm1lIHdy
-b3RlOg0KPiA+ID4gIEZyb20gQWRyaWVuIERlbG9ybWUNCj4gPiA+DQo+ID4gPj4gRnJvbTogRGF2
-aWQgQWhlcm4NCj4gPiA+PiBTZW50OiAxMiBBcHJpbCAyMDIzIDc6MzkNCj4gPiA+Pj4gU2VudDog
-MTEgQXByaWwgMjAyMyAxNjoyOA0KPiA+ID4+IC4uLi4NCj4gPiA+PiBPbmUgcHJvYmxlbSBpcyB0
-aGF0IG5vdCBhbGwgc29ja29wdCBjYWxscyBwYXNzIHRoZSBjb3JyZWN0IGxlbmd0aC4NCj4gPiA+
-PiBBbmQgc29tZSBvZiB0aGVtIGNhbiBoYXZlIHZlcnkgbG9uZyBidWZmZXJzLg0KPiA+ID4+IE5v
-dCB0byBtZW50aW9uIHRoZSBvbmVzIHRoYXQgYXJlIHJlYWQtbW9kaWZ5LXdyaXRlLg0KPiA+ID4+
-DQo+ID4gPj4gQSBwbGF1c2libGUgc29sdXRpb24gaXMgdG8gcGFzcyBhICdmYXQgcG9pbnRlcicg
-dGhhdCBjb250YWlucyBzb21lLA0KPiA+ID4+IG9yIGFsbCwgb2Y6DQo+ID4gPj4gICAgICAgIC0g
-QSB1c2Vyc3BhY2UgYnVmZmVyIHBvaW50ZXIuDQo+ID4gPj4gICAgICAgIC0gQSBrZXJuZWwgYnVm
-ZmVyIHBvaW50ZXIuDQo+ID4gPj4gICAgICAgIC0gVGhlIGxlbmd0aCBzdXBwbGllZCBieSB0aGUg
-dXNlci4NCj4gPiA+PiAgICAgICAgLSBUaGUgbGVuZ3RoIG9mIHRoZSBrZXJuZWwgYnVmZmVyLg0K
-PiA+ID4+ICAgICAgICA9IFRoZSBudW1iZXIgb2YgYnl0ZXMgdG8gY29weSBvbiBjb21wbGV0aW9u
-Lg0KPiA+ID4+IEZvciBzaW1wbGUgdXNlciByZXF1ZXN0cyB0aGUgc3lzY2FsbCBlbnRyeS9leGl0
-IGNvZGUgd291bGQgY29weSB0aGUNCj4gPiA+PiBkYXRhIHRvIGEgc2hvcnQgb24tc3RhY2sgYnVm
-ZmVyLg0KPiA+ID4+IEtlcm5lbCB1c2VycyBqdXN0IHBhc3MgdGhlIGtlcm5lbCBhZGRyZXNzLg0K
-PiA+ID4+IE9kZCByZXF1ZXN0cyBjYW4ganVzdCB1c2UgdGhlIHVzZXIgcG9pbnRlci4NCj4gPiA+
-Pg0KPiA+ID4+IFByb2JhYmx5IG5lZWRzIGFjY2Vzc29ycyB0aGF0IGFkZCBpbiBhbiBvZmZzZXQu
-DQo+ID4gPj4NCj4gPiA+PiBJdCBtaWdodCBhbHNvIGJlIHRoYXQgc29tZSBvZiB0aGUgcHJvYmxl
-bWF0aWMgc29ja29wdCB3ZXJlIGluIGRlY25ldA0KPiA+ID4+IC0gbm93IHJlbW92ZWQuDQo+ID4g
-Pg0KPiA+ID4gSGVsbG8gZXZlcnlvbmUsDQo+ID4gPg0KPiA+ID4gSSdtIGN1cnJlbnRseSB3b3Jr
-aW5nIG9uIGFuIGltcGxlbWVudGF0aW9uIG9mIHtnZXQsc2V0fSBzb2Nrb3B0Lg0KPiA+ID4gU2lu
-Y2UgdGhpcyB0aHJlYWQgaXMgYWxyZWFkeSB0YWxraW5nIGFib3V0IGl0LCBJIGhvcGUgdGhhdCBJ
-IHJlcGx5aW5nIGF0IHRoZQ0KPiA+IGNvcnJlY3QgcGxhY2UuDQo+ID4NCj4gPiBIaSBBZHJpZW4s
-IEkgYmVsaWV2ZSBCcmVubyBpcyB3b3JraW5nIG9uIHNldC9nZXRzb2Nrb3B0IGFzIHdlbGwgYW5k
-IGhhZA0KPiA+IHNpbWlsYXIgcGF0Y2hlcyBmb3IgYXdoaWxlLCBidXQgdGhhdCB3b3VsZCBuZWVk
-IGZvciBzb21lIHByb2JsZW1zIHRvIGJlDQo+ID4gc29sdmVkIGZpcnN0LCBlLmcuIHRyeSBhbmQg
-ZGVjaWRlIHdoZXRoZXIgaXQgY29waWVzIHRvIGEgcHRyIGFzIHRoZSBzeXNjYWxsDQo+ID4gdmVy
-c2lvbnMgb3Igd291bGQgZ2V0L3JldHVybiBvcHR2YWwgZGlyZWN0bHkgaW4gc3FlL2NxZS4gQW5k
-IGFsc28gd2hlcmUgdG8NCj4gPiBzdG9yZSBiaXRzIHRoYXQgeW91IHBhc3MgaW4gc3RydWN0IGFy
-Z3Nfc2V0c29ja29wdF91cmluZywgYW5kIHdoZXRoZXIgdG8gcmVseQ0KPiA+IG9uIFNRRTEyOCBv
-ciBub3QuDQo+ID4NCj4gDQo+IEhlbGxvIFBhdmVsLA0KPiBUaGF0IGlzIGdvb2QgdG8gaGVhci4g
-SWYgcG9zc2libGUgSSB3b3VsZCBsaWtlIHRvIHByb3ZpZGUgc29tZSBoZWxwLg0KPiBJIGxvb2tl
-ZCBhdCB0aGUgZ2V0c29ja29wdCBpbXBsZW1lbnRhdGlvbi4gRnJvbSB3aGF0IEknbSBzZWVpbmcs
-IEkgYmVsaWV2ZSB0aGF0IGl0IHdvdWxkIGJlIGVhc2llciB0bw0KPiBjb3BpZXMgdG8gYSBwdHIg
-YXMgdGhlIHN5c2NhbGwuDQo+IFRoZSBsZW5ndGggb2YgdGhlIG91dHB1dCBpcyB1c3VhbGx5IDQg
-Ynl0ZXMgKHNvbWV0aW1lcyBsZXNzKSBidXQgaW4gYSBsb3Qgb2YgY2FzZXMsIHRoaXMgbGVuZ3Ro
-IGlzDQo+IHZhcmlhYmxlLiBTb21ldGltZSBpdCBjYW4gZXZlbiBiZSBiaWdnZXIgdGhhdCB0aGUg
-U1FFMTI4IHJpbmcuDQo+IA0KPiBIZXJlIGlzIGEgbm9uLWV4aGF1c3RpdmUgbGlzdCBvZiB0aG9z
-ZSBjYXNlcyA6DQo+IC9uZXQvaXB2NC90Y3AuYyA6IGludCBkb190Y3BfZ2V0c29ja29wdCguLi4p
-DQo+ICAgLSBUQ1BfSU5GTyA6IHVwIHRvIDI0MCBieXRlcw0KPiAgIC0gVENQX0NDX0lORk8gYW5k
-IFRDUF9SRVBBSVJfV0lORE9XIDogdXAgdG8gMjAgYnl0ZXMNCj4gICAtIFRDUF9DT05HRVNUSU9O
-IGFuZCBUQ1BfVUxQIDogdXAgdG8gMTYgYnl0ZXMNCj4gICAtIFRDUF9aRVJPQ1BPWV9SRUNFSVZF
-IDogdXAgdG8gNjQgYnl0ZXMNCj4gL25ldC9hdG0vY29tbXVuLmMgOiBpbnQgdmNjX2dldHNvY2tv
-cHQoLi4uKQ0KPiAgIC0gU09fQVRNUU9TIDogdXAgdG8gODggYnl0ZXMNCj4gICAtIFNPX0FUTVBW
-QyA6IHVwIHRvIDE2IGJ5dGVzDQo+IC9uZXQvaXB2NC9pb19zb2NrZ2x1ZS5jIDogaW50IGRvX2lw
-X2dldHNvY2tvcHQoLi4uKQ0KPiAgIC0gTUNBU1RfTVNGSUxURVIgOiB1cCB0byAxNDQgYnl0ZXMN
-Cj4gICAtIElQX01TRklMVEVSIDogMTYgYnl0ZXMgbWluaW11bQ0KPiANCj4gSSB3aWxsIGxvb2sg
-aW50byBzZXRzb2Nrb3B0IGJ1dCBJIGJlbGlldmUgaXQgbWlnaHQgYmUgdGhlIHNhbWUuDQo+IElm
-IG5lZWRlZCBJIGNhbiBhbHNvIGNvbXBsZXRlIHRoaXMgbGlzdC4NCj4gSG93ZXZlciB0aGVyZSBh
-cmUgc29tZSBjYXNlcyB3aGVyZSBpdCBpcyBoYXJkIHRvIGRldGVybWluYXRlIGEgbWF4aW11bSBh
-bW91bnQgb2YgYnl0ZXMgaW4gYWR2YW5jZS4NCg0KQWxzbyBsb29rIGF0IFNDVFAgLSBpdCBoYXMg
-c29tZSB2ZXJ5IGxvbmcgYnVmZmVycy4NCkFsbW9zdCBhbnkgY29kZSB0aGF0IHVzZXMgU0NUUCBu
-ZWVkcyB0byB1c2UgdGhlIFNDVFBfU1RBVFVTDQpyZXF1ZXN0IHRvIGdldCB0aGUgbmVnb3RpYXRl
-ZCBudW1iZXIgb2YgZGF0YSBzdHJlYW1zDQoodGhhdCBvbmUgaXMgcmVsYXRpdmVseSBzaG9ydCku
-DQpJSVJDIHRoZXJlIGFyZSBhbHNvIGdldHNvY2tvcHQoKSB0aGF0IGFyZSByZWFkL21vZGlmeS93
-cml0ZSENCg0KVGhlcmUgd2lsbCBhbHNvIGJlIHVzZXIgY29kZSB0aGF0IHN1cHBsaWVzIGEgdmVy
-eSBsb25nIGJ1ZmZlcg0KKHRvbyBsb25nIHRvIGFsbG9jYXRlIGluIGtlcm5lbCkgZm9yIHNvbWUg
-dmFyaWFibGUgbGVuZ3RoIHJlcXVlc3RzLg0KDQpTbyB0aGUgZ2VuZXJpYyBzeXN0ZW0gY2FsbCBj
-b2RlIGNhbiBhbGxvY2F0ZSBhIHNob3J0IChlZyBvbi1zdGFjaykNCmJ1ZmZlciBmb3Igc2hvcnQg
-cmVxdWVzdHMgYW5kIHRoZW4gcGFzcyBib3RoIHRoZSB1c2VyIGFuZCBrZXJuZWwNCmFkZHJlc3Nl
-cyAoYW5kIGxlbmd0aHMpIHRocm91Z2ggdG8gdGhlIHByb3RvY29sIGZ1bmN0aW9ucy4NCkFueXRo
-aW5nIHRoYXQgbmVlZHMgYSBiaWcgYnVmZmVyIGNhbiBkaXJlY3RseSBjb3B5IHRvL2Zyb20NCmFu
-ZCB1c2VyIGJ1ZmZlcnMsIGtlcm5lbCBjYWxsZXJzIHdvdWxkIG5lZWQgdG8gcGFzcyBhIGJpZyBl
-bm91Z2gNCmJ1ZmZlci4NCg0KQnV0IHRoZSBjb2RlIGZvciBzbWFsbCBidWZmZXJzIHdvdWxkIGJl
-IG11Y2ggc2ltcGxpZmllZCBmb3INCmJvdGgga2VybmVsIGFuZCB1c2VyIGFjY2Vzcy4NCg0KCURh
-dmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3Vu
-dCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3
-Mzg2IChXYWxlcykNCg==
+On 04/28/23 11:12, Saravana Kannan wrote:
+> On Fri, Apr 28, 2023 at 4:57 AM Qais Yousef <qyousef@layalina.io> wrote:
+> >
+> > On 04/19/23 18:54, Qais Yousef wrote:
+> >
+> > [...]
+> >
+> > > I was considering to have something a bit more generic that allows selecting
+> > > which attributes to reset.
+> > >
+> > > For example a syscall with SCHED_FLAG_RESET_ON_FORK_SEL combined with
+> > > SCHED_FLAG_UCLAMP_MIN/MAX will only reset those. This should make it extensible
+> > > if we have other similar use cases in the future. The downside it *might*
+> > > require to be done in a separate syscall to the one that sets these parameter.
+> > > But it should be done once.
+> > >
+> > > Maybe there's a better interface, but I think it makes sense to do it in a way
+> > > that we won't have to do this again. Would be good to hear from maintainers
+> > > first before you take my word for it ;-)
+> >
+> > Actually I think we can do a better and simpler generic interface. We don't
+> > need a new flag. We can just add a new parameter for what to reset on fork.
+> > When this value is 0 (which it should be by default), it means reset
+> > everything.
+> 
+> Isn't he default NOT to reset everything?
 
+The default when the RESET_ON_FORK flag is set. This field will not be used
+otherwise. Like what happens for the other params.
+
+> 
+> > // pseudo code
+> >
+> > #define RESET_ON_FORK_ALL       0
+> > #define RESET_ON_FORK_POLICY    BIT(1) // implies resetting priority
+> > #define RESET_ON_FORK_PRIORITY  BIT(2)
+> > #define RESET_ON_FORK_UCLAMP    BIT(3)
+> >
+> > struct sched_attr {
+> >         ...
+> >         __u64 sched_reset_on_fork_flags;
+> > };
+> >
+> 
+> Also, honestly I think this is over designing for a hypothetical. We
+
+latency_nice is coming next and most likely to require something similar. It's
+not hypothetical nor over designing. I think it's worthwhile spending time to
+plan for the future. More interfaces are confusing to the end users. And glibc
+already complained about evolution of sched_setattr, that's why we don't have
+a wrapper there yet (beside none of us pushed that hard to resolve the concerns
+due to lack of bandwidth).
+
+https://public-inbox.org/libc-alpha/87va826rsb.fsf@mid.deneb.enyo.de/
+
+(this thread reminded me linux-api must be CCed)
+
+And there has been various discussions of the need of higher level
+wrappers/libraries that exposes simpler interface to app developers. So I'm
+actually expecting this to repeat. I think that was at LPC by Len Brown. I can
+find this thread on libc mailing list.
+
+https://public-inbox.org/libc-alpha/CAMe9rOpUh1pjfEUqf_hNxce8ZX=4mg6W=n+BbdZSNFHLi7wtkw@mail.gmail.com/
+
+These QoS hints might imply manipulating nice values and I can see ending up
+with a similar situation where we need to reset nice on fork without resetting
+other params.
+
+Generally I don't think we should restrict users to self-managed model.
+A delegated model does make sense, and the latter implies the need for finer
+control on what to reset.
+
+There's rtkit by the way which already an example of a delegating model to
+enable creating RT tasks by non privileged users.
+
+Should rtkit force resetting uclamp when on fork? I think it's a grey area and
+I learn towards it shouldn't.
+
+> have approximately 53 unused bits. By the time we run out of those,
+> we'd have added at least 20-50 more fields. At that point, we can
+> always add a flags2 field if we need it. I like David's patch as is --
+> it's clear and simple. Add a flag for explicitly what we are trying to
+> do and extend as needed.
+
+Fair enough. As I said if the maintainers are okay with current proposal, no
+objection from my side. Based on my experience I didn't expect them to be. And
+I do think a generic solution is not really complicated and is the better
+option. You can consider this as a backup plan ;-)
+
+
+Cheers
+
+--
+Qais Yousef
