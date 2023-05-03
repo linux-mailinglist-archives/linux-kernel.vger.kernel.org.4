@@ -2,108 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FD436F504B
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 08:37:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E89276F504F
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 08:44:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbjECGhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 02:37:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44442 "EHLO
+        id S229684AbjECGo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 02:44:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjECGhn (ORCPT
+        with ESMTP id S229555AbjECGoy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 02:37:43 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06086B8;
-        Tue,  2 May 2023 23:37:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683095862; x=1714631862;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=igBS5JYjxm12TUIwYix1XFx53k9IZdzxu0ykqR6Gpfk=;
-  b=Zb6ACV6P0SlYwB+eM7BFG44wIOMArSSB9mVDE5J021JIZkdHNu+K6VZd
-   WlH18sb5lZTRGd2QoawGRQyVJ+16IcspS1TmVlETl9lT8Mp7Hx/eZnXS2
-   haWD8oj8c/wPzQx1KxlGHPzENGei+/AY469LtJh1ZAMAUBuhPPOLYCkrk
-   f7fMZ51wbrJBtgmPe8iIhLkgIx78OiouUSGtHN85xJ5mFrTG9bGGeKp63
-   78aHMsBZPUMe8DThWvFh/vWy/ab8Qs4qxntyq9ntD9CLTCPp8/Q5Kkcyx
-   wVIg4PQyE5nr10ywRw1pDHVyNwg17wH5AiQe4gLf5lNPLX1rTo74Z7AmS
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="348623712"
-X-IronPort-AV: E=Sophos;i="5.99,246,1677571200"; 
-   d="scan'208";a="348623712"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2023 23:37:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="673962607"
-X-IronPort-AV: E=Sophos;i="5.99,246,1677571200"; 
-   d="scan'208";a="673962607"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.127]) ([10.239.159.127])
-  by orsmga006.jf.intel.com with ESMTP; 02 May 2023 23:37:36 -0700
-Message-ID: <9fb1c0dd-ea78-a3f7-9eac-3154f5d08ad5@linux.intel.com>
-Date:   Wed, 3 May 2023 14:37:16 +0800
+        Wed, 3 May 2023 02:44:54 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF9882684
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 23:44:51 -0700 (PDT)
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 4FE933F447
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 06:44:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1683096290;
+        bh=CbwPmz2P7xN6zL203S8qJj89Z+3qclxrXH5+1gyHu6M=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=RP4Hj07Q+h+6qwaOeQjcOHQ9v0gucSGQI4DwhYMtYrYcXieBjmT0ACxu26i5KzM0m
+         XgWdHPCateKotvoDWrIUUrBkWiPfhlwN/cUgBA6YUxK8EPS1wGVe9nmaQH+rRzY9+5
+         8ZJI3kkB83xTvvW9hwY9grTUY8EMdV6y+3xUviw4/A4LB+BaLiYgRv4lsMn6oo+4fm
+         50CDcHOb2TpQnY2vjnUZUW57RjYEIqXCW8HzVQ+dDtzbrAIPZk9jb58+Sm2oYL8hVk
+         kR1/O/+AFuiniDJqhY4tSOVscOhSvMgfECud5qJEwrw/4+y64wDrj/JMDVv8wdvDdQ
+         ivFNk3oAWjmdA==
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-95376348868so574665966b.2
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 23:44:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683096290; x=1685688290;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CbwPmz2P7xN6zL203S8qJj89Z+3qclxrXH5+1gyHu6M=;
+        b=PaeMkzs+wfBqCjm+c4MBCVLVzEK+49tE02nvZWOWqu60kQvKKfhOXFSQyYKr/azVSb
+         bufeuKxNfTaXqpTLFlJUsgu/DcWk43qJ6UlNuBKlQhhyw4gkN21VdXu8y2zD9vVrVUyW
+         ywSuv26Sw0yA+enlQKR7ZYIRAIWGXCLhf7TXytJ3btWZREF63g1TtTw6/klIhihl/N2b
+         LZfGL+0wCjJMcYkGpjJCE6xS1qf5VhHrJFyQ0ItFknLrIMe/MLiCrWvWN2B4i/lpZ/dk
+         wZO0/Fs0QJi0Krtk+tDByru+QHieOni2HOxqwE3UdPwisiwTuIdHFjijX9yXGhj5rwD3
+         SM0Q==
+X-Gm-Message-State: AC+VfDzVnVknVXDWVU+3zRfVZeBH3eHsAbzaYc+IRc9uEfA5X9QUc9y7
+        /5o3262Scq9OnnmO0D5fXUgBeBn8MNGAqZ6fJuaqKQ1Hgr3mabKERT3qo+0qxq9Be8WpTyOnjm3
+        Xyt75KZ8PBAm+Iwjx1s8zlKef9NoIgK1TSfhYQ8LqoyiltApXNulB
+X-Received: by 2002:a17:907:6d8a:b0:92b:69cd:34c7 with SMTP id sb10-20020a1709076d8a00b0092b69cd34c7mr2010526ejc.40.1683096289818;
+        Tue, 02 May 2023 23:44:49 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7skTmNTqRCqW6NVDyn9k/KK96LA43+EPzYgWnzw0kkpsf5ycBgKL5hiFmzoK2GwNnHlcUeIA==
+X-Received: by 2002:a17:907:6d8a:b0:92b:69cd:34c7 with SMTP id sb10-20020a1709076d8a00b0092b69cd34c7mr2010514ejc.40.1683096289565;
+        Tue, 02 May 2023 23:44:49 -0700 (PDT)
+Received: from amikhalitsyn.. ([62.168.35.11])
+        by smtp.gmail.com with ESMTPSA id e6-20020a1709062c0600b0094ef2003581sm16831270ejh.153.2023.05.02.23.44.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 May 2023 23:44:49 -0700 (PDT)
+From:   Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+To:     mortonm@chromium.org
+Cc:     penguin-kernel@i-love.sakura.ne.jp,
+        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] LSM: SafeSetID: fix UID printed instead of GID
+Date:   Wed,  3 May 2023 08:43:44 +0200
+Message-Id: <20230503064344.45825-1-aleksandr.mikhalitsyn@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Cc:     baolu.lu@linux.intel.com, Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        "Ranganathan, Narayan" <narayan.ranganathan@intel.com>
-Subject: Re: [PATCH v5 4/7] iommu/vt-d: Factoring out PASID set up helper
- function
-Content-Language: en-US
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>
-References: <20230427174937.471668-1-jacob.jun.pan@linux.intel.com>
- <20230427174937.471668-5-jacob.jun.pan@linux.intel.com>
- <BN9PR11MB5276726E67301703BD10833B8C6B9@BN9PR11MB5276.namprd11.prod.outlook.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <BN9PR11MB5276726E67301703BD10833B8C6B9@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/28/23 5:47 PM, Tian, Kevin wrote:
->> From: Jacob Pan <jacob.jun.pan@linux.intel.com>
->> Sent: Friday, April 28, 2023 1:50 AM
->>
->>
->> +static int dmar_domain_attach_device_pasid(struct dmar_domain *domain,
->> +					   struct intel_iommu *iommu,
->> +					   struct device *dev, ioasid_t pasid)
->> +{
->> +	int ret;
->> +
->> +	/* PASID table is mandatory for a PCI device in scalable mode. */
->> +	if (!sm_supported(iommu) && dev_is_real_dma_subdevice(dev))
->> +		return -EOPNOTSUPP;
-> 
-> "&&" should be "||"
-> 
+pr_warn message clearly says that GID should be printed,
+but we have UID there. Let's fix that.
 
-Also should return success instead if this is a RID case. Perhaps,
+Found accidentaly during the work on isolated user namespaces.
 
-	if (!sm_supported(iommu) || dev_is_real_dma_subdevice(dev))
-		return pasid == RID2PASID ? 0 : -EOPNOTSUPP;
+Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+---
+v2: __kuid_val -> __kgid_val
+---
+ security/safesetid/lsm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best regards,
-baolu
+diff --git a/security/safesetid/lsm.c b/security/safesetid/lsm.c
+index e806739f7868..5be5894aa0ea 100644
+--- a/security/safesetid/lsm.c
++++ b/security/safesetid/lsm.c
+@@ -131,7 +131,7 @@ static int safesetid_security_capable(const struct cred *cred,
+ 		 * set*gid() (e.g. setting up userns gid mappings).
+ 		 */
+ 		pr_warn("Operation requires CAP_SETGID, which is not available to GID %u for operations besides approved set*gid transitions\n",
+-			__kuid_val(cred->uid));
++			__kgid_val(cred->gid));
+ 		return -EPERM;
+ 	default:
+ 		/* Error, the only capabilities were checking for is CAP_SETUID/GID */
+-- 
+2.34.1
+
