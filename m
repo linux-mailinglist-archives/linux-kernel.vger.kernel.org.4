@@ -2,135 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 286A46F6103
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 00:03:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 870B76F6107
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 00:06:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbjECWDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 18:03:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50812 "EHLO
+        id S229644AbjECWGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 18:06:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjECWDL (ORCPT
+        with ESMTP id S229524AbjECWGq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 18:03:11 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CDAD7DB0;
-        Wed,  3 May 2023 15:03:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683151390; x=1714687390;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=J3S7+Z2Bb+TaVT5MbkGNBgkG899lTs0nMS79YuENME8=;
-  b=N/a22sK45untpCKDl72rrW3lBnu+PVG7pjy62zW1VdKd3J/ATm0FghQF
-   YKV2ddo5MtIgEMinn/RMj/87owomEMTJZ7GhvX4S0PaQIONmsAQ/cNghM
-   BrtzZZB8pSENg2EP5AZzDy6pIaaaadf0cvhbLxCQjk+tFgCQ+ebxJOmdI
-   FeirHTXqUqxofm5x8v+xdMmhbOJADnuW5R1OzUDOd20L41vYbAIQNTJFO
-   GnsFOwwOiC9nSYV/6nte8KppeP55Q5EBb1QvK8TQgnZtVxNEDK24MnY3D
-   Nmh6ruuB02kWJocuaPzNyKiEWaaeqQmzIn2FYJh4+LMdyD5hVnvOryEfW
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="333144699"
-X-IronPort-AV: E=Sophos;i="5.99,248,1677571200"; 
-   d="scan'208";a="333144699"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2023 15:03:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="820915544"
-X-IronPort-AV: E=Sophos;i="5.99,248,1677571200"; 
-   d="scan'208";a="820915544"
-Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.212.181.38])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2023 15:03:08 -0700
-Date:   Wed, 3 May 2023 15:03:07 -0700
-From:   Alison Schofield <alison.schofield@intel.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        raghuhack78@gmail.com
-Cc:     linux-cxl@vger.kernel.org, ira.weiny@intel.com,
-        bwidawsk@kernel.org, dan.j.williams@intel.com,
-        vishal.l.verma@intel.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] cxl/mbox: Remove redundant dev_err() after failed
- mem alloc
-Message-ID: <ZFLaG8jHHXmRp67w@aschofie-mobl2>
-References: <20230428012235.119333-1-raghuhack78@gmail.com>
- <20230428012235.119333-2-raghuhack78@gmail.com>
- <3235466.44csPzL39Z@suse>
+        Wed, 3 May 2023 18:06:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F237DB0
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 15:06:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 485C26303D
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 22:06:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A57D2C433D2;
+        Wed,  3 May 2023 22:06:42 +0000 (UTC)
+Date:   Wed, 3 May 2023 18:06:40 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Zqiang <qiang1.zhang@intel.com>
+Subject: Re: [RFC PATCH] rcu: rcupdate.h: Add missing parentheses around
+ macro pointer dereference
+Message-ID: <20230503180640.630f3006@gandalf.local.home>
+In-Reply-To: <20230503203236.1587590-1-mathieu.desnoyers@efficios.com>
+References: <20230503203236.1587590-1-mathieu.desnoyers@efficios.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3235466.44csPzL39Z@suse>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 03, 2023 at 08:32:37PM +0200, Fabio wrote:
-> On venerdì 28 aprile 2023 03:22:34 CEST Raghu H wrote:
-> > Issue found with checkpatch
-> > 
-> > A return of errno should be good enough if the memory allocation fails,
-> > the error message here is redundatant
-> 
-> Typo: it's "redundant". No problem, I think you shouldn't resend only for the 
-> purpose to fix this. But...
-> 
+On Wed,  3 May 2023 16:32:36 -0400
+Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
 
-Raghu,
-checkpatch --codespell will catch misspellings in the commit log, when
-run on the HEAD^ commit or on the formatted patch file.
+> linux/rcupdate.h macros use the *p parameter without parentheses, e.g.:
+> 
+>   typeof(*p)
+> 
+> rather than
+> 
+>   typeof(*(p))
+> 
+> The following test-case shows how it can generate confusion due to C
+> operator precedence being reversed compared to the expectations:
+> 
+>     #define m(p) \
+>     do { \
+>             __typeof__(*p) v = 0; \
+>     } while (0)
+> 
+>     void fct(unsigned long long *p1)
+>     {
+>             m(p1 + 1);      /* works */
+>             m(1 + p1);      /* broken */
+>     }
+> 
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> Cc: Joel Fernandes <joel@joelfernandes.org>
+> Cc: Josh Triplett <josh@joshtriplett.org>
+> Cc: Boqun Feng <boqun.feng@gmail.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Lai Jiangshan <jiangshanlai@gmail.com>
+> Cc: Zqiang <qiang1.zhang@intel.com>
+> ---
+>  include/linux/rcupdate.h | 18 +++++++++---------
+>  1 file changed, 9 insertions(+), 9 deletions(-)
+> 
+> diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
+> index dcd2cf1e8326..1565012fa47f 100644
+> --- a/include/linux/rcupdate.h
+> +++ b/include/linux/rcupdate.h
+> @@ -430,16 +430,16 @@ static inline void rcu_preempt_sleep_check(void) { }
+>  
+>  #ifdef __CHECKER__
+>  #define rcu_check_sparse(p, space) \
+> -	((void)(((typeof(*p) space *)p) == p))
+> +	((void)(((typeof(*(p)) space *)p) == p))
 
-> > as per the coding style, removing it.
-> > 
-> > Signed-off-by: Raghu H <raghuhack78@gmail.com>
-> 
-> Is "Raghu H" the name you sign legal documents with? 
-> 
+Hmm, should we have that be:
+	((void)(((typeof(*(p)) space *)(p)) == (p)))
 
-Fabio,
-Rather than asking a specific question to determine if this is a
-valid SOB, let's just point folks to the documentation to figure
-it out themselves. I'm aware that the 'sign legal documents' test
-has been used in the past, but kernel only actually requires a
-known identity.
+In case of the 1 + p1, which would end up as:
 
-https://www.kernel.org/doc/html/v4.17/process/submitting-patches.html#sign-your-work-the-developer-s-certificate-of-origin
-https://github.com/cncf/foundation/blob/659fd32c86dc/dco-guidelines.md
+	((void)(((typeof(*(1 + p1)) __rcu *)1 + p1 == 1 + p1;
+
+I don't know how that __rcu get's passed around via the + statement there,
+so it may be fine. May not even make sense to have that. But I like to
+error on more parenthesis. ;-)
+
+The rest looks fine.
+
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+
+-- Steve
 
 
 
-> If not, please send a new version signed-off-by your full legal name. 
-> Otherwise... sorry for the noise.
-> 
-> Thanks,
-> 
-> Fabio
-> 
-> > ---
-> >  drivers/cxl/core/mbox.c | 4 +---
-> >  1 file changed, 1 insertion(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
-> > index f2addb457172..11ea145b4b1f 100644
-> > --- a/drivers/cxl/core/mbox.c
-> > +++ b/drivers/cxl/core/mbox.c
-> > @@ -1112,10 +1112,8 @@ struct cxl_dev_state *cxl_dev_state_create(struct
-> > device *dev) struct cxl_dev_state *cxlds;
-> > 
-> >  	cxlds = devm_kzalloc(dev, sizeof(*cxlds), GFP_KERNEL);
-> > -	if (!cxlds) {
-> > -		dev_err(dev, "No memory available\n");
-> > +	if (!cxlds)
-> >  		return ERR_PTR(-ENOMEM);
-> > -	}
-> > 
-> >  	mutex_init(&cxlds->mbox_mutex);
-> >  	mutex_init(&cxlds->event.log_lock);
-> > --
-> > 2.39.2
-> 
-> 
-> 
-> 
+>  #else /* #ifdef __CHECKER__ */
+>  #define rcu_check_sparse(p, space)
+>  #endif /* #else #ifdef __CHECKER__ */
+>  
+>  #define __unrcu_pointer(p, local)					\
+>  ({									\
+> -	typeof(*p) *local = (typeof(*p) *__force)(p);			\
+> +	typeof(*(p)) *local = (typeof(*(p)) *__force)(p);		\
+>  	rcu_check_sparse(p, __rcu);					\
+> -	((typeof(*p) __force __kernel *)(local)); 			\
+> +	((typeof(*(p)) __force __kernel *)(local));			\
+>  })
+>  /**
+>   * unrcu_pointer - mark a pointer as not being RCU protected
+> @@ -452,29 +452,29 @@ static inline void rcu_preempt_sleep_check(void) { }
+>  
+>  #define __rcu_access_pointer(p, local, space) \
+>  ({ \
+> -	typeof(*p) *local = (typeof(*p) *__force)READ_ONCE(p); \
+> +	typeof(*(p)) *local = (typeof(*(p)) *__force)READ_ONCE(p); \
+>  	rcu_check_sparse(p, space); \
+> -	((typeof(*p) __force __kernel *)(local)); \
+> +	((typeof(*(p)) __force __kernel *)(local)); \
+>  })
+>  #define __rcu_dereference_check(p, local, c, space) \
+>  ({ \
+>  	/* Dependency order vs. p above. */ \
+> -	typeof(*p) *local = (typeof(*p) *__force)READ_ONCE(p); \
+> +	typeof(*(p)) *local = (typeof(*(p)) *__force)READ_ONCE(p); \
+>  	RCU_LOCKDEP_WARN(!(c), "suspicious rcu_dereference_check() usage"); \
+>  	rcu_check_sparse(p, space); \
+> -	((typeof(*p) __force __kernel *)(local)); \
+> +	((typeof(*(p)) __force __kernel *)(local)); \
+>  })
+>  #define __rcu_dereference_protected(p, local, c, space) \
+>  ({ \
+>  	RCU_LOCKDEP_WARN(!(c), "suspicious rcu_dereference_protected() usage"); \
+>  	rcu_check_sparse(p, space); \
+> -	((typeof(*p) __force __kernel *)(p)); \
+> +	((typeof(*(p)) __force __kernel *)(p)); \
+>  })
+>  #define __rcu_dereference_raw(p, local) \
+>  ({ \
+>  	/* Dependency order vs. p above. */ \
+>  	typeof(p) local = READ_ONCE(p); \
+> -	((typeof(*p) __force __kernel *)(local)); \
+> +	((typeof(*(p)) __force __kernel *)(local)); \
+>  })
+>  #define rcu_dereference_raw(p) __rcu_dereference_raw(p, __UNIQUE_ID(rcu))
+>  
+
