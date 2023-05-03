@@ -2,66 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E0416F5323
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 10:30:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A93076F5327
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 10:32:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbjECIaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 04:30:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51294 "EHLO
+        id S229666AbjECIcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 04:32:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjECIaI (ORCPT
+        with ESMTP id S229481AbjECIcC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 04:30:08 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8CD149F1;
-        Wed,  3 May 2023 01:30:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683102606; x=1714638606;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5vVhdAGvX08FAYtCHmyekXa4m8V+FYhfBeX/G8j/1Vs=;
-  b=fIUQPjS+6I/lIP5IuZ/8uMgTKn2/3+BOzKJf/0baGR+fLedFYPVCXoUU
-   sEHfWkSCsBe5ow50DljZIIJ2YbtQprfGbLJ3fqGJis8/AO5aLafj38rJH
-   V3wYP70Eas8m0G9v2hSS+0vYHID9oWH3KNDu4nafUjD1jvZhJClkONUkC
-   EELUgE7k/zb+Z1GlLuwsa8iDDLdLSKevat3A786bbl5GvW+UHVjFwVIH4
-   wCHc1Hnkb6GcB0t2lOLR3fvbHGBfYtQNAP5xCvpxrvpbmBsz1lr7YwoLd
-   N7LBhtrqJgdfQr2EyXID+4uH02KNq0TYYjM8i7RJg/mIHBtM0y/bmmDWw
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="328961974"
-X-IronPort-AV: E=Sophos;i="5.99,246,1677571200"; 
-   d="scan'208";a="328961974"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2023 01:30:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="840613160"
-X-IronPort-AV: E=Sophos;i="5.99,246,1677571200"; 
-   d="scan'208";a="840613160"
-Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 03 May 2023 01:30:04 -0700
-Received: from kbuild by e3434d64424d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pu7sB-0001iV-0R;
-        Wed, 03 May 2023 08:30:03 +0000
-Date:   Wed, 3 May 2023 16:29:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Naresh Solanki <naresh.solanki@9elements.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Naresh Solanki <Naresh.Solanki@9elements.com>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (max597x) Add Maxim Max597x
-Message-ID: <202305031640.SL6o9vFH-lkp@intel.com>
-References: <20230426090356.745979-1-Naresh.Solanki@9elements.com>
+        Wed, 3 May 2023 04:32:02 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A037026A0;
+        Wed,  3 May 2023 01:31:59 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3438Vl3k121181;
+        Wed, 3 May 2023 03:31:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1683102707;
+        bh=7E+b59g9ZUnT0DGj/ASCkfNAb/3LpiC3e12t/ZXeFRs=;
+        h=From:To:CC:Subject:Date;
+        b=Z6IL4fkmuL6gHxtZtRSYk1xTtBQwbUVv6ckWRjomzvGt6BKB3w4v8BpusWzujwoqW
+         yrUdBRTkJ4RsNrHQTpcUFmgQpYw6SLRIilkW/TgPp+jhK05V+je457fpvVjorqDEzU
+         FlCv2TpBM/CGE8aRtuNAirSlJehB1xjcBx7d/AXU=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3438VlI5056563
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 3 May 2023 03:31:47 -0500
+Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 3
+ May 2023 03:31:47 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 3 May 2023 03:31:47 -0500
+Received: from ul0491018.dal.design.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3438VhlN042501;
+        Wed, 3 May 2023 03:31:44 -0500
+From:   Thejasvi Konduru <t-konduru@ti.com>
+To:     Tero Kristo <kristo@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Nishanth Menon <nm@ti.com>, Andrew Davis <afd@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Apurva Nandan <a-nandan@ti.com>, Udit Kumar <u-kumar1@ti.com>,
+        Thejasvi Konduru <t-konduru@ti.com>
+Subject: [PATCH] arm64: dts: ti: k3-j784s4: Fix wakeup pinmux range and pinctrl node offsets
+Date:   Wed, 3 May 2023 14:01:43 +0530
+Message-ID: <20230503083143.32369-1-t-konduru@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230426090356.745979-1-Naresh.Solanki@9elements.com>
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,81 +66,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Naresh,
+The wkup_pmx register region in j784s4 has multiple non-addressable
+regions, hence the existing wkup_pmx region is split as follows to
+avoid the non-addressable regions. The pinctrl node offsets are
+also corrected as per the newly split wkup_pmx* nodes.
 
-kernel test robot noticed the following build warnings:
+wkup_pmx0 -> 13 pins (WKUP_PADCONFIG 0 - 12)
+wkup_pmx1 -> 11 pins (WKUP_PADCONFIG 14 - 24)
+wkup_pmx2 -> 72 pins (WKUP_PADCONFIG 26 - 97)
+wkup_pmx3 -> 1 pin (WKUP_PADCONFIG 100)
 
-[auto build test WARNING on b4c288cfd2f84c44994330c408e14645d45dee5b]
+Fixes: 4664ebd8346a ("arm64: dts: ti: Add initial support for J784S4 SoC")
+Signed-off-by: Thejasvi Konduru <t-konduru@ti.com>
+---
+ arch/arm64/boot/dts/ti/k3-j784s4-evm.dts      | 30 +++++++++----------
+ .../boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi     | 29 +++++++++++++++++-
+ 2 files changed, 43 insertions(+), 16 deletions(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Naresh-Solanki/hwmon-max597x-Add-Maxim-Max597x/20230426-170556
-base:   b4c288cfd2f84c44994330c408e14645d45dee5b
-patch link:    https://lore.kernel.org/r/20230426090356.745979-1-Naresh.Solanki%409elements.com
-patch subject: [PATCH] hwmon: (max597x) Add Maxim Max597x
-config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20230503/202305031640.SL6o9vFH-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/3d6f729d86a79adf0603717c79bc389a5dcc4444
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Naresh-Solanki/hwmon-max597x-Add-Maxim-Max597x/20230426-170556
-        git checkout 3d6f729d86a79adf0603717c79bc389a5dcc4444
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/hwmon/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305031640.SL6o9vFH-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/hwmon/max597x.c:47:10: warning: 9 enumeration values not handled in switch: 'hwmon_chip', 'hwmon_temp', 'hwmon_power'... [-Wswitch]
-           switch (type) {
-                   ^~~~
-   1 warning generated.
-
-
-vim +47 drivers/hwmon/max597x.c
-
-    40	
-    41	static int max597x_read(struct device *dev, enum hwmon_sensor_types type,
-    42				u32 attr, int channel, long *val)
-    43	{
-    44		struct max597x_hwmon *ddata = dev_get_drvdata(dev);
-    45		int ret;
-    46	
-  > 47		switch (type) {
-    48		case hwmon_curr:
-    49			switch (attr) {
-    50			case hwmon_curr_input:
-    51				ret = max597x_read_reg(ddata, MAX5970_REG_CURRENT_H(channel),
-    52						       ddata->irng[channel], val);
-    53				if (ret < 0)
-    54					return ret;
-    55	
-    56				return 0;
-    57			default:
-    58				return -EOPNOTSUPP;
-    59			}
-    60	
-    61		case hwmon_in:
-    62			switch (attr) {
-    63			case hwmon_in_input:
-    64				ret = max597x_read_reg(ddata, MAX5970_REG_VOLTAGE_H(channel),
-    65						       ddata->mon_rng[channel], val);
-    66				if (ret < 0)
-    67					return ret;
-    68				return 0;
-    69			default:
-    70				return -EOPNOTSUPP;
-    71			}
-    72		}
-    73		return -EOPNOTSUPP;
-    74	}
-    75	
-
+diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
+index f33815953e77..490d0b8624f3 100644
+--- a/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
++++ b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
+@@ -141,28 +141,28 @@
+ 	};
+ };
+ 
+-&wkup_pmx0 {
++&wkup_pmx2 {
+ 	mcu_cpsw_pins_default: mcu-cpsw-pins-default {
+ 		pinctrl-single,pins = <
+-			J784S4_WKUP_IOPAD(0x094, PIN_INPUT, 0) /* (A35) MCU_RGMII1_RD0 */
+-			J784S4_WKUP_IOPAD(0x090, PIN_INPUT, 0) /* (B36) MCU_RGMII1_RD1 */
+-			J784S4_WKUP_IOPAD(0x08c, PIN_INPUT, 0) /* (C36) MCU_RGMII1_RD2 */
+-			J784S4_WKUP_IOPAD(0x088, PIN_INPUT, 0) /* (D36) MCU_RGMII1_RD3 */
+-			J784S4_WKUP_IOPAD(0x084, PIN_INPUT, 0) /* (B37) MCU_RGMII1_RXC */
+-			J784S4_WKUP_IOPAD(0x06c, PIN_INPUT, 0) /* (C37) MCU_RGMII1_RX_CTL */
+-			J784S4_WKUP_IOPAD(0x07c, PIN_OUTPUT, 0) /* (D37) MCU_RGMII1_TD0 */
+-			J784S4_WKUP_IOPAD(0x078, PIN_OUTPUT, 0) /* (D38) MCU_RGMII1_TD1 */
+-			J784S4_WKUP_IOPAD(0x074, PIN_OUTPUT, 0) /* (E37) MCU_RGMII1_TD2 */
+-			J784S4_WKUP_IOPAD(0x070, PIN_OUTPUT, 0) /* (E38) MCU_RGMII1_TD3 */
+-			J784S4_WKUP_IOPAD(0x080, PIN_OUTPUT, 0) /* (E36) MCU_RGMII1_TXC */
+-			J784S4_WKUP_IOPAD(0x068, PIN_OUTPUT, 0) /* (C38) MCU_RGMII1_TX_CTL */
++			J784S4_WKUP_IOPAD(0x02c, PIN_INPUT, 0) /* (A35) MCU_RGMII1_RD0 */
++			J784S4_WKUP_IOPAD(0x028, PIN_INPUT, 0) /* (B36) MCU_RGMII1_RD1 */
++			J784S4_WKUP_IOPAD(0x024, PIN_INPUT, 0) /* (C36) MCU_RGMII1_RD2 */
++			J784S4_WKUP_IOPAD(0x020, PIN_INPUT, 0) /* (D36) MCU_RGMII1_RD3 */
++			J784S4_WKUP_IOPAD(0x01c, PIN_INPUT, 0) /* (B37) MCU_RGMII1_RXC */
++			J784S4_WKUP_IOPAD(0x004, PIN_INPUT, 0) /* (C37) MCU_RGMII1_RX_CTL */
++			J784S4_WKUP_IOPAD(0x014, PIN_OUTPUT, 0) /* (D37) MCU_RGMII1_TD0 */
++			J784S4_WKUP_IOPAD(0x010, PIN_OUTPUT, 0) /* (D38) MCU_RGMII1_TD1 */
++			J784S4_WKUP_IOPAD(0x00c, PIN_OUTPUT, 0) /* (E37) MCU_RGMII1_TD2 */
++			J784S4_WKUP_IOPAD(0x008, PIN_OUTPUT, 0) /* (E38) MCU_RGMII1_TD3 */
++			J784S4_WKUP_IOPAD(0x018, PIN_OUTPUT, 0) /* (E36) MCU_RGMII1_TXC */
++			J784S4_WKUP_IOPAD(0x000, PIN_OUTPUT, 0) /* (C38) MCU_RGMII1_TX_CTL */
+ 		>;
+ 	};
+ 
+ 	mcu_mdio_pins_default: mcu-mdio-pins-default {
+ 		pinctrl-single,pins = <
+-			J784S4_WKUP_IOPAD(0x09c, PIN_OUTPUT, 0) /* (A36) MCU_MDIO0_MDC */
+-			J784S4_WKUP_IOPAD(0x098, PIN_INPUT, 0) /* (B35) MCU_MDIO0_MDIO */
++			J784S4_WKUP_IOPAD(0x034, PIN_OUTPUT, 0) /* (A36) MCU_MDIO0_MDC */
++			J784S4_WKUP_IOPAD(0x030, PIN_INPUT, 0) /* (B35) MCU_MDIO0_MDIO */
+ 		>;
+ 	};
+ };
+diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi
+index f04fcb614cbe..ed2b40369c59 100644
+--- a/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi
+@@ -50,7 +50,34 @@
+ 	wkup_pmx0: pinctrl@4301c000 {
+ 		compatible = "pinctrl-single";
+ 		/* Proxy 0 addressing */
+-		reg = <0x00 0x4301c000 0x00 0x178>;
++		reg = <0x00 0x4301c000 0x00 0x034>;
++		#pinctrl-cells = <1>;
++		pinctrl-single,register-width = <32>;
++		pinctrl-single,function-mask = <0xffffffff>;
++	};
++
++	wkup_pmx1: pinctrl@4301c038 {
++		compatible = "pinctrl-single";
++		/* Proxy 0 addressing */
++		reg = <0x00 0x4301c038 0x00 0x02c>;
++		#pinctrl-cells = <1>;
++		pinctrl-single,register-width = <32>;
++		pinctrl-single,function-mask = <0xffffffff>;
++	};
++
++	wkup_pmx2: pinctrl@4301c068 {
++		compatible = "pinctrl-single";
++		/* Proxy 0 addressing */
++		reg = <0x00 0x4301c068 0x00 0x120>;
++		#pinctrl-cells = <1>;
++		pinctrl-single,register-width = <32>;
++		pinctrl-single,function-mask = <0xffffffff>;
++	};
++
++	wkup_pmx3: pinctrl@4301c190 {
++		compatible = "pinctrl-single";
++		/* Proxy 0 addressing */
++		reg = <0x00 0x4301c190 0x00 0x004>;
+ 		#pinctrl-cells = <1>;
+ 		pinctrl-single,register-width = <32>;
+ 		pinctrl-single,function-mask = <0xffffffff>;
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.17.1
+
