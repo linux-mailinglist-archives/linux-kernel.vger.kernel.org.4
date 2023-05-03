@@ -2,60 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F2BA6F5DEF
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 20:29:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BEBC6F5DF1
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 20:29:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbjECS3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 14:29:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33304 "EHLO
+        id S230188AbjECS3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 14:29:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbjECS3N (ORCPT
+        with ESMTP id S230092AbjECS3R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 14:29:13 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 767E47DAA
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 11:29:05 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-51f10bda596so2392217a12.1
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 11:29:05 -0700 (PDT)
+        Wed, 3 May 2023 14:29:17 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C617DA9
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 11:29:07 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id d2e1a72fcca58-64115ef7234so4721651b3a.1
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 11:29:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683138545; x=1685730545;
+        d=google.com; s=20221208; t=1683138547; x=1685730547;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=+XG9Kzlllq+ti/90Z+KsBtO7J9NFYimJbVN3QRxLOvk=;
-        b=X29uNydOzy9esvjDZDAzmyJGWiaC/8bpqbk2Hn15itn/w45LOQd8JmRA/zpwjar7/G
-         zCfOqNS1PuER3kG90LJ6+faebHsfrBZgI3Gsk9OaOkOjzz+YCncaAaFKFeTjGucnaL82
-         uV7amdMIE8zdLVIe+qP+XpQmBGhhs/EAOzrLAGU80Lo+kOudelqPKzbSbQ0oQyHVyBMa
-         g50Ev7JfwzCubGHAIE+UmozkyzUX0bVgS5oags8b6FO52NSnPSqiB4IVtTSmtj6QDYHg
-         smF9mSD6ucU4qYrBtDkwQqJSfLnkmTSjv+y/jwtO8cHVaC2OS6dmMMoRczVPyJn910iP
-         gUIQ==
+        bh=MYjVSO7f8c+kIFn144EZtSuJFXMcxb7hS79jWpV+usA=;
+        b=uHBYwjej/DFECXibkpDHhfTivTrghGDOxsM5wpPm+2OKUgT35SLiyuAcYFfRSe3X2m
+         Q3Kxx17ADvH76AXaDT3kJpvzbCkpSHft5I4S/odpDRI7L+yhK2UAparvBiSkhgjmud53
+         o8S07sZWBbZfl9vP1rp1WMi4j3MXwj4+m7IHgpFe9vE9XsuCkHP2PynOCPB0N13dUrfr
+         /1U+6AA0iZodAo835RTkH0TA6X2ySLHFsNdvSXdjcjI2X3CaFD1NQgrhzi+uRGKVlGAE
+         hTy2IcBDTowKlnWfXEmDrPtVRklseuhmqGxUvstOhjfpSoWunaoUm/6SA7pzhbLeRiWI
+         aIjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683138545; x=1685730545;
+        d=1e100.net; s=20221208; t=1683138547; x=1685730547;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=+XG9Kzlllq+ti/90Z+KsBtO7J9NFYimJbVN3QRxLOvk=;
-        b=OhzirQdsgOoNgJnJDx/lvZuY84X6myN2HB2J8DJCg8jqEVO/oJq0mtKbBnmPl1KSCK
-         hHERbxET+YyBUWI5P5GDg799IukdENzIiTkmflHChOXNdkIsN3hD6H213E2xoVyAWoT8
-         KGt3w1z7E3dXrVtfJu+chEWoNI+Q1eTiIkRAF5fPY6x0SGU+LEfDfflUb8as/JxRG/+J
-         VQ7WQ0SkEy0oM6phjqsh/pcFGMnJE+HBdkom9xR7saVevSij+W7DB2gDikp0gGLBRUp+
-         95Llf/+hIVBRrr5lPSr9B4k9+RBAIPehZ4o0+5RWgxHpZQxHyL8GXwEq66CU+KFbPlG+
-         13oA==
-X-Gm-Message-State: AC+VfDwZ0RPjezaCuVQtuJZrn56Tj+t90WtNHRNXsArBxgEQ2p6K2ia5
-        5Dxy/lageqn4MSjN6XcpTgt0UYhu79o=
-X-Google-Smtp-Source: ACHHUZ4g8LojGEmZCmmMffo7tSPFux1H2U6OuRHLfTAyx56VmnpckmGnA7nYKNUzNHB30VgOIXF/ETeNQoc=
+        bh=MYjVSO7f8c+kIFn144EZtSuJFXMcxb7hS79jWpV+usA=;
+        b=fp7roRkcg3gXWo5QYUIqHgFij4v3zIRqukpe+xp8uxpVl1xMfsLb1jjP3fNyDV06gN
+         2SJ/BybGO3L6OqFLz51wkFOUHyD1jhryB2zswtPRr+aoh5/18AEIcsPaa2DZPSmdFrob
+         2qgty54Zu6qI4urYfsahKdE93sU5aqHdwiAmp47dX4Vj8i+43bTMTu4tw3Kxrd4IzJbr
+         HO1a8PeoixHj5Ao7DRbFDKI4fkc3es1gA+GymXCbEHQbSo/nsG47TneHG3ahbce3brFg
+         AULoaQX/T9RWw93+VPSSA2DJe6mHB/fnnKuxhiq1q2ybW9HyO/btKYLW31Nkks4lOUbn
+         /mzw==
+X-Gm-Message-State: AC+VfDyQRiEkVrxD4VYtMMsdtZLj/EofP5FNPQevJQD4A5fiXqK4+8fk
+        r6/+XKBKlSkzgXH1lOvkOZvhugzaKTM=
+X-Google-Smtp-Source: ACHHUZ5aGf/q5xEUp0riyAAN6Net+jMN07Cmvn/fNQ/S3+kUTsXrLMg3LxQhwrZT086InrYNCPDfUT0sdTo=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a63:8142:0:b0:520:53db:fbf with SMTP id
- t63-20020a638142000000b0052053db0fbfmr760255pgd.6.1683138545003; Wed, 03 May
- 2023 11:29:05 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:903:2292:b0:1ab:19db:f57 with SMTP id
+ b18-20020a170903229200b001ab19db0f57mr271814plh.2.1683138546840; Wed, 03 May
+ 2023 11:29:06 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed,  3 May 2023 11:28:51 -0700
+Date:   Wed,  3 May 2023 11:28:52 -0700
 In-Reply-To: <20230503182852.3431281-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20230503182852.3431281-1-seanjc@google.com>
 X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
-Message-ID: <20230503182852.3431281-5-seanjc@google.com>
-Subject: [PATCH 4/5] KVM: x86: WARN if writes to PAT MSR are handled by common
- KVM code
+Message-ID: <20230503182852.3431281-6-seanjc@google.com>
+Subject: [PATCH 5/5] KVM: x86: Move PAT MSR handling out of mtrr.c
 From:   Sean Christopherson <seanjc@google.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>
@@ -73,34 +72,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-WARN and continue if a write to the PAT MSR reaches kvm_set_msr_common()
-now that both VMX and SVM handle PAT writes entirely on their own.  Keep
-the case statement with a WARN instead of dropping it entirely to document
-why KVM's handling of reads and writes isn't symmetrical (reads are still
-handled by kvm_get_msr_common().
+Drop handling of MSR_IA32_CR_PAT from mtrr.c now that SVM and VMX handle
+writes without bouncing through kvm_set_msr_common().  PAT isn't truly an
+MTRR even though it affects memory types, and more importantly isn't
+factored into KVM's handling of non-coherent DMA.
+
+The read path is and always has been trivial, i.e. burying it in the MTRR
+code does more harm than good.
+
+Inject #GP unconditionally for the PAT "handlng" in kvm_set_msr_common(),
+as that code is reached if and only if KVM is buggy.  Simply deleting the
+condition would provide similar functionality, but warning and explicitly
+alerting userspace that KVM is buggy is desirable.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/x86.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ arch/x86/kvm/mtrr.c | 18 +++++-------------
+ arch/x86/kvm/x86.c  |  4 +++-
+ 2 files changed, 8 insertions(+), 14 deletions(-)
 
+diff --git a/arch/x86/kvm/mtrr.c b/arch/x86/kvm/mtrr.c
+index d2c428f4ae42..76b132ba9df2 100644
+--- a/arch/x86/kvm/mtrr.c
++++ b/arch/x86/kvm/mtrr.c
+@@ -41,7 +41,6 @@ static bool msr_mtrr_valid(unsigned msr)
+ 	case MSR_MTRRfix4K_F0000:
+ 	case MSR_MTRRfix4K_F8000:
+ 	case MSR_MTRRdefType:
+-	case MSR_IA32_CR_PAT:
+ 		return true;
+ 	}
+ 	return false;
+@@ -60,9 +59,7 @@ bool kvm_mtrr_valid(struct kvm_vcpu *vcpu, u32 msr, u64 data)
+ 	if (!msr_mtrr_valid(msr))
+ 		return false;
+ 
+-	if (msr == MSR_IA32_CR_PAT) {
+-		return kvm_pat_valid(data);
+-	} else if (msr == MSR_MTRRdefType) {
++	if (msr == MSR_MTRRdefType) {
+ 		if (data & ~0xcff)
+ 			return false;
+ 		return valid_mtrr_type(data & 0xff);
+@@ -310,8 +307,7 @@ static void update_mtrr(struct kvm_vcpu *vcpu, u32 msr)
+ 	gfn_t start, end;
+ 	int index;
+ 
+-	if (msr == MSR_IA32_CR_PAT || !tdp_enabled ||
+-	      !kvm_arch_has_noncoherent_dma(vcpu->kvm))
++	if (!tdp_enabled || !kvm_arch_has_noncoherent_dma(vcpu->kvm))
+ 		return;
+ 
+ 	if (!mtrr_is_enabled(mtrr_state) && msr != MSR_MTRRdefType)
+@@ -382,8 +378,6 @@ int kvm_mtrr_set_msr(struct kvm_vcpu *vcpu, u32 msr, u64 data)
+ 		*(u64 *)&vcpu->arch.mtrr_state.fixed_ranges[index] = data;
+ 	else if (msr == MSR_MTRRdefType)
+ 		vcpu->arch.mtrr_state.deftype = data;
+-	else if (msr == MSR_IA32_CR_PAT)
+-		vcpu->arch.pat = data;
+ 	else
+ 		set_var_mtrr_msr(vcpu, msr, data);
+ 
+@@ -411,13 +405,11 @@ int kvm_mtrr_get_msr(struct kvm_vcpu *vcpu, u32 msr, u64 *pdata)
+ 		return 1;
+ 
+ 	index = fixed_msr_to_range_index(msr);
+-	if (index >= 0)
++	if (index >= 0) {
+ 		*pdata = *(u64 *)&vcpu->arch.mtrr_state.fixed_ranges[index];
+-	else if (msr == MSR_MTRRdefType)
++	} else if (msr == MSR_MTRRdefType) {
+ 		*pdata = vcpu->arch.mtrr_state.deftype;
+-	else if (msr == MSR_IA32_CR_PAT)
+-		*pdata = vcpu->arch.pat;
+-	else {	/* Variable MTRRs */
++	} else {	/* Variable MTRRs */
+ 		int is_mtrr_mask;
+ 
+ 		index = (msr - 0x200) / 2;
 diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 8b356c9d8a81..c36256d00250 100644
+index c36256d00250..3aa93401a398 100644
 --- a/arch/x86/kvm/x86.c
 +++ b/arch/x86/kvm/x86.c
-@@ -3701,6 +3701,12 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 		}
- 		break;
- 	case MSR_IA32_CR_PAT:
-+		/*
-+		 * Writes to PAT should be handled by vendor code as both SVM
-+		 * and VMX track the guest's PAT in the VMCB/VMCS.
-+		 */
-+		WARN_ON_ONCE(1);
-+		fallthrough;
+@@ -3706,7 +3706,7 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ 		 * and VMX track the guest's PAT in the VMCB/VMCS.
+ 		 */
+ 		WARN_ON_ONCE(1);
+-		fallthrough;
++		return 1;
  	case MTRRphysBase_MSR(0) ... MSR_MTRRfix4K_F8000:
  	case MSR_MTRRdefType:
  		return kvm_mtrr_set_msr(vcpu, msr, data);
+@@ -4116,6 +4116,8 @@ int kvm_get_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ 		break;
+ 	}
+ 	case MSR_IA32_CR_PAT:
++		msr_info->data = vcpu->arch.pat;
++		break;
+ 	case MSR_MTRRcap:
+ 	case MTRRphysBase_MSR(0) ... MSR_MTRRfix4K_F8000:
+ 	case MSR_MTRRdefType:
 -- 
 2.40.1.495.gc816e09b53d-goog
 
