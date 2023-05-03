@@ -2,69 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C7366F5EE5
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 21:07:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5978F6F5EE6
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 21:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230092AbjECTHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 15:07:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37900 "EHLO
+        id S229526AbjECTII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 15:08:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjECTH3 (ORCPT
+        with ESMTP id S229441AbjECTIH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 15:07:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C09677D8C
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 12:07:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C7F762FA1
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 19:07:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0920C433D2;
-        Wed,  3 May 2023 19:07:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683140847;
-        bh=v+P+/PX3TjpN24HnLhMA+gdDju8JpUR7dNJVSbynO7k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=heCwGJg1a8j9gEZnvDK9MSYpw2IWch2gK3oBWWIec3F4mxsyADM9tGsGtnifTVo/H
-         sejlVC6YlRFOOtFAy03iHzwWNfxR+tl3AFuzLH5mQ9VIl0OuoskBLFGMDZXAZgDUXx
-         XiT4hTs3GCI/BXwS0svV6VzYAm1FD586k5B7JSlTr7wiE+TbyXE5/9myA7JzQZm9a2
-         mzk8quiBZHnDwwZ28RF3EgPwX8n3kl5AkRo+dl+24JMx2Ous0KiKz50KV120B9aTsx
-         ftsxDIZUHnJtu9rWdSf64/qSkX0inUaeebY7DuvwpPn8rKVzdc3hexZELU05l+l3pO
-         BBIXGxkc9Br/A==
-Date:   Wed, 3 May 2023 21:07:18 +0200
-From:   Simon Horman <horms@kernel.org>
-To:     Shenwei Wang <shenwei.wang@nxp.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Wei Fang <wei.fang@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Clark Wang <xiaoning.wang@nxp.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Wed, 3 May 2023 15:08:07 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CB1AB6
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 12:08:06 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1puHpb-0005mD-Kq; Wed, 03 May 2023 21:08:03 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1puHpZ-0005aB-UM; Wed, 03 May 2023 21:08:01 +0200
+Date:   Wed, 3 May 2023 21:08:01 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Jun Li <jun.li@nxp.com>
+Cc:     "festevam@gmail.com" <festevam@gmail.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        Andreas Henriksson <andreas@fatal.se>,
+        Xu Yang <xu.yang_2@nxp.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "imx@lists.linux.dev" <imx@lists.linux.dev>
-Subject: Re: [EXT] Re: [PATCH v2 net 2/2] net: fec: restructuring the
- functions to avoid forward declarations
-Message-ID: <ZFKw5seP5WclDCG2@kernel.org>
-References: <20230502220818.691444-1-shenwei.wang@nxp.com>
- <20230502220818.691444-2-shenwei.wang@nxp.com>
- <6dff0a5b-c74b-4516-8461-26fcd5d615f3@lunn.ch>
- <PAXPR04MB9185BD38BA486104EE5B7213896C9@PAXPR04MB9185.eurprd04.prod.outlook.com>
- <ZFJ+9Ij+jOJO1+wu@kernel.org>
- <PAXPR04MB918564D93054CEDF255DA251896C9@PAXPR04MB9185.eurprd04.prod.outlook.com>
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH] arm64: dts: imx8mp-evk: add dual-role usb port1 support
+Message-ID: <20230503190801.5glkm3n5sn5tvg7m@pengutronix.de>
+References: <20230323105826.2058003-1-m.felsch@pengutronix.de>
+ <PA4PR04MB964081F4DB2E16D8E300B08389849@PA4PR04MB9640.eurprd04.prod.outlook.com>
+ <20230327084947.dcguxgyo2lfen2ms@fatal.se>
+ <DB9PR04MB96282C22D3AC853F325373CD898B9@DB9PR04MB9628.eurprd04.prod.outlook.com>
+ <20230503184834.qln2wwvf3pgitkmp@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <PAXPR04MB918564D93054CEDF255DA251896C9@PAXPR04MB9185.eurprd04.prod.outlook.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20230503184834.qln2wwvf3pgitkmp@pengutronix.de>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,43 +63,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 03, 2023 at 06:41:59PM +0000, Shenwei Wang wrote:
+On 23-05-03, Marco Felsch wrote:
+> Hi Li, Andreas,
 
 ...
 
-> > > > On Tue, May 02, 2023 at 05:08:18PM -0500, Shenwei Wang wrote:
-> > > > > The patch reorganizes functions related to XDP frame transmission,
-> > > > > moving them above the fec_enet_run_xdp implementation. This
-> > > > > eliminates the need for forward declarations of these functions.
-> > > >
-> > > > I'm confused. Are these two patches in the wrong order?
-> > > >
-> > > > The reason that i asked you to fix the forward declaration in
-> > > > net-next is that it makes your fix two patches. Sometimes that is
-> > > > not obvious to people back porting patches, and one gets lost,
-> > > > causing build problems. So it is better to have a single patch which
-> > > > is maybe not 100% best practice merged to stable, and then a cleanup patch
-> > merged to the head of development.
-> > > >
-> > >
-> > > If that is the case, we should forgo the second patch. Its purpose was
-> > > to reorganize function order such that the subsequent patch to
-> > > net-next enabling XDP_TX would not encounter forward declaration issues.
+> > Thanks for the advice.
 > > 
-> > I think a good plan would be, as I understood Andrew's original suggestion,
-> > to:
-> > 
-> > 1. Only have patch 2/2, targeted at 'net', for now 2. Later, once that patch has
-> > been accepted into 'net', 'net-next' has
-> >    reopened, and that patch is present in 'net-next', then follow-up
-> >    with patch 1/2, which is a cleanup.
+> > *reuse* compatible = "gpio-sbu-mux"; can make the basic *function* work,
+> > but that's not the right direction, SBU has its own signal in typec connector,
+> > here what we need is the Super Speed signal switch, you can see iMX8MP EVK
+> > use 2 GPIOs control the SS for 3 states(normal orientation, reserve orientation,
+> > places all channels in high impedance state), but SBU will disable both channels
+> > at TYPEC_STATE_USB, this is not correct for USB data, so logically we cannot
+> > reuse SBU either. But I think this gpio-sbu-mux.c driver can be extended to
+> > add support super speed signal orientation.
 > 
-> So should I re-submit the patch? Or you just take the 1st patch and drop
-> the 2nd one?
+> Thanks for the useful input :) I was dug into the usb-c hole and now I'm
+> back. The "gpio-sbu-mux" should fit perfectly for our use-case, we only
+> have to tell the driver to act as 'orientation-switch' only. All pieces
+> are in place so just dts work to do. I will test my new patch and send a
+> new version which should support super-speed to (fingers crossed).
 
-net and net-next work on a granularity of patch-sets.
-So I would suggest re-submitting only patch 2/2 for 'net'.
+Now I see problem you mentioned, let's see if we can extent the driver.
+Sorry for the noise.
 
-I would also suggest waiting 24h between posting v2 and v3,
-as per https://kernel.org/doc/html/next/process/maintainer-netdev.html
-
+Regards,
+  Marco
