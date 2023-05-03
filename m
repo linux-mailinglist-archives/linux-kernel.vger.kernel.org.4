@@ -2,83 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA186F4FD6
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 07:57:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 586876F4FE6
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 08:06:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbjECF5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 01:57:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58404 "EHLO
+        id S229534AbjECGGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 02:06:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbjECF5t (ORCPT
+        with ESMTP id S229441AbjECGGN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 01:57:49 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1D7BD30E8;
-        Tue,  2 May 2023 22:57:46 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 228BC80EB;
-        Wed,  3 May 2023 05:57:45 +0000 (UTC)
-Date:   Wed, 3 May 2023 08:57:43 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Olof Johansson <olof@lixom.net>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-actions@lists.infradead.org,
-        linux-sunxi@lists.linux.dev,
-        Linux-OMAP <linux-omap@vger.kernel.org>,
-        linux-amlogic@lists.infradead.org, linux-arm-kernel@axis.com,
-        linux-aspeed@lists.ozlabs.org,
-        linux-rpi-kernel@lists.infradead.org,
-        chrome-platform@lists.linux.dev,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-samsung-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        kernel@dh-electronics.com, linux-mediatek@lists.infradead.org,
-        openbmc@lists.ozlabs.org, linux-tegra@vger.kernel.org,
-        "linux-oxnas@groups.io" <linux-oxnas@groups.io>,
-        linux-arm-msm@vger.kernel.org, linux-unisoc@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        linux-realtek-soc@lists.infradead.org
-Subject: Re: [RFC PATCH 0/1] Categorize ARM dts directory
-Message-ID: <20230503055743.GK14287@atomide.com>
-References: <20220328000915.15041-1-ansuelsmth@gmail.com>
- <85eb14ec-f465-7447-ad77-a3dabc666f47@kernel.org>
- <YkKRYnN84D9VZhGj@Ansuel-xps.localdomain>
- <CAL_Jsq+RQQ-ADMxLPUFwk6S6kGmb6oNDy4k52fnU0EtbUvqmSA@mail.gmail.com>
- <CAMuHMdWNTE48MFy6fqxAsfMWz9b6E7dVNXtXtESP95sxk2PGwA@mail.gmail.com>
- <CAL_JsqJthKTm8bhRF2B=ae1tvtPeYYXx_Tm76qQtSwLtH5C6VA@mail.gmail.com>
- <720a2829-b6b5-411c-ac69-9a53e881f48d@app.fastmail.com>
- <CAL_JsqKCtmkwzKa01gyG65fH8ye6R3KhR41PJbJhOJ4X9j=znA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL_JsqKCtmkwzKa01gyG65fH8ye6R3KhR41PJbJhOJ4X9j=znA@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 3 May 2023 02:06:13 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC582680
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 23:06:10 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 78B811FE98;
+        Wed,  3 May 2023 06:06:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1683093969; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Aw1TI14wENs6g0pti+F37lBMbxrb2w8eOQXmNlSC0ks=;
+        b=JoEshgyEXnAaA7T/5nQXEy4iks6VQH3dB1wgz+D5leGDx+n3CZDHO+ICuJY0t9zxg6juuv
+        8OC2SmwpLwVzRSwqndtwlseSK3IQ77h4k2rAXiykoicHPihXo8+Uctuh9p9sFBOJtULj3p
+        OHjNniye7qNtI2J9nvw13z0/LFvnaUU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1683093969;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Aw1TI14wENs6g0pti+F37lBMbxrb2w8eOQXmNlSC0ks=;
+        b=9Xotz63MbJ7yPx5elWqg1Qghpi7hvG6o/cJaUTD8qsMTLtmFQJkxzFQl0s9xS9gBdqeSiO
+        qV5jy9qrtfExmEBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 51C0C13584;
+        Wed,  3 May 2023 06:06:09 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id UbYGE9H5UWR/JQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 03 May 2023 06:06:09 +0000
+Date:   Wed, 03 May 2023 08:06:08 +0200
+Message-ID: <87jzxqne3z.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Jeff Chua <jeff.chua.linux@gmail.com>
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Oswald Buddenhagen <oswald.buddenhagen@gmx.de>,
+        lkml <linux-kernel@vger.kernel.org>, Takashi Iwai <tiwai@suse.de>
+Subject: Re: linux-6.4 alsa sound broken
+In-Reply-To: <07f50016-5e24-56f8-0d02-df8d237059b6@gmail.com>
+References: <CAAJw_ZsbTVd3Es373x_wTNDF7RknGhCD0r+NKUSwAO7HpLAkYA@mail.gmail.com>
+        <ZE9ngFLRqLkN6faH@ugly>
+        <CAAJw_ZtKnZ3QruicqFRG_TLV0Ltbc8LSvdJSCEQRkr5GMSWvCw@mail.gmail.com>
+        <63bcc1eb-b0f5-4da1-0a22-31e0c86c0851@gmail.com>
+        <07f50016-5e24-56f8-0d02-df8d237059b6@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Rob Herring <robh+dt@kernel.org> [230502 19:40]:
-> I've dusted off my script and made a branch[1] with the result.
-> There's just a couple of fixes needed after the script is run (see the
-> top commit). The cross arch includes are all fixed up by the script.
-> dtbs_install maintains a flat install. I compared the number of .dtbs
-> before and after to check the script.
-...
+On Wed, 03 May 2023 06:37:48 +0200,
+Bagas Sanjaya wrote:
+> 
+> On 5/3/23 11:34, Bagas Sanjaya wrote:
+> >> Just send .. in another email. If the atttachment got stripped off,
+> >> please let me know.
+> >>
+> >>
+> > 
+> > I don't see your attachment. Can you please post the link
+> > to your test file on file storage hosting instead?
+> > 
+> 
+> Oops, I don't see the attachment on your reply at [1]. Sorry for the
+> inconvenience.
+> 
+> [1]: https://lore.kernel.org/lkml/CAAJw_ZveoPfnBsSkHZqmLiVWATcOosR--6Ds4cdekdi=t1yV7A@mail.gmail.com/
 
-> [1] git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git arm-dts-move-v2
+I see no attachment of the recorded sound.  In the mail above, only
+Side_Right.wav was attached, and this is the same file in
+/usr/share/sounds/alsa/.
 
-Looks good to me, thanks for doing this.
+But, I wonder how you played a mono channel file with "hw:1,0" PCM.
+Isn't this a HD-audio device?
+Usually HD-audio codec can't play a mono file.  For example, on my
+machine with a Realtek codec fails like:
 
-Regards,
+% aplay -Dhw:0,0 Side_Right.wav
+Playing WAVE 'Side_Right.wav' : Signed 16 bit Little Endian, Rate 48000 Hz, Mono
+aplay: set_params:1358: Channels count non available
 
-Tony
+So, if it works on yours, please show the output of playback with
+aplay -v option.  This will show more details.
+
+Last but not least, please double-check that the problem is really
+gone after reverting the commit 9f656705c5fa.  The commit is about the
+auto-silencing, and it should be irrelevant unless the application
+gives non-zero silence_size sw_params, and aplay doesn't set up it at
+all.
+
+
+thanks,
+
+Takashi
