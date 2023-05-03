@@ -2,144 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA8BC6F5A29
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 16:33:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED9086F5A39
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 16:38:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230355AbjECOdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 10:33:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54538 "EHLO
+        id S230002AbjECOiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 10:38:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230357AbjECOdl (ORCPT
+        with ESMTP id S229661AbjECOiU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 10:33:41 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D3086E98;
-        Wed,  3 May 2023 07:33:08 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Wed, 3 May 2023 10:38:20 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B11144ED2
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 07:38:18 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1puDc9-00088a-Id; Wed, 03 May 2023 16:37:53 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id CE76722882;
-        Wed,  3 May 2023 14:33:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1683124386; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/JDZKmq6NDdubmHkP/uNsYjONpv0JeFq0IdPtlGkuEE=;
-        b=2zASYWPs4ZAgH7dOk1uX7BscTjunqDjkpuVafV2ORMShEOYFc5H+ZqNU1Otzp586qtXeeT
-        MihV4fCW0njxdrpkph1MEzh9UA5H5XkGkk4YcCvyZ8ZjaAShjQ5Lma6Z+YwgtxKNyTWEHO
-        h6mWD5fj+4zR87Q8au/070UPG7wGak8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1683124386;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/JDZKmq6NDdubmHkP/uNsYjONpv0JeFq0IdPtlGkuEE=;
-        b=etazrKf7yQ3UmPc1F+aMte72Q40tSpHVmUiq/fPyDzlTY8tBHG1yZgsb3AOkhDgf1m1dHF
-        bElfb+OlCsjZ5gDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C0AE81331F;
-        Wed,  3 May 2023 14:33:06 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id KDqwLaJwUmT9RgAAMHmgww
-        (envelope-from <jack@suse.cz>); Wed, 03 May 2023 14:33:06 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 390ADA0744; Wed,  3 May 2023 16:33:06 +0200 (CEST)
-Date:   Wed, 3 May 2023 16:33:06 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Baokun Li <libaokun1@huawei.com>
-Cc:     linux-ext4@vger.kernel.org, tytso@mit.edu,
-        adilger.kernel@dilger.ca, jack@suse.cz, ritesh.list@gmail.com,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yangerkun@huawei.com, yukuai3@huawei.com
-Subject: Re: [PATCH v4 12/12] ext4: make ext4_zeroout_es() return void
-Message-ID: <20230503143306.ie557jsej4jqvu6u@quack3>
-References: <20230424033846.4732-1-libaokun1@huawei.com>
- <20230424033846.4732-13-libaokun1@huawei.com>
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 1E13E1BD106;
+        Wed,  3 May 2023 14:37:45 +0000 (UTC)
+Date:   Wed, 3 May 2023 16:37:44 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Peter Hong <peter_hong@fintek.com.tw>
+Cc:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
+        wg@grandegger.com, Steen.Hegelund@microchip.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, frank.jungclaus@esd.eu,
+        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, hpeter+linux_kernel@gmail.com
+Subject: Re: [PATCH V5] can: usb: f81604: add Fintek F81604 support
+Message-ID: <20230503-companion-sincere-573fc8d234d8-mkl@pengutronix.de>
+References: <20230420024403.13830-1-peter_hong@fintek.com.tw>
+ <CAMZ6RqKWrtBMFSD=BzGuCbvj=+3X-A-oW9haJ7=4kyL2AbEuHQ@mail.gmail.com>
+ <51991fc1-0746-608f-b3bb-78b64e6d1a3e@fintek.com.tw>
+ <CAMZ6Rq+zsC4F-mNhjKvqgPQuLhnnX1y79J=qOT8szPvkHY86VQ@mail.gmail.com>
+ <f9c007ae-fcfb-4091-c202-2c27e3ba1151@fintek.com.tw>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="2zdnzbummcllnzbh"
 Content-Disposition: inline
-In-Reply-To: <20230424033846.4732-13-libaokun1@huawei.com>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <f9c007ae-fcfb-4091-c202-2c27e3ba1151@fintek.com.tw>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 24-04-23 11:38:46, Baokun Li wrote:
-> After ext4_es_insert_extent() returns void, the return value in
-> ext4_zeroout_es() is also unnecessary, so make it return void too.
-> 
-> Signed-off-by: Baokun Li <libaokun1@huawei.com>
 
-Looks good to me. Feel free to add:
+--2zdnzbummcllnzbh
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+On 02.05.2023 10:53:43, Peter Hong wrote:
+> Hi Vincent, Michal and Marc,
+>=20
+> Vincent MAILHOL =E6=96=BC 2023/4/21 =E4=B8=8B=E5=8D=88 03:30 =E5=AF=AB=E9=
+=81=93:
+> > Hi Peter and Michal,
+> >=20
+> > On Fry. 21 Apr. 2023 at 12:14, Peter Hong <peter_hong@fintek.com.tw> wr=
+ote:
+> > > Hi Vincent,
+> > >=20
+> > > Vincent MAILHOL =E6=96=BC 2023/4/20 =E4=B8=8B=E5=8D=88 08:02 =E5=AF=
+=AB=E9=81=93:
+> > > > Hi Peter,
+> > > >=20
+> > > > Here are my comments. Now, it is mostly nitpicks. I guess that this=
+ is
+> > > > the final round.
+> > > >=20
+> > > > On Thu. 20 avr. 2023 at 11:44, Ji-Ze Hong (Peter Hong)
+> > > > <peter_hong@fintek.com.tw> wrote:
+> > > > > +static void f81604_handle_tx(struct f81604_port_priv *priv,
+> > > > > +                            struct f81604_int_data *data)
+> > > > > +{
+> > > > > +       struct net_device *netdev =3D priv->netdev;
+> > > > > +       struct net_device_stats *stats;
+> > > > > +
+> > > > > +       stats =3D &netdev->stats;
+> > > > Merge the declaration with the initialization.
+> > > If I merge initialization into declaration, it's may violation RCT?
+> > > How could I change about this ?
+> > @Michal: You requested RTC in:
+> >=20
+> > https://lore.kernel.org/linux-can/ZBgKSqaFiImtTThv@localhost.localdomai=
+n/
+> >=20
+> > I looked at the kernel documentation but I could not find "Reverse
+> > Chistmas Tree". Can you point me to where this is defined?
+> >=20
+> > In the above case, I do not think RCT should apply.
+> >=20
+> > I think that this:
+> >=20
+> >          struct net_device *netdev =3D priv->netdev;
+> >          struct net_device_stats *stats =3D &netdev->stats;
+> >=20
+> > Is better than that:
+> >=20
+> >          struct net_device *netdev =3D priv->netdev;
+> >          struct net_device_stats *stats;
+> >=20
+> >          stats =3D &netdev->stats;
+> >=20
+> > Arbitrarily splitting the definition and assignment does not make sense=
+ to me.
+> >=20
+> > Thank you for your comments.
+>=20
+> The RCT coding style seems a bit confuse. How about refactoring of next
+> step? @Marc ?
 
-								Honza
+I don't are that much about RCT (so far my upstream has not complained).
+Either of the above is fine with me.
 
-> ---
->  fs/ext4/extents.c | 12 +++++-------
->  1 file changed, 5 insertions(+), 7 deletions(-)
-> 
-> diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
-> index d555ed924f37..6c3080830b00 100644
-> --- a/fs/ext4/extents.c
-> +++ b/fs/ext4/extents.c
-> @@ -3123,7 +3123,7 @@ void ext4_ext_release(struct super_block *sb)
->  #endif
->  }
->  
-> -static int ext4_zeroout_es(struct inode *inode, struct ext4_extent *ex)
-> +static void ext4_zeroout_es(struct inode *inode, struct ext4_extent *ex)
->  {
->  	ext4_lblk_t  ee_block;
->  	ext4_fsblk_t ee_pblock;
-> @@ -3134,11 +3134,10 @@ static int ext4_zeroout_es(struct inode *inode, struct ext4_extent *ex)
->  	ee_pblock = ext4_ext_pblock(ex);
->  
->  	if (ee_len == 0)
-> -		return 0;
-> +		return;
->  
->  	ext4_es_insert_extent(inode, ee_block, ee_len, ee_pblock,
->  			      EXTENT_STATUS_WRITTEN);
-> -	return 0;
->  }
->  
->  /* FIXME!! we need to try to merge to left or right after zero-out  */
-> @@ -3288,7 +3287,7 @@ static int ext4_split_extent_at(handle_t *handle,
->  			err = ext4_ext_dirty(handle, inode, path + path->p_depth);
->  			if (!err)
->  				/* update extent status tree */
-> -				err = ext4_zeroout_es(inode, &zero_ex);
-> +				ext4_zeroout_es(inode, &zero_ex);
->  			/* If we failed at this point, we don't know in which
->  			 * state the extent tree exactly is so don't try to fix
->  			 * length of the original extent as it may do even more
-> @@ -3641,9 +3640,8 @@ static int ext4_ext_convert_to_initialized(handle_t *handle,
->  out:
->  	/* If we have gotten a failure, don't zero out status tree */
->  	if (!err) {
-> -		err = ext4_zeroout_es(inode, &zero_ex1);
-> -		if (!err)
-> -			err = ext4_zeroout_es(inode, &zero_ex2);
-> +		ext4_zeroout_es(inode, &zero_ex1);
-> +		ext4_zeroout_es(inode, &zero_ex2);
->  	}
->  	return err ? err : allocated;
->  }
-> -- 
-> 2.31.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--2zdnzbummcllnzbh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRScbUACgkQvlAcSiqK
+BOg7fgf/Rcocbit+eYsSyvu1J/b+f2NEUYAwjDYH8JKZ3qY1jHq4uPsd81dYGTJA
+MqBRikUZ9+9uIBf7oZPCapOYuVbSn8oRjphmRogLpJhos3xFOj9YyvK/ghypUbce
+5Ywi7RI5VFeoSuxBYh/7uCyWB5dpGi59SUNXACijeBVva1cFluCvBeNVOJ98mAjV
+oJp00jvJOtnsr8ARwxUWcM/y4N7N3276FQInKisfPCiiVPoec8xhplJRkr8kLcMB
+aBsL29t4yy+5LTZJ4cE8GPS9sn1buJqnmKjKrLc1IWTsaWabv1QrKRKPx1SLK3ro
+DeWlwoup2kKYXnccclJTGR6hmIlrhg==
+=SrP+
+-----END PGP SIGNATURE-----
+
+--2zdnzbummcllnzbh--
