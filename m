@@ -2,73 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1662B6F4F3A
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 05:47:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E79586F4F3C
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 05:47:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbjECDrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 23:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33460 "EHLO
+        id S229569AbjECDro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 23:47:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjECDre (ORCPT
+        with ESMTP id S229452AbjECDrk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 23:47:34 -0400
+        Tue, 2 May 2023 23:47:40 -0400
 Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14AC82683;
-        Tue,  2 May 2023 20:47:33 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 1FFD13200B83;
-        Tue,  2 May 2023 23:47:32 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 441E22D69;
+        Tue,  2 May 2023 20:47:39 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 5ABCF3200B89;
+        Tue,  2 May 2023 23:47:38 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Tue, 02 May 2023 23:47:32 -0400
+  by compute4.internal (MEProxy); Tue, 02 May 2023 23:47:38 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
         :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1683085651; x=1683172051; bh=V/d/3EsAUu
-        tJ/zE1JIkDiyrgpJXuHYYJg8L0EWtFynU=; b=gCJbXru/26p0OFK/4+NzCBhVdo
-        xJbP0QoYLpejtW1zZOmhAHbKibz6qBFPbOa7QrdF8dzzDbhPPXGH8UlKs8gMhl9F
-        7q2IE0YjDLycq+3DnMq5jPolyMZ2TUOhntl9wUMohCT0oDXQVCbXyvRn3LgTp39e
-        bQ0xqn3XfqZnYofss3F59UODL6qNJaj4Lx3mGvQbsf+4rzaVVJjCsxUxps5Y/e55
-        uhKH+v/blGqW3VMWYZrWDAqsnP/l4ZY905zZa2Z8VDNMox8lXqIdikh/WlBeBEqq
-        nu0EOX8mr9aaoSt93z4sK0RWvQr4jmbpMbaR8AzCR7Wb79lWRC0Uyau8KDbw==
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1683085657; x=
+        1683172057; bh=GE4ZZwE36FI7n9XRr0c3ku1bZdvpZHi3wyNYWI2WMCQ=; b=A
+        FRFP6BxEze6wYlk3J8FeRGTYFL8op0e4dFva7u2Sr/xhk0CBXtIW+0YL8NJ9l3Cl
+        tOBlWdeM4H16kTrE55I+vNHzjwcLUDV5Mq61zDlzYNtsnNG/I2TtOufxj3sISNAe
+        4RYIiIBoAM0pFR07izAB+ff9I4+qcB1Sg5QDsPLF9lMR302dbQzVEU65vGMvaUdN
+        PcDyVne7e0TbBcQbncpoSqZ2Kx4OWK+vVhTe0yPJle6yiuzch3Q7X51chtIFWX8c
+        ZiNqW3kJ+DXs2GSIICt9Ox+gzM83Eexcg/KuxaCko8zGmgNI/LFlSJWuo1wbhMrI
+        Iz8SUwPT9bYLPm0H24rbA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1683085651; x=1683172051; bh=V/d/3EsAUutJ/
-        zE1JIkDiyrgpJXuHYYJg8L0EWtFynU=; b=dfWYp3WmDiJGciJ46jC2WrnAKwNcP
-        mnSMy3XkPZ4uiRilU3Es4nZVHKa2usUqymbrO4CSdjoXYWLxt1FNIs/JFNuLsh//
-        575I/trxL2CLuS3WJxoAMtRgfMB3ltGufSGicCcZ5M4gYLY6EBtDvtIPtJEgsEPC
-        dmoWl4LymMYNC3suQUdiWhg1fFGznxyFREYmjC/jlgJFi6asc+auflOMimtoM+uv
-        vFyD52fh17dme9WBWqLT+A2ss0H7z3rBBhZlWeDpnN8AtnVpOzheu/IHUQAnQOEB
-        YvNL2Oe59KIfIOMmt6PiLKB0kNKwCDjSH8WX+UqAx1CncoNO34DgFoLoQ==
-X-ME-Sender: <xms:U9lRZOPk0NUJsR71-vsDdyBJJ0POOGh60MyIVJVGWPkp7ab5TWGipw>
-    <xme:U9lRZM-Cz9oG0Ph2caCsoaRtp9NiXskEpHZBj5Gi_Zr2nRAvZK8JnfUvGFvlVGe5C
-    13Cgg2QnLkkWpgTmwc>
-X-ME-Received: <xmr:U9lRZFQEFao6wEXjBVZNM0dqaUy_qTKaRl25Hl4cpmMPi8zCpztm653FPtzi>
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1683085657; x=
+        1683172057; bh=GE4ZZwE36FI7n9XRr0c3ku1bZdvpZHi3wyNYWI2WMCQ=; b=U
+        nnF2LAhzcWqFi/RWguKVR29vq6Vxd6svdqLPb5xLuPbJFVmpg1lyMXS+dycc5z+1
+        ZlYadwGgA3UnfVQ7UVkVvq0F3QXpmHYdkmBTEe1qzsUELD+/lQ7BsxSQS8cQyLac
+        btTmxk1+V+dGVMFZ8XezgmVlppZMZgrlELxxl7GGPGMZowBYPaYAQ/41BG70q3qz
+        fn6HmZV6kbAhwRNpkdMHem8vRe5sjCgNfbqGAGbbfEQMntUC8VDMbCvOaGwQhCkk
+        5IdFuk/2OVBsdbuMNOlZ+a6Er6CR6E28CdbowupITIMLUUVQpmkO+hjxqlqDJTaL
+        M/vb+FEEg0FdZQXm/s/4w==
+X-ME-Sender: <xms:WdlRZGtfMizRLs_73C4OM1Naa5eCAVeZyIRlLM7-ydwyAkr6FOWxdA>
+    <xme:WdlRZLfexhvJEw7LywoT5Z1zwviurrqjX-3uxlbkLrXZwiuoehyfaeM3GL_Vw36KV
+    WfgJOXnDqidUtPAxfk>
+X-ME-Received: <xmr:WdlRZByW2XlGIS5g6uZ9PLrDvrkuiznGnlM1mevh6TR3T7za3uoflgolICme>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedvjedgjeefucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
-    ertddtnecuhfhrohhmpedfnfhukhgvucffrdculfhonhgvshdfuceolhhukhgvsehljhho
-    nhgvshdruggvvheqnecuggftrfgrthhtvghrnhepgfdujedthfduudekffefkeeiffdttd
-    dvhfegudduueffuefhfefggeefteevvdegnecuvehluhhsthgvrhfuihiivgeptdenucfr
-    rghrrghmpehmrghilhhfrhhomheplhhukhgvsehljhhonhgvshdruggvvh
-X-ME-Proxy: <xmx:U9lRZOu7KWc-XxugfhFgomFQv8M7M_X8l1HEm9lE-oOAm25EPpJ6eA>
-    <xmx:U9lRZGfpga5fHjHhe2YBiiIqAL6s3vigo0dhrCpmBSPT_UdHy1A87Q>
-    <xmx:U9lRZC2H3QLBEf6K3ORUm9r7YvtmbH_X0ZBPAVe6mlrd-CsOxkGQaw>
-    <xmx:U9lRZG7FrFcwNOU-hgPpVhGwSYlKsslEXM_Ixy-Ug9BJky7k8ejeYw>
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtke
+    ertdertddtnecuhfhrohhmpedfnfhukhgvucffrdculfhonhgvshdfuceolhhukhgvsehl
+    jhhonhgvshdruggvvheqnecuggftrfgrthhtvghrnhepgfetfedugfetudeuheetjefhue
+    fggfelleetvdevtefhueeujeefvdegleevhefgnecuvehluhhsthgvrhfuihiivgeptden
+    ucfrrghrrghmpehmrghilhhfrhhomheplhhukhgvsehljhhonhgvshdruggvvh
+X-ME-Proxy: <xmx:WdlRZBN-NU2Uulee2KCSM36FggU5aTLJa21CxKAVf6Nz0C03ij2lzg>
+    <xmx:WdlRZG-E097y17Ul1IqYDmi_yy6KjDrAX1wEMUbEXvJHZ0jeA0VpSA>
+    <xmx:WdlRZJW5RcLyVC8kZ1Q60eypT5WlhY2NEFlC8iMhkurzoJlB3-0aoQ>
+    <xmx:WdlRZNbccZwos_dyiVCUr0rIZsFHUQLbu-uG8ph0becs0n87CWDSug>
 Feedback-ID: i5ec1447f:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 2 May 2023 23:47:28 -0400 (EDT)
+ 2 May 2023 23:47:35 -0400 (EDT)
 From:   "Luke D. Jones" <luke@ljones.dev>
 To:     linux-input@vger.kernel.org
 Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com,
         rydberg@bitmath.org, linux-kernel@vger.kernel.org,
         "Luke D. Jones" <luke@ljones.dev>
-Subject: [PATCH 1/3] HID: asus: Add support for ASUS ROG Z13 keyboard
-Date:   Wed,  3 May 2023 15:47:09 +1200
-Message-Id: <20230503034711.253439-1-luke@ljones.dev>
+Subject: [PATCH 2/3] HID: asus: add keycodes for 0x6a, 0x4b, and 0xc7
+Date:   Wed,  3 May 2023 15:47:10 +1200
+Message-Id: <20230503034711.253439-2-luke@ljones.dev>
 X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230503034711.253439-1-luke@ljones.dev>
+References: <20230503034711.253439-1-luke@ljones.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,41 +85,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the ROG Z13 keyboard. This is a variant of the last
-few ASUS ROG keyboards and has much of the same functionality.
+These two keys are found on some models with dual display.
+- 0x6a is intended for controlling the secondary screen brightness.
+- 0x4b is intended for toggling the arrow keys between arrows and
+  page up / page down.
+This key is found on a slightly modified keyboard layout.
+- 0xc7 is intended to cycle through keybvoard brightnesses (upwards) but
+  there is not suitable existing code for this behaviour. Using
+  `KEY_KBDILLUMTOGGLE` is different behaviour to Windows but at least
+  is picked up by many desktops already.
 
 Signed-off-by: Luke D. Jones <luke@ljones.dev>
 ---
- drivers/hid/hid-asus.c | 3 +++
- drivers/hid/hid-ids.h  | 1 +
- 2 files changed, 4 insertions(+)
+ drivers/hid/hid-asus.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/drivers/hid/hid-asus.c b/drivers/hid/hid-asus.c
-index d1094bb1aa42..ac93f987d822 100644
+index ac93f987d822..918d0d05ca88 100644
 --- a/drivers/hid/hid-asus.c
 +++ b/drivers/hid/hid-asus.c
-@@ -1267,6 +1267,9 @@ static const struct hid_device_id asus_devices[] = {
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_ASUSTEK,
- 	    USB_DEVICE_ID_ASUSTEK_ROG_NKEY_KEYBOARD2),
- 	  QUIRK_USE_KBD_BACKLIGHT | QUIRK_ROG_NKEY_KEYBOARD },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_ASUSTEK,
-+	    USB_DEVICE_ID_ASUSTEK_ROG_NKEY_KEYBOARD3),
-+	  QUIRK_USE_KBD_BACKLIGHT | QUIRK_ROG_NKEY_KEYBOARD },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_ASUSTEK,
- 	    USB_DEVICE_ID_ASUSTEK_ROG_CLAYMORE_II_KEYBOARD),
- 	  QUIRK_ROG_CLAYMORE_II_KEYBOARD },
-diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-index c2e9b6d1fd7d..513290a2e91c 100644
---- a/drivers/hid/hid-ids.h
-+++ b/drivers/hid/hid-ids.h
-@@ -207,6 +207,7 @@
- #define USB_DEVICE_ID_ASUSTEK_ROG_KEYBOARD3 0x1822
- #define USB_DEVICE_ID_ASUSTEK_ROG_NKEY_KEYBOARD	0x1866
- #define USB_DEVICE_ID_ASUSTEK_ROG_NKEY_KEYBOARD2	0x19b6
-+#define USB_DEVICE_ID_ASUSTEK_ROG_NKEY_KEYBOARD3	0x1a30
- #define USB_DEVICE_ID_ASUSTEK_ROG_CLAYMORE_II_KEYBOARD	0x196b
- #define USB_DEVICE_ID_ASUSTEK_FX503VD_KEYBOARD	0x1869
+@@ -883,6 +883,7 @@ static int asus_input_mapping(struct hid_device *hdev,
+ 		case 0xb5: asus_map_key_clear(KEY_CALC);			break;
+ 		case 0xc4: asus_map_key_clear(KEY_KBDILLUMUP);		break;
+ 		case 0xc5: asus_map_key_clear(KEY_KBDILLUMDOWN);		break;
++		case 0xc7: asus_map_key_clear(KEY_KBDILLUMTOGGLE);	break;
  
+ 		/* ASUS touchpad toggle */
+ 		case 0x6b: asus_map_key_clear(KEY_F21);			break;
+@@ -911,6 +912,12 @@ static int asus_input_mapping(struct hid_device *hdev,
+ 		/* Fn+Right Aura mode next on N-Key keyboard */
+ 		case 0xb3: asus_map_key_clear(KEY_PROG3);		break;
+ 
++		/* Screenpad toggle on N-Key keyboard */
++		case 0x6a: asus_map_key_clear(KEY_F13);		break;
++
++		/* Arrows/Page-up/Down toggle on N-Key keyboard */
++		case 0x4b: asus_map_key_clear(KEY_F14);		break;
++
+ 		default:
+ 			/* ASUS lazily declares 256 usages, ignore the rest,
+ 			 * as some make the keyboard appear as a pointer device. */
 -- 
 2.40.0
 
