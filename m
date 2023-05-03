@@ -2,201 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FD2D6F5F7C
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 21:57:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03A9C6F5F81
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 21:58:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbjECT50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 15:57:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35800 "EHLO
+        id S229861AbjECT6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 15:58:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229802AbjECT5Z (ORCPT
+        with ESMTP id S229544AbjECT6P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 15:57:25 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CD1D83E6
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 12:57:21 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-b9e6ec482b3so3223300276.3
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 12:57:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683143840; x=1685735840;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1Ox1/516ZvGWiy6XQzvdYM7/gH/XZHZIVHoP8inhzxM=;
-        b=tRO5/vsXmgz8bVUiKFCXTV8aovuqnpc72ZftAjAmKaHKUf97DDZm/88QvfymfWreye
-         9t68UwHLaPnIKrub9j6Uh3xDEzv32OfM52MVZU5n2roAEMLmNGL5OgnkuwpX473CFnhE
-         Q224qoZ9m0ei5qlLmUFmbz4acl3XMEWtwAyAq6pPi1lB4p9Mrd7Baw78EtRNJdYVkcvG
-         D5WtsIugC6jkpwf9NZ1EZKUfSJyaLOnAJx5TgAasi0iBHbse8rj94z/kDqfv+sqddCPJ
-         AWbxexAHZRDHXnRqbhJpejXPxipykhlLNVvttdrlypKH19n9HWGhOj23xTTvOI2T4CP9
-         L2zg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683143840; x=1685735840;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1Ox1/516ZvGWiy6XQzvdYM7/gH/XZHZIVHoP8inhzxM=;
-        b=K35nRvNnxnAmhRTpGY285cZ+ypSFxLdBAAttqq6BiJOogGhyT31/dK8GDQNHF7HwQQ
-         e0dZRoVF8pi7+C+uNioWWKlp9TMLFnfAyxSsDtmXJ9s15sGMJVw0lw8Ou0o2XsoWU+yw
-         CWQd94eJoIcjLKSw7NkFDJ3i7E6MAAjnQicBVI+srDU7XI8hLy3M1iAgnXe4Pdlr8eLw
-         TFDjbNDTpqQLgfi8Pn+x00XWk8jKvWO1aN92Hb/7aJDa6g/KhwCktgqpTimm7uF0qU90
-         4+RUIfHpbnHCBJosnZQxW/yRLm8+yXHghybaYVvu8JBNRiyg57RWa9Oa8EZ33JajZGx/
-         rHLQ==
-X-Gm-Message-State: AC+VfDw+MS/N+KwbCpM7iqP8g6vSyKPTAjSBbYzZcDULd+FCPYUJGz4H
-        PE7Nqw3HK27yc6DHxbJA4ZdRpN8yLSspZKh8u6oV1g==
-X-Google-Smtp-Source: ACHHUZ7ABw610g4pAAup3sgwroFeEko5dVILAFx3nQjtdd9Aki/WRsMXwrfgPFiTJCmml2TfA6W46q0XZ5s6cGLvQ/g=
-X-Received: by 2002:a25:f46:0:b0:b9d:f4df:b0ef with SMTP id
- 67-20020a250f46000000b00b9df4dfb0efmr13111149ybp.42.1683143840443; Wed, 03
- May 2023 12:57:20 -0700 (PDT)
+        Wed, 3 May 2023 15:58:15 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C04D4C29;
+        Wed,  3 May 2023 12:58:14 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 343JOU6M006258;
+        Wed, 3 May 2023 19:58:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=UCOhXWCZzsXVE1aRTaRL66l6NR89OJhY/cqL2K78T4o=;
+ b=bmSSJIsr/lTaIj7MnMRByLsQybF/1CZxfchFpL1pFkq2PzgzAErxeVhpZjPnaCUvRQqR
+ iyfNyLxsMFwxTTa8VEHNvQuP8mEm4JRpeHsomJjQUPMT8HrzkoPtNBiDmGl+lenz4bws
+ yMf0fWTvRvu56i6flbEkchQnL6gg12vNj+SxWSjmeLZDts0juXVfn1EDmH7R9UAUMRua
+ BLkEkT7f9LuySOgp4iHTYApqb/I4mE/KLY+9K9PRbpL4eAD6IXITiDKOtPlN5/lrjXmf
+ 31mhz4gtrjr3ZiyfBsyOKHiiV9Zx0K3wtZpEu5pz5CYLmJcpIyEZGIgiLzTuFNxxm33h Zg== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qb9bhtra4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 03 May 2023 19:58:03 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 343Jw2AT006878
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 3 May 2023 19:58:02 GMT
+Received: from [10.71.110.189] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 3 May 2023
+ 12:58:01 -0700
+Message-ID: <fe691246-93ee-7d84-aa6b-3d4ef51a6381@quicinc.com>
+Date:   Wed, 3 May 2023 12:58:01 -0700
 MIME-Version: 1.0
-References: <20230501175025.36233-1-surenb@google.com> <ZFBvOh8r5WbTVyA8@casper.infradead.org>
- <CAJuCfpHfAFx9rjv0gHK77LbP-8gd-kFnWw=aqfQTP6pH=zvMNg@mail.gmail.com>
- <ZFCB+G9KSNE+J9cZ@casper.infradead.org> <CAJuCfpES=G8i99yYXWoeJq9+JVUjX5Bkq_5VNVTVX7QT+Wkfxg@mail.gmail.com>
- <ZFEmN6G7WRy59Mum@casper.infradead.org> <CAJuCfpFs+Rgpu8v+ddHFwtOx33W5k1sKDdXHM2ej1Upyo_9y4g@mail.gmail.com>
- <ZFGPLXIis6tl1QWX@casper.infradead.org> <CAJuCfpGgc_bCEAE5LrhYPk=qXMU=owgiABTO9ZNqaBx-xfrOuQ@mail.gmail.com>
- <CAJD7tkZJ1VPB+bA0cjHHcehoMW2fT96-h=C5pRHD=Z+SJXYosA@mail.gmail.com>
-In-Reply-To: <CAJD7tkZJ1VPB+bA0cjHHcehoMW2fT96-h=C5pRHD=Z+SJXYosA@mail.gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 3 May 2023 12:57:09 -0700
-Message-ID: <CAJuCfpE9dVK01c-aNT_uwTC=m8RSdEiXsoe6XBR48GjL=ezsmg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] mm: handle swap page faults under VMA lock if page is uncontended
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Matthew Wilcox <willy@infradead.org>, akpm@linux-foundation.org,
-        hannes@cmpxchg.org, mhocko@suse.com, josef@toxicpanda.com,
-        jack@suse.cz, ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
-        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com, hdanton@sina.com,
-        apopple@nvidia.com, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 3/7] drm/msm/dpu: add DPU_PINGPONG_DSC bits into PP_BLK
+ and PP_BLK_TE marcos
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
+        <agross@kernel.org>, <andersson@kernel.org>
+CC:     <quic_abhinavk@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <marijn.suijten@somainline.org>, <freedreno@lists.freedesktop.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1683061382-32651-1-git-send-email-quic_khsieh@quicinc.com>
+ <1683061382-32651-4-git-send-email-quic_khsieh@quicinc.com>
+ <4315e96f-ed29-92aa-9549-d6fc9d820de6@linaro.org>
+ <648e7cca-8bb1-73f0-2bbb-0a6b81df3882@quicinc.com>
+ <a40c72c2-3483-020c-907e-6c7d84e88fbd@linaro.org>
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <a40c72c2-3483-020c-907e-6c7d84e88fbd@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: NCubpt8ns_d3_3WbCZ13bunCw8m2fhg9
+X-Proofpoint-ORIG-GUID: NCubpt8ns_d3_3WbCZ13bunCw8m2fhg9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-03_14,2023-05-03_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ priorityscore=1501 impostorscore=0 phishscore=0 suspectscore=0 spamscore=0
+ mlxlogscore=999 mlxscore=0 bulkscore=0 lowpriorityscore=0 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2305030171
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 3, 2023 at 1:34=E2=80=AFAM Yosry Ahmed <yosryahmed@google.com> =
-wrote:
->
-> On Tue, May 2, 2023 at 4:05=E2=80=AFPM Suren Baghdasaryan <surenb@google.=
-com> wrote:
-> >
-> > On Tue, May 2, 2023 at 3:31=E2=80=AFPM Matthew Wilcox <willy@infradead.=
-org> wrote:
-> > >
-> > > On Tue, May 02, 2023 at 09:36:03AM -0700, Suren Baghdasaryan wrote:
-> > > > On Tue, May 2, 2023 at 8:03=E2=80=AFAM Matthew Wilcox <willy@infrad=
-ead.org> wrote:
-> > > > >
-> > > > > On Mon, May 01, 2023 at 10:04:56PM -0700, Suren Baghdasaryan wrot=
-e:
-> > > > > > On Mon, May 1, 2023 at 8:22=E2=80=AFPM Matthew Wilcox <willy@in=
-fradead.org> wrote:
-> > > > > > >
-> > > > > > > On Mon, May 01, 2023 at 07:30:13PM -0700, Suren Baghdasaryan =
-wrote:
-> > > > > > > > On Mon, May 1, 2023 at 7:02=E2=80=AFPM Matthew Wilcox <will=
-y@infradead.org> wrote:
-> > > > > > > > >
-> > > > > > > > > On Mon, May 01, 2023 at 10:50:23AM -0700, Suren Baghdasar=
-yan wrote:
-> > > > > > > > > > +++ b/mm/memory.c
-> > > > > > > > > > @@ -3711,11 +3711,6 @@ vm_fault_t do_swap_page(struct v=
-m_fault *vmf)
-> > > > > > > > > >       if (!pte_unmap_same(vmf))
-> > > > > > > > > >               goto out;
-> > > > > > > > > >
-> > > > > > > > > > -     if (vmf->flags & FAULT_FLAG_VMA_LOCK) {
-> > > > > > > > > > -             ret =3D VM_FAULT_RETRY;
-> > > > > > > > > > -             goto out;
-> > > > > > > > > > -     }
-> > > > > > > > > > -
-> > > > > > > > > >       entry =3D pte_to_swp_entry(vmf->orig_pte);
-> > > > > > > > > >       if (unlikely(non_swap_entry(entry))) {
-> > > > > > > > > >               if (is_migration_entry(entry)) {
-> > > > > > > > >
-> > > > > > > > > You're missing the necessary fallback in the (!folio) cas=
-e.
-> > > > > > > > > swap_readpage() is synchronous and will sleep.
-> > > > > > > >
-> > > > > > > > True, but is it unsafe to do that under VMA lock and has to=
- be done
-> > > > > > > > under mmap_lock?
-> > > > > > >
-> > > > > > > ... you were the one arguing that we didn't want to wait for =
-I/O with
-> > > > > > > the VMA lock held?
-> > > > > >
-> > > > > > Well, that discussion was about waiting in folio_lock_or_retry(=
-) with
-> > > > > > the lock being held. I argued against it because currently we d=
-rop
-> > > > > > mmap_lock lock before waiting, so if we don't drop VMA lock we =
-would
-> > > > > > be changing the current behavior which might introduce new
-> > > > > > regressions. In the case of swap_readpage and swapin_readahead =
-we
-> > > > > > already wait with mmap_lock held, so waiting with VMA lock held=
- does
-> > > > > > not introduce new problems (unless there is a need to hold mmap=
-_lock).
-> > > > > >
-> > > > > > That said, you are absolutely correct that this situation can b=
-e
-> > > > > > improved by dropping the lock in these cases too. I just didn't=
- want
-> > > > > > to attack everything at once. I believe after we agree on the a=
-pproach
-> > > > > > implemented in https://lore.kernel.org/all/20230501175025.36233=
--3-surenb@google.com
-> > > > > > for dropping the VMA lock before waiting, these cases can be ad=
-ded
-> > > > > > easier. Does that make sense?
-> > > > >
-> > > > > OK, I looked at this path some more, and I think we're fine.  Thi=
-s
-> > > > > patch is only called for SWP_SYNCHRONOUS_IO which is only set for
-> > > > > QUEUE_FLAG_SYNCHRONOUS devices, which are brd, zram and nvdimms
-> > > > > (both btt and pmem).  So the answer is that we don't sleep in thi=
-s
-> > > > > path, and there's no need to drop the lock.
-> > > >
-> > > > Yes but swapin_readahead does sleep, so I'll have to handle that ca=
-se
-> > > > too after this.
-> > >
-> > > Sleeping is OK, we do that in pXd_alloc()!  Do we block on I/O anywhe=
-re
-> > > in swapin_readahead()?  It all looks like async I/O to me.
-> >
-> > Hmm. I thought that we have synchronous I/O in the following paths:
-> >     swapin_readahead()->swap_cluster_readahead()->swap_readpage()
-> >     swapin_readahead()->swap_vma_readahead()->swap_readpage()
-> > but just noticed that in both cases swap_readpage() is called with the
-> > synchronous parameter being false. So you are probably right here...
->
-> In both swap_cluster_readahead() and swap_vma_readahead() it looks
-> like if the readahead window is 1 (aka we are not reading ahead), then
-> we jump to directly calling read_swap_cache_async() passing do_poll =3D
-> true, which means we may end up calling swap_readpage() passing
-> synchronous =3D true.
->
-> I am not familiar with readahead heuristics, so I am not sure how
-> common this is, but it's something to think about.
 
-Uh, you are correct. If this branch is common, we could use the same
-"drop the lock and retry" pattern inside read_swap_cache_async(). That
-would be quite easy to implement.
-Thanks for checking on it!
+On 5/3/2023 11:55 AM, Dmitry Baryshkov wrote:
+> On 03/05/2023 20:45, Kuogee Hsieh wrote:
+>>
+>> On 5/2/2023 3:42 PM, Dmitry Baryshkov wrote:
+>>> On 03/05/2023 00:02, Kuogee Hsieh wrote:
+>>>> At legacy chipsets, it required DPU_PINGPONG_DSC bit be set to 
+>>>> indicate
+>>>> pingpong ops functions are required to complete DSC data path setup if
+>>>> this chipset has DSC hardware block presented. This patch add
+>>>> DPU_PINGPONG_DSC bit to both PP_BLK and PP_BLK_TE marcos if it has DSC
+>>>> hardware block presented.
+>>>>
+>>>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+>>>> ---
+>>>>   .../drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h    | 12 +++++-----
+>>>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h |  8 +++----
+>>>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h | 26 
+>>>> ++++++++++------------
+>>>>   .../drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h    | 24 
+>>>> ++++++++++----------
+>>>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_0_sm8250.h | 26 
+>>>> ++++++++++------------
+>>>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_2_sc7180.h |  4 ++--
+>>>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_3_sm6115.h |  2 +-
+>>>>   .../drm/msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h    |  2 +-
+>>>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |  8 +++----
+>>>>   9 files changed, 54 insertions(+), 58 deletions(-)
+>>>>
+>>>> diff --git 
+>>>> a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h 
+>>>> b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+>>>> index 17f821c..b7cd746 100644
+>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+>>>> @@ -112,16 +112,16 @@ static const struct dpu_lm_cfg msm8998_lm[] = {
+>>>>   };
+>>>>     static const struct dpu_pingpong_cfg msm8998_pp[] = {
+>>>> -    PP_BLK_TE("pingpong_0", PINGPONG_0, 0x70000, 0, 
+>>>> sdm845_pp_sblk_te,
+>>>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
+>>>> +    PP_BLK_TE("pingpong_0", PINGPONG_0, 0x70000, 
+>>>> BIT(DPU_PINGPONG_DSC), 0,
+>>>> +            sdm845_pp_sblk_te, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
+>>>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
+>>>> -    PP_BLK_TE("pingpong_1", PINGPONG_1, 0x70800, 0, 
+>>>> sdm845_pp_sblk_te,
+>>>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
+>>>> +    PP_BLK_TE("pingpong_1", PINGPONG_1, 0x70800, 
+>>>> BIT(DPU_PINGPONG_DSC), 0,
+>>>> +            sdm845_pp_sblk_te, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
+>>>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 13)),
+>>>> -    PP_BLK("pingpong_2", PINGPONG_2, 0x71000, 0, sdm845_pp_sblk,
+>>>> +    PP_BLK("pingpong_2", PINGPONG_2, 0x71000, 0, 0, sdm845_pp_sblk,
+>>>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10),
+>>>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 14)),
+>>>> -    PP_BLK("pingpong_3", PINGPONG_3, 0x71800, 0, sdm845_pp_sblk,
+>>>> +    PP_BLK("pingpong_3", PINGPONG_3, 0x71800, 0, 0, sdm845_pp_sblk,
+>>>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11),
+>>>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
+>>>
+>>> Just to doublecheck: why don't we have DPU_PINGPONG_DSC for PP_3/_4? 
+>>> We do have them on sdm845. Is it because we should not use DSC with 
+>>> thos PINGPONG blocks?
+>>>
+>> I think it only have two DSPP connect to pp blocks
+>
+> So, can they be connected to PP3/4 or not?
+
+no, my previous reply is not correct.
+
+original i though pp_3/_4 are for write back.
+
+but this not correct, 2 dspp can connect to pp_3/_4 also.
+
+I will add DPU_PINGPONG_DSC to pp_3/_4.
+
 
 >
-> > Does that mean swapin_readahead() might return a page which does not
-> > have its content swapped-in yet?
-> >
+>>>>   };
+>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h 
+>>>> b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h
+>>>> index ceca741..8888bd9 100644
+>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h
+>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h
+>>>> @@ -110,16 +110,16 @@ static const struct dpu_lm_cfg sdm845_lm[] = {
+>>>>   };
+>>>>     static const struct dpu_pingpong_cfg sdm845_pp[] = {
+>>>> -    PP_BLK_TE("pingpong_0", PINGPONG_0, 0x70000, 0, 
+>>>> sdm845_pp_sblk_te,
+>>>> +    PP_BLK_TE("pingpong_0", PINGPONG_0, 0x70000, 
+>>>> BIT(DPU_PINGPONG_DSC), 0, sdm845_pp_sblk_te,
+>>>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
+>>>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
+>>>> -    PP_BLK_TE("pingpong_1", PINGPONG_1, 0x70800, 0, 
+>>>> sdm845_pp_sblk_te,
+>>>> +    PP_BLK_TE("pingpong_1", PINGPONG_1, 0x70800, 
+>>>> BIT(DPU_PINGPONG_DSC), 0, sdm845_pp_sblk_te,
+>>>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
+>>>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 13)),
+>>>> -    PP_BLK("pingpong_2", PINGPONG_2, 0x71000, 0, sdm845_pp_sblk,
+>>>> +    PP_BLK("pingpong_2", PINGPONG_2, 0x71000, 
+>>>> BIT(DPU_PINGPONG_DSC), 0, sdm845_pp_sblk,
+>>>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10),
+>>>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 14)),
+>>>> -    PP_BLK("pingpong_3", PINGPONG_3, 0x71800, 0, sdm845_pp_sblk,
+>>>> +    PP_BLK("pingpong_3", PINGPONG_3, 0x71800, 
+>>>> BIT(DPU_PINGPONG_DSC), 0, sdm845_pp_sblk,
+>>>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11),
+>>>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
+>>>>
+>>>
+>>> [skipped the rest, looks good to me]
+>>>
+>
