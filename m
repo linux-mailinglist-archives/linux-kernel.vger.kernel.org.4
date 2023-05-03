@@ -2,76 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 268E96F5F02
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 21:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E5726F5F00
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 21:15:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbjECTPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 15:15:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42420 "EHLO
+        id S229761AbjECTPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 15:15:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbjECTPL (ORCPT
+        with ESMTP id S229564AbjECTPL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 3 May 2023 15:15:11 -0400
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82D077690
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 12:15:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=EhdvKt6fX3eyfVjkfKTMAZRD9OI88urIeLzb1B2hSPM=; b=j0Gwons4s5FUq/78sp8LgxzVTP
-        2FHF6xLZdhAxISl+mp2oHaYMQ7jwJTz3haBYn1dhDlKgsQJa0aIQO78CunvaTGc86Ki13q14YgTuU
-        Q3umhiQrAVSAM+Gv1wDliK04Dm1pKTbxpPe8R9J8FCu62W2hIAWsSiRvmCgbgDdvKn2gRUJFyN3gl
-        W848m7d6Km6t2WtFicatkglaPcAtZxbKRIxeqY2d2+8uMWGQWvy5ykUs/2HWe/1hqqBLsAkvTz5jX
-        A/Y6isPexHsKdM+9iaicddj9Pty3El0qQNSyKPop4C5DU7153ldwlARn3VrA+6AeShivtXrnleV+G
-        DsP1ZbLA==;
-Received: from [179.113.250.147] (helo=[192.168.1.111])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1puHwL-000eUN-2j; Wed, 03 May 2023 21:15:01 +0200
-Message-ID: <59774c28-a0ef-d4f2-e920-503857bce1cf@igalia.com>
-Date:   Wed, 3 May 2023 16:14:11 -0300
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DEAE7AAF
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 12:15:10 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-76978e7cd59so259741339f.2
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 12:15:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683141309; x=1685733309;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hoixSgrRQjNG22JONFbya6qV97s6dKsxLycBj9co2c0=;
+        b=CsPtWL+OFfG6Ij7ojYrHp2KWUGtYs2B1x3IXDWalqHPtWnveavGwsoBLpKQLSbRwS9
+         OL9mKkm8G/euBDW42CN0JjtAsRg7WMVCJ4PLWLmYnh10+nxuv5fOCrWWjl359UdXy2E7
+         /38tW6OjwS+gnFb4jZn/ftYgQYOtjKozn22rtJvOseIvXyU65Ucajkvd4UolurhFLyWG
+         2EhqaU7alZh9qD2iADatqPAdy7+awNFLTb862AkIUhCOJWP4zsys5DarQelpajg2qtTr
+         chsOSUvG6mi0OJKmM5uO0qJZQf5V7fYUwsoAp73S0pQS3FNPxrOI2rYgIwKPC9LXf2+Q
+         AMHA==
+X-Gm-Message-State: AC+VfDzgSohwFRkph7wpa28aeFYWAz63Nl/wOmXBCerY5A9k3A4zbKPJ
+        QtbvzwgbrfzELcjzx4uEQpQrRbRyNIIrpp6eEUZwc5KecxbNICY=
+X-Google-Smtp-Source: ACHHUZ7W0N0LqYyZ3J2ScXyAVyBHY0dHDp8G+fgwcsvPi5Gs2rBY/w+sqQZyhNSvinf2RHWHfhjhE/EYfxbqQLT9LUgHQKF1HTbG
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [RFC PATCH 0/1] Add AMDGPU_INFO_GUILTY_APP ioctl
-Content-Language: en-US
-To:     =?UTF-8?Q?Timur_Krist=c3=b3f?= <timur.kristof@gmail.com>,
-        Felix Kuehling <felix.kuehling@amd.com>
-Cc:     Alex Deucher <alexdeucher@gmail.com>,
-        "Pelloux-Prayer, Pierre-Eric" <pierre-eric.pelloux-prayer@amd.com>,
-        =?UTF-8?B?TWFyZWsgT2zFocOhaw==?= <maraeo@gmail.com>,
-        michel.daenzer@mailbox.org,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Samuel Pitoiset <samuel.pitoiset@gmail.com>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        kernel-dev@igalia.com,
-        "Deucher, Alexander" <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-References: <20230501185747.33519-1-andrealmeid@igalia.com>
- <CADnq5_NXj4W44F_etRQ7HWdVTnf5zARCM3Y_o3EiwWiHj8QMpA@mail.gmail.com>
- <6ab2ff76-4518-6fac-071e-5d0d5adc4fcd@igalia.com>
- <cb3d2590-a1f8-fe7e-0bba-638ee80719af@amd.com>
- <CAFF-SiV0=WNmRW-D9uYUuj68Zq0APxtGLya9KR6FfZ7v0Zf2RQ@mail.gmail.com>
- <fcca2934-a556-797c-535d-a66fc67bbe30@amd.com>
- <85c538b01efb6f3fa6ff05ed1a0bc3ff87df7a61.camel@gmail.com>
- <CADnq5_NHtFbwT=x8u7GYc4ESL_HVFzjgtOd3AnVFBYMrjZq55w@mail.gmail.com>
- <c54414482b685af0991a6b095cbfb7534d998afc.camel@gmail.com>
- <CADnq5_MSY=j9AobDk7ACevur4Hwvw_ub7g16Mfm7ymMJqwVNfQ@mail.gmail.com>
- <57fa0ee4-de4f-3797-f817-d05f72541d0e@gmail.com>
- <2bf162d0-6112-8370-8828-0e0b21ac22ba@amd.com>
- <967a044bc2723cc24ab914506c0164db08923c59.camel@gmail.com>
-From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>
-In-Reply-To: <967a044bc2723cc24ab914506c0164db08923c59.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+X-Received: by 2002:a6b:dc05:0:b0:760:e9b6:e6de with SMTP id
+ s5-20020a6bdc05000000b00760e9b6e6demr10548055ioc.0.1683141309499; Wed, 03 May
+ 2023 12:15:09 -0700 (PDT)
+Date:   Wed, 03 May 2023 12:15:09 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000dc2d3005facedfb7@google.com>
+Subject: [syzbot] upstream boot error: BUG: unable to handle kernel NULL
+ pointer dereference in __irq_resolve_mapping
+From:   syzbot <syzbot+ed37e5e7af93ae8a08ba@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, maz@kernel.org,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,65 +55,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em 03/05/2023 14:43, Timur Kristóf escreveu:
-> Hi Felix,
-> 
-> On Wed, 2023-05-03 at 11:08 -0400, Felix Kuehling wrote:
->> That's the worst-case scenario where you're debugging HW or FW
->> issues.
->> Those should be pretty rare post-bringup. But are there hangs caused
->> by
->> user mode driver or application bugs that are easier to debug and
->> probably don't even require a GPU reset?
-> 
-> There are many GPU hangs that gamers experience while playing. We have
-> dozens of open bug reports against RADV about GPU hangs on various GPU
-> generations. These usually fall into two categories:
-> 
-> 1. When the hang always happens at the same point in a game. These are
-> painful to debug but manageable.
-> 2. "Random" hangs that happen to users over the course of playing a
-> game for several hours. It is absolute hell to try to even reproduce
-> let alone diagnose these issues, and this is what we would like to
-> improve.
-> 
-> For these hard-to-diagnose problems, it is already a challenge to
-> determine whether the problem is the kernel (eg. setting wrong voltages
-> / frequencies) or userspace (eg. missing some synchronization), can be
-> even a game bug that we need to work around.
-> 
->> For example most VM faults can
->> be handled without hanging the GPU. Similarly, a shader in an endless
->> loop should not require a full GPU reset.
-> 
-> This is actually not the case, AFAIK André's test case was an app that
-> had an infinite loop in a shader.
-> 
+Hello,
 
-This is the test app if anyone want to try out: 
-https://github.com/andrealmeid/vulkan-triangle-v1. Just compile and run.
+syzbot found the following issue on:
 
-The kernel calls amdgpu_ring_soft_recovery() when I run my example, but 
-I'm not sure what a soft recovery means here and if it's a full GPU 
-reset or not.
+HEAD commit:    348551ddaf31 Merge tag 'pinctrl-v6.4-1' of git://git.kerne..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=14398ef8280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=124f13edd5df0b0d
+dashboard link: https://syzkaller.appspot.com/bug?extid=ed37e5e7af93ae8a08ba
+compiler:       arm-linux-gnueabi-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm
 
-But if we can at least trust the CP registers to dump information for 
-soft resets, it would be some improvement from the current state I think
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+ed37e5e7af93ae8a08ba@syzkaller.appspotmail.com
 
->>
->> It's more complicated for graphics because of the more complex
->> pipeline
->> and the lack of CWSR. But it should still be possible to do some
->> debugging without JTAG if the problem is in SW and not HW or FW. It's
->> probably worth improving that debugability without getting hung-up on
->> the worst case.
-> 
-> I agree, and we welcome any constructive suggestion to improve the
-> situation. It seems like our idea doesn't work if the kernel can't give
-> us the information we need.
-> 
-> How do we move forward?
-> 
-> Best regards,
-> Timur
-> 
+8<--- cut here ---
+Unable to handle kernel NULL pointer dereference at virtual address 00000213 when read
+[00000213] *pgd=80000080004003, *pmd=00000000
+Internal error: Oops: 207 [#1] PREEMPT SMP ARM
+Modules linked in:
+CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.3.0-syzkaller #0
+Hardware name: ARM-Versatile Express
+PC is at irq_data_to_desc include/linux/irqdesc.h:124 [inline]
+PC is at __irq_resolve_mapping+0x40/0x90 kernel/irq/irqdomain.c:968
+LR is at rcu_read_lock include/linux/rcupdate.h:771 [inline]
+LR is at __irq_resolve_mapping+0x20/0x90 kernel/irq/irqdomain.c:960
+pc : [<802c0dec>]    lr : [<802c0dcc>]    psr: 20000193
+sp : 82601e58  ip : 82601e58  fp : 82601e74
+r10: 00000000  r9 : 8261ae40  r8 : 00000000
+r7 : df80a00c  r6 : 00000000  r5 : 0000001b  r4 : 83094000
+r3 : 83094060  r2 : 8261ae40  r1 : 0000001b  r0 : 00000207
+Flags: nzCv  IRQs off  FIQs on  Mode SVC_32  ISA ARM  Segment user
+Control: 30c5387d  Table: 848c1880  DAC: fffffffd
+Register r0 information: non-paged memory
+Register r1 information: non-paged memory
+Register r2 information: non-slab/vmalloc memory
+Register r3 information:
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 0 at mm/slub.c:4649 __kmem_obj_info+0x1c4/0x21c mm/slub.c:4649
+Modules linked in:
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
