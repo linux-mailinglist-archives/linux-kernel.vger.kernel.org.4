@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65EDA6F5869
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 14:59:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 338836F5873
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 15:01:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbjECM7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 08:59:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59222 "EHLO
+        id S230028AbjECNBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 09:01:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbjECM7e (ORCPT
+        with ESMTP id S229601AbjECNBU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 08:59:34 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90342DF;
-        Wed,  3 May 2023 05:59:33 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-50bd2d7ba74so6352645a12.1;
-        Wed, 03 May 2023 05:59:33 -0700 (PDT)
+        Wed, 3 May 2023 09:01:20 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 166271A5;
+        Wed,  3 May 2023 06:01:19 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-95369921f8eso832037066b.0;
+        Wed, 03 May 2023 06:01:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683118772; x=1685710772;
+        d=gmail.com; s=20221208; t=1683118877; x=1685710877;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
         bh=MwC+BnPU6BKqxfDtGr6AFGwZArDyvQQ/gezoS0Ber4M=;
-        b=Whvtoc/skophwF5/lRnqZvU1HO9Y43Jm5bQ33Y4F+62KIWB5UxTiVA7QWdvdULYFkz
-         MwIU3Oe/1xZRIouK++//fKBd/uW1VGOwKoWjzMtRhxvqlMsIkqp8AuYIqvx4ASTqoCRN
-         8U6FduvNK59YjQlWcLUaVSPpZWoumSiXY9GqUBrfl+pKq5Rkl3YhjnczZfu4kO4fqqLz
-         8cfwzm6C4WBZIRMbmE5xMIBaDSaxqiwnYLzreA5DhoWKx09nB26U970l8mg1c1oWDq5o
-         x6LtGx9876/D9WscvZK/IVj6BnbxKfNVkbIBhJCvjq9n1+3YoMzKwt/LN3OZcyiOFhKk
-         ho5w==
+        b=X3oBKjudACwmC75Y4wdJDr/J+xLu8cqCfJ7s6xOe71aUPDGQ1Q6bGm3sZA416t1+Sr
+         iXcevJSgMY4H67knvJTWrlnLkjFaoirfoBQSM4cNPugqgp+lutVkqjyGTXGjskpXh6I+
+         OH9auC7rUdmKJN31C3C/e+HZP6tLmfOXY7Whi538m9aBoGQ7A0bnGPspxTfsD1ziKnOm
+         VrtcF3vl4yhmkE1SORUM76taFPbaXigFI4rK959Z0xvlqypRgcKHV643jqYoEclL3y14
+         S75aEIN3xUKpKayqonu7OaGzFnUsWSOYnVG1Zirjzaa7ElSP+Y+LG/8YQz0lVUsYYZ5e
+         8Oog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683118772; x=1685710772;
+        d=1e100.net; s=20221208; t=1683118877; x=1685710877;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
         bh=MwC+BnPU6BKqxfDtGr6AFGwZArDyvQQ/gezoS0Ber4M=;
-        b=OsEBdFc1xeIFkPXjW6R6V+XuW7vx4+f7DFSiSmDT8xNyGj2ivS7MvHzN6U3fpzk/ll
-         tDdPf67jlDVSCiqEGIOJMq4JZQIWnwyu2ZMPi1vYw1S+s3ngAEVX2YEIg0Gey+CP5X+H
-         qlAzV+MRwy+ro0QzfZ+CmJGPKEoVFDtmfZT/J1U0o3kpbLh8iBxZNMu3Q+iqOxOcIfza
-         yHEf3XeqGI5n1brpIvowpesmMBXyX3G48E/CBNjH8j0cqSZokoNJYagtycQZAjfQjB9Q
-         uHO15whMLoM/5OzVxAKideDlzyXbp78AvEryKGB5Qaqopx+HqUvRxabx8q9t7Fa29Qjl
-         Xw9A==
-X-Gm-Message-State: AC+VfDw8Iaf6R+qz8u6xJUyn8auJ7alaltc69fK8MlBVqjUX7XenIXO8
-        FCdA+X91BQIfqheL7Qk+sWc=
-X-Google-Smtp-Source: ACHHUZ72Fpw9/LNn4QH8bRfBYxsRJdfj9uLxypIA46Jhz9l0FywBbW/ZnyfmqNjGGZ+WjHN1Vh41lg==
-X-Received: by 2002:a17:907:7f89:b0:94b:769f:3ba3 with SMTP id qk9-20020a1709077f8900b0094b769f3ba3mr1841245ejc.8.1683118771593;
-        Wed, 03 May 2023 05:59:31 -0700 (PDT)
+        b=GKnJ8ZgwdQOMLEiZqtzgeNHFHjAy3rkFXqtL152E2zCkTjZy1CKR6totn/kgjwW+Ol
+         KHjQ/OCcFmPk+XPUjGo1QNJpmTHuSnq/0cMloDb9HGKRym2KrrNerboU1MVdzvnmCxcE
+         lfLRirotPlNKD2ieI8aEbRcENed/eL35KDFA1qzaBu/lMFDFmOi8ijwEplS/OTvg3ua4
+         O6/Bu44bIiLvloN098aCy11hhbfAsh543rLhmUxjaiPP+XdR4F9Cs4RpxGWoegfxmef1
+         IMc2E8CVTDuc/CnXXZHuno/tL+XGlq7vvTkOa7o6F+0qe9bjzhhsfPuAgp8SxbqxvVPl
+         dZGA==
+X-Gm-Message-State: AC+VfDwyNDZ1S22tJAe+qrX9Eeg9+vo274HowL+1o4DMiRXsW6ADRkLc
+        ibS8nym1dcwcomQkr0GVBfQ=
+X-Google-Smtp-Source: ACHHUZ47sxAcuWe0Hv30Dop6iLckSfStKoHwrI2n8/fQBLmJMSxeAD8FhXDAXTZyMlEzKeQReVI4+w==
+X-Received: by 2002:a17:907:608f:b0:94a:71b6:c007 with SMTP id ht15-20020a170907608f00b0094a71b6c007mr3327638ejc.8.1683118876191;
+        Wed, 03 May 2023 06:01:16 -0700 (PDT)
 Received: from localhost.localdomain ([95.183.227.33])
-        by smtp.gmail.com with ESMTPSA id gn2-20020a1709070d0200b009545230e682sm17107696ejc.91.2023.05.03.05.59.29
+        by smtp.gmail.com with ESMTPSA id my17-20020a1709065a5100b0095728081944sm16105578ejc.146.2023.05.03.06.01.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 May 2023 05:59:31 -0700 (PDT)
+        Wed, 03 May 2023 06:01:15 -0700 (PDT)
 From:   Yassine Oudjana <yassine.oudjana@gmail.com>
 X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
 To:     Andy Gross <agross@kernel.org>,
@@ -60,12 +60,12 @@ To:     Andy Gross <agross@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
-        "Yassine Oudjana linux-arm-msm @ vger . kernel . org" 
-        <yassine.oudjana@gmail.com>, linux-clk@vger.kernel.org,
+        Yassine Oudjana <yassine.oudjana@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/3] MSM8996 Pro CBF scaling support
-Date:   Wed,  3 May 2023 15:59:13 +0300
-Message-Id: <20230503125916.144600-1-y.oudjana@protonmail.com>
+Subject: [PATCH RESEND 0/3] MSM8996 Pro CBF scaling support
+Date:   Wed,  3 May 2023 16:00:48 +0300
+Message-Id: <20230503130051.144708-1-y.oudjana@protonmail.com>
 X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
