@@ -2,120 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6096A6F5634
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 12:31:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E72DA6F5637
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 12:31:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbjECKbC convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 3 May 2023 06:31:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43976 "EHLO
+        id S229606AbjECKbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 06:31:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbjECKbB (ORCPT
+        with ESMTP id S229734AbjECKbX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 06:31:01 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F4510C
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 03:30:57 -0700 (PDT)
-Received: from ip4d1634d3.dynamic.kabel-deutschland.de ([77.22.52.211] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1pu9kq-00078d-S7; Wed, 03 May 2023 12:30:36 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     philipp.tomsich@vrull.eu, Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     bjorn@kernel.org, jrtc27@jrtc27.com,
-        linux-riscv@lists.infradead.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        kito.cheng@sifive.com, Conor Dooley <conor.dooley@microchip.com>,
-        matthias.bgg@gmail.com, heinrich.schuchardt@canonical.com,
-        greentime.hu@sifive.com, nick.knight@sifive.com,
-        christoph.muellner@vrull.eu,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/4] Expose the isa-string via the AT_BASE_PLATFORM aux vector
-Date:   Wed, 03 May 2023 12:30:36 +0200
-Message-ID: <4830085.8hb0ThOEGa@diego>
-In-Reply-To: <mhng-4b9e3d86-2f0b-47da-8a5d-bd383a0171d6@palmer-ri-x1c9>
-References: <mhng-4b9e3d86-2f0b-47da-8a5d-bd383a0171d6@palmer-ri-x1c9>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
+        Wed, 3 May 2023 06:31:23 -0400
+Received: from mx0.infotecs.ru (mx0.infotecs.ru [91.244.183.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3AC19A8;
+        Wed,  3 May 2023 03:31:17 -0700 (PDT)
+Received: from mx0.infotecs-nt (localhost [127.0.0.1])
+        by mx0.infotecs.ru (Postfix) with ESMTP id 80BE4108C502;
+        Wed,  3 May 2023 13:31:15 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx0.infotecs.ru 80BE4108C502
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=infotecs.ru; s=mx;
+        t=1683109875; bh=KWv390BkinmwwaXe96nBkFt4dpGvWr/qTiStRAKAVhA=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=dpafbq+bhwwYhA/y/OAtDaHVigVH9ay9e74OwOcLJtfsPm1DNxHDuQUzGG05RYT0t
+         5+6Nazeye+n6Hwsputbg/8i2nbfFm0wXrQBLv/dedMvzr6CN8fwe40rs1WhKMKk7D2
+         A8zTVwbqmF+cVei3PnvviOMBr2fKv1hPZrxsBeew=
+Received: from msk-exch-01.infotecs-nt (msk-exch-01.infotecs-nt [10.0.7.191])
+        by mx0.infotecs-nt (Postfix) with ESMTP id 7909330A7C8F;
+        Wed,  3 May 2023 13:31:15 +0300 (MSK)
+From:   Gavrilov Ilia <Ilia.Gavrilov@infotecs.ru>
+To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+CC:     Simon Horman <simon.horman@corigine.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Xin Long <lucien.xin@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "lvc-project@linuxtesting.org" <lvc-project@linuxtesting.org>
+Subject: [PATCH net v3] sctp: remove unncessary check in
+ sctp_sched_set_sched()
+Thread-Topic: [PATCH net v3] sctp: remove unncessary check in
+ sctp_sched_set_sched()
+Thread-Index: AQHZfapjObQbDNSxlkamyq2whi4gYQ==
+Date:   Wed, 3 May 2023 10:31:14 +0000
+Message-ID: <20230503103108.3977352-1-Ilia.Gavrilov@infotecs.ru>
+References: <ZFFNLtBYepvBzoPr@t14s.localdomain>
+In-Reply-To: <ZFFNLtBYepvBzoPr@t14s.localdomain>
+Accept-Language: ru-RU, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.17.0.10]
+x-exclaimer-md-config: 208ac3cd-1ed4-4982-a353-bdefac89ac0a
 Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-KLMS-Rule-ID: 1
+X-KLMS-Message-Action: clean
+X-KLMS-AntiSpam-Lua-Profiles: 177141 [May 03 2023]
+X-KLMS-AntiSpam-Version: 5.9.59.0
+X-KLMS-AntiSpam-Envelope-From: Ilia.Gavrilov@infotecs.ru
+X-KLMS-AntiSpam-Rate: 0
+X-KLMS-AntiSpam-Status: not_detected
+X-KLMS-AntiSpam-Method: none
+X-KLMS-AntiSpam-Auth: dkim=none
+X-KLMS-AntiSpam-Info: LuaCore: 510 510 bc345371020d3ce827abc4c710f5f0ecf15eaf2e, {Tracking_from_domain_doesnt_match_to}, 127.0.0.199:7.1.2;infotecs.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
+X-MS-Exchange-Organization-SCL: -1
+X-KLMS-AntiSpam-Interceptor-Info: scan successful
+X-KLMS-AntiPhishing: Clean, bases: 2023/05/03 08:22:00
+X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, bases: 2023/05/03 05:22:00 #21210527
+X-KLMS-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The value of the 'sched' parameter of the function 'sctp_sched_set_sched'
+is checked on the calling side, so the internal check can be removed
 
-Am Dienstag, 2. Mai 2023, 19:15:29 CEST schrieb Palmer Dabbelt:
-> On Tue, 02 May 2023 02:13:10 PDT (-0700), philipp.tomsich@vrull.eu wrote:
-> > On Tue, 2 May 2023 at 09:58, Björn Töpel <bjorn@kernel.org> wrote:
-> >>
-> >> Philipp Tomsich <philipp.tomsich@vrull.eu> writes:
-> >>
-> >> > It is a pity that the current interface was designed without involving
-> >> > RVI (and that I had to ask my team to put together a patch set for
-> >> > further discussion, given that none of the other major vendors in RVI
-> >> > stepped forward).  I guarantee that plenty of reviewers would have
-> >> > highlighted that a central registry (even if it is just a kernel
-> >> > header) should be avoided.
-> >>
-> >> Are you claiming that the hwprobe work was not done in the open, but
-> >> secretly merged? That is not only incorrect, but rude to upstream RISC-V
-> >> Linux developers. I suggest you review how you interact with upstream
-> >> kernel work.
-> >
-> > Please don't put words into my mouth...
-> >
-> > I was merely pointing out that there was no engagement by the RVI
-> > member companies (in regard to this mechanism) within RVI, which would
-> > have prevented Jessica's issue.
-> > This would have also helped to address the concerns on vendor-defined
-> > extensions.
-> >
-> > Also who do you refer to when you say "how _you_ interact"?  If it is
-> > RVI that you refer to: it doesn't interact with upstream work
-> > directly, as it doesn't own any engineering resources.
-> > RVI provides a forum for member companies to come to an
-> > understanding/design and then have the member companies perform the
-> > work and take it upstream.
-> 
-> I'm not even sure what you're looking for here: if RVI doesn't want to 
-> work upstream, then complaining that RVI isn't part of upstream 
-> discussions is pretty pointless.
-> 
-> >> Why didn't RVI get involved in the review of the series? The expectation
-> >> cannot be that all open source projects go to RVI, but rather the other
-> >> way around.
-> >
-> > That is exactly the point I was making and which you seem to miss: RVI
-> > does not own any engineering resources and depends solely on its
-> > member companies to project into open source projects.
-> >
-> >> Take a look at commit ea3de9ce8aa2 ("RISC-V: Add a syscall for HW
-> >> probing"). Your team was very much involved in the review.
-> >
-> > I am aware, as I had reviewed and commented on these are well.
-> > And my only request (was and) is that we need to figure out a way to
-> > efficiently deal with vendor-defined extensions.
-> 
-> Maybe you should go talk to you team, then?  Handling vendor extensions 
-> via hwprobe has been discussed, sounds like you're confused again.
+Found by InfoTeCS on behalf of Linux Verification Center
+(linuxtesting.org) with SVACE.
 
-I too have this vague memory of us talking about vendor extensions,
-but my memory is really bad for stuff like this, so I spent the morning
-combing through all the hwprobe iterations looking for it, but so far
-have only found
+Signed-off-by: Ilia.Gavrilov <Ilia.Gavrilov@infotecs.ru>
+---
+V2:
+ - Change the order of local variables=20
+ - Specify the target tree in the subject
+V3:
+ - Change description
+ - Remove 'fixes'
+ net/sctp/stream_sched.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-https://lore.kernel.org/lkml/CALs-HstoeoTWjTEZrLWouCgwq0t3tDB6uL=tB68RJDs1ub4Frw@mail.gmail.com/
-
-I'm most likely just blind, but does someone have another pointer?
-
-
-Thanks
-Heiko
-
-
+diff --git a/net/sctp/stream_sched.c b/net/sctp/stream_sched.c
+index 330067002deb..52d308bdb469 100644
+--- a/net/sctp/stream_sched.c
++++ b/net/sctp/stream_sched.c
+@@ -155,9 +155,6 @@ int sctp_sched_set_sched(struct sctp_association *asoc,
+ 	if (old =3D=3D n)
+ 		return ret;
+=20
+-	if (sched > SCTP_SS_MAX)
+-		return -EINVAL;
+-
+ 	if (old)
+ 		sctp_sched_free_sched(&asoc->stream);
+=20
+--=20
+2.30.2
