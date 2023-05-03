@@ -2,152 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03C686F5448
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 11:15:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 880E36F540C
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 11:11:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229606AbjECJPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 05:15:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55024 "EHLO
+        id S229511AbjECJLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 05:11:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbjECJPu (ORCPT
+        with ESMTP id S229460AbjECJLk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 05:15:50 -0400
-Received: from mx0.infotecs.ru (mx0.infotecs.ru [91.244.183.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ACC449F6;
-        Wed,  3 May 2023 02:15:20 -0700 (PDT)
-Received: from mx0.infotecs-nt (localhost [127.0.0.1])
-        by mx0.infotecs.ru (Postfix) with ESMTP id 12512108AFAA;
-        Wed,  3 May 2023 12:08:18 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx0.infotecs.ru 12512108AFAA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=infotecs.ru; s=mx;
-        t=1683104898; bh=vPxxxy7yV8868nj9fGRfvJrPnweJYozvSJXXZIINGZo=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=O0+p5usXS6dDvhwZJJh9p0mrY6Q80lT/FA3VYIZ37f6MaxjcmQMBshFwqsBI9ikjh
-         inCvROSbr4fQGrnU17RK8j+vzP55ntmQwrgMBynBwNaaPx8fqprgjfWuE7NfyD39km
-         cvIrRGeF0nAjjhFCU2juhf+qydl3gtI6d655pFqc=
-Received: from msk-exch-02.infotecs-nt (msk-exch-02.infotecs-nt [10.0.7.192])
-        by mx0.infotecs-nt (Postfix) with ESMTP id 095E830B3400;
-        Wed,  3 May 2023 12:08:18 +0300 (MSK)
-From:   Gavrilov Ilia <Ilia.Gavrilov@infotecs.ru>
-To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>
-CC:     "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
-        "lucien.xin@gmail.com" <lucien.xin@gmail.com>,
-        "lvc-project@linuxtesting.org" <lvc-project@linuxtesting.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "nhorman@tuxdriver.com" <nhorman@tuxdriver.com>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "simon.horman@corigine.com" <simon.horman@corigine.com>
-Subject: Re: [PATCH net v2] sctp: fix a potential buffer overflow in
- sctp_sched_set_sched()
-Thread-Topic: [PATCH net v2] sctp: fix a potential buffer overflow in
- sctp_sched_set_sched()
-Thread-Index: AQHZfRha2tve32hJCkW0xqVNIsz0zK9HEG0AgAEAqYA=
-Date:   Wed, 3 May 2023 09:08:17 +0000
-Message-ID: <95bc9b12-9e1e-5054-c2df-ad9201d94ed5@infotecs.ru>
-References: <20230502130316.2680585-1-Ilia.Gavrilov@infotecs.ru>
- <20230502170516.39760-1-kuniyu@amazon.com>
- <ZFFNLtBYepvBzoPr@t14s.localdomain>
-In-Reply-To: <ZFFNLtBYepvBzoPr@t14s.localdomain>
-Accept-Language: ru-RU, en-US
-Content-Language: ru-RU
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.17.0.10]
-x-exclaimer-md-config: 208ac3cd-1ed4-4982-a353-bdefac89ac0a
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <1C74EF4D003C8D4B85C674386ED3FD4C@infotecs.ru>
-Content-Transfer-Encoding: base64
+        Wed, 3 May 2023 05:11:40 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A04259EC
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 02:11:16 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f182d745deso47577805e9.0
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 02:11:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683105051; x=1685697051;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iaoC3PHQvk7zFvJs+Qr9k0+mYfQsIaix2pxrBYU29ms=;
+        b=CRXSobVpXSYru4BinE0vENUhBsSPob02mJj0ui0NK0K1IYwnS8+mEqufMpi3CoDpr+
+         O++pJbkG9jE8pqX7WHMDs+qSiRKg3fwWQvralelqiwZ0CiJ8Kk71jSxz2HigUFjlbCuv
+         bIgDbDf9vji2lR3EvAens+OxkJquZmtxuN/sbcLOtk8V3N5S/rhSxgeMiPa3FHnmxjzo
+         TTrQYQVlsNgwb/76C+07arw/mqUugXL4O9sPF+mdPiBaz4f3S+eNjHwtwe8xKcofG4sH
+         /e4rPPbPwpySqOjRHNhQHVq7MJAz/ukB4jLEvirSPQxbm3+zWqcvKIV4FgbDdn9lkXv0
+         ZYQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683105051; x=1685697051;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iaoC3PHQvk7zFvJs+Qr9k0+mYfQsIaix2pxrBYU29ms=;
+        b=RyG61GVaSlKvEhuDBWQtqXTXRHx0qYnA37YpjdmuuOR58qF5L6uJeoVoI+eYtcwIW5
+         AGJlCF4pA6QZn0hoSE5tmAiA5E64mBqpH7SdzaK277VnUwQNh7D35nO9bxHw0oUlBr6G
+         4cuLNGy6wILmSbqQEEtbecqSNqazGZQLzys4b17b6bTCLxIxdkIPMnu6+bHCOI/xWgqX
+         +x3Svs8Wz8j52L/jJjDkyxuXOy++yV0HD2uPvA0a3GkblYj06+nRgdROEjw9el/BQ46Q
+         fsbaUv45aAaJ1hXVtYk1EU3u2eKmd/qNAJDB7FRLLHwoHXOV2jnp2oDvp0QPE4yvibXj
+         RozA==
+X-Gm-Message-State: AC+VfDx8iKg3c1lj5t7wEgxVeaLDJTkGMDFL0u8TyDZT1o4lsz1GM63o
+        +/Jys+tsDZheknHCckyZb82Kng==
+X-Google-Smtp-Source: ACHHUZ58LnUQtXDejYI1/H8uC+LEG2o4vb+AEPcHMm57SC9SyHauaRURPd/g3/gMpOXT05bilczeZA==
+X-Received: by 2002:a1c:7208:0:b0:3f0:a06a:7593 with SMTP id n8-20020a1c7208000000b003f0a06a7593mr14737792wmc.11.1683105050998;
+        Wed, 03 May 2023 02:10:50 -0700 (PDT)
+Received: from [197.55.55.58] ([93.107.151.186])
+        by smtp.gmail.com with ESMTPSA id x16-20020a05600c21d000b003f318be9442sm1257597wmj.40.2023.05.03.02.10.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 May 2023 02:10:50 -0700 (PDT)
+Message-ID: <aa193282-b35f-6293-7b7c-c26ed3bd4699@linaro.org>
+Date:   Wed, 3 May 2023 10:10:48 +0100
 MIME-Version: 1.0
-X-KLMS-Rule-ID: 1
-X-KLMS-Message-Action: clean
-X-KLMS-AntiSpam-Lua-Profiles: 177140 [May 03 2023]
-X-KLMS-AntiSpam-Version: 5.9.59.0
-X-KLMS-AntiSpam-Envelope-From: Ilia.Gavrilov@infotecs.ru
-X-KLMS-AntiSpam-Rate: 0
-X-KLMS-AntiSpam-Status: not_detected
-X-KLMS-AntiSpam-Method: none
-X-KLMS-AntiSpam-Auth: dkim=none
-X-KLMS-AntiSpam-Info: LuaCore: 510 510 bc345371020d3ce827abc4c710f5f0ecf15eaf2e, {Tracking_msgid_8}, {Tracking_uf_ne_domains}, {Tracking_from_domain_doesnt_match_to}, 127.0.0.199:7.1.2;infotecs.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
-X-MS-Exchange-Organization-SCL: -1
-X-KLMS-AntiSpam-Interceptor-Info: scan successful
-X-KLMS-AntiPhishing: Clean, bases: 2023/05/03 08:22:00
-X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, bases: 2023/05/03 05:22:00 #21210527
-X-KLMS-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 1/3] media: dt-bindings: media: camss: qcom,msm8996-camss:
+ Add CAMSS power domain and power-domain-names
+Content-Language: en-US
+To:     Yassine Oudjana <yassine.oudjana@gmail.com>,
+        Robert Foss <rfoss@kernel.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hans Verkuil <hansverk@cisco.com>
+Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230503072543.4837-1-y.oudjana@protonmail.com>
+ <20230503072543.4837-2-y.oudjana@protonmail.com>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <20230503072543.4837-2-y.oudjana@protonmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCg0K0KEg0YPQstCw0LbQtdC90LjQtdC8LA0K0JjQu9GM0Y8g0JPQsNCy0YDQuNC70L7Qsg0K
-0JLQtdC00YPRidC40Lkg0L/RgNC+0LPRgNCw0LzQvNC40YHRgg0K0J7RgtC00LXQuyDRgNCw0LfR
-gNCw0LHQvtGC0LrQuA0K0JDQniAi0JjQvdGE0L7QotC10JrQoSIg0LIg0LMuINCh0LDQvdC60YIt
-0J/QtdGC0LXRgNCx0YPRgNCzDQoxMjcyODcsINCzLiDQnNC+0YHQutCy0LAsINCh0YLQsNGA0YvQ
-uSDQn9C10YLRgNC+0LLRgdC60L4t0KDQsNC30YPQvNC+0LLRgdC60LjQuSDQv9GA0L7QtdC30LQs
-INC00L7QvCAxLzIzLCDRgdGC0YAuIDENClQ6ICs3IDQ5NSA3MzctNjEtOTIgKCDQtNC+0LEuIDQ5
-MjEpDQrQpDogKzcgNDk1IDczNy03Mi03OA0KDQoNCklsaWEuR2F2cmlsb3ZAaW5mb3RlY3MucnUN
-Cnd3dy5pbmZvdGVjcy5ydQ0KDQoNCk9uIDUvMi8yMyAyMDo0OSwgTWFyY2VsbyBSaWNhcmRvIExl
-aXRuZXIgd3JvdGU6DQo+IE9uIFR1ZSwgTWF5IDAyLCAyMDIzIGF0IDEwOjA1OjE2QU0gLTA3MDAs
-IEt1bml5dWtpIEl3YXNoaW1hIHdyb3RlOg0KPj4gRnJvbTogICBHYXZyaWxvdiBJbGlhIDxJbGlh
-LkdhdnJpbG92QGluZm90ZWNzLnJ1Pg0KPj4gRGF0ZTogICBUdWUsIDIgTWF5IDIwMjMgMTM6MDM6
-MjQgKzAwMDANCj4+PiBUaGUgJ3NjaGVkJyBpbmRleCB2YWx1ZSBtdXN0IGJlIGNoZWNrZWQgYmVm
-b3JlIGFjY2Vzc2luZyBhbiBlbGVtZW50DQo+Pj4gb2YgdGhlICdzY3RwX3NjaGVkX29wcycgYXJy
-YXkuIE90aGVyd2lzZSwgaXQgY2FuIGxlYWQgdG8gYnVmZmVyIG92ZXJmbG93Lg0KPj4NCj4+IE9P
-QiBhY2Nlc3MgPw0KPg0KPiBNeSB0aG91Z2h0IGFzIHdlbGwuDQo+DQoNCkknbSBzb3JyeS4gWWVz
-LCBJIG1lYW50IG91dC1vZi1ib3VuZHMgYWNjZXNzLg0KDQo+PiBCdXQgaXQncyBub3QgdHJ1ZSBi
-ZWNhdXNlIGl0IGRvZXMgbm90IGhhcHBlbiBpbiB0aGUgZmlyc3QgcGxhY2UuDQo+Pg0KPj4+DQo+
-Pj4gTm90ZSB0aGF0IGl0J3MgaGFybWxlc3Mgc2luY2UgdGhlICdzY2hlZCcgcGFyYW1ldGVyIGlz
-IGNoZWNrZWQgYmVmb3JlDQo+Pj4gY2FsbGluZyAnc2N0cF9zY2hlZF9zZXRfc2NoZWQnLg0KPj4+
-DQo+Pj4gRm91bmQgYnkgSW5mb1RlQ1Mgb24gYmVoYWxmIG9mIExpbnV4IFZlcmlmaWNhdGlvbiBD
-ZW50ZXINCj4+PiAobGludXh0ZXN0aW5nLm9yZykgd2l0aCBTVkFDRS4NCj4+Pg0KPj4+IEZpeGVz
-OiA1YmJiYmUzMmE0MzEgKCJzY3RwOiBpbnRyb2R1Y2Ugc3RyZWFtIHNjaGVkdWxlciBmb3VuZGF0
-aW9ucyIpDQo+Pj4gUmV2aWV3ZWQtYnk6IFNpbW9uIEhvcm1hbiA8c2ltb24uaG9ybWFuQGNvcmln
-aW5lLmNvbT4NCj4+PiBTaWduZWQtb2ZmLWJ5OiBJbGlhLkdhdnJpbG92IDxJbGlhLkdhdnJpbG92
-QGluZm90ZWNzLnJ1Pg0KPj4+IC0tLQ0KPj4+IFYyOg0KPj4+ICAgLSBDaGFuZ2UgdGhlIG9yZGVy
-IG9mIGxvY2FsIHZhcmlhYmxlcw0KPj4+ICAgLSBTcGVjaWZ5IHRoZSB0YXJnZXQgdHJlZSBpbiB0
-aGUgc3ViamVjdA0KPj4+ICAgbmV0L3NjdHAvc3RyZWFtX3NjaGVkLmMgfCA5ICsrKysrLS0tLQ0K
-Pj4+ICAgMSBmaWxlIGNoYW5nZWQsIDUgaW5zZXJ0aW9ucygrKSwgNCBkZWxldGlvbnMoLSkNCj4+
-Pg0KPj4+IGRpZmYgLS1naXQgYS9uZXQvc2N0cC9zdHJlYW1fc2NoZWQuYyBiL25ldC9zY3RwL3N0
-cmVhbV9zY2hlZC5jDQo+Pj4gaW5kZXggMzMwMDY3MDAyZGViLi40ZDA3NmE5Yjg1OTIgMTAwNjQ0
-DQo+Pj4gLS0tIGEvbmV0L3NjdHAvc3RyZWFtX3NjaGVkLmMNCj4+PiArKysgYi9uZXQvc2N0cC9z
-dHJlYW1fc2NoZWQuYw0KPj4+IEBAIC0xNDYsMTggKzE0NiwxOSBAQCBzdGF0aWMgdm9pZCBzY3Rw
-X3NjaGVkX2ZyZWVfc2NoZWQoc3RydWN0IHNjdHBfc3RyZWFtICpzdHJlYW0pDQo+Pj4gICBpbnQg
-c2N0cF9zY2hlZF9zZXRfc2NoZWQoc3RydWN0IHNjdHBfYXNzb2NpYXRpb24gKmFzb2MsDQo+Pj4g
-ICAgZW51bSBzY3RwX3NjaGVkX3R5cGUgc2NoZWQpDQo+Pj4gICB7DQo+Pj4gLXN0cnVjdCBzY3Rw
-X3NjaGVkX29wcyAqbiA9IHNjdHBfc2NoZWRfb3BzW3NjaGVkXTsNCj4+PiAgIHN0cnVjdCBzY3Rw
-X3NjaGVkX29wcyAqb2xkID0gYXNvYy0+b3V0cXVldWUuc2NoZWQ7DQo+Pj4gICBzdHJ1Y3Qgc2N0
-cF9kYXRhbXNnICptc2cgPSBOVUxMOw0KPj4+ICtzdHJ1Y3Qgc2N0cF9zY2hlZF9vcHMgKm47DQo+
-Pj4gICBzdHJ1Y3Qgc2N0cF9jaHVuayAqY2g7DQo+Pj4gICBpbnQgaSwgcmV0ID0gMDsNCj4+Pg0K
-Pj4+IC1pZiAob2xkID09IG4pDQo+Pj4gLXJldHVybiByZXQ7DQo+Pj4gLQ0KPj4+ICAgaWYgKHNj
-aGVkID4gU0NUUF9TU19NQVgpDQo+Pj4gICByZXR1cm4gLUVJTlZBTDsNCj4+DQo+PiBJJ2QganVz
-dCByZW1vdmUgdGhpcyBjaGVjayBpbnN0ZWFkIGJlY2F1c2UgdGhlIHNhbWUgdGVzdCBpcyBkb25l
-DQo+PiBpbiB0aGUgY2FsbGVyIHNpZGUsIHNjdHBfc2V0c29ja29wdF9zY2hlZHVsZXIoKSwgYW5k
-IHRoaXMgZXJybm8NCj4+IGlzIG5ldmVyIHJldHVybmVkLg0KPj4NCj4+IFRoaXMgdW5uZWNlc3Nh
-cnkgdGVzdCBjb25mdXNlcyBhIHJlYWRlciBsaWtlIHNjaGVkIGNvdWxkIGJlIG92ZXINCj4+IFND
-VFBfU1NfTUFYIGhlcmUuDQo+DQo+IEl0J3MgYWN0dWFseSBiZXR0ZXIgdG8ga2VlcCB0aGUgdGVz
-dCBoZXJlIGFuZCByZW1vdmUgaXQgZnJvbSB0aGUNCj4gY2FsbGVyczogdGhleSBkb24ndCBuZWVk
-IHRvIGtub3cgdGhlIHNwZWNpZmljcywgYW5kIGZ1cnRoZXIgbmV3IGNhbGxzDQo+IHdpbGwgYmUg
-cHJvdGVjdGVkIGFscmVhZHkuDQo+DQoNCkkgYWdyZWUgdGhhdCB0aGUgY2hlY2sgc2hvdWxkIGJl
-IHJlbW92ZWQsIGJ1dCBJIHRoaW5rIGl0J3MgYmV0dGVyIHRvDQprZWVwIHRoZSB0ZXN0IG9uIHRo
-ZSBjYWxsaW5nIHNpZGUsIGJlY2F1c2UgcGFyYW1zLT5hc3NvY192YWx1ZSBpcyBzZXQgYXMNCnRo
-ZSBkZWZhdWx0ICJzdHJlYW0gc2NoZWR1bGUiIGZvciB0aGUgc29ja2V0IGFuZCBpdCBuZWVkcyB0
-byBiZSBjaGVja2VkIHRvby4NCg0Kc3RhdGljIGludCBzY3RwX3NldHNvY2tvcHRfc2NoZWR1bGVy
-KC4uLiwgc3RydWN0IHNjdHBfYXNzb2NfdmFsdWUNCipwYXJhbXMsIC4uLikNCnsNCi4uLg0KICAg
-aWYgKHBhcmFtcy0+YXNzb2NfaWQgPT0gU0NUUF9GVVRVUkVfQVNTT0MgfHwNCiAgICAgICBwYXJh
-bXMtPmFzc29jX2lkID09IFNDVFBfQUxMX0FTU09DKQ0KICAgICAgIHNwLT5kZWZhdWx0X3NzID0g
-cGFyYW1zLT5hc3NvY192YWx1ZTsNCi4uLg0KfQ0KDQo+Pg0KPj4gU2luY2UgdGhlIE9PQiBhY2Nl
-c3MgZG9lcyBub3QgaGFwcGVuLCBJIHRoaW5rIHRoaXMgcGF0Y2ggc2hvdWxkDQo+PiBnbyB0byBu
-ZXQtbmV4dCB3aXRob3V0IHRoZSBGaXhlcyB0YWcgYWZ0ZXIgdGhlIG1lcmdlIHdpbmRvdy4NCj4N
-Cj4gWXVwLg0KPg0KPj4NCj4+IFRoYW5rcywNCj4+IEt1bml5dWtpDQo+Pg0KPj4NCj4+Pg0KPj4+
-ICtuID0gc2N0cF9zY2hlZF9vcHNbc2NoZWRdOw0KPj4+ICtpZiAob2xkID09IG4pDQo+Pj4gK3Jl
-dHVybiByZXQ7DQo+Pj4gKw0KPj4+ICAgaWYgKG9sZCkNCj4+PiAgIHNjdHBfc2NoZWRfZnJlZV9z
-Y2hlZCgmYXNvYy0+c3RyZWFtKTsNCj4+Pg0KPj4+IC0tDQo+Pj4gMi4zMC4yDQoNCg==
+On 03/05/2023 08:25, Yassine Oudjana wrote:
+> From: Yassine Oudjana <y.oudjana@protonmail.com>
+> 
+> Add the CAMSS power domain which is needed for the proper operation of CAMSS, and add
+> power-domain-names to ease fetching it as well as the other power domains.
+> 
+> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+> ---
+>   .../bindings/media/qcom,msm8996-camss.yaml          | 13 ++++++++++++-
+>   1 file changed, 12 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/media/qcom,msm8996-camss.yaml b/Documentation/devicetree/bindings/media/qcom,msm8996-camss.yaml
+> index 8a10aa1cafc5..27c9a11f0df9 100644
+> --- a/Documentation/devicetree/bindings/media/qcom,msm8996-camss.yaml
+> +++ b/Documentation/devicetree/bindings/media/qcom,msm8996-camss.yaml
+> @@ -85,6 +85,13 @@ properties:
+>       items:
+>         - description: VFE0 GDSC - Video Front End, Global Distributed Switch Controller.
+>         - description: VFE1 GDSC - Video Front End, Global Distributed Switch Controller.
+> +      - description: CAMSS GDSC - Camera Subsystem, Global Distributed Switch Controller.
+> +
+> +  power-domain-names:
+> +    items:
+> +      - const: vfe0
+> +      - const: vfe1
+> +      - const: camss
+>   
+>     ports:
+>       $ref: /schemas/graph.yaml#/properties/ports
+> @@ -209,6 +216,7 @@ required:
+>     - interrupts
+>     - iommus
+>     - power-domains
+> +  - power-domain-names
+>     - reg
+>     - reg-names
+>     - vdda-supply
+> @@ -326,7 +334,10 @@ examples:
+>            <&vfe_smmu 3>;
+>   
+>         power-domains = <&mmcc VFE0_GDSC>,
+> -        <&mmcc VFE1_GDSC>;
+> +        <&mmcc VFE1_GDSC>,
+> +        <&mmcc CAMSS_GDSC>;
+> +
+> +      power-domain-names = "vfe0", "vfe1", "camss";
+>   
+>         reg = <0x00a34000 0x1000>,
+>           <0x00a00030 0x4>,
+
+Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
