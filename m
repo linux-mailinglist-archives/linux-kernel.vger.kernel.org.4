@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C6DB6F52D2
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 10:11:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D24D76F52D5
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 10:12:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbjECILy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 04:11:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41136 "EHLO
+        id S229888AbjECIMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 04:12:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbjECILv (ORCPT
+        with ESMTP id S229633AbjECIMJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 04:11:51 -0400
+        Wed, 3 May 2023 04:12:09 -0400
 Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2050.outbound.protection.outlook.com [40.107.21.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EBD146B7
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 01:11:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB36146A3
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 01:11:51 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kXQX+UUJY2bu9LxYIgsO52Mqckz5jwvkjluqLGppct67bkVjxvot4eYZIoVTAP8vEdKzfP7MNswEHvMFHcbZ+UnB1odcR3BDl0JOwRHKFdqmfbLl2T2wZ1CMYN52E+25sjvVTzfpZbGRqkU+UMCYezO7YOiN4xXo/XMDN3XYfMNYmSCvoICMxDuAx8BC4fhnpcY6SuA+UAi0gaAxplcuT91pjrwwPDRoCzEAxSHmIz39Sr6vSjFSZysfpRfMkFIMh+QlauX2uQ/1ARoaNIfM5qYPgtxdA8zr4BCW2Bq0lheH44Z85pIyThhFu8dFHoHkj91L42uQT8Gy05f0d6+M6A==
+ b=QTqTlgYLnEMhsfYQROcOmprRN8oEy1wsfL66dIAnSiMgKXpZic+RKM3/DEub9xWO+dJDInbi2Oj64peQkWd71RX2+nFHXP15eIykKVTfUKPfdWq+/M7xSAUsnKLI7dWi/qNwFxsKJugncFQ+Ab5sphqPkU1DCnETNZQSym+sDScPK20VlF5jGQmr88wzBWD1y1LEb85rRzzYWaHL2wzdh0LgX01JEO8pgZRjgNPS7p+PNLk5i0dzDLhejBecx/dxbAUaogm/cisTyK4LjbXhjxL9u46RBAuSCKJueqWzEUUOSqg2UAMnH4egAa27jtbYpQF2uSHylfRuxCc8CkUwGA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OXAvWKaynpHsAI1tgqGNwCOSqmltsAuQnpT0Am+tucc=;
- b=Bll+tRMMUVTb/QwX30GKU5G1rBAbUCPGNNrb91Y4RJ5iftf7YKwVCOmCGBfp29Uqk1e59LwC9EeLHDrMUF+zYsQOH5KCejNUY7qLxsHsisSbSBsjnxDea/u0V28DERfg/wDdX2pL7MvRmr1eiIEZ3/kCiPxE+o4IwlhU8Ei8OIunwsMA3a0NEKDNaAPzBH0VCI+Zkx+gOYTfvUIvd6JE46go2y/7lQTMKi7Qy9R8OubBOgi+tpKKaQWmYlPhUT9w4f/ZCAb1ofhzk9bzvi1y3chcm9msMuJDhxq86NKY7BKiIag1DZISf5mjUtfLyCABji26YeNzKAIJT1j344QTFg==
+ bh=VdJB7DfPMN5TpI2aSmxNRf/xXhSL2fePyA3eXXbmOcQ=;
+ b=D9u3pVrV01X8R/oQ4CR59qGi9EGEww6IqRc31yoG6D6nKgaQT5M9vp2CLvY6eomBLSmKNR54EDBKLP8mJyERKvJJDWB/M7GrMDgfZ4iuXKzharZFWowopbzcPUqFmwi5NgeHVfV4QzsyZJ+lbJv9j11HjW5gVPOFh4sDXCVTZQHR2HZ5F1LWDEfLPM2OC/vIZ7Yn9S7jMXW3nMChmcOqKFogE3rTK5CyNw1oX4WPLKJRMTHxeqX/iJqvAcin5Nww85m6eQG9sSdavs89cPJNpfnjG70nP6S5XJL8IveLygT/AdLL13BF4CBK08K5RMrPOuqofJEfN/tkiiQMNcU6rQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
  dkim=pass header.d=oss.nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
  s=selector2-NXP1-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OXAvWKaynpHsAI1tgqGNwCOSqmltsAuQnpT0Am+tucc=;
- b=gA8B2WrPgc0Av1aDvFhO+dr8ETd87lm38hJ55WzONcnqtXAt+He+skg/5urpo/bzr3hn04aaXPmLWf9zasvcP4KGWFrJ5JGHsOUh24VKLPQGGs4JFjwRuidv/uMAwjusUzco1kKPVel2BvZuXi16QVEGJefSahXc5CDbWsI2ArQ=
+ bh=VdJB7DfPMN5TpI2aSmxNRf/xXhSL2fePyA3eXXbmOcQ=;
+ b=Lp0EW/wEoyHgm7h4Ew5qRJcEO0iQjg9MhPo1o/hrqEXkjOnAxeZlAlh/hHfwdHrBv6MwQyQo68GYfI8PvnT1JyN3bkw9sT6dUMehtOexvUpM4FUtfFQIKkuia2DyP667XnSbva8npa802Mc1h5vQjE121dOZfesA1iRp1CtjCUM=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=oss.nxp.com;
 Received: from VI1PR04MB5151.eurprd04.prod.outlook.com (2603:10a6:803:61::28)
  by DB9PR04MB9865.eurprd04.prod.outlook.com (2603:10a6:10:4f0::20) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.30; Wed, 3 May
- 2023 08:11:07 +0000
+ 2023 08:11:08 +0000
 Received: from VI1PR04MB5151.eurprd04.prod.outlook.com
  ([fe80::42e1:4216:edc6:52a9]) by VI1PR04MB5151.eurprd04.prod.outlook.com
  ([fe80::42e1:4216:edc6:52a9%5]) with mapi id 15.20.6363.021; Wed, 3 May 2023
- 08:11:07 +0000
+ 08:11:08 +0000
 From:   Daniel Baluta <daniel.baluta@oss.nxp.com>
 To:     broonie@kernel.org, alsa-devel@alsa-project.org
 Cc:     linux-kernel@vger.kernel.org, pierre-louis.bossart@linux.intel.com,
         lgirdwood@gmail.com, peter.ujfalusi@linux.intel.com,
         yung-chuan.liao@linux.intel.com, ranjani.sridharan@linux.intel.com,
         kai.vehmanen@linux.intel.com, daniel.baluta@gmail.com
-Subject: [PATCH 1/2] ASoC: sof: Improve sof_ipc3_bytes_ext_put function
-Date:   Wed,  3 May 2023 11:10:48 +0300
-Message-Id: <20230503081049.73847-2-daniel.baluta@oss.nxp.com>
+Subject: [PATCH 2/2] ASoC: sof: Improve sof_ipc4_bytes_ext_put function
+Date:   Wed,  3 May 2023 11:10:49 +0300
+Message-Id: <20230503081049.73847-3-daniel.baluta@oss.nxp.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230503081049.73847-1-daniel.baluta@oss.nxp.com>
 References: <20230503081049.73847-1-daniel.baluta@oss.nxp.com>
@@ -62,60 +62,60 @@ MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: VI1PR04MB5151:EE_|DB9PR04MB9865:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8c1ef4e1-761e-4dba-7643-08db4badf271
+X-MS-Office365-Filtering-Correlation-Id: 6b490060-08b1-434a-ceb2-08db4badf30e
 X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pLFmu42TyUzSMTz3BtVhR1LaoyTdAkNnQXMAqw8uUeRU5zO2dsNtyRbO6pZ/XrQg/DyCVjCBxQZ3pIr+PGSkI42tsZ4ddWF+b+bACb4Y5sqj5DowzciAjOP392JQp1zjNwdqXcMFSKF85Fi7mkngQyYaKTE3QRp5rvWuMjap+XvGQT4vfPcVLdCxR4oVZBfiu8XzSO9ss3T08CrSLDn9INWGwEKjQq3t5gD33RhdoIXlneUxfeTlJUPt9n70wkuIg4M67H+W6qiwU47aQ1iidoJCQ2SD0tjSaf4grzZ90QPuHdMMg94vkP4UcAxbVTckXy/iFhOkzXozdTI8VbdFleo2W9w8OkFTLnVvKZK1L2+SkG3rpn8qxFlydpX5gwCGRILZXb6q6dpKgVItbnksuHGHt6VYsFlrcOpp7xDg/TdS6Gcprj+3r+lmr7HCTJqj/UKcz71fYxBLy+QZZC+KLkXSJZYBnQuZOcw7NVJwzE8yWR7sO7jutBcHKM4knvgdO7HTw9msMiq4bkrkWqd2+qHoR6csKrBOB8d2AfB3ITlCKZDFgfWa59VxYptlwtBdugnYF/dpYVS+jr4pSjGMlEHJuUn4VH34wNERV3/mSWW9TgSHK1KmMZU01xcmv0lC
+X-Microsoft-Antispam-Message-Info: gKoiAFxfHhWB5Gy3NX0lff7IHkHv5gHc56JewxRByijYaBWHdYQjjhxv/FJGEEHY3DdwEXYIWpafuyb9BAr5opRhHimVeuRTbiD6LKemscH8SuvA4rTKOHcxn37Jq9gTVm457Y4hZWs2xy+Mk1LrOnqHH8DY/fhaEMKtJs2bXrayLR1iRbxBBguDnoWu+rG2FIJMlDWD9bgNIFOI+8gwXFA+2uu/9EgUexJc3AvOVbH8bNOQLVR+ExCFDEsiEqjLwFhyTGKRb9z8R9Ec5V5dO7lyEvKP3Jz9KUr/Ic123P3j2A8eZqmPpFiF1BCi3ucRnvD8w+maCY3e7e/VdAdCFPsn+N4lZVP7/RosRT8GszdaF6OHt5nj8HCOomP8tE7Gm09Z2YZ72nlSFPLqppBY1LTXpoMpebbSWfPlMdlu3b4ze4Mlh3D41/3YOSBwI9FJB7oKkX1ZVvSp3wTbnNQJfwgStSCO0aGAngoXxyFoNyZe8ppSngHcY4KYhCTaoa7lca/uvEi7l5DMovKV8dlc9OGw3hIkje6a1HVPgYAEVNFn88FPbdYs0Riu1jNVVuEu+Y+rjFnYONKRWMqcXFO+VPKnpWCIWWbPL89GmPOwZEJp6zbLlwyN0ESgx+Nw7VQW
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5151.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(39860400002)(396003)(136003)(376002)(451199021)(2616005)(83380400001)(478600001)(186003)(4326008)(66556008)(66476007)(66946007)(26005)(6486002)(52116002)(66574015)(6666004)(6512007)(6506007)(1076003)(44832011)(316002)(8676002)(8936002)(7416002)(5660300002)(41300700001)(2906002)(38100700002)(38350700002)(86362001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QWVxV0JKdjdncmpDVTM0MkZRSGVpUEZZZlFSTUROMnBacC8zZXZwMDNuT3FI?=
- =?utf-8?B?ekFoZVRkVWsva20rN0N4a3pwaXIzVEdENHVyRHVBaU5NRnJ0V3NRdkszUGFv?=
- =?utf-8?B?d21qaDQvZFo0aU0zVGdCaVRyeWJOckRqTFpKd2djQ1RNMFBvV05xSjR3ZTVN?=
- =?utf-8?B?cTdwN0VSK0czOGNHOUlJZzE1R3V5OEk2U3FGNlhGZlF5R09meFJGL25kTmJi?=
- =?utf-8?B?L2ZoaTFjVGl0TW1ybTVWTTdWMGJqd1Fqc3hiQ09ITVpabEdaaDNRc3VqUVA2?=
- =?utf-8?B?eWJBMDFNSnNydzFCL3dxTnkvY25DSE9xVWRlRkxIMXczMFVVRExadXpDRDd6?=
- =?utf-8?B?QTJsRm9GS0FaVjJrLzhuT0hQeEZFMHU0dUtESHgzelhOZmFXK3kzbFduREI5?=
- =?utf-8?B?N2Y4cUNsQ2s0ZExjYmFrWXNSSk0xYStqbDlqbXU4T0pJWFdvUFBTYzdaVDh0?=
- =?utf-8?B?QnlyMTExQkxjYlNVZVZ1RW5haGpuTEJDMkhZRStsQ1ZqbUU4MzNpem82dDI1?=
- =?utf-8?B?QmQ5clJRRDZlQXVQS2VPa2tFMzdwRFVMY2tMVUxiZ0pPQWtoeUxlbFZhSG1D?=
- =?utf-8?B?SWs1aHdMWmQvWm1rTUlKeldCUVd3T2t4TzhDY0VESWxZSjZLMTkwQTlwZWVo?=
- =?utf-8?B?UFhHdDRXMC82T3VkZHBLcjVIN0R2Mk1uVzczc3lIdUNwOTRLdk1vYXBwNFls?=
- =?utf-8?B?YUFPanVoTllpRXYyVkt5MTY0cDIwK2dWbytZUDNuUXVyelB3MnVHOHJDTlhS?=
- =?utf-8?B?d29nSk0zeE5NRG8rTnpjQlBsQTVjR1FEQUg2NU5rUVRVcloybmh1R09WMDgr?=
- =?utf-8?B?Y0ZIck5pQzJ1S0JNUmRLV3lldnFlZ1VXenJOaDFwbVJXSmtDZHcyellHZ1JU?=
- =?utf-8?B?QkZPWmpXaTNISHdreU4vbG5sbVJTdmF4S3UzU3pBN2NJeGUwUTBkQ041UUZS?=
- =?utf-8?B?Q2VvL2U0Sk9tWFdlbVh3eEorc2FTeGVqUmNhYittZHFnSzRHZDdXaGo2NUhJ?=
- =?utf-8?B?TUU5RVlSY3dJalg1STczd2RXbmNBWHIvM3NmL0lObHFHd2NXemVJaXEyMy9m?=
- =?utf-8?B?ekM5aklZeUlEQ05GL2lTK2hIZWVSRE1mbk1VSjJ5QW5Bdi9rb09rSVBRMys3?=
- =?utf-8?B?dnNOR1Y4R0VWb1lWVTRSR2pZYWF6VDdCUm4wTktWSSszK21FM3k1Q2F3ZExI?=
- =?utf-8?B?NHVML2RyUU9JMGFmOFJic2RycGg0R1ZXemhMZ1pNS25XQ3ZUT2diYzlPSUF5?=
- =?utf-8?B?OEJHeWRyUnJ2ejY4MG0vZ202ZVNjVjJLYS9kWGVMa1k3eFpVM0EyekdhOXFi?=
- =?utf-8?B?clRuRENjU2N6MGNuRERrQzJQaktqTjV0OFYzMzRmU0VFQ2VtV2NrYmxkeEox?=
- =?utf-8?B?ZllWVWVwT0lDcUowMFRWV0JWaXdJRHBWTE1VdWVMN2g4YnJhSTU1d1ZPeGxT?=
- =?utf-8?B?aE9JNXg2dzJjZWpJYStsbW95NmhLTWcrakVHaldhVUlJbC83YnhPWHQ5THpi?=
- =?utf-8?B?YTh3Sjd0TGVmZE1rbG1pNmtXT3FjaUtuT0NmMDMxVmFqUGNnUnl1c2xMNEJZ?=
- =?utf-8?B?U1dnMHpHTFdaekx3bkNLVkJmNzdNU2ZxNUgwL3dod0Jlejh5K09oZHdITWFt?=
- =?utf-8?B?blRRUklBQjRmT0QyenpVUXlaTGtkaXJzV1huNktsYjVzcVlnWVcrRFd2WlVk?=
- =?utf-8?B?TnBBb2ZUUEw5Ni92bFMvSjRHUk5vVDFROGVmenpvemNlZ002b2RDNk45T1c1?=
- =?utf-8?B?b21Rdnl2YkdKKy9UTElQYTRyWFp3WHdNOGdUVmFNR3lublNDQXpMdTlmYldK?=
- =?utf-8?B?WSs2M1FUWmN4SjFHVGM0d1Zvd0UrelJTczFQcmFtM2Q4TzFQazVoT0ZzK08w?=
- =?utf-8?B?SERuNkphV3Q5dVVXWGFtMjY1WjdlV2x1Z0NPUGkxSUVOTi9hMUZydGY1ZVY2?=
- =?utf-8?B?WnB1SEdXYXBNQWRNOW9WaUphM2lLZGNYaEZoNVNTNjNhT05HdldpWlI5ZUs5?=
- =?utf-8?B?Y2U3ekJNUERkYlk1TThXaFFkRWpjaURwL0FtSjlLVVlvbjVwbm5aa3FFSmxQ?=
- =?utf-8?B?WjMzV01XdWpWYzVGa25FV2xjYUxyQy9QbWFJYWtqa1B3ZC8xV3FMRmsvUUZk?=
- =?utf-8?Q?l3Izic7UOp0+RpolaDzakkPbh?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bFg2MldlYTlMSnFCTmR1YWt1aDhmYldDdS9kRUh3enBqVDNMS1VtcEhRZXhP?=
+ =?utf-8?B?Qk0zYWZWSk5jZVpoaitlMEFZVkZnaXdVYi81SjJSNFB5TUxsd2EwR3Evd3Bn?=
+ =?utf-8?B?V0FJREFvQlZXeHEwbld0TEY3NkxiWWp6WHpGcW8wbUdMamtsSXJzT3BNajRx?=
+ =?utf-8?B?elpFQk9HcnpTQXRsV3pDR0xCNzFkZmUwbGpDdXk1N2FLbUQxSGowbmdQS3Zp?=
+ =?utf-8?B?a2YzVDhJWFYyekNvbW9yQU5QV09TNlZLN2FaK1JMUkc2SEtUcU5ObGZsSk9F?=
+ =?utf-8?B?QmRZTUhQRHdaOHNIeHRIRFFVWEF2K2VsVzY4TzBaUW9VMGF5TnB5MTFkWkNF?=
+ =?utf-8?B?K3BwWnR1SzJSM3hKUEplUjlWelB3anlVZk1YWmowRHN2RldtVnYvbFMvVFVG?=
+ =?utf-8?B?Q3c4RWJzMWRsL1daS2JXK2lsalV2UFdqcmJkTE1GdWtYajBnWjNHakhxdktz?=
+ =?utf-8?B?MnlBVnF1L05wcldmcUZPSmlSNmNrSENBY3JTajRZb0dTUXlOemo3SzNFc0hC?=
+ =?utf-8?B?QU5TbEc5cnM0SnZSVTBOcXp2MDhjMzF4VVJsMHVwRmIyd1VOMFo0djV5c1R2?=
+ =?utf-8?B?M01ZUFVaNkREdksvWG9xZS9UcjM4ejNPYUIzVnhWY0ZlVmxQdzdCYlJKemsx?=
+ =?utf-8?B?RXIvQ281REs2eUM4UUVLT2RwdHU4YUdpU1RaTzREL3lKbmJtbmgzSnpUOUds?=
+ =?utf-8?B?RTk3UksyVGp3R3M0eDJJL2pnaHEwQjZNYU52T0lja2JJelJ1d1ZZMUtIOWs4?=
+ =?utf-8?B?bU1TWGVtVXR2ZlVzeG93b1REd0w1OFRCNkp6cll2cmpuK2FuU05GS1RaTGdN?=
+ =?utf-8?B?T0JSVW50bWRLRStmcVQraEVlMWVNTGlhQ3ozVXNzcVJhWkRodkd6Y0Z0emdz?=
+ =?utf-8?B?UG54R3Rsd2dzN1RGdUhiNGdEL1RBa3o5T2ZBRkpURTRIUENOVnBuSDJUUitG?=
+ =?utf-8?B?ZTdSdU9RbFc4TjRLSWprdlZHc2tlUDVyZjJwOEhBVXlRb2g3cDIxd05pc0FB?=
+ =?utf-8?B?NEYxZXFLaTQwMVVjT2pPZkU0VHNNLzlaSURRN1QwRlJERytQdStNSmhPWjU3?=
+ =?utf-8?B?MmtNUUtVWjJJV2thd3BBSmJMYm9aR2szQklpM0QwL2F6VTUrWnRyOC9kTkw3?=
+ =?utf-8?B?L1QrT0Z4N1k0OGpvTG0ydUgrSWlYME5KMmxERnByMjZsSExVS25RZExhR2c2?=
+ =?utf-8?B?T3E0cVVZQTZaWHhVNHkxNFI1Q1JZZ2ZLVnVyTW9HT3VBd0NOV2VMcEYvenlu?=
+ =?utf-8?B?M2p1VERhZGpiSlFhc2crSmxwdWpobitUN29uNkhueW9VR2RqV3o1U1ZxL0Uv?=
+ =?utf-8?B?dXoxa1lqNSsxdUNUbzVHenhmLy9zTGkrRjRnTjVHZk9tc01vaklOSE94NGI5?=
+ =?utf-8?B?VTVWMm03QWYxUDM3aUxOM1NQVXdETHdGb0liTzRjazFta1VHSXVkelcwekpI?=
+ =?utf-8?B?d1VGS3MxZmRCbHpZUFZ2dytXaENyRGNLcXVsamJ2dDVQcXhXNGN5Q3JSS0t0?=
+ =?utf-8?B?U0dicVdjQVp6bmtzbVRWd3I0NWVEeDNvS3NuelZtZU5uY0lFWkhLVnZLUG9j?=
+ =?utf-8?B?bjlmbmZIR091ZGtCV3VScTdOeFVjd0lOc1hRZUFna0kvTkpmWmVRVnJHdXBU?=
+ =?utf-8?B?MCs4ME0xVzB3Qkp0cndWeFd3TUNGbDBTeUZoaFZ2Mis3WUN1RzhKRGJFQktI?=
+ =?utf-8?B?YU5SSDBqMWpWQkZYQ2VVdnZUQWxIYmljUGQ5a1FhK1ZwcVdqVFkvT1g5YjIr?=
+ =?utf-8?B?ZjErM0FYa2ZIUFk2dDl3VXFJeE9xNjBiVHYwN2szbXJOUXhCbERiczBkdnpr?=
+ =?utf-8?B?OWlPVWtFSFNHdjlxSTVOMkw3V1lFSFFyMy84b3FvN3JCRVVLODl4QkZVdFlC?=
+ =?utf-8?B?UFRrV2NZTWNBY20rZzUyYzBKTFFseFkvYisrNFd6V3VjVGlORndBZ3REQitQ?=
+ =?utf-8?B?RVY0bXpwdkxlTk5LV2VUanYyZnFJZHdWUEgvOWxTQ0lSS2NBWnFlbzF4L3RR?=
+ =?utf-8?B?OHVSa2ZpYXQzY3NHK2JOU3RmUGFMZGpFb0pkRklOWnljcWFSdEVyNWhyaWpT?=
+ =?utf-8?B?Z1MyVGxpWFRaSyt4cE1OcFU1QUEwUHRicE9LN1lDRHhNK09STi8yS2hUa29P?=
+ =?utf-8?Q?psv+XMOZsxz+OoDJRuWODLI7c?=
 X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8c1ef4e1-761e-4dba-7643-08db4badf271
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6b490060-08b1-434a-ceb2-08db4badf30e
 X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5151.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 May 2023 08:11:07.3688
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 May 2023 08:11:08.4182
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kALIMjIkHythEsRteD0X3ao3NhR0L7SP8+apg6/75sOffi4vsy1pqhBQwr+TpmMp+jgjGOOVnaUXOjYSFqYz0Q==
+X-MS-Exchange-CrossTenant-UserPrincipalName: Kpfy4lJV8SZ7TSiSS8U9gvcq2I5U0qGjLzo73+lwHn09r4jLPB5SmMBixFRnz/j5VTWXXHDCaNOr6BDLBJdqzw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB9865
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
@@ -146,23 +146,23 @@ Reviewed-by: Daniel Baluta <daniel.baluta@nxp.com>
 Reviewed-by: Péter Ujfalusi <peter.ujfalusi@linux.intel.com>
 Signed-off-by: Paul Olaru <paul.olaru@nxp.com>
 Signed-off-by: Daniel Baluta <daniel.baluta@nxp.com>
----
- sound/soc/sof/ipc3-control.c | 54 ++++++++++++++++++++++++++++++++----
- sound/soc/sof/sof-audio.h    |  1 +
- 2 files changed, 49 insertions(+), 6 deletions(-)
 
-diff --git a/sound/soc/sof/ipc3-control.c b/sound/soc/sof/ipc3-control.c
-index ad040e7bb850..a8deec7dc021 100644
---- a/sound/soc/sof/ipc3-control.c
-+++ b/sound/soc/sof/ipc3-control.c
-@@ -96,6 +96,26 @@ static int sof_ipc3_set_get_kcontrol_data(struct snd_sof_control *scontrol,
- 	cdata->elems_remaining = 0;
+---
+ sound/soc/sof/ipc4-control.c | 39 ++++++++++++++++++++++++++++++++----
+ 1 file changed, 35 insertions(+), 4 deletions(-)
+
+diff --git a/sound/soc/sof/ipc4-control.c b/sound/soc/sof/ipc4-control.c
+index 6f0698be9451..c6d404d44097 100644
+--- a/sound/soc/sof/ipc4-control.c
++++ b/sound/soc/sof/ipc4-control.c
+@@ -54,6 +54,26 @@ static int sof_ipc4_set_get_kcontrol_data(struct snd_sof_control *scontrol,
+ 	msg->primary |= SOF_IPC4_MOD_INSTANCE(swidget->instance_id);
  
- 	ret = iops->set_get_data(sdev, cdata, cdata->rhdr.hdr.size, set);
+ 	ret = iops->set_get_data(sdev, msg, msg->data_size, set);
 +	if (!set)
 +		goto unlock;
 +
-+	/* It is a set-data operation, and we have a backup that we can restore */
++	/* It is a set-data operation, and we have a valid backup that we can restore */
 +	if (ret < 0) {
 +		if (!scontrol->old_ipc_control_data)
 +			goto unlock;
@@ -175,27 +175,17 @@ index ad040e7bb850..a8deec7dc021 100644
 +		kfree(scontrol->old_ipc_control_data);
 +		scontrol->old_ipc_control_data = NULL;
 +		/* Send the last known good configuration to firmware */
-+		ret = iops->set_get_data(sdev, cdata, cdata->rhdr.hdr.size, set);
++		ret = iops->set_get_data(sdev, msg, msg->data_size, set);
 +		if (ret < 0)
 +			goto unlock;
 +	}
  
  unlock:
  	if (lock)
-@@ -351,6 +371,7 @@ static int sof_ipc3_bytes_ext_put(struct snd_sof_control *scontrol,
- 	struct sof_ipc_ctrl_data *cdata = scontrol->ipc_control_data;
- 	struct snd_soc_component *scomp = scontrol->scomp;
- 	struct snd_ctl_tlv header;
-+	int ret = -EINVAL;
- 
- 	/*
- 	 * The beginning of bytes data contains a header from where
-@@ -381,31 +402,52 @@ static int sof_ipc3_bytes_ext_put(struct snd_sof_control *scontrol,
+@@ -327,13 +347,24 @@ static int sof_ipc4_bytes_ext_put(struct snd_sof_control *scontrol,
  		return -EINVAL;
  	}
  
--	if (copy_from_user(cdata->data, tlvd->tlv, header.length))
--		return -EFAULT;
 +	if (!scontrol->old_ipc_control_data) {
 +		/* Create a backup of the current, valid bytes control */
 +		scontrol->old_ipc_control_data = kmemdup(scontrol->ipc_control_data,
@@ -204,63 +194,23 @@ index ad040e7bb850..a8deec7dc021 100644
 +			return -ENOMEM;
 +	}
 +
-+	if (copy_from_user(cdata->data, tlvd->tlv, header.length)) {
-+		ret = -EFAULT;
-+		goto err_restore;
-+	}
- 
- 	if (cdata->data->magic != SOF_ABI_MAGIC) {
- 		dev_err_ratelimited(scomp->dev, "Wrong ABI magic 0x%08x\n", cdata->data->magic);
--		return -EINVAL;
-+		goto err_restore;
- 	}
- 
- 	if (SOF_ABI_VERSION_INCOMPATIBLE(SOF_ABI_VERSION, cdata->data->abi)) {
- 		dev_err_ratelimited(scomp->dev, "Incompatible ABI version 0x%08x\n",
- 				    cdata->data->abi);
--		return -EINVAL;
-+		goto err_restore;
- 	}
- 
- 	/* be->max has been verified to be >= sizeof(struct sof_abi_hdr) */
- 	if (cdata->data->size > scontrol->max_size - sizeof(struct sof_abi_hdr)) {
- 		dev_err_ratelimited(scomp->dev, "Mismatch in ABI data size (truncated?)\n");
--		return -EINVAL;
-+		goto err_restore;
- 	}
- 
- 	/* notify DSP of byte control updates */
--	if (pm_runtime_active(scomp->dev))
-+	if (pm_runtime_active(scomp->dev)) {
-+		/* Actually send the data to the DSP; this is an opportunity to validate the data */
- 		return sof_ipc3_set_get_kcontrol_data(scontrol, true, true);
-+	}
- 
- 	return 0;
-+
-+err_restore:
-+	/* If we have an issue, we restore the old, valid bytes control data */
-+	if (scontrol->old_ipc_control_data) {
-+		memcpy(cdata->data, scontrol->old_ipc_control_data, scontrol->max_size);
+ 	/* Copy the whole binary data which includes the ABI header and the payload */
+-	if (copy_from_user(data, tlvd->tlv, header.length))
++	if (copy_from_user(data, tlvd->tlv, header.length)) {
++		memcpy(scontrol->ipc_control_data, scontrol->old_ipc_control_data,
++		       scontrol->max_size);
 +		kfree(scontrol->old_ipc_control_data);
 +		scontrol->old_ipc_control_data = NULL;
+ 		return -EFAULT;
 +	}
-+	return ret;
+ 
+-	sof_ipc4_set_get_bytes_data(sdev, scontrol, true, true);
+-
+-	return 0;
++	return sof_ipc4_set_get_bytes_data(sdev, scontrol, true, true);
  }
  
- static int _sof_ipc3_bytes_ext_get(struct snd_sof_control *scontrol,
-diff --git a/sound/soc/sof/sof-audio.h b/sound/soc/sof/sof-audio.h
-index a090a9eb4828..5d5eeb1a1a6f 100644
---- a/sound/soc/sof/sof-audio.h
-+++ b/sound/soc/sof/sof-audio.h
-@@ -362,6 +362,7 @@ struct snd_sof_control {
- 	size_t priv_size; /* size of private data */
- 	size_t max_size;
- 	void *ipc_control_data;
-+	void *old_ipc_control_data;
- 	int max; /* applicable to volume controls */
- 	u32 size;	/* cdata size */
- 	u32 *volume_table; /* volume table computed from tlv data*/
+ static int _sof_ipc4_bytes_ext_get(struct snd_sof_control *scontrol,
 -- 
 2.25.1
 
