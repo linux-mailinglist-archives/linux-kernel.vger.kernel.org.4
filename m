@@ -2,159 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D53216F6127
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 00:18:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD26E6F612B
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 00:21:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbjECWSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 18:18:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33968 "EHLO
+        id S229618AbjECWVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 18:21:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbjECWSH (ORCPT
+        with ESMTP id S229559AbjECWVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 18:18:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B18A68A41;
-        Wed,  3 May 2023 15:18:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 45E7B60FFC;
-        Wed,  3 May 2023 22:18:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D36CC433EF;
-        Wed,  3 May 2023 22:18:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683152285;
-        bh=rdWzfBeBb0nIZaH1BRmuCF5QOp3kmicpuhtIZUkpC5Y=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=L1BOK6PKarBv7FN4ef3lK+PNVzXMLJhbQE9wxsb5ijQNh3R+X4izhN2Z+/ntlA1Md
-         wD6rcQEO99v/1bCqGukJYfzgIucaekmUec1Te3wMdkZ8T8toIS8+/0DhB371ytQ2Z3
-         ZPvdxfhNRoDbNdZkgvXEl0RnrJu8Ln5T+VRTLaZ2S9LM3H8Vu/QxP4oD6Yr0IoO+b8
-         1LAcNrdcAR8JKK3jLuWuzByzC46TUvD0EKg+7sJsdm14B/wkj4V4TM8owhQ+aDLer9
-         ROlJ5457EIGT4gQXCW8LNMAaPfC4Ig/TKRcLg1kokkoKySb+SkGUHn10Nf9xXIyEDJ
-         FXRJ+xWGUmhaQ==
-Date:   Wed, 3 May 2023 17:18:03 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Jim Quinlan <james.quinlan@broadcom.com>
-Cc:     Jim Quinlan <jim2101024@gmail.com>, linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cyril Brulebois <kibi@debian.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 1/5] dt-bindings: PCI: brcmstb:
- brcm,{enable-l1ss,completion-timeout-us} props
-Message-ID: <20230503221803.GA798402@bhelgaas>
+        Wed, 3 May 2023 18:21:22 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 877DC83DD;
+        Wed,  3 May 2023 15:21:19 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id af79cd13be357-7515631b965so414605385a.0;
+        Wed, 03 May 2023 15:21:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683152478; x=1685744478;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4qFMUK4gSXVCvFOIucsUQSFEP/01ciu1p1En0VOUwZ4=;
+        b=KgD3uc7sXYULZb+YflsTVeS0uxsQ9iAY3rbcKLk9Xo5G6rL4b8qtc/wl8WRrH/aHC0
+         78L8Jxz56jT4E8shMITwGb2nB5PnbIDE/Tp5pjCEC/drB8cDL4HmqbWfPlEwPCHu5BZO
+         ubEGi5ZIrOE/5A3ZUY2L6S64PrO252rbzXFcuAs3W4xoOBO8lJpOdMyITwcnpX7BGEHS
+         8Suxd03NF9gry8Q8Ym6fbmwF/bA9xnLwAGoGwaKy3q0m9IjnXIjORG2eDqZTP1z9vXeO
+         YxspGNspdSMNcq9w6sp5SseY1dza38R2Hxbr0GcdoEe1a3G7ACA6SXoZufCFkjDfllED
+         NmIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683152478; x=1685744478;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4qFMUK4gSXVCvFOIucsUQSFEP/01ciu1p1En0VOUwZ4=;
+        b=Z4VertvVLpjkoUXUX8NaqqrAnH7x/NFpgMPMRcECGz7VP+h7jcMmPXi+CpFS6vvjNV
+         8IzcGWMf6GBB/DInGkGeHVDZsew75qRBqp0MLZlIuqXxhKaf0TLyL1Jeh4jb7ljjK7Bd
+         o7PBiyJGK+kyNJlF1E+ds5inJEXLh+cEraRzpU+Q4rP2wIq94DHm4DbMtGgEf/3Hk/o4
+         D4OPtxayv9vY90AtgdrPF3/aGkN+oVHSW1QqNHTY03a5rtuyYaKdukGCXDPH64w9pxIZ
+         CHwRpzapS2Pz6jXYvPB13VX5Q6gih6ZnZXW1SjHM/OlndVRyY0tWyi/YG+NANkKtZSeH
+         LJzg==
+X-Gm-Message-State: AC+VfDyr5zOs++9qF2lReWzBfKtRf2YRgVVxesefIHRnVksDkPcBHSCX
+        gXnMPNRNYSgFsXoF4vg4BkY=
+X-Google-Smtp-Source: ACHHUZ7FN3yepJTfE9yjDHAPWtoFVMpOLH6qGhkyC1s2IYe78m9WyS1x4TzWuo1IrDWkT7oUTt/K/A==
+X-Received: by 2002:a05:622a:1010:b0:3ef:3281:fb53 with SMTP id d16-20020a05622a101000b003ef3281fb53mr2620975qte.18.1683152478560;
+        Wed, 03 May 2023 15:21:18 -0700 (PDT)
+Received: from [10.69.53.73] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id br40-20020a05620a462800b007435a646354sm11029538qkb.0.2023.05.03.15.20.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 May 2023 15:21:18 -0700 (PDT)
+Message-ID: <597ba853-1fe4-9263-c448-422b0c2a91d8@gmail.com>
+Date:   Wed, 3 May 2023 15:20:27 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [RFC PATCH 0/3] input: gpio-keys - fix pm ordering
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Gergo Koteles <soyer@irl.hu>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Kees Cook <keescook@chromium.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        Android Kernel Team <kernel-team@android.com>
+References: <20230427221625.116050-1-opendmb@gmail.com>
+ <CAGETcx-gDcqY7-_Ud0_rOtgvk7NbzevSa4UCV=NcqiV9zjAv7w@mail.gmail.com>
+ <CAGETcx_xjNT1Tp0GeqoddFwGFpv3O33hZZpEiThNg1wwWcfEQw@mail.gmail.com>
+Content-Language: en-US
+From:   Doug Berger <opendmb@gmail.com>
+In-Reply-To: <CAGETcx_xjNT1Tp0GeqoddFwGFpv3O33hZZpEiThNg1wwWcfEQw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+-6iNwBCn822NBv1wjLcbd0=bHEfx9V3R_UcAcuMz1_etUjMg@mail.gmail.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 03, 2023 at 05:38:15PM -0400, Jim Quinlan wrote:
-> On Wed, May 3, 2023 at 2:07 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > On Wed, May 03, 2023 at 10:38:57AM -0400, Jim Quinlan wrote:
-> > > On Sun, Apr 30, 2023 at 3:10 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > On Fri, Apr 28, 2023 at 06:34:55PM -0400, Jim Quinlan wrote:
-> > > > > brcm,enable-l1ss (bool):
-> > > > >
-> > > > >   The Broadcom STB/CM PCIe HW -- a core that is also used by RPi SOCs --
-> > > > >   requires the driver probe() to deliberately place the HW one of three
-> > > > >   CLKREQ# modes:
-> > > > >
-> > > > >   (a) CLKREQ# driven by the RC unconditionally
-> > > > >   (b) CLKREQ# driven by the EP for ASPM L0s, L1
-> > > > >   (c) Bidirectional CLKREQ#, as used for L1 Substates (L1SS).
-> > > > >
-> > > > >   The HW+driver can tell the difference between downstream devices that
-> > > > >   need (a) and (b), but does not know when to configure (c).  All devices
-> > > > >   should work fine when the driver chooses (a) or (b), but (c) may be
-> > > > >   desired to realize the extra power savings that L1SS offers.  So we
-> > > > >   introduce the boolean "brcm,enable-l1ss" property to inform the driver
-> > > > >   that (c) is desired.  Setting this property only makes sense when the
-> > > > >   downstream device is L1SS-capable and the OS is configured to activate
-> > > > >   this mode (e.g. policy==superpowersave).
-> > > ...
-> >
-> > > > What bad things would happen if the driver always configured (c)?
-> > >
-> > > Well, our driver has traditionally only supported (b) and our
-> > > existing boards have been designed with this in mind.  I would not
-> > > want to switch modes w'o the user/customer/engineer opting-in to do
-> > > so.  Further, the PCIe HW engineer told me defaulting to (c) was a
-> > > bad idea and was "asking for trouble".  Note that the commit's
-> > > comment has that warning about L1SS mode not meeting this 400ns
-> > > spec, and I suspect that many of our existing designs have bumped
-> > > into that.
-> > >
-> > > But to answer your question, I haven't found a scenario that did not
-> > > work by setting mode (c).  That doesn't mean they are not out there.
-> > >
-> > > > Other platforms don't require this, and having to edit the DT
-> > > > based on what PCIe device is plugged in seems wrong.  If brcmstb
-> > > > does need it, that suggests a hardware defect.  If we need this to
-> > > > work around a defect, that's OK, but we should acknowledge the
-> > > > defect so we can stop using this for future hardware that doesn't
-> > > > need it.
-> > >
-> > > All devices should work w/o the user having to change the DT.  Only
-> > > if they desire L1SS must they add the "brcm,enable-l1ss" property.
-> >
-> > I thought the DT was supposed to describe properties of the
-> > *hardware*, but this seems more like "use this untested clkreq
-> > configuration," which maybe could be done via a module parameter?
->
-> Electrically, it has been tested, but  specifically for L1SS capable
-> devices.  What is untested AFAICT are platforms using this mode on
-> non-L1SS capable devices.
+On 5/2/2023 7:18 PM, Saravana Kannan wrote:
+> On Mon, May 1, 2023 at 1:40 PM Saravana Kannan <saravanak@google.com> wrote:
+>>
+>> On Thu, Apr 27, 2023 at 3:18 PM Doug Berger <opendmb@gmail.com> wrote:
+>>>
+>>> Commit 52cdbdd49853 ("driver core: correct device's shutdown
+>>> order") allowed for proper sequencing of the gpio-keys device
+>>> shutdown callbacks by moving the device to the end of the
+>>> devices_kset list at probe which was delayed by child
+>>> dependencies.
+>>>
+>>> However, commit 722e5f2b1eec ("driver core: Partially revert
+>>> "driver core: correct device's shutdown order"") removed this
+>>> portion of that commit causing a reversion in the gpio-keys
+>>> behavior which can prevent waking from shutdown.
+>>>
+>>> This RFC is an attempt to find a better solution for properly
+>>> creating gpio-keys device links to ensure its suspend/resume and
+>>> shutdown services are invoked before those of its suppliers.
+>>>
+>>> The first patch here is pretty brute force but simple and has
+>>> the advantage that it should be easily backportable to the
+>>> versions where the regression first occurred.
+>>
+>> We really shouldn't be calling device_pm_move_to_tail() in drivers
+>> because device link uses device_pm_move_to_tail() for ordering too.
+>> And it becomes a "race" between device links and when the driver calls
+>> device_pm_move_to_tail() and I'm not sure we'll get the same ordering
+>> every time.
+>>
+>>>
+>>> The second patch is perhaps better in spirit though still a bit
+>>> inelegant, but it can only be backported to versions of the
+>>> kernel that contain the commit in its 'Fixes:' tag. That isn't
+>>> really a valid 'Fixes:' tag since that commit did not cause the
+>>> regression, but it does represent how far the patch could be
+>>> backported.
+>>>
+>>> Both commits shouldn't really exist in the same kernel so the
+>>> third patch reverts the first in an attempt to make that clear
+>>> (though it may be a source of confusion for some).
+>>>
+>>> Hopefully someone with a better understanding of device links
+>>> will see a less intrusive way to automatically capture these
+>>> dependencies for parent device drivers that implement the
+>>> functions of child node devices.
+>>
+>> Can you give a summary of the issue on a real system? I took a look at
+>> the two commits you've referenced above and it's not clear what's
+>> still broken in the 6.3+
+>>
+>> But I'd think that just teaching fw_devlink about some property should
+>> be sufficient. If you are facing a real issue, have you made sure you
+>> have fw_devlink=on (this is the default unless you turned it off in
+>> the commandline when it had issues in the past).
+>>
+> 
+> I took a closer look at how gpio-keys work and I can see why
+> fw_devlink doesn't pick up the GPIO dependencies. It's because the
+> gpio dependencies are listed under child "key-x" device nodes under
+> the main "gpio-keys" device tree node. fw_devlink doesn't consider
+> dependencies under child nodes as mandatory dependencies of the parent
+> node.
+> 
+> The main reason for this was because of how fw_devlink used to work.
+> But I might be able to change fw_devlink to pick this up
+> automatically. I need to think a bit more about this because in some
+> cases, ignoring those dependencies is the right thing to do. Give me a
+> few weeks to think through and experiment with this on my end.
+Thank you for taking a deeper look at gpio-keys, and for getting through 
+the gobblety-gook description in my cover-letter ;).
 
-Non-L1SS behavior is a subset of L1SS, so if you've tested with L1SS
-enabled, I would think you'd be covered.
+Yes, the dependencies of children are not automatically inherited by 
+their parents and it is not clear to me whether or not that should 
+change, but it definitely creates a problem for the sequencing of 
+gpio-keys device callbacks.
 
-But I'm not a hardware engineer, so maybe there's some subtlety there.
-The "asking for trouble" comment from your engineer is definitely
-concerning, but I have no idea what's behind that.
+I initially prepared the second patch as a way to explicitly create 
+device links specifically for the gpio-keys device from these child 
+dependencies as a work around for the fw_devlinks being dropped. I don't 
+really consider this a viable patch which is why I made it an RFC, but I 
+hoped it would highlight the issue.
 
-And obviously even if we have "brcm,enable-l1ss", the user may decide
-to disable L1SS administratively, so even if the Root Port and the
-device both support L1SS, it may be never be enabled.
+However, the regression actually occurs in v4.18 and fw_devlink isn't 
+introduced until v5.7 so it is desirable to think about solutions that 
+could be backported to older versions. This is why I provided the first 
+patch for discussion. Again, it is not a desirable solution just an 
+illustration what could be easily backported to restore the gpio-keys 
+behavior prior to commit 722e5f2b1eec ("driver core: Partially revert
+"driver core: correct device's shutdown order"") without affecting other 
+devices.
 
-> WRT bootline param
-> pci=[<domain>:]<bus>:<dev>.<func>[/<dev>.<func>]*pci:<vendor>:<device>[:<subvendor>:<subdevice>]:
-> this does not look compatible for vendor specific DT options like
-> "brcm,enable-l1ss".  I observe that pci_dev_str_match_path() is a
-> static function and I don't see a single option in pci.c  that is
-> vendor specific.  FWIW, moving something like this to the bootline
-> would not be popular with our customers; for some reason they really
-> don't like changes to the bootline.
+Thanks again for your willingness to take the time to think this through,
+     Doug
 
-They prefer editing the DT?
+> 
+> -Saravana
 
-I agree the "pci=B:D.F" stuff is a bit ugly.  Do you have multiple
-slots such that you would have to apply this parameter to some but not
-others?  I guess I was imagining a single-slot system where you
-wouldn't need to identify the specific device because there *is* only
-one.
-
-Bjorn
