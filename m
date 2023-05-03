@@ -2,108 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 547D26F59FA
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 16:28:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CC5F6F59FE
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 16:28:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbjECO15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 10:27:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49114 "EHLO
+        id S229770AbjECO2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 10:28:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbjECO1z (ORCPT
+        with ESMTP id S230249AbjECO2N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 10:27:55 -0400
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6635C6180;
-        Wed,  3 May 2023 07:27:49 -0700 (PDT)
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-94f9cd65b1aso149442766b.0;
-        Wed, 03 May 2023 07:27:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683124068; x=1685716068;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=T7or5jhvdguUx7fS3E1q044jm9m/uQJFidlz1pmA1fE=;
-        b=XHbgkOgyNpDrjRKUXc3LW2e/Au416ftX17dAteRoutUqOwbue9IJhdj7ZY3lvxxNe2
-         8omfEbmWIXX/hvTNywGp0WZeclknDv9birQkJs7pFTQwcKG70S+5Pgqpj29bC0cVbuEa
-         75ymF1KsTj9qHo/xrjNil2f2wloUyP+V7Jvq6foQru1WKyX602axmKFdzUZw2odhxE7s
-         RQgbq5Dwl87gF0R5s64pwKALOVq+vjyMC6frkq56TaRP91f9/brSSKqyVHSNMUsKfsns
-         VxEaKvcglddib9pTDse3Z4+icAkRH9ogI3ojuRwFG9nasp0hbGohQQ5NqCSR/Ri+LvZy
-         jOUg==
-X-Gm-Message-State: AC+VfDxvKNPqUQGjPwa6gyvVT0fZeho+Ykuumz48fbVpwgTFL/qedg9g
-        Gg2rPwN+UDM4iURZ+hCcSCoUsyDm95OAbNhxG42j9CVk6/c=
-X-Google-Smtp-Source: ACHHUZ4mQP3ZwE3Ln4aLPo0W7qdiz8bIOhrhdJ1wLlzA2bz2iJ4GA2ym1P2l9b33cIx8T2HuRn/rn09mLTaTbcNfhfs=
-X-Received: by 2002:a17:906:2254:b0:92e:f520:7762 with SMTP id
- 20-20020a170906225400b0092ef5207762mr5372473ejr.6.1683124067692; Wed, 03 May
- 2023 07:27:47 -0700 (PDT)
+        Wed, 3 May 2023 10:28:13 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 284565B84;
+        Wed,  3 May 2023 07:28:09 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id CDCED222BF;
+        Wed,  3 May 2023 14:28:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1683124087; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fu6b60Mx6ne7WksquAbUTz6ocKGQcg8fnknY3iq59bg=;
+        b=O8vn2FHlLit91rT3YjW2FENQMuHFRb8UxrbgtmZ8Ho2Vu+K9eJDUJKQI6D+B54QWR9sM7e
+        gNs5UwzFWjmqdqkxR/pnr1eVTD8aUJc4kmoW93OCYTO0sO6wqO3ZUSba7xhLonKlJaDzhO
+        /fdLy/iB2NRuvRCPMRxLkNq7+eAgmuU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1683124087;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fu6b60Mx6ne7WksquAbUTz6ocKGQcg8fnknY3iq59bg=;
+        b=9juQGp475N3bw1k6SUuPRTBRQBPfshZX3rJ5AdW2AvtUg7IrVEoYVZVNF3Zfy2KE3c3uYL
+        +SupOw9MLZbvzKBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BEF7B1331F;
+        Wed,  3 May 2023 14:28:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id +zGVLndvUmQERAAAMHmgww
+        (envelope-from <jack@suse.cz>); Wed, 03 May 2023 14:28:07 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 4AB41A0744; Wed,  3 May 2023 16:28:07 +0200 (CEST)
+Date:   Wed, 3 May 2023 16:28:07 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Baokun Li <libaokun1@huawei.com>
+Cc:     linux-ext4@vger.kernel.org, tytso@mit.edu,
+        adilger.kernel@dilger.ca, jack@suse.cz, ritesh.list@gmail.com,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        yangerkun@huawei.com, yukuai3@huawei.com
+Subject: Re: [PATCH v4 03/12] ext4: factor out __es_alloc_extent() and
+ __es_free_extent()
+Message-ID: <20230503142807.uzp4d3apt2abbpmg@quack3>
+References: <20230424033846.4732-1-libaokun1@huawei.com>
+ <20230424033846.4732-4-libaokun1@huawei.com>
 MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 3 May 2023 16:27:36 +0200
-Message-ID: <CAJZ5v0jVsrTH6=-YaXfqy3T8Q_mdZ_bDKHigtPXQqLFag8JBug@mail.gmail.com>
-Subject: [GIT PULL] More power management updates for v6.4-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230424033846.4732-4-libaokun1@huawei.com>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Mon 24-04-23 11:38:37, Baokun Li wrote:
+> Factor out __es_alloc_extent() and __es_free_extent(), which only allocate
+> and free extent_status in these two helpers.
+> 
+> The ext4_es_alloc_extent() function is split into __es_alloc_extent()
+> and ext4_es_init_extent(). In __es_alloc_extent() we allocate memory using
+> GFP_KERNEL | __GFP_NOFAIL | __GFP_ZERO if the memory allocation cannot
+> fail, otherwise we use GFP_ATOMIC. and the ext4_es_init_extent() is used to
+> initialize extent_status and update related variables after a successful
+> allocation.
+> 
+> This is to prepare for the use of pre-allocated extent_status later.
+> 
+> Signed-off-by: Baokun Li <libaokun1@huawei.com>
 
-Please pull from the tag
+Looks good. Feel free to add:
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-6.4-rc1-2
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-with top-most commit 57ea3ab21c14e6f04db2b0878e8a5be644fa3769
+								Honza
 
- Merge branch 'pm-sleep'
-
-on top of commit 0cfd8703e7da687924371e9bc77a025bdeba9637
-
- Merge tag 'pm-6.4-rc1' of
-git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
-
-to receive more power management updates for 6.4-rc1.
-
-These fix a hibernation test mode regression and clean up the intel_idle
-driver.
-
-Specifics:
-
- - Make test_resume work again after the changes that made hibernation
-   open the snapshot device in exclusive mode (Chen Yu).
-
- - Clean up code in several places in intel_idle (Artem Bityutskiy).
-
-Thanks!
-
-
----------------
-
-Artem Bityutskiy (7):
-      intel_idle: use pr_info() instead of printk()
-      intel_idle: clean up intel_idle_init_cstates_icpu()
-      intel_idle: further intel_idle_init_cstates_icpu() cleanup
-      intel_idle: improve C-state flags handling robustness
-      intel_idle: fix confusing message
-      intel_idle: do not sprinkle module parameter definitions around
-      intel_idle: mark few variables as __read_mostly
-
-Chen Yu (2):
-      PM: hibernate: Turn snapshot_test into global variable
-      PM: hibernate: Do not get block device exclusively in test_resume mode
-
----------------
-
- drivers/idle/intel_idle.c | 59 +++++++++++++++++++++++++++++------------------
- kernel/power/hibernate.c  | 15 +++++++++---
- kernel/power/power.h      |  1 +
- kernel/power/swap.c       |  8 +++++--
- 4 files changed, 56 insertions(+), 27 deletions(-)
+> ---
+>  fs/ext4/extents_status.c | 30 +++++++++++++++++++-----------
+>  1 file changed, 19 insertions(+), 11 deletions(-)
+> 
+> diff --git a/fs/ext4/extents_status.c b/fs/ext4/extents_status.c
+> index 573723b23d19..18665394392f 100644
+> --- a/fs/ext4/extents_status.c
+> +++ b/fs/ext4/extents_status.c
+> @@ -461,14 +461,17 @@ static inline bool ext4_es_must_keep(struct extent_status *es)
+>  	return false;
+>  }
+>  
+> -static struct extent_status *
+> -ext4_es_alloc_extent(struct inode *inode, ext4_lblk_t lblk, ext4_lblk_t len,
+> -		     ext4_fsblk_t pblk)
+> +static inline struct extent_status *__es_alloc_extent(bool nofail)
+> +{
+> +	if (!nofail)
+> +		return kmem_cache_alloc(ext4_es_cachep, GFP_ATOMIC);
+> +
+> +	return kmem_cache_zalloc(ext4_es_cachep, GFP_KERNEL | __GFP_NOFAIL);
+> +}
+> +
+> +static void ext4_es_init_extent(struct inode *inode, struct extent_status *es,
+> +		ext4_lblk_t lblk, ext4_lblk_t len, ext4_fsblk_t pblk)
+>  {
+> -	struct extent_status *es;
+> -	es = kmem_cache_alloc(ext4_es_cachep, GFP_ATOMIC);
+> -	if (es == NULL)
+> -		return NULL;
+>  	es->es_lblk = lblk;
+>  	es->es_len = len;
+>  	es->es_pblk = pblk;
+> @@ -483,8 +486,11 @@ ext4_es_alloc_extent(struct inode *inode, ext4_lblk_t lblk, ext4_lblk_t len,
+>  
+>  	EXT4_I(inode)->i_es_all_nr++;
+>  	percpu_counter_inc(&EXT4_SB(inode->i_sb)->s_es_stats.es_stats_all_cnt);
+> +}
+>  
+> -	return es;
+> +static inline void __es_free_extent(struct extent_status *es)
+> +{
+> +	kmem_cache_free(ext4_es_cachep, es);
+>  }
+>  
+>  static void ext4_es_free_extent(struct inode *inode, struct extent_status *es)
+> @@ -501,7 +507,7 @@ static void ext4_es_free_extent(struct inode *inode, struct extent_status *es)
+>  					s_es_stats.es_stats_shk_cnt);
+>  	}
+>  
+> -	kmem_cache_free(ext4_es_cachep, es);
+> +	__es_free_extent(es);
+>  }
+>  
+>  /*
+> @@ -802,10 +808,12 @@ static int __es_insert_extent(struct inode *inode, struct extent_status *newes)
+>  		}
+>  	}
+>  
+> -	es = ext4_es_alloc_extent(inode, newes->es_lblk, newes->es_len,
+> -				  newes->es_pblk);
+> +	es = __es_alloc_extent(false);
+>  	if (!es)
+>  		return -ENOMEM;
+> +	ext4_es_init_extent(inode, es, newes->es_lblk, newes->es_len,
+> +			    newes->es_pblk);
+> +
+>  	rb_link_node(&es->rb_node, parent, p);
+>  	rb_insert_color(&es->rb_node, &tree->root);
+>  
+> -- 
+> 2.31.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
