@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA2176F587A
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 15:02:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26FF76F5883
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 15:02:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbjECNCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 09:02:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60410 "EHLO
+        id S230085AbjECNCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 09:02:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbjECNCB (ORCPT
+        with ESMTP id S230045AbjECNCF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 09:02:01 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C3611A5;
-        Wed,  3 May 2023 06:01:58 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-959a3e2dc72so1010251766b.2;
-        Wed, 03 May 2023 06:01:58 -0700 (PDT)
+        Wed, 3 May 2023 09:02:05 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559C01A5;
+        Wed,  3 May 2023 06:02:03 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-50bd875398dso2394850a12.1;
+        Wed, 03 May 2023 06:02:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683118917; x=1685710917;
+        d=gmail.com; s=20221208; t=1683118922; x=1685710922;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JhiOdhDEfb+iWh2Mv/2vV0thu45ELxEEl7Ux8olY3M8=;
-        b=GDgWhCa7cTPRM91qlWVp/Nbs6yAAzQTxkEm9m3fVLU05H+ocy+NgohNDdjESCghGYH
-         pqeZbQHx/QVpX+CWCp9T/QRqvV3Vnl4e6jhqqtAHTxMeNTLLl8KDEl6dF1aDfH46bXuM
-         0RaDonz5kNkl4RUHwaKFsXP0PS9NSwIVO7JqfS4xb/rSqPAD6u8QcQ109WAC++fWH5si
-         wt2eEFU5qXN7HhHQ5P08n85ETKpzJIxQRnJhRMVHbfyICPnxiqwP0N1IKeZUcs8Y+Rw8
-         2ifiKzBy0i4GzGz8dSpo+2UjlKo4bMNkAlqqBNhjCzaezSEVgEbuNBVo7wWyFsGCIQ8H
-         SYMg==
+        bh=1V3rgI/5A2MTfAJo/8hueKDPxSOGXJm1mCHXT4uBpmY=;
+        b=PNvCtK6WJsAPCggpeyY2cAVR6Tw4iRNJDt+Wq2Xeu3nq2io/Y1JUbNeXlZEE4wesab
+         z3J1oYx42qC39l1cBaiWN64oPhEHpu70NsFwri2nc3O4bNZ47kmSBXUaybcue1LjVPBk
+         0qFMy06cY5sCuOqEnwQQIZJ7bLOmBuIqdah8SlcA2whIoBZNXlz9hSBwx+HQxlzwX0Wi
+         fQQqZy/A6Ap8w1uzDPQ0UhYtyLE1ImWQtkZj8ICrDaUQllA39ApBfRJoIcjrgWyAF/Nv
+         KfjBChTB3vsdT7/3MoF53TUFcpFcZtXZVZr5PmDGnb3Vj6X4ZBg6CStbHrxoJhIqJP/M
+         b+AA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683118917; x=1685710917;
+        d=1e100.net; s=20221208; t=1683118922; x=1685710922;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JhiOdhDEfb+iWh2Mv/2vV0thu45ELxEEl7Ux8olY3M8=;
-        b=EaPgHR1HGz+gkq0PbQBN+q5ibIyUWbTaEq/hb66Z2DmgxSYJ/09bOO/6BEnR8Jc31F
-         kmPk3wyFFX2oTLPNweqHUErcG/OwBEmZIEs1J6euAPyN4AnZOvT1NR3POzSMAgyzxeIc
-         Fxj25nXJYGUm2M8TIPfSP1cLmt56HbEy910ayOXwxG8V7x4CuoPN636AQT8FFdAJFZ6B
-         L7e4+0Pkr2vMUb+XqaxlvyQ+p3cDiwmtfmC9twNvHEOUf9f7E6nc3iWWnWoeEc8l/ryb
-         fYtO4JfMXdMfak/N/k5zyD8S8b0L4tq6M4LoHWL4YuiCzTeXLnhwUJQu5ZFWFKrB8p7x
-         zsWA==
-X-Gm-Message-State: AC+VfDz0qEF32QF+cDxqEWESfTkCNSPwmP3YDKxzhfjEpWFgemKQnqqO
-        6hwHGwpT8joReuG7UQKkG1o=
-X-Google-Smtp-Source: ACHHUZ5VBCxtl59/JZsu9Fjmhg//S8oBIMkURJC7sUdEzQiKrgokJkDMu0wHpflO+8wKkVT9t+9ZWw==
-X-Received: by 2002:a17:906:ef0a:b0:958:5c21:3fa7 with SMTP id f10-20020a170906ef0a00b009585c213fa7mr3490600ejs.25.1683118916731;
-        Wed, 03 May 2023 06:01:56 -0700 (PDT)
+        bh=1V3rgI/5A2MTfAJo/8hueKDPxSOGXJm1mCHXT4uBpmY=;
+        b=IlQ+gawut03x9BjMbDSj8n2OsjnZMEC/D7IpZfBLLI5HxTVwTRGMbHYDjzUrDD0rTN
+         /RyBYZa1hPlnMQCcwMIPV84PYNwLxxrKIGPUlcENtbD0xxJ3UNAOfzAh7cu7NxpKcUXx
+         Ao77my8wSJLCih8cW1iqtRsPeeM3H1Y5xBMf/PuaOYh3A7gpKAcu43ZcZw1N/R759ffu
+         WPNgbuyK3+LjWyNVpQduU8v7tYpcaoP9giAitSr81U/OM90EtZSkpnxADomJRHcPMOdf
+         tAH2r1kBkovx4LZ3pqe1mRMtAKRO0dozCLRzpKBAqWfy8f84h9bMB/Z+Z0XNaPZ6XK0+
+         v9lA==
+X-Gm-Message-State: AC+VfDxw5bLQipJbGcK2HBh+jtFOlysm6Y5QCTT5xmIqnQNYnLlPQtVS
+        XhPwtEwv3t6BgPUGqdSOXpk=
+X-Google-Smtp-Source: ACHHUZ53NeMl5qShVSaUR8CZtdJjEBycHu9DNGpIdzfyfh2sdXRAla7ZglQhrS7q9beetAPw0gXyQA==
+X-Received: by 2002:a17:906:794c:b0:94f:1c90:cb71 with SMTP id l12-20020a170906794c00b0094f1c90cb71mr4116095ejo.65.1683118921466;
+        Wed, 03 May 2023 06:02:01 -0700 (PDT)
 Received: from localhost.localdomain ([95.183.227.33])
-        by smtp.gmail.com with ESMTPSA id my17-20020a1709065a5100b0095728081944sm16105578ejc.146.2023.05.03.06.01.55
+        by smtp.gmail.com with ESMTPSA id my17-20020a1709065a5100b0095728081944sm16105578ejc.146.2023.05.03.06.01.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 May 2023 06:01:56 -0700 (PDT)
+        Wed, 03 May 2023 06:02:01 -0700 (PDT)
 From:   Yassine Oudjana <yassine.oudjana@gmail.com>
 X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
 To:     Andy Gross <agross@kernel.org>,
@@ -64,9 +64,9 @@ Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
         Yassine Oudjana <yassine.oudjana@gmail.com>,
         linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND 1/3] dt-bindings: clock: qcom,msm8996-cbf: Add compatible for MSM8996 Pro
-Date:   Wed,  3 May 2023 16:00:50 +0300
-Message-Id: <20230503130051.144708-2-y.oudjana@protonmail.com>
+Subject: [PATCH RESEND 2/3] arm64: dts: qcom: msm8996pro: Add CBF scaling support
+Date:   Wed,  3 May 2023 16:00:51 +0300
+Message-Id: <20230503130051.144708-3-y.oudjana@protonmail.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230503130051.144708-1-y.oudjana@protonmail.com>
 References: <20230503130051.144708-1-y.oudjana@protonmail.com>
@@ -84,30 +84,312 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yassine Oudjana <y.oudjana@protonmail.com>
 
-The CBF clock on MSM8996 Pro has a different divisor compared to MSM8996
-and is therefore not fully compatible with it. Add a new compatible string
-to differentiate between them.
+Add opp-peak-kBps to CPU OPPs to allow for CBF scaling, and change the
+CBF compatible to reflect the difference between it and the one on MSM8996.
 
 Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
 ---
- Documentation/devicetree/bindings/clock/qcom,msm8996-cbf.yaml | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ arch/arm64/boot/dts/qcom/msm8996pro.dtsi | 51 ++++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/clock/qcom,msm8996-cbf.yaml b/Documentation/devicetree/bindings/clock/qcom,msm8996-cbf.yaml
-index 3ffe69d8cdd5..0dfbd8c4d465 100644
---- a/Documentation/devicetree/bindings/clock/qcom,msm8996-cbf.yaml
-+++ b/Documentation/devicetree/bindings/clock/qcom,msm8996-cbf.yaml
-@@ -15,7 +15,9 @@ description: >
+diff --git a/arch/arm64/boot/dts/qcom/msm8996pro.dtsi b/arch/arm64/boot/dts/qcom/msm8996pro.dtsi
+index a679a9c0cf99..b74cff06f300 100644
+--- a/arch/arm64/boot/dts/qcom/msm8996pro.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8996pro.dtsi
+@@ -24,101 +24,121 @@ opp-307200000 {
+ 			opp-hz = /bits/ 64 <307200000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <192000>;
+ 		};
+ 		opp-384000000 {
+ 			opp-hz = /bits/ 64 <384000000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <192000>;
+ 		};
+ 		opp-460800000 {
+ 			opp-hz = /bits/ 64 <460800000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <192000>;
+ 		};
+ 		opp-537600000 {
+ 			opp-hz = /bits/ 64 <537600000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <192000>;
+ 		};
+ 		opp-614400000 {
+ 			opp-hz = /bits/ 64 <614400000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <192000>;
+ 		};
+ 		opp-691200000 {
+ 			opp-hz = /bits/ 64 <691200000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <307200>;
+ 		};
+ 		opp-768000000 {
+ 			opp-hz = /bits/ 64 <768000000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <307200>;
+ 		};
+ 		opp-844800000 {
+ 			opp-hz = /bits/ 64 <844800000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <384000>;
+ 		};
+ 		opp-902400000 {
+ 			opp-hz = /bits/ 64 <902400000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <441600>;
+ 		};
+ 		opp-979200000 {
+ 			opp-hz = /bits/ 64 <979200000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <537600>;
+ 		};
+ 		opp-1056000000 {
+ 			opp-hz = /bits/ 64 <1056000000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <614400>;
+ 		};
+ 		opp-1132800000 {
+ 			opp-hz = /bits/ 64 <1132800000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <691200>;
+ 		};
+ 		opp-1209600000 {
+ 			opp-hz = /bits/ 64 <1209600000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <768000>;
+ 		};
+ 		opp-1286400000 {
+ 			opp-hz = /bits/ 64 <1286400000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <844800>;
+ 		};
+ 		opp-1363200000 {
+ 			opp-hz = /bits/ 64 <1363200000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <902400>;
+ 		};
+ 		opp-1440000000 {
+ 			opp-hz = /bits/ 64 <1440000000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <979200>;
+ 		};
+ 		opp-1516800000 {
+ 			opp-hz = /bits/ 64 <1516800000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <1132800>;
+ 		};
+ 		opp-1593600000 {
+ 			opp-hz = /bits/ 64 <1593600000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <1190400>;
+ 		};
+ 		opp-1996800000 {
+ 			opp-hz = /bits/ 64 <1996800000>;
+ 			opp-supported-hw = <0x20>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <1516800>;
+ 		};
+ 		opp-2188800000 {
+ 			opp-hz = /bits/ 64 <2188800000>;
+ 			opp-supported-hw = <0x10>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <1593600>;
+ 		};
+ 	};
  
- properties:
-   compatible:
--    const: qcom,msm8996-cbf
-+    enum:
-+      - qcom,msm8996-cbf
-+      - qcom,msm8996pro-cbf
- 
-   reg:
-     maxItems: 1
+@@ -131,136 +151,163 @@ opp-307200000 {
+ 			opp-hz = /bits/ 64 <307200000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <192000>;
+ 		};
+ 		opp-384000000 {
+ 			opp-hz = /bits/ 64 <384000000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <192000>;
+ 		};
+ 		opp-460800000 {
+ 			opp-hz = /bits/ 64 <460800000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <192000>;
+ 		};
+ 		opp-537600000 {
+ 			opp-hz = /bits/ 64 <537600000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <192000>;
+ 		};
+ 		opp-614400000 {
+ 			opp-hz = /bits/ 64 <614400000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <192000>;
+ 		};
+ 		opp-691200000 {
+ 			opp-hz = /bits/ 64 <691200000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <307200>;
+ 		};
+ 		opp-748800000 {
+ 			opp-hz = /bits/ 64 <748800000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <307200>;
+ 		};
+ 		opp-825600000 {
+ 			opp-hz = /bits/ 64 <825600000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <384000>;
+ 		};
+ 		opp-902400000 {
+ 			opp-hz = /bits/ 64 <902400000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <441600>;
+ 		};
+ 		opp-979200000 {
+ 			opp-hz = /bits/ 64 <979200000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <441600>;
+ 		};
+ 		opp-1056000000 {
+ 			opp-hz = /bits/ 64 <1056000000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <537600>;
+ 		};
+ 		opp-1132800000 {
+ 			opp-hz = /bits/ 64 <1132800000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <614400>;
+ 		};
+ 		opp-1209600000 {
+ 			opp-hz = /bits/ 64 <1209600000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <691200>;
+ 		};
+ 		opp-1286400000 {
+ 			opp-hz = /bits/ 64 <1286400000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <768000>;
+ 		};
+ 		opp-1363200000 {
+ 			opp-hz = /bits/ 64 <1363200000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <844800>;
+ 		};
+ 		opp-1440000000 {
+ 			opp-hz = /bits/ 64 <1440000000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <902400>;
+ 		};
+ 		opp-1516800000 {
+ 			opp-hz = /bits/ 64 <1516800000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <979200>;
+ 		};
+ 		opp-1593600000 {
+ 			opp-hz = /bits/ 64 <1593600000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <1056000>;
+ 		};
+ 		opp-1670400000 {
+ 			opp-hz = /bits/ 64 <1670400000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <1132800>;
+ 		};
+ 		opp-1747200000 {
+ 			opp-hz = /bits/ 64 <1747200000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <1190400>;
+ 		};
+ 		opp-1824000000 {
+ 			opp-hz = /bits/ 64 <1824000000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <1286400>;
+ 		};
+ 		opp-1900800000 {
+ 			opp-hz = /bits/ 64 <1900800000>;
+ 			opp-supported-hw = <0x70>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <1363200>;
+ 		};
+ 		opp-1977600000 {
+ 			opp-hz = /bits/ 64 <1977600000>;
+ 			opp-supported-hw = <0x30>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <1440000>;
+ 		};
+ 		opp-2054400000 {
+ 			opp-hz = /bits/ 64 <2054400000>;
+ 			opp-supported-hw = <0x30>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <1516800>;
+ 		};
+ 		opp-2150400000 {
+ 			opp-hz = /bits/ 64 <2150400000>;
+ 			opp-supported-hw = <0x30>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <1593600>;
+ 		};
+ 		opp-2246400000 {
+ 			opp-hz = /bits/ 64 <2246400000>;
+ 			opp-supported-hw = <0x10>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <1593600>;
+ 		};
+ 		opp-2342400000 {
+ 			opp-hz = /bits/ 64 <2342400000>;
+ 			opp-supported-hw = <0x10>;
+ 			clock-latency-ns = <200000>;
++			opp-peak-kBps = <1593600>;
+ 		};
+ 	};
+ };
+@@ -289,3 +336,7 @@ opp-560000000 {
+ 	};
+ 	/* The rest is inherited from msm8996 */
+ };
++
++&cbf {
++	compatible = "qcom,msm8996pro-cbf";
++};
 -- 
 2.40.0
 
