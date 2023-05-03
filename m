@@ -2,180 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 922D76F5F56
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 21:42:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 525906F5F5A
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 21:43:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229833AbjECTm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 15:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57810 "EHLO
+        id S229536AbjECTnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 15:43:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjECTmZ (ORCPT
+        with ESMTP id S229554AbjECTnN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 15:42:25 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F3D683D5
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 12:42:18 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id 3f1490d57ef6-b9a6f17f2b6so5265456276.1
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 12:42:18 -0700 (PDT)
+        Wed, 3 May 2023 15:43:13 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C807AAD;
+        Wed,  3 May 2023 12:43:06 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f00c33c3d6so7044652e87.2;
+        Wed, 03 May 2023 12:43:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683142937; x=1685734937;
+        d=gmail.com; s=20221208; t=1683142984; x=1685734984;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=F66tG72rxj01tEzIhohJuuSFN+mKdDXWP8TmCLCAdWE=;
-        b=a1iLtOUtpMBcudAp+MYHhMRaSRYiAr+weHUc65uhkIL2DNMGQ4IBjRTGTgiuONBiYP
-         vVLg4kXeD/y1TobXMImkPRFkLEFDyMkBVj3chwGbyMjyT9KueDI0t4jM83JCb+nZbNpg
-         J/yqZcdlmdpM/XRaQRoaLiOpk1HFwAcDjRzKVbq5BFCOAsv/q1gn9XZ0OlwEgx5E1tmU
-         fxlkLjvH2QJSr3ZA/JpgsJ2ZaifRyNlvg3Y4opQ8LDqYGzRs1E/gkPa2ITSKhitCTkxP
-         RHQTvW0O6XD7HwIA3/vCkni+jxq3ADu+NHijnoNlKzGv0ZxiRdAZ2H1lDLOMmwB7AWW9
-         D6Gw==
+        bh=kAFsdkuWO9UgRn1XWK4rWMo4+aWqxozWG317Kv1fPQI=;
+        b=PDq5ODkIpFKfUY1aEuhCfzBRSE13qs5fZSAzLX6XZoXQB+61NiNekUMrnbcs37F/nV
+         DfGdEFAtJYIbPSOQeqPaj2OuwBL3dFQjBj3Cv4zzELKOwliYMrldoJMKQgVY0t7SRWcv
+         BCNFCvDtHfqn6Y3kGfDmyQKZ6Wa+TnKjpk1ivsyiO+1v4e3MvvW92HtWBuYKk1qLMYpE
+         l405olgX87z0j4GYNoCdTBSfb/a4H4dIA0ZpGhRTxTffVlOGOUHu+beS/JqsF/voTgrs
+         nzbNCq0qdov1EPsL5xy5OBYjDWosBD96V+XuIw3M19nV0DlIiyTumFxgOJx/4V76jbSX
+         vlLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683142937; x=1685734937;
+        d=1e100.net; s=20221208; t=1683142984; x=1685734984;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=F66tG72rxj01tEzIhohJuuSFN+mKdDXWP8TmCLCAdWE=;
-        b=Kyj/6U7u6ns6JlOjG6FVh7MhSItEVmCEgacisNG7YLWqOeaiwwJ8VQdixaqZlyqd5F
-         Vlg/5yXDmcHnhfFQRFNGe9SrR1/+xxzII35mTq5HUZRrfGYRsT20JSb6VvZDZwU11RTO
-         RRYP4xadSNE3e3hfasIfT4fBEb1GZCrcscX5q7IEJfdAvtUChCJe1JQitXMLZyV9+WtO
-         +7OFEUVWRbz6V2/FctMvHejUnFlw4D8tgKy5MsTc1hqlkZwTmJ3mksB05utInre6XEE3
-         SqlKOJplohMME9O2T7iI1+9Ma9yroT7Bf+LAooUuIoERXFq2LaYtpnEOcIWUaQakkglq
-         GzeQ==
-X-Gm-Message-State: AC+VfDxJt/FMG8F5ra21Cs7vx3/O7YiGt7ZW2lKYrq4ouBmVhIOQ3UF7
-        mk9RH276KE7XtAr30dlbdgRfpwcz4Om5ra2AGhLntQ==
-X-Google-Smtp-Source: ACHHUZ7Ugm6qsRSsxxL6fdJKCJyNFCrHQQaJjzCEXBLpYUK3FrDKBJdA46z3aMrfSb8XYxo7SGFzTHbMdrXAHFSGYjM=
-X-Received: by 2002:a25:4ac2:0:b0:b3d:5a52:5c6b with SMTP id
- x185-20020a254ac2000000b00b3d5a525c6bmr3354631yba.21.1683142937398; Wed, 03
- May 2023 12:42:17 -0700 (PDT)
+        bh=kAFsdkuWO9UgRn1XWK4rWMo4+aWqxozWG317Kv1fPQI=;
+        b=hYn2GwDPWEC0w3N2lq4x8e3zj+vmKjicidvlURDutWIWd/BDayQAdkfqlHNhiYb/If
+         yjJ0VqjLu7LvR0u1FuiU899Uh+TIOZjMb38NfkRGW80utx0GvG/V4XA2JTg5+gyQJwuY
+         oQua10Tmw6j0ttO3Bcp8inWaIPHreF/1hc0gEJbGQnIlnLQQOmYuWhYpOUYIBrMmvpDr
+         vh+560hd868wRccnsBkf3nhPlE+bvnbxq2aesUjsPmlHpWjMAhemRUz2o41/KkZsk8vi
+         L5iM1sThj1C79aSYQkl8/TtohyUlUeH7VhO5XzgARd31KGqkevaBTkh7vcbcXxcH1bqI
+         hZXg==
+X-Gm-Message-State: AC+VfDxuEJU/9jWHKsOl8m2PBcVdOggEQpLO2ZkdqgsNqs867EBU5wqE
+        5QbHtJEkapwsiyCpgI3hneX2oz7IBOZOos6Sm15Ri1EA
+X-Google-Smtp-Source: ACHHUZ4gIRs9gBo1LjXdVV3q4tcb1osFnczRFcpQ7grVogYdoVSKuvGWsK6yPmJvwUjCH1hNHcnAhtATOCSBxm3UYIQ=
+X-Received: by 2002:a05:6512:6f:b0:4ee:d562:573e with SMTP id
+ i15-20020a056512006f00b004eed562573emr1565840lfo.22.1683142984319; Wed, 03
+ May 2023 12:43:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230501175025.36233-1-surenb@google.com> <20230501175025.36233-2-surenb@google.com>
- <875y9aj23u.fsf@nvidia.com> <CAJuCfpGprqXcjjUmN_Vx7Uqa8aPrSZAq9WLV0W9=sKNBUe3Cvg@mail.gmail.com>
- <87lei5zhsr.fsf@nvidia.com>
-In-Reply-To: <87lei5zhsr.fsf@nvidia.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 3 May 2023 12:42:06 -0700
-Message-ID: <CAJuCfpEy9DBAEQw9H3CvF8MaX0NZTvY_+uCPiZqW+k0KjktECw@mail.gmail.com>
-Subject: Re: [PATCH 2/3] mm: drop VMA lock before waiting for migration
-To:     Alistair Popple <apopple@nvidia.com>
-Cc:     akpm@linux-foundation.org, willy@infradead.org, hannes@cmpxchg.org,
-        mhocko@suse.com, josef@toxicpanda.com, jack@suse.cz,
-        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
-        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com, hdanton@sina.com,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
+References: <20230420165454.9517-1-jorge.lopez2@hp.com> <20230420165454.9517-10-jorge.lopez2@hp.com>
+ <951adb9c-dd5c-4c40-a786-2025ebe1650f@t-8ch.de>
+In-Reply-To: <951adb9c-dd5c-4c40-a786-2025ebe1650f@t-8ch.de>
+From:   Jorge Lopez <jorgealtxwork@gmail.com>
+Date:   Wed, 3 May 2023 14:42:37 -0500
+Message-ID: <CAOOmCE-dVzSrjWDx=tcXP-f+4NuN-U_-sc_QaLRt1qjtjaVVGw@mail.gmail.com>
+Subject: Re: [PATCH v11 09/14] HP BIOSCFG driver - enum-attributes
+To:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 3, 2023 at 6:05=E2=80=AFAM Alistair Popple <apopple@nvidia.com>=
- wrote:
+On Sun, Apr 23, 2023 at 7:55=E2=80=AFAM Thomas Wei=C3=9Fschuh <thomas@t-8ch=
+.de> wrote:
 >
->
-> Suren Baghdasaryan <surenb@google.com> writes:
->
-> > On Tue, May 2, 2023 at 6:26=E2=80=AFAM 'Alistair Popple' via kernel-tea=
-m
-> > <kernel-team@android.com> wrote:
-> >>
-> >>
-> >> Suren Baghdasaryan <surenb@google.com> writes:
-> >>
-> >> [...]
-> >>
-> >> > diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-> >> > index 306a3d1a0fa6..b3b57c6da0e1 100644
-> >> > --- a/include/linux/mm_types.h
-> >> > +++ b/include/linux/mm_types.h
-> >> > @@ -1030,6 +1030,7 @@ typedef __bitwise unsigned int vm_fault_t;
-> >> >   *                           fsync() to complete (for synchronous p=
-age faults
-> >> >   *                           in DAX)
-> >> >   * @VM_FAULT_COMPLETED:              ->fault completed, meanwhile m=
-map lock released
-> >> > + * @VM_FAULT_VMA_UNLOCKED:   VMA lock was released
-> >>
-> >> A note here saying vmf->vma should no longer be accessed would be nice=
-.
+> On 2023-04-20 11:54:49-0500, Jorge Lopez wrote:
+> >  .../x86/hp/hp-bioscfg/enum-attributes.c       | 543 ++++++++++++++++++
+> >  1 file changed, 543 insertions(+)
+> >  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/enum-attributes.=
+c
 > >
-> > Good idea. Will add in the next version. Thanks!
-> >
-> >>
-> >> >   * @VM_FAULT_HINDEX_MASK:    mask HINDEX value
-> >> >   *
-> >> >   */
-> >> > @@ -1047,6 +1048,7 @@ enum vm_fault_reason {
-> >> >       VM_FAULT_DONE_COW       =3D (__force vm_fault_t)0x001000,
-> >> >       VM_FAULT_NEEDDSYNC      =3D (__force vm_fault_t)0x002000,
-> >> >       VM_FAULT_COMPLETED      =3D (__force vm_fault_t)0x004000,
-> >> > +     VM_FAULT_VMA_UNLOCKED   =3D (__force vm_fault_t)0x008000,
-> >> >       VM_FAULT_HINDEX_MASK    =3D (__force vm_fault_t)0x0f0000,
-> >> >  };
-> >> >
-> >> > @@ -1070,7 +1072,9 @@ enum vm_fault_reason {
-> >> >       { VM_FAULT_RETRY,               "RETRY" },      \
-> >> >       { VM_FAULT_FALLBACK,            "FALLBACK" },   \
-> >> >       { VM_FAULT_DONE_COW,            "DONE_COW" },   \
-> >> > -     { VM_FAULT_NEEDDSYNC,           "NEEDDSYNC" }
-> >> > +     { VM_FAULT_NEEDDSYNC,           "NEEDDSYNC" },  \
-> >> > +     { VM_FAULT_COMPLETED,           "COMPLETED" },  \
-> >>
-> >> VM_FAULT_COMPLETED isn't used in this patch, guessing that's snuck in
-> >> from one of the other patches in the series?
-> >
-> > I noticed that an entry for VM_FAULT_COMPLETED was missing and wanted
-> > to fix that... Should I drop that?
+> > diff --git a/drivers/platform/x86/hp/hp-bioscfg/enum-attributes.c b/dri=
+vers/platform/x86/hp/hp-bioscfg/enum-attributes.c
+> > new file mode 100644
+> > index 000000000000..20defa92da6f
+> > --- /dev/null
+> > +++ b/drivers/platform/x86/hp/hp-bioscfg/enum-attributes.c
+> > @@ -0,0 +1,543 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Functions corresponding to enumeration type attributes under
+> > + * BIOS Enumeration GUID for use with hp-bioscfg driver.
+> > + *
+> > + *  Copyright (c) 2022 HP Development Company, L.P.
+> > + */
+> > +
+> > +#include "bioscfg.h"
+> > +
+> > +GET_INSTANCE_ID(enumeration);
+> > +
+> > +static ssize_t current_value_show(struct kobject *kobj, struct kobj_at=
+tribute *attr, char *buf)
+> > +{
+> > +     int instance_id =3D get_enumeration_instance_id(kobj);
+> > +
+> > +     if (instance_id < 0)
+> > +             return -EIO;
+> > +
+> > +     return sysfs_emit(buf, "%s\n",
+> > +                      bioscfg_drv.enumeration_data[instance_id].curren=
+t_value);
+> > +}
+> > +
+> > +/*
+> > + * validate_enumeration_input() -
+> > + * Validate input of current_value against possible values
+> > + *
+> > + * @instance_id: The instance on which input is validated
+> > + * @buf: Input value
+> > + */
+> > +static int validate_enumeration_input(int instance_id, const char *buf=
+)
+> > +{
+> > +     int ret =3D 0;
+> > +     int found =3D 0;
+> > +     int i;
+> > +     int possible_values;
+> > +
+> > +     /* Is it a read only attribute */
+> > +     if (bioscfg_drv.enumeration_data[instance_id].common.is_readonly)
+> > +             return -EIO;
+> > +
+> > +     possible_values =3D bioscfg_drv.enumeration_data[instance_id].pos=
+sible_values_size;
+> > +     for (i =3D 0; i < possible_values && !found; i++)
+> > +             if (!strcasecmp(bioscfg_drv.enumeration_data[instance_id]=
+.possible_values[i], buf))
 >
-> Oh ok. It would certainly be good to add but really it should be it's
-> own patch.
+> Is this also intentionally case-insensitive?
 
-Ack. Will split in the next version. Thanks!
+Yes
 
 >
-> >>
-> >> > +     { VM_FAULT_VMA_UNLOCKED,        "VMA_UNLOCKED" }
-> >> >
-> >> >  struct vm_special_mapping {
-> >> >       const char *name;       /* The name, e.g. "[vdso]". */
-> >> > diff --git a/mm/memory.c b/mm/memory.c
-> >> > index 41f45819a923..8222acf74fd3 100644
-> >> > --- a/mm/memory.c
-> >> > +++ b/mm/memory.c
-> >> > @@ -3714,8 +3714,16 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
-> >> >       entry =3D pte_to_swp_entry(vmf->orig_pte);
-> >> >       if (unlikely(non_swap_entry(entry))) {
-> >> >               if (is_migration_entry(entry)) {
-> >> > -                     migration_entry_wait(vma->vm_mm, vmf->pmd,
-> >> > -                                          vmf->address);
-> >> > +                     /* Save mm in case VMA lock is dropped */
-> >> > +                     struct mm_struct *mm =3D vma->vm_mm;
-> >> > +
-> >> > +                     if (vmf->flags & FAULT_FLAG_VMA_LOCK) {
-> >> > +                             /* No need to hold VMA lock for migrat=
-ion */
-> >> > +                             vma_end_read(vma);
-> >> > +                             /* CAUTION! VMA can't be used after th=
-is */
-> >> > +                             ret |=3D VM_FAULT_VMA_UNLOCKED;
-> >> > +                     }
-> >> > +                     migration_entry_wait(mm, vmf->pmd, vmf->addres=
-s);
-> >> >               } else if (is_device_exclusive_entry(entry)) {
-> >> >                       vmf->page =3D pfn_swap_entry_to_page(entry);
-> >> >                       ret =3D remove_device_exclusive_entry(vmf);
-> >>
-> >> --
-> >> To unsubscribe from this group and stop receiving emails from it, send=
- an email to kernel-team+unsubscribe@android.com.
-> >>
+> > +                     found =3D 1;
+> > +
+> > +     if (!found) {
+> > +             ret =3D -EINVAL;
+> > +             goto exit_enum_input;
+> > +     }
+> > +
+> > +     /*
+> > +      * set pending reboot flag depending on
+> > +      * "RequiresPhysicalPresence" value
+> > +      */
+> > +     if (bioscfg_drv.enumeration_data[instance_id].common.requires_phy=
+sical_presence)
+> > +             bioscfg_drv.pending_reboot =3D true;
+> > +
+> > +exit_enum_input:
+> > +     return ret;
+> > +}
+> > +
+> > +static void update_enumeration_value(int instance_id, char *attr_value=
+)
+> > +{
+> > +     strscpy(bioscfg_drv.enumeration_data[instance_id].current_value,
+> > +             attr_value,
+> > +             sizeof(bioscfg_drv.enumeration_data[instance_id].current_=
+value));
+> > +}
+> > +
+> > +ATTRIBUTE_S_COMMON_PROPERTY_SHOW(display_name_language_code, enumerati=
+on);
+> > +static struct kobj_attribute enumeration_display_langcode =3D
+> > +             __ATTR_RO(display_name_language_code);
+> > +
+> > +ATTRIBUTE_S_COMMON_PROPERTY_SHOW(display_name, enumeration);
+> > +static struct kobj_attribute  enumeration_display_name =3D
+> > +             __ATTR_RO(display_name);
+> > +
+> > +ATTRIBUTE_PROPERTY_STORE(current_value, enumeration);
+> > +static struct kobj_attribute enumeration_current_val =3D
+> > +     __ATTR_RW_MODE(current_value, 0644);
 >
+> 0644 is the default for __ATTR_RW(), use that instead.
+
+Done!
+>
+
+<snip>
