@@ -2,128 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A53F6F5066
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 08:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 402FE6F506B
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 08:54:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbjECGxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 02:53:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47400 "EHLO
+        id S229606AbjECGx7 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 3 May 2023 02:53:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjECGxS (ORCPT
+        with ESMTP id S229686AbjECGx4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 02:53:18 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E8C62684;
-        Tue,  2 May 2023 23:53:17 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3436r7iD015967;
-        Wed, 3 May 2023 01:53:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1683096787;
-        bh=dDL1Ix5ed3FpBkik2TeAdp7w4F8HGFiJXQbTgcTMItg=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=MWV6/DKAaut9rrmb1aPB1cvas7X8I34+NweCC4JQ3ecLXKTvBzgkbY8IK2ZPNsVRc
-         C1HZMCa9KWBNrxMJkRy8QOE8I/scqGv1wb2sp9KVUegVdLjGmA74ZxYCX9N7EUxYXV
-         IqmFe5PvPQNwKeMn9nuFUae7aaPMSD3+DmXr5GAs=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3436r7mQ126813
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 3 May 2023 01:53:07 -0500
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 3
- May 2023 01:53:07 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 3 May 2023 01:53:07 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3436r6s4083088;
-        Wed, 3 May 2023 01:53:06 -0500
-From:   Vaishnav Achath <vaishnav.a@ti.com>
-To:     <peter.ujfalusi@gmail.com>, <vkoul@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>
-CC:     <dmaengine@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <j-choudhary@ti.com>,
-        <u-kumar1@ti.com>, <vigneshr@ti.com>, <vaishnav.a@ti.com>
-Subject: [PATCH 2/2] dmaengine: ti: k3-udma: Add support for J721S2 CSI BCDMA instance
-Date:   Wed, 3 May 2023 12:23:03 +0530
-Message-ID: <20230503065303.16674-2-vaishnav.a@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230503065303.16674-1-vaishnav.a@ti.com>
-References: <20230503065303.16674-1-vaishnav.a@ti.com>
+        Wed, 3 May 2023 02:53:56 -0400
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1A1840F0;
+        Tue,  2 May 2023 23:53:46 -0700 (PDT)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-55a20a56a01so62623187b3.3;
+        Tue, 02 May 2023 23:53:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683096826; x=1685688826;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ycoy11ds1uuECa7nLWAsDmiVFu/7yLRJRdJ8VPxevb0=;
+        b=HtUWWMMwJh/4gi7Yba4vIP8reQHnoUHaYjOe7jY6AWg69L6xjz/dH6lt7ibh6qC+kZ
+         PCYgjudwKIe2SgyFjrznGkVCVtTcV38GgewO+4sQWijwF2NAuxLjL8k2CLKgQXUD6eX7
+         3Jqfnwcu4DVuF3YbTChy0rqOWtNLnv6FElz6/UZioKU4WdN8j2t51zJJVs+MheGzaHzr
+         fNYfbhSFQ+7+SjscJ7MTFq1xNXTdYxSM3BTogkmWeWR/HN0tiR0B07nC/qp9yMXXa836
+         r7DLZB6xzWknmr/AQCKTznYIIxqJ6jMmLj4oLPmKAQ57HpwsLS96v5/Mk/MsSrVyG1+c
+         2Ijg==
+X-Gm-Message-State: AC+VfDwa6yXV/siGPfvNin492aZrpl34caSa5KyZWaIoJg8nyhLsCquA
+        mYR4dfsrzFiBXU+MrOX13zUTyPPcZ6AlLA==
+X-Google-Smtp-Source: ACHHUZ7tOq8GcY/KFL9NYrN/t/tzhwf1stUB9PTf1oiToxjxkb7abiStAKiPDTjLT4mrfoEuUTmkZw==
+X-Received: by 2002:a0d:ef42:0:b0:539:1b13:3d64 with SMTP id y63-20020a0def42000000b005391b133d64mr18387832ywe.48.1683096825826;
+        Tue, 02 May 2023 23:53:45 -0700 (PDT)
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
+        by smtp.gmail.com with ESMTPSA id g140-20020a0ddd92000000b00545a081849esm2986295ywe.46.2023.05.02.23.53.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 May 2023 23:53:45 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-b9dcd91a389so6020405276.2;
+        Tue, 02 May 2023 23:53:44 -0700 (PDT)
+X-Received: by 2002:a25:d84c:0:b0:b9d:5691:3ef6 with SMTP id
+ p73-20020a25d84c000000b00b9d56913ef6mr16412844ybg.27.1683096824680; Tue, 02
+ May 2023 23:53:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1683022164.git.geert+renesas@glider.be> <CAMuHMdVmfj8L24QbMGn54jW96rYkvX1gizmvgvEB7T3Jwevd+g@mail.gmail.com>
+ <878re6y9s8.fsf@minerva.mail-host-address-is-not-set> <ZFFCzHwJqyeXB52w@google.com>
+In-Reply-To: <ZFFCzHwJqyeXB52w@google.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 3 May 2023 08:53:32 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdW_K9R7L9M_=M+HyWKivK6S2_Bhb5jvwdGv_oqZ06-NxA@mail.gmail.com>
+Message-ID: <CAMuHMdW_K9R7L9M_=M+HyWKivK6S2_Bhb5jvwdGv_oqZ06-NxA@mail.gmail.com>
+Subject: Re: [PATCH 0/2] Input: tests - miscellaneous fixes
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Javier Martinez Canillas <javierm@redhat.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>, linux-input@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-J721S2 has dedicated BCDMA instance for Camera Serial Interface RX
-and TX. The BCDMA instance supports RX and TX channels but block copy
-channels are not present, add support for the same.
+Hi Dmitry,
 
-Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
----
- drivers/dma/ti/k3-udma.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+On Tue, May 2, 2023 at 7:05 PM Dmitry Torokhov
+<dmitry.torokhov@gmail.com> wrote:
+> On Tue, May 02, 2023 at 06:31:51PM +0200, Javier Martinez Canillas wrote:
+> > Geert Uytterhoeven <geert@linux-m68k.org> writes:
+> > > On Tue, May 2, 2023 at 12:17 PM Geert Uytterhoeven
+> > > <geert+renesas@glider.be> wrote:
+> > >> This patch series fixes a crash in the new input selftest, and makes the
+> > >> test available when the KUnit framework is modular.
+> > >>
+> > >> Unfortunately test 3 still fails for me (tested on Koelsch (R-Car M2-W)
+> > >> and ARAnyM):
+> > >>
+> > >>         KTAP version 1
+> > >>         # Subtest: input_core
+> > >>         1..3
+> > >>     input: Test input device as /devices/virtual/input/input1
+> > >>         ok 1 input_test_polling
+> > >>     input: Test input device as /devices/virtual/input/input2
+> > >>         ok 2 input_test_timestamp
+> > >>     input: Test input device as /devices/virtual/input/input3
+> > >>         # input_test_match_device_id: ASSERTION FAILED at # drivers/input/tests/input_test.c:99
+> > >>         Expected input_match_device_id(input_dev, &id) to be true, but is false
+> > >>         not ok 3 input_test_match_device_id
+> > >>     # input_core: pass:2 fail:1 skip:0 total:3
+> > >>     # Totals: pass:2 fail:1 skip:0 total:3
+> > >>     not ok 1 input_core
+> > >
+> > > Adding more debug code shows that it's the test on evbit [1] in
+> > > input_match_device_id() that fails.
+> > > Looking at your input_test_match_device_id(), I think you expect
+> > > the checks for the various bitmaps to be gated by
+> > > "if (id->flags & INPUT_DEVICE_ID_MATCH_EVBIT)", like is done for the
+> > > other checks?
+> > >
+> > > [1] https://elixir.bootlin.com/linux/latest/source/drivers/input/input.c#L1021
+> > >
+> >
+> > That's correct. In input_test_init(), the input dev is marked as capable
+> > of emitting EV_KEY BTN_LEFT and BTN_RIGHT. The goal of that test was to
+> > check this.
+> >
+> > That is, check if matches by the input dev capabilities in which case the
+> > __set_bit(EV_KEY, ...) would make the match true and __set_bit(EV_ABS, ..)
+> > would make the condition false.
+> >
+> > But maybe I misunderstood how the input_set_capability() and __set_bit()
+> > functions work ?
+> >
+> > I'll take a look to this tomorrow, thanks a lot for your report!
+>
+> Unfortunately (?) INPUT_DEVICE_ID_MATCH_*BIT have never had any effect,
+> the kernel always used bitmaps when matching (with the assumption that
+> if one does not care about given bitmap they can simply pass empty one),
+> so I think what we need to change is:
+>
+> diff --git a/drivers/input/tests/input_test.c b/drivers/input/tests/input_test.c
+> index 8b8ac3412a70..0540225f0288 100644
+> --- a/drivers/input/tests/input_test.c
+> +++ b/drivers/input/tests/input_test.c
+> @@ -87,7 +87,7 @@ static void input_test_timestamp(struct kunit *test)
+>  static void input_test_match_device_id(struct kunit *test)
+>  {
+>         struct input_dev *input_dev = test->priv;
+> -       struct input_device_id id;
+> +       struct input_device_id id = { 0 };
+>
+>         /*
+>          * Must match when the input device bus, vendor, product, version
+>
+> to avoid having garbage in the match data.
 
-diff --git a/drivers/dma/ti/k3-udma.c b/drivers/dma/ti/k3-udma.c
-index fc3a2a05ab7b..16c5c333808b 100644
---- a/drivers/dma/ti/k3-udma.c
-+++ b/drivers/dma/ti/k3-udma.c
-@@ -4308,6 +4308,15 @@ static struct udma_soc_data am62a_dmss_csi_soc_data = {
- 	},
- };
- 
-+static struct udma_soc_data j721s2_bcdma_csi_soc_data = {
-+	.oes = {
-+		.bcdma_tchan_data = 0x800,
-+		.bcdma_tchan_ring = 0xa00,
-+		.bcdma_rchan_data = 0xe00,
-+		.bcdma_rchan_ring = 0x1000,
-+	},
-+};
-+
- static struct udma_match_data am62a_bcdma_csirx_data = {
- 	.type = DMA_TYPE_BCDMA,
- 	.psil_base = 0x3100,
-@@ -4346,6 +4355,18 @@ static struct udma_match_data am64_pktdma_data = {
- 	},
- };
- 
-+static struct udma_match_data j721s2_bcdma_csi_data = {
-+	.type = DMA_TYPE_BCDMA,
-+	.psil_base = 0x2000,
-+	.enable_memcpy_support = false,
-+	.burst_size = {
-+		TI_SCI_RM_UDMAP_CHAN_BURST_SIZE_64_BYTES, /* Normal Channels */
-+		0, /* No H Channels */
-+		0, /* No UH Channels */
-+	},
-+	.soc_data = &j721s2_bcdma_csi_soc_data,
-+};
-+
- static const struct of_device_id udma_of_match[] = {
- 	{
- 		.compatible = "ti,am654-navss-main-udmap",
-@@ -4373,6 +4394,10 @@ static const struct of_device_id udma_of_match[] = {
- 		.compatible = "ti,am62a-dmss-bcdma-csirx",
- 		.data = &am62a_bcdma_csirx_data,
- 	},
-+	{
-+		.compatible = "ti,j721s2-dmss-bcdma-csi",
-+		.data = &j721s2_bcdma_csi_data,
-+	},
- 	{ /* Sentinel */ },
- };
- 
+Thanks, that did the trick! 3/3 tests pass.
+
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.17.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
