@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 505626F5735
+	by mail.lfdr.de (Postfix) with ESMTP id 9BB946F5736
 	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 13:34:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230180AbjECLer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 07:34:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45780 "EHLO
+        id S230170AbjECLew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 07:34:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230095AbjECLea (ORCPT
+        with ESMTP id S230150AbjECLei (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 07:34:30 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C3159DA
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 04:34:28 -0700 (PDT)
+        Wed, 3 May 2023 07:34:38 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F4D46B8
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 04:34:30 -0700 (PDT)
 Received: from IcarusMOD.eternityproject.eu (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C896D66056D3;
-        Wed,  3 May 2023 12:34:25 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 743AE66056D4;
+        Wed,  3 May 2023 12:34:27 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1683113667;
-        bh=S4CgoCQHjSzDV+ANF2xZcYt7UKYACrFS841NHZgYjfM=;
+        s=mail; t=1683113668;
+        bh=oygimjOCk8FTKzESWYFnGtWGKI3xuJTfmDm18J1tugE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bSzjfc7ECNNyEtLKzke72Nb5BjqW2QRpVPcqoSbpFvF2xwjJF/b3svXSVsbbdU4uZ
-         bMqzFyVFxfom3DZbQXCoUehXnTHeLY0zPw5sFMYuMmRBHmq94rQNIvTvx/VG8I9lXs
-         ms1IL3A7BR6+xmjT0tUQa8e8/RLAvzRS7q8dDlwTSzAZ7BPpKsQiKDtKxRigCQIpge
-         Ul1dP+WZxhnSfh0wF9j07b13taAGJvaVTKPTVarIpZ8oaIPiIKT5bhtIXuY+A06Ggz
-         Yb63e99gTZD3e5yyndqPBAF00RCApXbRhoSDI+brPP1T34lSJAkcSTZ5ZiWA2AUl3M
-         OOWgt+6u7ci6A==
+        b=nnSLnjd9bpSYeCY/2/NZVqduUmxCHwexohgvPshz2JTllUkmyRo/njwEw9d4MwMJT
+         7WEzj0+RlugeL+084Qu1byhLz321QBuV8Sp92WcW9OzgyfZhtdh9RnF9AP4e5g/EHW
+         wZvTDMxTRy+WptLhVtHFLPGx8Ifv3Vg6GQiytY7PaF4r5l1Qti/S0P4uF6QHP4VZ0S
+         uYa3FmhoPtjBPdT4YwwzCHzPe8XQAyhTpqzOo4CW4+mImzfQm5qUEWB1WEordvvWqk
+         Onn4CAvpadjEBcP9u3b3WgmRzKWsJ3zxVdgaTHuF3A+t+/U+XHxKLbGXCt2O6Cov0N
+         i+M3I5tgi8W/A==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     lgirdwood@gmail.com
@@ -48,9 +48,9 @@ Cc:     broonie@kernel.org, perex@perex.cz, tiwai@suse.com,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org,
         sound-open-firmware@alsa-project.org, kernel@collabora.com
-Subject: [PATCH 4/5] ASoC: mediatek: mt8195-afe-pcm: Simplify with dev_err_probe()
-Date:   Wed,  3 May 2023 13:34:12 +0200
-Message-Id: <20230503113413.149235-5-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH 5/5] ASoC: mediatek: mt8195-afe-pcm: Clean up unnecessary functions
+Date:   Wed,  3 May 2023 13:34:13 +0200
+Message-Id: <20230503113413.149235-6-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230503113413.149235-1-angelogioacchino.delregno@collabora.com>
 References: <20230503113413.149235-1-angelogioacchino.delregno@collabora.com>
@@ -66,99 +66,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Shorten the probe function by switching to dev_err_probe() where
-possible.
+Function mt8195_afe_init_registers() performs just a single call to
+regmap_multi_reg_write(), it returns int and it's not error checked;
+move that call to the probe function and also add some error check.
+
+While at it, also move the contents of mt8195_afe_parse_of() to the
+probe function as well: since this is getting a handle to topckgen
+and since that's optional, the ifdef for CONFIG_SND_SOC_MT6359 can
+also be removed.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- sound/soc/mediatek/mt8195/mt8195-afe-pcm.c | 45 +++++++---------------
- 1 file changed, 14 insertions(+), 31 deletions(-)
+ sound/soc/mediatek/mt8195/mt8195-afe-pcm.c | 32 ++++++----------------
+ 1 file changed, 8 insertions(+), 24 deletions(-)
 
 diff --git a/sound/soc/mediatek/mt8195/mt8195-afe-pcm.c b/sound/soc/mediatek/mt8195/mt8195-afe-pcm.c
-index a54c16e0aa05..105db11eecec 100644
+index 105db11eecec..d22cf1664d8a 100644
 --- a/sound/soc/mediatek/mt8195/mt8195-afe-pcm.c
 +++ b/sound/soc/mediatek/mt8195/mt8195-afe-pcm.c
-@@ -3062,10 +3062,8 @@ static int mt8195_afe_pcm_dev_probe(struct platform_device *pdev)
- 	struct snd_soc_component *component;
+@@ -3030,28 +3030,6 @@ static const struct reg_sequence mt8195_cg_patch[] = {
+ 	{ AUDIO_TOP_CON1, 0xfffffff8 },
+ };
  
- 	ret = of_reserved_mem_device_init(dev);
--	if (ret) {
--		dev_err(dev, "failed to assign memory region: %d\n", ret);
--		return ret;
+-static int mt8195_afe_init_registers(struct mtk_base_afe *afe)
+-{
+-	return regmap_multi_reg_write(afe->regmap,
+-			mt8195_afe_reg_defaults,
+-			ARRAY_SIZE(mt8195_afe_reg_defaults));
+-}
+-
+-static void mt8195_afe_parse_of(struct mtk_base_afe *afe,
+-				struct device_node *np)
+-{
+-#if IS_ENABLED(CONFIG_SND_SOC_MT6359)
+-	struct mt8195_afe_private *afe_priv = afe->platform_priv;
+-
+-	afe_priv->topckgen = syscon_regmap_lookup_by_phandle(afe->dev->of_node,
+-							     "mediatek,topckgen");
+-	if (IS_ERR(afe_priv->topckgen)) {
+-		dev_info(afe->dev, "%s() Cannot find topckgen controller: %ld\n",
+-			 __func__, PTR_ERR(afe_priv->topckgen));
 -	}
-+	if (ret)
-+		return dev_err_probe(dev, ret, "failed to assign memory region\n");
+-#endif
+-}
+-
+ static int mt8195_afe_pcm_dev_probe(struct platform_device *pdev)
+ {
+ 	struct mtk_base_afe *afe;
+@@ -3160,7 +3138,10 @@ static int mt8195_afe_pcm_dev_probe(struct platform_device *pdev)
  
- 	ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(33));
- 	if (ret)
-@@ -3089,24 +3087,17 @@ static int mt8195_afe_pcm_dev_probe(struct platform_device *pdev)
+ 	platform_set_drvdata(pdev, afe);
  
- 	/* initial audio related clock */
- 	ret = mt8195_afe_init_clock(afe);
--	if (ret) {
--		dev_err(dev, "init clock error\n");
--		return ret;
--	}
-+	if (ret)
-+		return dev_err_probe(dev, ret, "init clock error\n");
+-	mt8195_afe_parse_of(afe, pdev->dev.of_node);
++	afe_priv->topckgen = syscon_regmap_lookup_by_phandle(dev->of_node, "mediatek,topckgen");
++	if (IS_ERR(afe_priv->topckgen))
++		dev_dbg(afe->dev, "Cannot find topckgen controller: %ld\n",
++			PTR_ERR(afe_priv->topckgen));
  
- 	/* reset controller to reset audio regs before regmap cache */
- 	rstc = devm_reset_control_get_exclusive(dev, "audiosys");
--	if (IS_ERR(rstc)) {
--		ret = PTR_ERR(rstc);
--		dev_err(dev, "could not get audiosys reset:%d\n", ret);
--		return ret;
--	}
-+	if (IS_ERR(rstc))
-+		return dev_err_probe(dev, PTR_ERR(rstc), "could not get audiosys reset\n");
- 
- 	ret = reset_control_reset(rstc);
--	if (ret) {
--		dev_err(dev, "failed to trigger audio reset:%d\n", ret);
--		return ret;
--	}
-+	if (ret)
-+		return dev_err_probe(dev, ret, "failed to trigger audio reset\n");
- 
- 	spin_lock_init(&afe_priv->afe_ctrl_lock);
- 
-@@ -3143,30 +3134,22 @@ static int mt8195_afe_pcm_dev_probe(struct platform_device *pdev)
- 
- 	ret = devm_request_irq(dev, irq_id, mt8195_afe_irq_handler,
- 			       IRQF_TRIGGER_NONE, "asys-isr", (void *)afe);
--	if (ret) {
--		dev_err(dev, "could not request_irq for asys-isr\n");
--		return ret;
--	}
-+	if (ret)
-+		return dev_err_probe(dev, ret, "could not request_irq for asys-isr\n");
- 
- 	/* init sub_dais */
- 	INIT_LIST_HEAD(&afe->sub_dais);
- 
- 	for (i = 0; i < ARRAY_SIZE(dai_register_cbs); i++) {
- 		ret = dai_register_cbs[i](afe);
--		if (ret) {
--			dev_warn(dev, "dai register i %d fail, ret %d\n",
--				 i, ret);
--			return ret;
--		}
-+		if (ret)
-+			return dev_err_probe(dev, ret, "dai cb%i register fail\n", i);
+ 	/* enable clock for regcache get default value from hw */
+ 	afe_priv->pm_runtime_bypass_reg_ctl = true;
+@@ -3219,7 +3200,10 @@ static int mt8195_afe_pcm_dev_probe(struct platform_device *pdev)
+ 		goto err_pm_put;
  	}
  
- 	/* init dai_driver and component_driver */
- 	ret = mtk_afe_combine_sub_dai(afe);
--	if (ret) {
--		dev_warn(dev, "mtk_afe_combine_sub_dai fail, ret %d\n",
--			 ret);
--		return ret;
--	}
+-	mt8195_afe_init_registers(afe);
++	ret = regmap_multi_reg_write(afe->regmap, mt8195_afe_reg_defaults,
++				     ARRAY_SIZE(mt8195_afe_reg_defaults));
 +	if (ret)
-+		return dev_err_probe(dev, ret, "mtk_afe_combine_sub_dai fail\n");
++		goto err_pm_put;
  
- 	afe->mtk_afe_hardware = &mt8195_afe_hardware;
- 	afe->memif_fs = mt8195_memif_fs;
+ 	ret = pm_runtime_put_sync(dev);
+ 	if (ret)
 -- 
 2.40.1
 
