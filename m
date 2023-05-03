@@ -2,102 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DA276F5939
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 15:44:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 361146F593A
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 15:45:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230215AbjECNoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 09:44:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54894 "EHLO
+        id S230172AbjECNpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 09:45:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbjECNoS (ORCPT
+        with ESMTP id S229524AbjECNpD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 09:44:18 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D7491A5;
-        Wed,  3 May 2023 06:44:17 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id 5614622812f47-38e12d973bfso2781147b6e.0;
-        Wed, 03 May 2023 06:44:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683121456; x=1685713456;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gjViOKUqR5+zd+e+boxAGQ/v0HwnUIz4DBo4X82113w=;
-        b=HR7zgFMFTTNnVpWPqdJybt7c9zzQUToaSdsco4xAcpGkIeA7qI/Jts41BLLiUZyGre
-         XaclE5AJ41XlU8oI1vZ1tfRVpJqtRKszoIJ/fdqmhrhOQVAsZMYnyr9402a7E/3L0zoi
-         kZqnJ7eO/hwA/2vmPtO9Xzhkd438Gnk2aWsOjrE2Iil42czqQOHGjj0XoToMd144+M2m
-         9hDV8RLbgy9ZsAjgtoo31JUeOqECtG3C3pC5TwEjL8x6KcEEsGhGizZOIG9lGTEFWQxG
-         pTILjW0V109gJXcaUsccEP52B/VbdayCPx/4S0b78Js91sYBgSjFDGnhYJcBezcydbMY
-         RLXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683121456; x=1685713456;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gjViOKUqR5+zd+e+boxAGQ/v0HwnUIz4DBo4X82113w=;
-        b=M5VM5DMQuUWqj4T9qHRoOVZ7XaeqC8IdqWm7gpLqMbkC7Zn+iPAIR5aAEQkS2OnbeE
-         O3AUPo9YLrpFiyHRbCspM+//KS2N5VAgUx2CfdikLj6uSqRuogihyMzmCEtznFCrwFKA
-         0wjfbPvjykM//VXX3S+kyp2XVszF7kRSj8+SAC/4i02cb/0FCnVHJXvfJsup2qFRkLwJ
-         Gbn0BTBzx0w18bOXviKJ/GW9136Ts6Nkl+KTe1frPZ5UDu1Ttdsucp+xLaTpK6RN3bHZ
-         bUu61M9g03IeRSSpm+jwvSJsoye46W0A6M+5ZhH+1/0zP++AJOr9DvzO73VlEUcT/Tsc
-         s2aw==
-X-Gm-Message-State: AC+VfDxVlfkE4XRRlAJ6mkkHpOzWa8wsH2IvR6wO9gGRZWDnt77xQ9VD
-        gbRap1zG4ArzjkDT+7VaUhc=
-X-Google-Smtp-Source: ACHHUZ6aIab0/wls6IKL28j7/hMjuI302RELiMLfNoSp86ZYdie6RfJzVs/EUTT7uwvGN5Wi1qSCCw==
-X-Received: by 2002:a05:6808:3290:b0:38c:c177:a6bb with SMTP id cg16-20020a056808329000b0038cc177a6bbmr54145oib.23.1683121456428;
-        Wed, 03 May 2023 06:44:16 -0700 (PDT)
-Received: from t14s.localdomain ([177.92.48.92])
-        by smtp.gmail.com with ESMTPSA id ca16-20020a056808331000b003924c15cf58sm592578oib.20.2023.05.03.06.44.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 May 2023 06:44:16 -0700 (PDT)
-Received: by t14s.localdomain (Postfix, from userid 1000)
-        id 54CAD59F01D; Wed,  3 May 2023 10:44:13 -0300 (-03)
-Date:   Wed, 3 May 2023 10:44:13 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Gavrilov Ilia <Ilia.Gavrilov@infotecs.ru>
-Cc:     Simon Horman <simon.horman@corigine.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Xin Long <lucien.xin@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "lvc-project@linuxtesting.org" <lvc-project@linuxtesting.org>
-Subject: Re: [PATCH net v4] sctp: fix a potential OOB access in
- sctp_sched_set_sched()
-Message-ID: <ZFJlLaj6Qqa7Pc28@t14s.localdomain>
-References: <ZFJX3KLkcu4nON7l@t14s.localdomain>
- <20230503133752.4176720-1-Ilia.Gavrilov@infotecs.ru>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230503133752.4176720-1-Ilia.Gavrilov@infotecs.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 3 May 2023 09:45:03 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D155CB8
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 06:45:01 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8198822850;
+        Wed,  3 May 2023 13:45:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1683121500; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tYm+9t8/2tPC3QCxt5IjR+SXsI1QF/Sb+k/pBTc2UiE=;
+        b=h6+qwXC2AwgXnxr8OdlDZkE+zd2SBwHIJ+YmbGO0iFHSIWHcV4rV+io7G6xL10AhEHDCpM
+        nfTMwt2T2gdVsdVqsgSdzq60nymvOr+D7rT9bUUUJwUdZopGv+vWr9CuzPtBJUU5s0vWRW
+        5OuwdlJzLigH6Hlz3OpsNtVJvG/9NUc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1683121500;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tYm+9t8/2tPC3QCxt5IjR+SXsI1QF/Sb+k/pBTc2UiE=;
+        b=n0K0go0+LzDOeWfJHGY8WTr7dA3aiS/GWRTMZ5w/B2rhLrDVn2Cs1Dn7fTp9Yri7hFKCtQ
+        sIXsxW70rXAo5KCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6CA5313584;
+        Wed,  3 May 2023 13:45:00 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ovIVGlxlUmSCKgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 03 May 2023 13:45:00 +0000
+Date:   Wed, 03 May 2023 15:44:59 +0200
+Message-ID: <87a5ylcyw4.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Jeff Chua <jeff.chua.linux@gmail.com>
+Cc:     Takashi Iwai <tiwai@suse.de>, Bagas Sanjaya <bagasdotme@gmail.com>,
+        Oswald Buddenhagen <oswald.buddenhagen@gmx.de>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: Re: linux-6.4 alsa sound broken
+In-Reply-To: <CAAJw_ZsGZaypS1C=XwLDdNFQ9jbF8RFOOiEY0ZSWQvFmWx+Gwg@mail.gmail.com>
+References: <CAAJw_ZsbTVd3Es373x_wTNDF7RknGhCD0r+NKUSwAO7HpLAkYA@mail.gmail.com>
+        <ZE9ngFLRqLkN6faH@ugly>
+        <CAAJw_ZtKnZ3QruicqFRG_TLV0Ltbc8LSvdJSCEQRkr5GMSWvCw@mail.gmail.com>
+        <63bcc1eb-b0f5-4da1-0a22-31e0c86c0851@gmail.com>
+        <07f50016-5e24-56f8-0d02-df8d237059b6@gmail.com>
+        <87jzxqne3z.wl-tiwai@suse.de>
+        <CAAJw_ZsGZaypS1C=XwLDdNFQ9jbF8RFOOiEY0ZSWQvFmWx+Gwg@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 03, 2023 at 01:37:59PM +0000, Gavrilov Ilia wrote:
-> The 'sched' index value must be checked before accessing an element
-> of the 'sctp_sched_ops' array. Otherwise, it can lead to OOB access.
+On Wed, 03 May 2023 14:19:54 +0200,
+Jeff Chua wrote:
 > 
-> Note that it's harmless since the 'sched' parameter is checked before
-> calling 'sctp_sched_set_sched'.
+> On Wed, May 3, 2023 at 2:06 PM Takashi Iwai <tiwai@suse.de> wrote:
+> >
+> > On Wed, 03 May 2023 06:37:48 +0200,
+> > Bagas Sanjaya wrote:
+> > >
+> > > On 5/3/23 11:34, Bagas Sanjaya wrote:
+> > > >> Just send .. in another email. If the atttachment got stripped off,
+> > > >> please let me know.
+> > > >>
+> > > >>
+> > > >
+> > > > I don't see your attachment. Can you please post the link
+> > > > to your test file on file storage hosting instead?
+> > > >
+> > >
+> > > Oops, I don't see the attachment on your reply at [1]. Sorry for the
+> > > inconvenience.
+> > >
+> > > [1]: https://lore.kernel.org/lkml/CAAJw_ZveoPfnBsSkHZqmLiVWATcOosR--6Ds4cdekdi=t1yV7A@mail.gmail.com/
+> >
+> > I see no attachment of the recorded sound.  In the mail above, only
+> > Side_Right.wav was attached, and this is the same file in
+> > /usr/share/sounds/alsa/.
+> >
+> > But, I wonder how you played a mono channel file with "hw:1,0" PCM.
+> > Isn't this a HD-audio device?
+> > Usually HD-audio codec can't play a mono file.  For example, on my
+> > machine with a Realtek codec fails like:
+> >
+> > % aplay -Dhw:0,0 Side_Right.wav
+> > Playing WAVE 'Side_Right.wav' : Signed 16 bit Little Endian, Rate 48000 Hz, Mono
+> > aplay: set_params:1358: Channels count non available
+> >
+> > So, if it works on yours, please show the output of playback with
+> > aplay -v option.  This will show more details.
 > 
-> Found by InfoTeCS on behalf of Linux Verification Center
-> (linuxtesting.org) with SVACE.
-> 
-> Reviewed-by: Xin Long <lucien.xin@gmail.com>
-> Reviewed-by: Simon Horman <simon.horman@corigine.com>
-> Signed-off-by: Ilia.Gavrilov <Ilia.Gavrilov@infotecs.ru>
+> # aplay -v
+> Playing WAVE '/local/share/sounds/alsa/Side_Right.wav' : Signed 16 bit
+> Little Endian, Rate 48000 Hz, Mono
+> Plug PCM: Route conversion PCM (sformat=S32_LE)
+>   Transformation table:
+>     0 <- 0
+>     1 <- 0
+> Its setup is:
+>   stream       : PLAYBACK
+>   access       : RW_INTERLEAVED
+>   format       : S16_LE
+>   subformat    : STD
+>   channels     : 1
+>   rate         : 48000
+>   exact rate   : 48000 (48000/1)
+>   msbits       : 16
+>   buffer_size  : 16384
+>   period_size  : 1024
+>   period_time  : 21333
+>   tstamp_mode  : NONE
+>   tstamp_type  : MONOTONIC
+>   period_step  : 1
+>   avail_min    : 1024
+>   period_event : 0
+>   start_threshold  : 16384
+>   stop_threshold   : 16384
+>   silence_threshold: 0
+>   silence_size : 0
+>   boundary     : 4611686018427387904
+> Slave: Soft volume PCM
+> Control: PCM Playback Volume
+> min_dB: -51
+> max_dB: 0
+> resolution: 256
+> Its setup is:
+>   stream       : PLAYBACK
+>   access       : MMAP_INTERLEAVED
+>   format       : S32_LE
+>   subformat    : STD
+>   channels     : 2
+>   rate         : 48000
+>   exact rate   : 48000 (48000/1)
+>   msbits       : 32
+>   buffer_size  : 16384
+>   period_size  : 1024
+>   period_time  : 21333
+>   tstamp_mode  : NONE
+>   tstamp_type  : MONOTONIC
+>   period_step  : 1
+>   avail_min    : 1024
+>   period_event : 0
+>   start_threshold  : 16384
+>   stop_threshold   : 16384
+>   silence_threshold: 0
+>   silence_size : 0
+>   silence_size : 0
+>   boundary     : 4611686018427387904
+> Slave: Direct Stream Mixing PCM
+> Its setup is:
+>   stream       : PLAYBACK
+>   access       : MMAP_INTERLEAVED
+>   format       : S32_LE
+>   subformat    : STD
+>   channels     : 2
+>   rate         : 48000
+>   exact rate   : 48000 (48000/1)
+>   msbits       : 32
+>   buffer_size  : 16384
+>   period_size  : 1024
+>   period_time  : 21333
+>   tstamp_mode  : NONE
+>   tstamp_type  : MONOTONIC
+>   period_step  : 1
+>   avail_min    : 1024
+>   period_event : 0
+>   start_threshold  : 16384
+>   stop_threshold   : 16384
+>   silence_threshold: 0
+>   silence_size : 0
+>   boundary     : 4611686018427387904
+> Hardware PCM card 0 'HDA Intel PCH' device 0 subdevice 0
+> Its setup is:
+>   stream       : PLAYBACK
+>   access       : MMAP_INTERLEAVED
+>   format       : S32_LE
+>   subformat    : STD
+>   channels     : 2
+>   rate         : 48000
+>   exact rate   : 48000 (48000/1)
+>   msbits       : 32
+>   buffer_size  : 16384
+>   period_size  : 1024
+>   period_time  : 21333
+>   tstamp_mode  : ENABLE
+>   tstamp_type  : MONOTONIC
+>   period_step  : 1
+>   avail_min    : 1024
+>   period_event : 0
+>   start_threshold  : 1
+>   stop_threshold   : 4611686018427387904
+>   silence_threshold: 0
+>   silence_size : 4611686018427387904
+>   boundary     : 4611686018427387904
+>   appl_ptr     : 0
+>   hw_ptr       : 0
 
-Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+OK, that explains.  This is a completely different from the
+configuration with hw:X,Y I expected from your description.
+So, this is with dmix, and it indeed relies on the auto-silencing, so
+the commit must be relevant.
 
-Thx!
+
+> > Last but not least, please double-check that the problem is really
+> > gone after reverting the commit 9f656705c5fa.  The commit is about the
+> > auto-silencing, and it should be irrelevant unless the application
+> > gives non-zero silence_size sw_params, and aplay doesn't set up it at
+> > all.
+> 
+> 100% sure. I just compiled the latest linux git pull. Rebooted. Tested
+> that the problem exists, and revert just that patch
+> (9f656705c5faa18afb26d922cfc64f9fd103c38d), and the problem went away!
+> 
+> Sorry about the recorded.wav file that I attached earlier ... didn't
+> realized that when I recorded via the loop-back, I could heard that it
+> was "corrupted" on the unpatched kernel, but when I play back the same
+> file on the "patched" kernel, the sound played ok.
+> 
+> So, loop-back using the following did not capture the problem ...
+> # arecord -D hw:1,0,0 -f S16_LE -r 48000 recorded.wav
+> # aplay -D hw:1,1,0 /local/share/sounds/alsa/Side_Right.wav
+> 
+> Attached is the problem file captured using my iPhone. bad1.m4a.
+> 
+> I've uploaded to
+> https://github.com/jeffersonchua/linux-6.4-alsa/blob/main/bad1.m4a in
+> case the attachment got stripped-off.
+
+Ah, the arecord and aplay above with -Dhw:1,1 is for a different
+(still working) card?  Better to explain it more clearly...
+
+
+Takashi
