@@ -2,158 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9CF96F578D
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 14:04:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FD216F5799
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 14:09:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbjECMEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 08:04:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32850 "EHLO
+        id S229721AbjECMJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 08:09:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbjECMEA (ORCPT
+        with ESMTP id S229484AbjECMJm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 08:04:00 -0400
-Received: from mail-ed1-x549.google.com (mail-ed1-x549.google.com [IPv6:2a00:1450:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1121B5585
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 05:03:58 -0700 (PDT)
-Received: by mail-ed1-x549.google.com with SMTP id 4fb4d7f45d1cf-50bc1a01cffso3956027a12.3
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 05:03:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683115436; x=1685707436;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aNh3nAoRMa4V5EaowqHF7s4OcqODGsJdMyDwfRXX5Dc=;
-        b=7EkdGqODljDSobiIzTDmeQFUKbnYpVmD2o1PGwhi/GkC7qaRoP2QddYAMvQrwIUsV9
-         hBHpRu4OBxaO+ZLejbgWYiXPbfeL50zkdaoV/xeRyMBrr9PNasu68wJOhbM/6iX3PZZe
-         ih8mtHWMoa4bgZoAmgFjvT3icnvTrIYrPX0sPlC46XUwkaYGIBKLv4Ncgv4GrgzYT6hZ
-         DsVOdOe7WvizW//5nGqTrETTxBgBLAJ6Vy3+6xo/YJBinp1kiseAcq9GDW5oOoXxt95W
-         qz5dX6Bc3EqGXfzua98UA39AgWsuVBtu5yTosXvOWdk88Rk4We+AK3a0VrmMbfEiMqWh
-         QD7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683115436; x=1685707436;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aNh3nAoRMa4V5EaowqHF7s4OcqODGsJdMyDwfRXX5Dc=;
-        b=eFsz0HIto7yGAqWWjnj/tjlddQ/V2y31VLJ/+zTz9DIzY7hwtd549h5t6MGRUJkVzC
-         MymfCPenX8Q3+5+LKFhr4phB88LPGQfma7NVN/XfxgzFARUskEjonkP9j/dhSv5VcP1H
-         8zCPjZhoM+hdJiVD0mrf/YRYrznNl9r0/kwvjCg3b3/hDn7NxJiNfwAqnajITj5+kW6w
-         2U9MOc2DduovYYOdw9EGlJnWKzd+Dh7IT5OVc54pUdyhLLsnL7nizCoNxSzZMc3ADSNX
-         epJqo8Jyv0y7iKxLgsERL0ISs4GuRQ+Iy9ofAC/VHh1CDui336L+VEVT/jZqn4/BaxGn
-         9fjQ==
-X-Gm-Message-State: AC+VfDwOcUTjqbn44bx/D40Pza1gTM5wiLlpZ7uGr0pEkJYd/X+b4PLu
-        MJEG1lvNDzn2CwcPjSkjs5eu3YwDtMI0RwQ=
-X-Google-Smtp-Source: ACHHUZ5Sg0i/GCzPD8JGP59MFHRO+1dlXdn7nksVppSZZKhJAPPp/c+7q+SGeENBK7IAdZi0eNSEBr9c3w6cg8A=
-X-Received: from aliceryhl.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:6c8])
- (user=aliceryhl job=sendgmr) by 2002:a17:906:cc14:b0:94f:2cba:b785 with SMTP
- id ml20-20020a170906cc1400b0094f2cbab785mr1253805ejb.12.1683115436592; Wed,
- 03 May 2023 05:03:56 -0700 (PDT)
-Date:   Wed,  3 May 2023 12:03:54 +0000
-In-Reply-To: <20230503090708.2524310-7-nmi@metaspace.dk>
-Mime-Version: 1.0
-References: <20230503090708.2524310-7-nmi@metaspace.dk>
-X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
-Message-ID: <20230503120354.534136-1-aliceryhl@google.com>
-Subject: Re: [RFC PATCH 06/11] rust: apply cache line padding for `SpinLock`
-From:   Alice Ryhl <aliceryhl@google.com>
-To:     nmi@metaspace.dk
-Cc:     Damien.LeMoal@wdc.com, a.hindborg@samsung.com,
-        alex.gaynor@gmail.com, axboe@kernel.dk, benno.lossin@proton.me,
-        bjorn3_gh@protonmail.com, boqun.feng@gmail.com, gary@garyguo.net,
-        gost.dev@samsung.com, hare@suse.de, hch@lst.de, kbusch@kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lsf-pc@lists.linux-foundation.org, ojeda@kernel.org,
-        rust-for-linux@vger.kernel.org, wedsonaf@gmail.com,
-        willy@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Wed, 3 May 2023 08:09:42 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E29885275
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 05:09:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683115780; x=1714651780;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=UJm/xbuK9eiMknXtaolbMS/OFfDDogrV9LQnXq4yTxA=;
+  b=YXSkyY2bLx51kuNl/F4tzgcz3MNRlx3Nfdpy+W2zaYN2n6KJGagmD+lP
+   csQxf2+byKzOjrcVq4VXfNuZZb16ZGbNsPYqi2Q3hQuljpXN/ynkI6L+U
+   4hnr6aOzLT7k0e2QimkoSPJ1Q4Svfz8q0J8WaJd/2Abw3pTEGa+P5Ah+J
+   TLixJYzLEazvpDQ6QdWpvHozkzuoCUoh59ghgjg+ISWw1QlpjHtsCOXJQ
+   KWcyuOxxi/BxA4TrSiAu2cD2370N32udb5wCdhs3MK4fZzwCGnPNut2Fq
+   LTGOURLcLy3gunwomQPfNoJN6XRESO3L7WLhCKu60okQsBEmU2lnZLqqm
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="347456810"
+X-IronPort-AV: E=Sophos;i="5.99,247,1677571200"; 
+   d="scan'208";a="347456810"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2023 05:09:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="820744227"
+X-IronPort-AV: E=Sophos;i="5.99,247,1677571200"; 
+   d="scan'208";a="820744227"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga004.jf.intel.com with ESMTP; 03 May 2023 05:09:04 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 3 May 2023 05:09:04 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 3 May 2023 05:09:03 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Wed, 3 May 2023 05:09:03 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.105)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Wed, 3 May 2023 05:09:03 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=E98FkcASKWBhwDOPYI/VyT4N4qdFmL87Slv2sVtluV/5a7KLYYruBVIxSWvp601HDejARu5RWq1zTxMLRPLxReiNJ64UyZI0cpwPUF7tzeSnxFkNHzzoK9RSwuz6TXhAZW4UZqL1MkpSy7ylxYE8I1c4pnYr7RD5mnDS/S+H8nq5XNYoMpY1Y5xuJOeJLc0Hkllr/zA9BZlpvYh8t+93ezkijQC4SOKus8hA9xIVXyaZJnJmmXEsKZAWTeyQfqdjIv0wQ2ZKnBArjsn8Hq7KJQd6qfs9vPLODwmyLTRbsHX4+C+wyXjxx9wjes331uiK7pfjbvoM9VdMy4go3NhVSw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lTKhdYYeDXOTp2/h5OMl+QFFdwxjumvD6UPTjzZMDbg=;
+ b=B0FSwxbBxCK2K3x7Fxa7tgppO3obhI7cw7InPW2dkSO9+rropU+VRnjEcvdMemMdRJIHRv0U4wVIkJD0/GaTdIP5dTf6wOcd0yzudhIXJoxuC/Mpg0+GU/oPFHUWE9SIx5BM9cjMC8EjwwcxdGe0QApg5lJlTkOnsS+oL2XZIn+CGaJpYD6LehODGXE0IcMrtw7CvUGpDEFU7suMxIqAGpBQUZBEF7fM6nzmat3S0niRn/kOVC0pLOUAkpqNBynwROurb7tnknJAmPLZuY7ZXcXz1P5F49aiYErdygC++TfzA8M/23RdjdO1eGmj4q0jyDlH+h4n0n3l2svpylsTSQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from BL0PR11MB2995.namprd11.prod.outlook.com (2603:10b6:208:7a::28)
+ by CH3PR11MB7843.namprd11.prod.outlook.com (2603:10b6:610:124::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.22; Wed, 3 May
+ 2023 12:09:02 +0000
+Received: from BL0PR11MB2995.namprd11.prod.outlook.com
+ ([fe80::d7e6:2d0c:3393:229a]) by BL0PR11MB2995.namprd11.prod.outlook.com
+ ([fe80::d7e6:2d0c:3393:229a%7]) with mapi id 15.20.6340.031; Wed, 3 May 2023
+ 12:09:02 +0000
+Date:   Wed, 3 May 2023 20:08:51 +0800
+From:   Philip Li <philip.li@intel.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+CC:     Mike Rapoport <rppt@kernel.org>,
+        Justin Forbes <jforbes@fedoraproject.org>,
+        Will Deacon <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <jmforbes@linuxtx.org>,
+        Andrew Morton <akpm@linux-foundation.org>, <lkp@intel.com>
+Subject: Re: [PATCH] Revert arm64: drop ranges in definition of
+ ARCH_FORCE_MAX_ORDER
+Message-ID: <ZFJO01C9jbZrmDMW@rli9-mobl>
+References: <20230428153646.823736-1-jforbes@fedoraproject.org>
+ <ZEv76qfIiJcUvdql@arm.com>
+ <ZE1pcwi95nPdlKzN@kernel.org>
+ <CAFbkSA3SzjWZ_Q8XC6-_Kzc+jmUN6sG7vzbSD5X1bRvPUaJg3Q@mail.gmail.com>
+ <ZE3mdYajdFnvl1by@kernel.org>
+ <CAFbkSA0O-4YgNt-7KPhvx+vhvRNc38PO8E--GVAWKVgHK-_9Mw@mail.gmail.com>
+ <ZFEZLZHBosQK9xaH@arm.com>
+ <ZFE3GDjmUWpMpmqu@kernel.org>
+ <ZFFK/qPTCIpGE2Tu@arm.com>
+ <ZFI1eK5JmwIdL1eq@arm.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <ZFI1eK5JmwIdL1eq@arm.com>
+X-ClientProxiedBy: SG2PR04CA0152.apcprd04.prod.outlook.com (2603:1096:4::14)
+ To BL0PR11MB2995.namprd11.prod.outlook.com (2603:10b6:208:7a::28)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL0PR11MB2995:EE_|CH3PR11MB7843:EE_
+X-MS-Office365-Filtering-Correlation-Id: ecf7ab68-bb96-4ccf-778d-08db4bcf2eba
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: maVeB94u2uzTBwF1eELymVL9PAT3WRxxXZWqf6kVPeFK7b62L9gAg4KHJaGkVOr76NxSs6tE1MokWKd3oZj0HhturA0agnD637vehq2EpSWx2jKrRIdGsmznsPLoYKmvD7wM6arzNXBRSwVj82ho4a4ZBsOZbqVm+47MVDGN2OP2YLom1sDTXnS61WFvMbXLFb4OLiMAiaJFC+DQ6s95RedPfzIkF+FaT2dlJtbgiglEfknBmRrASvyY5AippXCFKCvGMIFapVfd6oRbKM3VmkwSnKI3Uz/E4ZQS9WYttTk9wgdx39KfYdpWQkqBOl0A+vqbtACTOBHJvEDd2wTLjboOIISkjSG/9sQkwqleDVOo/VzWg5T+aHmvpPO969K9FK2rjzOilBRai3+EW6hrz8f2lwP3DVpWJ5c8020kDiz9SRKSkwONedp5AMDCqcUuiU7FUkSi8zuz2kGjtsju90XkVW5a9Qb3KAmN9nmbXmcdV96up6S6Nz8NlNj5CXuaAHaGi+OY6hkOC9PgnCAitgBclGWObbx5Z8pSrijPMI19SjPprr28E/xU1xchxx4qylCbvCvw/3y4jE2Tt/+Zxg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR11MB2995.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(136003)(376002)(39860400002)(396003)(346002)(366004)(451199021)(8936002)(8676002)(966005)(6486002)(6666004)(86362001)(6916009)(4326008)(316002)(41300700001)(33716001)(66476007)(66556008)(66946007)(82960400001)(5660300002)(38100700002)(478600001)(2906002)(54906003)(6506007)(83380400001)(107886003)(186003)(26005)(44832011)(6512007)(9686003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?lHEzrjoaQTrtORgDmeGF1ktAprUvNKFHJ5zxv1bYwv2lwTJaRM+rYWpjxahq?=
+ =?us-ascii?Q?S/a5i1/nx7lGzloNzTXhXVIYsg5vk7nhp6jiYzX6c9hiE64aVnOvFq6Toiea?=
+ =?us-ascii?Q?iESkUJV5CrI938S7prCdnZNp4b61MTa/EDPi+FjTS29Ud0WQLzsx3uw2L+fU?=
+ =?us-ascii?Q?Ant6/LcLbDte1ON8TM13Jhpzxh15BQYgmiyJzcFb/U8q/0gSE29TQ7m6X0q4?=
+ =?us-ascii?Q?308uFPnZ40pz2qRxoP3o9KA+rRbisXse81VJnarGbDTR/HbTtSWlM3zjj62p?=
+ =?us-ascii?Q?gB0hQr20iLYGzW3L3G7kJmMX40+RTWsejiNjqc6zi5tNsjRev1HuLzPz8Scu?=
+ =?us-ascii?Q?02uBL1COJxHMiTIlp3vsXO/l7xgRyRWGTqqtU6TaQ+ZdS/Sh6EDOTplcgGLy?=
+ =?us-ascii?Q?dKCCgXTxNWDVbQTSj6P9b0ISbyo+8KVdGyqO3GJiPPI9qrMGeTD++iLJXkwP?=
+ =?us-ascii?Q?0wCBZ5+3KRRzAETsoJ5TjhUd+9YTz4fzZQAbVKeaJiqbVFg8fyNH34gQevnG?=
+ =?us-ascii?Q?Hywxl2D23fqx5zvEDlWGpCmZuwJgnF4Ycb8yKQ7yZIQ5sEfmKdHLnXihe/cQ?=
+ =?us-ascii?Q?7j1O/SdRWnIQxblwOEHtz46iAwXBr5AkLEbo9odIxietOoQ/7z9y1A48ONNU?=
+ =?us-ascii?Q?sSofD2wo2O0k123P53KHyGA6wLCRGlQS59KvM3Jyuwnb1kK/lpi+LSuDKFm0?=
+ =?us-ascii?Q?KMPI6fGmDlQdwagzJ1GTx0nbMIcpirLIPV51dl/XaJ6s/4Dz2CbQxpwtaggA?=
+ =?us-ascii?Q?5xAIrVDDx3xtDVloPxVHB7MIJA4vJxccqSRKjtOQgKtGtc7kt7Vi7zXznhpO?=
+ =?us-ascii?Q?PP/UGKJ/yr/qx/erdbVnFPQqMe8oyitGBJf+T4QpBU3RVDkB4/VIupGSa1PJ?=
+ =?us-ascii?Q?6X9kQ6ASb3/o+5MrsNuMdWgmL91TUeVFPmur83BpAwS1xaTyl1z5VcsMEahO?=
+ =?us-ascii?Q?DJW+wDbk78AegdfZsEPxl7tlnfnsE8/Jc3t6RuQT28GKcAYiXvRttMfObJOb?=
+ =?us-ascii?Q?Ts/8KBBOami+FtmLf7Z3Xz5MORsHZI1YdqbK+tGo+8m9mnC2P1ZZ6DusRvga?=
+ =?us-ascii?Q?2pxqU45EeUfZX/sajAJ2IdTK5fP/x4oGGkkYctxkKdjy4f2RKlPbqC2nxHaP?=
+ =?us-ascii?Q?bzqZevRsDIO+QaigvlmDzqDzrTuTx9m2ql6vbBu3KlQTfaFfCAMhOxnllexi?=
+ =?us-ascii?Q?LAYYFchVysOrN6HZWCWcWDkgVeACDgWBgEUZSeOfEnnHFuO4kWBG8Sk+Ug4j?=
+ =?us-ascii?Q?07MVBzRxpel7Ou5LeXQOlwyXzhyvAIJV5gZg34JpYPkhJAdMahNB3ttj3EG4?=
+ =?us-ascii?Q?FkSG6Y1lqWtA/i9RkJq+ewE5LT8cmJQlEL02VJV5fGCS4/vQjpC7BPC8dE6h?=
+ =?us-ascii?Q?1UCbKt/z/itgcAQZVopTUMqsTgoeoc15phrilsXSSjmjGhI3if8CEkd7MPLi?=
+ =?us-ascii?Q?bpdlj+S9IYlm63wUOq+rxxtszmgTOm899kIwLO2KTpRWDL31zZVvmoA939gL?=
+ =?us-ascii?Q?MW66mIOyn5xfedUyr6XL/IpXIwPf1QOEGypSAgu5A3z05ltb9oTNTc/UXz7C?=
+ =?us-ascii?Q?Z0aV5mX/zenH/rbtBSrzOkZNc08t0QYZZqvsNVtj?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: ecf7ab68-bb96-4ccf-778d-08db4bcf2eba
+X-MS-Exchange-CrossTenant-AuthSource: BL0PR11MB2995.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 May 2023 12:09:02.1292
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: CkhXxRXequrNf9mhUZoF6yU6eqpK11toTvgDwMkjbm2uQusvP02isIHom/Uxqh8YZ6pJ98el9j9381i3qdG3WA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR11MB7843
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 3 May 2023 11:07:03 +0200, Andreas Hindborg <a.hindborg@samsung.com> wrote:
-> The kernel `struct spinlock` is 4 bytes on x86 when lockdep is not enabled. The
-> structure is not padded to fit a cache line. The effect of this for `SpinLock`
-> is that the lock variable and the value protected by the lock will share a cache
-> line, depending on the alignment requirements of the protected value. Aligning
-> the lock variable and the protected value to a cache line yields a 20%
-> performance increase for the Rust null block driver for sequential reads to
-> memory backed devices at 6 concurrent readers.
+On Wed, May 03, 2023 at 11:20:40AM +0100, Catalin Marinas wrote:
+> On Tue, May 02, 2023 at 06:40:14PM +0100, Catalin Marinas wrote:
+> > On Tue, May 02, 2023 at 07:15:20PM +0300, Mike Rapoport wrote:
+> > > On Tue, May 02, 2023 at 03:07:41PM +0100, Catalin Marinas wrote:
+> > > > On Mon, May 01, 2023 at 04:24:38PM -0500, Justin Forbes wrote:
+> > > > 
+> > > > Regarding EXPERT, we could drop it and do like the other architectures
+> > > > but we'll have randconfig occasionally hitting weird values that won't
+> > > > build (like -1). Not sure EXPERT helps here.
+> > > 
+> > > AFAIU, randconfig does not randomize int values, it's probably random
+> > > people that do ;-)
+> > 
+> > https://lore.kernel.org/r/202303232149.Chh6KhiI-lkp@intel.com
+> > 
+> > with the randconfig here:
+> > 
+> > https://download.01.org/0day-ci/archive/20230323/202303232149.Chh6KhiI-lkp@intel.com/config
 > 
-> Signed-off-by: Andreas Hindborg <a.hindborg@samsung.com>
+> You may be right, I can't get my randconfig to set ARCH_FORCE_MAX_ORDER
+> to anything other than the default. Maybe the kernel test robot has its
+> own config randomisation (cc'ing lkp@intel.com).
 
-This applies the cacheline padding to all spinlocks unconditionally.
-It's not clear to me that we want to do that. Instead, I suggest using
-`SpinLock<CachePadded<T>>` in the null block driver to opt-in to the
-cache padding there, and let other drivers choose whether or not they
-want to cache pad their locks.
+Really appologize here, around Mar 23 time period, there's a bug in kernel test
+robot code which wrongly set the value of ARCH_FORCE_MAX_ORDER to -1. We fixed
+it after noticing this, and replied to the false positive reports we sent out.
+But we missed to reply this report to point out it was invalid report.
 
-On Wed, 3 May 2023 11:07:03 +0200, Andreas Hindborg <a.hindborg@samsung.com> wrote:
-> diff --git a/rust/kernel/cache_padded.rs b/rust/kernel/cache_padded.rs
-> new file mode 100644
-> index 000000000000..758678e71f50
-> --- /dev/null
-> +++ b/rust/kernel/cache_padded.rs
+Sorry about this again, pls ignore this report.
+
 > 
-> +impl<T> CachePadded<T> {
-> +    /// Pads and aligns a value to 64 bytes.
-> +    #[inline(always)]
-> +    pub(crate) const fn new(t: T) -> CachePadded<T> {
-> +        CachePadded::<T> { value: t }
-> +    }
-> +}
-
-Please make this `pub` instead of just `pub(crate)`. Other drivers might
-want to use this directly.
-
-On Wed, 3 May 2023 11:07:03 +0200, Andreas Hindborg <a.hindborg@samsung.com> wrote:
-> diff --git a/rust/kernel/sync/lock/spinlock.rs b/rust/kernel/sync/lock/spinlock.rs
-> index 979b56464a4e..e39142a8148c 100644
-> --- a/rust/kernel/sync/lock/spinlock.rs
-> +++ b/rust/kernel/sync/lock/spinlock.rs
-> @@ -100,18 +103,20 @@ unsafe impl super::Backend for SpinLockBackend {
->      ) {
->          // SAFETY: The safety requirements ensure that `ptr` is valid for writes, and `name` and
->          // `key` are valid for read indefinitely.
-> -        unsafe { bindings::__spin_lock_init(ptr, name, key) }
-> +        unsafe { bindings::__spin_lock_init((&mut *ptr).deref_mut(), name, key) }
->      }
->  
-> +    #[inline(always)]
->      unsafe fn lock(ptr: *mut Self::State) -> Self::GuardState {
->          // SAFETY: The safety requirements of this function ensure that `ptr` points to valid
->          // memory, and that it has been initialised before.
-> -        unsafe { bindings::spin_lock(ptr) }
-> +        unsafe { bindings::spin_lock((&mut *ptr).deref_mut()) }
->      }
->  
-> +    #[inline(always)]
->      unsafe fn unlock(ptr: *mut Self::State, _guard_state: &Self::GuardState) {
->          // SAFETY: The safety requirements of this function ensure that `ptr` is valid and that the
->          // caller is the owner of the mutex.
-> -        unsafe { bindings::spin_unlock(ptr) }
-> +        unsafe { bindings::spin_unlock((&mut *ptr).deref_mut()) }
->      }
->  }
-
-I would prefer to remain in pointer-land for the above operations. I
-think that this leads to core that is more obviously correct.
-
-For example:
-
-```
-impl<T> CachePadded<T> {
-    pub const fn raw_get(ptr: *mut Self) -> *mut T {
-        core::ptr::addr_of_mut!((*ptr).value)
-    }
-}
-
-#[inline(always)]
-unsafe fn unlock(ptr: *mut Self::State, _guard_state: &Self::GuardState) {
-    unsafe { bindings::spin_unlock(CachePadded::raw_get(ptr)) }
-}
-```
+> If we don't care about about this randconfig, I'm fine do drop EXPERT
+> from current mainline, together with the 4K/16K pages condition. The
+> condition only made sense if we kept the ranges in since these were
+> configurable (no range for 64K).
+> 
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index b1201d25a8a4..1867aba83ba3 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -1516,7 +1516,7 @@ config XEN
+>  # 16K |       27          |      14      |       13        |         11         |
+>  # 64K |       29          |      16      |       13        |         13         |
+>  config ARCH_FORCE_MAX_ORDER
+> -	int "Order of maximal physically contiguous allocations" if EXPERT && (ARM64_4K_PAGES || ARM64_16K_PAGES)
+> +	int "Order of maximal physically contiguous allocations"
+>  	default "13" if ARM64_64K_PAGES
+>  	default "11" if ARM64_16K_PAGES
+>  	default "10"
+> 
+> -- 
+> Catalin
