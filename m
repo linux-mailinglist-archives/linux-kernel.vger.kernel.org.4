@@ -2,183 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D8336F5096
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 09:06:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF5AE6F50A1
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 09:08:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbjECHGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 03:06:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50882 "EHLO
+        id S229536AbjECHIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 03:08:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbjECHGg (ORCPT
+        with ESMTP id S229460AbjECHIJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 03:06:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4DA269D
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 00:05:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683097551;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7rMfnngKbDMIXDY+jqrxZcVKh/6Dg/PieczSvFQViZc=;
-        b=dPuuL+SC/rNBXFKH/J0qrHF504mUhafKpdgfCvZT4ACUkMYu7mLxAM2PveyY1W48Ux8FvF
-        JPArAi42jEIOW2NZsJnn5+x4BCd/Nafs7y5E+ww44tLbrmcvxfu592110H31DJGqUl7ziN
-        1bf7jfTBHqpMGuUW30sAkW5wUbhPdLw=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-653-mniL6UkhMSCAhZb4v_VLmw-1; Wed, 03 May 2023 03:05:49 -0400
-X-MC-Unique: mniL6UkhMSCAhZb4v_VLmw-1
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f3fe24912cso1158785e9.0
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 00:05:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683097548; x=1685689548;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7rMfnngKbDMIXDY+jqrxZcVKh/6Dg/PieczSvFQViZc=;
-        b=dOtruhwfu/59jhKt6MYc9BE8DSlOk2XN36tjBTzHwZda1K1ZlvxoQ1kKwaCDMdANbV
-         +B6BLPW2O4skCEVsSrgEdqu0DmnxxK00Ofr3jC+98N0a8Aqiw2L3VPhaikD/L2b3WahR
-         ps4yCKw9IkfNvGXLwjIqiXwbHzNllNS/7cCAdi33K9nrz+mwAe44P89gEuoV+GUaoSPI
-         kwsEt20/aiaAJqRJfmi8d46MV25u1v7FNAS6Ul5eZ5ioaXExAx3353wMzmSSspsnWzPg
-         6qRE+dZ/VytgBBkOQMrlOeB7DCsefK5njCfU+VB+9VMBIS+Xv6BxNWlZ92zR+dYUc21e
-         LdfQ==
-X-Gm-Message-State: AC+VfDxckXU2aZXONPvogUAuHnjq1RoTNfuIG09/wENOCn/+6rg+4M2s
-        OA0ktv/3QkJhDvcbrhDJgP4lWCcVJvov4jwtCHaUnv2uEAwRKhLYeS6zHq9kfGzDEo49yJaFG4P
-        XucSP1b8atFit+iTXSzr2nBU1
-X-Received: by 2002:a7b:c3c8:0:b0:3f1:745a:784 with SMTP id t8-20020a7bc3c8000000b003f1745a0784mr14058986wmj.23.1683097548667;
-        Wed, 03 May 2023 00:05:48 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6EMZ0mCaWsxksHpAT35JNayZMXJp5qK8ljmGIxbIK6Kk82EZfo4YCQgIQhqMSmoIKtuva5Jg==
-X-Received: by 2002:a7b:c3c8:0:b0:3f1:745a:784 with SMTP id t8-20020a7bc3c8000000b003f1745a0784mr14058969wmj.23.1683097548261;
-        Wed, 03 May 2023 00:05:48 -0700 (PDT)
-Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id t15-20020a1c770f000000b003ee63fe5203sm908356wmi.36.2023.05.03.00.05.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 May 2023 00:05:47 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>, linux-input@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] Input: tests - miscellaneous fixes
-In-Reply-To: <CAMuHMdW_K9R7L9M_=M+HyWKivK6S2_Bhb5jvwdGv_oqZ06-NxA@mail.gmail.com>
-References: <cover.1683022164.git.geert+renesas@glider.be>
- <CAMuHMdVmfj8L24QbMGn54jW96rYkvX1gizmvgvEB7T3Jwevd+g@mail.gmail.com>
- <878re6y9s8.fsf@minerva.mail-host-address-is-not-set>
- <ZFFCzHwJqyeXB52w@google.com>
- <CAMuHMdW_K9R7L9M_=M+HyWKivK6S2_Bhb5jvwdGv_oqZ06-NxA@mail.gmail.com>
-Date:   Wed, 03 May 2023 09:05:46 +0200
-Message-ID: <875y99yjw5.fsf@minerva.mail-host-address-is-not-set>
+        Wed, 3 May 2023 03:08:09 -0400
+Received: from hust.edu.cn (unknown [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 388161FF6;
+        Wed,  3 May 2023 00:08:07 -0700 (PDT)
+Received: from liuyuxing.. ([10.12.190.56])
+        (user=lyx2022@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 343769xR010417-343769xS010417
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Wed, 3 May 2023 15:06:15 +0800
+From:   Yuxing Liu <lyx2022@hust.edu.cn>
+To:     Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Anson Huang <Anson.Huang@nxp.com>
+Cc:     hust-os-kernel-patches@googlegroups.com,
+        Yuxing Liu <lyx2022@hust.edu.cn>,
+        Dongliang Mu <dzm91@hust.edu.cn>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] clk: imx: clk-imx8mp: improve error handling in imx8mp_clocks_probe()
+Date:   Wed,  3 May 2023 07:06:07 +0000
+Message-Id: <20230503070607.2462-1-lyx2022@hust.edu.cn>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: lyx2022@hust.edu.cn
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Geert Uytterhoeven <geert@linux-m68k.org> writes:
+Replace of_iomap() and kzalloc() with devm_of_iomap() and devm_kzalloc()
+which can automatically release the related memory when the device
+or driver is removed or unloaded to avoid potential memory leak.
 
-> Hi Dmitry,
->
-> On Tue, May 2, 2023 at 7:05=E2=80=AFPM Dmitry Torokhov
-> <dmitry.torokhov@gmail.com> wrote:
->> On Tue, May 02, 2023 at 06:31:51PM +0200, Javier Martinez Canillas wrote:
->> > Geert Uytterhoeven <geert@linux-m68k.org> writes:
->> > > On Tue, May 2, 2023 at 12:17=E2=80=AFPM Geert Uytterhoeven
->> > > <geert+renesas@glider.be> wrote:
->> > >> This patch series fixes a crash in the new input selftest, and make=
-s the
->> > >> test available when the KUnit framework is modular.
->> > >>
->> > >> Unfortunately test 3 still fails for me (tested on Koelsch (R-Car M=
-2-W)
->> > >> and ARAnyM):
->> > >>
->> > >>         KTAP version 1
->> > >>         # Subtest: input_core
->> > >>         1..3
->> > >>     input: Test input device as /devices/virtual/input/input1
->> > >>         ok 1 input_test_polling
->> > >>     input: Test input device as /devices/virtual/input/input2
->> > >>         ok 2 input_test_timestamp
->> > >>     input: Test input device as /devices/virtual/input/input3
->> > >>         # input_test_match_device_id: ASSERTION FAILED at # drivers=
-/input/tests/input_test.c:99
->> > >>         Expected input_match_device_id(input_dev, &id) to be true, =
-but is false
->> > >>         not ok 3 input_test_match_device_id
->> > >>     # input_core: pass:2 fail:1 skip:0 total:3
->> > >>     # Totals: pass:2 fail:1 skip:0 total:3
->> > >>     not ok 1 input_core
->> > >
->> > > Adding more debug code shows that it's the test on evbit [1] in
->> > > input_match_device_id() that fails.
->> > > Looking at your input_test_match_device_id(), I think you expect
->> > > the checks for the various bitmaps to be gated by
->> > > "if (id->flags & INPUT_DEVICE_ID_MATCH_EVBIT)", like is done for the
->> > > other checks?
->> > >
->> > > [1] https://elixir.bootlin.com/linux/latest/source/drivers/input/inp=
-ut.c#L1021
->> > >
->> >
->> > That's correct. In input_test_init(), the input dev is marked as capab=
-le
->> > of emitting EV_KEY BTN_LEFT and BTN_RIGHT. The goal of that test was to
->> > check this.
->> >
->> > That is, check if matches by the input dev capabilities in which case =
-the
->> > __set_bit(EV_KEY, ...) would make the match true and __set_bit(EV_ABS,=
- ..)
->> > would make the condition false.
->> >
->> > But maybe I misunderstood how the input_set_capability() and __set_bit=
-()
->> > functions work ?
->> >
->> > I'll take a look to this tomorrow, thanks a lot for your report!
->>
->> Unfortunately (?) INPUT_DEVICE_ID_MATCH_*BIT have never had any effect,
->> the kernel always used bitmaps when matching (with the assumption that
->> if one does not care about given bitmap they can simply pass empty one),
->> so I think what we need to change is:
->>
->> diff --git a/drivers/input/tests/input_test.c b/drivers/input/tests/inpu=
-t_test.c
->> index 8b8ac3412a70..0540225f0288 100644
->> --- a/drivers/input/tests/input_test.c
->> +++ b/drivers/input/tests/input_test.c
->> @@ -87,7 +87,7 @@ static void input_test_timestamp(struct kunit *test)
->>  static void input_test_match_device_id(struct kunit *test)
->>  {
->>         struct input_dev *input_dev =3D test->priv;
->> -       struct input_device_id id;
->> +       struct input_device_id id =3D { 0 };
->>
->>         /*
->>          * Must match when the input device bus, vendor, product, version
->>
->> to avoid having garbage in the match data.
->
-> Thanks, that did the trick! 3/3 tests pass.
->
+In this case, iounmap(anatop_base) in line 427,433 are removed
+as manual release is not required.
 
-Oh, silly me. Are you going to post that as a proper patch ?
+Besides, referring to clk-imx8mq.c, check the return code of
+of_clk_add_hw_provider, if it returns negtive, print error info
+and unregister hws, which makes the program more robust.
 
---=20
-Best regards,
+Fixes: 9c140d992676 ("clk: imx: Add support for i.MX8MP clock driver")
+Signed-off-by: Yuxing Liu <lyx2022@hust.edu.cn>
+Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
+---
+This issue is found by static analysis and remains untested.
+---
+ drivers/clk/imx/clk-imx8mp.c | 24 +++++++++++++-----------
+ 1 file changed, 13 insertions(+), 11 deletions(-)
 
-Javier Martinez Canillas
-Core Platforms
-Red Hat
+diff --git a/drivers/clk/imx/clk-imx8mp.c b/drivers/clk/imx/clk-imx8mp.c
+index 3253589851ff..de7d2d2176be 100644
+--- a/drivers/clk/imx/clk-imx8mp.c
++++ b/drivers/clk/imx/clk-imx8mp.c
+@@ -414,25 +414,22 @@ static int imx8mp_clocks_probe(struct platform_device *pdev)
+ 	struct device *dev = &pdev->dev;
+ 	struct device_node *np;
+ 	void __iomem *anatop_base, *ccm_base;
++	int err;
+ 
+ 	np = of_find_compatible_node(NULL, NULL, "fsl,imx8mp-anatop");
+-	anatop_base = of_iomap(np, 0);
++	anatop_base = devm_of_iomap(dev, np, 0, NULL);
+ 	of_node_put(np);
+-	if (WARN_ON(!anatop_base))
+-		return -ENOMEM;
++	if (WARN_ON(IS_ERR(anatop_base)))
++		return PTR_ERR(anatop_base);
+ 
+ 	np = dev->of_node;
+ 	ccm_base = devm_platform_ioremap_resource(pdev, 0);
+-	if (WARN_ON(IS_ERR(ccm_base))) {
+-		iounmap(anatop_base);
++	if (WARN_ON(IS_ERR(ccm_base)))
+ 		return PTR_ERR(ccm_base);
+-	}
+ 
+-	clk_hw_data = kzalloc(struct_size(clk_hw_data, hws, IMX8MP_CLK_END), GFP_KERNEL);
+-	if (WARN_ON(!clk_hw_data)) {
+-		iounmap(anatop_base);
++	clk_hw_data = devm_kzalloc(dev, struct_size(clk_hw_data, hws, IMX8MP_CLK_END), GFP_KERNEL);
++	if (WARN_ON(!clk_hw_data))
+ 		return -ENOMEM;
+-	}
+ 
+ 	clk_hw_data->num = IMX8MP_CLK_END;
+ 	hws = clk_hw_data->hws;
+@@ -721,7 +718,12 @@ static int imx8mp_clocks_probe(struct platform_device *pdev)
+ 
+ 	imx_check_clk_hws(hws, IMX8MP_CLK_END);
+ 
+-	of_clk_add_hw_provider(np, of_clk_hw_onecell_get, clk_hw_data);
++	err = of_clk_add_hw_provider(np, of_clk_hw_onecell_get, clk_hw_data);
++	if (err < 0) {
++		dev_err(dev, "failed to register hws for i.MX8MP\n");
++		imx_unregister_hw_clocks(hws, IMX8MP_CLK_END);
++		return err;
++	}
+ 
+ 	imx_register_uart_clocks();
+ 
+-- 
+2.34.1
 
