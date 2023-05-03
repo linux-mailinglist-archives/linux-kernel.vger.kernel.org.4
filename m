@@ -2,67 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 525906F5F5A
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 21:43:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFD506F5F61
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 21:45:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbjECTnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 15:43:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58698 "EHLO
+        id S229626AbjECTpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 15:45:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbjECTnN (ORCPT
+        with ESMTP id S229484AbjECTpm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 15:43:13 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C807AAD;
-        Wed,  3 May 2023 12:43:06 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f00c33c3d6so7044652e87.2;
-        Wed, 03 May 2023 12:43:06 -0700 (PDT)
+        Wed, 3 May 2023 15:45:42 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52FE37695
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 12:45:41 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-b9a6869dd3cso8120507276.2
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 12:45:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683142984; x=1685734984;
+        d=google.com; s=20221208; t=1683143140; x=1685735140;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kAFsdkuWO9UgRn1XWK4rWMo4+aWqxozWG317Kv1fPQI=;
-        b=PDq5ODkIpFKfUY1aEuhCfzBRSE13qs5fZSAzLX6XZoXQB+61NiNekUMrnbcs37F/nV
-         DfGdEFAtJYIbPSOQeqPaj2OuwBL3dFQjBj3Cv4zzELKOwliYMrldoJMKQgVY0t7SRWcv
-         BCNFCvDtHfqn6Y3kGfDmyQKZ6Wa+TnKjpk1ivsyiO+1v4e3MvvW92HtWBuYKk1qLMYpE
-         l405olgX87z0j4GYNoCdTBSfb/a4H4dIA0ZpGhRTxTffVlOGOUHu+beS/JqsF/voTgrs
-         nzbNCq0qdov1EPsL5xy5OBYjDWosBD96V+XuIw3M19nV0DlIiyTumFxgOJx/4V76jbSX
-         vlLQ==
+        bh=bq44fWKfzB7azpC5445h4zSgjB+E0XG23Sx5k3P/Wrs=;
+        b=mNn8mOJ969yUibKfAWrXgatuIFi6FVIM4EsSSH9KQ1Go4d1sYzKZHUi8VHjbX6pfWa
+         OlJ16nZGAbvURg1kkDTdEvJDfJPD2YhA8jF3Bo81PkL1ob0v9cS2gkR4gCqMlpmjnr/s
+         tWs9Fu3MohlaypLe2rIvRSkpy7E5gp65K6pp8163QEUwdmBPDYTBTVK0GaffIx+/jWG1
+         GkJ4oD48JkxrW+rrbEhXrrnBxumK3LN05X4J4kXdI0k+pYkkAnfDQi3ANZniOpY63cWz
+         Q+VUnUlPsKkbZjKcze+vAukdxm3Nrif9W+zvOKGcMfCU5FAKE+MOBW4LpPVOFpo/QEqA
+         mUdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683142984; x=1685734984;
+        d=1e100.net; s=20221208; t=1683143140; x=1685735140;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kAFsdkuWO9UgRn1XWK4rWMo4+aWqxozWG317Kv1fPQI=;
-        b=hYn2GwDPWEC0w3N2lq4x8e3zj+vmKjicidvlURDutWIWd/BDayQAdkfqlHNhiYb/If
-         yjJ0VqjLu7LvR0u1FuiU899Uh+TIOZjMb38NfkRGW80utx0GvG/V4XA2JTg5+gyQJwuY
-         oQua10Tmw6j0ttO3Bcp8inWaIPHreF/1hc0gEJbGQnIlnLQQOmYuWhYpOUYIBrMmvpDr
-         vh+560hd868wRccnsBkf3nhPlE+bvnbxq2aesUjsPmlHpWjMAhemRUz2o41/KkZsk8vi
-         L5iM1sThj1C79aSYQkl8/TtohyUlUeH7VhO5XzgARd31KGqkevaBTkh7vcbcXxcH1bqI
-         hZXg==
-X-Gm-Message-State: AC+VfDxuEJU/9jWHKsOl8m2PBcVdOggEQpLO2ZkdqgsNqs867EBU5wqE
-        5QbHtJEkapwsiyCpgI3hneX2oz7IBOZOos6Sm15Ri1EA
-X-Google-Smtp-Source: ACHHUZ4gIRs9gBo1LjXdVV3q4tcb1osFnczRFcpQ7grVogYdoVSKuvGWsK6yPmJvwUjCH1hNHcnAhtATOCSBxm3UYIQ=
-X-Received: by 2002:a05:6512:6f:b0:4ee:d562:573e with SMTP id
- i15-20020a056512006f00b004eed562573emr1565840lfo.22.1683142984319; Wed, 03
- May 2023 12:43:04 -0700 (PDT)
+        bh=bq44fWKfzB7azpC5445h4zSgjB+E0XG23Sx5k3P/Wrs=;
+        b=R7ipBoeOfacUYRucSP0TiqZ7NhylaMDK/Eb/WZmUdOKzcB7z+ZmJaHGzxihSecQz0t
+         v6MUFJh9qPlhec1zPHwdKgmyGQZZRgASXZnAyMuxQ9Snzea6ccdWLrOQn+sT7PWzPWK3
+         mTAoNQYomCyE4gAyNBchwGdOdYtFXh9agqTsRfHNWw4y/Abq5d718S9ZaLw8UnwmCP42
+         xOeG5Yqa6ZXR53WneSQVBHDeYn6HM0ZPpzm31fLcEKLk6TjG18dhT6epnSJ3Pm6rD0Pu
+         /wTkM2ML9ypGDeJoklG9i4GRpW1hhb0vKE0+UH6X8Xr16pkB3KWjw9gDOx+Z+KawoJWP
+         qtWA==
+X-Gm-Message-State: AC+VfDxtSr/MYg4upP9sWetvsmE4+yG/E+DI2Y1QHUSDUumMaI+d65Xn
+        TO5x5HPmr6AWwWAstknGgYTbnEHszYKVtdInzLMX5w==
+X-Google-Smtp-Source: ACHHUZ611vK/8POrb92/ZC137MJ/7lfkX+qvV2x7CR/VSAZxV6421Yhl76g7YvjnquNOZJwUgKJzKQx8X6OL1TqAAdQ=
+X-Received: by 2002:a25:4f86:0:b0:b9a:9ad4:1d3 with SMTP id
+ d128-20020a254f86000000b00b9a9ad401d3mr18494816ybb.5.1683143140255; Wed, 03
+ May 2023 12:45:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230420165454.9517-1-jorge.lopez2@hp.com> <20230420165454.9517-10-jorge.lopez2@hp.com>
- <951adb9c-dd5c-4c40-a786-2025ebe1650f@t-8ch.de>
-In-Reply-To: <951adb9c-dd5c-4c40-a786-2025ebe1650f@t-8ch.de>
-From:   Jorge Lopez <jorgealtxwork@gmail.com>
-Date:   Wed, 3 May 2023 14:42:37 -0500
-Message-ID: <CAOOmCE-dVzSrjWDx=tcXP-f+4NuN-U_-sc_QaLRt1qjtjaVVGw@mail.gmail.com>
-Subject: Re: [PATCH v11 09/14] HP BIOSCFG driver - enum-attributes
-To:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20230501165450.15352-1-surenb@google.com> <20230501165450.15352-35-surenb@google.com>
+ <ZFIO3tXCbmTn53uv@dhcp22.suse.cz> <CAJuCfpHrZ4kWYFPvA3W9J+CmNMuOtGa_ZMXE9fOmKsPQeNt2tg@mail.gmail.com>
+ <b8ab89e6-0456-969d-ed31-fa64be0a0fd0@intel.com>
+In-Reply-To: <b8ab89e6-0456-969d-ed31-fa64be0a0fd0@intel.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 3 May 2023 12:45:29 -0700
+Message-ID: <CAJuCfpGq4CjFLJ=QdQZUJPN72ecvWhVi_vUKrOz5_DvMAM07EQ@mail.gmail.com>
+Subject: Re: [PATCH 34/40] lib: code tagging context capture support
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
+        kent.overstreet@linux.dev, vbabka@suse.cz, hannes@cmpxchg.org,
+        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
+        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
+        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
+        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
+        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
+        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
+        tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
+        paulmck@kernel.org, pasha.tatashin@soleen.com,
+        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
+        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
+        ndesaulniers@google.com, gregkh@linuxfoundation.org,
+        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+        glider@google.com, elver@google.com, dvyukov@google.com,
+        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
+        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,121 +97,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 23, 2023 at 7:55=E2=80=AFAM Thomas Wei=C3=9Fschuh <thomas@t-8ch=
-.de> wrote:
+On Wed, May 3, 2023 at 8:26=E2=80=AFAM Dave Hansen <dave.hansen@intel.com> =
+wrote:
 >
-> On 2023-04-20 11:54:49-0500, Jorge Lopez wrote:
-> >  .../x86/hp/hp-bioscfg/enum-attributes.c       | 543 ++++++++++++++++++
-> >  1 file changed, 543 insertions(+)
-> >  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/enum-attributes.=
-c
-> >
-> > diff --git a/drivers/platform/x86/hp/hp-bioscfg/enum-attributes.c b/dri=
-vers/platform/x86/hp/hp-bioscfg/enum-attributes.c
-> > new file mode 100644
-> > index 000000000000..20defa92da6f
-> > --- /dev/null
-> > +++ b/drivers/platform/x86/hp/hp-bioscfg/enum-attributes.c
-> > @@ -0,0 +1,543 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Functions corresponding to enumeration type attributes under
-> > + * BIOS Enumeration GUID for use with hp-bioscfg driver.
-> > + *
-> > + *  Copyright (c) 2022 HP Development Company, L.P.
-> > + */
-> > +
-> > +#include "bioscfg.h"
-> > +
-> > +GET_INSTANCE_ID(enumeration);
-> > +
-> > +static ssize_t current_value_show(struct kobject *kobj, struct kobj_at=
-tribute *attr, char *buf)
-> > +{
-> > +     int instance_id =3D get_enumeration_instance_id(kobj);
-> > +
-> > +     if (instance_id < 0)
-> > +             return -EIO;
-> > +
-> > +     return sysfs_emit(buf, "%s\n",
-> > +                      bioscfg_drv.enumeration_data[instance_id].curren=
-t_value);
-> > +}
-> > +
-> > +/*
-> > + * validate_enumeration_input() -
-> > + * Validate input of current_value against possible values
-> > + *
-> > + * @instance_id: The instance on which input is validated
-> > + * @buf: Input value
-> > + */
-> > +static int validate_enumeration_input(int instance_id, const char *buf=
-)
-> > +{
-> > +     int ret =3D 0;
-> > +     int found =3D 0;
-> > +     int i;
-> > +     int possible_values;
-> > +
-> > +     /* Is it a read only attribute */
-> > +     if (bioscfg_drv.enumeration_data[instance_id].common.is_readonly)
-> > +             return -EIO;
-> > +
-> > +     possible_values =3D bioscfg_drv.enumeration_data[instance_id].pos=
-sible_values_size;
-> > +     for (i =3D 0; i < possible_values && !found; i++)
-> > +             if (!strcasecmp(bioscfg_drv.enumeration_data[instance_id]=
-.possible_values[i], buf))
+> On 5/3/23 08:18, Suren Baghdasaryan wrote:
+> >>> +static inline void rem_ctx(struct codetag_ctx *ctx,
+> >>> +                        void (*free_ctx)(struct kref *refcount))
+> >>> +{
+> >>> +     struct codetag_with_ctx *ctc =3D ctx->ctc;
+> >>> +
+> >>> +     spin_lock(&ctc->ctx_lock);
+> >> This could deadlock when allocator is called from the IRQ context.
+> > I see. spin_lock_irqsave() then?
 >
-> Is this also intentionally case-insensitive?
+> Yes.  But, even better, please turn on lockdep when you are testing.  It
+> will find these for you.  If you're on x86, we have a set of handy-dandy
+> debug options that you can add to an existing config with:
+>
+>         make x86_debug.config
 
-Yes
+Nice!
+I thought I tested with lockdep enabled but I might be wrong. The
+beauty of working on multiple patchsets in parallel is that I can't
+remember what I did for each one :)
 
 >
-> > +                     found =3D 1;
-> > +
-> > +     if (!found) {
-> > +             ret =3D -EINVAL;
-> > +             goto exit_enum_input;
-> > +     }
-> > +
-> > +     /*
-> > +      * set pending reboot flag depending on
-> > +      * "RequiresPhysicalPresence" value
-> > +      */
-> > +     if (bioscfg_drv.enumeration_data[instance_id].common.requires_phy=
-sical_presence)
-> > +             bioscfg_drv.pending_reboot =3D true;
-> > +
-> > +exit_enum_input:
-> > +     return ret;
-> > +}
-> > +
-> > +static void update_enumeration_value(int instance_id, char *attr_value=
-)
-> > +{
-> > +     strscpy(bioscfg_drv.enumeration_data[instance_id].current_value,
-> > +             attr_value,
-> > +             sizeof(bioscfg_drv.enumeration_data[instance_id].current_=
-value));
-> > +}
-> > +
-> > +ATTRIBUTE_S_COMMON_PROPERTY_SHOW(display_name_language_code, enumerati=
-on);
-> > +static struct kobj_attribute enumeration_display_langcode =3D
-> > +             __ATTR_RO(display_name_language_code);
-> > +
-> > +ATTRIBUTE_S_COMMON_PROPERTY_SHOW(display_name, enumeration);
-> > +static struct kobj_attribute  enumeration_display_name =3D
-> > +             __ATTR_RO(display_name);
-> > +
-> > +ATTRIBUTE_PROPERTY_STORE(current_value, enumeration);
-> > +static struct kobj_attribute enumeration_current_val =3D
-> > +     __ATTR_RW_MODE(current_value, 0644);
->
-> 0644 is the default for __ATTR_RW(), use that instead.
+> That said, I'm as concerned as everyone else that this is all "new" code
+> and doesn't lean on existing tracing or things like PAGE_OWNER enough.
 
-Done!
->
+Yeah, that's being actively discussed.
 
-<snip>
+>
