@@ -2,100 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F4B26F567E
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 12:46:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06A4F6F5682
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 12:47:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbjECKqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 06:46:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51530 "EHLO
+        id S229693AbjECKrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 06:47:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbjECKqi (ORCPT
+        with ESMTP id S229651AbjECKrH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 06:46:38 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A14BB49DE
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 03:46:34 -0700 (PDT)
-Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230503104632epoutp0150c823596b7f1e231009e4f1efbb2251~bnFkmJIa41408914089epoutp01j
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 10:46:32 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230503104632epoutp0150c823596b7f1e231009e4f1efbb2251~bnFkmJIa41408914089epoutp01j
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1683110792;
-        bh=WBo+Gtt5+fa6g5qjUIPdBB+ssnPfrBNghApCsFJRoCo=;
-        h=Subject:Reply-To:From:To:CC:Date:References:From;
-        b=Ac3IemXeKwlZZUNIk93boTjrocnyFS8/ogaVnqdpWLm3yA9sKdC+Q+OxiNEh79/i+
-         mafHH06nICsPX+btFDA//YftVcdjTyP7AOCwSbpluPlro6+0hQvmmFtXTeOOOiOatF
-         tG4TC9ltqCylQP/y8XyPQcIKmEwl+9xJeYCRrEEU=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
-        20230503104631epcas2p4a09cc4d1324f05d21c1451160058db17~bnFjfm2LO1511615116epcas2p4k;
-        Wed,  3 May 2023 10:46:31 +0000 (GMT)
-Received: from epsmges2p1.samsung.com (unknown [182.195.36.100]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4QBDCB3L80z4x9Pv; Wed,  3 May
-        2023 10:46:30 +0000 (GMT)
-X-AuditID: b6c32a45-465ff70000020cc1-13-64523b86678c
-Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
-        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        8F.87.03265.68B32546; Wed,  3 May 2023 19:46:30 +0900 (KST)
-Mime-Version: 1.0
-Subject: [PATCH] scsi: ufs: core: Return earlier if
- ufshcd_hba_init_crypto_capabilities() fails
-Reply-To: keosung.park@samsung.com
-Sender: Keoseong Park <keosung.park@samsung.com>
-From:   Keoseong Park <keosung.park@samsung.com>
-To:     ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        "quic_asutoshd@quicinc.com" <quic_asutoshd@quicinc.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>
-CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20230503104630epcms2p8b82734102ffb920531e9264604086372@epcms2p8>
-Date:   Wed, 03 May 2023 19:46:30 +0900
-X-CMS-MailID: 20230503104630epcms2p8b82734102ffb920531e9264604086372
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrDJsWRmVeSWpSXmKPExsWy7bCmmW6bdVCKwYmNkhYP5m1js3j58yqb
-        xcGHnSwW0z78ZLZ4eUjTYtGNbUwWl3fNYbPovr6DzWL58X9MFgs75rJYLN16k9GB2+PyFW+P
-        CYsOMHq0nNzP4vF9fQebx8ent1g8Ju6p8+jbsorR4/MmOY/2A91MAZxR2TYZqYkpqUUKqXnJ
-        +SmZeem2St7B8c7xpmYGhrqGlhbmSgp5ibmptkouPgG6bpk5QLcqKZQl5pQChQISi4uV9O1s
-        ivJLS1IVMvKLS2yVUgtScgrMC/SKE3OLS/PS9fJSS6wMDQyMTIEKE7Izrl5bylpwlaPi1Zp3
-        rA2MXexdjJwcEgImEquv72ftYuTiEBLYwSix4PApli5GDg5eAUGJvzuEQWqEBRIl1i+YwwZi
-        CwkoSXQt3MoMETeQWDd9D5jNJqAnMeX3HUaQOSICPcwSHbeWsYIkmAXqJHbP+cMGsYxXYkb7
-        UxYIW1pi+/KtjBC2hsSPZb3MELaoxM3Vb9lh7PfH5kPViEi03jsLVSMo8eDnbqi4pETrma1Q
-        8+slWt+fYgc5QkJgAqNE47E/UIP0Ja51bARbzCvgK7H842ywOIuAqsTJ2z+gml0kDs88yQxx
-        tLzE9rdzmEEBwSygKbF+lz6IKSGgLHHkFgtEBZ9Ex+G/7DBvNWz8jZW9Y94TJghbTeLRgi2s
-        ELaMxMU555gnMCrNQoT0LCR7ZyHsXcDIvIpRLLWgODc9tdiowBAeucn5uZsYwclWy3UH4+S3
-        H/QOMTJxMB5ilOBgVhLh/VDolyLEm5JYWZValB9fVJqTWnyI0RTo44nMUqLJ+cB0n1cSb2hi
-        aWBiZmZobmRqYK4kzittezJZSCA9sSQ1OzW1ILUIpo+Jg1OqgUl88u7gwt/TeR/2RQr++PDj
-        zhx3yyXyN/32FCz228Ox5dRs5SfXivX4Qs9s9giaZjDZRV/s7KSYzDkKFcFbZsrm7TlimFd3
-        3k/G9JYBp3vG3N613VuPmlxObHt1n+VMwRcHj1cF4vLLTZYcYX1T/NW4un7RlekSk6L61K8H
-        7/f1+SHNLP+D4cn8K+YrtpoVclXutJupoLxk4Y9a5k0PXs2R9udU9chIvHFPvGjhgz3W2f+y
-        Tku4nGtI2xCVtumnq4jBth7m0Ie9NkFnfwUklPvvOqt44MaE6bp/o1/criph1Fz/KU/O747s
-        7UdnbX2vrRI8U939YJLFRX63Q0yivrmvvmwL1ZhREXtc43/b5XdKLMUZiYZazEXFiQCbR6a4
-        PwQAAA==
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230503104630epcms2p8b82734102ffb920531e9264604086372
-References: <CGME20230503104630epcms2p8b82734102ffb920531e9264604086372@epcms2p8>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        Wed, 3 May 2023 06:47:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BAC34C21;
+        Wed,  3 May 2023 03:47:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AB11962C9F;
+        Wed,  3 May 2023 10:47:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 556F4C433EF;
+        Wed,  3 May 2023 10:47:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683110825;
+        bh=jvMEIgG5kXcObXf5K+TzMNfsZt3iQ07uLKDL8MefLdg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sZJQmsdYe+qH8gTHQr+KcT33ILoK0yvUCvSsQnBXVlmgUOo2cn06HvExaXsjbdXkR
+         3Ojh0TEwH+hi8lCYzibvmYoGC2w6TSj7SguThsATH/ycfNAqN9zAmk+gpVNVgG1+Zg
+         EaD3yLibFDdfJQ7ir5R3cI+spQppClSljbTRywtf3seDrPq/yJDXVDS4JITPytL8Vd
+         AWXzYXcj/8xLCj4gJ8D7+Xs4BLtJKZxb8lTfGA5RV9tHCJVWWz5CzAcrDh8CugE7j7
+         ZwrmGUGGdsVf7gZ4qKXLeVnKK9OSHnjn0+DJhMkAAIL5/LJYik20Vo3sxrhM8EvHtT
+         pt8B3eGE7wlKA==
+Date:   Wed, 3 May 2023 13:47:00 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Linux Networking <netdev@vger.kernel.org>,
+        Linux Random Direct Memory Access 
+        <linux-rdma@vger.kernel.org>,
+        Linux Documentation <linux-doc@vger.kernel.org>,
+        Linux Networking <linux-kernel@vger.kernel.org>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Gal Pressman <gal@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Maher Sanalla <msanalla@nvidia.com>,
+        Rahul Rameshbabu <rrameshbabu@nvidia.com>,
+        Moshe Shemesh <moshe@nvidia.com>
+Subject: Re: [PATCH net 1/4] Documentation: net/mlx5: Wrap vnic reporter
+ devlink commands in code blocks
+Message-ID: <20230503104700.GI525452@unreal>
+References: <20230503094248.28931-1-bagasdotme@gmail.com>
+ <20230503094248.28931-2-bagasdotme@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230503094248.28931-2-bagasdotme@gmail.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,43 +70,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 'err' variable is used only as the result of
-ufshcd_hba_init_crypto_capabilities(), so return 'err' immediately when
-failed. If it is not an error, explicitly return 0.
+On Wed, May 03, 2023 at 04:42:46PM +0700, Bagas Sanjaya wrote:
+> Sphinx reports htmldocs warnings:
+> 
+> Documentation/networking/device_drivers/ethernet/mellanox/mlx5/devlink.rst:287: WARNING: Unexpected indentation.
+> Documentation/networking/device_drivers/ethernet/mellanox/mlx5/devlink.rst:288: WARNING: Block quote ends without a blank line; unexpected unindent.
+> Documentation/networking/device_drivers/ethernet/mellanox/mlx5/devlink.rst:290: WARNING: Unexpected indentation.
+> 
+> Fix above warnings by wrapping diagnostic devlink commands in "vnic
+> reporter" section in code blocks to be consistent with other devlink
+> command snippets.
+> 
+> Fixes: b0bc615df488ab ("net/mlx5: Add vnic devlink health reporter to PFs/VFs")
+> Fixes: cf14af140a5ad0 ("net/mlx5e: Add vnic devlink health reporter to representors")
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> ---
+>  .../device_drivers/ethernet/mellanox/mlx5/devlink.rst     | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
 
-Signed-off-by: Keoseong Park <keosung.park@samsung.com>
----
- drivers/ufs/core/ufshcd.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 9434328ba323..44328eb4158d 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -2343,18 +2343,20 @@ static inline int ufshcd_hba_capabilities(struct ufs_hba *hba)
- 
- 	/* Read crypto capabilities */
- 	err = ufshcd_hba_init_crypto_capabilities(hba);
--	if (err)
-+	if (err) {
- 		dev_err(hba->dev, "crypto setup failed\n");
-+		return err;
-+	}
- 
- 	hba->mcq_sup = FIELD_GET(MASK_MCQ_SUPPORT, hba->capabilities);
- 	if (!hba->mcq_sup)
--		return err;
-+		return 0;
- 
- 	hba->mcq_capabilities = ufshcd_readl(hba, REG_MCQCAP);
- 	hba->ext_iid_sup = FIELD_GET(MASK_EXT_IID_SUPPORT,
- 				     hba->mcq_capabilities);
- 
--	return err;
-+	return 0;
- }
- 
- /**
--- 
-2.17.1
-
+Thanks,
+Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
