@@ -2,83 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8FEA6F5DD9
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 20:24:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 566E06F5DDB
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 20:25:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230082AbjECSYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 14:24:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58640 "EHLO
+        id S229803AbjECSZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 14:25:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbjECSYm (ORCPT
+        with ESMTP id S229514AbjECSZ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 14:24:42 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AFF24237;
-        Wed,  3 May 2023 11:24:41 -0700 (PDT)
-Received: from zn.tnic (p5de8e8ea.dip0.t-ipconnect.de [93.232.232.234])
+        Wed, 3 May 2023 14:25:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F2203A87;
+        Wed,  3 May 2023 11:25:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 152551EC0506;
-        Wed,  3 May 2023 20:24:39 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1683138279;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=iWLErMvOWaKoW0oVpbqNFUUKIEuWA+CRFAzvpHhYlF8=;
-        b=rUCZd0YsQ+uFU5Sgy8P3L2jI/jkMFV9C3Y43OkPMnz2937pAfBYTRLXtwwwOJhNmVMTEnL
-        XJRmxeAZisxBkmjaag4VGHhaDLK5onRgPuXyitDfcaQRC3W/m10GqrQJ/4FgN6PzDOP91K
-        M6Y4nPsV0xGRsGPf+wjKhP/hji1tjuo=
-Date:   Wed, 3 May 2023 20:24:33 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Tom Lendacky <thomas.lendacky@amd.com>, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Evgeniy Baskov <baskov@ispras.ru>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Peter Jones <pjones@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Dave Young <dyoung@redhat.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH 0/6] efi/x86: Avoid legacy decompressor during EFI boot
-Message-ID: <20230503182433.GFZFKm4QAiqXRBYM0s@fat_crate.local>
-References: <20230424165726.2245548-1-ardb@kernel.org>
- <ecbcc066-3636-9620-8db9-2c066d16e717@amd.com>
- <CAMj1kXG8ZrdEUNTiSCet+aT+1ZyrbguFsGtNhVV+XgCssZgj9w@mail.gmail.com>
- <a6846282-95c8-274a-accc-ffa54205489c@amd.com>
- <8f85787a-1fa5-8f59-6047-b3a791291bfd@amd.com>
- <CAMj1kXFfHJDXW2xWTjT5xy_-8MdeS9HhcMh3=DKFZ3+vhaUFcA@mail.gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B8DDA617DC;
+        Wed,  3 May 2023 18:25:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B2A5C433D2;
+        Wed,  3 May 2023 18:25:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683138324;
+        bh=OsjI071Y14ZXXjZ8NoGpl++zRV5XTfFhw8+/C06ehhs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UKhBkf/GnYD1clUSITpTqZQBSalvTpQHZivnVmpLbcyyNaNWGiNN+WaLuEr4vUMKG
+         Ui81A7njHFJHVq1VQWn6l//1MbHk7cT5MY3pQpU33b/yyrE5LhTy2FvjiAkyRMmYW0
+         jV4cMQT/lmSJ2PgFnwHFGlSrIeGInH4znM2UI7QPLdDjAmxUamhlUgMWSzskmKJPuJ
+         vZuBdVZUTAR/SEZF+K5MmaH8y5BJd80/BEV4hpHF2j7kY8v+gghhb1nzq6Te1m2s/E
+         pSUGwprI+/mmnASDwYx9jZzbI5MYiJct6A4eRCem8ZlSRgamD/O5CgjLUBIodfq/xf
+         /5z2cXMwrq4rQ==
+Date:   Wed, 3 May 2023 19:25:19 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     linux-leds@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [GIT PULL] LEDs for v6.4
+Message-ID: <20230503182519.GN620451@google.com>
+References: <20230502162524.GJ620451@google.com>
+ <20230502162815.GK620451@google.com>
+ <ZFKl7GSNlStABYXG@duo.ucw.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAMj1kXFfHJDXW2xWTjT5xy_-8MdeS9HhcMh3=DKFZ3+vhaUFcA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZFKl7GSNlStABYXG@duo.ucw.cz>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 03, 2023 at 08:17:28PM +0200, Ard Biesheuvel wrote:
-> (There is some 32-bit SEV code in the decompressor as well that
-> obviously never gets called when booting in long mode, but I hadn't
-> quite grasped how much other SEV code there actually is)
+On Wed, 03 May 2023, Pavel Machek wrote:
 
-If you mean the thing in startup_32 which does get_sev_encryption_bit()
-etc, that is going away.
+> Hi!
+> 
+> > Apologies, this is obviously LEDs, not MFD - long day!
+> 
+> Thanks for doing this. I guess it may have something to do with the
+> subject, but please keep linux-leds@vger.kernel.org in the cc list.
+
+No problem.
+
+Sure.  I'll try to remember to do that next time.
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Lee Jones [李琼斯]
