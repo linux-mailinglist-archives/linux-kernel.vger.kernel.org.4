@@ -2,169 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 870B76F6107
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 00:06:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FDC46F6115
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 00:10:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbjECWGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 18:06:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52508 "EHLO
+        id S229689AbjECWKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 18:10:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjECWGq (ORCPT
+        with ESMTP id S229562AbjECWKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 18:06:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F237DB0
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 15:06:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 485C26303D
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 22:06:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A57D2C433D2;
-        Wed,  3 May 2023 22:06:42 +0000 (UTC)
-Date:   Wed, 3 May 2023 18:06:40 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Zqiang <qiang1.zhang@intel.com>
-Subject: Re: [RFC PATCH] rcu: rcupdate.h: Add missing parentheses around
- macro pointer dereference
-Message-ID: <20230503180640.630f3006@gandalf.local.home>
-In-Reply-To: <20230503203236.1587590-1-mathieu.desnoyers@efficios.com>
-References: <20230503203236.1587590-1-mathieu.desnoyers@efficios.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 3 May 2023 18:10:19 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 151B583DD
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 15:10:17 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-305f0491e62so5212319f8f.3
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 15:10:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683151815; x=1685743815;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KM+Eoku8OZr2C+7sz7eqGQokSgHhVju2rzB5GkXKvSs=;
+        b=iEqzXQ9iP1TcfpM5M0R7xpX9VPkf6KLlTxi9g54G6kOeXU9aEb95q9v6gpQoWPY4/X
+         ElJV8nWnZzUQ0JiD7qY3wxyjbRygmOxCS/OxnZchSo62oy73tWW51/fY2QX1nyLs/WMZ
+         LTDrFj9UxUbF22c9jQKyoQmt40w6nT5ft2f3BNzD6Lim35mnFdRzQX2snnjo668Lxxrc
+         XsuAsSMR6B5gyO4zGwjvAv6v01gqjOVwAiAykNfp0H1Ldx3LzjvmDUcPCcE2T9kZpavX
+         Txo67OqyjkYgK8i+yJqDj/6c4bpVsiulbLYUJzd5Jm6NmMQurM25390RNvVFcVRo+YaR
+         JL2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683151815; x=1685743815;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KM+Eoku8OZr2C+7sz7eqGQokSgHhVju2rzB5GkXKvSs=;
+        b=KtzRrxkVoxGm1CFxPkHTcaTzubn96dQtQ+tLFlkOJoN6GQfmNOhJbfVvpoqpgt9COB
+         +uk/KwRl3lDCpw+5YI4i+uokgCa8C3gevzv7ipWhcCWLRunKnsQxGoycnlXvDYW48zU2
+         xqYxd6D6PYpqF37iN5CqISAwVbRlukFjxQyVDBwKQmNdDKaXx4qTPMFhBqIp4C5Cxnd2
+         +9d9kYNkCqFNmnQ5+qXUYarWn7+m5s2zNad1WST07Y4Hq/LR1p7njrPlXjG81wR39Q9f
+         mweHuJQLBp404Zfd6bBCChIKxO7M03ojH10bJQOrBRWd2jR5rrq4lM0eCu+w9TSbHmvo
+         wTsw==
+X-Gm-Message-State: AC+VfDyje+YbjFsx62tPrpP5gENKtO64U21q9R6F2sFlE7TUM0Lr9Zh6
+        TuOQ/Lz7hqj4HxlrFt4AWvPn3Q==
+X-Google-Smtp-Source: ACHHUZ5OzpINizXldHsUOvhbQNgkg897DXT56Mb6xqEoyEq8YnPtxaCSPdNRDd6ZzMHawkqMmoyA1A==
+X-Received: by 2002:a05:6000:1a4f:b0:2ff:613c:af5d with SMTP id t15-20020a0560001a4f00b002ff613caf5dmr966542wry.36.1683151815562;
+        Wed, 03 May 2023 15:10:15 -0700 (PDT)
+Received: from [192.168.0.15] (cpc76484-cwma10-2-0-cust274.7-3.cable.virginm.net. [82.31.201.19])
+        by smtp.gmail.com with ESMTPSA id a18-20020a5d5712000000b003062675d4c9sm11934563wrv.39.2023.05.03.15.10.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 May 2023 15:10:15 -0700 (PDT)
+Message-ID: <9da030c6-6a9f-6766-7120-94aaa8fcd8ab@linaro.org>
+Date:   Wed, 3 May 2023 23:10:13 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH V4 1/3] dt-bindings: sram: qcom,imem: Add Boot Stat region
+ within IMEM
+Content-Language: en-US
+To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>
+References: <cover.1681742910.git.quic_schowdhu@quicinc.com>
+ <NO2MhqhxQqjQ33CVOtaXXxo2iBfl6Ugz1lE5oJAl-mjUyrRu4l9vCBWV8AVJZoCrVF0Cw0j49t44Bn5yEAv3mA==@protonmail.internalid>
+ <bd3350e3b0b02669cffa4bdaf9a0a1d8ae9072d1.1681742910.git.quic_schowdhu@quicinc.com>
+From:   Caleb Connolly <caleb.connolly@linaro.org>
+In-Reply-To: <bd3350e3b0b02669cffa4bdaf9a0a1d8ae9072d1.1681742910.git.quic_schowdhu@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed,  3 May 2023 16:32:36 -0400
-Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
 
-> linux/rcupdate.h macros use the *p parameter without parentheses, e.g.:
+
+On 17/04/2023 16:08, Souradeep Chowdhury wrote:
+> All Qualcomm bootloaders log useful timestamp information related
+> to bootloader stats in the IMEM region. Add the child node within
+> IMEM for the boot stat region containing register address and
+> compatible string.
 > 
->   typeof(*p)
-> 
-> rather than
-> 
->   typeof(*(p))
-> 
-> The following test-case shows how it can generate confusion due to C
-> operator precedence being reversed compared to the expectations:
-> 
->     #define m(p) \
->     do { \
->             __typeof__(*p) v = 0; \
->     } while (0)
-> 
->     void fct(unsigned long long *p1)
->     {
->             m(p1 + 1);      /* works */
->             m(1 + p1);      /* broken */
->     }
-> 
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Cc: "Paul E. McKenney" <paulmck@kernel.org>
-> Cc: Joel Fernandes <joel@joelfernandes.org>
-> Cc: Josh Triplett <josh@joshtriplett.org>
-> Cc: Boqun Feng <boqun.feng@gmail.com>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Lai Jiangshan <jiangshanlai@gmail.com>
-> Cc: Zqiang <qiang1.zhang@intel.com>
+> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
 > ---
->  include/linux/rcupdate.h | 18 +++++++++---------
->  1 file changed, 9 insertions(+), 9 deletions(-)
+>  .../devicetree/bindings/sram/qcom,imem.yaml        | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
 > 
-> diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
-> index dcd2cf1e8326..1565012fa47f 100644
-> --- a/include/linux/rcupdate.h
-> +++ b/include/linux/rcupdate.h
-> @@ -430,16 +430,16 @@ static inline void rcu_preempt_sleep_check(void) { }
->  
->  #ifdef __CHECKER__
->  #define rcu_check_sparse(p, space) \
-> -	((void)(((typeof(*p) space *)p) == p))
-> +	((void)(((typeof(*(p)) space *)p) == p))
+> diff --git a/Documentation/devicetree/bindings/sram/qcom,imem.yaml b/Documentation/devicetree/bindings/sram/qcom,imem.yaml
+> index ba694ce..d028bed 100644
+> --- a/Documentation/devicetree/bindings/sram/qcom,imem.yaml
+> +++ b/Documentation/devicetree/bindings/sram/qcom,imem.yaml
+> @@ -49,6 +49,28 @@ patternProperties:
+>      $ref: /schemas/remoteproc/qcom,pil-info.yaml#
+>      description: Peripheral image loader relocation region
+> 
+> +  "^stats@[0-9a-f]+$":
+> +    type: object
+> +    description:
+> +      Imem region dedicated for storing timestamps related
+> +      information regarding bootstats.
+> +
+> +    additionalProperties: false
+> +
+> +    properties:
+> +      compatible:
+> +        items:
+> +          - enum:
+> +              - qcom,sm8450-bootstats
 
-Hmm, should we have that be:
-	((void)(((typeof(*(p)) space *)(p)) == (p)))
+This region isn't exclusive to sm8450, it exists also on sdm845 and
+presumably other platforms. Is there any need for an SoC specific
+compatible?
 
-In case of the 1 + p1, which would end up as:
+> +          - const: qcom,imem-bootstats
+> +
+> +      reg:
+> +        maxItems: 1
+> +
+> +    required:
+> +      - compatible
+> +      - reg
+> +
+>  required:
+>    - compatible
+>    - reg
+> --
+> 2.7.4
+> 
 
-	((void)(((typeof(*(1 + p1)) __rcu *)1 + p1 == 1 + p1;
-
-I don't know how that __rcu get's passed around via the + statement there,
-so it may be fine. May not even make sense to have that. But I like to
-error on more parenthesis. ;-)
-
-The rest looks fine.
-
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-
--- Steve
-
-
-
->  #else /* #ifdef __CHECKER__ */
->  #define rcu_check_sparse(p, space)
->  #endif /* #else #ifdef __CHECKER__ */
->  
->  #define __unrcu_pointer(p, local)					\
->  ({									\
-> -	typeof(*p) *local = (typeof(*p) *__force)(p);			\
-> +	typeof(*(p)) *local = (typeof(*(p)) *__force)(p);		\
->  	rcu_check_sparse(p, __rcu);					\
-> -	((typeof(*p) __force __kernel *)(local)); 			\
-> +	((typeof(*(p)) __force __kernel *)(local));			\
->  })
->  /**
->   * unrcu_pointer - mark a pointer as not being RCU protected
-> @@ -452,29 +452,29 @@ static inline void rcu_preempt_sleep_check(void) { }
->  
->  #define __rcu_access_pointer(p, local, space) \
->  ({ \
-> -	typeof(*p) *local = (typeof(*p) *__force)READ_ONCE(p); \
-> +	typeof(*(p)) *local = (typeof(*(p)) *__force)READ_ONCE(p); \
->  	rcu_check_sparse(p, space); \
-> -	((typeof(*p) __force __kernel *)(local)); \
-> +	((typeof(*(p)) __force __kernel *)(local)); \
->  })
->  #define __rcu_dereference_check(p, local, c, space) \
->  ({ \
->  	/* Dependency order vs. p above. */ \
-> -	typeof(*p) *local = (typeof(*p) *__force)READ_ONCE(p); \
-> +	typeof(*(p)) *local = (typeof(*(p)) *__force)READ_ONCE(p); \
->  	RCU_LOCKDEP_WARN(!(c), "suspicious rcu_dereference_check() usage"); \
->  	rcu_check_sparse(p, space); \
-> -	((typeof(*p) __force __kernel *)(local)); \
-> +	((typeof(*(p)) __force __kernel *)(local)); \
->  })
->  #define __rcu_dereference_protected(p, local, c, space) \
->  ({ \
->  	RCU_LOCKDEP_WARN(!(c), "suspicious rcu_dereference_protected() usage"); \
->  	rcu_check_sparse(p, space); \
-> -	((typeof(*p) __force __kernel *)(p)); \
-> +	((typeof(*(p)) __force __kernel *)(p)); \
->  })
->  #define __rcu_dereference_raw(p, local) \
->  ({ \
->  	/* Dependency order vs. p above. */ \
->  	typeof(p) local = READ_ONCE(p); \
-> -	((typeof(*p) __force __kernel *)(local)); \
-> +	((typeof(*(p)) __force __kernel *)(local)); \
->  })
->  #define rcu_dereference_raw(p) __rcu_dereference_raw(p, __UNIQUE_ID(rcu))
->  
-
+-- 
+Kind Regards,
+Caleb (they/them)
