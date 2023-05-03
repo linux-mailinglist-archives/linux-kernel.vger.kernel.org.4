@@ -2,194 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 690616F61D5
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 01:11:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B16D76F61DA
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 01:14:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbjECXLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 19:11:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54734 "EHLO
+        id S229754AbjECXOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 19:14:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjECXLk (ORCPT
+        with ESMTP id S229577AbjECXOG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 19:11:40 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78F3768F
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 16:11:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683155498; x=1714691498;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=zjASLe0uc/nkUkaFL3EGaDbRNEIKCjDk+SCI+jmbNi8=;
-  b=RKaN+WRWDzt4OomuhFY5cpVjQrUJkuMz5E8GfUm2rUYRNVTRjOhaMYzo
-   YKmwxbMKL2RFjlGHLy+QpwJGxsvSn/Ky28ceXufdKBtlxmzGxtqdhuFpj
-   76JFVOV+/c8/A3ay4q4OS1J1Vd5taF7OqUUtEi26aJPMQeBtSjUp+egvn
-   tzdNohJe3sE4JdoDNH8ZY/zDAajELKG4seUmtXCh98Dc8HDYBHm529sx0
-   6trLjOA1SIekrUynUC/mCKX845UHpF8twXbpdGNdUEdehWmYZV4Iu+9K6
-   brGCQm7zQYxT9AwSQr5iSAhSmcoXjzX23IUrOfrr2HpINVUMjWyLZaT7w
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="329146083"
-X-IronPort-AV: E=Sophos;i="5.99,248,1677571200"; 
-   d="scan'208";a="329146083"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2023 16:11:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="840873286"
-X-IronPort-AV: E=Sophos;i="5.99,248,1677571200"; 
-   d="scan'208";a="840873286"
-Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 03 May 2023 16:11:37 -0700
-Received: from kbuild by e3434d64424d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1puLdI-0002LQ-21;
-        Wed, 03 May 2023 23:11:36 +0000
-Date:   Thu, 4 May 2023 07:11:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tushar Nimkar <quic_tnimkar@quicinc.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>
-Subject: drivers/soc/qcom/rpmh-rsc.c:1076 rpmh_rsc_probe() warn: always true
- condition '(drv->ver.minor >= 0) => (0-u32max >= 0)'
-Message-ID: <202305040742.9ZtlciO9-lkp@intel.com>
+        Wed, 3 May 2023 19:14:06 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 988867ABA;
+        Wed,  3 May 2023 16:14:03 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8BxrOq66lJk_E4EAA--.7161S3;
+        Thu, 04 May 2023 07:14:02 +0800 (CST)
+Received: from openarena.loongson.cn (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx_7O46lJk5dZIAA--.3684S2;
+        Thu, 04 May 2023 07:14:00 +0800 (CST)
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        suijingfeng <suijingfeng@loongson.cn>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian Koenig <christian.koenig@amd.com>,
+        emil.l.velikov@gmail.com
+Cc:     nathan@kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org
+Subject: [PATCH v11 0/2] drm: add kms driver for loongson display controller
+Date:   Thu,  4 May 2023 07:13:58 +0800
+Message-Id: <20230503231400.995613-1-suijingfeng@loongson.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Dx_7O46lJk5dZIAA--.3684S2
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxtr47ZFy8uw48uFyktFyDtrb_yoWftr43pF
+        43Aa4FkrWDJF12yr9xA3W8GFyfAa4fXFWS9F43J3sIg3yDAFyUZr15ZFW5JrW7ZFy7Xry2
+        qr97Kr4UG3ZFkaDanT9S1TB71UUUUbUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bfkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8JVW8Jr1ln4kS
+        14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E87Iv
+        67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxVAaw2
+        AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xF
+        xVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWw
+        C2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_
+        Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJV
+        WUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIY
+        CTnIWIevJa73UjIFyTuYvjxU4YLvDUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   fa31fc82fb775445c176e576304c4098222f47f2
-commit: 88704a0cd71909c3107561261412a5d5beb23358 soc: qcom: rpmh-rsc: Support RSC v3 minor versions
-date:   4 weeks ago
-config: nios2-randconfig-m031-20230503 (https://download.01.org/0day-ci/archive/20230504/202305040742.9ZtlciO9-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 12.1.0
+Loongson display controller IP has been integrated in both Loongson north
+bridge chipset(ls7a1000/ls7a2000) and Loongson SoCs(ls2k1000/ls2k2000), it
+has been even included in Loongson self-made BMC products.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305040742.9ZtlciO9-lkp@intel.com/
+This display controller is a PCI device. It has two display pipes and each
+display pipe support a primary plane and a cursor plane. For the DC in the
+ls7a1000 and ls2k1000, each display pipe has a DVO output interface which
+provide RGB888 signals, vertical & horizontal synchronisations and pixel
+clock. Each CRTC is able to support 1920x1080@60Hz, the maximum resolution
+of each display pipe is 2048x2048 according to the hardware spec.
 
-New smatch warnings:
-drivers/soc/qcom/rpmh-rsc.c:1076 rpmh_rsc_probe() warn: always true condition '(drv->ver.minor >= 0) => (0-u32max >= 0)'
+For the DC in LS7A2000, each display pipe is equipped with a built-in HDMI
+encoder which is compliant with the HDMI 1.4 specification, thus it support
+3840x2160@30Hz. The first display pipe is also equipped with a transparent
+vga encoder which is parallel with the HDMI encoder. The DC in LS7A2000 is
+more complete compare with the one in old chips, besides above feature, it
+has two hardware cursors, two hardware vblank counter and two scanout
+position recorders unit. It also support tiled framebuffer format which
+can be scanout the tiled framebuffer rendered by the LoongGPU directly.
 
-Old smatch warnings:
-arch/nios2/include/asm/thread_info.h:62 current_thread_info() error: uninitialized symbol 'sp'.
+ v1 -> v2:
+  1) Use hpd status reg when polling for ls7a2000
+  2) Fix all warnings emerged when compile with W=1
 
-vim +1076 drivers/soc/qcom/rpmh-rsc.c
+ v2 -> v3:
+  1) Add COMPILE_TEST in Kconfig and make the driver off by default
+  2) Alphabetical sorting headers (Thomas)
+  3) Untangle register access functions as much as possible (Thomas)
+  4) Switch to TTM based memory manager and prefer cached mapping
+     for Loongson SoC (Thomas)
+  5) Add chip id detection method, now all models are distinguishable.
+  6) Revise builtin HDMI phy driver, nearly all main stream mode
+     below 4K@30Hz is tested, this driver supported these mode very
+     well including clone display mode and extend display mode.
 
-  1031	
-  1032	static int rpmh_rsc_probe(struct platform_device *pdev)
-  1033	{
-  1034		struct device_node *dn = pdev->dev.of_node;
-  1035		struct rsc_drv *drv;
-  1036		char drv_id[10] = {0};
-  1037		int ret, irq;
-  1038		u32 solver_config;
-  1039		u32 rsc_id;
-  1040	
-  1041		/*
-  1042		 * Even though RPMh doesn't directly use cmd-db, all of its children
-  1043		 * do. To avoid adding this check to our children we'll do it now.
-  1044		 */
-  1045		ret = cmd_db_ready();
-  1046		if (ret) {
-  1047			if (ret != -EPROBE_DEFER)
-  1048				dev_err(&pdev->dev, "Command DB not available (%d)\n",
-  1049										ret);
-  1050			return ret;
-  1051		}
-  1052	
-  1053		drv = devm_kzalloc(&pdev->dev, sizeof(*drv), GFP_KERNEL);
-  1054		if (!drv)
-  1055			return -ENOMEM;
-  1056	
-  1057		ret = of_property_read_u32(dn, "qcom,drv-id", &drv->id);
-  1058		if (ret)
-  1059			return ret;
-  1060	
-  1061		drv->name = of_get_property(dn, "label", NULL);
-  1062		if (!drv->name)
-  1063			drv->name = dev_name(&pdev->dev);
-  1064	
-  1065		snprintf(drv_id, ARRAY_SIZE(drv_id), "drv-%d", drv->id);
-  1066		drv->base = devm_platform_ioremap_resource_byname(pdev, drv_id);
-  1067		if (IS_ERR(drv->base))
-  1068			return PTR_ERR(drv->base);
-  1069	
-  1070		rsc_id = readl_relaxed(drv->base + RSC_DRV_ID);
-  1071		drv->ver.major = rsc_id & (MAJOR_VER_MASK << MAJOR_VER_SHIFT);
-  1072		drv->ver.major >>= MAJOR_VER_SHIFT;
-  1073		drv->ver.minor = rsc_id & (MINOR_VER_MASK << MINOR_VER_SHIFT);
-  1074		drv->ver.minor >>= MINOR_VER_SHIFT;
-  1075	
-> 1076		if (drv->ver.major == 3 && drv->ver.minor >= 0)
-  1077			drv->regs = rpmh_rsc_reg_offset_ver_3_0;
-  1078		else
-  1079			drv->regs = rpmh_rsc_reg_offset_ver_2_7;
-  1080	
-  1081		ret = rpmh_probe_tcs_config(pdev, drv);
-  1082		if (ret)
-  1083			return ret;
-  1084	
-  1085		spin_lock_init(&drv->lock);
-  1086		init_waitqueue_head(&drv->tcs_wait);
-  1087		bitmap_zero(drv->tcs_in_use, MAX_TCS_NR);
-  1088	
-  1089		irq = platform_get_irq(pdev, drv->id);
-  1090		if (irq < 0)
-  1091			return irq;
-  1092	
-  1093		ret = devm_request_irq(&pdev->dev, irq, tcs_tx_done,
-  1094				       IRQF_TRIGGER_HIGH | IRQF_NO_SUSPEND,
-  1095				       drv->name, drv);
-  1096		if (ret)
-  1097			return ret;
-  1098	
-  1099		/*
-  1100		 * CPU PM/genpd notification are not required for controllers that support
-  1101		 * 'HW solver' mode where they can be in autonomous mode executing low
-  1102		 * power mode to power down.
-  1103		 */
-  1104		solver_config = readl_relaxed(drv->base + drv->regs[DRV_SOLVER_CONFIG]);
-  1105		solver_config &= DRV_HW_SOLVER_MASK << DRV_HW_SOLVER_SHIFT;
-  1106		solver_config = solver_config >> DRV_HW_SOLVER_SHIFT;
-  1107		if (!solver_config) {
-  1108			if (pdev->dev.pm_domain) {
-  1109				ret = rpmh_rsc_pd_attach(drv, &pdev->dev);
-  1110				if (ret)
-  1111					return ret;
-  1112			} else {
-  1113				drv->rsc_pm.notifier_call = rpmh_rsc_cpu_pm_callback;
-  1114				cpu_pm_register_notifier(&drv->rsc_pm);
-  1115			}
-  1116		}
-  1117	
-  1118		/* Enable the active TCS to send requests immediately */
-  1119		writel_relaxed(drv->tcs[ACTIVE_TCS].mask,
-  1120			       drv->tcs_base + drv->regs[RSC_DRV_IRQ_ENABLE]);
-  1121	
-  1122		spin_lock_init(&drv->client.cache_lock);
-  1123		INIT_LIST_HEAD(&drv->client.cache);
-  1124		INIT_LIST_HEAD(&drv->client.batch_cache);
-  1125	
-  1126		dev_set_drvdata(&pdev->dev, drv);
-  1127		drv->dev = &pdev->dev;
-  1128	
-  1129		ret = devm_of_platform_populate(&pdev->dev);
-  1130		if (ret && pdev->dev.pm_domain) {
-  1131			dev_pm_genpd_remove_notifier(&pdev->dev);
-  1132			pm_runtime_disable(&pdev->dev);
-  1133		}
-  1134	
-  1135		return ret;
-  1136	}
-  1137	
+ v3 -> v4:
+  1) Quickly fix a small mistake.
+
+ v4 -> v5:
+  1) Drop potential support for Loongson 2K series SoC temporary,
+     this part should be resend with the DT binding patch in the future.
+  2) Add per display pipe debugfs support to the builtin HDMI encoder.
+  3) Rewrite atomic_update() for hardware cursors plane(Thomas)
+  4) Rewrite encoder and connector initialization part, untangle it
+     according to the chip(Thomas).
+
+ v5 -> v6:
+  1) Remove stray code which didn't get used, say lsdc_of_get_reserved_ram
+  2) Fix all typos I could found, make sentences and code more readable
+  3) Untangle lsdc_hdmi*_connector_detect() function according to the pipe
+  4) After a serious consideration, we rename this driver as loongson.
+     Because we also have drivers toward the LoongGPU IP in LS7A2000 and
+     LS2K2000. Besides, there are also drivers about the external encoder,
+     HDMI audio driver and vbios support etc. This patch only provide DC
+     driver part, my teammate Li Yi believe that loongson will be more
+     suitable for loongson graphics than lsdc in the long run.
+
+     loongson.ko = LSDC + LoongGPU + encoders driver + vbios/DT ...
+
+  v6 -> v7:
+   1) Add prime support, self-sharing is works. sharing buffer with etnaviv
+      is also tested, and its works with limitation.
+   2) Implement buffer objects tracking with list_head.
+   3) S3(sleep to RAM) is tested on ls3a5000+ls7a2000 evb and it works.
+   4) Rewrite lsdc_bo_move, since ttm core stop allocating resources
+      during BO creation. Patch V1 ~ V6 of this series no longer works
+      on latest kernel. Thus, we send V7 to revival them.
+
+  v7 -> v8:
+   1) Zero a compile warnnings on 32-bit platform, compile with W=1
+   2) Revise lsdc_bo_gpu_offset() and minor cleanup
+   3) Pageflip tested on the virtual terminal with following commands
+
+      modetest -M loongson -s 32:1920x1080 -v
+      modetest -M loongson -s 34:1920x1080 -v -F tiles
+
+     It works like a charm, when running pageflip test with dual screnn
+     configuration, another two additional bo created by the modetest
+     emerged, VRAM usage up to 40+MB, well we have at least 64MB, still
+     enough.
+
+     # cat bos
+
+         bo[0000]: size:     8112kB VRAM
+         bo[0001]: size:       16kB VRAM
+         bo[0002]: size:       16kB VRAM
+         bo[0003]: size:    16208kB VRAM
+         bo[0004]: size:     8112kB VRAM
+         bo[0005]: size:     8112kB VRAM
+
+  v8 -> v9:
+   1) Select I2C and I2C_ALGOBIT in Kconfig and should depend on MMU.
+   2) Using pci_get_domain_bus_and_slot to get the GPU device.
+   3) Other minor improvements.
+
+   Those patches are tested on ls3a5000 + ls7a1000 CRB, ls3a5000 + ls7a2000
+   evb, and lemote a1901 board(ls3a4000 + ls7a1000). On loongson mips CPU,
+   the write combine support should be enabled, to get a decent performance
+   for writing framebuffer data to the VRAM.
+
+  v9 -> v10:
+   1) Revise lsdc_drm_freeze() to implement S3 completely and correctly.
+      I suddenly realized that pinned buffer can not move and VRAM lost
+      power when sleep to RAM. Thus, the data in the buffer who is pinned
+      in VRAM will get lost when resume. Yet it's not big problem because
+      we are software rendering solution which relay on the CPU update the
+      front framebuffer. We can see the garbage data when resume from S3,
+      but the screen will show correct image as I move the cursor. This is
+      due to the cpu repaint. v10 of this patch make S3 perfect by unpin
+      all of BOs in VRAM, evict them all to system RAM.
+
+  v10 -> v11
+   1) On double screen case, the single giant framebuffer is referenced by
+      two GEM object, hence, it will be pinned by prepare_fb() at lease two
+      times. This cause its pin count > 1. V10 of this patch only unpin
+      BOs in VRAM once before suspend, which is not correct on double
+      screen case. V11 of this patch unpin BOs until its pin count reach to
+      zero when suspend. Then, resume with double screen works very well.
+      Teste on both ls7a1000 and ls7a2000 platform. V10 only works on
+      single screen case.
+
+   2) Fix vblank wait timeout when disable CRTC and run kms_flip test.
+
+   3) Test against, at least fbdev test and kms_flip test of IGT passed,
+      while most of the tests passed.
+
+   4) Rewrite pixel PLL update function, magic numbers eliminated (Emil)
+
+   5) Drop a few common hardware features description in lsdc_desc (Emil)
+
+   6) Drop lsdc_mode_config_mode_valid(), instead add restrictions in dumb
+      create function. (Emil)
+
+   7) Untangle the ls7a1000 case and ls7a2000 case completely. (Thomas)
+
+Sui Jingfeng (2):
+  MAINTAINERS: add maintainers for DRM LOONGSON driver
+  drm: add kms driver for loongson display controller
+
+ MAINTAINERS                                 |    7 +
+ drivers/gpu/drm/Kconfig                     |    2 +
+ drivers/gpu/drm/Makefile                    |    1 +
+ drivers/gpu/drm/loongson/Kconfig            |   17 +
+ drivers/gpu/drm/loongson/Makefile           |   19 +
+ drivers/gpu/drm/loongson/ls7a1000_outputs.c |  160 +++
+ drivers/gpu/drm/loongson/ls7a2000_outputs.c |  534 ++++++++++
+ drivers/gpu/drm/loongson/lsdc_crtc.c        | 1064 +++++++++++++++++++
+ drivers/gpu/drm/loongson/lsdc_debugfs.c     |   78 ++
+ drivers/gpu/drm/loongson/lsdc_device.c      |  104 ++
+ drivers/gpu/drm/loongson/lsdc_drv.c         |  485 +++++++++
+ drivers/gpu/drm/loongson/lsdc_drv.h         |  485 +++++++++
+ drivers/gpu/drm/loongson/lsdc_gem.c         |  319 ++++++
+ drivers/gpu/drm/loongson/lsdc_gem.h         |   37 +
+ drivers/gpu/drm/loongson/lsdc_gfxpll.c      |  199 ++++
+ drivers/gpu/drm/loongson/lsdc_gfxpll.h      |   52 +
+ drivers/gpu/drm/loongson/lsdc_i2c.c         |  179 ++++
+ drivers/gpu/drm/loongson/lsdc_i2c.h         |   29 +
+ drivers/gpu/drm/loongson/lsdc_irq.c         |   81 ++
+ drivers/gpu/drm/loongson/lsdc_irq.h         |   16 +
+ drivers/gpu/drm/loongson/lsdc_output.h      |   21 +
+ drivers/gpu/drm/loongson/lsdc_pixpll.c      |  485 +++++++++
+ drivers/gpu/drm/loongson/lsdc_pixpll.h      |   86 ++
+ drivers/gpu/drm/loongson/lsdc_plane.c       |  639 +++++++++++
+ drivers/gpu/drm/loongson/lsdc_probe.c       |   56 +
+ drivers/gpu/drm/loongson/lsdc_probe.h       |   14 +
+ drivers/gpu/drm/loongson/lsdc_regs.h        |  400 +++++++
+ drivers/gpu/drm/loongson/lsdc_ttm.c         |  547 ++++++++++
+ drivers/gpu/drm/loongson/lsdc_ttm.h         |   88 ++
+ 29 files changed, 6204 insertions(+)
+ create mode 100644 drivers/gpu/drm/loongson/Kconfig
+ create mode 100644 drivers/gpu/drm/loongson/Makefile
+ create mode 100644 drivers/gpu/drm/loongson/ls7a1000_outputs.c
+ create mode 100644 drivers/gpu/drm/loongson/ls7a2000_outputs.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_crtc.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_debugfs.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_device.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_drv.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_drv.h
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_gem.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_gem.h
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_gfxpll.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_gfxpll.h
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_i2c.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_i2c.h
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_irq.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_irq.h
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_output.h
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_pixpll.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_pixpll.h
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_plane.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_probe.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_probe.h
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_regs.h
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_ttm.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_ttm.h
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.25.1
+
