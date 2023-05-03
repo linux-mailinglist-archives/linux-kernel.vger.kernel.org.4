@@ -2,103 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9506D6F5940
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 15:46:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73D776F5942
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 15:47:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbjECNqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 09:46:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55950 "EHLO
+        id S230225AbjECNrL convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 3 May 2023 09:47:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbjECNqa (ORCPT
+        with ESMTP id S229717AbjECNrI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 09:46:30 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37DD249F9
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 06:46:28 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so6961547a12.0
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 06:46:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683121586; x=1685713586;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=axb4hsXlmFr83tA4xeoHXLKOgCRNm9SMQj6gN9PpDXw=;
-        b=QAzuGmeNB88tZp09MZP0yiysHnaBQL2cCSdPygobX+guQiWepOealJNlfOK+r3g/AS
-         rAoFzy4Mm0EOQnZyGC2l86+uKx+sIRltqfAquaHCYPdxCnrJh4xUD4te+D7NG2U9U4o6
-         NL45bLJnD6ld8KkSOplfnBwJpOJV9xdTOCpVVKZbumYVHymGGAHiG0Pz60dkvcPpU1Bx
-         eVrQtKswaAc3V36t2+egEsImcQtKJ4dDVQMi+sIsVFK1IaaUNNQon1Ywuj9TMh0oTSjQ
-         GHlXN+qcqQZi0tLVB3K4f7mCgafvFsFhy/26JnIUNYVfNuMvBY0bf/rQvZOlX6EZNny2
-         r8Tg==
+        Wed, 3 May 2023 09:47:08 -0400
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D80C59FB;
+        Wed,  3 May 2023 06:47:06 -0700 (PDT)
+Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-b9a6ab9ede3so7264789276.2;
+        Wed, 03 May 2023 06:47:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683121586; x=1685713586;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=axb4hsXlmFr83tA4xeoHXLKOgCRNm9SMQj6gN9PpDXw=;
-        b=JSUy0yT+xV2yC3hOdxv0AZYljGJRG0Bd2ij8OMcIpMBR43tftCelHzPzp1dKOMAuog
-         zsL8WeUIqaFPVDqmBqGmPusGXai5j8tTvcgfvuT7/Tc3fFFlEumlsX9DTsbnQnPRsZ+s
-         5iTQlLt69N8NkBhJMT7za0saO8g48KbWV5qZeCgSEaBs4F0eBmuhLj7Q3UfvvBxPglBi
-         Hlem/mJlatzYZNDKcVVOZvFubgSkrUjtjjyYEEXL90V6hWJxOWAqDQxr4J+cDwqhiK7q
-         z6ndkoMVzIH//9jCCl0GX5qK4egwl8OlltcjgqYTHpR8SU4vDaHZjUxW5O16R2Iaygh6
-         bsDA==
-X-Gm-Message-State: AC+VfDyKNiGOUccoRSJviwyVTcqWPkMX+nlNDeB2Q2S5cKU/5jD0yEA0
-        TKEB2L27KIbqEZA71evgCgB9iA==
-X-Google-Smtp-Source: ACHHUZ4NuFlJ/Wa7YCqOr30cagS7gjoxX7SmR72GunTu/7lDsfbshb9zK3nhCGjzdoiZaNi7Bm/2WA==
-X-Received: by 2002:a17:907:7e83:b0:94e:83d3:1b51 with SMTP id qb3-20020a1709077e8300b0094e83d31b51mr1842852ejc.23.1683121586596;
-        Wed, 03 May 2023 06:46:26 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:db42:e3d0:c55a:8cf1? ([2a02:810d:15c0:828:db42:e3d0:c55a:8cf1])
-        by smtp.gmail.com with ESMTPSA id s12-20020a170906bc4c00b00947ed087a2csm17309530ejv.154.2023.05.03.06.46.25
+        d=1e100.net; s=20221208; t=1683121625; x=1685713625;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=g8fvBW6URQPQ1oJY9J3VwE1viOASAnv8GGw4ZkuvWUo=;
+        b=YtA95SpuqBrRTcr0Xb2NB21buvubrZ7kuWfWSThBxZkwTe4NQtk2vt91XiW6xn5MPf
+         vFnVDAFQ4D6+38KbXBovgJ1KwZIxKB4o7aRw/6sqdusmT5WlxEQ1KokvpYGySZ1plYSl
+         /tmFBvyuY6UxZD9TD9IpzdUOiNQqNZ1dESXhT9p55Kx2M/MS+SCsfZxmgF97YQgyAXpW
+         Z27aN9uMltsUDSn0CDq9nrl7Y8xTpdWNNMnN2sIuQ6qHznxYpqe6yGN+ouMUf0/lP5No
+         hVO0RgDFtdKNC7xBIJpuFdk+zNQNkBvYSJ6h8AdsDGGGTeq2tm76AR1bS18H8IrZaUcb
+         KJDQ==
+X-Gm-Message-State: AC+VfDylO+3e0avGUR2p8Jon6Nm76PItPk5UO5Dv9JiDDUHqJIWbwGQw
+        bCjgIIzoP6tQpTKkA4TzRCmSHKcnqkqyfQ==
+X-Google-Smtp-Source: ACHHUZ41uXWXRn93BDdcDV7J7JtZFAjkN9WnxIvWgHa5Ng63H+765D2QxaXRLxJ4hmuXyvvX5KuK2Q==
+X-Received: by 2002:a25:c83:0:b0:b9e:5aad:edda with SMTP id 125-20020a250c83000000b00b9e5aadeddamr6238844ybm.4.1683121625398;
+        Wed, 03 May 2023 06:47:05 -0700 (PDT)
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com. [209.85.219.180])
+        by smtp.gmail.com with ESMTPSA id y10-20020a5b0f4a000000b00b8f51af1364sm7958218ybr.53.2023.05.03.06.47.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 May 2023 06:46:25 -0700 (PDT)
-Message-ID: <64ce9447-7ae5-efbf-870f-74e45075a748@linaro.org>
-Date:   Wed, 3 May 2023 15:46:24 +0200
+        Wed, 03 May 2023 06:47:04 -0700 (PDT)
+Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-b9a6ab9ede3so7264717276.2;
+        Wed, 03 May 2023 06:47:04 -0700 (PDT)
+X-Received: by 2002:a25:2803:0:b0:b98:ddf4:7146 with SMTP id
+ o3-20020a252803000000b00b98ddf47146mr21412759ybo.21.1683121624299; Wed, 03
+ May 2023 06:47:04 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH] dt-bindings: xilinx: Remove Naga from memory and mtd
- bindings
-To:     Michal Simek <michal.simek@amd.com>, linux-kernel@vger.kernel.org,
-        monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Naga Sureshkumar Relli <nagasure@xilinx.com>,
-        Richard Weinberger <richard@nod.at>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mtd@lists.infradead.org
-References: <6b4cdc7158599b4a38409a03eda56e38975b6233.1683103250.git.michal.simek@amd.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <6b4cdc7158599b4a38409a03eda56e38975b6233.1683103250.git.michal.simek@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230503125746.331835-1-glaubitz@physik.fu-berlin.de>
+In-Reply-To: <20230503125746.331835-1-glaubitz@physik.fu-berlin.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 3 May 2023 15:46:52 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWxp16uzqZ1R2ViZHSbqYcHSjWNVJDM1_Qne3kfaG6pVQ@mail.gmail.com>
+Message-ID: <CAMuHMdWxp16uzqZ1R2ViZHSbqYcHSjWNVJDM1_Qne3kfaG6pVQ@mail.gmail.com>
+Subject: Re: [PATCH] sh: j2: Use ioremap() to translate device tree address
+ into kernel memory
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/05/2023 10:40, Michal Simek wrote:
-> Naga is no longer works for AMD/Xilinx and there is no activity from him to
-> continue to maintain Xilinx related drivers. Two drivers have Miquel as
-> maintainer and for the last one add myself instead to be kept in a loop if
-> there is any change required.
-> 
-> Signed-off-by: Michal Simek <michal.simek@amd.com>
-> ---
-> 
->  .../devicetree/bindings/memory-controllers/arm,pl35x-smc.yaml   | 1 -
->  .../devicetree/bindings/mtd/arasan,nand-controller.yaml         | 2 +-
->  Documentation/devicetree/bindings/mtd/arm,pl353-nand-r2p1.yaml  | 1 -
->  3 files changed, 1 insertion(+), 3 deletions(-)
+On Wed, May 3, 2023 at 2:59 PM John Paul Adrian Glaubitz
+<glaubitz@physik.fu-berlin.de> wrote:
+> Addresses the following warning when building j2_defconfig:
+>
+> arch/sh/kernel/cpu/sh2/probe.c: In function 'scan_cache':
+> arch/sh/kernel/cpu/sh2/probe.c:24:16: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+>    24 |  j2_ccr_base = (u32 __iomem *)of_flat_dt_translate_address(node);
+>       |
+>
+> Signed-off-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
 
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Gr{oetje,eeting}s,
 
-Best regards,
-Krzysztof
+                        Geert
 
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
