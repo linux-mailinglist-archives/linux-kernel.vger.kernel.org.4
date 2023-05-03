@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92F556F5298
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 10:03:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 582466F529C
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 10:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229581AbjECIDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 04:03:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58906 "EHLO
+        id S229828AbjECIDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 04:03:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjECIDP (ORCPT
+        with ESMTP id S229501AbjECIDP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 3 May 2023 04:03:15 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E8D110F5;
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADBADE74;
         Wed,  3 May 2023 01:03:14 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C54632233D;
-        Wed,  3 May 2023 08:03:12 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 669B9200AE;
+        Wed,  3 May 2023 08:03:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1683100992; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1683100993; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=W7w0k+oXuT3ygMJBORCHbE7gJuAfade3I+Yj4aO2iQ4=;
-        b=QnWEZFn5QsXCkwyHBQsdL6x12IWRpfaU0FhE/tNMa0MHiWKsu2XILyr1gYWyAl9B1W2rG/
-        3oxlsp92hqnyMInwoHxnico5eVjAci+JoDkgH0+Izt/YEV4ztfZsRachvVQAXo8KTVD84+
-        bGFsNAJEJbUYNWVDL0u5p96VKsZe7PI=
+        bh=zuH7OxLZZ6mL7lQtqpx6kEOj3SSaSSRaBrLmSYsP3ug=;
+        b=SRxHYgUvOSN/luK2rX8SG+kDeTVs9HlxQ0Q56silroZmpi65o5b1Z9mA/hy6YejXCc55za
+        t8XBXMTuruM6kEBn1mSXCSMFOZyewF/2Gbug6JdhZeDjGjlbWuCfrt2MzqvUjHxnDo7pQx
+        1k5AUC6CzVMuf57L6AD1y6rHAVrUfG8=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1683100992;
+        s=susede2_ed25519; t=1683100993;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=W7w0k+oXuT3ygMJBORCHbE7gJuAfade3I+Yj4aO2iQ4=;
-        b=XQIMNtqZ8muZDol8RlsMpug/UOB/qwYif3FZgM1zc4yyBJsUtN04+nPYrB96tlHF/PC33z
-        K2dG+UicqUyGAtCQ==
+        bh=zuH7OxLZZ6mL7lQtqpx6kEOj3SSaSSRaBrLmSYsP3ug=;
+        b=MQsYinun/4qb6UR8wykBHkBj3B7HWuhYIDDbO1gfb8OtbtSXjXKPJVdER2q9b9QvUDR5fT
+        ZgYcKFCeuM1bpuCg==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B811B1331F;
-        Wed,  3 May 2023 08:03:12 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 59B0C1331F;
+        Wed,  3 May 2023 08:03:13 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id /kHuLEAVUmQ3YgAAMHmgww
-        (envelope-from <dwagner@suse.de>); Wed, 03 May 2023 08:03:12 +0000
+        id R8DkFUEVUmQ5YgAAMHmgww
+        (envelope-from <dwagner@suse.de>); Wed, 03 May 2023 08:03:13 +0000
 From:   Daniel Wagner <dwagner@suse.de>
 To:     linux-nvme@lists.infradead.org
 Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
         Chaitanya Kulkarni <kch@nvidia.com>,
         Shin'ichiro Kawasaki <shinichiro@fastmail.com>,
         Hannes Reinecke <hare@suse.de>, Daniel Wagner <dwagner@suse.de>
-Subject: [PATCH blktests v3 05/12] nvme: Use runtime fio background jobs
-Date:   Wed,  3 May 2023 10:02:51 +0200
-Message-Id: <20230503080258.14525-6-dwagner@suse.de>
+Subject: [PATCH blktests v3 06/12] Documentation: Add info on nvme_tr_type
+Date:   Wed,  3 May 2023 10:02:52 +0200
+Message-Id: <20230503080258.14525-7-dwagner@suse.de>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230503080258.14525-1-dwagner@suse.de>
 References: <20230503080258.14525-1-dwagner@suse.de>
@@ -73,64 +73,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The fio jobs are supposed to run long in background during the test.
-Instead relying on a job size use explicit runtime for this.
+Mention that the nvme tests can be parametrized.
 
 Signed-off-by: Daniel Wagner <dwagner@suse.de>
 ---
- tests/nvme/032 | 4 ++--
- tests/nvme/040 | 9 +++++++--
- 2 files changed, 9 insertions(+), 4 deletions(-)
+ Documentation/running-tests.md | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/tests/nvme/032 b/tests/nvme/032
-index 017d4a339971..2e4b7f0760c7 100755
---- a/tests/nvme/032
-+++ b/tests/nvme/032
-@@ -38,8 +38,8 @@ test_device() {
- 	sysfs="/sys/bus/pci/devices/${pdev}"
+diff --git a/Documentation/running-tests.md b/Documentation/running-tests.md
+index 3550f377f487..7e827fba7ac0 100644
+--- a/Documentation/running-tests.md
++++ b/Documentation/running-tests.md
+@@ -98,6 +98,13 @@ requires that the kernel be compiled with `CONFIG_BLK_DEV_ZONED` enabled.
+ RUN_ZONED_TESTS=1
+ ```
  
- 	# start fio job
--	_run_fio_rand_io --filename="$TEST_DEV" --size=1g \
--		--group_reporting  &> /dev/null &
-+	_run_fio_rand_io --filename="$TEST_DEV" \
-+		--group_reporting --time_based --runtime=-1 &> /dev/null &
- 
- 	sleep 5
- 
-diff --git a/tests/nvme/040 b/tests/nvme/040
-index 04bd726cd309..05b4f5472ef5 100755
---- a/tests/nvme/040
-+++ b/tests/nvme/040
-@@ -21,6 +21,7 @@ test() {
- 	local port
- 	local loop_dev
- 	local nvmedev
-+	local fio_pid
- 
- 	echo "Running ${TEST_NAME}"
- 
-@@ -37,8 +38,10 @@ test() {
- 
- 	# start fio job
- 	echo "starting background fio"
--	_run_fio_rand_io --filename="/dev/${nvmedev}n1" --size=1g \
--		--group_reporting --ramp_time=5  &> /dev/null &
-+	_run_fio_rand_io --filename="/dev/${nvmedev}n1" \
-+		--group_reporting --ramp_time=5 \
-+		--time_based --runtime=-1 &> /dev/null &
-+	fio_pid=$!
- 	sleep 5
- 
- 	# do reset/remove operation
-@@ -48,6 +51,8 @@ test() {
- 	echo "deleting controller"
- 	_nvme_delete_ctrl "${nvmedev}"
- 
-+	{ kill "${fio_pid}"; wait; } &> /dev/null
++### NVMe test parameterizing
 +
- 	_remove_nvmet_subsystem_from_port "${port}" "${subsys}"
- 	_remove_nvmet_subsystem "${subsys}"
- 	_remove_nvmet_port "${port}"
++The NVMe tests can be additionally parameterized via environment variables.
++
++- nvme_tr_type: 'loop' (default), 'tcp', 'rdma' and 'fc'
++  Run the tests with the given transport.
++
+ ### Running nvme-rdma nvmeof-mp srp tests
+ 
+ Most of these tests will use the rdma_rxe (soft-RoCE) driver by default. The siw (soft-iWARP) driver is also supported.
 -- 
 2.40.0
 
