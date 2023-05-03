@@ -2,103 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9637C6F5DD7
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 20:24:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8FEA6F5DD9
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 20:24:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230016AbjECSYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 14:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58256 "EHLO
+        id S230082AbjECSYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 14:24:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjECSYJ (ORCPT
+        with ESMTP id S229774AbjECSYm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 14:24:09 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4539E4E;
-        Wed,  3 May 2023 11:24:08 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-63b5c48ea09so4177652b3a.1;
-        Wed, 03 May 2023 11:24:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683138248; x=1685730248;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HAaHXuopg20H7kDrY4ngFywwBOIWWtTHOJdh9Kk4ti8=;
-        b=aB33hUnZnfHPZlWWtIoWkOnjjHisPYabb6S2uWTBQ8h3onE+k8lH1fwWNrmP3+C2Ae
-         V9xYfHUAfa1MQR5bGsnZZI/T3EfAtEbMB7LJgZA6S5DUFfa3NoHlKU045MUvM3dSPcwJ
-         O9knvzOZHAicKc7Q1U9prQ5QYBA7iuXytpIxNnq+/0XAMdmK6s/cx66iKx/7bF6fFMVt
-         9qvyKftWjNhL52s2yKIZb6lNZsILUvRPIJqsyqINqcoQfODMA3flr2J6lxf4LYnNwpJG
-         HZgaEjG650bHbl05TVNvOqMZG18RkP9d2mBdzyVqPL8pMYePQurNMT2j8/2P3LbRKc10
-         RP1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683138248; x=1685730248;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HAaHXuopg20H7kDrY4ngFywwBOIWWtTHOJdh9Kk4ti8=;
-        b=dBig4BFc2E4RL2+ra5xqZ04y409pmUod4DWpp+YWPLM9C/T7JRVNbkhvnCZm3Khgnn
-         0EPlRH++A5iCerMyRyGA7eDenS6IUYsHKUZRAgJDjy4HB1mrNOuM+MUV+D5kjUOKRYaY
-         lOgtNaph4oJ1AbrB0haEonBEtE0i0ExnKSGeQ/2BkjcxeMFREThGkipX0CMAdKv6J72q
-         6w1v54g2/DhOGQk3VarXiV7QhdjgDe/z9ev026YoH3B+w3LmGlb+NVmlrA/X4yKmVb8C
-         nCIbVvqnGhjgGbAA08DvJEt1RsHvex3eUfz6PwAu7FhtlWD2GyzFSAJFCB5yfr/8hHp0
-         YiBw==
-X-Gm-Message-State: AC+VfDy1wYoDmVfMf3/dA0Rco1QCHULNCCkYmGk1wJ5vlsLdcwBpfubv
-        hNY0118zsH5r5j4u2pDCPEI=
-X-Google-Smtp-Source: ACHHUZ6SJEEQ8QvbsKtdJRVXR1zPnkUl+hGGIJ5sn55EaO+j6xudf8VpDqWbOhAMlICayQOL4hheYg==
-X-Received: by 2002:a05:6a20:1616:b0:f3:b764:5de3 with SMTP id l22-20020a056a20161600b000f3b7645de3mr27371733pzj.48.1683138248162;
-        Wed, 03 May 2023 11:24:08 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:6454])
-        by smtp.gmail.com with ESMTPSA id c17-20020a056a000ad100b005ae02dc5b94sm23989633pfl.219.2023.05.03.11.24.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 May 2023 11:24:07 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 3 May 2023 08:24:05 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        akpm@linux-foundation.org, vbabka@suse.cz, hannes@cmpxchg.org,
-        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
-        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
-        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
-        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
-        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
-        muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
-        pasha.tatashin@soleen.com, yosryahmed@google.com,
-        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
-        andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, gregkh@linuxfoundation.org,
-        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
-Subject: Re: [PATCH 00/40] Memory allocation profiling
-Message-ID: <ZFKmxVXlk9xkQoPB@slm.duckdns.org>
-References: <20230501165450.15352-1-surenb@google.com>
- <ZFIMaflxeHS3uR/A@dhcp22.suse.cz>
- <ZFIOfb6/jHwLqg6M@moria.home.lan>
- <ZFISlX+mSx4QJDK6@dhcp22.suse.cz>
- <ZFIVtB8JyKk0ddA5@moria.home.lan>
- <ZFKNZZwC8EUbOLMv@slm.duckdns.org>
- <ZFKfG7bVuOAk27yP@moria.home.lan>
+        Wed, 3 May 2023 14:24:42 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AFF24237;
+        Wed,  3 May 2023 11:24:41 -0700 (PDT)
+Received: from zn.tnic (p5de8e8ea.dip0.t-ipconnect.de [93.232.232.234])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 152551EC0506;
+        Wed,  3 May 2023 20:24:39 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1683138279;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=iWLErMvOWaKoW0oVpbqNFUUKIEuWA+CRFAzvpHhYlF8=;
+        b=rUCZd0YsQ+uFU5Sgy8P3L2jI/jkMFV9C3Y43OkPMnz2937pAfBYTRLXtwwwOJhNmVMTEnL
+        XJRmxeAZisxBkmjaag4VGHhaDLK5onRgPuXyitDfcaQRC3W/m10GqrQJ/4FgN6PzDOP91K
+        M6Y4nPsV0xGRsGPf+wjKhP/hji1tjuo=
+Date:   Wed, 3 May 2023 20:24:33 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Tom Lendacky <thomas.lendacky@amd.com>, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Evgeniy Baskov <baskov@ispras.ru>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Peter Jones <pjones@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Dave Young <dyoung@redhat.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH 0/6] efi/x86: Avoid legacy decompressor during EFI boot
+Message-ID: <20230503182433.GFZFKm4QAiqXRBYM0s@fat_crate.local>
+References: <20230424165726.2245548-1-ardb@kernel.org>
+ <ecbcc066-3636-9620-8db9-2c066d16e717@amd.com>
+ <CAMj1kXG8ZrdEUNTiSCet+aT+1ZyrbguFsGtNhVV+XgCssZgj9w@mail.gmail.com>
+ <a6846282-95c8-274a-accc-ffa54205489c@amd.com>
+ <8f85787a-1fa5-8f59-6047-b3a791291bfd@amd.com>
+ <CAMj1kXFfHJDXW2xWTjT5xy_-8MdeS9HhcMh3=DKFZ3+vhaUFcA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZFKfG7bVuOAk27yP@moria.home.lan>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+In-Reply-To: <CAMj1kXFfHJDXW2xWTjT5xy_-8MdeS9HhcMh3=DKFZ3+vhaUFcA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -106,24 +69,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, May 03, 2023 at 08:17:28PM +0200, Ard Biesheuvel wrote:
+> (There is some 32-bit SEV code in the decompressor as well that
+> obviously never gets called when booting in long mode, but I hadn't
+> quite grasped how much other SEV code there actually is)
 
-On Wed, May 03, 2023 at 01:51:23PM -0400, Kent Overstreet wrote:
-> Do you have example output?
-
-Not right now. It's from many months ago. It's just a script I could find
-easily.
-
-> TBH I'm skeptical that it's even possible to do full memory allocation
-> profiling with tracing/bpf, due to recursive memory allocations and
-> needing an index of outstanding allcations.
-
-There are some issues e.g. w/ lossy updates which should be fixed from BPF
-side but we do run BPF on every single packet and IO on most of our
-machines, so basing this argument on whether tracking all memory allocations
-from BPF is possible is probably not a winning strategy for this proposal.
-
-Thanks.
+If you mean the thing in startup_32 which does get_sev_encryption_bit()
+etc, that is going away.
 
 -- 
-tejun
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
