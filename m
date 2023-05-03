@@ -2,102 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A7006F5523
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 11:46:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 329C56F551D
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 11:46:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229996AbjECJqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 05:46:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42788 "EHLO
+        id S229922AbjECJqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 05:46:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbjECJpm (ORCPT
+        with ESMTP id S229983AbjECJpf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 05:45:42 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6A925B92;
-        Wed,  3 May 2023 02:45:02 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id af79cd13be357-74de7182043so222613985a.3;
-        Wed, 03 May 2023 02:45:02 -0700 (PDT)
+        Wed, 3 May 2023 05:45:35 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30EC52D69;
+        Wed,  3 May 2023 02:44:54 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2aa39ce5d26so50335311fa.1;
+        Wed, 03 May 2023 02:44:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683107101; x=1685699101;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vu1/caV96gPScaPWMCtnkWIUIUcxiUGOiQt9hLifgPw=;
-        b=VhDxBqzjRGO4xEvrUoTELhpqFpNqdt+CVDZ+RfOG21FgkmixgwMMdwK/NneQ7mOOcc
-         yhGPzgIBNau3G+2U9K7Xt4a9gdggrYOnkpWS/wNla11FYYg09l2IaImcnU5+b9MibRcR
-         k9v90h1Rsd7vskA6KQe8SRuvpU0sLUxitSFfsDPXj87uFGSdWAnrfcOx/eIuqMMyzqhk
-         CZB3LVF8x3HzsHEtVrXZagn8mwxC1GFztjcfWkPZzT8tLdcTHbvRug9Ltx2dxhrAfuC2
-         +waxUOke8lDu/8kEPIx91rOnvSt36w2a70UZk/8uywir3znA4RllKMN+w9ENvaPVPtXq
-         x7ig==
+        d=gmail.com; s=20221208; t=1683107086; x=1685699086;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ojEP9jyPYV0kD4k17U7z2zy6rqymh0kERFtXzzcztIU=;
+        b=Zv0OMcx+3tE1eL/oKZ1vLmKsrOS70sB8Y3JKt5oTugKAIGzBCrXdxXrfRw2nETQDRj
+         yn0u9pEABmPNFKhaIU9Vi/YG66R5ef71eDrHqFYTV2ojm+5qBD010v0zi+tAoHCi/hc6
+         +Lumqk1EW1BrS45MK4kLp3aH71ffjST5qHZ4KbxSKIV0UoZUSlAfsBeEFaq+NCN9wx9W
+         YsIfcyupolcFlkQHyyHO7Iwm8MuJUHranqQrhWldjODlf9DBi1FY9Ip2KHU63zro9Xbb
+         WSvIXUGqibhT+TzH38zCfWekFe0ve4GINNJYO24dH7YS86neAINd2cQbP0ffExyQudQO
+         UBFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683107101; x=1685699101;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vu1/caV96gPScaPWMCtnkWIUIUcxiUGOiQt9hLifgPw=;
-        b=B3rVo2uyw06jIberJgxw43HzLzO4oU0txTf58pTEOVkuzv445C5CQHeivCqRJK94DQ
-         zD5AyFJZov2lAQQu1/Dhc7NbRJJ330IK2Lq99VgBitm4x17uBTbrdyzBeNcbAWLzJEbj
-         4aVa6+n6lTGk3QCbYOObdORizIVMNMFMNewrjvhcymlPPXzkPXcH1nSrX8cVPYkEzcNu
-         +KY7b7C7R3fV0HI1N7zSAYqkk8dDcfcKjypNU96IbgDY2mEzr/8GmCiBd6IkBH4LFkA0
-         c9v2DjK91/Ap/5QwyT/0befUib0/vyUw7AomNa7UpRnxEDPfNlVRo8oqqwYJvbK6I9Zk
-         RSZQ==
-X-Gm-Message-State: AC+VfDzF6LSYZDCts26/4+JsGxyqFtn4dr663WhBpBquw7oGtcNkiQ1u
-        e78G/GJPDafpfsxqQMf2VOZlzqiEpB7Er+8gECg=
-X-Google-Smtp-Source: ACHHUZ6yi+LLZmqHyLDaoBpk27DTVexvbnD/0m840PDBVgRRMFVAguYf3NnMhxz4oEixavoWuRx1ThmZystGlNmkfIs=
-X-Received: by 2002:a05:6214:2629:b0:61b:17bd:c603 with SMTP id
- gv9-20020a056214262900b0061b17bdc603mr10563566qvb.9.1683107101117; Wed, 03
- May 2023 02:45:01 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683107086; x=1685699086;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ojEP9jyPYV0kD4k17U7z2zy6rqymh0kERFtXzzcztIU=;
+        b=ZO+xDYc+bmJLTTudcI7eCv9/oI1a1zjxPaeG/WiTfbYgE+Z0jh5dO+dRScJXTCnora
+         WX0WmCwkjFR1QhKYzk6+/mk5SNnnp2EeN5+Ec+mjTVOaXk1ehkuTVlJLevGW0PQK7/ZK
+         4kLTNEDELwcQQ+yTAWHkV6tXuq29p84aiTlMZZKs1+eYU92OZu77AejaGBxBgQ+NdaGS
+         LqurSROq9/FtTGRG5PxqaoqO8FnOZ51lI46SIU3TUmnp7mhnK0jQX9PNSrXW4305vzw+
+         Piz/PIKr9Cq9mTXLz0y5wClKJ/DB9bGW2XYDIjQMNa7B58FT/IoZkX0eCSUgGiw/NVWO
+         VQXQ==
+X-Gm-Message-State: AC+VfDwAJ/jXi663xn+2LxWg5POkeudAomgx1kpoH4EogXmfvTZ3Annx
+        5UEj12OqtTdIHeLn7mG7AGQ=
+X-Google-Smtp-Source: ACHHUZ7pgzWt3EBF0ftVh/qjbv7O9HsTVOsdlQkINcPMbcunzFiEfvfGCfeZQmH98HcoLckbOlS1MA==
+X-Received: by 2002:a2e:870a:0:b0:2a8:b579:225b with SMTP id m10-20020a2e870a000000b002a8b579225bmr5715324lji.40.1683107085468;
+        Wed, 03 May 2023 02:44:45 -0700 (PDT)
+Received: from fedora (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
+        by smtp.gmail.com with ESMTPSA id z23-20020a2e8857000000b002a8c271de33sm5778594ljj.67.2023.05.03.02.44.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 May 2023 02:44:44 -0700 (PDT)
+Date:   Wed, 3 May 2023 12:44:29 +0300
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Zhigang Shi <Zhigang.Shi@liteon.com>,
+        Paul Gazzillo <paul@pgazz.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/5] Support ROHM BU27008 RGB sensor
+Message-ID: <cover.1683105758.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
-References: <20230501165450.15352-1-surenb@google.com> <20230501165450.15352-2-surenb@google.com>
- <ouuidemyregstrijempvhv357ggp4tgnv6cijhasnungsovokm@jkgvyuyw2fti>
- <ZFAUj+Q+hP7cWs4w@moria.home.lan> <b6b472b65b76e95bb4c7fc7eac1ee296fdbb64fd.camel@HansenPartnership.com>
- <ZFCA2FF+9MI8LI5i@moria.home.lan> <2f5ebe8a9ce8471906a85ef092c1e50cfd7ddecd.camel@HansenPartnership.com>
- <20230502225016.GJ2155823@dread.disaster.area> <b6857aad-4cfc-4961-df54-6e658fca7f75@suse.cz>
-In-Reply-To: <b6857aad-4cfc-4961-df54-6e658fca7f75@suse.cz>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 3 May 2023 12:44:24 +0300
-Message-ID: <CAHp75VddBGrrkRGQcU=ZOXANaj2SznPGG4eQ8Q2NrGYbLK7Xog@mail.gmail.com>
-Subject: Re: [PATCH 01/40] lib/string_helpers: Drop space in string_get_size's output
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Dave Chinner <david@fromorbit.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        Suren Baghdasaryan <surenb@google.com>,
-        akpm@linux-foundation.org, mhocko@suse.com, hannes@cmpxchg.org,
-        roman.gushchin@linux.dev, mgorman@suse.de, willy@infradead.org,
-        liam.howlett@oracle.com, corbet@lwn.net, void@manifault.com,
-        peterz@infradead.org, juri.lelli@redhat.com, ldufour@linux.ibm.com,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, peterx@redhat.com, david@redhat.com,
-        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
-        nathan@kernel.org, dennis@kernel.org, tj@kernel.org,
-        muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
-        pasha.tatashin@soleen.com, yosryahmed@google.com,
-        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
-        andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, gregkh@linuxfoundation.org,
-        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org,
-        Andy Shevchenko <andy@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        =?UTF-8?B?Tm9yYWxmIFRyw6/Cv8K9bm5lcw==?= <noralf@tronnes.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="P6C63pZ7fe5zi9Lk"
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -108,78 +80,177 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 3, 2023 at 12:28=E2=80=AFPM Vlastimil Babka <vbabka@suse.cz> wr=
-ote:
->
-> On 5/3/23 00:50, Dave Chinner wrote:
-> > On Tue, May 02, 2023 at 07:42:59AM -0400, James Bottomley wrote:
-> >> On Mon, 2023-05-01 at 23:17 -0400, Kent Overstreet wrote:
-> >> > On Mon, May 01, 2023 at 10:22:18PM -0400, James Bottomley wrote:
-> >> > > It is not used just for debug.  It's used all over the kernel for
-> >> > > printing out device sizes.  The output mostly goes to the kernel
-> >> > > print buffer, so it's anyone's guess as to what, if any, tools are
-> >> > > parsing it, but the concern about breaking log parsers seems to be
-> >> > > a valid one.
-> >> >
-> >> > Ok, there is sd_print_capacity() - but who in their right mind would
-> >> > be trying to scrape device sizes, in human readable units,
-> >>
-> >> If you bother to google "kernel log parser", you'll discover it's quit=
-e
-> >> an active area which supports a load of company business models.
-> >
-> > That doesn't mean log messages are unchangable ABI. Indeed, we had
-> > the whole "printk_index_emit()" addition recently to create
-> > an external index of printk message formats for such applications to
-> > use. [*]
-> >
-> >> >  from log messages when it's available in sysfs/procfs (actually, is
-> >> > it in sysfs? if not, that's an oversight) in more reasonable units?
-> >>
-> >> It's not in sysfs, no.  As aren't a lot of things, which is why log
-> >> parsing for system monitoring is big business.
-> >
-> > And that big business is why printk_index_emit() exists to allow
-> > them to easily determine how log messages change format and come and
-> > go across different kernel versions.
-> >
-> >> > Correct me if I'm wrong, but I've yet to hear about kernel log
-> >> > messages being consider a stable interface, and this seems a bit out
-> >> > there.
-> >>
-> >> It might not be listed as stable, but when it's known there's a large
-> >> ecosystem out there consuming it we shouldn't break it just because yo=
-u
-> >> feel like it.
-> >
-> > But we've solved this problem already, yes?
-> >
-> > If the userspace applications are not using the kernel printk format
-> > index to detect such changes between kernel version, then they
-> > should be. This makes trivial issues like whether we have a space or
-> > not between units is completely irrelevant because the entry in the
-> > printk format index for the log output we emit will match whatever
-> > is output by the kernel....
->
-> If I understand that correctly from the commit changelog, this would have
-> indeed helped, but if the change was reflected in format string. But with
-> string_get_size() it's always an %s and the change of the helper's or a
-> switch to another variant of the helper that would omit the space, wouldn=
-'t
-> be reflected in the format string at all? I guess that would be an argume=
-nt
-> for Andy's suggestion for adding a new %pt / %pT which would then be
 
-(Note, there is no respective %p extension for string_get_size() yet.
-%pt is for time and was used as an example when its evolution included
-a change like this)
+--P6C63pZ7fe5zi9Lk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> reflected in the format string. And also more concise to use than using t=
-he
-> helper, fwiw.
+Add support for ROHM BU27008 RGB sensor.
 
+The ROHM BU27008 is a sensor with 5 photodiodes (red, green, blue, clear
+and IR) with four configurable channels. Red and green being always
+available and two out of the rest three (blue, clear, IR) can be
+selected to be simultaneously measured. Typical application is adjusting
+LCD backlight of TVs, mobile phones and tablet PCs.
+
+This series supports reading the RGBC and IR channels using IIO
+framework. However, only two of the BC+IR can be enabled at the same
+time. Series adds also support for scale and integration time
+configuration, where scale consists of impact of both the integration
+time and hardware gain. The gain and time support is backed by the newly
+introduced IIO GTS helper. This series depends on GTS helper patches
+added in BU27034 support series which is already merged in iio/togreg
+which this series is based on.
+
+The hardware allows configuring gain setting by writing a 5-bit gain
+selector value to a register. Part of the gain setting is common for all
+channels (RGBC + IR) but part of the selector value can be set
+separately for RGBC and IR:
+
+MODE_CONTROL2 REG:
+bit 7	    6	    5	    4	    3	    2	    1	    0
+-----------------------------------------------------------------
+|	RGB	selector		|
++---------------------------------------+
+-----------------------------------------------------------------
+| high bits IR	|			| low bits IR selector	|
++---------------+			+-----------------------+
+
+In theory it would be possible to set certain separate gain values for
+RGBC and IR channels, but this gets pretty confusing because there are a
+few 'unsupported' selector values. If only RGBC or IR was set, some
+extra handling should be done to prevent the other channel from getting
+unsupported value due to change in high-bits. Furthermore, allowing the
+channels to be set different gain values (in some cases when gains are
+such the HW supports it) would make the cases where also integration
+time is changed to achieve correct scale ... interesting. It might also
+be confusing for user to try predicting when setting different scales
+succeeds and when it does not. Furthermore, if for example the scale
+setting for RGBC caused IR selector to be invalid - it could also cause
+the IR scale to "jump" very far from previous value.
+
+To make the code simpler and more predictable for users, the current
+logic is as follows:
+
+1. Prevent setting IR scale. (My assumption is IR is less used than
+RGBC)
+2. When RGBC scale is set, set also the IR-selector to the same value.
+This prevents unsupported selector values and makes the IR scale changes
+predictable.
+
+The 2) could mean we effectively have the same scale for all channels.
+Unfortunately, the HW design is slightly peculiar and selector 0 means
+gain 1X on RGBC but gain 2X on IR. Rest of the selectors equal same gain
+values on RGBC and IR. The result is that while changin selector from 0
+=3D> 1 causes RGBC gain to go from 1X =3D> 4X, it causes IR gain to go from
+2X =3D> 4X.
+
+So, the driver provides separate scale entries for all channels (also
+RGB and C will have separate gain entries because these channels are of
+same type as IR channel). This makes it possible for user applications
+to go read the scales for all channels after setting scale for one (in
+order to detect the IR scale difference).
+
+Having the separate IR scale entry which applications can read to detect
+"arbitrary scale changes" makes it possible for applications to be
+written so they can cope if we need to implement the 'allow setting some
+different gains for IR and RGBC' - later.
+
+Finally, the scales_available is also provided for all other channels
+except the IR channel, which does not allow the scale to be changed.
+
+The sensor provides a data-ready IRQ and the driver implements a
+triggered buffer mode using this IRQ as a trigger.
+
+Finally, the series introduces generic iio_validate_own_trigger() helper
+which can be used as a validate_trigger callback for drivers which
+require the trigger and iio-device to be parented by same device. The
+KX022A driver is converted to use this new callback instead of rolling
+it's own function. The new helper and KX022A can be merged in as
+independent changes if need be.
+
+
+Revision history
+v3 =3D> v4:
+  bu27008 driver fixes
+    - Drop thread from device IRQ handler
+    - Styling and some minor improvements
+    - Use kernel-doc for enums
+    - Correctly order entries in Makefile
+v2 =3D> v3:
+  dt-bindings:
+    - No changes
+  iio_validate_own_trigger:
+    - subject fix
+  bu27008:
+    - Mostly styling based on comments from Andy and Andi
+
+  More accurate changelog in individual patches
+
+v1 =3D> v2:
+  dt-bindings:
+    - Fix issues pointed by Krzysztof.
+  bu27008 driver:
+    - Fix issues pointed by Jonathan
+  Add new helper for validating own trigger
+
+  More accurate changelog in individual patches
+
+---
+
+
+Matti Vaittinen (5):
+  dt-bindings: iio: light: ROHM BU27008
+  iio: trigger: Add simple trigger_validation helper
+  iio: kx022a: Use new iio_validate_own_trigger()
+  iio: light: ROHM BU27008 color sensor
+  MAINTAINERS: Add ROHM BU27008
+
+ .../bindings/iio/light/rohm,bu27008.yaml      |  49 +
+ MAINTAINERS                                   |   3 +-
+ drivers/iio/accel/kionix-kx022a.c             |  13 +-
+ drivers/iio/industrialio-trigger.c            |  22 +-
+ drivers/iio/light/Kconfig                     |  14 +
+ drivers/iio/light/Makefile                    |   1 +
+ drivers/iio/light/rohm-bu27008.c              | 993 ++++++++++++++++++
+ include/linux/iio/trigger.h                   |   1 +
+ 8 files changed, 1082 insertions(+), 14 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/iio/light/rohm,bu2700=
+8.yaml
+ create mode 100644 drivers/iio/light/rohm-bu27008.c
+
+
+base-commit: 7fcbd72176076c44b47e8f68f0223c02c411f420
+--=20
+2.40.0
 
 
 --=20
-With Best Regards,
-Andy Shevchenko
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--P6C63pZ7fe5zi9Lk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmRSLP0ACgkQeFA3/03a
+ocUDrQf+OxNKGB/FUi7i21Z8bsvmAsD8L+98eC7ffGG18ejsVA6OJ9vQksoOd3R3
+No+G8FNR/dM15gpbIH1VnCvEA8YGIzs66+YhzD73iMRyFS03BkcfLnZqmNVNL9uS
+XaFJPF+UmoamLn4rfIlBOjVDezGlzmdbIURLOg3w1vHMarXF7Xjr5MxaeHibc/bU
+wHOl9Q2b+9K7p3/5nNIOxbcFoiFulSffYvad3y6DMMckgP/PP0Ur4dQ0WbK1sN78
+7lGp8O46noD6LWRFxFa93u4TV/4Or6A7xlWQMnRBhsi2mBmz2QTmxyEwkTaNxYn/
+CvsRIpUuKSi+XTgLZO7mDgFY4m1VdQ==
+=7Cpw
+-----END PGP SIGNATURE-----
+
+--P6C63pZ7fe5zi9Lk--
