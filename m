@@ -2,222 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F8676F5AD3
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 17:20:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8F636F5AD6
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 17:20:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbjECPUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 11:20:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46414 "EHLO
+        id S230327AbjECPUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 11:20:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjECPUK (ORCPT
+        with ESMTP id S230395AbjECPUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 11:20:10 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A09346AE
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 08:20:08 -0700 (PDT)
-Received: from dude02.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::28])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <m.felsch@pengutronix.de>)
-        id 1puEH0-0004bF-U4; Wed, 03 May 2023 17:20:06 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-Date:   Wed, 03 May 2023 17:20:05 +0200
-Subject: [PATCH 2/2] arm64: dts: add NXP i.MX8MM-EVKB support
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+        Wed, 3 May 2023 11:20:15 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2134.outbound.protection.outlook.com [40.107.22.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4D261B2
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 08:20:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VbC75W+8AqJ04yzeVic+ajqH1YT+ylVQ43VtFOG+fj8VyCdKZUW/tMJb7mQB/pQqH8zIBelH2GYoM8l8xupvGAlKsJFzG7n49TITTdTXw8T2//+5tUjZJfTdAlihtthSiJkw3xil13W6+DcioN7WNVcy6eT64FLN6kT26t2lhl1ZxyOt0QZDiOH2uy2r3Sy2FtzCr05JS4q6TveuFDsGd1cgTgeJo1ITf03rg11ioERQLU7UA8tOjqqtOlK2P2HwM4ohksgpFSR5K8osuEOZXo2sF1jMZjY9FBHeqTeqnONX6u7wAh+JStD7UkPtD7neJFVYQzFUSXBwfg4bEqdJ6g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=udv82X1pSMwjpSXe5qE87cYdon18jmhyKM6UFirb8eU=;
+ b=Hea+VX8nvG54PBP7/A1h1jxnTY61+/t2Ygyy1Vu5dIsbA4BVZxlJa9O7w7vtvZKN3h4Y9pCwLkwWP1X/vUG8gVHcrgLoyGwWwIpyY05n6e5OK1+lUVOdakzdDXbUVcKpBeR72/RjjcJVUkb5ddL7aBZqV+bEGqUl1WAvG9giAlv+2Z3B5QWG76U4HhAw8kaxvVysn7eTg02cdO9szEWLhFbX8+jLcLfK727YswRygO1lgBWce9LM/oCQEQayQnEflmz3hVz9GXDVZA/WNDFPA7xXHo/BsCNzJwDGFnZ/YU2eDaiO6Szl62AImUPLWFJ3XaEZUjPL6guD5iavssoeug==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=kontron.de; dmarc=pass action=none header.from=kontron.de;
+ dkim=pass header.d=kontron.de; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mysnt.onmicrosoft.com;
+ s=selector2-mysnt-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=udv82X1pSMwjpSXe5qE87cYdon18jmhyKM6UFirb8eU=;
+ b=J7lPD2DcMGYdA2T+/AuD7NDn+kr57ompncffg6JlNH2b49zt6I/EcXAuOCIj7glHQccYy4ntmlJJHKL9ToWs/OW/1y6ovXoyl31xiIoL4iVHw2N93lqkFmX+j1S/vAEOqZIIVmq/Gl0+PfluM6N6VtS6PZ0ADB85lpssc1egXqA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=kontron.de;
+Received: from PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:263::10)
+ by VI1PR10MB3487.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:800:132::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.21; Wed, 3 May
+ 2023 15:20:11 +0000
+Received: from PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::e6fd:d174:5710:fb3a]) by PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::e6fd:d174:5710:fb3a%2]) with mapi id 15.20.6340.031; Wed, 3 May 2023
+ 15:20:11 +0000
+Message-ID: <74381387-357c-8091-9ad3-8739a432360a@kontron.de>
+Date:   Wed, 3 May 2023 17:20:09 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH V3 3/7] drm: bridge: samsung-dsim: Fetch
+ pll-clock-frequency automatically
+Content-Language: en-US, de-DE
+To:     Adam Ford <aford173@gmail.com>, dri-devel@lists.freedesktop.org
+Cc:     marex@denx.de, Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Jonas Karlman <jonas@kwiboo.se>, aford@beaconembedded.com,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Jagan Teki <jagan@amarulasolutions.com>
+References: <20230502010759.17282-1-aford173@gmail.com>
+ <20230502010759.17282-4-aford173@gmail.com>
+From:   Frieder Schrempf <frieder.schrempf@kontron.de>
+In-Reply-To: <20230502010759.17282-4-aford173@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230503-b4-v6-3-topic-boards-imx8mm-evk-v1-2-1e15a371d374@pengutronix.de>
-References: <20230503-b4-v6-3-topic-boards-imx8mm-evk-v1-0-1e15a371d374@pengutronix.de>
-In-Reply-To: <20230503-b4-v6-3-topic-boards-imx8mm-evk-v1-0-1e15a371d374@pengutronix.de>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Johannes Schneider <johannes.schneider@leica-geosystems.com>
-X-Mailer: b4 0.12.1
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::28
-X-SA-Exim-Mail-From: m.felsch@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: FR3P281CA0124.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:94::15) To PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:102:263::10)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PA4PR10MB5681:EE_|VI1PR10MB3487:EE_
+X-MS-Office365-Filtering-Correlation-Id: 97986687-07ad-4002-1007-08db4be9e35b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Y/jbqGzD6p+Wm+DW0Q4flcpvmBlNGXYZqvjS7A2ygAd/nLjxt3f51hYZorYkrXd82w51TvUZiQHqcPlUbWLgxE9kICZBQo+YwTqWyatV/Hiukw2Numybb0eT8BO1SxFubQ/obGrtf5jkBcUkrbBXrQvrxORtkIZ21FMsrDGeW3YaJFIP2L9ay4sWE4WC5ZfDcDPbsSkT6zQWObQOwejmFt0LFA2IGYH8dpifiujD/4gh0CO2u3t5gtXVgoK7mWxTZkbUSSPdNyCCLFG7gSJktLkwD+6cFyecMX15bFJPhKFHTKs+Ozeia/lrmAslwQfvHoRj81Yt1ugWnSvgU0QbYc2nhP3OmPIYzFWAoMy5t4NzRr/nkyTXtpb/FOvXMoROOK0Bs0sUNKIoZSBTeiulSxCxiXpeNuSUavlWHpPLP38eGSfyCkpsvFrgHIcPsGd5ZMzJDSJHZA+Jmelo7viENpDlzrQYw/4qppIfUqG4+3TkxCvX5M5nKRAj6s0Rn75uN9rBiGfN+0b6ZoEbLwTaaw8KyadAK54sDxuLRr5tHTWDvFiWxJnuHzul6tc73cuR1+vAIXE0DhLELpLo7RTbMSslNKr2/v8xb3DML/t4P8045T9rXaOcPrZFoxyZApHHJPFo7pNqQoFXUzPnDbKuOg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(366004)(376002)(346002)(396003)(136003)(451199021)(38100700002)(4744005)(86362001)(316002)(2906002)(36756003)(7416002)(44832011)(31686004)(8936002)(83380400001)(8676002)(41300700001)(31696002)(5660300002)(2616005)(4326008)(6512007)(26005)(6506007)(66946007)(186003)(66476007)(53546011)(478600001)(6486002)(66556008)(54906003)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NFpwU0p2b2N4SHJoOGQ1UU1lYXNjd3QrNkV1SndyRDR1Q0Y0V3hEcENjMHhs?=
+ =?utf-8?B?b3JJQVZrNklRamZGMm1CWDNOa0ZnbUFtVy8xK1F4L1ltd1E0N3VsYi96ajM2?=
+ =?utf-8?B?ZkEvNXYrM3FoZVVQR2dvMk1xWWlvRE9NNDZSMzZxTDBjZnpEM1dUTkcvRitz?=
+ =?utf-8?B?U2w1dmVzSWYzK1ZKTHNDdWo0b2h4YXJUcXRsMmtvREMxeU8wS2hRSHR5Mm1i?=
+ =?utf-8?B?dmpZSDlmVkxrZHdYSFdodktKdlMxaGhuN0JiMC85RkZYZkJaYTVpcU80NnBt?=
+ =?utf-8?B?dytTQ09BSE9OVmtYbElKYTUxdFRISFRMdW5Fb25MRzFwTDVORFFYK0dTMTdk?=
+ =?utf-8?B?ZXZQclRCQjRQdWJWT0xHeFpPL3lJcWp5VjVxMFBxZ2Jma1VzSUhpOTZRNkhR?=
+ =?utf-8?B?alUvWk84Y3l2K2ZQa3Nubi8xUHI1SXM3dUZDN0hzODBubTc0eFo5Qmtkcmlq?=
+ =?utf-8?B?bXZnTDFkeGM1a0FISkZSVHY2eEdhS2JOeVVhTjh6YzVTSGJwL0J1VkY5cVBk?=
+ =?utf-8?B?TXpzd3c3YjhBTjB3RUZqN3BzK3d0VVFubC92K3RhSnhrZmRNUmxUb1hLTHdm?=
+ =?utf-8?B?QVJwcmhoSFVzUnNQdTltU1l6a0dLQTVrRXFMb3U3d24wRFpBRUVPOVRBRENE?=
+ =?utf-8?B?TmwrSlJJMmpVYzJKZ3ZwYTlWMlB0UzJXR2VYQ0l1eW5Namp3ZVExR3h2N0dk?=
+ =?utf-8?B?N2ZNT1R3VmIzSHhsOS96cEJ1YWJPTkJaa3JjMTZsOHdMTHZ4OHZaREZiOUVF?=
+ =?utf-8?B?eFVaYUJEQ3lBbWFDVzZQNHJKTWlqbHRidUN1NE13R1N4S2RkYytER0dTam9V?=
+ =?utf-8?B?MFNsbmI1TEFQUnVEbktTU3RISnNQUVhFK0Qvbm9KNHdWNjVxYmpWbi9kZ0gz?=
+ =?utf-8?B?T3V4WGZsR3ZXZVY0ZWh0aUYyTjZnYTRNSDlESVVDQ3VzL2hrZFZESS9lMWNo?=
+ =?utf-8?B?L2ppc0YyZEQ2QkROSGJhejkySVdpM0xiL3hNS3g1T1c1QlNtMnFKNTk4ZW81?=
+ =?utf-8?B?aEIxa2Z0NE5qWXQ2UzZRNklBRU8zZklxSFlEODloa1g3TXN4cWtRMkY3VWxX?=
+ =?utf-8?B?VWZ6OURmbW5xbDY4RWIrVGVhSG5lTDNVK1JnZ1B3UzlMcXFHQU9vNlRndUps?=
+ =?utf-8?B?dGJ6aHFRcERjZmFXT3M5YmIydWV1K1IxdXMybmJMekdVeUFnOW9Id1pSV2pF?=
+ =?utf-8?B?MFFwQjkyRkpNUkZ5eWNwamNDWGRQd1hlajZieElUNEtiSHhwTE1yMzZ0TjNQ?=
+ =?utf-8?B?VlR6ZU1ISHd0VnVpcmF4ZjBYMllJZzE1RXFSdjFWbDU3bEdMRG5NZk5zOE1R?=
+ =?utf-8?B?Vm5BQ3d2MVpjMStaQnVadm4xSFFreEVVV2xRamNYcSt2Zko4clNEdHV3bW1Q?=
+ =?utf-8?B?VlkvWGUvUnRpWVJzaFJDMk1IbHVuU3JMOWczYnpLQ01BZ00wOHFOdk1PUnlK?=
+ =?utf-8?B?MVRoL1Mxb2NFaklwVzNRaTA0TXBrTitKNjYwRG9rSWhSNnQwZWFUVnRodzBw?=
+ =?utf-8?B?bU9iOG5NK0h2ZGhTakhYUHliWDZFUUhia2NvakYwdHlVNHpxTFJqMmNNRzN1?=
+ =?utf-8?B?MzFpaEtEVElWNFJTWjQ2Q3Q2TzRHVXFoRG1YclVyOGtmWWJ4c0lsazhCbzg4?=
+ =?utf-8?B?TUg0SkJoOTRnWGZFN2VoZG5XbFk2OE0veWhLOHN0TUJnVXh6b2U0cGthWlBt?=
+ =?utf-8?B?cU9xSHJkdHV5Qkk5OFlFbFkyVEJxL2cwMDJmTVIxZFpvYW9ITGtxaTBQeGI0?=
+ =?utf-8?B?cFB6V3B3VVM4WHpnYXdDRUNsMXdmeit2OGJ1WDFzbk1iSHZnMG1xRlJlS2Ry?=
+ =?utf-8?B?YXlOUjFIOSsrRWdZSlpsQ3RIaXltMzN1QWJPaXBDbFdFUk1YaEFwcUtKRWtJ?=
+ =?utf-8?B?NkNBUjBpTTFDM21hUytwR3VYYVRXNmhvNUFNR2FzUUl3WlEvclpvdkRSaHYy?=
+ =?utf-8?B?em9oeHhjYTNBdXlzWVdTekRBL1o4M3BQcUZLb05LbTZYTzhUaE1HUXU4c0h2?=
+ =?utf-8?B?ejBDR00xQnM5RHdDd0dIdEJOOEFhTldKakZIeCtJV29lUGZJMnR4UkRBdHNL?=
+ =?utf-8?B?QTU2T293RzhiUWhaYU9jQTVsU2p1NlVOL2JaQkllRTZhTVUrR21jNUdDeXhU?=
+ =?utf-8?B?WVV0cCs4K0c3eDEycWV0S3dtLytoYVFpNkFkNm1VSUUrZnY4aEg0czlkZEhT?=
+ =?utf-8?B?dUE9PQ==?=
+X-OriginatorOrg: kontron.de
+X-MS-Exchange-CrossTenant-Network-Message-Id: 97986687-07ad-4002-1007-08db4be9e35b
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 May 2023 15:20:11.8129
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8c9d3c97-3fd9-41c8-a2b1-646f3942daf1
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DwbneQJ2LB3wxgCURLISrWDDZaHj6mTK7QGMlYN2PG8DKBzKV356oD9bzKHpFc/jFErqhOtGhWRXMHJ+Zfe+X3SckbYKAj+h9sI9rU3emzY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR10MB3487
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johannes Schneider <johannes.schneider@leica-geosystems.com>
+On 02.05.23 03:07, Adam Ford wrote:
+> Make the pll-clock-frequency optional.  If it's present, use it
+> to maintain backwards compatibility with existing hardware.  If it
+> is absent, read clock rate of "sclk_mipi" to determine the rate.
+> 
+> Signed-off-by: Adam Ford <aford173@gmail.com>
+> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
 
-Add the i.MX8MM-EVKB [1] devicetree support. The EVKB is basically the
-same device except for the different used PMIC.
+Tested on Kontron BL i.MX8MM with SN65DSI84 and ADV7535 bridges.
 
-[1] https://www.nxp.com/design/development-boards/ \
-        i-mx-evaluation-and-development-boards/ \
-	evaluation-kit-for-the-i-mx-8m-mini-applications-processor:8MMINILPD4-EVK
-
-Signed-off-by: Johannes Schneider <johannes.schneider@leica-geosystems.com>
-[m.felsch@pengutronix.de: Adapt the commit message]
-[m.felsch@pengutronix.de: Include Shawns feedback]
-[m.felsch@pengutronix.de: Fix the regulator settings]
-Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
----
- arch/arm64/boot/dts/freescale/Makefile        |   1 +
- arch/arm64/boot/dts/freescale/imx8mm-evkb.dts | 128 ++++++++++++++++++++++++++
- 2 files changed, 129 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-index 198fff3731ae..a054313761a4 100644
---- a/arch/arm64/boot/dts/freescale/Makefile
-+++ b/arch/arm64/boot/dts/freescale/Makefile
-@@ -55,6 +55,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mm-data-modul-edm-sbc.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-ddr4-evk.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-emcon-avari.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-evk.dtb
-+dtb-$(CONFIG_ARCH_MXC) += imx8mm-evkb.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-icore-mx8mm-ctouch2.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-icore-mx8mm-edimm2.2.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-innocomm-wb15-evk.dtb
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evkb.dts b/arch/arm64/boot/dts/freescale/imx8mm-evkb.dts
-new file mode 100644
-index 000000000000..164df627a213
---- /dev/null
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-evkb.dts
-@@ -0,0 +1,128 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright 2019-2020 NXP
-+ */
-+
-+/dts-v1/;
-+
-+#include "imx8mm-evk.dtsi"
-+
-+/ {
-+	model = "FSL i.MX8MM EVKB";
-+	compatible = "fsl,imx8mm-evkb", "fsl,imx8mm";
-+};
-+
-+&i2c1 {
-+	/delete-node/ pmic@4b;
-+
-+	pmic@25 {
-+		compatible = "nxp,pca9450a";
-+		reg = <0x25>;
-+		pinctrl-0 = <&pinctrl_pmic>;
-+		pinctrl-names = "default";
-+		interrupt-parent = <&gpio1>;
-+		interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
-+
-+		regulators {
-+			/* VDD_SOC with PCIe */
-+			buck1_reg: BUCK1 {
-+				regulator-name = "BUCK1";
-+				regulator-min-microvolt = <850000>;
-+				regulator-max-microvolt = <850000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+				regulator-ramp-delay = <3125>;
-+			};
-+
-+			/* VDD_ARM */
-+			buck2_reg: BUCK2 {
-+				regulator-name = "BUCK2";
-+				regulator-min-microvolt = <850000>;
-+				regulator-max-microvolt = <1000000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+				regulator-ramp-delay = <3125>;
-+				nxp,dvs-standby-voltage = <850000>;
-+			};
-+
-+			/* VDD_GPU, VDD_VPU, VDD_DRAM */
-+			buck3_reg: BUCK3 {
-+				regulator-name = "BUCK3";
-+				regulator-min-microvolt = <850000>;
-+				regulator-max-microvolt = <1000000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			/* NVCC_3V3 */
-+			buck4_reg: BUCK4 {
-+				regulator-name = "BUCK4";
-+				regulator-min-microvolt = <3300000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			/* VDD_1V8, NVCC_1V8, NVCC_ENET */
-+			buck5_reg: BUCK5 {
-+				regulator-name = "BUCK5";
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			/* NVCC_DRAM for LPDDR4 */
-+			buck6_reg: BUCK6 {
-+				regulator-name = "BUCK6";
-+				regulator-min-microvolt = <1100000>;
-+				regulator-max-microvolt = <1100000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			/* NVCC_SNVS_1P8 */
-+			ldo1_reg: LDO1 {
-+				regulator-name = "LDO1";
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			/* VDD_SNVS_0P8 */
-+			ldo2_reg: LDO2 {
-+				regulator-name = "LDO2";
-+				regulator-min-microvolt = <800000>;
-+				regulator-max-microvolt = <800000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			/* VDD_*_1V8 */
-+			ldo3_reg: LDO3 {
-+				regulator-name = "LDO3";
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			/* VDD_PHY_0V9 */
-+			ldo4_reg: LDO4 {
-+				regulator-name = "LDO4";
-+				regulator-min-microvolt = <900000>;
-+				regulator-max-microvolt = <900000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			/* NVCC_SD2 */
-+			ldo5_reg: LDO5 {
-+				regulator-name = "LDO5";
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <3300000>;
-+			};
-+		};
-+	};
-+};
-
--- 
-2.39.2
+Tested-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+Reviewed-by: Frieder Schrempf <frieder.schrempf@kontron.de>
 
