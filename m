@@ -2,223 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAE9C6F50B6
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 09:09:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 772396F50B3
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 09:09:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbjECHJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 03:09:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52400 "EHLO
+        id S229610AbjECHJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 03:09:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjECHJq (ORCPT
+        with ESMTP id S229499AbjECHJ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 03:09:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C17B2D4E
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 00:08:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683097738;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Wed, 3 May 2023 03:09:29 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B219272A;
+        Wed,  3 May 2023 00:09:26 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id D753322385;
+        Wed,  3 May 2023 07:09:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1683097764; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=pHJN0MwZt1Qkyg0FwWKVsL71HOfF8cRCNsnTVzqCki0=;
-        b=D0/wd8rnEWmWlMr/XtAwPijjPgbMq3yz/a2EVkmuofSTffQGzLgpGF8mN/V2Jxn3wkdOyB
-        5d3gacQGLWuGX6k6KvcUmopGW4FLfyRmQHYnAiy73XmV+Kas85MRoiu6d1EQRrLTHdUvRJ
-        rHz1AFHTLD06s9XnbCrv+pJXicnhUJs=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-639-8Z0LMvm6MdyzFLqkpr8sdQ-1; Wed, 03 May 2023 03:08:57 -0400
-X-MC-Unique: 8Z0LMvm6MdyzFLqkpr8sdQ-1
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-30641258c9eso141610f8f.2
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 00:08:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683097736; x=1685689736;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :content-language:references:cc:to:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pHJN0MwZt1Qkyg0FwWKVsL71HOfF8cRCNsnTVzqCki0=;
-        b=GSjolvVOAjDm1yQH8SmUc2jUFCFDAnfgktjYxPOjzOZo1+RiklabF+f+raGsaCB5Rg
-         4R0kh1q6bo8tNfjqoNVGGeMfyyaXL2dbMOMhaL+suYN8yoMJjkHYSLg2jVeO3w7QNFne
-         WLDEjVYDEDuksfTKheOCf80G3SBkx0Ddy40JgQRAnwo3PhqGM8BvqjNpj3WYKremrA8w
-         lfCFtxkScm3hrK1l6g+al/L+kZanzp5dc5NoVaGYJnfYJaf0j4+em9iWdhzpbpW8OAmZ
-         PmaCuqqVFFfoG/dj+ccZIxRB7io3YtVBYUyacZ4P99hxgybp0xpU301ge5ORGpOcwit1
-         tIww==
-X-Gm-Message-State: AC+VfDzNjNDqSf2Qx7QNTPOElK2CMIVgvK/3i5GjPnUd7BdaPB6aNXMz
-        X/lnYFDa9rzyusWiCSaIwFhunhVwWLbWUdwVf1jFbNTAG3jCxKtQ8CaZXaniG8Irv2LNVz1/sQl
-        yfyCcM3J23wNeIKEQaBjVJ22C
-X-Received: by 2002:a5d:6410:0:b0:306:3a28:f950 with SMTP id z16-20020a5d6410000000b003063a28f950mr3061861wru.7.1683097735924;
-        Wed, 03 May 2023 00:08:55 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7NT02o8A0M+QHO4dvjy7p83osecccZDAuDP/z0mhC15FeHFbBpxcPnSHMrIpl83AzT6cM6xQ==
-X-Received: by 2002:a5d:6410:0:b0:306:3a28:f950 with SMTP id z16-20020a5d6410000000b003063a28f950mr3061838wru.7.1683097735470;
-        Wed, 03 May 2023 00:08:55 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c711:6a00:9109:6424:1804:a441? (p200300cbc7116a00910964241804a441.dip0.t-ipconnect.de. [2003:cb:c711:6a00:9109:6424:1804:a441])
-        by smtp.gmail.com with ESMTPSA id v2-20020a1cf702000000b003f32f013c3csm962580wmh.6.2023.05.03.00.08.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 May 2023 00:08:54 -0700 (PDT)
-Message-ID: <1b34e9a4-83c0-2f44-1457-dd8800b9287a@redhat.com>
-Date:   Wed, 3 May 2023 09:08:52 +0200
+        bh=teAFqwFmUnax09TuiGG90Kj7kG6+48TX1tmrs49YNrk=;
+        b=tUCwCKB0yD0DPwNpJBV0UjNNW8Pc2Tw1up+vtwWFbFULRjCUTM2r6XN97fpdpeDUsFrRLd
+        piKtpzVfJdFFncRwHBH4A9GLbUn0kSC51ADu0zOJdn42pSMYJQLHSNfHItzb4FVIUckF2T
+        ILfUkKY1mTGafy1tRkd67jr9sih0wIc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1683097764;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=teAFqwFmUnax09TuiGG90Kj7kG6+48TX1tmrs49YNrk=;
+        b=r2Odk1cw2e32jvI3AbMtbCk05d4jzD0gTvfM1aH+rVq9i59ptSJ85SasU9l54dvJrXnX1I
+        ptaVbSF6VtrOoFBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 751D21331F;
+        Wed,  3 May 2023 07:09:24 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id FWCdG6QIUmSWRAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 03 May 2023 07:09:24 +0000
+Message-ID: <563673c0-799d-e353-974c-91b1ab881a22@suse.de>
+Date:   Wed, 3 May 2023 09:09:24 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-To:     Matthew Rosato <mjrosato@linux.ibm.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Mika Penttila <mpenttil@redhat.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Theodore Ts'o <tytso@mit.edu>, Peter Xu <peterx@redhat.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>
-References: <cover.1683067198.git.lstoakes@gmail.com>
- <20d078c5-4ee6-18dc-d3a5-d76b6a68f64e@linux.ibm.com>
+Subject: Re: [PATCH v3 4/6] fbdev: Include <linux/io.h> via <asm/fb.h>
 Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v8 0/3] mm/gup: disallow GUP writing to file-backed
- mappings by default
-In-Reply-To: <20d078c5-4ee6-18dc-d3a5-d76b6a68f64e@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+To:     Sam Ravnborg <sam@ravnborg.org>
+Cc:     linux-arch@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        arnd@arndb.de, deller@gmx.de, chenhuacai@kernel.org,
+        javierm@redhat.com, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        James.Bottomley@hansenpartnership.com,
+        linux-m68k@lists.linux-m68k.org, geert@linux-m68k.org,
+        linux-parisc@vger.kernel.org, vgupta@kernel.org,
+        sparclinux@vger.kernel.org, kernel@xen0n.name,
+        linux-snps-arc@lists.infradead.org, davem@davemloft.net,
+        linux-arm-kernel@lists.infradead.org
+References: <20230502130223.14719-1-tzimmermann@suse.de>
+ <20230502130223.14719-5-tzimmermann@suse.de>
+ <20230502195429.GA319489@ravnborg.org>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20230502195429.GA319489@ravnborg.org>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------pUWBDJ1Raj0NjYY4OLYhyeQp"
+X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03.05.23 02:31, Matthew Rosato wrote:
-> On 5/2/23 6:51 PM, Lorenzo Stoakes wrote:
->> Writing to file-backed mappings which require folio dirty tracking using
->> GUP is a fundamentally broken operation, as kernel write access to GUP
->> mappings do not adhere to the semantics expected by a file system.
->>
->> A GUP caller uses the direct mapping to access the folio, which does not
->> cause write notify to trigger, nor does it enforce that the caller marks
->> the folio dirty.
->>
->> The problem arises when, after an initial write to the folio, writeback
->> results in the folio being cleaned and then the caller, via the GUP
->> interface, writes to the folio again.
->>
->> As a result of the use of this secondary, direct, mapping to the folio no
->> write notify will occur, and if the caller does mark the folio dirty, this
->> will be done so unexpectedly.
->>
->> For example, consider the following scenario:-
->>
->> 1. A folio is written to via GUP which write-faults the memory, notifying
->>     the file system and dirtying the folio.
->> 2. Later, writeback is triggered, resulting in the folio being cleaned and
->>     the PTE being marked read-only.
->> 3. The GUP caller writes to the folio, as it is mapped read/write via the
->>     direct mapping.
->> 4. The GUP caller, now done with the page, unpins it and sets it dirty
->>     (though it does not have to).
->>
->> This change updates both the PUP FOLL_LONGTERM slow and fast APIs. As
->> pin_user_pages_fast_only() does not exist, we can rely on a slightly
->> imperfect whitelisting in the PUP-fast case and fall back to the slow case
->> should this fail.
->>
->> v8:
->> - Fixed typo writeable -> writable.
->> - Fixed bug in writable_file_mapping_allowed() - must check combination of
->>    FOLL_PIN AND FOLL_LONGTERM not either/or.
->> - Updated vma_needs_dirty_tracking() to include write/shared to account for
->>    MAP_PRIVATE mappings.
->> - Move to open-coding the checks in folio_pin_allowed() so we can
->>    READ_ONCE() the mapping and avoid unexpected compiler loads. Rename to
->>    account for fact we now check flags here.
->> - Disallow mapping == NULL or mapping & PAGE_MAPPING_FLAGS other than
->>    anon. Defer to slow path.
->> - Perform GUP-fast check _after_ the lowest page table level is confirmed to
->>    be stable.
->> - Updated comments and commit message for final patch as per Jason's
->>    suggestions.
-> 
-> Tested again on s390 using QEMU with a memory backend file (on ext4) and vfio-pci -- This time both vfio_pin_pages_remote (which will call pin_user_pages_remote(flags | FOLL_LONGTERM)) and the pin_user_pages_fast(FOLL_WRITE | FOLL_LONGTERM) in kvm_s390_pci_aif_enable are being allowed (e.g. returning positive pin count)
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------pUWBDJ1Raj0NjYY4OLYhyeQp
+Content-Type: multipart/mixed; boundary="------------bKIh6R9LGtMQp74D7VXZK0tl";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Sam Ravnborg <sam@ravnborg.org>
+Cc: linux-arch@vger.kernel.org, linux-fbdev@vger.kernel.org,
+ linux-ia64@vger.kernel.org, loongarch@lists.linux.dev, arnd@arndb.de,
+ deller@gmx.de, chenhuacai@kernel.org, javierm@redhat.com,
+ dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ James.Bottomley@hansenpartnership.com, linux-m68k@lists.linux-m68k.org,
+ geert@linux-m68k.org, linux-parisc@vger.kernel.org, vgupta@kernel.org,
+ sparclinux@vger.kernel.org, kernel@xen0n.name,
+ linux-snps-arc@lists.infradead.org, davem@davemloft.net,
+ linux-arm-kernel@lists.infradead.org
+Message-ID: <563673c0-799d-e353-974c-91b1ab881a22@suse.de>
+Subject: Re: [PATCH v3 4/6] fbdev: Include <linux/io.h> via <asm/fb.h>
+References: <20230502130223.14719-1-tzimmermann@suse.de>
+ <20230502130223.14719-5-tzimmermann@suse.de>
+ <20230502195429.GA319489@ravnborg.org>
+In-Reply-To: <20230502195429.GA319489@ravnborg.org>
 
-At least it's consistent now ;) And it might be working as expected ...
+--------------bKIh6R9LGtMQp74D7VXZK0tl
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-In v7:
-* pin_user_pages_fast() succeeded
-* vfio_pin_pages_remote() failed
+SGkNCg0KQW0gMDIuMDUuMjMgdW0gMjE6NTQgc2NocmllYiBTYW0gUmF2bmJvcmc6DQo+IEhp
+IFRob21hcywNCj4gDQo+IE9uIFR1ZSwgTWF5IDAyLCAyMDIzIGF0IDAzOjAyOjIxUE0gKzAy
+MDAsIFRob21hcyBaaW1tZXJtYW5uIHdyb3RlOg0KPj4gRmJkZXYncyBtYWluIGhlYWRlciBm
+aWxlLCA8bGludXgvZmIuaD4sIGluY2x1ZGVzIDxhc20vaW8uaD4gdG8gZ2V0DQo+PiBkZWNs
+YXJhdGlvbnMgZm9yIEkvTyBoZWxwZXIgZnVuY3Rpb25zLiBGcm9tIHRoZXNlIGRlY2xhcmF0
+aW9ucywgaXQNCj4+IGxhdGVyIGRlZmluZXMgZnJhbWVidWZmZXIgSS9PIGhlbHBlcnMsIHN1
+Y2ggYXMgZmJfe3JlYWQsd3JpdGV9W2J3bHFdKCkNCj4+IG9yIGZiX21lbXNldCgpLg0KPj4N
+Cj4+IFRoZSBmcmFtZWJ1ZmZlciBJL08gaGVscGVycyBkZXBlbmQgb24gdGhlIHN5c3RlbSBh
+cmNoaXRlY3R1cmUgYW5kDQo+PiB3aWxsIHRoZXJlZm9yZSBiZSBtb3ZlZCBpbnRvIDxhc20v
+ZmIuaD4uIFByZXBhcmUgdGhpcyBjaGFuZ2UgYnkgZmlyc3QNCj4+IGFkZGluZyBhbiBpbmNs
+dWRlIHN0YXRlbWVudCBmb3IgPGxpbnV4L2lvLmg+IHRvIDxhc20tZ2VuZXJpYy9mYi5oPi4N
+Cj4+IEluY2x1ZGUgPGFzbS9mYi5oPiBpbiBhbGwgc291cmNlIGZpbGVzIHRoYXQgdXNlIHRo
+ZSBmcmFtZWJ1ZmZlciBJL08NCj4+IGhlbHBlcnMsIHNvIHRoYXQgdGhleSBzdGlsbCBnZXQg
+dGhlIG5lY2Vzc2FyeSBJL08gZnVuY3Rpb25zLg0KPj4NCj4gLi4uDQo+Pg0KPj4gZGlmZiAt
+LWdpdCBhL2RyaXZlcnMvdmlkZW8vZmJkZXYvYXJrZmIuYyBiL2RyaXZlcnMvdmlkZW8vZmJk
+ZXYvYXJrZmIuYw0KPj4gaW5kZXggNjBhOTZmZGI1ZGQ4Li5mZDM4ZThhMDczYjggMTAwNjQ0
+DQo+PiAtLS0gYS9kcml2ZXJzL3ZpZGVvL2ZiZGV2L2Fya2ZiLmMNCj4+ICsrKyBiL2RyaXZl
+cnMvdmlkZW8vZmJkZXYvYXJrZmIuYw0KPj4gQEAgLTI3LDYgKzI3LDggQEANCj4+ICAgI2lu
+Y2x1ZGUgPGxpbnV4L2NvbnNvbGUuaD4gLyogV2h5IHNob3VsZCBmYiBkcml2ZXIgY2FsbCBj
+b25zb2xlIGZ1bmN0aW9ucz8gYmVjYXVzZSBjb25zb2xlX2xvY2soKSAqLw0KPj4gICAjaW5j
+bHVkZSA8dmlkZW8vdmdhLmg+DQo+PiAgIA0KPj4gKyNpbmNsdWRlIDxhc20vZmIuaD4NCj4g
+DQo+IFdoZW4gd2UgaGF2ZSBhIGhlYWRlciBsaWtlIGxpbnV4L2ZiLmggLSBpdCBpcyBteSB1
+bmRlcnN0YW5kaW5nIHRoYXQgaXQgaXMNCj4gcHJlZmVycmVkIHRvIGluY2x1ZGUgdGhhdCBm
+aWxlLCBhbmQgbm90IHRoZSBhc20vZmIuaCB2YXJpYW50Lg0KPiANCj4gVGhpcyBpcyBhc3N1
+bWluZyB0aGUgbGludXgvZmIuaCBjb250YWlucyB0aGUgZ2VuZXJpYyBzdHVmZiwgYW5kIGlu
+Y2x1ZGVzDQo+IGFzbS9mYi5oIGZvciB0aGUgYXJjaGl0ZWN0dXJlIHNwZWNpZmljIHBhcnRz
+Lg0KPiANCj4gU28gZHJpdmVycyB3aWxsIGluY2x1ZGUgbGludXgvZmIuaCBhbmQgdGhlbiB0
+aGV5IGF1dG9tYXRpY2FsbHkgZ2V0IHRoZQ0KPiBhcmNoaXRlY3R1cmUgc3BlY2lmaWMgcGFy
+dHMgZnJvbSBhc20vZmIuaC4NCj4gDQo+IEluIG90aGVyIHdvcmRzLCBkcml2ZXJzIGFyZSBu
+b3Qgc3VwcG9zZWQgdG8gaW5jbHVkZSBhc20vZmIuaCwgaWYNCj4gbGludXguZmIuaCBleGlz
+dHMgLSBhbmQgbGludXgvZmIuaCBzaGFsbCBpbmNsdWRlIHRoZSBhc20vZmIuaC4NCj4gDQo+
+IElmIHRoZSBhYm92ZSBob2xkcyB0cnVlLCB0aGVuIGl0IGlzIHdyb25nIGFuZCBub3QgbmVl
+ZGVkIHRvIGFkZCBhc20vZmIuaA0KPiBhcyBzZWVuIGFib3ZlLg0KPiANCj4gDQo+IFRoZXJl
+IGFyZSBjb3VudGxlc3MgZXhhbXBsZXMgd2hlcmUgdGhlIGFib3ZlIGFyZSBub3QgZm9sbG93
+ZWQsDQo+IGJ1dCB0byBteSBiZXN0IHVuZGVyc3RhbmRpbmcgdGhlIGFib3ZlIGl0IHRoZSBw
+cmVmZXJyZWQgd2F5IHRvIGRvIGl0Lg0KDQpXaGVyZSBkaWQgeW91aGVyIHRoaXM/IEkgb25s
+eSBrbm93IGFib3V0IHRoaXMgaW4gdGhlIGNhc2Ugb2YgYXNtL2lvLmggDQp2cy4gbGludXgv
+aW8uaC4NCg0KSWYgdGhhdCdzIHRoZSBjYXNlLCB3ZSBzaG91bGQgcHV0IHRob3NlIGhlbHBl
+cnMgaW50byBhIG5ldyBoZWFkZXIgZmlsZSwgDQpiZWNhdXNlIG9uZSBvZiB0aGUgbW90aXZh
+dGlvbnMgaGVyZSBpcyB0byByZW1vdmUgPGFzbS9pby5oPiBmcm9tIA0KPGxpbnV4L2ZiLmg+
+Lg0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQo+IA0KPiAJU2FtDQoNCi0tIA0KVGhvbWFz
+IFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUg
+U29sdXRpb25zIEdlcm1hbnkgR21iSA0KRnJhbmtlbnN0cmFzc2UgMTQ2LCA5MDQ2MSBOdWVy
+bmJlcmcsIEdlcm1hbnkNCkdGOiBJdm8gVG90ZXYsIEFuZHJldyBNeWVycywgQW5kcmV3IE1j
+RG9uYWxkLCBCb3VkaWVuIE1vZXJtYW4NCkhSQiAzNjgwOSAoQUcgTnVlcm5iZXJnKQ0K
 
-But also in v7:
-* GUP-fast allows pinning (anonymous) pages in MAP_PRIVATE file
-   mappings
-* Ordinary GUP allows pinning pages in MAP_PRIVATE file mappings
+--------------bKIh6R9LGtMQp74D7VXZK0tl--
 
-In v8:
-* pin_user_pages_fast() succeeds
-* vfio_pin_pages_remote() succeeds
+--------------pUWBDJ1Raj0NjYY4OLYhyeQp
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-But also in v8:
-* GUP-fast allows pinning (anonymous) pages in MAP_PRIVATE file
-   mappings
-* Ordinary GUP allows pinning pages in MAP_PRIVATE file mappings
+-----BEGIN PGP SIGNATURE-----
 
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmRSCKQFAwAAAAAACgkQlh/E3EQov+CW
+BQ//YDmcKk7ERaH80k2npCB1rdHjACWs3GOdia4iNkVhYtPfK/loYq5roG9jBM+wXyR2nOo+RLD7
+0VtULvCiWgrJPT6BoA6hzeoOb+LGQ1gvDPJklhli0P+WaF13ibt8hnKPwJrCH19pjuRNtTzoSP1C
+SYXmx0uSU+ffenGiJdDfCAikIruhy/8N1qSfhKFvOvzDbazitLCGPZwCr+jdbh3IwtnEXz1uaFjY
+U+y7S/Z2CcvCqcGKsvyB/NnYg8zES/r0fwCzl5f4Y6jqr3jyU9Mi3wb2dbubLErIPkqiHsol7fmq
+zC8SvTXJFqLe2zKke7yZc1L6phcFbWdpcf6DLRhaQDBmylbz8uzXHkOjxjHuI8pnAHLTvF/VkOtj
+uZy/Reb7x0qboXTc2ivFUOwk2cKBJEwVab2hJFYdY4YAewUoINv+7vXs9XNoDjr8/LDmXLi+JYlu
+h8A38vUXFD4pi5xeFG57n1XlXhIDv38IzjxeozkQZ/RyxGF/HAbLLL6aK7kNnEn6+nU1krrOtbEV
+4w29Z2qCHW0LXsh1k0pGOEMx6K0w3gruoubOC4Wzr9sMom6tA31s11j21PHxYMLEtbhJMi0LzcNa
+r0w/T9Co/W6rI+j5TAH0rZNyxAywrj8YZIDmg/E7wk1CElgMIsECcxlGW2k1+Opr928kYYM4L97M
+50o=
+=a/zq
+-----END PGP SIGNATURE-----
 
-I have to speculate, but ... could it be that you are using a private 
-mapping?
-
-In QEMU, unfortunately, the default for memory-backend-file is 
-"share=off" (private) ... for memory-backend-memfd it is "share=on" 
-(shared). The default is stupid ...
-
-If you invoke QEMU manually, can you specify "share=on" for the 
-memory-backend-file? I thought libvirt would always default to 
-"share=on" for file mappings (everything else doesn't make much sense) 
-... but you might have to specify
-	<access mode="shared"/>
-in addition to
-	<source type="file"/>
-
--- 
-Thanks,
-
-David / dhildenb
-
+--------------pUWBDJ1Raj0NjYY4OLYhyeQp--
