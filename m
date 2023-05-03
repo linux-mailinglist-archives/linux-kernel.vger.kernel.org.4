@@ -2,300 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82DA66F5D2C
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 19:42:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 287246F5D2D
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 19:42:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229797AbjECRma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 13:42:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36266 "EHLO
+        id S229967AbjECRmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 13:42:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbjECRm1 (ORCPT
+        with ESMTP id S229538AbjECRmu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 13:42:27 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CADAAC
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 10:42:24 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-b9a6869dd3cso7930515276.2
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 10:42:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683135744; x=1685727744;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CyWASKhXrRNVBOOq8h+mxQvWE1hyBqHS7EnIBAfoYzo=;
-        b=lILby+6OTcd6uGew9Gqa7pI7NZDERobvBEoUxW0HhFyA1BRI3IbjTEpaxJY5cI5dqK
-         DA1zSIWnr7NZMDeUF05eCVuGGh2CT9vrOAzryneu8JduHDYkP6FYutQNmyLESxSwuuGA
-         QuyLAcoDwkidYgw1urIbr/7WmePlI+jjpkr/y8SQuG47YOMKyQjyUqQZLY1V6cSIQnsN
-         gF8ibE844UGbtwqhvwKyiswwRZ5DNj7ChXG/ByW2u3EBE9OETY+04pa10/S8xbX8Bwfw
-         LuAtgmQvuglHVzqT12ntCD4oe90ZORyd/+eYUAlMEp51urNfjxmt4VM8J4BfTDsPwJJU
-         u65A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683135744; x=1685727744;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CyWASKhXrRNVBOOq8h+mxQvWE1hyBqHS7EnIBAfoYzo=;
-        b=Jo7IcAf5Mx8sjzH+JmWcR5EzIu4+rEA+hDhpF+o5UuVXlZu/v8WyZT+XkvTZ/WdYOQ
-         BnwIRanhGA0xtDPppyB9oS2pVCwh+4KPzROhsGifc9m/ohzxRFF+6gaJz2PwbtTh0kbE
-         +2tG1n/4Bfr/yLYCtRrWPaLnUw6XQHZOqcuDS2Z4760Yt1h3cTghmuCCqc5PHyB8auDK
-         TP0b1IajHy2+aVXeZNhgNu+PHpe5YqCD5TcZLQFCBG0k3VAlSXWYohtERx1vDgfIhlwa
-         lh5O73RNuow8R2J0pEsPAqIj+WzhmD/LbJi7xsaXVSlt3XhX2SoTwyysubHVjkCBkyck
-         nAsg==
-X-Gm-Message-State: AC+VfDyGdXsFuDLJ+04AyMavh1hQ8GO7yzhK+ApB90mJKGpXHQICEa8V
-        Fc+ampk+dSEtOpMNSaSCvMXlKtpprWqbgGJB/OhRuQ==
-X-Google-Smtp-Source: ACHHUZ6HYcPlZ5XV5ms52xY8zbnWoIv3zn5EqbRVrrcEPiOmdQ5uGEsqCqZVvbNEmhoG/dl+nd9SSzxveD8s4GLGz9w=
-X-Received: by 2002:a25:b782:0:b0:b95:2bd5:8f86 with SMTP id
- n2-20020a25b782000000b00b952bd58f86mr19664721ybh.26.1683135743488; Wed, 03
- May 2023 10:42:23 -0700 (PDT)
+        Wed, 3 May 2023 13:42:50 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2049.outbound.protection.outlook.com [40.107.237.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42E8E19B5
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 10:42:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Yt0F86TP/Pe/rdQABtNqdpxaPElAXshaJFxY5L5mvgkc/PglzwFujns6X28so2RL9sXBVw3DqYoUCw7G6mWrNx6Ws4mdxkxYGT44T/aQ9rgSwg4FQOZWBaBnJ4DTNSDgkuiBzGe3YRGJTes0wIrVoWh2/OvLhW/MTaxvSemD07rzp3qOsKUCOfOJPTai5WNyWG430C0nlAJr1jKhgri0+fnCpgSziFJ1yuuiNAkqU2qh+GQ1og2ce1PZijKKw+mavXbDYZkEz8Zq1QFhFujJiEIei9Bt03fh4VAdj9kuqIh52XHAffWcKYkiH4/NILFbPwkSgFKpD9FwtREcOmpPQw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=myjK3wTqhg95ttiAz29KEF16OVcy41BN0OCKlwt95JA=;
+ b=JHwi/L/bEwuSoNvp/rvDyDan29ZUOcEOeMMlRHVpK17ZbGsUKphLn757D9rZTZkisQU+GHvgvHlwQHSblMqt5iDqZs9B1+bzu1xag/+8+/+gM0L4vHtuOd798ob8aANNvDsiL+ZNisqwE+F40hzuZZHiBnsGEn1pFEkArXpbgdOBjldvoN18SbITvrFZqg/wMx7+qTYqKMaicsmhOSZJXqSUrDYz11mB0qVyFPtFIVwUUABbHUos8K/d0ftfVB3ezSPeCy24KsxE+sOiPQy3Y0LZ//iyhxbnTerQfWI36TObUqndsK1Za4rl7eJUM8qeH0Z2ZT/FNG0FrFU/VdxO7A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=myjK3wTqhg95ttiAz29KEF16OVcy41BN0OCKlwt95JA=;
+ b=i74KM0Ya37lbjERdYJuudZNJ6CsUdet+BmpS+troZ2fXOZ4sSgc8Ymh5D5Ly7+nAjW82TeQO+laLXwYVvh/rCGPDmHg0vxu+dGrvLAiqZbc+dOcQcblCkj1HxeBYe9kp0SPLOolZgxOHZzrSZvl73Kfe3i9n1/SnGQf8SJcpqn4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN2PR12MB3008.namprd12.prod.outlook.com (2603:10b6:208:c8::17)
+ by IA1PR12MB8493.namprd12.prod.outlook.com (2603:10b6:208:447::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.22; Wed, 3 May
+ 2023 17:42:45 +0000
+Received: from MN2PR12MB3008.namprd12.prod.outlook.com
+ ([fe80::13fd:6611:29cf:a351]) by MN2PR12MB3008.namprd12.prod.outlook.com
+ ([fe80::13fd:6611:29cf:a351%4]) with mapi id 15.20.6363.022; Wed, 3 May 2023
+ 17:42:45 +0000
+Message-ID: <8213bb71-9924-4f98-eb85-1a3d6401c0f6@amd.com>
+Date:   Wed, 3 May 2023 23:12:33 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [RFC PATCH V1 1/2] sched/numa: Introduce per vma scan counter
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>, rppt@kernel.org,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Bharata B Rao <bharata@amd.com>
+References: <cover.1683033105.git.raghavendra.kt@amd.com>
+ <abd037023141f25f79c6bbbb801c8405e4c449a1.1683033105.git.raghavendra.kt@amd.com>
+From:   Raghavendra K T <raghavendra.kt@amd.com>
+In-Reply-To: <abd037023141f25f79c6bbbb801c8405e4c449a1.1683033105.git.raghavendra.kt@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN2PR01CA0195.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:e8::20) To MN2PR12MB3008.namprd12.prod.outlook.com
+ (2603:10b6:208:c8::17)
 MIME-Version: 1.0
-References: <20230501165450.15352-1-surenb@google.com> <ZFIMaflxeHS3uR/A@dhcp22.suse.cz>
- <ZFIOfb6/jHwLqg6M@moria.home.lan> <ZFISlX+mSx4QJDK6@dhcp22.suse.cz>
- <ZFIVtB8JyKk0ddA5@moria.home.lan> <ZFKNZZwC8EUbOLMv@slm.duckdns.org>
-In-Reply-To: <ZFKNZZwC8EUbOLMv@slm.duckdns.org>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 3 May 2023 10:42:11 -0700
-Message-ID: <CAJuCfpEFV7ZB4pvnf6n0bVpTCDWCVQup9PtrHuAayrf3GrQskg@mail.gmail.com>
-Subject: Re: [PATCH 00/40] Memory allocation profiling
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
-        Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
-        vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev,
-        mgorman@suse.de, dave@stgolabs.net, willy@infradead.org,
-        liam.howlett@oracle.com, corbet@lwn.net, void@manifault.com,
-        peterz@infradead.org, juri.lelli@redhat.com, ldufour@linux.ibm.com,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, peterx@redhat.com, david@redhat.com,
-        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
-        nathan@kernel.org, dennis@kernel.org, muchun.song@linux.dev,
-        rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com,
-        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
-        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, gregkh@linuxfoundation.org,
-        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3008:EE_|IA1PR12MB8493:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6576e3d2-aff5-4658-9690-08db4bfdcd6d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zcCR9ujutPSLbgrqxAICkWtEJqIH+zhLEdI0RxWTqvYJotPu9/gyaWGA4+TthtG63BmXCkfGfCah0raRY0t5vvMvQcUu4enElfUovzicHDCAGyNBhW7IYWux5jrHvTfWOwUcmEOLNDjL2xkcZkkUbyHuY7VSd/+tPQ4shr6Coxxn7329l5fYSqKyddyoULqJj8kHbhAU4fZdV9n+lBhHcWUTF3YF9mxX4wma0y2RDO3C8X2ZbzXUVPciyOEg2/dUQmRjOD8RhRsB9duSMqtnsyaZXQAamq4rqec4I38jEnNZZoXI4V7QVXjqg0wZ7LHtjTWzC1v04NldS9p6MSRvodHrokn9bZLkuvWPX8ldQg+HNXOvuUuT5yFBS+T0nSOn/VqX9Jv/tV/Q5uN18QrcwFGNJ5hg5vmZ6tY51R+m0Ddof9iXt9FbOEh4V+GxSJ9U9l46xycrfCraWyS+R0seU5Hmqk9VJvFOP29JAdVCdvdm6PIKBA5hpfb2fsHu6LZIh9yRDdOZdpvdeiuiePgFS/VyixrbAkDhVvaZ8uNnKdAHvdbyd3G7otsBBXCo2sWsnkd7jjHIynBUrjccTk9plUCO8f6OePA0deRNnuBW2tEreiEWaRtVzD4uMqNUqWJP8x8FgC67EIab2TyGsVbbxQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3008.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(366004)(376002)(39860400002)(136003)(451199021)(2906002)(38100700002)(83380400001)(2616005)(26005)(6506007)(6512007)(53546011)(186003)(36756003)(8676002)(8936002)(66476007)(5660300002)(7416002)(316002)(31696002)(478600001)(4326008)(54906003)(6666004)(6486002)(41300700001)(66556008)(66946007)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Um16RnJaUXIwSzdnaTZ0U2xmYyttQ29NTHJGN3crOE0ycG9XeVZ4M0lNVU5V?=
+ =?utf-8?B?MURzQVBiRENRdC9sWU9yam9nWjhJVFlaSnRQc3VMWjE5UUgvalpISktUbEJC?=
+ =?utf-8?B?dnQ5aEs3MitsTERadGxBUEJGRHlnUEN5N0ZZVDc2U1Y4TzBZZ0lhYmp1RXN5?=
+ =?utf-8?B?R2E2MkhvTkhSaU5TZkZiUFl4RDd1TlZKTjBJSk14WWVIM2syekxMNTBUcDhj?=
+ =?utf-8?B?UGZWaXM1Y09OdkdCMHZiM0VMZENGTlAzQm1xSFhqUTdiZ1c4cXZSNDl1MGFQ?=
+ =?utf-8?B?OUIxQzNXV0pTMTYxRnMxTVdldU9zZTdvWVpJdkFZaTIrMU1JT1FHRjdXQnRQ?=
+ =?utf-8?B?TldTdHNrL0Q3c1Z6eUNLMU12bXgvUjFzdzJZL3pJQ0hqM1M2bk5XVDJyWWhS?=
+ =?utf-8?B?TWpDOExNSWdBWllWZEpkUndpdndPL2lKdEZGdG4xbWZDVTVQc00yWFhwaTVV?=
+ =?utf-8?B?SWt6VmVVTFY1bXgwODViR25HcmN5cW9oVC8ybVBmSDQ2NzZZdWxYRVRva0dF?=
+ =?utf-8?B?clI1QldGMTVYVlo2dmNHRzloME8zd2JCbTZRNmJ0c3FkaDBraXc3VkVjVnJV?=
+ =?utf-8?B?aTU4ZnRXMERJcWZ2RC9VZDc3dWdJOFQwOWUzQndqblpvK1VRaFlDRGtvQkox?=
+ =?utf-8?B?MTh0RGcvYnovKzl5KzlHM3pQY2VMTWpqMFYrZ0kvZzF1R3BzQzZzTHdMb3ha?=
+ =?utf-8?B?T0crVllxZXd0R2ZmU3Yxa2lvMkxOeStIaFk4MFNKbXFWOTh3OVN2VnEweFdV?=
+ =?utf-8?B?RGdicmQ5cExET3RnYllOeWRONjkzNFRRbjhSckdVWnBPZjRBZGFiYUJ0ZDFz?=
+ =?utf-8?B?SitzaFRrOG1xb1AyRkhXOS9KUm11bDhwMFBEbzlTMVk4TUQraGVIb3B1Ym5i?=
+ =?utf-8?B?dU5SYzVvSk5GS010K2tqaHFMVkthL3AzUzI1dXBQRzF0LzBXTEVjZkd0MEtD?=
+ =?utf-8?B?eVFiZllUNndMUnpNY2NEWFR6UWtqN3JseTZsWWgveU8xTFhZRHExT3RwdkRn?=
+ =?utf-8?B?WVd0WXNjNEhKcHExQWNEUk1UL2dWaVloSCtsclRXREtqY0NPUjlFWmZpSUVC?=
+ =?utf-8?B?SGNjWkl2MG85YkZWaGprTWx5cWhSK1VCWFlnY3hucE5aMHVOWW5pckRCOTQv?=
+ =?utf-8?B?QkVSYVNSMXg2N2VadEIzaEF6alBmUGpwZTNzYzQwd0wrVWovRGhjb1B1ZFlo?=
+ =?utf-8?B?Z0dTcENWMUoyZW9TMnBkeW1zRWZISzNpNUFuTUNsbGI3ZHgxVXBCRVJPcUtU?=
+ =?utf-8?B?S3ZKWFpMRmpuSjFEMExUNjc0Q1J1Ry9BUUZQUW15elE1UmpaS2tHMnREVmw5?=
+ =?utf-8?B?MHB2WmJpVTBIeUN5SjNCc2M3OUxmS0I3V0hEMW56QU94aHdYOCs4cUYvRU8v?=
+ =?utf-8?B?UHFSYlJFc3p2cHhRUzBnUmwyRnpESEMzZlo5MCtiazZqRjd0OFpNNzE5azkz?=
+ =?utf-8?B?OGczU1o0NDU3VTdaMEh0YkVSNFFCRlRFd2o1ZGNMWUhZaEdWcTlOSjh1bzBJ?=
+ =?utf-8?B?a0tQRXo0bjZ6Q3AydXVtQmxoOXZkRUo0UDRCN0IrekQwelJMbjYzcVlmT0E3?=
+ =?utf-8?B?YTdBeDA2dlRQNHBLWDdCNjdwaFI4OTNhQjVReVJwMWViNkJ1MEoyNDZjdHph?=
+ =?utf-8?B?Yk8wWEhKOFJJaldYVGgxZHRqWXlvS2dweUcyelFObmJ0bEtzM3NXSHBqbnpX?=
+ =?utf-8?B?WmdrOUFwZXFwYnpVa2lvSkx6bUFqWlpmOVZQYnZaZHhUTGJMZk9rR1FyTUJ5?=
+ =?utf-8?B?L3hpZ0tTZ01XTmdBV2I5a3lyRkRpRGlsNEg2VVpMRG1vN3FmRTdLRkRtZzkz?=
+ =?utf-8?B?b0Q1SVFiRHhCL2cvREJES25FZmpmOVA5V2o5eFJOdkFVRHRGemorL2xEdDVJ?=
+ =?utf-8?B?NEo0aVpURXV0K3MzMW1NMTR1a0JSWHF5cjg5RExacURNTVJEK3VLZ20wVS8r?=
+ =?utf-8?B?V1RPK3FUY09GakUvS2k1QzRzZ2VFWHRiYVAxZlk5MjlVNWJQME5ibWlmV2FB?=
+ =?utf-8?B?dkwvb0FRb3FYZzA5c3dIcGFLdlhSU3N6LzZ4WE9TYXBUZHVLNGczOFEvNHJC?=
+ =?utf-8?B?RUdFTjdKL2p6WlZMOHRWNnJsUktVTjUyZ0tta1NsZTYvdmtaL01KQ0lEMEZ4?=
+ =?utf-8?Q?m0MyYkL9y4NQinWHdjp8toygn?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6576e3d2-aff5-4658-9690-08db4bfdcd6d
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3008.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 May 2023 17:42:45.1553
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Sw7AnyIX1DnLoCJuU+Kld+X/MJx8Qn26Neu/FXnwDORE8q6XOdZnwtva5ly/MyL7QYBVckngrNp2kh/2ptvsRg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8493
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 3, 2023 at 9:35=E2=80=AFAM Tejun Heo <tj@kernel.org> wrote:
->
-> Hello, Kent.
->
-> On Wed, May 03, 2023 at 04:05:08AM -0400, Kent Overstreet wrote:
-> > No, we're still waiting on the tracing people to _demonstrate_, not
-> > claim, that this is at all possible in a comparable way with tracing.
->
-> So, we (meta) happen to do stuff like this all the time in the fleet to h=
-unt
-> down tricky persistent problems like memory leaks, ref leaks, what-have-y=
-ou.
-> In recent kernels, with kprobe and BPF, our ability to debug these sorts =
-of
-> problems has improved a great deal. Below, I'm attaching a bcc script I u=
-sed
-> to hunt down, IIRC, a double vfree. It's not exactly for a leak but leaks
-> can follow the same pattern.
+On 5/3/2023 7:35 AM, Raghavendra K T wrote:
+> With the recent numa scan enhancements, only the tasks which had
+> previously accessed vma are allowed to scan.
+> 
+> While this has improved significant system time overhead, there are
+> corner cases, which genuinely needs some relaxation for e.g., concern
+> raised by PeterZ where unfairness amongst the theread belonging to
+> disjoint set of VMSs can potentially amplify the side effects of vma
+> regions belonging to some of the tasks being left unscanned.
+> 
+> To address this, allow scanning for first few times with a per vma
+> counter.
+> 
+> Signed-off-by: Raghavendra K T <raghavendra.kt@amd.com>
+> ---
 
-Thanks for sharing, Tejun!
+Some clarification:
+base was linux-next-20230411 (because I have some issue with
+linux-next-20230425 onwards and linux master branch, which I am diging.
 
->
-> There are of course some pros and cons to this approach:
->
-> Pros:
->
-> * The framework doesn't really have any runtime overhead, so we can have =
-it
->   deployed in the entire fleet and debug wherever problem is.
 
-Do you mean it has no runtime overhead when disabled?
-If so, do you know what's the overhead when enabled? I want to
-understand if that's truly a viable solution to track all allocations
-(including slab) all the time.
-Thanks,
-Suren.
+>   include/linux/mm_types.h |  1 +
+>   kernel/sched/fair.c      | 30 +++++++++++++++++++++++++++---
+>   2 files changed, 28 insertions(+), 3 deletions(-)
+> 
+> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+> index 3fc9e680f174..f66e6b4e0620 100644
+> --- a/include/linux/mm_types.h
+> +++ b/include/linux/mm_types.h
+> @@ -479,6 +479,7 @@ struct vma_numab_state {
+>   	unsigned long next_scan;
+>   	unsigned long next_pid_reset;
+>   	unsigned long access_pids[2];
+> +	unsigned int scan_counter;
+>   };
+>   
+>   /*
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index a29ca11bead2..3c50dc3893eb 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -2928,19 +2928,38 @@ static void reset_ptenuma_scan(struct task_struct *p)
+>   	p->mm->numa_scan_offset = 0;
+>   }
+>   
+> +/* Scan 1GB or 4 * scan_size */
+> +#define VMA_DISJOINT_SET_ACCESS_THRESH		4U
+> +
+>   static bool vma_is_accessed(struct vm_area_struct *vma)
+>   {
+>   	unsigned long pids;
+> +	unsigned int windows;
 
->
-> * It's fully flexible and programmable which enables non-trivial filterin=
-g
->   and summarizing to be done inside kernel w/ BPF as necessary, which is
->   pretty handy for tracking high frequency events.
->
-> * BPF is pretty performant. Dedicated built-in kernel code can do better =
-of
->   course but BPF's jit compiled code & its data structures are fast enoug=
-h.
->   I don't remember any time this was a problem.
->
-> Cons:
->
-> * BPF has some learning curve. Also the fact that what it provides is a w=
-ide
->   open field rather than something scoped out for a specific problem can
->   make it seem a bit daunting at the beginning.
->
-> * Because tracking starts when the script starts running, it doesn't know
->   anything which has happened upto that point, so you gotta pay attention=
- to
->   handling e.g. handling frees which don't match allocs. It's kinda annoy=
-ing
->   but not a huge problem usually. There are ways to build in BPF progs in=
-to
->   the kernel and load it early but I haven't experiemnted with it yet
->   personally.
->
-> I'm not necessarily against adding dedicated memory debugging mechanism b=
-ut
-> do wonder whether the extra benefits would be enough to justify the code =
-and
-> maintenance overhead.
->
-> Oh, a bit of delta but for anyone who's more interested in debugging
-> problems like this, while I tend to go for bcc
-> (https://github.com/iovisor/bcc) for this sort of problems. Others prefer=
- to
-> write against libbpf directly or use bpftrace
-> (https://github.com/iovisor/bpftrace).
->
-> Thanks.
->
-> #!/usr/bin/env bcc-py
->
-> import bcc
-> import time
-> import datetime
-> import argparse
-> import os
-> import sys
-> import errno
->
-> description =3D """
-> Record vmalloc/vfrees and trigger on unmatched vfree
-> """
->
-> bpf_source =3D """
-> #include <uapi/linux/ptrace.h>
-> #include <linux/vmalloc.h>
->
-> struct vmalloc_rec {
->         unsigned long           ptr;
->         int                     last_alloc_stkid;
->         int                     last_free_stkid;
->         int                     this_stkid;
->         bool                    allocated;
-> };
->
-> BPF_STACK_TRACE(stacks, 8192);
-> BPF_HASH(vmallocs, unsigned long, struct vmalloc_rec, 131072);
-> BPF_ARRAY(dup_free, struct vmalloc_rec, 1);
->
-> int kpret_vmalloc_node_range(struct pt_regs *ctx)
-> {
->         unsigned long ptr =3D PT_REGS_RC(ctx);
->         uint32_t zkey =3D 0;
->         struct vmalloc_rec rec_init =3D { };
->         struct vmalloc_rec *rec;
->         int stkid;
->
->         if (!ptr)
->                 return 0;
->
->         stkid =3D stacks.get_stackid(ctx, 0);
->
->         rec_init.ptr =3D ptr;
->         rec_init.last_alloc_stkid =3D -1;
->         rec_init.last_free_stkid =3D -1;
->         rec_init.this_stkid =3D -1;
->
->         rec =3D vmallocs.lookup_or_init(&ptr, &rec_init);
->         rec->allocated =3D true;
->         rec->last_alloc_stkid =3D stkid;
->         return 0;
-> }
->
-> int kp_vfree(struct pt_regs *ctx, const void *addr)
-> {
->         unsigned long ptr =3D (unsigned long)addr;
->         uint32_t zkey =3D 0;
->         struct vmalloc_rec rec_init =3D { };
->         struct vmalloc_rec *rec;
->         int stkid;
->
->         stkid =3D stacks.get_stackid(ctx, 0);
->
->         rec_init.ptr =3D ptr;
->         rec_init.last_alloc_stkid =3D -1;
->         rec_init.last_free_stkid =3D -1;
->         rec_init.this_stkid =3D -1;
->
->         rec =3D vmallocs.lookup_or_init(&ptr, &rec_init);
->         if (!rec->allocated && rec->last_alloc_stkid >=3D 0) {
->                 rec->this_stkid =3D stkid;
->                 dup_free.update(&zkey, rec);
->         }
->
->         rec->allocated =3D false;
->         rec->last_free_stkid =3D stkid;
->         return 0;
-> }
-> """
->
-> bpf =3D bcc.BPF(text=3Dbpf_source)
-> bpf.attach_kretprobe(event=3D"__vmalloc_node_range", fn_name=3D"kpret_vma=
-lloc_node_range");
-> bpf.attach_kprobe(event=3D"vfree", fn_name=3D"kp_vfree");
-> bpf.attach_kprobe(event=3D"vfree_atomic", fn_name=3D"kp_vfree");
->
-> stacks =3D bpf["stacks"]
-> vmallocs =3D bpf["vmallocs"]
-> dup_free =3D bpf["dup_free"]
-> last_dup_free_ptr =3D dup_free[0].ptr
->
-> def print_stack(stkid):
->     for addr in stacks.walk(stkid):
->         sym =3D bpf.ksym(addr)
->         print('  {}'.format(sym))
->
-> def print_dup(dup):
->     print('allocated=3D{} ptr=3D{}'.format(dup.allocated, hex(dup.ptr)))
->     if (dup.last_alloc_stkid >=3D 0):
->         print('last_alloc_stack: ')
->         print_stack(dup.last_alloc_stkid)
->     if (dup.last_free_stkid >=3D 0):
->         print('last_free_stack: ')
->         print_stack(dup.last_free_stkid)
->     if (dup.this_stkid >=3D 0):
->         print('this_stack: ')
->         print_stack(dup.this_stkid)
->
-> while True:
->     time.sleep(1)
->
->     if dup_free[0].ptr !=3D last_dup_free_ptr:
->         print('\nDUP_FREE:')
->         print_dup(dup_free[0])
->         last_dup_free_ptr =3D dup_free[0].ptr
->
-> --
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kernel-team+unsubscribe@android.com.
->
+Missed windows = 0 while splitting the patch
+will be corrected in next posting.
+
+/me Remembered after kernel test robot noticed
+[...]
