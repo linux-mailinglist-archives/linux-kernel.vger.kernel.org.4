@@ -2,124 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89FE96F5410
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 11:12:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A49CD6F5414
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 11:12:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229528AbjECJMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 05:12:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50302 "EHLO
+        id S229630AbjECJMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 05:12:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbjECJMO (ORCPT
+        with ESMTP id S229617AbjECJMh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 05:12:14 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3171459E2;
-        Wed,  3 May 2023 02:11:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683105114; x=1714641114;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=yZdDxF7eM2/0DaJdrpLaz+vSoS07hfHOMx2AFF1OeTM=;
-  b=fjkkNotiRbH6MTQkXKJgLKWgAy6gMqzwVWVZjj9eCS5zfa7yexe3IWgO
-   Yk2jV2ejpozSwUbMO5QVe34PhOiGpsjAS5/3lZ31qcRUf4gw2q6r++Gra
-   gZXDm/QX9vwv/xxl/adRM2j16y4CXtB0mVtgKyLOvXuMr0Uxy8IhH/zDc
-   mItAcS72CxS95UkpeDF1rFxfbKHF0u4sH5feD8MdHPrkLYv9owkdmj3xy
-   ZHbNDZtAvY73AChq/tL8O8fFrcw5O0hzYRxjGQX4Ez6mqSAesCWgRgGB/
-   CfXjo85f0+DB6peqpkd5InQJrkv77RW2bxHG1DHIL/ZvP6BrOK9SxlRh3
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="337745862"
-X-IronPort-AV: E=Sophos;i="5.99,246,1677571200"; 
-   d="scan'208";a="337745862"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2023 02:11:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="674010950"
-X-IronPort-AV: E=Sophos;i="5.99,246,1677571200"; 
-   d="scan'208";a="674010950"
-Received: from skallurr-mobl1.ger.corp.intel.com (HELO [10.249.254.212]) ([10.249.254.212])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2023 02:11:35 -0700
-Message-ID: <888841c4-7bd4-8174-7786-033715c995c6@linux.intel.com>
-Date:   Wed, 3 May 2023 11:11:32 +0200
+        Wed, 3 May 2023 05:12:37 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 361FB55AC
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 02:12:10 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f1cfed93e2so48723025e9.3
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 02:12:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683105127; x=1685697127;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=m0X3zVggkEphepgmpFfHgY9ZYh+yfpZHJged2HFiWeU=;
+        b=Fa3lXEiRtHvYcsTwrgnRVWSehxxRIi/uRLgKkYn2ouBFsrglKwEcNs1Z4rVjg3KWIb
+         /vaIjF4qaKw+IckLnTWcAJDa1FZ//0/GbLurdHaCvKbnzRWoqLL/u3MhO5Tz81Tomthk
+         ckfZ38rQ3VjZxg/sTpi1VcvHg2q8QrpxriF7KMiLcmjBwgJFOcAlhVjOpjheBK0PZruA
+         IHT8zSc6elHai/AmTfGznFFh15w8nzMPMJvpYP4ZBzcrAv/YGHkA1e3AEFuppld45pFV
+         bUKerQ3oA9rnTQaIrK865aZB0piyuRPBsjtiOcfPKmWMQ9wQhr77Dk6fD7S0qu0Zdogq
+         +6yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683105127; x=1685697127;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=m0X3zVggkEphepgmpFfHgY9ZYh+yfpZHJged2HFiWeU=;
+        b=b/Xrg6FdEl1v244JZ+BS6w3h9wLOC+a1tmDEFyZtEjnaLsEh17ihQ8ssUCLjxnZaYR
+         2qhmpitRymcnkxo8+ypXTxLEYynUmkr8Qlp2xJMeyc35lx4kIoSjiWu8BkvjVfH/3cFr
+         l0GkDGIn+HOcNcXmEZmQ8eGQ2r5eaZBDZMx2LHVDwhQvJs/WzE6VJu8mMtCF0DNP9kr1
+         EG7+JDJ4wkSIzxnzVn9Ajs7xN6Q4i05cv/qRn9udvcutNbFnYWpnPfb3enE5B2FA9qa7
+         jxnUn8Vk14PgZUJZm11w6vFrk8A3VkZPL0fWrlN2n9ftW0wrt1YhHQbDFpuGlBfgE/EV
+         VUCA==
+X-Gm-Message-State: AC+VfDxwPiK/ekXuyU64kRtjZtrhOHOtftxGiDgDogqKBh9eLm84JYCJ
+        VHjFrOkO53qeXL27lZMSPHcGsQ==
+X-Google-Smtp-Source: ACHHUZ5OhbmHe7S6Yn7dufDUvb/uOWhfr8XtiWW7s6/ZU4sMFJsUkPCrcMp7FBh9Fj+SeVEi6djCIw==
+X-Received: by 2002:a05:600c:b41:b0:3f1:79ad:f3a8 with SMTP id k1-20020a05600c0b4100b003f179adf3a8mr14533810wmr.16.1683105127222;
+        Wed, 03 May 2023 02:12:07 -0700 (PDT)
+Received: from [197.55.55.58] ([93.107.151.186])
+        by smtp.gmail.com with ESMTPSA id v9-20020a05600c444900b003f173be2ccfsm54681045wmn.2.2023.05.03.02.12.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 May 2023 02:12:06 -0700 (PDT)
+Message-ID: <d1dfb551-6a26-3ea4-69b0-221b9516f44e@linaro.org>
+Date:   Wed, 3 May 2023 10:12:04 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [Intel-xe] [RFC PATCH 3/4] drm/ttm: Handle -EAGAIN in
- ttm_resource_alloc as -ENOSPC.
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 2/3] arm64: dts: qcom: msm8996: Add CAMSS power domain and
+ power-domain-names to CAMSS
 Content-Language: en-US
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        dri-devel@lists.freedesktop.org, cgroups@vger.kernel.org,
-        intel-xe@lists.freedesktop.org
-Cc:     Daniel Vetter <daniel@ffwll.ch>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, Maxime Ripard <mripard@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Tejun Heo <tj@kernel.org>, David Airlie <airlied@gmail.com>
-References: <20230503083500.645848-1-maarten.lankhorst@linux.intel.com>
- <20230503083500.645848-4-maarten.lankhorst@linux.intel.com>
-From:   =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
-        <thomas.hellstrom@linux.intel.com>
-In-Reply-To: <20230503083500.645848-4-maarten.lankhorst@linux.intel.com>
+To:     Yassine Oudjana <yassine.oudjana@gmail.com>,
+        Robert Foss <rfoss@kernel.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hans Verkuil <hansverk@cisco.com>
+Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230503072543.4837-1-y.oudjana@protonmail.com>
+ <20230503072543.4837-3-y.oudjana@protonmail.com>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <20230503072543.4837-3-y.oudjana@protonmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Maarten
-
-On 5/3/23 10:34, Maarten Lankhorst wrote:
-> This allows the drm cgroup controller to return no space is available..
->
-> XXX: This is a hopeless simplification that changes behavior, and
-> returns -ENOSPC even if we could evict ourselves from the current
-> cgroup.
->
-> Ideally, the eviction code becomes cgroup aware, and will force eviction
-> from the current cgroup or its parents.
->
-> Signed-off-by: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-
-Thinking of the shrinker analogy, do non-cgroup aware shrinkers just 
-shrink blindly or do they reject shrinking like this patch when a cgroup 
-limit is reached?
-
-/Thomas
-
-
+On 03/05/2023 08:25, Yassine Oudjana wrote:
+> From: Yassine Oudjana <y.oudjana@protonmail.com>
+> 
+> Add the CAMSS power domain as well as power-domain-names for all CAMSS power domains.
+> 
+> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
 > ---
->   drivers/gpu/drm/ttm/ttm_bo.c | 4 +++-
+>   arch/arm64/boot/dts/qcom/msm8996.dtsi | 4 +++-
 >   1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/ttm/ttm_bo.c b/drivers/gpu/drm/ttm/ttm_bo.c
-> index bd5dae4d1624..e057d5d8f09a 100644
-> --- a/drivers/gpu/drm/ttm/ttm_bo.c
-> +++ b/drivers/gpu/drm/ttm/ttm_bo.c
-> @@ -731,6 +731,8 @@ static int ttm_bo_mem_force_space(struct ttm_buffer_object *bo,
->   		ret = ttm_resource_alloc(bo, place, mem);
->   		if (likely(!ret))
->   			break;
-> +		if (ret == -EAGAIN)
-> +			return -ENOSPC;
->   		if (unlikely(ret != -ENOSPC))
->   			return ret;
->   		ret = ttm_mem_evict_first(bdev, man, place, ctx,
-> @@ -783,7 +785,7 @@ int ttm_bo_mem_space(struct ttm_buffer_object *bo,
->   
->   		type_found = true;
->   		ret = ttm_resource_alloc(bo, place, mem);
-> -		if (ret == -ENOSPC)
-> +		if (ret == -ENOSPC || ret == -EAGAIN)
->   			continue;
->   		if (unlikely(ret))
->   			goto error;
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
+> index 30f6ebc4bd11..0168a086f57d 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
+> @@ -2118,7 +2118,9 @@ camss: camss@a00000 {
+>   				"vfe0",
+>   				"vfe1";
+>   			power-domains = <&mmcc VFE0_GDSC>,
+> -					<&mmcc VFE1_GDSC>;
+> +					<&mmcc VFE1_GDSC>,
+> +					<&mmcc CAMSS_GDSC>;
+> +			power-domain-names = "vfe0", "vfe1", "camss";
+>   			clocks = <&mmcc CAMSS_TOP_AHB_CLK>,
+>   				<&mmcc CAMSS_ISPIF_AHB_CLK>,
+>   				<&mmcc CAMSS_CSI0PHYTIMER_CLK>,
+
+Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
