@@ -2,58 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E0576F5E7F
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 20:49:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2D726F5E7E
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 20:49:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbjECStO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 14:49:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51276 "EHLO
+        id S229920AbjECStH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 14:49:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbjECStA (ORCPT
+        with ESMTP id S229705AbjECSs7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 14:49:00 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F2D7D98
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 11:48:44 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1puHWl-0003Vt-SJ; Wed, 03 May 2023 20:48:35 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1puHWk-0003xc-5a; Wed, 03 May 2023 20:48:34 +0200
-Date:   Wed, 3 May 2023 20:48:34 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Jun Li <jun.li@nxp.com>
-Cc:     Andreas Henriksson <andreas@fatal.se>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        Xu Yang <xu.yang_2@nxp.com>
-Subject: Re: [PATCH] arm64: dts: imx8mp-evk: add dual-role usb port1 support
-Message-ID: <20230503184834.qln2wwvf3pgitkmp@pengutronix.de>
-References: <20230323105826.2058003-1-m.felsch@pengutronix.de>
- <PA4PR04MB964081F4DB2E16D8E300B08389849@PA4PR04MB9640.eurprd04.prod.outlook.com>
- <20230327084947.dcguxgyo2lfen2ms@fatal.se>
- <DB9PR04MB96282C22D3AC853F325373CD898B9@DB9PR04MB9628.eurprd04.prod.outlook.com>
+        Wed, 3 May 2023 14:48:59 -0400
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 965291FCF;
+        Wed,  3 May 2023 11:48:45 -0700 (PDT)
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-63b4bf2d74aso3961667b3a.2;
+        Wed, 03 May 2023 11:48:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683139725; x=1685731725;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XuZdnAT/CQoJVHT3dd2kMfmEP+YdLoqLBmiyeRwGCT0=;
+        b=e8NdoRKfa1X2HkE8HBLHmECQjKIVBHYK7cjvDC65b30gG04OpJtvNYuqg5ckBI0Kva
+         K8+HfazqajqCOUR1eaTu1ugL9ylRT+KTMZA+RB8ih/LgD/Z9++s2KUD1UxDtH8WhQrW3
+         MkWiqKjp4n9HGsz8wNWw4y4oNr0wMo/ETxxdZugNdw524z7BHsjpT8xrO3OFna+UIMQ6
+         Wstz1rmZqoyfqvGuSF9B9uuDxETqLY04iJ/m123b2pfA1sR3o0BI3ls50Bygej3QqTsU
+         9cCoI0ZvVu00DFVzVnR0j7hWB4F7IPc8G3x10xRNdhFBx6+u0WpIkvMcgX9OiQcii6xp
+         tdqg==
+X-Gm-Message-State: AC+VfDw0hjSvPL/2I0sGPuQJD9JhLSi5J9DEYPblcvTaRjbgZ5IMI1/8
+        zRy2+n44rsVEXdoYkzNZ2IQ=
+X-Google-Smtp-Source: ACHHUZ5F6Az63900qigR1giHZvAPngXjFjcguLu9ABSQRGHDFzMdwXwdp/xGRc4SUkbW0gFEAodEnw==
+X-Received: by 2002:a05:6a20:258e:b0:ef:b02a:b35b with SMTP id k14-20020a056a20258e00b000efb02ab35bmr28209835pzd.0.1683139724862;
+        Wed, 03 May 2023 11:48:44 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:c683:a90b:5f41:5878? ([2620:15c:211:201:c683:a90b:5f41:5878])
+        by smtp.gmail.com with ESMTPSA id b20-20020a056a0002d400b006348cb791f4sm23919397pft.192.2023.05.03.11.48.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 May 2023 11:48:44 -0700 (PDT)
+Message-ID: <81ce524d-6186-e016-f597-153d214036bf@acm.org>
+Date:   Wed, 3 May 2023 11:48:41 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DB9PR04MB96282C22D3AC853F325373CD898B9@DB9PR04MB9628.eurprd04.prod.outlook.com>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH RFC 14/16] scsi: sd: Add WRITE_ATOMIC_16 support
+Content-Language: en-US
+To:     John Garry <john.g.garry@oracle.com>, axboe@kernel.dk,
+        kbusch@kernel.org, hch@lst.de, sagi@grimberg.me,
+        martin.petersen@oracle.com, djwong@kernel.org,
+        viro@zeniv.linux.org.uk, brauner@kernel.org, dchinner@redhat.com,
+        jejb@linux.ibm.com
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com
+References: <20230503183821.1473305-1-john.g.garry@oracle.com>
+ <20230503183821.1473305-15-john.g.garry@oracle.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20230503183821.1473305-15-john.g.garry@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,202 +72,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Li, Andreas,
+On 5/3/23 11:38, John Garry wrote:
+> +static blk_status_t sd_setup_atomic_cmnd(struct scsi_cmnd *cmd,
+> +					sector_t lba, unsigned int nr_blocks,
+> +					unsigned char flags)
+> +{
+> +	cmd->cmd_len  = 16;
+> +	cmd->cmnd[0]  = WRITE_ATOMIC_16;
+> +	cmd->cmnd[1]  = flags;
+> +	put_unaligned_be64(lba, &cmd->cmnd[2]);
+> +	cmd->cmnd[10] = 0;
+> +	cmd->cmnd[11] = 0;
+> +	put_unaligned_be16(nr_blocks, &cmd->cmnd[12]);
+> +	cmd->cmnd[14] = 0;
+> +	cmd->cmnd[15] = 0;
+> +
+> +	return BLK_STS_OK;
+> +}
 
-On 23-03-27, Jun Li wrote:
-> 
-> > -----Original Message-----
-> > From: Andreas Henriksson <andreas@fatal.se>
-> > Sent: Monday, March 27, 2023 4:50 PM
-> > To: Jun Li <jun.li@nxp.com>; Marco Felsch <m.felsch@pengutronix.de>
-> > Cc: robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org;
-> > shawnguo@kernel.org; dl-linux-imx <linux-imx@nxp.com>; festevam@gmail.com;
-> > linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org;
-> > kernel@pengutronix.de; Xu Yang <xu.yang_2@nxp.com>
-> > Subject: Re: [PATCH] arm64: dts: imx8mp-evk: add dual-role usb port1 support
-> > 
-> > On Fri, Mar 24, 2023 at 10:18:17AM +0000, Jun Li wrote:
-> > >
-> > >
-> > > > -----Original Message-----
-> > > > From: Marco Felsch <m.felsch@pengutronix.de>
-> > > > Sent: Thursday, March 23, 2023 6:58 PM
-> > > > To: robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org;
-> > > > shawnguo@kernel.org; dl-linux-imx <linux-imx@nxp.com>;
-> > > > festevam@gmail.com
-> > > > Cc: linux-arm-kernel@lists.infradead.org;
-> > > > linux-kernel@vger.kernel.org; kernel@pengutronix.de
-> > > > Subject: [PATCH] arm64: dts: imx8mp-evk: add dual-role usb port1
-> > > > support
-> > > >
-> > > > The i.MX8MP-EVK has a dual-role usb-type-c port marked as PORT1. By
-> > > > this commit the dual-role support is added which allows the
-> > > > user-space to assign usb-gadget functions to it via the configFS.
-> > >
-> > > So just ignore the orientation switch will make this port cannot work
-> > > at super speed, this is actually why this port is not enabled at upstream.
-> > > I see the orientation switch via GPIO for SBU is already merged:
-> > > drivers/usb/typec/mux/gpio-sbu-mux.c
-> > > Do you have interest to expand this driver to support super speed
-> > > switch for this case?
-> > [...]
-> > 
-> > FWIW This is what I ended up with (after backporting the gpio-sbu-mux patches)
-> > a little while ago trying to get the usb-c ports going on imx8mp-evk. I've
-> > not yet had the time to fully test this (only done host/device, not tested:
-> > SS, orientation, etc), so beware that it might be completely wrong.
-> 
-> Thanks for the advice.
-> 
-> *reuse* compatible = "gpio-sbu-mux"; can make the basic *function* work,
-> but that's not the right direction, SBU has its own signal in typec connector,
-> here what we need is the Super Speed signal switch, you can see iMX8MP EVK
-> use 2 GPIOs control the SS for 3 states(normal orientation, reserve orientation,
-> places all channels in high impedance state), but SBU will disable both channels
-> at TYPEC_STATE_USB, this is not correct for USB data, so logically we cannot
-> reuse SBU either. But I think this gpio-sbu-mux.c driver can be extended to
-> add support super speed signal orientation.
+A single space in front of the assignment operator please.
 
-Thanks for the useful input :) I was dug into the usb-c hole and now I'm
-back. The "gpio-sbu-mux" should fit perfectly for our use-case, we only
-have to tell the driver to act as 'orientation-switch' only. All pieces
-are in place so just dts work to do. I will test my new patch and send a
-new version which should support super-speed to (fingers crossed).
+> +
+>   static blk_status_t sd_setup_read_write_cmnd(struct scsi_cmnd *cmd)
+>   {
+>   	struct request *rq = scsi_cmd_to_rq(cmd);
+> @@ -1149,6 +1166,7 @@ static blk_status_t sd_setup_read_write_cmnd(struct scsi_cmnd *cmd)
+>   	unsigned int nr_blocks = sectors_to_logical(sdp, blk_rq_sectors(rq));
+>   	unsigned int mask = logical_to_sectors(sdp, 1) - 1;
+>   	bool write = rq_data_dir(rq) == WRITE;
+> +	bool atomic_write = !!(rq->cmd_flags & REQ_ATOMIC) && write;
 
-Regards,
-  Marco
+Isn't the !! superfluous in the above expression? I have not yet seen 
+any other kernel code where a flag test is used in a boolean expression 
+and where !! occurs in front of the flag test.
 
+Thanks,
 
-> 
-> Li Jun 
-> 
-> > 
-> > #include "dt-bindings/usb/pd.h"
-> > 
-> > &usb3_phy0 {
-> >     vbus-power-supply = <&ptn5110>;
-> >     status = "okay";
-> > };
-> > 
-> > &usb3_0 {
-> >     status = "okay";
-> > };
-> > 
-> > &usb_dwc3_0 {
-> >     dr_mode = "otg";
-> >     hnp-disable;
-> >     srp-disable;
-> >     adp-disable;
-> >     usb-role-switch;
-> >     role-switch-default-mode = "peripheral";
-> >     snps,dis-u1-entry-quirk;
-> >     snps,dis-u2-entry-quirk;
-> >     status = "okay";
-> > 
-> >     port {
-> >         usb3_drd_sw: endpoint {
-> >             remote-endpoint = <&typec_dr_sw>;
-> >         };
-> >     };
-> > };
-> > 
-> > &i2c2 {
-> >     clock-frequency = <100000>;
-> >     pinctrl-names = "default";
-> >     pinctrl-0 = <&pinctrl_i2c2>;
-> >     status = "okay";
-> > 
-> >     ptn5110: tcpc@50 {
-> >         compatible = "nxp,ptn5110";
-> >         pinctrl-names = "default";
-> >         pinctrl-0 = <&pinctrl_typec>;
-> >         reg = <0x50>;
-> > 
-> >         interrupt-parent = <&gpio4>;
-> >         interrupts = <19 IRQ_TYPE_LEVEL_LOW>;
-> >         status = "okay";
-> > 
-> >         port {
-> >             typec_dr_sw: endpoint {
-> >                 remote-endpoint = <&usb3_drd_sw>;
-> >             };
-> >         };
-> > 
-> >         usb_con: connector {
-> >             compatible = "usb-c-connector";
-> >             label = "USB-C";
-> >             power-role = "dual";
-> >             data-role = "dual";
-> >             try-power-role = "sink";
-> >             source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
-> >             sink-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)
-> >                      PDO_VAR(5000, 20000, 3000)>;
-> >             op-sink-microwatt = <15000000>;
-> >             self-powered;
-> > 
-> >             ports {
-> >                 #address-cells = <1>;
-> >                 #size-cells = <0>;
-> > 
-> >                 port@1 {
-> >                     reg = <1>;
-> >                     typec_con_ss: endpoint {
-> >                         remote-endpoint = <&usb3_data_ss>;
-> >                     };
-> >                 };
-> >             };
-> >         };
-> >     };
-> > 
-> > };
-> > 
-> > &iomuxc {
-> >     pinctrl_typec: typec1grp {
-> >         fsl,pins = <
-> >             MX8MP_IOMUXC_SAI1_TXD7__GPIO4_IO19    0x1c4
-> >         >;
-> >     };
-> > 
-> >     pinctrl_typec_mux: typec1muxgrp {
-> >         fsl,pins = <
-> >             MX8MP_IOMUXC_SAI1_MCLK__GPIO4_IO20    0x16
-> >             MX8MP_IOMUXC_SD2_WP__GPIO2_IO20        0x16
-> >         >;
-> >     };
-> > 
-> > 
-> >     pinctrl_i2c2: i2c2grp {
-> >         fsl,pins = <
-> >             MX8MP_IOMUXC_I2C2_SCL__I2C2_SCL        0x400001c2
-> >             MX8MP_IOMUXC_I2C2_SDA__I2C2_SDA        0x400001c2
-> >         >;
-> >     };
-> > };
-> > 
-> > / {
-> >     gpio-sbu-mux {
-> >         compatible = "gpio-sbu-mux";
-> > 
-> >         pinctrl-names = "default";
-> >         pinctrl-0 = <&pinctrl_typec_mux>;
-> >         select-gpios = <&gpio4 20 GPIO_ACTIVE_LOW>; // (PAD_)SAI1_MCLK ->
-> > USB1_SS_SEL
-> >         enable-gpios = <&gpio2 20 GPIO_ACTIVE_LOW>; // (PAD_)SD2_WP ->
-> > USB1_TYPEC_EN_B -> TYPEC_EN_B
-> > 
-> >         //mode-switch;
-> >         orientation-switch;
-> > 
-> >         port {
-> >             usb3_data_ss: endpoint {
-> >                 remote-endpoint = <&typec_con_ss>;
-> >             };
-> >         };
-> >     };
-> > };
-> > 
-> > Hope it might help.
-> > 
-> > Regards,
-> > Andreas Henriksson
-> 
+Bart.
