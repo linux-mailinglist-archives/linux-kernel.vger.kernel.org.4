@@ -2,160 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD2B26F559B
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 12:09:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B64256F559E
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 12:09:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229554AbjECKJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 06:09:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58438 "EHLO
+        id S229761AbjECKJq convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 3 May 2023 06:09:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbjECKJM (ORCPT
+        with ESMTP id S229671AbjECKJp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 06:09:12 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409CE1A5
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 03:09:10 -0700 (PDT)
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230503100908epoutp01867f3ca0a3c7af83bb94e0d3735bd054~bmk6gAcrp1497714977epoutp01c
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 10:09:08 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230503100908epoutp01867f3ca0a3c7af83bb94e0d3735bd054~bmk6gAcrp1497714977epoutp01c
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1683108548;
-        bh=kra6K6+UrYLIE+JQHy/nrTmW6GTWNgEH+aD6dQYjQ8E=;
-        h=Subject:Reply-To:From:To:In-Reply-To:Date:References:From;
-        b=WsAfJpBqvVnJDYUH62PLtpP/C7VxG63VKV4tLsVXFUfWa0Fup+Ut6FVbmDxfsqHjT
-         rVyWf08TUWJtHTYDtqp2k1LU4+wsRH4BaHqKES/nXkiseGUSMKVtJydBBJLjcebNN9
-         b1PH+MXzvU7uLN2zzb7Ewo9VW1UxWYe2TyhdPnpg=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
-        20230503100907epcas2p3449f6572ea0db3a9b054da777cfb6efc~bmk6Aaucn2526925269epcas2p33;
-        Wed,  3 May 2023 10:09:07 +0000 (GMT)
-Received: from epsmges2p1.samsung.com (unknown [182.195.36.88]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4QBCN3198vz4x9Pr; Wed,  3 May
-        2023 10:09:07 +0000 (GMT)
-X-AuditID: b6c32a45-c6fb9a8000020cc1-43-645232c276f4
-Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
-        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        70.1D.03265.2C232546; Wed,  3 May 2023 19:09:07 +0900 (KST)
-Mime-Version: 1.0
-Subject: [PATCH 04/15] block: bio-integiry: cleanup bio_integrity_prep
-Reply-To: j-young.choi@samsung.com
-Sender: Jinyoung CHOI <j-young.choi@samsung.com>
-From:   Jinyoung CHOI <j-young.choi@samsung.com>
-To:     Jinyoung CHOI <j-young.choi@samsung.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>, "hch@lst.de" <hch@lst.de>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <20230503094912epcms2p4bef206eab1c41a92eba2583a69c74323@epcms2p4>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20230503100906epcms2p35226430da085d7449840bb122a6b193c@epcms2p3>
-Date:   Wed, 03 May 2023 19:09:06 +0900
-X-CMS-MailID: 20230503100906epcms2p35226430da085d7449840bb122a6b193c
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrPKsWRmVeSWpSXmKPExsWy7bCmhe5ho6AUg3e9TBar7/azWbw8pGmx
-        cvVRJove/q1sFntvaVtc3jWHzWL58X9MDuwel8+Weuy+2cDm8fHpLRaPvi2rGD0+b5ILYI3K
-        tslITUxJLVJIzUvOT8nMS7dV8g6Od443NTMw1DW0tDBXUshLzE21VXLxCdB1y8wBukFJoSwx
-        pxQoFJBYXKykb2dTlF9akqqQkV9cYquUWpCSU2BeoFecmFtcmpeul5daYmVoYGBkClSYkJ2x
-        a8lR9oI5fBWNW7cyNjDu4O5i5OSQEDCReLj1G3sXIxeHkMAORom+Z5+AHA4OXgFBib87hEFq
-        hAXcJB4tucwMYgsJKEmcWzOLEaREWMBA4lavOUiYTUBP4ueSGWwgtojAaiaJ5uc1EON5JWa0
-        P2WBsKUlti/fyghicwr4STzecIsRIq4h8WNZLzOELSpxc/Vbdhj7/bH5UDUiEq33zkLVCEo8
-        +LkbKi4pcejQVzaQcyQE8iU2HAiECNdIvF1+AKpEX+Jax0awE3gFfCV29J8FO5NFQFVixdQ5
-        UKe5SPTPOA82nllAXmL72znMICOZBTQl1u/Sh5iuLHHkFgtEBZ9Ex+G/7DAPNmz8jZW9Y94T
-        JohWNYlFTUYQYRmJr4fns09gVJqFCORZSNbOQli7gJF5FaNYakFxbnpqsVGBITxek/NzNzGC
-        U6KW6w7GyW8/6B1iZOJgPMQowcGsJML7odAvRYg3JbGyKrUoP76oNCe1+BCjKdDDE5mlRJPz
-        gUk5ryTe0MTSwMTMzNDcyNTAXEmcV9r2ZLKQQHpiSWp2ampBahFMHxMHp1QDU9/9+fNsfW+v
-        0f0hZrSx00uP13G3eOpkaUtd7vk/54cVfHD7ZsFXe3HS/rBHrlcZ0s+zLXP6eNLnXpznne19
-        0oUs89TScjs+TC5dafSZ9/ihldrP37f8kuH43+66eH/eg7NHg7qVii3XZOn4eNhozb5reF1/
-        yb5dDv5ssjIP7MJXdJ74v+3P35XvDt88W71U+W95amLoN6cby9NeK4vPjchMvv5Hr2rXo+4t
-        l4OUpoSyphqd0lY76+Xo3WdnVxaqN6/35rvunYbt4mt1umrqAuMdH03L1zxlmaS4ZFX40wCd
-        R/7LRGS6Lz/elPl/boxIkfbGfmuOR5fklsb7c9aaPLef9H1qqtCF/k6XmBhLJZbijERDLeai
-        4kQAQxDxARIEAAA=
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230503094912epcms2p4bef206eab1c41a92eba2583a69c74323
-References: <20230503094912epcms2p4bef206eab1c41a92eba2583a69c74323@epcms2p4>
-        <CGME20230503094912epcms2p4bef206eab1c41a92eba2583a69c74323@epcms2p3>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 3 May 2023 06:09:45 -0400
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1353E1A5;
+        Wed,  3 May 2023 03:09:43 -0700 (PDT)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-55a79671a4dso39920847b3.2;
+        Wed, 03 May 2023 03:09:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683108582; x=1685700582;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sawd4wpoRtHE8s6UvEovoP3gm1uY3ejIUgCGBfkkyLU=;
+        b=ZYtGy04apyTkfG5MjQFhd9tmehcu813IpBOeqxVap0RZ46CfL+cbFHDKSOlo7XL69Z
+         wXBhwpg80jWmCTlUwIPW5fjRKp15WD6ybZYVvj8IrkOAplFKvxJSfIJmta98AebAcGeC
+         II52QXGVsV2WYfZTJDlhfGT8JFMG5T2d8+Q6BO76CAX+A7ZkcXtTEo+Q6+LdcGeSG4qw
+         32DBWJ+lvQwOnMPl+UkIGgY2WgtsAeC+a9dxcOvfT7XWJ8aB+Csinmmj0Ylkl0PkEvJP
+         xVsXunslfSLyZTqfPCbaW4DjnpfcZDrPnqyx0xmOzElJ/NBrYITOpBw02vMiF+ToUZ8N
+         oZvw==
+X-Gm-Message-State: AC+VfDw4VwPb8gcZOpqdHwPO+jkndYQPotaykWCpKoMcmjQRtw/u4cxn
+        Ho6R5H2JiuX4Rk3Ay+upEXDdZiynyUO4FA==
+X-Google-Smtp-Source: ACHHUZ54oosSzxi/8tOiAnFCUh2kjyZhlP4God13vC+klLQhjpuO8Nx6cCe31zYrr6p0+7bBuiPtjw==
+X-Received: by 2002:a81:8886:0:b0:55a:592d:9ec0 with SMTP id y128-20020a818886000000b0055a592d9ec0mr10060051ywf.20.1683108582047;
+        Wed, 03 May 2023 03:09:42 -0700 (PDT)
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
+        by smtp.gmail.com with ESMTPSA id y206-20020a81a1d7000000b0055a07585a91sm2494527ywg.11.2023.05.03.03.09.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 May 2023 03:09:41 -0700 (PDT)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-55af4277904so14442667b3.1;
+        Wed, 03 May 2023 03:09:41 -0700 (PDT)
+X-Received: by 2002:a81:84d2:0:b0:55a:6551:7ea8 with SMTP id
+ u201-20020a8184d2000000b0055a65517ea8mr9163012ywf.42.1683108581083; Wed, 03
+ May 2023 03:09:41 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230502170618.55967-1-wsa+renesas@sang-engineering.com> <20230502170618.55967-2-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20230502170618.55967-2-wsa+renesas@sang-engineering.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 3 May 2023 12:09:29 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdW9OP-C2iN97ntNJ7hjgmtY+=NQ=Hi38kPrd8ZUoafFjw@mail.gmail.com>
+Message-ID: <CAMuHMdW9OP-C2iN97ntNJ7hjgmtY+=NQ=Hi38kPrd8ZUoafFjw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] clk: renesas: r8a779a0: Add PWM clock
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If a problem occurs in the process of creating an integrity payload, the
-status of bio is always BLK_STS_RESOURCE.
+Hi Wolfram,
 
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Martin K. Petersen <martin.petersen@oracle.com>
+On Tue, May 2, 2023 at 7:06 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> Tested-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Signed-off-by: Jinyoung Choi <j-young.choi@samsung.com>
----
- block/bio-integrity.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+Thanks for your patch!
 
-diff --git a/block/bio-integrity.c b/block/bio-integrity.c
-index 74cf9933c285..329c44eca83d 100644
---- a/block/bio-integrity.c
-+++ b/block/bio-integrity.c
-@@ -278,7 +278,6 @@ bool bio_integrity_prep(struct bio *bio)
- 	unsigned int len, nr_pages;
- 	unsigned int bytes, offset, i;
- 	unsigned int intervals;
--	blk_status_t status;
- 
- 	if (!bi)
- 		return true;
-@@ -307,7 +306,6 @@ bool bio_integrity_prep(struct bio *bio)
- 	/* Allocate kernel buffer for protection data */
- 	len = intervals * bi->tuple_size;
- 	buf = kmalloc(len, GFP_NOIO);
--	status = BLK_STS_RESOURCE;
- 	if (unlikely(buf == NULL)) {
- 		printk(KERN_ERR "could not allocate integrity buffer\n");
- 		goto err_end_io;
-@@ -322,7 +320,6 @@ bool bio_integrity_prep(struct bio *bio)
- 	if (IS_ERR(bip)) {
- 		printk(KERN_ERR "could not allocate data integrity bioset\n");
- 		kfree(buf);
--		status = BLK_STS_RESOURCE;
- 		goto err_end_io;
- 	}
- 
-@@ -346,7 +343,6 @@ bool bio_integrity_prep(struct bio *bio)
- 		if (bio_integrity_add_page(bio, virt_to_page(buf),
- 					   bytes, offset) < bytes) {
- 			printk(KERN_ERR "could not attach integrity payload\n");
--			status = BLK_STS_RESOURCE;
- 			goto err_end_io;
- 		}
- 
-@@ -365,10 +361,9 @@ bool bio_integrity_prep(struct bio *bio)
- 	return true;
- 
- err_end_io:
--	bio->bi_status = status;
-+	bio->bi_status = BLK_STS_RESOURCE;
- 	bio_endio(bio);
- 	return false;
--
- }
- EXPORT_SYMBOL(bio_integrity_prep);
- 
+> --- a/drivers/clk/renesas/r8a779a0-cpg-mssr.c
+> +++ b/drivers/clk/renesas/r8a779a0-cpg-mssr.c
+> @@ -170,6 +170,7 @@ static const struct mssr_mod_clk r8a779a0_mod_clks[] __initconst = {
+>         DEF_MOD("msi3",         621,    R8A779A0_CLK_MSO),
+>         DEF_MOD("msi4",         622,    R8A779A0_CLK_MSO),
+>         DEF_MOD("msi5",         623,    R8A779A0_CLK_MSO),
+> +       DEF_MOD("pwm",          628,    R8A779A0_CLK_S1D8),
+
+Do you mind if I rename this to "pwm0" while applying, to match the docs?
+
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-clk-for-v6.5.
+
+>         DEF_MOD("rpc-if",       629,    R8A779A0_CLK_RPCD2),
+>         DEF_MOD("scif0",        702,    R8A779A0_CLK_S1D8),
+>         DEF_MOD("scif1",        703,    R8A779A0_CLK_S1D8),
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.34.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
