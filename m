@@ -2,138 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E6796F589A
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 15:09:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 044EE6F589D
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 15:10:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230008AbjECNJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 09:09:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35118 "EHLO
+        id S229940AbjECNJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 09:09:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbjECNJF (ORCPT
+        with ESMTP id S230073AbjECNJ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 09:09:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E874EDB;
-        Wed,  3 May 2023 06:09:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C1413614C8;
-        Wed,  3 May 2023 13:09:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C267C4339E;
-        Wed,  3 May 2023 13:09:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683119343;
-        bh=5Xok1b5Bon4dNBT/EG9uKl/6cvSusA5y9BN7upmEzC8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=glYqs7G41Oe7Vr2QNmHMivzZ6SgZQ51erxLwa4NoyJylHIWGgJZiJbFOEF9eZRS9n
-         xWx6cluWIvaqTZt7zXRHgIkq6tJbMsx2DRAeJtYjsXE4g6fbmacJoLd1zt/7Kc+RNb
-         DVYTcfIMk4llzEHHC0AIYjcc1NqABxKW5it0P7I3y/6ACXPplEVw9mnPneYwqWJE1j
-         DXf0Ve1xZPIJYMX1EQqZ/49QrXBsnJubhquY8wuE6I2y8dSs6L+d1Z35PcqDp/q7zl
-         io5DshylXLfwwhBVdAWKtYrKz5bhQuXIbmxPDl7QiyFIMDTq/uAziVDre8vjyLHGtq
-         jmFJ8ehjTEdAg==
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2ac75500798so6202301fa.0;
-        Wed, 03 May 2023 06:09:03 -0700 (PDT)
-X-Gm-Message-State: AC+VfDx8VIFGsdzwVAt9lIOTgqeOb8/Q9jS97/fHtSElo+tcs5II73Sm
-        ZIB/SgALIfvsV9uCVb4WpKzuMOObIZsxOcwOVA==
-X-Google-Smtp-Source: ACHHUZ50B+ONgazRTst79ZMphnWydxujQ+xpsmD1oxBiJc6OIwSZRmXeOONoaPS4VdIBDlX9Htpoiog7d0wWQm74E6U=
-X-Received: by 2002:a2e:80ca:0:b0:2a5:f82e:e2a6 with SMTP id
- r10-20020a2e80ca000000b002a5f82ee2a6mr239ljg.47.1683119341121; Wed, 03 May
- 2023 06:09:01 -0700 (PDT)
+        Wed, 3 May 2023 09:09:57 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09ED4EEB
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 06:09:54 -0700 (PDT)
+Received: from kwepemm600013.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4QBHHx2dhYz18Kpg;
+        Wed,  3 May 2023 21:05:49 +0800 (CST)
+Received: from [10.174.178.46] (10.174.178.46) by
+ kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 3 May 2023 21:09:50 +0800
+Subject: Re: [PATCH 1/4] mtd: ubi: block: don't return on error when removing
+To:     Daniel Golle <daniel@makrotopia.org>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+References: <cover.1683043928.git.daniel@makrotopia.org>
+ <4bca8ffa66fa094da37625e66f3a2681058531d6.1683043928.git.daniel@makrotopia.org>
+From:   Zhihao Cheng <chengzhihao1@huawei.com>
+Message-ID: <89f2a4a9-6054-80a8-285f-2be6c57c299d@huawei.com>
+Date:   Wed, 3 May 2023 21:09:49 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-References: <20220328000915.15041-1-ansuelsmth@gmail.com> <85eb14ec-f465-7447-ad77-a3dabc666f47@kernel.org>
- <YkKRYnN84D9VZhGj@Ansuel-xps.localdomain> <CAL_Jsq+RQQ-ADMxLPUFwk6S6kGmb6oNDy4k52fnU0EtbUvqmSA@mail.gmail.com>
- <CAMuHMdWNTE48MFy6fqxAsfMWz9b6E7dVNXtXtESP95sxk2PGwA@mail.gmail.com>
- <CAL_JsqJthKTm8bhRF2B=ae1tvtPeYYXx_Tm76qQtSwLtH5C6VA@mail.gmail.com>
- <720a2829-b6b5-411c-ac69-9a53e881f48d@app.fastmail.com> <CAL_JsqKCtmkwzKa01gyG65fH8ye6R3KhR41PJbJhOJ4X9j=znA@mail.gmail.com>
- <99b49e6b-e963-415a-a2c9-72505087833c@app.fastmail.com>
-In-Reply-To: <99b49e6b-e963-415a-a2c9-72505087833c@app.fastmail.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Wed, 3 May 2023 08:08:48 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqL-WMNxHrgCzn=LfH6gpE_Yb3uRwo97ssHPoZenK3CEeQ@mail.gmail.com>
-Message-ID: <CAL_JsqL-WMNxHrgCzn=LfH6gpE_Yb3uRwo97ssHPoZenK3CEeQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/1] Categorize ARM dts directory
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Olof Johansson <olof@lixom.net>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-actions@lists.infradead.org,
-        linux-sunxi@lists.linux.dev,
-        Linux-OMAP <linux-omap@vger.kernel.org>,
-        linux-amlogic@lists.infradead.org, linux-arm-kernel@axis.com,
-        linux-aspeed@lists.ozlabs.org,
-        linux-rpi-kernel@lists.infradead.org,
-        chrome-platform@lists.linux.dev,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-samsung-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        kernel@dh-electronics.com, linux-mediatek@lists.infradead.org,
-        openbmc@lists.ozlabs.org, linux-tegra@vger.kernel.org,
-        "linux-oxnas@groups.io" <linux-oxnas@groups.io>,
-        linux-arm-msm@vger.kernel.org, linux-unisoc@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        linux-realtek-soc@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <4bca8ffa66fa094da37625e66f3a2681058531d6.1683043928.git.daniel@makrotopia.org>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.46]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 3, 2023 at 6:02=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Tue, May 2, 2023, at 21:40, Rob Herring wrote:
-> > On Tue, May 2, 2023 at 3:15=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wr=
-ote:
->
-> > vendor_map =3D {
-> >     'alphascale' : 'alphascale',
-> >     'alpine' : 'alpine',
->
-> I would make this one 'amazon' if we go with current manufacturers.
->
-> >     'nspire' : 'nspire',
->
-> nspire is the name of the end-user product, so that doesn't quite
-> fit. The SoC was apparently an LSI logic Zevio, which is now owned
-> by Broadcom.
+ÔÚ 2023/5/3 0:48, Daniel Golle Ð´µÀ:
+> There is no point on returning the error from ubiblock_remove in case
+> it is being called due to a volume removal event -- the volume is gone,
+> we should destroy and remove the ubiblock device no matter what.
+> 
+> Introduce a new boolean parameter 'force' to tell ubiblock_remove to go
+> on even in case the ubiblock device is still busy. Use that new option
+> when calling ubiblock_remove due to a UBI_VOLUME_REMOVED event.
+> 
+> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> ---
+>   drivers/mtd/ubi/block.c | 6 +++---
+>   drivers/mtd/ubi/cdev.c  | 2 +-
+>   drivers/mtd/ubi/ubi.h   | 4 ++--
+>   3 files changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/mtd/ubi/block.c b/drivers/mtd/ubi/block.c
+> index 3711d7f746003..6f5804f4b8f55 100644
+> --- a/drivers/mtd/ubi/block.c
+> +++ b/drivers/mtd/ubi/block.c
+> @@ -457,7 +457,7 @@ static void ubiblock_cleanup(struct ubiblock *dev)
+>   	idr_remove(&ubiblock_minor_idr, dev->gd->first_minor);
+>   }
+>   
+> -int ubiblock_remove(struct ubi_volume_info *vi)
+> +int ubiblock_remove(struct ubi_volume_info *vi, bool force)
+>   {
+>   	struct ubiblock *dev;
+>   	int ret;
+> @@ -471,7 +471,7 @@ int ubiblock_remove(struct ubi_volume_info *vi)
+>   
+>   	/* Found a device, let's lock it so we can check if it's busy */
+>   	mutex_lock(&dev->dev_mutex);
+> -	if (dev->refcnt > 0) {
+> +	if (dev->refcnt > 0 && !force) {
+>   		ret = -EBUSY;
+>   		goto out_unlock_dev;
+>   	}
 
-I'm inclined to leave it. I put it in the category of a one-off thing
-that's not sharing anything
+After looking through this series, I think we should pay attention to 
+one problem: The lifetime of mtd device and ubi things(ubi 
+device/volume/block device). It's difficult to decide whether or not to 
+destroy ubi things when mtd driver is removed.
+If we destroy ubi things, one application may have opened an ubi volume 
+early, then ubi device and all its volumes are destroyed by 
+ubi_notify_remove(), later volume accessing by the application will 
+trigger an UAF problem in kernel.
+       App              driver_remove
+fd = ubi_open_volume
+                    ubi_notify_remove
+                     ubi_detach_mtd_dev
+                      vfree(ubi->vtbl)
+ioctl(fd, UBI_IOCVOLUP)
+  ubi_start_update
+   set_update_marker
+    vtbl_rec = ubi->vtbl[vol->vol_id]  // UAF!
 
-> >     'mvebu' : 'marvell',
-> >     'mmp' : 'marvell',
-> >     'berlin' : 'berlin',
->
-> While berlin is related to pxa/mmp, this one is now owned
-> by Synaptics, and the 64-bit versions are already in the
-> synaptics subdir, so I'd go with teh same here.
->
-> >     'openbmc' : 'aspeed',
-> >     'en7' : 'airoha',
->
-> airoha is a separate company now, but the hardware is still
-> shared with mediatek, so we could consider lumping it into
-> that subdir, but a separate one may be better long-term.
->
-> >     'gemini' : 'gemini',
->
-> This one is also a product name, not a company. Apparently,
-> gemini was originally made by Storm Semiconductor, and then
-> by Cortina, which was subsequently acquired by Inphi, and that ended
-> up in Marvell after the product was already discontinued.
->
-> Out of the four, I'd probably go with 'cortina' as the
-> directory name.
+If we reserve ubi things even mtd driver is removed. There exists mtd 
+drivers releasing mtd device (eg. phram_remove), then upper application 
+could accessing released mtd device by the ubi device, which also 
+triggers UAF in kernel.
 
-I had 'cortina' previously. Linus wanted gemini...
+After looking at nvme_free_ctrl, I found that nvme_dev is released when 
+device refcnt becomes zero, so block device and nvme_dev won't be freed 
+immediately when pci driver removed if upper filesystem being mounted on 
+nvme device. And the mtd device's refcnt is held by ubi too, we may 
+follow this method, but investigating all mtd drivers looks like 
+unrealistic.
 
-Rob
+> @@ -546,7 +546,7 @@ static int ubiblock_notify(struct notifier_block *nb,
+>   		 */
+>   		break;
+>   	case UBI_VOLUME_REMOVED:
+> -		ubiblock_remove(&nt->vi);
+> +		ubiblock_remove(&nt->vi, true);
+>   		break;
+>   	case UBI_VOLUME_RESIZED:
+>   		ubiblock_resize(&nt->vi);
+> diff --git a/drivers/mtd/ubi/cdev.c b/drivers/mtd/ubi/cdev.c
+> index f43430b9c1e65..bb55e863dd296 100644
+> --- a/drivers/mtd/ubi/cdev.c
+> +++ b/drivers/mtd/ubi/cdev.c
+> @@ -572,7 +572,7 @@ static long vol_cdev_ioctl(struct file *file, unsigned int cmd,
+>   		struct ubi_volume_info vi;
+>   
+>   		ubi_get_volume_info(desc, &vi);
+> -		err = ubiblock_remove(&vi);
+> +		err = ubiblock_remove(&vi, false);
+>   		break;
+>   	}
+>   
+> diff --git a/drivers/mtd/ubi/ubi.h b/drivers/mtd/ubi/ubi.h
+> index c8f1bd4fa1008..44c0eeaf1e1b0 100644
+> --- a/drivers/mtd/ubi/ubi.h
+> +++ b/drivers/mtd/ubi/ubi.h
+> @@ -979,7 +979,7 @@ static inline void ubi_fastmap_destroy_checkmap(struct ubi_volume *vol) {}
+>   int ubiblock_init(void);
+>   void ubiblock_exit(void);
+>   int ubiblock_create(struct ubi_volume_info *vi);
+> -int ubiblock_remove(struct ubi_volume_info *vi);
+> +int ubiblock_remove(struct ubi_volume_info *vi, bool force);
+>   #else
+>   static inline int ubiblock_init(void) { return 0; }
+>   static inline void ubiblock_exit(void) {}
+> @@ -987,7 +987,7 @@ static inline int ubiblock_create(struct ubi_volume_info *vi)
+>   {
+>   	return -ENOSYS;
+>   }
+> -static inline int ubiblock_remove(struct ubi_volume_info *vi)
+> +static inline int ubiblock_remove(struct ubi_volume_info *vi, bool force)
+>   {
+>   	return -ENOSYS;
+>   }
+> 
+
