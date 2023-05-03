@@ -2,214 +2,300 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FCAD6F605E
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 22:58:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EEAE6F6058
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 22:57:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbjECU6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 16:58:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33160 "EHLO
+        id S229673AbjECU5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 16:57:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbjECU6X (ORCPT
+        with ESMTP id S229648AbjECU5g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 16:58:23 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C5E8A4B
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 13:58:04 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-50bc22805d3so7563329a12.1
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 13:58:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683147482; x=1685739482;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fOKjucXS3bLNlM0zdkAZGUqfwQjiAxpZxAhc5U8CzHU=;
-        b=M76iV/Cp1NdgRUq/sw7nrkkQZ1f5OQw/FLMsnaaaGZ9WDv4dmUFRbQJ7/aaMVURbXH
-         jtw5XjZVNFYAGal1iu1GucmpcCJ0CgdZf5Dbshiuo8AvHjIdf0WWbQM1167FJbGBLOVb
-         +m1nnTAklcYmPuroSxwm4K/URkI9jq+Kt+7F8TF3u4xM52Qw3iUGnjjoffhghD/7aHOY
-         ZqstTs/T4J5k1rFcbF9bu5rwKRDcjvJp9ImpLerVMoag/moEHoqxkO/YcyexIo1OJITP
-         UPEfOHgdeHnqeQ1WiBjWWHnrzmC9+Io4K3aoUpIz3h6fXx4MOAIJD5q5jVcoAjZcEg/c
-         i7NA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683147482; x=1685739482;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fOKjucXS3bLNlM0zdkAZGUqfwQjiAxpZxAhc5U8CzHU=;
-        b=IOcS2xvfxa6hEAxeNXeA48EHfiGHfNL9IluIxO2LGBtsrLYqomqIf+Fi3/+c+AYZdi
-         n1KEA+N0koOJipe0f/41a/3g6wnYX1FXcuowunYDzhhVN0KfMrJ71goIIo0+6efXJGGY
-         UCX0V81/5hAC4yCdnzMvM5vNzYM5RmjUSLIkPBUFqOOZ7r+bs9EdA96Czs8GkrsLjHsm
-         wPiVL0LTahIayyubiQChQpqTC3jYsaXURJbxtzrrD6FSRjl2C892dBsFt4iDsjgfGLOV
-         Q4FGieNTV2ULb1rHmIKtZJPX1LpJC9xeax5OKgwAkJLC5gM9tdmLutXplTo5kB1L8Pxv
-         NTrA==
-X-Gm-Message-State: AC+VfDwi+AUkHK00w6QPgakGv8A0uOCR9em7Qpbf/uVLT6qktseTRf2P
-        bG60LLHSIC6qrQmpSseoIpPz7BK6dLsZ8pydalI9Og==
-X-Google-Smtp-Source: ACHHUZ7bG8Xn1LjA65SfnlqTNN22QeCgktHev9DSXBWTCamKtyQdrW7/6BUqHXApnZNL4m4+BsdZL7Rw4nFGoBYOPAM=
-X-Received: by 2002:a17:906:6a14:b0:953:7be7:91de with SMTP id
- qw20-20020a1709066a1400b009537be791demr4660114ejc.20.1683147481570; Wed, 03
- May 2023 13:58:01 -0700 (PDT)
+        Wed, 3 May 2023 16:57:36 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CF868A40;
+        Wed,  3 May 2023 13:57:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683147448; x=1714683448;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=LP6aJsbAslWxtPOKTpN6qXrdWcQD2USlo7JFwiBp9sU=;
+  b=A7in0AJcqoulsv2rQeSaSAifnFw43F1PTAmbpOOmdrrZ3fs6NFyHykeT
+   KJWoxdAj43O8kn2S+UCB9TAcvMH5kAeYVSfNBitUww8Re1Z1wFNmg5ukF
+   q/9UrbvxOUoUwPGZNvAElGI7d9F6t8xktqzDfPPQvBXFJ3D/4xz+Q0lm8
+   pDJpIZfwOoKAK4zJXrJ6UMu3IvMNhbwnCS/KfYenRUFGKPJv08QhBlS5l
+   vSp/LwAJPB6STwdk88L77WgjNiPYMu9sTG0Rn/8hrpaF5Ny+RZNUyw/Zu
+   9Mb4Kwp1zrfnY0UbhP8jh6qgeDFShKtjMb3PhflIHtVW6PJmBOd+XRi4R
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="411922222"
+X-IronPort-AV: E=Sophos;i="5.99,248,1677571200"; 
+   d="scan'208";a="411922222"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2023 13:57:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="727297487"
+X-IronPort-AV: E=Sophos;i="5.99,248,1677571200"; 
+   d="scan'208";a="727297487"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga008.jf.intel.com with ESMTP; 03 May 2023 13:57:27 -0700
+Received: from [10.209.46.175] (kliang2-mobl1.ccr.corp.intel.com [10.209.46.175])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 58A8C580D43;
+        Wed,  3 May 2023 13:57:23 -0700 (PDT)
+Message-ID: <01bb74d6-9240-5a42-f936-2106d1488800@linux.intel.com>
+Date:   Wed, 3 May 2023 16:57:22 -0400
 MIME-Version: 1.0
-References: <20230501175025.36233-1-surenb@google.com> <ZFBvOh8r5WbTVyA8@casper.infradead.org>
- <CAJuCfpHfAFx9rjv0gHK77LbP-8gd-kFnWw=aqfQTP6pH=zvMNg@mail.gmail.com>
- <ZFCB+G9KSNE+J9cZ@casper.infradead.org> <CAJuCfpES=G8i99yYXWoeJq9+JVUjX5Bkq_5VNVTVX7QT+Wkfxg@mail.gmail.com>
- <ZFEmN6G7WRy59Mum@casper.infradead.org> <CAJuCfpFs+Rgpu8v+ddHFwtOx33W5k1sKDdXHM2ej1Upyo_9y4g@mail.gmail.com>
- <ZFGPLXIis6tl1QWX@casper.infradead.org> <CAJuCfpGgc_bCEAE5LrhYPk=qXMU=owgiABTO9ZNqaBx-xfrOuQ@mail.gmail.com>
- <CAJD7tkZJ1VPB+bA0cjHHcehoMW2fT96-h=C5pRHD=Z+SJXYosA@mail.gmail.com> <CAJuCfpE9dVK01c-aNT_uwTC=m8RSdEiXsoe6XBR48GjL=ezsmg@mail.gmail.com>
-In-Reply-To: <CAJuCfpE9dVK01c-aNT_uwTC=m8RSdEiXsoe6XBR48GjL=ezsmg@mail.gmail.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Wed, 3 May 2023 13:57:17 -0700
-Message-ID: <CAJD7tkadk9=-PT1daXQyA=X_qz60XOEciXOkXWwPqxYJOaWRXQ@mail.gmail.com>
-Subject: Re: [PATCH 1/3] mm: handle swap page faults under VMA lock if page is uncontended
-To:     Suren Baghdasaryan <surenb@google.com>, Ying <ying.huang@intel.com>
-Cc:     Matthew Wilcox <willy@infradead.org>, akpm@linux-foundation.org,
-        hannes@cmpxchg.org, mhocko@suse.com, josef@toxicpanda.com,
-        jack@suse.cz, ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
-        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com, hdanton@sina.com,
-        apopple@nvidia.com, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v4 02/44] perf stat: Introduce skippable evsels
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ahmad Yasin <ahmad.yasin@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Stephane Eranian <eranian@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Samantha Alt <samantha.alt@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>,
+        Weilin Wang <weilin.wang@intel.com>,
+        Edward Baker <edward.baker@intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        Rob Herring <robh@kernel.org>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        James Clark <james.clark@arm.com>,
+        Suzuki Poulouse <suzuki.poulose@arm.com>,
+        Kang Minchul <tegongkang@gmail.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230502223851.2234828-1-irogers@google.com>
+ <20230502223851.2234828-3-irogers@google.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <20230502223851.2234828-3-irogers@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 3, 2023 at 12:57=E2=80=AFPM Suren Baghdasaryan <surenb@google.c=
-om> wrote:
->
-> On Wed, May 3, 2023 at 1:34=E2=80=AFAM Yosry Ahmed <yosryahmed@google.com=
-> wrote:
-> >
-> > On Tue, May 2, 2023 at 4:05=E2=80=AFPM Suren Baghdasaryan <surenb@googl=
-e.com> wrote:
-> > >
-> > > On Tue, May 2, 2023 at 3:31=E2=80=AFPM Matthew Wilcox <willy@infradea=
-d.org> wrote:
-> > > >
-> > > > On Tue, May 02, 2023 at 09:36:03AM -0700, Suren Baghdasaryan wrote:
-> > > > > On Tue, May 2, 2023 at 8:03=E2=80=AFAM Matthew Wilcox <willy@infr=
-adead.org> wrote:
-> > > > > >
-> > > > > > On Mon, May 01, 2023 at 10:04:56PM -0700, Suren Baghdasaryan wr=
-ote:
-> > > > > > > On Mon, May 1, 2023 at 8:22=E2=80=AFPM Matthew Wilcox <willy@=
-infradead.org> wrote:
-> > > > > > > >
-> > > > > > > > On Mon, May 01, 2023 at 07:30:13PM -0700, Suren Baghdasarya=
-n wrote:
-> > > > > > > > > On Mon, May 1, 2023 at 7:02=E2=80=AFPM Matthew Wilcox <wi=
-lly@infradead.org> wrote:
-> > > > > > > > > >
-> > > > > > > > > > On Mon, May 01, 2023 at 10:50:23AM -0700, Suren Baghdas=
-aryan wrote:
-> > > > > > > > > > > +++ b/mm/memory.c
-> > > > > > > > > > > @@ -3711,11 +3711,6 @@ vm_fault_t do_swap_page(struct=
- vm_fault *vmf)
-> > > > > > > > > > >       if (!pte_unmap_same(vmf))
-> > > > > > > > > > >               goto out;
-> > > > > > > > > > >
-> > > > > > > > > > > -     if (vmf->flags & FAULT_FLAG_VMA_LOCK) {
-> > > > > > > > > > > -             ret =3D VM_FAULT_RETRY;
-> > > > > > > > > > > -             goto out;
-> > > > > > > > > > > -     }
-> > > > > > > > > > > -
-> > > > > > > > > > >       entry =3D pte_to_swp_entry(vmf->orig_pte);
-> > > > > > > > > > >       if (unlikely(non_swap_entry(entry))) {
-> > > > > > > > > > >               if (is_migration_entry(entry)) {
-> > > > > > > > > >
-> > > > > > > > > > You're missing the necessary fallback in the (!folio) c=
-ase.
-> > > > > > > > > > swap_readpage() is synchronous and will sleep.
-> > > > > > > > >
-> > > > > > > > > True, but is it unsafe to do that under VMA lock and has =
-to be done
-> > > > > > > > > under mmap_lock?
-> > > > > > > >
-> > > > > > > > ... you were the one arguing that we didn't want to wait fo=
-r I/O with
-> > > > > > > > the VMA lock held?
-> > > > > > >
-> > > > > > > Well, that discussion was about waiting in folio_lock_or_retr=
-y() with
-> > > > > > > the lock being held. I argued against it because currently we=
- drop
-> > > > > > > mmap_lock lock before waiting, so if we don't drop VMA lock w=
-e would
-> > > > > > > be changing the current behavior which might introduce new
-> > > > > > > regressions. In the case of swap_readpage and swapin_readahea=
-d we
-> > > > > > > already wait with mmap_lock held, so waiting with VMA lock he=
-ld does
-> > > > > > > not introduce new problems (unless there is a need to hold mm=
-ap_lock).
-> > > > > > >
-> > > > > > > That said, you are absolutely correct that this situation can=
- be
-> > > > > > > improved by dropping the lock in these cases too. I just didn=
-'t want
-> > > > > > > to attack everything at once. I believe after we agree on the=
- approach
-> > > > > > > implemented in https://lore.kernel.org/all/20230501175025.362=
-33-3-surenb@google.com
-> > > > > > > for dropping the VMA lock before waiting, these cases can be =
-added
-> > > > > > > easier. Does that make sense?
-> > > > > >
-> > > > > > OK, I looked at this path some more, and I think we're fine.  T=
-his
-> > > > > > patch is only called for SWP_SYNCHRONOUS_IO which is only set f=
-or
-> > > > > > QUEUE_FLAG_SYNCHRONOUS devices, which are brd, zram and nvdimms
-> > > > > > (both btt and pmem).  So the answer is that we don't sleep in t=
-his
-> > > > > > path, and there's no need to drop the lock.
-> > > > >
-> > > > > Yes but swapin_readahead does sleep, so I'll have to handle that =
-case
-> > > > > too after this.
-> > > >
-> > > > Sleeping is OK, we do that in pXd_alloc()!  Do we block on I/O anyw=
-here
-> > > > in swapin_readahead()?  It all looks like async I/O to me.
-> > >
-> > > Hmm. I thought that we have synchronous I/O in the following paths:
-> > >     swapin_readahead()->swap_cluster_readahead()->swap_readpage()
-> > >     swapin_readahead()->swap_vma_readahead()->swap_readpage()
-> > > but just noticed that in both cases swap_readpage() is called with th=
-e
-> > > synchronous parameter being false. So you are probably right here...
-> >
-> > In both swap_cluster_readahead() and swap_vma_readahead() it looks
-> > like if the readahead window is 1 (aka we are not reading ahead), then
-> > we jump to directly calling read_swap_cache_async() passing do_poll =3D
-> > true, which means we may end up calling swap_readpage() passing
-> > synchronous =3D true.
-> >
-> > I am not familiar with readahead heuristics, so I am not sure how
-> > common this is, but it's something to think about.
->
-> Uh, you are correct. If this branch is common, we could use the same
-> "drop the lock and retry" pattern inside read_swap_cache_async(). That
-> would be quite easy to implement.
-> Thanks for checking on it!
 
 
-I am honestly not sure how common this is.
+On 2023-05-02 6:38 p.m., Ian Rogers wrote:
+> Perf stat with no arguments will use default events and metrics. These
+> events may fail to open even with kernel and hypervisor disabled. When
+> these fail then the permissions error appears even though they were
+> implicitly selected. This is particularly a problem with the automatic
+> selection of the TopdownL1 metric group on certain architectures like
+> Skylake:
+> 
+> '''
+> $ perf stat true
+> Error:
+> Access to performance monitoring and observability operations is limited.
+> Consider adjusting /proc/sys/kernel/perf_event_paranoid setting to open
+> access to performance monitoring and observability operations for processes
+> without CAP_PERFMON, CAP_SYS_PTRACE or CAP_SYS_ADMIN Linux capability.
+> More information can be found at 'Perf events and tool security' document:
+> https://www.kernel.org/doc/html/latest/admin-guide/perf-security.html
+> perf_event_paranoid setting is 2:
+>   -1: Allow use of (almost) all events by all users
+>       Ignore mlock limit after perf_event_mlock_kb without CAP_IPC_LOCK
+>> = 0: Disallow raw and ftrace function tracepoint access
+>> = 1: Disallow CPU event access
+>> = 2: Disallow kernel profiling
+> To make the adjusted perf_event_paranoid setting permanent preserve it
+> in /etc/sysctl.conf (e.g. kernel.perf_event_paranoid = <setting>)
+> '''
+> 
+> This patch adds skippable evsels that when they fail to open won't
+> cause termination and will appear as "<not supported>" in output. The
+> TopdownL1 events, from the metric group, are marked as skippable. This
+> turns the failure above to:
+> 
+> '''
+> $ perf stat perf bench internals synthesize
+> Computing performance of single threaded perf event synthesis by
+> synthesizing events on the perf process itself:
+>   Average synthesis took: 49.287 usec (+- 0.083 usec)
+>   Average num. events: 3.000 (+- 0.000)
+>   Average time per event 16.429 usec
+>   Average data synthesis took: 49.641 usec (+- 0.085 usec)
+>   Average num. events: 11.000 (+- 0.000)
+>   Average time per event 4.513 usec
+> 
+>  Performance counter stats for 'perf bench internals synthesize':
+> 
+>           1,222.38 msec task-clock:u                     #    0.993 CPUs utilized
+>                  0      context-switches:u               #    0.000 /sec
+>                  0      cpu-migrations:u                 #    0.000 /sec
+>                162      page-faults:u                    #  132.529 /sec
+>        774,445,184      cycles:u                         #    0.634 GHz                         (49.61%)
+>      1,640,969,811      instructions:u                   #    2.12  insn per cycle              (59.67%)
+>        302,052,148      branches:u                       #  247.102 M/sec                       (59.69%)
+>          1,807,718      branch-misses:u                  #    0.60% of all branches             (59.68%)
+>          5,218,927      CPU_CLK_UNHALTED.REF_XCLK:u      #    4.269 M/sec
+>                                                   #     17.3 %  tma_frontend_bound
+>                                                   #     56.4 %  tma_retiring
+>                                                   #      nan %  tma_backend_bound
+>                                                   #      nan %  tma_bad_speculation      (60.01%)
+>        536,580,469      IDQ_UOPS_NOT_DELIVERED.CORE:u    #  438.965 M/sec                       (60.33%)
+>    <not supported>      INT_MISC.RECOVERY_CYCLES_ANY:u
+>          5,223,936      CPU_CLK_UNHALTED.ONE_THREAD_ACTIVE:u #    4.274 M/sec                       (40.31%)
+>        774,127,250      CPU_CLK_UNHALTED.THREAD:u        #  633.297 M/sec                       (50.34%)
+>      1,746,579,518      UOPS_RETIRED.RETIRE_SLOTS:u      #    1.429 G/sec                       (50.12%)
+>      1,940,625,702      UOPS_ISSUED.ANY:u                #    1.588 G/sec                       (49.70%)
+> 
+>        1.231055525 seconds time elapsed
+> 
+>        0.258327000 seconds user
+>        0.965749000 seconds sys
+> '''
+> 
+> The event INT_MISC.RECOVERY_CYCLES_ANY:u is skipped as it can't be
+> opened with paranoia 2 on Skylake. With a lower paranoia, or as root,
+> all events/metrics are computed.
+> 
+> Signed-off-by: Ian Rogers <irogers@google.com>
 
-+Ying who might have a better idea.
+Tested-by: Kan Liang <kan.liang@linux.intel.com>
 
+Thanks,
+Kan
 
->
->
-> >
-> > > Does that mean swapin_readahead() might return a page which does not
-> > > have its content swapped-in yet?
-> > >
+> ---
+>  tools/perf/builtin-stat.c | 38 +++++++++++++++++++++++++++++---------
+>  tools/perf/util/evsel.c   | 15 +++++++++++++--
+>  tools/perf/util/evsel.h   |  1 +
+>  3 files changed, 43 insertions(+), 11 deletions(-)
+> 
+> diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+> index be9677aa642f..ffb47b166098 100644
+> --- a/tools/perf/builtin-stat.c
+> +++ b/tools/perf/builtin-stat.c
+> @@ -667,6 +667,13 @@ static enum counter_recovery stat_handle_error(struct evsel *counter)
+>  			evsel_list->core.threads->err_thread = -1;
+>  			return COUNTER_RETRY;
+>  		}
+> +	} else if (counter->skippable) {
+> +		if (verbose > 0)
+> +			ui__warning("skipping event %s that kernel failed to open .\n",
+> +				    evsel__name(counter));
+> +		counter->supported = false;
+> +		counter->errored = true;
+> +		return COUNTER_SKIP;
+>  	}
+>  
+>  	evsel__open_strerror(counter, &target, errno, msg, sizeof(msg));
+> @@ -1890,15 +1897,28 @@ static int add_default_attributes(void)
+>  		 * caused by exposing latent bugs. This is fixed properly in:
+>  		 * https://lore.kernel.org/lkml/bff481ba-e60a-763f-0aa0-3ee53302c480@linux.intel.com/
+>  		 */
+> -		if (metricgroup__has_metric("TopdownL1") && !perf_pmu__has_hybrid() &&
+> -		    metricgroup__parse_groups(evsel_list, "TopdownL1",
+> -					    /*metric_no_group=*/false,
+> -					    /*metric_no_merge=*/false,
+> -					    /*metric_no_threshold=*/true,
+> -					    stat_config.user_requested_cpu_list,
+> -					    stat_config.system_wide,
+> -					    &stat_config.metric_events) < 0)
+> -			return -1;
+> +		if (metricgroup__has_metric("TopdownL1") && !perf_pmu__has_hybrid()) {
+> +			struct evlist *metric_evlist = evlist__new();
+> +			struct evsel *metric_evsel;
+> +
+> +			if (!metric_evlist)
+> +				return -1;
+> +
+> +			if (metricgroup__parse_groups(metric_evlist, "TopdownL1",
+> +							/*metric_no_group=*/false,
+> +							/*metric_no_merge=*/false,
+> +							/*metric_no_threshold=*/true,
+> +							stat_config.user_requested_cpu_list,
+> +							stat_config.system_wide,
+> +							&stat_config.metric_events) < 0)
+> +				return -1;
+> +
+> +			evlist__for_each_entry(metric_evlist, metric_evsel) {
+> +				metric_evsel->skippable = true;
+> +			}
+> +			evlist__splice_list_tail(evsel_list, &metric_evlist->core.entries);
+> +			evlist__delete(metric_evlist);
+> +		}
+>  
+>  		/* Platform specific attrs */
+>  		if (evlist__add_default_attrs(evsel_list, default_null_attrs) < 0)
+> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+> index 356c07f03be6..1cd04b5998d2 100644
+> --- a/tools/perf/util/evsel.c
+> +++ b/tools/perf/util/evsel.c
+> @@ -290,6 +290,7 @@ void evsel__init(struct evsel *evsel,
+>  	evsel->per_pkg_mask  = NULL;
+>  	evsel->collect_stat  = false;
+>  	evsel->pmu_name      = NULL;
+> +	evsel->skippable     = false;
+>  }
+>  
+>  struct evsel *evsel__new_idx(struct perf_event_attr *attr, int idx)
+> @@ -1725,9 +1726,13 @@ static int get_group_fd(struct evsel *evsel, int cpu_map_idx, int thread)
+>  		return -1;
+>  
+>  	fd = FD(leader, cpu_map_idx, thread);
+> -	BUG_ON(fd == -1);
+> +	BUG_ON(fd == -1 && !leader->skippable);
+>  
+> -	return fd;
+> +	/*
+> +	 * When the leader has been skipped, return -2 to distinguish from no
+> +	 * group leader case.
+> +	 */
+> +	return fd == -1 ? -2 : fd;
+>  }
+>  
+>  static void evsel__remove_fd(struct evsel *pos, int nr_cpus, int nr_threads, int thread_idx)
+> @@ -2109,6 +2114,12 @@ static int evsel__open_cpu(struct evsel *evsel, struct perf_cpu_map *cpus,
+>  
+>  			group_fd = get_group_fd(evsel, idx, thread);
+>  
+> +			if (group_fd == -2) {
+> +				pr_debug("broken group leader for %s\n", evsel->name);
+> +				err = -EINVAL;
+> +				goto out_close;
+> +			}
+> +
+>  			test_attr__ready();
+>  
+>  			/* Debug message used by test scripts */
+> diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
+> index 35805dcdb1b9..bf8f01af1c0b 100644
+> --- a/tools/perf/util/evsel.h
+> +++ b/tools/perf/util/evsel.h
+> @@ -95,6 +95,7 @@ struct evsel {
+>  		bool			weak_group;
+>  		bool			bpf_counter;
+>  		bool			use_config_name;
+> +		bool			skippable;
+>  		int			bpf_fd;
+>  		struct bpf_object	*bpf_obj;
+>  		struct list_head	config_terms;
