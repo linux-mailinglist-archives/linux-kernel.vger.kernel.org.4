@@ -2,111 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A6F46F5E0E
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 20:39:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BBE96F5E11
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 20:40:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbjECSju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 14:39:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42258 "EHLO
+        id S229700AbjECSkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 14:40:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjECSjq (ORCPT
+        with ESMTP id S229577AbjECSkL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 14:39:46 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F1D4EDD;
-        Wed,  3 May 2023 11:39:45 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-94f7a0818aeso908176166b.2;
-        Wed, 03 May 2023 11:39:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683139184; x=1685731184;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hXawo9kiP+Vmzoz/c2lQQeKzlye9OM2UYu1dHvknnKI=;
-        b=P5g/bc4CJxpECNiGqxkyLXl2+x+qXT/PsfKky592bnfOuaqHgctz1pzcGnk7c7DLnZ
-         Gzc0Hpanaeq/vQIbd13QXdC59a3FWr6QSzLyePt81dZE6WZ+5vh4Sv80Mx16dm6IOjrR
-         d+ZMEk7AvVPLGPFJ1k+0BD7CwwGzlQECTbpvZyIOhzTzmmoKObZlQlax8OvfOCYJDiNW
-         +U5pwJ7ao1sl+qOm1RX3j+4U2sQmXbjfP2himr8IuoMYgYp8OzdKeHnHoFPrhX1rsf5m
-         Bdj6V2AWvEAxoTb2IeiIo1Cbx69kfo7zi/80chUqTmKT8tdSP02tNURGpoaZ5cTyzva9
-         393g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683139184; x=1685731184;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hXawo9kiP+Vmzoz/c2lQQeKzlye9OM2UYu1dHvknnKI=;
-        b=L7HxfH+wr0+eHqIXwRz4gsJuxCKBQQ4cCwKgbaoX8TK1eSoe8tHb/DjW+uGOfXH2Ho
-         Hl5GK6q5NuoWkeoUHH9tFuQp97f0yAY72fvFc9Wp+ygYzhJRVaATWZ53hFXCMdseHQwg
-         ONXIlLPnkeUBe9whipeUFjk0Ma1cv1rGtWNqs3agl9uy/ARJ8wuUSwCdgenWfJggMbVP
-         WbBpMf0mEcfMuQx8uBK+Z1MuvNZD2AipuF7wSM5Bz0+vfQLTsfmFSA9iC2WSBDYn4m2z
-         1A+Ki3YQb+MriQqN6RcqFfDuGnyZ1JCXxoFLURKQeKf7OO2KHcwRdQd3I6xSWyJooDEb
-         Lyow==
-X-Gm-Message-State: AC+VfDy44OizYVxzVF6suH/S91CnqdpXzuzypMhN+nBSW4ELz3h2fDDT
-        FgZA2aikp5KRbdhF2C5KVE8uEk+f6hC658bnhIU=
-X-Google-Smtp-Source: ACHHUZ4FqJhmXnUo/9MSvsx/rBHxAFjruUTH3c2eTKi/Fu9MUkFzjkK2ZGcho5F9Qo3igWXoBGNqZGNw/UV+gQwQJ7M=
-X-Received: by 2002:a17:907:1b08:b0:957:1df0:9cbf with SMTP id
- mp8-20020a1709071b0800b009571df09cbfmr4694843ejc.19.1683139184132; Wed, 03
- May 2023 11:39:44 -0700 (PDT)
+        Wed, 3 May 2023 14:40:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B97E768A;
+        Wed,  3 May 2023 11:40:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 70F6662F53;
+        Wed,  3 May 2023 18:40:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2635C433A1;
+        Wed,  3 May 2023 18:40:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683139206;
+        bh=cm76H1e596g6zBEKzoV3JH1wAtwXZ3vz7kKlt5bQlEA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=hVjxHsmwY3joEHA86eJkgM2j21OIUrZsEcIhlGlb5Wfwgn//Abz7J9qppoZs+VOet
+         Wm+0upecxPq6+9D+Oaq0EPpY161Jq2fLlmnfEV49OLVwjqpHWAMlPr+3X5yohT2D4w
+         82MrIkGARchZmHhaKpU5Qsa8h6rqVjXt0Z00+16ZjOA3E37xNQyq0bPm7Jcx/dXQ7s
+         P02vj/JQ1zVvZaWjVsPoGgH3hrmdETDglEiWicR4j7xk3ZTjjybqCvEBrnGKzbd9XM
+         oQVkfGWVo/y8spqPvl6e/Ei90LD1Llx/c9OfRDMJMakgC9w6uSJb8Y8KHSslgJyuC9
+         zarvc19ItZiiA==
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2ac7847839eso6740761fa.2;
+        Wed, 03 May 2023 11:40:06 -0700 (PDT)
+X-Gm-Message-State: AC+VfDzc9o7daXyBktapteg4UBzyxVA25RlHpxQ4MwEUHv9/xgSTov7w
+        lcMOKGDHfM+oBklzJ6aB1U9XO0qHBZColvYIXhY=
+X-Google-Smtp-Source: ACHHUZ42l1IMkEtuT4rp9vWqm5QdjomFmTc/BolNA0wpxB/RYD3L4h8/EsWZlO50/tic1SmlNLulr95mb7qDFP9xm78=
+X-Received: by 2002:a2e:95c2:0:b0:2a7:a2cf:3c03 with SMTP id
+ y2-20020a2e95c2000000b002a7a2cf3c03mr300157ljh.25.1683139204889; Wed, 03 May
+ 2023 11:40:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230406004018.1439952-1-drosen@google.com> <20230406004018.1439952-2-drosen@google.com>
- <CAEf4BzbyX3i6k5eL6D-5enU+u58nVn_fK28zNBJ4w_Vm-+RiMQ@mail.gmail.com>
- <CAADnVQ+jQG95kVqkajr=zz2-vs24XedEXcBgSx29oAjqUsFn2g@mail.gmail.com> <CA+PiJmST4WUH061KaxJ4kRL=fqy3X6+Wgb2E2rrLT5OYjUzxfQ@mail.gmail.com>
-In-Reply-To: <CA+PiJmST4WUH061KaxJ4kRL=fqy3X6+Wgb2E2rrLT5OYjUzxfQ@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 3 May 2023 11:39:32 -0700
-Message-ID: <CAEf4Bza3ONHzV0OPu2q17g7Z6w4PD8hMAmjP6ov-hKstt7r55A@mail.gmail.com>
-Subject: Re: [PATCH 1/3] bpf: verifier: Accept dynptr mem as mem in helpers
-To:     Daniel Rosenberg <drosen@google.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Joanne Koong <joannelkoong@gmail.com>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mykola Lysenko <mykolal@fb.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Android Kernel Team <kernel-team@android.com>
+References: <20230424165726.2245548-1-ardb@kernel.org> <ecbcc066-3636-9620-8db9-2c066d16e717@amd.com>
+ <CAMj1kXG8ZrdEUNTiSCet+aT+1ZyrbguFsGtNhVV+XgCssZgj9w@mail.gmail.com>
+ <a6846282-95c8-274a-accc-ffa54205489c@amd.com> <8f85787a-1fa5-8f59-6047-b3a791291bfd@amd.com>
+ <CAMj1kXFfHJDXW2xWTjT5xy_-8MdeS9HhcMh3=DKFZ3+vhaUFcA@mail.gmail.com> <20230503182433.GFZFKm4QAiqXRBYM0s@fat_crate.local>
+In-Reply-To: <20230503182433.GFZFKm4QAiqXRBYM0s@fat_crate.local>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 3 May 2023 20:39:53 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXFX0bEyE_Wr8j0Vexqc+sNcZWto5jy=t+g+43UpgDa2tA@mail.gmail.com>
+Message-ID: <CAMj1kXFX0bEyE_Wr8j0Vexqc+sNcZWto5jy=t+g+43UpgDa2tA@mail.gmail.com>
+Subject: Re: [PATCH 0/6] efi/x86: Avoid legacy decompressor during EFI boot
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Tom Lendacky <thomas.lendacky@amd.com>, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Evgeniy Baskov <baskov@ispras.ru>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Peter Jones <pjones@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Dave Young <dyoung@redhat.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 1, 2023 at 6:12=E2=80=AFPM Daniel Rosenberg <drosen@google.com>=
- wrote:
+On Wed, 3 May 2023 at 20:24, Borislav Petkov <bp@alien8.de> wrote:
 >
-> On Thu, Apr 6, 2023 at 3:13=E2=80=AFPM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > +1
-> > All of the DYNPTR_TYPE_FLAG_MASK flags cannot appear in type =3D=3D reg=
-->type
-> > here.
-> > They are either dynamic flags inside bpf_dynptr_kern->size
-> > or in arg_type.
-> > Like in bpf_dynptr_from_mem_proto.
+> On Wed, May 03, 2023 at 08:17:28PM +0200, Ard Biesheuvel wrote:
+> > (There is some 32-bit SEV code in the decompressor as well that
+> > obviously never gets called when booting in long mode, but I hadn't
+> > quite grasped how much other SEV code there actually is)
 >
-> Looking at this a bit more, I believe this is to enforce packet
-> restrictions for DYNPTR_TYPE_SKB and DYNPTR_TYPE_XDP. When a helper
-> function alters a packet, dynptr slices of it are invalidated. If I
-> remove that annotation entirely, then the invalid_data_slice family of
-> tests fail. bpf_dynptr_from_mem_proto is fine since that's just local
-> dynptrs, which don't have any extra limitations.
+> If you mean the thing in startup_32 which does get_sev_encryption_bit()
+> etc, that is going away.
+>
 
-
-Ah, ok, thanks for investigating!
+OK, good to know.
