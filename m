@@ -2,120 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 823A06F5BC5
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 18:10:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92B1B6F5BC6
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 18:11:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230522AbjECQK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 12:10:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45402 "EHLO
+        id S230064AbjECQLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 12:11:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230064AbjECQKv (ORCPT
+        with ESMTP id S230367AbjECQK5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 12:10:51 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B629769A
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 09:10:24 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-94f3cd32799so1071659566b.0
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 09:10:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683130222; x=1685722222;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MYyaoj8Q/I/Us7y08GPiQ94EBKjj+lyd3WqGJBJPwSw=;
-        b=dBw2i5oMj1+va8VKpl00IwyUGoupq4xPQDQptcJvuMkjcbLcNeSJFH2HHsZHH1AniB
-         6gtW4T/W15RqkusHKqKl4dsiKN7iE3piruslynidYHEOsu8lTTl1xqqnmsXfcJc7UE+m
-         30zleAz44oWe50z6DC8Cv5Whv8y6IdZgTZ1VVF9dtaWHI2cJEnLzTRXTA/bhDu0zjlBE
-         iYXeOuFRuEdLX8AyMkyoMDJcjXztIR3hetQgSoOGNV4oC6NkI67zT1m6rS2Gb5mToO0d
-         vpcYE76VdrtDmH9DsObFj9dWkWoMru3l3BsqZBLpyiroKiITMnJtIsC4vN67HXHP2kvs
-         ot0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683130222; x=1685722222;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MYyaoj8Q/I/Us7y08GPiQ94EBKjj+lyd3WqGJBJPwSw=;
-        b=kRb2Qsbjm7WbJfi36IEi6v1BQTpKlDtaNs7AHZ0RFA8qudN78+/WKez7ZN5pHkHrG/
-         Kt8/NQAnrfj0BVeL8cYvnBxpxZo8hWMnDmyx+Nh+yPEdkEYWj9BItgjooBssQGlmzMez
-         lBAUHPv+e0LRU//AWWhyPxxNAmXyYw5ASUDcvhX6P2xGieHFwHx+QP4qN/KIRUTLC5Do
-         F7PT3QDej67wIEHMr6PZVcD5vELF9N8GnIoevfu/GffIrWBXA4/oKcWUyovqEtYYUnyt
-         HY4i0LXCAjrXLgDIKaO1Ie9vdIFSfQJ5f6uupSwQCKqbFbxi8P7yw0YIYjz7SSUUTEdw
-         tcNw==
-X-Gm-Message-State: AC+VfDwjo729YvM0G432yJr/m7ZYs5KVng6NTOyVB+4+EsLLxSpHwLnO
-        HNq3JieJu/R4+Q50CP8TSWVBYA==
-X-Google-Smtp-Source: ACHHUZ5JrR5tK7SVHz0wY51w7D5j4qxwGQim+Bv3sQJV2ke2Jfo4xmib8u1tVuHBcaqfsphHttNTvQ==
-X-Received: by 2002:a17:907:3182:b0:94f:432f:242f with SMTP id xe2-20020a170907318200b0094f432f242fmr2973889ejb.67.1683130222354;
-        Wed, 03 May 2023 09:10:22 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:db42:e3d0:c55a:8cf1? ([2a02:810d:15c0:828:db42:e3d0:c55a:8cf1])
-        by smtp.gmail.com with ESMTPSA id s12-20020a170906bc4c00b00947ed087a2csm17455836ejv.154.2023.05.03.09.10.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 May 2023 09:10:21 -0700 (PDT)
-Message-ID: <08a20847-bf6a-20bc-4e80-1b74030ed80d@linaro.org>
-Date:   Wed, 3 May 2023 18:10:19 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 1/2] dt-bindings: arm: fsl: Add i.MX8MM-EVKB
-Content-Language: en-US
-To:     Marco Felsch <m.felsch@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Johannes Schneider <johannes.schneider@leica-geosystems.com>
-References: <20230503-b4-v6-3-topic-boards-imx8mm-evk-v1-0-1e15a371d374@pengutronix.de>
- <20230503-b4-v6-3-topic-boards-imx8mm-evk-v1-1-1e15a371d374@pengutronix.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230503-b4-v6-3-topic-boards-imx8mm-evk-v1-1-1e15a371d374@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 3 May 2023 12:10:57 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3435598
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 09:10:44 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 79CDE20523;
+        Wed,  3 May 2023 16:10:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1683130243; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TnCya75sRUhQpUzbtpvjYrIjYkQFYHaB1ZVmZiFKq5M=;
+        b=pGGUO64796gWKcPumbiplfH5y8f1p6xJn2q8eBbBx+Kr1raue4vuSM1jbtYS/lhk/A7bL0
+        bXQKgO8MiILv7DHHTpUGd7M638/SndTPtiPoXQGnv2oO3DaFHCyjzKggGDjNiSQZURjlYb
+        MkfR6K2EZbgS9v/yE+4IeHfL62cicjc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1683130243;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TnCya75sRUhQpUzbtpvjYrIjYkQFYHaB1ZVmZiFKq5M=;
+        b=xV8AFgh0Mk01Q8ueRBoWFyLyqJc7zWIJfgbgGPyJl6H7JJmQLwfRtrOPmR5NYXhDQAdLKJ
+        K421JIjeKkKZ1dCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5177013584;
+        Wed,  3 May 2023 16:10:43 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id JUHrEoOHUmTCfAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 03 May 2023 16:10:43 +0000
+Date:   Wed, 03 May 2023 18:10:42 +0200
+Message-ID: <87wn1pmm4d.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Oswald Buddenhagen <oswald.buddenhagen@gmx.de>
+Cc:     Jeff Chua <jeff.chua.linux@gmail.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: Re: linux-6.4 alsa sound broken
+In-Reply-To: <ZE9ngFLRqLkN6faH@ugly>
+References: <CAAJw_ZsbTVd3Es373x_wTNDF7RknGhCD0r+NKUSwAO7HpLAkYA@mail.gmail.com>
+        <ZE9ngFLRqLkN6faH@ugly>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/05/2023 17:20, Marco Felsch wrote:
-> From: Johannes Schneider <johannes.schneider@leica-geosystems.com>
+On Mon, 01 May 2023 09:17:20 +0200,
+Oswald Buddenhagen wrote:
 > 
-> Add DT compatible for the imx8mm EVKB [1].
+> On Mon, May 01, 2023 at 11:59:12AM +0800, Jeff Chua wrote:
+> > Latest git pull from Linus's tree ... playing a simple sound file will
+> > resulted in a lot of echo.
+> > 
+> how _exactly_ does it sound?
+> have you recorded a file through loopback for us to investigate? best
+> would be a short sample of a clean wave (sine or sawtooth) with some
+> leading and trailing silence.
 > 
-> [1] https://www.nxp.com/design/development-boards/ \
-> 	i-mx-evaluation-and-development-boards/ \
-> 	evaluation-kit-for-the-i-mx-8m-mini-applications-processor:8MMINILPD4-EVK
+> > Running on Lenovo X1 with ..
+> > 00:1f.3 Audio device: Intel Corporation Alder Lake PCH-P High
+> > Definition Audio Controller (rev 01)
+> > 
+> > I've bisected and reverted the following patch fixed the problem.
+> > 
+> this seems weird. so my first thought is: are you _sure_ that your
+> bisect isn't "contaminated" somehow? is the effect consistent across
+> several reboots with the same build? does re-applying my patch
+> immediately re-introduce the problem?
 > 
-> Signed-off-by: Johannes Schneider <johannes.schneider@leica-geosystems.com>
-> [m.felsch@pengutronix.de: Adapt the commit message]
-> [m.felsch@pengutronix.de: Adapt the yaml comment]
+> - this code is about silencing. getting dropouts or no playback at all
+> would be plausible, while echo (that is, repetition) seems surprising.
+>   theoretically, the driver may be setting a bad fill_silence()
+> callback   which copies some garbage instead of zeroing, but the HDA
+> driver   doesn't set one at all (i.e., uses the default one).
+> - this code must be explicitly enabled, which for all i know is done
+> by   almost nothing. what players did you try? did you get consistent
+> results? did you try taking out audio servers from the equation?
+> - the affected hardware belongs to the extremely widely used HDA
+> family,   which at the layer the patch is even remotely connected with
+> is   completely standardized. so _a lot_ of people should be affected,
+> and   we should be getting reports like yours by the dozen. are we?
+> 
+> of course i can't exclude the possibility that my patch is affected by
+> an uninitialized variable or memory corruption (or in the worst case
+> causes it), which would of course have very hard to predict
+> effects. but that should be investigated properly instead of just
+> reverting, lest we might be papering over a much more serious problem.
 
-I don't see any differences. The comment is exactly the same as before.
+Oswald, this looks like a real regression by the patch.
+Specially, this happens with dmix, and the issue doesn't seem specific
+to the driver.  It happens also with USB-audio, not only with
+HD-audio.  Just aplay /usr/share/sounds/alsa/Side_Left.wav or whatever
+there with the dmix config showed the problem.
 
-This is a friendly reminder during the review process.
+The dmix uses the silence_size=boundary as a fill-all operation, and
+it's a free-wheel mode, so supposedly something was overlooked in your
+code refactoring.
 
-It looks like you received a tag and forgot to add it.
-
-If you do not know the process, here is a short explanation:
-Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-versions. However, there's no need to repost patches *only* to add the
-tags. The upstream maintainer will do that for acks received on the
-version they apply.
-
-https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
-
-If a tag was not added on purpose, please state why and what changed.
+Could you check it and address quickly?  I'd like to fix it before
+6.4-rc1 release, so if no fix comes up in a couple of days, I'll have
+to revert the change for 6.4-rc1.
 
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+thanks,
 
-Best regards,
-Krzysztof
-
+Takashi
