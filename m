@@ -2,147 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E1966F5ACA
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 17:19:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA1726F5AC4
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 17:18:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230393AbjECPTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 11:19:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45244 "EHLO
+        id S230316AbjECPSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 11:18:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230354AbjECPS5 (ORCPT
+        with ESMTP id S229490AbjECPSq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 11:18:57 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E8775BAE
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 08:18:53 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id 3f1490d57ef6-b9e2b26b132so2988854276.1
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 08:18:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683127132; x=1685719132;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=i4wxKwRBUKexs/Rpj6bBCWyCDPYyPPHlLlNupBtzYaw=;
-        b=uY9LZ4++hkvUyhbn5c4syfgYI214i342bZOqq7w3PZ5UnX1WOR8kP1Dd5DgdTFpHBZ
-         YFrejpNwEwyVtgjJ2h7DJZZwM3wlarwFrdmlWF4/IbYdcLzhZu9eWfASeY3cBcMIJeWN
-         TmMwBt2giD3P+L/dV8xN4DWdOteVRuLxU576D+QIIYn5IEbMmRqCsDy6wH6RisaS2En+
-         77gau1VuW9LbpE+De59atSjH+/wZB+Rihg2dpbAxr/rgo94K50BySclFMG/5QR1qXpJU
-         YHFq9FmHNI3H6tgkwrY1pQTOJWYJg3qmXEmnIBPxV25YxcUtyGvErDZS2P4I8lHhi3Z5
-         NkBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683127132; x=1685719132;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=i4wxKwRBUKexs/Rpj6bBCWyCDPYyPPHlLlNupBtzYaw=;
-        b=YFCiNffY3FYKl6KaR4SwgHpdfRUkPGC9/vfsL0Cxl7+BOq+pBdAJtsRoY03sVWK/Of
-         dvjPyfytm3JNtXLwcoN97bLHxhy8Vmr182Nn4NYrCbzTLE5n0O/eE8mLJujgaablF+nm
-         7SF7Lto520WzmqYh/c4NR2v6dAVzNoMNmTUB4aG1qHtyowKf9lrPCghM/HHHAbFW8cas
-         fmaCuZypGSJEPF5PYy6T1XxbbUrHFKtfTmtdbgqw+42A2SLQPOZ6RbshyxENro3Xf91M
-         QmOhbF/nWF7RHCzIkH9Fu+SCHsimJi3/tviZ2R32AiEcIaz9LLy4gp+RD1hq8JvbEI7W
-         Uc3g==
-X-Gm-Message-State: AC+VfDz/j6i9paO/vuq++S66DdG81IoTxXqVdAK/8aW6MmRvFi7eHrpe
-        lnmRlKk3ddLryeATkVItMFS9C59ba4jlofotXF85Rw==
-X-Google-Smtp-Source: ACHHUZ4K+d9eu2MhiXikUKkPbraytc5q+SB8DjlC4OAFlU81ddI4JrxvOKqNrFRbhuXyiN7N0776W6I4xeufDIeaumw=
-X-Received: by 2002:a25:6844:0:b0:b9d:90d1:6301 with SMTP id
- d65-20020a256844000000b00b9d90d16301mr17445969ybc.47.1683127131990; Wed, 03
- May 2023 08:18:51 -0700 (PDT)
+        Wed, 3 May 2023 11:18:46 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2121.outbound.protection.outlook.com [40.107.22.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 214C146AE
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 08:18:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BJCuYbpJAIvdAKREqWwt6vMp1kfyG0YRka51i+cwfBMfkQ0zQ5mP3IAz23/0yKAsRRQ4NcqawvBnzJR1SxRkZLs5GvYfAm0dNMllPYyS4PJwz06Pu9Gy2ZRYBvl6Qr20RyPBZ5a/Sa7cJaDVzblBCT8rdtQURfwxdhgsmkoyUk/+yEAK7mOrdhbO797+zt9+F/2TLWzjQrmr/4iQupvS9yLHcxx72KhH82/OItOFowaWfVCt36TuVE1nsaJUS+QN0guKRRDvaZw1JFxSmcxzO30UUOBAxLaLty3yjmAydr1Jw6w4Sz2f1JEUC3ecE9x3lex1p0EA9opII6Gag0UmGQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BMlLWH9DCuVSZtYj/iQawVgACTeeOBJ7o9JdK9o4aNI=;
+ b=MbswC3yIV9g0oPCV2PLHllaEXw3KVSMk1FGxcbkqBxEqdTwY3+DflEAGOBBOGlqso7sPu/+f3haFGLmdNK0pQWuu13++m/X6XkJGnstz5UjW2gXTHiMsCQT53a8ixcrQvGjIIbmPecOf9FhFiEaa4Cfqwib6TXNiOYc5zh2m2rgoIG81krbEjfHsbe+9h3vsdkfKoH9XmUlGadPzUJ6HIq3ndabvPJ0SutPfPukAcIkUo2tGdhcEE9WO8zsnf84GGlKmk/0/ZrOLM2jnu5eHjGkfcwGU56y202+B+gNWtzIfnjbJEioAtE2Ojnj2s9ePxr3b84QH5xIw+23kG6Vp8Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=kontron.de; dmarc=pass action=none header.from=kontron.de;
+ dkim=pass header.d=kontron.de; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mysnt.onmicrosoft.com;
+ s=selector2-mysnt-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BMlLWH9DCuVSZtYj/iQawVgACTeeOBJ7o9JdK9o4aNI=;
+ b=ZJyoB1A77KL/Ae3jVsJHFdATSoVHgndiBTfzHwIo6U6qyv0ZDsfMBYXlVpb9CSGogazUKwdqXWxTuf2nb4QCOTfKnrvpFOAMzLp2Oz371LYD9Qz9OdjCS/G0KlWwjSNnrHP0jx8232SWUKiezwc++y2P4TDVwBH6dTCu7PzOw2A=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=kontron.de;
+Received: from PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:263::10)
+ by VI1PR10MB3487.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:800:132::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.21; Wed, 3 May
+ 2023 15:18:42 +0000
+Received: from PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::e6fd:d174:5710:fb3a]) by PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::e6fd:d174:5710:fb3a%2]) with mapi id 15.20.6340.031; Wed, 3 May 2023
+ 15:18:42 +0000
+Message-ID: <61ff6865-41bb-85af-2fdd-ff80e3c2b67f@kontron.de>
+Date:   Wed, 3 May 2023 17:18:40 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH V3 2/7] drm: bridge: samsung-dsim: Fix PMS Calculator on
+ imx8m[mnp]
+Content-Language: en-US, de-DE
+To:     Adam Ford <aford173@gmail.com>, dri-devel@lists.freedesktop.org
+Cc:     marex@denx.de, aford@beaconembedded.com,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Inki Dae <inki.dae@samsung.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-kernel@vger.kernel.org
+References: <20230502010759.17282-1-aford173@gmail.com>
+ <20230502010759.17282-3-aford173@gmail.com>
+From:   Frieder Schrempf <frieder.schrempf@kontron.de>
+In-Reply-To: <20230502010759.17282-3-aford173@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AM3PR07CA0085.eurprd07.prod.outlook.com
+ (2603:10a6:207:6::19) To PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:102:263::10)
 MIME-Version: 1.0
-References: <20230501165450.15352-1-surenb@google.com> <20230501165450.15352-35-surenb@google.com>
- <ZFIO3tXCbmTn53uv@dhcp22.suse.cz>
-In-Reply-To: <ZFIO3tXCbmTn53uv@dhcp22.suse.cz>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 3 May 2023 08:18:39 -0700
-Message-ID: <CAJuCfpHrZ4kWYFPvA3W9J+CmNMuOtGa_ZMXE9fOmKsPQeNt2tg@mail.gmail.com>
-Subject: Re: [PATCH 34/40] lib: code tagging context capture support
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
-        vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev,
-        mgorman@suse.de, dave@stgolabs.net, willy@infradead.org,
-        liam.howlett@oracle.com, corbet@lwn.net, void@manifault.com,
-        peterz@infradead.org, juri.lelli@redhat.com, ldufour@linux.ibm.com,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, peterx@redhat.com, david@redhat.com,
-        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
-        nathan@kernel.org, dennis@kernel.org, tj@kernel.org,
-        muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
-        pasha.tatashin@soleen.com, yosryahmed@google.com,
-        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
-        andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, gregkh@linuxfoundation.org,
-        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PA4PR10MB5681:EE_|VI1PR10MB3487:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0f7789a4-1e51-45d5-0827-08db4be9ae05
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: OE3ldttlah85TryTpRoN/FADnZsmU8WMv4vZhKBjAz7OatnLRn+QELuunQvgvhsxgfLlT72oyL/EmSbVRGbwV8DVwO70KIm+AiSqtpNf5KfqQf/eF72JES9bXuWLHNrBvH4GSYvICgVwsJtYQdE2p9Rv476B6X+XlFl+sRNUO35FmvJHG7QqqphiJuzQy1hqkO6vcac86ELrKTQbNPJbKWC6XcncX+AB8Cq2kngSjX34hHpF4jho0jUsHCKALIxSRm9yctfY2R5KMojOz//BbzYA8582Wyzw1948YiFGhHlSuOnaXQu/+ZX96CI3H37561QN7rHAUlFNtHUpNynLwSR92CS5mCjYm/Ym38a6CKL+KyDJYG0JIKMe89afX1MLe38CmHkv0HAvYwJjrxQqd6qJTiZWHuXlGFqHSka2byYryOdCl/i5hsz0/3Y03WA5CgmrIT2BbNNHhHo9F8XOkH7PDGaWzNRl/AhleOb5cFS9qPPv4lLPqQnWi8AlzGuZfAahQqATnrIRPX/Cx4yo4mtEBfnErU5OZbXm/ORf0NDlKExeAUeEIKU9QXdK637+2Zslxfd7XJmKXWwCLT3gR9mMSyDHZKD14AxFppVXxWgtueiXAvtf0Uc4YwqozXdjRzimI7qJ4Bf9HjMYPagfEcNwnNl/ZMAAZ3P+3HirEwc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(366004)(376002)(346002)(396003)(136003)(451199021)(38100700002)(86362001)(316002)(2906002)(36756003)(7416002)(44832011)(31686004)(8936002)(83380400001)(8676002)(41300700001)(31696002)(5660300002)(2616005)(4326008)(6512007)(26005)(6506007)(66946007)(186003)(66476007)(53546011)(478600001)(6486002)(66556008)(54906003)(32563001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Z3c3d2JsZ2FHazYydjd2Ymo1RXd6cGpWM3NFbEJteGRKc3hYUSs5Y3dzamQ5?=
+ =?utf-8?B?SCtYK2Vicmo3U1JVcXpMYnQvcVRlQW91LzNDRW9xRXEyZzhFKzR4WWcvbThz?=
+ =?utf-8?B?eUxxRVFuV0ZITktJYXJMVDA1cHdXOUx0WW51ZWxzTU90WGxrcHROQm5TQ0pP?=
+ =?utf-8?B?enZBV1pJNUtDV3NtS1cwVjVzeTZUZlFWdWVIS1JhY3dkbGt1dVQ0YzhHQkVV?=
+ =?utf-8?B?N083UTN3Wm56YldEb1lraDRWdXRYQWYvT3dxenJBcEcxeXBmb2F2ZlJjNkg3?=
+ =?utf-8?B?bE9wYTJvZk9CZlcrUFd3WjMyTlVrOTdaZkpRZXgrS0hWbUlJdWc0SEdueE1o?=
+ =?utf-8?B?MFY4U1VnZk16U1VUWE4vMEp1RzRZQmU0eXdpSDU1dzEwLzREM0lCYXJFbUdU?=
+ =?utf-8?B?elVDYzFxN0l2bHBURTUyQnliV2JYL3IydTBVV0Fja055c2ZQdkkyMHovSTB6?=
+ =?utf-8?B?VWRHVXFQUU1YWm5ibU0za01JTFkxZlF1bHMyK0xKQkZVZ3hCbzUvTkJidFhV?=
+ =?utf-8?B?QXVFZUZXWWRycjhoTlZiQmlFVytFR0l3VzNpTTZlSDNnTE0xc09Ydm15TTFv?=
+ =?utf-8?B?dzl4Vk9CZkhrZFZtSVZZQWE0dFowNXZQOW9uOXRzNHlCbW8wYVB5YVlFZ3Bi?=
+ =?utf-8?B?UDJ1V2o0bGs4cGx4NlhlLy9XSDRtVHdZZVhySXNEQUc5eVZWbkw4TFVjNVNZ?=
+ =?utf-8?B?U2NKeVFBK0xIb0dXYlk0Uk9ra0FMbjgwc2o2QUc4d2UxN25SMERBMG5WUXFi?=
+ =?utf-8?B?QnlTdTlVZWhLck1MOTJHMGVWa04zZm5iTFI3UmViSFl4VmpWTHpqNUVpaE9o?=
+ =?utf-8?B?MDdUcXpuTUpVdmpQNm1aUFh1SGRJR05BQlNKVnl0ckZ5eGRQcE5yWm9laU0y?=
+ =?utf-8?B?Qy8weW5uWHUxRmVNVEk4TExhVFM1L0QvVTQvY1pDYkEvdks2b3NPd21aQmZG?=
+ =?utf-8?B?Y0o4dXlNQmVUVzVjdlZNV1lGMXVMdW9QQ2hKakRqVk1RSnQ3SjQ1MmdnT1pM?=
+ =?utf-8?B?aTdxRHNkVGhqY1lDL3BtU2FMejdqVHdOWjBqd1luQjUyQXZVay9nSUpmWmk0?=
+ =?utf-8?B?YXZLWEN1NEJHeFpqSDRralM4UksvTWhHK2hNYy9aMmJJbkJkdlZUUEh6Nm1w?=
+ =?utf-8?B?Nkx4VEFSeEhvbkpJWFlrT3o2THhnK1RndWVVejQ1OGh1UzYyWVE4dHZCU3FC?=
+ =?utf-8?B?RXBzUDR4UVpEbmRBWHd3c3Z6MU5BQlhoY3lGeWpKMDVBZEpMcmdlZXZ5b0Iv?=
+ =?utf-8?B?dFlyaEZieUdQUHFpOElwc0NDcW1LZTJRd0pZWWd1ZDJGZzNFQWk4NnFFUi95?=
+ =?utf-8?B?RTdmMjN3eUFsR0RQVVhQUHpzQWcwRU1ZUDhVMHYzSUJnZmtLbWdmUWVWdCt1?=
+ =?utf-8?B?cExJR254dFZscktyOXJiMjQ3L1g1eGRscmlzcloxZ3hLeVYrUWwzRXpPL1JN?=
+ =?utf-8?B?UzNuT0NSRTdsUW0zdnZCVkZMd2xVMFNBTmhOcG56U3EzSUNTbGM2cVdFbXJs?=
+ =?utf-8?B?RnoyQ1Qra2lVNlNzT1k4TWNQaGJONmFMZ3llSDZTQzZ2c2FtK2JoVUhIYnAx?=
+ =?utf-8?B?cENPVlNqeGxFK3QxdTQzd2h0TkZjSDNPNG1XNVBqdnc2SzZpVWU2OG1abVg2?=
+ =?utf-8?B?L0ltbzhzZ3Nwa2F3OTQ0OHFqTEhIazNvcVhNdWNrZzBISXhLODV4eUxkU3J0?=
+ =?utf-8?B?VUYwV3VQWVB2blR4Y3V5dTJMdkZVOEhBTUhvRy9wZDd3N1Q5M2JIRm1QOVZv?=
+ =?utf-8?B?WmJUb2lMVzRxMlgxQWhVdXY1VVhOWmdHYm81TzhybUNyeGRtT0ZFbGpZd3Ja?=
+ =?utf-8?B?WktuVFc1RGlhVGV6WjROZW5GdDBReWEwMjdOdDd4T1dCcnFqM1FtTTRKS0U2?=
+ =?utf-8?B?cVUydGpLejEzWStTVG4wNk9xK1FWUDN4bEQxbWo3amlnTVNaNHc3NFJTSEcx?=
+ =?utf-8?B?TWhDcWNKU1RRVkpXMzNXUVBhYlBoYmcyMERIdnZwOHJlbWNxOEtrT3A4YlFZ?=
+ =?utf-8?B?KzVRSWwveDZNZG1xZ1pMZ04vTzR5QlM2V3pNRDJWQkQwWEhXTWVlaFAyM1Yx?=
+ =?utf-8?B?Qjk4Y1gxaHZmYXpMYm54Mi95Smt6bTEra2RobStMdFl4K3BzYUF5aVlDV0ZR?=
+ =?utf-8?B?em5rbk93TGFnNkJQRlJhakJobTA4eVdrOFBqZnhLZS9ITjZFVjV3VUFoZWFp?=
+ =?utf-8?B?NWc9PQ==?=
+X-OriginatorOrg: kontron.de
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0f7789a4-1e51-45d5-0827-08db4be9ae05
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 May 2023 15:18:42.3869
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8c9d3c97-3fd9-41c8-a2b1-646f3942daf1
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: dB8xcn5+JqXW2VDMgHLXxHKUW9figuG/lEp9ev0+R/csrBoFr/kegzkO2uJXADznemSKe7yHydc8uPQwfN08hfAKKlc81BZ5sidoz/BzUN8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR10MB3487
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 3, 2023 at 12:36=E2=80=AFAM Michal Hocko <mhocko@suse.com> wrot=
-e:
->
-> On Mon 01-05-23 09:54:44, Suren Baghdasaryan wrote:
-> [...]
-> > +static inline void add_ctx(struct codetag_ctx *ctx,
-> > +                        struct codetag_with_ctx *ctc)
-> > +{
-> > +     kref_init(&ctx->refcount);
-> > +     spin_lock(&ctc->ctx_lock);
-> > +     ctx->flags =3D CTC_FLAG_CTX_PTR;
-> > +     ctx->ctc =3D ctc;
-> > +     list_add_tail(&ctx->node, &ctc->ctx_head);
-> > +     spin_unlock(&ctc->ctx_lock);
->
-> AFAIU every single tracked allocation will get its own codetag_ctx.
-> There is no aggregation per allocation site or anything else. This looks
-> like a scalability and a memory overhead red flag to me.
+On 02.05.23 03:07, Adam Ford wrote:
+> According to Table 13-45 of the i.MX8M Mini Reference Manual, the min
+> and max values for M and the frequency range for the VCO_out
+> calculator were incorrect.  This information was contradicted in other
+> parts of the mini, nano and plus manuals.  After reaching out to my
+> NXP Rep, when confronting him about discrepencies in the Nano manual,
+> he responded with:
+>  "Yes it is definitely wrong, the one that is part
+>   of the NOTE in MIPI_DPHY_M_PLLPMS register table against PMS_P,
+>   PMS_M and PMS_S is not correct. I will report this to Doc team,
+>   the one customer should be take into account is the Table 13-40
+>   DPHY PLL Parameters and the Note above."
+> 
+> These updated values also match what is used in the NXP downstream
+> kernel.
+> 
+> To fix this, make new variables to hold the min and max values of m
+> and the minimum value of VCO_out, and update the PMS calculator to
+> use these new variables instead of using hard-coded values to keep
+> the backwards compatibility with other parts using this driver.
+> 
+> Fixes: 4d562c70c4dc ("drm: bridge: samsung-dsim: Add i.MX8M Mini/Nano support")
+> Signed-off-by: Adam Ford <aford173@gmail.com>
+> Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
+> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
 
-True. The allocations here would not be limited. We could introduce a
-global limit to the amount of memory that we can use to store contexts
-and maybe reuse the oldest entry (in LRU fashion) when we hit that
-limit?
+Tested on Kontron BL i.MX8MM with SN65DSI84 and ADV7535 bridges.
 
->
-> > +}
-> > +
-> > +static inline void rem_ctx(struct codetag_ctx *ctx,
-> > +                        void (*free_ctx)(struct kref *refcount))
-> > +{
-> > +     struct codetag_with_ctx *ctc =3D ctx->ctc;
-> > +
-> > +     spin_lock(&ctc->ctx_lock);
->
-> This could deadlock when allocator is called from the IRQ context.
-
-I see. spin_lock_irqsave() then?
-
-Thanks for the feedback!
-Suren.
-
->
-> > +     /* ctx might have been removed while we were using it */
-> > +     if (!list_empty(&ctx->node))
-> > +             list_del_init(&ctx->node);
-> > +     spin_unlock(&ctc->ctx_lock);
-> > +     kref_put(&ctx->refcount, free_ctx);
-> --
-> Michal Hocko
-> SUSE Labs
+Tested-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+Reviewed-by: Frieder Schrempf <frieder.schrempf@kontron.de>
