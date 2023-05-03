@@ -2,141 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE0606F569E
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 12:55:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96A616F56AD
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 13:00:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229873AbjECKzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 06:55:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56862 "EHLO
+        id S230025AbjECLAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 07:00:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbjECKy7 (ORCPT
+        with ESMTP id S229569AbjECLAA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 06:54:59 -0400
-Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1988849DE;
-        Wed,  3 May 2023 03:54:57 -0700 (PDT)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1puA83-004ibe-9X; Wed, 03 May 2023 18:54:37 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Wed, 03 May 2023 18:54:36 +0800
-Date:   Wed, 3 May 2023 18:54:36 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     syzbot <syzbot+726dc8c62c3536431ceb@syzkaller.appspotmail.com>,
-        davem@davemloft.net, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, olivia@selenic.com,
-        syzkaller-bugs@googlegroups.com, Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Laurent Vivier <lvivier@redhat.com>,
-        Rusty Russell <rusty@rustcorp.com.au>
-Subject: [PATCH] hwrng: virtio - Fix race on data_avail and actual data
-Message-ID: <ZFI9bHr1o2Cvdebp@gondor.apana.org.au>
-References: <00000000000050327205f9d993b2@google.com>
- <CACT4Y+awU85RHZjf3+_85AvJOHghoOhH3c9E-70p+a=FrRDYkg@mail.gmail.com>
+        Wed, 3 May 2023 07:00:00 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8153649DE;
+        Wed,  3 May 2023 03:59:59 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3439oQNL020511;
+        Wed, 3 May 2023 10:59:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=61I/qHVeaDrVGfByyTdO3IToeDPjIKC0Vq4EoJrP05g=;
+ b=aJfdyJNgbkxy6juGv76E1/HoyOSfscT8VtxNa48kp4ElG6qu9ELD/BTDALw3qPxycn3V
+ GoAHIZChwwxfIKiDhBz7Ht7pfR/9k4jJVxPidWYrATNhNCuLxkl/6XXih82riQu6MstP
+ F4wKHIwEnT2ovYGtrKjW48BmmIx/hJQpAY9sAgvISv0P3dPJ/X31MPGAr8c5jSiTNcif
+ G61Q1dpbxJpLQdVoJCWtzksSPMKS8b0wn3YmvU9h9+L0w0bEgXaRJr1gdSUqMZEn/Rsm
+ PY+4aHhLx4j79oxTe2Au0DNdtCig7SsoqOKfcSDlO+FCz+6zn00sFi9EDuN1JuMresmT BA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qbeb2s512-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 03 May 2023 10:59:48 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 343AxKsq022293
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 3 May 2023 10:59:20 GMT
+Received: from [10.242.242.243] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 3 May 2023
+ 03:59:09 -0700
+Message-ID: <9de5629f-0a69-7b5b-c312-ab6fe19d60f8@quicinc.com>
+Date:   Wed, 3 May 2023 16:29:06 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACT4Y+awU85RHZjf3+_85AvJOHghoOhH3c9E-70p+a=FrRDYkg@mail.gmail.com>
-X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH 01/11] dt-bindings: remoteproc: qcom: Add support for
+ multipd model
+To:     Rob Herring <robh@kernel.org>
+CC:     <quic_sjaganat@quicinc.com>, <quic_gurus@quicinc.com>,
+        <quic_gokulsri@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <andersson@kernel.org>, <jassisinghbrar@gmail.com>,
+        <konrad.dybcio@linaro.org>, <quic_eberman@quicinc.com>,
+        <quic_poovendh@quicinc.com>, <robimarko@gmail.com>,
+        <mturquette@baylibre.com>, <mathieu.poirier@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <quic_arajkuma@quicinc.com>,
+        <sboyd@kernel.org>, <robh+dt@kernel.org>,
+        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <loic.poulain@linaro.org>, <quic_anusha@quicinc.com>,
+        <linux-kernel@vger.kernel.org>, <quic_srichara@quicinc.com>,
+        <quic_kathirav@quicinc.com>, <agross@kernel.org>,
+        <linux-remoteproc@vger.kernel.org>
+References: <1678164097-13247-1-git-send-email-quic_mmanikan@quicinc.com>
+ <1678164097-13247-2-git-send-email-quic_mmanikan@quicinc.com>
+ <167819522915.3831.12765243745569076133.robh@kernel.org>
+Content-Language: en-US
+From:   Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
+In-Reply-To: <167819522915.3831.12765243745569076133.robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: -1i42SqUw0sue0zOijKvfEfpXK-YxAtg
+X-Proofpoint-GUID: -1i42SqUw0sue0zOijKvfEfpXK-YxAtg
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-03_06,2023-05-03_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ impostorscore=0 spamscore=0 bulkscore=0 mlxscore=0 phishscore=0
+ malwarescore=0 adultscore=0 clxscore=1011 priorityscore=1501
+ mlxlogscore=962 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2305030092
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 04:52:13PM +0200, Dmitry Vyukov wrote:
->
-> Here this:
+
+
+On 3/7/2023 6:53 PM, Rob Herring wrote:
 > 
-> size = min_t(unsigned int, size, vi->data_avail);
-> memcpy(buf, vi->data + vi->data_idx, size);
-> vi->data_idx += size;
-> vi->data_avail -= size;
+> On Tue, 07 Mar 2023 10:11:27 +0530, Manikanta Mylavarapu wrote:
+>> Add new binding document for multipd model remoteproc.
+>> IPQ5018, IPQ9574 follows multipd model.
+>>
+>> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
+>> ---
+>>   .../bindings/remoteproc/qcom,multipd-pil.yaml | 282 ++++++++++++++++++
+>>   1 file changed, 282 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,multipd-pil.yaml
+>>
 > 
-> runs concurrently with:
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
 > 
-> if (!virtqueue_get_buf(vi->vq, &vi->data_avail))
->     return;
-> vi->data_idx = 0;
+> yamllint warnings/errors:
 > 
-> I did not fully grasp how/where vi->data is populated, but it looks
-> like it can lead to use of uninit/stale random data, or even to out of
-> bounds access, say if vi->data_avail is already updated, but
-> vi->data_idx is not yet reset to 0. Then concurrent reading will read
-> not where it's supposed to read.
+> dtschema/dtc warnings/errors:
+> Documentation/devicetree/bindings/remoteproc/qcom,multipd-pil.example.dts:22:18: fatal error: dt-bindings/clock/qcom,gcc-ipq5018.h: No such file or directory
+>     22 |         #include <dt-bindings/clock/qcom,gcc-ipq5018.h>
+>        |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> compilation terminated.
+> make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/remoteproc/qcom,multipd-pil.example.dtb] Error 1
+> make[1]: *** Waiting for unfinished jobs....
+> make: *** [Makefile:1512: dt_binding_check] Error 2
+> 
+> doc reference errors (make refcheckdocs):
+> 
+> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/1678164097-13247-2-git-send-email-quic_mmanikan@quicinc.com
+> 
+> The base for the series is generally the latest rc1. A different dependency
+> should be noted in *this* patch.
+> 
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+> 
+> pip3 install dtschema --upgrade
+> 
+> Please check and re-submit after running the above command yourself. Note
+> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+> your schema. However, it must be unset to test all examples with your schema.
+> 
 
-Yes this is a real race.  This bug appears to have been around
-forever.
+I mentioned dependency link 
+(https://lore.kernel.org/linux-arm-msm/20220621161126.15883-1-quic_srichara@quicinc.com/) 
+in cover page patch because it's required for entire series. I will add 
+dependency link's and raise new patchset.
 
----8<---
-The virtio rng device kicks off a new entropy request whenever the
-data available reaches zero.  When a new request occurs at the end
-of a read operation, that is, when the result of that request is
-only needed by the next reader, then there is a race between the
-writing of the new data and the next reader.
+Thanks & Regards,
+Manikanta.
 
-This is because there is no synchronisation whatsoever between the
-writer and the reader.
-
-Fix this by writing data_avail with smp_store_release and reading
-it with smp_load_acquire when we first enter read.  The subsequent
-reads are safe because they're either protected by the first load
-acquire, or by the completion mechanism.
-
-Reported-by: syzbot+726dc8c62c3536431ceb@syzkaller.appspotmail.com
-Fixes: f7f510ec1957 ("virtio: An entropy device, as suggested by hpa.")
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
-
-diff --git a/drivers/char/hw_random/virtio-rng.c b/drivers/char/hw_random/virtio-rng.c
-index f7690e0f92ed..e41a84e6b4b5 100644
---- a/drivers/char/hw_random/virtio-rng.c
-+++ b/drivers/char/hw_random/virtio-rng.c
-@@ -4,6 +4,7 @@
-  *  Copyright (C) 2007, 2008 Rusty Russell IBM Corporation
-  */
- 
-+#include <asm/barrier.h>
- #include <linux/err.h>
- #include <linux/hw_random.h>
- #include <linux/scatterlist.h>
-@@ -37,13 +38,13 @@ struct virtrng_info {
- static void random_recv_done(struct virtqueue *vq)
- {
- 	struct virtrng_info *vi = vq->vdev->priv;
-+	unsigned int len;
- 
- 	/* We can get spurious callbacks, e.g. shared IRQs + virtio_pci. */
--	if (!virtqueue_get_buf(vi->vq, &vi->data_avail))
-+	if (!virtqueue_get_buf(vi->vq, &len))
- 		return;
- 
--	vi->data_idx = 0;
--
-+	smp_store_release(&vi->data_avail, len);
- 	complete(&vi->have_data);
- }
- 
-@@ -52,7 +53,6 @@ static void request_entropy(struct virtrng_info *vi)
- 	struct scatterlist sg;
- 
- 	reinit_completion(&vi->have_data);
--	vi->data_avail = 0;
- 	vi->data_idx = 0;
- 
- 	sg_init_one(&sg, vi->data, sizeof(vi->data));
-@@ -88,7 +88,7 @@ static int virtio_read(struct hwrng *rng, void *buf, size_t size, bool wait)
- 	read = 0;
- 
- 	/* copy available data */
--	if (vi->data_avail) {
-+	if (smp_load_acquire(&vi->data_avail)) {
- 		chunk = copy_data(vi, buf, size);
- 		size -= chunk;
- 		read += chunk;
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
