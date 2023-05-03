@@ -2,121 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8DCF6F60B7
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 23:59:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F53D6F6101
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 00:01:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbjECV7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 17:59:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49638 "EHLO
+        id S229586AbjECWBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 18:01:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjECV7f (ORCPT
+        with ESMTP id S229459AbjECWBs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 17:59:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CA7C7A84
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 14:59:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DC4362D21
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 21:59:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3F34C433EF;
-        Wed,  3 May 2023 21:59:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683151173;
-        bh=tjJqnJEPyEi7KhsaIkP4sflEqPlbtWhnDQ9Sf+EXXxw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ddo3i+iTqycg9cgxQrWgYpu9HoFw1oXEuS+HbTlk7fYpyGWDoFM6WCaz5HJi89stj
-         0rixswKfkvjUCa5TYAQeVLeZJ91yaNKqCtMO+IIuh3YI7z9Z3f5o5Nx/jbpzNSzE6Q
-         G/eh8hIDqshYIoEpGoyJ4PXWgoB6XI7JAo0K63gt0NgjshNXTkhfXHSYSS9fSmESn4
-         mEKxEQ6wAoNYI9oDBMoHzwS8DuBFdQtGM8U8K8NaA0RCQhEhvEyg0wcxDDLKT4gv0Z
-         s+gUDzDJYZVTqHGlBsMi3npfysKRRWcYXkg37zaM+AxIOSum/2c2RZP/1kFARQOvPh
-         omfwLNOeLm0Wg==
-Date:   Wed, 3 May 2023 14:59:31 -0700
-From:   Chris Li <chrisl@kernel.org>
-To:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-Cc:     sjenning@redhat.com, ddstreet@ieee.org, vitaly.wool@konsulko.com,
-        minchan@kernel.org, ngupta@vflare.org, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        hannes@cmpxchg.org
-Subject: Re: [PATCH v2] mm: fix zswap writeback race condition
-Message-ID: <ZFLZQ/hJarV+iNYd@google.com>
-References: <20230503151200.19707-1-cerasuolodomenico@gmail.com>
+        Wed, 3 May 2023 18:01:48 -0400
+Received: from out-22.mta0.migadu.com (out-22.mta0.migadu.com [91.218.175.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 663C276BD
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 15:01:47 -0700 (PDT)
+Date:   Wed, 3 May 2023 15:01:39 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1683151305;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EEe52o0s0vNqN0LkYqOOUs/hbrATnBchTc/XRGaSnAk=;
+        b=t/kjj7HN301F9hKxMUMFHnqsn1ebJ04weciwV5AR4GNMOFx76dj+cEviXvKJXPn2GHOwAs
+        hrIbKruipx/ci95oj6iMUPW4gbPyiKqZYzZLVUMhwui0wpDdfyDxObj2xJ3V5g2E4oSgDE
+        /xTeu5WDhyZJlklXPYIx+7izypTSjes=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Baokun Li <libaokun1@huawei.com>, linux-fsdevel@vger.kernel.org,
+        viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz,
+        tj@kernel.org, dennis@kernel.org, adilger.kernel@dilger.ca,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        yangerkun@huawei.com, houtao1@huawei.com, stable@vger.kernel.org
+Subject: Re: [PATCH v2] writeback, cgroup: fix null-ptr-deref write in
+ bdi_split_work_to_wbs
+Message-ID: <ZFLZw33qCKIYSDMJ@P9FQF9L96D.corp.robot.car>
+References: <20230410130826.1492525-1-libaokun1@huawei.com>
+ <20230502171701.58465d422e94cf038178dc51@linux-foundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230503151200.19707-1-cerasuolodomenico@gmail.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230502171701.58465d422e94cf038178dc51@linux-foundation.org>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Domenico,
-
-On Wed, May 03, 2023 at 05:12:00PM +0200, Domenico Cerasuolo wrote:
-> 1. a page with data A and swap offset X is stored in zswap
-> 2. page A is removed off the LRU by zpool driver for writeback in
-> zswap-shrink work, data for A is mapped by zpool driver
-> 3. user space program faults and invalidates page entry A, offset X is
-> considered free
-> 4. kswapd stores page B at offset X in zswap (zswap could also be full,
-> if so, page B would then be IOed to X, then skip step 5.)
-> 5. entry A is replaced by B in tree->rbroot, this doesn't affect the
-> local reference held by zswap-shrink work
-> 6. zswap-shrink work writes back A at X, and frees zswap entry A
-> 7. swapin of slot X brings A in memory instead of B
-
-Thanks for the interesting discovery.
-
-> V2:
-> - updated comment with better explaination of the situation being
-> addressed in the check
+On Tue, May 02, 2023 at 05:17:01PM -0700, Andrew Morton wrote:
+> On Mon, 10 Apr 2023 21:08:26 +0800 Baokun Li <libaokun1@huawei.com> wrote:
 > 
-> Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
-> ---
->  mm/zswap.c | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
+> > KASAN report null-ptr-deref:
+> > ==================================================================
+> > BUG: KASAN: null-ptr-deref in bdi_split_work_to_wbs+0x5c5/0x7b0
+> > Write of size 8 at addr 0000000000000000 by task sync/943
+> > CPU: 5 PID: 943 Comm: sync Tainted: 6.3.0-rc5-next-20230406-dirty #461
+> > Call Trace:
+> >  <TASK>
+> >  dump_stack_lvl+0x7f/0xc0
+> >  print_report+0x2ba/0x340
+> >  kasan_report+0xc4/0x120
+> >  kasan_check_range+0x1b7/0x2e0
+> >  __kasan_check_write+0x24/0x40
+> >  bdi_split_work_to_wbs+0x5c5/0x7b0
+> >  sync_inodes_sb+0x195/0x630
+> >  sync_inodes_one_sb+0x3a/0x50
+> >  iterate_supers+0x106/0x1b0
+> >  ksys_sync+0x98/0x160
+> > [...]
+> > ==================================================================
+> > 
+> > The race that causes the above issue is as follows:
+> > 
+> >            cpu1                     cpu2
+> > -------------------------|-------------------------
+> > inode_switch_wbs
+> >  INIT_WORK(&isw->work, inode_switch_wbs_work_fn)
+> >  queue_rcu_work(isw_wq, &isw->work)
+> >  // queue_work async
+> >   inode_switch_wbs_work_fn
+> >    wb_put_many(old_wb, nr_switched)
+> >     percpu_ref_put_many
+> >      ref->data->release(ref)
+> >      cgwb_release
+> >       queue_work(cgwb_release_wq, &wb->release_work)
+> >       // queue_work async
+> >        &wb->release_work
+> >        cgwb_release_workfn
+> >                             ksys_sync
+> >                              iterate_supers
+> >                               sync_inodes_one_sb
+> >                                sync_inodes_sb
+> >                                 bdi_split_work_to_wbs
+> >                                  kmalloc(sizeof(*work), GFP_ATOMIC)
+> >                                  // alloc memory failed
+> >         percpu_ref_exit
+> >          ref->data = NULL
+> >          kfree(data)
+> >                                  wb_get(wb)
+> >                                   percpu_ref_get(&wb->refcnt)
+> >                                    percpu_ref_get_many(ref, 1)
+> >                                     atomic_long_add(nr, &ref->data->count)
+> >                                      atomic64_add(i, v)
+> >                                      // trigger null-ptr-deref
+> > 
+> > bdi_split_work_to_wbs() traverses &bdi->wb_list to split work into all wbs.
+> > If the allocation of new work fails, the on-stack fallback will be used and
+> > the reference count of the current wb is increased afterwards. If cgroup
+> > writeback membership switches occur before getting the reference count and
+> > the current wb is released as old_wd, then calling wb_get() or wb_put()
+> > will trigger the null pointer dereference above.
+> > 
+> > This issue was introduced in v4.3-rc7 (see fix tag1). Both sync_inodes_sb()
+> > and __writeback_inodes_sb_nr() calls to bdi_split_work_to_wbs() can trigger
+> > this issue. For scenarios called via sync_inodes_sb(), originally commit
+> > 7fc5854f8c6e ("writeback: synchronize sync(2) against cgroup writeback
+> > membership switches") reduced the possibility of the issue by adding
+> > wb_switch_rwsem, but in v5.14-rc1 (see fix tag2) removed the
+> > "inode_io_list_del_locked(inode, old_wb)" from inode_switch_wbs_work_fn()
+> > so that wb->state contains WB_has_dirty_io, thus old_wb is not skipped
+> > when traversing wbs in bdi_split_work_to_wbs(), and the issue becomes
+> > easily reproducible again.
+> > 
+> > To solve this problem, percpu_ref_exit() is called under RCU protection
+> > to avoid race between cgwb_release_workfn() and bdi_split_work_to_wbs().
+> > Moreover, replace wb_get() with wb_tryget() in bdi_split_work_to_wbs(),
+> > and skip the current wb if wb_tryget() fails because the wb has already
+> > been shutdown.
+> > 
+> > Fixes: b817525a4a80 ("writeback: bdi_writeback iteration must not skip dying ones")
+> > Fixes: f3b6a6df38aa ("writeback, cgroup: keep list of inodes attached to bdi_writeback")
 > 
-> diff --git a/mm/zswap.c b/mm/zswap.c
-> index f6c89049cf70..5d5977c9ea45 100644
-> --- a/mm/zswap.c
-> +++ b/mm/zswap.c
-> @@ -995,6 +995,22 @@ static int zswap_writeback_entry(struct zpool *pool, unsigned long handle)
->  		goto fail;
->  
->  	case ZSWAP_SWAPCACHE_NEW: /* page is locked */
-> +		/*
-> +		 * Having a local reference to the zswap entry doesn't exclude
-> +		 * swapping from invalidating and recycling the swap slot. Once
-> +		 * the swapcache is secured against concurrent swapping to and
-> +		 * from the slot, recheck that the entry is still current before
-> +		 * writing.
-> +		 */
-> +		spin_lock(&tree->lock);
-> +		if (zswap_rb_search(&tree->rbroot, entry->offset) != entry) {
-> +			spin_unlock(&tree->lock);
-> +			delete_from_swap_cache(page_folio(page));
-> +			ret = -ENOMEM;
-> +			goto fail;
-> +		}
-> +		spin_unlock(&tree->lock);
-> +
+> Cc Roman for this second commit.
 
-The race condition is still there, just making it much harder to hit.
-What happens after you perform the rb tree search, release tree lock.
-Then the entry gets invalid and recycled right here before the decompress
-step?
+Thanks for the heads up!
 
->  		/* decompress */
->  		acomp_ctx = raw_cpu_ptr(entry->pool->acomp_ctx);
->  		dlen = PAGE_SIZE;
->
+The patch looks good to me.
+Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
 
-Chris
- 
+Thanks!
