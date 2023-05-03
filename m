@@ -2,147 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BF646F5D31
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 19:43:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D64616F5D35
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 19:45:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229497AbjECRni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 13:43:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37462 "EHLO
+        id S229872AbjECRpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 13:45:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbjECRne (ORCPT
+        with ESMTP id S229582AbjECRpH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 13:43:34 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C6F84C01
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 10:43:17 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f4000ec71dso5989475e9.2
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 10:43:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683135796; x=1685727796;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=0fukvTQBpdJxkwknUT2et4g7cMhSFUYtb+Kco7h5oV8=;
-        b=D4rN9Laqs+WmrLaWcKfLpPBqjvy0awK33/oZwDDJTjZ4yZdvDfCvKqjVf4w05QrUQz
-         Kp2POikwVM+IMY8eg8qAldD/kEiuV7xR6r8bIWAf63uKGx4B9c+oHV00JWY9+LCK/acY
-         oneDyIioahvbNqsGOaXcMJHB6xlnvp/9tJSN/WD3C+0hrt9WjDmeewiYaJ0CkiZxLhXG
-         /zJ/Np3fUyJ1KqD7XfLHWUnSGzBtHEZMWsunf5MOc4C6OhHZVpmIVI4Ys+4o+R2m8hSY
-         wZfBjrDWgE01mKClJhTR1AQYQ+jUiBHTTxlzoSgX9kEhB89ftpxKxJQ8jw3rVcm1uyIW
-         fhzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683135796; x=1685727796;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0fukvTQBpdJxkwknUT2et4g7cMhSFUYtb+Kco7h5oV8=;
-        b=jsAMYTG3J1BB+HEg4IQXk30unCDjBQZgWFx7F/o1EKXOyx2G6fWGyqRXe8GiaosAeZ
-         zcWCQX7ivTsvh+60lzynT/5mNgVVWbejuZUJmEE4Nfy7MUPauZ1ZhLbSFn/syQ76oNdP
-         GaB4okVpQRKhRJggm8LI1Y8EdJ9/PAxaTKKixKnmGvFBxYeGHtFVfadCKLCRDb/4EkAq
-         wM9gRHA460Ig2z5VBbUD9MoG+xbvRfiI2p5aXME3a2gUQEL4bmPZ027qnODnGyOH4ssB
-         /CVws/zoXrxiyMEyX4V5KF+DQYjhTUqhJt4aeXFZVWuAIVn2j/5Z4vxz43OEv1ocOvq5
-         OynQ==
-X-Gm-Message-State: AC+VfDyajkYRjQf+zdCBfkN7YvrHoC3+sbsl5xgbPn9TUSY87UaFzsLb
-        nH/Gpos+r7gkkNyuni83nFA=
-X-Google-Smtp-Source: ACHHUZ5DTr5HfRX9CyS/nfphMJGbrJb9KUL6YX5QqlgooaT+AFoRvjt2aMNUD9g5dZmrtbUWJtrOBA==
-X-Received: by 2002:a1c:7311:0:b0:3f1:72db:4554 with SMTP id d17-20020a1c7311000000b003f172db4554mr15221288wmb.1.1683135795723;
-        Wed, 03 May 2023 10:43:15 -0700 (PDT)
-Received: from [10.115.201.114] ([212.108.221.126])
-        by smtp.gmail.com with ESMTPSA id d10-20020a1c730a000000b003f325f0e020sm2452648wmb.47.2023.05.03.10.43.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 May 2023 10:43:14 -0700 (PDT)
-Message-ID: <967a044bc2723cc24ab914506c0164db08923c59.camel@gmail.com>
-Subject: Re: [RFC PATCH 0/1] Add AMDGPU_INFO_GUILTY_APP ioctl
-From:   Timur =?ISO-8859-1?Q?Krist=F3f?= <timur.kristof@gmail.com>
-To:     Felix Kuehling <felix.kuehling@amd.com>,
-        Christian =?ISO-8859-1?Q?K=F6nig?= 
-        <ckoenig.leichtzumerken@gmail.com>,
-        Alex Deucher <alexdeucher@gmail.com>
-Cc:     "Pelloux-Prayer, Pierre-Eric" <pierre-eric.pelloux-prayer@amd.com>,
-        =?ISO-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
-        Marek =?UTF-8?Q?Ol=C5=A1=C3=A1k?= <maraeo@gmail.com>,
-        michel.daenzer@mailbox.org,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-kernel@vger.kernel.org,
-        Samuel Pitoiset <samuel.pitoiset@gmail.com>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        kernel-dev@igalia.com,
-        "Deucher, Alexander" <alexander.deucher@amd.com>,
-        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Date:   Wed, 03 May 2023 19:43:12 +0200
-In-Reply-To: <2bf162d0-6112-8370-8828-0e0b21ac22ba@amd.com>
-References: <20230501185747.33519-1-andrealmeid@igalia.com>
-         <CADnq5_NXj4W44F_etRQ7HWdVTnf5zARCM3Y_o3EiwWiHj8QMpA@mail.gmail.com>
-         <6ab2ff76-4518-6fac-071e-5d0d5adc4fcd@igalia.com>
-         <cb3d2590-a1f8-fe7e-0bba-638ee80719af@amd.com>
-         <CAFF-SiV0=WNmRW-D9uYUuj68Zq0APxtGLya9KR6FfZ7v0Zf2RQ@mail.gmail.com>
-         <fcca2934-a556-797c-535d-a66fc67bbe30@amd.com>
-         <85c538b01efb6f3fa6ff05ed1a0bc3ff87df7a61.camel@gmail.com>
-         <CADnq5_NHtFbwT=x8u7GYc4ESL_HVFzjgtOd3AnVFBYMrjZq55w@mail.gmail.com>
-         <c54414482b685af0991a6b095cbfb7534d998afc.camel@gmail.com>
-         <CADnq5_MSY=j9AobDk7ACevur4Hwvw_ub7g16Mfm7ymMJqwVNfQ@mail.gmail.com>
-         <57fa0ee4-de4f-3797-f817-d05f72541d0e@gmail.com>
-         <2bf162d0-6112-8370-8828-0e0b21ac22ba@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.1 (3.48.1-1.fc38) 
+        Wed, 3 May 2023 13:45:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 794F9AC;
+        Wed,  3 May 2023 10:45:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1023560ED6;
+        Wed,  3 May 2023 17:45:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61F28C4339C;
+        Wed,  3 May 2023 17:45:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683135904;
+        bh=GYEgwBd0apuJNEnWrI8nQYtIkTHfLqojxK6C+Pzl4+I=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=mfF5KftGPxe85WmX55aAwUHx57QWAWWCLkMfMRjq1YGx0zoJZ75TCWoUQQ5PCMSfe
+         NKa4FGASKPOGko2Ee8iq5hSTTitBuKFkbFZin0scULdw2wztf1CXZPHQ3hauWl00OX
+         kmz6ZEPBwZJWwQ5qhnjRiNIBz/0L2RUdy6TW+b9t36LCBqps01y+FY7VVuTlugCueV
+         8o86pGiC8+s7BnVOeVLjwW9WuFTuStbLqp8VJNRxd3AMebpnn8lhFNfEWA3CBGcb/e
+         y8vy9hBFVhIfXSneX9Y6BUQT+byBCWb/bsFXyQsOxSTjlTS/zOqy5T34FUPVJg95Sh
+         u32InZ0KMh9WA==
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-4f00d41df22so5478578e87.1;
+        Wed, 03 May 2023 10:45:04 -0700 (PDT)
+X-Gm-Message-State: AC+VfDxxcQSZ+hR0aQjrJPFHXPzvkfFOjgZfGVUjkQpUh71ZW6d9B4rd
+        ipQvhxYSfjPXsZNd/oAo58d23E5CV6PRzf3TAQo=
+X-Google-Smtp-Source: ACHHUZ5mh/L7KHgl574Y/bdBoSICwEQYmhfqVnt1v3hiUr32sCRxLhs16i3qi+UufdgjooZ+Y47DvDmqlL7l79qlkf8=
+X-Received: by 2002:a05:6512:239b:b0:4f1:3700:6a51 with SMTP id
+ c27-20020a056512239b00b004f137006a51mr677575lfv.10.1683135902351; Wed, 03 May
+ 2023 10:45:02 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230424165726.2245548-1-ardb@kernel.org> <ecbcc066-3636-9620-8db9-2c066d16e717@amd.com>
+ <CAMj1kXG8ZrdEUNTiSCet+aT+1ZyrbguFsGtNhVV+XgCssZgj9w@mail.gmail.com> <a6846282-95c8-274a-accc-ffa54205489c@amd.com>
+In-Reply-To: <a6846282-95c8-274a-accc-ffa54205489c@amd.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 3 May 2023 19:44:51 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXFaZi3ARU-8U30dNw0LwCc7Vw7Tybe_vYSpW_-_GOAFKA@mail.gmail.com>
+Message-ID: <CAMj1kXFaZi3ARU-8U30dNw0LwCc7Vw7Tybe_vYSpW_-_GOAFKA@mail.gmail.com>
+Subject: Re: [PATCH 0/6] efi/x86: Avoid legacy decompressor during EFI boot
+To:     Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Evgeniy Baskov <baskov@ispras.ru>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Peter Jones <pjones@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Dave Young <dyoung@redhat.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Felix,
+On Tue, 2 May 2023 at 18:08, Tom Lendacky <thomas.lendacky@amd.com> wrote:
+>
+> On 5/2/23 08:39, Ard Biesheuvel wrote:
+> > On Tue, 2 May 2023 at 15:37, Tom Lendacky <thomas.lendacky@amd.com> wrote:
+> >>
+> >> On 4/24/23 11:57, Ard Biesheuvel wrote:
+> >>> This series is conceptually a combination of Evgeny's series [0] and
+> >>> mine [1], both of which attempt to make the early decompressor code more
+> >>> amenable to executing in the EFI environment with stricter handling of
+> >>> memory permissions.
+> >>>
+> >>> My series [1] implemented zboot for x86, by getting rid of the entire
+> >>> x86 decompressor, and replacing it with existing EFI code that does the
+> >>> same but in a generic way. The downside of this is that only EFI boot is
+> >>> supported, making it unviable for distros, which need to support BIOS
+> >>> boot and hybrid EFI boot modes that omit the EFI stub.
+> >>>
+> >>> Evgeny's series [0] adapted the entire decompressor code flow to allow
+> >>> it to execute in the EFI context as well as the bare metal context, and
+> >>> this involves changes to the 1:1 mapping code and the page fault
+> >>> handlers etc, none of which are really needed when doing EFI boot in the
+> >>> first place.
+> >>>
+> >>> So this series attempts to occupy the middle ground here: it makes
+> >>> minimal changes to the existing decompressor so some of it can be called
+> >>> from the EFI stub. Then, it reimplements the EFI boot flow to decompress
+> >>> the kernel and boot it directly, without relying on the trampoline code,
+> >>> page table code or page fault handling code. This allows us to get rid
+> >>> of quite a bit of unsavory EFI stub code, and replace it with two clear
+> >>> invocations of the EFI firmware APIs to clear NX restrictions from
+> >>> allocations that have been populated with executable code.
+> >>>
+> >>> The only code that is being reused is the decompression library itself,
+> >>> along with the minimal ELF parsing that is required to copy the ELF
+> >>> segments in place, and the relocation processing that fixes up absolute
+> >>> symbol references to refer to the correct virtual addresses.
+> >>>
+> >>> Note that some of Evgeny's changes to clean up the PE/COFF header
+> >>> generation will still be needed, but I've omitted those here for
+> >>> brevity.
+> >>
+> >> I tried booting an SEV and an SEV-ES guest using this and both failed to boot:
+> >>
+> >> EFI stub: WARNING: Decompression failed: Out of memory while allocating
+> >> z_stream
+> >>
+> >> I'll have to take a closer look as to why, but it might be a couple of
+> >> days before I can get to it.
+> >>
+> >
+> > Thanks Tom.
+> >
+> > The internal malloc() seems to be failing, which is often caused by
+> > BSS clearing problems. Could you elaborate a little bit on the boot
+> > environment you are using here?
+>
+> I'm using Qemu v7.2.1 as my VMM, Linux 6.3 with your series applied for my
+> host/hypervisor and guest kernel and the current OVMF tree built using
+> OvmfPkgX64.dsc.
+>
+> I was originally using the current merge window Linux, but moved to the
+> release version just to . With the release version SEV and SEV-ES still fail to
+> boot, but SEV actually #GPs now. And some of the register contents look
+> like encrypted data:
+>
+> ConvertPages: range 1000000 - 4FA1FFF covers multiple entries
+> !!!! X64 Exception Type - 0D(#GP - General Protection)  CPU Apic ID - 00000000 !!!!
+> ExceptionData - 0000000000000000
+> RIP  - 00000000597E71C1, CS  - 0000000000000038, RFLAGS - 0000000000210206
+> RAX  - 1FBA02A45943B920, RCX - 0000000000AF7009, RDX - A9DAE761B64A1F1B
+> RBX  - 1FBA02A45943B8C0, RSP - 000000007FD97320, RBP - 0000000002000000
+> RSI  - 0000000001000000, RDI - 1FBA02A45943DE68
+> R8   - 0000000003EF3C94, R9  - 0000000000000000, R10 - 000000007D7C6018
+> R11  - 0000000000000000, R12 - 0000000001000000, R13 - 00000000597EDD98
+> R14  - 0000000001000000, R15 - 000000007E0A5198
+> DS   - 0000000000000030, ES  - 0000000000000030, FS  - 0000000000000030
+> GS   - 0000000000000030, SS  - 0000000000000030
+> CR0  - 0000000080010033, CR2 - 0000000000000000, CR3 - 000000007FA01000
+> CR4  - 0000000000000668, CR8 - 0000000000000000
+> DR0  - 0000000000000000, DR1 - 0000000000000000, DR2 - 0000000000000000
+> DR3  - 0000000000000000, DR6 - 00000000FFFF0FF0, DR7 - 0000000000000400
+> GDTR - 000000007F7DC000 0000000000000047, LDTR - 0000000000000000
+> IDTR - 000000007F34C018 0000000000000FFF,   TR - 0000000000000000
+> FXSAVE_STATE - 000000007FD96F80
+> !!!! Find image based on IP(0x597E71C1) /root/kernels/ovmf-build-X64/Build/OvmfX64/DEBUG_GCC5/X64/MdeModulePkg/Universal/Variable/RuntimeDxe/VariableRuntimeDxe/DEBUG/Variable
+> RuntimeDxe.dll (ImageBase=0000000000D4792C, EntryPoint=0000000000D50CC3) !!!!
+>
+> So, yes, probably an area of memory that was zeroes when mapped
+> unencrypted, but wasn't cleared after changing the mapping to
+> encrypted.
+>
 
-On Wed, 2023-05-03 at 11:08 -0400, Felix Kuehling wrote:
-> That's the worst-case scenario where you're debugging HW or FW
-> issues.=20
-> Those should be pretty rare post-bringup. But are there hangs caused
-> by=20
-> user mode driver or application bugs that are easier to debug and=20
-> probably don't even require a GPU reset?
+Thanks.
 
-There are many GPU hangs that gamers experience while playing. We have
-dozens of open bug reports against RADV about GPU hangs on various GPU
-generations. These usually fall into two categories:
+It seems I was a bit naive and underestimated the amount of SEV
+related processing that goes on in the decompressor after the EFI stub
+has handed over. I will have to take some time and go through this,
+and decide whether there is a way we can share this code with the EFI
+stub without introducing yet another permutation that requires testing
+and maintenance.
 
-1. When the hang always happens at the same point in a game. These are
-painful to debug but manageable.
-2. "Random" hangs that happen to users over the course of playing a
-game for several hours. It is absolute hell to try to even reproduce
-let alone diagnose these issues, and this is what we would like to
-improve.
-
-For these hard-to-diagnose problems, it is already a challenge to
-determine whether the problem is the kernel (eg. setting wrong voltages
-/ frequencies) or userspace (eg. missing some synchronization), can be
-even a game bug that we need to work around.
-
-> For example most VM faults can=20
-> be handled without hanging the GPU. Similarly, a shader in an endless
-> loop should not require a full GPU reset.
-
-This is actually not the case, AFAIK Andr=C3=A9's test case was an app that
-had an infinite loop in a shader.
-
->=20
-> It's more complicated for graphics because of the more complex
-> pipeline=20
-> and the lack of CWSR. But it should still be possible to do some=20
-> debugging without JTAG if the problem is in SW and not HW or FW. It's
-> probably worth improving that debugability without getting hung-up on
-> the worst case.
-
-I agree, and we welcome any constructive suggestion to improve the
-situation. It seems like our idea doesn't work if the kernel can't give
-us the information we need.
-
-How do we move forward?
-
-Best regards,
-Timur
-
+Any suggestions on how to test this stuff is appreciated - does QEMU
+emulate any of this? Does consumer-level AMD hardware implement the
+pieces I'd need to run a SEV host with SNP support etc?
