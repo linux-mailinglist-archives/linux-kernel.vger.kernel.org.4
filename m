@@ -2,170 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 725CE6F57BD
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 14:16:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF1056F57BF
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 14:16:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229741AbjECMQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 08:16:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37672 "EHLO
+        id S229757AbjECMQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 08:16:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjECMPy (ORCPT
+        with ESMTP id S229774AbjECMQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 08:15:54 -0400
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59765587;
-        Wed,  3 May 2023 05:15:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1683116150;
-        bh=VDKmAp+D+K8DEGYmTk7RY6tTKuk1qCgpkelWg/ywlAg=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=PlkG5v+bL2k1SR6S+xTcurYCQMY1gqlm0glsK3Tehy9JLi4tipUL2h0fY91Ww/VO3
-         xDO5VLDNlSvr1ssHxu7B/uhx43c8VdCE70ZP8rGdKM8n07MK0plgjoj7x5eBJNKiLf
-         ZQX0hxl/XubtAQyr+oR+xbN/Fjm9fwU7RWvy5GrI=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 3409C1285CEE;
-        Wed,  3 May 2023 08:15:50 -0400 (EDT)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
- by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id TVvOwDLNFpHO; Wed,  3 May 2023 08:15:50 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1683116149;
-        bh=VDKmAp+D+K8DEGYmTk7RY6tTKuk1qCgpkelWg/ywlAg=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=J6HQpG+VrJ9szCbazPDOCSIgT+5ut4XwqZK3Dc0MdxaQliyHK3p1NrakhT8ZMCjIK
-         DNU+c0q6UaQjTZWPcZArAplMwU8UXy5bNs7sVcjLlrCYF64EO/PeWZtKPIX4uqlfWh
-         7xj+nhVGXEVTMTaNQqx/bgBI26AK0f9jPuO3roXU=
-Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::c14])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 15CC91281819;
-        Wed,  3 May 2023 08:15:44 -0400 (EDT)
-Message-ID: <8f3ab2a3091d7e2d1c3f593a335b03f3dcbebc89.camel@HansenPartnership.com>
-Subject: Re: [PATCH 01/40] lib/string_helpers: Drop space in
- string_get_size's output
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
-        Suren Baghdasaryan <surenb@google.com>,
-        akpm@linux-foundation.org, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de,
-        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
-        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
-        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
-        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
-        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
-        tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
-        paulmck@kernel.org, pasha.tatashin@soleen.com,
-        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
-        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, gregkh@linuxfoundation.org,
-        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org,
-        Andy Shevchenko <andy@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Noralf =?ISO-8859-1?Q?Tr=EF=BF=BDnnes?= <noralf@tronnes.org>
-Date:   Wed, 03 May 2023 08:15:42 -0400
-In-Reply-To: <20230502225016.GJ2155823@dread.disaster.area>
-References: <20230501165450.15352-1-surenb@google.com>
-         <20230501165450.15352-2-surenb@google.com>
-         <ouuidemyregstrijempvhv357ggp4tgnv6cijhasnungsovokm@jkgvyuyw2fti>
-         <ZFAUj+Q+hP7cWs4w@moria.home.lan>
-         <b6b472b65b76e95bb4c7fc7eac1ee296fdbb64fd.camel@HansenPartnership.com>
-         <ZFCA2FF+9MI8LI5i@moria.home.lan>
-         <2f5ebe8a9ce8471906a85ef092c1e50cfd7ddecd.camel@HansenPartnership.com>
-         <20230502225016.GJ2155823@dread.disaster.area>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+        Wed, 3 May 2023 08:16:20 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70C465597;
+        Wed,  3 May 2023 05:16:19 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 343CGCRd027335;
+        Wed, 3 May 2023 07:16:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1683116172;
+        bh=yxvXld7ipziPs58UNC838TKUfUNu88KPeyoDk1IG0Fw=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=llUbpnhktEKDuGzZ1Blyln1bRhjBkCyInhZ/iFJepRBfrjVQ4GEjA1tDO0nkRJriQ
+         uDz0x7UL3q+2oPNp3uCZ1hGeuovmO1uTK28X8GPoAaYb/9AWnJhhnpr1cQ096FnjLQ
+         nNS0Syrq1I2iZNXDqSwakuFhGMC9Yrk4Gil/AArU=
+Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 343CGC8Y007164
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 3 May 2023 07:16:12 -0500
+Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 3
+ May 2023 07:16:12 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 3 May 2023 07:16:11 -0500
+Received: from [172.24.145.195] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 343CG8bg068196;
+        Wed, 3 May 2023 07:16:09 -0500
+Message-ID: <eb6530ac-a999-fc03-5f11-e1cba6be504d@ti.com>
+Date:   Wed, 3 May 2023 17:46:08 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v4 2/3] arm64: dts: ti: k3-j721e: Add ESM support
+Content-Language: en-US
+To:     Nishanth Menon <nm@ti.com>
+CC:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <vigneshr@ti.com>,
+        <kristo@kernel.org>, <u-kumar1@ti.com>
+References: <20230503093310.85779-1-n-francis@ti.com>
+ <20230503093310.85779-3-n-francis@ti.com>
+ <20230503114827.lutd2ebygxczvali@argue>
+ <82a39b8e-96ad-faa2-714f-c8c6bfbcc5d6@ti.com>
+ <20230503120200.4xqylyoiczx43esu@gradation>
+From:   Neha Malcom Francis <n-francis@ti.com>
+In-Reply-To: <20230503120200.4xqylyoiczx43esu@gradation>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-05-03 at 08:50 +1000, Dave Chinner wrote:
-> On Tue, May 02, 2023 at 07:42:59AM -0400, James Bottomley wrote:
-> > On Mon, 2023-05-01 at 23:17 -0400, Kent Overstreet wrote:
-> > > On Mon, May 01, 2023 at 10:22:18PM -0400, James Bottomley wrote:
-> > > > It is not used just for debug.  It's used all over the kernel
-> > > > for printing out device sizes.  The output mostly goes to the
-> > > > kernel print buffer, so it's anyone's guess as to what, if any,
-> > > > tools are parsing it, but the concern about breaking log
-> > > > parsers seems to be a valid one.
-> > > 
-> > > Ok, there is sd_print_capacity() - but who in their right mind
-> > > would be trying to scrape device sizes, in human readable units,
-> > 
-> > If you bother to google "kernel log parser", you'll discover it's
-> > quite an active area which supports a load of company business
-> > models.
+Hi Nishanth
+
+On 03/05/23 17:32, Nishanth Menon wrote:
+> On 17:25-20230503, Neha Malcom Francis wrote:
+>> Hi Nishanth,
+>>
+>> On 03/05/23 17:18, Nishanth Menon wrote:
+>>> On 15:03-20230503, Neha Malcom Francis wrote:
+>>>> Add address entry mapping ESM on J721E.
+>>>>
+>>>> Signed-off-by: Neha Malcom Francis <n-francis@ti.com>
+>>>> ---
+>>>>    arch/arm64/boot/dts/ti/k3-j721e.dtsi | 1 +
+>>>>    1 file changed, 1 insertion(+)
+>>>>
+>>>> diff --git a/arch/arm64/boot/dts/ti/k3-j721e.dtsi b/arch/arm64/boot/dts/ti/k3-j721e.dtsi
+>>>> index b912143b6a11..52bcde601eb8 100644
+>>>> --- a/arch/arm64/boot/dts/ti/k3-j721e.dtsi
+>>>> +++ b/arch/arm64/boot/dts/ti/k3-j721e.dtsi
+>>>
+>>> Why is'nt esm node introduced here?
+>>>
+>>
+>> As it stands esm node is already in
+>> arch/arm/dts/k3-j721e-r5-common-proc-board.dts in u-boot and since this
+>> patch is motivated to keep the u-boot and kernel dts in sync, I haven't
+>> added it here.
+>>
+>> Although... I could add it here similar to j7200 and take action to move to
+>> the same in u-boot... maybe that is better route.
 > 
-> That doesn't mean log messages are unchangable ABI. Indeed, we had
-> the whole "printk_index_emit()" addition recently to create
-> an external index of printk message formats for such applications to
-> use. [*]
-
-I didn't say they were.
+> The core problem we have is that part of the hardware description is in
+> u-boot and a large part is in kernel. That is wrong. eventually, we will
+> drop u-boot.dtsi and r5-xyz.dts files.. This cleanup journey is towards
+> that action.
 > 
-> > >  from log messages when it's available in sysfs/procfs (actually,
-> > > is it in sysfs? if not, that's an oversight) in more reasonable
-> > > units?
-> > 
-> > It's not in sysfs, no.  As aren't a lot of things, which is why log
-> > parsing for system monitoring is big business.
+> we want kernel to be the canonical description of the hardware. which
+> means u-boot or zephyr or something else will eventually just copy the
+> kernel dts and it has information enough about the hardware to be able
+> to boot.
 > 
-> And that big business is why printk_index_emit() exists to allow
-> them to easily determine how log messages change format and come and
-> go across different kernel versions.
+> each of the dependent ecosystems (u-boot, zephyr etc..) have a little
+> bit of their own binding extensions (such as binman for u-boot), which
+> is maintained in their own repos. But, the SoC hardware description,
+> entirely should be available in kernel device tree.
 > 
-> > > Correct me if I'm wrong, but I've yet to hear about kernel log
-> > > messages being consider a stable interface, and this seems a bit
-> > > out there.
-> > 
-> > It might not be listed as stable, but when it's known there's a
-> > large ecosystem out there consuming it we shouldn't break it just
-> > because you feel like it.
+> So, please ensure esm is completely described as well.
 > 
-> But we've solved this problem already, yes?
 
-Well, yes; since it's a simple bit of extra thought and a couple of
-lines addition not to afflict everyone with the change, that's the
-simplest course.  It also gets us out of arguing about whether the
-space reads better and is SI consistent.
+Right got it, will add the node in v5, thanks!
 
-> If the userspace applications are not using the kernel printk format
-> index to detect such changes between kernel version, then they
-> should be. This makes trivial issues like whether we have a space or
-> not between units is completely irrelevant because the entry in the
-> printk format index for the log output we emit will match whatever
-> is output by the kernel....
-
-Just because we have better tools to fix a problem when it happens
-doesn't mean we should actively cause the problem when its easily
-avoidable.  In the same way we shouldn't drive less carefully just
-because cars are built safer today.
-
-James
-
+-- 
+Thanking You
+Neha Malcom Francis
