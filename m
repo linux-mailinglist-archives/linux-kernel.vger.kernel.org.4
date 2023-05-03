@@ -2,111 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 888646F569C
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 12:54:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE0606F569E
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 12:55:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbjECKyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 06:54:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56512 "EHLO
+        id S229873AbjECKzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 06:55:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbjECKy3 (ORCPT
+        with ESMTP id S229569AbjECKy7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 06:54:29 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659593C01
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 03:54:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=KUYY2bE5shqnm/FG8O/MklH06r5Nhh3u60SjyKiTrnA=; b=LFq3X47lk7axBmHPKPuygFqeYT
-        39fQM/1IgaA+ulDyDWPAgEsUFYZ4H+BwelTAMz6FpC8cPK8bF6PG/fMPPB8LN2LN3ZbwuMeHUxTez
-        Wzs1dFBXSLZyF+YjnBxtixoUShs4ZszFeoEQNUg0KpGs6/qXBoYni/pTTBTJD43O4A5m61g2wJjlB
-        JVt7YEvf1nh0tfeigikeDCf1UkZq7CNXkj53SC1yVmDG6PRh4Vdu6pIQrmP78qn4+uBMKRtOfiXme
-        vptGHz0yyNkDoxJYw3gPK66KVF0zZAcjj3NihdqYJLLOmM9F/LGSGw2E5BPGu8AmjTL+vDTymDpay
-        DcM+HRAQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:47624)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1puA7r-0003FO-Dz; Wed, 03 May 2023 11:54:23 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1puA7o-0001iz-Vw; Wed, 03 May 2023 11:54:20 +0100
-Date:   Wed, 3 May 2023 11:54:20 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+        Wed, 3 May 2023 06:54:59 -0400
+Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1988849DE;
+        Wed,  3 May 2023 03:54:57 -0700 (PDT)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1puA83-004ibe-9X; Wed, 03 May 2023 18:54:37 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Wed, 03 May 2023 18:54:36 +0800
+Date:   Wed, 3 May 2023 18:54:36 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
 To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     syzbot <syzbot+0827f43974813b74e6db@syzkaller.appspotmail.com>,
-        bristot@redhat.com, bsegall@google.com, dietmar.eggemann@arm.com,
-        hannes@cmpxchg.org, juri.lelli@redhat.com,
-        linux-kernel@vger.kernel.org, mgorman@suse.de, mingo@redhat.com,
-        peterz@infradead.org, rostedt@goodmis.org, surenb@google.com,
-        syzkaller-bugs@googlegroups.com, vincent.guittot@linaro.org,
-        vschneid@redhat.com,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [syzbot] upstream boot error: BUG: unable to handle kernel NULL
- pointer dereference in psi_task_switch
-Message-ID: <ZFI9XIb2/XXID3x6@shell.armlinux.org.uk>
-References: <000000000000281ae805faa4844e@google.com>
- <CACT4Y+Z+N9P6H8ZmF=TGfrC26r1LhHW7OT__UWKTh5VJOWnjEg@mail.gmail.com>
- <ZFI4ue1uzd0Il9yM@shell.armlinux.org.uk>
- <CACT4Y+Zxd87dozaOgKWQ=ROpnN8-4k+ErFByJEu_oxnJttmxMg@mail.gmail.com>
+Cc:     syzbot <syzbot+726dc8c62c3536431ceb@syzkaller.appspotmail.com>,
+        davem@davemloft.net, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, olivia@selenic.com,
+        syzkaller-bugs@googlegroups.com, Jason Wang <jasowang@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Laurent Vivier <lvivier@redhat.com>,
+        Rusty Russell <rusty@rustcorp.com.au>
+Subject: [PATCH] hwrng: virtio - Fix race on data_avail and actual data
+Message-ID: <ZFI9bHr1o2Cvdebp@gondor.apana.org.au>
+References: <00000000000050327205f9d993b2@google.com>
+ <CACT4Y+awU85RHZjf3+_85AvJOHghoOhH3c9E-70p+a=FrRDYkg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACT4Y+Zxd87dozaOgKWQ=ROpnN8-4k+ErFByJEu_oxnJttmxMg@mail.gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CACT4Y+awU85RHZjf3+_85AvJOHghoOhH3c9E-70p+a=FrRDYkg@mail.gmail.com>
+X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
+        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 03, 2023 at 12:38:19PM +0200, Dmitry Vyukov wrote:
-> On Wed, 3 May 2023 at 12:34, Russell King (Oracle)
-> <linux@armlinux.org.uk> wrote:
-> >
-> > On Tue, May 02, 2023 at 08:37:15AM +0200, Dmitry Vyukov wrote:
-> > > On Mon, 1 May 2023 at 18:43, syzbot
-> > > <syzbot+0827f43974813b74e6db@syzkaller.appspotmail.com> wrote:
-> > > >
-> > > > Hello,
-> > > >
-> > > > syzbot found the following issue on:
-> > > >
-> > > > HEAD commit:    89d77f71f493 Merge tag 'riscv-for-linus-6.4-mw1' of git://..
-> > > > git tree:       upstream
-> > > > console output: https://syzkaller.appspot.com/x/log.txt?x=1113550c280000
-> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=4cc65ccad523b604
-> > > > dashboard link: https://syzkaller.appspot.com/bug?extid=0827f43974813b74e6db
-> > > > compiler:       arm-linux-gnueabi-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > > > userspace arch: arm
-> > > >
-> > > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > > Reported-by: syzbot+0827f43974813b74e6db@syzkaller.appspotmail.com
-> > >
-> > > +arm mailing list
-> > >
-> > > Kernel started falling apart on arm during boot in various strange ways.
-> >
-> > Are these all the same hardware platform? If so, please check the
-> > hardware with a known working kernel. These look like spurious failts
-> > caused possibly the hardware platform failing.
+On Fri, Apr 21, 2023 at 04:52:13PM +0200, Dmitry Vyukov wrote:
+>
+> Here this:
 > 
-> It happens in the same qemu that used to work before. So "hardware" is
-> presumably working.
+> size = min_t(unsigned int, size, vi->data_avail);
+> memcpy(buf, vi->data + vi->data_idx, size);
+> vi->data_idx += size;
+> vi->data_avail -= size;
+> 
+> runs concurrently with:
+> 
+> if (!virtqueue_get_buf(vi->vq, &vi->data_avail))
+>     return;
+> vi->data_idx = 0;
+> 
+> I did not fully grasp how/where vi->data is populated, but it looks
+> like it can lead to use of uninit/stale random data, or even to out of
+> bounds access, say if vi->data_avail is already updated, but
+> vi->data_idx is not yet reset to 0. Then concurrent reading will read
+> not where it's supposed to read.
 
-I have no other ideas based on the incomplete information provided
-(due to the initial oops triggering a subsequent oops while trying to
-print the register "information".) And I have no suggestions how to
-debug it further. Sorry.
+Yes this is a real race.  This bug appears to have been around
+forever.
 
+---8<---
+The virtio rng device kicks off a new entropy request whenever the
+data available reaches zero.  When a new request occurs at the end
+of a read operation, that is, when the result of that request is
+only needed by the next reader, then there is a race between the
+writing of the new data and the next reader.
+
+This is because there is no synchronisation whatsoever between the
+writer and the reader.
+
+Fix this by writing data_avail with smp_store_release and reading
+it with smp_load_acquire when we first enter read.  The subsequent
+reads are safe because they're either protected by the first load
+acquire, or by the completion mechanism.
+
+Reported-by: syzbot+726dc8c62c3536431ceb@syzkaller.appspotmail.com
+Fixes: f7f510ec1957 ("virtio: An entropy device, as suggested by hpa.")
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+
+diff --git a/drivers/char/hw_random/virtio-rng.c b/drivers/char/hw_random/virtio-rng.c
+index f7690e0f92ed..e41a84e6b4b5 100644
+--- a/drivers/char/hw_random/virtio-rng.c
++++ b/drivers/char/hw_random/virtio-rng.c
+@@ -4,6 +4,7 @@
+  *  Copyright (C) 2007, 2008 Rusty Russell IBM Corporation
+  */
+ 
++#include <asm/barrier.h>
+ #include <linux/err.h>
+ #include <linux/hw_random.h>
+ #include <linux/scatterlist.h>
+@@ -37,13 +38,13 @@ struct virtrng_info {
+ static void random_recv_done(struct virtqueue *vq)
+ {
+ 	struct virtrng_info *vi = vq->vdev->priv;
++	unsigned int len;
+ 
+ 	/* We can get spurious callbacks, e.g. shared IRQs + virtio_pci. */
+-	if (!virtqueue_get_buf(vi->vq, &vi->data_avail))
++	if (!virtqueue_get_buf(vi->vq, &len))
+ 		return;
+ 
+-	vi->data_idx = 0;
+-
++	smp_store_release(&vi->data_avail, len);
+ 	complete(&vi->have_data);
+ }
+ 
+@@ -52,7 +53,6 @@ static void request_entropy(struct virtrng_info *vi)
+ 	struct scatterlist sg;
+ 
+ 	reinit_completion(&vi->have_data);
+-	vi->data_avail = 0;
+ 	vi->data_idx = 0;
+ 
+ 	sg_init_one(&sg, vi->data, sizeof(vi->data));
+@@ -88,7 +88,7 @@ static int virtio_read(struct hwrng *rng, void *buf, size_t size, bool wait)
+ 	read = 0;
+ 
+ 	/* copy available data */
+-	if (vi->data_avail) {
++	if (smp_load_acquire(&vi->data_avail)) {
+ 		chunk = copy_data(vi, buf, size);
+ 		size -= chunk;
+ 		read += chunk;
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
