@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63D016F5CA6
+	by mail.lfdr.de (Postfix) with ESMTP id 0109C6F5CA5
 	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 19:06:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230046AbjECRG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 13:06:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44416 "EHLO
+        id S230029AbjECRG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 13:06:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbjECRGN (ORCPT
+        with ESMTP id S229928AbjECRGO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 13:06:13 -0400
+        Wed, 3 May 2023 13:06:14 -0400
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97BD276B7;
-        Wed,  3 May 2023 10:05:41 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 343FYptl010763;
-        Wed, 3 May 2023 17:04:18 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C5A255AD;
+        Wed,  3 May 2023 10:05:42 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 343Fai30019527;
+        Wed, 3 May 2023 17:04:24 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type; s=qcppdkim1;
- bh=cTrb6AAL5Z/powfWWwL2O6iKbdcDlmyn8nzgAhqIzDw=;
- b=JkkXzoQvkg28ypNVYqpmwwpId05r/+tasVhqbg/jaJJ4/jvFDqOYsqv30BokzadsB5gs
- hAseGeTfvxUJNtkTH8hem2j4MSbNAx3+CPJLfZSyyOyQ2Pd1xI6s0gWNKRN1Tc2+Q+IQ
- i702lbrCaIedldd9S4hVBCjYriI01Ik6UG5GqKEhSvm4Dbwk9fiksHZir6YuFJf61kki
- Bm0oGSYwPv0QjgMSui7GxjcnS1knyHjR6JEIsCCY+pX5oQsIiPoXNHs2hQEe65vZ372l
- Xwk6f+pc+s8jDxvq9n71HKNiBEFVRdO/XjKa6xugqXCnQth8aJhkqXZsHCqEuOWA97zJ WQ== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qbn0a8yhk-1
+ bh=pnFO+DGPNd0UnzwouvqS8k1qPC+HUL5CLbVNoGqlidQ=;
+ b=de5KVOajhpHQ/pPQV1HvgNbDUN7bAMObw4fPjH4xy7581gofrLlVrcjuImMD5GO7GPQT
+ YG5Ews7XoNTIB8hoRUYO7OaEn0HbM0rZuH1Ow/pTvQERDfUAIHpZvXm6e7tVS5oGNFt9
+ qZbsw0wLf5p0xB6UI8ackEX519mqlFVS9XxOoinUxAEoKthNPXHxIbxB8Dmw0Uib+aYJ
+ 0j+A45slH7aOnvyURjKj3zA5ydTtCVQLgQgVeTbvUghZS7zU3TNCouB/G7xCaeSkEQir
+ Kd2wEes28RwwMd31/0ABGtRcf1/YaUipPyr/c6bqS5F27DkcRjVYMRyY3kWtTEKb9F/H 7Q== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qbeb2sx7p-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 03 May 2023 17:04:17 +0000
+        Wed, 03 May 2023 17:04:23 +0000
 Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 343H4GSg005221
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 343H4N0N004206
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 3 May 2023 17:04:16 GMT
+        Wed, 3 May 2023 17:04:23 GMT
 Received: from hu-mojha-hyd.qualcomm.com (10.80.80.8) by
  nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 3 May 2023 10:04:11 -0700
+ 15.2.986.42; Wed, 3 May 2023 10:04:17 -0700
 From:   Mukesh Ojha <quic_mojha@quicinc.com>
 To:     <agross@kernel.org>, <andersson@kernel.org>,
         <konrad.dybcio@linaro.org>, <corbet@lwn.net>,
@@ -52,9 +52,9 @@ CC:     <linux-arm-msm@vger.kernel.org>,
         <linux-hardening@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-doc@vger.kernel.org>, "Mukesh Ojha" <quic_mojha@quicinc.com>
-Subject: [PATCH v3 14/18] firmware: qcom_scm: provide a read-modify-write function
-Date:   Wed, 3 May 2023 22:32:28 +0530
-Message-ID: <1683133352-10046-15-git-send-email-quic_mojha@quicinc.com>
+Subject: [PATCH v3 15/18] pinctrl: qcom: Use qcom_scm_io_update_field()
+Date:   Wed, 3 May 2023 22:32:29 +0530
+Message-ID: <1683133352-10046-16-git-send-email-quic_mojha@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1683133352-10046-1-git-send-email-quic_mojha@quicinc.com>
 References: <1683133352-10046-1-git-send-email-quic_mojha@quicinc.com>
@@ -65,16 +65,16 @@ X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nasanex01c.na.qualcomm.com (10.45.79.139)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: NT5Jp7dFkvyRw3WTO3FQ2yqq9b54g_IO
-X-Proofpoint-ORIG-GUID: NT5Jp7dFkvyRw3WTO3FQ2yqq9b54g_IO
+X-Proofpoint-ORIG-GUID: 0Dk1vzNH1BoBMIVuq1Z0_xcxnx52KIEJ
+X-Proofpoint-GUID: 0Dk1vzNH1BoBMIVuq1Z0_xcxnx52KIEJ
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-05-03_12,2023-05-03_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 spamscore=0 phishscore=0 mlxlogscore=852 mlxscore=0
- malwarescore=0 priorityscore=1501 impostorscore=0 clxscore=1015
- adultscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2305030146
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ impostorscore=0 spamscore=0 bulkscore=0 mlxscore=0 phishscore=0
+ malwarescore=0 adultscore=0 clxscore=1015 priorityscore=1501
+ mlxlogscore=881 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2305030146
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
@@ -85,60 +85,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It was realized by Srinivas K. that there is a need of
-read-modify-write scm exported function so that it can
-be used by multiple clients.
+Use qcom_scm_io_update_field() exported function introduced
+in last commit.
 
-Let's introduce qcom_scm_io_update_field() which masks
-out the bits and write the passed value to that
-bit-offset. Subsequent patch will use this function.
-
-Suggested-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
 ---
- drivers/firmware/qcom_scm.c            | 15 +++++++++++++++
- include/linux/firmware/qcom/qcom_scm.h |  2 ++
- 2 files changed, 17 insertions(+)
+ drivers/pinctrl/qcom/pinctrl-msm.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-index fde33acd..003cbcb 100644
---- a/drivers/firmware/qcom_scm.c
-+++ b/drivers/firmware/qcom_scm.c
-@@ -407,6 +407,21 @@ int qcom_scm_set_remote_state(u32 state, u32 id)
- }
- EXPORT_SYMBOL(qcom_scm_set_remote_state);
+diff --git a/drivers/pinctrl/qcom/pinctrl-msm.c b/drivers/pinctrl/qcom/pinctrl-msm.c
+index 4515f37..856ebbf 100644
+--- a/drivers/pinctrl/qcom/pinctrl-msm.c
++++ b/drivers/pinctrl/qcom/pinctrl-msm.c
+@@ -1042,6 +1042,7 @@ static int msm_gpio_irq_set_type(struct irq_data *d, unsigned int type)
+ 	unsigned long flags;
+ 	bool was_enabled;
+ 	u32 val;
++	u32 mask;
  
-+int qcom_scm_io_update_field(phys_addr_t addr, unsigned int mask, unsigned int val)
-+{
-+	unsigned int old, new;
-+	int ret;
-+
-+	ret = qcom_scm_io_readl(addr, &old);
-+	if (ret)
-+		return ret;
-+
-+	new = (old & ~mask) | val << (ffs(mask) - 1);
-+
-+	return qcom_scm_io_writel(addr, new);
-+}
-+EXPORT_SYMBOL(qcom_scm_io_update_field);
-+
- static int __qcom_scm_set_dload_mode(struct device *dev, bool enable)
- {
- 	struct qcom_scm_desc desc = {
-diff --git a/include/linux/firmware/qcom/qcom_scm.h b/include/linux/firmware/qcom/qcom_scm.h
-index 250ea4e..ca41e4e 100644
---- a/include/linux/firmware/qcom/qcom_scm.h
-+++ b/include/linux/firmware/qcom/qcom_scm.h
-@@ -84,6 +84,8 @@ extern bool qcom_scm_pas_supported(u32 peripheral);
+ 	if (msm_gpio_needs_dual_edge_parent_workaround(d, type)) {
+ 		set_bit(d->hwirq, pctrl->dual_edge_irqs);
+@@ -1075,23 +1076,19 @@ static int msm_gpio_irq_set_type(struct irq_data *d, unsigned int type)
+ 	 * With intr_target_use_scm interrupts are routed to
+ 	 * application cpu using scm calls.
+ 	 */
++	mask = (7 << g->intr_target_bit);
+ 	if (pctrl->intr_target_use_scm) {
+ 		u32 addr = pctrl->phys_base[0] + g->intr_target_reg;
+ 		int ret;
  
- extern int qcom_scm_io_readl(phys_addr_t addr, unsigned int *val);
- extern int qcom_scm_io_writel(phys_addr_t addr, unsigned int val);
-+extern int qcom_scm_io_update_field(phys_addr_t addr, unsigned int mask,
-+				    unsigned int val);
- 
- extern bool qcom_scm_restore_sec_cfg_available(void);
- extern int qcom_scm_restore_sec_cfg(u32 device_id, u32 spare);
+-		qcom_scm_io_readl(addr, &val);
+-
+-		val &= ~(7 << g->intr_target_bit);
+-		val |= g->intr_target_kpss_val << g->intr_target_bit;
+-
+-		ret = qcom_scm_io_writel(addr, val);
++		ret = qcom_scm_io_update_field(addr, mask, g->intr_target_kpss_val);
+ 		if (ret)
+ 			dev_err(pctrl->dev,
+ 				"Failed routing %lu interrupt to Apps proc",
+ 				d->hwirq);
+ 	} else {
+ 		val = msm_readl_intr_target(pctrl, g);
+-		val &= ~(7 << g->intr_target_bit);
++		val &= ~mask;
+ 		val |= g->intr_target_kpss_val << g->intr_target_bit;
+ 		msm_writel_intr_target(val, pctrl, g);
+ 	}
 -- 
 2.7.4
 
