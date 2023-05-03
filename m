@@ -2,152 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 068396F5ABB
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 17:12:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD9D46F5ABA
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 17:12:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbjECPMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 11:12:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43296 "EHLO
+        id S230387AbjECPMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 11:12:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230316AbjECPMT (ORCPT
+        with ESMTP id S230249AbjECPMT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 3 May 2023 11:12:19 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FDF34EEC
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 08:12:18 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-50be17a1eceso2399717a12.2
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 08:12:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683126737; x=1685718737;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z2BX6nWAElbktu61khbd0CCx1zjsdbT7nj779WoSgig=;
-        b=Qi6kuSdLcWjDbiev/7XbQmEqXPI+b4DTWodJFdtLrPJwebJmneRvtEyv4A2AHACHjr
-         KZQQ1zaSdVzACQuRGfqTmaCV7NNnJCWmZKO77OnD9u4aRNSEWYxkrkGFEGDxA+/owHIl
-         u8ubC4loyBWDTJAOFa3xOQtsCufSlyiMl/7Z9Y0yyHMle7Xz1ssAEeS0t1erXno8rHyw
-         BorSbdZBPzEs6QcbRMSkImRcwRZnl4vQUw98AxBss4m9UhUMt8cjU2rSNXrJjyzkDAHO
-         N6OEbz7VqunpgwydGsthlQXYRAZMoaZ57lhUkuDfsY4rv9c11EdcWrO9nNaNwpJp4Feo
-         hu6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683126737; x=1685718737;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Z2BX6nWAElbktu61khbd0CCx1zjsdbT7nj779WoSgig=;
-        b=IrY+vSu0Zcbq37GAgAorB2d59J4fsGetgkWTEZJvEd3cpbot39MIjCXU5DhbDkDwxd
-         iXYmU8twjkt0hn7rfbSHzrHDYDVqi9QH5LT144Isot2KT4OYYqG1MH5S4R02AF0S84aK
-         fuOehH1e5i/cC1az8PXjk4v3j/pJ/hWDabTBg7pJKa1dttYmXV7NBOaGSLguaFN/p6rN
-         c3xiE7fgG95I96mAMvXOR+wesDx0T/A6g2cHZkGPgjCb2D/5qpJwU1DI2P29i0CGlKFf
-         biPfO5wwpWDEBrxQ1RJiTzLOnJsvIgb0irLWrPuJJUiOzFhMkHptQ010Kc06KXJpuKsF
-         VobA==
-X-Gm-Message-State: AC+VfDwZYX5OSMRfXRg5a8V2goUctniKFDRgAaZpnBMowruzvG1sE6q/
-        GL8lDkDG3tecummVEPiN9qg=
-X-Google-Smtp-Source: ACHHUZ5zj66pRwOFBbL/PILSfveFY9WzUGN8wSua4Hq5MvKvv5uge/onUY79vZp3saY5nTEOtosOoQ==
-X-Received: by 2002:a17:907:9721:b0:94f:3980:bf91 with SMTP id jg33-20020a170907972100b0094f3980bf91mr4315478ejc.19.1683126736625;
-        Wed, 03 May 2023 08:12:16 -0700 (PDT)
-Received: from lelloman-5950.. (host-95-235-191-161.retail.telecomitalia.it. [95.235.191.161])
-        by smtp.gmail.com with ESMTPSA id mb20-20020a170906eb1400b0094f432f2429sm17527738ejb.109.2023.05.03.08.12.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 May 2023 08:12:15 -0700 (PDT)
-From:   Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-To:     sjenning@redhat.com, ddstreet@ieee.org, vitaly.wool@konsulko.com,
-        minchan@kernel.org, ngupta@vflare.org, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     hannes@cmpxchg.org,
-        Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-Subject: [PATCH v2] mm: fix zswap writeback race condition
-Date:   Wed,  3 May 2023 17:12:00 +0200
-Message-Id: <20230503151200.19707-1-cerasuolodomenico@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E2004ED2;
+        Wed,  3 May 2023 08:12:18 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 10AF4660309E;
+        Wed,  3 May 2023 16:12:16 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1683126736;
+        bh=Pi/CSe8nv/Bn/w1ZOAaw3WYXTtUFhF9Hq3jb//Y3+2U=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=FE71iUqcb1QFWFNA3otCiAMTpY/p5HvHJZrIf1+KOPqWzSPysuJcEN/+3wOP6ZXBQ
+         hvFf/rkkglQMiiyriKdGxXdMVay7nx/w/N9KfAIMNP0/dPqy8uLa3xULtj7FKNOK7l
+         cjkBSoUog29I+Xt6nN4OXr4I3rkww6T5sRJUd2TWLikIQmW/idr0ACHqHStKr6bIFT
+         8xatKmjYGMwaQKwNetILI36FgRXr79+8dLdTbuhk6exLPzrkQU+JrO2C99WCE09x7m
+         Hq0W8m8IvfqXd8NST9C1NXegeNQqxTCdcjkD3MaYi5B6HopXdX+dD0oJ53+yBgaAfH
+         ziUv1iE+pN5mA==
+Message-ID: <43be865c-c870-f61a-9837-e189d6e4ae00@collabora.com>
+Date:   Wed, 3 May 2023 17:12:13 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH 3/3] thermal/drivers/mediatek/lvts_thermal: Disable
+ undesired interrupts
+Content-Language: en-US
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Alexandre Bailon <abailon@baylibre.com>, kernel@collabora.com,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Balsam CHIHI <bchihi@baylibre.com>,
+        Alexandre Mergnat <amergnat@baylibre.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
+References: <20230428195347.3832687-1-nfraprado@collabora.com>
+ <20230428195347.3832687-4-nfraprado@collabora.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230428195347.3832687-4-nfraprado@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The zswap writeback mechanism can cause a race condition resulting in
-memory corruption, where a swapped out page gets swapped in with data
-that was written to a different page.
+Il 28/04/23 21:53, Nícolas F. R. A. Prado ha scritto:
+> Out of the many interrupts supported by the hardware, the only ones of
+> interest to the driver currently are:
+> * The temperature went over the hot threshold, for any of the sensors
+> * The temperature went over the hot to normal threshold, for any of the
+>    sensors
+> * The temperature went over the stage3 threshold
+> 
+> These are the only thresholds configured by the driver through the
+> HTHRE, H2NTHRE, and PROTTC registers, respectively.
+> 
+> The current interrupt mask in LVTS_MONINT_CONF, enables many more
+> interrupts, including offset detection and data ready on sensors for
+> both filtered and immediate mode. These are not only not handled by the
+> driver, but they are also triggered too often, causing unneeded
+> overhead. Disable these unnecessary interrupts.
+> 
+> The meaning of each bit can be seen in the comment describing
+> LVTS_MONINTST in the IRQ handler.
+> 
+> Fixes: f5f633b18234 ("thermal/drivers/mediatek: Add the Low Voltage Thermal Sensor driver")
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-The race unfolds like this:
-1. a page with data A and swap offset X is stored in zswap
-2. page A is removed off the LRU by zpool driver for writeback in
-zswap-shrink work, data for A is mapped by zpool driver
-3. user space program faults and invalidates page entry A, offset X is
-considered free
-4. kswapd stores page B at offset X in zswap (zswap could also be full,
-if so, page B would then be IOed to X, then skip step 5.)
-5. entry A is replaced by B in tree->rbroot, this doesn't affect the
-local reference held by zswap-shrink work
-6. zswap-shrink work writes back A at X, and frees zswap entry A
-7. swapin of slot X brings A in memory instead of B
 
-The fix:
-Once the swap page cache has been allocated (case ZSWAP_SWAPCACHE_NEW),
-zswap-shrink work just checks that the local zswap_entry reference is
-still the same as the one in the tree. If it's not the same it means
-that it's either been invalidated or replaced, in both cases the
-writeback is aborted because the local entry contains stale data.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Reproducer:
-I originally found this by running `stress` overnight to validate my
-work on the zswap writeback mechanism, it manifested after hours on my
-test machine. The key to make it happen is having zswap writebacks, so
-whatever setup pumps /sys/kernel/debug/zswap/written_back_pages should
-do the trick.
-In order to reproduce this faster on a vm, I setup a system with ~100M
-of available memory and a 500M swap file, then running
-`stress --vm 1 --vm-bytes 300000000 --vm-stride 4000` makes it happen
-in matter of tens of minutes. One can speed things up even more by
-swinging /sys/module/zswap/parameters/max_pool_percent up and down
-between, say, 20 and 1; this makes it reproduce in tens of seconds.
-It's crucial to set `--vm-stride` to something other than 4096 otherwise
-`stress` won't realize that memory has been corrupted because all pages
-would have the same data.
-
-V2:
-- updated comment with better explaination of the situation being
-addressed in the check
-
-Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
----
- mm/zswap.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
-
-diff --git a/mm/zswap.c b/mm/zswap.c
-index f6c89049cf70..5d5977c9ea45 100644
---- a/mm/zswap.c
-+++ b/mm/zswap.c
-@@ -995,6 +995,22 @@ static int zswap_writeback_entry(struct zpool *pool, unsigned long handle)
- 		goto fail;
- 
- 	case ZSWAP_SWAPCACHE_NEW: /* page is locked */
-+		/*
-+		 * Having a local reference to the zswap entry doesn't exclude
-+		 * swapping from invalidating and recycling the swap slot. Once
-+		 * the swapcache is secured against concurrent swapping to and
-+		 * from the slot, recheck that the entry is still current before
-+		 * writing.
-+		 */
-+		spin_lock(&tree->lock);
-+		if (zswap_rb_search(&tree->rbroot, entry->offset) != entry) {
-+			spin_unlock(&tree->lock);
-+			delete_from_swap_cache(page_folio(page));
-+			ret = -ENOMEM;
-+			goto fail;
-+		}
-+		spin_unlock(&tree->lock);
-+
- 		/* decompress */
- 		acomp_ctx = raw_cpu_ptr(entry->pool->acomp_ctx);
- 		dlen = PAGE_SIZE;
--- 
-2.34.1
 
