@@ -2,135 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 433436F5123
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 09:20:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1F086F5132
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 09:23:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229684AbjECHUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 03:20:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33852 "EHLO
+        id S229643AbjECHXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 03:23:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjECHUJ (ORCPT
+        with ESMTP id S229455AbjECHXl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 03:20:09 -0400
+        Wed, 3 May 2023 03:23:41 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD28040F1
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 00:19:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3992D6B
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 00:22:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683098366;
+        s=mimecast20190719; t=1683098576;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JWuwBsoA7E+ixFPnuQyU62/zGQyUSXimh/xtxQzzOds=;
-        b=Yih/rFJAHiaY8DcTzymU86MuRim2k6zUA0W3Eysk7pU/42d2CSiANyDtU2oEPKsW0GHeeu
-        9yQVvzZO/+sXgBHFGSwqBiTV/l9uzH8CfUb6mbArG+Vng9CT49t7qBA973Gp2SvERKGl7X
-        Q+knl9oug8drqKei940PcigipRUFEgU=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=IIZ/GCCJmx19uZ3mIOzJAELhL8g2Ju+C9RZzvBPp+14=;
+        b=UlD8BqzR8DFk0puuZ5Ptlirl9D9/L/DVHBLKqcTnNFKDtMFfm0OEWH4T5GtMUCkvRBzQHh
+        /S6TYuDVcPFEeU8nVxq5NL5ndbqUaZLq1x17aP/CyoAxuBgc6BGT0/wxl/pyPwTIxs/BK0
+        TZ5JqXCGle5be3/PRNlx5cJe0CQXp9Y=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-22-ecsSxssXPAOomcQrcDML8A-1; Wed, 03 May 2023 03:19:24 -0400
-X-MC-Unique: ecsSxssXPAOomcQrcDML8A-1
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-3f18c2b2110so14861735e9.3
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 00:19:24 -0700 (PDT)
+ us-mta-654-kBKUc3_rMOO_0ymzOPYMOw-1; Wed, 03 May 2023 03:22:55 -0400
+X-MC-Unique: kBKUc3_rMOO_0ymzOPYMOw-1
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-3062e5d0cd3so1102380f8f.3
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 00:22:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683098363; x=1685690363;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JWuwBsoA7E+ixFPnuQyU62/zGQyUSXimh/xtxQzzOds=;
-        b=aG8KaTsN0MPZDha+8pivdEwAdsY61gZeDga0Vvxx21qtCLuZIcs2OcOuJPBmtZxWWE
-         meIPb/JHeg1qIfnr5PnDP1Fop8vmUGGdK5gbkRiE5RHU2Er7Bd5n86gWEtXHX69GRcDN
-         xNE11pjL54zO0nQjTkPe7q6SBUQDnlx8NAoDBEqe+5jfRzkWItq31Yj1Ka//5FnXX6ou
-         wC0BAFSyvg8ypZtzeuduqdji/GJeS0OkT19GaR9R1aGNoRBgi67Th1tNkho4IEvNlfFN
-         ZSpzrNOBFXYFB+jBWn4FGlEP/+8U3V4Okp1CpBXL0TEQeb6iYyeKWcBP7Kxz7UcIjFKl
-         VYsA==
-X-Gm-Message-State: AC+VfDzHNtG5X764QBwefhSj87Mn/Ue/IOxxnUJuiimCTl3KLlGNGaqI
-        tUc8ggMqhONG910h1JpZ0wHHasJLBYMAAa/RO3njtc1CMF77AB1H0jO1f6OHHllVgTsnnu7ZsSI
-        lH2AK1o56ipZ7iWVuscLAR4CB
-X-Received: by 2002:a5d:4536:0:b0:2f9:4fe9:74de with SMTP id j22-20020a5d4536000000b002f94fe974demr14583284wra.16.1683098363276;
-        Wed, 03 May 2023 00:19:23 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4YmDJ5fSjEX9bYJcvGxxrKGNEefuG/olEhGMwhxvTP6ZpCZhJEgcZLb8yFcLBX87Q12Wuhlg==
-X-Received: by 2002:a5d:4536:0:b0:2f9:4fe9:74de with SMTP id j22-20020a5d4536000000b002f94fe974demr14583271wra.16.1683098363001;
-        Wed, 03 May 2023 00:19:23 -0700 (PDT)
-Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id u7-20020a5d5147000000b002cde25fba30sm33050954wrt.1.2023.05.03.00.19.22
+        d=1e100.net; s=20221208; t=1683098574; x=1685690574;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IIZ/GCCJmx19uZ3mIOzJAELhL8g2Ju+C9RZzvBPp+14=;
+        b=KWCXdMgs4eCO6i72oclIYNLkavRJTjFb1RrnFhMSAIzhO/UBdgg/xc2ZgdXRdnFW+y
+         VFuWdlY8YxTyzguGo60SiP5cFA1qn+zxx2zHiM3XYet15mmGhQ0ksbXqf344O7cFyyVz
+         g68KX2MTPJAxYPi+a9Y7/ZsZpYfsglwviKLoIsBd2yx8XDgWXlkRJQZMJBJzRNFzRpZx
+         pDHAh9nDVYnDt2w79BYg2EmTXF9/tnqzHxiNyOaotQ2cJVf5XIlVhX31viEcsgfmJXEU
+         QYSYYlb1iLeT87t4JjV3FjBhfQ9YGigx1mWVmYf7w8YQEnuwJNchdhGiyM47XOOlY2yW
+         jFeA==
+X-Gm-Message-State: AC+VfDw5UUZ7Ad9poU9fUAnF4OFZ9JMyby3QpkNt78qfI+H9Wi5m99iy
+        51YpM+xmIxHixy8tqftVpiCppkZDW77auWxPATuCc/lcW3Qa3Pko8FPcOe8uKrh0/ZWeVEmVXMa
+        hqJu2MRrtWsVHvMhGRqlceReK
+X-Received: by 2002:a05:6000:1191:b0:306:34f6:de8a with SMTP id g17-20020a056000119100b0030634f6de8amr3740011wrx.71.1683098573814;
+        Wed, 03 May 2023 00:22:53 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ54zy8/SIcgpOp/BoRmdQDJsXfaF76CBFfxdPQZTW8HUw1yUuPWnpw6k9sR/S7c2WjN63x9jQ==
+X-Received: by 2002:a05:6000:1191:b0:306:34f6:de8a with SMTP id g17-20020a056000119100b0030634f6de8amr3739998wrx.71.1683098573403;
+        Wed, 03 May 2023 00:22:53 -0700 (PDT)
+Received: from localhost.localdomain.com ([2a02:b127:8011:7489:32ac:78e2:be8c:a5fb])
+        by smtp.gmail.com with ESMTPSA id k1-20020a7bc301000000b003eddc6aa5fasm947259wmj.39.2023.05.03.00.22.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 May 2023 00:19:22 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Sam Ravnborg <sam@ravnborg.org>
-Cc:     linux-arch@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        arnd@arndb.de, deller@gmx.de, chenhuacai@kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        James.Bottomley@hansenpartnership.com,
-        linux-m68k@lists.linux-m68k.org, geert@linux-m68k.org,
-        linux-parisc@vger.kernel.org, vgupta@kernel.org,
-        sparclinux@vger.kernel.org, kernel@xen0n.name,
-        linux-snps-arc@lists.infradead.org, davem@davemloft.net,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 4/6] fbdev: Include <linux/io.h> via <asm/fb.h>
-In-Reply-To: <563673c0-799d-e353-974c-91b1ab881a22@suse.de>
-References: <20230502130223.14719-1-tzimmermann@suse.de>
- <20230502130223.14719-5-tzimmermann@suse.de>
- <20230502195429.GA319489@ravnborg.org>
- <563673c0-799d-e353-974c-91b1ab881a22@suse.de>
-Date:   Wed, 03 May 2023 09:19:21 +0200
-Message-ID: <87354dyj9i.fsf@minerva.mail-host-address-is-not-set>
+        Wed, 03 May 2023 00:22:52 -0700 (PDT)
+From:   Juri Lelli <juri.lelli@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Qais Yousef <qyousef@layalina.io>,
+        Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Hao Luo <haoluo@google.com>
+Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
+        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
+        bristot@redhat.com, mathieu.poirier@linaro.org,
+        cgroups@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
+        Quentin Perret <qperret@google.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Juri Lelli <juri.lelli@redhat.com>
+Subject: [PATCH v2 0/6] sched/deadline: cpuset: Rework DEADLINE bandwidth restoration
+Date:   Wed,  3 May 2023 09:22:22 +0200
+Message-Id: <20230503072228.115707-1-juri.lelli@redhat.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thomas Zimmermann <tzimmermann@suse.de> writes:
+Qais reported [1] that iterating over all tasks when rebuilding root
+domains for finding out which ones are DEADLINE and need their bandwidth
+correctly restored on such root domains can be a costly operation (10+
+ms delays on suspend-resume). He proposed we skip rebuilding root
+domains for certain operations, but that approach seemed arch specific
+and possibly prone to errors, as paths that ultimately trigger a rebuild
+might be quite convoluted (thanks Qais for spending time on this!).
 
-Hello Thomas,
+This is v2 of an alternative approach (v1 at [3]) to fix the problem.
 
-> Am 02.05.23 um 21:54 schrieb Sam Ravnborg:
->> On Tue, May 02, 2023 at 03:02:21PM +0200, Thomas Zimmermann wrote:
+ 01/06 - Rename functions deadline with DEADLINE accounting (cleanup
+         suggested by Qais) - no functional change
+ 02/06 - Bring back cpuset_mutex (so that we have write access to cpusets
+         from scheduler operations - and we also fix some problems
+         associated to percpu_cpuset_rwsem)
+ 03/06 - Keep track of the number of DEADLINE tasks belonging to each cpuset
+ 04/06 - Use this information to only perform the costly iteration if
+         DEADLINE tasks are actually present in the cpuset for which a
+         corresponding root domain is being rebuilt
+ 05/06 - Create DL BW alloc, free & check overflow interface for bulk
+         bandwidth allocation/removal - no functional change 
+ 06/06 - Fix bandwidth allocation handling for cgroup operation
+         involving multiple tasks
 
-[...]
+With respect to the v1 posting [3]
 
->>>   #include <linux/console.h> /* Why should fb driver call console functions? because console_lock() */
->>>   #include <video/vga.h>
->>>   
->>> +#include <asm/fb.h>
->> 
->> When we have a header like linux/fb.h - it is my understanding that it is
->> preferred to include that file, and not the asm/fb.h variant.
->> 
->> This is assuming the linux/fb.h contains the generic stuff, and includes
->> asm/fb.h for the architecture specific parts.
->> 
->> So drivers will include linux/fb.h and then they automatically get the
->> architecture specific parts from asm/fb.h.
->> 
->> In other words, drivers are not supposed to include asm/fb.h, if
->> linux.fb.h exists - and linux/fb.h shall include the asm/fb.h.
->> 
->> If the above holds true, then it is wrong and not needed to add asm/fb.h
->> as seen above.
->> 
->> 
->> There are countless examples where the above are not followed,
->> but to my best understanding the above it the preferred way to do it.
->
-> Where did youher this? I only know about this in the case of asm/io.h 
-> vs. linux/io.h.
->
+ 1 - rebase on top of Linus' tree as of today (865fdb08197e)
+ 2 - move patch 6 to position 4 - Qais
 
-I understand that's the case too. I believe even checkpatch.pl complains
-about it? (not that the script always get right, but just as an example).
+As the rebase needed some work, I decided to remove the tested and
+reviewed bys. Please take another look, just in case I messed something
+up.
+
+This set is also available from
+
+https://github.com/jlelli/linux.git deadline/rework-cpusets
+
+Best,
+Juri
+
+1 - https://lore.kernel.org/lkml/20230206221428.2125324-1-qyousef@layalina.io/
+2 - RFC https://lore.kernel.org/lkml/20230315121812.206079-1-juri.lelli@redhat.com/
+3 - v1  https://lore.kernel.org/lkml/20230329125558.255239-1-juri.lelli@redhat.com/
+
+Dietmar Eggemann (2):
+  sched/deadline: Create DL BW alloc, free & check overflow interface
+  cgroup/cpuset: Free DL BW in case can_attach() fails
+
+Juri Lelli (4):
+  cgroup/cpuset: Rename functions dealing with DEADLINE accounting
+  sched/cpuset: Bring back cpuset_mutex
+  sched/cpuset: Keep track of SCHED_DEADLINE task in cpusets
+  cgroup/cpuset: Iterate only if DEADLINE tasks are present
+
+ include/linux/cpuset.h  |  12 +-
+ include/linux/sched.h   |   4 +-
+ kernel/cgroup/cgroup.c  |   4 +
+ kernel/cgroup/cpuset.c  | 242 ++++++++++++++++++++++++++--------------
+ kernel/sched/core.c     |  41 +++----
+ kernel/sched/deadline.c |  67 ++++++++---
+ kernel/sched/sched.h    |   2 +-
+ 7 files changed, 244 insertions(+), 128 deletions(-)
 
 -- 
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
+2.40.1
 
