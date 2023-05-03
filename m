@@ -2,133 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4874F6F5EC1
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 21:00:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D6CA6F5EC4
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 21:03:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbjECTAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 15:00:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33792 "EHLO
+        id S229994AbjECTDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 15:03:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbjECTAm (ORCPT
+        with ESMTP id S229498AbjECTDS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 15:00:42 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26ABD7690;
-        Wed,  3 May 2023 12:00:41 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1ab14cb3aaeso15705555ad.2;
-        Wed, 03 May 2023 12:00:41 -0700 (PDT)
+        Wed, 3 May 2023 15:03:18 -0400
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E9C67D8E;
+        Wed,  3 May 2023 12:03:16 -0700 (PDT)
+Received: by mail-ot1-x332.google.com with SMTP id 46e09a7af769-6a5febde157so2045733a34.3;
+        Wed, 03 May 2023 12:03:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683140440; x=1685732440;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TixecA9/pAM4HarsIzbsqo9aEePqi7NlMoMwpBqZ4sg=;
-        b=nj0vJNwdVVt0leIQqG7LNcDsn0HBv/2LB5bpwahmUCsC/miRMRioHYtWRmIyKRa4q7
-         /LerloBVswHzbFX9CCyUDnpxP/IQ/6PnLLqQpfWnc1NbH+CLoy/qomCuLXbQ/hm7GXbY
-         9K1llkLMVIzXH+9erLCPKYeKOCMjPHTi+/CtZTNMV7mXRuC6JsIf5ggN/rnrAz1NhNXa
-         eh05/yDdnx52+JINCk6ZeL/o57hnKkS0hVq+XSd3MGLHBk2Mi4AWCPwwxseywCc+V8EF
-         Yaorgf1eIpLSqB3Zpcj6GvY7Tq1yLUSj/1p4qXhmSy1aAY4pRffG6YTjpr/A2bnDbK8l
-         sQJw==
+        d=gmail.com; s=20221208; t=1683140596; x=1685732596;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=U0zanob5psot+MN0L3Jo7naT487S45wikpSmD7HcN6I=;
+        b=Y7pSDCAs4pgUkzQE6IaengKTj1KGR+dM7m5U3wjgt7c/cAzupQ8ZjRa/epStopoCba
+         Wyq07v5dOlnTpxO7t5xG29NSHxsXk2PcsRwDTFlq6fLPQBjmf4pPov6zNik3HWm3WHGN
+         GhAi44H8g1tTcl2btjSqtOPOoCgQLsteMFrkzQqXZZ3MPOqpBcTXZ7Ima21AVABQusnH
+         65dIh2UplkfUHuEMOTqqTtTzq2GFZUgwLfQsjiz7/6p5qq4mprddOXnvEWVPpIB5PIWg
+         kDNXb/T4+KqC1xLF/PMMpWiqvNhSzdm0DQZJNsakJrvOwxvzyIVu89RgUIaYh4/mY5+O
+         rchA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683140440; x=1685732440;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TixecA9/pAM4HarsIzbsqo9aEePqi7NlMoMwpBqZ4sg=;
-        b=TaHG4aqH+Cm/jBDGmbBFWxrdk3YZv4kNhts8Ldj6s/L39kekVmjZagdKJi3c5anOuD
-         Fy69eLqJ99M8n7IzuFOLg9F8xFliZoDRhTgR/1RDtbXevKQi9VIK+QfG7Z+gTY5abCZ0
-         6eIGB2LKsT814hkTtoV+YW+46QV954QRVbd4FOeU6H5CkASLWNXYQWLckgOTLe+nyPyz
-         dD/AoNYObQUTCYeTBixSeDz9N5zsROw2ozDoxEksM+Mtt50S2EVk43h3uMx8EbWyv7m8
-         nkom+fcIBi+pxDr10qZJ9Sto3WX5TwC77sR+jvixS7eUWgkfajKNVhIiOt2T2JdOHRk1
-         3d+Q==
-X-Gm-Message-State: AC+VfDxHGIesQO5eCdecst7EbwfRWyiu1d/oMt/6Q3M/a32ojk1GG1M4
-        q0w4+1rI6z7CK+YFhFszZ9o=
-X-Google-Smtp-Source: ACHHUZ6pUVtfnjx3yCSyP11V3DoOQqy3SF3n3ZcLqHfmDMnSaaQgXO4Z1nHM4fwjQoyk8033mvq5hQ==
-X-Received: by 2002:a17:902:b198:b0:1a1:b174:836c with SMTP id s24-20020a170902b19800b001a1b174836cmr1001919plr.16.1683140440270;
-        Wed, 03 May 2023 12:00:40 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:9390:e396:49ef:54dc])
-        by smtp.gmail.com with ESMTPSA id be12-20020a170902aa0c00b001a6a53c3b04sm21958039plb.306.2023.05.03.12.00.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 May 2023 12:00:39 -0700 (PDT)
-Date:   Wed, 3 May 2023 12:00:36 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     "Limonciello, Mario" <mlimonci@amd.com>
-Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
-        Chuanhong Guo <gch981213@gmail.com>,
-        linux-input@vger.kernel.org,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [regression] Bug 217394 - IRQ override skipping breaks the Aya
- Neo Air Plus 6800U keyboard buttons
-Message-ID: <ZFKvVKMesT+3NthN@google.com>
-References: <01ea5c8e-ed2f-7568-f6ed-896329e7b673@leemhuis.info>
- <68d017d9-d815-01d4-23c1-49c0aaf5f20b@amd.com>
+        d=1e100.net; s=20221208; t=1683140596; x=1685732596;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=U0zanob5psot+MN0L3Jo7naT487S45wikpSmD7HcN6I=;
+        b=NbtHjyKkszgVfP3gLdDdNOAPAnG0xnTBUKgwXC0RMPCJjrmuymRxFjexnW/37CUxlb
+         HxYEeHr5tQvbZTWQIUyr4abWvDBXucNwKXSrz4oxN+NJxrgoWASkxBGiyuuosWe35OeH
+         EQyBuEm+OfBWR6Ac9Lvwqzc/+1T/dOYCb2auPQsLOKani8cgCKf23EeI1VKEhvdeIwtn
+         p66jqIr3d3oyrRKIyws88OJvcxyKzWn4J/aZNrkw5abp2r6XjSvjNcWmudT8fpmkCiwN
+         /EiMMRhw9f7XZPcBvsHYen8Fn4rmHvf+/UAn3BP93ak2P3FdD5SIe6vDny/DtOszBMwJ
+         Cq3A==
+X-Gm-Message-State: AC+VfDwvWlRi95obIOLCCPTuIDAQxyJdQIYJaOECQGoZQbRNxqUnWzJ8
+        AbyKbsruCra1tLJYS3WpAs8=
+X-Google-Smtp-Source: ACHHUZ45fCKODtKeE+8Qp8r2XRVU4mmpJKXM3rSpGuOzwTDG+lKyAuq1oQHcakWua1AVejIv1wPKQA==
+X-Received: by 2002:a05:6870:a704:b0:191:d6cd:6f5b with SMTP id g4-20020a056870a70400b00191d6cd6f5bmr5786911oam.22.1683140595817;
+        Wed, 03 May 2023 12:03:15 -0700 (PDT)
+Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
+        by smtp.gmail.com with ESMTPSA id dv5-20020a056870d88500b0018459cc0f52sm897161oab.24.2023.05.03.12.03.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 May 2023 12:03:15 -0700 (PDT)
+Message-ID: <0aef40dd-a437-58e1-5fa5-b44412a2a89f@gmail.com>
+Date:   Wed, 3 May 2023 16:01:00 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <68d017d9-d815-01d4-23c1-49c0aaf5f20b@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v2] rust: str: add conversion from `CStr` to `CString`
+Content-Language: en-US
+To:     Alice Ryhl <aliceryhl@google.com>, Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>
+Cc:     Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev
+References: <20230503141016.683634-1-aliceryhl@google.com>
+From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+In-Reply-To: <20230503141016.683634-1-aliceryhl@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 03, 2023 at 11:11:33AM -0500, Limonciello, Mario wrote:
-> +linux-input
+On 5/3/23 11:10, Alice Ryhl wrote:
+> These methods can be used to copy the data in a temporary c string into
+> a separate allocation, so that it can be accessed later even if the
+> original is deallocated.
 > 
-> On 5/3/2023 7:58 AM, Linux regression tracking (Thorsten Leemhuis) wrote:
-> > Hi, Thorsten here, the Linux kernel's regression tracker.
-> > 
-> > I noticed a regression report in bugzilla.kernel.org. As many (most?)
-> > kernel developers don't keep an eye on it, I decided to forward it by mail.
-> > 
-> > Chuanhong Guo, apparently it's cause by a change of yours.
-> > 
-> > Note, you have to use bugzilla to reach the reporter, as I sadly[1] can
-> > not CCed them in mails like this.
-> > 
-> > Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217394 :
-> > 
-> > >   Matthew 2023-05-03 02:28:33 UTC
-> > > 
-> > > Reverting the changes found in this patch fixes the issue:
-> > > > https://lore.kernel.org/all/20220712020058.90374-1-gch981213@gmail.com/
-> > > With that patch the AT Translated Set 2 Keyboard doesn't show up with the evtest and is not usable.
-> > > 
-> > > Hardware:
-> > > 
-> > > Aya Neo Air Plus
-> > > AMD Ryzen 7 6800U
-> > See the ticket for more details.
-> > 
-> > BTW: there apparently is another IRQ override needed for a different
-> > machine. See https://bugzilla.kernel.org/show_bug.cgi?id=216804#c8 for
-> > details (ignore the comments before that, the quirk entry for that
-> > machine was merged; comment 8 and all related to it really should have a
-> > separate bug; that's also why this partly fall through the cracks here
-> > :-/ ). The user is currently trying to create a patch.
-> > 
-> Something I'm wondering about is if it's possible for i8042 to detect the
-> polarity is incorrect when it probes and
-> to try to correct it.
+> The API in this change mirrors the standard library API for the `&str`
+> and `String` types. The `ToOwned` trait is not implemented because it
+> assumes that allocations are infallible.
 > 
-> If we could do that we can probably drop 9946e39fe8d0 ("ACPI: resource: skip
-> IRQ override on AMD Zen platforms")
-> to fix this issue along with all the other quirks that have collected over
-> time on i8042 polarity issues.
+> Reviewed-by: Benno Lossin <benno.lossin@proton.me>
+> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+> ---
+>   rust/kernel/str.rs | 22 ++++++++++++++++++++++
+>   1 file changed, 22 insertions(+)
 > 
+> diff --git a/rust/kernel/str.rs b/rust/kernel/str.rs
+> index b771310fa4a4..f3dc5b24ea55 100644
+> --- a/rust/kernel/str.rs
+> +++ b/rust/kernel/str.rs
+> @@ -2,6 +2,7 @@
+>   
+>   //! String representations.
+>   
+> +use alloc::alloc::AllocError;
+>   use alloc::vec::Vec;
+>   use core::fmt::{self, Write};
+>   use core::ops::{self, Deref, Index};
+> @@ -199,6 +200,12 @@ impl CStr {
+>       pub unsafe fn as_str_unchecked(&self) -> &str {
+>           unsafe { core::str::from_utf8_unchecked(self.as_bytes()) }
+>       }
+> +
+> +    /// Convert this [`CStr`] into a [`CString`] by allocating memory and
+> +    /// copying over the string data.
+> +    pub fn to_cstring(&self) -> Result<CString, AllocError> {
+> +        CString::try_from(self)
+> +    }
+>   }
+>   
+>   impl fmt::Display for CStr {
+> @@ -584,6 +591,21 @@ impl Deref for CString {
+>       }
+>   }
+>   
+> +impl<'a> TryFrom<&'a CStr> for CString {
+> +    type Error = AllocError;
+> +
+> +    fn try_from(cstr: &'a CStr) -> Result<CString, AllocError> {
+> +        let mut buf = Vec::new();
+> +
+> +        buf.try_extend_from_slice(cstr.as_bytes_with_nul())
+> +            .map_err(|_| AllocError)?;
+> +
+> +        // INVARIANT: The `CStr` and `CString` types have the same invariants for
+> +        // the string data, and we copied it over without changes.
+> +        Ok(CString { buf })
+> +    }
+> +}
+> +
+>   /// A convenience alias for [`core::format_args`].
+>   #[macro_export]
+>   macro_rules! fmt {
+> 
+> base-commit: ea76e08f4d901a450619831a255e9e0a4c0ed162
 
-8042 is shared between multiple platforms and is quite fragile as it is.
-If there are issues in AMD firmware and you know the polarity that is
-needed for 8042 on these platforms you should add a proper fixup for
-override. Maybe you should only skip override for IRQ 1?
-
-Thanks.
-
--- 
-Dmitry
+Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
