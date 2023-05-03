@@ -2,181 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 772396F50B3
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 09:09:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C91FE6F50C0
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 09:10:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbjECHJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 03:09:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52566 "EHLO
+        id S229703AbjECHKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 03:10:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjECHJ3 (ORCPT
+        with ESMTP id S229581AbjECHKV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 03:09:29 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B219272A;
-        Wed,  3 May 2023 00:09:26 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id D753322385;
-        Wed,  3 May 2023 07:09:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1683097764; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=teAFqwFmUnax09TuiGG90Kj7kG6+48TX1tmrs49YNrk=;
-        b=tUCwCKB0yD0DPwNpJBV0UjNNW8Pc2Tw1up+vtwWFbFULRjCUTM2r6XN97fpdpeDUsFrRLd
-        piKtpzVfJdFFncRwHBH4A9GLbUn0kSC51ADu0zOJdn42pSMYJQLHSNfHItzb4FVIUckF2T
-        ILfUkKY1mTGafy1tRkd67jr9sih0wIc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1683097764;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=teAFqwFmUnax09TuiGG90Kj7kG6+48TX1tmrs49YNrk=;
-        b=r2Odk1cw2e32jvI3AbMtbCk05d4jzD0gTvfM1aH+rVq9i59ptSJ85SasU9l54dvJrXnX1I
-        ptaVbSF6VtrOoFBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 751D21331F;
-        Wed,  3 May 2023 07:09:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id FWCdG6QIUmSWRAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 03 May 2023 07:09:24 +0000
-Message-ID: <563673c0-799d-e353-974c-91b1ab881a22@suse.de>
-Date:   Wed, 3 May 2023 09:09:24 +0200
+        Wed, 3 May 2023 03:10:21 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D27212736;
+        Wed,  3 May 2023 00:10:14 -0700 (PDT)
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34369xsr003337;
+        Wed, 3 May 2023 00:09:59 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=pfpt0220; bh=6Mcsx5t9iR9kcFBpaV+wzj9CUlqadPfT07oLtT9p/0k=;
+ b=a6iHMGBVq87mTHctmJEogOUBVU7gDbHsdggE48vyKmjn99es2ofQhEnwFMHRyxfa+BZm
+ BLH9QsrULCCwQyIgMZW/ryG3lXemCIeFwICXgHI9zlCX13JjYXLc6ZpDBQGwcABwDIY6
+ iaXatoil+aOONwfjD47JyRcuIj1JWHofuEBKAp43SrrcoqM8SZl1hRTtPI1ld2HAqfqc
+ O6g18CG/diFxHPdUgXx7SUNhxSumCOCNSooYoi7Ioihc9bVvRJufpin83siKyYGHTBiy
+ foBorHIgRiOOFdXq1J8BQpYnYxelSg1gIRTYlgUlabhNmYLpTNaew4lXGyxxyWPZMgrJ fg== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3q92rp3m6s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 03 May 2023 00:09:58 -0700
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 3 May
+ 2023 00:09:51 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
+ Transport; Wed, 3 May 2023 00:09:51 -0700
+Received: from hyd1425.marvell.com (unknown [10.29.37.83])
+        by maili.marvell.com (Postfix) with ESMTP id 1D3D23F70A6;
+        Wed,  3 May 2023 00:09:46 -0700 (PDT)
+From:   Sai Krishna <saikrishnag@marvell.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <simon.horman@corigine.com>,
+        <leon@kernel.org>, <sgoutham@marvell.com>, <gakula@marvell.com>,
+        <lcherian@marvell.com>, <jerinj@marvell.com>, <hkelam@marvell.com>,
+        <sbhatta@marvell.com>
+CC:     Sai Krishna <saikrishnag@marvell.com>
+Subject: [net PATCH v5 00/11] octeontx2: Miscellaneous fixes
+Date:   Wed, 3 May 2023 12:39:33 +0530
+Message-ID: <20230503070944.960190-1-saikrishnag@marvell.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 4/6] fbdev: Include <linux/io.h> via <asm/fb.h>
-Content-Language: en-US
-To:     Sam Ravnborg <sam@ravnborg.org>
-Cc:     linux-arch@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        arnd@arndb.de, deller@gmx.de, chenhuacai@kernel.org,
-        javierm@redhat.com, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        James.Bottomley@hansenpartnership.com,
-        linux-m68k@lists.linux-m68k.org, geert@linux-m68k.org,
-        linux-parisc@vger.kernel.org, vgupta@kernel.org,
-        sparclinux@vger.kernel.org, kernel@xen0n.name,
-        linux-snps-arc@lists.infradead.org, davem@davemloft.net,
-        linux-arm-kernel@lists.infradead.org
-References: <20230502130223.14719-1-tzimmermann@suse.de>
- <20230502130223.14719-5-tzimmermann@suse.de>
- <20230502195429.GA319489@ravnborg.org>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20230502195429.GA319489@ravnborg.org>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------pUWBDJ1Raj0NjYY4OLYhyeQp"
-X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: QrAfS2EDw5wxNmfugFTLrNCvJlDd8Xho
+X-Proofpoint-GUID: QrAfS2EDw5wxNmfugFTLrNCvJlDd8Xho
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-03_04,2023-04-27_01,2023-02-09_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------pUWBDJ1Raj0NjYY4OLYhyeQp
-Content-Type: multipart/mixed; boundary="------------bKIh6R9LGtMQp74D7VXZK0tl";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Sam Ravnborg <sam@ravnborg.org>
-Cc: linux-arch@vger.kernel.org, linux-fbdev@vger.kernel.org,
- linux-ia64@vger.kernel.org, loongarch@lists.linux.dev, arnd@arndb.de,
- deller@gmx.de, chenhuacai@kernel.org, javierm@redhat.com,
- dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
- James.Bottomley@hansenpartnership.com, linux-m68k@lists.linux-m68k.org,
- geert@linux-m68k.org, linux-parisc@vger.kernel.org, vgupta@kernel.org,
- sparclinux@vger.kernel.org, kernel@xen0n.name,
- linux-snps-arc@lists.infradead.org, davem@davemloft.net,
- linux-arm-kernel@lists.infradead.org
-Message-ID: <563673c0-799d-e353-974c-91b1ab881a22@suse.de>
-Subject: Re: [PATCH v3 4/6] fbdev: Include <linux/io.h> via <asm/fb.h>
-References: <20230502130223.14719-1-tzimmermann@suse.de>
- <20230502130223.14719-5-tzimmermann@suse.de>
- <20230502195429.GA319489@ravnborg.org>
-In-Reply-To: <20230502195429.GA319489@ravnborg.org>
+This patchset includes following fixes.
 
---------------bKIh6R9LGtMQp74D7VXZK0tl
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Patch #1 Fix for the race condition while updating APR table 
+ 
+Patch #2 Fix end bit position in NPC scan config 
 
-SGkNCg0KQW0gMDIuMDUuMjMgdW0gMjE6NTQgc2NocmllYiBTYW0gUmF2bmJvcmc6DQo+IEhp
-IFRob21hcywNCj4gDQo+IE9uIFR1ZSwgTWF5IDAyLCAyMDIzIGF0IDAzOjAyOjIxUE0gKzAy
-MDAsIFRob21hcyBaaW1tZXJtYW5uIHdyb3RlOg0KPj4gRmJkZXYncyBtYWluIGhlYWRlciBm
-aWxlLCA8bGludXgvZmIuaD4sIGluY2x1ZGVzIDxhc20vaW8uaD4gdG8gZ2V0DQo+PiBkZWNs
-YXJhdGlvbnMgZm9yIEkvTyBoZWxwZXIgZnVuY3Rpb25zLiBGcm9tIHRoZXNlIGRlY2xhcmF0
-aW9ucywgaXQNCj4+IGxhdGVyIGRlZmluZXMgZnJhbWVidWZmZXIgSS9PIGhlbHBlcnMsIHN1
-Y2ggYXMgZmJfe3JlYWQsd3JpdGV9W2J3bHFdKCkNCj4+IG9yIGZiX21lbXNldCgpLg0KPj4N
-Cj4+IFRoZSBmcmFtZWJ1ZmZlciBJL08gaGVscGVycyBkZXBlbmQgb24gdGhlIHN5c3RlbSBh
-cmNoaXRlY3R1cmUgYW5kDQo+PiB3aWxsIHRoZXJlZm9yZSBiZSBtb3ZlZCBpbnRvIDxhc20v
-ZmIuaD4uIFByZXBhcmUgdGhpcyBjaGFuZ2UgYnkgZmlyc3QNCj4+IGFkZGluZyBhbiBpbmNs
-dWRlIHN0YXRlbWVudCBmb3IgPGxpbnV4L2lvLmg+IHRvIDxhc20tZ2VuZXJpYy9mYi5oPi4N
-Cj4+IEluY2x1ZGUgPGFzbS9mYi5oPiBpbiBhbGwgc291cmNlIGZpbGVzIHRoYXQgdXNlIHRo
-ZSBmcmFtZWJ1ZmZlciBJL08NCj4+IGhlbHBlcnMsIHNvIHRoYXQgdGhleSBzdGlsbCBnZXQg
-dGhlIG5lY2Vzc2FyeSBJL08gZnVuY3Rpb25zLg0KPj4NCj4gLi4uDQo+Pg0KPj4gZGlmZiAt
-LWdpdCBhL2RyaXZlcnMvdmlkZW8vZmJkZXYvYXJrZmIuYyBiL2RyaXZlcnMvdmlkZW8vZmJk
-ZXYvYXJrZmIuYw0KPj4gaW5kZXggNjBhOTZmZGI1ZGQ4Li5mZDM4ZThhMDczYjggMTAwNjQ0
-DQo+PiAtLS0gYS9kcml2ZXJzL3ZpZGVvL2ZiZGV2L2Fya2ZiLmMNCj4+ICsrKyBiL2RyaXZl
-cnMvdmlkZW8vZmJkZXYvYXJrZmIuYw0KPj4gQEAgLTI3LDYgKzI3LDggQEANCj4+ICAgI2lu
-Y2x1ZGUgPGxpbnV4L2NvbnNvbGUuaD4gLyogV2h5IHNob3VsZCBmYiBkcml2ZXIgY2FsbCBj
-b25zb2xlIGZ1bmN0aW9ucz8gYmVjYXVzZSBjb25zb2xlX2xvY2soKSAqLw0KPj4gICAjaW5j
-bHVkZSA8dmlkZW8vdmdhLmg+DQo+PiAgIA0KPj4gKyNpbmNsdWRlIDxhc20vZmIuaD4NCj4g
-DQo+IFdoZW4gd2UgaGF2ZSBhIGhlYWRlciBsaWtlIGxpbnV4L2ZiLmggLSBpdCBpcyBteSB1
-bmRlcnN0YW5kaW5nIHRoYXQgaXQgaXMNCj4gcHJlZmVycmVkIHRvIGluY2x1ZGUgdGhhdCBm
-aWxlLCBhbmQgbm90IHRoZSBhc20vZmIuaCB2YXJpYW50Lg0KPiANCj4gVGhpcyBpcyBhc3N1
-bWluZyB0aGUgbGludXgvZmIuaCBjb250YWlucyB0aGUgZ2VuZXJpYyBzdHVmZiwgYW5kIGlu
-Y2x1ZGVzDQo+IGFzbS9mYi5oIGZvciB0aGUgYXJjaGl0ZWN0dXJlIHNwZWNpZmljIHBhcnRz
-Lg0KPiANCj4gU28gZHJpdmVycyB3aWxsIGluY2x1ZGUgbGludXgvZmIuaCBhbmQgdGhlbiB0
-aGV5IGF1dG9tYXRpY2FsbHkgZ2V0IHRoZQ0KPiBhcmNoaXRlY3R1cmUgc3BlY2lmaWMgcGFy
-dHMgZnJvbSBhc20vZmIuaC4NCj4gDQo+IEluIG90aGVyIHdvcmRzLCBkcml2ZXJzIGFyZSBu
-b3Qgc3VwcG9zZWQgdG8gaW5jbHVkZSBhc20vZmIuaCwgaWYNCj4gbGludXguZmIuaCBleGlz
-dHMgLSBhbmQgbGludXgvZmIuaCBzaGFsbCBpbmNsdWRlIHRoZSBhc20vZmIuaC4NCj4gDQo+
-IElmIHRoZSBhYm92ZSBob2xkcyB0cnVlLCB0aGVuIGl0IGlzIHdyb25nIGFuZCBub3QgbmVl
-ZGVkIHRvIGFkZCBhc20vZmIuaA0KPiBhcyBzZWVuIGFib3ZlLg0KPiANCj4gDQo+IFRoZXJl
-IGFyZSBjb3VudGxlc3MgZXhhbXBsZXMgd2hlcmUgdGhlIGFib3ZlIGFyZSBub3QgZm9sbG93
-ZWQsDQo+IGJ1dCB0byBteSBiZXN0IHVuZGVyc3RhbmRpbmcgdGhlIGFib3ZlIGl0IHRoZSBw
-cmVmZXJyZWQgd2F5IHRvIGRvIGl0Lg0KDQpXaGVyZSBkaWQgeW91aGVyIHRoaXM/IEkgb25s
-eSBrbm93IGFib3V0IHRoaXMgaW4gdGhlIGNhc2Ugb2YgYXNtL2lvLmggDQp2cy4gbGludXgv
-aW8uaC4NCg0KSWYgdGhhdCdzIHRoZSBjYXNlLCB3ZSBzaG91bGQgcHV0IHRob3NlIGhlbHBl
-cnMgaW50byBhIG5ldyBoZWFkZXIgZmlsZSwgDQpiZWNhdXNlIG9uZSBvZiB0aGUgbW90aXZh
-dGlvbnMgaGVyZSBpcyB0byByZW1vdmUgPGFzbS9pby5oPiBmcm9tIA0KPGxpbnV4L2ZiLmg+
-Lg0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQo+IA0KPiAJU2FtDQoNCi0tIA0KVGhvbWFz
-IFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUg
-U29sdXRpb25zIEdlcm1hbnkgR21iSA0KRnJhbmtlbnN0cmFzc2UgMTQ2LCA5MDQ2MSBOdWVy
-bmJlcmcsIEdlcm1hbnkNCkdGOiBJdm8gVG90ZXYsIEFuZHJldyBNeWVycywgQW5kcmV3IE1j
-RG9uYWxkLCBCb3VkaWVuIE1vZXJtYW4NCkhSQiAzNjgwOSAoQUcgTnVlcm5iZXJnKQ0K
+Patch #3 Fix depth of CAM, MEM table entries
 
---------------bKIh6R9LGtMQp74D7VXZK0tl--
+Patch #4 Fix in increase the size of DMAC filter flows
 
---------------pUWBDJ1Raj0NjYY4OLYhyeQp
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+Patch #5 Fix driver crash resulting from invalid interface type
+information retrieved from firmware
 
------BEGIN PGP SIGNATURE-----
+Patch #6 Fix incorrect mask used while installing filters involving
+fragmented packets
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmRSCKQFAwAAAAAACgkQlh/E3EQov+CW
-BQ//YDmcKk7ERaH80k2npCB1rdHjACWs3GOdia4iNkVhYtPfK/loYq5roG9jBM+wXyR2nOo+RLD7
-0VtULvCiWgrJPT6BoA6hzeoOb+LGQ1gvDPJklhli0P+WaF13ibt8hnKPwJrCH19pjuRNtTzoSP1C
-SYXmx0uSU+ffenGiJdDfCAikIruhy/8N1qSfhKFvOvzDbazitLCGPZwCr+jdbh3IwtnEXz1uaFjY
-U+y7S/Z2CcvCqcGKsvyB/NnYg8zES/r0fwCzl5f4Y6jqr3jyU9Mi3wb2dbubLErIPkqiHsol7fmq
-zC8SvTXJFqLe2zKke7yZc1L6phcFbWdpcf6DLRhaQDBmylbz8uzXHkOjxjHuI8pnAHLTvF/VkOtj
-uZy/Reb7x0qboXTc2ivFUOwk2cKBJEwVab2hJFYdY4YAewUoINv+7vXs9XNoDjr8/LDmXLi+JYlu
-h8A38vUXFD4pi5xeFG57n1XlXhIDv38IzjxeozkQZ/RyxGF/HAbLLL6aK7kNnEn6+nU1krrOtbEV
-4w29Z2qCHW0LXsh1k0pGOEMx6K0w3gruoubOC4Wzr9sMom6tA31s11j21PHxYMLEtbhJMi0LzcNa
-r0w/T9Co/W6rI+j5TAH0rZNyxAywrj8YZIDmg/E7wk1CElgMIsECcxlGW2k1+Opr928kYYM4L97M
-50o=
-=a/zq
------END PGP SIGNATURE-----
+Patch #7 Fixes for NPC field hash extract w.r.t IPV6 hash reduction,
+         IPV6 filed hash configuration.
 
---------------pUWBDJ1Raj0NjYY4OLYhyeQp--
+Patch #8 Fix for NPC hardware parser configuration destination 
+         address hash, IPV6 endianness issues.
+
+Patch #9 Fix for skipping mbox initialization for PFs disabled by firmware.
+
+Patch #10 Fix disabling packet I/O in case of mailbox timeout.
+
+Patch #11 Fix detaching LF resources in case of VF probe fail.
+
+Geetha sowjanya (1):
+  octeontx2-af: Secure APR table update with the lock
+
+Hariprasad Kelam (1):
+  octeontx2-af: Add validation for lmac type
+
+Ratheesh Kannoth (6):
+  octeontx2-af: Fix start and end bit for scan config
+  octeontx2-af: Fix depth of cam and mem table.
+  octeontx2-pf: Increase the size of dmac filter flows
+  octeontx2-af: Update/Fix NPC field hash extract feature
+  octeontx2-af: Fix issues with NPC field hash extract
+  octeontx2-af: Skip PFs if not enabled
+
+Subbaraya Sundeep (2):
+  octeontx2-pf: Disable packet I/O for graceful exit
+  octeontx2-vf: Detach LF resources on probe cleanup
+
+Suman Ghosh (1):
+  octeontx2-af: Update correct mask to filter IPv4 fragments
+
+---
+v5 changes:
+	Fixed review comments given by Simon Horman
+        1. Split the patch.
+	2. Modified/Elaborated commit messages.
+	3. Fixed duplicate code using goto statements.
+
+v4 changes:
+	Fixed review comments given by Simon Horman
+        1. Replaced kcalloc() with bitmap_zalloc().
+	2. Modified/Elaborated commit messages.
+        3. Fixed end bit position in NPC exact match bitmap enable.
+
+v3 changes:
+	Fixed review comments given by Simon Horman
+        1. Split the patches
+        2. Replaced devm_kcalloc() with kcalloc.
+        3. Remove un-necessary validation before free_percpu
+	4. Modified/Elaborated commit message
+        5. Move the lock to inner function "rvu_get_lmtaddr()" to
+           avoid synchronization issues.
+
+v2 changes:
+	Fixed review comments given by Leon Romanovsky
+	1. Updated lmac_type in case of invalid lmac
+	2. Modified commit message
+
+ .../net/ethernet/marvell/octeontx2/af/cgx.c   |   8 ++
+ .../net/ethernet/marvell/octeontx2/af/mbox.c  |   5 +-
+ .../net/ethernet/marvell/octeontx2/af/mbox.h  |  19 ++-
+ .../net/ethernet/marvell/octeontx2/af/rvu.c   |  49 +++++--
+ .../ethernet/marvell/octeontx2/af/rvu_cn10k.c |  13 +-
+ .../marvell/octeontx2/af/rvu_npc_fs.c         |  26 ++--
+ .../marvell/octeontx2/af/rvu_npc_fs.h         |   4 +
+ .../marvell/octeontx2/af/rvu_npc_hash.c       | 125 ++++++++++--------
+ .../marvell/octeontx2/af/rvu_npc_hash.h       |  10 +-
+ .../marvell/octeontx2/nic/otx2_common.h       |   4 +-
+ .../ethernet/marvell/octeontx2/nic/otx2_pf.c  |  11 +-
+ .../ethernet/marvell/octeontx2/nic/otx2_tc.c  |   2 +-
+ .../ethernet/marvell/octeontx2/nic/otx2_vf.c  |   2 +-
+ 13 files changed, 187 insertions(+), 91 deletions(-)
+
+-- 
+2.25.1
+
