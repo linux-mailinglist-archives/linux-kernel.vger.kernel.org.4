@@ -2,111 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC2CA6F59F8
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 16:27:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 547D26F59FA
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 16:28:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230178AbjECO1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 10:27:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48648 "EHLO
+        id S230261AbjECO15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 10:27:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbjECO1d (ORCPT
+        with ESMTP id S230190AbjECO1z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 10:27:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BDB55BB8;
-        Wed,  3 May 2023 07:27:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B60CA62DF1;
-        Wed,  3 May 2023 14:27:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17874C433D2;
-        Wed,  3 May 2023 14:27:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683124051;
-        bh=W2XOHQb6yKkoN3xJSZAY+6+X+L/JcA2LzNHxTQz5qc8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ITIgoY6nvKH+KUTYPsEf3pUMUdSpykTJkvu7bUfGyz7B2VLTm49tAqcKuarr/19Yz
-         80gzR4nDoDZ24YmfvmtE9sS6LkDbEjHEaYV7NWuS99i+QT5/T0dAiodefrZqMstP1h
-         45VhCvQFPNfXeN1wpRdZJBWsMtitxE61gk8/GTComn2b/fdiD7mRxxnOMBtPrtiQDA
-         w3Shyh4C1dv0rEdtJlHioEJ+VPuHpCa6BdZMy1FePNycjnk46QsMkJr2HIM8X12Ce+
-         agbWH4ZG2xvPMLBGTLLWBd5MerheffmuLpodwSBmifl7ICY79E/Ys1YJa+eYTlLOTk
-         io5RIaUQvWoww==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1puDSC-00072Y-J8; Wed, 03 May 2023 16:27:36 +0200
-Date:   Wed, 3 May 2023 16:27:36 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
-        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
-        ahalaney@redhat.com, quic_shazhuss@quicinc.com
-Subject: Re: [PATCH v7 5/9] usb: dwc3: core: Refactor PHY logic to support
- Multiport Controller
-Message-ID: <ZFJvWAgZ1LGloS5N@hovoldconsulting.com>
-References: <20230501143445.3851-1-quic_kriskura@quicinc.com>
- <20230501143445.3851-6-quic_kriskura@quicinc.com>
- <ZFJBN2i5tXkY8ARA@hovoldconsulting.com>
- <910de571-caaf-97df-2065-e16efa454bad@quicinc.com>
+        Wed, 3 May 2023 10:27:55 -0400
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6635C6180;
+        Wed,  3 May 2023 07:27:49 -0700 (PDT)
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-94f9cd65b1aso149442766b.0;
+        Wed, 03 May 2023 07:27:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683124068; x=1685716068;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=T7or5jhvdguUx7fS3E1q044jm9m/uQJFidlz1pmA1fE=;
+        b=XHbgkOgyNpDrjRKUXc3LW2e/Au416ftX17dAteRoutUqOwbue9IJhdj7ZY3lvxxNe2
+         8omfEbmWIXX/hvTNywGp0WZeclknDv9birQkJs7pFTQwcKG70S+5Pgqpj29bC0cVbuEa
+         75ymF1KsTj9qHo/xrjNil2f2wloUyP+V7Jvq6foQru1WKyX602axmKFdzUZw2odhxE7s
+         RQgbq5Dwl87gF0R5s64pwKALOVq+vjyMC6frkq56TaRP91f9/brSSKqyVHSNMUsKfsns
+         VxEaKvcglddib9pTDse3Z4+icAkRH9ogI3ojuRwFG9nasp0hbGohQQ5NqCSR/Ri+LvZy
+         jOUg==
+X-Gm-Message-State: AC+VfDxvKNPqUQGjPwa6gyvVT0fZeho+Ykuumz48fbVpwgTFL/qedg9g
+        Gg2rPwN+UDM4iURZ+hCcSCoUsyDm95OAbNhxG42j9CVk6/c=
+X-Google-Smtp-Source: ACHHUZ4mQP3ZwE3Ln4aLPo0W7qdiz8bIOhrhdJ1wLlzA2bz2iJ4GA2ym1P2l9b33cIx8T2HuRn/rn09mLTaTbcNfhfs=
+X-Received: by 2002:a17:906:2254:b0:92e:f520:7762 with SMTP id
+ 20-20020a170906225400b0092ef5207762mr5372473ejr.6.1683124067692; Wed, 03 May
+ 2023 07:27:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <910de571-caaf-97df-2065-e16efa454bad@quicinc.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 3 May 2023 16:27:36 +0200
+Message-ID: <CAJZ5v0jVsrTH6=-YaXfqy3T8Q_mdZ_bDKHigtPXQqLFag8JBug@mail.gmail.com>
+Subject: [GIT PULL] More power management updates for v6.4-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 03, 2023 at 07:50:57PM +0530, Krishna Kurapati PSSNV wrote:
-> On 5/3/2023 4:40 PM, Johan Hovold wrote:
-> > On Mon, May 01, 2023 at 08:04:41PM +0530, Krishna Kurapati wrote:
-> >> Currently the DWC3 driver supports only single port controller
-> >> which requires at most one HS and one SS PHY.
-> >>
-> >> But the DWC3 USB controller can be connected to multiple ports and
-> >> each port can have their own PHYs. Each port of the multiport
-> >> controller can either be HS+SS capable or HS only capable
-> >> Proper quantification of them is required to modify GUSB2PHYCFG
-> >> and GUSB3PIPECTL registers appropriately.
-> >>
-> >> Add support for detecting, obtaining and configuring phy's supported
-> >> by a multiport controller and limit the max number of ports
-> >> supported to 4.
-> >>
-> >> Signed-off-by: Harsh Agarwal <quic_harshq@quicinc.com>
-> >> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> >> ---
-> >>   drivers/usb/dwc3/core.c | 262 +++++++++++++++++++++++++++++-----------
-> >>   drivers/usb/dwc3/core.h |  12 +-
-> >>   drivers/usb/dwc3/drd.c  |  13 +-
-> >>   3 files changed, 209 insertions(+), 78 deletions(-)
-> > 
-> > Note that this patch no longer applies and you need to rebase the series
-> > on mainline (e.g. including commit 1d72fab47656 ("USB: dwc3: refactor
-> > phy handling").
+Hi Linus,
 
->    This series is rebased on top of usb-next (on top of the above 
-> mentioned patch). Probably that is why its not applying on top of 
-> linux-next.
+Please pull from the tag
 
-Indeed it is. Sorry about the noise. Let me go double check why it did
-not apply here. Perhaps I'm missing something else from usb-next.
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-6.4-rc1-2
 
-Johan
+with top-most commit 57ea3ab21c14e6f04db2b0878e8a5be644fa3769
+
+ Merge branch 'pm-sleep'
+
+on top of commit 0cfd8703e7da687924371e9bc77a025bdeba9637
+
+ Merge tag 'pm-6.4-rc1' of
+git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
+
+to receive more power management updates for 6.4-rc1.
+
+These fix a hibernation test mode regression and clean up the intel_idle
+driver.
+
+Specifics:
+
+ - Make test_resume work again after the changes that made hibernation
+   open the snapshot device in exclusive mode (Chen Yu).
+
+ - Clean up code in several places in intel_idle (Artem Bityutskiy).
+
+Thanks!
+
+
+---------------
+
+Artem Bityutskiy (7):
+      intel_idle: use pr_info() instead of printk()
+      intel_idle: clean up intel_idle_init_cstates_icpu()
+      intel_idle: further intel_idle_init_cstates_icpu() cleanup
+      intel_idle: improve C-state flags handling robustness
+      intel_idle: fix confusing message
+      intel_idle: do not sprinkle module parameter definitions around
+      intel_idle: mark few variables as __read_mostly
+
+Chen Yu (2):
+      PM: hibernate: Turn snapshot_test into global variable
+      PM: hibernate: Do not get block device exclusively in test_resume mode
+
+---------------
+
+ drivers/idle/intel_idle.c | 59 +++++++++++++++++++++++++++++------------------
+ kernel/power/hibernate.c  | 15 +++++++++---
+ kernel/power/power.h      |  1 +
+ kernel/power/swap.c       |  8 +++++--
+ 4 files changed, 56 insertions(+), 27 deletions(-)
