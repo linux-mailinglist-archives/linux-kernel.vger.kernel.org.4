@@ -2,136 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 374A66F5E17
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 20:40:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91EBA6F5E5F
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 20:44:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229828AbjECSkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 14:40:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42660 "EHLO
+        id S229679AbjECSoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 14:44:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbjECSkN (ORCPT
+        with ESMTP id S229901AbjECSnl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 14:40:13 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2B8658E;
-        Wed,  3 May 2023 11:40:10 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-52c62a71541so761147a12.3;
-        Wed, 03 May 2023 11:40:10 -0700 (PDT)
+        Wed, 3 May 2023 14:43:41 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F28168A56;
+        Wed,  3 May 2023 11:41:17 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-64115eef620so7041575b3a.1;
+        Wed, 03 May 2023 11:41:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683139209; x=1685731209;
+        d=gmail.com; s=20221208; t=1683139273; x=1685731273;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sQ2ADeO1XgOmj5DxbzjpzikYpUTn+B695qqaLQsTl4A=;
-        b=FAsEakodIYGZZ49hzhHq8Do+4wt23WK6jVIu98FKgEcC2IC28Yv1qcpIguYdAHmL41
-         K6QXYVXYY9e0ydYBW/QaYBQ4kV1sgRKD0Z8m7VqP9eoT6OyuI2TEKLTHxSnuPoZ0/P86
-         Ak//1N2uQgFgtt5vHB1OZ1Yr9lZGqpMPiXmn0PLHivzD9gD6C3pgBiZeck/EvcUad+D9
-         AIqIEi6ySYiJEa/rjzcr1BnwS0cO5uVLCgZHYd00/2Qp62J0+g0bDyAUjzMrqC8es9RR
-         PvNP8hKoKyN1VyTkZlWwEOSIbNVu+bisxPnpdL40o9ZuYAjxbUCiGJrKy44Q/i6wCbvS
-         6MJg==
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ffwvzJo3AetlasPY6gczdMsVH/amBSlWs9nz5GwhjKo=;
+        b=BUwgoBPWsCmvVQYmmuOOxZi2Vjm5BAQyRtgpsU3UIjTvN96QrVGClIjRjcrP3CO/4a
+         vKPHya5vUObcTcf2qbpwCNwRVZMrIV+yCVJicmSnLfRDLn5GQo/JRwoN1DO3YOSQXwKw
+         iTAE8nywvJqc3X4JuNhaHD964flox43stbpb97fQN0E7Bxtn/8umJjl2LH4UIxG2OOcM
+         OU3dtgxTlljLyDb8zW5dVcu9Z3K9tuUx97r8/sIHdEFDsXiEzvkgCK0Bb1yl6edwJbWy
+         mNKTap/DotcsrKzDAnEMi4WxSoK+qQADqP8Rb7nxvikR7yfBfesjPELVdkU5rg+QH5ts
+         w+7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683139209; x=1685731209;
+        d=1e100.net; s=20221208; t=1683139273; x=1685731273;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sQ2ADeO1XgOmj5DxbzjpzikYpUTn+B695qqaLQsTl4A=;
-        b=BvoRPokoSMiVkbPlmALA8hIQW0hWkF3BGtAu3Whene693AAih2RPESqRgP9aO3X3wG
-         youYRS9jUoIPpTqC/k45VBMmpds/sXb2OY5BDLIrRiyK6jHqPmCcHaBiWZYN7gZV5ZHr
-         b7Cs9nIDJpdRLLmouDPWU+pUpS1arKk9lDmbCuvthKKckqvkeFLejrTePCsU6GWcVxRH
-         iD8Txo/yYwibavRal1PSN5TGBADpMjKOhUVDHQayB+SwafDV4c1PxoUiVHjqsQo/Cz9A
-         nNugKaMvBgsS2QhRLXTuw8Rh0caR2/ahG/5f+t4AAjzKnSJ/A4o/BOixSFrekxbWXbeF
-         vUCg==
-X-Gm-Message-State: AC+VfDxdx6rv5/vxaJT9N1OkMtov+3uywXA5fICrcvDYyDTdMtbE12dh
-        oA6SrYnEtMhbXeyWNwJa7ng=
-X-Google-Smtp-Source: ACHHUZ5HrlmzzWxl9cdU7mNdLYfBeR7MIFjXh85oRNOW13gF1ERuxzszMtMYq8KFsJoY0P2G/zpWtw==
-X-Received: by 2002:a05:6a20:4286:b0:dd:7661:fb34 with SMTP id o6-20020a056a20428600b000dd7661fb34mr28426673pzj.51.1683139209307;
-        Wed, 03 May 2023 11:40:09 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:6454])
-        by smtp.gmail.com with ESMTPSA id u22-20020a634556000000b005287b22ea8esm12540790pgk.88.2023.05.03.11.40.08
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ffwvzJo3AetlasPY6gczdMsVH/amBSlWs9nz5GwhjKo=;
+        b=gt8vu529Ix1+8ZiUYJ61V+5PLvyAXVE8YCROqXXStS5Qj20Izp3WI5KEMvaLs2/lBc
+         PybZCgzYbxIAGluj6/mXma1cCk1ay0H6/Dh0CRxUMmW4hO0yOrQVpckLHcJzevZRrV0I
+         H6tIqn/WbxhAcKc1/OjuynlGnxOj3yOfNc+Jz0H4FaoA9wE5TUJouEx+4nQ1WM1mpLJ6
+         p9ME/sx/XMGtFTAFyiuBaek/MEMRHfDIghTM6QF2TGzh6F6ReWw6Fc2OC68YtVoM/EsP
+         RD5JfyWbQx05DO/0tYfIvy/yY1NxcIgUxK1Tiftx8nO4Ib9CLqWhecoMwBvOtPnRsdUG
+         ZuFA==
+X-Gm-Message-State: AC+VfDxpHjZddTEVmiz9ZZgWTR+63Lll8hDyaBqeSCLQDlvCjYB3TSv+
+        yCQ9TaC5Fk0PlUog6JSTk4g=
+X-Google-Smtp-Source: ACHHUZ4sGR2VzM/n/g6q/XijzKKMV6zu0D1LXBCdpHQIraxKFbmxB3ILwUBxWRATGPgJ4Z6CrVyxeQ==
+X-Received: by 2002:a05:6a00:14c6:b0:636:e0fb:8c45 with SMTP id w6-20020a056a0014c600b00636e0fb8c45mr3611728pfu.16.1683139272680;
+        Wed, 03 May 2023 11:41:12 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:9390:e396:49ef:54dc])
+        by smtp.gmail.com with ESMTPSA id q10-20020a63d60a000000b0051eff0a70d7sm19998800pgg.94.2023.05.03.11.41.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 May 2023 11:40:08 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 3 May 2023 08:40:07 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
-        Michal Hocko <mhocko@suse.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        akpm@linux-foundation.org, vbabka@suse.cz,
-        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
-        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
-        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
-        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
-        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
-        muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
-        pasha.tatashin@soleen.com, yosryahmed@google.com,
-        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
-        andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, gregkh@linuxfoundation.org,
-        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>
-Subject: Re: [PATCH 00/40] Memory allocation profiling
-Message-ID: <ZFKqh5Dh93UULdse@slm.duckdns.org>
-References: <20230501165450.15352-1-surenb@google.com>
- <ZFIMaflxeHS3uR/A@dhcp22.suse.cz>
- <ZFIOfb6/jHwLqg6M@moria.home.lan>
- <ZFISlX+mSx4QJDK6@dhcp22.suse.cz>
- <ZFIVtB8JyKk0ddA5@moria.home.lan>
- <ZFKNZZwC8EUbOLMv@slm.duckdns.org>
- <20230503180726.GA196054@cmpxchg.org>
- <ZFKlrP7nLn93iIRf@slm.duckdns.org>
+        Wed, 03 May 2023 11:41:11 -0700 (PDT)
+Date:   Wed, 3 May 2023 11:41:08 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Mark Brown <broonie@kernel.org>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Helge Deller <deller@gmx.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-mmc@vger.kernel.org
+Subject: Re: [PATCH 1/4] Input/ARM: ads7846: Get pendown IRQ from descriptors
+Message-ID: <ZFKqxNA9m9Kge1oo@google.com>
+References: <20230430-nokia770-regression-v1-0-97704e36b094@linaro.org>
+ <20230430-nokia770-regression-v1-1-97704e36b094@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZFKlrP7nLn93iIRf@slm.duckdns.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230430-nokia770-regression-v1-1-97704e36b094@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 03, 2023 at 08:19:24AM -1000, Tejun Heo wrote:
-> > Taking a step back though, given the multitude of allocation sites in
-> > the kernel, it's a bit odd that the only accounting we do is the tiny
-> > fraction of voluntary vmstat/meminfo reporting. We try to cover the
-> > biggest consumers with this of course, but it's always going to be
-> > incomplete and is maintenance overhead too. There are on average
-> > several gigabytes in unknown memory (total - known vmstats) on our
-> > machines. It's difficult to detect regressions easily. And it's per
-> > definition the unexpected cornercases that are the trickiest to track
-> > down. So it might be doable with BPF, but it does feel like the kernel
-> > should do a better job of tracking out of the box and without
-> > requiring too much plumbing and somewhat fragile kernel allocation API
-> > tracking and probing from userspace.
+On Sun, Apr 30, 2023 at 11:22:16AM +0200, Linus Walleij wrote:
+> The ADS7846 has some limited support for using GPIO descriptors,
+> let's convert it over completely and fix all users to provide
+> GPIOs in descriptor tables.
 > 
-> Yeah, easy / default visibility argument does make sense to me.
+> The Nokia 770 now has dynamic allocation of IRQ numbers, so this
+> needs to be fixed for it to work.
+> 
+> Fixes: 92bf78b33b0b ("gpio: omap: use dynamic allocation of base")
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+>  arch/arm/mach-omap1/board-nokia770.c | 12 +++++++++++-
+>  arch/arm/mach-pxa/spitz.c            | 11 ++++++++++-
+>  arch/mips/alchemy/devboards/db1000.c | 11 ++++++++++-
+>  drivers/input/touchscreen/ads7846.c  | 32 ++++++++------------------------
+>  include/linux/spi/ads7846.h          |  2 --
+>  5 files changed, 39 insertions(+), 29 deletions(-)
+> 
+> diff --git a/arch/arm/mach-omap1/board-nokia770.c b/arch/arm/mach-omap1/board-nokia770.c
+> index a501a473ffd6..eb7652670447 100644
+> --- a/arch/arm/mach-omap1/board-nokia770.c
+> +++ b/arch/arm/mach-omap1/board-nokia770.c
+> @@ -118,7 +118,16 @@ static struct ads7846_platform_data nokia770_ads7846_platform_data __initdata =
+>  	.debounce_max	= 10,
+>  	.debounce_tol	= 3,
+>  	.debounce_rep	= 1,
+> -	.gpio_pendown	= ADS7846_PENDOWN_GPIO,
+> +};
+> +
+> +static struct gpiod_lookup_table nokia770_ads7846_gpio_table = {
+> +	/* SPI bus 2, device with chip select 0 */
+> +	.dev_id = "spi2.0",
+> +	.table = {
+> +		GPIO_LOOKUP("gpio-0-15", ADS7846_PENDOWN_GPIO,
+> +			    "pendown", GPIO_ACTIVE_HIGH),
+> +		{ }
+> +	},
+>  };
 
-So, a bit of addition here. If this is the thrust, the debugfs part seems
-rather redundant, right? That's trivially obtainable with tracing / bpf and
-in a more flexible and performant manner. Also, are we happy with recording
-just single depth for persistent tracking?
+I would like to eventually get rid of GPIO_LOOKUP in favor of
+PROPERTY_ENTRY_GPIO. Can we try something like the draft below (just
+typed, not even compiled):
+
+diff --git a/arch/arm/mach-omap1/board-nokia770.c b/arch/arm/mach-omap1/board-nokia770.c
+index a501a473ffd6..34b8e392b917 100644
+--- a/arch/arm/mach-omap1/board-nokia770.c
++++ b/arch/arm/mach-omap1/board-nokia770.c
+@@ -12,6 +12,7 @@
+ #include <linux/init.h>
+ #include <linux/mutex.h>
+ #include <linux/platform_device.h>
++#include <linux/property.h>
+ #include <linux/input.h>
+ #include <linux/omapfb.h>
+ 
+@@ -35,6 +36,24 @@
+ #include "clock.h"
+ #include "mmc.h"
+ 
++static const struct software_node nokia770_mpuio_gpiochip_node = {
++	.name = "mpuio",
++};
++
++static const struct software_node nokia770_gpiochip1_node = {
++	.name = "gpio-0-15",
++};
++
++static const struct software_node nokia770_gpiochip2_node = {
++	.name = "gpio-16-31",
++};
++
++static const struct software_node nokia770_gpiochip_nodes[] = {
++	&nokia770_mpuio_gpiochip_node
++	&nokia770_gpiochip1_node,
++	&nokia770_gpiochip2_node,
++};
++
+ #define ADS7846_PENDOWN_GPIO	15
+ 
+ static const unsigned int nokia770_keymap[] = {
+@@ -102,6 +121,17 @@ static const struct omap_lcd_config nokia770_lcd_config __initconst = {
+ 	.ctrl_name	= "hwa742",
+ };
+ 
++static const struct property_entry nokia770_mipid_props[] = {
++	PROPERTY_ENTRY_GPIO("reset-gpios", &nokia770_gpiochip1_node,
++			    13, GPIO_ACTIVE_LOW),
++	{ }
++};
++
++static const struct software_node nokia770_mipid_swnode = {
++	.name = "lcd_mipid",
++	.properties = nokia770_mipid_props,
++};
++
+ static void __init mipid_dev_init(void)
+ {
+ 	nokia770_mipid_platform_data.nreset_gpio = 13;
+@@ -110,15 +140,22 @@ static void __init mipid_dev_init(void)
+ 	omapfb_set_lcd_config(&nokia770_lcd_config);
+ }
+ 
+-static struct ads7846_platform_data nokia770_ads7846_platform_data __initdata = {
+-	.x_max		= 0x0fff,
+-	.y_max		= 0x0fff,
+-	.x_plate_ohms	= 180,
+-	.pressure_max	= 255,
+-	.debounce_max	= 10,
+-	.debounce_tol	= 3,
+-	.debounce_rep	= 1,
+-	.gpio_pendown	= ADS7846_PENDOWN_GPIO,
++static const struct property_entry nokia770_ads7846_props[] = {
++	PROPERTY_ENTRY_U32("touchscreen-size-x", 4096),
++	PROPERTY_ENTRY_U32("touchscreen-size-y", 4096),
++	PROPERTY_ENTRY_U32("touchscreen-max-pressure", 256),
++	PROPERTY_ENTRY_U32("touchscreen-average-samples", 10),
++	PROPERTY_ENTRY_U16("ti,x-plate-ohms", 180),
++	PROPERTY_ENTRY_U16("ti,debounce-tol", 3),
++	PROPERTY_ENTRY_U16("ti,debounce-rep", 1),
++	PROPERTY_ENTRY_GPIO("pendown-gpios", &nokia770_gpiochip1_node,
++			    ADS7846_PENDOWN_GPIO, GPIO_ACTIVE_HIGH),
++	{ }
++};
++
++static const struct software_node nokia770_ads7846_swnode = {
++	.name = "ads7846",
++	.properties = nokia770_ads7846_props,
+ };
+ 
+ static struct spi_board_info nokia770_spi_board_info[] __initdata = {
+@@ -128,13 +165,14 @@ static struct spi_board_info nokia770_spi_board_info[] __initdata = {
+ 		.chip_select    = 3,
+ 		.max_speed_hz   = 12000000,
+ 		.platform_data	= &nokia770_mipid_platform_data,
++		.swnode		= &nokia770_mipid_swnode,
+ 	},
+ 	[1] = {
+ 		.modalias       = "ads7846",
+ 		.bus_num        = 2,
+ 		.chip_select    = 0,
+ 		.max_speed_hz   = 2500000,
+-		.platform_data	= &nokia770_ads7846_platform_data,
++		.swnode		= &nokia770_ads7846_swnode,
+ 	},
+ };
+ 
+@@ -212,14 +250,15 @@ static inline void nokia770_mmc_init(void)
+ #endif
+ 
+ #if IS_ENABLED(CONFIG_I2C_CBUS_GPIO)
+-static struct gpiod_lookup_table nokia770_cbus_gpio_table = {
+-	.dev_id = "i2c-cbus-gpio.2",
+-	.table = {
+-		GPIO_LOOKUP_IDX("mpuio", 9, NULL, 0, 0), /* clk */
+-		GPIO_LOOKUP_IDX("mpuio", 10, NULL, 1, 0), /* dat */
+-		GPIO_LOOKUP_IDX("mpuio", 11, NULL, 2, 0), /* sel */
+-		{ },
+-	},
++static const struct software_node_ref_args nokia770_cbus_gpio_refs[] = {
++	SOFTWARE_NODE_REFERENCE(&nokia770_mpuio_gpiochip_swnode, 9, 0),
++	SOFTWARE_NODE_REFERENCE(&nokia770_mpuio_gpiochip_swnode, 10, 0),
++	SOFTWARE_NODE_REFERENCE(&nokia770_mpuio_gpiochip_swnode, 11, 0),
++};
++
++static const struct property_entry nokia770_ads7846_props[] = {
++	PROPERTY_ENTRY_REF_ARRAY("gpios", nokia770_cbus_gpio_refs),
++	{ }
+ };
+ 
+ static struct platform_device nokia770_cbus_device = {
+@@ -253,7 +292,8 @@ static void __init nokia770_cbus_init(void)
+ 	nokia770_i2c_board_info_2[1].irq = gpio_to_irq(tahvo_irq_gpio);
+ 	i2c_register_board_info(2, nokia770_i2c_board_info_2,
+ 				ARRAY_SIZE(nokia770_i2c_board_info_2));
+-	gpiod_add_lookup_table(&nokia770_cbus_gpio_table);
++	device_create_managed_software_node(&nokia770_cbus_device.dev,
++					    nokia770_cbus_props, NULL);
+ 	platform_device_register(&nokia770_cbus_device);
+ }
+ #else /* CONFIG_I2C_CBUS_GPIO */
+@@ -273,6 +313,7 @@ static void __init omap_nokia770_init(void)
+ 	/* Unmask SleepX signal */
+ 	omap_writew((omap_readw(0xfffb5004) & ~2), 0xfffb5004);
+ 
++	software_node_register_node_group(nokia770_gpiochip_swnodes);
+ 	platform_add_devices(nokia770_devices, ARRAY_SIZE(nokia770_devices));
+ 	nokia770_spi_board_info[1].irq = gpio_to_irq(15);
+ 	spi_register_board_info(nokia770_spi_board_info,
+
+
+This will need switching ads7846.c from using of_property* to
+device_property* so that it can parse software nodes.
 
 Thanks.
 
 -- 
-tejun
+Dmitry
