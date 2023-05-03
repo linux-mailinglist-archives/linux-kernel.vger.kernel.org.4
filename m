@@ -2,140 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 880E36F540C
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 11:11:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89FE96F5410
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 11:12:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229511AbjECJLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 05:11:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50092 "EHLO
+        id S229528AbjECJMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 05:12:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjECJLk (ORCPT
+        with ESMTP id S229553AbjECJMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 05:11:40 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A04259EC
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 02:11:16 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f182d745deso47577805e9.0
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 02:11:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683105051; x=1685697051;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iaoC3PHQvk7zFvJs+Qr9k0+mYfQsIaix2pxrBYU29ms=;
-        b=CRXSobVpXSYru4BinE0vENUhBsSPob02mJj0ui0NK0K1IYwnS8+mEqufMpi3CoDpr+
-         O++pJbkG9jE8pqX7WHMDs+qSiRKg3fwWQvralelqiwZ0CiJ8Kk71jSxz2HigUFjlbCuv
-         bIgDbDf9vji2lR3EvAens+OxkJquZmtxuN/sbcLOtk8V3N5S/rhSxgeMiPa3FHnmxjzo
-         TTrQYQVlsNgwb/76C+07arw/mqUugXL4O9sPF+mdPiBaz4f3S+eNjHwtwe8xKcofG4sH
-         /e4rPPbPwpySqOjRHNhQHVq7MJAz/ukB4jLEvirSPQxbm3+zWqcvKIV4FgbDdn9lkXv0
-         ZYQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683105051; x=1685697051;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iaoC3PHQvk7zFvJs+Qr9k0+mYfQsIaix2pxrBYU29ms=;
-        b=RyG61GVaSlKvEhuDBWQtqXTXRHx0qYnA37YpjdmuuOR58qF5L6uJeoVoI+eYtcwIW5
-         AGJlCF4pA6QZn0hoSE5tmAiA5E64mBqpH7SdzaK277VnUwQNh7D35nO9bxHw0oUlBr6G
-         4cuLNGy6wILmSbqQEEtbecqSNqazGZQLzys4b17b6bTCLxIxdkIPMnu6+bHCOI/xWgqX
-         +x3Svs8Wz8j52L/jJjDkyxuXOy++yV0HD2uPvA0a3GkblYj06+nRgdROEjw9el/BQ46Q
-         fsbaUv45aAaJ1hXVtYk1EU3u2eKmd/qNAJDB7FRLLHwoHXOV2jnp2oDvp0QPE4yvibXj
-         RozA==
-X-Gm-Message-State: AC+VfDx8iKg3c1lj5t7wEgxVeaLDJTkGMDFL0u8TyDZT1o4lsz1GM63o
-        +/Jys+tsDZheknHCckyZb82Kng==
-X-Google-Smtp-Source: ACHHUZ58LnUQtXDejYI1/H8uC+LEG2o4vb+AEPcHMm57SC9SyHauaRURPd/g3/gMpOXT05bilczeZA==
-X-Received: by 2002:a1c:7208:0:b0:3f0:a06a:7593 with SMTP id n8-20020a1c7208000000b003f0a06a7593mr14737792wmc.11.1683105050998;
-        Wed, 03 May 2023 02:10:50 -0700 (PDT)
-Received: from [197.55.55.58] ([93.107.151.186])
-        by smtp.gmail.com with ESMTPSA id x16-20020a05600c21d000b003f318be9442sm1257597wmj.40.2023.05.03.02.10.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 May 2023 02:10:50 -0700 (PDT)
-Message-ID: <aa193282-b35f-6293-7b7c-c26ed3bd4699@linaro.org>
-Date:   Wed, 3 May 2023 10:10:48 +0100
+        Wed, 3 May 2023 05:12:14 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3171459E2;
+        Wed,  3 May 2023 02:11:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683105114; x=1714641114;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=yZdDxF7eM2/0DaJdrpLaz+vSoS07hfHOMx2AFF1OeTM=;
+  b=fjkkNotiRbH6MTQkXKJgLKWgAy6gMqzwVWVZjj9eCS5zfa7yexe3IWgO
+   Yk2jV2ejpozSwUbMO5QVe34PhOiGpsjAS5/3lZ31qcRUf4gw2q6r++Gra
+   gZXDm/QX9vwv/xxl/adRM2j16y4CXtB0mVtgKyLOvXuMr0Uxy8IhH/zDc
+   mItAcS72CxS95UkpeDF1rFxfbKHF0u4sH5feD8MdHPrkLYv9owkdmj3xy
+   ZHbNDZtAvY73AChq/tL8O8fFrcw5O0hzYRxjGQX4Ez6mqSAesCWgRgGB/
+   CfXjo85f0+DB6peqpkd5InQJrkv77RW2bxHG1DHIL/ZvP6BrOK9SxlRh3
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="337745862"
+X-IronPort-AV: E=Sophos;i="5.99,246,1677571200"; 
+   d="scan'208";a="337745862"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2023 02:11:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="674010950"
+X-IronPort-AV: E=Sophos;i="5.99,246,1677571200"; 
+   d="scan'208";a="674010950"
+Received: from skallurr-mobl1.ger.corp.intel.com (HELO [10.249.254.212]) ([10.249.254.212])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2023 02:11:35 -0700
+Message-ID: <888841c4-7bd4-8174-7786-033715c995c6@linux.intel.com>
+Date:   Wed, 3 May 2023 11:11:32 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 1/3] media: dt-bindings: media: camss: qcom,msm8996-camss:
- Add CAMSS power domain and power-domain-names
+ Thunderbird/102.8.0
+Subject: Re: [Intel-xe] [RFC PATCH 3/4] drm/ttm: Handle -EAGAIN in
+ ttm_resource_alloc as -ENOSPC.
 Content-Language: en-US
-To:     Yassine Oudjana <yassine.oudjana@gmail.com>,
-        Robert Foss <rfoss@kernel.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Hans Verkuil <hansverk@cisco.com>
-Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230503072543.4837-1-y.oudjana@protonmail.com>
- <20230503072543.4837-2-y.oudjana@protonmail.com>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20230503072543.4837-2-y.oudjana@protonmail.com>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        dri-devel@lists.freedesktop.org, cgroups@vger.kernel.org,
+        intel-xe@lists.freedesktop.org
+Cc:     Daniel Vetter <daniel@ffwll.ch>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org, Maxime Ripard <mripard@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Tejun Heo <tj@kernel.org>, David Airlie <airlied@gmail.com>
+References: <20230503083500.645848-1-maarten.lankhorst@linux.intel.com>
+ <20230503083500.645848-4-maarten.lankhorst@linux.intel.com>
+From:   =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
+        <thomas.hellstrom@linux.intel.com>
+In-Reply-To: <20230503083500.645848-4-maarten.lankhorst@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/05/2023 08:25, Yassine Oudjana wrote:
-> From: Yassine Oudjana <y.oudjana@protonmail.com>
-> 
-> Add the CAMSS power domain which is needed for the proper operation of CAMSS, and add
-> power-domain-names to ease fetching it as well as the other power domains.
-> 
-> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
-> ---
->   .../bindings/media/qcom,msm8996-camss.yaml          | 13 ++++++++++++-
->   1 file changed, 12 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/media/qcom,msm8996-camss.yaml b/Documentation/devicetree/bindings/media/qcom,msm8996-camss.yaml
-> index 8a10aa1cafc5..27c9a11f0df9 100644
-> --- a/Documentation/devicetree/bindings/media/qcom,msm8996-camss.yaml
-> +++ b/Documentation/devicetree/bindings/media/qcom,msm8996-camss.yaml
-> @@ -85,6 +85,13 @@ properties:
->       items:
->         - description: VFE0 GDSC - Video Front End, Global Distributed Switch Controller.
->         - description: VFE1 GDSC - Video Front End, Global Distributed Switch Controller.
-> +      - description: CAMSS GDSC - Camera Subsystem, Global Distributed Switch Controller.
-> +
-> +  power-domain-names:
-> +    items:
-> +      - const: vfe0
-> +      - const: vfe1
-> +      - const: camss
->   
->     ports:
->       $ref: /schemas/graph.yaml#/properties/ports
-> @@ -209,6 +216,7 @@ required:
->     - interrupts
->     - iommus
->     - power-domains
-> +  - power-domain-names
->     - reg
->     - reg-names
->     - vdda-supply
-> @@ -326,7 +334,10 @@ examples:
->            <&vfe_smmu 3>;
->   
->         power-domains = <&mmcc VFE0_GDSC>,
-> -        <&mmcc VFE1_GDSC>;
-> +        <&mmcc VFE1_GDSC>,
-> +        <&mmcc CAMSS_GDSC>;
-> +
-> +      power-domain-names = "vfe0", "vfe1", "camss";
->   
->         reg = <0x00a34000 0x1000>,
->           <0x00a00030 0x4>,
+Hi, Maarten
 
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+On 5/3/23 10:34, Maarten Lankhorst wrote:
+> This allows the drm cgroup controller to return no space is available..
+>
+> XXX: This is a hopeless simplification that changes behavior, and
+> returns -ENOSPC even if we could evict ourselves from the current
+> cgroup.
+>
+> Ideally, the eviction code becomes cgroup aware, and will force eviction
+> from the current cgroup or its parents.
+>
+> Signed-off-by: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+
+Thinking of the shrinker analogy, do non-cgroup aware shrinkers just 
+shrink blindly or do they reject shrinking like this patch when a cgroup 
+limit is reached?
+
+/Thomas
+
+
+> ---
+>   drivers/gpu/drm/ttm/ttm_bo.c | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/ttm/ttm_bo.c b/drivers/gpu/drm/ttm/ttm_bo.c
+> index bd5dae4d1624..e057d5d8f09a 100644
+> --- a/drivers/gpu/drm/ttm/ttm_bo.c
+> +++ b/drivers/gpu/drm/ttm/ttm_bo.c
+> @@ -731,6 +731,8 @@ static int ttm_bo_mem_force_space(struct ttm_buffer_object *bo,
+>   		ret = ttm_resource_alloc(bo, place, mem);
+>   		if (likely(!ret))
+>   			break;
+> +		if (ret == -EAGAIN)
+> +			return -ENOSPC;
+>   		if (unlikely(ret != -ENOSPC))
+>   			return ret;
+>   		ret = ttm_mem_evict_first(bdev, man, place, ctx,
+> @@ -783,7 +785,7 @@ int ttm_bo_mem_space(struct ttm_buffer_object *bo,
+>   
+>   		type_found = true;
+>   		ret = ttm_resource_alloc(bo, place, mem);
+> -		if (ret == -ENOSPC)
+> +		if (ret == -ENOSPC || ret == -EAGAIN)
+>   			continue;
+>   		if (unlikely(ret))
+>   			goto error;
