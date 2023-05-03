@@ -2,79 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE5176F5FD5
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 22:11:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D4926F5FDE
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 22:12:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230169AbjECULk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 16:11:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43634 "EHLO
+        id S230064AbjECUMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 16:12:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230101AbjECULY (ORCPT
+        with ESMTP id S230071AbjECUM3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 16:11:24 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC979019;
-        Wed,  3 May 2023 13:11:16 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 343Jtu87028000;
-        Wed, 3 May 2023 20:11:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=HgkY/4t1ciDu1lo+Wfist+2tiRaTgkVBdB5/LYpavTA=;
- b=mHSLQs0nI7ZbPv5WbQL8353Lhx5NPy1U8TcqCJrkMIQc4ZhoumHz/w/LcFhVpMd1+a3o
- 720OyyDysc/TH5j6BlgkvsqJN+6GfG0ip0PM5JqVAZZ5V2LqsiGPicYpgfIYw/4zBT0h
- xMAj8iG5FkuafOJ2Kl2roHJTO4qz02ny412x5EPxzgjAHllxMQ4s2PdF1+yCCl4BHxMP
- 1D8PX9oFMT2/Ewpa27GrbVKcGqCgQSOfvRnbtVZjT9i9oF7I8mtvHZYLz8DPI3LP8jm0
- gKtg9kQvdxE/GPGs9od4Qm6G9aLChco3ys1GPMtj6hvkkK4WOyYmkJGzdpI4Fto8nf/N Cg== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qbsr40ny5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 03 May 2023 20:11:06 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 343KB5Bs020949
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 3 May 2023 20:11:05 GMT
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 3 May 2023 13:11:04 -0700
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
-        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
-        <andersson@kernel.org>
-CC:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        <quic_khsieh@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <marijn.suijten@somainline.org>, <freedreno@lists.freedesktop.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 7/7] drm/msm/dpu: add DSC 1.2 hw blocks for relevant chipsets
-Date:   Wed, 3 May 2023 13:10:39 -0700
-Message-ID: <1683144639-26614-8-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1683144639-26614-1-git-send-email-quic_khsieh@quicinc.com>
-References: <1683144639-26614-1-git-send-email-quic_khsieh@quicinc.com>
+        Wed, 3 May 2023 16:12:29 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92BE79023
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 13:12:03 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id af79cd13be357-74e13e46cb9so256358885a.1
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 13:12:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1683144713; x=1685736713;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=6aQuySOZ5f1xPp5M/IH7FdCb3YCBcIXK77oTLJoa1To=;
+        b=B77wj2uaBiAWD8idxLhj65ewWhJv33njFprJjaUykYSV+6Yt7L5dCUa5lIV4RnTCul
+         77+cSySse1ya6C7PyiB0e9SPkdj1lshr0RenyoypDVR8ikg/OEorh8RVaMkmDyZXhpHv
+         oV4cTXFAC8UYttofZrb1JTodalX4rrORDCcsv+1Jx7UbO7bLKPm1QGHzfh1gWH9APa83
+         /Rf/B+R6oZeNNgEfgORGaxElO0hO+QyuC06nrse5RwbHwLMFubuPNkiSJbC3/nSMBWBu
+         ZZk1an8YPsQoRYqubaG4Ci1ht8gXo9iEZqN3Zi7lvLJvcUkK5IQDe48usFI3QGu+5mjm
+         PenQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683144713; x=1685736713;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6aQuySOZ5f1xPp5M/IH7FdCb3YCBcIXK77oTLJoa1To=;
+        b=BJ/5pAf/W42eBgWsu1MCFx3+NAQT8Lbi9lw5ZJOcm5BiRG31+rC8oV28gkpOQW4PQd
+         7C2bkW7Galm2Fxg5scLwOWj4k9y5eocGp7AeGipcLmSNfez4eB7ALbiprAtKRK+67mPw
+         dnWs9Kh3fbNf7lz9wHWbRI/sVWut871jA7s1A02jkdrjNQe37LflNStp0Ehp+2h8Eang
+         zhm6NJ0r0Eaqq70lh79nUibG9V3K55ngryPYuGpeq2Al/PaIzRFv/5SZiDOqcSM/gSsL
+         hplcZmct0hw2bDXyieEjikS0pY2gR/tGQyRhhik/zGdFWsHPTpjbcELUP7m2TXBrViXI
+         pCPA==
+X-Gm-Message-State: AC+VfDx0OzeD3RBGaNF6pGAbnFPhHk6GQetWwTT/K63gTDU2mTM2x0Gh
+        qsF1WH0xRVnV5ec6mPFwqI4EIw==
+X-Google-Smtp-Source: ACHHUZ5CnnpIpmUeZ/FYpffmDL5OkaJstg4Fl9o3UD/YbGdgvGCcQtxmC6WZwKNTGrttYwJeKB4QiQ==
+X-Received: by 2002:ac8:5e0d:0:b0:3e6:9716:ba58 with SMTP id h13-20020ac85e0d000000b003e69716ba58mr2436956qtx.26.1683144712859;
+        Wed, 03 May 2023 13:11:52 -0700 (PDT)
+Received: from localhost (2603-7000-0c01-2716-8f57-5681-ccd3-4a2e.res6.spectrum.com. [2603:7000:c01:2716:8f57:5681:ccd3:4a2e])
+        by smtp.gmail.com with ESMTPSA id ed27-20020a05620a491b00b0074e2da97de4sm10761665qkb.33.2023.05.03.13.11.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 May 2023 13:11:52 -0700 (PDT)
+Date:   Wed, 3 May 2023 16:11:50 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Tejun Heo <tj@kernel.org>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
+        Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
+        vbabka@suse.cz, roman.gushchin@linux.dev, mgorman@suse.de,
+        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+        corbet@lwn.net, void@manifault.com, peterz@infradead.org,
+        juri.lelli@redhat.com, ldufour@linux.ibm.com,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, peterx@redhat.com, david@redhat.com,
+        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
+        nathan@kernel.org, dennis@kernel.org, muchun.song@linux.dev,
+        rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com,
+        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
+        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
+        ndesaulniers@google.com, gregkh@linuxfoundation.org,
+        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+        glider@google.com, elver@google.com, dvyukov@google.com,
+        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
+        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        kasan-dev@googlegroups.com, cgroups@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>
+Subject: Re: [PATCH 00/40] Memory allocation profiling
+Message-ID: <20230503201150.GB197627@cmpxchg.org>
+References: <ZFKNZZwC8EUbOLMv@slm.duckdns.org>
+ <20230503180726.GA196054@cmpxchg.org>
+ <ZFKlrP7nLn93iIRf@slm.duckdns.org>
+ <ZFKqh5Dh93UULdse@slm.duckdns.org>
+ <ZFKubD/lq7oB4svV@moria.home.lan>
+ <ZFKu6zWA00AzArMF@slm.duckdns.org>
+ <ZFKxcfqkUQ60zBB_@slm.duckdns.org>
+ <CAJuCfpEPkCJZO2svT-GfmpJ+V-jSLyFDKM_atnqPVRBKtzgtnQ@mail.gmail.com>
+ <ZFK6pwOelIlhV8Bm@slm.duckdns.org>
+ <CAJuCfpG4TmRpT5iU7bJmKcjW2Tghstdo1b=qEG=tDsmtJQYuWA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: zNKpVVUdtce614uKC5GJSi7aQLqMmS8V
-X-Proofpoint-ORIG-GUID: zNKpVVUdtce614uKC5GJSi7aQLqMmS8V
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-03_14,2023-05-03_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 bulkscore=0 phishscore=0 adultscore=0 suspectscore=0
- spamscore=0 mlxscore=0 mlxlogscore=999 lowpriorityscore=0 impostorscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2305030173
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJuCfpG4TmRpT5iU7bJmKcjW2Tghstdo1b=qEG=tDsmtJQYuWA@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,234 +110,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Abhinav Kumar <quic_abhinavk@quicinc.com>
+On Wed, May 03, 2023 at 01:08:40PM -0700, Suren Baghdasaryan wrote:
+> On Wed, May 3, 2023 at 12:49 PM Tejun Heo <tj@kernel.org> wrote:
+> > * Improving memory allocation visibility makes sense to me. To me, a more
+> >   natural place for that feels like /proc/allocations next to other memory
+> >   info files rather than under debugfs.
+> 
+> TBH I would love that if this approach is acceptable.
 
-Add DSC 1.2 hardware blocks to the catalog with necessary sub-block and
-feature flag information.  Each display compression engine (DCE) contains
-dual hard slice DSC encoders so both share same base address but with
-its own different sub block address.
-
-changes in v4:
--- delete DPU_DSC_HW_REV_1_1
--- re arrange sc8280xp_dsc[]
-
-Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h | 14 ++++++++++++
- .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h |  7 ++++++
- .../drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h   | 16 ++++++++++++++
- .../gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h | 14 ++++++++++++
- .../gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h | 14 ++++++++++++
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     | 25 +++++++++++++++++++++-
- 6 files changed, 89 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h
-index 4f6a965..f98c2a5 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h
-@@ -153,6 +153,18 @@ static const struct dpu_merge_3d_cfg sm8350_merge_3d[] = {
- 	MERGE_3D_BLK("merge_3d_2", MERGE_3D_2, 0x50000),
- };
- 
-+/*
-+ * NOTE: Each display compression engine (DCE) contains dual hard
-+ * slice DSC encoders so both share same base address but with
-+ * its own different sub block address.
-+ */
-+static const struct dpu_dsc_cfg sm8350_dsc[] = {
-+	DSC_BLK_1_2("dce_0", DSC_0, 0x80000, 0x100, 0, dsc_sblk_0),
-+	DSC_BLK_1_2("dce_0", DSC_1, 0x80000, 0x100, 0, dsc_sblk_1),
-+	DSC_BLK_1_2("dce_1", DSC_2, 0x81000, 0x100, BIT(DPU_DSC_NATIVE_422_EN), dsc_sblk_0),
-+	DSC_BLK_1_2("dce_1", DSC_3, 0x81000, 0x100, BIT(DPU_DSC_NATIVE_422_EN), dsc_sblk_1),
-+};
-+
- static const struct dpu_intf_cfg sm8350_intf[] = {
- 	INTF_BLK("intf_0", INTF_0, 0x34000, 0x280, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
- 	INTF_BLK("intf_1", INTF_1, 0x35000, 0x2c4, INTF_DSI, 0, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
-@@ -205,6 +217,8 @@ const struct dpu_mdss_cfg dpu_sm8350_cfg = {
- 	.dspp = sm8350_dspp,
- 	.pingpong_count = ARRAY_SIZE(sm8350_pp),
- 	.pingpong = sm8350_pp,
-+	.dsc = sm8350_dsc,
-+	.dsc_count = ARRAY_SIZE(sm8350_dsc),
- 	.merge_3d_count = ARRAY_SIZE(sm8350_merge_3d),
- 	.merge_3d = sm8350_merge_3d,
- 	.intf_count = ARRAY_SIZE(sm8350_intf),
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h
-index 6b2c7ea..3fd0498a 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h
-@@ -93,6 +93,11 @@ static const struct dpu_pingpong_cfg sc7280_pp[] = {
- 	PP_BLK_DITHER("pingpong_3", PINGPONG_3, 0x6c000, 0, sc7280_pp_sblk, -1, -1),
- };
- 
-+/* NOTE: sc7280 only has one dsc hard slice encoder */
-+static const struct dpu_dsc_cfg sc7280_dsc[] = {
-+	DSC_BLK_1_2("dce_0", DSC_0, 0x80000, 0x100, BIT(DPU_DSC_NATIVE_422_EN), dsc_sblk_0),
-+};
-+
- static const struct dpu_intf_cfg sc7280_intf[] = {
- 	INTF_BLK("intf_0", INTF_0, 0x34000, 0x280, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
- 	INTF_BLK("intf_1", INTF_1, 0x35000, 0x2c4, INTF_DSI, 0, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
-@@ -142,6 +147,8 @@ const struct dpu_mdss_cfg dpu_sc7280_cfg = {
- 	.mixer = sc7280_lm,
- 	.pingpong_count = ARRAY_SIZE(sc7280_pp),
- 	.pingpong = sc7280_pp,
-+	.dsc_count = ARRAY_SIZE(sc7280_dsc),
-+	.dsc = sc7280_dsc,
- 	.intf_count = ARRAY_SIZE(sc7280_intf),
- 	.intf = sc7280_intf,
- 	.vbif_count = ARRAY_SIZE(sdm845_vbif),
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h
-index 706d0f1..78ece02 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h
-@@ -141,6 +141,20 @@ static const struct dpu_merge_3d_cfg sc8280xp_merge_3d[] = {
- 	MERGE_3D_BLK("merge_3d_2", MERGE_3D_2, 0x50000),
- };
- 
-+/*
-+ * NOTE: Each display compression engine (DCE) contains dual hard
-+ * slice DSC encoders so both share same base address but with
-+ * its own different sub block address.
-+ */
-+static const struct dpu_dsc_cfg sc8280xp_dsc[] = {
-+	DSC_BLK_1_2("dce_0", DSC_0, 0x80000, 0x100, 0, dsc_sblk_0), 
-+	DSC_BLK_1_2("dce_0", DSC_1, 0x80000, 0x100, 0, dsc_sblk_1), 
-+	DSC_BLK_1_2("dce_1", DSC_2, 0x81000, 0x100, BIT(DPU_DSC_NATIVE_422_EN), dsc_sblk_0), 
-+	DSC_BLK_1_2("dce_1", DSC_3, 0x81000, 0x100, BIT(DPU_DSC_NATIVE_422_EN), dsc_sblk_1), 
-+	DSC_BLK_1_2("dce_2", DSC_4, 0x82000, 0x100, 0, dsc_sblk_0), 
-+	DSC_BLK_1_2("dce_2", DSC_5, 0x82000, 0x100, 0, dsc_sblk_1), 
-+};
-+
- /* TODO: INTF 3, 8 and 7 are used for MST, marked as INTF_NONE for now */
- static const struct dpu_intf_cfg sc8280xp_intf[] = {
- 	INTF_BLK("intf_0", INTF_0, 0x34000, 0x280, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
-@@ -196,6 +210,8 @@ const struct dpu_mdss_cfg dpu_sc8280xp_cfg = {
- 	.dspp = sc8280xp_dspp,
- 	.pingpong_count = ARRAY_SIZE(sc8280xp_pp),
- 	.pingpong = sc8280xp_pp,
-+	.dsc = sc8280xp_dsc,
-+	.dsc_count = ARRAY_SIZE(sc8280xp_dsc),
- 	.merge_3d_count = ARRAY_SIZE(sc8280xp_merge_3d),
- 	.merge_3d = sc8280xp_merge_3d,
- 	.intf_count = ARRAY_SIZE(sc8280xp_intf),
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h
-index 4ecb3df..3950e7b 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h
-@@ -161,6 +161,18 @@ static const struct dpu_merge_3d_cfg sm8450_merge_3d[] = {
- 	MERGE_3D_BLK("merge_3d_3", MERGE_3D_3, 0x65f00),
- };
- 
-+/*
-+ * NOTE: Each display compression engine (DCE) contains dual hard
-+ * slice DSC encoders so both share same base address but with
-+ * its own different sub block address.
-+ */
-+static const struct dpu_dsc_cfg sm8450_dsc[] = {
-+	DSC_BLK_1_2("dce_0", DSC_0, 0x80000, 0x100, 0, dsc_sblk_0),
-+	DSC_BLK_1_2("dce_0", DSC_1, 0x80000, 0x100, 0, dsc_sblk_1),
-+	DSC_BLK_1_2("dce_1", DSC_2, 0x81000, 0x100, BIT(DPU_DSC_NATIVE_422_EN), dsc_sblk_0),
-+	DSC_BLK_1_2("dce_1", DSC_3, 0x81000, 0x100, BIT(DPU_DSC_NATIVE_422_EN), dsc_sblk_1),
-+};
-+
- static const struct dpu_intf_cfg sm8450_intf[] = {
- 	INTF_BLK("intf_0", INTF_0, 0x34000, 0x280, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
- 	INTF_BLK("intf_1", INTF_1, 0x35000, 0x300, INTF_DSI, 0, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
-@@ -213,6 +225,8 @@ const struct dpu_mdss_cfg dpu_sm8450_cfg = {
- 	.dspp = sm8450_dspp,
- 	.pingpong_count = ARRAY_SIZE(sm8450_pp),
- 	.pingpong = sm8450_pp,
-+	.dsc = sm8450_dsc,
-+	.dsc_count = ARRAY_SIZE(sm8450_dsc),
- 	.merge_3d_count = ARRAY_SIZE(sm8450_merge_3d),
- 	.merge_3d = sm8450_merge_3d,
- 	.intf_count = ARRAY_SIZE(sm8450_intf),
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
-index d0ab351..1b3f542 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
-@@ -165,6 +165,18 @@ static const struct dpu_merge_3d_cfg sm8550_merge_3d[] = {
- 	MERGE_3D_BLK("merge_3d_3", MERGE_3D_3, 0x66700),
- };
- 
-+/*
-+ * NOTE: Each display compression engine (DCE) contains dual hard
-+ * slice DSC encoders so both share same base address but with
-+ * its own different sub block address.
-+ */
-+static const struct dpu_dsc_cfg sm8550_dsc[] = {
-+	DSC_BLK_1_2("dce_0", DSC_0, 0x80000, 0x100, 0, dsc_sblk_0),
-+	DSC_BLK_1_2("dce_0", DSC_1, 0x80000, 0x100, 0, dsc_sblk_1),
-+	DSC_BLK_1_2("dce_1", DSC_2, 0x81000, 0x100, BIT(DPU_DSC_NATIVE_422_EN), dsc_sblk_0),
-+	DSC_BLK_1_2("dce_1", DSC_3, 0x81000, 0x100, BIT(DPU_DSC_NATIVE_422_EN), dsc_sblk_1),
-+};
-+
- static const struct dpu_intf_cfg sm8550_intf[] = {
- 	INTF_BLK("intf_0", INTF_0, 0x34000, 0x280, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
- 	/* TODO TE sub-blocks for intf1 & intf2 */
-@@ -218,6 +230,8 @@ const struct dpu_mdss_cfg dpu_sm8550_cfg = {
- 	.dspp = sm8550_dspp,
- 	.pingpong_count = ARRAY_SIZE(sm8550_pp),
- 	.pingpong = sm8550_pp,
-+	.dsc = sm8550_dsc,
-+	.dsc_count = ARRAY_SIZE(sm8550_dsc),
- 	.merge_3d_count = ARRAY_SIZE(sm8550_merge_3d),
- 	.merge_3d = sm8550_merge_3d,
- 	.intf_count = ARRAY_SIZE(sm8550_intf),
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-index 6ea1e9d..a43336c 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /* Copyright (c) 2015-2018, The Linux Foundation. All rights reserved.
-- * Copyright (c) 2022. Qualcomm Innovation Center, Inc. All rights reserved.
-+ * Copyright (c) 2022-2023, Qualcomm Innovation Center, Inc. All rights reserved.
-  */
- 
- #define pr_fmt(fmt)	"[drm:%s:%d] " fmt, __func__, __LINE__
-@@ -536,6 +536,16 @@ static const struct dpu_pingpong_sub_blks sc7280_pp_sblk = {
- /*************************************************************
-  * DSC sub blocks config
-  *************************************************************/
-+static const struct dpu_dsc_sub_blks dsc_sblk_0 = {
-+	.enc = {.base = 0x100, .len = 0x100},
-+	.ctl = {.base = 0xF00, .len = 0x10},
-+};
-+
-+static const struct dpu_dsc_sub_blks dsc_sblk_1 = {
-+	.enc = {.base = 0x200, .len = 0x100},
-+	.ctl = {.base = 0xF80, .len = 0x10},
-+};
-+
- #define DSC_BLK(_name, _id, _base, _features) \
- 	{\
- 	.name = _name, .id = _id, \
-@@ -543,6 +553,19 @@ static const struct dpu_pingpong_sub_blks sc7280_pp_sblk = {
- 	.features = _features, \
- 	}
- 
-+/*
-+ * NOTE: Each display compression engine (DCE) contains dual hard
-+ * slice DSC encoders so both share same base address but with
-+ * its own different sub block address.
-+ */
-+#define DSC_BLK_1_2(_name, _id, _base, _len, _features, _sblk) \
-+	{\
-+	.name = _name, .id = _id, \
-+	.base = _base, .len = _len, \
-+	.features = BIT(DPU_DSC_HW_REV_1_2) | _features, \
-+	.sblk = &_sblk, \
-+	}
-+
- /*************************************************************
-  * INTF sub blocks config
-  *************************************************************/
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+Ack
