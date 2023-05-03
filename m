@@ -2,73 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85E5B6F5B5F
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 17:38:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69A036F5B60
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 17:38:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230302AbjECPi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 11:38:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58604 "EHLO
+        id S230493AbjECPih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 11:38:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbjECPi0 (ORCPT
+        with ESMTP id S230152AbjECPif (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 11:38:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D67E1FDB;
-        Wed,  3 May 2023 08:38:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2756160AB4;
-        Wed,  3 May 2023 15:38:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE110C433EF;
-        Wed,  3 May 2023 15:38:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683128304;
-        bh=LyAC9Uzz/+b0JzmwQtT+pFnyz2N1dBXrPdiGGOjCDNg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lp2Wbu726JEDxrXLhsme63CEQx9vUgzOGVcoCc9ADitNWS2ijVUMRLrQ4FP3Awjna
-         xgzY/IGaN+vUx5/WQt397KYN7kFr8uphMh1UqJ3T1Kpe5XmgR0iO+kjJASTbVdyM+3
-         zBmXKaGNs6b+zZ4q4jqSTC2BVR14b0q7/o1kdeXrCraUp9YvNTEjRbFNUGjsGWd+vn
-         114m4PlJXHHHUf2mixib9ROTW3yFDBJo7oXd2z7wpaU9z0pEQcff3UyU2QuOgB3FGP
-         8EwytdsAFrmMW942iAIvMqCVl5WzopD2vshY86uJBf21mbbhXQtL4TUf/DpDJX3fCc
-         UVORci/k8drOw==
-Date:   Wed, 3 May 2023 17:38:19 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Rob Herring <robh@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com, Ray Jui <rjui@broadcom.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 2/2] dt-bindings: i2c: brcm,kona-i2c: convert to YAML
-Message-ID: <ZFJ/67UgNRmB44HT@sai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Rob Herring <robh@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com, Ray Jui <rjui@broadcom.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <9875ec0211187e4f5e2a4379c63eacdb69b31d7a.1682252615.git.stano.jakubek@gmail.com>
- <72ba28004afb733224f7294a146fc2a6a5a834a7.1682252615.git.stano.jakubek@gmail.com>
- <168234258850.2489090.5138716439435477956.robh@kernel.org>
- <20230426172354.GB2506@standask-GA-A55M-S2HP>
- <ZE4Q6p1tAiIoZo/M@sai>
- <d10e48cf-3cf8-89b7-8741-260adccfdfed@linaro.org>
+        Wed, 3 May 2023 11:38:35 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603026E95
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 08:38:34 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1puEYk-00074M-Mi; Wed, 03 May 2023 17:38:26 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1puEYi-0003Zl-Jy; Wed, 03 May 2023 17:38:24 +0200
+Date:   Wed, 3 May 2023 17:38:24 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Shawn Guo <shawnguo@kernel.org>
+Cc:     Andreas Henriksson <andreas@fatal.se>, Jun Li <jun.li@nxp.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        Xu Yang <xu.yang_2@nxp.com>
+Subject: Re: [PATCH] arm64: dts: imx8mp-evk: add dual-role usb port1 support
+Message-ID: <20230503153824.57clwmz7lw5g4aif@pengutronix.de>
+References: <20230323105826.2058003-1-m.felsch@pengutronix.de>
+ <PA4PR04MB964081F4DB2E16D8E300B08389849@PA4PR04MB9640.eurprd04.prod.outlook.com>
+ <20230327084947.dcguxgyo2lfen2ms@fatal.se>
+ <20230330143813.teid36w24a4esjsx@pengutronix.de>
+ <20230403093812.rjj2wkusajsx5mwi@fatal.se>
+ <20230405131637.GB11367@dragon>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="azXWXr9cX0NZ/8VD"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d10e48cf-3cf8-89b7-8741-260adccfdfed@linaro.org>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20230405131637.GB11367@dragon>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,37 +63,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Andreas, Shawn,
 
---azXWXr9cX0NZ/8VD
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On 23-04-05, Shawn Guo wrote:
+> On Mon, Apr 03, 2023 at 11:38:12AM +0200, Andreas Henriksson wrote:
+> > Hello Marco Felsch,
+> > 
+> > On Thu, Mar 30, 2023 at 04:38:13PM +0200, Marco Felsch wrote:
+> > > Hi,
+> > > 
+> > > On 23-03-27, Andreas Henriksson wrote:
+> > [...]
+> > > > / {
+> > > >     gpio-sbu-mux {
+> > > >         compatible = "gpio-sbu-mux";
+> > [...]
+> > > I didn't tested it but at the moment I don't see the problem with my
+> > > patch. 
+> > 
+> > As Jun Li helpfully explained my patch is not correct, so don't bother.
+> > 
+> > I don't have a problem with your patch, was just trying to share
+> > what I had done.
 
+Thanks for sharing :)
 
-> The dtbs warnings - if fixed via any other pactch - can be safely
-> ignored. They do not affect bisectability. Please grab this patch via
-> I2C. The DTS will go separately via arm-soc.
+> > I've since learned that the board I'll be working on will not even have
+> > SS, so I will not pursue SBU. I'll most likely use your patches instead
+> > as they seem simpler than what I did and should fully meet my needs for
+> > an usb port that works in both host and device mode.
+> > 
+> > Not that it matters, but +1 from me on applying your patches.
+> > (If people are hesitant to do it because of lack of SS, then maybe
+> > that could be adressed by adding a comment setting the expectations?)
+> 
+> Marco,
+> 
+> Could you update the patch to mention a bit about Super-Speed support
+> as discussed here?
 
-OK, thanks for the heads up!
+Yes I will update the patch accordingly.
 
-
---azXWXr9cX0NZ/8VD
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmRSf+EACgkQFA3kzBSg
-KbYnWw/9G1lwulnAIeVChE4f9/tIeNApXcZYGou0kOV8iAAKIoD7rHyI9O1og8JX
-CIK77xo6TZFk2aqbuKhZ88g6nf6m2DNuSRoADweRwhWJNEKzctudEEQ6qUM9ijh8
-ql0C/SVacOP2CEO7FhGO7dwTjqtxH2VRJNvseoKawtrgFc7A/2VGZccZFJXNnYZJ
-K4+jHiI8lGfzBrXtRc3MMa+gtyjn2cFz/j3RwntDwlfi/vtjgs1+MMGJqNAGX2tn
-wTV7fE7qUASlBMxQN0Z/VCCoqTzn8dy7lvgoNJ0NqPLfuO16a779FJejS2b3jaeb
-m6+NjDFAmyMT5G1KO4AXSBZb63paL+VQE8LeQVxPATYlHS9dyxTYr3t4I6T0Taqg
-sIzThlFkrjNuGQ+6uXX2pCTtqWonGeV1U4LUGkiCQzSny+89hdG8ItXOe9clKQhl
-n+6TLwG3gpbQnQmFyDlq/fb0GPQcn8dnxVvDru6ojqpnCEbVXWEUsa6WAM0khNXO
-PReAyHriVCGnPQAl48oPpe7Qqt8EiiZHs2himY68/YstYe2V5pYvMaIBqFExTHVL
-yUSev1ywjXPZT0yrJry1lWqur9+YvKXCJqAg0lM5nmOoV5GNYqlTCHWSC6uM4uMP
-JhZQh960Vfyqn4so1DoVSLAhal+Tdd4WngP6tZ2rLEYWie0nddM=
-=tfLc
------END PGP SIGNATURE-----
-
---azXWXr9cX0NZ/8VD--
+Regards,
+  Marco
