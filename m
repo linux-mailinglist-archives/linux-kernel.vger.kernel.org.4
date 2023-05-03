@@ -2,78 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D8A86F6010
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 22:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 950996F6017
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 22:32:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbjECU2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 16:28:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53296 "EHLO
+        id S229743AbjECUct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 16:32:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbjECU2s (ORCPT
+        with ESMTP id S229441AbjECUcr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 16:28:48 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2330C6199
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 13:28:47 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 343KSV7c003833
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 3 May 2023 16:28:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1683145714; bh=aEB1wzggINOG9//I4Uz8LAAk2hMw0VvHmmcvM4Bk38I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=X2Mrz4OQHFKa7EXgs5ypd3VBJwNnHk9AFXpo7fRo61TLHdjsqktMFa3MvM8cCCtQb
-         Zto7RbNvHZp42GD19xhI3yLJn0XoliUS7wP+3neffXfbm69y4xJEoisLs8kADwF7WN
-         6i8omh1/nZxz1+4SoxoJ1mDbZ1xaz5UARgRLrv2x4ZwcTMGzLp3N/Lg5JbUGplNeH2
-         dACp08D9C9WA1EKy3/3Zi8IOKXGLJHXYNYsiK3TbzX9kmICXbWxSlh3MG/08ZST8WU
-         bWUwUbkLAyUOlMfrPZ80jOKlvQIVZujox+ZBDJEZ+SniTXQiH8DpEfbSHmWF7akOLm
-         AjubzHhw4bLcQ==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id D746D15C02E2; Wed,  3 May 2023 16:28:30 -0400 (EDT)
-Date:   Wed, 3 May 2023 16:28:30 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     syzbot <syzbot+6385d7d3065524c5ca6d@syzkaller.appspotmail.com>
-Cc:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [ext4?] WARNING in ext4_xattr_block_set (2)
-Message-ID: <20230503202830.GA695988@mit.edu>
-References: <00000000000006a0df05f6667499@google.com>
+        Wed, 3 May 2023 16:32:47 -0400
+Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 835E0198C
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 13:32:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1683145963;
+        bh=qNB6O5mVECCPuKgtGErPGROmbcclghgZAShV5yBxuaI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=no1YqwIX/6oqGAIE4BX0MFBH9H00tUF8S1a7Rp3ST8/qqgk+RD0qNCU6dUWy7Up55
+         87HM522afz/NFXZUW+wWRlNHFRjoKu6wPtnzU8W79UU1ruLrptpAMrnXdurov8Afws
+         FFpRaOOMVqHrc02dFUXt2s5GP+hlMfx04N+XtXde07EyDIH6yTeGgBnXFdjM7N/wc/
+         55DXbnsj32SPXO9VdZdvQZimthqCMNyltnUfUgnUDBBCfb97PmVSZxxv9YUrX7MlBM
+         5QfRdpBQl/XfS1NbqH06nNOOfAcdy8e16/fhC+MM0JURh+MeIxJ4MEUVjW2cJqaOek
+         7akX+418JyjWg==
+Received: from localhost.localdomain (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4QBTCb416Dz11fW;
+        Wed,  3 May 2023 16:32:43 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Zqiang <qiang1.zhang@intel.com>
+Subject: [RFC PATCH] rcu: rcupdate.h: Add missing parentheses around macro pointer dereference
+Date:   Wed,  3 May 2023 16:32:36 -0400
+Message-Id: <20230503203236.1587590-1-mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <00000000000006a0df05f6667499@google.com>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-#syz test git://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
+linux/rcupdate.h macros use the *p parameter without parentheses, e.g.:
 
-diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-index 39f00f05f981..dab33412b858 100644
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -6638,6 +6638,14 @@ static int __ext4_remount(struct fs_context *fc, struct super_block *sb)
- 	return 0;
+  typeof(*p)
+
+rather than
+
+  typeof(*(p))
+
+The following test-case shows how it can generate confusion due to C
+operator precedence being reversed compared to the expectations:
+
+    #define m(p) \
+    do { \
+            __typeof__(*p) v = 0; \
+    } while (0)
+
+    void fct(unsigned long long *p1)
+    {
+            m(p1 + 1);      /* works */
+            m(1 + p1);      /* broken */
+    }
+
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Joel Fernandes <joel@joelfernandes.org>
+Cc: Josh Triplett <josh@joshtriplett.org>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Lai Jiangshan <jiangshanlai@gmail.com>
+Cc: Zqiang <qiang1.zhang@intel.com>
+---
+ include/linux/rcupdate.h | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
+index dcd2cf1e8326..1565012fa47f 100644
+--- a/include/linux/rcupdate.h
++++ b/include/linux/rcupdate.h
+@@ -430,16 +430,16 @@ static inline void rcu_preempt_sleep_check(void) { }
  
- restore_opts:
-+	if ((sb->s_flags & SB_RDONLY) &&
-+	    !(old_sb_flags & SB_RDONLY)) {
-+		ext4_warning(sb, "failing rw->ro transition");
-+		if (sb_any_quota_suspended(sb)) {
-+			ext4_warning(sb, "would resume quotas");
-+//			dquot_resume(sb, -1);
-+		}
-+	}
- 	sb->s_flags = old_sb_flags;
- 	sbi->s_mount_opt = old_opts.s_mount_opt;
- 	sbi->s_mount_opt2 = old_opts.s_mount_opt2;
+ #ifdef __CHECKER__
+ #define rcu_check_sparse(p, space) \
+-	((void)(((typeof(*p) space *)p) == p))
++	((void)(((typeof(*(p)) space *)p) == p))
+ #else /* #ifdef __CHECKER__ */
+ #define rcu_check_sparse(p, space)
+ #endif /* #else #ifdef __CHECKER__ */
+ 
+ #define __unrcu_pointer(p, local)					\
+ ({									\
+-	typeof(*p) *local = (typeof(*p) *__force)(p);			\
++	typeof(*(p)) *local = (typeof(*(p)) *__force)(p);		\
+ 	rcu_check_sparse(p, __rcu);					\
+-	((typeof(*p) __force __kernel *)(local)); 			\
++	((typeof(*(p)) __force __kernel *)(local));			\
+ })
+ /**
+  * unrcu_pointer - mark a pointer as not being RCU protected
+@@ -452,29 +452,29 @@ static inline void rcu_preempt_sleep_check(void) { }
+ 
+ #define __rcu_access_pointer(p, local, space) \
+ ({ \
+-	typeof(*p) *local = (typeof(*p) *__force)READ_ONCE(p); \
++	typeof(*(p)) *local = (typeof(*(p)) *__force)READ_ONCE(p); \
+ 	rcu_check_sparse(p, space); \
+-	((typeof(*p) __force __kernel *)(local)); \
++	((typeof(*(p)) __force __kernel *)(local)); \
+ })
+ #define __rcu_dereference_check(p, local, c, space) \
+ ({ \
+ 	/* Dependency order vs. p above. */ \
+-	typeof(*p) *local = (typeof(*p) *__force)READ_ONCE(p); \
++	typeof(*(p)) *local = (typeof(*(p)) *__force)READ_ONCE(p); \
+ 	RCU_LOCKDEP_WARN(!(c), "suspicious rcu_dereference_check() usage"); \
+ 	rcu_check_sparse(p, space); \
+-	((typeof(*p) __force __kernel *)(local)); \
++	((typeof(*(p)) __force __kernel *)(local)); \
+ })
+ #define __rcu_dereference_protected(p, local, c, space) \
+ ({ \
+ 	RCU_LOCKDEP_WARN(!(c), "suspicious rcu_dereference_protected() usage"); \
+ 	rcu_check_sparse(p, space); \
+-	((typeof(*p) __force __kernel *)(p)); \
++	((typeof(*(p)) __force __kernel *)(p)); \
+ })
+ #define __rcu_dereference_raw(p, local) \
+ ({ \
+ 	/* Dependency order vs. p above. */ \
+ 	typeof(p) local = READ_ONCE(p); \
+-	((typeof(*p) __force __kernel *)(local)); \
++	((typeof(*(p)) __force __kernel *)(local)); \
+ })
+ #define rcu_dereference_raw(p) __rcu_dereference_raw(p, __UNIQUE_ID(rcu))
+ 
+-- 
+2.25.1
 
