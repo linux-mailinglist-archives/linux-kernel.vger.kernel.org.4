@@ -2,126 +2,432 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88A626F5313
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 10:22:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55B096F53A1
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 10:48:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbjECIWP convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 3 May 2023 04:22:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48442 "EHLO
+        id S229756AbjECIs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 04:48:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbjECIWH (ORCPT
+        with ESMTP id S229524AbjECIsY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 04:22:07 -0400
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 993584C11;
-        Wed,  3 May 2023 01:22:05 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-55a829411b5so24084707b3.1;
-        Wed, 03 May 2023 01:22:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683102124; x=1685694124;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yf0nQOOKHL0GEtmAgACXt9/1DKDkHK6ft7tmYSYGTKo=;
-        b=CJ5U/HXNXyC/cc3ae4K8hgvtdQUlrZV+z98m9/QvAG6EG5lJe1inzgr1MXQ3yAuWyu
-         Iy4KMTI0wYz+0+sNDAE1YtKYZaaJsvlz2mw46Tp5A5L0m3SEgnH++QIttWJS2KFGDMhU
-         mm9q9T0Y8ercwTR8mwZyGdUCWoe/4CnDyYmQmq6LrEoMc44vWZOWyS+sOq89c2wFPfwW
-         ksxAq8cjNhZIfqqr3vffey56LefKQ/w7IJcJxov52UJMStqL1lU+k6QK6hb/yysHP66k
-         YHW1iBeKFuETfoWJd+9jwmVChtUEmSSY+gDfbf0qCUqlzmngz0o7yc8EadYF36bzWloF
-         mE1g==
-X-Gm-Message-State: AC+VfDzrZDKPLsLGuMpXz3muLah1rfkdvm95fMR5VCug3VWTbHD0Fg2w
-        vkZFOLcVPVcQwuuJ6Q2Mpv1LNg37/eWrng==
-X-Google-Smtp-Source: ACHHUZ5X1QagMEjqiwNPa5tS7efZTv1eB2bYoLvf7UkSjrCyb5G+M9a5xdfAlk888xzRcPSMw5eIgw==
-X-Received: by 2002:a81:a14d:0:b0:55a:30f3:119 with SMTP id y74-20020a81a14d000000b0055a30f30119mr10441961ywg.35.1683102124555;
-        Wed, 03 May 2023 01:22:04 -0700 (PDT)
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
-        by smtp.gmail.com with ESMTPSA id t192-20020a8183c9000000b00552f3887d16sm8479050ywf.22.2023.05.03.01.22.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 May 2023 01:22:03 -0700 (PDT)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-55a829411b5so24084057b3.1;
-        Wed, 03 May 2023 01:22:02 -0700 (PDT)
-X-Received: by 2002:a25:240f:0:b0:b9d:d5dc:596c with SMTP id
- k15-20020a25240f000000b00b9dd5dc596cmr11998230ybk.12.1683102122353; Wed, 03
- May 2023 01:22:02 -0700 (PDT)
+        Wed, 3 May 2023 04:48:24 -0400
+X-Greylist: delayed 1515 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 03 May 2023 01:48:21 PDT
+Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B43E4F;
+        Wed,  3 May 2023 01:48:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+        Content-ID:Content-Description;
+        bh=H589cbbiMvCLoUQ4GsA6KT295qFVd297zqkGtpsRAfw=; b=XPo/rVtahqVhwDH+QWGnIy9N8t
+        V1DQSFFQ/ziSDN9Tkbk+Po0OzNufTsxItIcEUPwqH/6IcYGXxvNVPtUKbkhg1+CG2tlkXSETJxsdo
+        +BBZqHy7xURl/3hgRprmE35jLJ5Pp31v3SS9DozAHSYAgpyEME9mPnFP48iM15HJJQe0FjxzBjKwy
+        BVslW4IRSD3OLwF21/BXLF6Q3uE1sW/rZw6Q8M4ptdwVLEA5Yvbb8KindWvlZKF8N6NckXYN+2F9u
+        Jia/1wa4sf9W1LFzCYGqPFDkTAAqDw5lSv9JGZuo5amCb3R7KaLbrf8aa5z9L8z20mKl+tqUrBsIM
+        gdQ/zW6eQiw87hnyW24MJQCd6luBXIP0kqtz2pQ++s/WONSDTCpIpwUUFgkQOC3i5xRNQLeHKt6Zt
+        Q+MJ8sWP35ChHApPikY6quwLB+kzIbVCCGcA463b95ypZOjkffYuxSRAiJ+cXyJDi1SRJnk83DZQL
+        ezZBYGHVp5xAANsJ0Blj37NeNeIdGa2XewdiAFouDtjErI4I1eJFJSWHu/tpP/Rj/GRbhMdftMYIx
+        At0zqb7MKjSYFmwsoONcHCSJzdozT/vsCH4BfxVdWWLa+7Hwqi/KWX/bu61GVrWOTTXwZwsVKOwYZ
+        AivwsQDHH59pbbqSZdxFMYiiQOiq3dd3sxqTFjTS4=;
+From:   Christian Schoenebeck <linux_oss@crudebyte.com>
+To:     Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Dominique Martinet <asmadeus@codewreck.org>
+Cc:     Simon Horman <simon.horman@corigine.com>, v9fs@lists.linux.dev,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Dominique Martinet <asmadeus@codewreck.org>
+Subject: Re: [PATCH v2 5/5] 9p: remove dead stores (variable set again without being
+ read)
+Date:   Wed, 03 May 2023 10:22:46 +0200
+Message-ID: <3207385.lLoMtQYYpd@silver>
+In-Reply-To: <20230427-scan-build-v2-5-bb96a6e6a33b@codewreck.org>
+References: <20230427-scan-build-v2-0-bb96a6e6a33b@codewreck.org>
+ <20230427-scan-build-v2-5-bb96a6e6a33b@codewreck.org>
 MIME-Version: 1.0
-References: <20230502130223.14719-1-tzimmermann@suse.de>
-In-Reply-To: <20230502130223.14719-1-tzimmermann@suse.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 3 May 2023 10:21:50 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdV06LN17KzOh42vjyF504myT=D=a-zz3MduOmQPEmv5SA@mail.gmail.com>
-Message-ID: <CAMuHMdV06LN17KzOh42vjyF504myT=D=a-zz3MduOmQPEmv5SA@mail.gmail.com>
-Subject: Re: [PATCH v3 0/6] fbdev: Move framebuffer I/O helpers to <asm/fb.h>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     deller@gmx.de, javierm@redhat.com, daniel@ffwll.ch,
-        vgupta@kernel.org, chenhuacai@kernel.org, kernel@xen0n.name,
-        davem@davemloft.net, James.Bottomley@hansenpartnership.com,
-        arnd@arndb.de, sam@ravnborg.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-arch@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, sparclinux@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-parisc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+On Wednesday, May 3, 2023 9:49:29 AM CEST Dominique Martinet wrote:
+> The 9p code for some reason used to initialize variables outside of the
+> declaration, e.g. instead of just initializing the variable like this:
+> 
+> int retval = 0
+> 
+> We would be doing this:
+> 
+> int retval;
+> retval = 0;
 
-On Tue, May 2, 2023 at 3:02 PM Thomas Zimmermann <tzimmermann@suse.de> wrote:
-> (was: fbdev: Use regular I/O function for framebuffers)
->
-> Fbdev provides helpers for framebuffer I/O, such as fb_readl(),
-> fb_writel() or fb_memcpy_to_fb(). The implementation of each helper
-> depends on the architecture, but they are all equivalent to regular
-> I/O functions of similar names. So use regular functions instead and
-> move all helpers into <asm-generic/fb.h>
->
-> The first patch a simple whitespace cleanup.
->
-> Until now, <linux/fb.h> contained an include of <asm/io.h>. As this
-> will go away patches 2 to 4 prepare include statements in the various
-> drivers. Source files that use regular I/O helpers, such as readl(),
-> now include <linux/io.h>. Source files that use framebuffer I/O
-> helpers, such as fb_readl(), also include <asm/fb.h>.
->
-> Patch 5 replaces the architecture-based if-else branching in
-> <linux/fb.h> by helpers in <asm-generic/fb.h>. All helpers use Linux'
-> existing I/O functions.
->
-> Patch 6 harmonizes naming among fbdev and existing I/O functions.
->
-> The patchset has been built for a variety of platforms, such as x86-64,
-> arm, aarch64, ppc64, parisc, m64k, mips and sparc.
->
-> v3:
->         * add the new helpers in <asm-generic/fb.h>
->         * support reordering and native byte order (Geert, Arnd)
+OK, but AFAICS this patch would simply remove all initializations. I would
+expect at least a default initialization at variable declaration instead.
 
-Thanks, this fixes the mangled display I was seeing on ARAnyM
-with bpp=16.
+> This is perfectly fine and the compiler will just optimize dead stores
+> anyway, but scan-build seems to think this is a problem and there are
+> many of these warnings making the output of scan-build full of such
+> warnings:
+> fs/9p/vfs_inode.c:916:2: warning: Value stored to 'retval' is never read [deadcode.DeadStores]
+>         retval = 0;
+>         ^        ~
 
-BTW, this series seems to have mixed dependencies: the change
-to include/asm-generic/fb.h depends on "[PATCH v3 00/19] arch:
-Consolidate <asm/fb.h>"[1], but with that applied, I had to manually
-fixup drivers/video/fbdev/core/fb_cfb_fops.c.
+Honestly I don't see much value in this warning. Can't we just disable this
+warning for 9p code or is this just controllable for the entire project?
 
-[1] https://lore.kernel.org/all/20230417125651.25126-1-tzimmermann@suse.de,
+Turning variables uninitialized might be fine now, but it also makes the code
+error prone for future changes.
 
-Gr{oetje,eeting}s,
+> I have no strong opinion here, but if we want to regularly run
+> scan-build we should fix these just to silence the messages.
+> 
+> I've confirmed these all are indeed ok to remove.
+> 
+> Reviewed-by: Simon Horman <simon.horman@corigine.com>
+> Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
+> ---
+>  fs/9p/vfs_inode.c      |  6 ------
+>  fs/9p/vfs_inode_dotl.c |  1 -
+>  net/9p/client.c        | 46 ++++++++++++----------------------------------
+>  3 files changed, 12 insertions(+), 41 deletions(-)
+> 
+> diff --git a/fs/9p/vfs_inode.c b/fs/9p/vfs_inode.c
+> index 3791f642c502..99305e97287c 100644
+> --- a/fs/9p/vfs_inode.c
+> +++ b/fs/9p/vfs_inode.c
+> @@ -164,7 +164,6 @@ int v9fs_uflags2omode(int uflags, int extended)
+>  {
+>  	int ret;
+>  
+> -	ret = 0;
+>  	switch (uflags&3) {
+>  	default:
+>  	case O_RDONLY:
+> @@ -604,7 +603,6 @@ v9fs_create(struct v9fs_session_info *v9ses, struct inode *dir,
+>  
+>  	p9_debug(P9_DEBUG_VFS, "name %pd\n", dentry);
+>  
+> -	err = 0;
+>  	name = dentry->d_name.name;
+>  	dfid = v9fs_parent_fid(dentry);
+>  	if (IS_ERR(dfid)) {
+> @@ -816,8 +814,6 @@ v9fs_vfs_atomic_open(struct inode *dir, struct dentry *dentry,
+>  	if (!(flags & O_CREAT) || d_really_is_positive(dentry))
+>  		return finish_no_open(file, res);
+>  
+> -	err = 0;
+> -
+>  	v9ses = v9fs_inode2v9ses(dir);
+>  	perm = unixmode2p9mode(v9ses, mode);
+>  	p9_omode = v9fs_uflags2omode(flags, v9fs_proto_dotu(v9ses));
+> @@ -913,7 +909,6 @@ v9fs_vfs_rename(struct mnt_idmap *idmap, struct inode *old_dir,
+>  		return -EINVAL;
+>  
+>  	p9_debug(P9_DEBUG_VFS, "\n");
+> -	retval = 0;
+>  	old_inode = d_inode(old_dentry);
+>  	new_inode = d_inode(new_dentry);
+>  	v9ses = v9fs_inode2v9ses(old_inode);
+> @@ -1067,7 +1062,6 @@ static int v9fs_vfs_setattr(struct mnt_idmap *idmap,
+>  	if (retval)
+>  		return retval;
+>  
+> -	retval = -EPERM;
+>  	v9ses = v9fs_dentry2v9ses(dentry);
+>  	if (iattr->ia_valid & ATTR_FILE) {
+>  		fid = iattr->ia_file->private_data;
+> diff --git a/fs/9p/vfs_inode_dotl.c b/fs/9p/vfs_inode_dotl.c
+> index 3acf2bcb69cc..43e282f21962 100644
+> --- a/fs/9p/vfs_inode_dotl.c
+> +++ b/fs/9p/vfs_inode_dotl.c
+> @@ -367,7 +367,6 @@ static int v9fs_vfs_mkdir_dotl(struct mnt_idmap *idmap,
+>  	struct posix_acl *dacl = NULL, *pacl = NULL;
+>  
+>  	p9_debug(P9_DEBUG_VFS, "name %pd\n", dentry);
+> -	err = 0;
+>  	v9ses = v9fs_inode2v9ses(dir);
+>  
+>  	omode |= S_IFDIR;
+> diff --git a/net/9p/client.c b/net/9p/client.c
+> index a3340268ec8d..86bbc7147fc1 100644
+> --- a/net/9p/client.c
+> +++ b/net/9p/client.c
+> @@ -904,7 +904,7 @@ EXPORT_SYMBOL(do_trace_9p_fid_put);
+>  
+>  static int p9_client_version(struct p9_client *c)
+>  {
+> -	int err = 0;
+> +	int err;
+>  	struct p9_req_t *req;
+>  	char *version = NULL;
+>  	int msize;
+> @@ -975,7 +975,6 @@ struct p9_client *p9_client_create(const char *dev_name, char *options)
+>  	struct p9_client *clnt;
+>  	char *client_id;
+>  
+> -	err = 0;
+>  	clnt = kmalloc(sizeof(*clnt), GFP_KERNEL);
+>  	if (!clnt)
+>  		return ERR_PTR(-ENOMEM);
+> @@ -1094,7 +1093,7 @@ struct p9_fid *p9_client_attach(struct p9_client *clnt, struct p9_fid *afid,
+>  				const char *uname, kuid_t n_uname,
+>  				const char *aname)
+>  {
+> -	int err = 0;
+> +	int err;
+>  	struct p9_req_t *req;
+>  	struct p9_fid *fid;
+>  	struct p9_qid qid;
+> @@ -1147,7 +1146,6 @@ struct p9_fid *p9_client_walk(struct p9_fid *oldfid, uint16_t nwname,
+>  	struct p9_req_t *req;
+>  	u16 nwqids, count;
+>  
+> -	err = 0;
+>  	wqids = NULL;
+>  	clnt = oldfid->clnt;
+>  	if (clone) {
+> @@ -1224,7 +1222,6 @@ int p9_client_open(struct p9_fid *fid, int mode)
+>  	clnt = fid->clnt;
+>  	p9_debug(P9_DEBUG_9P, ">>> %s fid %d mode %d\n",
+>  		 p9_is_proto_dotl(clnt) ? "TLOPEN" : "TOPEN", fid->fid, mode);
+> -	err = 0;
+>  
+>  	if (fid->mode != -1)
+>  		return -EINVAL;
+> @@ -1262,7 +1259,7 @@ EXPORT_SYMBOL(p9_client_open);
+>  int p9_client_create_dotl(struct p9_fid *ofid, const char *name, u32 flags,
+>  			  u32 mode, kgid_t gid, struct p9_qid *qid)
+>  {
+> -	int err = 0;
+> +	int err;
+>  	struct p9_client *clnt;
+>  	struct p9_req_t *req;
+>  	int iounit;
+> @@ -1314,7 +1311,6 @@ int p9_client_fcreate(struct p9_fid *fid, const char *name, u32 perm, int mode,
+>  
+>  	p9_debug(P9_DEBUG_9P, ">>> TCREATE fid %d name %s perm %d mode %d\n",
+>  		 fid->fid, name, perm, mode);
+> -	err = 0;
+>  	clnt = fid->clnt;
+>  
+>  	if (fid->mode != -1)
+> @@ -1350,7 +1346,7 @@ EXPORT_SYMBOL(p9_client_fcreate);
+>  int p9_client_symlink(struct p9_fid *dfid, const char *name,
+>  		      const char *symtgt, kgid_t gid, struct p9_qid *qid)
+>  {
+> -	int err = 0;
+> +	int err;
+>  	struct p9_client *clnt;
+>  	struct p9_req_t *req;
+>  
+> @@ -1402,13 +1398,12 @@ EXPORT_SYMBOL(p9_client_link);
+>  
+>  int p9_client_fsync(struct p9_fid *fid, int datasync)
+>  {
+> -	int err;
+> +	int err = 0;
+>  	struct p9_client *clnt;
+>  	struct p9_req_t *req;
+>  
+>  	p9_debug(P9_DEBUG_9P, ">>> TFSYNC fid %d datasync:%d\n",
+>  		 fid->fid, datasync);
+> -	err = 0;
+>  	clnt = fid->clnt;
+>  
+>  	req = p9_client_rpc(clnt, P9_TFSYNC, "dd", fid->fid, datasync);
+> @@ -1428,7 +1423,7 @@ EXPORT_SYMBOL(p9_client_fsync);
+>  
+>  int p9_client_clunk(struct p9_fid *fid)
+>  {
+> -	int err;
+> +	int err = 0;
+>  	struct p9_client *clnt;
+>  	struct p9_req_t *req;
+>  	int retries = 0;
+> @@ -1436,7 +1431,6 @@ int p9_client_clunk(struct p9_fid *fid)
+>  again:
+>  	p9_debug(P9_DEBUG_9P, ">>> TCLUNK fid %d (try %d)\n",
+>  		 fid->fid, retries);
+> -	err = 0;
+>  	clnt = fid->clnt;
+>  
+>  	req = p9_client_rpc(clnt, P9_TCLUNK, "d", fid->fid);
+> @@ -1465,12 +1459,11 @@ EXPORT_SYMBOL(p9_client_clunk);
+>  
+>  int p9_client_remove(struct p9_fid *fid)
+>  {
+> -	int err;
+> +	int err = 0;
+>  	struct p9_client *clnt;
+>  	struct p9_req_t *req;
+>  
+>  	p9_debug(P9_DEBUG_9P, ">>> TREMOVE fid %d\n", fid->fid);
+> -	err = 0;
+>  	clnt = fid->clnt;
+>  
+>  	req = p9_client_rpc(clnt, P9_TREMOVE, "d", fid->fid);
+> @@ -1680,7 +1673,6 @@ struct p9_wstat *p9_client_stat(struct p9_fid *fid)
+>  	if (!ret)
+>  		return ERR_PTR(-ENOMEM);
+>  
+> -	err = 0;
+>  	clnt = fid->clnt;
+>  
+>  	req = p9_client_rpc(clnt, P9_TSTAT, "d", fid->fid);
+> @@ -1733,7 +1725,6 @@ struct p9_stat_dotl *p9_client_getattr_dotl(struct p9_fid *fid,
+>  	if (!ret)
+>  		return ERR_PTR(-ENOMEM);
+>  
+> -	err = 0;
+>  	clnt = fid->clnt;
+>  
+>  	req = p9_client_rpc(clnt, P9_TGETATTR, "dq", fid->fid, request_mask);
+> @@ -1812,11 +1803,10 @@ static int p9_client_statsize(struct p9_wstat *wst, int proto_version)
+>  
+>  int p9_client_wstat(struct p9_fid *fid, struct p9_wstat *wst)
+>  {
+> -	int err;
+> +	int err = 0;
+>  	struct p9_req_t *req;
+>  	struct p9_client *clnt;
+>  
+> -	err = 0;
+>  	clnt = fid->clnt;
+>  	wst->size = p9_client_statsize(wst, clnt->proto_version);
+>  	p9_debug(P9_DEBUG_9P, ">>> TWSTAT fid %d\n",
+> @@ -1851,11 +1841,10 @@ EXPORT_SYMBOL(p9_client_wstat);
+>  
+>  int p9_client_setattr(struct p9_fid *fid, struct p9_iattr_dotl *p9attr)
+>  {
+> -	int err;
+> +	int err = 0;
+>  	struct p9_req_t *req;
+>  	struct p9_client *clnt;
+>  
+> -	err = 0;
+>  	clnt = fid->clnt;
+>  	p9_debug(P9_DEBUG_9P, ">>> TSETATTR fid %d\n", fid->fid);
+>  	p9_debug(P9_DEBUG_9P, "    valid=%x mode=%x uid=%d gid=%d size=%lld\n",
+> @@ -1887,7 +1876,6 @@ int p9_client_statfs(struct p9_fid *fid, struct p9_rstatfs *sb)
+>  	struct p9_req_t *req;
+>  	struct p9_client *clnt;
+>  
+> -	err = 0;
+>  	clnt = fid->clnt;
+>  
+>  	p9_debug(P9_DEBUG_9P, ">>> TSTATFS fid %d\n", fid->fid);
+> @@ -1921,11 +1909,10 @@ EXPORT_SYMBOL(p9_client_statfs);
+>  int p9_client_rename(struct p9_fid *fid,
+>  		     struct p9_fid *newdirfid, const char *name)
+>  {
+> -	int err;
+> +	int err = 0;
+>  	struct p9_req_t *req;
+>  	struct p9_client *clnt;
+>  
+> -	err = 0;
+>  	clnt = fid->clnt;
+>  
+>  	p9_debug(P9_DEBUG_9P, ">>> TRENAME fid %d newdirfid %d name %s\n",
+> @@ -1949,11 +1936,10 @@ EXPORT_SYMBOL(p9_client_rename);
+>  int p9_client_renameat(struct p9_fid *olddirfid, const char *old_name,
+>  		       struct p9_fid *newdirfid, const char *new_name)
+>  {
+> -	int err;
+> +	int err = 0;
+>  	struct p9_req_t *req;
+>  	struct p9_client *clnt;
+>  
+> -	err = 0;
+>  	clnt = olddirfid->clnt;
+>  
+>  	p9_debug(P9_DEBUG_9P,
+> @@ -1986,7 +1972,6 @@ struct p9_fid *p9_client_xattrwalk(struct p9_fid *file_fid,
+>  	struct p9_client *clnt;
+>  	struct p9_fid *attr_fid;
+>  
+> -	err = 0;
+>  	clnt = file_fid->clnt;
+>  	attr_fid = p9_fid_create(clnt);
+>  	if (!attr_fid) {
+> @@ -2027,14 +2012,13 @@ EXPORT_SYMBOL_GPL(p9_client_xattrwalk);
+>  int p9_client_xattrcreate(struct p9_fid *fid, const char *name,
+>  			  u64 attr_size, int flags)
+>  {
+> -	int err;
+> +	int err = 0;
+>  	struct p9_req_t *req;
+>  	struct p9_client *clnt;
+>  
+>  	p9_debug(P9_DEBUG_9P,
+>  		 ">>> TXATTRCREATE fid %d name  %s size %llu flag %d\n",
+>  		 fid->fid, name, attr_size, flags);
+> -	err = 0;
+>  	clnt = fid->clnt;
+>  	req = p9_client_rpc(clnt, P9_TXATTRCREATE, "dsqd",
+>  			    fid->fid, name, attr_size, flags);
+> @@ -2063,7 +2047,6 @@ int p9_client_readdir(struct p9_fid *fid, char *data, u32 count, u64 offset)
+>  	p9_debug(P9_DEBUG_9P, ">>> TREADDIR fid %d offset %llu count %d\n",
+>  		 fid->fid, offset, count);
+>  
+> -	err = 0;
+>  	clnt = fid->clnt;
+>  
+>  	rsize = fid->iounit;
+> @@ -2122,7 +2105,6 @@ int p9_client_mknod_dotl(struct p9_fid *fid, const char *name, int mode,
+>  	struct p9_client *clnt;
+>  	struct p9_req_t *req;
+>  
+> -	err = 0;
+>  	clnt = fid->clnt;
+>  	p9_debug(P9_DEBUG_9P,
+>  		 ">>> TMKNOD fid %d name %s mode %d major %d minor %d\n",
+> @@ -2153,7 +2135,6 @@ int p9_client_mkdir_dotl(struct p9_fid *fid, const char *name, int mode,
+>  	struct p9_client *clnt;
+>  	struct p9_req_t *req;
+>  
+> -	err = 0;
+>  	clnt = fid->clnt;
+>  	p9_debug(P9_DEBUG_9P, ">>> TMKDIR fid %d name %s mode %d gid %d\n",
+>  		 fid->fid, name, mode, from_kgid(&init_user_ns, gid));
+> @@ -2182,7 +2163,6 @@ int p9_client_lock_dotl(struct p9_fid *fid, struct p9_flock *flock, u8 *status)
+>  	struct p9_client *clnt;
+>  	struct p9_req_t *req;
+>  
+> -	err = 0;
+>  	clnt = fid->clnt;
+>  	p9_debug(P9_DEBUG_9P,
+>  		 ">>> TLOCK fid %d type %i flags %d start %lld length %lld proc_id %d client_id %s\n",
+> @@ -2214,7 +2194,6 @@ int p9_client_getlock_dotl(struct p9_fid *fid, struct p9_getlock *glock)
+>  	struct p9_client *clnt;
+>  	struct p9_req_t *req;
+>  
+> -	err = 0;
+>  	clnt = fid->clnt;
+>  	p9_debug(P9_DEBUG_9P,
+>  		 ">>> TGETLOCK fid %d, type %i start %lld length %lld proc_id %d client_id %s\n",
+> @@ -2251,7 +2230,6 @@ int p9_client_readlink(struct p9_fid *fid, char **target)
+>  	struct p9_client *clnt;
+>  	struct p9_req_t *req;
+>  
+> -	err = 0;
+>  	clnt = fid->clnt;
+>  	p9_debug(P9_DEBUG_9P, ">>> TREADLINK fid %d\n", fid->fid);
+>  
+> 
+> 
 
-                        Geert
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+
