@@ -2,151 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28E346F4F50
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 05:54:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DEE36F4F54
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 05:55:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbjECDy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 23:54:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36852 "EHLO
+        id S229625AbjECDzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 23:55:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjECDyZ (ORCPT
+        with ESMTP id S229487AbjECDz3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 23:54:25 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B741730;
-        Tue,  2 May 2023 20:54:24 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1aaf2ede38fso32476155ad.2;
-        Tue, 02 May 2023 20:54:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683086063; x=1685678063;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=6q3+C/O6BV/0gC+jrMbg3MwoGAyt7Cv6nHU3v3zys3I=;
-        b=rDNoWnGhJwAj76Ge80sW8/InyLnBi7jwU23z97T9EoARIFUNIbUaF+GQ2D6DSU+vll
-         BsowuuPL6I9xhwUYyaiYWWm3C01pX1qNTK7LzYk/ZiqHGEhsel0iJBK5GbeC5O/cIUkL
-         dryGwMTYB0/Lsxn6sOHxgqg0DWg6rCzHVtKM6OfSmGKsvLXR1l6emV6kQY8nKt6ppTM8
-         K/k1e28rmsxf4toOeLGhuN/YtinfmiH6IjLZGLmiYE4+q512hzPS9bGYvhb2la5246Ka
-         cdqT1bMUPyYmrk6CgHTVwxzc7wR1NU2mAmSVJgTUU9GMskLiEM/Lfa3XUrwrP6/sBLay
-         ErgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683086063; x=1685678063;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6q3+C/O6BV/0gC+jrMbg3MwoGAyt7Cv6nHU3v3zys3I=;
-        b=TMu3lRfxienkkazSMuH+fqtcuixaxCO60VNn6qZhk0L4dztKHMbafn8zWN9l0k0LwN
-         V0nHfCSTCi/x/e6BxTGFdbfaiJ4zn29wFuTpZ2X2al6UB/UqikYqn/5OfpVu0bkjKTa4
-         fqySOsZgncq/vrdsVWzaPavqcC4KTTZOZ5U54cTKMxZdDBJt0DMoi2QN1qkGd47WyeG0
-         K/tcMlwoFgjGCQMP69a0VDt4feNYPPESbxvVMvOim4hk6KUndktCrY8hpMuvcHJyiQ44
-         iuoMaA9WfAvJAX4WnUEPM/mZs1wpptLgBW+HuyBRHRiVfDLtyn2gtk3Mau6FN27rcndH
-         xsuA==
-X-Gm-Message-State: AC+VfDwKN3iuzbpJpKS+ZPwoELnvNvtlEK4L7GWsGTbOCnrikSnhWj6Q
-        oKXAaHyGV1PsDk5M8pSdfPM=
-X-Google-Smtp-Source: ACHHUZ4FXkEzCEQcEM1H8rckNkqvjTZZ1HLLDrm2ZrxU2DPEZFArr8JYzLEEi7yxud81InKVTsb4jg==
-X-Received: by 2002:a17:902:e88d:b0:1a6:6fe3:df8d with SMTP id w13-20020a170902e88d00b001a66fe3df8dmr899006plg.8.1683086063246;
-        Tue, 02 May 2023 20:54:23 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-11.three.co.id. [180.214.233.11])
-        by smtp.gmail.com with ESMTPSA id c7-20020a170902aa4700b001a1faeac240sm20512918plr.186.2023.05.02.20.54.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 May 2023 20:54:22 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id EA49D10622E; Wed,  3 May 2023 10:54:19 +0700 (WIB)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Linux ALSA Subsystem Development <alsa-devel@alsa-project.org>,
-        Linux Documentation <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Oswald Buddenhagen <oswald.buddenhagen@gmx.de>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Takashi Sakamoto <o-takashi@sakamocchi.jp>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH] ALSA: docs: Fix code block indentation in ALSA driver example
-Date:   Wed,  3 May 2023 10:54:16 +0700
-Message-Id: <20230503035416.62722-1-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.40.1
+        Tue, 2 May 2023 23:55:29 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA622C5;
+        Tue,  2 May 2023 20:55:27 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3433PpsC007770;
+        Wed, 3 May 2023 03:55:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=OsWgzpu5/2JLIObVKc1qDH/DqW/O0qt5XMWvByGhzrM=;
+ b=FS0IM8EfhfAvyux4OTrlROUZY8xm8LldNF1GNA6LSpmoohZNwWp0Jun/pXCMVugDeTY2
+ 9bBEkTUV9SZfJOsQ8PvY4P2VR2CywYRltPvJNGZBb3QDLV/DMuGy/IwO7e202Kj3MwBf
+ xueHTWil7MR/d52dXuQByhjHPv4yViLNcn893v3SQ43y6wIolG3tKs7BNfHYsmb8Y0oS
+ hj8oOl/mgVYldroRre55iNGV5bmJ+OKYD9+WePzxv5OANtfDUEp5HKUmBCwGW4CIkzh2
+ 8kxja7pz6KSw2kkJ/CjT5DxdWCiJ0bdV2GPFpFFkbsv7Fuyc/ZFcl4etCwzxsMSMjyeQ /w== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qawak2gdj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 03 May 2023 03:55:17 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3433tHnh009110
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 3 May 2023 03:55:17 GMT
+Received: from [10.217.216.230] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 2 May 2023
+ 20:55:10 -0700
+Message-ID: <c2a747d4-57d3-61e9-69db-c94ccc6fd5cf@quicinc.com>
+Date:   Wed, 3 May 2023 09:25:07 +0530
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2821; i=bagasdotme@gmail.com; h=from:subject; bh=6LXELRL34BN4LPhBXSHO4pfAXrYd4OlwOyi8Y9pLNbI=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDCmBt16EPVP9HMJw1cC8qGTVAZcZf8692rCv/c3y4A//r 828EGOb3FHKwiDGxSArpsgyKZGv6fQuI5EL7WsdYeawMoEMYeDiFICJqLcz/HdaG928N+2fsO23 7GWPuuIr9ObPqFrxL47fLLTKoTT8rQzD//LruWeVlM387uu+VpnT0rnkSfrzML3a7PZ5HdJPUph mMQIA
-X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v7 8/9] arm64: dts: qcom: sa8295p: Enable tertiary
+ controller and its 4 USB ports
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
+        <quic_jackp@quicinc.com>, <quic_harshq@quicinc.com>,
+        <ahalaney@redhat.com>, <quic_shazhuss@quicinc.com>
+References: <20230501143445.3851-1-quic_kriskura@quicinc.com>
+ <20230501143445.3851-9-quic_kriskura@quicinc.com>
+ <8c8a7c25-9eae-7ded-61ce-2ce22b7b76dc@linaro.org>
+From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <8c8a7c25-9eae-7ded-61ce-2ce22b7b76dc@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: SXahuwUfH36mxgHgwaAMnR33Icza60Sa
+X-Proofpoint-ORIG-GUID: SXahuwUfH36mxgHgwaAMnR33Icza60Sa
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-03_01,2023-04-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
+ suspectscore=0 lowpriorityscore=0 clxscore=1015 malwarescore=0
+ priorityscore=1501 impostorscore=0 mlxlogscore=860 phishscore=0
+ spamscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2305030031
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sphinx reports htmldocs warnings:
 
-Documentation/sound/kernel-api/writing-an-alsa-driver.rst:3997: WARNING: Literal block expected; none found.
-Documentation/sound/kernel-api/writing-an-alsa-driver.rst:4004: WARNING: Literal block expected; none found.
-Documentation/sound/kernel-api/writing-an-alsa-driver.rst:4009: WARNING: Unexpected indentation.
-Documentation/sound/kernel-api/writing-an-alsa-driver.rst:4035: WARNING: Literal block expected; none found.
 
-These are due to indentation of example driver snippets which is outside
-the code block scope.
+On 5/2/2023 4:36 PM, Konrad Dybcio wrote:
+> 
+> 
+> On 1.05.2023 16:34, Krishna Kurapati wrote:
+>> Enable tertiary controller for SA8295P (based on SC8280XP).
+>> Add pinctrl support for usb ports to provide VBUS to connected peripherals.
+>>
+>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>> ---
+>>   arch/arm64/boot/dts/qcom/sa8295p-adp.dts | 47 ++++++++++++++++++++++++
+>>   1 file changed, 47 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sa8295p-adp.dts b/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
+>> index fd253942e5e5..7e6061c43835 100644
+>> --- a/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
+>> +++ b/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
+>> @@ -584,6 +584,19 @@ &usb_1_qmpphy {
+>>   	status = "okay";
+>>   };
+>>   
+>> +&usb_2 {
+>> +	pinctrl-names = "default";
+>> +	pinctrl-0 = <&usb2_en_state>,
+>> +			<&usb3_en_state>,
+>> +			<&usb4_en_state>,
+>> +			<&usb5_en_state>;
+> This is misaligned. Also, please do property-n before property-names.
+> 
+>> +	status = "okay";
+>> +};
+>> +
+>> +&usb_2_dwc3 {
+>> +	dr_mode = "host";
+>> +};
+>> +
+>>   &usb_2_hsphy0 {
+>>   	vdda-pll-supply = <&vreg_l5a>;
+>>   	vdda18-supply = <&vreg_l7g>;
+>> @@ -729,3 +742,37 @@ wake-n-pins {
+>>   		};
+>>   	};
+>>   };
+>> +
+>> +&pmm8540c_gpios {
+>> +	usb2_en_state: usb2-en-state {
+>> +		pins = "gpio9";
+>> +		function = "normal";
+>> +		output-high;
+>> +		power-source = <0>;
+> No drive-strength values?
+> 
+> Konrad
 
-Fix these by indenting code blocks in question to the scope.
+Hi Konrad,
 
-Fixes: 4d421eebe1465d ("ALSA: docs: writing-an-alsa-driver.rst: polishing")
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/linux-doc/202305021822.4U6XOvGf-lkp@intel.com/
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- .../kernel-api/writing-an-alsa-driver.rst     | 22 +++++++++----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+  TBH, I didn't add the drive strength values as things worked out of 
+the box with the current changes (may be the default value of drive 
+strength is sufficient for us).
 
-diff --git a/Documentation/sound/kernel-api/writing-an-alsa-driver.rst b/Documentation/sound/kernel-api/writing-an-alsa-driver.rst
-index c0f97b5e424969..4335c98b3d828f 100644
---- a/Documentation/sound/kernel-api/writing-an-alsa-driver.rst
-+++ b/Documentation/sound/kernel-api/writing-an-alsa-driver.rst
-@@ -3994,21 +3994,21 @@ Driver with A Single Source File
- 
-    Suppose you have a file xyz.c. Add the following two lines::
- 
--  snd-xyz-objs := xyz.o
--  obj-$(CONFIG_SND_XYZ) += snd-xyz.o
-+     snd-xyz-objs := xyz.o
-+     obj-$(CONFIG_SND_XYZ) += snd-xyz.o
- 
- 2. Create the Kconfig entry
- 
-    Add the new entry of Kconfig for your xyz driver::
- 
--  config SND_XYZ
--    tristate "Foobar XYZ"
--    depends on SND
--    select SND_PCM
--    help
--      Say Y here to include support for Foobar XYZ soundcard.
--      To compile this driver as a module, choose M here:
--      the module will be called snd-xyz.
-+     config SND_XYZ
-+       tristate "Foobar XYZ"
-+       depends on SND
-+       select SND_PCM
-+       help
-+         Say Y here to include support for Foobar XYZ soundcard.
-+         To compile this driver as a module, choose M here:
-+         the module will be called snd-xyz.
- 
- The line ``select SND_PCM`` specifies that the driver xyz supports PCM.
- In addition to SND_PCM, the following components are supported for
-@@ -4032,7 +4032,7 @@ located in the new subdirectory, sound/pci/xyz.
- 1. Add a new directory (``sound/pci/xyz``) in ``sound/pci/Makefile``
-    as below::
- 
--  obj-$(CONFIG_SND) += sound/pci/xyz/
-+     obj-$(CONFIG_SND) += sound/pci/xyz/
- 
- 
- 2. Under the directory ``sound/pci/xyz``, create a Makefile::
+Let me know if it is mandatory, I will add it up in the next version.
 
-base-commit: 348551ddaf311c76b01cdcbaf61b6fef06a49144
--- 
-An old man doll... just what I always wanted! - Clara
+Regards,
+Krishna,
 
+>> +	};
+>> +};
+>> +
+>> +&pmm8540e_gpios {
+>> +	usb3_en_state: usb3-en-state {
+>> +		pins = "gpio5";
+>> +		function = "normal";
+>> +		output-high;
+>> +		power-source = <0>;
+>> +	};
+>> +};
+>> +
+>> +&pmm8540g_gpios {
+>> +	usb4_en_state: usb4-en-state {
+>> +		pins = "gpio5";
+>> +		function = "normal";
+>> +		output-high;
+>> +		power-source = <0>;
+>> +	};
+>> +
+>> +	usb5_en_state: usb5-en-state {
+>> +		pins = "gpio9";
+>> +		function = "normal";
+>> +		output-high;
+>> +		power-source = <0>;
+>> +	};
+>> +};
