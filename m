@@ -2,82 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABE8C6F52A8
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 10:05:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F4166F52C0
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 10:10:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbjECIFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 04:05:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59482 "EHLO
+        id S229633AbjECIKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 04:10:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbjECIEv (ORCPT
+        with ESMTP id S230007AbjECIKC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 04:04:51 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F44526C
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 01:03:49 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 9B530240015;
-        Wed,  3 May 2023 08:03:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1683101025;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cWtD5hZ9pO4qfOfqb/gEUugnVCqJ/xBVK6sNPby8CWk=;
-        b=iV00TE+i2AgoYyt8d5LKg/8zuOlIz1ELOS3LA3ydbnFzO1+Fd7Wk/nM7XcIdTVpJ4YQL3D
-        oZlp4DK5kCbzvtPCQSzy08akUthfe3diKIagYIJywxdKAxqieAvJpeCMTGa918dNnhMJuQ
-        PemHM3EJez5nw04UxPvqf6S16lmcDDcA+HiaUpK/9xYwURu9o6SsmLRzoMDsf0UfenjYvw
-        ybmomkP1A9OXuAJlZ2OPHO7y8sbJB9v7w9h9ZdIm2j6JyIMNnI6QvDZit4UmIj86l+cFvo
-        MC2PmVcDrXUgwgdff4xWG5DkwlncDDhGBHoEz/T+gLhLGVrOfUZj3TTHYm/qdg==
-Date:   Wed, 3 May 2023 10:03:42 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
-Cc:     Liang Yang <liang.yang@amlogic.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Yixun Lan <yixun.lan@amlogic.com>, <oxffffaa@gmail.com>,
-        <kernel@sberdevices.ru>, <linux-mtd@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        "yonghui.yu" <yonghui.yu@amlogic.com>
-Subject: Re: [PATCH v1 4/5] mtd: rawnand: meson: clear OOB buffer before
- read
-Message-ID: <20230503100342.63215058@xps-13>
-In-Reply-To: <8996d53c-54ff-6a37-e08b-95cae0629703@sberdevices.ru>
-References: <20230412061700.1492474-1-AVKrasnov@sberdevices.ru>
-        <60fa656e-bda1-1de6-a79e-3e3041cd69a8@sberdevices.ru>
-        <780c0cae-18b6-2652-1c2c-6d398ea60451@amlogic.com>
-        <e7c49f2d-b3c1-8d9b-76fe-c8759b37c7c7@sberdevices.ru>
-        <20230418152505.72fc16da@xps-13>
-        <15a6e415-1489-a81f-fc8f-2372678ad2cb@sberdevices.ru>
-        <ee10bdeb-416c-70f0-d323-7107fe0746e8@amlogic.com>
-        <5e4b395e-bf9d-0123-a0f2-2b378d950b29@sberdevices.ru>
-        <fda1ae91-4bf8-6945-bd0d-b6dabc9cb4bd@sberdevices.ru>
-        <a5010dcf-a8ce-f144-949c-687548cefce7@amlogic.com>
-        <cf27b6b4-a75b-c5a6-32ea-ac20a2984192@sberdevices.ru>
-        <20230502115913.78012d98@xps-13>
-        <2274b432-d1a9-b3cf-4f7b-08c4a4c580b5@sberdevices.ru>
-        <20230502132745.14349770@xps-13>
-        <2b2f5cb4-84f7-65f6-13b2-42f965503023@sberdevices.ru>
-        <20230502141703.29f0bc30@xps-13>
-        <91cb8e19-e782-b847-8d2b-22580c371c34@sberdevices.ru>
-        <20230502150553.65fdeb7f@xps-13>
-        <8996d53c-54ff-6a37-e08b-95cae0629703@sberdevices.ru>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Wed, 3 May 2023 04:10:02 -0400
+Received: from mail-io1-xd4f.google.com (mail-io1-xd4f.google.com [IPv6:2607:f8b0:4864:20::d4f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80CAD198E
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 01:09:51 -0700 (PDT)
+Received: by mail-io1-xd4f.google.com with SMTP id ca18e2360f4ac-76353eb51acso714659939f.0
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 01:09:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683101090; x=1685693090;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4ZYvpj+DpkXfL/hfrzzciWQpe3C04IENNzmwaX3mfQI=;
+        b=E5B+fiSjMdtOsVKWSE/5V5HmnKvWIW8tWwT5CrBzlZcf4RHanccjyA57bCRr/TCR6n
+         vtWhIzjJfEjKis8Yjj61xXjo2Pjgq0xM/bIJcEGITrrv/7rokvEOMk7Oepie/9aWCiWu
+         PkKJnIwgDFPWkd1k2xwZ7xxkjczVt26q42OQv58P3AJyPvlpM5RUAvUMwF1OzguFjVD+
+         43wQg60Fa7PHcx6CCDNcpGC/qdYI38JbvB7+3qY5R6fIZlxoLdLmbsVAYzuqj0YwuV7O
+         JjvbbkpuvcKIRriqbRPxjLTyp4DnGiqHK47ch3MCUu6FXj8Oi6XA2+BPGNYJjKIjQrqp
+         Zjqw==
+X-Gm-Message-State: AC+VfDyawb9aslfYZXt5inAd1ZLXEGnqkKeKOCDF0t2E1fXYn3KGc2N/
+        jLLA/Z2hQ8RtY1CxX7Meg/f3STKEB2MzqPI0F5t8+G8Qa5/L
+X-Google-Smtp-Source: ACHHUZ6a6XZr6ZDE+zKtZBduWApFqx8NZbU9SRZlMUNpo6BPSzZoErFYyEmbwm99zQaPqzp6Aw1WOVq2Z4LErHBqLLV7fcEZCF3X
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+X-Received: by 2002:a6b:ed0f:0:b0:760:9d4c:814 with SMTP id
+ n15-20020a6bed0f000000b007609d4c0814mr9698366iog.4.1683101090746; Wed, 03 May
+ 2023 01:04:50 -0700 (PDT)
+Date:   Wed, 03 May 2023 01:04:50 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a2a1e105fac5829e@google.com>
+Subject: [syzbot] [hfs?] KASAN: slab-use-after-free Read in hfsplus_bnode_put
+From:   syzbot <syzbot+a090513c7f9270b11245@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,180 +54,234 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arseniy,
+Hello,
 
-avkrasnov@sberdevices.ru wrote on Tue, 2 May 2023 19:13:38 +0300:
+syzbot found the following issue on:
 
-> On 02.05.2023 16:05, Miquel Raynal wrote:
-> > Hi Arseniy,
-> >=20
-> > avkrasnov@sberdevices.ru wrote on Tue, 2 May 2023 15:24:09 +0300:
-> >  =20
-> >> On 02.05.2023 15:17, Miquel Raynal wrote: =20
-> >>> Hi Arseniy,
-> >>>
-> >>> Richard, your input is welcome below :-)
-> >>>    =20
-> >>>>>>>>>>> I just checked JFFS2 mount/umount again, here is what i see:
-> >>>>>>>>>>> 0) First attempt to mount JFFS2.
-> >>>>>>>>>>> 1) It writes OOB to page N (i'm using raw write). It is clean=
-marker value 0x85 0x19 0x03 0x20. Mount is done.
-> >>>>>>>>>>> 2) Umount JFFS2. Done.
-> >>>>>>>>>>> 3) Second attempt to mount JFFS2.
-> >>>>>>>>>>> 4) It reads OOB from page N (i'm using raw read). Value is 0x=
-85 0x19 0x03 0x20. Done.
-> >>>>>>>>>>> 5) It reads page N in ECC mode, and i get:
-> >>>>>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0 jffs2: mtd->read(0x100 bytes from N)=
- returned ECC error
-> >>>>>>>>>>> 6) Mount failed.
-> >>>>>>>>>>>
-> >>>>>>>>>>> We already had problem which looks like this on another devic=
-e. Solution was to use OOB area which is
-> >>>>>>>>>>> not covered by ECC for JFFS2 cleanmarkers.         =20
-> >>>>>>>>>
-> >>>>>>>>> ok, so there is not ECC parity bytes and mtd->read() returns EC=
-C error.
-> >>>>>>>>> does it have to use raw write/read on step 1) and 4)?
-> >>>>>>>>>          =20
-> >>>>>>>>
-> >>>>>>>> If i'm using non raw access to OOB, for example write OOB (user =
-bytes) in ECC mode, then
-> >>>>>>>> steps 1) and 4) and 5) passes ok, but write to this page will be=
- impossible (for example JFFS2
-> >>>>>>>> writes to such pages later) - we can't update ECC codes properly=
- without erasing whole page.
-> >>>>>>>> Write operation will be done without problem, but read will trig=
-ger ECC errors due to broken
-> >>>>>>>> ECC codes.
-> >>>>>>>>
-> >>>>>>>> In general problem that we discuss is that in current implementa=
-tion data and OOB conflicts
-> >>>>>>>> with each other by sharing same ECC codes, these ECC codes could=
- be written only once (without
-> >>>>>>>> erasing), while data and OOB has different callbacks to access a=
-nd thus supposed to work
-> >>>>>>>> separately.       =20
-> >>>>>>>
-> >>>>>>> The fact that there might be helpers just for writing OOB areas o=
-r just
-> >>>>>>> in-band areas are optimizations. NAND pages are meant to be writt=
-en a
-> >>>>>>> single time, no matter what portion you write. In some cases, it =
-is
-> >>>>>>> possible to perform subpage writes if the chip supports it. Pages=
- may
-> >>>>>>> be split into several areas which cover a partial in-band area *a=
-nd* a
-> >>>>>>> partial OOB area. If you write into the in-band *or* out-of-band =
-areas
-> >>>>>>> of a given subpage, you *cannot* write the other part later witho=
-ut       =20
-> >>>>>>
-> >>>>>> Thanks for details! So in case of JFFS2 it looks like strange, tha=
-t it tries
-> >>>>>> to write page after writing clean markers to it before? In the old=
- vendor's
-> >>>>>> driver OOB write callback is suppressed by return 0 always and JFF=
-S2 works
-> >>>>>> correctly.     =20
-> >>>>>
-> >>>>> Can you point the code you're mentioning? (both what JFFS2 which lo=
-oks
-> >>>>> strange to you and the old vendor hack)     =20
-> >>>>
-> >>>> Here is version of the old vendor's driver:
-> >>>>
-> >>>> https://github.com/kszaq/linux-amlogic/blob/master_new_amports/drive=
-rs/amlogic/nand/nand/aml_nand.c#L3260
-> >>>>
-> >>>> In my version there is no BUG() there, but it is same driver for the=
- same chip.
-> >>>>
-> >>>> About JFFS2 - i didn't check its source code, but what I can see usi=
-ng printk(), is that it first
-> >>>> tries to write cleanmarker using OOB write callback. Then later it t=
-ries to write to this page, so
-> >>>> may be it is unexpected behaviour of JFFS2?   =20
-> >>>
-> >>> TBH I am not knowledgeable about JFFS2, maybe Richard can help here.
-> >>>
-> >>> Are you sure you flash is recognized by JFFS2 as being a NAND device?
-> >>> Did you enable CONFIG_JFFS2_FS_WRITEBUFFER correctly? Because
-> >>> cleanmarker seem to be discarded when using a NAND device, and
-> >>> recognizing the device as a NAND device requires the above option to =
-be
-> >>> set apparently.   =20
-> >>
-> >> Yes, I have
-> >>
-> >> CONFIG_JFFS2_FS_WRITEBUFFER=3Dy
-> >>
-> >> And i see, that jffs2_mark_erased_block() calls jffs2_cleanmarker_oob(=
-) which checks that we have MTD_NANDFLASH. This
-> >> check is true, so then jffs2_write_nand_cleanmarker() is called and th=
-ere is OOB write in it. So I see opposite thing:
-> >> cleanmarkers are not discarded with NAND device.  =20
-> >=20
-> > Excellent. So when cleanmarker_size =3D=3D 0, it means there is no
-> > cleanmarker. But if it is a NAND device, we write the marker anyway.
-> >=20
-> > Well I guess it used to work on old controllers using a Hamming ECC
-> > engine not protecting any user OOB bytes, so writing the clean markers
-> > would simply not lead to ECC bytes being produced/written. Or it might
-> > have worked as well on controller drivers not enabling the ECC engine
-> > when performing OOB-only writes. It also requires the chip to be old
-> > enough to support multiple writes on the same (sub)page as long as the
-> > written bits do not overlap? =20
->=20
-> Yes, with controller which supports such modes there will be no problem h=
-ere!
-> What i see, is that this controller doesn't support multiple writes to the
-> same page in ECC mode(e.g. it can't update ECC correctly).
+HEAD commit:    22b8cc3e78f5 Merge tag 'x86_mm_for_6.4' of git://git.kerne..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=12b4cda4280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=928de0fc91f6ded8
+dashboard link: https://syzkaller.appspot.com/bug?extid=a090513c7f9270b11245
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
 
-I don't think this is a controller limitation. The NAND chip cannot
-write ECC bytes a first time and then overwrite other ECC bytes, that
-cannot work. The fact that we write ECC bytes in the first place is
-because the ECC engine covers the free OOB bytes used by JFFS2 to write
-its cleanmarkers.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-> So in v2 i've added
-> patch which moves OOB out of ECC area, thus JFFS2 driver will work correc=
-tly.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/2b80fd711869/disk-22b8cc3e.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/5aa32673c503/vmlinux-22b8cc3e.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/381e275c15f9/bzImage-22b8cc3e.xz
 
-I am sorry but the above sentence is not clear to me. I believe you
-meant the free OOB bytes are moved outside of the area protected by the
-ECC engine. In this case I guess it should be fine.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+a090513c7f9270b11245@syzkaller.appspotmail.com
 
-> So for me main question here is:
->=20
-> How JFFS2 should work with controllers where we can't update data and OOB
-> independently? Driver of this filesystem knows nothing about this feature=
-s of
-> the controller.
->=20
-> Or JFFS2 works incorrectly in my case when it tries to call write page ca=
-llback
-> after calling write OOB callback (IIUC it is better to ask Richard as You=
- mentioned above).
->=20
-> Or may be it is better to suppress OOB write callback (or set it to NULL)=
- in this
-> driver as in vendor's driver?
+hfsplus: inconsistency in B*Tree (1,0,1,0,2)
+hfsplus: xattr searching failed
+hfsplus: inconsistency in B*Tree (1,0,1,0,2)
+==================================================================
+BUG: KASAN: slab-use-after-free in hfsplus_bnode_put+0x48/0x6d0 fs/hfsplus/bnode.c:612
+Read of size 8 at addr ffff8880173da100 by task syz-executor.3/8306
 
-I would assume using the unprotected free OOB bytes to store the
-cleanmarkers should work. But that's a bit fragile and very filesystem
-oriented. I don't like this much. But on the other side JFFS2 is
-legacy, you should use UBI (which does not play with OOB areas) :-)
+CPU: 1 PID: 8306 Comm: syz-executor.3 Not tainted 6.3.0-syzkaller-10656-g22b8cc3e78f5 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:351 [inline]
+ print_report+0x163/0x540 mm/kasan/report.c:462
+ kasan_report+0x176/0x1b0 mm/kasan/report.c:572
+ hfsplus_bnode_put+0x48/0x6d0 fs/hfsplus/bnode.c:612
+ hfsplus_brec_find+0x421/0x570 fs/hfsplus/bfind.c:214
+ __hfsplus_getxattr+0x364/0xb10 fs/hfsplus/xattr.c:522
+ hfsplus_getxattr+0x9c/0xd0 fs/hfsplus/xattr.c:590
+ __vfs_getxattr+0x436/0x470 fs/xattr.c:424
+ smk_fetch+0xb1/0x140 security/smack/smack_lsm.c:295
+ smack_d_instantiate+0x868/0xb40 security/smack/smack_lsm.c:3512
+ security_d_instantiate+0x9b/0xf0 security/security.c:3760
+ d_instantiate+0x55/0x90 fs/dcache.c:2034
+ hfsplus_instantiate fs/hfsplus/dir.c:26 [inline]
+ hfsplus_mknod+0x250/0x2a0 fs/hfsplus/dir.c:507
+ lookup_open fs/namei.c:3416 [inline]
+ open_last_lookups fs/namei.c:3484 [inline]
+ path_openat+0x13df/0x3170 fs/namei.c:3712
+ do_filp_open+0x234/0x490 fs/namei.c:3742
+ do_sys_openat2+0x13f/0x500 fs/open.c:1356
+ do_sys_open fs/open.c:1372 [inline]
+ __do_sys_openat fs/open.c:1388 [inline]
+ __se_sys_openat fs/open.c:1383 [inline]
+ __x64_sys_openat+0x247/0x290 fs/open.c:1383
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f0fa6c8c169
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f0fa7a08168 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
+RAX: ffffffffffffffda RBX: 00007f0fa6dabf80 RCX: 00007f0fa6c8c169
+RDX: 000000000000275a RSI: 0000000020000000 RDI: ffffffffffffff9c
+RBP: 00007f0fa6ce7ca1 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffe31f70cef R14: 00007f0fa7a08300 R15: 0000000000022000
+ </TASK>
 
-Thanks,
-Miqu=C3=A8l
+Allocated by task 5392:
+ kasan_save_stack mm/kasan/common.c:45 [inline]
+ kasan_set_track+0x4f/0x70 mm/kasan/common.c:52
+ ____kasan_kmalloc mm/kasan/common.c:374 [inline]
+ __kasan_kmalloc+0x98/0xb0 mm/kasan/common.c:383
+ kasan_kmalloc include/linux/kasan.h:196 [inline]
+ __do_kmalloc_node mm/slab_common.c:966 [inline]
+ __kmalloc+0xb9/0x230 mm/slab_common.c:979
+ kmalloc include/linux/slab.h:563 [inline]
+ kzalloc include/linux/slab.h:680 [inline]
+ __hfs_bnode_create+0xf8/0x770 fs/hfsplus/bnode.c:409
+ hfsplus_bnode_find+0x237/0x10c0 fs/hfsplus/bnode.c:486
+ hfsplus_btree_write+0x24/0x4c0 fs/hfsplus/btree.c:289
+ hfsplus_system_write_inode fs/hfsplus/super.c:136 [inline]
+ hfsplus_write_inode+0x4c0/0x5e0 fs/hfsplus/super.c:162
+ write_inode fs/fs-writeback.c:1456 [inline]
+ __writeback_single_inode+0x69b/0xfa0 fs/fs-writeback.c:1668
+ writeback_sb_inodes+0x8e3/0x11d0 fs/fs-writeback.c:1894
+ __writeback_inodes_wb+0x11b/0x260 fs/fs-writeback.c:1965
+ wb_writeback+0x46c/0xc70 fs/fs-writeback.c:2070
+ wb_check_start_all fs/fs-writeback.c:2192 [inline]
+ wb_do_writeback fs/fs-writeback.c:2218 [inline]
+ wb_workfn+0x98f/0xff0 fs/fs-writeback.c:2251
+ process_one_work+0x8a0/0x10e0 kernel/workqueue.c:2390
+ worker_thread+0xa63/0x1210 kernel/workqueue.c:2537
+ kthread+0x2b8/0x350 kernel/kthread.c:379
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
 
->=20
-> Thanks, Arseniy
->=20
-> >=20
-> > Perhaps that's what the hack in the old driver is for. But that's
-> > IMHO broken in case of unexpected reboot :-)
-> >=20
-> > Miqu=C3=A8l =20
+Freed by task 8315:
+ kasan_save_stack mm/kasan/common.c:45 [inline]
+ kasan_set_track+0x4f/0x70 mm/kasan/common.c:52
+ kasan_save_free_info+0x2b/0x40 mm/kasan/generic.c:521
+ ____kasan_slab_free+0xd6/0x120 mm/kasan/common.c:236
+ kasan_slab_free include/linux/kasan.h:162 [inline]
+ slab_free_hook mm/slub.c:1781 [inline]
+ slab_free_freelist_hook mm/slub.c:1807 [inline]
+ slab_free mm/slub.c:3786 [inline]
+ __kmem_cache_free+0x264/0x3c0 mm/slub.c:3799
+ hfsplus_release_folio+0x45d/0x550 fs/hfsplus/inode.c:103
+ shrink_folio_list+0x25fa/0x8b80 mm/vmscan.c:2066
+ shrink_inactive_list mm/vmscan.c:2592 [inline]
+ shrink_list mm/vmscan.c:2833 [inline]
+ shrink_lruvec+0x16e6/0x2d30 mm/vmscan.c:6269
+ shrink_node_memcgs mm/vmscan.c:6456 [inline]
+ shrink_node+0x115c/0x2790 mm/vmscan.c:6491
+ shrink_zones mm/vmscan.c:6726 [inline]
+ do_try_to_free_pages+0x67e/0x1900 mm/vmscan.c:6788
+ try_to_free_mem_cgroup_pages+0x455/0xa50 mm/vmscan.c:7103
+ try_charge_memcg+0x5de/0x16d0 mm/memcontrol.c:2724
+ try_charge mm/memcontrol.c:2866 [inline]
+ mem_cgroup_charge_skmem+0xad/0x2b0 mm/memcontrol.c:7351
+ sock_reserve_memory+0x101/0x610 net/core/sock.c:1025
+ sk_setsockopt+0xc8e/0x3430 net/core/sock.c:1520
+ __sys_setsockopt+0x47b/0x980 net/socket.c:2269
+ __do_sys_setsockopt net/socket.c:2284 [inline]
+ __se_sys_setsockopt net/socket.c:2281 [inline]
+ __x64_sys_setsockopt+0xb5/0xd0 net/socket.c:2281
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
+The buggy address belongs to the object at ffff8880173da100
+ which belongs to the cache kmalloc-192 of size 192
+The buggy address is located 0 bytes inside of
+ freed 192-byte region [ffff8880173da100, ffff8880173da1c0)
+
+The buggy address belongs to the physical page:
+page:ffffea00005cf680 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff8880173da600 pfn:0x173da
+flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
+page_type: 0xffffffff()
+raw: 00fff00000000200 ffff888012441a00 ffffea0000af6a00 dead000000000002
+raw: ffff8880173da600 000000008010000f 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x112cc0(GFP_USER|__GFP_NOWARN|__GFP_NORETRY), pid 7799, tgid 7792 (syz-executor.3), ts 372538230491, free_ts 372528219086
+ set_page_owner include/linux/page_owner.h:31 [inline]
+ post_alloc_hook+0x1e6/0x210 mm/page_alloc.c:1722
+ prep_new_page mm/page_alloc.c:1729 [inline]
+ get_page_from_freelist+0x321c/0x33a0 mm/page_alloc.c:3493
+ __alloc_pages+0x255/0x670 mm/page_alloc.c:4759
+ __alloc_pages_node include/linux/gfp.h:237 [inline]
+ alloc_slab_page+0x59/0x160 mm/slub.c:1853
+ allocate_slab mm/slub.c:1998 [inline]
+ new_slab+0x84/0x2f0 mm/slub.c:2051
+ ___slab_alloc+0xa85/0x10a0 mm/slub.c:3192
+ __slab_alloc mm/slub.c:3291 [inline]
+ __slab_alloc_node mm/slub.c:3344 [inline]
+ slab_alloc_node mm/slub.c:3441 [inline]
+ __kmem_cache_alloc_node+0x1b8/0x290 mm/slub.c:3490
+ __do_kmalloc_node mm/slab_common.c:965 [inline]
+ __kmalloc_node+0xa7/0x230 mm/slab_common.c:973
+ kmalloc_array_node include/linux/slab.h:657 [inline]
+ kcalloc_node include/linux/slab.h:662 [inline]
+ memcg_alloc_slab_cgroups+0x81/0x120 mm/memcontrol.c:2928
+ account_slab mm/slab.h:597 [inline]
+ allocate_slab mm/slub.c:2016 [inline]
+ new_slab+0xc0/0x2f0 mm/slub.c:2051
+ ___slab_alloc+0xa85/0x10a0 mm/slub.c:3192
+ __slab_alloc mm/slub.c:3291 [inline]
+ __slab_alloc_node mm/slub.c:3344 [inline]
+ slab_alloc_node mm/slub.c:3441 [inline]
+ slab_alloc mm/slub.c:3459 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3466 [inline]
+ kmem_cache_alloc_lru+0x1b9/0x2e0 mm/slub.c:3482
+ __d_alloc+0x31/0x710 fs/dcache.c:1769
+ d_alloc fs/dcache.c:1849 [inline]
+ d_alloc_parallel+0xce/0x13a0 fs/dcache.c:2638
+ lookup_open fs/namei.c:3341 [inline]
+ open_last_lookups fs/namei.c:3484 [inline]
+ path_openat+0x90e/0x3170 fs/namei.c:3712
+ do_filp_open+0x234/0x490 fs/namei.c:3742
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1302 [inline]
+ free_unref_page_prepare+0x903/0xa30 mm/page_alloc.c:2555
+ free_unref_page+0x37/0x3f0 mm/page_alloc.c:2650
+ vfree+0x186/0x2e0 mm/vmalloc.c:2798
+ copy_entries_to_user net/ipv6/netfilter/ip6_tables.c:882 [inline]
+ get_entries net/ipv6/netfilter/ip6_tables.c:1039 [inline]
+ do_ip6t_get_ctl+0x11f7/0x18d0 net/ipv6/netfilter/ip6_tables.c:1669
+ nf_getsockopt+0x292/0x2c0 net/netfilter/nf_sockopt.c:116
+ ipv6_getsockopt+0x25d/0x380 net/ipv6/ipv6_sockglue.c:1500
+ tcp_getsockopt+0x160/0x1c0 net/ipv4/tcp.c:4410
+ __sys_getsockopt+0x2b6/0x5e0 net/socket.c:2317
+ __do_sys_getsockopt net/socket.c:2332 [inline]
+ __se_sys_getsockopt net/socket.c:2329 [inline]
+ __x64_sys_getsockopt+0xb5/0xd0 net/socket.c:2329
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Memory state around the buggy address:
+ ffff8880173da000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff8880173da080: 00 00 00 00 00 fc fc fc fc fc fc fc fc fc fc fc
+>ffff8880173da100: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                   ^
+ ffff8880173da180: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
+ ffff8880173da200: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
