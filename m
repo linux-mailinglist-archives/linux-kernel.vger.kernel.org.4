@@ -2,60 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C41216F4FEF
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 08:08:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 139786F4FF1
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 08:09:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbjECGIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 02:08:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33446 "EHLO
+        id S229624AbjECGJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 02:09:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbjECGIQ (ORCPT
+        with ESMTP id S229556AbjECGJE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 02:08:16 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F422680
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 23:08:15 -0700 (PDT)
+        Wed, 3 May 2023 02:09:04 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5082C2700;
+        Tue,  2 May 2023 23:09:03 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 0F9B7222C0;
-        Wed,  3 May 2023 06:08:14 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 0EEA61FFD8;
+        Wed,  3 May 2023 06:09:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1683094094; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1683094142; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=qpbCSszVr46DriBA7/WJQ7lj+XHfHPDBGRbf2/7ktVE=;
-        b=lM412DW6Frf8JnO9H/P1wXkkGe837O06CzHtfgyTmQNeUV8f3FFffg9OgESoimKEQvLJ1g
-        6f6yK80WDyeBDYB0MGsGtORA2tYKSjz3hdHJSLP3mlt8xLXQgmZ6vsi8PD5FWWHHYIF8SF
-        YCnYF6dtLxjyIAKKY19fyZkM5Iizi40=
+        bh=+t49PqzNz0xM/24vPeyfoW+k2vwxVL++9FCvg5c33FM=;
+        b=GtK0AlUp22O8tQ30XoNOh0ITR251rdWnN7/BwCI8DHmSg/0iIdcFdPtmTaCQxXOmFmMEUS
+        dPBvUkv058Y5gnCSMR/XMGCm8CmE1dznZ96hAS1X8O8Ri4gPeDj1MMjWVXCh6bO6U7dULh
+        sNkRrpz70L4DVeetXVYKVkN9yqZuPfk=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1683094094;
+        s=susede2_ed25519; t=1683094142;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=qpbCSszVr46DriBA7/WJQ7lj+XHfHPDBGRbf2/7ktVE=;
-        b=c2v7kafuMkO5hc8n85vXXla6Tk3AqZAkOR9HiTRMugEVh2qaIHbTkIdwFbOaymgy6TIFXG
-        AzGExnRA0bGlUQAg==
+        bh=+t49PqzNz0xM/24vPeyfoW+k2vwxVL++9FCvg5c33FM=;
+        b=onBur/FKJUp/7Ddlghcp9lxSTWbqnP5Ups4+6hQriBvywfQ84siBfr8dFU3E1otYMsHI6D
+        MtMibOV1FDf5ZHDw==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DE25113584;
-        Wed,  3 May 2023 06:08:13 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CB68E13584;
+        Wed,  3 May 2023 06:09:01 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id mK9VNU36UWR5JgAAMHmgww
-        (envelope-from <tiwai@suse.de>); Wed, 03 May 2023 06:08:13 +0000
-Date:   Wed, 03 May 2023 08:08:13 +0200
-Message-ID: <87h6sune0i.wl-tiwai@suse.de>
+        id OPqlMH36UWTPJgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 03 May 2023 06:09:01 +0000
+Date:   Wed, 03 May 2023 08:09:01 +0200
+Message-ID: <87fs8endz6.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
-To:     "Luke D. Jones" <luke@ljones.dev>
-Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        perex@perex.cz, tiwai@suse.com
-Subject: Re: [PATCH] ALSA: hda/realtek: Add quirk for 2nd ASUS GU603
-In-Reply-To: <20230503035035.254346-1-luke@ljones.dev>
-References: <20230503035035.254346-1-luke@ljones.dev>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Linux ALSA Subsystem Development <alsa-devel@alsa-project.org>,
+        Linux Documentation <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Oswald Buddenhagen <oswald.buddenhagen@gmx.de>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Takashi Sakamoto <o-takashi@sakamocchi.jp>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] ALSA: docs: Fix code block indentation in ALSA driver example
+In-Reply-To: <20230503035416.62722-1-bagasdotme@gmail.com>
+References: <20230503035416.62722-1-bagasdotme@gmail.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
@@ -69,33 +77,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 03 May 2023 05:50:35 +0200,
-Luke D. Jones wrote:
+On Wed, 03 May 2023 05:54:16 +0200,
+Bagas Sanjaya wrote:
 > 
-> Add quirk for GU603 with 0x1c62 variant of codec.
+> Sphinx reports htmldocs warnings:
 > 
-> Signed-off-by: Luke D. Jones <luke@ljones.dev>
-> ---
->  sound/pci/hda/patch_realtek.c | 1 +
->  1 file changed, 1 insertion(+)
+> Documentation/sound/kernel-api/writing-an-alsa-driver.rst:3997: WARNING: Literal block expected; none found.
+> Documentation/sound/kernel-api/writing-an-alsa-driver.rst:4004: WARNING: Literal block expected; none found.
+> Documentation/sound/kernel-api/writing-an-alsa-driver.rst:4009: WARNING: Unexpected indentation.
+> Documentation/sound/kernel-api/writing-an-alsa-driver.rst:4035: WARNING: Literal block expected; none found.
 > 
-> diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-> index 3b9f077a227f..4a585050edc3 100644
-> --- a/sound/pci/hda/patch_realtek.c
-> +++ b/sound/pci/hda/patch_realtek.c
-> @@ -9501,6 +9501,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
->  	SND_PCI_QUIRK(0x1043, 0x1517, "Asus Zenbook UX31A", ALC269VB_FIXUP_ASUS_ZENBOOK_UX31A),
->  	SND_PCI_QUIRK(0x1043, 0x1662, "ASUS GV301QH", ALC294_FIXUP_ASUS_DUAL_SPK),
->  	SND_PCI_QUIRK(0x1043, 0x16b2, "ASUS GU603", ALC289_FIXUP_ASUS_GA401),
-> +	SND_PCI_QUIRK(0x1043, 0x1c62, "ASUS GU603", ALC289_FIXUP_ASUS_GA401),
->  	SND_PCI_QUIRK(0x1043, 0x16e3, "ASUS UX50", ALC269_FIXUP_STEREO_DMIC),
->  	SND_PCI_QUIRK(0x1043, 0x1740, "ASUS UX430UA", ALC295_FIXUP_ASUS_DACS),
->  	SND_PCI_QUIRK(0x1043, 0x17d1, "ASUS UX431FL", ALC294_FIXUP_ASUS_DUAL_SPK),
+> These are due to indentation of example driver snippets which is outside
+> the code block scope.
+> 
+> Fix these by indenting code blocks in question to the scope.
+> 
+> Fixes: 4d421eebe1465d ("ALSA: docs: writing-an-alsa-driver.rst: polishing")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/linux-doc/202305021822.4U6XOvGf-lkp@intel.com/
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-Could you try to put the new entry at the right place?
-The table is sorted in the PCI SSID order.
+Thanks, applied.
 
-
-thanks,
 
 Takashi
