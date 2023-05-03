@@ -2,103 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5A646F5B67
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 17:39:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AA446F5B6E
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 17:43:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230466AbjECPjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 11:39:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59654 "EHLO
+        id S230187AbjECPnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 11:43:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230316AbjECPjv (ORCPT
+        with ESMTP id S229626AbjECPnM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 11:39:51 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6D76EB8
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 08:39:50 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id e9e14a558f8ab-32b625939d4so1249485ab.1
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 08:39:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1683128390; x=1685720390;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VVVLdXvIfrw5/3NYijIBIn8HUk/59pymTlkCnyX4gZk=;
-        b=hhwOQ1IRNoMXnJdreafhurd7FFlfWlG7ggNpHvGfTwl86HQaxurUdjbTsPCn5g21J1
-         WZJUWtptO9CY6OjNiJxnwf2pAtUpeg45ezOSpKhFaDLQj/DAo03745KRyQ2F+QyJoIC9
-         4naFiUVk5u0JT3Ssp6HMtEKLywdZYoB54T3elj56qZ3er+ZZv4fyn9T/mJBkQ/dPt/tY
-         tE/fUiEnL/YH6Y0TeFqQkPJI5ZEUkgUzquCEMsLcJOOtiES45axH7nEo7sWfo1YQQFRC
-         eYhAld8YCZZzXDAqT3Q+RvaF8Lp4Cojc9jUdaquf4cvNbFV7wjzl8SMIGxY1Gjl7gFWK
-         3YmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683128390; x=1685720390;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VVVLdXvIfrw5/3NYijIBIn8HUk/59pymTlkCnyX4gZk=;
-        b=agTTvs6ihsM9fL1Wy+yyv6iSObSGLLoFbW2Yq42nerfMgwFraPmPwl/Y645rnG18Yr
-         IDqQgvh+VzDQrd/kF61N+vG6lAPswy3nFHRhYl7UoZqcrtbEWkGhPeo5Dbsu07uZOl5C
-         Pi9Kt6JvT0uJLS5emO7E2GCdXvuqBavpXKdqfglFRFjVrwG4OWAqyFlh3C1CgppjxI79
-         bo1X/3d9nVmZdZkmOANqzmtQEBEPolMyW1v/BTgMZBj3wfxCpnXKY4/yQ9TUMKhUBH1T
-         DZkQ94EyJaZYm+0lU5IECV2zKh/nm9p9bCEEjLGkiFDCIyWJe1I1XUFh7JYL3pAbwAke
-         aN7g==
-X-Gm-Message-State: AC+VfDwTIiiKvCyMP4oV+yfzIU/+Q1Fpu/DqqJQyds5eKJFro0hGAtjK
-        V856F4GIHhQmTo3+ZCCCzEbGlS+B89Sf+p8D+rk=
-X-Google-Smtp-Source: ACHHUZ5d4YwH96Tpn6LfKIxiZcp69KtZgmoa3BJZVXRNO88gwL/jKwNV6SF+0qAXwiCYWhzG65q3sg==
-X-Received: by 2002:a92:7402:0:b0:330:a1eb:c5a4 with SMTP id p2-20020a927402000000b00330a1ebc5a4mr4047857ilc.1.1683128389782;
-        Wed, 03 May 2023 08:39:49 -0700 (PDT)
-Received: from [127.0.0.1] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id cd23-20020a0566381a1700b00406147dad72sm10232284jab.104.2023.05.03.08.39.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 May 2023 08:39:49 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     =?utf-8?q?Christoph_B=C3=B6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>
-Cc:     drbd-dev@lists.linbit.com, linux-kernel@vger.kernel.org,
-        Lars Ellenberg <lars.ellenberg@linbit.com>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        linux-block@vger.kernel.org, Christoph Hellwig <hch@infradead.org>,
-        stable@vger.kernel.org, Thomas Voegtle <tv@lio96.de>
-In-Reply-To: <20230503121937.17232-1-christoph.boehmwalder@linbit.com>
-References: <20230503121937.17232-1-christoph.boehmwalder@linbit.com>
-Subject: Re: [PATCH] drbd: correctly submit flush bio on barrier
-Message-Id: <168312838868.941317.975898202413701616.b4-ty@kernel.dk>
-Date:   Wed, 03 May 2023 09:39:48 -0600
+        Wed, 3 May 2023 11:43:12 -0400
+Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2118.outbound.protection.outlook.com [40.107.241.118])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC9B5BAE
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 08:43:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WEHY4oPnW9UR6hWT/YX5w9oPcfMJM59t/HHYurlfHkGFL5e1EksNdMrYpbrwEAweJ2AHp/2nno3gzEkec9hHkkm0ieDcXP/FD8JAi2e0PFvPdw2PQtfEbIh3mwZAOMi8K3V5YLKux5GVmXvHU6L8st4cflo/DhMz8VXEq4yrJ9s3UgmkLIDV5y/PPiae2ym7uVPwSnd7OSLPsHMFOF9hbigltPYhUxbrg220n6ibikK2Xdv1msB1wY8MT8lH7bdyjoByNypMxRZifoo5XiKPqeKAIxL/1vGDqmTRmx6FuH43qIeio9pPl5uGYze/0Psfh2Kopjf1xqpx7HuDEHgDNQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=aiiUY+uFCTE+qgX2aUEtApf/tNYfrWa9lnIP3deViGw=;
+ b=Rc7GPSHFVZofTLKTSyfmZgJasE9TDDfAmd1mNxrtc93Img4sObue5jBkYOrkESFSutoZIFvwchCBYRjfTG6ZjpBQqQdFT67iZvsk4uFdRw9vSkQTwPzOdpHs2zNG0mNGdDqNNeSu3otNPIhsgv87pFIsPPFpUjGAO9A9iJXr+2EtqcX0ENtn8lYA3846Sn7PIGfGZqsD58rcLpW6nJTB/Czg+9aDq+pxSs0/Cbylq7bs39yz2nMKoIO4TGg8iAq2uY3yHTeKrZch1ChMAOJHOWEvjRg+rODRBrmftRAK6sibCKkJFMdqBPFOSd8Gmq7cy4s7JBBYwUW8Hb1ek6ucFA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=kontron.de; dmarc=pass action=none header.from=kontron.de;
+ dkim=pass header.d=kontron.de; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mysnt.onmicrosoft.com;
+ s=selector2-mysnt-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aiiUY+uFCTE+qgX2aUEtApf/tNYfrWa9lnIP3deViGw=;
+ b=F2MnVaVsV4wL3/eRWkUOlQ2Wkrw5BeKy2nIOR2FxABReZCMCbfxYlUMoF+RHn2373j/NEC9K5FwAyHYCSjOvzV38Jgx5EpxBy7v8AvSFvHcg5Du9MS2OJoCibcRKDmdQId6kme4t6Ha5b2DEcjPIizRuVBbw72R9Zl+Q1f3G7wU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=kontron.de;
+Received: from PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:263::10)
+ by VI1PR10MB3646.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:800:138::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.22; Wed, 3 May
+ 2023 15:43:08 +0000
+Received: from PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::e6fd:d174:5710:fb3a]) by PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::e6fd:d174:5710:fb3a%2]) with mapi id 15.20.6340.031; Wed, 3 May 2023
+ 15:43:08 +0000
+Message-ID: <d7d435be-e178-2666-f83e-af3b6cc37137@kontron.de>
+Date:   Wed, 3 May 2023 17:43:05 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH V3 6/7] drm: bridge: samsung-dsim: Support non-burst mode
+Content-Language: en-US, de-DE
+To:     Adam Ford <aford173@gmail.com>, dri-devel@lists.freedesktop.org
+Cc:     marex@denx.de, Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Jonas Karlman <jonas@kwiboo.se>, aford@beaconembedded.com,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Jagan Teki <jagan@amarulasolutions.com>
+References: <20230502010759.17282-1-aford173@gmail.com>
+ <20230502010759.17282-7-aford173@gmail.com>
+From:   Frieder Schrempf <frieder.schrempf@kontron.de>
+In-Reply-To: <20230502010759.17282-7-aford173@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BE0P281CA0021.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:b10:14::8) To PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:102:263::10)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.13-dev-00303
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PA4PR10MB5681:EE_|VI1PR10MB3646:EE_
+X-MS-Office365-Filtering-Correlation-Id: 02da4c02-30f9-401e-55f9-08db4bed17a1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: JfGSM/sr0BDz7mhFqQz0ythG1oW6LquxYyPUBuv01lKlBByq4QXLvW9xOhTojejtUcEMUqIdnjldQwHh8mVNtjq5x7FqpHSsJkPrtCWdgLqwYhkz7KsTHbQKRp+fhzZR8D9/eIrxo5uFGm1gwT9MgMvI4vcRPELdAn+Oe00ka0gVzZqmHH/8SNxw3XKpvJYaJuXHT90lPC7waZrbUGv3/2IjivifMDjEbdlqdtOEjJVnM4Zr7fUpoW7aB9GMgz+PUIcHpkWoMt/KrY3A3cftH4SvhQlukcIWUKklPgZVwdJjcseNaOc2TFUnrxjMqRUxz1bu9nV3WP3bdBhtLtP5skqlarRLpz4AaOPNNzi6GU0jsWy2vYj1PiTReDDsePlPN2szYFPQVc+TOlSXl9XBEtb98453rkGWyswUM0PrO53mt34321DgaA3aJ+IxkaSOEZ4HkJAvJeeR98XNjWblSvlwzKo27VRy1Iwd6IZKLwrPL3cfGuuDkMhGP5+HH4QEt0CxXHnn45JsPqFCjqYOSPGdUzb6x4MjJJgipYnyUYayCrtXui2dGbp7BsCMq+5+JsQXOsAtaz3tvfg6mX+n/byPCShdCiiIy5f4rsFmulP1oO2kmIB5YtZF4GU12A6x+Vy8Xa+NvpMN3joRUNTkaQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(136003)(346002)(396003)(366004)(451199021)(31686004)(2906002)(4744005)(5660300002)(44832011)(7416002)(36756003)(8676002)(8936002)(41300700001)(66476007)(66556008)(66946007)(86362001)(31696002)(6666004)(54906003)(4326008)(478600001)(316002)(6486002)(38100700002)(186003)(53546011)(2616005)(83380400001)(26005)(6506007)(6512007)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dU82T2kxMUhraFB5dWNSakNUUncyK2Z1aHlZMFNmMnNQYUdzSjZ5N2VzeEI1?=
+ =?utf-8?B?bmE5UmY5eU9BVzFOQ1dNa3djcXhXK25OTmpOTDJzeTJ6UUwzU0xUUEhGOXV0?=
+ =?utf-8?B?T21PUk52Tk9UNWxsbU8vMmJtSjVWWmhMS3hHZzRiM1FOeGNSZjNDNFdIUWNP?=
+ =?utf-8?B?V1hZREJjVnFZUlBBa0JXNm4yR3ZtZ2p4MkdaajhXV2FoNXM0T1VJWXJ0bkNn?=
+ =?utf-8?B?cSt5MkVWRFphNjBEWkFjR1dFcHNEcWwvOU5peWNSaTY3elRxcVNjd2Vlamc3?=
+ =?utf-8?B?R0VlKzY2UGdMLy9ZeEVyNzdZbVpBcGtnRXIzRkxhZWJFczc5Rmo5UlhOa252?=
+ =?utf-8?B?eXErcllqWjN0V21SOXZCZ09HZDllUk53OXlxbEtXRTRGS1NaQzhwOTZVajN2?=
+ =?utf-8?B?eUZiRTAyRXNTU1gzanBrTmRZTUNmVVNMT09LNGpzc3pQVjRxc1drdHR0dUVR?=
+ =?utf-8?B?M1VsS01DRTFHR094OUJBcEVXeE5aM3UxU0hwU0tyNTlXN0llSzdldVhpYzZO?=
+ =?utf-8?B?a1UzM2tVdlFsUmMwM0llMkllUG0rbTFFMnhyNzFSWDNKVkthczlQUERvSGg1?=
+ =?utf-8?B?clRzeW90cU9yblZ2emdSeFMzTElpOU9Ddyt5Q0Z0RUZZY2srU1BTZit3SlhR?=
+ =?utf-8?B?ZUs1NWZGVWU0MWM2TUpzU0ZSOTlQcEJVUjBxSFNKN1lrSFZXcGFXTVArVmZl?=
+ =?utf-8?B?LzBVNXRLL05qL0hTK2lJM0JIbGN5ZlVBY2QvV0hsVGk2QzBGTmd2Sk9lWlpY?=
+ =?utf-8?B?MGo0UVZDbzdPU0t0a0czQnlVTkNRUGxTSjhKY0N1UlpvTGRVaW5STExYQkln?=
+ =?utf-8?B?aWpUNDBBaGFTeFhHL1BwZllqM3ZHdkI2L0hEbU11TEJJUFZHMm0zUDVsSlpj?=
+ =?utf-8?B?ZnlRc1N5czhhRm1TUHV0MUNIRjZyTlU0NkQ4MHVjano5WmpWcTRxV3lXWDF1?=
+ =?utf-8?B?OXRxNGhGYlZaNElud21Scm42Y3ZnVHlpVTRzY21XejBQZU9uUDhyd1ZpUWE0?=
+ =?utf-8?B?Y0VERUpDNzhRRTh0aGRVODMzaHpjWm85NXdBaDE0TnFsQlNYWjdHb1JSRDE4?=
+ =?utf-8?B?cnFCREVnRTFjR3A5bHREbjdpZ2g5Z1B5UTlCK1J2RE1Ba1NxaVBobUwwcDVy?=
+ =?utf-8?B?SkszUFluMWM0dm8rMFplUldtOEM5TXdrQldlU3lrSC9JVi81dzlURm5FZWZN?=
+ =?utf-8?B?ZHY0eXJvQStmcit6K0s5MDB3OXFia1FrNEw1QTNiYVNiakxGNmRPdm5LTXNw?=
+ =?utf-8?B?Qnd1NnRXN0ZLdWFhNjVSK3JSK1JMbGZIakRzbjlOQ0tmcTZMNmxJdlYwZDFE?=
+ =?utf-8?B?aEtaQ3FBaGFlL2d3ZW43WERHcHFObWl5TkxFUlNtWUx3SklYM2dJcXNFRVdr?=
+ =?utf-8?B?UlMrUmRZRGYwaHl5aDFpSHlXNHhGWmhwbjhqdzh5ZWREeGd3S1F3a2lKUU5Q?=
+ =?utf-8?B?YjFWWVl4U2VKQVBUb1diMzl6TDdrdWZQeG5sVGtETHpLWGlSUytiUWwxWE1N?=
+ =?utf-8?B?dG5jM0NiQ1UxSHBLcUhSWXFwamRRcjBKOEJQTHBSbWJYOCtBWVVDRFkzVEpD?=
+ =?utf-8?B?dTNFQnFpMmdub0djQTJ2QmJCcE0xR0NnWEQ4U2RhdXZWMW5CNUxPWWNETGtB?=
+ =?utf-8?B?b1dYR1BheDNPQTd2SWd2VmFKamlrYkNPTVpMWXdDVzdnU2x2aFNaYmI5UTVi?=
+ =?utf-8?B?WStTY1RhWXJCbmFhbDUySjZjWHpyOVVNdk9hZGorT1VDS3ovZzVEVC80QTNE?=
+ =?utf-8?B?cy8zTXcrdjh4ZEFqdStBTDNuUGpUSUxVcjljMG5QdVlkZ0VUNXp4N09nYXlL?=
+ =?utf-8?B?b1NFMDNocE52QnFkb0E5bkIrOEZqaUJBTEJzbHREalM0b29oVG1naS9XYVpX?=
+ =?utf-8?B?dXFvQ0dYV2FhRUJraEdhZGRzbmxjVytYSmdVQmcrekxYSmlTMnhqcFVTV0Fw?=
+ =?utf-8?B?MjZyZHJ1SXdZRHdlb1VOR3NzZi9pMlB1ZjZlTlBnY2FQdjFqcFRsbFNIT0Jw?=
+ =?utf-8?B?dDQvbzRzRFZsUnptekxzVGp3NVM4MTFESHhOcmcyWEx5QzFCVlZtQnBWcUpx?=
+ =?utf-8?B?R25taklJb0ZlWXRjM3dnSzUrOEo0UU1pcEZ4MmFoQ0VtejZnTEUvQmk4ZHN3?=
+ =?utf-8?B?SXMrVm5LWW94ZWdlRjgxVWxNTERtT3d4WWJ3RE41bmlUQk5FeVhFMW44blJr?=
+ =?utf-8?B?NHc9PQ==?=
+X-OriginatorOrg: kontron.de
+X-MS-Exchange-CrossTenant-Network-Message-Id: 02da4c02-30f9-401e-55f9-08db4bed17a1
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 May 2023 15:43:08.0323
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8c9d3c97-3fd9-41c8-a2b1-646f3942daf1
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1EwPiBsnl0rZYzFR7JIbQf/EAjsfyxILQzwnw9sy5dc3BAWVaHxoCU3MZUyC6eQHnFPQpgmyHW7e6SANA+nYYzjfDiszKUHSnN721Mrbtyw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR10MB3646
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Wed, 03 May 2023 14:19:37 +0200, Christoph Böhmwalder wrote:
-> When we receive a flush command (or "barrier" in DRBD), we currently use
-> a REQ_OP_FLUSH with the REQ_PREFLUSH flag set.
+On 02.05.23 03:07, Adam Ford wrote:
+> The high-speed clock is hard-coded to the burst-clock
+> frequency specified in the device tree.  However, when
+> using devices like certain bridge chips without burst mode
+> and varying resolutions and refresh rates, it may be
+> necessary to set the high-speed clock dynamically based
+> on the desired pixel clock for the connected device.
 > 
-> The correct way to submit a flush bio is by using a REQ_OP_WRITE without
-> any data, and set the REQ_PREFLUSH flag.
+> This also removes the need to set a clock speed from
+> the device tree for non-burst mode operation, since the
+> pixel clock rate is the rate requested from the attached
+> device like an HDMI bridge chip.  This should have no
+> impact for people using burst-mode and setting the burst
+> clock rate is still required for those users.
 > 
-> Since commit b4a6bb3a67aa ("block: add a sanity check for non-write
-> flush/fua bios"), this triggers a warning in the block layer, but this
-> has been broken for quite some time before that.
-> 
-> [...]
+> Signed-off-by: Adam Ford <aford173@gmail.com>
+> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
 
-Applied, thanks!
+Tested on Kontron BL i.MX8MM with SN65DSI84 and ADV7535 bridges.
 
-[1/1] drbd: correctly submit flush bio on barrier
-      commit: 3899d94e3831ee07ea6821c032dc297aec80586a
-
-Best regards,
--- 
-Jens Axboe
-
-
-
+Tested-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+Reviewed-by: Frieder Schrempf <frieder.schrempf@kontron.de>
