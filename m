@@ -2,205 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D6536F5055
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 08:50:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D7476F5057
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 08:50:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbjECGuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 02:50:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45998 "EHLO
+        id S229707AbjECGuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 02:50:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbjECGuD (ORCPT
+        with ESMTP id S229555AbjECGuW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 02:50:03 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA9CC2684;
-        Tue,  2 May 2023 23:50:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683096601; x=1714632601;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=iJ7gTbn3TGY2uVMAp3p07OP4QzdNfi6IggKfglIPbfg=;
-  b=LwrkvPYYppdkoz+Sd3epQJYdpSti3FJ5raer+iCR2JeqlT2AWaJIiWQ4
-   jHH5jvPAWC2Yf15vt2XeiJvnLSrWcmVS8OzQ29pO8mN9dXB+6Jzfw/uLs
-   lslWhONaTP0keL40on2XwpDwSjk7h0QKEMi9TKv2pzw36Dy956Jw4t4eO
-   BO/CSDdBfD1Bq5sFiTNgG9yqeYDVVhrejtwNs/exS+pEImaN069xGNNEh
-   UlmHHDlvNaAOq48mdGw43OJE6Oj0AdLJq7goKSE+f4O8w3/QoVqG+hLva
-   +UL+Fn5zX0tZVX6gfc6fCRS8ARedGiBg/Os4gSD9HHlDppusfgmfNXsAO
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="414038482"
-X-IronPort-AV: E=Sophos;i="5.99,246,1677571200"; 
-   d="scan'208";a="414038482"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2023 23:50:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="696453731"
-X-IronPort-AV: E=Sophos;i="5.99,246,1677571200"; 
-   d="scan'208";a="696453731"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.127]) ([10.239.159.127])
-  by orsmga002.jf.intel.com with ESMTP; 02 May 2023 23:49:56 -0700
-Message-ID: <75bdf30c-d38f-ef95-7618-91ebf35ea297@linux.intel.com>
-Date:   Wed, 3 May 2023 14:49:36 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Cc:     baolu.lu@linux.intel.com, Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        narayan.ranganathan@intel.com
-Subject: Re: [PATCH v5 5/7] iommu/vt-d: Prepare PASID attachment beyond
- RID_PASID
-Content-Language: en-US
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Joerg Roedel <joro@8bytes.org>, dmaengine@vger.kernel.org,
-        vkoul@kernel.org
-References: <20230427174937.471668-1-jacob.jun.pan@linux.intel.com>
- <20230427174937.471668-6-jacob.jun.pan@linux.intel.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20230427174937.471668-6-jacob.jun.pan@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Wed, 3 May 2023 02:50:22 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EE573C11
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 23:50:15 -0700 (PDT)
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230503065003epoutp040a0e0107bdb83efa993d12bd72009497~bj3GMNtCP2576525765epoutp04W
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 06:50:03 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230503065003epoutp040a0e0107bdb83efa993d12bd72009497~bj3GMNtCP2576525765epoutp04W
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1683096603;
+        bh=CM+8mMQP2iq+VCp4c684wdumP+wzl9e8MEJfoEWqXDI=;
+        h=Subject:Reply-To:From:To:In-Reply-To:Date:References:From;
+        b=o0NMDxX6PyNlAvMh6mMIKdIXzA52+uIgyfnTp1Q/esM406ft09ZJAh2HME98OM3Ip
+         cIiD+bK+ejavG8f6SeBtQUFKrGz9ElmVQt6CZuU39Tyr9U6At1ObljfA44LiQqflYP
+         XrQyKSLaVfCEPPdFfRqfL6R7AoVSyl/38ENLk/JU=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
+        20230503065003epcas2p38a30ebb96e1684d4c852825b0d0d9e7a~bj3Fsuu4D0342503425epcas2p3r;
+        Wed,  3 May 2023 06:50:03 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.97]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4QB6yL2Cnzz4x9Q0; Wed,  3 May
+        2023 06:50:02 +0000 (GMT)
+X-AuditID: b6c32a45-6d1fd70000020cc1-8c-6452041a1bc4
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        3F.78.03265.A1402546; Wed,  3 May 2023 15:50:02 +0900 (KST)
+Mime-Version: 1.0
+Subject: RE:(2) [PATCH] scsi: ufs: core: Use readable 'return 0' in
+ ufshcd_hba_capabilities()
+Reply-To: keosung.park@samsung.com
+Sender: Keoseong Park <keosung.park@samsung.com>
+From:   Keoseong Park <keosung.park@samsung.com>
+To:     Bart Van Assche <bvanassche@acm.org>,
+        Keoseong Park <keosung.park@samsung.com>,
+        ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
+        "mani@kernel.org" <mani@kernel.org>,
+        "quic_asutoshd@quicinc.com" <quic_asutoshd@quicinc.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <28ea2183-d1ce-f42d-1765-9d07d7481eda@acm.org>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20230503065001epcms2p55114ae8c2d6dc6bbae680af747177454@epcms2p5>
+Date:   Wed, 03 May 2023 15:50:01 +0900
+X-CMS-MailID: 20230503065001epcms2p55114ae8c2d6dc6bbae680af747177454
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrFJsWRmVeSWpSXmKPExsWy7bCmma4US1CKwcrHvBYP5m1js3j58yqb
+        xcGHnSwW0z78ZLZ4eUjTYtGNbUwWx0++Y7S4vGsOm0X39R1sFgc+rGK0WH78H5PFwo65LBZL
+        t95kdOD1uHzF22PTqk42jwmLDjB6tJzcz+LxfX0Hm8fHp7dYPCbuqfPo27KK0ePzJjmP9gPd
+        TAFcUdk2GamJKalFCql5yfkpmXnptkrewfHO8aZmBoa6hpYW5koKeYm5qbZKLj4Bum6ZOUCn
+        KymUJeaUAoUCEouLlfTtbIryS0tSFTLyi0tslVILUnIKzAv0ihNzi0vz0vXyUkusDA0MjEyB
+        ChOyM5afvcVW8Jy34uGsbsYGxincXYycHBICJhLXbl5n7GLk4hAS2MEoMXFmB0sXIwcHr4Cg
+        xN8dwiCmsEC8xLzXwSDlQgJKEl0LtzKD2MICBhLrpu8Bs9kE9CSm/L4DNkZE4AaLROPhDlaI
+        +bwSM9qfskDY0hLbl29lBLE5Bawl1v+6yQQR15D4sayXGcIWlbi5+i07jP3+2HxGCFtEovXe
+        WagaQYkHP3dDxSUlWs9sZYOw6yVa359iBzlCQmACo0TjsT9Qg/QlrnVsBDuCV8BXYvazo2AN
+        LAKqElvun4c6wkVizZSrYHFmAXmJ7W/nMIM8zyygKbF+lz6IKSGgLHHkFgtEBZ9Ex+G/7DAv
+        Nmz8jZW9Y94TqOlqEo8WbIEGiYzExTnnmCcwKs1CBPQsJHtnIexdwMi8ilEstaA4Nz212KjA
+        EB63yfm5mxjBiVjLdQfj5Lcf9A4xMnEwHmKU4GBWEuH9UOiXIsSbklhZlVqUH19UmpNafIjR
+        FOjjicxSosn5wFyQVxJvaGJpYGJmZmhuZGpgriTOK217MllIID2xJDU7NbUgtQimj4mDU6qB
+        yVp9joJn2/WIDo6da5q+V60O78/S++atJOli5P/jt8ZV2ZKcBxNFLcISdxvtN6ooX1XM4tO4
+        1da33/i+14yMn4cTT9YJ3JnAxB+V4yAbmORxdO4OAbE7Sfv3XO76sltZIGXnrZSfKR0Gs167
+        Cji7mfTyeeguXybRHCkjWWzTd+LVVakixj9pLMxbgsXXHOyOf9Cb++bbYr/k050vr8pyJR1P
+        sGfmKjS5FK3oxGz3R2lGx4775We9LC25pSae/cDCtsnPprT0tWIPq8D3af82LUldafiSUy3J
+        UOOmVdNGQa1F7pM+n3y78VCYRwHrjIhtqxXZv929ppWwrOdKiJimaeUD0Zybu7snv6970q3E
+        UpyRaKjFXFScCADt+7QjTQQAAA==
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230502113116epcms2p7b83da0d683e29f667c38f5430b985388
+References: <28ea2183-d1ce-f42d-1765-9d07d7481eda@acm.org>
+        <20230502113116epcms2p7b83da0d683e29f667c38f5430b985388@epcms2p7>
+        <CGME20230502113116epcms2p7b83da0d683e29f667c38f5430b985388@epcms2p5>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/28/23 1:49 AM, Jacob Pan wrote:
-> @@ -2433,12 +2477,17 @@ static int dmar_domain_attach_device_pasid(struct dmar_domain *domain,
->   					   struct intel_iommu *iommu,
->   					   struct device *dev, ioasid_t pasid)
->   {
-> +	struct device_pasid_info *dev_pasid;
-> +	unsigned long flags;
->   	int ret;
->   
-> -	/* PASID table is mandatory for a PCI device in scalable mode. */
->   	if (!sm_supported(iommu) && dev_is_real_dma_subdevice(dev))
->   		return -EOPNOTSUPP;
->   
-> +	dev_pasid = kzalloc(sizeof(*dev_pasid), GFP_KERNEL);
-> +	if (!dev_pasid)
-> +		return -ENOMEM;
-> +
->   	if (hw_pass_through && domain_type_is_si(domain))
->   		ret = intel_pasid_setup_pass_through(iommu, domain, dev, pasid);
->   	else if (domain->use_first_level)
-> @@ -2446,6 +2495,17 @@ static int dmar_domain_attach_device_pasid(struct dmar_domain *domain,
->   	else
->   		ret = intel_pasid_setup_second_level(iommu, domain, dev, pasid);
->   
-> +	if (ret) {
-> +		kfree(dev_pasid);
-> +		return ret;
-> +	}
-> +
-> +	dev_pasid->pasid = pasid;
-> +	dev_pasid->dev = dev;
-> +	spin_lock_irqsave(&domain->lock, flags);
-> +	list_add(&dev_pasid->link_domain, &domain->dev_pasids);
-> +	spin_unlock_irqrestore(&domain->lock, flags);
-> +
->   	return 0;
->   }
->   
-> @@ -2467,16 +2527,13 @@ static int dmar_domain_attach_device(struct dmar_domain *domain,
->   		return ret;
->   	info->domain = domain;
->   	spin_lock_irqsave(&domain->lock, flags);
-> +	if (info->dev_attached) {
-> +		spin_unlock_irqrestore(&domain->lock, flags);
-> +		return 0;
-> +	}
->   	list_add(&info->link, &domain->devices);
->   	spin_unlock_irqrestore(&domain->lock, flags);
->   
-> -	ret = dmar_domain_attach_device_pasid(domain, iommu, dev,
-> -					      IOMMU_DEF_RID_PASID);
-> -	if (ret) {
-> -		dev_err(dev, "Setup RID2PASID failed\n");
-> -		device_block_translation(dev);
-> -	}
-> -
->   	ret = domain_context_mapping(domain, dev);
->   	if (ret) {
->   		dev_err(dev, "Domain context map failed\n");
-> @@ -2485,8 +2542,9 @@ static int dmar_domain_attach_device(struct dmar_domain *domain,
->   	}
->   
->   	iommu_enable_pci_caps(info);
-> +	info->dev_attached = 1;
->   
-> -	return 0;
-> +	return ret;
->   }
->   
->   static bool device_has_rmrr(struct device *dev)
-> @@ -4044,6 +4102,7 @@ static void device_block_translation(struct device *dev)
->   
->   	spin_lock_irqsave(&info->domain->lock, flags);
->   	list_del(&info->link);
-> +	info->dev_attached = 0;
->   	spin_unlock_irqrestore(&info->domain->lock, flags);
->   
->   	domain_detach_iommu(info->domain, iommu);
-> @@ -4175,8 +4234,15 @@ static int intel_iommu_attach_device(struct iommu_domain *domain,
->   				     struct device *dev)
->   {
->   	struct device_domain_info *info = dev_iommu_priv_get(dev);
-> +	struct dmar_domain *dmar_domain = to_dmar_domain(domain);
-> +	struct intel_iommu *iommu;
-> +	u8 bus, devfn;
->   	int ret;
->   
-> +	iommu = device_to_iommu(dev, &bus, &devfn);
-> +	if (!iommu)
-> +		return -ENODEV;
-> +
->   	if (domain->type == IOMMU_DOMAIN_UNMANAGED &&
->   	    device_is_rmrr_locked(dev)) {
->   		dev_warn(dev, "Device is ineligible for IOMMU domain attach due to platform RMRR requirement.  Contact your platform vendor.\n");
-> @@ -4190,7 +4256,23 @@ static int intel_iommu_attach_device(struct iommu_domain *domain,
->   	if (ret)
->   		return ret;
->   
-> -	return dmar_domain_attach_device(to_dmar_domain(domain), dev);
-> +	ret = dmar_domain_attach_device(to_dmar_domain(domain), dev);
-> +	if (ret) {
-> +		dev_err(dev, "Attach device failed\n");
-> +		return ret;
-> +	}
-> +
-> +	/* PASID table is mandatory for a PCI device in scalable mode. */
-> +	if (sm_supported(iommu) && !dev_is_real_dma_subdevice(dev)) {
-> +		/* Setup the PASID entry for requests without PASID: */
-> +		ret = dmar_domain_attach_device_pasid(dmar_domain, iommu, dev,
-> +						      IOMMU_DEF_RID_PASID);
-> +		if (ret) {
-> +			dev_err(dev, "Setup RID2PASID failed\n");
-> +			device_block_translation(dev);
-> +		}
-> +	}
-> +	return ret;
->   }
->   
->   static int intel_iommu_map(struct iommu_domain *domain,
+>On 5/2/23 04:31, Keoseong Park wrote:
+>> The 'err' variable is the result of ufshcd_hba_init_crypto_capabilities()
+>> regardless of MCQ capabilities. Return 'err' immediately when the function
+>> error occurs. And if it is not an error, explicitly return 0.
+>> 
+>> Anyway, if ufshcd_hba_init_crypto_capabilities() returns error, MCQ
+>> capabilities is not used because it fails to initialize UFS driver.
+>> 
+>> Signed-off-by: Keoseong Park <keosung.park@samsung.com>
+>> ---
+>>   drivers/ufs/core/ufshcd.c | 8 +++++---
+>>   1 file changed, 5 insertions(+), 3 deletions(-)
+>> 
+>> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+>> index 9434328ba323..44328eb4158d 100644
+>> --- a/drivers/ufs/core/ufshcd.c
+>> +++ b/drivers/ufs/core/ufshcd.c
+>> @@ -2343,18 +2343,20 @@ static inline int ufshcd_hba_capabilities(struct ufs_hba *hba)
+>>   
+>>   	/* Read crypto capabilities */
+>>   	err = ufshcd_hba_init_crypto_capabilities(hba);
+>> -	if (err)
+>> +	if (err) {
+>>   		dev_err(hba->dev, "crypto setup failed\n");
+>> +		return err;
+>> +	}
+>>   
+>>   	hba->mcq_sup = FIELD_GET(MASK_MCQ_SUPPORT, hba->capabilities);
+>>   	if (!hba->mcq_sup)
+>> -		return err;
+>> +		return 0;
+>>   
+>>   	hba->mcq_capabilities = ufshcd_readl(hba, REG_MCQCAP);
+>>   	hba->ext_iid_sup = FIELD_GET(MASK_EXT_IID_SUPPORT,
+>>   				     hba->mcq_capabilities);
+>>   
+>> -	return err;
+>> +	return 0;
+>>   }
+>
+>The most important change in this patch is that ufshcd_hba_capabilities()
+>returns earlier if ufshcd_hba_init_crypto_capabilities() fails. Please
+>change the patch title such that it reflects this change instead of the
+>other less important change.
 
-I am not following why do you need to change the attach_device path in
-this patch. Perhaps you want to make sure that context entry for the
-device is configured before attach_device_pasid?
+OK, I will change it.
 
-Best regards,
-baolu
+Best Regards,
+Keoseong
+
+>
+>Thanks,
+>
+>Bart.
