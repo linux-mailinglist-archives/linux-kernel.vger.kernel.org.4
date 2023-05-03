@@ -2,199 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6B46F5EF2
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 21:10:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C25476F5EF6
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 21:11:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbjECTKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 15:10:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39974 "EHLO
+        id S229683AbjECTLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 15:11:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbjECTKu (ORCPT
+        with ESMTP id S229595AbjECTLr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 15:10:50 -0400
-Received: from stravinsky.debian.org (stravinsky.debian.org [IPv6:2001:41b8:202:deb::311:108])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DB0B7AB7;
-        Wed,  3 May 2023 12:10:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-        s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=vfvdDUxST/TqMGs2ydRU881qJNF4aH49FdBpxMofuJ0=; b=JLs+g9xs0MLmDTPqd5+nKMO8ir
-        Y2u6LvHU9xKErSImBxIs70xY7WVtk6PGQImC9NxCP7gL0MO/hVm1uAvxzbBESjfTxuzGC3xWdSm8q
-        AMddS+QQMkCW45A6K1IXlDKVM5JVBEHi1ZyTScNXVn685gOJ3/svPdtPrnHfOmlQ0RT1OlaVFzxng
-        BaIKiIO91uq5kBwqkAU9w0oIrQqCGFLJuMKS2C3YkWC7sjlvpMmtZ2OHK8ow/nCFmyBNR6RKW4Rbe
-        UAxo/PTL2lmRmHzXlqC3yomU44seu9chJXF0t3mHloydHzRUgQ/u3rWFG+Osulq4kaS8+AoGjyjSL
-        IR9ifGOw==;
-Received: from authenticated user
-        by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.94.2)
-        (envelope-from <kibi@debian.org>)
-        id 1puHs8-003gwQ-NP; Wed, 03 May 2023 19:10:42 +0000
-Date:   Wed, 3 May 2023 21:10:37 +0200
-From:   Cyril Brulebois <kibi@debian.org>
-To:     Jim Quinlan <james.quinlan@broadcom.com>
-Cc:     Jim Quinlan <jim2101024@gmail.com>, linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Phil Elwell <phil@raspberrypi.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>
-Subject: Re: [PATCH v4 0/5] PCI: brcmstb: Configure appropriate HW CLKREQ#
- mode
-Message-ID: <20230503191037.pqnpoiojdq5huyo6@mraw.org>
-Organization: Debian
-References: <20230428223500.23337-1-jim2101024@gmail.com>
- <20230502231558.5zt5tyxczd22ppjz@mraw.org>
- <CA+-6iNzD_YrrhDPfr0J7KA3rotbgDNB+vGOJyyRnW3-7G5vw6Q@mail.gmail.com>
+        Wed, 3 May 2023 15:11:47 -0400
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F2B7AA3;
+        Wed,  3 May 2023 12:11:44 -0700 (PDT)
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-306281edf15so4858551f8f.1;
+        Wed, 03 May 2023 12:11:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683141103; x=1685733103;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=54FcX7m56ayBWjcvud1Kf/5sZaGwEHaWh+uspYclntQ=;
+        b=Mpz4hTf3Xp44JTzlnxjhUNRd8Hwn0unWpsdfKLEYhvCSgYWfYX7rC89PVZ/TRcErr4
+         76uZQy14HkwfLJZfP+LhDE9qbBDc4tF5TQncPkhYaxEhzl3qqntjSu7N1948sPbB0p7A
+         kbOmsrPEwIdKhbZVesPMGDoP2GPBQueDREcQimlsKbFFwxBHCqgpSrQ2b9T2pT0+KVss
+         lopUUIVea47bJCipnzRnFuEqinp9TNcuTeF/clMZyAoXNSDflvd4/JvBJ/otPttdkfO+
+         AD2m2r7X4UwEbusT9ochfmZ76pGwGT/D/azz3cFYqHpYzptlVjz9CkHnOXZW3pJCi0yZ
+         Hbmw==
+X-Gm-Message-State: AC+VfDw1g2VTld7hDdDtDqUiAvLT+ZAUD9OnCsRhBBNLV0orOG/FhpiO
+        pnkWPQOfex4czW9wTuPMcqY=
+X-Google-Smtp-Source: ACHHUZ6HDa6PpE0QZkVce9/fw7pukp37W1XiFxrwL1kOk7bquMTIwotFwziRSBw5lTeJ/dgM0pLGRQ==
+X-Received: by 2002:a5d:6b09:0:b0:306:2eab:fb8c with SMTP id v9-20020a5d6b09000000b003062eabfb8cmr771025wrw.42.1683141102639;
+        Wed, 03 May 2023 12:11:42 -0700 (PDT)
+Received: from gmail.com (fwdproxy-cln-029.fbsv.net. [2a03:2880:31ff:1d::face:b00c])
+        by smtp.gmail.com with ESMTPSA id k5-20020adff5c5000000b002f103ca90cdsm34480997wrp.101.2023.05.03.12.11.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 May 2023 12:11:42 -0700 (PDT)
+Date:   Wed, 3 May 2023 12:11:40 -0700
+From:   Breno Leitao <leitao@debian.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     io-uring@vger.kernel.org, linux-nvme@lists.infradead.org,
+        asml.silence@gmail.com, axboe@kernel.dk, ming.lei@redhat.com,
+        leit@fb.com, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org, sagi@grimberg.me, joshi.k@samsung.com,
+        kbusch@kernel.org
+Subject: Re: [PATCH v3 4/4] block: ublk_drv: Add a helper instead of casting
+Message-ID: <ZFKx7Kn2Q3qiKfze@gmail.com>
+References: <20230430143532.605367-1-leitao@debian.org>
+ <20230430143532.605367-5-leitao@debian.org>
+ <20230501043122.GC19673@lst.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="d7okzvijjcoe4r4d"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+-6iNzD_YrrhDPfr0J7KA3rotbgDNB+vGOJyyRnW3-7G5vw6Q@mail.gmail.com>
-X-Debian-User: kibi
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230501043122.GC19673@lst.de>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, May 01, 2023 at 06:31:22AM +0200, Christoph Hellwig wrote:
+> On Sun, Apr 30, 2023 at 07:35:32AM -0700, Breno Leitao wrote:
+> > ublk driver is using casts to get private data from uring cmd struct.
+> > Let's use a proper helper, as an interface that requires casts in all
+> > callers is one asking for bugs.
+> > 
+> > Suggested-by: Christoph Hellwig <hch@lst.de>
+> 
+> No, I've not suggested this.
+> 
+> > +static inline struct ublksrv_ctrl_cmd *ublk_uring_ctrl_cmd(
+> > +		struct io_uring_cmd *cmd)
+> > +{
+> > +	return (struct ublksrv_ctrl_cmd *)cmd->sqe->cmd;
+> > +}
+> 
+> I've two times explained we need a core io_uring helper to remove this
+> casting in the drivers, and I've explained how to do that and provided
+> the actual code for it.
 
---d7okzvijjcoe4r4d
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Sorry for it, somehow I misunderstood what you meant. I re-read the
+thread and got what you said.
 
-Hi Jim,
-
-Jim Quinlan <james.quinlan@broadcom.com> (2023-05-03):
-> >                            +----------+----------+----------+
-> >                            |   006    |   006S   |   VIA    |
-> >   +------------------------+----------+----------+----------+
-> >   | 1. CM4 Lite Rev 1.0    |    KP*   |    KP*   |  OK, 72  |
-> >   |    pristine            |          |          |          |
-> >   +------------------------+----------+----------+----------+
-> >   | 2. CM4 Lite Rev 1.0    |  boot +  |  OK, 72  |  OK, 72  |
-> >   |    + brcm,enable-l1ss  | timeouts |          |          |
-> >   +------------------------+----------+----------+----------+
-> >   | 3. CM4 8/32 Rev 1.0    |    KP    |    KP    |    KP    |
-> >   |    pristine            |          |          |          |
-> >   +------------------------+----------+----------+----------+
-> >   | 4. CM4 8/32 Rev 1.0    |  OK, 69  |  OK, 69  |  OK, 69  |
-> >   |    + brcm,enable-l1ss  |          |          |          |
-> >   +------------------------+----------+----------+----------+
-> >   | 5. CM4 4/32 Rev 1.1    |  boot +  |  OK, 69  |  OK, 69  |
-> >   |    pristine            | timeouts |          |          |
-> >   +------------------------+----------+----------+----------+
-> >   | 6. CM4 4/32 Rev 1.1    |  OK, 82  |  OK, 69  |  OK, 69  |
-> >   |    + brcm,enable-l1ss  |          |          |          |
-> >   +------------------------+----------+----------+----------+
->=20
-> Hello Cyril,
->=20
-> I'm confused by your result table above which has a number of
-> failures.  Further in your message you say:
->=20
-> Takeaways:
->  - Upgrading the EEPROM solved all problems;
->  - brcm,enable-l1ss (which used to help) is not needed [...]
->=20
-> May I conclude that if one uses a modern CM4 eeprom that these
-> failures go away?
-
-Sorry that wasn't clear enough. The table with failures, quoted above,
-was with 3 compute modules in their stock configuration:
- - CM4 Lite Rev 1.0 (lines 1-2) had an 2021-02-16 EEPROM;
- - CM4 8/32 Rev 1.0 (lines 3-4) had an 2021-02-16 EEPROM;
- - CM4 4/32 Rev 1.1 (lines 5-6) had an 2021-12-02 EEPROM.
-
-Upgrading them all to current 2023-01-11 led to the second table when I
-tested again, where everything worked fine.
-
-The 2 versions (2021-02-16 and 2021-12-02) are marked as stable in the
-rpi-eeprom.git repository.
-
-> You mentioned in a personal email that at least one of your "CM4" was
-> running a Beta eeprom image.
-
-That one was another CM4 Lite Rev 1.0, and had a 2020-10-02 EEPROM. That
-one is marked as an old beta in the rpi-eeprom.git. (That CM4 Lite also
-works very fine once the current 2023-01-11 is deployed on it.)
-
-[Regarding EEPROM variety in the field: I've mentioned this topic on the
-#debian-raspberrypi IRC channel, warning others about troubles that
-might be linked to the EEPROM version. I've seen at least one CM4 user
-report the 2020-10-02 beta EEPROM, and another one report a different
-2022-04-26 stable EEPROM.]
-
-> I'm much less concerned about folks having problems with old  or
-> pre-release versions of the CM4 eeprom because (a) most of these folks
-> are using Raspian Linux anyway and (b) they can just upgrade their
-> eeprom.
-
-That looks totally fair to me. So I can stop here, wait for the next
-iteration of your patch series if there's one (rechecking everything
-still works fine), and only the latest EEPROM matters? Sounds good.
-
-> Further, the Rpi eeprom is closed-source and my questions on the Rpi
-> forum  and Rpi Github have not yet led to any answers  about why a
-> different eeprom image is changing the behavior of a clkreq signal.
-
-The following doesn't shed much light but seems consistent with results
-getting better with newer EEPROM versions (a number of =E2=80=9CPCIe=E2=80=
-=9D hits, some
-about probing, some about resets):
-  https://github.com/raspberrypi/rpi-eeprom/blob/master/firmware/release-no=
-tes.md
-
-[If I had known how much of a difference an upgraded EEPROM would make,
-and how easy it is to upgrade, I would have probably bothered you much
-less with all those weird results=E2=80=A6 Sorry about that.]
-
-
-The whole series is:
-
-Tested-By: Cyril Brulebois <cyril@debamax.com>
-
-
-Cheers,
---=20
-Cyril Brulebois (kibi@debian.org)            <https://debamax.com/>
-D-I release manager -- Release team member -- Freelance Consultant
-
---d7okzvijjcoe4r4d
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEtg6/KYRFPHDXTPR4/5FK8MKzVSAFAmRSsa0ACgkQ/5FK8MKz
-VSC0RBAAvA1uZTNBedOSof5kzCNp05mRkPl8jIRFLj7DDYMqF2zjzzjBVIrx4kXm
-rE+YsIDiQVZiiaFHVcWDt2PDulJSJdJLvdHsCZeUHiSaxyKezrZfimr4sZkgXVf0
-TBBhDAGIRWMom2V+RaSIyt8XyWfkaWVRa7+OJA+KwC3wVw2t1ah1mZyIGoWJNZjd
-ig3IkPbIaY7uNeU4KNmmoYehXXbY/guvFiF9l7iwdcQmW790zPkhf41yfKSzYzu/
-8cHVdB3wHFlLfg+eE50Vr9UTJfCTmWcH84pRoQA8QDPKZtX0GWMoFnRw4HAC2Fk7
-AUU4yu6TaDuDlxwnsvveFwmKWbjjlBEhJ0Dnw+mdVA/NdcnyrDyOVDHWpZnZWD+N
-VKKxbQ9k1yHUA4OQL47zQJIrfyUJOKG68Hu2dXBirRUh6G1ncuakKgI8lp8S09zH
-gqw5LPNfqLyk3KCptdI+i1kin8mfJNzFsgjxcD/KDgSQPsnG0Xr5+ZOdKjXjrCVN
-XNFSQqEIjSSsABmcya8DCx1kpLkUbpVvgszTLLGKCLidPREIAdj9mLYCV6/LM/sY
-n5Y4cRUOutzsAnZusasiiFClIJrAibUWWeLUHiMdBhnuB5qIGdcYDe+lHpCb3NPM
-78Cmb7FlvGWE7ZA8K9s2EtvyFsxOoh/wrKMUxSVlHaOisWrE3Us=
-=IvjH
------END PGP SIGNATURE-----
-
---d7okzvijjcoe4r4d--
+I am preparing a V4 with the new approach, and I will send it tomorrow.
