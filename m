@@ -2,172 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 478786F5420
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 11:13:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 873B46F544D
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 11:16:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbjECJNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 05:13:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51902 "EHLO
+        id S229670AbjECJP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 05:15:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbjECJNA (ORCPT
+        with ESMTP id S229653AbjECJPy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 05:13:00 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BCEF19A8;
-        Wed,  3 May 2023 02:12:35 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3439CR1o122542;
-        Wed, 3 May 2023 04:12:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1683105147;
-        bh=lVDJIsQ0S2BXDL0aE4jmdUNqxmhZpOYTho+RaZVBNIA=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=jd3umEQXVSUx33LaxFbYR0LQ9dwDARtPVEMBX35NH0kxU2t4fEQU7/J4tOcCF8YfW
-         2O/AGqGJOxQWyEqBjJZrzzkv+TsVNTvtogN8tkZNS01e/TYCTuOOG8e968363R2Tgf
-         lh0Yk8mxBxoJi/2uzYZ2dv4LGr/SOqewBYUA9s1I=
-Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3439CRNo026854
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 3 May 2023 04:12:27 -0500
-Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 3
- May 2023 04:12:27 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 3 May 2023 04:12:27 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3439CQR7037091;
-        Wed, 3 May 2023 04:12:26 -0500
-From:   Vaishnav Achath <vaishnav.a@ti.com>
-To:     <nm@ti.com>, <kristo@kernel.org>, <vigneshr@ti.com>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <u-kumar1@ti.com>, <vaishnav.a@ti.com>
-Subject: [PATCH 4/4] arm64: dts: ti: k3-j7200-som: Describe OSPI and Hyperflash partition info
-Date:   Wed, 3 May 2023 14:42:18 +0530
-Message-ID: <20230503091218.25899-5-vaishnav.a@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230503091218.25899-1-vaishnav.a@ti.com>
-References: <20230503091218.25899-1-vaishnav.a@ti.com>
+        Wed, 3 May 2023 05:15:54 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ABD84EC5
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 02:15:41 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f1950f569eso30983745e9.2
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 02:15:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683105340; x=1685697340;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nnxyxW2LIpf3FgeSjcXMHAhw+bRdl8x1S9X/p8vOn8g=;
+        b=feDSc/GDEr/cMdnO8DNyIkvRHLZWiFTFiTYkgBFr/SofSWuU8hc9ghLqVwAPHd7/RF
+         C7cuIDPZwxNzL7BGVyEw6FJlowwUq1Z8X80XYlqn1ntGgXVB9xfmefP6GtWs7CM7kPFK
+         nYIUk3o+dyLfUy0tmXAXn5yu5Oyxd/n5gg74cRb/IB/kz98y327PagIk9YjKtxKN82JG
+         0mGqcnuUvuZrM+uKOzZPIcBUVRF0Oa+uKhwX1S7+5u1R0vN+UG1sn1Cb7gns4hwJzaW7
+         1PQhcZ3EfEne/B/G1AAqtFuq2pyt6fCBq76rUTKPEhr1XnV3MAAJ4dQ/9U48bgxQbiqa
+         9H0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683105340; x=1685697340;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nnxyxW2LIpf3FgeSjcXMHAhw+bRdl8x1S9X/p8vOn8g=;
+        b=bsoUdG2WZVPsMkjThnt2zMDlg162vEVTR7RRZMtElZzwHSwelUzkfHqhkGeb1uyiVR
+         gPTZuqf+QKM+NWGfC9k/tcH+tV0Jo8i9394lSsyTlas+U047Gpl+/+8kzZdfiiXkzqdC
+         GoMWpXozmjn62OdjNMklDksJRG16JCaNy5ncGf+LbTDfRcFdwica7rye6S5LQCsZ73/X
+         /aJtSk6KIk1HPpgMKKO/qj6VaYjVEG2GyoraFQr0x2E0tXPyFWSJYYjvfoEFQWoB9lqm
+         SumWYlE3Eg4kozXMXJVT5oUOaX5iIr30DTVnyMvNxtTXWihimvlh+2axeTFs3QWaU4J5
+         MoAg==
+X-Gm-Message-State: AC+VfDxGsJjES9n5VYRWebrHnA9Dic8Nj+bfVT9MwUDxqNumgtwCQlfL
+        L+0TElaaJalMvkmHj1Lr1umJcg==
+X-Google-Smtp-Source: ACHHUZ6eaGsYv3iCIVixt5Sj/mxQl+JmS4dm2WtL7LWCgzs7EZI/uUAjKQonoxTmKNjnBFAaXy59Ww==
+X-Received: by 2002:adf:e28a:0:b0:302:1b72:b951 with SMTP id v10-20020adfe28a000000b003021b72b951mr14017544wri.26.1683105340350;
+        Wed, 03 May 2023 02:15:40 -0700 (PDT)
+Received: from [197.55.55.58] ([93.107.151.186])
+        by smtp.gmail.com with ESMTPSA id p1-20020a05600c204100b003ed2c0a0f37sm1259871wmg.35.2023.05.03.02.15.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 May 2023 02:15:39 -0700 (PDT)
+Message-ID: <5d2814e8-b44d-39b2-8f1e-2751b66c33a9@linaro.org>
+Date:   Wed, 3 May 2023 10:15:38 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 3/3] media: camss: Link CAMSS power domain
+Content-Language: en-US
+To:     Yassine Oudjana <yassine.oudjana@gmail.com>,
+        Robert Foss <rfoss@kernel.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hans Verkuil <hansverk@cisco.com>
+Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230503072543.4837-1-y.oudjana@protonmail.com>
+ <20230503072543.4837-4-y.oudjana@protonmail.com>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <20230503072543.4837-4-y.oudjana@protonmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Describe OSPI and Hyperflash partition information through device tree,
-this helps to remove passing partition information through the mtdparts
-commandline parameter which requires maintaining the partition
-information in a string format. J7200 SoM has a S28 64 MiB OSPI flash
-with sector size of 256 KiB thus the size of the smallest partition is
-chosen as 256 KiB, the SoM also has a 64 MiB Hyperflash present on it,
-the partition names and offsets are chosen according to the corresponding
-name and offsets in bootloader.
+On 03/05/2023 08:25, Yassine Oudjana wrote:
+> From: Yassine Oudjana <y.oudjana@protonmail.com>
+> 
+> The CAMSS power domain was previously enabled implicitly when the VFE power domains
+> were enabled. Commit 46cc03175498 (media: camss: Split power domain management, 2022-07-04)
+> delayed enabling VFE power domains which in turn delayed enabling the CAMSS power domain.
+> This made CSIPHY fail to enable camss_top_ahb_clk which requires the CAMSS power domain to
+> be on:
+> 
+> [  199.097810] ------------[ cut here ]------------
+> [  199.097893] camss_top_ahb_clk status stuck at 'off'
+> [  199.097913] WARNING: CPU: 3 PID: 728 at drivers/clk/qcom/clk-branch.c:91 clk_branch_wait+0x140/0x160
+> ...
+> [  199.100064]  clk_branch_wait+0x140/0x160
+> [  199.100112]  clk_branch2_enable+0x30/0x40
+> [  199.100159]  clk_core_enable+0x6c/0xb0
+> [  199.100211]  clk_enable+0x2c/0x50
+> [  199.100257]  camss_enable_clocks+0x94/0xe0 [qcom_camss]
+> [  199.100342]  csiphy_set_power+0x154/0x2a0 [qcom_camss]
+> ...
+> [  199.101594] ---[ end trace 0000000000000000 ]---
+> 
+> Link the CAMSS power domain in camss_configure_pd to make sure it gets enabled before
+> CSIPHY tries to enable clocks.
+> 
+> Fixes: 02afa816dbbf (media: camss: Add basic runtime PM support, 2018-07-25)
+> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
 
-Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
+Same comment as in the cover letter, your Fixes: tag is broken
+
+WARNING: Please use correct Fixes: style 'Fixes: <12 chars of sha1> 
+("<title line>")' - ie: 'Fixes: 02afa816dbbf ("media: camss: Add basic 
+runtime PM support")'
+#28:
+Fixes: 02afa816dbbf (media: camss: Add basic runtime PM support, 2018-07-25)
+
+> ---
+>   drivers/media/platform/qcom/camss/camss.c | 9 ++++++++-
+>   1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
+> index 1ef26aea3eae..9aea8220d923 100644
+> --- a/drivers/media/platform/qcom/camss/camss.c
+> +++ b/drivers/media/platform/qcom/camss/camss.c
+> @@ -1453,6 +1453,7 @@ static const struct media_device_ops camss_media_ops = {
+>   static int camss_configure_pd(struct camss *camss)
+>   {
+>   	struct device *dev = camss->dev;
+> +	int camss_pd_index;
+>   	int i;
+>   	int ret;
+>   
+> @@ -1496,7 +1497,13 @@ static int camss_configure_pd(struct camss *camss)
+>   		}
+>   	}
+>   
+> -	if (i > camss->vfe_num) {
+> +	/* Link CAMSS power domain if available */
+> +	camss_pd_index = device_property_match_string(camss->dev, "power-domain-names", "camss");
+> +	if (camss_pd_index >= 0)
+> +		device_link_add(camss->dev, camss->genpd[camss_pd_index], DL_FLAG_STATELESS |
+> +				DL_FLAG_PM_RUNTIME | DL_FLAG_RPM_ACTIVE);
+> +
+> +	if (i > camss->vfe_num && i != camss_pd_index) {
+>   		camss->genpd_link[i - 1] = device_link_add(camss->dev, camss->genpd[i - 1],
+>   							   DL_FLAG_STATELESS | DL_FLAG_PM_RUNTIME |
+>   							   DL_FLAG_RPM_ACTIVE);
+
+The rest of it seems reasonable to me. I'll give it a R/B T/B on your 
+next iteration - including Fixes: fix as I'm OOO ATM.
+
 ---
- arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi | 72 +++++++++++++++++++++
- 1 file changed, 72 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi b/arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi
-index fa44ed4c17d5..198408fdb017 100644
---- a/arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi
-@@ -140,6 +140,37 @@
- 	flash@0,0 {
- 		compatible = "cypress,hyperflash", "cfi-flash";
- 		reg = <0x00 0x00 0x4000000>;
-+
-+		partitions {
-+			compatible = "fixed-partitions";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+
-+			partition@0 {
-+				label = "hbmc.tiboot3";
-+				reg = <0x0 0x100000>;
-+			};
-+
-+			partition@100000 {
-+				label = "hbmc.tispl";
-+				reg = <0x100000 0x200000>;
-+			};
-+
-+			partition@300000 {
-+				label = "hbmc.u-boot";
-+				reg = <0x300000 0x400000>;
-+			};
-+
-+			partition@700000 {
-+				label = "hbmc.env";
-+				reg = <0x700000 0x40000>;
-+			};
-+
-+			partition@800000 {
-+				label = "hbmc.rootfs";
-+				reg = <0x800000 0x3800000>;
-+			};
-+		};
- 	};
- };
- 
-@@ -229,5 +260,46 @@
- 		cdns,tchsh-ns = <60>;
- 		cdns,tslch-ns = <60>;
- 		cdns,read-delay = <4>;
-+
-+		partitions {
-+			compatible = "fixed-partitions";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+
-+			partition@0 {
-+				label = "ospi.tiboot3";
-+				reg = <0x0 0x100000>;
-+			};
-+
-+			partition@100000 {
-+				label = "ospi.tispl";
-+				reg = <0x100000 0x200000>;
-+			};
-+
-+			partition@300000 {
-+				label = "ospi.u-boot";
-+				reg = <0x300000 0x400000>;
-+			};
-+
-+			partition@700000 {
-+				label = "ospi.env";
-+				reg = <0x700000 0x40000>;
-+			};
-+
-+			partition@740000 {
-+				label = "ospi.env.backup";
-+				reg = <0x740000 0x40000>;
-+			};
-+
-+			partition@800000 {
-+				label = "ospi.rootfs";
-+				reg = <0x800000 0x37c0000>;
-+			};
-+
-+			partition@3fc0000 {
-+				label = "ospi.phypattern";
-+				reg = <0x3fc0000 0x40000>;
-+			};
-+		};
- 	};
- };
--- 
-2.17.1
-
+bod
