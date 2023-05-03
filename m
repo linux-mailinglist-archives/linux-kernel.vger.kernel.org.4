@@ -2,87 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A4D56F620A
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 01:24:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C57126F6208
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 01:24:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbjECXYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 19:24:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32966 "EHLO
+        id S229573AbjECXYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 19:24:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbjECXYu (ORCPT
+        with ESMTP id S229574AbjECXYn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 19:24:50 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F8A8A74;
-        Wed,  3 May 2023 16:24:39 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 343NBmCE018439;
-        Wed, 3 May 2023 23:24:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=v73srPm2Ygdh8jPbwFEnqSjx3SDVfJDGkEjFiw8b6N8=;
- b=a6Z7oRCgkYJ+3gjwA8iSf4wX+lxbEYB4a+UzonVGrvbHD1H3c2DMjtYgJruPeskWqiFT
- D3QHeQlxsWitqawZbyvl6AQpI+JXiHELjQJDKXIAuIqmENp4gpqwGRaTv4S8E+3GSTuj
- xmtmhXKq7cOormTDnMpiRoKRR2WcNYHC+uca5xqucwfzalGC/eRHhBSs25Z+coPzvOM3
- hL0pKUwYizJ+gCeYV2qVw7O2s+Szkh7O2oVmC2WncN26uw78iBvh4ro2kljjd1nysmkc
- NaqiE4WMATD7xvlKCOuw2iLrhwlfQPu5yOfm2ieEAi30zCdBdB1X3MOGjHuLUsSIGYy3 wg== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qbn0a9kbu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 03 May 2023 23:24:32 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 343NO8lv005662
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 3 May 2023 23:24:08 GMT
-Received: from [10.71.110.193] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 3 May 2023
- 16:24:08 -0700
-Message-ID: <5c54a6f1-63e1-0870-4fb1-f9128291d15a@quicinc.com>
-Date:   Wed, 3 May 2023 16:24:07 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 3/4] drm/msm/dpu: Add has_data_compress to dpu_caps
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-CC:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-References: <20230405-add-dsc-support-v1-0-6bc6f03ae735@quicinc.com>
- <20230405-add-dsc-support-v1-3-6bc6f03ae735@quicinc.com>
- <v5hmqtjwd3syqwo5nqru7xgpt3rv5ubfbzt6pssriyb7cuprkf@7zdvwsil67nc>
- <7117aadb-0289-01ff-6eb9-8bfc358eca63@quicinc.com>
- <46an5zrsxplqo3h35okjyhfes6sqwmw5kez3nm3x5vrkqyvsn5@lxca65m7ju6n>
-From:   Jessica Zhang <quic_jesszhan@quicinc.com>
-In-Reply-To: <46an5zrsxplqo3h35okjyhfes6sqwmw5kez3nm3x5vrkqyvsn5@lxca65m7ju6n>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+        Wed, 3 May 2023 19:24:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52F5E6E95;
+        Wed,  3 May 2023 16:24:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D912B63087;
+        Wed,  3 May 2023 23:24:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15299C433D2;
+        Wed,  3 May 2023 23:24:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1683156273;
+        bh=K/V49M3fmE/XvwR5aK0MwXvOUFLt3IEPIoOXeueUAaI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=DW840XOa6I3ye8EshwGBjplHXxwKsJePC3WoAmIKihibCbjv1u7fzw+mdo9QziNaP
+         nhc5rq+aIvQij5gIAFohvYQPOitK2nctlbE5plLG5ZltVHJbgZKMNeSKrN578tcMfw
+         WlzLhg1ns2eBsVONzHC98jlNQB/ccJ7ub/9cZR84=
+Date:   Wed, 3 May 2023 16:24:32 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        mm-commits@vger.kernel.org
+Subject: [GIT PULL] final MM updates for 6.4-rc1
+Message-Id: <20230503162432.24a580b6c1a7fd465ed6bc2d@linux-foundation.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ESwn2-N3gT_KrTnHV0ym-VmikpmPWYA2
-X-Proofpoint-ORIG-GUID: ESwn2-N3gT_KrTnHV0ym-VmikpmPWYA2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-03_14,2023-05-03_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 spamscore=0 phishscore=0 mlxlogscore=825 mlxscore=0
- malwarescore=0 priorityscore=1501 impostorscore=0 clxscore=1015
- adultscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2305030201
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -90,63 +51,51 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+Linus, please merge this small batch or MM updates, thanks.
 
-On 5/3/2023 4:03 PM, Marijn Suijten wrote:
-> Hi Jessica,
-> 
-> On 2023-05-03 12:03:40, Jessica Zhang wrote:
->>
->>
->> On 5/3/2023 12:07 AM, Marijn Suijten wrote:
->>> On 2023-05-02 18:19:14, Jessica Zhang wrote:
->>>> Add data_compress feature to DPU HW catalog.
->>>>
->>>> In DPU 7.x and later, there is a DATA_COMPRESS register that must be set
->>>> within the DPU INTF block for DSC to work.
->>>>
->>>> As core_rev (and related macros) was removed from the dpu_kms struct, the
->>>> most straightforward way to indicate the presence of this register would be
->>>> to have a flag in dpu_caps.
->>>
->>> This is a very generic name to have in the global dpu_caps for a very
->>> specific register on the INTF block since DPU >= 7.0.0, and I doubt any
->>> new catalog contributor will know how to fill this field.  After all,
->>> DPU < 7.0.0 also has DCE but it is controlled via the PINGPONG block.
->>>
->>> Instead, how about having it as a DPU_INTF_DATA_COMPRESS (or similar)
->>> feature flag on the INTF block?  We do the same for other (register
->>> related) features on the INTF block, and you did the same to disable DSC
->>> callbacks on PP in [1].
-> 
-> (Note: I said "you" but meant Kuogee)
-> 
->> Hi Marijn,
->>
->> Sounds good.
->>
->>>
->>> In fact it seems that the DSC/DCE (enablement) registers have been moved
->>> from PINGPONG to INTF in DPU 7.0.0.  Can you clarify in the patch
->>> message for v2 that this is the case, and do the same in the linked
->>> PINGPONG patch?  Perhaps these patches should be part of the same series
->>> as they do not seem DSI-specific.
->>
->> Will make a note of the PP to INTF change in the commit message.
-> 
-> Thanks.
-> 
->> I would prefer to keep this patch in this series is because it is needed
->> for DSI over command mode to work and the subsequent patch is
->> specifically for command mode.
-> 
-> That is fine, but do mention this in the commit message if it is
-> relevant here.  Otherwise only mention it as part of patch 4/4.
 
-Acked.
+The following changes since commit 22b8cc3e78f5448b4c5df00303817a9137cd663f:
 
-Thanks,
+  Merge tag 'x86_mm_for_6.4' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip (2023-04-28 09:43:49 -0700)
 
-Jessica Zhang
+are available in the Git repository at:
 
-> 
-> - Marijn
+  git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm tags/mm-stable-2023-05-03-16-22
+
+for you to fetch changes up to 245f0922689364b21163af4937a05ea0ba576fae:
+
+  mm: hwpoison: coredump: support recovery from dump_user_range() (2023-05-02 17:21:50 -0700)
+
+----------------------------------------------------------------
+- Some DAMON cleanups from Kefeng Wang
+
+- Some KSM work from David Hildenbrand, to make the PR_SET_MEMORY_MERGE
+  ioctl's behavior more similar to KSM's behavior.
+
+----------------------------------------------------------------
+Baolin Wang (1):
+      mm/page_alloc: add some comments to explain the possible hole in __pageblock_pfn_to_page()
+
+David Hildenbrand (3):
+      mm/ksm: unmerge and clear VM_MERGEABLE when setting PR_SET_MEMORY_MERGE=0
+      selftests/ksm: ksm_functional_tests: add prctl unmerge test
+      mm/ksm: move disabling KSM from s390/gmap code to KSM code
+
+Kefeng Wang (4):
+      mm/damon/paddr: minor refactor of damon_pa_pageout()
+      mm/damon/paddr: minor refactor of damon_pa_mark_accessed_or_deactivate()
+      mm/damon/paddr: fix missing folio_sz update in damon_pa_young()
+      mm: hwpoison: coredump: support recovery from dump_user_range()
+
+ arch/s390/mm/gmap.c                               | 20 +------
+ fs/coredump.c                                     |  1 +
+ include/linux/ksm.h                               |  7 +++
+ include/linux/uio.h                               | 16 ++++++
+ kernel/sys.c                                      | 12 +---
+ lib/iov_iter.c                                    | 17 +++++-
+ mm/damon/paddr.c                                  | 26 ++++-----
+ mm/ksm.c                                          | 70 +++++++++++++++++++++++
+ mm/page_alloc.c                                   |  9 +++
+ tools/testing/selftests/mm/ksm_functional_tests.c | 46 +++++++++++++--
+ 10 files changed, 172 insertions(+), 52 deletions(-)
+
