@@ -2,94 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D111B6F4ECC
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 04:18:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84BFE6F4ECE
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 04:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbjECCSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 22:18:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41800 "EHLO
+        id S229649AbjECCTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 22:19:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjECCSe (ORCPT
+        with ESMTP id S229577AbjECCTd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 22:18:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 041393A9B;
-        Tue,  2 May 2023 19:18:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 94D556222B;
-        Wed,  3 May 2023 02:18:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53C81C433D2;
-        Wed,  3 May 2023 02:18:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1683080304;
-        bh=Xmt51HxGX9w7I26oXyzXEA9RUwzh1L+7hsYlH4OpXLE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=f39fPxBDGnTUgpaTxjZQeKkZ/zVq1v4h9KI/nLBuGHAWPh0cfBRqLnxPBrGGeq5Xx
-         MuO0qydl1QN6zffGi617yVLvREx5SmNpZLWAiZcik9b+NZNIlX/3zDhzOPcC773irR
-         iOis4Hz6xH16ikl/K7F7qUn7Hj3rSznIi4h8HDeE=
-Date:   Tue, 2 May 2023 19:18:21 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Mika Penttila <mpenttil@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Theodore Ts'o <tytso@mit.edu>, Peter Xu <peterx@redhat.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>
-Subject: Re: [PATCH v8 3/3] mm/gup: disallow FOLL_LONGTERM GUP-fast writing
- to file-backed mappings
-Message-Id: <20230502191821.71c86a2c25f19fe342aa72db@linux-foundation.org>
-In-Reply-To: <a690186fc37e1ea92556a7dbd0887fe201fcc709.1683067198.git.lstoakes@gmail.com>
-References: <cover.1683067198.git.lstoakes@gmail.com>
-        <a690186fc37e1ea92556a7dbd0887fe201fcc709.1683067198.git.lstoakes@gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        Tue, 2 May 2023 22:19:33 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59FF42D69
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 19:19:32 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1a950b982d4so161715ad.0
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 19:19:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683080372; x=1685672372;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ctb1R3fy35Ln0l9ZfEUNBbFNpKA3q8wClyqzrQTbJpg=;
+        b=21rXa6BKPsH1Q9DLffrghLCDtdO0rxkfIfXzRBY90U2BKxFSxAilOuBXsbhudPcv3r
+         4QloLZeDs+Yzqgxyb6xfURzZRHYcsF1T3ICzP98bkBVwp8QlqwZqUKot6sfzZrAod4wA
+         RnBM15xsIT31n8nDArb9G1R8SHb2Ll/jnt5P77w86TOmhoT5dbyewEnjwKRrQGO9NJU3
+         5ELCU3L2UB8vAsU3nILJzhTq2BNmgtA8gK4S9Bm7ZQodM1D3jq7jfjBs/4Iq/v/Y/QJW
+         WYMl6Mmuc5HH/xFkh0y8mqVfJjcTDAkSZ1jnM4XSpFf5mfjEv/P4g+23kyw78tFTVqX2
+         hfBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683080372; x=1685672372;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ctb1R3fy35Ln0l9ZfEUNBbFNpKA3q8wClyqzrQTbJpg=;
+        b=R5OWMMrdkBwT5uDvO3WEF0cYNzjzretmbfwvBDKJihmoZdxYStRuL/Yac50LKlwP3J
+         JhH26PK2WYgK2WZLS4TZXnq2svNqx3osYj8PedAnD2yEVRsaqBj0DS4p94BCasMYYQX2
+         NNiOU5sYkgr1xAN01jE7giTa+K5/BttWl46/k6YmTlOngY6KP9k+/uKEjxpAXlp8LWLV
+         reRHt1dwwG5eQbjLB/pDll6D1grqQmGIe8gd5+C7Cy6ICxB9iJXt2OkZn4HGekERmaZR
+         PHD7PdBl4DgeMqF+CUmUF/qAhzRR4RpXJPCPP/eYGNzFIVlA8CSOTBy8y4vA5Z6P+u29
+         6MMg==
+X-Gm-Message-State: AC+VfDyDTIgsP/RaIBNanz5DRTWcq47nUB1FCikJRNxi+NbVCGmrxKrQ
+        Vck4lK5kW9Zge7xzSFTSjSK7lF1zAj5GzGRjEVjKig==
+X-Google-Smtp-Source: ACHHUZ4fW/UoAhnH6cLXbSIFupRrZXAhv+Av7tDVYL+xqu26Hu3gvOim8JtCuM7qsSSd3wIitG82hSp9P5pzrQjtto8=
+X-Received: by 2002:a17:902:ce8b:b0:1a6:760c:af3d with SMTP id
+ f11-20020a170902ce8b00b001a6760caf3dmr139870plg.16.1683080371574; Tue, 02 May
+ 2023 19:19:31 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230427221625.116050-1-opendmb@gmail.com> <CAGETcx-gDcqY7-_Ud0_rOtgvk7NbzevSa4UCV=NcqiV9zjAv7w@mail.gmail.com>
+In-Reply-To: <CAGETcx-gDcqY7-_Ud0_rOtgvk7NbzevSa4UCV=NcqiV9zjAv7w@mail.gmail.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Tue, 2 May 2023 19:18:55 -0700
+Message-ID: <CAGETcx_xjNT1Tp0GeqoddFwGFpv3O33hZZpEiThNg1wwWcfEQw@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/3] input: gpio-keys - fix pm ordering
+To:     Doug Berger <opendmb@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Gergo Koteles <soyer@irl.hu>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Kees Cook <keescook@chromium.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        Android Kernel Team <kernel-team@android.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,212 +83,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue,  2 May 2023 23:51:35 +0100 Lorenzo Stoakes <lstoakes@gmail.com> wrote:
+On Mon, May 1, 2023 at 1:40=E2=80=AFPM Saravana Kannan <saravanak@google.co=
+m> wrote:
+>
+> On Thu, Apr 27, 2023 at 3:18=E2=80=AFPM Doug Berger <opendmb@gmail.com> w=
+rote:
+> >
+> > Commit 52cdbdd49853 ("driver core: correct device's shutdown
+> > order") allowed for proper sequencing of the gpio-keys device
+> > shutdown callbacks by moving the device to the end of the
+> > devices_kset list at probe which was delayed by child
+> > dependencies.
+> >
+> > However, commit 722e5f2b1eec ("driver core: Partially revert
+> > "driver core: correct device's shutdown order"") removed this
+> > portion of that commit causing a reversion in the gpio-keys
+> > behavior which can prevent waking from shutdown.
+> >
+> > This RFC is an attempt to find a better solution for properly
+> > creating gpio-keys device links to ensure its suspend/resume and
+> > shutdown services are invoked before those of its suppliers.
+> >
+> > The first patch here is pretty brute force but simple and has
+> > the advantage that it should be easily backportable to the
+> > versions where the regression first occurred.
+>
+> We really shouldn't be calling device_pm_move_to_tail() in drivers
+> because device link uses device_pm_move_to_tail() for ordering too.
+> And it becomes a "race" between device links and when the driver calls
+> device_pm_move_to_tail() and I'm not sure we'll get the same ordering
+> every time.
+>
+> >
+> > The second patch is perhaps better in spirit though still a bit
+> > inelegant, but it can only be backported to versions of the
+> > kernel that contain the commit in its 'Fixes:' tag. That isn't
+> > really a valid 'Fixes:' tag since that commit did not cause the
+> > regression, but it does represent how far the patch could be
+> > backported.
+> >
+> > Both commits shouldn't really exist in the same kernel so the
+> > third patch reverts the first in an attempt to make that clear
+> > (though it may be a source of confusion for some).
+> >
+> > Hopefully someone with a better understanding of device links
+> > will see a less intrusive way to automatically capture these
+> > dependencies for parent device drivers that implement the
+> > functions of child node devices.
+>
+> Can you give a summary of the issue on a real system? I took a look at
+> the two commits you've referenced above and it's not clear what's
+> still broken in the 6.3+
+>
+> But I'd think that just teaching fw_devlink about some property should
+> be sufficient. If you are facing a real issue, have you made sure you
+> have fw_devlink=3Don (this is the default unless you turned it off in
+> the commandline when it had issues in the past).
+>
 
-> Writing to file-backed dirty-tracked mappings via GUP is inherently broken
-> as we cannot rule out folios being cleaned and then a GUP user writing to
-> them again and possibly marking them dirty unexpectedly.
-> 
-> This is especially egregious for long-term mappings (as indicated by the
-> use of the FOLL_LONGTERM flag), so we disallow this case in GUP-fast as
-> we have already done in the slow path.
-> 
-> We have access to less information in the fast path as we cannot examine
-> the VMA containing the mapping, however we can determine whether the folio
-> is anonymous or belonging to a whitelisted filesystem - specifically
-> hugetlb and shmem mappings.
-> 
-> We take special care to ensure that both the folio and mapping are safe to
-> access when performing these checks and document folio_fast_pin_allowed()
-> accordingly.
-> 
-> It's important to note that there are no APIs allowing users to specify
-> FOLL_FAST_ONLY for a PUP-fast let alone with FOLL_LONGTERM, so we can
-> always rely on the fact that if we fail to pin on the fast path, the code
-> will fall back to the slow path which can perform the more thorough check.
+I took a closer look at how gpio-keys work and I can see why
+fw_devlink doesn't pick up the GPIO dependencies. It's because the
+gpio dependencies are listed under child "key-x" device nodes under
+the main "gpio-keys" device tree node. fw_devlink doesn't consider
+dependencies under child nodes as mandatory dependencies of the parent
+node.
 
-arm allnoconfig said
+The main reason for this was because of how fw_devlink used to work.
+But I might be able to change fw_devlink to pick this up
+automatically. I need to think a bit more about this because in some
+cases, ignoring those dependencies is the right thing to do. Give me a
+few weeks to think through and experiment with this on my end.
 
-mm/gup.c:115:13: warning: 'folio_fast_pin_allowed' defined but not used [-Wunused-function]
-  115 | static bool folio_fast_pin_allowed(struct folio *folio, unsigned int flags)
-      |             ^~~~~~~~~~~~~~~~~~~~~~
-
-so I moved the definition inside CONFIG_ARCH_HAS_PTE_SPECIAL.
-
-
-
- mm/gup.c |  154 ++++++++++++++++++++++++++---------------------------
- 1 file changed, 77 insertions(+), 77 deletions(-)
-
---- a/mm/gup.c~mm-gup-disallow-foll_longterm-gup-fast-writing-to-file-backed-mappings-fix
-+++ a/mm/gup.c
-@@ -96,83 +96,6 @@ retry:
- 	return folio;
- }
- 
--/*
-- * Used in the GUP-fast path to determine whether a pin is permitted for a
-- * specific folio.
-- *
-- * This call assumes the caller has pinned the folio, that the lowest page table
-- * level still points to this folio, and that interrupts have been disabled.
-- *
-- * Writing to pinned file-backed dirty tracked folios is inherently problematic
-- * (see comment describing the writable_file_mapping_allowed() function). We
-- * therefore try to avoid the most egregious case of a long-term mapping doing
-- * so.
-- *
-- * This function cannot be as thorough as that one as the VMA is not available
-- * in the fast path, so instead we whitelist known good cases and if in doubt,
-- * fall back to the slow path.
-- */
--static bool folio_fast_pin_allowed(struct folio *folio, unsigned int flags)
--{
--	struct address_space *mapping;
--	unsigned long mapping_flags;
--
--	/*
--	 * If we aren't pinning then no problematic write can occur. A long term
--	 * pin is the most egregious case so this is the one we disallow.
--	 */
--	if ((flags & (FOLL_PIN | FOLL_LONGTERM | FOLL_WRITE)) !=
--	    (FOLL_PIN | FOLL_LONGTERM | FOLL_WRITE))
--		return true;
--
--	/* The folio is pinned, so we can safely access folio fields. */
--
--	/* Neither of these should be possible, but check to be sure. */
--	if (unlikely(folio_test_slab(folio) || folio_test_swapcache(folio)))
--		return false;
--
--	/* hugetlb mappings do not require dirty-tracking. */
--	if (folio_test_hugetlb(folio))
--		return true;
--
--	/*
--	 * GUP-fast disables IRQs. When IRQS are disabled, RCU grace periods
--	 * cannot proceed, which means no actions performed under RCU can
--	 * proceed either.
--	 *
--	 * inodes and thus their mappings are freed under RCU, which means the
--	 * mapping cannot be freed beneath us and thus we can safely dereference
--	 * it.
--	 */
--	lockdep_assert_irqs_disabled();
--
--	/*
--	 * However, there may be operations which _alter_ the mapping, so ensure
--	 * we read it once and only once.
--	 */
--	mapping = READ_ONCE(folio->mapping);
--
--	/*
--	 * The mapping may have been truncated, in any case we cannot determine
--	 * if this mapping is safe - fall back to slow path to determine how to
--	 * proceed.
--	 */
--	if (!mapping)
--		return false;
--
--	/* Anonymous folios are fine, other non-file backed cases are not. */
--	mapping_flags = (unsigned long)mapping & PAGE_MAPPING_FLAGS;
--	if (mapping_flags)
--		return mapping_flags == PAGE_MAPPING_ANON;
--
--	/*
--	 * At this point, we know the mapping is non-null and points to an
--	 * address_space object. The only remaining whitelisted file system is
--	 * shmem.
--	 */
--	return shmem_mapping(mapping);
--}
--
- /**
-  * try_grab_folio() - Attempt to get or pin a folio.
-  * @page:  pointer to page to be grabbed
-@@ -2474,6 +2397,83 @@ static void __maybe_unused undo_dev_page
- 
- #ifdef CONFIG_ARCH_HAS_PTE_SPECIAL
- /*
-+ * Used in the GUP-fast path to determine whether a pin is permitted for a
-+ * specific folio.
-+ *
-+ * This call assumes the caller has pinned the folio, that the lowest page table
-+ * level still points to this folio, and that interrupts have been disabled.
-+ *
-+ * Writing to pinned file-backed dirty tracked folios is inherently problematic
-+ * (see comment describing the writable_file_mapping_allowed() function). We
-+ * therefore try to avoid the most egregious case of a long-term mapping doing
-+ * so.
-+ *
-+ * This function cannot be as thorough as that one as the VMA is not available
-+ * in the fast path, so instead we whitelist known good cases and if in doubt,
-+ * fall back to the slow path.
-+ */
-+static bool folio_fast_pin_allowed(struct folio *folio, unsigned int flags)
-+{
-+	struct address_space *mapping;
-+	unsigned long mapping_flags;
-+
-+	/*
-+	 * If we aren't pinning then no problematic write can occur. A long term
-+	 * pin is the most egregious case so this is the one we disallow.
-+	 */
-+	if ((flags & (FOLL_PIN | FOLL_LONGTERM | FOLL_WRITE)) !=
-+	    (FOLL_PIN | FOLL_LONGTERM | FOLL_WRITE))
-+		return true;
-+
-+	/* The folio is pinned, so we can safely access folio fields. */
-+
-+	/* Neither of these should be possible, but check to be sure. */
-+	if (unlikely(folio_test_slab(folio) || folio_test_swapcache(folio)))
-+		return false;
-+
-+	/* hugetlb mappings do not require dirty-tracking. */
-+	if (folio_test_hugetlb(folio))
-+		return true;
-+
-+	/*
-+	 * GUP-fast disables IRQs. When IRQS are disabled, RCU grace periods
-+	 * cannot proceed, which means no actions performed under RCU can
-+	 * proceed either.
-+	 *
-+	 * inodes and thus their mappings are freed under RCU, which means the
-+	 * mapping cannot be freed beneath us and thus we can safely dereference
-+	 * it.
-+	 */
-+	lockdep_assert_irqs_disabled();
-+
-+	/*
-+	 * However, there may be operations which _alter_ the mapping, so ensure
-+	 * we read it once and only once.
-+	 */
-+	mapping = READ_ONCE(folio->mapping);
-+
-+	/*
-+	 * The mapping may have been truncated, in any case we cannot determine
-+	 * if this mapping is safe - fall back to slow path to determine how to
-+	 * proceed.
-+	 */
-+	if (!mapping)
-+		return false;
-+
-+	/* Anonymous folios are fine, other non-file backed cases are not. */
-+	mapping_flags = (unsigned long)mapping & PAGE_MAPPING_FLAGS;
-+	if (mapping_flags)
-+		return mapping_flags == PAGE_MAPPING_ANON;
-+
-+	/*
-+	 * At this point, we know the mapping is non-null and points to an
-+	 * address_space object. The only remaining whitelisted file system is
-+	 * shmem.
-+	 */
-+	return shmem_mapping(mapping);
-+}
-+
-+/*
-  * Fast-gup relies on pte change detection to avoid concurrent pgtable
-  * operations.
-  *
-_
-
+-Saravana
