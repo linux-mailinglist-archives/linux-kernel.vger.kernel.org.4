@@ -2,133 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BEFF6F4FFE
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 08:14:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC8966F4FFA
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 08:12:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbjECGOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 02:14:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36088 "EHLO
+        id S229601AbjECGMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 02:12:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbjECGOD (ORCPT
+        with ESMTP id S229524AbjECGMT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 02:14:03 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B275E40CF;
-        Tue,  2 May 2023 23:14:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683094442; x=1714630442;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Rt+NiPHzZk0ufSm8/klt7oGsdG1fjJ5fZs7aIMtC/FE=;
-  b=l6kOqlwJOpEeyVXnn7GYZi7yxGSxLvG14wjAPFkxF3t2WhFWY42eAupb
-   yBNv/Vlhr8VSWgrq/sZAB+WavnA4dsjfDldOkfFPjC04VoAhYvmhKAlN9
-   cqwfZCku/P7r87Lvp5vRcQgrwh0/JhxwQ2WfIw1fUtUI2uKhnQDq/YDFc
-   9HQ5ujYDiwEWVKB7wqk3SiHDptR0OFtbwi3lU6rQPTsSxx/mqpEIm1JpD
-   fT3cCtLrC1CbG/n6r5RzyGc6rJDxIKh+aTpsQK5iR4D6XDB0skmQxX+ck
-   wYnXMOtnUWPsKfvqecn5URZf/7Kvy+MkPmKPrWu/D+qcq20VKl2mJFMcj
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="328205855"
-X-IronPort-AV: E=Sophos;i="5.99,246,1677571200"; 
-   d="scan'208";a="328205855"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2023 23:14:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="690574189"
-X-IronPort-AV: E=Sophos;i="5.99,246,1677571200"; 
-   d="scan'208";a="690574189"
-Received: from unknown (HELO localhost.localdomain) ([10.226.216.116])
-  by orsmga007.jf.intel.com with ESMTP; 02 May 2023 23:13:59 -0700
-From:   niravkumar.l.rabara@intel.com
-To:     Dinh Nguyen <dinguyen@kernel.org>, Borislav Petkov <bp@alien8.de>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
-Subject: [PATCH 2/2] EDAC/altera: Check previous DDR DBE during driver probe
-Date:   Wed,  3 May 2023 14:10:00 +0800
-Message-Id: <20230503061000.3279381-3-niravkumar.l.rabara@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230503061000.3279381-1-niravkumar.l.rabara@intel.com>
-References: <20230503061000.3279381-1-niravkumar.l.rabara@intel.com>
+        Wed, 3 May 2023 02:12:19 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 727662700
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 23:12:18 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-50be17a1eceso1258544a12.2
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 23:12:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683094337; x=1685686337;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mgYCgNS0MQTBVFvuRN+B4YWv6Xql+dVFmfm2BcHVLME=;
+        b=WoJnzQXZlpBLu62zpB5udi4YjTXhEpM7+vKIIA08G0xOd1TbLEnW5cTdsDj8ZxJWX9
+         a+CA4Z/S/3CfyfPVJ/XfuuSq5d6SXFYNB0CXLnlxv5nk2LKEPObXkLjLqv0u522+VEvE
+         Xx4h3DEDS9dBXFQvDDpPVPbIYVXlucpI5XfZSTOO/S+wwCkTeZ5iM5UIY3bF55te9RLs
+         ZuWfheLiaKrWO26qbGUr/QsWmaVXcvOhzaENU9aMVatYNGv3LBmgaBu3neLs9/pKLt1X
+         UPPrcLCD79/Z9Ou6RNASjngZN++LxGF1rSVuOGOg/qXtd86JjEmAjQRqAsF6mbILkiF+
+         ADHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683094337; x=1685686337;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mgYCgNS0MQTBVFvuRN+B4YWv6Xql+dVFmfm2BcHVLME=;
+        b=YNBXMkLwP7+jpQycEzMyX2lD0arxmY9S2EvQ5zqW/33rWOJyLTwMVyNhaIkEzo1oZX
+         3ipcH332Wnz03kE62vLzTpplLDyqls5fo3z/4Fv9LBG3IQBIVd1xhv5aZRs++cSc6MhH
+         pGGgbXAo7qL8S0R+gF+dfNEUkcz+J7xk+UyyRNBVN9dC3KcbKe2DvW4IH9ahEI4IF2pu
+         PP0PUN0iPeCO+WFHBjbxI/FPLdNJmy86LbaO+GxgxAZfKswF0l+V5VvbEVZRs9Yxb/Jk
+         /hHhJ/yOFcINJwyb/gpOA1Xya/t85aNGS50KZFE+3yzA1b6fwL/mktaP69CicEV/j0yD
+         1FUw==
+X-Gm-Message-State: AC+VfDyP8iSwscSFnucA7Y8NH7Qt/Fekr0wHzvnEa+XVT3X++NM+OHdq
+        Ih7E9py3SAa/R5sd0MWq397+vQ==
+X-Google-Smtp-Source: ACHHUZ7v4/iP8CNJrGq8xzN6FhOMhNcteagGyrZyzuU7xkujmV1Jy93L7XlxV5hg7kBti1YRZ07usg==
+X-Received: by 2002:a50:ee8c:0:b0:4fb:953d:c3d0 with SMTP id f12-20020a50ee8c000000b004fb953dc3d0mr9847667edr.20.1683094336843;
+        Tue, 02 May 2023 23:12:16 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:a40b:9d8:1fa0:ecc5? ([2a02:810d:15c0:828:a40b:9d8:1fa0:ecc5])
+        by smtp.gmail.com with ESMTPSA id r16-20020aa7da10000000b0050bc911eabfsm337186eds.19.2023.05.02.23.12.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 May 2023 23:12:16 -0700 (PDT)
+Message-ID: <c0a392a2-c63f-b51e-fe84-cb7061cc9b65@linaro.org>
+Date:   Wed, 3 May 2023 08:11:57 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v3 0/2] arm: dts: sunxi: Add ICnova A20 ADB4006 board
+ support
+To:     Ludwig Kormann <ludwig.kormann@in-circuit.de>, samuel@sholland.org,
+        jernej.skrabec@gmail.com, wens@csie.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, andre.przywara@arm.com
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20230420102409.1394618-1-ludwig.kormann@in-circuit.de>
+ <10a2e893-18b6-d9c2-1db7-3d500cc0891c@in-circuit.de>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <10a2e893-18b6-d9c2-1db7-3d500cc0891c@in-circuit.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
+On 02/05/2023 10:06, Ludwig Kormann wrote:
+> Hello,
+> 
+> thanks for the reviews so far!
+> 
+> Is there anything I can do / need to do for my patch series for it to 
+> get merged before -rc1?
 
-Add DDR DBE check during driver probe to notify user if previous
-reboot cause by DDR DBE and print DBE error related information.
+It's merge window now, so no, it cannot get merged before rc1.
 
-Signed-off-by: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
----
- drivers/edac/altera_edac.c | 29 ++++++++++++++++++++++++-----
- 1 file changed, 24 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
-index 8b31cd54bdb6..398a49a3eb89 100644
---- a/drivers/edac/altera_edac.c
-+++ b/drivers/edac/altera_edac.c
-@@ -2159,6 +2159,7 @@ static int altr_edac_a10_probe(struct platform_device *pdev)
- #ifdef CONFIG_64BIT
- 	{
- 		int dberror, err_addr;
-+		struct arm_smccc_res result;
- 
- 		edac->panic_notifier.notifier_call = s10_edac_dberr_handler;
- 		atomic_notifier_chain_register(&panic_notifier_list,
-@@ -2168,11 +2169,28 @@ static int altr_edac_a10_probe(struct platform_device *pdev)
- 		regmap_read(edac->ecc_mgr_map, S10_SYSMGR_UE_VAL_OFST,
- 			    &dberror);
- 		if (dberror) {
--			regmap_read(edac->ecc_mgr_map, S10_SYSMGR_UE_ADDR_OFST,
--				    &err_addr);
--			edac_printk(KERN_ERR, EDAC_DEVICE,
--				    "Previous Boot UE detected[0x%X] @ 0x%X\n",
--				    dberror, err_addr);
-+			/* Bit-31 is set if previous DDR UE happened */
-+			if (dberror & (1 << 31)) {
-+				/* Read previous DDR UE info */
-+				arm_smccc_smc(INTEL_SIP_SMC_READ_SEU_ERR, 0,
-+					0, 0, 0, 0, 0, 0, &result);
-+
-+				if (!(int)result.a0) {
-+					edac_printk(KERN_ERR, EDAC_DEVICE,
-+					"Previous DDR UE:Count=0x%X,Address=0x%X,ErrorData=0x%X\n"
-+					, (unsigned int)result.a1, (unsigned int)result.a2
-+					, (unsigned int)result.a3);
-+				} else {
-+					edac_printk(KERN_ERR, EDAC_DEVICE,
-+						"INTEL_SIP_SMC_SEU_ERR_STATUS failed\n");
-+				}
-+			} else {
-+				regmap_read(edac->ecc_mgr_map, S10_SYSMGR_UE_ADDR_OFST,
-+						&err_addr);
-+				edac_printk(KERN_ERR, EDAC_DEVICE,
-+						"Previous Boot UE detected[0x%X] @ 0x%X\n",
-+						dberror, err_addr);
-+			}
- 			/* Reset the sticky registers */
- 			regmap_write(edac->ecc_mgr_map,
- 				     S10_SYSMGR_UE_VAL_OFST, 0);
-@@ -2180,6 +2198,7 @@ static int altr_edac_a10_probe(struct platform_device *pdev)
- 				     S10_SYSMGR_UE_ADDR_OFST, 0);
- 		}
- 	}
-+
- #else
- 	edac->db_irq = platform_get_irq(pdev, 1);
- 	if (edac->db_irq < 0)
--- 
-2.25.1
+Best regards,
+Krzysztof
 
