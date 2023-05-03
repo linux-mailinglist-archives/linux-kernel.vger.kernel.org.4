@@ -2,229 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DAA56F60B6
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 23:59:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8DCF6F60B7
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 23:59:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbjECV65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 17:58:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49090 "EHLO
+        id S229722AbjECV7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 17:59:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjECV6y (ORCPT
+        with ESMTP id S229459AbjECV7f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 17:58:54 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35B77A97
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 14:58:50 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-64359d9c531so660267b3a.3
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 14:58:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1683151130; x=1685743130;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=utvU5QtMOHItQUMD6lrtAs8Wr5pQXqi5OJWCl5bkj/0=;
-        b=tvIXyHrnLyKA2x1/3ixxeDOmxncJn3NGOI34hCBw6aO0vlBonwcg1VFOG5j3O8dbXI
-         6INVus5KAgUVJq2EsYw5CY9f9Ik16f7QXHgdKbNWrWt5O94CBfM1xEj4/vRg4s+5elHd
-         FSc1O2VPz2/GHRq/pdkaGfYgQ1P1sRS6Bs+ZcHCC9woSFJBCySsUZM4dSURJ+ynG7Xot
-         CHzooPFNGVLm90Gu2WAvozhH/rrV4glEWUZhEstADJ6Jqv1kQEEuy+jJSX9CeWXFshVu
-         SdRH0tPycWs8EbaHXYCPYCihh0qtb5/2zAqhhJ6PbpqHs5YaC8mvf27EKhScsw321GZw
-         6hHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683151130; x=1685743130;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=utvU5QtMOHItQUMD6lrtAs8Wr5pQXqi5OJWCl5bkj/0=;
-        b=hmmht01YKho9P+Gb7kgEF5xOwV/SvhiV7N2uMjB7BEb/PwDIuUs3W2hwll5DjMb/Zk
-         Pmys1szx+fk2e0MedwFNzaMBa2PToXOdciIpAy7TNrkz7efxF31q0Ht2n0NrcSJH0ZLN
-         t+yiu5ZdaPkLLcLKRjjM5DmpadK/1q6inytAobgAFCL2cLvRpbJmr4VqPNr+jA+grKzh
-         aXqx9ILUeYC7uQGOZsvjC8U4DkAn+UvPitUj6aKyuyiwqmdjAxDvi3QKlDy7oRPs/6PA
-         FesEpXTML5L/C+fvNi4dasPIp2vc5qxUN/inJ53rm2tbLA9f5HAi/Y0v9i3uONUGUr8e
-         tASQ==
-X-Gm-Message-State: AC+VfDwUTgfjdzPPEClZFtJW0vrCYM/Ry7WVn2ejh+B6Y6IeJAe5iB0i
-        WeA8wR84MpB/ug0nyKUSTVmAxw==
-X-Google-Smtp-Source: ACHHUZ6p7TCZTMBYI9apxL3KzrmzkMEgHVXC+J+6oGMOdBUet/QJwy+eVYfp51Of6HElOgcccqSInQ==
-X-Received: by 2002:a05:6a20:1593:b0:f3:3578:6699 with SMTP id h19-20020a056a20159300b000f335786699mr28979966pzj.45.1683151130066;
-        Wed, 03 May 2023 14:58:50 -0700 (PDT)
-Received: from dread.disaster.area (pa49-181-88-204.pa.nsw.optusnet.com.au. [49.181.88.204])
-        by smtp.gmail.com with ESMTPSA id y72-20020a62644b000000b006372791d708sm24025265pfb.104.2023.05.03.14.58.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 May 2023 14:58:49 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1puKUo-00B0iy-Si; Thu, 04 May 2023 07:58:46 +1000
-Date:   Thu, 4 May 2023 07:58:46 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     John Garry <john.g.garry@oracle.com>
-Cc:     axboe@kernel.dk, kbusch@kernel.org, hch@lst.de, sagi@grimberg.me,
-        martin.petersen@oracle.com, djwong@kernel.org,
-        viro@zeniv.linux.org.uk, brauner@kernel.org, dchinner@redhat.com,
-        jejb@linux.ibm.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-scsi@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com,
-        Prasad Singamsetty <prasad.singamsetty@oracle.com>
-Subject: Re: [PATCH RFC 02/16] fs/bdev: Add atomic write support info to statx
-Message-ID: <20230503215846.GE3223426@dread.disaster.area>
-References: <20230503183821.1473305-1-john.g.garry@oracle.com>
- <20230503183821.1473305-3-john.g.garry@oracle.com>
+        Wed, 3 May 2023 17:59:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CA7C7A84
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 14:59:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DC4362D21
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 21:59:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3F34C433EF;
+        Wed,  3 May 2023 21:59:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683151173;
+        bh=tjJqnJEPyEi7KhsaIkP4sflEqPlbtWhnDQ9Sf+EXXxw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ddo3i+iTqycg9cgxQrWgYpu9HoFw1oXEuS+HbTlk7fYpyGWDoFM6WCaz5HJi89stj
+         0rixswKfkvjUCa5TYAQeVLeZJ91yaNKqCtMO+IIuh3YI7z9Z3f5o5Nx/jbpzNSzE6Q
+         G/eh8hIDqshYIoEpGoyJ4PXWgoB6XI7JAo0K63gt0NgjshNXTkhfXHSYSS9fSmESn4
+         mEKxEQ6wAoNYI9oDBMoHzwS8DuBFdQtGM8U8K8NaA0RCQhEhvEyg0wcxDDLKT4gv0Z
+         s+gUDzDJYZVTqHGlBsMi3npfysKRRWcYXkg37zaM+AxIOSum/2c2RZP/1kFARQOvPh
+         omfwLNOeLm0Wg==
+Date:   Wed, 3 May 2023 14:59:31 -0700
+From:   Chris Li <chrisl@kernel.org>
+To:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+Cc:     sjenning@redhat.com, ddstreet@ieee.org, vitaly.wool@konsulko.com,
+        minchan@kernel.org, ngupta@vflare.org, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        hannes@cmpxchg.org
+Subject: Re: [PATCH v2] mm: fix zswap writeback race condition
+Message-ID: <ZFLZQ/hJarV+iNYd@google.com>
+References: <20230503151200.19707-1-cerasuolodomenico@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230503183821.1473305-3-john.g.garry@oracle.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230503151200.19707-1-cerasuolodomenico@gmail.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 03, 2023 at 06:38:07PM +0000, John Garry wrote:
-> From: Prasad Singamsetty <prasad.singamsetty@oracle.com>
+Hi Domenico,
+
+On Wed, May 03, 2023 at 05:12:00PM +0200, Domenico Cerasuolo wrote:
+> 1. a page with data A and swap offset X is stored in zswap
+> 2. page A is removed off the LRU by zpool driver for writeback in
+> zswap-shrink work, data for A is mapped by zpool driver
+> 3. user space program faults and invalidates page entry A, offset X is
+> considered free
+> 4. kswapd stores page B at offset X in zswap (zswap could also be full,
+> if so, page B would then be IOed to X, then skip step 5.)
+> 5. entry A is replaced by B in tree->rbroot, this doesn't affect the
+> local reference held by zswap-shrink work
+> 6. zswap-shrink work writes back A at X, and frees zswap entry A
+> 7. swapin of slot X brings A in memory instead of B
+
+Thanks for the interesting discovery.
+
+> V2:
+> - updated comment with better explaination of the situation being
+> addressed in the check
 > 
-> Extend statx system call to return additional info for atomic write support
-> support if the specified file is a block device.
-> 
-> Add initial support for a block device.
-> 
-> Signed-off-by: Prasad Singamsetty <prasad.singamsetty@oracle.com>
-> Signed-off-by: John Garry <john.g.garry@oracle.com>
+> Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
 > ---
->  block/bdev.c              | 21 +++++++++++++++++++++
->  fs/stat.c                 | 10 ++++++++++
->  include/linux/blkdev.h    |  4 ++++
->  include/linux/stat.h      |  2 ++
->  include/uapi/linux/stat.h |  7 ++++++-
->  5 files changed, 43 insertions(+), 1 deletion(-)
+>  mm/zswap.c | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
 > 
-> diff --git a/block/bdev.c b/block/bdev.c
-> index 1795c7d4b99e..6a5fd5abaadc 100644
-> --- a/block/bdev.c
-> +++ b/block/bdev.c
-> @@ -1014,3 +1014,24 @@ void bdev_statx_dioalign(struct inode *inode, struct kstat *stat)
+> diff --git a/mm/zswap.c b/mm/zswap.c
+> index f6c89049cf70..5d5977c9ea45 100644
+> --- a/mm/zswap.c
+> +++ b/mm/zswap.c
+> @@ -995,6 +995,22 @@ static int zswap_writeback_entry(struct zpool *pool, unsigned long handle)
+>  		goto fail;
 >  
->  	blkdev_put_no_open(bdev);
->  }
+>  	case ZSWAP_SWAPCACHE_NEW: /* page is locked */
+> +		/*
+> +		 * Having a local reference to the zswap entry doesn't exclude
+> +		 * swapping from invalidating and recycling the swap slot. Once
+> +		 * the swapcache is secured against concurrent swapping to and
+> +		 * from the slot, recheck that the entry is still current before
+> +		 * writing.
+> +		 */
+> +		spin_lock(&tree->lock);
+> +		if (zswap_rb_search(&tree->rbroot, entry->offset) != entry) {
+> +			spin_unlock(&tree->lock);
+> +			delete_from_swap_cache(page_folio(page));
+> +			ret = -ENOMEM;
+> +			goto fail;
+> +		}
+> +		spin_unlock(&tree->lock);
 > +
-> +/*
-> + * Handle statx for block devices to get properties of WRITE ATOMIC
-> + * feature support.
-> + */
-> +void bdev_statx_atomic(struct inode *inode, struct kstat *stat)
-> +{
-> +	struct block_device *bdev;
-> +
-> +	bdev = blkdev_get_no_open(inode->i_rdev);
-> +	if (!bdev)
-> +		return;
-> +
-> +	stat->atomic_write_unit_min = queue_atomic_write_unit_min(bdev->bd_queue);
-> +	stat->atomic_write_unit_max = queue_atomic_write_unit_max(bdev->bd_queue);
-> +	stat->attributes |= STATX_ATTR_WRITE_ATOMIC;
-> +	stat->attributes_mask |= STATX_ATTR_WRITE_ATOMIC;
-> +	stat->result_mask |= STATX_WRITE_ATOMIC;
-> +
-> +	blkdev_put_no_open(bdev);
-> +}
-> diff --git a/fs/stat.c b/fs/stat.c
-> index 7c238da22ef0..d20334a0e9ae 100644
-> --- a/fs/stat.c
-> +++ b/fs/stat.c
-> @@ -256,6 +256,14 @@ static int vfs_statx(int dfd, struct filename *filename, int flags,
->  			bdev_statx_dioalign(inode, stat);
->  	}
->  
-> +	/* Handle STATX_WRITE_ATOMIC for block devices */
-> +	if (request_mask & STATX_WRITE_ATOMIC) {
-> +		struct inode *inode = d_backing_inode(path.dentry);
-> +
-> +		if (S_ISBLK(inode->i_mode))
-> +			bdev_statx_atomic(inode, stat);
-> +	}
 
-This duplicates STATX_DIOALIGN bdev handling.
+The race condition is still there, just making it much harder to hit.
+What happens after you perform the rb tree search, release tree lock.
+Then the entry gets invalid and recycled right here before the decompress
+step?
 
-Really, the bdev attribute handling should be completely factored
-out of vfs_statx() - blockdevs are not the common fastpath for stat
-operations. Somthing like:
+>  		/* decompress */
+>  		acomp_ctx = raw_cpu_ptr(entry->pool->acomp_ctx);
+>  		dlen = PAGE_SIZE;
+>
 
-	/*
-	 * If this is a block device inode, override the filesystem
-	 * attributes with the block device specific parameters
-	 * that need to be obtained from the bdev backing inode.
-	 */
-	if (S_ISBLK(d_backing_inode(path.dentry)->i_mode))
-		bdev_statx(path.dentry, stat);
-
-And then all the overrides can go in the one function that doesn't
-need to repeatedly check S_ISBLK()....
-
-
-> diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-> index 6b6f2992338c..19d33b2897b2 100644
-> --- a/include/linux/blkdev.h
-> +++ b/include/linux/blkdev.h
-> @@ -1527,6 +1527,7 @@ int sync_blockdev_range(struct block_device *bdev, loff_t lstart, loff_t lend);
->  int sync_blockdev_nowait(struct block_device *bdev);
->  void sync_bdevs(bool wait);
->  void bdev_statx_dioalign(struct inode *inode, struct kstat *stat);
-> +void bdev_statx_atomic(struct inode *inode, struct kstat *stat);
->  void printk_all_partitions(void);
->  #else
->  static inline void invalidate_bdev(struct block_device *bdev)
-> @@ -1546,6 +1547,9 @@ static inline void sync_bdevs(bool wait)
->  static inline void bdev_statx_dioalign(struct inode *inode, struct kstat *stat)
->  {
->  }
-> +static inline void bdev_statx_atomic(struct inode *inode, struct kstat *stat)
-> +{
-> +}
->  static inline void printk_all_partitions(void)
->  {
->  }
-
-That also gets rid of the need for all these fine grained exports
-out of the bdev code for statx....
-
-> diff --git a/include/linux/stat.h b/include/linux/stat.h
-> index 52150570d37a..dfa69ecfaacf 100644
-> --- a/include/linux/stat.h
-> +++ b/include/linux/stat.h
-> @@ -53,6 +53,8 @@ struct kstat {
->  	u32		dio_mem_align;
->  	u32		dio_offset_align;
->  	u64		change_cookie;
-> +	u32		atomic_write_unit_max;
-> +	u32		atomic_write_unit_min;
->  };
->  
->  /* These definitions are internal to the kernel for now. Mainly used by nfsd. */
-> diff --git a/include/uapi/linux/stat.h b/include/uapi/linux/stat.h
-> index 7cab2c65d3d7..c99d7cac2aa6 100644
-> --- a/include/uapi/linux/stat.h
-> +++ b/include/uapi/linux/stat.h
-> @@ -127,7 +127,10 @@ struct statx {
->  	__u32	stx_dio_mem_align;	/* Memory buffer alignment for direct I/O */
->  	__u32	stx_dio_offset_align;	/* File offset alignment for direct I/O */
->  	/* 0xa0 */
-> -	__u64	__spare3[12];	/* Spare space for future expansion */
-> +	__u32	stx_atomic_write_unit_max;
-> +	__u32	stx_atomic_write_unit_min;
-> +	/* 0xb0 */
-> +	__u64	__spare3[11];	/* Spare space for future expansion */
->  	/* 0x100 */
->  };
-
-No documentation on what units these are in. Is there a statx() man
-page update for this addition?
-
-Cheers,
-
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+Chris
+ 
