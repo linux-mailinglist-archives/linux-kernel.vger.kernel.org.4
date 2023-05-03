@@ -2,33 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94C8B6F5AD0
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 17:20:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 207C26F5AD2
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 17:20:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230270AbjECPUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 11:20:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46396 "EHLO
+        id S230410AbjECPUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 11:20:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjECPUI (ORCPT
+        with ESMTP id S230145AbjECPUJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 11:20:08 -0400
+        Wed, 3 May 2023 11:20:09 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8818946AE
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 08:20:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 220A74ED2
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 08:20:08 -0700 (PDT)
 Received: from dude02.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::28])
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <m.felsch@pengutronix.de>)
-        id 1puEGz-0004bF-Sf; Wed, 03 May 2023 17:20:05 +0200
+        id 1puEH0-0004bF-DP; Wed, 03 May 2023 17:20:06 +0200
 From:   Marco Felsch <m.felsch@pengutronix.de>
-Subject: [PATCH 0/2] Add i.MX8MM-EVKB Support
-Date:   Wed, 03 May 2023 17:20:03 +0200
-Message-Id: <20230503-b4-v6-3-topic-boards-imx8mm-evk-v1-0-1e15a371d374@pengutronix.de>
+Date:   Wed, 03 May 2023 17:20:04 +0200
+Subject: [PATCH 1/2] dt-bindings: arm: fsl: Add i.MX8MM-EVKB
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAKN7UmQC/x2NQQ7CIBAAv9Ls2U0QahW/0nhY6Go3FmhASZOmf
- 5d4nDnM7FA4Cxe4dztkrlIkxQbnUwd+pvhilKkxaKWNuiiDrsc6oMFPWsWjS5SnghK2WwjI9Y2
- 256slqwZNDlrFUWF0maKfWyd+l6XJNfNTtv92fBzHD4Eqd1+GAAAA
+Message-Id: <20230503-b4-v6-3-topic-boards-imx8mm-evk-v1-1-1e15a371d374@pengutronix.de>
+References: <20230503-b4-v6-3-topic-boards-imx8mm-evk-v1-0-1e15a371d374@pengutronix.de>
+In-Reply-To: <20230503-b4-v6-3-topic-boards-imx8mm-evk-v1-0-1e15a371d374@pengutronix.de>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
@@ -45,40 +44,43 @@ X-SA-Exim-Mail-From: m.felsch@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Johannes Schneider <johannes.schneider@leica-geosystems.com>
 
-I picked the patch series from Johannes [1] and reworked it according
-the comments and the discussion.
+Add DT compatible for the imx8mm EVKB [1].
 
-@Krzysztof
-I dropped your ack for the bindings since I adapted the comment within
-this oneliner. Please can you check the current state and provide your
-(n)ack again?
+[1] https://www.nxp.com/design/development-boards/ \
+	i-mx-evaluation-and-development-boards/ \
+	evaluation-kit-for-the-i-mx-8m-mini-applications-processor:8MMINILPD4-EVK
 
-[1] https://lore.kernel.org/all/20230130172553.2738182-1-johannes.schneider@leica-geosystems.com/
-
+Signed-off-by: Johannes Schneider <johannes.schneider@leica-geosystems.com>
+[m.felsch@pengutronix.de: Adapt the commit message]
+[m.felsch@pengutronix.de: Adapt the yaml comment]
+Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
 ---
-Johannes Schneider (2):
-      dt-bindings: arm: fsl: Add i.MX8MM-EVKB
-      arm64: dts: add NXP i.MX8MM-EVKB support
+ Documentation/devicetree/bindings/arm/fsl.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
- Documentation/devicetree/bindings/arm/fsl.yaml |   1 +
- arch/arm64/boot/dts/freescale/Makefile         |   1 +
- arch/arm64/boot/dts/freescale/imx8mm-evkb.dts  | 128 +++++++++++++++++++++++++
- 3 files changed, 130 insertions(+)
----
-base-commit: 457391b0380335d5e9a5babdec90ac53928b23b4
-change-id: 20230503-b4-v6-3-topic-boards-imx8mm-evk-94e79a9062ab
+diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
+index 442ce8f4d675..446f71b7b798 100644
+--- a/Documentation/devicetree/bindings/arm/fsl.yaml
++++ b/Documentation/devicetree/bindings/arm/fsl.yaml
+@@ -887,6 +887,7 @@ properties:
+               - emtrion,emcon-mx8mm-avari # emCON-MX8MM SoM on Avari Base
+               - fsl,imx8mm-ddr4-evk       # i.MX8MM DDR4 EVK Board
+               - fsl,imx8mm-evk            # i.MX8MM EVK Board
++              - fsl,imx8mm-evkb           # i.MX8MM EVKB Board
+               - gateworks,imx8mm-gw7904
+               - gw,imx8mm-gw71xx-0x       # i.MX8MM Gateworks Development Kit
+               - gw,imx8mm-gw72xx-0x       # i.MX8MM Gateworks Development Kit
 
-Best regards,
 -- 
-Marco Felsch <m.felsch@pengutronix.de>
+2.39.2
 
