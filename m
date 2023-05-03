@@ -2,147 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2750F6F57B4
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 14:14:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 725CE6F57BD
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 14:16:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbjECMOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 08:14:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36126 "EHLO
+        id S229741AbjECMQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 08:16:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbjECMNy (ORCPT
+        with ESMTP id S229610AbjECMPy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 08:13:54 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E50CC59DA
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 05:13:51 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-55a214572e8so54946477b3.0
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 05:13:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683116031; x=1685708031;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HLFpTw4Opsx0SIhXDBcwLEPI4lObbahA52WBgGIUVsM=;
-        b=w24SJl1jEsx1dsysGc/JqXn8TRE0UMobpr8S9T3y+gEnR/nI+CHCSx5trFpTNAVCVG
-         8XS7YABKoVXwdqhydgmtWe9LQJJ7LBPnr1fCtb0rshbAxTDbaTU+5U0WNdSypx0SKblE
-         0CP6meVuOVDCtCX96ONGJ58N4h4LCh6KY7HQXwOPLcftT7CWUqTxxZHaVMF/ygVuJ3xU
-         KtX9ixUBAF79tkLLjx9Hg+1rarQ5Su54dehEmdGZNBkbkoufEbwweYd9rnB2Q94mEjKe
-         bYeSIwtnrv7tEjxTeB2h1XUenyGb9cWojKfDEo4AC69c880iPhtph2axVQ7WlTkbXxO7
-         +S+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683116031; x=1685708031;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HLFpTw4Opsx0SIhXDBcwLEPI4lObbahA52WBgGIUVsM=;
-        b=Gv8j+wicifWLjz2XOAtPQZjlquWCI1NLNLq/bXBZvLXnvfDJFM/rLV0s20CHZ8jhcR
-         859LAW82WvPpl6LRnnMiVLal8VkEvqpMjenStJY5dfT5LCKwCnGqtoyV1L88wcB4PTah
-         QeYJ6bEo95sI6drIUPwjd2Y9ij5XfGpdg2IhOvHyr4lSqrXM9tlB4XCz0Yv4ssT5Z6dr
-         8Ej48a3GnSLRWywM0bS7Wk20q0hl6uUdYwgVK/nPZE3ySUOL9Vk+c/RZKlgvOfYnuLlN
-         Qj92HzJoSKyn7uXaeGOp8WEd6jTv/3Atdfpd1T6KkVE/ZeWS1IW+3qoZFxf17WsMV1fF
-         rQWw==
-X-Gm-Message-State: AC+VfDzj++BsoSpFMHe5DlK2PLDWsyKr5Nl9uMs7STTqAurYLoziETR8
-        qs4E2JMDMOA9MsDOzF+mIk8VAzROKWzOPQrOW2YW3w==
-X-Google-Smtp-Source: ACHHUZ66hRgZLiqP0HgNywmuyEJNjQjxpzuYU/Ewr0nLiWAs/k7+ydf4eMIyKQKo0mpz4nSzQd/diYDGzmnUCVXeNlI=
-X-Received: by 2002:a81:4f04:0:b0:54f:ddb9:95e7 with SMTP id
- d4-20020a814f04000000b0054fddb995e7mr20136923ywb.34.1683116031053; Wed, 03
- May 2023 05:13:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220328000915.15041-1-ansuelsmth@gmail.com> <85eb14ec-f465-7447-ad77-a3dabc666f47@kernel.org>
- <YkKRYnN84D9VZhGj@Ansuel-xps.localdomain> <CAL_Jsq+RQQ-ADMxLPUFwk6S6kGmb6oNDy4k52fnU0EtbUvqmSA@mail.gmail.com>
- <CAMuHMdWNTE48MFy6fqxAsfMWz9b6E7dVNXtXtESP95sxk2PGwA@mail.gmail.com>
- <CAL_JsqJthKTm8bhRF2B=ae1tvtPeYYXx_Tm76qQtSwLtH5C6VA@mail.gmail.com>
- <720a2829-b6b5-411c-ac69-9a53e881f48d@app.fastmail.com> <CAL_JsqKCtmkwzKa01gyG65fH8ye6R3KhR41PJbJhOJ4X9j=znA@mail.gmail.com>
- <bce93654-fc36-3d12-282d-76fafb8f51ce@linaro.org> <CAL_JsqJXd_EpOQwwNEAn25mzFfkhEvqzur6ui5Ca+dbt2kA8-Q@mail.gmail.com>
- <5e318b02-8f33-4e2d-a956-5660e1c60619@app.fastmail.com>
-In-Reply-To: <5e318b02-8f33-4e2d-a956-5660e1c60619@app.fastmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Wed, 3 May 2023 15:13:39 +0300
-Message-ID: <CAA8EJpq8x5wQa3fMebaSP3hCdMiCsZRaF+B4Y3N3royW_CeXCA@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/1] Categorize ARM dts directory
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Olof Johansson <olof@lixom.net>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-actions@lists.infradead.org,
-        linux-sunxi@lists.linux.dev,
-        Linux-OMAP <linux-omap@vger.kernel.org>,
-        linux-amlogic@lists.infradead.org, linux-arm-kernel@axis.com,
-        linux-aspeed@lists.ozlabs.org,
-        linux-rpi-kernel@lists.infradead.org,
-        chrome-platform@lists.linux.dev,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-samsung-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        kernel@dh-electronics.com, linux-mediatek@lists.infradead.org,
-        openbmc@lists.ozlabs.org, linux-tegra@vger.kernel.org,
-        "linux-oxnas@groups.io" <linux-oxnas@groups.io>,
-        linux-arm-msm@vger.kernel.org, linux-unisoc@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        linux-realtek-soc@lists.infradead.org
+        Wed, 3 May 2023 08:15:54 -0400
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59765587;
+        Wed,  3 May 2023 05:15:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1683116150;
+        bh=VDKmAp+D+K8DEGYmTk7RY6tTKuk1qCgpkelWg/ywlAg=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=PlkG5v+bL2k1SR6S+xTcurYCQMY1gqlm0glsK3Tehy9JLi4tipUL2h0fY91Ww/VO3
+         xDO5VLDNlSvr1ssHxu7B/uhx43c8VdCE70ZP8rGdKM8n07MK0plgjoj7x5eBJNKiLf
+         ZQX0hxl/XubtAQyr+oR+xbN/Fjm9fwU7RWvy5GrI=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 3409C1285CEE;
+        Wed,  3 May 2023 08:15:50 -0400 (EDT)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+ by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
+ with ESMTP id TVvOwDLNFpHO; Wed,  3 May 2023 08:15:50 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1683116149;
+        bh=VDKmAp+D+K8DEGYmTk7RY6tTKuk1qCgpkelWg/ywlAg=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=J6HQpG+VrJ9szCbazPDOCSIgT+5ut4XwqZK3Dc0MdxaQliyHK3p1NrakhT8ZMCjIK
+         DNU+c0q6UaQjTZWPcZArAplMwU8UXy5bNs7sVcjLlrCYF64EO/PeWZtKPIX4uqlfWh
+         7xj+nhVGXEVTMTaNQqx/bgBI26AK0f9jPuO3roXU=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::c14])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 15CC91281819;
+        Wed,  3 May 2023 08:15:44 -0400 (EDT)
+Message-ID: <8f3ab2a3091d7e2d1c3f593a335b03f3dcbebc89.camel@HansenPartnership.com>
+Subject: Re: [PATCH 01/40] lib/string_helpers: Drop space in
+ string_get_size's output
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
+        Suren Baghdasaryan <surenb@google.com>,
+        akpm@linux-foundation.org, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de,
+        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
+        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
+        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
+        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
+        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
+        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
+        tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
+        paulmck@kernel.org, pasha.tatashin@soleen.com,
+        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
+        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
+        ndesaulniers@google.com, gregkh@linuxfoundation.org,
+        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+        glider@google.com, elver@google.com, dvyukov@google.com,
+        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
+        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        kasan-dev@googlegroups.com, cgroups@vger.kernel.org,
+        Andy Shevchenko <andy@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Noralf =?ISO-8859-1?Q?Tr=EF=BF=BDnnes?= <noralf@tronnes.org>
+Date:   Wed, 03 May 2023 08:15:42 -0400
+In-Reply-To: <20230502225016.GJ2155823@dread.disaster.area>
+References: <20230501165450.15352-1-surenb@google.com>
+         <20230501165450.15352-2-surenb@google.com>
+         <ouuidemyregstrijempvhv357ggp4tgnv6cijhasnungsovokm@jkgvyuyw2fti>
+         <ZFAUj+Q+hP7cWs4w@moria.home.lan>
+         <b6b472b65b76e95bb4c7fc7eac1ee296fdbb64fd.camel@HansenPartnership.com>
+         <ZFCA2FF+9MI8LI5i@moria.home.lan>
+         <2f5ebe8a9ce8471906a85ef092c1e50cfd7ddecd.camel@HansenPartnership.com>
+         <20230502225016.GJ2155823@dread.disaster.area>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.42.4 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 3 May 2023 at 13:39, Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Wed, May 3, 2023, at 03:17, Rob Herring wrote:
-> > On Tue, May 2, 2023 at 5:52=E2=80=AFPM Dmitry Baryshkov <dmitry.baryshk=
-ov@linaro.org> wrote:
-> >> On 02/05/2023 22:40, Rob Herring wrote:
-> >> >      'berlin' : 'berlin',
-> >> >      'pxa2' : 'pxa',
-> >> >      'pxa3' : 'pxa',
-> >> >      'pxa' : 'marvell',
-> >>
-> >> I'd question if it makes sense to split the pxa line. Yes, it was sold
-> >> by Intel to Marvell, but IIRC the devices still had some inheritance.
-> >> So, if we have the 'pxa' subdir, I'd move Marvell PXAs to that dir too=
-.
-> >
-> > I think I probably split it because it was different maintainers.
-> > Though it doesn't look like pxa168 or pxa910 have any maintainer. They
-> > are a mixture of pxa and mmp I think.
->
-> I think the original split here is probably the best we can do,
-> but there is no good way to do it because of the confusing naming
-> and the problem that there is no clear line between pxa and mmp.
-> As far as I can tell, the release timeline was:
->
-> Intel pxa2xx (mach-pxa, xscale, still exists)
-> Intel pxa3xx (mach-pxa, xscale, still exists)
-> Intel pxa90x (never merged)
-> Marvell pxa93x (mach-pxa, xscale, removed in Linux-6.3, no DT)
-> Marvell pxa92x (never merged)
-> Marvell pxa91x (mach-mmp, pj1, still exists)
-> Marvell pxa168 (mach-mmp, pj1, still exists)
-> Marvell pxa95x (mach-pxa, pj4, long gone)
-> Marvell pxa688 (mach-mmp, pj4, known as mmp2)
->
-> So with pxa93x out of the picture, we can simplify it as using
-> 'pxa' as the name for all the above chips with an Intel XScale
-> core, and 'marvell' for all the other ones that have a Marvell
-> core and exist in mach-mmp.
+On Wed, 2023-05-03 at 08:50 +1000, Dave Chinner wrote:
+> On Tue, May 02, 2023 at 07:42:59AM -0400, James Bottomley wrote:
+> > On Mon, 2023-05-01 at 23:17 -0400, Kent Overstreet wrote:
+> > > On Mon, May 01, 2023 at 10:22:18PM -0400, James Bottomley wrote:
+> > > > It is not used just for debug.  It's used all over the kernel
+> > > > for printing out device sizes.  The output mostly goes to the
+> > > > kernel print buffer, so it's anyone's guess as to what, if any,
+> > > > tools are parsing it, but the concern about breaking log
+> > > > parsers seems to be a valid one.
+> > > 
+> > > Ok, there is sd_print_capacity() - but who in their right mind
+> > > would be trying to scrape device sizes, in human readable units,
+> > 
+> > If you bother to google "kernel log parser", you'll discover it's
+> > quite an active area which supports a load of company business
+> > models.
+> 
+> That doesn't mean log messages are unchangable ABI. Indeed, we had
+> the whole "printk_index_emit()" addition recently to create
+> an external index of printk message formats for such applications to
+> use. [*]
 
-Should it be 'intel' for pxa[23]xx then?
+I didn't say they were.
+> 
+> > >  from log messages when it's available in sysfs/procfs (actually,
+> > > is it in sysfs? if not, that's an oversight) in more reasonable
+> > > units?
+> > 
+> > It's not in sysfs, no.  As aren't a lot of things, which is why log
+> > parsing for system monitoring is big business.
+> 
+> And that big business is why printk_index_emit() exists to allow
+> them to easily determine how log messages change format and come and
+> go across different kernel versions.
+> 
+> > > Correct me if I'm wrong, but I've yet to hear about kernel log
+> > > messages being consider a stable interface, and this seems a bit
+> > > out there.
+> > 
+> > It might not be listed as stable, but when it's known there's a
+> > large ecosystem out there consuming it we shouldn't break it just
+> > because you feel like it.
+> 
+> But we've solved this problem already, yes?
 
->
->      Arnd
+Well, yes; since it's a simple bit of extra thought and a couple of
+lines addition not to afflict everyone with the change, that's the
+simplest course.  It also gets us out of arguing about whether the
+space reads better and is SI consistent.
 
+> If the userspace applications are not using the kernel printk format
+> index to detect such changes between kernel version, then they
+> should be. This makes trivial issues like whether we have a space or
+> not between units is completely irrelevant because the entry in the
+> printk format index for the log output we emit will match whatever
+> is output by the kernel....
 
+Just because we have better tools to fix a problem when it happens
+doesn't mean we should actively cause the problem when its easily
+avoidable.  In the same way we shouldn't drive less carefully just
+because cars are built safer today.
 
---=20
-With best wishes
-Dmitry
+James
+
