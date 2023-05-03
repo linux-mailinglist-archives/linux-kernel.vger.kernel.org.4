@@ -2,131 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47AC96F52C7
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 10:10:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B32F06F52CD
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 10:10:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbjECIKJ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 3 May 2023 04:10:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38934 "EHLO
+        id S229739AbjECIK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 04:10:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbjECIKH (ORCPT
+        with ESMTP id S229545AbjECIKy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 04:10:07 -0400
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34FA11716;
-        Wed,  3 May 2023 01:09:53 -0700 (PDT)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-55a6efe95c9so38615197b3.1;
-        Wed, 03 May 2023 01:09:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683101392; x=1685693392;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3SVmNF978sXXspcYjjZLpiBDqyot8IfsoBtpE1ZoRNc=;
-        b=W7CHGSXOvP426ID/JQgMh2SojaH7qharrHVxPh9IYKVwCXRBUi1TzDY4iX73qZniz1
-         NEvRueNIBBOdPb0+lO+D1lat5fcW6aBLpmE9DC1HCs2UZVDsD/9JGDBSwt0EMuP0ugCU
-         gvfS7KzARnWxFgd2k9HXRC/8d0HUSDw1DQA4598ed+KT8DQBY0OlHlOq+jEYKOTqTKJK
-         U4OougSW1OjZt78kPCJ0C+uFglLtOr9imlJQChTlG35FzQVL1CjkdCf27hrlMRB295wn
-         6aGDEaGEOgB0GRm4r/zX86T6brTSzQBfryMJnCfDT0TclfeUeoyhR5frTojKtfCu4I5Q
-         XO5g==
-X-Gm-Message-State: AC+VfDz9w1SIvm7FBW/kFMU0sItSyYyExQewIKN6uq+S4l28mTmsUV9h
-        lK2Kzi90YDlqgUA/R4g8WrZMA9bCLKdW2g==
-X-Google-Smtp-Source: ACHHUZ5yFIqBAyWPU6jgBPJP96XJUTLdIAkfaJtV4XlOmse1rTDnHHtFTC6jME+Lr68ItrgraGXS8Q==
-X-Received: by 2002:a81:4f82:0:b0:55a:2ce1:2353 with SMTP id d124-20020a814f82000000b0055a2ce12353mr9928596ywb.2.1683101392047;
-        Wed, 03 May 2023 01:09:52 -0700 (PDT)
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
-        by smtp.gmail.com with ESMTPSA id s2-20020a817702000000b00545a08184b5sm8387125ywc.69.2023.05.03.01.09.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 May 2023 01:09:51 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-559e317eef1so59866857b3.0;
-        Wed, 03 May 2023 01:09:50 -0700 (PDT)
-X-Received: by 2002:a0d:c347:0:b0:556:dd1b:3bb7 with SMTP id
- f68-20020a0dc347000000b00556dd1b3bb7mr19301020ywd.43.1683101390642; Wed, 03
- May 2023 01:09:50 -0700 (PDT)
+        Wed, 3 May 2023 04:10:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A545599
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 01:10:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0CDBE627B0
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 08:10:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5B4D4C433D2;
+        Wed,  3 May 2023 08:10:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683101424;
+        bh=3CHjCfDp7Pv1imQOgY8v/8hC+1fjQAX3ePTWSqAm0Ic=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=PXVetXbzlgbgqSTBlWdksSXEucudPVn0TnQkAGHcNCeNIIPdu7v6GwkonOnMLxV5s
+         +mpH4+WUduwKk3llXkd83O4Tb3hTU/tUBv+9G7mo3iUe0pUyABaWuCyX1g18Fv3U3q
+         7Woz1mh/ePQpFs4lrRJmOWTkvue6uT7gsExl5KWFUtED0EabYyZluDUUprOFMIcwJ+
+         u1Kh6fH4r1aSmI3Q1rro9bsnmnh1UC7opDvTg5ngDT3aWwUFyVhKgub+WLGK9KTvys
+         6X202vUf7a+RZfS8s1heuciqcIemNSOacQDH56mFFEb9pr9dErJsTdaVbGQc0Vi5qQ
+         EiRq13Xzn0m6Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3BB92C395FD;
+        Wed,  3 May 2023 08:10:24 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20230502130223.14719-1-tzimmermann@suse.de> <20230502130223.14719-5-tzimmermann@suse.de>
- <20230502195429.GA319489@ravnborg.org> <563673c0-799d-e353-974c-91b1ab881a22@suse.de>
- <87354dyj9i.fsf@minerva.mail-host-address-is-not-set>
-In-Reply-To: <87354dyj9i.fsf@minerva.mail-host-address-is-not-set>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 3 May 2023 10:09:39 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdW8Sm7sBu47XQ1xygn6fzq2FzQeiuK0ncMVGHan-_k4Ow@mail.gmail.com>
-Message-ID: <CAMuHMdW8Sm7sBu47XQ1xygn6fzq2FzQeiuK0ncMVGHan-_k4Ow@mail.gmail.com>
-Subject: Re: [PATCH v3 4/6] fbdev: Include <linux/io.h> via <asm/fb.h>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Sam Ravnborg <sam@ravnborg.org>, linux-arch@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, arnd@arndb.de, deller@gmx.de,
-        chenhuacai@kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        James.Bottomley@hansenpartnership.com,
-        linux-m68k@lists.linux-m68k.org, linux-parisc@vger.kernel.org,
-        vgupta@kernel.org, sparclinux@vger.kernel.org, kernel@xen0n.name,
-        linux-snps-arc@lists.infradead.org, davem@davemloft.net,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [net PATCH v5 00/11] octeontx2: Miscellaneous fixes
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168310142423.16336.14588338859037879117.git-patchwork-notify@kernel.org>
+Date:   Wed, 03 May 2023 08:10:24 +0000
+References: <20230503070944.960190-1-saikrishnag@marvell.com>
+In-Reply-To: <20230503070944.960190-1-saikrishnag@marvell.com>
+To:     Sai Krishna <saikrishnag@marvell.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, simon.horman@corigine.com,
+        leon@kernel.org, sgoutham@marvell.com, gakula@marvell.com,
+        lcherian@marvell.com, jerinj@marvell.com, hkelam@marvell.com,
+        sbhatta@marvell.com
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 3, 2023 at 9:19 AM Javier Martinez Canillas
-<javierm@redhat.com> wrote:
-> Thomas Zimmermann <tzimmermann@suse.de> writes:
-> > Am 02.05.23 um 21:54 schrieb Sam Ravnborg:
-> >> On Tue, May 02, 2023 at 03:02:21PM +0200, Thomas Zimmermann wrote:
->
+Hello:
+
+This series was applied to netdev/net.git (main)
+by David S. Miller <davem@davemloft.net>:
+
+On Wed, 3 May 2023 12:39:33 +0530 you wrote:
+> This patchset includes following fixes.
+> 
+> Patch #1 Fix for the race condition while updating APR table
+> 
+> Patch #2 Fix end bit position in NPC scan config
+> 
+> Patch #3 Fix depth of CAM, MEM table entries
+> 
 > [...]
->
-> >>>   #include <linux/console.h> /* Why should fb driver call console functions? because console_lock() */
-> >>>   #include <video/vga.h>
-> >>>
-> >>> +#include <asm/fb.h>
-> >>
-> >> When we have a header like linux/fb.h - it is my understanding that it is
-> >> preferred to include that file, and not the asm/fb.h variant.
-> >>
-> >> This is assuming the linux/fb.h contains the generic stuff, and includes
-> >> asm/fb.h for the architecture specific parts.
-> >>
-> >> So drivers will include linux/fb.h and then they automatically get the
-> >> architecture specific parts from asm/fb.h.
-> >>
-> >> In other words, drivers are not supposed to include asm/fb.h, if
-> >> linux.fb.h exists - and linux/fb.h shall include the asm/fb.h.
-> >>
-> >> If the above holds true, then it is wrong and not needed to add asm/fb.h
-> >> as seen above.
-> >>
-> >>
-> >> There are countless examples where the above are not followed,
-> >> but to my best understanding the above it the preferred way to do it.
-> >
-> > Where did youher this? I only know about this in the case of asm/io.h
-> > vs. linux/io.h.
-> >
->
-> I understand that's the case too. I believe even checkpatch.pl complains
-> about it? (not that the script always get right, but just as an example).
 
-One more to chime in: in general, drivers should only include <linux/foo.h>.
-Including <asm/foo.h> directly is the exception.
+Here is the summary with links:
+  - [net,v5,01/11] octeontx2-af: Secure APR table update with the lock
+    https://git.kernel.org/netdev/net/c/048486f81d01
+  - [net,v5,02/11] octeontx2-af: Fix start and end bit for scan config
+    https://git.kernel.org/netdev/net/c/c60a6b90e789
+  - [net,v5,03/11] octeontx2-af: Fix depth of cam and mem table.
+    https://git.kernel.org/netdev/net/c/60999cb83554
+  - [net,v5,04/11] octeontx2-pf: Increase the size of dmac filter flows
+    https://git.kernel.org/netdev/net/c/2a6eecc592b4
+  - [net,v5,05/11] octeontx2-af: Add validation for lmac type
+    https://git.kernel.org/netdev/net/c/cb5edce27176
+  - [net,v5,06/11] octeontx2-af: Update correct mask to filter IPv4 fragments
+    https://git.kernel.org/netdev/net/c/2075bf150ddf
+  - [net,v5,07/11] octeontx2-af: Update/Fix NPC field hash extract feature
+    https://git.kernel.org/netdev/net/c/406bed11fb91
+  - [net,v5,08/11] octeontx2-af: Fix issues with NPC field hash extract
+    https://git.kernel.org/netdev/net/c/f66155905959
+  - [net,v5,09/11] octeontx2-af: Skip PFs if not enabled
+    https://git.kernel.org/netdev/net/c/5eb1b7220948
+  - [net,v5,10/11] octeontx2-pf: Disable packet I/O for graceful exit
+    https://git.kernel.org/netdev/net/c/c926252205c4
+  - [net,v5,11/11] octeontx2-vf: Detach LF resources on probe cleanup
+    https://git.kernel.org/netdev/net/c/99ae1260fdb5
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
+You are awesome, thank you!
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+
