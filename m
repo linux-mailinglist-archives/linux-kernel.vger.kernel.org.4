@@ -2,94 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5D4A6F5C0B
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 18:31:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A66AF6F5C15
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 18:33:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbjECQbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 12:31:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56846 "EHLO
+        id S229678AbjECQdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 12:33:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjECQb3 (ORCPT
+        with ESMTP id S229502AbjECQdg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 12:31:29 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1781E72AA
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 09:31:02 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-9536df4b907so1094076166b.0
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 09:31:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683131459; x=1685723459;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fXJgfLVVj1pALvWUNLrKJS1/xJYeKNsh9YVn+qFWuk8=;
-        b=E5YFDGy+IpKtyMz50/OBcRAizD3X+twgJ6+5BP9IEIL+hCf/pS/XQ5gm+/wtvosAKZ
-         zJzJ8JUTByQe5vfvCuIhLyKtzMCGkVAgiawDeTzpsIKm0eVF1gwYVfVp6O9Ftg/AYVGO
-         qgXmRLxMAeRvhBl+RmSPQqsMcuJFZ2xpjnrXA+jf+1VBQ72bWJHHAmyzJMGnPN+ZrEfN
-         thmt42dAe6bgr2WjZK2+IjyX+/m43C3wQRzgeTyaO1w7RHPF3yoBeUBS3kY+kSduwIPc
-         c/OxBf+OGhzHA4VnfSDoFnjWB2qcIPhfAip1YdOe77DVcIVFmRPgREyNs9eGq15WBGYF
-         8O3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683131459; x=1685723459;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fXJgfLVVj1pALvWUNLrKJS1/xJYeKNsh9YVn+qFWuk8=;
-        b=A5GgThOYsOHBL+pFfOfXQFgPqtZLgE76gPF8pF+NQwUhi9RVgaD6fGH2lFWiGKwpcf
-         jwSoCBK5FubchGwkTSA+hH75ufmMLFNUNm8fOi781t1HiHq/2Mj5plBVPw/Pf0/Fh+Mo
-         cLj3PgJc9HjixgfYNITJ/cSblj+ojaGRphEjyYBD9xV69lpR+PVGKT6S7wt6NyxRD0Lx
-         IdFUoe3RpX0JNgbbrAXX60fsgwE8+8S873v+yf3u6Ol+SqN3RA/H0W/z5WlXtXAG3PNk
-         9yHChYzKmTNHgPuVGpAs+y/IZtlKrIRBuLD0bFH7WD+3KDQB4JmD2CVBuHfoQT0r+JY5
-         yJVA==
-X-Gm-Message-State: AC+VfDyzThBjn1sBxTqbj55NSO2drbgtcbf4EI1UOXx94v7umtm4Ge0N
-        IS30nqZE5p7SpNoSmDwObnJYsQ==
-X-Google-Smtp-Source: ACHHUZ4jl6h1T4GpwW8ro5hRFKZ21S+ZFKnEJkGNAO51qnShKHP4eHiC1vV2YNWypxDnAmMzYtDVeA==
-X-Received: by 2002:a17:907:a40b:b0:94e:5708:1564 with SMTP id sg11-20020a170907a40b00b0094e57081564mr3560157ejc.22.1683131459316;
-        Wed, 03 May 2023 09:30:59 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:db42:e3d0:c55a:8cf1? ([2a02:810d:15c0:828:db42:e3d0:c55a:8cf1])
-        by smtp.gmail.com with ESMTPSA id i15-20020a1709061e4f00b0094f3d700868sm17515205ejj.80.2023.05.03.09.30.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 May 2023 09:30:57 -0700 (PDT)
-Message-ID: <5a48749d-61ca-8ade-9fe5-f0d68031f889@linaro.org>
-Date:   Wed, 3 May 2023 18:30:56 +0200
+        Wed, 3 May 2023 12:33:36 -0400
+Received: from mail.fris.de (mail.fris.de [116.203.77.234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 492473ABC
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 09:33:34 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id B39E4BFAE6;
+        Wed,  3 May 2023 18:33:19 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fris.de; s=dkim;
+        t=1683131611; h=from:subject:date:message-id:to:cc:mime-version:
+         content-transfer-encoding; bh=Wz6v8uYHo0LpPLKMPt437X8+F6WcxC2BzkAFGOrZAgE=;
+        b=kCsPK1lkPscu8mHpVGaYjIMrkL3Y83hjOX6nB9DD7tu1cwu3wWw0muGYyEtIyH/4FGSyI3
+        C3Ecep97lekr8IM+q0c4bvhyS+1u1rm3zVwCjgAaCXDc+wIOx7EuO8bzhkvNOZL3kHkLp0
+        9kK+LiLno6Ubc9jHuYFT/0HrkmuYiFkcT/hZu8xZ4qY/N0pRA8945fPA2ZcE0YZUb7gR9m
+        LGwRG+9WFcEat7g8s3jIohGYOyKlVI6z6JkzOLTq2CaHlhGJzuzn1mv2OlGchR+2wyPuWW
+        zqlXv4S4uOS1mBYHIoY+8velaBjdmNKR8TGKTAfN6i8lJeJz13x2pumlrPJTNw==
+From:   Frieder Schrempf <frieder@fris.de>
+To:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        dri-devel@lists.freedesktop.org, Inki Dae <inki.dae@samsung.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        linux-kernel@vger.kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>
+Cc:     Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Marek Vasut <marex@denx.de>, Sam Ravnborg <sam@ravnborg.org>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>
+Subject: [PATCH v2 0/2] Init flow fixes for Samsung DSIM and TI SN65DSI84
+Date:   Wed,  3 May 2023 18:33:05 +0200
+Message-Id: <20230503163313.2640898-1-frieder@fris.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 1/1] arm64: dts: ti: k3-j721s2: Add reserved status in
- msmc
-Content-Language: en-US
-To:     Nishanth Menon <nm@ti.com>, Udit Kumar <u-kumar1@ti.com>
-Cc:     vigneshr@ti.com, kristo@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, afd@ti.com, u-boot@lists.denx.de,
-        n-francis@ti.com
-References: <20230503144706.1265672-1-u-kumar1@ti.com>
- <20230503144706.1265672-2-u-kumar1@ti.com>
- <20230503145107.e447yxvn5e6fmz4g@patronize>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230503145107.e447yxvn5e6fmz4g@patronize>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/05/2023 16:51, Nishanth Menon wrote:
-> On 20:17-20230503, Udit Kumar wrote:
->> Mark atf, l3-cache and tifs node as reserved.
-> 
-> why? (I am not reading the cover-letter for a 1 patch)
+From: Frieder Schrempf <frieder.schrempf@kontron.de>
 
-And you should not have to. :) The commit msg should explain why it is
-useful.
+This patchset contains a proposal to fix the initialization flow for
+the display pipeline used on our i.MX8MM Kontron boards:
 
-Best regards,
-Krzysztof
+  i.MX8MM LCDIF -> i.MX8MM DSIM -> TI SN65DSI84 -> 7" LVDS Panel
+
+Without these changes the display works most of the time, but fails
+to come up occassionally when booting or doing on/off cycling tests
+with:
+
+  echo 0 > /sys/devices/platform/soc@0/32c00000.bus/32e00000.lcdif/graphics/fb0/blank
+  echo 1 > /sys/devices/platform/soc@0/32c00000.bus/32e00000.lcdif/graphics/fb0/blank
+
+All the changes intend to follow the documentation provided here:
+https://docs.kernel.org/gpu/drm-kms-helpers.html#mipi-dsi-bridge-operation
+
+Changes for v2:
+* Drop RFC
+* Drop non-working Exynos cleanup patch 3/3
+
+Frieder Schrempf (2):
+  drm: bridge: samsung-dsim: Fix i.MX8M enable flow to meet spec
+  drm/bridge: ti-sn65dsi83: Fix enable/disable flow to meet spec
+
+ drivers/gpu/drm/bridge/samsung-dsim.c | 25 +++++++++++++++++++++++--
+ drivers/gpu/drm/bridge/ti-sn65dsi83.c | 19 ++++++++++++++++---
+ 2 files changed, 39 insertions(+), 5 deletions(-)
+
+-- 
+2.40.0
 
