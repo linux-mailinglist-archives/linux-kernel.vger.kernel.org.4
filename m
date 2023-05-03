@@ -2,92 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0821A6F56C5
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 13:01:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 841216F56C3
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 13:01:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230116AbjECLBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 07:01:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59766 "EHLO
+        id S230087AbjECLBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 07:01:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230168AbjECLB0 (ORCPT
+        with ESMTP id S230148AbjECLBU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 07:01:26 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E48159E8;
-        Wed,  3 May 2023 04:00:59 -0700 (PDT)
-Received: from [IPv6:2804:14d:72b4:8284:32a8:8167:f815:2895] (unknown [IPv6:2804:14d:72b4:8284:32a8:8167:f815:2895])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 3 May 2023 07:01:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7DF59F2;
+        Wed,  3 May 2023 04:00:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: dwlsalmeida)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B25156600010;
-        Wed,  3 May 2023 12:00:53 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1683111657;
-        bh=YgZoFypi9uBzyCleV28/+qccnmAQ9nqEaGbJaWVfyOI=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=oG7sXoN3W0Ip2e6rvOzM+wj6NYpQu709wQqRJnIFuQ6W+VyeaPUpjk/rRiG4L70xE
-         4bhH14TnwyLVojgsFxLSIKFcK2QeHTa8GLMcE08xoefgIdSqjTnVdZQe+24n1NOILk
-         cE1cjxXis+yFH65uk3fma9e9bOI6uFwxd/0zf2iloldTSBUgo3gV5Q1+dJzw5B60TX
-         DUUKQ8g6XUXesoo5SDIAH2rAPlfxE+aDEPHOzADhqVkfHmsaaeBHW9riV476rNJYdg
-         gJvgCNQ6CAw+fKtydNgfggARwcxWiRf4E0Er4wSz1RJjI1wLmrehefWaJulgXqYeyQ
-         LlqPOZW1bvQ2g==
-Message-ID: <56777298b3883fc2b105af52be80cf5f0cf14be0.camel@collabora.com>
-Subject: Re: [PATCH 0/6] Initial Rust V4L2 support
-From:   Daniel Almeida <daniel.almeida@collabora.com>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Asahi Lina <lina@asahilina.net>
-Cc:     Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>, wedsonaf@gmail.com,
-        ojeda@kernel.org, mchehab@kernel.org,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, kernel@collabora.com,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        Antoni Boucher <bouanto@zoho.com>
-Date:   Wed, 03 May 2023 08:00:40 -0300
-In-Reply-To: <CANiq72m8cOWrO21PhUFcBap2j7ooKtAKdkOU9u8y-xGj_8fvoA@mail.gmail.com>
-References: <20230406215615.122099-1-daniel.almeida@collabora.com>
-         <136035a4-26df-1c14-e51e-406b4ee5fe33@xs4all.nl>
-         <CANiq72kzgopREcNcAnjCBk2u9b9cJ4f_jPix6LWYSkcOV5kubw@mail.gmail.com>
-         <20230426003210.GA31260@pendragon.ideasonboard.com>
-         <CANiq72nLtpOn2HcOneoQ6v_TcYAEj_W8z2HCQvF4HmB4+OoSZA@mail.gmail.com>
-         <20230426163512.GE18120@pendragon.ideasonboard.com>
-         <7b4ea4fc-7d73-d229-4645-366b1ea574fb@collabora.com>
-         <20230426172539.GD2326@pendragon.ideasonboard.com>
-         <9cf10a4d7a9eec237f5d18f79f6ae4bd031489bb.camel@collabora.com>
-         <fe2dc70b-915c-ca2b-be81-a8ee66cf41cd@asahilina.net>
-         <CANiq72m8cOWrO21PhUFcBap2j7ooKtAKdkOU9u8y-xGj_8fvoA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DE948621B6;
+        Wed,  3 May 2023 11:00:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EC01C433D2;
+        Wed,  3 May 2023 11:00:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683111654;
+        bh=aVQhtxN0NqJG5qAwFQGM7qQW6a+VAP6JwXVNlk6TTI4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Pew2rThKTE2IVaEDpnKSwdq2+hrdTIOJoGtZu56OmT77m7fLKOssjQ+M9ZANRvl+F
+         Y2QyZ23JuiorwffwwZAkfU7XiQ4CCt5svNwaOyod14xrccDZR1nnXdAGLMbzW+thWs
+         OyCUMrDZPyC4rm48OZ1/+5iFTQKb4Dh3AR4EuvyRavi//egHyZ2V28Z4xkcKwTCP6F
+         gkh5AyYIRKOULoFyaTfy9AnkdU1VfvqMcGCYo0YzHmOcn6HpCUhtI6ddFK77rPUG21
+         A9Ax+uOwoyRdbO74GV3qqg04G0skrXu4aXYWpfzAZDp+Va76gC5OSDuvfkT1GfdfUc
+         OnSXeRmTt9ZQQ==
+From:   Roger Quadros <rogerq@kernel.org>
+To:     Thinh.Nguyen@synopsys.com
+Cc:     gregkh@linuxfoundation.org, r-gunasekaran@ti.com, srk@ti.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Roger Quadros <rogerq@kernel.org>, stable@vger.kernel.org
+Subject: [PATCH v3] usb: dwc3: gadget: Improve dwc3_gadget_suspend() and dwc3_gadget_resume()
+Date:   Wed,  3 May 2023 14:00:48 +0300
+Message-Id: <20230503110048.30617-1-rogerq@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Prevent -ETIMEDOUT error on .suspend().
+e.g. If gadget driver is loaded and we are connected to a USB host,
+all transfers must be stopped before stopping the controller else
+we will not get a clean stop i.e. dwc3_gadget_run_stop() will take
+several seconds to complete and will return -ETIMEDOUT.
 
-Hi Lina, all,
+Handle error cases properly in dwc3_gadget_suspend().
+Simplify dwc3_gadget_resume() by using the introduced helper function.
 
-I disagree that we need to wait for anything as a precondition for
-writing the things Nicolas listed. The reason being that he listed out
-some very self-contained codebases. These would not depend on the
-kernel crate either for the most part (or at all, even, but going from
-memory here..).
+Fixes: 9f8a67b65a49 ("usb: dwc3: gadget: fix gadget suspend/resume")
+Cc: stable@vger.kernel.org
+Suggested-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Signed-off-by: Roger Quadros <rogerq@kernel.org>
+Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+---
 
-Note that the codec library in particular would rarely be touched after
-it's written, as the algorithms in there are more or less "set in
-stone" by the codec specs.
+Changelog:
 
-Maintaining these until they can be merged would be essentially free,
-unless I am missing something?
+v3:
+- dropped patch 1. Now no longer check for softconnect during .suspend
+- in suspend error path check for softconnect and enable softconnect accordingly
+- added Acked-by tag by Thinh Nguyen
 
+v2:
+- rebase on greg/usb-next
+- split into 2 patches. Add Fixes tag and cc stable.
+- do not check for !softconnect in error condition in dwc3_gadget_suspend()
 
--- Daniel
+ drivers/usb/dwc3/gadget.c | 67 ++++++++++++++++++++-------------------
+ 1 file changed, 34 insertions(+), 33 deletions(-)
+
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index c0ca4d12f95d..2996bcb4d53d 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -2699,6 +2699,21 @@ static int dwc3_gadget_soft_disconnect(struct dwc3 *dwc)
+ 	return ret;
+ }
+ 
++static int dwc3_gadget_soft_connect(struct dwc3 *dwc)
++{
++	/*
++	 * In the Synopsys DWC_usb31 1.90a programming guide section
++	 * 4.1.9, it specifies that for a reconnect after a
++	 * device-initiated disconnect requires a core soft reset
++	 * (DCTL.CSftRst) before enabling the run/stop bit.
++	 */
++	dwc3_core_soft_reset(dwc);
++
++	dwc3_event_buffers_setup(dwc);
++	__dwc3_gadget_start(dwc);
++	return dwc3_gadget_run_stop(dwc, true);
++}
++
+ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+ {
+ 	struct dwc3		*dwc = gadget_to_dwc(g);
+@@ -2737,21 +2752,10 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+ 
+ 	synchronize_irq(dwc->irq_gadget);
+ 
+-	if (!is_on) {
++	if (!is_on)
+ 		ret = dwc3_gadget_soft_disconnect(dwc);
+-	} else {
+-		/*
+-		 * In the Synopsys DWC_usb31 1.90a programming guide section
+-		 * 4.1.9, it specifies that for a reconnect after a
+-		 * device-initiated disconnect requires a core soft reset
+-		 * (DCTL.CSftRst) before enabling the run/stop bit.
+-		 */
+-		dwc3_core_soft_reset(dwc);
+-
+-		dwc3_event_buffers_setup(dwc);
+-		__dwc3_gadget_start(dwc);
+-		ret = dwc3_gadget_run_stop(dwc, true);
+-	}
++	else
++		ret = dwc3_gadget_soft_connect(dwc);
+ 
+ 	pm_runtime_put(dwc->dev);
+ 
+@@ -4655,42 +4659,39 @@ void dwc3_gadget_exit(struct dwc3 *dwc)
+ int dwc3_gadget_suspend(struct dwc3 *dwc)
+ {
+ 	unsigned long flags;
++	int ret;
+ 
+ 	if (!dwc->gadget_driver)
+ 		return 0;
+ 
+-	dwc3_gadget_run_stop(dwc, false);
++	ret = dwc3_gadget_soft_disconnect(dwc);
++	if (ret)
++		goto err;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	dwc3_disconnect_gadget(dwc);
+-	__dwc3_gadget_stop(dwc);
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
+ 	return 0;
++
++err:
++	/*
++	 * Attempt to reset the controller's state. Likely no
++	 * communication can be established until the host
++	 * performs a port reset.
++	 */
++	if (dwc->softconnect)
++		dwc3_gadget_soft_connect(dwc);
++
++	return ret;
+ }
+ 
+ int dwc3_gadget_resume(struct dwc3 *dwc)
+ {
+-	int			ret;
+-
+ 	if (!dwc->gadget_driver || !dwc->softconnect)
+ 		return 0;
+ 
+-	ret = __dwc3_gadget_start(dwc);
+-	if (ret < 0)
+-		goto err0;
+-
+-	ret = dwc3_gadget_run_stop(dwc, true);
+-	if (ret < 0)
+-		goto err1;
+-
+-	return 0;
+-
+-err1:
+-	__dwc3_gadget_stop(dwc);
+-
+-err0:
+-	return ret;
++	return dwc3_gadget_soft_connect(dwc);
+ }
+ 
+ void dwc3_gadget_process_pending_events(struct dwc3 *dwc)
+-- 
+2.34.1
 
