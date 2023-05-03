@@ -2,90 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BC7D6F526B
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 09:59:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A1596F5276
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 10:00:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbjECH7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 03:59:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56084 "EHLO
+        id S229816AbjECIA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 04:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbjECH7U (ORCPT
+        with ESMTP id S229693AbjECIAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 03:59:20 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A80135B0
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 00:59:19 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-94f3df30043so780225366b.2
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 00:59:19 -0700 (PDT)
+        Wed, 3 May 2023 04:00:23 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD013C29
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 01:00:20 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-50bc075d6b2so7433604a12.0
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 01:00:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683100757; x=1685692757;
+        d=linaro.org; s=google; t=1683100819; x=1685692819;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=n2lIatLtxS/6Cq5Ij16t1kjY3cuWYBdjoqqifNQbzJ0=;
-        b=DOS/xq+cYgi2rm7lNlZXy9XxJnguOr4ukDE7HlwSSGNfuchYEibFzGrCDB4JCmZDpP
-         +Vp88JXbD9SBlbhs+0GhYf52FYivkDHS2VGGJyjmQr2yRAlrJOm8uVQAvGJnDxjrkxfV
-         StCf39JolnezT8H3ADMXoPkBKlp7wB9bo5CkvVg3QZfKF4JGJA5j+hVU4296EqrccSzH
-         NgzK+/qVIN43BzAVnOg/cOe94u/MnVVWBDmdra5++VtKRiBDY2VMMCetOpNJQ+WDDUgh
-         pSufUDhgScQVCXzfAWIbWWE+DI9bwyEScM4kHig6AsUNHxQsLnGzwFFprTPaVG21aMu1
-         Pccw==
+        bh=lDbcd7WqGVeRLL02ERpjzOWzEQ8QCr4sxAPprp+7Tic=;
+        b=XKpO/jtQf7swVp2+niPXDJtv62ipHkMbsef5wWma2J43jj6tBUBcI3P7pEM4wjFH8p
+         5/lnpT7JqB36XiqzwMrXSsJvYLWDPtswP6ZurpYSs+er2XP9jfgmhFqcagNbcfgfR59g
+         ltJBzthBzusiNRteiPeh4jU6JdNu13Ed8B9YM/UjrgBOd3IOI/2hsx0qz6E1/8W4qdhT
+         90K5dmPn3Uucq5VP+E6ScKxCQuOAJAxVg1zJup+sSiFQ/HpIPD/23pUBX6zQTIZLhPUN
+         5yG+IHTwrOBHh5QwfAChV83KRHfWAHAe9HsMDN6pjUK59v+bsHZJj0EM8KRNzrBW/92k
+         NgDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683100757; x=1685692757;
+        d=1e100.net; s=20221208; t=1683100819; x=1685692819;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=n2lIatLtxS/6Cq5Ij16t1kjY3cuWYBdjoqqifNQbzJ0=;
-        b=NPoRVD0T6BDEtXrjAdKgVIuSOcEIj41xhnD6816D7xasvqZuc5mIAqfLKXxIGSg6qG
-         ffc+bsydFtLtneTejbnacspfV3Je/RH1iWVNG8kcVSuOb8p6PgGZ27sj3kjof2Ix/ZEh
-         YO4grJfkTYoqCqmNnjvnrrzv3yzU17S+yUdFZ+pIVB/m/qz5EGfWh8AyO521k2Ez42Bs
-         nOTxN0er7//7TyZ9DDLvqckZjFXgRl1Blu9stTnPLEC+Ws7OemxemfFZnM75RAn/Hh1R
-         tBHMdHBhC1gyQb2TQEXxEOWNCxffAap9zHficM257j7TzdI4WQ3OZACZ4xAOk3EmiW8c
-         Mq2w==
-X-Gm-Message-State: AC+VfDzuTeuLX7oNZeGo7c9KaOGGik7VTs5Re1OWdUX1QyXO3LOob/6C
-        JsUjrnA8bvgeueU/RLkPMBA=
-X-Google-Smtp-Source: ACHHUZ7QonMKpXLDNMvlR5g3wCXfj/KqGphX90kcj6y7J15I6kLWmqF8/fe8tRNYkuvkR5VIxL/NWQ==
-X-Received: by 2002:a17:907:2da9:b0:94e:bd38:49bb with SMTP id gt41-20020a1709072da900b0094ebd3849bbmr2734381ejc.23.1683100757340;
-        Wed, 03 May 2023 00:59:17 -0700 (PDT)
-Received: from ?IPV6:2a02:908:1256:79a0:56ef:355f:bcc8:d6a8? ([2a02:908:1256:79a0:56ef:355f:bcc8:d6a8])
-        by smtp.gmail.com with ESMTPSA id s1-20020a1709060c0100b0094f66176208sm17145771ejf.95.2023.05.03.00.59.16
+        bh=lDbcd7WqGVeRLL02ERpjzOWzEQ8QCr4sxAPprp+7Tic=;
+        b=iTupw9JI+vpXfSDB1TvaEt3N9Scib8UOtbkwjZbhNNsYOZTMvplPtViOFxCuHAAJsG
+         MCeSO6QYfvt9wAvuVOcomccKRpi1ScABWBuczwPLC37PTrh9ZnCHw+8wQ9lyAenMmgsH
+         nFaA5Q5xvJs0u35FgERiSymTWtswaE6BSGi1mv2J3miVykybZvw4HFPZj0WdJXLKFt3M
+         Td9za1TQAKUWPcz5WqbwsxRkyNpCY76w1YQwts3gB7U6joVEd5FFS8WHo0P5mgftMtRb
+         Dx+QdIL9eUS6Hd7vKlYtllDrJR+vMfCiOW1WQsvtN3oE0wdAtirR9eUVGUDz+JGk+ke+
+         +BMw==
+X-Gm-Message-State: AC+VfDyEjGHLMkr5h+qXpZHnUU9uOjjOsAiRc13a5cduD+pUVgwS57MC
+        twRCkd8/hamZCPzNvChYf03wFg==
+X-Google-Smtp-Source: ACHHUZ6lXDlOR3mp+rsdhGh4eUn3gQ3+nAzJWxexqEU2mAxaH0A8yN3eJHCzcLI0u1bOfl0Iqrk1Kw==
+X-Received: by 2002:a17:907:9485:b0:94f:720b:1b14 with SMTP id dm5-20020a170907948500b0094f720b1b14mr2456927ejc.29.1683100819322;
+        Wed, 03 May 2023 01:00:19 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:a40b:9d8:1fa0:ecc5? ([2a02:810d:15c0:828:a40b:9d8:1fa0:ecc5])
+        by smtp.gmail.com with ESMTPSA id bj1-20020a170906b04100b0094f7acbafe0sm16105889ejb.177.2023.05.03.01.00.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 May 2023 00:59:16 -0700 (PDT)
-Message-ID: <57fa0ee4-de4f-3797-f817-d05f72541d0e@gmail.com>
-Date:   Wed, 3 May 2023 09:59:15 +0200
+        Wed, 03 May 2023 01:00:18 -0700 (PDT)
+Message-ID: <b3e227d4-1bdf-9f58-a354-e7f798765e91@linaro.org>
+Date:   Wed, 3 May 2023 10:00:17 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RFC PATCH 0/1] Add AMDGPU_INFO_GUILTY_APP ioctl
+ Thunderbird/102.10.1
+Subject: Re: [PATCH 6/6] soundwire: qcom: do not probe devices before bus/link
+ init
 Content-Language: en-US
-To:     Alex Deucher <alexdeucher@gmail.com>,
-        =?UTF-8?Q?Timur_Krist=c3=b3f?= <timur.kristof@gmail.com>
-Cc:     "Pelloux-Prayer, Pierre-Eric" <pierre-eric.pelloux-prayer@amd.com>,
-        Samuel Pitoiset <samuel.pitoiset@gmail.com>,
-        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
-        =?UTF-8?B?TWFyZWsgT2zFocOhaw==?= <maraeo@gmail.com>,
-        michel.daenzer@mailbox.org, linux-kernel@vger.kernel.org,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        kernel-dev@igalia.com, Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
-        "Deucher, Alexander" <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-References: <20230501185747.33519-1-andrealmeid@igalia.com>
- <CADnq5_NXj4W44F_etRQ7HWdVTnf5zARCM3Y_o3EiwWiHj8QMpA@mail.gmail.com>
- <6ab2ff76-4518-6fac-071e-5d0d5adc4fcd@igalia.com>
- <cb3d2590-a1f8-fe7e-0bba-638ee80719af@amd.com>
- <CAFF-SiV0=WNmRW-D9uYUuj68Zq0APxtGLya9KR6FfZ7v0Zf2RQ@mail.gmail.com>
- <fcca2934-a556-797c-535d-a66fc67bbe30@amd.com>
- <85c538b01efb6f3fa6ff05ed1a0bc3ff87df7a61.camel@gmail.com>
- <CADnq5_NHtFbwT=x8u7GYc4ESL_HVFzjgtOd3AnVFBYMrjZq55w@mail.gmail.com>
- <c54414482b685af0991a6b095cbfb7534d998afc.camel@gmail.com>
- <CADnq5_MSY=j9AobDk7ACevur4Hwvw_ub7g16Mfm7ymMJqwVNfQ@mail.gmail.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-In-Reply-To: <CADnq5_MSY=j9AobDk7ACevur4Hwvw_ub7g16Mfm7ymMJqwVNfQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Cc:     Patrick Lai <quic_plai@quicinc.com>
+References: <20230420101617.142225-1-krzysztof.kozlowski@linaro.org>
+ <20230420101617.142225-7-krzysztof.kozlowski@linaro.org>
+ <28141433-2130-e278-0f59-d9ab507b9be3@linux.intel.com>
+ <42fbf7ad-54db-0917-bb85-a1be9f99cc45@linaro.org>
+ <3f618297-e1cd-a46d-5318-c3b77a0fc78d@linux.intel.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <3f618297-e1cd-a46d-5318-c3b77a0fc78d@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,72 +90,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 02.05.23 um 20:41 schrieb Alex Deucher:
-> On Tue, May 2, 2023 at 11:22 AM Timur Kristóf <timur.kristof@gmail.com> wrote:
->> [SNIP]
->>>>>> In my opinion, the correct solution to those problems would be
->>>>>> if
->>>>>> the kernel could give userspace the necessary information about
->>>>>> a
->>>>>> GPU hang before a GPU reset.
->>>>>>
->>>>>   The fundamental problem here is that the kernel doesn't have
->>>>> that
->>>>> information either. We know which IB timed out and can
->>>>> potentially do
->>>>> a devcoredump when that happens, but that's it.
->>>>
->>>> Is it really not possible to know such a fundamental thing as what
->>>> the
->>>> GPU was doing when it hung? How are we supposed to do any kind of
->>>> debugging without knowing that?
-
-Yes, that's indeed something at least I try to figure out for years as well.
-
-Basically there are two major problems:
-1. When the ASIC is hung you can't talk to the firmware engines any more 
-and most state is not exposed directly, but just through some fw/hw 
-interface.
-     Just take a look at how umr reads the shader state from the SQ. 
-When that block is hung you can't do that any more and basically have no 
-chance at all to figure out why it's hung.
-
-     Same for other engines, I remember once spending a week figuring 
-out why the UVD block is hung during suspend. Turned out to be a 
-debugging nightmare because any time you touch any register of that 
-block the whole system would hang.
-
-2. There are tons of things going on in a pipeline fashion or even 
-completely in parallel. For example the CP is just the beginning of a 
-rather long pipeline which at the end produces a bunch of pixels.
-     In almost all cases I've seen you ran into a problem somewhere deep 
-in the pipeline and only very rarely at the beginning.
-
->>>>
->>>> I wonder what AMD's Windows driver team is doing with this problem,
->>>> surely they must have better tools to deal with GPU hangs?
->>> For better or worse, most teams internally rely on scan dumps via
->>> JTAG
->>> which sort of limits the usefulness outside of AMD, but also gives
->>> you
->>> the exact state of the hardware when it's hung so the hardware teams
->>> prefer it.
+On 01/05/2023 15:43, Pierre-Louis Bossart wrote:
+> 
+> 
+> On 5/1/23 07:24, Krzysztof Kozlowski wrote:
+>> On 20/04/2023 23:37, Pierre-Louis Bossart wrote:
 >>>
->> How does this approach scale? It's not something we can ask users to
->> do, and even if all of us in the radv team had a JTAG device, we
->> wouldn't be able to play every game that users experience random hangs
->> with.
-> It doesn't scale or lend itself particularly well to external
-> development, but that's the current state of affairs.
+>>>
+>>> On 4/20/23 05:16, Krzysztof Kozlowski wrote:
+>>>> Soundwire devices are supposed to be kept in reset state (powered off)
+>>>> till their probe() or component bind() callbacks.  However if they are
+>>>> already powered on, then they might enumerate before the master
+>>>> initializes bus in qcom_swrm_init() leading to occasional errors like:
+>>>
+>>> The problem statement is really hard to follow.
+>>>
+>>> The peripheral can only be enumerated AFTER
+>>> a) the manager starts the bus clock and transmitting PING frames
+>>> b) the peripheral detects the sync words for 16 frames in a row.
+>>> c) the peripheral reports as Attached in the Device0 slot
+>>>
+>>> That sequence holds whether the manager does the enumeration manually or
+>>> relies on hardware-assisted autoenumeration. This is what the spec requires.
+>>>
+>>> So why can't the bus clock start be controlled by the manager driver,
+>>> and started once all required initializations are done?
+>>>
+>>> I mean, there's got to be some sort of parent-child hierarchy with
+>>> manager first, peripheral(s) second, I don't get how these steps could
+>>> be inverted or race.
+>>>
+>>>>   qcom-soundwire 6d30000.soundwire-controller: Qualcomm Soundwire controller v2.0.0 Registered
+>>>>   wcd938x_codec audio-codec: bound sdw:0:0217:010d:00:4 (ops wcd938x_sdw_component_ops)
+>>>>   wcd938x_codec audio-codec: bound sdw:0:0217:010d:00:3 (ops wcd938x_sdw_component_ops)
+>>>>   qcom-soundwire 6ad0000.soundwire-controller: swrm_wait_for_wr_fifo_avail err write overflow
+>>>>
+>>>> The problem primarily lies in Qualcomm Soundwire controller probe() sequence:
+>>>> 1. request_threaded_irq()
+>>>> 2. sdw_bus_master_add() - which will cause probe() and component bind()
+>>>>    of Soundwire devices, e.g. WCD938x codec drivers.  Device drivers
+>>>>    might already start accessing their registers.
+>>>
+>>> not if the bus clock hasn't started...
+>>>
+>>>> 3. qcom_swrm_init() - which initializes the link/bus and enables
+>>>>    interrupts.
+>>>
+>>> if you can move the clock start in 3) then problem solved. Why can't
+>>> this be done?
+>>
+>> Responding to all your three responses:
+>> The clock is enabled in this 3. qcom_swrm_init(), so the old code to my
+>> knowledge is written exactly how you expect.
+>>
+>> However even with stopped clock, the device enumerates at
+>> sdw_bus_master_add(), before anything is enabled.
+> 
+> Erm, that's not physically possible...
+> 
+> The peripheral can report as attached and be enumerated by the manager,
+> i.e. assigned a non-zero "Device Number" after the peripheral
+> synchronizes on 16 frames with valid static and dynamic syncwords. That
+> can only happen if there is a clock toggling and PING frames transmitted
+> on the data line.
+> 
+> There's something else at play here.
 
-The usual approach seems to be to reproduce a problem in a lab and have 
-a JTAG attached to give the hw guys a scan dump and they can then tell 
-you why something didn't worked as expected.
+Yes, I think you are right and that "else" is my limited knowledge on
+the entire setup.
 
-And yes that absolutely doesn't scale.
+You gave me awesome hint in email before that probe != enumeration !=
+initialization, however the wcd938x sound codec drivers were assuming
+some steps are equal.
 
-Christian.
+wcd938x comes with three devices on two drivers:
+1. RX Soundwire device (wcd938x-sdw.c driver)
+2. TX Soundwire device, which is used as regmap (also wcd938x-sdw.c driver)
+3. platform device (wcd938x.c driver) - glue and component master,
+actually having most of the code using TX Soundwire device regmap.
 
->
-> Alex
+The probe of each RX and TX Soundwire devices added components, but that
+this did not mean devices were enumerated, as you said.
+
+Considering what Mark said about using regcache (and sync it), I am now
+replacing entire solution with proper regcache handling device
+enumeration after component bind.
+
+Best regards,
+Krzysztof
 
