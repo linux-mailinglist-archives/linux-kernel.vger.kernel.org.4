@@ -2,120 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 006006F5749
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 13:41:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9C666F5753
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 13:47:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbjECLlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 07:41:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50290 "EHLO
+        id S229650AbjECLqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 07:46:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjECLlC (ORCPT
+        with ESMTP id S229524AbjECLqw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 07:41:02 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F4C46B8
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 04:41:00 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5FA9B6603137;
-        Wed,  3 May 2023 12:40:58 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1683114059;
-        bh=n9OmOmneeX6wqBjDmlr0Zvo9uXocS0m84dAmWMG3fxo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=VTOSfAHSQ938Nxqe8G8CggzhRoBUh97H4KzW+xbvFP8uvmlpFcAcVv7FRm5/wT7WK
-         l1sn/IvkaCsIOD0gC52q6jcKbUTcmjeJZsfY47YcxacT+w2xTStsjR/SUsZlHEVCZ7
-         JM+bGimVVcxw1ENIIgXxZIMqPLMhvYVSo98q35Vnm2/kIKI8OR8nPLfVCaWEGrwZN/
-         LPg89L2F4Xc1ovybZnSD4v/G9JplLgMrulrSrIfkmkEqb/iUdDU1rDk+nXbkAKKV0j
-         fv0D2Hkb0oxanx2C3ioa6IsMKIJXrWE0iw66O9aU8ki7sI1IHewmJuUjlYamSjloUm
-         whcG+q2QVpU3w==
-Message-ID: <6439bf4e-979e-889e-c97d-e7b1dd94b4f1@collabora.com>
-Date:   Wed, 3 May 2023 13:40:56 +0200
+        Wed, 3 May 2023 07:46:52 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D3894C2E;
+        Wed,  3 May 2023 04:46:46 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 343BkQQX029255;
+        Wed, 3 May 2023 06:46:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1683114386;
+        bh=YYporjMys+Lo9rb4WneUw6x9qhWDXgIxIWKCKaIfm8g=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=W7rCx8SbpGiRY/J2MZPAMXdjMfF9IeI9dkDX9q+2ix/VuVf7A4TP2MxU/Xu/aCse/
+         qmc5pofFO1nIAn41M9Y9phlbFeVm0baSykag0YKU8y/FmL6bdonOM/eRVyp6vtk6Vm
+         aPZ036xna5dXezKbsp9GyFpTBsm3/hYX0Rz6KP1Y=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 343BkQFB039670
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 3 May 2023 06:46:26 -0500
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 3
+ May 2023 06:46:25 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 3 May 2023 06:46:25 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 343BkP02070180;
+        Wed, 3 May 2023 06:46:25 -0500
+Date:   Wed, 3 May 2023 06:46:25 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Thejasvi Konduru <t-konduru@ti.com>
+CC:     Tero Kristo <kristo@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Andrew Davis <afd@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Apurva Nandan <a-nandan@ti.com>, Udit Kumar <u-kumar1@ti.com>
+Subject: Re: [PATCH] arm64: dts: ti: k3-j784s4: Fix wakeup pinmux range and
+ pinctrl node offsets
+Message-ID: <20230503114625.gqnijd3bog5bwemz@parameter>
+References: <20230503083143.32369-1-t-konduru@ti.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH] PM / devfreq: mtk-cci: refactor error handling of probe
- and remove
-Content-Language: en-US
-To:     "jia-wei.chang" <jia-wei.chang@mediatek.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Johnson Wang <johnson.wang@mediatek.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        hsinyi@google.com
-References: <20230503092742.19404-1-jia-wei.chang@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230503092742.19404-1-jia-wei.chang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230503083143.32369-1-t-konduru@ti.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 03/05/23 11:27, jia-wei.chang ha scritto:
-> From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+On 14:01-20230503, Thejasvi Konduru wrote:
+> The wkup_pmx register region in j784s4 has multiple non-addressable
+> regions, hence the existing wkup_pmx region is split as follows to
+> avoid the non-addressable regions. The pinctrl node offsets are
+> also corrected as per the newly split wkup_pmx* nodes.
 > 
-> To refactor the regulator/clk handlers so it can follow the way of "Free
-> the Last Thing Style".
+> wkup_pmx0 -> 13 pins (WKUP_PADCONFIG 0 - 12)
+> wkup_pmx1 -> 11 pins (WKUP_PADCONFIG 14 - 24)
+> wkup_pmx2 -> 72 pins (WKUP_PADCONFIG 26 - 97)
+> wkup_pmx3 -> 1 pin (WKUP_PADCONFIG 100)
 > 
-> Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> Fixes: 86d231b1db1b ("PM / devfreq: mediatek: Introduce MediaTek CCI devfreq driver")
+> Fixes: 4664ebd8346a ("arm64: dts: ti: Add initial support for J784S4 SoC")
+> Signed-off-by: Thejasvi Konduru <t-konduru@ti.com>
 > ---
->   drivers/devfreq/mtk-cci-devfreq.c | 47 ++++++++++++++++++-------------
->   1 file changed, 28 insertions(+), 19 deletions(-)
+
+Could you provide a link to the output of:
+$ cat /sys/kernel/debug/pinctrl/*/pins
+
+>  arch/arm64/boot/dts/ti/k3-j784s4-evm.dts      | 30 +++++++++----------
+>  .../boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi     | 29 +++++++++++++++++-
+>  2 files changed, 43 insertions(+), 16 deletions(-)
 > 
-> diff --git a/drivers/devfreq/mtk-cci-devfreq.c b/drivers/devfreq/mtk-cci-devfreq.c
-> index e5458ada5197..d2f743774147 100644
-> --- a/drivers/devfreq/mtk-cci-devfreq.c
-> +++ b/drivers/devfreq/mtk-cci-devfreq.c
-> @@ -294,14 +294,14 @@ static int mtk_ccifreq_probe(struct platform_device *pdev)
->   	if (IS_ERR(drv->sram_reg)) {
->   		ret = PTR_ERR(drv->sram_reg);
->   		if (ret == -EPROBE_DEFER)
-> -			goto out_free_resources;
-> +			goto out_disable_proc_reg;
->   
->   		drv->sram_reg = NULL;
->   	} else {
->   		ret = regulator_enable(drv->sram_reg);
->   		if (ret) {
->   			dev_err(dev, "failed to enable sram regulator\n");
-> -			goto out_free_resources;
-> +			goto out_disable_proc_reg;
->   		}
->   	}
->   
-> @@ -316,12 +316,16 @@ static int mtk_ccifreq_probe(struct platform_device *pdev)
->   
->   	ret = clk_prepare_enable(drv->cci_clk);
->   	if (ret)
-> -		goto out_free_resources;
-> +		goto out_disable_sram_reg;
+> diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
+> index f33815953e77..490d0b8624f3 100644
+> --- a/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
+> +++ b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
+> @@ -141,28 +141,28 @@
+>  	};
+>  };
+>  
+> -&wkup_pmx0 {
+> +&wkup_pmx2 {
+>  	mcu_cpsw_pins_default: mcu-cpsw-pins-default {
+>  		pinctrl-single,pins = <
+> -			J784S4_WKUP_IOPAD(0x094, PIN_INPUT, 0) /* (A35) MCU_RGMII1_RD0 */
+> -			J784S4_WKUP_IOPAD(0x090, PIN_INPUT, 0) /* (B36) MCU_RGMII1_RD1 */
+> -			J784S4_WKUP_IOPAD(0x08c, PIN_INPUT, 0) /* (C36) MCU_RGMII1_RD2 */
+> -			J784S4_WKUP_IOPAD(0x088, PIN_INPUT, 0) /* (D36) MCU_RGMII1_RD3 */
+> -			J784S4_WKUP_IOPAD(0x084, PIN_INPUT, 0) /* (B37) MCU_RGMII1_RXC */
+> -			J784S4_WKUP_IOPAD(0x06c, PIN_INPUT, 0) /* (C37) MCU_RGMII1_RX_CTL */
+> -			J784S4_WKUP_IOPAD(0x07c, PIN_OUTPUT, 0) /* (D37) MCU_RGMII1_TD0 */
+> -			J784S4_WKUP_IOPAD(0x078, PIN_OUTPUT, 0) /* (D38) MCU_RGMII1_TD1 */
+> -			J784S4_WKUP_IOPAD(0x074, PIN_OUTPUT, 0) /* (E37) MCU_RGMII1_TD2 */
+> -			J784S4_WKUP_IOPAD(0x070, PIN_OUTPUT, 0) /* (E38) MCU_RGMII1_TD3 */
+> -			J784S4_WKUP_IOPAD(0x080, PIN_OUTPUT, 0) /* (E36) MCU_RGMII1_TXC */
+> -			J784S4_WKUP_IOPAD(0x068, PIN_OUTPUT, 0) /* (C38) MCU_RGMII1_TX_CTL */
+> +			J784S4_WKUP_IOPAD(0x02c, PIN_INPUT, 0) /* (A35) MCU_RGMII1_RD0 */
+> +			J784S4_WKUP_IOPAD(0x028, PIN_INPUT, 0) /* (B36) MCU_RGMII1_RD1 */
+> +			J784S4_WKUP_IOPAD(0x024, PIN_INPUT, 0) /* (C36) MCU_RGMII1_RD2 */
+> +			J784S4_WKUP_IOPAD(0x020, PIN_INPUT, 0) /* (D36) MCU_RGMII1_RD3 */
+> +			J784S4_WKUP_IOPAD(0x01c, PIN_INPUT, 0) /* (B37) MCU_RGMII1_RXC */
+> +			J784S4_WKUP_IOPAD(0x004, PIN_INPUT, 0) /* (C37) MCU_RGMII1_RX_CTL */
+> +			J784S4_WKUP_IOPAD(0x014, PIN_OUTPUT, 0) /* (D37) MCU_RGMII1_TD0 */
+> +			J784S4_WKUP_IOPAD(0x010, PIN_OUTPUT, 0) /* (D38) MCU_RGMII1_TD1 */
+> +			J784S4_WKUP_IOPAD(0x00c, PIN_OUTPUT, 0) /* (E37) MCU_RGMII1_TD2 */
+> +			J784S4_WKUP_IOPAD(0x008, PIN_OUTPUT, 0) /* (E38) MCU_RGMII1_TD3 */
+> +			J784S4_WKUP_IOPAD(0x018, PIN_OUTPUT, 0) /* (E36) MCU_RGMII1_TXC */
+> +			J784S4_WKUP_IOPAD(0x000, PIN_OUTPUT, 0) /* (C38) MCU_RGMII1_TX_CTL */
+>  		>;
+>  	};
+>  
+>  	mcu_mdio_pins_default: mcu-mdio-pins-default {
+>  		pinctrl-single,pins = <
+> -			J784S4_WKUP_IOPAD(0x09c, PIN_OUTPUT, 0) /* (A36) MCU_MDIO0_MDC */
+> -			J784S4_WKUP_IOPAD(0x098, PIN_INPUT, 0) /* (B35) MCU_MDIO0_MDIO */
+> +			J784S4_WKUP_IOPAD(0x034, PIN_OUTPUT, 0) /* (A36) MCU_MDIO0_MDC */
+> +			J784S4_WKUP_IOPAD(0x030, PIN_INPUT, 0) /* (B35) MCU_MDIO0_MDIO */
+>  		>;
+>  	};
+>  };
+> diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi
+> index f04fcb614cbe..ed2b40369c59 100644
+> --- a/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi
+> @@ -50,7 +50,34 @@
+>  	wkup_pmx0: pinctrl@4301c000 {
+>  		compatible = "pinctrl-single";
+>  		/* Proxy 0 addressing */
+> -		reg = <0x00 0x4301c000 0x00 0x178>;
+> +		reg = <0x00 0x4301c000 0x00 0x034>;
+> +		#pinctrl-cells = <1>;
+> +		pinctrl-single,register-width = <32>;
+> +		pinctrl-single,function-mask = <0xffffffff>;
+> +	};
 > +
-> +	ret = clk_prepare_enable(drv->inter_clk);
+> +	wkup_pmx1: pinctrl@4301c038 {
+> +		compatible = "pinctrl-single";
+> +		/* Proxy 0 addressing */
+> +		reg = <0x00 0x4301c038 0x00 0x02c>;
+> +		#pinctrl-cells = <1>;
+> +		pinctrl-single,register-width = <32>;
+> +		pinctrl-single,function-mask = <0xffffffff>;
+> +	};
+> +
+> +	wkup_pmx2: pinctrl@4301c068 {
+> +		compatible = "pinctrl-single";
+> +		/* Proxy 0 addressing */
+> +		reg = <0x00 0x4301c068 0x00 0x120>;
+> +		#pinctrl-cells = <1>;
+> +		pinctrl-single,register-width = <32>;
+> +		pinctrl-single,function-mask = <0xffffffff>;
+> +	};
+> +
+> +	wkup_pmx3: pinctrl@4301c190 {
+> +		compatible = "pinctrl-single";
+> +		/* Proxy 0 addressing */
+> +		reg = <0x00 0x4301c190 0x00 0x004>;
+>  		#pinctrl-cells = <1>;
+>  		pinctrl-single,register-width = <32>;
+>  		pinctrl-single,function-mask = <0xffffffff>;
+> -- 
+> 2.17.1
+> 
 
-Adding a clk_prepare_enable() call for a clock must be done in a separate commit.
-Besides, there shouldn't be any need to do that, as when you call clk_set_parent()
-(done in mtk_ccifreq_target()) on a clock that has flag CLK_OPS_PARENT_ENABLE, the
-clk core will automatically call clk_core_prepare_enable() on the new parent.
-
-If you're facing a bug for which the parent is not getting enabled, the solution
-is to add CLK_OPS_PARENT_ENABLE to the interested clock.
-
+-- 
 Regards,
-Angelo
-
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
