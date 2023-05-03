@@ -2,100 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C57126F6208
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 01:24:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32CDE6F620D
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 01:25:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229573AbjECXYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 19:24:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32870 "EHLO
+        id S229649AbjECXZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 19:25:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbjECXYn (ORCPT
+        with ESMTP id S229514AbjECXZx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 19:24:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52F5E6E95;
-        Wed,  3 May 2023 16:24:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D912B63087;
-        Wed,  3 May 2023 23:24:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15299C433D2;
-        Wed,  3 May 2023 23:24:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1683156273;
-        bh=K/V49M3fmE/XvwR5aK0MwXvOUFLt3IEPIoOXeueUAaI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=DW840XOa6I3ye8EshwGBjplHXxwKsJePC3WoAmIKihibCbjv1u7fzw+mdo9QziNaP
-         nhc5rq+aIvQij5gIAFohvYQPOitK2nctlbE5plLG5ZltVHJbgZKMNeSKrN578tcMfw
-         WlzLhg1ns2eBsVONzHC98jlNQB/ccJ7ub/9cZR84=
-Date:   Wed, 3 May 2023 16:24:32 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        mm-commits@vger.kernel.org
-Subject: [GIT PULL] final MM updates for 6.4-rc1
-Message-Id: <20230503162432.24a580b6c1a7fd465ed6bc2d@linux-foundation.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 3 May 2023 19:25:53 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 543938A68
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 16:25:51 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-559d30ec7fcso119360157b3.2
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 16:25:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683156350; x=1685748350;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YfYVgm4V22KIRH92REoFmnqd0qb4XCUf2GX84sOfe6w=;
+        b=OmZq6gmWvj0FIdFE45aTXILn/94QK8EbGzv+YyaCcMvs9mesrYXEvGLBIhT6vj7IDa
+         MzVghvdOlN2xIIChmHQNvxd4GFCU8gOHVeOlNTboedQuvPyihRjuCTvTjnqgwZanjn1s
+         uwJSEYdVFlVY7pgEJH+TkOk4mqdGbEm0kVsrjOWj9rJ7b2RxrW0NimB3iYpc2iZa3HsG
+         X9iZlKyMwHdcr4YM7BtZanbVTYc9H8oZay9/axmdJegv+yTbxvv5ueAdDN4e8S5FgGol
+         3aj7pHHeyQjh9eCRBRoR4fipNlhtMlhHvHUwzzK0HVTSlf3wt9s//AuMJPaNCt5lLMN0
+         CuwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683156350; x=1685748350;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YfYVgm4V22KIRH92REoFmnqd0qb4XCUf2GX84sOfe6w=;
+        b=C0FLM5YEq+qqe/Ipr91rZylxzPOZKkni6NkLFfcgP43AudxLNpbxkC852whEseHeq+
+         q6uLr0GlDrhGYpPzzFXgpB1Qtq2q1v+0Ob7CAXOWNdXc+l/PsVuqd3LLgJVp/TviCfRZ
+         YmLMlr/V4QeHjoJvYhdJJGNVe5dUctUN1r9b5lgWDXlnPEeWL29Ss+/3cg2j7xwvgTfm
+         eSYbnxhWpkikDUBElaJbnPeXR0DDF7fxmMomhJt3IAs8Ct/faAbaQA0wj+GcC6iVe5ee
+         3vphzuNHE5zjqPg/y2iAGEGU4KZUcsXR+x3det8A4SOKczHq44CFQS1HwhkDDJG+IZ3/
+         VGRA==
+X-Gm-Message-State: AC+VfDyDsq3kSDxoaVZMQY2+8gnrbywUSURMJeXxQW6Gtd4u34ntycm5
+        HRquNzyk+hKHTIoCdRjiqlIqZinzF4M=
+X-Google-Smtp-Source: ACHHUZ45lladU/lC3ZOTRb4KKsIWxC7RPUoLGPPo/y+io7gdVsjr+OO40Dfh4Ce2jwlN2leI9DNgF6kbFd0=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a81:e904:0:b0:544:cd0e:2f80 with SMTP id
+ d4-20020a81e904000000b00544cd0e2f80mr122436ywm.8.1683156350572; Wed, 03 May
+ 2023 16:25:50 -0700 (PDT)
+Date:   Wed, 3 May 2023 16:25:48 -0700
+In-Reply-To: <56fa0da83203b20c9945e7c82a0eed11f3d31ea5.camel@intel.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230503182852.3431281-1-seanjc@google.com> <20230503182852.3431281-2-seanjc@google.com>
+ <56fa0da83203b20c9945e7c82a0eed11f3d31ea5.camel@intel.com>
+Message-ID: <ZFLtfFjAvuL0JSQj@google.com>
+Subject: Re: [PATCH 1/5] KVM: VMX: Open code writing vCPU's PAT in VMX's MSR handler
+From:   Sean Christopherson <seanjc@google.com>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "guoke@uniontech.com" <guoke@uniontech.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "haiwenyao@uniontech.com" <haiwenyao@uniontech.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, May 03, 2023, Kai Huang wrote:
+> On Wed, 2023-05-03 at 11:28 -0700, Sean Christopherson wrote:
+> > From: Wenyao Hai <haiwenyao@uniontech.com>
+> > 
+> > Open code setting "vcpu->arch.pat" in vmx_set_msr() instead of bouncing
+> > through kvm_set_msr_common() to get to the same code in kvm_mtrr_set_msr().
+> 
+> What's the value of doing so, besides saving a function of kvm_set_msr_common()?
 
-Linus, please merge this small batch or MM updates, thanks.
+To avoid complicating a very simple operation (writing vcpu->arch.pat), and to
+align with SVM.
 
+> PAT change shouldn't be something frequent so shouldn't in a performance
+> critical path.  Given the PAT logic on Intel and AMD are basically the same ,
+> isn't it better to do in kvm_set_msr_common()?
 
-The following changes since commit 22b8cc3e78f5448b4c5df00303817a9137cd663f:
+I could go either way on calling into kvm_set_msr_common().  I agree that
+performance isn't a concern.  Hmm, and kvm_set_msr_common() still has a case
+statement for MSR_IA32_CR_PAT, so handling the write fully in vendor code won't
+impact the code generation for other MSRs.
 
-  Merge tag 'x86_mm_for_6.4' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip (2023-04-28 09:43:49 -0700)
+Though I am leaning towards saying we should either handle loads and stores to
+vcpu->arch.pat in common code _or_ vendor code, i.e. either teach VMX and SVM to
+handle reads of PAT, or have their write paths call kvm_set_msr_common().  A mix
+of both is definitely odd.
 
-are available in the Git repository at:
+I don't have strong preference on which of those two we choose.  I dislike duplicating
+logic across VMX and SVM, but on the other hands it's so little code.  I think
+I'd vote for handling everything in vendor code, mostly because this gives the
+appearance that the write can fail, which is silly and misleading.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm tags/mm-stable-2023-05-03-16-22
+		ret = kvm_set_msr_common(vcpu, msr_info);
 
-for you to fetch changes up to 245f0922689364b21163af4937a05ea0ba576fae:
+> For instance, given mtrr code is also in common x86, if we ever want to add some
+> additional logic to, i.e. calculate effective memtype, isn't better to do handle
+> pat in common code too?
 
-  mm: hwpoison: coredump: support recovery from dump_user_range() (2023-05-02 17:21:50 -0700)
+FWIW, I highly doubt we'll ever have code like that.  The truly effective memtype
+calculations are too different between Intel and AMD, and doing anything useful
+with the guest's effective memtype is likely a fool's errand.
 
-----------------------------------------------------------------
-- Some DAMON cleanups from Kefeng Wang
-
-- Some KSM work from David Hildenbrand, to make the PR_SET_MEMORY_MERGE
-  ioctl's behavior more similar to KSM's behavior.
-
-----------------------------------------------------------------
-Baolin Wang (1):
-      mm/page_alloc: add some comments to explain the possible hole in __pageblock_pfn_to_page()
-
-David Hildenbrand (3):
-      mm/ksm: unmerge and clear VM_MERGEABLE when setting PR_SET_MEMORY_MERGE=0
-      selftests/ksm: ksm_functional_tests: add prctl unmerge test
-      mm/ksm: move disabling KSM from s390/gmap code to KSM code
-
-Kefeng Wang (4):
-      mm/damon/paddr: minor refactor of damon_pa_pageout()
-      mm/damon/paddr: minor refactor of damon_pa_mark_accessed_or_deactivate()
-      mm/damon/paddr: fix missing folio_sz update in damon_pa_young()
-      mm: hwpoison: coredump: support recovery from dump_user_range()
-
- arch/s390/mm/gmap.c                               | 20 +------
- fs/coredump.c                                     |  1 +
- include/linux/ksm.h                               |  7 +++
- include/linux/uio.h                               | 16 ++++++
- kernel/sys.c                                      | 12 +---
- lib/iov_iter.c                                    | 17 +++++-
- mm/damon/paddr.c                                  | 26 ++++-----
- mm/ksm.c                                          | 70 +++++++++++++++++++++++
- mm/page_alloc.c                                   |  9 +++
- tools/testing/selftests/mm/ksm_functional_tests.c | 46 +++++++++++++--
- 10 files changed, 172 insertions(+), 52 deletions(-)
-
+> > Note, MSR_IA32_CR_PAT is 0x277, and is very subtly handled by
+> > 
+> > 	case 0x200 ... MSR_IA32_MC0_CTL2 - 1:
+> > 
+> > in kvm_set_msr_common().
+> > 
+> > Signed-off-by: Wenyao Hai <haiwenyao@uniontech.com>
+> > [sean: massage changelog]
+> > Signed-off-by: Sean Christopherson <seanjc@google.com>
+> > ---
+> >  arch/x86/kvm/vmx/vmx.c | 8 +++-----
+> >  1 file changed, 3 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> > index 44fb619803b8..53e249109483 100644
+> > --- a/arch/x86/kvm/vmx/vmx.c
+> > +++ b/arch/x86/kvm/vmx/vmx.c
+> > @@ -2294,12 +2294,10 @@ static int vmx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+> >  		    get_vmcs12(vcpu)->vm_exit_controls & VM_EXIT_SAVE_IA32_PAT)
+> >  			get_vmcs12(vcpu)->guest_ia32_pat = data;
+> >  
+> > -		if (vmcs_config.vmentry_ctrl & VM_ENTRY_LOAD_IA32_PAT) {
+> > +		if (vmcs_config.vmentry_ctrl & VM_ENTRY_LOAD_IA32_PAT)
+> >  			vmcs_write64(GUEST_IA32_PAT, data);
+> > -			vcpu->arch.pat = data;
+> > -			break;
+> > -		}
+> > -		ret = kvm_set_msr_common(vcpu, msr_info);
+> > +
+> > +		vcpu->arch.pat = data;
+> >  		break;
+> >  	case MSR_IA32_MCG_EXT_CTL:
+> >  		if ((!msr_info->host_initiated &&
