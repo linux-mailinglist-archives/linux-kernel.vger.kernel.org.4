@@ -2,150 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49AA56F5558
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 11:52:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 898406F555F
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 11:52:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbjECJwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 05:52:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46986 "EHLO
+        id S230125AbjECJwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 05:52:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbjECJvb (ORCPT
+        with ESMTP id S230080AbjECJwA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 05:51:31 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E4AB4C13;
-        Wed,  3 May 2023 02:50:37 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4f13bfe257aso291108e87.3;
-        Wed, 03 May 2023 02:50:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683107434; x=1685699434;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=giiNwB/ofLJq9Zmc8RdE3SafvU/LyX7CoNowFxpAxEY=;
-        b=Gh1VBV9IXf791iwp+kVCh7qyn4R5Y3nCmJ1Qz7pMO/cE/bqq1xWFVP0QU1dBf2q2X0
-         SjafL7wxMcVIckevgWFkgOopOZBawflfB8ldsyKJWPKoF2kPUFoodBzz8AqKvs22y2tI
-         mTIcJqGTx7DSmPq0bh6bc3iXI/C6Oe0fUkWn7edYnMmhA8N09r4v/3vbvh20fVhcalfY
-         FyrTwDMzoIYVWefwe3vB6dqQatlKDGcNjo/Ln9SgoqlWkuNed21FhG7elKtnnW64+39C
-         j36wHhHdxgZUyGt2RdkXBOHWApjYrmIZwy0yzmN4Y1JpY8TeOjq1BNvmCJRgofwCd9L9
-         kWnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683107434; x=1685699434;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=giiNwB/ofLJq9Zmc8RdE3SafvU/LyX7CoNowFxpAxEY=;
-        b=K5yUdQr18gMoQH6EgCsC8n88CLusVnpAiMi8J6IsIFzXg+htPYYzE/KD+MC0dmjS2s
-         ym/FeasBPvSxSLeeUYH6a4aFM7o8x9tXR4ITqSz2gdbscKl4tLauwVvxB9QFH5ZgWyem
-         mT3hQDzVWuVKlNc/d7NIzZ5QLR5ZWh6M0PJ0jJEFr1y9dOA55YW9FjONCTNzvBp1Dov0
-         O9mpdVX+u42PyaUZUeCj1Ts9zXnHA6UaO4CG8JtOxTv9vwAn5WhEsiQJSrjMoxxJ71vd
-         3CHOJ7Ll4iSWjHX9NMvERAqACnjH8fd5B7ONW5AD0aEvukenUybB/hHwr/yM3m0p8R11
-         RldA==
-X-Gm-Message-State: AC+VfDy1c1XCNMfNVvjoNazwqHRlfk1ENeX/F7D89Yscc22hkJu2iKEA
-        evM77KG22jJwImsKBTHVrBc=
-X-Google-Smtp-Source: ACHHUZ4nK3cEvg58H2Kq5P3sIHMsiEzWtHGPmej11jB01kfLHuLIvkXu0MpBeoe/PLq2qTgbYLmaoQ==
-X-Received: by 2002:a05:6512:502:b0:4ef:f64b:65b5 with SMTP id o2-20020a056512050200b004eff64b65b5mr770258lfb.62.1683107434279;
-        Wed, 03 May 2023 02:50:34 -0700 (PDT)
-Received: from fedora (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
-        by smtp.gmail.com with ESMTPSA id m6-20020a056512014600b004efd3c2b746sm5475508lfo.162.2023.05.03.02.50.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 May 2023 02:50:33 -0700 (PDT)
-Date:   Wed, 3 May 2023 12:50:30 +0300
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Zhigang Shi <Zhigang.Shi@liteon.com>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4 5/5] MAINTAINERS: Add ROHM BU27008
-Message-ID: <1c1b035d9c93faa59fabc60e7376e67c9ed93747.1683105758.git.mazziesaccount@gmail.com>
-References: <cover.1683105758.git.mazziesaccount@gmail.com>
+        Wed, 3 May 2023 05:52:00 -0400
+Received: from bee.tesarici.cz (bee.tesarici.cz [77.93.223.253])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 526D22D69;
+        Wed,  3 May 2023 02:51:01 -0700 (PDT)
+Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by bee.tesarici.cz (Postfix) with ESMTPSA id 4172014F40A;
+        Wed,  3 May 2023 11:50:53 +0200 (CEST)
+Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
+        t=1683107454; bh=euE9Fy72eTCTzlw5Sukf/PgjmxlM5KjXHgyH+Ju07I4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=o4mIxsTFDU/Asg743zP6TL7vY9VIicV7szjQy+QZSVfUh0ZN2pXcOmbsJkTrRQhEW
+         V0lzfUZw62KHSzg9YBP14S4dhZVmXUCdkggUSAZ2UuV+SUUVfZF/CGUsCwWitZBD4z
+         ysWGUtF+VV0GsSv+Ei3n5Pi0OS1j9ABWxozdTkHK0/uzoTxalYL1ZDmYfFb+XuYNfT
+         HegYaGGzQ6f2kiymcfSDHOApWq2LmLt2PQ9UxD1K5WRUxyph/jb6V/3Kz6TgPvsafx
+         MwLoNdNiSCn9iZOacUHABR4CbRTCORxZjyKDpv5cPN9R4G8md9WmrmQ50ZjClYN1Bi
+         bP0Em3VIM6Z/w==
+Date:   Wed, 3 May 2023 11:50:51 +0200
+From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
+        Suren Baghdasaryan <surenb@google.com>,
+        akpm@linux-foundation.org, vbabka@suse.cz, hannes@cmpxchg.org,
+        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
+        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
+        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
+        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
+        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
+        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
+        tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
+        paulmck@kernel.org, pasha.tatashin@soleen.com,
+        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
+        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
+        ndesaulniers@google.com, gregkh@linuxfoundation.org,
+        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+        glider@google.com, elver@google.com, dvyukov@google.com,
+        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
+        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
+Subject: Re: [PATCH 00/40] Memory allocation profiling
+Message-ID: <20230503115051.30b8a97f@meshulam.tesarici.cz>
+In-Reply-To: <ZFISlX+mSx4QJDK6@dhcp22.suse.cz>
+References: <20230501165450.15352-1-surenb@google.com>
+        <ZFIMaflxeHS3uR/A@dhcp22.suse.cz>
+        <ZFIOfb6/jHwLqg6M@moria.home.lan>
+        <ZFISlX+mSx4QJDK6@dhcp22.suse.cz>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="MZBAOBq6rUGqWZP+"
-Content-Disposition: inline
-In-Reply-To: <cover.1683105758.git.mazziesaccount@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 3 May 2023 09:51:49 +0200
+Michal Hocko <mhocko@suse.com> wrote:
 
---MZBAOBq6rUGqWZP+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> On Wed 03-05-23 03:34:21, Kent Overstreet wrote:
+>[...]
+> > We've made this as clean and simple as posssible: a single new macro
+> > invocation per allocation function, no calling convention changes (that
+> > would indeed have been a lot of churn!)  
+> 
+> That doesn't really make the concern any less relevant. I believe you
+> and Suren have made a great effort to reduce the churn as much as
+> possible but looking at the diffstat the code changes are clearly there
+> and you have to convince the rest of the community that this maintenance
+> overhead is really worth it.
 
-Add myself as a maintainer for ROHM BU27008 color sensor driver.
+I believe this is the crucial point.
 
-Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+I have my own concerns about the use of preprocessor macros, which goes
+against the basic idea of a code tagging framework (patch 13/40).
+AFAICS the CODE_TAG_INIT macro must be expanded on the same source code
+line as the tagged code, which makes it hard to use without further
+macros (unless you want to make the source code unreadable beyond
+imagination). That's why all allocation functions must be converted to
+macros.
 
----
-Revision history:
-No changes since v1
----
- MAINTAINERS | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+If anyone ever wants to use this code tagging framework for something
+else, they will also have to convert relevant functions to macros,
+slowly changing the kernel to a minefield where local identifiers,
+struct, union and enum tags, field names and labels must avoid name
+conflict with a tagged function. For now, I have to remember that
+alloc_pages is forbidden, but the list may grow.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 32772c383ab7..c02e3d2ec348 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -18198,10 +18198,11 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/iio/light/bh1750.yaml
- F:	drivers/iio/light/bh1750.c
-=20
--ROHM BU27034 AMBIENT LIGHT SENSOR DRIVER
-+ROHM BU270xx LIGHT SENSOR DRIVERs
- M:	Matti Vaittinen <mazziesaccount@gmail.com>
- L:	linux-iio@vger.kernel.org
- S:	Supported
-+F:	drivers/iio/light/rohm-bu27008.c
- F:	drivers/iio/light/rohm-bu27034.c
-=20
- ROHM MULTIFUNCTION BD9571MWV-M PMIC DEVICE DRIVERS
---=20
-2.40.0
+FWIW I can see some occurences of "alloc_pages" under arch/ which are
+not renamed by patch 19/40 of this series. For instance, does the
+kernel build for s390x after applying the patch series?
 
+New code may also work initially, but explode after adding an #include
+later...
 
---=20
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
+HOWEVER, if the rest of the community agrees that the added value of
+code tagging is worth all these potential risks, I can live with it.
 
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =3D]=20
-
---MZBAOBq6rUGqWZP+
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmRSLmYACgkQeFA3/03a
-ocWYVQf/TavC0x0EopKULDo1d2NIOS4xV02Ca059/9CtwibgG+floEcaSAZUEsFL
-hhjEqYBnDdaMHXw6Q45th7detgiPH7HVKW09PYlKJWdpIiRywJCfTXGmdelB0itT
-SEEGrQL2DAAsEHAg162h/LYHVjufXJByezioLYDTBj9ZsmLYOA3058s1hpVgH4Rl
-Y0Ch9tjn0HemXwku6wtZhLl/Vi7TO0J39sN3UOqWXFsmXzt3w2exPWxNz4Wq4Qtw
-GztHLlHzIhBkIlDfLQkU9JoSUXNwUdgK+uPXzuksXQfcivWXfxTpoStygK1BIVAv
-csK5qTX6YQy9XSJ8yHMnCFv2QLtVRw==
-=oZhD
------END PGP SIGNATURE-----
-
---MZBAOBq6rUGqWZP+--
+Petr T
