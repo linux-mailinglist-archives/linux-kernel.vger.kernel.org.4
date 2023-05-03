@@ -2,148 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C2A06F5A02
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 16:28:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AC5D6F5A05
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 16:29:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230286AbjECO2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 10:28:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50234 "EHLO
+        id S230237AbjECO3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 10:29:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230197AbjECO2v (ORCPT
+        with ESMTP id S230197AbjECO33 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 10:28:51 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A81341FF6
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 07:28:48 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id af79cd13be357-75178b082a5so131339385a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 07:28:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1683124128; x=1685716128;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qmZ4DsDKrMe1S2UiM4lF3iPDDNQLVdB3fN/nPm0O+pI=;
-        b=xOFe0H29iDHpimotgJRcaLX6/SmYqAhUgt7QykkIwaN5ArFrr67+xXLlpVVlQMvSm1
-         RPn5ONAVfnr8xMJvUZgHIsgicCh2NlpHkZzlbotmQg6XyHJqN7GmMCOqgT9QEq8Nk0DP
-         6XQSoE+g/zWIZz8yvYHylhmN5XnjZ8zEB0Dl9ALOgHd+jkrXz5ToigDNZ+eabCcyxBr4
-         duYN1MXQv6CJKolySvtsT3waS1hGoiQBI737dGIe+txiceEkohRDoMTQuKYoAh5GolMY
-         y9RKrb4aUP/zDYZBwSqZuOcVknnLVFmCgmjVsnlBTLxd9dXRHcHEs8SKonvX5HVljRV6
-         aI3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683124128; x=1685716128;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qmZ4DsDKrMe1S2UiM4lF3iPDDNQLVdB3fN/nPm0O+pI=;
-        b=b6gFqM8kdNBQnB3VRQyfO/+nfwWZmzor3pJPYf2u+y+UenKI31VQCnfpLFTspUha69
-         fLmBQ77UVOPB1C+qpe6Eo90roSYlRyOMchAEh63YdoowVjJsI5ENIm66GyQtHMLwLFt5
-         cqPgcKTAwmWCzJ1sDWEXZhAn0e80YoUwbKA1Rg3QZZm6XaoChRo57lXvuP6twSdt3AaA
-         g7zp8c6qXdWIw/VnMgAW2eQNmoUsgBb3a2QrXpTHRb9jfUAjZ+V/QjqILUriebq7l+gS
-         tp4wk08KYwbRPGnB97MpOgQng4AsKgiHkV47yhpSHsLlwjK5RUS9LiRnOkdd7QiVSuf0
-         pwrw==
-X-Gm-Message-State: AC+VfDy5KNubW7gAxQauIKr+xOlstDNMlZJlcZcIHlDXWVW3bbwtvcPc
-        Xi9pZAZdAFEm5SNyh2hTis6a7jV1XWmnBTAQFHA=
-X-Google-Smtp-Source: ACHHUZ4M0zjk5FZ8yY3AGVchtAjIIei756Ls/aUGKZtURl7Hx24TrnOkvYA+7uqlcYTFCcYv46aGAA==
-X-Received: by 2002:ad4:4ea6:0:b0:5fd:7701:88c5 with SMTP id ed6-20020ad44ea6000000b005fd770188c5mr11763060qvb.6.1683124127795;
-        Wed, 03 May 2023 07:28:47 -0700 (PDT)
-Received: from localhost (2603-7000-0c01-2716-8f57-5681-ccd3-4a2e.res6.spectrum.com. [2603:7000:c01:2716:8f57:5681:ccd3:4a2e])
-        by smtp.gmail.com with ESMTPSA id b27-20020a0cb3db000000b005e750d07153sm10588375qvf.135.2023.05.03.07.28.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 May 2023 07:28:46 -0700 (PDT)
-Date:   Wed, 3 May 2023 10:28:46 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-Cc:     sjenning@redhat.com, ddstreet@ieee.org, vitaly.wool@konsulko.com,
-        minchan@kernel.org, ngupta@vflare.org, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: fix zswap writeback race condition
-Message-ID: <20230503142846.GA193380@cmpxchg.org>
-References: <20230503132148.9682-1-cerasuolodomenico@gmail.com>
+        Wed, 3 May 2023 10:29:29 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B9E133;
+        Wed,  3 May 2023 07:29:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683124162; x=1714660162;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ik8tzDXZ50F3h07IT+orfz5geP/IY8FgDN2FLhPf/a4=;
+  b=L8mbajJ++xh1QsXcJ1aEb+qnDSVNrgwrm/kwTC6ZwLZheJhBQMFcyKVt
+   GsBe1uoVZ7g0ivVrXy1oQM4OwnVi8Q8wJba7nWhDZWxuvkgJlro3EYq2I
+   M0PGV/hxExcuWZLGAvzd+rRdYQeuiHhhyt2+xYgU7mpJ+tDkziMhGrjrU
+   bKUKoUN0AASdBd4+hT0RZ09wSJeQmVvMs//RG1v1WAH2cJELNFsh2JbUY
+   5cFZ4d8eFsm6G2uyWJ1bH8yJu1/vYVLVPxXV70LXKRCND06AhbMnrfmwK
+   WBp/Jn2jMtxLB2rovx7E7XiNW+NJGpGBJOhHAnEaC9whQWvLpZ0K1L7iL
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="411824090"
+X-IronPort-AV: E=Sophos;i="5.99,247,1677571200"; 
+   d="scan'208";a="411824090"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2023 07:29:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="840704655"
+X-IronPort-AV: E=Sophos;i="5.99,247,1677571200"; 
+   d="scan'208";a="840704655"
+Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 03 May 2023 07:29:19 -0700
+Received: from kbuild by e3434d64424d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1puDTq-00023E-2j;
+        Wed, 03 May 2023 14:29:18 +0000
+Date:   Wed, 3 May 2023 22:29:12 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jinyoung CHOI <j-young.choi@samsung.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>, "hch@lst.de" <hch@lst.de>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH 14/15] block: blk-integrity: change sg-table
+ configuration method for integrity
+Message-ID: <202305032213.JHLycY4F-lkp@intel.com>
+References: <20230503102719epcms2p457434fefd535ee43d502eff854227919@epcms2p4>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230503132148.9682-1-cerasuolodomenico@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230503102719epcms2p457434fefd535ee43d502eff854227919@epcms2p4>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 03, 2023 at 03:21:48PM +0200, Domenico Cerasuolo wrote:
-> The zswap writeback mechanism can cause a race condition resulting in
-> memory corruption, where a swapped out page gets swapped in with data
-> that was written to a different page.
-> 
-> The race unfolds like this:
-> 1. a page with data A and swap offset X is stored in zswap
-> 2. page A is removed off the LRU by zpool driver for writeback in
-> zswap-shrink work, data for A is mapped by zpool driver
-> 3. user space program faults and invalidates page entry A, offset X is
-> considered free
-> 4. kswapd stores page B at offset X in zswap (zswap could also be full,
-> if so, page B would then be IOed to X, then skip step 5.)
-> 5. entry A is replaced by B in tree->rbroot, this doesn't affect the
-> local reference held by zswap-shrink work
-> 6. zswap-shrink work writes back A at X, and frees zswap entry A
-> 7. swapin of slot X brings A in memory instead of B
-> 
-> The fix:
-> Once the swap page cache has been allocated (case ZSWAP_SWAPCACHE_NEW),
-> zswap-shrink work just checks that the local zswap_entry reference is
-> still the same as the one in the tree. If it's not the same it means
-> that it's either been invalidated or replaced, in both cases the
-> writeback is aborted because the local entry contains stale data.
-> 
-> Reproducer:
-> I originally found this by running `stress` overnight to validate my
-> work on the zswap writeback mechanism, it manifested after hours on my
-> test machine. The key to make it happen is having zswap writebacks, so
-> whatever setup pumps /sys/kernel/debug/zswap/written_back_pages should
-> do the trick.
-> In order to reproduce this faster on a vm, I setup a system with ~100M
-> of available memory and a 500M swap file, then running
-> `stress --vm 1 --vm-bytes 300000000 --vm-stride 4000` makes it happen
-> in matter of tens of minutes. One can speed things up even more by
-> swinging /sys/module/zswap/parameters/max_pool_percent up and down
-> between, say, 20 and 1; this makes it reproduce in tens of seconds.
-> It's crucial to set `--vm-stride` to something other than 4096 otherwise
-> `stress` won't realize that memory has been corrupted because all pages
-> would have the same data.
-> 
-> Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-> ---
->  mm/zswap.c | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
-> 
-> diff --git a/mm/zswap.c b/mm/zswap.c
-> index f6c89049cf70..d20d60266bc8 100644
-> --- a/mm/zswap.c
-> +++ b/mm/zswap.c
-> @@ -995,6 +995,19 @@ static int zswap_writeback_entry(struct zpool *pool, unsigned long handle)
->  		goto fail;
->  
->  	case ZSWAP_SWAPCACHE_NEW: /* page is locked */
-> +		/*
-> +		 * if the entry in the tree has been replaced, it means that we would
-> +		 * be overriding the swap page with stale data, let's not do that.
-> +		 */
-> +		spin_lock(&tree->lock);
-> +		if (zswap_rb_search(&tree->rbroot, entry->offset) != entry) {
-> +			spin_unlock(&tree->lock);
-> +			delete_from_swap_cache(page_folio(page));
-> +			ret = -ENOMEM;
-> +			goto fail;
-> +		}
-> +		spin_unlock(&tree->lock);
+Hi Jinyoung,
 
-I think it would be beneficial to explain the exact race in the
-comment above. That our local reference to the zswap entry doesn't
-exclude swapping from invalidating and recyling the swap slot. Once
-the swapcache is secured against concurrent swapping to and from the
-slot, recheck that the entry is still current before writing.
+kernel test robot noticed the following build errors:
 
-With that, please add:
+[auto build test ERROR on axboe-block/for-next]
+[also build test ERROR on mkp-scsi/for-next jejb-scsi/for-next linus/master v6.3 next-20230428]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+url:    https://github.com/intel-lab-lkp/linux/commits/Jinyoung-CHOI/block-blk-integiry-add-helper-functions-for-bio_integrity_add_page/20230503-183015
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+patch link:    https://lore.kernel.org/r/20230503102719epcms2p457434fefd535ee43d502eff854227919%40epcms2p4
+patch subject: [PATCH 14/15] block: blk-integrity: change sg-table configuration method for integrity
+config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20230503/202305032213.JHLycY4F-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/7e4810d74ca92ed35bbc73cb09a4baa1dacfbc96
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jinyoung-CHOI/block-blk-integiry-add-helper-functions-for-bio_integrity_add_page/20230503-183015
+        git checkout 7e4810d74ca92ed35bbc73cb09a4baa1dacfbc96
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=um SUBARCH=i386 olddefconfig
+        make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305032213.JHLycY4F-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from include/linux/blk-integrity.h:5,
+                    from block/blk-merge.c:9:
+   include/linux/blk-mq.h: In function 'blk_rq_bio_prep':
+   include/linux/blk-mq.h:972:19: error: 'struct request' has no member named 'nr_integrity_segments'
+     972 |                 rq->nr_integrity_segments = bio_integrity(bio)->bip_vcnt;
+         |                   ^~
+   include/linux/blk-mq.h:972:63: warning: dereferencing 'void *' pointer
+     972 |                 rq->nr_integrity_segments = bio_integrity(bio)->bip_vcnt;
+         |                                                               ^~
+   include/linux/blk-mq.h:972:63: error: request for member 'bip_vcnt' in something not a structure or union
+   block/blk-merge.c: At top level:
+>> block/blk-merge.c:536:5: error: redefinition of 'blk_rq_map_integrity_sg'
+     536 | int blk_rq_map_integrity_sg(struct request_queue *q, struct bio *bio,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~
+   In file included from block/blk-merge.c:9:
+   include/linux/blk-integrity.h:132:19: note: previous definition of 'blk_rq_map_integrity_sg' with type 'int(struct request_queue *, struct bio *, struct scatterlist *)'
+     132 | static inline int blk_rq_map_integrity_sg(struct request_queue *q,
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~
+   block/blk-merge.c: In function 'blk_rq_map_integrity_sg':
+>> block/blk-merge.c:546:56: error: 'struct bio' has no member named 'bi_integrity'
+     546 |                 struct bio_integrity_payload *bip = bio->bi_integrity;
+         |                                                        ^~
+>> block/blk-merge.c:548:17: error: implicit declaration of function 'bip_for_each_mp_bvec'; did you mean 'for_each_mp_bvec'? [-Werror=implicit-function-declaration]
+     548 |                 bip_for_each_mp_bvec(iv, bip, iter) {
+         |                 ^~~~~~~~~~~~~~~~~~~~
+         |                 for_each_mp_bvec
+>> block/blk-merge.c:548:52: error: expected ';' before '{' token
+     548 |                 bip_for_each_mp_bvec(iv, bip, iter) {
+         |                                                    ^~
+         |                                                    ;
+   block/blk-merge.c:543:14: warning: unused variable 'new_bio' [-Wunused-variable]
+     543 |         bool new_bio = false;
+         |              ^~~~~~~
+   block/blk-merge.c:539:28: warning: unused variable 'ivprv' [-Wunused-variable]
+     539 |         struct bio_vec iv, ivprv = { NULL };
+         |                            ^~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +/blk_rq_map_integrity_sg +536 block/blk-merge.c
+
+   526	
+   527	/**
+   528	 * blk_rq_map_integrity_sg - Map integrity metadata into a scatterlist
+   529	 * @q:		request queue
+   530	 * @bio:	bio with integrity metadata attached
+   531	 * @sglist:	target scatterlist
+   532	 *
+   533	 * Description: Map the integrity vectors in request into a scatterlist.
+   534	 * The scatterlist must be big enough to hold all elements.
+   535	 */
+ > 536	int blk_rq_map_integrity_sg(struct request_queue *q, struct bio *bio,
+   537				    struct scatterlist *sglist)
+   538	{
+   539		struct bio_vec iv, ivprv = { NULL };
+   540		struct scatterlist *sg = NULL;
+   541		unsigned int nsegs = 0;
+   542		struct bvec_iter iter;
+   543		bool new_bio = false;
+   544	
+   545		for_each_bio(bio) {
+ > 546			struct bio_integrity_payload *bip = bio->bi_integrity;
+   547	
+ > 548			bip_for_each_mp_bvec(iv, bip, iter) {
+   549				/*
+   550				 * Only try to merge bvecs from two bios given we
+   551				 * have done bio internal merge when adding pages
+   552				 * to bio
+   553				 */
+   554				if (new_bio &&
+   555				    __blk_segment_map_sg_merge(q, &iv, &ivprv, &sg))
+   556					goto next_iv;
+   557	
+   558				if (iv.bv_offset + iv.bv_len <= PAGE_SIZE)
+   559					nsegs += __blk_bvec_map_sg(iv, sglist, &sg);
+   560				else
+   561					nsegs += blk_bvec_map_sg(q, &iv, sglist, &sg);
+   562	 next_iv:
+   563				new_bio = false;
+   564			}
+   565	
+   566			if (likely(bip->bip_iter.bi_size)) {
+   567				ivprv = iv;
+   568				new_bio = true;
+   569			}
+   570		}
+   571	
+   572		if (sg)
+   573			sg_mark_end(sg);
+   574	
+   575		return nsegs;
+   576	}
+   577	EXPORT_SYMBOL(blk_rq_map_integrity_sg);
+   578	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
