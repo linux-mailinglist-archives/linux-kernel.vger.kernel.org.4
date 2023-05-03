@@ -2,70 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DD266F5D1C
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 19:40:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 724756F5D24
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 19:41:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbjECRkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 13:40:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35044 "EHLO
+        id S229939AbjECRlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 13:41:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbjECRj6 (ORCPT
+        with ESMTP id S229813AbjECRk5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 13:39:58 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E4A10F3
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 10:39:57 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id 98e67ed59e1d1-24e43240e9fso709836a91.3
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 10:39:57 -0700 (PDT)
+        Wed, 3 May 2023 13:40:57 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D8F65FD3
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 10:40:55 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-555e853d3c5so51879047b3.2
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 10:40:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683135597; x=1685727597;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jaNgUREymFs00Yb0mg7CK5SfoWbeJmned3OPDAQIihE=;
-        b=fsYBHQWjLN1c2TAemudpJrNbjeVHqe7+5QQHkDQi6Z/0nBduOM1DUUrpIsMsFZGcLf
-         NMpF3syzhVSx1vAOpx0fbLqAbosL4eI+dtlQi36iyccxfl6E6f+Po/vqB470Iul+FBlm
-         F/M/eaAlClHy/c1D0atYjVen2fOKdL7B6UqbNpveqT7DfydQyM5h6SVr1KKhfejO8pmK
-         Z88eJzWbSCgqwR5Mkcdy4bYH1xukJtlqbg6MKyFWL/9qMYkQz72IKUpwcaw/IBtLJi8a
-         SyjTGe2unBzkFvf0wxrN+BW2BAPU2MvzDi48ZHHK9QIo/vWubYX4NKW5+LruoV9EB6ZA
-         55Ow==
+        d=google.com; s=20221208; t=1683135654; x=1685727654;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VnWJwoqbKS+XkHViPIVupavn1s9FL+9QLrnitzrqP5g=;
+        b=eK3o90MKtG0sAxJkQzBjjPPdgC8Naf0DW8LSnzzFyGy7r2iplN6tx8LRS+K1pesqQ/
+         +dlPpm9XhI5MpmbmybPkhrAEcSQe8jXQWxke9zLF0oWZbujbmGNiLr16iUXkN33UUHSx
+         XBXGIEWcktzdHazuLFLqwBuOkd1R9zqRh1rR05EQP6mEIW+Y870cMvkQ+YZdkTbO3EXe
+         JnQPUyB6BIyM6BqPoFJBWX+ubIIjmGY6Y6TRZTV6HlKG9bq6FA2QoEZiVTg495moZLJm
+         8j7J7Vy9fMLWKuo3JHmpkQUMBoO2kqt3hu+UuR0WJjg5iixGZu5y4Lvke1eQTwl5WZQa
+         NpXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683135597; x=1685727597;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=jaNgUREymFs00Yb0mg7CK5SfoWbeJmned3OPDAQIihE=;
-        b=QhuACoT/N3PtcWiqe5atXB5X5GxlUnPbeUGXZhFGoVZlW1hN3Lgdev0pmqpyZ/3YDW
-         WKr07f+Tdw2f9K0F5p8bGd0Uls/iZcUUmSN7/sbhID+fu23PpTHTsJ12TXkELFW27boy
-         9oQgNEx8zO+dviagt7RnuXxU4dWRLw20Waw0wAXqVGflg7BRMz2E0erIxEXgiPfVPgDY
-         fIgFZPMHfhm24zW3FiUswGoy9DeUn1An7H+CpkwV28P65GkcHbG0PLP6ISqLauOiXaZ4
-         +XYhRkjGb0GJcYUX4MV+phw9QNt5wTtGF6nCraqB4jcyFKJsYK/vaYE2duzqBJW2dfvd
-         isxQ==
-X-Gm-Message-State: AC+VfDw6ED7tdQSq8dz6FBBe16aFns0AzLA2mfDHnxY2I4sq09B4ZSOV
-        pP4CR7UJ2njHNc700DEGRFigU53OCTg=
-X-Google-Smtp-Source: ACHHUZ5XjGSm7zCGuwEwfzGUlaSfDp04mSDPK5a311XubZ0+jqcjEKM5p3OevUqiAMIldDEYRLKxnOHDobs=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90a:4d0a:b0:24d:fb1d:106d with SMTP id
- c10-20020a17090a4d0a00b0024dfb1d106dmr3029858pjg.2.1683135596770; Wed, 03 May
- 2023 10:39:56 -0700 (PDT)
-Date:   Wed, 3 May 2023 10:39:55 -0700
-In-Reply-To: <CALMp9eTHsS2PwVu38QtOa7JkUvBuR7Znz5wjsNuWBfyjT1O8ow@mail.gmail.com>
-Mime-Version: 1.0
-References: <20230503041631.3368796-1-mizhang@google.com> <ZFKLB1C+v6HKcy0o@google.com>
- <CALMp9eTHsS2PwVu38QtOa7JkUvBuR7Znz5wjsNuWBfyjT1O8ow@mail.gmail.com>
-Message-ID: <ZFKca+dKE+Gjl+IR@google.com>
-Subject: Re: [PATCH] KVM: VMX: add MSR_IA32_TSX_CTRL into msrs_to_save
-From:   Sean Christopherson <seanjc@google.com>
-To:     Jim Mattson <jmattson@google.com>
-Cc:     Mingwei Zhang <mizhang@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
+        d=1e100.net; s=20221208; t=1683135654; x=1685727654;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VnWJwoqbKS+XkHViPIVupavn1s9FL+9QLrnitzrqP5g=;
+        b=VCCn4TImEBeQAt/THs+/l6+nJR5dbvyI91dyGVAzKrkyTKFQiv8mQ3C8GvjURqsr05
+         eUp6FNVdWafDrivSt8rPd0ooOnMCmIS+nCb7EbqiZN/jsPLdZmned5YcbjnohjxLZzHN
+         7ApP/KLg8IBzezkQIzqxrvZSohlrQtwBu92nISgtmraVZawal9mcFTbkk0+2j14vQ4R1
+         eUezkm4/++gn3PmL++f6HN2DRbSkySv8DvZXRV5H3lyfa+LaB8wc+NBEOOxNPGFGblGr
+         BR/+SLNjeVe+RmaZk+j0reZOxQouMn3VTnlAI2RJz80+qsveEBvanrYz4hKRlf3bTMue
+         Lj4w==
+X-Gm-Message-State: AC+VfDyP+KRw5qo5Qun6dTMJtbR4jOReGOx3Gvgx9hk2z8bQd7VzXP9X
+        RLSseMkN3MTLEaf7CWaUHf4aYaPNyRN/D6ZuwAltNw==
+X-Google-Smtp-Source: ACHHUZ5+xgmBEFDJhkEbV6hOZk2BeNhUs5riMMl8CEWVIZEPl5lRwY7k05WxOPH80Nz6y5uKgnKRw8/1iWaKnQTfG2Y=
+X-Received: by 2002:a25:1885:0:b0:b92:3f59:26e with SMTP id
+ 127-20020a251885000000b00b923f59026emr18942712yby.41.1683135654167; Wed, 03
+ May 2023 10:40:54 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230501165450.15352-1-surenb@google.com> <ZFIMaflxeHS3uR/A@dhcp22.suse.cz>
+ <CAJuCfpHxbYFxDENYFfnggh1D8ot4s493PQX0C7kD-JLvixC-Vg@mail.gmail.com> <20230503122839.0d9934c5@gandalf.local.home>
+In-Reply-To: <20230503122839.0d9934c5@gandalf.local.home>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 3 May 2023 10:40:42 -0700
+Message-ID: <CAJuCfpFYq7CZS4y2ZiF+AJHRKwnyhmZCk_uuTwFse26DxGh-qQ@mail.gmail.com>
+Subject: Re: [PATCH 00/40] Memory allocation profiling
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
+        kent.overstreet@linux.dev, vbabka@suse.cz, hannes@cmpxchg.org,
+        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
+        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
+        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
+        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
+        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
+        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
+        tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
+        paulmck@kernel.org, pasha.tatashin@soleen.com,
+        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
+        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
+        ndesaulniers@google.com, gregkh@linuxfoundation.org,
+        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, bristot@redhat.com,
+        vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
+        iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
+        elver@google.com, dvyukov@google.com, shakeelb@google.com,
+        songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com,
+        minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,49 +96,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 03, 2023, Jim Mattson wrote:
-> On Wed, May 3, 2023 at 9:25=E2=80=AFAM Sean Christopherson <seanjc@google=
-.com> wrote:
-> >
-> > On Wed, May 03, 2023, Mingwei Zhang wrote:
-> > > Add MSR_IA32_TSX_CTRL into msrs_to_save[] to explicitly tell userspac=
-e to
-> > > save/restore the register value during migration. Missing this may ca=
-use
-> > > userspace that relies on KVM ioctl(KVM_GET_MSR_INDEX_LIST) fail to po=
-rt the
-> > > value to the target VM.
-> > >
-> > > Fixes: b07a5c53d42a ("KVM: vmx: use MSR_IA32_TSX_CTRL to hard-disable=
- TSX on guest that lack it")
-> > > Reported-by: Jim Mattson <jmattson@google.com>
-> > > Signed-off-by: Mingwei Zhang <mizhang@google.com>
-> > > ---
-> > >  arch/x86/kvm/x86.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > > index 237c483b1230..2236cfee4b7a 100644
-> > > --- a/arch/x86/kvm/x86.c
-> > > +++ b/arch/x86/kvm/x86.c
-> > > @@ -1431,7 +1431,7 @@ static const u32 msrs_to_save_base[] =3D {
-> > >  #endif
-> > >       MSR_IA32_TSC, MSR_IA32_CR_PAT, MSR_VM_HSAVE_PA,
-> > >       MSR_IA32_FEAT_CTL, MSR_IA32_BNDCFGS, MSR_TSC_AUX,
-> > > -     MSR_IA32_SPEC_CTRL,
-> > > +     MSR_IA32_SPEC_CTRL, MSR_IA32_TSX_CTRL,
-> > >       MSR_IA32_RTIT_CTL, MSR_IA32_RTIT_STATUS, MSR_IA32_RTIT_CR3_MATC=
-H,
-> > >       MSR_IA32_RTIT_OUTPUT_BASE, MSR_IA32_RTIT_OUTPUT_MASK,
-> > >       MSR_IA32_RTIT_ADDR0_A, MSR_IA32_RTIT_ADDR0_B,
-> > > --
-> >
-> > Hmm, KVM shouldn't report the MSR if it can't be written by the guest. =
- Over-
->=20
-> I think you mean to say that KVM shouldn't report the MSR if it can't
-> be written by *any* guest. KVM_GET_MSR_INDEX_LIST is a device ioctl,
-> so it isn't capable of filtering out MSRs that can't be written by
-> *the* guest, for some occurrence of "the."
+On Wed, May 3, 2023 at 9:28=E2=80=AFAM Steven Rostedt <rostedt@goodmis.org>=
+ wrote:
+>
+> On Wed, 3 May 2023 08:09:28 -0700
+> Suren Baghdasaryan <surenb@google.com> wrote:
+>
+> > There is another issue, which I think can be solved in a smart way but
+> > will either affect performance or would require more memory. With the
+> > tracing approach we don't know beforehand how many individual
+> > allocation sites exist, so we have to allocate code tags (or similar
+> > structures for counting) at runtime vs compile time. We can be smart
+> > about it and allocate in batches or even preallocate more than we need
+> > beforehand but, as I said, it will require some kind of compromise.
+>
+> This approach is actually quite common, especially since tagging every
+> instance is usually overkill, as if you trace function calls in a running
+> kernel, you will find that only a small percentage of the kernel ever
+> executes. It's possible that you will be allocating a lot of tags that wi=
+ll
+> never be used. If run time allocation is possible, that is usually the
+> better approach.
 
-Doh, yes, "the guest" was a handwavy reference to any/all guests.
+True but the memory overhead should not be prohibitive here. As a
+ballpark number, on my machine I see there are 4838 individual
+allocation locations and each codetag structure is 32 bytes, so that's
+152KB.
+
+>
+> -- Steve
