@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8F9C6F50C3
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 09:10:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0D1C6F50C5
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 09:10:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbjECHKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 03:10:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53488 "EHLO
+        id S229726AbjECHKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 03:10:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229701AbjECHKY (ORCPT
+        with ESMTP id S229741AbjECHKe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 03:10:24 -0400
+        Wed, 3 May 2023 03:10:34 -0400
 Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8944E4227;
-        Wed,  3 May 2023 00:10:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AF2C4223;
+        Wed,  3 May 2023 00:10:29 -0700 (PDT)
 Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3436A4il003430;
-        Wed, 3 May 2023 00:10:12 -0700
+        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3436AsGR004505;
+        Wed, 3 May 2023 00:10:17 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=pfpt0220;
- bh=c3cSGBdd33u15K/8c9xWQAxDg4P0TadDZwx94vassMs=;
- b=Os04Qm33lUu9sprcuTfOqe110LksylE8pMgPmt77MGAe+6ZopDyN1PD6c1E6vumko6gB
- ObwnS9IO+Ezsnvc/xWYi72YCn/Cmlvh2Sv7ku0RL/WUQN8grplbeeBdCjGCGc5GQTTHc
- c6g0dFlqTXm45/DrPB+DJblQZ6T5CjunP2M+raGInJnc55T1J+VplzDVcTqv1sKdRyLn
- JzJMsqqJOuP5IvYJcpmPKcNAS4tAtswGdwvOwdYu8PhdNpAFing10a48R6pDw22GZ3tg
- 3Y6oO+95hOG+4ZwMfuofpV0N7NOdFak4H782Rj+ijiTGDkpzJp7ugXU8kkgPX8pXgTW1 CA== 
+ bh=ZlSrOLdBRNFKeLr7Ip+8w0eprD3EHpIspAhBFP9tXz8=;
+ b=aAOHEL2RA4pToiPZJEbz48+w4sePaoB8HNfrvK2p+ABqkIORQ2CKkaT9PHP2T0apZk0a
+ hQD5G99S+0iaOy5+TMa+myfvfGnTo4hARGXBdjJfr/uqwJp3ilQyp7N/P4QPnA1guCHn
+ BoMMotlCysJhpdc3xplRIrvHTzP2ovfqqla58LUmZJhKYfXgFToFvWgFlfljzd1IgUVP
+ TiyrX/vEHDl+7fvZMmKXUHDhAVUaPj0wNwiUYO+qsNZL72/wAEsvzfl84SdfWfiQ3eMI
+ +cnZLY0FW4LpJGoY72NVTTyKe/gKfEZFjAlkMAeg+krcX20Fe0l5SJSoaEyhO6pzpCes gQ== 
 Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3q92rp3m7m-2
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3q92rp3m7v-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 03 May 2023 00:10:12 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
+        Wed, 03 May 2023 00:10:17 -0700
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
  (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 3 May
- 2023 00:10:10 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
- Transport; Wed, 3 May 2023 00:10:10 -0700
+ 2023 00:10:15 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
+ Transport; Wed, 3 May 2023 00:10:15 -0700
 Received: from hyd1425.marvell.com (unknown [10.29.37.83])
-        by maili.marvell.com (Postfix) with ESMTP id 51B7A3F70EE;
-        Wed,  3 May 2023 00:10:06 -0700 (PDT)
+        by maili.marvell.com (Postfix) with ESMTP id 4379A3F7082;
+        Wed,  3 May 2023 00:10:11 -0700 (PDT)
 From:   Sai Krishna <saikrishnag@marvell.com>
 To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
         <pabeni@redhat.com>, <netdev@vger.kernel.org>,
@@ -47,19 +47,18 @@ To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
         <leon@kernel.org>, <sgoutham@marvell.com>, <gakula@marvell.com>,
         <lcherian@marvell.com>, <jerinj@marvell.com>, <hkelam@marvell.com>,
         <sbhatta@marvell.com>
-CC:     Ratheesh Kannoth <rkannoth@marvell.com>,
-        Sai Krishna <saikrishnag@marvell.com>
-Subject: [net PATCH v5 04/11] octeontx2-pf: Increase the size of dmac filter flows
-Date:   Wed, 3 May 2023 12:39:37 +0530
-Message-ID: <20230503070944.960190-5-saikrishnag@marvell.com>
+CC:     Sai Krishna <saikrishnag@marvell.com>
+Subject: [net PATCH v5 05/11] octeontx2-af: Add validation for lmac type
+Date:   Wed, 3 May 2023 12:39:38 +0530
+Message-ID: <20230503070944.960190-6-saikrishnag@marvell.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230503070944.960190-1-saikrishnag@marvell.com>
 References: <20230503070944.960190-1-saikrishnag@marvell.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 0O9sNZLQwZP1zBipVk47tyB6O5_zm8n9
-X-Proofpoint-GUID: 0O9sNZLQwZP1zBipVk47tyB6O5_zm8n9
+X-Proofpoint-ORIG-GUID: mugEdnywIu1dptctzCkIXq5IiRZSHBAL
+X-Proofpoint-GUID: mugEdnywIu1dptctzCkIXq5IiRZSHBAL
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-05-03_04,2023-04-27_01,2023-02-09_01
@@ -73,38 +72,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ratheesh Kannoth <rkannoth@marvell.com>
+From: Hariprasad Kelam <hkelam@marvell.com>
 
-CN10kb supports large number of dmac filter flows to be
-inserted. Increase the field size to accommodate the same
+Upon physical link change, firmware reports to the kernel about the
+change along with the details like speed, lmac_type_id, etc.
+Kernel derives lmac_type based on lmac_type_id received from firmware.
 
-Fixes: b747923afff8 ("octeontx2-af: Exact match support")
-Signed-off-by: Ratheesh Kannoth <rkannoth@marvell.com>
+In a few scenarios, firmware returns an invalid lmac_type_id, which
+is resulting in below kernel panic. This patch adds the missing
+validation of the lmac_type_id field.
+
+Internal error: Oops: 96000005 [#1] PREEMPT SMP
+[   35.321595] Modules linked in:
+[   35.328982] CPU: 0 PID: 31 Comm: kworker/0:1 Not tainted
+5.4.210-g2e3169d8e1bc-dirty #17
+[   35.337014] Hardware name: Marvell CN103XX board (DT)
+[   35.344297] Workqueue: events work_for_cpu_fn
+[   35.352730] pstate: 40400089 (nZcv daIf +PAN -UAO)
+[   35.360267] pc : strncpy+0x10/0x30
+[   35.366595] lr : cgx_link_change_handler+0x90/0x180
+
+Fixes: 61071a871ea6 ("octeontx2-af: Forward CGX link notifications to PFs")
+Signed-off-by: Hariprasad Kelam <hkelam@marvell.com>
 Signed-off-by: Sunil Kovvuri Goutham <sgoutham@marvell.com>
 Signed-off-by: Sai Krishna <saikrishnag@marvell.com>
 Reviewed-by: Simon Horman <simon.horman@corigine.com>
 ---
- drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/marvell/octeontx2/af/cgx.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
-index f42b2b65bfd7..0c8fc66ade82 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
-@@ -335,11 +335,11 @@ struct otx2_flow_config {
- #define OTX2_PER_VF_VLAN_FLOWS	2 /* Rx + Tx per VF */
- #define OTX2_VF_VLAN_RX_INDEX	0
- #define OTX2_VF_VLAN_TX_INDEX	1
--	u16			max_flows;
--	u8			dmacflt_max_flows;
- 	u32			*bmap_to_dmacindex;
- 	unsigned long		*dmacflt_bmap;
- 	struct list_head	flow_list;
-+	u32			dmacflt_max_flows;
-+	u16                     max_flows;
- };
- 
- struct otx2_tc_info {
+diff --git a/drivers/net/ethernet/marvell/octeontx2/af/cgx.c b/drivers/net/ethernet/marvell/octeontx2/af/cgx.c
+index 724df6398bbe..bd77152bb8d7 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/af/cgx.c
++++ b/drivers/net/ethernet/marvell/octeontx2/af/cgx.c
+@@ -1231,6 +1231,14 @@ static inline void link_status_user_format(u64 lstat,
+ 	linfo->an = FIELD_GET(RESP_LINKSTAT_AN, lstat);
+ 	linfo->fec = FIELD_GET(RESP_LINKSTAT_FEC, lstat);
+ 	linfo->lmac_type_id = FIELD_GET(RESP_LINKSTAT_LMAC_TYPE, lstat);
++
++	if (linfo->lmac_type_id >= LMAC_MODE_MAX) {
++		dev_err(&cgx->pdev->dev, "Unknown lmac_type_id %d reported by firmware on cgx port%d:%d",
++			linfo->lmac_type_id, cgx->cgx_id, lmac_id);
++		strncpy(linfo->lmac_type, "Unknown", LMACTYPE_STR_LEN - 1);
++		return;
++	}
++
+ 	lmac_string = cgx_lmactype_string[linfo->lmac_type_id];
+ 	strncpy(linfo->lmac_type, lmac_string, LMACTYPE_STR_LEN - 1);
+ }
 -- 
 2.25.1
 
