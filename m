@@ -2,65 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DF996F4FEE
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 08:07:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C41216F4FEF
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 08:08:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbjECGHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 02:07:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32922 "EHLO
+        id S229617AbjECGIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 02:08:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbjECGHq (ORCPT
+        with ESMTP id S229598AbjECGIQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 02:07:46 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 262A535B0;
-        Tue,  2 May 2023 23:07:41 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 9436280EB;
-        Wed,  3 May 2023 06:07:40 +0000 (UTC)
-Date:   Wed, 3 May 2023 09:07:39 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Julien Panis <jpanis@baylibre.com>, arnd@arndb.de, olof@lixom.net,
-        soc@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org
-Subject: Re: [PATCH] arm: dts: Add am335x-boneblack-pps.dts
-Message-ID: <20230503060739.GM14287@atomide.com>
-References: <20230428105453.110254-1-jpanis@baylibre.com>
- <8e1ee169-603f-4aa4-9f02-68520d708d57@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8e1ee169-603f-4aa4-9f02-68520d708d57@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 3 May 2023 02:08:16 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F422680
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 23:08:15 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 0F9B7222C0;
+        Wed,  3 May 2023 06:08:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1683094094; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qpbCSszVr46DriBA7/WJQ7lj+XHfHPDBGRbf2/7ktVE=;
+        b=lM412DW6Frf8JnO9H/P1wXkkGe837O06CzHtfgyTmQNeUV8f3FFffg9OgESoimKEQvLJ1g
+        6f6yK80WDyeBDYB0MGsGtORA2tYKSjz3hdHJSLP3mlt8xLXQgmZ6vsi8PD5FWWHHYIF8SF
+        YCnYF6dtLxjyIAKKY19fyZkM5Iizi40=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1683094094;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qpbCSszVr46DriBA7/WJQ7lj+XHfHPDBGRbf2/7ktVE=;
+        b=c2v7kafuMkO5hc8n85vXXla6Tk3AqZAkOR9HiTRMugEVh2qaIHbTkIdwFbOaymgy6TIFXG
+        AzGExnRA0bGlUQAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DE25113584;
+        Wed,  3 May 2023 06:08:13 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id mK9VNU36UWR5JgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 03 May 2023 06:08:13 +0000
+Date:   Wed, 03 May 2023 08:08:13 +0200
+Message-ID: <87h6sune0i.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     "Luke D. Jones" <luke@ljones.dev>
+Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        perex@perex.cz, tiwai@suse.com
+Subject: Re: [PATCH] ALSA: hda/realtek: Add quirk for 2nd ASUS GU603
+In-Reply-To: <20230503035035.254346-1-luke@ljones.dev>
+References: <20230503035035.254346-1-luke@ljones.dev>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-* Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> [230428 13:50]:
-> On 28/04/2023 12:54, Julien Panis wrote:
-> > From: Lokesh Vutla <lokeshvutla@ti.com>
-> > +		compatible = "ti,omap-dmtimer-pwm";
-> > +		pinctrl-names = "default";
-> > +		pinctrl-0 = <&pwm7_pins>;
-> > +		#pwm-cells = <3>;
-> > +		ti,timers = <&timer7>;
-> > +		ti,clock-source = <0x00>; /* timer_sys_ck */
+On Wed, 03 May 2023 05:50:35 +0200,
+Luke D. Jones wrote:
 > 
-> Why this is hex? Should be just 0/1/2?
+> Add quirk for GU603 with 0x1c62 variant of codec.
+> 
+> Signed-off-by: Luke D. Jones <luke@ljones.dev>
+> ---
+>  sound/pci/hda/patch_realtek.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+> index 3b9f077a227f..4a585050edc3 100644
+> --- a/sound/pci/hda/patch_realtek.c
+> +++ b/sound/pci/hda/patch_realtek.c
+> @@ -9501,6 +9501,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+>  	SND_PCI_QUIRK(0x1043, 0x1517, "Asus Zenbook UX31A", ALC269VB_FIXUP_ASUS_ZENBOOK_UX31A),
+>  	SND_PCI_QUIRK(0x1043, 0x1662, "ASUS GV301QH", ALC294_FIXUP_ASUS_DUAL_SPK),
+>  	SND_PCI_QUIRK(0x1043, 0x16b2, "ASUS GU603", ALC289_FIXUP_ASUS_GA401),
+> +	SND_PCI_QUIRK(0x1043, 0x1c62, "ASUS GU603", ALC289_FIXUP_ASUS_GA401),
+>  	SND_PCI_QUIRK(0x1043, 0x16e3, "ASUS UX50", ALC269_FIXUP_STEREO_DMIC),
+>  	SND_PCI_QUIRK(0x1043, 0x1740, "ASUS UX430UA", ALC295_FIXUP_ASUS_DACS),
+>  	SND_PCI_QUIRK(0x1043, 0x17d1, "ASUS UX431FL", ALC294_FIXUP_ASUS_DUAL_SPK),
 
-I think the ti,clock-source can be left out now, this can be done
-with assigned-clocks and parents instead. Please grep for some
-examples in the current mainline kernel dts files.
+Could you try to put the new entry at the right place?
+The table is sorted in the PCI SSID order.
 
-Regards,
 
-Tony
+thanks,
+
+Takashi
