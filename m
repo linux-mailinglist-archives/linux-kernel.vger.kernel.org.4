@@ -2,64 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1DC56F57A7
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 14:12:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D63766F5785
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 14:02:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229745AbjECMMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 08:12:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35164 "EHLO
+        id S229830AbjECMCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 08:02:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbjECMME (ORCPT
+        with ESMTP id S229528AbjECMCJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 08:12:04 -0400
-X-Greylist: delayed 595 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 03 May 2023 05:11:59 PDT
-Received: from proxima.lasnet.de (proxima.lasnet.de [IPv6:2a01:4f8:121:31eb:3::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4451BFC;
-        Wed,  3 May 2023 05:11:59 -0700 (PDT)
-Received: from [IPV6:2003:e9:d706:54a1:212b:c98b:d0c5:6c8c] (p200300e9d70654a1212bc98bd0c56c8c.dip0.t-ipconnect.de [IPv6:2003:e9:d706:54a1:212b:c98b:d0c5:6c8c])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: stefan@datenfreihafen.org)
-        by proxima.lasnet.de (Postfix) with ESMTPSA id 82FFAC00AF;
-        Wed,  3 May 2023 14:01:59 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=datenfreihafen.org;
-        s=2021; t=1683115319;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jrY4np7MIEvKj3oth8g3qje83iXw5OFsZNJLsl8D7RQ=;
-        b=uKEEkxzo4jZwwNqIjEPvwkWPHWvKHNyQL62sEHhuw8fTrst//3B4Jz7HPuLZ53cgZo8hzu
-        kFT/KmpufWXNCH4OBKVSVBmBQ49Qt0/qnrmzQztaS0cVHrus38DsOwEkS87hsxtmyNtfdG
-        rC03XUGSYEuo3/K+v8eMwq/i3AnFp0KnqeNsvEWkx0Y54BpS7SeltuaO3OyqIdCoh9wRFB
-        pIx2GdUF2Ki/lnEcCfgOEwoXHdqHG472NOA0DccePOmMj7wshaWu4qMMavnYPVt84aAd4y
-        m+qamR0+DUqmfDd2dAvYAAfLpj8uMGyepMzm6DNtwNX3r5ahAGzJKgzG71PkoQ==
-Message-ID: <f5518a73-ebba-32a1-3c70-464c6d233760@datenfreihafen.org>
-Date:   Wed, 3 May 2023 14:01:58 +0200
+        Wed, 3 May 2023 08:02:09 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA4875585;
+        Wed,  3 May 2023 05:02:08 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 343C21r5032374;
+        Wed, 3 May 2023 07:02:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1683115321;
+        bh=MIf99BfN5GAxrHPaX4Iy2F4CqpygWl3DmZAiV3GRb4k=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=E62KV0rtoPz0Yms9hQ0jCw9GcQfOKDoEArrOh3e+2pcR+orw2TJTqDloY+gPVRwMS
+         ZJFQEltbfGkPgszWsdD5fIIxLGRhL+DMx4jf3zBuD5I2/QWT6K7NufAJkIEjKvfivA
+         e9Fer8xnpPB2DpQmLNy/zTCPsp7F8/Ed4PgTu4ZM=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 343C21Kn045508
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 3 May 2023 07:02:01 -0500
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 3
+ May 2023 07:02:01 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 3 May 2023 07:02:01 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 343C20fk030040;
+        Wed, 3 May 2023 07:02:00 -0500
+Date:   Wed, 3 May 2023 07:02:00 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Neha Malcom Francis <n-francis@ti.com>
+CC:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <vigneshr@ti.com>,
+        <kristo@kernel.org>, <u-kumar1@ti.com>
+Subject: Re: [PATCH v4 2/3] arm64: dts: ti: k3-j721e: Add ESM support
+Message-ID: <20230503120200.4xqylyoiczx43esu@gradation>
+References: <20230503093310.85779-1-n-francis@ti.com>
+ <20230503093310.85779-3-n-francis@ti.com>
+ <20230503114827.lutd2ebygxczvali@argue>
+ <82a39b8e-96ad-faa2-714f-c8c6bfbcc5d6@ti.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] ca8210: move to gpio descriptors
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>,
-        Alexander Aring <alex.aring@gmail.com>
-Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Hauke Mehrtens <hauke@hauke-m.de>, linux-wpan@vger.kernel.org,
-        Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org
-References: <20230126161737.2985704-1-arnd@kernel.org>
- <57e74219-d439-4d10-9bb5-53fe7b30b46f@app.fastmail.com>
-From:   Stefan Schmidt <stefan@datenfreihafen.org>
-In-Reply-To: <57e74219-d439-4d10-9bb5-53fe7b30b46f@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <82a39b8e-96ad-faa2-714f-c8c6bfbcc5d6@ti.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,29 +68,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Arnd.
-
-On 26.01.23 17:25, Arnd Bergmann wrote:
-> On Thu, Jan 26, 2023, at 17:17, Arnd Bergmann wrote:
+On 17:25-20230503, Neha Malcom Francis wrote:
+> Hi Nishanth,
 > 
->>   	if (ret) {
->> -		dev_crit(&spi->dev, "request_irq %d failed\n", pdata->irq_id);
->> -		gpiod_unexport(gpio_to_desc(pdata->gpio_irq));
->> -		gpio_free(pdata->gpio_irq);
->> +		dev_crit(&spi->dev, "request_irq %d failed\n", priv->irq_id);
->> +		gpiod_put(priv->gpio_irq);
->>   	}
+> On 03/05/23 17:18, Nishanth Menon wrote:
+> > On 15:03-20230503, Neha Malcom Francis wrote:
+> > > Add address entry mapping ESM on J721E.
+> > > 
+> > > Signed-off-by: Neha Malcom Francis <n-francis@ti.com>
+> > > ---
+> > >   arch/arm64/boot/dts/ti/k3-j721e.dtsi | 1 +
+> > >   1 file changed, 1 insertion(+)
+> > > 
+> > > diff --git a/arch/arm64/boot/dts/ti/k3-j721e.dtsi b/arch/arm64/boot/dts/ti/k3-j721e.dtsi
+> > > index b912143b6a11..52bcde601eb8 100644
+> > > --- a/arch/arm64/boot/dts/ti/k3-j721e.dtsi
+> > > +++ b/arch/arm64/boot/dts/ti/k3-j721e.dtsi
+> > 
+> > Why is'nt esm node introduced here?
+> > 
 > 
-> I just realized that this bit depends on the "gpiolib: remove
-> legacy gpio_export" patch I sent to the gpio mailing list earlier.
+> As it stands esm node is already in
+> arch/arm/dts/k3-j721e-r5-common-proc-board.dts in u-boot and since this
+> patch is motivated to keep the u-boot and kernel dts in sync, I haven't
+> added it here.
 > 
-> We can probably just defer this change until that is merged,
-> or alternatively I can rebase this patch to avoid the
-> dependency.
+> Although... I could add it here similar to j7200 and take action to move to
+> the same in u-boot... maybe that is better route.
 
-I think the gpiolib ependency should be merged now. Do you want to 
-rebase this patch against latest? We had some other ca8210 changes 
-coming in.
+The core problem we have is that part of the hardware description is in
+u-boot and a large part is in kernel. That is wrong. eventually, we will
+drop u-boot.dtsi and r5-xyz.dts files.. This cleanup journey is towards
+that action.
 
-regards
-Stefan Schmidt
+we want kernel to be the canonical description of the hardware. which
+means u-boot or zephyr or something else will eventually just copy the
+kernel dts and it has information enough about the hardware to be able
+to boot.
+
+each of the dependent ecosystems (u-boot, zephyr etc..) have a little
+bit of their own binding extensions (such as binman for u-boot), which
+is maintained in their own repos. But, the SoC hardware description,
+entirely should be available in kernel device tree.
+
+So, please ensure esm is completely described as well.
+
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
