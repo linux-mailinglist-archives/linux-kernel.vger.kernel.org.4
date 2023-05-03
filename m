@@ -2,65 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C6DC6F5B4D
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 17:35:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B60E06F5B57
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 17:37:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230352AbjECPfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 11:35:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57180 "EHLO
+        id S230497AbjECPhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 11:37:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230126AbjECPfp (ORCPT
+        with ESMTP id S230080AbjECPhl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 11:35:45 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E49A449B;
-        Wed,  3 May 2023 08:35:43 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4ec8eca56cfso6316820e87.0;
-        Wed, 03 May 2023 08:35:43 -0700 (PDT)
+        Wed, 3 May 2023 11:37:41 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 942466EA0;
+        Wed,  3 May 2023 08:37:39 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f1cfed93e2so53546585e9.3;
+        Wed, 03 May 2023 08:37:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683128142; x=1685720142;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rFjqMoLMLjbtDQ/FU1cJVmttw0+g9NofP/Ycqwg6QIY=;
-        b=K76Ghx//hX9tW7hHI/FUWux51ViM4vpqlDsSH5zxXGrxB50x7VcP0uDGhcb5yU4l2A
-         K+wTlTnsGLZnklY0cgk2lbCf09y+rJUCeXq/gV8EU7TjdDivQfqjEblksuWxJzmrHhod
-         PUHrl5Czf2YFmHTGf3Vdy4tOQpU7SEugoCUfmNPuEnU5XYBk/+coG7UxBtliSCubq/Zl
-         IthyxQHkwaBuzchxWcF6odTdqEMruNYfUzWGwCMNCY+YrJBsugnwxhfPAfJEOLE4yGZw
-         KXKpYUR1VBNxQU3vmbshlprI5fxJYjy/bLHYS1V3FI0KNLK1eHfU3qgxsaX2MJ12zAJz
-         yA1g==
+        d=gmail.com; s=20221208; t=1683128258; x=1685720258;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=5JJFuEPTE4BVU5/m4SDNq/0rwYCFngwHyNb8+sMGpbk=;
+        b=f1ldkmb3XFaeE9giB5HgYpoxWExCQUXmfJ4wPY5lgSi5xTmbfBbONoep0z2W98W7Wt
+         /V12EC2x93BkTv2q6xbvQ5zU+Qj35ndmiPtJoysgGPxWqIFgPDklGDxZY0MFJXHqzU2U
+         V2xuyKyNq4q4r33oeksriXiB9EltdqXuI7t6CBkmVMxFAVk+5DZUTgEeuHOF8vdiYANJ
+         CRBTNnFN6Q7laO5i1m5aBAuVRqvOb9ukpBUnG9MLtiPrq5D66aiqS1DbvznoNo4BfjZg
+         U4AWHBJkmfkvfjVN3kAvMFidmy7t8a1i7JhTxDZ6WGETZCPlC/7CYZHOWGJC4EFs80nc
+         3NfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683128142; x=1685720142;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rFjqMoLMLjbtDQ/FU1cJVmttw0+g9NofP/Ycqwg6QIY=;
-        b=WvyZb62GR6LfHay2Vbc30KYQDSV9x7+7sGppaTibU9txJ/qYlcUA/h0ONf0W5jGwvA
-         ZlkjvPCLcuM/FXB+InVZt0lfwomLAM970Oaq7lQiaGDCPhC2NAKorAEiiYgq1azjU2ob
-         kZsr+8rKN7/XXFp37i/ZOM483BBIlYOgrlRdr9GIs7Wiq77ieEL2l6UnMdzHHCzUOgfR
-         tv/n64iJdVJwSLdxl/uTJ7+UHYPqu67B0/ufGMA4wM/KEudkpce57T04KG7jyXlxRQS1
-         WggNBJYYqjSqA6eS/dFwIQ7fLO7FcwS7WqHOyfsyLVoe4TT2ppU5AjWzNgfKM9VfAQZ7
-         Oizg==
-X-Gm-Message-State: AC+VfDw+d7z+z2hSrz3ALySRIoQvp9E3kHK+TsAEajiWGlOBSWossAys
-        padLn1J2C54lT4S4W88VPh85ofBeEt6cgMEplAP/yg6PQIQ=
-X-Google-Smtp-Source: ACHHUZ6GOeKAUtMS19C1Uh8omVflvYszWMm59+XnpoCPt3wEDwEiIBXYP+LsJ7aHxwdvLUmm9moEKnyNO02wdW1Rpl8=
-X-Received: by 2002:ac2:4d10:0:b0:4f0:1a32:ca23 with SMTP id
- r16-20020ac24d10000000b004f01a32ca23mr927848lfi.40.1683128141551; Wed, 03 May
- 2023 08:35:41 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683128258; x=1685720258;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5JJFuEPTE4BVU5/m4SDNq/0rwYCFngwHyNb8+sMGpbk=;
+        b=aHiZQyTb88QoLWc8N2lrmQyP2M5liTTbTnsJ8lG9qUxdpCV/YPQg0ZHAsh9fSeL2sa
+         WNdqFEHdbeTaFHm6XM1t7wORXowEDtaSLzFIgIXb8PRVWcpkzFH7aHEMZXnBLhMRYIca
+         yLUI2Jp05BqVayunz2fQZQ24bSH6BmIMOD+OjtKxSvM1xyjhqF7t91xG4atIVs8PJxJB
+         iMRbyL2XP8ewOyiNJdcIde75G3FgcM1cwHnmKdfBjWdYEwSQvwPN+/AIblSod/A9Dp7Y
+         MGrnpOJndGYPCbdnarISOaWoABPDEZliCXDhdQ3PoOataWTRJj5wvkvd0KriePraNr3X
+         0+ZQ==
+X-Gm-Message-State: AC+VfDyxatHmTE+ulrps1RroLjECR4/A31Eqnmpq7+0WV6YMlB86bCpc
+        TH9QZ/TM9G2xvvYZ+ZGrezQ=
+X-Google-Smtp-Source: ACHHUZ45eo37jRhdELP3diMtYKEIHQFfdiD2toTSX9stBBpCuutuuzk1Z4vng0abDtctAvKSjY/BNQ==
+X-Received: by 2002:a1c:7710:0:b0:3f3:2b37:dd34 with SMTP id t16-20020a1c7710000000b003f32b37dd34mr11146391wmi.9.1683128257631;
+        Wed, 03 May 2023 08:37:37 -0700 (PDT)
+Received: from localhost (host86-156-84-164.range86-156.btcentralplus.com. [86.156.84.164])
+        by smtp.gmail.com with ESMTPSA id l2-20020a1ced02000000b003f19b3d89e9sm2234347wmh.33.2023.05.03.08.37.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 May 2023 08:37:36 -0700 (PDT)
+Date:   Wed, 3 May 2023 16:37:36 +0100
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Petr =?utf-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>,
+        Michal Hocko <mhocko@suse.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        akpm@linux-foundation.org, vbabka@suse.cz, hannes@cmpxchg.org,
+        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
+        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
+        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
+        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
+        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
+        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
+        tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
+        paulmck@kernel.org, pasha.tatashin@soleen.com,
+        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
+        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
+        ndesaulniers@google.com, gregkh@linuxfoundation.org,
+        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+        glider@google.com, elver@google.com, dvyukov@google.com,
+        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
+        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
+Subject: Re: [PATCH 00/40] Memory allocation profiling
+Message-ID: <f57b77b0-74da-41a3-a3bc-969ded4e0410@lucifer.local>
+References: <20230501165450.15352-1-surenb@google.com>
+ <ZFIMaflxeHS3uR/A@dhcp22.suse.cz>
+ <ZFIOfb6/jHwLqg6M@moria.home.lan>
+ <ZFISlX+mSx4QJDK6@dhcp22.suse.cz>
+ <20230503115051.30b8a97f@meshulam.tesarici.cz>
+ <ZFIv+30UH7+ySCZr@moria.home.lan>
+ <25a1ea786712df5111d7d1db42490624ac63651e.camel@HansenPartnership.com>
+ <ZFJ9hlQ3ZIU1XYCY@moria.home.lan>
 MIME-Version: 1.0
-References: <20230420165454.9517-1-jorge.lopez2@hp.com> <20230420165454.9517-5-jorge.lopez2@hp.com>
- <26f0a80e-d3f8-4d6c-83ff-d756abed7b6b@t-8ch.de> <CAOOmCE8+Kgkm4uscYEei1+9xHiN=wd2oNtEiLeneDS+zppuYcg@mail.gmail.com>
- <efafedc0-e9d3-4060-a174-dc4f33f77246@t-8ch.de>
-In-Reply-To: <efafedc0-e9d3-4060-a174-dc4f33f77246@t-8ch.de>
-From:   Jorge Lopez <jorgealtxwork@gmail.com>
-Date:   Wed, 3 May 2023 10:35:14 -0500
-Message-ID: <CAOOmCE9U3y_aCD9LGdWLXFAF5OQzWFfNRbywQM5iGdM=DCzkLg@mail.gmail.com>
-Subject: Re: [PATCH v11 04/14] HP BIOSCFG driver - int-attributes
-To:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZFJ9hlQ3ZIU1XYCY@moria.home.lan>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -71,225 +108,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 2, 2023 at 4:30=E2=80=AFPM Thomas Wei=C3=9Fschuh <thomas@t-8ch.=
-de> wrote:
->
-> Hi Jorge,
->
-> thanks for incorporating my feedback, I'm curious for the next revision!
->
-> The review comments are very terse but that is only to bring across
-> their points better. Your effort is appreciated.
->
-> On 2023-05-02 15:56:22-0500, Jorge Lopez wrote:
->
-> <snip>
->
-> > > On 2023-04-20 11:54:44-0500, Jorge Lopez wrote:
-> > > > ---
-> > > > Based on the latest platform-drivers-x86.git/for-next
-> > > > ---
-> > > >  .../x86/hp/hp-bioscfg/int-attributes.c        | 474 ++++++++++++++=
-++++
-> > > >  1 file changed, 474 insertions(+)
-> > > >  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/int-attribut=
-es.c
-> > > >
-> > > > diff --git a/drivers/platform/x86/hp/hp-bioscfg/int-attributes.c b/=
-drivers/platform/x86/hp/hp-bioscfg/int-attributes.c
-> > > > new file mode 100644
-> > > > index 000000000000..d8ee39dac3f9
-> > > > --- /dev/null
-> > > > +++ b/drivers/platform/x86/hp/hp-bioscfg/int-attributes.c
->
-> <snip>
->
-> > > > +int populate_integer_elements_from_package(union acpi_object *inte=
-ger_obj,
-> > > > +                                        int integer_obj_count,
-> > > > +                                        int instance_id)
-> > > > +{
-> > > > +     char *str_value =3D NULL;
-> > > > +     int value_len;
-> > > > +     int ret =3D 0;
-> > > > +     u32 size =3D 0;
-> > > > +     u32 int_value;
-> > > > +     int elem =3D 0;
-> > > > +     int reqs;
-> > > > +     int eloc;
-> > > > +
-> > > > +     if (!integer_obj)
-> > > > +             return -EINVAL;
-> > > > +
-> > > > +     strscpy(bioscfg_drv.integer_data[instance_id].common.display_=
-name_language_code,
-> > > > +             LANG_CODE_STR,
-> > > > +             sizeof(bioscfg_drv.integer_data[instance_id].common.d=
-isplay_name_language_code));
-> > > > +
-> > > > +     for (elem =3D 1, eloc =3D 1; elem < integer_obj_count; elem++=
-, eloc++) {
-> > > > +
-> > > > +             /* ONLY look at the first INTEGER_ELEM_CNT elements *=
-/
+On Wed, May 03, 2023 at 11:28:06AM -0400, Kent Overstreet wrote:
+> On Wed, May 03, 2023 at 08:33:48AM -0400, James Bottomley wrote:
+> > On Wed, 2023-05-03 at 05:57 -0400, Kent Overstreet wrote:
+> > > On Wed, May 03, 2023 at 11:50:51AM +0200, Petr Tesařík wrote:
+> > > > If anyone ever wants to use this code tagging framework for
+> > > > something
+> > > > else, they will also have to convert relevant functions to macros,
+> > > > slowly changing the kernel to a minefield where local identifiers,
+> > > > struct, union and enum tags, field names and labels must avoid name
+> > > > conflict with a tagged function. For now, I have to remember that
+> > > > alloc_pages is forbidden, but the list may grow.
 > > >
-> > > Why?
-> > The information provided in element 0 from the package is ignored as
-> > directed by the BIOS team.
-> > Similar action is taken when reading the information from ACPI Buffer
-> > (populate_integer_elements_from_buffer())
->
-> This should be mentioned somewhere.
->
-> But my question was more why to we only look at INTEGER_ELEM_CNT?
-> It is clear to me now, but this is very convulted. See below.
-
-I am adding the following information to each attribute file for clarificat=
-ion.
-
-"The total number of elements (INT_ELEM_CNT) read include only data
-relevant to this driver and its functionality. BIOS defines the order
-in which each element is read.  Element 0 data is not relevant to this
-driver hence it is ignored.  For clarity, The switch statement list
-all element names (DISPLAY_IN_UI) which defines the order in which is
-read and the name matches the variable where the data is stored".
-
->
-> <snip>
->
-> > >
-> > > > +
-> > > > +int populate_integer_elements_from_buffer(u8 *buffer_ptr, u32 *buf=
-fer_size,
-> > > > +                                       int instance_id)
-> > > > +{
-> > > > +     char *dst =3D NULL;
-> > > > +     int elem;
-> > > > +     int reqs;
-> > > > +     int integer;
-> > > > +     int size =3D 0;
-> > > > +     int ret;
-> > > > +     int dst_size =3D *buffer_size / sizeof(u16);
-> > > > +
-> > > > +     dst =3D kcalloc(dst_size, sizeof(char), GFP_KERNEL);
-> > > > +     if (!dst)
-> > > > +             return -ENOMEM;
-> > > > +
-> > > > +     elem =3D 0;
-> > > > +     strscpy(bioscfg_drv.integer_data[instance_id].common.display_=
-name_language_code,
-> > > > +             LANG_CODE_STR,
-> > > > +             sizeof(bioscfg_drv.integer_data[instance_id].common.d=
-isplay_name_language_code));
-> > > > +
-> > > > +     for (elem =3D 1; elem < 3; elem++) {
-> > > > +
-> > > > +             ret =3D get_string_from_buffer(&buffer_ptr, buffer_si=
-ze, dst, dst_size);
-> > > > +             if (ret < 0)
-> > > > +                     continue;
-> > > > +
-> > > > +             switch (elem) {
-> > > > +             case VALUE:
-> > > > +                     ret =3D kstrtoint(dst, 10, &integer);
-> > > > +                     if (ret)
-> > > > +                             continue;
-> > > > +
-> > > > +                     bioscfg_drv.integer_data[instance_id].current=
-_value =3D integer;
-> > > > +                     break;
-> > > > +             case PATH:
-> > > > +                     strscpy(bioscfg_drv.integer_data[instance_id]=
-.common.path, dst,
-> > > > +                             sizeof(bioscfg_drv.integer_data[insta=
-nce_id].common.path));
-> > > > +                     break;
-> > > > +             default:
-> > > > +                     pr_warn("Invalid element: %d found in Integer=
- attribute or data may be malformed\n", elem);
-> > > > +                     break;
-> > > > +             }
-> > > > +     }
-> > > > +
-> > > > +     for (elem =3D 3; elem < INTEGER_ELEM_CNT; elem++) {
-> > >
-> > > This loop pattern seems weird to me.
-> > > It is not obvious that the values are read in the order of the switch=
-()
-> > > branches from the buffer.
-> > >
+> > > Also, since you're not actually a kernel contributor yet...
 > >
-> > The order in which the data is read from the buffer is set by BIOS.
+> > You have an amazing talent for being wrong.  But even if you were
+> > actually right about this, it would be an ad hominem personal attack on
+> > a new contributor which crosses the line into unacceptable behaviour on
+> > the list and runs counter to our code of conduct.
 >
-> This I understand.
+> ...Err, what? That was intended _in no way_ as a personal attack.
 >
-> > The switch statement was used to enforce the reading order of the
-> > elements and provide additional clarity
->
-> This is not clear from the code alone. One also needs to know the
-> concrete values of the enums.
->
-> > > Something more obvious would be:
-> > >
-> > > instance.common.is_readonly =3D read_int_from_buf(&buffer_ptr);
-> > > instance.common.display_in_ui =3D read_int_from_buf(&buffer_ptr);
-> > > instance.common.requires_physical_presence =3D read_int_from_buf(&buf=
-fer_ptr);
->
-> The proposed pattern above, just regular function calls, are also
-> executed in the correct order, the order in which they are written.
->
-The code will be easier to follow and will not require checking of the
-results  because failing conditions are ignored.
-This will be a good option for functions such
-populate_integer_elements_from_buffer().  Buffer elements.
-Refactoring  package function,
-populate_integer_elements_from_package(), will introduce additional
-complexity and obfuscation.
 
+As an outside observer, I can assure you that absolutely came across as a
+personal attack, and the precise kind that puts people off from
+contributing. I should know as a hobbyist contributor myself.
 
-> For a reader it is clear that the order is important and part of the
-> ABI of the BIOS.
+> If I was mistaken I do apologize, but lately I've run across quite a lot
+> of people offering review feedback to patches I post that turn out to
+> have 0 or 10 patches in the kernel, and - to be blunt - a pattern of
+> offering feedback in strong language with a presumption of experience
+> that takes a lot to respond to adequately on a technical basis.
 >
-> > > This would make it clear that these are fields read in order from the
-> > > buffer. Without having to also look at the numeric values of the
-> > > defines.
-> > >
-> > > Furthermore it would make the code shorter and errorhandling would be
-> > > clearer and the API similar to the netlink APIs.
-> > >
-> > > Or maybe with error reporting:
-> > >
-> > > ret =3D read_int_from_buf(&buffer_ptr, &instance.common.is_readonly);
-> > > if (ret)
-> > >     ...
-> >
-> > Instance.common.is_readonly is only evaluated when the user attempt to
-> > update an attribute current value
->
-> is_readonly was only an example on how to more nicely read the data from
-> the buffer. It applies to all values of all attribute types.
->
-> > > ret =3D read_int_from_buf(&buffer_ptr, &instance.common.display_in_ui=
-);
-> > > if (ret)
-> > >     ...
-> >
-> > Instance.common.display_in_ui has no specific use at this time.
-> >
-> > The code was made shorter and easier to understand by replacing the
-> > long statements with
-> >
-> > struct integer_data *integer_data =3D &bioscfg_drv.integer_data[instanc=
-e_id];
-> > ...
-> > integer_data->common.is_readonly =3D integer;
-> >
-> > Same approach was taken for all attribute files.
->
-> Thanks!
->
-> Please do try to use the "plain functioncall" pattern as outlined above.
-> I think it can make the code much shorter and idiomatic.
 
-Understood!
+I, who may very well not merit being considered a contributor of
+significant merit in your view, have had such 'drive-by' commentary on some
+of my patches by precisely this type of person, and at no time felt the
+need to question whether they were a true Scotsman or not. It's simply not
+productive.
+
+> I don't think a suggestion to spend a bit more time reading code instead
+> of speculating is out of order! We could all, put more effort into how
+> we offer review feedback.
+
+It's the means by which you say it that counts for everything. If you feel
+the technical comments might not be merited on a deeper level, perhaps ask
+a broader question, or even don't respond at all? There are other means
+available.
+
+It's remarkable the impact comments like the one you made can have on
+contributors, certainly those of us who are not maintainers and are
+naturally plagued with imposter syndrome, so I would ask you on a human
+level to try to be a little more considerate.
+
+By all means address technical issues as robustly as you feel appropriate,
+that is after all the purpose of code review, but just take a step back and
+perhaps find the 'cuddlier' side of yourself when not addressing technical
+things :)
