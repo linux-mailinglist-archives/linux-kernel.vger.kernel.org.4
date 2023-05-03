@@ -2,126 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C67686F5F66
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 21:49:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB6C56F5F6B
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 21:49:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbjECTs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 15:48:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60592 "EHLO
+        id S229934AbjECTtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 15:49:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbjECTsx (ORCPT
+        with ESMTP id S229659AbjECTs7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 15:48:53 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D587AB4
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 12:48:52 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2ac70c975fcso14705221fa.3
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 12:48:52 -0700 (PDT)
+        Wed, 3 May 2023 15:48:59 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E0987AA0;
+        Wed,  3 May 2023 12:48:58 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-63b5465fc13so4281480b3a.3;
+        Wed, 03 May 2023 12:48:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683143331; x=1685735331;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GgxHMAd2AIMSIN7wxwztZQuxCjRjDT1lsufiXrNyadA=;
-        b=aogvjXXKvsH1JCvlSuu99w3M49a+Rox9nlF1yW7PWiOObH1fXAT5pOak8lxxjRSSs/
-         uUUB2uES6rNkgkhJE0lSCAgPN/H7/tXyEsAywz+0KRgUTa1uomGgUKEP7H6HcCX9rhmr
-         t3Erd3e6uNTmrhG1d/mAtgjoudH2HZMmUfGolqPePtU4Xljlni3kDasUhsNoxvT+owOA
-         +y9OgsP9ajUid7qTrnqieZvGFHXE/MigJy9SH2sp8bCjsbLDXl0sALVYAUPC8u8/4iK2
-         ztsSOWVNk7tEjd3X6W8mGLPZjN4p3AuCZXOS4wR6qGVWEMzLD+KhnEqKe9Az7gfEJNtY
-         wJVQ==
+        d=gmail.com; s=20221208; t=1683143337; x=1685735337;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=X0rUD0Br2hVe3zymEpoVc3T4TI1iG6AHKLcBxAchx6c=;
+        b=WRBBKM6Ry5r7jdgtwiYn+VkQZ8oJVQRWR7eY6Q4gywAy/AIvKMLTc5lvr+I7cWBcM8
+         TVhHYYvOx67ydwBdoukq9sxuHpDbTIx22fG3/FumxSshOm9pmxX92bnYtvASSZ4zbmzc
+         16xIn+Y67YCqR06ozsQt3kblulDkmNtdmkspoxukxm7NEnp7dppq9zXv9usUpK/QejVj
+         uG3paayH7MDDf0m/MWp/ZvWKY2r+v95ayLq3zeaaad/ime6aEDAhxIb3bCUzDcMlE+HN
+         t35RGIt3UP+SFV37LJD1LcRWQFcEBQWiLoyXLJmQezSeP5APJKrU5xq4XYO73ImZOIXL
+         Vu0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683143331; x=1685735331;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GgxHMAd2AIMSIN7wxwztZQuxCjRjDT1lsufiXrNyadA=;
-        b=EKyQl+hPKfWh3DYULp4cWIzbWmaPDo+6AvICcUvryWUaovfG6IAMVw26oQHSMqELoL
-         hRR8KhYE/NBd0aX6A40M8qR+wpexbWXM0V1HVx1DEhdGBikfhvLIILlLNo1p8wmlhPpS
-         qEF+tEZStYD0z2GfdMjA71haIcxaapZQTy7g9Ye62/R9HluZBFLXucRMppLbL9JI1tDj
-         uAKqCDsLNeffNODUE8MHqqTsdNUC3YjiLKTbvNRv/U1BwueHvbiYWqCBK4mK+/q6Di0s
-         f30CZ7is+mQx6xOUvXZJ5qjUJMf2B1Af1KdcnbVDoQGOnACa3L8k41xtaEBGgbRDVnpr
-         HpzA==
-X-Gm-Message-State: AC+VfDwF3oqHqr7oyhYLerJruoTXqDTLsQqFUYvoJF718IiYW108Jf/Z
-        8QJKKg39Iupg3CsLgugWbFjoyE9HDX82o1Lto+E=
-X-Google-Smtp-Source: ACHHUZ4NybURc8uLsP4LiiPVzi+nXZYpmTbylkvjCdEyJuSHfBGFZ4e/0y65cuVcRE8Kp/ENoMgol/Mx3aZAwrVJoGg=
-X-Received: by 2002:a2e:680e:0:b0:2ac:775f:6fd3 with SMTP id
- c14-20020a2e680e000000b002ac775f6fd3mr287789lja.13.1683143330477; Wed, 03 May
- 2023 12:48:50 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683143337; x=1685735337;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=X0rUD0Br2hVe3zymEpoVc3T4TI1iG6AHKLcBxAchx6c=;
+        b=Zc05avD7vDx3W4vWNqPQgUXyYHNTO6EFJGI6V6ddGu8U9S0rR3afScUtXiOVo4nlY5
+         hcRhWnSIYeN11SX5CiUbvs6QJNJ8bReunBUrkXxTxnyTotrk/rXW4aDxyzExE6mtipws
+         P6Nqfs1fYPPwDE9S7pwRKssDCdFiZXLbcwUIxPTfSXBvuNXVQSil4Kt7qwkOAL/rgJP4
+         NdHBS34P2aa3FHZC6xtjJRy+qh8KRjGm7MU7TG09B7k9J0HAvBbRawyCWXoCQDJZFtqe
+         kT6sr0YJo5hzwZria8oiKkwVdvIYW0A/tpjaAeTl4XFxiFfRAi9wXQItMeTTUJT49I/5
+         1jcQ==
+X-Gm-Message-State: AC+VfDw4dJXMYF3H3U/aTfgVPOFu1uZhW2D4YtxZ32KD5w7ARrDV7sZv
+        TXB7MSo6PVdyMsVmfdK8x6E=
+X-Google-Smtp-Source: ACHHUZ7PCAia8qenUZjVuL3CxoAfpPOTz+pVitg644DoS55sSsvwsR0a2zZvJ1yLsyH/3euEv2JSdw==
+X-Received: by 2002:a05:6a00:16ca:b0:641:23df:e914 with SMTP id l10-20020a056a0016ca00b0064123dfe914mr31263008pfc.13.1683143337337;
+        Wed, 03 May 2023 12:48:57 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:6454])
+        by smtp.gmail.com with ESMTPSA id s12-20020a056a00178c00b0062e12f945adsm23909517pfg.135.2023.05.03.12.48.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 May 2023 12:48:56 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 3 May 2023 09:48:55 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
+        vbabka@suse.cz, roman.gushchin@linux.dev, mgorman@suse.de,
+        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+        corbet@lwn.net, void@manifault.com, peterz@infradead.org,
+        juri.lelli@redhat.com, ldufour@linux.ibm.com,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, peterx@redhat.com, david@redhat.com,
+        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
+        nathan@kernel.org, dennis@kernel.org, muchun.song@linux.dev,
+        rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com,
+        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
+        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
+        ndesaulniers@google.com, gregkh@linuxfoundation.org,
+        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+        glider@google.com, elver@google.com, dvyukov@google.com,
+        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
+        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        kasan-dev@googlegroups.com, cgroups@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>
+Subject: Re: [PATCH 00/40] Memory allocation profiling
+Message-ID: <ZFK6pwOelIlhV8Bm@slm.duckdns.org>
+References: <ZFISlX+mSx4QJDK6@dhcp22.suse.cz>
+ <ZFIVtB8JyKk0ddA5@moria.home.lan>
+ <ZFKNZZwC8EUbOLMv@slm.duckdns.org>
+ <20230503180726.GA196054@cmpxchg.org>
+ <ZFKlrP7nLn93iIRf@slm.duckdns.org>
+ <ZFKqh5Dh93UULdse@slm.duckdns.org>
+ <ZFKubD/lq7oB4svV@moria.home.lan>
+ <ZFKu6zWA00AzArMF@slm.duckdns.org>
+ <ZFKxcfqkUQ60zBB_@slm.duckdns.org>
+ <CAJuCfpEPkCJZO2svT-GfmpJ+V-jSLyFDKM_atnqPVRBKtzgtnQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230412061700.1492474-1-AVKrasnov@sberdevices.ru>
- <60fa656e-bda1-1de6-a79e-3e3041cd69a8@sberdevices.ru> <780c0cae-18b6-2652-1c2c-6d398ea60451@amlogic.com>
- <e7c49f2d-b3c1-8d9b-76fe-c8759b37c7c7@sberdevices.ru> <20230418152505.72fc16da@xps-13>
- <15a6e415-1489-a81f-fc8f-2372678ad2cb@sberdevices.ru> <ee10bdeb-416c-70f0-d323-7107fe0746e8@amlogic.com>
- <5e4b395e-bf9d-0123-a0f2-2b378d950b29@sberdevices.ru> <fda1ae91-4bf8-6945-bd0d-b6dabc9cb4bd@sberdevices.ru>
- <a5010dcf-a8ce-f144-949c-687548cefce7@amlogic.com> <cf27b6b4-a75b-c5a6-32ea-ac20a2984192@sberdevices.ru>
- <20230502115913.78012d98@xps-13> <2274b432-d1a9-b3cf-4f7b-08c4a4c580b5@sberdevices.ru>
- <20230502132745.14349770@xps-13> <2b2f5cb4-84f7-65f6-13b2-42f965503023@sberdevices.ru>
- <20230502141703.29f0bc30@xps-13> <91cb8e19-e782-b847-8d2b-22580c371c34@sberdevices.ru>
- <20230502150553.65fdeb7f@xps-13> <8996d53c-54ff-6a37-e08b-95cae0629703@sberdevices.ru>
- <20230503100342.63215058@xps-13>
-In-Reply-To: <20230503100342.63215058@xps-13>
-From:   Richard Weinberger <richard.weinberger@gmail.com>
-Date:   Wed, 3 May 2023 21:48:38 +0200
-Message-ID: <CAFLxGvwfi2RH3y2M6n0vqUHarp6DwR-wT7oBto3raA7oC3nJvg@mail.gmail.com>
-Subject: Re: [PATCH v1 4/5] mtd: rawnand: meson: clear OOB buffer before read
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Arseniy Krasnov <avkrasnov@sberdevices.ru>,
-        Liang Yang <liang.yang@amlogic.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Yixun Lan <yixun.lan@amlogic.com>, oxffffaa@gmail.com,
-        kernel@sberdevices.ru, linux-mtd@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        "yonghui.yu" <yonghui.yu@amlogic.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJuCfpEPkCJZO2svT-GfmpJ+V-jSLyFDKM_atnqPVRBKtzgtnQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry for joining the party late.
+Hello,
 
-On Wed, May 3, 2023 at 10:07=E2=80=AFAM Miquel Raynal <miquel.raynal@bootli=
-n.com> wrote:
-> > So for me main question here is:
+On Wed, May 03, 2023 at 12:41:08PM -0700, Suren Baghdasaryan wrote:
+> On Wed, May 3, 2023 at 12:09 PM Tejun Heo <tj@kernel.org> wrote:
 > >
-> > How JFFS2 should work with controllers where we can't update data and O=
-OB
-> > independently? Driver of this filesystem knows nothing about this featu=
-res of
-> > the controller.
-> >
-> > Or JFFS2 works incorrectly in my case when it tries to call write page =
-callback
-> > after calling write OOB callback (IIUC it is better to ask Richard as Y=
-ou mentioned above).
-> >
-> > Or may be it is better to suppress OOB write callback (or set it to NUL=
-L) in this
-> > driver as in vendor's driver?
->
-> I would assume using the unprotected free OOB bytes to store the
-> cleanmarkers should work. But that's a bit fragile and very filesystem
-> oriented. I don't like this much. But on the other side JFFS2 is
-> legacy, you should use UBI (which does not play with OOB areas) :-)
+> > On Wed, May 03, 2023 at 08:58:51AM -1000, Tejun Heo wrote:
+> > > On Wed, May 03, 2023 at 02:56:44PM -0400, Kent Overstreet wrote:
+> > > > On Wed, May 03, 2023 at 08:40:07AM -1000, Tejun Heo wrote:
+> > > > > > Yeah, easy / default visibility argument does make sense to me.
+> > > > >
+> > > > > So, a bit of addition here. If this is the thrust, the debugfs part seems
+> > > > > rather redundant, right? That's trivially obtainable with tracing / bpf and
+> > > > > in a more flexible and performant manner. Also, are we happy with recording
+> > > > > just single depth for persistent tracking?
+> 
+> IIUC, by single depth you mean no call stack capturing?
 
-Please note that JFFS2's main use case is NOR flash. Support for NAND
-flash was never
-considered as fully complete/stable. That's why UBIFS (JFFS3 in the
-very beginning)
-was invented.
+Yes.
 
-Thanks,
-//richard
+> If so, that's the idea behind the context capture feature so that we
+> can enable it on specific allocations only after we determine there is
+> something interesting there. So, with low-cost persistent tracking we
+> can determine the suspects and then pay some more to investigate those
+> suspects in more detail.
+
+Yeah, I was wondering whether it'd be useful to have that configurable so
+that it'd be possible for a user to say "I'm okay with the cost, please
+track more context per allocation". Given that tracking the immediate caller
+is already a huge improvement and narrowing it down from there using
+existing tools shouldn't be that difficult, I don't think this is a blocker
+in any way. It just bothers me a bit that the code is structured so that
+source line is the main abstraction.
+
+> > > > Not sure what you're envisioning?
+> > > >
+> > > > I'd consider the debugfs interface pretty integral; it's much more
+> > > > discoverable for users, and it's hardly any code out of the whole
+> > > > patchset.
+> > >
+> > > You can do the same thing with a bpftrace one liner tho. That's rather
+> > > difficult to beat.
+> 
+> debugfs seemed like a natural choice for such information. If another
+> interface is more appropriate I'm happy to explore that.
+> 
+> >
+> > Ah, shit, I'm an idiot. Sorry. I thought allocations was under /proc and
+> > allocations.ctx under debugfs. I meant allocations.ctx is redundant.
+> 
+> Do you mean that we could display allocation context in
+> debugfs/allocations file (for the allocations which we explicitly
+> enabled context capturing)?
+
+Sorry about the fumbled communication. Here's what I mean:
+
+* Improving memory allocation visibility makes sense to me. To me, a more
+  natural place for that feels like /proc/allocations next to other memory
+  info files rather than under debugfs.
+
+* The default visibility provided by "allocations" provides something which
+  is more difficult or at least cumbersome to obtain using existing tracing
+  tools. However, what's provided by "allocations.ctx" can be trivially
+  obtained using kprobe and BPF and seems redundant.
+
+Thanks.
+
+-- 
+tejun
