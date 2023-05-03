@@ -2,273 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A95C6F5C29
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 18:36:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1FBD6F5C2C
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 18:36:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbjECQgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 12:36:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59392 "EHLO
+        id S229782AbjECQgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 12:36:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbjECQfy (ORCPT
+        with ESMTP id S229765AbjECQg0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 12:35:54 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0579E7295;
-        Wed,  3 May 2023 09:35:52 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1ab0c697c2bso21973435ad.1;
-        Wed, 03 May 2023 09:35:52 -0700 (PDT)
+        Wed, 3 May 2023 12:36:26 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E4E7A8F
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 09:36:09 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-55d2e87048cso10826167b3.1
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 09:36:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683131752; x=1685723752;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=W/389qplif+CNkXxtQ/HgIFDi4dycC02/rtil8xXRXc=;
-        b=Z4Cs5R4/s1pDP2FSeVmU9xT76qMP3wouwY1Ps65fLeCYqjQMaYVvejB0JItUP+T4RT
-         nWx4lT9WzEfq5aY3guO9R76KVrFDtaYaUEQ25Elo5NPmaZMniCMb9/o9TulI0KS66Wcc
-         YYCLdO6ngyzuKE+06qHF3wji8nd2xQW3m1k3e5rdxhRItiF1X5TFu+t0PF7PfWXTDJOq
-         vmBjGIGV1qcWBiu9R9ccyJNV/Zfw+WN6u7iyvNY1trl87oBHYSdkRTgtdNd6mx7MobO6
-         19aTGTAzKUXos+LOcg5oYQLOH1Cb1ebcesa6IZ5JP32gGVOeFxZhN7B5M0PhCbOvncdK
-         9/Vg==
+        d=amarulasolutions.com; s=google; t=1683131768; x=1685723768;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=d/907v6qlrO+vgCs3WjNzG1/NauBMPopzZK9UTvbynU=;
+        b=XEyEzVkiiwnZJGFsWnGM0c/KJmcFHp95byWnjRbnn0ITkTswKKM1EeLk4gbaC9+5Ar
+         hoGVxxwdsEXXLqLugJmBz2VErtyAwfCVrY9Z4qIzixocOjKuxCCc90jizXWXs0BY731D
+         iCaBKRBHSTtSaIeTcGHmWOhljisey60vgTuik=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683131752; x=1685723752;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1683131768; x=1685723768;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=W/389qplif+CNkXxtQ/HgIFDi4dycC02/rtil8xXRXc=;
-        b=cxH0maBnvWXvVij0gUge4XULXmIEWnHs+dhOXXGhMyjYFGZlC/uAcMQ3HnS0VcF1Yd
-         L3TVS6R2hTcRm0xDdvUUivP0JyqNdiNCU/5K/ApNguD+vtB/gHHp/Zq4Y6EQ8FfIMCHP
-         TddyFRSz4r/fHcLoutN9lZaNKqdfBb8qMqnIPfdkBxH4PypxBKu1w7d2QLSn0plbpUWE
-         5kuh74dLUO/WF5/ksfzJkHfO9y+WJlD8AVVN4oI42ohjIR2CgQeifBfayXkQcjQ8R/SV
-         dCySGnUHDsJGD22KmLbCY/SnulGRXlpO5SCjhQ8O3dJBSxK+WMeHvu2yjlwqLi+xWc0u
-         iT0g==
-X-Gm-Message-State: AC+VfDylgJJ1ZBaJFELx69CcvGe6poiq6i55sOWTNsCcpsaNZkIxL4HF
-        TcK7uo7KIA1Q1lE15oLVPA42Tn6yQOc=
-X-Google-Smtp-Source: ACHHUZ7oH0uCOdfhzFzAfAEqMGAC0lMcQXIsRmBhYh8cE2yZXFGKpt64wEgV0/NPP4dhRRVPYCfDvA==
-X-Received: by 2002:a17:902:82c3:b0:1a9:1b4:9fd5 with SMTP id u3-20020a17090282c300b001a901b49fd5mr589673plz.68.1683131751882;
-        Wed, 03 May 2023 09:35:51 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:6454])
-        by smtp.gmail.com with ESMTPSA id b5-20020a170902a9c500b001a4fa2f7a23sm21823336plr.274.2023.05.03.09.35.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 May 2023 09:35:51 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 3 May 2023 06:35:49 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        akpm@linux-foundation.org, vbabka@suse.cz, hannes@cmpxchg.org,
-        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
-        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
-        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
-        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
-        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
-        muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
-        pasha.tatashin@soleen.com, yosryahmed@google.com,
-        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
-        andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, gregkh@linuxfoundation.org,
-        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
-Subject: Re: [PATCH 00/40] Memory allocation profiling
-Message-ID: <ZFKNZZwC8EUbOLMv@slm.duckdns.org>
-References: <20230501165450.15352-1-surenb@google.com>
- <ZFIMaflxeHS3uR/A@dhcp22.suse.cz>
- <ZFIOfb6/jHwLqg6M@moria.home.lan>
- <ZFISlX+mSx4QJDK6@dhcp22.suse.cz>
- <ZFIVtB8JyKk0ddA5@moria.home.lan>
+        bh=d/907v6qlrO+vgCs3WjNzG1/NauBMPopzZK9UTvbynU=;
+        b=g1BYjXEcmKfw+ihVJJqY/HfW1DKhnQJbg+WVYuPaFgo1x+WbelPcGAlw1yAtC66xAf
+         onCJTZQsgWi310Jdq3OHJdXRVOGqpiCs59Q89ALz+G/4+1D8z9h5bjMzROVyMrL68uFw
+         JDZx1lO37TKMaikL89TdnKf4Io2x/LsSNCijC6FmPPb/IdIe5EHBvcmqNWVM+dG/PMix
+         NT/F8UWqkYtWQ5Z6td43wjUlMic5yQxfsUkeqTegw6oDU4E2nzvI0OusvQHSMKwsiy45
+         RpyFfcdWbLE5kK+WT/oxQjpEoeoosQm0ZMU+ObamyOponorpO0097l3rsafb1MZokv13
+         SAKw==
+X-Gm-Message-State: AC+VfDwAIosbllYGXCZ1TOYof0/Bs6FMMyIPopbzvq0k1CX2dfPChXNn
+        5PFu37ncWA7tTw0qokwYlKZmhaglJ13XcSHvjmTsnQ==
+X-Google-Smtp-Source: ACHHUZ4jy6BhscYAIyIWZXUqVR7LWYFy1QquV9iIbGTx9DTE26ZPw/idXmwHZ+h1dD3KFj1uYuT3oWq9sY/rIdshzdA=
+X-Received: by 2002:a81:a007:0:b0:55a:4117:a8f2 with SMTP id
+ x7-20020a81a007000000b0055a4117a8f2mr11909110ywg.4.1683131768294; Wed, 03 May
+ 2023 09:36:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZFIVtB8JyKk0ddA5@moria.home.lan>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20230423121232.1345909-1-aford173@gmail.com> <20230423121232.1345909-2-aford173@gmail.com>
+ <CAMty3ZCn9_AT8SOfFD-MYox16ZcqOEezt_0x6aES6LWQFj8Kpg@mail.gmail.com> <CAHCN7xLYfEO9Pxq91vZSDG0QXjnx3BEKYdsTXgQ1BTbtuTbLGQ@mail.gmail.com>
+In-Reply-To: <CAHCN7xLYfEO9Pxq91vZSDG0QXjnx3BEKYdsTXgQ1BTbtuTbLGQ@mail.gmail.com>
+From:   Jagan Teki <jagan@amarulasolutions.com>
+Date:   Wed, 3 May 2023 22:05:56 +0530
+Message-ID: <CAMty3ZB0q7MLRyu4TgcV20rX7c8d2SMbvBr39XRru5_Ry6q1Ug@mail.gmail.com>
+Subject: Re: [PATCH V2 1/6] drm: bridge: samsung-dsim: fix blanking packet
+ size calculation
+To:     Adam Ford <aford173@gmail.com>
+Cc:     l.stach@pengutronix.de, dri-devel@lists.freedesktop.org,
+        m.szyprowski@samsung.com, aford@beaconembedded.com,
+        dario.binacchi@amarulasolutions.com,
+        Inki Dae <inki.dae@samsung.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Marek Vasut <marex@denx.de>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, Kent.
+On Mon, Apr 24, 2023 at 3:17=E2=80=AFPM Adam Ford <aford173@gmail.com> wrot=
+e:
+>
+> On Mon, Apr 24, 2023 at 4:03=E2=80=AFAM Jagan Teki <jagan@amarulasolution=
+s.com> wrote:
+> >
+> > On Sun, Apr 23, 2023 at 5:42=E2=80=AFPM Adam Ford <aford173@gmail.com> =
+wrote:
+> > >
+> > > From: Lucas Stach <l.stach@pengutronix.de>
+> > >
+> > > Scale the blanking packet sizes to match the ratio between HS clock
+> > > and DPI interface clock. The controller seems to do internal scaling
+> > > to the number of active lanes, so we don't take those into account.
+> > >
+> > > Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+> > > Signed-off-by: Adam Ford <aford173@gmail.com>
+> > > ---
+> > >  drivers/gpu/drm/bridge/samsung-dsim.c | 18 +++++++++++++++---
+> > >  1 file changed, 15 insertions(+), 3 deletions(-)
+> > >
+> > > diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c b/drivers/gpu/drm/=
+bridge/samsung-dsim.c
+> > > index e0a402a85787..2be3b58624c3 100644
+> > > --- a/drivers/gpu/drm/bridge/samsung-dsim.c
+> > > +++ b/drivers/gpu/drm/bridge/samsung-dsim.c
+> > > @@ -874,17 +874,29 @@ static void samsung_dsim_set_display_mode(struc=
+t samsung_dsim *dsi)
+> > >         u32 reg;
+> > >
+> > >         if (dsi->mode_flags & MIPI_DSI_MODE_VIDEO) {
+> > > +               int byte_clk_khz =3D dsi->burst_clk_rate / 1000 / 8;
+> > > +               int hfp =3D (m->hsync_start - m->hdisplay) * byte_clk=
+_khz / m->clock;
+> >
+> > I do not quite understand why it depends on burst_clk_rate, would you
+> > please explain? does it depends on bpp something like this
+> >
+> > mipi_dsi_pixel_format_to_bpp(format) / 8
+>
+> The pixel clock is currently set to the burst clock rate.  Dividing
+> the clock by 1000 gets the pixel clock in KHz, and dividing by 8
+> converts bits to bytes.
+> Later in the series, I change the clock from the burst clock to the
+> cached value returned from samsung_dsim_set_pll.
 
-On Wed, May 03, 2023 at 04:05:08AM -0400, Kent Overstreet wrote:
-> No, we're still waiting on the tracing people to _demonstrate_, not
-> claim, that this is at all possible in a comparable way with tracing. 
+Okay.
 
-So, we (meta) happen to do stuff like this all the time in the fleet to hunt
-down tricky persistent problems like memory leaks, ref leaks, what-have-you.
-In recent kernels, with kprobe and BPF, our ability to debug these sorts of
-problems has improved a great deal. Below, I'm attaching a bcc script I used
-to hunt down, IIRC, a double vfree. It's not exactly for a leak but leaks
-can follow the same pattern.
+>
+> >
+> > > +               int hbp =3D (m->htotal - m->hsync_end) * byte_clk_khz=
+ / m->clock;
+> > > +               int hsa =3D (m->hsync_end - m->hsync_start) * byte_cl=
+k_khz / m->clock;
+> > > +
+> > > +               /* remove packet overhead when possible */
+> > > +               hfp =3D max(hfp - 6, 0);
+> > > +               hbp =3D max(hbp - 6, 0);
+> > > +               hsa =3D max(hsa - 6, 0);
+> >
+> > 6 blanking packet overhead here means, 4 bytes + payload + 2 bytes
+> > format? does this packet overhead depends on the respective porch's
+> > like hpf, hbp and hsa has different packet overheads?
+>
+> Lucas might be able to explain this better.  However, it does match
+> the values of the downstream NXP kernel, and I tried playing with
+> these values manually, and 6 appeared to be the only number that
+> seemed to work for me too.  I abandoned my approach for Lucas'
+> implementation, because it seemed more clear than mine.
+> Maybe Lucas can chime in, since this is really his patch.
 
-There are of course some pros and cons to this approach:
+Lucan, any inputs?
 
-Pros:
-
-* The framework doesn't really have any runtime overhead, so we can have it
-  deployed in the entire fleet and debug wherever problem is.
-
-* It's fully flexible and programmable which enables non-trivial filtering
-  and summarizing to be done inside kernel w/ BPF as necessary, which is
-  pretty handy for tracking high frequency events.
-
-* BPF is pretty performant. Dedicated built-in kernel code can do better of
-  course but BPF's jit compiled code & its data structures are fast enough.
-  I don't remember any time this was a problem.
-
-Cons:
-
-* BPF has some learning curve. Also the fact that what it provides is a wide
-  open field rather than something scoped out for a specific problem can
-  make it seem a bit daunting at the beginning.
-
-* Because tracking starts when the script starts running, it doesn't know
-  anything which has happened upto that point, so you gotta pay attention to
-  handling e.g. handling frees which don't match allocs. It's kinda annoying
-  but not a huge problem usually. There are ways to build in BPF progs into
-  the kernel and load it early but I haven't experiemnted with it yet
-  personally.
-
-I'm not necessarily against adding dedicated memory debugging mechanism but
-do wonder whether the extra benefits would be enough to justify the code and
-maintenance overhead.
-
-Oh, a bit of delta but for anyone who's more interested in debugging
-problems like this, while I tend to go for bcc
-(https://github.com/iovisor/bcc) for this sort of problems. Others prefer to
-write against libbpf directly or use bpftrace
-(https://github.com/iovisor/bpftrace).
-
-Thanks.
-
-#!/usr/bin/env bcc-py
-
-import bcc
-import time
-import datetime
-import argparse
-import os
-import sys
-import errno
-
-description = """
-Record vmalloc/vfrees and trigger on unmatched vfree
-"""
-
-bpf_source = """
-#include <uapi/linux/ptrace.h>
-#include <linux/vmalloc.h>
-
-struct vmalloc_rec {
-	unsigned long		ptr;
-	int			last_alloc_stkid;
-	int			last_free_stkid;
-	int			this_stkid;
-	bool			allocated;
-};
-
-BPF_STACK_TRACE(stacks, 8192);
-BPF_HASH(vmallocs, unsigned long, struct vmalloc_rec, 131072);
-BPF_ARRAY(dup_free, struct vmalloc_rec, 1);
-
-int kpret_vmalloc_node_range(struct pt_regs *ctx)
-{
-        unsigned long ptr = PT_REGS_RC(ctx);
-	uint32_t zkey = 0;
-	struct vmalloc_rec rec_init = { };
-	struct vmalloc_rec *rec;
-	int stkid;
-
-	if (!ptr)
-		return 0;
-
-	stkid = stacks.get_stackid(ctx, 0);
-
-        rec_init.ptr = ptr;
-        rec_init.last_alloc_stkid = -1;
-        rec_init.last_free_stkid = -1;
-        rec_init.this_stkid = -1;
-
-	rec = vmallocs.lookup_or_init(&ptr, &rec_init);
-	rec->allocated = true;
-	rec->last_alloc_stkid = stkid;
-	return 0;
-}
-
-int kp_vfree(struct pt_regs *ctx, const void *addr)
-{
-	unsigned long ptr = (unsigned long)addr;
-	uint32_t zkey = 0;
-	struct vmalloc_rec rec_init = { };
-	struct vmalloc_rec *rec;
-	int stkid;
-
-	stkid = stacks.get_stackid(ctx, 0);
-
-        rec_init.ptr = ptr;
-        rec_init.last_alloc_stkid = -1;
-        rec_init.last_free_stkid = -1;
-        rec_init.this_stkid = -1;
-
-	rec = vmallocs.lookup_or_init(&ptr, &rec_init);
-	if (!rec->allocated && rec->last_alloc_stkid >= 0) {
-		rec->this_stkid = stkid;
-		dup_free.update(&zkey, rec);
-	}
-
-	rec->allocated = false;
-	rec->last_free_stkid = stkid;
-        return 0;
-}
-"""
-
-bpf = bcc.BPF(text=bpf_source)
-bpf.attach_kretprobe(event="__vmalloc_node_range", fn_name="kpret_vmalloc_node_range");
-bpf.attach_kprobe(event="vfree", fn_name="kp_vfree");
-bpf.attach_kprobe(event="vfree_atomic", fn_name="kp_vfree");
-
-stacks = bpf["stacks"]
-vmallocs = bpf["vmallocs"]
-dup_free = bpf["dup_free"]
-last_dup_free_ptr = dup_free[0].ptr
-
-def print_stack(stkid):
-    for addr in stacks.walk(stkid):
-        sym = bpf.ksym(addr)
-        print('  {}'.format(sym))
-
-def print_dup(dup):
-    print('allocated={} ptr={}'.format(dup.allocated, hex(dup.ptr)))
-    if (dup.last_alloc_stkid >= 0):
-        print('last_alloc_stack: ')
-        print_stack(dup.last_alloc_stkid)
-    if (dup.last_free_stkid >= 0):
-        print('last_free_stack: ')
-        print_stack(dup.last_free_stkid)
-    if (dup.this_stkid >= 0):
-        print('this_stack: ')
-        print_stack(dup.this_stkid)
-
-while True:
-    time.sleep(1)
-    
-    if dup_free[0].ptr != last_dup_free_ptr:
-        print('\nDUP_FREE:')
-        print_dup(dup_free[0])
-        last_dup_free_ptr = dup_free[0].ptr
+Jagan.
