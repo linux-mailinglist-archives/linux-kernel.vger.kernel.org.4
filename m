@@ -2,125 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 482736F6007
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 22:26:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D8A86F6010
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 22:28:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbjECUZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 16:25:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51522 "EHLO
+        id S229734AbjECU2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 16:28:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjECUZy (ORCPT
+        with ESMTP id S229664AbjECU2s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 16:25:54 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4FA483F5
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 13:25:52 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-b9e2f227640so4848209276.3
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 13:25:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683145552; x=1685737552;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1gEz7yCW0YNWEyofUMW+bM1YB2JKr4lLhGCi/13fTrc=;
-        b=Mzh0ZV1liVt0pO7T3ehH+wp5tHq2eHIvxMQvgVLhBNtjThUcDrX/+aDvPu0tBZ/9ee
-         EXtPp3wMLIa74YOBsQ0e08IZyzEb9z2PtCzmiGLSL5FFkcqFzSprSbu/p4OtMtm5Z8vg
-         QTb+851VnqyKufW9AlhGHuA8W1rOsuyTf/U1ngEssyK7U0XiMTLfkIYXQJ/3BWdZ/+nL
-         IlkiQndW7FfaXvB3Wtdi5hEfH46S40YPblPeGAPLxeQ85pZXExi718VSSliADLafDbtF
-         EIagwxP3z0ZUYRpd+UFfoZPqXzZHPfYekCM7c+V8IvPd0peQzIxx4yrWJn2aqzP6n/mT
-         v8JQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683145552; x=1685737552;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1gEz7yCW0YNWEyofUMW+bM1YB2JKr4lLhGCi/13fTrc=;
-        b=OfNa1hT9gvgIFI0vI5NerbyJq7inrUmqmQLQvtY56Z5YjZt8FjQ8r1oUJfJPP5EGEK
-         mekP/3GKqlIWYpPnVA3uoCvjKQpuNtDwgSkvct5ms21HaO92As2EJ+Y4xyrv1x+iGMF0
-         7ieOi+CR0LXb3RldBoyxQgD3szbc5ko/IpxlwPNlm498OF6IcxfxW4ShwVteAsV96EyC
-         mYHmGm4YYuwx2aNcJlaLl2gnhUmSj1E0hLSSTmXEkLUHGkeDRl4owVGG7u8YCxjB/gC2
-         qeVHVK24uNxqwktubWRIK8egGawTCBLmxA8befgl3hGMPru+6teaEj6BA8fCMj+B5DSS
-         zaAQ==
-X-Gm-Message-State: AC+VfDz19KMRVxWNJSyZDDvwNzmu1bbq7AYZQLx8HkIdRBY8HMCEXfIE
-        cLH5obekCSC6nPylX/sia+yEeIU1/yzQFhcI+N0ugQ==
-X-Google-Smtp-Source: ACHHUZ6bWBOMBfCcUnb1ZA+ngbZpzrLgmQlXt3j9zhiGPRBmWSduiRqy3n8tV6EAdgHxuWzjmwHy1P//RM78ldQ0LkU=
-X-Received: by 2002:a25:fc0c:0:b0:b9e:7ec8:5d41 with SMTP id
- v12-20020a25fc0c000000b00b9e7ec85d41mr5902733ybd.55.1683145551966; Wed, 03
- May 2023 13:25:51 -0700 (PDT)
+        Wed, 3 May 2023 16:28:48 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2330C6199
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 13:28:47 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 343KSV7c003833
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 3 May 2023 16:28:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1683145714; bh=aEB1wzggINOG9//I4Uz8LAAk2hMw0VvHmmcvM4Bk38I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=X2Mrz4OQHFKa7EXgs5ypd3VBJwNnHk9AFXpo7fRo61TLHdjsqktMFa3MvM8cCCtQb
+         Zto7RbNvHZp42GD19xhI3yLJn0XoliUS7wP+3neffXfbm69y4xJEoisLs8kADwF7WN
+         6i8omh1/nZxz1+4SoxoJ1mDbZ1xaz5UARgRLrv2x4ZwcTMGzLp3N/Lg5JbUGplNeH2
+         dACp08D9C9WA1EKy3/3Zi8IOKXGLJHXYNYsiK3TbzX9kmICXbWxSlh3MG/08ZST8WU
+         bWUwUbkLAyUOlMfrPZ80jOKlvQIVZujox+ZBDJEZ+SniTXQiH8DpEfbSHmWF7akOLm
+         AjubzHhw4bLcQ==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id D746D15C02E2; Wed,  3 May 2023 16:28:30 -0400 (EDT)
+Date:   Wed, 3 May 2023 16:28:30 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     syzbot <syzbot+6385d7d3065524c5ca6d@syzkaller.appspotmail.com>
+Cc:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [ext4?] WARNING in ext4_xattr_block_set (2)
+Message-ID: <20230503202830.GA695988@mit.edu>
+References: <00000000000006a0df05f6667499@google.com>
 MIME-Version: 1.0
-References: <20220328000915.15041-1-ansuelsmth@gmail.com> <85eb14ec-f465-7447-ad77-a3dabc666f47@kernel.org>
- <YkKRYnN84D9VZhGj@Ansuel-xps.localdomain> <CAL_Jsq+RQQ-ADMxLPUFwk6S6kGmb6oNDy4k52fnU0EtbUvqmSA@mail.gmail.com>
- <CAMuHMdWNTE48MFy6fqxAsfMWz9b6E7dVNXtXtESP95sxk2PGwA@mail.gmail.com>
- <CAL_JsqJthKTm8bhRF2B=ae1tvtPeYYXx_Tm76qQtSwLtH5C6VA@mail.gmail.com>
- <720a2829-b6b5-411c-ac69-9a53e881f48d@app.fastmail.com> <CAL_JsqKCtmkwzKa01gyG65fH8ye6R3KhR41PJbJhOJ4X9j=znA@mail.gmail.com>
- <99b49e6b-e963-415a-a2c9-72505087833c@app.fastmail.com>
-In-Reply-To: <99b49e6b-e963-415a-a2c9-72505087833c@app.fastmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 3 May 2023 22:25:39 +0200
-Message-ID: <CACRpkdaZdxNZ3amHxE44NZOZcVMpBa4Kx126+7WW3XHGM2NU=A@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/1] Categorize ARM dts directory
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Olof Johansson <olof@lixom.net>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-actions@lists.infradead.org,
-        linux-sunxi@lists.linux.dev,
-        Linux-OMAP <linux-omap@vger.kernel.org>,
-        linux-amlogic@lists.infradead.org, linux-arm-kernel@axis.com,
-        linux-aspeed@lists.ozlabs.org,
-        linux-rpi-kernel@lists.infradead.org,
-        chrome-platform@lists.linux.dev,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-samsung-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        kernel@dh-electronics.com, linux-mediatek@lists.infradead.org,
-        openbmc@lists.ozlabs.org, linux-tegra@vger.kernel.org,
-        "linux-oxnas@groups.io" <linux-oxnas@groups.io>,
-        linux-arm-msm@vger.kernel.org, linux-unisoc@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        linux-realtek-soc@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <00000000000006a0df05f6667499@google.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 3, 2023 at 1:03=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote:
+#syz test git://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
 
-> >     'gemini' : 'gemini',
->
-> This one is also a product name, not a company. Apparently,
-> gemini was originally made by Storm Semiconductor, and then
-> by Cortina, which was subsequently acquired by Inphi, and that ended
-> up in Marvell after the product was already discontinued.
->
-> Out of the four, I'd probably go with 'cortina' as the
-> directory name.
->
+diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+index 39f00f05f981..dab33412b858 100644
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -6638,6 +6638,14 @@ static int __ext4_remount(struct fs_context *fc, struct super_block *sb)
+ 	return 0;
+ 
+ restore_opts:
++	if ((sb->s_flags & SB_RDONLY) &&
++	    !(old_sb_flags & SB_RDONLY)) {
++		ext4_warning(sb, "failing rw->ro transition");
++		if (sb_any_quota_suspended(sb)) {
++			ext4_warning(sb, "would resume quotas");
++//			dquot_resume(sb, -1);
++		}
++	}
+ 	sb->s_flags = old_sb_flags;
+ 	sbi->s_mount_opt = old_opts.s_mount_opt;
+ 	sbi->s_mount_opt2 = old_opts.s_mount_opt2;
 
-StorLink was the initial company, thus SL3516, SL3512
-the name of the chips.
-
-Then that company changed name to Storm Semiconductor.
-
-Git acquired by Cortina.
-
-Then Inphi acquired Cortina.
-
-Then Marvell scooped up the IP.
-
-If we *have* to use a company name I would use storlink,
-because the chips are named after that.
-
-Yours,
-Linus Walleij
