@@ -2,157 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7776D6F5584
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 12:01:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E0B16F5588
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 12:01:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbjECKBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 06:01:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54880 "EHLO
+        id S229873AbjECKBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 06:01:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbjECKA6 (ORCPT
+        with ESMTP id S229555AbjECKBk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 06:00:58 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A27C8B4
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 03:00:53 -0700 (PDT)
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20230503100051epoutp03b4726934c3085c40f26e63077f623519~bmdr5pyeX1324113241epoutp03o
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 10:00:51 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20230503100051epoutp03b4726934c3085c40f26e63077f623519~bmdr5pyeX1324113241epoutp03o
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1683108051;
-        bh=Lh/JoKhqwHvgqNqdwOhUU4xB3qjfNA9DOJp/qwOaGTM=;
-        h=Subject:Reply-To:From:To:In-Reply-To:Date:References:From;
-        b=SwzA/pbmu8lEKPrQtd05GBW8GO8WrxrE1PF4buYVMm7KDgsbq82mB1d+NZ0zy0QaA
-         tilrDndq0ZDBZkD69z2qDxnWT38yJhyGoi/SO3o0F8MmZuEl3Lk+IyJ9q3nRK5Y9ly
-         ZJSEzifAVj0JCoq4tjLqdZ1clswtOg743ZjWXtRQ=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
-        20230503100051epcas2p4226eb26512691c9a5b0fe5e8ab873761~bmdrfzeS-1761217612epcas2p4q;
-        Wed,  3 May 2023 10:00:51 +0000 (GMT)
-Received: from epsmges2p3.samsung.com (unknown [182.195.36.88]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4QBCBV3zyxz4x9Px; Wed,  3 May
-        2023 10:00:50 +0000 (GMT)
-X-AuditID: b6c32a47-e99fd70000002007-a4-645230d274be
-Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
-        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        70.89.08199.2D032546; Wed,  3 May 2023 19:00:50 +0900 (KST)
-Mime-Version: 1.0
-Subject: [PATCH 01/15] block: bio: rename page_is_mergeable to
- bio_page_is_mergeable and make non-static
-Reply-To: j-young.choi@samsung.com
-Sender: Jinyoung CHOI <j-young.choi@samsung.com>
-From:   Jinyoung CHOI <j-young.choi@samsung.com>
-To:     Jinyoung CHOI <j-young.choi@samsung.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>, "hch@lst.de" <hch@lst.de>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <20230503094912epcms2p4bef206eab1c41a92eba2583a69c74323@epcms2p4>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20230503100049epcms2p2c830ebb7b50beaa2663abd0cd274293c@epcms2p2>
-Date:   Wed, 03 May 2023 19:00:49 +0900
-X-CMS-MailID: 20230503100049epcms2p2c830ebb7b50beaa2663abd0cd274293c
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrPKsWRmVeSWpSXmKPExsWy7bCmhe4lg6AUg797ZC1W3+1ns3h5SNNi
-        5eqjTBa9/VvZLPbe0ra4vGsOm8Xy4/+YHNg9Lp8t9dh9s4HN4+PTWywefVtWMXp83iQXwBqV
-        bZORmpiSWqSQmpecn5KZl26r5B0c7xxvamZgqGtoaWGupJCXmJtqq+TiE6DrlpkDdIOSQlli
-        TilQKCCxuFhJ386mKL+0JFUhI7+4xFYptSAlp8C8QK84Mbe4NC9dLy+1xMrQwMDIFKgwITuj
-        /fc55oKzAhXP775hbWDcx9vFyMkhIWAisXPNPZYuRi4OIYEdjBJXt/9n7WLk4OAVEJT4u0MY
-        pEZYIEti69Kb7CC2kICSxLk1sxhBSoQFDCRu9ZqDhNkE9CR+LpnBBmKLCKxmkmh+XgMxnldi
-        RvtTFghbWmL78q2MIDangJ/E4w23GCHiGhI/lvUyQ9iiEjdXv2WHsd8fmw9VIyLReu8sVI2g
-        xIOfu6HikhKHDn1lAzlHQiBfYsOBQIhwjcTb5QegSvQlrnVsBDuBV8BXYtHxVrDxLAKqEvN7
-        ZkCtcpGY9+UxE4jNLCAvsf3tHGaQkcwCmhLrd+lDTFeWOHKLBaKCT6Lj8F92mAcbNv7Gyt4x
-        7wkTRKuaxKImI4iwjMTXw/PZJzAqzUIE8iwka2chrF3AyLyKUSy1oDg3PbXYqMAYHq/J+bmb
-        GMEpUct9B+OMtx/0DjEycTAeYpTgYFYS4f1Q6JcixJuSWFmVWpQfX1Sak1p8iNEU6OGJzFKi
-        yfnApJxXEm9oYmlgYmZmaG5kamCuJM4rbXsyWUggPbEkNTs1tSC1CKaPiYNTqoEp42zr9p+F
-        E1Qud2pKKRwoCN/rYnhmf/unX2U5nx/wnFW/63jDv1Jgsd131ud5VevUfT06eXZPk/34f8uZ
-        /03muycamLRLFTmobtv8I4xP+HfEhb1nHzbkKLOxntQ1i+TXUvjUbPNkntr28NqWS9oXH+3r
-        EFZ8IdZSdCcx2yEw+cyc2Wv2tS3VfTzj6c4dRwzrq5auNFOad+xSkdPHFyuq6x7uD72qNfdd
-        qDHbskU3rf/vZpp3duXqtK/yPnOTuTUsWr4Ymy6P7dWUl179qTTgnUmh2Nb1c9avmbBep/fM
-        1J38exxag2Kzo33LZb0+K6gknLf/GHWr6FV2Rfxka9GJ+fa1ZcY5py7rP562Ri9LiaU4I9FQ
-        i7moOBEA7Q64whIEAAA=
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230503094912epcms2p4bef206eab1c41a92eba2583a69c74323
-References: <20230503094912epcms2p4bef206eab1c41a92eba2583a69c74323@epcms2p4>
-        <CGME20230503094912epcms2p4bef206eab1c41a92eba2583a69c74323@epcms2p2>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 3 May 2023 06:01:40 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD08F1A7;
+        Wed,  3 May 2023 03:01:38 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2ac70c975fcso7007581fa.3;
+        Wed, 03 May 2023 03:01:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683108097; x=1685700097;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cbLddoF+dAfHfXpgdlmLObjxEgG+kEshDJTymk4l9ms=;
+        b=gI5XkbYsbtK/jwU0afMsdo76wKVXF4M7QiDt3zprFZQ28XDkIjmMXMD2kenFHE65yV
+         ohgIcOOnH11dknn3BhPL7HkLAE7ZcO65CyNqAINsi5rBHTRyTaj8SC/B+HOSlRT15CBF
+         l2juIQliZwBDGP32kNlp9QmTm7coAlGYJIlZlfYg7mFb6mLf0jUNhj3Lnz/6eXu7Qhry
+         wfWvoJZsr2eWay/PnYJyGZ93nFKA5xPxB/I43OjbaT9t0x/XGWIoq/pOavFebqYBL/Ue
+         baCm2WRe++NvNI3LW8GsvRP71O9YFt0UWpPmCEMEyxak1vRVWl6nLb8o+Ngp2Iw1iSzk
+         tzoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683108097; x=1685700097;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cbLddoF+dAfHfXpgdlmLObjxEgG+kEshDJTymk4l9ms=;
+        b=Hc4L9YO3y2IBNL3mVL2L/9/xH2zc8mmKm8OpkkKmh/VvykPbT+10gPKb0oI0LypyW8
+         trozfL1pOmxkzjbjPjfs5vh+YeU6zD2O63kQGyhA/u2xhgYYdNJJLsji84EOGmmOv23J
+         xQrGfRYMDzXgX+1J+AxKEtgFeAgT0YRyEdYXhpaQ5qTWF/LNFQWbjMyeDEWo3ksk8vzD
+         wuZ8DTfoTfoLd/Hc9zc19UI4elJARsanXgTb66Tli0HcUUHrxMHVFb/Ei8Fg2qxt8wyE
+         j8zMFAcRY+/NUutPS/Fpov6+v3rjo117bC2cX1an+WPInZsqgOPQ8/wu0PsiY7G8Pypz
+         maGg==
+X-Gm-Message-State: AC+VfDx0xsVWtPDWRYjVr5Sa/Jxx0rDwKwbpfJnWSL2aoJyzTHNniM57
+        mjXs3GL21FkG+5m9eGYB3OWb9n5QDGE=
+X-Google-Smtp-Source: ACHHUZ5/8w8sJORF5OVUQCO9GUOzJsjUQD5v0q7aRSE4TjHmG1bFAR+zVnBsXA3gDK7W2HI1v0mARQ==
+X-Received: by 2002:a2e:8295:0:b0:2a6:1682:3a1e with SMTP id y21-20020a2e8295000000b002a616823a1emr5224079ljg.31.1683108096971;
+        Wed, 03 May 2023 03:01:36 -0700 (PDT)
+Received: from fedora (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
+        by smtp.gmail.com with ESMTPSA id y11-20020a05651c020b00b002a8a8f2dc89sm5907418ljn.72.2023.05.03.03.01.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 May 2023 03:01:36 -0700 (PDT)
+Date:   Wed, 3 May 2023 13:01:32 +0300
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] iio: bu27034: Ensure reset is written
+Message-ID: <ZFIw/KdApZe1euN8@fedora>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Ru/DL4Tb+YxI3Pq5"
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-page_is_meargeable() can be used to merge the page to the bio_vec of
-bio's integrity payload. For this, the static was removed.
 
-There is a page_is_mergeable() in F2FS filesystem, so the name was changed
-to bio_page_is_mergeable.
+--Ru/DL4Tb+YxI3Pq5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Martin K. Petersen <martin.petersen@oracle.com>
+The reset bit must be always written to the hardware no matter what value
+is in a cache or register. Ensure this by using regmap_write_bits()
+instead of the regmap_update_bits(). Furthermore, the RESET bit may be
+self-clearing, so mark the SYSTEM_CONTROL register volatile to guarantee
+we do also read the right state - should we ever need to read it.
 
-Signed-off-by: Jinyoung Choi <j-young.choi@samsung.com>
+Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+Fixes: e52afbd61039 ("iio: light: ROHM BU27034 Ambient Light Sensor")
+
 ---
- block/bio.c         | 8 ++++----
- include/linux/bio.h | 3 +++
- 2 files changed, 7 insertions(+), 4 deletions(-)
+Changelog:
+v1 =3D> v2:
+  - Fix SoB tag
 
-diff --git a/block/bio.c b/block/bio.c
-index fd11614bba4d..3e5ab59502e2 100644
---- a/block/bio.c
-+++ b/block/bio.c
-@@ -903,9 +903,9 @@ static inline bool bio_full(struct bio *bio, unsigned len)
- 	return false;
- }
- 
--static inline bool page_is_mergeable(const struct bio_vec *bv,
--		struct page *page, unsigned int len, unsigned int off,
--		bool *same_page)
-+bool bio_page_is_mergeable(const struct bio_vec *bv, struct page *page,
-+			   unsigned int len, unsigned int off,
-+			   bool *same_page)
- {
- 	size_t bv_end = bv->bv_offset + bv->bv_len;
- 	phys_addr_t vec_end_addr = page_to_phys(bv->bv_page) + bv_end - 1;
-@@ -951,7 +951,7 @@ static bool __bio_try_merge_page(struct bio *bio, struct page *page,
- 	if (bio->bi_vcnt > 0) {
- 		struct bio_vec *bv = &bio->bi_io_vec[bio->bi_vcnt - 1];
- 
--		if (page_is_mergeable(bv, page, len, off, same_page)) {
-+		if (bio_page_is_mergeable(bv, page, len, off, same_page)) {
- 			if (bio->bi_iter.bi_size > UINT_MAX - len) {
- 				*same_page = false;
- 				return false;
-diff --git a/include/linux/bio.h b/include/linux/bio.h
-index d766be7152e1..b53a595b519a 100644
---- a/include/linux/bio.h
-+++ b/include/linux/bio.h
-@@ -418,6 +418,9 @@ struct bio *bio_alloc_clone(struct block_device *bdev, struct bio *bio_src,
- 		gfp_t gfp, struct bio_set *bs);
- int bio_init_clone(struct block_device *bdev, struct bio *bio,
- 		struct bio *bio_src, gfp_t gfp);
-+bool bio_page_is_mergeable(const struct bio_vec *bv, struct page *page,
-+			   unsigned int len, unsigned int off,
-+			   bool *same_page);
- 
- extern struct bio_set fs_bio_set;
- 
--- 
-2.34.1
+
+I haven't verified if the reset bit is self-clearin as I did temporarily
+give away the HW.
+
+In worst case the bit is not self clearing - but we don't really
+get performance penalty even if we set the register volatile because the
+SYSTEM_CONTROL register only has the part-ID and the reset fields. The
+part-id is only read once at probe.
+
+---
+ drivers/iio/light/rohm-bu27034.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/iio/light/rohm-bu27034.c b/drivers/iio/light/rohm-bu27=
+034.c
+index 25c9b79574a5..740ebd86b6e5 100644
+--- a/drivers/iio/light/rohm-bu27034.c
++++ b/drivers/iio/light/rohm-bu27034.c
+@@ -231,6 +231,9 @@ struct bu27034_result {
+=20
+ static const struct regmap_range bu27034_volatile_ranges[] =3D {
+ 	{
++		.range_min =3D BU27034_REG_SYSTEM_CONTROL,
++		.range_max =3D BU27034_REG_SYSTEM_CONTROL,
++	}, {
+ 		.range_min =3D BU27034_REG_MODE_CONTROL4,
+ 		.range_max =3D BU27034_REG_MODE_CONTROL4,
+ 	}, {
+@@ -1272,7 +1275,7 @@ static int bu27034_chip_init(struct bu27034_data *dat=
+a)
+ 	int ret, sel;
+=20
+ 	/* Reset */
+-	ret =3D regmap_update_bits(data->regmap, BU27034_REG_SYSTEM_CONTROL,
++	ret =3D regmap_write_bits(data->regmap, BU27034_REG_SYSTEM_CONTROL,
+ 			   BU27034_MASK_SW_RESET, BU27034_MASK_SW_RESET);
+ 	if (ret)
+ 		return dev_err_probe(data->dev, ret, "Sensor reset failed\n");
+
+base-commit: 7fcbd72176076c44b47e8f68f0223c02c411f420
+--=20
+2.40.0
+
+
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--Ru/DL4Tb+YxI3Pq5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmRSMOkACgkQeFA3/03a
+ocUcfAf/Z0/YZjlVoNVlpuQQ0nWdANGKI+QVVvyOJXPMWBMVHDlpQjoy3F0xaLjb
+CYEoY5n8d8pSCC5M37MVAX7p2inmk7FbW5jPU1vh5/BDmEN9GSaN2QJ0xrXYl0NY
+SWep2kHeFwLoPk5wHFP0Fs2V/ZaLPqSEm12rM4asfFfJec9EwBv89peV21N/0Uj2
+Y9QYKgqGfHZ6GtYUmMMRXRzmcALSf+YuIPy42XSAmfV929GX0I/aIX351J6hPJZ0
+ktBTdzOlneh9zrB97bc/ycuEMUL0dKzcWYaBIdBuq3Gglii2+ZJZkdn4VdchhCbL
+OWekHVo/i0gdRJq7jAnAiO6I4Hj3FA==
+=1Gqg
+-----END PGP SIGNATURE-----
+
+--Ru/DL4Tb+YxI3Pq5--
