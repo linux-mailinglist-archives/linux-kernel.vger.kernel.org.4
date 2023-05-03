@@ -2,224 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 871586F61F7
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 01:16:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA6D76F61F5
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 01:16:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229741AbjECXQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 19:16:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57822 "EHLO
+        id S229460AbjECXQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 19:16:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjECXQg (ORCPT
+        with ESMTP id S229622AbjECXQf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 19:16:36 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 771157ABA;
-        Wed,  3 May 2023 16:16:18 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 343MVgG3003181;
-        Wed, 3 May 2023 23:16:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=UxTkhBpsnpmY6xxucMQdSRc3ibNabuhL7IWCyy9HV58=;
- b=OxEwRao2gdkU/BHZ/KnnqFL4xHMbfOKOBYGilHy84CaNgaTnrtGxGtXlGYyo2/QyA7dK
- yTuiBPmaxK0O9MaMVF4c/zhiXxu7TZadiHBYbcPiZ528Hxr+QJ/gPhoafHfN3PAbqGgy
- ZJs2GrHp98yBI2oXsKBDVd1znubcPATpXpdx1w0FF/Tr7j0jZuh3zoXUYEcnAz2PhJwQ
- xTXPykJAAxUCmDOAFmx18Cm1IY+Z4q0oMkTmXhRVmIe3cBCyn56L2cx9d/2Iego8PcXF
- 2mMUz1turLRfcpa0ZBslNhnDI6aMDfpkMbk8PziQ+jo6MErSA4wr4Sbbwz1k6SrymO5P TA== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qbvghgg7x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 03 May 2023 23:16:11 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 343NGA4n025281
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 3 May 2023 23:16:10 GMT
-Received: from [10.71.110.193] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 3 May 2023
- 16:16:10 -0700
-Message-ID: <714d6e3a-4ddd-bf35-0949-ce162565c000@quicinc.com>
-Date:   Wed, 3 May 2023 16:16:09 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 4/4] drm/msm/dpu: Enable compression for command mode
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-CC:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-References: <20230405-add-dsc-support-v1-0-6bc6f03ae735@quicinc.com>
- <20230405-add-dsc-support-v1-4-6bc6f03ae735@quicinc.com>
- <hxqxnfcydzyfrlvihmil3gecan6p6xyjw44gielu63ltgtqul7@xwvoprzofq6g>
- <d4b7a747-77a0-95eb-1201-c8b1c80defe3@quicinc.com>
- <3dddb676-750f-0bc7-7999-f8880c63931b@linaro.org>
-From:   Jessica Zhang <quic_jesszhan@quicinc.com>
-In-Reply-To: <3dddb676-750f-0bc7-7999-f8880c63931b@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: U2GBB1urOEYfUsAzrC2_eYS2JyTqpd4e
-X-Proofpoint-GUID: U2GBB1urOEYfUsAzrC2_eYS2JyTqpd4e
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-03_14,2023-05-03_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- lowpriorityscore=0 impostorscore=0 suspectscore=0 malwarescore=0
- bulkscore=0 clxscore=1015 phishscore=0 spamscore=0 adultscore=0
- priorityscore=1501 mlxscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2303200000 definitions=main-2305030200
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 3 May 2023 19:16:35 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AC6293E6
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 16:16:13 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id d9443c01a7336-1ab0f01ce43so22158345ad.1
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 16:16:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683155772; x=1685747772;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=VcB+Y5fDyixakWTeoinQOVeecLhRUTl+pbViwwNrtuQ=;
+        b=sTeZoxVDxdqS3PD2YH+hzY3HPDUPF4CDBpil3ScaC5e3sXkVGT/uJEkeaOrwNg3Zgb
+         37BoXrNRmGg/+0SCX9mPdqUq6njuBQHxQ6D9QGXpWlyL6WdcOB8AK+eY8A422ogU7Fup
+         Lx9HYoY9kT10KPUZIF0eOJ7o+kZcARHSXpg+uwE+qWc976HUetby61zeLGqtVWlgNCfZ
+         W/66w8bglbdx9ioh6DT4mqwxC0A+u1kW5jlQMMLE8PzDfQ5Dsq7GnyOAJPIjYbgNCQTt
+         HztMBYNsGySpCSBrDm76lEVZgHCRRphG93ufQqUcEFTAg6jKycPQpkvucn1e8E1JDP7d
+         uV8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683155772; x=1685747772;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VcB+Y5fDyixakWTeoinQOVeecLhRUTl+pbViwwNrtuQ=;
+        b=JbKLG2CEycxUdOfnyAw2YYzEqOXysxBmgtdTTPzgTi1uZkVoql3PAs9CiYgABEI0Gf
+         o8RbcyoXaSuh6YOlbRWL4n9baEOhK5+b5wfs0TFu4CiCRe78VZAn97LHpzawg3IticAN
+         jDnvBpKbY06UFB/tMeE6Kid1q5MlBSG1CZV6WKo7c1fALPix1scQnSsfHfVMnEMezXp5
+         RvMZKPPYM2ULWFryjQZMdPZF5EPIqiz0ETDuZRSWzks0vUy0xAjqsKYHWJuu9sHGrQh3
+         s5UDoLFaM4KZejhlODRbQcN6zpNPQTy7eWX4vrhSBxLcBVKEgs/fCMisEd2WkqS7DLVm
+         CIwg==
+X-Gm-Message-State: AC+VfDz0ySZJ/V5Im+KDhaO5qlX5CbhxcFlAUJ9kozjxyn7uQx1U3jEl
+        oXqScElGBYXu+7ZAjHBwErnHpwhA9ds=
+X-Google-Smtp-Source: ACHHUZ6g5+RkH9RYY37NzyTJLkYzceQaVVLYFcfwNF/8stvntiOGUw0qCRLeunRzkavyvs4pLnENPx5NNl4=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:903:234c:b0:1a2:87a2:c932 with SMTP id
+ c12-20020a170903234c00b001a287a2c932mr513261plh.10.1683155772723; Wed, 03 May
+ 2023 16:16:12 -0700 (PDT)
+Date:   Wed, 3 May 2023 16:16:10 -0700
+In-Reply-To: <ZBwS0DNOwMf7OVmV@yzhao56-desk.sh.intel.com>
+Mime-Version: 1.0
+References: <20230311002258.852397-1-seanjc@google.com> <20230311002258.852397-26-seanjc@google.com>
+ <ZBQkyB3KJP34D9/h@yzhao56-desk.sh.intel.com> <ZBwS0DNOwMf7OVmV@yzhao56-desk.sh.intel.com>
+Message-ID: <ZFLrOgUL4T/lrVLo@google.com>
+Subject: Re: [PATCH v2 25/27] KVM: x86/mmu: Drop @slot param from
+ exported/external page-track APIs
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yan Zhao <yan.y.zhao@intel.com>
+Cc:     kvm@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Ben Gardon <bgardon@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        intel-gvt-dev@lists.freedesktop.org,
+        Zhi Wang <zhi.a.wang@intel.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Finally getting back to this series...
 
-
-On 5/3/2023 12:51 PM, Dmitry Baryshkov wrote:
-> On 03/05/2023 22:04, Jessica Zhang wrote:
->>
->>
->> On 5/3/2023 12:28 AM, Marijn Suijten wrote:
->>> On 2023-05-02 18:19:15, Jessica Zhang wrote:
->>>> Add a dpu_hw_intf op to enable data compression.
->>>>
->>>> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
->>>> ---
->>>>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c | 4 ++++
->>>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c          | 7 +++++++
->>>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h          | 2 ++
->>>>   3 files changed, 13 insertions(+)
->>>>
->>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c 
->>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
->>>> index 74470d068622..4321a1aba17f 100644
->>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
->>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
->>>
->>> Can we have INTF DCE on video-mode encoders as well?
->>
->> Hi Marijn,
->>
->> Currently, there's no way to validate DSC for video mode as I've only 
->> made changes to support DSI for command mode. We are planning to post 
->> changes to support DSC over DP, which will include changes for video 
->> mode.
+On Thu, Mar 23, 2023, Yan Zhao wrote:
+> On Fri, Mar 17, 2023 at 04:28:56PM +0800, Yan Zhao wrote:
+> > On Fri, Mar 10, 2023 at 04:22:56PM -0800, Sean Christopherson wrote:
+> > ...
+> > > +int kvm_write_track_add_gfn(struct kvm *kvm, gfn_t gfn)
+> > > +{
+> > > +	struct kvm_memory_slot *slot;
+> > > +	int idx;
+> > > +
+> > > +	idx = srcu_read_lock(&kvm->srcu);
+> > > +
+> > > +	slot = gfn_to_memslot(kvm, gfn);
+> > > +	if (!slot) {
+> > > +		srcu_read_unlock(&kvm->srcu, idx);
+> > > +		return -EINVAL;
+> > > +	}
+> > > +
+> > Also fail if slot->flags & KVM_MEMSLOT_INVALID is true?
+> > There should exist a window for external users to see an invalid slot
+> > when a slot is about to get deleted/moved.
+> > (It happens before MOVE is rejected in kvm_arch_prepare_memory_region()).
 > 
-> If I remember correctly, HDK8350 panel should support DSC for both 
-> command and video modes.
+> Or using
+>         if (!kvm_is_visible_memslot(slot)) {
+> 		srcu_read_unlock(&kvm->srcu, idx);
+> 		return -EINVAL;
+> 	}
 
-Hi Dmitry,
+Hrm.  If the DELETE/MOVE succeeds, then the funky accounting is ok (by the end
+of the series) as the tracking disappears on DELETE, KVMGT will reject MOVE, and
+KVM proper zaps SPTEs and resets accounting on MOVE (account_shadowed() runs under
+mmu_lock and thus ensures all previous SPTEs are zapped before the "flush" from
+kvm_arch_flush_shadow_memslot() can run).
 
-Correct, however we are planning to submit the video mode changes with 
-the DP DSC v1.2 changes.
+If kvm_prepare_memory_region() fails though...
 
-My current panel driver/dt changes are for command mode, so we would 
-have to spent time to also add video mode support. It would be faster to 
-land the video mode changes with DP support as that's already a work in 
-progress.
+Ah, KVM itself is safe because of the aforementioned kvm_arch_flush_shadow_memslot().
+Any accounting done on a temporarily invalid memslot will be unwound when the SPTEs
+are zapped.  So for KVM, ignoring invalid memslots is correct _and necessary_.
+We could clean that up by having accounted_shadowed() use the @slot from the fault,
+which would close the window where the fault starts with a valid memslot but then
+sees an invalid memslot when accounting a new shadow page.  But I don't think there
+is a bug there.
 
-> 
->>
->>>
->>>> @@ -72,6 +72,10 @@ static void _dpu_encoder_phys_cmd_update_intf_cfg(
->>>>                   phys_enc->hw_intf,
->>>>                   true,
->>>>                   phys_enc->hw_pp->idx);
->>>> +
->>>> +    if (phys_enc->dpu_kms->catalog->caps->has_data_compress &&
->>>
->>> As per my suggestion on patch 3/4, drop the flag and check above and
->>> only check if the function is NULL (below).
->>
->> Acked.
->>
->>>
->>>> +            phys_enc->hw_intf->ops.enable_compression)
->>>> +        phys_enc->hw_intf->ops.enable_compression(phys_enc->hw_intf);
->>>>   }
->>>>   static void dpu_encoder_phys_cmd_pp_tx_done_irq(void *arg, int 
->>>> irq_idx)
->>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c 
->>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
->>>> index 671048a78801..4ce7ffdd7a05 100644
->>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
->>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
->>>> @@ -64,10 +64,16 @@
->>>>   #define INTF_CFG2_DATABUS_WIDEN    BIT(0)
->>>>   #define INTF_CFG2_DATA_HCTL_EN    BIT(4)
->>>
->>> These should probably be reindented to match the below... And the rest
->>> of the defines use spaces instead of tabs.
->>
->> Fair point, though I think fixing the whitespace for these 2 macros 
->> specifically might be better in a more relevant series.
->>
->> With that being said, I'll change the spacing of the DATA_COMPRESS bit 
->> to spaces instead of tabs.
->>
->>>
->>>> +#define INTF_CFG2_DCE_DATA_COMPRESS    BIT(12)
->>>>   #define INTF_MISR_CTRL            0x180
->>>>   #define INTF_MISR_SIGNATURE        0x184
->>>
->>> This does not seem to apply on top of:
->>> https://lore.kernel.org/linux-arm-msm/20230411-dpu-intf-te-v4-10-27ce1a5ab5c6@somainline.org/
->>
->> Seems like I'm missing some patches from that series on my working 
->> branch. Will rebase on top of the full series for the v2.
->>
->>>
->>>> +static inline void dpu_hw_intf_enable_compression(struct 
->>>> dpu_hw_intf *ctx)
->>>
->>> Why inline?  This is used as a pointer callback.
->>
->> Acked, will remove the inline.
->>
->>>
->>>> +{
->>>> +    DPU_REG_WRITE(&ctx->hw, INTF_CONFIG2, 
->>>> INTF_CFG2_DCE_DATA_COMPRESS);
->>>
->>> dpu_hw_intf_setup_timing_engine() also programs INTF_CONFIG2.  Is it
->>> double-buffered, or is that config **always** unused when DSI CMD mode
->>> is used in conjunction with DSC/DCE?  Otherwise this should perhaps OR
->>> the bitflag into the register, or write the whole thing at once in
->>> dpu_hw_intf_setup_timing_engine()?
->>
->> For command mode, INTF_CONFIG2 is unused aside from setting 
->> DATA_COMPRESS for DSC.
->>
->> Since setup_timing_engine() is only used for video mode, the 
->> corresponding changes will be made in the DSC v1.2 for DP changes.
-> 
-> So, for command mode panels is this the only bit that should be set in 
-> INTF_CFG2?
+Right, and DELETE can't actually fail in the current code base, and we've established
+that MOVE can't possibly work.  So even if this is problematic in theory, there are
+no _unknown_ bugs, and the known bugs are fixed by the end of the series.
 
-Yep, outside of the changes in this patch, INTF_CONFIG2 is only used in 
-the video mode setup_timing_engine() method.
-
-Thanks,
-
-Jessica Zhang
-
-> -- 
-> With best wishes
-> Dmitry
-> 
+And at the end of the series, KVMGT drops its tracking only when the DELETE is
+committed.  So I _think_ allowing external trackers to add and remove gfns for
+write-tracking in an invalid slot is actually desirable/correct.  I'm pretty sure
+removal should be allowed as that can lead to dangling write-protection in a
+rollback scenario.   And I can't think of anything that will break (in the kernel)
+if write-tracking a gfn in an invalid slot is allowed, so I don't see any harm in
+allowing the extremely theoretical case of KVMGT shadowing a gfn in a to-be-deleted
+memslot _and_ the deletion being rolled back.
