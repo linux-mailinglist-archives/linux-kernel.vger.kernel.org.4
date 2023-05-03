@@ -2,94 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B88B06F4FA1
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 07:05:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C113A6F4FA8
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 07:10:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229524AbjECFFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 01:05:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50690 "EHLO
+        id S229514AbjECFKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 01:10:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjECFFH (ORCPT
+        with ESMTP id S229441AbjECFK3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 01:05:07 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5187198C
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 22:05:06 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 34354i9r019743
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 3 May 2023 01:04:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1683090287; bh=FvORr7FHd1hBjWof7ef5KTgBWPg3huRRQIi7D/9SWE8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=K0pZ4wkIz0FwMjJ1JFT6gMXcq0FcOS33EiPOKvpJh227bfZuKJymQsT9q33sPbUdW
-         5dsqf9H3DvSTr2CU7VYTRidmlCzaHcsGobTrRDF8oojGAqfFEaiqOfNiLruOj/3y1x
-         lr3qrf6hAiMuF9gxdLV9ZYSjve4DIDs8HkTtUGCsbEE82UK+QsxtffWdWjFMDYEvue
-         T4TDSjCErV5flWemUcgeVkx05P7QhVVy/ANgaWlJ7V3MXwCjxzxHrKdIGQUE2i4LKW
-         7DlWnnHb4PDkR/vkJN1w4AROmBbjVjl4sm8lzTVMIQF0K/PwPkX5Z33V0+bmUQKAyp
-         FDM9GbWtb3Iiw==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id CD23815C02E2; Wed,  3 May 2023 01:04:44 -0400 (EDT)
-Date:   Wed, 3 May 2023 01:04:44 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Aleksandr Nogikh <nogikh@google.com>
-Cc:     syzbot <syzbot+e6dab35a08df7f7aa260@syzkaller.appspotmail.com>,
-        brauner@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        viro@zeniv.linux.org.uk
-Subject: Re: [syzbot] [fs?] INFO: task hung in eventpoll_release_file
-Message-ID: <20230503050444.GB674745@mit.edu>
-References: <000000000000c6dc0305f75b4d74@google.com>
- <ZE4L+x5SjT3+elhh@mit.edu>
- <CANp29Y4cg6HB0dw_4mO05ibiAv2GkdnMksQozSGiBrwan9JvYA@mail.gmail.com>
+        Wed, 3 May 2023 01:10:29 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 560F5198C;
+        Tue,  2 May 2023 22:10:28 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f137dbaa4fso366065e87.2;
+        Tue, 02 May 2023 22:10:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683090626; x=1685682626;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/gUMcAb9p0mtdNtbUOeVy8zAV4NOHZstBj8s8GNLqlo=;
+        b=rXbyC8wiohAIZnaCzgut2ymBY5J5zPwmSUhFhzl9ol/JU4Sy2uQwvsnu1NbXM1LMHd
+         kLe6iUxw1O2vUz6cY8rvR2d3JOcgFPnDmMUOdQtgY1VXK8LUMsfCkTJ1AG6MNqk/q5bK
+         kaRel+B/SFxikNOV64r3HIVJeq9ZJl1A5VlU0ANcugWa4WVbSSt5l+kxniIvkTD4/ZhE
+         eI57ZB+tFb4Sct1jA7UChoyLxFZVZBgMYQe7WZZ34CxeOICI86FzQ3mkXSUaqJRHHld2
+         XNNIFISSRqRhwPSGIo7u5UgPESeKIzJiaUncBqeKqT6VbKkFJDqLqO7kEpqsen3wS1JY
+         u1KQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683090626; x=1685682626;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/gUMcAb9p0mtdNtbUOeVy8zAV4NOHZstBj8s8GNLqlo=;
+        b=ltgAE4F5Me5/OH3tMye41UnNqUJJgySqw24jIT4hAA9pffFtoV2R89aB+PbIe2XTOl
+         kdgi/c9onm67vMjcA3GTkbeq4LaC5zTKrBi8NeyyHpza19+/Nbml2p5iiKQjOIvxxz9D
+         ZuX5bL+pjTnV/9TX62NnR9BVPKECafxMFcg88euVkRCSODDGKifKDwW5OGagg1cHJdzN
+         hiWvB26OWXRkoGGlhdnGfNhXPgY208UYzZ3LZRmjCGqO+GuyYj+CYuyvFgIIcau51RhT
+         B0BwqJfVAV80C7Vo3Y1q7xSBXdzvubBpguqKdn+7+vyviw/SpCUPfFRvwWdO45KgjCSg
+         3U3w==
+X-Gm-Message-State: AC+VfDzr8Tzd453vgWDOZTNetxKwSgKX4ZWs/DBg8sMrM6Ck0bxj0J0t
+        +PQni4D3K9OcEKkUxRA3rXMyt/WSMLf/sR1y1A==
+X-Google-Smtp-Source: ACHHUZ6HugMTcvUOsV69lbdyeCpg3dHGRyKco7GUIMPTz/WpvdDDFDxbuGmiiy/fYUIOfBPvyKlzjJqDW4B/nm4tK2c=
+X-Received: by 2002:ac2:5d6a:0:b0:4dc:4b92:dbc4 with SMTP id
+ h10-20020ac25d6a000000b004dc4b92dbc4mr445424lft.14.1683090626163; Tue, 02 May
+ 2023 22:10:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANp29Y4cg6HB0dw_4mO05ibiAv2GkdnMksQozSGiBrwan9JvYA@mail.gmail.com>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <CGME20230427094420epcms2p1043333a3e0c0cf58e66164e0b83b3b02@epcms2p1>
+ <20230427094420epcms2p1043333a3e0c0cf58e66164e0b83b3b02@epcms2p1>
+In-Reply-To: <20230427094420epcms2p1043333a3e0c0cf58e66164e0b83b3b02@epcms2p1>
+From:   Stanley Chu <chu.stanley@gmail.com>
+Date:   Wed, 3 May 2023 13:10:13 +0800
+Message-ID: <CAGaU9a9B7gAfJk8F_4_v3OAYuGA2MAAOEbq09aJrbhCZqo7CaA@mail.gmail.com>
+Subject: Re: [PATCH] scsi: ufs: core: Change the module parameter macro of use_mcq_mode
+To:     keosung.park@samsung.com
+Cc:     ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
+        "mani@kernel.org" <mani@kernel.org>,
+        "quic_asutoshd@quicinc.com" <quic_asutoshd@quicinc.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 02, 2023 at 10:08:44PM +0200, Aleksandr Nogikh wrote:
-> Hi Ted,
-> 
-> On Sun, Apr 30, 2023 at 8:34 AM Theodore Ts'o <tytso@mit.edu> wrote:
-> >
-> > #syz set subsystem: fs
-> >
-> > This somehow got tagged with the ext4 label, and not the fs label.
-> > (And this is not the first one I've noticed).  I'm beginning to
-> > suspect there may have been some syzbot database hiccup?  Anyway,
-> > fixing...
-> 
-> FWIW one of this bug's crashes was attributed to ext4 [1] and syzbot's
-> logic in this case was to prefer a more specific subsystem (ext4) to a
-> more generic one (fs), even if it's not mentioned in the majority of
-> crashes.
-> 
-> [1] https://syzkaller.appspot.com/text?tag=CrashReport&x=171abfaac80000
+Keoseong Park <keosung.park@samsung.com> =E6=96=BC 2023=E5=B9=B44=E6=9C=882=
+7=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=885:48=E5=AF=AB=E9=81=93=EF=
+=BC=9A
+>
+> mcq_mode_ops uses only param_{set,get}_bool(). Therefore, convert
+> module_param_cb() to module_param() and remove the mcq_mode_ops.
+>
 
-One of the challenges is that the attribution is not necessasrily
-accurate.  One of the CPU's was running an ext4 workqueue task (which
-was apparntly making forward progress) at the time of the crash.
-
-It should also be noted that apparently there is a potential patch
-which seems to fix the problem, and it's solely in the fs/eventpoll.c.
-Unfortunately, it was not in the lore.kernel.org archives, since
-apparently it wasn't cc'ed there.  It's in the syzkaller-bugs Google
-Groups archive, though, since Pauolo Abeni cc'ed the
-syzkaller-bugs@googlegroups.com, but not the lore archive, on his
-test:
-
-https://groups.google.com/g/syzkaller-bugs/c/oiBUmGsqz_Q/m/Xi5iOeJNAgAJ
-
-						- Ted
+Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
