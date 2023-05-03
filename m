@@ -2,121 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5B016F54F9
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 11:42:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA2696F550C
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 11:43:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbjECJmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 05:42:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40878 "EHLO
+        id S230017AbjECJnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 05:43:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229802AbjECJma (ORCPT
+        with ESMTP id S229936AbjECJna (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 05:42:30 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC7244B2;
-        Wed,  3 May 2023 02:42:28 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 61AC0201CB;
-        Wed,  3 May 2023 09:42:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1683106947; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Wuc1vTQ8wQRR6tjkgMtetfqYzZutfpJcCtXQCNyxPaE=;
-        b=onzzM/v1oyKFB4FXmhHjMFCMfyCMsRPoN8kNryQXhOdlgGhF+7N7l93bcEVNHsoDxefF9t
-        7lhSxjb+agVtwS0b+PBPmQNxbun2z2IzZu4y1LvLwHFf9qf8TW0n6sfpcUE+WtyTSMNG+G
-        gs6QJhk4Grrkztl4tS0n8NiLwWIl1Q0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1683106947;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Wuc1vTQ8wQRR6tjkgMtetfqYzZutfpJcCtXQCNyxPaE=;
-        b=BlObSjVxACe5A1daCOXZ1F33pExCCXIO/Pa5F8XFQ6vTAq64KzieqEx9wywLowDfSiLzW+
-        c8gKFw4Fjt5kW/Bg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 53B021331F;
-        Wed,  3 May 2023 09:42:27 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id hEARFIMsUmSaHAAAMHmgww
-        (envelope-from <dwagner@suse.de>); Wed, 03 May 2023 09:42:27 +0000
-Date:   Wed, 3 May 2023 11:42:26 +0200
-From:   Daniel Wagner <dwagner@suse.de>
-To:     Chaitanya Kulkarni <chaitanyak@nvidia.com>
-Cc:     "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        Shin'ichiro Kawasaki <shinichiro@fastmail.com>,
-        Hannes Reinecke <hare@suse.de>
-Subject: Re: [PATCH blktests v3 04/12] common/xfs: Limit fio size job to fit
- into xfs fs
-Message-ID: <qv4br55wggqf46jomv7r7ern6e6s7kprqh65wtqvmcnvrlqvl2@kahiiqhulyan>
-References: <20230503080258.14525-1-dwagner@suse.de>
- <20230503080258.14525-5-dwagner@suse.de>
- <74e9c631-23cd-705c-7043-88f345598ad1@nvidia.com>
+        Wed, 3 May 2023 05:43:30 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFC9649F2;
+        Wed,  3 May 2023 02:43:10 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-63b60365f53so5567457b3a.0;
+        Wed, 03 May 2023 02:43:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683106990; x=1685698990;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sqvmzpSfh7BOiDMlgneo0+djsuuObhP2Z0rVZr4lDOg=;
+        b=UwZnD9/fcZrkqOZCSC4bWh3iltR4zy8emhX+MwX88jpqXu9K4Shg2M1HnVL0Q+0/Iq
+         E37lv5Aw1Rc4Zfq1bnwyTl9sSK7fjYIPashCAKyCYub7ExiqBQhKa72+acewDM1LAOWA
+         dTO8nu1LkJd6SX0fZ3TF2iBWC2QwXATraPdlM4Dno/IwF0KnVB/8wlO+h/JWP/u45D2O
+         Ui/jXm1HfjHsxrRI05+vK4Fb8Qz11EI74TpMyEWmzQKbkvpo65vKoHH+NIfBoPUQG+Sl
+         fKbyczCRGx2WFq+WcwmrcK6lgM1s+abjL1yls/I8D/S+cSj9gx1PDzlW9c7GIflpKLo9
+         ohMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683106990; x=1685698990;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sqvmzpSfh7BOiDMlgneo0+djsuuObhP2Z0rVZr4lDOg=;
+        b=jpN+cJDJxx94C/Ki+9L8DOGZCf2LxvJCeI+EMP0lOf+GU9BDi2Ahq7QTKDj/XDwirL
+         BIIHfZJpLwF+atmn+oAwSuFp4ylOFHc67k42j4u2RwiBygKdE5k6oKRcXptxua1WUvQC
+         s1VaxDW/Z8DyFa/ZwVz01/h63Ys2mBeqPXpdfgvDdK8Vaw6rSxevO/GQMfCjcDmsLCpw
+         hpobKRa1JWFonv2kwqo3H0SaeKIh5TxnnvNG1dDJMHypmTcD2eGVHix9sbeFEeZoKxSx
+         galu4MIefw5ZDWHQ8q1Dwtl5pEcPI3tYC6NQDd1CJl5E16Evc3dpGHzxU81dtKgbmfWs
+         Ygew==
+X-Gm-Message-State: AC+VfDyFl19offU6SyGWhNizxp7bu1VpssdopBA18u6D2tc9R1z15OtS
+        BJQaxTMaKBE5kjPHQXbVMdkQYgYmn9Y=
+X-Google-Smtp-Source: ACHHUZ68zLDVQf2eKV+GWEFtaAUCrBh4nVjOqbrBcNzLH77grDT5QnN10SAIAwuYdcVOs3f2UdcPKA==
+X-Received: by 2002:a05:6a00:140e:b0:63d:3f74:9df7 with SMTP id l14-20020a056a00140e00b0063d3f749df7mr26228464pfu.34.1683106990046;
+        Wed, 03 May 2023 02:43:10 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-11.three.co.id. [180.214.233.11])
+        by smtp.gmail.com with ESMTPSA id a10-20020aa780ca000000b00642ea56f06dsm4714307pfn.26.2023.05.03.02.43.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 May 2023 02:43:08 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 72091106250; Wed,  3 May 2023 16:43:04 +0700 (WIB)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Linux Networking <netdev@vger.kernel.org>,
+        Linux Random Direct Memory Access 
+        <linux-rdma@vger.kernel.org>,
+        Linux Documentation <linux-doc@vger.kernel.org>,
+        Linux Networking <linux-kernel@vger.kernel.org>
+Cc:     Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Maher Sanalla <msanalla@nvidia.com>,
+        Rahul Rameshbabu <rrameshbabu@nvidia.com>,
+        Moshe Shemesh <moshe@nvidia.com>
+Subject: [PATCH net 0/4] Documentation fixes for Mellanox mlx5 devlink info
+Date:   Wed,  3 May 2023 16:42:45 +0700
+Message-Id: <20230503094248.28931-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <74e9c631-23cd-705c-7043-88f345598ad1@nvidia.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=727; i=bagasdotme@gmail.com; h=from:subject; bh=aer6HOi8fhrQqjCrvQO5H7xohlct7D9hbyMhJQSmMaE=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDClBOt0c/+q31OZdnq4UzW/CxJX4Y5n/r6tWx70fJq04t NjRd5ZkRykLgxgXg6yYIsukRL6m07uMRC60r3WEmcPKBDKEgYtTACayNpqRYdbFvP67ryc1a231 ly4WXvO+Izayq3xe20enoNxcufRjAYwMTTteXTn0tDhCb5p9lf9O26zbMt859AQuccqKtpWceHu OAQA=
+X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 03, 2023 at 09:29:04AM +0000, Chaitanya Kulkarni wrote:
-> On 5/3/23 01:02, Daniel Wagner wrote:
-> > The usable capacity of the filesystem is less than the raw
-> > partition/device size due to the additional meta/log data.
-> >
-> > Ensure that the job size for fio is not exceeding the limits.
-> >
-> > Because we have hard coded the path where we mount the filesystem
-> > and don't want to expose this, we just update max size inside
-> > _xfs_run_fio_verify_io(). No need to leak this into the caller.
-> >
-> > Signed-off-by: Daniel Wagner <dwagner@suse.de>
-> > ---
-> >   common/xfs | 3 +++
-> >   1 file changed, 3 insertions(+)
-> >
-> > diff --git a/common/xfs b/common/xfs
-> > index 413c2820ffaf..37ce85878df2 100644
-> > --- a/common/xfs
-> > +++ b/common/xfs
-> > @@ -37,6 +37,9 @@ _xfs_run_fio_verify_io() {
-> >   		sz_mb="${avail_mb}"
-> >   	else
-> >   		sz_mb="$(convert_to_mb "${sz}")"
-> > +		if [[ "${sz_mb}" -gt "${avail_mb}" ]]; then
-> > +			sz_mb="${avail_mb}"
-> > +		fi
-> >   	fi
-> >   
-> >   	_run_fio_verify_io --size="${sz_mb}m" --directory="${mount_dir}/"
-> 
-> 
-> this is exactly how it should to start with, the only
-> is now we are silently reducing the fio job size maybe that is okay ?
-> 
-> or we should error out here instead of being smart ?
+Here is fixes for mlx5 devlink info documentation. The first fixes
+htmldocs warnings on the mainline, while the rest is formatting fixes.
 
-The problem I try to solve here is that on the caller side (nvme/035) we don't
-know yet the usable filesystem size. We only the size of the nvme_img_size.
+Bagas Sanjaya (4):
+  Documentation: net/mlx5: Wrap vnic reporter devlink commands in code
+    blocks
+  Documentation: net/mlx5: Use bullet and definition lists for vnic
+    counters description
+  Documentation: net/mlx5: Add blank line separator before numbered
+    lists
+  Documentation: net/mlx5: Wrap notes in admonition blocks
 
-If we want to move this logic to the caller side we need split
-_xfs_run_fio_verify_io() into steps. The first step which creates the fileystem
-and the second one which runs fio.
+ .../ethernet/mellanox/mlx5/devlink.rst        | 60 ++++++++++++-------
+ 1 file changed, 37 insertions(+), 23 deletions(-)
 
-I don't know if this is worth doing it though.
+
+base-commit: c6d96df9fa2c1d19525239d4262889cce594ce6c
+-- 
+An old man doll... just what I always wanted! - Clara
+
