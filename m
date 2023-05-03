@@ -2,133 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC3146F5EDE
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 21:06:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C7366F5EE5
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 21:07:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230149AbjECTG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 15:06:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37068 "EHLO
+        id S230092AbjECTHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 15:07:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbjECTGY (ORCPT
+        with ESMTP id S229481AbjECTH3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 15:06:24 -0400
-Received: from mailrelay3-1.pub.mailoutpod2-cph3.one.com (mailrelay3-1.pub.mailoutpod2-cph3.one.com [IPv6:2a02:2350:5:402::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E18177DA0
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 12:06:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=WdyijgrhY4RTD1q08ndFDbdTcMhAA946cORCCTZmsdo=;
-        b=gNsbDnuimH08qa10cbdLhym1IRrgRdP9AeDQNlOy+MDGfpEbFka6iHLaMl53BJLZ9ds0o+tb2McSK
-         umFvpOk/DQBiNLyNcdfFi+G7QPGueDnWCyi92LsYRkrKz08tjED2SvZo0z4jeOxUD2PPUuOifj2N0K
-         8uHgXDhcBex5pGBKPYq+6EFmdgSXjV5/AF7AzSAHaexKpK0gYptqQ5AiuJKB/RSVWTUx0MmGBla+c1
-         3XCQ1bchQnlI1pRtu0F7C4NDiY7uFhuYU2stFxHDcvsRqF/E8zNYFWRE3hdphxBm2IxdMxYpGmgYdM
-         IX5HrfOaCuHWc45u/ociK//KjVptQZA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=WdyijgrhY4RTD1q08ndFDbdTcMhAA946cORCCTZmsdo=;
-        b=BFeyD0DeTOJBCOL0z6ux7O7hUQiygYBxE0HwrzdugYwmBlQt32kD7CLH2TN/FY+HRiNUVv4M/2hmJ
-         GRBucEJCA==
-X-HalOne-ID: 942bba87-e9e5-11ed-bfec-b90637070a9d
-Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-        by mailrelay3 (Halon) with ESMTPSA
-        id 942bba87-e9e5-11ed-bfec-b90637070a9d;
-        Wed, 03 May 2023 19:06:19 +0000 (UTC)
-Date:   Wed, 3 May 2023 21:06:17 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     deller@gmx.de, geert@linux-m68k.org, javierm@redhat.com,
-        daniel@ffwll.ch, vgupta@kernel.org, chenhuacai@kernel.org,
-        kernel@xen0n.name, davem@davemloft.net,
-        James.Bottomley@hansenpartnership.com, arnd@arndb.de,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-arch@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        sparclinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-parisc@vger.kernel.org
-Subject: Re: [PATCH v3 6/6] fbdev: Rename fb_mem*() helpers
-Message-ID: <20230503190617.GB422961@ravnborg.org>
-References: <20230502130223.14719-1-tzimmermann@suse.de>
- <20230502130223.14719-7-tzimmermann@suse.de>
- <20230502200813.GC319489@ravnborg.org>
- <828664d0-3562-56cc-019d-1bb8a55826b5@suse.de>
+        Wed, 3 May 2023 15:07:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C09677D8C
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 12:07:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C7F762FA1
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 19:07:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0920C433D2;
+        Wed,  3 May 2023 19:07:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683140847;
+        bh=v+P+/PX3TjpN24HnLhMA+gdDju8JpUR7dNJVSbynO7k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=heCwGJg1a8j9gEZnvDK9MSYpw2IWch2gK3oBWWIec3F4mxsyADM9tGsGtnifTVo/H
+         sejlVC6YlRFOOtFAy03iHzwWNfxR+tl3AFuzLH5mQ9VIl0OuoskBLFGMDZXAZgDUXx
+         XiT4hTs3GCI/BXwS0svV6VzYAm1FD586k5B7JSlTr7wiE+TbyXE5/9myA7JzQZm9a2
+         mzk8quiBZHnDwwZ28RF3EgPwX8n3kl5AkRo+dl+24JMx2Ous0KiKz50KV120B9aTsx
+         ftsxDIZUHnJtu9rWdSf64/qSkX0inUaeebY7DuvwpPn8rKVzdc3hexZELU05l+l3pO
+         BBIXGxkc9Br/A==
+Date:   Wed, 3 May 2023 21:07:18 +0200
+From:   Simon Horman <horms@kernel.org>
+To:     Shenwei Wang <shenwei.wang@nxp.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Wei Fang <wei.fang@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Clark Wang <xiaoning.wang@nxp.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "imx@lists.linux.dev" <imx@lists.linux.dev>
+Subject: Re: [EXT] Re: [PATCH v2 net 2/2] net: fec: restructuring the
+ functions to avoid forward declarations
+Message-ID: <ZFKw5seP5WclDCG2@kernel.org>
+References: <20230502220818.691444-1-shenwei.wang@nxp.com>
+ <20230502220818.691444-2-shenwei.wang@nxp.com>
+ <6dff0a5b-c74b-4516-8461-26fcd5d615f3@lunn.ch>
+ <PAXPR04MB9185BD38BA486104EE5B7213896C9@PAXPR04MB9185.eurprd04.prod.outlook.com>
+ <ZFJ+9Ij+jOJO1+wu@kernel.org>
+ <PAXPR04MB918564D93054CEDF255DA251896C9@PAXPR04MB9185.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <828664d0-3562-56cc-019d-1bb8a55826b5@suse.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <PAXPR04MB918564D93054CEDF255DA251896C9@PAXPR04MB9185.eurprd04.prod.outlook.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+On Wed, May 03, 2023 at 06:41:59PM +0000, Shenwei Wang wrote:
 
-On Wed, May 03, 2023 at 10:15:46AM +0200, Thomas Zimmermann wrote:
-> Hi
-> 
-> Am 02.05.23 um 22:08 schrieb Sam Ravnborg:
-> > Hi Thomas.
-> > 
-> > On Tue, May 02, 2023 at 03:02:23PM +0200, Thomas Zimmermann wrote:
-> > > Update the names of the fb_mem*() helpers to be consistent with their
-> > > regular counterparts. Hence, fb_memset() now becomes fb_memset_io(),
-> > > fb_memcpy_fromfb() now becomes fb_memcpy_fromio() and fb_memcpy_tofb()
-> > > becomes fb_memcpy_toio(). No functional changes.
-> > > 
-> > > Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-> > > ---
-> > ...
-> > > -#ifndef fb_memcpy_fromfb
-> > > -static inline void fb_memcpy_fromfb(void *to, const volatile void __iomem *from, size_t n)
-> > > +#ifndef fb_memcpy_fromio
-> > > +static inline void fb_memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
-> > >   {
-> > >   	memcpy_fromio(to, from, n);
-> > >   }
-> > > -#define fb_memcpy_fromfb fb_memcpy_fromfb
-> > > +#define fb_memcpy_fromio fb_memcpy_fromio
-> > >   #endif
-> > > -#ifndef fb_memcpy_tofb
-> > > -static inline void fb_memcpy_tofb(volatile void __iomem *to, const void *from, size_t n)
-> > > +#ifndef fb_memcpy_toio
-> > > +static inline void fb_memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
-> > >   {
-> > >   	memcpy_toio(to, from, n);
-> > >   }
-> > > -#define fb_memcpy_tofb fb_memcpy_tofb
-> > > +#define fb_memcpy_toio fb_memcpy_toio
-> > >   #endif
-> > >   #ifndef fb_memset
-> > > -static inline void fb_memset(volatile void __iomem *addr, int c, size_t n)
-> > > +static inline void fb_memset_io(volatile void __iomem *addr, int c, size_t n)
-> > >   {
-> > >   	memset_io(addr, c, n);
-> > >   }
-> > > -#define fb_memset fb_memset
-> > > +#define fb_memset fb_memset_io
-> > 
-> > The static inlines wrappers does not provide any value, and could be replaced by
-> > direct calls to memcpy_fromio(), memcpy_toio(), memset_io().
-> > 
-> > If you decide to keep the wrappers I will not hold you back, so the
-> > patch has my:
-> > Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
-> > 
-> > But I prefer the direct calls without the wrappers....
-> 
-> At first I was also skeptical if those fb_mem*() wrappers are needed. But
-> Arnd mentioned that there are subtle differences between the current code
-> and Linux' mem*_io() functions. Keeping the wrappers might be needed.
-Saw the dialog, and agree that keeping current behaviour is the way to
-go for now even if this is more code and wrappers.
+...
 
-	Sam
+> > > > On Tue, May 02, 2023 at 05:08:18PM -0500, Shenwei Wang wrote:
+> > > > > The patch reorganizes functions related to XDP frame transmission,
+> > > > > moving them above the fec_enet_run_xdp implementation. This
+> > > > > eliminates the need for forward declarations of these functions.
+> > > >
+> > > > I'm confused. Are these two patches in the wrong order?
+> > > >
+> > > > The reason that i asked you to fix the forward declaration in
+> > > > net-next is that it makes your fix two patches. Sometimes that is
+> > > > not obvious to people back porting patches, and one gets lost,
+> > > > causing build problems. So it is better to have a single patch which
+> > > > is maybe not 100% best practice merged to stable, and then a cleanup patch
+> > merged to the head of development.
+> > > >
+> > >
+> > > If that is the case, we should forgo the second patch. Its purpose was
+> > > to reorganize function order such that the subsequent patch to
+> > > net-next enabling XDP_TX would not encounter forward declaration issues.
+> > 
+> > I think a good plan would be, as I understood Andrew's original suggestion,
+> > to:
+> > 
+> > 1. Only have patch 2/2, targeted at 'net', for now 2. Later, once that patch has
+> > been accepted into 'net', 'net-next' has
+> >    reopened, and that patch is present in 'net-next', then follow-up
+> >    with patch 1/2, which is a cleanup.
+> 
+> So should I re-submit the patch? Or you just take the 1st patch and drop
+> the 2nd one?
+
+net and net-next work on a granularity of patch-sets.
+So I would suggest re-submitting only patch 2/2 for 'net'.
+
+I would also suggest waiting 24h between posting v2 and v3,
+as per https://kernel.org/doc/html/next/process/maintainer-netdev.html
+
