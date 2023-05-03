@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7DEF6F516E
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 09:28:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AE1F6F5174
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 09:28:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbjECH2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 03:28:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35188 "EHLO
+        id S229555AbjECH2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 03:28:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbjECH1y (ORCPT
+        with ESMTP id S229898AbjECH16 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 03:27:54 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C6B4C08;
-        Wed,  3 May 2023 00:27:28 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-50bc3a2d333so5698596a12.0;
-        Wed, 03 May 2023 00:27:27 -0700 (PDT)
+        Wed, 3 May 2023 03:27:58 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56262D6B;
+        Wed,  3 May 2023 00:27:34 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-956eacbe651so958026066b.3;
+        Wed, 03 May 2023 00:27:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683098846; x=1685690846;
+        d=gmail.com; s=20221208; t=1683098853; x=1685690853;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+ypdkqPJjbiclAH5MyIicuceDqAshp12bpImWLmn/d8=;
-        b=jQtVuZXOwV0WGZ/MPDTF/me9uREk3t2/WE9ZiVZAbgcw/aA/He1E273lKAaxmd3oBS
-         q9hCC9qWrW3FGtK6fOiJ+vbKof5vzX/g6Y/OHLVXD4RAfOgKsKcweda2w5tFOO/MgGsc
-         3ufy5EGnbYTNbh1GHEUWxzuCLV1Y4gYbN6cJUqwi1rY+MqL4Hc60/8inuV0PnWFxlaOw
-         h5hYhateHNi+K2gDpB4CYcfgDFf/ZUAvT9aTIiwZalNx5hW1EveN2aXb/IGXi5eT2gPR
-         MeAiRtyui7iM1Sw/3PESawMo+ZEN5b889WQCGNQhFKyeqyFiNxpyjq+hP4yEVhricPzJ
-         bDgw==
+        bh=5Vjy0njVYlk4DJBe6xXSLpMploNAvBdfi1zWVLfGo2U=;
+        b=RUTK25YiYQ7CLZ05QlEdu4wwlG6TLGr87ALM61BMl/m6DuJmNWK1nuTM3Wmac9dMoB
+         yHhe09fi/Sr4sqM/xTuNKniouv5zKjknoZCWtP/wNmrkPiIcnl2549PIwfvVG5x6KDfT
+         oNQ5kt9So95GgFCbgc2diRmJ5A8c0FR+oC06PIASBr5+yrJliznri9dfJIHzPQDRjifr
+         FTRUJJCTOAOYLWc25G4IHNp3uLlLEQ5+QIMvs/gCgZUCO6Aeg7o+7ipgGVCEbC5fBCyP
+         Q2FXc+Pn9+l067pWUplTRbZm52Fvgw68QdXfyyHIFGHkOUpnz5F6jidVAAVFGWAPs3Sr
+         ZDFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683098846; x=1685690846;
+        d=1e100.net; s=20221208; t=1683098853; x=1685690853;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+ypdkqPJjbiclAH5MyIicuceDqAshp12bpImWLmn/d8=;
-        b=Q5JAv9VYym95YxVvlEyGeKxMawqt9sTYI1BvmEdJNSlm9maOnIHnp9dpE/zWe4x4jM
-         NjV1HffWzI+t+MCFUBHa0uBE9EI7Z3sg27jb23OHl+CLIAN0HtZptMdMuWV6/hzrRh0L
-         dUwO+L2W4ZzJUKHQAT/moXaD9mIbPpNWpJtYVYIzDcJidZnJCDhPx7r+umc5AscRSRvY
-         XjALBBR4Z7a2N0ruGiFgaXnM2QEBdrYjoW9RTrvWgPvo6NTCX3AmviptB4v6GaHiWlcJ
-         oruCcAOG7aJHi9wmHbRuUijxbtLx2t4rElra4A/T2msaeBV55fDYuDCj/4HVl+AxxTT/
-         FjBA==
-X-Gm-Message-State: AC+VfDxWKRZ5xYjs0Y90gX0UKt1XAohL+KIS2oQy0e9tY+FDBM6TeRxT
-        MkwaSIA06HgY9n8d5t3K9axs2uC9m2g=
-X-Google-Smtp-Source: ACHHUZ6S9G4G72KhP8axul/9Aabc8aOFuEwWkD36wsvdZJYE5znLW7acElVOyPgqmhDAkSceTVsnUw==
-X-Received: by 2002:a17:907:8a24:b0:933:3a22:8513 with SMTP id sc36-20020a1709078a2400b009333a228513mr2877794ejc.53.1683098846189;
-        Wed, 03 May 2023 00:27:26 -0700 (PDT)
+        bh=5Vjy0njVYlk4DJBe6xXSLpMploNAvBdfi1zWVLfGo2U=;
+        b=ip3UhNbWX548rYOEbEvfh7+9IvlXWT/iiMIrh5Z20XB/BEpTnah/YbFoQ39ZFbat/L
+         dr889RRbl8AGLo3k5WE+0RmAab6Rq8Qdi234gUi8BY398NcNjogsgjft90Iic6nISJ/4
+         BAwN/xd1Tr8h2MHkVOFjwirpWMGpWwADwSHWOPwUESqV//y+o78N3Y7zTxlYXfozLblQ
+         qVL+KB37G4+F4JMmiG1iJdwZEZBy/3M7SJWkED0FreQLtzbCb4THhM2D6KlUQLB0hEv/
+         z5lEfE6pVT3J1fW7MvQ5RVwEFoQ7Oogbn1gxAr+pKswGDGvnytSNqvC/5UvBzef4pnCo
+         1LuQ==
+X-Gm-Message-State: AC+VfDyoyN7Vc29zgsWWyVA6CIt+LTpRbGNOeRcc+g3Y1/AEG2267QKl
+        nv5Hwa/QwUYD9XHol2YMIso=
+X-Google-Smtp-Source: ACHHUZ4T9bS8sbiihvCjmQVgyX4U1r515yDDgtUgefwQNOSSPoZ1kUscQBDeTBBAMACBZSDhpDziiQ==
+X-Received: by 2002:a17:907:3da2:b0:960:f1a6:6a12 with SMTP id he34-20020a1709073da200b00960f1a66a12mr2444084ejc.55.1683098853270;
+        Wed, 03 May 2023 00:27:33 -0700 (PDT)
 Received: from localhost.localdomain ([95.183.227.33])
-        by smtp.gmail.com with ESMTPSA id t26-20020a1709064f1a00b0094f34fe27c6sm17072009eju.170.2023.05.03.00.27.22
+        by smtp.gmail.com with ESMTPSA id t26-20020a1709064f1a00b0094f34fe27c6sm17072009eju.170.2023.05.03.00.27.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 May 2023 00:27:25 -0700 (PDT)
+        Wed, 03 May 2023 00:27:33 -0700 (PDT)
 From:   Yassine Oudjana <yassine.oudjana@gmail.com>
 X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
 To:     Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
@@ -66,9 +66,9 @@ Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
         Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
         linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] media: dt-bindings: media: camss: qcom,msm8996-camss: Add CAMSS power domain and power-domain-names
-Date:   Wed,  3 May 2023 10:25:41 +0300
-Message-Id: <20230503072543.4837-2-y.oudjana@protonmail.com>
+Subject: [PATCH 2/3] arm64: dts: qcom: msm8996: Add CAMSS power domain and power-domain-names to CAMSS
+Date:   Wed,  3 May 2023 10:25:42 +0300
+Message-Id: <20230503072543.4837-3-y.oudjana@protonmail.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230503072543.4837-1-y.oudjana@protonmail.com>
 References: <20230503072543.4837-1-y.oudjana@protonmail.com>
@@ -86,52 +86,28 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yassine Oudjana <y.oudjana@protonmail.com>
 
-Add the CAMSS power domain which is needed for the proper operation of CAMSS, and add
-power-domain-names to ease fetching it as well as the other power domains.
+Add the CAMSS power domain as well as power-domain-names for all CAMSS power domains.
 
 Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
 ---
- .../bindings/media/qcom,msm8996-camss.yaml          | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+ arch/arm64/boot/dts/qcom/msm8996.dtsi | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/media/qcom,msm8996-camss.yaml b/Documentation/devicetree/bindings/media/qcom,msm8996-camss.yaml
-index 8a10aa1cafc5..27c9a11f0df9 100644
---- a/Documentation/devicetree/bindings/media/qcom,msm8996-camss.yaml
-+++ b/Documentation/devicetree/bindings/media/qcom,msm8996-camss.yaml
-@@ -85,6 +85,13 @@ properties:
-     items:
-       - description: VFE0 GDSC - Video Front End, Global Distributed Switch Controller.
-       - description: VFE1 GDSC - Video Front End, Global Distributed Switch Controller.
-+      - description: CAMSS GDSC - Camera Subsystem, Global Distributed Switch Controller.
-+
-+  power-domain-names:
-+    items:
-+      - const: vfe0
-+      - const: vfe1
-+      - const: camss
- 
-   ports:
-     $ref: /schemas/graph.yaml#/properties/ports
-@@ -209,6 +216,7 @@ required:
-   - interrupts
-   - iommus
-   - power-domains
-+  - power-domain-names
-   - reg
-   - reg-names
-   - vdda-supply
-@@ -326,7 +334,10 @@ examples:
-          <&vfe_smmu 3>;
- 
-       power-domains = <&mmcc VFE0_GDSC>,
--        <&mmcc VFE1_GDSC>;
-+        <&mmcc VFE1_GDSC>,
-+        <&mmcc CAMSS_GDSC>;
-+
-+      power-domain-names = "vfe0", "vfe1", "camss";
- 
-       reg = <0x00a34000 0x1000>,
-         <0x00a00030 0x4>,
+diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
+index 30f6ebc4bd11..0168a086f57d 100644
+--- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
+@@ -2118,7 +2118,9 @@ camss: camss@a00000 {
+ 				"vfe0",
+ 				"vfe1";
+ 			power-domains = <&mmcc VFE0_GDSC>,
+-					<&mmcc VFE1_GDSC>;
++					<&mmcc VFE1_GDSC>,
++					<&mmcc CAMSS_GDSC>;
++			power-domain-names = "vfe0", "vfe1", "camss";
+ 			clocks = <&mmcc CAMSS_TOP_AHB_CLK>,
+ 				<&mmcc CAMSS_ISPIF_AHB_CLK>,
+ 				<&mmcc CAMSS_CSI0PHYTIMER_CLK>,
 -- 
 2.40.0
 
