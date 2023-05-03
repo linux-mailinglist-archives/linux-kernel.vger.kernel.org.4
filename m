@@ -2,121 +2,509 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E61CF6F5C41
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 18:52:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAE5A6F5C43
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 18:54:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbjECQwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 12:52:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37436 "EHLO
+        id S229760AbjECQyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 12:54:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbjECQwU (ORCPT
+        with ESMTP id S229515AbjECQyA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 12:52:20 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A2655AD
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 09:52:19 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-94eff00bcdaso1040674666b.1
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 09:52:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1683132737; x=1685724737;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aHVhQYzfld0G3Q00SBMgtA1efoI8gmOuzAdIqG+F6L0=;
-        b=A3P42I+ZvOl097Rp80s10pAIZb6piOqKWhBPqxaWRVb0MYtaIP81nlAQJsWyqO6AgR
-         8SBalUVQhlI1JVxK5M4FeYbOpU5F2LoLARsq/+0rry05Hj2ZANE6mxCXD34XOmRza+/Z
-         DSOyGfGA2Br6QazuoIeXeIkX78RSjbRQpDrIg=
+        Wed, 3 May 2023 12:54:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3830472B8
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 09:53:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683132788;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iRHETFIZFIl9iMCD50OnzRUeVg7Q2LLZPzZ0l0Nj65c=;
+        b=SQsAqn3a2DTL9vy4GU2eoJjrcXyQk6x0n4Rk4b05Z8t78hGL9jvHP8IkDnrdaurVTy4Xr4
+        gQd1t/wY7eTo2FdXMoaHUJ4QshnnLj4n7FNTj6/F0gE0Lmn0bT4VochqacrLBDfcG0ajPx
+        wzvAH5bOOAudmZhdFC5JT6I3oiCkFZI=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-611-QvqjN9_-PMqiY9K_M3wJkA-1; Wed, 03 May 2023 12:53:07 -0400
+X-MC-Unique: QvqjN9_-PMqiY9K_M3wJkA-1
+Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-5ef8c84cae4so81308686d6.1
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 09:53:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683132737; x=1685724737;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aHVhQYzfld0G3Q00SBMgtA1efoI8gmOuzAdIqG+F6L0=;
-        b=k0p1WLVtCLAApFC0ZPkI5Gx8Q9+1nWANVOu2vIgaZBvw9fKf4boIewAEvTBzTwY30z
-         xqqEqpWnb3chliRYPfiyWpXPa1CGQT2YXRl9UxBNbd5bB0kR9QOET7MmACfqzE3WdnSt
-         4kHNZeEL8qHhnDzyiXRlf0hMOLf1y0Ma99GLo2EMC50Z7Zvi+gbxU9mxOlX+m2bc6inV
-         Ny2rBWGqeQK/QWTxJ6cFKh4hEvPLP0iYt1IOuyIfDmSOYm3gTIF42ydNwFjkJTA0krJk
-         hbCpmWnw9U8zY8+/Ki+d6/dpURrtQqvFcO9TfmDWli46QFvxan2X9xwMeZxLL9Ep7CV5
-         1qIg==
-X-Gm-Message-State: AC+VfDwqXAFyvm/W7Jtb5VCgMUKLdM/nfKDcyIu5uwymR7h41LaocpyR
-        1UtmndwPOGw8fDph+gya3iGIRNabIWeGHvO8OhxG0w==
-X-Google-Smtp-Source: ACHHUZ6wu+hbUnNT/QA6aMnCvqUcE7dY4FK4yLXQYFgcmYODB2NxxpWjWqeYjifRlwrPXgQDq5Yy3A==
-X-Received: by 2002:a17:907:70b:b0:94e:fa56:a74f with SMTP id xb11-20020a170907070b00b0094efa56a74fmr3466907ejb.14.1683132737499;
-        Wed, 03 May 2023 09:52:17 -0700 (PDT)
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com. [209.85.218.52])
-        by smtp.gmail.com with ESMTPSA id jo2-20020a170906f6c200b009538cc79241sm17723830ejb.56.2023.05.03.09.52.16
-        for <linux-kernel@vger.kernel.org>
+        d=1e100.net; s=20221208; t=1683132786; x=1685724786;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iRHETFIZFIl9iMCD50OnzRUeVg7Q2LLZPzZ0l0Nj65c=;
+        b=Wnt2q92UtR69blNoQqtvgJPbcEGAUuIduYDl6zs12KEk/eRWaVrV5MMH/aFPtTzEPc
+         Ribj/SHPiNM/5vvxx1gRCHbVDB1k/TsIsZx8GOT7dW/IGn67GB8ooRl3gpArO+o/i4Sa
+         HRvIInxFTQwG3haZbD7502sns5ZVOgC36aGtpjFE1lzAOAPCzSy17KpsltdiUu7EtSEb
+         TfX1mBTFRo6IYU7NBpyoJmDo4hBmVXFJnb2ltcaE7Zx+nYNl7wN+NhYt//Q8f8kHujXk
+         iXHgwf+Y8WfyzLMsgBPalOyYKbLLyDnEtkIqidwnVm97kLZ12VAGHyIs0Y9+FvJ2Pqe1
+         cejQ==
+X-Gm-Message-State: AC+VfDyHEYafBWtS1nLdjnjiQbl4RAHYvlWhIIZ+Igl4BW31XQLLXF/L
+        WoJKmVeUC1cm5ADzkbwXJi2GqMFgLJUeSaL3nzuxItMI4/pnAv7p1i/0wDSdpldEhB6qz3oS2hC
+        tZWdG8ro2jYLKTOMPLL2/2I87+HDVF08=
+X-Received: by 2002:a05:6214:20a5:b0:616:55f5:ca94 with SMTP id 5-20020a05621420a500b0061655f5ca94mr9562421qvd.29.1683132786482;
+        Wed, 03 May 2023 09:53:06 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4lWMAjrCs7iTUiyos8HYKqB/dPI37+m2ieAQkCHYnQVZx5bpb8MFoNn3Fjjd4Y9bmofltKWw==
+X-Received: by 2002:a05:6214:20a5:b0:616:55f5:ca94 with SMTP id 5-20020a05621420a500b0061655f5ca94mr9562400qvd.29.1683132786164;
+        Wed, 03 May 2023 09:53:06 -0700 (PDT)
+Received: from [192.168.9.16] (net-2-34-28-169.cust.vodafonedsl.it. [2.34.28.169])
+        by smtp.gmail.com with ESMTPSA id v14-20020a0ccd8e000000b006039f5a247esm10053547qvm.78.2023.05.03.09.53.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 May 2023 09:52:16 -0700 (PDT)
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-94a342f7c4cso1042918166b.0
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 09:52:16 -0700 (PDT)
-X-Received: by 2002:a17:907:6d83:b0:95f:2046:d20d with SMTP id
- sb3-20020a1709076d8300b0095f2046d20dmr4171169ejc.2.1683132736505; Wed, 03 May
- 2023 09:52:16 -0700 (PDT)
+        Wed, 03 May 2023 09:53:05 -0700 (PDT)
+Message-ID: <594789b2-eb5d-11fc-9c47-310bdb258f7c@redhat.com>
+Date:   Wed, 3 May 2023 18:53:02 +0200
 MIME-Version: 1.0
-References: <20230427225647.1101172-1-dave.hansen@linux.intel.com>
- <CAHk-=wgrdOm8RwO+u8bydrbgs0wXJV_9mBYAtzX9d9hEY7a25A@mail.gmail.com>
- <CAHk-=wiHvdgbLxayyCsRU45JnKCZkCOpEJPfOvE3eYCnGjVcSA@mail.gmail.com>
- <20230429003822.n3mglslg666j3npp@box.shutemov.name> <641a9348-a052-6bb5-e6c7-64acb6405328@intel.com>
- <CAHk-=wgnGoj8qZg3SRh1Z1-mU=b3ryydXZykUuarnrAn6LuHBw@mail.gmail.com>
- <CAHk-=wgN=GY2A0htYQQRmPaLCorWnFatY_XO0X2w_m9xXQDcPA@mail.gmail.com>
- <f5983c42-82a5-1cd8-c717-67bfd72377dc@intel.com> <CAHk-=wgpOqujY210W9-KJPEfD42W_bvUdLwF-PAvyxJQ92tzDg@mail.gmail.com>
- <CAHk-=wj7q6Ng5uemZtrDnhtcfrgkzX5Z18eKZj94FY5d2quP6A@mail.gmail.com> <95f17f84-f172-417c-fe7e-ca0a07b205fb@intel.com>
-In-Reply-To: <95f17f84-f172-417c-fe7e-ca0a07b205fb@intel.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 3 May 2023 09:51:59 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgOvcWrmwhqJrMhmGty46k+10Bd927UTTVVqB1q9Pj6Xg@mail.gmail.com>
-Message-ID: <CAHk-=wgOvcWrmwhqJrMhmGty46k+10Bd927UTTVVqB1q9Pj6Xg@mail.gmail.com>
-Subject: Re: [GIT PULL] x86/mm for 6.4
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kirill.shutemov@linux.intel.com,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [RFC PATCH v4 1/4] fpga: add fake FPGA manager
+Content-Language: en-US
+From:   Marco Pagani <marpagan@redhat.com>
+To:     Xu Yilun <yilun.xu@intel.com>
+Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org
+References: <20230417122308.131453-1-marpagan@redhat.com>
+ <20230417122308.131453-2-marpagan@redhat.com>
+ <ZEGE+UqTyKGTyv9h@yilunxu-OptiPlex-7050>
+ <cef792a1-42c1-b262-b07e-529006fdcb6d@redhat.com>
+In-Reply-To: <cef792a1-42c1-b262-b07e-529006fdcb6d@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 3, 2023 at 9:45=E2=80=AFAM Dave Hansen <dave.hansen@intel.com> =
-wrote:
->
-> On 5/3/23 09:38, Linus Torvalds wrote:
-> > If somebody actually tries to untag a kernel address, that would be a
-> > bug anyway, as far as I can tell.
->
-> Is it a bug?  The do_madvise() path, for instance, is passing a value in
-> there that came right from userspace.
+On 2023-04-26 17:44, Marco Pagani wrote:
+> 
+> 
+> On 2023-04-20 20:31, Xu Yilun wrote:
+>> On 2023-04-17 at 14:23:05 +0200, Marco Pagani wrote:
+>>> Add fake FPGA manager platform driver with support functions.
+>>> The driver checks the programming sequence using KUnit expectations.
+>>> This module is part of the KUnit tests for the FPGA subsystem.
+>>>
+>>> Signed-off-by: Marco Pagani <marpagan@redhat.com>
+>>> ---
+>>>  drivers/fpga/tests/fake-fpga-mgr.c | 386 +++++++++++++++++++++++++++++
+>>>  drivers/fpga/tests/fake-fpga-mgr.h |  43 ++++
+>>>  2 files changed, 429 insertions(+)
+>>>  create mode 100644 drivers/fpga/tests/fake-fpga-mgr.c
+>>>  create mode 100644 drivers/fpga/tests/fake-fpga-mgr.h
+>>>
+>>> diff --git a/drivers/fpga/tests/fake-fpga-mgr.c b/drivers/fpga/tests/fake-fpga-mgr.c
+>>> new file mode 100644
+>>> index 000000000000..636df637b291
+>>> --- /dev/null
+>>> +++ b/drivers/fpga/tests/fake-fpga-mgr.c
+>>> @@ -0,0 +1,386 @@
+>>> +// SPDX-License-Identifier: GPL-2.0
+>>> +/*
+>>> + * Driver for the fake FPGA manager
+>>> + *
+>>> + * Copyright (C) 2023 Red Hat, Inc.
+>>> + *
+>>> + * Author: Marco Pagani <marpagan@redhat.com>
+>>> + */
+>>> +
+>>> +#include <linux/types.h>
+>>> +#include <linux/device.h>
+>>> +#include <linux/platform_device.h>
+>>> +#include <linux/fpga/fpga-mgr.h>
+>>> +#include <kunit/test.h>
+>>> +
+>>> +#include "fake-fpga-mgr.h"
+>>> +
+>>> +#define FAKE_FPGA_MGR_DEV_NAME	"fake_fpga_mgr"
+>>> +
+>>> +#define FAKE_HEADER_BYTE	0x3f
+>>> +#define FAKE_HEADER_SIZE	FPGA_IMG_BLOCK
+>>> +
+>>> +struct fake_mgr_priv {
+>>> +	int rcfg_count;
+>>> +	bool op_parse_header;
+>>> +	bool op_write_init;
+>>> +	bool op_write;
+>>> +	bool op_write_sg;
+>>> +	bool op_write_complete;
+>>> +	struct kunit *test;
+>>> +};
+>>> +
+>>> +struct fake_mgr_data {
+>>> +	struct kunit *test;
+>>> +};
+>>> +
+>>> +static void check_header(struct kunit *test, const u8 *buf);
+>>> +
+>>> +static enum fpga_mgr_states op_state(struct fpga_manager *mgr)
+>>> +{
+>>> +	struct fake_mgr_priv *priv;
+>>> +
+>>> +	priv = mgr->priv;
+>>> +
+>>> +	if (priv->test)
+>>> +		kunit_info(priv->test, "Fake FPGA manager: state\n");
+>>> +
+>>> +	return FPGA_MGR_STATE_UNKNOWN;
+>>> +}
+>>> +
+>>> +static u64 op_status(struct fpga_manager *mgr)
+>>> +{
+>>> +	struct fake_mgr_priv *priv;
+>>> +
+>>> +	priv = mgr->priv;
+>>> +
+>>> +	if (priv->test)
+>>> +		kunit_info(priv->test, "Fake FPGA manager: status\n");
+>>> +
+>>> +	return 0;
+>>> +}
+>>> +
+>>> +static int op_parse_header(struct fpga_manager *mgr, struct fpga_image_info *info,
+>>> +			   const char *buf, size_t count)
+>>> +{
+>>> +	struct fake_mgr_priv *priv;
+>>> +
+>>> +	priv = mgr->priv;
+>>> +
+>>> +	if (priv->test) {
+>>> +		kunit_info(priv->test, "Fake FPGA manager: parse_header\n");
+>>> +
+>>> +		KUNIT_EXPECT_EQ(priv->test, mgr->state,
+>>> +				FPGA_MGR_STATE_PARSE_HEADER);
+>>> +
+>>> +		check_header(priv->test, buf);
+>>> +	}
+>>> +
+>>> +	priv->op_parse_header = true;
+>>> +
+>>> +	return 0;
+>>> +}
+>>> +
+>>> +static int op_write_init(struct fpga_manager *mgr, struct fpga_image_info *info,
+>>> +			 const char *buf, size_t count)
+>>> +{
+>>> +	struct fake_mgr_priv *priv;
+>>> +
+>>> +	priv = mgr->priv;
+>>> +
+>>> +	if (priv->test) {
+>>> +		kunit_info(priv->test, "Fake FPGA manager: write_init\n");
+>>> +
+>>> +		KUNIT_EXPECT_EQ(priv->test, mgr->state,
+>>> +				FPGA_MGR_STATE_WRITE_INIT);
+>>> +	}
+>>> +
+>>> +	priv->op_write_init = true;
+>>> +
+>>> +	return 0;
+>>> +}
+>>> +
+>>> +static int op_write(struct fpga_manager *mgr, const char *buf, size_t count)
+>>> +{
+>>> +	struct fake_mgr_priv *priv;
+>>> +
+>>> +	priv = mgr->priv;
+>>> +
+>>> +	if (priv->test) {
+>>> +		kunit_info(priv->test, "Fake FPGA manager: write\n");
+>>> +
+>>> +		KUNIT_EXPECT_EQ(priv->test, mgr->state,
+>>> +				FPGA_MGR_STATE_WRITE);
+>>> +	}
+>>> +
+>>> +	priv->op_write = true;
+>>> +
+>>> +	return 0;
+>>> +}
+>>> +
+>>> +static int op_write_sg(struct fpga_manager *mgr, struct sg_table *sgt)
+>>> +{
+>>> +	struct fake_mgr_priv *priv;
+>>> +
+>>> +	priv = mgr->priv;
+>>> +
+>>> +	if (priv->test) {
+>>> +		kunit_info(priv->test, "Fake FPGA manager: write_sg\n");
+>>> +
+>>> +		KUNIT_EXPECT_EQ(priv->test, mgr->state,
+>>> +				FPGA_MGR_STATE_WRITE);
+>>> +	}
+>>> +
+>>> +	priv->op_write_sg = true;
+>>> +
+>>> +	return 0;
+>>> +}
+>>> +
+>>> +static int op_write_complete(struct fpga_manager *mgr, struct fpga_image_info *info)
+>>> +{
+>>> +	struct fake_mgr_priv *priv;
+>>> +
+>>> +	priv = mgr->priv;
+>>> +
+>>> +	if (priv->test) {
+>>> +		kunit_info(priv->test, "Fake FPGA manager: write_complete\n");
+>>> +
+>>> +		KUNIT_EXPECT_EQ(priv->test, mgr->state,
+>>> +				FPGA_MGR_STATE_WRITE_COMPLETE);
+>>> +	}
+>>> +
+>>> +	priv->op_write_complete = true;
+>>> +	priv->rcfg_count++;
+>>> +
+>>> +	return 0;
+>>> +}
+>>> +
+>>> +static void op_fpga_remove(struct fpga_manager *mgr)
+>>> +{
+>>> +	struct fake_mgr_priv *priv;
+>>> +
+>>> +	priv = mgr->priv;
+>>> +
+>>> +	if (priv->test)
+>>> +		kunit_info(priv->test, "Fake FPGA manager: remove\n");
+>>> +}
+>>> +
+>>> +static const struct fpga_manager_ops fake_fpga_mgr_ops = {
+>>> +	.initial_header_size = FAKE_HEADER_SIZE,
+>>> +	.skip_header = false,
+>>> +	.state = op_state,
+>>> +	.status = op_status,
+>>> +	.parse_header = op_parse_header,
+>>> +	.write_init = op_write_init,
+>>> +	.write = op_write,
+>>> +	.write_sg = op_write_sg,
+>>> +	.write_complete = op_write_complete,
+>>> +	.fpga_remove = op_fpga_remove,
+>>> +};
+>>> +
+>>> +/**
+>>> + * fake_fpga_mgr_register() - register a fake FPGA manager.
+>>> + * @mgr_ctx: fake FPGA manager context data structure.
+>>> + * @test: KUnit test context object.
+>>> + *
+>>> + * Return: pointer to a new fake FPGA manager on success, an ERR_PTR()
+>>> + * encoded error code on failure.
+>>> + */
+>>> +struct fake_fpga_mgr *
+>>> +fake_fpga_mgr_register(struct kunit *test, struct device *parent)
+>>> +{
+>>> +	struct fake_fpga_mgr *mgr_ctx;
+>>> +	struct fake_mgr_data pdata;
+>>> +	int ret;
+>>> +
+>>> +	mgr_ctx = kzalloc(sizeof(*mgr_ctx), GFP_KERNEL);
+>>> +	if (!mgr_ctx) {
+>>> +		ret = -ENOMEM;
+>>> +		goto err_mem;
+>>> +	}
+>>> +
+>>> +	mgr_ctx->pdev = platform_device_alloc(FAKE_FPGA_MGR_DEV_NAME,
+>>> +					      PLATFORM_DEVID_AUTO);
+>>> +	if (!mgr_ctx->pdev) {
+>>> +		pr_err("Fake FPGA manager device allocation failed\n");
+>>> +		ret = -ENOMEM;
+>>> +		goto err_mem;
+>>> +	}
+>>> +
+>>> +	pdata.test = test;
+>>> +	platform_device_add_data(mgr_ctx->pdev, &pdata, sizeof(pdata));
+>>> +
+>>> +	mgr_ctx->pdev->dev.parent = parent;
+>>> +	ret = platform_device_add(mgr_ctx->pdev);
+>>> +	if (ret) {
+>>> +		pr_err("Fake FPGA manager device add failed\n");
+>>> +		goto err_pdev;
+>>> +	}
+>>> +
+>>> +	mgr_ctx->mgr = platform_get_drvdata(mgr_ctx->pdev);
+>>> +
+>>> +	if (test)
+>>> +		kunit_info(test, "Fake FPGA manager registered\n");
+>>> +
+>>> +	return mgr_ctx;
+>>> +
+>>> +err_pdev:
+>>> +	platform_device_put(mgr_ctx->pdev);
+>>> +	kfree(mgr_ctx);
+>>> +err_mem:
+>>> +	return ERR_PTR(ret);
+>>> +}
+>>> +EXPORT_SYMBOL_GPL(fake_fpga_mgr_register);
+>>> +
+>>> +/**
+>>> + * fake_fpga_mgr_unregister() - unregister a fake FPGA manager.
+>>> + * @mgr_ctx: fake FPGA manager context data structure.
+>>> + */
+>>> +void fake_fpga_mgr_unregister(struct fake_fpga_mgr *mgr_ctx)
+>>> +{
+>>> +	struct fake_mgr_priv *priv;
+>>> +	struct kunit *test;
+>>> +
+>>> +	if (!mgr_ctx)
+>>> +		return;
+>>> +
+>>> +	priv = mgr_ctx->mgr->priv;
+>>> +	test = priv->test;
+>>> +
+>>> +	if (mgr_ctx->pdev) {
+>>> +		platform_device_unregister(mgr_ctx->pdev);
+>>> +		if (test)
+>>> +			kunit_info(test, "Fake FPGA manager unregistered\n");
+>>> +	}
+>>> +
+>>> +	kfree(mgr_ctx);
+>>> +}
+>>> +EXPORT_SYMBOL_GPL(fake_fpga_mgr_unregister);
+>>> +
+>>> +/**
+>>> + * fake_fpga_mgr_get_rcfg_count() - get the number of reconfigurations.
+>>> + * @mgr_ctx: fake FPGA manager context data structure.
+>>> + *
+>>> + * Return: number of reconfigurations.
+>>> + */
+>>> +int fake_fpga_mgr_get_rcfg_count(const struct fake_fpga_mgr *mgr_ctx)
+>>> +{
+>>> +	struct fake_mgr_priv *priv;
+>>> +
+>>> +	priv = mgr_ctx->mgr->priv;
+>>> +
+>>> +	return priv->rcfg_count;
+>>> +}
+>>> +EXPORT_SYMBOL_GPL(fake_fpga_mgr_get_rcfg_count);
+>>> +
+>>> +/**
+>>> + * fake_fpga_mgr_fill_header() - fill an image buffer with the test header.
+>>> + * @buf: image buffer.
+>>> + */
+>>> +void fake_fpga_mgr_fill_header(u8 *buf)
+>>> +{
+>>> +	int i;
+>>> +
+>>> +	for (i = 0; i < FAKE_HEADER_SIZE; i++)
+>>> +		buf[i] = FAKE_HEADER_BYTE;
+>>> +}
+>>> +EXPORT_SYMBOL_GPL(fake_fpga_mgr_fill_header);
+>>> +
+>>> +static void check_header(struct kunit *test, const u8 *buf)
+>>> +{
+>>> +	int i;
+>>> +
+>>> +	for (i = 0; i < FAKE_HEADER_SIZE; i++)
+>>> +		KUNIT_EXPECT_EQ(test, buf[i], FAKE_HEADER_BYTE);
+>>> +}
+>>> +
+>>> +static void clear_op_flags(struct fake_mgr_priv *priv)
+>>> +{
+>>> +	priv->op_parse_header = false;
+>>> +	priv->op_write_init = false;
+>>> +	priv->op_write = false;
+>>> +	priv->op_write_sg = false;
+>>> +	priv->op_write_complete = false;
+>>> +}
+>>> +
+>>> +/**
+>>> + * fake_fpga_mgr_check_write_buf() - check if programming using a buffer succeeded.
+>>> + * @mgr_ctx: fake FPGA manager context data structure.
+>>> + */
+>>> +void fake_fpga_mgr_check_write_buf(struct fake_fpga_mgr *mgr_ctx)
+>>> +{
+>>> +	struct fake_mgr_priv *priv;
+>>> +
+>>> +	priv = mgr_ctx->mgr->priv;
+>>> +
+>>> +	if (priv->test) {
+>>> +		KUNIT_EXPECT_EQ(priv->test, priv->op_parse_header, true);
+>>> +		KUNIT_EXPECT_EQ(priv->test, priv->op_write_init, true);
+>>> +		KUNIT_EXPECT_EQ(priv->test, priv->op_write, true);
+>>> +		KUNIT_EXPECT_EQ(priv->test, priv->op_write_complete, true);
+>>> +	}
+>>> +
+>>> +	clear_op_flags(priv);
+>>> +}
+>>> +EXPORT_SYMBOL_GPL(fake_fpga_mgr_check_write_buf);
+>>> +
+>>> +/**
+>>> + * fake_fpga_mgr_check_write_sgt() - check if programming using a s.g. table succeeded.
+>>> + * @mgr_ctx: fake FPGA manager context data structure.
+>>> + */
+>>> +void fake_fpga_mgr_check_write_sgt(struct fake_fpga_mgr *mgr_ctx)
+>>> +{
+>>> +	struct fake_mgr_priv *priv;
+>>> +
+>>> +	priv = mgr_ctx->mgr->priv;
+>>> +
+>>> +	if (priv->test) {
+>>> +		KUNIT_EXPECT_EQ(priv->test, priv->op_parse_header, true);
+>>> +		KUNIT_EXPECT_EQ(priv->test, priv->op_write_init, true);
+>>> +		KUNIT_EXPECT_EQ(priv->test, priv->op_write_sg, true);
+>>> +		KUNIT_EXPECT_EQ(priv->test, priv->op_write_complete, true);
+>>> +	}
+>>> +
+>>> +	clear_op_flags(priv);
+>>> +}
+>>> +EXPORT_SYMBOL_GPL(fake_fpga_mgr_check_write_sgt);
+>>
+>> I'm wondering, if we could move all these exported functions out of
+>> fake_fpga driver module. And make this driver module serves FPGA
+>> mgr framework only, just like other fpga drivers do.
+>>
+>> I assume the main requirement is to check the statistics produced
+>> by the fake fpga driver. Directly accessing mgr->priv outside the
+>> driver could be unwanted.  To solve this, could we create a shared
+>> buffer for the statistics and pass to fake drivers by platform data.
+>>
+>> I hope move all the tester's actions in fpga-test.c, so that people
+>> could easily see from code what a user need to do to enable fpga
+>> reprogramming and what are expected in one file. The fake drivers could
+>> be kept as simple, they only move the process forward and produce
+>> statistics.
+>>
+>> Thanks,
+>> Yilun
+>>
+> 
+> I agree with you. Initially, I wanted to keep all KUnit test assertions
+> and expectations contained in fpga-test. However, I could not find a simple
+> way to test that the FPGA manager performs the correct state transitions
+> during programming. So I ended up putting KUnit assertions in the methods
+> of the low-level fake driver as a first solution.
+> 
+> I like your suggestion of using a shared buffer to have a cleaner
+> implementation. My only concern is that it would make the code more complex.
+> I will work on this for V5.
+> 
 
-That's still a "user address" - just not a *valid* one.
+I experimented with a couple of alternatives to move all tests inside
+fpga-test and remove the external functions. Unfortunately, each alternative
+comes with its drawbacks.
 
-So we do not want to mask the high bit off - because that is what will
-catch people later doing things like vma address range comparisons on
-it and notice "that's not a valid address", but it's also not a
-"kernel address" that we need to preserve as such.
+Using a shared buffer (e.g., kfifo) to implement an events buffer between
+fake mgr/bridge and the fpga-test overcomplicates the code (i.e., defining
+message structs, enums for the operations, locks, etc.).
 
-So yeah, it's a bit confusing in that it's _also_ true that "kernel
-addresses have the high bit set" and "user addresses have the high bit
-clear", and I'm basically using two different semantics for "kernel
-address".
+Moving fake modules' (mgr, bridge, region) implementations inside fpga-test
+makes fpga-test monolithic and harder to understand and maintain.
 
-IOW: what I mean by "it's not valid to do 'untagged_addr()' on a
-kernel address" is that you can't take a (valid) kernel address, do
-'untagged_addr()' on it, and expect it to still work as a kernel
-address.
+Accessing modules' private data directly from fpga-test breaks encapsulation.
 
-But at the same time you *are* supposed to be able to use
-'untagged_addr()' on a - untrusted and possibly invalid - user
-pointer, and it's supposed to end up having the tag bits clear and
-still be usable as a user pointer. And yet still also be caught by any
-validity checks (ie a high bit set would never be a valid user
-pointer, not even after doing 'untagged_addr()' on it).
+Overall, it seems to me that using external functions to get the state of fake
+modules is the least-worst alternative. What are your thoughts and preferences?
 
-                Linus
+Thanks,
+Marco
+
+
+>>> [...]
+
