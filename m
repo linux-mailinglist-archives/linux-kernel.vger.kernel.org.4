@@ -2,93 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46AAA6F5EFC
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 21:14:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 268E96F5F02
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 21:15:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbjECTOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 15:14:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41876 "EHLO
+        id S229803AbjECTPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 15:15:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjECTOF (ORCPT
+        with ESMTP id S229683AbjECTPL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 15:14:05 -0400
-Received: from fgw23-7.mail.saunalahti.fi (fgw23-7.mail.saunalahti.fi [62.142.5.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B59D87690
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 12:14:04 -0700 (PDT)
-Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
-        by fgw23.mail.saunalahti.fi (Halon) with ESMTP
-        id a912b3f3-e9e6-11ed-b972-005056bdfda7;
-        Wed, 03 May 2023 22:14:01 +0300 (EEST)
-From:   andy.shevchenko@gmail.com
-Date:   Wed, 3 May 2023 22:14:00 +0300
-To:     Xiaolei Wang <xiaolei.wang@windriver.com>
-Cc:     aisheng.dong@nxp.com, festevam@gmail.com, shawnguo@kernel.org,
-        ping.bai@nxp.com, kernel@pengutronix.de, linus.walleij@linaro.org,
-        shenwei.wang@nxp.com, bartosz.golaszewski@linaro.org,
-        peng.fan@nxp.com, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [v2][PATCH] pinctrl: freescale: Fix a memory out of bounds when
- num_configs is 1
-Message-ID: <ZFKyeFQOuCaDOh1n@surfacebook>
-References: <20230503012127.4157304-1-xiaolei.wang@windriver.com>
+        Wed, 3 May 2023 15:15:11 -0400
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82D077690
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 12:15:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=EhdvKt6fX3eyfVjkfKTMAZRD9OI88urIeLzb1B2hSPM=; b=j0Gwons4s5FUq/78sp8LgxzVTP
+        2FHF6xLZdhAxISl+mp2oHaYMQ7jwJTz3haBYn1dhDlKgsQJa0aIQO78CunvaTGc86Ki13q14YgTuU
+        Q3umhiQrAVSAM+Gv1wDliK04Dm1pKTbxpPe8R9J8FCu62W2hIAWsSiRvmCgbgDdvKn2gRUJFyN3gl
+        W848m7d6Km6t2WtFicatkglaPcAtZxbKRIxeqY2d2+8uMWGQWvy5ykUs/2HWe/1hqqBLsAkvTz5jX
+        A/Y6isPexHsKdM+9iaicddj9Pty3El0qQNSyKPop4C5DU7153ldwlARn3VrA+6AeShivtXrnleV+G
+        DsP1ZbLA==;
+Received: from [179.113.250.147] (helo=[192.168.1.111])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1puHwL-000eUN-2j; Wed, 03 May 2023 21:15:01 +0200
+Message-ID: <59774c28-a0ef-d4f2-e920-503857bce1cf@igalia.com>
+Date:   Wed, 3 May 2023 16:14:11 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230503012127.4157304-1-xiaolei.wang@windriver.com>
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [RFC PATCH 0/1] Add AMDGPU_INFO_GUILTY_APP ioctl
+Content-Language: en-US
+To:     =?UTF-8?Q?Timur_Krist=c3=b3f?= <timur.kristof@gmail.com>,
+        Felix Kuehling <felix.kuehling@amd.com>
+Cc:     Alex Deucher <alexdeucher@gmail.com>,
+        "Pelloux-Prayer, Pierre-Eric" <pierre-eric.pelloux-prayer@amd.com>,
+        =?UTF-8?B?TWFyZWsgT2zFocOhaw==?= <maraeo@gmail.com>,
+        michel.daenzer@mailbox.org,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Samuel Pitoiset <samuel.pitoiset@gmail.com>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        kernel-dev@igalia.com,
+        "Deucher, Alexander" <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+References: <20230501185747.33519-1-andrealmeid@igalia.com>
+ <CADnq5_NXj4W44F_etRQ7HWdVTnf5zARCM3Y_o3EiwWiHj8QMpA@mail.gmail.com>
+ <6ab2ff76-4518-6fac-071e-5d0d5adc4fcd@igalia.com>
+ <cb3d2590-a1f8-fe7e-0bba-638ee80719af@amd.com>
+ <CAFF-SiV0=WNmRW-D9uYUuj68Zq0APxtGLya9KR6FfZ7v0Zf2RQ@mail.gmail.com>
+ <fcca2934-a556-797c-535d-a66fc67bbe30@amd.com>
+ <85c538b01efb6f3fa6ff05ed1a0bc3ff87df7a61.camel@gmail.com>
+ <CADnq5_NHtFbwT=x8u7GYc4ESL_HVFzjgtOd3AnVFBYMrjZq55w@mail.gmail.com>
+ <c54414482b685af0991a6b095cbfb7534d998afc.camel@gmail.com>
+ <CADnq5_MSY=j9AobDk7ACevur4Hwvw_ub7g16Mfm7ymMJqwVNfQ@mail.gmail.com>
+ <57fa0ee4-de4f-3797-f817-d05f72541d0e@gmail.com>
+ <2bf162d0-6112-8370-8828-0e0b21ac22ba@amd.com>
+ <967a044bc2723cc24ab914506c0164db08923c59.camel@gmail.com>
+From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>
+In-Reply-To: <967a044bc2723cc24ab914506c0164db08923c59.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wed, May 03, 2023 at 09:21:27AM +0800, Xiaolei Wang kirjoitti:
-> The config passed in by pad wakeup is 1, When num_configs is 1,
-> configs[1] should not be obtained, which will generate the
-> following memory out-of-bounds situation:
+Em 03/05/2023 14:43, Timur Kristóf escreveu:
+> Hi Felix,
 > 
-> BUG: KASAN: stack out of bounds in imx_pinconf_set_scu+0x9c/0x160
->   Read size 8 at address ffff8000104c7558 by task sh/664
->   CPU: 3 PID: 664 Communication: sh Tainted: G WC 6.1.20 #1
->      Hardware name: Freescale i.MX8QM MEK (DT)
->   Call trace:
->     dump_backtrace.part.0+0xe0/0xf0
->     show stack+0x18/0x30
->     dump_stack_lvl+0x64/0x80
->     print report +0x154/0x458
->     kasan_report+0xb8/0x100
->     __asan_load8+0x80/0xac
->     imx_pinconf_set_scu+0x9c/0x160
->     imx_pinconf_set+0x6c/0x214
->     pinconf_set_config+0x68/0x90
->     pinctrl_gpio_set_config+0x138/0x170
->     gpiochip_generic_config+0x44/0x60
->     mxc_gpio_set_pad_wakeup+0x100/0x140
->     mxc_gpio_noirq_suspend+0x50/0x74
->     pm_generic_suspend_noirq+0x4c/0x70
->     genpd_finish_suspend+0x174/0x260
->     genpd_suspend_noirq+0x14/0x20
->     dpm_run_callback.constprop.0+0x48/0xec
->     __device_suspend_noirq+0x1a8/0x370
->     dpm_noirq_suspend_devices+0x1cc/0x320
->     dpm_suspend_noirq+0x7c/0x11c
->     suspend_devices_and_enter+0x27c/0x760
->     pm_suspend+0x36c/0x3e0
+> On Wed, 2023-05-03 at 11:08 -0400, Felix Kuehling wrote:
+>> That's the worst-case scenario where you're debugging HW or FW
+>> issues.
+>> Those should be pretty rare post-bringup. But are there hangs caused
+>> by
+>> user mode driver or application bugs that are easier to debug and
+>> probably don't even require a GPU reset?
+> 
+> There are many GPU hangs that gamers experience while playing. We have
+> dozens of open bug reports against RADV about GPU hangs on various GPU
+> generations. These usually fall into two categories:
+> 
+> 1. When the hang always happens at the same point in a game. These are
+> painful to debug but manageable.
+> 2. "Random" hangs that happen to users over the course of playing a
+> game for several hours. It is absolute hell to try to even reproduce
+> let alone diagnose these issues, and this is what we would like to
+> improve.
+> 
+> For these hard-to-diagnose problems, it is already a challenge to
+> determine whether the problem is the kernel (eg. setting wrong voltages
+> / frequencies) or userspace (eg. missing some synchronization), can be
+> even a game bug that we need to work around.
+> 
+>> For example most VM faults can
+>> be handled without hanging the GPU. Similarly, a shader in an endless
+>> loop should not require a full GPU reset.
+> 
+> This is actually not the case, AFAIK André's test case was an app that
+> had an infinite loop in a shader.
+> 
 
-I have already pointed out to the documentation in which you may find what to
-do to make above better. 
+This is the test app if anyone want to try out: 
+https://github.com/andrealmeid/vulkan-triangle-v1. Just compile and run.
 
-> Fixes: f60c9eac54af ("gpio: mxc: enable pad wakeup on i.MX8x platforms")
-> Signed-off-by: Xiaolei Wang <xiaolei.wang@windriver.com>
-> ---
+The kernel calls amdgpu_ring_soft_recovery() when I run my example, but 
+I'm not sure what a soft recovery means here and if it's a full GPU 
+reset or not.
 
-Where is the changelog?
+But if we can at least trust the CP registers to dump information for 
+soft resets, it would be some improvement from the current state I think
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+>>
+>> It's more complicated for graphics because of the more complex
+>> pipeline
+>> and the lack of CWSR. But it should still be possible to do some
+>> debugging without JTAG if the problem is in SW and not HW or FW. It's
+>> probably worth improving that debugability without getting hung-up on
+>> the worst case.
+> 
+> I agree, and we welcome any constructive suggestion to improve the
+> situation. It seems like our idea doesn't work if the kernel can't give
+> us the information we need.
+> 
+> How do we move forward?
+> 
+> Best regards,
+> Timur
+> 
