@@ -2,98 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0219D6F5755
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 13:48:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 919836F5756
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 13:49:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbjECLsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 07:48:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52210 "EHLO
+        id S229722AbjECLte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 07:49:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjECLsg (ORCPT
+        with ESMTP id S229524AbjECLtc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 07:48:36 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6DE7198E;
-        Wed,  3 May 2023 04:48:35 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 343BmS4R075804;
-        Wed, 3 May 2023 06:48:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1683114508;
-        bh=wPB8y/TzSnjaGViF/6c6Y1Y9FXqSPyD31+joFudUKTA=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=GVPkXy2hKTRnuVmgR3piUz0QE5AkCjDavTIhMuPg5jTW8kJp5+besz8zjVIMFc0C8
-         qiEApOmmCHAoJKqI5PQ5QdbEZ3rs4KO4k57fx/UO9jHeDBXsV9NvbStC6As8V1toc5
-         E7pNIKC5K2HpRLq1fb8dp3hkXWXELSoLTC4VV7Zc=
-Received: from DLEE101.ent.ti.com (dlee101.ent.ti.com [157.170.170.31])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 343BmS1J122719
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 3 May 2023 06:48:28 -0500
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 3
- May 2023 06:48:27 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 3 May 2023 06:48:27 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 343BmRSd083672;
-        Wed, 3 May 2023 06:48:27 -0500
-Date:   Wed, 3 May 2023 06:48:27 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Neha Malcom Francis <n-francis@ti.com>
-CC:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <vigneshr@ti.com>,
-        <kristo@kernel.org>, <u-kumar1@ti.com>
-Subject: Re: [PATCH v4 2/3] arm64: dts: ti: k3-j721e: Add ESM support
-Message-ID: <20230503114827.lutd2ebygxczvali@argue>
-References: <20230503093310.85779-1-n-francis@ti.com>
- <20230503093310.85779-3-n-francis@ti.com>
+        Wed, 3 May 2023 07:49:32 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D10C198E
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 04:49:30 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 107506603137;
+        Wed,  3 May 2023 12:49:28 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1683114568;
+        bh=45kl1Qn8N6NdwEwbEwHPXZCjU6At4IMsqvvVu/56OOo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=UVU1BSJYXh0rXAoemDv5pFELCQTZbkBW0fC3lSX4YejQ9lvFgzKSyUuuYycvUvCtH
+         cPyS86+Diluh7dv76WqH/U/czkQ0pETYXmphoQ0uMD15Opar6jW0MtP7vCHM1r6LWX
+         OOQyjDq44aERQhTVdOqd1ZwtbYDWwOYTc11I3tM4y29mQ/tg5Cxi7ukEAehippHUcF
+         AJPro4X/8MUTiuKu1CfpLBIfGA8UlEeHbZssZnoWfB1kD09zs8K0hRwY72Jsh7jBpk
+         HPrANme9/tGuOCSvOPBoQRHASW6TxR6rgqNPDG+AFhUKAgQ5DfuA9cm5KAoZ30a7j1
+         hqaFfZhOM5xJw==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     chunkuang.hu@kernel.org
+Cc:     p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, wenst@chromium.org,
+        kernel@collabora.com
+Subject: [PATCH v2 00/11] MediaTek DDP GAMMA - 12-bit LUT support
+Date:   Wed,  3 May 2023 13:49:12 +0200
+Message-Id: <20230503114923.156985-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230503093310.85779-3-n-francis@ti.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15:03-20230503, Neha Malcom Francis wrote:
-> Add address entry mapping ESM on J721E.
-> 
-> Signed-off-by: Neha Malcom Francis <n-francis@ti.com>
-> ---
->  arch/arm64/boot/dts/ti/k3-j721e.dtsi | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721e.dtsi b/arch/arm64/boot/dts/ti/k3-j721e.dtsi
-> index b912143b6a11..52bcde601eb8 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j721e.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-j721e.dtsi
+Changes in v2:
+ - Added explicit inclusion of linux/bitfield.h in patch [06/11]
 
-Why is'nt esm node introduced here?
+This series adds support for GAMMA IP requiring and/or supporting
+a 12-bits LUT using a slightly different register layout and programming
+sequence for multiple LUT banks: this IP version is currently found
+on a number of SoCs, not only including the Chromebook/IoT oriented
+Kompanio 1200/1380 MT8195/MT8195T, but also Smartphone chips such as
+the Dimensity 9200 (MT6985) and others.
 
-> @@ -131,6 +131,7 @@ cbass_main: bus@100000 {
->  		#size-cells = <2>;
->  		ranges = <0x00 0x00100000 0x00 0x00100000 0x00 0x00020000>, /* ctrl mmr */
->  			 <0x00 0x00600000 0x00 0x00600000 0x00 0x00031100>, /* GPIO */
-> +			 <0x00 0x00700000 0x00 0x00700000 0x00 0x00001000>, /* ESM */
->  			 <0x00 0x00900000 0x00 0x00900000 0x00 0x00012000>, /* serdes */
->  			 <0x00 0x00a40000 0x00 0x00a40000 0x00 0x00000800>, /* timesync router */
->  			 <0x00 0x06000000 0x00 0x06000000 0x00 0x00400000>, /* USBSS0 */
-> -- 
-> 2.34.1
-> 
+This series was tested on MT8195, MT8192, MT8173, MT6795:
+ * MT6795, MT8192, MT8173: No regression, works fine.
+ * MT8195: Color correction is finally working!
+
+AngeloGioacchino Del Regno (10):
+  drm/mediatek: gamma: Reduce indentation in mtk_gamma_set_common()
+  drm/mediatek: gamma: Support SoC specific LUT size
+  drm/mediatek: gamma: Improve and simplify HW LUT calculation
+  drm/mediatek: gamma: Enable the Gamma LUT table only after programming
+  drm/mediatek: gamma: Use bitfield macros
+  drm/mediatek: gamma: Support specifying number of bits per LUT
+    component
+  drm/mediatek: gamma: Support multi-bank gamma LUT
+  drm/mediatek: gamma: Add support for 12-bit LUT and MT8195
+  drm/mediatek: gamma: Make sure relay mode is disabled
+  drm/mediatek: gamma: Program gamma LUT type for descending or rising
+
+Jason-JH.Lin (1):
+  drm/mediatek: gamma: Adjust mtk_drm_gamma_set_common parameters
+
+ drivers/gpu/drm/mediatek/mtk_disp_aal.c     |   2 +-
+ drivers/gpu/drm/mediatek/mtk_disp_drv.h     |   3 +-
+ drivers/gpu/drm/mediatek/mtk_disp_gamma.c   | 195 ++++++++++++++++----
+ drivers/gpu/drm/mediatek/mtk_drm_crtc.c     |   4 +-
+ drivers/gpu/drm/mediatek/mtk_drm_crtc.h     |   1 -
+ drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h |   9 +
+ 6 files changed, 178 insertions(+), 36 deletions(-)
 
 -- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+2.40.1
+
