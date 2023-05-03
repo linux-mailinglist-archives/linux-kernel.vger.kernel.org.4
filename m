@@ -2,188 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D387E6F4F1D
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 05:19:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CBF86F4F25
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 05:30:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbjECDTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 23:19:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58350 "EHLO
+        id S229564AbjECDaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 23:30:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjECDTr (ORCPT
+        with ESMTP id S229511AbjECDaK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 23:19:47 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBEC7AD;
-        Tue,  2 May 2023 20:19:45 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-50be0d835aaso1099069a12.3;
-        Tue, 02 May 2023 20:19:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683083984; x=1685675984;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=OvdbKE2Dtsq8U1gEyTyqa6w0OBoKW/W9/QwTfH31tG8=;
-        b=lR1n8LVn7cbEUHS0RkbnFkMML7LFiYXr+rd0ZDQ4CF++Z2ENHMMnSazaD7yIky39/y
-         gGdltxDz2oecFDPSOS84N8vqQM4jHO8FIdGWvvRPr071t4tnbegSPl98LpAY4eERWY0+
-         TsHPMdCH2LFJItSc/LsuFGxhr33Jwb9bU3RFQZDD7m1ACJCIzOdUjMrC6bhkBC0FeGl3
-         C/YeLk+6Lp/IhN0jgBcDgbEpSM0FKQJfjwI8bcDF/o775NhOjNUIkFJi+QlUekEH6tIB
-         ip316TjsBUicdIpx8z7f5jjj49i95Mp02WWu9hg/CR6LDpgH0FdBLzRVzNFpcnGTTU55
-         8Kbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683083984; x=1685675984;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OvdbKE2Dtsq8U1gEyTyqa6w0OBoKW/W9/QwTfH31tG8=;
-        b=XMp8a0bFr4RCYw1b790nastBC/m27XoN3mvnTmK5OhwoFcUw8oF8F89I3wW8ZbHDkp
-         059n/ekcE9vCXpox2ugPOgvZaKsAyShhCBB9dt+qG+dlj1f5mR7r6TGUyY4SXUS4OxHj
-         DqmuhG+EIlyKgmtMBginnisxgZrvHsNQIHDUXFl3dXKQpt7KsnodSXFFy5cdD2UqNtqI
-         wfw8+PgOsHMxvFQxOtRALqB6Lp24H4SsDlwzP0pJkev5R2nYqcLEL0fRQiwg2B4jHU9g
-         M3KnS40b3d65udEpjki0qjg5ZrnE++1SSOzxWthPDoUr7g3jl4F2FpOQv5zaKmS8+zX5
-         WpSQ==
-X-Gm-Message-State: AC+VfDw8YptkQTLtKOg7QKqLUAW+8MspTUYkXR2ukoHJiKWjWhqUn+82
-        Zoest6CMWU8hDm6u4lzC40uAza1L9MxPPoITeio=
-X-Google-Smtp-Source: ACHHUZ5lJAQu0znDrqojW97LLqgoHhayF3QoCCbg3NBoJzKPAqZCsZxuNLNiVUPisbgVkXRc0R9b4NytCHdTwy4CQIs=
-X-Received: by 2002:a17:907:7b8f:b0:965:5d54:496d with SMTP id
- ne15-20020a1709077b8f00b009655d54496dmr762960ejc.45.1683083983880; Tue, 02
- May 2023 20:19:43 -0700 (PDT)
+        Tue, 2 May 2023 23:30:10 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2080.outbound.protection.outlook.com [40.107.94.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A83922680
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 20:30:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=H4zh+tyEDTwmodNsBkKHbzN6ZgVLus2FE6c2fA7X8fH5ORe4bM/cKzaMKI6wOekySn/EJ8X4l0OzTu1/kpN2BKPWyUi2TwD9mGyK/fWmr/mlY4G9BmZhYDU6NxO7/IllQJ8+3t6/dG+aTB8xZwv29NONQd9ZRFf3LxKOJT+wYx+AjSIquNiaV/498acuE1fAasbWyhnFG7RL45HdL/Zxf1JzLmQaC5Sak+3JjeMEV61aBehx6XpFwmUpqtK/mmJQ89bfkG/+TsGx/tSo5thTL/oJb675kqY75Vt2HwktMCIcCQWIJ0dd919rV4mbXkKpD7ZI+7kDEt6WVT6T9YxEfg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZpeRA5qlLz2CdUTryD06Stbj2eLrB7bdvoTpsURpzY8=;
+ b=IHOT/Uwvi6QIOCjtXTEx3wDpv+vT350h4TiJt0UjKrqEJg4aOzvsF1cq4qPVwSgBbpQHynFuPrvqi55egODJsmj/DINuxz1tSjV8HYBJtnsXSaL3WuPN/NJDsPZlxOZd4yxPaj8yrFKA06hDeXKbuBV7Y+mjJa38q3SsByPYPLGN9ujx0qfAn1IcA86DbL0cHEoOVGB1fTj+rP4cful2z43a3TnNbNDBskHVS8VFq8/6EKa+ZziY+51w2MbxVhkfbYpdkyhdVaWbVwN7JKq61MhSgQTaiAip+p0k18EeGWBA1vwGvMZst6iGHsiXq7Lmxmiy6eES9KZi03sXZL7ngQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=linux-foundation.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZpeRA5qlLz2CdUTryD06Stbj2eLrB7bdvoTpsURpzY8=;
+ b=UgdVXvQK17ex9zk6/hAxtNtHo3y8MM/6HxHAjuWJnw41LLHvcxqc+dDAeWAOAXZcfdSEbEl+QJCN821ODtNQzr6mPwtICeTEyn98ozTlcKnWfc1O1T0JQKB0k3hgkUs3nLyUBv9ZKFlvz1AyynXIE/eOzAnF91BqpntKrnBZkY7rfl5KWUi31l4mJGXkORirkD4KPmB4c3zDOI95z5SVN8C4QAZx+zQxbePn/LHGPXjXi8kU99U4Q+Z5a1x3vPu6H0Wtisx+/oU7nK/21lWKUpY9cqWTQfzLTg5PkaqEPl9kIsRB5y+2FSTh4CZw5wz1tX53oCpiFGOCJix9RDPHHQ==
+Received: from DM6PR06CA0061.namprd06.prod.outlook.com (2603:10b6:5:54::38) by
+ DM4PR12MB5794.namprd12.prod.outlook.com (2603:10b6:8:61::17) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6363.20; Wed, 3 May 2023 03:30:06 +0000
+Received: from DM6NAM11FT079.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:54:cafe::58) by DM6PR06CA0061.outlook.office365.com
+ (2603:10b6:5:54::38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.22 via Frontend
+ Transport; Wed, 3 May 2023 03:30:06 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ DM6NAM11FT079.mail.protection.outlook.com (10.13.173.4) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6363.22 via Frontend Transport; Wed, 3 May 2023 03:30:06 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Tue, 2 May 2023
+ 20:30:00 -0700
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Tue, 2 May 2023
+ 20:30:00 -0700
+Received: from dipenp.nvidia.com (10.127.8.10) by mail.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server id 15.2.986.37 via Frontend
+ Transport; Tue, 2 May 2023 20:30:00 -0700
+From:   Dipen Patel <dipenp@nvidia.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+CC:     Dipen Patel <dipenp@nvidia.com>, <timestamp@lists.linux.dev>,
+        <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] hte: Changes for v6.4-rc1
+Date:   Tue, 2 May 2023 20:29:47 -0700
+Message-ID: <20230503032947.23384-1-dipenp@nvidia.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20230419043652.1773413-1-airlied@gmail.com> <ck2dzxvllhhh74oa3vjlacutc7rdmgl7cfrfq7vgx4w3jcufrz@7jbgxcat42yn>
- <CAPM=9tw0Y2A4DvuTHT_yd58Eit+tUmo63pbEOHwRJ66LeqznEQ@mail.gmail.com>
- <fsleccud43leoioli6bj4xoydwbdcjb5qr4denuf6morhgtqki@t6xya2mygon5>
- <ZEcJNcz+ArLfUSJ1@bombadil.infradead.org> <n6gwizwt26ucpuva2kt35rprth6iqeibi3inq2qrn5qhs3aa3b@4hjbhgnskutq>
-In-Reply-To: <n6gwizwt26ucpuva2kt35rprth6iqeibi3inq2qrn5qhs3aa3b@4hjbhgnskutq>
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Wed, 3 May 2023 13:19:31 +1000
-Message-ID: <CAPM=9txLf2NbuZSM5CLYT4wA5mbQ=+ssm9tdzh6JJ=gtEBeqAA@mail.gmail.com>
-Subject: Re: [PATCH] modules/firmware: add a new option to denote a firmware
- group to choose one.
-To:     Lucas De Marchi <lucas.demarchi@intel.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Dave Airlie <airlied@redhat.com>,
-        dri-devel@lists.freedesktop.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT079:EE_|DM4PR12MB5794:EE_
+X-MS-Office365-Filtering-Correlation-Id: df2b1da3-a0f7-4495-a27c-08db4b86b0b8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Te1/DHE7x3SFUBkSsiYS+uoOUwRUT542bPujnvFxB4/+6si9LLoempk0Xua+lcEmahI49gwUYY/zlu2LxPyhjbHWY12P/6cMlxH1kRI3CWkJ/3G41iywMQO5R8sm+s3l86FFfqgtPIBz40KvDllcHDiDdAC1hgLv7VjKIP+HmRxQ9kG6TSgTkGKuP7181a39fU+teOCR05/mv9b2/KDdwkK2LtResfnWKn66FUsCYM3HpuynycMkhHiyrLiY7z0Bki4mYJhkFkEwNG5kHhRB08Jv50n70YCrLvZlwGFeu6sYaHfly4tX+DlTDSdnncydLW9QSrog3VdhZwlNpcdnsZ7a5d6cV/sqACl4WTDksghuiczvDQIXeAa42/EvAZm1nXWYNlYevGK3ftRJK0wD5AQO2dm5Zj3XQgI6DgqYmb3dX3QXQEY3G4oZsq2FDeKYMg5vRSBpmsunz8ntkRw27z55A/0YXaBcrQ4lLDhzy8a3yMLlfZkRUChYu5/9ITxEoNoqcWz5NYYOhfn82YuEGSMsStff7FVJsKFKYgje3Jms9/wEcuMcdCOUyHIAoe5eu2Ir7Ag3ogm6z6HWZoCgkOi0xUSS2m0UU21DUbFTTZHyHKhi1Bdpq0u8O1FN2nXAFDmGOSd/oBAjzsiI7hbQpNtkuvDn6eVKoQEKde06nrQ+xWLDC1j66VNDEATKRMHvZANEjoL4tTY8CVQqsElN9w==
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(396003)(346002)(136003)(451199021)(36840700001)(46966006)(40470700004)(54906003)(336012)(26005)(426003)(1076003)(36860700001)(2616005)(6666004)(478600001)(4326008)(6916009)(316002)(41300700001)(186003)(83380400001)(47076005)(7696005)(70206006)(70586007)(5660300002)(8936002)(7636003)(82740400003)(40460700003)(2906002)(356005)(40480700001)(86362001)(8676002)(36756003)(82310400005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 May 2023 03:30:06.4242
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: df2b1da3-a0f7-4495-a27c-08db4b86b0b8
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT079.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5794
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->
-> >
-> >> > the GROUP until after the FIRMWARE, so this can't work, as it already
-> >> > will have included all the ones below, hence why I bracketed top and
-> >> > bottom with a group.
-> >>
-> >> well... that is something that can be adapted easily by using a 2 pass
-> >> approach, filtering out the list based on the groups.
-> >>
-> >> I agree that yours is simpler though.  If we can rely on the
-> >> order produced by the compiler and we document the expectations of
-> >> MODULE_FIRMWARE_GROUP_ONLY_ONE, then I believe we can stay with the
-> >> simpler approach.
-> >>
-> >> Luis, any thoughts here?
-> >
-> >I see the Dracut code indicates that the order says now that you should
-> >put the preferred firmware last, and that seems to match most coding
-> >conventions, ie, new firmwares likely get added last, so it's a nice
->
-> not all. i915 for example keeps it newest first so when attempting
-> multiple firmware versions it starts from the preferred version.  It
-> will be harder to convert since it also uses a x-macro to make sure the
-> MODULE_FIRMWARE() and the the platform mapping are actually using the same
-> firmware.
->
-> >coincidence. Will this always work? I don't know. But if you like to
->
-> short answer: it depends if your compiler is gcc *and* -O2 is used
-> Longer debug ahead. Simple test with the expansion of MODULE_FIRMWARE
-> baked in:
->
->         $ cat /tmp/a.c
->         static const __attribute__((section("__modinfo_manual"), used, aligned(1))) char foo[] = "modinfo_manual_foo";
->         static const __attribute__((section("__modinfo_manual"), used, aligned(1))) char bar[] = "modinfo_manual_bar";
->         $ gcc -c -o /tmp/a.o /tmp/a.c
->         $ objcopy -O binary --only-section=__modinfo_manual /tmp/a.o /tmp/modinfo_manual
->         $ strings /tmp/modinfo_manual
->         modinfo_manual_foo
->         modinfo_manual_bar
->
-> However that doesn't match when building modules. In kmod:
->
-> diff --git a/testsuite/module-playground/mod-simple.c b/testsuite/module-playground/mod-simple.c
-> index 503e4d8..6dd5771 100644
-> --- a/testsuite/module-playground/mod-simple.c
-> +++ b/testsuite/module-playground/mod-simple.c
-> @@ -30,3 +30,9 @@ module_exit(test_module_exit);
->
->   MODULE_AUTHOR("Lucas De Marchi <lucas.demarchi@intel.com>");
->   MODULE_LICENSE("GPL");
-> +
-> +
-> +static const char __UNIQUE_ID_firmware404[] __attribute__((__used__)) __attribute__((__section__("__modinfo_cpp"))) __attribute__((__aligned__(1))) = "modinfo_cpp_foo";
-> +static const char __UNIQUE_ID_firmware405[] __attribute__((__used__)) __attribute__((__section__("__modinfo_cpp"))) __attribute__((__aligned__(1))) = "modinfo_cpp_bar";
->
->         $ make ....
->         $ objcopy -O binary --only-section=__modinfo_cpp testsuite/module-playground/mod-simple.ko /tmp/modinfo_cpp
->         $ strings /tmp/modinfo_cpp
->         modinfo_cpp_bar
->         modinfo_cpp_foo
->
-> It doesn't seem to be ./scripts/Makefile.modfinal neither as it's also
-> inverted in testsuite/module-playground/mod-simple.o
->
-> After checking the options passed to gcc, here is the "culprit": -O2
->
->         $ gcc -c -o /tmp/a.o /tmp/a.c && objcopy -O binary --only-section=__modinfo_manual /tmp/a.o /tmp/modinfo_manual && strings /tmp/modinfo_manual
->         modinfo_manual_foo
->         modinfo_manual_bar
->         $ gcc -O2 -c -o /tmp/a.o /tmp/a.c && objcopy -O binary --only-section=__modinfo_manual /tmp/a.o /tmp/modinfo_manual && strings /tmp/modinfo_manual
->         modinfo_manual_bar
->         modinfo_manual_foo
->
-> It seems anything but -O0 inverts the section.
->
->         $ gcc --version
->         gcc (GCC) 12.2.1 20230201
->
-> It doesn't match the behavior described in its man page though. Manually
-> specifying all the options that -O1 turns on doesn't invert it.
->
->         $ gcc -fauto-inc-dec -fbranch-count-reg -fcombine-stack-adjustments \
->                 -fcompare-elim -fcprop-registers -fdce -fdefer-pop -fdelayed-branch
->                 -fdse -fforward-propagate -fguess-branch-probability -fif-conversion \
->                 -fif-conversion2 -finline-functions-called-once -fipa-modref \
->                 -fipa-profile -fipa-pure-const -fipa-reference -fipa-reference-addressable \
->                 -fmerge-constants -fmove-loop-stores -fomit-frame-pointer -freorder-blocks \
->                 -fshrink-wrap -fshrink-wrap-separate -fsplit-wide-types -fssa-backprop \
->                 -fssa-phiopt -ftree-bit-ccp -ftree-ccp -ftree-ch -ftree-coalesce-vars \
->                 -ftree-copy-prop -ftree-dce -ftree-dominator-opts -ftree-dse -ftree-forwprop \
->                 -ftree-fre -ftree-phiprop -ftree-pta -ftree-scev-cprop -ftree-sink -ftree-slsr \
->                 -ftree-sra -ftree-ter -funit-at-a-time -c -o /tmp/a.o /tmp/a.c \
->                 && objcopy -O binary --only-section=__modinfo_manual /tmp/a.o /tmp/modinfo_manual && strings /tmp/modinfo_manual
->         cc1: warning: this target machine does not have delayed branches
->         modinfo_manual_foo
->         modinfo_manual_bar
->
+Hi Linus,
 
-Thanks Lucas,
+The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
 
--ftoplevel-reorder is the one that does it, now that does mean how
-I've done it isn't going to be robust.
+  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
 
-I will reconsider but in order to keep backwards compat, it might be
-easier to add firmware groups as an explicit list, but also spit out
-the individual names, but not sure how clean this will end up on
-dracut side.
+are available in the Git repository at:
 
-I'll take a look at the other options, but it does seem like reworking
-dracut is going to be the harder end of this, esp if I still want to
-keep compat with older ones.
+  git://git.kernel.org/pub/scm/linux/kernel/git/pateldipen1984/linux.git tags/for-6.4-rc1
 
-Dave.
+for you to fetch changes up to ca3d1a4b419acad3fca6828884acb03614f7558b:
+
+  hte: tegra-194: Use proper includes (2023-04-26 15:44:30 -0700)
+
+----------------------------------------------------------------
+hte: Changes for v6.4-rc1
+
+The changes for the hte/timestamp subsystem include the following:
+- Add Tegra234 HTE provider and relevant DT bindings
+- Update MAINTAINERS file for the HTE subsystem
+
+----------------------------------------------------------------
+Arnd Bergmann (1):
+      hte: tegra: fix 'struct of_device_id' build error
+
+Dan Carpenter (1):
+      hte: tegra-194: Fix off by one in tegra_hte_map_to_line_id()
+
+Dipen Patel (9):
+      MAINTAINERS: Add HTE/timestamp subsystem details
+      dt-bindings: timestamp: Add Tegra234 support
+      dt-bindings: timestamp: Deprecate nvidia,slices property
+      arm64: tegra: Add Tegra234 GTE nodes
+      hte: Re-phrase tegra API document
+      hte: Add Tegra234 provider
+      hte: Deprecate nvidia,slices property
+      hte: handle nvidia,gpio-controller property
+      gpio: tegra186: Add Tegra234 hte support
+
+Linus Walleij (1):
+      hte: tegra-194: Use proper includes
+
+Rob Herring (1):
+      hte: Use of_property_present() for testing DT property presence
+
+ye xingchen (1):
+      hte: Use device_match_of_node()
+
+ .../bindings/timestamp/nvidia,tegra194-hte.yaml    |  66 +++++++-
+ Documentation/driver-api/hte/index.rst             |   2 +-
+ .../hte/{tegra194-hte.rst => tegra-hte.rst}        |  33 ++--
+ MAINTAINERS                                        |   3 +
+ arch/arm64/boot/dts/nvidia/tegra234.dtsi           |  17 +++
+ drivers/gpio/gpio-tegra186.c                       |   1 +
+ drivers/hte/hte-tegra194-test.c                    |  12 +-
+ drivers/hte/hte-tegra194.c                         | 169 +++++++++++++++++++--
+ drivers/hte/hte.c                                  |   4 +-
+ 9 files changed, 260 insertions(+), 47 deletions(-)
+ rename Documentation/driver-api/hte/{tegra194-hte.rst => tegra-hte.rst} (50%)
