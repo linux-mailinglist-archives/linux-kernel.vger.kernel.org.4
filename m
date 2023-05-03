@@ -2,80 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0887D6F4E75
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 03:19:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E2996F4E8A
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 03:22:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbjECBTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 21:19:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56676 "EHLO
+        id S229532AbjECBWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 21:22:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjECBTm (ORCPT
+        with ESMTP id S229457AbjECBWP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 21:19:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9488C5;
-        Tue,  2 May 2023 18:19:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 56902629F5;
-        Wed,  3 May 2023 01:19:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A491C433D2;
-        Wed,  3 May 2023 01:19:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683076779;
-        bh=/ClN072w7D0BeanxCvNBxwRHREUHQZYiL77EUxvntHk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JVZeDMEmw3ok5p7/Jokl5bNCXoQM891Tszn/Thv4zoccfzdzf7iHFIpWlAS0tyFpX
-         AA7SIMVFkbkYY5BWamH6TXc+Z4lBpRRw/BuCp0bg7BjTsUVZrM3wqhddMLNOBEqtCs
-         iokjjjqiG3GqW0VqYJKaWIQpd6Q+V0thg4cB4zRnaTSa9V24b7++ydOgA3W/HzZ8PC
-         UWZO6ttjeoJqXl+BqEV6mBqbjoqkHY/IX5QVwWKf09zlT/tidsYX0jfpN0ED1RsGYc
-         11tcJfs9v4CYDwdvCCUAUixITcxX98mDPAOJAgRNKRIxD9/FJHjnGP5J0TfstHwO9a
-         Jao70lg62pHUg==
-Date:   Wed, 3 May 2023 09:19:20 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Olof Johansson <olof@lixom.net>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-actions@lists.infradead.org,
-        linux-sunxi@lists.linux.dev,
-        Linux-OMAP <linux-omap@vger.kernel.org>,
-        linux-amlogic@lists.infradead.org, linux-arm-kernel@axis.com,
-        linux-aspeed@lists.ozlabs.org,
-        linux-rpi-kernel@lists.infradead.org,
-        chrome-platform@lists.linux.dev,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-samsung-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        kernel@dh-electronics.com, linux-mediatek@lists.infradead.org,
-        openbmc@lists.ozlabs.org, linux-tegra@vger.kernel.org,
-        "linux-oxnas@groups.io" <linux-oxnas@groups.io>,
-        linux-arm-msm@vger.kernel.org, linux-unisoc@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        linux-realtek-soc@lists.infradead.org
-Subject: Re: [RFC PATCH 0/1] Categorize ARM dts directory
-Message-ID: <20230503011920.GB31464@dragon>
-References: <20220328000915.15041-1-ansuelsmth@gmail.com>
- <85eb14ec-f465-7447-ad77-a3dabc666f47@kernel.org>
- <YkKRYnN84D9VZhGj@Ansuel-xps.localdomain>
- <CAL_Jsq+RQQ-ADMxLPUFwk6S6kGmb6oNDy4k52fnU0EtbUvqmSA@mail.gmail.com>
- <CAMuHMdWNTE48MFy6fqxAsfMWz9b6E7dVNXtXtESP95sxk2PGwA@mail.gmail.com>
- <CAL_JsqJthKTm8bhRF2B=ae1tvtPeYYXx_Tm76qQtSwLtH5C6VA@mail.gmail.com>
- <720a2829-b6b5-411c-ac69-9a53e881f48d@app.fastmail.com>
- <CAL_JsqKCtmkwzKa01gyG65fH8ye6R3KhR41PJbJhOJ4X9j=znA@mail.gmail.com>
- <2783a3ba-8fcb-7e5f-3147-91d02e573ba4@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+        Tue, 2 May 2023 21:22:15 -0400
+Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com [205.220.166.238])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1932CC;
+        Tue,  2 May 2023 18:22:13 -0700 (PDT)
+Received: from pps.filterd (m0250810.ppops.net [127.0.0.1])
+        by mx0a-0064b401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3430vrTU023736;
+        Tue, 2 May 2023 18:21:58 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com; h=from : to : cc :
+ subject : date : message-id : content-transfer-encoding : content-type :
+ mime-version; s=PPS06212021;
+ bh=+1RgkwJLdAJUJJO5LbJNMNCyEssUFb17iZLiwO/Y0dU=;
+ b=KDm3uJ51AUPFGgoovx1Sp+oXjLJMu8q5MglI6w4lEsLBqBLrEZZhv7mts4JKV6kdfoWr
+ B9ybUvUaPzgFIaaUx73q6yMLAJFmOlI1tI+m7h+q3xMehD0Q05P1M+iohLbwR+HtMc66
+ EgtNpQTolqmA6TEHn82z3ZAsAgqNoTSa2FczgTSOTacNFmK92pYdAB2fLQftB1324xvL
+ 3NyAv7e7fQebOIrIaZL6VVQP+yjlEu9GY4vozt4MiitTeGyQ0aZtodGY5FibDame3iEx
+ Yp8NK0W7Y/L2aNagz3t0zk3uXTVP9b/iqwi8FEwGgr3RXGMeVRTo4vdbuQsEXLxtTq2g Mg== 
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2100.outbound.protection.outlook.com [104.47.70.100])
+        by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3q8xh5k6sd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 02 May 2023 18:21:58 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JzfMVN/yFGdq8Dg2W29hdn4t6opzLoP+uJskg+p31lLlzJb1IejnbaG/UjBFqh5ONXCNl9VL1l7qc0+n8YWzZfW4QwazpKY67MIf63KfD0C2j1d/btpRBahbiufwK4I/A2v1Fuf7ToPbmRHMFpjP8Knwr+7SueXvJ7T4rE1f6HqF3WAbMujnZcnJWjOt8lEpUWXzI+nBCGqopw9JXKLetLelgeLTpKFQUL2RJpTK2Zwck0WPGqXrcxko4kQvGtzQ8eC/dV/OHw6zi496dyPEMNdVean37aQv0Vo6JCSpH4HmBCMy4KNFrAom0+JH+xcNFoFv4hWorNxLsoD2YZiKcA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+1RgkwJLdAJUJJO5LbJNMNCyEssUFb17iZLiwO/Y0dU=;
+ b=JVLL5kFm32dhvvTVCp9aeG5QJa5sHqrGXu6nSbrJaOljOhv7lng1dDBASZlOuETqA+5Sx8Z7K4JJxlH5wcaaVJLAiPqHkPvRqICCp1gHvGDm/yt0mbHrGRX+RWcK4MtAvOLE5YKSy8j9Qm+trH1ChB+kHUkHUqDiCywEoVhzrLfCAYfIW+NQhL4pzGCv8rKRAcCP9UlC0eJ0CpfIiBM9OdKgJCZwTeP1Cfo4MAgTDzynjCY+YkEHrVgUS/5BazV/ZEE3gHfPr+VJ/QyKvIcfD7pVEnBZbBUXnlG+SnlPw4+5aNpZlBxi1+mczCgKsl5WSZWb1sqKlDrvPTv6RMc4mQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=windriver.com; dmarc=pass action=none
+ header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
+Received: from MW5PR11MB5764.namprd11.prod.outlook.com (2603:10b6:303:197::8)
+ by BN0PR11MB5711.namprd11.prod.outlook.com (2603:10b6:408:167::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.31; Wed, 3 May
+ 2023 01:21:54 +0000
+Received: from MW5PR11MB5764.namprd11.prod.outlook.com
+ ([fe80::6485:357:72c7:e45]) by MW5PR11MB5764.namprd11.prod.outlook.com
+ ([fe80::6485:357:72c7:e45%7]) with mapi id 15.20.6340.030; Wed, 3 May 2023
+ 01:21:54 +0000
+From:   Xiaolei Wang <xiaolei.wang@windriver.com>
+To:     aisheng.dong@nxp.com, festevam@gmail.com, shawnguo@kernel.org,
+        ping.bai@nxp.com, kernel@pengutronix.de, linus.walleij@linaro.org,
+        shenwei.wang@nxp.com, bartosz.golaszewski@linaro.org,
+        peng.fan@nxp.com
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [v2][PATCH] pinctrl: freescale: Fix a memory out of bounds when num_configs is 1
+Date:   Wed,  3 May 2023 09:21:27 +0800
+Message-Id: <20230503012127.4157304-1-xiaolei.wang@windriver.com>
+X-Mailer: git-send-email 2.25.1
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <2783a3ba-8fcb-7e5f-3147-91d02e573ba4@kernel.org>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-ClientProxiedBy: TYCPR01CA0131.jpnprd01.prod.outlook.com
+ (2603:1096:400:26d::19) To MW5PR11MB5764.namprd11.prod.outlook.com
+ (2603:10b6:303:197::8)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MW5PR11MB5764:EE_|BN0PR11MB5711:EE_
+X-MS-Office365-Filtering-Correlation-Id: 85e9c5d2-84fd-4276-f8f6-08db4b74c7d1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: kQvwfVctGDcdOJjZrYC8Lgv+KbzAzamOgkDqJv6ocFJGEoAJM2x4IWEADKSzXnWjDnWLKSBapE5HpMcT0X/SIfALSzea91NgVvOS5x7AmMpzYua1LRtn8QRLzBRPsusZohSovtzpiQoNqjZ0kv4sdA9ojWhX7+6g2fyFVJ+7FN30O+HLKWl27b5Aaksx++5APEbz0/uAW3nvTlKE+95wrILDxWUQ3W0QgW3CTa8ivIugafcScprBeG80J9/Je5uX6YzP/8P2kcfYFhJ2c1eRmqlxA69Pfq4p4CJfmPVVFEWtPjyl80cuWD6NfUouUeqrGUvyk3pcPShtPHpGAR7ppyO2JPKRiEMlpn5D9OzNi2uz3mvZ3DptcUzZ1sxWJ2YfZ9STkzvrwtKOQyZB+GBJdNnrfGQ1vZwqwljjnPfIpA6Z+A5TNr3/nLTi8iJd/Us9VJWQZxOqtnUBqWiqTnP4KLJ+tctalu+lf10kv8AokliFsa29Go0i3x/o3dZDyNlrLA+D78n7biOJDwLvO0pOYcsAN4BBI9pfKhW/znjzSO7WWjgzM/ER+ltkLbtHC5Jv7gqqdqGMG40sLU4mG4aCn1FJ7uP/hO7nzW5UdFULHk/jF5wCteriOvHnAtUNlZYIARVbHDkWoiEHEuM2x2dMHN85DcAIiRMhQe68onqnzjc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW5PR11MB5764.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(136003)(39850400004)(346002)(376002)(396003)(451199021)(38100700002)(41300700001)(5660300002)(8936002)(8676002)(38350700002)(66946007)(66556008)(66476007)(316002)(2906002)(44832011)(7416002)(86362001)(186003)(6512007)(1076003)(26005)(6506007)(6486002)(52116002)(4326008)(6666004)(83380400001)(36756003)(2616005)(478600001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZMZ7iVZr5M4dG24LzrjBdwbvIaX4qsFhL3dXZg9ycTk/L4nj5aoH8hCv8Iqf?=
+ =?us-ascii?Q?aZFSIp6mH3IGKiomTJ5YXn3egJ86Qdt7nBt788//dayCQNqnPhXiYwyamQP1?=
+ =?us-ascii?Q?pVJwjGJhqE+vO5wBMlPL3X75jaLBY/kqGueM6mLg3PYPe1H0vEwyauBibvSa?=
+ =?us-ascii?Q?tepm7lgqWTUEaY1IVDAra/Ugn2i3w7L9mVpAoyR6OSaGK+kTJn7EfkCf+p5G?=
+ =?us-ascii?Q?7gQt3X1sfS/5wJ6PuVFE8nx2Ypeqs7XnEMzJwQTQdf9omXHpNGwLeLj38Vmv?=
+ =?us-ascii?Q?Bpyi9qycrEOkw4oE27XPlnMiAs8b25DOqM9WRzp04OexzGRMSiwevsCoKNUk?=
+ =?us-ascii?Q?/ivFjFiEMBQ5HOb8eUonyxaTFfolHGBfwmYViMUor71shKJxJcn1CQKJi2GH?=
+ =?us-ascii?Q?ztvGO9zyo65KoY0IYXnazSIIy+2WFxa09BWmJA2/rLHFcvZBmtaIr6rpWXAz?=
+ =?us-ascii?Q?C+4pWRE5jgJ6lIGdVCn5/mAiD/AaSr5FtRLwI3Z6yA5wOyYbu1+pKhCPu7eU?=
+ =?us-ascii?Q?kHS3Gcry6FxaX7RJjJI5PaP/2ES105Nqv8kGzUky+5ipkNHtJF2pTvBo+Lhn?=
+ =?us-ascii?Q?FFQsnlQMKP4AsQUd7g2wMI1sehgZvGOPgBJrstaolha7MMFu2Ian8C+jMBis?=
+ =?us-ascii?Q?xK9vMxtqQwsS+KlKzOJblGPsx8gymaVKV5LIEjeYrcyR2xf3bQx57AdTeU67?=
+ =?us-ascii?Q?av4Co3p8JY3g/4nu7B9b2HR/ilVquGuXsJuVfWKezdSXyU94U79wFXYbYpT/?=
+ =?us-ascii?Q?A1lfT4tURct2jaEiTAJGIdNvttPOigSJRYnteQnShY+ufaWRWN1GKPOwYsXC?=
+ =?us-ascii?Q?nxrGLhL/3n7sbrXqG00lTUC2ypTAm+7HDbfRu2rGhA31YCQWmWEOsNVpxiK7?=
+ =?us-ascii?Q?l/fQCK/R4k43OYV7FvHelSpCf3jVXiTEYk6Tr0r3vME+52U4NJ7JEWqhySKY?=
+ =?us-ascii?Q?TgfYQG5+Qt331O0OZEBhCbPFnp+sQVy7SZInvwWarIwNxDhMtUvBB3CuNkD5?=
+ =?us-ascii?Q?zkfyNNzQs/88JwPrfnc5kKanQwcBC9vGo8XQi+EQ5tlP8JFt7aB188Ain42V?=
+ =?us-ascii?Q?499gHMGFYoFO3wAihdoHBBtzsIAFZTkrbL+x+x8xsMClHiFASSRT/04nM17c?=
+ =?us-ascii?Q?jagqhObI6vLuzLF1qU8CkVL3BH3Ji97Jgtt81sxY0a66lITmNcd5LRs1n3xS?=
+ =?us-ascii?Q?XcsXZEtZIJe0aHkw7yhaE2p6b8l8ugMt7CRrt7VJGzq6RmhZnz1rWnqFCF1d?=
+ =?us-ascii?Q?r8Hp0xDt+n8Jvx0shft4yV6SYarmsb3wjaKgQwPnd1rzaT/VgbniB3gNbBYw?=
+ =?us-ascii?Q?hIPmKY74H6CUwIgGWOrcdqn+qZhsskSKChCZbtuUZAaAVXWzfAYW0BwUNlm0?=
+ =?us-ascii?Q?U9l1HcB4QAvCIwcp1anB0PfLVMqppedNwS7aZLFK4LxvvSmcmxz6IvOavHBv?=
+ =?us-ascii?Q?2taozG9y3Y31FmLoW4FjeAd/yLOI3tgNWCkTMCvwD4qVIAvp4NGbi4nZIo8H?=
+ =?us-ascii?Q?KKvlkHHmrHzVrRqKHQ8TmHLSBm2e/gkGpDRbnyrF2nkzrAuitWrJCNVmoSVa?=
+ =?us-ascii?Q?HKidAia3pmwq0ItOu1Tx/gBPz5PAhJmJFmLWNk+kHDniCwkRKM874JMCAR85?=
+ =?us-ascii?Q?RA=3D=3D?=
+X-OriginatorOrg: windriver.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 85e9c5d2-84fd-4276-f8f6-08db4b74c7d1
+X-MS-Exchange-CrossTenant-AuthSource: MW5PR11MB5764.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 May 2023 01:21:54.6533
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: sjPE3ccb0ldYqO/EsqqN0HBQO7paD8nsIGjwI8/RbGlJgUAkSSnWRlbDHCp8/8D6BUn4/oex+8qChB5sN6jbnQaTMzsSqWTD5P+l8jynnsw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR11MB5711
+X-Proofpoint-ORIG-GUID: iXhrNyVLBJ4qkcJjRqCTKc2TSY_LDZ53
+X-Proofpoint-GUID: iXhrNyVLBJ4qkcJjRqCTKc2TSY_LDZ53
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-02_14,2023-04-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 spamscore=0 clxscore=1015 suspectscore=0 mlxscore=0
+ phishscore=0 priorityscore=1501 mlxlogscore=590 adultscore=0 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2305030009
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,179 +134,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 02, 2023 at 10:02:03PM +0200, Krzysztof Kozlowski wrote:
-> On 02/05/2023 21:40, Rob Herring wrote:
-> > On Tue, May 2, 2023 at 3:15 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> >>
-> >> On Tue, Apr 25, 2023, at 17:57, Rob Herring wrote:
-> >>> On Tue, Apr 25, 2023 at 2:28 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> >>>
-> >>>> Does your script also cater for .dts files not matching any pattern,
-> >>>> but including a .dtsi file that does match a pattern?
-> >>>
-> >>> I assume I built everything after moving, but maybe not...
-> >>>
-> >>> That's all just "details". First, we need agreement on a) moving
-> >>> things to subdirs and b) doing it 1-by-1 or all at once. So far we've
-> >>> been stuck on a) for being 'too much churn'.
-> >>
-> >> Sorry for missing most of the discussion last week. The script sounds
-> >> fine to me, the only reason I didn't want to do this in the past is that
-> >> we had the plan to move platforms out of the kernel tree to an external
-> >> repository and I wanted to do this platform at a time and also only move
-> >> each one once. I don't think that is going to happen anytime soon now,
-> >> so let's just do your script.
-> >>
-> >> Can you send me the script and/or a pull request of the resulting
-> >> tree based on my soc/dt branch? Everything is merged upstream,
-> >> and I think git-merge would handle the remaining merges with any
-> >> other changes in mainline.
-> > 
-> > I've dusted off my script and made a branch[1] with the result.
-> > There's just a couple of fixes needed after the script is run (see the
-> > top commit). The cross arch includes are all fixed up by the script.
-> > dtbs_install maintains a flat install. I compared the number of .dtbs
-> > before and after to check the script.
-> > 
-> > I think the only issue remaining is finalizing the mapping of
-> > platforms to subdirs. What I have currently is a mixture of SoC
-> > families and vendors. The most notable are all the Freescale/NXP
-> > platforms, pxa, socfpga, and stm32. It's not consistent with arm64
-> > either. Once that's finalized, I still need to go update MAINTAINERS.
-> > 
-> > Here's the current mapping:
-> > 
-> > vendor_map = {
-> >     'alphascale' : 'alphascale',
-> >     'alpine' : 'alpine',
-> >     'artpec' : 'axis',
-> >     'axm' : 'lsi',
-> >     'cx9' : 'cnxt',
-> >     'ecx' : 'calxeda',
-> >     'highbank' : 'calxeda',
-> >     'ep7' : 'cirrus',
-> >     'mxs': 'mxs',
-> >     'imx23': 'mxs',
-> >     'imx28': 'mxs',
-> >     'sun' : 'allwinner',
-> >     'imx': 'imx',
-> >     'e6' : 'imx',
-> >     'e7' : 'imx',
-> >     'mba6' : 'imx',
-> >     'ls': 'fsl',
-> >     'vf': 'fsl',
-> 
-> If I remember correctly, Vybrid are a bit closer to iMX than to LS
-> (Layerscape), but it should be Shawn's call (+Cc).
+The config passed in by pad wakeup is 1, When num_configs is 1,
+configs[1] should not be obtained, which will generate the
+following memory out-of-bounds situation:
 
-I would suggest to have all Freescale/NXP platforms in a single
-directory, which includes all mxs, imx, fsl ones.
+BUG: KASAN: stack out of bounds in imx_pinconf_set_scu+0x9c/0x160
+  Read size 8 at address ffff8000104c7558 by task sh/664
+  CPU: 3 PID: 664 Communication: sh Tainted: G WC 6.1.20 #1
+     Hardware name: Freescale i.MX8QM MEK (DT)
+  Call trace:
+    dump_backtrace.part.0+0xe0/0xf0
+    show stack+0x18/0x30
+    dump_stack_lvl+0x64/0x80
+    print report +0x154/0x458
+    kasan_report+0xb8/0x100
+    __asan_load8+0x80/0xac
+    imx_pinconf_set_scu+0x9c/0x160
+    imx_pinconf_set+0x6c/0x214
+    pinconf_set_config+0x68/0x90
+    pinctrl_gpio_set_config+0x138/0x170
+    gpiochip_generic_config+0x44/0x60
+    mxc_gpio_set_pad_wakeup+0x100/0x140
+    mxc_gpio_noirq_suspend+0x50/0x74
+    pm_generic_suspend_noirq+0x4c/0x70
+    genpd_finish_suspend+0x174/0x260
+    genpd_suspend_noirq+0x14/0x20
+    dpm_run_callback.constprop.0+0x48/0xec
+    __device_suspend_noirq+0x1a8/0x370
+    dpm_noirq_suspend_devices+0x1cc/0x320
+    dpm_suspend_noirq+0x7c/0x11c
+    suspend_devices_and_enter+0x27c/0x760
+    pm_suspend+0x36c/0x3e0
 
-Shawn
+Fixes: f60c9eac54af ("gpio: mxc: enable pad wakeup on i.MX8x platforms")
+Signed-off-by: Xiaolei Wang <xiaolei.wang@windriver.com>
+---
+ drivers/pinctrl/freescale/pinctrl-scu.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-> 
-> >     'qcom': 'qcom',
-> >     'am3' : 'ti',
-> >     'am4' : 'ti',
-> >     'am5' : 'ti',
-> >     'dra' : 'ti',
-> >     'keystone' : 'ti',
-> >     'omap' : 'ti',
-> >     'compulab' : 'ti',
-> >     'logicpd' : 'ti',
-> >     'elpida' : 'ti',
-> >     'motorola' : 'ti',
-> >     'twl' : 'ti',
-> >     'da' : 'ti',
-> >     'dm' : 'ti',
-> >     'nspire' : 'nspire',
-> >     'armada' : 'marvell',
-> >     'dove' : 'marvell',
-> >     'kirkwood' : 'marvell',
-> >     'orion' : 'marvell',
-> >     'mvebu' : 'marvell',
-> >     'mmp' : 'marvell',
-> >     'berlin' : 'berlin',
-> >     'pxa2' : 'pxa',
-> >     'pxa3' : 'pxa',
-> >     'pxa' : 'marvell',
-> >     'arm-' : 'arm',
-> >     'integ' : 'arm',
-> >     'mps' : 'arm',
-> >     've' : 'arm',
-> >     'aspeed' : 'aspeed',
-> >     'ast2' : 'aspeed',
-> >     'facebook' : 'aspeed',
-> >     'ibm' : 'aspeed',
-> >     'openbmc' : 'aspeed',
-> >     'en7' : 'airoha',
-> >     'at91' : 'microchip',
-> >     'sama' : 'microchip',
-> >     'sam9' : 'microchip',
-> >     'usb_' : 'microchip',
-> >     'tny_' : 'microchip',
-> >     'mpa1600' : 'microchip',
-> >     'animeo_ip' : 'microchip',
-> >     'aks-cdu' : 'microchip',
-> >     'ethernut5' : 'microchip',
-> >     'evk-pro3' : 'microchip',
-> >     'pm9g45' : 'microchip',
-> >     'ge86' : 'microchip',
-> >     'bcm' : 'brcm',
-> >     'exynos' : 'samsung',
-> >     's3c' : 'samsung',
-> >     's5p' : 'samsung',
-> 
-> For samsung looks good.
-> 
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> >     'gemini' : 'gemini',
-> >     'hi3' : 'hisilicon',
-> >     'hip' : 'hisilicon',
-> >     'hisi' : 'hisilicon',
-> >     'sd5' : 'hisilicon',
-> >     'hpe' : 'hpe',
-> >     'intel': 'intel',
-> >     'mt' : 'mediatek',
-> >     'meson' : 'meson',
-> >     'moxa' : 'moxa',
-> >     'mstar' : 'mstar',
-> >     'nuvo' : 'nuvoton',
-> >     'lpc' : 'lpc',
-> >     'lan96' : 'microchip',
-> >     'owl' : 'actions',
-> >     'ox8' : 'oxsemi',
-> >     'rda' : 'rda',
-> >     'rtd' : 'realtek',
-> >     'r7' : 'renesas',
-> >     'r8' : 'renesas',
-> >     'r9' : 'renesas',
-> >     'emev2' : 'renesas',
-> >     'sh73a' : 'renesas',
-> >     'gr-' : 'renesas',
-> >     'iwg' : 'renesas',
-> >     'rk' : 'rockchip',
-> >     'rv11' : 'rockchip',
-> >     'rockchip' : 'rockchip',
-> >     'socfpga' : 'socfpga',
-> >     'stm' : 'stm32',
-> >     'sti' : 'sti',
-> >     'st-pin' : 'sti',
-> >     'ste' : 'st-ericsson',
-> >     'spear' : 'spear',
-> >     'axp' : 'allwinner',
-> >     'tegra' : 'nvidia',
-> >     'milbeaut' : 'socionext',
-> >     'uniph' : 'socionext',
-> >     'vt8500' : 'vt8500',
-> >     'wm8' : 'vt8500',
-> >     'xen' : 'xen',
-> >     'zx' : 'zte',
-> >     'zynq' : 'xilinx',
-> 
-> The rest looks good to me, but I don't know half of these :)
-> 
-> Best regards,
-> Krzysztof
-> 
+diff --git a/drivers/pinctrl/freescale/pinctrl-scu.c b/drivers/pinctrl/freescale/pinctrl-scu.c
+index ea261b6e7458..3b252d684d72 100644
+--- a/drivers/pinctrl/freescale/pinctrl-scu.c
++++ b/drivers/pinctrl/freescale/pinctrl-scu.c
+@@ -90,7 +90,7 @@ int imx_pinconf_set_scu(struct pinctrl_dev *pctldev, unsigned pin_id,
+ 	struct imx_sc_msg_req_pad_set msg;
+ 	struct imx_sc_rpc_msg *hdr = &msg.hdr;
+ 	unsigned int mux = configs[0];
+-	unsigned int conf = configs[1];
++	unsigned int conf;
+ 	unsigned int val;
+ 	int ret;
+ 
+@@ -115,6 +115,7 @@ int imx_pinconf_set_scu(struct pinctrl_dev *pctldev, unsigned pin_id,
+ 	 * Set mux and conf together in one IPC call
+ 	 */
+ 	WARN_ON(num_configs != 2);
++	conf = configs[1];
+ 
+ 	val = conf | BM_PAD_CTL_IFMUX_ENABLE | BM_PAD_CTL_GP_ENABLE;
+ 	val |= mux << BP_PAD_CTL_IFMUX;
+-- 
+2.25.1
+
