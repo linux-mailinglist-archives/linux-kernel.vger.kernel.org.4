@@ -2,141 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C111A6F5F90
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 22:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 453686F5F91
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 22:01:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230016AbjECUAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 16:00:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37788 "EHLO
+        id S229947AbjECUA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 16:00:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbjECUAc (ORCPT
+        with ESMTP id S230026AbjECUAv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 16:00:32 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1793883D6;
-        Wed,  3 May 2023 13:00:31 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-64115e652eeso7674923b3a.0;
-        Wed, 03 May 2023 13:00:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683144030; x=1685736030;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0HV83qXSxt0rJsxUhYqPsLXk4a5FBTNhGHWC84tLfFA=;
-        b=T5ytdzQZFR/i6X3PRt8GPpsG1Y8I62q5m+7bcocFY5Cvsi6WjKKciTo/qMildNoBZe
-         u85rUJbf90oBHRO2tw11PhVl1/2+PBLQR5fvlp3hzuHC/CfV94InI4lPsLH/RfX1qbI8
-         ausoXPd6AA+d24SrubrUATq5ZGbTkNJHhzAmb4/I8cKntvdRB5ITs5umOnT9xtLYVW6J
-         XelWqPKoBht+a4RuNCfbFoX3W+hTDToV7mxgM9rNIWkoPMCAeRQG8Dr+8MzArcAuR1Md
-         bQM+fnzNC44jQ5pJFy8Oos8cJXJygO15rVG3lH4kT1O7gkNi5v7N3Otc1cZyartcRwPg
-         eT9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683144030; x=1685736030;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0HV83qXSxt0rJsxUhYqPsLXk4a5FBTNhGHWC84tLfFA=;
-        b=D85uzd0Xgft5mPfwBk68Ckxiihu/dLSxwTHOGrOyvFktrCpg+h70x05/9d3Hn51vWu
-         p2DMYZ3pfvI40Es+E4I7bP0MNnCSvP+t1VxNV3EXWfQajhIhmsKDbLtPoHLVulxRGBAo
-         /wL8Au9x733a6ZlvzkduFECy4gEW+8ttYHYaw/X4ESPIFBQ3l1dxaAhmTMWdz8Tw3H3s
-         rl9eGo4xXM/Xrqx1pzO1oOUWiosVceOM18rdvKmDiYmODHltz4MkO6wJX6NCXCS9QfiO
-         bCrKNww9ied3T88ALAOtBX19cHoPm5zBYs2D+Nz4YGj4hJG6tg+tVcZPSDYoM0LRug1o
-         8e4w==
-X-Gm-Message-State: AC+VfDw0T3h3jAWpS/7vacHU0sQZO1i5LESdDlLJkyq5T07T0Q71Q70O
-        32YWHMa0mlDFrke/wreCW/o=
-X-Google-Smtp-Source: ACHHUZ5olDzdTm5Ey2E+MQulD+SLoYUhuLqQV+Y8D7lSbEkzX4uIXZlIewj6XWYcqZ1z8grZ/iYmXg==
-X-Received: by 2002:a05:6a20:1587:b0:f6:592a:7e3d with SMTP id h7-20020a056a20158700b000f6592a7e3dmr3740358pzj.7.1683144030189;
-        Wed, 03 May 2023 13:00:30 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:6454])
-        by smtp.gmail.com with ESMTPSA id w22-20020a63f516000000b0052873a7cecesm3042624pgh.0.2023.05.03.13.00.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 May 2023 13:00:29 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 3 May 2023 10:00:28 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
-        vbabka@suse.cz, roman.gushchin@linux.dev, mgorman@suse.de,
-        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
-        corbet@lwn.net, void@manifault.com, peterz@infradead.org,
-        juri.lelli@redhat.com, ldufour@linux.ibm.com,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, peterx@redhat.com, david@redhat.com,
-        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
-        nathan@kernel.org, dennis@kernel.org, muchun.song@linux.dev,
-        rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com,
-        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
-        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, gregkh@linuxfoundation.org,
-        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>
-Subject: Re: [PATCH 00/40] Memory allocation profiling
-Message-ID: <ZFK9XMSzOBxIFOHm@slm.duckdns.org>
-References: <ZFIVtB8JyKk0ddA5@moria.home.lan>
- <ZFKNZZwC8EUbOLMv@slm.duckdns.org>
- <20230503180726.GA196054@cmpxchg.org>
- <ZFKlrP7nLn93iIRf@slm.duckdns.org>
- <ZFKqh5Dh93UULdse@slm.duckdns.org>
- <ZFKubD/lq7oB4svV@moria.home.lan>
- <ZFKu6zWA00AzArMF@slm.duckdns.org>
- <ZFKxcfqkUQ60zBB_@slm.duckdns.org>
- <CAJuCfpEPkCJZO2svT-GfmpJ+V-jSLyFDKM_atnqPVRBKtzgtnQ@mail.gmail.com>
- <ZFK6pwOelIlhV8Bm@slm.duckdns.org>
+        Wed, 3 May 2023 16:00:51 -0400
+Received: from bluemchen.kde.org (bluemchen.kde.org [IPv6:2001:470:142:8::100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3C50869E
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 13:00:42 -0700 (PDT)
+Received: from ugly.fritz.box (localhost [127.0.0.1])
+        by bluemchen.kde.org (Postfix) with ESMTP id 3C63B23FA3;
+        Wed,  3 May 2023 16:00:38 -0400 (EDT)
+Received: by ugly.fritz.box (masqmail 0.3.4, from userid 1000)
+        id 1puIeT-40E-00; Wed, 03 May 2023 22:00:37 +0200
+Date:   Wed, 3 May 2023 22:00:37 +0200
+From:   Oswald Buddenhagen <oswald.buddenhagen@gmx.de>
+To:     Jaroslav Kysela <perex@perex.cz>
+Cc:     Takashi Iwai <tiwai@suse.de>,
+        Jeff Chua <jeff.chua.linux@gmail.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        ALSA development <alsa-devel@alsa-project.org>
+Subject: Re: linux-6.4 alsa sound broken
+Message-ID: <ZFK9ZSm34Z3hQPF4@ugly>
+Mail-Followup-To: Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.de>, Jeff Chua <jeff.chua.linux@gmail.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        ALSA development <alsa-devel@alsa-project.org>
+References: <CAAJw_ZsbTVd3Es373x_wTNDF7RknGhCD0r+NKUSwAO7HpLAkYA@mail.gmail.com>
+ <ZE9ngFLRqLkN6faH@ugly>
+ <87wn1pmm4d.wl-tiwai@suse.de>
+ <7b80ef1e-23dd-c523-0663-4bf311c1823a@perex.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <ZFK6pwOelIlhV8Bm@slm.duckdns.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <7b80ef1e-23dd-c523-0663-4bf311c1823a@perex.cz>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, May 03, 2023 at 09:32:02PM +0200, Jaroslav Kysela wrote:
+>On 03. 05. 23 18:10, Takashi Iwai wrote:
+>> The dmix uses the silence_size=boundary as a fill-all operation, and
+>> it's a free-wheel mode, so supposedly something was overlooked in your
+>> code refactoring.
+>> 
+>> Could you check it and address quickly?  I'd like to fix it before
+>> 6.4-rc1 release, so if no fix comes up in a couple of days, I'll have
+>> to revert the change for 6.4-rc1.
+>
+>I would revert this patch.
 
-On Wed, May 03, 2023 at 09:48:55AM -1000, Tejun Heo wrote:
-> > If so, that's the idea behind the context capture feature so that we
-> > can enable it on specific allocations only after we determine there is
-> > something interesting there. So, with low-cost persistent tracking we
-> > can determine the suspects and then pay some more to investigate those
-> > suspects in more detail.
-> 
-> Yeah, I was wondering whether it'd be useful to have that configurable so
-> that it'd be possible for a user to say "I'm okay with the cost, please
-> track more context per allocation". Given that tracking the immediate caller
-> is already a huge improvement and narrowing it down from there using
-> existing tools shouldn't be that difficult, I don't think this is a blocker
-> in any way. It just bothers me a bit that the code is structured so that
-> source line is the main abstraction.
+> It seems that this "do silence right after the playback is finished" 
+> mechanism is not handled in the updated code (and I overlooked that, 
+> too):
+>
+no, there is nothing wrong with the code _per se_.
 
-Another related question. So, the reason for macro'ing stuff is needed is
-because you want to print the line directly from kernel, right? Is that
-really necessary? Values from __builtin_return_address() can easily be
-printed out as function+offset from kernel which already gives most of the
-necessary information for triaging and mapping that back to source line from
-userspace isn't difficult. Wouldn't using __builtin_return_address() make
-the whole thing a lot simpler?
+what's happening is that the dmix plugin doesn't update the application 
+pointer, and somehow gets away with it.
 
-Thanks.
+that means that it would have never worked with thresholded silencing 
+mode, either, but, well, it uses top-up mode.
 
--- 
-tejun
+anyway, this means that we need to revert the code path for top-up mode, 
+which means reverting most of the patch's "meat".
+i think i can do better than your proposal, but not today anymore.
+
+fwiw, the echo results from the plugin apparently summing up the samples 
+in the buffer without clearing it first, that is, it relies on the 
+auto-silencing doing the clearing, which the patch broke under the given 
+circumstances. rather obvious in retrospect.
+
+regards
