@@ -2,176 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50D886F52E0
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 10:13:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 303136F52E8
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 10:15:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229491AbjECING (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 04:13:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42560 "EHLO
+        id S229496AbjECIPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 04:15:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbjECINE (ORCPT
+        with ESMTP id S229461AbjECIPc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 04:13:04 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 642AF49EC;
-        Wed,  3 May 2023 01:12:36 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 20EC9200C6;
-        Wed,  3 May 2023 08:12:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1683101555; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tc9DIPq7pTkoGAht2wWI5nJunFRzyPMlSCfbCZiBK1c=;
-        b=AfL6iumxVF5n6IeMDDLsMqi8GAlhyHaR3kxkrAEw5LnrYWieIJZS2G6Ts+xRLr/c8FGjyS
-        m6Am9kPZxnfO7W1jhSUc3DraDg+JgcMeLiHpJczw8yyNzgIrhc7jI1xqvf/b0+WrkoYEYa
-        Us6CRneW8nTxDe1t+psl10HBXWsJJ6k=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1683101555;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tc9DIPq7pTkoGAht2wWI5nJunFRzyPMlSCfbCZiBK1c=;
-        b=FGzkoeTCbAxNseTk6a0KodvewqCUifKU/cEBznf4woz4fVH8jrwLfQfXnKA+dtvcl7WpaY
-        2zRnYIhzuUnF2cBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id ACF2013584;
-        Wed,  3 May 2023 08:12:34 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id MDUrKXIXUmQdZwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 03 May 2023 08:12:34 +0000
-Message-ID: <97bbdb2f-6245-caf2-c0f6-d628873bd6db@suse.de>
-Date:   Wed, 3 May 2023 10:12:34 +0200
+        Wed, 3 May 2023 04:15:32 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E9FF133;
+        Wed,  3 May 2023 01:15:30 -0700 (PDT)
+Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3438FGd8018031;
+        Wed, 3 May 2023 08:15:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=oq+VBQkSfSWiiK+RENjjb9DICXFg41U0XSB8KRndZq4=;
+ b=GtclZbAwH3elBpjPu1ng23cNGJ0t/zF4inWNB2ZMWbK1Yz77xF8wdOgx0NBA3qAU7fzV
+ iX4GjOSrWumS7HN1XAi0O3fPvWPtqa5ZT5vmRH1ky8LfbdU02/DByq7tGj2YJ94H0hpK
+ uIIW/GlYal/kqCvLVpHt8o8xlPo/GV9rVAsBbhzKZmVP1PGXjnp7DKBasJ8fafAu3Bw9
+ zyWumLNkld0kx9WYaGy6N8mLh3gTq7xnjDBUfwHG2X+PmJHN/MQXmqBtRd5ZMzaTFrJA
+ w5o+EM7eG+YhyNYFYexjHzzmualbhYAiXuafpeGIzPEkujrR/ZEEfPhgrSU2kYfjBQ7R Ww== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qbhjbbkcw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 03 May 2023 08:15:25 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 342NcDAu014756;
+        Wed, 3 May 2023 08:13:01 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3q8tv6t289-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 03 May 2023 08:13:00 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3438Cvq944630608
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 3 May 2023 08:12:57 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0CB7320040;
+        Wed,  3 May 2023 08:12:57 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DB20B2004B;
+        Wed,  3 May 2023 08:12:56 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Wed,  3 May 2023 08:12:56 +0000 (GMT)
+From:   Thomas Richter <tmricht@linux.ibm.com>
+To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org
+Cc:     svens@linux.ibm.com, gor@linux.ibm.com, sumanthk@linux.ibm.com,
+        hca@linux.ibm.com, Thomas Richter <tmricht@linux.ibm.com>
+Subject: [PATCH] Fix perf test probe libc's inet_pton on x86_64
+Date:   Wed,  3 May 2023 10:12:55 +0200
+Message-Id: <20230503081255.3372986-1-tmricht@linux.ibm.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 4/6] fbdev: Include <linux/io.h> via <asm/fb.h>
-Content-Language: en-US
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        Sam Ravnborg <sam@ravnborg.org>
-Cc:     linux-arch@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
-        arnd@arndb.de, deller@gmx.de, chenhuacai@kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        James.Bottomley@hansenpartnership.com,
-        linux-m68k@lists.linux-m68k.org, geert@linux-m68k.org,
-        loongarch@lists.linux.dev, vgupta@kernel.org,
-        sparclinux@vger.kernel.org, kernel@xen0n.name,
-        linux-snps-arc@lists.infradead.org, davem@davemloft.net,
-        linux-arm-kernel@lists.infradead.org
-References: <20230502130223.14719-1-tzimmermann@suse.de>
- <20230502130223.14719-5-tzimmermann@suse.de>
- <20230502195429.GA319489@ravnborg.org>
- <563673c0-799d-e353-974c-91b1ab881a22@suse.de>
- <87354dyj9i.fsf@minerva.mail-host-address-is-not-set>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <87354dyj9i.fsf@minerva.mail-host-address-is-not-set>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------dSf0EVbufBs83iVbfepPLDAU"
-X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: N2BoDKQMWFzeQ_-n6o8q4q4tqIFlUNaN
+X-Proofpoint-GUID: N2BoDKQMWFzeQ_-n6o8q4q4tqIFlUNaN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-03_04,2023-04-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
+ bulkscore=0 adultscore=0 mlxlogscore=949 suspectscore=0 clxscore=1015
+ mlxscore=0 lowpriorityscore=0 impostorscore=0 priorityscore=1501
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2305030066
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------dSf0EVbufBs83iVbfepPLDAU
-Content-Type: multipart/mixed; boundary="------------jY06Zzru0ezybpxu1Q2sypmE";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Javier Martinez Canillas <javierm@redhat.com>,
- Sam Ravnborg <sam@ravnborg.org>
-Cc: linux-arch@vger.kernel.org, linux-fbdev@vger.kernel.org,
- linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org, arnd@arndb.de,
- deller@gmx.de, chenhuacai@kernel.org, linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org, James.Bottomley@hansenpartnership.com,
- linux-m68k@lists.linux-m68k.org, geert@linux-m68k.org,
- loongarch@lists.linux.dev, vgupta@kernel.org, sparclinux@vger.kernel.org,
- kernel@xen0n.name, linux-snps-arc@lists.infradead.org, davem@davemloft.net,
- linux-arm-kernel@lists.infradead.org
-Message-ID: <97bbdb2f-6245-caf2-c0f6-d628873bd6db@suse.de>
-Subject: Re: [PATCH v3 4/6] fbdev: Include <linux/io.h> via <asm/fb.h>
-References: <20230502130223.14719-1-tzimmermann@suse.de>
- <20230502130223.14719-5-tzimmermann@suse.de>
- <20230502195429.GA319489@ravnborg.org>
- <563673c0-799d-e353-974c-91b1ab881a22@suse.de>
- <87354dyj9i.fsf@minerva.mail-host-address-is-not-set>
-In-Reply-To: <87354dyj9i.fsf@minerva.mail-host-address-is-not-set>
+The test case probe libc's inet_pton & backtrace it with ping
+fails with Fedora 38 on x86_64.
 
---------------jY06Zzru0ezybpxu1Q2sypmE
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Function getaddrinfo() does not show up in the call chain anymore:
+ # ./perf script
+ ping  1803 [000] 728.567146: probe_libc:inet_pton: (7f5275afc840)
+           133840 __GI___inet_pton+0x0 (/usr/lib64/libc.so.6)
+            27b4a __libc_start_call_main+0x7a (/usr/lib64/libc.so.6)
+            27c0b __libc_start_main@@GLIBC_2.34+0x8b (/usr/lib64/libc.so.6)
 
-SGkNCg0KQW0gMDMuMDUuMjMgdW0gMDk6MTkgc2NocmllYiBKYXZpZXIgTWFydGluZXogQ2Fu
-aWxsYXM6DQo+IFRob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPiB3cml0
-ZXM6DQo+IA0KPiBIZWxsbyBUaG9tYXMsDQo+IA0KPj4gQW0gMDIuMDUuMjMgdW0gMjE6NTQg
-c2NocmllYiBTYW0gUmF2bmJvcmc6DQo+Pj4gT24gVHVlLCBNYXkgMDIsIDIwMjMgYXQgMDM6
-MDI6MjFQTSArMDIwMCwgVGhvbWFzIFppbW1lcm1hbm4gd3JvdGU6DQo+IA0KPiBbLi4uXQ0K
-PiANCj4+Pj4gICAgI2luY2x1ZGUgPGxpbnV4L2NvbnNvbGUuaD4gLyogV2h5IHNob3VsZCBm
-YiBkcml2ZXIgY2FsbCBjb25zb2xlIGZ1bmN0aW9ucz8gYmVjYXVzZSBjb25zb2xlX2xvY2so
-KSAqLw0KPj4+PiAgICAjaW5jbHVkZSA8dmlkZW8vdmdhLmg+DQo+Pj4+ICAgIA0KPj4+PiAr
-I2luY2x1ZGUgPGFzbS9mYi5oPg0KPj4+DQo+Pj4gV2hlbiB3ZSBoYXZlIGEgaGVhZGVyIGxp
-a2UgbGludXgvZmIuaCAtIGl0IGlzIG15IHVuZGVyc3RhbmRpbmcgdGhhdCBpdCBpcw0KPj4+
-IHByZWZlcnJlZCB0byBpbmNsdWRlIHRoYXQgZmlsZSwgYW5kIG5vdCB0aGUgYXNtL2ZiLmgg
-dmFyaWFudC4NCj4+Pg0KPj4+IFRoaXMgaXMgYXNzdW1pbmcgdGhlIGxpbnV4L2ZiLmggY29u
-dGFpbnMgdGhlIGdlbmVyaWMgc3R1ZmYsIGFuZCBpbmNsdWRlcw0KPj4+IGFzbS9mYi5oIGZv
-ciB0aGUgYXJjaGl0ZWN0dXJlIHNwZWNpZmljIHBhcnRzLg0KPj4+DQo+Pj4gU28gZHJpdmVy
-cyB3aWxsIGluY2x1ZGUgbGludXgvZmIuaCBhbmQgdGhlbiB0aGV5IGF1dG9tYXRpY2FsbHkg
-Z2V0IHRoZQ0KPj4+IGFyY2hpdGVjdHVyZSBzcGVjaWZpYyBwYXJ0cyBmcm9tIGFzbS9mYi5o
-Lg0KPj4+DQo+Pj4gSW4gb3RoZXIgd29yZHMsIGRyaXZlcnMgYXJlIG5vdCBzdXBwb3NlZCB0
-byBpbmNsdWRlIGFzbS9mYi5oLCBpZg0KPj4+IGxpbnV4LmZiLmggZXhpc3RzIC0gYW5kIGxp
-bnV4L2ZiLmggc2hhbGwgaW5jbHVkZSB0aGUgYXNtL2ZiLmguDQo+Pj4NCj4+PiBJZiB0aGUg
-YWJvdmUgaG9sZHMgdHJ1ZSwgdGhlbiBpdCBpcyB3cm9uZyBhbmQgbm90IG5lZWRlZCB0byBh
-ZGQgYXNtL2ZiLmgNCj4+PiBhcyBzZWVuIGFib3ZlLg0KPj4+DQo+Pj4NCj4+PiBUaGVyZSBh
-cmUgY291bnRsZXNzIGV4YW1wbGVzIHdoZXJlIHRoZSBhYm92ZSBhcmUgbm90IGZvbGxvd2Vk
-LA0KPj4+IGJ1dCB0byBteSBiZXN0IHVuZGVyc3RhbmRpbmcgdGhlIGFib3ZlIGl0IHRoZSBw
-cmVmZXJyZWQgd2F5IHRvIGRvIGl0Lg0KPj4NCj4+IFdoZXJlIGRpZCB5b3VoZXIgdGhpcz8g
-SSBvbmx5IGtub3cgYWJvdXQgdGhpcyBpbiB0aGUgY2FzZSBvZiBhc20vaW8uaA0KPj4gdnMu
-IGxpbnV4L2lvLmguDQo+Pg0KPiANCj4gSSB1bmRlcnN0YW5kIHRoYXQncyB0aGUgY2FzZSB0
-b28uIEkgYmVsaWV2ZSBldmVuIGNoZWNrcGF0Y2gucGwgY29tcGxhaW5zDQo+IGFib3V0IGl0
-PyAobm90IHRoYXQgdGhlIHNjcmlwdCBhbHdheXMgZ2V0IHJpZ2h0LCBidXQganVzdCBhcyBh
-biBleGFtcGxlKS4NCg0KRG8geW91IGtub3cgaWYgdGhhdCdzIHRoZSBnZW5lcmFsIHJ1bGU/
-IElmIHNvLCB3ZSBtaWdodCB3YW50IHRvIA0KcmVwdXJwb3NlIDxhc20vZmJpby5oPiBmb3Ig
-dGhlIGZyYW1lYnVmZmVyIEkvTyBmdW5jdGlvbnMuDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFz
-DQoNCj4gDQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZl
-bG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KRnJhbmtlbnN0
-cmFzc2UgMTQ2LCA5MDQ2MSBOdWVybmJlcmcsIEdlcm1hbnkNCkdGOiBJdm8gVG90ZXYsIEFu
-ZHJldyBNeWVycywgQW5kcmV3IE1jRG9uYWxkLCBCb3VkaWVuIE1vZXJtYW4NCkhSQiAzNjgw
-OSAoQUcgTnVlcm5iZXJnKQ0K
+ ping  1803 [000]   728.567184: probe_libc:inet_pton: (7f5275afc840)
+           133840 __GI___inet_pton+0x0 (/usr/lib64/libc.so.6)
+             493e main+0xcde (/usr/bin/ping)
+            27b4a __libc_start_call_main+0x7a (/usr/lib64/libc.so.6)
 
---------------jY06Zzru0ezybpxu1Q2sypmE--
+ #
+which causes the test case to fail. Remove function getaddrinfo()
+from list of expected functions.
 
---------------dSf0EVbufBs83iVbfepPLDAU
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+Output before:
+ # ./perf test 'libc'
+ 91: probe libc's inet_pton & backtrace it with ping    : FAILED!
+ #
 
------BEGIN PGP SIGNATURE-----
+Output after:
+ # ./perf test 'libc'
+ 91: probe libc's inet_pton & backtrace it with ping    : Ok
+ #
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmRSF3IFAwAAAAAACgkQlh/E3EQov+Co
-3g/6A1O5+d0Sok09homhPOuVYuX/fK3UvhI7SSV8CChfilInrDjHcBh3jZGT5VD8NdGux1i8OQxK
-SNEswIVXK40SH6+Y0VAdvKHmixI6U2QTDsL7MBhKwd5zqxJaC633oR+0O5npj9Uo53fZexFuxt2V
-e/CxFlEFP30w+g5h8llM8g4Orz09mTPc2adxi5sG2jxhW6W/2sln8thofU3yEW+ktvjmpe+mu8fT
-72z8h3S5FP2SiZx09O6cKPR6GAf77CRPpigHnaw9SGeLDC3av+/X0Cet6toxCdExmHUKOqooBdQp
-MqElnyMAn8XN5YTFfwd2IfIFVyUdgni/3Kj0NAF2OtX6Y6u3gM/zoRZu4dBoThTh3P7alznR5hHX
-0rOZUuoOooOsRvjyx9nwL1zfgW5PbSrgC0RP0kka8Rbqofr7cCqLq2JxczFEOEzDZJc1c2fyw5PJ
-QxN47HbhHLwTQ4vjSy9USnQgxUz5Jg9yleUgYY/BvZZjEgHJWx/h7k2U+bgjWbJYaX0KyHe8uSto
-TVHJWxWdhESiQ3IqKgNzEj4iWc0Ocyeb5WdhBxWFyu3CuzN2Nr9LBsXEdDrUoTpySpABcGwOtjWJ
-CdQhriQsbKyN63JDZU7KL211DvtCm4TQn7hLgIIwfJoNQcc7FvwDJYkgNXl2IVsfLHQcbDpJiGjV
-J3o=
-=n0cz
------END PGP SIGNATURE-----
+Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
+---
+ tools/perf/tests/shell/record+probe_libc_inet_pton.sh | 1 -
+ 1 file changed, 1 deletion(-)
 
---------------dSf0EVbufBs83iVbfepPLDAU--
+diff --git a/tools/perf/tests/shell/record+probe_libc_inet_pton.sh b/tools/perf/tests/shell/record+probe_libc_inet_pton.sh
+index b4149b2db4c6..8d5915d3ad6f 100755
+--- a/tools/perf/tests/shell/record+probe_libc_inet_pton.sh
++++ b/tools/perf/tests/shell/record+probe_libc_inet_pton.sh
+@@ -51,7 +51,6 @@ trace_libc_inet_pton_backtrace() {
+ 		;;
+ 	*)
+ 		eventattr='max-stack=3'
+-		echo "getaddrinfo\+0x[[:xdigit:]]+[[:space:]]\($libc\)$" >> $expected
+ 		echo ".*(\+0x[[:xdigit:]]+|\[unknown\])[[:space:]]\(.*/bin/ping.*\)$" >> $expected
+ 		;;
+ 	esac
+-- 
+2.40.1
+
