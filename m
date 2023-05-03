@@ -2,93 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D91986F5527
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 11:47:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE1BC6F5816
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 14:43:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230055AbjECJrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 05:47:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41950 "EHLO
+        id S229721AbjECMm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 08:42:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbjECJqW (ORCPT
+        with ESMTP id S229679AbjECMm4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 05:46:22 -0400
-Received: from zimbra.hgl.mspz3.gob.ec (zimbra.hgl.mspz3.gob.ec [181.211.10.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE5E59C9
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 02:45:40 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.hgl.mspz3.gob.ec (Postfix) with ESMTP id 2C347D26352C;
-        Wed,  3 May 2023 04:45:05 -0500 (-05)
-Received: from zimbra.hgl.mspz3.gob.ec ([127.0.0.1])
-        by localhost (zimbra.hgl.mspz3.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id JaU64MEBRuBr; Wed,  3 May 2023 04:45:04 -0500 (-05)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.hgl.mspz3.gob.ec (Postfix) with ESMTP id 1D739D2EFB41;
-        Wed,  3 May 2023 04:45:04 -0500 (-05)
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra.hgl.mspz3.gob.ec 1D739D2EFB41
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hgl.mspz3.gob.ec;
-        s=742CE15C-1AFF-11EC-A9A2-9A629A3BD8AB; t=1683107104;
-        bh=mAhvhhVt0FojqIoI5vUL967LmtKhh/nKngvxnrO5ImE=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=oNybF1lXUTF703FprVh+T8CL9z+twQnJ6fvqqSfcqHAKeK8AwB2ZEm4t0FBG1yggL
-         sdoj4zS/Au7p6eadQ3GV21DuqYDiMCFcGmu/A1cMmzd2udsQC0r1eyylIdZqcOgck7
-         6LHPNl9IhZ8xUOk7QF2GDZkWBzasbnCC4AxhnpU/4wKTulGRxKHLKj/c+47Gsc7zgu
-         tdSwdNXixTj0ccf2MhlGR926wqZlw6c++Pa4DmRZNGSZTIlSsh6e74nH7yjwpAVm1c
-         syq5miUbctZzBp3kxaJ8mYVHE0TzsMVImCy3wQJq2FnN3hMNPP7r7ONVeX/fQQayrf
-         FC2CIIik45cmA==
-X-Virus-Scanned: amavisd-new at zimbra.hgl.mspz3.gob.ec
-Received: from zimbra.hgl.mspz3.gob.ec ([127.0.0.1])
-        by localhost (zimbra.hgl.mspz3.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 58xs5C_wnTda; Wed,  3 May 2023 04:45:04 -0500 (-05)
-Received: from [23.146.243.48] (unknown [23.146.243.48])
-        by zimbra.hgl.mspz3.gob.ec (Postfix) with ESMTPSA id 8F223D148A46;
-        Wed,  3 May 2023 04:43:38 -0500 (-05)
-Content-Type: text/plain; charset="iso-8859-1"
+        Wed, 3 May 2023 08:42:56 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9180949DE
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 05:42:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=gYfwJ7GhWlbQkcMj1JcM56SejKNs
+        fbTZDXFiVzo4qr0=; b=S7GdNggFjoW5pgqnXLEQHxJBBL2PKlmITuenHqyWty80
+        B2qxSmi/90aBsRqjZiqOM9NnJq5lXMMQYCQrnxD3u+PHj8tn9sTMW/7lRPdMsH9M
+        STxaQzDJ8PQ7KKPcnsDNksw5JkjUB5XOAAPug1WUQ2WLqVVTe7PmYzE9ata4lgM=
+Received: (qmail 85566 invoked from network); 3 May 2023 14:42:52 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 3 May 2023 14:42:52 +0200
+X-UD-Smtp-Session: l3s3148p1@pl3rZMn6AK8ujnsI
+Date:   Wed, 3 May 2023 14:42:51 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Phong Hoang <phong.hoang.wz@renesas.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] arm64: dts: renesas: r8a779a0: Add PWM nodes
+Message-ID: <ZFJWyxPR2iLVcOoL@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-renesas-soc@vger.kernel.org,
+        Phong Hoang <phong.hoang.wz@renesas.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230502170618.55967-1-wsa+renesas@sang-engineering.com>
+ <20230502170618.55967-3-wsa+renesas@sang-engineering.com>
+ <CAMuHMdV0iZJwNDRTxZXr-Rg_=VDN1hYw2gbSwwys1EDrzgC7Ew@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Re: Actualizacion
-To:     Recipients <geoconda.arias@hgl.mspz3.gob.ec>
-From:   "@zimbra" <geoconda.arias@hgl.mspz3.gob.ec>
-Date:   Wed, 03 May 2023 05:42:43 -0700
-Reply-To: webmasterzimbra1@gmail.com
-Message-Id: <20230503094344.8F223D148A46@zimbra.hgl.mspz3.gob.ec>
-X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="nlnmZCMUT4S19Qmp"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdV0iZJwNDRTxZXr-Rg_=VDN1hYw2gbSwwys1EDrzgC7Ew@mail.gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Su cuenta no ha pasado por el proceso de verificaci=F3n / actualizaci=F3n. =
-Los titulares de cuentas deben actualizar sus cuentas dentro de los 5 d=EDa=
-s h=E1biles posteriores a la recepci=F3n de este aviso. El incumplimiento d=
-e este aviso dentro de la fecha l=EDmite puede no ser capaz de enviar o rec=
-ibir todos los mensajes y el propietario correr=E1 el riesgo de perder su c=
-uenta.
 
-Confirme los detalles de la cuenta a continuaci=F3n.
-_____________________________________
-1. Nombre y apellido:
-2. Correo electr=F3nico completo en:
-3. Nombre de usuario:
-4. Contrase=F1a:
-5. Vuelva a escribir la contrase=F1a:
-_____________________________________
- =
+--nlnmZCMUT4S19Qmp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-NOTA !!! Si no actualiza su cuenta, su cuenta se eliminar=E1 autom=E1ticame=
-nte de nuestro sistema.
- =
 
-Nos disculpamos por cualquier inconveniente causado.
- =
+> > --- a/arch/arm64/boot/dts/renesas/r8a779a0.dtsi
+> > +++ b/arch/arm64/boot/dts/renesas/r8a779a0.dtsi
+> > @@ -1108,6 +1108,56 @@ msiof5: spi@e6c28000 {
+> >                         status =3D "disabled";
+> >                 };
+> >
+> > +               pwm0: pwm@e6e30000 {
+>=20
+> I'll move this before serial@e6e60000 while applying, to preserve sort
+> order (by unit address).
 
-Sinceramente
-Atenci=F3n al cliente
-Equipo de soporte t=E9cnico de Zimbra.
- =
+Oops, right, things have been added since I last worked on V3U. Thank
+you!
 
-Copyright =A9 2005-2023 Synacor, Inc. Todos los derechos reservados
+
+--nlnmZCMUT4S19Qmp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmRSVssACgkQFA3kzBSg
+KbYD/Q//byfip8AJ4NFJ+VuOVTkHRSqMm4tk+i5gyy3Q2DLMWmGEk/f7nXL4QB9x
+kzQSfTif8VDDuKpKa6CXFejaMJwRO0i7OwT20e2OrplqOr0cStHgY8/qdYNtU0OE
+n5m3UPTw+ndNIeaaVIi6IKVgwAEAFx3xriRWML79wqKut7IX/wW696KihXmFZoZu
+OoWDx16P1xPQErN3HgWe/YNU//8Ab0/hRX8RTjc4WZMT3dt8t7F4bncL5daB44nE
+7pLyx+8LQeo/5OJOLTeIQ5lVZKEMPidPD43H6t0D6shhPO88L2wDbyiryzh9jeuG
+eBYVCnRpYKdeRGUUiMygg6u+ozJzms0QcnFIFvis5Xzykww71gtJ/f8SyMurjfst
+MUXZeKXzEFg1d+kqCd/gfeU7UvZwgpClfR36rXyilpCD7uiFu/n60GlGc/jvWsls
+xYVSUly90Bl9A6qosHLkZwvQZXjMObYjMU5Gtf/jibE+0nRIwoiQJ4mwcuALdz3S
+VTsoMjOSXsGva1cxOU2Ci7zKUNuzy133OSbcl0TShmQDWQGFuJQ4le1ALJQnT48L
+QOnF4QsVF1dqQbiduVS7NHCCLyAY/CjO+irE1ScIxBzoGBodvKm8X6wHcjiqgRNy
+Av4hh+cBkmsYKpSLvMqdq8RNzvy1SgiZjQW6Kk6X0bMuHcYBz8c=
+=Fqdy
+-----END PGP SIGNATURE-----
+
+--nlnmZCMUT4S19Qmp--
