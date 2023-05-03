@@ -2,73 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 306756F5991
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 16:11:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 643696F599A
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 16:13:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230051AbjECOLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 10:11:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37956 "EHLO
+        id S230028AbjECONg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 10:13:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbjECOLu (ORCPT
+        with ESMTP id S229763AbjECONe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 10:11:50 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF5C59F0;
-        Wed,  3 May 2023 07:11:49 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id af79cd13be357-75131c2997bso227471585a.1;
-        Wed, 03 May 2023 07:11:49 -0700 (PDT)
+        Wed, 3 May 2023 10:13:34 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE355A3
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 07:13:32 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-3062678861fso3003456f8f.0
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 07:13:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683123108; x=1685715108;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gUG4sgiQ1KTeWUq0RWqJ+AL9Ulz9Emys2lp8p49mD5s=;
-        b=rsVvo1MaAxxvWQVE8a5FCgk271oCPa7AFeqUNjH6/7+2ugf+EiZEGJzNE8ao6Doj6t
-         FCOMbihFCQehwpN97HcEac4vldNeeF+zfGj56xFKoi1kMVDssrFv8AHNdHxVqOrRUCcZ
-         12PbplJFsUI01rHOPI3D8pODprPejrogUCjfF1HO0Yvbfh4rokDqkJqelu06D1HEFali
-         qocdi8YOQYAHDdb/ytqCW/u1w4cyQEx4DYZlo4/6MitiNEOyqbM5rYcSUoJfEAv/vuS8
-         ClfwGMI3fRfTRxZMdUfgMx6IyjcD+X4h5/kPMy5wmnFK71OQ9pyzv+t5/a9BfYXTVej+
-         dZ9Q==
+        d=linaro.org; s=google; t=1683123211; x=1685715211;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=AwALSkvKDHtujUw26080EGh0+IX6T4U1b0JJECQI5Yg=;
+        b=K65F2ABVlyAL5wa9u9bqzQLkeyIIggK7j19+oSao42j1/RNz7OyFUTMGo3LtjYJpKP
+         OTpY+8jveYg9IWMFwE4REgNuutGIa+llCy6+orIq9KHAwsHztZ+DKdMZq85Bqtfeweus
+         i/bSo7quw4zNEjFdZiHT9Gw/XQFVO+Gl7YOnyXevNfV/cL5PagfdU1umZZKnQaY0+y4V
+         UJJsf2x0UJa8v+vNywF/UwVJy/bKTPtRNh0ykMRgy79a2zTYozLz9X7glDyNKBalbdUv
+         v8VRlruHc2KTDRPAQ/rh60rrltoFbjc9rZ94c3bAXXsL2+tdpg/4c9+K0zxdIqfQyzow
+         m0qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683123108; x=1685715108;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1683123211; x=1685715211;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=gUG4sgiQ1KTeWUq0RWqJ+AL9Ulz9Emys2lp8p49mD5s=;
-        b=kT6dEQrWd9Fwo9LLnIc0Nu+70f5PNa3mY9fdhZEz61NXhNcYNQbdgmTwXAmoU2oQGj
-         8z3yfAjCXhpV0yVBU4LcmeH5dVY0mFoB7hRnvX7UTHVNA4WupzhJUKYKwc5i5U4CGld+
-         T2MnDaWUdXPvT1t85k5S7CQ7qwAW7J0v3ukGvqvBnDTBHmXGMVprSZIWbAfd5XYKzuXT
-         fHzrsXiDz7cj4Yb2SoJWg5+aiJHiyY1M2N9Yd5tUx9RrP5tVVcYETcKEdvFslCpKiEGy
-         lheO40uTEDtoRFCiG0UAhlWlkx6O084s0EzJw5zObW53W14kg4uJMtcSJAc7n5SHk7xf
-         U1yw==
-X-Gm-Message-State: AC+VfDxw0wq30oB595GQz0MUx7PfYEx8C6zMaGP8tvMKrdmFS2D/GNcz
-        pJqCPr7hec3z19lV1c6iMOM=
-X-Google-Smtp-Source: ACHHUZ61fVaZwt1vUlMIS5/1x/krBw24HmhirjusDb86fZD1DnQ0fQ02fTjFpaw4dwNSF9rp2B/dDg==
-X-Received: by 2002:a05:622a:190c:b0:3ef:3824:b8b0 with SMTP id w12-20020a05622a190c00b003ef3824b8b0mr461735qtc.5.1683123108129;
-        Wed, 03 May 2023 07:11:48 -0700 (PDT)
-Received: from pm2-ws13.praxislan02.com (207-172-141-204.s8906.c3-0.slvr-cbr1.lnh-slvr.md.cable.rcncustomer.com. [207.172.141.204])
-        by smtp.gmail.com with ESMTPSA id r2-20020a05622a034200b003ef42f84532sm11459281qtw.49.2023.05.03.07.11.46
+        bh=AwALSkvKDHtujUw26080EGh0+IX6T4U1b0JJECQI5Yg=;
+        b=Bmtm1xNPe+25MrnuZS1Z9BcLUtqJDkbcVgQ8d+lc/a4AEwJcLSWbgLOUTGYKxfjgkp
+         NImeNmJ0D8G4lg+wLFDAzqtcc5m7q+ZZifIBTRERBoj/5GeE1wQg28WG+MGG+SDERa3p
+         1Gpw+WKMgsszJxlF/rOydpmS3hU6yGwsBjXqJa0FGUtRl/WJNt9IO7oH91MkSDKycxOT
+         Ei63gjPZTJDMZM6oAUI9OkbNbUX9Z1fUMVBMKJKIDASva9Ku62yWGiCVhimTOxFQMknn
+         AYCk1hUbBXwGgHY332/ONcRLXkXDIw+3C7n7PYgTC3xOKoRj14JFF/h5Ki0evPwooNoY
+         Y/uA==
+X-Gm-Message-State: AC+VfDykVOwRCZyUTJDYu9GPZL66pKUuYgctPUTL2dRFrhhWup3jsFFx
+        21rwKK9Tf54ZH16SaVCm38Z4UA==
+X-Google-Smtp-Source: ACHHUZ6MOkzQkyGfaWvMMNk9dao/O7ohimeenJ7zgWo1S0c9nTeu1hwQA5p6/NQlOj2aDZe7xu4+PA==
+X-Received: by 2002:a5d:6241:0:b0:306:2c47:9736 with SMTP id m1-20020a5d6241000000b003062c479736mr175182wrv.15.1683123211117;
+        Wed, 03 May 2023 07:13:31 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id a13-20020a056000100d00b003063c130ef1sm3028638wrx.112.2023.05.03.07.13.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 May 2023 07:11:47 -0700 (PDT)
-From:   Jason Andryuk <jandryuk@gmail.com>
-To:     Eric Van Hensbergen <ericvh@kernel.org>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Christian Schoenebeck <linux_oss@crudebyte.com>
-Cc:     Jason Andryuk <jandryuk@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, v9fs@lists.linux.dev,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH v2] 9p: Remove INET dependency
-Date:   Wed,  3 May 2023 10:11:20 -0400
-Message-Id: <20230503141123.23290-1-jandryuk@gmail.com>
-X-Mailer: git-send-email 2.40.1
+        Wed, 03 May 2023 07:13:30 -0700 (PDT)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [PATCH 0/2] arm64: dts: qcom: pmk[345]50: enable reboot reason
+Date:   Wed, 03 May 2023 16:13:27 +0200
+Message-Id: <20230503-topic-sm8450-upstream-reboot-reason-v1-0-c5ac3dd5b49f@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAdsUmQC/x2NQQrDMAwEvxJ0rsB1ahL6ldKD7SqNILGD5JRCy
+ N8relpmDzMHKAmTwr07QOjDyrUYXC8d5DmWNyG/jME737vgemx144y6jrfgcN+0CcUVhVKtzSZ
+ qLUhhyqMfUsx+ADOlqIRJYsmzucq+LHZuQhN//+nH8zx/SDjG5ooAAAA=
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Abel Vesa <abel.vesa@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1068;
+ i=neil.armstrong@linaro.org; h=from:subject:message-id;
+ bh=EON79yjoVMWcDaKmyYQsV72yLHaegDJtRDFwAQR7DHY=;
+ b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkUmwJNcUBNiXogIwF9iTh1raJDqEw4lawPumc4Gho
+ oVJOnDyJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZFJsCQAKCRB33NvayMhJ0W6gEA
+ DHQvGUX2jQtEO4t9fk6Y4boD3lb2ELVyTrZK/sTFkmJI9HcN5eEDeX+lmSIGy9+DKRBHn5DpZ34FUt
+ fVpH2PQcZJtiUBYr/4FvO60VpJc4qjlLxXu8i6wn+fdpUoLBw2EYHIU4CUvYd5vHIfDfi4zFF8sPIu
+ yRr+9EuJFDQZM394NdR9R83uc4LT5GM2WY0LO1xCeS/LjdsmXjcVCz+8sS1OwyffcyqsQR8nhyimiZ
+ tFnyyPcXIv0EZphFRhIi8xiYR9wc8Mmf/X5BwxQ/Bf3wAGTh1uT1MzUmizFDdlmr3ENg0svEiQe8eH
+ V6HUacMQy7+I6efzIwOleolRy61IiA+voPu8Ppr1MHVDZWs+JvRzYvMht9opTcmjXVboJqOKVRYQBx
+ sG1q+h2RmEi4rQqBOfxzyRa+inEG+XDxNTnHZAevo44HYjBagqQAEAUSjNOx+XQ3FAm6j/baKdBzZs
+ 0v9egFp7p1a1rb8eL2g6vmTxO/F5jX+OKNwU7bXS4jGq/vMD3htRfV1Iugy4MeAD/FGXrREawZbLFt
+ Vwv5ic5AzhI9LSjwgL1a327U8Tn8jeImLtxrrqh2jHu4ymV58Aa4wZv89p87FeflM0za9O79nt4aaQ
+ dHuC7V/OpyPgZ0eWvRJNPgH10dE3uye+zJMIpK7HIM7Ks9ek1Sl0oNJkDQlg==
+X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
+ fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,143 +96,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-9pfs can run over assorted transports, so it doesn't have an INET
-dependency.  Drop it and remove the includes of linux/inet.h.
+Like SA8775P (at [1]), the SM8350, SM8450 & SM8550 platforms uses
+the SDAM2 nvmem to pass the reboot reason.
 
-NET_9P_FD/trans_fd.o builds without INET or UNIX and is unusable over
-plain file descriptors.  However, tcp and unix functionality is still
-built and would generate runtime failures if used.  Add imply INET and
-UNIX to NET_9P_FD, so functionality is enabled by default but can still
-be explicitly disabled.
+This simply adds the sdam2 and reboot reason nodes
+in the pmk8350 and pmk8550 dtsi.
 
-This allows configuring 9pfs over Xen with INET and UNIX disabled.
+Tested with:
 
-Signed-off-by: Jason Andryuk <jandryuk@gmail.com>
+and
+
+triggering the following ABL logs on HDK8450:
+  KeyPress:0, BootReason:2
+  Fastboot=1, Recovery:0
+and
+  KeyPress:0, BootReason:1
+  Fastboot=0, Recovery:1
+
+[1] https://lore.kernel.org/lkml/20230417145536.414490-1-brgl@bgdev.pl/T/
+
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
-v2
-Add imply INET and UNIX
----
- fs/9p/Kconfig          | 2 +-
- fs/9p/vfs_addr.c       | 1 -
- fs/9p/vfs_dentry.c     | 1 -
- fs/9p/vfs_dir.c        | 1 -
- fs/9p/vfs_file.c       | 1 -
- fs/9p/vfs_inode.c      | 1 -
- fs/9p/vfs_inode_dotl.c | 1 -
- fs/9p/vfs_super.c      | 1 -
- net/9p/Kconfig         | 2 ++
- 9 files changed, 3 insertions(+), 8 deletions(-)
+Neil Armstrong (2):
+      arm64: dts: qcom: pmk8350: add reboot-mode node using sdam_2 nvmem
+      arm64: dts: qcom: pmk8550: add reboot-mode node using sdam_2 nvmem
 
-diff --git a/fs/9p/Kconfig b/fs/9p/Kconfig
-index d7bc93447c85..0c63df574ee7 100644
---- a/fs/9p/Kconfig
-+++ b/fs/9p/Kconfig
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
- config 9P_FS
- 	tristate "Plan 9 Resource Sharing Support (9P2000)"
--	depends on INET && NET_9P
-+	depends on NET_9P
- 	select NETFS_SUPPORT
- 	help
- 	  If you say Y here, you will get experimental support for
-diff --git a/fs/9p/vfs_addr.c b/fs/9p/vfs_addr.c
-index 6f46d7e4c750..425956eb9fde 100644
---- a/fs/9p/vfs_addr.c
-+++ b/fs/9p/vfs_addr.c
-@@ -12,7 +12,6 @@
- #include <linux/file.h>
- #include <linux/stat.h>
- #include <linux/string.h>
--#include <linux/inet.h>
- #include <linux/pagemap.h>
- #include <linux/sched.h>
- #include <linux/swap.h>
-diff --git a/fs/9p/vfs_dentry.c b/fs/9p/vfs_dentry.c
-index 65fa2df5e49b..f16f73581634 100644
---- a/fs/9p/vfs_dentry.c
-+++ b/fs/9p/vfs_dentry.c
-@@ -13,7 +13,6 @@
- #include <linux/pagemap.h>
- #include <linux/stat.h>
- #include <linux/string.h>
--#include <linux/inet.h>
- #include <linux/namei.h>
- #include <linux/sched.h>
- #include <linux/slab.h>
-diff --git a/fs/9p/vfs_dir.c b/fs/9p/vfs_dir.c
-index 3d74b04fe0de..52bf87934650 100644
---- a/fs/9p/vfs_dir.c
-+++ b/fs/9p/vfs_dir.c
-@@ -13,7 +13,6 @@
- #include <linux/stat.h>
- #include <linux/string.h>
- #include <linux/sched.h>
--#include <linux/inet.h>
- #include <linux/slab.h>
- #include <linux/uio.h>
- #include <linux/fscache.h>
-diff --git a/fs/9p/vfs_file.c b/fs/9p/vfs_file.c
-index 44c15eb2b908..367a851eaa82 100644
---- a/fs/9p/vfs_file.c
-+++ b/fs/9p/vfs_file.c
-@@ -14,7 +14,6 @@
- #include <linux/file.h>
- #include <linux/stat.h>
- #include <linux/string.h>
--#include <linux/inet.h>
- #include <linux/list.h>
- #include <linux/pagemap.h>
- #include <linux/utsname.h>
-diff --git a/fs/9p/vfs_inode.c b/fs/9p/vfs_inode.c
-index 1d523bec0a94..502ac74e4959 100644
---- a/fs/9p/vfs_inode.c
-+++ b/fs/9p/vfs_inode.c
-@@ -15,7 +15,6 @@
- #include <linux/pagemap.h>
- #include <linux/stat.h>
- #include <linux/string.h>
--#include <linux/inet.h>
- #include <linux/namei.h>
- #include <linux/sched.h>
- #include <linux/slab.h>
-diff --git a/fs/9p/vfs_inode_dotl.c b/fs/9p/vfs_inode_dotl.c
-index 331ed60d8fcb..a7da49906d99 100644
---- a/fs/9p/vfs_inode_dotl.c
-+++ b/fs/9p/vfs_inode_dotl.c
-@@ -13,7 +13,6 @@
- #include <linux/pagemap.h>
- #include <linux/stat.h>
- #include <linux/string.h>
--#include <linux/inet.h>
- #include <linux/namei.h>
- #include <linux/sched.h>
- #include <linux/slab.h>
-diff --git a/fs/9p/vfs_super.c b/fs/9p/vfs_super.c
-index 266c4693e20c..10449994a972 100644
---- a/fs/9p/vfs_super.c
-+++ b/fs/9p/vfs_super.c
-@@ -12,7 +12,6 @@
- #include <linux/file.h>
- #include <linux/stat.h>
- #include <linux/string.h>
--#include <linux/inet.h>
- #include <linux/pagemap.h>
- #include <linux/mount.h>
- #include <linux/sched.h>
-diff --git a/net/9p/Kconfig b/net/9p/Kconfig
-index deabbd376cb1..00ebce9e5a65 100644
---- a/net/9p/Kconfig
-+++ b/net/9p/Kconfig
-@@ -17,6 +17,8 @@ if NET_9P
- 
- config NET_9P_FD
- 	default NET_9P
-+	imply INET
-+	imply UNIX
- 	tristate "9P FD Transport"
- 	help
- 	  This builds support for transports over TCP, Unix sockets and
+ arch/arm64/boot/dts/qcom/pmk8350.dtsi | 23 +++++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/pmk8550.dtsi | 23 +++++++++++++++++++++++
+ 2 files changed, 46 insertions(+)
+---
+base-commit: 92e815cf07ed24ee1c51b122f24ffcf2964b4b13
+change-id: 20230503-topic-sm8450-upstream-reboot-reason-e5fc827bac27
+
+Best regards,
 -- 
-2.40.1
+Neil Armstrong <neil.armstrong@linaro.org>
 
