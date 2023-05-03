@@ -2,205 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03A9C6F5F81
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 21:58:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C111A6F5F90
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 22:00:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbjECT6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 15:58:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36756 "EHLO
+        id S230016AbjECUAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 16:00:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbjECT6P (ORCPT
+        with ESMTP id S229911AbjECUAc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 15:58:15 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C04D4C29;
-        Wed,  3 May 2023 12:58:14 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 343JOU6M006258;
-        Wed, 3 May 2023 19:58:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=UCOhXWCZzsXVE1aRTaRL66l6NR89OJhY/cqL2K78T4o=;
- b=bmSSJIsr/lTaIj7MnMRByLsQybF/1CZxfchFpL1pFkq2PzgzAErxeVhpZjPnaCUvRQqR
- iyfNyLxsMFwxTTa8VEHNvQuP8mEm4JRpeHsomJjQUPMT8HrzkoPtNBiDmGl+lenz4bws
- yMf0fWTvRvu56i6flbEkchQnL6gg12vNj+SxWSjmeLZDts0juXVfn1EDmH7R9UAUMRua
- BLkEkT7f9LuySOgp4iHTYApqb/I4mE/KLY+9K9PRbpL4eAD6IXITiDKOtPlN5/lrjXmf
- 31mhz4gtrjr3ZiyfBsyOKHiiV9Zx0K3wtZpEu5pz5CYLmJcpIyEZGIgiLzTuFNxxm33h Zg== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qb9bhtra4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 03 May 2023 19:58:03 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 343Jw2AT006878
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 3 May 2023 19:58:02 GMT
-Received: from [10.71.110.189] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 3 May 2023
- 12:58:01 -0700
-Message-ID: <fe691246-93ee-7d84-aa6b-3d4ef51a6381@quicinc.com>
-Date:   Wed, 3 May 2023 12:58:01 -0700
+        Wed, 3 May 2023 16:00:32 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1793883D6;
+        Wed,  3 May 2023 13:00:31 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-64115e652eeso7674923b3a.0;
+        Wed, 03 May 2023 13:00:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683144030; x=1685736030;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0HV83qXSxt0rJsxUhYqPsLXk4a5FBTNhGHWC84tLfFA=;
+        b=T5ytdzQZFR/i6X3PRt8GPpsG1Y8I62q5m+7bcocFY5Cvsi6WjKKciTo/qMildNoBZe
+         u85rUJbf90oBHRO2tw11PhVl1/2+PBLQR5fvlp3hzuHC/CfV94InI4lPsLH/RfX1qbI8
+         ausoXPd6AA+d24SrubrUATq5ZGbTkNJHhzAmb4/I8cKntvdRB5ITs5umOnT9xtLYVW6J
+         XelWqPKoBht+a4RuNCfbFoX3W+hTDToV7mxgM9rNIWkoPMCAeRQG8Dr+8MzArcAuR1Md
+         bQM+fnzNC44jQ5pJFy8Oos8cJXJygO15rVG3lH4kT1O7gkNi5v7N3Otc1cZyartcRwPg
+         eT9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683144030; x=1685736030;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0HV83qXSxt0rJsxUhYqPsLXk4a5FBTNhGHWC84tLfFA=;
+        b=D85uzd0Xgft5mPfwBk68Ckxiihu/dLSxwTHOGrOyvFktrCpg+h70x05/9d3Hn51vWu
+         p2DMYZ3pfvI40Es+E4I7bP0MNnCSvP+t1VxNV3EXWfQajhIhmsKDbLtPoHLVulxRGBAo
+         /wL8Au9x733a6ZlvzkduFECy4gEW+8ttYHYaw/X4ESPIFBQ3l1dxaAhmTMWdz8Tw3H3s
+         rl9eGo4xXM/Xrqx1pzO1oOUWiosVceOM18rdvKmDiYmODHltz4MkO6wJX6NCXCS9QfiO
+         bCrKNww9ied3T88ALAOtBX19cHoPm5zBYs2D+Nz4YGj4hJG6tg+tVcZPSDYoM0LRug1o
+         8e4w==
+X-Gm-Message-State: AC+VfDw0T3h3jAWpS/7vacHU0sQZO1i5LESdDlLJkyq5T07T0Q71Q70O
+        32YWHMa0mlDFrke/wreCW/o=
+X-Google-Smtp-Source: ACHHUZ5olDzdTm5Ey2E+MQulD+SLoYUhuLqQV+Y8D7lSbEkzX4uIXZlIewj6XWYcqZ1z8grZ/iYmXg==
+X-Received: by 2002:a05:6a20:1587:b0:f6:592a:7e3d with SMTP id h7-20020a056a20158700b000f6592a7e3dmr3740358pzj.7.1683144030189;
+        Wed, 03 May 2023 13:00:30 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:6454])
+        by smtp.gmail.com with ESMTPSA id w22-20020a63f516000000b0052873a7cecesm3042624pgh.0.2023.05.03.13.00.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 May 2023 13:00:29 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 3 May 2023 10:00:28 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
+        vbabka@suse.cz, roman.gushchin@linux.dev, mgorman@suse.de,
+        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+        corbet@lwn.net, void@manifault.com, peterz@infradead.org,
+        juri.lelli@redhat.com, ldufour@linux.ibm.com,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, peterx@redhat.com, david@redhat.com,
+        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
+        nathan@kernel.org, dennis@kernel.org, muchun.song@linux.dev,
+        rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com,
+        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
+        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
+        ndesaulniers@google.com, gregkh@linuxfoundation.org,
+        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+        glider@google.com, elver@google.com, dvyukov@google.com,
+        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
+        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        kasan-dev@googlegroups.com, cgroups@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>
+Subject: Re: [PATCH 00/40] Memory allocation profiling
+Message-ID: <ZFK9XMSzOBxIFOHm@slm.duckdns.org>
+References: <ZFIVtB8JyKk0ddA5@moria.home.lan>
+ <ZFKNZZwC8EUbOLMv@slm.duckdns.org>
+ <20230503180726.GA196054@cmpxchg.org>
+ <ZFKlrP7nLn93iIRf@slm.duckdns.org>
+ <ZFKqh5Dh93UULdse@slm.duckdns.org>
+ <ZFKubD/lq7oB4svV@moria.home.lan>
+ <ZFKu6zWA00AzArMF@slm.duckdns.org>
+ <ZFKxcfqkUQ60zBB_@slm.duckdns.org>
+ <CAJuCfpEPkCJZO2svT-GfmpJ+V-jSLyFDKM_atnqPVRBKtzgtnQ@mail.gmail.com>
+ <ZFK6pwOelIlhV8Bm@slm.duckdns.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 3/7] drm/msm/dpu: add DPU_PINGPONG_DSC bits into PP_BLK
- and PP_BLK_TE marcos
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
-        <agross@kernel.org>, <andersson@kernel.org>
-CC:     <quic_abhinavk@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <marijn.suijten@somainline.org>, <freedreno@lists.freedesktop.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1683061382-32651-1-git-send-email-quic_khsieh@quicinc.com>
- <1683061382-32651-4-git-send-email-quic_khsieh@quicinc.com>
- <4315e96f-ed29-92aa-9549-d6fc9d820de6@linaro.org>
- <648e7cca-8bb1-73f0-2bbb-0a6b81df3882@quicinc.com>
- <a40c72c2-3483-020c-907e-6c7d84e88fbd@linaro.org>
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-In-Reply-To: <a40c72c2-3483-020c-907e-6c7d84e88fbd@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: NCubpt8ns_d3_3WbCZ13bunCw8m2fhg9
-X-Proofpoint-ORIG-GUID: NCubpt8ns_d3_3WbCZ13bunCw8m2fhg9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-03_14,2023-05-03_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- priorityscore=1501 impostorscore=0 phishscore=0 suspectscore=0 spamscore=0
- mlxlogscore=999 mlxscore=0 bulkscore=0 lowpriorityscore=0 adultscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2305030171
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZFK6pwOelIlhV8Bm@slm.duckdns.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
-On 5/3/2023 11:55 AM, Dmitry Baryshkov wrote:
-> On 03/05/2023 20:45, Kuogee Hsieh wrote:
->>
->> On 5/2/2023 3:42 PM, Dmitry Baryshkov wrote:
->>> On 03/05/2023 00:02, Kuogee Hsieh wrote:
->>>> At legacy chipsets, it required DPU_PINGPONG_DSC bit be set to 
->>>> indicate
->>>> pingpong ops functions are required to complete DSC data path setup if
->>>> this chipset has DSC hardware block presented. This patch add
->>>> DPU_PINGPONG_DSC bit to both PP_BLK and PP_BLK_TE marcos if it has DSC
->>>> hardware block presented.
->>>>
->>>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->>>> ---
->>>>   .../drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h    | 12 +++++-----
->>>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h |  8 +++----
->>>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h | 26 
->>>> ++++++++++------------
->>>>   .../drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h    | 24 
->>>> ++++++++++----------
->>>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_0_sm8250.h | 26 
->>>> ++++++++++------------
->>>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_2_sc7180.h |  4 ++--
->>>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_3_sm6115.h |  2 +-
->>>>   .../drm/msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h    |  2 +-
->>>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |  8 +++----
->>>>   9 files changed, 54 insertions(+), 58 deletions(-)
->>>>
->>>> diff --git 
->>>> a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h 
->>>> b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
->>>> index 17f821c..b7cd746 100644
->>>> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
->>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
->>>> @@ -112,16 +112,16 @@ static const struct dpu_lm_cfg msm8998_lm[] = {
->>>>   };
->>>>     static const struct dpu_pingpong_cfg msm8998_pp[] = {
->>>> -    PP_BLK_TE("pingpong_0", PINGPONG_0, 0x70000, 0, 
->>>> sdm845_pp_sblk_te,
->>>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
->>>> +    PP_BLK_TE("pingpong_0", PINGPONG_0, 0x70000, 
->>>> BIT(DPU_PINGPONG_DSC), 0,
->>>> +            sdm845_pp_sblk_te, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
->>>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
->>>> -    PP_BLK_TE("pingpong_1", PINGPONG_1, 0x70800, 0, 
->>>> sdm845_pp_sblk_te,
->>>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
->>>> +    PP_BLK_TE("pingpong_1", PINGPONG_1, 0x70800, 
->>>> BIT(DPU_PINGPONG_DSC), 0,
->>>> +            sdm845_pp_sblk_te, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
->>>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 13)),
->>>> -    PP_BLK("pingpong_2", PINGPONG_2, 0x71000, 0, sdm845_pp_sblk,
->>>> +    PP_BLK("pingpong_2", PINGPONG_2, 0x71000, 0, 0, sdm845_pp_sblk,
->>>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10),
->>>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 14)),
->>>> -    PP_BLK("pingpong_3", PINGPONG_3, 0x71800, 0, sdm845_pp_sblk,
->>>> +    PP_BLK("pingpong_3", PINGPONG_3, 0x71800, 0, 0, sdm845_pp_sblk,
->>>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11),
->>>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
->>>
->>> Just to doublecheck: why don't we have DPU_PINGPONG_DSC for PP_3/_4? 
->>> We do have them on sdm845. Is it because we should not use DSC with 
->>> thos PINGPONG blocks?
->>>
->> I think it only have two DSPP connect to pp blocks
->
-> So, can they be connected to PP3/4 or not?
+On Wed, May 03, 2023 at 09:48:55AM -1000, Tejun Heo wrote:
+> > If so, that's the idea behind the context capture feature so that we
+> > can enable it on specific allocations only after we determine there is
+> > something interesting there. So, with low-cost persistent tracking we
+> > can determine the suspects and then pay some more to investigate those
+> > suspects in more detail.
+> 
+> Yeah, I was wondering whether it'd be useful to have that configurable so
+> that it'd be possible for a user to say "I'm okay with the cost, please
+> track more context per allocation". Given that tracking the immediate caller
+> is already a huge improvement and narrowing it down from there using
+> existing tools shouldn't be that difficult, I don't think this is a blocker
+> in any way. It just bothers me a bit that the code is structured so that
+> source line is the main abstraction.
 
-no, my previous reply is not correct.
+Another related question. So, the reason for macro'ing stuff is needed is
+because you want to print the line directly from kernel, right? Is that
+really necessary? Values from __builtin_return_address() can easily be
+printed out as function+offset from kernel which already gives most of the
+necessary information for triaging and mapping that back to source line from
+userspace isn't difficult. Wouldn't using __builtin_return_address() make
+the whole thing a lot simpler?
 
-original i though pp_3/_4 are for write back.
+Thanks.
 
-but this not correct, 2 dspp can connect to pp_3/_4 also.
-
-I will add DPU_PINGPONG_DSC to pp_3/_4.
-
-
->
->>>>   };
->>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h 
->>>> b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h
->>>> index ceca741..8888bd9 100644
->>>> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h
->>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h
->>>> @@ -110,16 +110,16 @@ static const struct dpu_lm_cfg sdm845_lm[] = {
->>>>   };
->>>>     static const struct dpu_pingpong_cfg sdm845_pp[] = {
->>>> -    PP_BLK_TE("pingpong_0", PINGPONG_0, 0x70000, 0, 
->>>> sdm845_pp_sblk_te,
->>>> +    PP_BLK_TE("pingpong_0", PINGPONG_0, 0x70000, 
->>>> BIT(DPU_PINGPONG_DSC), 0, sdm845_pp_sblk_te,
->>>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
->>>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
->>>> -    PP_BLK_TE("pingpong_1", PINGPONG_1, 0x70800, 0, 
->>>> sdm845_pp_sblk_te,
->>>> +    PP_BLK_TE("pingpong_1", PINGPONG_1, 0x70800, 
->>>> BIT(DPU_PINGPONG_DSC), 0, sdm845_pp_sblk_te,
->>>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
->>>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 13)),
->>>> -    PP_BLK("pingpong_2", PINGPONG_2, 0x71000, 0, sdm845_pp_sblk,
->>>> +    PP_BLK("pingpong_2", PINGPONG_2, 0x71000, 
->>>> BIT(DPU_PINGPONG_DSC), 0, sdm845_pp_sblk,
->>>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10),
->>>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 14)),
->>>> -    PP_BLK("pingpong_3", PINGPONG_3, 0x71800, 0, sdm845_pp_sblk,
->>>> +    PP_BLK("pingpong_3", PINGPONG_3, 0x71800, 
->>>> BIT(DPU_PINGPONG_DSC), 0, sdm845_pp_sblk,
->>>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11),
->>>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
->>>>
->>>
->>> [skipped the rest, looks good to me]
->>>
->
+-- 
+tejun
