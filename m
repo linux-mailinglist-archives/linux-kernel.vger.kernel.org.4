@@ -2,100 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19DEB6F59AC
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 16:19:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB78A6F59B3
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 16:20:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229953AbjECOTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 10:19:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42116 "EHLO
+        id S230237AbjECOUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 10:20:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbjECOTx (ORCPT
+        with ESMTP id S229995AbjECOUm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 10:19:53 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C3759F7
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 07:19:52 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-95f4c5cb755so1008007266b.0
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 07:19:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683123590; x=1685715590;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uWgO7hULIYINXjGmfuoAQDTi7WMO+rhRdnfLea0FV6s=;
-        b=CP/OHCt/e7mqivbmA8RV5uShl7FpaLgGQ+cEPXffsVjXHIDDZdUZKj59N3CC7GjNox
-         77W32+m1Vevs34OaSgnTI4YZxQmonF4WchSd1O5Mf6FhU7TMpFWixFiZPu7LUXI8gAfj
-         oPk9SAjXBFPfT7fcf24IJSXcsy6oO3q1yx3M6Rn2Thyg7dEEPuwEPF6l3UWRsYaKV8mu
-         w5oE+vhGFlT2v3/mQ9LFQzNtSblCI+0IZQ/s3GEEnFN4QXgUQQB8PWbFfAFT4vnlpG3D
-         8vs1vFKNRfWsyVNr6tf9H7txea5GI2qVR5VDCEQBTQnz/tedyrZBk1oPsSYzEWsE3fhd
-         B+zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683123590; x=1685715590;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uWgO7hULIYINXjGmfuoAQDTi7WMO+rhRdnfLea0FV6s=;
-        b=XQE5XfmDii9ZxmULGuPGat8XLl8MzABCzhTTcleLg0T5ySDHuKXgOHZaPF7wKWXe3z
-         eUTtL2LYP9RQyEpKygke+fsWpn0xEPjyS9oF8+NoBvj0P12hB7pjh0dBEPSYJiOO7dlj
-         tKtZzhwN52AnI45rXCzihp7KpYe8lbgY7k/Y32/GGB7hGk+xUFS7jW8MOuGRkUheEXQd
-         eJJxwFanDplLKeJ745tIYwzvk/MB+TWe4w/LYZSIxUvhye/mCiVfSZSaxaAbqi7gQG0P
-         hR8GpHNqjLWEb5L38lrxkH6N0UoFgAWOV0TfHOZC+9gTHT4sg1ERhwBRAgksbnUQBNuq
-         MXWA==
-X-Gm-Message-State: AC+VfDzjR6PKSobfycFyjQicXnFezPhytBP5y+JS4Jb65uA6khLEyWvU
-        JwOU2kkrbMid33LyM5tk8QyglIC7uvowdY78re2PZIao
-X-Google-Smtp-Source: ACHHUZ5TWjOPSlETWTZrvGUlMvw+LaPKm7EzQMkfpLGL86DzCj1hoJhrNBBY+/0jXpFGI1jS8SdmJA==
-X-Received: by 2002:a17:907:25c1:b0:94f:62a2:d1ab with SMTP id ae1-20020a17090725c100b0094f62a2d1abmr3360895ejc.63.1683123590563;
-        Wed, 03 May 2023 07:19:50 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:db42:e3d0:c55a:8cf1? ([2a02:810d:15c0:828:db42:e3d0:c55a:8cf1])
-        by smtp.gmail.com with ESMTPSA id e6-20020a1709062c0600b0094ef2003581sm17287005ejh.153.2023.05.03.07.19.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 May 2023 07:19:49 -0700 (PDT)
-Message-ID: <256d8a4e-ecad-668a-b404-fd10debdc8f5@linaro.org>
-Date:   Wed, 3 May 2023 16:19:43 +0200
+        Wed, 3 May 2023 10:20:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90A0D59F7;
+        Wed,  3 May 2023 07:20:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B4FA62DDC;
+        Wed,  3 May 2023 14:20:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75D86C433D2;
+        Wed,  3 May 2023 14:20:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683123640;
+        bh=B/byiGRb2kElHzhLs8i3vMpx6Eq2eV1GQaupQ5p6W14=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Hf1xqOynP8r+xdYeg5iDsOp1QXAPWNX+EeWOtmAT0vfdre7GtfqfDnvWfMT4VbgTi
+         W4k2ThDGKEe03SK+/E281k29evFeM8QWXvxynMvFg4W/6FHrB2qh8/yTd3cu6w9cZ5
+         iodu4EhjBC75RZXcxSk1a5179MjmEzeJHrMcII/Hk16buPuReZjkQ1sQRwGTD5oX1P
+         mOawJte++byKiiGdeBj3mChUv555myDwv6MXgoatDm5O/zabgVu2jTJvDrijdS4VBB
+         ofZX6rr7heInptz16aMXa0ad2VkgaW4h6f5kkV70L1QPjCPmuGDju5mFCp2uaq99Uq
+         9hwrCzOKpwCzw==
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Chinner <david@fromorbit.com>,
+        Chuck Lever <chuck.lever@oracle.com>
+Cc:     Jan Kara <jack@suse.cz>, Amir Goldstein <amir73il@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Neil Brown <neilb@suse.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Theodore T'so <tytso@mit.edu>, Chris Mason <clm@fb.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-mm@kvack.org, linux-nfs@vger.kernel.org
+Subject: [PATCH v3 0/6] fs: implement multigrain timestamps
+Date:   Wed,  3 May 2023 10:20:31 -0400
+Message-Id: <20230503142037.153531-1-jlayton@kernel.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 1/2] arm64: dts: qcom: pmk8350: add reboot-mode node using
- sdam_2 nvmem
-Content-Language: en-US
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Abel Vesa <abel.vesa@linaro.org>, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230503-topic-sm8450-upstream-reboot-reason-v1-0-c5ac3dd5b49f@linaro.org>
- <20230503-topic-sm8450-upstream-reboot-reason-v1-1-c5ac3dd5b49f@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230503-topic-sm8450-upstream-reboot-reason-v1-1-c5ac3dd5b49f@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/05/2023 16:13, Neil Armstrong wrote:
-> Introduce sdam_2 node, which is to be used via nvmem for power on
-> reasons during reboot. Add supported PoN reasons supported via sdam_2
-> node.
-> 
+Major changes in v3:
+- move flag to use bit 31 instead of 0 since the upper bits in the
+  tv_nsec field aren't used for timestamps. This means we don't need to
+  set s_time_gran to a value higher than 1.
 
+- use an fstype flag instead of a superblock flag
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Tested-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+...plus a lot of smaller cleanups and documentation.
 
-Tested on HDK8450.
+The basic idea with multigrain timestamps is to keep track of when an
+inode's mtime or ctime has been queried and to force a fine-grained
+timestamp the next time the mtime or ctime is updated.
 
+This is a follow-up of the patches I posted last week [1]. The main
+change in this set is that it no longer uses the lowest-order bit in the
+tv_nsec field, and instead uses one of the higher-order bits (#31,
+specifically) since they are otherwise unused. This change makes things
+much simpler, and we no longer need to twiddle s_time_gran for it.
 
+Note that with these changes, the statx06 LTP test will intermittently
+fail on most filesystems, usually with errors like this:
 
-Best regards,
-Krzysztof
+    statx06.c:138: TFAIL: Birth time > after_time
+    statx06.c:138: TFAIL: Modified time > after_time
+
+The test does this:
+
+        SAFE_CLOCK_GETTIME(CLOCK_REALTIME_COARSE, &before_time);
+        clock_wait_tick();
+        tc->operation();
+        clock_wait_tick();
+        SAFE_CLOCK_GETTIME(CLOCK_REALTIME_COARSE, &after_time);
+
+Converting the second SAFE_CLOCK_GETTIME to use CLOCK_REALTIME instead
+gets things working again.
+
+For now, I've only converted/tested a few filesystems, focusing on the
+most popular ones exported via NFS.  If this approach looks acceptable
+though, I'll plan to convert more filesystems to it.
+
+Another thing we could consider is enabling this unilaterally
+kernel-wide. I decided not to do that for now, but it's something we
+could consider for lately.
+
+[1]: https://lore.kernel.org/linux-fsdevel/20230424151104.175456-1-jlayton@kernel.org/
+
+Jeff Layton (6):
+  fs: add infrastructure for multigrain inode i_m/ctime
+  overlayfs: allow it handle multigrain timestamps
+  shmem: convert to multigrain timestamps
+  xfs: convert to multigrain timestamps
+  ext4: convert to multigrain timestamps
+  btrfs: convert to multigrain timestamps
+
+ fs/btrfs/delayed-inode.c        |  2 +-
+ fs/btrfs/file.c                 | 10 +++---
+ fs/btrfs/inode.c                | 25 +++++++-------
+ fs/btrfs/ioctl.c                |  6 ++--
+ fs/btrfs/reflink.c              |  2 +-
+ fs/btrfs/super.c                |  5 +--
+ fs/btrfs/transaction.c          |  2 +-
+ fs/btrfs/tree-log.c             |  2 +-
+ fs/btrfs/volumes.c              |  2 +-
+ fs/btrfs/xattr.c                |  4 +--
+ fs/ext4/acl.c                   |  2 +-
+ fs/ext4/extents.c               | 10 +++---
+ fs/ext4/ialloc.c                |  2 +-
+ fs/ext4/inline.c                |  4 +--
+ fs/ext4/inode.c                 | 24 ++++++++++---
+ fs/ext4/ioctl.c                 |  8 ++---
+ fs/ext4/namei.c                 | 20 +++++------
+ fs/ext4/super.c                 |  4 +--
+ fs/ext4/xattr.c                 |  2 +-
+ fs/inode.c                      | 52 ++++++++++++++++++++++++++--
+ fs/overlayfs/file.c             |  7 ++--
+ fs/overlayfs/util.c             |  2 +-
+ fs/stat.c                       | 32 +++++++++++++++++
+ fs/xfs/libxfs/xfs_inode_buf.c   |  2 +-
+ fs/xfs/libxfs/xfs_trans_inode.c |  2 +-
+ fs/xfs/xfs_acl.c                |  2 +-
+ fs/xfs/xfs_bmap_util.c          |  2 +-
+ fs/xfs/xfs_inode.c              |  2 +-
+ fs/xfs/xfs_inode_item.c         |  2 +-
+ fs/xfs/xfs_iops.c               | 15 ++++++--
+ fs/xfs/xfs_super.c              |  2 +-
+ include/linux/fs.h              | 61 ++++++++++++++++++++++++++++++++-
+ mm/shmem.c                      | 25 +++++++-------
+ 33 files changed, 255 insertions(+), 89 deletions(-)
+
+-- 
+2.40.1
 
