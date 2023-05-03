@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A01E36F53F3
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 11:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3B976F53FA
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 11:07:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbjECJH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 05:07:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45316 "EHLO
+        id S229656AbjECJHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 05:07:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbjECJHZ (ORCPT
+        with ESMTP id S229907AbjECJH1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 05:07:25 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF9764691
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 02:07:19 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-3063afa2372so1356511f8f.0
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 02:07:19 -0700 (PDT)
+        Wed, 3 May 2023 05:07:27 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A70149EC
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 02:07:21 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f178da21b5so31755925e9.3
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 02:07:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=metaspace-dk.20221208.gappssmtp.com; s=20221208; t=1683104838; x=1685696838;
+        d=metaspace-dk.20221208.gappssmtp.com; s=20221208; t=1683104839; x=1685696839;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=s2OF8cEuaV6eZXvZ8+TxAkEcAWTLOcEvP8M1z8Cu3eg=;
-        b=gxwZbpfudAGlkc9suPmtflL1jblQr4MK2hN1E3gaOGf/Plu3em+uZBGDw0rNUr7SUW
-         EFB1a9htiLdSYQkjbn0JwIhIuQzJvNeRrzMlV0eXOLXXzIMN08VTuR5LYMKTn7m05OvH
-         9LHtC/oRDhdH3ACVUabMlgXW9Ewt8dD9XDI4Ez+21QfYADeNMEfiUmJzzu0XcckSKJuW
-         Nj3Eh8mnhKzN9/T17uqbvi142/KhX1PBU6Qk/kU/ro0xuE5e8kN3AfwwdKqZvdZVSRvp
-         4qO3v7fHN7bd8dDrEFaz1iXrwav7RAETaSSc1oLICAvTlYivVQel8jdUiGT3J45aYlDO
-         jWSQ==
+        bh=oTm6JqVuE+nMnHE8FtSNpIwMZXEBmyO5CLHkBrzqYiM=;
+        b=y8ejhwlgPFRLA58nqaLi6rcO3cTM2Bfu5R3HefR0o7cV9HTZoOxGUPasuvY46ZCwRh
+         Sieo0Nw1Hzb4wY/iGDsNeHNIVg922qi3pacnA1K1Se735gJ7tsTrShXrb9Q3Tud15qCH
+         pSi0ybeIHv49VuB2OI3rl+J+JTSb+9Q6ggrpcJFtEdi5YM3IsSttMHyzuBP0ZuAFksoN
+         vicg6hsE+vaLEKi9gFV/LC2GyxdFyAnbn301c0wlUyeORPMq2Ykn/8QtIJHJeargKiXo
+         g6ZYJxIn2Ojk9efoIi4W30BLPTSKqbSu7FqbbaUdRjKDx6DSjir7twQZkzXbwUjeKM5j
+         +eEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683104838; x=1685696838;
+        d=1e100.net; s=20221208; t=1683104839; x=1685696839;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=s2OF8cEuaV6eZXvZ8+TxAkEcAWTLOcEvP8M1z8Cu3eg=;
-        b=B3djbIyFvFI1xcdYRleM7my6CV2w9AGmi0Js/kbqc5yaZdghRmV013oVBgH/RGSrX/
-         uwutFZUtCJjbSCtD4QXxRaAmofOZgkgEWbDc2MkQ0jEjFkpCfwzIIgGd+5fTvhO8566O
-         rO0eWgAKDtOCgXZgUq2bUTSLSXrqfT/T1vu7NBg7PvqsOdC15ne+wRVXusIFCJzQoxA6
-         a+UrziC21rfJwkOro1mllKR1bLKhA1ab9yoRqRzmsPiV+Bueffv5nf4HAMX24tmQQ+A7
-         CahJyDikTuXNJVfAybXwCxIJ5lcmZQGu+AhscxDX+DzwHsv6qbd7WMXnMifsHYl6GXsH
-         sjAA==
-X-Gm-Message-State: AC+VfDzqkwFbW16BVS1rN61ShpWfUt0Dr8AOWAwCCE/aYvXbMNeCywjB
-        Zixf9suOGvFwXGS8nQJHSRVwyg==
-X-Google-Smtp-Source: ACHHUZ7yrDB5gpNUkKE0X5q8MEbvZmkfVFN8rXKsdmGE0Vy4CSxFk+RB6D8+DyE/dyNCU1ItHJSB8g==
-X-Received: by 2002:a05:6000:1145:b0:306:2cf5:79dc with SMTP id d5-20020a056000114500b003062cf579dcmr6255554wrx.35.1683104838080;
-        Wed, 03 May 2023 02:07:18 -0700 (PDT)
+        bh=oTm6JqVuE+nMnHE8FtSNpIwMZXEBmyO5CLHkBrzqYiM=;
+        b=ARgkB/7wsNnBfz8kp/2VCBhWoa4VU8Ed7NhzzWXJECFz8XggMQPfTIRIuWLlyEYlkl
+         EGKBnDUvqd18jFHbQo3Z9DvOimHjUd9cXsP+L5PBB/QREOIA9qg7gbO7sF8vJtPXCrL1
+         Vxh7e36XAZ6kYRvgZTb4+I701eUFfXI8/hMEDS4LatItkKblGCKucp08Z+DrlQ2SbMca
+         t2Th6fHQ86sxBKzfgfnJAfjqCq1sSinjPSNsJHveg/7SQdm9vNNe3MuRCV5Xs21Q4IMi
+         7uK6waXtgcf2sSTq91jxnjBY98Z1TF+b5EPvAwCEhpeZHZmRjbDiJJnK4mHwm21JgiZl
+         5Wgw==
+X-Gm-Message-State: AC+VfDz8yJE8aheqOJXSHWKiSfLGu6LuVN33p/ZGeV09yStMglDida7C
+        hvyKRiWisvvk6jdxgL/CBONYWg==
+X-Google-Smtp-Source: ACHHUZ7NYkY5wjU5kOgvBlYNkrutaPEK/czR704t4GtHEI0ibjC9b/NRGmiwBmTmJwdWADfymkFv2Q==
+X-Received: by 2002:a7b:c383:0:b0:3f3:3a81:334 with SMTP id s3-20020a7bc383000000b003f33a810334mr6690102wmj.29.1683104839156;
+        Wed, 03 May 2023 02:07:19 -0700 (PDT)
 Received: from localhost ([147.161.155.99])
-        by smtp.gmail.com with ESMTPSA id t15-20020adfe44f000000b002f00793bd7asm33035982wrm.27.2023.05.03.02.07.17
+        by smtp.gmail.com with ESMTPSA id s7-20020a1cf207000000b003f1733feb3dsm1305041wmc.0.2023.05.03.02.07.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 May 2023 02:07:17 -0700 (PDT)
+        Wed, 03 May 2023 02:07:18 -0700 (PDT)
 From:   Andreas Hindborg <nmi@metaspace.dk>
 To:     Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
         Keith Busch <kbusch@kernel.org>,
@@ -67,9 +67,9 @@ Cc:     Andreas Hindborg <a.hindborg@samsung.com>,
         Benno Lossin <benno.lossin@proton.me>,
         Andreas Hindborg <nmi@metaspace.dk>,
         linux-kernel@vger.kernel.org (open list), gost.dev@samsung.com
-Subject: [RFC PATCH 02/11] rust: add `pages` module for handling page allocation
-Date:   Wed,  3 May 2023 11:06:59 +0200
-Message-Id: <20230503090708.2524310-3-nmi@metaspace.dk>
+Subject: [RFC PATCH 03/11] rust: block: introduce `kernel::block::mq` module
+Date:   Wed,  3 May 2023 11:07:00 +0200
+Message-Id: <20230503090708.2524310-4-nmi@metaspace.dk>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230503090708.2524310-1-nmi@metaspace.dk>
 References: <20230503090708.2524310-1-nmi@metaspace.dk>
@@ -87,386 +87,771 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andreas Hindborg <a.hindborg@samsung.com>
 
-This patch adds support for working with pages of order 0. Support for pages
-with higher order is deferred. Page allocation flags are fixed in this patch.
-Future work might allow the user to specify allocation flags.
+Add initial abstractions for working with blk-mq.
 
-This patch is a heavily modified version of code available in the rust tree [1],
-primarily adding support for multiple page mapping strategies.
+This patch is a maintained, refactored subset of code originally published by
+Wedson Almeida Filho <wedsonaf@gmail.com> [1].
 
-[1] https://github.com/rust-for-Linux/linux/tree/bc22545f38d74473cfef3e9fd65432733435b79f/rust/kernel/pages.rs
+[1] https://github.com/wedsonaf/linux/tree/f2cfd2fe0e2ca4e90994f96afe268bbd4382a891/rust/kernel/blk/mq.rs
 
+Cc: Wedson Almeida Filho <wedsonaf@gmail.com>
 Signed-off-by: Andreas Hindborg <a.hindborg@samsung.com>
 ---
- rust/helpers.c       |  31 +++++
- rust/kernel/lib.rs   |   6 +
- rust/kernel/pages.rs | 284 +++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 321 insertions(+)
- create mode 100644 rust/kernel/pages.rs
+ rust/bindings/bindings_helper.h    |   2 +
+ rust/helpers.c                     |  22 +++
+ rust/kernel/block.rs               |   5 +
+ rust/kernel/block/mq.rs            |  15 ++
+ rust/kernel/block/mq/gen_disk.rs   | 133 +++++++++++++++
+ rust/kernel/block/mq/operations.rs | 260 +++++++++++++++++++++++++++++
+ rust/kernel/block/mq/raw_writer.rs |  30 ++++
+ rust/kernel/block/mq/request.rs    |  71 ++++++++
+ rust/kernel/block/mq/tag_set.rs    |  92 ++++++++++
+ rust/kernel/error.rs               |   4 +
+ rust/kernel/lib.rs                 |   1 +
+ 11 files changed, 635 insertions(+)
+ create mode 100644 rust/kernel/block.rs
+ create mode 100644 rust/kernel/block/mq.rs
+ create mode 100644 rust/kernel/block/mq/gen_disk.rs
+ create mode 100644 rust/kernel/block/mq/operations.rs
+ create mode 100644 rust/kernel/block/mq/raw_writer.rs
+ create mode 100644 rust/kernel/block/mq/request.rs
+ create mode 100644 rust/kernel/block/mq/tag_set.rs
 
+diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_helper.h
+index 52834962b94d..86c07eeb1ba1 100644
+--- a/rust/bindings/bindings_helper.h
++++ b/rust/bindings/bindings_helper.h
+@@ -11,6 +11,8 @@
+ #include <linux/wait.h>
+ #include <linux/sched.h>
+ #include <linux/radix-tree.h>
++#include <linux/blk_types.h>
++#include <linux/blk-mq.h>
+ 
+ /* `bindgen` gets confused at certain things. */
+ const gfp_t BINDINGS_GFP_KERNEL = GFP_KERNEL;
 diff --git a/rust/helpers.c b/rust/helpers.c
-index 5dd5e325b7cc..9bd9d95da951 100644
+index 9bd9d95da951..a59341084774 100644
 --- a/rust/helpers.c
 +++ b/rust/helpers.c
-@@ -27,6 +27,7 @@
- #include <linux/sched/signal.h>
+@@ -18,6 +18,7 @@
+  * accidentally exposed.
+  */
+ 
++#include <linux/bio.h>
+ #include <linux/bug.h>
+ #include <linux/build_bug.h>
+ #include <linux/err.h>
+@@ -28,6 +29,8 @@
  #include <linux/wait.h>
  #include <linux/radix-tree.h>
-+#include <linux/highmem.h>
+ #include <linux/highmem.h>
++#include <linux/blk-mq.h>
++#include <linux/blkdev.h>
  
  __noreturn void rust_helper_BUG(void)
  {
-@@ -150,6 +151,36 @@ void **rust_helper_radix_tree_next_slot(void **slot,
+@@ -130,6 +133,25 @@ void rust_helper_put_task_struct(struct task_struct *t)
  }
- EXPORT_SYMBOL_GPL(rust_helper_radix_tree_next_slot);
+ EXPORT_SYMBOL_GPL(rust_helper_put_task_struct);
  
-+void *rust_helper_kmap(struct page *page)
++struct bio_vec rust_helper_req_bvec(struct request *rq)
 +{
-+	return kmap(page);
++	return req_bvec(rq);
 +}
-+EXPORT_SYMBOL_GPL(rust_helper_kmap);
++EXPORT_SYMBOL_GPL(rust_helper_req_bvec);
 +
-+void rust_helper_kunmap(struct page *page)
++void *rust_helper_blk_mq_rq_to_pdu(struct request *rq)
 +{
-+	return kunmap(page);
++	return blk_mq_rq_to_pdu(rq);
 +}
-+EXPORT_SYMBOL_GPL(rust_helper_kunmap);
++EXPORT_SYMBOL_GPL(rust_helper_blk_mq_rq_to_pdu);
 +
-+void *rust_helper_kmap_atomic(struct page *page)
-+{
-+	return kmap_atomic(page);
++void rust_helper_bio_advance_iter_single(const struct bio *bio,
++                                         struct bvec_iter *iter,
++                                         unsigned int bytes) {
++  bio_advance_iter_single(bio, iter, bytes);
 +}
-+EXPORT_SYMBOL_GPL(rust_helper_kmap_atomic);
++EXPORT_SYMBOL_GPL(rust_helper_bio_advance_iter_single);
 +
-+void rust_helper_kunmap_atomic(void *address)
-+{
-+	kunmap_atomic(address);
-+}
-+EXPORT_SYMBOL_GPL(rust_helper_kunmap_atomic);
-+
-+struct page *rust_helper_alloc_pages(gfp_t gfp_mask, unsigned int order)
-+{
-+	return alloc_pages(gfp_mask, order);
-+}
-+EXPORT_SYMBOL_GPL(rust_helper_alloc_pages);
-+
- /*
-  * We use `bindgen`'s `--size_t-is-usize` option to bind the C `size_t` type
-  * as the Rust `usize` type, so we can use it in contexts where Rust
-diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-index a85cb6aae8d6..8bef6686504b 100644
---- a/rust/kernel/lib.rs
-+++ b/rust/kernel/lib.rs
-@@ -38,6 +38,7 @@ mod build_assert;
- pub mod error;
- pub mod init;
- pub mod ioctl;
-+pub mod pages;
- pub mod prelude;
- pub mod print;
- pub mod radix_tree;
-@@ -57,6 +58,11 @@ pub use uapi;
- #[doc(hidden)]
- pub use build_error::build_error;
- 
-+/// Page size defined in terms of the `PAGE_SHIFT` macro from C.
-+///
-+/// [`PAGE_SHIFT`]: ../../../include/asm-generic/page.h
-+pub const PAGE_SIZE: u32 = 1 << bindings::PAGE_SHIFT;
-+
- /// Prefix to appear before log messages printed from within the `kernel` crate.
- const __LOG_PREFIX: &[u8] = b"rust_kernel\0";
- 
-diff --git a/rust/kernel/pages.rs b/rust/kernel/pages.rs
+ void rust_helper_init_radix_tree(struct xarray *tree, gfp_t gfp_mask)
+ {
+ 	INIT_RADIX_TREE(tree, gfp_mask);
+diff --git a/rust/kernel/block.rs b/rust/kernel/block.rs
 new file mode 100644
-index 000000000000..ed51b053dd5d
+index 000000000000..4c93317a568a
 --- /dev/null
-+++ b/rust/kernel/pages.rs
-@@ -0,0 +1,284 @@
++++ b/rust/kernel/block.rs
+@@ -0,0 +1,5 @@
 +// SPDX-License-Identifier: GPL-2.0
 +
-+//! Kernel page allocation and management.
++//! Types for working with the block layer
++
++pub mod mq;
+diff --git a/rust/kernel/block/mq.rs b/rust/kernel/block/mq.rs
+new file mode 100644
+index 000000000000..5b40f6a73c0f
+--- /dev/null
++++ b/rust/kernel/block/mq.rs
+@@ -0,0 +1,15 @@
++// SPDX-License-Identifier: GPL-2.0
++
++//! This module provides types for implementing drivers that interface the
++//! blk-mq subsystem
++
++mod gen_disk;
++mod operations;
++mod raw_writer;
++mod request;
++mod tag_set;
++
++pub use gen_disk::GenDisk;
++pub use operations::Operations;
++pub use request::Request;
++pub use tag_set::TagSet;
+diff --git a/rust/kernel/block/mq/gen_disk.rs b/rust/kernel/block/mq/gen_disk.rs
+new file mode 100644
+index 000000000000..50496af15bbf
+--- /dev/null
++++ b/rust/kernel/block/mq/gen_disk.rs
+@@ -0,0 +1,133 @@
++// SPDX-License-Identifier: GPL-2.0
++
++//! GenDisk abstraction
 +//!
-+//! This module currently provides limited support. It supports pages of order 0
-+//! for most operations. Page allocation flags are fixed.
++//! C header: [`include/linux/blkdev.h`](../../include/linux/blkdev.h)
++//! C header: [`include/linux/blk_mq.h`](../../include/linux/blk_mq.h)
 +
-+use crate::{bindings, error::code::*, error::Result, PAGE_SIZE};
-+use core::{marker::PhantomData, ptr};
++use crate::block::mq::{raw_writer::RawWriter, Operations, TagSet};
++use crate::{
++    bindings, error::from_err_ptr, error::Result, sync::Arc, types::ForeignOwnable,
++    types::ScopeGuard,
++};
++use core::fmt::{self, Write};
 +
-+/// A set of physical pages.
-+///
-+/// `Pages` holds a reference to a set of pages of order `ORDER`. Having the order as a generic
-+/// const allows the struct to have the same size as a pointer.
++/// A generic block device
 +///
 +/// # Invariants
 +///
-+/// The pointer `Pages::pages` is valid and points to 2^ORDER pages.
-+pub struct Pages<const ORDER: u32> {
-+    pub(crate) pages: *mut bindings::page,
++///  - `gendisk` must always point to an initialized and valid `struct gendisk`.
++pub struct GenDisk<T: Operations> {
++    _tagset: Arc<TagSet<T>>,
++    gendisk: *mut bindings::gendisk,
 +}
 +
-+impl<const ORDER: u32> Pages<ORDER> {
-+    /// Allocates a new set of contiguous pages.
-+    pub fn new() -> Result<Self> {
-+        let pages = unsafe {
-+            bindings::alloc_pages(
-+                bindings::GFP_KERNEL | bindings::__GFP_ZERO | bindings::___GFP_HIGHMEM,
-+                ORDER,
-+            )
++// SAFETY: `GenDisk` is an owned pointer to a `struct gendisk` and an `Arc` to a
++// `TagSet` It is safe to send this to other threads as long as T is Send.
++unsafe impl<T: Operations + Send> Send for GenDisk<T> {}
++
++impl<T: Operations> GenDisk<T> {
++    /// Try to create a new `GenDisk`
++    pub fn try_new(tagset: Arc<TagSet<T>>, queue_data: T::QueueData) -> Result<Self> {
++        let data = queue_data.into_foreign();
++        let recover_data = ScopeGuard::new(|| {
++            // SAFETY: T::QueueData was created by the call to `into_foreign()` above
++            unsafe { T::QueueData::from_foreign(data) };
++        });
++
++        let lock_class_key = crate::sync::LockClassKey::new();
++
++        // SAFETY: `tagset.raw_tag_set()` points to a valid and initialized tag set
++        let gendisk = from_err_ptr(unsafe {
++            bindings::__blk_mq_alloc_disk(tagset.raw_tag_set(), data as _, lock_class_key.as_ptr())
++        })?;
++
++        const TABLE: bindings::block_device_operations = bindings::block_device_operations {
++            submit_bio: None,
++            open: None,
++            release: None,
++            ioctl: None,
++            compat_ioctl: None,
++            check_events: None,
++            unlock_native_capacity: None,
++            getgeo: None,
++            set_read_only: None,
++            swap_slot_free_notify: None,
++            report_zones: None,
++            devnode: None,
++            alternative_gpt_sector: None,
++            get_unique_id: None,
++            owner: core::ptr::null_mut(),
++            pr_ops: core::ptr::null_mut(),
++            free_disk: None,
++            poll_bio: None,
 +        };
-+        if pages.is_null() {
-+            return Err(ENOMEM);
-+        }
-+        // INVARIANTS: We checked that the allocation above succeeded.
-+        // SAFETY: We allocated pages above
-+        Ok(unsafe { Self::from_raw(pages) })
++
++        // SAFETY: gendisk is a valid pointer as we initialized it above
++        unsafe { (*gendisk).fops = &TABLE };
++
++        recover_data.dismiss();
++        Ok(Self {
++            _tagset: tagset,
++            gendisk,
++        })
 +    }
 +
-+    /// Create a `Pages` from a raw `struct page` pointer
-+    ///
-+    /// # Safety
-+    ///
-+    /// Caller must own the pages pointed to by `ptr` as these will be freed
-+    /// when the returned `Pages` is dropped.
-+    pub unsafe fn from_raw(ptr: *mut bindings::page) -> Self {
-+        Self { pages: ptr }
-+    }
-+}
-+
-+impl Pages<0> {
-+    #[inline(always)]
-+    fn check_offset_and_map<I: MappingInfo>(
-+        &self,
-+        offset: usize,
-+        len: usize,
-+    ) -> Result<PageMapping<'_, I>>
-+    where
-+        Pages<0>: MappingActions<I>,
-+    {
-+        let end = offset.checked_add(len).ok_or(EINVAL)?;
-+        if end as u32 > PAGE_SIZE {
-+            return Err(EINVAL);
-+        }
-+
-+        let mapping = <Self as MappingActions<I>>::map(self);
-+
-+        Ok(mapping)
-+    }
-+
-+    #[inline(always)]
-+    unsafe fn read_internal<I: MappingInfo>(
-+        &self,
-+        dest: *mut u8,
-+        offset: usize,
-+        len: usize,
-+    ) -> Result
-+    where
-+        Pages<0>: MappingActions<I>,
-+    {
-+        let mapping = self.check_offset_and_map::<I>(offset, len)?;
-+
-+        unsafe { ptr::copy_nonoverlapping((mapping.ptr as *mut u8).add(offset), dest, len) };
++    /// Set the name of the device
++    pub fn set_name(&self, args: fmt::Arguments<'_>) -> Result {
++        let mut raw_writer = RawWriter::from_array(unsafe { &mut (*self.gendisk).disk_name });
++        raw_writer.write_fmt(args)?;
++        raw_writer.write_char('\0')?;
 +        Ok(())
 +    }
 +
-+    /// Maps the pages and reads from them into the given buffer.
-+    ///
-+    /// # Safety
-+    ///
-+    /// Callers must ensure that the destination buffer is valid for the given
-+    /// length. Additionally, if the raw buffer is intended to be recast, they
-+    /// must ensure that the data can be safely cast;
-+    /// [`crate::io_buffer::ReadableFromBytes`] has more details about it.
-+    /// `dest` may not point to the source page.
-+    #[inline(always)]
-+    pub unsafe fn read(&self, dest: *mut u8, offset: usize, len: usize) -> Result {
-+        unsafe { self.read_internal::<NormalMappingInfo>(dest, offset, len) }
++    /// Register the device with the kernel. When this function return, the
++    /// device is accessible from VFS. The kernel may issue reads to the device
++    /// during registration to discover partition infomation.
++    pub fn add(&self) -> Result {
++        crate::error::to_result(unsafe {
++            bindings::device_add_disk(core::ptr::null_mut(), self.gendisk, core::ptr::null_mut())
++        })
 +    }
 +
-+    /// Maps the pages and reads from them into the given buffer. The page is
-+    /// mapped atomically.
-+    ///
-+    /// # Safety
-+    ///
-+    /// Callers must ensure that the destination buffer is valid for the given
-+    /// length. Additionally, if the raw buffer is intended to be recast, they
-+    /// must ensure that the data can be safely cast;
-+    /// [`crate::io_buffer::ReadableFromBytes`] has more details about it.
-+    /// `dest` may not point to the source page.
-+    #[inline(always)]
-+    pub unsafe fn read_atomic(&self, dest: *mut u8, offset: usize, len: usize) -> Result {
-+        unsafe { self.read_internal::<AtomicMappingInfo>(dest, offset, len) }
++    /// Call to tell the block layer the capcacity of the device
++    pub fn set_capacity(&self, sectors: u64) {
++        unsafe { bindings::set_capacity(self.gendisk, sectors) };
 +    }
 +
-+    #[inline(always)]
-+    unsafe fn write_internal<I: MappingInfo>(
-+        &self,
-+        src: *const u8,
-+        offset: usize,
-+        len: usize,
-+    ) -> Result
-+    where
-+        Pages<0>: MappingActions<I>,
-+    {
-+        let mapping = self.check_offset_and_map::<I>(offset, len)?;
-+
-+        unsafe { ptr::copy_nonoverlapping(src, (mapping.ptr as *mut u8).add(offset), len) };
-+        Ok(())
++    /// Set the logical block size of the device
++    pub fn set_queue_logical_block_size(&self, size: u32) {
++        unsafe { bindings::blk_queue_logical_block_size((*self.gendisk).queue, size) };
 +    }
 +
-+    /// Maps the pages and writes into them from the given buffer.
-+    ///
-+    /// # Safety
-+    ///
-+    /// Callers must ensure that the buffer is valid for the given length.
-+    /// Additionally, if the page is (or will be) mapped by userspace, they must
-+    /// ensure that no kernel data is leaked through padding if it was cast from
-+    /// another type; [`crate::io_buffer::WritableToBytes`] has more details
-+    /// about it. `src` must not point to the destination page.
-+    #[inline(always)]
-+    pub unsafe fn write(&self, src: *const u8, offset: usize, len: usize) -> Result {
-+        unsafe { self.write_internal::<NormalMappingInfo>(src, offset, len) }
++    /// Set the physical block size of the device
++    pub fn set_queue_physical_block_size(&self, size: u32) {
++        unsafe { bindings::blk_queue_physical_block_size((*self.gendisk).queue, size) };
 +    }
 +
-+    /// Maps the pages and writes into them from the given buffer. The page is
-+    /// mapped atomically.
-+    ///
-+    /// # Safety
-+    ///
-+    /// Callers must ensure that the buffer is valid for the given length.
-+    /// Additionally, if the page is (or will be) mapped by userspace, they must
-+    /// ensure that no kernel data is leaked through padding if it was cast from
-+    /// another type; [`crate::io_buffer::WritableToBytes`] has more details
-+    /// about it. `src` must not point to the destination page.
-+    #[inline(always)]
-+    pub unsafe fn write_atomic(&self, src: *const u8, offset: usize, len: usize) -> Result {
-+        unsafe { self.write_internal::<AtomicMappingInfo>(src, offset, len) }
-+    }
-+
-+    /// Maps the page at index 0.
-+    #[inline(always)]
-+    pub fn kmap(&self) -> PageMapping<'_, NormalMappingInfo> {
-+        let ptr = unsafe { bindings::kmap(self.pages) };
-+
-+        PageMapping {
-+            page: self.pages,
-+            ptr,
-+            _phantom: PhantomData,
-+            _phantom2: PhantomData,
-+        }
-+    }
-+
-+    /// Atomically Maps the page at index 0.
-+    #[inline(always)]
-+    pub fn kmap_atomic(&self) -> PageMapping<'_, AtomicMappingInfo> {
-+        let ptr = unsafe { bindings::kmap_atomic(self.pages) };
-+
-+        PageMapping {
-+            page: self.pages,
-+            ptr,
-+            _phantom: PhantomData,
-+            _phantom2: PhantomData,
++    /// Set the rotational media attribute for the device
++    pub fn set_rotational(&self, rotational: bool) {
++        if !rotational {
++            unsafe {
++                bindings::blk_queue_flag_set(bindings::QUEUE_FLAG_NONROT, (*self.gendisk).queue)
++            };
++        } else {
++            unsafe {
++                bindings::blk_queue_flag_clear(bindings::QUEUE_FLAG_NONROT, (*self.gendisk).queue)
++            };
 +        }
 +    }
 +}
 +
-+impl<const ORDER: u32> Drop for Pages<ORDER> {
++impl<T: Operations> Drop for GenDisk<T> {
 +    fn drop(&mut self) {
-+        // SAFETY: By the type invariants, we know the pages are allocated with the given order.
-+        unsafe { bindings::__free_pages(self.pages, ORDER) };
++        let queue_data = unsafe { (*(*self.gendisk).queue).queuedata };
++
++        unsafe { bindings::del_gendisk(self.gendisk) };
++
++        // SAFETY: `queue.queuedata` was created by `GenDisk::try_new()` with a
++        // call to `ForeignOwnable::into_pointer()` to create `queuedata`.
++        // `ForeignOwnable::from_foreign()` is only called here.
++        let _queue_data = unsafe { T::QueueData::from_foreign(queue_data) };
++    }
++}
+diff --git a/rust/kernel/block/mq/operations.rs b/rust/kernel/block/mq/operations.rs
+new file mode 100644
+index 000000000000..fb1ab707d1f0
+--- /dev/null
++++ b/rust/kernel/block/mq/operations.rs
+@@ -0,0 +1,260 @@
++// SPDX-License-Identifier: GPL-2.0
++
++//! This module provides an interface for blk-mq drivers to implement.
++//!
++//! C header: [`include/linux/blk-mq.h`](../../include/linux/blk-mq.h)
++
++use crate::{
++    bindings,
++    block::mq::{tag_set::TagSetRef, Request},
++    error::{from_result, Result},
++    types::ForeignOwnable,
++};
++use core::{marker::PhantomData, pin::Pin};
++
++/// Implement this trait to interface blk-mq as block devices
++#[macros::vtable]
++pub trait Operations: Sized {
++    /// Data associated with a request. This data is located next to the request
++    /// structure.
++    type RequestData;
++
++    /// Data associated with the `struct request_queue` that is allocated for
++    /// the `GenDisk` associated with this `Operations` implementation.
++    type QueueData: ForeignOwnable;
++
++    /// Data associated with a dispatch queue. This is stored as a pointer in
++    /// `struct blk_mq_hw_ctx`.
++    type HwData: ForeignOwnable;
++
++    /// Data associated with a tag set. This is stored as a pointer in `struct
++    /// blk_mq_tag_set`.
++    type TagSetData: ForeignOwnable;
++
++    /// Called by the kernel to allocate a new `RequestData`. The structure will
++    /// eventually be pinned, so defer initialization to `init_request_data()`
++    fn new_request_data(
++        _tagset_data: <Self::TagSetData as ForeignOwnable>::Borrowed<'_>,
++    ) -> Result<Self::RequestData>;
++
++    /// Called by the kernel to initialize a previously allocated `RequestData`
++    fn init_request_data(
++        _tagset_data: <Self::TagSetData as ForeignOwnable>::Borrowed<'_>,
++        _data: Pin<&mut Self::RequestData>,
++    ) -> Result {
++        Ok(())
++    }
++
++    /// Called by the kernel to queue a request with the driver. If `is_last` is
++    /// `false`, the driver is allowed to defer commiting the request.
++    fn queue_rq(
++        hw_data: <Self::HwData as ForeignOwnable>::Borrowed<'_>,
++        queue_data: <Self::QueueData as ForeignOwnable>::Borrowed<'_>,
++        rq: &Request<Self>,
++        is_last: bool,
++    ) -> Result;
++
++    /// Called by the kernel to indicate that queued requests should be submitted
++    fn commit_rqs(
++        hw_data: <Self::HwData as ForeignOwnable>::Borrowed<'_>,
++        queue_data: <Self::QueueData as ForeignOwnable>::Borrowed<'_>,
++    );
++
++    /// Called by the kernel when the request is completed
++    fn complete(_rq: &Request<Self>);
++
++    /// Called by the kernel to allocate and initialize a driver specific hardware context data
++    fn init_hctx(
++        tagset_data: <Self::TagSetData as ForeignOwnable>::Borrowed<'_>,
++        hctx_idx: u32,
++    ) -> Result<Self::HwData>;
++
++    /// Called by the kernel to poll the device for completed requests. Only used for poll queues.
++    fn poll(_hw_data: <Self::HwData as ForeignOwnable>::Borrowed<'_>) -> i32 {
++        unreachable!()
++    }
++
++    /// Called by the kernel to map submission queues to CPU cores.
++    fn map_queues(_tag_set: &TagSetRef) {
++        unreachable!()
++    }
++
++    // There is no need for exit_request() because `drop` will be called.
++}
++
++pub(crate) struct OperationsVtable<T: Operations>(PhantomData<T>);
++
++impl<T: Operations> OperationsVtable<T> {
++    // # Safety
++    //
++    // The caller of this function must ensure that `hctx` and `bd` are valid
++    // and initialized. The pointees must outlive this function. Further
++    // `hctx->driver_data` must be a pointer created by a call to
++    // `Self::init_hctx_callback()` and the pointee must outlive this function.
++    // This function must not be called with a `hctx` for which
++    // `Self::exit_hctx_callback()` has been called.
++    unsafe extern "C" fn queue_rq_callback(
++        hctx: *mut bindings::blk_mq_hw_ctx,
++        bd: *const bindings::blk_mq_queue_data,
++    ) -> bindings::blk_status_t {
++        // SAFETY: `bd` is valid as required by the safety requirement for this function.
++        let rq = unsafe { (*bd).rq };
++
++        // SAFETY: The safety requirement for this function ensure that
++        // `(*hctx).driver_data` was returned by a call to
++        // `Self::init_hctx_callback()`. That function uses
++        // `PointerWrapper::into_pointer()` to create `driver_data`. Further,
++        // the returned value does not outlive this function and
++        // `from_foreign()` is not called until `Self::exit_hctx_callback()` is
++        // called. By the safety requirement of this function and contract with
++        // the `blk-mq` API, `queue_rq_callback()` will not be called after that
++        // point.
++        let hw_data = unsafe { T::HwData::borrow((*hctx).driver_data) };
++
++        // SAFETY: `hctx` is valid as required by this function.
++        let queue_data = unsafe { (*(*hctx).queue).queuedata };
++
++        // SAFETY: `queue.queuedata` was created by `GenDisk::try_new()` with a
++        // call to `ForeignOwnable::into_pointer()` to create `queuedata`.
++        // `ForeignOwnable::from_foreign()` is only called when the tagset is
++        // dropped, which happens after we are dropped.
++        let queue_data = unsafe { T::QueueData::borrow(queue_data) };
++
++        // SAFETY: `bd` is valid as required by the safety requirement for this function.
++        let ret = T::queue_rq(
++            hw_data,
++            queue_data,
++            &unsafe { Request::from_ptr(rq) },
++            unsafe { (*bd).last },
++        );
++        if let Err(e) = ret {
++            e.to_blk_status()
++        } else {
++            bindings::BLK_STS_OK as _
++        }
++    }
++
++    unsafe extern "C" fn commit_rqs_callback(hctx: *mut bindings::blk_mq_hw_ctx) {
++        let hw_data = unsafe { T::HwData::borrow((*hctx).driver_data) };
++
++        // SAFETY: `hctx` is valid as required by this function.
++        let queue_data = unsafe { (*(*hctx).queue).queuedata };
++
++        // SAFETY: `queue.queuedata` was created by `GenDisk::try_new()` with a
++        // call to `ForeignOwnable::into_pointer()` to create `queuedata`.
++        // `ForeignOwnable::from_foreign()` is only called when the tagset is
++        // dropped, which happens after we are dropped.
++        let queue_data = unsafe { T::QueueData::borrow(queue_data) };
++        T::commit_rqs(hw_data, queue_data)
++    }
++
++    unsafe extern "C" fn complete_callback(rq: *mut bindings::request) {
++        T::complete(&unsafe { Request::from_ptr(rq) });
++    }
++
++    unsafe extern "C" fn poll_callback(
++        hctx: *mut bindings::blk_mq_hw_ctx,
++        _iob: *mut bindings::io_comp_batch,
++    ) -> core::ffi::c_int {
++        let hw_data = unsafe { T::HwData::borrow((*hctx).driver_data) };
++        T::poll(hw_data)
++    }
++
++    unsafe extern "C" fn init_hctx_callback(
++        hctx: *mut bindings::blk_mq_hw_ctx,
++        tagset_data: *mut core::ffi::c_void,
++        hctx_idx: core::ffi::c_uint,
++    ) -> core::ffi::c_int {
++        from_result(|| {
++            let tagset_data = unsafe { T::TagSetData::borrow(tagset_data) };
++            let data = T::init_hctx(tagset_data, hctx_idx)?;
++            unsafe { (*hctx).driver_data = data.into_foreign() as _ };
++            Ok(0)
++        })
++    }
++
++    unsafe extern "C" fn exit_hctx_callback(
++        hctx: *mut bindings::blk_mq_hw_ctx,
++        _hctx_idx: core::ffi::c_uint,
++    ) {
++        let ptr = unsafe { (*hctx).driver_data };
++        unsafe { T::HwData::from_foreign(ptr) };
++    }
++
++    unsafe extern "C" fn init_request_callback(
++        set: *mut bindings::blk_mq_tag_set,
++        rq: *mut bindings::request,
++        _hctx_idx: core::ffi::c_uint,
++        _numa_node: core::ffi::c_uint,
++    ) -> core::ffi::c_int {
++        from_result(|| {
++            // SAFETY: The tagset invariants guarantee that all requests are allocated with extra memory
++            // for the request data.
++            let pdu = unsafe { bindings::blk_mq_rq_to_pdu(rq) } as *mut T::RequestData;
++            let tagset_data = unsafe { T::TagSetData::borrow((*set).driver_data) };
++
++            let v = T::new_request_data(tagset_data)?;
++
++            // SAFETY: `pdu` memory is valid, as it was allocated by the caller.
++            unsafe { pdu.write(v) };
++
++            let tagset_data = unsafe { T::TagSetData::borrow((*set).driver_data) };
++            // SAFETY: `pdu` memory is valid and properly initialised.
++            T::init_request_data(tagset_data, unsafe { Pin::new_unchecked(&mut *pdu) })?;
++
++            Ok(0)
++        })
++    }
++
++    unsafe extern "C" fn exit_request_callback(
++        _set: *mut bindings::blk_mq_tag_set,
++        rq: *mut bindings::request,
++        _hctx_idx: core::ffi::c_uint,
++    ) {
++        // SAFETY: The tagset invariants guarantee that all requests are allocated with extra memory
++        // for the request data.
++        let pdu = unsafe { bindings::blk_mq_rq_to_pdu(rq) } as *mut T::RequestData;
++
++        // SAFETY: `pdu` is valid for read and write and is properly initialised.
++        unsafe { core::ptr::drop_in_place(pdu) };
++    }
++
++    unsafe extern "C" fn map_queues_callback(tag_set_ptr: *mut bindings::blk_mq_tag_set) {
++        let tag_set = unsafe { TagSetRef::from_ptr(tag_set_ptr) };
++        T::map_queues(&tag_set);
++    }
++
++    const VTABLE: bindings::blk_mq_ops = bindings::blk_mq_ops {
++        queue_rq: Some(Self::queue_rq_callback),
++        queue_rqs: None,
++        commit_rqs: Some(Self::commit_rqs_callback),
++        get_budget: None,
++        put_budget: None,
++        set_rq_budget_token: None,
++        get_rq_budget_token: None,
++        timeout: None,
++        poll: if T::HAS_POLL {
++            Some(Self::poll_callback)
++        } else {
++            None
++        },
++        complete: Some(Self::complete_callback),
++        init_hctx: Some(Self::init_hctx_callback),
++        exit_hctx: Some(Self::exit_hctx_callback),
++        init_request: Some(Self::init_request_callback),
++        exit_request: Some(Self::exit_request_callback),
++        cleanup_rq: None,
++        busy: None,
++        map_queues: if T::HAS_MAP_QUEUES {
++            Some(Self::map_queues_callback)
++        } else {
++            None
++        },
++        #[cfg(CONFIG_BLK_DEBUG_FS)]
++        show_rq: None,
++    };
++
++    pub(crate) const unsafe fn build() -> &'static bindings::blk_mq_ops {
++        &Self::VTABLE
++    }
++}
+diff --git a/rust/kernel/block/mq/raw_writer.rs b/rust/kernel/block/mq/raw_writer.rs
+new file mode 100644
+index 000000000000..25c16ee0b1f7
+--- /dev/null
++++ b/rust/kernel/block/mq/raw_writer.rs
+@@ -0,0 +1,30 @@
++use core::fmt::{self, Write};
++
++pub(crate) struct RawWriter {
++    ptr: *mut u8,
++    len: usize,
++}
++
++impl RawWriter {
++    unsafe fn new(ptr: *mut u8, len: usize) -> Self {
++        Self { ptr, len }
++    }
++
++    pub(crate) fn from_array<const N: usize>(a: &mut [core::ffi::c_char; N]) -> Self {
++        unsafe { Self::new(&mut a[0] as *mut _ as _, N) }
 +    }
 +}
 +
-+/// Specifies the type of page mapping
-+pub trait MappingInfo {}
-+
-+/// Encapsulates methods to map and unmap pages
-+pub trait MappingActions<I: MappingInfo>
-+where
-+    Pages<0>: MappingActions<I>,
-+{
-+    /// Map a page into the kernel address scpace
-+    fn map(pages: &Pages<0>) -> PageMapping<'_, I>;
-+
-+    /// Unmap a page specified by `mapping`
-+    ///
-+    /// # Safety
-+    ///
-+    /// Must only be called by `PageMapping::drop()`.
-+    unsafe fn unmap(mapping: &PageMapping<'_, I>);
-+}
-+
-+/// A type state indicating that pages were mapped atomically
-+pub struct AtomicMappingInfo;
-+impl MappingInfo for AtomicMappingInfo {}
-+
-+/// A type state indicating that pages were not mapped atomically
-+pub struct NormalMappingInfo;
-+impl MappingInfo for NormalMappingInfo {}
-+
-+impl MappingActions<AtomicMappingInfo> for Pages<0> {
-+    #[inline(always)]
-+    fn map(pages: &Pages<0>) -> PageMapping<'_, AtomicMappingInfo> {
-+        pages.kmap_atomic()
-+    }
-+
-+    #[inline(always)]
-+    unsafe fn unmap(mapping: &PageMapping<'_, AtomicMappingInfo>) {
-+        // SAFETY: An instance of `PageMapping` is created only when `kmap` succeeded for the given
-+        // page, so it is safe to unmap it here.
-+        unsafe { bindings::kunmap_atomic(mapping.ptr) };
++impl Write for RawWriter {
++    fn write_str(&mut self, s: &str) -> fmt::Result {
++        let bytes = s.as_bytes();
++        let len = bytes.len();
++        if len > self.len {
++            return Err(fmt::Error);
++        }
++        unsafe { core::ptr::copy_nonoverlapping(&bytes[0], self.ptr, len) };
++        self.ptr = unsafe { self.ptr.add(len) };
++        self.len -= len;
++        Ok(())
 +    }
 +}
+diff --git a/rust/kernel/block/mq/request.rs b/rust/kernel/block/mq/request.rs
+new file mode 100644
+index 000000000000..e95ae3fd71ad
+--- /dev/null
++++ b/rust/kernel/block/mq/request.rs
+@@ -0,0 +1,71 @@
++// SPDX-License-Identifier: GPL-2.0
 +
-+impl MappingActions<NormalMappingInfo> for Pages<0> {
-+    #[inline(always)]
-+    fn map(pages: &Pages<0>) -> PageMapping<'_, NormalMappingInfo> {
-+        pages.kmap()
++//! This module provides a wrapper for the C `struct request` type.
++//!
++//! C header: [`include/linux/blk-mq.h`](../../include/linux/blk-mq.h)
++
++use crate::{
++    bindings,
++    block::mq::Operations,
++    error::{Error, Result},
++};
++use core::marker::PhantomData;
++
++/// A wrapper around a blk-mq `struct request`. This represents an IO request.
++pub struct Request<T: Operations> {
++    ptr: *mut bindings::request,
++    _p: PhantomData<T>,
++}
++
++impl<T: Operations> Request<T> {
++    pub(crate) unsafe fn from_ptr(ptr: *mut bindings::request) -> Self {
++        Self {
++            ptr,
++            _p: PhantomData,
++        }
 +    }
 +
++    /// Get the command identifier for the request
++    pub fn command(&self) -> u32 {
++        unsafe { (*self.ptr).cmd_flags & ((1 << bindings::REQ_OP_BITS) - 1) }
++    }
++
++    /// Call this to indicate to the kernel that the request has been issued by the driver
++    pub fn start(&self) {
++        unsafe { bindings::blk_mq_start_request(self.ptr) };
++    }
++
++    /// Call this to indicate to the kernel that the request has been completed without errors
++    // TODO: Consume rq so that we can't use it after ending it?
++    pub fn end_ok(&self) {
++        unsafe { bindings::blk_mq_end_request(self.ptr, bindings::BLK_STS_OK as _) };
++    }
++
++    /// Call this to indicate to the kernel that the request completed with an error
++    pub fn end_err(&self, err: Error) {
++        unsafe { bindings::blk_mq_end_request(self.ptr, err.to_blk_status()) };
++    }
++
++    /// Call this to indicate that the request completed with the status indicated by `status`
++    pub fn end(&self, status: Result) {
++        if let Err(e) = status {
++            self.end_err(e);
++        } else {
++            self.end_ok();
++        }
++    }
++
++    /// Call this to schedule defered completion of the request
++    // TODO: Consume rq so that we can't use it after completing it?
++    pub fn complete(&self) {
++        if !unsafe { bindings::blk_mq_complete_request_remote(self.ptr) } {
++            T::complete(&unsafe { Self::from_ptr(self.ptr) });
++        }
++    }
++
++    /// Get the target sector for the request
 +    #[inline(always)]
-+    unsafe fn unmap(mapping: &PageMapping<'_, NormalMappingInfo>) {
-+        // SAFETY: An instance of `PageMapping` is created only when `kmap` succeeded for the given
-+        // page, so it is safe to unmap it here.
-+        unsafe { bindings::kunmap(mapping.page) };
++    pub fn sector(&self) -> usize {
++        unsafe { (*self.ptr).__sector as usize }
++    }
++}
+diff --git a/rust/kernel/block/mq/tag_set.rs b/rust/kernel/block/mq/tag_set.rs
+new file mode 100644
+index 000000000000..d122db7f6d0e
+--- /dev/null
++++ b/rust/kernel/block/mq/tag_set.rs
+@@ -0,0 +1,92 @@
++// SPDX-License-Identifier: GPL-2.0
++
++//! This module provides the `TagSet` struct to wrap the C `struct blk_mq_tag_set`.
++//!
++//! C header: [`include/linux/blk-mq.h`](../../include/linux/blk-mq.h)
++
++use crate::{
++    bindings,
++    block::mq::{operations::OperationsVtable, Operations},
++    error::{Error, Result},
++    sync::Arc,
++    types::ForeignOwnable,
++};
++use core::{cell::UnsafeCell, convert::TryInto, marker::PhantomData};
++
++/// A wrapper for the C `struct blk_mq_tag_set`
++pub struct TagSet<T: Operations> {
++    inner: UnsafeCell<bindings::blk_mq_tag_set>,
++    _p: PhantomData<T>,
++}
++
++impl<T: Operations> TagSet<T> {
++    /// Try to create a new tag set
++    pub fn try_new(
++        nr_hw_queues: u32,
++        tagset_data: T::TagSetData,
++        num_tags: u32,
++        num_maps: u32,
++    ) -> Result<Arc<Self>> {
++        let tagset = Arc::try_new(Self {
++            inner: UnsafeCell::new(bindings::blk_mq_tag_set::default()),
++            _p: PhantomData,
++        })?;
++
++        // SAFETY: We just allocated `tagset`, we know this is the only reference to it.
++        let inner = unsafe { &mut *tagset.inner.get() };
++
++        inner.ops = unsafe { OperationsVtable::<T>::build() };
++        inner.nr_hw_queues = nr_hw_queues;
++        inner.timeout = 0; // 0 means default which is 30 * HZ in C
++        inner.numa_node = bindings::NUMA_NO_NODE;
++        inner.queue_depth = num_tags;
++        inner.cmd_size = core::mem::size_of::<T::RequestData>().try_into()?;
++        inner.flags = bindings::BLK_MQ_F_SHOULD_MERGE;
++        inner.driver_data = tagset_data.into_foreign() as _;
++        inner.nr_maps = num_maps;
++
++        // SAFETY: `inner` points to valid and initialised memory.
++        let ret = unsafe { bindings::blk_mq_alloc_tag_set(inner) };
++        if ret < 0 {
++            // SAFETY: We created `driver_data` above with `into_foreign`
++            unsafe { T::TagSetData::from_foreign(inner.driver_data) };
++            return Err(Error::from_errno(ret));
++        }
++
++        Ok(tagset)
++    }
++
++    /// Return the pointer to the wrapped `struct blk_mq_tag_set`
++    pub(crate) fn raw_tag_set(&self) -> *mut bindings::blk_mq_tag_set {
++        self.inner.get()
 +    }
 +}
 +
-+/// An owned page mapping. When this struct is dropped, the page is unmapped.
-+pub struct PageMapping<'a, I: MappingInfo>
-+where
-+    Pages<0>: MappingActions<I>,
-+{
-+    page: *mut bindings::page,
-+    ptr: *mut core::ffi::c_void,
-+    _phantom: PhantomData<&'a i32>,
-+    _phantom2: PhantomData<I>,
++impl<T: Operations> Drop for TagSet<T> {
++    fn drop(&mut self) {
++        let tagset_data = unsafe { (*self.inner.get()).driver_data };
++
++        // SAFETY: `inner` is valid and has been properly initialised during construction.
++        unsafe { bindings::blk_mq_free_tag_set(self.inner.get()) };
++
++        // SAFETY: `tagset_data` was created by a call to
++        // `ForeignOwnable::into_foreign` in `TagSet::try_new()`
++        unsafe { T::TagSetData::from_foreign(tagset_data) };
++    }
 +}
 +
-+impl<'a, I: MappingInfo> PageMapping<'a, I>
-+where
-+    Pages<0>: MappingActions<I>,
-+{
-+    /// Return a pointer to the wrapped `struct page`
-+    #[inline(always)]
-+    pub fn get_ptr(&self) -> *mut core::ffi::c_void {
++/// A tag set reference. Used to control lifetime and prevent drop of TagSet references passed to
++/// `Operations::map_queues()`
++pub struct TagSetRef {
++    ptr: *mut bindings::blk_mq_tag_set,
++}
++
++impl TagSetRef {
++    pub(crate) unsafe fn from_ptr(tagset: *mut bindings::blk_mq_tag_set) -> Self {
++        Self { ptr: tagset }
++    }
++
++    pub fn ptr(&self) -> *mut bindings::blk_mq_tag_set {
 +        self.ptr
 +    }
 +}
-+
-+// Because we do not have Drop specialization, we have to do this dance. Life
-+// would be much more simple if we could have `impl Drop for PageMapping<'_,
-+// Atomic>` and `impl Drop for PageMapping<'_, NotAtomic>`
-+impl<I: MappingInfo> Drop for PageMapping<'_, I>
-+where
-+    Pages<0>: MappingActions<I>,
-+{
-+    #[inline(always)]
-+    fn drop(&mut self) {
-+        // SAFETY: We are OK to call this because we are `PageMapping::drop()`
-+        unsafe { <Pages<0> as MappingActions<I>>::unmap(self) }
+diff --git a/rust/kernel/error.rs b/rust/kernel/error.rs
+index 5f4114b30b94..421fef677321 100644
+--- a/rust/kernel/error.rs
++++ b/rust/kernel/error.rs
+@@ -107,6 +107,10 @@ impl Error {
+         self.0
+     }
+ 
++    pub(crate) fn to_blk_status(self) -> bindings::blk_status_t {
++        unsafe { bindings::errno_to_blk_status(self.0) }
 +    }
-+}
++
+     /// Returns the error encoded as a pointer.
+     #[allow(dead_code)]
+     pub(crate) fn to_ptr<T>(self) -> *mut T {
+diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+index 8bef6686504b..cd798d12d97c 100644
+--- a/rust/kernel/lib.rs
++++ b/rust/kernel/lib.rs
+@@ -34,6 +34,7 @@ extern crate self as kernel;
+ #[cfg(not(test))]
+ #[cfg(not(testlib))]
+ mod allocator;
++pub mod block;
+ mod build_assert;
+ pub mod error;
+ pub mod init;
 -- 
 2.40.0
 
