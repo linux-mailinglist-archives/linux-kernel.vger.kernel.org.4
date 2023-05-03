@@ -2,98 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 274B76F5819
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 14:45:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B49C66F581F
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 14:47:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbjECMpJ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 3 May 2023 08:45:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50618 "EHLO
+        id S229890AbjECMrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 08:47:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjECMpG (ORCPT
+        with ESMTP id S229691AbjECMrD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 08:45:06 -0400
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0796F4688;
-        Wed,  3 May 2023 05:45:06 -0700 (PDT)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-55a64f0053fso45831587b3.3;
-        Wed, 03 May 2023 05:45:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683117905; x=1685709905;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LzS5hST/7dqPMgs9sJNP8+fBwYbZ8e7b2WdD4jUEi3c=;
-        b=ef2nOFPb9dwfOENTBcejBQR8wM+d8IXsRzeF139GXOj3D6ICccL9z9+IiuAKnN2Hki
-         kQzcnOUmONc/S95qdFLMPDbIPCdeCtw/F7OOP+FcUbhoP8ZlF+WSOMOzZVSPjcfyA9HX
-         47udGmGKjnIfKjteDIdgBtpLTAW6HVmcTWAjBb+cX6h1tZHR8kTgwOtaMC4KmblpgmGI
-         p9DzRBtW4GqENFYUTuGCaJw/XhtaPVXlWiitkNoPATR9vfpOulfrQnmr5wfz+5f6uCMw
-         65Lx7HSaPGzXsVEmsB9BwMIuXT1TVM5XLpc9+qc1HYjycF/NdNJ2jsY6I+C7q/54dLZU
-         Pzrg==
-X-Gm-Message-State: AC+VfDxqVeRfYH83nPwg6LUGsj5J+qzvI3qT0oaFLfxSbCOvjPM1PBoH
-        NTEQP95HbLRyMaXOY6ImivYB5j+o/z1K2g==
-X-Google-Smtp-Source: ACHHUZ6TlvmCii8SvA+8xjIzQjWUQz7hdNdJXZjLZcr73jnLr4Upb6RroV+IXm2vjz+Ntk9NlGbxtQ==
-X-Received: by 2002:a0d:cacc:0:b0:55a:afce:f652 with SMTP id m195-20020a0dcacc000000b0055aafcef652mr3865184ywd.32.1683117904937;
-        Wed, 03 May 2023 05:45:04 -0700 (PDT)
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
-        by smtp.gmail.com with ESMTPSA id g140-20020a0ddd92000000b00545a081849esm3133470ywe.46.2023.05.03.05.45.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 May 2023 05:45:03 -0700 (PDT)
-Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-b9e66ce80acso2934616276.3;
-        Wed, 03 May 2023 05:45:03 -0700 (PDT)
-X-Received: by 2002:a25:ca08:0:b0:b9d:9b0b:6aa0 with SMTP id
- a8-20020a25ca08000000b00b9d9b0b6aa0mr15992985ybg.44.1683117903422; Wed, 03
- May 2023 05:45:03 -0700 (PDT)
+        Wed, 3 May 2023 08:47:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BBE649DE;
+        Wed,  3 May 2023 05:47:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9755162D38;
+        Wed,  3 May 2023 12:47:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03472C433A4;
+        Wed,  3 May 2023 12:47:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683118021;
+        bh=EgiNiJbh15KE0Ia15kPVvnW13bZZDq3+PSwMvLc6Ois=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=NIfzEJ7naztoKrOkIDAEykRjVdZFitWMFmR0Pw+XFLAM0/K3e6QOJUVsWQIorOu4p
+         R7IIJb/74do45Btc5opX6zgBz1ejVpZPVZ2oZh0n8ZqkZjewhTbUG1POz0evYzWPAk
+         9uItN64Yt294K/8vbdCEg9OaDadt9VJymhJ0Svj19GrNTrMlXuBf0/6p1UdGUvAOCp
+         33yx3Uor/9Te4cpXJMW8tncCEq7uf7x3HhCOaVdRD7TzBe0DpM4A0ktbnRdTiE3TOB
+         9hXY79QgD+FjTRFKJfvUEOIIMR/XpTFVuaW+g4o2Hv7DWfKnMCNDcjWTeDMngMce/i
+         AH+I4O9Hb7KJg==
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-9505214c47fso1008666466b.1;
+        Wed, 03 May 2023 05:47:00 -0700 (PDT)
+X-Gm-Message-State: AC+VfDxAckV5g6bsz9JGhlz3ikGiia6+p4T3KTkSuJixOXdMnH+AHX+e
+        zVMpDGG6bydb9zuRYhygC9lNAP1amGr/RXiolWs=
+X-Google-Smtp-Source: ACHHUZ6IKHwFYCLYB5LqHR+3pNixMRRo4M6Cb27Yi39KHRdvN38tYrtbttUydFJNM4Zdu4mTeivPqROz4c/tClebcKQ=
+X-Received: by 2002:a17:906:6a1f:b0:94e:dbf7:2dfe with SMTP id
+ qw31-20020a1709066a1f00b0094edbf72dfemr3509786ejc.11.1683118019168; Wed, 03
+ May 2023 05:46:59 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230502170618.55967-1-wsa+renesas@sang-engineering.com>
- <20230502170618.55967-2-wsa+renesas@sang-engineering.com> <CAMuHMdW9OP-C2iN97ntNJ7hjgmtY+=NQ=Hi38kPrd8ZUoafFjw@mail.gmail.com>
- <ZFJWkOzqqLXWReSk@ninjato>
-In-Reply-To: <ZFJWkOzqqLXWReSk@ninjato>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 3 May 2023 14:44:52 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdV4StnvMaUZtrjbk-dbrm+3ELCKmzhSxd7O29Vt1fnM_A@mail.gmail.com>
-Message-ID: <CAMuHMdV4StnvMaUZtrjbk-dbrm+3ELCKmzhSxd7O29Vt1fnM_A@mail.gmail.com>
-Subject: Re: [PATCH 1/2] clk: renesas: r8a779a0: Add PWM clock
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-renesas-soc@vger.kernel.org,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20230322052504.2629429-1-peng.fan@oss.nxp.com>
+ <20230322052504.2629429-11-peng.fan@oss.nxp.com> <20230405130649.GA11367@dragon>
+ <DU0PR04MB94178755C624BCBE25D8073C88919@DU0PR04MB9417.eurprd04.prod.outlook.com>
+ <20230406014013.GJ11367@dragon> <ZEDzkhtUiUxQ0V4d@kroah.com> <20230503010731.GA31464@dragon>
+In-Reply-To: <20230503010731.GA31464@dragon>
+From:   Shawn Guo <shawnguo@kernel.org>
+Date:   Wed, 3 May 2023 20:46:46 +0800
+X-Gmail-Original-Message-ID: <CAJBJ56+DOuMa+-k2sspV7mKdHPpqAS38epbwOAmfC-42Bq-MfQ@mail.gmail.com>
+Message-ID: <CAJBJ56+DOuMa+-k2sspV7mKdHPpqAS38epbwOAmfC-42Bq-MfQ@mail.gmail.com>
+Subject: Re: [PATCH V7 10/10] ARM64: dts: imx7ulp: update usb compatible
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Peng Fan <peng.fan@nxp.com>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        Xu Yang <xu.yang_2@nxp.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>, Jun Li <jun.li@nxp.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wolfram,
-
-On Wed, May 3, 2023 at 2:41 PM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> > > +       DEF_MOD("pwm",          628,    R8A779A0_CLK_S1D8),
-> >
-> > Do you mind if I rename this to "pwm0" while applying, to match the docs?
+On Wed, May 3, 2023 at 9:07=E2=80=AFAM Shawn Guo <shawnguo@kernel.org> wrot=
+e:
 >
-> No, feel free. I think it is a bit misleading because the clock is used
-> up to pwm4. But if the docs have it that way...
+> On Thu, Apr 20, 2023 at 10:10:58AM +0200, Greg KH wrote:
+> > On Thu, Apr 06, 2023 at 09:40:13AM +0800, Shawn Guo wrote:
+> > > On Thu, Apr 06, 2023 at 01:18:43AM +0000, Peng Fan wrote:
+> > > > Hi Shawn,
+> > > >
+> > > > > Subject: Re: [PATCH V7 10/10] ARM64: dts: imx7ulp: update usb com=
+patible
+> > > > >
+> > > > > On Wed, Mar 22, 2023 at 01:25:04PM +0800, Peng Fan (OSS) wrote:
+> > > > > > From: Peng Fan <peng.fan@nxp.com>
+> > > > > >
+> > > > > > Per binding doc, update the compatible
+> > > > > >
+> > > > > > Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> > > > >
+> > > > > ARM: dts: imx7ulp: ...
+> > > > >
+> > > > > Fixed it up and applied all DTS patches.
+> > > > [Peng Fan]
+> > > >
+> > > > Thanks for the fix. But I think Greg already applied the patchset.
+> > >
+> > > Okay, I will drop them from my tree, but ...
+> > >
+> > > Greg,
+> > >
+> > > May I suggest a couple of things on the future process?
+> > >
+> > > - Could you leave i.MX DTS patches to me, so that we can avoid potent=
+ial
+> > >   merge conflicts?
+> >
+> > How am I supposed to know this?
+>
+> Aren't we using patch prefix to tell the target subsystem?
+>
+> > Our tools take the whole patch series,
+> > not individual ones.  If someone wants patches to go through different
+> > trees, then they need to submit them as different patch series,
+> > otherwise it makes no sense.
+>
+> It's a quite common practice that people send a series containing
+> multiple patches targeting different subsystems, as that's what
+> reviewers have been asking for sake of completeness.  So we are asking
+> for two opposite things from what I can see.
 
-The preliminary R-Car V3U docs _are_ misleading... But it's probably
-the best we'd ever get ;-)
+Never mind.  I think I will just start pushing people to send DTS
+changes as separate patchset.
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Shawn
