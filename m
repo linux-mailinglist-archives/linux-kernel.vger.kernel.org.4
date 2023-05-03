@@ -2,185 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFA046F5994
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 16:12:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 306756F5991
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 16:11:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230234AbjECOMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 10:12:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38228 "EHLO
+        id S230051AbjECOLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 10:11:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230220AbjECOMF (ORCPT
+        with ESMTP id S229675AbjECOLu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 10:12:05 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B0D59F7;
-        Wed,  3 May 2023 07:12:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683123122; x=1714659122;
-  h=message-id:date:mime-version:from:subject:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=Sdc17yyLFNgQb0H5vTTPJSsrbyvScz5vZiBycvsufh0=;
-  b=m4BVyaGTJPwKyreXwXwQRIzEzuAyEPlH/sXwzDPnkTaKNquD85jiLllG
-   pViDePIehuHKeTxuvD0Xot9oL3mTzMN58z89ntH/dZgoLk3wOElxJlIia
-   Dpd9SrXFlS50q0YZcc9RLjg9D3a1hJhsRoPFpztew4C5HB8gAB2OsAuBK
-   m06s1yEZReO8rwhRtwpxxIiHkwfiorqfkt6s94vAqhW4YZ+vWgcUbhCgB
-   EOP0OxH1sofHdCHw1lpjZR0QC5sNu7gkD+KX1jKggSFmROWhCztRTeCyg
-   UC+I51kFSloVprpbOQOMEDhxNnynXglfL3rBsv7kNBMz53wX4DLsb5i3B
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="350740571"
-X-IronPort-AV: E=Sophos;i="5.99,247,1677571200"; 
-   d="scan'208";a="350740571"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2023 07:12:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="1026512753"
-X-IronPort-AV: E=Sophos;i="5.99,247,1677571200"; 
-   d="scan'208";a="1026512753"
-Received: from jshields-mobl.amr.corp.intel.com (HELO [10.209.77.83]) ([10.209.77.83])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2023 07:11:59 -0700
-Message-ID: <3dc77f99-2237-80c9-64cf-19e392aaccc9@linux.intel.com>
-Date:   Wed, 3 May 2023 09:11:15 -0500
+        Wed, 3 May 2023 10:11:50 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF5C59F0;
+        Wed,  3 May 2023 07:11:49 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id af79cd13be357-75131c2997bso227471585a.1;
+        Wed, 03 May 2023 07:11:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683123108; x=1685715108;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gUG4sgiQ1KTeWUq0RWqJ+AL9Ulz9Emys2lp8p49mD5s=;
+        b=rsVvo1MaAxxvWQVE8a5FCgk271oCPa7AFeqUNjH6/7+2ugf+EiZEGJzNE8ao6Doj6t
+         FCOMbihFCQehwpN97HcEac4vldNeeF+zfGj56xFKoi1kMVDssrFv8AHNdHxVqOrRUCcZ
+         12PbplJFsUI01rHOPI3D8pODprPejrogUCjfF1HO0Yvbfh4rokDqkJqelu06D1HEFali
+         qocdi8YOQYAHDdb/ytqCW/u1w4cyQEx4DYZlo4/6MitiNEOyqbM5rYcSUoJfEAv/vuS8
+         ClfwGMI3fRfTRxZMdUfgMx6IyjcD+X4h5/kPMy5wmnFK71OQ9pyzv+t5/a9BfYXTVej+
+         dZ9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683123108; x=1685715108;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gUG4sgiQ1KTeWUq0RWqJ+AL9Ulz9Emys2lp8p49mD5s=;
+        b=kT6dEQrWd9Fwo9LLnIc0Nu+70f5PNa3mY9fdhZEz61NXhNcYNQbdgmTwXAmoU2oQGj
+         8z3yfAjCXhpV0yVBU4LcmeH5dVY0mFoB7hRnvX7UTHVNA4WupzhJUKYKwc5i5U4CGld+
+         T2MnDaWUdXPvT1t85k5S7CQ7qwAW7J0v3ukGvqvBnDTBHmXGMVprSZIWbAfd5XYKzuXT
+         fHzrsXiDz7cj4Yb2SoJWg5+aiJHiyY1M2N9Yd5tUx9RrP5tVVcYETcKEdvFslCpKiEGy
+         lheO40uTEDtoRFCiG0UAhlWlkx6O084s0EzJw5zObW53W14kg4uJMtcSJAc7n5SHk7xf
+         U1yw==
+X-Gm-Message-State: AC+VfDxw0wq30oB595GQz0MUx7PfYEx8C6zMaGP8tvMKrdmFS2D/GNcz
+        pJqCPr7hec3z19lV1c6iMOM=
+X-Google-Smtp-Source: ACHHUZ61fVaZwt1vUlMIS5/1x/krBw24HmhirjusDb86fZD1DnQ0fQ02fTjFpaw4dwNSF9rp2B/dDg==
+X-Received: by 2002:a05:622a:190c:b0:3ef:3824:b8b0 with SMTP id w12-20020a05622a190c00b003ef3824b8b0mr461735qtc.5.1683123108129;
+        Wed, 03 May 2023 07:11:48 -0700 (PDT)
+Received: from pm2-ws13.praxislan02.com (207-172-141-204.s8906.c3-0.slvr-cbr1.lnh-slvr.md.cable.rcncustomer.com. [207.172.141.204])
+        by smtp.gmail.com with ESMTPSA id r2-20020a05622a034200b003ef42f84532sm11459281qtw.49.2023.05.03.07.11.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 May 2023 07:11:47 -0700 (PDT)
+From:   Jason Andryuk <jandryuk@gmail.com>
+To:     Eric Van Hensbergen <ericvh@kernel.org>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Christian Schoenebeck <linux_oss@crudebyte.com>
+Cc:     Jason Andryuk <jandryuk@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, v9fs@lists.linux.dev,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH v2] 9p: Remove INET dependency
+Date:   Wed,  3 May 2023 10:11:20 -0400
+Message-Id: <20230503141123.23290-1-jandryuk@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.10.0
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Subject: Re: [PATCH 6/6] soundwire: qcom: do not probe devices before bus/link
- init
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Cc:     Patrick Lai <quic_plai@quicinc.com>
-References: <20230420101617.142225-1-krzysztof.kozlowski@linaro.org>
- <20230420101617.142225-7-krzysztof.kozlowski@linaro.org>
- <28141433-2130-e278-0f59-d9ab507b9be3@linux.intel.com>
- <42fbf7ad-54db-0917-bb85-a1be9f99cc45@linaro.org>
- <3f618297-e1cd-a46d-5318-c3b77a0fc78d@linux.intel.com>
- <b3e227d4-1bdf-9f58-a354-e7f798765e91@linaro.org>
-Content-Language: en-US
-In-Reply-To: <b3e227d4-1bdf-9f58-a354-e7f798765e91@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+9pfs can run over assorted transports, so it doesn't have an INET
+dependency.  Drop it and remove the includes of linux/inet.h.
 
+NET_9P_FD/trans_fd.o builds without INET or UNIX and is unusable over
+plain file descriptors.  However, tcp and unix functionality is still
+built and would generate runtime failures if used.  Add imply INET and
+UNIX to NET_9P_FD, so functionality is enabled by default but can still
+be explicitly disabled.
 
-On 5/3/23 03:00, Krzysztof Kozlowski wrote:
-> On 01/05/2023 15:43, Pierre-Louis Bossart wrote:
->>
->>
->> On 5/1/23 07:24, Krzysztof Kozlowski wrote:
->>> On 20/04/2023 23:37, Pierre-Louis Bossart wrote:
->>>>
->>>>
->>>> On 4/20/23 05:16, Krzysztof Kozlowski wrote:
->>>>> Soundwire devices are supposed to be kept in reset state (powered off)
->>>>> till their probe() or component bind() callbacks.  However if they are
->>>>> already powered on, then they might enumerate before the master
->>>>> initializes bus in qcom_swrm_init() leading to occasional errors like:
->>>>
->>>> The problem statement is really hard to follow.
->>>>
->>>> The peripheral can only be enumerated AFTER
->>>> a) the manager starts the bus clock and transmitting PING frames
->>>> b) the peripheral detects the sync words for 16 frames in a row.
->>>> c) the peripheral reports as Attached in the Device0 slot
->>>>
->>>> That sequence holds whether the manager does the enumeration manually or
->>>> relies on hardware-assisted autoenumeration. This is what the spec requires.
->>>>
->>>> So why can't the bus clock start be controlled by the manager driver,
->>>> and started once all required initializations are done?
->>>>
->>>> I mean, there's got to be some sort of parent-child hierarchy with
->>>> manager first, peripheral(s) second, I don't get how these steps could
->>>> be inverted or race.
->>>>
->>>>>   qcom-soundwire 6d30000.soundwire-controller: Qualcomm Soundwire controller v2.0.0 Registered
->>>>>   wcd938x_codec audio-codec: bound sdw:0:0217:010d:00:4 (ops wcd938x_sdw_component_ops)
->>>>>   wcd938x_codec audio-codec: bound sdw:0:0217:010d:00:3 (ops wcd938x_sdw_component_ops)
->>>>>   qcom-soundwire 6ad0000.soundwire-controller: swrm_wait_for_wr_fifo_avail err write overflow
->>>>>
->>>>> The problem primarily lies in Qualcomm Soundwire controller probe() sequence:
->>>>> 1. request_threaded_irq()
->>>>> 2. sdw_bus_master_add() - which will cause probe() and component bind()
->>>>>    of Soundwire devices, e.g. WCD938x codec drivers.  Device drivers
->>>>>    might already start accessing their registers.
->>>>
->>>> not if the bus clock hasn't started...
->>>>
->>>>> 3. qcom_swrm_init() - which initializes the link/bus and enables
->>>>>    interrupts.
->>>>
->>>> if you can move the clock start in 3) then problem solved. Why can't
->>>> this be done?
->>>
->>> Responding to all your three responses:
->>> The clock is enabled in this 3. qcom_swrm_init(), so the old code to my
->>> knowledge is written exactly how you expect.
->>>
->>> However even with stopped clock, the device enumerates at
->>> sdw_bus_master_add(), before anything is enabled.
->>
->> Erm, that's not physically possible...
->>
->> The peripheral can report as attached and be enumerated by the manager,
->> i.e. assigned a non-zero "Device Number" after the peripheral
->> synchronizes on 16 frames with valid static and dynamic syncwords. That
->> can only happen if there is a clock toggling and PING frames transmitted
->> on the data line.
->>
->> There's something else at play here.
-> 
-> Yes, I think you are right and that "else" is my limited knowledge on
-> the entire setup.
-> 
-> You gave me awesome hint in email before that probe != enumeration !=
-> initialization, however the wcd938x sound codec drivers were assuming
-> some steps are equal.
-> 
-> wcd938x comes with three devices on two drivers:
-> 1. RX Soundwire device (wcd938x-sdw.c driver)
-> 2. TX Soundwire device, which is used as regmap (also wcd938x-sdw.c driver)
-> 3. platform device (wcd938x.c driver) - glue and component master,
-> actually having most of the code using TX Soundwire device regmap.
-> 
-> The probe of each RX and TX Soundwire devices added components, but that
-> this did not mean devices were enumerated, as you said.
-> 
-> Considering what Mark said about using regcache (and sync it), I am now
-> replacing entire solution with proper regcache handling device
-> enumeration after component bind.
+This allows configuring 9pfs over Xen with INET and UNIX disabled.
 
-I thought you were talking about ASoC "struct snd_soc_component" but no,
-that's "struct component_ops" in wcd938x-sdw.c
+Signed-off-by: Jason Andryuk <jandryuk@gmail.com>
+---
+v2
+Add imply INET and UNIX
+---
+ fs/9p/Kconfig          | 2 +-
+ fs/9p/vfs_addr.c       | 1 -
+ fs/9p/vfs_dentry.c     | 1 -
+ fs/9p/vfs_dir.c        | 1 -
+ fs/9p/vfs_file.c       | 1 -
+ fs/9p/vfs_inode.c      | 1 -
+ fs/9p/vfs_inode_dotl.c | 1 -
+ fs/9p/vfs_super.c      | 1 -
+ net/9p/Kconfig         | 2 ++
+ 9 files changed, 3 insertions(+), 8 deletions(-)
 
-Now I think I get the scope of the problem, I didn't click on the fact
-that it's a platform driver that registers ASoC components, and not the
-SoundWire codec driver.
+diff --git a/fs/9p/Kconfig b/fs/9p/Kconfig
+index d7bc93447c85..0c63df574ee7 100644
+--- a/fs/9p/Kconfig
++++ b/fs/9p/Kconfig
+@@ -1,7 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ config 9P_FS
+ 	tristate "Plan 9 Resource Sharing Support (9P2000)"
+-	depends on INET && NET_9P
++	depends on NET_9P
+ 	select NETFS_SUPPORT
+ 	help
+ 	  If you say Y here, you will get experimental support for
+diff --git a/fs/9p/vfs_addr.c b/fs/9p/vfs_addr.c
+index 6f46d7e4c750..425956eb9fde 100644
+--- a/fs/9p/vfs_addr.c
++++ b/fs/9p/vfs_addr.c
+@@ -12,7 +12,6 @@
+ #include <linux/file.h>
+ #include <linux/stat.h>
+ #include <linux/string.h>
+-#include <linux/inet.h>
+ #include <linux/pagemap.h>
+ #include <linux/sched.h>
+ #include <linux/swap.h>
+diff --git a/fs/9p/vfs_dentry.c b/fs/9p/vfs_dentry.c
+index 65fa2df5e49b..f16f73581634 100644
+--- a/fs/9p/vfs_dentry.c
++++ b/fs/9p/vfs_dentry.c
+@@ -13,7 +13,6 @@
+ #include <linux/pagemap.h>
+ #include <linux/stat.h>
+ #include <linux/string.h>
+-#include <linux/inet.h>
+ #include <linux/namei.h>
+ #include <linux/sched.h>
+ #include <linux/slab.h>
+diff --git a/fs/9p/vfs_dir.c b/fs/9p/vfs_dir.c
+index 3d74b04fe0de..52bf87934650 100644
+--- a/fs/9p/vfs_dir.c
++++ b/fs/9p/vfs_dir.c
+@@ -13,7 +13,6 @@
+ #include <linux/stat.h>
+ #include <linux/string.h>
+ #include <linux/sched.h>
+-#include <linux/inet.h>
+ #include <linux/slab.h>
+ #include <linux/uio.h>
+ #include <linux/fscache.h>
+diff --git a/fs/9p/vfs_file.c b/fs/9p/vfs_file.c
+index 44c15eb2b908..367a851eaa82 100644
+--- a/fs/9p/vfs_file.c
++++ b/fs/9p/vfs_file.c
+@@ -14,7 +14,6 @@
+ #include <linux/file.h>
+ #include <linux/stat.h>
+ #include <linux/string.h>
+-#include <linux/inet.h>
+ #include <linux/list.h>
+ #include <linux/pagemap.h>
+ #include <linux/utsname.h>
+diff --git a/fs/9p/vfs_inode.c b/fs/9p/vfs_inode.c
+index 1d523bec0a94..502ac74e4959 100644
+--- a/fs/9p/vfs_inode.c
++++ b/fs/9p/vfs_inode.c
+@@ -15,7 +15,6 @@
+ #include <linux/pagemap.h>
+ #include <linux/stat.h>
+ #include <linux/string.h>
+-#include <linux/inet.h>
+ #include <linux/namei.h>
+ #include <linux/sched.h>
+ #include <linux/slab.h>
+diff --git a/fs/9p/vfs_inode_dotl.c b/fs/9p/vfs_inode_dotl.c
+index 331ed60d8fcb..a7da49906d99 100644
+--- a/fs/9p/vfs_inode_dotl.c
++++ b/fs/9p/vfs_inode_dotl.c
+@@ -13,7 +13,6 @@
+ #include <linux/pagemap.h>
+ #include <linux/stat.h>
+ #include <linux/string.h>
+-#include <linux/inet.h>
+ #include <linux/namei.h>
+ #include <linux/sched.h>
+ #include <linux/slab.h>
+diff --git a/fs/9p/vfs_super.c b/fs/9p/vfs_super.c
+index 266c4693e20c..10449994a972 100644
+--- a/fs/9p/vfs_super.c
++++ b/fs/9p/vfs_super.c
+@@ -12,7 +12,6 @@
+ #include <linux/file.h>
+ #include <linux/stat.h>
+ #include <linux/string.h>
+-#include <linux/inet.h>
+ #include <linux/pagemap.h>
+ #include <linux/mount.h>
+ #include <linux/sched.h>
+diff --git a/net/9p/Kconfig b/net/9p/Kconfig
+index deabbd376cb1..00ebce9e5a65 100644
+--- a/net/9p/Kconfig
++++ b/net/9p/Kconfig
+@@ -17,6 +17,8 @@ if NET_9P
+ 
+ config NET_9P_FD
+ 	default NET_9P
++	imply INET
++	imply UNIX
+ 	tristate "9P FD Transport"
+ 	help
+ 	  This builds support for transports over TCP, Unix sockets and
+-- 
+2.40.1
 
-That's certainly more complicated than any other SoundWire-based systems
-I've seen so far. It's already difficult to keep track of the SoundWire
-peripheral driver .probe(), the ASoC component .probe(), the SoundWire
-bus .update_status() callback and now there's
-the component .bind() added.
-
-Wow. What could possibly go wrong, eh?
