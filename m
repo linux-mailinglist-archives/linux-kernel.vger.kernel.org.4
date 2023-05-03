@@ -2,48 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 691306F5F3E
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 21:38:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1441E6F5F44
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 21:40:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbjECTix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 15:38:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55438 "EHLO
+        id S229922AbjECTkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 15:40:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjECTiv (ORCPT
+        with ESMTP id S229481AbjECTkq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 15:38:51 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47AFA619E;
-        Wed,  3 May 2023 12:38:50 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (aztw-30-b2-v4wan-166917-cust845.vm26.cable.virginm.net [82.37.23.78])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 35231755;
-        Wed,  3 May 2023 21:38:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1683142726;
-        bh=z9h1L4FSJYTgSOT7AfLs56rIVm5AivZZhOhg4sKWHi4=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=a8Mde7Wq+kgQROwZsD+KBym+sRVMmdVzsbm78XhQs8EE7NJkZ0lG+URWyI5p8j4Xh
-         k46gSixmYinJf4E/ZrlihlPlNqybD1M7a15X9NrluEJr4IETUu8km27IHLR1yrnCCz
-         b8vEQnjmgX4JdOv4MzaLB+2ReSPEMTuIt/9a29q0=
-Content-Type: text/plain; charset="utf-8"
+        Wed, 3 May 2023 15:40:46 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ACE86A63;
+        Wed,  3 May 2023 12:40:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=VorYlWQvvEamK0tp9BEBG0k8GWiLXWZL2H2lBJZo/Q4=; b=aIVe1Vmc68PpIeaXlpQaOQBTSy
+        yMrvsmEpiDW5r7bSkzuceaJ3YXSN3/xeI0Q8aG4wLq/2TOPJTUXjhq+8WZ+t3YGbjXpWkM4rei4tn
+        eUr9zpZyN8vnra1DwqJSu5lWG6mEzECGEsDSeVdHqIjc/4wcvvwiGyeowFgUEdd5gDzE=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1puIL0-00BrLE-5n; Wed, 03 May 2023 21:40:30 +0200
+Date:   Wed, 3 May 2023 21:40:30 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Shenwei Wang <shenwei.wang@nxp.com>
+Cc:     Simon Horman <horms@kernel.org>, Wei Fang <wei.fang@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Clark Wang <xiaoning.wang@nxp.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "imx@lists.linux.dev" <imx@lists.linux.dev>
+Subject: Re: [EXT] Re: [PATCH v2 net 2/2] net: fec: restructuring the
+ functions to avoid forward declarations
+Message-ID: <48d0de18-942e-4a1a-9774-792fe16db6c1@lunn.ch>
+References: <20230502220818.691444-1-shenwei.wang@nxp.com>
+ <20230502220818.691444-2-shenwei.wang@nxp.com>
+ <6dff0a5b-c74b-4516-8461-26fcd5d615f3@lunn.ch>
+ <PAXPR04MB9185BD38BA486104EE5B7213896C9@PAXPR04MB9185.eurprd04.prod.outlook.com>
+ <ZFJ+9Ij+jOJO1+wu@kernel.org>
+ <PAXPR04MB918564D93054CEDF255DA251896C9@PAXPR04MB9185.eurprd04.prod.outlook.com>
+ <ZFKw5seP5WclDCG2@kernel.org>
+ <PAXPR04MB9185FA526B63311C3899BD9C896C9@PAXPR04MB9185.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CAMuHMdV0iZJwNDRTxZXr-Rg_=VDN1hYw2gbSwwys1EDrzgC7Ew@mail.gmail.com>
-References: <20230502170618.55967-1-wsa+renesas@sang-engineering.com> <20230502170618.55967-3-wsa+renesas@sang-engineering.com> <CAMuHMdV0iZJwNDRTxZXr-Rg_=VDN1hYw2gbSwwys1EDrzgC7Ew@mail.gmail.com>
-Subject: Re: [PATCH 2/2] arm64: dts: renesas: r8a779a0: Add PWM nodes
-From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Phong Hoang <phong.hoang.wz@renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Date:   Wed, 03 May 2023 20:38:46 +0100
-Message-ID: <168314272625.1880445.3765065467307871846@Monstersaurus>
-User-Agent: alot/0.10
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PAXPR04MB9185FA526B63311C3899BD9C896C9@PAXPR04MB9185.eurprd04.prod.outlook.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
@@ -54,51 +69,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Geert Uytterhoeven (2023-05-03 11:14:52)
-> Hi Wolfram,
->=20
-> On Tue, May 2, 2023 at 7:06=E2=80=AFPM Wolfram Sang
-> <wsa+renesas@sang-engineering.com> wrote:
-> > From: Phong Hoang <phong.hoang.wz@renesas.com>
-> >
-> > This patch adds PWM nodes for R-Car V3U (r8a779a0) SoC.
-> >
-> > Signed-off-by: Phong Hoang <phong.hoang.wz@renesas.com>
-> > [wsa: rebased]
-> > Tested-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-> > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
->=20
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> i.e. will queue in renesas-devel for v6.5.
->=20
-> > --- a/arch/arm64/boot/dts/renesas/r8a779a0.dtsi
-> > +++ b/arch/arm64/boot/dts/renesas/r8a779a0.dtsi
-> > @@ -1108,6 +1108,56 @@ msiof5: spi@e6c28000 {
-> >                         status =3D "disabled";
-> >                 };
-> >
-> > +               pwm0: pwm@e6e30000 {
->=20
-> I'll move this before serial@e6e60000 while applying, to preserve sort
-> order (by unit address).
+> Hi Simon,
+> 
+> I'm a bit confused.
+> 
+> Are you suggesting that I submit the following restructuring patch for 'net' at this time?
+> [PATCH v2 net 2/2] net: fec: restructuring the functions to avoid forward declarations
+> 
+> Thanks,
+> Shenwei
 
-I still wonder when we can have nice tools that will sort DT and format
-DT files for us!
+Submit the fix to 'net'. But only the fix.
 
+Once a week, net gets merged to net-next, so the fix will also appear
+in net-next. You can then do the cleanup in net-next.
 
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-
->=20
-> Gr{oetje,eeting}s,
->=20
->                         Geert
->=20
-> --=20
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m6=
-8k.org
->=20
-> In personal conversations with technical people, I call myself a hacker. =
-But
-> when I'm talking to journalists I just say "programmer" or something like=
- that.
->                                 -- Linus Torvalds
+   Andrew
