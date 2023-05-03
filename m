@@ -2,286 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91EBA6F5E5F
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 20:44:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E6896F5E61
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 20:45:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbjECSoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 14:44:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45262 "EHLO
+        id S230019AbjECSpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 14:45:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbjECSnl (ORCPT
+        with ESMTP id S230200AbjECSou (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 14:43:41 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F28168A56;
-        Wed,  3 May 2023 11:41:17 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-64115eef620so7041575b3a.1;
-        Wed, 03 May 2023 11:41:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683139273; x=1685731273;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ffwvzJo3AetlasPY6gczdMsVH/amBSlWs9nz5GwhjKo=;
-        b=BUwgoBPWsCmvVQYmmuOOxZi2Vjm5BAQyRtgpsU3UIjTvN96QrVGClIjRjcrP3CO/4a
-         vKPHya5vUObcTcf2qbpwCNwRVZMrIV+yCVJicmSnLfRDLn5GQo/JRwoN1DO3YOSQXwKw
-         iTAE8nywvJqc3X4JuNhaHD964flox43stbpb97fQN0E7Bxtn/8umJjl2LH4UIxG2OOcM
-         OU3dtgxTlljLyDb8zW5dVcu9Z3K9tuUx97r8/sIHdEFDsXiEzvkgCK0Bb1yl6edwJbWy
-         mNKTap/DotcsrKzDAnEMi4WxSoK+qQADqP8Rb7nxvikR7yfBfesjPELVdkU5rg+QH5ts
-         w+7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683139273; x=1685731273;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ffwvzJo3AetlasPY6gczdMsVH/amBSlWs9nz5GwhjKo=;
-        b=gt8vu529Ix1+8ZiUYJ61V+5PLvyAXVE8YCROqXXStS5Qj20Izp3WI5KEMvaLs2/lBc
-         PybZCgzYbxIAGluj6/mXma1cCk1ay0H6/Dh0CRxUMmW4hO0yOrQVpckLHcJzevZRrV0I
-         H6tIqn/WbxhAcKc1/OjuynlGnxOj3yOfNc+Jz0H4FaoA9wE5TUJouEx+4nQ1WM1mpLJ6
-         p9ME/sx/XMGtFTAFyiuBaek/MEMRHfDIghTM6QF2TGzh6F6ReWw6Fc2OC68YtVoM/EsP
-         RD5JfyWbQx05DO/0tYfIvy/yY1NxcIgUxK1Tiftx8nO4Ib9CLqWhecoMwBvOtPnRsdUG
-         ZuFA==
-X-Gm-Message-State: AC+VfDxpHjZddTEVmiz9ZZgWTR+63Lll8hDyaBqeSCLQDlvCjYB3TSv+
-        yCQ9TaC5Fk0PlUog6JSTk4g=
-X-Google-Smtp-Source: ACHHUZ4sGR2VzM/n/g6q/XijzKKMV6zu0D1LXBCdpHQIraxKFbmxB3ILwUBxWRATGPgJ4Z6CrVyxeQ==
-X-Received: by 2002:a05:6a00:14c6:b0:636:e0fb:8c45 with SMTP id w6-20020a056a0014c600b00636e0fb8c45mr3611728pfu.16.1683139272680;
-        Wed, 03 May 2023 11:41:12 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:9390:e396:49ef:54dc])
-        by smtp.gmail.com with ESMTPSA id q10-20020a63d60a000000b0051eff0a70d7sm19998800pgg.94.2023.05.03.11.41.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 May 2023 11:41:11 -0700 (PDT)
-Date:   Wed, 3 May 2023 11:41:08 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Mark Brown <broonie@kernel.org>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        Helge Deller <deller@gmx.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-mmc@vger.kernel.org
-Subject: Re: [PATCH 1/4] Input/ARM: ads7846: Get pendown IRQ from descriptors
-Message-ID: <ZFKqxNA9m9Kge1oo@google.com>
-References: <20230430-nokia770-regression-v1-0-97704e36b094@linaro.org>
- <20230430-nokia770-regression-v1-1-97704e36b094@linaro.org>
+        Wed, 3 May 2023 14:44:50 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2056.outbound.protection.outlook.com [40.107.20.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74FFA83D0;
+        Wed,  3 May 2023 11:43:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ttyx6Q0vxEGRbFFz9rMZ8RL6bog9DvxuMMGY+bDTM8c8w9LW0cLD/bckP3GHw4/gWYHsPZ7nGpkhbf9oo2AZN9xn0f0mqcGlcbG6u49yGfxOQ3hzeCbBgv/1+szhOUQ2tCYo99H93ZOX5cPHW1XnaujY/R9tOFmHrylKq6hZnHaYBhySTY3puhpaJRjWCGBSWNIyWwO7fQYZX/HRTHdh6xHfgwH3PwxbLSzaihMcPT4BV9cSkpjPhw8l8LHM2FP92b9Ctmo+LW/ex51gZhZEiGMW3Tez7U8QI4BboNyzDqnYxwZKRNtDKw1V+7hZOMouse1ar+pRXx2HqzdLUfd/6g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KTo9T8Qu7zgy6rlXIueIoC1T01Qg7AwmeeQ19y3EDp8=;
+ b=hurRSOo9e+SPz9HKxpo+/Z9apNRGoNVqzgtHz7XazfL6gzzfEiMm34gdL6wJuQx0PFa9cpGJAFXlkkZAHo+VNyusa3bsELFmlO+TSoIKb8ovKKrX/hds6kvvVKqbctrqr/qxx9ovPx33ypFDf+qyWktmgf3cZloxXQLSlHftl6mf7oj8PbkYDRbgkUeIaiYsrcSs2jv1u2nndoPMmVC04SYKpyWoa13FCRyr93yigk/Y+074LjB909mqQx26zQ6ozl2OHr5pxKpSdR3leOvSvmfGGqhjDCFkAE75yhj7wGOzbZaLNdSMrTVjZokJ3vSvs38hiW0pI8wyl31LVLdrjA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KTo9T8Qu7zgy6rlXIueIoC1T01Qg7AwmeeQ19y3EDp8=;
+ b=l9xlEF8Z1wBb2bQ0i+XK6XaKkVEikM69+4VjCmnbuqtNnpj0Bgmp7bvXUVN77F8yzSP8p4IPaZj5aJ5UkYy7woESZr2HDiP26rg3V2sXF8qhS6jcBfm5WlEBKZ4xSHfBkvJ6YITGHrJ285MO5PB5vo2LscncbRRZoFlwro0oMf0=
+Received: from PAXPR04MB9185.eurprd04.prod.outlook.com (2603:10a6:102:231::11)
+ by DUZPR04MB9982.eurprd04.prod.outlook.com (2603:10a6:10:4db::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.31; Wed, 3 May
+ 2023 18:41:59 +0000
+Received: from PAXPR04MB9185.eurprd04.prod.outlook.com
+ ([fe80::28fb:82ec:7a6:62f3]) by PAXPR04MB9185.eurprd04.prod.outlook.com
+ ([fe80::28fb:82ec:7a6:62f3%5]) with mapi id 15.20.6363.022; Wed, 3 May 2023
+ 18:41:59 +0000
+From:   Shenwei Wang <shenwei.wang@nxp.com>
+To:     Simon Horman <horms@kernel.org>
+CC:     Andrew Lunn <andrew@lunn.ch>, Wei Fang <wei.fang@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Clark Wang <xiaoning.wang@nxp.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "imx@lists.linux.dev" <imx@lists.linux.dev>
+Subject: RE: [EXT] Re: [PATCH v2 net 2/2] net: fec: restructuring the
+ functions to avoid forward declarations
+Thread-Topic: [EXT] Re: [PATCH v2 net 2/2] net: fec: restructuring the
+ functions to avoid forward declarations
+Thread-Index: AQHZfUKo4ZwVUtEG3EOjLFQNjL7Wpa9HnlQAgADiOCCAAC5aAIAAM7tw
+Date:   Wed, 3 May 2023 18:41:59 +0000
+Message-ID: <PAXPR04MB918564D93054CEDF255DA251896C9@PAXPR04MB9185.eurprd04.prod.outlook.com>
+References: <20230502220818.691444-1-shenwei.wang@nxp.com>
+ <20230502220818.691444-2-shenwei.wang@nxp.com>
+ <6dff0a5b-c74b-4516-8461-26fcd5d615f3@lunn.ch>
+ <PAXPR04MB9185BD38BA486104EE5B7213896C9@PAXPR04MB9185.eurprd04.prod.outlook.com>
+ <ZFJ+9Ij+jOJO1+wu@kernel.org>
+In-Reply-To: <ZFJ+9Ij+jOJO1+wu@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PAXPR04MB9185:EE_|DUZPR04MB9982:EE_
+x-ms-office365-filtering-correlation-id: 239fdba7-9c92-4ea0-8928-08db4c061434
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 7RJ60YtXuRJV9Kpdzqsw0hbjMlNxMP8lOio47MpW2XrqBprTjWpxyP1Mv78Af2kG2x4KHiyEgjmsNolB07WjtbZaIdwGheGz0ia7dQL48cys+AHaq6UF28yQCKEx2NEKhGtDbZVLFP9l86cSpWWY3cX1mhlKVgCPWxKd0YpOsLDYV7jWTmJS327xoZgjrqZ9Q+6d9X0kOw96byGaowoIfnIlMhjr/9ndLRHdwAQC4jNPSApYcoa1CVbQLanLmc40B+oEKc1wS0rwQqV4yj1Da7DTtcm/wih8Ng7xJGX3tYP3QfFuoK3kFIMiNRQmcslyESqjkUKtS3dSSZ+pLUBjwc/SFqL8C11UTyZrntRx6HbtoHDh9sOCei1z2FIQEL7DWV5+zvaBMDuKEwN6SnZQErpnFAv4XonV4XRjD4nIxN0sxJccs2tcbu9+i4WtH+o/5ni2y4uHfbmx7tETPn6M0NXgYGNGBAc+Lk8SR2IpFQENy4eURRjvoLa9YW9SoCBkB2KG0L8Sfy8QY5ar9UG4mJtsz/zd93LN320QLjlclbPGFLv672Sj+rf25H5JkYPMNTWfMPWPzhrOyxxb06k/GT2OVlYoDNsUaDygM4UOhiYwrbR+sjKCbtAEKjrWj+FI
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9185.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(366004)(376002)(136003)(396003)(451199021)(26005)(186003)(83380400001)(54906003)(44832011)(6506007)(55236004)(2906002)(9686003)(53546011)(122000001)(7416002)(52536014)(66556008)(66946007)(66446008)(66476007)(64756008)(38100700002)(5660300002)(76116006)(8936002)(55016003)(316002)(8676002)(86362001)(33656002)(38070700005)(41300700001)(6916009)(71200400001)(478600001)(4326008)(7696005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?SbQp6nkj81I3eYbksvFva5xZ6YJT05pJdUiVnUfNziQnc/74m7v2BGUaPEaT?=
+ =?us-ascii?Q?2XHfj/GIFTTiBVfAhfqkVG3zuSXLkg4vNv+fA95WWAjEu5Am6WWPEB9lWmEJ?=
+ =?us-ascii?Q?EPKc/pLBFBteBUdx3hDIG6K1sOpQP5he5Fy3R58F6m2hU4tjBbcNcKNluUUN?=
+ =?us-ascii?Q?m0uB0ER6C+T/vjW9ZVHZY/8b9WWqo8EXXDjxP1Zdja0z8BXqIvxEViIJWx+I?=
+ =?us-ascii?Q?4sm3kI6Dz3bFslL/pqQPb5GgNg+gCpAYYRQ9zvsUb+2++V+ry1/Wmz8ndLK9?=
+ =?us-ascii?Q?dpXbJWM/tSxvzbDo1qQ6TPGUmyq1t7tvUUkjJ0FnymuvqVoIspWcQ1mMllgi?=
+ =?us-ascii?Q?BZWEEe4jdeU25pWsrJVy1roomKc/HhOuS+bLg+F9HtkBmRvKz5dnhshUbSw4?=
+ =?us-ascii?Q?a//az8/znkP2gLM3+PpgqHhj5ief/15Wb7hl5mTHkdZgMGTCnmThAMJatkWx?=
+ =?us-ascii?Q?9nyBHHuP+J44gwvY3UUSUYWrwTsHoUlMpxYPIh3pQAzWlXkFUBWToSCu4s/G?=
+ =?us-ascii?Q?6TwCYf9lh4D6rKrxQxuFAqEtaIl3/jIkzJ/v6yvVC2zLP9WDOSqERhcAb9Y7?=
+ =?us-ascii?Q?PI/I/i7+l1+Do0/RyZdR798myiy453Ms8Z16NHRaXv+GejIQtKU6jNTM2TtU?=
+ =?us-ascii?Q?Bs2TaTHDfLq6aeKsblez9Rjtd33lDmWBJoNCc4/JEKxtujv2QsVXrEr2kWYt?=
+ =?us-ascii?Q?tYUFvwVaG47Bk56hVL/6x+Iry7Ql9ZXx8UOUiL0r4LiSLT1nJzGFI51KNs4K?=
+ =?us-ascii?Q?bkVfHQiBFtwA8y/pPnpdcvmW9SLavoymcSLC3ZEUHjvkQssuirBN1an4aLC7?=
+ =?us-ascii?Q?jDiNq+sg34q1oxRLNYwxWqfQ3HhEbC2iPcZuRB+rmhOMgT6tzxJirgC8cajd?=
+ =?us-ascii?Q?uXgIBsbKr92eQB2AXx4ZXW+Ivvg+KAVstYvVxpcCSMNNNY5BUo1A1+hLykRG?=
+ =?us-ascii?Q?8YEpmzDn/rjnfkDroxR6j4q0cNmwoshBM6WezheMP93Rtihoo0O8HU0jtHf+?=
+ =?us-ascii?Q?uCqFzhxql9fOsHMR8cAJ8tEEC9UTddXpnBWYNBU0ES7Xrg24ICvSzisCUUIZ?=
+ =?us-ascii?Q?AEs1egzNEItfbc80syeBakNlvSSOpiQQjrZBpKuIygq5yIo/bO1cRJRmfbjt?=
+ =?us-ascii?Q?jRTkzURlVLoaplF7A9nu+ALu5FC+Yy5o0uGKdxwkjdCNgsh6vmC9DuY4tUQx?=
+ =?us-ascii?Q?qrI3aU0L8tErcJzK8SbMNj/EWV5awRblTi5S7xGFMBwdfOiTpTWZkbe9GEkT?=
+ =?us-ascii?Q?/sshe2UxasW3ea48k0s6Qq34TKBL31sJiOy2X1ycokcE7rzcKFZslsQczhtT?=
+ =?us-ascii?Q?ljkA7C0WoAWK3QMnEljX+NWhssuG0rXLdMY8LsiGPCdvi4q+f7q3CqpiwZO6?=
+ =?us-ascii?Q?iPGmXO1X974PsSKQ/7zf3VmMVk4iGW0TTavF6Uq1A0QaFjNaBhrBkIZt+k8h?=
+ =?us-ascii?Q?zXrKtGvSvzJyrxt37HBdFFLKF97hi3m+rRice8PsnA2jpusYo1nhstHk4BmK?=
+ =?us-ascii?Q?79ES/OWBfwrwQKU12pTXZ/BEwY4/ccNszhNwhSOjvE4tTexplYUSgDvW0Atd?=
+ =?us-ascii?Q?beNddW1BoJKPbt2zhEwNc7jn9wSVtLINmcrjo+oo?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230430-nokia770-regression-v1-1-97704e36b094@linaro.org>
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9185.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 239fdba7-9c92-4ea0-8928-08db4c061434
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 May 2023 18:41:59.5233
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: /NZ/93cH+pBCBx9Gb8f7QkLi1FLEP9DHjCsvh3NLkJQRlBbECRnOO1E5xHPjecIJc/GBypCMFeWxjQxH+rcjcw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DUZPR04MB9982
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 30, 2023 at 11:22:16AM +0200, Linus Walleij wrote:
-> The ADS7846 has some limited support for using GPIO descriptors,
-> let's convert it over completely and fix all users to provide
-> GPIOs in descriptor tables.
-> 
-> The Nokia 770 now has dynamic allocation of IRQ numbers, so this
-> needs to be fixed for it to work.
-> 
-> Fixes: 92bf78b33b0b ("gpio: omap: use dynamic allocation of base")
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
->  arch/arm/mach-omap1/board-nokia770.c | 12 +++++++++++-
->  arch/arm/mach-pxa/spitz.c            | 11 ++++++++++-
->  arch/mips/alchemy/devboards/db1000.c | 11 ++++++++++-
->  drivers/input/touchscreen/ads7846.c  | 32 ++++++++------------------------
->  include/linux/spi/ads7846.h          |  2 --
->  5 files changed, 39 insertions(+), 29 deletions(-)
-> 
-> diff --git a/arch/arm/mach-omap1/board-nokia770.c b/arch/arm/mach-omap1/board-nokia770.c
-> index a501a473ffd6..eb7652670447 100644
-> --- a/arch/arm/mach-omap1/board-nokia770.c
-> +++ b/arch/arm/mach-omap1/board-nokia770.c
-> @@ -118,7 +118,16 @@ static struct ads7846_platform_data nokia770_ads7846_platform_data __initdata =
->  	.debounce_max	= 10,
->  	.debounce_tol	= 3,
->  	.debounce_rep	= 1,
-> -	.gpio_pendown	= ADS7846_PENDOWN_GPIO,
-> +};
-> +
-> +static struct gpiod_lookup_table nokia770_ads7846_gpio_table = {
-> +	/* SPI bus 2, device with chip select 0 */
-> +	.dev_id = "spi2.0",
-> +	.table = {
-> +		GPIO_LOOKUP("gpio-0-15", ADS7846_PENDOWN_GPIO,
-> +			    "pendown", GPIO_ACTIVE_HIGH),
-> +		{ }
-> +	},
->  };
-
-I would like to eventually get rid of GPIO_LOOKUP in favor of
-PROPERTY_ENTRY_GPIO. Can we try something like the draft below (just
-typed, not even compiled):
-
-diff --git a/arch/arm/mach-omap1/board-nokia770.c b/arch/arm/mach-omap1/board-nokia770.c
-index a501a473ffd6..34b8e392b917 100644
---- a/arch/arm/mach-omap1/board-nokia770.c
-+++ b/arch/arm/mach-omap1/board-nokia770.c
-@@ -12,6 +12,7 @@
- #include <linux/init.h>
- #include <linux/mutex.h>
- #include <linux/platform_device.h>
-+#include <linux/property.h>
- #include <linux/input.h>
- #include <linux/omapfb.h>
- 
-@@ -35,6 +36,24 @@
- #include "clock.h"
- #include "mmc.h"
- 
-+static const struct software_node nokia770_mpuio_gpiochip_node = {
-+	.name = "mpuio",
-+};
-+
-+static const struct software_node nokia770_gpiochip1_node = {
-+	.name = "gpio-0-15",
-+};
-+
-+static const struct software_node nokia770_gpiochip2_node = {
-+	.name = "gpio-16-31",
-+};
-+
-+static const struct software_node nokia770_gpiochip_nodes[] = {
-+	&nokia770_mpuio_gpiochip_node
-+	&nokia770_gpiochip1_node,
-+	&nokia770_gpiochip2_node,
-+};
-+
- #define ADS7846_PENDOWN_GPIO	15
- 
- static const unsigned int nokia770_keymap[] = {
-@@ -102,6 +121,17 @@ static const struct omap_lcd_config nokia770_lcd_config __initconst = {
- 	.ctrl_name	= "hwa742",
- };
- 
-+static const struct property_entry nokia770_mipid_props[] = {
-+	PROPERTY_ENTRY_GPIO("reset-gpios", &nokia770_gpiochip1_node,
-+			    13, GPIO_ACTIVE_LOW),
-+	{ }
-+};
-+
-+static const struct software_node nokia770_mipid_swnode = {
-+	.name = "lcd_mipid",
-+	.properties = nokia770_mipid_props,
-+};
-+
- static void __init mipid_dev_init(void)
- {
- 	nokia770_mipid_platform_data.nreset_gpio = 13;
-@@ -110,15 +140,22 @@ static void __init mipid_dev_init(void)
- 	omapfb_set_lcd_config(&nokia770_lcd_config);
- }
- 
--static struct ads7846_platform_data nokia770_ads7846_platform_data __initdata = {
--	.x_max		= 0x0fff,
--	.y_max		= 0x0fff,
--	.x_plate_ohms	= 180,
--	.pressure_max	= 255,
--	.debounce_max	= 10,
--	.debounce_tol	= 3,
--	.debounce_rep	= 1,
--	.gpio_pendown	= ADS7846_PENDOWN_GPIO,
-+static const struct property_entry nokia770_ads7846_props[] = {
-+	PROPERTY_ENTRY_U32("touchscreen-size-x", 4096),
-+	PROPERTY_ENTRY_U32("touchscreen-size-y", 4096),
-+	PROPERTY_ENTRY_U32("touchscreen-max-pressure", 256),
-+	PROPERTY_ENTRY_U32("touchscreen-average-samples", 10),
-+	PROPERTY_ENTRY_U16("ti,x-plate-ohms", 180),
-+	PROPERTY_ENTRY_U16("ti,debounce-tol", 3),
-+	PROPERTY_ENTRY_U16("ti,debounce-rep", 1),
-+	PROPERTY_ENTRY_GPIO("pendown-gpios", &nokia770_gpiochip1_node,
-+			    ADS7846_PENDOWN_GPIO, GPIO_ACTIVE_HIGH),
-+	{ }
-+};
-+
-+static const struct software_node nokia770_ads7846_swnode = {
-+	.name = "ads7846",
-+	.properties = nokia770_ads7846_props,
- };
- 
- static struct spi_board_info nokia770_spi_board_info[] __initdata = {
-@@ -128,13 +165,14 @@ static struct spi_board_info nokia770_spi_board_info[] __initdata = {
- 		.chip_select    = 3,
- 		.max_speed_hz   = 12000000,
- 		.platform_data	= &nokia770_mipid_platform_data,
-+		.swnode		= &nokia770_mipid_swnode,
- 	},
- 	[1] = {
- 		.modalias       = "ads7846",
- 		.bus_num        = 2,
- 		.chip_select    = 0,
- 		.max_speed_hz   = 2500000,
--		.platform_data	= &nokia770_ads7846_platform_data,
-+		.swnode		= &nokia770_ads7846_swnode,
- 	},
- };
- 
-@@ -212,14 +250,15 @@ static inline void nokia770_mmc_init(void)
- #endif
- 
- #if IS_ENABLED(CONFIG_I2C_CBUS_GPIO)
--static struct gpiod_lookup_table nokia770_cbus_gpio_table = {
--	.dev_id = "i2c-cbus-gpio.2",
--	.table = {
--		GPIO_LOOKUP_IDX("mpuio", 9, NULL, 0, 0), /* clk */
--		GPIO_LOOKUP_IDX("mpuio", 10, NULL, 1, 0), /* dat */
--		GPIO_LOOKUP_IDX("mpuio", 11, NULL, 2, 0), /* sel */
--		{ },
--	},
-+static const struct software_node_ref_args nokia770_cbus_gpio_refs[] = {
-+	SOFTWARE_NODE_REFERENCE(&nokia770_mpuio_gpiochip_swnode, 9, 0),
-+	SOFTWARE_NODE_REFERENCE(&nokia770_mpuio_gpiochip_swnode, 10, 0),
-+	SOFTWARE_NODE_REFERENCE(&nokia770_mpuio_gpiochip_swnode, 11, 0),
-+};
-+
-+static const struct property_entry nokia770_ads7846_props[] = {
-+	PROPERTY_ENTRY_REF_ARRAY("gpios", nokia770_cbus_gpio_refs),
-+	{ }
- };
- 
- static struct platform_device nokia770_cbus_device = {
-@@ -253,7 +292,8 @@ static void __init nokia770_cbus_init(void)
- 	nokia770_i2c_board_info_2[1].irq = gpio_to_irq(tahvo_irq_gpio);
- 	i2c_register_board_info(2, nokia770_i2c_board_info_2,
- 				ARRAY_SIZE(nokia770_i2c_board_info_2));
--	gpiod_add_lookup_table(&nokia770_cbus_gpio_table);
-+	device_create_managed_software_node(&nokia770_cbus_device.dev,
-+					    nokia770_cbus_props, NULL);
- 	platform_device_register(&nokia770_cbus_device);
- }
- #else /* CONFIG_I2C_CBUS_GPIO */
-@@ -273,6 +313,7 @@ static void __init omap_nokia770_init(void)
- 	/* Unmask SleepX signal */
- 	omap_writew((omap_readw(0xfffb5004) & ~2), 0xfffb5004);
- 
-+	software_node_register_node_group(nokia770_gpiochip_swnodes);
- 	platform_add_devices(nokia770_devices, ARRAY_SIZE(nokia770_devices));
- 	nokia770_spi_board_info[1].irq = gpio_to_irq(15);
- 	spi_register_board_info(nokia770_spi_board_info,
 
 
-This will need switching ads7846.c from using of_property* to
-device_property* so that it can parse software nodes.
+> -----Original Message-----
+> From: Simon Horman <horms@kernel.org>
+> Sent: Wednesday, May 3, 2023 10:34 AM
+> To: Shenwei Wang <shenwei.wang@nxp.com>
+> Cc: Andrew Lunn <andrew@lunn.ch>; Wei Fang <wei.fang@nxp.com>; David S.
+> Miller <davem@davemloft.net>; Eric Dumazet <edumazet@google.com>; Jakub
+> Kicinski <kuba@kernel.org>; Paolo Abeni <pabeni@redhat.com>; Clark Wang
+> <xiaoning.wang@nxp.com>; dl-linux-imx <linux-imx@nxp.com>; Alexei
+> Starovoitov <ast@kernel.org>; Daniel Borkmann <daniel@iogearbox.net>;
+> Jesper Dangaard Brouer <hawk@kernel.org>; John Fastabend
+> <john.fastabend@gmail.com>; Alexander Lobakin
+> <alexandr.lobakin@intel.com>; netdev@vger.kernel.org; linux-
+> kernel@vger.kernel.org; imx@lists.linux.dev
+> Subject: Re: [EXT] Re: [PATCH v2 net 2/2] net: fec: restructuring the fun=
+ctions to
+> avoid forward declarations
+>=20
+> Caution: This is an external email. Please take care when clicking links =
+or
+> opening attachments. When in doubt, report the message using the 'Report =
+this
+> email' button
+>=20
+>=20
+> On Wed, May 03, 2023 at 12:53:57PM +0000, Shenwei Wang wrote:
+> >
+> >
+> > > -----Original Message-----
+> > > From: Andrew Lunn <andrew@lunn.ch>
+> > > Sent: Tuesday, May 2, 2023 6:19 PM
+> > > To: Shenwei Wang <shenwei.wang@nxp.com>
+> > > Cc: Wei Fang <wei.fang@nxp.com>; David S. Miller
+> > > <davem@davemloft.net>; Eric Dumazet <edumazet@google.com>; Jakub
+> > > Kicinski <kuba@kernel.org>; Paolo Abeni <pabeni@redhat.com>; Clark
+> > > Wang <xiaoning.wang@nxp.com>; dl- linux-imx <linux-imx@nxp.com>;
+> > > Alexei Starovoitov <ast@kernel.org>; Daniel Borkmann
+> > > <daniel@iogearbox.net>; Jesper Dangaard Brouer <hawk@kernel.org>;
+> > > John Fastabend <john.fastabend@gmail.com>; Alexander Lobakin
+> > > <alexandr.lobakin@intel.com>; netdev@vger.kernel.org; linux-
+> > > kernel@vger.kernel.org; imx@lists.linux.dev
+> > > Subject: [EXT] Re: [PATCH v2 net 2/2] net: fec: restructuring the
+> > > functions to avoid forward declarations
+> > >
+> > > Caution: This is an external email. Please take care when clicking
+> > > links or opening attachments. When in doubt, report the message
+> > > using the 'Report this email' button
+> > >
+> > >
+> > > On Tue, May 02, 2023 at 05:08:18PM -0500, Shenwei Wang wrote:
+> > > > The patch reorganizes functions related to XDP frame transmission,
+> > > > moving them above the fec_enet_run_xdp implementation. This
+> > > > eliminates the need for forward declarations of these functions.
+> > >
+> > > I'm confused. Are these two patches in the wrong order?
+> > >
+> > > The reason that i asked you to fix the forward declaration in
+> > > net-next is that it makes your fix two patches. Sometimes that is
+> > > not obvious to people back porting patches, and one gets lost,
+> > > causing build problems. So it is better to have a single patch which
+> > > is maybe not 100% best practice merged to stable, and then a cleanup =
+patch
+> merged to the head of development.
+> > >
+> >
+> > If that is the case, we should forgo the second patch. Its purpose was
+> > to reorganize function order such that the subsequent patch to
+> > net-next enabling XDP_TX would not encounter forward declaration issues=
+.
+>=20
+> I think a good plan would be, as I understood Andrew's original suggestio=
+n,
+> to:
+>=20
+> 1. Only have patch 2/2, targeted at 'net', for now 2. Later, once that pa=
+tch has
+> been accepted into 'net', 'net-next' has
+>    reopened, and that patch is present in 'net-next', then follow-up
+>    with patch 1/2, which is a cleanup.
 
-Thanks.
+So should I re-submit the patch? Or you just take the 1st patch and drop th=
+e 2nd one?
 
--- 
-Dmitry
+Thanks,
+Shenwei
