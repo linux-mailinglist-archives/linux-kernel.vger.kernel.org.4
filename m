@@ -2,99 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 584786F583F
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 14:54:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 305226F585D
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 14:57:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbjECMy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 08:54:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54700 "EHLO
+        id S230010AbjECM5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 08:57:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbjECMyU (ORCPT
+        with ESMTP id S229675AbjECM5V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 08:54:20 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107BA59FB;
-        Wed,  3 May 2023 05:54:04 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B7B38227F7;
-        Wed,  3 May 2023 12:54:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1683118442; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=XGQuVbsJSpb3XLS+PmIsQvClRUbeKXxErey9Ewqz9fM=;
-        b=chZi2O4e9/GB1oKRKC9Hfqkl6IfrkSSPGMUBfDu9Vj7bOqk3o22tv2oyX3AvbbHqWiE8xK
-        FQGsfFkRsAvGEXzIwnGGKoI7/5atVK12eFnEpLC8iBeRSvv6QsESycZXHZ6S2Wa/i/OSIU
-        OexiNAKjs9f7vG6vfdJfQ4anBsioP8M=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 983AE13584;
-        Wed,  3 May 2023 12:54:02 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ojRRJGpZUmSWDQAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Wed, 03 May 2023 12:54:02 +0000
-From:   =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
-To:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Benjamin Berg <benjamin@sipsolutions.net>
-Subject: [RFC PATCH] cgroup: Return error when attempting to migrate a zombie process
-Date:   Wed,  3 May 2023 14:53:59 +0200
-Message-Id: <20230503125359.14789-1-mkoutny@suse.com>
-X-Mailer: git-send-email 2.40.1
+        Wed, 3 May 2023 08:57:21 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD2A5262;
+        Wed,  3 May 2023 05:57:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683118640; x=1714654640;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NXY93xhwaopT17+l0/EjS3Gx663sl7IzwqUBhRClEhQ=;
+  b=niq7nSFYAexaS4quCt4tFqhcsXNKUfNeJw7kgrQoOSu5CBlWNkN0VHaY
+   FRpp0E+tFSpd7OtCdXxviunL6Uln2hXw1E0PvJeOBPrlJYwV+Qg/DTsbC
+   bV+CY4KxdZzmAp5KoM4cHqsFyQqgyyKU8cWAz4QJJ+RUtcg6Qf30CfUz5
+   y5C/HklawLCDAsZYX5dgK8M5GBFmfDLTVwY83E+aOhEjSNArsQiXhhVH9
+   J/gOjGswCvkHp2O/wWL9/A17iWeCZojZ+HkuU8+VjakXe5j2eHA/jLjre
+   WH6DHKbA/qc3Svs1TBqxShZswvoNaj12LmOJiUwe88xd57SFoQ0+l8/lY
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="350723207"
+X-IronPort-AV: E=Sophos;i="5.99,247,1677571200"; 
+   d="scan'208";a="350723207"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2023 05:57:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="1026491301"
+X-IronPort-AV: E=Sophos;i="5.99,247,1677571200"; 
+   d="scan'208";a="1026491301"
+Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 03 May 2023 05:57:18 -0700
+Received: from kbuild by e3434d64424d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1puC2n-000212-0g;
+        Wed, 03 May 2023 12:57:17 +0000
+Date:   Wed, 3 May 2023 20:56:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jinyoung CHOI <j-young.choi@samsung.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>, "hch@lst.de" <hch@lst.de>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH 05/15] block: fix not to apply bip information in
+ blk_rq_bio_prep()
+Message-ID: <202305032008.NxgqlW9X-lkp@intel.com>
+References: <20230503101048epcms2p61d61df1431955d9517c9939999ee3478@epcms2p6>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230503101048epcms2p61d61df1431955d9517c9939999ee3478@epcms2p6>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zombies aren't migrated. However, return value of a migration write may
-suggest a zombie process was migrated and causing confusion about lack
-of cgroup.events:populated between origin and target cgroups (e.g.
-target cgroup rmdir).
+Hi Jinyoung,
 
-Notify the users about no effect of their action by a return value.
-(update_dfl_csses migration of zombies still silently passes since it is
-not meant to be user-visible migration anyway.)
+kernel test robot noticed the following build errors:
 
-Suggested-by: Benjamin Berg <benjamin@sipsolutions.net>
-Signed-off-by: Michal Koutný <mkoutny@suse.com>
----
- kernel/cgroup/cgroup.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+[auto build test ERROR on axboe-block/for-next]
+[also build test ERROR on mkp-scsi/for-next jejb-scsi/for-next linus/master v6.3 next-20230428]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Reasons for RFC:
-1) Some users may notice the change,
-2) EINVAL vs ESCHR,
-3) add a selftest?
+url:    https://github.com/intel-lab-lkp/linux/commits/Jinyoung-CHOI/block-blk-integiry-add-helper-functions-for-bio_integrity_add_page/20230503-183015
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+patch link:    https://lore.kernel.org/r/20230503101048epcms2p61d61df1431955d9517c9939999ee3478%40epcms2p6
+patch subject: [PATCH 05/15] block: fix not to apply bip information in blk_rq_bio_prep()
+config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20230503/202305032008.NxgqlW9X-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/584edc6ae9cb23e8a778ee73d711b9143038a047
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jinyoung-CHOI/block-blk-integiry-add-helper-functions-for-bio_integrity_add_page/20230503-183015
+        git checkout 584edc6ae9cb23e8a778ee73d711b9143038a047
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=um SUBARCH=i386 olddefconfig
+        make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash arch/um/drivers/ block/
 
-diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index 625d7483951c..306547dd7b76 100644
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -2968,7 +2968,8 @@ struct task_struct *cgroup_procs_write_start(char *buf, bool threadgroup,
- 	 * become trapped in a cpuset, or RT kthread may be born in a
- 	 * cgroup with no rt_runtime allocated.  Just say no.
- 	 */
--	if (tsk->no_cgroup_migration || (tsk->flags & PF_NO_SETAFFINITY)) {
-+	if (tsk->no_cgroup_migration || (tsk->flags & PF_NO_SETAFFINITY) ||
-+	    !atomic_read(&tsk->signal->live)) {
- 		tsk = ERR_PTR(-EINVAL);
- 		goto out_unlock_threadgroup;
- 	}
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305032008.NxgqlW9X-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+   In file included from arch/um/drivers/ubd_kern.c:27:
+   include/linux/blk-mq.h: In function 'blk_rq_bio_prep':
+>> include/linux/blk-mq.h:972:19: error: 'struct request' has no member named 'nr_integrity_segments'
+     972 |                 rq->nr_integrity_segments = bio_integrity(bio)->bip_vcnt;
+         |                   ^~
+>> include/linux/blk-mq.h:972:63: warning: dereferencing 'void *' pointer
+     972 |                 rq->nr_integrity_segments = bio_integrity(bio)->bip_vcnt;
+         |                                                               ^~
+>> include/linux/blk-mq.h:972:63: error: request for member 'bip_vcnt' in something not a structure or union
+
+
+vim +972 include/linux/blk-mq.h
+
+   962	
+   963	static inline void blk_rq_bio_prep(struct request *rq, struct bio *bio,
+   964			unsigned int nr_segs)
+   965	{
+   966		rq->nr_phys_segments = nr_segs;
+   967		rq->__data_len = bio->bi_iter.bi_size;
+   968		rq->bio = rq->biotail = bio;
+   969		rq->ioprio = bio_prio(bio);
+   970	
+   971		if (bio_integrity(bio)) {
+ > 972			rq->nr_integrity_segments = bio_integrity(bio)->bip_vcnt;
+   973			rq->cmd_flags |= REQ_INTEGRITY;
+   974		}
+   975	}
+   976	
+
 -- 
-2.40.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
