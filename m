@@ -2,149 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB8D96F5025
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 08:30:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 211B66F5027
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 08:31:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbjECGaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 02:30:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40708 "EHLO
+        id S229587AbjECGbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 02:31:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbjECGau (ORCPT
+        with ESMTP id S229488AbjECGbl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 02:30:50 -0400
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1D61BC1;
-        Tue,  2 May 2023 23:30:49 -0700 (PDT)
-Received: by mail-qv1-xf2d.google.com with SMTP id 6a1803df08f44-61b6101a166so10036056d6.0;
-        Tue, 02 May 2023 23:30:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683095448; x=1685687448;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NSWUOSuqVLpIOWgszk2VW3MzVdJnM+9N5Gz+a5oZIik=;
-        b=FwxsWECu6Vmz2nS2N36nqdmqGUy6EtTWCwQbQH8C4yyx7S50D7jj6hwfI3pG4WOWTe
-         J5Ac/nm/4jjf2uonNwEk7kkgqGFkqqOlCnFifWxFhM5HBLHG5/+yNdwPcGRQZD8xyZgY
-         y564jPge77bFOjQ7/C7PbIZo2J/D/9HIgWm1qaK+/JMqtAHJacp7Y7p+jXsMBKVPwiay
-         de3olKWgxT5zQQmgR6+1vlYmLMhp7LATVC+UKYup+7gpwYRYwOXn88552r8N8+SfOO97
-         mz3mbEB+LcrH93Ca5jn3i5g7nB6tCk4YfB1Kz47lyE0ZxPdxng7OE8IRGtE3NBhEpUXq
-         C5Vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683095448; x=1685687448;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NSWUOSuqVLpIOWgszk2VW3MzVdJnM+9N5Gz+a5oZIik=;
-        b=LZ8g6qgCasB0UbWpZlTJfNky3m5otbn6PjY6RwXQu+MDJPhx7+b/0cP5iSqjK6IarW
-         XZZ6Yo2SN65wDHuMjjM16QvJ2+F0Oama4XLbqsmBgbyVyvkWa+GbjRg2ZrafvtPXw+Z/
-         a9NkLP43GnHPax/mHAuHxO6hk4oRAyjaoW6R9eCSD54CQjf2aFI9HYvIOnTPhjccKx/x
-         TXlGwwT2c4b3fhUQfL07QIbGsMIoCOJmS6G6f82pg2f+tiplvSY7dt7PSCrH7bUdpx6+
-         HZnaWiPp36SFl1uMrj0pqPL1UyHwE9/TtoiLzMuFN98aPWAMwXQBHkHA/1VnA0a5DaMC
-         a6zw==
-X-Gm-Message-State: AC+VfDwrMV2BdmzmTBrtaoU+npTWUl9khzMIJ+MTGaP9KpuFDjTRlI+4
-        7hvm+PERBQ8vK96Cf/WEU7KB6Dz47imKeYFLZt4=
-X-Google-Smtp-Source: ACHHUZ6mwR/Eb9QNNQC3EY6y0Gd5Rl8C7T1qIt5du/51986iaziD1AevtUJQS/vhAg1zqokn+I2SvW0bGzGu5uBEHP4=
-X-Received: by 2002:a05:6214:1941:b0:61b:5cba:5820 with SMTP id
- q1-20020a056214194100b0061b5cba5820mr9799913qvk.50.1683095448149; Tue, 02 May
- 2023 23:30:48 -0700 (PDT)
+        Wed, 3 May 2023 02:31:41 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF58D1FF6;
+        Tue,  2 May 2023 23:31:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=BUuae1WmeUS+YcTLuLq8+anuiHArLRlt25IljJxQbVg=; b=HdOeeTl6sskV/oCc3qva1Bzu9M
+        USA/QmyZurxM9Eouk3FqgL0fPaY/HdLJhTR/IPPkxdu8/o9gaaZx0qZCq9B274xLvBE30SAyxxVDD
+        jQfVpTFhZuePIQw46/m2LwDBPfNeIemUkelRTqW64koVTA9F2JYdE+3l+9zasH1AWqdCgFaEVKefr
+        OSbYWCoTRYSPceG6qg2GsRiFYCTyLcu/3qUVJ9LH2rb3HzaDM5sukHl5BQL8U/cUlv1zc6tDkVb9j
+        9RnHcfKCF0Smz7OsjmsvmxMJ8NWMp9hvUqVgy/HwnpCmIXk2KPbF+skxeGCma1gpnRDs68rgPsFdi
+        a1/0R7PQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pu61W-003VE1-2J;
+        Wed, 03 May 2023 06:31:34 +0000
+Date:   Tue, 2 May 2023 23:31:34 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Kelvin Cao <kelvin.cao@microchip.com>
+Cc:     vkoul@kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org, logang@deltatee.com,
+        george.ge@microchip.com, christophe.jaillet@wanadoo.fr,
+        hch@infradead.org
+Subject: Re: [PATCH v4 1/1] dmaengine: switchtec-dma: Introduce Switchtec DMA
+ engine PCI driver
+Message-ID: <ZFH/xhyjm9VTZolE@infradead.org>
+References: <20230423213717.318655-1-kelvin.cao@microchip.com>
+ <20230423213717.318655-2-kelvin.cao@microchip.com>
 MIME-Version: 1.0
-References: <20230501165450.15352-1-surenb@google.com> <20230501165450.15352-2-surenb@google.com>
- <ouuidemyregstrijempvhv357ggp4tgnv6cijhasnungsovokm@jkgvyuyw2fti>
- <ZFAUj+Q+hP7cWs4w@moria.home.lan> <b6b472b65b76e95bb4c7fc7eac1ee296fdbb64fd.camel@HansenPartnership.com>
- <ZFCA2FF+9MI8LI5i@moria.home.lan> <CAHp75VdK2bgU8P+-np7ScVWTEpLrz+muG-R15SXm=ETXnjaiZg@mail.gmail.com>
- <ZFCsAZFMhPWIQIpk@moria.home.lan> <CAHp75VdvRshCthpFOjtmajVgCS_8YoJBGbLVukPwU+t79Jgmww@mail.gmail.com>
- <ZFHB2ATrPIsjObm/@moria.home.lan>
-In-Reply-To: <ZFHB2ATrPIsjObm/@moria.home.lan>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 3 May 2023 09:30:11 +0300
-Message-ID: <CAHp75VdH07gTYCPvp2FRjnWn17BxpJCcFBbFPpjpGxBt1B158A@mail.gmail.com>
-Subject: Re: [PATCH 01/40] lib/string_helpers: Drop space in string_get_size's output
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        akpm@linux-foundation.org, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de,
-        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
-        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
-        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
-        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
-        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
-        tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
-        paulmck@kernel.org, pasha.tatashin@soleen.com,
-        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
-        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, gregkh@linuxfoundation.org,
-        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org,
-        Andy Shevchenko <andy@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        =?UTF-8?B?Tm9yYWxmIFRyw6/Cv8K9bm5lcw==?= <noralf@tronnes.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230423213717.318655-2-kelvin.cao@microchip.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 3, 2023 at 5:07=E2=80=AFAM Kent Overstreet
-<kent.overstreet@linux.dev> wrote:
-> On Tue, May 02, 2023 at 06:19:27PM +0300, Andy Shevchenko wrote:
-> > On Tue, May 2, 2023 at 9:22=E2=80=AFAM Kent Overstreet
-> > <kent.overstreet@linux.dev> wrote:
-> > > On Tue, May 02, 2023 at 08:33:57AM +0300, Andy Shevchenko wrote:
-> > > > Actually instead of producing zillions of variants, do a %p extensi=
-on
-> > > > to the printf() and that's it. We have, for example, %pt with T and
-> > > > with space to follow users that want one or the other variant. Same
-> > > > can be done with string_get_size().
-> > >
-> > > God no.
-> >
-> > Any elaboration what's wrong with that?
->
-> I'm really not a fan of %p extensions in general (they are what people
-> reach for because we can't standardize on a common string output API),
+On Sun, Apr 23, 2023 at 02:37:17PM -0700, Kelvin Cao wrote:
+> Implement core PCI driver skeleton and register DMA engine callbacks.
 
-The whole story behind, for example, %pt is to _standardize_ the
-output of the same stanza in the kernel.
+I only noticed this now, but this sentence reads a bit odd.  What does
+it try to say?
 
-> but when we'd be passing it bare integers the lack of type safety would
-> be a particularly big footgun.
+> +struct chan_fw_regs {
+> +	u32 valid_en_se;
 
-There is no difference to any other place in the kernel where we can
-shoot into our foot.
+...
 
-> > God no for zillion APIs for almost the same. Today you want space,
-> > tomorrow some other (special) delimiter.
->
-> No, I just want to delete the space and output numbers the same way
-> everyone else does. And if we are stuck with two string_get_size()
-> functions, %p extensions in no way improve the situation.
+> +	u16 cq_phase;
+> +} __packed;
 
-I think it's exactly for the opposite, i.e. standardize that output
-once and for all.
+Everything here seems nicely naturally aligned, what is the reason
+for the __packed attribute?
 
---=20
-With Best Regards,
-Andy Shevchenko
+> +struct switchtec_dma_hw_se_desc {
+> +	u8 opc;
+> +	u8 ctrl;
+> +	__le16 tlp_setting;
+> +	__le16 rsvd1;
+> +	__le16 cid;
+> +	__le32 byte_cnt;
+> +	union {
+> +		__le32 saddr_lo;
+> +		__le32 widata_lo;
+> +	};
+> +	union {
+> +		__le32 saddr_hi;
+> +		__le32 widata_hi;
+> +	};
+
+What is the point for unions of identical data types?
+
+> +			p = (int *)ce;
+> +			for (i = 0; i < sizeof(*ce)/4; i++) {
+> +				dev_err(chan_dev, "CE DW%d: 0x%08x\n", i,
+> +					le32_to_cpu((__force __le32)*p));
+> +				p++;
+> +			}
+
+Why is this casting to an int that is never used and the back to CE?
+Maybe a function that actually dumps the registers with names and
+is type safe might be a better idea?  If not just using
+print_hex_dump would be a simpler, although that would always printk
+in little endian representation (which might be easier to read anyway).
+
+> +	struct pci_dev *pdev;
+> +	struct switchtec_dma_chan *swdma_chan = to_switchtec_dma_chan(chan);
+> +	int rc;
+> +
+> +	rcu_read_lock();
+> +	pdev = rcu_dereference(swdma_chan->swdma_dev->pdev);
+> +	rcu_read_unlock();
+> +
+> +	if (pdev)
+> +		synchronize_irq(swdma_chan->irq);
+
+At this point pdev might be freed as you're outside the RCU critical
+section, and the irq number could have been reused.
+
+> +	switch (type) {
+> +	case MEMCPY:
+> +		if (len > SWITCHTEC_DESC_MAX_SIZE)
+> +			goto err_unlock;
+> +		break;
+> +	case WIMM:
+> +		if (len != 8)
+> +			break;
+> +
+> +		if (dma_dst & ((1 << DMAENGINE_ALIGN_8_BYTES) - 1)) {
+> +			dev_err(chan_dev,
+> +				"QW WIMM dst addr 0x%08x_%08x not QW aligned!\n",
+> +				upper_32_bits(dma_dst), lower_32_bits(dma_dst));
+> +			goto err_unlock;
+> +		}
+> +		break;
+> +	default:
+> +		goto err_unlock;
+> +	}
+
+IT looks like these checks could easily be done without the lock,
+and in the respective callers.
+
+> +	if (type == MEMCPY) {
+> +		desc->hw->opc = SWITCHTEC_DMA_OPC_MEMCPY;
+> +		desc->hw->saddr_lo = cpu_to_le32(lower_32_bits(dma_src));
+> +		desc->hw->saddr_hi = cpu_to_le32(upper_32_bits(dma_src));
+> +	} else {
+> +		desc->hw->opc = SWITCHTEC_DMA_OPC_WRIMM;
+> +		desc->hw->widata_lo = cpu_to_le32(lower_32_bits(data));
+> +		desc->hw->widata_hi = cpu_to_le32(upper_32_bits(data));
+> +	}
+
+... and then instead of the type I'd just pass the opcode directly,
+simplifying the logic quite a bit.
+
+> +static irqreturn_t switchtec_dma_isr(int irq, void *chan)
+> +{
+> +	struct switchtec_dma_chan *swdma_chan = chan;
+> +
+> +	if (swdma_chan->comp_ring_active)
+> +		tasklet_schedule(&swdma_chan->desc_task);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static irqreturn_t switchtec_dma_chan_status_isr(int irq, void *dma)
+> +{
+> +	struct switchtec_dma_dev *swdma_dev = dma;
+> +
+> +	tasklet_schedule(&swdma_dev->chan_status_task);
+> +
+> +	return IRQ_HANDLED;
+> +}
+
+Same comment as last time - irq + tasklet seems quite hack and
+inefficient over just using threaded interrupts.  I'd like to see
+a really good rationale for using it, and a Cc to the interrupt
+maintainers that would love to kill off tasklets
+
+> +	addr = swdma_dev->bar + SWITCHTEC_DMAC_CHAN_CFG_STS_OFFSET;
+> +	addr +=  i * SWITCHTEC_DMA_CHAN_FW_REGS_SIZE;
+> +	chan_fw = (struct chan_fw_regs __iomem *)addr;
+> +
+> +	addr = swdma_dev->bar + SWITCHTEC_DMAC_CHAN_CTRL_OFFSET;
+> +	addr +=  i * SWITCHTEC_DMA_CHAN_HW_REGS_SIZE;
+> +	chan_hw = (struct chan_hw_regs __iomem *)addr;
+> +
+> +	swdma_dev->swdma_chans[i] = swdma_chan;
+> +	swdma_chan->mmio_chan_fw = chan_fw;
+> +	swdma_chan->mmio_chan_hw = chan_hw;
+
+No need for the casts above.  This could simply become:
+
+	swdma_chan->mmio_chan_fw =
+		swdma_dev->bar + SWITCHTEC_DMAC_CHAN_CFG_STS_OFFSET +
+		i * SWITCHTEC_DMA_CHAN_FW_REGS_SIZE;
+	swdma_chan->mmio_chan_hw =
+		swdma_dev->bar + SWITCHTEC_DMAC_CHAN_CTRL_OFFSET +
+		i * SWITCHTEC_DMA_CHAN_HW_REGS_SIZE;
+
+> +	rc = pause_reset_channel(swdma_chan);
+> +	if (rc)
+> +		goto free_and_exit;
+> +
+> +	rcu_read_lock();
+> +	pdev = rcu_dereference(swdma_dev->pdev);
+> +	if (!pdev) {
+> +		rc = -ENODEV;
+> +		goto unlock_and_free;
+> +	}
+
+The pdev can't go away while you're in ->probe as that is synchronized
+vs ->remove and ->shutdown.
+
+> +	irq = pci_irq_vector(pdev, irq);
+> +	if (irq < 0) {
+> +		rc = irq;
+> +		goto unlock_and_free;
+> +	}
+> +
+> +	rcu_read_unlock();
+> +
+> +	rc = request_irq(irq, switchtec_dma_isr, 0, KBUILD_MODNAME, swdma_chan);
+> +	if (rc)
+> +		goto free_and_exit;
+
+I'd just use pci_request_irq here.
+
+> +#define SWITCHTEC_DMA_DEVICE(device_id) \
+> +	{ \
+> +		.vendor     = PCI_VENDOR_ID_MICROSEMI, \
+> +		.device     = device_id, \
+> +		.subvendor  = PCI_ANY_ID, \
+> +		.subdevice  = PCI_ANY_ID, \
+> +		.class      = PCI_CLASS_SYSTEM_OTHER << 8, \
+> +		.class_mask = 0xFFFFFFFF, \
+> +	}
+> +
+> +static const struct pci_device_id switchtec_dma_pci_tbl[] = {
+> +	SWITCHTEC_DMA_DEVICE(0x4000), /* PFX 100XG4 */
+
+This should use the common PCI_DEVICE() macro instead, i.e.
+
+	PCI_DEVICE(PCI_VENDOR_ID_MICROSEMI, 0x4000), /* PFX 100XG4 */
+	...
