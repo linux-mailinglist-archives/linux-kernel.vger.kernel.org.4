@@ -2,138 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C1006F5CDE
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 19:16:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D32C86F5D07
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 19:24:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbjECRQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 13:16:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54800 "EHLO
+        id S229975AbjECRYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 13:24:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbjECRQs (ORCPT
+        with ESMTP id S229571AbjECRYd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 13:16:48 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEAED72A6
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 10:16:39 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id e9e14a558f8ab-33164ec77ccso120925ab.0
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 10:16:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683134199; x=1685726199;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3hTF/f5W7mfhVcIgHt1rtu4BQKXkWNpqlFd5KseezRg=;
-        b=xPQ37BEIl/tb3mZYi/MgDlp7F++MBNnSq6R2tLfSlo+brHoyfTjpqdxqW7mXeAofUG
-         iSSdKCaoSwmtDN2ovf/MQgupDgyBI6GpuDSKON5wCOvF8VHe+S3M1EbESa00FEhhlxUo
-         J1ZSVWsu9hZ8aNT2VlbtLucMWuerP/WYoyIMevRlarweob6j2e3B+vU/1Rn7LHdESiaZ
-         PyWfA3axGuabIJX68kYm4/9G894KYAWQXICg0z7CB06tNsOAiAxQRgIsvoYZtTT++XDQ
-         7HbfBRjLVjzttHkJkHyP0y3oip+DWWq4Div9GpaYkQS2yyP/97AKVzjwxpiyhjupgSIU
-         dm8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683134199; x=1685726199;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3hTF/f5W7mfhVcIgHt1rtu4BQKXkWNpqlFd5KseezRg=;
-        b=AOu9YZt2FDP+eYbJXxM1GcTtuOwYascRcKFeMwzE2tlgceL+wL15PBB2pepNnKmp9Z
-         Azv/jpPdrz1BcWrz//EIsD30dnoqwk5avOeNQoL5VKla37XwpN+pF8IS7E3EsCq7P3la
-         IhVTNFx2l6R0jqPypWCxSuZy2GWjr1PaLPuHrTm9xgyIShhbx4Q4HyFSP/P2VaOSZ+zn
-         VgD+Nn1pC+REiLPl9lvNMbQm615qGmL1EcwZF1z6jfaq5cBgEdixus5N4GVB9Kj55Us5
-         V26hzYR3Wyn3jMYuFLm7AALCPIRBy0876+l0WYnnHBTEqLXnxQpi8xmEPn9G4qb7Ahgw
-         UF9Q==
-X-Gm-Message-State: AC+VfDwEgVxYWaUsaAcPr+/0o+jg6CoqfY/hiP1EY7Rex2YNivbBNjuF
-        CN4YRdnPtA7KDVB8Vs1b5c6b+bYCaaIM5SgSn4NqDsP9c+DJI3C/ba5bCQ==
-X-Google-Smtp-Source: ACHHUZ5ArHdDqvETOAHPW/PSJlKZ2gSYno2r8SpqcRkHPNaNBE4NgclTgDUti4HHkkV3AOKuV7GsH+nNb/D8BBdigas=
-X-Received: by 2002:a05:6e02:1569:b0:32a:db6c:d4f3 with SMTP id
- k9-20020a056e02156900b0032adb6cd4f3mr400922ilu.10.1683134198851; Wed, 03 May
- 2023 10:16:38 -0700 (PDT)
+        Wed, 3 May 2023 13:24:33 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38EFF5BAB;
+        Wed,  3 May 2023 10:24:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683134671; x=1714670671;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hcKCVFXhx3yMViZSecHcsu0Oh2KFBf8Ahfru86Q4miE=;
+  b=cpDDkIRFbEJuyEWvOOuRkSKwqeP6Eo2tGqX548FSQosEvldD9iLeiUPA
+   pTWcpKXXZosQ++hhh6gQHk1UY+6aRCiexpEub8FA7C8JpYEEcihpAp24U
+   jQSX2EHkHzsSXQEtGEOLWHNzJcCKNN7YXdLkjYTSWYq9hitVI25cWAOrH
+   07eaD42IQEl2NhAcL4p7h25FeX7GeJ2TwbfvGiRTDx9vwigyw4HgmzS1G
+   ZVaY1B9dQKrsMmaybWxMij9W9nj0t818jGow9AenXHYnhCgqJ+hVNaU7d
+   pa8t/2Pa7A2E3gOV/CZ2sYV20FStb8fbRyHCJf+VIUCd/By6f75q66/ZH
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="328337466"
+X-IronPort-AV: E=Sophos;i="5.99,247,1677571200"; 
+   d="scan'208";a="328337466"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2023 10:24:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="808353884"
+X-IronPort-AV: E=Sophos;i="5.99,247,1677571200"; 
+   d="scan'208";a="808353884"
+Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 03 May 2023 10:24:26 -0700
+Received: from kbuild by e3434d64424d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1puGDJ-0002AK-1e;
+        Wed, 03 May 2023 17:24:25 +0000
+Date:   Thu, 4 May 2023 01:23:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jinyoung CHOI <j-young.choi@samsung.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>, "hch@lst.de" <hch@lst.de>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH 05/15] block: fix not to apply bip information in
+ blk_rq_bio_prep()
+Message-ID: <202305040157.ZWiorthB-lkp@intel.com>
+References: <20230503101048epcms2p61d61df1431955d9517c9939999ee3478@epcms2p6>
 MIME-Version: 1.0
-References: <20230502203135.24794-1-jinli.xiao@nyu.edu> <CAP-5=fV-RZGwcM8+dMCsqwK_1aFERrvQ1sLJfUCA+kBFMEdoDw@mail.gmail.com>
- <CAExMFzgmcQqnVSBj9+YVr2UAkUg8CHdpLjQJF6CuOaWdcMbqDQ@mail.gmail.com>
-In-Reply-To: <CAExMFzgmcQqnVSBj9+YVr2UAkUg8CHdpLjQJF6CuOaWdcMbqDQ@mail.gmail.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 3 May 2023 10:16:27 -0700
-Message-ID: <CAP-5=fWy5AztcN3MZyiNcSkbpdNws0cevarfYwt0TWqhyf3eEw@mail.gmail.com>
-Subject: Re: [PATCH] perf python: Set error messages on call failure
-To:     Jinli Xiao <jinli.xiao@nyu.edu>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Suzuki Poulouse <suzuki.poulose@arm.com>,
-        James Clark <james.clark@arm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230503101048epcms2p61d61df1431955d9517c9939999ee3478@epcms2p6>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 2, 2023 at 7:27=E2=80=AFPM Jinli Xiao <jinli.xiao@nyu.edu> wrot=
-e:
->
-> Thanks for the prompt response!
->
-> On Tue, May 2, 2023 at 4:37=E2=80=AFPM Ian Rogers <irogers@google.com> wr=
-ote:
-> >
-> > Nice! Would it be possible to test this? We could do a shell test
->
-> All my changes in this patch is just setting the error message that
-> can be interpreted by Python just before the bindings return.
->
-> I am not sure about shell test, but I can do something like
->
-> [root@nyu-lexis linux]# export PYTHONPATH=3D~jinli/linux/tools/perf/pytho=
-n/
-> [root@nyu-lexis linux]# python3
-> Python 3.11.2 (main, Feb  8 2023, 00:00:00) [GCC 12.2.1 20221121 (Red
-> Hat 12.2.1-4)] on linux
-> Type "help", "copyright", "credits" or "license" for more information.
-> >>> import perf
-> >>> thread_map =3D perf.thread_map(9999)   # a non-existent pid in /proc
-> Traceback (most recent call last):
->   File "<stdin>", line 1, in <module>
-> FileNotFoundError: [Errno 2] No such file or directory
->
-> whereas the original output is
->
-> >>> thread_map =3D perf.thread_map(9999)
-> Traceback (most recent call last):
->   File "<stdin>", line 1, in <module>
-> SystemError: <class 'perf.thread_map'> returned NULL without setting
-> an exception
->
-> Upon testing I did find some of the changes unnecessary. I will submit
-> a new patch to this.
->
-> This is my first time contributing so please let me know if I did
-> anything wrong :)
+Hi Jinyoung,
 
-Everything is good with your patch. I'm keen that we try to make sure
-we have coverage with tests. We have other shell tests that run
-python:
-https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/p=
-erf/tests/shell/stat+json_output.sh?h=3Dperf-tools-next
-So I wonder we can start doing what you did in your example and then
-just assert we get a FileNotFoundError in the python. The shell script
-is really just a way to run the python and can follow the example in
-the link. Sound good?
+kernel test robot noticed the following build errors:
 
-Thanks,
-Ian
+[auto build test ERROR on axboe-block/for-next]
+[also build test ERROR on mkp-scsi/for-next jejb-scsi/for-next linus/master v6.3 next-20230428]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> Best wishes,
-> Jinli
+url:    https://github.com/intel-lab-lkp/linux/commits/Jinyoung-CHOI/block-blk-integiry-add-helper-functions-for-bio_integrity_add_page/20230503-183015
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+patch link:    https://lore.kernel.org/r/20230503101048epcms2p61d61df1431955d9517c9939999ee3478%40epcms2p6
+patch subject: [PATCH 05/15] block: fix not to apply bip information in blk_rq_bio_prep()
+config: riscv-randconfig-r042-20230503 (https://download.01.org/0day-ci/archive/20230504/202305040157.ZWiorthB-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b1465cd49efcbc114a75220b153f5a055ce7911f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/584edc6ae9cb23e8a778ee73d711b9143038a047
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jinyoung-CHOI/block-blk-integiry-add-helper-functions-for-bio_integrity_add_page/20230503-183015
+        git checkout 584edc6ae9cb23e8a778ee73d711b9143038a047
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash block/ drivers/mtd/ubi/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305040157.ZWiorthB-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from block/bdev.c:15:
+   In file included from include/linux/blk-integrity.h:5:
+>> include/linux/blk-mq.h:972:7: error: no member named 'nr_integrity_segments' in 'struct request'
+                   rq->nr_integrity_segments = bio_integrity(bio)->bip_vcnt;
+                   ~~  ^
+>> include/linux/blk-mq.h:972:49: error: member reference base type 'void' is not a structure or union
+                   rq->nr_integrity_segments = bio_integrity(bio)->bip_vcnt;
+                                               ~~~~~~~~~~~~~~~~~~^ ~~~~~~~~
+   2 errors generated.
+
+
+vim +972 include/linux/blk-mq.h
+
+   962	
+   963	static inline void blk_rq_bio_prep(struct request *rq, struct bio *bio,
+   964			unsigned int nr_segs)
+   965	{
+   966		rq->nr_phys_segments = nr_segs;
+   967		rq->__data_len = bio->bi_iter.bi_size;
+   968		rq->bio = rq->biotail = bio;
+   969		rq->ioprio = bio_prio(bio);
+   970	
+   971		if (bio_integrity(bio)) {
+ > 972			rq->nr_integrity_segments = bio_integrity(bio)->bip_vcnt;
+   973			rq->cmd_flags |= REQ_INTEGRITY;
+   974		}
+   975	}
+   976	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
