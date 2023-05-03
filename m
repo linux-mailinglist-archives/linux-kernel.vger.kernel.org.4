@@ -2,125 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C87A06F53C0
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 10:53:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE1286F53C3
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 10:54:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbjECIx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 04:53:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40306 "EHLO
+        id S229922AbjECIyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 04:54:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbjECIxP (ORCPT
+        with ESMTP id S229804AbjECIyw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 04:53:15 -0400
-Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB138E57;
-        Wed,  3 May 2023 01:52:59 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.west.internal (Postfix) with ESMTP id E927C2B0695E;
-        Wed,  3 May 2023 04:52:55 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Wed, 03 May 2023 04:52:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1683103975; x=1683111175; bh=IS
-        4EM5wdsuSjV61ICnK1JWQzvfZmpsEGvr2M9gQsBDg=; b=xFunroi/7DC9ShYZYF
-        0mkS1O4uFFPq6Ixts8x5XfA1TtFTRvtgFMSPwmY/QxmzmL4BwSEk1AAGZOWlkaw8
-        G/Qp1sWYevvX+sFvbpTZcf3rjLOBulkJ8Uiuvi16V7J3DjTqeQNEK8iP4a9KjnGf
-        AZFDczkFoeVbNFRXPynwrYtDmJgetJTY2yHzUYvc3J0ZzuF1bobFPZSiPlRGEuYf
-        3e67ij/DjoLjlsBxu1+3uM5MYZv9w2R9m7KD9LMhSly7TtZLqeq0jrg0Gls3kupf
-        1G1xcF49uh5fi9NgbQILKNzf3cG1mEsLRM3xpKbKP5GH0OST4rDQ5eyIyIPDKIcL
-        OBAQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1683103975; x=1683111175; bh=IS4EM5wdsuSjV
-        61ICnK1JWQzvfZmpsEGvr2M9gQsBDg=; b=fOZ/xI4I2hlVOsmaVXohE0GxuJ/WQ
-        5W+sIMqjJ3nKPDW8LmKpdh2luVCCtpTNFkUrKdi1fAsUK6C/2B6+1tLefS1ddRsr
-        MmMAFZgcqtocNbZny1ua3NZ6+E5xbqP8/5bWqckB5cYLDA5DGxh9x+UY8Pw2fq+p
-        S79jlVyAhJjFWrlrypp8EpWc1dMwsc5a9hw/oePA/lCbQIxkR5ZeY/6Xsftlhc+l
-        Htz3SpG1C/s3uhEXjE4MxVAJDLcu8PvU5jAfsiTFb/NVUr9dk100g0e4uViCzcCf
-        84BNNVhGsrK57sej9W1I7Khq+NtVWqm5iYASgfRGRnF5bgsaTBk7l9gdA==
-X-ME-Sender: <xms:5iBSZB6waEbkoZSuAcdjwPbQtxZjM_QjNWuH9Z89bJoEVoKZECP9XQ>
-    <xme:5iBSZO4MbLBKe8qyXRGJZconrK-wkSHbbvOY5Nn3ucu39n3eNmHGgS9BbDQks5mVi
-    9deu1Go1vvXng1b94w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedvkedgtdekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:5iBSZIetZ3io1_WwWrG5A5y-vWMtX6jG-iRLHYUbU3H91u2JRZxyIg>
-    <xmx:5iBSZKKYY7kwklx5HX9jBu4cyX4FKYnhz1QuC9yZ8w_mnITQhCunaw>
-    <xmx:5iBSZFJNJdiIT89CdIrMdBTAeYA7OFOs9bKV0VCjpS-TfgXa9njB7Q>
-    <xmx:5yBSZKCtfTyRWweziCf0h6B7K9kpLs7LYO6VLyOu5dz5_qpxplsAo3N_Uvk>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 45BA2B60086; Wed,  3 May 2023 04:52:54 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-386-g2404815117-fm-20230425.001-g24048151
-Mime-Version: 1.0
-Message-Id: <0ecbc92c-7e42-4958-988b-abc265f039bf@app.fastmail.com>
-In-Reply-To: <97bbdb2f-6245-caf2-c0f6-d628873bd6db@suse.de>
-References: <20230502130223.14719-1-tzimmermann@suse.de>
- <20230502130223.14719-5-tzimmermann@suse.de>
- <20230502195429.GA319489@ravnborg.org>
- <563673c0-799d-e353-974c-91b1ab881a22@suse.de>
- <87354dyj9i.fsf@minerva.mail-host-address-is-not-set>
- <97bbdb2f-6245-caf2-c0f6-d628873bd6db@suse.de>
-Date:   Wed, 03 May 2023 10:52:34 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Thomas Zimmermann" <tzimmermann@suse.de>,
-        "Javier Martinez Canillas" <javierm@redhat.com>,
-        "Sam Ravnborg" <sam@ravnborg.org>
-Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-fbdev@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-parisc@vger.kernel.org, "Helge Deller" <deller@gmx.de>,
-        "Huacai Chen" <chenhuacai@kernel.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        linux-m68k@lists.linux-m68k.org,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        loongarch@lists.linux.dev, "Vineet Gupta" <vgupta@kernel.org>,
-        sparclinux@vger.kernel.org, "WANG Xuerui" <kernel@xen0n.name>,
-        linux-snps-arc@lists.infradead.org,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 4/6] fbdev: Include <linux/io.h> via <asm/fb.h>
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Wed, 3 May 2023 04:54:52 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45991E4F;
+        Wed,  3 May 2023 01:54:51 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-3064099f9b6so387000f8f.1;
+        Wed, 03 May 2023 01:54:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683104089; x=1685696089;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=f2p0yoo0i5p3EfddnZbh5yG5oSchLdGvcnS9WBAzF48=;
+        b=EHtvlf+qv5+8pmPJ2JRdBdO45v8SNHSizF3F1V6dZY2/UK5W3h+D6P/nZjqF5IJs2P
+         hO8ojtoXO+C6iZFJqQsDmpzJn4x/l+scAfNuegluhhzAoml1eY9mhu8mw5zBAZetpXY1
+         KCic7dJ5tbkctiDHaB+7henMb9PTsJjmhDwIMrwgCpjS9GxioYblhDeEKxM87QZQVvvp
+         bBVUkQeuHvNB6qzfpq/pMOzvMBGrMzih2ecEaF2ca8UAweuEy7RFZgXgab95ZY8H2K5i
+         Bt2zdnhTuKvShyKz2yiPbPy+t1ivk8/jbInxRHv+XUhWsBMdfyZNnrH5gv2B0d2e5qSU
+         QY8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683104089; x=1685696089;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=f2p0yoo0i5p3EfddnZbh5yG5oSchLdGvcnS9WBAzF48=;
+        b=lDRQbZRd/rBWZ5UaLFwkJm+Pz6IACWzvOYnL5WJp/rYFcu4fBclIW9IUIVAt1PFGUa
+         IH6vZ0I1Gohlw4eg2Z24a2BdR/o39tG8RGNtCTRigQhoiZGLCJdc/gUR9JLMRFl9GXmV
+         PJ9XoAse9XD8X8WfCtwZXYyLo8/NWXThCJA9eBj9VZgD52PduNTDDCj/O7ewjC9wDcxU
+         tLiSpnYEODXI1rXbRw6IUby/p4ANFPhyEKex7M7t/+37P5hcQXmtjNit9FNworA7xSVo
+         8b3lHV2W1p0NTjy3qxtKrbHqfn0UDf/fV+c+Rvwb2y0xfIf9nKJ7DNALZMWFs4f2Ywfy
+         JcQA==
+X-Gm-Message-State: AC+VfDyEscUeRLX84Uw1Aj6oNHZREoG1yK7H60py/lSJV6oYsk3o49NM
+        WZmSRlIbHojdr1QwM1vlcL2o/CJHQngI6wKxUWOtVOzVRg==
+X-Google-Smtp-Source: ACHHUZ76C7h3pCTp93J3BNUiRv2goG0fxJQVWnMgNbV6RMd/YFSGitH8MI8s1qmSFEgV0buGilHBZzwm3EwhliR5SFc=
+X-Received: by 2002:adf:e5c2:0:b0:2fb:ca40:e42c with SMTP id
+ a2-20020adfe5c2000000b002fbca40e42cmr13636086wrn.6.1683104089624; Wed, 03 May
+ 2023 01:54:49 -0700 (PDT)
+MIME-Version: 1.0
+References: <ZEnErxfnSn2JOpvm@nixie71> <20230428102015.810686-1-tomas.mudrunka@gmail.com>
+ <ZFHOwEu6tKDjoPA4@nixie71>
+In-Reply-To: <ZFHOwEu6tKDjoPA4@nixie71>
+From:   =?UTF-8?B?VG9tw6HFoSBNdWRydcWIa2E=?= <tomas.mudrunka@gmail.com>
+Date:   Wed, 3 May 2023 10:54:37 +0200
+Message-ID: <CAH2-hcJYVpBNwnMS6qUp4=MW8kSryDAz7G5cNA8R00QabC9bjg@mail.gmail.com>
+Subject: Re: [PATCH v4] Fix freeze in lm8333 i2c keyboard driver
+To:     Jeff LaBundy <jeff@labundy.com>
+Cc:     dmitry.torokhov@gmail.com, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 3, 2023, at 10:12, Thomas Zimmermann wrote:
-> Am 03.05.23 um 09:19 schrieb Javier Martinez Canillas:
->> Thomas Zimmermann <tzimmermann@suse.de> writes:
->>>>
->>>> There are countless examples where the above are not followed,
->>>> but to my best understanding the above it the preferred way to do it.
->>>
->>> Where did youher this? I only know about this in the case of asm/io.h
->>> vs. linux/io.h.
->>>
->> 
->> I understand that's the case too. I believe even checkpatch.pl complains
->> about it? (not that the script always get right, but just as an example).
->
-> Do you know if that's the general rule? If so, we might want to 
-> repurpose <asm/fbio.h> for the framebuffer I/O functions.
+> Just to clarify, my stance is that this call should go _before_ the handler
+> is registered.
 
-It's certainly the general trend across all of the kernel to have
-drivers prefer including linux/*.h, and to move stuff from asm/*.h
-to linux/*.h as it gets generalized across architectures.
+Ok, i will fix the patch later today.
 
-     Arnd
+> Any events that come before then are off the table, and this is OK because
+> user space isn't going to start consuming key events until well after this
+> driver has probed anyway.
+
+Well, that was never my point. I don't care about capturing events
+that happen before driver was properly loaded.
+My only concern was to limit possibility of deadlock which happened previously.
+Because that makes device unusable till the IC is power cycled.
+Which might be especially annoying on devices that have power button
+implemented using this exact IC :-)
+
+> The reason behind my assertion is that as a matter of best practice, you
+> should not have two asynchronous threads that can in theory access the same
+> register.
+
+Yeah, this makes bit more sense now. Didn't realized IRQ might
+interrupt that lm8333_irq_thread() call immediately.
+While not very likely to cause problems like deadlock of the driver, i
+think it's a valid point.
+
+After all this is what happens with IRQF_ONESHOT anyway right? Each
+time the IRQ is triggered it's disabled, lm8333_irq_thread() is run
+and then it's enabled immediately after that. So i guess the behaviour
+on each keypress is very similar to calling lm8333_irq_thread() before
+registering the IRQ handler, which gives me some confidence there
+might not be huge chance for deadlock under normal circumstances.
+
+Though i wonder what would happen if some EMI burst would create rapid
+train of randomly timed keypresses, that might just hit the
+unfortunate sweetspot after while... Might test that later in the lab,
+since i really need the software to remain operational after such
+condition had passed.
