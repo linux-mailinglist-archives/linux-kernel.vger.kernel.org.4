@@ -2,71 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3CBA6F54E8
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 11:38:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAD976F54EF
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 11:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbjECJiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 05:38:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38990 "EHLO
+        id S229901AbjECJkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 05:40:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjECJiA (ORCPT
+        with ESMTP id S229690AbjECJkD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 05:38:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E4EF4231
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 02:37:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683106635;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=26wC6Uz3skz9Dn8nmQe6TTcveSmK6dcM1Jb9i+Z1uVA=;
-        b=KvIP4nB9Ma0zk4batIxCCrR+5GSbO9xAmRiQG52l2GfOGUkaUPMoUcuzQsKOhIFgKl7yY5
-        PY9qcmYrvvODM9MnnnNRzh2luT/O8fhtSHE36IbyCCRUTUF5EfvRnE1RkBOrSQ+0Cd78eA
-        YGVwnThybJjxvLbc1KmU43U7gL0Su/Q=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-2-ijt6-Vo-PzeFciUvPkYsug-1; Wed, 03 May 2023 05:36:08 -0400
-X-MC-Unique: ijt6-Vo-PzeFciUvPkYsug-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 34960884340;
-        Wed,  3 May 2023 09:36:08 +0000 (UTC)
-Received: from oldenburg.str.redhat.com (unknown [10.2.16.17])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8252B42AB8;
-        Wed,  3 May 2023 09:36:05 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Ian Rogers <irogers@google.com>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "Justin M. Forbes" <jforbes@fedoraproject.org>
-Subject: Re: [PATCH v2] perf: Avoid implicit function declarations in
- lexer/parse interface
-References: <87sfcn7uot.fsf@oldenburg.str.redhat.com>
-        <CAP-5=fXZv+KCdCN05wVUcAwDCZAgXjWunoaviGBQEiUPqNwOmg@mail.gmail.com>
-        <ZEx0IQAtBatrRDCR@kernel.org> <ZEx0xAamEl66qk2w@kernel.org>
-Date:   Wed, 03 May 2023 11:36:03 +0200
-In-Reply-To: <ZEx0xAamEl66qk2w@kernel.org> (Arnaldo Carvalho de Melo's message
-        of "Fri, 28 Apr 2023 22:37:08 -0300")
-Message-ID: <874jot69ks.fsf@oldenburg.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+        Wed, 3 May 2023 05:40:03 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 942B244A4
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 02:40:00 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-30644c18072so223736f8f.2
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 02:40:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683106799; x=1685698799;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HBB9qpJkTYYA50YXDxfy8uIUZ0jceCXCGKDGT94/U+Q=;
+        b=KHG/5BA2dCS08XF2BbibbxTkzVdJYPJQuS+rtOh5FXboVLlWx4sR1NBFceoE91NtVn
+         4Uon1kA3Gnqs1XmVi5X1ud1zKhUqrX90z6/dulef2suJj1eT4Fp5Nwl1X2jd+KyBiI5x
+         P/hE+N/mqs/hvNAnIITtDklTdEx8gl1S3ig0HL0734e2Xvjw6+y6RZIt+iUSNQySTsJI
+         SLEq4UT5S3K6VpPPGt+gVMjK18cyiTfLG/yjcKtBjbJe27PPRlRPx+OJYSxcRmxg5vZw
+         rmLGnwic9fbXFiJHWr4gAOwNESlpsG5LEAkWA6LcNusZmqqm8bQ531xvKTJrjXq0U77r
+         r+eA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683106799; x=1685698799;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HBB9qpJkTYYA50YXDxfy8uIUZ0jceCXCGKDGT94/U+Q=;
+        b=DEBDXIAKN1QhE3ieQiElUlJOTHQZXNq5etzUQrwCl2AVIbYrR/QYArH+Cz5l8SNiDr
+         VIo8Oj/TaoYD3tLL2vr7kqOC5Ey3CzzNUSp0n2kmSQLZCwZ9DepjlD+Es5SowS7NhR39
+         xMq+HfIbcreC4n1wgGhTzA6sd3QYx00xKZRx9xyiF79jtPH46RJAS7zY6Yt3IgjIo2GY
+         940cal15xNZe8jPZReh9V+jYqFg0JXzwlkfCgaXEmrflYoZDXdk3UukbzZwyTD33Mg80
+         kMPITJBpiirQXOWWDgKDK6Yr7LIZvnMPWsdB2VKwEuF0fZOkUFL/bFY2Y6WxXMfz02iS
+         0VJw==
+X-Gm-Message-State: AC+VfDw2uuf0z2q2Mh/QVcDa37dmxNawHwXLI+IW4DQJv+jAPb3ZYo2v
+        YmziK6g1LlC/i8oRnhTbfJjEWA==
+X-Google-Smtp-Source: ACHHUZ5q2V2/d6gZ/eg9vR4Ebv5hh+UqaafIAXihyIs6HSzA/KAu8W0Vs2yb94nR7tXoGdrpnkZIAg==
+X-Received: by 2002:adf:df06:0:b0:306:2f8e:d259 with SMTP id y6-20020adfdf06000000b003062f8ed259mr6585314wrl.57.1683106799062;
+        Wed, 03 May 2023 02:39:59 -0700 (PDT)
+Received: from [197.55.55.58] ([93.107.151.186])
+        by smtp.gmail.com with ESMTPSA id p6-20020adfcc86000000b0030644bdefd8sm845361wrj.52.2023.05.03.02.39.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 May 2023 02:39:58 -0700 (PDT)
+Message-ID: <49006a56-cdd2-84f9-55f6-bd02f423b582@linaro.org>
+Date:   Wed, 3 May 2023 10:39:57 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] media: camss: camss-video: Don't zero subdev format again
+ after initialization
+Content-Language: en-US
+To:     Yassine Oudjana <yassine.oudjana@gmail.com>,
+        Robert Foss <rfoss@kernel.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Lad Prabhakar <prabhakar.csengg@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230503075340.45755-1-y.oudjana@protonmail.com>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <20230503075340.45755-1-y.oudjana@protonmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,48 +88,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Arnaldo Carvalho de Melo:
+On 03/05/2023 08:53, Yassine Oudjana wrote:
+> From: Yassine Oudjana <y.oudjana@protonmail.com>
+> 
+> In an earlier commit, setting the which field of the subdev format struct
+> in video_get_subdev_format was moved to a designated initializer that also
+> zeroes all other fields. However, the memset call that was zeroing the
+> fields earlier was left in place, causing the which field to be cleared
+> after being set in the initializer.
+> 
+> Remove the memset call from video_get_subdev_format to avoid clearing the
+> initialized which field.
+> 
+> Fixes: ecefa105cc44 ("media: Zero-initialize all structures passed to subdev pad operations")
+> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+> ---
+>   drivers/media/platform/qcom/camss/camss-video.c | 1 -
+>   1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/media/platform/qcom/camss/camss-video.c b/drivers/media/platform/qcom/camss/camss-video.c
+> index 898f32177b12..8640db306026 100644
+> --- a/drivers/media/platform/qcom/camss/camss-video.c
+> +++ b/drivers/media/platform/qcom/camss/camss-video.c
+> @@ -353,7 +353,6 @@ static int video_get_subdev_format(struct camss_video *video,
+>   	if (subdev == NULL)
+>   		return -EPIPE;
+>   
+> -	memset(&fmt, 0, sizeof(fmt));
+>   	fmt.pad = pad;
+>   
+>   	ret = v4l2_subdev_call(subdev, pad, get_fmt, NULL, &fmt);
 
->> Thanks, applied. BTW b4 coulnd't find this message (nor the original):
-
-Yes, vger drops the message after accepting it for some reason, probably
-something in the patch contents.  I tried to resubmit from a completely
-separate account, no luck.
-
-> Not so fast, removed it for now:
->
->   CC      /tmp/build/perf-tools-next/util/parse-events-bison.o
-> In file included from util/pmu.y:14:
-> /tmp/build/perf-tools-next/util/pmu-flex.h:496:1: error: unknown type nam=
-e =E2=80=98YYSTYPE=E2=80=99
->   496 |
->       | ^
-> /tmp/build/perf-tools-next/util/pmu-flex.h:498:19: error: unknown type na=
-me =E2=80=98YYSTYPE=E2=80=99
->   498 |
->       |                   ^
-> /tmp/build/perf-tools-next/util/pmu-flex.h:546:17: error: unknown type na=
-me =E2=80=98YYSTYPE=E2=80=99
->   546 | extern int yylex \
->       |                 ^~
-> util/pmu-bison.c: In function =E2=80=98perf_pmu_parse=E2=80=99:
-> /tmp/build/perf-tools-next/util/pmu-bison.c:69:25: error: implicit declar=
-ation of function =E2=80=98perf_pmu_lex=E2=80=99; did you mean =E2=80=98per=
-f_pmu_free=E2=80=99? [-Werror=3Dimplicit-function-declaration]
->    69 | #define yylex           perf_pmu_lex
->       |                         ^~~~~~~~~~~~
-> util/pmu-bison.c:1007:16: note: in expansion of macro =E2=80=98yylex=E2=
-=80=99
-
-This appears to be related to some BPF filter stuff that is only in
-perf-next, not mainline.
-
-Is this the right tree on which to base the patch?
-
-  <https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/>
-
-Branch perf-tools-next?
-
-Thanks,
-Florian
-
+Acked-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
