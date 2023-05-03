@@ -2,150 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9542C6F55B4
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 12:14:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A0176F55BB
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 12:15:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbjECKN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 06:13:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33406 "EHLO
+        id S229803AbjECKPI convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 3 May 2023 06:15:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbjECKNz (ORCPT
+        with ESMTP id S229679AbjECKPG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 06:13:55 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0E7446AB
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 03:13:53 -0700 (PDT)
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20230503101352epoutp031b5c8741aad3a357ea56a5cc9f2f6cf6~bmpC3bK3p2141521415epoutp036
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 10:13:52 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20230503101352epoutp031b5c8741aad3a357ea56a5cc9f2f6cf6~bmpC3bK3p2141521415epoutp036
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1683108832;
-        bh=5spsBQ/UOnjOahi0JzD6hmV/5aBQ7IGxHCQ9KefOjyE=;
-        h=Subject:Reply-To:From:To:In-Reply-To:Date:References:From;
-        b=T5sgQtkLpfPBVjNcR07b57q0MOgTYpZ55yuIkkUazLw+zQJm1hqvV36LeGkBgicdp
-         335d2dUOkbZ/WLFrFD1LI9FLzS8ULUjO0rm77wikVguHawEPzUYBWa40ucY8RDhb3h
-         Dobr//mzyxWoLgZ0GwZG4qMF4Kgf/zisKe6++AI8=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
-        20230503101351epcas2p40434afb19b942994ca0612bb822eeeeb~bmpCOdERn3032830328epcas2p4s;
-        Wed,  3 May 2023 10:13:51 +0000 (GMT)
-Received: from epsmges2p3.samsung.com (unknown [182.195.36.91]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4QBCTV6GwDz4x9Pw; Wed,  3 May
-        2023 10:13:50 +0000 (GMT)
-X-AuditID: b6c32a47-c29ff70000002007-98-645233dec14f
-Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
-        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        DB.4F.08199.ED332546; Wed,  3 May 2023 19:13:50 +0900 (KST)
-Mime-Version: 1.0
-Subject: [PATCH 07/15] block: blk-merge: fix merging two requests in
- ll_merge_requests_fn
-Reply-To: j-young.choi@samsung.com
-Sender: Jinyoung CHOI <j-young.choi@samsung.com>
-From:   Jinyoung CHOI <j-young.choi@samsung.com>
-To:     Jinyoung CHOI <j-young.choi@samsung.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>, "hch@lst.de" <hch@lst.de>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <20230503094912epcms2p4bef206eab1c41a92eba2583a69c74323@epcms2p4>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20230503101350epcms2p63c31a0642156d56853acdcd4754abb50@epcms2p6>
-Date:   Wed, 03 May 2023 19:13:50 +0900
-X-CMS-MailID: 20230503101350epcms2p63c31a0642156d56853acdcd4754abb50
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrHKsWRmVeSWpSXmKPExsWy7bCmme4946AUg62X9C1W3+1ns3h5SNNi
-        5eqjTBa9/VvZLPbe0ra4vGsOm8Xy4/+YHNg9Lp8t9dh9s4HN4+PTWywefVtWMXp83iQXwBqV
-        bZORmpiSWqSQmpecn5KZl26r5B0c7xxvamZgqGtoaWGupJCXmJtqq+TiE6DrlpkDdIOSQlli
-        TilQKCCxuFhJ386mKL+0JFUhI7+4xFYptSAlp8C8QK84Mbe4NC9dLy+1xMrQwMDIFKgwITvj
-        X+8cxoJNvBUb2/rYGxgncncxcnJICJhIvNyzkLWLkYtDSGAHo8S1ZXOAHA4OXgFBib87hEFM
-        YYFoiXtb00HKhQSUJM6tmcUIETaQuNVrDhJmE9CT+LlkBhuILSKwmkmi+XkNxHReiRntT1kg
-        bGmJ7cu3MoLYnAJ+Eo833GKEiGtI/FjWywxhi0rcXP2WHcZ+f2w+VI2IROu9s1A1ghIPfu6G
-        iktKHDr0lQ3kHAmBfIkNBwIhwjUSb5cfgCrRl7jWsRHsBF4BX4kVL1aAjWcRUJVo+DgZ6jQX
-        idPXFoGNZxaQl9j+dg4zyEhmAU2J9bv0IaYrSxy5xQJRwSfRcfgvO8yDDRt/Y2XvmPeECaJV
-        TWJRkxFEWEbi6+H57BMYlWYhwngWkrWzENYuYGRexSiWWlCcm55abFRgDI/W5PzcTYzghKjl
-        voNxxtsPeocYmTgYDzFKcDArifB+KPRLEeJNSaysSi3Kjy8qzUktPsRoCvTwRGYp0eR8YErO
-        K4k3NLE0MDEzMzQ3MjUwVxLnlbY9mSwkkJ5YkpqdmlqQWgTTx8TBKdXA1L5mLzfj+qCkRM8Z
-        +25lT9zvv7fAKvzd05q1625/87n/4XXroXOHX+6sO51n6yxbZhNbU/zwxS5BhSfaInG7nnXb
-        Tuxd3vt9efm0Xqu2A/OF/S1t7nKvDOf7lXVz5b2F2/omFnaFrt/CtkxjenFT8q27Vnbnds+1
-        P8QQWs46NVmfcY93TclhpVm3lJ9HT1mibPfl7Inwh3uzIwPD24OK9rKv2xe4Z+Xiz/9nztiy
-        94KL8jv9GK7w9KCPMp5XSw7dj1/jI/88vXZXTNLrrNntKscXXb6sZW+dYulSzCjs7in1p+zI
-        0QPprmUh3tNCWjU4Fj284Hkzcf+sUJGgZMN/nvciLi9uji+doX2xZH/QMiWW4oxEQy3mouJE
-        AMEW8/cRBAAA
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230503094912epcms2p4bef206eab1c41a92eba2583a69c74323
-References: <20230503094912epcms2p4bef206eab1c41a92eba2583a69c74323@epcms2p4>
-        <CGME20230503094912epcms2p4bef206eab1c41a92eba2583a69c74323@epcms2p6>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Wed, 3 May 2023 06:15:06 -0400
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1526CE;
+        Wed,  3 May 2023 03:15:05 -0700 (PDT)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-55a5e0f5b1aso30548947b3.0;
+        Wed, 03 May 2023 03:15:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683108905; x=1685700905;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=J9Ei4eIU9458pKjl+Q1vOAHQVhwFjS/Wijv4O7V3dZA=;
+        b=UYnvKE4IdOfoSSCZBKLUieqkiy5yblXhWBcGHAKmYmFxMazr1jazskY7EpKK4Xq2fl
+         8kRiiC6naTH8HU3XGgRfbyK91V4G4ToGyJfrdsPV9PMu/xyhtlMMGpZ4BfLgrWtEW6dD
+         yQnsoQqCr+VLCOg+fQ3p3bZz9mJ4qmyCJiFf9JujI6dwjTmOrmjfo15zKSYATcFXEp45
+         54uSn+iOXIoh5A40gcVmCp0yCl/qHDWoSHgx0VXig0uIvXQAawlkp0i4d70EpNj5wQ0j
+         b9c38FwIS4CEyWXhzvQEBugsvvZj6Y7VmguWR6uwC7ZrexcsdWeGbR2xz+KFmcO2uH39
+         1OvQ==
+X-Gm-Message-State: AC+VfDwo7qu5dbB4fncJ2Hy/+h8BcNHm6IMKTJHSo6gdNj5JxbkqvIkn
+        nXF7pa7ctsEvcm71xc30JBK5FZUEwV0M+w==
+X-Google-Smtp-Source: ACHHUZ6YoJDvn2lKwqaOBxilCH42V89xOozSpg7tc4F2+SJaSpGvieRF5ZnzK30qGnvpSpCSr59cUQ==
+X-Received: by 2002:a0d:f4c5:0:b0:556:b11e:ec34 with SMTP id d188-20020a0df4c5000000b00556b11eec34mr19442764ywf.50.1683108904693;
+        Wed, 03 May 2023 03:15:04 -0700 (PDT)
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
+        by smtp.gmail.com with ESMTPSA id u205-20020a8147d6000000b00557027bf788sm3994773ywa.74.2023.05.03.03.15.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 May 2023 03:15:04 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-55a5e0f5b1aso30548467b3.0;
+        Wed, 03 May 2023 03:15:03 -0700 (PDT)
+X-Received: by 2002:a81:83cf:0:b0:55c:253b:91dc with SMTP id
+ t198-20020a8183cf000000b0055c253b91dcmr1626279ywf.34.1683108903696; Wed, 03
+ May 2023 03:15:03 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230502170618.55967-1-wsa+renesas@sang-engineering.com> <20230502170618.55967-3-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20230502170618.55967-3-wsa+renesas@sang-engineering.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 3 May 2023 12:14:52 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdV0iZJwNDRTxZXr-Rg_=VDN1hYw2gbSwwys1EDrzgC7Ew@mail.gmail.com>
+Message-ID: <CAMuHMdV0iZJwNDRTxZXr-Rg_=VDN1hYw2gbSwwys1EDrzgC7Ew@mail.gmail.com>
+Subject: Re: [PATCH 2/2] arm64: dts: renesas: r8a779a0: Add PWM nodes
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Phong Hoang <phong.hoang.wz@renesas.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-blk_integrity_merge_rq() merges integrity segment information of two
-requests. However, it is only a condition check and does not perform the
-actual integrity information update. So this was modified.
+Hi Wolfram,
 
-After it is called, the merge process of the requests may fail
-due to other conditions. At this time, there is an error in the integrity
-segment information of request. So the call location was also changed.
+On Tue, May 2, 2023 at 7:06 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> From: Phong Hoang <phong.hoang.wz@renesas.com>
+>
+> This patch adds PWM nodes for R-Car V3U (r8a779a0) SoC.
+>
+> Signed-off-by: Phong Hoang <phong.hoang.wz@renesas.com>
+> [wsa: rebased]
+> Tested-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Martin K. Petersen <martin.petersen@oracle.com>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v6.5.
 
-Signed-off-by: Jinyoung Choi <j-young.choi@samsung.com>
----
- block/blk-integrity.c | 2 ++
- block/blk-merge.c     | 5 +++--
- 2 files changed, 5 insertions(+), 2 deletions(-)
+> --- a/arch/arm64/boot/dts/renesas/r8a779a0.dtsi
+> +++ b/arch/arm64/boot/dts/renesas/r8a779a0.dtsi
+> @@ -1108,6 +1108,56 @@ msiof5: spi@e6c28000 {
+>                         status = "disabled";
+>                 };
+>
+> +               pwm0: pwm@e6e30000 {
 
-diff --git a/block/blk-integrity.c b/block/blk-integrity.c
-index 03a85e1f6d2e..f97b7e8a6d4d 100644
---- a/block/blk-integrity.c
-+++ b/block/blk-integrity.c
-@@ -181,6 +181,8 @@ bool blk_integrity_merge_rq(struct request_queue *q, struct request *req,
- 	if (integrity_req_gap_back_merge(req, next->bio))
- 		return false;
- 
-+	req->nr_integrity_segments += next->nr_integrity_segments;
-+
- 	return true;
- }
- 
-diff --git a/block/blk-merge.c b/block/blk-merge.c
-index 8509f468d6d4..c6a0958e8df1 100644
---- a/block/blk-merge.c
-+++ b/block/blk-merge.c
-@@ -711,10 +711,11 @@ static int ll_merge_requests_fn(struct request_queue *q, struct request *req,
- 	if (!blk_cgroup_mergeable(req, next->bio))
- 		return 0;
- 
--	if (blk_integrity_merge_rq(q, req, next) == false)
-+	if (!bio_crypt_ctx_merge_rq(req, next))
- 		return 0;
- 
--	if (!bio_crypt_ctx_merge_rq(req, next))
-+	/* this will merge integrity segments */
-+	if (!blk_integrity_merge_rq(q, req, next))
- 		return 0;
- 
- 	/* Merge is OK... */
+I'll move this before serial@e6e60000 while applying, to preserve sort
+order (by unit address).
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.34.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
