@@ -2,94 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFD506F5F61
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 21:45:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C67686F5F66
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 21:49:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbjECTpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 15:45:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59620 "EHLO
+        id S229713AbjECTs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 15:48:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjECTpm (ORCPT
+        with ESMTP id S229613AbjECTsx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 15:45:42 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52FE37695
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 12:45:41 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-b9a6869dd3cso8120507276.2
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 12:45:41 -0700 (PDT)
+        Wed, 3 May 2023 15:48:53 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D587AB4
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 12:48:52 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2ac70c975fcso14705221fa.3
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 12:48:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683143140; x=1685735140;
+        d=gmail.com; s=20221208; t=1683143331; x=1685735331;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bq44fWKfzB7azpC5445h4zSgjB+E0XG23Sx5k3P/Wrs=;
-        b=mNn8mOJ969yUibKfAWrXgatuIFi6FVIM4EsSSH9KQ1Go4d1sYzKZHUi8VHjbX6pfWa
-         OlJ16nZGAbvURg1kkDTdEvJDfJPD2YhA8jF3Bo81PkL1ob0v9cS2gkR4gCqMlpmjnr/s
-         tWs9Fu3MohlaypLe2rIvRSkpy7E5gp65K6pp8163QEUwdmBPDYTBTVK0GaffIx+/jWG1
-         GkJ4oD48JkxrW+rrbEhXrrnBxumK3LN05X4J4kXdI0k+pYkkAnfDQi3ANZniOpY63cWz
-         Q+VUnUlPsKkbZjKcze+vAukdxm3Nrif9W+zvOKGcMfCU5FAKE+MOBW4LpPVOFpo/QEqA
-         mUdg==
+        bh=GgxHMAd2AIMSIN7wxwztZQuxCjRjDT1lsufiXrNyadA=;
+        b=aogvjXXKvsH1JCvlSuu99w3M49a+Rox9nlF1yW7PWiOObH1fXAT5pOak8lxxjRSSs/
+         uUUB2uES6rNkgkhJE0lSCAgPN/H7/tXyEsAywz+0KRgUTa1uomGgUKEP7H6HcCX9rhmr
+         t3Erd3e6uNTmrhG1d/mAtgjoudH2HZMmUfGolqPePtU4Xljlni3kDasUhsNoxvT+owOA
+         +y9OgsP9ajUid7qTrnqieZvGFHXE/MigJy9SH2sp8bCjsbLDXl0sALVYAUPC8u8/4iK2
+         ztsSOWVNk7tEjd3X6W8mGLPZjN4p3AuCZXOS4wR6qGVWEMzLD+KhnEqKe9Az7gfEJNtY
+         wJVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683143140; x=1685735140;
+        d=1e100.net; s=20221208; t=1683143331; x=1685735331;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bq44fWKfzB7azpC5445h4zSgjB+E0XG23Sx5k3P/Wrs=;
-        b=R7ipBoeOfacUYRucSP0TiqZ7NhylaMDK/Eb/WZmUdOKzcB7z+ZmJaHGzxihSecQz0t
-         v6MUFJh9qPlhec1zPHwdKgmyGQZZRgASXZnAyMuxQ9Snzea6ccdWLrOQn+sT7PWzPWK3
-         mTAoNQYomCyE4gAyNBchwGdOdYtFXh9agqTsRfHNWw4y/Abq5d718S9ZaLw8UnwmCP42
-         xOeG5Yqa6ZXR53WneSQVBHDeYn6HM0ZPpzm31fLcEKLk6TjG18dhT6epnSJ3Pm6rD0Pu
-         /wTkM2ML9ypGDeJoklG9i4GRpW1hhb0vKE0+UH6X8Xr16pkB3KWjw9gDOx+Z+KawoJWP
-         qtWA==
-X-Gm-Message-State: AC+VfDxtSr/MYg4upP9sWetvsmE4+yG/E+DI2Y1QHUSDUumMaI+d65Xn
-        TO5x5HPmr6AWwWAstknGgYTbnEHszYKVtdInzLMX5w==
-X-Google-Smtp-Source: ACHHUZ611vK/8POrb92/ZC137MJ/7lfkX+qvV2x7CR/VSAZxV6421Yhl76g7YvjnquNOZJwUgKJzKQx8X6OL1TqAAdQ=
-X-Received: by 2002:a25:4f86:0:b0:b9a:9ad4:1d3 with SMTP id
- d128-20020a254f86000000b00b9a9ad401d3mr18494816ybb.5.1683143140255; Wed, 03
- May 2023 12:45:40 -0700 (PDT)
+        bh=GgxHMAd2AIMSIN7wxwztZQuxCjRjDT1lsufiXrNyadA=;
+        b=EKyQl+hPKfWh3DYULp4cWIzbWmaPDo+6AvICcUvryWUaovfG6IAMVw26oQHSMqELoL
+         hRR8KhYE/NBd0aX6A40M8qR+wpexbWXM0V1HVx1DEhdGBikfhvLIILlLNo1p8wmlhPpS
+         qEF+tEZStYD0z2GfdMjA71haIcxaapZQTy7g9Ye62/R9HluZBFLXucRMppLbL9JI1tDj
+         uAKqCDsLNeffNODUE8MHqqTsdNUC3YjiLKTbvNRv/U1BwueHvbiYWqCBK4mK+/q6Di0s
+         f30CZ7is+mQx6xOUvXZJ5qjUJMf2B1Af1KdcnbVDoQGOnACa3L8k41xtaEBGgbRDVnpr
+         HpzA==
+X-Gm-Message-State: AC+VfDwF3oqHqr7oyhYLerJruoTXqDTLsQqFUYvoJF718IiYW108Jf/Z
+        8QJKKg39Iupg3CsLgugWbFjoyE9HDX82o1Lto+E=
+X-Google-Smtp-Source: ACHHUZ4NybURc8uLsP4LiiPVzi+nXZYpmTbylkvjCdEyJuSHfBGFZ4e/0y65cuVcRE8Kp/ENoMgol/Mx3aZAwrVJoGg=
+X-Received: by 2002:a2e:680e:0:b0:2ac:775f:6fd3 with SMTP id
+ c14-20020a2e680e000000b002ac775f6fd3mr287789lja.13.1683143330477; Wed, 03 May
+ 2023 12:48:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230501165450.15352-1-surenb@google.com> <20230501165450.15352-35-surenb@google.com>
- <ZFIO3tXCbmTn53uv@dhcp22.suse.cz> <CAJuCfpHrZ4kWYFPvA3W9J+CmNMuOtGa_ZMXE9fOmKsPQeNt2tg@mail.gmail.com>
- <b8ab89e6-0456-969d-ed31-fa64be0a0fd0@intel.com>
-In-Reply-To: <b8ab89e6-0456-969d-ed31-fa64be0a0fd0@intel.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 3 May 2023 12:45:29 -0700
-Message-ID: <CAJuCfpGq4CjFLJ=QdQZUJPN72ecvWhVi_vUKrOz5_DvMAM07EQ@mail.gmail.com>
-Subject: Re: [PATCH 34/40] lib: code tagging context capture support
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
-        kent.overstreet@linux.dev, vbabka@suse.cz, hannes@cmpxchg.org,
-        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
-        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
-        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
-        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
-        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
-        tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
-        paulmck@kernel.org, pasha.tatashin@soleen.com,
-        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
-        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, gregkh@linuxfoundation.org,
-        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
+References: <20230412061700.1492474-1-AVKrasnov@sberdevices.ru>
+ <60fa656e-bda1-1de6-a79e-3e3041cd69a8@sberdevices.ru> <780c0cae-18b6-2652-1c2c-6d398ea60451@amlogic.com>
+ <e7c49f2d-b3c1-8d9b-76fe-c8759b37c7c7@sberdevices.ru> <20230418152505.72fc16da@xps-13>
+ <15a6e415-1489-a81f-fc8f-2372678ad2cb@sberdevices.ru> <ee10bdeb-416c-70f0-d323-7107fe0746e8@amlogic.com>
+ <5e4b395e-bf9d-0123-a0f2-2b378d950b29@sberdevices.ru> <fda1ae91-4bf8-6945-bd0d-b6dabc9cb4bd@sberdevices.ru>
+ <a5010dcf-a8ce-f144-949c-687548cefce7@amlogic.com> <cf27b6b4-a75b-c5a6-32ea-ac20a2984192@sberdevices.ru>
+ <20230502115913.78012d98@xps-13> <2274b432-d1a9-b3cf-4f7b-08c4a4c580b5@sberdevices.ru>
+ <20230502132745.14349770@xps-13> <2b2f5cb4-84f7-65f6-13b2-42f965503023@sberdevices.ru>
+ <20230502141703.29f0bc30@xps-13> <91cb8e19-e782-b847-8d2b-22580c371c34@sberdevices.ru>
+ <20230502150553.65fdeb7f@xps-13> <8996d53c-54ff-6a37-e08b-95cae0629703@sberdevices.ru>
+ <20230503100342.63215058@xps-13>
+In-Reply-To: <20230503100342.63215058@xps-13>
+From:   Richard Weinberger <richard.weinberger@gmail.com>
+Date:   Wed, 3 May 2023 21:48:38 +0200
+Message-ID: <CAFLxGvwfi2RH3y2M6n0vqUHarp6DwR-wT7oBto3raA7oC3nJvg@mail.gmail.com>
+Subject: Re: [PATCH v1 4/5] mtd: rawnand: meson: clear OOB buffer before read
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Arseniy Krasnov <avkrasnov@sberdevices.ru>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Yixun Lan <yixun.lan@amlogic.com>, oxffffaa@gmail.com,
+        kernel@sberdevices.ru, linux-mtd@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        "yonghui.yu" <yonghui.yu@amlogic.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,34 +91,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 3, 2023 at 8:26=E2=80=AFAM Dave Hansen <dave.hansen@intel.com> =
-wrote:
->
-> On 5/3/23 08:18, Suren Baghdasaryan wrote:
-> >>> +static inline void rem_ctx(struct codetag_ctx *ctx,
-> >>> +                        void (*free_ctx)(struct kref *refcount))
-> >>> +{
-> >>> +     struct codetag_with_ctx *ctc =3D ctx->ctc;
-> >>> +
-> >>> +     spin_lock(&ctc->ctx_lock);
-> >> This could deadlock when allocator is called from the IRQ context.
-> > I see. spin_lock_irqsave() then?
->
-> Yes.  But, even better, please turn on lockdep when you are testing.  It
-> will find these for you.  If you're on x86, we have a set of handy-dandy
-> debug options that you can add to an existing config with:
->
->         make x86_debug.config
+Sorry for joining the party late.
 
-Nice!
-I thought I tested with lockdep enabled but I might be wrong. The
-beauty of working on multiple patchsets in parallel is that I can't
-remember what I did for each one :)
-
+On Wed, May 3, 2023 at 10:07=E2=80=AFAM Miquel Raynal <miquel.raynal@bootli=
+n.com> wrote:
+> > So for me main question here is:
+> >
+> > How JFFS2 should work with controllers where we can't update data and O=
+OB
+> > independently? Driver of this filesystem knows nothing about this featu=
+res of
+> > the controller.
+> >
+> > Or JFFS2 works incorrectly in my case when it tries to call write page =
+callback
+> > after calling write OOB callback (IIUC it is better to ask Richard as Y=
+ou mentioned above).
+> >
+> > Or may be it is better to suppress OOB write callback (or set it to NUL=
+L) in this
+> > driver as in vendor's driver?
 >
-> That said, I'm as concerned as everyone else that this is all "new" code
-> and doesn't lean on existing tracing or things like PAGE_OWNER enough.
+> I would assume using the unprotected free OOB bytes to store the
+> cleanmarkers should work. But that's a bit fragile and very filesystem
+> oriented. I don't like this much. But on the other side JFFS2 is
+> legacy, you should use UBI (which does not play with OOB areas) :-)
 
-Yeah, that's being actively discussed.
+Please note that JFFS2's main use case is NOR flash. Support for NAND
+flash was never
+considered as fully complete/stable. That's why UBIFS (JFFS3 in the
+very beginning)
+was invented.
 
->
+Thanks,
+//richard
