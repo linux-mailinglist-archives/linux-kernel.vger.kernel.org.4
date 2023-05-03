@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AE1F6F5174
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 09:28:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63E956F5175
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 09:28:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbjECH2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 03:28:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35538 "EHLO
+        id S229886AbjECH2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 03:28:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbjECH16 (ORCPT
+        with ESMTP id S229903AbjECH17 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 03:27:58 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56262D6B;
-        Wed,  3 May 2023 00:27:34 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-956eacbe651so958026066b.3;
-        Wed, 03 May 2023 00:27:34 -0700 (PDT)
+        Wed, 3 May 2023 03:27:59 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 925DF468B;
+        Wed,  3 May 2023 00:27:41 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-95678d891d6so971247566b.1;
+        Wed, 03 May 2023 00:27:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683098853; x=1685690853;
+        d=gmail.com; s=20221208; t=1683098860; x=1685690860;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5Vjy0njVYlk4DJBe6xXSLpMploNAvBdfi1zWVLfGo2U=;
-        b=RUTK25YiYQ7CLZ05QlEdu4wwlG6TLGr87ALM61BMl/m6DuJmNWK1nuTM3Wmac9dMoB
-         yHhe09fi/Sr4sqM/xTuNKniouv5zKjknoZCWtP/wNmrkPiIcnl2549PIwfvVG5x6KDfT
-         oNQ5kt9So95GgFCbgc2diRmJ5A8c0FR+oC06PIASBr5+yrJliznri9dfJIHzPQDRjifr
-         FTRUJJCTOAOYLWc25G4IHNp3uLlLEQ5+QIMvs/gCgZUCO6Aeg7o+7ipgGVCEbC5fBCyP
-         Q2FXc+Pn9+l067pWUplTRbZm52Fvgw68QdXfyyHIFGHkOUpnz5F6jidVAAVFGWAPs3Sr
-         ZDFA==
+        bh=YJwlvnk2QOdQ9AieHi7YHl4/Jlfed/PX+1LmVtBDjCk=;
+        b=qpNz7E1+VFzfePkVMnoVHtoW/8IE7Quy0IjJVHeRuJEgGBJ2wZV6mKpbfWtxhRhnTB
+         Pkt9Ja9tb4KNAEaZdsQuvv4RITeunowlxbR453JsaqzgkDX/+JvQeHI42uGslw9W2JdG
+         NqNgrgtI81T9c25P1N9B7AD7vxUdlmp97Jc98Vn6lSeU0B9pCuY68hy/r6V96YlVyXvW
+         07CLLoHkIYFO/xPmHX7jL5yKpyehTt5gDseiuvprl825NpcaOxPzgMitiH0G41Ejxwy7
+         KByAC5zcQvxgGNOp5RaVsBD9PBhy83TJ1AtM7Sh7APR3F+isGHVqPvl+vc3LvMG5EQBh
+         ZWBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683098853; x=1685690853;
+        d=1e100.net; s=20221208; t=1683098860; x=1685690860;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5Vjy0njVYlk4DJBe6xXSLpMploNAvBdfi1zWVLfGo2U=;
-        b=ip3UhNbWX548rYOEbEvfh7+9IvlXWT/iiMIrh5Z20XB/BEpTnah/YbFoQ39ZFbat/L
-         dr889RRbl8AGLo3k5WE+0RmAab6Rq8Qdi234gUi8BY398NcNjogsgjft90Iic6nISJ/4
-         BAwN/xd1Tr8h2MHkVOFjwirpWMGpWwADwSHWOPwUESqV//y+o78N3Y7zTxlYXfozLblQ
-         qVL+KB37G4+F4JMmiG1iJdwZEZBy/3M7SJWkED0FreQLtzbCb4THhM2D6KlUQLB0hEv/
-         z5lEfE6pVT3J1fW7MvQ5RVwEFoQ7Oogbn1gxAr+pKswGDGvnytSNqvC/5UvBzef4pnCo
-         1LuQ==
-X-Gm-Message-State: AC+VfDyoyN7Vc29zgsWWyVA6CIt+LTpRbGNOeRcc+g3Y1/AEG2267QKl
-        nv5Hwa/QwUYD9XHol2YMIso=
-X-Google-Smtp-Source: ACHHUZ4T9bS8sbiihvCjmQVgyX4U1r515yDDgtUgefwQNOSSPoZ1kUscQBDeTBBAMACBZSDhpDziiQ==
-X-Received: by 2002:a17:907:3da2:b0:960:f1a6:6a12 with SMTP id he34-20020a1709073da200b00960f1a66a12mr2444084ejc.55.1683098853270;
-        Wed, 03 May 2023 00:27:33 -0700 (PDT)
+        bh=YJwlvnk2QOdQ9AieHi7YHl4/Jlfed/PX+1LmVtBDjCk=;
+        b=KVrzL+mHd7jPIK5/gHmt2dmixcTyKSmJsdVzPsZVsx7175SRzmssvKTg1WNgVvPspi
+         fG9G/Gg5hMreqz1oUXayx+B/7CJ30Ny5sLakMH7/kK0rsLXG4J9lydlx3i+XeHMAED1g
+         MRfJXQ+3bO5+BO99l9JtxtXsvaafegTJD2ojnvthQnJeECODoCB37NlOPV1TYs8Eq9kC
+         hBimxdLv8zL7jEXVC3/0mH5Gk+cEyVoALVBh7m1qel4+M32ih8bTIeOIpvtG39W1/GDQ
+         pr91iSbdcg6NL+ALDJ28RojwiQ7zp3KU6bt4eKlhmI7SV/1f5KAUTx7zCIGiB7Ufb40p
+         y/ZA==
+X-Gm-Message-State: AC+VfDzvyyx/8l8aLEG3hvF75nGNnYNCSrWTNasgGGCqQ+VwFrKKUL/S
+        IdMEsOBsG6Pd4HyJuKg0Zfs=
+X-Google-Smtp-Source: ACHHUZ4IAn1aq7b3Q3aab34HGPYRA0chyG0SMTfVUuMvdOIL9hRKBA9f3MSYZjTWldPVUSnpXA1Iiw==
+X-Received: by 2002:a17:907:5c2:b0:961:b0:3dfd with SMTP id wg2-20020a17090705c200b0096100b03dfdmr2301653ejb.7.1683098859957;
+        Wed, 03 May 2023 00:27:39 -0700 (PDT)
 Received: from localhost.localdomain ([95.183.227.33])
-        by smtp.gmail.com with ESMTPSA id t26-20020a1709064f1a00b0094f34fe27c6sm17072009eju.170.2023.05.03.00.27.31
+        by smtp.gmail.com with ESMTPSA id t26-20020a1709064f1a00b0094f34fe27c6sm17072009eju.170.2023.05.03.00.27.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 May 2023 00:27:33 -0700 (PDT)
+        Wed, 03 May 2023 00:27:39 -0700 (PDT)
 From:   Yassine Oudjana <yassine.oudjana@gmail.com>
 X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
 To:     Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
@@ -66,9 +66,9 @@ Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
         Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
         linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/3] arm64: dts: qcom: msm8996: Add CAMSS power domain and power-domain-names to CAMSS
-Date:   Wed,  3 May 2023 10:25:42 +0300
-Message-Id: <20230503072543.4837-3-y.oudjana@protonmail.com>
+Subject: [PATCH 3/3] media: camss: Link CAMSS power domain
+Date:   Wed,  3 May 2023 10:25:43 +0300
+Message-Id: <20230503072543.4837-4-y.oudjana@protonmail.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230503072543.4837-1-y.oudjana@protonmail.com>
 References: <20230503072543.4837-1-y.oudjana@protonmail.com>
@@ -86,28 +86,61 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yassine Oudjana <y.oudjana@protonmail.com>
 
-Add the CAMSS power domain as well as power-domain-names for all CAMSS power domains.
+The CAMSS power domain was previously enabled implicitly when the VFE power domains
+were enabled. Commit 46cc03175498 (media: camss: Split power domain management, 2022-07-04)
+delayed enabling VFE power domains which in turn delayed enabling the CAMSS power domain.
+This made CSIPHY fail to enable camss_top_ahb_clk which requires the CAMSS power domain to
+be on:
 
+[  199.097810] ------------[ cut here ]------------
+[  199.097893] camss_top_ahb_clk status stuck at 'off'
+[  199.097913] WARNING: CPU: 3 PID: 728 at drivers/clk/qcom/clk-branch.c:91 clk_branch_wait+0x140/0x160
+...
+[  199.100064]  clk_branch_wait+0x140/0x160
+[  199.100112]  clk_branch2_enable+0x30/0x40
+[  199.100159]  clk_core_enable+0x6c/0xb0
+[  199.100211]  clk_enable+0x2c/0x50
+[  199.100257]  camss_enable_clocks+0x94/0xe0 [qcom_camss]
+[  199.100342]  csiphy_set_power+0x154/0x2a0 [qcom_camss]
+...
+[  199.101594] ---[ end trace 0000000000000000 ]---
+
+Link the CAMSS power domain in camss_configure_pd to make sure it gets enabled before
+CSIPHY tries to enable clocks.
+
+Fixes: 02afa816dbbf (media: camss: Add basic runtime PM support, 2018-07-25)
 Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
 ---
- arch/arm64/boot/dts/qcom/msm8996.dtsi | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/media/platform/qcom/camss/camss.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-index 30f6ebc4bd11..0168a086f57d 100644
---- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-@@ -2118,7 +2118,9 @@ camss: camss@a00000 {
- 				"vfe0",
- 				"vfe1";
- 			power-domains = <&mmcc VFE0_GDSC>,
--					<&mmcc VFE1_GDSC>;
-+					<&mmcc VFE1_GDSC>,
-+					<&mmcc CAMSS_GDSC>;
-+			power-domain-names = "vfe0", "vfe1", "camss";
- 			clocks = <&mmcc CAMSS_TOP_AHB_CLK>,
- 				<&mmcc CAMSS_ISPIF_AHB_CLK>,
- 				<&mmcc CAMSS_CSI0PHYTIMER_CLK>,
+diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
+index 1ef26aea3eae..9aea8220d923 100644
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -1453,6 +1453,7 @@ static const struct media_device_ops camss_media_ops = {
+ static int camss_configure_pd(struct camss *camss)
+ {
+ 	struct device *dev = camss->dev;
++	int camss_pd_index;
+ 	int i;
+ 	int ret;
+ 
+@@ -1496,7 +1497,13 @@ static int camss_configure_pd(struct camss *camss)
+ 		}
+ 	}
+ 
+-	if (i > camss->vfe_num) {
++	/* Link CAMSS power domain if available */
++	camss_pd_index = device_property_match_string(camss->dev, "power-domain-names", "camss");
++	if (camss_pd_index >= 0)
++		device_link_add(camss->dev, camss->genpd[camss_pd_index], DL_FLAG_STATELESS |
++				DL_FLAG_PM_RUNTIME | DL_FLAG_RPM_ACTIVE);
++
++	if (i > camss->vfe_num && i != camss_pd_index) {
+ 		camss->genpd_link[i - 1] = device_link_add(camss->dev, camss->genpd[i - 1],
+ 							   DL_FLAG_STATELESS | DL_FLAG_PM_RUNTIME |
+ 							   DL_FLAG_RPM_ACTIVE);
 -- 
 2.40.0
 
