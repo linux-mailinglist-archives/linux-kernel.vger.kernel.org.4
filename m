@@ -2,111 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49FD66F4E27
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 02:31:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1245F6F4EC6
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 04:18:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbjECAbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 20:31:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48650 "EHLO
+        id S229499AbjECCRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 22:17:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjECAbs (ORCPT
+        with ESMTP id S229575AbjECCRu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 20:31:48 -0400
-Received: from mail-ua1-x949.google.com (mail-ua1-x949.google.com [IPv6:2607:f8b0:4864:20::949])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494902D4E
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 17:31:47 -0700 (PDT)
-Received: by mail-ua1-x949.google.com with SMTP id a1e0cc1a2514c-772a3262ef4so1559528241.2
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 17:31:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683073906; x=1685665906;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=+pEr4mb5Zur3Q3nUnZ4OhrYzy499wJZFFnvzigIXG3U=;
-        b=QjeFE6mN5MiGDi87j71j4nSAbzIq4rwt81w91exCeiaudrO8/oRdMesqlfCSMIW511
-         6N6QfSJlrZC0qIQL3SvOqCcGfXaRHvybRC7/vc4Ypj0YYNRdFMe0o9GbLaFHALniSHfe
-         rHp7Wh1hTbOtqFlB0KB5+hb9+Da3Q5SdUrKvOpwu+0XhpFOkv6tV12I3kP5TtUUx/vn1
-         jF+GNo+zsX/WUVCjTctR6GUZFQcy1eereto34TUxgJUnDgXH3VcatopWh4l8B1pK8g1k
-         bUR7hwTf+8upbpdYgGDUgMbVSHTqndYVQWUUMGgpGXaIQY15KmNoknqdlB4BJi/at1W0
-         vrag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683073906; x=1685665906;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+pEr4mb5Zur3Q3nUnZ4OhrYzy499wJZFFnvzigIXG3U=;
-        b=lYbasUgS04/nJDCSVGHsVCLOj72/p3iiId9ETgn1jtjINyx5qeLgFcYiw7tiaX2Vji
-         zxoKAFlc//Lz2Roxex2axUToUcND6FiLyI3gIjFmRkDhAkvcGAkvranrFWZHcOcVtqnB
-         Xstrav1M3itt3T3hjbVS0YkOv4JNdgUpccgtDDwCOO8c7bBvbugepDfdR3cK3aiPzPI2
-         bkLxthWEcDYhMartVMJTX/thScnpmrIaertA7QXf3WEo5gs1owoM4RBJSNI2t6HhMyt7
-         E88G6LxAeKoWYE3/LnU44g/3angJRzkqt3BmS+wUPm/gAbIayCKgakSFjDebfi2goelp
-         QEcw==
-X-Gm-Message-State: AC+VfDw2HycFIvyg+9sKuFp10LbmpuwtbLJY4hmMXNZq1ZvRbLJB9XT7
-        DTMASUoAnvnxQ1EAZWucDoSoRbuU3hU=
-X-Google-Smtp-Source: ACHHUZ7/RAEnxBFqidksbK7And5YR7lq0R5mnWyIA/9GMcY3+gk7lH9NZZH3ZK5Ci2pzSoAk9j/YwZbOM3Q=
-X-Received: from royluo-cloudtop0.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:bb8])
- (user=royluo job=sendgmr) by 2002:a67:d885:0:b0:430:6da5:c64a with SMTP id
- f5-20020a67d885000000b004306da5c64amr1033123vsj.2.1683073906412; Tue, 02 May
- 2023 17:31:46 -0700 (PDT)
-Date:   Wed,  3 May 2023 00:31:44 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
-Message-ID: <20230503003144.3782774-1-royluo@google.com>
-Subject: [PATCH v1] usb: dwc3: Add error logs for unknown endpoint events
-From:   Roy Luo <royluo@google.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        badhri@google.com, Roy Luo <royluo@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 2 May 2023 22:17:50 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85B9430E8;
+        Tue,  2 May 2023 19:17:49 -0700 (PDT)
+Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3432BBu1015196;
+        Wed, 3 May 2023 02:15:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=JoJ5SpihN/QtdPkAWRyYxCvZqinMeEO/Vv8+UL+iDFk=;
+ b=k37u0tf1VyFeaC7Jg83qYfqqMntBgTM7x67ARJyBxuuMvl3ygfFtJVFR7gEFY/9YRaWH
+ liOMpemLILu+uY9V3+wdx6fgxi3yFRc/FBZVjFW/Hef9jKGWu11wAQ9UEhNWBnJKiUZi
+ zkFS8h6uGJg7PSHullw9NRMOwIG7PubRIYeuff6vqfxcE8VRLHzyc4ZMDXkiKY+fWkEF
+ oy2gtybz+DF7ozhocJfnOwxP8CBRlwWkp9B5QZlH0fnTMjSx+PF3hqYqsOWPreN27zsR
+ GU7npTMSDk142G4QPFgIiiL5YKMLycHNObY99pwrTYbJ/tKGQmvoi+/n103EhArosoLw QQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qbefk0gpm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 03 May 2023 02:15:54 +0000
+Received: from m0353726.ppops.net (m0353726.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3432FIcr027482;
+        Wed, 3 May 2023 02:15:52 GMT
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qbefk0gp5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 03 May 2023 02:15:52 +0000
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 342MjM4Y003793;
+        Wed, 3 May 2023 00:31:55 GMT
+Received: from smtprelay07.wdc07v.mail.ibm.com ([9.208.129.116])
+        by ppma05wdc.us.ibm.com (PPS) with ESMTPS id 3q8tv7t06v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 03 May 2023 00:31:55 +0000
+Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
+        by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3430Vpcm47448388
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 3 May 2023 00:31:51 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AEA305803F;
+        Wed,  3 May 2023 00:31:51 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 766D658056;
+        Wed,  3 May 2023 00:31:46 +0000 (GMT)
+Received: from [9.160.35.135] (unknown [9.160.35.135])
+        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Wed,  3 May 2023 00:31:46 +0000 (GMT)
+Message-ID: <20d078c5-4ee6-18dc-d3a5-d76b6a68f64e@linux.ibm.com>
+Date:   Tue, 2 May 2023 20:31:45 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v8 0/3] mm/gup: disallow GUP writing to file-backed
+ mappings by default
+Content-Language: en-US
+To:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Mika Penttila <mpenttil@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Dave Chinner <david@fromorbit.com>,
+        "Theodore Ts'o" <tytso@mit.edu>, Peter Xu <peterx@redhat.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>
+References: <cover.1683067198.git.lstoakes@gmail.com>
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+In-Reply-To: <cover.1683067198.git.lstoakes@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: AlrGBLtyvdeT3uz2aLYHtlgeq7D8Cq1z
+X-Proofpoint-ORIG-GUID: _xLhuMzbYl-0maWOE8quUSjewJ8AjUjs
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-02_14,2023-04-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=358 clxscore=1015
+ suspectscore=0 bulkscore=0 impostorscore=0 lowpriorityscore=0 adultscore=0
+ spamscore=0 priorityscore=1501 phishscore=0 malwarescore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2305030015
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In cases where the controller somehow fails to write to event buffer
-memory (e.g. due to incorrect MMU config), the driver would receive
-all-zero dwc3 events. However, the abnormal event is silently dropped
-as a regular ep0out event.
-Add error logs when an unknown endpoint event is received to highlight
-the anamoly.
+On 5/2/23 6:51 PM, Lorenzo Stoakes wrote:
+> Writing to file-backed mappings which require folio dirty tracking using
+> GUP is a fundamentally broken operation, as kernel write access to GUP
+> mappings do not adhere to the semantics expected by a file system.
+> 
+> A GUP caller uses the direct mapping to access the folio, which does not
+> cause write notify to trigger, nor does it enforce that the caller marks
+> the folio dirty.
+> 
+> The problem arises when, after an initial write to the folio, writeback
+> results in the folio being cleaned and then the caller, via the GUP
+> interface, writes to the folio again.
+> 
+> As a result of the use of this secondary, direct, mapping to the folio no
+> write notify will occur, and if the caller does mark the folio dirty, this
+> will be done so unexpectedly.
+> 
+> For example, consider the following scenario:-
+> 
+> 1. A folio is written to via GUP which write-faults the memory, notifying
+>    the file system and dirtying the folio.
+> 2. Later, writeback is triggered, resulting in the folio being cleaned and
+>    the PTE being marked read-only.
+> 3. The GUP caller writes to the folio, as it is mapped read/write via the
+>    direct mapping.
+> 4. The GUP caller, now done with the page, unpins it and sets it dirty
+>    (though it does not have to).
+> 
+> This change updates both the PUP FOLL_LONGTERM slow and fast APIs. As
+> pin_user_pages_fast_only() does not exist, we can rely on a slightly
+> imperfect whitelisting in the PUP-fast case and fall back to the slow case
+> should this fail.
+> 
+> v8:
+> - Fixed typo writeable -> writable.
+> - Fixed bug in writable_file_mapping_allowed() - must check combination of
+>   FOLL_PIN AND FOLL_LONGTERM not either/or.
+> - Updated vma_needs_dirty_tracking() to include write/shared to account for
+>   MAP_PRIVATE mappings.
+> - Move to open-coding the checks in folio_pin_allowed() so we can
+>   READ_ONCE() the mapping and avoid unexpected compiler loads. Rename to
+>   account for fact we now check flags here.
+> - Disallow mapping == NULL or mapping & PAGE_MAPPING_FLAGS other than
+>   anon. Defer to slow path.
+> - Perform GUP-fast check _after_ the lowest page table level is confirmed to
+>   be stable.
+> - Updated comments and commit message for final patch as per Jason's
+>   suggestions.
 
-Signed-off-by: Roy Luo <royluo@google.com>
----
- drivers/usb/dwc3/ep0.c    | 2 ++
- drivers/usb/dwc3/gadget.c | 2 ++
- 2 files changed, 4 insertions(+)
-
-diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
-index 953b752a5052..8c9560a9999e 100644
---- a/drivers/usb/dwc3/ep0.c
-+++ b/drivers/usb/dwc3/ep0.c
-@@ -1207,5 +1207,7 @@ void dwc3_ep0_interrupt(struct dwc3 *dwc,
- 			dep->flags &= ~DWC3_EP_TRANSFER_STARTED;
- 		}
- 		break;
-+	default:
-+		dev_err(dwc->dev, "unknown endpoint event %d\n", event->endpoint_event);
- 	}
- }
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index c0ca4d12f95d..054f6f297e17 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -3803,6 +3803,8 @@ static void dwc3_endpoint_interrupt(struct dwc3 *dwc,
- 		break;
- 	case DWC3_DEPEVT_RXTXFIFOEVT:
- 		break;
-+	default:
-+		dev_err(dwc->dev, "unknown endpoint event %d\n", event->endpoint_event);
- 	}
- }
- 
-
-base-commit: c8c655c34e33544aec9d64b660872ab33c29b5f1
--- 
-2.40.1.495.gc816e09b53d-goog
+Tested again on s390 using QEMU with a memory backend file (on ext4) and vfio-pci -- This time both vfio_pin_pages_remote (which will call pin_user_pages_remote(flags | FOLL_LONGTERM)) and the pin_user_pages_fast(FOLL_WRITE | FOLL_LONGTERM) in kvm_s390_pci_aif_enable are being allowed (e.g. returning positive pin count)
 
