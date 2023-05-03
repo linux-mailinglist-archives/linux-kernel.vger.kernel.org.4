@@ -2,94 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6ADC6F4F32
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 05:43:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 865916F4F36
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 05:45:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229511AbjECDnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 23:43:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60814 "EHLO
+        id S229538AbjECDpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 23:45:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjECDnr (ORCPT
+        with ESMTP id S229461AbjECDpb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 23:43:47 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793C21FEE;
-        Tue,  2 May 2023 20:43:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=ZIADMU0Kl928OS/WKfRbeOaDTqGObzNlyLZhin0OEhA=; b=Z6LjI6NPKvxa7F9MQg2+mHEqf6
-        BatQJO2ZLt9WUOwD0Ti+q3lhN7BjZHsoBx4dRIe/3xl8XgC80Z1Yo0i7T9gbB6Uzb5tjBfYAfVccU
-        3e/bvgfRhNQ89Beg7Y24Y3xyTpChATHEmd+GBHxMmcO0x6/gWY3JnN2i+kodjBfWWUFPE8Y4AKB3a
-        HdOCqzoFLE4a1o2xBnN9YqCH+fFKQBfEnyXgJcaABsWQw9XZN9Q5qI/67H4eG9t7S4YZEUJ32FZ8f
-        CV/HasI9G/AuAsIC8o++ybW6z1AN3AtfY0BoalPBLMZh5os6sa0NAktiSfgNo+12PN26+vhourEfs
-        b7oLqKag==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pu3P7-003FF8-11;
-        Wed, 03 May 2023 03:43:45 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     torvalds@linux-foundation.org, patches@lists.linux.dev,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, kernel test robot <lkp@intel.com>,
-        Luis Chamberlain <mcgrof@kernel.org>
-Subject: [PATCH] module: include internal.h in module/dups.c
-Date:   Tue,  2 May 2023 20:43:44 -0700
-Message-Id: <20230503034344.773568-1-mcgrof@kernel.org>
-X-Mailer: git-send-email 2.38.1
+        Tue, 2 May 2023 23:45:31 -0400
+Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA4A92683;
+        Tue,  2 May 2023 20:45:29 -0700 (PDT)
+Received: by mail-ua1-x92d.google.com with SMTP id a1e0cc1a2514c-77d46c7dd10so1521686241.0;
+        Tue, 02 May 2023 20:45:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683085529; x=1685677529;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e/HXv6CG+LxJ7BClSWO3ugL9TVXyN0Lqq9OyDlKsu+U=;
+        b=hZ2fCikkaJ3a8AARHzwxnFamVk+Ky1uH8Sv3ZmruF70hU5fTJER//ZGjvUth/M+Tls
+         w+FlE6924Bz6XqfFZn50ZPuqGiHpw0PrAZtx5WVfEv2joJ6RyF/L4ynNU0jPzRak30Ck
+         z22nyDOyti4yCC9GS6fzKvB7vDbkmrt3kxYb9Z9RexGYEd51PgLB+zWssA18S7zmJ4Em
+         sdTP5SHmqQEzxnobgoPdo8+9/GfCBEVtZCEdVLhAhw1miPbyAXyUpJ5MwOLoObrXUbRN
+         tukCKwHxTTci7FSkFfebZdBTI+HKHArdxM8bCliFQxnkwQm/+WB9Nkvl8+DxWnwk0zTS
+         fPVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683085529; x=1685677529;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=e/HXv6CG+LxJ7BClSWO3ugL9TVXyN0Lqq9OyDlKsu+U=;
+        b=IYe22Jvc5IRMcVeW7LJ9/nz54Hg1X29GAYj89+iQHuU7mQv8zEH5Ka6eqwBQiCMNCe
+         O6ICOyyaebNCA1ms5x0F+2m38eu1N8+ZAh5jkPsALux2OjrOTJHmGdFzp44xkOjEj12Y
+         D4ksbrWSBM7iv7Q00Ru9cyaiWL6c1bF+R3ViqIA+rLEOtuhHiDynmGW/jnlYi+B62bCF
+         eaFRYIZzxWaXRDMsmg3klcH1xM2pXNNGJw79VqxXtyqb5zgvilrjOtfuz6MEmmo5RuLV
+         3qN4+b21tKQyD0rYkSAiSRO2pzhl51tcWQmY2ja93PqRSQXqApXdDqIH6YP0uvKJaIix
+         ANcA==
+X-Gm-Message-State: AC+VfDzR7jzgLk2UDP620tl6ZaMERugrcsHRPvFDR9TtbTpDdog8sSJ+
+        4A4Rk0f/Ahb6NSj/oWpH/4THO8YdYtAbkcfL/hY=
+X-Google-Smtp-Source: ACHHUZ5tzzMWOASC+yK6hxGcJYLcI+b9I/oT+mJ2v1V8ZQ4we7IPzywRC+azTftiFych0glVNcKyJE7ikI8ACK/DupM=
+X-Received: by 2002:a1f:5e10:0:b0:432:e55:b103 with SMTP id
+ s16-20020a1f5e10000000b004320e55b103mr290197vkb.3.1683085528720; Tue, 02 May
+ 2023 20:45:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230418014037.2412394-1-drosen@google.com> <20230418014037.2412394-9-drosen@google.com>
+ <20230502033825.ofcxttuquoanhe7b@dhcp-172-26-102-232.dhcp.thefacebook.com>
+In-Reply-To: <20230502033825.ofcxttuquoanhe7b@dhcp-172-26-102-232.dhcp.thefacebook.com>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Wed, 3 May 2023 06:45:17 +0300
+Message-ID: <CAOQ4uxi3WXb2MKx+YUnsCad2jUDtUuafFzuqJi0uo4us7xmfuA@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 08/37] fuse: Add fuse-bpf, a stacked fs extension
+ for FUSE
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Daniel Rosenberg <drosen@google.com>,
+        Miklos Szeredi <miklos@szeredi.hu>, bpf@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-unionfs@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Joanne Koong <joannelkoong@gmail.com>,
+        Mykola Lysenko <mykolal@fb.com>, kernel-team@android.com,
+        Paul Lawrence <paullawrence@google.com>,
+        Alessio Balsini <balsini@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Tue, May 2, 2023 at 6:38=E2=80=AFAM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Mon, Apr 17, 2023 at 06:40:08PM -0700, Daniel Rosenberg wrote:
+> > Fuse-bpf provides a short circuit path for Fuse implementations that ac=
+t
+> > as a stacked filesystem. For cases that are directly unchanged,
+> > operations are passed directly to the backing filesystem. Small
+> > adjustments can be handled by bpf prefilters or postfilters, with the
+> > option to fall back to userspace as needed.
+>
+> Here is my understanding of fuse-bpf design:
+> - bpf progs can mostly read-only access fuse_args before and after proper=
+ vfs
+>   operation on a backing path/file/inode.
+> - args are unconditionally prepared for bpf prog consumption, but progs w=
+on't
+>   be doing anything with them most of the time.
+> - progs unfortunately cannot do any real work. they're nothing but simple=
+ filters.
+>   They can give 'green light' for a fuse_FOO op to be delegated to proper=
+ vfs_FOO
+>   in backing file. The logic in this patch keeps track of backing_path/fi=
+le/inode.
+> - in other words bpf side is "dumb", but it's telling kernel what to do w=
+ith
+>   real things like path/file/inode and the kernel is doing real work and =
+calling vfs_*.
+>
+> This design adds non-negligible overhead to fuse when CONFIG_FUSE_BPF is =
+set.
+> Comparing to trip to user space it's close to zero, but the cost of
+> initialize_in/out + backing + finalize is not free.
+> The patch 33 is especially odd.
+> fuse has a traditional mechanism to upcall to user space with fuse_simple=
+_request.
+> The patch 33 allows bpf prog to return special return value and trigger t=
+wo more
+> fuse_bpf_simple_request-s to user space. Not clear why.
+> It seems to me that the main assumption of the fuse bpf design is that bp=
+f prog
+> has to stay short and simple. It cannot do much other than reading and co=
+mparing
+> strings with the help of dynptr.
+> How about we allow bpf attach to fuse_simple_request and nothing else?
+> All fuse ops call it anyway and cmd is already encoded in the args.
+> Then let bpf prog read fuse_args as-is (without converting them to bpf_fu=
+se_args)
+> and avoid doing actual fuse_req to user space.
+> Also allow bpf prog acquire and remember path/file/inode.
+> The verifier is already smart enough to track that the prog is doing it s=
+afely
+> without leaking references and what not.
+> And, of course, allow bpf prog call vfs_* via kfuncs.
+> In other words, instead of hard coding
+>  +#define bpf_fuse_backing(inode, io, out,                             \
+>  +                      initialize_in, initialize_out,                 \
+>  +                      backing, finalize, args...)                    \
+> one for each fuse_ops in the kernel let bpf prog do the same but on deman=
+d.
+> The biggest advantage is that this patch set instead of 95% on fuse side =
+and 5% on bpf
+> will become 5% addition to fuse code. All the logic will be handled purel=
+y by bpf.
+> Right now you're limiting it to one backing_file per fuse_file.
+> With bpf prog driving it the prog can keep multiple backing_files and shu=
+ffle
+> access to them as prog decides.
+> Instead of doing 'return BPF_FUSE_CONTINUE' the bpf progs will
+> pass 'path' to kfunc bpf_vfs_open, than stash 'struct bpf_file*', etc.
+> Probably will be easier to white board this idea during lsfmmbpf.
+>
 
-Two newly introduced functions are declared in a header that is not
-included before the definition, causing a warning with sparse or
-'make W=1':
+I have to admit that sounds a bit challenging, but I'm up for sitting
+in front of that whiteboard :)
 
-kernel/module/dups.c:118:6: error: no previous prototype for 'kmod_dup_request_exists_wait' [-Werror=missing-prototypes]
-  118 | bool kmod_dup_request_exists_wait(char *module_name, bool wait, int *dup_ret)
-      |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-kernel/module/dups.c:220:6: error: no previous prototype for 'kmod_dup_request_announce' [-Werror=missing-prototypes]
-  220 | void kmod_dup_request_announce(char *module_name, int ret)
-      |      ^~~~~~~~~~~~~~~~~~~~~~~~~
+BTW, thanks Daniel (Borkmann) for sorting out the cross track
+sessions for FS-BFP.
+We have another FS only session on FUSE-BFP, but I feel there is plenty
+to discuss on the FUSE-bypass part, as well as on the BPF part.
+Same goes for BFP iterators for filesystems session.
 
-Add an explicit include to ensure the prototypes match.
-
-Fixes: 8660484ed1cf ("module: add debugging auto-load duplicate module support")
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/oe-kbuild-all/202304141440.DYO4NAzp-lkp@intel.com/
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
----
-
- kernel/module/dups.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-Linus, only one fix so far for modules so might as well send this as a patch.
-
-diff --git a/kernel/module/dups.c b/kernel/module/dups.c
-index aa8e1361fdb5..f3d7ea1e96d8 100644
---- a/kernel/module/dups.c
-+++ b/kernel/module/dups.c
-@@ -32,6 +32,8 @@
- #include <linux/async.h>
- #include <linux/uaccess.h>
- 
-+#include "internal.h"
-+
- #undef MODULE_PARAM_PREFIX
- #define MODULE_PARAM_PREFIX "module."
- static bool enable_dups_trace = IS_ENABLED(CONFIG_MODULE_DEBUG_AUTOLOAD_DUPS_TRACE);
--- 
-2.39.2
-
+Thanks,
+Amir.
