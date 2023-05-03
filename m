@@ -2,105 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18E0B6F57F8
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 14:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F63F6F57F9
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 14:33:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbjECMco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 08:32:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44720 "EHLO
+        id S229948AbjECMdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 08:33:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbjECMce (ORCPT
+        with ESMTP id S229805AbjECMdV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 08:32:34 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 766C759CF;
-        Wed,  3 May 2023 05:32:32 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 343CWQoS030704;
-        Wed, 3 May 2023 07:32:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1683117146;
-        bh=1GIZKi464DswWpYYI8PkLUvrxRe5Lbt01DrvEsUrNoA=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=kPEEHZxWIQW6avwgR94ygXq8+ybd6NU9MY42iWJfnWZWLooO6ZSbeTZ8kQxWM/PxP
-         yb1p4PtjRsEeYAzs4KesBmvoSsB9W/H4LGDOHCxNpivBHWJJRcSx1nFxum6CQS4UTv
-         b1EgtMmJnZI0rZYbeg6sPvL871UkYotOWyExScyM=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 343CWPo5011930
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 3 May 2023 07:32:25 -0500
-Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 3
- May 2023 07:32:25 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 3 May 2023 07:32:25 -0500
-Received: from ula0497641.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 343CWDoB124525;
-        Wed, 3 May 2023 07:32:23 -0500
-From:   Neha Malcom Francis <n-francis@ti.com>
-To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <n-francis@ti.com>, <nm@ti.com>, <vigneshr@ti.com>,
-        <kristo@kernel.org>, <u-kumar1@ti.com>
-Subject: [PATCH v5 3/3] arm64: dts: ti: k3-j7200: Add ESM support
-Date:   Wed, 3 May 2023 18:02:12 +0530
-Message-ID: <20230503123212.208457-4-n-francis@ti.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230503123212.208457-1-n-francis@ti.com>
-References: <20230503123212.208457-1-n-francis@ti.com>
+        Wed, 3 May 2023 08:33:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC9110E5
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 05:32:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683117154;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Gi64OX3Of2seO335Lxc+tT0UY6TwkdsRC//xSV8lTrE=;
+        b=e7g611dBFaY8WSx+EMdZ+n/PHYtl0sunX2AC23+bZNur+NL/PLv9O2BUIEz8k3jvVquMZi
+        AAIFSpOOs3WrH30Z4gVOnCMtXQskotjG423nrVgmc7XLYDFrDxROvN9gnAOzPrYOBx1jNr
+        TPTQPvXpTL1eHBsSWrFI1DK1DxroYZ8=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-137-a0xRB9EyN8-59rg55rmjiw-1; Wed, 03 May 2023 08:32:33 -0400
+X-MC-Unique: a0xRB9EyN8-59rg55rmjiw-1
+Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-5efc80e8485so76704196d6.0
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 05:32:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683117153; x=1685709153;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Gi64OX3Of2seO335Lxc+tT0UY6TwkdsRC//xSV8lTrE=;
+        b=fT1UsKJAGMJCA16TPCxn9bT7LWWGEGzZ3DVVfD+HQrOU0xH+BlRZqNoe1vwW4rkQtF
+         Q0x7ImOGH6T7iBoVV0Bhmy0kO9+r+CA8VPGkDZZmXh7T8pDbmEnFoaod/AhYL8rnvqJ3
+         fgiErflud+1pPLAvrKezaqAhcVJYm0RBrNoCx2JORrpc4Tf6BXn0paqwRlWmKV5iroVF
+         8fwr0gAHMRSeNwABpwGimYYuUNgNumgUSNF5DhLrG6D9VmYC2/BgQG5Q2x3ZWl/oDY83
+         G0wELs+QWyJvCkffEESR5gKfGyKAXRHsQrIP2rbix6jHpJWwrt6HEgGqOuVu3zmfyTwS
+         3Lwg==
+X-Gm-Message-State: AC+VfDwDEWya6gVwm8/t/onGSjVSME/9NEmq/1T/4phdDGEWp+S9ysPh
+        V5tOw3jWeu8ELJ/M3V/xemfuxa78QcqcuYcMdo2W1jt7Kc24Xnoh6HcRv67YjQ6K5evbIGDuRYq
+        taKrhzokwjKOd6X5UX721hh/9
+X-Received: by 2002:a05:6214:2b06:b0:5b5:9c2:8c29 with SMTP id jx6-20020a0562142b0600b005b509c28c29mr10558692qvb.12.1683117153213;
+        Wed, 03 May 2023 05:32:33 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7gD3DZqKFg22wLfhmmFhk3KWfQV1G/GfCVYnFgmZALN4tXOUdfnVs05JyYA1d20ExjdNJAIw==
+X-Received: by 2002:a05:6214:2b06:b0:5b5:9c2:8c29 with SMTP id jx6-20020a0562142b0600b005b509c28c29mr10558669qvb.12.1683117152962;
+        Wed, 03 May 2023 05:32:32 -0700 (PDT)
+Received: from [192.168.1.31] (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id l17-20020a056214029100b005e8f61012e9sm10300002qvv.26.2023.05.03.05.32.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 May 2023 05:32:32 -0700 (PDT)
+Message-ID: <e0d252e7-a025-511e-22b3-c46f1f7ac054@redhat.com>
+Date:   Wed, 3 May 2023 05:32:29 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.1
+Subject: Re: [PATCH] pds_core: add stub macros for pdsc_debufs_* when !
+ CONFIG_DEBUG_FS
+Content-Language: en-US
+To:     Jiri Pirko <jiri@resnulli.us>
+Cc:     shannon.nelson@amd.com, brett.creeley@amd.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230502145220.2927464-1-trix@redhat.com>
+ <ZFIO4FixTx1HC1RJ@nanopsycho>
+From:   Tom Rix <trix@redhat.com>
+In-Reply-To: <ZFIO4FixTx1HC1RJ@nanopsycho>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add address entry mapping ESM on J7200.
 
-Signed-off-by: Neha Malcom Francis <n-francis@ti.com>
----
- arch/arm64/boot/dts/ti/k3-j7200-main.dtsi | 6 ++++++
- arch/arm64/boot/dts/ti/k3-j7200.dtsi      | 1 +
- 2 files changed, 7 insertions(+)
+On 5/3/23 12:36 AM, Jiri Pirko wrote:
+> Tue, May 02, 2023 at 04:52:20PM CEST, trix@redhat.com wrote:
+>> When CONFIG_DEBUG_FS is not defined there is this representative link error
+>> ld: drivers/net/ethernet/amd/pds_core/main.o: in function `pdsc_remove':
+>> main.c:(.text+0x35c): undefined reference to `pdsc_debugfs_del_dev
+>>
+>> Avoid these link errors when CONFIG_DEBUG_FS is not defined by
+>> providing some empty macros.
+>>
+>> Signed-off-by: Tom Rix <trix@redhat.com>
+>> ---
+>> drivers/net/ethernet/amd/pds_core/core.h | 12 ++++++++++++
+>> 1 file changed, 12 insertions(+)
+>>
+>> diff --git a/drivers/net/ethernet/amd/pds_core/core.h b/drivers/net/ethernet/amd/pds_core/core.h
+>> index e545fafc4819..0b39a6dc65c8 100644
+>> --- a/drivers/net/ethernet/amd/pds_core/core.h
+>> +++ b/drivers/net/ethernet/amd/pds_core/core.h
+>> @@ -261,6 +261,7 @@ int pdsc_dl_enable_validate(struct devlink *dl, u32 id,
+>>
+>> void __iomem *pdsc_map_dbpage(struct pdsc *pdsc, int page_num);
+>>
+>> +#ifdef CONFIG_DEBUG_FS
+>> void pdsc_debugfs_create(void);
+>> void pdsc_debugfs_destroy(void);
+>> void pdsc_debugfs_add_dev(struct pdsc *pdsc);
+>> @@ -270,6 +271,17 @@ void pdsc_debugfs_add_viftype(struct pdsc *pdsc);
+>> void pdsc_debugfs_add_irqs(struct pdsc *pdsc);
+>> void pdsc_debugfs_add_qcq(struct pdsc *pdsc, struct pdsc_qcq *qcq);
+>> void pdsc_debugfs_del_qcq(struct pdsc_qcq *qcq);
+>> +#else
+>> +#define pdsc_debugfs_create()
+>> +#define pdsc_debugfs_destroy()
+>> +#define pdsc_debugfs_add_dev(pdsc)
+>> +#define pdsc_debugfs_del_dev(pdsc)
+>> +#define pdsc_debugfs_add_ident(pdsc)
+>> +#define pdsc_debugfs_add_viftype(pdsc)
+>> +#define pdsc_debugfs_add_irqs(pdsc)
+>> +#define pdsc_debugfs_add_qcq(pdsc, qcq)
+>> +#define pdsc_debugfs_del_qcq(qcq)
+> Usually this is done using static inline stub functions. Any reason to
+> not to do it in the same way?
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi b/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
-index ef352e32f19d..89f816f5e53d 100644
---- a/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
-@@ -1010,4 +1010,10 @@ main_r5fss0_core1: r5f@5d00000 {
- 			ti,loczrama = <1>;
- 		};
- 	};
-+
-+	main_esm: esm@700000 {
-+		compatible = "ti,j721e-esm";
-+		reg = <0x0 0x700000 0x0 0x1000>;
-+		ti,esm-pins = <656>, <657>;
-+	};
- };
-diff --git a/arch/arm64/boot/dts/ti/k3-j7200.dtsi b/arch/arm64/boot/dts/ti/k3-j7200.dtsi
-index bbe380c72a7e..4998eb4fbe75 100644
---- a/arch/arm64/boot/dts/ti/k3-j7200.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j7200.dtsi
-@@ -128,6 +128,7 @@ cbass_main: bus@100000 {
- 		#size-cells = <2>;
- 		ranges = <0x00 0x00100000 0x00 0x00100000 0x00 0x00020000>, /* ctrl mmr */
- 			 <0x00 0x00600000 0x00 0x00600000 0x00 0x00031100>, /* GPIO */
-+			 <0x00 0x00700000 0x00 0x00700000 0x00 0x00001000>, /* ESM */
- 			 <0x00 0x00a40000 0x00 0x00a40000 0x00 0x00000800>, /* timesync router */
- 			 <0x00 0x01000000 0x00 0x01000000 0x00 0x0d000000>, /* Most peripherals */
- 			 <0x00 0x30000000 0x00 0x30000000 0x00 0x0c400000>, /* MAIN NAVSS */
--- 
-2.34.1
+I do not mind changing the patch if that is what is required.
+
+However I believe Paolo said the change was being handled by another patch.
+
+Tom
+
+>
+>
+>> +#endif
+>>
+>> int pdsc_err_to_errno(enum pds_core_status_code code);
+>> bool pdsc_is_fw_running(struct pdsc *pdsc);
+>> -- 
+>> 2.27.0
+>>
 
