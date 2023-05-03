@@ -2,86 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1FAB6F4E68
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 03:17:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E3416F4E88
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 03:20:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbjECBRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 21:17:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55596 "EHLO
+        id S229502AbjECBUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 21:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjECBRe (ORCPT
+        with ESMTP id S229575AbjECBTw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 21:17:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D7D2D69;
-        Tue,  2 May 2023 18:17:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B1290629CE;
-        Wed,  3 May 2023 01:17:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B903C433A4;
-        Wed,  3 May 2023 01:17:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683076652;
-        bh=hzNYaAPUaGLZ1v0sTCo4kr9f/IJ1faX5mnRj5TAeAKs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=QMxxEJKiF/Xy/wpJ45M6Vv6cDRwnVgmz71oBe+yu+VPg0ZvwY64iyWw1oPr8JUNsE
-         0+NbSQmo02gKsS9daJssd0DmAziCO02D1v+rCR9/TCg9DRmRIzIHHDkEC5EBHq42cC
-         iZJESeEwfq5QYqjYTczZHNt4kDZ5i7w0VJs1GJao3IU+1auKFA2BykAAE5UNE3BtXQ
-         aC4MLEcHqVgH0EAnYnpuUjEij93YdOr8eL89gHougN+yaCFsiDwKF73MyP/ntMVVx7
-         Z0tyl6sVDb0DoXY+oCDA68mFlGLNWyOY++rZwaVyScUlpxomtUHulQA3qlYqFCh+jI
-         ZWyTVi+oNLAKA==
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-4efe8991bafso5827118e87.0;
-        Tue, 02 May 2023 18:17:31 -0700 (PDT)
-X-Gm-Message-State: AC+VfDzOGuDHTJ8vgpfZ2SIogWx5lN3a+TZgCbJBjTPRL6Re+O7Uf5XY
-        Pr0kzft79MeZsmfY0mvuMefmJ1XDurLSBZ5MXQ==
-X-Google-Smtp-Source: ACHHUZ55e+9yQPQvr0rpIhj0RbrnT2KB6aoc0WjPIM2H1fvT2bLnAwsd1znjwXMKc8qD22lf5irJ3k12RJA0LJgPE6Y=
-X-Received: by 2002:a05:6512:964:b0:4ea:c730:aabe with SMTP id
- v4-20020a056512096400b004eac730aabemr592385lft.20.1683076649996; Tue, 02 May
- 2023 18:17:29 -0700 (PDT)
+        Tue, 2 May 2023 21:19:52 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD4B2D69;
+        Tue,  2 May 2023 18:19:44 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 343115rD001844;
+        Wed, 3 May 2023 01:19:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : subject :
+ date : message-id : mime-version : content-type :
+ content-transfer-encoding : to : cc; s=qcppdkim1;
+ bh=rKP4YVtHkxJqxSOqGp+MkG6/BHs2hqGdO5ozyHsKlpw=;
+ b=GL1G6dmt1PJ0LsM6Z8zFFKvD9hqCKNHQUm/+jytJMAsC3C1YVXyuyBYd8HaiOE1KQSrW
+ vjFK2+GSoPvk8X1baR3OvBFbwxSmgXBCByqSs4fmYa72Op/MKHANJr8XnxmIBWvKdg8V
+ UoOpxDRJj2w9dDJwpowaI9Dd6UuDQ+mZa0FIxdEF8HHH3+Gm/pfuJCTcBUFDPwtM4LvF
+ AN+HbQiQy4DpdqulOjLXfFWj1MxICUQwXt5r5lkEAmMvEk4FSwIz3B/gCioxNWeZLh5J
+ WyIjjgczl1eWJ+mcId3zd22Ic6k6MZXiQotJFQZhengVODSM+AHs2kfL/BWVFnwUDNKb 1g== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qawcta91t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 03 May 2023 01:19:37 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3431JaLv031340
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 3 May 2023 01:19:36 GMT
+Received: from jesszhan-linux.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Tue, 2 May 2023 18:19:36 -0700
+From:   Jessica Zhang <quic_jesszhan@quicinc.com>
+Subject: [PATCH 0/4] Add DSC v1.2 Support for DSI
+Date:   Tue, 2 May 2023 18:19:11 -0700
+Message-ID: <20230405-add-dsc-support-v1-0-6bc6f03ae735@quicinc.com>
 MIME-Version: 1.0
-References: <20220328000915.15041-1-ansuelsmth@gmail.com> <85eb14ec-f465-7447-ad77-a3dabc666f47@kernel.org>
- <YkKRYnN84D9VZhGj@Ansuel-xps.localdomain> <CAL_Jsq+RQQ-ADMxLPUFwk6S6kGmb6oNDy4k52fnU0EtbUvqmSA@mail.gmail.com>
- <CAMuHMdWNTE48MFy6fqxAsfMWz9b6E7dVNXtXtESP95sxk2PGwA@mail.gmail.com>
- <CAL_JsqJthKTm8bhRF2B=ae1tvtPeYYXx_Tm76qQtSwLtH5C6VA@mail.gmail.com>
- <720a2829-b6b5-411c-ac69-9a53e881f48d@app.fastmail.com> <CAL_JsqKCtmkwzKa01gyG65fH8ye6R3KhR41PJbJhOJ4X9j=znA@mail.gmail.com>
- <bce93654-fc36-3d12-282d-76fafb8f51ce@linaro.org>
-In-Reply-To: <bce93654-fc36-3d12-282d-76fafb8f51ce@linaro.org>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Tue, 2 May 2023 20:17:17 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqJXd_EpOQwwNEAn25mzFfkhEvqzur6ui5Ca+dbt2kA8-Q@mail.gmail.com>
-Message-ID: <CAL_JsqJXd_EpOQwwNEAn25mzFfkhEvqzur6ui5Ca+dbt2kA8-Q@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/1] Categorize ARM dts directory
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Olof Johansson <olof@lixom.net>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-actions@lists.infradead.org,
-        linux-sunxi@lists.linux.dev,
-        Linux-OMAP <linux-omap@vger.kernel.org>,
-        linux-amlogic@lists.infradead.org, linux-arm-kernel@axis.com,
-        linux-aspeed@lists.ozlabs.org,
-        linux-rpi-kernel@lists.infradead.org,
-        chrome-platform@lists.linux.dev,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-samsung-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        kernel@dh-electronics.com, linux-mediatek@lists.infradead.org,
-        openbmc@lists.ozlabs.org, linux-tegra@vger.kernel.org,
-        "linux-oxnas@groups.io" <linux-oxnas@groups.io>,
-        linux-arm-msm@vger.kernel.org, linux-unisoc@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        linux-realtek-soc@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAI+2UWQC/x2NQQqDMBAAvyJ77kKiKbT9Sulhk6x1D8awa4sg/
+ r2xx2EYZgdjFTZ4dDsof8VkKQ38pYM0UXkzSm4MvesHF9wVKWfMltA+tS664sh+cJHC/RY8tCq
+ SMUalkqazm23Gwtt6qqo8yvafPV/H8QPpET2hfAAAAA==
+To:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Marijn Suijten <marijn.suijten@somainline.org>
+CC:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>
+X-Mailer: b4 0.13-dev-bfdf5
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1683076775; l=1613;
+ i=quic_jesszhan@quicinc.com; s=20230329; h=from:subject:message-id;
+ bh=PFFcQW6FTUXHIiVB7iLGZXdzML2G70MnT3tS7Jf4MOs=;
+ b=xvSfOsQs9d3kDGc+arl6THVhp9DuNnU0HYusnr8S65iUl6v+/QBVZAKNGh1Y0p5b2NSZfTL/Z
+ Pzv9/nfq842DCcT4V2Bx710V/LTEg0fP8FqTI/gxGqlUKWJAAuMSK9C
+X-Developer-Key: i=quic_jesszhan@quicinc.com; a=ed25519;
+ pk=gAUCgHZ6wTJOzQa3U0GfeCDH7iZLlqIEPo4rrjfDpWE=
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: pbAhUElu8_n0hA7eH1jv6HxoXm669A69
+X-Proofpoint-GUID: pbAhUElu8_n0hA7eH1jv6HxoXm669A69
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-02_14,2023-04-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
+ lowpriorityscore=0 priorityscore=1501 bulkscore=0 phishscore=0
+ adultscore=0 mlxlogscore=999 impostorscore=0 malwarescore=0 suspectscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2305030009
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,106 +92,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 2, 2023 at 5:52=E2=80=AFPM Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
->
-> On 02/05/2023 22:40, Rob Herring wrote:
-> > On Tue, May 2, 2023 at 3:15=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wr=
-ote:
-> >>
-> >> On Tue, Apr 25, 2023, at 17:57, Rob Herring wrote:
-> >>> On Tue, Apr 25, 2023 at 2:28=E2=80=AFAM Geert Uytterhoeven <geert@lin=
-ux-m68k.org> wrote:
-> >>>
-> >>>> Does your script also cater for .dts files not matching any pattern,
-> >>>> but including a .dtsi file that does match a pattern?
-> >>>
-> >>> I assume I built everything after moving, but maybe not...
-> >>>
-> >>> That's all just "details". First, we need agreement on a) moving
-> >>> things to subdirs and b) doing it 1-by-1 or all at once. So far we've
-> >>> been stuck on a) for being 'too much churn'.
-> >>
-> >> Sorry for missing most of the discussion last week. The script sounds
-> >> fine to me, the only reason I didn't want to do this in the past is th=
-at
-> >> we had the plan to move platforms out of the kernel tree to an externa=
-l
-> >> repository and I wanted to do this platform at a time and also only mo=
-ve
-> >> each one once. I don't think that is going to happen anytime soon now,
-> >> so let's just do your script.
-> >>
-> >> Can you send me the script and/or a pull request of the resulting
-> >> tree based on my soc/dt branch? Everything is merged upstream,
-> >> and I think git-merge would handle the remaining merges with any
-> >> other changes in mainline.
-> >
-> > I've dusted off my script and made a branch[1] with the result.
-> > There's just a couple of fixes needed after the script is run (see the
-> > top commit). The cross arch includes are all fixed up by the script.
-> > dtbs_install maintains a flat install. I compared the number of .dtbs
-> > before and after to check the script.
-> >
-> > I think the only issue remaining is finalizing the mapping of
-> > platforms to subdirs. What I have currently is a mixture of SoC
-> > families and vendors. The most notable are all the Freescale/NXP
-> > platforms, pxa, socfpga, and stm32. It's not consistent with arm64
-> > either. Once that's finalized, I still need to go update MAINTAINERS.
-> >
-> > Here's the current mapping:
-> >
-> > vendor_map =3D {
-> >      'alphascale' : 'alphascale',
-> >      'alpine' : 'alpine',
-> >      'artpec' : 'axis',
-> >      'axm' : 'lsi',
-> >      'cx9' : 'cnxt',
-> >      'ecx' : 'calxeda',
-> >      'highbank' : 'calxeda',
-> >      'ep7' : 'cirrus',
-> >      'mxs': 'mxs',
-> >      'imx23': 'mxs',
-> >      'imx28': 'mxs',
-> >      'sun' : 'allwinner',
-> >      'imx': 'imx',
-> >      'e6' : 'imx',
-> >      'e7' : 'imx',
-> >      'mba6' : 'imx',
-> >      'ls': 'fsl',
-> >      'vf': 'fsl',
-> >      'qcom': 'qcom',
-> >      'am3' : 'ti',
-> >      'am4' : 'ti',
-> >      'am5' : 'ti',
-> >      'dra' : 'ti',
-> >      'keystone' : 'ti',
-> >      'omap' : 'ti',
-> >      'compulab' : 'ti',
-> >      'logicpd' : 'ti',
-> >      'elpida' : 'ti',
-> >      'motorola' : 'ti',
-> >      'twl' : 'ti',
-> >      'da' : 'ti',
-> >      'dm' : 'ti',
-> >      'nspire' : 'nspire',
-> >      'armada' : 'marvell',
-> >      'dove' : 'marvell',
-> >      'kirkwood' : 'marvell',
-> >      'orion' : 'marvell',
-> >      'mvebu' : 'marvell',
-> >      'mmp' : 'marvell',
-> >      'berlin' : 'berlin',
-> >      'pxa2' : 'pxa',
-> >      'pxa3' : 'pxa',
-> >      'pxa' : 'marvell',
->
-> I'd question if it makes sense to split the pxa line. Yes, it was sold
-> by Intel to Marvell, but IIRC the devices still had some inheritance.
-> So, if we have the 'pxa' subdir, I'd move Marvell PXAs to that dir too.
+This is a series of changes for DSI to enable support for DSC v1.2.
 
-I think I probably split it because it was different maintainers.
-Though it doesn't look like pxa168 or pxa910 have any maintainer. They
-are a mixture of pxa and mmp I think.
+This includes:
 
-Rob
+1) Dividing the pclk_rate by the compression ratio when DSC is enabled
+2) Fixing the word count calculation for DSC
+3) Setting the DATA_COMPRESS bit when DSC is enabled
+
+With these changes (and the dependency below), DSC v1.2 should work over
+DSI.
+
+Depends-on: "add DSC 1.2 dpu supports" [1]
+
+[1] https://patchwork.freedesktop.org/series/116789/
+
+Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
+---
+Jessica Zhang (4):
+      drm/msm/dsi: Adjust pclk rate for compression
+      drm/msm/dsi: Fix compressed word count calculation
+      drm/msm/dpu: Add has_data_compress to dpu_caps
+      drm/msm/dpu: Enable compression for command mode
+
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h |  1 +
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h |  1 +
+ .../drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h   |  1 +
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h |  1 +
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h |  1 +
+ .../gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c   |  4 ++++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |  2 ++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c        |  7 +++++++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h        |  2 ++
+ drivers/gpu/drm/msm/dsi/dsi_host.c                 | 23 +++++++++++++++++-----
+ 10 files changed, 38 insertions(+), 5 deletions(-)
+---
+base-commit: a4e4b4826fe482d5f63a0232bc6588da2edfa45b
+change-id: 20230405-add-dsc-support-fe130ba49841
+
+Best regards,
+-- 
+Jessica Zhang <quic_jesszhan@quicinc.com>
+
