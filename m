@@ -2,146 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F53D6F6101
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 00:01:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 286A46F6103
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 00:03:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbjECWBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 18:01:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50154 "EHLO
+        id S229619AbjECWDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 18:03:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjECWBs (ORCPT
+        with ESMTP id S229459AbjECWDL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 18:01:48 -0400
-Received: from out-22.mta0.migadu.com (out-22.mta0.migadu.com [91.218.175.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 663C276BD
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 15:01:47 -0700 (PDT)
-Date:   Wed, 3 May 2023 15:01:39 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1683151305;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EEe52o0s0vNqN0LkYqOOUs/hbrATnBchTc/XRGaSnAk=;
-        b=t/kjj7HN301F9hKxMUMFHnqsn1ebJ04weciwV5AR4GNMOFx76dj+cEviXvKJXPn2GHOwAs
-        hrIbKruipx/ci95oj6iMUPW4gbPyiKqZYzZLVUMhwui0wpDdfyDxObj2xJ3V5g2E4oSgDE
-        /xTeu5WDhyZJlklXPYIx+7izypTSjes=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Baokun Li <libaokun1@huawei.com>, linux-fsdevel@vger.kernel.org,
-        viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz,
-        tj@kernel.org, dennis@kernel.org, adilger.kernel@dilger.ca,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yangerkun@huawei.com, houtao1@huawei.com, stable@vger.kernel.org
-Subject: Re: [PATCH v2] writeback, cgroup: fix null-ptr-deref write in
- bdi_split_work_to_wbs
-Message-ID: <ZFLZw33qCKIYSDMJ@P9FQF9L96D.corp.robot.car>
-References: <20230410130826.1492525-1-libaokun1@huawei.com>
- <20230502171701.58465d422e94cf038178dc51@linux-foundation.org>
+        Wed, 3 May 2023 18:03:11 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CDAD7DB0;
+        Wed,  3 May 2023 15:03:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683151390; x=1714687390;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=J3S7+Z2Bb+TaVT5MbkGNBgkG899lTs0nMS79YuENME8=;
+  b=N/a22sK45untpCKDl72rrW3lBnu+PVG7pjy62zW1VdKd3J/ATm0FghQF
+   YKV2ddo5MtIgEMinn/RMj/87owomEMTJZ7GhvX4S0PaQIONmsAQ/cNghM
+   BrtzZZB8pSENg2EP5AZzDy6pIaaaadf0cvhbLxCQjk+tFgCQ+ebxJOmdI
+   FeirHTXqUqxofm5x8v+xdMmhbOJADnuW5R1OzUDOd20L41vYbAIQNTJFO
+   GnsFOwwOiC9nSYV/6nte8KppeP55Q5EBb1QvK8TQgnZtVxNEDK24MnY3D
+   Nmh6ruuB02kWJocuaPzNyKiEWaaeqQmzIn2FYJh4+LMdyD5hVnvOryEfW
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="333144699"
+X-IronPort-AV: E=Sophos;i="5.99,248,1677571200"; 
+   d="scan'208";a="333144699"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2023 15:03:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="820915544"
+X-IronPort-AV: E=Sophos;i="5.99,248,1677571200"; 
+   d="scan'208";a="820915544"
+Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.212.181.38])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2023 15:03:08 -0700
+Date:   Wed, 3 May 2023 15:03:07 -0700
+From:   Alison Schofield <alison.schofield@intel.com>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        raghuhack78@gmail.com
+Cc:     linux-cxl@vger.kernel.org, ira.weiny@intel.com,
+        bwidawsk@kernel.org, dan.j.williams@intel.com,
+        vishal.l.verma@intel.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] cxl/mbox: Remove redundant dev_err() after failed
+ mem alloc
+Message-ID: <ZFLaG8jHHXmRp67w@aschofie-mobl2>
+References: <20230428012235.119333-1-raghuhack78@gmail.com>
+ <20230428012235.119333-2-raghuhack78@gmail.com>
+ <3235466.44csPzL39Z@suse>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230502171701.58465d422e94cf038178dc51@linux-foundation.org>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3235466.44csPzL39Z@suse>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 02, 2023 at 05:17:01PM -0700, Andrew Morton wrote:
-> On Mon, 10 Apr 2023 21:08:26 +0800 Baokun Li <libaokun1@huawei.com> wrote:
+On Wed, May 03, 2023 at 08:32:37PM +0200, Fabio wrote:
+> On venerdì 28 aprile 2023 03:22:34 CEST Raghu H wrote:
+> > Issue found with checkpatch
+> > 
+> > A return of errno should be good enough if the memory allocation fails,
+> > the error message here is redundatant
 > 
-> > KASAN report null-ptr-deref:
-> > ==================================================================
-> > BUG: KASAN: null-ptr-deref in bdi_split_work_to_wbs+0x5c5/0x7b0
-> > Write of size 8 at addr 0000000000000000 by task sync/943
-> > CPU: 5 PID: 943 Comm: sync Tainted: 6.3.0-rc5-next-20230406-dirty #461
-> > Call Trace:
-> >  <TASK>
-> >  dump_stack_lvl+0x7f/0xc0
-> >  print_report+0x2ba/0x340
-> >  kasan_report+0xc4/0x120
-> >  kasan_check_range+0x1b7/0x2e0
-> >  __kasan_check_write+0x24/0x40
-> >  bdi_split_work_to_wbs+0x5c5/0x7b0
-> >  sync_inodes_sb+0x195/0x630
-> >  sync_inodes_one_sb+0x3a/0x50
-> >  iterate_supers+0x106/0x1b0
-> >  ksys_sync+0x98/0x160
-> > [...]
-> > ==================================================================
-> > 
-> > The race that causes the above issue is as follows:
-> > 
-> >            cpu1                     cpu2
-> > -------------------------|-------------------------
-> > inode_switch_wbs
-> >  INIT_WORK(&isw->work, inode_switch_wbs_work_fn)
-> >  queue_rcu_work(isw_wq, &isw->work)
-> >  // queue_work async
-> >   inode_switch_wbs_work_fn
-> >    wb_put_many(old_wb, nr_switched)
-> >     percpu_ref_put_many
-> >      ref->data->release(ref)
-> >      cgwb_release
-> >       queue_work(cgwb_release_wq, &wb->release_work)
-> >       // queue_work async
-> >        &wb->release_work
-> >        cgwb_release_workfn
-> >                             ksys_sync
-> >                              iterate_supers
-> >                               sync_inodes_one_sb
-> >                                sync_inodes_sb
-> >                                 bdi_split_work_to_wbs
-> >                                  kmalloc(sizeof(*work), GFP_ATOMIC)
-> >                                  // alloc memory failed
-> >         percpu_ref_exit
-> >          ref->data = NULL
-> >          kfree(data)
-> >                                  wb_get(wb)
-> >                                   percpu_ref_get(&wb->refcnt)
-> >                                    percpu_ref_get_many(ref, 1)
-> >                                     atomic_long_add(nr, &ref->data->count)
-> >                                      atomic64_add(i, v)
-> >                                      // trigger null-ptr-deref
-> > 
-> > bdi_split_work_to_wbs() traverses &bdi->wb_list to split work into all wbs.
-> > If the allocation of new work fails, the on-stack fallback will be used and
-> > the reference count of the current wb is increased afterwards. If cgroup
-> > writeback membership switches occur before getting the reference count and
-> > the current wb is released as old_wd, then calling wb_get() or wb_put()
-> > will trigger the null pointer dereference above.
-> > 
-> > This issue was introduced in v4.3-rc7 (see fix tag1). Both sync_inodes_sb()
-> > and __writeback_inodes_sb_nr() calls to bdi_split_work_to_wbs() can trigger
-> > this issue. For scenarios called via sync_inodes_sb(), originally commit
-> > 7fc5854f8c6e ("writeback: synchronize sync(2) against cgroup writeback
-> > membership switches") reduced the possibility of the issue by adding
-> > wb_switch_rwsem, but in v5.14-rc1 (see fix tag2) removed the
-> > "inode_io_list_del_locked(inode, old_wb)" from inode_switch_wbs_work_fn()
-> > so that wb->state contains WB_has_dirty_io, thus old_wb is not skipped
-> > when traversing wbs in bdi_split_work_to_wbs(), and the issue becomes
-> > easily reproducible again.
-> > 
-> > To solve this problem, percpu_ref_exit() is called under RCU protection
-> > to avoid race between cgwb_release_workfn() and bdi_split_work_to_wbs().
-> > Moreover, replace wb_get() with wb_tryget() in bdi_split_work_to_wbs(),
-> > and skip the current wb if wb_tryget() fails because the wb has already
-> > been shutdown.
-> > 
-> > Fixes: b817525a4a80 ("writeback: bdi_writeback iteration must not skip dying ones")
-> > Fixes: f3b6a6df38aa ("writeback, cgroup: keep list of inodes attached to bdi_writeback")
+> Typo: it's "redundant". No problem, I think you shouldn't resend only for the 
+> purpose to fix this. But...
 > 
-> Cc Roman for this second commit.
 
-Thanks for the heads up!
+Raghu,
+checkpatch --codespell will catch misspellings in the commit log, when
+run on the HEAD^ commit or on the formatted patch file.
 
-The patch looks good to me.
-Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
+> > as per the coding style, removing it.
+> > 
+> > Signed-off-by: Raghu H <raghuhack78@gmail.com>
+> 
+> Is "Raghu H" the name you sign legal documents with? 
+> 
 
-Thanks!
+Fabio,
+Rather than asking a specific question to determine if this is a
+valid SOB, let's just point folks to the documentation to figure
+it out themselves. I'm aware that the 'sign legal documents' test
+has been used in the past, but kernel only actually requires a
+known identity.
+
+https://www.kernel.org/doc/html/v4.17/process/submitting-patches.html#sign-your-work-the-developer-s-certificate-of-origin
+https://github.com/cncf/foundation/blob/659fd32c86dc/dco-guidelines.md
+
+
+
+> If not, please send a new version signed-off-by your full legal name. 
+> Otherwise... sorry for the noise.
+> 
+> Thanks,
+> 
+> Fabio
+> 
+> > ---
+> >  drivers/cxl/core/mbox.c | 4 +---
+> >  1 file changed, 1 insertion(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
+> > index f2addb457172..11ea145b4b1f 100644
+> > --- a/drivers/cxl/core/mbox.c
+> > +++ b/drivers/cxl/core/mbox.c
+> > @@ -1112,10 +1112,8 @@ struct cxl_dev_state *cxl_dev_state_create(struct
+> > device *dev) struct cxl_dev_state *cxlds;
+> > 
+> >  	cxlds = devm_kzalloc(dev, sizeof(*cxlds), GFP_KERNEL);
+> > -	if (!cxlds) {
+> > -		dev_err(dev, "No memory available\n");
+> > +	if (!cxlds)
+> >  		return ERR_PTR(-ENOMEM);
+> > -	}
+> > 
+> >  	mutex_init(&cxlds->mbox_mutex);
+> >  	mutex_init(&cxlds->event.log_lock);
+> > --
+> > 2.39.2
+> 
+> 
+> 
+> 
