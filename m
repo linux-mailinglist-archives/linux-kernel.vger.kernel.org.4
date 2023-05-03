@@ -2,149 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDA046F4F0C
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 05:14:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9589B6F4F0F
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 05:15:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbjECDOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 23:14:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55718 "EHLO
+        id S229643AbjECDPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 23:15:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbjECDOU (ORCPT
+        with ESMTP id S229571AbjECDO5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 23:14:20 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52EFC1FCD;
-        Tue,  2 May 2023 20:14:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kvEf2TwIT7wQ5TYusfrBXHSEgIJ2RJs5xP2iaNH64zU3/WCPK7vjRJYaKS8WmhMth/jQXJwBj/JlaraSNPk0jmH08hu4k6aP5f38yz/hQTxC3/5yK3ApfEY7zmo8xLtPf8MEniOrWq5OVx0XIm+dlMO+a3x2pkYEwfdj+BmAm6qxMGiIMV3ezG+qQWX82GdwpwaRKeyd9lH8yBsyXzKOa3bZHZ809J/oyR6vv0e/kLqcl7rq6j4Are+KpZE3EJD0A/REWHGWqHfSjL26mP53LyqLcv68BI8i9z3wGS6uprYOy/28Z+7axWjcpAVJO8jdTAZXx90X1NXxUSY+73ezbA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yzZP/gsmbudKSXNL8D9BRYlR3JrAFvNok5hAXmrXH98=;
- b=k7MSScBGxY2G7ZDrK+0AIQ/K6MATe2kZl1BB3YPW+8CUMPOigK3LCQwh7Nq3aDFAaDwCK2EdYAiqJNObqikf3nVsuihSpZ8Rqt3S2DX0MUTDyje9qVgzOUrY8iuu6y54p9BdLPxqKi0n7tfJlZx3b1MSycPzUMRJo1++igIawHtGvoUMiVYk3t6Ce+elq2L5LwkZv2tCqj6IlfOP4PTiRDM5FW2AgsXCHzvAj6OJz0L/V4dSUto4xDfaf8AsWTFWf1IkO4AtDyti8S1tM5PE9eFJba8oGYvUetyWL0bELHQjLgOi/oJ1I35wFoNExwkmbBulafIjLABmQ3pgVP9oxA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yzZP/gsmbudKSXNL8D9BRYlR3JrAFvNok5hAXmrXH98=;
- b=V4EbSkM0uhkjpW9l48cPHEwfq5NTBw6XtGH/9Y9hH3ADKDcaFPpGKgMy0JM5UN9bTvgFM+oaSCKXkhOcCQTEpURRNSJDm2Neyp95AiWffWoWp3dNsxGPV7+i6ceYqpUv6xHKurbDX7pDVrYu8JcDw/sID5rDdjyM58Xm8w9iur6TpIixvZHRStOXAcD8Li2Pexm7NVV0zx8pNsxFpVs5lyM9cbSl3d/6EgQGjwxa8G9M46LI4FTK+COyaaLOOSC4bjIxNa12qt29il7zY7u5fPFsVqIVUyMwFM8voAa3j1k0HmTrdaJ7kGUwAhbccfs1HKS+pCOfOB+j6llWYDI9Xg==
-Received: from PH0PR12MB5481.namprd12.prod.outlook.com (2603:10b6:510:d4::15)
- by SA0PR12MB7076.namprd12.prod.outlook.com (2603:10b6:806:2d5::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.20; Wed, 3 May
- 2023 03:14:17 +0000
-Received: from PH0PR12MB5481.namprd12.prod.outlook.com
- ([fe80::1c51:21c0:c13c:3ed3]) by PH0PR12MB5481.namprd12.prod.outlook.com
- ([fe80::1c51:21c0:c13c:3ed3%2]) with mapi id 15.20.6363.020; Wed, 3 May 2023
- 03:14:17 +0000
-From:   Parav Pandit <parav@nvidia.com>
-To:     Feng Liu <feliu@nvidia.com>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-CC:     Jason Wang <jasowang@redhat.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Bodong Wang <bodong@nvidia.com>, William Tu <witu@nvidia.com>
-Subject: RE: [PATCH net v3] virtio_net: Fix error unwinding of XDP
- initialization
-Thread-Topic: [PATCH net v3] virtio_net: Fix error unwinding of XDP
- initialization
-Thread-Index: AQHZfVcwzjoxZpx/L0qvM1APBG0OYq9H318A
-Date:   Wed, 3 May 2023 03:14:17 +0000
-Message-ID: <PH0PR12MB54816403B23CE6D0AF2FD035DC6C9@PH0PR12MB5481.namprd12.prod.outlook.com>
-References: <20230503003525.48590-1-feliu@nvidia.com>
-In-Reply-To: <20230503003525.48590-1-feliu@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
+        Tue, 2 May 2023 23:14:57 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FEA71FD2;
+        Tue,  2 May 2023 20:14:52 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 3433EZ4G0005230, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 3433EZ4G0005230
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Wed, 3 May 2023 11:14:35 +0800
+Received: from RTEXMBS06.realtek.com.tw (172.21.6.99) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Wed, 3 May 2023 11:14:40 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS06.realtek.com.tw (172.21.6.99) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Wed, 3 May 2023 11:14:39 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
+ RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
+ 15.01.2375.007; Wed, 3 May 2023 11:14:39 +0800
+From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
+        <stanley_chang@realtek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v4 2/2] dt-bindings: usb: snps,dwc3: Add the compatible name 'snps,dwc3-rtk-soc'
+Thread-Topic: [PATCH v4 2/2] dt-bindings: usb: snps,dwc3: Add the compatible
+ name 'snps,dwc3-rtk-soc'
+Thread-Index: AQHZfLOhYfbzHfxzYE2TNUg+fEIenq9GE1eAgACG7nD//4ryAIAAh9bw//+RWQCAAIlt4IAAEN2AgAEHGaA=
+Date:   Wed, 3 May 2023 03:14:39 +0000
+Message-ID: <9d3e976192364bde98adeb7d31767505@realtek.com>
+References: <20230502050452.27276-1-stanley_chang@realtek.com>
+ <20230502050452.27276-2-stanley_chang@realtek.com>
+ <2653e0d1-6570-7469-51da-b539b5c14299@linaro.org>
+ <bc5cd630d96f44bcaad7f95f2f45aac1@realtek.com>
+ <49d2b103-de1e-637a-1bf0-aaba1c6afaf4@linaro.org>
+ <a04e70f97bcb48048edb2f6db7bb6c25@realtek.com>
+ <f51b4dc9-e1da-7c9c-1e39-c8510569db9d@linaro.org>
+ <c44baa9fae5c445c90103cd2e129ab0b@realtek.com>
+ <676dae73-9b59-d0bb-37ca-eaa120e8dcb5@linaro.org>
+In-Reply-To: <676dae73-9b59-d0bb-37ca-eaa120e8dcb5@linaro.org>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH0PR12MB5481:EE_|SA0PR12MB7076:EE_
-x-ms-office365-filtering-correlation-id: 24c07e2e-897f-4c7a-e7ac-08db4b847ad0
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: +ZFrW+wqXYrppcu1cIPb+IkvARJ7EA1ykY0K0OJaYrGqVwOHssRb9paCZNYga1AV5GDZtaTJGvOBgcwsnm/xL7IkJ4M+Xb6ByNzhQUHrKSqNduLmh0P471KdV/w3Jo9bm5drE2HYf3hyi8XDcKcT/WuG+/3gk/EfIs8SzmYR/n5BEvb5+HXV+Ovk35pXaC6gguXYz8HWeWiH/2YrhOng88AHgemZSEGy8ICSx4ICYuVQDcY2pVO7XNyQzsvZ9i31ls+zjKD9qpaa/IuRWi/X4oEyRaSrU6AfDwphKuBHpE5FQavvdUZE+KAN/Na7+uujRWwEqeuy041yqjKopFKNGAKqhstghYJEin3CgFgg/B3yPuvnwkmKEGAr8STInY7boQpXe+06/CqPTAKQlJ/4y+dcLda6NIvl9wIqVtAJFEv9bWktE8i6gsvei0bvOjBp/i9Y+CUPJpMlcrkil5wtIPaqNmx1R0QjwSDJNDU2PLJDyO+1vgD3YEe0zuaM5TvFnu+Qlhz0DNfdOO3pjoT5UozlaFNADOvUommyZb4irHOBptYC3a90GJ+Ss6Tg5bu/tTD6f2VOpxSSidL0kC9igWzha+w2gbKDQfgaOW+1P0qmrAIllgajJfwCed0o6X3r
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR12MB5481.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(346002)(39860400002)(136003)(376002)(451199021)(4744005)(122000001)(41300700001)(8936002)(8676002)(5660300002)(52536014)(2906002)(86362001)(38070700005)(38100700002)(33656002)(71200400001)(7696005)(54906003)(55016003)(478600001)(186003)(9686003)(6506007)(107886003)(26005)(66946007)(4326008)(66446008)(66476007)(76116006)(66556008)(64756008)(316002)(110136005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?SgN/JCwvh1kYx6SP4G1g7cJsBnlU+NLUSBcn9blPdX/0qeNO2iJll8TDUw/4?=
- =?us-ascii?Q?Bsm5NMGv8P05szh100Bg89ic+uiYTR7XpmbzV9giwwomFeOAGf5UbxEUNAMU?=
- =?us-ascii?Q?B2kf7oiYgqvKBDxByhPzgfYENFOPWx+RlBCw862nphsqtUWBdL5oKmB2GkcM?=
- =?us-ascii?Q?5DJ1DqXzMrPB1CT84B8HO8MF7XKdiB1NSVFCDl+GNM+cG4V7ydeUteilXKiY?=
- =?us-ascii?Q?vW70rLdYhwit+zBRTE11xRKxlhJtiq+wcuA0fnlj0evJ5J1Uuvzy4Wdz3OhQ?=
- =?us-ascii?Q?2vap/ajs0TUEgsRtzuqLXBUrgCZ1EvmUChSrus91Mppjvk6AO/pwB4nFER2z?=
- =?us-ascii?Q?FmUGsiEmqElpxcSFWN4Ls8SLX84i1FbSzPl/h/Z75U1p27BUTevHzx0i/7RS?=
- =?us-ascii?Q?Xj34EDYWDMWxELzvttLGYOv7Ju1Q+zBwGo/7ckby9GfrLiVHQFf9pEQZuZBk?=
- =?us-ascii?Q?pAuAgOns2KkXMwoQNpaJNRCSo5QhXd0YMV5gHikAXknhrJ/fjSgocYJBR3WY?=
- =?us-ascii?Q?XqA4SUs/GRF/KUQ5yr4DSu5i63DIMn04X+BlPvJG5vcHj/hMUTXWMxdD83Ll?=
- =?us-ascii?Q?GASC5UkECnXvEM48PIwWvkMfuW685CYn1Tt8ikOiHDPHvkrse+xZnevKWo2e?=
- =?us-ascii?Q?1JgxLChAaFcKxbTZraIhpCfb5tiXo3HKi+rV7T+glr9yyKEBVNzjg2srDlSp?=
- =?us-ascii?Q?5gS527l244j0lMDQVcpfzZ+3kruv62F2fH72UTm5QAq9D4BzgoUdJTG7pscm?=
- =?us-ascii?Q?jEzNiAsvvYI12btE2HvSE9sumVbe7VpWdMXXgOu8nQQKLsWvETfkGzpzDycr?=
- =?us-ascii?Q?S6dr7S0mxMmdl3SYUUGu0MS0hDN36mQiHi0qYeISqkqaYRgO1tJ0Q3c4D/Ec?=
- =?us-ascii?Q?8M0CWxu5dvzBd/2rgFr2guYk+aA5CNaE65I37zQ7Jy/HAIfV0SDsOwhqABme?=
- =?us-ascii?Q?wx8r60RtsUKS2C2b6kr8peZnpvkI7yEFEpXSmbe2yk+vCJ8pTxZ2nM7OxH1/?=
- =?us-ascii?Q?ZDpHsO0hMGQtaPap77KIW1T9VFl0ydB5t6R2cLoYBxZFZyXOhWO8ontuN2+O?=
- =?us-ascii?Q?5VyOV5TL5biBYBGaGCUTIhALSj5gCERgCwTDcOVB79GVh0jMDWvNwHeiUtv6?=
- =?us-ascii?Q?J1u/2fdXdB3Wq2GYanhPNO72n5euBqa47K3KDwgTgdKYk2lK65akxj4rn/Tq?=
- =?us-ascii?Q?5Kn7vgk94+07OIjVdy4D4n/TSHonx7NwctkSbWpa6tMyEhcaGGuq0xi7YnZP?=
- =?us-ascii?Q?NhtGf8dFJOJpKXdlmj+xKihmYb4kQTgthPaVxN6BevSF88w9j2AgWumskYR3?=
- =?us-ascii?Q?9kfzEbBsK/m5163HiETOm3k57WwBA7Mo9Q51nNoI8ovr99TSDqR0wBhly6gb?=
- =?us-ascii?Q?wXpSX+2eKKVd4oZXqHyiaJ3PBVfJziill78DdaBQnc/n76JvkzQkarQZyUMS?=
- =?us-ascii?Q?VVUTFZQtT9i76qd6tOBe7v4hdkHVhp4qb1SOJTocwbGl8os5YoojXZD4Brk+?=
- =?us-ascii?Q?bTjCDqSSuY4U3zFiOp7KZW4TWiHjujjN/e9yNq/s1hNviKPJagVDbYSpX+LZ?=
- =?us-ascii?Q?T445rLDtoaegTRbs21o=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+x-originating-ip: [172.21.190.159]
+x-kse-serverinfo: RTEXMBS06.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR12MB5481.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 24c07e2e-897f-4c7a-e7ac-08db4b847ad0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 May 2023 03:14:17.1204
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 7jSOxjuzy8Ae8xVP8PRvALp00RKvTaY4zwJMq+Rc0KgHJgxl87NX0SdTVhkWKF+8jKEffErpC6QHa8qp2EITQQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB7076
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-> From: Feng Liu <feliu@nvidia.com>
-> Sent: Tuesday, May 2, 2023 8:35 PM
-
-> Issue: 3383038
-Remove this internal garbage.
-
-> Fixes: 754b8a21a96d ("virtio_net: setup xdp_rxq_info")
-> Signed-off-by: Feng Liu <feliu@nvidia.com>
-> Reviewed-by: William Tu <witu@nvidia.com>
-> Reviewed-by: Parav Pandit <parav@nvidia.com>
-> Reviewed-by: Simon Horman <simon.horman@corigine.com>
-> Acked-by: Michael S. Tsirkin <mst@redhat.com>
-
-> Change-Id: Ib4c6a97cb7b837cfa484c593dd43a435c47ea68f
-Remove this internal garbage.
-Please run a local script not to forward the above garbage in upstream patc=
-hes.
-
-You are missing the changelog from v0->v1->v2->v3.
-Please add and resend with above things removed and with changelog.
+SGkgS3J6eXN6dG9mLA0KDQo+IFJlZ3VsYXIgcnVsZXMgYXBwbHksIGJlY2F1c2UgeW91ciBkZXZp
+Y2UgaXMgbm90IHNwZWNpYWwuDQo+IGh0dHBzOi8vZWxpeGlyLmJvb3RsaW4uY29tL2xpbnV4L3Y2
+LjEtcmMxL3NvdXJjZS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluDQo+IGRpbmdzL3dyaXRp
+bmctYmluZGluZ3MucnN0I0w0Mg0KPiANCj4gVGhlcmVmb3JlIGVpdGhlciBTb0MtYmFzZWQgZGV2
+aWNlIHNwZWNpZmljIG5hbWUgb3IgZm9sbG93ZWQgYnk6DQo+IDEuIFNvQy1iYXNlZCBkZXZpY2Ug
+c3BlY2lmaWMgZmFsbGJhY2ssDQo+IDIuIEZhbWlseS1kZXZpY2UgZ2VuZXJpYyBmYWxsYmFjaywN
+Cj4gDQoNClRoYW5rcyBmb3IgeW91ciBzdWdnZXN0aW9uLiBJIHdpbGwgZm9sbG93IHRoZXNlIHJ1
+bGVzLg0KVGhpbmggaGFzIGEgZ29vZCBzdWdnZXN0aW9uIGZvciB0aGlzIHByb2JsZW0uDQpIaXMg
+c29sdXRpb24gaXMgc2ltcGx5LiBBbmQgbm8gbW9kaWZ5IHRoZSBjb21wYXRpYmxlIG5hbWUgYW5k
+IHByb3BlcnR5IG9mIGR3YzMuDQoNClRoYW5rcywNClN0YW5sZXkNCg==
