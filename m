@@ -2,91 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BBE96F5E11
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 20:40:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 374A66F5E17
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 20:40:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbjECSkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 14:40:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42628 "EHLO
+        id S229828AbjECSkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 14:40:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjECSkL (ORCPT
+        with ESMTP id S229622AbjECSkN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 14:40:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B97E768A;
-        Wed,  3 May 2023 11:40:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 70F6662F53;
-        Wed,  3 May 2023 18:40:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2635C433A1;
-        Wed,  3 May 2023 18:40:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683139206;
-        bh=cm76H1e596g6zBEKzoV3JH1wAtwXZ3vz7kKlt5bQlEA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=hVjxHsmwY3joEHA86eJkgM2j21OIUrZsEcIhlGlb5Wfwgn//Abz7J9qppoZs+VOet
-         Wm+0upecxPq6+9D+Oaq0EPpY161Jq2fLlmnfEV49OLVwjqpHWAMlPr+3X5yohT2D4w
-         82MrIkGARchZmHhaKpU5Qsa8h6rqVjXt0Z00+16ZjOA3E37xNQyq0bPm7Jcx/dXQ7s
-         P02vj/JQ1zVvZaWjVsPoGgH3hrmdETDglEiWicR4j7xk3ZTjjybqCvEBrnGKzbd9XM
-         oQVkfGWVo/y8spqPvl6e/Ei90LD1Llx/c9OfRDMJMakgC9w6uSJb8Y8KHSslgJyuC9
-         zarvc19ItZiiA==
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2ac7847839eso6740761fa.2;
-        Wed, 03 May 2023 11:40:06 -0700 (PDT)
-X-Gm-Message-State: AC+VfDzc9o7daXyBktapteg4UBzyxVA25RlHpxQ4MwEUHv9/xgSTov7w
-        lcMOKGDHfM+oBklzJ6aB1U9XO0qHBZColvYIXhY=
-X-Google-Smtp-Source: ACHHUZ42l1IMkEtuT4rp9vWqm5QdjomFmTc/BolNA0wpxB/RYD3L4h8/EsWZlO50/tic1SmlNLulr95mb7qDFP9xm78=
-X-Received: by 2002:a2e:95c2:0:b0:2a7:a2cf:3c03 with SMTP id
- y2-20020a2e95c2000000b002a7a2cf3c03mr300157ljh.25.1683139204889; Wed, 03 May
- 2023 11:40:04 -0700 (PDT)
+        Wed, 3 May 2023 14:40:13 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2B8658E;
+        Wed,  3 May 2023 11:40:10 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-52c62a71541so761147a12.3;
+        Wed, 03 May 2023 11:40:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683139209; x=1685731209;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sQ2ADeO1XgOmj5DxbzjpzikYpUTn+B695qqaLQsTl4A=;
+        b=FAsEakodIYGZZ49hzhHq8Do+4wt23WK6jVIu98FKgEcC2IC28Yv1qcpIguYdAHmL41
+         K6QXYVXYY9e0ydYBW/QaYBQ4kV1sgRKD0Z8m7VqP9eoT6OyuI2TEKLTHxSnuPoZ0/P86
+         Ak//1N2uQgFgtt5vHB1OZ1Yr9lZGqpMPiXmn0PLHivzD9gD6C3pgBiZeck/EvcUad+D9
+         AIqIEi6ySYiJEa/rjzcr1BnwS0cO5uVLCgZHYd00/2Qp62J0+g0bDyAUjzMrqC8es9RR
+         PvNP8hKoKyN1VyTkZlWwEOSIbNVu+bisxPnpdL40o9ZuYAjxbUCiGJrKy44Q/i6wCbvS
+         6MJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683139209; x=1685731209;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sQ2ADeO1XgOmj5DxbzjpzikYpUTn+B695qqaLQsTl4A=;
+        b=BvoRPokoSMiVkbPlmALA8hIQW0hWkF3BGtAu3Whene693AAih2RPESqRgP9aO3X3wG
+         youYRS9jUoIPpTqC/k45VBMmpds/sXb2OY5BDLIrRiyK6jHqPmCcHaBiWZYN7gZV5ZHr
+         b7Cs9nIDJpdRLLmouDPWU+pUpS1arKk9lDmbCuvthKKckqvkeFLejrTePCsU6GWcVxRH
+         iD8Txo/yYwibavRal1PSN5TGBADpMjKOhUVDHQayB+SwafDV4c1PxoUiVHjqsQo/Cz9A
+         nNugKaMvBgsS2QhRLXTuw8Rh0caR2/ahG/5f+t4AAjzKnSJ/A4o/BOixSFrekxbWXbeF
+         vUCg==
+X-Gm-Message-State: AC+VfDxdx6rv5/vxaJT9N1OkMtov+3uywXA5fICrcvDYyDTdMtbE12dh
+        oA6SrYnEtMhbXeyWNwJa7ng=
+X-Google-Smtp-Source: ACHHUZ5HrlmzzWxl9cdU7mNdLYfBeR7MIFjXh85oRNOW13gF1ERuxzszMtMYq8KFsJoY0P2G/zpWtw==
+X-Received: by 2002:a05:6a20:4286:b0:dd:7661:fb34 with SMTP id o6-20020a056a20428600b000dd7661fb34mr28426673pzj.51.1683139209307;
+        Wed, 03 May 2023 11:40:09 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:6454])
+        by smtp.gmail.com with ESMTPSA id u22-20020a634556000000b005287b22ea8esm12540790pgk.88.2023.05.03.11.40.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 May 2023 11:40:08 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 3 May 2023 08:40:07 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
+        Michal Hocko <mhocko@suse.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        akpm@linux-foundation.org, vbabka@suse.cz,
+        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
+        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
+        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
+        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
+        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
+        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
+        muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
+        pasha.tatashin@soleen.com, yosryahmed@google.com,
+        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
+        andreyknvl@gmail.com, keescook@chromium.org,
+        ndesaulniers@google.com, gregkh@linuxfoundation.org,
+        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+        glider@google.com, elver@google.com, dvyukov@google.com,
+        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
+        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        kasan-dev@googlegroups.com, cgroups@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>
+Subject: Re: [PATCH 00/40] Memory allocation profiling
+Message-ID: <ZFKqh5Dh93UULdse@slm.duckdns.org>
+References: <20230501165450.15352-1-surenb@google.com>
+ <ZFIMaflxeHS3uR/A@dhcp22.suse.cz>
+ <ZFIOfb6/jHwLqg6M@moria.home.lan>
+ <ZFISlX+mSx4QJDK6@dhcp22.suse.cz>
+ <ZFIVtB8JyKk0ddA5@moria.home.lan>
+ <ZFKNZZwC8EUbOLMv@slm.duckdns.org>
+ <20230503180726.GA196054@cmpxchg.org>
+ <ZFKlrP7nLn93iIRf@slm.duckdns.org>
 MIME-Version: 1.0
-References: <20230424165726.2245548-1-ardb@kernel.org> <ecbcc066-3636-9620-8db9-2c066d16e717@amd.com>
- <CAMj1kXG8ZrdEUNTiSCet+aT+1ZyrbguFsGtNhVV+XgCssZgj9w@mail.gmail.com>
- <a6846282-95c8-274a-accc-ffa54205489c@amd.com> <8f85787a-1fa5-8f59-6047-b3a791291bfd@amd.com>
- <CAMj1kXFfHJDXW2xWTjT5xy_-8MdeS9HhcMh3=DKFZ3+vhaUFcA@mail.gmail.com> <20230503182433.GFZFKm4QAiqXRBYM0s@fat_crate.local>
-In-Reply-To: <20230503182433.GFZFKm4QAiqXRBYM0s@fat_crate.local>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 3 May 2023 20:39:53 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXFX0bEyE_Wr8j0Vexqc+sNcZWto5jy=t+g+43UpgDa2tA@mail.gmail.com>
-Message-ID: <CAMj1kXFX0bEyE_Wr8j0Vexqc+sNcZWto5jy=t+g+43UpgDa2tA@mail.gmail.com>
-Subject: Re: [PATCH 0/6] efi/x86: Avoid legacy decompressor during EFI boot
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Tom Lendacky <thomas.lendacky@amd.com>, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Evgeniy Baskov <baskov@ispras.ru>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Peter Jones <pjones@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Dave Young <dyoung@redhat.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZFKlrP7nLn93iIRf@slm.duckdns.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 3 May 2023 at 20:24, Borislav Petkov <bp@alien8.de> wrote:
->
-> On Wed, May 03, 2023 at 08:17:28PM +0200, Ard Biesheuvel wrote:
-> > (There is some 32-bit SEV code in the decompressor as well that
-> > obviously never gets called when booting in long mode, but I hadn't
-> > quite grasped how much other SEV code there actually is)
->
-> If you mean the thing in startup_32 which does get_sev_encryption_bit()
-> etc, that is going away.
->
+On Wed, May 03, 2023 at 08:19:24AM -1000, Tejun Heo wrote:
+> > Taking a step back though, given the multitude of allocation sites in
+> > the kernel, it's a bit odd that the only accounting we do is the tiny
+> > fraction of voluntary vmstat/meminfo reporting. We try to cover the
+> > biggest consumers with this of course, but it's always going to be
+> > incomplete and is maintenance overhead too. There are on average
+> > several gigabytes in unknown memory (total - known vmstats) on our
+> > machines. It's difficult to detect regressions easily. And it's per
+> > definition the unexpected cornercases that are the trickiest to track
+> > down. So it might be doable with BPF, but it does feel like the kernel
+> > should do a better job of tracking out of the box and without
+> > requiring too much plumbing and somewhat fragile kernel allocation API
+> > tracking and probing from userspace.
+> 
+> Yeah, easy / default visibility argument does make sense to me.
 
-OK, good to know.
+So, a bit of addition here. If this is the thrust, the debugfs part seems
+rather redundant, right? That's trivially obtainable with tracing / bpf and
+in a more flexible and performant manner. Also, are we happy with recording
+just single depth for persistent tracking?
+
+Thanks.
+
+-- 
+tejun
