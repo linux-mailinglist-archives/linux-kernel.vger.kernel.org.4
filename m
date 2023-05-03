@@ -2,164 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 456236F5BCF
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 18:18:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E687A6F5BD2
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 18:18:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbjECQSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 12:18:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48166 "EHLO
+        id S229584AbjECQSm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 12:18:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjECQSH (ORCPT
+        with ESMTP id S229514AbjECQSg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 12:18:07 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F116F1
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 09:18:03 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id 98e67ed59e1d1-24e4f674356so708984a91.3
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 09:18:03 -0700 (PDT)
+        Wed, 3 May 2023 12:18:36 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7581A273B
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 09:18:34 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-50bd875398dso2803610a12.1
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 09:18:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683130682; x=1685722682;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UmKZspVB74y8KHaujMmKpQPz93YiFFN2bzMFb4mgq1o=;
-        b=Q4Ot9zXTgNgD0strUAihBbymUptaXwEyFHutNOzqHf70COhEz0B4r6UBHbNfo0YULN
-         CUKHiHMxW10d0m4/u2MdRzuT36JryMXu/v8wzTs5BsdwyngeMQqcM2wqUgLVmaUtjTrr
-         tx9Q1MsfFBklXwZNCpX7s0u6gEE9iwVmXGvvWy0VNaFJMN5MYNvoIGvKG2lfNm/dFboP
-         kFpb0DsAFA9gnlMRjxhNcYt4Pih5R56vjzluoeTQikprSC8e540eshNvl0A6cg10+1Qj
-         vzxLxKRmbV89iPyDQyD+heEQhkZHNmD1e158SQ9E2flojyzeGXZgHAsuEYYwafxUzL1w
-         H4fw==
+        d=linaro.org; s=google; t=1683130713; x=1685722713;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8Aan+1nXbt0jfOhD5Ja5iMTYpmi8Pt1ECMfi2iv1VeQ=;
+        b=gXBiF7En2VrfDtBHTZZ++RcIziw1n4WPIy9B5dSvtTFmQDqBSCYvUAAiBUYQb/0fdl
+         Myj5Gmp9pWY7w3nqgJoXlJua/D7lCPS/Iu2mNZY0SNSkvjbXYcf7ugS417S/43TEhRFX
+         anNGqZGmCMKlvSwP4v1vDoo7SJlrWfnvKjV10paXIkswmcuGTxQqlWEDRUICOKQp+Nh5
+         OzkZMDTYP73470zGL45CmV8EYPlUHSpoichcICj1SxtE33cxdwhVAsKJ2cQG5TQQIDVO
+         iN2x+5RJgxfy+YiFmFEOpKE6iTLA92x60XGcvUYhMn2EtkzNlwDpS0cPSDkNr8UHWCnl
+         oXgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683130682; x=1685722682;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UmKZspVB74y8KHaujMmKpQPz93YiFFN2bzMFb4mgq1o=;
-        b=KQ3vRIjQCNYmZ6Duco7ScLvzG9LC301MM6bSMsrX1u6M1khsINd1+JG+f6crMj4NiB
-         PwzceWqh6/di5VfJj+UDNd/DTfV+TqC4mfjo3R0eWAeXlNE1Uc9mYzR0T3P2lJL0PXdj
-         ll31uwqM/YdxzpgZ45ub2beM78kV6MzXJgwGS5MXWIRwhxjjeNMRD2vm/GEXBrWAVAlr
-         NLRAgnXAr4yosDsagTIJ20Okz2E2MdQ1qemZwZjH2m1L1QHnX51hqKoTOoPWVaYfmD7G
-         eE8KrATPByRu7TX9UD1AeH4D9c15RSnhEqSU/fj+4Ogy9ehuv68lyikt7uP4NKm/Wt2q
-         SAAA==
-X-Gm-Message-State: AC+VfDyMj/9nInDWpYwXAsvJ1noKTlPzUDHsXhHFB4KbsTDrtqIgoXi2
-        4+pBvUDsGDxAQlFP+hEstMxIBpZRX3eJwXxhvkU=
-X-Google-Smtp-Source: ACHHUZ7J2U5JE/rIMcy4i2ok3/I41F44ypaSOWGNPZ9hXcPpCyTr3JavDAAKGO/0IQMTysI+qWj8BNnsAcL13ND2Nu4=
-X-Received: by 2002:a17:90a:8b92:b0:24d:f59a:d331 with SMTP id
- z18-20020a17090a8b9200b0024df59ad331mr12791706pjn.26.1683130682321; Wed, 03
- May 2023 09:18:02 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683130713; x=1685722713;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8Aan+1nXbt0jfOhD5Ja5iMTYpmi8Pt1ECMfi2iv1VeQ=;
+        b=VJm76dnZqrCXSdjQeTbyCyHNQoDz84I07ElFkl/lK29v1hEAryPxjY9FwK+Z+/O2fJ
+         BdqriRGvPIfBN3ViHoawZebtfGWNxMPaBjZxnKi0OztTcOGG418twlSLqRP9CIwn7i17
+         BSlW2gUYfBtPVMwRS6eKBlAsyA/CuyaZe2EwuvT8Ugj5x6mBdo/Qbg9bxxEX8pq5ey9A
+         ej0cgh1JABrrpptRzVpOcffvfwY0l7Aed1ysD0BaeUxOw4t//89EAgQ1R1gmXlCWsK9Z
+         kgXzjbPvNBhfSDsyZ/ldqDz0wiUBA9XpAmerLsWpKLzksr16vSzBe9pBGAeUCezq4NZR
+         1JWg==
+X-Gm-Message-State: AC+VfDzhfrYI/qXE23G2KP7/V7G7/xNr3WffunXgom1VjAVghXvyhLzK
+        kvuf8E0aLNmQ42dbcPL4/fh7wg==
+X-Google-Smtp-Source: ACHHUZ6LmTTQu4gGi+AtIGCA4HB4MOYccg0kMPqHGZGgaW6d/6TXsmKRpjiBwFjG/T6Ot/HnM6fkww==
+X-Received: by 2002:aa7:c849:0:b0:502:2494:b8fc with SMTP id g9-20020aa7c849000000b005022494b8fcmr11029297edt.7.1683130712901;
+        Wed, 03 May 2023 09:18:32 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:db42:e3d0:c55a:8cf1? ([2a02:810d:15c0:828:db42:e3d0:c55a:8cf1])
+        by smtp.gmail.com with ESMTPSA id bm11-20020a0564020b0b00b00506987c5c71sm859910edb.70.2023.05.03.09.18.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 May 2023 09:18:32 -0700 (PDT)
+Message-ID: <20eb1d0e-0aa2-9d41-7ba5-2feb148748d0@linaro.org>
+Date:   Wed, 3 May 2023 18:18:31 +0200
 MIME-Version: 1.0
-References: <20230502010759.17282-1-aford173@gmail.com> <20230502010759.17282-8-aford173@gmail.com>
- <ba50c423-2678-3865-8f9a-907480c9870a@kontron.de>
-In-Reply-To: <ba50c423-2678-3865-8f9a-907480c9870a@kontron.de>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Wed, 3 May 2023 11:17:50 -0500
-Message-ID: <CAHCN7x+ZQWspfiJVyrsJ=2E6OBya1o4vhBh9efxcjC09hv=Ziw@mail.gmail.com>
-Subject: Re: [PATCH V3 7/7] drm: bridge: samsung-dsim: Let blanking calcuation
- work in non-burst mode
-To:     Frieder Schrempf <frieder.schrempf@kontron.de>
-Cc:     dri-devel@lists.freedesktop.org, marex@denx.de,
-        aford@beaconembedded.com, Chen-Yu Tsai <wenst@chromium.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Inki Dae <inki.dae@samsung.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add max6639
+Content-Language: en-US
+To:     Naresh Solanki <naresh.solanki@9elements.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Marcello Sylvester Bauer <sylv@sylv.io>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230420111759.2687001-1-Naresh.Solanki@9elements.com>
+ <76e57634-75dd-01e8-9c56-36ed7de17812@linaro.org>
+ <c8d1b5db-318e-3401-0834-b89769831eca@9elements.com>
+ <be129c4f-3ad7-c54b-936e-08b142608ebc@linaro.org>
+ <88f9a008-2861-284c-76c4-7d416c107fbb@9elements.com>
+ <bd45ea5d-e6e4-403a-e855-376e0f647f91@9elements.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <bd45ea5d-e6e4-403a-e855-376e0f647f91@9elements.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 3, 2023 at 10:52=E2=80=AFAM Frieder Schrempf
-<frieder.schrempf@kontron.de> wrote:
->
-> On 02.05.23 03:07, Adam Ford wrote:
-> > The blanking calculation currently uses burst_clk_rate for calculating
-> > the settings. Since it's possible to use this in non-burst mode, it's
-> > possible that where won't be burst_clk_rate.  Instead, cache the
->
-> "possible that burst_clk_rate is 0"
->
-> > clock rate configured from of samsung_dsim_set_pll and use it instead.
-> >
-> > Signed-off-by: Adam Ford <aford173@gmail.com> Tested-by: Chen-Yu Tsai <=
-wenst@chromium.org>
->
-> Maybe this patch should be squashed into patch 6/7 as otherwise
-> burst_clk_rate could be 0 here causing bisection issues?
+On 03/05/2023 10:26, Naresh Solanki wrote:
+> Hi Krzysztof,
+> 
+> On 24-04-2023 03:23 pm, Naresh Solanki wrote:
+>> Hi Krzysztof,
+>>
+>> On 24-04-2023 03:12 pm, Krzysztof Kozlowski wrote:
+>>> On 24/04/2023 11:18, Naresh Solanki wrote:
+>>>
+>>>>>> Changes in V2:
+>>>>>> - Update subject
+>>>>>> - Drop blank lines
+>>>>>> ---
+>>>>>>    .../bindings/hwmon/maxim,max6639.yaml         | 52 
+>>>>>> +++++++++++++++++++
+>>>>>>    1 file changed, 52 insertions(+)
+>>>>>>    create mode 100644 
+>>>>>> Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+>>>>>>
+>>>>>> diff --git 
+>>>>>> a/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml 
+>>>>>> b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+>>>>>> new file mode 100644
+>>>>>> index 000000000000..1aaedfd7cee0
+>>>>>> --- /dev/null
+>>>>>> +++ b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+>>>>>> @@ -0,0 +1,52 @@
+>>>>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>>>>>> +%YAML 1.2
+>>>>>> +---
+>>>>>> +$id: http://devicetree.org/schemas/hwmon/maxim,max6639.yaml#
+>>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>>>> +
+>>>>>> +title: Maxim max6639
+>>>>>
+>>>>> What is this device? fan controller?
+>>>> Yes Fan controller.
+>>>> Do you want me to update the title here as:
+>>>> "Maxim MAC6639 2 channel fan controller & temperature monitor" ?
+>>>
+>>> Enough would be:
+>>> Maxim MAX6639 Fan Controller
+>> Ack
+>>>
+>>>
+>>>>
+>>>>>
+>>>>>> +
+>>>>>> +maintainers:
+>>>>>> +  - Naresh Solanki <Naresh.Solanki@9elements.com>
+>>>>>> +
+>>>>>> +description: |
+>>>>>> +  The MAX6639 is a 2-channel temperature monitor with dual, 
+>>>>>> automatic, PWM
+>>>>>> +  fan-speed controller.  It monitors its own temperature and one 
+>>>>>> external
+>>>>>> +  diode-connected transistor or the temperatures of two external 
+>>>>>> diode-connected
+>>>>>> +  transistors, typically available in CPUs, FPGAs, or GPUs.
+>>>>>> +
+>>>>>> +  Datasheets:
+>>>>>> +    https://datasheets.maximintegrated.com/en/ds/MAX6639-MAX6639F.pdf
+>>>>>> +
+>>>>>> +properties:
+>>>>>> +  compatible:
+>>>>>> +    enum:
+>>>>>> +      - maxim,max6639
+>>>>>> +
+>>>>>> +  reg:
+>>>>>> +    maxItems: 1
+>>>>>> +
+>>>>>> +  '#address-cells':
+>>>>>> +    const: 1
+>>>>>> +
+>>>>>> +  '#size-cells':
+>>>>>> +    const: 0
+>>>>>
+>>>>> Why do you need these two properties?
+>>>> Ack. Will remove them.
+>>>>>
+>>>>> Anyway, the binding looks incomplete. Where are the supplies? 
+>>>>> Interrupts?
+>>>> This patch just adds basic support to the existing platform driver.
+>>>> Intention is to be able to call the driver from DT with basic
+>>>> initialization from driver the existing driver.
+>>>
+>>> Bindings should be rather complete. Here the datasheet is accessible and
+>>> few properties quite obvious, so I don't see a reason to skip them.
+>> I agree with you. But currently the driver which is already merged 
+>> doesn't has it implemented.
+>> And will be working on separate patch to include this later.
+> Please let me know if this approach is acceptable, or if there are any 
+> other suggestions or concerns that you have.
 
-I thought about squashing them and I went back and forth on that.
-Since there are some other minor edits in this series, I can push a V4
-with these squashed.
+You are adding new bindings, so what does the driver has to do with it?
 
->
-> Apart from that:
->
-> Tested on Kontron BL i.MX8MM with SN65DSI84 and ADV7535 bridges.
->
+Best regards,
+Krzysztof
 
-Thank you for testing this series.
-
-> Tested-by: Frieder Schrempf <frieder.schrempf@kontron.de>
-> Reviewed-by: Frieder Schrempf <frieder.schrempf@kontron.de>
->
-
-adam
-> > ---
-> >  drivers/gpu/drm/bridge/samsung-dsim.c | 4 +++-
-> >  include/drm/bridge/samsung-dsim.h     | 1 +
-> >  2 files changed, 4 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c b/drivers/gpu/drm/br=
-idge/samsung-dsim.c
-> > index 53099461cdc2..1dc913db2cb3 100644
-> > --- a/drivers/gpu/drm/bridge/samsung-dsim.c
-> > +++ b/drivers/gpu/drm/bridge/samsung-dsim.c
-> > @@ -652,6 +652,8 @@ static unsigned long samsung_dsim_set_pll(struct sa=
-msung_dsim *dsi,
-> >               reg =3D samsung_dsim_read(dsi, DSIM_STATUS_REG);
-> >       } while ((reg & DSIM_PLL_STABLE) =3D=3D 0);
-> >
-> > +     dsi->hs_clock =3D fout;
-> > +
-> >       return fout;
-> >  }
-> >
-> > @@ -960,7 +962,7 @@ static void samsung_dsim_set_display_mode(struct sa=
-msung_dsim *dsi)
-> >       u32 reg;
-> >
-> >       if (dsi->mode_flags & MIPI_DSI_MODE_VIDEO) {
-> > -             int byte_clk_khz =3D dsi->burst_clk_rate / 1000 / 8;
-> > +             int byte_clk_khz =3D dsi->hs_clock / 1000 / 8;>          =
- int hfp =3D (m->hsync_start - m->hdisplay) * byte_clk_khz / m->clock;
-> >               int hbp =3D (m->htotal - m->hsync_end) * byte_clk_khz / m=
-->clock;
-> >               int hsa =3D (m->hsync_end - m->hsync_start) * byte_clk_kh=
-z / m->clock;
-> > diff --git a/include/drm/bridge/samsung-dsim.h b/include/drm/bridge/sam=
-sung-dsim.h
-> > index 76ea8a1720cc..14176e6e9040 100644
-> > --- a/include/drm/bridge/samsung-dsim.h
-> > +++ b/include/drm/bridge/samsung-dsim.h
-> > @@ -94,6 +94,7 @@ struct samsung_dsim {
-> >
-> >       u32 pll_clk_rate;
-> >       u32 burst_clk_rate;
-> > +     u32 hs_clock;
-> >       u32 esc_clk_rate;
-> >       u32 lanes;
-> >       u32 mode_flags;
