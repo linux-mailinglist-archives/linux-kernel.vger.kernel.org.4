@@ -2,139 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 147EF6F5B7E
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 17:49:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE2FF6F5B82
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 17:49:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230287AbjECPtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 11:49:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35880 "EHLO
+        id S230512AbjECPtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 11:49:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbjECPtc (ORCPT
+        with ESMTP id S229675AbjECPto (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 11:49:32 -0400
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D8210E5;
-        Wed,  3 May 2023 08:49:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1683128971;
-        bh=aZHv4qLewpPoN2a7Dp1hmQ518n6knm526HL7tro2+QQ=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=RuzgPwW7Excw6pez9bbQH1LgK0+PrOgDucE8mX352a/WgEFXdVcyXswKLkwHVN4FK
-         NRRB6IArfDLzoJ2Y5xkv3PNA1E6ef4irPxZ/JjdOQrfSM2D4MyBH3rpgG/WnwCUFYL
-         KRr071rSZhNhJKS7IDpjG6MPN5NNicYHXLH+D7mM=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 18E6D1281F1E;
-        Wed,  3 May 2023 11:49:31 -0400 (EDT)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
- by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id GaG0-VEABDNr; Wed,  3 May 2023 11:49:30 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1683128970;
-        bh=aZHv4qLewpPoN2a7Dp1hmQ518n6knm526HL7tro2+QQ=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=q0tL2VdkMVextXF7i8wLij4wc+Rv8eXjweyKXiHti73zJxCRaSCu25jteEhbnxI6v
-         yK9rK8oceeU4P+nNqywZMzxEdAYo1SWnGfe4NiTdtA5ocsYJMypoTDNv+p+Qwjz8wz
-         oLVM+AAJEgGOGX5BoVd44tXyBl3Vu996X/awzutg=
-Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 5B7F812805C5;
-        Wed,  3 May 2023 11:49:25 -0400 (EDT)
-Message-ID: <d01388d01b93071ac9ad04452ff4ff29d85e90f1.camel@HansenPartnership.com>
-Subject: Re: [PATCH 00/40] Memory allocation profiling
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Petr =?UTF-8?Q?Tesa=C5=99=C3=ADk?= <petr@tesarici.cz>,
-        Michal Hocko <mhocko@suse.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        akpm@linux-foundation.org, vbabka@suse.cz, hannes@cmpxchg.org,
-        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
-        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
-        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
-        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
-        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
-        tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
-        paulmck@kernel.org, pasha.tatashin@soleen.com,
-        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
-        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, gregkh@linuxfoundation.org,
-        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
-Date:   Wed, 03 May 2023 11:49:23 -0400
-In-Reply-To: <ZFJ9hlQ3ZIU1XYCY@moria.home.lan>
-References: <20230501165450.15352-1-surenb@google.com>
-         <ZFIMaflxeHS3uR/A@dhcp22.suse.cz> <ZFIOfb6/jHwLqg6M@moria.home.lan>
-         <ZFISlX+mSx4QJDK6@dhcp22.suse.cz>
-         <20230503115051.30b8a97f@meshulam.tesarici.cz>
-         <ZFIv+30UH7+ySCZr@moria.home.lan>
-         <25a1ea786712df5111d7d1db42490624ac63651e.camel@HansenPartnership.com>
-         <ZFJ9hlQ3ZIU1XYCY@moria.home.lan>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+        Wed, 3 May 2023 11:49:44 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 344994EDC;
+        Wed,  3 May 2023 08:49:42 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-50bc25f0c7dso8367752a12.3;
+        Wed, 03 May 2023 08:49:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683128980; x=1685720980;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=tETsKMX2tnbq04Ram2NTU5I+3P2hJGPmdkjf8f881/c=;
+        b=bwq4mF86a1xlcBwdEgHnM//lmE25bW8kY7mq8Eb70aT4AHp9XEcNc2xxJEMMo+BZF+
+         h69vI0Rv6ZI7k1KSct6jgHgdlm2XcaueyEPNZ23QW+PWXx5O8aPQ4oRoqbrMaXlxVGe7
+         4+rDF68hndvDqTQBamKpCUVEo0BzIDqvWjiAvZ9L+xBuruZEz7MRaoTwTpiiW+0OOQUA
+         ZczI/V74JVrpKhKHBVsrr8wGMtxA5DEhNDqZ4L6iGY/tOciOanl4GuzidfeWbC6DvZ+I
+         HYUouuAoEIQ5qv5aDZ3DPNsOcpLurqJ6UmjJk31fTP+Mo5jvBiduwoH8StlXxYCzykBm
+         RrHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683128980; x=1685720980;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tETsKMX2tnbq04Ram2NTU5I+3P2hJGPmdkjf8f881/c=;
+        b=B/tVznjPLb+LKujDtPa/5/P7bTI8kir5XTRwxsh5XieJ+FjEo0Z/aYSzBB96kE9NC/
+         hmQp9LPktJMCRQvP3QstWO2Zx3yV3WSOQaYGUj4Q0NoP4ETuZxmjrPB7gnxvrl8ihqmZ
+         D8fdfeNrcgW6b+XTCNABDBY8t+NrDr+Wo73wjGtDZR07syeCKsy8n2XbQzyhrpQjPYXG
+         tLiruuQgao/+0pXdqjjXCCOkhvJnDG82BMFGVwbBdSD1KesW+rjTEnLGUgl6BTIhvM9y
+         yXyLlKzT8uex41jZcSPbspqKPCMQbk25BKuywnfqwhhVi8rep04mpb64z80olVmw8JSZ
+         Nbng==
+X-Gm-Message-State: AC+VfDwD9J/rqwja2rpilC4tDbGBR6H5yYDM6EYOFoXAob+xxPjO+iu/
+        VRC3rdKkKF262s1o3OsiUUI=
+X-Google-Smtp-Source: ACHHUZ6pzgR3ME9djQJDyipBlhiBL37NkjvADP9CwcpHZSnhBZ2fgGFwJhb4NmnG9qP4MCUNOuxJrg==
+X-Received: by 2002:a17:906:ee86:b0:958:cc8:bd55 with SMTP id wt6-20020a170906ee8600b009580cc8bd55mr3755739ejb.0.1683128980422;
+        Wed, 03 May 2023 08:49:40 -0700 (PDT)
+Received: from localhost (p200300e41f053a00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f05:3a00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id gx11-20020a1709068a4b00b0094f225c0cd3sm17328106ejc.86.2023.05.03.08.49.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 May 2023 08:49:40 -0700 (PDT)
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-pwm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] pwm: Changes for v6.4-rc1
+Date:   Wed,  3 May 2023 17:49:36 +0200
+Message-Id: <20230503154936.1824529-1-thierry.reding@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-05-03 at 11:28 -0400, Kent Overstreet wrote:
-> On Wed, May 03, 2023 at 08:33:48AM -0400, James Bottomley wrote:
-> > On Wed, 2023-05-03 at 05:57 -0400, Kent Overstreet wrote:
-> > > On Wed, May 03, 2023 at 11:50:51AM +0200, Petr Tesařík wrote:
-> > > > If anyone ever wants to use this code tagging framework for
-> > > > something else, they will also have to convert relevant
-> > > > functions to macros, slowly changing the kernel to a minefield
-> > > > where local identifiers, struct, union and enum tags, field
-> > > > names and labels must avoid name conflict with a tagged
-> > > > function. For now, I have to remember that alloc_pages is
-> > > > forbidden, but the list may grow.
-> > > 
-> > > Also, since you're not actually a kernel contributor yet...
-> > 
-> > You have an amazing talent for being wrong.  But even if you were
-> > actually right about this, it would be an ad hominem personal
-> > attack on a new contributor which crosses the line into
-> > unacceptable behaviour on the list and runs counter to our code of
-> > conduct.
-> 
-> ...Err, what? That was intended _in no way_ as a personal attack.
+Hi Linus,
 
-Your reply went on to say "If you're going to comment, please do the
-necessary work to make sure you're saying something that makes sense."
-That is a personal attack belittling the person involved and holding
-them up for general contempt on the mailing list.  This is exactly how
-we should *not* treat newcomers.
+The following changes since commit 1271a7b98e7989ba6bb978e14403fc84efe16e13:
 
-> If I was mistaken I do apologize, but lately I've run across quite a
-> lot of people offering review feedback to patches I post that turn
-> out to have 0 or 10 patches in the kernel, and - to be blunt - a
-> pattern of offering feedback in strong language with a presumption of
-> experience that takes a lot to respond to adequately on a technical
-> basis.
+  pwm: Zero-initialize the pwm_state passed to driver's .get_state() (2023-03-23 14:44:43 +0100)
 
-A synopsis of the feedback is that using macros to attach trace tags
-pollutes the global function namespace of the kernel.  That's a valid
-observation and merits a technical not a personal response.
+are available in the Git repository at:
 
-James
+  git://git.kernel.org/pub/scm/linux/kernel/git/thierry.reding/linux-pwm.git tags/pwm/for-6.4-rc1
 
+for you to fetch changes up to 247ee6c780406513c6031a7f4ea41f1648b03295:
+
+  pwm: Remove unused radix tree (2023-04-14 11:35:52 +0200)
+
+This is based on top of the v6.3 fixes pull from a few weeks ago.
+Interestingly this brings to a close a journey (legacy API removal)
+that I set out on back when I took over maintenance. It's hard to
+believe that that was over 11 years ago. I hadn't thought it would
+take that long. Thanks to Uwe for helping to get this across the
+finish line.
+
+Thanks,
+Thierry
+
+----------------------------------------------------------------
+pwm: Changes for v6.4-rc1
+
+The bulk of this is trivial conversions to the new .remove_new()
+callback for drivers as part of Uwe's effort to clean that up.
+
+Other than that a driver is added for Apple devices and various small
+fixes are included for existing drivers.
+
+Last but not least, this finally gets rid of the old pwm_request() and
+pwm_free() APIs are removed since the last user was dropped in v6.3.
+
+----------------------------------------------------------------
+AngeloGioacchino Del Regno (2):
+      pwm: mtk-disp: Disable shadow registers before setting backlight values
+      pwm: mtk-disp: Configure double buffering before reading in .get_state()
+
+Daniel Golle (1):
+      dt-bindings: pwm: mediatek: Add mediatek,mt7986 compatible
+
+Heiner Kallweit (3):
+      dt-bindings: pwm: Convert Amlogic Meson PWM binding
+      pwm: meson: Fix axg ao mux parents
+      pwm: meson: Fix g12a ao clk81 name
+
+Krzysztof Kozlowski (2):
+      pwm: rcar: Drop of_match_ptr for ID table
+      pwm: stm32-lp: Drop of_match_ptr for ID table
+
+Olivier Moysan (1):
+      pwm: stm32: Enforce settings for PWM capture
+
+Sasha Finkelstein (3):
+      dt-bindings: pwm: Add Apple PWM controller
+      pwm: Add Apple PWM controller
+      MAINTAINERS: Add entries for Apple PWM driver
+
+Thierry Reding (2):
+      Merge branch 'fixes' into for-next
+      pwm: Remove unused radix tree
+
+Uwe Kleine-König (31):
+      pwm: atmel-hlcdc: Convert to platform remove callback returning void
+      pwm: atmel-tcb: Convert to platform remove callback returning void
+      pwm: atmel: Convert to platform remove callback returning void
+      pwm: bcm-iproc: Convert to platform remove callback returning void
+      pwm: bcm2835: Convert to platform remove callback returning void
+      pwm: berlin: Convert to platform remove callback returning void
+      pwm: brcmstb: Convert to platform remove callback returning void
+      pwm: clk: Convert to platform remove callback returning void
+      pwm: cros-ec: Convert to platform remove callback returning void
+      pwm: hibvt: Convert to platform remove callback returning void
+      pwm: img: Convert to platform remove callback returning void
+      pwm: imx-tpm: Convert to platform remove callback returning void
+      pwm: lpc18xx-sct: Convert to platform remove callback returning void
+      pwm: lpss-platform: Convert to platform remove callback returning void
+      pwm: mtk-disp: Convert to platform remove callback returning void
+      pwm: omap-dmtimer: Convert to platform remove callback returning void
+      pwm: rcar: Convert to platform remove callback returning void
+      pwm: rockchip: Convert to platform remove callback returning void
+      pwm: samsung: Convert to platform remove callback returning void
+      pwm: sifive: Convert to platform remove callback returning void
+      pwm: spear: Convert to platform remove callback returning void
+      pwm: sprd: Convert to platform remove callback returning void
+      pwm: sti: Convert to platform remove callback returning void
+      pwm: stm32: Convert to platform remove callback returning void
+      pwm: sun4i: Convert to platform remove callback returning void
+      pwm: tegra: Convert to platform remove callback returning void
+      pwm: tiecap: Convert to platform remove callback returning void
+      pwm: tiehrpwm: Convert to platform remove callback returning void
+      pwm: vt8500: Convert to platform remove callback returning void
+      pwm: xilinx: Convert to platform remove callback returning void
+      pwm: Delete deprecated functions pwm_request() and pwm_free()
+
+ .../devicetree/bindings/pwm/apple,s5l-fpwm.yaml    |  51 +++++++
+ .../bindings/pwm/mediatek,mt2712-pwm.yaml          |   1 +
+ .../devicetree/bindings/pwm/pwm-amlogic.yaml       |  70 +++++++++
+ .../devicetree/bindings/pwm/pwm-meson.txt          |  29 ----
+ Documentation/driver-api/pwm.rst                   |  13 +-
+ MAINTAINERS                                        |   2 +
+ drivers/pwm/Kconfig                                |  12 ++
+ drivers/pwm/Makefile                               |   1 +
+ drivers/pwm/core.c                                 |  71 +--------
+ drivers/pwm/pwm-apple.c                            | 159 +++++++++++++++++++++
+ drivers/pwm/pwm-atmel-hlcdc.c                      |   6 +-
+ drivers/pwm/pwm-atmel-tcb.c                        |   6 +-
+ drivers/pwm/pwm-atmel.c                            |   6 +-
+ drivers/pwm/pwm-bcm-iproc.c                        |   6 +-
+ drivers/pwm/pwm-bcm2835.c                          |   6 +-
+ drivers/pwm/pwm-berlin.c                           |   6 +-
+ drivers/pwm/pwm-brcmstb.c                          |   6 +-
+ drivers/pwm/pwm-clk.c                              |   6 +-
+ drivers/pwm/pwm-cros-ec.c                          |   6 +-
+ drivers/pwm/pwm-hibvt.c                            |   6 +-
+ drivers/pwm/pwm-img.c                              |   6 +-
+ drivers/pwm/pwm-imx-tpm.c                          |   6 +-
+ drivers/pwm/pwm-lpc18xx-sct.c                      |   6 +-
+ drivers/pwm/pwm-lpss-platform.c                    |   5 +-
+ drivers/pwm/pwm-meson.c                            |   6 +-
+ drivers/pwm/pwm-mtk-disp.c                         |  40 ++++--
+ drivers/pwm/pwm-omap-dmtimer.c                     |   6 +-
+ drivers/pwm/pwm-rcar.c                             |   8 +-
+ drivers/pwm/pwm-rockchip.c                         |   6 +-
+ drivers/pwm/pwm-samsung.c                          |   6 +-
+ drivers/pwm/pwm-sifive.c                           |   6 +-
+ drivers/pwm/pwm-spear.c                            |   6 +-
+ drivers/pwm/pwm-sprd.c                             |   6 +-
+ drivers/pwm/pwm-sti.c                              |   6 +-
+ drivers/pwm/pwm-stm32-lp.c                         |   2 +-
+ drivers/pwm/pwm-stm32.c                            |  10 +-
+ drivers/pwm/pwm-sun4i.c                            |   6 +-
+ drivers/pwm/pwm-tegra.c                            |   6 +-
+ drivers/pwm/pwm-tiecap.c                           |   6 +-
+ drivers/pwm/pwm-tiehrpwm.c                         |   6 +-
+ drivers/pwm/pwm-vt8500.c                           |   6 +-
+ drivers/pwm/pwm-xilinx.c                           |   5 +-
+ include/linux/mfd/stm32-timers.h                   |   1 +
+ include/linux/pwm.h                                |  13 --
+ 44 files changed, 397 insertions(+), 252 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/pwm/apple,s5l-fpwm.yaml
+ create mode 100644 Documentation/devicetree/bindings/pwm/pwm-amlogic.yaml
+ delete mode 100644 Documentation/devicetree/bindings/pwm/pwm-meson.txt
+ create mode 100644 drivers/pwm/pwm-apple.c
