@@ -2,176 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61C9A6F5CC4
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 19:11:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BE696F5CC8
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 19:13:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229554AbjECRLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 13:11:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48832 "EHLO
+        id S229648AbjECRNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 13:13:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbjECRLH (ORCPT
+        with ESMTP id S229602AbjECRNl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 13:11:07 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3A657D83;
-        Wed,  3 May 2023 10:10:41 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 343EqIDA012512;
-        Wed, 3 May 2023 17:10:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=xedohLVoYxPec4E1c7GC+Ewwx4H1Qhde+jh2MpigbA8=;
- b=VDHI0sCbm0B3k+eJuLMqr9jgtlTzx5z1F3dh48dGvRsH8NLp43+fYCN9/sbF6rSFt0qK
- SZ27qxfA14As8OGee4rg6hok/iXhnhXzmrzaI5b3nXD8vYM84BKrjmTucfDogYBzvbgo
- vH/aNob8eYav6/nG/O5drpL0dEpNjVl/IVD3yO35u6r9tNJ23xxGMXobzyJ+09170Cgc
- p318fAru+8hASTlTGynnuc33oXmCObKizmClxwJsb3c2sGeXoAjDX2h7Gdp7+9z9CLbC
- BXh3ni57ygJ/5moS7Q/lF/85pYl6UeHYt+iQDZz23FXQ/RTS3DfH/IsIO8b4cGq+QwNK uw== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qbsr40b40-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 03 May 2023 17:10:18 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 343HAHk2014148
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 3 May 2023 17:10:17 GMT
-Received: from [10.71.110.193] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 3 May 2023
- 10:10:16 -0700
-Message-ID: <14ed17e5-de5e-3ea6-84b7-4e7c045c9765@quicinc.com>
-Date:   Wed, 3 May 2023 10:10:11 -0700
+        Wed, 3 May 2023 13:13:41 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7D91C420B
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 10:13:20 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 48A9A2F4;
+        Wed,  3 May 2023 10:14:04 -0700 (PDT)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 879DB3F64C;
+        Wed,  3 May 2023 10:13:18 -0700 (PDT)
+Message-ID: <4c77a01e-8ff3-f415-ffff-01c8d79a8bc7@arm.com>
+Date:   Wed, 3 May 2023 19:13:17 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 1/4] drm/msm/dsi: Adjust pclk rate for compression
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-CC:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-References: <20230405-add-dsc-support-v1-0-6bc6f03ae735@quicinc.com>
- <20230405-add-dsc-support-v1-1-6bc6f03ae735@quicinc.com>
- <dc926d1c-2637-34a7-df82-c6bd119bfadd@linaro.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 1/1] sched: Consider CPU contention in frequency &
+ load-balance busiest CPU selection
 Content-Language: en-US
-From:   Jessica Zhang <quic_jesszhan@quicinc.com>
-In-Reply-To: <dc926d1c-2637-34a7-df82-c6bd119bfadd@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: WR23AbmmI96jLITRnwSfG4LvSAbFjoSU
-X-Proofpoint-ORIG-GUID: WR23AbmmI96jLITRnwSfG4LvSAbFjoSU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-03_12,2023-05-03_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 bulkscore=0 phishscore=0 adultscore=0 suspectscore=0
- spamscore=0 mlxscore=0 mlxlogscore=999 lowpriorityscore=0 impostorscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2305030146
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Qais Yousef <qyousef@layalina.io>,
+        Kajetan Puchalski <kajetan.puchalski@arm.com>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Vincent Donnefort <vdonnefort@google.com>,
+        Quentin Perret <qperret@google.com>,
+        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
+        linux-kernel@vger.kernel.org
+References: <20230406155030.1989554-1-dietmar.eggemann@arm.com>
+ <20230406155030.1989554-2-dietmar.eggemann@arm.com>
+ <20230429145829.GB1495785@hirez.programming.kicks-ass.net>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <20230429145829.GB1495785@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5/3/2023 1:33 AM, Dmitry Baryshkov wrote:
-> On 03/05/2023 04:19, Jessica Zhang wrote:
->> Divide the pclk rate by the compression ratio when DSC is enabled
+On 29/04/2023 16:58, Peter Zijlstra wrote:
+> On Thu, Apr 06, 2023 at 05:50:30PM +0200, Dietmar Eggemann wrote:
+>> Use new cpu_boosted_util_cfs() instead of cpu_util_cfs().
 >>
->> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
->> ---
->>   drivers/gpu/drm/msm/dsi/dsi_host.c | 14 ++++++++++----
->>   1 file changed, 10 insertions(+), 4 deletions(-)
+>> The former returns max(util_avg, runnable_avg) capped by max CPU
+>> capacity. CPU contention is thereby considered through runnable_avg.
 >>
->> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c 
->> b/drivers/gpu/drm/msm/dsi/dsi_host.c
->> index 43a5ec33eee8..35c69dbe5f6f 100644
->> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
->> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
->> @@ -561,7 +561,8 @@ void dsi_link_clk_disable_v2(struct msm_dsi_host 
->> *msm_host)
->>       clk_disable_unprepare(msm_host->byte_clk);
->>   }
->> -static unsigned long dsi_get_pclk_rate(const struct drm_display_mode 
->> *mode, bool is_bonded_dsi)
->> +static unsigned long dsi_get_pclk_rate(const struct drm_display_mode 
->> *mode,
->> +        struct drm_dsc_config *dsc, bool is_bonded_dsi)
->>   {
->>       unsigned long pclk_rate;
->> @@ -576,6 +577,11 @@ static unsigned long dsi_get_pclk_rate(const 
->> struct drm_display_mode *mode, bool
->>       if (is_bonded_dsi)
->>           pclk_rate /= 2;
->> +    /* If DSC is enabled, divide pclk by compression ratio */
->> +    if (dsc)
->> +        pclk_rate = DIV_ROUND_UP(pclk_rate,
->> +                dsc->bits_per_component * 3 / msm_dsc_get_bpp_int(dsc));
->> +
+>> The change in load-balance only affects migration type `migrate_util`.
 > 
-> Don't we loose precision here?
-> Would DIV_ROUND_UP(pclk_rate * bpp, dsc->bpc * 3) be better?
+> But why, and how does it affect? That is, isn't this Changelog a wee bit
+> sparse?
 
-Hi Dmitry,
+Absolutely. 
 
-Acked.
+I have compelling test data based on JankbenchX on Pixel6 for 
+sugov_get_util() case I will share with v2.
 
-Thanks,
+But for the find_busiest_queue() (lb migration_type = migrate_util) case 
+it is tricky to create a test env.
 
-Jessica Zhang
+`migrate_util` only operates in DIE or NUMA SD (!SD_SHARE_PKG_RESOURCES) 
+and the system should not be overloaded (spare capacity on the local 
+group).
 
-> 
->>       return pclk_rate;
->>   }
->> @@ -585,7 +591,7 @@ unsigned long dsi_byte_clk_get_rate(struct 
->> mipi_dsi_host *host, bool is_bonded_d
->>       struct msm_dsi_host *msm_host = to_msm_dsi_host(host);
->>       u8 lanes = msm_host->lanes;
->>       u32 bpp = dsi_get_bpp(msm_host->format);
->> -    unsigned long pclk_rate = dsi_get_pclk_rate(mode, is_bonded_dsi);
->> +    unsigned long pclk_rate = dsi_get_pclk_rate(mode, msm_host->dsc, 
->> is_bonded_dsi);
->>       u64 pclk_bpp = (u64)pclk_rate * bpp;
->>       if (lanes == 0) {
->> @@ -604,7 +610,7 @@ unsigned long dsi_byte_clk_get_rate(struct 
->> mipi_dsi_host *host, bool is_bonded_d
->>   static void dsi_calc_pclk(struct msm_dsi_host *msm_host, bool 
->> is_bonded_dsi)
->>   {
->> -    msm_host->pixel_clk_rate = dsi_get_pclk_rate(msm_host->mode, 
->> is_bonded_dsi);
->> +    msm_host->pixel_clk_rate = dsi_get_pclk_rate(msm_host->mode, 
->> msm_host->dsc, is_bonded_dsi);
->>       msm_host->byte_clk_rate = dsi_byte_clk_get_rate(&msm_host->base, 
->> is_bonded_dsi,
->>                               msm_host->mode);
->> @@ -634,7 +640,7 @@ int dsi_calc_clk_rate_v2(struct msm_dsi_host 
->> *msm_host, bool is_bonded_dsi)
->>       dsi_calc_pclk(msm_host, is_bonded_dsi);
->> -    pclk_bpp = (u64)dsi_get_pclk_rate(msm_host->mode, is_bonded_dsi) 
->> * bpp;
->> +    pclk_bpp = (u64)dsi_get_pclk_rate(msm_host->mode, msm_host->dsc, 
->> is_bonded_dsi) * bpp;
->>       do_div(pclk_bpp, 8);
->>       msm_host->src_clk_rate = pclk_bpp;
->>
-> 
-> -- 
-> With best wishes
-> Dmitry
-> 
+perf bench sched messaging with a small number of tasks compared to CPU 
+number shows some improvement.
+
+E.g. Ampere Altra with 160 CPUs, SDs = {MC, DIE, NUMA} and 1 group = 40 
+tasks shows some improvement:
+
+perf stat --null --repeat 10 -- perf bench sched messaging -t -g 1 -l 2000
+
+0.4869 +- 0.0173 seconds time elapsed  ( +-  3.55% ) -> 0.4377 +- 0.0147 seconds time elapsed  ( +-  3.36% )
+
+If I put more tasks onto the machine, the conditions to go into 
+`migrate_util` lb vanish so there is no difference.
+
+Also if I test on an 8 CPUs system, SDs = {MC, DIE} and 1 group = 40 
+tasks the conditions to do migrate_util lb are only true for a short
+moment of the beginning of the test so it does not have much implication
+on the score.
+
+[...]
