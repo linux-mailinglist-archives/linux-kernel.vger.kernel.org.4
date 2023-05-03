@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BC856F556B
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 11:56:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1767D6F5575
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 11:57:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbjECJ4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 05:56:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51214 "EHLO
+        id S229788AbjECJ5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 05:57:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbjECJzg (ORCPT
+        with ESMTP id S229571AbjECJ5d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 05:55:36 -0400
-Received: from out-46.mta1.migadu.com (out-46.mta1.migadu.com [IPv6:2001:41d0:203:375::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A554ED4
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 02:54:58 -0700 (PDT)
-Date:   Wed, 3 May 2023 05:54:43 -0400
+        Wed, 3 May 2023 05:57:33 -0400
+Received: from out-29.mta0.migadu.com (out-29.mta0.migadu.com [IPv6:2001:41d0:1004:224b::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF31F30D6
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 02:57:28 -0700 (PDT)
+Date:   Wed, 3 May 2023 05:57:15 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1683107695;
+        t=1683107846;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Jg445jwECvvRmiCScPtVAaWcZXXyMj8rYmSMQmAKTHE=;
-        b=lCllcENijvyC1ebNj7URRaDdhwEZW7RyfvbYg1fVUeO79bulTkt3RjYJG2jVCHzwR7Pc3x
-        HUxyBBuo+xgNeAXZgmwQd3P2gPgxlM+XgMIkSt4fwh5HjNr9tfDeILYa8rca8iOp4VrOxy
-        Ufos0rVn5Brx5c1dPWhOO5ah3BGV4Lc=
+        bh=sUxQsWcAayZPSDpvKJX6MVjvEYhxJEaesagDt8ESMoA=;
+        b=HUCOH/N80slFi5vErQvwXmQRVJPgvs7X0vQd0axDTlMk/yD6uS8UUgewhyEcC5YpGdd9lD
+        Nfp4W/DmTbgBenfdi4cDwJFHiY7ZMVbWxr9EavpMuZfK1GaSdppyvarZLa7ZfejwjalZfu
+        dEG41/SPqlqOodTMCQ2OgtLp+yIUXFg=
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From:   Kent Overstreet <kent.overstreet@linux.dev>
 To:     Petr =?utf-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
@@ -58,7 +58,7 @@ Cc:     Michal Hocko <mhocko@suse.com>,
         linux-mm@kvack.org, linux-modules@vger.kernel.org,
         kasan-dev@googlegroups.com, cgroups@vger.kernel.org
 Subject: Re: [PATCH 00/40] Memory allocation profiling
-Message-ID: <ZFIvY5p1UAXxHw9s@moria.home.lan>
+Message-ID: <ZFIv+30UH7+ySCZr@moria.home.lan>
 References: <20230501165450.15352-1-surenb@google.com>
  <ZFIMaflxeHS3uR/A@dhcp22.suse.cz>
  <ZFIOfb6/jHwLqg6M@moria.home.lan>
@@ -72,8 +72,8 @@ In-Reply-To: <20230503115051.30b8a97f@meshulam.tesarici.cz>
 X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -81,31 +81,6 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Wed, May 03, 2023 at 11:50:51AM +0200, Petr Tesařík wrote:
-> On Wed, 3 May 2023 09:51:49 +0200
-> Michal Hocko <mhocko@suse.com> wrote:
-> 
-> > On Wed 03-05-23 03:34:21, Kent Overstreet wrote:
-> >[...]
-> > > We've made this as clean and simple as posssible: a single new macro
-> > > invocation per allocation function, no calling convention changes (that
-> > > would indeed have been a lot of churn!)  
-> > 
-> > That doesn't really make the concern any less relevant. I believe you
-> > and Suren have made a great effort to reduce the churn as much as
-> > possible but looking at the diffstat the code changes are clearly there
-> > and you have to convince the rest of the community that this maintenance
-> > overhead is really worth it.
-> 
-> I believe this is the crucial point.
-> 
-> I have my own concerns about the use of preprocessor macros, which goes
-> against the basic idea of a code tagging framework (patch 13/40).
-> AFAICS the CODE_TAG_INIT macro must be expanded on the same source code
-> line as the tagged code, which makes it hard to use without further
-> macros (unless you want to make the source code unreadable beyond
-> imagination). That's why all allocation functions must be converted to
-> macros.
-> 
 > If anyone ever wants to use this code tagging framework for something
 > else, they will also have to convert relevant functions to macros,
 > slowly changing the kernel to a minefield where local identifiers,
@@ -113,9 +88,9 @@ On Wed, May 03, 2023 at 11:50:51AM +0200, Petr Tesařík wrote:
 > conflict with a tagged function. For now, I have to remember that
 > alloc_pages is forbidden, but the list may grow.
 
-No, we've got other code tagging applications (that have already been
-posted!) and they don't "convert functions to macros" in the way this
-patchset does - they do introduce new macros, but as new identifiers,
-which we do all the time.
+Also, since you're not actually a kernel contributor yet...
 
-This was simply the least churny way to hook memory allocations.
+It's not really good decorum to speculate in code review about things
+that can be answered by just reading the code. If you're going to
+comment, please do the necessary work to make sure you're saying
+something that makes sense.
