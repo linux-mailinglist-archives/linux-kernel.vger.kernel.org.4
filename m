@@ -2,95 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9589B6F4F0F
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 05:15:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A00FD6F4F11
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 05:16:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbjECDPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 23:15:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56194 "EHLO
+        id S229675AbjECDQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 23:16:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjECDO5 (ORCPT
+        with ESMTP id S229618AbjECDQY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 23:14:57 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FEA71FD2;
-        Tue,  2 May 2023 20:14:52 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 3433EZ4G0005230, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 3433EZ4G0005230
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Wed, 3 May 2023 11:14:35 +0800
-Received: from RTEXMBS06.realtek.com.tw (172.21.6.99) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Wed, 3 May 2023 11:14:40 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS06.realtek.com.tw (172.21.6.99) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Wed, 3 May 2023 11:14:39 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
- RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
- 15.01.2375.007; Wed, 3 May 2023 11:14:39 +0800
-From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
-        <stanley_chang@realtek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v4 2/2] dt-bindings: usb: snps,dwc3: Add the compatible name 'snps,dwc3-rtk-soc'
-Thread-Topic: [PATCH v4 2/2] dt-bindings: usb: snps,dwc3: Add the compatible
- name 'snps,dwc3-rtk-soc'
-Thread-Index: AQHZfLOhYfbzHfxzYE2TNUg+fEIenq9GE1eAgACG7nD//4ryAIAAh9bw//+RWQCAAIlt4IAAEN2AgAEHGaA=
-Date:   Wed, 3 May 2023 03:14:39 +0000
-Message-ID: <9d3e976192364bde98adeb7d31767505@realtek.com>
-References: <20230502050452.27276-1-stanley_chang@realtek.com>
- <20230502050452.27276-2-stanley_chang@realtek.com>
- <2653e0d1-6570-7469-51da-b539b5c14299@linaro.org>
- <bc5cd630d96f44bcaad7f95f2f45aac1@realtek.com>
- <49d2b103-de1e-637a-1bf0-aaba1c6afaf4@linaro.org>
- <a04e70f97bcb48048edb2f6db7bb6c25@realtek.com>
- <f51b4dc9-e1da-7c9c-1e39-c8510569db9d@linaro.org>
- <c44baa9fae5c445c90103cd2e129ab0b@realtek.com>
- <676dae73-9b59-d0bb-37ca-eaa120e8dcb5@linaro.org>
-In-Reply-To: <676dae73-9b59-d0bb-37ca-eaa120e8dcb5@linaro.org>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.190.159]
-x-kse-serverinfo: RTEXMBS06.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 2 May 2023 23:16:24 -0400
+Received: from mail-m11876.qiye.163.com (mail-m11876.qiye.163.com [115.236.118.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 877C6AD;
+        Tue,  2 May 2023 20:16:22 -0700 (PDT)
+Received: from localhost.localdomain (unknown [IPV6:240e:3b7:327f:5c30:95e8:3d27:11c5:1ee8])
+        by mail-m11876.qiye.163.com (Hmail) with ESMTPA id 7D4DC3C0234;
+        Wed,  3 May 2023 11:16:14 +0800 (CST)
+From:   Ding Hui <dinghui@sangfor.com.cn>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, intel-wired-lan@lists.osuosl.org,
+        jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com
+Cc:     keescook@chromium.org, grzegorzx.szczurek@intel.com,
+        mateusz.palczewski@intel.com, mitch.a.williams@intel.com,
+        gregory.v.rose@intel.com, jeffrey.t.kirsher@intel.com,
+        michal.kubiak@intel.com, simon.horman@corigine.com,
+        madhu.chittim@intel.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        pengdonglin@sangfor.com.cn, huangcun@sangfor.com.cn,
+        Ding Hui <dinghui@sangfor.com.cn>
+Subject: [PATCH net v4 0/2] iavf: Fix issues when setting channels concurrency with removing
+Date:   Wed,  3 May 2023 11:15:39 +0800
+Message-Id: <20230503031541.27855-1-dinghui@sangfor.com.cn>
+X-Mailer: git-send-email 2.17.1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlCHUlCVh1KHU9CTkpPSUpMHVUTARMWGhIXJBQOD1
+        lXWRgSC1lBWUlPSx5BSBlMQUhJTB1BThhIS0FCTh5DQUgfSUxBSkoYTkFKHh5DWVdZFhoPEhUdFF
+        lBWU9LSFVKSktISkxVSktLVUtZBg++
+X-HM-Tid: 0a87df9c4c802eb2kusn7d4dc3c0234
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6N0k6Tgw6CD0OAToTMB8XQgIK
+        DkoaFC1VSlVKTUNIS0NITExOTkpIVTMWGhIXVR8SFRwTDhI7CBoVHB0UCVUYFBZVGBVFWVdZEgtZ
+        QVlJT0seQUgZTEFISUwdQU4YSEtBQk4eQ0FIH0lMQUpKGE5BSh4eQ1lXWQgBWUFIS09ONwY+
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgS3J6eXN6dG9mLA0KDQo+IFJlZ3VsYXIgcnVsZXMgYXBwbHksIGJlY2F1c2UgeW91ciBkZXZp
-Y2UgaXMgbm90IHNwZWNpYWwuDQo+IGh0dHBzOi8vZWxpeGlyLmJvb3RsaW4uY29tL2xpbnV4L3Y2
-LjEtcmMxL3NvdXJjZS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluDQo+IGRpbmdzL3dyaXRp
-bmctYmluZGluZ3MucnN0I0w0Mg0KPiANCj4gVGhlcmVmb3JlIGVpdGhlciBTb0MtYmFzZWQgZGV2
-aWNlIHNwZWNpZmljIG5hbWUgb3IgZm9sbG93ZWQgYnk6DQo+IDEuIFNvQy1iYXNlZCBkZXZpY2Ug
-c3BlY2lmaWMgZmFsbGJhY2ssDQo+IDIuIEZhbWlseS1kZXZpY2UgZ2VuZXJpYyBmYWxsYmFjaywN
-Cj4gDQoNClRoYW5rcyBmb3IgeW91ciBzdWdnZXN0aW9uLiBJIHdpbGwgZm9sbG93IHRoZXNlIHJ1
-bGVzLg0KVGhpbmggaGFzIGEgZ29vZCBzdWdnZXN0aW9uIGZvciB0aGlzIHByb2JsZW0uDQpIaXMg
-c29sdXRpb24gaXMgc2ltcGx5LiBBbmQgbm8gbW9kaWZ5IHRoZSBjb21wYXRpYmxlIG5hbWUgYW5k
-IHByb3BlcnR5IG9mIGR3YzMuDQoNClRoYW5rcywNClN0YW5sZXkNCg==
+The patchset fix two issues which can be reproduced by the following script:
+
+[root@host ~]# cat repro.sh
+#!/bin/bash
+
+pf_dbsf="0000:41:00.0"
+vf0_dbsf="0000:41:02.0"
+g_pids=()
+
+function do_set_numvf()
+{
+    echo 2 >/sys/bus/pci/devices/${pf_dbsf}/sriov_numvfs
+    sleep $((RANDOM%3+1))
+    echo 0 >/sys/bus/pci/devices/${pf_dbsf}/sriov_numvfs
+    sleep $((RANDOM%3+1))
+}
+
+function do_set_channel()
+{
+    local nic=$(ls -1 --indicator-style=none /sys/bus/pci/devices/${vf0_dbsf}/net/)
+    [ -z "$nic" ] && { sleep $((RANDOM%3)) ; return 1; }
+    ifconfig $nic 192.168.18.5 netmask 255.255.255.0
+    ifconfig $nic up
+    ethtool -L $nic combined 1
+    ethtool -L $nic combined 4
+    sleep $((RANDOM%3))
+}
+
+function on_exit()
+{
+    local pid
+    for pid in "${g_pids[@]}"; do
+        kill -0 "$pid" &>/dev/null && kill "$pid" &>/dev/null
+    done
+    g_pids=()
+}
+
+trap "on_exit; exit" EXIT
+
+while :; do do_set_numvf ; done &
+g_pids+=($!)
+while :; do do_set_channel ; done &
+g_pids+=($!)
+
+wait
+
+
+Ding Hui (2):
+  iavf: Fix use-after-free in free_netdev
+  iavf: Fix out-of-bounds when setting channels on remove
+
+ drivers/net/ethernet/intel/iavf/iavf_ethtool.c | 4 +++-
+ drivers/net/ethernet/intel/iavf/iavf_main.c    | 6 +-----
+ 2 files changed, 4 insertions(+), 6 deletions(-)
+
+-- 
+2.17.1
+
