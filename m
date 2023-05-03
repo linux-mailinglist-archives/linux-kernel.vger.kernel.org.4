@@ -2,449 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E6EA6F5240
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 09:50:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 721EE6F5254
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 09:52:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbjECHuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 03:50:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50372 "EHLO
+        id S229637AbjECHw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 03:52:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbjECHuN (ORCPT
+        with ESMTP id S229564AbjECHwP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 03:50:13 -0400
-Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5C91981;
-        Wed,  3 May 2023 00:50:04 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id E004DC009; Wed,  3 May 2023 09:50:02 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1683100202; bh=VbVBtnbrwLuul77qAvsbvfbxVsUi5EeTfSpIBmi3j4w=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=P79Oa6KPZN66cQuxIKitEjcvhOa4af7NH0eLqh4Sqy++awurygv3Xthq2MUglS/vC
-         JIb0vzmZ2S8sPeKq/8FZPJnRlENsAGQ2H3WDzrDMqKIgQvAtFd4a7kB5u6T1+lBalv
-         3AGt+SihdF2fnJ+8xAUS2N4xCpWyJghmphsDlQmLGnwjjcF/tK5driZMu7v/gTFe2U
-         DNuui4X8WNYXJLRbAWGUcIf6qrqDj2u3WK1D/297bAE3B6B7SAqEJ42mLwWEf0j6Gj
-         tLojuMsrTCU6O80zByT6RLgCUxEyUvH4WAa49oTBdRFw6ztWbpat5SJR/Zo+QJhvld
-         7tp3Foj8CVnGQ==
+        Wed, 3 May 2023 03:52:15 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07E730F7;
+        Wed,  3 May 2023 00:51:51 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 529882230F;
+        Wed,  3 May 2023 07:51:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1683100310; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LbOettp3UaJGbcC185AxqMHgcSABvOiPPaXvjwmoDVE=;
+        b=u+JdKhxmNSEcTLgJetAiyE5+DpLX9lfGaxfRYrwtA1OwKYk88K/+nmG6d/2esV+aCUUtPR
+        h+gvAGPKGWUp3TxdEFsKmHv+uIDk2Y2kKg6agFx7Z77jX1G45rhNx3IzfsIMW/fcqrejJk
+        PfnqrxsJUonlqQD4TEfvThhG0FK+lVs=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2480E1331F;
+        Wed,  3 May 2023 07:51:50 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id YvrlCJYSUmQIXAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Wed, 03 May 2023 07:51:50 +0000
+Date:   Wed, 3 May 2023 09:51:49 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
+        vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev,
+        mgorman@suse.de, dave@stgolabs.net, willy@infradead.org,
+        liam.howlett@oracle.com, corbet@lwn.net, void@manifault.com,
+        peterz@infradead.org, juri.lelli@redhat.com, ldufour@linux.ibm.com,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, peterx@redhat.com, david@redhat.com,
+        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
+        nathan@kernel.org, dennis@kernel.org, tj@kernel.org,
+        muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
+        pasha.tatashin@soleen.com, yosryahmed@google.com,
+        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
+        andreyknvl@gmail.com, keescook@chromium.org,
+        ndesaulniers@google.com, gregkh@linuxfoundation.org,
+        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+        glider@google.com, elver@google.com, dvyukov@google.com,
+        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
+        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
+Subject: Re: [PATCH 00/40] Memory allocation profiling
+Message-ID: <ZFISlX+mSx4QJDK6@dhcp22.suse.cz>
+References: <20230501165450.15352-1-surenb@google.com>
+ <ZFIMaflxeHS3uR/A@dhcp22.suse.cz>
+ <ZFIOfb6/jHwLqg6M@moria.home.lan>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZFIOfb6/jHwLqg6M@moria.home.lan>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id CB897C01B;
-        Wed,  3 May 2023 09:49:53 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1683100200; bh=VbVBtnbrwLuul77qAvsbvfbxVsUi5EeTfSpIBmi3j4w=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=UXX7GgqwXphKEMKtVQdLpmhed/vC6usO4K1w6PT5h6gGTVaeCpY0hiUGz49RWatII
-         G4hQDTMQRUk7ubZ2fu1yRThyQ/AI8nCqlP8neMmKE0jwKRrYS+W+YBLfQortMpYLpU
-         PAVdW5dTPHgnVbRT/7+TAK2qdygsOU9SITOp5ZlZSHHzUfyKcf2xxjDz9HYTAof/KW
-         9cl9KugM1YHRyF4kdH6S+t6gbqEtlV5SsNKoMi6OfmtS3/04bpwQ4thLxbgcUgxBro
-         2B+1cF1sEopRtftw3BqECeiUtvuyhxup6tBhp0L4h08VfbRgmDzuP8K7PAOXs4Fo+j
-         AWJu5S0IFeIHg==
-Received: from [127.0.0.2] (localhost [::1])
-        by odin.codewreck.org (OpenSMTPD) with ESMTP id 018f94ab;
-        Wed, 3 May 2023 07:49:37 +0000 (UTC)
-From:   Dominique Martinet <asmadeus@codewreck.org>
-Date:   Wed, 03 May 2023 16:49:29 +0900
-Subject: [PATCH v2 5/5] 9p: remove dead stores (variable set again without
- being read)
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230427-scan-build-v2-5-bb96a6e6a33b@codewreck.org>
-References: <20230427-scan-build-v2-0-bb96a6e6a33b@codewreck.org>
-In-Reply-To: <20230427-scan-build-v2-0-bb96a6e6a33b@codewreck.org>
-To:     Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Christian Schoenebeck <linux_oss@crudebyte.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Simon Horman <simon.horman@corigine.com>, v9fs@lists.linux.dev,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Dominique Martinet <asmadeus@codewreck.org>
-X-Mailer: b4 0.13-dev-f371f
-X-Developer-Signature: v=1; a=openpgp-sha256; l=10835;
- i=asmadeus@codewreck.org; h=from:subject:message-id;
- bh=ZpaOG6I1Mg+9Sdfd+zvY5JWk7jk8BihMPOQRrLFRmpo=;
- b=owEBbQKS/ZANAwAIAatOm+xqmOZwAcsmYgBkUhIRID05hLvaWGo3o+U/pd52m5DsD9LwkTky9
- qXpKfcZyIiJAjMEAAEIAB0WIQT8g9txgG5a3TOhiE6rTpvsapjmcAUCZFISEQAKCRCrTpvsapjm
- cLkeD/4n5FKs8IQpn2Irz9rpxv3ywSXtF39YwPsTq7qmAfcoDKoiie8WGjc4CqTX/bBKhpiBYBs
- jcrQ0wqwBG9tE5Ll3zjk+1faNeFm7ew320iIqBr+B3sV6aAe9ebUnv1nb57bGW2twwWGaxLZ4HF
- m7Bf1UanvVZztieddeKqdwPJlDchaUwmuRF/ugl64eBPwiw0EWkIG5wqmN8cscpHQm8Bqngq4Nw
- NtgzhCmSneRGcrZ7bBCH6KccnpevkdlFpsh8Rqf4BImlVdGAN936oQG2lhL0OuiYmlxiVFVv+l6
- CYa0EzbkjXREoZIoil9mTwz4bZMvDOcHOFMfUvYZJQYcYC++im7S6PZAoyYPdRB/PFyw0NUZkuw
- cMXCvfWYluoxkZeAndbi1qA0aycOxHl1T4/4MdHfNuGK4nqyAafwlSwu9JuAw1MUJzm2OnMDwzQ
- phoRv4SloO8aDwCMz99vPlJImlv2Of4M0uwXyY0nSQe6DLYEuKgT3+fjZHC2UQbSBSR3M2A+waB
- tGxhiHEybZWNB9sut2FSFANFW31seYucC+w/DJoeW5v1N7+ROgLT+w9cNTAcpj95GvwvLnxwNlO
- JZlbm3wBWP/HnuddAc2ElNR/bPapb4cPtHGlk4rLFhDuZPj6CiopCZdtr+HN69d1vG9CXfLNAku
- zL5qD9hQBYmxRZw==
-X-Developer-Key: i=asmadeus@codewreck.org; a=openpgp;
- fpr=B894379F662089525B3FB1B9333F1F391BBBB00A
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 9p code for some reason used to initialize variables outside of the
-declaration, e.g. instead of just initializing the variable like this:
+On Wed 03-05-23 03:34:21, Kent Overstreet wrote:
+> On Wed, May 03, 2023 at 09:25:29AM +0200, Michal Hocko wrote:
+> > On Mon 01-05-23 09:54:10, Suren Baghdasaryan wrote:
+> > > Memory allocation profiling infrastructure provides a low overhead
+> > > mechanism to make all kernel allocations in the system visible. It can be
+> > > used to monitor memory usage, track memory hotspots, detect memory leaks,
+> > > identify memory regressions.
+> > > 
+> > > To keep the overhead to the minimum, we record only allocation sizes for
+> > > every allocation in the codebase. With that information, if users are
+> > > interested in more detailed context for a specific allocation, they can
+> > > enable in-depth context tracking, which includes capturing the pid, tgid,
+> > > task name, allocation size, timestamp and call stack for every allocation
+> > > at the specified code location.
+> > [...]
+> > > Implementation utilizes a more generic concept of code tagging, introduced
+> > > as part of this patchset. Code tag is a structure identifying a specific
+> > > location in the source code which is generated at compile time and can be
+> > > embedded in an application-specific structure. A number of applications
+> > > for code tagging have been presented in the original RFC [1].
+> > > Code tagging uses the old trick of "define a special elf section for
+> > > objects of a given type so that we can iterate over them at runtime" and
+> > > creates a proper library for it. 
+> > > 
+> > > To profile memory allocations, we instrument page, slab and percpu
+> > > allocators to record total memory allocated in the associated code tag at
+> > > every allocation in the codebase. Every time an allocation is performed by
+> > > an instrumented allocator, the code tag at that location increments its
+> > > counter by allocation size. Every time the memory is freed the counter is
+> > > decremented. To decrement the counter upon freeing, allocated object needs
+> > > a reference to its code tag. Page allocators use page_ext to record this
+> > > reference while slab allocators use memcg_data (renamed into more generic
+> > > slabobj_ext) of the slab page.
+> > [...]
+> > > [1] https://lore.kernel.org/all/20220830214919.53220-1-surenb@google.com/
+> > [...]
+> > >  70 files changed, 2765 insertions(+), 554 deletions(-)
+> > 
+> > Sorry for cutting the cover considerably but I believe I have quoted the
+> > most important/interesting parts here. The approach is not fundamentally
+> > different from the previous version [1] and there was a significant
+> > discussion around this approach. The cover letter doesn't summarize nor
+> > deal with concerns expressed previous AFAICS. So let me bring those up
+> > back. At least those I find the most important:
+> 
+> We covered this previously, I'll just be giving the same answers I did
+> before:
 
-int retval = 0
+Your answers have shown your insight into tracing is very limited. I
+have a clear recollection there were many suggestions on how to get what
+you need and willingness to help out. Repeating your previous position
+will not help much to be honest with you.
 
-We would be doing this:
+> > - This is a big change and it adds a significant maintenance burden
+> >   because each allocation entry point needs to be handled specifically.
+> >   The cost will grow with the intended coverage especially there when
+> >   allocation is hidden in a library code.
+> 
+> We've made this as clean and simple as posssible: a single new macro
+> invocation per allocation function, no calling convention changes (that
+> would indeed have been a lot of churn!)
 
-int retval;
-retval = 0;
+That doesn't really make the concern any less relevant. I believe you
+and Suren have made a great effort to reduce the churn as much as
+possible but looking at the diffstat the code changes are clearly there
+and you have to convince the rest of the community that this maintenance
+overhead is really worth it. The above statement hasn't helped to
+convinced me to be honest.
 
-This is perfectly fine and the compiler will just optimize dead stores
-anyway, but scan-build seems to think this is a problem and there are
-many of these warnings making the output of scan-build full of such
-warnings:
-fs/9p/vfs_inode.c:916:2: warning: Value stored to 'retval' is never read [deadcode.DeadStores]
-        retval = 0;
-        ^        ~
+> > - It has been brought up that this is duplicating functionality already
+> >   available via existing tracing infrastructure. You should make it very
+> >   clear why that is not suitable for the job
+> 
+> Tracing people _claimed_ this, but never demonstrated it.
 
-I have no strong opinion here, but if we want to regularly run
-scan-build we should fix these just to silence the messages.
+The burden is on you and Suren. You are proposing the implement an
+alternative tracing infrastructure.
 
-I've confirmed these all are indeed ok to remove.
+> Tracepoints
+> exist but the tooling that would consume them to provide this kind of
+> information does not exist;
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
-Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
----
- fs/9p/vfs_inode.c      |  6 ------
- fs/9p/vfs_inode_dotl.c |  1 -
- net/9p/client.c        | 46 ++++++++++++----------------------------------
- 3 files changed, 12 insertions(+), 41 deletions(-)
+Any reasons why an appropriate tooling cannot be developed?
 
-diff --git a/fs/9p/vfs_inode.c b/fs/9p/vfs_inode.c
-index 3791f642c502..99305e97287c 100644
---- a/fs/9p/vfs_inode.c
-+++ b/fs/9p/vfs_inode.c
-@@ -164,7 +164,6 @@ int v9fs_uflags2omode(int uflags, int extended)
- {
- 	int ret;
- 
--	ret = 0;
- 	switch (uflags&3) {
- 	default:
- 	case O_RDONLY:
-@@ -604,7 +603,6 @@ v9fs_create(struct v9fs_session_info *v9ses, struct inode *dir,
- 
- 	p9_debug(P9_DEBUG_VFS, "name %pd\n", dentry);
- 
--	err = 0;
- 	name = dentry->d_name.name;
- 	dfid = v9fs_parent_fid(dentry);
- 	if (IS_ERR(dfid)) {
-@@ -816,8 +814,6 @@ v9fs_vfs_atomic_open(struct inode *dir, struct dentry *dentry,
- 	if (!(flags & O_CREAT) || d_really_is_positive(dentry))
- 		return finish_no_open(file, res);
- 
--	err = 0;
--
- 	v9ses = v9fs_inode2v9ses(dir);
- 	perm = unixmode2p9mode(v9ses, mode);
- 	p9_omode = v9fs_uflags2omode(flags, v9fs_proto_dotu(v9ses));
-@@ -913,7 +909,6 @@ v9fs_vfs_rename(struct mnt_idmap *idmap, struct inode *old_dir,
- 		return -EINVAL;
- 
- 	p9_debug(P9_DEBUG_VFS, "\n");
--	retval = 0;
- 	old_inode = d_inode(old_dentry);
- 	new_inode = d_inode(new_dentry);
- 	v9ses = v9fs_inode2v9ses(old_inode);
-@@ -1067,7 +1062,6 @@ static int v9fs_vfs_setattr(struct mnt_idmap *idmap,
- 	if (retval)
- 		return retval;
- 
--	retval = -EPERM;
- 	v9ses = v9fs_dentry2v9ses(dentry);
- 	if (iattr->ia_valid & ATTR_FILE) {
- 		fid = iattr->ia_file->private_data;
-diff --git a/fs/9p/vfs_inode_dotl.c b/fs/9p/vfs_inode_dotl.c
-index 3acf2bcb69cc..43e282f21962 100644
---- a/fs/9p/vfs_inode_dotl.c
-+++ b/fs/9p/vfs_inode_dotl.c
-@@ -367,7 +367,6 @@ static int v9fs_vfs_mkdir_dotl(struct mnt_idmap *idmap,
- 	struct posix_acl *dacl = NULL, *pacl = NULL;
- 
- 	p9_debug(P9_DEBUG_VFS, "name %pd\n", dentry);
--	err = 0;
- 	v9ses = v9fs_inode2v9ses(dir);
- 
- 	omode |= S_IFDIR;
-diff --git a/net/9p/client.c b/net/9p/client.c
-index a3340268ec8d..86bbc7147fc1 100644
---- a/net/9p/client.c
-+++ b/net/9p/client.c
-@@ -904,7 +904,7 @@ EXPORT_SYMBOL(do_trace_9p_fid_put);
- 
- static int p9_client_version(struct p9_client *c)
- {
--	int err = 0;
-+	int err;
- 	struct p9_req_t *req;
- 	char *version = NULL;
- 	int msize;
-@@ -975,7 +975,6 @@ struct p9_client *p9_client_create(const char *dev_name, char *options)
- 	struct p9_client *clnt;
- 	char *client_id;
- 
--	err = 0;
- 	clnt = kmalloc(sizeof(*clnt), GFP_KERNEL);
- 	if (!clnt)
- 		return ERR_PTR(-ENOMEM);
-@@ -1094,7 +1093,7 @@ struct p9_fid *p9_client_attach(struct p9_client *clnt, struct p9_fid *afid,
- 				const char *uname, kuid_t n_uname,
- 				const char *aname)
- {
--	int err = 0;
-+	int err;
- 	struct p9_req_t *req;
- 	struct p9_fid *fid;
- 	struct p9_qid qid;
-@@ -1147,7 +1146,6 @@ struct p9_fid *p9_client_walk(struct p9_fid *oldfid, uint16_t nwname,
- 	struct p9_req_t *req;
- 	u16 nwqids, count;
- 
--	err = 0;
- 	wqids = NULL;
- 	clnt = oldfid->clnt;
- 	if (clone) {
-@@ -1224,7 +1222,6 @@ int p9_client_open(struct p9_fid *fid, int mode)
- 	clnt = fid->clnt;
- 	p9_debug(P9_DEBUG_9P, ">>> %s fid %d mode %d\n",
- 		 p9_is_proto_dotl(clnt) ? "TLOPEN" : "TOPEN", fid->fid, mode);
--	err = 0;
- 
- 	if (fid->mode != -1)
- 		return -EINVAL;
-@@ -1262,7 +1259,7 @@ EXPORT_SYMBOL(p9_client_open);
- int p9_client_create_dotl(struct p9_fid *ofid, const char *name, u32 flags,
- 			  u32 mode, kgid_t gid, struct p9_qid *qid)
- {
--	int err = 0;
-+	int err;
- 	struct p9_client *clnt;
- 	struct p9_req_t *req;
- 	int iounit;
-@@ -1314,7 +1311,6 @@ int p9_client_fcreate(struct p9_fid *fid, const char *name, u32 perm, int mode,
- 
- 	p9_debug(P9_DEBUG_9P, ">>> TCREATE fid %d name %s perm %d mode %d\n",
- 		 fid->fid, name, perm, mode);
--	err = 0;
- 	clnt = fid->clnt;
- 
- 	if (fid->mode != -1)
-@@ -1350,7 +1346,7 @@ EXPORT_SYMBOL(p9_client_fcreate);
- int p9_client_symlink(struct p9_fid *dfid, const char *name,
- 		      const char *symtgt, kgid_t gid, struct p9_qid *qid)
- {
--	int err = 0;
-+	int err;
- 	struct p9_client *clnt;
- 	struct p9_req_t *req;
- 
-@@ -1402,13 +1398,12 @@ EXPORT_SYMBOL(p9_client_link);
- 
- int p9_client_fsync(struct p9_fid *fid, int datasync)
- {
--	int err;
-+	int err = 0;
- 	struct p9_client *clnt;
- 	struct p9_req_t *req;
- 
- 	p9_debug(P9_DEBUG_9P, ">>> TFSYNC fid %d datasync:%d\n",
- 		 fid->fid, datasync);
--	err = 0;
- 	clnt = fid->clnt;
- 
- 	req = p9_client_rpc(clnt, P9_TFSYNC, "dd", fid->fid, datasync);
-@@ -1428,7 +1423,7 @@ EXPORT_SYMBOL(p9_client_fsync);
- 
- int p9_client_clunk(struct p9_fid *fid)
- {
--	int err;
-+	int err = 0;
- 	struct p9_client *clnt;
- 	struct p9_req_t *req;
- 	int retries = 0;
-@@ -1436,7 +1431,6 @@ int p9_client_clunk(struct p9_fid *fid)
- again:
- 	p9_debug(P9_DEBUG_9P, ">>> TCLUNK fid %d (try %d)\n",
- 		 fid->fid, retries);
--	err = 0;
- 	clnt = fid->clnt;
- 
- 	req = p9_client_rpc(clnt, P9_TCLUNK, "d", fid->fid);
-@@ -1465,12 +1459,11 @@ EXPORT_SYMBOL(p9_client_clunk);
- 
- int p9_client_remove(struct p9_fid *fid)
- {
--	int err;
-+	int err = 0;
- 	struct p9_client *clnt;
- 	struct p9_req_t *req;
- 
- 	p9_debug(P9_DEBUG_9P, ">>> TREMOVE fid %d\n", fid->fid);
--	err = 0;
- 	clnt = fid->clnt;
- 
- 	req = p9_client_rpc(clnt, P9_TREMOVE, "d", fid->fid);
-@@ -1680,7 +1673,6 @@ struct p9_wstat *p9_client_stat(struct p9_fid *fid)
- 	if (!ret)
- 		return ERR_PTR(-ENOMEM);
- 
--	err = 0;
- 	clnt = fid->clnt;
- 
- 	req = p9_client_rpc(clnt, P9_TSTAT, "d", fid->fid);
-@@ -1733,7 +1725,6 @@ struct p9_stat_dotl *p9_client_getattr_dotl(struct p9_fid *fid,
- 	if (!ret)
- 		return ERR_PTR(-ENOMEM);
- 
--	err = 0;
- 	clnt = fid->clnt;
- 
- 	req = p9_client_rpc(clnt, P9_TGETATTR, "dq", fid->fid, request_mask);
-@@ -1812,11 +1803,10 @@ static int p9_client_statsize(struct p9_wstat *wst, int proto_version)
- 
- int p9_client_wstat(struct p9_fid *fid, struct p9_wstat *wst)
- {
--	int err;
-+	int err = 0;
- 	struct p9_req_t *req;
- 	struct p9_client *clnt;
- 
--	err = 0;
- 	clnt = fid->clnt;
- 	wst->size = p9_client_statsize(wst, clnt->proto_version);
- 	p9_debug(P9_DEBUG_9P, ">>> TWSTAT fid %d\n",
-@@ -1851,11 +1841,10 @@ EXPORT_SYMBOL(p9_client_wstat);
- 
- int p9_client_setattr(struct p9_fid *fid, struct p9_iattr_dotl *p9attr)
- {
--	int err;
-+	int err = 0;
- 	struct p9_req_t *req;
- 	struct p9_client *clnt;
- 
--	err = 0;
- 	clnt = fid->clnt;
- 	p9_debug(P9_DEBUG_9P, ">>> TSETATTR fid %d\n", fid->fid);
- 	p9_debug(P9_DEBUG_9P, "    valid=%x mode=%x uid=%d gid=%d size=%lld\n",
-@@ -1887,7 +1876,6 @@ int p9_client_statfs(struct p9_fid *fid, struct p9_rstatfs *sb)
- 	struct p9_req_t *req;
- 	struct p9_client *clnt;
- 
--	err = 0;
- 	clnt = fid->clnt;
- 
- 	p9_debug(P9_DEBUG_9P, ">>> TSTATFS fid %d\n", fid->fid);
-@@ -1921,11 +1909,10 @@ EXPORT_SYMBOL(p9_client_statfs);
- int p9_client_rename(struct p9_fid *fid,
- 		     struct p9_fid *newdirfid, const char *name)
- {
--	int err;
-+	int err = 0;
- 	struct p9_req_t *req;
- 	struct p9_client *clnt;
- 
--	err = 0;
- 	clnt = fid->clnt;
- 
- 	p9_debug(P9_DEBUG_9P, ">>> TRENAME fid %d newdirfid %d name %s\n",
-@@ -1949,11 +1936,10 @@ EXPORT_SYMBOL(p9_client_rename);
- int p9_client_renameat(struct p9_fid *olddirfid, const char *old_name,
- 		       struct p9_fid *newdirfid, const char *new_name)
- {
--	int err;
-+	int err = 0;
- 	struct p9_req_t *req;
- 	struct p9_client *clnt;
- 
--	err = 0;
- 	clnt = olddirfid->clnt;
- 
- 	p9_debug(P9_DEBUG_9P,
-@@ -1986,7 +1972,6 @@ struct p9_fid *p9_client_xattrwalk(struct p9_fid *file_fid,
- 	struct p9_client *clnt;
- 	struct p9_fid *attr_fid;
- 
--	err = 0;
- 	clnt = file_fid->clnt;
- 	attr_fid = p9_fid_create(clnt);
- 	if (!attr_fid) {
-@@ -2027,14 +2012,13 @@ EXPORT_SYMBOL_GPL(p9_client_xattrwalk);
- int p9_client_xattrcreate(struct p9_fid *fid, const char *name,
- 			  u64 attr_size, int flags)
- {
--	int err;
-+	int err = 0;
- 	struct p9_req_t *req;
- 	struct p9_client *clnt;
- 
- 	p9_debug(P9_DEBUG_9P,
- 		 ">>> TXATTRCREATE fid %d name  %s size %llu flag %d\n",
- 		 fid->fid, name, attr_size, flags);
--	err = 0;
- 	clnt = fid->clnt;
- 	req = p9_client_rpc(clnt, P9_TXATTRCREATE, "dsqd",
- 			    fid->fid, name, attr_size, flags);
-@@ -2063,7 +2047,6 @@ int p9_client_readdir(struct p9_fid *fid, char *data, u32 count, u64 offset)
- 	p9_debug(P9_DEBUG_9P, ">>> TREADDIR fid %d offset %llu count %d\n",
- 		 fid->fid, offset, count);
- 
--	err = 0;
- 	clnt = fid->clnt;
- 
- 	rsize = fid->iounit;
-@@ -2122,7 +2105,6 @@ int p9_client_mknod_dotl(struct p9_fid *fid, const char *name, int mode,
- 	struct p9_client *clnt;
- 	struct p9_req_t *req;
- 
--	err = 0;
- 	clnt = fid->clnt;
- 	p9_debug(P9_DEBUG_9P,
- 		 ">>> TMKNOD fid %d name %s mode %d major %d minor %d\n",
-@@ -2153,7 +2135,6 @@ int p9_client_mkdir_dotl(struct p9_fid *fid, const char *name, int mode,
- 	struct p9_client *clnt;
- 	struct p9_req_t *req;
- 
--	err = 0;
- 	clnt = fid->clnt;
- 	p9_debug(P9_DEBUG_9P, ">>> TMKDIR fid %d name %s mode %d gid %d\n",
- 		 fid->fid, name, mode, from_kgid(&init_user_ns, gid));
-@@ -2182,7 +2163,6 @@ int p9_client_lock_dotl(struct p9_fid *fid, struct p9_flock *flock, u8 *status)
- 	struct p9_client *clnt;
- 	struct p9_req_t *req;
- 
--	err = 0;
- 	clnt = fid->clnt;
- 	p9_debug(P9_DEBUG_9P,
- 		 ">>> TLOCK fid %d type %i flags %d start %lld length %lld proc_id %d client_id %s\n",
-@@ -2214,7 +2194,6 @@ int p9_client_getlock_dotl(struct p9_fid *fid, struct p9_getlock *glock)
- 	struct p9_client *clnt;
- 	struct p9_req_t *req;
- 
--	err = 0;
- 	clnt = fid->clnt;
- 	p9_debug(P9_DEBUG_9P,
- 		 ">>> TGETLOCK fid %d, type %i start %lld length %lld proc_id %d client_id %s\n",
-@@ -2251,7 +2230,6 @@ int p9_client_readlink(struct p9_fid *fid, char **target)
- 	struct p9_client *clnt;
- 	struct p9_req_t *req;
- 
--	err = 0;
- 	clnt = fid->clnt;
- 	p9_debug(P9_DEBUG_9P, ">>> TREADLINK fid %d\n", fid->fid);
- 
+> it would require maintaining an index of
+> _every outstanding allocation_ so that frees could be accounted
+> correctly - IOW, it would be _drastically_ higher overhead, so not at
+> all comparable.
+
+Do you have any actual data points to prove your claim?
+
+> > - We already have page_owner infrastructure that provides allocation
+> >   tracking data. Why it cannot be used/extended?
+> 
+> Page owner is also very high overhead,
+
+Is there any data to prove that claim? I would be really surprised that
+page_owner would give higher overhead than page tagging with profiling
+enabled (there is an allocation for each allocation request!!!). We can
+discuss the bare bone page tagging comparision to page_owner because of
+the full stack unwinding but is that overhead really prohibitively costly?
+Can we reduce that by trimming the unwinder information?
+
+> and the output is not very user
+> friendly (tracking full call stack means many related overhead gets
+> split, not generally what you want), and it doesn't cover slab.
+
+Is this something we cannot do anything about? Have you explored any
+potential ways?
+
+> This tracks _all_ memory allocations - slab, page, vmalloc, percpu.
 
 -- 
-2.39.2
-
+Michal Hocko
+SUSE Labs
