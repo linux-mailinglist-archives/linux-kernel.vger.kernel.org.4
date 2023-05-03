@@ -2,88 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC4A86F4E82
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 03:20:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0887D6F4E75
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 03:19:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229631AbjECBUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 May 2023 21:20:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56886 "EHLO
+        id S229565AbjECBTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 May 2023 21:19:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbjECBTw (ORCPT
+        with ESMTP id S229455AbjECBTm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 May 2023 21:19:52 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE16130D8;
-        Tue,  2 May 2023 18:19:44 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 342Nr23H011168;
-        Wed, 3 May 2023 01:19:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : date :
- subject : mime-version : content-type : content-transfer-encoding :
- message-id : references : in-reply-to : to : cc; s=qcppdkim1;
- bh=Dlmi8ttPHa718tsyDxsZ9LTXyy4isTwomG9XccKgjh4=;
- b=a0EF+q6ghnEW2wqzDOk74pvUJ+yyf67C0aOITj9PNvuqWEPHrbDXYl09S+7YTVlFVJTd
- Nq49EGESycgawNWrPYEC+x9h0HVM/68WUjRkmv2FSdgFESC2/gajTY5ANa+G6ZPgkOYB
- v3aomaf8l9GnzcnYQQJ4NjC66FnOMWT6F7cE2bo/vod/zJcRjOPNbskMKNYQFdf5BLh6
- Rtvwq2HhVDCz45nbSlKZJ+sFmW4navSyoevfXR2aydu6fnQb61mxBdKNzdmGmTdas55h
- xvKSMUWS5nyq3Xzu2rGCEUqBuqeltbqrQG1dCHX8KxAoVIKn56o4ouNRQb+DsaPO4it7 uA== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qawcba8tp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 03 May 2023 01:19:38 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3431Jb2w031354
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 3 May 2023 01:19:37 GMT
-Received: from jesszhan-linux.qualcomm.com (10.80.80.8) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Tue, 2 May 2023 18:19:37 -0700
-From:   Jessica Zhang <quic_jesszhan@quicinc.com>
-Date:   Tue, 2 May 2023 18:19:15 -0700
-Subject: [PATCH 4/4] drm/msm/dpu: Enable compression for command mode
+        Tue, 2 May 2023 21:19:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9488C5;
+        Tue,  2 May 2023 18:19:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 56902629F5;
+        Wed,  3 May 2023 01:19:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A491C433D2;
+        Wed,  3 May 2023 01:19:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683076779;
+        bh=/ClN072w7D0BeanxCvNBxwRHREUHQZYiL77EUxvntHk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JVZeDMEmw3ok5p7/Jokl5bNCXoQM891Tszn/Thv4zoccfzdzf7iHFIpWlAS0tyFpX
+         AA7SIMVFkbkYY5BWamH6TXc+Z4lBpRRw/BuCp0bg7BjTsUVZrM3wqhddMLNOBEqtCs
+         iokjjjqiG3GqW0VqYJKaWIQpd6Q+V0thg4cB4zRnaTSa9V24b7++ydOgA3W/HzZ8PC
+         UWZO6ttjeoJqXl+BqEV6mBqbjoqkHY/IX5QVwWKf09zlT/tidsYX0jfpN0ED1RsGYc
+         11tcJfs9v4CYDwdvCCUAUixITcxX98mDPAOJAgRNKRIxD9/FJHjnGP5J0TfstHwO9a
+         Jao70lg62pHUg==
+Date:   Wed, 3 May 2023 09:19:20 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Olof Johansson <olof@lixom.net>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-actions@lists.infradead.org,
+        linux-sunxi@lists.linux.dev,
+        Linux-OMAP <linux-omap@vger.kernel.org>,
+        linux-amlogic@lists.infradead.org, linux-arm-kernel@axis.com,
+        linux-aspeed@lists.ozlabs.org,
+        linux-rpi-kernel@lists.infradead.org,
+        chrome-platform@lists.linux.dev,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        kernel@dh-electronics.com, linux-mediatek@lists.infradead.org,
+        openbmc@lists.ozlabs.org, linux-tegra@vger.kernel.org,
+        "linux-oxnas@groups.io" <linux-oxnas@groups.io>,
+        linux-arm-msm@vger.kernel.org, linux-unisoc@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        linux-realtek-soc@lists.infradead.org
+Subject: Re: [RFC PATCH 0/1] Categorize ARM dts directory
+Message-ID: <20230503011920.GB31464@dragon>
+References: <20220328000915.15041-1-ansuelsmth@gmail.com>
+ <85eb14ec-f465-7447-ad77-a3dabc666f47@kernel.org>
+ <YkKRYnN84D9VZhGj@Ansuel-xps.localdomain>
+ <CAL_Jsq+RQQ-ADMxLPUFwk6S6kGmb6oNDy4k52fnU0EtbUvqmSA@mail.gmail.com>
+ <CAMuHMdWNTE48MFy6fqxAsfMWz9b6E7dVNXtXtESP95sxk2PGwA@mail.gmail.com>
+ <CAL_JsqJthKTm8bhRF2B=ae1tvtPeYYXx_Tm76qQtSwLtH5C6VA@mail.gmail.com>
+ <720a2829-b6b5-411c-ac69-9a53e881f48d@app.fastmail.com>
+ <CAL_JsqKCtmkwzKa01gyG65fH8ye6R3KhR41PJbJhOJ4X9j=znA@mail.gmail.com>
+ <2783a3ba-8fcb-7e5f-3147-91d02e573ba4@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20230405-add-dsc-support-v1-4-6bc6f03ae735@quicinc.com>
-References: <20230405-add-dsc-support-v1-0-6bc6f03ae735@quicinc.com>
-In-Reply-To: <20230405-add-dsc-support-v1-0-6bc6f03ae735@quicinc.com>
-To:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-CC:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>
-X-Mailer: b4 0.13-dev-bfdf5
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1683076776; l=3059;
- i=quic_jesszhan@quicinc.com; s=20230329; h=from:subject:message-id;
- bh=1DC1vTomN+IXwi1E2dJXxXSzLYYrRpXHpSX0sGbldnM=;
- b=Axt9D/WCcOGuDEy3U0pLwgGzdTpCAa7OSRnnksppvSDf6HxuC2AWQOCffZBtJc0sUgWadZbHH
- ym/MK2rPNYUBfWgTfRpnKFXcqSdHXjY0MO+gS7I81XLdBhUznDiBstN
-X-Developer-Key: i=quic_jesszhan@quicinc.com; a=ed25519;
- pk=gAUCgHZ6wTJOzQa3U0GfeCDH7iZLlqIEPo4rrjfDpWE=
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Id7_C3Ad-e5NQfNqn12_x1B9fTFvyWY-
-X-Proofpoint-ORIG-GUID: Id7_C3Ad-e5NQfNqn12_x1B9fTFvyWY-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-02_14,2023-04-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
- lowpriorityscore=0 spamscore=0 mlxscore=0 bulkscore=0 adultscore=0
- mlxlogscore=893 impostorscore=0 priorityscore=1501 clxscore=1015
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2305030009
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2783a3ba-8fcb-7e5f-3147-91d02e573ba4@kernel.org>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,80 +83,179 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a dpu_hw_intf op to enable data compression.
+On Tue, May 02, 2023 at 10:02:03PM +0200, Krzysztof Kozlowski wrote:
+> On 02/05/2023 21:40, Rob Herring wrote:
+> > On Tue, May 2, 2023 at 3:15 AM Arnd Bergmann <arnd@arndb.de> wrote:
+> >>
+> >> On Tue, Apr 25, 2023, at 17:57, Rob Herring wrote:
+> >>> On Tue, Apr 25, 2023 at 2:28 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> >>>
+> >>>> Does your script also cater for .dts files not matching any pattern,
+> >>>> but including a .dtsi file that does match a pattern?
+> >>>
+> >>> I assume I built everything after moving, but maybe not...
+> >>>
+> >>> That's all just "details". First, we need agreement on a) moving
+> >>> things to subdirs and b) doing it 1-by-1 or all at once. So far we've
+> >>> been stuck on a) for being 'too much churn'.
+> >>
+> >> Sorry for missing most of the discussion last week. The script sounds
+> >> fine to me, the only reason I didn't want to do this in the past is that
+> >> we had the plan to move platforms out of the kernel tree to an external
+> >> repository and I wanted to do this platform at a time and also only move
+> >> each one once. I don't think that is going to happen anytime soon now,
+> >> so let's just do your script.
+> >>
+> >> Can you send me the script and/or a pull request of the resulting
+> >> tree based on my soc/dt branch? Everything is merged upstream,
+> >> and I think git-merge would handle the remaining merges with any
+> >> other changes in mainline.
+> > 
+> > I've dusted off my script and made a branch[1] with the result.
+> > There's just a couple of fixes needed after the script is run (see the
+> > top commit). The cross arch includes are all fixed up by the script.
+> > dtbs_install maintains a flat install. I compared the number of .dtbs
+> > before and after to check the script.
+> > 
+> > I think the only issue remaining is finalizing the mapping of
+> > platforms to subdirs. What I have currently is a mixture of SoC
+> > families and vendors. The most notable are all the Freescale/NXP
+> > platforms, pxa, socfpga, and stm32. It's not consistent with arm64
+> > either. Once that's finalized, I still need to go update MAINTAINERS.
+> > 
+> > Here's the current mapping:
+> > 
+> > vendor_map = {
+> >     'alphascale' : 'alphascale',
+> >     'alpine' : 'alpine',
+> >     'artpec' : 'axis',
+> >     'axm' : 'lsi',
+> >     'cx9' : 'cnxt',
+> >     'ecx' : 'calxeda',
+> >     'highbank' : 'calxeda',
+> >     'ep7' : 'cirrus',
+> >     'mxs': 'mxs',
+> >     'imx23': 'mxs',
+> >     'imx28': 'mxs',
+> >     'sun' : 'allwinner',
+> >     'imx': 'imx',
+> >     'e6' : 'imx',
+> >     'e7' : 'imx',
+> >     'mba6' : 'imx',
+> >     'ls': 'fsl',
+> >     'vf': 'fsl',
+> 
+> If I remember correctly, Vybrid are a bit closer to iMX than to LS
+> (Layerscape), but it should be Shawn's call (+Cc).
 
-Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
----
- drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c | 4 ++++
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c          | 7 +++++++
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h          | 2 ++
- 3 files changed, 13 insertions(+)
+I would suggest to have all Freescale/NXP platforms in a single
+directory, which includes all mxs, imx, fsl ones.
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
-index 74470d068622..4321a1aba17f 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
-@@ -72,6 +72,10 @@ static void _dpu_encoder_phys_cmd_update_intf_cfg(
- 				phys_enc->hw_intf,
- 				true,
- 				phys_enc->hw_pp->idx);
-+
-+	if (phys_enc->dpu_kms->catalog->caps->has_data_compress &&
-+			phys_enc->hw_intf->ops.enable_compression)
-+		phys_enc->hw_intf->ops.enable_compression(phys_enc->hw_intf);
- }
- 
- static void dpu_encoder_phys_cmd_pp_tx_done_irq(void *arg, int irq_idx)
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
-index 671048a78801..4ce7ffdd7a05 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
-@@ -64,10 +64,16 @@
- 
- #define INTF_CFG2_DATABUS_WIDEN	BIT(0)
- #define INTF_CFG2_DATA_HCTL_EN	BIT(4)
-+#define INTF_CFG2_DCE_DATA_COMPRESS	BIT(12)
- 
- #define INTF_MISR_CTRL			0x180
- #define INTF_MISR_SIGNATURE		0x184
- 
-+static inline void dpu_hw_intf_enable_compression(struct dpu_hw_intf *ctx)
-+{
-+	DPU_REG_WRITE(&ctx->hw, INTF_CONFIG2, INTF_CFG2_DCE_DATA_COMPRESS);
-+}
-+
- static void dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
- 		const struct intf_timing_params *p,
- 		const struct dpu_format *fmt)
-@@ -325,6 +331,7 @@ static void _setup_intf_ops(struct dpu_hw_intf_ops *ops,
- 		ops->bind_pingpong_blk = dpu_hw_intf_bind_pingpong_blk;
- 	ops->setup_misr = dpu_hw_intf_setup_misr;
- 	ops->collect_misr = dpu_hw_intf_collect_misr;
-+	ops->enable_compression = dpu_hw_intf_enable_compression;
- }
- 
- struct dpu_hw_intf *dpu_hw_intf_init(const struct dpu_intf_cfg *cfg,
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
-index 102c4f0e812b..99528c735368 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
-@@ -60,6 +60,7 @@ struct intf_status {
-  *                     feed pixels to this interface
-  * @setup_misr: enable/disable MISR
-  * @collect_misr: read MISR signature
-+ * @enable_compression: Enable data compression
-  */
- struct dpu_hw_intf_ops {
- 	void (*setup_timing_gen)(struct dpu_hw_intf *intf,
-@@ -82,6 +83,7 @@ struct dpu_hw_intf_ops {
- 			const enum dpu_pingpong pp);
- 	void (*setup_misr)(struct dpu_hw_intf *intf, bool enable, u32 frame_count);
- 	int (*collect_misr)(struct dpu_hw_intf *intf, u32 *misr_value);
-+	void (*enable_compression)(struct dpu_hw_intf *intf);
- };
- 
- struct dpu_hw_intf {
+Shawn
 
--- 
-2.40.1
-
+> 
+> >     'qcom': 'qcom',
+> >     'am3' : 'ti',
+> >     'am4' : 'ti',
+> >     'am5' : 'ti',
+> >     'dra' : 'ti',
+> >     'keystone' : 'ti',
+> >     'omap' : 'ti',
+> >     'compulab' : 'ti',
+> >     'logicpd' : 'ti',
+> >     'elpida' : 'ti',
+> >     'motorola' : 'ti',
+> >     'twl' : 'ti',
+> >     'da' : 'ti',
+> >     'dm' : 'ti',
+> >     'nspire' : 'nspire',
+> >     'armada' : 'marvell',
+> >     'dove' : 'marvell',
+> >     'kirkwood' : 'marvell',
+> >     'orion' : 'marvell',
+> >     'mvebu' : 'marvell',
+> >     'mmp' : 'marvell',
+> >     'berlin' : 'berlin',
+> >     'pxa2' : 'pxa',
+> >     'pxa3' : 'pxa',
+> >     'pxa' : 'marvell',
+> >     'arm-' : 'arm',
+> >     'integ' : 'arm',
+> >     'mps' : 'arm',
+> >     've' : 'arm',
+> >     'aspeed' : 'aspeed',
+> >     'ast2' : 'aspeed',
+> >     'facebook' : 'aspeed',
+> >     'ibm' : 'aspeed',
+> >     'openbmc' : 'aspeed',
+> >     'en7' : 'airoha',
+> >     'at91' : 'microchip',
+> >     'sama' : 'microchip',
+> >     'sam9' : 'microchip',
+> >     'usb_' : 'microchip',
+> >     'tny_' : 'microchip',
+> >     'mpa1600' : 'microchip',
+> >     'animeo_ip' : 'microchip',
+> >     'aks-cdu' : 'microchip',
+> >     'ethernut5' : 'microchip',
+> >     'evk-pro3' : 'microchip',
+> >     'pm9g45' : 'microchip',
+> >     'ge86' : 'microchip',
+> >     'bcm' : 'brcm',
+> >     'exynos' : 'samsung',
+> >     's3c' : 'samsung',
+> >     's5p' : 'samsung',
+> 
+> For samsung looks good.
+> 
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> >     'gemini' : 'gemini',
+> >     'hi3' : 'hisilicon',
+> >     'hip' : 'hisilicon',
+> >     'hisi' : 'hisilicon',
+> >     'sd5' : 'hisilicon',
+> >     'hpe' : 'hpe',
+> >     'intel': 'intel',
+> >     'mt' : 'mediatek',
+> >     'meson' : 'meson',
+> >     'moxa' : 'moxa',
+> >     'mstar' : 'mstar',
+> >     'nuvo' : 'nuvoton',
+> >     'lpc' : 'lpc',
+> >     'lan96' : 'microchip',
+> >     'owl' : 'actions',
+> >     'ox8' : 'oxsemi',
+> >     'rda' : 'rda',
+> >     'rtd' : 'realtek',
+> >     'r7' : 'renesas',
+> >     'r8' : 'renesas',
+> >     'r9' : 'renesas',
+> >     'emev2' : 'renesas',
+> >     'sh73a' : 'renesas',
+> >     'gr-' : 'renesas',
+> >     'iwg' : 'renesas',
+> >     'rk' : 'rockchip',
+> >     'rv11' : 'rockchip',
+> >     'rockchip' : 'rockchip',
+> >     'socfpga' : 'socfpga',
+> >     'stm' : 'stm32',
+> >     'sti' : 'sti',
+> >     'st-pin' : 'sti',
+> >     'ste' : 'st-ericsson',
+> >     'spear' : 'spear',
+> >     'axp' : 'allwinner',
+> >     'tegra' : 'nvidia',
+> >     'milbeaut' : 'socionext',
+> >     'uniph' : 'socionext',
+> >     'vt8500' : 'vt8500',
+> >     'wm8' : 'vt8500',
+> >     'xen' : 'xen',
+> >     'zx' : 'zte',
+> >     'zynq' : 'xilinx',
+> 
+> The rest looks good to me, but I don't know half of these :)
+> 
+> Best regards,
+> Krzysztof
+> 
