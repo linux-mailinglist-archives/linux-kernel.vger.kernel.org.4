@@ -2,147 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64D7E6F5A0A
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 16:30:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 272956F5A10
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 16:31:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230315AbjECOac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 10:30:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51964 "EHLO
+        id S230233AbjECObo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 10:31:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230163AbjECOaa (ORCPT
+        with ESMTP id S229796AbjECObj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 10:30:30 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304901FF6;
-        Wed,  3 May 2023 07:30:28 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id DC4F0222BF;
-        Wed,  3 May 2023 14:30:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1683124226; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vfvp5EAr03RumqMmaXNjAHEK8G4910C+luedX7/5ogo=;
-        b=MHNyho4ZHmit7oc6DIdyFVcAJIZiqxVdaBSZ/RwnsjtM5VrFmL2Ze7uhC/HH56UVEGjnh7
-        SWE9Rv0Sk5+o5X1kROnG1gnNeF8/QTUgRJgcBZDzksyHx3X/9VVYFeI6pB90mB30EnSRj7
-        50j2qWEO+qXwt6z4W67JdpmXNMHBYGc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1683124226;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vfvp5EAr03RumqMmaXNjAHEK8G4910C+luedX7/5ogo=;
-        b=19N6voLnfoHXBAkNTCQNdU/x0F4V5HZe/6MdlST/VYPkfPp4SFjcIsrRzZt1SwwPAk9IUe
-        7KNb7zw09X/fQ4DQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CF3B11331F;
-        Wed,  3 May 2023 14:30:26 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id c7uUMgJwUmSeRQAAMHmgww
-        (envelope-from <jack@suse.cz>); Wed, 03 May 2023 14:30:26 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 54A23A0744; Wed,  3 May 2023 16:30:26 +0200 (CEST)
-Date:   Wed, 3 May 2023 16:30:26 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Baokun Li <libaokun1@huawei.com>
-Cc:     linux-ext4@vger.kernel.org, tytso@mit.edu,
-        adilger.kernel@dilger.ca, jack@suse.cz, ritesh.list@gmail.com,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yangerkun@huawei.com, yukuai3@huawei.com
-Subject: Re: [PATCH v4 06/12] ext4: using nofail preallocation in
- ext4_es_remove_extent()
-Message-ID: <20230503143026.md6gtrnkqp2awogd@quack3>
-References: <20230424033846.4732-1-libaokun1@huawei.com>
- <20230424033846.4732-7-libaokun1@huawei.com>
+        Wed, 3 May 2023 10:31:39 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E1E9B
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 07:31:37 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id af79cd13be357-74e462a540aso243310985a.1
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 07:31:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1683124296; x=1685716296;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=n7llKhBaHnkQjLetPGzkZN0ajWGNkpSrzpK5vsJeUYo=;
+        b=OEysCc3Q3AKZhYWUpecGGN+q2wOXE5wiyVvtko0WaJ2fEF5TgOdqBC+UgjJaKatM4j
+         Hk8gD6ZHWvzvWGN6ZFM4ZdXXiLRZOENkqMpoEcR7TPHTjgYqm+JUUNaYF1NjPwNMH+XC
+         t3AiZLBPIR/LbJUbtOA2ucWvWq1mgUvx6eYpoV8xcGmUnFf21ziYRfmryIfoB7XMQNKi
+         Gep/JblJp11omSrcXBKcxDuoCpyJs5GbLr6596ivDXkas4ThRVy4RSYqyknHtPUU6oSb
+         NRc/LfnhjI3vv4EB+X3g5MeSp0Hg72kS2vPM993Umv9YxSm+C9Nq9lQYrxlESiIsgBuu
+         SP7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683124296; x=1685716296;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n7llKhBaHnkQjLetPGzkZN0ajWGNkpSrzpK5vsJeUYo=;
+        b=RUp25pOdlvthD7lgdkw6TI+wNYeIB+Oxcve8ihbiggf3LL59GJR8PsAYZ5FgKBcZ31
+         PAxiKRMYSOzsgGGvzyWVTFOXPsbxApd9dldc5w7RW601VwgwI3ZF6I4ZUffZMGIfUEP3
+         8B56sGEQWWHyRhNkwhpiYB2qHshdhHPym7y5c2ACSCozeuP4ykZ9c25mnvxqFtXyHkHk
+         L9zFsupO9UksD/gWycccgGghqShD+65uIalO9P0Rn0IQWiK2KT0p5CvvlpC4cDD2XAME
+         Tpg87iHXP0bGVuIXd1vW6ImH0HQW1+/vRQ7dwYCZpJO1E0Zb1XBpGVV0dUnME7rTGxRY
+         ZN7A==
+X-Gm-Message-State: AC+VfDzBeYokQFbCeVdwW1zgl6W6WBq0nBGQ2t8wprkbc8S3fyEGgpr+
+        BHSoRTDivZdiO5lJ/ggDbzixFw==
+X-Google-Smtp-Source: ACHHUZ52pEaTCuzSpiKuoJ9hRntF1lpl/uhp/LT3ZTmSOW5jqLwz9JWE4c/5m2w391ttcRDRN6fT2w==
+X-Received: by 2002:ac8:5e50:0:b0:3ea:8224:b5b4 with SMTP id i16-20020ac85e50000000b003ea8224b5b4mr504607qtx.9.1683124295905;
+        Wed, 03 May 2023 07:31:35 -0700 (PDT)
+Received: from localhost (2603-7000-0c01-2716-8f57-5681-ccd3-4a2e.res6.spectrum.com. [2603:7000:c01:2716:8f57:5681:ccd3:4a2e])
+        by smtp.gmail.com with ESMTPSA id d6-20020ac80606000000b003bf9f9f1844sm11116879qth.71.2023.05.03.07.31.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 May 2023 07:31:35 -0700 (PDT)
+Date:   Wed, 3 May 2023 10:31:34 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Nhat Pham <nphamcs@gmail.com>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, bfoster@redhat.com,
+        willy@infradead.org, linux-api@vger.kernel.org,
+        kernel-team@meta.com
+Subject: Re: [PATCH v13 1/3] workingset: refactor LRU refault to expose
+ refault recency check
+Message-ID: <20230503143134.GB193380@cmpxchg.org>
+References: <20230503013608.2431726-1-nphamcs@gmail.com>
+ <20230503013608.2431726-2-nphamcs@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230424033846.4732-7-libaokun1@huawei.com>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230503013608.2431726-2-nphamcs@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 24-04-23 11:38:40, Baokun Li wrote:
-> If __es_remove_extent() returns an error it means that when splitting
-> extent, allocating an extent that must be kept failed, where returning
-> an error directly would cause the extent tree to be inconsistent. So we
-> use GFP_NOFAIL to pre-allocate an extent_status and pass it to
-> __es_remove_extent() to avoid this problem.
+On Tue, May 02, 2023 at 06:36:06PM -0700, Nhat Pham wrote:
+> In preparation for computing recently evicted pages in cachestat,
+> refactor workingset_refault and lru_gen_refault to expose a helper
+> function that would test if an evicted page is recently evicted.
 > 
-> In addition, since the allocated memory is outside the i_es_lock, the
-> extent_status tree may change and the pre-allocated extent_status is
-> no longer needed, so we release the pre-allocated extent_status when
-> es->es_len is not initialized.
-> 
-> Suggested-by: Jan Kara <jack@suse.cz>
-> Signed-off-by: Baokun Li <libaokun1@huawei.com>
+> Signed-off-by: Nhat Pham <nphamcs@gmail.com>
 
-Looks good. Feel free to add:
-
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
-> ---
->  fs/ext4/extents_status.c | 13 +++++++++++--
->  1 file changed, 11 insertions(+), 2 deletions(-)
-> 
-> diff --git a/fs/ext4/extents_status.c b/fs/ext4/extents_status.c
-> index 7219116e0d68..f4d50cd501fc 100644
-> --- a/fs/ext4/extents_status.c
-> +++ b/fs/ext4/extents_status.c
-> @@ -1458,6 +1458,7 @@ int ext4_es_remove_extent(struct inode *inode, ext4_lblk_t lblk,
->  	ext4_lblk_t end;
->  	int err = 0;
->  	int reserved = 0;
-> +	struct extent_status *es = NULL;
->  
->  	if (EXT4_SB(inode->i_sb)->s_mount_state & EXT4_FC_REPLAY)
->  		return 0;
-> @@ -1472,17 +1473,25 @@ int ext4_es_remove_extent(struct inode *inode, ext4_lblk_t lblk,
->  	end = lblk + len - 1;
->  	BUG_ON(end < lblk);
->  
-> +retry:
-> +	if (err && !es)
-> +		es = __es_alloc_extent(true);
->  	/*
->  	 * ext4_clear_inode() depends on us taking i_es_lock unconditionally
->  	 * so that we are sure __es_shrink() is done with the inode before it
->  	 * is reclaimed.
->  	 */
->  	write_lock(&EXT4_I(inode)->i_es_lock);
-> -	err = __es_remove_extent(inode, lblk, end, &reserved, NULL);
-> +	err = __es_remove_extent(inode, lblk, end, &reserved, es);
-> +	if (es && !es->es_len)
-> +		__es_free_extent(es);
->  	write_unlock(&EXT4_I(inode)->i_es_lock);
-> +	if (err)
-> +		goto retry;
-> +
->  	ext4_es_print_tree(inode);
->  	ext4_da_release_space(inode, reserved);
-> -	return err;
-> +	return 0;
->  }
->  
->  static int __es_shrink(struct ext4_sb_info *sbi, int nr_to_scan,
-> -- 
-> 2.31.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>
