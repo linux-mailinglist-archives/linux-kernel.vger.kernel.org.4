@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C50BC6F5237
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 09:50:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 635B66F523C
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 09:50:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbjECHuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 03:50:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50152 "EHLO
+        id S229665AbjECHuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 03:50:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbjECHuB (ORCPT
+        with ESMTP id S229813AbjECHuG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 03:50:01 -0400
-Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA1C42120;
-        Wed,  3 May 2023 00:49:59 -0700 (PDT)
+        Wed, 3 May 2023 03:50:06 -0400
+Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D9A44AD;
+        Wed,  3 May 2023 00:50:02 -0700 (PDT)
 Received: by nautica.notk.org (Postfix, from userid 108)
-        id 56CD6C020; Wed,  3 May 2023 09:49:58 +0200 (CEST)
+        id C67B8C01E; Wed,  3 May 2023 09:50:00 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1683100198; bh=1Jr6SQdK7M5acrT1P40JH2SkrtTm7xWnHTF1Ugx2KeU=;
+        t=1683100200; bh=STk00GLf3dBT1BAQ4Vfvpm/JgGYNx5KVfN2QOVrKrFA=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=W4N9wVWMI0TNJRmVaZm0QoBKG5yEhDrFZ8sLwmEMRgBUt8C6GgPYs570a4bkSHTqw
-         nJTLRGmmNAsgEwuvya5QO7nNah4VQ7S62Arg7h/Uu7hjSkRwURbOoYwRm4yRwV0/8p
-         ioVKL7sScDR67F09ue5udveu8Zl4NO6sAo1k4met6v/7evU9R8B53jbDaFafbWFJXJ
-         akt65MyknhLc5BRpUuttrHSLya5bU6OTv494v75ZgMJ+vP18iA2bxspPG1Kzk/JSmN
-         WXLcsGK559ZR3PGPFijO3sJ7YkZbEsKWhA6pemPtAfZr6AwHzrFNhHCviJPrQNPIMN
-         SdT4/dYKZjxEw==
+        b=DKMfb6A+mPwlJYreZAWzsenvNYbD+7HreCiqg885fdtQRZtl3S3NADCPI0ZM8Gan4
+         5tDoUWBg1xewb9q5c2U2H8kM3HdxegR7yKD4rmx7IX50xviDGIVULEHMBbKQfhp5ZJ
+         +4EsZjnLv/mLikrw4Cdz90wYZEVAW4wZCNu+RJOPNEdw5Y0O7OEI0n1FP9C485PCvu
+         aGByIMkiwW6RU7EdflBC9jA0nhDtElTIbdzLOHvpwL6tUb1XwFF9EOE4UuPCOl9qLA
+         lGOX3KcgpDi3LOgYq6B8HbdSr8UGLXn4SSAErTKmN2vIXjbk0y6m9IaZbGogBTTVAh
+         lz4T7llCRDanQ==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 X-Spam-Level: 
@@ -34,28 +34,27 @@ X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id D6642C01C;
-        Wed,  3 May 2023 09:49:50 +0200 (CEST)
+        by nautica.notk.org (Postfix) with ESMTPS id 840F2C025;
+        Wed,  3 May 2023 09:49:53 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1683100197; bh=1Jr6SQdK7M5acrT1P40JH2SkrtTm7xWnHTF1Ugx2KeU=;
+        t=1683100200; bh=STk00GLf3dBT1BAQ4Vfvpm/JgGYNx5KVfN2QOVrKrFA=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=U5F1hQdmW5ecqDVHupT+OXuCEXwrmJ7mLGKMRUhn+5RZ5qdM0t2ppZsiNIBs7x34n
-         0t9McldIPzIvHayubcwiej9BZREEEqwqiArHSanQQEKOVoEbtM1D5l2OBOIDNu9jkZ
-         mm1GV8JjjRKarGYoP98Q3oo+E5wVC90oI9bOOEal0sxAnqXzqrf/RTd7TbvrKEapyY
-         O8wfjcfQrn/UZaJcYOavkT7arcTjO3c+DBNytsWfXfZCNAXPI3wI6AO0ePRCPmN+BU
-         WHMCxpgSAz6mTLMsl+PVrIfQjzbfsaoYyqIhrXIK+gcsYxW0h+Xp8HufnN8dvU8V+Q
-         iFe/ifeg3nPEA==
+        b=DKMfb6A+mPwlJYreZAWzsenvNYbD+7HreCiqg885fdtQRZtl3S3NADCPI0ZM8Gan4
+         5tDoUWBg1xewb9q5c2U2H8kM3HdxegR7yKD4rmx7IX50xviDGIVULEHMBbKQfhp5ZJ
+         +4EsZjnLv/mLikrw4Cdz90wYZEVAW4wZCNu+RJOPNEdw5Y0O7OEI0n1FP9C485PCvu
+         aGByIMkiwW6RU7EdflBC9jA0nhDtElTIbdzLOHvpwL6tUb1XwFF9EOE4UuPCOl9qLA
+         lGOX3KcgpDi3LOgYq6B8HbdSr8UGLXn4SSAErTKmN2vIXjbk0y6m9IaZbGogBTTVAh
+         lz4T7llCRDanQ==
 Received: from [127.0.0.2] (localhost [::1])
-        by odin.codewreck.org (OpenSMTPD) with ESMTP id b4109f14;
+        by odin.codewreck.org (OpenSMTPD) with ESMTP id 61229dc9;
         Wed, 3 May 2023 07:49:37 +0000 (UTC)
 From:   Dominique Martinet <asmadeus@codewreck.org>
-Date:   Wed, 03 May 2023 16:49:27 +0900
-Subject: [PATCH v2 3/5] 9p: virtio: make sure 'offs' is initialized in
- zc_request
+Date:   Wed, 03 May 2023 16:49:28 +0900
+Subject: [PATCH v2 4/5] 9p: virtio: skip incrementing unused variable
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230427-scan-build-v2-3-bb96a6e6a33b@codewreck.org>
+Message-Id: <20230427-scan-build-v2-4-bb96a6e6a33b@codewreck.org>
 References: <20230427-scan-build-v2-0-bb96a6e6a33b@codewreck.org>
 In-Reply-To: <20230427-scan-build-v2-0-bb96a6e6a33b@codewreck.org>
 To:     Eric Van Hensbergen <ericvh@gmail.com>,
@@ -69,56 +68,61 @@ Cc:     Simon Horman <simon.horman@corigine.com>, v9fs@lists.linux.dev,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         Dominique Martinet <asmadeus@codewreck.org>
 X-Mailer: b4 0.13-dev-f371f
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1206;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1501;
  i=asmadeus@codewreck.org; h=from:subject:message-id;
- bh=vhjUjQLTL0bzvtWRoRMBT59Y+F+0DRe8NxWoHtMoq0M=;
- b=owEBbQKS/ZANAwAIAatOm+xqmOZwAcsmYgBkUhIR1SXh7VwBjG2iq8nQNm0Lx3pG8+75NFVpz
- u+o++lwu+mJAjMEAAEIAB0WIQT8g9txgG5a3TOhiE6rTpvsapjmcAUCZFISEQAKCRCrTpvsapjm
- cPQcD/0eNUjIdy/ox9zl2KORjzzu+7EapK/XLxBHOqcUzWal/SWa1I3vmak3k35GueIco9YH5z+
- gFH5m5xE5LM5azeCYHW4Aih6wsP/XtUvKW8iDLodfdZbXIkkyC2NOJghoNnDgbodETIGutZJrB1
- pRUd1MhakD+HQ9U5JfToISTJ2GnmNss/OxSoP4mbgIPYouzwawXYGPvX4LtNqo0TTndvMFjza4s
- nUgbLRKcHWbF8lZbLUyEuDfy1QWfFO7FB8MhXEYAaeprfniu2BHDrwCTROJ9DyQtu+uypH6jPM3
- HRVjg8LlIbWEQKpDN5aqqc9GpdoWIOHhkMJNfGA7zTDykjhhsX+cnhXjt6nq7iqbRavjmqn7wV7
- 3OeAUXBm057jV1jbqLlQh0DJpxrTL0y77Obxqrzwbti8LB9RycOUHXSTtS5T8yF+UVG6lwXc5B6
- 0tnMJpr4Dw2u7/w6apa+9JxJ9OXuVJ+052+HqzQxZF6ZitlbODP+nr047oMYrYRaEt/7Fh2RfXi
- sbsSM19OmACmMmde2bfDl4tkzThSQvx70E+7HfObBFzKTOoGLGsg9HIuLzBzbq9HuwsTpZUKYrZ
- cm+YmDCjN4CU1pSlLxxUp1Yx2eKu9YTMR51fkD8tpCzwIzL3xWcVlKrD7x5OwqP3ZUhEW4V2xTI
- f8b7Zr1sxcSEcsg==
+ bh=yIvIlyYdte2aD4M+nwUw7i10WOSRD+BBZXKURFMfUiY=;
+ b=owEBbQKS/ZANAwAIAatOm+xqmOZwAcsmYgBkUhIRjyn3bKEcahIRg5jp+rPyxrU+yyhaY/UMo
+ mzzp5/HKbCJAjMEAAEIAB0WIQT8g9txgG5a3TOhiE6rTpvsapjmcAUCZFISEQAKCRCrTpvsapjm
+ cDtMD/43S+r+yQYPp13CgDJPXxiuToYdylFo+o4civPO6RBVF5uxyzUaGWE/NThzkh9EWLUWSho
+ d8IleOaEje4+9gY50+P81w2ufmZk2Mf5lyO9d4g6vJ/zuksEmx+K20s0qFfohEZSX9sXGmauBog
+ M67qek25C8gisov1sjvIVOUMHR/wLLMpuqP2zsY2NwfvB3fNQdvGUFd3atuskWCB5/4ZAMXlHAe
+ K5TBTvcQBxCD2fTu8HjFyENlki4eJTJFw2uJ2uQ7nMiqH/T6aFYh4HU5244qzM2lXDLeoDZZjoh
+ 7uRNbII4Amp/j7f10Tp9lrTyR7eTh6yRCfHR2ItYoCdTHzcXRoCSMUIIkcUw7y+7e7iSPD6r5Kp
+ aAi/E7yZm+YOBaqAAbA+olaQY1FhBTjfhpTQCvtWNyhfz+mPJhBwzjJoWk+Ps6Dbeju16yuyact
+ OGEs12QpXTMrpTqfqB1imOtz2uqfQ3n/Hw814B5EI1FVwM4OiPvbBBvtDcKp41LIH9xI7BP0ERu
+ UG4luuMlz0dYpCYL1cYU7PJlFE8wQtY0C0xEIA06a3RZwwOFBvtEFUKKXQSivb64vs97JTJUTS4
+ PGIzXiOa/k1Ru0+v4eChQ9QxcEMNiY49lbUQH32M8ETOQ6EfX6S8Q2hoquZSrp2zwJ1z2AiOkmi
+ TbKVgBzoULoUUnQ==
 X-Developer-Key: i=asmadeus@codewreck.org; a=openpgp;
  fpr=B894379F662089525B3FB1B9333F1F391BBBB00A
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Similarly to the previous patch: offs can be used in handle_rerrors
-without initializing on small payloads; in this case handle_rerrors will
-not use it because of the size check, but it doesn't hurt to make sure
-it is zero to please scan-build.
+Fix the following scan-build warning:
+net/9p/trans_virtio.c:504:3: warning: Value stored to 'in' is never read [deadcode.DeadStores]
+                in += pack_sg_list_p(chan->sg, out + in, VIRTQUEUE_NUM,
+                ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This fixes the following warning:
-net/9p/trans_virtio.c:539:3: warning: 3rd function call argument is an uninitialized value [core.CallAndMessage]
-                handle_rerror(req, in_hdr_len, offs, in_pages);
-                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+I'm honestly not 100% sure about this one; I'm tempted to think we
+could (should?) just check the return value of pack_sg_list_p to skip
+the in_sgs++ and setting sgs[] if it didn't process anything, but I'm
+not sure it should ever happen so this is probably fine as is.
+
+Just removing the assignment at least makes it clear the return value
+isn't used, so it's an improvement in terms of readability.
 
 Reviewed-by: Simon Horman <simon.horman@corigine.com>
 Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
 ---
- net/9p/trans_virtio.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/9p/trans_virtio.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/net/9p/trans_virtio.c b/net/9p/trans_virtio.c
-index 2c9495ccda6b..f3f678289423 100644
+index f3f678289423..e305071eb7b8 100644
 --- a/net/9p/trans_virtio.c
 +++ b/net/9p/trans_virtio.c
-@@ -428,7 +428,7 @@ p9_virtio_zc_request(struct p9_client *client, struct p9_req_t *req,
- 	struct page **in_pages = NULL, **out_pages = NULL;
- 	struct virtio_chan *chan = client->trans;
- 	struct scatterlist *sgs[4];
--	size_t offs;
-+	size_t offs = 0;
- 	int need_drop = 0;
- 	int kicked = 0;
+@@ -501,8 +501,8 @@ p9_virtio_zc_request(struct p9_client *client, struct p9_req_t *req,
  
+ 	if (in_pages) {
+ 		sgs[out_sgs + in_sgs++] = chan->sg + out + in;
+-		in += pack_sg_list_p(chan->sg, out + in, VIRTQUEUE_NUM,
+-				     in_pages, in_nr_pages, offs, inlen);
++		pack_sg_list_p(chan->sg, out + in, VIRTQUEUE_NUM,
++			       in_pages, in_nr_pages, offs, inlen);
+ 	}
+ 
+ 	BUG_ON(out_sgs + in_sgs > ARRAY_SIZE(sgs));
 
 -- 
 2.39.2
