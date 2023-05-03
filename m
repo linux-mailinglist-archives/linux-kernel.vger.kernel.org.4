@@ -2,285 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F8476F5B74
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 17:47:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 147EF6F5B7E
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 17:49:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230125AbjECPrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 11:47:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34074 "EHLO
+        id S230287AbjECPtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 11:49:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjECPrJ (ORCPT
+        with ESMTP id S229675AbjECPtc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 11:47:09 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD0765FF9
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 08:47:07 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Wed, 3 May 2023 11:49:32 -0400
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D8210E5;
+        Wed,  3 May 2023 08:49:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1683128971;
+        bh=aZHv4qLewpPoN2a7Dp1hmQ518n6knm526HL7tro2+QQ=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=RuzgPwW7Excw6pez9bbQH1LgK0+PrOgDucE8mX352a/WgEFXdVcyXswKLkwHVN4FK
+         NRRB6IArfDLzoJ2Y5xkv3PNA1E6ef4irPxZ/JjdOQrfSM2D4MyBH3rpgG/WnwCUFYL
+         KRr071rSZhNhJKS7IDpjG6MPN5NNicYHXLH+D7mM=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 18E6D1281F1E;
+        Wed,  3 May 2023 11:49:31 -0400 (EDT)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+ by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
+ with ESMTP id GaG0-VEABDNr; Wed,  3 May 2023 11:49:30 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1683128970;
+        bh=aZHv4qLewpPoN2a7Dp1hmQ518n6knm526HL7tro2+QQ=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=q0tL2VdkMVextXF7i8wLij4wc+Rv8eXjweyKXiHti73zJxCRaSCu25jteEhbnxI6v
+         yK9rK8oceeU4P+nNqywZMzxEdAYo1SWnGfe4NiTdtA5ocsYJMypoTDNv+p+Qwjz8wz
+         oLVM+AAJEgGOGX5BoVd44tXyBl3Vu996X/awzutg=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 46154204EE;
-        Wed,  3 May 2023 15:47:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1683128826; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9H5tPG0mP0o9lp1KWPeQvdb+q0hdkjVEkN1tewN2nIc=;
-        b=Q42NDkCnpxT2N/Mvr1eFVBKqka3qMj3SkO3gwBCqcApVk/pHL0YJ3ypbXfl9Xyeyk9Z1D0
-        4g0MiMOPLliOhXY4NiNoB0+1vSKU4GGhvYZDSQ9I6vYj5AJ9s2B0TerX/uu5wx10ex+q9K
-        Nqdj8t2Xk88F5M/UPWd71k5rl7/1n5Q=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1683128826;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9H5tPG0mP0o9lp1KWPeQvdb+q0hdkjVEkN1tewN2nIc=;
-        b=RgYlGkDLxLa7D7eENKp6i/rffLfoQqFAc1bFXABI9rJJEXef7sF/XQ44oszQEhe2sdIoYE
-        QxrNBRCSuxw4uhAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1C8CD13584;
-        Wed,  3 May 2023 15:47:06 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id atjsBfqBUmQ6cAAAMHmgww
-        (envelope-from <tiwai@suse.de>); Wed, 03 May 2023 15:47:06 +0000
-Date:   Wed, 03 May 2023 17:47:05 +0200
-Message-ID: <87354do1s6.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Jeff Chua <jeff.chua.linux@gmail.com>
-Cc:     Takashi Iwai <tiwai@suse.de>, Bagas Sanjaya <bagasdotme@gmail.com>,
-        Oswald Buddenhagen <oswald.buddenhagen@gmx.de>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: Re: linux-6.4 alsa sound broken
-In-Reply-To: <CAAJw_Ztu=Ki91wJUTAHrtW6xqaHvn-ZPii6bCoAjK_YmigZ3TQ@mail.gmail.com>
-References: <CAAJw_ZsbTVd3Es373x_wTNDF7RknGhCD0r+NKUSwAO7HpLAkYA@mail.gmail.com>
-        <ZE9ngFLRqLkN6faH@ugly>
-        <CAAJw_ZtKnZ3QruicqFRG_TLV0Ltbc8LSvdJSCEQRkr5GMSWvCw@mail.gmail.com>
-        <63bcc1eb-b0f5-4da1-0a22-31e0c86c0851@gmail.com>
-        <07f50016-5e24-56f8-0d02-df8d237059b6@gmail.com>
-        <87jzxqne3z.wl-tiwai@suse.de>
-        <CAAJw_ZsGZaypS1C=XwLDdNFQ9jbF8RFOOiEY0ZSWQvFmWx+Gwg@mail.gmail.com>
-        <87a5ylcyw4.wl-tiwai@suse.de>
-        <CAAJw_Ztu=Ki91wJUTAHrtW6xqaHvn-ZPii6bCoAjK_YmigZ3TQ@mail.gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=UTF-8
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 5B7F812805C5;
+        Wed,  3 May 2023 11:49:25 -0400 (EDT)
+Message-ID: <d01388d01b93071ac9ad04452ff4ff29d85e90f1.camel@HansenPartnership.com>
+Subject: Re: [PATCH 00/40] Memory allocation profiling
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Petr =?UTF-8?Q?Tesa=C5=99=C3=ADk?= <petr@tesarici.cz>,
+        Michal Hocko <mhocko@suse.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        akpm@linux-foundation.org, vbabka@suse.cz, hannes@cmpxchg.org,
+        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
+        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
+        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
+        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
+        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
+        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
+        tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
+        paulmck@kernel.org, pasha.tatashin@soleen.com,
+        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
+        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
+        ndesaulniers@google.com, gregkh@linuxfoundation.org,
+        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+        glider@google.com, elver@google.com, dvyukov@google.com,
+        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
+        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
+Date:   Wed, 03 May 2023 11:49:23 -0400
+In-Reply-To: <ZFJ9hlQ3ZIU1XYCY@moria.home.lan>
+References: <20230501165450.15352-1-surenb@google.com>
+         <ZFIMaflxeHS3uR/A@dhcp22.suse.cz> <ZFIOfb6/jHwLqg6M@moria.home.lan>
+         <ZFISlX+mSx4QJDK6@dhcp22.suse.cz>
+         <20230503115051.30b8a97f@meshulam.tesarici.cz>
+         <ZFIv+30UH7+ySCZr@moria.home.lan>
+         <25a1ea786712df5111d7d1db42490624ac63651e.camel@HansenPartnership.com>
+         <ZFJ9hlQ3ZIU1XYCY@moria.home.lan>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 03 May 2023 17:06:16 +0200,
-Jeff Chua wrote:
+On Wed, 2023-05-03 at 11:28 -0400, Kent Overstreet wrote:
+> On Wed, May 03, 2023 at 08:33:48AM -0400, James Bottomley wrote:
+> > On Wed, 2023-05-03 at 05:57 -0400, Kent Overstreet wrote:
+> > > On Wed, May 03, 2023 at 11:50:51AM +0200, Petr Tesařík wrote:
+> > > > If anyone ever wants to use this code tagging framework for
+> > > > something else, they will also have to convert relevant
+> > > > functions to macros, slowly changing the kernel to a minefield
+> > > > where local identifiers, struct, union and enum tags, field
+> > > > names and labels must avoid name conflict with a tagged
+> > > > function. For now, I have to remember that alloc_pages is
+> > > > forbidden, but the list may grow.
+> > > 
+> > > Also, since you're not actually a kernel contributor yet...
+> > 
+> > You have an amazing talent for being wrong.  But even if you were
+> > actually right about this, it would be an ad hominem personal
+> > attack on a new contributor which crosses the line into
+> > unacceptable behaviour on the list and runs counter to our code of
+> > conduct.
 > 
-> On Wed, May 3, 2023 at 9:45 PM Takashi Iwai <tiwai@suse.de> wrote:
-> >
-> > On Wed, 03 May 2023 14:19:54 +0200,
-> > Jeff Chua wrote:
-> > >
-> > > On Wed, May 3, 2023 at 2:06 PM Takashi Iwai <tiwai@suse.de> wrote:
-> > > >
-> > > > On Wed, 03 May 2023 06:37:48 +0200,
-> > > > Bagas Sanjaya wrote:
-> > > > >
-> > > > > On 5/3/23 11:34, Bagas Sanjaya wrote:
-> > > > > >> Just send .. in another email. If the atttachment got stripped off,
-> > > > > >> please let me know.
-> > > > > >>
-> > > > > >>
-> > > > > >
-> > > > > > I don't see your attachment. Can you please post the link
-> > > > > > to your test file on file storage hosting instead?
-> > > > > >
-> > > > >
-> > > > > Oops, I don't see the attachment on your reply at [1]. Sorry for the
-> > > > > inconvenience.
-> > > > >
-> > > > > [1]: https://lore.kernel.org/lkml/CAAJw_ZveoPfnBsSkHZqmLiVWATcOosR--6Ds4cdekdi=t1yV7A@mail.gmail.com/
-> > > >
-> > > > I see no attachment of the recorded sound.  In the mail above, only
-> > > > Side_Right.wav was attached, and this is the same file in
-> > > > /usr/share/sounds/alsa/.
-> > > >
-> > > > But, I wonder how you played a mono channel file with "hw:1,0" PCM.
-> > > > Isn't this a HD-audio device?
-> > > > Usually HD-audio codec can't play a mono file.  For example, on my
-> > > > machine with a Realtek codec fails like:
-> > > >
-> > > > % aplay -Dhw:0,0 Side_Right.wav
-> > > > Playing WAVE 'Side_Right.wav' : Signed 16 bit Little Endian, Rate 48000 Hz, Mono
-> > > > aplay: set_params:1358: Channels count non available
-> > > >
-> > > > So, if it works on yours, please show the output of playback with
-> > > > aplay -v option.  This will show more details.
-> > >
-> > > # aplay -v
-> > > Playing WAVE '/local/share/sounds/alsa/Side_Right.wav' : Signed 16 bit
-> > > Little Endian, Rate 48000 Hz, Mono
-> > > Plug PCM: Route conversion PCM (sformat=S32_LE)
-> > >   Transformation table:
-> > >     0 <- 0
-> > >     1 <- 0
-> > > Its setup is:
-> > >   stream       : PLAYBACK
-> > >   access       : RW_INTERLEAVED
-> > >   format       : S16_LE
-> > >   subformat    : STD
-> > >   channels     : 1
-> > >   rate         : 48000
-> > >   exact rate   : 48000 (48000/1)
-> > >   msbits       : 16
-> > >   buffer_size  : 16384
-> > >   period_size  : 1024
-> > >   period_time  : 21333
-> > >   tstamp_mode  : NONE
-> > >   tstamp_type  : MONOTONIC
-> > >   period_step  : 1
-> > >   avail_min    : 1024
-> > >   period_event : 0
-> > >   start_threshold  : 16384
-> > >   stop_threshold   : 16384
-> > >   silence_threshold: 0
-> > >   silence_size : 0
-> > >   boundary     : 4611686018427387904
-> > > Slave: Soft volume PCM
-> > > Control: PCM Playback Volume
-> > > min_dB: -51
-> > > max_dB: 0
-> > > resolution: 256
-> > > Its setup is:
-> > >   stream       : PLAYBACK
-> > >   access       : MMAP_INTERLEAVED
-> > >   format       : S32_LE
-> > >   subformat    : STD
-> > >   channels     : 2
-> > >   rate         : 48000
-> > >   exact rate   : 48000 (48000/1)
-> > >   msbits       : 32
-> > >   buffer_size  : 16384
-> > >   period_size  : 1024
-> > >   period_time  : 21333
-> > >   tstamp_mode  : NONE
-> > >   tstamp_type  : MONOTONIC
-> > >   period_step  : 1
-> > >   avail_min    : 1024
-> > >   period_event : 0
-> > >   start_threshold  : 16384
-> > >   stop_threshold   : 16384
-> > >   silence_threshold: 0
-> > >   silence_size : 0
-> > >   silence_size : 0
-> > >   boundary     : 4611686018427387904
-> > > Slave: Direct Stream Mixing PCM
-> > > Its setup is:
-> > >   stream       : PLAYBACK
-> > >   access       : MMAP_INTERLEAVED
-> > >   format       : S32_LE
-> > >   subformat    : STD
-> > >   channels     : 2
-> > >   rate         : 48000
-> > >   exact rate   : 48000 (48000/1)
-> > >   msbits       : 32
-> > >   buffer_size  : 16384
-> > >   period_size  : 1024
-> > >   period_time  : 21333
-> > >   tstamp_mode  : NONE
-> > >   tstamp_type  : MONOTONIC
-> > >   period_step  : 1
-> > >   avail_min    : 1024
-> > >   period_event : 0
-> > >   start_threshold  : 16384
-> > >   stop_threshold   : 16384
-> > >   silence_threshold: 0
-> > >   silence_size : 0
-> > >   boundary     : 4611686018427387904
-> > > Hardware PCM card 0 'HDA Intel PCH' device 0 subdevice 0
-> > > Its setup is:
-> > >   stream       : PLAYBACK
-> > >   access       : MMAP_INTERLEAVED
-> > >   format       : S32_LE
-> > >   subformat    : STD
-> > >   channels     : 2
-> > >   rate         : 48000
-> > >   exact rate   : 48000 (48000/1)
-> > >   msbits       : 32
-> > >   buffer_size  : 16384
-> > >   period_size  : 1024
-> > >   period_time  : 21333
-> > >   tstamp_mode  : ENABLE
-> > >   tstamp_type  : MONOTONIC
-> > >   period_step  : 1
-> > >   avail_min    : 1024
-> > >   period_event : 0
-> > >   start_threshold  : 1
-> > >   stop_threshold   : 4611686018427387904
-> > >   silence_threshold: 0
-> > >   silence_size : 4611686018427387904
-> > >   boundary     : 4611686018427387904
-> > >   appl_ptr     : 0
-> > >   hw_ptr       : 0
-> >
-> > OK, that explains.  This is a completely different from the
-> > configuration with hw:X,Y I expected from your description.
-> > So, this is with dmix, and it indeed relies on the auto-silencing, so
-> > the commit must be relevant.
-> >
-> >
-> > > > Last but not least, please double-check that the problem is really
-> > > > gone after reverting the commit 9f656705c5fa.  The commit is about the
-> > > > auto-silencing, and it should be irrelevant unless the application
-> > > > gives non-zero silence_size sw_params, and aplay doesn't set up it at
-> > > > all.
-> > >
-> > > 100% sure. I just compiled the latest linux git pull. Rebooted. Tested
-> > > that the problem exists, and revert just that patch
-> > > (9f656705c5faa18afb26d922cfc64f9fd103c38d), and the problem went away!
-> > >
-> > > Sorry about the recorded.wav file that I attached earlier ... didn't
-> > > realized that when I recorded via the loop-back, I could heard that it
-> > > was "corrupted" on the unpatched kernel, but when I play back the same
-> > > file on the "patched" kernel, the sound played ok.
-> > >
-> > > So, loop-back using the following did not capture the problem ...
-> > > # arecord -D hw:1,0,0 -f S16_LE -r 48000 recorded.wav
-> > > # aplay -D hw:1,1,0 /local/share/sounds/alsa/Side_Right.wav
-> > >
-> > > Attached is the problem file captured using my iPhone. bad1.m4a.
-> > >
-> > > I've uploaded to
-> > > https://github.com/jeffersonchua/linux-6.4-alsa/blob/main/bad1.m4a in
-> > > case the attachment got stripped-off.
-> >
-> > Ah, the arecord and aplay above with -Dhw:1,1 is for a different
-> > (still working) card?  Better to explain it more clearly...
-> 
-> I use this to record the sound, but it's the playback that's having
-> the issue ...
-> 
-> # modprobe snd-aloop
-> # arecord -D hw:1,0,0 -f S16_LE -r 48000 recorded.wav
-> # aplay -D hw:1,1,0 /local/share/sounds/alsa/Side_Right.wav
-> 
-> The issue is still without reversing the patch, I'm getting the bad
-> audio (bad1.m4a)
-> 
-> Just let me know what else I can provide. I'm not sure what's need,
-> and don't want to bombard everyone with diagnostics that are
-> irrelavant.
+> ...Err, what? That was intended _in no way_ as a personal attack.
 
-Thanks, now the situation got clearer.
-Will investigate.
+Your reply went on to say "If you're going to comment, please do the
+necessary work to make sure you're saying something that makes sense."
+That is a personal attack belittling the person involved and holding
+them up for general contempt on the mailing list.  This is exactly how
+we should *not* treat newcomers.
 
+> If I was mistaken I do apologize, but lately I've run across quite a
+> lot of people offering review feedback to patches I post that turn
+> out to have 0 or 10 patches in the kernel, and - to be blunt - a
+> pattern of offering feedback in strong language with a presumption of
+> experience that takes a lot to respond to adequately on a technical
+> basis.
 
-Takashi
+A synopsis of the feedback is that using macros to attach trace tags
+pollutes the global function namespace of the kernel.  That's a valid
+observation and merits a technical not a personal response.
+
+James
+
