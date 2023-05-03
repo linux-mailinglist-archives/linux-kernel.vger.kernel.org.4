@@ -2,295 +2,386 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C29E86F6094
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 23:38:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C02BF6F609B
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 23:39:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbjECVie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 17:38:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44208 "EHLO
+        id S229683AbjECVjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 17:39:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjECVib (ORCPT
+        with ESMTP id S229545AbjECVjf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 17:38:31 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C39F4EE2
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 14:38:29 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f193ca059bso36003655e9.3
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 14:38:29 -0700 (PDT)
+        Wed, 3 May 2023 17:39:35 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 021014EE0
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 14:39:31 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-63b62d2f729so4366160b3a.1
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 14:39:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1683149908; x=1685741908;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fc+FSrOAehALu39yg9/NlrGVLO1vykHrFppEuPhtPgM=;
-        b=WxpDpyfVAtuMz1hC9BpW3jXSsniGuFDP0gy06HAcrpIqzrZUDxZBukKt5UtNtjBh5J
-         s6VGPL6CQ6ojV8AHatKt9Qyfuf/k5TO1OvhlC2mAq3cpguXm06HRa+YnZEIHcki/bftk
-         3YMZ0qzJ76hNZLGa9OjnpJpsROxhD3dS3juXg=
+        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1683149970; x=1685741970;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JzAhAYHfPiOiW4LGzVRyyrVTgIaQhjrhkrdgvGxpiyM=;
+        b=IhF1wixOaSL/x8TlU2RExxY7cJSSZaroN+UxW8vl7cR9l23m0lsThaG0Tea8DON128
+         ps3dQt0jnqtLV6sgxnYS8EQrdj9H3j6pXLtmsQdF6LLgDIJngN1ezjwLb0Uhu61JCLc9
+         jT0kF8peKcL8FlrOUKxCfAeGoidm+h4TUG5+pKrM2Yew5GctCXxqz4pZeUhjptSUY8Qy
+         jMO8TJPDDU/sSzrlAvNFZsxacLg9E7hVWO24oQMJpIAtxV0FPPYHh35IL8wTpnYlq/V/
+         QqO9XBTJsEjnoj2NBDmgiXzKqjBT6M5CpdQIQBOHk4tVRQt8N4OAapTxtPzTShctlGgv
+         GMfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683149908; x=1685741908;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Fc+FSrOAehALu39yg9/NlrGVLO1vykHrFppEuPhtPgM=;
-        b=Ynyr3Qdl7pPoc7WOQKLwug/l0ZoifHi2KdvfFeM4JmSnmAfZJoWHHqzRKo+ZtJuh+l
-         Nxup0FentzyBML/EHgeJU99UamlEaOOipn+GX63qnNc5JSPaiPE7vhgTSsXqG1G18Kdo
-         NkXhSPVlUxeVhSnCdqf8eyi1EOsMTZOr7KtLaNpfzQnj8poIyxODyTbdgOC7mSu4FDc1
-         bAftc1R65tivevqJBGUfi3F844W4F++KrBXX39fnx590CEcZRUjAgYsDPpIZNhyEOIa2
-         7VqjV9sJt8AOFHeIj1jrzlruV8H3oqwpkgxpl44V7P933IsjvNwksTmthmFBomhzPErF
-         lEdQ==
-X-Gm-Message-State: AC+VfDzJSKRPyhOJgU4IGtRJ9Kg5HLtHTK3ydhkvvleAux6ljemyu33O
-        aEFMAGqz2l9gT+Nb1a9aWDaEGTkHnrLp72m8xvAVmg==
-X-Google-Smtp-Source: ACHHUZ4dVvXiE4GCJSMmrHAq1rBn32PazU1r1gAaXck2y41FdwX9+ER1onwQmzeaypGv/FUGm6LTd69bfRVKzbVBwoQ=
-X-Received: by 2002:adf:dc0f:0:b0:2f9:ee8c:a2fa with SMTP id
- t15-20020adfdc0f000000b002f9ee8ca2famr973392wri.64.1683149907746; Wed, 03 May
- 2023 14:38:27 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683149970; x=1685741970;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JzAhAYHfPiOiW4LGzVRyyrVTgIaQhjrhkrdgvGxpiyM=;
+        b=ZzlTOXkn2tue4H40ZlrTG4S0P6rn8P693zJf9XRXvsUwG6b6l0OYAFfE1bBWsrJp8S
+         g4e+1dwSE9OeimMQx8fd70oyK/75kZuO9+yc+3pyySFh4lqsMXXmaXTa9Ca4EiXtPQUv
+         iQodvbGf5VD3bAEmjEEfBH5e094eRRnUBCBiLJZ21kGZEsif2Qs7ULPRHPVn29AJ7WJt
+         7PjKUV1u4Xtfrd85Rsbtsu9ZUfsxxNWkVNwWHz/bnbeKzOJy41h2Z9j5iFJCQjQBqECv
+         GWXDeyKY2woQP6Big915WXa+hA6qExZrQzoBjZJFU32si4XpIQ6nMz4QuxImOmvmQ1uf
+         shcA==
+X-Gm-Message-State: AC+VfDzXGXdXfN/QD6wmM3eiTQtmtAUbt0BnRWBB070rjmCJhHkPJHWG
+        ThGpVZoXGqLEii8yaLLQe/x5uw==
+X-Google-Smtp-Source: ACHHUZ7c8+1LMq/ab4C/efQsoxMs8u6vlVF2UalA9iWyU2ItPHceCK3E3VPgAKJ7NiuiSI8HPHPgHw==
+X-Received: by 2002:a05:6a00:10c7:b0:641:2927:985b with SMTP id d7-20020a056a0010c700b006412927985bmr64703pfu.4.1683149970354;
+        Wed, 03 May 2023 14:39:30 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-88-204.pa.nsw.optusnet.com.au. [49.181.88.204])
+        by smtp.gmail.com with ESMTPSA id u3-20020a056a00158300b0063f3aac78b9sm19474124pfk.79.2023.05.03.14.39.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 May 2023 14:39:29 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1puKC5-00B0Kz-U6; Thu, 04 May 2023 07:39:25 +1000
+Date:   Thu, 4 May 2023 07:39:25 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     John Garry <john.g.garry@oracle.com>
+Cc:     axboe@kernel.dk, kbusch@kernel.org, hch@lst.de, sagi@grimberg.me,
+        martin.petersen@oracle.com, djwong@kernel.org,
+        viro@zeniv.linux.org.uk, brauner@kernel.org, dchinner@redhat.com,
+        jejb@linux.ibm.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-scsi@vger.kernel.org, linux-xfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com,
+        Himanshu Madhani <himanshu.madhani@oracle.com>
+Subject: Re: [PATCH RFC 01/16] block: Add atomic write operations to
+ request_queue limits
+Message-ID: <20230503213925.GD3223426@dread.disaster.area>
+References: <20230503183821.1473305-1-john.g.garry@oracle.com>
+ <20230503183821.1473305-2-john.g.garry@oracle.com>
 MIME-Version: 1.0
-References: <CA+-6iNxO6y_y5En2Q7YHgDGh=v4a-8E1Qbr2VL0NpWNNJqRf-g@mail.gmail.com>
- <20230503180728.GA778510@bhelgaas>
-In-Reply-To: <20230503180728.GA778510@bhelgaas>
-From:   Jim Quinlan <james.quinlan@broadcom.com>
-Date:   Wed, 3 May 2023 17:38:15 -0400
-Message-ID: <CA+-6iNwBCn822NBv1wjLcbd0=bHEfx9V3R_UcAcuMz1_etUjMg@mail.gmail.com>
-Subject: Re: [PATCH v4 1/5] dt-bindings: PCI: brcmstb: brcm,{enable-l1ss,completion-timeout-us}
- props
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Jim Quinlan <jim2101024@gmail.com>, linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cyril Brulebois <kibi@debian.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000060990505fad0e0f3"
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230503183821.1473305-2-john.g.garry@oracle.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000060990505fad0e0f3
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+On Wed, May 03, 2023 at 06:38:06PM +0000, John Garry wrote:
+> From: Himanshu Madhani <himanshu.madhani@oracle.com>
+> 
+> Add the following limits:
+> - atomic_write_boundary
+> - atomic_write_max_bytes
+> - atomic_write_unit_max
+> - atomic_write_unit_min
+> 
+> Signed-off-by: Himanshu Madhani <himanshu.madhani@oracle.com>
+> Signed-off-by: John Garry <john.g.garry@oracle.com>
+> ---
+>  Documentation/ABI/stable/sysfs-block | 42 +++++++++++++++++++++
+>  block/blk-settings.c                 | 56 ++++++++++++++++++++++++++++
+>  block/blk-sysfs.c                    | 33 ++++++++++++++++
+>  include/linux/blkdev.h               | 23 ++++++++++++
+>  4 files changed, 154 insertions(+)
+> 
+> diff --git a/Documentation/ABI/stable/sysfs-block b/Documentation/ABI/stable/sysfs-block
+> index 282de3680367..f3ed9890e03b 100644
+> --- a/Documentation/ABI/stable/sysfs-block
+> +++ b/Documentation/ABI/stable/sysfs-block
+> @@ -21,6 +21,48 @@ Description:
+>  		device is offset from the internal allocation unit's
+>  		natural alignment.
+>  
+> +What:		/sys/block/<disk>/atomic_write_max_bytes
+> +Date:		May 2023
+> +Contact:	Himanshu Madhani <himanshu.madhani@oracle.com>
+> +Description:
+> +		[RO] This parameter specifies the maximum atomic write
+> +		size reported by the device. An atomic write operation
+> +		must not exceed this number of bytes.
+> +
+> +
+> +What:		/sys/block/<disk>/atomic_write_unit_min
+> +Date:		May 2023
+> +Contact:	Himanshu Madhani <himanshu.madhani@oracle.com>
+> +Description:
+> +		[RO] This parameter specifies the smallest block which can
+> +		be written atomically with an atomic write operation. All
+> +		atomic write operations must begin at a
+> +		atomic_write_unit_min boundary and must be multiples of
+> +		atomic_write_unit_min. This value must be a power-of-two.
 
-On Wed, May 3, 2023 at 2:07=E2=80=AFPM Bjorn Helgaas <helgaas@kernel.org> w=
-rote:
->
-> On Wed, May 03, 2023 at 10:38:57AM -0400, Jim Quinlan wrote:
-> > On Sun, Apr 30, 2023 at 3:10=E2=80=AFPM Bjorn Helgaas <helgaas@kernel.o=
-rg> wrote:
-> > > On Fri, Apr 28, 2023 at 06:34:55PM -0400, Jim Quinlan wrote:
-> > > > brcm,enable-l1ss (bool):
-> > > >
-> > > >   The Broadcom STB/CM PCIe HW -- a core that is also used by RPi SO=
-Cs --
-> > > >   requires the driver probe() to deliberately place the HW one of t=
-hree
-> > > >   CLKREQ# modes:
-> > > >
-> > > >   (a) CLKREQ# driven by the RC unconditionally
-> > > >   (b) CLKREQ# driven by the EP for ASPM L0s, L1
-> > > >   (c) Bidirectional CLKREQ#, as used for L1 Substates (L1SS).
-> > > >
-> > > >   The HW+driver can tell the difference between downstream devices =
-that
-> > > >   need (a) and (b), but does not know when to configure (c).  All d=
-evices
-> > > >   should work fine when the driver chooses (a) or (b), but (c) may =
-be
-> > > >   desired to realize the extra power savings that L1SS offers.  So =
-we
-> > > >   introduce the boolean "brcm,enable-l1ss" property to inform the d=
-river
-> > > >   that (c) is desired.  Setting this property only makes sense when=
- the
-> > > >   downstream device is L1SS-capable and the OS is configured to act=
-ivate
-> > > >   this mode (e.g. policy=3D=3Dsuperpowersave).
-> > ...
->
-> > > What bad things would happen if the driver always configured (c)?
-> >
-> > Well, our driver has traditionally only supported (b) and our
-> > existing boards have been designed with this in mind.  I would not
-> > want to switch modes w'o the user/customer/engineer opting-in to do
-> > so.  Further, the PCIe HW engineer told me defaulting to (c) was a
-> > bad idea and was "asking for trouble".  Note that the commit's
-> > comment has that warning about L1SS mode not meeting this 400ns
-> > spec, and I suspect that many of our existing designs have bumped
-> > into that.
-> >
-> > But to answer your question, I haven't found a scenario that did not
-> > work by setting mode (c).  That doesn't mean they are not out there.
-> >
-> > > Other platforms don't require this, and having to edit the DT
-> > > based on what PCIe device is plugged in seems wrong.  If brcmstb
-> > > does need it, that suggests a hardware defect.  If we need this to
-> > > work around a defect, that's OK, but we should acknowledge the
-> > > defect so we can stop using this for future hardware that doesn't
-> > > need it.
-> >
-> > All devices should work w/o the user having to change the DT.  Only
-> > if they desire L1SS must they add the "brcm,enable-l1ss" property.
->
-> I thought the DT was supposed to describe properties of the
-> *hardware*, but this seems more like "use this untested clkreq
-> configuration," which maybe could be done via a module parameter?
-Electrically, it has been tested, but  specifically for L1SS capable
-devices.  What is untested AFAICT are platforms using this mode on
-non-L1SS capable
-devices.  I was not aware that Raspian OS was turning this on as a
-default until the CM4 came out.
+What units is this defined to use? Bytes?
 
-As far as "DT describing the HW only", one doesn't have to go far to
-find exceptions to the rule.
-One example off the top of my head is "linux,pci-domain" -- all this
-does is assign
-an "id" to a controller to make life easier.  We've gone from not
-using it, with three controllers no less,
-to using it, but the HW was the same all along.
+> +
+> +
+> +What:		/sys/block/<disk>/atomic_write_unit_max
+> +Date:		January 2023
+> +Contact:	Himanshu Madhani <himanshu.madhani@oracle.com>
+> +Description:
+> +		[RO] This parameter defines the largest block which can be
+> +		written atomically with an atomic write operation. This
+> +		value must be a multiple of atomic_write_unit_min and must
+> +		be a power-of-two.
 
-WRT bootline param
-pci=3D[<domain>:]<bus>:<dev>.<func>[/<dev>.<func>]*pci:<vendor>:<device>[:<=
-subvendor>:<subdevice>]:
-this does not look compatible for vendor specific DT options like
-"brcm,enable-l1ss".  I observe that pci_dev_str_match_path() is a
-static function and I don't see a single option in pci.c  that is
-vendor specific.  FWIW, moving something like this to the bootline
-would not be popular with our customers; for some reason they really
-don't like changes to the bootline.
+Same question. Also, how is this different to
+atomic_write_max_bytes?
 
+> +
+> +
+> +What:		/sys/block/<disk>/atomic_write_boundary
+> +Date:		May 2023
+> +Contact:	Himanshu Madhani <himanshu.madhani@oracle.com>
+> +Description:
+> +		[RO] A device may need to internally split I/Os which
+> +		straddle a given logical block address boundary. In that
+> +		case a single atomic write operation will be processed as
+> +		one of more sub-operations which each complete atomically.
+> +		This parameter specifies the size in bytes of the atomic
+> +		boundary if one is reported by the device. This value must
+> +		be a power-of-two.
 
->
-> Whatever the mechanism, it looks like patch 2/5 makes brcmstb
-> advertise the appropriate ASPM and L1SS stuff in the PCIe and L1SS
-> Capabilities so the OS will do the right thing without any core
-> changes.
->
-> > > Maybe the name should be more specific to CLKREQ#, since this
-> > > doesn't actually *enable* L1SS; apparently it's just one of the
-> > > pieces needed to enable L1SS?
-> >
-> > The other pieces are:  (a) policy =3D=3D POWERSUPERSAVE and (b) an
-> > L1SS-capable device, which seem unrelated and are out of the scope
-> > of the driver.
->
-> Right.  Of course, if ASPM and L1SS support are advertised, the OS can
-> still choose whether to enable them, and that choice can change at
-> run-time.
-Agree.
+How are users/filesystems supposed to use this?
 
-Thanks & regards,
-Jim Quinlan
-Broadcom STB
->
-> > The RPi Raspian folks have been using "brcm,enable-l1ss"  for a
-> > while now and I would prefer to keep that name for compatibility.
->
-> BTW, the DT comment in the patch refers to PCIe Mini CEM .0 sec
-> 3.2.5.2.5.  I think the correct section is 3.2.5.2.2 (at least in the
-> r2.1 spec).
->
-> There's also a footnote to the effect that T_CRLon is allowed to
-> exceed 400ns when LTR is supported and enabled.  L1.2 requires LTR, so
-> if L1.2 is the case where brcmstb exceeds 400ns, that might not be a
-> problem.
->
-> Bjorn
+> +
+>  
+>  What:		/sys/block/<disk>/diskseq
+>  Date:		February 2021
+> diff --git a/block/blk-settings.c b/block/blk-settings.c
+> index 896b4654ab00..e21731715a12 100644
+> --- a/block/blk-settings.c
+> +++ b/block/blk-settings.c
+> @@ -59,6 +59,9 @@ void blk_set_default_limits(struct queue_limits *lim)
+>  	lim->zoned = BLK_ZONED_NONE;
+>  	lim->zone_write_granularity = 0;
+>  	lim->dma_alignment = 511;
+> +	lim->atomic_write_unit_min = lim->atomic_write_unit_max = 1;
 
---00000000000060990505fad0e0f3
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+A value of "1" isn't obviously a power of 2, nor does it tell me
+what units these values use.
 
-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
-mOAplh6h3nMZUZxBguxG3g2p3iD4EgibUYneEzqOQafIQB/naf2uetKb8y9jKgWJxq2Y4y8Jqg2u
-uVIO1AyOJjWwqdgN+QhuIlat+qZd03P48Gim9ZPEMDUCAwEAAaOCAdswggHXMA4GA1UdDwEB/wQE
-AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
-c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
-AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
-TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
-bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
-L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJQYDVR0R
-BB4wHIEaamFtZXMucXVpbmxhbkBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYBBQUHAwQwHwYD
-VR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFGx/E27aeGBP2eJktrILxlhK
-z8f6MA0GCSqGSIb3DQEBCwUAA4IBAQBdQQukiELsPfse49X4QNy/UN43dPUw0I1asiQ8wye3nAuD
-b3GFmf3SZKlgxBTdWJoaNmmUFW2H3HWOoQBnTeedLtV9M2Tb9vOKMncQD1f9hvWZR6LnZpjBIlKe
-+R+v6CLF07qYmBI6olvOY/Rsv9QpW9W8qZYk+2RkWHz/fR5N5YldKlJHP0NDT4Wjc5fEzV+mZC8A
-AlT80qiuCVv+IQP08ovEVSLPhUp8i1pwsHT9atbWOfXQjbq1B/ditFIbPzwmwJPuGUc7n7vpmtxB
-75sSFMj27j4JXl5W9vORgHR2YzuPBzfzDJU1ul0DIofSWVF6E1dx4tZohRED1Yl/T/ZGMYICbTCC
-AmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UE
-AxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMSO43VW7D5NP1X/KD
-MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAd5f5+wrmmAKUd6cLTsu5TZR/Rs8ig
-y5o1R0LIEE0+DzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMzA1
-MDMyMTM4MjhaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFlAwQBFjALBglg
-hkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzALBglghkgBZQME
-AgEwDQYJKoZIhvcNAQEBBQAEggEAaLmJ2Vq7qAnRvNyNQJjqMemznps1iKJ5aR5LmDfrJB+1Z/Xu
-dfzbytjpS8svQPzbRUr6Ab+g7xuSZDYfAgMoESSIcppgm/9lf3N50TPcdxlQstjyVzhKqAhSA94z
-SxGT2MtR2NNjZj74HqzN+Pv69m7XWIA6O0gp4RgavCKzSt+nhqqcmWax+bKSTm2NpjyRZriPvuAI
-9P4fNZudkjiZ1zfbZ17XUM8l7eEqU1uD4TBiUT6PwMqjl799gM+S22zHK1KKushH+9P1yZa0orH2
-Iso59wLxoZFTLL24R6JuUHHi3ftNXu7et5y1+/ZAw6jZHxoAUo/ACXnx3lq2XlSKQg==
---00000000000060990505fad0e0f3--
+> +	lim->atomic_write_max_bytes = 512;
+> +	lim->atomic_write_boundary = 0;
+
+The behaviour when the value is zero is not defined by the syfs
+description above.
+
+>  }
+>  
+>  /**
+> @@ -183,6 +186,59 @@ void blk_queue_max_discard_sectors(struct request_queue *q,
+>  }
+>  EXPORT_SYMBOL(blk_queue_max_discard_sectors);
+>  
+> +/**
+> + * blk_queue_atomic_write_max_bytes - set max bytes supported by
+> + * the device for atomic write operations.
+> + * @q:  the request queue for the device
+> + * @size: maximum bytes supported
+> + */
+> +void blk_queue_atomic_write_max_bytes(struct request_queue *q,
+> +				      unsigned int size)
+> +{
+> +	q->limits.atomic_write_max_bytes = size;
+> +}
+> +EXPORT_SYMBOL(blk_queue_atomic_write_max_bytes);
+> +
+> +/**
+> + * blk_queue_atomic_write_boundary - Device's logical block address space
+> + * which an atomic write should not cross.
+
+I have no idea what "logical block address space which an atomic
+write should not cross" means, especially as the unit is in bytes
+and not in sectors (which are the units LBAs are expressed in).
+
+> + * @q:  the request queue for the device
+> + * @size: size in bytes. Must be a power-of-two.
+> + */
+> +void blk_queue_atomic_write_boundary(struct request_queue *q,
+> +				     unsigned int size)
+> +{
+> +	q->limits.atomic_write_boundary = size;
+> +}
+> +EXPORT_SYMBOL(blk_queue_atomic_write_boundary);
+> +
+> +/**
+> + * blk_queue_atomic_write_unit_min - smallest unit that can be written
+> + *				     atomically to the device.
+> + * @q:  the request queue for the device
+> + * @sectors: must be a power-of-two.
+> + */
+> +void blk_queue_atomic_write_unit_min(struct request_queue *q,
+> +				     unsigned int sectors)
+> +{
+> +	q->limits.atomic_write_unit_min = sectors;
+> +}
+> +EXPORT_SYMBOL(blk_queue_atomic_write_unit_min);
+
+Oh, these are sectors?
+
+What size sector? Are we talking about fixed size 512 byte basic
+block units, or are we talking about physical device sector sizes
+(e.g. 4kB, maybe larger in future?)
+
+These really should be in bytes, as they are directly exposed to
+userspace applications via statx and applications will have no idea
+what the sector size actually is without having to query the block
+device directly...
+
+> +
+> +/*
+> + * blk_queue_atomic_write_unit_max - largest unit that can be written
+> + * atomically to the device.
+> + * @q: the reqeust queue for the device
+> + * @sectors: must be a power-of-two.
+> + */
+> +void blk_queue_atomic_write_unit_max(struct request_queue *q,
+> +				     unsigned int sectors)
+> +{
+> +	struct queue_limits *limits = &q->limits;
+> +	limits->atomic_write_unit_max = sectors;
+> +}
+> +EXPORT_SYMBOL(blk_queue_atomic_write_unit_max);
+> +
+>  /**
+>   * blk_queue_max_secure_erase_sectors - set max sectors for a secure erase
+>   * @q:  the request queue for the device
+> diff --git a/block/blk-sysfs.c b/block/blk-sysfs.c
+> index f1fce1c7fa44..1025beff2281 100644
+> --- a/block/blk-sysfs.c
+> +++ b/block/blk-sysfs.c
+> @@ -132,6 +132,30 @@ static ssize_t queue_max_discard_segments_show(struct request_queue *q,
+>  	return queue_var_show(queue_max_discard_segments(q), page);
+>  }
+>  
+> +static ssize_t queue_atomic_write_max_bytes_show(struct request_queue *q,
+> +						char *page)
+> +{
+> +	return queue_var_show(q->limits.atomic_write_max_bytes, page);
+> +}
+> +
+> +static ssize_t queue_atomic_write_boundary_show(struct request_queue *q,
+> +						char *page)
+> +{
+> +	return queue_var_show(q->limits.atomic_write_boundary, page);
+> +}
+> +
+> +static ssize_t queue_atomic_write_unit_min_show(struct request_queue *q,
+> +						char *page)
+> +{
+> +	return queue_var_show(queue_atomic_write_unit_min(q), page);
+> +}
+> +
+> +static ssize_t queue_atomic_write_unit_max_show(struct request_queue *q,
+> +						char *page)
+> +{
+> +	return queue_var_show(queue_atomic_write_unit_max(q), page);
+> +}
+> +
+>  static ssize_t queue_max_integrity_segments_show(struct request_queue *q, char *page)
+>  {
+>  	return queue_var_show(q->limits.max_integrity_segments, page);
+> @@ -604,6 +628,11 @@ QUEUE_RO_ENTRY(queue_discard_max_hw, "discard_max_hw_bytes");
+>  QUEUE_RW_ENTRY(queue_discard_max, "discard_max_bytes");
+>  QUEUE_RO_ENTRY(queue_discard_zeroes_data, "discard_zeroes_data");
+>  
+> +QUEUE_RO_ENTRY(queue_atomic_write_max_bytes, "atomic_write_max_bytes");
+> +QUEUE_RO_ENTRY(queue_atomic_write_boundary, "atomic_write_boundary");
+> +QUEUE_RO_ENTRY(queue_atomic_write_unit_max, "atomic_write_unit_max");
+> +QUEUE_RO_ENTRY(queue_atomic_write_unit_min, "atomic_write_unit_min");
+> +
+>  QUEUE_RO_ENTRY(queue_write_same_max, "write_same_max_bytes");
+>  QUEUE_RO_ENTRY(queue_write_zeroes_max, "write_zeroes_max_bytes");
+>  QUEUE_RO_ENTRY(queue_zone_append_max, "zone_append_max_bytes");
+> @@ -661,6 +690,10 @@ static struct attribute *queue_attrs[] = {
+>  	&queue_discard_max_entry.attr,
+>  	&queue_discard_max_hw_entry.attr,
+>  	&queue_discard_zeroes_data_entry.attr,
+> +	&queue_atomic_write_max_bytes_entry.attr,
+> +	&queue_atomic_write_boundary_entry.attr,
+> +	&queue_atomic_write_unit_min_entry.attr,
+> +	&queue_atomic_write_unit_max_entry.attr,
+>  	&queue_write_same_max_entry.attr,
+>  	&queue_write_zeroes_max_entry.attr,
+>  	&queue_zone_append_max_entry.attr,
+> diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
+> index 941304f17492..6b6f2992338c 100644
+> --- a/include/linux/blkdev.h
+> +++ b/include/linux/blkdev.h
+> @@ -304,6 +304,11 @@ struct queue_limits {
+>  	unsigned int		discard_alignment;
+>  	unsigned int		zone_write_granularity;
+>  
+> +	unsigned int		atomic_write_boundary;
+> +	unsigned int		atomic_write_max_bytes;
+> +	unsigned int		atomic_write_unit_min;
+> +	unsigned int		atomic_write_unit_max;
+> +
+>  	unsigned short		max_segments;
+>  	unsigned short		max_integrity_segments;
+>  	unsigned short		max_discard_segments;
+> @@ -929,6 +934,14 @@ void blk_queue_zone_write_granularity(struct request_queue *q,
+>  				      unsigned int size);
+>  extern void blk_queue_alignment_offset(struct request_queue *q,
+>  				       unsigned int alignment);
+> +extern void blk_queue_atomic_write_max_bytes(struct request_queue *q,
+> +					     unsigned int size);
+> +extern void blk_queue_atomic_write_unit_max(struct request_queue *q,
+> +					    unsigned int sectors);
+> +extern void blk_queue_atomic_write_unit_min(struct request_queue *q,
+> +					    unsigned int sectors);
+> +extern void blk_queue_atomic_write_boundary(struct request_queue *q,
+> +					    unsigned int size);
+>  void disk_update_readahead(struct gendisk *disk);
+>  extern void blk_limits_io_min(struct queue_limits *limits, unsigned int min);
+>  extern void blk_queue_io_min(struct request_queue *q, unsigned int min);
+> @@ -1331,6 +1344,16 @@ static inline int queue_dma_alignment(const struct request_queue *q)
+>  	return q ? q->limits.dma_alignment : 511;
+>  }
+>  
+> +static inline unsigned int queue_atomic_write_unit_max(const struct request_queue *q)
+> +{
+> +	return q->limits.atomic_write_unit_max << SECTOR_SHIFT;
+> +}
+> +
+> +static inline unsigned int queue_atomic_write_unit_min(const struct request_queue *q)
+> +{
+> +	return q->limits.atomic_write_unit_min << SECTOR_SHIFT;
+> +}
+
+Ah, what? This undocumented interface reports "unit limits" in
+bytes, but it's not using the physical device sector size to convert
+between sector units and bytes. This really needs some more
+documentation and work to make it present all units consistently and
+not result in confusion when devices have 4kB sector sizes and not
+512 byte sectors...
+
+Also, I think all the byte ranges should support full 64 bit values,
+otherwise there will be silent overflows in converting 32 bit sector
+counts to byte ranges. And, eventually, something will want to do
+larger than 4GB atomic IOs
+
+Cheers,
+
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
