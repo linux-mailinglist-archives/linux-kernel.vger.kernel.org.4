@@ -2,112 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 897D16F56F4
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 13:08:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 887046F56FB
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 13:10:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbjECLIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 07:08:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38126 "EHLO
+        id S230103AbjECLKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 07:10:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbjECLId (ORCPT
+        with ESMTP id S229606AbjECLKo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 07:08:33 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFF1F4EDE;
-        Wed,  3 May 2023 04:08:24 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-555e853d3c5so46802447b3.2;
-        Wed, 03 May 2023 04:08:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683112103; x=1685704103;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/XRvyoBO4AO/TxyQQrkvIAn6f4aXp991XpmSJsSj6DU=;
-        b=nhlejzrMxeYuUoeujbaHc5FMHwmvv/DGMh0WX+wsc1bbiAHYEA+A8GoOLrvnU6FdVj
-         26RUneDIB5GxIJvvBC4/1K09Pj+2lOaxykc3lvianocnz5ZJrIodOCUMs9da1PnotP81
-         3Jq57/TSK2lw+7a5ep245cMtaZC8bYlpeinLG5VvdmEbmPcpcrLnUhZkSadMIaJc3xER
-         4Sofz71yS95/fAkOl5KAhZB2t2xn1UlfFjWI766MZ8wIetRdWk4whdTM1VMuuxtwtFWB
-         SWLpbDVZotMkx/FdOoJtylrLpH0eViARH+c8+jpXLVGeUcnugIq5LBYjqbIrHY4UtBYM
-         OHwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683112103; x=1685704103;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/XRvyoBO4AO/TxyQQrkvIAn6f4aXp991XpmSJsSj6DU=;
-        b=XSc+I7f64Ymyv5qd82MPT7zPSbH0CEwB5Bl4PE2UICl2LXs9FneXtCvsImcMV+aTkN
-         tCqv9jQZiQY6ZFExlTL9B3lt+ZolIIUtP5Ts1reZEFDNYcDgzEfCk8D50GloVizSMjMW
-         AIqQGT13cLhZWBWeOOt8QEBusJkHd942V1IT7n7B//eiMti1Wdy2MZRg46iNQcCPYPdy
-         zVhLJ7cTjGnjr/dxlipEj6EgobM8QsI3crAsLq4YmUgAum6YVhm3VI+y0PK4LkbNRf66
-         lldXVUyAWZPGYq250CswsHcewdQ6BBBrAxwntCGNXG9Bdwm8L2qoCi5zdQX3U/lxICcg
-         G+ng==
-X-Gm-Message-State: AC+VfDybonaiA7i0keoaFuXrnVB0jSyCCAs1A8PBjC3yY9uc8rCZCSZP
-        YFydlR4Bo/WNyVNsy6/n74Ytqd7qzJOwSCnLkjo=
-X-Google-Smtp-Source: ACHHUZ7piRrKAF1UtoNrQ8bYwi3fDJtg2cWK9hVNdVr7ND314M45ivGeyru0TGopRmeONqV0CAmUNZG5DucwB5W8myk=
-X-Received: by 2002:a81:920b:0:b0:544:5b74:cfe with SMTP id
- j11-20020a81920b000000b005445b740cfemr19305504ywg.6.1683112103572; Wed, 03
- May 2023 04:08:23 -0700 (PDT)
+        Wed, 3 May 2023 07:10:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B5B526A9;
+        Wed,  3 May 2023 04:10:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 26D3862CC7;
+        Wed,  3 May 2023 11:10:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80EE0C433D2;
+        Wed,  3 May 2023 11:10:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683112242;
+        bh=s0Ua0IGvfJHjDVRFs1MEv5s7m2oj87gMVXpVRmE+ezY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ks2JmkYxOm4r8x2pfckba6C/Ure5b9zp/hQAQHQjowbCDSnCLwfhzlT2VuhYIRAMF
+         SWpqFzbbBaMAi9kuYtd8aOrX8K6Nhm42DqQ+CYAD2Vb2VNSi4alcoYDX7e5DdkuR/e
+         cD6WCF632kXF2iNHTLMMUD/uMcxSAb7njJPJatnd7bojlNfLJU4oH19OuXeGnWRmVk
+         MERDKuv7c3NYHaOoCyQZ3OV1ZoZQbJxhmhC4GWgnfvelVPEZAZsUm7po+Oec7KR9c7
+         UMIsSWnqkNAgD4Fed/D7btblZplPfCupRmVOjvR2qjzIUWhVKRueUbc7hfwTDa8Ze2
+         6DiwuIhMwJD6g==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1puANj-0001mf-Rl; Wed, 03 May 2023 13:10:47 +0200
+Date:   Wed, 3 May 2023 13:10:47 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
+        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
+        ahalaney@redhat.com, quic_shazhuss@quicinc.com
+Subject: Re: [PATCH v7 5/9] usb: dwc3: core: Refactor PHY logic to support
+ Multiport Controller
+Message-ID: <ZFJBN2i5tXkY8ARA@hovoldconsulting.com>
+References: <20230501143445.3851-1-quic_kriskura@quicinc.com>
+ <20230501143445.3851-6-quic_kriskura@quicinc.com>
 MIME-Version: 1.0
-References: <20230426224748.34056-1-materoy@proton.me> <dIXozfBEyCqYQ9-l0IgxfaoL6paYc_6NjXMxHp3qUqAxQdF-c5qRoULMp4K_Lv4bCOPRez2c_4v4PuFKMysFxhNkK2r1t0grU89YosKzTbE=@proton.me>
-In-Reply-To: <dIXozfBEyCqYQ9-l0IgxfaoL6paYc_6NjXMxHp3qUqAxQdF-c5qRoULMp4K_Lv4bCOPRez2c_4v4PuFKMysFxhNkK2r1t0grU89YosKzTbE=@proton.me>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Wed, 3 May 2023 13:08:12 +0200
-Message-ID: <CANiq72k5LyriTgTnYwVVzJLROoq-VEZra=WbwKBGh-O6a+guqQ@mail.gmail.com>
-Subject: Re: [PATCH] rust: bindings: fix sorting of rust/bindings/bindings_helper.h's
- #includes
-To:     Benno Lossin <benno.lossin@proton.me>
-Cc:     materoy@proton.me, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Alice Ryhl <aliceryhl@google.com>,
-        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230501143445.3851-6-quic_kriskura@quicinc.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 3, 2023 at 12:45=E2=80=AFPM Benno Lossin <benno.lossin@proton.m=
-e> wrote:
->
-> A couple of nits for the commit message (these can be
-> applied by Miguel when picking the patch, if he agrees):
+On Mon, May 01, 2023 at 08:04:41PM +0530, Krishna Kurapati wrote:
+> Currently the DWC3 driver supports only single port controller
+> which requires at most one HS and one SS PHY.
+> 
+> But the DWC3 USB controller can be connected to multiple ports and
+> each port can have their own PHYs. Each port of the multiport
+> controller can either be HS+SS capable or HS only capable
+> Proper quantification of them is required to modify GUSB2PHYCFG
+> and GUSB3PIPECTL registers appropriately.
+> 
+> Add support for detecting, obtaining and configuring phy's supported
+> by a multiport controller and limit the max number of ports
+> supported to 4.
+> 
+> Signed-off-by: Harsh Agarwal <quic_harshq@quicinc.com>
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> ---
+>  drivers/usb/dwc3/core.c | 262 +++++++++++++++++++++++++++++-----------
+>  drivers/usb/dwc3/core.h |  12 +-
+>  drivers/usb/dwc3/drd.c  |  13 +-
+>  3 files changed, 209 insertions(+), 78 deletions(-)
 
-Given this is one of the "get yourself familiarized with the kernel's
-development process" issues that I create from time to time, it is a
-good opportunity for Roy to fix those and send a v2.
+Note that this patch no longer applies and you need to rebase the series
+on mainline (e.g. including commit 1d72fab47656 ("USB: dwc3: refactor
+phy handling").
 
-Roy, could you please do that? Please pass `-v2` to `git format-patch`
-when you do so, then also collect the two `Reviewed-by`s you got and
-put them above your `Signed-off-by`.
-
-> - capitalize 'Rust',
-> - add a `.` at the end,
-> - remove the newline between the tags.
-
-Also: typo "idoms" -> "idioms", and the title could be improved to:
-
-    rust: bindings: sort `#include`s of `bindings_helper.h`
-
-since "rust/bindings" is already given by the prefixes etc.
-
-However, what does it mean "...and rust idoms"? This is C code, not
-Rust code, and thus it should follow kernel C idioms (which, in some
-cases, do sort the `#include`s too, so that is fine).
-
-Perhaps remove that bit, or say instead "Rust subsystem idioms"
-instead (since we do want to keep them sorted :)
-
-Thanks!
-
-Cheers,
-Miguel
+Johan
