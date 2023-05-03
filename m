@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC7B36F5372
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 10:39:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15FF56F537B
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 10:40:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbjECIje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 04:39:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56814 "EHLO
+        id S229555AbjECIkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 04:40:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbjECIjH (ORCPT
+        with ESMTP id S229975AbjECIjc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 04:39:07 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CEB359DA;
-        Wed,  3 May 2023 01:38:41 -0700 (PDT)
+        Wed, 3 May 2023 04:39:32 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69373524F;
+        Wed,  3 May 2023 01:39:08 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id AD94720103;
-        Wed,  3 May 2023 08:38:19 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 511E02246F;
+        Wed,  3 May 2023 08:38:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1683103099; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1683103100; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=3QiWi7xEJCHdkqRRP7ZvqBGwdGpiUG8vH8kiotRokzk=;
-        b=2Ab2FKdQ8fKvGmqEB0I/U2g45KK08soyZP8tOF5wMfe8PNz6K78uSs0i5apBW+etQ1Inxa
-        ArwPC2DMu4vA8e6CSdctlFz3XfVblS/ze6a6TsINdMLPUAtm1Mb+kSl1pda1VqWPTYp/rs
-        wiyefmKRpZThx3TPbcyzy7OPlAYGXrw=
+        bh=1K7B1ulTvYgPG7Sie5nMsi4gf4h2tfGpVQJI7Dvefpg=;
+        b=XIXDrIli9pt2V82t801AL6ofsvdrmgk5MOQRGziqjipJ6gsLBnzlXuQJ2RQGnFI1whska4
+        dq0VPixIH5VqZY6Q+tnmkSufhSWthnDa9HQLat9Cc+YofgDlO0kF7Y1Wbaph1unYEWa8ds
+        3NqmKYxfCqyzRtBXIf+2NtOqC4GDb6Y=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1683103099;
+        s=susede2_ed25519; t=1683103100;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=3QiWi7xEJCHdkqRRP7ZvqBGwdGpiUG8vH8kiotRokzk=;
-        b=2SEKacaeG0CMWxmOXWQkVhmTf0ZZABRscFhVrhXTVExwYlmfgZTNCfQNrR1qDX38PChdIQ
-        8KZeRytBUCP4bjDQ==
+        bh=1K7B1ulTvYgPG7Sie5nMsi4gf4h2tfGpVQJI7Dvefpg=;
+        b=QUr0MSESnCfRUDUbjDlYjtBOkz69rCIadklZK/oE4PQUcF5U2GWnexHAtz54vdgZTP/1ZA
+        OJLkAExOz8XEGUBw==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9EAB4139F8;
-        Wed,  3 May 2023 08:38:19 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 43908139F8;
+        Wed,  3 May 2023 08:38:20 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id 4py3JnsdUmS1dQAAMHmgww
-        (envelope-from <dwagner@suse.de>); Wed, 03 May 2023 08:38:19 +0000
+        id Uvp7EHwdUmS5dQAAMHmgww
+        (envelope-from <dwagner@suse.de>); Wed, 03 May 2023 08:38:20 +0000
 From:   Daniel Wagner <dwagner@suse.de>
 To:     linux-nvme@lists.infradead.org
 Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
@@ -56,9 +56,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
         Shin'ichiro Kawasaki <shinichiro@fastmail.com>,
         Sagi Grimberg <sagi@grimberg.me>,
         Hannes Reinecke <hare@suse.de>, Daniel Wagner <dwagner@suse.de>
-Subject: [PATCH blktests v3 1/2] nvme/rc: Cleanup fc ports in reverse order
-Date:   Wed,  3 May 2023 10:38:15 +0200
-Message-Id: <20230503083816.18792-2-dwagner@suse.de>
+Subject: [PATCH blktests v3 2/2] nvme/rc: Cleanup fc resource before module unloading
+Date:   Wed,  3 May 2023 10:38:16 +0200
+Message-Id: <20230503083816.18792-3-dwagner@suse.de>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230503083816.18792-1-dwagner@suse.de>
 References: <20230503083816.18792-1-dwagner@suse.de>
@@ -74,30 +74,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We need to free the resources in the opposite order as we allocate them.
+Cleanup all fc resources before unloading the module, so it the
+operations are in reverse order how we setup them.
+
+Also unload the nvme-fcloop after usage.
 
 Signed-off-by: Daniel Wagner <dwagner@suse.de>
 ---
- tests/nvme/rc | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tests/nvme/rc | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
 diff --git a/tests/nvme/rc b/tests/nvme/rc
-index b44239446dcf..ec0cc2d8d8cc 100644
+index ec0cc2d8d8cc..24803afe8879 100644
 --- a/tests/nvme/rc
 +++ b/tests/nvme/rc
-@@ -204,10 +204,10 @@ _cleanup_fcloop() {
- 	local remote_wwnn="${3:-$def_remote_wwnn}"
- 	local remote_wwpn="${4:-$def_remote_wwpn}"
+@@ -260,6 +260,11 @@ _cleanup_nvmet() {
+ 	shopt -u nullglob
+ 	trap SIGINT
  
--	_nvme_fcloop_del_rport "${local_wwnn}" "${local_wwpn}" \
--			       "${remote_wwnn}" "${remote_wwpn}"
- 	_nvme_fcloop_del_tport "${remote_wwnn}" "${remote_wwpn}"
- 	_nvme_fcloop_del_lport "${local_wwnn}" "${local_wwpn}"
-+	_nvme_fcloop_del_rport "${local_wwnn}" "${local_wwpn}" \
-+			       "${remote_wwnn}" "${remote_wwpn}"
++	if [[ "${nvme_trtype}" == "fc" ]]; then
++		_cleanup_fcloop "${def_local_wwnn}" "${def_local_wwpn}" \
++			        "${def_remote_wwnn}" "${def_remote_wwpn}"
++		modprobe -rq nvme-fcloop
++	fi
+ 	modprobe -rq nvme-"${nvme_trtype}" 2>/dev/null
+ 	if [[ "${nvme_trtype}" != "loop" ]]; then
+ 		modprobe -rq nvmet-"${nvme_trtype}" 2>/dev/null
+@@ -268,10 +273,6 @@ _cleanup_nvmet() {
+ 	if [[ "${nvme_trtype}" == "rdma" ]]; then
+ 		stop_soft_rdma
+ 	fi
+-	if [[ "${nvme_trtype}" == "fc" ]]; then
+-		_cleanup_fcloop "${def_local_wwnn}" "${def_local_wwpn}" \
+-			        "${def_remote_wwnn}" "${def_remote_wwpn}"
+-	fi
  }
  
- _cleanup_nvmet() {
+ _setup_nvmet() {
 -- 
 2.40.0
 
