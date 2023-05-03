@@ -2,67 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 942C76F5A85
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 16:59:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11D4A6F5A89
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 17:00:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbjECO7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 10:59:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37550 "EHLO
+        id S230187AbjECPAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 11:00:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbjECO7j (ORCPT
+        with ESMTP id S229675AbjECPAe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 10:59:39 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22BE449F9;
-        Wed,  3 May 2023 07:59:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=JAgcGCa0iriRDIyulwuKYkDgWlBOM5XWRjlSwXqyJII=; b=G1Zex2TAl4dZV3a31P0gQgnMta
-        x8hsYyMh0VoT+gBaPejSZ/jDxzfuM62caV//+sXBaIRCRjwKI6t4QXzvsHZWj8YN9xSTOHhWdikk9
-        cvE4AdB9nfURRccj93tKNbu5lH2bEplLU1ZnOP6/6/ADFeKM+J8CvWfwNk3BCR5EH8ovb8wr6ZOia
-        0hSiMiE7akTrxstEGLRa5cE6F+mu0BNG0mH2H7erYfQAP3fUd/yn6QRyFE/WqWQzlcRLIpgQYNMyV
-        6Y8SjvWYKrb/bNpSRRC+xcn5Q+ZqmGxawMzCF1jeCtPkJy8bJz5eVY9PtQ6c5Ur9cPjmRBqQbmxq8
-        Nh8BCCUg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1puDwe-009eL7-RX; Wed, 03 May 2023 14:59:05 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D1AFC30339B;
-        Wed,  3 May 2023 16:59:00 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id B2CCE241DA2D7; Wed,  3 May 2023 16:59:00 +0200 (CEST)
-Date:   Wed, 3 May 2023 16:59:00 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Leonardo =?iso-8859-1?Q?Br=E1s?= <leobras@redhat.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yury Norov <yury.norov@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Nadav Amit <namit@vmware.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Chen Zhongjin <chenzhongjin@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        Marcelo Tosatti <mtosatti@redhat.com>, vschneid@redhat.com
-Subject: Re: [RFC PATCH 1/1] smp: Add tracepoints for functions called with
- smp_call_function*()
-Message-ID: <20230503145900.GC1689514@hirez.programming.kicks-ass.net>
-References: <20230406075718.68672-1-leobras@redhat.com>
- <20230406095519.GG386572@hirez.programming.kicks-ass.net>
- <f294a74cd17bf932621a6a746d592f49770d25ec.camel@redhat.com>
+        Wed, 3 May 2023 11:00:34 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2065.outbound.protection.outlook.com [40.107.244.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41BE149F9;
+        Wed,  3 May 2023 08:00:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NggceEvxQhh1xRFs3nfuVSxvUkFvBvv3pOTWL8RBZMlb5RlVqExKdyEBDhGf1a5hIbwt2mabqb/OZ7cOHHofZdNs2HYXvz+IzNZl+9x6LSZp5bsAzfGfkaKYNZ3gsinQluBOFZBGh5rb7eAKk22goSu6DAc6enexWZGMZeZbm8xfJV2kRQZVZmu1575ryTORmfd9xjQYC5ZlSpJvzCBjh+9yEqyaKH6ioES4dUWkwZ8wfiIwUJadGHkiWGZhuA5IcbIwjo3xuj5kQYtsxTxuN0Hdk6mHkby+eIJGPt4AFjrQ7LIhL5lQ+1gCxDaoVFb8oxtk3eYhJEGetcvsuFhZVA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=M9nXqdqYMcYrK/yplpC6fNvvdxium6IdSAbnQ1QFWjA=;
+ b=JPKY3BF2xnlS/EpXi4BngNhenO2rlGeIB925jkmwEcUlCxVL/uown5LKde9FhCh3WSmK3GqkRM1W+zzHS6CtHC06fb+HSanbfP3Yc/a98Uf8Q8BE3zLMQd+Zfw5pzZAljvTvySjlVFbiKOktxU8+HsdWVyXcGhATnI+OmIlYA7FZZrzAOc4RV5xXtQjoCsiiyS8xINqkhojf8ZtVkeZw2qCiBpASLeqQpuqGXrxnrRVTRD6NjT9vg5QhsyFXP0OZde4euDlpZLwnxDaV5syxy5sR/CUxifRaEN7nER/vfJbJackJeTvQt+bn6md0lu4xeOVlzXzevpKM1cHA6L7YCA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=M9nXqdqYMcYrK/yplpC6fNvvdxium6IdSAbnQ1QFWjA=;
+ b=UDkh79F278dO6oCdbJadnpOU8CZBBH69y2miRonTCDNSZx2foMWTWb6mXrjwl7VCvuXSFmtiaJwLiysQWsLTS4AUA42Oas1baFy1y/qIZxiPMu47UlKEXbihvvYoCU3mavmu5zQypgKc1pbW0jZw2EUAvdBUDmbOVLrtJUaBj76xMkwH8rxwOrLV/CISkbEaztL06btArZ13+fVVCloNLDX5zhNBysY186OFQ5WMMXBqv19MYcjj1s+tMUqZ1hw+OY9n2czNIwV6VYOL9KMieISjF6gL+THKo05qyD58l7p/bIjjPRcBQL2p8BBpNXb7DS4o/VSZLHKdP2JppjNWOQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CY5PR12MB6201.namprd12.prod.outlook.com (2603:10b6:930:26::16)
+ by MW3PR12MB4538.namprd12.prod.outlook.com (2603:10b6:303:55::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.31; Wed, 3 May
+ 2023 15:00:30 +0000
+Received: from CY5PR12MB6201.namprd12.prod.outlook.com
+ ([fe80::a7a3:1d9d:1fa:5136]) by CY5PR12MB6201.namprd12.prod.outlook.com
+ ([fe80::a7a3:1d9d:1fa:5136%6]) with mapi id 15.20.6363.020; Wed, 3 May 2023
+ 15:00:30 +0000
+Message-ID: <482f00d4-d3f0-da85-93e3-a4a2e5597e12@nvidia.com>
+Date:   Wed, 3 May 2023 11:00:25 -0400
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH net v3] virtio_net: Fix error unwinding of XDP
+ initialization
+To:     Parav Pandit <parav@nvidia.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        Bodong Wang <bodong@nvidia.com>, William Tu <witu@nvidia.com>
+References: <20230503003525.48590-1-feliu@nvidia.com>
+ <PH0PR12MB54816403B23CE6D0AF2FD035DC6C9@PH0PR12MB5481.namprd12.prod.outlook.com>
+From:   Feng Liu <feliu@nvidia.com>
+In-Reply-To: <PH0PR12MB54816403B23CE6D0AF2FD035DC6C9@PH0PR12MB5481.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR13CA0222.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c1::17) To CY5PR12MB6201.namprd12.prod.outlook.com
+ (2603:10b6:930:26::16)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f294a74cd17bf932621a6a746d592f49770d25ec.camel@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY5PR12MB6201:EE_|MW3PR12MB4538:EE_
+X-MS-Office365-Filtering-Correlation-Id: 388416ab-4002-4626-7f60-08db4be72309
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Vn46b0+jRY4njEtlkvp4NBucaHJW/Aw3eASiM9Pf6eNwEtOiHIRTdwIW1a4fZTy5JUtrZJRVcVHvX8D82RcVPmkLZe+YEstSYxkHq7GX7jjXmgJ1bpeLbRnmrkfCoJl9aj9MGFNEe5USDDn+2jFi5z67lIUBaLKdaLFdPIZHEWxO/2jz8EOtZ5sQEEh4fis59wJwA0ES8k/I0O+ludj0zRn2Ri9GfDGdrSAFW7VnfdASV1zcc5mKtPymCFHhUhna9pb6p9CTzB75LXLjrP/O5s0twkQ1WyR62tGjLUKcm6AzsviaLxpq+bsvqED+MYXu3yDUOa/GWDMj9QgzAvZ1qDu0jMnERc1tjrz4+5ZSbjEuVkA4lIOV3cL1PToJ3l4vPywgr0WCmJIep2DnP55FkwmYwAwL2Ru+tcDR+stAjF22tgqVtjZHo+OAqDGC/Pt7lDzXv1WU3wRzTjiaNvWT2BA2DtIoZeEqwaimlgJnMMtOdc/9B4+N+2eCOINAB8wsYIDwK9Wr6sG5TgkuR/nrDkw2+4CnsAOEb+0xBPMphETkckLMcCLsNtAq2kI6uGsO/3NkTsgmaanCgd70JXt07/6vaTp/zzF7pxHfG2VlF9S31QCfcttkdkNFY8CUMU3OQKLzRUcGsvXXkugZvT1jmw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6201.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(366004)(376002)(346002)(136003)(396003)(451199021)(31686004)(5660300002)(41300700001)(4744005)(2906002)(2616005)(8676002)(8936002)(316002)(6666004)(6486002)(38100700002)(66556008)(66476007)(4326008)(31696002)(86362001)(54906003)(478600001)(110136005)(36756003)(26005)(186003)(6512007)(66946007)(6506007)(107886003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TExQeFJILzhtYk5rSWNubnk2djV1ZFFqb1dtTVZtUUVCVU5aS3ZzM2dHaC92?=
+ =?utf-8?B?UlY2ek00VGdoZUNIODNaYjBFSkZsWGJYUWU5Nm14MVg0UW5FTTJIQWo0K2Ex?=
+ =?utf-8?B?MFR6VFg0VDMwN3RyOFM4VFcvaEo4bldBTjkzbENHM3hOTFZZbmpSWGt5Rkxu?=
+ =?utf-8?B?UkJpRzM1RzcvSDRjeHl1ZTVCVmZubkNreTEwQ3FQUk1HanIraUpCT09XRlhy?=
+ =?utf-8?B?WTUxbU04ZWkySC9xZ2NrNXNMQjJBZVg5MmUxa2hteDFNRXFPYVQza2VIbTU4?=
+ =?utf-8?B?YjJQS0s4emE4aUdJV0hrQnltNHZJeGxqZ2FGcDRYeURseVdwTHYrUTZyMjJp?=
+ =?utf-8?B?TTVuSFpZR3lHYUF3M3ZXNFliUUxrQnpodGkwSWFuM0NlUy9xZWFkQ2RzbTFV?=
+ =?utf-8?B?S1ZVb2hxVk5BMnhPdWQxcncvR1B3a0UyY2ZHMmJXeEc1cVdpTVNySDd3dVFa?=
+ =?utf-8?B?ejRqb1RIa2FGYXI4SHpuMzMvcFRzanlMZU1McFlDS1dUaGlBRFg4R094UkdZ?=
+ =?utf-8?B?UlFsVmw3MlI1YytTTWdVZmp5Vmd1cWdYd0sveEtTZnFtMlRmK3lVcWd3QWw2?=
+ =?utf-8?B?L2djKzJld25TVW9EQmVZcUNHc1JHVnMzcklnNDh0Tkx0Q0ZmSzZnZzFETnpt?=
+ =?utf-8?B?VTFNbWE0dUpJYU5qSmJBaU1rVmNQaUEyQkdQUnN0Q0V3a1RZblpzRlY3cnFO?=
+ =?utf-8?B?N2RuZEZ4c2dscy9xdVZLWHo1TDk4UW5WaWgrSGdHeCthYnVkZW9xaGExUmFj?=
+ =?utf-8?B?RCtGK1Y4U3RGeG95RUtuSGRXYVE0L3A2VG4vZzF4WXJwT09PRmppK2NKMWE1?=
+ =?utf-8?B?ZFAySytDeGRjeXpDRFZhWUIvVkF4MnlVM1k4K08vY2J4WUZhQzNyTkpldHFF?=
+ =?utf-8?B?NGZ6TTN6dGZoSzdDVFkxeXlDRXZGNE1jWjNwY1VpNkNUR3lOeUtwWTg1eGJ1?=
+ =?utf-8?B?UnNCR01oN2dhMEk0cUNtb3dHM3VCVE9YRGtFd0VaMVNwdFJuTFpMalQzdFo3?=
+ =?utf-8?B?Ympma1hJMHgra3p3NzVyUENISWM3SmQ2QjJQOGJ1eTM4cUZpclFRNGVpWFQ0?=
+ =?utf-8?B?OTNreU5uUVBtY3VyS1hyd1NvdENFbFF0UnpQc3BTZDZDTWNNbXhWVkE2YUg0?=
+ =?utf-8?B?OFluaE4wSkRFNmRtY0JLeXpEbThsUFU5N3pqT2YrZzE3NDNQWUt6amRBMVk3?=
+ =?utf-8?B?OUhCQm1EYlVoRTVGR0pqeEc3ekNiMk80WjZVbXYvemp1Z0hDb1RzRlYwd3ZS?=
+ =?utf-8?B?VVNQd0NDVEVqcXNRZFllZ2JteXdxYVBMUTZLQ21ndkFqN3h6UjRTV1M4NGdH?=
+ =?utf-8?B?YXlJRWNPRXpENEJJTytnUzA5eDBQMmRzNTlrc2JWdTdvbG5BVVBQTzJ0NDVU?=
+ =?utf-8?B?c0JBVWh1eHpEeFFmUnprbmI0L2hVdENCcGR3SWFJTi9sZ0ZsSitNN0tuVHd2?=
+ =?utf-8?B?eHN0YUNGQW5ROXN3U2VZK3A4MGdhaVc4b1J4NmE2YkFMU28vdHI2Y2ltQm5B?=
+ =?utf-8?B?d1V5Z2lHUkhaZERPZUsrVEg2S3NYc25SeDc5bFQxanFOS2g1ajhVU3NVTitB?=
+ =?utf-8?B?RlE3ZXAvL1V5NFVsdWtLeTFWcXpYMVh3dnVHNzhEVHJpdEo4cGJZR21DVk43?=
+ =?utf-8?B?N25yWHRrKytCbHVyeDBwM1k1NHo2WUpDVWtHTWxVVWZ6M2hBVjFXZU9nUlZz?=
+ =?utf-8?B?K3E3TGdNWkJXNGRoTlRLVkw1RllPS09YelRyQ3NWUnk0TFJJeVB4Y3orLy8v?=
+ =?utf-8?B?a3B6QmlOMWRaY3l6SjRwTzJwbkJjdmkyYXB6SENkYTlJMENHSUV4aXVHQ3cx?=
+ =?utf-8?B?NlFxNkhBYWl0SWVsUUpoR052OExXSWs3c0tRUGRVb2pWQTBxcnJzcTN1SlNa?=
+ =?utf-8?B?YUhxbUtCeXduQiswOUc1bkh1a0sxZkRqeFRaMFlwZGV2cnVVUS94UGhMeVlC?=
+ =?utf-8?B?clhyaW9OTGViUzkwK09FZ2tucjE0dkdzSzd6WU1CNndhTnYzN0RkZ09WcGJ0?=
+ =?utf-8?B?cXpENE5WNk1WdVh3ZWNqdUhlaTEzc0ZGaWhReEdRQ2F3ZExaYXNubTFtR0pz?=
+ =?utf-8?B?eGJhSmFwSlJNVnVOWFloSGNyeCtCZ1hENmtFMmNKaGxFNkF5UXdsV1plUmEv?=
+ =?utf-8?Q?+JW3mQayz9gDILXH4A6pvX1bo?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 388416ab-4002-4626-7f60-08db4be72309
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6201.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 May 2023 15:00:30.1887
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Mor5W2bqxhBZ+EYVCE28fzU8hQYuQqJHRxdHbW/heAK+BCeSqxeGix7+GG09//fG6t1OId+MsRonUatYxwOgFQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4538
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
         SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,57 +135,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 12:45:08AM -0300, Leonardo Brás wrote:
-> On Thu, 2023-04-06 at 11:55 +0200, Peter Zijlstra wrote:
-> > On Thu, Apr 06, 2023 at 04:57:18AM -0300, Leonardo Bras wrote:
-> > > When running RT workloads in isolated CPUs, many cases of deadline misses
-> > > are caused by remote CPU requests such as smp_call_function*().
-> > > 
-> > > For those cases, having the names of those functions running around the
-> > > deadline miss moment could help finding a target for the next improvements.
-> > > 
-> > > Add tracepoints for acquiring the funtion name & argument before entry and
-> > > after exitting the called function.
-> > > 
-> > > Signed-off-by: Leonardo Bras <leobras@redhat.com>
-> > 
-> > How are the patches queued there not sufficient?
-> > 
-> > https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/log/?h=smp/core
-> > 
+
+
+On 2023-05-02 p.m.11:14, Parav Pandit wrote:
 > 
-> IIUC the last commits add tracepoints that are collected in the
-> requesting CPU, at the moment of scheduling the IPI, which are also useful in
-> some scenarios.
+>> From: Feng Liu <feliu@nvidia.com>
+>> Sent: Tuesday, May 2, 2023 8:35 PM
 > 
-> On my scenario, it could help a little, since it makes possible to filter what
-> all other cpus are scheduling on the requested cpu. OTOH it could be also be
-> misleading, as the requested cpu could be running something that was scheduled
-> way before.
+>> Issue: 3383038
+> Remove this internal garbage.
 > 
-> The change I propose does exactly what my scenario need: track exactly which
-> function was running at given time in the requested CPU. With this info, we can
-> check which (if any) remotely requested function was running on given time
-> window.
-
-I was thinking you could simply (graph)-trace
-__flush_smp_call_function_queue() with a max_graph_depth or so (Steve
-says that ought to work).
-
-But even that might be too specific, your use case sounds more like what
-we have the irq-off latency tracer for, and that thing will immediately
-tell you what functions were being ran.
-
-> (An unrelated thing I just thought: We could even use the commits you pointed
-> together with my proposed change in order to measure how long does it take for a
-> requested function to run / complete in the requested cpu)
-
-I don't think you could actually do that; the send tracepoints Valentin
-added don't log the csd address, this means you cannot distinguish
-two CSDs with the same function send from different CPUs.
-
-To do this you'd need to add the csd address to the the ipi_send
-tracepoints and your own (possibly replacing info -- because I don't
-think that's too useful).
-
-Valentin -- is any of this something you'd also find useful?
+>> Fixes: 754b8a21a96d ("virtio_net: setup xdp_rxq_info")
+>> Signed-off-by: Feng Liu <feliu@nvidia.com>
+>> Reviewed-by: William Tu <witu@nvidia.com>
+>> Reviewed-by: Parav Pandit <parav@nvidia.com>
+>> Reviewed-by: Simon Horman <simon.horman@corigine.com>
+>> Acked-by: Michael S. Tsirkin <mst@redhat.com>
+> 
+>> Change-Id: Ib4c6a97cb7b837cfa484c593dd43a435c47ea68f
+> Remove this internal garbage.
+> Please run a local script not to forward the above garbage in upstream patches.
+> 
+> You are missing the changelog from v0->v1->v2->v3.
+> Please add and resend with above things removed and with changelog.
+ok
