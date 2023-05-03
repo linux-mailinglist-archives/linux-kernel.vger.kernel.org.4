@@ -2,126 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3258A6F4FCB
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 07:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EF426F4FCE
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 07:57:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229539AbjECFnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 01:43:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57206 "EHLO
+        id S229536AbjECF5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 01:57:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjECFnH (ORCPT
+        with ESMTP id S229457AbjECF5e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 01:43:07 -0400
-Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F502736
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 22:43:06 -0700 (PDT)
-Received: by mail-ua1-x932.google.com with SMTP id a1e0cc1a2514c-77d53b41462so142565241.1
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 22:43:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683092586; x=1685684586;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rsAmWnHYdqf8PxIDTx7JVpNph88uEqYsba4Oi5M9pys=;
-        b=ERzOwCN8Snpnb6R6BMPDcCWmrygLOdCFBKCPjPfmNrRa9r/Bde491tD+EBUO98Pr0p
-         PcYay5OeQR1WNpFBwkdiaJIM3+7iqCOlKWMHHMJye7Atdu9Zb1AXDB2Npq44wRmcUwya
-         fT9UCI9jNpd5nzKnTAiA4RiZ5eQKjVAkYXREU/mWQP0b6z00COHDWedWjnAIFXF1mG2g
-         jVQTFpY3OSTck2RfgXgOJYWJFuIRizX2uecYY6kr6Rg/WxtYCl4mc669GUNBZa33AZM1
-         BV8zqOBEt5IvAUNRKH1DuV38cIW5jEK3tCOuqPoQYxu82LJovSQ7MCSld2eA2GwZEAMP
-         P8Qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683092586; x=1685684586;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rsAmWnHYdqf8PxIDTx7JVpNph88uEqYsba4Oi5M9pys=;
-        b=MhIevZbEgAjwW8fL8igXDSHxfRyBVlW3XYFUk1tk/vnesybc9TEgG2+CmQbMwV0L7T
-         2t+n48TsFyXyei4OpHh4830kwU9l46iJkcAiZGkKJLfiLTRvlLr+OBDR7SFEl2qf/c9j
-         htAMeNyeEGBHu1EpBnF1WjNK6TtxjfXSvDJntOWkhTsvlQkuVIsHgqOfE+kWEmpP/+GJ
-         soo7kDeRckrDzBc+Q5hNw87smqnGORinzoOq7tl2gqEPxvfiKksILX3pzQWBCi7Nki7/
-         YHXLrozM+9G6OXPJpYZyP78sFnh/z5eAWwXliR7o2ZVp/LWxUMUP0PVgHYppbyWg10qV
-         boZA==
-X-Gm-Message-State: AC+VfDyyr7FE4Bg0kqdAsmhtIvt+3WE6knArZpllNRV60zTBTKOMQ26r
-        saF8jJHRhvi09vm2o8UumgRBKBEmGqmd2weGjfiMAieIf3k=
-X-Google-Smtp-Source: ACHHUZ7ykK9Pomy4WV89OB6bwk9/UoxMqZtNJrFwUkc6HainGydy65lfIkZPMMydRIzSTL7GURxd1oHI9zPRV9FHxyI=
-X-Received: by 2002:a67:fb11:0:b0:42e:38c1:8a54 with SMTP id
- d17-20020a67fb11000000b0042e38c18a54mr942121vsr.0.1683092585868; Tue, 02 May
- 2023 22:43:05 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAAJw_ZsbTVd3Es373x_wTNDF7RknGhCD0r+NKUSwAO7HpLAkYA@mail.gmail.com>
- <ZE9B4avbDtIXOu4O@debian.me> <87r0s0pnim.wl-tiwai@suse.de>
- <CAAJw_ZsDdiB=b2PZydQWF2fjSULit3NWE-Bf1icBEryN-GuqUw@mail.gmail.com>
- <87fs8gp0i7.wl-tiwai@suse.de> <CAAJw_ZveoPfnBsSkHZqmLiVWATcOosR--6Ds4cdekdi=t1yV7A@mail.gmail.com>
- <b449cbf6-8286-e22d-ca87-b1bc3dce29d7@gmail.com>
-In-Reply-To: <b449cbf6-8286-e22d-ca87-b1bc3dce29d7@gmail.com>
-From:   Jeff Chua <jeff.chua.linux@gmail.com>
-Date:   Wed, 3 May 2023 13:42:55 +0800
-Message-ID: <CAAJw_Zur2fz7FnO-qyzd_mSoCcroCREcvHKo8sOMrrMDGxXv2g@mail.gmail.com>
-Subject: Re: linux-6.4 alsa sound broken
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Takashi Iwai <tiwai@suse.de>, lkml <linux-kernel@vger.kernel.org>,
-        Oswald Buddenhagen <oswald.buddenhagen@gmx.de>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Linux ALSA Subsystem Development 
-        <alsa-devel@alsa-project.org>,
-        Linux Regressions <regressions@lists.linux.dev>
+        Wed, 3 May 2023 01:57:34 -0400
+X-Greylist: delayed 121 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 02 May 2023 22:57:31 PDT
+Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE74C1FE3
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 22:57:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1683093311; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=dXf/z6T3UZCv+texqamhmD8WP+ySIcT8+mX4YjiIwp3ksH9l0AwHJk8exPIQpHv7jxwD8ih2IvKeQdgbN7/aIMh6cSLiq9yFMvach4NLaSsApwH4pZ79Q2dE0+er7wR8oM0z2HkDB9VxsElDfNJtDa9rl+ZUjobX2pOtsJ0Diww=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1683093311; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=+NVmQ6ZP5n0PV0Ca3kCz5g0tcHZhKEg4OMuMhJVciXo=; 
+        b=d8GGDXSgdeCo9x8iwJmIJfyukfwY7iqH0LnTqzC16YA1CoGVSlhBklln2AdM9KEc5ca/Yi3ptNEPwzy284mhy9oszNQCm6Ji0VSfNDknSlc+YrZsB9L2raREkFA1oRcVNWilra5ZsrcHoTGzJnQFVLAZZlLfvFzrbk1dBs3TA7g=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=icenowy.me;
+        spf=pass  smtp.mailfrom=uwu@icenowy.me;
+        dmarc=pass header.from=<uwu@icenowy.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1683093311;
+        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
+        h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
+        bh=+NVmQ6ZP5n0PV0Ca3kCz5g0tcHZhKEg4OMuMhJVciXo=;
+        b=aPZBAYz49O8UFO+n13fU7Y1tnR+1aqUzikkCGb3bNVs3K5wJ+dIO9xKWfXrZEmEi
+        VADEEVxnyWF1cOA9wcYwh9LNwCHEw/uPJ+GGyy748NgKPPGDdg9nSFE6r4i3JzM1Dpc
+        nNT4E/mgjrp1NSLxil87xo/nL/5qM0Wzlt85Wi4Q=
+Received: from edelgard.fodlan.icenowy.me (120.85.97.113 [120.85.97.113]) by mx.zohomail.com
+        with SMTPS id 1683093310083649.8294996152783; Tue, 2 May 2023 22:55:10 -0700 (PDT)
+Message-ID: <8bb0baa57a92a778a83618e1f4de8f28f4a15ee0.camel@icenowy.me>
+Subject: Re: Atish is looking at the excessive bouncing
+From:   Icenowy Zheng <uwu@icenowy.me>
+To:     Atish Patra <atishp@atishpatra.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
+Cc:     linux-riscv@lists.infradead.org
+Date:   Wed, 03 May 2023 13:55:00 +0800
+In-Reply-To: <CAOnJCULybsPrygGe6easQUgFTXOSUFQ+nOPEYp57F-vkvhuHLQ@mail.gmail.com>
+References: <mhng-f3c5429e-4361-4068-b88c-fb528681881a@palmer-ri-x1c9a>
+         <CAOnJCULybsPrygGe6easQUgFTXOSUFQ+nOPEYp57F-vkvhuHLQ@mail.gmail.com>
+Organization: Anthon Open-Source Community
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 
+MIME-Version: 1.0
+X-ZohoMailClient: External
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 3, 2023 at 12:40=E2=80=AFPM Bagas Sanjaya <bagasdotme@gmail.com=
+=E5=9C=A8 2023-05-03=E6=98=9F=E6=9C=9F=E4=B8=89=E7=9A=84 00:00 +0530=EF=BC=
+=8CAtish Patra=E5=86=99=E9=81=93=EF=BC=9A
+> On Tue, May 2, 2023 at 11:17=E2=80=AFAM Palmer Dabbelt <palmer@rivosinc.c=
+om>
 > wrote:
->
-> On 5/1/23 22:03, Jeff Chua wrote:
-> >> There was no description about which sound backend is used.  Is it
-> >> PulseAudio, pipewire or dmix/dsnoop?
-> >
-> > Just pure alsautils.
-> >
-> > arecord -D hw:1,0,0 -f S16_LE -r 48000 recorded.wav
-> > aplay -D hw:1,1,0 /local/share/sounds/alsa/Side_Right.wav
-> >
-> > [recorded.wav] attached.
-> > [Side_Right.wav] attached.
-> > aplay: version 1.2.8 by Jaroslav Kysela <perex@perex.cz>
-> > arecord: version 1.2.8 by Jaroslav Kysela <perex@perex.cz>
-> >
-> > alsautils, alsaplugins alsalibs all using latest git pull.
->
-> Are you sure you build alsa tools straight from the git repo?
-> Can you also reproduce with latest stable version of these?
-> Otherwise it's anyone's guess due to moving parts...
+> >=20
+> > We're not sure what happened, but it looks like a lot of people are
+> > getting dropped from the list due to excessive bounces.=C2=A0 Seems to
+> > have
+> > started recently, possibly today or over the weekend.=C2=A0 We've alway=
+s
+> > had
+> > some issues with the bounces, but they're a lot worse.
+> >=20
+>=20
+> All the bounces are related to the gmail server which treats genuine
+> patches as bounce messages.
+> mailman server disables the membership if it gets too many bounce
+> backs from the recipient.
+> It seems the mailman server can't do much about it until the issue is
+> fixed in the gmail server.
+> We have increased the bounce threshold significantly in order to
+> avoid
+> disabling subscriptions.
+> If you still get one, please reenable it manually. You should receive
+> one reminder email for that as well.
+> There is no other solution at this time. Sorry for the inconvenience.
 
+Well, by the way, my mail server (Zoho), is also always receiving
+bounce reminder.
 
-All cloned from ...
-https://github.com/alsa-project/alsa-lib.git
-https://github.com/alsa-project/alsa-utils.git
-https://github.com/alsa-project/alsa-plugins.git
+I don't know how this happens yet.
 
-arecord is symbolic link to aplay.
+>=20
+> I have included the broader kernel mailing list in the hope to see if
+> anybody else is also facing similar problems.
+> It would be great if anybody working for the Google/gmail team can
+> raise this issue internally.
+>=20
+> > Sorry for the headaches.
+> >=20
+> > _______________________________________________
+> > linux-riscv mailing list
+> > linux-riscv@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-riscv
+>=20
+>=20
+>=20
 
-I just recompiled all the alsa-lib, utils and plugins, and retest and
-it's the same issue.
-
-GNU C Library (GNU libc) development release version 2.37.9000.
-gcc version 11.3.1 20230315 (GCC)
-binutils-2.40
-
-Linux kernel is ...
-commit 348551ddaf311c76b01cdcbaf61b6fef06a49144 (HEAD -> master,
-origin/master, origin/HEAD)
-Merge: 7df047b3f0aa b7badd752de0
-Author: Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue May 2 15:40:41 2023 -0700
-
-
-Thanks,
-Jeff
