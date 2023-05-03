@@ -2,203 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDE7C6F5744
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 13:38:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70F926F5741
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 13:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbjECLh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 07:37:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47646 "EHLO
+        id S229577AbjECLhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 07:37:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjECLh4 (ORCPT
+        with ESMTP id S229580AbjECLhK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 07:37:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6706C55B8
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 04:37:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683113828;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bIi8bY8IRLAsexxUq+ST9kZ+eooAdtb0UXZ2yaSI33A=;
-        b=CMbw6wYuH/H2Sh/TMQvgTe8XFuyBaVizDFMgNbodJKcmKb/QxLMxiPzLimnMjRdUhJbgJ1
-        2Cy1lC1Ve/bvA97bx4NjlBud1tMpx1n9Pgy5+ysiCH9hRG3/hWfRsWWcS8MMzMgMVzjsO6
-        bUFlj0Fo4Kk/QDZSpLdDYSkWtKUbB3k=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-568-LnRXnl52ND2tHgh8c1C3Zw-1; Wed, 03 May 2023 07:37:07 -0400
-X-MC-Unique: LnRXnl52ND2tHgh8c1C3Zw-1
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-30479b764f9so1437891f8f.0
+        Wed, 3 May 2023 07:37:10 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F122259E2
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 04:37:07 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-3063b5f32aaso1087871f8f.2
         for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 04:37:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1683113826; x=1685705826;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ElfKrvCpInhLz/Z11HONGQ5ugEk4h7txKdzMFSSJ7WI=;
+        b=3YMjtCt+YEx9MHKvkBysT1EG56mO+Vo+YpW/LTWjsGLyLxMn4K1HSNucKEXLONZNCS
+         WlRhlXGKcOJD4M45LldidayZsG5Q8hQjdyXJBulUn46q6719ha8EyNR+cgUlFWYgmCw5
+         JI/7dApiX3rNM6wdb+rqnYcNzgvSPb+lZeQ0aIwyA/9Pz5gOLMuCqo2BJMkAziMYt2f8
+         dpw0ICkRigcxHcGuG2Dn03W4Des24k+0QnLpLOzy4T/cQhMTErvk5Ze73frvNBXAWxVK
+         bbiV3YKwcV63I7Bqd1pW/6ITZojNpCoW02a95gVkOiRmm1tg5N143mfA5laDQ/UAo7sR
+         Ak/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20221208; t=1683113826; x=1685705826;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bIi8bY8IRLAsexxUq+ST9kZ+eooAdtb0UXZ2yaSI33A=;
-        b=eEL5OdoeMuKrX4pGWnABUlnV+vDoljQNSjqwYas/pV2Hbne83ELOfb5PsXu3jD0m9i
-         KQMOc9rd4t0YsTlYVNATCMp/7QLSw6Gb9JjjzQaChWoOMH6kzNrw0ZJkoI9K3d2iq9MY
-         SCGV7OA/CyaMWlmlLxQdQc+OraFRdfeAZq4Z4lyKFSAYB53e1jT4gzKL3eRwRN3XItVv
-         6hBGk1ZKGpOMuw5y8LO+Kj+LaPzKWdVwiD24PbhrMoe2gUwwM92GxD1O5DOyFLxcLvgH
-         +CXjpIsWR5DMDJofpeB/ekG1Lr3ZbVap2/gSMa6/6u5ssbuX/E/Ft4YXdPpArY3eN0K0
-         z4EA==
-X-Gm-Message-State: AC+VfDz9VT1WodTEBLTSunNBq6E2zN/bxeW9YoCzm1jQD+a16CUvqlKV
-        0VbS61ihE3xzYGPrjj5cGi4nEOApLrstQkTfgHa523BNg06HGqZ1u/RaNbDhaT6nY4Vsfap9PfA
-        bLTe9a+CBNZaPB8bGEAjDYS5U
-X-Received: by 2002:adf:e4cb:0:b0:306:2de2:f583 with SMTP id v11-20020adfe4cb000000b003062de2f583mr6541273wrm.53.1683113826164;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ElfKrvCpInhLz/Z11HONGQ5ugEk4h7txKdzMFSSJ7WI=;
+        b=A7ofmoUq4ilvPbeYRuXOnOdKqJ+qrfdNbU1/dK4U+DtoyhjT2Mg93BT3YRZrsqF1UI
+         1+mHAmnoPPK/16+0S6Z1zQTpk4F7uZXRZzrNKnqMoKHOFIIUeVjGupIRf+tklZ2t6Z7Z
+         Kjry7535NzfnLNXpOc8jJAaeJ6w/JdwHBrHU668EB9ZflKb9WJUNbXLancaoBbEZgtLK
+         ilKrA2aMMUdhhz6UTUUq50cfyyTA9MA+JxbI5SEeiRpK3eJeGUPjn3x6wFDW8b27f4Er
+         03QjZNsTTGdmtkFPHP51msSotIURS/3eLpcQC9e0xJS5rrXKebThUeIlY55tRhKFsFoD
+         g/kA==
+X-Gm-Message-State: AC+VfDxNGFF8Ut5yB6DHnjI3fgmGKAZXUF1bBnGc/Hx/Eb7J+wCsaB8g
+        BXricIOCx1lGYiDLa1fZ9wqDJA==
+X-Google-Smtp-Source: ACHHUZ4DApPSRWp2+mUTN9/wyi4skFbo/r44ueyxB4RUcB9WR+vb3A1heHuO0vLG1ABVxySeBoCIDg==
+X-Received: by 2002:adf:fcce:0:b0:306:2d3d:a108 with SMTP id f14-20020adffcce000000b003062d3da108mr6793461wrs.11.1683113826415;
         Wed, 03 May 2023 04:37:06 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7PPuhtQnzDd49eLyL+LKBBbg7YVhP2WcRbMovIP3Uq0JyM1N6Oj/UsS/45wviUPGjNlfNQKA==
-X-Received: by 2002:adf:e4cb:0:b0:306:2de2:f583 with SMTP id v11-20020adfe4cb000000b003062de2f583mr6541253wrm.53.1683113825857;
+Received: from localhost ([2a01:e0a:28d:66d0:a20d:16d3:a674:dfc4])
+        by smtp.gmail.com with ESMTPSA id l18-20020a05600012d200b002ceacff44c7sm33708069wrx.83.2023.05.03.04.37.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
         Wed, 03 May 2023 04:37:05 -0700 (PDT)
-Received: from redhat.com ([31.187.78.112])
-        by smtp.gmail.com with ESMTPSA id o11-20020a1c750b000000b003f1712b1402sm1630540wmc.30.2023.05.03.04.37.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 May 2023 04:37:05 -0700 (PDT)
-Date:   Wed, 3 May 2023 07:37:00 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        syzbot <syzbot+726dc8c62c3536431ceb@syzkaller.appspotmail.com>,
-        davem@davemloft.net, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, olivia@selenic.com,
-        syzkaller-bugs@googlegroups.com, Jason Wang <jasowang@redhat.com>,
-        Laurent Vivier <lvivier@redhat.com>,
-        Rusty Russell <rusty@rustcorp.com.au>
-Subject: Re: [PATCH] hwrng: virtio - Fix race on data_avail and actual data
-Message-ID: <20230503073220-mutt-send-email-mst@kernel.org>
-References: <00000000000050327205f9d993b2@google.com>
- <CACT4Y+awU85RHZjf3+_85AvJOHghoOhH3c9E-70p+a=FrRDYkg@mail.gmail.com>
- <ZFI9bHr1o2Cvdebp@gondor.apana.org.au>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZFI9bHr1o2Cvdebp@gondor.apana.org.au>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Wed, 03 May 2023 13:37:04 +0200
+Message-Id: <CSCM20VPW7QB.RQD36XO6634I@burritosblues>
+Subject: Re: [PATCH v3 2/3] pinctrl: tps6594: add for TPS6594 PMIC
+From:   "Esteban Blanc" <eblanc@baylibre.com>
+To:     "Linus Walleij" <linus.walleij@linaro.org>
+Cc:     <lgirdwood@gmail.com>, <broonie@kernel.org>,
+        <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
+        <linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-rtc@vger.kernel.org>, <jpanis@baylibre.com>,
+        <jneanne@baylibre.com>, <aseketeli@baylibre.com>, <sterzik@ti.com>,
+        <u-kumar1@ti.com>
+X-Mailer: aerc 0.14.0
+References: <20230414101217.1342891-1-eblanc@baylibre.com>
+ <20230414101217.1342891-3-eblanc@baylibre.com>
+ <CACRpkdab_26D9BMGeSygy_oa6SFa62ytXcy+Ydi3yPzQO3tU4A@mail.gmail.com>
+In-Reply-To: <CACRpkdab_26D9BMGeSygy_oa6SFa62ytXcy+Ydi3yPzQO3tU4A@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 03, 2023 at 06:54:36PM +0800, Herbert Xu wrote:
-> On Fri, Apr 21, 2023 at 04:52:13PM +0200, Dmitry Vyukov wrote:
+On Fri Apr 21, 2023 at 10:34 AM CEST, Linus Walleij wrote:
+> Hi Esteban,
+>
+> thanks for your patch!
+>
+> On Fri, Apr 14, 2023 at 12:12=E2=80=AFPM Esteban Blanc <eblanc@baylibre.c=
+om> wrote:
+>
+> > TI TPS6594 PMIC has 11 GPIOs which can be used for different
+> > functions.
 > >
-> > Here this:
-> > 
-> > size = min_t(unsigned int, size, vi->data_avail);
-> > memcpy(buf, vi->data + vi->data_idx, size);
-> > vi->data_idx += size;
-> > vi->data_avail -= size;
-> > 
-> > runs concurrently with:
-> > 
-> > if (!virtqueue_get_buf(vi->vq, &vi->data_avail))
-> >     return;
-> > vi->data_idx = 0;
-> > 
-> > I did not fully grasp how/where vi->data is populated, but it looks
-> > like it can lead to use of uninit/stale random data, or even to out of
-> > bounds access, say if vi->data_avail is already updated, but
-> > vi->data_idx is not yet reset to 0. Then concurrent reading will read
-> > not where it's supposed to read.
-> 
-> Yes this is a real race.  This bug appears to have been around
-> forever.
-> 
-> ---8<---
-> The virtio rng device kicks off a new entropy request whenever the
-> data available reaches zero.  When a new request occurs at the end
-> of a read operation, that is, when the result of that request is
-> only needed by the next reader, then there is a race between the
-> writing of the new data and the next reader.
-> 
-> This is because there is no synchronisation whatsoever between the
-> writer and the reader.
-> 
-> Fix this by writing data_avail with smp_store_release and reading
-> it with smp_load_acquire when we first enter read.  The subsequent
-> reads are safe because they're either protected by the first load
-> acquire, or by the completion mechanism.
-> 
-> Reported-by: syzbot+726dc8c62c3536431ceb@syzkaller.appspotmail.com
-> Fixes: f7f510ec1957 ("virtio: An entropy device, as suggested by hpa.")
-> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
-> 
-> diff --git a/drivers/char/hw_random/virtio-rng.c b/drivers/char/hw_random/virtio-rng.c
-> index f7690e0f92ed..e41a84e6b4b5 100644
-> --- a/drivers/char/hw_random/virtio-rng.c
-> +++ b/drivers/char/hw_random/virtio-rng.c
-> @@ -4,6 +4,7 @@
->   *  Copyright (C) 2007, 2008 Rusty Russell IBM Corporation
->   */
->  
-> +#include <asm/barrier.h>
->  #include <linux/err.h>
->  #include <linux/hw_random.h>
->  #include <linux/scatterlist.h>
-> @@ -37,13 +38,13 @@ struct virtrng_info {
->  static void random_recv_done(struct virtqueue *vq)
->  {
->  	struct virtrng_info *vi = vq->vdev->priv;
-> +	unsigned int len;
->  
->  	/* We can get spurious callbacks, e.g. shared IRQs + virtio_pci. */
-> -	if (!virtqueue_get_buf(vi->vq, &vi->data_avail))
-> +	if (!virtqueue_get_buf(vi->vq, &len))
->  		return;
->  
-> -	vi->data_idx = 0;
-> -
+> > This add a pinctrl and pinmux drivers in order to use those functions.
+> >
+> > Signed-off-by: Esteban Blanc <eblanc@baylibre.com>
+> (...)
+> > +config PINCTRL_TPS6594
+> > +       tristate "Pinctrl and GPIO driver for TI TPS6594 PMIC"
+> > +       depends on MFD_TPS6594
+> > +       default MFD_TPS6594
+> > +       select PINMUX
+> > +       select GPIOLIB
+>
+> select GPIO_REGMAP
+> ?
+>
+> I think this driver can use the GPIO_REGMAP helper library.
+>
+> Please look into other drivers using this, such as
+> drivers/gpio/gpio-sl28cpld.c
 
-On the surface of it, it looks like you removed this store
-which isn't described in the commit log.
-I do not, offhand, remember why we stored 0 in data_idx here
-when we also zero it in request_entropy.
-It was added with
+I had a look at this driver and gpio-regmap.c. I think I understood
+what's going on, but I'm not sure how to handle the
+gpio_regmap_set_direction case. It is using the same reg_mask_xlate to
+determine the register and value to write as gpio_regmap_set or
+gpio_regmap_read. The problem is that this PMIC has 1 register per GPIO
+for the configuration (GPIOX_CONF registers with a bit for direction),
+while the in and out register are used for 8 pins (GPIO_OUT_1,
+GPIO_OUT_2 and GPIO_IN_1, GPIO_IN_2). This means that the register and
+mask returned by reg_mask_xlate will be erroneous in one or the other
+case.
 
+I noticed that I could override reg_mask_xlate, so I should be able to
+"just" match on the base address given as argument to perform a
+different computation depending on whether we are using reg_mask_xlate in
+a "direction change" or not, but somehow this feels a bit wrong.
 
-commit 5c8e933050044d6dd2a000f9a5756ae73cbe7c44
-Author: Laurent Vivier <lvivier@redhat.com>
-Date:   Thu Oct 28 12:11:10 2021 +0200
+Is this the correct solution?
+Am I missing something?
 
-    hwrng: virtio - don't waste entropy
-    
-    if we don't use all the entropy available in the buffer, keep it
-    and use it later.
-    
-    Signed-off-by: Laurent Vivier <lvivier@redhat.com>
-    Link: https://lore.kernel.org/r/20211028101111.128049-4-lvivier@redhat.com
-    Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Thanks again for your time. Best regards,
 
-
-
-> +	smp_store_release(&vi->data_avail, len);
->  	complete(&vi->have_data);
->  }
->  
-> @@ -52,7 +53,6 @@ static void request_entropy(struct virtrng_info *vi)
->  	struct scatterlist sg;
->  
->  	reinit_completion(&vi->have_data);
-> -	vi->data_avail = 0;
->  	vi->data_idx = 0;
->  
->  	sg_init_one(&sg, vi->data, sizeof(vi->data));
-> @@ -88,7 +88,7 @@ static int virtio_read(struct hwrng *rng, void *buf, size_t size, bool wait)
->  	read = 0;
->  
->  	/* copy available data */
-> -	if (vi->data_avail) {
-> +	if (smp_load_acquire(&vi->data_avail)) {
->  		chunk = copy_data(vi, buf, size);
->  		size -= chunk;
->  		read += chunk;
-> -- 
-> Email: Herbert Xu <herbert@gondor.apana.org.au>
-> Home Page: http://gondor.apana.org.au/~herbert/
-> PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+--=20
+Esteban Blanc
+BayLibre
 
