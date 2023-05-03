@@ -2,331 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BAB06F521E
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 09:45:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49E5F6F5233
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 09:49:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229506AbjECHpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 03:45:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48960 "EHLO
+        id S229751AbjECHtw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 03:49:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjECHpC (ORCPT
+        with ESMTP id S229732AbjECHtu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 03:45:02 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BBA82120
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 00:44:57 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-55d2e87048cso2323917b3.1
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 00:44:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683099896; x=1685691896;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=az3ZjZw5c+oMwn1F0ZqH0yI5AWLiLyNI1BlVOd3ymQ8=;
-        b=zir+QTa2OoYRyEL82qbdMjPM4PdjHMEJZY1MWJvAskJCX9GmJP35sQw11Pz/ae8iZI
-         LK1uvUO9Yb09slOZ0h2VU2o6LxBLLXBPAn0lM+i23XeI31IBGAMn9LDnPf85h3nXEu7W
-         /7lcfLKxWlWg80qPzKTTHQsA0tK94v1RQFJwLfXKFdbVSjKVvWS8G1q1Aq1g8CdRJW2P
-         RiYMX4qkZDTKuTpQoq4xXiIT9r7zG3ZeWzZP8UBf959kQlWLRLqWHI1EskALyQJ+giZY
-         SyglIN3PcF7IDp3j0DC8O9D2GxfaD5oD/I+04S+wsp9y3Rb4KP/PdyCj9ym1yV+JaqP9
-         sf6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683099896; x=1685691896;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=az3ZjZw5c+oMwn1F0ZqH0yI5AWLiLyNI1BlVOd3ymQ8=;
-        b=mFMeeSGupIeqy9LIdo7nT3zIIf068SVQ+TfEEZPUXgFkQQJ8qC0PGpp0QKzYOfNKmJ
-         0J5qrH2xj7696XWKL3jKqB13GyrfpRxDOPWh0sHuu/2AdMH6AX1pjivENq7D0vzRCrQv
-         fuZolAAdph+529kUhtXK0Y01YWrF8sAgpim3P5LS5gZS+693xTsFRA+XKISOuhR1eP8Z
-         Yt9vPZVXIbxnuRenchmCrmSJuVF7ZrGD8plVMTJD1HPqkvMAtTDr3cH5QbfuRq8rxQ9n
-         00/JsoCvy5Hf0959Nebbi6Vw4JPUppTjvWagUL6CwoVbLfDlqz/WDR8H1ppFpuPCLjN5
-         Y88w==
-X-Gm-Message-State: AC+VfDx/hNBDhdmxtvBGd5oVtePgB6Ax3NUMOen7+ZjYbCCHDqOxCKHt
-        2BPsUDdyAdVkyPFGsH5uviUADQ==
-X-Google-Smtp-Source: ACHHUZ6nzF9dKBpKYl4KrQ1B3kU7KyZBLmv5XILSEzR8eD10wsiU6RQ9szs3+zgoxeFB55g7Mr6CjQ==
-X-Received: by 2002:a0d:efc2:0:b0:556:ceb2:c462 with SMTP id y185-20020a0defc2000000b00556ceb2c462mr17663236ywe.2.1683099896640;
-        Wed, 03 May 2023 00:44:56 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id k63-20020a0dc842000000b00555ca01b112sm3283263ywd.105.2023.05.03.00.44.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 May 2023 00:44:56 -0700 (PDT)
-Message-ID: <0a7caa8d-289a-d76a-d57b-611b178fdc34@linaro.org>
-Date:   Wed, 3 May 2023 10:44:52 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v1 4/4] arm64: dts: qcom: ipq9574: add thermal zone nodes
-Content-Language: en-GB
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>, amitk@kernel.org,
-        thara.gopinath@gmail.com, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, rafael@kernel.org,
-        daniel.lezcano@linaro.org, rui.zhang@intel.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Praveenkumar I <quic_ipkumar@quicinc.com>
-References: <cover.1683027347.git.quic_varada@quicinc.com>
- <65d05b81201a8d24c14f0d7564e708348a368068.1683027347.git.quic_varada@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <65d05b81201a8d24c14f0d7564e708348a368068.1683027347.git.quic_varada@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 3 May 2023 03:49:50 -0400
+X-Greylist: delayed 29795 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 03 May 2023 00:49:49 PDT
+Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32A51997;
+        Wed,  3 May 2023 00:49:47 -0700 (PDT)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id 841A3C023; Wed,  3 May 2023 09:49:46 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1683100186; bh=03BZvl9vWUAaps81KZtMrvoUu+Ei0u6JmNiU1A+xCUw=;
+        h=From:Subject:Date:To:Cc:From;
+        b=Drl5yaP49ve7lFH4girxL1C0YjfGkj9U3efO1MO378YJ5teEqcsmP74L9rlx5UVyT
+         5dba/ZS4Fm5d4TXUsXgF0lv406UMuf3zlYEZ61Rrt+gQHc9D5FxX8Qi+LWVJdiJ/Qz
+         PWMDCehaM3M1TFKxDf35SocpGw8qC8+e8yxdI0KLqOwROQL1neNjrXWFl+UrXj2yQe
+         l7LFRTS0+E2UFXvzBQp5lY6Pv7SD/+XEqndF45GT1cfd2FSCXXHUaB+bc+ybzs+h/k
+         vw0Lau/UKelx0GZr8P5XRhhFvoWbS4dOedpkNqM1d5qpgukCbLeNalDOqCjg5K0H1d
+         zZjQ/MAcjs5eg==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 68329C009;
+        Wed,  3 May 2023 09:49:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1683100185; bh=03BZvl9vWUAaps81KZtMrvoUu+Ei0u6JmNiU1A+xCUw=;
+        h=From:Subject:Date:To:Cc:From;
+        b=U6ss4AB6X/svBcKiMyOB14hiH+SoTYUiBfAqXlBz4lJQ5y723ZeV2W+42TMza6ZaL
+         qCQLGDDoJ9xS4B287H1Ocp/Q9PISIlqhUMhPDW/6dlrUeaPgOZfPgrsEWCVOb8kuYu
+         D8bavk5Db8sgOeZWiL6rcjCeWHS+UahuUrLW9siQ/Nzahdr2NGjV6FS8D0UAlpIBbq
+         RNrYTpKlm7xSvW241U1ZWns8lIm8NuTrgr4YpScK7ZNR1YS1bh+JHbUunFSHqbALEx
+         Amt5636UxLoCB8nKuq8GcbmQUpTX+MayC2k3KIi4jS8EcRgSdZVzh6uHPTJWVPy026
+         x5jvWHP/BBTQw==
+Received: from [127.0.0.2] (localhost [::1])
+        by odin.codewreck.org (OpenSMTPD) with ESMTP id 97d966d4;
+        Wed, 3 May 2023 07:49:37 +0000 (UTC)
+From:   Dominique Martinet <asmadeus@codewreck.org>
+Subject: [PATCH v2 0/5] Fix scan-build warnings
+Date:   Wed, 03 May 2023 16:49:24 +0900
+Message-Id: <20230427-scan-build-v2-0-bb96a6e6a33b@codewreck.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAQSUmQC/22NwQ6CMBBEf4X0bE2pgOLJ/zAclu0CG7U1W0QN4
+ d8tnD2+mbyZWUUSpqjO2ayEJo4cfAK7yxQO4HvS7BIra+zBFPaoI4LX7YvvTrtTXWBedVgXpUp
+ CC5F0K+BxWJUHxJFkLZ5CHX+2l2uTeOA4Bvlup1O+pn/3p1wbTR2Y0lUlWQcXDI7eQnjbB+lVs
+ yzLD6TnTC/BAAAA
+To:     Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Christian Schoenebeck <linux_oss@crudebyte.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Simon Horman <simon.horman@corigine.com>, v9fs@lists.linux.dev,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Dominique Martinet <asmadeus@codewreck.org>
+X-Mailer: b4 0.13-dev-f371f
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1648;
+ i=asmadeus@codewreck.org; h=from:subject:message-id;
+ bh=afbQdsPMHgU9d5cGBEldN5a+ZUGe/KImHrbQL8lC5/o=;
+ b=owEBbQKS/ZANAwAIAatOm+xqmOZwAcsmYgBkUhIRCm8c7FkghHBdb67PEXrRMdCgilMZRzUoH
+ CF+GQz8mwCJAjMEAAEIAB0WIQT8g9txgG5a3TOhiE6rTpvsapjmcAUCZFISEQAKCRCrTpvsapjm
+ cLDlD/4k9GMiCeWg0Jkms1hwipAGnOoHYTXr2Ia6KsuQCZAvgHjokosICR/8NsWawcdTVIwEef7
+ 6o0hYX5f6uApDA/jGLdQcTU/P0Qe1dskuUPJxqmXyuAXaqapSz92vBQZ3WrdY9RYfbeZY+SuULm
+ GAZUlFmHzKHZ8oJm/HpzJCD6JmCUP/PFwVEjvh6gltPAcTIZ0X4y5KjqTlTvX4sWEDnJ5kb62DL
+ Ew3dw8N++P4C9mobBi1MtwoLLPYkW5oOeFycZ5xcJvjfpvI4ZUIq3WB7NUrvuvqUtZgAKAQ5w0z
+ hLYTmEz1J0YaW5VEJ41FNP0QKbnmzqDO2Qt07Hn/vJPgOLCz9QiBnLI+72CfH1L1LZtnM9tI4NM
+ 9ds1M0Gk2lRA2WDgK/pzS0fj1BhI8dzBhP7K3hKev7ARQvQEWAlSUxN03H5Y5+L7WoDiI4V19Zj
+ b9w+39k3mqDytX4sH9iLh5BGqvh64k/o34/MoKo9RE6EWDi6i8s4pDVuAev7GneeG872uTKVmxa
+ Xbe548kc99vDp+56ycZiLnOF4KVG+j+u3m6JxWfsV5DjilfuEwAiwlEYChH58uv9qP1y2kTn5Aw
+ idBIUri0ulX3JlcLVjd6NMjKdd7E7wc/+7FlKsFilzYheF/QURdhBoHWxKcIp4X/bGtnwJUI7uO
+ 37p/3KE5hv+Y1cg==
+X-Developer-Key: i=asmadeus@codewreck.org; a=openpgp;
+ fpr=B894379F662089525B3FB1B9333F1F391BBBB00A
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/05/2023 07:46, Varadarajan Narayanan wrote:
-> This patch adds thermal zone nodes for the various
-> sensors present in IPQ9574
-> 
-> Co-developed-by: Praveenkumar I <quic_ipkumar@quicinc.com>
-> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+I ran scan-build very crudly on our source files, and there was at least
+one real bug so we might as well run it once in a while, in which case
+we probably ought to also fix the less important things hence this
+series.
+In here the first patch is a real fix and the rest is low priority, the
+last one is arguably not an improvement and can be discussed (happy to
+just move the 0-initializations around to variable declaration which
+would also silence scan-build afaict)
 
+Anyway, it can probably all wait until after this merge, sorry for the
+timing.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
+---
+Changes in v2:
+- Add Fixes tag to first patch (wasn't the one suggested but a very
+  recent commit, still in -next)
+- Fix typo in commit messages
+- Link to v1: https://lore.kernel.org/r/20230427-scan-build-v1-0-efa05d65e2da@codewreck.org
 
-one nit below.
+---
+Dominique Martinet (5):
+      9p: fix ignored return value in v9fs_dir_release
+      9p: virtio: fix unlikely null pointer deref in handle_rerror
+      9p: virtio: make sure 'offs' is initialized in zc_request
+      9p: virtio: skip incrementing unused variable
+      9p: remove dead stores (variable set again without being read)
 
+ fs/9p/vfs_dir.c        |  5 +++--
+ fs/9p/vfs_inode.c      |  6 ------
+ fs/9p/vfs_inode_dotl.c |  1 -
+ net/9p/client.c        | 46 ++++++++++++----------------------------------
+ net/9p/trans_virtio.c  |  8 ++++----
+ 5 files changed, 19 insertions(+), 47 deletions(-)
+---
+base-commit: 21e26d5e54ab7cfe6b488fd27d4d70956d07e03b
+change-id: 20230427-scan-build-d894c16fc945
 
-> ---
-> [v1]:
-> 	Fix node names
-> ---
->   arch/arm64/boot/dts/qcom/ipq9574.dtsi | 208 ++++++++++++++++++++++++++++++++++
->   1 file changed, 208 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> index b22b999..bc4d061 100644
-> --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> @@ -1067,6 +1067,214 @@
->   		};
->   	};
->   
-> +	thermal-zones {
-> +		nss-top-thermal {
-> +			polling-delay-passive = <0>;
-> +			polling-delay = <0>;
-> +			thermal-sensors = <&tsens 3>;
-> +
-> +			trips {
-> +				nss-top-critical {
-> +					temperature = <125000>;
-> +					hysteresis = <1000>;
-> +					type = "critical";
-> +				};
-> +			};
-> +		};
-> +
-> +		ubi-0-thermal {
-> +			polling-delay-passive = <0>;
-> +			polling-delay = <0>;
-> +			thermal-sensors = <&tsens 4>;
-> +
-> +			trips {
-> +				ubi_0-critical {
-> +					temperature = <125000>;
-> +					hysteresis = <1000>;
-> +					type = "critical";
-> +				};
-> +			};
-> +		};
-> +
-> +		ubi-1-thermal {
-> +			polling-delay-passive = <0>;
-> +			polling-delay = <0>;
-> +			thermal-sensors = <&tsens 5>;
-> +
-> +			trips {
-> +				ubi_1-critical {
-> +					temperature = <125000>;
-> +					hysteresis = <1000>;
-> +					type = "critical";
-> +				};
-> +			};
-> +		};
-> +
-> +		ubi-2-thermal {
-> +			polling-delay-passive = <0>;
-> +			polling-delay = <0>;
-> +			thermal-sensors = <&tsens 6>;
-> +
-> +			trips {
-> +				ubi_2-critical {
-> +					temperature = <125000>;
-> +					hysteresis = <1000>;
-> +					type = "critical";
-> +				};
-> +			};
-> +		};
-> +
-> +		ubi-3-thermal {
-> +			polling-delay-passive = <0>;
-> +			polling-delay = <0>;
-> +			thermal-sensors = <&tsens 7>;
-> +
-> +			trips {
-> +				ubi_3-critical {
-> +					temperature = <125000>;
-> +					hysteresis = <1000>;
-> +					type = "critical";
-> +				};
-> +			};
-> +		};
-> +
-> +		cluster0-thermal {
-
-I think we were usually using cpussN instead of clusterN, but this is 
-really a minor issue, we don't have that standardized.
-
-> +			polling-delay-passive = <0>;
-> +			polling-delay = <0>;
-> +			thermal-sensors = <&tsens 8>;
-> +
-> +			trips {
-> +				cpu-critical {
-> +					temperature = <125000>;
-> +					hysteresis = <1000>;
-> +					type = "critical";
-> +				};
-> +			};
-> +		};
-> +
-> +		cluster1-thermal {
-> +			polling-delay-passive = <0>;
-> +			polling-delay = <0>;
-> +			thermal-sensors = <&tsens 9>;
-> +
-> +			trips {
-> +				cpu-critical {
-> +					temperature = <125000>;
-> +					hysteresis = <1000>;
-> +					type = "critical";
-> +				};
-> +			};
-> +		};
-> +
-> +		cpu0-thermal {
-> +			polling-delay-passive = <0>;
-> +			polling-delay = <0>;
-> +			thermal-sensors = <&tsens 10>;
-> +
-> +			trips {
-> +				cpu-critical {
-> +					temperature = <120000>;
-> +					hysteresis = <10000>;
-> +					type = "critical";
-> +				};
-> +
-> +				cpu-passive {
-> +					temperature = <110000>;
-> +					hysteresis = <1000>;
-> +					type = "passive";
-> +				};
-> +			};
-> +		};
-> +
-> +		cpu1-thermal {
-> +			polling-delay-passive = <0>;
-> +			polling-delay = <0>;
-> +			thermal-sensors = <&tsens 11>;
-> +
-> +			trips {
-> +				cpu-critical {
-> +					temperature = <120000>;
-> +					hysteresis = <10000>;
-> +					type = "critical";
-> +				};
-> +
-> +				cpu-passive {
-> +					temperature = <110000>;
-> +					hysteresis = <1000>;
-> +					type = "passive";
-> +				};
-> +			};
-> +		};
-> +
-> +		cpu2-thermal {
-> +			polling-delay-passive = <0>;
-> +			polling-delay = <0>;
-> +			thermal-sensors = <&tsens 12>;
-> +
-> +			trips {
-> +				cpu-critical {
-> +					temperature = <120000>;
-> +					hysteresis = <10000>;
-> +					type = "critical";
-> +				};
-> +
-> +				cpu-passive {
-> +					temperature = <110000>;
-> +					hysteresis = <1000>;
-> +					type = "passive";
-> +				};
-> +			};
-> +		};
-> +
-> +		cpu3-thermal {
-> +			polling-delay-passive = <0>;
-> +			polling-delay = <0>;
-> +			thermal-sensors = <&tsens 13>;
-> +
-> +			trips {
-> +				cpu-critical {
-> +					temperature = <120000>;
-> +					hysteresis = <10000>;
-> +					type = "critical";
-> +				};
-> +
-> +				cpu-passive {
-> +					temperature = <110000>;
-> +					hysteresis = <1000>;
-> +					type = "passive";
-> +				};
-> +			};
-> +		};
-> +
-> +		wcss-phyb-thermal {
-> +			polling-delay-passive = <0>;
-> +			polling-delay = <0>;
-> +			thermal-sensors = <&tsens 14>;
-> +
-> +			trips {
-> +				wcss_phyb-critical {
-> +					temperature = <125000>;
-> +					hysteresis = <1000>;
-> +					type = "critical";
-> +				};
-> +			};
-> +		};
-> +
-> +		top-glue-thermal {
-> +			polling-delay-passive = <0>;
-> +			polling-delay = <0>;
-> +			thermal-sensors = <&tsens 15>;
-> +
-> +			trips {
-> +				top_glue-critical {
-> +					temperature = <125000>;
-> +					hysteresis = <1000>;
-> +					type = "critical";
-> +				};
-> +			};
-> +		};
-> +	};
-> +
->   	timer {
->   		compatible = "arm,armv8-timer";
->   		interrupts = <GIC_PPI 2 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
-
+Best regards,
 -- 
-With best wishes
-Dmitry
+Dominique Martinet | Asmadeus
 
