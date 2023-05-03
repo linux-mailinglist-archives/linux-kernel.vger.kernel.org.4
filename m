@@ -2,208 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE5AA6F5018
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 08:28:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB8D96F5025
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 08:30:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbjECG2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 02:28:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40000 "EHLO
+        id S229672AbjECGaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 02:30:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjECG2v (ORCPT
+        with ESMTP id S229544AbjECGau (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 02:28:51 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6502D1FCF
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 23:28:50 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-50bd87539c2so1748536a12.0
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 23:28:50 -0700 (PDT)
+        Wed, 3 May 2023 02:30:50 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1D61BC1;
+        Tue,  2 May 2023 23:30:49 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id 6a1803df08f44-61b6101a166so10036056d6.0;
+        Tue, 02 May 2023 23:30:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683095329; x=1685687329;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7QkCOwPVV47rBbXiC/TT/NWf8AZkKzBELUWgp+uXk1c=;
-        b=S19sAVeim0llat822qN0TkI1wzFO8rpIJ7D5aG4/0xlZcLvVVy7Buc17IYzgKAnoiR
-         KezJLEAG9iNZX5sHkZ9aRcEuuO398FvHSWwkXRhfLP8nF07Q6Bk5JF4MLSrhflUI0RjC
-         foe/QaKWXI/K/ZLWBd72bt6XOeBlte8XfRLQSfROs9NPVUPAGM0pOR6yl1pwwbWEoEQJ
-         9mAaZ7aNi2lEuNCdyWjVTMsSV35VjrgeyFs0SBzb+7a27cHTPbnswK9Y48mRAITrBS/Z
-         /CiSFhppTl0jAFlTQQFXb/cV2dI3x9va2QbcqRzcHJSQy39mKgaCJFSqR6wzC1QKN8i7
-         dfzw==
+        d=gmail.com; s=20221208; t=1683095448; x=1685687448;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NSWUOSuqVLpIOWgszk2VW3MzVdJnM+9N5Gz+a5oZIik=;
+        b=FwxsWECu6Vmz2nS2N36nqdmqGUy6EtTWCwQbQH8C4yyx7S50D7jj6hwfI3pG4WOWTe
+         J5Ac/nm/4jjf2uonNwEk7kkgqGFkqqOlCnFifWxFhM5HBLHG5/+yNdwPcGRQZD8xyZgY
+         y564jPge77bFOjQ7/C7PbIZo2J/D/9HIgWm1qaK+/JMqtAHJacp7Y7p+jXsMBKVPwiay
+         de3olKWgxT5zQQmgR6+1vlYmLMhp7LATVC+UKYup+7gpwYRYwOXn88552r8N8+SfOO97
+         mz3mbEB+LcrH93Ca5jn3i5g7nB6tCk4YfB1Kz47lyE0ZxPdxng7OE8IRGtE3NBhEpUXq
+         C5Vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683095329; x=1685687329;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7QkCOwPVV47rBbXiC/TT/NWf8AZkKzBELUWgp+uXk1c=;
-        b=aescWIzDCqTpMjkOOXwv+jfR3ZE3ktk26BeRmZE24R3CgyQePH8j5z3q8JLESeJYpn
-         GGCCNbcDiMKKnkoOx3p+qbZfMpQLJ3V5ZMubnNbq8lEb374ntLkK58DjeHzxtz0NWf1t
-         pAFe/2i1c3oPTaZfOk+EZNkMcaxk5IkZXdxJOQhX+bYzRUJ0iX01k03uS4sIVqELLapy
-         jZX/mF4dinLp4ZwuwCLFwvhxVcWgrCmMWu0nshsPecm915+opRsX9s1d86nxY/0SQRLp
-         7HPrYftti1VYIqJlqKAzrk/Hg9hnAeCtN/KIJIv+eU3npJ7eODX2FzANGkBVGN0W5/j/
-         hnCw==
-X-Gm-Message-State: AC+VfDxQujP+DmKBwVSwScnJyrfa+DY39uAqJyNh0hNellaF8kZLhxQq
-        f4JG0O0s40A70nYsyTU1gY2I1Q==
-X-Google-Smtp-Source: ACHHUZ7NJYZH4xiaQvcnIk6FigSAqVosnLMbEKPw1SuimdWpQi0rQKBsgWdAXfyBV1PKSN/I14RAEg==
-X-Received: by 2002:a17:907:a426:b0:94a:9c9e:6885 with SMTP id sg38-20020a170907a42600b0094a9c9e6885mr2184090ejc.58.1683095328796;
-        Tue, 02 May 2023 23:28:48 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:a40b:9d8:1fa0:ecc5? ([2a02:810d:15c0:828:a40b:9d8:1fa0:ecc5])
-        by smtp.gmail.com with ESMTPSA id g11-20020a170906394b00b0094f4f2db7e0sm17159284eje.143.2023.05.02.23.28.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 May 2023 23:28:48 -0700 (PDT)
-Message-ID: <0678c24c-33ae-7e99-7bb6-d15dc5a7ed76@linaro.org>
-Date:   Wed, 3 May 2023 08:28:46 +0200
+        d=1e100.net; s=20221208; t=1683095448; x=1685687448;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NSWUOSuqVLpIOWgszk2VW3MzVdJnM+9N5Gz+a5oZIik=;
+        b=LZ8g6qgCasB0UbWpZlTJfNky3m5otbn6PjY6RwXQu+MDJPhx7+b/0cP5iSqjK6IarW
+         XZZ6Yo2SN65wDHuMjjM16QvJ2+F0Oama4XLbqsmBgbyVyvkWa+GbjRg2ZrafvtPXw+Z/
+         a9NkLP43GnHPax/mHAuHxO6hk4oRAyjaoW6R9eCSD54CQjf2aFI9HYvIOnTPhjccKx/x
+         TXlGwwT2c4b3fhUQfL07QIbGsMIoCOJmS6G6f82pg2f+tiplvSY7dt7PSCrH7bUdpx6+
+         HZnaWiPp36SFl1uMrj0pqPL1UyHwE9/TtoiLzMuFN98aPWAMwXQBHkHA/1VnA0a5DaMC
+         a6zw==
+X-Gm-Message-State: AC+VfDwrMV2BdmzmTBrtaoU+npTWUl9khzMIJ+MTGaP9KpuFDjTRlI+4
+        7hvm+PERBQ8vK96Cf/WEU7KB6Dz47imKeYFLZt4=
+X-Google-Smtp-Source: ACHHUZ6mwR/Eb9QNNQC3EY6y0Gd5Rl8C7T1qIt5du/51986iaziD1AevtUJQS/vhAg1zqokn+I2SvW0bGzGu5uBEHP4=
+X-Received: by 2002:a05:6214:1941:b0:61b:5cba:5820 with SMTP id
+ q1-20020a056214194100b0061b5cba5820mr9799913qvk.50.1683095448149; Tue, 02 May
+ 2023 23:30:48 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 2/8] dt-bindings: nvmem: rockchip-otp: Add compatible for
- RK3588
-Content-Language: en-US
-To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Kever Yang <kever.yang@rock-chips.com>,
-        Finley Xiao <finley.xiao@rock-chips.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-References: <20230501084401.765169-1-cristian.ciocaltea@collabora.com>
- <20230501084401.765169-3-cristian.ciocaltea@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230501084401.765169-3-cristian.ciocaltea@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230501165450.15352-1-surenb@google.com> <20230501165450.15352-2-surenb@google.com>
+ <ouuidemyregstrijempvhv357ggp4tgnv6cijhasnungsovokm@jkgvyuyw2fti>
+ <ZFAUj+Q+hP7cWs4w@moria.home.lan> <b6b472b65b76e95bb4c7fc7eac1ee296fdbb64fd.camel@HansenPartnership.com>
+ <ZFCA2FF+9MI8LI5i@moria.home.lan> <CAHp75VdK2bgU8P+-np7ScVWTEpLrz+muG-R15SXm=ETXnjaiZg@mail.gmail.com>
+ <ZFCsAZFMhPWIQIpk@moria.home.lan> <CAHp75VdvRshCthpFOjtmajVgCS_8YoJBGbLVukPwU+t79Jgmww@mail.gmail.com>
+ <ZFHB2ATrPIsjObm/@moria.home.lan>
+In-Reply-To: <ZFHB2ATrPIsjObm/@moria.home.lan>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 3 May 2023 09:30:11 +0300
+Message-ID: <CAHp75VdH07gTYCPvp2FRjnWn17BxpJCcFBbFPpjpGxBt1B158A@mail.gmail.com>
+Subject: Re: [PATCH 01/40] lib/string_helpers: Drop space in string_get_size's output
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        akpm@linux-foundation.org, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de,
+        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
+        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
+        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
+        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
+        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
+        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
+        tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
+        paulmck@kernel.org, pasha.tatashin@soleen.com,
+        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
+        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
+        ndesaulniers@google.com, gregkh@linuxfoundation.org,
+        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+        glider@google.com, elver@google.com, dvyukov@google.com,
+        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
+        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        kasan-dev@googlegroups.com, cgroups@vger.kernel.org,
+        Andy Shevchenko <andy@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        =?UTF-8?B?Tm9yYWxmIFRyw6/Cv8K9bm5lcw==?= <noralf@tronnes.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/05/2023 10:43, Cristian Ciocaltea wrote:
-> Document the OTP memory found on Rockchip RK3588 SoC.
-> 
-> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-> ---
->  .../bindings/nvmem/rockchip-otp.yaml          | 71 ++++++++++++++++---
->  1 file changed, 60 insertions(+), 11 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/nvmem/rockchip-otp.yaml b/Documentation/devicetree/bindings/nvmem/rockchip-otp.yaml
-> index 658ceed14ee2..84a11382c6e7 100644
-> --- a/Documentation/devicetree/bindings/nvmem/rockchip-otp.yaml
-> +++ b/Documentation/devicetree/bindings/nvmem/rockchip-otp.yaml
-> @@ -9,34 +9,31 @@ title: Rockchip internal OTP (One Time Programmable) memory
->  maintainers:
->    - Heiko Stuebner <heiko@sntech.de>
->  
-> -allOf:
-> -  - $ref: nvmem.yaml#
-> -
->  properties:
->    compatible:
->      enum:
->        - rockchip,px30-otp
->        - rockchip,rk3308-otp
-> +      - rockchip,rk3588-otp
->  
->    reg:
->      maxItems: 1
->  
->    clocks:
->      minItems: 3
-> -    maxItems: 3
-> +    maxItems: 4
->  
->    clock-names:
-> -    items:
-> -      - const: otp
-> -      - const: apb_pclk
-> -      - const: phy
-> +    minItems: 3
-> +    maxItems: 4
->  
->    resets:
-> -    maxItems: 1
-> +    minItems: 1
-> +    maxItems: 3
->  
->    reset-names:
-> -    items:
-> -      - const: phy
-> +    minItems: 1
-> +    maxItems: 3
->  
->  required:
->    - compatible
-> @@ -46,6 +43,58 @@ required:
->    - resets
->    - reset-names
->  
-> +allOf:
-> +  - $ref: nvmem.yaml#
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - rockchip,px30-otp
-> +              - rockchip,rk3308-otp
-> +    then:
-> +      properties:
-> +        clocks:
-> +          minItems: 3
-> +          maxItems: 3
-> +        clock-names:
-> +          items:
-> +            - const: otp
-> +            - const: apb_pclk
-> +            - const: phy
-> +        resets:
-> +          maxItems: 1
-> +        reset-names:
-> +          items:
-> +            - const: phy
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - rockchip,rk3588-otp
-> +    then:
-> +      properties:
-> +        clocks:
-> +          minItems: 4
-> +          maxItems: 4
-> +        clock-names:
-> +          items:
-> +            - const: otpc
-> +            - const: apb
-> +            - const: arb
-> +            - const: phy
+On Wed, May 3, 2023 at 5:07=E2=80=AFAM Kent Overstreet
+<kent.overstreet@linux.dev> wrote:
+> On Tue, May 02, 2023 at 06:19:27PM +0300, Andy Shevchenko wrote:
+> > On Tue, May 2, 2023 at 9:22=E2=80=AFAM Kent Overstreet
+> > <kent.overstreet@linux.dev> wrote:
+> > > On Tue, May 02, 2023 at 08:33:57AM +0300, Andy Shevchenko wrote:
+> > > > Actually instead of producing zillions of variants, do a %p extensi=
+on
+> > > > to the printf() and that's it. We have, for example, %pt with T and
+> > > > with space to follow users that want one or the other variant. Same
+> > > > can be done with string_get_size().
+> > >
+> > > God no.
+> >
+> > Any elaboration what's wrong with that?
+>
+> I'm really not a fan of %p extensions in general (they are what people
+> reach for because we can't standardize on a common string output API),
 
-Keep the same order of clocks as in older variants, so you can keep the
-list in top-level place and here only minItems: 4.
+The whole story behind, for example, %pt is to _standardize_ the
+output of the same stanza in the kernel.
 
-> +        resets:
-> +          minItems: 1
-> +          maxItems: 3
-> +        reset-names:
-> +          items:
-> +            - const: otpc
+> but when we'd be passing it bare integers the lack of type safety would
+> be a particularly big footgun.
 
-Shouldn't this be phy?
+There is no difference to any other place in the kernel where we can
+shoot into our foot.
 
+> > God no for zillion APIs for almost the same. Today you want space,
+> > tomorrow some other (special) delimiter.
+>
+> No, I just want to delete the space and output numbers the same way
+> everyone else does. And if we are stuck with two string_get_size()
+> functions, %p extensions in no way improve the situation.
 
+I think it's exactly for the opposite, i.e. standardize that output
+once and for all.
 
-Best regards,
-Krzysztof
-
+--=20
+With Best Regards,
+Andy Shevchenko
