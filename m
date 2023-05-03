@@ -2,155 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59EB96F5C06
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 18:30:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 178D26F5C08
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 18:30:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbjECQ36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 12:29:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54784 "EHLO
+        id S229681AbjECQaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 12:30:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbjECQ3y (ORCPT
+        with ESMTP id S229653AbjECQaT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 12:29:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A0C72B9;
-        Wed,  3 May 2023 09:29:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 11B496259B;
-        Wed,  3 May 2023 16:29:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC06CC433D2;
-        Wed,  3 May 2023 16:29:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683131376;
-        bh=+Fa8lWXq+eKn54nxvLtDWjF14FF8nVDjXsR+6SPokpg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ala5bqNF4QzuhsDsLBzQ1IP0XdwwIbDJ3GLns3f6uzPfhcI7QGlMw2tqwy04hpTRt
-         0oHMxsoxfOKIkGu+X4P62VCbNbGiKnb86a3Onb/lBvNbHpJjlMzk060TTdista/eVW
-         RGq0xAj4h2Gi86TTggpW7vmEqbXglXHX8Bz18ffQ9hzgIrWaKg2Ka+YUsfIgHy6RQd
-         oFIzyqUPYoo4Mbd2gW0oaMTZJaBlZJINKgaxGy5x0npQkSQRL6vIu8JBhiWvwvWTj5
-         heLSJohzf2nBNT9CbXpER2fku1XcLUmA/cFnyLs2j0Fio0ZNCOopL0DdHQglz7JyqF
-         20zuTnRxMm08g==
-Date:   Wed, 3 May 2023 19:29:32 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Ding Hui <dinghui@sangfor.com.cn>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, intel-wired-lan@lists.osuosl.org,
-        jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        keescook@chromium.org, grzegorzx.szczurek@intel.com,
-        mateusz.palczewski@intel.com, mitch.a.williams@intel.com,
-        gregory.v.rose@intel.com, jeffrey.t.kirsher@intel.com,
-        michal.kubiak@intel.com, simon.horman@corigine.com,
-        madhu.chittim@intel.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        pengdonglin@sangfor.com.cn, huangcun@sangfor.com.cn
-Subject: Re: [PATCH net v4 2/2] iavf: Fix out-of-bounds when setting channels
- on remove
-Message-ID: <20230503162932.GN525452@unreal>
-References: <20230503031541.27855-1-dinghui@sangfor.com.cn>
- <20230503031541.27855-3-dinghui@sangfor.com.cn>
- <20230503082458.GH525452@unreal>
- <d2351c0f-0bfe-9422-f6f3-f0a0db58c729@sangfor.com.cn>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d2351c0f-0bfe-9422-f6f3-f0a0db58c729@sangfor.com.cn>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 3 May 2023 12:30:19 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8746768D
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 09:30:06 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id 98e67ed59e1d1-24de2954bc5so3379325a91.1
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 09:30:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683131406; x=1685723406;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dN+c7N82AqaEGkqMTuZ0QlZ/AB20yNlAiJ4wXRNuemc=;
+        b=B9XhIyP4wuPb7sTXlB7ROOFqJMWcFJkAV42K1gOm5rlALwMS/6uPbbIMgps6In2iV8
+         0oWBF77nGrHtTtw0mziyRO2M8Uv3dTnPK0pt4tCPowSFQYhJB4F17HBg8iGOKNfUTF4A
+         qqy52KJXU6eo8YmiF7Yv4qGdBdr1vdCvNgLwuqXFCGOBP/36SCVS5UijY0RsH4XU+z10
+         PufouWv/j517g8affobMfljQMe3AnnKzNkVTh5MLDJ3wxx8qgHA2iTyF7hKZRect7Hie
+         9bTEunIO6kN58+UzDnNZtM1vvbNgRKzAgkeXaOYOqm3mgzLeuY1oFcDLc0yF+Q+e7LiC
+         qVfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683131406; x=1685723406;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dN+c7N82AqaEGkqMTuZ0QlZ/AB20yNlAiJ4wXRNuemc=;
+        b=KDof/Nitz8NqO3TJkKWp+ICcUtnMTFTe0y1maHgPG9OIjp4VjRBFPFUDEnIl+d8bkc
+         KLMug7SjZddt5H4qpH2JfbTH+wdihJgUVcyEtJEeZQhvR+r3F7+DwzWjpMX2HWOB28x6
+         ihKUUSyJslnhR3/4njJvRUWE+YZcuYPNrTJEIEmBe5z85iqK25ss1Y7I/DAYgmoRf/Dw
+         IaosFGLnwZi9reCD3463qAX6g8XP/mtEje63Gf5njFneRBmiWsFOhVYO6upfIIrEtfAn
+         Brbjbsci+PP5hKD7IH8aU6CId1SOiEzVBLrKjOXu5+zxpMUgFTi0HHqmGEdkmiBa4oku
+         wKYg==
+X-Gm-Message-State: AC+VfDxodqG0+BHF8Yjeu1QOQPoRO1Um9qiuAV+4PMl3/hj2FPNINuBT
+        51mNzYXRKFeK9Ze0pM+weeJDIVLWcIY5iP03
+X-Google-Smtp-Source: ACHHUZ4eziCQdP7R+XAFDLZ3H7Rwqrg2KJun784oDj49Ybx2Pf+GBdWGdUNloiJ/mSiVZhquSUFQXw==
+X-Received: by 2002:a17:90a:ebc5:b0:24e:2021:b410 with SMTP id cf5-20020a17090aebc500b0024e2021b410mr7026170pjb.14.1683131406080;
+        Wed, 03 May 2023 09:30:06 -0700 (PDT)
+Received: from MSI-FindNS.localdomain ([2a06:f901:c00a:2::2])
+        by smtp.gmail.com with ESMTPSA id k1-20020a170902760100b001a1adbe215asm21836293pll.142.2023.05.03.09.30.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 May 2023 09:30:05 -0700 (PDT)
+From:   Yue Zhao <findns94@gmail.com>
+To:     keescook@chromium.org
+Cc:     arnd@arndb.de, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, Yue Zhao <findns94@gmail.com>
+Subject: [PATCH] lkdtm: replace ll_rw_block with submit_bh
+Date:   Thu,  4 May 2023 00:29:44 +0800
+Message-Id: <20230503162944.3969-1-findns94@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 03, 2023 at 10:00:49PM +0800, Ding Hui wrote:
-> On 2023/5/3 4:24 下午, Leon Romanovsky wrote:
-> > On Wed, May 03, 2023 at 11:15:41AM +0800, Ding Hui wrote:
-> 
-> > > 
-> > > If we detected removing is in processing, we can avoid unnecessary
-> > > waiting and return error faster.
-> > > 
-> > > On the other hand in timeout handling, we should keep the original
-> > > num_active_queues and reset num_req_queues to 0.
-> > > 
-> > > Fixes: 4e5e6b5d9d13 ("iavf: Fix return of set the new channel count")
-> > > Signed-off-by: Ding Hui <dinghui@sangfor.com.cn>
-> > > Cc: Donglin Peng <pengdonglin@sangfor.com.cn>
-> > > Cc: Huang Cun <huangcun@sangfor.com.cn>
-> > > Reviewed-by: Simon Horman <simon.horman@corigine.com>
-> > > Reviewed-by: Michal Kubiak <michal.kubiak@intel.com>
-> > > ---
-> > > v3 to v4:
-> > >    - nothing changed
-> > > 
-> > > v2 to v3:
-> > >    - fix review tag
-> > > 
-> > > v1 to v2:
-> > >    - add reproduction script
-> > > 
-> > > ---
-> > >   drivers/net/ethernet/intel/iavf/iavf_ethtool.c | 4 +++-
-> > >   1 file changed, 3 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/net/ethernet/intel/iavf/iavf_ethtool.c b/drivers/net/ethernet/intel/iavf/iavf_ethtool.c
-> > > index 6f171d1d85b7..d8a3c0cfedd0 100644
-> > > --- a/drivers/net/ethernet/intel/iavf/iavf_ethtool.c
-> > > +++ b/drivers/net/ethernet/intel/iavf/iavf_ethtool.c
-> > > @@ -1857,13 +1857,15 @@ static int iavf_set_channels(struct net_device *netdev,
-> > >   	/* wait for the reset is done */
-> > >   	for (i = 0; i < IAVF_RESET_WAIT_COMPLETE_COUNT; i++) {
-> > >   		msleep(IAVF_RESET_WAIT_MS);
-> > > +		if (test_bit(__IAVF_IN_REMOVE_TASK, &adapter->crit_section))
-> > > +			return -EOPNOTSUPP;
-> > 
-> > This makes no sense without locking as change to __IAVF_IN_REMOVE_TASK
-> > can happen any time.
-> > 
-> 
-> The state doesn't need to be that precise here, it is optimized only for
-> the fast path. During the lifecycle of the adapter, the __IAVF_IN_REMOVE_TASK
-> state will only be set and not cleared.
-> 
-> If we didn't detect the "removing" state, we also can fallback to timeout
-> handling.
-> 
-> So I don't think the locking is necessary here, what do the maintainers
-> at Intel think?
+Function ll_rw_block was removed in commit 79f597842069 ("fs/buffer:
+remove ll_rw_block() helper"). There is no unified function to sumbit
+read or write buffer in block layer for now. Consider similar sematics,
+we can choose submit_bh() to replace ll_rw_block() as predefined crash
+point. In submit_bh(), it also takes read or write flag as the first
+argument and invoke submit_bio() to submit I/O request to block layer.
 
-I'm not Intel maintainer, but your change, explanation and the following
-line from your commit message aren't really aligned.
+Fixes: 79f597842069 ("fs/buffer: remove ll_rw_block() helper")
 
-[ 3510.400799] ==================================================================
-[ 3510.400820] BUG: KASAN: slab-out-of-bounds in iavf_free_all_tx_resources+0x156/0x160 [iavf]
+Signed-off-by: Yue Zhao <findns94@gmail.com>
+---
+ Documentation/fault-injection/provoke-crashes.rst | 2 +-
+ drivers/misc/lkdtm/core.c                         | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/Documentation/fault-injection/provoke-crashes.rst b/Documentation/fault-injection/provoke-crashes.rst
+index 3abe84225613..1f087e502ca6 100644
+--- a/Documentation/fault-injection/provoke-crashes.rst
++++ b/Documentation/fault-injection/provoke-crashes.rst
+@@ -29,7 +29,7 @@ recur_count
+ cpoint_name
+ 	Where in the kernel to trigger the action. It can be
+ 	one of INT_HARDWARE_ENTRY, INT_HW_IRQ_EN, INT_TASKLET_ENTRY,
+-	FS_DEVRW, MEM_SWAPOUT, TIMERADD, SCSI_QUEUE_RQ, or DIRECT.
++	FS_SUBMIT_BH, MEM_SWAPOUT, TIMERADD, SCSI_QUEUE_RQ, or DIRECT.
+ 
+ cpoint_type
+ 	Indicates the action to be taken on hitting the crash point.
+diff --git a/drivers/misc/lkdtm/core.c b/drivers/misc/lkdtm/core.c
+index b4712ff196b4..0772e4a4757e 100644
+--- a/drivers/misc/lkdtm/core.c
++++ b/drivers/misc/lkdtm/core.c
+@@ -79,7 +79,7 @@ static struct crashpoint crashpoints[] = {
+ 	CRASHPOINT("INT_HARDWARE_ENTRY", "do_IRQ"),
+ 	CRASHPOINT("INT_HW_IRQ_EN",	 "handle_irq_event"),
+ 	CRASHPOINT("INT_TASKLET_ENTRY",	 "tasklet_action"),
+-	CRASHPOINT("FS_DEVRW",		 "ll_rw_block"),
++	CRASHPOINT("FS_SUBMIT_BH",		 "submit_bh"),
+ 	CRASHPOINT("MEM_SWAPOUT",	 "shrink_inactive_list"),
+ 	CRASHPOINT("TIMERADD",		 "hrtimer_start"),
+ 	CRASHPOINT("SCSI_QUEUE_RQ",	 "scsi_queue_rq"),
+-- 
+2.17.1
 
-> 
-> > Thanks
-> > 
-> > >   		if (adapter->flags & IAVF_FLAG_RESET_PENDING)
-> > >   			continue;
-> > >   		break;
-> > >   	}
-> > >   	if (i == IAVF_RESET_WAIT_COMPLETE_COUNT) {
-> > >   		adapter->flags &= ~IAVF_FLAG_REINIT_ITR_NEEDED;
-> > > -		adapter->num_active_queues = num_req;
-> > > +		adapter->num_req_queues = 0;
-> > >   		return -EOPNOTSUPP;
-> > >   	}
-> > > -- 
-> > > 2.17.1
-> > > 
-> > > 
-> > 
-> 
-> -- 
-> Thanks,
-> -dinghui
-> 
-> 
