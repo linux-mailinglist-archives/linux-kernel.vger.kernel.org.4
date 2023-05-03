@@ -2,107 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D4926F5FDE
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 22:12:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A1016F5FEB
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 22:14:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230064AbjECUMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 16:12:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44042 "EHLO
+        id S230167AbjECUOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 16:14:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230071AbjECUM3 (ORCPT
+        with ESMTP id S230156AbjECUOg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 16:12:29 -0400
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92BE79023
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 13:12:03 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id af79cd13be357-74e13e46cb9so256358885a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 13:12:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1683144713; x=1685736713;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=6aQuySOZ5f1xPp5M/IH7FdCb3YCBcIXK77oTLJoa1To=;
-        b=B77wj2uaBiAWD8idxLhj65ewWhJv33njFprJjaUykYSV+6Yt7L5dCUa5lIV4RnTCul
-         77+cSySse1ya6C7PyiB0e9SPkdj1lshr0RenyoypDVR8ikg/OEorh8RVaMkmDyZXhpHv
-         oV4cTXFAC8UYttofZrb1JTodalX4rrORDCcsv+1Jx7UbO7bLKPm1QGHzfh1gWH9APa83
-         /Rf/B+R6oZeNNgEfgORGaxElO0hO+QyuC06nrse5RwbHwLMFubuPNkiSJbC3/nSMBWBu
-         ZZk1an8YPsQoRYqubaG4Ci1ht8gXo9iEZqN3Zi7lvLJvcUkK5IQDe48usFI3QGu+5mjm
-         PenQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683144713; x=1685736713;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6aQuySOZ5f1xPp5M/IH7FdCb3YCBcIXK77oTLJoa1To=;
-        b=BJ/5pAf/W42eBgWsu1MCFx3+NAQT8Lbi9lw5ZJOcm5BiRG31+rC8oV28gkpOQW4PQd
-         7C2bkW7Galm2Fxg5scLwOWj4k9y5eocGp7AeGipcLmSNfez4eB7ALbiprAtKRK+67mPw
-         dnWs9Kh3fbNf7lz9wHWbRI/sVWut871jA7s1A02jkdrjNQe37LflNStp0Ehp+2h8Eang
-         zhm6NJ0r0Eaqq70lh79nUibG9V3K55ngryPYuGpeq2Al/PaIzRFv/5SZiDOqcSM/gSsL
-         hplcZmct0hw2bDXyieEjikS0pY2gR/tGQyRhhik/zGdFWsHPTpjbcELUP7m2TXBrViXI
-         pCPA==
-X-Gm-Message-State: AC+VfDx0OzeD3RBGaNF6pGAbnFPhHk6GQetWwTT/K63gTDU2mTM2x0Gh
-        qsF1WH0xRVnV5ec6mPFwqI4EIw==
-X-Google-Smtp-Source: ACHHUZ5CnnpIpmUeZ/FYpffmDL5OkaJstg4Fl9o3UD/YbGdgvGCcQtxmC6WZwKNTGrttYwJeKB4QiQ==
-X-Received: by 2002:ac8:5e0d:0:b0:3e6:9716:ba58 with SMTP id h13-20020ac85e0d000000b003e69716ba58mr2436956qtx.26.1683144712859;
-        Wed, 03 May 2023 13:11:52 -0700 (PDT)
-Received: from localhost (2603-7000-0c01-2716-8f57-5681-ccd3-4a2e.res6.spectrum.com. [2603:7000:c01:2716:8f57:5681:ccd3:4a2e])
-        by smtp.gmail.com with ESMTPSA id ed27-20020a05620a491b00b0074e2da97de4sm10761665qkb.33.2023.05.03.13.11.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 May 2023 13:11:52 -0700 (PDT)
-Date:   Wed, 3 May 2023 16:11:50 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     Tejun Heo <tj@kernel.org>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
-        vbabka@suse.cz, roman.gushchin@linux.dev, mgorman@suse.de,
-        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
-        corbet@lwn.net, void@manifault.com, peterz@infradead.org,
-        juri.lelli@redhat.com, ldufour@linux.ibm.com,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, peterx@redhat.com, david@redhat.com,
-        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
-        nathan@kernel.org, dennis@kernel.org, muchun.song@linux.dev,
-        rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com,
-        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
-        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, gregkh@linuxfoundation.org,
-        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>
-Subject: Re: [PATCH 00/40] Memory allocation profiling
-Message-ID: <20230503201150.GB197627@cmpxchg.org>
-References: <ZFKNZZwC8EUbOLMv@slm.duckdns.org>
- <20230503180726.GA196054@cmpxchg.org>
- <ZFKlrP7nLn93iIRf@slm.duckdns.org>
- <ZFKqh5Dh93UULdse@slm.duckdns.org>
- <ZFKubD/lq7oB4svV@moria.home.lan>
- <ZFKu6zWA00AzArMF@slm.duckdns.org>
- <ZFKxcfqkUQ60zBB_@slm.duckdns.org>
- <CAJuCfpEPkCJZO2svT-GfmpJ+V-jSLyFDKM_atnqPVRBKtzgtnQ@mail.gmail.com>
- <ZFK6pwOelIlhV8Bm@slm.duckdns.org>
- <CAJuCfpG4TmRpT5iU7bJmKcjW2Tghstdo1b=qEG=tDsmtJQYuWA@mail.gmail.com>
+        Wed, 3 May 2023 16:14:36 -0400
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 846B58A62
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 13:13:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1683144808;
+        bh=40ZXckww7AYtcV479k70ydFlE0zo0yVWPM2kmuXq4GE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=iWQhduDV2eR1p8Thl+BMwPzCkIwdsiO/5RLyy8ywDEU3r6f16RUbK/SQUaD/8xsdL
+         3OVqXh1KHJm0i2fCxTimnKBAcpcDrQMNByvpRV7eOP5l2Yybwd6Xia/HGrnYGDl3L0
+         iMmMYtqenUAKxh8LeUqDRp7spzSOT+ONHMNuRvtTuVRX9ucQ40zsQcK/p2lkKqq2h7
+         /iW+zAJ4wDCOG/bEKoPymILTMcMYk+x06S+cB1qPjcG/lUAzOw0nLM/5wMfLsDX+ZM
+         w6co6Xh+3+g1i784LVhFGB7QlwV/xHSl2imfTDobzxaEN3RqOmVVCJ8KXsPyxWUflS
+         XdCyV2qe+sO9w==
+Received: from localhost.localdomain (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4QBSnN4dzBz11hs;
+        Wed,  3 May 2023 16:13:28 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [RFC PATCH 1/3] selftests/rseq: Implement rseq_unqual_scalar_typeof
+Date:   Wed,  3 May 2023 16:13:22 -0400
+Message-Id: <20230503201324.1587003-1-mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJuCfpG4TmRpT5iU7bJmKcjW2Tghstdo1b=qEG=tDsmtJQYuWA@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -110,12 +48,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 03, 2023 at 01:08:40PM -0700, Suren Baghdasaryan wrote:
-> On Wed, May 3, 2023 at 12:49 PM Tejun Heo <tj@kernel.org> wrote:
-> > * Improving memory allocation visibility makes sense to me. To me, a more
-> >   natural place for that feels like /proc/allocations next to other memory
-> >   info files rather than under debugfs.
-> 
-> TBH I would love that if this approach is acceptable.
+Allow defining variables and perform cast with a typeof which removes
+the volatile and const qualifiers.
 
-Ack
+This prevents declaring a stack variable with a volatile qualifier
+within a macro, which would generate sub-optimal assembler.
+
+This is imported from the "librseq" project.
+
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+---
+ tools/testing/selftests/rseq/compiler.h | 27 +++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+
+diff --git a/tools/testing/selftests/rseq/compiler.h b/tools/testing/selftests/rseq/compiler.h
+index f47092bddeba..8dc7f881e253 100644
+--- a/tools/testing/selftests/rseq/compiler.h
++++ b/tools/testing/selftests/rseq/compiler.h
+@@ -33,4 +33,31 @@
+ #define RSEQ_COMBINE_TOKENS(_tokena, _tokenb)	\
+ 	RSEQ__COMBINE_TOKENS(_tokena, _tokenb)
+ 
++#ifdef __cplusplus
++#define rseq_unqual_scalar_typeof(x)					\
++	std::remove_cv<std::remove_reference<decltype(x)>::type>::type
++#else
++/*
++ * Use C11 _Generic to express unqualified type from expression. This removes
++ * volatile qualifier from expression type.
++ */
++#define rseq_unqual_scalar_typeof(x)					\
++	__typeof__(							\
++		_Generic((x),						\
++			char: (char)0,					\
++			unsigned char: (unsigned char)0,		\
++			signed char: (signed char)0,			\
++			unsigned short: (unsigned short)0,		\
++			signed short: (signed short)0,			\
++			unsigned int: (unsigned int)0,			\
++			signed int: (signed int)0,			\
++			unsigned long: (unsigned long)0,		\
++			signed long: (signed long)0,			\
++			unsigned long long: (unsigned long long)0,	\
++			signed long long: (signed long long)0,		\
++			default: (x)					\
++		)							\
++	)
++#endif
++
+ #endif  /* RSEQ_COMPILER_H_ */
+-- 
+2.25.1
+
