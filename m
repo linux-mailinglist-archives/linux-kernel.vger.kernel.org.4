@@ -2,105 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D0DA6F5532
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 11:49:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A2956F5537
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 11:49:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbjECJtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 05:49:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43172 "EHLO
+        id S229802AbjECJtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 05:49:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbjECJtA (ORCPT
+        with ESMTP id S229538AbjECJtG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 05:49:00 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DAB35B92;
-        Wed,  3 May 2023 02:48:14 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id af79cd13be357-74db3642400so448558985a.2;
-        Wed, 03 May 2023 02:48:14 -0700 (PDT)
+        Wed, 3 May 2023 05:49:06 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87BE49F2;
+        Wed,  3 May 2023 02:48:35 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2a8a600bd05so50384831fa.2;
+        Wed, 03 May 2023 02:48:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683107293; x=1685699293;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tLkQD32F3IyzI9nuizEgzw57kW3UmWyAr9AlLHhtw/w=;
-        b=EzxTxtGSL3zdYaLaEhs72pGdeB0Zra/NxBtuqx7f8JwACc+XbqYDu37vlb6u8y2ohO
-         qFcW7MytFMXf+78FAiD9S0g4DGsNZy72i4FbVuz35UOrbuwStgOCmqwrj4VcNyr5DKWD
-         GdYS3KBu1ib4z11kTk8ZXXSNDyejh6T0UTLt2HsiKQf3xBZdYVJGS5GPCR7aTbCXS6AL
-         rfW8XO2hv5VC4eItvnc2zXcZIZtMlIxCt/7kKRh7pGOr71A6bBmnfp854IRTfyIWs1La
-         dKT3bN4+F73RsM1MnR5CFo/fpM7zEk9ALtzvcZJDKxfYq/oQKvW0iC5wq++VrhEdy0fs
-         gDvA==
+        d=gmail.com; s=20221208; t=1683107314; x=1685699314;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6DLhXL1SHK8zjmrz0XD00qubJN9V0QxBZCbEYgZPK2o=;
+        b=HLQOpM+rJzcwbDmpuDNqG5rzSuWW7jIZwCve4iigYnrIBJsoJ2FsEHmt/h5PXG6ULB
+         Wzd67qv/u56PgnhDX78QirqbzzfAemCtt0bIJYIPCHu2v78qrEknAjeSnyHpXCL1g1wS
+         +0G/AvsfAJej/Pw3h1fn7M3bXLO6Qg606NxhijItefX7kpj+RRItKCtmwq3EMbm1DP24
+         wnuaXoKznrlC2gkNYxmQk36TG48tHBSbzUF3eFC/DDqAFRTv0tCRjt6mGeBeJUwIv0ij
+         /4PB4uUBLImApFv6spGad+mP8OMyKVNxpwt49fh3jrVSdOZfBkynNbs2tz+6rDv94x5U
+         ZhwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683107293; x=1685699293;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tLkQD32F3IyzI9nuizEgzw57kW3UmWyAr9AlLHhtw/w=;
-        b=OaUOjUHzaDjm5oAK+CTaeE0MXMYZ/KCQil9Z7HWdqC7Lt4/IW7sycwz0XQRBY/8Dne
-         8y5KMFOZbrWFDb+u2JmSl/vV6YX84vYGkF2U7zniPHLSX6wz3hQcLdT10v31GNiyEZCh
-         EPPxrwb/s3QfaeLR4YEHDRSU4blc3zM72s3zAUKcx3rwON5LpvoPu4wedDYAUev9hH6O
-         t7wMzj5TFehb3GphonZaAurWehmfgRTxkpIVV4rQ9/2v2AALLNB2xkkrKkcGge2qNElj
-         CM2XPeSE63d+h8kSus4s/I4JJr/07hI5qrw/KNYnvTGzrL2AIcGz2I4xk1NzMD0i3HwA
-         gksg==
-X-Gm-Message-State: AC+VfDzJsYsd4Hok4KC7stH7zNF9SMnVrzSg8QjtkamTz0vidZ5LWlkf
-        IO66+J+a9KtrxwB+czvPmfpkp8uBu9L7A8gsYUo=
-X-Google-Smtp-Source: ACHHUZ4Q5WQUaumtaNYI49nhQWXJyCnvaZUIKU+GwPX9rXu7Tuv0i4XSm6dxaPFhw0f4LYxtCet8Vcp57kX3RfIVqac=
-X-Received: by 2002:a05:6214:5012:b0:5ef:45a7:a3c0 with SMTP id
- jo18-20020a056214501200b005ef45a7a3c0mr10842556qvb.27.1683107293366; Wed, 03
- May 2023 02:48:13 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683107314; x=1685699314;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6DLhXL1SHK8zjmrz0XD00qubJN9V0QxBZCbEYgZPK2o=;
+        b=M3cwZ1/QjjUQYlmvZzVBAykxjhtR97BvliMbSMuWD8q+vLN/IkYu0dmtPZ0mq1LWAm
+         QXGNJ/1tPN0T0rkFSHTtRf5kntBBApUxSZBFzrdO9j9B2OQx35Q1X0W1NtZiKG/U14/b
+         IvLhv3eLOxN/IgpUUIMbxeAmT6uTut3hV/W1wdMmj53TVLutJJJh8Wg9BMppDa1bemg7
+         DzrZI4BHlh0T+ZDVx1wOGIG3HYGBSHFhZhcXY8OMKaYJDnUPUbdLDuiVKXa76+KD4PUQ
+         zeqseDihwyGmvo12bh4BKK78nmhSqwQb7gTcc0qikpVvoWR0VtV81w4aEW0i5HzQsfnG
+         XJRA==
+X-Gm-Message-State: AC+VfDzth3dAyp7c7qfAvG5WocJK8/mZFJia6o4uWvT16byLJ7o0VnIa
+        dT2FHFmU6sP7NxmbXOwkN5Q=
+X-Google-Smtp-Source: ACHHUZ555FDNwTrzYDDuzf8DHHczi7B/PTIMCc4taiw7yHHBp/E7LSvlYo67kkCCSg+vjyETJH4Gfg==
+X-Received: by 2002:ac2:414b:0:b0:4e8:3fca:4927 with SMTP id c11-20020ac2414b000000b004e83fca4927mr665829lfi.58.1683107313768;
+        Wed, 03 May 2023 02:48:33 -0700 (PDT)
+Received: from fedora (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
+        by smtp.gmail.com with ESMTPSA id l14-20020ac2554e000000b004dda76fad5asm5877868lfk.218.2023.05.03.02.48.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 May 2023 02:48:33 -0700 (PDT)
+Date:   Wed, 3 May 2023 12:48:29 +0300
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Zhigang Shi <Zhigang.Shi@liteon.com>,
+        Paul Gazzillo <paul@pgazz.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 1/5] dt-bindings: iio: light: ROHM BU27008
+Message-ID: <1fe50acb5223a2f1d882951697911f190391d546.1683105758.git.mazziesaccount@gmail.com>
+References: <cover.1683105758.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
-References: <1683092380-29551-1-git-send-email-quic_rohiagar@quicinc.com> <1683092380-29551-4-git-send-email-quic_rohiagar@quicinc.com>
-In-Reply-To: <1683092380-29551-4-git-send-email-quic_rohiagar@quicinc.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 3 May 2023 12:47:37 +0300
-Message-ID: <CAHp75Ve0FqX7=x3B5eaCfj0AE5m1qMXGrYzLoHzqbLY7gdOSOg@mail.gmail.com>
-Subject: Re: [PATCH v5 3/3] pinctrl: qcom: Add SDX75 pincontrol driver
-To:     Rohit Agarwal <quic_rohiagar@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        linus.walleij@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, richardcochran@gmail.com,
-        manivannan.sadhasivam@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ojlY+SCRNoXtnTjn"
+Content-Disposition: inline
+In-Reply-To: <cover.1683105758.git.mazziesaccount@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 3, 2023 at 8:39=E2=80=AFAM Rohit Agarwal <quic_rohiagar@quicinc=
-.com> wrote:
->
-> Add initial Qualcomm SDX75 pinctrl driver to support pin configuration
-> with pinctrl framework for SDX75 SoC.
-> While at it, reordering the SDX65 entry.
 
-...
+--ojlY+SCRNoXtnTjn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> +#define FUNCTION(n)                                                    \
-> +       [msm_mux_##n] =3D {                                              =
- \
-> +                       .func =3D PINCTRL_PINFUNCTION(#n,                =
- \
-> +                                       n##_groups,                     \
-> +                                       ARRAY_SIZE(n##_groups))         \
-> +                       }
+The ROHM BU27008 is a sensor with 5 photodiodes (red, green, blue, clear
+and IR) with four configurable channels. Red and green being always
+available and two out of the rest three (blue, clear, IR) can be
+selected to be simultaneously measured. Typical application is adjusting
+LCD backlight of TVs, mobile phones and tablet PCs.
 
-Or even define
+Add BU27008 dt-bindings.
 
-  #define MSM_PIN_FUNCTION(fname) \
-      [msm_mux_##fname] =3D PINCTRL_PINFUNCTION(...)
+Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-in the header for all MSM related controllers.
+---
+Revision history:
+v2 =3D> No changes
 
-All the same for the rest groups (if any), otherwise use redefinition
-of FUNCTION inside each file.
+v1 =3D> v2:
+- fix binding file name
+- fix binding id
+- drop unnecessary '|' from description
+---
+ .../bindings/iio/light/rohm,bu27008.yaml      | 49 +++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iio/light/rohm,bu2700=
+8.yaml
+
+diff --git a/Documentation/devicetree/bindings/iio/light/rohm,bu27008.yaml =
+b/Documentation/devicetree/bindings/iio/light/rohm,bu27008.yaml
+new file mode 100644
+index 000000000000..4f66fd47b016
+--- /dev/null
++++ b/Documentation/devicetree/bindings/iio/light/rohm,bu27008.yaml
+@@ -0,0 +1,49 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/iio/light/rohm,bu27008.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: ROHM BU27008 color sensor
++
++maintainers:
++  - Matti Vaittinen <mazziesaccount@gmail.com>
++
++description:
++  The ROHM BU27008 is a sensor with 5 photodiodes (red, green, blue, clear
++  and IR) with four configurable channels. Red and green being always
++  available and two out of the rest three (blue, clear, IR) can be
++  selected to be simultaneously measured. Typical application is adjusting
++  LCD backlight of TVs, mobile phones and tablet PCs.
++
++properties:
++  compatible:
++    const: rohm,bu27008
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  vdd-supply: true
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++      #address-cells =3D <1>;
++      #size-cells =3D <0>;
++
++      light-sensor@38 {
++        compatible =3D "rohm,bu27008";
++        reg =3D <0x38>;
++      };
++    };
++
++...
+--=20
+2.40.0
+
 
 --=20
-With Best Regards,
-Andy Shevchenko
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--ojlY+SCRNoXtnTjn
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmRSLe0ACgkQeFA3/03a
+ocW9MAf9FyAINt2z25PTVVWG2amRPpNVvSUUQWfDjMssQYgoSlSnRemkyf2YQOGz
+08j51CQYRX1lf1R4RUxnUAxYjJ0b07Lu5P/0Zk8wyLy0O1AgYCUHuoCbFSFzBMPV
+y8cE8rbfhgUTQdWrMCUXraP/6LXNWVPYg0muR4cJzjaUi8fwgBkr7lzY4HDOhU6r
+qPrgCLHPdsUZfoNGzYqULQa1JI3ttkGqO9+3+XNxg35kUVP+BvopyWLZt52AgMaA
+uIWFEF1aYMTvGnCS7BuJL34EDrpM3H+Q/shqh8urwiVorX5LswSGH5UDOBXOQqHo
+enysVh/kRm19AX38EbHlNqwul/QPrQ==
+=Koi1
+-----END PGP SIGNATURE-----
+
+--ojlY+SCRNoXtnTjn--
