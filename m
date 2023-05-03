@@ -2,132 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AA446F5B6E
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 17:43:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F8476F5B74
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 17:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbjECPnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 11:43:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33014 "EHLO
+        id S230125AbjECPrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 11:47:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbjECPnM (ORCPT
+        with ESMTP id S229610AbjECPrJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 11:43:12 -0400
-Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2118.outbound.protection.outlook.com [40.107.241.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC9B5BAE
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 08:43:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WEHY4oPnW9UR6hWT/YX5w9oPcfMJM59t/HHYurlfHkGFL5e1EksNdMrYpbrwEAweJ2AHp/2nno3gzEkec9hHkkm0ieDcXP/FD8JAi2e0PFvPdw2PQtfEbIh3mwZAOMi8K3V5YLKux5GVmXvHU6L8st4cflo/DhMz8VXEq4yrJ9s3UgmkLIDV5y/PPiae2ym7uVPwSnd7OSLPsHMFOF9hbigltPYhUxbrg220n6ibikK2Xdv1msB1wY8MT8lH7bdyjoByNypMxRZifoo5XiKPqeKAIxL/1vGDqmTRmx6FuH43qIeio9pPl5uGYze/0Psfh2Kopjf1xqpx7HuDEHgDNQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aiiUY+uFCTE+qgX2aUEtApf/tNYfrWa9lnIP3deViGw=;
- b=Rc7GPSHFVZofTLKTSyfmZgJasE9TDDfAmd1mNxrtc93Img4sObue5jBkYOrkESFSutoZIFvwchCBYRjfTG6ZjpBQqQdFT67iZvsk4uFdRw9vSkQTwPzOdpHs2zNG0mNGdDqNNeSu3otNPIhsgv87pFIsPPFpUjGAO9A9iJXr+2EtqcX0ENtn8lYA3846Sn7PIGfGZqsD58rcLpW6nJTB/Czg+9aDq+pxSs0/Cbylq7bs39yz2nMKoIO4TGg8iAq2uY3yHTeKrZch1ChMAOJHOWEvjRg+rODRBrmftRAK6sibCKkJFMdqBPFOSd8Gmq7cy4s7JBBYwUW8Hb1ek6ucFA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=kontron.de; dmarc=pass action=none header.from=kontron.de;
- dkim=pass header.d=kontron.de; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mysnt.onmicrosoft.com;
- s=selector2-mysnt-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aiiUY+uFCTE+qgX2aUEtApf/tNYfrWa9lnIP3deViGw=;
- b=F2MnVaVsV4wL3/eRWkUOlQ2Wkrw5BeKy2nIOR2FxABReZCMCbfxYlUMoF+RHn2373j/NEC9K5FwAyHYCSjOvzV38Jgx5EpxBy7v8AvSFvHcg5Du9MS2OJoCibcRKDmdQId6kme4t6Ha5b2DEcjPIizRuVBbw72R9Zl+Q1f3G7wU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=kontron.de;
-Received: from PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:263::10)
- by VI1PR10MB3646.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:800:138::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.22; Wed, 3 May
- 2023 15:43:08 +0000
-Received: from PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::e6fd:d174:5710:fb3a]) by PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::e6fd:d174:5710:fb3a%2]) with mapi id 15.20.6340.031; Wed, 3 May 2023
- 15:43:08 +0000
-Message-ID: <d7d435be-e178-2666-f83e-af3b6cc37137@kontron.de>
-Date:   Wed, 3 May 2023 17:43:05 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH V3 6/7] drm: bridge: samsung-dsim: Support non-burst mode
-Content-Language: en-US, de-DE
-To:     Adam Ford <aford173@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     marex@denx.de, Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Jonas Karlman <jonas@kwiboo.se>, aford@beaconembedded.com,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Jagan Teki <jagan@amarulasolutions.com>
-References: <20230502010759.17282-1-aford173@gmail.com>
- <20230502010759.17282-7-aford173@gmail.com>
-From:   Frieder Schrempf <frieder.schrempf@kontron.de>
-In-Reply-To: <20230502010759.17282-7-aford173@gmail.com>
+        Wed, 3 May 2023 11:47:09 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD0765FF9
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 08:47:07 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 46154204EE;
+        Wed,  3 May 2023 15:47:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1683128826; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9H5tPG0mP0o9lp1KWPeQvdb+q0hdkjVEkN1tewN2nIc=;
+        b=Q42NDkCnpxT2N/Mvr1eFVBKqka3qMj3SkO3gwBCqcApVk/pHL0YJ3ypbXfl9Xyeyk9Z1D0
+        4g0MiMOPLliOhXY4NiNoB0+1vSKU4GGhvYZDSQ9I6vYj5AJ9s2B0TerX/uu5wx10ex+q9K
+        Nqdj8t2Xk88F5M/UPWd71k5rl7/1n5Q=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1683128826;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9H5tPG0mP0o9lp1KWPeQvdb+q0hdkjVEkN1tewN2nIc=;
+        b=RgYlGkDLxLa7D7eENKp6i/rffLfoQqFAc1bFXABI9rJJEXef7sF/XQ44oszQEhe2sdIoYE
+        QxrNBRCSuxw4uhAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1C8CD13584;
+        Wed,  3 May 2023 15:47:06 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id atjsBfqBUmQ6cAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 03 May 2023 15:47:06 +0000
+Date:   Wed, 03 May 2023 17:47:05 +0200
+Message-ID: <87354do1s6.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Jeff Chua <jeff.chua.linux@gmail.com>
+Cc:     Takashi Iwai <tiwai@suse.de>, Bagas Sanjaya <bagasdotme@gmail.com>,
+        Oswald Buddenhagen <oswald.buddenhagen@gmx.de>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: Re: linux-6.4 alsa sound broken
+In-Reply-To: <CAAJw_Ztu=Ki91wJUTAHrtW6xqaHvn-ZPii6bCoAjK_YmigZ3TQ@mail.gmail.com>
+References: <CAAJw_ZsbTVd3Es373x_wTNDF7RknGhCD0r+NKUSwAO7HpLAkYA@mail.gmail.com>
+        <ZE9ngFLRqLkN6faH@ugly>
+        <CAAJw_ZtKnZ3QruicqFRG_TLV0Ltbc8LSvdJSCEQRkr5GMSWvCw@mail.gmail.com>
+        <63bcc1eb-b0f5-4da1-0a22-31e0c86c0851@gmail.com>
+        <07f50016-5e24-56f8-0d02-df8d237059b6@gmail.com>
+        <87jzxqne3z.wl-tiwai@suse.de>
+        <CAAJw_ZsGZaypS1C=XwLDdNFQ9jbF8RFOOiEY0ZSWQvFmWx+Gwg@mail.gmail.com>
+        <87a5ylcyw4.wl-tiwai@suse.de>
+        <CAAJw_Ztu=Ki91wJUTAHrtW6xqaHvn-ZPii6bCoAjK_YmigZ3TQ@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BE0P281CA0021.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:b10:14::8) To PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:102:263::10)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PA4PR10MB5681:EE_|VI1PR10MB3646:EE_
-X-MS-Office365-Filtering-Correlation-Id: 02da4c02-30f9-401e-55f9-08db4bed17a1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JfGSM/sr0BDz7mhFqQz0ythG1oW6LquxYyPUBuv01lKlBByq4QXLvW9xOhTojejtUcEMUqIdnjldQwHh8mVNtjq5x7FqpHSsJkPrtCWdgLqwYhkz7KsTHbQKRp+fhzZR8D9/eIrxo5uFGm1gwT9MgMvI4vcRPELdAn+Oe00ka0gVzZqmHH/8SNxw3XKpvJYaJuXHT90lPC7waZrbUGv3/2IjivifMDjEbdlqdtOEjJVnM4Zr7fUpoW7aB9GMgz+PUIcHpkWoMt/KrY3A3cftH4SvhQlukcIWUKklPgZVwdJjcseNaOc2TFUnrxjMqRUxz1bu9nV3WP3bdBhtLtP5skqlarRLpz4AaOPNNzi6GU0jsWy2vYj1PiTReDDsePlPN2szYFPQVc+TOlSXl9XBEtb98453rkGWyswUM0PrO53mt34321DgaA3aJ+IxkaSOEZ4HkJAvJeeR98XNjWblSvlwzKo27VRy1Iwd6IZKLwrPL3cfGuuDkMhGP5+HH4QEt0CxXHnn45JsPqFCjqYOSPGdUzb6x4MjJJgipYnyUYayCrtXui2dGbp7BsCMq+5+JsQXOsAtaz3tvfg6mX+n/byPCShdCiiIy5f4rsFmulP1oO2kmIB5YtZF4GU12A6x+Vy8Xa+NvpMN3joRUNTkaQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(136003)(346002)(396003)(366004)(451199021)(31686004)(2906002)(4744005)(5660300002)(44832011)(7416002)(36756003)(8676002)(8936002)(41300700001)(66476007)(66556008)(66946007)(86362001)(31696002)(6666004)(54906003)(4326008)(478600001)(316002)(6486002)(38100700002)(186003)(53546011)(2616005)(83380400001)(26005)(6506007)(6512007)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dU82T2kxMUhraFB5dWNSakNUUncyK2Z1aHlZMFNmMnNQYUdzSjZ5N2VzeEI1?=
- =?utf-8?B?bmE5UmY5eU9BVzFOQ1dNa3djcXhXK25OTmpOTDJzeTJ6UUwzU0xUUEhGOXV0?=
- =?utf-8?B?T21PUk52Tk9UNWxsbU8vMmJtSjVWWmhMS3hHZzRiM1FOeGNSZjNDNFdIUWNP?=
- =?utf-8?B?V1hZREJjVnFZUlBBa0JXNm4yR3ZtZ2p4MkdaajhXV2FoNXM0T1VJWXJ0bkNn?=
- =?utf-8?B?cSt5MkVWRFphNjBEWkFjR1dFcHNEcWwvOU5peWNSaTY3elRxcVNjd2Vlamc3?=
- =?utf-8?B?R0VlKzY2UGdMLy9ZeEVyNzdZbVpBcGtnRXIzRkxhZWJFczc5Rmo5UlhOa252?=
- =?utf-8?B?eXErcllqWjN0V21SOXZCZ09HZDllUk53OXlxbEtXRTRGS1NaQzhwOTZVajN2?=
- =?utf-8?B?eUZiRTAyRXNTU1gzanBrTmRZTUNmVVNMT09LNGpzc3pQVjRxc1drdHR0dUVR?=
- =?utf-8?B?M1VsS01DRTFHR094OUJBcEVXeE5aM3UxU0hwU0tyNTlXN0llSzdldVhpYzZO?=
- =?utf-8?B?a1UzM2tVdlFsUmMwM0llMkllUG0rbTFFMnhyNzFSWDNKVkthczlQUERvSGg1?=
- =?utf-8?B?clRzeW90cU9yblZ2emdSeFMzTElpOU9Ddyt5Q0Z0RUZZY2srU1BTZit3SlhR?=
- =?utf-8?B?ZUs1NWZGVWU0MWM2TUpzU0ZSOTlQcEJVUjBxSFNKN1lrSFZXcGFXTVArVmZl?=
- =?utf-8?B?LzBVNXRLL05qL0hTK2lJM0JIbGN5ZlVBY2QvV0hsVGk2QzBGTmd2Sk9lWlpY?=
- =?utf-8?B?MGo0UVZDbzdPU0t0a0czQnlVTkNRUGxTSjhKY0N1UlpvTGRVaW5STExYQkln?=
- =?utf-8?B?aWpUNDBBaGFTeFhHL1BwZllqM3ZHdkI2L0hEbU11TEJJUFZHMm0zUDVsSlpj?=
- =?utf-8?B?ZnlRc1N5czhhRm1TUHV0MUNIRjZyTlU0NkQ4MHVjano5WmpWcTRxV3lXWDF1?=
- =?utf-8?B?OXRxNGhGYlZaNElud21Scm42Y3ZnVHlpVTRzY21XejBQZU9uUDhyd1ZpUWE0?=
- =?utf-8?B?Y0VERUpDNzhRRTh0aGRVODMzaHpjWm85NXdBaDE0TnFsQlNYWjdHb1JSRDE4?=
- =?utf-8?B?cnFCREVnRTFjR3A5bHREbjdpZ2g5Z1B5UTlCK1J2RE1Ba1NxaVBobUwwcDVy?=
- =?utf-8?B?SkszUFluMWM0dm8rMFplUldtOEM5TXdrQldlU3lrSC9JVi81dzlURm5FZWZN?=
- =?utf-8?B?ZHY0eXJvQStmcit6K0s5MDB3OXFia1FrNEw1QTNiYVNiakxGNmRPdm5LTXNw?=
- =?utf-8?B?Qnd1NnRXN0ZLdWFhNjVSK3JSK1JMbGZIakRzbjlOQ0tmcTZMNmxJdlYwZDFE?=
- =?utf-8?B?aEtaQ3FBaGFlL2d3ZW43WERHcHFObWl5TkxFUlNtWUx3SklYM2dJcXNFRVdr?=
- =?utf-8?B?UlMrUmRZRGYwaHl5aDFpSHlXNHhGWmhwbjhqdzh5ZWREeGd3S1F3a2lKUU5Q?=
- =?utf-8?B?YjFWWVl4U2VKQVBUb1diMzl6TDdrdWZQeG5sVGtETHpLWGlSUytiUWwxWE1N?=
- =?utf-8?B?dG5jM0NiQ1UxSHBLcUhSWXFwamRRcjBKOEJQTHBSbWJYOCtBWVVDRFkzVEpD?=
- =?utf-8?B?dTNFQnFpMmdub0djQTJ2QmJCcE0xR0NnWEQ4U2RhdXZWMW5CNUxPWWNETGtB?=
- =?utf-8?B?b1dYR1BheDNPQTd2SWd2VmFKamlrYkNPTVpMWXdDVzdnU2x2aFNaYmI5UTVi?=
- =?utf-8?B?WStTY1RhWXJCbmFhbDUySjZjWHpyOVVNdk9hZGorT1VDS3ovZzVEVC80QTNE?=
- =?utf-8?B?cy8zTXcrdjh4ZEFqdStBTDNuUGpUSUxVcjljMG5QdVlkZ0VUNXp4N09nYXlL?=
- =?utf-8?B?b1NFMDNocE52QnFkb0E5bkIrOEZqaUJBTEJzbHREalM0b29oVG1naS9XYVpX?=
- =?utf-8?B?dXFvQ0dYV2FhRUJraEdhZGRzbmxjVytYSmdVQmcrekxYSmlTMnhqcFVTV0Fw?=
- =?utf-8?B?MjZyZHJ1SXdZRHdlb1VOR3NzZi9pMlB1ZjZlTlBnY2FQdjFqcFRsbFNIT0Jw?=
- =?utf-8?B?dDQvbzRzRFZsUnptekxzVGp3NVM4MTFESHhOcmcyWEx5QzFCVlZtQnBWcUpx?=
- =?utf-8?B?R25taklJb0ZlWXRjM3dnSzUrOEo0UU1pcEZ4MmFoQ0VtejZnTEUvQmk4ZHN3?=
- =?utf-8?B?SXMrVm5LWW94ZWdlRjgxVWxNTERtT3d4WWJ3RE41bmlUQk5FeVhFMW44blJr?=
- =?utf-8?B?NHc9PQ==?=
-X-OriginatorOrg: kontron.de
-X-MS-Exchange-CrossTenant-Network-Message-Id: 02da4c02-30f9-401e-55f9-08db4bed17a1
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 May 2023 15:43:08.0323
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8c9d3c97-3fd9-41c8-a2b1-646f3942daf1
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1EwPiBsnl0rZYzFR7JIbQf/EAjsfyxILQzwnw9sy5dc3BAWVaHxoCU3MZUyC6eQHnFPQpgmyHW7e6SANA+nYYzjfDiszKUHSnN721Mrbtyw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR10MB3646
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -135,25 +81,206 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02.05.23 03:07, Adam Ford wrote:
-> The high-speed clock is hard-coded to the burst-clock
-> frequency specified in the device tree.  However, when
-> using devices like certain bridge chips without burst mode
-> and varying resolutions and refresh rates, it may be
-> necessary to set the high-speed clock dynamically based
-> on the desired pixel clock for the connected device.
+On Wed, 03 May 2023 17:06:16 +0200,
+Jeff Chua wrote:
 > 
-> This also removes the need to set a clock speed from
-> the device tree for non-burst mode operation, since the
-> pixel clock rate is the rate requested from the attached
-> device like an HDMI bridge chip.  This should have no
-> impact for people using burst-mode and setting the burst
-> clock rate is still required for those users.
+> On Wed, May 3, 2023 at 9:45 PM Takashi Iwai <tiwai@suse.de> wrote:
+> >
+> > On Wed, 03 May 2023 14:19:54 +0200,
+> > Jeff Chua wrote:
+> > >
+> > > On Wed, May 3, 2023 at 2:06 PM Takashi Iwai <tiwai@suse.de> wrote:
+> > > >
+> > > > On Wed, 03 May 2023 06:37:48 +0200,
+> > > > Bagas Sanjaya wrote:
+> > > > >
+> > > > > On 5/3/23 11:34, Bagas Sanjaya wrote:
+> > > > > >> Just send .. in another email. If the atttachment got stripped off,
+> > > > > >> please let me know.
+> > > > > >>
+> > > > > >>
+> > > > > >
+> > > > > > I don't see your attachment. Can you please post the link
+> > > > > > to your test file on file storage hosting instead?
+> > > > > >
+> > > > >
+> > > > > Oops, I don't see the attachment on your reply at [1]. Sorry for the
+> > > > > inconvenience.
+> > > > >
+> > > > > [1]: https://lore.kernel.org/lkml/CAAJw_ZveoPfnBsSkHZqmLiVWATcOosR--6Ds4cdekdi=t1yV7A@mail.gmail.com/
+> > > >
+> > > > I see no attachment of the recorded sound.  In the mail above, only
+> > > > Side_Right.wav was attached, and this is the same file in
+> > > > /usr/share/sounds/alsa/.
+> > > >
+> > > > But, I wonder how you played a mono channel file with "hw:1,0" PCM.
+> > > > Isn't this a HD-audio device?
+> > > > Usually HD-audio codec can't play a mono file.  For example, on my
+> > > > machine with a Realtek codec fails like:
+> > > >
+> > > > % aplay -Dhw:0,0 Side_Right.wav
+> > > > Playing WAVE 'Side_Right.wav' : Signed 16 bit Little Endian, Rate 48000 Hz, Mono
+> > > > aplay: set_params:1358: Channels count non available
+> > > >
+> > > > So, if it works on yours, please show the output of playback with
+> > > > aplay -v option.  This will show more details.
+> > >
+> > > # aplay -v
+> > > Playing WAVE '/local/share/sounds/alsa/Side_Right.wav' : Signed 16 bit
+> > > Little Endian, Rate 48000 Hz, Mono
+> > > Plug PCM: Route conversion PCM (sformat=S32_LE)
+> > >   Transformation table:
+> > >     0 <- 0
+> > >     1 <- 0
+> > > Its setup is:
+> > >   stream       : PLAYBACK
+> > >   access       : RW_INTERLEAVED
+> > >   format       : S16_LE
+> > >   subformat    : STD
+> > >   channels     : 1
+> > >   rate         : 48000
+> > >   exact rate   : 48000 (48000/1)
+> > >   msbits       : 16
+> > >   buffer_size  : 16384
+> > >   period_size  : 1024
+> > >   period_time  : 21333
+> > >   tstamp_mode  : NONE
+> > >   tstamp_type  : MONOTONIC
+> > >   period_step  : 1
+> > >   avail_min    : 1024
+> > >   period_event : 0
+> > >   start_threshold  : 16384
+> > >   stop_threshold   : 16384
+> > >   silence_threshold: 0
+> > >   silence_size : 0
+> > >   boundary     : 4611686018427387904
+> > > Slave: Soft volume PCM
+> > > Control: PCM Playback Volume
+> > > min_dB: -51
+> > > max_dB: 0
+> > > resolution: 256
+> > > Its setup is:
+> > >   stream       : PLAYBACK
+> > >   access       : MMAP_INTERLEAVED
+> > >   format       : S32_LE
+> > >   subformat    : STD
+> > >   channels     : 2
+> > >   rate         : 48000
+> > >   exact rate   : 48000 (48000/1)
+> > >   msbits       : 32
+> > >   buffer_size  : 16384
+> > >   period_size  : 1024
+> > >   period_time  : 21333
+> > >   tstamp_mode  : NONE
+> > >   tstamp_type  : MONOTONIC
+> > >   period_step  : 1
+> > >   avail_min    : 1024
+> > >   period_event : 0
+> > >   start_threshold  : 16384
+> > >   stop_threshold   : 16384
+> > >   silence_threshold: 0
+> > >   silence_size : 0
+> > >   silence_size : 0
+> > >   boundary     : 4611686018427387904
+> > > Slave: Direct Stream Mixing PCM
+> > > Its setup is:
+> > >   stream       : PLAYBACK
+> > >   access       : MMAP_INTERLEAVED
+> > >   format       : S32_LE
+> > >   subformat    : STD
+> > >   channels     : 2
+> > >   rate         : 48000
+> > >   exact rate   : 48000 (48000/1)
+> > >   msbits       : 32
+> > >   buffer_size  : 16384
+> > >   period_size  : 1024
+> > >   period_time  : 21333
+> > >   tstamp_mode  : NONE
+> > >   tstamp_type  : MONOTONIC
+> > >   period_step  : 1
+> > >   avail_min    : 1024
+> > >   period_event : 0
+> > >   start_threshold  : 16384
+> > >   stop_threshold   : 16384
+> > >   silence_threshold: 0
+> > >   silence_size : 0
+> > >   boundary     : 4611686018427387904
+> > > Hardware PCM card 0 'HDA Intel PCH' device 0 subdevice 0
+> > > Its setup is:
+> > >   stream       : PLAYBACK
+> > >   access       : MMAP_INTERLEAVED
+> > >   format       : S32_LE
+> > >   subformat    : STD
+> > >   channels     : 2
+> > >   rate         : 48000
+> > >   exact rate   : 48000 (48000/1)
+> > >   msbits       : 32
+> > >   buffer_size  : 16384
+> > >   period_size  : 1024
+> > >   period_time  : 21333
+> > >   tstamp_mode  : ENABLE
+> > >   tstamp_type  : MONOTONIC
+> > >   period_step  : 1
+> > >   avail_min    : 1024
+> > >   period_event : 0
+> > >   start_threshold  : 1
+> > >   stop_threshold   : 4611686018427387904
+> > >   silence_threshold: 0
+> > >   silence_size : 4611686018427387904
+> > >   boundary     : 4611686018427387904
+> > >   appl_ptr     : 0
+> > >   hw_ptr       : 0
+> >
+> > OK, that explains.  This is a completely different from the
+> > configuration with hw:X,Y I expected from your description.
+> > So, this is with dmix, and it indeed relies on the auto-silencing, so
+> > the commit must be relevant.
+> >
+> >
+> > > > Last but not least, please double-check that the problem is really
+> > > > gone after reverting the commit 9f656705c5fa.  The commit is about the
+> > > > auto-silencing, and it should be irrelevant unless the application
+> > > > gives non-zero silence_size sw_params, and aplay doesn't set up it at
+> > > > all.
+> > >
+> > > 100% sure. I just compiled the latest linux git pull. Rebooted. Tested
+> > > that the problem exists, and revert just that patch
+> > > (9f656705c5faa18afb26d922cfc64f9fd103c38d), and the problem went away!
+> > >
+> > > Sorry about the recorded.wav file that I attached earlier ... didn't
+> > > realized that when I recorded via the loop-back, I could heard that it
+> > > was "corrupted" on the unpatched kernel, but when I play back the same
+> > > file on the "patched" kernel, the sound played ok.
+> > >
+> > > So, loop-back using the following did not capture the problem ...
+> > > # arecord -D hw:1,0,0 -f S16_LE -r 48000 recorded.wav
+> > > # aplay -D hw:1,1,0 /local/share/sounds/alsa/Side_Right.wav
+> > >
+> > > Attached is the problem file captured using my iPhone. bad1.m4a.
+> > >
+> > > I've uploaded to
+> > > https://github.com/jeffersonchua/linux-6.4-alsa/blob/main/bad1.m4a in
+> > > case the attachment got stripped-off.
+> >
+> > Ah, the arecord and aplay above with -Dhw:1,1 is for a different
+> > (still working) card?  Better to explain it more clearly...
 > 
-> Signed-off-by: Adam Ford <aford173@gmail.com>
-> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+> I use this to record the sound, but it's the playback that's having
+> the issue ...
+> 
+> # modprobe snd-aloop
+> # arecord -D hw:1,0,0 -f S16_LE -r 48000 recorded.wav
+> # aplay -D hw:1,1,0 /local/share/sounds/alsa/Side_Right.wav
+> 
+> The issue is still without reversing the patch, I'm getting the bad
+> audio (bad1.m4a)
+> 
+> Just let me know what else I can provide. I'm not sure what's need,
+> and don't want to bombard everyone with diagnostics that are
+> irrelavant.
 
-Tested on Kontron BL i.MX8MM with SN65DSI84 and ADV7535 bridges.
+Thanks, now the situation got clearer.
+Will investigate.
 
-Tested-by: Frieder Schrempf <frieder.schrempf@kontron.de>
-Reviewed-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+
+Takashi
