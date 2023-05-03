@@ -2,172 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49A546F5A01
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 16:28:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C2A06F5A02
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 16:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230249AbjECO2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 10:28:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50048 "EHLO
+        id S230286AbjECO2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 10:28:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230197AbjECO2l (ORCPT
+        with ESMTP id S230197AbjECO2v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 10:28:41 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 277F710E7;
-        Wed,  3 May 2023 07:28:40 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C7786228E2;
-        Wed,  3 May 2023 14:28:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1683124118; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rLfZ5SGOBxMGr1OOefG31+NLkLh0UuwK3FQhM6ffc9U=;
-        b=Ru3QQXap/+rKGJ7bBy+0HfH5rkRP/oBO6fk2jNd/x1BA8a8kH/R51KQWgxa5ksrQYImYTK
-        OdKASuiU/Q1WY+VXFCeUod1l8VV/9dBXXswIhlVKuPy0pHkCRfrBzVLhiKP0Kbsor18wJR
-        IjzBv08XIPFsDTBUp8Oa7mqmyuZ5J8Y=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1683124118;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rLfZ5SGOBxMGr1OOefG31+NLkLh0UuwK3FQhM6ffc9U=;
-        b=FCnbsHtphG2e725EBT82NQhm45dCfahUwxT3rTeR5HwLxxIgCPbKoRlZttTTk2uFzgFv4i
-        DI8s23wyjTww3JDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B9B011331F;
-        Wed,  3 May 2023 14:28:38 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id kcdRLZZvUmRXRAAAMHmgww
-        (envelope-from <jack@suse.cz>); Wed, 03 May 2023 14:28:38 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 603AFA0744; Wed,  3 May 2023 16:28:38 +0200 (CEST)
-Date:   Wed, 3 May 2023 16:28:38 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Baokun Li <libaokun1@huawei.com>
-Cc:     linux-ext4@vger.kernel.org, tytso@mit.edu,
-        adilger.kernel@dilger.ca, jack@suse.cz, ritesh.list@gmail.com,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yangerkun@huawei.com, yukuai3@huawei.com
-Subject: Re: [PATCH v4 04/12] ext4: use pre-allocated es in
- __es_insert_extent()
-Message-ID: <20230503142838.d4ijsruotb5l2xnp@quack3>
-References: <20230424033846.4732-1-libaokun1@huawei.com>
- <20230424033846.4732-5-libaokun1@huawei.com>
+        Wed, 3 May 2023 10:28:51 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A81341FF6
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 07:28:48 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id af79cd13be357-75178b082a5so131339385a.1
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 07:28:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1683124128; x=1685716128;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qmZ4DsDKrMe1S2UiM4lF3iPDDNQLVdB3fN/nPm0O+pI=;
+        b=xOFe0H29iDHpimotgJRcaLX6/SmYqAhUgt7QykkIwaN5ArFrr67+xXLlpVVlQMvSm1
+         RPn5ONAVfnr8xMJvUZgHIsgicCh2NlpHkZzlbotmQg6XyHJqN7GmMCOqgT9QEq8Nk0DP
+         6XQSoE+g/zWIZz8yvYHylhmN5XnjZ8zEB0Dl9ALOgHd+jkrXz5ToigDNZ+eabCcyxBr4
+         duYN1MXQv6CJKolySvtsT3waS1hGoiQBI737dGIe+txiceEkohRDoMTQuKYoAh5GolMY
+         y9RKrb4aUP/zDYZBwSqZuOcVknnLVFmCgmjVsnlBTLxd9dXRHcHEs8SKonvX5HVljRV6
+         aI3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683124128; x=1685716128;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qmZ4DsDKrMe1S2UiM4lF3iPDDNQLVdB3fN/nPm0O+pI=;
+        b=b6gFqM8kdNBQnB3VRQyfO/+nfwWZmzor3pJPYf2u+y+UenKI31VQCnfpLFTspUha69
+         fLmBQ77UVOPB1C+qpe6Eo90roSYlRyOMchAEh63YdoowVjJsI5ENIm66GyQtHMLwLFt5
+         cqPgcKTAwmWCzJ1sDWEXZhAn0e80YoUwbKA1Rg3QZZm6XaoChRo57lXvuP6twSdt3AaA
+         g7zp8c6qXdWIw/VnMgAW2eQNmoUsgBb3a2QrXpTHRb9jfUAjZ+V/QjqILUriebq7l+gS
+         tp4wk08KYwbRPGnB97MpOgQng4AsKgiHkV47yhpSHsLlwjK5RUS9LiRnOkdd7QiVSuf0
+         pwrw==
+X-Gm-Message-State: AC+VfDy5KNubW7gAxQauIKr+xOlstDNMlZJlcZcIHlDXWVW3bbwtvcPc
+        Xi9pZAZdAFEm5SNyh2hTis6a7jV1XWmnBTAQFHA=
+X-Google-Smtp-Source: ACHHUZ4M0zjk5FZ8yY3AGVchtAjIIei756Ls/aUGKZtURl7Hx24TrnOkvYA+7uqlcYTFCcYv46aGAA==
+X-Received: by 2002:ad4:4ea6:0:b0:5fd:7701:88c5 with SMTP id ed6-20020ad44ea6000000b005fd770188c5mr11763060qvb.6.1683124127795;
+        Wed, 03 May 2023 07:28:47 -0700 (PDT)
+Received: from localhost (2603-7000-0c01-2716-8f57-5681-ccd3-4a2e.res6.spectrum.com. [2603:7000:c01:2716:8f57:5681:ccd3:4a2e])
+        by smtp.gmail.com with ESMTPSA id b27-20020a0cb3db000000b005e750d07153sm10588375qvf.135.2023.05.03.07.28.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 May 2023 07:28:46 -0700 (PDT)
+Date:   Wed, 3 May 2023 10:28:46 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+Cc:     sjenning@redhat.com, ddstreet@ieee.org, vitaly.wool@konsulko.com,
+        minchan@kernel.org, ngupta@vflare.org, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: fix zswap writeback race condition
+Message-ID: <20230503142846.GA193380@cmpxchg.org>
+References: <20230503132148.9682-1-cerasuolodomenico@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230424033846.4732-5-libaokun1@huawei.com>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230503132148.9682-1-cerasuolodomenico@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 24-04-23 11:38:38, Baokun Li wrote:
-> Pass a extent_status pointer prealloc to __es_insert_extent(). If the
-> pointer is non-null, it is used directly when a new extent_status is
-> needed to avoid memory allocation failures.
+On Wed, May 03, 2023 at 03:21:48PM +0200, Domenico Cerasuolo wrote:
+> The zswap writeback mechanism can cause a race condition resulting in
+> memory corruption, where a swapped out page gets swapped in with data
+> that was written to a different page.
 > 
-> Suggested-by: Jan Kara <jack@suse.cz>
-> Signed-off-by: Baokun Li <libaokun1@huawei.com>
-
-Looks good. Feel free to add:
-
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
+> The race unfolds like this:
+> 1. a page with data A and swap offset X is stored in zswap
+> 2. page A is removed off the LRU by zpool driver for writeback in
+> zswap-shrink work, data for A is mapped by zpool driver
+> 3. user space program faults and invalidates page entry A, offset X is
+> considered free
+> 4. kswapd stores page B at offset X in zswap (zswap could also be full,
+> if so, page B would then be IOed to X, then skip step 5.)
+> 5. entry A is replaced by B in tree->rbroot, this doesn't affect the
+> local reference held by zswap-shrink work
+> 6. zswap-shrink work writes back A at X, and frees zswap entry A
+> 7. swapin of slot X brings A in memory instead of B
+> 
+> The fix:
+> Once the swap page cache has been allocated (case ZSWAP_SWAPCACHE_NEW),
+> zswap-shrink work just checks that the local zswap_entry reference is
+> still the same as the one in the tree. If it's not the same it means
+> that it's either been invalidated or replaced, in both cases the
+> writeback is aborted because the local entry contains stale data.
+> 
+> Reproducer:
+> I originally found this by running `stress` overnight to validate my
+> work on the zswap writeback mechanism, it manifested after hours on my
+> test machine. The key to make it happen is having zswap writebacks, so
+> whatever setup pumps /sys/kernel/debug/zswap/written_back_pages should
+> do the trick.
+> In order to reproduce this faster on a vm, I setup a system with ~100M
+> of available memory and a 500M swap file, then running
+> `stress --vm 1 --vm-bytes 300000000 --vm-stride 4000` makes it happen
+> in matter of tens of minutes. One can speed things up even more by
+> swinging /sys/module/zswap/parameters/max_pool_percent up and down
+> between, say, 20 and 1; this makes it reproduce in tens of seconds.
+> It's crucial to set `--vm-stride` to something other than 4096 otherwise
+> `stress` won't realize that memory has been corrupted because all pages
+> would have the same data.
+> 
+> Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
 > ---
->  fs/ext4/extents_status.c | 19 ++++++++++++-------
->  1 file changed, 12 insertions(+), 7 deletions(-)
+>  mm/zswap.c | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
 > 
-> diff --git a/fs/ext4/extents_status.c b/fs/ext4/extents_status.c
-> index 18665394392f..a6a62a744e83 100644
-> --- a/fs/ext4/extents_status.c
-> +++ b/fs/ext4/extents_status.c
-> @@ -144,7 +144,8 @@
->  static struct kmem_cache *ext4_es_cachep;
->  static struct kmem_cache *ext4_pending_cachep;
+> diff --git a/mm/zswap.c b/mm/zswap.c
+> index f6c89049cf70..d20d60266bc8 100644
+> --- a/mm/zswap.c
+> +++ b/mm/zswap.c
+> @@ -995,6 +995,19 @@ static int zswap_writeback_entry(struct zpool *pool, unsigned long handle)
+>  		goto fail;
 >  
-> -static int __es_insert_extent(struct inode *inode, struct extent_status *newes);
-> +static int __es_insert_extent(struct inode *inode, struct extent_status *newes,
-> +			      struct extent_status *prealloc);
->  static int __es_remove_extent(struct inode *inode, ext4_lblk_t lblk,
->  			      ext4_lblk_t end, int *reserved);
->  static int es_reclaim_extents(struct ext4_inode_info *ei, int *nr_to_scan);
-> @@ -768,7 +769,8 @@ static inline void ext4_es_insert_extent_check(struct inode *inode,
->  }
->  #endif
->  
-> -static int __es_insert_extent(struct inode *inode, struct extent_status *newes)
-> +static int __es_insert_extent(struct inode *inode, struct extent_status *newes,
-> +			      struct extent_status *prealloc)
->  {
->  	struct ext4_es_tree *tree = &EXT4_I(inode)->i_es_tree;
->  	struct rb_node **p = &tree->root.rb_node;
-> @@ -808,7 +810,10 @@ static int __es_insert_extent(struct inode *inode, struct extent_status *newes)
->  		}
->  	}
->  
-> -	es = __es_alloc_extent(false);
-> +	if (prealloc)
-> +		es = prealloc;
-> +	else
-> +		es = __es_alloc_extent(false);
->  	if (!es)
->  		return -ENOMEM;
->  	ext4_es_init_extent(inode, es, newes->es_lblk, newes->es_len,
-> @@ -868,7 +873,7 @@ int ext4_es_insert_extent(struct inode *inode, ext4_lblk_t lblk,
->  	if (err != 0)
->  		goto error;
->  retry:
-> -	err = __es_insert_extent(inode, &newes);
-> +	err = __es_insert_extent(inode, &newes, NULL);
->  	if (err == -ENOMEM && __es_shrink(EXT4_SB(inode->i_sb),
->  					  128, EXT4_I(inode)))
->  		goto retry;
-> @@ -918,7 +923,7 @@ void ext4_es_cache_extent(struct inode *inode, ext4_lblk_t lblk,
->  
->  	es = __es_tree_search(&EXT4_I(inode)->i_es_tree.root, lblk);
->  	if (!es || es->es_lblk > end)
-> -		__es_insert_extent(inode, &newes);
-> +		__es_insert_extent(inode, &newes, NULL);
->  	write_unlock(&EXT4_I(inode)->i_es_lock);
->  }
->  
-> @@ -1366,7 +1371,7 @@ static int __es_remove_extent(struct inode *inode, ext4_lblk_t lblk,
->  					orig_es.es_len - len2;
->  			ext4_es_store_pblock_status(&newes, block,
->  						    ext4_es_status(&orig_es));
-> -			err = __es_insert_extent(inode, &newes);
-> +			err = __es_insert_extent(inode, &newes, NULL);
->  			if (err) {
->  				es->es_lblk = orig_es.es_lblk;
->  				es->es_len = orig_es.es_len;
-> @@ -2020,7 +2025,7 @@ int ext4_es_insert_delayed_block(struct inode *inode, ext4_lblk_t lblk,
->  	if (err != 0)
->  		goto error;
->  retry:
-> -	err = __es_insert_extent(inode, &newes);
-> +	err = __es_insert_extent(inode, &newes, NULL);
->  	if (err == -ENOMEM && __es_shrink(EXT4_SB(inode->i_sb),
->  					  128, EXT4_I(inode)))
->  		goto retry;
-> -- 
-> 2.31.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+>  	case ZSWAP_SWAPCACHE_NEW: /* page is locked */
+> +		/*
+> +		 * if the entry in the tree has been replaced, it means that we would
+> +		 * be overriding the swap page with stale data, let's not do that.
+> +		 */
+> +		spin_lock(&tree->lock);
+> +		if (zswap_rb_search(&tree->rbroot, entry->offset) != entry) {
+> +			spin_unlock(&tree->lock);
+> +			delete_from_swap_cache(page_folio(page));
+> +			ret = -ENOMEM;
+> +			goto fail;
+> +		}
+> +		spin_unlock(&tree->lock);
+
+I think it would be beneficial to explain the exact race in the
+comment above. That our local reference to the zswap entry doesn't
+exclude swapping from invalidating and recyling the swap slot. Once
+the swapcache is secured against concurrent swapping to and from the
+slot, recheck that the entry is still current before writing.
+
+With that, please add:
+
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>
