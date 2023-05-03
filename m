@@ -2,70 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D7086F4F7C
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 06:37:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F26046F4F7D
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 May 2023 06:40:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbjECEh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 00:37:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45564 "EHLO
+        id S229604AbjECEkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 00:40:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjECEhx (ORCPT
+        with ESMTP id S229449AbjECEkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 00:37:53 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F141FDB
-        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 21:37:52 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1aaf21bb427so23765775ad.1
-        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 21:37:52 -0700 (PDT)
+        Wed, 3 May 2023 00:40:08 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502982D4C
+        for <linux-kernel@vger.kernel.org>; Tue,  2 May 2023 21:40:07 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id 98e67ed59e1d1-24781e23c27so4631592a91.0
+        for <linux-kernel@vger.kernel.org>; Tue, 02 May 2023 21:40:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683088672; x=1685680672;
-        h=content-transfer-encoding:in-reply-to:references:to:from
+        d=gmail.com; s=20221208; t=1683088807; x=1685680807;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=tBRpNrBSUH6LetpgU4f0Y2KfiXl/hkdBqA2mb0yht1E=;
-        b=Q46J1JtdOWPafacWSg+cl2/3pw2KPyVgoSzwKoKSZFPlw9eO2rLDyCPBpM6yl3x8nc
-         fdCtjZEwA6MY84cUlobNNY4nCLIwTNGdVnVfqNtEfvEClPjoMwWzXFqZfVw1fuqG3kEa
-         YZAx8wMPtcxfr7O7cNTVuqVB0FiYpwOMAH1Kf/tzjGi/1xVuC0mP0zSHpuDSerBy5JW9
-         W51x3CN6+hwUVQEgIAgONwSZuVpeFlyYrMaE/GhR87KPrDnJrLToxKlmjGskk6no7HaF
-         yzyf5iMkTbkhRFo0KjvbS+ljgzFLv3evYmnVMOCwvVLMJfR0zBLSM+YO7B0a24POrbZn
-         iLKg==
+        bh=77tiXpQ2HjbyMiGi98E0ovy9Ioj8cftg4GmqV7//X1I=;
+        b=AP6cSbQMwHS6YgLcCIuhbKJsz4vaRSY9hCqhPFEtm1HvvnSf0N2gxnGfZTtZNeb3fM
+         TZoK8iW8O8MRog34ymtley4D9V4uy5F6QwMBxbNoC6MOWj60ENUdFc9y3b2u/j6Y1tJz
+         hkHjUFD9D/tzIc6oyyld8M2eNwZryMU6ID3HCJ0OIFfHV+sxQAlh5dWP9F6FXA8pt9hW
+         qUU8Q1dvEAbAMjCbH6dYmU3dC00Dha/cZMaGdMtWi9pq7ekseqAWr/oQr/shKek35CZ2
+         OSNWdXu8oT2IHmDEP+wDrzo+sdwPvFSNLWzCvIF9/pr5vb/SXBHtJnwQNQuLNTNxfiFO
+         g40A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683088672; x=1685680672;
-        h=content-transfer-encoding:in-reply-to:references:to:from
+        d=1e100.net; s=20221208; t=1683088807; x=1685680807;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tBRpNrBSUH6LetpgU4f0Y2KfiXl/hkdBqA2mb0yht1E=;
-        b=YB6HXHINBnVxrgf3TMxoQyv1fGGZ+Hb1RClC0OrpIngU7BWzdlp78l0erAMY5hGiZf
-         dsWwDLr+1DInc6C0QUImrBvqR7gJACRIMdM4sfgL2gN/zqior8CwSRj640b6wL1PSEyl
-         3lygY1cmYqVjOU2FlGz1el1tpDBqtTS27CFECiBoPlvaQJ/QWK5NVZo3KScGaqh0NdSW
-         W15T6ZwldWl0DP1YABCZlR9/AC2JKwwJ0wzyOsPm/qBbbWWBZfx3PqYFfr4qswqekOJP
-         7vFL95BRWxECCRHH7JLxaKBuO83XP8LzxUKrerfrL4momXnC/rKREIpy6aTwBchHrP9t
-         Ci4A==
-X-Gm-Message-State: AC+VfDzyRCuDLlU8En0FxeJ2oPEfUKof79KOvT7l+bTZXX31TJAuk/UB
-        VVCAvhHAcjzZURXhp5T8Mpbvp3tsmlo=
-X-Google-Smtp-Source: ACHHUZ5F2G9uszvaikvs1eFXbDQdooc27eIpRScospuCyPqfZ+tLjXP+dQZ2y3SIV3jzzNyqA1C6JQ==
-X-Received: by 2002:a17:902:db03:b0:1a9:7707:80b1 with SMTP id m3-20020a170902db0300b001a9770780b1mr897127plx.67.1683088671805;
-        Tue, 02 May 2023 21:37:51 -0700 (PDT)
+        bh=77tiXpQ2HjbyMiGi98E0ovy9Ioj8cftg4GmqV7//X1I=;
+        b=M9jEpUISbKVGm1rkjadE0yg6kFbockt9ANAMuGmepad8PNvKGsF/P2ff7S6sY4UpMw
+         WBuLv51jU2URqCTpxSnKD7dKsnvdmS+Ce9ylJ8WHWPc7xwcFFEOxAFQmEGgFPycycjhb
+         echEH1ekT045k/ohJm4sP2lreydl9ekTf9r/jYt5cGyA5hTAtErWJ9HiW/wlHiC68tH3
+         f+iyhkjg4KPjGtiVvnJefx6+pWgT29/SuY3OkE5a3cxegaq4zdOGRR+zsRUiL0Zo+7zJ
+         qSA/pnAcgzpa2hLM4xxOHR/CUjYU2banUu6bGM5vSOM3asfMYV9TaBgDP0KTNOa1MveS
+         9oCg==
+X-Gm-Message-State: AC+VfDz/DPdYB9gw4pY90dtIyRnEbN6L3O1FU57dKh0XVOGtW8g8Hbo6
+        kAng+Df8+cVTECockWgwRvE=
+X-Google-Smtp-Source: ACHHUZ6FVFqaBqyy90CyPDYOpLziIFIxoEYbT12+sSR0gn8lbdxTMRS5XqCfds/MEuQG/S5rDPBXNw==
+X-Received: by 2002:a17:90b:4c46:b0:24d:ed1e:c2db with SMTP id np6-20020a17090b4c4600b0024ded1ec2dbmr11210942pjb.31.1683088806739;
+        Tue, 02 May 2023 21:40:06 -0700 (PDT)
 Received: from [192.168.43.80] (subs32-116-206-28-39.three.co.id. [116.206.28.39])
-        by smtp.gmail.com with ESMTPSA id y17-20020a170902b49100b001aae1eefc8dsm6183787plr.109.2023.05.02.21.37.50
+        by smtp.gmail.com with ESMTPSA id h24-20020a17090a9c1800b00247735d1463sm2276107pjp.39.2023.05.02.21.40.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 May 2023 21:37:51 -0700 (PDT)
-Message-ID: <07f50016-5e24-56f8-0d02-df8d237059b6@gmail.com>
-Date:   Wed, 3 May 2023 11:37:48 +0700
+        Tue, 02 May 2023 21:40:06 -0700 (PDT)
+Message-ID: <b449cbf6-8286-e22d-ca87-b1bc3dce29d7@gmail.com>
+Date:   Wed, 3 May 2023 11:40:02 +0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
 Subject: Re: linux-6.4 alsa sound broken
 Content-Language: en-US
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Jeff Chua <jeff.chua.linux@gmail.com>,
+To:     Jeff Chua <jeff.chua.linux@gmail.com>, Takashi Iwai <tiwai@suse.de>
+Cc:     lkml <linux-kernel@vger.kernel.org>,
         Oswald Buddenhagen <oswald.buddenhagen@gmx.de>,
-        lkml <linux-kernel@vger.kernel.org>, Takashi Iwai <tiwai@suse.de>
+        Jaroslav Kysela <perex@perex.cz>,
+        Linux ALSA Subsystem Development 
+        <alsa-devel@alsa-project.org>,
+        Linux Regressions <regressions@lists.linux.dev>
 References: <CAAJw_ZsbTVd3Es373x_wTNDF7RknGhCD0r+NKUSwAO7HpLAkYA@mail.gmail.com>
- <ZE9ngFLRqLkN6faH@ugly>
- <CAAJw_ZtKnZ3QruicqFRG_TLV0Ltbc8LSvdJSCEQRkr5GMSWvCw@mail.gmail.com>
- <63bcc1eb-b0f5-4da1-0a22-31e0c86c0851@gmail.com>
-In-Reply-To: <63bcc1eb-b0f5-4da1-0a22-31e0c86c0851@gmail.com>
+ <ZE9B4avbDtIXOu4O@debian.me> <87r0s0pnim.wl-tiwai@suse.de>
+ <CAAJw_ZsDdiB=b2PZydQWF2fjSULit3NWE-Bf1icBEryN-GuqUw@mail.gmail.com>
+ <87fs8gp0i7.wl-tiwai@suse.de>
+ <CAAJw_ZveoPfnBsSkHZqmLiVWATcOosR--6Ds4cdekdi=t1yV7A@mail.gmail.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <CAAJw_ZveoPfnBsSkHZqmLiVWATcOosR--6Ds4cdekdi=t1yV7A@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -78,20 +83,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/3/23 11:34, Bagas Sanjaya wrote:
->> Just send .. in another email. If the atttachment got stripped off,
->> please let me know.
->>
->>
+On 5/1/23 22:03, Jeff Chua wrote:
+>> There was no description about which sound backend is used.  Is it
+>> PulseAudio, pipewire or dmix/dsnoop?
 > 
-> I don't see your attachment. Can you please post the link
-> to your test file on file storage hosting instead?
+> Just pure alsautils.
 > 
+> arecord -D hw:1,0,0 -f S16_LE -r 48000 recorded.wav
+> aplay -D hw:1,1,0 /local/share/sounds/alsa/Side_Right.wav
+> 
+> [recorded.wav] attached.
+> [Side_Right.wav] attached.
+> aplay: version 1.2.8 by Jaroslav Kysela <perex@perex.cz>
+> arecord: version 1.2.8 by Jaroslav Kysela <perex@perex.cz>
+> 
+> alsautils, alsaplugins alsalibs all using latest git pull.
 
-Oops, I don't see the attachment on your reply at [1]. Sorry for the
-inconvenience.
+Are you sure you build alsa tools straight from the git repo?
+Can you also reproduce with latest stable version of these?
+Otherwise it's anyone's guess due to moving parts...
 
-[1]: https://lore.kernel.org/lkml/CAAJw_ZveoPfnBsSkHZqmLiVWATcOosR--6Ds4cdekdi=t1yV7A@mail.gmail.com/
+Thanks.
 
 -- 
 An old man doll... just what I always wanted! - Clara
