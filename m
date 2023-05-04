@@ -2,43 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D77CA6F779E
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 23:00:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A57A6F77A9
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 23:02:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbjEDVAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 17:00:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56362 "EHLO
+        id S230374AbjEDVCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 17:02:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbjEDVAU (ORCPT
+        with ESMTP id S230475AbjEDVB3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 17:00:20 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE8593FE;
-        Thu,  4 May 2023 14:00:03 -0700 (PDT)
-Date:   Thu, 4 May 2023 22:59:57 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1683233998; bh=ruqYEKXRNGS9PZw7L4ZE2k6BitP4uC8r7qrWbLRFwxM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LPLjwUQ440aBCZFZPIipvGoCHOVMD/pYUD3irZdNQ81TA/Ij9bOr/KqpC9LapkjVL
-         /LhdAe2A28B9q42TwpME5ptYo2FoVIvLnGYW3jHZOMGeTh6UqgZ75pVkxEDngbZNkG
-         0si/niitg2NchQ+xEJycBZ2bUIf8Lvg/r02qav0M=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Jorge Lopez <jorgealtxwork@gmail.com>
-Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v11 06/14] HP BIOSCFG driver - passwdobj-attributes
-Message-ID: <9bbf8cb3-6333-4742-b32a-c7e9118bc618@t-8ch.de>
-References: <20230420165454.9517-1-jorge.lopez2@hp.com>
- <20230420165454.9517-7-jorge.lopez2@hp.com>
- <016a9a6a-cff1-444d-b96a-63eded1ac58a@t-8ch.de>
- <CAOOmCE9USvpih7E6cq7sKiMmGJa_FV74g36kb6EZMSrkg5BnLg@mail.gmail.com>
+        Thu, 4 May 2023 17:01:29 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC1786187;
+        Thu,  4 May 2023 14:01:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683234070; x=1714770070;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=IfVExH0qardTjdqtJgdlAIcymWuZgM64VE9GNqOqshE=;
+  b=gp1T+1Edh+hSnEVcJjmZexVtF79C9WXOK3pWCQEhIHvvi79JFtMWjhgh
+   b447WGicV53F+EXTe6PSG4+efvVYaetzgow1HGNi/D2zk426o0Ckr4AyS
+   gGmfhq5UjdhVNnXiC4ToDbRfeNe/Q6MXuatNGxRIIEs+kL/uGOVyBo21e
+   8F1cWL679QqQ2pobPXSdSKYnlVoT4XRZP1l+8n21rhLUnazcZ51nkh6XT
+   RPPEYT7nMvzWf78pD/WYjTgPjM2dI/2dTyKW6vSJlyMh2SBld7Px0GyVH
+   PvyvoNSZPZjL6X1Vxi1YtP28z3b8hHH9mruX5wW6LV/kgxFYGZ+EK3qwA
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="377131444"
+X-IronPort-AV: E=Sophos;i="5.99,250,1677571200"; 
+   d="scan'208";a="377131444"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 14:00:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="786732267"
+X-IronPort-AV: E=Sophos;i="5.99,250,1677571200"; 
+   d="scan'208";a="786732267"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by FMSMGA003.fm.intel.com with ESMTP; 04 May 2023 14:00:54 -0700
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 4 May 2023 14:00:53 -0700
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 4 May 2023 14:00:53 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Thu, 4 May 2023 14:00:53 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.175)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Thu, 4 May 2023 14:00:53 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=L+wNpHuMMXlkXUfjPTC4SwZb74qtNcDOWX+jJSW0IUrP1AjnSOsNbUHYUj3wSlOcC4WoGO1lf8ZR2omoKx0iNXIYKMlgRKmIWQ/sON/pLIvwvLLKjluadH4+87g1xAb3G7FBvYY38OjqKuHESiqHxZfbRUn+0CEB9FkbfZuZaSXHn6jjmLlcc4D46JsHsOzOCUJPcKksI6FxTZNCIzpI+KDBoLlTSKK3Apgd/djG++oAwpuTZjvhwUKMCBak3kgQ6gwlk3c9zw47zfTXPg0jkFX9CYsohlSNXmKeUkSwXidnORJopQhj5jTJnCofNumHjwzKZ6m117cYHRbeoM4XVw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YuzaY/2vaLzFvAc+FosPk4geRpITSdPSRfKSmuPuvDE=;
+ b=ABzKHm3u/gfqEF1cSq5pQpM4nSv+OIjxIKpsy8Geq6vlffocRdogMUgPdKv13AI+5FnYdYiRPwCbLbH4r8sttV8Uz/UIE1bS3uQz7wMTc87GanabwsLCL4sMdHjCcUozff7qYqs15S2FtBiajNCxXe5RK0OQNxj53Y08EKR5vu2hjOVrwSzLGen4zQsBk8MjoI/15WtCfx5oXt3WpTWl6lQ5FZQa2p21gVkaAnrymI7bpRxYb6T3Vq00+uAe3xBQ6F4Lr+QaU9qetIu/jJyVshYSQFIapUjdk6XnA95LrjBDgflSpuGXZ1EM/nut2rkH2MPul4BP4aYPVqa6aYKBWA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from SJ1PR11MB6083.namprd11.prod.outlook.com (2603:10b6:a03:48a::9)
+ by CH0PR11MB5564.namprd11.prod.outlook.com (2603:10b6:610:d7::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.26; Thu, 4 May
+ 2023 21:00:51 +0000
+Received: from SJ1PR11MB6083.namprd11.prod.outlook.com
+ ([fe80::a52e:e620:e80f:302]) by SJ1PR11MB6083.namprd11.prod.outlook.com
+ ([fe80::a52e:e620:e80f:302%6]) with mapi id 15.20.6363.022; Thu, 4 May 2023
+ 21:00:51 +0000
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Piyush Malgujar <pmalgujar@marvell.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "xueshuai@linux.alibaba.com" <xueshuai@linux.alibaba.com>,
+        "benjamin.cheatham@amd.com" <benjamin.cheatham@amd.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "lenb@kernel.org" <lenb@kernel.org>,
+        "rafael@kernel.org" <rafael@kernel.org>
+CC:     "jannadurai@marvell.com" <jannadurai@marvell.com>,
+        "cchavva@marvell.com" <cchavva@marvell.com>
+Subject: RE: [PATCH v2] ACPI: APEI: EINJ: EINJV2 support added
+Thread-Topic: [PATCH v2] ACPI: APEI: EINJ: EINJV2 support added
+Thread-Index: AQHZfoz/HoY7ASH3bUeV4msZv1/xf69KTa1QgABJGIA=
+Date:   Thu, 4 May 2023 21:00:51 +0000
+Message-ID: <SJ1PR11MB608326A6AC3FFE42699DDB40FC6D9@SJ1PR11MB6083.namprd11.prod.outlook.com>
+References: <20230504133224.2669-1-pmalgujar@marvell.com>
+ <SJ1PR11MB6083A266C4A869FC9AAA5A9AFC6D9@SJ1PR11MB6083.namprd11.prod.outlook.com>
+In-Reply-To: <SJ1PR11MB6083A266C4A869FC9AAA5A9AFC6D9@SJ1PR11MB6083.namprd11.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SJ1PR11MB6083:EE_|CH0PR11MB5564:EE_
+x-ms-office365-filtering-correlation-id: 56517d2b-bae1-4778-a9e4-08db4ce2a4f1
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: OdvvzIAOWmKs7HXpDfGvmhoTFy5R3Qe13VB7OUrFuUT0xA6XjGSw4yLVfrg0/uHj+glr5r1eLSOgAV76HCzLlLZ6Xu/iYjqm58j6eZeenKMDD1QJ0Uznex/y918iYmEUk8ahq2IUecz1rdBUFM2ArB4x/EFbmxCEtq9ZxaN1y80UJR/Ni2fPCBncpHtrYXCqgQzByigHUDEQ+usK/WCsilh9Nxgl2lPg+RHgMAR/bU7sg5kkk+56mci8cEbuc9RV89FCchh9sOWocQF97+PWcVemmtbfqz+LVfo5Peemjjf9NNHQVpD3XMFHS9VR4kTYuyU0IU24BPpVdOfDVY7B7t0Z5qke1VisEeqrscRhoU9Gjd6pSDrcJc4nuehrls0QC/ouIlN4rRV/cY47smtuBbK4lJxubbh0/W2wX6uuwnnFIHBrqIqUNkGXtzLXXjWHs8raEP4bj93Qh7eMyUjhiCDS+I3U+LAB8vH/dcHKn/3/mF/EADmK1dK5cZgZ8n4wS2xU+L+kYBk4MQMkNsSuVrbugB5ZkZfhR2gPUMhvC2s7qrNlwicxUQXjQsA9vbg3XOEBZT7FdmPjhbOTgIExmJVU5rX9VSeCjn+Ve3GhlLHd8Q9JQWlyd0YMM40MHeVMG2aaTTdJgeI2cRdppa7sVA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6083.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(136003)(346002)(376002)(396003)(39860400002)(451199021)(9686003)(26005)(6506007)(7416002)(186003)(2940100002)(110136005)(122000001)(478600001)(33656002)(38100700002)(41300700001)(54906003)(7696005)(921005)(71200400001)(55016003)(52536014)(5660300002)(8936002)(8676002)(316002)(64756008)(66446008)(66556008)(4326008)(66476007)(66946007)(76116006)(2906002)(86362001)(38070700005)(82960400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?YBtoiZX92RFHSYGyEjyv+dcIrBcj3heBJ/FdVWI9MURSScN0GdpgmbLMrJVk?=
+ =?us-ascii?Q?VcMGChqo0yWTfeNXZcOOCuwtDVxTaHQNfafY3Qb4axHNRS5uxIZEcK39pmld?=
+ =?us-ascii?Q?RDW07oSq73wsw6vGoIpnR3dDPiOgZkMiLkuvuBJMRpA084jLuy6+hESAvqR2?=
+ =?us-ascii?Q?ZbF8kK0B8zTnmRPOngR+hyURAPQhDvieW70nvL2ken9Us91XhqJvKbdRf5Sp?=
+ =?us-ascii?Q?5/ZvGWDjG7CXpr7whtxfMuHClJS57wOxAkrONMwKz7zWqnW39iNikoKjruzT?=
+ =?us-ascii?Q?XbRVleLgAkqe0M+iDJSoTdhyQBIN3D+YUKElGzjUMmQMQNJJGe5ESvq4svu7?=
+ =?us-ascii?Q?DUy6WrtSjVEpgi1J8vIvj8OqErLEF2KfbLzJBmdb10axxjsnIvLGlDay5WC9?=
+ =?us-ascii?Q?YvfpigGQnG/N1HXZcNVHJWXPlIK/WV2WxRjM0KjT4kpFg5L1aLDwx3CVPIQT?=
+ =?us-ascii?Q?GUtx9Lb02EUMJv4iVzb9Q4ZqNhEE7XZB0dBX1LyC21R0rvD1//B42Uh/SbM0?=
+ =?us-ascii?Q?qYmGTHKEuZi0QHDopDiI68CzAD7N6r/RHeBCebbCl16jjISHB4mid5O6a3BX?=
+ =?us-ascii?Q?mO+xdg+mQZXq2eJ/zNc9PlQRJfqUxlgSUWoyxXofWS2YrcEY0QVpjySULXxA?=
+ =?us-ascii?Q?BSBxYIcRLTtLVBQkwZs7/Q/BH/fPMRy02U5cAECxRMRb1xT62Mh0tqiRF4bN?=
+ =?us-ascii?Q?qENYy/roI6C0Sjjw4d1JJX9BAw6E/IhVm9RsKUpEGb1qAyYeYmaGM3ULfcbX?=
+ =?us-ascii?Q?YhUWDJuY/7BJYorMI3aRIkJOBQsuIbCm87aO6HPy3GP+R/OYtviCxItaGi2+?=
+ =?us-ascii?Q?4Zd33T5nlpvG5h8Fr6oGKRtjbCT4yqM5FcVXpqJqRAhc23RNEClYJoMfApp4?=
+ =?us-ascii?Q?qnLildXef6+lVjErJvoV8dDBqeFdQZOqpoW+Dy9GhjU3hcoJT7NdDx5wl3Kp?=
+ =?us-ascii?Q?vTJTaf0VjZLRwg0aBBxMbNc3Ys4dZt7BLLj95iMRRfvnLPE/IOa6ue44TqKX?=
+ =?us-ascii?Q?3eiZAT21xNhM85gRYWaR076J0zl/yhylSPJ+HMqjhuGLZI2NZmri2vfEuL/N?=
+ =?us-ascii?Q?QxzGEF/6m/94eXl1dqRD824k9CNlREXKPdWBBk2YPO64io8KJ0SyC8Lc8hfk?=
+ =?us-ascii?Q?/ryuIdJJO3AzbixrHlqBlYmimmfNcdrehw0ZGY0y0yuLRx39cohLlPNpofad?=
+ =?us-ascii?Q?AeqFTfGWl8K3sNhVFbM1ObeBJGT8Uk7wsY+qaiZGOwmMfGMiT23OB2t7wJRi?=
+ =?us-ascii?Q?KgUizwqopRDKxGBZyH3pVpeppRf6wPTGOrsNLfPv9p1Q++UfZvfk82mdeNQ6?=
+ =?us-ascii?Q?OkPGWteUQJNx2bjDyDoCjhFpqwJJAEZOmkpFYnaRAsB2/58lXz3vPjggC0WQ?=
+ =?us-ascii?Q?hNMHXdZqS9YUTNFNSxe26iwKlLIJJdvLMNqBY/yxFSXyxfJNllIe70+9H0rG?=
+ =?us-ascii?Q?M50c1g2vEWNv+9qjhAsK2znQzRMLDzy8oqIXYGQjshktN6rFJZh0TYsfb23+?=
+ =?us-ascii?Q?1rflmcfdu4drjLRUsrJ9oc7APfuoekk5YTadrLfa+hrP6eK/J8ux/HkT8Mtu?=
+ =?us-ascii?Q?aZerEnL8Vd9bVCKpbL8=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOOmCE9USvpih7E6cq7sKiMmGJa_FV74g36kb6EZMSrkg5BnLg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6083.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 56517d2b-bae1-4778-a9e4-08db4ce2a4f1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 May 2023 21:00:51.6609
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: gh6mZ7kipxT1QORS97ABiMJZmEs3ZEPfVfDK2+PIfOXyWu+UTPdDGDZPbM56Bjip5LdideMS7WWRSEDDQW6ylw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5564
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -47,334 +162,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-04 15:29:21-0500, Jorge Lopez wrote:
-> On Sun, Apr 23, 2023 at 4:07 AM <thomas@t-8ch.de> wrote:
-> >
-> > On 2023-04-20 11:54:46-0500, Jorge Lopez wrote:
-> > > ---
-> > >  .../x86/hp/hp-bioscfg/passwdobj-attributes.c  | 669 ++++++++++++++++++
-> > >  1 file changed, 669 insertions(+)
-> > >  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/passwdobj-attributes.c
-> > >
-> > > diff --git a/drivers/platform/x86/hp/hp-bioscfg/passwdobj-attributes.c b/drivers/platform/x86/hp/hp-bioscfg/passwdobj-attributes.c
-> > > new file mode 100644
-> > > index 000000000000..c03b3a71e9c4
-> > > --- /dev/null
-> > > +++ b/drivers/platform/x86/hp/hp-bioscfg/passwdobj-attributes.c
-> > > @@ -0,0 +1,669 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +/*
-> 
-> <snip>
-> 
-> > > +int validate_password_input(int instance_id, const char *buf)
-> > > +{
-> > > +     int length;
-> > > +
-> > > +     length = strlen(buf);
-> > > +     if (buf[length-1] == '\n')
-> > > +             length--;
-> > > +
-> > > +     if (length > MAX_PASSWD_SIZE)
-> > > +             return INVALID_BIOS_AUTH;
-> > > +
-> > > +     if (bioscfg_drv.password_data[instance_id].min_password_length > length ||
-> > > +         bioscfg_drv.password_data[instance_id].max_password_length < length)
-> > > +             return INVALID_BIOS_AUTH;
-> > > +     return SUCCESS;
-> > > +}
-> > > +
-> > > +int password_is_set(const char *name)
-> >
-> > bool is_password_set(const char *name)
-> 
-> Function is invoked nowhere.  It will be removed.
-> >
-> > > +{
-> > > +     int id;
-> > > +
-> > > +     id = get_password_instance_for_type(name);
-> > > +     if (id < 0)
-> > > +             return 0;
-> > > +
-> > > +     return bioscfg_drv.password_data[id].is_enabled;
-> > > +}
-> > > +
-> > > +ATTRIBUTE_N_PROPERTY_SHOW(is_enabled, password);
-> > > +static struct kobj_attribute password_is_password_set = __ATTR_RO(is_enabled);
-> > > +
-> > > +static ssize_t current_password_store(struct kobject *kobj,
-> > > +                                   struct kobj_attribute *attr,
-> > > +                                   const char *buf, size_t count)
-> > > +{
-> > > +     char *p, *buf_cp;
-> > > +     int id, ret = 0;
-> > > +
-> > > +     buf_cp = kstrdup(buf, GFP_KERNEL);
-> > > +     if (!buf_cp) {
-> > > +             ret = -ENOMEM;
-> > > +             goto exit_password;
-> > > +     }
-> > > +
-> > > +     p = memchr(buf_cp, '\n', count);
-> > > +
-> > > +     if (p != NULL)
-> > > +             *p = '\0';
-> >
-> > This will also accept input like "foo\nbar" and truncate away the "bar".
-> >
-> > For something like a password it seems errorprone to try to munge the
-> > value.
-> 
-> This is an expected behavior.  If the user enters '\n' as part of the
-> password, the buffer data will be truncated since only one line per
-> sysfs file is permitted.
+> +An error injection example::
+> +
+> +  # cd /sys/kernel/debug/apei/einj
+> +  # cat available_error_type         # See which errors can be injected
+> +  0x00000001 EINJV2 Processor Error
+> +  0x00000002 EINJV2 Memory Error
+> +  0x00000004 EINJV2 PCI Express Error
+> +  # echo 0x2 > error_type
+> +  # echo 0x5 > flags
+> +  # echo 0x12345000 > param1
+> +  # echo 0x2 > param5
+> +  # echo 1 > error_inject
+>
+> Is the expectation that platforms that implement EINJV2 will not include =
+legacy
+> EINJ support?
 
-As discussed in another patch this would silently truncate the input on
-the first newline character; even if it is not the last character of the
-input string.
+I spoke to some BIOS folks here. They said that the ACPI 6.5 change is an
+extension to the action table with new opcodes for GET/SET when EINJV2
+is supported. The legacy actions are not deprecated. So platform firmware c=
+ould
+support both old and new injection formats.
 
-This should use the same helper as the other files to only strip a
-newline at the end of the input.
+So I'm going to double down on this:
 
-> >
-> > > +
-> > > +     id = get_password_instance_id(kobj);
-> > > +
-> > > +     if (id >= 0)
-> > > +             ret = validate_password_input(id, buf_cp);
-> > > +
-> > > +     if (!ret) {
-> > > +             strscpy(bioscfg_drv.password_data[id].current_password,
-> > > +                     buf_cp,
-> > > +                     sizeof(bioscfg_drv.password_data[id].current_password));
-> > > +             /*
-> > > +              * set pending reboot flag depending on
-> > > +              * "RequiresPhysicalPresence" value
-> > > +              */
-> > > +             if (bioscfg_drv.password_data[id].common.requires_physical_presence)
-> > > +                     bioscfg_drv.pending_reboot = true;
-> >
-> > Just setting this to true does not emit the necessary KOBJ_CHANGE event
-> > on the class dev kobj which is necessary for userspace to be able to
-> > react.
-> 
-> This feature was added outside of the original design specification to
-> be used at a later time.
-> Changes to the value to true does not emit a KOBJ_CHANGE event.
+> Maybe it would be better to change the top-level directory to:
+>
+>	/sys/kernel/debug/apei/einjv2
 
-This contradicts the documentation: 
+and say this isn't a "maybe". The EINJV2 interface files should go
+in a new directory. The old files should continue to work (assuming
+firmware still enumerates the old available types).
 
-	A read-only attribute reads 1 if a reboot is necessary to apply
-	pending BIOS attribute changes. Also, an uevent_KOBJ_CHANGE is
-	generated when it changes to 1.
+Simplifying the interface for EINJV2 in the new directory is an option.
+I think we should take it ... the "paramN" files that mean different
+things for different injection types were an evolution rather than a design=
+.
 
-This will confuse userspace, there are generic userspace applications
-waiting for those events.
-If there is a reason for not emitting them it should be good and
-documented.
+-Tony
 
-Also according to the docs the authentication attributes should
-KOBJ_CHANGE events. I think this also affects this driver and should be
-implemented.
 
-> >
-> > > +     }
-> > > +
-> > > +exit_password:
-> > > +     kfree(buf_cp);
-> > > +     return ret ? ret : count;
-> > > +}
-> > > +static struct kobj_attribute password_current_password = __ATTR_WO(current_password);
-> > > +
-> > > +static ssize_t new_password_store(struct kobject *kobj,
-> > > +                               struct kobj_attribute *attr,
-> > > +                               const char *buf, size_t count)
-> > > +{
-> > > +     char *p, *buf_cp = NULL;
-> > > +     int id = 0;
-> > > +     int ret = -EIO;
-> > > +
-> > > +     buf_cp = kstrdup(buf, GFP_KERNEL);
-> > > +     if (!buf_cp) {
-> > > +             ret = -ENOMEM;
-> > > +             goto exit_password;
-> > > +     }
-> > > +
-> > > +     p = memchr(buf_cp, '\n', count);
-> > > +
-> > > +     if (p != NULL)
-> > > +             *p = '\0';
-> >
-> > Same as above.
-> 
-> This is an expected behavior.  If the user enters '\n' as part of the
-> password, the buffer data will be truncated since only one line per
-> sysfs file is permitted.
 
-If a user accidentally presses enter before entering a password this
-may set the password to the empty string; surprising.
 
-This should really use the helper.
-
-> >
-> > > +
-> > > +     id = get_password_instance_id(kobj);
-> > > +
-> > > +     if (id >= 0)
-> > > +             ret = validate_password_input(id, buf_cp);
-> > > +
-> > > +     if (!ret)
-> > > +             strscpy(bioscfg_drv.password_data[id].new_password,
-> > > +                     buf_cp,
-> > > +                     sizeof(bioscfg_drv.password_data[id].new_password));
-> > > +
-> > > +     if (!ret)
-> > > +             ret = hp_set_attribute(kobj->name, buf_cp);
-> > > +
-> > > +exit_password:
-> > > +     /*
-> > > +      * Regardless of the results both new and current passwords
-> > > +      * will be set to zero and avoid security issues
-> > > +      */
-> > > +     clear_passwords(id);
-> > > +
-> > > +     kfree(buf_cp);
-> > > +     return ret ? ret : count;
-> > > +}
-> > > +
-> > > +static struct kobj_attribute password_new_password = __ATTR_WO(new_password);
-> > > +
-> > > +
-> > > +ATTRIBUTE_N_PROPERTY_SHOW(min_password_length, password);
-> > > +static struct kobj_attribute password_min_password_length = __ATTR_RO(min_password_length);
-> > > +
-> > > +ATTRIBUTE_N_PROPERTY_SHOW(max_password_length, password);
-> > > +static struct kobj_attribute password_max_password_length = __ATTR_RO(max_password_length);
-> > > +
-> > > +static ssize_t role_show(struct kobject *kobj, struct kobj_attribute *attr,
-> > > +                      char *buf)
-> > > +{
-> > > +     if (strcmp(kobj->name, SETUP_PASSWD) == 0)
-> > > +             return sysfs_emit(buf, "%s\n", BIOS_ADMIN);
-> > > +
-> > > +     if (strcmp(kobj->name, POWER_ON_PASSWD) == 0)
-> > > +             return sysfs_emit(buf,  "%s\n", POWER_ON);
-> > > +
-> > > +     return -EIO;
-> > > +}
-> > > +static struct kobj_attribute password_role = __ATTR_RO(role);
-> > > +
-> > > +static ssize_t mechanism_show(struct kobject *kobj, struct kobj_attribute *attr,
-> > > +                        char *buf)
-> > > +{
-> > > +     int i = get_password_instance_id(kobj);
-> > > +
-> > > +     if (i < 0)
-> > > +             return i;
-> > > +
-> > > +     if (bioscfg_drv.password_data[i].mechanism != PASSWORD)
-> > > +             return -EINVAL;
-> > > +
-> > > +     return sysfs_emit(buf, "%s\n", PASSWD_MECHANISM_TYPES);
-> > > +}
-> > > +static struct kobj_attribute password_mechanism = __ATTR_RO(mechanism);
-> > > +
-> > > +static ssize_t type_show(struct kobject *kobj, struct kobj_attribute *attr,
-> > > +                      char *buf)
-> > > +{
-> > > +     return sysfs_emit(buf, "password\n");
-> > > +}
-> > > +static struct kobj_attribute password_type = __ATTR_RO(type);
-> > > +
-> > > +ATTRIBUTE_S_COMMON_PROPERTY_SHOW(display_name, password);
-> > > +static struct kobj_attribute password_display_name =
-> > > +             __ATTR_RO(display_name);
-> > > +
-> > > +ATTRIBUTE_S_COMMON_PROPERTY_SHOW(display_name_language_code, password);
-> > > +static struct kobj_attribute password_display_langcode =
-> > > +             __ATTR_RO(display_name_language_code);
-> > > +
-> > > +ATTRIBUTE_N_COMMON_PROPERTY_SHOW(prerequisites_size, password);
-> > > +static struct kobj_attribute  password_prerequisites_size_val =
-> > > +             __ATTR_RO(prerequisites_size);
-> > > +
-> > > +ATTRIBUTE_V_COMMON_PROPERTY_SHOW(prerequisites, password);
-> > > +static struct kobj_attribute  password_prerequisites_val =
-> > > +             __ATTR_RO(prerequisites);
-> > > +
-> > > +ATTRIBUTE_N_PROPERTY_SHOW(encodings_size, password);
-> > > +static struct kobj_attribute  password_encodings_size_val =
-> > > +             __ATTR_RO(encodings_size);
-> >
-> > As before, these size attribute are fairly pointless for userspace as
-> > they can't be relied on.
-> 
-> I will remove the attribute from being reported in sysfs but they will
-> be kept as part of the driver internal data
-> 
-> >
-> > > +
-> > > +ATTRIBUTE_VALUES_PROPERTY_SHOW(encodings, password);
-> > > +static struct kobj_attribute  password_encodings_val =
-> > > +             __ATTR_RO(encodings);
-> > > +
-> > > +
-> > > +static struct attribute *password_attrs[] = {
-> > > +     &password_is_password_set.attr,
-> > > +     &password_min_password_length.attr,
-> > > +     &password_max_password_length.attr,
-> > > +     &password_current_password.attr,
-> > > +     &password_new_password.attr,
-> > > +     &password_role.attr,
-> > > +     &password_mechanism.attr,
-> > > +     &password_type.attr,
-> > > +     &password_display_name.attr,
-> > > +     &password_display_langcode.attr,
-> > > +     &password_prerequisites_size_val.attr,
-> > > +     &password_prerequisites_val.attr,
-> > > +     &password_encodings_val.attr,
-> > > +     &password_encodings_size_val.attr,
-> > > +     NULL
-> > > +};
-> >
-> > Many of these attributes are not documented.
-> 
-> Those attributes are documented under authentication section, lines 150-329
-> 
-> What: /sys/class/firmware-attributes/*/authentication/
-> Date: February 2021
-> KernelVersion: 5.11
-> Contact: Divya Bharathi <Divya.Bharathi@Dell.com>,
-> Prasanth KSR <prasanth.ksr@dell.com>
-> Dell.Client.Kernel@dell.com
-> Description:
-> Devices support various authentication mechanisms which can be exposed
-> as a separate configuration object.
-
-If I read that correctly the authentication attributes are not "normal"
-attributes.
-So they don't need "type", "display_name", "display_langcode".
-
-Do they need prerequisites?
-
-> 
-> 
-> >
-> > > +
-> > > +static const struct attribute_group bios_password_attr_group = {
-> > > +     .attrs = password_attrs
-> > > +};
-> > > +
-> > > +static const struct attribute_group system_password_attr_group = {
-> > > +     .attrs = password_attrs
-> > > +};
-> >
-> > These groups are the same, are both needed?
-> 
-> Yes.  They will show under  'Setup Password' and 'Power-on password'
-
-These are identical constant structures. It should be possible to have
-only one and use it for both usecases.
-
-<snip>
