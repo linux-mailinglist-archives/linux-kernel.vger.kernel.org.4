@@ -2,277 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0303C6F6ACC
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 14:03:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 692CC6F6AC4
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 14:03:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230270AbjEDMDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 08:03:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40308 "EHLO
+        id S229973AbjEDMD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 08:03:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230325AbjEDMDl (ORCPT
+        with ESMTP id S229919AbjEDMDY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 08:03:41 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15060618E;
-        Thu,  4 May 2023 05:03:36 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f19afc4f60so3014265e9.1;
-        Thu, 04 May 2023 05:03:35 -0700 (PDT)
+        Thu, 4 May 2023 08:03:24 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8876B5FC5
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 05:03:20 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-94f7a0818aeso59027366b.2
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 05:03:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683201814; x=1685793814;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ci2GOyOF6jSU8W/FguKXLUHH+zmeKnpa5iuvTWV/5Jo=;
-        b=WOVXvJPOH0oyxdvsQbQaO+yXRSIi11rlfhb1dnB7cRJtIoS7Y+BEdu7M1mST7Vo8vj
-         EzTifv9dydrt638b831QaKEo+cHR4uAhqzNfhA3ZD8MVMwv4XufWVH4Tk0G4JnLPbcHO
-         U6eIsEsHZHz1BUHWDtW4H+ogX3AbK+ZEY9qlUl270CV2MaupOzKiXTHBs73ljb/hO8HV
-         Gn3wCRQHwX3LRYqt+X02H73dEJ5iAUg/WURDvGzekguSkrPj8S0GsrGYEJjruba1VC+H
-         P01LE4/waF0bs6zjAEDLsEya1RI0bKGD8WiGO6FoSWjk+vOkfqt/F4X1KmQlIj+sN0dN
-         Kv2g==
+        d=linaro.org; s=google; t=1683201799; x=1685793799;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=s+Flag063oKB8Q1wi7qSq3Ulfch+IJh7NyCjAcrM3ZE=;
+        b=IYSagRNF//SQQg3BUrc4S0KxF4KoLFjA33rsTrtPcO+JqKa0apRPWl3U/wTAQGSPab
+         EMIlYccEyXfAq/FZbXhwWuNSi9fTJA9Mvk9gQXY3XKjy+jJyqiAgA4hdAzjo7YwIYV9A
+         kLY7Gb5r0+74CruZqUJR7vCI7ztmSbAPfO5C5oDy9r/TPJX7gxQx/7lFewrjHkxU/2iD
+         FJmcWSSM9eMxEfD9id6y3uUHPpxJJ9rfw9l9k8ONvWbnLsu9CXahoFDQHWwz84eFGUG6
+         l4hoPL76xLEX1cchsBjY6o/dy2dFCUZUy67fDdvDV7VXOHgksXeEf/g5VnVW6OcaOHct
+         luCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683201814; x=1685793814;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ci2GOyOF6jSU8W/FguKXLUHH+zmeKnpa5iuvTWV/5Jo=;
-        b=MMZGZdDRcUI+cVffKJfVxcl6t8xnjArIYSXGXK/6SAZvOA/SViwPQn27sEI2iW6rPq
-         8OgRwWjjqxpBZ1Gv/LNJtFe6xSKNorOV8z5mtUeORMOsk2Cv3QV/cPUwaIsHikojlsrT
-         2EBYdl22YG2FSWtAL51NRJcrv+YyESb1ho+5AwiaHZku4ACJRebNmGyDJ8dBjB8zHwOk
-         4I175ceBmQiZS12acxs+0SjpeXPsPzyF3Fept3WUkLTu45YiqcTkFqkDhMUZBQYU+LZZ
-         u6zNBj09e5/iDz1+lFo1n4jASsJ3jRAsbijPUWRVQ/WqTYJukL1x86FTq5/+55Dgk1NH
-         whaw==
-X-Gm-Message-State: AC+VfDyJyDEcpdf106tPNsUNwlcjevxW9ZxMqOAplVfhhEc+2vmWORUI
-        XkDEdHH5D0OcuZPHm8evIbU=
-X-Google-Smtp-Source: ACHHUZ4NUHUcqMuIsnV1+epKAIRwdH+vgxpTDzb82ymzLmgqX3mH9dg2WHlmMv4dY5nQxjpDuuM22g==
-X-Received: by 2002:a05:6000:190:b0:2fe:c0ea:18b4 with SMTP id p16-20020a056000019000b002fec0ea18b4mr2257460wrx.24.1683201814475;
-        Thu, 04 May 2023 05:03:34 -0700 (PDT)
-Received: from koko.localdomain (cgn-89-1-213-9.nc.de. [89.1.213.9])
-        by smtp.gmail.com with ESMTPSA id a7-20020adfdd07000000b003062db9cc21sm10942632wrm.92.2023.05.04.05.03.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 May 2023 05:03:34 -0700 (PDT)
-From:   Maximilian Weigand <mweigand2017@gmail.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     Maximilian Weigand <mweigand@mweigand.net>,
-        Alistair Francis <alistair@alistair23.me>
-Subject: [PATCH v3 1/1] Input: cyttsp5 - implement proper sleep and wakeup procedures
-Date:   Thu,  4 May 2023 14:03:16 +0200
-Message-Id: <20230504120316.408687-2-mweigand2017@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230504120316.408687-1-mweigand2017@gmail.com>
-References: <20230504120316.408687-1-mweigand2017@gmail.com>
+        d=1e100.net; s=20221208; t=1683201799; x=1685793799;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=s+Flag063oKB8Q1wi7qSq3Ulfch+IJh7NyCjAcrM3ZE=;
+        b=bGvuQIA+1AvpB88Qs6dybwQHBNBNzoFObvH7kzCK5FJcDw9pr1ipO6qKFw/z+rG8s9
+         Hxr7dOaW9Ii9kXeIGahL70YgcrzSCOsQd8CITcvjkSWNryr5BSohrXR9v76APJnSM75V
+         sQcedqri13BEiDx8M07ZkkaeuUbZNzswH1y2yI0WSDDpAfXCUX6fl7O3lTwV6WK+RIxf
+         Dk2+YnaQWwA0gwbCeqoTZDKN0qy0Yxppgd2SzqTSYOdN73XBXcZRNylJsjpygX5AxzHy
+         noWg5znxRqd0Y3niQUHhj05og0QTK2bCeuRvLJdmeIvf9ooZJkqHonrPo6iod72wgw/0
+         4U4Q==
+X-Gm-Message-State: AC+VfDx1O5bblgoIwyMq9l4dbkUpHig3uBTiAEfCVsv8DV9zFkY05J5i
+        D8XT9T3JW76hx3mQKM7Se+8jkA==
+X-Google-Smtp-Source: ACHHUZ47YNIr6sZk/XYPHNt6yECSYNBOnFaK5lc1XKM9RfUQ+Fa5l3+EvXb6aEqviIAPoQw+tOeQvQ==
+X-Received: by 2002:a17:907:268c:b0:92b:3c78:91fa with SMTP id bn12-20020a170907268c00b0092b3c7891famr5405677ejc.28.1683201798867;
+        Thu, 04 May 2023 05:03:18 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:cbf1:e7ef:fb81:e912? ([2a02:810d:15c0:828:cbf1:e7ef:fb81:e912])
+        by smtp.gmail.com with ESMTPSA id oz15-20020a1709077d8f00b0095850aef138sm15707511ejc.6.2023.05.04.05.03.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 May 2023 05:03:18 -0700 (PDT)
+Message-ID: <659a9637-f82c-054b-99a8-dc25416c8e13@linaro.org>
+Date:   Thu, 4 May 2023 14:03:16 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v3 02/18] remoteproc: qcom: Move minidump specific data to
+ qcom_minidump.h
+Content-Language: en-US
+To:     Mukesh Ojha <quic_mojha@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, corbet@lwn.net,
+        keescook@chromium.org, tony.luck@intel.com, gpiccoli@igalia.com,
+        catalin.marinas@arm.com, will@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        linus.walleij@linaro.org, linux-gpio@vger.kernel.org,
+        srinivas.kandagatla@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org
+References: <1683133352-10046-1-git-send-email-quic_mojha@quicinc.com>
+ <1683133352-10046-3-git-send-email-quic_mojha@quicinc.com>
+ <fe94ed5c-c444-436d-720a-c96538c1026d@linaro.org>
+ <e69862cc-4185-a7a2-07b2-15e331c4678a@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <e69862cc-4185-a7a2-07b2-15e331c4678a@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maximilian Weigand <mweigand@mweigand.net>
+On 04/05/2023 13:58, Mukesh Ojha wrote:
+> 
+> 
+> On 5/4/2023 5:08 PM, Krzysztof Kozlowski wrote:
+>> On 03/05/2023 19:02, Mukesh Ojha wrote:
+>>> Move minidump specific data types and macros to a separate internal
+>>> header(qcom_minidump.h) so that it can be shared among different
+>>> Qualcomm drivers.
+>>
+>> No, this is not internal header. You moved it to global header.
+>>
+>> There is no reason driver internals should be exposed to other unrelated
+>> subsystems.
+>>
+>>>
+>>> There is no change in functional behavior after this.
+>>
+>> It is. You made all these internal symbols available to others.
+>>
+>>>
+>>
+>> This comes without justification why other drivers needs to access
+>> private and internal data. It does not look correct design. NAK.
+> 
+> Thanks for catching outdated commit text, will fix the commit with
+> more descriptive reasoning.
+> 
+> It has to be global so that co-processor minidump and apss minidump can
+> share data structure and they are lying in different directory.
+> 
 
-The touchscreen can be put into a deep sleep state that prevents it from
-emitting touch irqs. Put the touchscreen into deep sleep during suspend
-if it is not marked as a wakeup source.
+Then you should not share all the internals of memory layout but only
+few pieces necessary to talk with minidump driver. The minidump driver
+should organize everything how it wants.
 
-This also fixes a problem with the touchscreen getting unresponsive after
-system resume when a falling edge trigger is used for the interrupt.
-When left on during suspend, the touchscreen would pull the interrupt
-line down in response to touch events, leaving the interrupt effectively
-disabled after resume.
-
-Signed-off-by: Maximilian Weigand <mweigand@mweigand.net>
-Reviewed-by: Alistair Francis <alistair@alistair23.me>
----
- drivers/input/touchscreen/cyttsp5.c | 118 ++++++++++++++++++++++++++++
- 1 file changed, 118 insertions(+)
-
-diff --git a/drivers/input/touchscreen/cyttsp5.c b/drivers/input/touchscreen/cyttsp5.c
-index 30102cb80fac..bdb63eeed59c 100644
---- a/drivers/input/touchscreen/cyttsp5.c
-+++ b/drivers/input/touchscreen/cyttsp5.c
-@@ -43,6 +43,7 @@
- #define HID_DESC_REG				0x1
- #define HID_INPUT_REG				0x3
- #define HID_OUTPUT_REG				0x4
-+#define HID_COMMAND_REG             0x5
-
- #define REPORT_ID_TOUCH				0x1
- #define REPORT_ID_BTN				0x3
-@@ -68,6 +69,7 @@
- #define HID_APP_OUTPUT_REPORT_ID		0x2F
- #define HID_BL_RESPONSE_REPORT_ID		0x30
- #define HID_BL_OUTPUT_REPORT_ID			0x40
-+#define HID_RESPONSE_REPORT_ID      0xF0
-
- #define HID_OUTPUT_RESPONSE_REPORT_OFFSET	2
- #define HID_OUTPUT_RESPONSE_CMD_OFFSET		4
-@@ -78,9 +80,15 @@
- #define HID_SYSINFO_BTN_MASK			GENMASK(7, 0)
- #define HID_SYSINFO_MAX_BTN			8
-
-+#define HID_CMD_SET_POWER           0x8
-+
-+#define HID_POWER_ON                0x0
-+#define HID_POWER_SLEEP             0x1
-+
- #define CY_HID_OUTPUT_TIMEOUT_MS		200
- #define CY_HID_OUTPUT_GET_SYSINFO_TIMEOUT_MS	3000
- #define CY_HID_GET_HID_DESCRIPTOR_TIMEOUT_MS	4000
-+#define CY_HID_SET_POWER_TIMEOUT		500
-
- /* maximum number of concurrent tracks */
- #define TOUCH_REPORT_SIZE			10
-@@ -100,6 +108,14 @@
- #define TOUCH_REPORT_USAGE_PG_MIN		0xFF010063
- #define TOUCH_COL_USAGE_PG			0x000D0022
-
-+#define SET_CMD_LOW(byte, bits) \
-+	((byte) = (((byte) & 0xF0) | ((bits) & 0x0F)))
-+#define SET_CMD_HIGH(byte, bits)\
-+	((byte) = (((byte) & 0x0F) | ((bits) & 0xF0)))
-+#define SET_CMD_OPCODE(byte, opcode) SET_CMD_LOW(byte, opcode)
-+#define SET_CMD_REPORT_TYPE(byte, type) SET_CMD_HIGH(byte, ((type) << 4))
-+#define SET_CMD_REPORT_ID(byte, id) SET_CMD_LOW(byte, id)
-+
- /* System Information interface definitions */
- struct cyttsp5_sensing_conf_data_dev {
- 	u8 electrodes_x;
-@@ -557,6 +573,82 @@ static int cyttsp5_hid_output_get_sysinfo(struct cyttsp5 *ts)
- 	return cyttsp5_get_sysinfo_regs(ts);
- }
-
-+static int cyttsp5_enter_sleep(struct cyttsp5 *ts)
-+{
-+	int rc;
-+	u8 cmd[2];
-+
-+	memset(cmd, 0, sizeof(cmd));
-+
-+	SET_CMD_REPORT_TYPE(cmd[0], 0);
-+	SET_CMD_REPORT_ID(cmd[0], HID_POWER_SLEEP);
-+	SET_CMD_OPCODE(cmd[1], HID_CMD_SET_POWER);
-+
-+	rc = cyttsp5_write(ts, HID_COMMAND_REG, cmd, 2);
-+	if (rc) {
-+		dev_err(ts->dev, "Failed to write command %d", rc);
-+		return rc;
-+	}
-+
-+	rc = wait_for_completion_interruptible_timeout(&ts->cmd_done,
-+				msecs_to_jiffies(CY_HID_SET_POWER_TIMEOUT));
-+	if (rc <= 0) {
-+		dev_err(ts->dev, "HID output cmd execution timed out\n");
-+		rc = -ETIMEDOUT;
-+		return rc;
-+	}
-+
-+	/* validate */
-+	if ((ts->response_buf[2] != HID_RESPONSE_REPORT_ID)
-+			|| ((ts->response_buf[3] & 0x3) != HID_POWER_SLEEP)
-+			|| ((ts->response_buf[4] & 0xF) != HID_CMD_SET_POWER)) {
-+		rc = -EINVAL;
-+		dev_err(ts->dev, "Validation of the sleep response failed\n");
-+		return rc;
-+	}
-+
-+	return 0;
-+
-+}
-+
-+static int cyttsp5_wakeup(struct cyttsp5 *ts)
-+{
-+	int rc;
-+	u8 cmd[2];
-+
-+	memset(cmd, 0, sizeof(cmd));
-+
-+	SET_CMD_REPORT_TYPE(cmd[0], 0);
-+	SET_CMD_REPORT_ID(cmd[0], HID_POWER_ON);
-+	SET_CMD_OPCODE(cmd[1], HID_CMD_SET_POWER);
-+
-+	rc = cyttsp5_write(ts, HID_COMMAND_REG, cmd, 2);
-+	if (rc) {
-+		dev_err(ts->dev, "Failed to write command %d", rc);
-+		return rc;
-+	}
-+
-+	rc = wait_for_completion_interruptible_timeout(&ts->cmd_done,
-+				msecs_to_jiffies(CY_HID_SET_POWER_TIMEOUT));
-+	if (rc <= 0) {
-+		dev_err(ts->dev, "HID output cmd execution timed out\n");
-+		rc = -ETIMEDOUT;
-+		return rc;
-+	}
-+
-+	/* validate */
-+	if ((ts->response_buf[2] != HID_RESPONSE_REPORT_ID)
-+			|| ((ts->response_buf[3] & 0x3) != HID_POWER_ON)
-+			|| ((ts->response_buf[4] & 0xF) != HID_CMD_SET_POWER)) {
-+		rc = -EINVAL;
-+		dev_err(ts->dev, "Validation of the wakeup response failed\n");
-+		return rc;
-+	}
-+
-+	return 0;
-+
-+}
-+
- static int cyttsp5_hid_output_bl_launch_app(struct cyttsp5 *ts)
- {
- 	int rc;
-@@ -675,6 +767,10 @@ static irqreturn_t cyttsp5_handle_irq(int irq, void *handle)
- 	case HID_BTN_REPORT_ID:
- 		cyttsp5_btn_attention(ts->dev);
- 		break;
-+	case HID_RESPONSE_REPORT_ID:
-+		memcpy(ts->response_buf, ts->input_buf, size);
-+		complete(&ts->cmd_done);
-+		break;
- 	default:
- 		/* It is not an input but a command response */
- 		memcpy(ts->response_buf, ts->input_buf, size);
-@@ -886,10 +982,32 @@ static const struct i2c_device_id cyttsp5_i2c_id[] = {
- };
- MODULE_DEVICE_TABLE(i2c, cyttsp5_i2c_id);
-
-+static int __maybe_unused cyttsp5_suspend(struct device *dev)
-+{
-+	struct cyttsp5 *ts = dev_get_drvdata(dev);
-+
-+	if (!device_may_wakeup(dev))
-+		cyttsp5_enter_sleep(ts);
-+	return 0;
-+}
-+
-+static int __maybe_unused cyttsp5_resume(struct device *dev)
-+{
-+	struct cyttsp5 *ts = dev_get_drvdata(dev);
-+
-+	if (!device_may_wakeup(dev))
-+		cyttsp5_wakeup(ts);
-+
-+	return 0;
-+}
-+
-+static SIMPLE_DEV_PM_OPS(cyttsp5_pm, cyttsp5_suspend, cyttsp5_resume);
-+
- static struct i2c_driver cyttsp5_i2c_driver = {
- 	.driver = {
- 		.name = CYTTSP5_NAME,
- 		.of_match_table = cyttsp5_of_match,
-+		.pm     = &cyttsp5_pm,
- 	},
- 	.probe_new = cyttsp5_i2c_probe,
- 	.id_table = cyttsp5_i2c_id,
---
-2.39.2
+Best regards,
+Krzysztof
 
