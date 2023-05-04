@@ -2,99 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CA846F6ED3
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 17:24:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A44196F6ECE
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 17:23:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231289AbjEDPYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 11:24:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42202 "EHLO
+        id S231396AbjEDPXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 11:23:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230218AbjEDPYT (ORCPT
+        with ESMTP id S230474AbjEDPXO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 11:24:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 256654698
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 08:23:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683213810;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Jnl2toVgwwItvy6XtFHZnmUDaDwxr0L/Z3lg2dwhqx4=;
-        b=KfdFBcuC2gQHWJnDJ7jFEuVNXG70Fm6hkLxlS94bc4/QmjqSLmJw3tfv+bofy+q3aGzZM0
-        AMySwcYEGryVm/dGkG8QA/SeIoWZ9IXbQ3S+ik/A8oQu4ijRCtpI423aRzU8ErxYXBsRDY
-        MbZ/gfBhIwm3pCGN/SX2FMS664YVq6g=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-512-6LWlnIc6OTKYxoO-Dh0TuQ-1; Thu, 04 May 2023 11:23:29 -0400
-X-MC-Unique: 6LWlnIc6OTKYxoO-Dh0TuQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 58DFA3810B19;
-        Thu,  4 May 2023 15:23:27 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.225.24])
-        by smtp.corp.redhat.com (Postfix) with SMTP id C171B40C2064;
-        Thu,  4 May 2023 15:23:19 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Thu,  4 May 2023 17:23:15 +0200 (CEST)
-Date:   Thu, 4 May 2023 17:23:07 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Wander Lairson Costa <wander@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Brian Cain <bcain@quicinc.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Christian Brauner <brauner@kernel.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
-        <linux-perf-users@vger.kernel.org>, Hu Chunyu <chuhu@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v7 2/3] sched/task: Add the put_task_struct_atomic_safe()
- function
-Message-ID: <20230504152306.GA1135@redhat.com>
-References: <20230425114307.36889-1-wander@redhat.com>
- <20230425114307.36889-3-wander@redhat.com>
- <20230504084229.GI1734100@hirez.programming.kicks-ass.net>
- <20230504122945.GA28757@redhat.com>
- <20230504143303.GA1744142@hirez.programming.kicks-ass.net>
- <CAAq0SUmYrQbS1k9NNKGQP7hQRQJ308dk9NCiUimEiLeBJUavgA@mail.gmail.com>
+        Thu, 4 May 2023 11:23:14 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A08BB44A1;
+        Thu,  4 May 2023 08:23:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683213793; x=1714749793;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=9TcAKdsolrTcyR7kRO2MnyaoQAF+RM8oAHRHOpZd1ms=;
+  b=Sf5U85sA1Czn7mrT/KYLakQyLJNbqdykoNf/rwtmlDJuN3vIzsI1FiaC
+   JRkGzlJ4S+Cm6yJuNPXRaralIxiKEvaAPOld5SN8BmdqEjUHdeWpPhrEb
+   aNhRuQ2mPwtawMnbCVc7uomySolt4NdGkOcVVBmH4ivRegIyNhgfh/Zk7
+   v7Vh0WPnYELR5p3U4aaQUlDway+O3bymHdrlKir0x4N8oZcVJnex0rWXy
+   bQN9U/6yU3FCz0DhrTFSf1CKsulKsvECUdEbqzsHBaMQJwayEDbygF2oT
+   qXvm4c1B2y+1TvIzxKp/vyB8tkc10TxG+aASOMKfzgaRBUnG0wUidcXkg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="346438604"
+X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
+   d="scan'208";a="346438604"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 08:23:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="674584461"
+X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
+   d="scan'208";a="674584461"
+Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.212.168.201])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 08:23:12 -0700
+Date:   Thu, 4 May 2023 08:23:11 -0700
+From:   Alison Schofield <alison.schofield@intel.com>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     raghuhack78@gmail.com, linux-cxl@vger.kernel.org,
+        ira.weiny@intel.com, bwidawsk@kernel.org, dan.j.williams@intel.com,
+        vishal.l.verma@intel.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] cxl/mbox: Remove redundant dev_err() after failed
+ mem alloc
+Message-ID: <ZFPN340/UstRWtmR@aschofie-mobl2>
+References: <20230428012235.119333-1-raghuhack78@gmail.com>
+ <3235466.44csPzL39Z@suse>
+ <ZFLaG8jHHXmRp67w@aschofie-mobl2>
+ <2755196.BEx9A2HvPv@suse>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAAq0SUmYrQbS1k9NNKGQP7hQRQJ308dk9NCiUimEiLeBJUavgA@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <2755196.BEx9A2HvPv@suse>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,27 +67,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/04, Wander Lairson Costa wrote:
->
-> On Thu, May 4, 2023 at 11:34â€¯AM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > static inline void put_task_struct(struct task_struct *t)
-> > {
-> >         if (!refcount_dec_and_test(&t->usage))
-> >                 return;
-> >
-> >         if (IS_ENABLED(CONFIG_PREEMPT_RT) && !preemptible())
-> >                 call_rcu(&t->rcu, __put_task_struct_rcu);
-> >
-> >         __put_task_struct(t);
-> > }
-> >
->
-> That's what v5 [1] does.
+On Thu, May 04, 2023 at 12:46:37PM +0200, Fabio wrote:
+> On giovedì 4 maggio 2023 00:03:07 CEST Alison Schofield wrote:
+> > On Wed, May 03, 2023 at 08:32:37PM +0200, Fabio wrote:
+> > > On venerdì 28 aprile 2023 03:22:34 CEST Raghu H wrote:
+> 
+> [...]
+> 
+> > > > 
+> > > > Signed-off-by: Raghu H <raghuhack78@gmail.com>
+> > > 
+> > > Is "Raghu H" the name you sign legal documents with?
+> > 
+> > Fabio,
+> > Rather than asking a specific question to determine if this is a
+> > valid SOB, let's just point folks to the documentation to figure
+> > it out themselves.
+> > I'm aware that the 'sign legal documents' test
+> > has been used in the past, but kernel only actually requires a
+> > known identity.
+> > 
+> > https://www.kernel.org/doc/html/v4.17/process/submitting-patches.html#sign-you
+> > r-work-the-developer-s-certificate-of-origin
+> > https://github.com/cncf/foundation/blob/659fd32c86dc/dco-guidelines.md
+> 
+> Alison,
+> 
+> Thanks for your suggestions.
+> 
+> I have just a couple of questions about this issue...
+> 
+> 1) How do we know that the "real name", which the Linux official documentation 
+> refers to, should be interpreted in accordance to the document pointed by the 
+> second link you provided? 
+> 
+> I mean, how can we be sure that the official documentation should be 
+> interpreted according to the second link, since it doesn't even cite that 
+> document from CNCF? 
+> 
+> Can you provide links to documents / LKML's threads that state agreement of 
+> our Community about the "relaxed" interpretation by CNCF?
 
-Yes, but as Sebastian explained CONFIG_PROVE_RAW_LOCK_NESTING won't like it.
+Citation is hidden it git history. See:
+d4563201f33a ("Documentation: simplify and clarify DCO contribution example language")
 
-	https://lore.kernel.org/all/Y+zFNrCjBn53%2F+Q2@linutronix.de/
+> 
+> 2) It looks that some maintainers (e.g., Greg K-H) still interpret "[] using 
+> your real name (sorry, no pseudonyms or anonymous contributions.)" in a 
+> "strict" and "common" sense. 
 
-Oleg.
+See the commit log above. The language was updated to say
+"using a known identity (sorry, no anonymous contributions.)"
 
+> 
+> Can you remember that Greg refused all patches from "Kloudifold" and why? If 
+> not, please take a look at the following two questions / objections from Greg: 
+> https://lore.kernel.org/linux-staging/ZCQkPr6t8IOvF6bk@kroah.com/ and 
+> https://lore.kernel.org/linux-staging/ZBCjK2BXhfiFooeO@kroah.com/.
+
+The second link above is Greg recognizing that known pseudonyms are
+allowed. 
+
+> 
+> It seems that this issue it's not yet settled. 
+> Am I overlooking something?
+
+Hey, I'm not meaning to jump on you for asking Raghu the question.
+I realize you are being helpful to someone who is submitting their first
+patch. I'm just saying to make the submitter aware of the guideline and
+put the burden on them to make sure they're using a known identity.
+
+Sometimes, what one person thinks of as 'common' is not. Let's refer to
+the docs and not add out personal or historical layers of interpretation
+on top of it. (The legal doc signing question may not apply to everyone.)
+
+Alison
+
+> 
+> Again thanks,
+> 
+> Fabio
+> 
+> > > If not, please send a new version signed-off-by your full legal name.
+> > > Otherwise... sorry for the noise.
+> > > 
+> > > Thanks,
+> > > 
+> > > Fabio
+> 
+> 
+> 
