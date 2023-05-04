@@ -2,147 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDB046F6405
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 06:25:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8C4A6F6B25
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 14:29:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229625AbjEDEZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 00:25:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38838 "EHLO
+        id S230420AbjEDM3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 08:29:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjEDEZX (ORCPT
+        with ESMTP id S229606AbjEDM3E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 00:25:23 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E3C8E7;
-        Wed,  3 May 2023 21:25:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683174322; x=1714710322;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dya1D6Mnv6a/Xw9LvYK+h+ly8LrufF6GuEJbEAmnId8=;
-  b=e/1PKwiAEgBcjQp98h3dt5xsRSzzDVA+bF5Ew9ezNFWUgIg2gSICaJli
-   yo2XIH9jjLYrbnqbdXnFcv1WLekIT6476A3pjmt53LCw3cVfrfk5DZLDq
-   x0yXhptpmxLUwPOGDQ15zf6dTELf+00n90h97lwMuZmR/1p0GEj74KfKs
-   4cfQ7Pih49gvbCdHHZ35+eQbEM1poy9siA382i6xQeG4DU5vCXdwa4H23
-   K9mQslzi4PGrG00k+63sFASksgYAMk3eiitxEJP/wb3DdPgQjJz6ah4CT
-   Q0DzkEiZJldWG/DsooS60PH0//Gj6Gqhu+mscBbNg/w9fkP19HTuL7Iem
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="348873838"
-X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
-   d="scan'208";a="348873838"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2023 21:25:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="943170223"
-X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
-   d="scan'208";a="943170223"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga006.fm.intel.com with ESMTP; 03 May 2023 21:25:20 -0700
-Date:   Thu, 4 May 2023 20:25:32 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Marco Pagani <marpagan@redhat.com>
-Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org
-Subject: Re: [RFC PATCH v4 1/4] fpga: add fake FPGA manager
-Message-ID: <ZFOkPNOmbjsalTmn@yilunxu-OptiPlex-7050>
-References: <20230417122308.131453-1-marpagan@redhat.com>
- <20230417122308.131453-2-marpagan@redhat.com>
- <ZEGE+UqTyKGTyv9h@yilunxu-OptiPlex-7050>
- <cef792a1-42c1-b262-b07e-529006fdcb6d@redhat.com>
- <594789b2-eb5d-11fc-9c47-310bdb258f7c@redhat.com>
+        Thu, 4 May 2023 08:29:04 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439726185;
+        Thu,  4 May 2023 05:29:03 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 344C6mSH018634;
+        Thu, 4 May 2023 12:28:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=PUpzOZj3934Z7RYhXVQ62PQUTt99uv5wnpS3MmtTpDk=;
+ b=ScENoJCIMPa/nuFo6WTOFsnXjEuxC+Det3kt10e9fKn1ztsXrEJgHbbjsrZr+z5JwEZn
+ hmDJvGzGPJOWJPgP54zFyhoGSr5FDEjM8rUt6QmcFddNfV1plbgwK+LXhnMor7f+liYY
+ 1VzHTBDenyXsxo4f+TPGNgKFKQlY69BCo4IOauZNvlUsoplFqSEJ1b0jsbVeIxerH20p
+ 2cMQx/I2NegcwPzWHd437O+XwqrUHodbP6rO/0i2hxFnPLW+lEWAHsWnsoc2PGBOBzfU
+ rwYE9NbH2hxJZz2f/7dMVEAr3GchS+Yc5D8oRURBysTFiHSxPjcCbNE2QfMSYh7IOXJC fg== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qc8kw8mh7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 04 May 2023 12:28:41 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 344CQiX9004732
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 4 May 2023 12:28:40 GMT
+Received: from [10.216.46.158] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 4 May 2023
+ 05:26:37 -0700
+Message-ID: <33ea7c3b-4317-5aff-5e6a-af6e093d45a0@quicinc.com>
+Date:   Thu, 4 May 2023 17:56:33 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <594789b2-eb5d-11fc-9c47-310bdb258f7c@redhat.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 02/18] remoteproc: qcom: Move minidump specific data to
+ qcom_minidump.h
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <corbet@lwn.net>,
+        <keescook@chromium.org>, <tony.luck@intel.com>,
+        <gpiccoli@igalia.com>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <robh+dt@kernel.org>, <linus.walleij@linaro.org>,
+        <linux-gpio@vger.kernel.org>, <srinivas.kandagatla@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-hardening@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-doc@vger.kernel.org>
+References: <1683133352-10046-1-git-send-email-quic_mojha@quicinc.com>
+ <1683133352-10046-3-git-send-email-quic_mojha@quicinc.com>
+ <fe94ed5c-c444-436d-720a-c96538c1026d@linaro.org>
+ <e69862cc-4185-a7a2-07b2-15e331c4678a@quicinc.com>
+ <659a9637-f82c-054b-99a8-dc25416c8e13@linaro.org>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <659a9637-f82c-054b-99a8-dc25416c8e13@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 2We-ouX9jSCh1TC1DTCqu74GKsCnUQj-
+X-Proofpoint-ORIG-GUID: 2We-ouX9jSCh1TC1DTCqu74GKsCnUQj-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-04_08,2023-05-04_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ lowpriorityscore=0 mlxlogscore=396 malwarescore=0 phishscore=0
+ adultscore=0 clxscore=1015 spamscore=0 impostorscore=0 bulkscore=0
+ mlxscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2305040101
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-03 at 18:53:02 +0200, Marco Pagani wrote:
-> On 2023-04-26 17:44, Marco Pagani wrote:
-> > 
-> > 
-> > On 2023-04-20 20:31, Xu Yilun wrote:
-> >> On 2023-04-17 at 14:23:05 +0200, Marco Pagani wrote:
-> >>> Add fake FPGA manager platform driver with support functions.
-> >>> The driver checks the programming sequence using KUnit expectations.
-> >>> This module is part of the KUnit tests for the FPGA subsystem.
-> >>>
-> >>> Signed-off-by: Marco Pagani <marpagan@redhat.com>
 
-[...]
 
-> >>> +EXPORT_SYMBOL_GPL(fake_fpga_mgr_check_write_sgt);
-> >>
-> >> I'm wondering, if we could move all these exported functions out of
-> >> fake_fpga driver module. And make this driver module serves FPGA
-> >> mgr framework only, just like other fpga drivers do.
-> >>
-> >> I assume the main requirement is to check the statistics produced
-> >> by the fake fpga driver. Directly accessing mgr->priv outside the
-> >> driver could be unwanted.  To solve this, could we create a shared
-> >> buffer for the statistics and pass to fake drivers by platform data.
-> >>
-> >> I hope move all the tester's actions in fpga-test.c, so that people
-> >> could easily see from code what a user need to do to enable fpga
-> >> reprogramming and what are expected in one file. The fake drivers could
-> >> be kept as simple, they only move the process forward and produce
-> >> statistics.
-> >>
-> >> Thanks,
-> >> Yilun
-> >>
-> > 
-> > I agree with you. Initially, I wanted to keep all KUnit test assertions
-> > and expectations contained in fpga-test. However, I could not find a simple
-> > way to test that the FPGA manager performs the correct state transitions
-> > during programming. So I ended up putting KUnit assertions in the methods
-> > of the low-level fake driver as a first solution.
-> > 
-> > I like your suggestion of using a shared buffer to have a cleaner
-> > implementation. My only concern is that it would make the code more complex.
-> > I will work on this for V5.
-> > 
+On 5/4/2023 5:33 PM, Krzysztof Kozlowski wrote:
+> On 04/05/2023 13:58, Mukesh Ojha wrote:
+>>
+>>
+>> On 5/4/2023 5:08 PM, Krzysztof Kozlowski wrote:
+>>> On 03/05/2023 19:02, Mukesh Ojha wrote:
+>>>> Move minidump specific data types and macros to a separate internal
+>>>> header(qcom_minidump.h) so that it can be shared among different
+>>>> Qualcomm drivers.
+>>>
+>>> No, this is not internal header. You moved it to global header.
+>>>
+>>> There is no reason driver internals should be exposed to other unrelated
+>>> subsystems.
+>>>
+>>>>
+>>>> There is no change in functional behavior after this.
+>>>
+>>> It is. You made all these internal symbols available to others.
+>>>
+>>>>
+>>>
+>>> This comes without justification why other drivers needs to access
+>>> private and internal data. It does not look correct design. NAK.
+>>
+>> Thanks for catching outdated commit text, will fix the commit with
+>> more descriptive reasoning.
+>>
+>> It has to be global so that co-processor minidump and apss minidump can
+>> share data structure and they are lying in different directory.
+>>
 > 
-> I experimented with a couple of alternatives to move all tests inside
-> fpga-test and remove the external functions. Unfortunately, each alternative
-> comes with its drawbacks.
-> 
-> Using a shared buffer (e.g., kfifo) to implement an events buffer between
-> fake mgr/bridge and the fpga-test overcomplicates the code (i.e., defining
-> message structs, enums for the operations, locks, etc.).
+> Then you should not share all the internals of memory layout but only
+> few pieces necessary to talk with minidump driver. The minidump driver
+> should organize everything how it wants.
 
-Oh, I actually didn't expect a message based mechanism for statistics
-reading, which is overcomplicated for a test.
+These are core data structure which is shared with boot firmware and the
+one's are moved here all are required by minidump driver .
 
-Maybe just pass a structured data buffer via platform_data, so that both
-fpga-test & fake drivers could recognize and access it directly. fpga-test
-could directly check the updated statistics after reprograming and assert
-them. Is that OK for you?
+If you follow here[1], i raised by concern to make this particular one's
+as private and later to avoid confusion went with single header.
+But if others agree, I will keep the one that get shared with minidump
+as separate one or if relative path of headers are allowed that can make
+it private between these drivers(which i don't think, will be allowed or
+recommended).
 
-Thanks,
-Yilun
+[1]
+https://lore.kernel.org/lkml/3df1ec27-7e4d-1f84-ff20-94e8ea91c86f@quicinc.com/
 
+-- Mukesh
 > 
-> Moving fake modules' (mgr, bridge, region) implementations inside fpga-test
-> makes fpga-test monolithic and harder to understand and maintain.
-> 
-> Accessing modules' private data directly from fpga-test breaks encapsulation.
-> 
-> Overall, it seems to me that using external functions to get the state of fake
-> modules is the least-worst alternative. What are your thoughts and preferences?
-> 
-> Thanks,
-> Marco
-> 
-> 
-> >>> [...]
+> Best regards,
+> Krzysztof
 > 
