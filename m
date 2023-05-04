@@ -2,139 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC8596F7750
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 22:45:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3837B6F7754
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 22:45:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230274AbjEDUow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 16:44:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59070 "EHLO
+        id S229462AbjEDUpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 16:45:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbjEDUoe (ORCPT
+        with ESMTP id S230338AbjEDUpU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 16:44:34 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8691568E
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 13:42:10 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1aafb2766e0so4676935ad.3
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 13:42:10 -0700 (PDT)
+        Thu, 4 May 2023 16:45:20 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8268D156B6
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 13:43:23 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2ac82912a59so7011861fa.3
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 13:43:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683232877; x=1685824877;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AjkGj18Tl/NdfVrPbyDKfRjswecBEB5bOxxm+RgEgOA=;
-        b=dwM0BsNHiZq4qN5FFSbCSGE++/6He9ZJ4z5viQWckrJ8WPqSLQ8Km8bPGMKJj+0R9p
-         I0J3YecLSBxvD02tDtPU982IC8x9/a1YZb8X+0iRfNF3fiRMfxvvQUULR3hN79FAwnI/
-         cAU4ZxDrnR4eK3dQFmer77OC9xbMVjvG7DPL3SgAqYCnzopDZ4sbT7kparWlvac/jrpe
-         aywPdxXO07pbaZv/2mlj9qGJ7Q9r9pz4gOZuesNuCy0kVdWw40YrzzQQQEiQGUkTdoOc
-         KxNZS7OaaTUFp1rlYp342z2i6irzzOSijP7gKUSkwl8xUGPyY5XEPsn+Su+NBS8T47K+
-         kY+w==
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1683232944; x=1685824944;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oVXjrmmVPaC86MGd9q8K4xTk3JxmLDQjsYVtmH3P8Vg=;
+        b=3BjmTk52FjJ4BZ5C66bWTRr52l9evxxc+bMgjqDSaabztt/bHBF+RohZUSzJQatZyb
+         claN4a2I75spURPJHBoUn4s7lpu22YrwaqWj4XPKUalZG/Nid9NWJC1zfEpy8CYq0pKH
+         ygTPX8WE4pBaJ5R2+0qomdO/dJsWlmMU/PJ8mREJ3up0fwU3/dppDVSQXU/JZm77RbmP
+         G0PMoyVs/M6xOZ+ISzCA8dq8QQmq1zh17PDsPyNzgqNsaYTglDYz5d6e2tCy8StqGQF/
+         Z6RSBtQ3Ff+CJt8/AX6Qen7TW6lfpZBKrIDZAdoyt/e+3Sbq/TDS0b1Fbzr3tQFqQorl
+         65EA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683232877; x=1685824877;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AjkGj18Tl/NdfVrPbyDKfRjswecBEB5bOxxm+RgEgOA=;
-        b=gSqg6QsrKBYBbWJrRKKplbPdeo9htEHIcieAilA90iCds4BgR22ipfpX9F+dEQG9Gz
-         tA/lN44wnJuqiu6ZkpMel8GU8XeFB0rAbGVxVXEj77UGSotxq4yK0xG8ONLv7kIvQvF6
-         OfPd0bXkDxrAsm1PYDJzw/L231I2Qg5S+0j6ecJ9deIFv4qFUfEedVLaAgFi9D4InMWZ
-         u0hUhzrMO++HhfJgrYr4FkcVE2gyTCNnrKBOpFpZr3t7IitDhcIKqnAGsGlVpILNqent
-         SmbhNAWHXcYsLySqe08NXco1EX31NBN6pUoHxJ6TFW38xJiP+9gp5dWp5wIMXjSbuAC4
-         slOA==
-X-Gm-Message-State: AC+VfDxgveoAaVNCyuupz0SjsbwUeCOx6hsyJb3YPZlvte8TQ3XF1fsf
-        0VCcne0UmHz/1LWOirqsHhF2DSTDGqw=
-X-Google-Smtp-Source: ACHHUZ4qDwy5vZenwdizmjrkDEh6vha7LNA0vevnvbKr11qb7WL0aDbrG3uXQqhgmVCsKenkgsLqX/R9iCE=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:903:1247:b0:1a6:c110:900a with SMTP id
- u7-20020a170903124700b001a6c110900amr1614861plh.3.1683232877690; Thu, 04 May
- 2023 13:41:17 -0700 (PDT)
-Date:   Thu, 4 May 2023 13:41:16 -0700
-In-Reply-To: <ZBP7oZ1lkJhlSNpY@yzhao56-desk.sh.intel.com>
-Mime-Version: 1.0
-References: <20230311002258.852397-1-seanjc@google.com> <20230311002258.852397-6-seanjc@google.com>
- <ZBP7oZ1lkJhlSNpY@yzhao56-desk.sh.intel.com>
-Message-ID: <ZFQYbHTYgG4HJ+ac@google.com>
-Subject: Re: [PATCH v2 05/27] drm/i915/gvt: Verify VFIO-pinned page is THP
- when shadowing 2M gtt entry
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yan Zhao <yan.y.zhao@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>, kvm@vger.kernel.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Ben Gardon <bgardon@google.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1683232944; x=1685824944;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oVXjrmmVPaC86MGd9q8K4xTk3JxmLDQjsYVtmH3P8Vg=;
+        b=iNqPWk0ScG7MulZaWQojYHnFhVHkR0A55U+vUTwEq5WdfIQYMeGJVMxP4Z+6njO4Fb
+         H9Qrqsy2c4rscr80bhWQUvLFbYpGPVsEvelcdN5XH6ddjGrkidMY0+xk1TEXDthcyRhM
+         dm0PrKJBwWjdmChEZOwP8Dbl2C3K/OjhUaHfmIePIGo4SdqdYfQfI3jgYIJu42h+4E+b
+         dcfvQEXfqFM2Q7z5jMDh/ur4ClJVQmZCCn86IITksK2aW+JHcrWs+40nPS1A9HRu0STA
+         hla8dYF3c8wzJaM8YWnsrbR7HA55KAkggXjHHA08kMlBLR9h2w2SFDti//FeGmBQ5pEO
+         8AtQ==
+X-Gm-Message-State: AC+VfDzzUPoWVd8wU74qN0C2TGK8Gb0N/t4hZ5jH3cgHdTlYm1ixkzyQ
+        78ey1SINgfuLUQJjcQP6JaEPJgeACAFjF0MvZ4bPLA==
+X-Google-Smtp-Source: ACHHUZ5Oc2JEQgYDtMrNqV9XGIAbMc3mAKkNtDt4QLTkADEAez2zfBLXo0ybF6pZVqwkI3T9WtVOyOeQEtC+PYafcWE=
+X-Received: by 2002:a2e:9c46:0:b0:298:a840:ec65 with SMTP id
+ t6-20020a2e9c46000000b00298a840ec65mr1174533ljj.36.1683232944435; Thu, 04 May
+ 2023 13:42:24 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230404-tractor-confusing-8852e552539a@spud> <20230504202156.GA260181-robh@kernel.org>
+In-Reply-To: <20230504202156.GA260181-robh@kernel.org>
+From:   Atish Kumar Patra <atishp@rivosinc.com>
+Date:   Fri, 5 May 2023 02:12:13 +0530
+Message-ID: <CAHBxVyE6Hy8R3BY2_71az5__UxHyOQcjf-hRm6ivTpXNSyCj6Q@mail.gmail.com>
+Subject: Re: [PATCH v1] dt-bindings: perf: riscv,pmu: fix property dependencies
+To:     Rob Herring <robh@kernel.org>
+Cc:     Conor Dooley <conor@kernel.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023, Yan Zhao wrote:
-> On Fri, Mar 10, 2023 at 04:22:36PM -0800, Sean Christopherson wrote:
-> > When shadowing a GTT entry with a 2M page, explicitly verify that the
-> > first page pinned by VFIO is a transparent hugepage instead of assuming
-> > that page observed by is_2MB_gtt_possible() is the same page pinned by
-> > vfio_pin_pages().  E.g. if userspace is doing something funky with the
-> > guest's memslots, or if the page is demoted between is_2MB_gtt_possible()
-> > and vfio_pin_pages().
-> > 
-> > This is more of a performance optimization than a bug fix as the check
-> > for contiguous struct pages should guard against incorrect mapping (even
-> > though assuming struct pages are virtually contiguous is wrong).
-> > 
-> > The real motivation for explicitly checking for a transparent hugepage
-> > after pinning is that it will reduce the risk of introducing a bug in a
-> > future fix for a page refcount leak (KVMGT doesn't put the reference
-> > acquired by gfn_to_pfn()), and eventually will allow KVMGT to stop using
-> > KVM's gfn_to_pfn() altogether.
-> > 
-> > Signed-off-by: Sean Christopherson <seanjc@google.com>
+On Fri, May 5, 2023 at 1:51=E2=80=AFAM Rob Herring <robh@kernel.org> wrote:
+>
+> On Tue, Apr 04, 2023 at 07:03:22PM +0100, Conor Dooley wrote:
+> > From: Conor Dooley <conor.dooley@microchip.com>
+> >
+> > Seemingly I mis-implemented the dependencies here. The OpenSBI docs onl=
+y
+> > point out that the "riscv,event-to-mhpmcounters property is mandatory i=
+f
+> > riscv,event-to-mhpmevent is present". It never claims that
+> > riscv,event-to-mhpmcounters requires riscv,event-to-mhpmevent.
+> >
+> > Drop the dependency of riscv,event-to-mhpmcounters on
+> > riscv,event-to-mhpmevent.
+> >
+> > Fixes: 7e38085d9c59 ("dt-bindings: riscv: add SBI PMU event mappings")
+> > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 > > ---
-> >  drivers/gpu/drm/i915/gvt/kvmgt.c | 18 ++++++++++++++++--
-> >  1 file changed, 16 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/gpu/drm/i915/gvt/kvmgt.c b/drivers/gpu/drm/i915/gvt/kvmgt.c
-> > index 8ae7039b3683..90997cc385b4 100644
-> > --- a/drivers/gpu/drm/i915/gvt/kvmgt.c
-> > +++ b/drivers/gpu/drm/i915/gvt/kvmgt.c
-> > @@ -159,11 +159,25 @@ static int gvt_pin_guest_page(struct intel_vgpu *vgpu, unsigned long gfn,
-> >  			goto err;
-> >  		}
-> >  
-> > -		if (npage == 0)
-> > -			base_page = cur_page;
-> > +		if (npage == 0) {
-> > +			/*
-> > +			 * Bail immediately to avoid unnecessary pinning when
-> > +			 * trying to shadow a 2M page and the host page isn't
-> > +			 * a transparent hugepage.
-> > +			 *
-> > +			 * TODO: support other type hugepages, e.g. HugeTLB.
-> > +			 */
-> > +			if (size == I915_GTT_PAGE_SIZE_2M &&
-> > +			    !PageTransHuge(cur_page))
-> Maybe the checking of PageTransHuge(cur_page) and bailing out is not necessary.
-> If a page is not transparent huge, but there are 512 contigous 4K
-> pages, I think it's still good to map them in IOMMU in 2M.
-> See vfio_pin_map_dma() who does similar things.
+> >
+> > Atish, I'm not 100% on this one but I noticed it while doing dt-validat=
+e
+> > on a dump of the qemu virt machine which doesn't use the
+> > event-to-mhpmevent property.
 
-I agree that bailing isn't strictly necessary, and processing "blindly" should
-Just Work for HugeTLB and other hugepage types.  I was going to argue that it
-would be safer to add this and then drop it at the end, but I think that's a
-specious argument.  If not checking the page type is unsafe, then the existing
-code is buggy, and this changelog literally states that the check for contiguous
-pages guards against any such problems.
+Yes. That's correct. virt machine uses default encoding specified by
+the SBI PMU spec.
+Hence, event-to-mhpmevent is not used.
 
-I do think there's a (very, very theoretical) issue though.  For "CONFIG_SPARSEMEM=y
-&& CONFIG_SPARSEMEM_VMEMMAP=n", struct pages aren't virtually contiguous with respect
-to their pfns, i.e. it's possible (again, very theoretically) that two struct pages
-could be virtually contiguous but physically discontiguous.  I suspect I'm being
-ridiculously paranoid, but for the efficient cases where pages are guaranteed to
-be contiguous, the extra page_to_pfn() checks should be optimized away by the
-compiler, i.e. there's no meaningful downside to the paranoia.
+>
+> Waiting for comments before I apply this...
+>
 
-TL;DR: My plan is to drop this patch and instead harden the continuity check.
+Sorry for the delay. Not sure why this did not show up in my gmail.
+Probably due to all the bouncing issues going on.
+
+
+Reviewed-by: Atish Patra <atishp@rivosinc.com>
+
+> >
+> > CC: Rob Herring <robh+dt@kernel.org>
+> > CC: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> > CC: Paul Walmsley <paul.walmsley@sifive.com>
+> > CC: Palmer Dabbelt <palmer@dabbelt.com>
+> > CC: Atish Patra <atishp@rivosinc.com>
+> > CC: Andrew Jones <ajones@ventanamicro.com>
+> > CC: devicetree@vger.kernel.org
+> > CC: linux-riscv@lists.infradead.org
+> > CC: linux-kernel@vger.kernel.org
+> > ---
+> >  Documentation/devicetree/bindings/perf/riscv,pmu.yaml | 1 -
+> >  1 file changed, 1 deletion(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/perf/riscv,pmu.yaml b/Do=
+cumentation/devicetree/bindings/perf/riscv,pmu.yaml
+> > index a55a4d047d3f..c8448de2f2a0 100644
+> > --- a/Documentation/devicetree/bindings/perf/riscv,pmu.yaml
+> > +++ b/Documentation/devicetree/bindings/perf/riscv,pmu.yaml
+> > @@ -91,7 +91,6 @@ properties:
+> >
+> >  dependencies:
+> >    "riscv,event-to-mhpmevent": [ "riscv,event-to-mhpmcounters" ]
+> > -  "riscv,event-to-mhpmcounters": [ "riscv,event-to-mhpmevent" ]
+> >
+> >  required:
+> >    - compatible
+> > --
+> > 2.39.2
+> >
