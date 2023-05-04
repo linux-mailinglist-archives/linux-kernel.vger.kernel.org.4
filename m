@@ -2,94 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E19F6F67ED
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 11:06:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67AD16F67EF
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 11:06:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbjEDJGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 05:06:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60776 "EHLO
+        id S230139AbjEDJGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 05:06:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbjEDJGT (ORCPT
+        with ESMTP id S230049AbjEDJG2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 05:06:19 -0400
-Received: from smtpbgau2.qq.com (smtpbgau2.qq.com [54.206.34.216])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D552B8F;
-        Thu,  4 May 2023 02:06:16 -0700 (PDT)
-X-QQ-mid: bizesmtpipv601t1683191150t556
-Received: from localhost ( [255.251.132.4])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 04 May 2023 17:05:48 +0800 (CST)
-X-QQ-SSF: 0140000000000090C000000A0000000
-X-QQ-FEAT: Il1yX1zTS2AaZvPkKIPsBCyi9J+kgPbMSU9zxIwHbRESjPeDW66BEmAxvuIw/
-        g9FNdAbWN7JLpZebEqTnhavGofkzOh1pAQwEi+qC5ZMtmqJto58tkXjRPAkbMarL9v6xcLR
-        GsdYenz1+mGguE1pwLFPjs1JiU7QN2ntChWUlRpEvp5nlKrPVj2/1UbzhfayhsTFTkdq6Wm
-        TQP4sCFm5c09TgvmE4zXRSeRpanoz5BrDBwxXH3dYnb9PiySrvRwadTzU8jVzmoqr6Zb5qR
-        mmg2QjWqQh3ftugT3dFxJZCSiZxdtZomgK5MwcpvfdXFiM0lQurQ0fCGqdlD/fl40WDNvVX
-        nn/djQwR9gS1fgSFe5cCgWPfX7AlOWv/dj79A54YGILeT/9IVI=
-X-QQ-GoodBg: 2
-X-BIZMAIL-ID: 9945072676502930506
-Date:   Thu, 4 May 2023 17:05:51 +0800
-From:   Wang Honghui <honghui.wang@ucas.com.cn>
-To:     Oliver Neukum <oliver@neukum.org>, Ali Akcaagac <aliakc@web.de>,
-        Jamie Lenehan <lenehan@twibble.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        dc395x@twibble.org, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] strcuture: Correct spelling mistakes in comments
-Message-ID: <262EBDA8BEEA7619+ZFN1b1D66/Lp8hzh@TP-P15V>
+        Thu, 4 May 2023 05:06:28 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EFFD3596;
+        Thu,  4 May 2023 02:06:24 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34496ECB045353;
+        Thu, 4 May 2023 04:06:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1683191174;
+        bh=2yUKgIxt3yIAgi8HJ/0RdzVrA3jcGWcr89Ye8ASgQt4=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=tbwNQ3HqS3fjdU3A/8PelgKMWaHQeMjJmC76sEKwhzsL7Z34Ye+kf4KqlVUZWzqnX
+         9ep6sCoudgusxDGCDZyJRyxpN/OQ+OESSdFNBFApHxGT+w1lFuG3h/igWKMqm5VggW
+         dx0T1fTdYsb+FD32KzOVcBAXGFZedpEhjQzR53gg=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34496EZZ022214
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 4 May 2023 04:06:14 -0500
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 4
+ May 2023 04:06:14 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 4 May 2023 04:06:14 -0500
+Received: from [172.24.147.77] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34496Aj6101590;
+        Thu, 4 May 2023 04:06:11 -0500
+Message-ID: <31b31af7-6c54-7d05-f7ef-fcceba48580e@ti.com>
+Date:   Thu, 4 May 2023 14:36:10 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtpipv:ucas.com.cn:qybglogicsvrgz:qybglogicsvrgz5a-2
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,RCVD_ILLEGAL_IP,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] arm64: dts: ti: k3-j784s4: Fix wakeup pinmux range and
+ pinctrl node offsets
+To:     Nishanth Menon <nm@ti.com>
+CC:     Tero Kristo <kristo@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Andrew Davis <afd@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Apurva Nandan <a-nandan@ti.com>, Udit Kumar <u-kumar1@ti.com>
+References: <20230503083143.32369-1-t-konduru@ti.com>
+ <20230503114625.gqnijd3bog5bwemz@parameter>
+Content-Language: en-US
+From:   Thejasvi Konduru <t-konduru@ti.com>
+In-Reply-To: <20230503114625.gqnijd3bog5bwemz@parameter>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Subject: [PATCH] strcuture: Correct spelling mistakes in comments
 
-Signed-off-by: Wang Honghui <honghui.wang@ucas.com.cn>
----
- drivers/scsi/dc395x.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+On 03/05/23 17:16, Nishanth Menon wrote:
+> On 14:01-20230503, Thejasvi Konduru wrote:
+>> The wkup_pmx register region in j784s4 has multiple non-addressable
+>> regions, hence the existing wkup_pmx region is split as follows to
+>> avoid the non-addressable regions. The pinctrl node offsets are
+>> also corrected as per the newly split wkup_pmx* nodes.
+>>
+>> wkup_pmx0 -> 13 pins (WKUP_PADCONFIG 0 - 12)
+>> wkup_pmx1 -> 11 pins (WKUP_PADCONFIG 14 - 24)
+>> wkup_pmx2 -> 72 pins (WKUP_PADCONFIG 26 - 97)
+>> wkup_pmx3 -> 1 pin (WKUP_PADCONFIG 100)
+>>
+>> Fixes: 4664ebd8346a ("arm64: dts: ti: Add initial support for J784S4 SoC")
+>> Signed-off-by: Thejasvi Konduru <t-konduru@ti.com>
+>> ---
+> Could you provide a link to the output of:
+> $ cat /sys/kernel/debug/pinctrl/*/pins
 
-diff --git a/drivers/scsi/dc395x.c b/drivers/scsi/dc395x.c
-index c8e86f8a631e..a3f00e6e3296 100644
---- a/drivers/scsi/dc395x.c
-+++ b/drivers/scsi/dc395x.c
-@@ -3641,7 +3641,7 @@ static void adapter_add_device(struct AdapterCtlBlk *acb,
-  * adapter_remove_device - Removes the device instance from the adaptor
-  * instance. The device instance is not check in any way or freed by this. 
-  * The caller is expected to take care of that. This will simply remove the
-- * device from the adapters data strcutures.
-+ * device from the adapters data structures.
-  *
-  * @acb: The adapter device to be updated
-  * @dcb: A device that has previously been added to the adapter.
-@@ -3980,7 +3980,7 @@ static void trms1040_read_all(struct NvRamType *eeprom, unsigned long io_port)
-  * Checks the checksum and if it's not correct it uses a set of default
-  * values.
-  *
-- * @eeprom:	caller allocated strcuture to read the eeprom data into
-+ * @eeprom:	caller allocated structure to read the eeprom data into
-  * @io_port:	io port to read from
-  **/
- static void check_eeprom(struct NvRamType *eeprom, unsigned long io_port)
-@@ -4578,7 +4578,7 @@ static void banner_display(void)
-  * dc395x_init_one - Initialise a single instance of the adapter.
-  *
-  * The PCI layer will call this once for each instance of the adapter
-- * that it finds in the system. The pci_dev strcuture indicates which
-+ * that it finds in the system. The pci_dev structure indicates which
-  * instance we are being called from.
-  * 
-  * @dev: The PCI device to initialize.
--- 
-2.34.1
+https://gist.github.com/thejasvikonduru/05b1a8e0fd8176116b7a3cc4e43b244a
 
+>
+>>   arch/arm64/boot/dts/ti/k3-j784s4-evm.dts      | 30 +++++++++----------
+>>   .../boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi     | 29 +++++++++++++++++-
+>>   2 files changed, 43 insertions(+), 16 deletions(-)
+>>
+>> diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
+>> index f33815953e77..490d0b8624f3 100644
+>> --- a/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
+>> +++ b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
+>> @@ -141,28 +141,28 @@
+>>   	};
+>>   };
+>>   
+>> -&wkup_pmx0 {
+>> +&wkup_pmx2 {
+>>   	mcu_cpsw_pins_default: mcu-cpsw-pins-default {
+>>   		pinctrl-single,pins = <
+>> -			J784S4_WKUP_IOPAD(0x094, PIN_INPUT, 0) /* (A35) MCU_RGMII1_RD0 */
+>> -			J784S4_WKUP_IOPAD(0x090, PIN_INPUT, 0) /* (B36) MCU_RGMII1_RD1 */
+>> -			J784S4_WKUP_IOPAD(0x08c, PIN_INPUT, 0) /* (C36) MCU_RGMII1_RD2 */
+>> -			J784S4_WKUP_IOPAD(0x088, PIN_INPUT, 0) /* (D36) MCU_RGMII1_RD3 */
+>> -			J784S4_WKUP_IOPAD(0x084, PIN_INPUT, 0) /* (B37) MCU_RGMII1_RXC */
+>> -			J784S4_WKUP_IOPAD(0x06c, PIN_INPUT, 0) /* (C37) MCU_RGMII1_RX_CTL */
+>> -			J784S4_WKUP_IOPAD(0x07c, PIN_OUTPUT, 0) /* (D37) MCU_RGMII1_TD0 */
+>> -			J784S4_WKUP_IOPAD(0x078, PIN_OUTPUT, 0) /* (D38) MCU_RGMII1_TD1 */
+>> -			J784S4_WKUP_IOPAD(0x074, PIN_OUTPUT, 0) /* (E37) MCU_RGMII1_TD2 */
+>> -			J784S4_WKUP_IOPAD(0x070, PIN_OUTPUT, 0) /* (E38) MCU_RGMII1_TD3 */
+>> -			J784S4_WKUP_IOPAD(0x080, PIN_OUTPUT, 0) /* (E36) MCU_RGMII1_TXC */
+>> -			J784S4_WKUP_IOPAD(0x068, PIN_OUTPUT, 0) /* (C38) MCU_RGMII1_TX_CTL */
+>> +			J784S4_WKUP_IOPAD(0x02c, PIN_INPUT, 0) /* (A35) MCU_RGMII1_RD0 */
+>> +			J784S4_WKUP_IOPAD(0x028, PIN_INPUT, 0) /* (B36) MCU_RGMII1_RD1 */
+>> +			J784S4_WKUP_IOPAD(0x024, PIN_INPUT, 0) /* (C36) MCU_RGMII1_RD2 */
+>> +			J784S4_WKUP_IOPAD(0x020, PIN_INPUT, 0) /* (D36) MCU_RGMII1_RD3 */
+>> +			J784S4_WKUP_IOPAD(0x01c, PIN_INPUT, 0) /* (B37) MCU_RGMII1_RXC */
+>> +			J784S4_WKUP_IOPAD(0x004, PIN_INPUT, 0) /* (C37) MCU_RGMII1_RX_CTL */
+>> +			J784S4_WKUP_IOPAD(0x014, PIN_OUTPUT, 0) /* (D37) MCU_RGMII1_TD0 */
+>> +			J784S4_WKUP_IOPAD(0x010, PIN_OUTPUT, 0) /* (D38) MCU_RGMII1_TD1 */
+>> +			J784S4_WKUP_IOPAD(0x00c, PIN_OUTPUT, 0) /* (E37) MCU_RGMII1_TD2 */
+>> +			J784S4_WKUP_IOPAD(0x008, PIN_OUTPUT, 0) /* (E38) MCU_RGMII1_TD3 */
+>> +			J784S4_WKUP_IOPAD(0x018, PIN_OUTPUT, 0) /* (E36) MCU_RGMII1_TXC */
+>> +			J784S4_WKUP_IOPAD(0x000, PIN_OUTPUT, 0) /* (C38) MCU_RGMII1_TX_CTL */
+>>   		>;
+>>   	};
+>>   
+>>   	mcu_mdio_pins_default: mcu-mdio-pins-default {
+>>   		pinctrl-single,pins = <
+>> -			J784S4_WKUP_IOPAD(0x09c, PIN_OUTPUT, 0) /* (A36) MCU_MDIO0_MDC */
+>> -			J784S4_WKUP_IOPAD(0x098, PIN_INPUT, 0) /* (B35) MCU_MDIO0_MDIO */
+>> +			J784S4_WKUP_IOPAD(0x034, PIN_OUTPUT, 0) /* (A36) MCU_MDIO0_MDC */
+>> +			J784S4_WKUP_IOPAD(0x030, PIN_INPUT, 0) /* (B35) MCU_MDIO0_MDIO */
+>>   		>;
+>>   	};
+>>   };
+>> diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi
+>> index f04fcb614cbe..ed2b40369c59 100644
+>> --- a/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi
+>> +++ b/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi
+>> @@ -50,7 +50,34 @@
+>>   	wkup_pmx0: pinctrl@4301c000 {
+>>   		compatible = "pinctrl-single";
+>>   		/* Proxy 0 addressing */
+>> -		reg = <0x00 0x4301c000 0x00 0x178>;
+>> +		reg = <0x00 0x4301c000 0x00 0x034>;
+>> +		#pinctrl-cells = <1>;
+>> +		pinctrl-single,register-width = <32>;
+>> +		pinctrl-single,function-mask = <0xffffffff>;
+>> +	};
+>> +
+>> +	wkup_pmx1: pinctrl@4301c038 {
+>> +		compatible = "pinctrl-single";
+>> +		/* Proxy 0 addressing */
+>> +		reg = <0x00 0x4301c038 0x00 0x02c>;
+>> +		#pinctrl-cells = <1>;
+>> +		pinctrl-single,register-width = <32>;
+>> +		pinctrl-single,function-mask = <0xffffffff>;
+>> +	};
+>> +
+>> +	wkup_pmx2: pinctrl@4301c068 {
+>> +		compatible = "pinctrl-single";
+>> +		/* Proxy 0 addressing */
+>> +		reg = <0x00 0x4301c068 0x00 0x120>;
+>> +		#pinctrl-cells = <1>;
+>> +		pinctrl-single,register-width = <32>;
+>> +		pinctrl-single,function-mask = <0xffffffff>;
+>> +	};
+>> +
+>> +	wkup_pmx3: pinctrl@4301c190 {
+>> +		compatible = "pinctrl-single";
+>> +		/* Proxy 0 addressing */
+>> +		reg = <0x00 0x4301c190 0x00 0x004>;
+>>   		#pinctrl-cells = <1>;
+>>   		pinctrl-single,register-width = <32>;
+>>   		pinctrl-single,function-mask = <0xffffffff>;
+>> -- 
+>> 2.17.1
+>>
