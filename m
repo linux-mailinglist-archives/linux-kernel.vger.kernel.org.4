@@ -2,77 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1788B6F700E
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 18:44:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BECAF6F702B
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 18:47:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbjEDQop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 12:44:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56120 "EHLO
+        id S229917AbjEDQrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 12:47:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjEDQon (ORCPT
+        with ESMTP id S229494AbjEDQrK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 12:44:43 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21666359F
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 09:44:41 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id ca18e2360f4ac-763af6790a3so4516439f.0
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 09:44:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1683218680; x=1685810680;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RldMxRu/eCeUoOgwIk9gehyNreGKl8U4r7xfbeXdGLk=;
-        b=gU503mwUGDgvk+ob6edwahv5IgBmP7ZtABLqT6FPLZO7zKK1IskehUe3xVTWnfHAer
-         2GNQ6R1WgeObwkRXPElf2IRADlJ2RKBOmcwCBcmuWhO8+Gf33wDYQrPm2PeE9cwjKGm7
-         1OCO8hT67pAfXiTKkAFr2mKExEMqV4ZEIGxK/biH2fNi4LT1B9RTkxtn3RTwfheUNTIL
-         j4ropzYAbeRCuDJ6m/CRWHRMHkmmadk1taXK+N105YYs4jbCE92pd830QdorGNc6n6pa
-         s5Mr3FOZgEpUqYvb48dd5Ac1yNhVqQToWjDbzYalgM7vIxxHa2RO6ntIpdJ4RItv5/LI
-         1rvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683218680; x=1685810680;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RldMxRu/eCeUoOgwIk9gehyNreGKl8U4r7xfbeXdGLk=;
-        b=QKzPggJebPC5alUMN5y2RDleOmn2rGApOTI/0xFpPfLUzMBLD+oIkiX/n4PksVNJjD
-         Vcih0hzKibdf3v6j9SRdE88Mh7ghXXC4xRfzQZmBKsFWxAyJC2OsQz0tE7xOZQkFdi7C
-         dcKx+jR1U/Fv+IOlnP1HCkuJxwq19JAMX2+snt1asR556Qay13aWPghPpKT7nJuSapvz
-         sDwsXlQSob/pufLC7auwECC+tUlUgx2RT1WQJM6bN0V1An6gOXLPdyTpNKSzLEzklZ7u
-         t4BOEZY+zvbn9440Oh1TnjYa2BymRLirxWjMgaItxx//ncZxWdSqz3iU532NqHzb8prN
-         cm6g==
-X-Gm-Message-State: AC+VfDxRqJKCCyAB99f5GteimiccGyt2NJqFnyuhjfzi7doZA75t/k55
-        YPVDbQi/g9KlYmJoLBCUkcFJmg==
-X-Google-Smtp-Source: ACHHUZ5prRsEWmIhj5kFGb/cvDO1yaOeYY5WSRuaeVPJa7Z898cL5o2X7LzPPTIx95hwtUQnda+dVQ==
-X-Received: by 2002:a05:6602:4089:b0:760:ed2e:cc32 with SMTP id bl9-20020a056602408900b00760ed2ecc32mr11841776iob.2.1683218680379;
-        Thu, 04 May 2023 09:44:40 -0700 (PDT)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id y24-20020a027318000000b0040fbc31614esm10675095jab.54.2023.05.04.09.44.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 09:44:39 -0700 (PDT)
-Message-ID: <b9acff08-913b-55cc-75dd-4a1bbe63e330@kernel.dk>
-Date:   Thu, 4 May 2023 10:44:38 -0600
+        Thu, 4 May 2023 12:47:10 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61B7C359D;
+        Thu,  4 May 2023 09:47:09 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 344AX0gR016310;
+        Thu, 4 May 2023 16:46:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=Kf2+34XEzNLrx05TNlYlXWYQma1jIn7oJNcNhN662q4=;
+ b=EipOORCvBassLct4NrxyLrAglfrnQgu9S6X1rsSTfyvVlLOVmhT+wOJSrQiWS3RH3S3b
+ +ltd60puYVavo6rS7gR7EiPGWbhmxBr4IYsCThEMFxfQywZVK/tmzVM4J+tTkCD141nO
+ oWrC8YeXnZAnuJEA8PDWaWBQIgs9rutQ1SzXiygmcpEgOCXsTptOCVuLwMdEKy5PPLes
+ zwQrNdbzAcpf3vVtia5xncecd1qdRusilD4KXz0gBRlNI85i5LCogbr0CObFp3ZHNChD
+ q5a9BEW9PaGbGvWLMVRWZ+v3MhSxqNCd5WCxe2gyH0J76fFY/8kErzf75lImz/x+IqZJ kw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qcb2492fe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 04 May 2023 16:46:59 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 344GkuRG005341
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 4 May 2023 16:46:56 GMT
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Thu, 4 May 2023 09:46:55 -0700
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
+        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <andersson@kernel.org>
+CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        <quic_abhinavk@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <marijn.suijten@somainline.org>, <freedreno@lists.freedesktop.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v5 0/7] add DSC 1.2 dpu supports
+Date:   Thu, 4 May 2023 09:46:38 -0700
+Message-ID: <1683218805-23419-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: Hang loading initrd since last Friday.
-Content-Language: en-US
-To:     Raghavendra K T <raghavendra.kt@amd.com>,
-        Ben Greear <greearb@candelatech.com>,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <9d87defc-5376-d690-b483-bc314e4f568b@candelatech.com>
- <ZFHHh/m0pkOYIzo7@debian.me>
- <ebb280e4-d381-0bf8-d134-0318c5cfdf83@leemhuis.info>
- <f12a8f23-5aac-b615-300c-38001b9583c2@candelatech.com>
- <835c3de6-7460-226c-96e7-839aeef6064e@amd.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <835c3de6-7460-226c-96e7-839aeef6064e@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: RJu8z22nG8HsREQDIu-vJW3NZt36mvQL
+X-Proofpoint-ORIG-GUID: RJu8z22nG8HsREQDIu-vJW3NZt36mvQL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-04_10,2023-05-04_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=964 phishscore=0
+ impostorscore=0 mlxscore=0 lowpriorityscore=0 bulkscore=0 spamscore=0
+ priorityscore=1501 malwarescore=0 clxscore=1015 adultscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2305040136
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,46 +79,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/4/23 10:38 AM, Raghavendra K T wrote:
-> On 5/4/2023 5:19 AM, Ben Greear wrote:
->> On 5/2/23 21:46, Linux regression tracking (Thorsten Leemhuis) wrote:
->>> On 03.05.23 04:31, Bagas Sanjaya wrote:
->>>> On Tue, May 02, 2023 at 02:03:33PM -0700, Ben Greear wrote:
->>>>>
->>>>> Pulling today's upstream 6.3+ tree, my system now hangs loading initrd.
->>>
->>> Just to understand this properly: you mean after the boot loader said it
->>> loaded the initramfs, not when the kernel starts using it?
->>
->> I am bisecting...it appears to be .config related.  If I skip enabling things
->> during bisect, then I do not see the problem.  But I copied my original buggy .config
->> into an otherwise good kernel commit, and now it fails.  I'm manually bisecting
->> the .config settings....
->>
->> Thanks,
->> Ben
->>
-> 
-> Hello Ben,
-> 
-> (CCing Jens here)
-> 
-> I was facing same issue too. Surprising I did not hit the same on the
-> guest VM.
-> 
-> After bisecting, found that Reverting
-> [9f4107b07b17b5ee68af680150f91227bea2df6f] block: store bdev->bd_disk->fops->submit_bio state in bdev
-> 
-> Helped me to boot back the system. Can you please confirm
+This series adds the DPU side changes to support DSC 1.2 encoder. This
+was validated with both DSI DSC 1.2 panel and DP DSC 1.2 monitor.
+The DSI and DP parts will be pushed later on top of this change.
+This seriel is rebase on [1], [2] and catalog fixes from rev-4 of [3].
 
-Can you try and pull:
+[1]: https://patchwork.freedesktop.org/series/116851/
+[2]: https://patchwork.freedesktop.org/series/116615/
+[3]: https://patchwork.freedesktop.org/series/112332/
 
-git://git.kernel.dk/linux for-6.4/block
+Abhinav Kumar (2):
+  drm/msm/dpu: add dsc blocks for remaining chipsets in catalog
+  drm/msm/dpu: add DSC 1.2 hw blocks for relevant chipsets
 
-into current -git and see if that works for you? There's a fix for that
-commit in there.
+Kuogee Hsieh (5):
+  drm/msm/dpu: add DPU_PINGPONG_DSC feature bit
+  drm/msm/dpu: add DPU_PINGPONG_DSC bits into PP_BLK and PP_BLK_TE
+    marcos
+  drm/msm/dpu: Introduce PINGPONG_NONE to disconnect DSC from PINGPONG
+  drm/msm/dpu: add support for DSC encoder v1.2 engine
+  drm/msm/dpu: separate DSC flush update out of interface
+
+ drivers/gpu/drm/msm/Makefile                       |   1 +
+ .../drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h    |  23 +-
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h |  16 +-
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h |  24 +-
+ .../drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h    |  35 +-
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_0_sm8250.h |  24 +-
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h |  14 +
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h |   7 +
+ .../drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h   |  16 +
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h |  14 +
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h |  14 +
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c        |  16 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |  25 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |  36 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c         |  22 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h         |  10 +
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c         |  15 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h         |  15 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc_1_2.c     | 385 +++++++++++++++++++++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h        |   3 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c    |   6 +
+ drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c             |   7 +-
+ 22 files changed, 652 insertions(+), 76 deletions(-)
+ create mode 100644 drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc_1_2.c
 
 -- 
-Jens Axboe
-
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
