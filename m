@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1124B6F752E
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:56:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F20B6F74B8
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:52:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231858AbjEDT4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 15:56:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42744 "EHLO
+        id S231596AbjEDTwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 15:52:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231848AbjEDTyh (ORCPT
+        with ESMTP id S231588AbjEDTvh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 15:54:37 -0400
+        Thu, 4 May 2023 15:51:37 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17BD61AECF;
-        Thu,  4 May 2023 12:48:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBAE811B66;
+        Thu,  4 May 2023 12:47:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 02CC5637D2;
-        Thu,  4 May 2023 19:46:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11B48C433EF;
-        Thu,  4 May 2023 19:46:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 96CA0637D0;
+        Thu,  4 May 2023 19:47:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E995C433D2;
+        Thu,  4 May 2023 19:46:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683229617;
-        bh=AOFh1WhfR4xsMJ/bfPiml5mDJj6P2fKPo6om/hQdRh0=;
+        s=k20201202; t=1683229621;
+        bh=cc8i3+a6mA29PywXsWaG+BHDZOfZiUF1UJgCk351FIo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RhE0gmhSwtT5ZH9yCoqxDLNjCiHO1D3+cxiE0AiCe2Il106y4xCeyb4xsdYsscmxQ
-         EaIr5a5f2liKFtM8uIglfk6jpiuqOHkXAfAWdQddTFeTBlb247fq8J0Rk12rQfX79y
-         log8SCixYDCId3KX0P+Y/Vtnr3NHRjqP0DeEuI956I+WiXzjUxtOB+Szal0Irjc72K
-         O3jSfq6h44VRYo+uE3hLzeRrtM3NDTsqMtT/yxLSqw4tY668cXU14h9Vt609IUOje/
-         h415XviDewOQFz5a64tVXDNrmtHYPQwjNgieu5giQm4wB1V7aNg2PmmXQDp8a4s8EJ
-         NK9ZnIAlUCdJw==
+        b=gv6xS4+ZYXiCus2MzI+zwj4Il26PzLWkW6OrnvOz/kPug39GdMA97Q70qXv9QAL3E
+         h1NKVrLIoJHS2ivBBHsJbkbtGdxdVLwEEDruB/fkdFyGAGCtu0UAvC19HUdMuxifZR
+         nDohw5T2gA3Ps8TbXoVDxWLwQeTIVLirTg/iSK3qbdL93wJiPxhOkgMiHLc34GnCI7
+         0KHADG0ZTb5yqGRUThlSzMs7uaJ49ws2JaNdyO1wRdeGZfMGOYnbqs/Gr+sFhli2AY
+         EV+bpZGPhlCWRqCMSpJp7mCFfYNoxZ1P3lrlsFJxPeKVDSqj6OynMPMIuwrbkZoUGy
+         cYLH2J1v50KXA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Paolo Abeni <pabeni@redhat.com>,
+Cc:     Nick Child <nnac123@linux.ibm.com>,
+        Piotr Raczynski <piotr.raczynski@intel.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, ndesaulniers@google.com,
-        mkl@pengutronix.de, netdev@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.1 11/49] net: pasemi: Fix return type of pasemi_mac_start_tx()
-Date:   Thu,  4 May 2023 15:45:48 -0400
-Message-Id: <20230504194626.3807438-11-sashal@kernel.org>
+        edumazet@google.com, pabeni@redhat.com, kuniyu@amazon.com,
+        liuhangbin@gmail.com, jiri@resnulli.us, andy.ren@getcruise.com,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 12/49] net: Catch invalid index in XPS mapping
+Date:   Thu,  4 May 2023 15:45:49 -0400
+Message-Id: <20230504194626.3807438-12-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230504194626.3807438-1-sashal@kernel.org>
 References: <20230504194626.3807438-1-sashal@kernel.org>
@@ -60,52 +61,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Chancellor <nathan@kernel.org>
+From: Nick Child <nnac123@linux.ibm.com>
 
-[ Upstream commit c8384d4a51e7cb0e6587f3143f29099f202c5de1 ]
+[ Upstream commit 5dd0dfd55baec0742ba8f5625a0dd064aca7db16 ]
 
-With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
-indirect call targets are validated against the expected function
-pointer prototype to make sure the call target is valid to help mitigate
-ROP attacks. If they are not identical, there is a failure at run time,
-which manifests as either a kernel panic or thread getting killed. A
-warning in clang aims to catch these at compile time, which reveals:
+When setting the XPS value of a TX queue, warn the user once if the
+index of the queue is greater than the number of allocated TX queues.
 
-  drivers/net/ethernet/pasemi/pasemi_mac.c:1665:21: error: incompatible function pointer types initializing 'netdev_tx_t (*)(struct sk_buff *, struct net_device *)' (aka 'enum netdev_tx (*)(struct sk_buff *, struct net_device *)') with an expression of type 'int (struct sk_buff *, struct net_device *)' [-Werror,-Wincompatible-function-pointer-types-strict]
-          .ndo_start_xmit         = pasemi_mac_start_tx,
-                                    ^~~~~~~~~~~~~~~~~~~
-  1 error generated.
+Previously, this scenario went uncaught. In the best case, it resulted
+in unnecessary allocations. In the worst case, it resulted in
+out-of-bounds memory references through calls to `netdev_get_tx_queue(
+dev, index)`. Therefore, it is important to inform the user but not
+worth returning an error and risk downing the netdevice.
 
-->ndo_start_xmit() in 'struct net_device_ops' expects a return type of
-'netdev_tx_t', not 'int'. Adjust the return type of
-pasemi_mac_start_tx() to match the prototype's to resolve the warning.
-While PowerPC does not currently implement support for kCFI, it could in
-the future, which means this warning becomes a fatal CFI failure at run
-time.
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/1750
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Reviewed-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-Link: https://lore.kernel.org/r/20230319-pasemi-incompatible-pointer-types-strict-v1-1-1b9459d8aef0@kernel.org
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Nick Child <nnac123@linux.ibm.com>
+Reviewed-by: Piotr Raczynski <piotr.raczynski@intel.com>
+Link: https://lore.kernel.org/r/20230321150725.127229-1-nnac123@linux.ibm.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/pasemi/pasemi_mac.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/core/dev.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/net/ethernet/pasemi/pasemi_mac.c b/drivers/net/ethernet/pasemi/pasemi_mac.c
-index aaab590ef548d..ed7dd0a042355 100644
---- a/drivers/net/ethernet/pasemi/pasemi_mac.c
-+++ b/drivers/net/ethernet/pasemi/pasemi_mac.c
-@@ -1423,7 +1423,7 @@ static void pasemi_mac_queue_csdesc(const struct sk_buff *skb,
- 	write_dma_reg(PAS_DMA_TXCHAN_INCR(txring->chan.chno), 2);
- }
+diff --git a/net/core/dev.c b/net/core/dev.c
+index a25b8741b1599..7b4576206be2f 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -2549,6 +2549,8 @@ int __netif_set_xps_queue(struct net_device *dev, const unsigned long *mask,
+ 	struct xps_map *map, *new_map;
+ 	unsigned int nr_ids;
  
--static int pasemi_mac_start_tx(struct sk_buff *skb, struct net_device *dev)
-+static netdev_tx_t pasemi_mac_start_tx(struct sk_buff *skb, struct net_device *dev)
- {
- 	struct pasemi_mac * const mac = netdev_priv(dev);
- 	struct pasemi_mac_txring * const txring = tx_ring(mac);
++	WARN_ON_ONCE(index >= dev->num_tx_queues);
++
+ 	if (dev->num_tc) {
+ 		/* Do not allow XPS on subordinate device directly */
+ 		num_tc = dev->num_tc;
 -- 
 2.39.2
 
