@@ -2,189 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87ACC6F64C7
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 08:13:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DBF96F64C9
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 08:15:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbjEDGNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 02:13:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36858 "EHLO
+        id S229805AbjEDGPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 02:15:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbjEDGNo (ORCPT
+        with ESMTP id S229514AbjEDGPM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 02:13:44 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B5B1992
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 23:13:41 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-50b383222f7so33591a12.3
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 23:13:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683180820; x=1685772820;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LR67W3cu8TbdbHHvCQSzQmbTfNOrONMNhQlzXKF5QhY=;
-        b=C/inxBvjHBKX6ieqG1SKbI5iXHvEGIAYZJ81VWBub4NdV61svnrIu0nxr3RpLn0swe
-         rjArbctnnIy5zRRZt98Mr6T9r/Km0X8LgbmGISWJJWl7MgdobOkBLexzz7MZcggE57iw
-         kd8uRxX2gxAXP6u2fQtsg7eshSojRfGyIBYQXi6VQwf/ZHIh/5/BXAAm5eCZHmun+Ypc
-         K8glI3FPoZTp0lKA5KEB4j+Xu8WZp2EPfkNi3NAssh89TXL9u4olIzEZXpIuEbfKYN5c
-         aoHVqEA7Ju8fvu8c0WE0CnlkJ3RQbFKlov+yUuQGAHQBJBOfEU5Cm+3yRZf/FYqvP/Gp
-         LZdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683180820; x=1685772820;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LR67W3cu8TbdbHHvCQSzQmbTfNOrONMNhQlzXKF5QhY=;
-        b=B3cxukFp89H0OOQRYHVpoAqXzrl6aZgu3X5DFilvM8gsbQ8L/EitowPAYiFaIVc/zH
-         nOMD9lR67ZwBPAE4WuPT2eh6JwcTLFfDBe69oh6B9BJuZIFDb9+yOU6aEhFYQHvRmuEk
-         W81KTLnOeZ7DxvnxkPqRZU9gAsOqf59kJCImnhZZZkuEWSRMuKCDOBIMVwGE8gAcqp0c
-         5jfmA4wEhBQM1w953SbKICu4mQW1L0e76xwSvRUNI9A+njqN18km9XOfLR4Ijh5ca0+R
-         n10YD3odz6ZjIZDpCvHml3g0/KlR4ZRrDLO4m9/uL+kzknGO0USWTGwBnV9v/WQMLWep
-         HYtQ==
-X-Gm-Message-State: AC+VfDxsVWw49e3UNAyjNa8ssDCTXbgKyn0YczYum4m0NOPAAQAEz1Ja
-        WVpeWhK3iPuchiWXtFwIAyZacg==
-X-Google-Smtp-Source: ACHHUZ7wIe5zVEzox2wc5lT4hvgbIaXMMXZaqdRJTNEz0rZ6QHnHEVd2ucDuXrE6/fW5nkbcl0TBzQ==
-X-Received: by 2002:a17:907:60d6:b0:960:c5fe:a35a with SMTP id hv22-20020a17090760d600b00960c5fea35amr6542406ejc.64.1683180819754;
-        Wed, 03 May 2023 23:13:39 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:cbf1:e7ef:fb81:e912? ([2a02:810d:15c0:828:cbf1:e7ef:fb81:e912])
-        by smtp.gmail.com with ESMTPSA id o19-20020a1709062e9300b0094f281bd279sm18333085eji.198.2023.05.03.23.13.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 May 2023 23:13:38 -0700 (PDT)
-Message-ID: <3ed72340-accc-4ad1-098f-4a2eb6448828@linaro.org>
-Date:   Thu, 4 May 2023 08:13:37 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [RESEND v2 1/6] dt-bindings: power: Add JH7110 AON PMU support
-Content-Language: en-US
-To:     Changhuang Liang <changhuang.liang@starfivetech.com>,
-        Conor Dooley <conor@kernel.org>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Walker Chen <walker.chen@starfivetech.com>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, vkoul@kernel.org,
-        linux-phy@lists.infradead.org
-References: <20230419-labored-camper-644d51a7ca96@spud>
- <1a5b15fa-4f20-51c2-2ba1-a04a2911a694@starfivetech.com>
- <20230424-baffle-punch-ec73098f2b6a@spud>
- <d685a1d4-c07d-7dfa-f1fb-b35ceb2aa0eb@starfivetech.com>
- <20230425-unquote-eligible-09f743d81981@wendy>
- <a7cdfabf-2312-eaf3-f462-5bda7f0a120d@starfivetech.com>
- <68cb565d-bf39-10b0-9e3e-35ba7f54b90b@linaro.org>
- <0988495f-b87a-7f69-f222-37c67d6eae23@starfivetech.com>
- <20230425-resale-footrest-de667778c4fe@wendy>
- <663e9933-b9b3-a48f-98b6-2207215a8ed7@starfivetech.com>
- <20230425-commotion-prewashed-876247bed4ab@spud>
- <0b0f9187-ad6b-a1d9-6ec4-beb8989ca731@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <0b0f9187-ad6b-a1d9-6ec4-beb8989ca731@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 4 May 2023 02:15:12 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE291980
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 23:15:11 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id BE1EE208FE;
+        Thu,  4 May 2023 06:15:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1683180909; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=d0sfME+PPZ5V5RFQCvfOfX+BHGbYKlu9VTktkJ7gxMU=;
+        b=BXV8QdqyhL+5kaPtttVPSi8CPQYetVaPlbq4eJYMMaXbH+ITomk8BPJViddT5nyviPzmf9
+        EZFur6SewI/FIE6QjPb6t9ZI+vbnF5Y8P8t4EL14nGHFEI1I9X/eOg3kUVNu5/DFHljGuz
+        dtjOjKG2/XufJARI5DrtQmXq1WKFRaQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1683180909;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=d0sfME+PPZ5V5RFQCvfOfX+BHGbYKlu9VTktkJ7gxMU=;
+        b=/fYfg4UAJeiaOrTtwcq5d0o7z64GBeEudmhkv8euCcn7QhTVJJFPYTxxiKfNHk7nXZTl7a
+        S5j81fAFCrirplDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 967EC139C3;
+        Thu,  4 May 2023 06:15:09 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Nn1nI21NU2TvaQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Thu, 04 May 2023 06:15:09 +0000
+Date:   Thu, 04 May 2023 08:15:09 +0200
+Message-ID: <87ttwsmxle.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Oswald Buddenhagen <oswald.buddenhagen@gmx.de>
+Cc:     Jaroslav Kysela <perex@perex.cz>,
+        Jeff Chua <jeff.chua.linux@gmail.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        ALSA development <alsa-devel@alsa-project.org>
+Subject: Re: linux-6.4 alsa sound broken
+In-Reply-To: <ZFK9ZSm34Z3hQPF4@ugly>
+References: <CAAJw_ZsbTVd3Es373x_wTNDF7RknGhCD0r+NKUSwAO7HpLAkYA@mail.gmail.com>
+        <ZE9ngFLRqLkN6faH@ugly>
+        <87wn1pmm4d.wl-tiwai@suse.de>
+        <7b80ef1e-23dd-c523-0663-4bf311c1823a@perex.cz>
+        <ZFK9ZSm34Z3hQPF4@ugly>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/05/2023 03:34, Changhuang Liang wrote:
+On Wed, 03 May 2023 22:00:37 +0200,
+Oswald Buddenhagen wrote:
 > 
+> On Wed, May 03, 2023 at 09:32:02PM +0200, Jaroslav Kysela wrote:
+> > On 03. 05. 23 18:10, Takashi Iwai wrote:
+> >> The dmix uses the silence_size=boundary as a fill-all operation, and
+> >> it's a free-wheel mode, so supposedly something was overlooked in your
+> >> code refactoring.
+> >> 
+> >> Could you check it and address quickly?  I'd like to fix it before
+> >> 6.4-rc1 release, so if no fix comes up in a couple of days, I'll have
+> >> to revert the change for 6.4-rc1.
+> > 
+> > I would revert this patch.
 > 
-> On 2023/4/26 0:56, Conor Dooley wrote:
->> On Tue, Apr 25, 2023 at 08:26:35PM +0800, Changhuang Liang wrote:
->>> On 2023/4/25 17:35, Conor Dooley wrote:
->>>> On Tue, Apr 25, 2023 at 05:18:10PM +0800, Changhuang Liang wrote:
->>>>> On 2023/4/25 16:19, Krzysztof Kozlowski wrote:
->>>>>> On 25/04/2023 09:57, Changhuang Liang wrote:
->>>>>>> Yes, "starfive,jh7110-aon-pmu" is a child-node of "starfive,jh7110-aon-syscon".
->>>>>>> In my opinion, "0x17010000" is "aon-syscon" on JH7110 SoC, and this "aon-pmu" is just 
->>>>>>> a part of "aon-syscon" function, so I think it is inappropriate to make "aon-syscon"
->>>>>>> to a power domain controller. I think using the child-node description is closer to
->>>>>>> JH7110 SoC. 
->>>>>>
->>>>>> Unfortunately, I do not see the correlation between these, any
->>>>>> connection. Why being a child of syscon block would mean that this
->>>>>> should no be power domain controller? Really, why? These are two
->>>>>> unrelated things.
->>>>>
->>>>> Let me summarize what has been discussed above. 
->>>>>
->>>>> There has two ways to describe this "starfive,jh7110-aon-syscon"(0x17010000).
->>>>> 1. (0x17010000) is power-controller node:
->>>>>
->>>>> 	aon_pwrc: power-controller@17010000 {
->>>>> 		compatible = "starfive,jh7110-aon-pmu", "syscon";
->>>>> 		reg = <0x0 0x17010000 0x0 0x1000>;
->>>>> 		#power-domain-cells = <1>;
->>>>> 	};
->>>>>
->>>>>
->>>>> 2. (0x17010000) is syscon node, power-controller is child-node of syscon:
->>>>>
->>>>> 	aon_syscon: syscon@17010000 {
->>>>> 		compatible = "starfive,jh7110-aon-syscon", "syscon", "simple-mfd";
->>>>> 		reg = <0x0 0x17010000 0x0 0x1000>;
->>>>>
->>>>> 		aon_pwrc: power-controller {
->>>>> 			compatible = "starfive,jh7110-aon-pmu";
->>>>> 			#power-domain-cells = <1>;
->>>>> 		};
->>>>> 	};
->>>>
->>>> I thought that Rob was suggesting something like this:
->>>> 	aon_syscon: syscon@17010000 {
->>>> 		compatible = "starfive,jh7110-aon-syscon", ...
->>>> 		reg = <0x0 0x17010000 0x0 0x1000>;
->>>> 		#power-domain-cells = <1>;
->>>> 	};
->>
->>> I see the kernel:
->>> https://elixir.bootlin.com/linux/latest/source/arch/arm64/boot/dts/mediatek/mt8167.dtsi
->>> this file line 42:
->>> it's power-controller also has no meaningful properties.
->>> What do you think?
->>
->> I'm not sure that I follow. It has a bunch of child-nodes does it not,
->> each of which is a domain?
->>
->> I didn't see such domains in your dts patch, they're defined directly in
->> the driver instead AFAIU. Assuming I have understood that correctly,
->> your situation is different to that mediatek one?
->>
->> Cheers,
->> Conor.
+> > It seems that this "do silence right after the playback is finished"
+> > mechanism is not handled in the updated code (and I overlooked that,
+> > too):
+> > 
+> no, there is nothing wrong with the code _per se_.
+>
+> what's happening is that the dmix plugin doesn't update the
+> application pointer, and somehow gets away with it.
 > 
-> Conor and Rob, 
-> 
-> How about this way:
-> 
-> aon_syscon: syscon@17010000 {
-> 	compatible = "starfive,jh7110-aon-syscon", "syscon", "simple-mfd";
-> 	reg = <0x0 0x17010000 0x0 0x1000>;
-> 	
-> 	aon_pwrc: power-controller {
-> 		compatible = "starfive,jh7110-aon-pmu";
-> 		regmap = <&aon_syscon>;
-> 		#power-domain-cells = <1>;
-> 	};
-> };
-> 
-> Add a "regmap" property which is phandle. And it can keep the present child-node
-> structure. This is more consistent with our soc design.
+> that means that it would have never worked with thresholded silencing
+> mode, either, but, well, it uses top-up mode.
 
-Adding property from child to parent does not make any sense. Didn't you
-already receive comment on this?
+Well, the code made just a wrong interpretation for the behavior with
+silence_size == boundary.  This mode is actually a kind of tailored
+operation for dmix.
 
-Best regards,
-Krzysztof
+In the description of alsa-lib snd_pcm_sw_params_set_silence_size(),
+you can find it:
 
+/**
+ * \brief Set silence size inside a software configuration container
+ * \param pcm PCM handle
+ * \param params Software configuration container
+ * \param val Silence size in frames (0 for disabled)
+ * \return 0 otherwise a negative error code
+ *
+ * A portion of playback buffer is overwritten with silence when playback
+ * underrun is nearer than silence threshold (see 
+ * #snd_pcm_sw_params_set_silence_threshold)
+ *
+ * The special case is when silence size value is equal or greater than
+ * boundary. The unused portion of the ring buffer (initial written samples
+ * are untouched) is filled with silence at start. Later, only just processed
+ * sample area is filled with silence. Note: silence_threshold must be set to zero.
+ */
+
+So, the "top-up" silencing happens only at start, but not after that.
+In the code path of hw_ptr update, it doesn't check the appl_ptr any
+longer, but fills the processed area by the hw_ptr update with
+silence.  That's the intended behavior for use cases of free-wheel
+mode without appl_ptr updates like dmix.
+
+
+Takashi
