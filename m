@@ -2,121 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9448B6F69FA
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 13:31:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B19A6F6358
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 05:32:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbjEDLbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 07:31:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49040 "EHLO
+        id S229461AbjEDDcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 23:32:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbjEDLb3 (ORCPT
+        with ESMTP id S229499AbjEDDcG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 07:31:29 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2276B3C0F;
-        Thu,  4 May 2023 04:31:28 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.31:55282.482502416
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.31])
-        by 189.cn (HERMES) with SMTP id 40663100283;
-        Thu,  4 May 2023 19:31:24 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-85667d6c59-6qwzn with ESMTP id 70d89bba14af4bc3806cb9bbf0733f71 for tzimmermann@suse.de;
-        Thu, 04 May 2023 19:31:27 CST
-X-Transaction-ID: 70d89bba14af4bc3806cb9bbf0733f71
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <58d2bd17-3b51-bd24-2f30-d849d3f72b0e@189.cn>
-Date:   Thu, 4 May 2023 19:31:24 +0800
+        Wed, 3 May 2023 23:32:06 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D9D9198A;
+        Wed,  3 May 2023 20:32:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683171125; x=1714707125;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rjq6kEAE37ZXdqXsLJPk3r0TYSNxOiuwP3NhKVSX78M=;
+  b=bAVU7kA3YwKmBs0gKRttJAWAuNNZkJcFNLM9TzlAOp2jNJXRDMlrRO7y
+   7WnMzjAFdrcvzjl0kk/Aej4VeG3i1PPZXaeoRz4rnDDpc/NkV3Ik1Kvbr
+   TxCCU6scZwBu5++U7eqc8cAiz1Me1d4Vx/z1VhbJux5rXzayaBgVelFm/
+   rziyewYyMCjhR7na9hg8fipWJvniA/1gngFN3G353T5qt2QROXp92zxSs
+   b6nl8Omn9H8EFP6RsDW1k1VFtl5q4STou0I5Fl0NeUW/7jiO/1cTL9Yen
+   pNv8Kh3UN9MfqosRJB6YhEpyW+eofjcsS9ceRRuH26WPp4/HVi46VilsV
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="411998246"
+X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
+   d="scan'208";a="411998246"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2023 20:32:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="786354576"
+X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
+   d="scan'208";a="786354576"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by FMSMGA003.fm.intel.com with ESMTP; 03 May 2023 20:32:01 -0700
+Date:   Thu, 4 May 2023 19:32:13 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
+        Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Vladimir Georgiev <v.georgiev@metrotek.ru>, system@metrotek.ru,
+        linux-fpga@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] dt-bindings: fpga: replace Ivan Bornyakov
+ maintainership
+Message-ID: <ZFOXvQAjA5bri+Zb@yilunxu-OptiPlex-7050>
+References: <20230428140150.2592-1-i.bornyakov@metrotek.ru>
+ <20230428140150.2592-3-i.bornyakov@metrotek.ru>
+ <20230428220415.GA351049-robh@kernel.org>
+ <20230429082919.i4pmerf4qeckl3w6@x260>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [v4,3/6] fbdev: Include <linux/io.h> in various drivers
-Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>, deller@gmx.de,
-        geert@linux-m68k.org, javierm@redhat.com, daniel@ffwll.ch,
-        vgupta@kernel.org, chenhuacai@kernel.org, kernel@xen0n.name,
-        davem@davemloft.net, James.Bottomley@HansenPartnership.com,
-        arnd@arndb.de, sam@ravnborg.org
-Cc:     linux-arch@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-m68k@lists.linux-m68k.org, loongarch@lists.linux.dev,
-        sparclinux@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230504074539.8181-4-tzimmermann@suse.de>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <20230504074539.8181-4-tzimmermann@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230429082919.i4pmerf4qeckl3w6@x260>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2023-04-29 at 11:29:19 +0300, Ivan Bornyakov wrote:
+> On Fri, Apr 28, 2023 at 05:04:15PM -0500, Rob Herring wrote:
+> > On Fri, Apr 28, 2023 at 05:01:50PM +0300, Ivan Bornyakov wrote:
+> > > As I'm leaving Metrotek, hand over Lattice Slave SPI sysCONFIG FPGA
+> > > manager and Microchip Polarfire FPGA manager maintainership duties to
+> > > Vladimir.
+> > > 
+> > > Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+> > > Signed-off-by: Vladimir Georgiev <v.georgiev@metrotek.ru>
+> > 
+> > The patch sender's Sob goes last. And only Vladimir should add his Sob 
+> > (when an author or sender).
+> > 
+> 
+> For the moment, when I'm still sender, would it be alright if we replace
+> Vladimir's "Signed-off-by" to "Acked-by"?
 
-Reviewed-by: Sui Jingfeng <suijingfeng@loongson.cn>
+Yes. I actually need an "Acked-by" that sent from Vladimir.
 
-
-On 2023/5/4 15:45, Thomas Zimmermann wrote:
-> The code uses writel() and similar I/O-memory helpers. Include
-> the header file to get the declarations.
->
-> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-> Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
-> ---
->   drivers/video/fbdev/arcfb.c       | 1 +
->   drivers/video/fbdev/aty/atyfb.h   | 2 ++
->   drivers/video/fbdev/wmt_ge_rops.c | 2 ++
->   3 files changed, 5 insertions(+)
->
-> diff --git a/drivers/video/fbdev/arcfb.c b/drivers/video/fbdev/arcfb.c
-> index 45e64016db32..d631d53f42ad 100644
-> --- a/drivers/video/fbdev/arcfb.c
-> +++ b/drivers/video/fbdev/arcfb.c
-> @@ -41,6 +41,7 @@
->   #include <linux/vmalloc.h>
->   #include <linux/delay.h>
->   #include <linux/interrupt.h>
-> +#include <linux/io.h>
->   #include <linux/fb.h>
->   #include <linux/init.h>
->   #include <linux/arcfb.h>
-> diff --git a/drivers/video/fbdev/aty/atyfb.h b/drivers/video/fbdev/aty/atyfb.h
-> index 465f55beb97f..30da3e82ed3c 100644
-> --- a/drivers/video/fbdev/aty/atyfb.h
-> +++ b/drivers/video/fbdev/aty/atyfb.h
-> @@ -3,8 +3,10 @@
->    *  ATI Frame Buffer Device Driver Core Definitions
->    */
->   
-> +#include <linux/io.h>
->   #include <linux/spinlock.h>
->   #include <linux/wait.h>
-> +
->       /*
->        *  Elements of the hardware specific atyfb_par structure
->        */
-> diff --git a/drivers/video/fbdev/wmt_ge_rops.c b/drivers/video/fbdev/wmt_ge_rops.c
-> index 42255d27a1db..99c7b0aea615 100644
-> --- a/drivers/video/fbdev/wmt_ge_rops.c
-> +++ b/drivers/video/fbdev/wmt_ge_rops.c
-> @@ -9,7 +9,9 @@
->   
->   #include <linux/module.h>
->   #include <linux/fb.h>
-> +#include <linux/io.h>
->   #include <linux/platform_device.h>
-> +
->   #include "core/fb_draw.h"
->   #include "wmt_ge_rops.h"
->   
+> 
+> > > ---
+> > >  Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml   | 2 +-
+> > >  .../devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml    | 2 +-
+> > >  2 files changed, 2 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml b/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
+> > > index 4fb05eb84e2a..164331eb6275 100644
+> > > --- a/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
+> > > +++ b/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
+> > > @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+> > >  title: Lattice Slave SPI sysCONFIG FPGA manager
+> > >  
+> > >  maintainers:
+> > > -  - Ivan Bornyakov <i.bornyakov@metrotek.ru>
+> > > +  - Vladimir Georgiev <v.georgiev@metrotek.ru>
+> > >  
+> > >  description: |
+> > >    Lattice sysCONFIG port, which is used for FPGA configuration, among others,
+> > > diff --git a/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml b/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
+> > > index 527532f039ce..a157eecfb5fc 100644
+> > > --- a/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
+> > > +++ b/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
+> > > @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+> > >  title: Microchip Polarfire FPGA manager.
+> > >  
+> > >  maintainers:
+> > > -  - Ivan Bornyakov <i.bornyakov@metrotek.ru>
+> > > +  - Vladimir Georgiev <v.georgiev@metrotek.ru>
+> > >  
+> > >  description:
+> > >    Device Tree Bindings for Microchip Polarfire FPGA Manager using slave SPI to
+> > > -- 
+> > > 2.40.0
+> > > 
+> > > 
+> 
