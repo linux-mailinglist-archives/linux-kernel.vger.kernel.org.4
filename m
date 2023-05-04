@@ -2,50 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12A966F7590
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:58:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6F2E6F7591
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:58:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232224AbjEDT6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 15:58:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43506 "EHLO
+        id S232228AbjEDT6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 15:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232623AbjEDT4X (ORCPT
+        with ESMTP id S232633AbjEDT4Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 15:56:23 -0400
+        Thu, 4 May 2023 15:56:25 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3219AAD33;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C21C21D966;
         Thu,  4 May 2023 12:49:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 957486380B;
-        Thu,  4 May 2023 19:49:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70FD9C4339B;
-        Thu,  4 May 2023 19:49:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9489363800;
+        Thu,  4 May 2023 19:49:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6873AC433EF;
+        Thu,  4 May 2023 19:49:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683229762;
-        bh=zU5BRTiyPHLi74zNbFe5zIUduzQsgNtAt2mWhl02SDo=;
+        s=k20201202; t=1683229766;
+        bh=tHNCniWDgY4VtmfVvTqf1L/rTVX3QQEKktO4dpi2r9E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uz8iyK9tbffPRpPk7Js4mjRMnUn+GLVrC/PpMhNlcufqxwjgXwxMoPOypGczeJU06
-         e3/KOuoyDJ7EIyLlTYZ5ROqX9artlqNpxx9VtqUQCe6C6NjhPYIxiwqlJun9Fwybty
-         Zf58rc76ZPT9kOwysEP0yOpRlqNAT1fG3WHJMguyUFJDAB+0kGLQ5kCfHPaZQFIwyW
-         7zHfEUw5b3cDr/PiMMse9Wr4BRHvBQzJRRNiaL37nn1o6LraRxSIFWmhojKpl7DN9N
-         r5GNBHy5jrD8xK6RgFYk+Hgbm0mjnIOvBhPzPYXL+FZ1tfaq+PCm/4gQIiBGVPjAna
-         IfiOx4uio4oiw==
+        b=Opf6x6KYbqYlr7EqR1K+7NhyJGTlReWaOqnKJuBekhuUQBLJUOxx6k/1b7gkEgeJg
+         yj95wRFPL+76WIfHVXZKGuSFUoHdq9QJN5MOMm4FtUmaGd9mLASqByXdD77ueWtwQM
+         bwnlOBoZ2TqKtwC5NbDch81ZNpQOqiCuUU4CwNIHuWY3HpUGEOrzYQMLtaZYGDtsue
+         4cTY8C+myb7P1kOvqGdc9LhzNUebS2Oa4S6c27lnsyP6fFZB0E2ga+dNPgwk57xvK0
+         L4dvf/S98U7CnezsPVMOMwqP806NcnVwsjqaI889i8Ckp4baA1S8jlCJIb31OZKs6D
+         dlVXgVzoEaxYw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Chaitanya Kulkarni <kch@nvidia.com>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        Ming Lei <ming.lei@redhat.com>,
-        Nitesh Shetty <nj.shetty@samsung.com>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>,
-        damien.lemoal@opensource.wdc.com, bvanassche@acm.org,
-        johannes.thumshirn@wdc.com, vincent.fu@samsung.com,
-        error27@gmail.com, akinobu.mita@gmail.com,
-        shinichiro.kawasaki@wdc.com, linux-block@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 23/30] null_blk: Always check queue mode setting from configfs
-Date:   Thu,  4 May 2023 15:48:16 -0400
-Message-Id: <20230504194824.3808028-23-sashal@kernel.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Sasha Levin <sashal@kernel.org>, gregory.greenman@intel.com,
+        kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, benjamin.berg@intel.com,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 24/30] wifi: iwlwifi: dvm: Fix memcpy: detected field-spanning write backtrace
+Date:   Thu,  4 May 2023 15:48:17 -0400
+Message-Id: <20230504194824.3808028-24-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230504194824.3808028-1-sashal@kernel.org>
 References: <20230504194824.3808028-1-sashal@kernel.org>
@@ -63,85 +62,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chaitanya Kulkarni <kch@nvidia.com>
+From: Hans de Goede <hdegoede@redhat.com>
 
-[ Upstream commit 63f8793ee60513a09f110ea460a6ff2c33811cdb ]
+[ Upstream commit ef16799640865f937719f0771c93be5dca18adc6 ]
 
-Make sure to check device queue mode in the null_validate_conf() and
-return error for NULL_Q_RQ as we don't allow legacy I/O path, without
-this patch we get OOPs when queue mode is set to 1 from configfs,
-following are repro steps :-
+A received TKIP key may be up to 32 bytes because it may contain
+MIC rx/tx keys too. These are not used by iwl and copying these
+over overflows the iwl_keyinfo.key field.
 
-modprobe null_blk nr_devices=0
-mkdir config/nullb/nullb0
-echo 1 > config/nullb/nullb0/memory_backed
-echo 4096 > config/nullb/nullb0/blocksize
-echo 20480 > config/nullb/nullb0/size
-echo 1 > config/nullb/nullb0/queue_mode
-echo 1 > config/nullb/nullb0/power
+Add a check to not copy more data to iwl_keyinfo.key then will fit.
 
-Entering kdb (current=0xffff88810acdd080, pid 2372) on processor 42 Oops: (null)
-due to oops @ 0xffffffffc041c329
-CPU: 42 PID: 2372 Comm: sh Tainted: G           O     N 6.3.0-rc5lblk+ #5
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
-RIP: 0010:null_add_dev.part.0+0xd9/0x720 [null_blk]
-Code: 01 00 00 85 d2 0f 85 a1 03 00 00 48 83 bb 08 01 00 00 00 0f 85 f7 03 00 00 80 bb 62 01 00 00 00 48 8b 75 20 0f 85 6d 02 00 00 <48> 89 6e 60 48 8b 75 20 bf 06 00 00 00 e8 f5 37 2c c1 48 8b 75 20
-RSP: 0018:ffffc900052cbde0 EFLAGS: 00010246
-RAX: 0000000000000001 RBX: ffff88811084d800 RCX: 0000000000000001
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff888100042e00
-RBP: ffff8881053d8200 R08: ffffc900052cbd68 R09: ffff888105db2000
-R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000002
-R13: ffff888104765200 R14: ffff88810eec1748 R15: ffff88810eec1740
-FS:  00007fd445fd1740(0000) GS:ffff8897dfc80000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000060 CR3: 0000000166a00000 CR4: 0000000000350ee0
-DR0: ffffffff8437a488 DR1: ffffffff8437a489 DR2: ffffffff8437a48a
-DR3: ffffffff8437a48b DR6: 00000000ffff0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- nullb_device_power_store+0xd1/0x120 [null_blk]
- configfs_write_iter+0xb4/0x120
- vfs_write+0x2ba/0x3c0
- ksys_write+0x5f/0xe0
- do_syscall_64+0x3b/0x90
- entry_SYSCALL_64_after_hwframe+0x72/0xdc
-RIP: 0033:0x7fd4460c57a7
-Code: 0d 00 f7 d8 64 89 02 48 c7 c0 ff ff ff ff eb b7 0f 1f 00 f3 0f 1e fa 64 8b 04 25 18 00 00 00 85 c0 75 10 b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 51 c3 48 83 ec 28 48 89 54 24 18 48 89 74 24
-RSP: 002b:00007ffd3792a4a8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007fd4460c57a7
-RDX: 0000000000000002 RSI: 000055b43c02e4c0 RDI: 0000000000000001
-RBP: 000055b43c02e4c0 R08: 000000000000000a R09: 00007fd44615b4e0
-R10: 00007fd44615b3e0 R11: 0000000000000246 R12: 0000000000000002
-R13: 00007fd446198520 R14: 0000000000000002 R15: 00007fd446198700
- </TASK>
+This fixes backtraces like this one:
 
-Signed-off-by: Chaitanya Kulkarni <kch@nvidia.com>
-Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
-Reviewed-by: Ming Lei <ming.lei@redhat.com>
-Reviewed-by: Nitesh Shetty <nj.shetty@samsung.com>
-Link: https://lore.kernel.org/r/20230416220339.43845-1-kch@nvidia.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+ memcpy: detected field-spanning write (size 32) of single field "sta_cmd.key.key" at drivers/net/wireless/intel/iwlwifi/dvm/sta.c:1103 (size 16)
+ WARNING: CPU: 1 PID: 946 at drivers/net/wireless/intel/iwlwifi/dvm/sta.c:1103 iwlagn_send_sta_key+0x375/0x390 [iwldvm]
+ <snip>
+ Hardware name: Dell Inc. Latitude E6430/0H3MT5, BIOS A21 05/08/2017
+ RIP: 0010:iwlagn_send_sta_key+0x375/0x390 [iwldvm]
+ <snip>
+ Call Trace:
+  <TASK>
+  iwl_set_dynamic_key+0x1f0/0x220 [iwldvm]
+  iwlagn_mac_set_key+0x1e4/0x280 [iwldvm]
+  drv_set_key+0xa4/0x1b0 [mac80211]
+  ieee80211_key_enable_hw_accel+0xa8/0x2d0 [mac80211]
+  ieee80211_key_replace+0x22d/0x8e0 [mac80211]
+ <snip>
+
+Link: https://www.alionet.org/index.php?topic=1469.0
+Link: https://lore.kernel.org/linux-wireless/20230218191056.never.374-kees@kernel.org/
+Link: https://lore.kernel.org/linux-wireless/68760035-7f75-1b23-e355-bfb758a87d83@redhat.com/
+Cc: Kees Cook <keescook@chromium.org>
+Suggested-by: Johannes Berg <johannes@sipsolutions.net>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/block/null_blk/main.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/net/wireless/intel/iwlwifi/dvm/sta.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/block/null_blk/main.c b/drivers/block/null_blk/main.c
-index 033b0f64f2b9b..686ec6bcdef3d 100644
---- a/drivers/block/null_blk/main.c
-+++ b/drivers/block/null_blk/main.c
-@@ -1744,6 +1744,11 @@ static int null_init_tag_set(struct nullb *nullb, struct blk_mq_tag_set *set)
- 
- static int null_validate_conf(struct nullb_device *dev)
+diff --git a/drivers/net/wireless/intel/iwlwifi/dvm/sta.c b/drivers/net/wireless/intel/iwlwifi/dvm/sta.c
+index ddc14059b07d1..7c3168145e58a 100644
+--- a/drivers/net/wireless/intel/iwlwifi/dvm/sta.c
++++ b/drivers/net/wireless/intel/iwlwifi/dvm/sta.c
+@@ -1086,6 +1086,7 @@ static int iwlagn_send_sta_key(struct iwl_priv *priv,
  {
-+	if (dev->queue_mode == NULL_Q_RQ) {
-+		pr_err("legacy IO path is no longer available\n");
-+		return -EINVAL;
-+	}
-+
- 	dev->blocksize = round_down(dev->blocksize, 512);
- 	dev->blocksize = clamp_t(unsigned int, dev->blocksize, 512, 4096);
+ 	__le16 key_flags;
+ 	struct iwl_addsta_cmd sta_cmd;
++	size_t to_copy;
+ 	int i;
  
+ 	spin_lock_bh(&priv->sta_lock);
+@@ -1105,7 +1106,9 @@ static int iwlagn_send_sta_key(struct iwl_priv *priv,
+ 		sta_cmd.key.tkip_rx_tsc_byte2 = tkip_iv32;
+ 		for (i = 0; i < 5; i++)
+ 			sta_cmd.key.tkip_rx_ttak[i] = cpu_to_le16(tkip_p1k[i]);
+-		memcpy(sta_cmd.key.key, keyconf->key, keyconf->keylen);
++		/* keyconf may contain MIC rx/tx keys which iwl does not use */
++		to_copy = min_t(size_t, sizeof(sta_cmd.key.key), keyconf->keylen);
++		memcpy(sta_cmd.key.key, keyconf->key, to_copy);
+ 		break;
+ 	case WLAN_CIPHER_SUITE_WEP104:
+ 		key_flags |= STA_KEY_FLG_KEY_SIZE_MSK;
 -- 
 2.39.2
 
