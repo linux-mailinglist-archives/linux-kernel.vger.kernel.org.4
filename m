@@ -2,89 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B7246F6DCA
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 16:34:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F1616F6DC8
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 16:34:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbjEDOeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 10:34:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35378 "EHLO
+        id S231234AbjEDOeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 10:34:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbjEDOeI (ORCPT
+        with ESMTP id S229915AbjEDOd7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 10:34:08 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36764ECF;
-        Thu,  4 May 2023 07:34:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=2q1Na0yWnrxCd8vbOMPYz/xcczauSqn9EWcowSr4XIc=; b=wY435xR4+CwjWJ9LFIuoGNLvka
-        dWhDGn6W86+Jw2I/OQeFmzzO0qD+fBbP3yVQp0sM1CR/teYcmmDcgl7GBOFKOQSHTENMB5bmM3GPp
-        zVXmNn67yldM41vjaysbtH01Jhot9+lcxiJpmEEhjAZpKMxYdveWf/j9OvdjJmGK+WjIPMlmWLl5p
-        9gBS9h/QsBg8D94BHw1CiWsHknlJbHfMrvSqAysHP7kQCKIGSdlDc8TyClJ5j+ReW3CcVrqSXHJNi
-        usjNCB2JInauUpoRSS90LDcX1yVTo/OQaMomlLTol0RXpWSIqneB3B2GKMu6IMpj4k+RiS5+PwaTC
-        xu4uxQFw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pua15-00Afz2-Ky; Thu, 04 May 2023 14:33:08 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 807333002A3;
-        Thu,  4 May 2023 16:33:04 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 0432B263B6381; Thu,  4 May 2023 16:33:03 +0200 (CEST)
-Date:   Thu, 4 May 2023 16:33:03 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     Wander Lairson Costa <wander@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Brian Cain <bcain@quicinc.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Christian Brauner <brauner@kernel.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
-        <linux-perf-users@vger.kernel.org>, Hu Chunyu <chuhu@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v7 2/3] sched/task: Add the put_task_struct_atomic_safe()
- function
-Message-ID: <20230504143303.GA1744142@hirez.programming.kicks-ass.net>
-References: <20230425114307.36889-1-wander@redhat.com>
- <20230425114307.36889-3-wander@redhat.com>
- <20230504084229.GI1734100@hirez.programming.kicks-ass.net>
- <20230504122945.GA28757@redhat.com>
+        Thu, 4 May 2023 10:33:59 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A35CED;
+        Thu,  4 May 2023 07:33:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683210838; x=1714746838;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xlLDMQQnaoiJZU5cc5xhDZa7M+4PCVjcjgdzn9vspmI=;
+  b=PpIkwUDi2EOUbNVwXxnpOGKCOUOxcVT47VYAaQEVhL1My8miYN3b2AV+
+   7au4Dx1c1oZDgT5CoFEDjIjvYOH+YgSwyqHCkJ+1c314NyVbPildcYrsB
+   i0Ib5KWUVxuOz4GiS7oPd4PSrJJ+v/WAafJsXNTmA1ocjE55h9S9yRaCs
+   8EW5yXQkPPwDqjgZdsknLHI62OyZXr2KTnD8gGdvDFldeBxUAcW39TuUK
+   F/y50GJR1KkO84uoQM4N5o2NbMZXLnWKwdAbtia8Bj5Qj6+fD1Vk7Y8g5
+   Ry5koy4r9qT0d6U49AiG4Pgu7sXvd34tOySRqZF46De++gxACl5rV75gX
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="329305927"
+X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
+   d="scan'208";a="329305927"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 07:33:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="821195742"
+X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
+   d="scan'208";a="821195742"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga004.jf.intel.com with ESMTP; 04 May 2023 07:33:54 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pua1p-0095jL-07;
+        Thu, 04 May 2023 17:33:53 +0300
+Date:   Thu, 4 May 2023 17:33:52 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Zhigang Shi <Zhigang.Shi@liteon.com>,
+        Paul Gazzillo <paul@pgazz.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 4/5] iio: light: ROHM BU27008 color sensor
+Message-ID: <ZFPCUJ81aw/GkJgT@smile.fi.intel.com>
+References: <cover.1683105758.git.mazziesaccount@gmail.com>
+ <6d1e37f95dd039d9c96a992b1855fd193bdded40.1683105758.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230504122945.GA28757@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <6d1e37f95dd039d9c96a992b1855fd193bdded40.1683105758.git.mazziesaccount@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -93,37 +76,174 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 04, 2023 at 02:29:45PM +0200, Oleg Nesterov wrote:
-> On 05/04, Peter Zijlstra wrote:
-> >
-> > Urgh.. that's plenty horrible. And I'm sure everybody plus kitchen sink
-> > has already asked why can't we just rcu free the thing unconditionally.
-> >
-> > Google only found me an earlier version of this same patch set, but I'm
-> > sure we've had that discussion many times over the past several years.
+On Wed, May 03, 2023 at 12:50:14PM +0300, Matti Vaittinen wrote:
+> The ROHM BU27008 is a sensor with 5 photodiodes (red, green, blue, clear
+> and IR) with four configurable channels. Red and green being always
+> available and two out of the rest three (blue, clear, IR) can be
+> selected to be simultaneously measured. Typical application is adjusting
+> LCD backlight of TVs, mobile phones and tablet PCs.
 > 
-> Yes... see for example
-> 
-> https://lore.kernel.org/lkml/CAHk-=whtj+aSYftniMRG4xvFE8dmmYyrqcJyPmzStsfj5w9r=w@mail.gmail.com/
-> 
-> We already have an rcu pass before put_task_struct(zombie), see
-> put_task_struct_rcu_user(), another one look unfortunate.
+> Add initial support for the ROHM BU27008 color sensor.
+>  - raw_read() of RGB and clear channels
+>  - triggered buffer w/ DRDY interrtupt
 
-Ah indeed, it got mentioned there as well. And Linus seems to be arguing
-against doing an rcu free there. So humm..
+...
 
-Then I'm thinking something trivial like so:
+> +config ROHM_BU27008
+> +	tristate "ROHM BU27008 color (RGB+C/IR) sensor"
+> +	depends on I2C
+> +	select REGMAP_I2C
+> +	select IIO_GTS_HELPER
+> +	help
+> +	  Enable support for the ROHM BU27008 color sensor.
+> +	  The ROHM BU27008 is a sensor with 5 photodiodes (red, green,
+> +	  blue, clear and IR) with four configurable channels. Red and
+> +	  green being always available and two out of the rest three
+> +	  (blue, clear, IR) can be selected to be simultaneously measured.
+> +	  Typical application is adjusting LCD backlight of TVs,
+> +	  mobile phones and tablet PCs.
 
-static inline void put_task_struct(struct task_struct *t)
-{
-	if (!refcount_dec_and_test(&t->usage))
-		return;
+Module name?
 
-	if (IS_ENABLED(CONFIG_PREEMPT_RT) && !preemptible())
-		call_rcu(&t->rcu, __put_task_struct_rcu);
+...
 
-	__put_task_struct(t);
-}
+> +static const struct regmap_range bu27008_read_only_ranges[] = {
+> +	{
+> +		.range_min = BU27008_REG_DATA0_LO,
+> +		.range_max = BU27008_REG_DATA3_HI,
+> +	}, {
+> +		.range_min = BU27008_REG_MANUFACTURER_ID,
+> +		.range_max = BU27008_REG_MANUFACTURER_ID,
 
-should do, or alternatively use irq_work, which has a much lower
-latency, but meh..
+> +	}
+
++ trailing comma for consistency?
+
+> +};
+
+...
+
+> +static const struct regmap_config bu27008_regmap = {
+> +	.reg_bits = 8,
+> +	.val_bits = 8,
+> +	.max_register = BU27008_REG_MAX,
+> +	.cache_type = REGCACHE_RBTREE,
+> +	.volatile_table = &bu27008_volatile_regs,
+> +	.wr_table = &bu27008_ro_regs,
+
+Do you need regmap lock? If so, why (since you have mutex)?
+
+> +};
+
+...
+
+> +static int bu27008_read_one(struct bu27008_data *data, struct iio_dev *idev,
+> +			    struct iio_chan_spec const *chan, int *val, int *val2)
+> +{
+> +	int ret, int_time;
+> +
+> +	ret = bu27008_chan_cfg(data, chan);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = bu27008_meas_set(data, BU27008_MEAS_EN);
+> +	if (ret)
+> +		return ret;
+> +
+> +	int_time = bu27008_get_int_time_us(data);
+> +	if (int_time < 0)
+> +		int_time = BU27008_MEAS_TIME_MAX_MS;
+> +	else
+> +		int_time /= USEC_PER_MSEC;
+
+The above function returns an error code when negative, so I would rather see
+
+	ret = bu27008_get_int_time_us(data);
+	if (ret < 0)
+		int_time = BU27008_MEAS_TIME_MAX_MS;
+	else
+		int_time = ret / USEC_PER_MSEC;
+
+at least this explicitly shows the semantics of the "negative" time.
+
+> +	msleep(int_time);
+> +
+> +	ret = bu27008_chan_read_data(data, chan->address, val);
+> +	if (!ret)
+> +		ret = IIO_VAL_INT;
+> +
+> +	if (bu27008_meas_set(data, BU27008_MEAS_DIS))
+> +		dev_warn(data->dev, "measurement disabling failed\n");
+> +
+> +	return ret;
+> +}
+
+...
+
+> +	ret = regmap_reinit_cache(data->regmap, &bu27008_regmap);
+> +	if (ret) {
+> +		dev_err(data->dev, "Failed to reinit reg cache\n");
+
+> +		return ret;
+
+Dup is not needed.
+
+> +	}
+> +
+> +	return ret;
+
+...
+
+> +	if (i2c->irq) {
+
+Instead of a long body, I would rather see a call to
+
+		ret = ..._setup_irq();
+		if (ret)
+			return ret;
+
+> +		ret = devm_iio_triggered_buffer_setup(dev, idev,
+> +						      &iio_pollfunc_store_time,
+> +						      bu27008_trigger_handler,
+> +						      &bu27008_buffer_ops);
+> +		if (ret)
+> +			return dev_err_probe(dev, ret,
+> +				     "iio_triggered_buffer_setup_ext FAIL\n");
+> +
+> +		itrig = devm_iio_trigger_alloc(dev, "%sdata-rdy-dev%d",
+> +					       idev->name, iio_device_id(idev));
+> +		if (!itrig)
+> +			return -ENOMEM;
+> +
+> +		data->trig = itrig;
+> +
+> +		itrig->ops = &bu27008_trigger_ops;
+> +		iio_trigger_set_drvdata(itrig, data);
+> +
+> +		name = devm_kasprintf(dev, GFP_KERNEL, "%s-bu27008",
+> +				      dev_name(dev));
+> +
+> +		ret = devm_request_irq(dev, i2c->irq,
+> +				       &bu27008_data_rdy_poll,
+> +				       0, name, itrig);
+> +		if (ret)
+> +			return dev_err_probe(dev, ret,
+> +					     "Could not request IRQ\n");
+> +
+> +		ret = devm_iio_trigger_register(dev, itrig);
+> +		if (ret)
+> +			return dev_err_probe(dev, ret,
+> +					     "Trigger registration failed\n");
+> +
+> +		/* set default trigger */
+> +		idev->trig = iio_trigger_get(itrig);
+> +	} else {
+> +		dev_info(dev, "No IRQ, buffered mode disabled\n");
+> +	}
+
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
