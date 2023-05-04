@@ -2,206 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C8E36F6535
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 08:46:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F04186F653F
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 08:48:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229684AbjEDGqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 02:46:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54296 "EHLO
+        id S230048AbjEDGsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 02:48:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbjEDGqv (ORCPT
+        with ESMTP id S229994AbjEDGsB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 02:46:51 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F2BB26A4
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 23:46:48 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-50bc4ba28cbso113239a12.0
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 23:46:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683182807; x=1685774807;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=M7vw8A+fPBvQQ7FZ7Zi1LK3WXKYiCvrkFtHK4YoEOPY=;
-        b=NJB48wgq8GaIWJfLNyX9Xph8XZknqa3JZ+QwdR8JtY4eLr142KuLjIFZQEA1Avf62D
-         rOwf/8NNDFoicTajh6DcOMjtMJPHSdPgsaCLb76kK8VJThqNsFKN5FnUvc0yhDNJkZ6g
-         zLzpjRvEgDdzhluvdCJMKSX4OT5lXrtwUbdA78TatEHKf+qHc5jVJRCf54en6xuXpYPq
-         WQLvOMtYnB1Le7URGZRQ+GrrjxnJVPuZ0p2oCQMk8YkBiJIVcLHpKm0AhgH3/tvWQkVz
-         tgVc/mclRts18VaHlldJb+BEe6Zyz6+hdGuKTCz2kAg06gohn1iwOhPVQL+p42V5/IWR
-         JHjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683182807; x=1685774807;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=M7vw8A+fPBvQQ7FZ7Zi1LK3WXKYiCvrkFtHK4YoEOPY=;
-        b=Wq8TqOEXfYGzSfLtEZIjpFGfaaJzHaVmek2Ue4+nzz+VKP4khMCG+hi0p7A0X9/Y/s
-         WBLIKImGcFIV7JI4LqolEiQuIL0JcIkZ/8w8d37XHxhaCJogbVG+TE3cZqao8Qv72ehG
-         Jy8jE+3zdVAglYKnmxRKGL/ukGgDwvKe2YXX3qAIm2caI9IvbiOTnR3HSc64ipMnP2iU
-         cdrmzvimhMdKEUZ+Ba47DteMYw9iynq952umMXtD93nQz1J8n+CvieV3CP883+becwB3
-         WxbiBUw/N9latmTU8nLp8MjTiBRs6CnvrBiZqgEUd8SCM8Mt4SPwZpj1ld0jFJxi3Zl/
-         iKCQ==
-X-Gm-Message-State: AC+VfDwCrFJE+e3CJpa0fP5qAHh+ZxDFIOnSJXtRh3XBVAMCAPZlsdgV
-        71T07vD1s7C1yXrtSeYYSaR12g==
-X-Google-Smtp-Source: ACHHUZ6UY8A2CuWiZF7JTRIhZOxqHEYlLakXgHOXDn41+YXqXV2Z9n4jJZ+YqlYAwptXMo8AV6xSmg==
-X-Received: by 2002:a17:907:3e22:b0:931:6921:bdb7 with SMTP id hp34-20020a1709073e2200b009316921bdb7mr5892628ejc.60.1683182807040;
-        Wed, 03 May 2023 23:46:47 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:cbf1:e7ef:fb81:e912? ([2a02:810d:15c0:828:cbf1:e7ef:fb81:e912])
-        by smtp.gmail.com with ESMTPSA id 10-20020a170906328a00b009599c3a019fsm14027418ejw.60.2023.05.03.23.46.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 May 2023 23:46:46 -0700 (PDT)
-Message-ID: <4aa7adbf-f89e-6819-64d2-5942a456528a@linaro.org>
-Date:   Thu, 4 May 2023 08:46:45 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH] dt-bindings: usb: Add binding for Microchip usb5744 hub
- controller
-Content-Language: en-US
-To:     Michal Simek <michal.simek@amd.com>, linux-kernel@vger.kernel.org,
-        monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com,
-        ilias.apalodimas@linaro.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Piyush Mehta <piyush.mehta@amd.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org
-References: <cca068980ae0b902168a9a9b78cab4efb43157a8.1683121150.git.michal.simek@amd.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <cca068980ae0b902168a9a9b78cab4efb43157a8.1683121150.git.michal.simek@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 4 May 2023 02:48:01 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7AA72728
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 23:47:59 -0700 (PDT)
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230504064757epoutp04e4d7f5bcb8b5b161502b89fe22cb6bc8~b3ejOcmAK1807918079epoutp04s
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 06:47:57 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230504064757epoutp04e4d7f5bcb8b5b161502b89fe22cb6bc8~b3ejOcmAK1807918079epoutp04s
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1683182877;
+        bh=8a+D469i+vkHAxN6iDvWl8ngbgBCSjHZ3wFl2e3DQwM=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=VDww7eCQTHXKdK5dNAm1aIRzIbOc9IKIDaOOkCgrXw559jHo1fR4ISSTiaI5rNILS
+         QWFJgZtFsfAWKfJBdE3BNuLOGtOw45wNUKUSC2OO3lgF8PxQEzil3kF98vqKnVxH6w
+         iq8eIdMI2k2UPzhQf/N4snI2UiFtRckeO8pRev+w=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20230504064757epcas2p1160f37b6d615008ef1312ff7d6ce79d3~b3ei5LuyD2860128601epcas2p11;
+        Thu,  4 May 2023 06:47:57 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.88]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4QBksS5wgsz4x9Pq; Thu,  4 May
+        2023 06:47:56 +0000 (GMT)
+X-AuditID: b6c32a45-465ff70000020cc1-ce-6453551c9128
+Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        13.AA.03265.C1553546; Thu,  4 May 2023 15:47:56 +0900 (KST)
+Mime-Version: 1.0
+Subject: RE:(2) [PATCH 02/15] block: blk-integiry: add helper functions for
+ bio_integrity_add_page
+Reply-To: j-young.choi@samsung.com
+Sender: Jinyoung CHOI <j-young.choi@samsung.com>
+From:   Jinyoung CHOI <j-young.choi@samsung.com>
+To:     "hch@lst.de" <hch@lst.de>
+CC:     "axboe@kernel.dk" <axboe@kernel.dk>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <20230503155501.GB31700@lst.de>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20230504064656epcms2p79ffe075ea27710f311b8c1738ed10be0@epcms2p7>
+Date:   Thu, 04 May 2023 15:46:56 +0900
+X-CMS-MailID: 20230504064656epcms2p79ffe075ea27710f311b8c1738ed10be0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrFKsWRmVeSWpSXmKPExsWy7bCmua5MaHCKwdo/Char7/azWbw8pGmx
+        cvVRJou9t7QtLu+aw2ax/Pg/Jgc2j8tnSz1232xg8/j49BaLR9+WVYwenzfJBbBGZdtkpCam
+        pBYppOYl56dk5qXbKnkHxzvHm5oZGOoaWlqYKynkJeam2iq5+AToumXmAK1XUihLzCkFCgUk
+        Fhcr6dvZFOWXlqQqZOQXl9gqpRak5BSYF+gVJ+YWl+al6+WlllgZGhgYmQIVJmRnrPq9j7lg
+        J1/FkndXmBoY3/F2MXJySAiYSOzuu8/axcjFISSwg1Gid+pMti5GDg5eAUGJvzuEQWqEBVIk
+        /v89yQZiCwkoSZxbM4sRpERYwEDiVq85SJhNQE/i55IZYJ0iArISV1bUg0xkFnjCKLF55Xw2
+        iFW8EjPan7JA2NIS25dvZQSxOQV0JA5tPcoKEdeQ+LGslxnCFpW4ufotO4z9/th8RghbRKL1
+        3lmoGkGJBz93Q8UlJQ4d+gp2g4RAvsSGA4EQ4RqJt8sPQJXoS1zr2Ah2Aq+Ar8Tu9xvAbBYB
+        VYm9Lz9DnekiMaFnLVicWUBbYtnC18wgI5kFNCXW79KHmK4sceQWVAWfRMfhv+wwDzZs/I2V
+        vWPeEyaIVjWJRU1GExiVZyECeRaSVbMQVi1gZF7FKJZaUJybnlpsVGAIj9fk/NxNjOBEqOW6
+        g3Hy2w96hxiZOBgPMUpwMCuJ8H4o9EsR4k1JrKxKLcqPLyrNSS0+xGgK9OREZinR5HxgKs4r
+        iTc0sTQwMTMzNDcyNTBXEueVtj2ZLCSQnliSmp2aWpBaBNPHxMEp1cDkIs++84HJmXQTWeHt
+        5yvSJlnmp27cEvZywz05tdSZ3ud+bJX2q5JcLHlhRsRS3bnxYvPqGbfp/Pm1Vkgzar9Y97Zv
+        ktZ7/zhnyv36+8F6xbKnZp/k418bFEdo5W28pFa8OPeogt7xBRMam66bHdT8a/pew6fp9adr
+        B1xai3fwcFcvfrSZ2S9D8qrSi65/V/JUuBzWvi+6dkOQza79SohEjOvZ66u3qWXNu9MY/LNx
+        tpXPLQfOBOnP8btLk10lD6apBZjI7tHfLx9d9O7D/1CDA0sL7J+cklifO3GZ4NW/zw692lXJ
+        Xefn+U+27y+Tzb5GbrG151s9JVbr2SUsiixd+eznrmN2p3Xi3F4uVDJUYinOSDTUYi4qTgQA
+        /GS5Sg0EAAA=
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230503094912epcms2p4bef206eab1c41a92eba2583a69c74323
+References: <20230503155501.GB31700@lst.de>
+        <20230503094912epcms2p4bef206eab1c41a92eba2583a69c74323@epcms2p4>
+        <20230503100220epcms2p33e69fd7d5f04b305c621799792e8155f@epcms2p3>
+        <CGME20230503094912epcms2p4bef206eab1c41a92eba2583a69c74323@epcms2p7>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/05/2023 15:39, Michal Simek wrote:
-> The Microchip usb5744 is a SS/HS USB 3.0 hub controller with 4 ports.
-> The binding describes USB related aspects of the USB5744 hub, it as
-> well cover the option of connecting the controller as an i2c slave.
-> When i2c interface is connected hub needs to be initialized first.
-> Hub itself has fixed i2c address 0x2D but hardcoding address is not good
-> idea because address can be shifted by i2c address translator in the
-> middle.
-> 
-> Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
-> Signed-off-by: Michal Simek <michal.simek@amd.com>
-> ---
-> 
-> It looks like that usb8041 has also an optional i2c interface which is not
-> covered. But it is mentioned at commit 40e58a8a7ca6 ("dt-bindings: usb:
-> Add binding for TI USB8041 hub controller").
-> 
-> i2c-bus name property was suggested by Rob at
-> https://lore.kernel.org/all/CAL_JsqJedhX6typpUKbnzV7CLK6UZVjq3CyG9iY_j5DLPqvVdw@mail.gmail.com/
-> and
-> https://lore.kernel.org/all/CAL_JsqJZBbu+UXqUNdZwg-uv0PAsNg55026PTwhKr5wQtxCjVQ@mail.gmail.com/
-> 
-> the question is if adding address like this is acceptable.
-> But it must be specified.
-
-Why? phandle points it explicitly.
-
-> 
-> Driver will follow based on final dt-binding.
-> 
-> ---
->  .../bindings/usb/microchip,usb5744.yaml       | 85 +++++++++++++++++++
->  1 file changed, 85 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml b/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
-> new file mode 100644
-> index 000000000000..fafe275a35df
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
-> @@ -0,0 +1,85 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/microchip,usb5744.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Microchip USB5744 4-port Hub Controller
-> +
-> +description:
-> +  Microchip's USB5744 SmartHubTM IC is a 4 port, SuperSpeed (SS)/Hi-Speed (HS),
-> +  low power, low pin count configurable and fully compliant with the USB 3.1
-> +  Gen 1 specification. The USB5744 also supports Full Speed (FS) and Low Speed
-> +  (LS) USB signaling, offering complete coverage of all defined USB operating
-> +  speeds. The new SuperSpeed hubs operate in parallel with the USB 2.0
-> +  controller, so 5 Gbps SuperSpeed data transfers are not affected by slower
-> +  USB 2.0 traffic.
-> +
-> +maintainers:
-> +  - Piyush Mehta <piyush.mehta@amd.com>
-> +  - Michal Simek <michal.simek@amd.com>
-> +
-> +allOf:
-> +  - $ref: usb-device.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - usb424,5744
-> +      - usb424,2744
-
-Keep the list ordered, so 2744 before 5744.
-
-> +
-> +  reg: true
-> +
-> +  reset-gpios:
-> +    maxItems: 1
-> +    description:
-> +      GPIO controlling the GRST# pin.
-> +
-> +  vdd-supply:
-> +    description:
-> +      VDD power supply to the hub
-> +
-> +  peer-hub:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description:
-> +      phandle to the peer hub on the controller.
-> +
-> +  i2c-bus:
-> +    maxItems: 1
-> +    description:
-> +      phandle of an I2C controller to link usb-hub for usb attach and reset
-> +      followed by i2c address.
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - peer-hub
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +
-> +    usb {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        /* 2.0 hub on port 1 */
-> +        hub_2_0: hub@1 {
-> +          compatible = "usb424,5744";
-
-Mixed indentation, use four spaces here as well.
-
-> +          reg = <1>;
-> +          peer-hub = <&hub_3_0>;
-> +          i2c-bus = <&i2c 0x2d>;
-> +          reset-gpios = <&gpio 3 GPIO_ACTIVE_LOW>;
-> +        };
-Krzysztof
-
+>s/blk-integiry/blk-integrity/ in the subject.
+>
+>> +static inline bool bip_full(struct bio_integrity_payload *bip, unsigned=
+ int len)
+>
+>> +static bool bip_try_merge_hw_seg(struct request_queue *q,
+>> + =C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
+struct=20bio_integrity_payload=20*bip,=0D=0A>>=20+=20=C2=A0=20=C2=A0=20=C2=
+=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20struct=20page=20*page,=20un=
+signed=20int=20len,=0D=0A>>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
+=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
+=20=C2=A0=20=C2=A0=20=C2=A0=20unsigned=20int=20offset,=20bool=20*same_page)=
+=0D=0A>=0D=0A>...=20but=20adding=20static=20functions=20without=20users=20w=
+ill=20cause=20a=20compile=0D=0A>error=20anyway,=20so=20I'd=20suggest=20to=
+=20just=20merge=20it=20into=20the=20patch=20adding=0D=0A>users.=0D=0A>=0D=
+=0A>But=20I=20wonder=20if=20we=20really=20want=20to=20duplicate=20all=20thi=
+s=20logic=20anyway.=0D=0A>If=20we=20passed=20a=20bio_vec=20array,=20the=20v=
+ec=20count=20and=20an=20iter,=20we=20should=0D=0A>be=20able=20to=20just=20s=
+hare=20the=20logic=20with=20the=20bio=20data=20payload.=0D=0A=0D=0AThank=20=
+you,=20Christoph.=0D=0A=0D=0AI=20made=20a=20mistake=20while=20dividing=20th=
+e=20patch.=20I=20will=20be=20careful.=0D=0AI=20will=20merge=20with=20the=20=
+code=20that=20uses=20the=20function=20and=20put=20it=20on=20the=20next=20pa=
+tch.=0D=0A=0D=0AAnd=20as=20you=20mentioned,=20it=20is=20duplicated=20with=
+=20the=20configuration=20of=20bio's=20data=20payload.=0D=0AI=20will=20impro=
+ve=20this=20by=20reflecting=20your=20proposal.=0D=0A=0D=0ABest=20regards,=
+=0D=0AJinyoung.
