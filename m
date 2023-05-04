@@ -2,52 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 977046F7847
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 23:39:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0711E6F7851
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 23:49:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbjEDVjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 17:39:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41150 "EHLO
+        id S229981AbjEDVs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 17:48:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbjEDVjr (ORCPT
+        with ESMTP id S229502AbjEDVsz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 17:39:47 -0400
-Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [5.144.164.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA1A13869
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 14:39:45 -0700 (PDT)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Thu, 4 May 2023 17:48:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B19E61154C;
+        Thu,  4 May 2023 14:48:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 935F3212FE;
-        Thu,  4 May 2023 23:39:43 +0200 (CEST)
-Date:   Thu, 4 May 2023 23:39:42 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
-        agross@kernel.org, andersson@kernel.org, quic_sbillaka@quicinc.com,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 3/7] drm/msm/dpu: add DPU_PINGPONG_DSC bits into
- PP_BLK and PP_BLK_TE marcos
-Message-ID: <55aa25pdeaqbuc2x2v3xkmcatlzmn2c5pn2py5qnqz7bnrp6s4@3vkwwnn4uasi>
-References: <1683218805-23419-1-git-send-email-quic_khsieh@quicinc.com>
- <1683218805-23419-4-git-send-email-quic_khsieh@quicinc.com>
- <ljt5mp4ew5lcrrrdd7xyof3jv3friafbmr3im35ddwxjc42ekh@toez7xfdreg2>
- <CAA8EJpreM9i3DUp+93K7p14f_tNMy-m+C-WdyN5_drmmkGV66g@mail.gmail.com>
- <u7hlzltevx675gfg4w6emmeceo6nj76taqeecsor6iqsi3hmki@lg43y65m6chz>
- <11ef769a-5089-57d4-db87-4c5766d98206@quicinc.com>
- <6qg25ffuq6xcfz3vuqm5lguspihjospctjclxmwyu2ifau4p7b@txywjmir7lg5>
- <9011a078-9962-b3de-6427-b9114fcd0cf4@quicinc.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D42F60FF2;
+        Thu,  4 May 2023 21:48:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64255C433D2;
+        Thu,  4 May 2023 21:48:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683236933;
+        bh=E+tiJRiug8u/AhLbDq1jW1M9EjtSX+RGcxzT9cXg0OA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rMdA9ogtCuMp0Sz7JLCENwEd4AWatDFzw2WAwjb5ktcXxWjfNKWW7bZyOUArAd8HU
+         UL4OumyNy3crnSxBKNshymYNbVbX4lOa279OubixiBydpm/RRHSWJRaHtCqz6uspVU
+         NEc6KhOBq9ve6ukXju2/z1noWgOV2W56EGYwUupQ02PcTJikJf+YeE3DIAqvxPQ53s
+         WQlvgBJ5hkCpGo7m2vYt5L3CXYee/mEUSciL6LXLUCvyTBXvoOvtADzcgsDvF2MbAq
+         UlavxJ2HQQSMEpKZFr9hn0h/eFbXP+IsaAuHElYt2IWahMLk64u0OWUJQ/YRUgoLFc
+         W35nmYHgPCemQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 4C6A0403B5; Thu,  4 May 2023 18:48:50 -0300 (-03)
+Date:   Thu, 4 May 2023 18:48:50 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Song Liu <song@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Clark Williams <williams@redhat.com>,
+        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Changbin Du <changbin.du@huawei.com>,
+        Hao Luo <haoluo@google.com>, Ian Rogers <irogers@google.com>,
+        James Clark <james.clark@arm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Roman Lozko <lozko.roma@gmail.com>,
+        Stephane Eranian <eranian@google.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        bpf <bpf@vger.kernel.org>
+Subject: Re: BPF skels in perf .Re: [GIT PULL] perf tools changes for v6.4
+Message-ID: <ZFQoQjCNtyMIulp+@kernel.org>
+References: <20230503211801.897735-1-acme@kernel.org>
+ <CAHk-=wjY_3cBELRSLMpqCt6Eb71Qei2agfKSNsrr5KcpdEQCaA@mail.gmail.com>
+ <CAHk-=wgci+OTRacQZcvvapRcWkoiTFJ=VTe_JYtabGgZ9refmg@mail.gmail.com>
+ <ZFOSUab5XEJD0kxj@kernel.org>
+ <CAHk-=wgv1sKTdLWPC7XR1Px=pDNrDPDTKdX-T_2AQOwgkpWB2A@mail.gmail.com>
+ <ZFPw0scDq1eIzfHr@kernel.org>
+ <CAEf4BzaUU9vZU6R_020ru5ct0wh-p1M3ZFet-vYqcHvb9bW1Cw@mail.gmail.com>
+ <ZFQCccsx6GK+gY0j@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <9011a078-9962-b3de-6427-b9114fcd0cf4@quicinc.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZFQCccsx6GK+gY0j@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,84 +82,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-04 12:50:57, Abhinav Kumar wrote:
+Em Thu, May 04, 2023 at 04:07:29PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Thu, May 04, 2023 at 11:50:07AM -0700, Andrii Nakryiko escreveu:
+> > On Thu, May 4, 2023 at 10:52 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+> > > Andrii, can you add some more information about the usage of vmlinux.h
+> > > instead of using kernel headers?
+>  
+> > I'll just say that vmlinux.h is not a hard requirement to build BPF
+> > programs, it's more a convenience allowing easy access to definitions
+> > of both UAPI and kernel-internal structures for tracing needs and
+> > marking them relocatable using BPF CO-RE machinery. Lots of real-world
+> > applications just check-in pregenerated vmlinux.h to avoid build-time
+> > dependency on up-to-date host kernel and such.
+>  
+> > If vmlinux.h generation and usage is causing issues, though, given
+> > that perf's BPF programs don't seem to be using many different kernel
+> > types, it might be a better option to just use UAPI headers for public
+> > kernel type definitions, and just define CO-RE-relocatable minimal
+> > definitions locally in perf's BPF code for the other types necessary.
+> > E.g., if perf needs only pid and tgid from task_struct, this would
+> > suffice:
+>  
+> > struct task_struct {
+> >     int pid;
+> >     int tgid;
+> > } __attribute__((preserve_access_index));
 > 
-> 
-> On 5/4/2023 12:36 PM, Marijn Suijten wrote:
-> > On 2023-05-04 11:25:44, Abhinav Kumar wrote:
-> > <snip>
-> >>> Sure, if you really prefer a split I'd go for two patches:
-> >>> 1. Add the flag to the enum and catalog;
-> >>> 2. Add the ops guard (functional change).
-> >>>
-> >>> Then don't forget to reword the commit message, following the guidelines
-> >>> below and the suggestion for 2/7.
-> >>>
-> >>> - Marijn
-> >>
-> >> Plan sounds good to me.
-> >>
-> >> Marijn, we will wait for a couple of days to post the next rev but would
-> >> be hard more than that as we need to pick up other things which are
-> >> pending on top of this. Hence would appreciate if you can finish reviews
-> >> by then.
-> > 
-> > It depends on how many more revisions are needed after that, and not all
-> > patches in this series have an r-b just yet.  Given the amount of review
-> > comments that are still trickling in (also on patches that already have
-> > maintainer r-b) I don't think we're quite there to start thinging about
-> > picking this up in drm-msm just yet.  I doubt anyone wants a repeat of
-> > the original DSC series, which went through many review rounds yet still
-> > required multiple series of bugfixes (some of which were pointed out and
-> > ignored in review) to be brought to a working state.  But the split
-> > across topics per series already makes this a lot less likely, many
-> > thanks for that.
-> > 
-> 
-> I think the outstanding comments shouldnt last more than 1-2 revs more 
-> on this one as its mostly due to multiple patches on the list touching 
-> catalog at the same time. I have been monitoring the comments closely 
-> even though I dont respond to all of them.
-> 
-> One of the major reasons of the number of issues with DSC 1.1 was QC 
-> didn't really have the devices or panels to support it. Thats why I 
-> changed that this time around to take more control of validation of DSC 
-> 1.2 and ofcourse decided to break up of series into the least amount of 
-> functionality needed to keep the DPU driver intact.
+> Yeah, that seems like a way better approach, no vmlinux involved, libbpf
+> CO-RE notices that task_struct changed from this two integers version
+> (of course) and does the relocation to where it is in the running kernel
+> by using /sys/kernel/btf/vmlinux.
 
-Really glad that you are able to test and validate it now, that goes a
-long way.  Does that also mean you can post the panel patches quickly,
-so that everyone has a point of reference?  As you said that is one of
-the main points where DSC 1.1 "went wrong" (a misunderstanding of
-drm_dsc_config).
+Doing it for one of the skels, build tested, runtime untested, but not
+using any vmlinux, BTF to help, not that bad, more verbose, but at least
+we state what are the fields we actually use, have those attribute
+documenting that those offsets will be recorded for future use, etc.
 
-> All that being said, we still value your comments and would gladly wait 
-> for a couple of days like I already wrote. But there are more 
-> incremental series on top of this:
-> 
-> -> DSI changes for DSC 1.2
-> -> proper teardown for DSC
-> -> DSC pair allocation support
-> -> DSC 1.2 over DP
+Namhyung, can you please check that this works?
 
-Yeah, I'm familiar with the concept of having many dependent series, and
-now DSC series are even rebasing on DPU (catalog) cleanups to preempt
-conflicts, which is really hard to follow.
-Dmitry just pushed v5 of "drm/i915/dsc: change DSC param tables to
-follow the DSC model" [1] and seems to have dropped some patches that
-some of these series are depending on, resulting in compilation
-failures.  Other series don't seem to fully mention all their
-dependencies.
+Thanks,
 
-[1]: https://lore.kernel.org/linux-arm-msm/20230504153511.4007320-1-dmitry.baryshkov@linaro.org/T/#u
+- Arnaldo
 
-So, for this to go as convenient as possible, do you have a list of
-series, in a desired order that they should be reviewed and tested?
-That way I can direct my priorities and help achieve the goal of picking
-base dependencies as early as possible.
-
-For example, one of the many series regresses DSC on the Xperia XZ3
-(SDM845), but I have yet to bisect and understand which patch it is.
-Will let you know as soon as I get my tree in order.
-
-- Marijn
+diff --git a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
+index 6a438e0102c5a2cb..f376d162549ebd74 100644
+--- a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
++++ b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
+@@ -1,11 +1,40 @@
+ // SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ // Copyright (c) 2021 Facebook
+ // Copyright (c) 2021 Google
+-#include "vmlinux.h"
++#include <linux/types.h>
++#include <linux/bpf.h>
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
+ #include <bpf/bpf_core_read.h>
+ 
++// libbpf's CO-RE will take care of the relocations so that these fields match
++// the layout of these structs in the kernel where this ends up running on.
++
++struct cgroup_subsys_state {
++	struct cgroup *cgroup;
++} __attribute__((preserve_access_index));
++
++struct css_set {
++	struct cgroup_subsys_state *subsys[13];
++} __attribute__((preserve_access_index));
++
++struct task_struct {
++	struct css_set *cgroups;
++} __attribute__((preserve_access_index));
++
++struct kernfs_node {
++	__u64 id;
++}  __attribute__((preserve_access_index));
++
++struct cgroup {
++	struct kernfs_node *kn;
++	int                level;
++}  __attribute__((preserve_access_index));
++
++enum cgroup_subsys_id {
++	perf_event_cgrp_id  = 8,
++};
++
+ #define MAX_LEVELS  10  // max cgroup hierarchy level: arbitrary
+ #define MAX_EVENTS  32  // max events per cgroup: arbitrary
+ 
+@@ -52,7 +81,7 @@ struct cgroup___new {
+ /* old kernel cgroup definition */
+ struct cgroup___old {
+ 	int level;
+-	u64 ancestor_ids[];
++	__u64 ancestor_ids[];
+ } __attribute__((preserve_access_index));
+ 
+ const volatile __u32 num_events = 1;
