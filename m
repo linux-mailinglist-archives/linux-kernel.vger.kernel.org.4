@@ -2,128 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAEF96F6422
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 06:49:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 922BD6F642F
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 06:58:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbjEDEtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 00:49:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43492 "EHLO
+        id S229700AbjEDE6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 00:58:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbjEDEto (ORCPT
+        with ESMTP id S229553AbjEDE6Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 00:49:44 -0400
-Received: from mail.nfschina.com (unknown [42.101.60.195])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 25331199E;
-        Wed,  3 May 2023 21:49:42 -0700 (PDT)
-Received: from localhost.localdomain (unknown [180.167.10.98])
-        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id 9998B180126FE4;
-        Thu,  4 May 2023 12:49:40 +0800 (CST)
-X-MD-Sfrom: suhui@nfschina.com
-X-MD-SrcIP: 180.167.10.98
-From:   Su Hui <suhui@nfschina.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, Su Hui <suhui@nfschina.com>
-Subject: [PATCH] media: dvb-usb: pctv452e: remove unnecessary (void*) conversions
-Date:   Thu,  4 May 2023 12:48:22 +0800
-Message-Id: <20230504044823.89197-1-suhui@nfschina.com>
-X-Mailer: git-send-email 2.30.2
+        Thu, 4 May 2023 00:58:16 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FAF61992;
+        Wed,  3 May 2023 21:58:15 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3444a2JF016832;
+        Thu, 4 May 2023 04:58:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=XOez8aIhSf+YdRgRsaYBvkI2AQ5HgrExKkF0OV2wdf4=;
+ b=D94yAvxnbIoKNGkwC90wF5uDpyAzwF3CKWaSNJ75lThPY6KVd007I0q7bkdVcCN7txA/
+ 6mf2dImNVA9jCerRW1ZNfW6WAr6tqzF8oeV9lZQNHVuMKvhzW72w2LRytS1VSoAevTs4
+ NwxeLeVXw7cJuNQRt72pIaAWrR7ZEuxCXa9c7Bdq35Gj95MJgIZONviUSM4XsMan7uHk
+ 3zTrqBISyfiV7c1VRwBB4RA9TipRD+pfXMU224A8gBb9XF8hNe6pwBVB2uX1yo3IuC1s
+ HS01jA0YH3C0GZ68mX99L6Lgs1htxl8R2rLvHC1fjfKnxDpKyyMWDuXNziSwHRk5wwwz EA== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qbbsw36nm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 04 May 2023 04:58:09 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3444w8RT032412
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 4 May 2023 04:58:08 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Wed, 3 May 2023 21:58:03 -0700
+Date:   Thu, 4 May 2023 10:27:58 +0530
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <amitk@kernel.org>,
+        <thara.gopinath@gmail.com>, <rafael@kernel.org>,
+        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Praveenkumar I <quic_ipkumar@quicinc.com>
+Subject: Re: [PATCH 1/4] dt-bindings: thermal: tsens: Add ipq9574 compatible
+Message-ID: <20230504045757.GA13434@varda-linux.qualcomm.com>
+References: <cover.1682682753.git.quic_varada@quicinc.com>
+ <3c6f7510d175ba5a3c81730b010f6c421b2fbf2d.1682682753.git.quic_varada@quicinc.com>
+ <16443d11-7948-d224-cfef-b6c1b5c3d60d@linaro.org>
+ <20230503071055.GB1087@varda-linux.qualcomm.com>
+ <915eea5b-6cef-d346-7cbd-b679726113ad@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <915eea5b-6cef-d346-7cbd-b679726113ad@linaro.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: IIGMl5GEIhuIyR1Tkq8seYgGcw_g0vZw
+X-Proofpoint-ORIG-GUID: IIGMl5GEIhuIyR1Tkq8seYgGcw_g0vZw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-04_02,2023-05-03_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ lowpriorityscore=0 adultscore=0 suspectscore=0 malwarescore=0
+ mlxlogscore=965 impostorscore=0 bulkscore=0 mlxscore=0 phishscore=0
+ spamscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2305040041
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No need cast (void*) to (struct pctv452e_state *).
+On Wed, May 03, 2023 at 09:42:28AM +0200, Krzysztof Kozlowski wrote:
+> On 03/05/2023 09:10, Varadarajan Narayanan wrote:
+> > On Mon, May 01, 2023 at 09:08:49AM +0200, Krzysztof Kozlowski wrote:
+> >> On 28/04/2023 16:52, Varadarajan Narayanan wrote:
+> >>> From: Praveenkumar I <quic_ipkumar@quicinc.com>
+> >>>
+> >>> Qualcomm IPQ9574 has tsens v2.3.1 block, which is similar to IPQ8074 tsens.
+> >>>
+> >>> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+> >>> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> >>> ---
+> >>>  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 3 +++
+> >>>  1 file changed, 3 insertions(+)
+> >>>
+> >>> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> >>> index d1ec963..8e2208c 100644
+> >>> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> >>> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> >>> @@ -66,6 +66,7 @@ properties:
+> >>>        - description: v2 of TSENS with combined interrupt
+> >>>          enum:
+> >>>            - qcom,ipq8074-tsens
+> >>> +          - qcom,ipq9574-tsens
+> >>
+> >> Your drive change indicates they are compatible, so make them
+> >> compatible. 9574 followed by 8074.
+> >
+> > Not able to understand. You want IPQ9574 to use "qcom,ipq8074-tsens"
+> > instead of adding a "qcom,ipq9574-tsens" and no need to add an extra
+> > entry to the driver like
+>
+> Assuming the devices are really compatible, which your driver change
+> suggests, I want to use two compatibles. 9574 followed by 8074 fallback,
+> just like we do for all Qualcomm IP blocks. Then as you said - no need
+> for driver change.
 
-Signed-off-by: Su Hui <suhui@nfschina.com>
----
- drivers/media/usb/dvb-usb/pctv452e.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+With schema like this
+	items:
+	  - enum:
+	      - qcom,ipq8074-tsens
+	      - qcom,ipq9574-tsens
+and DTS as
+	compatible = "qcom,ipq9574-tsens", "qcom,ipq8074-tsens";
 
-diff --git a/drivers/media/usb/dvb-usb/pctv452e.c b/drivers/media/usb/dvb-usb/pctv452e.c
-index da42c989e071..42763c12cf29 100644
---- a/drivers/media/usb/dvb-usb/pctv452e.c
-+++ b/drivers/media/usb/dvb-usb/pctv452e.c
-@@ -108,7 +108,7 @@ struct pctv452e_state {
- static int tt3650_ci_msg(struct dvb_usb_device *d, u8 cmd, u8 *data,
- 			 unsigned int write_len, unsigned int read_len)
- {
--	struct pctv452e_state *state = (struct pctv452e_state *)d->priv;
-+	struct pctv452e_state *state = d->priv;
- 	u8 *buf;
- 	u8 id;
- 	unsigned int rlen;
-@@ -160,7 +160,7 @@ static int tt3650_ci_msg_locked(struct dvb_ca_en50221 *ca,
- 				unsigned int read_len)
- {
- 	struct dvb_usb_device *d = (struct dvb_usb_device *)ca->data;
--	struct pctv452e_state *state = (struct pctv452e_state *)d->priv;
-+	struct pctv452e_state *state = d->priv;
- 	int ret;
- 
- 	mutex_lock(&state->ca_mutex);
-@@ -293,7 +293,7 @@ static int tt3650_ci_slot_ts_enable(struct dvb_ca_en50221 *ca, int slot)
- static int tt3650_ci_slot_reset(struct dvb_ca_en50221 *ca, int slot)
- {
- 	struct dvb_usb_device *d = (struct dvb_usb_device *)ca->data;
--	struct pctv452e_state *state = (struct pctv452e_state *)d->priv;
-+	struct pctv452e_state *state = d->priv;
- 	u8 buf[1];
- 	int ret;
- 
-@@ -361,7 +361,7 @@ static void tt3650_ci_uninit(struct dvb_usb_device *d)
- 	if (NULL == d)
- 		return;
- 
--	state = (struct pctv452e_state *)d->priv;
-+	state = d->priv;
- 	if (NULL == state)
- 		return;
- 
-@@ -379,7 +379,7 @@ static void tt3650_ci_uninit(struct dvb_usb_device *d)
- static int tt3650_ci_init(struct dvb_usb_adapter *a)
- {
- 	struct dvb_usb_device *d = a->dev;
--	struct pctv452e_state *state = (struct pctv452e_state *)d->priv;
-+	struct pctv452e_state *state = d->priv;
- 	int ret;
- 
- 	ci_dbg("%s", __func__);
-@@ -417,7 +417,7 @@ static int pctv452e_i2c_msg(struct dvb_usb_device *d, u8 addr,
- 				const u8 *snd_buf, u8 snd_len,
- 				u8 *rcv_buf, u8 rcv_len)
- {
--	struct pctv452e_state *state = (struct pctv452e_state *)d->priv;
-+	struct pctv452e_state *state = d->priv;
- 	u8 *buf;
- 	u8 id;
- 	int ret;
-@@ -516,7 +516,7 @@ static u32 pctv452e_i2c_func(struct i2c_adapter *adapter)
- 
- static int pctv452e_power_ctrl(struct dvb_usb_device *d, int i)
- {
--	struct pctv452e_state *state = (struct pctv452e_state *)d->priv;
-+	struct pctv452e_state *state = d->priv;
- 	u8 *b0, *rx;
- 	int ret;
- 
-@@ -567,7 +567,7 @@ static int pctv452e_power_ctrl(struct dvb_usb_device *d, int i)
- 
- static int pctv452e_rc_query(struct dvb_usb_device *d)
- {
--	struct pctv452e_state *state = (struct pctv452e_state *)d->priv;
-+	struct pctv452e_state *state = d->priv;
- 	u8 *b, *rx;
- 	int ret, i;
- 	u8 id;
--- 
-2.30.2
+'make dtbs_check' gives the following error
 
+arch/arm64/boot/dts/qcom/ipq9574-rdp433.dtb: thermal-sensor@4a9000: compatible: 'oneOf' conditional failed, one must be fixed:
+        ['qcom,ipq9574-tsens', 'qcom,ipq8074-tsens'] is too long
+
+To fix the above error, I have to change the schema as
+
+	items:
+	  - enum:
+	      - qcom,ipq8074-tsens
+	      - qcom,ipq9574-tsens
+	  - const: qcom,tsens-v2-combined-int
+
+and change ipq8074 & ipq9754 DTS as
+
+	compatible = "qcom,ipq8074-tsens", "qcom,tsens-v2-combined-int";
+	compatible = "qcom,ipq9574-tsens", "qcom,tsens-v2-combined-int";
+
+For this to work, have to introduce qcom,tsens-v2-combined-int in
+the driver with
+	}, {
+		.compatible = "qcom,tsens-v2-combined-int",
+		.data = &data_ipq8074,
+	},
+
+This i guess will defeat the purpose. So shall we leave it as it
+is now, or shall I change driver, schema and ipq8074 + ip9574 DTS
+with qcom,tsens-v2-combined-int? Let me know.
+
+Thanks
+Varada
+
+
+
+> Best regards,
+> Krzysztof
