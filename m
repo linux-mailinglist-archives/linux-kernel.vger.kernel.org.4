@@ -2,112 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BE536F70CE
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 19:24:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 737176F70CD
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 19:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbjEDRYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 13:24:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55212 "EHLO
+        id S229795AbjEDRYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 13:24:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbjEDRYL (ORCPT
+        with ESMTP id S229553AbjEDRYA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 13:24:11 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C388149D3
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 10:24:10 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-50bc25f0c7dso1532068a12.3
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 10:24:10 -0700 (PDT)
+        Thu, 4 May 2023 13:24:00 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF64E449C
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 10:23:59 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-ba1b052e53dso1147703276.1
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 10:23:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1683221049; x=1685813049;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cjowc/gRt/pdKPtgyZqkM5OSn7+TcLpFEiLZrM6tdM0=;
-        b=hEQ+VutEhKDPZsOTY3XnPqGUM+jUOkVftCAYeNoJ4w3CBdvYz51hSrfFPk0ItbcABz
-         d5+QMeVED0eT+5bv3KPIY9pNk5a73FBGTDiBm3+TJ2Ox5W0Lb6EnhHjXGnvPD98mvCJw
-         BME8+zc6On0S4WeykifZ3C8b1Io1CQrXYoYoY=
+        d=google.com; s=20221208; t=1683221039; x=1685813039;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ONB00+6Q69z3/h03ZXeAoDFdXXdOjEaMLtfkrHED77E=;
+        b=a19ly5QJ1Q1N22wDXhgi9csT1yq+d14FzfsBWgUtF4wbUqyCVwSYl75NVDF+a4VtDE
+         Ii9TlZsiACL2LTTI08ua87HBuUovZFuBkxtAs65RU+NYy+LOeL81Yx25IxhPkStxvE4a
+         puKgvwWz8lVMfccj9E41YPBeKftkVqVLBUUOm8MaEYjLyhmqBwWKsChhLCXouqxxIb0V
+         ZxHq+oddfmEkNiR82cqG4X6vidPMoanq8BFAbBQA+v97hN4fxCRmNe8QoTf169a64ul8
+         +l0aISINsGVg9egilXnwsORqMbtmn6H6Vr9fiRayC/WofHyGLboRtxmtxwXGO5i2CIIe
+         IROA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683221049; x=1685813049;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cjowc/gRt/pdKPtgyZqkM5OSn7+TcLpFEiLZrM6tdM0=;
-        b=c9NMJm51onJKiTG32JXhSduBoR8au/foGS6qeXSnsH4x7WwqNR64m50U9kZvT8XFp6
-         kQH3rhCv2P7NZtyWLr0EMH/JithtXzJ3jOX7KYS1YXkooO9yCcZd2JJAhsZ0OaSZhZG3
-         K+90lpa7coHS3bPtM/fIjPdhKY2XmgqYW8ChgIsSs5XErYynLexB+WpjQ0wRiI100x/6
-         ykuBqskGkwFy7dxmDDJ7QqOU8vQcDbZQpVZs9iv/ZajhDchGRjsQfml3FRg2YAy/OPo3
-         GS/GQHoMUPuY1uj8wP99TtEac0Y9kr4QjkPk7uugsjHLzq+SE8rJ7a4jvgi4Ef8yriKq
-         FH9w==
-X-Gm-Message-State: AC+VfDxGLFX2p8CaPRoauTMFW0lONYVNnUuwUlX0lI4TwU29ziDkRUeT
-        8WkBj/Y/yiBl54Wqk9hFIavf4vN6dBRbLHECTHjRi6Ve
-X-Google-Smtp-Source: ACHHUZ6BfK2SwxRnUcowJpnOrCrVv8PFbiIhvPlQv6T7i0vFLpk0E7ANs8K1krO3cmHERz8dcoyiEw==
-X-Received: by 2002:a17:906:ef0a:b0:958:5c21:3fa7 with SMTP id f10-20020a170906ef0a00b009585c213fa7mr8250889ejs.25.1683221048890;
-        Thu, 04 May 2023 10:24:08 -0700 (PDT)
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com. [209.85.218.41])
-        by smtp.gmail.com with ESMTPSA id qm10-20020a170907674a00b0094f282fc29asm18774883ejc.207.2023.05.04.10.24.07
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 10:24:08 -0700 (PDT)
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-956ff2399c9so132468366b.3
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 10:24:07 -0700 (PDT)
-X-Received: by 2002:a17:907:3205:b0:90b:53f6:fd8b with SMTP id
- xg5-20020a170907320500b0090b53f6fd8bmr6290287ejb.31.1683221047723; Thu, 04
- May 2023 10:24:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <ZFI74eeUzVPKhi4f@matsya> <20230504150624.GA1000378@dev-arch.thelio-3990X>
- <ZFPPucb9VNLB8r8v@matsya>
-In-Reply-To: <ZFPPucb9VNLB8r8v@matsya>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 4 May 2023 10:23:51 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wi-ve0h02vsNrzuox58rLXSbzcjay+k=XnUueWRh6cO2Q@mail.gmail.com>
-Message-ID: <CAHk-=wi-ve0h02vsNrzuox58rLXSbzcjay+k=XnUueWRh6cO2Q@mail.gmail.com>
-Subject: Re: [GIT PULL]: Generic phy updates for v6.4
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Phy <linux-phy@lists.infradead.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1683221039; x=1685813039;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ONB00+6Q69z3/h03ZXeAoDFdXXdOjEaMLtfkrHED77E=;
+        b=WJcBCOYGq7gEfSdliHuj5WcVEka2Obkx630FqE3Sej3tG0LHJ3gwjSnKb9CWUk46qu
+         U/aIe68VsE2TQg+lTAZEVAoHzvQnSbwl3K3XEAWdSaE+OWKPVVi21gDmp+kwtwhlYJPj
+         7aWn6suUWNu4cnyhwP99Ws8pyrtOrfm+TMvhj+4ndiD45GtVvSwbxdbVZe7k7NpVemjy
+         5SXgPwmOXpP1cc9XM56yR6iIvi5gkMKNagLCwWMABCZoaozu5I2ZWF9baP9XQas4SnKX
+         l1uIjrWe8hP/FIdYM+voxO2t97V1F5ziIrHoWK6Zm1bcgAu1RRvfHNC/Pb9hMwmjO2Jn
+         fmYA==
+X-Gm-Message-State: AC+VfDyQyoYu28lprRGMnLyHozsrJflvo3mSI0XPwgoTAjfvjgAxXFN0
+        iVRtxOhE5/Uj7eSEloQ2kkuu2K4H6OA=
+X-Google-Smtp-Source: ACHHUZ6nT2T395WRubeB3aSWGrfqRKKIgCUhsMtSEWpYYWZrkznq+sx7rqITmcWPGdxyYiBgCtn8mm8/UAQ=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:8b03:0:b0:b9d:f5b9:3d58 with SMTP id
+ i3-20020a258b03000000b00b9df5b93d58mr281680ybl.3.1683221039062; Thu, 04 May
+ 2023 10:23:59 -0700 (PDT)
+Date:   Thu, 4 May 2023 10:23:57 -0700
+In-Reply-To: <34f44b2748ad1365907c7927a3cbee794b986243.camel@intel.com>
+Mime-Version: 1.0
+References: <20230503182852.3431281-1-seanjc@google.com> <20230503182852.3431281-2-seanjc@google.com>
+ <56fa0da83203b20c9945e7c82a0eed11f3d31ea5.camel@intel.com>
+ <ZFLtfFjAvuL0JSQj@google.com> <34f44b2748ad1365907c7927a3cbee794b986243.camel@intel.com>
+Message-ID: <ZFPqLS08b0xT/PLa@google.com>
+Subject: Re: [PATCH 1/5] KVM: VMX: Open code writing vCPU's PAT in VMX's MSR handler
+From:   Sean Christopherson <seanjc@google.com>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "guoke@uniontech.com" <guoke@uniontech.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "haiwenyao@uniontech.com" <haiwenyao@uniontech.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 4, 2023 at 8:31=E2=80=AFAM Vinod Koul <vkoul@kernel.org> wrote:
-> Sorry between vacation and travel, this was missed.
->
-> No worries we have process to deal with this, so this shall go in as
-> fixes.. I will do the needful shortly
+On Wed, May 03, 2023, Kai Huang wrote:
+> On Wed, 2023-05-03 at 16:25 -0700, Sean Christopherson wrote:
+> > On Wed, May 03, 2023, Kai Huang wrote:
+> > > On Wed, 2023-05-03 at 11:28 -0700, Sean Christopherson wrote:
+> > > > From: Wenyao Hai <haiwenyao@uniontech.com>
+> > > > 
+> > > > Open code setting "vcpu->arch.pat" in vmx_set_msr() instead of bouncing
+> > > > through kvm_set_msr_common() to get to the same code in kvm_mtrr_set_msr().
+> > > 
+> > > What's the value of doing so, besides saving a function of kvm_set_msr_common()?
+> > 
+> > To avoid complicating a very simple operation (writing vcpu->arch.pat), and to
+> > align with SVM.
+> > 
+> > > PAT change shouldn't be something frequent so shouldn't in a performance
+> > > critical path.  Given the PAT logic on Intel and AMD are basically the same ,
+> > > isn't it better to do in kvm_set_msr_common()?
+> > 
+> > I could go either way on calling into kvm_set_msr_common().  I agree that
+> > performance isn't a concern.  Hmm, and kvm_set_msr_common() still has a case
+> > statement for MSR_IA32_CR_PAT, so handling the write fully in vendor code won't
+> > impact the code generation for other MSRs.
+> > 
+> > Though I am leaning towards saying we should either handle loads and stores to
+> > vcpu->arch.pat in common code _or_ vendor code, i.e. either teach VMX and SVM to
+> > handle reads of PAT, or have their write paths call kvm_set_msr_common().  A mix
+> > of both is definitely odd.
+> 
+> Agreed.  Alternatively we can move SVM's setting vcpu->arch.pat to common code.
+> 
+> > 
+> > I don't have strong preference on which of those two we choose.  I dislike duplicating
+> > logic across VMX and SVM, but on the other hands it's so little code.  I think
+> > I'd vote for handling everything in vendor code, mostly because this gives the
+> > appearance that the write can fail, which is silly and misleading.
+> > 
+> > 		ret = kvm_set_msr_common(vcpu, msr_info);
+> 
+> No opinion either.  First glance is having 
+> 
+> 	case MSR_IA32_CR_PAT:
+> 		vcpu->arch.pat = data;
+> 
+> in kvm_set_msr_common() is clearer because it is symmetrical to the read path.
+> 
+> Anyway your decision :)
 
-You need to do it *now*.
+Duh, the obvious answer is to do 
 
-You should never have sent the pull request to me in the first place
-if you hadn't checked the status in linux-next.
+	ret = kvm_set_msr_common(vcpu, msr_info);
+	if (ret)
+		break;
 
-The point of linux-next is to find failures. And if you don't then
-*care* about the failures, then it has all become  entirely pointless,
-and it's effectively the same as if it had never been there in the
-first place.
+	<vendor code here>
 
-So this needs to get fixed *PRONTO*, and it needs to never ever happen agai=
-n.
+That's an established pattern for other MSRs, and addresses my main concern of
+not unwinding the VMCS updates in the should-be-impossible scenario of
+kvm_set_msr_common() failing after the kvm_pat_valid() check.
 
-Because if it does happen, I will consider your code to effectively
-never have been in linux-next, and thus just not be an option for
-pulling.
-
-This isn't debatable. You don't put things in linux-next, ignore the
-reports, and then send things upstream anyway.
-
-If you don't have time to check the status of your tree in linux-next,
-you don't have the time to do a pull request. That's just how it
-works.
-
-                      Linus
+Thanks Kai!
