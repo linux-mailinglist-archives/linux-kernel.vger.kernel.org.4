@@ -2,88 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8FDC6F680C
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 11:12:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56F1C6F6808
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 11:11:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230169AbjEDJM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 05:12:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36442 "EHLO
+        id S230059AbjEDJLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 05:11:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230021AbjEDJM1 (ORCPT
+        with ESMTP id S229683AbjEDJLW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 05:12:27 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB7E02D7F
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 02:12:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1683191543; x=1714727543;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=fr0qXQ3IKjF95MLSwjk9LSBsQKlFhihSG+c0KYPCwOQ=;
-  b=Lmqv0bJ2ih/wHtCEyyNHYFRsRu7aZntvK+xlPvwg8zbhX0WlxJo3WzjS
-   m25ZLOqq7SGRCrchNgh3k0wE4kzxFw/jbD/5IdRHysGu8uGG5Mq7XogLk
-   XGb/hahYL0Fg6H1uu8whYifd/rmoXXswS2A69z4AIwADFQTWSHcLBOWW0
-   LnVADVTWRjdIt9FyatanHazlnYhYVMJv+sImTz+2y99BKub0PL5MCEiiS
-   RUVowjFbtytVd8KTG7zHNuDaC6veyHRL9MDOVoRVMy8xuSJ2SwSeSV1Is
-   +xijnfMzyZZfMJaRz03lkD4MVPP0CIkC0mEXt3zDZqOLeLjSJ0ihf1xVD
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.99,249,1677538800"; 
-   d="scan'208";a="30714870"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 04 May 2023 11:12:06 +0200
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Thu, 04 May 2023 11:12:06 +0200
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Thu, 04 May 2023 11:12:06 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1683191526; x=1714727526;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=fr0qXQ3IKjF95MLSwjk9LSBsQKlFhihSG+c0KYPCwOQ=;
-  b=YR/zlnOWkCVKK9jLTJcyxRfiRquPg42bI/MJM6oalJDUjhaI3KMmilTQ
-   GW0kDe8RzyEB3AER5bImH5nJpJbJRFvLLPpQXFuLw34ak59pg9dLNeUGU
-   z1+Pnb8TBPd2870g9JL6+IHs14XlAxPTQzwz+xGRm7u2Fa2wAiQTIoLwP
-   80CdfkhJU017RLogWPtVrKGJDc+8ETZoniRoV0yBjmu7j6vBuBHTph5W4
-   NfK8poQBNrdUPuNA/DoeTWNkLVZv6pHR/xKRJF8jMGfEV05MSjLa3/SuZ
-   ikh1ANpJNraMnNsi0jagtuvChJpbEQabm910OLSzMgUvXqJBLL3ZGHlEl
-   g==;
-X-IronPort-AV: E=Sophos;i="5.99,249,1677538800"; 
-   d="scan'208";a="30714859"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 04 May 2023 11:11:35 +0200
-Received: from steina-w.localnet (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 7B5CA280056;
-        Thu,  4 May 2023 11:11:15 +0200 (CEST)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>
-Cc:     Marek Vasut <marex@denx.de>, Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Uwe =?ISO-8859-1?Q?Kleine=2DK=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Sam Ravnborg <sam@ravnborg.org>,
-        Frieder Schrempf <frieder@fris.de>
-Subject: Re: [PATCH v2 2/2] drm/bridge: ti-sn65dsi83: Fix enable/disable flow to meet spec
-Date:   Thu, 04 May 2023 11:11:14 +0200
-Message-ID: <2225400.iZASKD2KPV@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <20230503163313.2640898-3-frieder@fris.de>
-References: <20230503163313.2640898-1-frieder@fris.de> <20230503163313.2640898-3-frieder@fris.de>
+        Thu, 4 May 2023 05:11:22 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C433CAC;
+        Thu,  4 May 2023 02:11:20 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1puUzf-0006QT-5i; Thu, 04 May 2023 11:11:19 +0200
+Message-ID: <eda7abb0-89a2-fa51-4e82-1972b1eed591@leemhuis.info>
+Date:   Thu, 4 May 2023 11:11:17 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: dmaengine: at_hdmac: Regression regarding rs485 via dma in v5.4
+Content-Language: en-US, de-DE
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+To:     Kristof Havasi <havasiefr@gmail.com>
+Cc:     Linux kernel regressions list <regressions@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        tudor.ambarus@microchip.com
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>,
+          Linux regressions mailing list 
+          <regressions@lists.linux.dev>
+References: <CADBnMvj93bSO=+wU4=pLTgONV7w_hhecxQHAc_YS4P4GaqMNrA@mail.gmail.com>
+ <1473b364-777a-ede8-3ff6-36d9e1d577ad@leemhuis.info>
+In-Reply-To: <1473b364-777a-ede8-3ff6-36d9e1d577ad@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1683191480;c47b5798;
+X-HE-SMSGID: 1puUzf-0006QT-5i
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,108 +54,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Mittwoch, 3. Mai 2023, 18:33:07 CEST schrieb Frieder Schrempf:
-> From: Frieder Schrempf <frieder.schrempf@kontron.de>
->=20
-> The datasheet describes the following initialization flow including
-> minimum delay times between each step:
->=20
-> 1. DSI data lanes need to be in LP-11 and the clock lane in HS mode
-> 2. toggle EN signal
-> 3. initialize registers
-> 4. enable PLL
-> 5. soft reset
-> 6. enable DSI stream
-> 7. check error status register
->=20
-> To meet this requirement we need to make sure the host bridge's
-> pre_enable() is called first by using the pre_enable_prev_first
-> flag.
->=20
-> Furthermore we need to split enable() into pre_enable() which covers
-> steps 2-5 from above and enable() which covers step 7 and is called
-> after the host bridge's enable().
->=20
-> Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+On 04.04.23 13:25, Linux regression tracking (Thorsten Leemhuis) wrote:
+> [Adding a few pople to the list of recipients that were involved in
+> developing the culprit; also CCing the regression list, as it should be
+> in the loop for regressions:
+> https://docs.kernel.org/admin-guide/reporting-regressions.html]
+> 
+> [TLDR: I'm adding this report to the list of tracked Linux kernel
+> regressions; the text you find below is based on a few templates
+> paragraphs you might have encountered already in similar form.
+> See link in footer if these mails annoy you.]
+> 
+> On 29.03.23 16:31, Kristof Havasi wrote:
+>>
+>> I was rebasing the Kernel branch of our SAMA5D35 based board from
+>> v5.4.189 to v5.4.238.
+>> I noticed that after the rebase we could _only send, but not receive_
+>> through our RS485 interface.
+>>
+>> I could bisect the problem to 77b97ef4908aa917e7b68667ec6b344cc5dc5034
+>> in the v5.4.225 release. 
+> 
+> FWIW, that's 7176a6a8982d ("dmaengine: at_hdmac: Don't start
+> transactions at tx_submit level") in mainline.
+> 
+> Kristof Havasi: would be good to know if this is something that happens
+> with recent mainline as well, because if not it might be something the
+> stable team needs to handle.
 
-Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com> #TQMa8MxML/MBa=
-8Mx
+Kristof, any news? Doesn't look like it from here, but maybe I'm missing
+something.
 
-> ---
-> Changes for v2:
-> * Drop RFC
-> ---
->  drivers/gpu/drm/bridge/ti-sn65dsi83.c | 19 ++++++++++++++++---
->  1 file changed, 16 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/gpu/drm/bridge/ti-sn65dsi83.c
-> b/drivers/gpu/drm/bridge/ti-sn65dsi83.c index 75286c9afbb9..a82f10b8109f
-> 100644
-> --- a/drivers/gpu/drm/bridge/ti-sn65dsi83.c
-> +++ b/drivers/gpu/drm/bridge/ti-sn65dsi83.c
-> @@ -321,8 +321,8 @@ static u8 sn65dsi83_get_dsi_div(struct sn65dsi83 *ctx)
->  	return dsi_div - 1;
->  }
->=20
-> -static void sn65dsi83_atomic_enable(struct drm_bridge *bridge,
-> -				    struct drm_bridge_state=20
-*old_bridge_state)
-> +static void sn65dsi83_atomic_pre_enable(struct drm_bridge *bridge,
-> +					struct drm_bridge_state=20
-*old_bridge_state)
->  {
->  	struct sn65dsi83 *ctx =3D bridge_to_sn65dsi83(bridge);
->  	struct drm_atomic_state *state =3D old_bridge_state->base.state;
-> @@ -484,11 +484,22 @@ static void sn65dsi83_atomic_enable(struct drm_brid=
-ge
-> *bridge, /* Trigger reset after CSR register update. */
->  	regmap_write(ctx->regmap, REG_RC_RESET, REG_RC_RESET_SOFT_RESET);
->=20
-> +	/* Wait for 10ms after soft reset as specified in datasheet */
-> +	usleep_range(10000, 12000);
-> +}
-> +
-> +static void sn65dsi83_atomic_enable(struct drm_bridge *bridge,
-> +				    struct drm_bridge_state=20
-*old_bridge_state)
-> +{
-> +	struct sn65dsi83 *ctx =3D bridge_to_sn65dsi83(bridge);
-> +	unsigned int pval;
-> +
->  	/* Clear all errors that got asserted during initialization. */
->  	regmap_read(ctx->regmap, REG_IRQ_STAT, &pval);
->  	regmap_write(ctx->regmap, REG_IRQ_STAT, pval);
->=20
-> -	usleep_range(10000, 12000);
-> +	/* Wait for 1ms and check for errors in status register */
-> +	usleep_range(1000, 1100);
->  	regmap_read(ctx->regmap, REG_IRQ_STAT, &pval);
->  	if (pval)
->  		dev_err(ctx->dev, "Unexpected link status 0x%02x\n",=20
-pval);
-> @@ -555,6 +566,7 @@ static const struct drm_bridge_funcs sn65dsi83_funcs =
-=3D {
-> .attach			=3D sn65dsi83_attach,
->  	.detach			=3D sn65dsi83_detach,
->  	.atomic_enable		=3D sn65dsi83_atomic_enable,
-> +	.atomic_pre_enable	=3D sn65dsi83_atomic_pre_enable,
->  	.atomic_disable		=3D sn65dsi83_atomic_disable,
->  	.mode_valid		=3D sn65dsi83_mode_valid,
->=20
-> @@ -697,6 +709,7 @@ static int sn65dsi83_probe(struct i2c_client *client)
->=20
->  	ctx->bridge.funcs =3D &sn65dsi83_funcs;
->  	ctx->bridge.of_node =3D dev->of_node;
-> +	ctx->bridge.pre_enable_prev_first =3D true;
->  	drm_bridge_add(&ctx->bridge);
->=20
->  	ret =3D sn65dsi83_host_attach(ctx);
+And did you try what I suggested? Without trying that it looks like
+neither the mainline developers nor the stable team cares enough to look
+into your report, as both sides might assume it's the other sides duty
+to do so.
 
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
 
-=2D-=20
-TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht M=FCnchen, HRB 105018
-Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
-http://www.tq-group.com/
+#regzbot poke
 
-
+>> If I revert this commit, the tx/rx works just
+>> like before.
+>> Maybe this use-case wasn't considered when this patch was created?
+>> I haven't seen a documentation change regarding this in DT bindings,
+>> but if the config should be something else, please let me know.
+>> Otherwise this commit breaks the RS485 function of atmel_serial at
+>> least in the v5.4.y branch.
+>>
+>> Best Regards,
+>> Kristóf Havasi
+>>
+>> The relevant device tree nodes:
+>>
+>> from sama5d3.dtsi:
+>>
+>> usart1: serial@f0020000 {
+>>   compatible = "atmel,at91sam9260-usart";
+>>   reg = <0xf0020000 0x100>;
+>>   interrupts = <13 IRQ_TYPE_LEVEL_HIGH 5>;
+>>   dmas = <&dma0 2 AT91_DMA_CFG_PER_ID(5)>,
+>>   <&dma0 2 (AT91_DMA_CFG_PER_ID(6) | AT91_DMA_CFG_FIFOCFG_ASAP)>;
+>>   dma-names = "tx", "rx";
+>>   pinctrl-names = "default";
+>>   pinctrl-0 = <&pinctrl_usart1>;
+>>   clocks = <&usart1_clk>;
+>>   clock-names = "usart";
+>>   status = "disabled";
+>> };
+>>
+>> pinctrl_usart1: usart1-0 {
+>>   atmel,pins =
+>>   <AT91_PIOB 28 AT91_PERIPH_A AT91_PINCTRL_PULL_UP
+>>    AT91_PIOB 29 AT91_PERIPH_A AT91_PINCTRL_NONE>;
+>> };
+>> pinctrl_usart1_rts_cts: usart1_rts_cts-0 {
+>>   atmel,pins =
+>>   <AT91_PIOB 26 AT91_PERIPH_A AT91_PINCTRL_NONE /* PB26 periph A,
+>> conflicts with GRX7 */
+>>    AT91_PIOB 27 AT91_PERIPH_A AT91_PINCTRL_NONE>; /* PB27 periph A,
+>> conflicts with G125CKO */
+>> };
+>>
+>> from our dts:
+>>
+>> &usart1 {
+>>   pinctrl-0 = <&pinctrl_usart1 &pinctrl_usart1_rts_cts>;
+>>   atmel,use-dma-rx;
+>>   atmel,use-dma-tx;
+>>   rs485-rx-during-tx;
+>>   linux,rs485-enabled-at-boot-time;
+>>   status = "okay";
+>> };
+>>
+>> HW:
+>> The SAMA5D3's PB27 is connected to the |RE+DE of the RS485 transceiver
+>> SP3458EN-L
+> 
+> 
+> Thanks for the report. To be sure the issue doesn't fall through the
+> cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
+> tracking bot:
+> 
+> #regzbot ^introduced 77b97ef4908aa
+> #regzbot title dmaengine: at_hdmac: receiving data through the RS485
+> interface broke
+> #regzbot ignore-activity
+> 
+> This isn't a regression? This issue or a fix for it are already
+> discussed somewhere else? It was fixed already? You want to clarify when
+> the regression started to happen? Or point out I got the title or
+> something else totally wrong? Then just reply and tell me -- ideally
+> while also telling regzbot about it, as explained by the page listed in
+> the footer of this mail.
+> 
+> Developers: When fixing the issue, remember to add 'Link:' tags pointing
+> to the report (the parent of this mail). See page linked in footer for
+> details.
+> 
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> --
+> Everything you wanna know about Linux kernel regression tracking:
+> https://linux-regtracking.leemhuis.info/about/#tldr
+> That page also explains what to do if mails like this annoy you.
+> 
+> 
