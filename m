@@ -2,101 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B62966F636D
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 05:34:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA94C6F6A14
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 13:35:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbjEDDep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 23:34:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48550 "EHLO
+        id S229959AbjEDLfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 07:35:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbjEDDej (ORCPT
+        with ESMTP id S229482AbjEDLfS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 23:34:39 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0AFC1BF6;
-        Wed,  3 May 2023 20:34:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683171257; x=1714707257;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3KiOAT90UU7GzEuS/S0TppUB/RAnJK0O9UmCMBs0ZBM=;
-  b=RX9+w68TDldESwTGAJ75inYBOaFpYuB7r/uiZknU4YRIAk9MOKNBvLdx
-   NuUdkDfIkSFjv6SzibL2YGq4W2t5nVy+Mny6zy3+X4fsnaonjkKBGageN
-   NyAv2/cFyXVr+JyLNTeTuj5hyGrHPJGRK9a44T6I6su7MxR0AOSXtYAMC
-   vo4dmfNz48aL5anbn7ZjOSw1mdtsKv/RFAcC+LQrS4aHjsGig4KEf6M0j
-   mnMA58SeC69Gbv2tnE3xXm+7ZOcSwUNRR8JZz29GODz4v760/mDE2r3xp
-   1HR5bIGHuErgbcX9/knZbnUEt6miQNWAKlpKdX6dfemVePBHWT+Ly/It1
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="348868849"
-X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
-   d="scan'208";a="348868849"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2023 20:34:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="871198748"
-X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
-   d="scan'208";a="871198748"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga005.jf.intel.com with ESMTP; 03 May 2023 20:34:14 -0700
-Date:   Thu, 4 May 2023 19:34:26 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Cc:     linux-kernel@vger.kernel.org, Moritz Fischer <mdf@kernel.org>,
-        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Vladimir Georgiev <v.georgiev@metrotek.ru>, system@metrotek.ru,
-        linux-fpga@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] MAINTAINERS: update Microchip MPF FPGA reviewers
-Message-ID: <ZFOYQgA6TYa8hCjS@yilunxu-OptiPlex-7050>
-References: <20230429104838.5064-1-i.bornyakov@metrotek.ru>
- <20230429104838.5064-2-i.bornyakov@metrotek.ru>
+        Thu, 4 May 2023 07:35:18 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2B12448F;
+        Thu,  4 May 2023 04:35:17 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A117F66031D7;
+        Thu,  4 May 2023 12:35:15 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1683200116;
+        bh=1NMvcGiXphJ8FhyetkrltYkSY2U0NjU1T6zPshhG/DI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Cyu4RsQ5vbnTn1GOCVrF9dpVrpJ2iP4P5L2sHjYetT6uTK9OohIFOkKk+5TaAmTSw
+         WKYfxpcLiZBqlOcuHG59K4ltBDH3yR/QrzROBvAyqIHOIYpZ5hDwbrBYjuBEWeioSx
+         yAHlYQdbIuxFMBX/yt/HeaMWPfoYUOx94OEb24SVWCk26MhHnswfqzLeD6pVROYac8
+         65zOPsnSK1g6ZNo7YWEaUpXvfJ5VLvI+JdOkgg1fu+6YP6Pshss1/Z70R3MQX+TrBr
+         7p5GsAkgwckBnC51XzIRGXxA38Z2iZw7X/EKq0xM2XhSG3ubc5UDtGJ68q4t2QP9Zb
+         tsQPqnPBY8VeA==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     ryder.lee@mediatek.com
+Cc:     jianjun.wang@mediatek.com, lpieralisi@kernel.org, kw@linux.com,
+        robh@kernel.org, bhelgaas@google.com, p.zabel@pengutronix.de,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        linux-pci@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 0/2] MediaTek PCIe Gen3: Suspend fixes
+Date:   Thu,  4 May 2023 13:35:07 +0200
+Message-Id: <20230504113509.184633-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230429104838.5064-2-i.bornyakov@metrotek.ru>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-29 at 13:48:37 +0300, Ivan Bornyakov wrote:
-> As I'm leaving Metrotek, hand over reviewing duty of Microchip MPF FPGA
-> driver to Vladimir.
-> 
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> Acked-by: Vladimir Georgiev <v.georgiev@metrotek.ru>
-> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+This series fixes PM suspend/resume for MediaTek PCIe Gen3, seen on
+the MT8195 Tomato Chromebook, which would deadlock at resume.
 
-Hi Vladimir:
+Tested on a MT8195 Tomato Chromebook.
 
-I need the "Acked-by" from your mail address.
+AngeloGioacchino Del Regno (2):
+  PCI: mediatek-gen3: Stop acquiring spinlocks in {suspend,resume}_noirq
+  PCI: mediatek-gen3: Assert MAC reset only if PHY reset also present
 
-> ---
->  MAINTAINERS | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index a81ba8328704..aab9fbb20362 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -8100,7 +8100,7 @@ F:	drivers/fpga/intel-m10-bmc-sec-update.c
->  
->  MICROCHIP POLARFIRE FPGA DRIVERS
->  M:	Conor Dooley <conor.dooley@microchip.com>
-> -R:	Ivan Bornyakov <i.bornyakov@metrotek.ru>
-> +R:	Vladimir Georgiev <v.georgiev@metrotek.ru>
->  L:	linux-fpga@vger.kernel.org
->  S:	Supported
->  F:	Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
-> -- 
-> 2.40.0
-> 
-> 
+ drivers/pci/controller/pcie-mediatek-gen3.c | 33 +++++++++++----------
+ 1 file changed, 17 insertions(+), 16 deletions(-)
+
+-- 
+2.40.1
+
