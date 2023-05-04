@@ -2,118 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62F666F6B0D
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 14:19:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BEB86F6B10
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 14:19:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230452AbjEDMTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 08:19:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49412 "EHLO
+        id S230413AbjEDMTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 08:19:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230415AbjEDMTK (ORCPT
+        with ESMTP id S230337AbjEDMT3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 08:19:10 -0400
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9505618B;
-        Thu,  4 May 2023 05:19:08 -0700 (PDT)
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3064099f9b6so259169f8f.1;
-        Thu, 04 May 2023 05:19:08 -0700 (PDT)
+        Thu, 4 May 2023 08:19:29 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F03C7284
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 05:19:20 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-b996127ec71so605988276.0
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 05:19:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683202759; x=1685794759;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=C0BBMlMuhsvJslxHkgJj2+Y0Hn+bMZWGZK5WjuDPBsY=;
+        b=NoQYyZqeA0SQwvIUS/9QOhNCXe85mGDlgPllqMWdTSrOww2ZBuZngjthCLUbhK0oJm
+         Hp8bHn1LXGN64/gTkUlpO8uDaYkogEqxHtM7fqv56QpK/VGGAQRy85JzZfmbqlxRxxEg
+         IdGlOoHL7Cii8vQzBKWuN4+zd1D8N94pNkMLiQO8SNrbWxRC33xFB/rS7glTBbGwirsb
+         /ngEPISLdr9F9ekv4Pepmnb6MVqO8RDf/oQqR/WckKjzcHYl1B9QGeGr8hqZ4gNSemmi
+         DLjxNbXCvojvhrrToKr7hSu7CUGHKj9D7U5p/KJH9akJqVjMmrrIb9Q/PxldPtMDWKy/
+         Jd+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683202747; x=1685794747;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1683202759; x=1685794759;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=it1Jg8DeNZi+uSQaZN6tyTLLss5U0nLB9ujTI6DLQlE=;
-        b=I2EcyFal6Slt1X71bBmBCA1jLd9RXN2G5Sl8E8Z1DnTyyUFK/ML4aNCDsnwEU6Gm28
-         YHOv1H4uhD0GyLHu0TI4Aw+5b47rGSXnAlh10kZQ78obYMAqZ09INVdqZSPZcSmoavrz
-         9YxqXKC/XSBj9ao7zCg0CyBLiDlqzIazbuSVvbVBHDXbs+Kd4uy3QX71OnLsaMRxDcF+
-         szmkygZKJqhjOksQShanmCryb1j58OjOms7gVAatUj2eHZ65EMdlbCSClPdjcgWCROG6
-         tNT3RLbp2+qtKumgiOmwZqvoM61SjfmhvQ/L7hqOOGy72OBty9usXfT7YO23tYllbK8h
-         CgpA==
-X-Gm-Message-State: AC+VfDwX7UXE0NBF1cs6thGJ9E2kcXFYuWaUXlFA4DB/S0T53Pv1cN0k
-        FSSnr5hisvEndxtcQe6w9QhrbuxlAx3dXw==
-X-Google-Smtp-Source: ACHHUZ5pFqkNjG1UPGsV75RqUHWvgJLeZ2Ye5mVCDjBw50wrtT9suVc5ow9F1hW4QpWHoybLEEvBqg==
-X-Received: by 2002:adf:fec7:0:b0:307:41a1:dc86 with SMTP id q7-20020adffec7000000b0030741a1dc86mr902784wrs.67.1683202747127;
-        Thu, 04 May 2023 05:19:07 -0700 (PDT)
-Received: from localhost (fwdproxy-cln-030.fbsv.net. [2a03:2880:31ff:1e::face:b00c])
-        by smtp.gmail.com with ESMTPSA id m18-20020adffa12000000b003047297a5e8sm29871228wrr.54.2023.05.04.05.19.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 May 2023 05:19:06 -0700 (PDT)
-From:   Breno Leitao <leitao@debian.org>
-To:     io-uring@vger.kernel.org, linux-nvme@lists.infradead.org,
-        asml.silence@gmail.com, hch@lst.de, axboe@kernel.dk,
-        ming.lei@redhat.com
-Cc:     leit@fb.com, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org, sagi@grimberg.me, joshi.k@samsung.com,
-        kbusch@kernel.org
-Subject: [PATCH v4 3/3] io_uring: Remove unnecessary BUILD_BUG_ON
-Date:   Thu,  4 May 2023 05:18:56 -0700
-Message-Id: <20230504121856.904491-4-leitao@debian.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230504121856.904491-1-leitao@debian.org>
-References: <20230504121856.904491-1-leitao@debian.org>
+        bh=C0BBMlMuhsvJslxHkgJj2+Y0Hn+bMZWGZK5WjuDPBsY=;
+        b=QhEwSbAPHlpJoYLanvkAT0/bHIkfC0GoA8fWnRPaY+UsKVcsV7eJt9c/ME1Ap0vnZ6
+         0jpMlt+2v3Xu8ltTVcF6r6l8TWE/QEiWCA+dUktQUd5ZUnglMeOUX0PMQTHyBBAZ9kh1
+         QY+z5IMIM7s65uYTLg64wWX4M8cwj5rnnk4SeuxatfMBl47NaPhYLTBayONA95VNTFpT
+         IBrCcrVbQAjcddvwWXYui0xcsDPFEmrwrXYQ4yCYiKunjKru3wFBHhyhpUiS1AiPAatf
+         JOTcl9uH6DXDiTu/DCqLDpifzDuEnIBqQRiQ2H2pc3b/9Jhio3C/Eks2rZKxojDQ5Uh1
+         AkQw==
+X-Gm-Message-State: AC+VfDxpwoJcz2ZuvOLlfz5picZtKKZPItmaD6i/LpbxLCTrODyGBbuI
+        BkMzdhV7Elfbf9QwTH/Tu9q8aLRUv1tmuy5QkGTs8A==
+X-Google-Smtp-Source: ACHHUZ4VDWXMROP3mCAF7rpou7Htz0bEHKaHrjuuvqvEA4WmfiqDVqgTJPJuYa7V9/7tWfvgdnV+3a0+eHkbXthOZrI=
+X-Received: by 2002:a25:502:0:b0:b9e:45e1:20e0 with SMTP id
+ 2-20020a250502000000b00b9e45e120e0mr11815579ybf.48.1683202759261; Thu, 04 May
+ 2023 05:19:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20230430-omap2-pdata-quirks-v1-0-e015f3a3ea46@linaro.org>
+ <20230430-omap2-pdata-quirks-v1-1-e015f3a3ea46@linaro.org> <CAMRc=MczGKVFo+iWe_Pnvi3-hCK0fhmmkjp-h92RHONEHFAP_g@mail.gmail.com>
+In-Reply-To: <CAMRc=MczGKVFo+iWe_Pnvi3-hCK0fhmmkjp-h92RHONEHFAP_g@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 4 May 2023 14:19:08 +0200
+Message-ID: <CACRpkdbYR+kobi3-xx7FgQG5aZb37JJageP+JWMss=D+KZUkFw@mail.gmail.com>
+Subject: Re: [PATCH 1/3] ARM/gpio: Push OMAP2 quirk down into TWL4030 driver
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Tony Lindgren <tony@atomide.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Lee Jones <lee@kernel.org>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the io_uring_cmd_prep_async() there is an unnecessary compilation time
-check to check if cmd is correctly placed at field 48 of the SQE.
+On Wed, May 3, 2023 at 3:02=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.pl> =
+wrote:
+> On Mon, May 1, 2023 at 11:05=E2=80=AFAM Linus Walleij <linus.walleij@lina=
+ro.org> wrote:
+> >
+> > The TWL4030 GPIO driver has a custom platform data .set_up()
+> > callback to call back into the platform and do misc stuff such
+> > as hog and export a GPIO for WLAN PWR on a specific OMAP3 board.
+> >
+> > Avoid all the kludgery in the platform data and the boardfile
+> > and just put the quirks right into the driver. Make it
+> > conditional on OMAP3.
+> >
+> > I think the exported GPIO is used by some kind of userspace
+> > so ordinary DTS hogs will probably not work.
+> >
+>
+> While I haven't tested it (nor can I) so don't take my word for it, it
+> looks to me as if regular DTS hogs *should* work. If anything, the way
+> this quirk is implemented in your patch moves the export past the chip
+> registration, while ordinary hogs would be applied when the chip is
+> first added.
+>
+> Am I missing something?
 
-This is unnecessary, since this check is already in place at
-io_uring_init():
+DTS hogs cannot do gpiod_export(), that's the problem. I think the OMAP2
+(Nokia phones?) need those exported GPIOs.
 
-          BUILD_BUG_SQE_ELEM(48, __u64,  addr3);
-
-Remove it and the uring_cmd_pdu_size() function, which is not used
-anymore.
-
-Keith started a discussion about this topic in the following thread:
-Link: https://lore.kernel.org/lkml/ZDBmQOhbyU0iLhMw@kbusch-mbp.dhcp.thefacebook.com/
-
-Signed-off-by: Breno Leitao <leitao@debian.org>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
----
- io_uring/uring_cmd.c | 3 ---
- io_uring/uring_cmd.h | 8 --------
- 2 files changed, 11 deletions(-)
-
-diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
-index ed536d7499db..5e32db48696d 100644
---- a/io_uring/uring_cmd.c
-+++ b/io_uring/uring_cmd.c
-@@ -70,9 +70,6 @@ int io_uring_cmd_prep_async(struct io_kiocb *req)
- {
- 	struct io_uring_cmd *ioucmd = io_kiocb_to_cmd(req, struct io_uring_cmd);
- 
--	BUILD_BUG_ON(uring_cmd_pdu_size(0) != 16);
--	BUILD_BUG_ON(uring_cmd_pdu_size(1) != 80);
--
- 	memcpy(req->async_data, ioucmd->sqe, uring_sqe_size(req->ctx));
- 	ioucmd->sqe = req->async_data;
- 	return 0;
-diff --git a/io_uring/uring_cmd.h b/io_uring/uring_cmd.h
-index 7c6697d13cb2..8117684ec3ca 100644
---- a/io_uring/uring_cmd.h
-+++ b/io_uring/uring_cmd.h
-@@ -3,11 +3,3 @@
- int io_uring_cmd(struct io_kiocb *req, unsigned int issue_flags);
- int io_uring_cmd_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe);
- int io_uring_cmd_prep_async(struct io_kiocb *req);
--
--/*
-- * The URING_CMD payload starts at 'cmd' in the first sqe, and continues into
-- * the following sqe if SQE128 is used.
-- */
--#define uring_cmd_pdu_size(is_sqe128)				\
--	((1 + !!(is_sqe128)) * sizeof(struct io_uring_sqe) -	\
--		offsetof(struct io_uring_sqe, cmd))
--- 
-2.34.1
-
+Yours,
+Linus Walleij
