@@ -2,155 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F25026F6DDD
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 16:40:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CF9F6F6DE6
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 16:42:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230312AbjEDOku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 10:40:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38778 "EHLO
+        id S230432AbjEDOmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 10:42:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230049AbjEDOkq (ORCPT
+        with ESMTP id S231278AbjEDOmN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 10:40:46 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5F0358C
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 07:40:45 -0700 (PDT)
-Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 344EZpRF015478;
-        Thu, 4 May 2023 14:40:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=AJyZqaB1bab4U3tvgHgrP+C2mc3Jtlr5vUnHOB90K2c=;
- b=QETFLT08Dpc/TdYi8xIay84+LW4/xM+GOOg8UxJG91XjPTQzdQC1GaNNaMyu1mnmdPEa
- /DQZ27/aXEGLTk76RdoXz6umMykQdFfG68Lvsrjp4y9xM7qIkss+qhL9uT0B/8wpGflY
- Fs/hlsO3JeZKFPckAc62+Gmj8KhSxxR4IOS+k6z5R0WTei3AhrdLfWNje3W9BQ4EJAl3
- YpXh90+eAJ7DaRhaTU17dCCHDZw6HlK7JuAxjqkyc9fBOZil3I0q89wtEoLLh/7vhGvZ
- 40skUyaLzn1iXYgXoSHk+IvHRCTS47qbfSB3rY4k9mR9W74PYcj/eu1CY1tQZ+gVJ46Z yw== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qceec8h7w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 04 May 2023 14:40:41 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3440gM7L020923;
-        Thu, 4 May 2023 14:40:38 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3q8tv6tx2f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 04 May 2023 14:40:38 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 344EeYuh37094092
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 4 May 2023 14:40:35 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D4F3520043;
-        Thu,  4 May 2023 14:40:34 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4AA6120040;
-        Thu,  4 May 2023 14:40:34 +0000 (GMT)
-Received: from heavy.boeblingen.de.ibm.com (unknown [9.171.60.220])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Thu,  4 May 2023 14:40:34 +0000 (GMT)
-From:   Ilya Leoshkevich <iii@linux.ibm.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH 2/2] s390/uapi: Cover statfs padding by growing f_spare
-Date:   Thu,  4 May 2023 16:40:21 +0200
-Message-Id: <20230504144021.808932-3-iii@linux.ibm.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230504144021.808932-1-iii@linux.ibm.com>
-References: <20230504144021.808932-1-iii@linux.ibm.com>
+        Thu, 4 May 2023 10:42:13 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4EAE3592
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 07:42:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683211331; x=1714747331;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JZtArQ8TvPv7mtuLAG+ic+CHQLAPbY90gaientxZsTY=;
+  b=c99ZMMHPghkOXRkIyQ8XAURsVQLU7/VQyWlkXgk+ogjoU6Z1w/Nus1Nv
+   JE1+olOywB7Er0KMlmfb4kHgQWQEOQfXwGcA89DxIzgUlMeK+TT8n9PAU
+   0lQYFNYoOYeqvEIt1jPIHOk0DlA11H26LVlZgvH/qvOY6CIN1LOhfBhQ+
+   pIdYzi8k660zSJ8xuvU6L6Obf101kV4JWrkdfvvr/rGemZytXxYTIptar
+   lMkio9PHzVzS0IIAOY+I8ik1YYBCchlk8+4nd1upEwDjoOnYeXxddiArx
+   MHwB+DAOZvaPI5SuWdhmzWCRSCrAR1nqmCuXDd+FW4DDLtNSsJDkVW/8+
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="333349347"
+X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
+   d="scan'208";a="333349347"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 07:41:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="808748776"
+X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
+   d="scan'208";a="808748776"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP; 04 May 2023 07:41:23 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pua94-0095su-0d;
+        Thu, 04 May 2023 17:41:22 +0300
+Date:   Thu, 4 May 2023 17:41:21 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Howells <dhowells@redhat.com>,
+        Ricardo Martinez <ricardo.martinez@linux.intel.com>
+Subject: Re: [RFC PATCH 2/4] list.h: Fix parentheses around macro pointer
+ parameter use
+Message-ID: <ZFPEEVvHTw2uukun@smile.fi.intel.com>
+References: <20230504012914.1797355-1-mathieu.desnoyers@efficios.com>
+ <20230504012914.1797355-2-mathieu.desnoyers@efficios.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: C9BKYqGboMPIY73_0YqYDN94ubRFVMPW
-X-Proofpoint-GUID: C9BKYqGboMPIY73_0YqYDN94ubRFVMPW
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-04_10,2023-05-04_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- adultscore=0 priorityscore=1501 mlxscore=0 phishscore=0 suspectscore=0
- mlxlogscore=948 spamscore=0 lowpriorityscore=0 bulkscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2305040119
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230504012914.1797355-2-mathieu.desnoyers@efficios.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pahole says:
+On Wed, May 03, 2023 at 09:29:12PM -0400, Mathieu Desnoyers wrote:
+> Add missing parentheses around use of macro argument "pos" in those
+> patterns to ensure operator precedence behaves as expected:
+> 
+> - typeof(*pos)
+> - pos->member
+> 
+> Remove useless parentheses around use of macro parameter (head) in the
+> following pattern:
+> 
+> - list_is_head(pos, (head))
+> 
+> Because comma is the lowest priority operator already, so the extra pair
+> of parentheses is redundant.
+> 
+> This corrects the following usage pattern where operator precedence is
+> unexpected:
+> 
+>   LIST_HEAD(testlist);
+> 
+>   struct test {
+>           struct list_head node;
+>           int a;
+>   };
+> 
+>   // pos->member issue
+>   void f(void)
+>   {
+>           struct test *t1;
+>           struct test **t2 = &t1;
 
-	struct compat_statfs64 {
-		...
-		u32			f_spare[4];		/*    68    16 */
-		/* size: 88, cachelines: 1, members: 12 */
-		/* padding: 4 */
+I'm not against the patch, but I'm in doubt, looking into this example, it's useful.
+Any real use case like above in the Linux kernel, please?
 
-	struct statfs {
-		...
-		unsigned int		f_spare[4];		/*    68    16 */
-		/* size: 88, cachelines: 1, members: 12 */
-		/* padding: 4 */
+>           list_for_each_entry((*t2), &testlist, node) {   /* works */
+>                   //...
+>           }
+>           list_for_each_entry(*t2, &testlist, node) {     /* broken */
+>                   //...
+>           }
+>   }
 
-	struct statfs64 {
-		...
-		unsigned int		f_spare[4];		/*    68    16 */
-		/* size: 88, cachelines: 1, members: 12 */
-		/* padding: 4 */
-
-One has to keep the existence of padding in mind when working with
-these structs. Grow f_spare arrays to 5 in order to simplify things.
-
-Acked-by: Heiko Carstens <hca@linux.ibm.com>
-Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
----
- arch/s390/include/asm/compat.h      | 2 +-
- arch/s390/include/uapi/asm/statfs.h | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/arch/s390/include/asm/compat.h b/arch/s390/include/asm/compat.h
-index a386070f1d56..3cb9d813f022 100644
---- a/arch/s390/include/asm/compat.h
-+++ b/arch/s390/include/asm/compat.h
-@@ -112,7 +112,7 @@ struct compat_statfs64 {
- 	u32		f_namelen;
- 	u32		f_frsize;
- 	u32		f_flags;
--	u32		f_spare[4];
-+	u32		f_spare[5];
- };
- 
- /*
-diff --git a/arch/s390/include/uapi/asm/statfs.h b/arch/s390/include/uapi/asm/statfs.h
-index 72604f7792c3..f85b50723dd3 100644
---- a/arch/s390/include/uapi/asm/statfs.h
-+++ b/arch/s390/include/uapi/asm/statfs.h
-@@ -30,7 +30,7 @@ struct statfs {
- 	unsigned int	f_namelen;
- 	unsigned int	f_frsize;
- 	unsigned int	f_flags;
--	unsigned int	f_spare[4];
-+	unsigned int	f_spare[5];
- };
- 
- struct statfs64 {
-@@ -45,7 +45,7 @@ struct statfs64 {
- 	unsigned int	f_namelen;
- 	unsigned int	f_frsize;
- 	unsigned int	f_flags;
--	unsigned int	f_spare[4];
-+	unsigned int	f_spare[5];
- };
- 
- #endif
 -- 
-2.40.1
+With Best Regards,
+Andy Shevchenko
+
 
