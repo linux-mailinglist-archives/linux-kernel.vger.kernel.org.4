@@ -2,216 +2,302 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FE436F63A4
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 05:42:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57B9A6F63A7
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 05:43:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbjEDDmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 23:42:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53870 "EHLO
+        id S229722AbjEDDng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 23:43:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbjEDDl6 (ORCPT
+        with ESMTP id S229502AbjEDDnc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 23:41:58 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50FB61B1;
-        Wed,  3 May 2023 20:41:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683171696; x=1714707696;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=ljHnkX5U0AQaaLLWMLKfyQ8/tZ8WJNpfC4Fd376E+2k=;
-  b=bDIp6i3JnfWEZVJB6mOWrranGqmSTdsBKEHOCrvIAeVx0k3dXALm0HsK
-   QGTa6K2xwdHaFol5b4DbnFYePZdrfWRODlb6GwsFBlmfXuIkYYWjdgbJB
-   OGwV4MBczhNm08YzxnojsemHL7B9x5EHUof3beWAA7fc96knFBBYZleHL
-   CnjqyHbB9TTVcqtdV7/oxRLuGaCrvgmvhfkJoXIX8jAjEMejZolEX8OvM
-   P2qbaevO05DmAGLI3Qz0HzdYjVEuKvr38Ls+7o7NH2sMKHbHNULQUCvkW
-   lL0nhn4KTeTHJtsNP/814t1pBlsA5qtYo5GXBqZbNF9Nhm1wR1BSPsHm9
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="328445117"
-X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
-   d="scan'208";a="328445117"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2023 20:41:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="727412093"
-X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
-   d="scan'208";a="727412093"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga008.jf.intel.com with ESMTP; 03 May 2023 20:41:33 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 3 May 2023 20:41:33 -0700
-Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 3 May 2023 20:41:33 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Wed, 3 May 2023 20:41:33 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.107)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Wed, 3 May 2023 20:41:33 -0700
+        Wed, 3 May 2023 23:43:32 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FBE1B1;
+        Wed,  3 May 2023 20:43:30 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bqHkDXpRDTkTZf/wUXxPPIHWmkglUq6GPjr5CmWns/GJQ0YNk+4J0UO6bl7eFGJCSw0PJQP1yVAx8U4VQJPbBQoyGTlLVrE4WlYVKc+Pdr4XdXu679X1q5WteMFCYrLuGvcT7OrsrXGxGgva9O9UKSidgjjVfQFfpN0iUvkb5QnIdOr45T5yQhiIq6lLua0DeifbxEY+nvlRtNz/bAkeITM+5lFprIEE60wahm0kK9YjIiwtO2kpbSDDv06yvaQ7aS0IkdanKT1fMUCtnyhs0yKbaUNsdaGWD0FvT4gR8iOFtaJel3kQI0XNMdmhC5YbmgFXg/XTacfnyhNAoER5ng==
+ b=jISXc/aPefMp2ES0xL98nHpVTSiV4jQ7/kduzR9nXFxh2u+Xx0cAjcgzaHBj7m7hF7lfnr7ppdYy9RE5dmigVZv3W0n7sbl+o7TJI8wtrxcOmummJugKIrQk5lN0XfGg+k8jTWB0/sO9GsNrfO5CGmNhdu7GcUskcsTZHFr95DeWpuoi50ZlQkWLSvrn5qwgp4A7pWdWRuZcj3rO7MX7llQXg5BfysQoPZ1sMMn+1EYhaTlRQnug8bDihb6Fje8WPTxtza/tHz+YFlSre3S3mdX9tZVgyGTdeu8L6R3zMgrfGglmuDMtzyZuAkLtWCbQcBxXPSlDUcS9xkDqAb+cZA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2lG9/euZ/yatc/gkFMol8XuXHNwJsma7nDhGudIN7pk=;
- b=LEBKN43dN2QpkU0UJ3ljoDPRpu7nGQFWsc5e9KL6HMlyPZMzJ05k0UL99lr7bO5szVyjubO5nxdU1l1auVfjMqUl5AjFFuIww3Lojo8uRfPjGHiijytAoTdN1wkf+wUi114pL3G2GQgapJEkBG61LY60h85FpjcAyJNAkUSfTcQXjE84Nw9uTv4HjNf1btwYg6X19EWL80DXeQJfC3NWHQiLbDaEnyPAF6l2SSSIdg3qGaCDxjCK1qt2tNPc5ItOW8/1tbOhXUo69vL5jU5+HwSFyhijS6k6yrzfdrL+F0YLi14wRi1UhDMt91iMfc7UxQtLk+ruzliZpkszat9+sg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH0PR11MB4965.namprd11.prod.outlook.com (2603:10b6:510:34::7)
- by CO1PR11MB4865.namprd11.prod.outlook.com (2603:10b6:303:9c::9) with
+ bh=iG2Ivvdx2fhZqtlr1r2kHdSSNgGHpf6inzK7YTV6B4k=;
+ b=Pgbu2Js3ZfDuYcoBnOCdKOnE5hsxm8qunzVuu73kH9wD/ujAje3BYIBt9DqnuTmhVbf+ij9Mot57xHf30ikcPZMajTOunsGuJelUOCw9GtFqK4T1PSOgmgbOF5/gVmuo14MfEBx27Z9t0nkTAWcZTCuF3vNQQVDHP9fXBdtN4xzQI/JFVBpDjWvzV3FLzTDE5v0Uv5T7m7H1pZ8vfeLkNN4eBneheTinTGiXWmWJd7skeGkFTUs0t2sXDmWEXKiEIbBIlkKQPnqKIeBPJ+8XFqXdxokXqYrd9CGPHGKTNKuMef7EfXua8xPn1e7t72ai/wOFERrkDWhCRfaRu7GyUA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 192.147.44.15) smtp.rcpttodomain=vger.kernel.org
+ smtp.mailfrom=tw.synaptics.com; dmarc=pass (p=none sp=none pct=100)
+ action=none header.from=tw.synaptics.com; dkim=none (message not signed);
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=Synaptics.onmicrosoft.com; s=selector2-Synaptics-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iG2Ivvdx2fhZqtlr1r2kHdSSNgGHpf6inzK7YTV6B4k=;
+ b=XMW3BJh5lLrZOwObHjMCtwEqyiOe7Ze+kiOTYdVuRMAnv5AZ0CAaHCiyCo4PfQ1J0L6RHonl0P6tg1ZOESbEXd8UOJSvCfOXzFcNFtDsFtMESD58B/P35R6/uvtxRZjy6juFL70RfHuibo8oELCCliKn4Q+ZtEqXOcq2s4uDtYQ=
+Received: from BN1PR13CA0019.namprd13.prod.outlook.com (2603:10b6:408:e2::24)
+ by SJ0PR03MB6566.namprd03.prod.outlook.com (2603:10b6:a03:38a::17) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.26; Thu, 4 May
- 2023 03:41:30 +0000
-Received: from PH0PR11MB4965.namprd11.prod.outlook.com
- ([fe80::1ff:c7e7:87de:6d97]) by PH0PR11MB4965.namprd11.prod.outlook.com
- ([fe80::1ff:c7e7:87de:6d97%5]) with mapi id 15.20.6363.026; Thu, 4 May 2023
- 03:41:29 +0000
-Message-ID: <7bf51510-ca6e-d4b2-31bf-405258fd08e7@intel.com>
-Date:   Thu, 4 May 2023 11:41:17 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 10/21] KVM:x86: Add #CP support in guest exception
- classification
-Content-Language: en-US
-To:     Binbin Wu <binbin.wu@linux.intel.com>
-CC:     <rick.p.edgecombe@intel.com>, <seanjc@google.com>,
-        <pbonzini@redhat.com>, <peterz@infradead.org>,
-        <john.allen@amd.com>, <kvm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230421134615.62539-1-weijiang.yang@intel.com>
- <20230421134615.62539-11-weijiang.yang@intel.com>
- <d923f839-7505-21fc-2976-673c9e698b6f@linux.intel.com>
-From:   "Yang, Weijiang" <weijiang.yang@intel.com>
-In-Reply-To: <d923f839-7505-21fc-2976-673c9e698b6f@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SG2PR03CA0108.apcprd03.prod.outlook.com
- (2603:1096:4:7c::36) To PH0PR11MB4965.namprd11.prod.outlook.com
- (2603:10b6:510:34::7)
+ 2023 03:43:27 +0000
+Received: from BN8NAM11FT111.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:e2:cafe::10) by BN1PR13CA0019.outlook.office365.com
+ (2603:10b6:408:e2::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.22 via Frontend
+ Transport; Thu, 4 May 2023 03:43:26 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 192.147.44.15)
+ smtp.mailfrom=tw.synaptics.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=tw.synaptics.com;
+Received-SPF: Pass (protection.outlook.com: domain of tw.synaptics.com
+ designates 192.147.44.15 as permitted sender)
+ receiver=protection.outlook.com; client-ip=192.147.44.15;
+ helo=sjc1wvp-mail01.synaptics-inc.local; pr=C
+Received: from sjc1wvp-mail01.synaptics-inc.local (192.147.44.15) by
+ BN8NAM11FT111.mail.protection.outlook.com (10.13.177.54) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6363.26 via Frontend Transport; Thu, 4 May 2023 03:43:26 +0000
+Received: from sjc1wvp-mail01.synaptics-inc.local (10.20.24.252) by
+ sjc1wvp-mail01.synaptics-inc.local (10.20.24.252) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.2; Wed, 3 May 2023 20:43:24 -0700
+Received: from sjc1uvd-bld04.synaptics.com (10.20.70.64) by
+ sjc1wvp-mail01.synaptics-inc.local (10.20.24.252) with Microsoft SMTP Server
+ id 15.0.1497.2 via Frontend Transport; Wed, 3 May 2023 20:43:24 -0700
+From:   Marge Yang <marge.yang@tw.synaptics.com>
+To:     <dmitry.torokhov@gmail.com>, <linux-input@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <marge.yang@tw.synaptics.com>
+CC:     <vincent.huang@tw.synaptics.com>, <david.chiu@tw.synaptics.com>,
+        <derek.cheng@tw.synaptics.com>, <sam.tsai@synaptics.com>,
+        Marge Yang <marge.yang@synaptics.com>
+Subject: [PATCH V1] Input: synaptics-rmi4-add support for F21.
+Date:   Thu, 4 May 2023 03:43:21 +0000
+Message-ID: <20230504034321.97267-1-marge.yang@tw.synaptics.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR11MB4965:EE_|CO1PR11MB4865:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3271a20c-f5a0-43aa-2ae8-08db4c51722c
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT111:EE_|SJ0PR03MB6566:EE_
+X-MS-Office365-Filtering-Correlation-Id: da64cfa0-fb4a-4e6b-637f-08db4c51b7ea
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Evpm0UahVUZcztlximc46re++/6C9Xzs7ALbxee4BfeKgnxSjFf6j8Ez1wR3HgDPMtASR+gNfgWmRL0I7ptZEu0Y4eBMFgDJeOSxSHxYelXGGZmXMFN6zTfc/HSdlayEoPnUGd4vq2v0Amfp+sATR+EzBooUvUOF6xAlRZGV3KaqEi9d4Yh7bqBCq1NStdf+nvqfQ6mPV1OUZIDxS6Sidjue1uk0Z6BIZjo72iPOUtdXh9N0fiePYidDnCKy1vSRFAAQQcMZXyky/43/o6DNg1y71rykETfGaz5FdTXRmbXjDQcLW/xkQCJZO/RdIhyzuNbOCiiVWRClNbKB8YOGHMJ6bxnFRD55H9XffyImmdo0og1QUj0iyCm9oa+oDNav5f1PcjKXMwHmukPl+LHWvRMUYuaTkxtaqGDgh+mLVMdYd0OylKHIoFbfMfLLpryvJ4idM/1souBSwMieQQJrnXCFzwZFV0JwM6iTLDFuo+IT8CkDM2s8Qgbu1nIjYz3hR1n06eB5wov29O+MdQX8lQlXjwlcb6R2H/wrqQjJSUyQ6DcrQAG0ycXMPKOweIhcTj/aquREOFgKuNWLQ9SCgYxPAx62mFgacmgMkxbQ4QFN1EEezoa+iKjiwGyKjqmfVrcYfTfQ3G399S6G+oPNIQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4965.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(376002)(366004)(136003)(346002)(396003)(451199021)(31696002)(86362001)(6666004)(41300700001)(6486002)(478600001)(36756003)(66476007)(66556008)(66946007)(4326008)(6916009)(316002)(5660300002)(2616005)(31686004)(6506007)(6512007)(26005)(53546011)(2906002)(186003)(8936002)(8676002)(82960400001)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QzFWMFpyMng0eHhveGtVVFh3cE42bkc5bHVORmpCOW1aTXFNbmw3b0ZJWVM2?=
- =?utf-8?B?Uy9uRTZNaTdNL2lEaHNNYUs3cjFDcTRXNkZaRE9EUFN5aGt6UkRvWW9ZQWhC?=
- =?utf-8?B?allIRGw3RFpQRUV2VjU5WHFrOUh6bjdxRkhtOGZRaUZIZUhnb2VNb2E2NHZ1?=
- =?utf-8?B?dGdMcTI4RCtXYmozZmI2NmNDcllDYk5qZ0VBQm1NZXdiYk0vNGYwREZzWVBl?=
- =?utf-8?B?VVJaeCtpZmNlTUczODA1dWF3RmxHUCtKeDM1YXlVaVpTQm5KcWVKeHRqMHNH?=
- =?utf-8?B?Yi9za3E3eGZpQklHcXIzSTcwd051anQ3SGM2dDY1MkFBdGR1VlhjOXY3R3Zi?=
- =?utf-8?B?UXNwbW1FcjVkS2VmUk1xblRYSC9QSmYwU3lSZWVqM1lZalBsSzBxMVV2WGVs?=
- =?utf-8?B?R2NZSHZPcnZKVzJCb2hNL29xOHl5Znk3Tlh5Um1kLzJucy8yYjRTQWU4bjNm?=
- =?utf-8?B?YkxCcDhCaXJxaTVCNVh1aHhWRDF3SzAyLy8wWCtoUnN4ZC9QZ3VndVJ4WmlU?=
- =?utf-8?B?R015YnJMT0xEdU9kUmdqWThtbldOV21BdnFWNWVRYjF2VHpSOWt5dW5WMmFk?=
- =?utf-8?B?VURIZW9zK1lYMVYxbk9sclpDZEJDZFpBbWRvc2FQWkkvV0VFdXdvSUYrbzZh?=
- =?utf-8?B?cksyZEU2YjliOW43Nis1Q0djREx5aThkQi8xUlhUeFBTZHQva2JmM1NLOWVy?=
- =?utf-8?B?YllBVmhvRXltMFN2VXltREsvWS9GSHI2WVpnTE1UVWZmNy9QM3ltL2RMN3hs?=
- =?utf-8?B?Z2llK3pLYWlRalZTU1JYNE5lU0NPZUluVTFuSkpnWVhPNHlFRHVtcU9TMkpm?=
- =?utf-8?B?Q3FkOW0xMGplU2dpdUhlalRLVmRmMUExWXppRU9RRkRPcVhHME96RzdFNk9r?=
- =?utf-8?B?bkxHSWtwWHBsQmFEczIrSjZPNG8rdzl0LzdGMWlUb3JMdTVaMzBFTVU3Tnh3?=
- =?utf-8?B?VlZ4c2s0R0x4ODBYTzNVK2lVUERWem85b0xUK3owNk84dWtWNXpROWVVL2V2?=
- =?utf-8?B?M1M2ZWV1WU90VE5YZ2tMVE5XU1kwWmFYT09RdTIxL25qZEZ3WFBzdEVNYUx6?=
- =?utf-8?B?NXAySVp6Y2J1ZVJyMzlETitCeE1RcjgxWXFjZTYyZi9KV2o1VE5VamFNaXB5?=
- =?utf-8?B?dTZldGp1MVg0WGJIbWFEYnhRTzZ1c3N5VkZnSm9GSmNGM29OV09BdlRHL2RE?=
- =?utf-8?B?Y0huTkNpWUtIMUtSbTN0TVNVTDJETlQrellaRGxGMHZTVytsZW83elBGNFRr?=
- =?utf-8?B?S0U1bE9ud01zS0VqZ1U2aUhjZzJnZmUvdmxoZ2txZ2NtZlBwTlRZMzF6ZWhs?=
- =?utf-8?B?R2xnNEczRHFYOStkaDFFcTFqOEp6b2lEVUJieXNOcEQ2UTNjaCsvL0VtZzla?=
- =?utf-8?B?R0RiclZYZFZKb2xQSjVmeEd5alBjL09rS1VYTWwrd0gxc1NINWZDMTV5NnUw?=
- =?utf-8?B?Z1JKVnU1YjQzSVBhbXBzSDhKUmpkOXVDMVBVRXRHY3lqMXVqL0FMaGxBa1Yr?=
- =?utf-8?B?dFMvWG0rZm5oeGJjdnZuZzBJQjlMbDZWMTFpaW9RTmU0Vld1UlJNS0tIZVhE?=
- =?utf-8?B?amNaZnAzM1pIOTl6ZUVMdjMzM3d0eTNiZGF3c04xODc1TzBUdW9lUUwyc3Rx?=
- =?utf-8?B?Q0lwZmVwRXZiUTRpVDFYOTRVMHU4VjU4Z3gya1JOcFY3MGREUFh2VEtzTnVN?=
- =?utf-8?B?U0tOR3ZRTU5yOXR1ejBaenQxMzR6Unl0c2h5V2pOblRpUTBDS1hadjJBNThL?=
- =?utf-8?B?RUhEcEl5em1MNUZZQkl4SjRvMW9TT3FLL0x1TzFGU2NPNHozT1FLekFzOHFP?=
- =?utf-8?B?cmhIbDhBMzgzQXdxMVRNVUVNejZnM05ZZklTRUR3RzN1K1Z0VHpBTjh0UGlt?=
- =?utf-8?B?V0doVTcwK1B6d0Z5SDArU1RuS1N5RHNPYTM1QmVqU2N5bXdub1JXZDFYTWFM?=
- =?utf-8?B?UkJRUVJjZ3oxZkFxTE1qenc0SkRyekJRWWQ3U0NDSENrUkQwMlUrNHhYRUQ3?=
- =?utf-8?B?WlJtSVh6T0trK3VjY0NSLy9rVnZ1b1hFMFNYd1AxRmk0R2gxSCtWdzM1eWpV?=
- =?utf-8?B?cm5DYkFhczZxTDRIYTU2eWJBc2Y0NWp2V1YwUEVlNHB0SDd0RzZBSVo2a3Vl?=
- =?utf-8?B?eEhkbnhtc0V6VkhhV29FdGtwdWZNcjBPNklmbnl2QjFLS1grcmNRSEYwL0NS?=
- =?utf-8?B?Vmc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3271a20c-f5a0-43aa-2ae8-08db4c51722c
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4965.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2023 03:41:29.7444
+X-Microsoft-Antispam-Message-Info: dHKLOndE1uKInv5/RkCN8GYmMjanP7H3BD+Udw60WQN99xvUOtZC5TF8dxszqb3X6hAZsvVucsNe3uUJPTztfIe/0W8Z8TPHtVsO2Ted++x5vNI56etISehwdOw4dJMxRHIG61i2CVCLU3wIKJ0E5Bfm8Tj1v9nIuD8yPNqY1JSgo0AhiD6IG6IVO9hWCgVKIYY6M2nDPq0GOSv4J+5UfVN1rLGy1ySqad2glUdfnqzh1sjmn+LlpTzkiYAIY5amZbcv1cvMwaxm22gM1NWvuajqrsZSl6dBhV/SP0ka3PakslJLFvH8SzabvilEBWM4VwiRm/eBrOQkIvSrV1EL2SWogSFjrK8dmAzQTcpmbvWCd0VSpnwqDnWCXtqQzq/CoPK9q55Ho7XJT4KR8jnFmJxtA5B4oEya/NrAIo0oy8y3j6m6Ja6mCx40M2y4oHye6xsWof4o8LMUvytMP8QFaouKORKOFMiCA9YMaXi44zMHSEcMsNpWYmwE3/mq2Nr19095Tdru5TkryQnikDdLQYTZKJWTFjazd2qksvdBL05lfSQG+JrQTKVZs1hZbvuVQIHDtVUW4CmuNhX6OaVx5BWqJP1/Rbm+lsLY+c/v1O4sbmLVq5bjWdKtg9PlMISdGJ2TzeIu5PWbFqdqk5SUqTPVHIJCzW0DoYSaUmt6rdq6B9znU5L70ahdQcJe1SXwTrIPw387cW0JilAehgiJ5g==
+X-Forefront-Antispam-Report: CIP:192.147.44.15;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:sjc1wvp-mail01.synaptics-inc.local;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(376002)(136003)(346002)(396003)(39860400002)(451199021)(46966006)(36840700001)(316002)(41300700001)(2906002)(186003)(1076003)(26005)(6666004)(54906003)(2616005)(110136005)(82310400005)(4326008)(107886003)(83380400001)(336012)(47076005)(70586007)(86362001)(70206006)(36860700001)(44832011)(478600001)(7049001)(8676002)(8936002)(82740400003)(5660300002)(81166007)(356005)(40480700001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: tw.synaptics.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2023 03:43:26.2835
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: YY8iGyXi5pu+w8YbxzSOjIjZDwj8dD2Q5G5+tTPxPwuNY/TUV4FwEqAbaI7MM/OvGdoF4XhVeGslPuaX00S1bg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB4865
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: da64cfa0-fb4a-4e6b-637f-08db4c51b7ea
+X-MS-Exchange-CrossTenant-Id: 335d1fbc-2124-4173-9863-17e7051a2a0e
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=335d1fbc-2124-4173-9863-17e7051a2a0e;Ip=[192.147.44.15];Helo=[sjc1wvp-mail01.synaptics-inc.local]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT111.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR03MB6566
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Marge Yang <marge.yang@synaptics.com>
 
-On 4/28/2023 2:09 PM, Binbin Wu wrote:
->
->
-> On 4/21/2023 9:46 PM, Yang Weijiang wrote:
->> Add handling for Control Protection (#CP) exceptions(vector 21).
->> The new vector is introduced for Intel's Control-Flow Enforcement
->> Technology (CET) relevant violation cases.
->> See Intel's SDM for details.
->>
-[...]
->>   -static int exception_class(int vector)
->> +static int exception_class(struct kvm_vcpu *vcpu, int vector)
->>   {
->>       switch (vector) {
->>       case PF_VECTOR:
->>           return EXCPT_PF;
->> +    case CP_VECTOR:
->> +        if (vcpu->arch.cr4_guest_rsvd_bits & X86_CR4_CET)
->> +            return EXCPT_BENIGN;
->> +        return EXCPT_CONTRIBUTORY;
-> By definition, #CP is Contributory.
-> Can you explain more about this change here which treats #CP as 
-> EXCPT_BENIGN when CET is not enabled in guest?
+RMI4 F21 supports the forcepad click feature.
 
-I check the history of this patch, found maintainer modified the patch 
-due to some unit test issue in L1. You can check the
+Signed-off-by: Marge Yang <marge.yang@synaptics.com>
+---
+ drivers/input/rmi4/Kconfig      |   8 +++
+ drivers/input/rmi4/Makefile     |   1 +
+ drivers/input/rmi4/rmi_bus.c    |   3 ++
+ drivers/input/rmi4/rmi_driver.h |   5 +-
+ drivers/input/rmi4/rmi_f21.c    | 110 ++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 126 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/input/rmi4/rmi_f21.c
 
-details here:
-
-Re: [PATCH v15 04/14] KVM: x86: Add #CP support in guest exception 
-dispatch - Sean Christopherson (kernel.org) 
-<https://lore.kernel.org/all/YBsZwvwhshw+s7yQ@google.com/>
-
-
->
-> In current KVM code, there is suppose no #CP triggered in guest if CET 
-> is not enalbed in guest, right?
-
-Yes.
-
->>       case DE_VECTOR:
->>       case TS_VECTOR:
->>       case NP_VECTOR:
-
-
-[...]
+diff --git a/drivers/input/rmi4/Kconfig b/drivers/input/rmi4/Kconfig
+index c0163b9..37e2ba4 100644
+--- a/drivers/input/rmi4/Kconfig
++++ b/drivers/input/rmi4/Kconfig
+@@ -108,6 +108,14 @@ config RMI4_F3A
+ 	  Function 3A provides GPIO support for RMI4 devices. This includes
+ 	  support for buttons on TouchPads and ClickPads.
+ 
++config RMI4_F21
++	bool "RMI4 Function 21 (PRESSURE)"
++	help
++	  Say Y here if you want to add support for RMI4 function 21.
++
++	  Function 21 provides buttons/pressure for RMI4 devices. This includes
++	  support for buttons/pressure on PressurePad.
++
+ config RMI4_F54
+ 	bool "RMI4 Function 54 (Analog diagnostics)"
+ 	depends on VIDEO_DEV=y || (RMI4_CORE=m && VIDEO_DEV=m)
+diff --git a/drivers/input/rmi4/Makefile b/drivers/input/rmi4/Makefile
+index 02f14c8..ec4f085 100644
+--- a/drivers/input/rmi4/Makefile
++++ b/drivers/input/rmi4/Makefile
+@@ -11,6 +11,7 @@ rmi_core-$(CONFIG_RMI4_F12) += rmi_f12.o
+ rmi_core-$(CONFIG_RMI4_F30) += rmi_f30.o
+ rmi_core-$(CONFIG_RMI4_F34) += rmi_f34.o rmi_f34v7.o
+ rmi_core-$(CONFIG_RMI4_F3A) += rmi_f3a.o
++rmi_core-$(CONFIG_RMI4_F21) += rmi_f21.o
+ rmi_core-$(CONFIG_RMI4_F54) += rmi_f54.o
+ rmi_core-$(CONFIG_RMI4_F55) += rmi_f55.o
+ 
+diff --git a/drivers/input/rmi4/rmi_bus.c b/drivers/input/rmi4/rmi_bus.c
+index 50a0134..d42df5f 100644
+--- a/drivers/input/rmi4/rmi_bus.c
++++ b/drivers/input/rmi4/rmi_bus.c
+@@ -369,6 +369,9 @@ static struct rmi_function_handler *fn_handlers[] = {
+ #ifdef CONFIG_RMI4_F3A
+ 	&rmi_f3a_handler,
+ #endif
++#ifdef CONFIG_RMI4_F21
++	&rmi_f21_handler,
++#endif
+ #ifdef CONFIG_RMI4_F54
+ 	&rmi_f54_handler,
+ #endif
+diff --git a/drivers/input/rmi4/rmi_driver.h b/drivers/input/rmi4/rmi_driver.h
+index 1c6c608..57f2583 100644
+--- a/drivers/input/rmi4/rmi_driver.h
++++ b/drivers/input/rmi4/rmi_driver.h
+@@ -114,7 +114,9 @@ static inline int rmi_f03_overwrite_button(struct rmi_function *fn,
+ }
+ static inline void rmi_f03_commit_buttons(struct rmi_function *fn) {}
+ #endif
+-
++#ifdef CONFIG_RMI4_F21
++int rmi_f21_report_pressure(struct rmi_function *fn, int i);
++#endif
+ #ifdef CONFIG_RMI4_F34
+ int rmi_f34_create_sysfs(struct rmi_device *rmi_dev);
+ void rmi_f34_remove_sysfs(struct rmi_device *rmi_dev);
+@@ -136,6 +138,7 @@ extern struct rmi_function_handler rmi_f12_handler;
+ extern struct rmi_function_handler rmi_f30_handler;
+ extern struct rmi_function_handler rmi_f34_handler;
+ extern struct rmi_function_handler rmi_f3a_handler;
++extern struct rmi_function_handler rmi_f21_handler;
+ extern struct rmi_function_handler rmi_f54_handler;
+ extern struct rmi_function_handler rmi_f55_handler;
+ #endif
+diff --git a/drivers/input/rmi4/rmi_f21.c b/drivers/input/rmi4/rmi_f21.c
+new file mode 100644
+index 0000000..5657bf4
+--- /dev/null
++++ b/drivers/input/rmi4/rmi_f21.c
+@@ -0,0 +1,110 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (c) 2012-2020 Synaptics Incorporated
++ */
++
++#include <linux/kernel.h>
++#include <linux/rmi.h>
++#include <linux/input.h>
++#include <linux/slab.h>
++#include "rmi_driver.h"
++
++#define RMI_F21_FORCE_CLICK_OFFSET	8
++#define RMI_f21_FORCE_CLICK			0x01
++#define RMI_f21_DATA_REGS_MAX_SIZE	1
++#define RMI_f21_FORCEPAD_BUTTON_COUNT	1
++
++struct f21_data {
++	/* Query Data */
++	u8 data_regs[RMI_f21_DATA_REGS_MAX_SIZE];
++	struct input_dev *input;
++	u16 key_code;
++};
++
++static irqreturn_t rmi_f21_attention(int irq, void *ctx)
++{
++	struct rmi_function *fn = ctx;
++	struct f21_data *f21 = dev_get_drvdata(&fn->dev);
++	int error;
++
++	error = rmi_read_block(fn->rmi_dev,
++				fn->fd.data_base_addr+RMI_F21_FORCE_CLICK_OFFSET,
++				f21->data_regs, 1);
++	if (error) {
++		dev_err(&fn->dev,
++			"%s: Failed to read f21 data registers: %d\n",
++			__func__, error);
++		return IRQ_RETVAL(error);
++	}
++
++	if (!!(f21->data_regs[0] & RMI_f21_FORCE_CLICK))
++		input_report_key(f21->input, f21->key_code, true);
++	else
++		input_report_key(f21->input, f21->key_code, false);
++	return IRQ_HANDLED;
++}
++
++static int rmi_f21_config(struct rmi_function *fn)
++{
++	struct f21_data *f21 = dev_get_drvdata(&fn->dev);
++	struct rmi_driver *drv = fn->rmi_dev->driver;
++
++	if (!f21)
++		return 0;
++
++	drv->set_irq_bits(fn->rmi_dev, fn->irq_mask);
++
++	return 0;
++}
++
++static int rmi_f21_initialize(struct rmi_function *fn, struct f21_data *f21)
++{
++	struct input_dev *input = f21->input;
++	unsigned int button = BTN_LEFT;
++
++	f21->key_code = button;
++	input_set_capability(input, EV_KEY, f21->key_code);
++	input->keycode = &(f21->key_code);
++	input->keycodesize = sizeof(f21->key_code);
++	input->keycodemax = RMI_f21_FORCEPAD_BUTTON_COUNT;
++
++	__set_bit(INPUT_PROP_BUTTONPAD, input->propbit);
++
++	return 0;
++}
++
++static int rmi_f21_probe(struct rmi_function *fn)
++{
++	struct rmi_device *rmi_dev = fn->rmi_dev;
++	struct rmi_driver_data *drv_data = dev_get_drvdata(&rmi_dev->dev);
++	struct f21_data *f21;
++	int error;
++
++	if (!drv_data->input) {
++		dev_info(&fn->dev, "f21: no input device found, ignoring\n");
++		return -ENXIO;
++	}
++
++	f21 = devm_kzalloc(&fn->dev, sizeof(*f21), GFP_KERNEL);
++	if (!f21)
++		return -ENOMEM;
++
++	f21->input = drv_data->input;
++
++	error = rmi_f21_initialize(fn, f21);
++	if (error)
++		return error;
++
++	dev_set_drvdata(&fn->dev, f21);
++	return 0;
++}
++
++struct rmi_function_handler rmi_f21_handler = {
++	.driver = {
++		.name = "rmi4_f21",
++	},
++	.func = 0x21,
++	.probe = rmi_f21_probe,
++	.config = rmi_f21_config,
++	.attention = rmi_f21_attention,
++};
+-- 
+2.7.4
 
