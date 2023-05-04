@@ -2,120 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E58A76F6850
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 11:31:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DA3C6F6854
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 11:33:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230388AbjEDJbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 05:31:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48886 "EHLO
+        id S229845AbjEDJcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 05:32:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230362AbjEDJbE (ORCPT
+        with ESMTP id S229878AbjEDJcF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 05:31:04 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CE1149C2
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 02:31:00 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-50bd2d7ba74so15135712a12.1
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 02:31:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683192658; x=1685784658;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AaczximwLqjWvhf3kocqHyl+J5SvoMmPF03yVDwkRs4=;
-        b=aNPccQY+gX06bolqcHhXi2YhG6kR04MHmDjVRfdOemxBzkYktH3gKS6dDofm6KP+Up
-         Jhtmd94g6jXYRGWtkr+21KPl0Q4MtgiOtLaXDuDaKUEPNT3oW1LDbhh0yNvX7PS47i7R
-         3jIaJrpfhYfTBhZV9jA7qOWXofW9NeDkQa0yaM12YWLc+jp/iOLi3HgsDhrO44Z6u3c3
-         VJU5Ex3jk6CK+xA8sXQ9WMYJILu2bmXEFUe5Zzi9rf9LJ9GJf+sLbSF5JqNe485AGKLv
-         4s4b65yZrcUE22zy50aIzWxXICitIDSH3YeP2nKSVQ3hcauABzOSfBCV59Jr0pjnxMfr
-         dDNQ==
+        Thu, 4 May 2023 05:32:05 -0400
+Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB714698
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 02:32:03 -0700 (PDT)
+Received: by mail-il1-f207.google.com with SMTP id e9e14a558f8ab-331828cdc2dso1487385ab.3
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 02:32:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683192658; x=1685784658;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AaczximwLqjWvhf3kocqHyl+J5SvoMmPF03yVDwkRs4=;
-        b=e+DiKamhRWP+RgH8M3jneuHR8yylJ+DmFHDLQovRXS4z7RtlNsZxtXmLfdjtwoxjRO
-         zmEnJMYl6uH14AJC1LCq+Cv6G2Zb1HHbnx60Sg2gVqY5j0ZZ8ll3/H3ch8hfDHu/r5sF
-         AG+cuvS14hbYz+Uz5+2geTrhY85WNyzb9j9H/3w/vlHI4w27TGBAxo1EMfKo//9lM4IY
-         yAYYKs6LfXyG1SfZZF6fSa1YpTlPM4AX3vW0m7gmbKEevuTIq/95kGN6FKThuBs9xJF/
-         HGbLJqiliTEi2Dbi+Hubrfb93pKCXI2NLP1DD0PI4puPvBfcZh8JU3Pc9FlpJh8+Vqs9
-         /zTg==
-X-Gm-Message-State: AC+VfDyn0YYaQOq8t+gT7tu65j0vr5/YDDylDuVmiB9gjNCIY6Uz1kVN
-        RGtguvuXRkahBZCKROV5i4aHIA==
-X-Google-Smtp-Source: ACHHUZ4zWC5818MrlYN1OkCW/KpORJOzjBkAj9AnViKKKaMTTIpIp5OwrMHe9lbhkR79JVl27RQsFQ==
-X-Received: by 2002:a17:907:3e84:b0:94f:1ce7:1865 with SMTP id hs4-20020a1709073e8400b0094f1ce71865mr5054078ejc.26.1683192658602;
-        Thu, 04 May 2023 02:30:58 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:cbf1:e7ef:fb81:e912? ([2a02:810d:15c0:828:cbf1:e7ef:fb81:e912])
-        by smtp.gmail.com with ESMTPSA id hz19-20020a1709072cf300b009629ffabe0asm3349435ejc.224.2023.05.04.02.30.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 02:30:58 -0700 (PDT)
-Message-ID: <b09998bc-9ff7-3a18-89af-9778521ab127@linaro.org>
-Date:   Thu, 4 May 2023 11:30:56 +0200
+        d=1e100.net; s=20221208; t=1683192722; x=1685784722;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=C8fFZy2M9CRWNQT/qQ4rHsUOD+ZlazMxTl8QpIseuL8=;
+        b=LkyezhndehIQsynouynxeF4r+1d1lvEp8/QQFH31oK8+gswY0pCetbslqz+p2RD0gU
+         7RMhUCYur+KKqDuO8gCjYcNgiCdyOwfIovLXS+bUIKp2Ob9ujxXbEJ+fao0rQV/RfIrL
+         nHi+M1rUyIrSkR0Q5O8LVyzxyWkGun+0kG7JVmwjAmwtMYY3cwei6NuqoSy/OlwhpczV
+         wie/Tz/eY4Z5LcY7rjcROyu5WhdO0r8HQemszJZPWmdwG9Vf2DL+5IjsE/rUCjzVrNoh
+         6IA8rFn0XDF6h0fhZk6WMkdhV5bOOSRuI07r1hHlEItFKFW8sO9bBAFbx48H0PjIkc5A
+         46Ig==
+X-Gm-Message-State: AC+VfDwZDBx77Sy2/D9qi04oPsvCjH3jKnlXxRTPEOqsl0w8wRJU+xnz
+        ZIPKjy4GLjvf413A/NBQeUGjDe2SRED7DDnBrxuIWBKT09W0
+X-Google-Smtp-Source: ACHHUZ5F0rrP+Fpyvw8MhPHceX+zZzy+lIokl7i/4c8QOsPPUdo5FhTd5mZSgg2APXXXZ2qNseR/5f8Nmmb4O7HGpPRGTfe7rWXm
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH] clk: imx: imx93: introduce clk_bypassed module parameter
-Content-Language: en-US
-To:     Peng Fan <peng.fan@nxp.com>, Greg KH <greg@kroah.com>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>
-Cc:     "abelvesa@kernel.org" <abelvesa@kernel.org>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230504085506.504474-1-peng.fan@oss.nxp.com>
- <2023050410-rejoin-vocation-8560@gregkh>
- <DU0PR04MB9417F9CBB5C9EE1FC85B10A2886D9@DU0PR04MB9417.eurprd04.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <DU0PR04MB9417F9CBB5C9EE1FC85B10A2886D9@DU0PR04MB9417.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:d08a:0:b0:329:5faf:cbc0 with SMTP id
+ h10-20020a92d08a000000b003295fafcbc0mr13341297ilh.2.1683192722605; Thu, 04
+ May 2023 02:32:02 -0700 (PDT)
+Date:   Thu, 04 May 2023 02:32:02 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000051d14405fadad8cc@google.com>
+Subject: [syzbot] [jfs?] KASAN: user-memory-access Write in __destroy_inode
+From:   syzbot <syzbot+dcc068159182a4c31ca3@syzkaller.appspotmail.com>
+To:     brauner@kernel.org, jfs-discussion@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        shaggy@kernel.org, syzkaller-bugs@googlegroups.com,
+        viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/05/2023 11:17, Peng Fan wrote:
-> + DT maintainers.
-> 
->> Subject: Re: [PATCH] clk: imx: imx93: introduce clk_bypassed module
->> parameter
->>
->> On Thu, May 04, 2023 at 04:55:06PM +0800, Peng Fan (OSS) wrote:
->>> From: Peng Fan <peng.fan@nxp.com>
->>>
->>> With the clk names specified in clk_bypassed module parameter, give
->>> user an option to bypass the clk from managing them by Linux kernel.
->>
->> As I said on another email, no, please do not add new module parameters
->> for drivers, this is not the 1990s
-> 
-> ok, but this is for boot, so only DT could be considered.
-> 
-> But DT is to describe hardware, here I just wanna give user
-> an option to bypass some clocks. Is it ok to add a DT property
-> saying "fsl,imx93-bypass-clks = <IMX93_CLK_X>, <IMX93_CLK_Y>" ?
-> 
+Hello,
 
-I don't know what it is to "bypass some clocks". This does not look like
-parameter for system at all.
+syzbot found the following issue on:
 
-Best regards,
-Krzysztof
+HEAD commit:    fa31fc82fb77 Merge tag 'pm-6.4-rc1-2' of git://git.kernel...
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=176f146c280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=73a06f6ef2d5b492
+dashboard link: https://syzkaller.appspot.com/bug?extid=dcc068159182a4c31ca3
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13a40690280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=156b965c280000
 
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/47047382df87/disk-fa31fc82.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/1fd540f5f80a/vmlinux-fa31fc82.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/21da1f9e2c23/bzImage-fa31fc82.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/058ce906b620/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+dcc068159182a4c31ca3@syzkaller.appspotmail.com
+
+ERROR: (device loop0): jfs_readdir: JFS:Dtree error: ino = 2, bn=0, index = 6
+ERROR: (device loop0): jfs_readdir: JFS:Dtree error: ino = 2, bn=0, index = 7
+==================================================================
+BUG: KASAN: user-memory-access in instrument_atomic_read_write include/linux/instrumented.h:96 [inline]
+BUG: KASAN: user-memory-access in atomic_fetch_sub_release include/linux/atomic/atomic-instrumented.h:176 [inline]
+BUG: KASAN: user-memory-access in __refcount_sub_and_test include/linux/refcount.h:272 [inline]
+BUG: KASAN: user-memory-access in __refcount_dec_and_test include/linux/refcount.h:315 [inline]
+BUG: KASAN: user-memory-access in refcount_dec_and_test include/linux/refcount.h:333 [inline]
+BUG: KASAN: user-memory-access in posix_acl_release include/linux/posix_acl.h:57 [inline]
+BUG: KASAN: user-memory-access in __destroy_inode+0x426/0x5e0 fs/inode.c:297
+Write of size 4 at addr 0000000b00000000 by task syz-executor374/4998
+
+CPU: 0 PID: 4998 Comm: syz-executor374 Not tainted 6.3.0-syzkaller-12999-gfa31fc82fb77 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
+ print_report+0xe6/0x540 mm/kasan/report.c:465
+ kasan_report+0x176/0x1b0 mm/kasan/report.c:572
+ kasan_check_range+0x283/0x290 mm/kasan/generic.c:187
+ instrument_atomic_read_write include/linux/instrumented.h:96 [inline]
+ atomic_fetch_sub_release include/linux/atomic/atomic-instrumented.h:176 [inline]
+ __refcount_sub_and_test include/linux/refcount.h:272 [inline]
+ __refcount_dec_and_test include/linux/refcount.h:315 [inline]
+ refcount_dec_and_test include/linux/refcount.h:333 [inline]
+ posix_acl_release include/linux/posix_acl.h:57 [inline]
+ __destroy_inode+0x426/0x5e0 fs/inode.c:297
+ destroy_inode fs/inode.c:308 [inline]
+ evict+0x51b/0x620 fs/inode.c:680
+ dispose_list fs/inode.c:698 [inline]
+ evict_inodes+0x5f8/0x690 fs/inode.c:748
+ generic_shutdown_super+0x98/0x340 fs/super.c:479
+ kill_block_super+0x84/0xf0 fs/super.c:1407
+ deactivate_locked_super+0xa4/0x110 fs/super.c:331
+ cleanup_mnt+0x426/0x4c0 fs/namespace.c:1177
+ task_work_run+0x24a/0x300 kernel/task_work.c:179
+ exit_task_work include/linux/task_work.h:38 [inline]
+ do_exit+0x68f/0x2290 kernel/exit.c:871
+ do_group_exit+0x206/0x2c0 kernel/exit.c:1021
+ __do_sys_exit_group kernel/exit.c:1032 [inline]
+ __se_sys_exit_group kernel/exit.c:1030 [inline]
+ __x64_sys_exit_group+0x3f/0x40 kernel/exit.c:1030
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f696702ea49
+Code: Unable to access opcode bytes at 0x7f696702ea1f.
+RSP: 002b:00007ffcc25baa18 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007f69670a9330 RCX: 00007f696702ea49
+RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000001
+RBP: 0000000000000001 R08: ffffffffffffffc0 R09: 00007f69670a3e40
+R10: 00007f69670a3e40 R11: 0000000000000246 R12: 00007f69670a9330
+R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
+ </TASK>
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
