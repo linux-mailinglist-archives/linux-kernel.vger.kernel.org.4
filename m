@@ -2,329 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACCB86F6DF6
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 16:47:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 026006F6DFA
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 16:48:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231129AbjEDOrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 10:47:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43498 "EHLO
+        id S231183AbjEDOsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 10:48:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbjEDOrX (ORCPT
+        with ESMTP id S229638AbjEDOsU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 10:47:23 -0400
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAAC61A8;
-        Thu,  4 May 2023 07:47:21 -0700 (PDT)
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 344CQ3ES013210;
-        Thu, 4 May 2023 07:46:45 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=s2048-2021-q4;
- bh=3eOdXs7Fq33Z5QZNR2BQDcHSXudPVjPdqZey3eiuf+w=;
- b=RHcmmfF/VA+6uyW34rYXm+Nz0/WwsP5LI2qdHTwBsPiyWX6BevCYAVXFXSv3GvUuJUFT
- fwa5vSx/xw4ltAflvj+cToqR3QQomiw8/624h5065fF/wYPedt9v3qh/IBUSGgiPPH4x
- MrCTkcwLyG3HOBehzm1+OQVmlr27JJNPCCH9rxa9xpUHwcY3shCVMHm14AF4ontob6f7
- VCSVNh4AGXtx5W7se+S9jJgA/tzSlrbK3crweKYHq4x6GJhl5+QSD/Sjopq0WZnI1TLy
- pYb3mhOYNiy5jM8W7PVamGTPTvDAKrmvuQBLVouxeCNl7GQg9BH1gHETmHLwLPaBwc0C NA== 
-Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1nam02lp2045.outbound.protection.outlook.com [104.47.57.45])
-        by m0089730.ppops.net (PPS) with ESMTPS id 3qccq00vn5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 04 May 2023 07:46:45 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lNxczRSdr7tNsZJakZdChGvNwtZJiRQqmmI9Rc0icZ1JPs9i1y3rt6g0KAwCEjo6xOvx5yPRoSxPy5cINaVCNVozzp/JgCB4pxRSyB2QxQmYQ3qmsGCfhrG7xBaATNI/BrPwwMdrVAJGcdINQ26Ano1AMfziD5MIhVVPmOCz8gNRDfKZxseoxBTkFuLi08jUar+erSy1PkNOrzupOhHntuNET1O1NRaquhivmxkWHZ9GNVG0U/S6F7bhoSU6KajfWiXoj4tcQwoFh0Lsb+kGqQm4esf776qlMi7q3lWaX62jJA3hrqXAnoSxJm8l0Rox9gXBkg9f+D2gac8j9tu5QA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3eOdXs7Fq33Z5QZNR2BQDcHSXudPVjPdqZey3eiuf+w=;
- b=GP7VTLhKZNQl0N75HBu3GFnlzDBd57MiDoJpeDK9LhfcLmMGrJEFS8W9OsM2X1yTJ6ee4yUIwdsFX0LyUt1nZvrNFvHUYaDvAMe0YgJcFrIc9CEONm+QTlwTrRX9k0JPTuuLuEi92uWNGKQldMCNjS+wGdSPlfVh7OQH3PF0mAtss+ZjXNcoIBU4z0WDPP9JxDx8IISyeTq1kvZtg/l/0ypISikpV3mBqNPB0McjwzKVcnaMllCIXeyEGb81BsBn0KYMpnqWRU3PgX2klKbGbx8eQYDMQgUsYXfa+OOuWdWmdlWVLbMk40DDvoNp2tJxIfLF6LdD2FqN6jJuiosxlA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
- dkim=pass header.d=meta.com; arc=none
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by BY1PR15MB5957.namprd15.prod.outlook.com (2603:10b6:a03:52b::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.31; Thu, 4 May
- 2023 14:46:43 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::589f:9230:518:7f53]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::589f:9230:518:7f53%6]) with mapi id 15.20.6363.022; Thu, 4 May 2023
- 14:46:43 +0000
-Message-ID: <63138022-e28f-a63c-6f4c-61b61e585641@meta.com>
-Date:   Thu, 4 May 2023 07:46:38 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.1
-Subject: Re: [PATCH bpf-next v5 2/2] selftests/bpf: Add testcase for
- bpf_task_under_cgroup
-Content-Language: en-US
-To:     Feng zhou <zhoufeng.zf@bytedance.com>, martin.lau@linux.dev,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, mykolal@fb.com,
-        shuah@kernel.org
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        yangzhenze@bytedance.com, wangdongdong.6@bytedance.com
-References: <20230504031513.13749-1-zhoufeng.zf@bytedance.com>
- <20230504031513.13749-3-zhoufeng.zf@bytedance.com>
-From:   Yonghong Song <yhs@meta.com>
-In-Reply-To: <20230504031513.13749-3-zhoufeng.zf@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR05CA0164.namprd05.prod.outlook.com
- (2603:10b6:a03:339::19) To SN6PR1501MB2064.namprd15.prod.outlook.com
- (2603:10b6:805:d::27)
+        Thu, 4 May 2023 10:48:20 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 388E0CD;
+        Thu,  4 May 2023 07:48:19 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id 5614622812f47-38e5eeba43cso199749b6e.3;
+        Thu, 04 May 2023 07:48:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683211698; x=1685803698;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/elf53ReInwQkE2MA0feH0LEMQ6B/gIWB/x/DzsbjR8=;
+        b=hInvwGa9X+53HLs//WPzgh4itSmpZzu4o+YjJu+vqENVTsUVRuyX/tQ1TOMDhzad28
+         1dVJEHFRTuHAQu346Wv0c2w3kglaMsLtdGi7f+jiBc/cr8pddyPxL63imxc1SAkLo0PX
+         MvCBVx5yKU4P451j4Vqn9NL5S7EvOv9h1dqFjA3PbC+Dft76gUBqqVW5ZerzC4ySXpiX
+         UK/+7saLslglP4T9ylLUexeQGl0F7aQkQgYOERMtHq2NAHvbqAqLZ/zeitfvo/fBXn73
+         RgPDrsFD6fFIUx2Uh6pz9U8eoi9tbPCkJfCdr3ivnS4VTxIYONJhEEjnrvPVYoEt6BZt
+         3iWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683211698; x=1685803698;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/elf53ReInwQkE2MA0feH0LEMQ6B/gIWB/x/DzsbjR8=;
+        b=MO++zvWvUVBua3s3VqIKqlXM/sIxdFHxoBDwFP57aZbgAyNyyedxTiGgg2Mi9y0Ugm
+         8lNXIwehXe3SPP5nyPi5xWSNkW/aTnf4wNBRMbRl1yJDSbHcIBjpssOLEt8XDSnJqUhg
+         iRTBjutDdKcSQ5z/aXZctyp8yf805ot81ZPucf5lWFb2tjpddIUW2Jnr20Tk0jzTn3fj
+         OPL+F+pcxsDLbpHzRJd7pZ1JDVQHn+s9APiVrFuNoejA4d7WG52uIz29yF8zuihReVQR
+         rO6Oz3PLzDIXB+F26f+umKIY9kctAsopAKLXvXC49IfwI5SbBIx568UDyfCQE3vEDMoR
+         rYhQ==
+X-Gm-Message-State: AC+VfDyXIwRszEi+sTY+HZ7ktDkoyCjo9Ru6dYUsLfLKafs20sJCsUVH
+        gFP5y6EJvCQnY3EzNtXpphhYMRSfwtqP1X23ManTq4xhP/E=
+X-Google-Smtp-Source: ACHHUZ6MwHuU84KzmOFkHJdZLMa2SNpJTDMCzVNdGE6/3Ylx9yAG6UCDbFstjPwKMPydDnS8O3/Igd9Ud3WI5jH3yZA=
+X-Received: by 2002:a05:6808:190b:b0:38e:a4a6:41a with SMTP id
+ bf11-20020a056808190b00b0038ea4a6041amr1947029oib.20.1683211697946; Thu, 04
+ May 2023 07:48:17 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|BY1PR15MB5957:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3b987b0a-7c68-4ff3-b65c-08db4cae6077
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: hGX6mkWS6kxlzgLZOmEXBoE+V3AyLz3FKPmt5lduq0o6XWKXMF3LAiTIbIe/XL0RvuFvlVa+k8qZMBEXLnjwrungiqtCu4qXVNAQJJn/zaE0xbVhsEDDd65lASJ3WLs+Gd1eWat0bmjbkw8mVFaU9RCbAmXfdjDGJR0QG79dyy67wRU/qU/IjWKZOMLLg+tfQO73XoFeXUqmr0Q9g8d10izP8kq3ZMBzBWCX3FuVSUtmBUMcIM6kpX9v09d3gsanN8SG6qZnWSlwU9q95DbFKOHzzLxXBdU85z7aEx6LGYz46z/O30iYHNqM+VMNuA8G8M5PMj6eA6yU8SRQcSO8GmjRRSt1fG72TwFI3kINioGWm2tUO0WDrOMaCws7jnotOGqHYmakE6lyjcg9iYrpOKxmFhfw2PX+jbK9ESFWyv4eowE+ATVePNy/mrm815riWDE40Df1fZc08wCWaKjxhZSFioM+Vz1310+j9qp1XZ+4Aic7N9jAYCXQQCfpV2dpgjnj1aPpyvYu6Rl5HGaL0+zgUubRSUKRYEBtIGEpjaD/1xpQQQVTJJN6MR3KdicMfvUKyXfe5tVtjm2WeSNVox9jLyLpV2veQNdRbUfuL0R2KDSfpoT1TXyKk5gicV5Y38DbWA/tTqEt8m/1kDKEkKqY3qlWUnKmXO406zKF2Kk=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39860400002)(136003)(396003)(346002)(376002)(451199021)(921005)(8676002)(5660300002)(41300700001)(8936002)(38100700002)(66946007)(66556008)(66476007)(316002)(2906002)(7416002)(4326008)(86362001)(31696002)(6506007)(53546011)(6512007)(186003)(6486002)(83380400001)(6666004)(36756003)(31686004)(2616005)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eUpvb3FFNkVHeklSMDBFUG04WCtSM2xYaU1Iek5yZmJscmVQOFluYVhEMFBk?=
- =?utf-8?B?ME9oOWkzL0k5NEtEWVhpL2syWDdBWGdScTc2ZFlna2tGenhTOWZ4WGpBbkFP?=
- =?utf-8?B?TlFHOE42N0E0cWxWd0FwcjJPRVprK0drYWkyWllVMGNnTVpPRGRid1MreCtN?=
- =?utf-8?B?ZFdWd2FWdUxKem9XYm9aWmhJbjZnRngvY0o1Uzdld1M3WnEwM0tPWmg1ZTVI?=
- =?utf-8?B?Tmt3UmRvNGtFVlhZVC9GN3cwaHNLMUlOY1pvT1N4cmc3Q3NBMzRqL29oR1U1?=
- =?utf-8?B?QlJMS3FDZmJvbW5lOC9lcjRNRW0ybXhnekZjUWRsVlhCVnA5VXVNK2RaV05s?=
- =?utf-8?B?REhPSXB1cmZPLzkyTmxYSEtpdHAwUVdiTWorMGluNVYxOEszSkt2OGNtbVFr?=
- =?utf-8?B?UmVFZUg1ZEJIY2JhMFlUS1FJdmpqY2NWY1k5WXJRODBsVzM5S3RaQkQ5aHA1?=
- =?utf-8?B?ZWZUNEdQVkhoTWtyTFNJSHhUWE05SklETUxyM2RIb1dCcExyVG9iTVltL05i?=
- =?utf-8?B?azY5OERvTjgya3ZMTGZOeStuV0RUSzYzRWZ1WlZiT2JiblZLOEQwd0dkQkUv?=
- =?utf-8?B?TUxPZVVyQUZjbGYwZVdjYmJuZWR6d3JneW9pZ052ZkFVdGpUbEhmdVRuYWEw?=
- =?utf-8?B?WnNIRlZHcFNCNVQwNERBOCtxL2xsWEd5NGpqdlJYZHoyVWp4ZVBTd1lIeFpo?=
- =?utf-8?B?c2NUSXVDZGszamNuNWo1SzcwSi9xNk9pRWdJTjdvUTVMVkRBbXl0bVZodTcz?=
- =?utf-8?B?K1Q3NGpFa29PTU8vNUxDOTB2NENQVjcwc0tBRmJvcFhrV1h5enY0c3ZLQWkx?=
- =?utf-8?B?dGR4NTIzQ0Fzem80ak4wNEwvOHJHTzFOaUh2Qk9XN0MrenRXZjBIQWM1aGVl?=
- =?utf-8?B?VExPekpKNnJmdFJyYXRvbWwyRkdGaU1XZ1d2Z3RBYjduQnNlS2lKNktsNzc4?=
- =?utf-8?B?VTB5a3lWZjZDTTdmYklmK25Od2JqS1owTk5Yak1NeFl2YytwTlN2T0tGdm5Q?=
- =?utf-8?B?YjFIZzNNWDUvL2JnRmdrczhHeWhzdFZieVFlaGxod0UyT1JyMzVNRkFXek5T?=
- =?utf-8?B?QTFhK04vMUtDQU93TU5nNS9ocXdkajhLYzlobHVKUTBiOGVvUFFwTENrZEhB?=
- =?utf-8?B?cXczazliZGpvTUROSE1vQzNLSFEwalFoL0RKeWdtVHZTcVBwVHFORkZNbTho?=
- =?utf-8?B?SDkxVlBkdERDTVpNb3QzMXJEU1NJZWY5ZFYvODFCeHl2QXEwWXl1V1o1c2Zs?=
- =?utf-8?B?RXMwZVBoSmN0MFVmcXoyTEM5Y3VnNVVMWWk2cllkWWc4N0ZXYWdXUFlrYUts?=
- =?utf-8?B?WXY1NUlhTmdlaG1PV09BVU5tTFdXNUY2UWU1M3NOZWVFMk44b2lJb0YyOE9r?=
- =?utf-8?B?U2RyNHZ6N3QvQlp1MURyRk1ZMnZnWEJmNmVxc3ROMzVVNGljMzl4TnlhbG9N?=
- =?utf-8?B?Zm9UTThpRTh6REFNWFNJTXlBVk9pWFhnb1NTcFRsSU5pTTdSYzN1a05INm5C?=
- =?utf-8?B?SW92K1pZZDZ6UEhycFBsV2hsSXhsajN6TmNXMHNnWVlLcUNidkFtSkZiV3pO?=
- =?utf-8?B?SVg2STVpREpVVDhmejR6Smxxam5PSjJkMVhHY3lNWFIzeGoyUWdrdjhlbHBS?=
- =?utf-8?B?S29ZRlIya2pLZFhIUTcvMWcweWRUNkJFdDNZd0FJdGlsZ3dXS3VuQUJZTUVM?=
- =?utf-8?B?RGJ5bDdaZWpLQXZkQkxFMVBNTEZpU3pjZGVZcllBUmRyQ3lUK3E1K0VscENn?=
- =?utf-8?B?b1oyUnljR1BvbzlPclQrVWRwQ3hrcE1aSUVGMWlDVnowOGNUTEJ2dHRTbC9T?=
- =?utf-8?B?RVh1V3RHakFHVDA1enlGV0ZEZUN0TnFZMS9PZEpUVzJMcGMvdmlib2E3WDF3?=
- =?utf-8?B?MWtXeEFUTzNzWnUzWWlyamsrTHorM1NtYzVHOCs5M3ZuWnFSN2dhV2ljRzZH?=
- =?utf-8?B?ZEtFK28rNHZzT0orNVdRNDEySlEvYzBMMHI4OTFFQU9zaGhZMXBJRlZHZVBk?=
- =?utf-8?B?bkI3MWRrc3N5N0VENlJwdFFaZ3VyR0w5NmpmTzNMdEZWT2lzOENEWm5pMWZ3?=
- =?utf-8?B?Z0dONW54NGdPWEkzY0dYbk1jdVNSbklma0ZKNzB5OUQvbktTY08ydHUrRGph?=
- =?utf-8?B?OVBtaVFmTDJEL01EeGZuZVEya0RDcVRTVlVwYnJET2ZpM3ZPSWdxc3ROczN3?=
- =?utf-8?B?a2c9PQ==?=
-X-OriginatorOrg: meta.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3b987b0a-7c68-4ff3-b65c-08db4cae6077
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2023 14:46:43.1425
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SbznlvFwJS51eesUAlivwHdDiHA16kmewgEkk5K8zdanv7/mK+mVbk6XzyqnVcTT
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY1PR15MB5957
-X-Proofpoint-ORIG-GUID: p2xkc6CMyYyaRM1qRyVsDkxHnt78Qsn8
-X-Proofpoint-GUID: p2xkc6CMyYyaRM1qRyVsDkxHnt78Qsn8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-04_10,2023-05-04_01,2023-02-09_01
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230418090312.2818879-1-sergio.paracuellos@gmail.com>
+In-Reply-To: <20230418090312.2818879-1-sergio.paracuellos@gmail.com>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Thu, 4 May 2023 16:48:06 +0200
+Message-ID: <CAMhs-H_yn_76RAFNk4ux_-rn9FdKna9Vsu0raFQXfr3ykkRWPw@mail.gmail.com>
+Subject: Re: [PATCH v3 0/9] mips: ralink: add complete clock and reset driver
+ for mtmips SoCs
+To:     linux-clk@vger.kernel.org
+Cc:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
+        john@phrozen.org, linux-kernel@vger.kernel.org,
+        p.zabel@pengutronix.de, mturquette@baylibre.com, sboyd@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, devicetree@vger.kernel.org,
+        arinc.unal@arinc9.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Apr 18, 2023 at 11:03=E2=80=AFAM Sergio Paracuellos
+<sergio.paracuellos@gmail.com> wrote:
+>
+> Hi all!
+>
+> This patchset is a big effort to properly implement a clock and reset
+> driver for old ralink SoCs. This allow to properly define clocks in
+> device tree and avoid to use fixed-clocks directly from 'arch/mips/ralink=
+'
+> architecture directory code.
+>
+> Device tree 'sysc' node will be both clock and reset provider using
+> 'clock-cells' and 'reset-cells' properties.
+>
+> The ralink SoCs we are taking about are RT2880, RT3050, RT3052, RT3350,
+> RT3352, RT3883, RT5350, MT7620, MT7628 and MT7688. Mostly the code in
+> this new driver has been extracted from 'arch/mips/ralink' and cleanly
+> put using kernel clock and reset driver APIs. The clock plans for this
+> SoCs only talks about relation between CPU frequency and BUS frequency.
+> This relation is different depending on the particular SoC. CPU clock is
+> derived from XTAL frequencies.
+>
+>  Depending on the SoC we have the following frequencies:
+>  * RT2880 SoC:
+>      - XTAL: 40 MHz.
+>      - CPU: 250, 266, 280 or 300 MHz.
+>      - BUS: CPU / 2 MHz.
+>   * RT3050, RT3052, RT3350:
+>      - XTAL: 40 MHz.
+>      - CPU: 320 or 384 MHz.
+>      - BUS: CPU / 3 MHz.
+>   * RT3352:
+>      - XTAL: 40 MHz.
+>      - CPU: 384 or 400 MHz.
+>      - BUS: CPU / 3 MHz.
+>      - PERIPH: 40 MHz.
+>   * RT3383:
+>      - XTAL: 40 MHz.
+>      - CPU: 250, 384, 480 or 500 MHz.
+>      - BUS: Depends on RAM Type and CPU:
+>        + RAM DDR2: 125. ELSE 83 MHz.
+>        + RAM DDR2: 128. ELSE 96 MHz.
+>        + RAM DDR2: 160. ELSE 120 MHz.
+>        + RAM DDR2: 166. ELSE 125 MHz.
+>   * RT5350:
+>       - XTAL: 40 MHz.
+>       - CPU: 300, 320 or 360 MHz.
+>       - BUS: CPU / 3, CPU / 4, CPU / 3 MHz.
+>       - PERIPH: 40 MHz.
+>   * MT7628 and MT7688:
+>      - XTAL: 20 MHz or 40 MHz.
+>      - CPU: 575 or 580 MHz.
+>      - BUS: CPU / 3.
+>      - PCMI2S: 480 MHz.
+>      - PERIPH: 40 MHz.
+>   * MT7620:
+>      - XTAL: 20 MHz or 40 MHz.
+>      - PLL: XTAL, 480, 600 MHz.
+>      - CPU: depends on PLL and some mult and dividers.
+>      - BUS: depends on PLL and some mult and dividers.
+>      - PERIPH: 40 or XTAL MHz.
+>
+> MT7620 is a bit more complex deriving CPU clock from a PLL and an bunch o=
+f
+> register reads and predividers. To derive CPU and BUS frequencies in the
+> MT7620 SoC 'mt7620_calc_rate()' helper is used.
+> In the case XTAL can have different frequencies and we need a different
+> clock frequency for peripherals 'periph' clock in introduced.
+> The rest of the peripherals present in the SoC just follow their parent
+> frequencies.
+>
+> I am using 'mtmips' inside for ralink clock driver. This is aligned with
+> pinctrl series recently merged through pinctrl git tree [0].
+>
+> I am maintaining ralink as prefix for compatible strings after discussion=
+s
+> between Rob and Arinc in v2 of this series [1].
+>
+> Changes have been compile tested for:
+> - RT2880
+> - RT3883
+> - MT7620
+>
+> Changes have been properly tested in RT5350 SoC based board (ALL5003 boar=
+d)
+> resulting in a working platform.
+>
+> Dts files for these SoCs in-tree except MT7621 are incomplete. We are
+> planning to align with openWRT files at some point and add extra needed
+> changes. Hence I am not touching them at all in these series. If this is
+> a problem, please let me know and I will update them.
+>
+> Talking about merging this series I'd like all of the patches going throu=
+gh
+> the MIPS tree if possible.
+>
+> Thanks in advance for your time.
+>
+> Best regards,
+>     Sergio Paracuellos
+>
+> Changes in v3:
+> - Address Stephen comments in v2:
+>     + Drop unsused include '<linux/clk.h>'.
+>     + Add fixed and factor clocks when it makes sense.
+>     + Make 'mtmips_periph_clk_ops' named variable.
+>     + WARN_ON -> WARN_ON_ONCE.
+>     + Avoid CONFIG_USB dependent code. Introduce new 'mtmips_clk_regs_ini=
+t'.
+>     + Don't validate the bindings in the driver.
+>     + Make const 'struct clk_init_data' used inside macros.
+>     + do_div -> div_u64.
+>     + Make use of dev_err_probe.
 
+Hi Stephen,
 
-On 5/3/23 8:15 PM, Feng zhou wrote:
-> From: Feng Zhou <zhoufeng.zf@bytedance.com>
-> 
-> test_progs:
-> Tests new kfunc bpf_task_under_cgroup().
-> 
-> The bpf program saves the new task's pid within a given cgroup to
-> the remote_pid, which is convenient for the user-mode program to
-> verify the test correctness.
-> 
-> The user-mode program creates its own mount namespace, and mounts the
-> cgroupsv2 hierarchy in there, call the fork syscall, then check if
-> remote_pid and local_pid are unequal.
-> 
-> Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
+Does anything else need to be addressed to have all of these added?
 
-Ack with a few nits below. You can carry my Ack in the
-next revision.
+Philipp, can you please review the reset related code in PATCH 2/9 of
+these series?
 
-Acked-by: Yonghong Song <yhs@fb.com>
+Thanks in advance for your time!
 
+Best regards,
+    Sergio Paracuellos
 
-> ---
->   tools/testing/selftests/bpf/DENYLIST.s390x    |  1 +
->   .../bpf/prog_tests/task_under_cgroup.c        | 54 +++++++++++++++++++
->   .../bpf/progs/test_task_under_cgroup.c        | 51 ++++++++++++++++++
->   3 files changed, 106 insertions(+)
->   create mode 100644 tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
->   create mode 100644 tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
-> 
-> diff --git a/tools/testing/selftests/bpf/DENYLIST.s390x b/tools/testing/selftests/bpf/DENYLIST.s390x
-> index c7463f3ec3c0..5061d9e24c16 100644
-> --- a/tools/testing/selftests/bpf/DENYLIST.s390x
-> +++ b/tools/testing/selftests/bpf/DENYLIST.s390x
-> @@ -26,3 +26,4 @@ user_ringbuf                             # failed to find kernel BTF type ID of
->   verif_stats                              # trace_vprintk__open_and_load unexpected error: -9                           (?)
->   xdp_bonding                              # failed to auto-attach program 'trace_on_entry': -524                        (trampoline)
->   xdp_metadata                             # JIT does not support calling kernel function                                (kfunc)
-> +test_task_under_cgroup                   # JIT does not support calling kernel function                                (kfunc)
-> diff --git a/tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c b/tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
-> new file mode 100644
-> index 000000000000..fa3a98eae5ef
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
-> @@ -0,0 +1,54 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2023 Bytedance */
-> +
-> +#include <sys/syscall.h>
-> +#include <test_progs.h>
-> +#include <cgroup_helpers.h>
-> +#include "test_task_under_cgroup.skel.h"
-> +
-> +#define FOO	"/foo"
-> +
-> +void test_task_under_cgroup(void)
-> +{
-> +	struct test_task_under_cgroup *skel;
-> +	int ret, foo = -1;
-
-You do not need to initialize 'foo' here.
-
-> +	pid_t pid;
-> +
-> +	foo = test__join_cgroup(FOO);
-> +	if (!ASSERT_OK(foo < 0, "cgroup_join_foo"))
-> +		return;
-> +
-> +	skel = test_task_under_cgroup__open();
-> +	if (!ASSERT_OK_PTR(skel, "test_task_under_cgroup__open"))
-> +		goto cleanup;
-> +
-> +	skel->rodata->local_pid = getpid();
-> +	skel->bss->remote_pid = getpid();
-> +	skel->rodata->cgid = get_cgroup_id(FOO);
-> +
-> +	ret = test_task_under_cgroup__load(skel);
-> +	if (!ASSERT_OK(ret, "test_task_under_cgroup__load"))
-> +		goto cleanup;
-> +
-> +	ret = test_task_under_cgroup__attach(skel);
-> +	if (!ASSERT_OK(ret, "test_task_under_cgroup__attach"))
-> +		goto cleanup;
-> +
-> +	pid = fork();
-> +	if (pid == 0)
-> +		exit(0);
-> +
-> +	ret = (pid == -1);
-> +	if (ASSERT_OK(ret, "fork process"))
-> +		wait(NULL);
-> +
-> +	test_task_under_cgroup__detach(skel);
-> +
-> +	ASSERT_NEQ(skel->bss->remote_pid, skel->rodata->local_pid,
-> +		   "test task_under_cgroup");
-> +
-> +cleanup:
-> +	close(foo);
-> +
-> +	test_task_under_cgroup__destroy(skel);
-
-Let us just do:
-cleanup:
-	test_task_under_cgroup__destroy(skel);
-	close(foo);
-
-This is the reverse order of test__join_cgroup() and 
-test_task_under_cgroup__open().
-
-> +}
-> diff --git a/tools/testing/selftests/bpf/progs/test_task_under_cgroup.c b/tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
-> new file mode 100644
-> index 000000000000..79d98e65c7eb
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
-> @@ -0,0 +1,51 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2023 Bytedance */
-> +
-> +#include <vmlinux.h>
-> +#include <bpf/bpf_tracing.h>
-> +#include <bpf/bpf_helpers.h>
-> +
-> +#include "bpf_misc.h"
-> +
-> +struct cgroup *bpf_cgroup_from_id(u64 cgid) __ksym;
-> +long bpf_task_under_cgroup(struct task_struct *task, struct cgroup *ancestor) __ksym;
-> +void bpf_cgroup_release(struct cgroup *p) __ksym;
-> +struct task_struct *bpf_task_acquire(struct task_struct *p) __ksym;
-> +void bpf_task_release(struct task_struct *p) __ksym;
-> +
-> +const volatile int local_pid;
-> +const volatile __u64 cgid;
-> +int remote_pid;
-> +
-> +SEC("tp_btf/task_newtask")
-> +int BPF_PROG(handle__task_newtask, struct task_struct *task, u64 clone_flags)
-> +{
-> +	struct cgroup *cgrp = NULL;
-> +	struct task_struct *acquired;
-> +
-> +	if (local_pid != (bpf_get_current_pid_tgid() >> 32))
-> +		return 0;
-> +
-> +	acquired = bpf_task_acquire(task);
-> +	if (!acquired)
-> +		return 0;
-> +
-> +	if (local_pid == acquired->tgid)
-> +		goto out;
-> +
-> +	cgrp = bpf_cgroup_from_id(cgid);
-> +	if (!cgrp)
-> +		goto out;
-> +
-> +	if (bpf_task_under_cgroup(acquired, cgrp))
-> +		remote_pid = acquired->tgid;
-> +
-> +out:
-> +	if (acquired)
-> +		bpf_task_release(acquired);
-> +	if (cgrp)
-> +		bpf_cgroup_release(cgrp);
-
-Let us do:
-out:
-	if (cgrp)
-		bpf_cgroup_release(cgrp);
-	bpf_task_release(acquired);
-
-> +	return 0;
-> +}
-> +
-> +char _license[] SEC("license") = "GPL";
+>
+> Changes in v2:
+> - Address bindings documentation changes pointed out by Krzysztof:
+>     + Rename the file into 'mediatek,mtmips-sysc.yaml'.
+>     + Redo commit subject and log message.
+>     + Order compatibles alphabetically.
+>     + Redo bindings description taking into account this is a system
+>       controller node which provides both clocks and resets to the world.
+>     + Drop label from example.
+>     + Use 'syscon' as node name in example.
+>     + Drop no sense 'ralink,rt2880-reset' compatible string
+> - Squash patches 6 and 7 together as pointed out by Stephen Boyd.
+>
+> Previoous series:
+> v2: https://lore.kernel.org/linux-clk/CAMhs-H-BfZb3mD8E=3DLeJ4vT22uibQ1Dn=
+aZsfTrtRxSiv=3D8L5RA@mail.gmail.com/T/#t
+> v1: https://lore.kernel.org/linux-clk/20230320161823.1424278-1-sergio.par=
+acuellos@gmail.com/T/#t
+>
+> [0]: https://lore.kernel.org/linux-gpio/e9e6ad87-2db5-9767-ff39-64a302b06=
+185@arinc9.com/T/#t
+> [1]: https://lore.kernel.org/linux-clk/CAMhs-H-BfZb3mD8E=3DLeJ4vT22uibQ1D=
+naZsfTrtRxSiv=3D8L5RA@mail.gmail.com/T/#mfe725b6e3382c6fb09736472a846cbbc84=
+f264dc
+>
+> Sergio Paracuellos (9):
+>   dt-bindings: clock: add mtmips SoCs system controller
+>   clk: ralink: add clock and reset driver for MTMIPS SoCs
+>   mips: ralink: rt288x: remove clock related code
+>   mips: ralink: rt305x: remove clock related code
+>   mips: ralink: rt3883: remove clock related code
+>   mips: ralink: mt7620: remove clock related code
+>   mips: ralink: remove reset related code
+>   mips: ralink: get cpu rate from new driver code
+>   MAINTAINERS: add Mediatek MTMIPS Clock maintainer
+>
+>  .../bindings/clock/mediatek,mtmips-sysc.yaml  |   65 +
+>  MAINTAINERS                                   |    6 +
+>  arch/mips/include/asm/mach-ralink/mt7620.h    |   35 -
+>  arch/mips/include/asm/mach-ralink/rt288x.h    |   10 -
+>  arch/mips/include/asm/mach-ralink/rt305x.h    |   21 -
+>  arch/mips/include/asm/mach-ralink/rt3883.h    |    8 -
+>  arch/mips/ralink/clk.c                        |   26 +-
+>  arch/mips/ralink/common.h                     |    5 -
+>  arch/mips/ralink/mt7620.c                     |  226 ----
+>  arch/mips/ralink/of.c                         |    4 -
+>  arch/mips/ralink/reset.c                      |   61 -
+>  arch/mips/ralink/rt288x.c                     |   31 -
+>  arch/mips/ralink/rt305x.c                     |   78 --
+>  arch/mips/ralink/rt3883.c                     |   44 -
+>  drivers/clk/ralink/Kconfig                    |    7 +
+>  drivers/clk/ralink/Makefile                   |    1 +
+>  drivers/clk/ralink/clk-mtmips.c               | 1134 +++++++++++++++++
+>  17 files changed, 1232 insertions(+), 530 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mtmi=
+ps-sysc.yaml
+>  create mode 100644 drivers/clk/ralink/clk-mtmips.c
+>
+> --
+> 2.25.1
+>
