@@ -2,301 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B471C6F7038
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 18:50:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0657E6F703B
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 18:51:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229765AbjEDQus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 12:50:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33300 "EHLO
+        id S229879AbjEDQvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 12:51:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjEDQup (ORCPT
+        with ESMTP id S229748AbjEDQvQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 12:50:45 -0400
-Received: from mail11.truemail.it (mail11.truemail.it [IPv6:2001:4b7e:0:8::81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ECE040E9;
-        Thu,  4 May 2023 09:50:26 -0700 (PDT)
-Received: from francesco-nb.int.toradex.com (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-        by mail11.truemail.it (Postfix) with ESMTPA id 3242E20B6A;
-        Thu,  4 May 2023 18:50:19 +0200 (CEST)
-Date:   Thu, 4 May 2023 18:50:14 +0200
-From:   Francesco Dolcini <francesco@dolcini.it>
-To:     Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc:     devicetree@vger.kernel.org, festevam@gmail.com,
-        gregkh@linuxfoundation.org, jun.li@nxp.com, kernel@pengutronix.de,
-        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        peter.chen@nxp.com, robh+dt@kernel.org, s.hauer@pengutronix.de,
-        shawnguo@kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        francesco.dolcini@toradex.com
-Subject: Re: [PATCH v2 2/3] usb: chipidea: imx: support disabling runtime-pm
-Message-ID: <ZFPiRvoF5l8uGzzZ@francesco-nb.int.toradex.com>
-References: <23672d66d229d3be4cc854ddf1462c3507f1c2fc.camel@toradex.com>
- <20230504162312.1506763-1-luca.ceresoli@bootlin.com>
+        Thu, 4 May 2023 12:51:16 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C5D128
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 09:51:15 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id d75a77b69052e-3f0a2f8216fso788531cf.0
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 09:51:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683219075; x=1685811075;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=smUXkej0xPzQw1tg67ntvigJgPPhrNFSnWepihD6ur8=;
+        b=K1oJeQe320jy4VAtg3hw+5lreYPqWQXRA2DhbRqCx+JumP5I+wGtVUapJkj4xbP5Gc
+         LekZghaozR/4Qo4Man59/cjwsyO1mWdp1HYs2Up0YspSfb5Y09KyJUACWQO64fh2SfhT
+         /WrgNUBfJy561g+iLGCchaOa0QJrOGh+51kgnejTI4ms2xjEgy0cE0eYTdIcQfuaBbj2
+         laz1HzpEdBlAd4yN3mcFlfSFxvlDATXF+jgnemjKagcvfb4oBUn6y5WhU1hAzE9eLHd8
+         YBShAagG+6NldxNv9bhLZFUy84FIwetvoEpA2oDHLtvoPB+boKrhKz9OSAuX1NBtfLR1
+         3Mtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683219075; x=1685811075;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=smUXkej0xPzQw1tg67ntvigJgPPhrNFSnWepihD6ur8=;
+        b=kb66OCokoaXw5EoKdxwoObfsscni0EG0X/yS1aan8QNjxdeLywL/UtTA9kGcTec9/m
+         z7/FG6o0YpAPcAbt+GOwpIbFi1B46+fPkkcSu6yFmrYvkH4q9PX9hGNvW7YC1oWF/SoL
+         6Uxv7h0iyjuxv+4m60+z4UxaMm8t0qcriNprBZIocb01wtP0Pui3kTk46OkKBfemwWth
+         McU7BT+1hZZKSzEZ4j60BaOQGTnimONcK4L/eguv3H9hrUqEAd+rAOEWyED6rXQJq6RF
+         rUTbGsavm8mudcpfHcfnuqlGPtNJvowX31KcMgf14hLC9dncWlssrwL3fOV2ZFPGbkeS
+         QJIg==
+X-Gm-Message-State: AC+VfDxHTOC9IPL1NE6HhSluLvzBO8rl5hUsui9NgjcO0x4peybiVzO0
+        1kpGD1aoZ3jvUbXR0nfry+PhQkQQy7bg364X+0843Q3hjwnI2emgxY2xkA==
+X-Google-Smtp-Source: ACHHUZ57M6XvrZOUlJI4JuZPd/5ZX1/+KJTt4pAsY8OkJ3eOXQG7rcN0DdhPWJ3waUZhDaSXwPJ+uOusE1Vz1WLvmCE=
+X-Received: by 2002:ac8:7f8c:0:b0:3f1:f8d0:a3a7 with SMTP id
+ z12-20020ac87f8c000000b003f1f8d0a3a7mr498652qtj.8.1683219074618; Thu, 04 May
+ 2023 09:51:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230504162312.1506763-1-luca.ceresoli@bootlin.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <000000000000951c2505d8a0a8e5@google.com> <00000000000091b72905fae0eda2@google.com>
+In-Reply-To: <00000000000091b72905fae0eda2@google.com>
+From:   Aleksandr Nogikh <nogikh@google.com>
+Date:   Thu, 4 May 2023 18:51:03 +0200
+Message-ID: <CANp29Y6PHCKRWSQvhs2gKTMC3u95Zo8VLTmXRxP1=5X00EKh-w@mail.gmail.com>
+Subject: Re: [syzbot] [can?] WARNING in j1939_session_deactivate_activate_next
+To:     syzbot <syzbot+3d2eaacbc2b94537c6c5@syzkaller.appspotmail.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kernel@pengutronix.de,
+        kuba@kernel.org, linux-can@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux@rempel-privat.de,
+        mkl@pengutronix.de, netdev@vger.kernel.org,
+        o.rempel@pengutronix.de, pabeni@redhat.com, robin@protonic.nl,
+        socketcan@hartkopp.net, syzkaller-bugs@googlegroups.com,
+        william.xuanziyang@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Luca,
-I guess your mail to Philippe bounced, let me try to answer since I am aware
-of the issue here.
+On Thu, May 4, 2023 at 6:47=E2=80=AFPM syzbot
+<syzbot+3d2eaacbc2b94537c6c5@syzkaller.appspotmail.com> wrote:
+>
+> syzbot suspects this issue was fixed by commit:
+>
+> commit d0553680f94c49bbe0e39eb50d033ba563b4212d
+> Author: Ziyang Xuan <william.xuanziyang@huawei.com>
+> Date:   Mon Sep 6 09:42:00 2021 +0000
+>
+>     can: j1939: fix errant WARN_ON_ONCE in j1939_session_deactivate
+>
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D10cf099028=
+0000
+> start commit:   fa182ea26ff0 net: phy: micrel: Fixes FIELD_GET assertion
+> git tree:       net
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D796b7c2847a68=
+66a
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3D3d2eaacbc2b9453=
+7c6c5
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D1455e3b2880=
+000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D10296e7c88000=
+0
+>
+> If the result looks correct, please mark the issue as fixed by replying w=
+ith:
+>
+> #syz fix: can: j1939: fix errant WARN_ON_ONCE in j1939_session_deactivate
 
-On Thu, May 04, 2023 at 06:23:12PM +0200, Luca Ceresoli wrote:
-> I found this thread after several hours spent in debugging why USB host is
-> not detecting new devices on a custom board using the iMX6ULL Colibri
-> SoM.
-> 
-> My best workaround at the moment is:
-We have the same workaround in our BSP since quite some time, see
-https://git.toradex.com/cgit/meta-toradex-bsp-common.git/tree/recipes-kernel/linux/linux-toradex-mainline-git/0002-drivers-chipidea-disable-runtime-pm-for-imx6ul.patch
+Looks correct.
+#syz fix: can: j1939: fix errant WARN_ON_ONCE in j1939_session_deactivate
 
-> I haven't found any follow-up patches from you, so I'm wondering whether
-> you have made any progress on this issue.
-You can find the latest discussion on that regard here
-https://lore.kernel.org/all/Y1vLpaxpc5WBCuGD@francesco-nb.int.toradex.com/
-
-> As I see it, a quirk in the driver would make sense.
-I am not sure.
-
-The reason this is not working is that the VBUS is not directly
-connected to the SOC and the USB IP is powered in a different way (all
-of that was reviewed/acked by NXP when the board was designed).
-
-The issue is in drivers/usb/phy/phy-mxs-usb.c:mxs_phy_disconnect_line(),
-however:
- 1 - checking for the VBUS when in host mode is not correct.
- 2 - checking for the VBUS when in OTG/dual-role mode should be done using
- extcon or equivalent. In this case on the colibri-imx6ull you would get
- the correct behavior.
-
-The NXP downstream kernel has some improvements on that regard, for
-instance 1 would work, 2 I am not 100% sure.
-
-Here the related patches:
-
-From 60422d8301fc354e69ec0184831468c3b65cc26a Mon Sep 17 00:00:00 2001
-From: Li Jun <jun.li@nxp.com>
-Date: Wed, 12 Apr 2017 05:31:17 +0800
-Subject: [PATCH 1/3] MLK-14285-1 usb: phy: add usb mode for usb_phy
-
-USB phy driver may need to know the current working mode of
-the controller, and does some different settings according to
-host mode or device mode.
-
-Signed-off-by: Li Jun <jun.li@nxp.com>
-(cherry picked from commit 2286cb30feedd6f4a5cb82a0f0af5aa3a04ab698)
-Signed-off-by: Vipul Kumar <vipul_kumar@mentor.com>
-Signed-off-by: Srikanth Krishnakar <Srikanth_Krishnakar@mentor.com>
----
- include/linux/usb/phy.h | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
-
-diff --git a/include/linux/usb/phy.h b/include/linux/usb/phy.h
-index e4de6bc1f69b..93963a018a13 100644
---- a/include/linux/usb/phy.h
-+++ b/include/linux/usb/phy.h
-@@ -63,6 +63,13 @@ enum usb_otg_state {
- 	OTG_STATE_A_VBUS_ERR,
- };
- 
-+/* The usb role of phy to be working with */
-+enum usb_current_mode {
-+	CUR_USB_MODE_NONE,
-+	CUR_USB_MODE_HOST,
-+	CUR_USB_MODE_DEVICE,
-+};
-+
- struct usb_phy;
- struct usb_otg;
- 
-@@ -155,6 +162,10 @@ struct usb_phy {
- 	 * manually detect the charger type.
- 	 */
- 	enum usb_charger_type (*charger_detect)(struct usb_phy *x);
-+
-+	int	(*set_mode)(struct usb_phy *x,
-+			enum usb_current_mode mode);
-+
- };
- 
- /* for board-specific init logic */
-@@ -213,6 +224,15 @@ usb_phy_vbus_off(struct usb_phy *x)
- 	return x->set_vbus(x, false);
- }
- 
-+static inline int
-+usb_phy_set_mode(struct usb_phy *x, enum usb_current_mode mode)
-+{
-+	if (!x || !x->set_mode)
-+		return 0;
-+
-+	return x->set_mode(x, mode);
-+}
-+
- /* for usb host and peripheral controller drivers */
- #if IS_ENABLED(CONFIG_USB_PHY)
- extern struct usb_phy *usb_get_phy(enum usb_phy_type type);
-
-
-From cf3f741f4b7ab5d139938c4c0cd65d4547d386ff Mon Sep 17 00:00:00 2001
-From: Li Jun <jun.li@nxp.com>
-Date: Wed, 12 Apr 2017 05:41:21 +0800
-Subject: [PATCH 2/3] MLK-14285-3 usb: phy: mxs: optimize disconnect line
- condition
-
-We only have below cases to disconnect line when suspend:
-1. Device mode without connection to any host/charger(no vbus).
-2. Device mode connect to a charger(w/ vbus), usb suspend when
-   system is entering suspend.
-This patch can fix usb phy wrongly does disconnect line in case
-some usb host enters suspend but vbus is off.
-
-Signed-off-by: Li Jun <jun.li@nxp.com>
-(cherry picked from commit 2af48913f77cec3658f5863b13f63619d8101279)
----
- drivers/usb/phy/phy-mxs-usb.c | 32 ++++++++++++++++++--------------
- 1 file changed, 18 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/usb/phy/phy-mxs-usb.c b/drivers/usb/phy/phy-mxs-usb.c
-index 8a262c5a0408..31f40dbb71c0 100644
---- a/drivers/usb/phy/phy-mxs-usb.c
-+++ b/drivers/usb/phy/phy-mxs-usb.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0+
- /*
-- * Copyright 2012-2014 Freescale Semiconductor, Inc.
-+ * Copyright 2012-2016 Freescale Semiconductor, Inc.
-+ * Copyright 2017 NXP
-  * Copyright (C) 2012 Marek Vasut <marex@denx.de>
-  * on behalf of DENX Software Engineering GmbH
-  */
-@@ -204,6 +205,7 @@ struct mxs_phy {
- 	int port_id;
- 	u32 tx_reg_set;
- 	u32 tx_reg_mask;
-+	enum usb_current_mode mode;
- };
- 
- static inline bool is_imx6q_phy(struct mxs_phy *mxs_phy)
-@@ -386,18 +388,6 @@ static void __mxs_phy_disconnect_line(struct mxs_phy *mxs_phy, bool disconnect)
- 		usleep_range(500, 1000);
- }
- 
--static bool mxs_phy_is_otg_host(struct mxs_phy *mxs_phy)
--{
--	void __iomem *base = mxs_phy->phy.io_priv;
--	u32 phyctrl = readl(base + HW_USBPHY_CTRL);
--
--	if (IS_ENABLED(CONFIG_USB_OTG) &&
--			!(phyctrl & BM_USBPHY_CTRL_OTG_ID_VALUE))
--		return true;
--
--	return false;
--}
--
- static void mxs_phy_disconnect_line(struct mxs_phy *mxs_phy, bool on)
- {
- 	bool vbus_is_on = false;
-@@ -412,7 +402,7 @@ static void mxs_phy_disconnect_line(struct mxs_phy *mxs_phy, bool on)
- 
- 	vbus_is_on = mxs_phy_get_vbus_status(mxs_phy);
- 
--	if (on && !vbus_is_on && !mxs_phy_is_otg_host(mxs_phy))
-+	if (on && ((!vbus_is_on && mxs_phy->mode != CUR_USB_MODE_HOST)))
- 		__mxs_phy_disconnect_line(mxs_phy, true);
- 	else
- 		__mxs_phy_disconnect_line(mxs_phy, false);
-@@ -708,6 +698,19 @@ static enum usb_charger_type mxs_phy_charger_detect(struct usb_phy *phy)
- 	return chgr_type;
- }
- 
-+/*
-+ * Set the usb current role for phy.
-+ */
-+static int mxs_phy_set_mode(struct usb_phy *phy,
-+		enum usb_current_mode mode)
-+{
-+	struct mxs_phy *mxs_phy = to_mxs_phy(phy);
-+
-+	mxs_phy->mode = mode;
-+
-+	return 0;
-+}
-+
- static int mxs_phy_probe(struct platform_device *pdev)
- {
- 	void __iomem *base;
-@@ -793,6 +796,7 @@ static int mxs_phy_probe(struct platform_device *pdev)
- 
- 	mxs_phy->clk = clk;
- 	mxs_phy->data = of_device_get_match_data(&pdev->dev);
-+	mxs_phy->phy.set_mode		= mxs_phy_set_mode;
- 
- 	platform_set_drvdata(pdev, mxs_phy);
- 
-
-From d4c4385b997f32b081e859d491f25f5beb738ae9 Mon Sep 17 00:00:00 2001
-From: Li Jun <jun.li@nxp.com>
-Date: Wed, 12 Apr 2017 05:38:48 +0800
-Subject: [PATCH 3/3] MLK-14285-2 usb: chipidea: set mode for usb phy driver
-
-After enters one specific role, notify usb phy driver.
-
-Signed-off-by: Li Jun <jun.li@nxp.com>
-(cherry picked from commit d3aa2a13f4e47bc7fae7f2eee1e86291d7513312)
----
- drivers/usb/chipidea/ci.h | 21 ++++++++++++++++++---
- 1 file changed, 18 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/usb/chipidea/ci.h b/drivers/usb/chipidea/ci.h
-index 99440baa6458..9d7ba902246d 100644
---- a/drivers/usb/chipidea/ci.h
-+++ b/drivers/usb/chipidea/ci.h
-@@ -274,9 +274,21 @@ static inline int ci_role_start(struct ci_hdrc *ci, enum ci_role role)
- 		return -ENXIO;
- 
- 	ret = ci->roles[role]->start(ci);
--	if (!ret)
--		ci->role = role;
--	return ret;
-+	if (ret)
-+		return ret;
-+
-+	ci->role = role;
-+
-+	if (ci->usb_phy) {
-+		if (role == CI_ROLE_HOST)
-+			usb_phy_set_mode(ci->usb_phy,
-+					CUR_USB_MODE_HOST);
-+		else
-+			usb_phy_set_mode(ci->usb_phy,
-+					CUR_USB_MODE_DEVICE);
-+	}
-+
-+	return 0;
- }
- 
- static inline void ci_role_stop(struct ci_hdrc *ci)
-@@ -289,6 +301,9 @@ static inline void ci_role_stop(struct ci_hdrc *ci)
- 	ci->role = CI_ROLE_END;
- 
- 	ci->roles[role]->stop(ci);
-+
-+	if (ci->usb_phy)
-+		usb_phy_set_mode(ci->usb_phy, CUR_USB_MODE_NONE);
- }
- 
- static inline enum usb_role ci_role_to_usb_role(struct ci_hdrc *ci)
-
-
-Francesco
-
+>
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisect=
+ion
+>
+> --
+> You received this message because you are subscribed to the Google Groups=
+ "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgi=
+d/syzkaller-bugs/00000000000091b72905fae0eda2%40google.com.
