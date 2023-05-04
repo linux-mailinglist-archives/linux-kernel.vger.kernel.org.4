@@ -2,50 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A30E56F7595
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:59:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 152A36F7598
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:59:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232261AbjEDT67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 15:58:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42922 "EHLO
+        id S232089AbjEDT7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 15:59:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231864AbjEDT4e (ORCPT
+        with ESMTP id S231294AbjEDT4f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 15:56:34 -0400
+        Thu, 4 May 2023 15:56:35 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E91D21D97D;
-        Thu,  4 May 2023 12:49:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8FA3AD09;
+        Thu,  4 May 2023 12:49:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1662C63826;
-        Thu,  4 May 2023 19:49:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8AB5C433EF;
-        Thu,  4 May 2023 19:49:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 69EC86381F;
+        Thu,  4 May 2023 19:49:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6199C433D2;
+        Thu,  4 May 2023 19:49:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683229771;
-        bh=0vnWX0MVgGb7iZDFbJNjeohEnUpVDAWB+6di4E0lEvI=;
+        s=k20201202; t=1683229772;
+        bh=+96Mq4ggXsx7WcB6BZtFOmiAWeqBv5VKnktfiAdc368=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ur/8H1nzsWMd18UFJSis2LzxRxMT0etGQY1EU7tUxDgM429eBXfOEl20eRm0+AwOG
-         rOlwDzpJPJSatY0y8PG3jpjwrKdKSL35Dhr99Pv/HdYIOEVGQkOFDI8j3MR5Y3MQZS
-         XiZVfsJMgZ6SbILiTAzPAYeGgNfdtIgAx+HcIXw28YmlsoUi0FvCCM4Rh4G0o+AssT
-         SH+kcAfYo764Pz4HWUPREOvWlHdcLy5xJexKqHEdvBOva0JdNGT/4JjdjRYKixqhYi
-         MJFCVMLaeWaCCnYlgHzEMoCXjH1t32ewMtksK2Qh/IUaRtCAbgf4lk6hW/nMiICdqO
-         yjhGXAzoVKZDw==
+        b=ZAptdyaWXnk1/rYalL72z1pBE1rjt5LD4PxhjxjHXDJwvPlrj3yZceJzzhflwjMfa
+         ozhD1S7bh7/NZDNXDYSjr0AIS51p+MWT+EZcVw+yyOKCZBvYdv7zZgRySlHTVRTSsW
+         pY/kJ6a/+u63pgA3eE9H1xooYgplOS8aPnDw5a5KtfDIoOzvKfgnNRmuK8NScuRAb+
+         aiT/yl6t5J4M7ux8QI5mP5ofmwOiB2hi4RSzKtcK5vNgn5pDlfz7c7QP/eD4bFo7Sr
+         bpHWjku4Fr9NDIs4UpwvOZdpFB70BMB2yO+9sw73piMN2Yw7yDDC1FRtmKaN38NdTs
+         JwiPik57I3Lwg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Simon Horman <horms@kernel.org>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Sasha Levin <sashal@kernel.org>, davem@davemloft.net,
-        dsahern@kernel.org, horms@verge.net.au, ja@ssi.bg,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        kadlec@netfilter.org, fw@strlen.de, netdev@vger.kernel.org,
-        lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org
-Subject: [PATCH AUTOSEL 5.15 27/30] ipvs: Update width of source for ip_vs_sync_conn_options
-Date:   Thu,  4 May 2023 15:48:20 -0400
-Message-Id: <20230504194824.3808028-27-sashal@kernel.org>
+Cc:     Chethan T N <chethan.tumkur.narayan@intel.com>,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        Sasha Levin <sashal@kernel.org>, marcel@holtmann.org,
+        johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        linux-bluetooth@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 28/30] Bluetooth: btintel: Add LE States quirk support
+Date:   Thu,  4 May 2023 15:48:21 -0400
+Message-Id: <20230504194824.3808028-28-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230504194824.3808028-1-sashal@kernel.org>
 References: <20230504194824.3808028-1-sashal@kernel.org>
@@ -63,88 +59,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Simon Horman <horms@kernel.org>
+From: Chethan T N <chethan.tumkur.narayan@intel.com>
 
-[ Upstream commit e3478c68f6704638d08f437cbc552ca5970c151a ]
+[ Upstream commit 77f542b10c535c9a93bf8afdd2665524935807c2 ]
 
-In ip_vs_sync_conn_v0() copy is made to struct ip_vs_sync_conn_options.
-That structure looks like this:
+Basically all Intel controllers support both Central/Peripheral
+LE states.
 
-struct ip_vs_sync_conn_options {
-        struct ip_vs_seq        in_seq;
-        struct ip_vs_seq        out_seq;
-};
+This patch enables the LE States quirk by default on all
+Solar and Magnertor Intel controllers.
 
-The source of the copy is the in_seq field of struct ip_vs_conn.  Whose
-type is struct ip_vs_seq. Thus we can see that the source - is not as
-wide as the amount of data copied, which is the width of struct
-ip_vs_sync_conn_option.
-
-The copy is safe because the next field in is another struct ip_vs_seq.
-Make use of struct_group() to annotate this.
-
-Flagged by gcc-13 as:
-
- In file included from ./include/linux/string.h:254,
-                  from ./include/linux/bitmap.h:11,
-                  from ./include/linux/cpumask.h:12,
-                  from ./arch/x86/include/asm/paravirt.h:17,
-                  from ./arch/x86/include/asm/cpuid.h:62,
-                  from ./arch/x86/include/asm/processor.h:19,
-                  from ./arch/x86/include/asm/timex.h:5,
-                  from ./include/linux/timex.h:67,
-                  from ./include/linux/time32.h:13,
-                  from ./include/linux/time.h:60,
-                  from ./include/linux/stat.h:19,
-                  from ./include/linux/module.h:13,
-                  from net/netfilter/ipvs/ip_vs_sync.c:38:
- In function 'fortify_memcpy_chk',
-     inlined from 'ip_vs_sync_conn_v0' at net/netfilter/ipvs/ip_vs_sync.c:606:3:
- ./include/linux/fortify-string.h:529:25: error: call to '__read_overflow2_field' declared with attribute warning: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Werror=attribute-warning]
-   529 |                         __read_overflow2_field(q_size_field, size);
-       |
-
-Compile tested only.
-
-Signed-off-by: Simon Horman <horms@kernel.org>
-Reviewed-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Signed-off-by: Chethan T N <chethan.tumkur.narayan@intel.com>
+Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/net/ip_vs.h             | 6 ++++--
- net/netfilter/ipvs/ip_vs_sync.c | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ drivers/bluetooth/btintel.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/include/net/ip_vs.h b/include/net/ip_vs.h
-index 7cb5a1aace40d..59f8412de45ac 100644
---- a/include/net/ip_vs.h
-+++ b/include/net/ip_vs.h
-@@ -549,8 +549,10 @@ struct ip_vs_conn {
- 	 */
- 	struct ip_vs_app        *app;           /* bound ip_vs_app object */
- 	void                    *app_data;      /* Application private data */
--	struct ip_vs_seq        in_seq;         /* incoming seq. struct */
--	struct ip_vs_seq        out_seq;        /* outgoing seq. struct */
-+	struct_group(sync_conn_opt,
-+		struct ip_vs_seq  in_seq;       /* incoming seq. struct */
-+		struct ip_vs_seq  out_seq;      /* outgoing seq. struct */
-+	);
+diff --git a/drivers/bluetooth/btintel.c b/drivers/bluetooth/btintel.c
+index d707aa63e9441..2a4cc5d8c2d40 100644
+--- a/drivers/bluetooth/btintel.c
++++ b/drivers/bluetooth/btintel.c
+@@ -2381,9 +2381,8 @@ static int btintel_setup_combined(struct hci_dev *hdev)
+ 		 */
+ 		set_bit(HCI_QUIRK_WIDEBAND_SPEECH_SUPPORTED, &hdev->quirks);
  
- 	const struct ip_vs_pe	*pe;
- 	char			*pe_data;
-diff --git a/net/netfilter/ipvs/ip_vs_sync.c b/net/netfilter/ipvs/ip_vs_sync.c
-index a56fd0b5a430a..0d89e68dc9d18 100644
---- a/net/netfilter/ipvs/ip_vs_sync.c
-+++ b/net/netfilter/ipvs/ip_vs_sync.c
-@@ -603,7 +603,7 @@ static void ip_vs_sync_conn_v0(struct netns_ipvs *ipvs, struct ip_vs_conn *cp,
- 	if (cp->flags & IP_VS_CONN_F_SEQ_MASK) {
- 		struct ip_vs_sync_conn_options *opt =
- 			(struct ip_vs_sync_conn_options *)&s[1];
--		memcpy(opt, &cp->in_seq, sizeof(*opt));
-+		memcpy(opt, &cp->sync_conn_opt, sizeof(*opt));
- 	}
+-		/* Valid LE States quirk for GfP */
+-		if (INTEL_HW_VARIANT(ver_tlv.cnvi_bt) == 0x18)
+-			set_bit(HCI_QUIRK_VALID_LE_STATES, &hdev->quirks);
++		/* Apply LE States quirk from solar onwards */
++		set_bit(HCI_QUIRK_VALID_LE_STATES, &hdev->quirks);
  
- 	m->nr_conns++;
+ 		/* Setup MSFT Extension support */
+ 		btintel_set_msft_opcode(hdev,
 -- 
 2.39.2
 
