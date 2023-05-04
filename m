@@ -2,123 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E0AD6F70C5
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 19:21:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0AEA6F70C8
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 19:22:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbjEDRVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 13:21:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53056 "EHLO
+        id S230001AbjEDRV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 13:21:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbjEDRVA (ORCPT
+        with ESMTP id S229778AbjEDRV4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 13:21:00 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 798061722
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 10:20:58 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f122ff663eso892574e87.2
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 10:20:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683220857; x=1685812857;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=x03inJk1u8Dl+C485ZgejmLGtZM16EKxZlLJMRQD5GU=;
-        b=CI0xsUrSJoPZc3hn8va7m74kLj9rg4kPxmQ2T1/R068MJp5jW7mBh1Pcox80Uuf7B0
-         Q3Gbvi8g8KBRtJcqNzvdrg3aMMfdsVinB7BvmCIpUN1coOQnGsPPpo3fSSnGPTgN049X
-         h2HJZnYfUVjNz1qBnbciaG59E7P6UEsvBdFvd9MocP+XJmek9XdZWZp46gpPcmLqrknQ
-         Yr9RRdTU6LvcA6J3aztC9CgYtnQThTNbivXAnrv6zJtCb93ckSpOgkHzGqW3axD5I7sT
-         Kdqaz3BS06CYmvqURLZlutmRWo1lo0vKRg40JqAC5NbmxUQiEX0D7Ol8No6LOdBxO42E
-         UKpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683220857; x=1685812857;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=x03inJk1u8Dl+C485ZgejmLGtZM16EKxZlLJMRQD5GU=;
-        b=EF7oF2pJOIbHJbKCmfUVI8nJ1QCtp2M9AXiLWt7KoOXfemyzcTQh0Kgc9DSWzHRWFH
-         l+zPI2HeBIJvEzyF74KHGZ274X/MOixJRxeOb/xm/OS+r7trwE8tXDwTlRiLeADEkOY3
-         UGwg9hzBhjiOd6fveH8MGJszPFW4T5BEwpVmAW7HwBgGvVjbZQFXHVPSuVDoU9/KGQT3
-         I0CRObUDI1cyyhYR0l1+bRM5m1GqnL5xRgJhbYhqz13sMAPA9IvYpoPT73jusJg5vXaT
-         NdxRP1s7WeRgasde7DN9wNTvGYK748LMuZJDvIcMPxexu8yI8K328FDLmp4/WSL5ZZ9A
-         7D8Q==
-X-Gm-Message-State: AC+VfDz7e1AiJkzRDDGGkARE2FFyTw/00ZnoqwI5kJPgLWNCv45IWgyh
-        IAAy5S/WLp0INsL81UlWbU8EnQ==
-X-Google-Smtp-Source: ACHHUZ4C6t1iYtTRYW+vZQQ/bmsstMMU41QpxPtkhpn1Yrgd4/LIy3h5wflkeRXteZ14Wf2EjtrHUw==
-X-Received: by 2002:a05:6512:38b1:b0:4ec:a9c5:f3ae with SMTP id o17-20020a05651238b100b004eca9c5f3aemr1879977lft.11.1683220856716;
-        Thu, 04 May 2023 10:20:56 -0700 (PDT)
-Received: from [192.168.1.101] (abyl248.neoplus.adsl.tpnet.pl. [83.9.31.248])
-        by smtp.gmail.com with ESMTPSA id i20-20020ac25234000000b004eb07f5cde6sm6591133lfl.297.2023.05.04.10.20.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 10:20:56 -0700 (PDT)
-Message-ID: <02f5d449-a64b-8f5e-6b72-2fdf8d9bafbe@linaro.org>
-Date:   Thu, 4 May 2023 19:20:55 +0200
+        Thu, 4 May 2023 13:21:56 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 096E2E5D;
+        Thu,  4 May 2023 10:21:55 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F36681FB;
+        Thu,  4 May 2023 10:22:38 -0700 (PDT)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1670A3F64C;
+        Thu,  4 May 2023 10:21:50 -0700 (PDT)
+Message-ID: <2c1a8c86-7c99-4edf-d18d-cc3227a02150@arm.com>
+Date:   Thu, 4 May 2023 19:21:49 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 4/4] venus: return P010 as preferred format for 10 bit
- decode
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 5/6] sched/deadline: Create DL BW alloc, free & check
+ overflow interface
 Content-Language: en-US
-To:     Dikshita Agarwal <quic_dikshita@quicinc.com>,
-        linux-media@vger.kernel.org, stanimir.k.varbanov@gmail.com,
-        quic_vgarodia@quicinc.com, agross@kernel.org, andersson@kernel.org,
-        mchehab@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <1683196599-3730-1-git-send-email-quic_dikshita@quicinc.com>
- <1683196599-3730-5-git-send-email-quic_dikshita@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <1683196599-3730-5-git-send-email-quic_dikshita@quicinc.com>
+To:     Juri Lelli <juri.lelli@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@kernel.org>, Qais Yousef <qyousef@layalina.io>,
+        Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Hao Luo <haoluo@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
+        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
+        bristot@redhat.com, mathieu.poirier@linaro.org,
+        cgroups@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
+        Quentin Perret <qperret@google.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>
+References: <20230503072228.115707-1-juri.lelli@redhat.com>
+ <20230503072228.115707-6-juri.lelli@redhat.com>
+ <20230504062359.GE1734100@hirez.programming.kicks-ass.net>
+ <ZFNplb0IYONNPtAU@localhost.localdomain>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <ZFNplb0IYONNPtAU@localhost.localdomain>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 4.05.2023 12:36, Dikshita Agarwal wrote:
-> If bit depth is detected as 10 bit by firmware, return
-> P010 as preferred decoder format to the client.
+On 04/05/2023 10:15, Juri Lelli wrote:
+> On 04/05/23 08:23, Peter Zijlstra wrote:
+>> On Wed, May 03, 2023 at 09:22:27AM +0200, Juri Lelli wrote:
+>>> From: Dietmar Eggemann <dietmar.eggemann@arm.com>
+>>>
+>>> Rework the existing dl_cpu_busy() interface which offers DL BW overflow
+>>> checking and per-task DL BW allocation.
+>>>
+>>> Add dl_bw_free() as an interface to be able to free DL BW.
+>>> It will be used to allow freeing of the DL BW request done during
+>>> cpuset_can_attach() in case multiple controllers are attached to the
+>>> cgroup next to the cpuset controller and one of the non-cpuset
+>>> can_attach() fails.
+>>>
+>>> dl_bw_alloc() (and dl_bw_free()) now take a `u64 dl_bw` parameter
+>>> instead of `struct task_struct *p` used in dl_cpu_busy().  This allows
+>>> to allocate DL BW for a set of tasks too rater than only for a single
+>>> task.
+>>>
+>>
+>> Changlog fails the 'why' test.
+>>
 > 
-> Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
-> ---
->  drivers/media/platform/qcom/venus/vdec.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
+> Dietmar, if you could please add (or rework) the 'why' as a reply to
+> this email, I can fold in v3.
 > 
-> diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
-> index 69f7f6e..ed11dc2 100644
-> --- a/drivers/media/platform/qcom/venus/vdec.c
-> +++ b/drivers/media/platform/qcom/venus/vdec.c
-> @@ -1468,8 +1468,13 @@ static void vdec_event_change(struct venus_inst *inst,
->  	inst->out_width = ev_data->width;
->  	inst->out_height = ev_data->height;
->  
-> -	if (inst->bit_depth != ev_data->bit_depth)
-> +	if (inst->bit_depth != ev_data->bit_depth) {
->  		inst->bit_depth = ev_data->bit_depth;
-> +		if (inst->bit_depth == VIDC_BITDEPTH_10)
-> +			inst->fmt_cap = &vdec_formats[3];
-> +		else
-> +			inst->fmt_cap = &vdec_formats[0];
-This doesn't scale and is very error-prone, please enumerate the
-entries and assign it using the enumerator, like:
+> Thanks!
+> 
 
-enum {
-	VDEC_FORMAT_FOO,
-	...
-};
+-->8--
 
-... vdec_formats[] = {
-	[VDEC_FORMAT_FOO] = { foo, bar, baz }
-}
+From 4ce3556723728a606b527bef8813b0fce3ad6e22 Mon Sep 17 00:00:00 2001
+From: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Date: Wed, 3 May 2023 09:22:27 +0200
+Subject: [PATCH] sched/deadline: Create DL BW alloc, free & check overflow
+ interface
 
-Konrad
-> +	}
->  
->  	if (inst->pic_struct != ev_data->pic_struct)
->  		inst->pic_struct = ev_data->pic_struct;
+While moving a set of tasks between exclusive cpusets,
+cpuset_can_attach() -> task_can_attach() calls dl_cpu_busy(..., p) for
+DL BW overflow checking and per-task DL BW allocation on the destination
+root_domain for the DL tasks in this set.
+
+This approach has the issue of not freeing already allocated DL BW in
+the following error cases:
+
+(1) The set of tasks includes multiple DL tasks and DL BW overflow
+    checking fails for one of the subsequent DL tasks.
+
+(2) Another controller next to the cpuset controller which is attached
+    to the same cgroup fails in its can_attach().
+
+To address this problem rework dl_cpu_busy():
+
+(1) Split it into dl_bw_check_overflow() & dl_bw_alloc() and add a
+    dedicated dl_bw_free().
+
+(2) dl_bw_alloc() & dl_bw_free() take a `u64 dl_bw` parameter instead of
+    a `struct task_struct *p` used in dl_cpu_busy(). This allows to
+    allocate DL BW for a set of tasks too rather than only for a single
+    task.
+
+Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Signed-off-by: Juri Lelli <juri.lelli@redhat.com>
+---
+ include/linux/sched.h   |  2 ++
+ kernel/sched/core.c     |  4 ++--
+ kernel/sched/deadline.c | 53 +++++++++++++++++++++++++++++++----------
+ kernel/sched/sched.h    |  2 +-
+ 4 files changed, 45 insertions(+), 16 deletions(-)
+
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index eed5d65b8d1f..0bee06542450 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -1853,6 +1853,8 @@ current_restore_flags(unsigned long orig_flags, unsigned long flags)
+ 
+ extern int cpuset_cpumask_can_shrink(const struct cpumask *cur, const struct cpumask *trial);
+ extern int task_can_attach(struct task_struct *p, const struct cpumask *cs_effective_cpus);
++extern int dl_bw_alloc(int cpu, u64 dl_bw);
++extern void dl_bw_free(int cpu, u64 dl_bw);
+ #ifdef CONFIG_SMP
+ extern void do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask);
+ extern int set_cpus_allowed_ptr(struct task_struct *p, const struct cpumask *new_mask);
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index d826bec1c522..df659892d7d5 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -9319,7 +9319,7 @@ int task_can_attach(struct task_struct *p,
+ 
+ 		if (unlikely(cpu >= nr_cpu_ids))
+ 			return -EINVAL;
+-		ret = dl_cpu_busy(cpu, p);
++		ret = dl_bw_alloc(cpu, p->dl.dl_bw);
+ 	}
+ 
+ out:
+@@ -9604,7 +9604,7 @@ static void cpuset_cpu_active(void)
+ static int cpuset_cpu_inactive(unsigned int cpu)
+ {
+ 	if (!cpuhp_tasks_frozen) {
+-		int ret = dl_cpu_busy(cpu, NULL);
++		int ret = dl_bw_check_overflow(cpu);
+ 
+ 		if (ret)
+ 			return ret;
+diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+index e11de074a6fd..166c3e6eae61 100644
+--- a/kernel/sched/deadline.c
++++ b/kernel/sched/deadline.c
+@@ -3058,26 +3058,38 @@ int dl_cpuset_cpumask_can_shrink(const struct cpumask *cur,
+ 	return ret;
+ }
+ 
+-int dl_cpu_busy(int cpu, struct task_struct *p)
++enum dl_bw_request {
++	dl_bw_req_check_overflow = 0,
++	dl_bw_req_alloc,
++	dl_bw_req_free
++};
++
++static int dl_bw_manage(enum dl_bw_request req, int cpu, u64 dl_bw)
+ {
+-	unsigned long flags, cap;
++	unsigned long flags;
+ 	struct dl_bw *dl_b;
+-	bool overflow;
++	bool overflow = 0;
+ 
+ 	rcu_read_lock_sched();
+ 	dl_b = dl_bw_of(cpu);
+ 	raw_spin_lock_irqsave(&dl_b->lock, flags);
+-	cap = dl_bw_capacity(cpu);
+-	overflow = __dl_overflow(dl_b, cap, 0, p ? p->dl.dl_bw : 0);
+ 
+-	if (!overflow && p) {
+-		/*
+-		 * We reserve space for this task in the destination
+-		 * root_domain, as we can't fail after this point.
+-		 * We will free resources in the source root_domain
+-		 * later on (see set_cpus_allowed_dl()).
+-		 */
+-		__dl_add(dl_b, p->dl.dl_bw, dl_bw_cpus(cpu));
++	if (req == dl_bw_req_free) {
++		__dl_sub(dl_b, dl_bw, dl_bw_cpus(cpu));
++	} else {
++		unsigned long cap = dl_bw_capacity(cpu);
++
++		overflow = __dl_overflow(dl_b, cap, 0, dl_bw);
++
++		if (req == dl_bw_req_alloc && !overflow) {
++			/*
++			 * We reserve space in the destination
++			 * root_domain, as we can't fail after this point.
++			 * We will free resources in the source root_domain
++			 * later on (see set_cpus_allowed_dl()).
++			 */
++			__dl_add(dl_b, dl_bw, dl_bw_cpus(cpu));
++		}
+ 	}
+ 
+ 	raw_spin_unlock_irqrestore(&dl_b->lock, flags);
+@@ -3085,6 +3097,21 @@ int dl_cpu_busy(int cpu, struct task_struct *p)
+ 
+ 	return overflow ? -EBUSY : 0;
+ }
++
++int dl_bw_check_overflow(int cpu)
++{
++	return dl_bw_manage(dl_bw_req_check_overflow, cpu, 0);
++}
++
++int dl_bw_alloc(int cpu, u64 dl_bw)
++{
++	return dl_bw_manage(dl_bw_req_alloc, cpu, dl_bw);
++}
++
++void dl_bw_free(int cpu, u64 dl_bw)
++{
++	dl_bw_manage(dl_bw_req_free, cpu, dl_bw);
++}
+ #endif
+ 
+ #ifdef CONFIG_SCHED_DEBUG
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index ec7b3e0a2b20..0ad712811e35 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -330,7 +330,7 @@ extern void __getparam_dl(struct task_struct *p, struct sched_attr *attr);
+ extern bool __checkparam_dl(const struct sched_attr *attr);
+ extern bool dl_param_changed(struct task_struct *p, const struct sched_attr *attr);
+ extern int  dl_cpuset_cpumask_can_shrink(const struct cpumask *cur, const struct cpumask *trial);
+-extern int  dl_cpu_busy(int cpu, struct task_struct *p);
++extern int  dl_bw_check_overflow(int cpu);
+ 
+ #ifdef CONFIG_CGROUP_SCHED
+ 
+-- 
+2.25.1
