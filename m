@@ -2,44 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2A8B6F67D9
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 10:56:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C2FB6F67DB
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 10:58:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230057AbjEDI4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 04:56:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56990 "EHLO
+        id S229915AbjEDI6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 04:58:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbjEDI4e (ORCPT
+        with ESMTP id S229598AbjEDI6S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 04:56:34 -0400
-X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 04 May 2023 01:56:32 PDT
-Received: from unicom145.biz-email.net (unicom145.biz-email.net [210.51.26.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50CAD358A;
-        Thu,  4 May 2023 01:56:31 -0700 (PDT)
-Received: from unicom145.biz-email.net
-        by unicom145.biz-email.net ((D)) with ASMTP (SSL) id AFI00024;
-        Thu, 04 May 2023 16:55:24 +0800
-Received: from localhost.localdomain.com (10.73.43.242) by
- jtjnmail201608.home.langchao.com (10.100.2.8) with Microsoft SMTP Server id
- 15.1.2507.23; Thu, 4 May 2023 16:55:23 +0800
-From:   Bo Liu <liubo03@inspur.com>
-To:     <tony@atomide.com>
-CC:     <linux-omap@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Bo Liu <liubo03@inspur.com>
-Subject: [PATCH] bus: ti-sysc: convert sysfs sprintf to sysfs_emit
-Date:   Thu, 4 May 2023 04:55:22 -0400
-Message-ID: <20230504085522.2635-1-liubo03@inspur.com>
-X-Mailer: git-send-email 2.18.2
+        Thu, 4 May 2023 04:58:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2B5358A
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 01:58:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E30C63286
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 08:58:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B3D0C433D2;
+        Thu,  4 May 2023 08:58:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1683190695;
+        bh=WB9OO+EBIif8Ny5uYVvpRmtEyUuGxpVYXQ0OMAFnMXs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EYnHKq5p6hmHN85ndecCLdeeKIY6uFQJe+9XBPB2LZTISgCBMGWRmxf3Ffo3T26Rh
+         Ykfz4aR4Isg3spKhZggzoY0M3LIOXoS9qANMYVn5SKBSudBEZR2EE8YtSa0I+NfwTU
+         0Z5xIi3GyhmrS2v39oss9UonSbn/NjUBSoifX6IY=
+Date:   Thu, 4 May 2023 17:58:10 +0900
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        rafael@kernel.org, andriy.shevchenko@linux.intel.com,
+        hdegoede@redhat.com, jgg@ziepe.ca, saravanak@google.com,
+        keescook@chromium.org, tglx@linutronix.de,
+        linux-kernel@vger.kernel.org, abel.vesa@linaro.org,
+        Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH] devres: provide API devm_kstrndup
+Message-ID: <2023050413-margin-devotedly-468d@gregkh>
+References: <20230504075754.372780-1-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.73.43.242]
-tUid:   2023504165524c241f6fba83c50017744cf9c8f0f8e3c
-X-Abuse-Reports-To: service@corp-email.com
-Abuse-Reports-To: service@corp-email.com
-X-Complaints-To: service@corp-email.com
-X-Report-Abuse-To: service@corp-email.com
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230504075754.372780-1-peng.fan@oss.nxp.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,52 +55,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Follow the advice of the Documentation/filesystems/sysfs.rst
-and show() should only use sysfs_emit() or sysfs_emit_at()
-when formatting the value to be returned to user space.
+On Thu, May 04, 2023 at 03:57:54PM +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> This patch introduces devm_kstrndup API so that the
+> device's driver can allocate memory and copy string.
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  drivers/base/devres.c  | 28 ++++++++++++++++++++++++++++
+>  include/linux/device.h |  1 +
+>  2 files changed, 29 insertions(+)
 
-Signed-off-by: Bo Liu <liubo03@inspur.com>
----
- drivers/bus/ti-sysc.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+We can not add apis with no users, please submit this at the same time a
+driver needs it.
 
-diff --git a/drivers/bus/ti-sysc.c b/drivers/bus/ti-sysc.c
-index 6c49de37d5e9..e3d043de894d 100644
---- a/drivers/bus/ti-sysc.c
-+++ b/drivers/bus/ti-sysc.c
-@@ -969,9 +969,9 @@ static int sysc_show_rev(char *bufp, struct sysc *ddata)
- 	int len;
- 
- 	if (ddata->offsets[SYSC_REVISION] < 0)
--		return sprintf(bufp, ":NA");
-+		return sysfs_emit(bufp, ":NA");
- 
--	len = sprintf(bufp, ":%08x", ddata->revision);
-+	len = sysfs_emit(bufp, ":%08x", ddata->revision);
- 
- 	return len;
- }
-@@ -980,9 +980,9 @@ static int sysc_show_reg(struct sysc *ddata,
- 			 char *bufp, enum sysc_registers reg)
- {
- 	if (ddata->offsets[reg] < 0)
--		return sprintf(bufp, ":NA");
-+		return sysfs_emit(bufp, ":NA");
- 
--	return sprintf(bufp, ":%x", ddata->offsets[reg]);
-+	return sysfs_emit(bufp, ":%x", ddata->offsets[reg]);
- }
- 
- static int sysc_show_name(char *bufp, struct sysc *ddata)
-@@ -990,7 +990,7 @@ static int sysc_show_name(char *bufp, struct sysc *ddata)
- 	if (!ddata->name)
- 		return 0;
- 
--	return sprintf(bufp, ":%s", ddata->name);
-+	return sysfs_emit(bufp, ":%s", ddata->name);
- }
- 
- /**
--- 
-2.27.0
+And what driver would need to copy a string?
 
+
+> 
+> diff --git a/drivers/base/devres.c b/drivers/base/devres.c
+> index 5c998cfac335..87e2965e5bab 100644
+> --- a/drivers/base/devres.c
+> +++ b/drivers/base/devres.c
+> @@ -963,6 +963,34 @@ char *devm_kstrdup(struct device *dev, const char *s, gfp_t gfp)
+>  }
+>  EXPORT_SYMBOL_GPL(devm_kstrdup);
+>  
+> +/**
+> + * devm_kstrndup - Allocate resource managed space and
+> + *                copy an existing string into that.
+> + * @dev: Device to allocate memory for
+> + * @s: the string to duplicate
+> + * @max: max length to duplicate
+> + * @gfp: the GFP mask used in the devm_kmalloc() call when allocating memory
+> + * RETURNS:
+> + * Pointer to allocated string on success, NULL on failure.
+> + */
+> +char *devm_kstrndup(struct device *dev, const char *s, size_t max, gfp_t gfp)
+> +{
+> +	size_t len;
+> +	char *buf;
+> +
+> +	if (!s)
+> +		return NULL;
+> +
+> +	len = strnlen(s, max);
+> +	buf = devm_kmalloc(dev, len + 1, gfp);
+> +	if (buf) {
+> +		memcpy(buf, s, len);
+> +		buf[len] = '\0';
+
+Why not use kstrndup() instead of copying the same logic here?
+
+thanks,
+
+greg k-h
