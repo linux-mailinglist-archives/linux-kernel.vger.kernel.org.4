@@ -2,203 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C0106F67F9
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 11:07:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98A366F67FD
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 11:08:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230224AbjEDJHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 05:07:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33446 "EHLO
+        id S230017AbjEDJIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 05:08:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230178AbjEDJHa (ORCPT
+        with ESMTP id S229607AbjEDJIw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 05:07:30 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF198F
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 02:07:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1683191248; x=1714727248;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=TgRfuEiSYLGvwOx+jCad+MlcgTvyjfSwiQwQ90ROdIg=;
-  b=SkERozUzJGr5OU8N6uktaZW4b/mtXw7fsGIUjqHjP3oJ2kkKRlAgbSte
-   vvZaAWHmfEMmVcQoenVcEML8XFgWeq16sn/iqHmnu3LydYtODig2PXoU+
-   /Z8vl/DpfRe9Le+5B8bGTzmys/tf/nI5PEK5+V8Uq+yJdvcCrnxz3yjmq
-   kV7sr435kLbbGR0/OERd8TyRxBcVvYm8HG/VM1D7Ad/GMhaB4Xn63fNGN
-   JYCzL8JxVZaN+VfPO14iGpXDaDoVB/LUHJsgNH7phQhWV76luIfuEmQA9
-   ZbVqSYEQJEU6Qsh60GKljvtvZFcIlzw9iw/dLEcPejVN042hw0wFmaAlB
-   A==;
-X-IronPort-AV: E=Sophos;i="5.99,249,1677538800"; 
-   d="scan'208";a="30714724"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 04 May 2023 11:07:26 +0200
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Thu, 04 May 2023 11:07:26 +0200
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Thu, 04 May 2023 11:07:26 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1683191246; x=1714727246;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=TgRfuEiSYLGvwOx+jCad+MlcgTvyjfSwiQwQ90ROdIg=;
-  b=UzP8IxqvBeD5XmQSWXQ44mit3aJHnjYdGpoLUpXJLgNLkd5QbBPgdfpL
-   SlnvwlF9YBF+gwGMMuQW8EsSqYGPuxw66lZs+hpaRPRADr69fEJqIGp9z
-   clITMDMc2cGt2RgaPyz5rNmATJCJdu2xUqz8/p9MB0i4qM5VBvb6hRAAQ
-   ze3MKti+lxAx6x25iJxgWuYrpiftkMTTrhuBYM1vsWpuK1jsFSOLdFr3V
-   F0rKcjkMrYyOQorVUN/OPclmZvnSaHxbLke4aGICrB3pFbNaj5ajJLORv
-   eOVilLmMkNopWOTaXbnBXzNl4RusON0Ze8EAx+eRMo13lvcCeFZaw/Wno
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.99,249,1677538800"; 
-   d="scan'208";a="30714723"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 04 May 2023 11:07:26 +0200
-Received: from steina-w.localnet (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        Thu, 4 May 2023 05:08:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CFFE8F
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 02:08:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 809AD280056;
-        Thu,  4 May 2023 11:07:25 +0200 (CEST)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        dri-devel@lists.freedesktop.org, Inki Dae <inki.dae@samsung.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        linux-kernel@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>
-Cc:     Marek Vasut <marex@denx.de>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Frieder Schrempf <frieder@fris.de>
-Subject: Re: [PATCH v2 1/2] drm: bridge: samsung-dsim: Fix i.MX8M enable flow to meet spec
-Date:   Thu, 04 May 2023 11:07:24 +0200
-Message-ID: <8215519.T7Z3S40VBb@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <20230503163313.2640898-2-frieder@fris.de>
-References: <20230503163313.2640898-1-frieder@fris.de> <20230503163313.2640898-2-frieder@fris.de>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D83F26328C
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 09:08:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6BC3C433EF;
+        Thu,  4 May 2023 09:08:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1683191330;
+        bh=A2Y8ocJewa9pRLM5TJJDkxuMMlwkyXdMFrnpas75cFY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HEkFsohFscDqkBUdcSNwm67WI6FDw1kaL77Ysg/Yo+ihNbMvH217bSmHIGhecOmE2
+         MQUtBR5xuVSU8F9zMBWe0np6yKT4c8EJioeaXXuueauCZ/4+3y031h2FCxMaq4F1QD
+         LCo4CzVMy71/IXpS8mKqK7bIRlbsOP1PM617R5FE=
+Date:   Thu, 4 May 2023 18:08:46 +0900
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Peng Fan <peng.fan@nxp.com>
+Cc:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "hdegoede@redhat.com" <hdegoede@redhat.com>,
+        "jgg@ziepe.ca" <jgg@ziepe.ca>,
+        "saravanak@google.com" <saravanak@google.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "abel.vesa@linaro.org" <abel.vesa@linaro.org>
+Subject: Re: [PATCH] devres: provide API devm_kstrndup
+Message-ID: <2023050445-blizzard-splendid-cf1c@gregkh>
+References: <20230504075754.372780-1-peng.fan@oss.nxp.com>
+ <2023050413-margin-devotedly-468d@gregkh>
+ <DU0PR04MB9417B76952E9B21E89946C09886D9@DU0PR04MB9417.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <DU0PR04MB9417B76952E9B21E89946C09886D9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Frieder,
+On Thu, May 04, 2023 at 08:59:41AM +0000, Peng Fan wrote:
+> Hi Greg,
+> 
+> > -----Original Message-----
+> > From: Greg KH <gregkh@linuxfoundation.org>
+> > Sent: 2023年5月4日 16:58
+> > To: Peng Fan (OSS) <peng.fan@oss.nxp.com>
+> > Cc: robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org;
+> > rafael@kernel.org; andriy.shevchenko@linux.intel.com;
+> > hdegoede@redhat.com; jgg@ziepe.ca; saravanak@google.com;
+> > keescook@chromium.org; tglx@linutronix.de; linux-kernel@vger.kernel.org;
+> > abel.vesa@linaro.org; Peng Fan <peng.fan@nxp.com>
+> > Subject: Re: [PATCH] devres: provide API devm_kstrndup
+> > 
+> > On Thu, May 04, 2023 at 03:57:54PM +0800, Peng Fan (OSS) wrote:
+> > > From: Peng Fan <peng.fan@nxp.com>
+> > >
+> > > This patch introduces devm_kstrndup API so that the device's driver
+> > > can allocate memory and copy string.
+> > >
+> > > Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> > > ---
+> > >  drivers/base/devres.c  | 28 ++++++++++++++++++++++++++++
+> > > include/linux/device.h |  1 +
+> > >  2 files changed, 29 insertions(+)
+> > 
+> > We can not add apis with no users, please submit this at the same time a
+> > driver needs it.
+> > 
+> > And what driver would need to copy a string?
+> 
+> https://lore.kernel.org/all/20230504085506.504474-1-peng.fan@oss.nxp.com/
 
-Am Mittwoch, 3. Mai 2023, 18:33:06 CEST schrieb Frieder Schrempf:
-> From: Frieder Schrempf <frieder.schrempf@kontron.de>
->=20
-> According to the documentation [1] the proper enable flow is:
->=20
-> 1. Enable DSI link and keep data lanes in LP-11 (stop state)
-> 2. Disable stop state to bring data lanes into HS mode
->=20
-> Currently we do this all at once within enable(), which doesn't
-> allow to meet the requirements of some downstream bridges.
->=20
-> To fix this we now enable the DSI in pre_enable() and force it
-> into stop state using the FORCE_STOP_STATE bit in the ESCMODE
-> register until enable() is called where we reset the bit.
->=20
-> We currently do this only for i.MX8M as Exynos uses a different
-> init flow where samsung_dsim_init() is called from
-> samsung_dsim_host_transfer().
->=20
-> [1]
-> https://docs.kernel.org/gpu/drm-kms-helpers.html#mipi-dsi-bridge-operation
->=20
-> Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
-> ---
-> Changes for v2:
-> * Drop RFC
-> ---
->  drivers/gpu/drm/bridge/samsung-dsim.c | 25 +++++++++++++++++++++++--
->  1 file changed, 23 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c
-> b/drivers/gpu/drm/bridge/samsung-dsim.c index e0a402a85787..9775779721d9
-> 100644
-> --- a/drivers/gpu/drm/bridge/samsung-dsim.c
-> +++ b/drivers/gpu/drm/bridge/samsung-dsim.c
-> @@ -859,6 +859,10 @@ static int samsung_dsim_init_link(struct samsung_dsim
-> *dsi) reg =3D samsung_dsim_read(dsi, DSIM_ESCMODE_REG);
->  	reg &=3D ~DSIM_STOP_STATE_CNT_MASK;
->  	reg |=3D DSIM_STOP_STATE_CNT(driver_data->reg_values[STOP_STATE_CNT]);
-> +
-> +	if (!samsung_dsim_hw_is_exynos(dsi->plat_data->hw_type))
-> +		reg |=3D DSIM_FORCE_STOP_STATE;
-> +
->  	samsung_dsim_write(dsi, DSIM_ESCMODE_REG, reg);
->=20
->  	reg =3D DSIM_BTA_TIMEOUT(0xff) | DSIM_LPDR_TIMEOUT(0xffff);
-> @@ -1340,6 +1344,9 @@ static void samsung_dsim_atomic_pre_enable(struct
-> drm_bridge *bridge, ret =3D samsung_dsim_init(dsi);
->  		if (ret)
->  			return;
-> +
-> +		samsung_dsim_set_display_mode(dsi);
-> +		samsung_dsim_set_display_enable(dsi, true);
->  	}
->  }
->=20
-> @@ -1347,9 +1354,16 @@ static void samsung_dsim_atomic_enable(struct
-> drm_bridge *bridge, struct drm_bridge_state *old_bridge_state)
->  {
->  	struct samsung_dsim *dsi =3D bridge_to_dsi(bridge);
-> +	u32 reg;
->=20
-> -	samsung_dsim_set_display_mode(dsi);
-> -	samsung_dsim_set_display_enable(dsi, true);
-> +	if (samsung_dsim_hw_is_exynos(dsi->plat_data->hw_type)) {
-> +		samsung_dsim_set_display_mode(dsi);
-> +		samsung_dsim_set_display_enable(dsi, true);
-> +	} else {
-> +		reg =3D samsung_dsim_read(dsi, DSIM_ESCMODE_REG);
-> +		reg &=3D ~DSIM_FORCE_STOP_STATE;
-> +		samsung_dsim_write(dsi, DSIM_ESCMODE_REG, reg);
-> +	}
->=20
->  	dsi->state |=3D DSIM_STATE_VIDOUT_AVAILABLE;
->  }
-> @@ -1358,10 +1372,17 @@ static void samsung_dsim_atomic_disable(struct
-> drm_bridge *bridge, struct drm_bridge_state *old_bridge_state)
->  {
->  	struct samsung_dsim *dsi =3D bridge_to_dsi(bridge);
-> +	u32 reg;
->=20
->  	if (!(dsi->state & DSIM_STATE_ENABLED))
->  		return;
->=20
-> +	if (!samsung_dsim_hw_is_exynos(dsi->plat_data->hw_type)) {
-> +		reg =3D samsung_dsim_read(dsi, DSIM_ESCMODE_REG);
-> +		reg |=3D DSIM_FORCE_STOP_STATE;
-> +		samsung_dsim_write(dsi, DSIM_ESCMODE_REG, reg);
-> +	}
-> +
->  	dsi->state &=3D ~DSIM_STATE_VIDOUT_AVAILABLE;
->  }
+Please never add new module parameters, ESPECIALLY for a driver.  This
+is not the 1990's anymore, please use the correct apis instead (hint,
+sysfs, configfs, DT, etc.)
 
-I know that this is necessary right now, but I don't like that=20
-'samsung_dsim_hw_is_exynos()' checks all over the place.
+> Should I submit V2 with the upper patch in a patchset?
 
-Despite that:
-Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com> #TQMa8MxML/MBa=
-8Mx
+I can't take this as-is, for the reason I said, so yes.  And again, your
+dependant patch is not ok either, so I don't think this is needed
+anymore.
 
-=2D-=20
-TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht M=FCnchen, HRB 105018
-Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
-http://www.tq-group.com/
+thanks,
 
-
+greg k-h
