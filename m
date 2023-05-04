@@ -2,42 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00B0D6F6D71
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 16:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7852B6F6D6A
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 16:00:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231178AbjEDODF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 10:03:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48950 "EHLO
+        id S231284AbjEDOAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 10:00:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbjEDODD (ORCPT
+        with ESMTP id S230380AbjEDOAu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 10:03:03 -0400
-Received: from hust.edu.cn (unknown [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEDBE46BB
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 07:03:02 -0700 (PDT)
-Received: from localhost.localdomain ([172.16.0.254])
-        (user=dzm91@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 344E1fZO011334-344E1fZR011334
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Thu, 4 May 2023 22:01:46 +0800
-From:   Dongliang Mu <dzm91@hust.edu.cn>
-To:     Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jacopo Mondi <jacopo.mondi@linaro.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Dongliang Mu <dzm91@hust.edu.cn>,
-        Greg Kroah-Hartman <gregkh@google.com>,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] drivers: staging: greybus: fix GPF issue in gb_camera_capture
-Date:   Thu,  4 May 2023 21:58:41 +0800
-Message-Id: <20230504135841.1566958-1-dzm91@hust.edu.cn>
+        Thu, 4 May 2023 10:00:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D521982;
+        Thu,  4 May 2023 07:00:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5948160BDC;
+        Thu,  4 May 2023 14:00:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48628C4339B;
+        Thu,  4 May 2023 14:00:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683208847;
+        bh=+i4zLKz/bY77nPFISagMtcEHYXbSlZ5uAgfTAWb8wZ4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=PqkG2DbVTQV0GB0ACRJAFWICW/D3Y1FdBZrbPHaPkeY1adbagVGtkcQkEGsehlZuO
+         JZnRh6b3hQMHyV6MHYevoL+hAx+lWVFGbBX05LXF6HSGDSyKQaQGYcIcwb4Z6v+9jJ
+         UU6HXoKZyIMzUyjz4KLL2+69+W0OJimzoAfESoxbXJbiACylLNvRCHLJ9wAHVfltT0
+         AvPYX8iy9Wmya4eTC3g9N8bQYYRlz7GoLzW63nOGfPYPhGLMnUu8sQBWoYC6/dHgv1
+         +H68SvCvowHbK1oVEwFU2xSqqvd8DqKZ+8s8cWj8aszTfI3Pk8vVJGmo0qp0cm1niK
+         EdDt0RBEc+eiw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Tree for May 4
+Date:   Thu,  4 May 2023 23:00:40 +0900
+Message-Id: <20230504140040.190691-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-FEAS-AUTH-USER: dzm91@hust.edu.cn
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        LOCALPART_IN_SUBJECT,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,32 +52,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In gb_camera_capture(), it does not check the value of settings
-before dereferencing it. And gb_camera_debugfs_capture calls
-gb_camera_capture with the 6th parameter settings as NULL.
+Hi all,
 
-Fix this by checking the value of setting at the starting of
-gb_camera_capture.
+Changes since 20230428:
 
-Fixes: 3265edaf0d70 ("greybus: Add driver for the camera class protocol")
-Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
----
- drivers/staging/greybus/camera.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The tip tree gained a conflict with the origin tree.
 
-diff --git a/drivers/staging/greybus/camera.c b/drivers/staging/greybus/camera.c
-index cdbb42cd413b..5a4b26e7f645 100644
---- a/drivers/staging/greybus/camera.c
-+++ b/drivers/staging/greybus/camera.c
-@@ -659,7 +659,7 @@ static int gb_camera_capture(struct gb_camera *gcam, u32 request_id,
- 	size_t req_size;
- 	int ret;
- 
--	if (settings_size > GB_CAMERA_MAX_SETTINGS_SIZE)
-+	if (settings_size > GB_CAMERA_MAX_SETTINGS_SIZE || !settings)
- 		return -EINVAL;
- 
- 	req_size = sizeof(*req) + settings_size;
--- 
-2.39.2
+The tip tree gained a conflict with the mm tree.
 
+The pinctrl tree gained a conflict with the origin tree.
+
+Non-merge commits (relative to Linus' tree): 1201
+ 1446 files changed, 187560 insertions(+), 156238 deletions(-)
+
+----------------------------------------------------------------------------
+
+I have created today's linux-next tree at
+git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
+are tracking the linux-next tree using git, you should not use "git pull"
+to do so as that will try to merge the new linux-next release with the
+old one.  You should use "git fetch" and checkout or reset to the new
+master.
+
+You can see which trees have been included by looking in the Next/Trees
+file in the source.  There is also the merge.log file in the Next
+directory.  Between each merge, the tree was built with a ppc64_defconfig
+for powerpc, an allmodconfig for x86_64, a multi_v7_defconfig for arm
+and a native build of tools/perf. After the final fixups (if any), I do
+an x86_64 modules_install followed by builds for x86_64 allnoconfig,
+powerpc allnoconfig (32 and 64 bit), ppc44x_defconfig, allyesconfig
+and pseries_le_defconfig and i386, arm64, s390, sparc and sparc64
+defconfig and htmldocs. And finally, a simple boot test of the powerpc
+pseries_le_defconfig kernel in qemu (with and without kvm enabled).
+
+Below is a summary of the state of the merge.
+
+I am currently merging 358 trees (counting Linus' and 102 trees of bug
+fix patches pending for the current merge release).
+
+Stats about the size of the tree over time can be seen at
+http://neuling.org/linux-next-size.html .
+
+Status of my local build tests will be at
+http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
+advice about cross compilers/configs that work, we are always open to add
+more builds.
+
+Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
+Gortmaker for triage and bug fixes.
