@@ -2,537 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28F8A6F6F4B
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 17:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACB736F6F51
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 17:45:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231497AbjEDPog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 11:44:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54534 "EHLO
+        id S231504AbjEDPpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 11:45:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231448AbjEDPoa (ORCPT
+        with ESMTP id S231138AbjEDPpl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 11:44:30 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2125.outbound.protection.outlook.com [40.107.22.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 919D244A1;
-        Thu,  4 May 2023 08:44:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fASG2fSOLK7SpJdXtZZEtL9BvhkYh0BtMdVAPmYQUm/vyk10qWW27X5bMObxrFtr791hoyz4V6DBg6ZANIWIcrxjvSo/ddqQs3AYYf0TBeINhzGk7NWkJxcK2+8D7MUUzwe2STy6c44lGhYv9IPF18e6HPMU898qDgmrBSuGqhUH12PM71Q0jFWEUOaZ7v3vbzx7KSm6Yz+HMiR9yPBpTn5+5Smd0Mt8bqL7MOc5sETCE2WlneAZrB4RGbMEwuiG8XWx9N4k+INIMjST8fk4LWYBjC3OXz/atZLipszvLXkHiT7QBzRIMzzWKxEfFOnoUpb29g5dZeVdfIFAGpLU1w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EPhyKgG1xpwo/nX1bXfvdJsx0VDYFN6i7w2yhM7rJnw=;
- b=T+5r6nLRJEJ4aUaQPEnNUHUdpCl09sp9YQtlhVIc3NmWEvvQsamKSP8zSRZWXTtYXwS3hD5gzWeUxoJQPtX5I24W1HZdvcFY+W77nlTF2wcFiaVqyOlXqtNFXPQ+862EImauQEoBaSY0ttQ3QQIw7p+gZVGPDjZSTRzj/CGkxu/SLelojhOxETYZcWaBldn8yBB0DI7d9q8tJMPEoJNFsGuxwii5u4YPLgOHWreOtR5Voss/BVwGtS1HYPcmOffu6g3SjFp17XJNWpACQdkFlQeYlZkivpsbXWZtLIRJMCMZtVSltNqMOd1l7gjFBi4FQBvw7zmOfQUSZC+GEkgzVg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
- is 80.151.164.27) smtp.rcpttodomain=esd.eu smtp.mailfrom=esd.eu; dmarc=none
- action=none header.from=esd.eu; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=esdhannover.onmicrosoft.com; s=selector1-esdhannover-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EPhyKgG1xpwo/nX1bXfvdJsx0VDYFN6i7w2yhM7rJnw=;
- b=szLG/ClS5MwtJGgoz3XM9VNiRunp1F9NWGKiaNZ5nfRQ7xApouK0rOVoUplEb1QfLQoHkwbsSSLqrqJQg25e37liV3V+4DewXl3xVxDEP4nzwwGVWkEb4FOChPxVtoVc5Fh1S/IdodZYLVd43NprmKitka22EhwvkFHPfsDk4QU=
-Received: from DU2PR04CA0035.eurprd04.prod.outlook.com (2603:10a6:10:234::10)
- by DB9PR03MB7274.eurprd03.prod.outlook.com (2603:10a6:10:222::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.21; Thu, 4 May
- 2023 15:44:25 +0000
-Received: from DB8EUR06FT060.eop-eur06.prod.protection.outlook.com
- (2603:10a6:10:234:cafe::65) by DU2PR04CA0035.outlook.office365.com
- (2603:10a6:10:234::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.26 via Frontend
- Transport; Thu, 4 May 2023 15:44:25 +0000
-X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
- 80.151.164.27) smtp.mailfrom=esd.eu; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=esd.eu;
-Received-SPF: SoftFail (protection.outlook.com: domain of transitioning esd.eu
- discourages use of 80.151.164.27 as permitted sender)
-Received: from esd-s7.esd (80.151.164.27) by
- DB8EUR06FT060.mail.protection.outlook.com (10.233.253.39) with Microsoft SMTP
- Server id 15.20.6363.27 via Frontend Transport; Thu, 4 May 2023 15:44:24
- +0000
-Received: from esd-s20.esd.local (jenkins.esd.local [10.0.0.190])
-        by esd-s7.esd (Postfix) with ESMTPS id 0191C7C16CA;
-        Thu,  4 May 2023 17:44:24 +0200 (CEST)
-Received: by esd-s20.esd.local (Postfix, from userid 2046)
-        id E954D2E1787; Thu,  4 May 2023 17:44:23 +0200 (CEST)
-From:   Frank Jungclaus <frank.jungclaus@esd.eu>
-To:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Frank Jungclaus <frank.jungclaus@esd.eu>
-Subject: [PATCH 2/2] can: esd_usb: Add support for esd CAN-USB/3
-Date:   Thu,  4 May 2023 17:44:14 +0200
-Message-Id: <20230504154414.1864615-3-frank.jungclaus@esd.eu>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230504154414.1864615-1-frank.jungclaus@esd.eu>
-References: <20230504154414.1864615-1-frank.jungclaus@esd.eu>
+        Thu, 4 May 2023 11:45:41 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9EB199E;
+        Thu,  4 May 2023 08:45:10 -0700 (PDT)
+X-UUID: 9f97f7a0ea9211ed9cb5633481061a41-20230504
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=6nZpUG2z8o8BhlSwQn2P1A3JTPzryx4nQ3sH/JpQWvY=;
+        b=gsCcHM6dwo1RQOoO/xiCHcz14H3Mmu2RRQnZDgGzkBqTekLdu8jek97P8gjai09S+bH/e/hUw2sZf43nJ3KzDApivW9cAMEwatYn27RSayYDbjHyZ1i3i/bKEvx+IIBeDSx3t0WJgJkLwNTwKQ+mW/AROnHNdTq1PqtYoPp8dXk=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.23,REQID:d6e37119-6dd3-4ad7-adb2-511a5a0ca0c0,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:-5
+X-CID-META: VersionHash:697ab71,CLOUDID:e57bcebf-e32c-4c97-918d-fbb3fc224d4e,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-UUID: 9f97f7a0ea9211ed9cb5633481061a41-20230504
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <powen.kao@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 2008017879; Thu, 04 May 2023 23:44:58 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Thu, 4 May 2023 23:44:56 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Thu, 4 May 2023 23:44:56 +0800
+From:   Po-Wen Kao <powen.kao@mediatek.com>
+To:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+CC:     <wsd_upstream@mediatek.com>, <peter.wang@mediatek.com>,
+        <stanley.chu@mediatek.com>, <powen.kao@mediatek.com>,
+        <alice.chao@mediatek.com>, <naomi.chu@mediatek.com>,
+        <chun-hung.wu@mediatek.com>, <cc.chou@mediatek.com>,
+        <eddie.huang@mediatek.com>
+Subject: [PATCH v6 0/3] Several UFS MCQ Code Changes
+Date:   Thu, 4 May 2023 23:44:48 +0800
+Message-ID: <20230504154454.26654-1-powen.kao@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB8EUR06FT060:EE_|DB9PR03MB7274:EE_
 Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: 6e15cad2-bb59-4e68-a742-08db4cb66f98
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kIaXaerC5DG+Z6J0ma6izxDQtOp7BfKdx00fIj0Y3LaVzt7AoeVGAb2R81Kdfq0uEiWCeoozHkTKHKQ72jS1nuA5K3BhWafULdaFw9fFrfTO7B7anx7J8kpxwv1ZHSaHWCFXwDZ/hbQJuDQWjtKxFxyBb3KoTtdC60LrOdYtpCnb8OtNpFry8IYkeG9Xd6s+7bu6mf1AyfbsF71FC1moZ3lG8ghyWtm3juOTsiyPMNR852QmZbjTLCU06qOdmJO80oNuh4IeP5g3nZ4xEeXRLHH9nrPfidOq/YV1b1hHsFPlv8LJmKRvt/5WiBtXqAd+/vUVqWykyrCd6ZkQEoX0dDT61MyzmdBsYyNScWciawGFtcj/Ozdq/96Jf+U95NeVLdRZWYongIEgXf/WYkQ8e921kbRfkjy0ZK8YPrl3xRW4AqmaCL5KzOC8LXdP3ZS1cYjfhWZZtMxNeRY3kyUHnq106CBPjG8smnj7L43UV0wf0qCU7S2ezdzURU8Ut1LGx8zTdjM3JWYI6pSGwFKhEgqjAOeYbQ0apQoMj/SK5qh9nj0xO84aP9lFnyJoXaovoQ4KLTIXeLEtvcCBOVmykjPUOeJ/5DFiicPvZeUc/vr1ja46L8MgD4wH1X65ZI/eHPpThQVbA4flfcnjNJNuXAI1PNmTDb+Pmk5g+GpLKBM=
-X-Forefront-Antispam-Report: CIP:80.151.164.27;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:esd-s7.esd;PTR:p5097a41b.dip0.t-ipconnect.de;CAT:NONE;SFS:(13230028)(4636009)(39830400003)(396003)(136003)(376002)(346002)(451199021)(36840700001)(46966006)(42186006)(6266002)(186003)(478600001)(110136005)(54906003)(2616005)(336012)(1076003)(26005)(6666004)(36860700001)(47076005)(70586007)(4326008)(70206006)(41300700001)(316002)(83380400001)(5660300002)(8676002)(8936002)(44832011)(81166007)(30864003)(2906002)(356005)(40480700001)(36756003)(86362001)(82310400005);DIR:OUT;SFP:1102;
-X-OriginatorOrg: esd.eu
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2023 15:44:24.1997
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6e15cad2-bb59-4e68-a742-08db4cb66f98
-X-MS-Exchange-CrossTenant-Id: 5a9c3a1d-52db-4235-b74c-9fd851db2e6b
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5a9c3a1d-52db-4235-b74c-9fd851db2e6b;Ip=[80.151.164.27];Helo=[esd-s7.esd]
-X-MS-Exchange-CrossTenant-AuthSource: DB8EUR06FT060.eop-eur06.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR03MB7274
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for esd CAN-USB/3 and CAN FD to esd_usb.
+v5 -> v6
+- Also fix call to sizeof_utp_transfer_cmd_desc() in 
+`ufshcd_release_sdb_queue()` as suggested by Stanley Chu
 
-Signed-off-by: Frank Jungclaus <frank.jungclaus@esd.eu>
----
- drivers/net/can/usb/esd_usb.c | 282 ++++++++++++++++++++++++++++++----
- 1 file changed, 249 insertions(+), 33 deletions(-)
+v4 -> v5
+- Send MTK driver MCQ support as independent patch and address Bart's 
+comment there
+    "[PATCH v1 0/2] Add MCQ support for MTK platform"
 
-diff --git a/drivers/net/can/usb/esd_usb.c b/drivers/net/can/usb/esd_usb.c
-index e24fa48b9b42..48cf5e88d216 100644
---- a/drivers/net/can/usb/esd_usb.c
-+++ b/drivers/net/can/usb/esd_usb.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * CAN driver for esd electronics gmbh CAN-USB/2 and CAN-USB/Micro
-+ * CAN driver for esd electronics gmbh CAN-USB/2, CAN-USB/3 and CAN-USB/Micro
-  *
-  * Copyright (C) 2010-2012 esd electronic system design gmbh, Matthias Fuchs <socketcan@esd.eu>
-  * Copyright (C) 2022-2023 esd electronics gmbh, Frank Jungclaus <frank.jungclaus@esd.eu>
-@@ -18,17 +18,19 @@
- 
- MODULE_AUTHOR("Matthias Fuchs <socketcan@esd.eu>");
- MODULE_AUTHOR("Frank Jungclaus <frank.jungclaus@esd.eu>");
--MODULE_DESCRIPTION("CAN driver for esd electronics gmbh CAN-USB/2 and CAN-USB/Micro interfaces");
-+MODULE_DESCRIPTION("CAN driver for esd electronics gmbh CAN-USB/2, CAN-USB/3 and CAN-USB/Micro interfaces");
- MODULE_LICENSE("GPL v2");
- 
- /* USB vendor and product ID */
- #define USB_ESDGMBH_VENDOR_ID	0x0ab4
- #define USB_CANUSB2_PRODUCT_ID	0x0010
- #define USB_CANUSBM_PRODUCT_ID	0x0011
-+#define USB_CANUSB3_PRODUCT_ID	0x0014
- 
- /* CAN controller clock frequencies */
- #define ESD_USB2_CAN_CLOCK	60000000
- #define ESD_USBM_CAN_CLOCK	36000000
-+#define ESD_USB3_CAN_CLOCK	80000000
- 
- /* Maximum number of CAN nets */
- #define ESD_USB_MAX_NETS	2
-@@ -43,6 +45,9 @@ MODULE_LICENSE("GPL v2");
- 
- /* esd CAN message flags - dlc field */
- #define ESD_DLC_RTR		0x10
-+#define ESD_DLC_NO_BRS		0x10
-+#define ESD_DLC_ESI		0x20
-+#define ESD_DLC_FD		0x80
- 
- /* esd CAN message flags - id field */
- #define ESD_EXTID		0x20000000
-@@ -72,6 +77,28 @@ MODULE_LICENSE("GPL v2");
- #define ESD_USB2_BRP_INC	1
- #define ESD_USB2_3_SAMPLES	0x00800000
- 
-+/* Bit timing CAN-USB/3 */
-+#define ESD_USB3_TSEG1_MIN	1
-+#define ESD_USB3_TSEG1_MAX	256
-+#define ESD_USB3_TSEG2_MIN	1
-+#define ESD_USB3_TSEG2_MAX	128
-+#define ESD_USB3_SJW_MAX	128
-+#define ESD_USB3_BRP_MIN	1
-+#define ESD_USB3_BRP_MAX	1024
-+#define ESD_USB3_BRP_INC	1
-+/* Bit timing CAN-USB/3, data phase */
-+#define ESD_USB3_DATA_TSEG1_MIN	1
-+#define ESD_USB3_DATA_TSEG1_MAX	32
-+#define ESD_USB3_DATA_TSEG2_MIN	1
-+#define ESD_USB3_DATA_TSEG2_MAX	16
-+#define ESD_USB3_DATA_SJW_MAX	8
-+#define ESD_USB3_DATA_BRP_MIN	1
-+#define ESD_USB3_DATA_BRP_MAX	32
-+#define ESD_USB3_DATA_BRP_INC	1
-+
-+/* Transmitter Delay Compensation */
-+#define ESD_TDC_MODE_AUTO	0
-+
- /* esd IDADD message */
- #define ESD_ID_ENABLE		0x80
- #define ESD_MAX_ID_SEGMENT	64
-@@ -95,6 +122,21 @@ MODULE_LICENSE("GPL v2");
- #define MAX_RX_URBS		4
- #define MAX_TX_URBS		16 /* must be power of 2 */
- 
-+/* Modes for NTCAN_BAUDRATE_X */
-+#define ESD_BAUDRATE_MODE_DISABLE	0 /* remove from bus */
-+#define ESD_BAUDRATE_MODE_INDEX		1 /* ESD (CiA) bit rate idx */
-+#define ESD_BAUDRATE_MODE_BTR_CTRL	2 /* BTR values (Controller)*/
-+#define ESD_BAUDRATE_MODE_BTR_CANONICAL	3 /* BTR values (Canonical) */
-+#define ESD_BAUDRATE_MODE_NUM		4 /* numerical bit rate */
-+#define ESD_BAUDRATE_MODE_AUTOBAUD	5 /* autobaud */
-+
-+/* Flags for NTCAN_BAUDRATE_X */
-+#define ESD_BAUDRATE_FLAG_FD	0x0001 /* enable CAN FD Mode */
-+#define ESD_BAUDRATE_FLAG_LOM	0x0002 /* enable Listen Only mode */
-+#define ESD_BAUDRATE_FLAG_STM	0x0004 /* enable Self test mode */
-+#define ESD_BAUDRATE_FLAG_TRS	0x0008 /* enable Triple Sampling */
-+#define ESD_BAUDRATE_FLAG_TXP	0x0010 /* enable Transmit Pause */
-+
- struct header_msg {
- 	u8 len; /* len is always the total message length in 32bit words */
- 	u8 cmd;
-@@ -129,6 +171,7 @@ struct rx_msg {
- 	__le32 id; /* upper 3 bits contain flags */
- 	union {
- 		u8 data[8];
-+		u8 data_fd[64];
- 		struct {
- 			u8 status; /* CAN Controller Status */
- 			u8 ecc;    /* Error Capture Register */
-@@ -144,8 +187,11 @@ struct tx_msg {
- 	u8 net;
- 	u8 dlc;
- 	u32 hnd;	/* opaque handle, not used by device */
--	__le32 id; /* upper 3 bits contain flags */
--	u8 data[8];
-+	__le32 id;	/* upper 3 bits contain flags */
-+	union {
-+		u8 data[8];
-+		u8 data_fd[64];
-+	};
- };
- 
- struct tx_done_msg {
-@@ -165,12 +211,37 @@ struct id_filter_msg {
- 	__le32 mask[ESD_MAX_ID_SEGMENT + 1];
- };
- 
-+struct baudrate_x_cfg {
-+	__le16 brp;	/* bit rate pre-scaler */
-+	__le16 tseg1;	/* TSEG1 register */
-+	__le16 tseg2;	/* TSEG2 register */
-+	__le16 sjw;	/* SJW register */
-+};
-+
-+struct tdc_cfg {
-+	u8 tdc_mode;	/* transmitter Delay Compensation mode  */
-+	u8 ssp_offset;	/* secondary Sample Point offset in mtq */
-+	s8 ssp_shift;	/* secondary Sample Point shift in mtq */
-+	u8 tdc_filter;	/* Transmitter Delay Compensation */
-+};
-+
-+struct baudrate_x {
-+	__le16 mode;	/* mode word */
-+	__le16 flags;	/* control flags */
-+	struct tdc_cfg tdc;	/* TDC configuration */
-+	struct baudrate_x_cfg arb;	/* bit rate during arbitration phase  */
-+	struct baudrate_x_cfg data;	/* bit rate during data phase */
-+};
-+
- struct set_baudrate_msg {
- 	u8 len;
- 	u8 cmd;
- 	u8 net;
- 	u8 rsvd;
--	__le32 baud;
-+	union {
-+		__le32 baud;
-+		struct baudrate_x baud_x;
-+	};
- };
- 
- /* Main message type used between library and application */
-@@ -188,6 +259,7 @@ union __packed esd_usb_msg {
- static struct usb_device_id esd_usb_table[] = {
- 	{USB_DEVICE(USB_ESDGMBH_VENDOR_ID, USB_CANUSB2_PRODUCT_ID)},
- 	{USB_DEVICE(USB_ESDGMBH_VENDOR_ID, USB_CANUSBM_PRODUCT_ID)},
-+	{USB_DEVICE(USB_ESDGMBH_VENDOR_ID, USB_CANUSB3_PRODUCT_ID)},
- 	{}
- };
- MODULE_DEVICE_TABLE(usb, esd_usb_table);
-@@ -326,11 +398,13 @@ static void esd_usb_rx_event(struct esd_usb_net_priv *priv,
- static void esd_usb_rx_can_msg(struct esd_usb_net_priv *priv,
- 			       union esd_usb_msg *msg)
- {
-+	bool is_canfd = msg->rx.dlc & ESD_DLC_FD ? true : false;
- 	struct net_device_stats *stats = &priv->netdev->stats;
- 	struct can_frame *cf;
-+	struct canfd_frame *cfd;
- 	struct sk_buff *skb;
--	int i;
- 	u32 id;
-+	u8 len;
- 
- 	if (!netif_device_present(priv->netdev))
- 		return;
-@@ -340,27 +414,42 @@ static void esd_usb_rx_can_msg(struct esd_usb_net_priv *priv,
- 	if (id & ESD_EVENT) {
- 		esd_usb_rx_event(priv, msg);
- 	} else {
--		skb = alloc_can_skb(priv->netdev, &cf);
-+		if (is_canfd) {
-+			skb = alloc_canfd_skb(priv->netdev, &cfd);
-+		} else {
-+			skb = alloc_can_skb(priv->netdev, &cf);
-+			cfd = (struct canfd_frame *)cf;
-+		}
-+
- 		if (skb == NULL) {
- 			stats->rx_dropped++;
- 			return;
- 		}
- 
--		cf->can_id = id & ESD_IDMASK;
--		can_frame_set_cc_len(cf, msg->rx.dlc & ~ESD_DLC_RTR,
--				     priv->can.ctrlmode);
--
--		if (id & ESD_EXTID)
--			cf->can_id |= CAN_EFF_FLAG;
-+		cfd->can_id = id & ESD_IDMASK;
- 
--		if (msg->rx.dlc & ESD_DLC_RTR) {
--			cf->can_id |= CAN_RTR_FLAG;
-+		if (is_canfd) {
-+			/* masking by 0x0F is already done within can_fd_dlc2len() */
-+			cfd->len = can_fd_dlc2len(msg->rx.dlc);
-+			len = cfd->len;
-+			if ((msg->rx.dlc & ESD_DLC_NO_BRS) == 0)
-+				cfd->flags |= CANFD_BRS;
-+			if (msg->rx.dlc & ESD_DLC_ESI)
-+				cfd->flags |= CANFD_ESI;
- 		} else {
--			for (i = 0; i < cf->len; i++)
--				cf->data[i] = msg->rx.data[i];
--
--			stats->rx_bytes += cf->len;
-+			can_frame_set_cc_len(cf, msg->rx.dlc & ~ESD_DLC_RTR, priv->can.ctrlmode);
-+			len = cf->len;
-+			if (msg->rx.dlc & ESD_DLC_RTR) {
-+				cf->can_id |= CAN_RTR_FLAG;
-+				len = 0;
-+			}
- 		}
-+
-+		if (id & ESD_EXTID)
-+			cfd->can_id |= CAN_EFF_FLAG;
-+
-+		memcpy(cfd->data, msg->rx.data_fd, len);
-+		stats->rx_bytes += len;
- 		stats->rx_packets++;
- 
- 		netif_rx(skb);
-@@ -735,7 +824,7 @@ static netdev_tx_t esd_usb_start_xmit(struct sk_buff *skb,
- 	struct esd_usb *dev = priv->usb;
- 	struct esd_tx_urb_context *context = NULL;
- 	struct net_device_stats *stats = &netdev->stats;
--	struct can_frame *cf = (struct can_frame *)skb->data;
-+	struct canfd_frame *cfd = (struct canfd_frame *)skb->data;
- 	union esd_usb_msg *msg;
- 	struct urb *urb;
- 	u8 *buf;
-@@ -768,19 +857,28 @@ static netdev_tx_t esd_usb_start_xmit(struct sk_buff *skb,
- 	msg->hdr.len = 3; /* minimal length */
- 	msg->hdr.cmd = CMD_CAN_TX;
- 	msg->tx.net = priv->index;
--	msg->tx.dlc = can_get_cc_dlc(cf, priv->can.ctrlmode);
--	msg->tx.id = cpu_to_le32(cf->can_id & CAN_ERR_MASK);
- 
--	if (cf->can_id & CAN_RTR_FLAG)
--		msg->tx.dlc |= ESD_DLC_RTR;
-+	if (can_is_canfd_skb(skb)) {
-+		msg->tx.dlc = can_fd_len2dlc(cfd->len);
-+		msg->tx.dlc |= ESD_DLC_FD;
-+
-+		if ((cfd->flags & CANFD_BRS) == 0)
-+			msg->tx.dlc |= ESD_DLC_NO_BRS;
-+	} else {
-+		msg->tx.dlc = can_get_cc_dlc((struct can_frame *)cfd, priv->can.ctrlmode);
-+
-+		if (cfd->can_id & CAN_RTR_FLAG)
-+			msg->tx.dlc |= ESD_DLC_RTR;
-+	}
- 
--	if (cf->can_id & CAN_EFF_FLAG)
-+	msg->tx.id = cpu_to_le32(cfd->can_id & CAN_ERR_MASK);
-+
-+	if (cfd->can_id & CAN_EFF_FLAG)
- 		msg->tx.id |= cpu_to_le32(ESD_EXTID);
- 
--	for (i = 0; i < cf->len; i++)
--		msg->tx.data[i] = cf->data[i];
-+	memcpy(msg->tx.data_fd, cfd->data, cfd->len);
- 
--	msg->hdr.len += (cf->len + 3) >> 2;
-+	msg->hdr.len += (cfd->len + 3) >> 2;
- 
- 	for (i = 0; i < MAX_TX_URBS; i++) {
- 		if (priv->tx_contexts[i].echo_index == MAX_TX_URBS) {
-@@ -966,6 +1064,108 @@ static int esd_usb2_set_bittiming(struct net_device *netdev)
- 	return err;
- }
- 
-+static const struct can_bittiming_const esd_usb3_bittiming_const = {
-+	.name = "esd_usb3",
-+	.tseg1_min = ESD_USB3_TSEG1_MIN,
-+	.tseg1_max = ESD_USB3_TSEG1_MAX,
-+	.tseg2_min = ESD_USB3_TSEG2_MIN,
-+	.tseg2_max = ESD_USB3_TSEG2_MAX,
-+	.sjw_max = ESD_USB3_SJW_MAX,
-+	.brp_min = ESD_USB3_BRP_MIN,
-+	.brp_max = ESD_USB3_BRP_MAX,
-+	.brp_inc = ESD_USB3_BRP_INC,
-+};
-+
-+static const struct can_bittiming_const esd_usb3_data_bittiming_const = {
-+	.name = "esd_usb3",
-+	.tseg1_min = ESD_USB3_DATA_TSEG1_MIN,
-+	.tseg1_max = ESD_USB3_DATA_TSEG1_MAX,
-+	.tseg2_min = ESD_USB3_DATA_TSEG2_MIN,
-+	.tseg2_max = ESD_USB3_DATA_TSEG2_MAX,
-+	.sjw_max = ESD_USB3_DATA_SJW_MAX,
-+	.brp_min = ESD_USB3_DATA_BRP_MIN,
-+	.brp_max = ESD_USB3_DATA_BRP_MAX,
-+	.brp_inc = ESD_USB3_DATA_BRP_INC,
-+};
-+
-+static int esd_usb3_set_bittiming(struct net_device *netdev)
-+{
-+	struct esd_usb_net_priv *priv = netdev_priv(netdev);
-+	struct can_bittiming *bt   = &priv->can.bittiming;
-+	struct can_bittiming *d_bt = &priv->can.data_bittiming;
-+	union esd_usb_msg *msg;
-+	int err;
-+	u16 mode;
-+	u16 flags = 0;
-+	u16 brp, tseg1, tseg2, sjw;
-+	u16 d_brp, d_tseg1, d_tseg2, d_sjw;
-+
-+	msg = kmalloc(sizeof(*msg), GFP_KERNEL);
-+	if (!msg)
-+		return -ENOMEM;
-+
-+	/* Canonical is the most reasonable mode for SocketCAN on CAN-USB/3 ... */
-+	mode = ESD_BAUDRATE_MODE_BTR_CANONICAL;
-+
-+	if (priv->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
-+		flags |= ESD_BAUDRATE_FLAG_LOM;
-+
-+	if (priv->can.ctrlmode & CAN_CTRLMODE_3_SAMPLES)
-+		flags |= ESD_BAUDRATE_FLAG_TRS;
-+
-+	brp = bt->brp & (ESD_USB3_BRP_MAX - 1);
-+	sjw = bt->sjw & (ESD_USB3_SJW_MAX - 1);
-+	tseg1 = (bt->prop_seg + bt->phase_seg1) & (ESD_USB3_TSEG1_MAX - 1);
-+	tseg2 = bt->phase_seg2 & (ESD_USB3_TSEG2_MAX - 1);
-+
-+	msg->setbaud.baud_x.arb.brp = cpu_to_le16(brp);
-+	msg->setbaud.baud_x.arb.sjw = cpu_to_le16(sjw);
-+	msg->setbaud.baud_x.arb.tseg1 = cpu_to_le16(tseg1);
-+	msg->setbaud.baud_x.arb.tseg2 = cpu_to_le16(tseg2);
-+
-+	if (priv->can.ctrlmode & CAN_CTRLMODE_FD) {
-+		d_brp = d_bt->brp & (ESD_USB3_DATA_BRP_MAX - 1);
-+		d_sjw = d_bt->sjw & (ESD_USB3_DATA_SJW_MAX - 1);
-+		d_tseg1 = (d_bt->prop_seg + d_bt->phase_seg1) & (ESD_USB3_DATA_TSEG1_MAX - 1);
-+		d_tseg2 = d_bt->phase_seg2 & (ESD_USB3_DATA_TSEG2_MAX - 1);
-+		flags |= ESD_BAUDRATE_FLAG_FD;
-+	} else {
-+		d_brp = 0;
-+		d_sjw = 0;
-+		d_tseg1 = 0;
-+		d_tseg2 = 0;
-+	}
-+
-+	msg->setbaud.baud_x.data.brp = cpu_to_le16(d_brp);
-+	msg->setbaud.baud_x.data.sjw = cpu_to_le16(d_sjw);
-+	msg->setbaud.baud_x.data.tseg1 = cpu_to_le16(d_tseg1);
-+	msg->setbaud.baud_x.data.tseg2 = cpu_to_le16(d_tseg2);
-+	msg->setbaud.baud_x.mode = cpu_to_le16(mode);
-+	msg->setbaud.baud_x.flags = cpu_to_le16(flags);
-+	msg->setbaud.baud_x.tdc.tdc_mode = ESD_TDC_MODE_AUTO;
-+	msg->setbaud.baud_x.tdc.ssp_offset = 0;
-+	msg->setbaud.baud_x.tdc.ssp_shift = 0;
-+	msg->setbaud.baud_x.tdc.tdc_filter = 0;
-+
-+	msg->hdr.len = 7;
-+	msg->hdr.cmd = CMD_SETBAUD;
-+
-+	msg->setbaud.net = priv->index;
-+	msg->setbaud.rsvd = 0;
-+
-+	netdev_info(netdev,
-+		    "ctrlmode=%#x/%#x, esd-net=%u, esd-mode=%#x, esd-flg=%#x, arb: brp=%u, ts1=%u, ts2=%u, sjw=%u, data: dbrp=%u, dts1=%u, dts2=%u dsjw=%u\n",
-+		    priv->can.ctrlmode, priv->can.ctrlmode_supported,
-+		    priv->index, mode, flags,
-+		    brp, tseg1, tseg2, sjw,
-+		    d_brp, d_tseg1, d_tseg2, d_sjw);
-+
-+	err = esd_usb_send_msg(priv->usb, msg);
-+
-+	kfree(msg);
-+	return err;
-+}
-+
- static int esd_usb_get_berr_counter(const struct net_device *netdev,
- 				    struct can_berr_counter *bec)
- {
-@@ -1023,16 +1223,32 @@ static int esd_usb_probe_one_net(struct usb_interface *intf, int index)
- 		CAN_CTRLMODE_CC_LEN8_DLC |
- 		CAN_CTRLMODE_BERR_REPORTING;
- 
--	if (le16_to_cpu(dev->udev->descriptor.idProduct) ==
--	    USB_CANUSBM_PRODUCT_ID)
-+	switch (le16_to_cpu(dev->udev->descriptor.idProduct)) {
-+	case USB_CANUSB3_PRODUCT_ID:
-+		priv->can.clock.freq = ESD_USB3_CAN_CLOCK;
-+		priv->can.ctrlmode_supported |= CAN_CTRLMODE_3_SAMPLES;
-+		priv->can.ctrlmode_supported |= CAN_CTRLMODE_FD;
-+		priv->can.bittiming_const = &esd_usb3_bittiming_const;
-+		priv->can.data_bittiming_const = &esd_usb3_data_bittiming_const;
-+		priv->can.do_set_bittiming = esd_usb3_set_bittiming;
-+		priv->can.do_set_data_bittiming = esd_usb3_set_bittiming;
-+		break;
-+
-+	case USB_CANUSBM_PRODUCT_ID:
- 		priv->can.clock.freq = ESD_USBM_CAN_CLOCK;
--	else {
-+		priv->can.bittiming_const = &esd_usb2_bittiming_const;
-+		priv->can.do_set_bittiming = esd_usb2_set_bittiming;
-+		break;
-+
-+	case USB_CANUSB2_PRODUCT_ID:
-+	default:
- 		priv->can.clock.freq = ESD_USB2_CAN_CLOCK;
- 		priv->can.ctrlmode_supported |= CAN_CTRLMODE_3_SAMPLES;
-+		priv->can.bittiming_const = &esd_usb2_bittiming_const;
-+		priv->can.do_set_bittiming = esd_usb2_set_bittiming;
-+		break;
- 	}
- 
--	priv->can.bittiming_const = &esd_usb2_bittiming_const;
--	priv->can.do_set_bittiming = esd_usb2_set_bittiming;
- 	priv->can.do_set_mode = esd_usb_set_mode;
- 	priv->can.do_get_berr_counter = esd_usb_get_berr_counter;
- 
+v3 -> v4
+- Rebase on latest scsi-next/staging
+- Drop "scsi: ufs: core: Remove redundant check" since it's already fixed
+- Improve commit message as suggested by Manivannan Sadhasivam
+- Fix patch check error
+
+v2 -> v3
+- Remove "scsi: ufs: core: Add hwq print for debug".
+	send later when error handling is ready.
+- Rename patch title to match convention "scsi: ufs: ufs-mediatek:..."
+- Add explanation for (nr_hw_queues = MAXQ + 1)
+- Remove dummy line
+
+v1 -> v2:
+- Add 2 new patches
+	- Update MTK driver for mcq
+	- Export symbols for MTK driver
+- Fix commit message in "scsi: ufs: core: Fix mcq nr_hw_queues"
+- Split name change and fix into two patches
+
+Po-Wen Kao (3):
+  scsi: ufs: core: Fix mcq tag calcualtion
+  scsi: ufs: core: Rename symbol sizeof_utp_transfer_cmd_desc()
+  scsi: ufs: core: Fix mcq nr_hw_queues
+
+ drivers/ufs/core/ufs-mcq.c |  5 +++--
+ drivers/ufs/core/ufshcd.c  | 10 +++++-----
+ include/ufs/ufshcd.h       |  2 +-
+ 3 files changed, 9 insertions(+), 8 deletions(-)
+
 -- 
-2.25.1
+2.18.0
 
