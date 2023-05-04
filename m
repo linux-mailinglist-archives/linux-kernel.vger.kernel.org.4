@@ -2,183 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4E776F62D1
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 04:12:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B38D06F62DA
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 04:16:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbjEDCMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 22:12:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49516 "EHLO
+        id S229684AbjEDCQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 22:16:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjEDCMd (ORCPT
+        with ESMTP id S229598AbjEDCQs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 22:12:33 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A079135
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 19:12:32 -0700 (PDT)
-Received: from dggpemm500009.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QBcfT1nxwzTjx2;
-        Thu,  4 May 2023 10:08:01 +0800 (CST)
-Received: from [10.174.178.209] (10.174.178.209) by
- dggpemm500009.china.huawei.com (7.185.36.225) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 4 May 2023 10:12:29 +0800
-Message-ID: <307f61a1-b72c-c310-797c-013a8914ec1c@huawei.com>
-Date:   Thu, 4 May 2023 10:12:29 +0800
+        Wed, 3 May 2023 22:16:48 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6851A5;
+        Wed,  3 May 2023 19:16:47 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id 98e67ed59e1d1-24df4ecdb87so13048a91.0;
+        Wed, 03 May 2023 19:16:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683166607; x=1685758607;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xki9EImbF8EHplkOG7u13eoQc3pPoVT6i0i48IKNO48=;
+        b=AVbZGT9K0r89MqzrSpIR7uMQXdw8u/F4834X6xnRREOGxmDQ4D/A6MjHGUxFG3npis
+         aSiP7azLezP1XiGgrGudWR33IUl22a/61L8gQoe/STrWaRoCtDxodSejGGl7LbFwoSoW
+         y8er0cowxZ+SiTuo8NZyP0h49wpyK2kMLhUVxrO1AuEfSIV5AQV6s/WtZ233X+EY2wzS
+         HnH2l/EQfk2fmkfN3WEcKcwTa+M18CB0b6bZWDe3dFh5+ms0vEqPkw0zF+C7i7OAyOn6
+         4mDKRPiK7AP3pPjuxFNw9ey2zSAa4AXCrWoax2bREtiC64a4zO5i43E6Ply2PNr5/uI6
+         ybJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683166607; x=1685758607;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xki9EImbF8EHplkOG7u13eoQc3pPoVT6i0i48IKNO48=;
+        b=MM3dMURXSfcey280qVppIyEXYmxA2k1cqSaGUgC6OyY1mKYPyY1Rqwbl/5AMXA3F5+
+         L2KutqNafXDwxulqpMdhu5r2QRmGvFA0qYJV/EmAxCJcleGWVq1QaDOXzWJviEOpgU0f
+         mPZabcKYZlSRDLrlaciFQN7RhvfwJ87yp1+nFHaP4TpDpur6QmNP9/qpAj1vjzefFbOo
+         wxrjpgkBb0enqT98KbxuAXuaKH9ByBR/RScxprsNnwVduJzvCEufOtJa7MtHNI0eb5/A
+         VrJhdjUF9q6LnwZiI14k8K0ki1XOKT5Q+8M3sI2PKZwj/JdbQ0xhMzAbfz8nsaIJ5iMR
+         WoCA==
+X-Gm-Message-State: AC+VfDzlO5LO6efHztyzEliefkgZFQ96LwxpC8c/19Pdgb6SKlRnnXLX
+        YIlukQVBpcjWV6KUYDRRKt8=
+X-Google-Smtp-Source: ACHHUZ586dtnZJkOKWi8qtW2XOPFy14umbO1JQg1ZdQXQttGCitXUXieeRChBtu6pNojzrEGrsn1pA==
+X-Received: by 2002:a17:902:a60e:b0:1a9:2b7f:a594 with SMTP id u14-20020a170902a60e00b001a92b7fa594mr1984126plq.29.1683166606837;
+        Wed, 03 May 2023 19:16:46 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:6454])
+        by smtp.gmail.com with ESMTPSA id jd20-20020a170903261400b001a682a195basm3871260plb.28.2023.05.03.19.16.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 May 2023 19:16:46 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 3 May 2023 16:16:44 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
+        vbabka@suse.cz, roman.gushchin@linux.dev, mgorman@suse.de,
+        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+        corbet@lwn.net, void@manifault.com, peterz@infradead.org,
+        juri.lelli@redhat.com, ldufour@linux.ibm.com,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, peterx@redhat.com, david@redhat.com,
+        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
+        nathan@kernel.org, dennis@kernel.org, muchun.song@linux.dev,
+        rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com,
+        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
+        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
+        ndesaulniers@google.com, gregkh@linuxfoundation.org,
+        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+        glider@google.com, elver@google.com, dvyukov@google.com,
+        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
+        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        kasan-dev@googlegroups.com, cgroups@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>
+Subject: Re: [PATCH 00/40] Memory allocation profiling
+Message-ID: <ZFMVjAze4tu0DUXs@slm.duckdns.org>
+References: <ZFKNZZwC8EUbOLMv@slm.duckdns.org>
+ <20230503180726.GA196054@cmpxchg.org>
+ <ZFKlrP7nLn93iIRf@slm.duckdns.org>
+ <ZFKqh5Dh93UULdse@slm.duckdns.org>
+ <ZFKubD/lq7oB4svV@moria.home.lan>
+ <ZFKu6zWA00AzArMF@slm.duckdns.org>
+ <ZFKxcfqkUQ60zBB_@slm.duckdns.org>
+ <CAJuCfpEPkCJZO2svT-GfmpJ+V-jSLyFDKM_atnqPVRBKtzgtnQ@mail.gmail.com>
+ <ZFK6pwOelIlhV8Bm@slm.duckdns.org>
+ <CAJuCfpG4TmRpT5iU7bJmKcjW2Tghstdo1b=qEG=tDsmtJQYuWA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 1/2] ubi: fix slab-out-of-bounds in
- ubi_eba_get_ldesc+0xfb/0x130
-To:     Zhihao Cheng <chengzhihao1@huawei.com>, <richard@nod.at>,
-        <miquel.raynal@bootlin.com>, <vigneshr@ti.com>
-CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <yi.zhang@huawei.com>
-References: <20230406071331.1247429-1-wangzhaolong1@huawei.com>
- <20230406071331.1247429-2-wangzhaolong1@huawei.com>
- <cdb047f0-c071-3263-0167-e9bce852b5d5@huawei.com>
-From:   ZhaoLong Wang <wangzhaolong1@huawei.com>
-In-Reply-To: <cdb047f0-c071-3263-0167-e9bce852b5d5@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.209]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500009.china.huawei.com (7.185.36.225)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJuCfpG4TmRpT5iU7bJmKcjW2Tghstdo1b=qEG=tDsmtJQYuWA@mail.gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Yes, that could happen. I was able to reproduce the problem despite the
-low probability of triggering it.
+Hello,
 
-This race between wear_leveling_work() and ubi_resize_volume() can cause
-data corruption in the UBIFS running on the UBI volume.. ubi->volumes_lock
-must be added to protect the update of eba_tbl in the ubi_eba_copy_leb().
+On Wed, May 03, 2023 at 01:08:40PM -0700, Suren Baghdasaryan wrote:
+> > Yeah, I was wondering whether it'd be useful to have that configurable so
+> > that it'd be possible for a user to say "I'm okay with the cost, please
+> > track more context per allocation".
+> 
+> I assume by "more context per allocation" you mean for a specific
+> allocation, not for all allocations.
+> So, in a sense you are asking if the context capture feature can be
+> dropped from this series and implemented using some other means. Is
+> that right?
 
-I'll do a V2 patch later to fix this issue.
+Oh, no, what I meant was whether it'd make sense to allow enable richer
+tracking (e.g. record deeper into callstack) for all allocations. For
+targeted tracking, it seems that the kernel already has everything needed.
+But this is more of an idle thought and the immediate caller tracking is
+already a big improvement in terms of visibility, so no need to be hung up
+on this part of discussion at all.
 
-With appreciation
-ZhaoLong Wang
+Thanks.
 
-> HI,
->> From: Guo Xuenan <guoxuenan@huawei.com>
->>
->> When using ioctl interface to resize ubi volume, ubi_resize_volume will
->> resize eba table first, but not change vol->reserved_pebs in the same
->> atomic context which may cause concurrency access eba table.
->>
->> For example, When user do shrink ubi volume A calling ubi_resize_volume,
->> while the other thread is writing (volume B) and triggering 
->> wear-leveling,
->> which may calling ubi_write_fastmap, under these circumstances, KASAN 
->> may
->> report: slab-out-of-bounds in ubi_eba_get_ldesc+0xfb/0x130.
->>
-> [...]
->> diff --git a/drivers/mtd/ubi/vmt.c b/drivers/mtd/ubi/vmt.c
->> index 2c867d16f89f..97294def01eb 100644
->> --- a/drivers/mtd/ubi/vmt.c
->> +++ b/drivers/mtd/ubi/vmt.c
->> @@ -408,6 +408,7 @@ int ubi_resize_volume(struct ubi_volume_desc 
->> *desc, int reserved_pebs)
->>       struct ubi_device *ubi = vol->ubi;
->>       struct ubi_vtbl_record vtbl_rec;
->>       struct ubi_eba_table *new_eba_tbl = NULL;
->> +    struct ubi_eba_table *old_eba_tbl = NULL;
->>       int vol_id = vol->vol_id;
->>         if (ubi->ro_mode)
->> @@ -453,10 +454,13 @@ int ubi_resize_volume(struct ubi_volume_desc 
->> *desc, int reserved_pebs)
->>               err = -ENOSPC;
->>               goto out_free;
->>           }
->> +
->>           ubi->avail_pebs -= pebs;
->>           ubi->rsvd_pebs += pebs;
->>           ubi_eba_copy_table(vol, new_eba_tbl, vol->reserved_pebs);
->> -        ubi_eba_replace_table(vol, new_eba_tbl);
->> +        old_eba_tbl = vol->eba_tbl;
->> +        vol->eba_tbl = new_eba_tbl;
->> +        vol->reserved_pebs = reserved_pebs;
->>           spin_unlock(&ubi->volumes_lock);
->>       }
->>   @@ -471,7 +475,9 @@ int ubi_resize_volume(struct ubi_volume_desc 
->> *desc, int reserved_pebs)
->>           ubi->avail_pebs -= pebs;
->>           ubi_update_reserved(ubi);
->>           ubi_eba_copy_table(vol, new_eba_tbl, reserved_pebs);
->> -        ubi_eba_replace_table(vol, new_eba_tbl);
->> +        old_eba_tbl = vol->eba_tbl;
->> +        vol->eba_tbl = new_eba_tbl;
->> +        vol->reserved_pebs = reserved_pebs;
->>           spin_unlock(&ubi->volumes_lock);
->>       }
->>   @@ -493,7 +499,6 @@ int ubi_resize_volume(struct ubi_volume_desc 
->> *desc, int reserved_pebs)
->>       if (err)
->>           goto out_acc;
->>   -    vol->reserved_pebs = reserved_pebs;
->>       if (vol->vol_type == UBI_DYNAMIC_VOLUME) {
->>           vol->used_ebs = reserved_pebs;
->>           vol->last_eb_bytes = vol->usable_leb_size;
->> @@ -501,19 +506,24 @@ int ubi_resize_volume(struct ubi_volume_desc 
->> *desc, int reserved_pebs)
->>               (long long)vol->used_ebs * vol->usable_leb_size;
->>       }
->>   +    /* destroy old table */
->> +    ubi_eba_destroy_table(old_eba_tbl);
->>       ubi_volume_notify(ubi, vol, UBI_VOLUME_RESIZED);
->>       self_check_volumes(ubi);
->>       return err;
->>     out_acc:
->> +    spin_lock(&ubi->volumes_lock);
->> +    vol->reserved_pebs = reserved_pebs - pebs;
->>       if (pebs > 0) {
->> -        spin_lock(&ubi->volumes_lock);
->>           ubi->rsvd_pebs -= pebs;
->>           ubi->avail_pebs += pebs;
->> -        spin_unlock(&ubi->volumes_lock);
->> +        ubi_eba_copy_table(vol, old_eba_tbl, vol->reserved_pebs);
->> +    } else {
->> +        ubi_eba_copy_table(vol, old_eba_tbl, reserved_pebs);
->>       }
->> -    return err;
->> -
->> +    vol->eba_tbl = old_eba_tbl;
->> +    spin_unlock(&ubi->volumes_lock);
->>   out_free:
->>       ubi_eba_destroy_table(new_eba_tbl);
->>       return err;
->>
->
->
-> Besides that, it's better to protect 'vol->eba_tbl->entries' 
-> assignment like:
-> diff --git a/drivers/mtd/ubi/eba.c b/drivers/mtd/ubi/eba.c
-> index 403b79d6efd5..5ae0c1bc6f41 100644
-> --- a/drivers/mtd/ubi/eba.c
-> +++ b/drivers/mtd/ubi/eba.c
-> @@ -1450,7 +1450,9 @@ int ubi_eba_copy_leb(struct ubi_device *ubi, int 
-> from, int to,
->         }
->
->         ubi_assert(vol->eba_tbl->entries[lnum].pnum == from);
-> +       spin_lock(&ubi->volumes_lock);
->         vol->eba_tbl->entries[lnum].pnum = to;
-> +       spin_unlock(&ubi->volumes_lock);
->
->  out_unlock_buf:
->         mutex_unlock(&ubi->buf_mutex);
->
-> Otherwise, a race between wear_leveling_work and shrinking volume 
-> could happen:
->
->  ubi_resize_volume         wear_leveling_worker
->   ubi_eba_copy_table(vol, new_eba_tbl, reserved_pebs);
-> vol->eba_tbl->entries[lnum].pnum = to; // update old eba_tbl
->   vol->eba_tbl = new_eba_tbl
+-- 
+tejun
