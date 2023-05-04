@@ -2,161 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DA3C6F6854
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 11:33:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED7D86F6857
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 11:33:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbjEDJcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 05:32:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49930 "EHLO
+        id S230023AbjEDJdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 05:33:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbjEDJcF (ORCPT
+        with ESMTP id S230443AbjEDJdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 05:32:05 -0400
-Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB714698
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 02:32:03 -0700 (PDT)
-Received: by mail-il1-f207.google.com with SMTP id e9e14a558f8ab-331828cdc2dso1487385ab.3
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 02:32:03 -0700 (PDT)
+        Thu, 4 May 2023 05:33:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64BE84698
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 02:32:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683192757;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Br2sdhxJExbXbcqoz/VU+uPPIl2iDyGjIsFcKxJYcBE=;
+        b=RrtLX3cuFKxRZD9S0mslS6cAXKjFigKANVJvskN/0Hf59GfxbWluA7n6TRFRDcHsqMU6Jt
+        tx1Mw9NKNwps6RKU2u8IixQXeVFJvhpaaPeZ1N7jdiD+btIzEOHdvoVwtCViHumVAGAI7I
+        I1XunG5+XGH8JTuy7/a/VA+T2jjULmo=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-528-Ku1KV5SaOLeaxWO12_c6Mg-1; Thu, 04 May 2023 05:32:36 -0400
+X-MC-Unique: Ku1KV5SaOLeaxWO12_c6Mg-1
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-2fbb99cb244so90412f8f.3
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 02:32:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683192722; x=1685784722;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=C8fFZy2M9CRWNQT/qQ4rHsUOD+ZlazMxTl8QpIseuL8=;
-        b=LkyezhndehIQsynouynxeF4r+1d1lvEp8/QQFH31oK8+gswY0pCetbslqz+p2RD0gU
-         7RMhUCYur+KKqDuO8gCjYcNgiCdyOwfIovLXS+bUIKp2Ob9ujxXbEJ+fao0rQV/RfIrL
-         nHi+M1rUyIrSkR0Q5O8LVyzxyWkGun+0kG7JVmwjAmwtMYY3cwei6NuqoSy/OlwhpczV
-         wie/Tz/eY4Z5LcY7rjcROyu5WhdO0r8HQemszJZPWmdwG9Vf2DL+5IjsE/rUCjzVrNoh
-         6IA8rFn0XDF6h0fhZk6WMkdhV5bOOSRuI07r1hHlEItFKFW8sO9bBAFbx48H0PjIkc5A
-         46Ig==
-X-Gm-Message-State: AC+VfDwZDBx77Sy2/D9qi04oPsvCjH3jKnlXxRTPEOqsl0w8wRJU+xnz
-        ZIPKjy4GLjvf413A/NBQeUGjDe2SRED7DDnBrxuIWBKT09W0
-X-Google-Smtp-Source: ACHHUZ5F0rrP+Fpyvw8MhPHceX+zZzy+lIokl7i/4c8QOsPPUdo5FhTd5mZSgg2APXXXZ2qNseR/5f8Nmmb4O7HGpPRGTfe7rWXm
+        d=1e100.net; s=20221208; t=1683192754; x=1685784754;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Br2sdhxJExbXbcqoz/VU+uPPIl2iDyGjIsFcKxJYcBE=;
+        b=GjgPYtspV2dKtTphjK8Drxg0nv4FRXt/G++Ye+vTcTBf6Jw9Q3gcaUfcReLGDn5Bbl
+         76GUVdy9QkA4GgisnkospYH601fvm1JHtQ6JaToyo68WvDIUZ6lt98RDTcUecuQ4IgLQ
+         wMQWwW7xGnxAavj9RlchBdtJysKR2Arkr28ZokCBlMrkeoRqiOkBFH77qK2JFB6C1O77
+         Yd9s19R0s1lgN4+a/rJX9l1biIAGA+b4nx+NUVhJjkd2wbUN0TV2LarhCnrExtK2okIn
+         ZkGT5qt0OvBMwE0Tvl33+ueVdse1fveOJ/2QNyuFfyENZNwsoTZHioUQCM96rDjrC9w/
+         Onyg==
+X-Gm-Message-State: AC+VfDw6l0rm6vmLRA7qeO//G5xd6Cogge3peSU3JaWYNPL+Z2/oxjzW
+        gPgUeTmkp6iVHLlvWmhXMJX47PekWMw23zvvyAnKrxYu83baMFABzkOyskH8PgaMZWHjTQeNScD
+        kXc/GIjUH8D/F4MeTPdmt9FZZ
+X-Received: by 2002:a05:6000:1292:b0:304:75b1:4dff with SMTP id f18-20020a056000129200b0030475b14dffmr2679664wrx.48.1683192754410;
+        Thu, 04 May 2023 02:32:34 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7lFdaoDN/domYYFl97TJ7iMctTEG96htH3lecWTjBRB0SpQ5yaagyG1HTRY2lhM63g8FCxBg==
+X-Received: by 2002:a05:6000:1292:b0:304:75b1:4dff with SMTP id f18-20020a056000129200b0030475b14dffmr2679627wrx.48.1683192754120;
+        Thu, 04 May 2023 02:32:34 -0700 (PDT)
+Received: from vschneid.remote.csb ([154.57.232.159])
+        by smtp.gmail.com with ESMTPSA id p17-20020a056000019100b002fda1b12a0bsm36383284wrx.2.2023.05.04.02.32.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 May 2023 02:32:33 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Wander Lairson Costa <wander@redhat.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Christian Brauner <brauner@kernel.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
+        <linux-perf-users@vger.kernel.org>, Hu Chunyu <chuhu@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v7 2/3] sched/task: Add the
+ put_task_struct_atomic_safe() function
+In-Reply-To: <20230504084229.GI1734100@hirez.programming.kicks-ass.net>
+References: <20230425114307.36889-1-wander@redhat.com>
+ <20230425114307.36889-3-wander@redhat.com>
+ <20230504084229.GI1734100@hirez.programming.kicks-ass.net>
+Date:   Thu, 04 May 2023 10:32:31 +0100
+Message-ID: <xhsmha5ykjvbk.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-X-Received: by 2002:a92:d08a:0:b0:329:5faf:cbc0 with SMTP id
- h10-20020a92d08a000000b003295fafcbc0mr13341297ilh.2.1683192722605; Thu, 04
- May 2023 02:32:02 -0700 (PDT)
-Date:   Thu, 04 May 2023 02:32:02 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000051d14405fadad8cc@google.com>
-Subject: [syzbot] [jfs?] KASAN: user-memory-access Write in __destroy_inode
-From:   syzbot <syzbot+dcc068159182a4c31ca3@syzkaller.appspotmail.com>
-To:     brauner@kernel.org, jfs-discussion@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        shaggy@kernel.org, syzkaller-bugs@googlegroups.com,
-        viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 04/05/23 10:42, Peter Zijlstra wrote:
+> On Tue, Apr 25, 2023 at 08:43:02AM -0300, Wander Lairson Costa wrote:
+>> diff --git a/include/linux/sched/task.h b/include/linux/sched/task.h
+>> index b597b97b1f8f..cf774b83b2ec 100644
+>> --- a/include/linux/sched/task.h
+>> +++ b/include/linux/sched/task.h
+>> @@ -141,6 +141,41 @@ static inline void put_task_struct_many(struct task_struct *t, int nr)
+>>
+>>  void put_task_struct_rcu_user(struct task_struct *task);
+>>
+>> +extern void __delayed_put_task_struct(struct rcu_head *rhp);
+>> +
+>> +static inline void put_task_struct_atomic_safe(struct task_struct *task)
+>> +{
+>> +	if (IS_ENABLED(CONFIG_PREEMPT_RT)) {
+>> +		/*
+>> +		 * Decrement the refcount explicitly to avoid unnecessarily
+>> +		 * calling call_rcu.
+>> +		 */
+>> +		if (refcount_dec_and_test(&task->usage))
+>> +			/*
+>> +			 * under PREEMPT_RT, we can't call put_task_struct
+>> +			 * in atomic context because it will indirectly
+>> +			 * acquire sleeping locks.
+>> +			 * call_rcu() will schedule __delayed_put_task_struct()
+>> +			 * to be called in process context.
+>> +			 *
+>> +			 * __put_task_struct() is called when
+>> +			 * refcount_dec_and_test(&t->usage) succeeds.
+>> +			 *
+>> +			 * This means that it can't conflict with
+>> +			 * put_task_struct_rcu_user() which abuses ->rcu the same
+>> +			 * way; rcu_users has a reference so task->usage can't be
+>> +			 * zero after rcu_users 1 -> 0 transition.
+>> +			 *
+>> +			 * delayed_free_task() also uses ->rcu, but it is only called
+>> +			 * when it fails to fork a process. Therefore, there is no
+>> +			 * way it can conflict with put_task_struct().
+>> +			 */
+>> +			call_rcu(&task->rcu, __delayed_put_task_struct);
+>> +	} else {
+>> +		put_task_struct(task);
+>> +	}
+>> +}
+>
+> Urgh.. that's plenty horrible. And I'm sure everybody plus kitchen sink
+> has already asked why can't we just rcu free the thing unconditionally.
+>
+> Google only found me an earlier version of this same patch set, but I'm
+> sure we've had that discussion many times over the past several years.
+> The above and your follow up patch is just horrible.
+>
 
-syzbot found the following issue on:
+So on v3/v4 we got to doing that unconditionally for PREEMPT_RT, but per
+[1] Wander went back to hand-fixing the problematic callsites.
 
-HEAD commit:    fa31fc82fb77 Merge tag 'pm-6.4-rc1-2' of git://git.kernel...
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=176f146c280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=73a06f6ef2d5b492
-dashboard link: https://syzkaller.appspot.com/bug?extid=dcc068159182a4c31ca3
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13a40690280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=156b965c280000
+Now that I'm looking at it again, I couldn't find a concrete argument from
+Oleg against doing this unconditionally - as Wander is pointing out in the
+changelog and comments, reusing task_struct.rcu for that purpose is safe
+(although not necessarily obviously so).
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/47047382df87/disk-fa31fc82.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/1fd540f5f80a/vmlinux-fa31fc82.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/21da1f9e2c23/bzImage-fa31fc82.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/058ce906b620/mount_0.gz
+Is this just miscommunication, or is there a genuine issue with doing this
+unconditionally? As argued before, I'd also much rather have this be an
+unconditional call_rcu() (regardless of context or PREEMPT_RT).
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+dcc068159182a4c31ca3@syzkaller.appspotmail.com
-
-ERROR: (device loop0): jfs_readdir: JFS:Dtree error: ino = 2, bn=0, index = 6
-ERROR: (device loop0): jfs_readdir: JFS:Dtree error: ino = 2, bn=0, index = 7
-==================================================================
-BUG: KASAN: user-memory-access in instrument_atomic_read_write include/linux/instrumented.h:96 [inline]
-BUG: KASAN: user-memory-access in atomic_fetch_sub_release include/linux/atomic/atomic-instrumented.h:176 [inline]
-BUG: KASAN: user-memory-access in __refcount_sub_and_test include/linux/refcount.h:272 [inline]
-BUG: KASAN: user-memory-access in __refcount_dec_and_test include/linux/refcount.h:315 [inline]
-BUG: KASAN: user-memory-access in refcount_dec_and_test include/linux/refcount.h:333 [inline]
-BUG: KASAN: user-memory-access in posix_acl_release include/linux/posix_acl.h:57 [inline]
-BUG: KASAN: user-memory-access in __destroy_inode+0x426/0x5e0 fs/inode.c:297
-Write of size 4 at addr 0000000b00000000 by task syz-executor374/4998
-
-CPU: 0 PID: 4998 Comm: syz-executor374 Not tainted 6.3.0-syzkaller-12999-gfa31fc82fb77 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
- print_report+0xe6/0x540 mm/kasan/report.c:465
- kasan_report+0x176/0x1b0 mm/kasan/report.c:572
- kasan_check_range+0x283/0x290 mm/kasan/generic.c:187
- instrument_atomic_read_write include/linux/instrumented.h:96 [inline]
- atomic_fetch_sub_release include/linux/atomic/atomic-instrumented.h:176 [inline]
- __refcount_sub_and_test include/linux/refcount.h:272 [inline]
- __refcount_dec_and_test include/linux/refcount.h:315 [inline]
- refcount_dec_and_test include/linux/refcount.h:333 [inline]
- posix_acl_release include/linux/posix_acl.h:57 [inline]
- __destroy_inode+0x426/0x5e0 fs/inode.c:297
- destroy_inode fs/inode.c:308 [inline]
- evict+0x51b/0x620 fs/inode.c:680
- dispose_list fs/inode.c:698 [inline]
- evict_inodes+0x5f8/0x690 fs/inode.c:748
- generic_shutdown_super+0x98/0x340 fs/super.c:479
- kill_block_super+0x84/0xf0 fs/super.c:1407
- deactivate_locked_super+0xa4/0x110 fs/super.c:331
- cleanup_mnt+0x426/0x4c0 fs/namespace.c:1177
- task_work_run+0x24a/0x300 kernel/task_work.c:179
- exit_task_work include/linux/task_work.h:38 [inline]
- do_exit+0x68f/0x2290 kernel/exit.c:871
- do_group_exit+0x206/0x2c0 kernel/exit.c:1021
- __do_sys_exit_group kernel/exit.c:1032 [inline]
- __se_sys_exit_group kernel/exit.c:1030 [inline]
- __x64_sys_exit_group+0x3f/0x40 kernel/exit.c:1030
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f696702ea49
-Code: Unable to access opcode bytes at 0x7f696702ea1f.
-RSP: 002b:00007ffcc25baa18 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-RAX: ffffffffffffffda RBX: 00007f69670a9330 RCX: 00007f696702ea49
-RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000001
-RBP: 0000000000000001 R08: ffffffffffffffc0 R09: 00007f69670a3e40
-R10: 00007f69670a3e40 R11: 0000000000000246 R12: 00007f69670a9330
-R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
- </TASK>
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
