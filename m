@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B8A46F7482
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:51:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92B6D6F747F
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:51:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231553AbjEDTvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 15:51:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59418 "EHLO
+        id S231523AbjEDTvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 15:51:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231442AbjEDTt6 (ORCPT
+        with ESMTP id S231466AbjEDTuC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 15:49:58 -0400
+        Thu, 4 May 2023 15:50:02 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBDE5AD27;
-        Thu,  4 May 2023 12:46:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670A3AD3E;
+        Thu,  4 May 2023 12:46:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A22BB6379D;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B14A637A0;
+        Thu,  4 May 2023 19:46:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87AC6C4339E;
         Thu,  4 May 2023 19:46:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22509C433EF;
-        Thu,  4 May 2023 19:46:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683229571;
-        bh=PMZp1mz8IurQD2OLwhUSBlMTcMyirOhTLvX1DVhphp4=;
+        s=k20201202; t=1683229573;
+        bh=TNm0yrIervS2LXwIJUly4WGmTV4UHIrQ3v4l9E2viOI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f6f8TJ0WlqvGKH4vxCvVyBg+Z/tn773yVuQ/VzoweKMKbnPU68EE1Aow6zxLlrosW
-         FlPumcDnjz3nGSFD41W6gzTAwKaWDLtyJx/SOU+tKIcyvBCNKfoYRSsNLBrbDXPO9/
-         /vkc2rf1B95lMzKMsrgI+mQXcSm7bVrCn0g4ugENdkTOogy5/Su9f1yAAHugMDnWJr
-         cVudklPH6Oav7deyhvod9QidnA9soZmhjj1GYSuIdh/G5fVkLRUrbjm14YnqiwphxU
-         hLfM9X2cz1Af4OR3j+wBR/STp6FyKpFF+WLfP+YOOCpNMWVptL2+4P5UpaX+fxIbgK
-         FZoBm04PoWS/w==
+        b=lEi/gZDoqkIhRJO+MbPVRDKUQe1lLJ0RVYYWmVgMreYWTs7FQLpl0hW7g3TYBxSFn
+         2wFHtFZNOpK8v02lC/+On82D2c5fupmqYuj/h8El44ITvi1p+Fq7pxYqiHXjFwUen3
+         qxAuqzhcjBmA+Hgc/NNycrMpcw4uE/+Pl3gzApotjWc1vsnjN06cdW94zGjJ4AHAph
+         Nn+mYtJvKMC2PxJTfFDkxhqCr9RBli59bZnJpmuwYMEq9HYtaY5hR1qqrRmB7ciD6h
+         2moIW5sGkZntXPjhfM3C4r4WkR+HANHoHFunzN9uxqQR/rmJYTWC3nWd4RW9BC4Q8M
+         pQ8bzsDsDpVXQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Meng Tang <tangmeng@uniontech.com>,
+Cc:     Vasily Khoruzhick <anarsoul@gmail.com>,
+        Bastian Germann <bage@debian.org>,
         Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
         Sasha Levin <sashal@kernel.org>, marcel@holtmann.org,
-        johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        linux-bluetooth@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.2 44/53] Bluetooth: btusb: Add new PID/VID 04ca:3801 for MT7663
-Date:   Thu,  4 May 2023 15:44:04 -0400
-Message-Id: <20230504194413.3806354-44-sashal@kernel.org>
+        johan.hedberg@gmail.com, luiz.dentz@gmail.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.2 45/53] Bluetooth: Add new quirk for broken local ext features page 2
+Date:   Thu,  4 May 2023 15:44:05 -0400
+Message-Id: <20230504194413.3806354-45-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230504194413.3806354-1-sashal@kernel.org>
 References: <20230504194413.3806354-1-sashal@kernel.org>
@@ -59,72 +61,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Meng Tang <tangmeng@uniontech.com>
+From: Vasily Khoruzhick <anarsoul@gmail.com>
 
-[ Upstream commit 13209415d0e88396d99d346b184864834d70d68a ]
+[ Upstream commit 8194f1ef5a815aea815a91daf2c721eab2674f1f ]
 
-This bluetooth device is found in a combo WLAN/BT card
-for a MediaTek 7663.
+Some adapters (e.g. RTL8723CS) advertise that they have more than
+2 pages for local ext features, but they don't support any features
+declared in these pages. RTL8723CS reports max_page = 2 and declares
+support for sync train and secure connection, but it responds with
+either garbage or with error in status on corresponding commands.
 
-Tested on Acer Aspire A315-24P Notebook
-
-The device information:
-
-T:  Bus=01 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  2 Spd=480  MxCh= 0
-D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=04ca ProdID=3801 Rev= 1.00
-S:  Manufacturer=MediaTek Inc.
-S:  Product=Wireless_Device
-S:  SerialNumber=000000000
-C:* #Ifs= 2 Cfg#= 1 Atr=e0 MxPwr=100mA
-A:  FirstIf#= 0 IfCount= 2 Cls=e0(wlcon) Sub=01 Prot=01
-I:* If#= 0 Alt= 0 #EPs= 3 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=81(I) Atr=03(Int.) MxPS=  16 Ivl=125us
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=   0 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=   0 Ivl=1ms
-I:  If#= 1 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=   9 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=   9 Ivl=1ms
-I:  If#= 1 Alt= 2 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  17 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  17 Ivl=1ms
-I:  If#= 1 Alt= 3 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  25 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  25 Ivl=1ms
-I:  If#= 1 Alt= 4 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  33 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  33 Ivl=1ms
-I:  If#= 1 Alt= 5 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  49 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  49 Ivl=1ms
-I:  If#= 1 Alt= 6 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  63 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  63 Ivl=1ms
-
-Signed-off-by: Meng Tang <tangmeng@uniontech.com>
+Signed-off-by: Vasily Khoruzhick <anarsoul@gmail.com>
+Signed-off-by: Bastian Germann <bage@debian.org>
 Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/bluetooth/btusb.c | 3 +++
- 1 file changed, 3 insertions(+)
+ include/net/bluetooth/hci.h | 7 +++++++
+ net/bluetooth/hci_event.c   | 9 +++++++--
+ 2 files changed, 14 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-index 5c536151ef836..683556dcdc436 100644
---- a/drivers/bluetooth/btusb.c
-+++ b/drivers/bluetooth/btusb.c
-@@ -558,6 +558,9 @@ static const struct usb_device_id blacklist_table[] = {
- 	{ USB_DEVICE(0x043e, 0x310c), .driver_info = BTUSB_MEDIATEK |
- 						     BTUSB_WIDEBAND_SPEECH |
- 						     BTUSB_VALID_LE_STATES },
-+	{ USB_DEVICE(0x04ca, 0x3801), .driver_info = BTUSB_MEDIATEK |
-+						     BTUSB_WIDEBAND_SPEECH |
-+						     BTUSB_VALID_LE_STATES },
+diff --git a/include/net/bluetooth/hci.h b/include/net/bluetooth/hci.h
+index 8d773b042c853..7127313140cf0 100644
+--- a/include/net/bluetooth/hci.h
++++ b/include/net/bluetooth/hci.h
+@@ -294,6 +294,13 @@ enum {
+ 	 * during the hdev->setup vendor callback.
+ 	 */
+ 	HCI_QUIRK_BROKEN_MWS_TRANSPORT_CONFIG,
++
++	/* When this quirk is set, max_page for local extended features
++	 * is set to 1, even if controller reports higher number. Some
++	 * controllers (e.g. RTL8723CS) report more pages, but they
++	 * don't actually support features declared there.
++	 */
++	HCI_QUIRK_BROKEN_LOCAL_EXT_FEATURES_PAGE_2,
+ };
  
- 	/* Additional MediaTek MT7668 Bluetooth devices */
- 	{ USB_DEVICE(0x043e, 0x3109), .driver_info = BTUSB_MEDIATEK |
+ /* HCI device flags */
+diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
+index e87c928c9e17a..51f13518dba9b 100644
+--- a/net/bluetooth/hci_event.c
++++ b/net/bluetooth/hci_event.c
+@@ -886,8 +886,13 @@ static u8 hci_cc_read_local_ext_features(struct hci_dev *hdev, void *data,
+ 	if (rp->status)
+ 		return rp->status;
+ 
+-	if (hdev->max_page < rp->max_page)
+-		hdev->max_page = rp->max_page;
++	if (hdev->max_page < rp->max_page) {
++		if (test_bit(HCI_QUIRK_BROKEN_LOCAL_EXT_FEATURES_PAGE_2,
++			     &hdev->quirks))
++			bt_dev_warn(hdev, "broken local ext features page 2");
++		else
++			hdev->max_page = rp->max_page;
++	}
+ 
+ 	if (rp->page < HCI_MAX_PAGES)
+ 		memcpy(hdev->features[rp->page], rp->features, 8);
 -- 
 2.39.2
 
