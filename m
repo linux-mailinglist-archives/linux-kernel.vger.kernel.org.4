@@ -2,325 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCBF36F71B1
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 20:03:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA9296F71B5
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 20:04:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbjEDSDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 14:03:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50974 "EHLO
+        id S229870AbjEDSEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 14:04:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjEDSC6 (ORCPT
+        with ESMTP id S229449AbjEDSEM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 14:02:58 -0400
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3681BCC;
-        Thu,  4 May 2023 11:02:56 -0700 (PDT)
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-3f182d745deso8688755e9.0;
-        Thu, 04 May 2023 11:02:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683223375; x=1685815375;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AZDZ8YxdhDn5mPRZaBC8fY/+Z68in9GRyIAk1Dnoetc=;
-        b=Kl79NMdhU4m3mUbihXEUL8U6/uIEw0kekZUvEQ4VVd/whqOl3+kOn7yzi8w47q1F1e
-         7/nlT2XrZduHKJHJIsZvkAZFjdyRoB8ehWCcQ/lngm+PjcvVccCDUzVajmjU+sZlF2fG
-         3tSe2DcYsV3wxDY0YE1PI/F7iSHBEumgPadM7lx0Vbhc/c+tM7ZftQAakgft2fen7RAA
-         CKECkkiZLNnCfoP4Ho3vf8eUsDY14sop6i+SvdIdIsrFHKnfaLqMw4IkAmcj6C+Pies0
-         HmQau+tm0hzMlRYjD7aUWovGGFv/ZpHI6jWCKG7+JgPDsdwS+iWZi3B6nfQHiVSjC1lx
-         AgHw==
-X-Gm-Message-State: AC+VfDxxRFr+ZV4NJ8ZYIKTNmnLgzMWP7HC0+sSU5A5SOxmbNEvKl0VN
-        H7BBxs4VmZQVnKH/5Wp5sqtwiEd3W9HlUVYi
-X-Google-Smtp-Source: ACHHUZ7DBR9JLJxcGYEzgKy6RZn8Pk58Li37tq9w2jOkGLDCeZjMsgu0U1JZXU2UqbD7d8dCxpFZQw==
-X-Received: by 2002:a1c:6a0d:0:b0:3f1:72ee:97b7 with SMTP id f13-20020a1c6a0d000000b003f172ee97b7mr393450wmc.15.1683223374722;
-        Thu, 04 May 2023 11:02:54 -0700 (PDT)
-Received: from costa-tp.bos2.lab ([2a00:a040:1a3:c11b:3ae6:1732:e587:a81f])
-        by smtp.gmail.com with ESMTPSA id p8-20020a7bcc88000000b003f03d483966sm5560826wma.44.2023.05.04.11.02.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 May 2023 11:02:54 -0700 (PDT)
-From:   Costa Shulyupin <costa.shul@redhat.com>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-doc@vger.kernel.org
-Cc:     Costa Shulyupin <costa.shul@redhat.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-snps-arc@lists.infradead.org (open list:SYNOPSYS ARC ARCHITECTURE),
-        linux-kernel@vger.kernel.org (open list),
-        linux-ia64@vger.kernel.org (open list:IA64 (Itanium) PLATFORM),
-        linux-openrisc@vger.kernel.org (open list:OPENRISC ARCHITECTURE),
-        linux-parisc@vger.kernel.org (open list:PARISC ARCHITECTURE),
-        linux-sh@vger.kernel.org (open list:SUPERH)
-Subject: [PATCH v3] docs: directive `alias` for redirects
-Date:   Thu,  4 May 2023 21:01:52 +0300
-Message-Id: <20230504180210.727364-1-costa.shul@redhat.com>
-X-Mailer: git-send-email 2.40.0
+        Thu, 4 May 2023 14:04:12 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 554D51BCC;
+        Thu,  4 May 2023 11:04:10 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 344BlV63013169;
+        Thu, 4 May 2023 18:03:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=dIQM/IxZx2gsJVXsqEYgNIwEqFxDum1d1ZVaPq4CXv4=;
+ b=De4imCXjRvkP8hRycq1OUTBeZtouNEV17SaswUr9m0VCP6tetyFPqOr2zaug6rYfS2LR
+ /aRy2P0CLAi61z5IlbPL2RNzkivADdLqJlRWWHb6V/cvwclZkVbJdVMWOAHcJsbrzdro
+ nY+1T1x3EhQiX4Ik8OWW8fJN+ViHKWvvuNB2P35lCbwUZBqg0rDCj59YoJS+cN2LE4e7
+ 80UaocMOcEXINwvehSuH1dUNyW8PI5MUeZ/ypvzEjblUn/CBQgm4yqYna8AIFVU3lDXm
+ +GRwX9rrV+TxWSSgkdSPSxg62/ZGTFELKJXUptg9ccFIbuxjXTiNAFeLTWc6Ekiz1RRW Jg== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qc7a41msc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 04 May 2023 18:03:55 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 344I3sQq005175
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 4 May 2023 18:03:54 GMT
+Received: from [10.216.20.183] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 4 May 2023
+ 11:03:48 -0700
+Message-ID: <50c37e0c-3171-bce2-d97e-371150e1854f@quicinc.com>
+Date:   Thu, 4 May 2023 23:33:44 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v7 9/9] arm64: dts: qcom: sa8540-ride: Enable first port
+ of tertiary usb controller
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
+        <quic_jackp@quicinc.com>, <quic_harshq@quicinc.com>,
+        <ahalaney@redhat.com>, <quic_shazhuss@quicinc.com>
+References: <20230501143445.3851-1-quic_kriskura@quicinc.com>
+ <20230501143445.3851-10-quic_kriskura@quicinc.com>
+ <0e76a9f6-f062-2802-d9de-3c0b2b897a4e@linaro.org>
+Content-Language: en-US
+From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <0e76a9f6-f062-2802-d9de-3c0b2b897a4e@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 5u2iymyeyDmAHLUFP63Y4Y9eE9SwnywN
+X-Proofpoint-ORIG-GUID: 5u2iymyeyDmAHLUFP63Y4Y9eE9SwnywN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-04_12,2023-05-04_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
+ malwarescore=0 priorityscore=1501 adultscore=0 clxscore=1015
+ mlxlogscore=832 mlxscore=0 lowpriorityscore=0 phishscore=0 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2305040145
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-and several redirects for moved main arch pages
 
-Problems:
-- The documentation lacks hierarchy
-- Relocating pages disrupts external links to
-  the documentation and causes confusion for users
 
-Benefits:
-- Users can easily access relocated pages from external resources
-- Using redirects frees up options for reorganizing the documentation
+On 5/2/2023 4:37 PM, Konrad Dybcio wrote:
+> 
+> 
+> On 1.05.2023 16:34, Krishna Kurapati wrote:
+>> There is now support for the multiport USB controller this uses so
+>> enable it.
+>>
+>> The board only has a single port hooked up (despite it being wired up to
+>> the multiport IP on the SoC). There's also a USB 2.0 mux hooked up,
+>> which by default on boot is selected to mux properly. Grab the gpio
+>> controlling that and ensure it stays in the right position so USB 2.0
+>> continues to be routed from the external port to the SoC.
+>>
+>> Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
+>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>> ---
+> same comments as patch 8
+> 
+> Konrad
 
-The solution:
-- Introduced directive `alias` which declares previous path of
-  a moved document as the argument.
-- Redirects are implemented with Sphinx extension rediraffe_redirects.
+Hi Konrad,
 
-Signed-off-by: Costa Shulyupin <costa.shul@redhat.com>
+   Sure, will add a default value for drive-strength for this pinctrl node.
 
----
+Hi Andrew Halaney,
 
-Changes:
-- complete new implementation
----
- Documentation/arch/arc/index.rst        |  2 ++
- Documentation/arch/ia64/index.rst       |  2 ++
- Documentation/arch/index.rst            |  2 ++
- Documentation/arch/m68k/index.rst       |  2 ++
- Documentation/arch/nios2/index.rst      |  2 ++
- Documentation/arch/openrisc/index.rst   |  2 ++
- Documentation/arch/parisc/index.rst     |  2 ++
- Documentation/arch/sh/index.rst         |  2 ++
- Documentation/arch/sparc/index.rst      |  2 ++
- Documentation/arch/x86/index.rst        |  2 ++
- Documentation/arch/x86/x86_64/index.rst |  2 ++
- Documentation/arch/xtensa/index.rst     |  2 ++
- Documentation/conf.py                   |  9 +++++++
- Documentation/sphinx/alias.py           | 35 +++++++++++++++++++++++++
- Documentation/sphinx/requirements.txt   |  1 +
- 15 files changed, 69 insertions(+)
- create mode 100644 Documentation/sphinx/alias.py
+  I currently don't have a Ride device with me to test this change. Can 
+you help test this patch on SA8540-Ride including (drive-strength = 
+<2>;) property (which I believe is the default value).
 
-diff --git a/Documentation/arch/arc/index.rst b/Documentation/arch/arc/index.rst
-index 7b098d4a5e3e..c2be040f04c3 100644
---- a/Documentation/arch/arc/index.rst
-+++ b/Documentation/arch/arc/index.rst
-@@ -15,3 +15,5 @@ ARC architecture
-    =======
- 
-    * :ref:`genindex`
-+
-+.. alias:: arc/index
-diff --git a/Documentation/arch/ia64/index.rst b/Documentation/arch/ia64/index.rst
-index 761f2154dfa2..c4f973f17af2 100644
---- a/Documentation/arch/ia64/index.rst
-+++ b/Documentation/arch/ia64/index.rst
-@@ -17,3 +17,5 @@ IA-64 Architecture
-    serial
- 
-    features
-+
-+.. alias:: ia64/index
-diff --git a/Documentation/arch/index.rst b/Documentation/arch/index.rst
-index 80ee31016584..11be66e23de4 100644
---- a/Documentation/arch/index.rst
-+++ b/Documentation/arch/index.rst
-@@ -26,3 +26,5 @@ implementation.
-    sparc/index
-    x86/index
-    xtensa/index
-+
-+.. alias:: arch
-diff --git a/Documentation/arch/m68k/index.rst b/Documentation/arch/m68k/index.rst
-index 0f890dbb5fe2..9b5c34510fb7 100644
---- a/Documentation/arch/m68k/index.rst
-+++ b/Documentation/arch/m68k/index.rst
-@@ -18,3 +18,5 @@ m68k Architecture
-    =======
- 
-    * :ref:`genindex`
-+
-+.. alias:: m68k/index
-diff --git a/Documentation/arch/nios2/index.rst b/Documentation/arch/nios2/index.rst
-index 4468fe1a1037..bfaf0e963db3 100644
---- a/Documentation/arch/nios2/index.rst
-+++ b/Documentation/arch/nios2/index.rst
-@@ -10,3 +10,5 @@ Nios II Specific Documentation
- 
-    nios2
-    features
-+
-+.. alias:: nios2/index
-diff --git a/Documentation/arch/openrisc/index.rst b/Documentation/arch/openrisc/index.rst
-index 6879f998b87a..b59d97d6f8b7 100644
---- a/Documentation/arch/openrisc/index.rst
-+++ b/Documentation/arch/openrisc/index.rst
-@@ -18,3 +18,5 @@ OpenRISC Architecture
-    =======
- 
-    * :ref:`genindex`
-+
-+.. alias:: openrisc/index
-diff --git a/Documentation/arch/parisc/index.rst b/Documentation/arch/parisc/index.rst
-index 240685751825..aaa708c7f98d 100644
---- a/Documentation/arch/parisc/index.rst
-+++ b/Documentation/arch/parisc/index.rst
-@@ -18,3 +18,5 @@ PA-RISC Architecture
-    =======
- 
-    * :ref:`genindex`
-+
-+.. alias:: parisc/index
-diff --git a/Documentation/arch/sh/index.rst b/Documentation/arch/sh/index.rst
-index c64776738cf6..5a12d76abec4 100644
---- a/Documentation/arch/sh/index.rst
-+++ b/Documentation/arch/sh/index.rst
-@@ -54,3 +54,5 @@ Maple
- 
- .. kernel-doc:: drivers/sh/maple/maple.c
-    :export:
-+
-+.. alias:: sh/index
-diff --git a/Documentation/arch/sparc/index.rst b/Documentation/arch/sparc/index.rst
-index ae884224eec2..f2731a4925c3 100644
---- a/Documentation/arch/sparc/index.rst
-+++ b/Documentation/arch/sparc/index.rst
-@@ -11,3 +11,5 @@ Sparc Architecture
-    oradax/oracle-dax
- 
-    features
-+
-+.. alias:: sparc/index
-diff --git a/Documentation/arch/x86/index.rst b/Documentation/arch/x86/index.rst
-index c73d133fd37c..2154bfe2b6ca 100644
---- a/Documentation/arch/x86/index.rst
-+++ b/Documentation/arch/x86/index.rst
-@@ -42,3 +42,5 @@ x86-specific Documentation
-    features
-    elf_auxvec
-    xstate
-+
-+.. alias:: x86/index
-diff --git a/Documentation/arch/x86/x86_64/index.rst b/Documentation/arch/x86/x86_64/index.rst
-index a56070fc8e77..d4eb610b0080 100644
---- a/Documentation/arch/x86/x86_64/index.rst
-+++ b/Documentation/arch/x86/x86_64/index.rst
-@@ -15,3 +15,5 @@ x86_64 Support
-    cpu-hotplug-spec
-    machinecheck
-    fsgs
-+
-+.. alias:: x86/x86_64/index
-diff --git a/Documentation/arch/xtensa/index.rst b/Documentation/arch/xtensa/index.rst
-index 69952446a9be..a794bddddad4 100644
---- a/Documentation/arch/xtensa/index.rst
-+++ b/Documentation/arch/xtensa/index.rst
-@@ -12,3 +12,5 @@ Xtensa Architecture
-    mmu
- 
-    features
-+
-+.. alias:: xtensa/index
-diff --git a/Documentation/conf.py b/Documentation/conf.py
-index 37314afd1ac8..068f85e5dd1f 100644
---- a/Documentation/conf.py
-+++ b/Documentation/conf.py
-@@ -16,6 +16,7 @@ import sys
- import os
- import sphinx
- import shutil
-+from importlib.util import find_spec
- 
- # helper
- # ------
-@@ -57,6 +58,14 @@ extensions = ['kerneldoc', 'rstFlatTable', 'kernel_include',
-               'maintainers_include', 'sphinx.ext.autosectionlabel',
-               'kernel_abi', 'kernel_feat']
- 
-+extensions += ['alias'] # uses rediraffe
-+
-+if find_spec('sphinxext.rediraffe'):
-+    extensions += ['sphinxext.rediraffe']
-+    rediraffe_redirects = { }
-+else:
-+    print("Skipping redirects because sphinxext.rediraffe is not installed")
-+
- if major >= 3:
-     if (major > 3) or (minor > 0 or patch >= 2):
-         # Sphinx c function parser is more pedantic with regards to type
-diff --git a/Documentation/sphinx/alias.py b/Documentation/sphinx/alias.py
-new file mode 100644
-index 000000000000..e00605d07dbd
---- /dev/null
-+++ b/Documentation/sphinx/alias.py
-@@ -0,0 +1,35 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+u"""
-+    Directive `alias`
-+    ~~~~~~~~~~~~~~~
-+    Provides browser redirects for moved pages.
-+
-+    The directive declares previous path of a moved document as the argument.
-+    Redirects are implemented with Sphinx extension rediraffe_redirects.
-+
-+    :copyright: Copyright 2023 Costa Shulyupin <costa.shul@redhat.com>
-+    :license:   GPL Version 2, June 1991 see linux/COPYING for details.
-+
-+"""
-+
-+from docutils.parsers.rst import Directive
-+import os
-+
-+
-+class AliasDirective(Directive):
-+    required_arguments = 1
-+
-+    def run(self):
-+        env = self.state.document.settings.env
-+        if 'rediraffe_redirects' not in env.config:
-+            return []
-+        env.config.rediraffe_redirects[self.arguments[0]] \
-+            = os.path.relpath(self.state.document.current_source,
-+                              env.srcdir)
-+        return []
-+
-+
-+def setup(app):
-+    app.add_directive('alias', AliasDirective)
-+    return { 'parallel_read_safe': False, 'parallel_write_safe': False }
-diff --git a/Documentation/sphinx/requirements.txt b/Documentation/sphinx/requirements.txt
-index 335b53df35e2..9ff99beb5ed3 100644
---- a/Documentation/sphinx/requirements.txt
-+++ b/Documentation/sphinx/requirements.txt
-@@ -1,3 +1,4 @@
- # jinja2>=3.1 is not compatible with Sphinx<4.0
- jinja2<3.1
- Sphinx==2.4.4
-+rediraffe_redirects
--- 
-2.40.0
+I can test the same on SA8295-ADP and can push the next version quickly.
 
+Regards,
+Krishna,
+
+>>   arch/arm64/boot/dts/qcom/sa8540p-ride.dts | 22 ++++++++++++++++++++++
+>>   1 file changed, 22 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
+>> index 24fa449d48a6..53d47593306e 100644
+>> --- a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
+>> +++ b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
+>> @@ -309,6 +309,19 @@ &usb_2_qmpphy0 {
+>>   	status = "okay";
+>>   };
+>>   
+>> +&usb_2 {
+>> +	pinctrl-names = "default";
+>> +	pinctrl-0 = <&usb2_en_state>;
+>> +
+>> +	status = "okay";
+>> +};
+>> +
+>> +&usb_2_dwc3 {
+>> +	dr_mode = "host";
+>> +	phy-names = "usb2-port0", "usb3-port0";
+>> +	phys = <&usb_2_hsphy0>, <&usb_2_qmpphy0>;
+>> +};
+>> +
+>>   &xo_board_clk {
+>>   	clock-frequency = <38400000>;
+>>   };
+>> @@ -401,4 +414,13 @@ wake-pins {
+>>   			bias-pull-up;
+>>   		};
+>>   	};
+>> +
+>> +	usb2_en_state: usb2-en-state {
+>> +		/* TS3USB221A USB2.0 mux select */
+>> +		pins = "gpio24";
+>> +		function = "gpio";
+>> +		drive-strength = <2>;
+>> +		bias-disable;
+>> +		output-low;
+>> +	};
+>>   };
