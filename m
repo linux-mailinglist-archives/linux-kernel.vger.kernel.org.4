@@ -2,66 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78DD96F6527
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 08:38:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCC146F652C
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 08:43:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbjEDGif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 02:38:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52640 "EHLO
+        id S229967AbjEDGnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 02:43:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjEDGid (ORCPT
+        with ESMTP id S229460AbjEDGnq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 02:38:33 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD13E2122
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 23:38:31 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f18dacd392so467865e9.0
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 23:38:31 -0700 (PDT)
+        Thu, 4 May 2023 02:43:46 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1FEE4
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 23:43:44 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-9505214c47fso13515966b.1
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 23:43:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683182310; x=1685774310;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+        d=gmail.com; s=20221208; t=1683182623; x=1685774623;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=0j4be7d2rG+22TYev8I5mh2jy5bdlXqGPQcv/ReyqdQ=;
-        b=tw6Qh5w7opRCW4Q+ayJWgUlmG18Ys0UByGAJ+5n2YniM0PUWxitzIRUlXQwPt9EKa8
-         NWoSfoieLWgQgVtUWeCJPW14Sb6ANdwBvJug7kzSlxco76xHzRuDBEAlU9wX800ZcVV7
-         vrUeX+ISVuoRNMwCuKJ6E/+VFlKYVet33wH9V9N86MCOJsTLfbjmnV1XTXSmB2c9dl+Y
-         8qUUS+LbcJH4V5nOPzJcNsWD2eZbAUn/rTgONZoaZobe9uxR501evVCtP9r+IyqcFfOz
-         hy7OxzdgCO00XmZaasmrQraKq0lhS8FpiTq+IwTIViSvGJTGf4bf+M2ucJkQsxRC+IMU
-         hVjQ==
+        bh=L+HveaSZ8pmwoAQVLbFBbIPHXURnLfpovswLFaD49cM=;
+        b=Yc1utEmmtVjKxRztgUq8TCrqbbROc/mWgRM3m733c//+EhoGPCJukqByvu+IsuYjXz
+         9fekby6lVOIh2YlJV/Pwk4KwyIOcLqk8AjfPvYHGFdPY34ZF9JcPF9Ki5Ier/UY4O5LC
+         ++Kjly+BcoE03+TJesuBL2Pg9QhuWVcaQQU5nPUT8EBPrONzuK5Ex9y3ExzxbZG4A+q0
+         3RaTYaMmYm55t+c4AXLG+jKta0VAxf9t2XOIGq15QxVBU/YRqQVyoRA/wnHJ/QqK5LbG
+         WtGE8MFTa4t8bOpBBWz5DY11Rt0KlFtM2yQ8rj8hHg4KtVLs5MUlAyqVFqEqBbMQOoWJ
+         UZmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683182310; x=1685774310;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20221208; t=1683182623; x=1685774623;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0j4be7d2rG+22TYev8I5mh2jy5bdlXqGPQcv/ReyqdQ=;
-        b=a5YBijv56Pe4dgy5nD4zOVbip19eouw15c2TMoVJaIxZH0cSlMnfmvfELs8E01Eafw
-         517SXy9sjrVwv8hM39hGRsYTd3UDVJlk2YddtDgZMrPwn9ugcHhBg1za2Kv46dLLlLl0
-         9GhClZZayqCbx0lsJVkBf+OrfUMhBdW6LuI5t5T59X33iT/ZlIcl6jd6ogD0dtw+y92D
-         srVaHWRZonm06lORikGqlBctT1eto49qA3qD7rppqQVQU3Fjm++s6o8KfXH4+EhcC72k
-         YoF9+XtxnJZGFhCPF7mjVRfZxKPFsYgjaGkqrJQLCKm8RmP81X3Y6gqxTS61MTUMDfUe
-         hdRg==
-X-Gm-Message-State: AC+VfDxXC6i1eUaF9a8pi21bofWY5O8wZWtFDzYzFSUq3iVYgoIKqldR
-        xNWqZTl0a6Nb4hhSId3EFiEDiw==
-X-Google-Smtp-Source: ACHHUZ6YSFXuWIzgIAn2WEOQ2PDaxiYOet8Q+iWJXYQ4KFH0vwIkq2ihD5MIXOFv//R9vz5DMg9RjQ==
-X-Received: by 2002:a7b:cb93:0:b0:3f1:6eaf:daa7 with SMTP id m19-20020a7bcb93000000b003f16eafdaa7mr16219917wmi.10.1683182310180;
-        Wed, 03 May 2023 23:38:30 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id n15-20020a1c720f000000b003f339b2d06fsm3823493wmc.4.2023.05.03.23.38.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 May 2023 23:38:28 -0700 (PDT)
-Date:   Thu, 4 May 2023 09:38:22 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     oe-kbuild@lists.linux.dev, Masahiro Yamada <masahiroy@kernel.org>
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: drivers/scsi/mpi3mr/mpi3mr_fw.c:1413 mpi3mr_issue_reset() error:
- uninitialized symbol 'host_diagnostic'.
-Message-ID: <90ba7164-a232-4561-9d59-78c0669e2851@kili.mountain>
+        bh=L+HveaSZ8pmwoAQVLbFBbIPHXURnLfpovswLFaD49cM=;
+        b=EUTPjKIE/cYoflufK9jdGnQiS0tKB+ry+Mr1HQkdVYk8xc1LDFlBWPb5gTpe6pRx4I
+         KQN7QMHmWM8YM/92NF3mCfJpOczBh+KAJu9MAZBYt5rx3YmKAAAYlGhrixP/aNPABRTz
+         O4OhO9SidObQ2+cUProsEImT1mACiCp20Gyp/Fkrp1Og756/t84GRC/UVDZzQ5B+gQoN
+         osmxVkYAuyrpr9piB6M95w2cQLeHc5+pciejplbJsDCfYW+XHv+dxm18U54sfR/qN1NY
+         N+jP8nJq29Pm8fWsEGdSkbLAxQanNYFeg07hGvUV2wYkKCcf3+V3ZXE7KmfkA8hnKuhW
+         zgLg==
+X-Gm-Message-State: AC+VfDxyECIhwaKB2EM7UcD9BNA8/MUFw6u9Sa9hnIo0Tw8ZXEDNjyam
+        vdlkrv3WchTwfS6uYR79t0g=
+X-Google-Smtp-Source: ACHHUZ6uvKUY4TfE5NW9KHFncs7MFdr3b9I0I/pMbi5ojrgYPfu3ZEqrW8pvVrcM5xsnTl/cei+hRw==
+X-Received: by 2002:a17:907:31c7:b0:95e:d448:477 with SMTP id xf7-20020a17090731c700b0095ed4480477mr5524506ejb.33.1683182622810;
+        Wed, 03 May 2023 23:43:42 -0700 (PDT)
+Received: from ?IPV6:2a02:908:1256:79a0:df61:3d16:42f9:8c09? ([2a02:908:1256:79a0:df61:3d16:42f9:8c09])
+        by smtp.gmail.com with ESMTPSA id k9-20020a170906970900b009534211cc97sm18405177ejx.159.2023.05.03.23.43.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 May 2023 23:43:41 -0700 (PDT)
+Message-ID: <718e7aa5-0e08-fc88-b612-ae82ab9736cd@gmail.com>
+Date:   Thu, 4 May 2023 08:43:42 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [RFC PATCH 0/1] Add AMDGPU_INFO_GUILTY_APP ioctl
+Content-Language: en-US
+To:     =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
+        =?UTF-8?Q?Timur_Krist=c3=b3f?= <timur.kristof@gmail.com>,
+        Felix Kuehling <felix.kuehling@amd.com>
+Cc:     Alex Deucher <alexdeucher@gmail.com>,
+        "Pelloux-Prayer, Pierre-Eric" <pierre-eric.pelloux-prayer@amd.com>,
+        =?UTF-8?B?TWFyZWsgT2zFocOhaw==?= <maraeo@gmail.com>,
+        michel.daenzer@mailbox.org,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-kernel@vger.kernel.org,
+        Samuel Pitoiset <samuel.pitoiset@gmail.com>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        kernel-dev@igalia.com,
+        "Deucher, Alexander" <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+References: <20230501185747.33519-1-andrealmeid@igalia.com>
+ <CADnq5_NXj4W44F_etRQ7HWdVTnf5zARCM3Y_o3EiwWiHj8QMpA@mail.gmail.com>
+ <6ab2ff76-4518-6fac-071e-5d0d5adc4fcd@igalia.com>
+ <cb3d2590-a1f8-fe7e-0bba-638ee80719af@amd.com>
+ <CAFF-SiV0=WNmRW-D9uYUuj68Zq0APxtGLya9KR6FfZ7v0Zf2RQ@mail.gmail.com>
+ <fcca2934-a556-797c-535d-a66fc67bbe30@amd.com>
+ <85c538b01efb6f3fa6ff05ed1a0bc3ff87df7a61.camel@gmail.com>
+ <CADnq5_NHtFbwT=x8u7GYc4ESL_HVFzjgtOd3AnVFBYMrjZq55w@mail.gmail.com>
+ <c54414482b685af0991a6b095cbfb7534d998afc.camel@gmail.com>
+ <CADnq5_MSY=j9AobDk7ACevur4Hwvw_ub7g16Mfm7ymMJqwVNfQ@mail.gmail.com>
+ <57fa0ee4-de4f-3797-f817-d05f72541d0e@gmail.com>
+ <2bf162d0-6112-8370-8828-0e0b21ac22ba@amd.com>
+ <967a044bc2723cc24ab914506c0164db08923c59.camel@gmail.com>
+ <59774c28-a0ef-d4f2-e920-503857bce1cf@igalia.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+In-Reply-To: <59774c28-a0ef-d4f2-e920-503857bce1cf@igalia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,158 +99,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Masahiro,
+Am 03.05.23 um 21:14 schrieb André Almeida:
+> Em 03/05/2023 14:43, Timur Kristóf escreveu:
+>> Hi Felix,
+>>
+>> On Wed, 2023-05-03 at 11:08 -0400, Felix Kuehling wrote:
+>>> That's the worst-case scenario where you're debugging HW or FW
+>>> issues.
+>>> Those should be pretty rare post-bringup. But are there hangs caused
+>>> by
+>>> user mode driver or application bugs that are easier to debug and
+>>> probably don't even require a GPU reset?
+>>
+>> There are many GPU hangs that gamers experience while playing. We have
+>> dozens of open bug reports against RADV about GPU hangs on various GPU
+>> generations. These usually fall into two categories:
+>>
+>> 1. When the hang always happens at the same point in a game. These are
+>> painful to debug but manageable.
+>> 2. "Random" hangs that happen to users over the course of playing a
+>> game for several hours. It is absolute hell to try to even reproduce
+>> let alone diagnose these issues, and this is what we would like to
+>> improve.
+>>
+>> For these hard-to-diagnose problems, it is already a challenge to
+>> determine whether the problem is the kernel (eg. setting wrong voltages
+>> / frequencies) or userspace (eg. missing some synchronization), can be
+>> even a game bug that we need to work around.
+>>
+>>> For example most VM faults can
+>>> be handled without hanging the GPU. Similarly, a shader in an endless
+>>> loop should not require a full GPU reset.
+>>
+>> This is actually not the case, AFAIK André's test case was an app that
+>> had an infinite loop in a shader.
+>>
+>
+> This is the test app if anyone want to try out: 
+> https://github.com/andrealmeid/vulkan-triangle-v1. Just compile and run.
+>
+> The kernel calls amdgpu_ring_soft_recovery() when I run my example, 
+> but I'm not sure what a soft recovery means here and if it's a full 
+> GPU reset or not.
 
-First bad commit (maybe != root cause):
+That's just "soft" recovery. In other words we send the SQ a command to 
+kill a shader.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   fa31fc82fb775445c176e576304c4098222f47f2
-commit: 3753af778dd9d0d5199d6a7d01b0ead33135d095 kbuild: fix single directory build
-config: arm64-randconfig-m041-20230428 (https://download.01.org/0day-ci/archive/20230504/202305040735.8kNJSKlE-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
+That usually works for shaders which contain an endless loop (which is 
+the most common application bug), but unfortunately not for any other 
+problem.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <error27@gmail.com>
-| Link: https://lore.kernel.org/r/202305040735.8kNJSKlE-lkp@intel.com/
+>
+> But if we can at least trust the CP registers to dump information for 
+> soft resets, it would be some improvement from the current state I think
 
-New smatch warnings:
-drivers/scsi/mpi3mr/mpi3mr_fw.c:1413 mpi3mr_issue_reset() error: uninitialized symbol 'host_diagnostic'.
-drivers/scsi/mpi3mr/mpi3mr_fw.c:1919 mpi3mr_create_op_reply_q() error: we previously assumed 'op_reply_q->q_segments' could be null (see line 1872)
-drivers/scsi/mpi3mr/mpi3mr_fw.c:2027 mpi3mr_create_op_req_q() error: we previously assumed 'op_req_q->q_segments' could be null (see line 2000)
-drivers/scsi/mpi3mr/mpi3mr_app.c:1337 mpi3mr_bsg_process_mpt_cmds() warn: potentially one past the end of array 'drv_bufs[mpirep_offset]'
-drivers/scsi/mpi3mr/mpi3mr_app.c:1337 mpi3mr_bsg_process_mpt_cmds() warn: potentially one past the end of array 'drv_bufs[mpirep_offset]'
-drivers/scsi/mpi3mr/mpi3mr_app.c:1367 mpi3mr_bsg_process_mpt_cmds() warn: potentially one past the end of array 'drv_bufs[erb_offset]'
-drivers/scsi/mpi3mr/mpi3mr_transport.c:2063 mpi3mr_expander_add() warn: returning -1 instead of -ENOMEM is sloppy
+Especially for endless loops the CP registers are completely useless. 
+The CP just prepares the draw commands and all the state which is then 
+send to the SQ for execution.
 
-Old smatch warnings:
-drivers/scsi/mpi3mr/mpi3mr_app.c:1338 mpi3mr_bsg_process_mpt_cmds() warn: potentially one past the end of array 'drv_bufs[mpirep_offset]'
+As Marek wrote we know which submission has timed out in the kernel, but 
+we can't figure out where inside this submission we are.
 
-vim +/host_diagnostic +1413 drivers/scsi/mpi3mr/mpi3mr_fw.c
+>
+>>>
+>>> It's more complicated for graphics because of the more complex
+>>> pipeline
+>>> and the lack of CWSR. But it should still be possible to do some
+>>> debugging without JTAG if the problem is in SW and not HW or FW. It's
+>>> probably worth improving that debugability without getting hung-up on
+>>> the worst case.
+>>
+>> I agree, and we welcome any constructive suggestion to improve the
+>> situation. It seems like our idea doesn't work if the kernel can't give
+>> us the information we need.
+>>
+>> How do we move forward?
 
-824a156633dfdb Kashyap Desai   2021-05-20  1371  
-824a156633dfdb Kashyap Desai   2021-05-20  1372  /**
-824a156633dfdb Kashyap Desai   2021-05-20  1373   * mpi3mr_issue_reset - Issue reset to the controller
-824a156633dfdb Kashyap Desai   2021-05-20  1374   * @mrioc: Adapter reference
-824a156633dfdb Kashyap Desai   2021-05-20  1375   * @reset_type: Reset type
-824a156633dfdb Kashyap Desai   2021-05-20  1376   * @reset_reason: Reset reason code
-824a156633dfdb Kashyap Desai   2021-05-20  1377   *
-f061178e076210 Kashyap Desai   2021-05-20  1378   * Unlock the host diagnostic registers and write the specific
-f061178e076210 Kashyap Desai   2021-05-20  1379   * reset type to that, wait for reset acknowledgment from the
-f061178e076210 Kashyap Desai   2021-05-20  1380   * controller, if the reset is not successful retry for the
-f061178e076210 Kashyap Desai   2021-05-20  1381   * predefined number of times.
-824a156633dfdb Kashyap Desai   2021-05-20  1382   *
-824a156633dfdb Kashyap Desai   2021-05-20  1383   * Return: 0 on success, non-zero on failure.
-824a156633dfdb Kashyap Desai   2021-05-20  1384   */
-824a156633dfdb Kashyap Desai   2021-05-20  1385  static int mpi3mr_issue_reset(struct mpi3mr_ioc *mrioc, u16 reset_type,
-824a156633dfdb Kashyap Desai   2021-05-20  1386  	u32 reset_reason)
-824a156633dfdb Kashyap Desai   2021-05-20  1387  {
-f061178e076210 Kashyap Desai   2021-05-20  1388  	int retval = -1;
-b64845a7d4039a Sreekanth Reddy 2021-12-20  1389  	u8 unlock_retry_count = 0;
-b64845a7d4039a Sreekanth Reddy 2021-12-20  1390  	u32 host_diagnostic, ioc_status, ioc_config;
-b64845a7d4039a Sreekanth Reddy 2021-12-20  1391  	u32 timeout = MPI3MR_RESET_ACK_TIMEOUT * 10;
-f061178e076210 Kashyap Desai   2021-05-20  1392  
-f061178e076210 Kashyap Desai   2021-05-20  1393  	if ((reset_type != MPI3_SYSIF_HOST_DIAG_RESET_ACTION_SOFT_RESET) &&
-f061178e076210 Kashyap Desai   2021-05-20  1394  	    (reset_type != MPI3_SYSIF_HOST_DIAG_RESET_ACTION_DIAG_FAULT))
-b64845a7d4039a Sreekanth Reddy 2021-12-20  1395  		return retval;
-f061178e076210 Kashyap Desai   2021-05-20  1396  	if (mrioc->unrecoverable)
-b64845a7d4039a Sreekanth Reddy 2021-12-20  1397  		return retval;
-b64845a7d4039a Sreekanth Reddy 2021-12-20  1398  	if (reset_reason == MPI3MR_RESET_FROM_FIRMWARE) {
-b64845a7d4039a Sreekanth Reddy 2021-12-20  1399  		retval = 0;
-b64845a7d4039a Sreekanth Reddy 2021-12-20  1400  		return retval;
-b64845a7d4039a Sreekanth Reddy 2021-12-20  1401  	}
-b64845a7d4039a Sreekanth Reddy 2021-12-20  1402  
-b64845a7d4039a Sreekanth Reddy 2021-12-20  1403  	ioc_info(mrioc, "%s reset due to %s(0x%x)\n",
-b64845a7d4039a Sreekanth Reddy 2021-12-20  1404  	    mpi3mr_reset_type_name(reset_type),
-b64845a7d4039a Sreekanth Reddy 2021-12-20  1405  	    mpi3mr_reset_rc_name(reset_reason), reset_reason);
-b64845a7d4039a Sreekanth Reddy 2021-12-20  1406  
-f061178e076210 Kashyap Desai   2021-05-20  1407  	mpi3mr_clear_reset_history(mrioc);
-f061178e076210 Kashyap Desai   2021-05-20  1408  	do {
-f061178e076210 Kashyap Desai   2021-05-20  1409  		ioc_info(mrioc,
-f061178e076210 Kashyap Desai   2021-05-20  1410  		    "Write magic sequence to unlock host diag register (retry=%d)\n",
-f061178e076210 Kashyap Desai   2021-05-20  1411  		    ++unlock_retry_count);
-f061178e076210 Kashyap Desai   2021-05-20  1412  		if (unlock_retry_count >= MPI3MR_HOSTDIAG_UNLOCK_RETRY_COUNT) {
-b64845a7d4039a Sreekanth Reddy 2021-12-20 @1413  			ioc_err(mrioc,
-b64845a7d4039a Sreekanth Reddy 2021-12-20  1414  			    "%s reset failed due to unlock failure, host_diagnostic(0x%08x)\n",
-b64845a7d4039a Sreekanth Reddy 2021-12-20  1415  			    mpi3mr_reset_type_name(reset_type),
-b64845a7d4039a Sreekanth Reddy 2021-12-20  1416  			    host_diagnostic);
-                                                                            ^^^^^^^^^^^^^^^^
-Uninitialized.
+As I said the best approach to figure out which draw command hangs is to 
+sprinkle WRITE_DATA commands into your command stream.
 
-f061178e076210 Kashyap Desai   2021-05-20  1417  			mrioc->unrecoverable = 1;
-b64845a7d4039a Sreekanth Reddy 2021-12-20  1418  			return retval;
-f061178e076210 Kashyap Desai   2021-05-20  1419  		}
-f061178e076210 Kashyap Desai   2021-05-20  1420  
-f061178e076210 Kashyap Desai   2021-05-20  1421  		writel(MPI3_SYSIF_WRITE_SEQUENCE_KEY_VALUE_FLUSH,
-f061178e076210 Kashyap Desai   2021-05-20  1422  		    &mrioc->sysif_regs->write_sequence);
-f061178e076210 Kashyap Desai   2021-05-20  1423  		writel(MPI3_SYSIF_WRITE_SEQUENCE_KEY_VALUE_1ST,
-f061178e076210 Kashyap Desai   2021-05-20  1424  		    &mrioc->sysif_regs->write_sequence);
-f061178e076210 Kashyap Desai   2021-05-20  1425  		writel(MPI3_SYSIF_WRITE_SEQUENCE_KEY_VALUE_2ND,
-f061178e076210 Kashyap Desai   2021-05-20  1426  		    &mrioc->sysif_regs->write_sequence);
-f061178e076210 Kashyap Desai   2021-05-20  1427  		writel(MPI3_SYSIF_WRITE_SEQUENCE_KEY_VALUE_3RD,
-f061178e076210 Kashyap Desai   2021-05-20  1428  		    &mrioc->sysif_regs->write_sequence);
-f061178e076210 Kashyap Desai   2021-05-20  1429  		writel(MPI3_SYSIF_WRITE_SEQUENCE_KEY_VALUE_4TH,
-f061178e076210 Kashyap Desai   2021-05-20  1430  		    &mrioc->sysif_regs->write_sequence);
-f061178e076210 Kashyap Desai   2021-05-20  1431  		writel(MPI3_SYSIF_WRITE_SEQUENCE_KEY_VALUE_5TH,
-f061178e076210 Kashyap Desai   2021-05-20  1432  		    &mrioc->sysif_regs->write_sequence);
-f061178e076210 Kashyap Desai   2021-05-20  1433  		writel(MPI3_SYSIF_WRITE_SEQUENCE_KEY_VALUE_6TH,
-f061178e076210 Kashyap Desai   2021-05-20  1434  		    &mrioc->sysif_regs->write_sequence);
-f061178e076210 Kashyap Desai   2021-05-20  1435  		usleep_range(1000, 1100);
-f061178e076210 Kashyap Desai   2021-05-20  1436  		host_diagnostic = readl(&mrioc->sysif_regs->host_diagnostic);
-f061178e076210 Kashyap Desai   2021-05-20  1437  		ioc_info(mrioc,
-f061178e076210 Kashyap Desai   2021-05-20  1438  		    "wrote magic sequence: retry_count(%d), host_diagnostic(0x%08x)\n",
-f061178e076210 Kashyap Desai   2021-05-20  1439  		    unlock_retry_count, host_diagnostic);
-f061178e076210 Kashyap Desai   2021-05-20  1440  	} while (!(host_diagnostic & MPI3_SYSIF_HOST_DIAG_DIAG_WRITE_ENABLE));
-f061178e076210 Kashyap Desai   2021-05-20  1441  
-f061178e076210 Kashyap Desai   2021-05-20  1442  	writel(reset_reason, &mrioc->sysif_regs->scratchpad[0]);
-f061178e076210 Kashyap Desai   2021-05-20  1443  	writel(host_diagnostic | reset_type,
-f061178e076210 Kashyap Desai   2021-05-20  1444  	    &mrioc->sysif_regs->host_diagnostic);
-b64845a7d4039a Sreekanth Reddy 2021-12-20  1445  	switch (reset_type) {
-b64845a7d4039a Sreekanth Reddy 2021-12-20  1446  	case MPI3_SYSIF_HOST_DIAG_RESET_ACTION_SOFT_RESET:
-f061178e076210 Kashyap Desai   2021-05-20  1447  		do {
-f061178e076210 Kashyap Desai   2021-05-20  1448  			ioc_status = readl(&mrioc->sysif_regs->ioc_status);
-f061178e076210 Kashyap Desai   2021-05-20  1449  			ioc_config =
-f061178e076210 Kashyap Desai   2021-05-20  1450  			    readl(&mrioc->sysif_regs->ioc_configuration);
-b64845a7d4039a Sreekanth Reddy 2021-12-20  1451  			if ((ioc_status & MPI3_SYSIF_IOC_STATUS_RESET_HISTORY)
-b64845a7d4039a Sreekanth Reddy 2021-12-20  1452  			    && mpi3mr_soft_reset_success(ioc_status, ioc_config)
-b64845a7d4039a Sreekanth Reddy 2021-12-20  1453  			    ) {
-b64845a7d4039a Sreekanth Reddy 2021-12-20  1454  				mpi3mr_clear_reset_history(mrioc);
-f061178e076210 Kashyap Desai   2021-05-20  1455  				retval = 0;
-f061178e076210 Kashyap Desai   2021-05-20  1456  				break;
-f061178e076210 Kashyap Desai   2021-05-20  1457  			}
-f061178e076210 Kashyap Desai   2021-05-20  1458  			msleep(100);
-f061178e076210 Kashyap Desai   2021-05-20  1459  		} while (--timeout);
-b64845a7d4039a Sreekanth Reddy 2021-12-20  1460  		mpi3mr_print_fault_info(mrioc);
-b64845a7d4039a Sreekanth Reddy 2021-12-20  1461  		break;
-b64845a7d4039a Sreekanth Reddy 2021-12-20  1462  	case MPI3_SYSIF_HOST_DIAG_RESET_ACTION_DIAG_FAULT:
-f061178e076210 Kashyap Desai   2021-05-20  1463  		do {
-f061178e076210 Kashyap Desai   2021-05-20  1464  			ioc_status = readl(&mrioc->sysif_regs->ioc_status);
-f061178e076210 Kashyap Desai   2021-05-20  1465  			if (mpi3mr_diagfault_success(mrioc, ioc_status)) {
-f061178e076210 Kashyap Desai   2021-05-20  1466  				retval = 0;
-f061178e076210 Kashyap Desai   2021-05-20  1467  				break;
-f061178e076210 Kashyap Desai   2021-05-20  1468  			}
-f061178e076210 Kashyap Desai   2021-05-20  1469  			msleep(100);
-f061178e076210 Kashyap Desai   2021-05-20  1470  		} while (--timeout);
-b64845a7d4039a Sreekanth Reddy 2021-12-20  1471  		break;
-b64845a7d4039a Sreekanth Reddy 2021-12-20  1472  	default:
-b64845a7d4039a Sreekanth Reddy 2021-12-20  1473  		break;
-b64845a7d4039a Sreekanth Reddy 2021-12-20  1474  	}
-b64845a7d4039a Sreekanth Reddy 2021-12-20  1475  
-f061178e076210 Kashyap Desai   2021-05-20  1476  	writel(MPI3_SYSIF_WRITE_SEQUENCE_KEY_VALUE_2ND,
-f061178e076210 Kashyap Desai   2021-05-20  1477  	    &mrioc->sysif_regs->write_sequence);
-f061178e076210 Kashyap Desai   2021-05-20  1478  
-f061178e076210 Kashyap Desai   2021-05-20  1479  	ioc_config = readl(&mrioc->sysif_regs->ioc_configuration);
-b64845a7d4039a Sreekanth Reddy 2021-12-20  1480  	ioc_status = readl(&mrioc->sysif_regs->ioc_status);
-f061178e076210 Kashyap Desai   2021-05-20  1481  	ioc_info(mrioc,
-b64845a7d4039a Sreekanth Reddy 2021-12-20  1482  	    "ioc_status/ioc_onfig after %s reset is (0x%x)/(0x%x)\n",
-f061178e076210 Kashyap Desai   2021-05-20  1483  	    (!retval)?"successful":"failed", ioc_status,
-f061178e076210 Kashyap Desai   2021-05-20  1484  	    ioc_config);
-b64845a7d4039a Sreekanth Reddy 2021-12-20  1485  	if (retval)
-b64845a7d4039a Sreekanth Reddy 2021-12-20  1486  		mrioc->unrecoverable = 1;
-f061178e076210 Kashyap Desai   2021-05-20  1487  	return retval;
-824a156633dfdb Kashyap Desai   2021-05-20  1488  }
+That's not so much overhead and at least Bas things that this is doable 
+in RADV with some changes.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+For the kernel we can certainly implement devcoredump and allow writing 
+out register values and other state when a problem happens.
+
+Regards,
+Christian.
+
+>>
+>> Best regards,
+>> Timur
+>>
 
