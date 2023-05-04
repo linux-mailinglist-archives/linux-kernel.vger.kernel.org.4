@@ -2,105 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CD726F66D4
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 10:07:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E50D86F66E8
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 10:11:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230325AbjEDIHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 04:07:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49562 "EHLO
+        id S230270AbjEDILq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 04:11:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230212AbjEDIG6 (ORCPT
+        with ESMTP id S230017AbjEDILF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 04:06:58 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15A6A49C9;
-        Thu,  4 May 2023 01:06:23 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34485dZu087762;
-        Thu, 4 May 2023 03:05:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1683187539;
-        bh=1GIZKi464DswWpYYI8PkLUvrxRe5Lbt01DrvEsUrNoA=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=Vc7gbfmBmDHdjx0pSamnichWeKc88NN79sJGIL58gjk9FZGjp26+PWWro0BecSkew
-         YcfV6qz7INRQKyt5Yp/pAEZNmDYXnKzdOL8Lws9DuOkwioORgM905dXnPcDfArzmA5
-         FdGve1QEq/5WohlQ5CvOoVnicC9xcAsBziB8J4Nw=
-Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34485diR012046
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 4 May 2023 03:05:39 -0500
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 4
- May 2023 03:05:39 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 4 May 2023 03:05:39 -0500
-Received: from ula0497641.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34485R1R090093;
-        Thu, 4 May 2023 03:05:37 -0500
-From:   Neha Malcom Francis <n-francis@ti.com>
-To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <n-francis@ti.com>, <nm@ti.com>, <vigneshr@ti.com>,
-        <kristo@kernel.org>, <u-kumar1@ti.com>
-Subject: [PATCH v6 3/3] arm64: dts: ti: k3-j7200: Add ESM support
-Date:   Thu, 4 May 2023 13:35:26 +0530
-Message-ID: <20230504080526.133149-4-n-francis@ti.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230504080526.133149-1-n-francis@ti.com>
-References: <20230504080526.133149-1-n-francis@ti.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Thu, 4 May 2023 04:11:05 -0400
+Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8842159DD;
+        Thu,  4 May 2023 01:08:45 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailnew.nyi.internal (Postfix) with ESMTP id C953F580E95;
+        Thu,  4 May 2023 04:08:27 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 04 May 2023 04:08:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1683187707; x=1683194907; bh=7I
+        vu6rn6B1NGFOZyVTFGNG5QNTPEE1cpZNNy0FHXEjE=; b=fWn6u6lEuEOEz732Wx
+        rmayNAhve5wq+evaQfFvpEc5R6ye2SWH72iSWHn1otWQC1ahiQ8t9gXIp8XfuKdP
+        gw7yALeMRyEJ/QwP/xbB2gkjd/8276PjG9S2y8tv15DrZjy36ESbn/kfrtHRaByU
+        AQnZxbtjrPQBJI7g+kiMYM/yUNCwanHgR1RxjXfRlWRRxRo1OK/Tm5U3jWxHAKEH
+        QO9xny6tg6v+0Ltcw8bU5Xj3QxjTMznmB7/XBRGl3oqX4MZD0yJu6NDaeEzfu2W3
+        AKTj/VdOxrUNdwDJr1X6v7nJ3+YevXi+ScssrwbkNXmt3QiF4LN7nmEYgbel8aF5
+        7nQw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1683187707; x=1683194907; bh=7Ivu6rn6B1NGF
+        OZyVTFGNG5QNTPEE1cpZNNy0FHXEjE=; b=BY0CkEdf22oXu9QS+93gEkE+r+1KL
+        y4q2EzAPSeXPlQHoIn5PPogsePeb2EtPSdD77LsuSbHRCs9Hos3Au0vYQyA0RyE2
+        d4AS/QwSrLJyCVUMvrf2MoaPAwX4TebJVh38wsMNgrKZnd3CTjq2ram0SP3S2mC3
+        UKv05OqeACoP9cQxSs0G8kJ9Tj1Z7lHJwMCCAZO87eeFgS5QP7I1dEASPKfMGDmZ
+        kMLSzhyF0OnlR6P7d3sADZ4XOyPTUuOhFfBGUQw043OqExMXRj1wKSKT9o3zMDLA
+        AaOHJNQD6RcQ/xG0v7VdJeSXy0atqxicuKYDU46a+oiTN8n2u5awSGS3w==
+X-ME-Sender: <xms:-mdTZKvpe77Ggd55l7QklkXVLdjfMWwkvcfsgL6xYuT9kl-opXPMQQ>
+    <xme:-mdTZPc7TGrAEu-sq9LVOHxH6C6sW62ghk6jE0OTZCHOC5XvGmjDCG4naf5DLoXB8
+    ogQmLW6DnnkrnAm7po>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedvledguddviecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:-mdTZFzKaTEBCz5YZ6VEL5PbwzD84xZUykvo2kpZRgf8jJl3WFo6tQ>
+    <xmx:-mdTZFM9ja9VRjcYH6gnljzqTpzuYZ8K0ABfc6pNxosU5UAvkgn3oA>
+    <xmx:-mdTZK9yA2NopA9LXitQq9QqfUe7AExDqkaJjSEZs_iY6EhOz893cw>
+    <xmx:-2dTZNjT4047igFwdLFr9BK1zu7YSDGszq7TkVg743YjZX4Z6vfdnw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id C2C61B60086; Thu,  4 May 2023 04:08:26 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-386-g2404815117-fm-20230425.001-g24048151
+Mime-Version: 1.0
+Message-Id: <ee4cea3d-282e-4e90-897e-4ba576731f6e@app.fastmail.com>
+In-Reply-To: <20230504074539.8181-1-tzimmermann@suse.de>
+References: <20230504074539.8181-1-tzimmermann@suse.de>
+Date:   Thu, 04 May 2023 10:08:05 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Thomas Zimmermann" <tzimmermann@suse.de>,
+        "Helge Deller" <deller@gmx.de>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        "Javier Martinez Canillas" <javierm@redhat.com>,
+        "Daniel Vetter" <daniel@ffwll.ch>,
+        "Vineet Gupta" <vgupta@kernel.org>,
+        "Huacai Chen" <chenhuacai@kernel.org>,
+        "WANG Xuerui" <kernel@xen0n.name>,
+        "David S . Miller" <davem@davemloft.net>,
+        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+        "Sam Ravnborg" <sam@ravnborg.org>
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, sparclinux@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-parisc@vger.kernel.org
+Subject: Re: [PATCH v4 0/6] fbdev: Move framebuffer I/O helpers to <asm/fb.h>
 Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add address entry mapping ESM on J7200.
+On Thu, May 4, 2023, at 09:45, Thomas Zimmermann wrote:
+> Fbdev provides helpers for framebuffer I/O, such as fb_readl(),
+> fb_writel() or fb_memcpy_to_fb(). The implementation of each helper
+> depends on the architecture, but they are all equivalent to regular
+> I/O functions of similar names. So use regular functions instead and
+> move all helpers into <asm-generic/fb.h>
+>
+> The first patch a simple whitespace cleanup.
+>
+> Until now, <linux/fb.h> contained an include of <asm/io.h>. As this
+> will go away, patches 2 to 4 prepare include statements in the various
+> drivers. Source files that use regular I/O helpers, such as readl(),
+> now include <linux/io.h>. Source files that use framebuffer I/O
+> helpers, such as fb_readl(), now include <linux/fb.h>.
+>
+> Patch 5 replaces the architecture-based if-else branching in 
+> <linux/fb.h> by helpers in <asm-generic/fb.h>. All helpers use Linux'
+> existing I/O functions.
+>
+> Patch 6 harmonizes naming among fbdev and existing I/O functions.
+>
+> The patchset has been built for a variety of platforms, such as x86-64,
+> arm, aarch64, ppc64, parisc, m64k, mips and sparc.
 
-Signed-off-by: Neha Malcom Francis <n-francis@ti.com>
----
- arch/arm64/boot/dts/ti/k3-j7200-main.dtsi | 6 ++++++
- arch/arm64/boot/dts/ti/k3-j7200.dtsi      | 1 +
- 2 files changed, 7 insertions(+)
+The whole series looks good to me now,
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi b/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
-index ef352e32f19d..89f816f5e53d 100644
---- a/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
-@@ -1010,4 +1010,10 @@ main_r5fss0_core1: r5f@5d00000 {
- 			ti,loczrama = <1>;
- 		};
- 	};
-+
-+	main_esm: esm@700000 {
-+		compatible = "ti,j721e-esm";
-+		reg = <0x0 0x700000 0x0 0x1000>;
-+		ti,esm-pins = <656>, <657>;
-+	};
- };
-diff --git a/arch/arm64/boot/dts/ti/k3-j7200.dtsi b/arch/arm64/boot/dts/ti/k3-j7200.dtsi
-index bbe380c72a7e..4998eb4fbe75 100644
---- a/arch/arm64/boot/dts/ti/k3-j7200.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j7200.dtsi
-@@ -128,6 +128,7 @@ cbass_main: bus@100000 {
- 		#size-cells = <2>;
- 		ranges = <0x00 0x00100000 0x00 0x00100000 0x00 0x00020000>, /* ctrl mmr */
- 			 <0x00 0x00600000 0x00 0x00600000 0x00 0x00031100>, /* GPIO */
-+			 <0x00 0x00700000 0x00 0x00700000 0x00 0x00001000>, /* ESM */
- 			 <0x00 0x00a40000 0x00 0x00a40000 0x00 0x00000800>, /* timesync router */
- 			 <0x00 0x01000000 0x00 0x01000000 0x00 0x0d000000>, /* Most peripherals */
- 			 <0x00 0x30000000 0x00 0x30000000 0x00 0x0c400000>, /* MAIN NAVSS */
--- 
-2.34.1
-
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
