@@ -2,143 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EFE76F6CE5
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 15:25:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE22F6F6CF1
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 15:30:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230358AbjEDNZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 09:25:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55556 "EHLO
+        id S230190AbjEDNai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 09:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbjEDNZs (ORCPT
+        with ESMTP id S229873AbjEDNaf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 09:25:48 -0400
-Received: from www484.your-server.de (www484.your-server.de [78.47.237.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A4E0CF;
-        Thu,  4 May 2023 06:25:46 -0700 (PDT)
-Received: from sslproxy01.your-server.de ([78.46.139.224])
-        by www484.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <k.graefe@gateware.de>)
-        id 1puYxp-0002qp-4j; Thu, 04 May 2023 15:25:41 +0200
-Received: from [2003:ca:6730:e8f8:81f6:311d:d80b:43c1]
-        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <k.graefe@gateware.de>)
-        id 1puYxo-000E7H-UN; Thu, 04 May 2023 15:25:40 +0200
-Message-ID: <69e232c0-56ff-268c-43c4-ff40f5b00568@gateware.de>
-Date:   Thu, 4 May 2023 15:25:40 +0200
+        Thu, 4 May 2023 09:30:35 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656864C24
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 06:30:34 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-64395e2a715so330347b3a.3
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 06:30:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683207034; x=1685799034;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e5zsZyieTVAbp2iRxHeQ6n3AI+4u6cFOmhvnnOshY8E=;
+        b=E8quQU+cUGSfXkNGJShwkhCuwJjqDNhbti1Y4b019xq7w0dS++lpvHBnw2QSiPSMxf
+         LuaeypMAOIiyIfqmCxiwOluwfRTIaPBV06A3yuXOOw68c+y+gwSWyYIvdBKbkecsq86g
+         rR1Lo6wYkHJ9bzswQzSinQmcnFfnxTIh8udre29Nn5LNn8TIL0wdjy3U8YqRqmVp4MPh
+         KlGchG1khmNbJejhidFwncu9YWgxYxy7yR0QUHcGmyzfNAXaVC7+k5KLExoIyyx/OmdC
+         fuygIFZeSYM1hC9gq3ehmbFmmqkcGJYRQYzuXUquMc6nlq418nnDWvH98RG5Xbd54vLu
+         Y6SA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683207034; x=1685799034;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=e5zsZyieTVAbp2iRxHeQ6n3AI+4u6cFOmhvnnOshY8E=;
+        b=I4uc9JT/V3Y2lt7eQDQbOkaQ7qTaFDqj+AQIZYqF5ybQvGTfed8UMqcNH1VKRl/qqt
+         wmQ5nK4EHRMUTHka7XQTz345GA+HvPB1mgsIM+zk/KXd8uiYPCqdxZpP6jg6wCcpFdgo
+         a2NBKNyu4ce9pGnUBnMvKkXATszXsEUWzbXReA5LPP64DLU9vgMgt4bUqpvozrw0kHLQ
+         7UDh88HD52BpL69RU2ej0Y17HOKOEQPNvHJiSv+TfR3Hz5gJgHv5k9+t+fXgHBRaloWb
+         4HNEI4py5hcSMq6D3v4//ZBSesrXd3hywylUHkoz611XaBqUD4C/2Hjgq1XeMvgYHcpX
+         8bGQ==
+X-Gm-Message-State: AC+VfDzyzcV4xJuf4rXqCcb7sA5U/J/Lhn+Z07XgUIbt7qY75lvAlcAy
+        Nc8LhNWVRvxvO/TaLUBooAsLq10Mo3VBgqFoH8w=
+X-Google-Smtp-Source: ACHHUZ5ffjYF492JruMj8ZfHqNuPp7FprBS7oBRNSilULYkqheWPo8hzmZDSdXYCqgXvwFMUg6B4PH7mh7jbtm4WC24=
+X-Received: by 2002:a05:6a20:a226:b0:f5:6530:c7a8 with SMTP id
+ u38-20020a056a20a22600b000f56530c7a8mr1766188pzk.22.1683207033691; Thu, 04
+ May 2023 06:30:33 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v3 1/2] vsprintf: Add %p[mM]U for uppercase MAC address
-To:     Petr Mladek <pmladek@suse.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Quentin Schulz <quentin.schulz@theobroma-systems.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Felipe Balbi <balbi@ti.com>, stable@vger.kernel.org
-References: <2023042625-rendition-distort-fe06@gregkh>
- <20230427115120.241954-1-k.graefe@gateware.de>
- <c075b668-8194-6aea-484c-0223f164cb4d@rasmusvillemoes.dk>
- <ZFEAq7r-awo0OYzp@alley>
-Content-Language: en-US
-From:   =?UTF-8?Q?Konrad_Gr=c3=a4fe?= <k.graefe@gateware.de>
-In-Reply-To: <ZFEAq7r-awo0OYzp@alley>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------0rBkBiV7ZMJJRdrXNy5M0vcT"
-X-Authenticated-Sender: k.graefe@gateware.de
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26896/Thu May  4 09:24:50 2023)
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230502010759.17282-1-aford173@gmail.com> <1759996.VLH7GnMWUR@steina-w>
+ <CAHCN7x+Me-wbUNNyN9fJwg3KETE+0S2MfPOsAb=-CSuSUvZvPg@mail.gmail.com> <1856543.CQOukoFCf9@steina-w>
+In-Reply-To: <1856543.CQOukoFCf9@steina-w>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Thu, 4 May 2023 08:30:22 -0500
+Message-ID: <CAHCN7xKcpD5w640a-W3cofdY4g3uK=Vt_w2BMWOuz-Q6m4gjaQ@mail.gmail.com>
+Subject: Re: [PATCH V3 3/7] drm: bridge: samsung-dsim: Fetch
+ pll-clock-frequency automatically
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     dri-devel@lists.freedesktop.org, marex@denx.de,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Jonas Karlman <jonas@kwiboo.se>, aford@beaconembedded.com,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Jagan Teki <jagan@amarulasolutions.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------0rBkBiV7ZMJJRdrXNy5M0vcT
-Content-Type: multipart/mixed; boundary="------------QcARM0qlBrvLPKSgK8cV8oH0";
- protected-headers="v1"
-From: =?UTF-8?Q?Konrad_Gr=c3=a4fe?= <k.graefe@gateware.de>
-To: Petr Mladek <pmladek@suse.com>,
- Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc: Quentin Schulz <quentin.schulz@theobroma-systems.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Steven Rostedt <rostedt@goodmis.org>,
- Sergey Senozhatsky <senozhatsky@chromium.org>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- Kyungmin Park <kyungmin.park@samsung.com>,
- Andrzej Pietrasiewicz <andrzej.p@collabora.com>, Felipe Balbi
- <balbi@ti.com>, stable@vger.kernel.org
-Message-ID: <69e232c0-56ff-268c-43c4-ff40f5b00568@gateware.de>
-Subject: Re: [PATCH v3 1/2] vsprintf: Add %p[mM]U for uppercase MAC address
-References: <2023042625-rendition-distort-fe06@gregkh>
- <20230427115120.241954-1-k.graefe@gateware.de>
- <c075b668-8194-6aea-484c-0223f164cb4d@rasmusvillemoes.dk>
- <ZFEAq7r-awo0OYzp@alley>
-In-Reply-To: <ZFEAq7r-awo0OYzp@alley>
+On Thu, May 4, 2023 at 8:18=E2=80=AFAM Alexander Stein
+<alexander.stein@ew.tq-group.com> wrote:
+>
+> Am Donnerstag, 4. Mai 2023, 14:57:01 CEST schrieb Adam Ford:
+> > On Thu, May 4, 2023 at 7:40=E2=80=AFAM Alexander Stein
+> >
+> > <alexander.stein@ew.tq-group.com> wrote:
+> > > Hi Adam,
+> > >
+> > > Am Donnerstag, 4. Mai 2023, 14:00:08 CEST schrieb Adam Ford:
+> > > > On Thu, May 4, 2023 at 4:21=E2=80=AFAM Alexander Stein
+> > > >
+> > > > <alexander.stein@ew.tq-group.com> wrote:
+> > > > > Am Dienstag, 2. Mai 2023, 03:07:55 CEST schrieb Adam Ford:
+> > > > > > Make the pll-clock-frequency optional.  If it's present, use it
+> > > > > > to maintain backwards compatibility with existing hardware.  If=
+ it
+> > > > > > is absent, read clock rate of "sclk_mipi" to determine the rate=
+.
+> > > > > >
+> > > > > > Signed-off-by: Adam Ford <aford173@gmail.com>
+> > > > > > Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+> > > > > > ---
+> > > > > >
+> > > > > >  drivers/gpu/drm/bridge/samsung-dsim.c | 12 ++++++++++--
+> > > > > >  1 file changed, 10 insertions(+), 2 deletions(-)
+> > > > > >
+> > > > > > diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c
+> > > > > > b/drivers/gpu/drm/bridge/samsung-dsim.c index
+> > > > > > bf4b33d2de76..2dc02a9e37c0
+> > > > > > 100644
+> > > > > > --- a/drivers/gpu/drm/bridge/samsung-dsim.c
+> > > > > > +++ b/drivers/gpu/drm/bridge/samsung-dsim.c
+> > > > > > @@ -1726,12 +1726,20 @@ static int samsung_dsim_parse_dt(struct
+> > > > > > samsung_dsim *dsi) {
+> > > > > >
+> > > > > >       struct device *dev =3D dsi->dev;
+> > > > > >       struct device_node *node =3D dev->of_node;
+> > > > > >
+> > > > > > +     struct clk *pll_clk;
+> > > > > >
+> > > > > >       int ret;
+> > > > > >
+> > > > > >       ret =3D samsung_dsim_of_read_u32(node,
+> > > > > >       "samsung,pll-clock-frequency",
+> > > > > >
+> > > > > >                                      &dsi->pll_clk_rate);
+> > > > > >
+> > > > > > -     if (ret < 0)
+> > > > > > -             return ret;
+> > > > > > +
+> > > > > > +     /* If it doesn't exist, read it from the clock instead of
+> > > > > > failing
+> > > > > > */
+> > > > > > +     if (ret < 0) {
+> > > > > > +             pll_clk =3D devm_clk_get(dev, "sclk_mipi");
+> > > > > > +             if (!IS_ERR(pll_clk))
+> > > > > > +                     dsi->pll_clk_rate =3D clk_get_rate(pll_cl=
+k);
+> > > > > > +             else
+> > > > > > +                     return PTR_ERR(pll_clk);
+> > > > > > +     }
+> > > > >
+> > > > > Now that 'samsung,pll-clock-frequency' is optional the error in
+> > > > > samsung_dsim_of_read_u32() should be changed. Otherwise you will =
+get
+> > > > >
+> > > > > > /soc@0/bus@32c00000/dsi@32e10000: failed to get 'samsung,pll-cl=
+ock-
+> > > > >
+> > > > > frequency' property
+> > > >
+> > > > I'll change the message from err to info with a message that reads =
+"no
+> > > > samsung,pll-clock-frequency, using pixel clock"
+> > > >
+> > > > Does that work?
+> > >
+> > > Having just a info is totally fine with me. Thanks.
+> > > Although your suggested message somehow implies (to me) using pixel c=
+lock
+> > > is just a fallback. I'm a bit concerned some might think
+> > > "samsung,pll-clock- frequency" should be provided in DT. But this mig=
+ht
+> > > just be me.
+> >
+> > Oops, I got the PLL and burst burst clock confused.  I think both
+> > burst-clock and pll clock messages should get updates.
+> >
+> > The pll clock should say something like "samsung,pll-clock-frequency
+> > not defined, using sclk_mipi"
+> >
+> > The imx8m n/m/p have the sclk_mipi defined in the device tree, and
+> > this patch allows them to not have
+> > to manually set the pll clock since it can be read.  This allows to
+> > people to change the frequency of the PLL in
+> > in one place and let the driver read it instead of having to set the
+> > value in two places for the same clock.
+>
+> That's why I would like to make it sound less error-like.
+> How about "Using sclk_mipi for pll clock frequency"?
+>
+> > For the burst clock, I'd like to propose
+> > "samsung,burst-clock-frequency not defined, using pixel clock"
+>
+> Similar to above how about "Using pixel clock for burst clock frequency"?
 
---------------QcARM0qlBrvLPKSgK8cV8oH0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+I like that.
 
-T24gMDIuMDUuMjMgMTQ6MjMsIFBldHIgTWxhZGVrIHdyb3RlOg0KPiBPbiBGcmkgMjAyMy0w
-NC0yOCAwODo1Njo1OSwgUmFzbXVzIFZpbGxlbW9lcyB3cm90ZToNCj4+IE9uIDI3LzA0LzIw
-MjMgMTMuNTEsIEtvbnJhZCBHcsOkZmUgd3JvdGU6DQo+Pj4gVGhlIENEQy1FQ00gc3BlY2lm
-aWNhdGlvbiByZXF1aXJlcyBhbiBVU0IgZ2FkZ2V0IHRvIHNlbmQgdGhlIGhvc3QgTUFDDQo+
-Pj4gYWRkcmVzcyBhcyB1cHBlcmNhc2UgaGV4IHN0cmluZy4gVGhpcyBjaGFuZ2UgYWRkcyB0
-aGUgYXBwcm9wcmlhdGUNCj4+PiBtb2RpZmllci4NCj4+DQo+PiBUaGlua2luZyBtb3JlIGFi
-b3V0IGl0LCBJJ20gbm90IHN1cmUgdGhpcyBpcyBhcHByb3ByaWF0ZSwgbm90IGZvciBhDQo+
-PiBzaW5nbGUgdXNlciBsaWtlIHRoaXMuIHZzcHJpbnRmKCkgc2hvdWxkIG5vdCBhbmQgY2Fu
-bm90IHNhdGlzZnkgYWxsDQo+PiBwb3NzaWJsZSBzdHJpbmcgZm9ybWF0dGluZyByZXF1aXJl
-bWVudHMgZm9yIHRoZSB3aG9sZSBrZXJuZWwuIFRoZSAlcFgNCj4+IGV4dGVuc2lvbnMgYXJl
-IGNvbnZlbmllbnQgZm9yIHVzZSB3aXRoIHByaW50aygpIGFuZCBmcmllbmRzIHdoZXJlIG9u
-ZQ0KPj4gbmVlZHMgd2hhdCBpbiBvdGhlciBsYW5ndWFnZXMgd291bGQgYmUgInN0cmluZyBp
-bnRlcnBvbGF0aW9uIiAoYmVjYXVzZQ0KPj4gdGhlbiB0aGUgY2FsbGVyIGRvZXNuJ3QgbmVl
-ZCB0byBkZWFsIHdpdGggdGVtcG9yYXJ5IHN0YWNrIGJ1ZmZlcnMgYW5kDQo+PiBwYXNzIHRo
-ZW0gYXMgJXMgYXJndW1lbnRzKSwgYnV0IGZvciBzaW5nbGUgaXRlbXMgbGlrZSB0aGlzLCBz
-bnByaW50ZigpDQo+PiBpcyBub3QgbmVjZXNzYXJpbHkgdGhlIHJpZ2h0IHRvb2wgZm9yIHRo
-ZSBqb2IuDQo+Pg0KPj4gSW4gdGhpcyBjYXNlLCB0aGUgY2FsbGVyIGNhbiBqdXN0IGFzIHdl
-bGwgY2FsbCBzdHJpbmdfdXBwZXIoKSBvbiB0aGUNCj4+IHJlc3VsdA0KPiANCj4gSSB0ZW5k
-IHRvIGFncmVlIHdpdGggUmFzbXVzLiBzdHJpbmdfdXBwZXIoKSBpcyBhIHN1cGVyLWVhc3kg
-c29sdXRpb24uDQo+IE9uZSB1c2VyIGRvZXMgbm90IGxvb2sgd29ydGggYWRkaW5nIGFsbCB0
-aGUgY2h1cm4gaW50byB2c3ByaW50ZigpLg0KPiANCj4gQmVzdCBSZWdhcmRzLA0KPiBQZXRy
-DQoNCkkgZG8gYWdyZWUgYXMgd2VsbC4gVGhhdCB3b3VsZCBiYXNpY2FsbHkgYmUgdjEgWzFd
-IHdpdGhvdXQgdGhlIA0KaGFuZC1jcmFmdGVkIHN0cmluZ191cHBlcigpLiAoSSBkaWRuJ3Qg
-a25vdyB0aGUgZnVuY3Rpb24uKQ0KDQpSZWdhcmRzLA0KS29ucmFkDQoNClsxXTogDQpodHRw
-czovL2xvcmUua2VybmVsLm9yZy9saW51eC11c2IvOTRhZmQ2ZTAtNzMwMC1lOGY0LWQ1MmUt
-YzIxYWNlYzA0ZjViQGdhdGV3YXJlLmRlLw0K
+>
+> > Does that work for you?
+>
+> But I'm okay with both ways. Up to you.
 
---------------QcARM0qlBrvLPKSgK8cV8oH0--
+ I'll wait another day or two to see if anyone else has any feedback,
+and I'll submit V4 with some other items addressed too.
 
---------------0rBkBiV7ZMJJRdrXNy5M0vcT
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+Thank you for your review!
 
------BEGIN PGP SIGNATURE-----
+adam
 
-wsF5BAABCAAjFiEEUA99m0xJ9cFn0k9bgJOZiyvdweQFAmRTslQFAwAAAAAACgkQgJOZiyvdweT9
-zxAAoD8iG56zIdUyKV97cMYu+mfgxAg5tg7HVcw6oiHUy03pf0eR56WOEbTKzO18J9p1EPnefLU/
-FJ7gOlbz2aFUV5gGMN0tPj2CrgH17a6UFd3qalMmL9Q8rtL3rh4/Lg7KVlDnB9sWGXH+h5ZpEHe/
-2XPD2qL3aQMWSZxv5bms28X/OlJnxV6fR9hKUQ4mJd52zHzS5dlYWtM8Z8V29P0JiQIB4f0z81Sv
-WrVCKR3sIIDkVL+GVTMwhlKcNV194/FNDUYLEox8zgqQDBlM39UafL5aMKea/RiPIPUn+Xbbj6Ro
-bgqmS9WGYKKp9h6568L1pmwtuSDuZobFv0EeM1rahxwXX6/SIcI4Uf9OwwGwJmmJOFmCm/xg02u7
-4houue1QIpLaPs9YOzG8fJkA3jogKUevqa/fHyvZ6sUw546M/vhSki1Jtf6ICSd6TmvgD7BZNqMz
-ZXgBDeQkYmHZtJbLQLpG0Hp4Qw9yl+vnHfDw+KY8FDCAd6aSNP9kk5lJsCHaN+rnEOcET+SryNu1
-PD72QfWaNICK5PDVecurAHNHAETqu2/7btXAFXvPqq00zY0tSIcCDaJEacil+PQprTfc8JdVXkoA
-XjizXpRU9iAJo3RJ6Kcv/8vakChjf7saMzmwQ9Z1boSH1nd71INxa9kc4VQqu19S4hXNP7Pvud0f
-gXk=
-=u/N7
------END PGP SIGNATURE-----
-
---------------0rBkBiV7ZMJJRdrXNy5M0vcT--
+>
+> Thanks and best regards,
+> Alexander
+>
+>
+> > > frequency
+> > >
+> > >
+> > > Best regards,
+> > > Alexander
+> > >
+> > > > adam
+> > > >
+> > > > > Best regards,
+> > > > > Alexander
+> > > > >
+> > > > > >       ret =3D samsung_dsim_of_read_u32(node, "samsung,burst-clo=
+ck-
+> > > > >
+> > > > > frequency",
+> > > > >
+> > > > > >                                      &dsi->burst_clk_rate);
+> > > > >
+> > > > > --
+> > > > > TQ-Systems GmbH | M=C3=BChlstra=C3=9Fe 2, Gut Delling | 82229 See=
+feld, Germany
+> > > > > Amtsgericht M=C3=BCnchen, HRB 105018
+> > > > > Gesch=C3=A4ftsf=C3=BChrer: Detlef Schneider, R=C3=BCdiger Stahl, =
+Stefan Schneider
+> > > > > http://www.tq-group.com/
+> > >
+> > > --
+> > > TQ-Systems GmbH | M=C3=BChlstra=C3=9Fe 2, Gut Delling | 82229 Seefeld=
+, Germany
+> > > Amtsgericht M=C3=BCnchen, HRB 105018
+> > > Gesch=C3=A4ftsf=C3=BChrer: Detlef Schneider, R=C3=BCdiger Stahl, Stef=
+an Schneider
+> > > http://www.tq-group.com/
+>
+>
+> --
+> TQ-Systems GmbH | M=C3=BChlstra=C3=9Fe 2, Gut Delling | 82229 Seefeld, Ge=
+rmany
+> Amtsgericht M=C3=BCnchen, HRB 105018
+> Gesch=C3=A4ftsf=C3=BChrer: Detlef Schneider, R=C3=BCdiger Stahl, Stefan S=
+chneider
+> http://www.tq-group.com/
+>
+>
