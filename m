@@ -2,338 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD8F6F78F8
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 00:21:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34CBB6F7903
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 00:21:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229706AbjEDWUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 18:20:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58234 "EHLO
+        id S229712AbjEDWVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 18:21:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjEDWUx (ORCPT
+        with ESMTP id S229717AbjEDWVO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 18:20:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E529EE8;
-        Thu,  4 May 2023 15:20:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 063E263A6F;
-        Thu,  4 May 2023 22:20:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C8DEC433EF;
-        Thu,  4 May 2023 22:20:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683238850;
-        bh=rwx7iUdSi9ZJ936Oee+tnrMgzVQXpxJNfSPrASIpy3Q=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=YKsUVpu0ptYjRBovoU/uOo2fA0BLiAZ1A+MBoqqjLC4c5AS7LeMY8bwZEN8loP+Gs
-         32n4NOnIJBMoV5gKsEAkVHH0nJiXS1gPKnCxotZljfqR1V4u4dNPWyAWtx8U0yfbCT
-         SXACPyg87+6r2MlTf67MfYt+OvW2G2HHVFp3SnMXecSyCAEHHBTsJrSqfGym4NDomP
-         DMk3EPIfkqNi9tsmpRaccspQfjuesw8vkZMyprA6GPQvMtpC8eQpyHfbZysO7RoPlU
-         xIdDEW6wAuoObJ8PfmRChxOfCuTrKWbAgYzUDSL4n2lAZB9iu7OBv8SWzhKNMd8m7j
-         3LCQ1rhIJRL5w==
-Date:   Thu, 4 May 2023 17:20:48 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-        Oliver O'Halloran <oohall@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Stefan Roese <sr@denx.de>, Jim Wilson <wilson@tuliptree.org>,
-        David Abdurachmanov <david.abdurachmanov@gmail.com>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        linux-pci@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
+        Thu, 4 May 2023 18:21:14 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A70124BD;
+        Thu,  4 May 2023 15:21:06 -0700 (PDT)
+Date:   Fri, 5 May 2023 00:21:01 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1683238862; bh=nU/A/v9PUK0xVMjHH0iKaik1gYQJC4LyFxlKFA7zhrw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cc84+qDslyVmGx5hjR9zAw6hn3fKkvk5jaO+iH2Lj2491Q0zrQCxGcupfpKelr0TC
+         hwAyeDde+UjoqbRR2RJ1gCWMcy3YB6ZiVKJ5cofF6FBp0O3zg+jOFLyjfXJHVcDTKB
+         urz9oGGHsuYxyTLuRu+oxM4E6jB1NZFWKAI4OgEY=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Jorge Lopez <jorgealtxwork@gmail.com>
+Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 7/7] PCI: Work around PCIe link training failures
-Message-ID: <20230504222048.GA887151@bhelgaas>
+Subject: Re: [PATCH v11 06/14] HP BIOSCFG driver - passwdobj-attributes
+Message-ID: <1f80c7a9-cc88-4c30-9797-e20e3cb4859c@t-8ch.de>
+References: <20230420165454.9517-1-jorge.lopez2@hp.com>
+ <20230420165454.9517-7-jorge.lopez2@hp.com>
+ <016a9a6a-cff1-444d-b96a-63eded1ac58a@t-8ch.de>
+ <CAOOmCE9USvpih7E6cq7sKiMmGJa_FV74g36kb6EZMSrkg5BnLg@mail.gmail.com>
+ <9bbf8cb3-6333-4742-b32a-c7e9118bc618@t-8ch.de>
+ <CAOOmCE-S-GpcmG9c6eB1hz6o3hudX8hWY9jmZ-cUwivHzijsPw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2304060116380.13659@angie.orcam.me.uk>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAOOmCE-S-GpcmG9c6eB1hz6o3hudX8hWY9jmZ-cUwivHzijsPw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 01:21:31AM +0100, Maciej W. Rozycki wrote:
-> Attempt to handle cases such as with a downstream port of the ASMedia 
-> ASM2824 PCIe switch where link training never completes and the link 
-> continues switching between speeds indefinitely with the data link layer 
-> never reaching the active state.
+On 2023-05-04 16:34:06-0500, Jorge Lopez wrote:
+> On Thu, May 4, 2023 at 3:59 PM Thomas Weißschuh <thomas@t-8ch.de> wrote:
+> >
+> > On 2023-05-04 15:29:21-0500, Jorge Lopez wrote:
+> > > On Sun, Apr 23, 2023 at 4:07 AM <thomas@t-8ch.de> wrote:
+> > > >
+> > > > On 2023-04-20 11:54:46-0500, Jorge Lopez wrote:
+> > > > > ---
+> > > > >  .../x86/hp/hp-bioscfg/passwdobj-attributes.c  | 669 ++++++++++++++++++
+> > > > >  1 file changed, 669 insertions(+)
+> > > > >  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/passwdobj-attributes.c
 
-We're going to land this series this cycle, come hell or high water.
+<snip>
 
-We talked about reusing pcie_retrain_link() earlier.  IIRC that didn't
-work: ASPM needs to use PCI_EXP_LNKSTA_LT because not all devices
-support PCI_EXP_LNKSTA_DLLLA, and you need PCI_EXP_LNKSTA_DLLLA
-because the erratum makes PCI_EXP_LNKSTA_LT flap.
+> > > > > +
+> > > > > +     id = get_password_instance_id(kobj);
+> > > > > +
+> > > > > +     if (id >= 0)
+> > > > > +             ret = validate_password_input(id, buf_cp);
+> > > > > +
+> > > > > +     if (!ret) {
+> > > > > +             strscpy(bioscfg_drv.password_data[id].current_password,
+> > > > > +                     buf_cp,
+> > > > > +                     sizeof(bioscfg_drv.password_data[id].current_password));
+> > > > > +             /*
+> > > > > +              * set pending reboot flag depending on
+> > > > > +              * "RequiresPhysicalPresence" value
+> > > > > +              */
+> > > > > +             if (bioscfg_drv.password_data[id].common.requires_physical_presence)
+> > > > > +                     bioscfg_drv.pending_reboot = true;
+> > > >
+> > > > Just setting this to true does not emit the necessary KOBJ_CHANGE event
+> > > > on the class dev kobj which is necessary for userspace to be able to
+> > > > react.
+> > >
+> > > This feature was added outside of the original design specification to
+> > > be used at a later time.
+> > > Changes to the value to true does not emit a KOBJ_CHANGE event.
+> >
+> > This contradicts the documentation:
+> >
+> >         A read-only attribute reads 1 if a reboot is necessary to apply
+> >         pending BIOS attribute changes. Also, an uevent_KOBJ_CHANGE is
+> >         generated when it changes to 1.
+> >
+> > This will confuse userspace, there are generic userspace applications
+> > waiting for those events.
+> > If there is a reason for not emitting them it should be good and
+> > documented.
+> >
+> > Also according to the docs the authentication attributes should
+> > KOBJ_CHANGE events. I think this also affects this driver and should be
+> > implemented.
+> >
+> 
+> HP-BIOSCFG initially is not intended for the use of fwupd tool nor was
+> it tested.
+> This does not mean the driver will interface with fwupd and other
+> tools in the future.
 
-What if we made pcie_retrain_link() reusable by making it:
+There are probably more tools than fwupd using this ABI.
 
-  bool pcie_retrain_link(struct pci_dev *pdev, u16 link_status_bit)
+The driver is implementing a well-known ABI and users of this ABI expect
+it to work as documented.
 
-so ASPM could use pcie_retrain_link(link->pdev, PCI_EXP_LNKSTA_LT) and
-you could use pcie_retrain_link(dev, PCI_EXP_LNKSTA_DLLLA)?
+Emitting these events seems straigtforward and simple.
 
-Maybe do it two steps?
+Maybe Hans can give more guidance on it.
 
-  1) Move pcie_retrain_link() just after pcie_wait_for_link() and make
-  it take link->pdev instead of link.
+> > > >
+> > > > > +     }
+> > > > > +
+> > > > > +exit_password:
+> > > > > +     kfree(buf_cp);
+> > > > > +     return ret ? ret : count;
+> > > > > +}
+> > > > > +static struct kobj_attribute password_current_password = __ATTR_WO(current_password);
+> > > > > +
+> > > > > +static ssize_t new_password_store(struct kobject *kobj,
+> > > > > +                               struct kobj_attribute *attr,
+> > > > > +                               const char *buf, size_t count)
+> > > > > +{
+> > > > > +     char *p, *buf_cp = NULL;
+> > > > > +     int id = 0;
+> > > > > +     int ret = -EIO;
+> > > > > +
+> > > > > +     buf_cp = kstrdup(buf, GFP_KERNEL);
+> > > > > +     if (!buf_cp) {
+> > > > > +             ret = -ENOMEM;
+> > > > > +             goto exit_password;
+> > > > > +     }
+> > > > > +
+> > > > > +     p = memchr(buf_cp, '\n', count);
+> > > > > +
+> > > > > +     if (p != NULL)
+> > > > > +             *p = '\0';
+> > > >
+> > > > Same as above.
+> > >
+> > > This is an expected behavior.  If the user enters '\n' as part of the
+> > > password, the buffer data will be truncated since only one line per
+> > > sysfs file is permitted.
+> >
+> > If a user accidentally presses enter before entering a password this
+> > may set the password to the empty string; surprising.
+> >
+> > This should really use the helper.
+> 
+> Done!  enforce_single_line_input() function is used.
+> >
+> > > >
+> <snip>
+> > > > > +
+> > > > > +ATTRIBUTE_V_COMMON_PROPERTY_SHOW(prerequisites, password);
+> > > > > +static struct kobj_attribute  password_prerequisites_val =
+> > > > > +             __ATTR_RO(prerequisites);
+> > > > > +
+> > > > > +ATTRIBUTE_N_PROPERTY_SHOW(encodings_size, password);
+> > > > > +static struct kobj_attribute  password_encodings_size_val =
+> > > > > +             __ATTR_RO(encodings_size);
+> > > >
+> > > > As before, these size attribute are fairly pointless for userspace as
+> > > > they can't be relied on.
+> > >
+> > > I will remove the attribute from being reported in sysfs but they will
+> > > be kept as part of the driver internal data
+> > >
+> > > >
+> > > > > +
+> > > > > +ATTRIBUTE_VALUES_PROPERTY_SHOW(encodings, password);
+> > > > > +static struct kobj_attribute  password_encodings_val =
+> > > > > +             __ATTR_RO(encodings);
+> > > > > +
+> > > > > +
+> > > > > +static struct attribute *password_attrs[] = {
+> > > > > +     &password_is_password_set.attr,
+> > > > > +     &password_min_password_length.attr,
+> > > > > +     &password_max_password_length.attr,
+> > > > > +     &password_current_password.attr,
+> > > > > +     &password_new_password.attr,
+> > > > > +     &password_role.attr,
+> > > > > +     &password_mechanism.attr,
+> > > > > +     &password_type.attr,
+> > > > > +     &password_display_name.attr,
+> > > > > +     &password_display_langcode.attr,
+> > > > > +     &password_prerequisites_size_val.attr,
+> > > > > +     &password_prerequisites_val.attr,
+> > > > > +     &password_encodings_val.attr,
+> > > > > +     &password_encodings_size_val.attr,
+> > > > > +     NULL
+> > > > > +};
+> > > >
+> > > > Many of these attributes are not documented.
+> > >
+> > > Those attributes are documented under authentication section, lines 150-329
+> > >
+> > > What: /sys/class/firmware-attributes/*/authentication/
+> > > Date: February 2021
+> > > KernelVersion: 5.11
+> > > Contact: Divya Bharathi <Divya.Bharathi@Dell.com>,
+> > > Prasanth KSR <prasanth.ksr@dell.com>
+> > > Dell.Client.Kernel@dell.com
+> > > Description:
+> > > Devices support various authentication mechanisms which can be exposed
+> > > as a separate configuration object.
+> >
+> > If I read that correctly the authentication attributes are not "normal"
+> > attributes.
+> > So they don't need "type", "display_name", "display_langcode".
+> >
+> 
+> Type, display_name, and display_langcode are required and default settings.
+> See documentation lines 15-52
+> 
+> type:
+>     A file that can be read to obtain the type of attribute.
+>     This attribute is mandatory.
+> 
+> display_name:
+> A file that can be read to obtain a user friendly
+> description of the at <attr>
+> 
+> display_name_language_code:
+> A file that can be read to obtain
+> the IETF language tag corresponding to the
+> "display_name" of the <attr>
 
-  2) Add the bit parameter.
+They are required for
 
-I'm OK with having pcie_retrain_link() in pci.c, but the surrounding
-logic about restricting to 2.5GT/s, retraining, removing the
-restriction, retraining again is stuff I'd rather have in quirks.c so
-it doesn't clutter pci.c.
+/sys/class/firmware-attributes/*/attributes/*/
 
-I think it'd be good if the pci_device_add() path made clear that this
-is a workaround for a problem, e.g.,
+but here we implement 
 
-  void pci_device_add(struct pci_dev *dev, struct pci_bus *bus)
-  {
-    ...
-    if (pcie_link_failed(dev))
-      pcie_fix_link_train(dev);
+/sys/class/firmware-attributes/*/authentication/*/
 
-where pcie_fix_link_train() could live in quirks.c (with a stub when
-CONFIG_PCI_QUIRKS isn't enabled).  It *might* even be worth adding it
-and the stub first because that's a trivial patch and wouldn't clutter
-the probe.c git history with all the grotty details about ASM2824 and
-this topology.
+which is a different ABI.
 
-> +int pcie_downstream_link_retrain(struct pci_dev *dev)
-> +{
-> +	static const struct pci_device_id ids[] = {
-> +		{ PCI_VDEVICE(ASMEDIA, 0x2824) }, /* ASMedia ASM2824 */
-> +		{}
-> +	};
-> +	u16 lnksta, lnkctl2;
-> +
-> +	if (!pci_is_pcie(dev) || !pcie_downstream_port(dev) ||
-> +	    !pcie_cap_has_lnkctl2(dev) || !dev->link_active_reporting)
-> +		return -1;
-> +
-> +	pcie_capability_read_word(dev, PCI_EXP_LNKCTL2, &lnkctl2);
-> +	pcie_capability_read_word(dev, PCI_EXP_LNKSTA, &lnksta);
-> +	if ((lnksta & (PCI_EXP_LNKSTA_LBMS | PCI_EXP_LNKSTA_DLLLA)) ==
-> +	    PCI_EXP_LNKSTA_LBMS) {
+> 
+> > Do they need prerequisites?
+> 
+> Prerequisites is optional and not documented.  I will remove it from
+> the list of items reported within sysfs
+> >
+> > >
+> > >
+> > > >
+> > > > > +
+> > > > > +static const struct attribute_group bios_password_attr_group = {
+> > > > > +     .attrs = password_attrs
+> > > > > +};
+> > > > > +
+> > > > > +static const struct attribute_group system_password_attr_group = {
+> > > > > +     .attrs = password_attrs
+> > > > > +};
+> > > >
+> > > > These groups are the same, are both needed?
+> > >
+> > > Yes.  They will show under  'Setup Password' and 'Power-on password'
+> >
+> > These are identical constant structures. It should be possible to have
+> > only one and use it for both usecases.
+> >
+> 
+> Both 'Setup Password' and 'Power-on password' need to coexist hence
+> the reason for keeping them separate.
+> Both attributes share the same helper routines.  Unifying  both
+> passwords into a single structure adds unnecessary complexity.
 
-You go to some trouble to make sure PCI_EXP_LNKSTA_LBMS is set, and I
-can't remember what the reason is.  If you make a preparatory patch
-like this, it would give a place for that background, e.g.,
+They are already sharing the "password_attrs" array and all the
+attributes listed in it.
 
-  +bool pcie_link_failed(struct pci_dev *dev)
-  +{
-  +       u16 lnksta;
-  +
-  +       if (!pci_is_pcie(dev) || !pcie_downstream_port(dev) ||
-  +           !pcie_cap_has_lnkctl2(dev) || !dev->link_active_reporting)
-  +               return false;
-  +
-  +       pcie_capability_read_word(dev, PCI_EXP_LNKSTA, &lnksta);
-  +       if ((lnksta & (PCI_EXP_LNKSTA_LBMS | PCI_EXP_LNKSTA_DLLLA)) ==
-  +                       PCI_EXP_LNKSTA_LBMS)
-  +               return true;
-  +
-  +       return false;
-  +}
-
-If this is a generic thing and checking PCI_EXP_LNKSTA_LBMS makes
-sense for everybody, it could go in pci.c; otherwise it could go in
-quirks.c as well.  I guess it's not *truly* generic anyway because it
-only detects link training failures for devices that have LNKCTL2 and
-link_active_reporting.
-
-> +		unsigned long timeout;
-> +		u16 lnkctl;
-> +
-> +		pci_info(dev, "broken device, retraining non-functional downstream link at 2.5GT/s\n");
-> +
-> +		pcie_capability_read_word(dev, PCI_EXP_LNKCTL, &lnkctl);
-> +		lnkctl |= PCI_EXP_LNKCTL_RL;
-> +		lnkctl2 &= ~PCI_EXP_LNKCTL2_TLS;
-> +		lnkctl2 |= PCI_EXP_LNKCTL2_TLS_2_5GT;
-> +		pcie_capability_write_word(dev, PCI_EXP_LNKCTL2, lnkctl2);
-> +		pcie_capability_write_word(dev, PCI_EXP_LNKCTL, lnkctl);
-> +		/*
-> +		 * Due to an erratum in some devices the Retrain Link bit
-> +		 * needs to be cleared again manually to allow the link
-> +		 * training to succeed.
-> +		 */
-> +		lnkctl &= ~PCI_EXP_LNKCTL_RL;
-> +		if (dev->clear_retrain_link)
-> +			pcie_capability_write_word(dev, PCI_EXP_LNKCTL,
-> +						   lnkctl);
-> +
-> +		timeout = jiffies + PCIE_LINK_RETRAIN_TIMEOUT;
-> +		do {
-> +			pcie_capability_read_word(dev, PCI_EXP_LNKSTA,
-> +					     &lnksta);
-> +			if (lnksta & PCI_EXP_LNKSTA_DLLLA)
-> +				break;
-> +			usleep_range(10000, 20000);
-> +		} while (time_before(jiffies, timeout));
-> +
-> +		if (!(lnksta & PCI_EXP_LNKSTA_DLLLA)) {
-> +			pci_info(dev, "retraining failed\n");
-> +			return -1;
-> +		}
-> +	}
-
-> +	if (IS_ENABLED(CONFIG_PCI_QUIRKS) && (lnksta & PCI_EXP_LNKSTA_DLLLA) &&
-> +	    (lnkctl2 & PCI_EXP_LNKCTL2_TLS) == PCI_EXP_LNKCTL2_TLS_2_5GT &&
-> +	    pci_match_id(ids, dev)) {
-> +		u32 lnkcap;
-> +		u16 lnkctl;
-> +
-> +		pci_info(dev, "removing 2.5GT/s downstream link speed restriction\n");
-> +		pcie_capability_read_dword(dev, PCI_EXP_LNKCAP, &lnkcap);
-> +		pcie_capability_read_word(dev, PCI_EXP_LNKCTL, &lnkctl);
-> +		lnkctl |= PCI_EXP_LNKCTL_RL;
-> +		lnkctl2 &= ~PCI_EXP_LNKCTL2_TLS;
-> +		lnkctl2 |= lnkcap & PCI_EXP_LNKCAP_SLS;
-> +		pcie_capability_write_word(dev, PCI_EXP_LNKCTL2, lnkctl2);
-> +		pcie_capability_write_word(dev, PCI_EXP_LNKCTL, lnkctl);
-
-This starts a retrain; should we wait for training to complete?
-
-> +	}
-
-If we put most of this into a pcie_fix_link_train() (separated from
-detecting the *need* to fix something), could it be made to look
-sort of like this?  (I suppose you'd want to return bool and rename
-it that reads naturally, e.g., "pcie_link_forcibly_retrained()",
-"pcie_link_retrained()", etc)
-
-  +void pcie_fix_link_train(struct pci_dev *dev)
-  +{
-  +       u16 lnkctl2;
-  +       u32 lnkcap;
-  +       bool linkup;
-  +
-  +       pci_info(dev, "attempting link retrain at 2.5GT/s\n");
-  +       pcie_capability_read_word(dev, PCI_EXP_LNKCTL2, &lnkctl2);
-  +       lnkctl2 &= ~PCI_EXP_LNKCTL2_TLS;
-  +       lnkctl2 |= PCI_EXP_LNKCTL2_TLS_2_5GT;
-  +       pcie_capability_write_word(dev, PCI_EXP_LNKCTL2, lnkctl2);
-  +
-  +       linkup = pcie_retrain_link(dev, PCI_EXP_LNKSTA_DLLLA);
-  +       if (!linkup) {
-  +               pci_info(dev, "retraining failed\n");
-  +               return;
-  +       }
-  +
-  +       if (LNKCAP supports only 2.5GT/s)
-  +               return;
-  +
-  +       if (!pci_match_id(ids, dev))
-  +               return;
-
-Your comment said "if we know this is *safe*"; I can't remember if
-pci_match_id() is there to avoid a known problem?
-
-  +
-  +       pci_info(dev, "attempting link retrain at max supported rate\n");
-  +       pcie_capability_read_dword(dev, PCI_EXP_LNKCAP, &lnkcap);
-  +       lnkctl2 &= ~PCI_EXP_LNKCTL2_TLS;
-  +       lnkctl2 |= lnkcap & PCI_EXP_LNKCAP_SLS;
-  +       pcie_capability_write_word(dev, PCI_EXP_LNKCTL2, lnkctl2);
-  +
-  +       linkup = pcie_retrain_link(dev, PCI_EXP_LNKSTA_DLLLA);
-  +       if (!linkup)
-  +               pci_info(dev, "retraining failed\n");
-  +}
-
-> +
-> +	return 0;
-> +}
-> +
-> +/* Same as above, but called for a downstream device.  */
-> +static int pcie_upstream_link_retrain(struct pci_dev *dev)
-> +{
-> +	struct pci_dev *bridge;
-> +
-> +	bridge = pci_upstream_bridge(dev);
-> +	if (bridge)
-> +		return pcie_downstream_link_retrain(bridge);
-> +	else
-> +		return -1;
-> +}
-> +
->  static int pci_acs_enable;
->  
->  /**
-> @@ -1148,8 +1274,8 @@ void pci_resume_bus(struct pci_bus *bus)
->  
->  static int pci_dev_wait(struct pci_dev *dev, char *reset_type, int timeout)
->  {
-> +	int retrain = 0;
->  	int delay = 1;
-> -	u32 id;
->  
->  	/*
->  	 * After reset, the device should not silently discard config
-> @@ -1163,21 +1289,37 @@ static int pci_dev_wait(struct pci_dev *
->  	 * Command register instead of Vendor ID so we don't have to
->  	 * contend with the CRS SV value.
->  	 */
-> -	pci_read_config_dword(dev, PCI_COMMAND, &id);
-> -	while (PCI_POSSIBLE_ERROR(id)) {
-> +	for (;;) {
-> +		u32 id;
-> +
-> +		pci_read_config_dword(dev, PCI_COMMAND, &id);
-> +		if (!PCI_POSSIBLE_ERROR(id)) {
-> +			if (delay > PCI_RESET_WAIT)
-> +				pci_info(dev, "ready %dms after %s\n",
-> +					 delay - 1, reset_type);
-> +			break;
-> +		}
-> +
->  		if (delay > timeout) {
->  			pci_warn(dev, "not ready %dms after %s; giving up\n",
->  				 delay - 1, reset_type);
->  			return -ENOTTY;
->  		}
->  
-> -		if (delay > PCI_RESET_WAIT)
-> +		if (delay > PCI_RESET_WAIT) {
-> +			if (!retrain) {
-> +				retrain = 1;
-> +				if (pcie_upstream_link_retrain(dev) == 0) {
-> +					delay = 1;
-> +					continue;
-> +				}
-> +			}
->  			pci_info(dev, "not ready %dms after %s; waiting\n",
->  				 delay - 1, reset_type);
-> +		}
-
-Thanks for fixing this in the reset path, too.  Can we move this part
-to a separate patch?  It's related to the rest of the patch, but it
-looks so much different that I think it would be easier to understand
-by itself.
-
-I think I might try to fold the pcie_upstream_link_retrain() directly
-in here because the "upstream link retrain" in the function name
-doesn't really make sense in PCIe terms.
-
-Bjorn
+It seems they could also share the attribute_group which does not really
+contain any data.
