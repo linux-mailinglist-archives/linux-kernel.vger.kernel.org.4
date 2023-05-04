@@ -2,76 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2A7F6F6F5D
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 17:47:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D2FE6F6F60
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 17:48:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231236AbjEDPrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 11:47:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58470 "EHLO
+        id S231374AbjEDPs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 11:48:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbjEDPrw (ORCPT
+        with ESMTP id S230147AbjEDPs0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 11:47:52 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A608E1BF7;
-        Thu,  4 May 2023 08:47:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683215270; x=1714751270;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+W/UCTBIfYK9iU0TR7/tMzBfgHk4eby0Qe2D0HTr7Rc=;
-  b=nJr7YyuC2Ez1D903Tr5UOTsQL59dMgR1IvGZfLQg3T0sM+VFz3K5KIPs
-   MfMC422sADwtBCiAwy13HD1oEiTOlSxSHpSt1KiFuPq6Jis7pm/WeQTgO
-   BpGrFIAS5Ky6s24kDjG19Wzw3MwGgHfdApskZ7gga4ojYtsghZDr/ZEUf
-   /EYfHXobL2CKdVWgSHQ4EewM6JARD/JMnmP50qGMV/Nfb4I6vXuZ6dvYU
-   vRYHMNs5BJjrft3K2/kQa90Q6MdEkJ+BZWoEOzhD7ttSeu1sDPpAPfQz0
-   ptNeGcgeIP9VE1Y+RwvfOsxqsU7e3AYfh7c08dIvI3u15ngy68whDVSU2
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="328594515"
-X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
-   d="scan'208";a="328594515"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 08:47:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="1027007589"
-X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
-   d="scan'208";a="1027007589"
-Received: from lkp-server01.sh.intel.com (HELO 64cf2984a3fe) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 04 May 2023 08:47:45 -0700
-Received: from kbuild by 64cf2984a3fe with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pubBI-00001Y-1Q;
-        Thu, 04 May 2023 15:47:44 +0000
-Date:   Thu, 4 May 2023 23:46:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Marco Felsch <m.felsch@pengutronix.de>, andreas@fatal.se,
-        jun.li@nxp.com, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Marco Felsch <m.felsch@pengutronix.de>
-Subject: Re: [PATCH v2 2/4] usb: typec: mux: gpio-sbu-mux: add support for ss
- data lane muxing
-Message-ID: <202305042306.TmTuYCAJ-lkp@intel.com>
-References: <20230504-b4-v6-3-topic-boards-imx8mp-evk-dual-role-usb-v2-2-3889b1b2050c@pengutronix.de>
+        Thu, 4 May 2023 11:48:26 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4778949D4;
+        Thu,  4 May 2023 08:48:24 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f315735514so69122235e9.1;
+        Thu, 04 May 2023 08:48:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683215303; x=1685807303;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mO/FCTJ0lgmDzfuu+m/nGF6TmLm95y7sMUjn9Rtpsbc=;
+        b=IW8KU+aybAdA7IkSMNM+90mqkc3W0LlV/6WZVdi1Ij9oLCE08FNtokKMDzc1ncrLAL
+         e9v6oMPVkwsk8ZnkBjP7KJeoH2xnx5GD+ac0+az7WEG38+OUdHn6LSzwQhrc31gZTbPW
+         7424WGNFQyfLBkeGK87MdYzTQ8RUrcD70Mz/b97RvPRNISjLmbwmFQOLhZ0m6mDLiI9w
+         nDnwbRiTsPG/oMYSH9mh5rd8jCuf0e8GOYVb0OnMmi6iTm11fzASWgtnIc6jrhLqt1CW
+         2UpOnOdmDGViLDf8ZuvcbESF1+Y1+rRDV3VUABszQg1EGn6DX/IkpSdrv91deyonsNrU
+         zRjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683215303; x=1685807303;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mO/FCTJ0lgmDzfuu+m/nGF6TmLm95y7sMUjn9Rtpsbc=;
+        b=j/qSv+UrVM+1JM6eFoo++/TOtNPiZxqKXHen0isxYuq3ELlSbioZrTPBRY7EfkSthu
+         aaR01bmypPj+rZsgPfmRLz5J7Ab82vRho6dJHrUe+wQmfV6pLTx0B47iNKiRdXztP5me
+         yKbvkc/dZ/XjCqQ3K2p1k8sfS0lxyLeoq5ql5w3WTfF4gwLvrKF8vfvkg1Ac3XbIsqni
+         9iMvFRxhIhbU652FmssaDK+1SNa8i0ZLJ+7GdQm6ABWiPr3HPDugp9kTz8aK70do7maf
+         /NgU4sqdDB8ePrSIWG/ui9Egx7FSWIVmj6YJ3TM0s2cqod4mbsbSMonKiAvQSFaCy+mD
+         6A9A==
+X-Gm-Message-State: AC+VfDy85kBnyL331y5xWjwn0O6rbbUP1axgcH2ukMI7f4+RFxRwI0gc
+        pRUaunnLoQn3Nq2r/wct74w=
+X-Google-Smtp-Source: ACHHUZ4m5McqqZbS0V5UHgSHzKGW68QxLmqj/OvdzG6ZThD/G2NiJTODGR0yI1G9zuovilw4t9rlww==
+X-Received: by 2002:a5d:63cd:0:b0:306:31cb:25fb with SMTP id c13-20020a5d63cd000000b0030631cb25fbmr2559900wrw.17.1683215302436;
+        Thu, 04 May 2023 08:48:22 -0700 (PDT)
+Received: from localhost (host86-156-84-164.range86-156.btcentralplus.com. [86.156.84.164])
+        by smtp.gmail.com with ESMTPSA id i17-20020a5d6311000000b00306ec04f060sm2162821wru.107.2023.05.04.08.48.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 May 2023 08:48:21 -0700 (PDT)
+Date:   Thu, 4 May 2023 16:48:20 +0100
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Mika Penttila <mpenttil@redhat.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Theodore Ts'o <tytso@mit.edu>, Peter Xu <peterx@redhat.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>
+Subject: Re: [PATCH v8 3/3] mm/gup: disallow FOLL_LONGTERM GUP-fast writing
+ to file-backed mappings
+Message-ID: <c2a6311c-7fdc-4d12-9a3f-d2eed954c468@lucifer.local>
+References: <cover.1683067198.git.lstoakes@gmail.com>
+ <a690186fc37e1ea92556a7dbd0887fe201fcc709.1683067198.git.lstoakes@gmail.com>
+ <e4c92510-9756-d9a1-0055-4cd64a0c76d9@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230504-b4-v6-3-topic-boards-imx8mp-evk-dual-role-usb-v2-2-3889b1b2050c@pengutronix.de>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+In-Reply-To: <e4c92510-9756-d9a1-0055-4cd64a0c76d9@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,98 +117,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marco,
+On Thu, May 04, 2023 at 05:04:34PM +0200, David Hildenbrand wrote:
+> [...]
+>
+> > +static bool folio_fast_pin_allowed(struct folio *folio, unsigned int flags)
+> > +{
+> > +	struct address_space *mapping;
+> > +	unsigned long mapping_flags;
+> > +
+> > +	/*
+> > +	 * If we aren't pinning then no problematic write can occur. A long term
+> > +	 * pin is the most egregious case so this is the one we disallow.
+> > +	 */
+> > +	if ((flags & (FOLL_PIN | FOLL_LONGTERM | FOLL_WRITE)) !=
+> > +	    (FOLL_PIN | FOLL_LONGTERM | FOLL_WRITE))
+> > +		return true;
+> > +
+> > +	/* The folio is pinned, so we can safely access folio fields. */
+> > +
+> > +	/* Neither of these should be possible, but check to be sure. */
+>
+> You can easily have anon pages that are at the swapcache at this point
+> (especially, because this function is called before our unsharing checks),
+> the comment is misleading.
 
-kernel test robot noticed the following build warnings:
+Ack will update.
 
-[auto build test WARNING on 457391b0380335d5e9a5babdec90ac53928b23b4]
+>
+> And there is nothing wrong about pinning an anon page that's still in the
+> swapcache. The following folio_test_anon() check will allow them.
+>
+> The check made sense in page_mapping(), but here it's not required.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Marco-Felsch/dt-bindings-usb-gpio-sbu-mux-add-support-for-ss-data-lanes-mux/20230504-214927
-base:   457391b0380335d5e9a5babdec90ac53928b23b4
-patch link:    https://lore.kernel.org/r/20230504-b4-v6-3-topic-boards-imx8mp-evk-dual-role-usb-v2-2-3889b1b2050c%40pengutronix.de
-patch subject: [PATCH v2 2/4] usb: typec: mux: gpio-sbu-mux: add support for ss data lane muxing
-config: riscv-randconfig-r042-20230501 (https://download.01.org/0day-ci/archive/20230504/202305042306.TmTuYCAJ-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b1465cd49efcbc114a75220b153f5a055ce7911f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/8cbffd4f358b26347855cb2dcae31dd8c012226f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Marco-Felsch/dt-bindings-usb-gpio-sbu-mux-add-support-for-ss-data-lanes-mux/20230504-214927
-        git checkout 8cbffd4f358b26347855cb2dcae31dd8c012226f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/usb/typec/mux/
+Waaaaaaaaaait a second, you were saying before:-
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305042306.TmTuYCAJ-lkp@intel.com/
+  "Folios in the swap cache return the swap mapping" -- you might disallow
+  pinning anonymous pages that are in the swap cache.
 
-All warnings (new ones prefixed by >>):
+  I recall that there are corner cases where we can end up with an anon
+  page that's mapped writable but still in the swap cache ... so you'd
+  fallback to the GUP slow path (acceptable for these corner cases, I
+  guess), however especially the comment is a bit misleading then.
 
->> drivers/usb/typec/mux/gpio-sbu-mux.c:119:18: warning: cast to smaller integer type 'enum gpio_sbu_mux_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
-           sbu_mux->type = (enum gpio_sbu_mux_type)device_get_match_data(&pdev->dev);
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+So are we allowing or disallowing pinning anon swap cache pages? :P
+
+I mean slow path would allow them if they are just marked anon so I'm inclined
+to allow them.
+
+>
+> I do agree regarding folio_test_slab(), though. Should we WARN in case we
+> would have one?
+>
+> if (WARN_ON_ONCE(folio_test_slab(folio)))
+> 	return false;
+>
+
+God help us if we have a slab page at this point, so agreed worth doing, it
+would surely have to arise from some dreadful bug/memory corruption.
+
+> > +	if (unlikely(folio_test_slab(folio) || folio_test_swapcache(folio)))
+> > +		return false;
+> > +
+> > +	/* hugetlb mappings do not require dirty-tracking. */
+> > +	if (folio_test_hugetlb(folio))
+> > +		return true;
+> > +
+> > +	/*
+> > +	 * GUP-fast disables IRQs. When IRQS are disabled, RCU grace periods
+> > +	 * cannot proceed, which means no actions performed under RCU can
+> > +	 * proceed either.
+> > +	 *
+> > +	 * inodes and thus their mappings are freed under RCU, which means the
+> > +	 * mapping cannot be freed beneath us and thus we can safely dereference
+> > +	 * it.
+> > +	 */
+> > +	lockdep_assert_irqs_disabled();
+> > +
+> > +	/*
+> > +	 * However, there may be operations which _alter_ the mapping, so ensure
+> > +	 * we read it once and only once.
+> > +	 */
+> > +	mapping = READ_ONCE(folio->mapping);
+> > +
+> > +	/*
+> > +	 * The mapping may have been truncated, in any case we cannot determine
+> > +	 * if this mapping is safe - fall back to slow path to determine how to
+> > +	 * proceed.
+> > +	 */
+> > +	if (!mapping)
+> > +		return false;
+> > +
+> > +	/* Anonymous folios are fine, other non-file backed cases are not. */
+> > +	mapping_flags = (unsigned long)mapping & PAGE_MAPPING_FLAGS;
+> > +	if (mapping_flags)
+> > +		return mapping_flags == PAGE_MAPPING_ANON;
+>
+> KSM pages are also (shared) anonymous folios, and that check would fail --
+> which is ok (the following unsharing checks rejects long-term pinning them),
+> but a bit inconstent with your comment and folio_test_anon().
+>
+> It would be more consistent (with your comment and also the folio_test_anon
+> implementation) to have here:
+>
+> 	return mapping_flags & PAGE_MAPPING_ANON;
+>
+
+I explicitly excluded KSM out of fear that could be some breakage given they're
+wrprotect'd + expected to CoW though? But I guess you mean they'd get picked up
+by the unshare and so it doesn't matter + we wouldn't want to exclude an
+PG_anon_exclusive case?
+
+I'll make the change in any case given the unshare check!
+
+I notice the gup_huge_pgd() doesn't do an unshare but I mean, a PGD-sized huge
+page probably isn't going to be CoW'd :P
 
 
-vim +119 drivers/usb/typec/mux/gpio-sbu-mux.c
+> > +
+> > +	/*
+> > +	 * At this point, we know the mapping is non-null and points to an
+> > +	 * address_space object. The only remaining whitelisted file system is
+> > +	 * shmem.
+> > +	 */
+> > +	return shmem_mapping(mapping);
+> > +}
+> > +
+>
+> In general, LGTM
+>
+> Acked-by: David Hildenbrand <david@redhat.com>
+>
 
-   107	
-   108	static int gpio_sbu_mux_probe(struct platform_device *pdev)
-   109	{
-   110		struct typec_switch_desc sw_desc = { };
-   111		struct typec_mux_desc mux_desc = { };
-   112		struct device *dev = &pdev->dev;
-   113		struct gpio_sbu_mux *sbu_mux;
-   114	
-   115		sbu_mux = devm_kzalloc(dev, sizeof(*sbu_mux), GFP_KERNEL);
-   116		if (!sbu_mux)
-   117			return -ENOMEM;
-   118	
- > 119		sbu_mux->type = (enum gpio_sbu_mux_type)device_get_match_data(&pdev->dev);
-   120	
-   121		mutex_init(&sbu_mux->lock);
-   122	
-   123		sbu_mux->enable_gpio = devm_gpiod_get(dev, "enable", GPIOD_OUT_LOW);
-   124		if (IS_ERR(sbu_mux->enable_gpio))
-   125			return dev_err_probe(dev, PTR_ERR(sbu_mux->enable_gpio),
-   126					     "unable to acquire enable gpio\n");
-   127	
-   128		sbu_mux->select_gpio = devm_gpiod_get(dev, "select", GPIOD_OUT_LOW);
-   129		if (IS_ERR(sbu_mux->select_gpio))
-   130			return dev_err_probe(dev, PTR_ERR(sbu_mux->select_gpio),
-   131					     "unable to acquire select gpio\n");
-   132	
-   133		sw_desc.drvdata = sbu_mux;
-   134		sw_desc.fwnode = dev_fwnode(dev);
-   135		sw_desc.set = gpio_sbu_switch_set;
-   136	
-   137		sbu_mux->sw = typec_switch_register(dev, &sw_desc);
-   138		if (IS_ERR(sbu_mux->sw))
-   139			return dev_err_probe(dev, PTR_ERR(sbu_mux->sw),
-   140					     "failed to register typec switch\n");
-   141	
-   142		mux_desc.drvdata = sbu_mux;
-   143		mux_desc.fwnode = dev_fwnode(dev);
-   144		mux_desc.set = gpio_sbu_mux_set;
-   145	
-   146		sbu_mux->mux = typec_mux_register(dev, &mux_desc);
-   147		if (IS_ERR(sbu_mux->mux)) {
-   148			typec_switch_unregister(sbu_mux->sw);
-   149			return dev_err_probe(dev, PTR_ERR(sbu_mux->mux),
-   150					     "failed to register typec mux\n");
-   151		}
-   152	
-   153		platform_set_drvdata(pdev, sbu_mux);
-   154	
-   155		return 0;
-   156	}
-   157	
+Thanks!
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Will respin, addressing your comments and addressing the issue the kernel
+bot picked up with placement in the appropriate #ifdef's and send out a v9
+shortly.
+
+
+> --
+> Thanks,
+>
+> David / dhildenb
+>
