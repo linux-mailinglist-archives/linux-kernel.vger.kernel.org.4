@@ -2,172 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 963A96F77D5
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 23:13:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 168266F77E8
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 23:17:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbjEDVNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 17:13:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46160 "EHLO
+        id S229774AbjEDVRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 17:17:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbjEDVNJ (ORCPT
+        with ESMTP id S229745AbjEDVRi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 17:13:09 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49AFC4EC8
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 14:13:05 -0700 (PDT)
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
+        Thu, 4 May 2023 17:17:38 -0400
+Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [IPv6:2001:4b7a:2000:18::163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC391386B
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 14:17:36 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id D10653F12F
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 21:13:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1683234782;
-        bh=8/IuvB7q0MpadpI+BtBqI9cgeVSD1cWHWWl6VaVHMkI=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=WEXQ81HvjSxQFkLOc/oIs8XXHteowDdp/+558iHFsRkT56hUEVNsl38n6j3t0ds3E
-         57zl70/Z2M+AEQTDDej0C57ikM3WtAYlrSXSOztdT88yRvG7XtOGt3Mg/duA9pWIJz
-         Txg0dzXPfW8MRzomRzskdHqElqZaswONkzXUqYf7wHy5GkD0LGPBW8tP+tHWyONsHW
-         LoOTvBhEqXybLSgAiNjBGQ4suWfkLVOm/7HdR1+qxsiede/JfY71ihSttecGmckTcv
-         TjEUwNXDcpIUDZ1v7T7nVo2oqH95m7vk3fXFzV43n33gBwhqRoPjfHxYpw107NQH0J
-         GJsaH+iJMli9Q==
-Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-94ec76d7a26so94770866b.1
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 14:13:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683234782; x=1685826782;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8/IuvB7q0MpadpI+BtBqI9cgeVSD1cWHWWl6VaVHMkI=;
-        b=NcFz8pz+hQQF6MZ1N4Q2OvpMTcTWWT5k669AVjLXv4BO4Fzd+OXPa/r3HcupLEnNNR
-         5lME4lUOT5z26n1BQV0FKFnkBr+GXOB4Z8krbSIyHKSkzdag7ijDcZwso3+dHpiU14ZG
-         ts447nxrjjUKch8jdlJ1FBf2LgpjLj2i9DpLvO/guuwbNj8OBChqAgZ+xAQVAxFhPBsu
-         M4v6vWr7V40Jke1dSCV2P6DVr/H7DUCOuLi9Nkd/0N3S/MQdd6HGxRRgzHSmE2xNBE1D
-         NIJ8poSIsXR/twxvMijTh8L8HdGlKg+QVtqOJGUa6sdrUa+tGIdLdOqJGGMHkAqoHPGv
-         wHJQ==
-X-Gm-Message-State: AC+VfDyPQ6nhm61zLgiLIAXfD4ZR0fcl0xmK0YANcmnjQ5z0dfa7cZd4
-        JMAlntWjUnfB87QJkK29pHKfd8s5RQGOHVb47g2ZYVp7M/iJIhIjAQhoczM+p/5Lv8t6EA8G+qt
-        kdDfORlERr2G/HpzOV7/nSWMda17soH4iTJiRPw9BCg==
-X-Received: by 2002:a17:907:846:b0:94e:f738:514f with SMTP id ww6-20020a170907084600b0094ef738514fmr162681ejb.13.1683234782536;
-        Thu, 04 May 2023 14:13:02 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6ANyGyXAGB71H/AEoG1ZDXxwhyovwMjLeaMQ9fUMZjmJ05dtMIpeeSciNh8ivLL2x5tUC2rQ==
-X-Received: by 2002:a17:907:846:b0:94e:f738:514f with SMTP id ww6-20020a170907084600b0094ef738514fmr162673ejb.13.1683234782206;
-        Thu, 04 May 2023 14:13:02 -0700 (PDT)
-Received: from localhost ([62.168.35.125])
-        by smtp.gmail.com with ESMTPSA id g8-20020a17090670c800b0095fbb1b72c2sm39879ejk.63.2023.05.04.14.13.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 May 2023 14:13:01 -0700 (PDT)
-Date:   Thu, 4 May 2023 23:13:01 +0200
-From:   Andrea Righi <andrea.righi@canonical.com>
-To:     hanjinke <hanjinke.666@bytedance.com>
-Cc:     tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [External] Re: [PATCH v2] blk-throttle: Fix io statistics for
- cgroup v1
-Message-ID: <ZFQf3TCs7DqsSR8l@righiandr-XPS-13-7390>
-References: <20230401094708.77631-1-hanjinke.666@bytedance.com>
- <ZEwY5Oo+5inO9UFf@righiandr-XPS-13-7390>
- <eb2eeb6b-07da-4e98-142c-da1e7ea35c2b@bytedance.com>
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 820BA2128F;
+        Thu,  4 May 2023 23:17:33 +0200 (CEST)
+Date:   Thu, 4 May 2023 23:17:32 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Jessica Zhang <quic_jesszhan@quicinc.com>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] drm/msm/dsi: Adjust pclk rate for compression
+Message-ID: <hetttr6ug6sbt3g3fwmuqkx5f7betgxtzyuaovo62h5ams3th7@7xbztyqgyrz5>
+References: <20230405-add-dsc-support-v1-0-6bc6f03ae735@quicinc.com>
+ <20230405-add-dsc-support-v1-1-6bc6f03ae735@quicinc.com>
+ <lq6le3pxya3op2nke53uniusr3chtkmqdfrc7wkv4tylqb2fio@esjoh4f63g5q>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <eb2eeb6b-07da-4e98-142c-da1e7ea35c2b@bytedance.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <lq6le3pxya3op2nke53uniusr3chtkmqdfrc7wkv4tylqb2fio@esjoh4f63g5q>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 04, 2023 at 11:08:53PM +0800, hanjinke wrote:
-> Hi
+On 2023-05-04 22:33:17, Marijn Suijten wrote:
+> Title suggestion: use the wording "reduce pclk rate" :)
 > 
-> Sorry for delay（Chinese Labor Day holiday).
-
-No problem, it was also Labor Day in Italy. :)
-
+> (Eventually "when DSC is enabled", instead of "for compression")
 > 
-> 在 2023/4/29 上午3:05, Andrea Righi 写道:
-> > On Sat, Apr 01, 2023 at 05:47:08PM +0800, Jinke Han wrote:
-> > > From: Jinke Han <hanjinke.666@bytedance.com>
-> > > 
-> > > After commit f382fb0bcef4 ("block: remove legacy IO schedulers"),
-> > > blkio.throttle.io_serviced and blkio.throttle.io_service_bytes become
-> > > the only stable io stats interface of cgroup v1, and these statistics
-> > > are done in the blk-throttle code. But the current code only counts the
-> > > bios that are actually throttled. When the user does not add the throttle
-> > > limit, the io stats for cgroup v1 has nothing. I fix it according to the
-> > > statistical method of v2, and made it count all ios accurately.
-> > > 
-> > > Fixes: a7b36ee6ba29 ("block: move blk-throtl fast path inline")
-> > > Signed-off-by: Jinke Han <hanjinke.666@bytedance.com>
+> On 2023-05-02 18:19:12, Jessica Zhang wrote:
+> > Divide the pclk rate by the compression ratio when DSC is enabled
 > > 
-> > Thanks for fixing this!
-> > 
-> > The code looks correct to me, but this seems to report io statistics
-> > only if at least one throttling limit is defined. IIRC with cgroup v1 it
-> > was possible to see the io statistics inside a cgroup also with no
-> > throttling limits configured.
-> > 
-> > Basically to restore the old behavior we would need to drop the
-> > cgroup_subsys_on_dfl() check, something like the following (on top of
-> > your patch).
-> > 
-> > But I'm not sure if we're breaking other behaviors in this way...
-> > opinions?
-> > 
-> >   block/blk-cgroup.c   |  3 ---
-> >   block/blk-throttle.h | 12 +++++-------
-> >   2 files changed, 5 insertions(+), 10 deletions(-)
-> > 
-> > diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
-> > index 79138bfc6001..43af86db7cf3 100644
-> > --- a/block/blk-cgroup.c
-> > +++ b/block/blk-cgroup.c
-> > @@ -2045,9 +2045,6 @@ void blk_cgroup_bio_start(struct bio *bio)
-> >   	struct blkg_iostat_set *bis;
-> >   	unsigned long flags;
-> > -	if (!cgroup_subsys_on_dfl(io_cgrp_subsys))
-> > -		return;
-> > -
-> >   	/* Root-level stats are sourced from system-wide IO stats */
-> >   	if (!cgroup_parent(blkcg->css.cgroup))
-> >   		return;
-> > diff --git a/block/blk-throttle.h b/block/blk-throttle.h
-> > index d1ccbfe9f797..bcb40ee2eeba 100644
-> > --- a/block/blk-throttle.h
-> > +++ b/block/blk-throttle.h
-> > @@ -185,14 +185,12 @@ static inline bool blk_should_throtl(struct bio *bio)
-> >   	struct throtl_grp *tg = blkg_to_tg(bio->bi_blkg);
-> >   	int rw = bio_data_dir(bio);
-> > -	if (!cgroup_subsys_on_dfl(io_cgrp_subsys)) {
-> > -		if (!bio_flagged(bio, BIO_CGROUP_ACCT)) {
-> > -			bio_set_flag(bio, BIO_CGROUP_ACCT);
-> > -			blkg_rwstat_add(&tg->stat_bytes, bio->bi_opf,
-> > -					bio->bi_iter.bi_size);
-> > -		}
-> > -		blkg_rwstat_add(&tg->stat_ios, bio->bi_opf, 1);
-> > +	if (!bio_flagged(bio, BIO_CGROUP_ACCT)) {
-> > +		bio_set_flag(bio, BIO_CGROUP_ACCT);
-> > +		blkg_rwstat_add(&tg->stat_bytes, bio->bi_opf,
-> > +				bio->bi_iter.bi_size);
-> >   	}
-> > +	blkg_rwstat_add(&tg->stat_ios, bio->bi_opf, 1);
+> > Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
 > 
-> It seems that statistics have been carried out in both v1 and v2，we can get
-> the statistics of v2 from io.stat, is it necessary to count v2 here?
+> Thank you so much for sending this.   The compression ratio was applied
+> to hdisplay
+
+In hindsight, on the note of hdisplay, dsi_timing_setup() actually only
+divides the visual portion - that is hdisplay out of htotal - without
+affecting the back and front porch.
+
+Since this clock inside the mode is based on the full htotal * vtotal *
+..., should we compensate for that and only divide the visual portion of
+the clock signal by 3?  Otherwise we might not have enough clockticks to
+perform the front and back porch (even though CMD mode doesn't really
+have porches, I have yet to properly understand that part of the
+signal).
+
+- Marijn
+
+> , but not the clocks yet, and with this patch I get a massive
+> reduction in clock speeds on the Xperia XZ3, without regressions nor
+> affecting performance/fps:
 > 
-
-I think this code is affecting (and should affect) only v1, stats for v2
-are accounted via blk_cgroup_bio_start() in a different way. And the
-behavior in v2 is the same as with this patch applied, that means io
-stats are always reported even if we don't set any io limit.
-
-Thanks,
--Andrea
+>           gcc_sys_noc_cpuss_ahb_clk       1        1        0    19200000          0     0  50000         Y
+>           gcc_cpuss_ahb_clk           1        1        0    19200000          0     0  50000         Y
+>     bi_tcxo                           6        6        0    19200000          0     0  50000         Y
+>        dsi0vco_clk                    1        1        0  [-1873793994-]{+1249195898+}          0     0  50000         Y
+>           dsi0_pll_out_div_clk        1        1        0   [-1873793994-]{+624597949+}          0     0  50000         Y
+>              dsi0_pll_post_out_div_clk       0        0        0   [-468448498-]{+156149487+}          0     0  50000         Y
+>              dsi0_pll_bit_clk         2        2        0   [-1873793994-]{+624597949+}          0     0  50000         Y
+>                 dsi0_pclk_mux         1        1        0   [-1873793994-]{+624597949+}          0     0  50000         Y
+>                    dsi0_phy_pll_out_dsiclk       1        1        0   [-312298999-]{+104099659+}          0     0  50000         Y
+>                       disp_cc_mdss_pclk0_clk_src       1        1        0   [-312298999-]{+104099659+}          0     0  50000         Y
+>                          disp_cc_mdss_pclk0_clk       1        1        0   [-312298999-]{+104099659+}          0     0  50000         Y
+>                 dsi0_pll_by_2_bit_clk       0        0        0   [-936896997-]{+312298974+}          0     0  50000         Y
+>                 dsi0_phy_pll_out_byteclk       1        1        0    [-234224249-]{+78074743+}          0     0  50000         Y
+>                    disp_cc_mdss_byte0_clk_src       2        2        0    [-234224249-]{+78074743+}          0     0  50000         Y
+>                       disp_cc_mdss_byte0_div_clk_src       1        1        0    [-117112125-]{+39037372+}          0     0  50000         Y
+>                          disp_cc_mdss_byte0_intf_clk       1        1        0    [-117112125-]{+39037372+}          0     0  50000         Y
+>                       disp_cc_mdss_byte0_clk       1        1        0    [-234224249-]{+78074743+}          0     0  50000         Y
+>        gpu_cc_pll1                    0        0        0   500000097          0     0  50000         N
+>        disp_cc_mdss_dp_pixel_clk_src       0        0        0    19200000          0     0  50000         N
+>           disp_cc_mdss_dp_pixel_clk       0        0        0    19200000          0     0  50000         N
+> 
+> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+> 
+> > ---
+> >  drivers/gpu/drm/msm/dsi/dsi_host.c | 14 ++++++++++----
+> >  1 file changed, 10 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> > index 43a5ec33eee8..35c69dbe5f6f 100644
+> > --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
+> > +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> > @@ -561,7 +561,8 @@ void dsi_link_clk_disable_v2(struct msm_dsi_host *msm_host)
+> >  	clk_disable_unprepare(msm_host->byte_clk);
+> >  }
+> >  
+> > -static unsigned long dsi_get_pclk_rate(const struct drm_display_mode *mode, bool is_bonded_dsi)
+> > +static unsigned long dsi_get_pclk_rate(const struct drm_display_mode *mode,
+> 
+> It is a bit unfortunate that this function is called so often with the
+> same parameters, doing the same calculation over and over.
+> 
+> > +		struct drm_dsc_config *dsc, bool is_bonded_dsi)
+> >  {
+> >  	unsigned long pclk_rate;
+> >  
+> > @@ -576,6 +577,11 @@ static unsigned long dsi_get_pclk_rate(const struct drm_display_mode *mode, bool
+> >  	if (is_bonded_dsi)
+> >  		pclk_rate /= 2;
+> >  
+> > +	/* If DSC is enabled, divide pclk by compression ratio */
+> > +	if (dsc)
+> > +		pclk_rate = DIV_ROUND_UP(pclk_rate,
+> > +				dsc->bits_per_component * 3 / msm_dsc_get_bpp_int(dsc));
+> 
+> Don't forget to mention that this series depends on the DSC helpers.  I
+> don't think the linked DSC 1.2 series depends on it (at least it doesn't
+> mention it):
+> 
+> https://lore.kernel.org/linux-arm-msm/20230329-rfc-msm-dsc-helper-v6-2-cb7f59f0f7fb@quicinc.com/
+> 
+> - Marijn
+> 
+> > +
+> >  	return pclk_rate;
+> >  }
+> >  
+> > @@ -585,7 +591,7 @@ unsigned long dsi_byte_clk_get_rate(struct mipi_dsi_host *host, bool is_bonded_d
+> >  	struct msm_dsi_host *msm_host = to_msm_dsi_host(host);
+> >  	u8 lanes = msm_host->lanes;
+> >  	u32 bpp = dsi_get_bpp(msm_host->format);
+> > -	unsigned long pclk_rate = dsi_get_pclk_rate(mode, is_bonded_dsi);
+> > +	unsigned long pclk_rate = dsi_get_pclk_rate(mode, msm_host->dsc, is_bonded_dsi);
+> >  	u64 pclk_bpp = (u64)pclk_rate * bpp;
+> >  
+> >  	if (lanes == 0) {
+> > @@ -604,7 +610,7 @@ unsigned long dsi_byte_clk_get_rate(struct mipi_dsi_host *host, bool is_bonded_d
+> >  
+> >  static void dsi_calc_pclk(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
+> >  {
+> > -	msm_host->pixel_clk_rate = dsi_get_pclk_rate(msm_host->mode, is_bonded_dsi);
+> > +	msm_host->pixel_clk_rate = dsi_get_pclk_rate(msm_host->mode, msm_host->dsc, is_bonded_dsi);
+> >  	msm_host->byte_clk_rate = dsi_byte_clk_get_rate(&msm_host->base, is_bonded_dsi,
+> >  							msm_host->mode);
+> >  
+> > @@ -634,7 +640,7 @@ int dsi_calc_clk_rate_v2(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
+> >  
+> >  	dsi_calc_pclk(msm_host, is_bonded_dsi);
+> >  
+> > -	pclk_bpp = (u64)dsi_get_pclk_rate(msm_host->mode, is_bonded_dsi) * bpp;
+> > +	pclk_bpp = (u64)dsi_get_pclk_rate(msm_host->mode, msm_host->dsc, is_bonded_dsi) * bpp;
+> >  	do_div(pclk_bpp, 8);
+> >  	msm_host->src_clk_rate = pclk_bpp;
+> >  
+> > 
+> > -- 
+> > 2.40.1
+> > 
