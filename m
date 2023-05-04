@@ -2,151 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C220C6F6FD9
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 18:22:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 836786F6FE1
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 18:23:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbjEDQW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 12:22:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47816 "EHLO
+        id S229761AbjEDQXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 12:23:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbjEDQWZ (ORCPT
+        with ESMTP id S229607AbjEDQXU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 12:22:25 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CE045B96
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 09:22:22 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-2f3fe12de15so497756f8f.3
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 09:22:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683217340; x=1685809340;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Gsk62XwjD8JjQowiDifvFLPW2uokrx3QTotNr7V9c/A=;
-        b=6NGLeWA30bcHwOn4ghW5tWONP3tIeVXLoIAwGSOlF40SYraEbii/SQhzrJIho8Ivb6
-         Hpkk6vNh9E5t/cw05230dMqe0m+/H6ie+h8h31p+GrZCCgkTxJbXyMjFGjZkhz3bV6dG
-         vSjHZI0HIdPfHSmqobGMchd9amOB1v/ceZjRFhmXUrjm4M4cWFnS99GIAMxh/gj5liXv
-         4tj0lHTy81/1Wbpb012EhMfXD9LTcX1fI/Tm4TbQO8kVMc6YZQrPrde4R4+RJt2s2OWX
-         VOgAgJHhDqiDK83jUMMdRLdqlv9RhFWhmjzvFXehDDJFCUBnHdRe0JsvmE5LyyU2xx97
-         symQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683217341; x=1685809341;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Gsk62XwjD8JjQowiDifvFLPW2uokrx3QTotNr7V9c/A=;
-        b=PdjKYqsaKv8qJYcZsy/bIubThsiOQAnb/Aoh24vnZtHwLF+gopow9vEeBB+fpNOUsQ
-         L24ImAOtvwzy+9VNlY+eMsxwkvEhEOGt52zdWQuYNBaU683boUQWBnxzN2CTSHnLMD2E
-         G3O0O1bluHwCziRMi9SC1/J7e9mhXwGhSIKdEKz08w37JmOvkyYj7tC+zmyQfLjDTaKs
-         2a+5Imb4n87ReMijU0G7qksGwgYft5bCr/4Jkp5ycNbguKHLo0OmdUJFjihy8C+/Kr18
-         64Lg0c6ajj+eOxY4wMxtl7t+lRlDNZ3qzkaIpnXuI80exma5rQ51vdIuREdFJUTyT5nz
-         Nadw==
-X-Gm-Message-State: AC+VfDw+I9EVAxfd44GWAW3+krXXmweTJxfZRkxNLUqEgLh77utdAtY3
-        Ql3HBSuFExqyaA5uvC+tIV/MKSTZtpn9tvE2O5ClkQ==
-X-Google-Smtp-Source: ACHHUZ6W7LU6+7sJ+JIBNyUc93OdZBrKmPb6kgAM40ObN2WRJqo/GOAU298MN4AghxYk5WmY9UXzE3DSoSxQENd3Lcc=
-X-Received: by 2002:a05:6000:120a:b0:2fc:7b62:f459 with SMTP id
- e10-20020a056000120a00b002fc7b62f459mr2840579wrx.32.1683217340407; Thu, 04
- May 2023 09:22:20 -0700 (PDT)
+        Thu, 4 May 2023 12:23:20 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E28E92736;
+        Thu,  4 May 2023 09:23:16 -0700 (PDT)
+Received: from booty.fritz.box (unknown [77.244.183.192])
+        (Authenticated sender: luca.ceresoli@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPA id B2BF5C0007;
+        Thu,  4 May 2023 16:23:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1683217395;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wiCrz2ZRJmlknjS2A3op5qUSsF1/r0N1+dDlTFVnvnE=;
+        b=ehp8Vtl2YknxMApsjQ51QluNSkt0kStbvIacHCS6HpgBi30SX0QmHASf05KUC2vQq0SQaS
+        nOo0WJESWYwe/ZhBt66skVyMrslAHsB5sPpWQukCeB7HNjaejeN/EZM1Zg7ClZtGAIJVSX
+        T1D055JNe3iJy108yRmGnEfkqmQ2cHV+61PxOeDtgHPpabPX1cumhMKJ0+XOs/dw26Yn1t
+        aGwjc9Vke5F9P+/ka8h8DO4BoW/Gmhdpl2+1KRb5hRXmGsWdvuyEogWO7cB3P9Mhyi5p+O
+        H7ofWPxyGkCguu1+hUeUb3XpXca5sh8sP9dhr9+2zpFLxr3qZjtWBAbGVqJZJw==
+From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
+To:     philippe.schenker@toradex.com
+Cc:     devicetree@vger.kernel.org, festevam@gmail.com,
+        gregkh@linuxfoundation.org, jun.li@nxp.com, kernel@pengutronix.de,
+        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        peter.chen@nxp.com, robh+dt@kernel.org, s.hauer@pengutronix.de,
+        shawnguo@kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v2 2/3] usb: chipidea: imx: support disabling runtime-pm
+Date:   Thu,  4 May 2023 18:23:12 +0200
+Message-Id: <20230504162312.1506763-1-luca.ceresoli@bootlin.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <23672d66d229d3be4cc854ddf1462c3507f1c2fc.camel@toradex.com>
+References: <23672d66d229d3be4cc854ddf1462c3507f1c2fc.camel@toradex.com>
 MIME-Version: 1.0
-References: <20230501165450.15352-1-surenb@google.com> <20230501165450.15352-36-surenb@google.com>
- <ZFIPmnrSIdJ5yusM@dhcp22.suse.cz> <CAJuCfpGsvWupMbasqvwcMYsOOPxTQqi1ed5+=vyu-yoPQwwybg@mail.gmail.com>
- <ZFNoVfb+1W4NAh74@dhcp22.suse.cz>
-In-Reply-To: <ZFNoVfb+1W4NAh74@dhcp22.suse.cz>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Thu, 4 May 2023 09:22:07 -0700
-Message-ID: <CAJuCfpGUtw6cbjLsksGJKATZfTV0FEYRXwXT0pZV83XqQydBgg@mail.gmail.com>
-Subject: Re: [PATCH 35/40] lib: implement context capture support for tagged allocations
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
-        vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev,
-        mgorman@suse.de, dave@stgolabs.net, willy@infradead.org,
-        liam.howlett@oracle.com, corbet@lwn.net, void@manifault.com,
-        peterz@infradead.org, juri.lelli@redhat.com, ldufour@linux.ibm.com,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, peterx@redhat.com, david@redhat.com,
-        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
-        nathan@kernel.org, dennis@kernel.org, tj@kernel.org,
-        muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
-        pasha.tatashin@soleen.com, yosryahmed@google.com,
-        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
-        andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, gregkh@linuxfoundation.org,
-        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 4, 2023 at 1:09=E2=80=AFAM Michal Hocko <mhocko@suse.com> wrote=
-:
->
-> On Wed 03-05-23 08:24:19, Suren Baghdasaryan wrote:
-> > On Wed, May 3, 2023 at 12:39=E2=80=AFAM Michal Hocko <mhocko@suse.com> =
-wrote:
-> > >
-> > > On Mon 01-05-23 09:54:45, Suren Baghdasaryan wrote:
-> > > [...]
-> > > > +struct codetag_ctx *alloc_tag_create_ctx(struct alloc_tag *tag, si=
-ze_t size)
-> > > > +{
-> > > > +     struct alloc_call_ctx *ac_ctx;
-> > > > +
-> > > > +     /* TODO: use a dedicated kmem_cache */
-> > > > +     ac_ctx =3D kmalloc(sizeof(struct alloc_call_ctx), GFP_KERNEL)=
-;
-> > >
-> > > You cannot really use GFP_KERNEL here. This is post_alloc_hook path a=
-nd
-> > > that has its own gfp context.
-> >
-> > I missed that. Would it be appropriate to use the gfp_flags parameter
-> > of post_alloc_hook() here?
->
-> No. the original allocation could have been GFP_USER based and you do
-> not want these allocations to pullute other zones potentially. You want
-> GFP_KERNEL compatible subset of that mask.
+Hello Philippe,
 
-Ack.
+I found this thread after several hours spent in debugging why USB host is
+not detecting new devices on a custom board using the iMX6ULL Colibri
+SoM.
 
->
-> But even then I really detest an additional allocation from this context
-> for every single allocation request. There GFP_NOWAIT allocation for
-> steckdepot but that is at least cached and generally not allocating.
-> This will allocate for every single allocation.
+My best workaround at the moment is:
 
-A small correction here. alloc_tag_create_ctx() is used only for
-allocations which we requested to capture the context. So, this last
-sentence is true for allocations we specifically marked to capture the
-context, not in general.
+  --- a/drivers/usb/chipidea/ci_hdrc_imx.c
+  +++ b/drivers/usb/chipidea/ci_hdrc_imx.c
+  @@ -56,7 +58,7 @@ static const struct ci_hdrc_imx_platform_flag imx6sx_usb_data = {
+   };
+ 
+   static const struct ci_hdrc_imx_platform_flag imx6ul_usb_data = {
+  -       .flags = CI_HDRC_SUPPORTS_RUNTIME_PM |
+  +       .flags = //CI_HDRC_SUPPORTS_RUNTIME_PM |
+                  CI_HDRC_TURN_VBUS_EARLY_ON |
+                  CI_HDRC_DISABLE_DEVICE_STREAMING,
+   };
 
-> There must be a better way.
+so it's equivalent to yours, but hard-coded.
 
-Yeah, agree, it would be good to avoid allocations in this path. Any
-specific ideas on how to improve this? Pooling/caching perhaps? I
-think kmem_cache does some of that already but maybe something else?
-Thanks,
-Suren.
+I haven't found any follow-up patches from you, so I'm wondering whether
+you have made any progress on this issue.
 
-> --
-> Michal Hocko
-> SUSE Labs
+As I see it, a quirk in the driver would make sense. What needs to be
+sorted out is how to enable it from device tree.
+
+I think a DT boolean as you propose would do, but with a name describing
+the hardware aspects of it ("chipidea,vbus-detection-is-broken"?) and not
+the driver behaviour.
+
+Otherwise looking for the "toradex,colibri-imx6ul" prefix in the top-level
+/compatible strings seems doable. I don't know how acceptable this is from
+a driver maintainer's point of view though.
+
+Best regards,
+Luca
