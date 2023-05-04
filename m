@@ -2,193 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCC146F652C
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 08:43:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C8E36F6535
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 08:46:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbjEDGnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 02:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53624 "EHLO
+        id S229684AbjEDGqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 02:46:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjEDGnq (ORCPT
+        with ESMTP id S229761AbjEDGqv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 02:43:46 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1FEE4
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 23:43:44 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-9505214c47fso13515966b.1
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 23:43:44 -0700 (PDT)
+        Thu, 4 May 2023 02:46:51 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F2BB26A4
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 23:46:48 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-50bc4ba28cbso113239a12.0
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 23:46:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683182623; x=1685774623;
+        d=linaro.org; s=google; t=1683182807; x=1685774807;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=L+HveaSZ8pmwoAQVLbFBbIPHXURnLfpovswLFaD49cM=;
-        b=Yc1utEmmtVjKxRztgUq8TCrqbbROc/mWgRM3m733c//+EhoGPCJukqByvu+IsuYjXz
-         9fekby6lVOIh2YlJV/Pwk4KwyIOcLqk8AjfPvYHGFdPY34ZF9JcPF9Ki5Ier/UY4O5LC
-         ++Kjly+BcoE03+TJesuBL2Pg9QhuWVcaQQU5nPUT8EBPrONzuK5Ex9y3ExzxbZG4A+q0
-         3RaTYaMmYm55t+c4AXLG+jKta0VAxf9t2XOIGq15QxVBU/YRqQVyoRA/wnHJ/QqK5LbG
-         WtGE8MFTa4t8bOpBBWz5DY11Rt0KlFtM2yQ8rj8hHg4KtVLs5MUlAyqVFqEqBbMQOoWJ
-         UZmg==
+        bh=M7vw8A+fPBvQQ7FZ7Zi1LK3WXKYiCvrkFtHK4YoEOPY=;
+        b=NJB48wgq8GaIWJfLNyX9Xph8XZknqa3JZ+QwdR8JtY4eLr142KuLjIFZQEA1Avf62D
+         rOwf/8NNDFoicTajh6DcOMjtMJPHSdPgsaCLb76kK8VJThqNsFKN5FnUvc0yhDNJkZ6g
+         zLzpjRvEgDdzhluvdCJMKSX4OT5lXrtwUbdA78TatEHKf+qHc5jVJRCf54en6xuXpYPq
+         WQLvOMtYnB1Le7URGZRQ+GrrjxnJVPuZ0p2oCQMk8YkBiJIVcLHpKm0AhgH3/tvWQkVz
+         tgVc/mclRts18VaHlldJb+BEe6Zyz6+hdGuKTCz2kAg06gohn1iwOhPVQL+p42V5/IWR
+         JHjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683182623; x=1685774623;
+        d=1e100.net; s=20221208; t=1683182807; x=1685774807;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=L+HveaSZ8pmwoAQVLbFBbIPHXURnLfpovswLFaD49cM=;
-        b=EUTPjKIE/cYoflufK9jdGnQiS0tKB+ry+Mr1HQkdVYk8xc1LDFlBWPb5gTpe6pRx4I
-         KQN7QMHmWM8YM/92NF3mCfJpOczBh+KAJu9MAZBYt5rx3YmKAAAYlGhrixP/aNPABRTz
-         O4OhO9SidObQ2+cUProsEImT1mACiCp20Gyp/Fkrp1Og756/t84GRC/UVDZzQ5B+gQoN
-         osmxVkYAuyrpr9piB6M95w2cQLeHc5+pciejplbJsDCfYW+XHv+dxm18U54sfR/qN1NY
-         N+jP8nJq29Pm8fWsEGdSkbLAxQanNYFeg07hGvUV2wYkKCcf3+V3ZXE7KmfkA8hnKuhW
-         zgLg==
-X-Gm-Message-State: AC+VfDxyECIhwaKB2EM7UcD9BNA8/MUFw6u9Sa9hnIo0Tw8ZXEDNjyam
-        vdlkrv3WchTwfS6uYR79t0g=
-X-Google-Smtp-Source: ACHHUZ6uvKUY4TfE5NW9KHFncs7MFdr3b9I0I/pMbi5ojrgYPfu3ZEqrW8pvVrcM5xsnTl/cei+hRw==
-X-Received: by 2002:a17:907:31c7:b0:95e:d448:477 with SMTP id xf7-20020a17090731c700b0095ed4480477mr5524506ejb.33.1683182622810;
-        Wed, 03 May 2023 23:43:42 -0700 (PDT)
-Received: from ?IPV6:2a02:908:1256:79a0:df61:3d16:42f9:8c09? ([2a02:908:1256:79a0:df61:3d16:42f9:8c09])
-        by smtp.gmail.com with ESMTPSA id k9-20020a170906970900b009534211cc97sm18405177ejx.159.2023.05.03.23.43.41
+        bh=M7vw8A+fPBvQQ7FZ7Zi1LK3WXKYiCvrkFtHK4YoEOPY=;
+        b=Wq8TqOEXfYGzSfLtEZIjpFGfaaJzHaVmek2Ue4+nzz+VKP4khMCG+hi0p7A0X9/Y/s
+         WBLIKImGcFIV7JI4LqolEiQuIL0JcIkZ/8w8d37XHxhaCJogbVG+TE3cZqao8Qv72ehG
+         Jy8jE+3zdVAglYKnmxRKGL/ukGgDwvKe2YXX3qAIm2caI9IvbiOTnR3HSc64ipMnP2iU
+         cdrmzvimhMdKEUZ+Ba47DteMYw9iynq952umMXtD93nQz1J8n+CvieV3CP883+becwB3
+         WxbiBUw/N9latmTU8nLp8MjTiBRs6CnvrBiZqgEUd8SCM8Mt4SPwZpj1ld0jFJxi3Zl/
+         iKCQ==
+X-Gm-Message-State: AC+VfDwCrFJE+e3CJpa0fP5qAHh+ZxDFIOnSJXtRh3XBVAMCAPZlsdgV
+        71T07vD1s7C1yXrtSeYYSaR12g==
+X-Google-Smtp-Source: ACHHUZ6UY8A2CuWiZF7JTRIhZOxqHEYlLakXgHOXDn41+YXqXV2Z9n4jJZ+YqlYAwptXMo8AV6xSmg==
+X-Received: by 2002:a17:907:3e22:b0:931:6921:bdb7 with SMTP id hp34-20020a1709073e2200b009316921bdb7mr5892628ejc.60.1683182807040;
+        Wed, 03 May 2023 23:46:47 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:cbf1:e7ef:fb81:e912? ([2a02:810d:15c0:828:cbf1:e7ef:fb81:e912])
+        by smtp.gmail.com with ESMTPSA id 10-20020a170906328a00b009599c3a019fsm14027418ejw.60.2023.05.03.23.46.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 May 2023 23:43:41 -0700 (PDT)
-Message-ID: <718e7aa5-0e08-fc88-b612-ae82ab9736cd@gmail.com>
-Date:   Thu, 4 May 2023 08:43:42 +0200
+        Wed, 03 May 2023 23:46:46 -0700 (PDT)
+Message-ID: <4aa7adbf-f89e-6819-64d2-5942a456528a@linaro.org>
+Date:   Thu, 4 May 2023 08:46:45 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RFC PATCH 0/1] Add AMDGPU_INFO_GUILTY_APP ioctl
+ Thunderbird/102.10.1
+Subject: Re: [PATCH] dt-bindings: usb: Add binding for Microchip usb5744 hub
+ controller
 Content-Language: en-US
-To:     =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
-        =?UTF-8?Q?Timur_Krist=c3=b3f?= <timur.kristof@gmail.com>,
-        Felix Kuehling <felix.kuehling@amd.com>
-Cc:     Alex Deucher <alexdeucher@gmail.com>,
-        "Pelloux-Prayer, Pierre-Eric" <pierre-eric.pelloux-prayer@amd.com>,
-        =?UTF-8?B?TWFyZWsgT2zFocOhaw==?= <maraeo@gmail.com>,
-        michel.daenzer@mailbox.org,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-kernel@vger.kernel.org,
-        Samuel Pitoiset <samuel.pitoiset@gmail.com>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        kernel-dev@igalia.com,
-        "Deucher, Alexander" <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-References: <20230501185747.33519-1-andrealmeid@igalia.com>
- <CADnq5_NXj4W44F_etRQ7HWdVTnf5zARCM3Y_o3EiwWiHj8QMpA@mail.gmail.com>
- <6ab2ff76-4518-6fac-071e-5d0d5adc4fcd@igalia.com>
- <cb3d2590-a1f8-fe7e-0bba-638ee80719af@amd.com>
- <CAFF-SiV0=WNmRW-D9uYUuj68Zq0APxtGLya9KR6FfZ7v0Zf2RQ@mail.gmail.com>
- <fcca2934-a556-797c-535d-a66fc67bbe30@amd.com>
- <85c538b01efb6f3fa6ff05ed1a0bc3ff87df7a61.camel@gmail.com>
- <CADnq5_NHtFbwT=x8u7GYc4ESL_HVFzjgtOd3AnVFBYMrjZq55w@mail.gmail.com>
- <c54414482b685af0991a6b095cbfb7534d998afc.camel@gmail.com>
- <CADnq5_MSY=j9AobDk7ACevur4Hwvw_ub7g16Mfm7ymMJqwVNfQ@mail.gmail.com>
- <57fa0ee4-de4f-3797-f817-d05f72541d0e@gmail.com>
- <2bf162d0-6112-8370-8828-0e0b21ac22ba@amd.com>
- <967a044bc2723cc24ab914506c0164db08923c59.camel@gmail.com>
- <59774c28-a0ef-d4f2-e920-503857bce1cf@igalia.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-In-Reply-To: <59774c28-a0ef-d4f2-e920-503857bce1cf@igalia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To:     Michal Simek <michal.simek@amd.com>, linux-kernel@vger.kernel.org,
+        monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com,
+        ilias.apalodimas@linaro.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Piyush Mehta <piyush.mehta@amd.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <cca068980ae0b902168a9a9b78cab4efb43157a8.1683121150.git.michal.simek@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <cca068980ae0b902168a9a9b78cab4efb43157a8.1683121150.git.michal.simek@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 03.05.23 um 21:14 schrieb André Almeida:
-> Em 03/05/2023 14:43, Timur Kristóf escreveu:
->> Hi Felix,
->>
->> On Wed, 2023-05-03 at 11:08 -0400, Felix Kuehling wrote:
->>> That's the worst-case scenario where you're debugging HW or FW
->>> issues.
->>> Those should be pretty rare post-bringup. But are there hangs caused
->>> by
->>> user mode driver or application bugs that are easier to debug and
->>> probably don't even require a GPU reset?
->>
->> There are many GPU hangs that gamers experience while playing. We have
->> dozens of open bug reports against RADV about GPU hangs on various GPU
->> generations. These usually fall into two categories:
->>
->> 1. When the hang always happens at the same point in a game. These are
->> painful to debug but manageable.
->> 2. "Random" hangs that happen to users over the course of playing a
->> game for several hours. It is absolute hell to try to even reproduce
->> let alone diagnose these issues, and this is what we would like to
->> improve.
->>
->> For these hard-to-diagnose problems, it is already a challenge to
->> determine whether the problem is the kernel (eg. setting wrong voltages
->> / frequencies) or userspace (eg. missing some synchronization), can be
->> even a game bug that we need to work around.
->>
->>> For example most VM faults can
->>> be handled without hanging the GPU. Similarly, a shader in an endless
->>> loop should not require a full GPU reset.
->>
->> This is actually not the case, AFAIK André's test case was an app that
->> had an infinite loop in a shader.
->>
->
-> This is the test app if anyone want to try out: 
-> https://github.com/andrealmeid/vulkan-triangle-v1. Just compile and run.
->
-> The kernel calls amdgpu_ring_soft_recovery() when I run my example, 
-> but I'm not sure what a soft recovery means here and if it's a full 
-> GPU reset or not.
+On 03/05/2023 15:39, Michal Simek wrote:
+> The Microchip usb5744 is a SS/HS USB 3.0 hub controller with 4 ports.
+> The binding describes USB related aspects of the USB5744 hub, it as
+> well cover the option of connecting the controller as an i2c slave.
+> When i2c interface is connected hub needs to be initialized first.
+> Hub itself has fixed i2c address 0x2D but hardcoding address is not good
+> idea because address can be shifted by i2c address translator in the
+> middle.
+> 
+> Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
+> Signed-off-by: Michal Simek <michal.simek@amd.com>
+> ---
+> 
+> It looks like that usb8041 has also an optional i2c interface which is not
+> covered. But it is mentioned at commit 40e58a8a7ca6 ("dt-bindings: usb:
+> Add binding for TI USB8041 hub controller").
+> 
+> i2c-bus name property was suggested by Rob at
+> https://lore.kernel.org/all/CAL_JsqJedhX6typpUKbnzV7CLK6UZVjq3CyG9iY_j5DLPqvVdw@mail.gmail.com/
+> and
+> https://lore.kernel.org/all/CAL_JsqJZBbu+UXqUNdZwg-uv0PAsNg55026PTwhKr5wQtxCjVQ@mail.gmail.com/
+> 
+> the question is if adding address like this is acceptable.
+> But it must be specified.
 
-That's just "soft" recovery. In other words we send the SQ a command to 
-kill a shader.
+Why? phandle points it explicitly.
 
-That usually works for shaders which contain an endless loop (which is 
-the most common application bug), but unfortunately not for any other 
-problem.
+> 
+> Driver will follow based on final dt-binding.
+> 
+> ---
+>  .../bindings/usb/microchip,usb5744.yaml       | 85 +++++++++++++++++++
+>  1 file changed, 85 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml b/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
+> new file mode 100644
+> index 000000000000..fafe275a35df
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
+> @@ -0,0 +1,85 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/microchip,usb5744.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Microchip USB5744 4-port Hub Controller
+> +
+> +description:
+> +  Microchip's USB5744 SmartHubTM IC is a 4 port, SuperSpeed (SS)/Hi-Speed (HS),
+> +  low power, low pin count configurable and fully compliant with the USB 3.1
+> +  Gen 1 specification. The USB5744 also supports Full Speed (FS) and Low Speed
+> +  (LS) USB signaling, offering complete coverage of all defined USB operating
+> +  speeds. The new SuperSpeed hubs operate in parallel with the USB 2.0
+> +  controller, so 5 Gbps SuperSpeed data transfers are not affected by slower
+> +  USB 2.0 traffic.
+> +
+> +maintainers:
+> +  - Piyush Mehta <piyush.mehta@amd.com>
+> +  - Michal Simek <michal.simek@amd.com>
+> +
+> +allOf:
+> +  - $ref: usb-device.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - usb424,5744
+> +      - usb424,2744
 
->
-> But if we can at least trust the CP registers to dump information for 
-> soft resets, it would be some improvement from the current state I think
+Keep the list ordered, so 2744 before 5744.
 
-Especially for endless loops the CP registers are completely useless. 
-The CP just prepares the draw commands and all the state which is then 
-send to the SQ for execution.
+> +
+> +  reg: true
+> +
+> +  reset-gpios:
+> +    maxItems: 1
+> +    description:
+> +      GPIO controlling the GRST# pin.
+> +
+> +  vdd-supply:
+> +    description:
+> +      VDD power supply to the hub
+> +
+> +  peer-hub:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description:
+> +      phandle to the peer hub on the controller.
+> +
+> +  i2c-bus:
+> +    maxItems: 1
+> +    description:
+> +      phandle of an I2C controller to link usb-hub for usb attach and reset
+> +      followed by i2c address.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - peer-hub
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +
+> +    usb {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        /* 2.0 hub on port 1 */
+> +        hub_2_0: hub@1 {
+> +          compatible = "usb424,5744";
 
-As Marek wrote we know which submission has timed out in the kernel, but 
-we can't figure out where inside this submission we are.
+Mixed indentation, use four spaces here as well.
 
->
->>>
->>> It's more complicated for graphics because of the more complex
->>> pipeline
->>> and the lack of CWSR. But it should still be possible to do some
->>> debugging without JTAG if the problem is in SW and not HW or FW. It's
->>> probably worth improving that debugability without getting hung-up on
->>> the worst case.
->>
->> I agree, and we welcome any constructive suggestion to improve the
->> situation. It seems like our idea doesn't work if the kernel can't give
->> us the information we need.
->>
->> How do we move forward?
-
-As I said the best approach to figure out which draw command hangs is to 
-sprinkle WRITE_DATA commands into your command stream.
-
-That's not so much overhead and at least Bas things that this is doable 
-in RADV with some changes.
-
-For the kernel we can certainly implement devcoredump and allow writing 
-out register values and other state when a problem happens.
-
-Regards,
-Christian.
-
->>
->> Best regards,
->> Timur
->>
+> +          reg = <1>;
+> +          peer-hub = <&hub_3_0>;
+> +          i2c-bus = <&i2c 0x2d>;
+> +          reset-gpios = <&gpio 3 GPIO_ACTIVE_LOW>;
+> +        };
+Krzysztof
 
