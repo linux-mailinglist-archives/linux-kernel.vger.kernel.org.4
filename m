@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5196C6F7373
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:43:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17C8B6F73BA
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:45:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230001AbjEDTnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 15:43:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48348 "EHLO
+        id S230384AbjEDTpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 15:45:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbjEDTnF (ORCPT
+        with ESMTP id S230323AbjEDTov (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 15:43:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E20C7D99;
-        Thu,  4 May 2023 12:42:44 -0700 (PDT)
+        Thu, 4 May 2023 15:44:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A109023;
+        Thu,  4 May 2023 12:43:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D0196370D;
-        Thu,  4 May 2023 19:42:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45FE2C43443;
-        Thu,  4 May 2023 19:42:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D9ECD636FD;
+        Thu,  4 May 2023 19:42:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9294FC433A0;
+        Thu,  4 May 2023 19:42:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683229361;
-        bh=hUoPHgkgFeSmgpT+GyBiuCiIZCGJ4a49BAhUVhMi/lQ=;
+        s=k20201202; t=1683229364;
+        bh=m8VNee3bA+lgpiWAyRUMwnimPC/EadPMf/JdyNqFKu0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CWrKOQLPqp0zmwDnQ28ZWEQONIzn2PqRkTfx7gLZAwodYBy0MJ3llb9vSd4MJHp32
-         jtc2ZmNrX34ZyO1ZshX72biRc3e1Wmr4q/r043cl0GDqghDBXj91z0h0J0DvsHIMef
-         DuF3uGBHIc0NN09DMA8USeqI7C2H3gYPptf/FOYxQ0v+tVXbOWd3R/5Pp4D5mnqyD9
-         UysCNXOqvviRvf+Ow3EnNh12JvSdJch38S3mnu1ZtcrDez84bMapSzHPVRk0JtrYQA
-         K80fv/gntqtMDr16/yffBEPGFQD/HvascheqqEWYcNp2JCpnS2TmXaBOboNlDBwlch
-         ois20cyNtvVQg==
+        b=cj99WayOTV1ZEYOPVjetgWNuqZOTFZngkPLoiw+zOrX5MeeI0Alh4NOn9cXFKsnlk
+         lzxGpzMOjzE9YgPovtMOPYlAgTZ6Q9yG6VxIS5p5TSOZFbpHnrzxEJAB+Y0lW5ykYa
+         ODZbGQ04qvP0Zbfnr83FNKTtNrK6dgsVDy1OI6xByd0obq/S1XOClWb8BzVQWzD8Ry
+         SRgIxSQgH1c+dqChxe5lY3kIXbDJdvEmBZyQ9daE3+BCquJ63R6mWGm415CquV2/n6
+         v+oQYbOoxxu+pJbbj8bhrP63l/KKumdqu37p/qgKN051skqWCbRjcnc5E++9qu5ZgM
+         tf1OGcioxZPQQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dmitry Bogdanov <d.bogdanov@yadro.com>, Forza <forza@tnonline.net>,
-        Mike Christie <michael.christie@oracle.com>,
-        Maurizio Lombardi <mlombard@redhat.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, mgurtovoy@nvidia.com,
-        mingzhe.zou@easystack.cn, justinstitt@google.com,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 19/59] scsi: target: iscsit: Free cmds before session free
-Date:   Thu,  4 May 2023 15:41:02 -0400
-Message-Id: <20230504194142.3805425-19-sashal@kernel.org>
+Cc:     Eli Cohen <elic@nvidia.com>, Thomas Gleixner <tglx@linutronix.de>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.3 20/59] lib: cpu_rmap: Avoid use after free on rmap->obj array entries
+Date:   Thu,  4 May 2023 15:41:03 -0400
+Message-Id: <20230504194142.3805425-20-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230504194142.3805425-1-sashal@kernel.org>
 References: <20230504194142.3805425-1-sashal@kernel.org>
@@ -51,8 +48,8 @@ MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,62 +58,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Bogdanov <d.bogdanov@yadro.com>
+From: Eli Cohen <elic@nvidia.com>
 
-[ Upstream commit d8990b5a4d065f38f35d69bcd627ec5a7f8330ca ]
+[ Upstream commit 4e0473f1060aa49621d40a113afde24818101d37 ]
 
-Commands from recovery entries are freed after session has been closed.
-That leads to use-after-free at command free or NPE with such call trace:
+When calling irq_set_affinity_notifier() with NULL at the notify
+argument, it will cause freeing of the glue pointer in the
+corresponding array entry but will leave the pointer in the array. A
+subsequent call to free_irq_cpu_rmap() will try to free this entry again
+leading to possible use after free.
 
-Time2Retain timer expired for SID: 1, cleaning up iSCSI session.
-BUG: kernel NULL pointer dereference, address: 0000000000000140
-RIP: 0010:sbitmap_queue_clear+0x3a/0xa0
-Call Trace:
- target_release_cmd_kref+0xd1/0x1f0 [target_core_mod]
- transport_generic_free_cmd+0xd1/0x180 [target_core_mod]
- iscsit_free_cmd+0x53/0xd0 [iscsi_target_mod]
- iscsit_free_connection_recovery_entries+0x29d/0x320 [iscsi_target_mod]
- iscsit_close_session+0x13a/0x140 [iscsi_target_mod]
- iscsit_check_post_dataout+0x440/0x440 [iscsi_target_mod]
- call_timer_fn+0x24/0x140
+Fix that by setting NULL to the array entry and checking that we have
+non-zero at the array entry when iterating over the array in
+free_irq_cpu_rmap().
 
-Move cleanup of recovery enrties to before session freeing.
+The current code does not suffer from this since there are no cases
+where irq_set_affinity_notifier(irq, NULL) (note the NULL passed for the
+notify arg) is called, followed by a call to free_irq_cpu_rmap() so we
+don't hit and issue. Subsequent patches in this series excersize this
+flow, hence the required fix.
 
-Reported-by: Forza <forza@tnonline.net>
-Signed-off-by: Dmitry Bogdanov <d.bogdanov@yadro.com>
-Signed-off-by: Mike Christie <michael.christie@oracle.com>
-Link: https://lore.kernel.org/r/20230319015620.96006-7-michael.christie@oracle.com
-Reviewed-by: Maurizio Lombardi <mlombard@redhat.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Eli Cohen <elic@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+Reviewed-by: Jacob Keller <jacob.e.keller@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/target/iscsi/iscsi_target.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ lib/cpu_rmap.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/target/iscsi/iscsi_target.c b/drivers/target/iscsi/iscsi_target.c
-index baf4da7bb3b4e..412efb576f785 100644
---- a/drivers/target/iscsi/iscsi_target.c
-+++ b/drivers/target/iscsi/iscsi_target.c
-@@ -4517,6 +4517,9 @@ int iscsit_close_session(struct iscsit_session *sess, bool can_sleep)
- 	iscsit_stop_time2retain_timer(sess);
- 	spin_unlock_bh(&se_tpg->session_lock);
+diff --git a/lib/cpu_rmap.c b/lib/cpu_rmap.c
+index f08d9c56f712e..e77f12bb3c774 100644
+--- a/lib/cpu_rmap.c
++++ b/lib/cpu_rmap.c
+@@ -232,7 +232,8 @@ void free_irq_cpu_rmap(struct cpu_rmap *rmap)
  
-+	if (sess->sess_ops->ErrorRecoveryLevel == 2)
-+		iscsit_free_connection_recovery_entries(sess);
-+
- 	/*
- 	 * transport_deregister_session_configfs() will clear the
- 	 * struct se_node_acl->nacl_sess pointer now as a iscsi_np process context
-@@ -4540,9 +4543,6 @@ int iscsit_close_session(struct iscsit_session *sess, bool can_sleep)
+ 	for (index = 0; index < rmap->used; index++) {
+ 		glue = rmap->obj[index];
+-		irq_set_affinity_notifier(glue->notify.irq, NULL);
++		if (glue)
++			irq_set_affinity_notifier(glue->notify.irq, NULL);
+ 	}
  
- 	transport_deregister_session(sess->se_sess);
+ 	cpu_rmap_put(rmap);
+@@ -268,6 +269,7 @@ static void irq_cpu_rmap_release(struct kref *ref)
+ 		container_of(ref, struct irq_glue, notify.kref);
  
--	if (sess->sess_ops->ErrorRecoveryLevel == 2)
--		iscsit_free_connection_recovery_entries(sess);
--
- 	iscsit_free_all_ooo_cmdsns(sess);
+ 	cpu_rmap_put(glue->rmap);
++	glue->rmap->obj[glue->index] = NULL;
+ 	kfree(glue);
+ }
  
- 	spin_lock_bh(&se_tpg->session_lock);
+@@ -297,6 +299,7 @@ int irq_cpu_rmap_add(struct cpu_rmap *rmap, int irq)
+ 	rc = irq_set_affinity_notifier(irq, &glue->notify);
+ 	if (rc) {
+ 		cpu_rmap_put(glue->rmap);
++		rmap->obj[glue->index] = NULL;
+ 		kfree(glue);
+ 	}
+ 	return rc;
 -- 
 2.39.2
 
