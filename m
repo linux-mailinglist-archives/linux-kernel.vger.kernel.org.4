@@ -2,110 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7D3B6F780C
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 23:28:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFB2B6F7811
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 23:28:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229921AbjEDV2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 17:28:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59064 "EHLO
+        id S229948AbjEDV24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 17:28:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbjEDV2G (ORCPT
+        with ESMTP id S230055AbjEDV2s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 17:28:06 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4934C13845;
-        Thu,  4 May 2023 14:28:05 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f4000ec74aso7594125e9.3;
-        Thu, 04 May 2023 14:28:05 -0700 (PDT)
+        Thu, 4 May 2023 17:28:48 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA290150F7;
+        Thu,  4 May 2023 14:28:37 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-64115e652eeso15590340b3a.0;
+        Thu, 04 May 2023 14:28:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683235683; x=1685827683;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LVvS/g9TQZhbyJ0eYwxV/bq9pypwHnS3KxbZ3TakH0A=;
-        b=nDqaT9jTn1xS/73an8X8CZx5lEdAkbbCfNc3aHqQJY0MVaAq0rKXw3Hl7EMh/PsKaw
-         KjyDymSUIa5lvaOxTxYcZSbLRrSnGQzJhrU33LOy4zs4CYIrEBerOvyOsdbMlCNDO4dL
-         4gY+0oFUzAdGI9dIz6XS+VdORUSXJ7h5O/+xBztBvos5R5Dp5BwIfaMrSxDXjkraVAb3
-         GqetQj/TybYu3/KEm0PfEL08hp229jk6gotjF2Jewejdv6Rzc52IcDKptRklcWfBNEck
-         NXllxEh+8zHWwya/9Vrmo0A+7JwnwYxL3tCYQhtxtoBkNw/T+kFfCUInMF5IfH12dFgK
-         6QdA==
+        d=gmail.com; s=20221208; t=1683235712; x=1685827712;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fKzf5mgdxK8ZWZ/hO2d3mis74L5K1plt3kebtBa9TF4=;
+        b=qYGPgaiZ97JRmhW72uxcBIC5sglElbqAHmTiISeGp0hKdNK/vt6h2mOAdg3eeACBhW
+         Hcd0cfClqrlvnG1IkC1VCDRPds0wteOy7D24xRfLdi7NmtHfrYNwQw+hqOAMBqtCn0iu
+         3nxSGZ9PqD8GCXwypfGeF3F9fUyDV67yMVnJG4cn2Q6hRjnG5bdmBIky2zD+eYZ7ST3U
+         ptvvax4FI7hdqUqvT1v79Xf2hRbpqQi2EQgU6CCgglrCD0xh9vLYy6NJxcU7AUCl3Ft4
+         ZlMaonNbF0chuJeO2ngh1ejAC4Eduq4K1LHvP8nI6DUrI2NrJ0INiQgtnQDGj343KTrG
+         Cw3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683235683; x=1685827683;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LVvS/g9TQZhbyJ0eYwxV/bq9pypwHnS3KxbZ3TakH0A=;
-        b=D/LJkI0ab6qG2i6Ol1kbzEHieOqdUo4BupE/mvajpQIgTtBk1l5JohuNbEMYYTVj61
-         JnEtub7F40aVOco/Or1h6xEDF9nin+MnppSqgRGb+l1fQ0iw3Gzh5ryaU5dsJSiVXczL
-         E//1+qCpZSzCzDGHdLGKq69zqKc86vZq6AWxnngl4eXNUeI6WWuqRABoeOrfhiy20Yui
-         Mk+oKNu4qyjZp/0wDUcYH5M+jKUCofmZvEZhokfT4/iY8v1UG55VcbrcP6lul++NLWX/
-         QDdbcOET6/EtY2UmbxxJKeXqNaHcmNE6Vzx4Qt24RaBbEAVQcPDjU44zKVy9k8DEvcIG
-         aiug==
-X-Gm-Message-State: AC+VfDxoycTh9Lx14VvgXmj3peRFLfa01pSijWMa8IOWPAU7rBDanxOY
-        WmI29VzQfjz3PkQSDcJeexQ=
-X-Google-Smtp-Source: ACHHUZ7OkkaKrVwLmJGvJfx2GtQ/hBrq0xkNESgtAjZZX9WIor0cxYkB1uwQpjW6k8RY3NIvur5rlA==
-X-Received: by 2002:a1c:f30d:0:b0:3f1:7ba6:d5ab with SMTP id q13-20020a1cf30d000000b003f17ba6d5abmr580330wmq.36.1683235683276;
-        Thu, 04 May 2023 14:28:03 -0700 (PDT)
-Received: from lucifer.home (host86-156-84-164.range86-156.btcentralplus.com. [86.156.84.164])
-        by smtp.googlemail.com with ESMTPSA id h15-20020a05600c314f00b003f1978bbcd6sm51617562wmo.3.2023.05.04.14.28.01
+        d=1e100.net; s=20221208; t=1683235712; x=1685827712;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fKzf5mgdxK8ZWZ/hO2d3mis74L5K1plt3kebtBa9TF4=;
+        b=MRxy5YeCeacDWgZWYj34fqkPfinGr/fBuOLGIbv/OaX0JuP3oJFNQeZTeE1KQy3eJP
+         2oQ3TAVeN0pd+NftdEamE5iz+eotHj8DwVfsNQlA/eu0xw+I1p2FOLRGHEF87bNXqnA9
+         sg9qYPA4Bg1MbO+Drn6TxQ30APxCWeG28Nw9F1T+UeP8BGc0wETUDDbMEjEeC4Vhqo16
+         /aJ1vK0X0Wt2GpI4hX2cVpcbnOyssj5Cst5CXetSrcPFT5gjRSRD4Br0AuYIxC6xZFuG
+         GbQGe51iwZYRPaQT+AwEdCz4yrY/yyQzknRBqO2UnIP7vny7FMFQaL4aKBFsRnUJirEc
+         X5CA==
+X-Gm-Message-State: AC+VfDxmhjvKOL/V7CPXYJfjQ0K/QEsHGeqYyKIP/I+88qtWvwT7D5WT
+        0W0J2gavgjsy91Z+BjAI4jwZG0CU0QioFQ==
+X-Google-Smtp-Source: ACHHUZ4ZCy/oVjaXBYMXNbkwXWL87CqFddmbdotuPwc/JDDT221Rxmgpp0qqHi6svhFL4T1wfyDweQ==
+X-Received: by 2002:a17:902:d483:b0:19a:96ea:3850 with SMTP id c3-20020a170902d48300b0019a96ea3850mr5861490plg.17.1683235712591;
+        Thu, 04 May 2023 14:28:32 -0700 (PDT)
+Received: from localhost.localdomain ([2600:8801:9701:6a00:daec:5eff:fea8:3a31])
+        by smtp.gmail.com with ESMTPSA id l13-20020a170903244d00b001ab1bb0126fsm1039pls.102.2023.05.04.14.28.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 May 2023 14:28:02 -0700 (PDT)
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Mika Penttila <mpenttil@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Theodore Ts'o <tytso@mit.edu>, Peter Xu <peterx@redhat.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>
-Subject: [PATCH v9 2/3] mm/gup: disallow FOLL_LONGTERM GUP-nonfast writing to file-backed mappings
-Date:   Thu,  4 May 2023 22:27:52 +0100
-Message-Id: <7282506742d2390c125949c2f9894722750bb68a.1683235180.git.lstoakes@gmail.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <cover.1683235180.git.lstoakes@gmail.com>
-References: <cover.1683235180.git.lstoakes@gmail.com>
+        Thu, 04 May 2023 14:28:31 -0700 (PDT)
+From:   Dan Gora <dan.gora@gmail.com>
+Cc:     Dan Gora <dan.gora@gmail.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/1] Bluetooth: btusb: Add device 6655:8771 to device tables.
+Date:   Thu,  4 May 2023 14:27:53 -0700
+Message-Id: <20230504212752.16179-1-dan.gora@gmail.com>
+X-Mailer: git-send-email 2.35.1.102.g2b9c120970
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -113,145 +67,49 @@ X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Writing to file-backed mappings which require folio dirty tracking using
-GUP is a fundamentally broken operation, as kernel write access to GUP
-mappings do not adhere to the semantics expected by a file system.
+This device is an Inspire branded BT 5.1 USB dongle with a
+Realtek RTL8761BU chip using the "Best Buy China" vendor ID.
 
-A GUP caller uses the direct mapping to access the folio, which does not
-cause write notify to trigger, nor does it enforce that the caller marks
-the folio dirty.
+The device table is as follows:
 
-The problem arises when, after an initial write to the folio, writeback
-results in the folio being cleaned and then the caller, via the GUP
-interface, writes to the folio again.
+T:  Bus=01 Lev=01 Prnt=02 Port=09 Cnt=01 Dev#=  7 Spd=12   MxCh= 0
+D:  Ver= 1.10 Cls=e0(wlcon) Sub=01 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=6655 ProdID=8771 Rev=02.00
+S:  Manufacturer=Realtek
+S:  Product=Bluetooth Radio
+S:  SerialNumber=00E04C239987
+C:  #Ifs= 2 Cfg#= 1 Atr=e0 MxPwr=500mA
+I:  If#= 0 Alt= 0 #EPs= 3 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=02(O) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+E:  Ad=81(I) Atr=03(Int.) MxPS=  16 Ivl=1ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+I:  If#= 1 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=03(O) Atr=01(Isoc) MxPS=   0 Ivl=1ms
+E:  Ad=83(I) Atr=01(Isoc) MxPS=   0 Ivl=1ms
 
-As a result of the use of this secondary, direct, mapping to the folio no
-write notify will occur, and if the caller does mark the folio dirty, this
-will be done so unexpectedly.
-
-For example, consider the following scenario:-
-
-1. A folio is written to via GUP which write-faults the memory, notifying
-   the file system and dirtying the folio.
-2. Later, writeback is triggered, resulting in the folio being cleaned and
-   the PTE being marked read-only.
-3. The GUP caller writes to the folio, as it is mapped read/write via the
-   direct mapping.
-4. The GUP caller, now done with the page, unpins it and sets it dirty
-   (though it does not have to).
-
-This results in both data being written to a folio without writenotify, and
-the folio being dirtied unexpectedly (if the caller decides to do so).
-
-This issue was first reported by Jan Kara [1] in 2018, where the problem
-resulted in file system crashes.
-
-This is only relevant when the mappings are file-backed and the underlying
-file system requires folio dirty tracking. File systems which do not, such
-as shmem or hugetlb, are not at risk and therefore can be written to
-without issue.
-
-Unfortunately this limitation of GUP has been present for some time and
-requires future rework of the GUP API in order to provide correct write
-access to such mappings.
-
-However, for the time being we introduce this check to prevent the most
-egregious case of this occurring, use of the FOLL_LONGTERM pin.
-
-These mappings are considerably more likely to be written to after
-folios are cleaned and thus simply must not be permitted to do so.
-
-This patch changes only the slow-path GUP functions, a following patch
-adapts the GUP-fast path along similar lines.
-
-[1]:https://lore.kernel.org/linux-mm/20180103100430.GE4911@quack2.suse.cz/
-
-Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
-Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
-Reviewed-by: John Hubbard <jhubbard@nvidia.com>
-Reviewed-by: Mika Penttilä <mpenttil@redhat.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-Acked-by: David Hildenbrand <david@redhat.com>
+Signed-off-by: Dan Gora <dan.gora@gmail.com>
 ---
- mm/gup.c | 44 +++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 43 insertions(+), 1 deletion(-)
+ drivers/bluetooth/btusb.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/mm/gup.c b/mm/gup.c
-index ff689c88a357..0ea9ebec9547 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -959,16 +959,54 @@ static int faultin_page(struct vm_area_struct *vma,
- 	return 0;
- }
- 
-+/*
-+ * Writing to file-backed mappings which require folio dirty tracking using GUP
-+ * is a fundamentally broken operation, as kernel write access to GUP mappings
-+ * do not adhere to the semantics expected by a file system.
-+ *
-+ * Consider the following scenario:-
-+ *
-+ * 1. A folio is written to via GUP which write-faults the memory, notifying
-+ *    the file system and dirtying the folio.
-+ * 2. Later, writeback is triggered, resulting in the folio being cleaned and
-+ *    the PTE being marked read-only.
-+ * 3. The GUP caller writes to the folio, as it is mapped read/write via the
-+ *    direct mapping.
-+ * 4. The GUP caller, now done with the page, unpins it and sets it dirty
-+ *    (though it does not have to).
-+ *
-+ * This results in both data being written to a folio without writenotify, and
-+ * the folio being dirtied unexpectedly (if the caller decides to do so).
-+ */
-+static bool writable_file_mapping_allowed(struct vm_area_struct *vma,
-+					  unsigned long gup_flags)
-+{
-+	/*
-+	 * If we aren't pinning then no problematic write can occur. A long term
-+	 * pin is the most egregious case so this is the case we disallow.
-+	 */
-+	if ((gup_flags & (FOLL_PIN | FOLL_LONGTERM)) !=
-+	    (FOLL_PIN | FOLL_LONGTERM))
-+		return true;
-+
-+	/*
-+	 * If the VMA does not require dirty tracking then no problematic write
-+	 * can occur either.
-+	 */
-+	return !vma_needs_dirty_tracking(vma);
-+}
-+
- static int check_vma_flags(struct vm_area_struct *vma, unsigned long gup_flags)
- {
- 	vm_flags_t vm_flags = vma->vm_flags;
- 	int write = (gup_flags & FOLL_WRITE);
- 	int foreign = (gup_flags & FOLL_REMOTE);
-+	bool vma_anon = vma_is_anonymous(vma);
- 
- 	if (vm_flags & (VM_IO | VM_PFNMAP))
- 		return -EFAULT;
- 
--	if (gup_flags & FOLL_ANON && !vma_is_anonymous(vma))
-+	if ((gup_flags & FOLL_ANON) && !vma_anon)
- 		return -EFAULT;
- 
- 	if ((gup_flags & FOLL_LONGTERM) && vma_is_fsdax(vma))
-@@ -978,6 +1016,10 @@ static int check_vma_flags(struct vm_area_struct *vma, unsigned long gup_flags)
- 		return -EFAULT;
- 
- 	if (write) {
-+		if (!vma_anon &&
-+		    !writable_file_mapping_allowed(vma, gup_flags))
-+			return -EFAULT;
-+
- 		if (!(vm_flags & VM_WRITE)) {
- 			if (!(gup_flags & FOLL_FORCE))
- 				return -EFAULT;
+diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
+index 2a8e2bb038f5..0b0a02cf0d4a 100644
+--- a/drivers/bluetooth/btusb.c
++++ b/drivers/bluetooth/btusb.c
+@@ -655,6 +655,8 @@ static const struct usb_device_id blacklist_table[] = {
+ 						     BTUSB_WIDEBAND_SPEECH },
+ 	{ USB_DEVICE(0x0bda, 0x8771), .driver_info = BTUSB_REALTEK |
+ 						     BTUSB_WIDEBAND_SPEECH },
++	{ USB_DEVICE(0x6655, 0x8771), .driver_info = BTUSB_REALTEK |
++						     BTUSB_WIDEBAND_SPEECH },
+ 	{ USB_DEVICE(0x7392, 0xc611), .driver_info = BTUSB_REALTEK |
+ 						     BTUSB_WIDEBAND_SPEECH },
+ 	{ USB_DEVICE(0x2b89, 0x8761), .driver_info = BTUSB_REALTEK |
 -- 
-2.40.1
+2.35.1.102.g2b9c120970
 
