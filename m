@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 250DB6F6A65
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 13:51:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 217506F6A6D
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 13:52:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229918AbjEDLvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 07:51:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60674 "EHLO
+        id S230038AbjEDLwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 07:52:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjEDLvP (ORCPT
+        with ESMTP id S229535AbjEDLwX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 07:51:15 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D861549C6;
-        Thu,  4 May 2023 04:51:14 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 344Bp41j091609;
-        Thu, 4 May 2023 06:51:04 -0500
+        Thu, 4 May 2023 07:52:23 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E18581994;
+        Thu,  4 May 2023 04:52:21 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 344Bq8Mv049016;
+        Thu, 4 May 2023 06:52:08 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1683201064;
-        bh=TlkytCG2IfS0OaI9mHC6bEmi/KFpyRlS+eIsngeB+P0=;
+        s=ti-com-17Q1; t=1683201128;
+        bh=UBO8+Aq6ZMaLHb6b4g7FC3umBIeXotIckk2IFl8ZmFk=;
         h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=BT37aagaJHKAwZutkeL1hm0SEr4/lOBbyH1KKpN4/80PcA5nbaidQgBuK4/Dt09LJ
-         MdKfBYhZ/iiQErnvADwmrzKTPxfhh9isQWMvgpEwwcA30dKyRM8429mDQIYnc011EH
-         lr2inGZqw/JcB9xTO0a1JuWy4t5Se51hTodnDzUk=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 344Bp469102494
+        b=aKPn0kseIzSBahQ34K+Q7bN/34NIl44peySVhsUssSOxKNeSQahVzY9tGg+IXx2oW
+         JBVwa4+QHwUdS9aVmk6ItCguX7uAiJUzY8rdpWQ7K1sKGfnrrnHzlSXYBQ9lom+Br0
+         YR1CKFkOS5QOdV3ofwsrmu9h+woOXgl+w37FcpE0=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 344Bq8g7113628
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 4 May 2023 06:51:04 -0500
-Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+        Thu, 4 May 2023 06:52:08 -0500
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 4
- May 2023 06:51:03 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ May 2023 06:52:07 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 4 May 2023 06:51:03 -0500
+ Frontend Transport; Thu, 4 May 2023 06:52:07 -0500
 Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 344Bp3mN105000;
-        Thu, 4 May 2023 06:51:03 -0500
-Date:   Thu, 4 May 2023 06:51:03 -0500
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 344Bq7cn022908;
+        Thu, 4 May 2023 06:52:07 -0500
+Date:   Thu, 4 May 2023 06:52:07 -0500
 From:   Nishanth Menon <nm@ti.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     Neha Malcom Francis <n-francis@ti.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <vigneshr@ti.com>,
-        <kristo@kernel.org>, <u-kumar1@ti.com>
-Subject: Re: [PATCH v6 1/3] dt-bindings: misc: esm: Add ESM support for TI K3
- devices
-Message-ID: <20230504115103.gxr5cebv5jaljywj@gondola>
-References: <20230504080526.133149-1-n-francis@ti.com>
- <20230504080526.133149-2-n-francis@ti.com>
- <84a345aa-1426-2d1a-f7d6-df3cfc10ae3a@linaro.org>
+To:     Thejasvi Konduru <t-konduru@ti.com>
+CC:     Tero Kristo <kristo@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Andrew Davis <afd@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Apurva Nandan <a-nandan@ti.com>, Udit Kumar <u-kumar1@ti.com>
+Subject: Re: [PATCH] arm64: dts: ti: k3-j784s4: Fix wakeup pinmux range and
+ pinctrl node offsets
+Message-ID: <20230504115207.h6trzy4mqjcbkcm3@comment>
+References: <20230503083143.32369-1-t-konduru@ti.com>
+ <20230503114625.gqnijd3bog5bwemz@parameter>
+ <31b31af7-6c54-7d05-f7ef-fcceba48580e@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <84a345aa-1426-2d1a-f7d6-df3cfc10ae3a@linaro.org>
+In-Reply-To: <31b31af7-6c54-7d05-f7ef-fcceba48580e@ti.com>
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -69,15 +71,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10:11-20230504, Krzysztof Kozlowski wrote:
-> On 04/05/2023 10:05, Neha Malcom Francis wrote:
-> > Document the binding for TI K3 ESM (Error Signaling Module) block.
-> > 
-> > Signed-off-by: Neha Malcom Francis <n-francis@ti.com>
-> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On 14:36-20230504, Thejasvi Konduru wrote:
 > 
-To make sure we are'nt stepping on toes:
-Krzysztof: is it OK to pick this up via SoC tree?
+> On 03/05/23 17:16, Nishanth Menon wrote:
+> > On 14:01-20230503, Thejasvi Konduru wrote:
+> > > The wkup_pmx register region in j784s4 has multiple non-addressable
+> > > regions, hence the existing wkup_pmx region is split as follows to
+> > > avoid the non-addressable regions. The pinctrl node offsets are
+> > > also corrected as per the newly split wkup_pmx* nodes.
+> > > 
+> > > wkup_pmx0 -> 13 pins (WKUP_PADCONFIG 0 - 12)
+> > > wkup_pmx1 -> 11 pins (WKUP_PADCONFIG 14 - 24)
+> > > wkup_pmx2 -> 72 pins (WKUP_PADCONFIG 26 - 97)
+> > > wkup_pmx3 -> 1 pin (WKUP_PADCONFIG 100)
+> > > 
+> > > Fixes: 4664ebd8346a ("arm64: dts: ti: Add initial support for J784S4 SoC")
+> > > Signed-off-by: Thejasvi Konduru <t-konduru@ti.com>
+> > > ---
+> > Could you provide a link to the output of:
+> > $ cat /sys/kernel/debug/pinctrl/*/pins
+> 
+> https://gist.github.com/thejasvikonduru/05b1a8e0fd8176116b7a3cc4e43b244a
+
+Was this failing prior to this patch? Trying to understand the "Fix"
+aspect of this patch.
+
 
 -- 
 Regards,
