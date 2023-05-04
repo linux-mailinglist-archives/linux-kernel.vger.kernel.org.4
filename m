@@ -2,43 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D888F6F74F8
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:54:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14A946F74FD
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:54:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231841AbjEDTyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 15:54:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60050 "EHLO
+        id S231855AbjEDTyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 15:54:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231163AbjEDTxW (ORCPT
+        with ESMTP id S231446AbjEDTxk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 15:53:22 -0400
+        Thu, 4 May 2023 15:53:40 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB65917DDC;
-        Thu,  4 May 2023 12:47:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EC7E17DF0;
+        Thu,  4 May 2023 12:47:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 440716378D;
-        Thu,  4 May 2023 19:47:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14D53C433EF;
-        Thu,  4 May 2023 19:47:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AFC2637C6;
+        Thu,  4 May 2023 19:47:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 218C7C4339B;
+        Thu,  4 May 2023 19:47:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683229650;
-        bh=UitNJATXfwLU//5VZHJZ1rqVgYxAGa2r5kH97N86JqI=;
+        s=k20201202; t=1683229654;
+        bh=tUeLxEpG/h++lckzMpmkZHbKYJMZxZK9Sx2cU7BImo4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uq/hobs+S+G1YUweStwFuN+f2bQWLFF61x5zfGRJsTK/j351y1XNmXnMXKIeOuUOJ
-         br2LOY0r81uH33ipKoSKan6444GC/syq0RvPOpDPIAr7GUzvwD7k3UUPZMKfsmenpB
-         CdQenc/JKe3OKVMDxzlQIfhvnIQjoo/DDC+2cvFZFVpfjI1SIWi18GIF63SUpaZQHd
-         3R+xNJN0TihxUY94lARov7WfkbsuO2GaSVeirnnVNlR4wxgSGOUlBDm7P1prh4xUj9
-         Bb//gka89ySCuo2cts2cPtKVwn8ZeC0B5tcKUxDT7O02n3f/Fp4wrzrEvXOAEHJLO/
-         rAQJNDWykqEzg==
+        b=FG5S+nD/Pj2jryJx5ke9bw+pbdkTDHCjTTgZw+2lIhdUCTyAdkInk5mHB3tQpD7DK
+         vyZrAwyoA0ez+n6+ggCFk6dlObMsPNiK3IoGssPUKoOgYmLPskVNU7Zip9AoAGAd2J
+         odMqZCU6UEz7iAYsm2c+hMB+Uzx1c53PFvuQgUypyu4rcl86VPQ1qTBgyOuYLTgUmb
+         70M4KfvRR9b+w1lzL4oz/HUIfkkEFkIKJiJAsFGyrJwJ29YmbQ1QBLctXb8sxHjkxZ
+         8jlI/uSjJQSKgo0RLqCv4RTx4QSNRldO7yPVeopmauPdqj34ZJR1kd8VUafh0osspi
+         PYvvW4aqZtcjQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Yu Kuai <yukuai3@huawei.com>, Song Liu <song@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-raid@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 27/49] md: fix soft lockup in status_resync
-Date:   Thu,  4 May 2023 15:46:04 -0400
-Message-Id: <20230504194626.3807438-27-sashal@kernel.org>
+Cc:     Daniel Gabay <daniel.gabay@intel.com>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Sasha Levin <sashal@kernel.org>, kvalo@kernel.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, mukesh.sisodiya@intel.com,
+        yaara.baruch@intel.com, golan.ben.ami@intel.com,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 28/49] wifi: iwlwifi: pcie: fix possible NULL pointer dereference
+Date:   Thu,  4 May 2023 15:46:05 -0400
+Message-Id: <20230504194626.3807438-28-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230504194626.3807438-1-sashal@kernel.org>
 References: <20230504194626.3807438-1-sashal@kernel.org>
@@ -56,62 +62,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
+From: Daniel Gabay <daniel.gabay@intel.com>
 
-[ Upstream commit 6efddf1e32e2a264694766ca485a4f5e04ee82a7 ]
+[ Upstream commit b655b9a9f8467684cfa8906713d33b71ea8c8f54 ]
 
-status_resync() will calculate 'curr_resync - recovery_active' to show
-user a progress bar like following:
+It is possible that iwl_pci_probe() will fail and free the trans,
+then afterwards iwl_pci_remove() will be called and crash by trying
+to access trans which is already freed, fix it.
 
-[============>........]  resync = 61.4%
+iwlwifi 0000:01:00.0: Detected crf-id 0xa5a5a5a2, cnv-id 0xa5a5a5a2
+		      wfpm id 0xa5a5a5a2
+iwlwifi 0000:01:00.0: Can't find a correct rfid for crf id 0x5a2
+...
+BUG: kernel NULL pointer dereference, address: 0000000000000028
+...
+RIP: 0010:iwl_pci_remove+0x12/0x30 [iwlwifi]
+pci_device_remove+0x3e/0xb0
+device_release_driver_internal+0x103/0x1f0
+driver_detach+0x4c/0x90
+bus_remove_driver+0x5c/0xd0
+driver_unregister+0x31/0x50
+pci_unregister_driver+0x40/0x90
+iwl_pci_unregister_driver+0x15/0x20 [iwlwifi]
+__exit_compat+0x9/0x98 [iwlwifi]
+__x64_sys_delete_module+0x147/0x260
 
-'curr_resync' and 'recovery_active' is updated in md_do_sync(), and
-status_resync() can read them concurrently, hence it's possible that
-'curr_resync - recovery_active' can overflow to a huge number. In this
-case status_resync() will be stuck in the loop to print a large amount
-of '=', which will end up soft lockup.
-
-Fix the problem by setting 'resync' to MD_RESYNC_ACTIVE in this case,
-this way resync in progress will be reported to user.
-
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-Signed-off-by: Song Liu <song@kernel.org>
-Link: https://lore.kernel.org/r/20230310073855.1337560-3-yukuai1@huaweicloud.com
+Signed-off-by: Daniel Gabay <daniel.gabay@intel.com>
+Signed-off-by: Gregory Greenman <gregory.greenman@intel.com>
+Link: https://lore.kernel.org/r/20230413213309.082f6e21341b.I0db21d7fa9a828d571ca886713bd0b5d0b6e1e5c@changeid
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/md/md.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ drivers/net/wireless/intel/iwlwifi/pcie/drv.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/md/md.c b/drivers/md/md.c
-index d5c362b1602b6..bb73a541bb193 100644
---- a/drivers/md/md.c
-+++ b/drivers/md/md.c
-@@ -8028,16 +8028,16 @@ static int status_resync(struct seq_file *seq, struct mddev *mddev)
- 	} else if (resync > max_sectors) {
- 		resync = max_sectors;
- 	} else {
--		resync -= atomic_read(&mddev->recovery_active);
--		if (resync < MD_RESYNC_ACTIVE) {
--			/*
--			 * Resync has started, but the subtraction has
--			 * yielded one of the special values. Force it
--			 * to active to ensure the status reports an
--			 * active resync.
--			 */
-+		res = atomic_read(&mddev->recovery_active);
-+		/*
-+		 * Resync has started, but the subtraction has overflowed or
-+		 * yielded one of the special values. Force it to active to
-+		 * ensure the status reports an active resync.
-+		 */
-+		if (resync < res || resync - res < MD_RESYNC_ACTIVE)
- 			resync = MD_RESYNC_ACTIVE;
--		}
-+		else
-+			resync -= res;
- 	}
+diff --git a/drivers/net/wireless/intel/iwlwifi/pcie/drv.c b/drivers/net/wireless/intel/iwlwifi/pcie/drv.c
+index 4f699862e7f73..9c8908526194b 100644
+--- a/drivers/net/wireless/intel/iwlwifi/pcie/drv.c
++++ b/drivers/net/wireless/intel/iwlwifi/pcie/drv.c
+@@ -1686,6 +1686,9 @@ static void iwl_pci_remove(struct pci_dev *pdev)
+ {
+ 	struct iwl_trans *trans = pci_get_drvdata(pdev);
  
- 	if (resync == MD_RESYNC_NONE) {
++	if (!trans)
++		return;
++
+ 	iwl_drv_stop(trans->drv);
+ 
+ 	iwl_trans_pcie_free(trans);
 -- 
 2.39.2
 
