@@ -2,106 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE6FB6F65C0
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 09:32:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 298366F65C3
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 09:32:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbjEDHcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 03:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49016 "EHLO
+        id S230079AbjEDHch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 03:32:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjEDHcN (ORCPT
+        with ESMTP id S229712AbjEDHc3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 03:32:13 -0400
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD802D6D;
-        Thu,  4 May 2023 00:32:07 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=17;SR=0;TI=SMTPD_---0VhfrQKo_1683185519;
-Received: from 30.240.112.215(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VhfrQKo_1683185519)
-          by smtp.aliyun-inc.com;
-          Thu, 04 May 2023 15:32:01 +0800
-Message-ID: <bf593f0f-5c62-f36a-a5d2-f6376f3babda@linux.alibaba.com>
-Date:   Thu, 4 May 2023 15:31:58 +0800
+        Thu, 4 May 2023 03:32:29 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB5E3593
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 00:32:26 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <j.zink@pengutronix.de>)
+        id 1puTRk-0001GQ-Mb; Thu, 04 May 2023 09:32:12 +0200
+Message-ID: <0a5d631a-037e-5158-82dd-e53d478befea@pengutronix.de>
+Date:   Thu, 4 May 2023 09:32:11 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.1
-Subject: Re: [PATCH v2 5/5] perf vendor events: Add JSON metrics for Yitian
- 710 DDR
-Content-Language: en-US
-To:     Jing Zhang <renyu.zj@linux.alibaba.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>
-Cc:     James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        Zhuo Song <zhuo.song@linux.alibaba.com>
-References: <1682329456-19418-1-git-send-email-renyu.zj@linux.alibaba.com>
- <1682329456-19418-6-git-send-email-renyu.zj@linux.alibaba.com>
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <1682329456-19418-6-git-send-email-renyu.zj@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 1/2] dt-bindings: phy: imx8mq-usb: add phy tuning
+ properties
+Content-Language: en-US, de-DE
+From:   Johannes Zink <j.zink@pengutronix.de>
+To:     Rob Herring <robh@kernel.org>
+Cc:     kishon@kernel.org, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, festevam@gmail.com,
+        s.hauer@pengutronix.de, vkoul@kernel.org, haibo.chen@nxp.com,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-imx@nxp.com, kernel@pengutronix.de,
+        linux-phy@lists.infradead.org, shawnguo@kernel.org,
+        linux-arm-kernel@lists.infradead.org, jun.li@nxp.com,
+        patchwork-jzi@pengutronix.de
+References: <20230405112118.1256151-1-j.zink@pengutronix.de>
+ <20230405112118.1256151-2-j.zink@pengutronix.de>
+ <5398cbe0-c681-5dd7-0b3e-3a586cc4915f@linaro.org>
+ <3f7257ee36dc44f162a87281c8279fd5bad91dea.camel@pengutronix.de>
+ <95b4afd4-c93e-628b-fd22-6fcbc1d1234e@linaro.org>
+ <b394b456540943b1022a7b093bf369924fca0566.camel@pengutronix.de>
+ <20230412133921.GA2017891-robh@kernel.org>
+ <6953b608-973f-c603-f852-edf7ba183e64@pengutronix.de>
+ <67d283f3-d0db-5fc0-79e9-e7531d591aab@pengutronix.de>
+In-Reply-To: <67d283f3-d0db-5fc0-79e9-e7531d591aab@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-14.2 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: j.zink@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Rob, hi Krzysztof,
 
+[snip]
+ > gentle ping - any opinions on this? Shall I just send a V2 along the 
+lines of the phy-stm32-usbphy.c?
 
-On 2023/4/24 17:44, Jing Zhang wrote:
-> Add JSON metrics for T-HEAD Yitian 710 SoC DDR.
-> 
-> Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
+This would be something like (example for the trim-hs-current, taken 
+from pyh-stm32-usbphyc):
 
+       st,trim-hs-current:
+         description: |
+           Controls HS driver current trimming for choke compensation
+           - <0> = 18.87 mA target current / nominal + 0%
+           - <1> = 19.165 mA target current / nominal + 1.56%
+           - <2> = 19.46 mA target current / nominal + 3.12%
+           - <3> = 19.755 mA target current / nominal + 4.68%
+           - <4> = 20.05 mA target current / nominal + 6.24%
+           - <5> = 20.345 mA target current / nominal + 7.8%
+           - <6> = 20.64 mA target current / nominal + 9.36%
+           - <7> = 20.935 mA target current / nominal + 10.92%
+           - <8> = 21.23 mA target current / nominal + 12.48%
+           - <9> = 21.525 mA target current / nominal + 14.04%
+           - <10> = 21.82 mA target current / nominal + 15.6%
+           - <11> = 22.115 mA target current / nominal + 17.16%
+           - <12> = 22.458 mA target current / nominal + 19.01%
+           - <13> = 22.755 mA target current / nominal + 20.58%
+           - <14> = 23.052 mA target current / nominal + 22.16%
+           - <15> = 23.348 mA target current / nominal + 23.73%
+         $ref: /schemas/types.yaml#/definitions/uint32
+         minimum: 0
+         maximum: 15
+         default: 0
 
-Could you also update the Documentation/admin-guide/perf/alibaba_pmu.rst
-with some example of how to use these metrics?
+If you think something along these lines is acceptable, I would like to 
+prepare and send a V2.
 
-Best Regards,
-Shuai
+Best regards
+Johannes
 
-
-> ---
->  .../arch/arm64/freescale/yitian710/sys/metrics.json  | 20 ++++++++++++++++++++
->  1 file changed, 20 insertions(+)
->  create mode 100644 tools/perf/pmu-events/arch/arm64/freescale/yitian710/sys/metrics.json
-> 
-> diff --git a/tools/perf/pmu-events/arch/arm64/freescale/yitian710/sys/metrics.json b/tools/perf/pmu-events/arch/arm64/freescale/yitian710/sys/metrics.json
-> new file mode 100644
-> index 0000000..1a92477
-> --- /dev/null
-> +++ b/tools/perf/pmu-events/arch/arm64/freescale/yitian710/sys/metrics.json
-> @@ -0,0 +1,20 @@
-> +[
-> +	{
-> +		"MetricName": "ddr_read_bandwidth.all",
-> +		"BriefDescription": "The ddr read bandwidth(MB/s).",
-> +		"MetricGroup": "ddr",
-> +		"MetricExpr": "hif_rd * 64 / 1e6 / duration_time",
-> +		"ScaleUnit": "1MB/s",
-> +		"Unit": "ali_drw",
-> +		"Compat": "ali_drw_pmu"
-> +	},
-> +	{
-> +		"MetricName": "ddr_write_bandwidth.all",
-> +		"BriefDescription": "The ddr write bandwidth(MB/s).",
-> +		"MetricGroup": "ddr",
-> +		"MetricExpr": "(hif_wr + hif_rmw) * 64 / 1e6 / duration_time",
-> +		"ScaleUnit": "1MB/s",
-> +		"Unit": "ali_drw",
-> +		"Compat": "ali_drw_pmu"
-> +	}
-> +]
+[snip]
