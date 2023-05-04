@@ -2,179 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 610FB6F6462
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 07:29:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B9AC6F6464
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 07:31:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbjEDF33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 01:29:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48844 "EHLO
+        id S229636AbjEDFbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 01:31:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjEDF32 (ORCPT
+        with ESMTP id S229610AbjEDFbD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 01:29:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B4F1BEB
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 22:28:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683178118;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rknz9rWFTYmTSoqDehsopyM4J34RAfhCmfEUYFTI4vk=;
-        b=Wn/pnQbMFk/Jz6CJI0KR0xZRG3gOaTvWlKZ2M86eHzPKCjwoSq9Hz+o+rPJW8bkJI66TxL
-        +lLmW2HOoMbHpW3AXWK9oy/9+YE1dxeyrc1bmofb50aH1zJzeWGDURTRuVMmSXB1YHTir1
-        yNTS+IOAUqPTvGD1D8q4cDmqFzeb200=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-653-IJpQgbRGPRWdAyK1Z7Nx4w-1; Thu, 04 May 2023 01:28:36 -0400
-X-MC-Unique: IJpQgbRGPRWdAyK1Z7Nx4w-1
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f21e35dc08so39315e9.2
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 22:28:36 -0700 (PDT)
+        Thu, 4 May 2023 01:31:03 -0400
+Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A5291BF6
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 22:31:00 -0700 (PDT)
+Received: by mail-io1-f80.google.com with SMTP id ca18e2360f4ac-763537830d9so1901339f.0
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 22:31:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683178115; x=1685770115;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rknz9rWFTYmTSoqDehsopyM4J34RAfhCmfEUYFTI4vk=;
-        b=jfBAofl4aVAziAZVEyaK0oP2mw/ZUsecuULdtUOlMsFDLFttIbhCdrqJRh4OAxOg03
-         wSWBmVdiu0DBbMRMuB86DgYDZogHO2AvtWeEtk4+eQ/lFhNwDHIQc3ee0kzokPo5Wbf1
-         THqg/nOqU2b8ePgisAgY9wz9FmzE9AM/eYXqzU3fsijxmh+Pf5ZbfeHRzVrLyh5T1rCx
-         Q4SashmaocTIj6whPtpVm69ft0KXMqI5Ka2+DVlbyA0Zlk9bZlo/81Ernl20WzXfdU0P
-         IpLWwJazH7OkXobz1X8kVo4V5S6XX2nlA1uuLVhwBwNSf94OU8fu+oDRmf8TcvipGYVC
-         5RjQ==
-X-Gm-Message-State: AC+VfDyVYq7c4YeA+5Up/5xToOLNzt4y/O1nNfdLzudGrcTpA+VJKH1H
-        XNV/pHBqxkXG/gYIP9Xo3LIY4cETA6drS4zKfVkPuEEYthRe7RtfYVruGqfQeTXXbVV6A5ZM53x
-        fkn6Ym3rpDkcKpmIvgP7E3BRa
-X-Received: by 2002:a7b:ce8b:0:b0:3f1:6faa:d94c with SMTP id q11-20020a7bce8b000000b003f16faad94cmr16392043wmj.16.1683178115457;
-        Wed, 03 May 2023 22:28:35 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6POiYPPqmIlSPfpvcMsDXK5aF0I0YO5IEpOhc6/XuSAbh//EpUFBgAgN7y/MN/MRyTPhiCQA==
-X-Received: by 2002:a7b:ce8b:0:b0:3f1:6faa:d94c with SMTP id q11-20020a7bce8b000000b003f16faad94cmr16392033wmj.16.1683178115152;
-        Wed, 03 May 2023 22:28:35 -0700 (PDT)
-Received: from redhat.com ([31.187.78.120])
-        by smtp.gmail.com with ESMTPSA id x16-20020a05600c21d000b003f318be9442sm3682466wmj.40.2023.05.03.22.28.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 May 2023 22:28:34 -0700 (PDT)
-Date:   Thu, 4 May 2023 01:28:30 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        syzbot <syzbot+726dc8c62c3536431ceb@syzkaller.appspotmail.com>,
-        davem@davemloft.net, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, olivia@selenic.com,
-        syzkaller-bugs@googlegroups.com, Jason Wang <jasowang@redhat.com>,
-        Laurent Vivier <lvivier@redhat.com>,
-        Rusty Russell <rusty@rustcorp.com.au>
-Subject: Re: [v2 PATCH] hwrng: virtio - Fix race on data_avail and actual data
-Message-ID: <20230504012732-mutt-send-email-mst@kernel.org>
-References: <00000000000050327205f9d993b2@google.com>
- <CACT4Y+awU85RHZjf3+_85AvJOHghoOhH3c9E-70p+a=FrRDYkg@mail.gmail.com>
- <ZFI9bHr1o2Cvdebp@gondor.apana.org.au>
- <20230503073220-mutt-send-email-mst@kernel.org>
- <ZFMtpC18ykLd/jf2@gondor.apana.org.au>
+        d=1e100.net; s=20221208; t=1683178260; x=1685770260;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LvlYAZ3Me0ZvWK0peP7KkabrrzZnc1AAxIMZTphZeG0=;
+        b=GUrS7E/jSSMHESLvJVPBnMgk+Nkqq7vBclI6qhqe/orK/9UiExYTaSDcXWcLzafyYg
+         W8K00EEK6tVonq2z0UBFm3utSk4OPHBqAZDldqnQ9nj6B8poJ/D66rHs1LVwqh1jxJlM
+         9l1ba8M9pQSm5gLkoZ6bbtyIhLig4Wotu4K1i1S13EFopW8RwGjzfJ7ONj8J12OLhL/v
+         eDOYcQAX4MuS78jwSvr1mAUFLdxVQFZ8Z/JUCw4Bmx0+HmNKusrlnEQN0+Fk8fjfUguq
+         8SifsfawS+Jb83dU+tP2DXpA+7cvGW4e7Sh5NbE3Xj3sLNqxHvIc/udowfS2OwlmYPT3
+         aR8Q==
+X-Gm-Message-State: AC+VfDyBeKGSmepEe29SK7+sh0VGiGUX+5Ghbw/zCXddefUBxrTLcxKX
+        +crma6Ah+LpTHz23hB0SxNiiq+Mzu3Z+HzyeSuvBxrK6YFsZ
+X-Google-Smtp-Source: ACHHUZ7Q9s0CaW0Fz9AD9scK66AIspx3NzAxoNU/dHnaFO7CaRSjRE/tkFPi6PHsJFkQEYg+F4uAjBIGV67ZDihI7Cu2O0xSsFjd
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZFMtpC18ykLd/jf2@gondor.apana.org.au>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6602:114:b0:745:5e5c:f091 with SMTP id
+ s20-20020a056602011400b007455e5cf091mr11544478iot.0.1683178259880; Wed, 03
+ May 2023 22:30:59 -0700 (PDT)
+Date:   Wed, 03 May 2023 22:30:59 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004623de05fad77acc@google.com>
+Subject: [syzbot] [integrity?] [lsm?] possible deadlock in ima_file_free
+From:   syzbot <syzbot+a2bbe9020e59fdeab932@syzkaller.appspotmail.com>
+To:     dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, paul@paul-moore.com,
+        serge@hallyn.com, syzkaller-bugs@googlegroups.com,
+        zohar@linux.ibm.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 04, 2023 at 11:59:32AM +0800, Herbert Xu wrote:
-> On Wed, May 03, 2023 at 07:37:00AM -0400, Michael S. Tsirkin wrote:
-> >
-> > On the surface of it, it looks like you removed this store
-> > which isn't described in the commit log.
-> > I do not, offhand, remember why we stored 0 in data_idx here
-> > when we also zero it in request_entropy.
-> > It was added with
-> 
-> Yes I removed because it's redundant.  But you're right I'll add
-> a note about it in the log:
-> 
-> ---8<---
-> The virtio rng device kicks off a new entropy request whenever the
-> data available reaches zero.  When a new request occurs at the end
-> of a read operation, that is, when the result of that request is
-> only needed by the next reader, then there is a race between the
-> writing of the new data and the next reader.
-> 
-> This is because there is no synchronisation whatsoever between the
-> writer and the reader.
-> 
-> Fix this by writing data_avail with smp_store_release and reading
-> it with smp_load_acquire when we first enter read.  The subsequent
-> reads are safe because they're either protected by the first load
-> acquire, or by the completion mechanism.
-> 
-> Also remove the redundant zeroing of data_idx in random_recv_done
-> (data_idx must already be zero at this point) and data_avail in
-> request_entropy (ditto).
-> 
-> Reported-by: syzbot+726dc8c62c3536431ceb@syzkaller.appspotmail.com
-> Fixes: f7f510ec1957 ("virtio: An entropy device, as suggested by hpa.")
-> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    c8c655c34e33 Merge tag 'for-linus' of git://git.kernel.org..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=142ad18c280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5eadbf0d3c2ece89
+dashboard link: https://syzkaller.appspot.com/bug?extid=a2bbe9020e59fdeab932
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/618b22e20036/disk-c8c655c3.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/1388ab23cc1b/vmlinux-c8c655c3.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/79496e207412/bzImage-c8c655c3.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+a2bbe9020e59fdeab932@syzkaller.appspotmail.com
+
+syz-executor.1: attempt to access beyond end of device
+loop1: rw=2049, sector=77824, nr_sectors = 2048 limit=63271
+syz-executor.1: attempt to access beyond end of device
+loop1: rw=2049, sector=79872, nr_sectors = 2048 limit=63271
+======================================================
+WARNING: possible circular locking dependency detected
+6.3.0-syzkaller-12378-gc8c655c34e33 #0 Not tainted
+------------------------------------------------------
+syz-executor.1/26208 is trying to acquire lock:
+ffff8880294dc1a0 (&iint->mutex){+.+.}-{3:3}, at: ima_check_last_writer security/integrity/ima/ima_main.c:165 [inline]
+ffff8880294dc1a0 (&iint->mutex){+.+.}-{3:3}, at: ima_file_free+0x110/0x3c0 security/integrity/ima/ima_main.c:199
+
+but task is already holding lock:
+ffff88805b928448 (&sbi->node_write){++++}-{3:3}, at: f2fs_down_read fs/f2fs/f2fs.h:2087 [inline]
+ffff88805b928448 (&sbi->node_write){++++}-{3:3}, at: f2fs_write_single_data_page+0xa10/0x1d50 fs/f2fs/data.c:2842
+
+which lock already depends on the new lock.
 
 
-Acked-by: Michael S. Tsirkin <mst@redhat.com>
+the existing dependency chain (in reverse order) is:
 
-feel free ro merge, thanks!
+-> #4 (&sbi->node_write){++++}-{3:3}:
+       reacquire_held_locks+0x3aa/0x660 kernel/locking/lockdep.c:5216
+       __lock_release kernel/locking/lockdep.c:5405 [inline]
+       lock_release+0x36f/0x9d0 kernel/locking/lockdep.c:5711
+       up_write+0x79/0x580 kernel/locking/rwsem.c:1625
+       f2fs_write_checkpoint+0x13a4/0x1f90 fs/f2fs/checkpoint.c:1651
+       __write_checkpoint_sync fs/f2fs/checkpoint.c:1768 [inline]
+       __checkpoint_and_complete_reqs+0xda/0x3b0 fs/f2fs/checkpoint.c:1787
+       issue_checkpoint_thread+0xda/0x260 fs/f2fs/checkpoint.c:1818
+       kthread+0x2b8/0x350 kernel/kthread.c:379
+       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
 
-> 
-> diff --git a/drivers/char/hw_random/virtio-rng.c b/drivers/char/hw_random/virtio-rng.c
-> index f7690e0f92ed..e41a84e6b4b5 100644
-> --- a/drivers/char/hw_random/virtio-rng.c
-> +++ b/drivers/char/hw_random/virtio-rng.c
-> @@ -4,6 +4,7 @@
->   *  Copyright (C) 2007, 2008 Rusty Russell IBM Corporation
->   */
->  
-> +#include <asm/barrier.h>
->  #include <linux/err.h>
->  #include <linux/hw_random.h>
->  #include <linux/scatterlist.h>
-> @@ -37,13 +38,13 @@ struct virtrng_info {
->  static void random_recv_done(struct virtqueue *vq)
->  {
->  	struct virtrng_info *vi = vq->vdev->priv;
-> +	unsigned int len;
->  
->  	/* We can get spurious callbacks, e.g. shared IRQs + virtio_pci. */
-> -	if (!virtqueue_get_buf(vi->vq, &vi->data_avail))
-> +	if (!virtqueue_get_buf(vi->vq, &len))
->  		return;
->  
-> -	vi->data_idx = 0;
-> -
-> +	smp_store_release(&vi->data_avail, len);
->  	complete(&vi->have_data);
->  }
->  
-> @@ -52,7 +53,6 @@ static void request_entropy(struct virtrng_info *vi)
->  	struct scatterlist sg;
->  
->  	reinit_completion(&vi->have_data);
-> -	vi->data_avail = 0;
->  	vi->data_idx = 0;
->  
->  	sg_init_one(&sg, vi->data, sizeof(vi->data));
-> @@ -88,7 +88,7 @@ static int virtio_read(struct hwrng *rng, void *buf, size_t size, bool wait)
->  	read = 0;
->  
->  	/* copy available data */
-> -	if (vi->data_avail) {
-> +	if (smp_load_acquire(&vi->data_avail)) {
->  		chunk = copy_data(vi, buf, size);
->  		size -= chunk;
->  		read += chunk;
-> -- 
-> Email: Herbert Xu <herbert@gondor.apana.org.au>
-> Home Page: http://gondor.apana.org.au/~herbert/
-> PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+-> #3 (&sbi->cp_rwsem){++++}-{3:3}:
+       lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5691
+       down_read+0x3d/0x50 kernel/locking/rwsem.c:1520
+       f2fs_down_read fs/f2fs/f2fs.h:2087 [inline]
+       f2fs_lock_op fs/f2fs/f2fs.h:2130 [inline]
+       f2fs_convert_inline_inode+0x578/0x800 fs/f2fs/inline.c:218
+       f2fs_vm_page_mkwrite+0x32c/0x13d0 fs/f2fs/file.c:79
+       do_page_mkwrite+0x1a4/0x600 mm/memory.c:2931
+       do_shared_fault mm/memory.c:4595 [inline]
+       do_fault mm/memory.c:4663 [inline]
+       do_pte_missing mm/memory.c:3647 [inline]
+       handle_pte_fault mm/memory.c:4947 [inline]
+       __handle_mm_fault mm/memory.c:5089 [inline]
+       handle_mm_fault+0x2140/0x5860 mm/memory.c:5243
+       do_user_addr_fault arch/x86/mm/fault.c:1440 [inline]
+       handle_page_fault arch/x86/mm/fault.c:1534 [inline]
+       exc_page_fault+0x7d2/0x910 arch/x86/mm/fault.c:1590
+       asm_exc_page_fault+0x26/0x30 arch/x86/include/asm/idtentry.h:570
 
+-> #2 (&mm->mmap_lock){++++}-{3:3}:
+       lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5691
+       internal_get_user_pages_fast+0x244/0x2ce0 mm/gup.c:2967
+       __iov_iter_get_pages_alloc+0x3c9/0x940 lib/iov_iter.c:1509
+       iov_iter_get_pages+0xd9/0x130 lib/iov_iter.c:1552
+       __bio_iov_iter_get_pages block/bio.c:1269 [inline]
+       bio_iov_iter_get_pages+0x480/0x12b0 block/bio.c:1340
+       iomap_dio_bio_iter+0xac2/0x1430 fs/iomap/direct-io.c:325
+       __iomap_dio_rw+0x12c3/0x22e0 fs/iomap/direct-io.c:598
+       iomap_dio_rw+0x46/0xa0 fs/iomap/direct-io.c:688
+       xfs_file_dio_write_aligned+0x222/0x350 fs/xfs/xfs_file.c:543
+       xfs_file_dio_write fs/xfs/xfs_file.c:655 [inline]
+       xfs_file_write_iter+0x508/0x620 fs/xfs/xfs_file.c:797
+       do_iter_write+0x7b1/0xcb0 fs/read_write.c:860
+       vfs_writev fs/read_write.c:933 [inline]
+       do_pwritev+0x21a/0x360 fs/read_write.c:1030
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #1 (&sb->s_type->i_mutex_key#26){++++}-{3:3}:
+       lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5691
+       down_read_nested+0x40/0x60 kernel/locking/rwsem.c:1645
+       xfs_ilock+0x10e/0x3a0 fs/xfs/xfs_inode.c:198
+       xfs_ilock_iocb fs/xfs/xfs_file.c:211 [inline]
+       xfs_file_buffered_read+0x160/0x320 fs/xfs/xfs_file.c:274
+       xfs_file_read_iter+0x262/0x4d0 fs/xfs/xfs_file.c:302
+       __kernel_read+0x422/0x8a0 fs/read_write.c:428
+       integrity_kernel_read+0xb0/0xf0 security/integrity/iint.c:192
+       ima_calc_file_hash_tfm security/integrity/ima/ima_crypto.c:485 [inline]
+       ima_calc_file_shash security/integrity/ima/ima_crypto.c:516 [inline]
+       ima_calc_file_hash+0x1643/0x1d20 security/integrity/ima/ima_crypto.c:573
+       ima_collect_measurement+0x3a7/0x880 security/integrity/ima/ima_api.c:293
+       process_measurement+0xfdb/0x1ce0 security/integrity/ima/ima_main.c:341
+       ima_file_check+0xf1/0x170 security/integrity/ima/ima_main.c:539
+       do_open fs/namei.c:3638 [inline]
+       path_openat+0x280a/0x3170 fs/namei.c:3791
+       do_filp_open+0x234/0x490 fs/namei.c:3818
+       do_sys_openat2+0x13f/0x500 fs/open.c:1356
+       do_sys_open fs/open.c:1372 [inline]
+       __do_sys_open fs/open.c:1380 [inline]
+       __se_sys_open fs/open.c:1376 [inline]
+       __x64_sys_open+0x225/0x270 fs/open.c:1376
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #0 (&iint->mutex){+.+.}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3108 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3227 [inline]
+       validate_chain+0x166b/0x58e0 kernel/locking/lockdep.c:3842
+       __lock_acquire+0x1295/0x2000 kernel/locking/lockdep.c:5074
+       lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5691
+       __mutex_lock_common+0x1d8/0x2530 kernel/locking/mutex.c:603
+       __mutex_lock kernel/locking/mutex.c:747 [inline]
+       mutex_lock_nested+0x1b/0x20 kernel/locking/mutex.c:799
+       ima_check_last_writer security/integrity/ima/ima_main.c:165 [inline]
+       ima_file_free+0x110/0x3c0 security/integrity/ima/ima_main.c:199
+       __fput+0x32e/0x890 fs/file_table.c:315
+       task_work_run+0x24a/0x300 kernel/task_work.c:179
+       get_signal+0x1606/0x17e0 kernel/signal.c:2650
+       arch_do_signal_or_restart+0x91/0x670 arch/x86/kernel/signal.c:306
+       exit_to_user_mode_loop+0x6a/0x100 kernel/entry/common.c:168
+       exit_to_user_mode_prepare+0xb1/0x140 kernel/entry/common.c:204
+       __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+       syscall_exit_to_user_mode+0x64/0x280 kernel/entry/common.c:297
+       do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+other info that might help us debug this:
+
+Chain exists of:
+  &iint->mutex --> &sbi->cp_rwsem --> &sbi->node_write
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  rlock(&sbi->node_write);
+                               lock(&sbi->cp_rwsem);
+                               lock(&sbi->node_write);
+  lock(&iint->mutex);
+
+ *** DEADLOCK ***
+
+1 lock held by syz-executor.1/26208:
+ #0: ffff88805b928448 (&sbi->node_write){++++}-{3:3}, at: f2fs_down_read fs/f2fs/f2fs.h:2087 [inline]
+ #0: ffff88805b928448 (&sbi->node_write){++++}-{3:3}, at: f2fs_write_single_data_page+0xa10/0x1d50 fs/f2fs/data.c:2842
+
+stack backtrace:
+CPU: 0 PID: 26208 Comm: syz-executor.1 Not tainted 6.3.0-syzkaller-12378-gc8c655c34e33 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
+ check_noncircular+0x2fe/0x3b0 kernel/locking/lockdep.c:2188
+ check_prev_add kernel/locking/lockdep.c:3108 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3227 [inline]
+ validate_chain+0x166b/0x58e0 kernel/locking/lockdep.c:3842
+ __lock_acquire+0x1295/0x2000 kernel/locking/lockdep.c:5074
+ lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5691
+ __mutex_lock_common+0x1d8/0x2530 kernel/locking/mutex.c:603
+ __mutex_lock kernel/locking/mutex.c:747 [inline]
+ mutex_lock_nested+0x1b/0x20 kernel/locking/mutex.c:799
+ ima_check_last_writer security/integrity/ima/ima_main.c:165 [inline]
+ ima_file_free+0x110/0x3c0 security/integrity/ima/ima_main.c:199
+ __fput+0x32e/0x890 fs/file_table.c:315
+ task_work_run+0x24a/0x300 kernel/task_work.c:179
+ get_signal+0x1606/0x17e0 kernel/signal.c:2650
+ arch_do_signal_or_restart+0x91/0x670 arch/x86/kernel/signal.c:306
+ exit_to_user_mode_loop+0x6a/0x100 kernel/entry/common.c:168
+ exit_to_user_mode_prepare+0xb1/0x140 kernel/entry/common.c:204
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+ syscall_exit_to_user_mode+0x64/0x280 kernel/entry/common.c:297
+ do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f8281a8c169
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f82827f4168 EFLAGS: 00000246 ORIG_RAX: 0000000000000148
+RAX: fffffffffffffffb RBX: 00007f8281babf80 RCX: 00007f8281a8c169
+RDX: 0000000000000001 RSI: 0000000020000240 RDI: 0000000000000004
+RBP: 00007f8281ae7ca1 R08: 0000000000000000 R09: 0000000000000003
+R10: 0000000000001400 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffe420958ff R14: 00007f82827f4300 R15: 0000000000022000
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
