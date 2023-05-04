@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 763196F7664
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 22:06:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 501756F7668
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 22:07:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232743AbjEDUGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 16:06:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52258 "EHLO
+        id S232705AbjEDUG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 16:06:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232704AbjEDUFB (ORCPT
+        with ESMTP id S232706AbjEDUFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 16:05:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962C423A2A;
+        Thu, 4 May 2023 16:05:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B9523A33;
         Thu,  4 May 2023 12:52:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 702D26387C;
-        Thu,  4 May 2023 19:51:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 875ADC4339C;
-        Thu,  4 May 2023 19:51:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 20D506385B;
+        Thu,  4 May 2023 19:51:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A87EC433A0;
+        Thu,  4 May 2023 19:51:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683229905;
-        bh=ENDo6/89J1yGoBlmK71uujreDBJABABZbczYgDdCfyA=;
+        s=k20201202; t=1683229909;
+        bh=UPXs4s2DT25fIy4+DRbTtgc7cmejTYlS1uDyKUb3Jw0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nEAP5x7+WTc6k45p5G6sqt9GUyowRcW1BTUmDzJd4DJzmiywxkGfII0trURt+2XJK
-         jV8gVICQWtvdn1rOQc3Dms7IkDugBssFkj5cz3P9Gd1AtgB2m2gDnEhoH+IgFNTFJB
-         LzNUqJKt5S30+gPBSS/sDG/zSgz0igHZ/3LT57fh8UAJLY5hNTuNN4OKdTbgcKNJi1
-         LaU/73FSvFcrP8k8lOb8gmzkp5t47Ro7HVMkqrFseY+da/EyhZiHk9O+gFz5JzQhMx
-         V8tYR6yvATR8Lse4o1vAm55wirl5Ph1pZC1ZNPr7YTh/mWNASrFZVn2AvdEoKWMfPy
-         M0JlnjBCu+4cg==
+        b=DHbONe6dYvrzLQXgUDSFAnVOAKaudaOnw+qI2JvnX+eX6Q8AGJJWHiWU20+5vpeea
+         DCjSztweyp5wwFrPPbNtD9oBdV5oUAOuAWQHS4xGtgfsFiG6Tq4CXDfzB0Vq5tLqZr
+         Brd8FYTlXWooQl94mB2+CuTfUA9EyxAZ2bCbQb5JajLz6Ei02TX2g5B683313W3MHV
+         cQg3Ds1sV8E8LaLg7XwfGsrMoGIhhRwdseNluRkNjVjx/dzh1pawBPB/jCoxhe8685
+         tWoph03ZAcICDOXQx08evNQs6Fc8AQxmajwgP6JEPkXUTWiKpHYr29Sfqb+u74r5sE
+         D2KRogz2XGsJQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Paolo Abeni <pabeni@redhat.com>,
+Cc:     Nick Child <nnac123@linux.ibm.com>,
+        Piotr Raczynski <piotr.raczynski@intel.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, ndesaulniers@google.com,
-        mkl@pengutronix.de, netdev@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 4.19 04/13] net: pasemi: Fix return type of pasemi_mac_start_tx()
-Date:   Thu,  4 May 2023 15:51:21 -0400
-Message-Id: <20230504195132.3808946-4-sashal@kernel.org>
+        edumazet@google.com, pabeni@redhat.com, kuniyu@amazon.com,
+        liuhangbin@gmail.com, jiri@resnulli.us, andy.ren@getcruise.com,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 05/13] net: Catch invalid index in XPS mapping
+Date:   Thu,  4 May 2023 15:51:22 -0400
+Message-Id: <20230504195132.3808946-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230504195132.3808946-1-sashal@kernel.org>
 References: <20230504195132.3808946-1-sashal@kernel.org>
@@ -50,8 +51,8 @@ MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,52 +61,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Chancellor <nathan@kernel.org>
+From: Nick Child <nnac123@linux.ibm.com>
 
-[ Upstream commit c8384d4a51e7cb0e6587f3143f29099f202c5de1 ]
+[ Upstream commit 5dd0dfd55baec0742ba8f5625a0dd064aca7db16 ]
 
-With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
-indirect call targets are validated against the expected function
-pointer prototype to make sure the call target is valid to help mitigate
-ROP attacks. If they are not identical, there is a failure at run time,
-which manifests as either a kernel panic or thread getting killed. A
-warning in clang aims to catch these at compile time, which reveals:
+When setting the XPS value of a TX queue, warn the user once if the
+index of the queue is greater than the number of allocated TX queues.
 
-  drivers/net/ethernet/pasemi/pasemi_mac.c:1665:21: error: incompatible function pointer types initializing 'netdev_tx_t (*)(struct sk_buff *, struct net_device *)' (aka 'enum netdev_tx (*)(struct sk_buff *, struct net_device *)') with an expression of type 'int (struct sk_buff *, struct net_device *)' [-Werror,-Wincompatible-function-pointer-types-strict]
-          .ndo_start_xmit         = pasemi_mac_start_tx,
-                                    ^~~~~~~~~~~~~~~~~~~
-  1 error generated.
+Previously, this scenario went uncaught. In the best case, it resulted
+in unnecessary allocations. In the worst case, it resulted in
+out-of-bounds memory references through calls to `netdev_get_tx_queue(
+dev, index)`. Therefore, it is important to inform the user but not
+worth returning an error and risk downing the netdevice.
 
-->ndo_start_xmit() in 'struct net_device_ops' expects a return type of
-'netdev_tx_t', not 'int'. Adjust the return type of
-pasemi_mac_start_tx() to match the prototype's to resolve the warning.
-While PowerPC does not currently implement support for kCFI, it could in
-the future, which means this warning becomes a fatal CFI failure at run
-time.
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/1750
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Reviewed-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-Link: https://lore.kernel.org/r/20230319-pasemi-incompatible-pointer-types-strict-v1-1-1b9459d8aef0@kernel.org
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Nick Child <nnac123@linux.ibm.com>
+Reviewed-by: Piotr Raczynski <piotr.raczynski@intel.com>
+Link: https://lore.kernel.org/r/20230321150725.127229-1-nnac123@linux.ibm.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/pasemi/pasemi_mac.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/core/dev.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/net/ethernet/pasemi/pasemi_mac.c b/drivers/net/ethernet/pasemi/pasemi_mac.c
-index e2c280913fbbb..8238a70161599 100644
---- a/drivers/net/ethernet/pasemi/pasemi_mac.c
-+++ b/drivers/net/ethernet/pasemi/pasemi_mac.c
-@@ -1435,7 +1435,7 @@ static void pasemi_mac_queue_csdesc(const struct sk_buff *skb,
- 	write_dma_reg(PAS_DMA_TXCHAN_INCR(txring->chan.chno), 2);
- }
+diff --git a/net/core/dev.c b/net/core/dev.c
+index b778f35965433..03903d3f1d695 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -2303,6 +2303,8 @@ int __netif_set_xps_queue(struct net_device *dev, const unsigned long *mask,
+ 	bool active = false;
+ 	unsigned int nr_ids;
  
--static int pasemi_mac_start_tx(struct sk_buff *skb, struct net_device *dev)
-+static netdev_tx_t pasemi_mac_start_tx(struct sk_buff *skb, struct net_device *dev)
- {
- 	struct pasemi_mac * const mac = netdev_priv(dev);
- 	struct pasemi_mac_txring * const txring = tx_ring(mac);
++	WARN_ON_ONCE(index >= dev->num_tx_queues);
++
+ 	if (dev->num_tc) {
+ 		/* Do not allow XPS on subordinate device directly */
+ 		num_tc = dev->num_tc;
 -- 
 2.39.2
 
