@@ -2,477 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23B7E6F67E5
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 11:00:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 391176F6844
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 11:28:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbjEDJAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 05:00:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59112 "EHLO
+        id S230334AbjEDJ1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 05:27:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbjEDJAS (ORCPT
+        with ESMTP id S229607AbjEDJ1w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 05:00:18 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2093.outbound.protection.outlook.com [40.107.255.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9224F3C3A;
-        Thu,  4 May 2023 02:00:14 -0700 (PDT)
+        Thu, 4 May 2023 05:27:52 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304413A82;
+        Thu,  4 May 2023 02:27:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683192472; x=1714728472;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   in-reply-to:mime-version;
+  bh=wYYjyiUgGUvniNeiN9FhsEPF62k6wQOEocV+fMnT+IE=;
+  b=AqeE/wREuJHoYWWSpcmdXwjB1MQZQZnwVe7NmHvAaubgpU/ukBRmSktQ
+   qL5lCTJEicTqja8B7SgdGC+GaeG4c+fXAd52rvEUw6yv8NA6VjKa+kUkR
+   2UDGPvlxhY099rawd3NpMxbs6p2pYH6PTrvJHLCcbV5NMgTyXfnLUEXqG
+   xh5T1lY5Brbtzf0HOfaM75EaVq5Ee2oJFYVJ24dl6b+gFKwAPQ1dv9SMH
+   Np4a8RI1BMQIXkQ6yNRiVkyO0TeS5LdAB19YHKJZIqIG86A1fEeWtYa9N
+   REcs/V8ZM4JMb4c3YeCyVam4akwAtqEo5Lwv9Ob+NgjC/gTNveX5WNW0b
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="346354188"
+X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
+   d="scan'208";a="346354188"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 02:27:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="729722133"
+X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
+   d="scan'208";a="729722133"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga001.jf.intel.com with ESMTP; 04 May 2023 02:27:51 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 4 May 2023 02:27:50 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Thu, 4 May 2023 02:27:50 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.176)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Thu, 4 May 2023 02:27:50 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=H8TKP0WfknK3+cNWk6yAQu3ghHTCnhY72NXMPyxfwASzdrkWNtwcDk1LI4OcYIB0+B4t4thwiZMSimAktTCcrTgmi9CYVG/Pd1l7j1MBMhAy8jAGyFtxOUTeQ57vun7e+DZXTvN2Pn65xFhLUA6m9BW0XcIEaB6qN/YcbTGjQkLtMaHF019HOjapkdGNpGcGQrSIA8QUG+QMbesF9BHSBSQi7EOs1pXuVPYnb+A75Kw3iCYPXWauAtwCZXwPmlSd/BZkbA9gTiXVo+4paowBQhlXlV9TFd/pj9E6M6dr6CRx02WTc//n4dhWebbekCb1aoRSuqiKunQQhdMAEPtS3A==
+ b=j4sRIGgrfru59f/oGGf+sBvO0saRLKGRBNuEdIz9d+heBrTVDY6PZ0NqOAXURbIjEOy+YDi33296P34VukVPmHW2XFmAo/P7Cz3M5YPNdeXfFlFBE7MwVrrLvS7qnvsDYi05U4kFtyGWs5bwYBqiC1VXbageN+YniHR2HGl7kZzS8vNva/l5Im+xqiDTEwAFpfgSTAIDr3gi3BnoaPLTu06YtJ2GSmzr84HJs9rgHBXGUZUGdaU0WCPTrhFXOnAiYFD5PCnDS/KFSnLSZrT3l+7QvMeBU6UWXSBLD3jUOYt7rIjdr9emHD95kGbgWSZuRp/Kjn/exvnqgDwC8vfjgg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=h1F2eRGD9viHQg9Hkx84c02jrck22hQBI82zfmwXwDU=;
- b=ofHCzaoCtSx1fNdFMLxVZAzqneC7Cn4gkkH/ALd5bV/k4T6u237VjFvBqxjwMGLXic2EtZDbOVhvC+Yg3BDHwBCKjvpdPM3SOOOzEnpxjfNEhONHUzzrlhMQdxLSmarobW7x8vTEf30Q+4SfrIBnRj0GAykXbJG/SdNyd9BNio1Fq/vOItx3s8NdcE6B4sKNzQINLHMQ4LpS+27jWtULQDvhCKRAtCogqYeNrIaANAb7lDJ3FrEcVNimUu8wkQAy+2XqXYsFy/27sSvSk/ebxjyce2q8pGh8RrgaQ0PGyoLYR6f4MlzS4yIp8IR63B0qL9gKl4V6/EOy4T/0g/Zq5A==
+ bh=wYYjyiUgGUvniNeiN9FhsEPF62k6wQOEocV+fMnT+IE=;
+ b=lZd5c8v3BlxjRobSJ5FQhkvvnLXQXioMtTTOkU2KnOzw+pqcWoGxFsNcb/AE5+I1gi/UHahK1kSBjX/giGbX08QXcIqEXsqJhIrTe+ttWhqe0IRVQ/1Qv7HIjFiA6EA+LUhJ8HDHfU81Saj+6uL59w95+jPRE9VStE3rI/XAPhhnTntGTTUw6XvN/Te2MzYt47GHfrAe/uhasNKnCBDS3slR6S925SOAFX2t/mxxkNrIYaqIZJ2rAXFHjikkD1OaxyBsZu3ARjAGioWMtvU21UxNcQcqBfQ15tHWhRlv9tduvcDvd87Py1je6+V+RGR7HpdSAcQdtpgmshlq8ewr4g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amlogic.com; dmarc=pass action=none header.from=amlogic.com;
- dkim=pass header.d=amlogic.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amlogic.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=h1F2eRGD9viHQg9Hkx84c02jrck22hQBI82zfmwXwDU=;
- b=AEJgVznG+pzXutn8zIMknM5bTrCiZuWwQoXoqS3ljmn6SYJ+QoQu9cRFNUb7Infq+IgewX9P8Q2AvEjnXNnwJkjLaS3Sgpd2T7V9QaHny6/1WG+HjYVsC9DFYrfxW1qA4zFYl38BvgRKWjn5ImRJR350neWMzxPaHlm8CxlXby5WybocpCFqmmSNRC73ng6giQN/PxA9Xtk42T0lhr/+MkrXY/tbsMf8RbIuS7qI+sxzHEvHI1KyYFBXg0DiulNNNO/qhPLEn+Qc70Gwkm4o+BqInBceyfoK8kemuhikMI4M23zwimH43Ic/5OPrBqYI+7q80M1arC0zBB1vwIKQzQ==
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amlogic.com;
-Received: from SG2PR03MB6730.apcprd03.prod.outlook.com (2603:1096:4:1d5::9) by
- SEZPR03MB6594.apcprd03.prod.outlook.com (2603:1096:101:76::11) with Microsoft
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DS7PR11MB5966.namprd11.prod.outlook.com (2603:10b6:8:71::6) by
+ PH7PR11MB6674.namprd11.prod.outlook.com (2603:10b6:510:1ac::7) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6363.21; Thu, 4 May 2023 09:00:11 +0000
-Received: from SG2PR03MB6730.apcprd03.prod.outlook.com
- ([fe80::e116:7d2a:af78:fcf1]) by SG2PR03MB6730.apcprd03.prod.outlook.com
- ([fe80::e116:7d2a:af78:fcf1%5]) with mapi id 15.20.6363.022; Thu, 4 May 2023
- 09:00:10 +0000
-Message-ID: <f00990ad-22db-ee70-d76c-e52fc45d8f5e@amlogic.com>
-Date:   Thu, 4 May 2023 16:59:44 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH V7 2/4] dt-bindings: clock: document Amlogic S4 SoC
- peripherals clock controller
-Content-Language: en-US
-To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        kelvin.zhang@amlogic.com, qi.duan@amlogic.com
-References: <20230417065005.24967-1-yu.tu@amlogic.com>
- <20230417065005.24967-3-yu.tu@amlogic.com>
- <20230426104946.xiwsdjxris2faf7x@CAB-WSD-L081021>
- <98fdedba-2715-23e7-1d2b-2d9334f0c674@amlogic.com>
- <20230427085228.vktptr76wbcdcksq@CAB-WSD-L081021>
-From:   Yu Tu <yu.tu@amlogic.com>
-In-Reply-To: <20230427085228.vktptr76wbcdcksq@CAB-WSD-L081021>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SG2PR06CA0215.apcprd06.prod.outlook.com
- (2603:1096:4:68::23) To SG2PR03MB6730.apcprd03.prod.outlook.com
- (2603:1096:4:1d5::9)
+ 15.20.6340.31; Thu, 4 May 2023 09:27:46 +0000
+Received: from DS7PR11MB5966.namprd11.prod.outlook.com
+ ([fe80::a670:49f5:d602:e2e4]) by DS7PR11MB5966.namprd11.prod.outlook.com
+ ([fe80::a670:49f5:d602:e2e4%6]) with mapi id 15.20.6363.022; Thu, 4 May 2023
+ 09:27:46 +0000
+Date:   Thu, 4 May 2023 17:02:45 +0800
+From:   Yan Zhao <yan.y.zhao@intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+CC:     Paolo Bonzini <pbonzini@redhat.com>, <kvm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Wenyao Hai <haiwenyao@uniontech.com>,
+        Ke Guo <guoke@uniontech.com>
+Subject: Re: [PATCH 3/5] KVM: x86: Use MTRR macros to define possible MTRR
+ MSR ranges
+Message-ID: <ZFN0tVIOfLaZGxX5@yzhao56-desk.sh.intel.com>
+Reply-To: Yan Zhao <yan.y.zhao@intel.com>
+References: <20230503182852.3431281-1-seanjc@google.com>
+ <20230503182852.3431281-4-seanjc@google.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230503182852.3431281-4-seanjc@google.com>
+X-ClientProxiedBy: SG2PR01CA0149.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:8f::29) To DS7PR11MB5966.namprd11.prod.outlook.com
+ (2603:10b6:8:71::6)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SG2PR03MB6730:EE_|SEZPR03MB6594:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5059973d-2328-4a86-505c-08db4c7df718
+X-MS-TrafficTypeDiagnostic: DS7PR11MB5966:EE_|PH7PR11MB6674:EE_
+X-MS-Office365-Filtering-Correlation-Id: 43efed08-f8dd-4ed6-a0d5-08db4c81d232
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Z5Ju/MuimGrD4M/pPzzGhww9ygAcu4ZfA4k5rpVfQHDgDC4HI/o+oMKLtdFYcRF88Ic8UvscfM0NZoKKcKtjwQwzHar7VYdPsbQVGj+CUFb30WXW8XUIAO+egekePxHS3Kcwgdylyfv3E/vAauQhYORxPAKciF+fovew/SQiK6PwCowGVEG8hc6MMxwZZ3pmx0RFztutwxQgPlO0HHRPLpibct/AEHYWuad4vwzW/Ud5+ELdMsr8h+qJUrgUjnGqmFqjA6vpKOZAHRroJg7e3m0W+YvQT6FYjHIzsZICi2e3OQouxGuVUiUnKT0his3ShpFG6Ci4Qk0/PAYZkF7X9Rlj0vDhTtomXiXWWZWQitDs1UMLmyU+kI4e2jilSTKMzkpb7Z1t6CywjqMrRRvj/8d/HL8+ZzEjP8+jc9Wi4YrVACmcoC3/VPio68uaqZKrILCJHSbYBJFFWJnv4u2UwdV1m4/az4U9Kj7zdTR+8gVeKu3QEaMt4Zqu98sIp3JpgemSNjoHH0+HY9R8LSV64DD3tXV93HDejNjuDGZHOvSZeAXrhjgHct8f6CATMhQx104wY0p1WmdudulRundFgdDlkgq6ePhQRJ5380qkx0/JqZr4OP3maUymQoHmZQ4QT7TwAVwIZDJb/BZbib44wrh+0rXLV2EPNJt589j8heT5nO0kgw2d/HogdxJo5SAa
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR03MB6730.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(39850400004)(366004)(376002)(396003)(136003)(451199021)(110136005)(83380400001)(966005)(2616005)(478600001)(6666004)(6486002)(26005)(107886003)(6506007)(54906003)(186003)(53546011)(6512007)(38100700002)(7416002)(2906002)(30864003)(31696002)(66476007)(5660300002)(36756003)(8936002)(4326008)(66556008)(66946007)(8676002)(41300700001)(44832011)(86362001)(316002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: lQXl+w7RUxiyyV9SQFZOqeroCV4X1QpcyqgveiQ8W+a6q93D+8/k0ZV1asj/UGHyqevZHp87A8DW4zshkqdQQ9pFOQwYTmqNuuZjyQySHLZT3xSYZEmhSLWFDfguskaq1LSdvY7RgILg6W8kOK+mqma7+of4baM8g9xddn2Ag/T3LwNFSIIRNb94JQy1JDExa/L7PFZNr0wwsmADRMGRJVxNSh94YtJGZVlqDXr9qkdpEI/5DtgOBEnkxjo0yARbmu5rSm3hLzb+xM6ltkVGYkuV0nQL6j9nQax6tEzAznLUyF6d+TUx0XNAFulqftfxd/hgU3gRrUgo0wTy6ueBcn9ZQ0gJbKJKq8uPD/pH1QFSvBN/TOk/iBrDiABjh9UAzxx+Yzo0KG7RvUzczYom24cHcXKCT52Dd7bvQJ/RiEfMVMTCc6lc7P4E2hzgXbdaFkzAV4V44tjgMe7Vx+GNkXIpHGkNQAoxpN6LA3gLmB7U+jZCEm6uoJ3HVakY2Q7rB+NvCeYfktIZz9/RwMvIcuvTQc/20orkLxL5zAWTOACaTiYdzxaHbLhEQACxS57U
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR11MB5966.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(39860400002)(376002)(346002)(396003)(136003)(451199021)(6486002)(54906003)(478600001)(186003)(6506007)(6512007)(26005)(558084003)(86362001)(41300700001)(316002)(82960400001)(8936002)(8676002)(2906002)(38100700002)(6916009)(3450700001)(5660300002)(4326008)(66476007)(66946007)(66556008);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bHQrN3kvQkFSekF4eXFzWnlnTUQzaGVmSnlnNS9keVgzNTI4OFhDZnM4OHdN?=
- =?utf-8?B?ZEtwRk8zSmlMc2E5YVNkQWVKZi9lR2gzTE5qWjBoZjdqQWYxd0pOYlJBRDVl?=
- =?utf-8?B?Sk1RWFpoNGJ2SkwxcFlhSVI0eEx0YXBlK3RHdHZTRExSUEUzZmk1WWUycG96?=
- =?utf-8?B?T3FrTVdRdDdSbGpJQUZjZlFLamZmdlZtSG1FcjBZWk9Kdk1QN0dMNkRpd1Fr?=
- =?utf-8?B?WHFveXVPT05mUHA0Z0p3c045aGxGUVZ4SUxtY1VxTDF4cUU5d0hHT2NSMVNZ?=
- =?utf-8?B?aDdma3pHQThIRkF1Z1VaUkhobEZwQ3pYSmlPOThkUmc3UXk5S1JLelZON0hl?=
- =?utf-8?B?SnZoSGs1cHFZK093T2w5YmFqUHZwYlZwYmhpTEpuRjc4Vk9leDVBWDVHVHJG?=
- =?utf-8?B?U0dBS25yNFVXSndranJ2VDc3ZHByUUMyUEgrUVltUnNLY2Q1dXcybFBsVWR3?=
- =?utf-8?B?TGcwODllbUVob3VoYVg5T25ZNDZ6R1REbWZSRnZCaVJqUWpuYWRvVHF1c3F1?=
- =?utf-8?B?V1VPVGlORW94SEIrTm1JVzFUbGlQR092NHF0dFYxd3lwb2VlUFVPUG1yL2M4?=
- =?utf-8?B?cnJ2RktwMVpORk43bDIvTlBkOFlnQVprNVJtS0ZJYUVTYktNTGlqTmJIcDMv?=
- =?utf-8?B?aUhCdm1MRFRtT0dyZUlkdHo1eVFUeDVlVGpKRE9mUytRM3pydFpDRjZGbk5F?=
- =?utf-8?B?YUNGSHJNQ0pqaTFLRVFOMHM5RUsvakVhdG9GUCtHWkxmQmdiQmgzdnpmMkNn?=
- =?utf-8?B?S2orNExKMmRNVmxGQjZhQ3JxdmpIK2NzK3lqUStla0NiaGl6aUR4M3YzSHcw?=
- =?utf-8?B?Ly9UOFArL1lhR3lMTkM0SG14ZVdZS2xWa1UyYWRmbW8yZDdwZDhma3NsY3hX?=
- =?utf-8?B?ekhRUkJ5dlY3VGVDdVFydVEwMmlhZWlpdkthOW1MQWtnNzlRMEE0WVY2M2ZV?=
- =?utf-8?B?RDBvaHM0eWxNdHJsRHVieW1qdHN6SkF4Q29RQU1JdStLTFZycmlkdE5vQ0dq?=
- =?utf-8?B?N29GNVg2dFMvdWZZM1hJOS9BSVQ5NUhKd2FJeU0xdlJhWjBScWR4b0JFQTFW?=
- =?utf-8?B?YTVLOHNWSldNVWNvT3ludGNxYjhacXVjTXBDaG1zMXdDVThlNnZnUUpIdjVD?=
- =?utf-8?B?dFdCNXJ0TWdYV2x2Vi8zVkg5NXpRUW94ZWQrZVd2TUVxUlBiNFdIK3JycmN2?=
- =?utf-8?B?a2RhKy9VVEQrVFVqQ2pOUXlFNFB2Ryt6UlhNUFBSYUNyYzQwSitibkUxTTVS?=
- =?utf-8?B?MEorSE1RdTA2RzE4Y1pMbFBQSUU2eHlxcmxTMVlKRHgxS3V4SFc0SjRGT3dp?=
- =?utf-8?B?ZDJpRXdKY1hXRS9aRlhoQ2JMR3NQYmVxNlNiV0orVDVueW1WdFFDRmtyamJ2?=
- =?utf-8?B?c0QxckVoY1NoL3hnd1NFZmJic0ZkM2xBNEczTGlMYUZmSWxDcWRlQStFakVn?=
- =?utf-8?B?bmNZNlJLUDViR3BzTWc5LythYWVpWHZRVE5YUHJ2clRkbUtZZ2MyNDJnbXFQ?=
- =?utf-8?B?UGxScHdjVmpzZWVBeSszZzkrcW15NG5Qa2F6VVQzV1dVeXZicVZYczFIaDNP?=
- =?utf-8?B?cFFYaXJ4bEY0T1VlcGdPQUI2UEdDYm1tQ24wWFRPNlJiSHRUNXFXR29DeWk4?=
- =?utf-8?B?OWpoWU4xalAwZHlzeThVMWpnMk1UdkkzdzZQUjZ0ck95WmpaQjJTTGJnOEl3?=
- =?utf-8?B?TW84Zzh6Ui9JVkd4VjViZnBHMHpoTzJGTld0dTBvVjBjeUVPczFPSnVXdS9z?=
- =?utf-8?B?ZWNGRm1YaEhBTzRIcFlKM1NTcThWTzdMSE5JWFhFSWI2YWxLVTkvRHRwM0tG?=
- =?utf-8?B?RWxJWkdnQnlqaXdzdVJVV1lyelhlQTZPSTl4K2lpOEUzTXF3RjFZMHpValoy?=
- =?utf-8?B?a3VHTUdGT1FTZUlvVk8ydXhidEpBL0x3M0hMM2RKdnNpK3FkQ3Z3b2lZNm5T?=
- =?utf-8?B?ZE1BcWIvcFRwY1VUd0ZET2kwQ0RVa2NoOGhSUkRNeTRWVFlXbXZrMm95a0ZE?=
- =?utf-8?B?VjNNaUl5dDFDUUk5SmUzUHZLOHMzWjJydlNQZ012Z1pGMHBsYmU3SWdGKzNZ?=
- =?utf-8?B?OG1ZU1ZDcVhjM3dwS3JXL3AvNmhwR2huTDNsUUwzTHEyNXMxd21nMW0zN2N4?=
- =?utf-8?Q?Ya0T9qntCMDQ+JDFIcbZKfFDN?=
-X-OriginatorOrg: amlogic.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5059973d-2328-4a86-505c-08db4c7df718
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR03MB6730.apcprd03.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?++cEUlHXEl6BRmxQfwmLzg34PF1mKUg5HIBxzLaXTCqCJpc+GRWvmJtaGsFt?=
+ =?us-ascii?Q?zBjoKOjmgV319PPXvC7SjGbeEUSfMolxy4DdcIFfx+Q6UPZXQ1UA5edaLLK8?=
+ =?us-ascii?Q?gHmJxoqmX5hRjRJvo1WGwHD/HYsvLOw/Ucq04Y4PHbe0rdoWHITYHEfGeASN?=
+ =?us-ascii?Q?lPx9BQcrsLLaMQ+Ndr1DIMfkauC4rxTGEnvCSRtUMVBUSL8eT1Vu8S0D05sx?=
+ =?us-ascii?Q?+X95hsd6HZ9NOTieiFMTONTYAcDqUWuzEYa06oTWi4xkc6igjj7WCjOYNgpC?=
+ =?us-ascii?Q?DMewEi5aJBaUpMDFRMHtKTfYL+GJV7LpliXiW3idn+coYl+KUitqGqsN0Rxs?=
+ =?us-ascii?Q?g2UjdKaaZIpjIu2a6t6z/eDg3A+7/Le34aCtZht+k9hR+l1mHi5CblwKzFVz?=
+ =?us-ascii?Q?98A6yLgCqe+DYIXN8xFaCZGhvJT6kBF5VJjWSbXidmUCDfaDjbeNWQ+PwrFE?=
+ =?us-ascii?Q?rRBdLXnMxK2rdyUpMjVtwhU7sD8LdmoIp8yoH+5aXGJwV/kYUICLqkNwS+VS?=
+ =?us-ascii?Q?PheX1mwn05CrErSeIY6IMJj+DpN2hDwfGQicoXMPEy3drKHIJJteifLuA263?=
+ =?us-ascii?Q?ct4YkiOa+/7kKi5ruexBLNC0eV3Cxol8L3cFaF88WYgJ8oxD7qEB+/Om6Ynp?=
+ =?us-ascii?Q?2iuuD5tzM65Hqo3X66C0xsVqkF1oS+BVvyVW39hVCqKh4LD7UKbn/cLVbdcg?=
+ =?us-ascii?Q?r5MNLgys6rUTmNS0FBIlEXb+Jzr4VJD2LWefykYlH8qirBr8A7qVP4Yt40u9?=
+ =?us-ascii?Q?36c1lA+HPBS6eQxxV1RIr/Oh6hUPugfRf4SitQDivvrCF8sxKDwqATIx8GgK?=
+ =?us-ascii?Q?brRNQxYYno6FkrsYeLgQXHjHPukq0jKhQpX+2Y4OgqKNuAaCqYDIUl46pdgA?=
+ =?us-ascii?Q?hZxGyBZoHi1BnSb/+yzhHfHkqqJMB2F77+H+cFPh/xTcDcu5CrrUEsh67rKb?=
+ =?us-ascii?Q?10l/9ZxziHzO1G6+iJEvoAH0pVTd5jJa5w+So6UKLvK8V9jWUYV0l14l8XRX?=
+ =?us-ascii?Q?OY3rbBDOrr1LFUp3LiSQcn0+I6IbbEI9trI7aIsED77YqAUtu8qLbH9ggW2P?=
+ =?us-ascii?Q?U8YoCDzMjJ7TqQCNnS+KsQrEAzD7tcSh8yxYYm5MDt5PjKf5hbYBbE6THcQZ?=
+ =?us-ascii?Q?1KfKbFx9ZHDJ3w58vbEM6nKsPGrijrci23X3BEEHEMeozWpFei3odcUbuU64?=
+ =?us-ascii?Q?sUMlPE2MkgOq4ghKKItTbTild4cO/VFeUwTtRpwYJQFJK0cS3/L00wgs4JyD?=
+ =?us-ascii?Q?m3og4V8kdk6+7bgb/eHl1TbafQNH/LjSuq/ntFiwBsv5LsqQTdKQuOpKzciL?=
+ =?us-ascii?Q?3ieTSgPkvSIOW3rQVgi/RPfjdqeZyuNkq30KU4PoTJA0+cS9R4jmzKVTJb8b?=
+ =?us-ascii?Q?WngVW6yAtN0GB7bLSsmdYDA1bsL+wc77q+qc5PCWDIoHjec7d3t/YX29Ki76?=
+ =?us-ascii?Q?T9bp4qDale8OEjAYLwRESwEn8JPSfezA6LkpKaK4FB2t0qe12UwmDV/IzmNh?=
+ =?us-ascii?Q?scvTq1LFzrVhUEN5YOWhVZa6XMsRPuMDv/x6Zli2sz1MYqGx9RkrV2GxxXLa?=
+ =?us-ascii?Q?PbmPdwF3qfQuaIyFPMgiEm5YTYQYx14oQfe/zokH?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 43efed08-f8dd-4ed6-a0d5-08db4c81d232
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR11MB5966.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2023 09:00:10.5111
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2023 09:27:46.6075
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 0df2add9-25ca-4b3a-acb4-c99ddf0b1114
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Hdvfi7/EWz8rH8bihO7v0/CNGeKZcrj9evJ6TavM8+2tZL8risy1chOzOMkfXgW6fv8aw587OfKhrK7hPXfRLA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR03MB6594
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: iZfS0tw9DafU/IpTt+XXYcy2aFNPOb50v6zxYC9wf1gGnY1dzOQAnzjGnUhuwMXUZx7Jpf0fInuhAqhf/M/C6A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6674
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, May 03, 2023 at 11:28:50AM -0700, Sean Christopherson wrote:
+> Use the MTRR macros to identify the ranges of possible MTRR MSRs instead
 
+What about using MTRR macros to replace other 0x200 in mtrr.c too?
 
-On 2023/4/27 16:52, Dmitry Rokosov wrote:
-> [ EXTERNAL EMAIL ]
-> 
-> On Thu, Apr 27, 2023 at 04:03:41PM +0800, Yu Tu wrote:
->>
->>
->> On 2023/4/26 18:49, Dmitry Rokosov wrote:
->>> [ EXTERNAL EMAIL ]
->>>
->>> Hello Yu,
->>>
->>> Thank you for the patch series! Please find my comments below.
->>>
->>
->> Hi Dmitry，
->>        Thank you for your review.
->>
->>> On Mon, Apr 17, 2023 at 02:50:03PM +0800, Yu Tu wrote:
->>>> Add the S4 peripherals clock controller dt-bindings in the s4 SoC
->>>> family.
->>>>
->>>> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
->>>> ---
->>>>    .../clock/amlogic,s4-peripherals-clkc.yaml    |  97 +++++++++++++
->>>>    .../clock/amlogic,s4-peripherals-clkc.h       | 131 ++++++++++++++++++
->>>>    2 files changed, 228 insertions(+)
->>>>    create mode 100644 Documentation/devicetree/bindings/clock/amlogic,s4-peripherals-clkc.yaml
->>>>    create mode 100644 include/dt-bindings/clock/amlogic,s4-peripherals-clkc.h
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/clock/amlogic,s4-peripherals-clkc.yaml b/Documentation/devicetree/bindings/clock/amlogic,s4-peripherals-clkc.yaml
->>>> new file mode 100644
->>>> index 000000000000..46b969a16a7c
->>>> --- /dev/null
->>>> +++ b/Documentation/devicetree/bindings/clock/amlogic,s4-peripherals-clkc.yaml
->>>> @@ -0,0 +1,97 @@
->>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>>> +%YAML 1.2
->>>> +---
->>>> +$id: http://devicetree.org/schemas/clock/amlogic,s4-peripherals-clkc.yaml#
->>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>> +
->>>> +title: Amlogic Meson S serials Peripherals Clock Controller
->>>
->>> As per my understanding, Meson is no longer applicable.
->>> As Neil and Martin suggested in other reviews, the term 'Amlogic' should
->>> be used instead or 'Meson' should be removed altogether.
->>>
->>
->> No. This was all agreed upon a long time ago. Corporate drivers and dtsi are
->> named after this.
->>
-> 
-> Okay, it seems like there may be a misunderstanding here.
-> Now might be a good time to ask Neil about the correct behavior.
-> 
-> Neil, could you please provide the specific naming rules for the new
-> Amlogic drivers? Where should we use the 'meson' keyword, and where
-> should we not use it?
-> 
->>>> +
->>>> +maintainers:
->>>> +  - Neil Armstrong <neil.armstrong@linaro.org>
->>>> +  - Jerome Brunet <jbrunet@baylibre.com>
->>>> +  - Yu Tu <yu.tu@amlogic.com>
->>>> +
->>>> +properties:
->>>> +  compatible:
->>>> +    const: amlogic,s4-peripherals-clkc
->>>> +
->>>> +  reg:
->>>> +    maxItems: 1
->>>> +
->>>> +  clocks:
->>>> +    items:
->>>> +      - description: input fixed pll div2
->>>> +      - description: input fixed pll div2p5
->>>> +      - description: input fixed pll div3
->>>> +      - description: input fixed pll div4
->>>> +      - description: input fixed pll div5
->>>> +      - description: input fixed pll div7
->>>> +      - description: input hifi pll
->>>> +      - description: input gp0 pll
->>>> +      - description: input mpll0
->>>> +      - description: input mpll1
->>>> +      - description: input mpll2
->>>> +      - description: input mpll3
->>>> +      - description: input hdmi pll
->>>> +      - description: input oscillator (usually at 24MHz)
->>>> +      - description: input external 32kHz reference (optional)
->>>> +
->>>> +  clock-names:
->>>> +    items:
->>>> +      - const: fclk_div2
->>>> +      - const: fclk_div2p5
->>>> +      - const: fclk_div3
->>>> +      - const: fclk_div4
->>>> +      - const: fclk_div5
->>>> +      - const: fclk_div7
->>>> +      - const: hifi_pll
->>>> +      - const: gp0_pll
->>>> +      - const: mpll0
->>>> +      - const: mpll1
->>>> +      - const: mpll2
->>>> +      - const: mpll3
->>>> +      - const: hdmi_pll
->>>> +      - const: xtal
->>>> +      - const: ext_32k
->>>> +
->>>> +  "#clock-cells":
->>>> +    const: 1
->>>> +
->>>> +required:
->>>> +  - compatible
->>>> +  - reg
->>>> +  - clocks
->>>> +  - clock-names
->>>> +  - "#clock-cells"
->>>> +
->>>> +additionalProperties: false
->>>> +
->>>> +examples:
->>>> +  - |
->>>> +    #include <dt-bindings/clock/amlogic,s4-peripherals-clkc.h>
->>>> +
->>>> +    clkc_periphs: clock-controller@fe000000 {
->>>> +      compatible = "amlogic,s4-peripherals-clkc";
->>>> +      reg = <0xfe000000 0x49c>;
->>>
->>> I was under the impression that reg as MMIO address should have four
->>> cells on ARM64 architecture. Are you sure it only needs two cells?
->>
->> Yes. Maybe you can check out the clock file for other yaml.The two cells and
->> four cells all are ok.
->>
->> It's not a problem even in real DTS. How many cells are needed to look at
->> the parent address-cells and size-cells definitions.
->>
-> 
-> AFAIR, it depends on which OF API you will call for retreive address
-> and size values (u32 or u64).
-> 
->>>
->>>> +      clocks = <&clkc_pll 3>,
->>>> +              <&clkc_pll 13>,
->>>> +              <&clkc_pll 5>,
->>>> +              <&clkc_pll 7>,
->>>> +              <&clkc_pll 9>,
->>>> +              <&clkc_pll 11>,
->>>> +              <&clkc_pll 17>,
->>>> +              <&clkc_pll 15>,
->>>> +              <&clkc_pll 25>,
->>>> +              <&clkc_pll 27>,
->>>> +              <&clkc_pll 29>,
->>>> +              <&clkc_pll 31>,
->>>> +              <&clkc_pll 20>,
->>>> +              <&xtal>,
->>>> +              <&ext_32k>;
->>>> +      clock-names = "fclk_div2", "fclk_div2p5", "fclk_div3", "fclk_div4",
->>>> +                    "fclk_div5", "fclk_div7", "hifi_pll", "gp0_pll",
->>>> +                    "mpll0", "mpll1", "mpll2", "mpll3", "hdmi_pll", "xtal",
->>>> +                    "ext_32k";
->>>> +      #clock-cells = <1>;
->>>> +    };
->>>> +...
->>>> diff --git a/include/dt-bindings/clock/amlogic,s4-peripherals-clkc.h b/include/dt-bindings/clock/amlogic,s4-peripherals-clkc.h
->>>> new file mode 100644
->>>> index 000000000000..073396a76957
->>>> --- /dev/null
->>>> +++ b/include/dt-bindings/clock/amlogic,s4-peripherals-clkc.h
->>>> @@ -0,0 +1,131 @@
->>>> +/* SPDX-License-Identifier: (GPL-2.0 OR MIT) */
->>>> +/*
->>>> + * Copyright (c) 2021 Amlogic, Inc. All rights reserved.
->>>> + * Author: Yu Tu <yu.tu@amlogic.com>
->>>> + */
->>>> +
->>>> +#ifndef _DT_BINDINGS_CLOCK_AMLOGIC_S4_PERIPHERALS_CLKC_H
->>>> +#define _DT_BINDINGS_CLOCK_AMLOGIC_S4_PERIPHERALS_CLKC_H
->>>> +
->>>> +/*
->>>> + * CLKID index values
->>>> + */
->>>> +
->>>> +#define CLKID_RTC_CLK                        4
->>>
->>> I believe that the CLK suffix is unnecessary since it is already clear
->>> that the object in question is a clock. Additionally, it is redundant
->>> to use the GATE suffix.
->>
->> No. These prefixes and suffixes are very friendly to the people who write
->> and read the code.
->>
-> 
-> Jerome has already pointed this out in another review for the
-> A1 clock driver, there are redundant suffixes:
-> 
-> https://lore.kernel.org/linux-amlogic/1j359y82fn.fsf@starbuckisacylon.baylibre.com/
-
-After discussion, we think that the CLK suffix can be deleted, but the 
-GATE suffix is convenient to look at the code even though it is redundant.
-
-> 
->>>
->>>> +#define CLKID_SYS_CLK_B_GATE         7
->>>> +#define CLKID_SYS_CLK_A_GATE         10
->>>> +#define CLKID_SYS_CLK                        11
->>>> +#define CLKID_CECA_32K_CLKOUT                16
->>>> +#define CLKID_CECB_32K_CLKOUT                21
->>>> +#define CLKID_SC_CLK_GATE            24
->>>> +#define CLKID_12_24M_CLK_SEL         27
->>>> +#define CLKID_VID_PLL                        30
->>>> +#define CLKID_VCLK                   37
->>>> +#define CLKID_VCLK2                  38
->>>> +#define CLKID_VCLK_DIV1                      39
->>>> +#define CLKID_VCLK2_DIV1             44
->>>> +#define CLKID_VCLK_DIV2                      49
->>>> +#define CLKID_VCLK_DIV4                      50
->>>> +#define CLKID_VCLK_DIV6                      51
->>>> +#define CLKID_VCLK_DIV12             52
->>>> +#define CLKID_VCLK2_DIV2             53
->>>> +#define CLKID_VCLK2_DIV4             54
->>>> +#define CLKID_VCLK2_DIV6             55
->>>> +#define CLKID_VCLK2_DIV12            56
->>>> +#define CLKID_CTS_ENCI                       61
->>>> +#define CLKID_CTS_ENCP                       62
->>>> +#define CLKID_CTS_VDAC                       63
->>>> +#define CLKID_HDMI                   67
->>>> +#define CLKID_TS_CLK_GATE            69
->>>> +#define CLKID_MALI_0                 72
->>>> +#define CLKID_MALI_1                 75
->>>> +#define CLKID_MALI                   76
->>>> +#define CLKID_VDEC_P0                        79
->>>> +#define CLKID_VDEC_P1                        82
->>>> +#define CLKID_VDEC_SEL                       83
->>>> +#define CLKID_HEVCF_P0                       86
->>>> +#define CLKID_HEVCF_P1                       89
->>>> +#define CLKID_HEVCF_SEL                      90
->>>> +#define CLKID_VPU_0                  93
->>>> +#define CLKID_VPU_1                  96
->>>> +#define CLKID_VPU                    97
->>>> +#define CLKID_VPU_CLKB_TMP           100
->>>> +#define CLKID_VPU_CLKB                       102
->>>> +#define CLKID_VPU_CLKC_P0            105
->>>> +#define CLKID_VPU_CLKC_P1            108
->>>> +#define CLKID_VPU_CLKC_SEL           109
->>>> +#define CLKID_VAPB_0                 112
->>>> +#define CLKID_VAPB_1                 115
->>>> +#define CLKID_VAPB                   116
->>>> +#define CLKID_GE2D                   117
->>>> +#define CLKID_VDIN_MEAS_GATE         120
->>>> +#define CLKID_SD_EMMC_C_CLK          123
->>>> +#define CLKID_SD_EMMC_A_CLK          126
->>>> +#define CLKID_SD_EMMC_B_CLK          129
->>>> +#define CLKID_SPICC0_GATE            132
->>>> +#define CLKID_PWM_A_GATE             135
->>>> +#define CLKID_PWM_B_GATE             138
->>>> +#define CLKID_PWM_C_GATE             141
->>>> +#define CLKID_PWM_D_GATE             144
->>>> +#define CLKID_PWM_E_GATE             147
->>>> +#define CLKID_PWM_F_GATE             150
->>>> +#define CLKID_PWM_G_GATE             153
->>>> +#define CLKID_PWM_H_GATE             156
->>>> +#define CLKID_PWM_I_GATE             159
->>>> +#define CLKID_PWM_J_GATE             162
->>>> +#define CLKID_SARADC_GATE            165
->>>> +#define CLKID_GEN_GATE                       168
->>>> +#define CLKID_DDR                    169
->>>> +#define CLKID_DOS                    170
->>>> +#define CLKID_ETHPHY                 171
->>>> +#define CLKID_MALI_GATE                      172
->>>> +#define CLKID_AOCPU                  173
->>>> +#define CLKID_AUCPU                  174
->>>> +#define CLKID_CEC                    175
->>>> +#define CLKID_SD_EMMC_A                      176
->>>> +#define CLKID_SD_EMMC_B                      177
->>>> +#define CLKID_NAND                   178
->>>> +#define CLKID_SMARTCARD                      179
->>>> +#define CLKID_ACODEC                 180
->>>> +#define CLKID_SPIFC                  181
->>>> +#define CLKID_MSR_CLK                        182
->>>> +#define CLKID_IR_CTRL                        183
->>>> +#define CLKID_AUDIO                  184
->>>> +#define CLKID_ETH                    185
->>>> +#define CLKID_UART_A                 186
->>>> +#define CLKID_UART_B                 187
->>>> +#define CLKID_UART_C                 188
->>>> +#define CLKID_UART_D                 189
->>>> +#define CLKID_UART_E                 190
->>>> +#define CLKID_AIFIFO                 191
->>>> +#define CLKID_TS_DDR                 192
->>>> +#define CLKID_TS_PLL                 193
->>>> +#define CLKID_G2D                    194
->>>> +#define CLKID_SPICC0                 195
->>>> +#define CLKID_SPICC1                 196
->>>> +#define CLKID_USB                    197
->>>> +#define CLKID_I2C_M_A                        198
->>>> +#define CLKID_I2C_M_B                        199
->>>> +#define CLKID_I2C_M_C                        200
->>>> +#define CLKID_I2C_M_D                        201
->>>> +#define CLKID_I2C_M_E                        202
->>>> +#define CLKID_HDMITX_APB             203
->>>> +#define CLKID_I2C_S_A                        204
->>>> +#define CLKID_USB1_TO_DDR            205
->>>> +#define CLKID_HDCP22                 206
->>>> +#define CLKID_MMC_APB                        207
->>>> +#define CLKID_RSA                    208
->>>> +#define CLKID_CPU_DEBUG                      209
->>>> +#define CLKID_VPU_INTR                       210
->>>> +#define CLKID_DEMOD                  211
->>>> +#define CLKID_SAR_ADC                        212
->>>> +#define CLKID_GIC                    213
->>>> +#define CLKID_PWM_AB                 214
->>>> +#define CLKID_PWM_CD                 215
->>>> +#define CLKID_PWM_EF                 216
->>>> +#define CLKID_PWM_GH                 217
->>>> +#define CLKID_PWM_IJ                 218
->>>> +#define CLKID_HDCP22_ESMCLK_GATE     221
->>>> +#define CLKID_HDCP22_SKPCLK_GATE     224
->>>> +
->>>> +#endif /* _DT_BINDINGS_CLOCK_AMLOGIC_S4_PERIPHERALS_CLKC_H */
->>>> --
->>>> 2.33.1
->>>>
->>>>
->>>> _______________________________________________
->>>> linux-amlogic mailing list
->>>> linux-amlogic@lists.infradead.org
->>>> http://lists.infradead.org/mailman/listinfo/linux-amlogic
->>>
->>> --
->>> Thank you,
->>> Dmitry
-> 
-> --
-> Thank you,
-> Dmitry
