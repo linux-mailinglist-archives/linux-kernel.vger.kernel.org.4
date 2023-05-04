@@ -2,112 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 759316F629E
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 03:21:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68F9C6F62A5
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 03:29:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbjEDBVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 21:21:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38172 "EHLO
+        id S229681AbjEDB33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 21:29:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbjEDBVu (ORCPT
+        with ESMTP id S229602AbjEDB3Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 21:21:50 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252F0101;
-        Wed,  3 May 2023 18:21:45 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 2A1117F8A;
-        Thu,  4 May 2023 09:21:37 +0800 (CST)
-Received: from EXMBX062.cuchost.com (172.16.6.62) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 4 May
- 2023 09:21:37 +0800
-Received: from [192.168.125.107] (183.27.99.121) by EXMBX062.cuchost.com
- (172.16.6.62) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 4 May
- 2023 09:21:36 +0800
-Message-ID: <d2044dc1-ff5c-7398-5646-1bfdfb8ea935@starfivetech.com>
-Date:   Thu, 4 May 2023 09:21:41 +0800
+        Wed, 3 May 2023 21:29:25 -0400
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86E1A10F1
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 18:29:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1683163763;
+        bh=T39JG5jO81CkJSiSo/IvnzdNLETorvzXw2aS+hjSu+c=;
+        h=From:To:Cc:Subject:Date:From;
+        b=moiWwAj7t1bORbTueVEJdVtZHDLSrYjYRWg0Ya7ToKbnd4zYjD4MQcvoP2ek5IuNH
+         0XoHK7zCvoLl8nO3YSELqXQB3PTJjAoX6vWGxbAOuVQZnjK0PuLBKekH2+whThoh59
+         Oq8Xs+zkhzbfZ05Y1FZqLWjxox0B30XJytqjm430IDH/CqkdnVieSeinOlNLuow0Q9
+         5QK767dGFzBup0rEo71gw1DLRifcWr6XmL9fAew0b7+yPZvGzyaJKGUIy2yC952HvY
+         jA75/BB6gytAt2yrlrdGUvaTkq32a/ZGF5tgB6vDkJ4Q30qxbAmbWEsov3ITRAesGi
+         xrzCn2QcLyXFA==
+Received: from localhost.localdomain (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4QBbnv0Lflz11wY;
+        Wed,  3 May 2023 21:29:23 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Zqiang <qiang1.zhang@intel.com>
+Subject: [RFC PATCH 1/4] rcu: rcupdate.h: Add missing parentheses around macro pointer dereference
+Date:   Wed,  3 May 2023 21:29:11 -0400
+Message-Id: <20230504012914.1797355-1-mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4 1/3] dt-bindings: phy: Add starfive,jh7110-dphy-rx
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     Jack Zhu <jack.zhu@starfivetech.com>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-References: <20230412084540.295411-1-changhuang.liang@starfivetech.com>
- <20230412084540.295411-2-changhuang.liang@starfivetech.com>
- <8dd0dc63-e0df-8764-f756-da032d9d671c@linaro.org>
- <eb47b7c7-bdbb-92d9-ba39-604ce487f297@starfivetech.com>
- <f6a4fb28-d635-4d99-44bb-d929cb41eef2@linaro.org>
- <b34a8d59-34e4-8358-9d2b-367f4707ca7c@starfivetech.com>
- <f0d82428-aaa5-3dd4-bc29-f1057fe749bc@linaro.org>
- <0c94aadf-fac3-d05c-1c54-ae8337526849@starfivetech.com>
- <31c582a7-682a-330e-51d4-53b4a0c5f3a2@linaro.org>
-From:   Changhuang Liang <changhuang.liang@starfivetech.com>
-In-Reply-To: <31c582a7-682a-330e-51d4-53b4a0c5f3a2@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.99.121]
-X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX062.cuchost.com
- (172.16.6.62)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+linux/rcupdate.h macros use the *p parameter without parentheses, e.g.:
 
+  typeof(*p)
 
-On 2023/4/17 1:29, Krzysztof Kozlowski wrote:
->>>> A standard property? Like "clocks" or "resets"?
->>>
->>> Like lane-polarities now submitted to one MIPI.
->>>
->>> Anyway it does not look like a property of a board. You said it is fixed
->>> per SoC, so it should be implied from the compatible. Otherwise please
->>> explain in description and provide some rationale.
->>>
->>> Best regards,
->>> Krzysztof
->>>
->>
->> This property is the only one used for this IP, I have compared this IP with
->> other DPHY rx module, DPHY modules form the other manufacturers not have this
->> configure.
->> And we also have a SoC called JH7100. It DPHY rx module is the same as JH7110.
->> But we don't do the upstream work on it. If it use this lane-maps will be 
->> configure as "lane_maps = /bits/ 8 <0 1 2 3 4 5>;".
-> 
-> And JH7100 is different SoC, so you have different compatible. Again -
-> is this board specific? If not, looks like SoC specific, thus imply it
-> from compatible.
-> 
-> 
-> Best regards,
-> Krzysztof
-> 
+rather than
 
-Vinod,
+  typeof(*(p))
 
-Hi, could you give me some suggestions about Krzysztof's comment? Thanks for
-your time.
+The following test-case shows how it can generate confusion due to C
+operator precedence being reversed compared to the expectations:
 
-Best regards,
-Changhuang
+    #define m(p) \
+    do { \
+            __typeof__(*p) v = 0; \
+    } while (0)
+
+    void fct(unsigned long long *p1)
+    {
+            m(p1 + 1);      /* works */
+            m(1 + p1);      /* broken */
+    }
+
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
+Reviewed-by: Steven Rostedt <rostedt@goodmis.org>
+Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Joel Fernandes <joel@joelfernandes.org>
+Cc: Josh Triplett <josh@joshtriplett.org>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Lai Jiangshan <jiangshanlai@gmail.com>
+Cc: Zqiang <qiang1.zhang@intel.com>
+---
+ include/linux/rcupdate.h | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
+index dcd2cf1e8326..38e84f3d515e 100644
+--- a/include/linux/rcupdate.h
++++ b/include/linux/rcupdate.h
+@@ -430,16 +430,16 @@ static inline void rcu_preempt_sleep_check(void) { }
+ 
+ #ifdef __CHECKER__
+ #define rcu_check_sparse(p, space) \
+-	((void)(((typeof(*p) space *)p) == p))
++	((void)(((typeof(*(p)) space *)(p)) == (p)))
+ #else /* #ifdef __CHECKER__ */
+ #define rcu_check_sparse(p, space)
+ #endif /* #else #ifdef __CHECKER__ */
+ 
+ #define __unrcu_pointer(p, local)					\
+ ({									\
+-	typeof(*p) *local = (typeof(*p) *__force)(p);			\
++	typeof(*(p)) *local = (typeof(*(p)) *__force)(p);		\
+ 	rcu_check_sparse(p, __rcu);					\
+-	((typeof(*p) __force __kernel *)(local)); 			\
++	((typeof(*(p)) __force __kernel *)(local));			\
+ })
+ /**
+  * unrcu_pointer - mark a pointer as not being RCU protected
+@@ -452,29 +452,29 @@ static inline void rcu_preempt_sleep_check(void) { }
+ 
+ #define __rcu_access_pointer(p, local, space) \
+ ({ \
+-	typeof(*p) *local = (typeof(*p) *__force)READ_ONCE(p); \
++	typeof(*(p)) *local = (typeof(*(p)) *__force)READ_ONCE(p); \
+ 	rcu_check_sparse(p, space); \
+-	((typeof(*p) __force __kernel *)(local)); \
++	((typeof(*(p)) __force __kernel *)(local)); \
+ })
+ #define __rcu_dereference_check(p, local, c, space) \
+ ({ \
+ 	/* Dependency order vs. p above. */ \
+-	typeof(*p) *local = (typeof(*p) *__force)READ_ONCE(p); \
++	typeof(*(p)) *local = (typeof(*(p)) *__force)READ_ONCE(p); \
+ 	RCU_LOCKDEP_WARN(!(c), "suspicious rcu_dereference_check() usage"); \
+ 	rcu_check_sparse(p, space); \
+-	((typeof(*p) __force __kernel *)(local)); \
++	((typeof(*(p)) __force __kernel *)(local)); \
+ })
+ #define __rcu_dereference_protected(p, local, c, space) \
+ ({ \
+ 	RCU_LOCKDEP_WARN(!(c), "suspicious rcu_dereference_protected() usage"); \
+ 	rcu_check_sparse(p, space); \
+-	((typeof(*p) __force __kernel *)(p)); \
++	((typeof(*(p)) __force __kernel *)(p)); \
+ })
+ #define __rcu_dereference_raw(p, local) \
+ ({ \
+ 	/* Dependency order vs. p above. */ \
+ 	typeof(p) local = READ_ONCE(p); \
+-	((typeof(*p) __force __kernel *)(local)); \
++	((typeof(*(p)) __force __kernel *)(local)); \
+ })
+ #define rcu_dereference_raw(p) __rcu_dereference_raw(p, __UNIQUE_ID(rcu))
+ 
+-- 
+2.25.1
+
