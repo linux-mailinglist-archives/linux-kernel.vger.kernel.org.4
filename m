@@ -2,152 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97B2B6F62FE
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 04:42:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED9E76F62E0
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 04:17:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbjEDCmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 22:42:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58318 "EHLO
+        id S229598AbjEDCRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 22:17:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjEDCmm (ORCPT
+        with ESMTP id S229505AbjEDCRv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 22:42:42 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 470B4E65;
-        Wed,  3 May 2023 19:42:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683168161; x=1714704161;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   in-reply-to:mime-version;
-  bh=13cZr1M2fmpLTMqDo35HiN6KirFvEojyf+Y0NLP0acA=;
-  b=YLlgm/Eo9WgluJj/7xMp2IROZnyQZxm7GYWpd31HBrLpHgiUU/LrlAp4
-   wqcGliKiDURgluDm67ypeQk7iTxgW6n8RQEOefceqc43Va8bSgvAxZRzy
-   fNpyxTLua7L534/XyHEJJIM0/Mwb93aGvnnDjwy2VTQujS3hCCSF0gJb7
-   oMDNCIkb8tEHX6kly2o1clUCny7x+DdBWLysE0Y/2z8Nmyav644CZwhBB
-   4TZIQE5I55/CvhP1/EGOjnSj/24fNddq7NQ+UiCy/zlZ7LsXJzOZMw3Za
-   saz2aMwx2OLwiZAUjiF6nadrsf/IZikR0kDd95BPh4MsxeTNcooWdiNS5
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="333186768"
-X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
-   d="scan'208";a="333186768"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2023 19:42:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="1026755153"
-X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
-   d="scan'208";a="1026755153"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga005.fm.intel.com with ESMTP; 03 May 2023 19:42:40 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 3 May 2023 19:42:40 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Wed, 3 May 2023 19:42:40 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.45) by
- edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Wed, 3 May 2023 19:42:39 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GMM4Dbr6i+IuC4GoU6tnM7sGpzMX6yfO87+5BgEUUGAxYC+22iDhUarsxAvdCc/HHxQwtEctgSnGl9i4aUeZbTC3OF/N20VtX/4EMlJGgSt9ppcbr7e5NnbhgzPrUoyZqw18Etkg4As2swm5B8htSLw40zrsO6vRn3H5EymHdLzFXoSHdSETXjgrU/AGXDADHLEk1nMGPhz9QKuoPc7D63gq0jJNdhpoS1WH7jJWJ/y4nNbCQ/LlQkJ9HgE3eNC1xQB3PUuOAeYN4JrPsI/edQkleaXGBku6+jIzLQN8lDnLc+Hur4tGN3eNiCuQNKjUt6qs4AD1gn+Z6eAo5fOneA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qjZQDQaYX7bw+RTKMRV8bAEKkcEOxANCpr8AoXbEGAc=;
- b=AKqCdzYhGb0C/qYHv0gpFXekyi6tNsLbxxdMgMg2diheaUIfEuXRUvat/v46q/+o4d0n/QqQwYpqgxCDcA7WICltaaOh37jq0FBjSoRlERCviqcyXpZNzJ4GueV+kb3cbcAhJjQpS8mYRa01oE/FLdwaUBb8JDrVy2BKzk1sXFqmO5uOtdU6Gt/Zs0gCTaYA3gliti5yIXUFd/uCsL93dkR8GGe7O5/daLaMimSdnwAWaKMm5vVUzpsz5Y4adhmBwV7jCHN7/ZwGGyO5HtQebTzbuSBiIZo6Xy805GrDUykX8npW2QXmZsN+JVZIUcTg06OV9IkXH3mWlD/TPmFrxA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DS7PR11MB5966.namprd11.prod.outlook.com (2603:10b6:8:71::6) by
- DS7PR11MB6037.namprd11.prod.outlook.com (2603:10b6:8:74::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6363.22; Thu, 4 May 2023 02:42:38 +0000
-Received: from DS7PR11MB5966.namprd11.prod.outlook.com
- ([fe80::a670:49f5:d602:e2e4]) by DS7PR11MB5966.namprd11.prod.outlook.com
- ([fe80::a670:49f5:d602:e2e4%6]) with mapi id 15.20.6363.022; Thu, 4 May 2023
- 02:42:38 +0000
-Date:   Thu, 4 May 2023 10:17:20 +0800
-From:   Yan Zhao <yan.y.zhao@intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-CC:     <kvm@vger.kernel.org>, <intel-gfx@lists.freedesktop.org>,
-        <linux-kernel@vger.kernel.org>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        "Ben Gardon" <bgardon@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        <intel-gvt-dev@lists.freedesktop.org>,
-        Zhi Wang <zhi.a.wang@intel.com>
-Subject: Re: [PATCH v2 25/27] KVM: x86/mmu: Drop @slot param from
- exported/external page-track APIs
-Message-ID: <ZFMVsFzpN16hiPUH@yzhao56-desk.sh.intel.com>
-Reply-To: Yan Zhao <yan.y.zhao@intel.com>
-References: <20230311002258.852397-1-seanjc@google.com>
- <20230311002258.852397-26-seanjc@google.com>
- <ZBQkyB3KJP34D9/h@yzhao56-desk.sh.intel.com>
- <ZBwS0DNOwMf7OVmV@yzhao56-desk.sh.intel.com>
- <ZFLrOgUL4T/lrVLo@google.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <ZFLrOgUL4T/lrVLo@google.com>
-X-ClientProxiedBy: SG2PR04CA0183.apcprd04.prod.outlook.com
- (2603:1096:4:14::21) To DS7PR11MB5966.namprd11.prod.outlook.com
- (2603:10b6:8:71::6)
+        Wed, 3 May 2023 22:17:51 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D80A1185;
+        Wed,  3 May 2023 19:17:47 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QBcsg6Y8hz4f3mWJ;
+        Thu,  4 May 2023 10:17:43 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP2 (Coremail) with SMTP id Syh0CgAHruvIFVNkuzZ0Ig--.19119S3;
+        Thu, 04 May 2023 10:17:45 +0800 (CST)
+Subject: Re: [PATCH RFC -next] block: support enable/disable blk-mq debugfs
+ dynamically
+To:     Yu Kuai <yukuai1@huaweicloud.com>, axboe@kernel.dk
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, yangerkun@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20230415082042.2120295-1-yukuai1@huaweicloud.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <eabac8f5-108c-40dc-bd75-b5a04075a4d4@huaweicloud.com>
+Date:   Thu, 4 May 2023 10:17:44 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR11MB5966:EE_|DS7PR11MB6037:EE_
-X-MS-Office365-Filtering-Correlation-Id: fd927f50-4b7d-43c8-6c26-08db4c493920
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /98dg1bH0a2gLo+doovEnFABBzCkDtCbN1RyI+bMijeky/oM9aMH51NWv2OlQIRutRqTH+kBI9SxLsClji5XL0ynJndDYWhaZnHVX41fkASAvaBGVy5ck8vJTkRga1ESXmP/e2foBGGn9e6+zQOaWkYCupwtY3TMZKBiQX34Mr0jjQaYIJWPKL8qoMilQIf43KkitlVJCVETwhV/+Z3OWX8FOsEJfFxqhsK0qi9og14A+iDG6dk0yXbFbgNR8w4SmgCWCenPhomlROz9eHXBgKscJNzwKEFlZpFjpZV8EZ4aGio48uGScamraZT0ktUaI/JVfXkTKFH2ncSTye++Msay7RjzCoM5z/hKXAaKcgs1qM03uFlvJTg9C5x7SEp74NGtdJQQu/eU7iBcVgLc/Yu6iveHokJ5RzrRd9ZFFEncc40E2j6ZZ5NMom5Ni2tDPDbnLqQC7pi6oXXcuVxQ9Jk/T/qLmmgXvn6XESTRFeC9hYXrThuaIZtqUY/RTbfWnwmt3/cgulcV7Z9fXvZcaZul0hpqLeACWrwpWBY9XAWGfTs5k2k8UcHhglIL8iL3
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR11MB5966.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(366004)(396003)(136003)(376002)(39860400002)(451199021)(2906002)(3450700001)(38100700002)(82960400001)(6512007)(26005)(6506007)(186003)(83380400001)(8676002)(8936002)(5660300002)(316002)(478600001)(6666004)(86362001)(6486002)(4326008)(6916009)(54906003)(41300700001)(66476007)(66946007)(66556008);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?CXZ0mvht+KkfntOfubiXKpfoofpI7FMaAA1bpjj2UOthiKhBEHHHhlku3SYv?=
- =?us-ascii?Q?+KTTqH9QxpXQ0vw2iy6jysE0EOOmCkoPEDpLjW799LgfSdOQSEe20ZWu29nG?=
- =?us-ascii?Q?vfg9kfBP462rJwyYT5DYPwB7hJ0RyKARceEedO23Oz0Jsn88AM/7v7eN4Ah8?=
- =?us-ascii?Q?0rH/URYByja5+5y9djS12J9QdtYSV5EOwcyN8taqBPDrP/2DfOhj1Xwq5ajj?=
- =?us-ascii?Q?meFc5Rl1d6KjR+w6ctIUsGzpCEAKpJbWtNFTqwGVAYZtjLIRhPOKFHncF6At?=
- =?us-ascii?Q?WSWf3xWiNIsUsTjjueXAI8oK9cnYk06Yh+hhW/PgEqAPuvRycv0Scq+6uF5J?=
- =?us-ascii?Q?AlWhEUT5rYfJ4AQrT/XXa/spEaEdf434ygxiWUVJFu9/mR2a+d1/dO8nqe7z?=
- =?us-ascii?Q?TOF9x4cOUCtx9vqPPm8HagZRjZNyuSvJcN+S9Hka1Lpmx9kLbYNSAsvMLsa8?=
- =?us-ascii?Q?nncpiDWbBN+Z4gamhT16RcNp35Vp5JQZ6I5hL+vmPtV8UDsO884kyRnxFbQP?=
- =?us-ascii?Q?evMcmGPL6MPb4afacHNBmlpS40/TAZ2lOfIVSdLoSOyq9OGvKDMNg4VgW7JD?=
- =?us-ascii?Q?SLmKJygnD/Eww2++QVUiqy7Gh13HIEaqea7N0RT+Z1OcJfADfIoHo5xW+slA?=
- =?us-ascii?Q?XTEWjhEvN5W38Z48edQcU4BTKm0oh7dNxz8MphZjEwhY+NMF/oJtgJ1+p4ug?=
- =?us-ascii?Q?jS3XbYtM1203F96j/rxDd56aCmdgH9oDw8yyHjJCF7ivnJOfT7FNmUvwPsop?=
- =?us-ascii?Q?XMCDP2rdy7H18HkdOmEznYKsE96qgb2yVIASun9yG67R7kYPInnNWFRW2o8t?=
- =?us-ascii?Q?Jrl9GWhMwCIUMJuYBU5dJ5cic7035sbYv8PpX6DK9LjexdbkQrv1vY1IgEN4?=
- =?us-ascii?Q?Rmu+G0EGW7lUyzDtjiTeh+aH7y4FVOhD0XyrgIP7wZIpzjfpgFjd5thfiIAc?=
- =?us-ascii?Q?tGXTqChdWzI6Bqo4LQi2DsUFm+K/FwKF6liOgJUqm5CRbGbq/qRjy7NSD7AP?=
- =?us-ascii?Q?HS6XvI9q3ZoSfS/MtkrAY0Pfi1nQyTM3MH+hFGBtbsxT1IlUjYcwf9MBcdfW?=
- =?us-ascii?Q?jTF9r5MFU8MnTLDNRtEYiuKn1h7IWXuKWXzPz9ScgCpbbNa26IZiXoi6+fMi?=
- =?us-ascii?Q?p+yQtgtKZ9J4bgi8gLDI6PSYZ4Jw8NjrVyzmEs8QRf9Du4/c4V74hWcte0Ti?=
- =?us-ascii?Q?EoIAfIxylrgpClpbhwODsidP4ik2y/6eFMn5Id/Rafb8ZCFX3MvEouPws5ZS?=
- =?us-ascii?Q?pVyo960vtk9LdDUNeJijgvuO11YHcRTMpuUh4jT8t6yxKyypqW1TodwANGGF?=
- =?us-ascii?Q?vqeSc/kSr2e7B0DDRpWbxKKvYTzrUb7mRiF26CoRvMCicKhSgRjrRnQALFQQ?=
- =?us-ascii?Q?JsApRrOWv0A6niI8WPDNuOeIJLaBjObpMNfPzWVJUsQwR16PAEPlOJChAYo+?=
- =?us-ascii?Q?5UZp3L7/HXte9btetX3Z9rOLKVgqq4aMxUj0rcATwJzevRFoexFJ4vlQgEHg?=
- =?us-ascii?Q?7hiQRaPZps5WL/4xFPqNRFsXs8S2Cqydh3OxfF5ffE0Vug9esZ2Km/CCv/1P?=
- =?us-ascii?Q?0EoSavMuuPF/UCpQBMamjzCC9PbrBWpxixz5eQ9v?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: fd927f50-4b7d-43c8-6c26-08db4c493920
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR11MB5966.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2023 02:42:38.0395
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: e5M6Cl7lCwjP8nQ0s4cFtGyTzcosgrqdob7FzpVZVrqHRBionlcSybp5P4UT6+07UFV/9B2N6tv0iS+azEyCxQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR11MB6037
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+In-Reply-To: <20230415082042.2120295-1-yukuai1@huaweicloud.com>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: Syh0CgAHruvIFVNkuzZ0Ig--.19119S3
+X-Coremail-Antispam: 1UD129KBjvJXoW3Xr15WFWUKFWDWry5trWrKrg_yoW3Cw4xpa
+        yDGa15tw1vyr47XFyfCa17Ar93K3yvgr17ZryS9ryFvw1kKr1SqF18JrWUJrWkWrWkCw42
+        vr15J3yq9ryDtFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
+        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
+        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkG
+        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r4j6FyUMIIF0xvEx4A2jsIE14v26r1j6r4U
+        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUp6wZUUU
+        UU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -155,68 +65,242 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 03, 2023 at 04:16:10PM -0700, Sean Christopherson wrote:
-> Finally getting back to this series...
+Hi,
+
+ÔÚ 2023/04/15 16:20, Yu Kuai Ð´µÀ:
+> From: Yu Kuai <yukuai3@huawei.com>
 > 
-> On Thu, Mar 23, 2023, Yan Zhao wrote:
-> > On Fri, Mar 17, 2023 at 04:28:56PM +0800, Yan Zhao wrote:
-> > > On Fri, Mar 10, 2023 at 04:22:56PM -0800, Sean Christopherson wrote:
-> > > ...
-> > > > +int kvm_write_track_add_gfn(struct kvm *kvm, gfn_t gfn)
-> > > > +{
-> > > > +	struct kvm_memory_slot *slot;
-> > > > +	int idx;
-> > > > +
-> > > > +	idx = srcu_read_lock(&kvm->srcu);
-> > > > +
-> > > > +	slot = gfn_to_memslot(kvm, gfn);
-> > > > +	if (!slot) {
-> > > > +		srcu_read_unlock(&kvm->srcu, idx);
-> > > > +		return -EINVAL;
-> > > > +	}
-> > > > +
-> > > Also fail if slot->flags & KVM_MEMSLOT_INVALID is true?
-> > > There should exist a window for external users to see an invalid slot
-> > > when a slot is about to get deleted/moved.
-> > > (It happens before MOVE is rejected in kvm_arch_prepare_memory_region()).
-> > 
-> > Or using
-> >         if (!kvm_is_visible_memslot(slot)) {
-> > 		srcu_read_unlock(&kvm->srcu, idx);
-> > 		return -EINVAL;
-> > 	}
+> After a disk is created, debugfs inode and dentry will be created
+> together, and the memory used for debugfs can't be freed until disk
+> removal.
 > 
-> Hrm.  If the DELETE/MOVE succeeds, then the funky accounting is ok (by the end
-> of the series) as the tracking disappears on DELETE, KVMGT will reject MOVE, and
-> KVM proper zaps SPTEs and resets accounting on MOVE (account_shadowed() runs under
-> mmu_lock and thus ensures all previous SPTEs are zapped before the "flush" from
-> kvm_arch_flush_shadow_memslot() can run).
+> The number of debugfs inode and dentry is based on how many cpus and
+> hctxs. For example, testing on a 128-core environemt, with default
+> module parameters, each loop device will cost 1679KB memory, and debugfs
+> will cost 336KB(20%).
 > 
-> If kvm_prepare_memory_region() fails though...
+> The memory cost for debugfs for a disk seems little, but if a big machine
+> contains thousands of disks, the cost will be xxGB. This memory overhead
+> can be avoided by disabling CONFIG_BLK_DEBUG_FS.
 > 
-> Ah, KVM itself is safe because of the aforementioned kvm_arch_flush_shadow_memslot().
-> Any accounting done on a temporarily invalid memslot will be unwound when the SPTEs
-> are zapped.  So for KVM, ignoring invalid memslots is correct _and necessary_.
-> We could clean that up by having accounted_shadowed() use the @slot from the fault,
-> which would close the window where the fault starts with a valid memslot but then
-> sees an invalid memslot when accounting a new shadow page.  But I don't think there
-> is a bug there.
+> This patch add a disk level switch that can enable/disable debugfs
+> dynamically, so that user can disable debugfs if they care about the
+> memory overhead, in the meantime, debugfs can be enabled again in demand.
 > 
-> Right, and DELETE can't actually fail in the current code base, and we've established
-> that MOVE can't possibly work.  So even if this is problematic in theory, there are
-> no _unknown_ bugs, and the known bugs are fixed by the end of the series.
+
+Friendly ping ...
+
+Thanks,
+Kuai
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> ---
+>   block/blk-mq-debugfs.c | 58 ++++++++++++++++++++++++++++++++++++++----
+>   block/blk-mq-debugfs.h |  1 +
+>   block/blk-sysfs.c      | 41 +++++++++++++++++++++++++++++
+>   include/linux/blkdev.h |  2 ++
+>   4 files changed, 97 insertions(+), 5 deletions(-)
 > 
-> And at the end of the series, KVMGT drops its tracking only when the DELETE is
-> committed.  So I _think_ allowing external trackers to add and remove gfns for
-> write-tracking in an invalid slot is actually desirable/correct.  I'm pretty sure
-> removal should be allowed as that can lead to dangling write-protection in a
-> rollback scenario.   And I can't think of anything that will break (in the kernel)
-> if write-tracking a gfn in an invalid slot is allowed, so I don't see any harm in
-> allowing the extremely theoretical case of KVMGT shadowing a gfn in a to-be-deleted
-> memslot _and_ the deletion being rolled back.
-Yes, you are right!
-I previously thought that
-invalid_slot->arch.gfn_write_track and old->arch.gfn_write_track are
-pointing to different places. But I'm wrong.
-Yes, allowing INVALID slot here is more desired for deletion rolling-back.
+> diff --git a/block/blk-mq-debugfs.c b/block/blk-mq-debugfs.c
+> index 212a7f301e73..3ffc27fd4d07 100644
+> --- a/block/blk-mq-debugfs.c
+> +++ b/block/blk-mq-debugfs.c
+> @@ -657,6 +657,9 @@ void blk_mq_debugfs_register(struct request_queue *q)
+>   	struct blk_mq_hw_ctx *hctx;
+>   	unsigned long i;
+>   
+> +	if (!test_bit(QUEUE_FLAG_DEBUGFS, &q->queue_flags))
+> +		return;
+> +
+>   	debugfs_create_files(q->debugfs_dir, q, blk_mq_debugfs_queue_attrs);
+>   
+>   	/*
+> @@ -685,6 +688,47 @@ void blk_mq_debugfs_register(struct request_queue *q)
+>   	}
+>   }
+>   
+> +static void debugfs_remove_files(struct dentry *parent,
+> +				 const struct blk_mq_debugfs_attr *attr)
+> +{
+> +	if (IS_ERR_OR_NULL(parent))
+> +		return;
+> +
+> +	for (; attr->name; attr++)
+> +		debugfs_lookup_and_remove(attr->name, parent);
+> +}
+> +
+> +void blk_mq_debugfs_unregister(struct request_queue *q)
+> +{
+> +	struct blk_mq_hw_ctx *hctx;
+> +	unsigned long i;
+> +
+> +	if (q->rq_qos) {
+> +		struct rq_qos *rqos = q->rq_qos;
+> +
+> +		while (rqos) {
+> +			if (rqos->debugfs_dir)
+> +				blk_mq_debugfs_unregister_rqos(rqos);
+> +			rqos = rqos->next;
+> +		}
+> +	}
+> +
+> +	debugfs_remove_recursive(q->rqos_debugfs_dir);
+> +	q->rqos_debugfs_dir = NULL;
+> +
+> +	queue_for_each_hw_ctx(q, hctx, i) {
+> +		if (hctx->debugfs_dir)
+> +			blk_mq_debugfs_unregister_hctx(hctx);
+> +		if (hctx->sched_debugfs_dir)
+> +			blk_mq_debugfs_unregister_sched_hctx(hctx);
+> +	}
+> +
+> +	if (q->sched_debugfs_dir)
+> +		blk_mq_debugfs_unregister_sched(q);
+> +
+> +	debugfs_remove_files(q->debugfs_dir, blk_mq_debugfs_queue_attrs);
+> +}
+> +
+>   static void blk_mq_debugfs_register_ctx(struct blk_mq_hw_ctx *hctx,
+>   					struct blk_mq_ctx *ctx)
+>   {
+> @@ -704,7 +748,7 @@ void blk_mq_debugfs_register_hctx(struct request_queue *q,
+>   	char name[20];
+>   	int i;
+>   
+> -	if (!q->debugfs_dir)
+> +	if (!q->debugfs_dir || !test_bit(QUEUE_FLAG_DEBUGFS, &q->queue_flags))
+>   		return;
+>   
+>   	snprintf(name, sizeof(name), "hctx%u", hctx->queue_num);
+> @@ -718,7 +762,8 @@ void blk_mq_debugfs_register_hctx(struct request_queue *q,
+>   
+>   void blk_mq_debugfs_unregister_hctx(struct blk_mq_hw_ctx *hctx)
+>   {
+> -	if (!hctx->queue->debugfs_dir)
+> +	if (!hctx->queue->debugfs_dir ||
+> +	    !test_bit(QUEUE_FLAG_DEBUGFS, &hctx->queue->queue_flags))
+>   		return;
+>   	debugfs_remove_recursive(hctx->debugfs_dir);
+>   	hctx->sched_debugfs_dir = NULL;
+> @@ -756,7 +801,8 @@ void blk_mq_debugfs_register_sched(struct request_queue *q)
+>   	if (!q->debugfs_dir)
+>   		return;
+>   
+> -	if (!e->queue_debugfs_attrs)
+> +	if (!e->queue_debugfs_attrs ||
+> +	    !test_bit(QUEUE_FLAG_DEBUGFS, &q->queue_flags))
+>   		return;
+>   
+>   	q->sched_debugfs_dir = debugfs_create_dir("sched", q->debugfs_dir);
+> @@ -802,7 +848,8 @@ void blk_mq_debugfs_register_rqos(struct rq_qos *rqos)
+>   
+>   	lockdep_assert_held(&q->debugfs_mutex);
+>   
+> -	if (rqos->debugfs_dir || !rqos->ops->debugfs_attrs)
+> +	if (rqos->debugfs_dir || !rqos->ops->debugfs_attrs ||
+> +	    !test_bit(QUEUE_FLAG_DEBUGFS, &q->queue_flags))
+>   		return;
+>   
+>   	if (!q->rqos_debugfs_dir)
+> @@ -828,7 +875,8 @@ void blk_mq_debugfs_register_sched_hctx(struct request_queue *q,
+>   	if (!hctx->debugfs_dir)
+>   		return;
+>   
+> -	if (!e->hctx_debugfs_attrs)
+> +	if (!e->hctx_debugfs_attrs ||
+> +	    !test_bit(QUEUE_FLAG_DEBUGFS, &q->queue_flags))
+>   		return;
+>   
+>   	hctx->sched_debugfs_dir = debugfs_create_dir("sched",
+> diff --git a/block/blk-mq-debugfs.h b/block/blk-mq-debugfs.h
+> index 9c7d4b6117d4..c8dd03f73d8c 100644
+> --- a/block/blk-mq-debugfs.h
+> +++ b/block/blk-mq-debugfs.h
+> @@ -21,6 +21,7 @@ int __blk_mq_debugfs_rq_show(struct seq_file *m, struct request *rq);
+>   int blk_mq_debugfs_rq_show(struct seq_file *m, void *v);
+>   
+>   void blk_mq_debugfs_register(struct request_queue *q);
+> +void blk_mq_debugfs_unregister(struct request_queue *q);
+>   void blk_mq_debugfs_register_hctx(struct request_queue *q,
+>   				  struct blk_mq_hw_ctx *hctx);
+>   void blk_mq_debugfs_unregister_hctx(struct blk_mq_hw_ctx *hctx);
+> diff --git a/block/blk-sysfs.c b/block/blk-sysfs.c
+> index 1a743b4f2958..450acea23f21 100644
+> --- a/block/blk-sysfs.c
+> +++ b/block/blk-sysfs.c
+> @@ -618,6 +618,44 @@ QUEUE_RW_ENTRY(queue_iostats, "iostats");
+>   QUEUE_RW_ENTRY(queue_random, "add_random");
+>   QUEUE_RW_ENTRY(queue_stable_writes, "stable_writes");
+>   
+> +#ifdef CONFIG_BLK_DEBUG_FS
+> +static ssize_t queue_debugfs_show(struct request_queue *q, char *page)
+> +{
+> +	return queue_var_show(test_bit(QUEUE_FLAG_DEBUGFS, &q->queue_flags),
+> +			      page);
+> +}
+> +
+> +static ssize_t queue_debugfs_store(struct request_queue *q, const char *page,
+> +				   size_t count)
+> +{
+> +	unsigned long val;
+> +	bool enabled;
+> +	ssize_t ret = queue_var_store(&val, page, count);
+> +
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	mutex_lock(&q->debugfs_mutex);
+> +	enabled = test_bit(QUEUE_FLAG_DEBUGFS, &q->queue_flags);
+> +	if (val) {
+> +		if (!enabled && queue_is_mq(q)) {
+> +			blk_queue_flag_set(QUEUE_FLAG_DEBUGFS, q);
+> +			blk_mq_debugfs_register(q);
+> +		}
+> +	} else {
+> +		if (enabled) {
+> +			blk_mq_debugfs_unregister(q);
+> +			blk_queue_flag_clear(QUEUE_FLAG_DEBUGFS, q);
+> +		}
+> +	}
+> +	mutex_unlock(&q->debugfs_mutex);
+> +
+> +	return ret;
+> +}
+> +
+> +QUEUE_RW_ENTRY(queue_debugfs, "debugfs");
+> +#endif
+> +
+>   static struct attribute *queue_attrs[] = {
+>   	&queue_requests_entry.attr,
+>   	&queue_ra_entry.attr,
+> @@ -664,6 +702,9 @@ static struct attribute *queue_attrs[] = {
+>   #endif
+>   	&queue_virt_boundary_mask_entry.attr,
+>   	&queue_dma_alignment_entry.attr,
+> +#ifdef CONFIG_BLK_DEBUG_FS
+> +	&queue_debugfs_entry.attr,
+> +#endif
+>   	NULL,
+>   };
+>   
+> diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
+> index e3242e67a8e3..be51592751b2 100644
+> --- a/include/linux/blkdev.h
+> +++ b/include/linux/blkdev.h
+> @@ -544,6 +544,7 @@ struct request_queue {
+>   #define QUEUE_FLAG_NONROT	6	/* non-rotational device (SSD) */
+>   #define QUEUE_FLAG_VIRT		QUEUE_FLAG_NONROT /* paravirt device */
+>   #define QUEUE_FLAG_IO_STAT	7	/* do disk/partitions IO accounting */
+> +#define QUEUE_FLAG_DEBUGFS	8	/* supports debugfs */
+>   #define QUEUE_FLAG_NOXMERGES	9	/* No extended merges */
+>   #define QUEUE_FLAG_ADD_RANDOM	10	/* Contributes to random pool */
+>   #define QUEUE_FLAG_SYNCHRONOUS	11	/* always completes in submit context */
+> @@ -566,6 +567,7 @@ struct request_queue {
+>   #define QUEUE_FLAG_SKIP_TAGSET_QUIESCE	31 /* quiesce_tagset skip the queue*/
+>   
+>   #define QUEUE_FLAG_MQ_DEFAULT	((1UL << QUEUE_FLAG_IO_STAT) |		\
+> +				 (1UL << QUEUE_FLAG_DEBUGFS) |	\
+>   				 (1UL << QUEUE_FLAG_SAME_COMP) |	\
+>   				 (1UL << QUEUE_FLAG_NOWAIT))
+>   
+> 
 
