@@ -2,207 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C9166F6C70
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 14:54:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB2596F6C74
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 14:55:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230179AbjEDMyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 08:54:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42362 "EHLO
+        id S230363AbjEDMz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 08:55:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230363AbjEDMyv (ORCPT
+        with ESMTP id S230357AbjEDMzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 08:54:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 112D610DE;
-        Thu,  4 May 2023 05:54:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 80E6763403;
-        Thu,  4 May 2023 12:54:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72C39C433D2;
-        Thu,  4 May 2023 12:54:44 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>,
-        Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [GIT PULL] LoongArch changes for v6.4
-Date:   Thu,  4 May 2023 20:54:09 +0800
-Message-Id: <20230504125409.2444851-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.39.1
+        Thu, 4 May 2023 08:55:23 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A83D7
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 05:55:22 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f315735514so62020415e9.1
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 05:55:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683204921; x=1685796921;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=TwKH5OHkDV/MpZ9yrdw81ApCoAA4gk5I47srjkhQU+0=;
+        b=YpPw9mHfAJxQ6CjbhpKohzqG56cQCfKAsDGoAtpjQT/Ev9QAxQYnrL4ZV1Askhy9PI
+         T941FhMz6i+3/qDiHy4zFYgu3EIVivdVq7QIyouI2OKNpDAzqG2H4XhR0cd+3FR+yJcw
+         hjBqp7/5UVTKhenkIVvXOYwzXB/HzQJHyif3BM1SWkUolIv+S+e6ddSWctMztZ9tzcWP
+         W4W6beeMjzo4XVjpMQxo0hhE0k3TZFuq9PTu5jBsqSfugZT8LlPCIQHgHIYVKB42VZfs
+         9sjcq+T0ekua36zu4GAL4svoSk8byRqO9AkRxKEDPQZA4IL2jc90PlkTy6FBtxwVK2a4
+         xdVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683204921; x=1685796921;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TwKH5OHkDV/MpZ9yrdw81ApCoAA4gk5I47srjkhQU+0=;
+        b=HLY25x9JHf4LbM4va17vXNq3LjvyQkWtUt7hBgXjyYFHKzt09MBAT1WrM98X16Sv3Y
+         2I5AcLQUR35dU3asxdUTUqu7cX4XTePeTRGPAhfm8i0XNkvZBEz/+NsWQVoxbEILlwbj
+         bmWlZEz/QflqoktbfuNwlsFpdO8PC0In0HJ1jTAw0CP8qI4y7V9HHa4hhO+t27QdF51Y
+         GMeRG1gfSfk2yHPXyLO/6F0IEM4z2e60i9mR5c+1xGui8Ik5N6f0HkyqTddzb6d6NSSi
+         7VZ43zFpJqg/OkrBkQgc422U4fGsDgK64Q4usAaIKsO/WQ81Qocu+cO0TGpiAaHKN8r8
+         ok3g==
+X-Gm-Message-State: AC+VfDwd8TlYIwcFVQMJ+tAicApOTEVoyUD46JEJrG7+xA3NMSnhMNDE
+        NAJValEwup1ORENiVuPyyS36hw==
+X-Google-Smtp-Source: ACHHUZ6CDWxhk+dhSH8qLQE79fBassliV0GQlKPgAAM0MVDziCfBXEKP0mKuYXtpd45JN7ujvYKCxw==
+X-Received: by 2002:a5d:61d1:0:b0:306:2be3:6d40 with SMTP id q17-20020a5d61d1000000b003062be36d40mr2268666wrv.35.1683204920678;
+        Thu, 04 May 2023 05:55:20 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:52fb:80bd:bee3:f741? ([2a01:e0a:982:cbb0:52fb:80bd:bee3:f741])
+        by smtp.gmail.com with ESMTPSA id c11-20020a5d63cb000000b003062cdc6ac5sm11554084wrw.89.2023.05.04.05.55.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 May 2023 05:55:20 -0700 (PDT)
+Message-ID: <b18a22c0-2cc2-d361-262c-2e5cf802641b@linaro.org>
+Date:   Thu, 4 May 2023 14:55:19 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH 3/6] arm64: dts: qcom: sm8350-hdk: Add QMP & DP to
+ SuperSpeed graph
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20230503-topic-sm8450-graphics-dp-next-v1-0-d1ee9397f2a6@linaro.org>
+ <20230503-topic-sm8450-graphics-dp-next-v1-3-d1ee9397f2a6@linaro.org>
+ <c985201e-6916-1ad8-4a11-cfc3bc288733@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <c985201e-6916-1ad8-4a11-cfc3bc288733@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 457391b0380335d5e9a5babdec90ac53928b23b4:
+On 04/05/2023 08:53, Konrad Dybcio wrote:
+> 
+> 
+> On 3.05.2023 15:10, Neil Armstrong wrote:
+>> With support for the QMP combo phy to react to USB Type-C switch events,
+>> introduce it as the next hop for the SuperSpeed lanes of the Type-C
+>> connector, and connect the output of the DisplayPort controller
+>> to the QMP combo phy.
+>>
+>> This allows the TCPM to perform orientation switching of both USB and
+>> DisplayPort signals.
+>>
+>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>> ---
+>>   arch/arm64/boot/dts/qcom/sm8350-hdk.dts | 74 ++++++++++++++++++++++++++++++++-
+>>   1 file changed, 72 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sm8350-hdk.dts b/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
+>> index 2ee1b121686a..fa835bdb7408 100644
+>> --- a/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
+>> +++ b/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
+>> @@ -58,7 +58,15 @@ port@1 {
+>>   					reg = <1>;
+>>   
+>>   					pmic_glink_ss_in: endpoint {
+>> -						remote-endpoint = <&usb_1_dwc3_ss>;
+>> +						remote-endpoint = <&usb_1_qmpphy_out>;
+>> +					};
+>> +				};
+>> +
+>> +				port@2 {
+>> +					reg = <2>;
+>> +
+>> +					pmic_glink_sbu: endpoint {
+>> +						remote-endpoint = <&fsa4480_sbu_mux>;
+>>   					};
+>>   				};
+>>   			};
+>> @@ -326,6 +334,36 @@ zap-shader {
+>>   	};
+>>   };
+>>   
+>> +&i2c13 {
+>> +	status = "okay";
+>> +	clock-frequency = <100000>;
+> Status last
 
-  Linux 6.3 (2023-04-23 12:02:52 -0700)
+Ack
 
-are available in the Git repository at:
+> 
+>> +
+>> +	fsa4480@42 {
+>> +		compatible = "fcs,fsa4480";
+>> +		reg = <0x42>;
+>> +
+>> +		interrupts-extended = <&tlmm 2 IRQ_TYPE_LEVEL_LOW>;
+>> +
+>> +		vcc-supply = <&vreg_bob>;
+>> +		mode-switch;
+>> +		orientation-switch;
+>> +		svid = /bits/ 16 <0xff01>;
+>> +
+>> +		ports {
+>> +			#address-cells = <1>;
+>> +			#size-cells = <0>;
+>> +
+>> +			port@0 {
+>> +				reg = <0>;
+>> +
+>> +				fsa4480_sbu_mux: endpoint {
+>> +					remote-endpoint = <&pmic_glink_sbu>;
+>> +				};
+>> +			};
+>> +		};
+>> +	};
+>> +};
+>> +
+>>   &i2c15 {
+>>   	clock-frequency = <400000>;
+>>   	status = "okay";
+>> @@ -370,6 +408,20 @@ &mdss {
+>>   	status = "okay";
+>>   };
+>>   
+>> +&mdss_dp {
+>> +	status = "okay";
+>> +
+>> +	ports {
+>> +		port@1 {
+>> +			reg = <1>;
+> missing newline
+> 
+>> +			mdss_dp0_out: endpoint {
+>> +				data-lanes = <0 1>;
+>> +				remote-endpoint = <&usb_1_qmpphy_dp_in>;
+>> +			};
+>> +		};
+>> +	};
+>> +};
+>> +
+>>   &mdss_mdp {
+>>   	status = "okay";
+>>   };
+>> @@ -416,6 +468,10 @@ &qupv3_id_0 {
+>>   	status = "okay";
+>>   };
+>>   
+>> +&qupv3_id_1 {
+>> +	status = "okay";
+>> +};
+>> +
+>>   &qupv3_id_2 {
+>>   	status = "okay";
+>>   };
+>> @@ -716,7 +772,7 @@ &usb_1_dwc3_hs {
+>>   };
+>>   
+>>   &usb_1_dwc3_ss {
+>> -	remote-endpoint = <&pmic_glink_ss_in>;
+>> +	remote-endpoint = <&usb_1_qmpphy_usb_ss_in>;
+>>   };
+>>   
+>>   &usb_1_hsphy {
+>> @@ -732,6 +788,20 @@ &usb_1_qmpphy {
+>>   
+>>   	vdda-phy-supply = <&vreg_l6b_1p2>;
+>>   	vdda-pll-supply = <&vreg_l1b_0p88>;
+>> +
+>> +	orientation-switch;
+> this is a common property which will/should be ignored if no
+> usbc is present
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-6.4
+So, do you mean it should be in the common dtsi ? I don't see why since
+it's only true if there's an USB-C connector
 
-for you to fetch changes up to 2fa5ebe3bc4e31e07a99196455498472417842f2:
+> 
+>> +};
+>> +
+>> +&usb_1_qmpphy_out {
+>> +	remote-endpoint = <&pmic_glink_ss_in>;
+>> +};
+>> +
+>> +&usb_1_qmpphy_usb_ss_in {
+>> +	remote-endpoint = <&usb_1_dwc3_ss>;
+>> +};
+>> +
+>> +&usb_1_qmpphy_dp_in {
+>> +	remote-endpoint = <&mdss_dp0_out>;
+> 'd' < 'o' < 'u'
+Exact...
 
-  tools/perf: Add basic support for LoongArch (2023-05-01 17:19:59 +0800)
+> 
+> with that fixed
+> 
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> 
+> Konrad
+>>   };
+>>   
+>>   &usb_2 {
+>>
 
-----------------------------------------------------------------
-LoongArch changes for v6.4
-
-1, Better backtraces for humanization;
-2, Relay BCE exceptions to userland as SIGSEGV;
-3, Provide kernel fpu functions;
-4, Optimize memory ops (memset/memcpy/memmove);
-5, Optimize checksum and crc32(c) calculation;
-6, Add ARCH_HAS_FORTIFY_SOURCE selection;
-7, Add function error injection support;
-8, Add ftrace with direct call support;
-9, Add basic perf tools support.
-
-Note: There are merge conflicts in these files but can be simply fixed
-by adjusting context around "static struct ftrace_ops direct":
-
-  samples/ftrace/ftrace-direct-modify.c
-  samples/ftrace/ftrace-direct-too.c
-  samples/ftrace/ftrace-direct.c
-
-----------------------------------------------------------------
-Bibo Mao (1):
-      LoongArch: Add checksum optimization for 64-bit system
-
-Huacai Chen (3):
-      Merge 'irq/loongarch-fixes-6.4' into loongarch-next
-      LoongArch: Provide kernel fpu functions
-      tools/perf: Add basic support for LoongArch
-
-Jianmin Lv (5):
-      irqchip/loongson-eiointc: Fix returned value on parsing MADT
-      irqchip/loongson-eiointc: Fix incorrect use of acpi_get_vec_parent
-      irqchip/loongson-eiointc: Fix registration of syscore_ops
-      irqchip/loongson-pch-pic: Fix registration of syscore_ops
-      irqchip/loongson-pch-pic: Fix pch_pic_acpi_init calling
-
-Min Zhou (1):
-      LoongArch: crypto: Add crc32 and crc32c hw acceleration
-
-Qing Zhang (2):
-      LoongArch: Add ARCH_HAS_FORTIFY_SOURCE selection
-      LoongArch: ftrace: Abstract DYNAMIC_FTRACE_WITH_ARGS accesses
-
-Tiezhu Yang (1):
-      LoongArch: Add support for function error injection
-
-WANG Rui (1):
-      LoongArch: Optimize memory ops (memset/memcpy/memmove)
-
-WANG Xuerui (12):
-      LoongArch: Clean up the architectural interrupt definitions
-      LoongArch: Define regular names for BCE/WATCH/HVC/GSPR exceptions
-      LoongArch: Print GPRs with ABI names when showing registers
-      LoongArch: Print symbol info for $ra and CSR.ERA only for kernel-mode contexts
-      LoongArch: Fix format of CSR lines during show_regs()
-      LoongArch: Humanize the CRMD line when showing registers
-      LoongArch: Humanize the PRMD line when showing registers
-      LoongArch: Humanize the EUEN line when showing registers
-      LoongArch: Humanize the ECFG line when showing registers
-      LoongArch: Humanize the ESTAT line when showing registers
-      LoongArch: Tweak the BADV and CPUCFG.PRID lines in show_regs()
-      LoongArch: Relay BCE exceptions to userland as SIGSEGV with si_code=SEGV_BNDERR
-
-Youling Tang (4):
-      LoongArch: ftrace: Fix build error if DYNAMIC_FTRACE_WITH_REGS is not set
-      LoongArch: ftrace: Implement ftrace_find_callable_addr() to simplify code
-      LoongArch: ftrace: Add direct call support
-      LoongArch: ftrace: Add direct call trampoline samples support
-
- arch/loongarch/Kconfig                             |   5 +
- arch/loongarch/Makefile                            |   2 +
- arch/loongarch/crypto/Kconfig                      |  14 +
- arch/loongarch/crypto/Makefile                     |   6 +
- arch/loongarch/crypto/crc32-loongarch.c            | 304 ++++++++++++++++++++
- arch/loongarch/include/asm/checksum.h              |  66 +++++
- arch/loongarch/include/asm/fpu.h                   |   3 +
- arch/loongarch/include/asm/ftrace.h                |  37 +++
- arch/loongarch/include/asm/inst.h                  |  26 ++
- arch/loongarch/include/asm/loongarch.h             |  57 ++--
- arch/loongarch/include/asm/ptrace.h                |   5 +
- arch/loongarch/kernel/Makefile                     |   2 +-
- arch/loongarch/kernel/ftrace_dyn.c                 | 128 +++++----
- arch/loongarch/kernel/genex.S                      |   1 +
- arch/loongarch/kernel/irq.c                        |   2 +-
- arch/loongarch/kernel/kfpu.c                       |  43 +++
- arch/loongarch/kernel/mcount_dyn.S                 |  13 +-
- arch/loongarch/kernel/perf_event.c                 |   2 +-
- arch/loongarch/kernel/time.c                       |   2 +-
- arch/loongarch/kernel/traps.c                      | 318 ++++++++++++++++++---
- arch/loongarch/lib/Makefile                        |   4 +-
- arch/loongarch/lib/clear_user.S                    | 136 ++++++++-
- arch/loongarch/lib/copy_user.S                     | 251 ++++++++++++----
- arch/loongarch/lib/csum.c                          | 141 +++++++++
- arch/loongarch/lib/error-inject.c                  |  10 +
- arch/loongarch/lib/memcpy.S                        | 147 ++++++++--
- arch/loongarch/lib/memmove.S                       | 120 ++++----
- arch/loongarch/lib/memset.S                        | 116 ++++++--
- crypto/Kconfig                                     |   3 +
- drivers/irqchip/irq-loongson-eiointc.c             |  32 ++-
- drivers/irqchip/irq-loongson-pch-pic.c             |   6 +-
- samples/ftrace/ftrace-direct-modify.c              |  34 +++
- samples/ftrace/ftrace-direct-multi-modify.c        |  41 +++
- samples/ftrace/ftrace-direct-multi.c               |  25 ++
- samples/ftrace/ftrace-direct-too.c                 |  27 ++
- samples/ftrace/ftrace-direct.c                     |  23 ++
- tools/arch/loongarch/include/uapi/asm/perf_regs.h  |  40 +++
- tools/arch/loongarch/include/uapi/asm/unistd.h     |   9 +
- tools/perf/Makefile.config                         |  12 +-
- tools/perf/arch/loongarch/Build                    |   1 +
- tools/perf/arch/loongarch/Makefile                 |  28 ++
- tools/perf/arch/loongarch/annotate/instructions.c  |  45 +++
- .../arch/loongarch/entry/syscalls/mksyscalltbl     |  61 ++++
- .../perf/arch/loongarch/include/dwarf-regs-table.h |  16 ++
- tools/perf/arch/loongarch/include/perf_regs.h      |  15 +
- tools/perf/arch/loongarch/util/Build               |   5 +
- tools/perf/arch/loongarch/util/dwarf-regs.c        |  44 +++
- tools/perf/arch/loongarch/util/perf_regs.c         |   6 +
- tools/perf/arch/loongarch/util/unwind-libdw.c      |  56 ++++
- tools/perf/arch/loongarch/util/unwind-libunwind.c  |  82 ++++++
- tools/perf/check-headers.sh                        |   1 +
- tools/perf/util/annotate.c                         |   8 +
- tools/perf/util/dwarf-regs.c                       |   7 +
- tools/perf/util/env.c                              |   2 +
- tools/perf/util/genelf.h                           |   3 +
- tools/perf/util/perf_regs.c                        |  76 +++++
- tools/perf/util/syscalltbl.c                       |   4 +
- 57 files changed, 2364 insertions(+), 309 deletions(-)
- create mode 100644 arch/loongarch/crypto/Kconfig
- create mode 100644 arch/loongarch/crypto/Makefile
- create mode 100644 arch/loongarch/crypto/crc32-loongarch.c
- create mode 100644 arch/loongarch/include/asm/checksum.h
- create mode 100644 arch/loongarch/kernel/kfpu.c
- create mode 100644 arch/loongarch/lib/csum.c
- create mode 100644 arch/loongarch/lib/error-inject.c
- create mode 100644 tools/arch/loongarch/include/uapi/asm/perf_regs.h
- create mode 100644 tools/arch/loongarch/include/uapi/asm/unistd.h
- create mode 100644 tools/perf/arch/loongarch/Build
- create mode 100644 tools/perf/arch/loongarch/Makefile
- create mode 100644 tools/perf/arch/loongarch/annotate/instructions.c
- create mode 100755 tools/perf/arch/loongarch/entry/syscalls/mksyscalltbl
- create mode 100644 tools/perf/arch/loongarch/include/dwarf-regs-table.h
- create mode 100644 tools/perf/arch/loongarch/include/perf_regs.h
- create mode 100644 tools/perf/arch/loongarch/util/Build
- create mode 100644 tools/perf/arch/loongarch/util/dwarf-regs.c
- create mode 100644 tools/perf/arch/loongarch/util/perf_regs.c
- create mode 100644 tools/perf/arch/loongarch/util/unwind-libdw.c
- create mode 100644 tools/perf/arch/loongarch/util/unwind-libunwind.c
