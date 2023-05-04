@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 717CB6F692D
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 12:37:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BFC76F692B
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 12:37:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230056AbjEDKhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 06:37:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53234 "EHLO
+        id S230254AbjEDKhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 06:37:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230057AbjEDKhC (ORCPT
+        with ESMTP id S230056AbjEDKhC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 4 May 2023 06:37:02 -0400
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0122349E3;
-        Thu,  4 May 2023 03:36:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68FE14C2D;
+        Thu,  4 May 2023 03:36:51 -0700 (PDT)
 Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 344AMrWp004012;
-        Thu, 4 May 2023 10:36:46 GMT
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3449OHD1029873;
+        Thu, 4 May 2023 10:36:48 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=n8Nqq5knuYs0m9wUvtQ0ByXIx5S1MpqjK4cnS+3hfwY=;
- b=DxW05hqVBA9dHcOhxOSPJlQl/cJdylBk+iYHcOmmBnq8I41MbNQ+caDt2EJtRPu2Y0AA
- WQdBaIwX04YYD7+PO4MequMThZswUK+yPf1NyNjoXJ7i8Pm0wNRvtRg7M6kwpMcHQ8q1
- S0+SY1x2fHMvmLwHjKNY+Pbz/mV6RsJDaepvuKyVTcCSZn4zbLJX75mNzpVwA4mUJl+J
- UVST8svdO4cn0FOwDW7JsYqjMox40NbE1JlZMrLZ40tAQW+zofONoidy1Y/M8mQ5/Qbp
- aiM25cQFTb9N5AZOZBfkOecmw3MkWgr4UWGeCNSp40BU6tbxtlmaREb+jidyx+VZa7yZ Cw== 
+ bh=ja4McYpDweECEhW5T3LlcCCcrzFhUN/KK5TCWSffgjw=;
+ b=AJEaLA2UhqWMqJPh6ZLMca2axR47j7iuIrXwRmYCTLIAnN1+nZG6oJFp+iVyQt5WcgPR
+ qGUXWNgrbJMT5WMjYIvuY828qB3p2zfX6PaOEYvuAIakHgX3m+ARAAetNCE6UexqYMuw
+ Z81cZSAYfdXIAhO8yuGJWZOLW+2BlIdQjxvSehooaVNFSvJtmxwETXlMffsr3Yteyy20
+ uLdBhmU6gP/GLUXVqWzhu+q7fRKOHtvo8gwoXD2JjUN2OY1GsfkN11u83AXoCR4sHxf0
+ XNHzOynET4LhHA5ooV7GdpkexYSatZTX49+94mnAJcGKBEWLRZPqRn02mJXn1iAznW+L NA== 
 Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qca1j857w-1
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qca1j857y-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 04 May 2023 10:36:46 +0000
+        Thu, 04 May 2023 10:36:47 +0000
 Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 344AahtL002473;
-        Thu, 4 May 2023 10:36:43 GMT
+        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 344AagOH002434;
+        Thu, 4 May 2023 10:36:44 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3q8vakt1qh-1;
-        Thu, 04 May 2023 10:36:43 +0000
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3q8vakt1qp-1;
+        Thu, 04 May 2023 10:36:44 +0000
 Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 344Aahcb002456;
-        Thu, 4 May 2023 10:36:43 GMT
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 344AaicV002725;
+        Thu, 4 May 2023 10:36:44 GMT
 Received: from hu-sgudaval-hyd.qualcomm.com (hu-dikshita-hyd.qualcomm.com [10.213.110.13])
-        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 344Aagn6002451;
-        Thu, 04 May 2023 10:36:43 +0000
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 344Aai72002627;
+        Thu, 04 May 2023 10:36:44 +0000
 Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 347544)
-        id 3AA09BE0; Thu,  4 May 2023 16:06:42 +0530 (+0530)
+        id 7222FBE0; Thu,  4 May 2023 16:06:43 +0530 (+0530)
 From:   Dikshita Agarwal <quic_dikshita@quicinc.com>
 To:     linux-media@vger.kernel.org, stanimir.k.varbanov@gmail.com,
         quic_vgarodia@quicinc.com, agross@kernel.org, andersson@kernel.org,
         konrad.dybcio@linaro.org, mchehab@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         Dikshita Agarwal <quic_dikshita@quicinc.com>
-Subject: [PATCH 2/4] venus: update calculation for dpb buffers
-Date:   Thu,  4 May 2023 16:06:37 +0530
-Message-Id: <1683196599-3730-3-git-send-email-quic_dikshita@quicinc.com>
+Subject: [PATCH 3/4] venus: add handling of bit depth change from firmwar
+Date:   Thu,  4 May 2023 16:06:38 +0530
+Message-Id: <1683196599-3730-4-git-send-email-quic_dikshita@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1683196599-3730-1-git-send-email-quic_dikshita@quicinc.com>
 References: <1683196599-3730-1-git-send-email-quic_dikshita@quicinc.com>
@@ -60,14 +60,14 @@ X-QCInternal: smtphost
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: qLvi9VwSO-0SDgYs5mrwGj--lkBtXrFx
-X-Proofpoint-GUID: qLvi9VwSO-0SDgYs5mrwGj--lkBtXrFx
+X-Proofpoint-ORIG-GUID: rmHEtJl6IkFsp2ROxw3Y99nEZkBXlAL6
+X-Proofpoint-GUID: rmHEtJl6IkFsp2ROxw3Y99nEZkBXlAL6
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-05-04_06,2023-05-04_01,2023-02-09_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
  lowpriorityscore=0 priorityscore=1501 bulkscore=0 phishscore=0
- mlxlogscore=619 spamscore=0 suspectscore=0 impostorscore=0 clxscore=1015
+ mlxlogscore=735 spamscore=0 suspectscore=0 impostorscore=0 clxscore=1015
  mlxscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2303200000 definitions=main-2305040086
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,79 +80,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use dpb color format, width and height of output port
-for calculating buffer size of dpb buffers.
+Set opb format to TP10_UWC and dpb to client set format
+when bit depth change to 10 bit is detecting by firmware.
 
 Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
 ---
- drivers/media/platform/qcom/venus/helpers.c          | 4 ++++
- drivers/media/platform/qcom/venus/hfi_plat_bufs.h    | 3 +++
- drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c | 8 +++++++-
- 3 files changed, 14 insertions(+), 1 deletion(-)
+ drivers/media/platform/qcom/venus/helpers.c | 18 ++++++++++++++++++
+ drivers/media/platform/qcom/venus/vdec.c    |  5 ++++-
+ 2 files changed, 22 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/media/platform/qcom/venus/helpers.c b/drivers/media/platform/qcom/venus/helpers.c
-index 5946def..4ad6232 100644
+index 4ad6232..4f48ebd 100644
 --- a/drivers/media/platform/qcom/venus/helpers.c
 +++ b/drivers/media/platform/qcom/venus/helpers.c
-@@ -641,12 +641,16 @@ static int platform_get_bufreq(struct venus_inst *inst, u32 buftype,
- 	if (is_dec) {
- 		params.width = inst->width;
- 		params.height = inst->height;
-+		params.out_width = inst->out_width;
-+		params.out_height = inst->out_height;
- 		params.codec = inst->fmt_out->pixfmt;
- 		params.hfi_color_fmt = to_hfi_raw_fmt(inst->fmt_cap->pixfmt);
- 		params.dec.max_mbs_per_frame = mbs_per_frame_max(inst);
- 		params.dec.buffer_size_limit = 0;
- 		params.dec.is_secondary_output =
- 			inst->opb_buftype == HFI_BUFFER_OUTPUT2;
-+		if (params.dec.is_secondary_output)
-+			params.hfi_dpb_color_fmt = inst->dpb_fmt;
- 		params.dec.is_interlaced =
- 			inst->pic_struct != HFI_INTERLACE_FRAME_PROGRESSIVE;
- 	} else {
-diff --git a/drivers/media/platform/qcom/venus/hfi_plat_bufs.h b/drivers/media/platform/qcom/venus/hfi_plat_bufs.h
-index 52a51a3..25e6074 100644
---- a/drivers/media/platform/qcom/venus/hfi_plat_bufs.h
-+++ b/drivers/media/platform/qcom/venus/hfi_plat_bufs.h
-@@ -12,8 +12,11 @@
- struct hfi_plat_buffers_params {
- 	u32 width;
- 	u32 height;
-+	u32 out_width;
-+	u32 out_height;
- 	u32 codec;
- 	u32 hfi_color_fmt;
-+	u32 hfi_dpb_color_fmt;
- 	enum hfi_version version;
- 	u32 num_vpp_pipes;
- 	union {
-diff --git a/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c b/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c
-index ea25c45..3855b04 100644
---- a/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c
-+++ b/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c
-@@ -1185,6 +1185,7 @@ static int bufreq_dec(struct hfi_plat_buffers_params *params, u32 buftype,
- 	enum hfi_version version = params->version;
- 	u32 codec = params->codec;
- 	u32 width = params->width, height = params->height, out_min_count;
-+	u32 out_width = params->out_width, out_height = params->out_height;
- 	struct dec_bufsize_ops *dec_ops;
- 	bool is_secondary_output = params->dec.is_secondary_output;
- 	bool is_interlaced = params->dec.is_interlaced;
-@@ -1235,7 +1236,12 @@ static int bufreq_dec(struct hfi_plat_buffers_params *params, u32 buftype,
- 		bufreq->count_min = out_min_count;
- 		bufreq->size =
- 			venus_helper_get_framesz_raw(params->hfi_color_fmt,
--						     width, height);
-+						     out_width, out_height);
-+		if (buftype == HFI_BUFFER_OUTPUT &&
-+		    params->dec.is_secondary_output)
-+			bufreq->size =
-+				venus_helper_get_framesz_raw(params->hfi_dpb_color_fmt,
-+							     out_width, out_height);
- 	} else if (buftype == HFI_BUFFER_INTERNAL_SCRATCH(version)) {
- 		bufreq->size = dec_ops->scratch(width, height, is_interlaced);
- 	} else if (buftype == HFI_BUFFER_INTERNAL_SCRATCH_1(version)) {
+@@ -1770,6 +1770,24 @@ int venus_helper_get_out_fmts(struct venus_inst *inst, u32 v4l2_fmt,
+ 	if (!caps)
+ 		return -EINVAL;
+ 
++	if (inst->bit_depth == VIDC_BITDEPTH_10 &&
++	    inst->session_type == VIDC_SESSION_TYPE_DEC) {
++		found_ubwc = find_fmt_from_caps(caps, HFI_BUFFER_OUTPUT,
++						HFI_COLOR_FORMAT_YUV420_TP10_UBWC);
++		found = find_fmt_from_caps(caps, HFI_BUFFER_OUTPUT2,
++					   fmt);
++		if (found_ubwc && found) {
++			/*
++			 * Hard-code DPB buffers to be 10bit UBWC
++			 * until V4L2 is able to expose compressed/tiled
++			 * formats to applications.
++			 */
++			*out_fmt = HFI_COLOR_FORMAT_YUV420_TP10_UBWC;
++			*out2_fmt = fmt;
++			return 0;
++		}
++	}
++
+ 	if (ubwc) {
+ 		ubwc_fmt = fmt | HFI_COLOR_FORMAT_UBWC_BASE;
+ 		found_ubwc = find_fmt_from_caps(caps, HFI_BUFFER_OUTPUT,
+diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
+index 687d62e..69f7f6e 100644
+--- a/drivers/media/platform/qcom/venus/vdec.c
++++ b/drivers/media/platform/qcom/venus/vdec.c
+@@ -701,6 +701,9 @@ static int vdec_set_work_route(struct venus_inst *inst)
+ }
+ 
+ #define is_ubwc_fmt(fmt) (!!((fmt) & HFI_COLOR_FORMAT_UBWC_BASE))
++#define is_10bit_ubwc_fmt(fmt) (!!((fmt) & HFI_COLOR_FORMAT_10_BIT_BASE & \
++				 HFI_COLOR_FORMAT_UBWC_BASE))
++
+ 
+ static int vdec_output_conf(struct venus_inst *inst)
+ {
+@@ -748,7 +751,7 @@ static int vdec_output_conf(struct venus_inst *inst)
+ 		inst->opb_fmt = out2_fmt;
+ 		inst->dpb_buftype = HFI_BUFFER_OUTPUT;
+ 		inst->dpb_fmt = out_fmt;
+-	} else if (is_ubwc_fmt(out2_fmt)) {
++	} else if (is_ubwc_fmt(out2_fmt) || is_10bit_ubwc_fmt(out_fmt)) {
+ 		inst->opb_buftype = HFI_BUFFER_OUTPUT;
+ 		inst->opb_fmt = out_fmt;
+ 		inst->dpb_buftype = HFI_BUFFER_OUTPUT2;
 -- 
 2.7.4
 
