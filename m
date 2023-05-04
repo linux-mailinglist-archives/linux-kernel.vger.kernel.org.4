@@ -2,167 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 922BD6F642F
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 06:58:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 722876F6431
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 06:59:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbjEDE6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 00:58:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44588 "EHLO
+        id S229709AbjEDE7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 00:59:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbjEDE6Q (ORCPT
+        with ESMTP id S229553AbjEDE7N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 00:58:16 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FAF61992;
-        Wed,  3 May 2023 21:58:15 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3444a2JF016832;
-        Thu, 4 May 2023 04:58:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=XOez8aIhSf+YdRgRsaYBvkI2AQ5HgrExKkF0OV2wdf4=;
- b=D94yAvxnbIoKNGkwC90wF5uDpyAzwF3CKWaSNJ75lThPY6KVd007I0q7bkdVcCN7txA/
- 6mf2dImNVA9jCerRW1ZNfW6WAr6tqzF8oeV9lZQNHVuMKvhzW72w2LRytS1VSoAevTs4
- NwxeLeVXw7cJuNQRt72pIaAWrR7ZEuxCXa9c7Bdq35Gj95MJgIZONviUSM4XsMan7uHk
- 3zTrqBISyfiV7c1VRwBB4RA9TipRD+pfXMU224A8gBb9XF8hNe6pwBVB2uX1yo3IuC1s
- HS01jA0YH3C0GZ68mX99L6Lgs1htxl8R2rLvHC1fjfKnxDpKyyMWDuXNziSwHRk5wwwz EA== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qbbsw36nm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 04 May 2023 04:58:09 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3444w8RT032412
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 4 May 2023 04:58:08 GMT
-Received: from varda-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 3 May 2023 21:58:03 -0700
-Date:   Thu, 4 May 2023 10:27:58 +0530
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <amitk@kernel.org>,
-        <thara.gopinath@gmail.com>, <rafael@kernel.org>,
-        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Praveenkumar I <quic_ipkumar@quicinc.com>
-Subject: Re: [PATCH 1/4] dt-bindings: thermal: tsens: Add ipq9574 compatible
-Message-ID: <20230504045757.GA13434@varda-linux.qualcomm.com>
-References: <cover.1682682753.git.quic_varada@quicinc.com>
- <3c6f7510d175ba5a3c81730b010f6c421b2fbf2d.1682682753.git.quic_varada@quicinc.com>
- <16443d11-7948-d224-cfef-b6c1b5c3d60d@linaro.org>
- <20230503071055.GB1087@varda-linux.qualcomm.com>
- <915eea5b-6cef-d346-7cbd-b679726113ad@linaro.org>
+        Thu, 4 May 2023 00:59:13 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97EA31BCC;
+        Wed,  3 May 2023 21:59:12 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f11d267d8bso26487e87.2;
+        Wed, 03 May 2023 21:59:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683176351; x=1685768351;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3ErlKNWxBynVKO1TxiPrcdtE3Y8hGtnJhFEqGtEQkc8=;
+        b=soIwOFlSuDbixg2p6QtdSv5cD/tBfMNtUK26BEhWsrzI1LyhraH1IP/7pkVKQNhxHs
+         HUIJgYKti/U32k8lDHufVq5ADib5F02en5QQvxvNpYP8aJzrvoggy1I+YUu1tViv2LnK
+         NL0KfxYalHS7fqsfbvsS8UK65BCMmtRkb8ufoAHy2r36w7gq82xc+mwsq8X6cS5Vi4MA
+         VufyakMl7lhWek/zQLsSdAAE4a0H4/bPZ0rWmiVDp1KwCSWqLXvyb6EHoaRbZftbnYU6
+         PlYmFCq57kaeltIRilTngjqhGubBKB9ehrBtcUBxwuGep2/pRTyDH0kZEIlpJLclS8kv
+         BIUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683176351; x=1685768351;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3ErlKNWxBynVKO1TxiPrcdtE3Y8hGtnJhFEqGtEQkc8=;
+        b=OYRuxPuY5zaVy/7G/MO90gmWw0PNt5nHxOt0kzFlr2KuwqSzqZfzD9b8Zru79GZcVY
+         bB+30zIYUfXQfAwE8GrY0+2dHnEiJ1TeDuw+Hyz9v9nkHcCrUAefnffgxT2+WTYO/TdE
+         JxC43wP624nEa6yYxxag2P3SyRFb1c7N/PHQ9I0nrRLw+byyB69Seutm2K2Ejo3hhbAa
+         npeIXa2ADY7EEYacqTdiJGGER/U3ZSLNqVTdCiz7WQ/uUGxueFTS0gJTGbGcGEg0Mc7L
+         Wwrnb0r+ih3aZEBrqC4TzA21CE6l6pNFtpDBgdobpMY64lAB1f6QzIvhJh8tjI9R7qru
+         T1Qg==
+X-Gm-Message-State: AC+VfDysYPJpRbbldxhpPg6GY2iHHmh0MG0CPOS8oTK8MlxhoeJftLh+
+        MfuBXV1K36HRQKzbQTXzZppCArkADP0=
+X-Google-Smtp-Source: ACHHUZ52RfsUVAy4cdynTNVaZuAil4yNWLQoT4m/gUgpZPeOgkBoOHExFoQ6LIau3jXi/f7BzefBNg==
+X-Received: by 2002:a2e:97c5:0:b0:2aa:43cd:57c9 with SMTP id m5-20020a2e97c5000000b002aa43cd57c9mr497393ljj.36.1683176350423;
+        Wed, 03 May 2023 21:59:10 -0700 (PDT)
+Received: from fedora (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
+        by smtp.gmail.com with ESMTPSA id v1-20020a2e9901000000b002ab4ceea005sm3242194lji.136.2023.05.03.21.59.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 May 2023 21:59:09 -0700 (PDT)
+Date:   Thu, 4 May 2023 07:59:00 +0300
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] iio: bu27034: Reinit regmap cache after reset
+Message-ID: <ZFM7lE4ZuDrUTspH@fedora>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="WjVFt0L+e0GrUcbG"
 Content-Disposition: inline
-In-Reply-To: <915eea5b-6cef-d346-7cbd-b679726113ad@linaro.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: IIGMl5GEIhuIyR1Tkq8seYgGcw_g0vZw
-X-Proofpoint-ORIG-GUID: IIGMl5GEIhuIyR1Tkq8seYgGcw_g0vZw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-04_02,2023-05-03_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 adultscore=0 suspectscore=0 malwarescore=0
- mlxlogscore=965 impostorscore=0 bulkscore=0 mlxscore=0 phishscore=0
- spamscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2305040041
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 03, 2023 at 09:42:28AM +0200, Krzysztof Kozlowski wrote:
-> On 03/05/2023 09:10, Varadarajan Narayanan wrote:
-> > On Mon, May 01, 2023 at 09:08:49AM +0200, Krzysztof Kozlowski wrote:
-> >> On 28/04/2023 16:52, Varadarajan Narayanan wrote:
-> >>> From: Praveenkumar I <quic_ipkumar@quicinc.com>
-> >>>
-> >>> Qualcomm IPQ9574 has tsens v2.3.1 block, which is similar to IPQ8074 tsens.
-> >>>
-> >>> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
-> >>> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> >>> ---
-> >>>  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 3 +++
-> >>>  1 file changed, 3 insertions(+)
-> >>>
-> >>> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> >>> index d1ec963..8e2208c 100644
-> >>> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> >>> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> >>> @@ -66,6 +66,7 @@ properties:
-> >>>        - description: v2 of TSENS with combined interrupt
-> >>>          enum:
-> >>>            - qcom,ipq8074-tsens
-> >>> +          - qcom,ipq9574-tsens
-> >>
-> >> Your drive change indicates they are compatible, so make them
-> >> compatible. 9574 followed by 8074.
-> >
-> > Not able to understand. You want IPQ9574 to use "qcom,ipq8074-tsens"
-> > instead of adding a "qcom,ipq9574-tsens" and no need to add an extra
-> > entry to the driver like
->
-> Assuming the devices are really compatible, which your driver change
-> suggests, I want to use two compatibles. 9574 followed by 8074 fallback,
-> just like we do for all Qualcomm IP blocks. Then as you said - no need
-> for driver change.
 
-With schema like this
-	items:
-	  - enum:
-	      - qcom,ipq8074-tsens
-	      - qcom,ipq9574-tsens
-and DTS as
-	compatible = "qcom,ipq9574-tsens", "qcom,ipq8074-tsens";
+--WjVFt0L+e0GrUcbG
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-'make dtbs_check' gives the following error
+When BU27034 restores the default register values when SWRESET is
+issued. This can cause register cache to be outdated.
 
-arch/arm64/boot/dts/qcom/ipq9574-rdp433.dtb: thermal-sensor@4a9000: compatible: 'oneOf' conditional failed, one must be fixed:
-        ['qcom,ipq9574-tsens', 'qcom,ipq8074-tsens'] is too long
+Rebuild register cache after SWRESET.
 
-To fix the above error, I have to change the schema as
+Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+Fixes: e52afbd61039 ("iio: light: ROHM BU27034 Ambient Light Sensor")
 
-	items:
-	  - enum:
-	      - qcom,ipq8074-tsens
-	      - qcom,ipq9574-tsens
-	  - const: qcom,tsens-v2-combined-int
+---
+I noticed this was missing while writing driver for another light
+sensor. The change is not tested in hardware as I don't have the BU27034
+at my hands right now. Careful review would be highly appreciated.
 
-and change ipq8074 & ipq9754 DTS as
+This change is built on top of the
+https://lore.kernel.org/all/ZFIw%2FKdApZe1euN8@fedora/
+and could probably be squashed with it. Unfortunately I spotted the
+missing cache re-init only after sending the fix linked above.
 
-	compatible = "qcom,ipq8074-tsens", "qcom,tsens-v2-combined-int";
-	compatible = "qcom,ipq9574-tsens", "qcom,tsens-v2-combined-int";
+Please, let me know if you want me to squash and respin.
+---
+ drivers/iio/light/rohm-bu27034.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-For this to work, have to introduce qcom,tsens-v2-combined-int in
-the driver with
-	}, {
-		.compatible = "qcom,tsens-v2-combined-int",
-		.data = &data_ipq8074,
-	},
-
-This i guess will defeat the purpose. So shall we leave it as it
-is now, or shall I change driver, schema and ipq8074 + ip9574 DTS
-with qcom,tsens-v2-combined-int? Let me know.
-
-Thanks
-Varada
+diff --git a/drivers/iio/light/rohm-bu27034.c b/drivers/iio/light/rohm-bu27=
+034.c
+index 740ebd86b6e5..f85194fda6b0 100644
+--- a/drivers/iio/light/rohm-bu27034.c
++++ b/drivers/iio/light/rohm-bu27034.c
+@@ -1281,6 +1281,13 @@ static int bu27034_chip_init(struct bu27034_data *da=
+ta)
+ 		return dev_err_probe(data->dev, ret, "Sensor reset failed\n");
+=20
+ 	msleep(1);
++
++	ret =3D regmap_reinit_cache(data->regmap, &bu27034_regmap);
++	if (ret) {
++		dev_err(data->dev, "Failed to reinit reg cache\n");
++		return ret;
++	}
++
+ 	/*
+ 	 * Read integration time here to ensure it is in regmap cache. We do
+ 	 * this to speed-up the int-time acquisition in the start of the buffer
+--=20
+2.40.0
 
 
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
 
-> Best regards,
-> Krzysztof
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--WjVFt0L+e0GrUcbG
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmRTO40ACgkQeFA3/03a
+ocUA9gf/UMa46MuFkteiHUqt7W2SqZGZFWFl4nao++CmtZ4ZyKgJdOq241lKI2cD
++O7+INvepfEnUgOpsGmXS4bnb2TZWb7GKQhqcV2fOJfwzBDB+EF4v3Vztz4s9uZz
+cTr+9vBeIh+IJSY9HXIAtN6yZH8Uw4XWMylToy7f4UAlkJqAqCIYlznH9baUy5Pp
+3zOkH0/uoCzuKlIut/dWjOEWkoa6vRdeKBv1tveFNlQMnbxlVbJmk6LX6fNR/6K/
+EFI0cwiV+La0nikGV0fvJYlHPbbIrggEM84mHwNTQhXK5rWtDwiJKdHaVEQoDMxq
+6R7emeYzjNSrS+iEGzzhy60cIyB0GQ==
+=QaGQ
+-----END PGP SIGNATURE-----
+
+--WjVFt0L+e0GrUcbG--
