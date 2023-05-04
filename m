@@ -2,119 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0657E6F703B
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 18:51:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 241156F703F
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 18:53:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbjEDQvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 12:51:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33922 "EHLO
+        id S229930AbjEDQxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 12:53:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbjEDQvQ (ORCPT
+        with ESMTP id S229660AbjEDQxI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 12:51:16 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C5D128
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 09:51:15 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id d75a77b69052e-3f0a2f8216fso788531cf.0
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 09:51:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683219075; x=1685811075;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=smUXkej0xPzQw1tg67ntvigJgPPhrNFSnWepihD6ur8=;
-        b=K1oJeQe320jy4VAtg3hw+5lreYPqWQXRA2DhbRqCx+JumP5I+wGtVUapJkj4xbP5Gc
-         LekZghaozR/4Qo4Man59/cjwsyO1mWdp1HYs2Up0YspSfb5Y09KyJUACWQO64fh2SfhT
-         /WrgNUBfJy561g+iLGCchaOa0QJrOGh+51kgnejTI4ms2xjEgy0cE0eYTdIcQfuaBbj2
-         laz1HzpEdBlAd4yN3mcFlfSFxvlDATXF+jgnemjKagcvfb4oBUn6y5WhU1hAzE9eLHd8
-         YBShAagG+6NldxNv9bhLZFUy84FIwetvoEpA2oDHLtvoPB+boKrhKz9OSAuX1NBtfLR1
-         3Mtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683219075; x=1685811075;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=smUXkej0xPzQw1tg67ntvigJgPPhrNFSnWepihD6ur8=;
-        b=kb66OCokoaXw5EoKdxwoObfsscni0EG0X/yS1aan8QNjxdeLywL/UtTA9kGcTec9/m
-         z7/FG6o0YpAPcAbt+GOwpIbFi1B46+fPkkcSu6yFmrYvkH4q9PX9hGNvW7YC1oWF/SoL
-         6Uxv7h0iyjuxv+4m60+z4UxaMm8t0qcriNprBZIocb01wtP0Pui3kTk46OkKBfemwWth
-         McU7BT+1hZZKSzEZ4j60BaOQGTnimONcK4L/eguv3H9hrUqEAd+rAOEWyED6rXQJq6RF
-         rUTbGsavm8mudcpfHcfnuqlGPtNJvowX31KcMgf14hLC9dncWlssrwL3fOV2ZFPGbkeS
-         QJIg==
-X-Gm-Message-State: AC+VfDxHTOC9IPL1NE6HhSluLvzBO8rl5hUsui9NgjcO0x4peybiVzO0
-        1kpGD1aoZ3jvUbXR0nfry+PhQkQQy7bg364X+0843Q3hjwnI2emgxY2xkA==
-X-Google-Smtp-Source: ACHHUZ57M6XvrZOUlJI4JuZPd/5ZX1/+KJTt4pAsY8OkJ3eOXQG7rcN0DdhPWJ3waUZhDaSXwPJ+uOusE1Vz1WLvmCE=
-X-Received: by 2002:ac8:7f8c:0:b0:3f1:f8d0:a3a7 with SMTP id
- z12-20020ac87f8c000000b003f1f8d0a3a7mr498652qtj.8.1683219074618; Thu, 04 May
- 2023 09:51:14 -0700 (PDT)
+        Thu, 4 May 2023 12:53:08 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8752226B8
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 09:53:07 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1pucCB-0003bZ-Bc; Thu, 04 May 2023 18:52:43 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1pucC8-0001qN-Ca; Thu, 04 May 2023 18:52:40 +0200
+Date:   Thu, 4 May 2023 18:52:40 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     andreas@fatal.se, jun.li@nxp.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 3/4] usb: typec: tcpci: clear the fault status bit
+Message-ID: <20230504165240.plans4ddovskwqx6@pengutronix.de>
+References: <20230504-b4-v6-3-topic-boards-imx8mp-evk-dual-role-usb-v2-0-3889b1b2050c@pengutronix.de>
+ <20230504-b4-v6-3-topic-boards-imx8mp-evk-dual-role-usb-v2-3-3889b1b2050c@pengutronix.de>
+ <6a894ff0-3232-4ef0-5e26-95471cc33ed9@roeck-us.net>
+ <20230504142708.l4xo4sbl7wzsrbql@pengutronix.de>
+ <670c3604-7287-ed7d-8e37-b0458ff28ca8@roeck-us.net>
 MIME-Version: 1.0
-References: <000000000000951c2505d8a0a8e5@google.com> <00000000000091b72905fae0eda2@google.com>
-In-Reply-To: <00000000000091b72905fae0eda2@google.com>
-From:   Aleksandr Nogikh <nogikh@google.com>
-Date:   Thu, 4 May 2023 18:51:03 +0200
-Message-ID: <CANp29Y6PHCKRWSQvhs2gKTMC3u95Zo8VLTmXRxP1=5X00EKh-w@mail.gmail.com>
-Subject: Re: [syzbot] [can?] WARNING in j1939_session_deactivate_activate_next
-To:     syzbot <syzbot+3d2eaacbc2b94537c6c5@syzkaller.appspotmail.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kernel@pengutronix.de,
-        kuba@kernel.org, linux-can@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux@rempel-privat.de,
-        mkl@pengutronix.de, netdev@vger.kernel.org,
-        o.rempel@pengutronix.de, pabeni@redhat.com, robin@protonic.nl,
-        socketcan@hartkopp.net, syzkaller-bugs@googlegroups.com,
-        william.xuanziyang@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <670c3604-7287-ed7d-8e37-b0458ff28ca8@roeck-us.net>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 4, 2023 at 6:47=E2=80=AFPM syzbot
-<syzbot+3d2eaacbc2b94537c6c5@syzkaller.appspotmail.com> wrote:
->
-> syzbot suspects this issue was fixed by commit:
->
-> commit d0553680f94c49bbe0e39eb50d033ba563b4212d
-> Author: Ziyang Xuan <william.xuanziyang@huawei.com>
-> Date:   Mon Sep 6 09:42:00 2021 +0000
->
->     can: j1939: fix errant WARN_ON_ONCE in j1939_session_deactivate
->
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D10cf099028=
-0000
-> start commit:   fa182ea26ff0 net: phy: micrel: Fixes FIELD_GET assertion
-> git tree:       net
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D796b7c2847a68=
-66a
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3D3d2eaacbc2b9453=
-7c6c5
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D1455e3b2880=
-000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D10296e7c88000=
-0
->
-> If the result looks correct, please mark the issue as fixed by replying w=
-ith:
->
-> #syz fix: can: j1939: fix errant WARN_ON_ONCE in j1939_session_deactivate
+On 23-05-04, Guenter Roeck wrote:
+> On 5/4/23 07:27, Marco Felsch wrote:
+> > On 23-05-04, Guenter Roeck wrote:
+> > > On 5/4/23 06:46, Marco Felsch wrote:
+> > > > According the "USB Type-C Port Controller Interface Specification v2.0"
+> > > > the TCPC sets the fault status register bit-7
+> > > > (AllRegistersResetToDefault) once the registers have been reseted to
+> > > 
+> > > cleared ? set ?
+> > 
+> > Sry. I don't get this.
+> > 
+> 
+> instead of "reseted" which isn't really a word.
 
-Looks correct.
-#syz fix: can: j1939: fix errant WARN_ON_ONCE in j1939_session_deactivate
+Sure, thanks.
 
->
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisect=
-ion
->
-> --
-> You received this message because you are subscribed to the Google Groups=
- "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgi=
-d/syzkaller-bugs/00000000000091b72905fae0eda2%40google.com.
+Regards,
+  Marco
