@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDC3A6F75C4
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 22:01:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7ACA6F75D0
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 22:02:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231909AbjEDUBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 16:01:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52136 "EHLO
+        id S232326AbjEDUCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 16:02:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232192AbjEDUBG (ORCPT
+        with ESMTP id S232297AbjEDUBN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 16:01:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E30150C4;
-        Thu,  4 May 2023 12:51:18 -0700 (PDT)
+        Thu, 4 May 2023 16:01:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C570A1890B;
+        Thu,  4 May 2023 12:51:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B6D89637DA;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 38CB863846;
+        Thu,  4 May 2023 19:49:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A68A9C433EF;
         Thu,  4 May 2023 19:49:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 632C7C43323;
-        Thu,  4 May 2023 19:49:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683229788;
-        bh=f0J1s3O97S5PWIY9pto77hRoNRoyEl5+G6HMZ08MPJ4=;
+        s=k20201202; t=1683229789;
+        bh=izABLxX+9a8wiRgDI3zSiWIjNG9o+UA2j3BELE3awTQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=beSDdCOJSpQW25kR3OxKD9ngLvjUowsL6vZRu1CnPN5jhRKvkSOVfrqyJtulyBUxG
-         2Lk9+gXR1SuX27feEXyFT8+83papH476QhM9BxWItVI8B+mmcmZWR3ODyz2WBA29ps
-         YpHTwriDPRId6ts0P68rZhweJND/pYiiXhut5RkmzZvOdnhp6EWRweE3Fr2zg7ujOs
-         5LCx9h2c+5JpVJp/WeGpcKty/pvJIIWrPQNSbQbAhBV5IvjW5LsCkU+ovX2AxZv07K
-         cMfUh6odUAP7HPqAqsz6tINsyWyVPnlZJHMHs1pQB5CivF4Bhm2NLdomhuKEpzb4+k
-         0vXj21sps2Kkw==
+        b=ZmuJZnQRgaLkdSF+Z5kfWIqDK/kqXmJXpHEBXm4Pfz7AJHZkHJ00W5XxP6kO4mrMb
+         53sm1CVjYcNq/K4dkpLYpde7BMzKNiV2B2hYHSTCq1LkJmsGiYytL2BiQN4/CDJiYc
+         niQqICbHxsFms3nx0hhdrxXAt8N4kgiPIDZ5pTORKo2kfFttTt39AO08ZJIL+wMQyU
+         yBkLWsZn5mmhnOEtfWbs6oSYcSrtJbtMDMh4u+DctkRgxlovoOn5iDCnc1p790eoPg
+         j1lqynNbOP/kF7LH3PHL+Rz2GXstIGWKOrX8A4bDrvso6hPztmv33aVpR4Pz3g11em
+         vpVTT6q4ki4Uw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jan Kara <jack@suse.cz>,
-        syzbot+4fec412f59eba8c01b77@syzkaller.appspotmail.com,
-        Sasha Levin <sashal@kernel.org>, jack@suse.com,
-        linux-ext4@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 04/24] ext2: Check block size validity during mount
-Date:   Thu,  4 May 2023 15:49:17 -0400
-Message-Id: <20230504194937.3808414-4-sashal@kernel.org>
+Cc:     Justin Tee <justin.tee@broadcom.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>, james.smart@broadcom.com,
+        dick.kennedy@broadcom.com, jejb@linux.ibm.com,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 05/24] scsi: lpfc: Prevent lpfc_debugfs_lockstat_write() buffer overflow
+Date:   Thu,  4 May 2023 15:49:18 -0400
+Message-Id: <20230504194937.3808414-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230504194937.3808414-1-sashal@kernel.org>
 References: <20230504194937.3808414-1-sashal@kernel.org>
@@ -48,8 +49,8 @@ MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,52 +59,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jan Kara <jack@suse.cz>
+From: Justin Tee <justin.tee@broadcom.com>
 
-[ Upstream commit 62aeb94433fcec80241754b70d0d1836d5926b0a ]
+[ Upstream commit c6087b82a9146826564a55c5ca0164cac40348f5 ]
 
-Check that log of block size stored in the superblock has sensible
-value. Otherwise the shift computing the block size can overflow leading
-to undefined behavior.
+A static code analysis tool flagged the possibility of buffer overflow when
+using copy_from_user() for a debugfs entry.
 
-Reported-by: syzbot+4fec412f59eba8c01b77@syzkaller.appspotmail.com
-Signed-off-by: Jan Kara <jack@suse.cz>
+Currently, it is possible that copy_from_user() copies more bytes than what
+would fit in the mybuf char array.  Add a min() restriction check between
+sizeof(mybuf) - 1 and nbytes passed from the userspace buffer to protect
+against buffer overflow.
+
+Link: https://lore.kernel.org/r/20230301231626.9621-2-justintee8345@gmail.com
+Signed-off-by: Justin Tee <justin.tee@broadcom.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext2/ext2.h  | 1 +
- fs/ext2/super.c | 7 +++++++
- 2 files changed, 8 insertions(+)
+ drivers/scsi/lpfc/lpfc_debugfs.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/fs/ext2/ext2.h b/fs/ext2/ext2.h
-index 5136b7289e8da..f06367cfd7641 100644
---- a/fs/ext2/ext2.h
-+++ b/fs/ext2/ext2.h
-@@ -177,6 +177,7 @@ static inline struct ext2_sb_info *EXT2_SB(struct super_block *sb)
- #define EXT2_MIN_BLOCK_SIZE		1024
- #define	EXT2_MAX_BLOCK_SIZE		4096
- #define EXT2_MIN_BLOCK_LOG_SIZE		  10
-+#define EXT2_MAX_BLOCK_LOG_SIZE		  16
- #define EXT2_BLOCK_SIZE(s)		((s)->s_blocksize)
- #define	EXT2_ADDR_PER_BLOCK(s)		(EXT2_BLOCK_SIZE(s) / sizeof (__u32))
- #define EXT2_BLOCK_SIZE_BITS(s)		((s)->s_blocksize_bits)
-diff --git a/fs/ext2/super.c b/fs/ext2/super.c
-index 9a6475b2ab28b..ab01ec7ac48c5 100644
---- a/fs/ext2/super.c
-+++ b/fs/ext2/super.c
-@@ -950,6 +950,13 @@ static int ext2_fill_super(struct super_block *sb, void *data, int silent)
- 		goto failed_mount;
+diff --git a/drivers/scsi/lpfc/lpfc_debugfs.c b/drivers/scsi/lpfc/lpfc_debugfs.c
+index fbc76d69ea0b4..2b77cbbcdccb6 100644
+--- a/drivers/scsi/lpfc/lpfc_debugfs.c
++++ b/drivers/scsi/lpfc/lpfc_debugfs.c
+@@ -2159,10 +2159,13 @@ lpfc_debugfs_lockstat_write(struct file *file, const char __user *buf,
+ 	char mybuf[64];
+ 	char *pbuf;
+ 	int i;
++	size_t bsize;
+ 
+ 	memset(mybuf, 0, sizeof(mybuf));
+ 
+-	if (copy_from_user(mybuf, buf, nbytes))
++	bsize = min(nbytes, (sizeof(mybuf) - 1));
++
++	if (copy_from_user(mybuf, buf, bsize))
+ 		return -EFAULT;
+ 	pbuf = &mybuf[0];
+ 
+@@ -2183,7 +2186,7 @@ lpfc_debugfs_lockstat_write(struct file *file, const char __user *buf,
+ 			qp->lock_conflict.wq_access = 0;
+ 		}
  	}
+-	return nbytes;
++	return bsize;
+ }
+ #endif
  
-+	if (le32_to_cpu(es->s_log_block_size) >
-+	    (EXT2_MAX_BLOCK_LOG_SIZE - BLOCK_SIZE_BITS)) {
-+		ext2_msg(sb, KERN_ERR,
-+			 "Invalid log block size: %u",
-+			 le32_to_cpu(es->s_log_block_size));
-+		goto failed_mount;
-+	}
- 	blocksize = BLOCK_SIZE << le32_to_cpu(sbi->s_es->s_log_block_size);
- 
- 	if (test_opt(sb, DAX)) {
 -- 
 2.39.2
 
