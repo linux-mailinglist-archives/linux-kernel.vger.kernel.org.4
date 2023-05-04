@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B59E6F76A0
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 22:11:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2FCB6F767C
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 22:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232974AbjEDUJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 16:09:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33860 "EHLO
+        id S232735AbjEDUHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 16:07:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232786AbjEDUJU (ORCPT
+        with ESMTP id S233009AbjEDUFl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 16:09:20 -0400
+        Thu, 4 May 2023 16:05:41 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48D931A105;
-        Thu,  4 May 2023 12:54:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48F519925;
+        Thu,  4 May 2023 12:53:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 15E706386D;
-        Thu,  4 May 2023 19:52:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86039C4339B;
-        Thu,  4 May 2023 19:52:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BEDA63899;
+        Thu,  4 May 2023 19:52:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDF67C433EF;
+        Thu,  4 May 2023 19:52:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683229952;
-        bh=xYrx8c4EG0HeFGp5LDwwZL0KcMzUPrcmpGA1rkAKKRs=;
+        s=k20201202; t=1683229953;
+        bh=HIskSI5/26AxnyRWmrGkaPUF4mHYJscsMvsbDYG59lw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aQEheBUHZx6uNsCmTQOMv5BXwKVXPcJ67JhQss53BH37RqhEsvWXhGxIuuUl9V+jS
-         Gem2CXwi3CM3bqcXzLHNKuDXaEy6dPeLIoYnB/5EPutDAA259Fa8aP8DzevB0ZZSAY
-         DmASkcPuPVwi0mQDITf1S+JLHJt4ksgTDm7+xDD4gSST/HoaN9EUInmW+KmwgmJ8jw
-         LuGZp5BzclcZGKkfY7dECLeCgoacsBQhH+5VDVgEAmrV+VIuyOY6mKm8P/lY7PaK5D
-         XAUesDeLP1nEnAfXduMO6TfIebtgHxxN7gKlSG2Lbj6bRMj20z+W8ImPEjm1HAMTaz
-         6eebeg+pXKwDw==
+        b=Kpkvu4MU0SX+bM89RG9ZuW96ojSxl0BXxRjSY7Ncl65IcvnNiTusLScXnXqrEZZZY
+         OjN720EileXwja65831f88ItBifaqFfI1MdAiQijG+ZT0RhMz9tZloLFvjnbiA62hZ
+         WR0231eNYfMOl0TTKkgq9r9aBBE2Z8Nwnzkf1+0YMWAz2vGYZwES0X9pbta9bw7lxw
+         cF8s+Hkh/3vPsHMe3NTkOzU09MSSGjmhrWrVUSKlUpFmmq35vCUTF70fhqRIMLF3zy
+         TiwvvylKhsIF0jFgVzgPU0lgTVYk4Z2EnDsKihFho0df+OUjSM4hR1Q4JVB51VKhOm
+         qo+WASSiATzqQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ojaswin Mujoo <ojaswin@linux.ibm.com>, Jan Kara <jack@suse.cz>,
-        Ritesh Harjani <ritesh.list@gmail.com>,
-        Theodore Ts'o <tytso@mit.edu>, Sasha Levin <sashal@kernel.org>,
-        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 10/13] ext4: Fix best extent lstart adjustment logic in ext4_mb_new_inode_pa()
-Date:   Thu,  4 May 2023 15:52:02 -0400
-Message-Id: <20230504195207.3809116-10-sashal@kernel.org>
+Cc:     Chaitanya Kulkarni <kch@nvidia.com>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Ming Lei <ming.lei@redhat.com>,
+        Nitesh Shetty <nj.shetty@samsung.com>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>,
+        linux-block@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 11/13] null_blk: Always check queue mode setting from configfs
+Date:   Thu,  4 May 2023 15:52:03 -0400
+Message-Id: <20230504195207.3809116-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230504195207.3809116-1-sashal@kernel.org>
 References: <20230504195207.3809116-1-sashal@kernel.org>
@@ -50,134 +52,93 @@ X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ojaswin Mujoo <ojaswin@linux.ibm.com>
+From: Chaitanya Kulkarni <kch@nvidia.com>
 
-[ Upstream commit 93cdf49f6eca5e23f6546b8f28457b2e6a6961d9 ]
+[ Upstream commit 63f8793ee60513a09f110ea460a6ff2c33811cdb ]
 
-When the length of best extent found is less than the length of goal extent
-we need to make sure that the best extent atleast covers the start of the
-original request. This is done by adjusting the ac_b_ex.fe_logical (logical
-start) of the extent.
+Make sure to check device queue mode in the null_validate_conf() and
+return error for NULL_Q_RQ as we don't allow legacy I/O path, without
+this patch we get OOPs when queue mode is set to 1 from configfs,
+following are repro steps :-
 
-While doing so, the current logic sometimes results in the best extent's
-logical range overflowing the goal extent. Since this best extent is later
-added to the inode preallocation list, we have a possibility of introducing
-overlapping preallocations. This is discussed in detail here [1].
+modprobe null_blk nr_devices=0
+mkdir config/nullb/nullb0
+echo 1 > config/nullb/nullb0/memory_backed
+echo 4096 > config/nullb/nullb0/blocksize
+echo 20480 > config/nullb/nullb0/size
+echo 1 > config/nullb/nullb0/queue_mode
+echo 1 > config/nullb/nullb0/power
 
-As per Jan's suggestion, to fix this, replace the existing logic with the
-below logic for adjusting best extent as it keeps fragmentation in check
-while ensuring logical range of best extent doesn't overflow out of goal
-extent:
+Entering kdb (current=0xffff88810acdd080, pid 2372) on processor 42 Oops: (null)
+due to oops @ 0xffffffffc041c329
+CPU: 42 PID: 2372 Comm: sh Tainted: G           O     N 6.3.0-rc5lblk+ #5
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
+RIP: 0010:null_add_dev.part.0+0xd9/0x720 [null_blk]
+Code: 01 00 00 85 d2 0f 85 a1 03 00 00 48 83 bb 08 01 00 00 00 0f 85 f7 03 00 00 80 bb 62 01 00 00 00 48 8b 75 20 0f 85 6d 02 00 00 <48> 89 6e 60 48 8b 75 20 bf 06 00 00 00 e8 f5 37 2c c1 48 8b 75 20
+RSP: 0018:ffffc900052cbde0 EFLAGS: 00010246
+RAX: 0000000000000001 RBX: ffff88811084d800 RCX: 0000000000000001
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff888100042e00
+RBP: ffff8881053d8200 R08: ffffc900052cbd68 R09: ffff888105db2000
+R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000002
+R13: ffff888104765200 R14: ffff88810eec1748 R15: ffff88810eec1740
+FS:  00007fd445fd1740(0000) GS:ffff8897dfc80000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000060 CR3: 0000000166a00000 CR4: 0000000000350ee0
+DR0: ffffffff8437a488 DR1: ffffffff8437a489 DR2: ffffffff8437a48a
+DR3: ffffffff8437a48b DR6: 00000000ffff0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ nullb_device_power_store+0xd1/0x120 [null_blk]
+ configfs_write_iter+0xb4/0x120
+ vfs_write+0x2ba/0x3c0
+ ksys_write+0x5f/0xe0
+ do_syscall_64+0x3b/0x90
+ entry_SYSCALL_64_after_hwframe+0x72/0xdc
+RIP: 0033:0x7fd4460c57a7
+Code: 0d 00 f7 d8 64 89 02 48 c7 c0 ff ff ff ff eb b7 0f 1f 00 f3 0f 1e fa 64 8b 04 25 18 00 00 00 85 c0 75 10 b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 51 c3 48 83 ec 28 48 89 54 24 18 48 89 74 24
+RSP: 002b:00007ffd3792a4a8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007fd4460c57a7
+RDX: 0000000000000002 RSI: 000055b43c02e4c0 RDI: 0000000000000001
+RBP: 000055b43c02e4c0 R08: 000000000000000a R09: 00007fd44615b4e0
+R10: 00007fd44615b3e0 R11: 0000000000000246 R12: 0000000000000002
+R13: 00007fd446198520 R14: 0000000000000002 R15: 00007fd446198700
+ </TASK>
 
-1. Check if best extent can be kept at end of goal range and still cover
-   original start.
-2. Else, check if best extent can be kept at start of goal range and still
-   cover original start.
-3. Else, keep the best extent at start of original request.
-
-Also, add a few extra BUG_ONs that might help catch errors faster.
-
-[1] https://lore.kernel.org/r/Y+OGkVvzPN0RMv0O@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com
-
-Suggested-by: Jan Kara <jack@suse.cz>
-Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
-Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Link: https://lore.kernel.org/r/f96aca6d415b36d1f90db86c1a8cd7e2e9d7ab0e.1679731817.git.ojaswin@linux.ibm.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Signed-off-by: Chaitanya Kulkarni <kch@nvidia.com>
+Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
+Reviewed-by: Ming Lei <ming.lei@redhat.com>
+Reviewed-by: Nitesh Shetty <nj.shetty@samsung.com>
+Link: https://lore.kernel.org/r/20230416220339.43845-1-kch@nvidia.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/mballoc.c | 49 ++++++++++++++++++++++++++++++-----------------
- 1 file changed, 31 insertions(+), 18 deletions(-)
+ drivers/block/null_blk.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
-index 60f202e63eebd..374862666128b 100644
---- a/fs/ext4/mballoc.c
-+++ b/fs/ext4/mballoc.c
-@@ -3403,6 +3403,7 @@ static void ext4_mb_use_inode_pa(struct ext4_allocation_context *ac,
- 	BUG_ON(start < pa->pa_pstart);
- 	BUG_ON(end > pa->pa_pstart + EXT4_C2B(sbi, pa->pa_len));
- 	BUG_ON(pa->pa_free < len);
-+	BUG_ON(ac->ac_b_ex.fe_len <= 0);
- 	pa->pa_free -= len;
+diff --git a/drivers/block/null_blk.c b/drivers/block/null_blk.c
+index b499e72b2847e..38660b5cfb73c 100644
+--- a/drivers/block/null_blk.c
++++ b/drivers/block/null_blk.c
+@@ -1780,6 +1780,11 @@ static int null_init_tag_set(struct nullb *nullb, struct blk_mq_tag_set *set)
  
- 	mb_debug(1, "use %llu/%u from inode pa %p\n", start, len, pa);
-@@ -3707,10 +3708,8 @@ ext4_mb_new_inode_pa(struct ext4_allocation_context *ac)
- 		return -ENOMEM;
- 
- 	if (ac->ac_b_ex.fe_len < ac->ac_g_ex.fe_len) {
--		int winl;
--		int wins;
--		int win;
--		int offs;
-+		int new_bex_start;
-+		int new_bex_end;
- 
- 		/* we can't allocate as much as normalizer wants.
- 		 * so, found space must get proper lstart
-@@ -3718,26 +3717,40 @@ ext4_mb_new_inode_pa(struct ext4_allocation_context *ac)
- 		BUG_ON(ac->ac_g_ex.fe_logical > ac->ac_o_ex.fe_logical);
- 		BUG_ON(ac->ac_g_ex.fe_len < ac->ac_o_ex.fe_len);
- 
--		/* we're limited by original request in that
--		 * logical block must be covered any way
--		 * winl is window we can move our chunk within */
--		winl = ac->ac_o_ex.fe_logical - ac->ac_g_ex.fe_logical;
-+		/*
-+		 * Use the below logic for adjusting best extent as it keeps
-+		 * fragmentation in check while ensuring logical range of best
-+		 * extent doesn't overflow out of goal extent:
-+		 *
-+		 * 1. Check if best ex can be kept at end of goal and still
-+		 *    cover original start
-+		 * 2. Else, check if best ex can be kept at start of goal and
-+		 *    still cover original start
-+		 * 3. Else, keep the best ex at start of original request.
-+		 */
-+		new_bex_end = ac->ac_g_ex.fe_logical +
-+			EXT4_C2B(sbi, ac->ac_g_ex.fe_len);
-+		new_bex_start = new_bex_end - EXT4_C2B(sbi, ac->ac_b_ex.fe_len);
-+		if (ac->ac_o_ex.fe_logical >= new_bex_start)
-+			goto adjust_bex;
- 
--		/* also, we should cover whole original request */
--		wins = EXT4_C2B(sbi, ac->ac_b_ex.fe_len - ac->ac_o_ex.fe_len);
-+		new_bex_start = ac->ac_g_ex.fe_logical;
-+		new_bex_end =
-+			new_bex_start + EXT4_C2B(sbi, ac->ac_b_ex.fe_len);
-+		if (ac->ac_o_ex.fe_logical < new_bex_end)
-+			goto adjust_bex;
- 
--		/* the smallest one defines real window */
--		win = min(winl, wins);
-+		new_bex_start = ac->ac_o_ex.fe_logical;
-+		new_bex_end =
-+			new_bex_start + EXT4_C2B(sbi, ac->ac_b_ex.fe_len);
- 
--		offs = ac->ac_o_ex.fe_logical %
--			EXT4_C2B(sbi, ac->ac_b_ex.fe_len);
--		if (offs && offs < win)
--			win = offs;
-+adjust_bex:
-+		ac->ac_b_ex.fe_logical = new_bex_start;
- 
--		ac->ac_b_ex.fe_logical = ac->ac_o_ex.fe_logical -
--			EXT4_NUM_B2C(sbi, win);
- 		BUG_ON(ac->ac_o_ex.fe_logical < ac->ac_b_ex.fe_logical);
- 		BUG_ON(ac->ac_o_ex.fe_len > ac->ac_b_ex.fe_len);
-+		BUG_ON(new_bex_end > (ac->ac_g_ex.fe_logical +
-+				      EXT4_C2B(sbi, ac->ac_g_ex.fe_len)));
- 	}
- 
- 	/* preallocation can change ac_b_ex, thus we store actually
+ static void null_validate_conf(struct nullb_device *dev)
+ {
++	if (dev->queue_mode == NULL_Q_RQ) {
++		pr_err("legacy IO path is no longer available\n");
++		return -EINVAL;
++	}
++
+ 	dev->blocksize = round_down(dev->blocksize, 512);
+ 	dev->blocksize = clamp_t(unsigned int, dev->blocksize, 512, 4096);
+ 	if (dev->use_lightnvm && dev->blocksize != 4096)
 -- 
 2.39.2
 
