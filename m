@@ -2,109 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7B756F70AC
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 19:16:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1C4D6F70AE
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 19:17:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbjEDRQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 13:16:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49120 "EHLO
+        id S229845AbjEDRRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 13:17:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229970AbjEDRQd (ORCPT
+        with ESMTP id S229514AbjEDRRI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 13:16:33 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C69D335A0
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 10:16:31 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f315712406so72679585e9.0
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 10:16:31 -0700 (PDT)
+        Thu, 4 May 2023 13:17:08 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F8E449C
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 10:16:55 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-95f4c5cb755so134094466b.0
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 10:16:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683220590; x=1685812590;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=o2RAHhaxyXIg8vqIKXQz3LeM9SzAwuVSXKa9rGCQUhg=;
-        b=FC9Sq09wan3CTtRshB35e+apWwzPyXyqLx1Z6Jmy43MuTwNCij7HmCtL8JTQCBAwG8
-         YeSvP5AlsHY214taapVE+bareqY1qcxH/Pb23AcyrY09fqN8l6Q2SEFaQPCioxw4lUU5
-         YtzMr6WM7Q+sjzl+7s2OXw5tfnpUPvChxQvA09AqUpocyIb4yGP4LQCzagwMsL72QpCZ
-         z5jw8hqZLeWLC5iQJt0lrFz70+T1fe8RfrFa5BEtbaWpfk+5zgX5zwFSyygaVuzf9FbR
-         ofoM/dZdv3PLq/xuLgleAwHmEN8HYGhGL4GcNyn05DUtxl8GNGI2bvADKQGEm7IFNJCk
-         M/Mw==
+        d=linux-foundation.org; s=google; t=1683220614; x=1685812614;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6cXwPFrpZkWdKeLA6HDo5uvIR69BqdB0irBe6sSQ2ms=;
+        b=ZAtCFD2+rko9JGeIqQ0VIfIaY5h43k7bBBCNXFDqZOlQSYkuA8pl0IUrHRdBpy+5/s
+         b+695KryNA1Y0B3gAD63Fwb1HzoTa2D6m0KlSWvNtQe2m3yA8zisSQ0CPm8q2QnDtYwP
+         RZtn2ZYQ8lJVnIAcbxwdPBLUKbykj76JP/mdI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683220590; x=1685812590;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=o2RAHhaxyXIg8vqIKXQz3LeM9SzAwuVSXKa9rGCQUhg=;
-        b=ADAhLTJT5hj1QBrjdJry8ohtYtjuyvci07j6SOGtHWAU6XBcbs0D85/a3X9Qs5tSdG
-         0MwvuH3BmOlmJagEzMnH01WsFaFLStvyq4VvRz7akz7ZcTmIg/G+YTTicdh2x7yahvEl
-         15CtWjFO53nHrewjAO6U0CeCwGnyVRRuTUv1jmIg9pm5P81LOXNxwi3oCpQT6opsZPOf
-         +ybP22MXzErBu8Y7k9alBiOvf+DX2Y618sNB2Eko22G+aIcrA8MNq3z4NwsOa7DYe35l
-         Xe13kgC/4qa1F248oM3vhP8gC7aKR+LUJ+9vvCTLBHZvzUlkNI+FSeXXKTI6pk72ehlX
-         mihA==
-X-Gm-Message-State: AC+VfDxY4jm75MbkqKDq0wQA8MdZWgVOE/vJtK8Gd309sl/o8uUqRhEJ
-        k02oa7ubr7GecCvx0qMFjk2V4ZBJNzlsy8sb/pdkZQ==
-X-Google-Smtp-Source: ACHHUZ7hZ50T/Pwr9w/GflPdscw+9rCulRDegeWiCCmJWCsRX4pJH5oZJaDR9tMlZJxoYuZb6tWW84RIZsYCa7hjlgE=
-X-Received: by 2002:adf:f4cf:0:b0:307:5091:5b96 with SMTP id
- h15-20020adff4cf000000b0030750915b96mr1426097wrp.22.1683220590241; Thu, 04
- May 2023 10:16:30 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683220614; x=1685812614;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6cXwPFrpZkWdKeLA6HDo5uvIR69BqdB0irBe6sSQ2ms=;
+        b=PsNi+rlCgOefJfcgTpXTq1cuOgFqx/wvKxxprK7PJKAOzYdnHZh/ZVgRtGiOtFJF8s
+         DZRLwpMKROX8gh7rYg/RFS5Dns8xUzzNbnxtjcqhe18Xp24IU8cG4DYjLaDQ/40Y71jB
+         u8AUy285i/m4+sQXX0LbOrhktqCFXVAVIJKYfvGpxDFGtoGg1pnjtcb2FqyyEHes6/C+
+         ycibF8J83hzBP40Pq9fPDL9U3ro45OuCtrGK98lV91iWsAlNXQEbfofL8bR+ync+ARWf
+         FgIUBx52ezRWj7E6JkMPwzGZfSD+ift1LT13H6ZdPoCCjAK+pXI1ovVJd9vSgRGPz8/o
+         yGdA==
+X-Gm-Message-State: AC+VfDy+DXHkESh/agSp7sm8N7aUFE52oyAhn0DZ7dTWjzElCfHUWYBO
+        MYZhuOUvetI2tT+kgXUAwquxjy3ttbt3FxXUa1fD8yqN
+X-Google-Smtp-Source: ACHHUZ4r4Hl6JRNvsKHlEZcRiWIs6gSzH33FHkPnYGfy7nQ0b+rWZduTy2wMtB999p8ADPsqrelJSA==
+X-Received: by 2002:a17:906:7313:b0:94e:988d:acc5 with SMTP id di19-20020a170906731300b0094e988dacc5mr6742369ejc.46.1683220614000;
+        Thu, 04 May 2023 10:16:54 -0700 (PDT)
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com. [209.85.218.49])
+        by smtp.gmail.com with ESMTPSA id ig11-20020a1709072e0b00b00965af4c7f07sm972799ejc.20.2023.05.04.10.16.53
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 May 2023 10:16:53 -0700 (PDT)
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-95f4c5cb755so134091366b.0
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 10:16:53 -0700 (PDT)
+X-Received: by 2002:a17:907:9725:b0:933:1134:be1e with SMTP id
+ jg37-20020a170907972500b009331134be1emr7581466ejc.53.1683220613083; Thu, 04
+ May 2023 10:16:53 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230501105832.1185477-1-bhupesh.sharma@linaro.org>
- <20230501105832.1185477-4-bhupesh.sharma@linaro.org> <1aaff58a-f07b-1e2a-e27b-df41eacd19e7@linaro.org>
- <CAA8EJpog9cbB_y4zyeECkXRjOGznEATpztAOYsMx61NgyH3Xqg@mail.gmail.com>
-In-Reply-To: <CAA8EJpog9cbB_y4zyeECkXRjOGznEATpztAOYsMx61NgyH3Xqg@mail.gmail.com>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Thu, 4 May 2023 22:46:19 +0530
-Message-ID: <CAH=2NtwVtLdE5hg8Qhd_MLCPJTqXvus8+qW_uj4O7hnOy7PVUA@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] arm64: dts: qcom: qrb4210-rb2: Enable aDSP and
- cDSP remoteproc nodes
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, agross@kernel.org,
-        andersson@kernel.org, linux-kernel@vger.kernel.org,
-        bhupesh.linux@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski@linaro.org, devicetree@vger.kernel.org
+References: <20230504012914.1797355-1-mathieu.desnoyers@efficios.com>
+ <20230504012914.1797355-4-mathieu.desnoyers@efficios.com> <87pm7gd4l5.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <8c28baa8-0945-fd77-3d1d-92c99c7bbbd1@efficios.com>
+In-Reply-To: <8c28baa8-0945-fd77-3d1d-92c99c7bbbd1@efficios.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 4 May 2023 10:16:36 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjfgCa-u8h9z+8U7gaKK6PnRCpws1Md9wYSSXywUxoUSA@mail.gmail.com>
+Message-ID: <CAHk-=wjfgCa-u8h9z+8U7gaKK6PnRCpws1Md9wYSSXywUxoUSA@mail.gmail.com>
+Subject: Re: [RFC PATCH 4/4] llist.h: Fix parentheses around macro pointer
+ parameter use
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     "Huang, Ying" <ying.huang@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2 May 2023 at 17:53, Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
+On Thu, May 4, 2023 at 7:54=E2=80=AFAM Mathieu Desnoyers
+<mathieu.desnoyers@efficios.com> wrote:
+> +#define list_prepare_entry(pos, head, member) \
+> +       ((pos) ? : list_entry(head, typeof(*pos), member))
 >
-> On Tue, 2 May 2023 at 14:58, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
-> >
-> > On 1.05.2023 12:58, Bhupesh Sharma wrote:
-> > > Enable the aDSP and cDSP remoteproc nodes on Qualcomm QRB4210 RB2 board.
-> > >
-> > > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> > > ---
-> > >  arch/arm64/boot/dts/qcom/qrb4210-rb2.dts | 10 ++++++++++
-> > >  1 file changed, 10 insertions(+)
-> > >
-> > > diff --git a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-> > > index bff6ba1d689f..3ab46499d3fa 100644
-> > > --- a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-> > > +++ b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-> > > @@ -34,6 +34,16 @@ &qupv3_id_0 {
-> > >       status = "okay";
-> > >  };
-> > >
-> > > +&remoteproc_adsp {
-> > > +     status = "okay";
-> > > +     firmware-name = "qcom/sm6115/adsp.mdt";
-> > status last
-> > also, don't we want to use .mbn (squashed binary)?
->
-> Yes, please. Also, just to make sure, are sm6115 and qrb4210 binaries
-> fully compatible? We already have a mess of sdm845 vs sda845.
+> So even though the fact that "pos" is used as an lvalue specifically in
+> llist_for_each_entry_safe() makes it so that the parentheses are not
+> strictly required around "pos" in typeof(*pos), I argue that we should
+> still add those for consistency.
 
-That's a fair point. Let's use qrb4210 naming instead of sm6115 here.
-I will send a fixed version shortly.
+Ack. It may not matter in reality because of how 'pos' is supposed to
+be just a local variable name, but I agree that for consistency our
+macros should still follow the usual pattern.
 
-Thanks,
-Bhupesh
+Of course, *because* of how 'pos' is not some random expression, and
+is supposed to be that local variable, and because of how it is used,
+it must always violate the whole "only use once" usual pattern,.
+
+Exactly the same way the member name is also typically used multiple
+times because of how it's not an expression, but really a "part of the
+syntax".
+
+So an alternative might be that we should use a different syntax for
+those things and make it clear that they are not normal expressions.
+Some people use upper-case names for special things like that to make
+them stand out as "not normal" (kind of the same way upper-case macros
+themselves were a warning that they weren't normal and might evaluate
+arguments multiple times).
+
+                   Linus
