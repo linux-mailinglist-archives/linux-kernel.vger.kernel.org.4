@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D78C6F77D1
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 23:11:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 285336F77D2
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 23:11:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbjEDVLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 17:11:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43032 "EHLO
+        id S229709AbjEDVLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 17:11:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjEDVLD (ORCPT
+        with ESMTP id S229574AbjEDVLE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 17:11:03 -0400
+        Thu, 4 May 2023 17:11:04 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 09BF71493C
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 14:11:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2011814376
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 14:11:03 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0BB242F4;
-        Thu,  4 May 2023 14:11:46 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 220EF12FC;
+        Thu,  4 May 2023 14:11:47 -0700 (PDT)
 Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id D76B13F67D;
-        Thu,  4 May 2023 14:11:00 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id EDD3B3F67D;
+        Thu,  4 May 2023 14:11:01 -0700 (PDT)
 From:   Robin Murphy <robin.murphy@arm.com>
 To:     joro@8bytes.org, jgg@nvidia.com
 Cc:     will@kernel.org, schnelle@linux.ibm.com, iommu@lists.linux.dev,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] iommu: Add a capability for flush queue support
-Date:   Thu,  4 May 2023 22:10:55 +0100
-Message-Id: <f0086a93dbccb92622e1ace775846d81c1c4b174.1683233867.git.robin.murphy@arm.com>
+Subject: [PATCH 2/2] iommu: Use flush queue capability
+Date:   Thu,  4 May 2023 22:10:56 +0100
+Message-Id: <1c552d99e8ba452bdac48209fa74c0bdd52fd9d9.1683233867.git.robin.murphy@arm.com>
 X-Mailer: git-send-email 2.39.2.101.g768bb238c484.dirty
 In-Reply-To: <cover.1683233867.git.robin.murphy@arm.com>
 References: <cover.1683233867.git.robin.murphy@arm.com>
@@ -42,85 +42,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Passing a special type to domain_alloc to indirectly query whether flush
-queues are a worthwhile optimisation with the given driver is a bit
-clunky, and looking increasingly anachronistic. Let's put that into an
-explicit capability instead.
+It remains really handy to have distinct DMA domain types within core
+code for the sake of default domain policy selection, but we can now
+hide that detail from drivers by using the new capability instead.
 
 Signed-off-by: Robin Murphy <robin.murphy@arm.com>
----
- drivers/iommu/amd/iommu.c                   | 2 ++
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 1 +
- drivers/iommu/arm/arm-smmu/arm-smmu.c       | 1 +
- drivers/iommu/intel/iommu.c                 | 1 +
- include/linux/iommu.h                       | 5 +++++
- 5 files changed, 10 insertions(+)
 
-diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
-index 4a314647d1f7..9b7bd6bed664 100644
---- a/drivers/iommu/amd/iommu.c
-+++ b/drivers/iommu/amd/iommu.c
-@@ -2293,6 +2293,8 @@ static bool amd_iommu_capable(struct device *dev, enum iommu_cap cap)
- 		return amdr_ivrs_remap_support;
- 	case IOMMU_CAP_ENFORCE_CACHE_COHERENCY:
- 		return true;
-+	case IOMMU_CAP_DEFERRED_FLUSH:
-+		return true;
- 	default:
- 		break;
- 	}
+---
+
+Note that IOMMU_DOMAIN_ALLOC_FLAGS would go away again with the
+proposed domain_alloc_paging() interface design.
+---
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 1 -
+ drivers/iommu/arm/arm-smmu/arm-smmu.c       | 3 +--
+ drivers/iommu/dma-iommu.c                   | 3 ++-
+ drivers/iommu/intel/iommu.c                 | 1 -
+ drivers/iommu/iommu.c                       | 3 ++-
+ include/linux/iommu.h                       | 1 +
+ 6 files changed, 6 insertions(+), 6 deletions(-)
+
 diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-index 3fd83fb75722..6d65a7e81df4 100644
+index 6d65a7e81df4..1ed9c4ed5db9 100644
 --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
 +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-@@ -2008,6 +2008,7 @@ static bool arm_smmu_capable(struct device *dev, enum iommu_cap cap)
- 		/* Assume that a coherent TCU implies coherent TBUs */
- 		return master->smmu->features & ARM_SMMU_FEAT_COHERENCY;
- 	case IOMMU_CAP_NOEXEC:
-+	case IOMMU_CAP_DEFERRED_FLUSH:
- 		return true;
- 	default:
- 		return false;
+@@ -2024,7 +2024,6 @@ static struct iommu_domain *arm_smmu_domain_alloc(unsigned type)
+ 
+ 	if (type != IOMMU_DOMAIN_UNMANAGED &&
+ 	    type != IOMMU_DOMAIN_DMA &&
+-	    type != IOMMU_DOMAIN_DMA_FQ &&
+ 	    type != IOMMU_DOMAIN_IDENTITY)
+ 		return NULL;
+ 
 diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu.c b/drivers/iommu/arm/arm-smmu/arm-smmu.c
-index 6e0813b26fb6..7f4ee365912c 100644
+index 7f4ee365912c..a86acd76c1df 100644
 --- a/drivers/iommu/arm/arm-smmu/arm-smmu.c
 +++ b/drivers/iommu/arm/arm-smmu/arm-smmu.c
-@@ -1325,6 +1325,7 @@ static bool arm_smmu_capable(struct device *dev, enum iommu_cap cap)
- 		return cfg->smmu->features & ARM_SMMU_FEAT_COHERENT_WALK ||
- 			device_get_dma_attr(dev) == DEV_DMA_COHERENT;
- 	case IOMMU_CAP_NOEXEC:
-+	case IOMMU_CAP_DEFERRED_FLUSH:
- 		return true;
- 	default:
- 		return false;
+@@ -856,8 +856,7 @@ static struct iommu_domain *arm_smmu_domain_alloc(unsigned type)
+ 	struct arm_smmu_domain *smmu_domain;
+ 
+ 	if (type != IOMMU_DOMAIN_UNMANAGED && type != IOMMU_DOMAIN_IDENTITY) {
+-		if (using_legacy_binding ||
+-		    (type != IOMMU_DOMAIN_DMA && type != IOMMU_DOMAIN_DMA_FQ))
++		if (using_legacy_binding || type != IOMMU_DOMAIN_DMA)
+ 			return NULL;
+ 	}
+ 	/*
+diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+index 7a9f0b0bddbd..c4bdd2587daf 100644
+--- a/drivers/iommu/dma-iommu.c
++++ b/drivers/iommu/dma-iommu.c
+@@ -586,7 +586,8 @@ static int iommu_dma_init_domain(struct iommu_domain *domain, dma_addr_t base,
+ 		goto done_unlock;
+ 
+ 	/* If the FQ fails we can simply fall back to strict mode */
+-	if (domain->type == IOMMU_DOMAIN_DMA_FQ && iommu_dma_init_fq(domain))
++	if (domain->type == IOMMU_DOMAIN_DMA_FQ &&
++	    (!device_iommu_capable(dev, IOMMU_CAP_DEFERRED_FLUSH) || iommu_dma_init_fq(domain)))
+ 		domain->type = IOMMU_DOMAIN_DMA;
+ 
+ 	ret = iova_reserve_iommu_regions(dev, domain);
 diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index b871a6afd803..ff923298f8ed 100644
+index ff923298f8ed..8096273b034c 100644
 --- a/drivers/iommu/intel/iommu.c
 +++ b/drivers/iommu/intel/iommu.c
-@@ -4369,6 +4369,7 @@ static bool intel_iommu_capable(struct device *dev, enum iommu_cap cap)
+@@ -4064,7 +4064,6 @@ static struct iommu_domain *intel_iommu_domain_alloc(unsigned type)
+ 	case IOMMU_DOMAIN_BLOCKED:
+ 		return &blocking_domain;
+ 	case IOMMU_DOMAIN_DMA:
+-	case IOMMU_DOMAIN_DMA_FQ:
+ 	case IOMMU_DOMAIN_UNMANAGED:
+ 		dmar_domain = alloc_domain(type);
+ 		if (!dmar_domain) {
+diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+index f1dcfa3f1a1b..7078bf4a8ec8 100644
+--- a/drivers/iommu/iommu.c
++++ b/drivers/iommu/iommu.c
+@@ -1980,11 +1980,12 @@ static struct iommu_domain *__iommu_domain_alloc(const struct bus_type *bus,
+ 						 unsigned type)
+ {
+ 	struct iommu_domain *domain;
++	unsigned int alloc_type = type & IOMMU_DOMAIN_ALLOC_FLAGS;
  
- 	switch (cap) {
- 	case IOMMU_CAP_CACHE_COHERENCY:
-+	case IOMMU_CAP_DEFERRED_FLUSH:
- 		return true;
- 	case IOMMU_CAP_PRE_BOOT_PROTECTION:
- 		return dmar_platform_optin();
+ 	if (bus == NULL || bus->iommu_ops == NULL)
+ 		return NULL;
+ 
+-	domain = bus->iommu_ops->domain_alloc(type);
++	domain = bus->iommu_ops->domain_alloc(alloc_type);
+ 	if (!domain)
+ 		return NULL;
+ 
 diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-index e8c9a7da1060..1b7180d6edae 100644
+index 1b7180d6edae..d31642596675 100644
 --- a/include/linux/iommu.h
 +++ b/include/linux/iommu.h
-@@ -127,6 +127,11 @@ enum iommu_cap {
- 	 * this device.
- 	 */
- 	IOMMU_CAP_ENFORCE_CACHE_COHERENCY,
-+	/*
-+	 * IOMMU driver does not issue TLB maintenance during .unmap, so can
-+	 * usefully support the non-strict DMA flush queue.
-+	 */
-+	IOMMU_CAP_DEFERRED_FLUSH,
- };
+@@ -65,6 +65,7 @@ struct iommu_domain_geometry {
  
- /* These are the possible reserved region types */
+ #define __IOMMU_DOMAIN_SVA	(1U << 4)  /* Shared process address space */
+ 
++#define IOMMU_DOMAIN_ALLOC_FLAGS ~__IOMMU_DOMAIN_DMA_FQ
+ /*
+  * This are the possible domain-types
+  *
 -- 
 2.39.2.101.g768bb238c484.dirty
 
