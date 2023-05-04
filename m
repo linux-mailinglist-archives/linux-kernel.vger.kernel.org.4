@@ -2,72 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49FF66F6940
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 12:46:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC1456F6943
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 12:47:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbjEDKqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 06:46:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58290 "EHLO
+        id S230075AbjEDKr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 06:47:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbjEDKqm (ORCPT
+        with ESMTP id S229872AbjEDKr0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 06:46:42 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FEDA46A1;
-        Thu,  4 May 2023 03:46:41 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-2fddb442d47so234826f8f.2;
-        Thu, 04 May 2023 03:46:41 -0700 (PDT)
+        Thu, 4 May 2023 06:47:26 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931BB4C3C
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 03:47:24 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-50bcb00a4c2so474287a12.1
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 03:47:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683197200; x=1685789200;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8zdCbcdk6QnPG7VtZ4x/vz7lPGcrzozQcS4ayWI86dk=;
-        b=eYOUhKuPf0y6qqzK9CH3z+7G4inH0kM0KxHDm/Gkl1damXhzYAHC4YUIuAkTh3+ZBz
-         AE4h00yOO6PFeiYwJSLpSHw4fMiwfLAj8ukDTIG9QEytbCz3hPPmBsALMItjM5amj02B
-         C3IrYwrzX8s7BUxNCl4Zd/3gQSbwMgvxnDjdpQByg6mNK+oznsvQcP+GCk2k4X+CcXYT
-         Q+PemxD//w/A35pUVizFR57Ed3FSTGNk1IvabkW0s44bmK+Q1Kvx1jEaMoUgFvjf2vM9
-         zZ6wLw/lLLVoRbF+xNGYmhnW1dCU6rpZu7bBjSgwQv3nrnwLUMds8E3HypaDnsNtjh9L
-         leyw==
+        d=linaro.org; s=google; t=1683197243; x=1685789243;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LDUr+SdvpIiSP6qCRawb7YyHx7gIgkjLW8C3I6l0aaE=;
+        b=M5L02rtq5Qei5mqUn254sUJrBGf9jx3pWpRXWA6JYYQwFt6LBCGKzPhdPKjhYaKvtn
+         oS61bwhp7z6t3fMDCbBgH7uoRUiz1UXHDKDRJ4oJzasKN1UgShUNxeIhWR/9/juaooJB
+         YxXJASaSs78VvAOQKAmkk1DJN21vg+GPG1Ww+muGa1YURyGRUV1Kw7p80oOwHK+M4ZRh
+         yWEzdGsQPWd6K86T4L/kG5oshWbIts7EHmF5NMGekKL7oRQTwwA4GDJJc/SFwnlMdmf2
+         x/inDbEgMZfxhMXovsB5o27TC6FNF20eGUqQyjZXA42y0CPLmRW3+FtujcMmC/9ihc+7
+         Tplw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683197200; x=1685789200;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8zdCbcdk6QnPG7VtZ4x/vz7lPGcrzozQcS4ayWI86dk=;
-        b=crd6KX1fe3hEfsjVQl4HlItHiupIrpQmdTq5IMcmPfU8dJ4VVOF36WkpBxR574yD5P
-         FmzFhqS8gz5EQhvuygrwynTrEtJ3RI4vleE3U2g9VzL0n2hZwzTmjIqBef0nQOpeH306
-         Y/qVJVFkVYMqfLGUmLuFPwDy7dFh78UYMXCIllUseQ/bOr/MLvEqsoItnvr3yXk9oKHp
-         NzdJMM9dHrIy/RhQAc/nM29kWT+WU2MlLpNk9WJfXvW3vSa/+mPHkUAud+jupLi1fYDf
-         fl+PfdcXy2XKowypF8rAcvP81bW3QA8SUB55PFOGjZe1bJcZoaYGpT6qXf9w1nqPjHCh
-         tsig==
-X-Gm-Message-State: AC+VfDzbLUCX83PMraN94S6PSTkEDqpFumsMUBJ4JIGeOj3OsaoWCvmp
-        bfEEDXZgdVqa8nr4uC6Z7RU=
-X-Google-Smtp-Source: ACHHUZ6cs+Y79ICix1jxy8NAosC1izVsG4yj853+8KjnsyXcTX/Dtjp/1mmMjebtPBdMwPNQ2F2aZw==
-X-Received: by 2002:adf:e904:0:b0:306:4063:1afe with SMTP id f4-20020adfe904000000b0030640631afemr1997467wrm.71.1683197199879;
-        Thu, 04 May 2023 03:46:39 -0700 (PDT)
-Received: from suse.localnet (host-212-171-7-24.pool212171.interbusiness.it. [212.171.7.24])
-        by smtp.gmail.com with ESMTPSA id m8-20020a7bcb88000000b003f173956a82sm4550146wmi.21.2023.05.04.03.46.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 May 2023 03:46:39 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Alison Schofield <alison.schofield@intel.com>
-Cc:     raghuhack78@gmail.com, linux-cxl@vger.kernel.org,
-        ira.weiny@intel.com, bwidawsk@kernel.org, dan.j.williams@intel.com,
-        vishal.l.verma@intel.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] cxl/mbox: Remove redundant dev_err() after failed mem
- alloc
-Date:   Thu, 04 May 2023 12:46:37 +0200
-Message-ID: <2755196.BEx9A2HvPv@suse>
-In-Reply-To: <ZFLaG8jHHXmRp67w@aschofie-mobl2>
-References: <20230428012235.119333-1-raghuhack78@gmail.com> <3235466.44csPzL39Z@suse>
- <ZFLaG8jHHXmRp67w@aschofie-mobl2>
+        d=1e100.net; s=20221208; t=1683197243; x=1685789243;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LDUr+SdvpIiSP6qCRawb7YyHx7gIgkjLW8C3I6l0aaE=;
+        b=h/bDYoumm+3uzUnu/HwYlpnVRe4k2h4EYF1RH4fHuNIaxTL1BnNwWjNWRCQiLysUfz
+         6DcPxu2kjCg+5FNGRcBQsmg3Tt/SgtQcI5LRs3Mcn91PN1xBXMU39rwdssJhGzcF8RN/
+         6vUYgFY8ofXT4mIgHsyPlk2tAGZ/XXsDG0kWBp6quSg9LaoSncjr7YuL+YVXz5OK5f3W
+         hI0I6RRiCHzUm6xDzYuXKSp4BGt0O2ZiUaDZf3SvSoveWjW3cgEfIL0gVSRFOQqG1ZSx
+         qLR/PrvyM5Abd40WfaQnq/EkQG6ursy1u9rVtnjbb1ny6lw1WIbEREHDe705AoH/7OPt
+         X6MQ==
+X-Gm-Message-State: AC+VfDzYtN4TomTo2g2LM9M5AFdUFPrIu1Xp+eD7XeinIo39DEKnxsJw
+        IG1NhYmByb+3/VA6unk6NFiuIm0HUyGAlw9VhDzyGw==
+X-Google-Smtp-Source: ACHHUZ70/ErzHYXj4QS5QBI/TWmWKk1BXhP3YcX1PlCjQqCcnxqrV+mBi+XnXt9mXP60CKmC/T0xIg==
+X-Received: by 2002:a17:907:3203:b0:953:43a1:1988 with SMTP id xg3-20020a170907320300b0095343a11988mr5536477ejb.46.1683197243060;
+        Thu, 04 May 2023 03:47:23 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:cbf1:e7ef:fb81:e912? ([2a02:810d:15c0:828:cbf1:e7ef:fb81:e912])
+        by smtp.gmail.com with ESMTPSA id ia10-20020a170907a06a00b00961277a426dsm7318940ejc.205.2023.05.04.03.47.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 May 2023 03:47:22 -0700 (PDT)
+Message-ID: <80b60de0-dcb5-303f-8d13-f4b1cf7d8521@linaro.org>
+Date:   Thu, 4 May 2023 12:47:21 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add max6639
+Content-Language: en-US
+To:     Naresh Solanki <naresh.solanki@9elements.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Marcello Sylvester Bauer <sylv@sylv.io>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230420111759.2687001-1-Naresh.Solanki@9elements.com>
+ <76e57634-75dd-01e8-9c56-36ed7de17812@linaro.org>
+ <c8d1b5db-318e-3401-0834-b89769831eca@9elements.com>
+ <be129c4f-3ad7-c54b-936e-08b142608ebc@linaro.org>
+ <88f9a008-2861-284c-76c4-7d416c107fbb@9elements.com>
+ <bd45ea5d-e6e4-403a-e855-376e0f647f91@9elements.com>
+ <20eb1d0e-0aa2-9d41-7ba5-2feb148748d0@linaro.org>
+ <9d989c4c-7c9e-9e95-133f-03741d07198b@9elements.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <9d989c4c-7c9e-9e95-133f-03741d07198b@9elements.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,75 +87,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On gioved=EC 4 maggio 2023 00:03:07 CEST Alison Schofield wrote:
-> On Wed, May 03, 2023 at 08:32:37PM +0200, Fabio wrote:
-> > On venerd=EC 28 aprile 2023 03:22:34 CEST Raghu H wrote:
+On 04/05/2023 11:47, Naresh Solanki wrote:
+> Hi Krzysztof,
+> 
+> On 03-05-2023 09:48 pm, Krzysztof Kozlowski wrote:
+>> On 03/05/2023 10:26, Naresh Solanki wrote:
+>>> Hi Krzysztof,
+>>>
+>>> On 24-04-2023 03:23 pm, Naresh Solanki wrote:
+>>>> Hi Krzysztof,
+>>>>
+>>>> On 24-04-2023 03:12 pm, Krzysztof Kozlowski wrote:
+>>>>> On 24/04/2023 11:18, Naresh Solanki wrote:
+>>>>>
+>>>>>>>> Changes in V2:
+>>>>>>>> - Update subject
+>>>>>>>> - Drop blank lines
+>>>>>>>> ---
+>>>>>>>>     .../bindings/hwmon/maxim,max6639.yaml         | 52
+>>>>>>>> +++++++++++++++++++
+>>>>>>>>     1 file changed, 52 insertions(+)
+>>>>>>>>     create mode 100644
+>>>>>>>> Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+>>>>>>>>
+>>>>>>>> diff --git
+>>>>>>>> a/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+>>>>>>>> b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+>>>>>>>> new file mode 100644
+>>>>>>>> index 000000000000..1aaedfd7cee0
+>>>>>>>> --- /dev/null
+>>>>>>>> +++ b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+>>>>>>>> @@ -0,0 +1,52 @@
+>>>>>>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>>>>>>>> +%YAML 1.2
+>>>>>>>> +---
+>>>>>>>> +$id: http://devicetree.org/schemas/hwmon/maxim,max6639.yaml#
+>>>>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>>>>>> +
+>>>>>>>> +title: Maxim max6639
+>>>>>>>
+>>>>>>> What is this device? fan controller?
+>>>>>> Yes Fan controller.
+>>>>>> Do you want me to update the title here as:
+>>>>>> "Maxim MAC6639 2 channel fan controller & temperature monitor" ?
+>>>>>
+>>>>> Enough would be:
+>>>>> Maxim MAX6639 Fan Controller
+>>>> Ack
+>>>>>
+>>>>>
+>>>>>>
+>>>>>>>
+>>>>>>>> +
+>>>>>>>> +maintainers:
+>>>>>>>> +  - Naresh Solanki <Naresh.Solanki@9elements.com>
+>>>>>>>> +
+>>>>>>>> +description: |
+>>>>>>>> +  The MAX6639 is a 2-channel temperature monitor with dual,
+>>>>>>>> automatic, PWM
+>>>>>>>> +  fan-speed controller.  It monitors its own temperature and one
+>>>>>>>> external
+>>>>>>>> +  diode-connected transistor or the temperatures of two external
+>>>>>>>> diode-connected
+>>>>>>>> +  transistors, typically available in CPUs, FPGAs, or GPUs.
+>>>>>>>> +
+>>>>>>>> +  Datasheets:
+>>>>>>>> +    https://datasheets.maximintegrated.com/en/ds/MAX6639-MAX6639F.pdf
+>>>>>>>> +
+>>>>>>>> +properties:
+>>>>>>>> +  compatible:
+>>>>>>>> +    enum:
+>>>>>>>> +      - maxim,max6639
+>>>>>>>> +
+>>>>>>>> +  reg:
+>>>>>>>> +    maxItems: 1
+>>>>>>>> +
+>>>>>>>> +  '#address-cells':
+>>>>>>>> +    const: 1
+>>>>>>>> +
+>>>>>>>> +  '#size-cells':
+>>>>>>>> +    const: 0
+>>>>>>>
+>>>>>>> Why do you need these two properties?
+>>>>>> Ack. Will remove them.
+>>>>>>>
+>>>>>>> Anyway, the binding looks incomplete. Where are the supplies?
+>>>>>>> Interrupts?
+>>>>>> This patch just adds basic support to the existing platform driver.
+>>>>>> Intention is to be able to call the driver from DT with basic
+>>>>>> initialization from driver the existing driver.
+>>>>>
+>>>>> Bindings should be rather complete. Here the datasheet is accessible and
+>>>>> few properties quite obvious, so I don't see a reason to skip them.
+>>>> I agree with you. But currently the driver which is already merged
+>>>> doesn't has it implemented.
+>>>> And will be working on separate patch to include this later.
+>>> Please let me know if this approach is acceptable, or if there are any
+>>> other suggestions or concerns that you have.
+>>
+>> You are adding new bindings, so what does the driver has to do with it?
+> The reason for adding these new bindings is to enable the use of the 
+> driver on my machine. Without the compatible string, it would not be 
+> possible to use the driver.
+> 
+> Currently, the driver initializes the device with defaults, which is 
+> good enough for my application. Also, as you previously pointed out, it 
+> uses the optional 'fan-supply' which will be included in the next patch 
+> revision.
+> 
+> I hope this clarifies my reasoning. Could you kindly confirm if we can 
+> proceed with this approach?
 
-[...]
+No, we cannot, because we asked you to fix things there. Your entire
+explanation about compatible and driver is not related to the comment
+you received: bindings should be complete. You argue that bindings do
+not have to be complete, because of something with driver. This is not
+related. Bindings are not for driver.
 
-> > >=20
-> > > Signed-off-by: Raghu H <raghuhack78@gmail.com>
-> >=20
-> > Is "Raghu H" the name you sign legal documents with?
->=20
-> Fabio,
-> Rather than asking a specific question to determine if this is a
-> valid SOB, let's just point folks to the documentation to figure
-> it out themselves.
-> I'm aware that the 'sign legal documents' test
-> has been used in the past, but kernel only actually requires a
-> known identity.
->=20
-> https://www.kernel.org/doc/html/v4.17/process/submitting-patches.html#sig=
-n-you
-> r-work-the-developer-s-certificate-of-origin
-> https://github.com/cncf/foundation/blob/659fd32c86dc/dco-guidelines.md
-
-Alison,
-
-Thanks for your suggestions.
-
-I have just a couple of questions about this issue...
-
-1) How do we know that the "real name", which the Linux official documentat=
-ion=20
-refers to, should be interpreted in accordance to the document pointed by t=
-he=20
-second link you provided?=20
-
-I mean, how can we be sure that the official documentation should be=20
-interpreted according to the second link, since it doesn't even cite that=20
-document from CNCF?=20
-
-Can you provide links to documents / LKML's threads that state agreement of=
-=20
-our Community about the "relaxed" interpretation by CNCF?
-
-2) It looks that some maintainers (e.g., Greg K-H) still interpret "[] usin=
-g=20
-your real name (sorry, no pseudonyms or anonymous contributions.)" in a=20
-"strict" and "common" sense.=20
-
-Can you remember that Greg refused all patches from "Kloudifold" and why? I=
-f=20
-not, please take a look at the following two questions / objections from Gr=
-eg:=20
-https://lore.kernel.org/linux-staging/ZCQkPr6t8IOvF6bk@kroah.com/ and=20
-https://lore.kernel.org/linux-staging/ZBCjK2BXhfiFooeO@kroah.com/.
-
-It seems that this issue it's not yet settled.=20
-Am I overlooking something?
-
-Again thanks,
-
-=46abio
-
-> > If not, please send a new version signed-off-by your full legal name.
-> > Otherwise... sorry for the noise.
-> >=20
-> > Thanks,
-> >=20
-> > Fabio
-
-
+Best regards,
+Krzysztof
 
