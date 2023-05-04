@@ -2,134 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C86D86F63CA
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 05:59:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD0736F63DB
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 06:07:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbjEDD7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 23:59:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59046 "EHLO
+        id S229731AbjEDEG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 00:06:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjEDD7r (ORCPT
+        with ESMTP id S229530AbjEDEG4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 23:59:47 -0400
-Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A6FE45;
-        Wed,  3 May 2023 20:59:45 -0700 (PDT)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1puQ7v-0051wS-Ps; Thu, 04 May 2023 11:59:33 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Thu, 04 May 2023 11:59:32 +0800
-Date:   Thu, 4 May 2023 11:59:32 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        syzbot <syzbot+726dc8c62c3536431ceb@syzkaller.appspotmail.com>,
-        davem@davemloft.net, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, olivia@selenic.com,
-        syzkaller-bugs@googlegroups.com, Jason Wang <jasowang@redhat.com>,
-        Laurent Vivier <lvivier@redhat.com>,
-        Rusty Russell <rusty@rustcorp.com.au>
-Subject: [v2 PATCH] hwrng: virtio - Fix race on data_avail and actual data
-Message-ID: <ZFMtpC18ykLd/jf2@gondor.apana.org.au>
-References: <00000000000050327205f9d993b2@google.com>
- <CACT4Y+awU85RHZjf3+_85AvJOHghoOhH3c9E-70p+a=FrRDYkg@mail.gmail.com>
- <ZFI9bHr1o2Cvdebp@gondor.apana.org.au>
- <20230503073220-mutt-send-email-mst@kernel.org>
+        Thu, 4 May 2023 00:06:56 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5BC19A8;
+        Wed,  3 May 2023 21:06:54 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3442wD1t022553;
+        Thu, 4 May 2023 04:01:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=J7dM4YfP2Cn22FfC54o6HXBvZDJbbsBila3/VvkxwQ0=;
+ b=PUFwU4UW4dNXAUmEfCoryfUMPOcrtcv4CAKyxowgtfdT63Iy6fb7uzUWkh1mBQjH3HmS
+ nCJNgJqTWcrpZIdJWi2tt1R7PjlpwDuLLbNDApQhPFYemOh2wTtsYso6MBYt4v0SVTks
+ mr037YN7fClXiHqalrG5iGlG8QA+yK5JJZF+t+5ZcUY7Mlv/JIeF/Vz/yLJU08WdOHtK
+ jx3VTLMVXah59+fbFMUBML7jw4jriEMWKwXLJCvz8KRFgp4/FydkGB+Za5aK/JnIOBcv
+ m8Q4ycDZptdqbNnEBwNm8ADPlKbDhPsVgN19Gxcu8U2qAyXgrMHXtkshkTfObOq4wA3U sw== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qbmy49ytt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 04 May 2023 04:01:27 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34441Qsi022326
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 4 May 2023 04:01:26 GMT
+Received: from [192.168.143.77] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 3 May 2023
+ 21:01:26 -0700
+Message-ID: <b1af6459-43b7-d193-c6e7-37f24d7349e6@quicinc.com>
+Date:   Wed, 3 May 2023 21:01:25 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230503073220-mutt-send-email-mst@kernel.org>
-X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 2/5] ufs: mcq: Add support for clean up mcq resources
+Content-Language: en-US
+To:     Bart Van Assche <bvanassche@acm.org>, <quic_asutoshd@quicinc.com>,
+        <quic_cang@quicinc.com>, <mani@kernel.org>,
+        <Powen.Kao@mediatek.com>, <stanley.chu@mediatek.com>,
+        <adrian.hunter@intel.com>, <beanhuo@micron.com>,
+        <avri.altman@wdc.com>, <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <cover.1681764704.git.quic_nguyenb@quicinc.com>
+ <5e662692bc0ad5108ce91ae3d1ec2b575c34d4ae.1681764704.git.quic_nguyenb@quicinc.com>
+ <12308ca3-f824-596e-078f-bc00fa674aef@acm.org>
+From:   "Bao D. Nguyen" <quic_nguyenb@quicinc.com>
+In-Reply-To: <12308ca3-f824-596e-078f-bc00fa674aef@acm.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: aFEuaGkgD6p-cENCvp6dUp53kCzpc-e_
+X-Proofpoint-GUID: aFEuaGkgD6p-cENCvp6dUp53kCzpc-e_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-04_01,2023-05-03_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ bulkscore=0 priorityscore=1501 malwarescore=0 suspectscore=0
+ impostorscore=0 adultscore=0 mlxlogscore=999 spamscore=0 phishscore=0
+ clxscore=1015 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2305040032
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 03, 2023 at 07:37:00AM -0400, Michael S. Tsirkin wrote:
->
-> On the surface of it, it looks like you removed this store
-> which isn't described in the commit log.
-> I do not, offhand, remember why we stored 0 in data_idx here
-> when we also zero it in request_entropy.
-> It was added with
+On 4/25/2023 5:08 PM, Bart Van Assche wrote:
+> On 4/17/23 14:05, Bao D. Nguyen wrote:
+>> @@ -3110,7 +3128,7 @@ static int ufshcd_wait_for_dev_cmd(struct 
+>> ufs_hba *hba,
+>>           err = -ETIMEDOUT;
+>>           dev_dbg(hba->dev, "%s: dev_cmd request timedout, tag %d\n",
+>>               __func__, lrbp->task_tag);
+>> -        if (ufshcd_clear_cmds(hba, 1U << lrbp->task_tag) == 0) {
+>> +        if (ufshcd_clear_cmds(hba, 1UL << lrbp->task_tag) == 0) {
+>>               /* successfully cleared the command, retry if needed */
+>>               err = -EAGAIN;
+>>               /*
+> 
+> Is this change necessary?
+My intention was to support tag greater than 31 and less than 64.
+The 1U << only works up to 32 bits.
 
-Yes I removed because it's redundant.  But you're right I'll add
-a note about it in the log:
+> 
+>> @@ -7379,6 +7397,20 @@ static int ufshcd_try_to_abort_task(struct 
+>> ufs_hba *hba, int tag)
+>>                */
+>>               dev_err(hba->dev, "%s: cmd at tag %d not pending in the 
+>> device.\n",
+>>                   __func__, tag);
+>> +            if (is_mcq_enabled(hba)) {
+>> +                /* MCQ mode */
+>> +                if (lrbp->cmd) {
+>> +                    /* sleep for max. 200us to stabilize */
+> 
+> What is being stabilized here? Please make this comment more clear.
+This is to keep the same operation/timing as in SDB mode.
 
----8<---
-The virtio rng device kicks off a new entropy request whenever the
-data available reaches zero.  When a new request occurs at the end
-of a read operation, that is, when the result of that request is
-only needed by the next reader, then there is a race between the
-writing of the new data and the next reader.
+> 
+>> +                    usleep_range(100, 200);
+>> +                    continue;
+>> +                }
+>> +                /* command completed already */
+>> +                dev_err(hba->dev, "%s: cmd at tag=%d is cleared.\n",
+>> +                    __func__, tag);
+>> +                goto out;
+>> +            }
+> 
+> Please do not use lrbp->cmd to check whether or not a command has 
+> completed. See also my patch "scsi: ufs: Fix handling of lrbp->cmd".
+I have been thinking how to replace lrbp->cmd, but could not find a good 
+solution. Throughout this patch series, I am using lrbp->cmd as a way to 
+find the pending command that is being aborted and clean up the 
+resources associated with it. Any suggestions to achieve it? Thanks.
 
-This is because there is no synchronisation whatsoever between the
-writer and the reader.
+> 
+>> @@ -7415,7 +7447,7 @@ static int ufshcd_try_to_abort_task(struct 
+>> ufs_hba *hba, int tag)
+>>           goto out;
+>>       }
+>> -    err = ufshcd_clear_cmds(hba, 1U << tag);
+>> +    err = ufshcd_clear_cmds(hba, 1UL << tag);
+>>       if (err)
+>>           dev_err(hba->dev, "%s: Failed clearing cmd at tag %d, err 
+>> %d\n",
+>>               __func__, tag, err);
+> 
+> Is this change necessary?
+Same as above, I intended  to support 64 > tag > 31
 
-Fix this by writing data_avail with smp_store_release and reading
-it with smp_load_acquire when we first enter read.  The subsequent
-reads are safe because they're either protected by the first load
-acquire, or by the completion mechanism.
+> 
+>> -    if (!(test_bit(tag, &hba->outstanding_reqs))) {
+>> +    if (!is_mcq_enabled(hba) && !(test_bit(tag, 
+>> &hba->outstanding_reqs))) {
+> 
+> Please leave out one pair of superfluous parentheses from the above 
+> expression.
+Yes, I will change.
 
-Also remove the redundant zeroing of data_idx in random_recv_done
-(data_idx must already be zero at this point) and data_avail in
-request_entropy (ditto).
+> 
+> Thanks,
+> 
+> Bart.
 
-Reported-by: syzbot+726dc8c62c3536431ceb@syzkaller.appspotmail.com
-Fixes: f7f510ec1957 ("virtio: An entropy device, as suggested by hpa.")
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
-
-diff --git a/drivers/char/hw_random/virtio-rng.c b/drivers/char/hw_random/virtio-rng.c
-index f7690e0f92ed..e41a84e6b4b5 100644
---- a/drivers/char/hw_random/virtio-rng.c
-+++ b/drivers/char/hw_random/virtio-rng.c
-@@ -4,6 +4,7 @@
-  *  Copyright (C) 2007, 2008 Rusty Russell IBM Corporation
-  */
- 
-+#include <asm/barrier.h>
- #include <linux/err.h>
- #include <linux/hw_random.h>
- #include <linux/scatterlist.h>
-@@ -37,13 +38,13 @@ struct virtrng_info {
- static void random_recv_done(struct virtqueue *vq)
- {
- 	struct virtrng_info *vi = vq->vdev->priv;
-+	unsigned int len;
- 
- 	/* We can get spurious callbacks, e.g. shared IRQs + virtio_pci. */
--	if (!virtqueue_get_buf(vi->vq, &vi->data_avail))
-+	if (!virtqueue_get_buf(vi->vq, &len))
- 		return;
- 
--	vi->data_idx = 0;
--
-+	smp_store_release(&vi->data_avail, len);
- 	complete(&vi->have_data);
- }
- 
-@@ -52,7 +53,6 @@ static void request_entropy(struct virtrng_info *vi)
- 	struct scatterlist sg;
- 
- 	reinit_completion(&vi->have_data);
--	vi->data_avail = 0;
- 	vi->data_idx = 0;
- 
- 	sg_init_one(&sg, vi->data, sizeof(vi->data));
-@@ -88,7 +88,7 @@ static int virtio_read(struct hwrng *rng, void *buf, size_t size, bool wait)
- 	read = 0;
- 
- 	/* copy available data */
--	if (vi->data_avail) {
-+	if (smp_load_acquire(&vi->data_avail)) {
- 		chunk = copy_data(vi, buf, size);
- 		size -= chunk;
- 		read += chunk;
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
