@@ -2,72 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32B396F62AE
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 03:34:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0689B6F62B3
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 03:43:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbjEDBev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 21:34:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42740 "EHLO
+        id S229622AbjEDBno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 21:43:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbjEDBep (ORCPT
+        with ESMTP id S229459AbjEDBnn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 21:34:45 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 733ED170A;
-        Wed,  3 May 2023 18:34:43 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 9B0B224E09F;
-        Thu,  4 May 2023 09:34:33 +0800 (CST)
-Received: from EXMBX062.cuchost.com (172.16.6.62) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 4 May
- 2023 09:34:33 +0800
-Received: from [192.168.125.107] (183.27.99.121) by EXMBX062.cuchost.com
- (172.16.6.62) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 4 May
- 2023 09:34:32 +0800
-Message-ID: <0b0f9187-ad6b-a1d9-6ec4-beb8989ca731@starfivetech.com>
-Date:   Thu, 4 May 2023 09:34:37 +0800
+        Wed, 3 May 2023 21:43:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC48C0;
+        Wed,  3 May 2023 18:43:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A09DF61CD2;
+        Thu,  4 May 2023 01:43:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1465DC433D2;
+        Thu,  4 May 2023 01:43:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683164620;
+        bh=rvpKaggMszfYip+0djm2qEsluKsxOtwAuEPdkTFMsMk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Bd3Ks804e8Dg3xIGkiux87A6xJhhYMXyiFSqE5jdNLdlQa28lotVHijpF+f+FLY90
+         JrMYvKKkzXjZZu1ijPd8sgcHK1p696lJQZRXJmjs+dW/dkpXMIhyVDT8EhRaTs+zUk
+         lWVIBRF9IxbNkKKxq25oPqs5I3yw+QeY28d20fZsowvzYPAxXt33ZIJuPP7i8L19+H
+         eF71fpWYVN6AM4xeSe9OHxqxpSe54RmVCTHau10eiEXAft5M+tZ4OzTgO2Oam6A4sQ
+         fwCoqBYpmnMFyDGh3NS28M9TNblwalIE3T4iB/aqB0HDouHTr8Z14EAr6lk6Mcmd93
+         zxTBrpegkw7tA==
+Message-ID: <6596335b-2448-20f7-30ea-42ba40f1af72@kernel.org>
+Date:   Thu, 4 May 2023 09:43:26 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [RESEND v2 1/6] dt-bindings: power: Add JH7110 AON PMU support
+Subject: Re: [PATCH v4] f2fs: add async reset zone command support
 Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>
-CC:     Conor Dooley <conor.dooley@microchip.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Walker Chen <walker.chen@starfivetech.com>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, <vkoul@kernel.org>,
-        <linux-phy@lists.infradead.org>
-References: <20230419-labored-camper-644d51a7ca96@spud>
- <1a5b15fa-4f20-51c2-2ba1-a04a2911a694@starfivetech.com>
- <20230424-baffle-punch-ec73098f2b6a@spud>
- <d685a1d4-c07d-7dfa-f1fb-b35ceb2aa0eb@starfivetech.com>
- <20230425-unquote-eligible-09f743d81981@wendy>
- <a7cdfabf-2312-eaf3-f462-5bda7f0a120d@starfivetech.com>
- <68cb565d-bf39-10b0-9e3e-35ba7f54b90b@linaro.org>
- <0988495f-b87a-7f69-f222-37c67d6eae23@starfivetech.com>
- <20230425-resale-footrest-de667778c4fe@wendy>
- <663e9933-b9b3-a48f-98b6-2207215a8ed7@starfivetech.com>
- <20230425-commotion-prewashed-876247bed4ab@spud>
-From:   Changhuang Liang <changhuang.liang@starfivetech.com>
-In-Reply-To: <20230425-commotion-prewashed-876247bed4ab@spud>
-Content-Type: text/plain; charset="UTF-8"
+To:     daejun7.park@samsung.com,
+        "jaegeuk@kernel.org" <jaegeuk@kernel.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        "linux-f2fs-devel@lists.sourceforge.net" 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-trace-kernel@vger.kernel.org" 
+        <linux-trace-kernel@vger.kernel.org>
+Cc:     Seokhwan Kim <sukka.kim@samsung.com>,
+        Yonggil Song <yonggil.song@samsung.com>,
+        beomsu kim <beomsu7.kim@samsung.com>
+References: <CGME20230502041628epcms2p7233a97389cebafb73fc525a47215e707@epcms2p7>
+ <20230502041628epcms2p7233a97389cebafb73fc525a47215e707@epcms2p7>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20230502041628epcms2p7233a97389cebafb73fc525a47215e707@epcms2p7>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.99.121]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX062.cuchost.com
- (172.16.6.62)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,89 +67,203 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/4/26 0:56, Conor Dooley wrote:
-> On Tue, Apr 25, 2023 at 08:26:35PM +0800, Changhuang Liang wrote:
->> On 2023/4/25 17:35, Conor Dooley wrote:
->>> On Tue, Apr 25, 2023 at 05:18:10PM +0800, Changhuang Liang wrote:
->>>> On 2023/4/25 16:19, Krzysztof Kozlowski wrote:
->>>>> On 25/04/2023 09:57, Changhuang Liang wrote:
->>>>>> Yes, "starfive,jh7110-aon-pmu" is a child-node of "starfive,jh7110-aon-syscon".
->>>>>> In my opinion, "0x17010000" is "aon-syscon" on JH7110 SoC, and this "aon-pmu" is just 
->>>>>> a part of "aon-syscon" function, so I think it is inappropriate to make "aon-syscon"
->>>>>> to a power domain controller. I think using the child-node description is closer to
->>>>>> JH7110 SoC. 
->>>>>
->>>>> Unfortunately, I do not see the correlation between these, any
->>>>> connection. Why being a child of syscon block would mean that this
->>>>> should no be power domain controller? Really, why? These are two
->>>>> unrelated things.
->>>>
->>>> Let me summarize what has been discussed above. 
->>>>
->>>> There has two ways to describe this "starfive,jh7110-aon-syscon"(0x17010000).
->>>> 1. (0x17010000) is power-controller node:
->>>>
->>>> 	aon_pwrc: power-controller@17010000 {
->>>> 		compatible = "starfive,jh7110-aon-pmu", "syscon";
->>>> 		reg = <0x0 0x17010000 0x0 0x1000>;
->>>> 		#power-domain-cells = <1>;
->>>> 	};
->>>>
->>>>
->>>> 2. (0x17010000) is syscon node, power-controller is child-node of syscon:
->>>>
->>>> 	aon_syscon: syscon@17010000 {
->>>> 		compatible = "starfive,jh7110-aon-syscon", "syscon", "simple-mfd";
->>>> 		reg = <0x0 0x17010000 0x0 0x1000>;
->>>>
->>>> 		aon_pwrc: power-controller {
->>>> 			compatible = "starfive,jh7110-aon-pmu";
->>>> 			#power-domain-cells = <1>;
->>>> 		};
->>>> 	};
->>>
->>> I thought that Rob was suggesting something like this:
->>> 	aon_syscon: syscon@17010000 {
->>> 		compatible = "starfive,jh7110-aon-syscon", ...
->>> 		reg = <0x0 0x17010000 0x0 0x1000>;
->>> 		#power-domain-cells = <1>;
->>> 	};
+On 2023/5/2 12:16, Daejun Park wrote:
+> Changelog:
 > 
->> I see the kernel:
->> https://elixir.bootlin.com/linux/latest/source/arch/arm64/boot/dts/mediatek/mt8167.dtsi
->> this file line 42:
->> it's power-controller also has no meaningful properties.
->> What do you think?
+> v3 -> v4
+> Fixed build error caused by unused function.
 > 
-> I'm not sure that I follow. It has a bunch of child-nodes does it not,
-> each of which is a domain?
+> v2 -> v3
+> Modified arguments to be correct for ftrace parameter.
+> Changed __submit_zone_reset_cmd to void return.
+> Refactored the f2fs_wait_discard_bio function.
+> Fixed code that was previously incorrectly merged.
 > 
-> I didn't see such domains in your dts patch, they're defined directly in
-> the driver instead AFAIU. Assuming I have understood that correctly,
-> your situation is different to that mediatek one?
+> v1 -> v2
+> Changed to apply the optional async reset write pointer by default.
 > 
-> Cheers,
-> Conor.
+> This patch enables submit reset zone command asynchornously. It helps
+> decrease average latency of write IOs in high utilization scenario by
+> faster checkpointing.
+> 
+> Signed-off-by: Daejun Park <daejun7.park@samsung.com>
+> ---
+>   fs/f2fs/segment.c           | 83 +++++++++++++++++++++++++++++++++++--
+>   include/trace/events/f2fs.h | 18 +++++++-
+>   2 files changed, 96 insertions(+), 5 deletions(-)
+> 
+> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+> index 6db410f1bb8c..ec7a8de71198 100644
+> --- a/fs/f2fs/segment.c
+> +++ b/fs/f2fs/segment.c
+> @@ -1196,6 +1196,44 @@ static void __init_discard_policy(struct f2fs_sb_info *sbi,
+>   static void __update_discard_tree_range(struct f2fs_sb_info *sbi,
+>   				struct block_device *bdev, block_t lstart,
+>   				block_t start, block_t len);
+> +
+> +#ifdef CONFIG_BLK_DEV_ZONED
+> +static void __submit_zone_reset_cmd(struct f2fs_sb_info *sbi,
+> +				   struct discard_cmd *dc, blk_opf_t flag,
+> +				   struct list_head *wait_list,
+> +				   unsigned int *issued)
+> +{
+> +	struct discard_cmd_control *dcc = SM_I(sbi)->dcc_info;
+> +	struct block_device *bdev = dc->bdev;
+> +	struct bio *bio = bio_alloc(bdev, 0, REQ_OP_ZONE_RESET | flag, GFP_NOFS);
+> +	unsigned long flags;
+> +
+> +	trace_f2fs_issue_reset_zone(bdev, dc->di.start);
+> +
+> +	spin_lock_irqsave(&dc->lock, flags);
+> +	dc->state = D_SUBMIT;
+> +	dc->bio_ref++;
+> +	spin_unlock_irqrestore(&dc->lock, flags);
+> +
+> +	if (issued)
+> +		(*issued)++;
+> +
+> +	atomic_inc(&dcc->queued_discard);
+> +	dc->queued++;
+> +	list_move_tail(&dc->list, wait_list);
+> +
+> +	/* sanity check on discard range */
+> +	__check_sit_bitmap(sbi, dc->di.lstart, dc->di.lstart + dc->di.len);
+> +
+> +	bio->bi_iter.bi_sector = SECTOR_FROM_BLOCK(dc->di.start);
+> +	bio->bi_private = dc;
+> +	bio->bi_end_io = f2fs_submit_discard_endio;
+> +	submit_bio(bio);
 
-Conor and Rob, 
+How about accounting iostat info for zone reset command?
 
-How about this way:
+f2fs_update_iostat(sbi, NULL, FS_ZONE_RESET_IO, len * F2FS_BLKSIZE);
 
-aon_syscon: syscon@17010000 {
-	compatible = "starfive,jh7110-aon-syscon", "syscon", "simple-mfd";
-	reg = <0x0 0x17010000 0x0 0x1000>;
-	
-	aon_pwrc: power-controller {
-		compatible = "starfive,jh7110-aon-pmu";
-		regmap = <&aon_syscon>;
-		#power-domain-cells = <1>;
-	};
-};
+> +
+> +	atomic_inc(&dcc->issued_discard);
+> +}
+> +#endif
+> +
+>   /* this function is copied from blkdev_issue_discard from block/blk-lib.c */
+>   static int __submit_discard_cmd(struct f2fs_sb_info *sbi,
+>   				struct discard_policy *dpolicy,
+> @@ -1217,6 +1255,13 @@ static int __submit_discard_cmd(struct f2fs_sb_info *sbi,
+>   	if (is_sbi_flag_set(sbi, SBI_NEED_FSCK))
+>   		return 0;
+>   
+> +#ifdef CONFIG_BLK_DEV_ZONED
+> +	if (f2fs_sb_has_blkzoned(sbi) && bdev_is_zoned(bdev)) {
+> +		__submit_zone_reset_cmd(sbi, dc, flag, wait_list, issued);
+> +		return 0;
+> +	}
+> +#endif
+> +
+>   	trace_f2fs_issue_discard(bdev, dc->di.start, dc->di.len);
+>   
+>   	lstart = dc->di.lstart;
+> @@ -1461,6 +1506,19 @@ static void __update_discard_tree_range(struct f2fs_sb_info *sbi,
+>   	}
+>   }
+>   
+> +#ifdef CONFIG_BLK_DEV_ZONED
+> +static void __queue_zone_reset_cmd(struct f2fs_sb_info *sbi,
+> +		struct block_device *bdev, block_t blkstart, block_t lblkstart,
+> +		block_t blklen)
+> +{
+> +	trace_f2fs_queue_reset_zone(bdev, blkstart);
+> +
+> +	mutex_lock(&SM_I(sbi)->dcc_info->cmd_lock);
+> +	__insert_discard_cmd(sbi, bdev, lblkstart, blkstart, blklen);
+> +	mutex_unlock(&SM_I(sbi)->dcc_info->cmd_lock);
+> +}
+> +#endif
+> +
+>   static void __queue_discard_cmd(struct f2fs_sb_info *sbi,
+>   		struct block_device *bdev, block_t blkstart, block_t blklen)
+>   {
+> @@ -1724,6 +1782,19 @@ static void f2fs_wait_discard_bio(struct f2fs_sb_info *sbi, block_t blkaddr)
+>   
+>   	mutex_lock(&dcc->cmd_lock);
+>   	dc = __lookup_discard_cmd(sbi, blkaddr);
+> +#ifdef CONFIG_BLK_DEV_ZONED
+> +	if (dc && f2fs_sb_has_blkzoned(sbi) && bdev_is_zoned(dc->bdev)) {
+> +		/* force submit zone reset */
+> +		if (dc->state == D_PREP)
+> +			__submit_zone_reset_cmd(sbi, dc, REQ_SYNC,
+> +						&dcc->wait_list, NULL);
+> +		dc->ref++;
 
-Add a "regmap" property which is phandle. And it can keep the present child-node
-structure. This is more consistent with our soc design.
+IIUC, should be?
 
-Best regards,
-Changhuang
+else
+	dc->ref++;
+
+Thanks,
+
+> +		mutex_unlock(&dcc->cmd_lock);
+> +		/* wait zone reset */
+> +		__wait_one_discard_bio(sbi, dc);
+> +		return;
+> +	}
+> +#endif
+>   	if (dc) {
+>   		if (dc->state == D_PREP) {
+>   			__punch_discard_cmd(sbi, dc, blkaddr);
+> @@ -1876,9 +1947,15 @@ static int __f2fs_issue_discard_zone(struct f2fs_sb_info *sbi,
+>   				 blkstart, blklen);
+>   			return -EIO;
+>   		}
+> -		trace_f2fs_issue_reset_zone(bdev, blkstart);
+> -		return blkdev_zone_mgmt(bdev, REQ_OP_ZONE_RESET,
+> -					sector, nr_sects, GFP_NOFS);
+> +
+> +		if (unlikely(is_sbi_flag_set(sbi, SBI_POR_DOING))) {
+> +			trace_f2fs_issue_reset_zone(bdev, blkstart);
+> +			return blkdev_zone_mgmt(bdev, REQ_OP_ZONE_RESET,
+> +						sector, nr_sects, GFP_NOFS);
+> +		}
+> +
+> +		__queue_zone_reset_cmd(sbi, bdev, blkstart, lblkstart, blklen);
+> +		return 0;
+>   	}
+>   
+>   	/* For conventional zones, use regular discard if supported */
+> diff --git a/include/trace/events/f2fs.h b/include/trace/events/f2fs.h
+> index 99cbc5949e3c..ee1477de8324 100644
+> --- a/include/trace/events/f2fs.h
+> +++ b/include/trace/events/f2fs.h
+> @@ -1512,7 +1512,7 @@ DEFINE_EVENT(f2fs_discard, f2fs_remove_discard,
+>   	TP_ARGS(dev, blkstart, blklen)
+>   );
+>   
+> -TRACE_EVENT(f2fs_issue_reset_zone,
+> +DECLARE_EVENT_CLASS(f2fs_reset_zone,
+>   
+>   	TP_PROTO(struct block_device *dev, block_t blkstart),
+>   
+> @@ -1528,11 +1528,25 @@ TRACE_EVENT(f2fs_issue_reset_zone,
+>   		__entry->blkstart = blkstart;
+>   	),
+>   
+> -	TP_printk("dev = (%d,%d), reset zone at block = 0x%llx",
+> +	TP_printk("dev = (%d,%d), zone at block = 0x%llx",
+>   		show_dev(__entry->dev),
+>   		(unsigned long long)__entry->blkstart)
+>   );
+>   
+> +DEFINE_EVENT(f2fs_reset_zone, f2fs_queue_reset_zone,
+> +
+> +	TP_PROTO(struct block_device *dev, block_t blkstart),
+> +
+> +	TP_ARGS(dev, blkstart)
+> +);
+> +
+> +DEFINE_EVENT(f2fs_reset_zone, f2fs_issue_reset_zone,
+> +
+> +	TP_PROTO(struct block_device *dev, block_t blkstart),
+> +
+> +	TP_ARGS(dev, blkstart)
+> +);
+> +
+>   TRACE_EVENT(f2fs_issue_flush,
+>   
+>   	TP_PROTO(struct block_device *dev, unsigned int nobarrier,
