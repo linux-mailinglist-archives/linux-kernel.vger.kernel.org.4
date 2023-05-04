@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 033816F728C
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:03:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57ACC6F7294
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:03:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbjEDTDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 15:03:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51372 "EHLO
+        id S230045AbjEDTDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 15:03:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230079AbjEDTDE (ORCPT
+        with ESMTP id S230097AbjEDTDR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 15:03:04 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8DA29037;
-        Thu,  4 May 2023 12:02:28 -0700 (PDT)
-Message-ID: <20230504185937.201611990@linutronix.de>
+        Thu, 4 May 2023 15:03:17 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D659EC6;
+        Thu,  4 May 2023 12:02:36 -0700 (PDT)
+Message-ID: <20230504185937.257347750@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683226944;
+        s=2020; t=1683226946;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=8IR2ZEar7xSTX3+WcC3NFIdAp4AUTKg+YP70lXONDYs=;
-        b=b5Dhpk7DXri1g+Jk4Fccefqph5HHh5m0O6WHx1dP1v8spz8TW/ZVEXRzP6Fu5Vyp4twGau
-        0WJ5VSOP7FkG0YM49DJA3ab9WsH+lMCnQQToJbW5YLIvGGqyCD5SuatG+70PddmmocvInY
-        sbywrL3O4QW1MGnAo6cSBXhCM/VRCDBpxMydY3h/7/ooJkjuTTpet2ZIX0gkrKNjXC4iyZ
-        NM25MYCPlURsUrvY1AdwvXfa3J2aswhoiO4UsIkjW2ZgbjIhOmU0uQ9SDbhRPFEyzNsNh0
-        mS7KdesNxpuJcwz0hAomc0k47L5YQTKWUQ3/pEIBgfRwzYecCD6MkvQPPrVSxw==
+         references:references; bh=7K79vzHgMUP9R0A/9c85ZFgwBToV4EA8CXJkDqIYiAA=;
+        b=UC7UBpzkmxaEWM2nz/Qw6Vjvrnn6fWsNM/KnljWxV7HMtz5u7vnaAfODd1M7vTr5ktTb20
+        nVojYUScHcp2OqOxJ8IqsoIvsDu/7IdzIUdDuRTyFO8wPuGlIHpnfYJUn5p8bx3AiClEX1
+        fRskIOaKRFHPshjjQegmMKxWZJiKU/W1wNR+46su4jgsn/9Va0iMm7QqwA01siEqX7wCZg
+        cW+AbT9hwgRm2RTXxGoRlf6T+Y7L4Mnn/bxe5uXiXqUdghVOxD2GUZ9J1ZZ4wpm572Kggb
+        lAqMgDTfSLuvpAL4aW6s90BbYxngLSPUP8QvW4PAuFXJ0OZBFaKLB/9XRIX9dw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683226944;
+        s=2020e; t=1683226946;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=8IR2ZEar7xSTX3+WcC3NFIdAp4AUTKg+YP70lXONDYs=;
-        b=dn+I2+Yxq6eST9WYLeBz7I//tSeh1zP1C4UnkiRYUPrB/Bi9OJVO0kV5NCl8mWHGp/F1Kx
-        csRGXLzl80A3yQBw==
+         references:references; bh=7K79vzHgMUP9R0A/9c85ZFgwBToV4EA8CXJkDqIYiAA=;
+        b=y1BzbUsMle0wpOLNE2p2p2IO/b5quxM8T3suQns4J8s0UcXtZFuk8jCSoUG3pH8YtIQT2K
+        ezemL9386MNKclAg==
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
@@ -67,11 +67,11 @@ Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Sabin Rapan <sabrapan@amazon.com>,
         "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Subject: [patch V2 16/38] x86/xen/smp_pv: Remove wait for CPU online
+Subject: [patch V2 17/38] x86/xen/hvm: Get rid of DEAD_FROZEN handling
 References: <20230504185733.126511787@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date:   Thu,  4 May 2023 21:02:24 +0200 (CEST)
+Date:   Thu,  4 May 2023 21:02:25 +0200 (CEST)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
@@ -84,11 +84,12 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Thomas Gleixner <tglx@linutronix.de>
 
-Now that the core code drops sparse_irq_lock after the idle thread
-synchronized, it's pointless to wait for the AP to mark itself online.
+No point in this conditional voodoo. Un-initializing the lock mechanism is
+safe to be called unconditionally even if it was already invoked when the
+CPU died.
 
-Whether the control CPU runs in a wait loop or sleeps in the core code
-waiting for the online operation to complete makes no difference.
+Remove the invocation of xen_smp_intr_free() as that has been already
+cleaned up in xen_cpu_dead_hvm().
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Cc: Juergen Gross <jgross@suse.com>
@@ -96,26 +97,28 @@ Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>
 Cc: xen-devel@lists.xenproject.org
 
 ---
- arch/x86/xen/smp_pv.c |   10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ arch/x86/xen/enlighten_hvm.c |   11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 ---
---- a/arch/x86/xen/smp_pv.c
-+++ b/arch/x86/xen/smp_pv.c
-@@ -340,11 +340,11 @@ static int xen_pv_cpu_up(unsigned int cp
+--- a/arch/x86/xen/enlighten_hvm.c
++++ b/arch/x86/xen/enlighten_hvm.c
+@@ -161,13 +161,12 @@ static int xen_cpu_up_prepare_hvm(unsign
+ 	int rc = 0;
  
- 	xen_pmu_init(cpu);
+ 	/*
+-	 * This can happen if CPU was offlined earlier and
+-	 * offlining timed out in common_cpu_die().
++	 * If a CPU was offlined earlier and offlining timed out then the
++	 * lock mechanism is still initialized. Uninit it unconditionally
++	 * as it's safe to call even if already uninited. Interrupts and
++	 * timer have already been handled in xen_cpu_dead_hvm().
+ 	 */
+-	if (cpu_report_state(cpu) == CPU_DEAD_FROZEN) {
+-		xen_smp_intr_free(cpu);
+-		xen_uninit_lock_cpu(cpu);
+-	}
++	xen_uninit_lock_cpu(cpu);
  
--	rc = HYPERVISOR_vcpu_op(VCPUOP_up, xen_vcpu_nr(cpu), NULL);
--	BUG_ON(rc);
--
--	while (cpu_report_state(cpu) != CPU_ONLINE)
--		HYPERVISOR_sched_op(SCHEDOP_yield, NULL);
-+	/*
-+	 * Why is this a BUG? If the hypercall fails then everything can be
-+	 * rolled back, no?
-+	 */
-+	BUG_ON(HYPERVISOR_vcpu_op(VCPUOP_up, xen_vcpu_nr(cpu), NULL));
- 
- 	return 0;
- }
+ 	if (cpu_acpi_id(cpu) != U32_MAX)
+ 		per_cpu(xen_vcpu_id, cpu) = cpu_acpi_id(cpu);
 
