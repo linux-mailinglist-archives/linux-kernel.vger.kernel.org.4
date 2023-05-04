@@ -2,144 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74DDB6F6676
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 10:00:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A36E56F667E
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 10:01:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbjEDIA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 04:00:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42468 "EHLO
+        id S229907AbjEDIBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 04:01:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbjEDIAY (ORCPT
+        with ESMTP id S229913AbjEDIBa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 04:00:24 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B437319B7;
-        Thu,  4 May 2023 01:00:21 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-6436e075166so180534b3a.0;
-        Thu, 04 May 2023 01:00:21 -0700 (PDT)
+        Thu, 4 May 2023 04:01:30 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFFB82728
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 01:01:27 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2a7b02615f1so2183241fa.0
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 01:01:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683187221; x=1685779221;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=72YRHw4QQ93xVIclFiNgNX/J7ndLff1qiZMWos8BlCY=;
-        b=gjXOHhEuhIqPasoFoc9u6rL2o5GiqQ6NRd6DMCN0SKe+GQJUZanrwmgAdjysJ8ShSW
-         NVlFECf9Tyx4PUrEbs8Ra7ohUVdupwWPugdeMwQWnPXImlbyRmyNc1kQpGe23qBSqONw
-         u4kB2oUcDJj/S6QduG9b+4ubcTenOJawSiKaneKq9lAudf3bilJGgBVf6m9zDYtrm3k1
-         iBZHQvwdMc1cvVruP628KGUe+L2Xztg3xTQn1c36F1fHtwcPHlCmgqDbefftVJ9n8YDs
-         lINKMV786hqOqUtNerm6zW7G7gtWB64bXjNGuX9tixuqqP5ByHlu5fnLUlPg1tDVfXKG
-         osVw==
+        d=linaro.org; s=google; t=1683187286; x=1685779286;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UKfCQ7oGwGPPqXZQ3aJ0ZDJ1Cq02ffMWgWKavhP3FMk=;
+        b=OCbpz2/JL1GKJRn1a0KJVijPSjPYlLyMDv8bEl5Ox0lliaW3pnTjLN4TyPnmJ0m7P/
+         UoTMo3Nlc0Ks9VwxZ0Jm8l5dJOcO7x80W0UAN3yn2RmETo41GqV6YDtlzakWGV6R+U2L
+         lzUQMwJ7P9koytIoJWukoBvR8+eF1Mg/yEfUxApYsuC2R8zQ0/to46epQc+DXobk+ohp
+         soJtyJ+1VzFkcvnPZ4zeH2FYF12rnsbmmXKwMCHi5kVPfERJh70GRM5N3upZ6qU7j55k
+         pkfQ+lOZejmm+lxNQvTpIivH8hHGo85XFpFqDssoZAxJGpjhTQfD/jbA+DwLvO4aJQ3o
+         Yr/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683187221; x=1685779221;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=72YRHw4QQ93xVIclFiNgNX/J7ndLff1qiZMWos8BlCY=;
-        b=bVFzlF0AwcQ+BKK+pLnP7Pkj7myNAkVtfffQvPHkVTxIB6X80ekBlo+K75/8ovyr15
-         uCczzUhkHmfs9xHuKd8Wm2azNu3Zjx85xwFL3wHHOkwCzz7bFqFpMrCszyIDlZojQL94
-         IphZdjmw5EPn0R9Z2neKaT67BTj+WcUnXp0UpOszA4r/l4eLGTrQZa2UY9jvkiFI055F
-         GR1ugNWm3Es+TnILbYGg53rcq/fDJzRAsL8ERTRApxnSFqYPzHfzliNWuPRyswBAy9e1
-         ujEk4sqdVkmKseP+J74viqylj8rKiSoiTammSQAjv8/t/cdzmGJ3S5Ho5ecTPwFriTrO
-         nHZg==
-X-Gm-Message-State: AC+VfDxko1hNJEs2OSTHWAmHgxSdHD93LmnEroSicxyAW2gTBBZUsm4M
-        hA85YH6WBwh6aeVal2fi5IKSrg8ziQwrZg==
-X-Google-Smtp-Source: ACHHUZ70+7VKyknxDPc0AmBRRAciFB6F8TIqqUAcNwQvfgXbOd5ZKdoDXw1kdNxlhqG87/aH01LYXw==
-X-Received: by 2002:a05:6a21:3a95:b0:f2:ad27:f98a with SMTP id zv21-20020a056a213a9500b000f2ad27f98amr1288460pzb.14.1683187220834;
-        Thu, 04 May 2023 01:00:20 -0700 (PDT)
-Received: from [172.19.1.47] (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id z2-20020a6552c2000000b0051b3d5543c4sm17337924pgp.30.2023.05.04.01.00.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 01:00:20 -0700 (PDT)
-Message-ID: <1f97c5a6-7c28-8582-a820-c33304a1801c@gmail.com>
-Date:   Thu, 4 May 2023 16:00:16 +0800
+        d=1e100.net; s=20221208; t=1683187286; x=1685779286;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UKfCQ7oGwGPPqXZQ3aJ0ZDJ1Cq02ffMWgWKavhP3FMk=;
+        b=ky8mlqW9pc0VzA9RwA/wOsWXvugnKUe1V9U29GZ3p+072TAdFSqy2akMjEIuuln+1I
+         Pn34WtJUpMiC1PBh/ueTy0n4EkqXfevJ2EuAxAuxJvMCEWxbxJU1VdswfT431AFjDx7v
+         IKs7pKTzf1dFJlMTjNeGsdx1R1ohAso0kHSFdNrPqi/GQd5LRwSJaAspv9UMEucthvkK
+         QFRqWeeHJOG71NEEZEUeP6i+Mx+ztcJpQd1QXxRtVHb5C+wohn8nSm7EDIREb/t5vhS0
+         +MU94dlyefjSDKIE+LpX09qZoC/9Q4j08523Phjez8IQgdqo5aJi/RCd0UcV33HuW6Hz
+         ovbg==
+X-Gm-Message-State: AC+VfDwwyDYZeb0H9lXz6SNdwtLdSmJcoU/RFLjSb0QeeqyqAiqNcvgR
+        vnshuQrMxCvS7WwewrGsB4M6Wg==
+X-Google-Smtp-Source: ACHHUZ7am1RRkZ8Sc7m+l2FmARoz8//M3blPO+LwbYWvDuPgp0QcQozPU0DQCGq7Ct2XY8F3WtGDIw==
+X-Received: by 2002:a2e:8242:0:b0:2a8:d146:12cd with SMTP id j2-20020a2e8242000000b002a8d14612cdmr708401ljh.17.1683187285974;
+        Thu, 04 May 2023 01:01:25 -0700 (PDT)
+Received: from [192.168.1.101] (abyl248.neoplus.adsl.tpnet.pl. [83.9.31.248])
+        by smtp.gmail.com with ESMTPSA id n26-20020ac2491a000000b004edc512515fsm917165lfi.47.2023.05.04.01.01.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 May 2023 01:01:25 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH v2 00/18] Venus QoL / maintainability fixes
+Date:   Thu, 04 May 2023 10:00:56 +0200
+Message-Id: <20230228-topic-venus-v2-0-d95d14949c79@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v9 01/10] arm64: Kconfig.platforms: Add config for Nuvoton
- MA35 platform
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org, Lee Jones <lee@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-serial@vger.kernel.org, schung@nuvoton.com,
-        mjchen@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
-References: <20230504033726.93-1-ychuang570808@gmail.com>
- <20230504033726.93-2-ychuang570808@gmail.com>
- <8ce93998-84c3-0640-a6e1-76ff17b3953c@linaro.org>
- <c99babb3-532a-4d00-876c-3c316b456325@app.fastmail.com>
-Content-Language: en-US
-From:   Jacky Huang <ychuang570808@gmail.com>
-In-Reply-To: <c99babb3-532a-4d00-876c-3c316b456325@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADlmU2QC/22NQQ6CMBBFr0Jm7ZhSFEZW3sOwKHWESUhLWmg0h
+ LtbWbt8L/n/bRA5CEdoiw0CJ4niXQZ9KsCOxg2M8swMWulKaU24+FksJnZrxEaxqXrb1DUR5EV
+ vImMfjLNj3rh1mrKcA7/kfSQeXeZR4uLD5yim8mf/n6cSFV7JaktU0YVv90mcCf7swwDdvu9fX
+ jO8IbwAAAA=
+To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Dikshita Agarwal <dikshita@qti.qualcomm.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Mansur Alisha Shaik <mansur@codeaurora.org>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Dikshita Agarwal <quic_dikshita@quicinc.com>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        stable@vger.kernel.org
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1683187284; l=3947;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=g8caXHzolWKJFFUH0lTGkLSyyvJcODU6gNhXgru7KZw=;
+ b=RSVmsgJ0YO3P5dGd36GiY9k/kLomJabqfxZTeBEzwhNlP+IniWLWwfZ+VPb0xn1U8j/0asU1q
+ Bor1BqUPEffBC3Koiz0GgzR0alRK167TZ3qyh0LhP09bRGkE2PbV7md
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+v1 -> v2:
+- Move "Write to VIDC_CTRL_INIT after unmasking interrupts" up and add
+  a Fixes tag & Cc stable
+- Reword the comment in "Correct IS_V6() checks"
+- Move up "media: venus: Remap bufreq fields on HFI6XX", add Fixes and
+  Cc stable
+- Use better English in "Use newly-introduced hfi_buffer_requirements
+  accessors" commit message
+- Mention "Restrict writing SCIACMDARG3 to Venus V1/V2" doesn't seem to
+  regress SM8250 in the commit message
+- Pick up tags (note: I capitalized the R in Dikshita's 'reviewed-by'
+  and removed one occurrence of random '**' to make sure review tools
+  like b4 don't go crazy)
+- Handle AR50_LITE in "Assign registers based on VPU version"
+- Drop /* VPUn */ comments, they're invalid as explained by Vikash
+- Take a different approach to the sys_idle problem in patch 1
 
+v1: https://lore.kernel.org/r/20230228-topic-venus-v1-0-58c2c88384e9@linaro.org
 
-On 2023/5/4 下午 03:49, Arnd Bergmann wrote:
-> On Thu, May 4, 2023, at 08:32, Krzysztof Kozlowski wrote:
->> On 04/05/2023 05:37, Jacky Huang wrote:
->>> From: Jacky Huang <ychuang3@nuvoton.com>
->>>
->>> Add ARCH_NUVOTON configuration option for Nuvoton MA35 family SoCs.
->>>
->>> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
->>> ---
->>>   arch/arm64/Kconfig.platforms | 9 +++++++++
->>>   1 file changed, 9 insertions(+)
->>>
->>> diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
->>> index 89a0b13b058d..c1f277c05569 100644
->>> --- a/arch/arm64/Kconfig.platforms
->>> +++ b/arch/arm64/Kconfig.platforms
->>> @@ -236,6 +236,15 @@ config ARCH_NPCM
->>>   	  General support for NPCM8xx BMC (Arbel).
->>>   	  Nuvoton NPCM8xx BMC based on the Cortex A35.
->>>   
->>> +config ARCH_NUVOTON
->> Either this should be ARCH_MA35 or you should integrate it with NPCM.
->> ARCH_NUVOTON means all Nuvoton platforms.
-> I'd go with two separate Kconfig options here (ARCH_MA35 and ARCH_NPCM)
-> for arm64, but keep the shared arch/arm64/boot/dts/nuvoton directory,
-> I think that fits most closely what we do on other targets, and there
-> is apparently very little sharing of IP blocks between npcm and ma35,
-> if any.
->
->        Arnd
+Currently upstream assumes all (well, almost all - see 7280 or CrOS
+specific checks) Venus implementations using the same version of the
+Hardware Firmware Interface can be treated the same way. This is
+however not the case.
 
-Dear Arnd and Krzysztof,
+This series tries to introduce the groundwork to start differentiating
+them based on the VPU (Video Processing Unit) hardware type, fixes a
+couple of issues that were an effect of that generalized assumption
+and lays the foundation for supporting 8150 (IRIS1) and SM6115/QCM2290
+(AR50 Lite), which will hopefully come soon.
 
-Thank you for your suggestion, it really helped me. We are also considering
-whether to use ARCH_MA35. As NPCM and MA35 are designed for different
-application areas, it is unlikely that they would be used simultaneously.
-Therefore, it would be more reasonable to separate them into ARCH_NPCM and
-ARCH_MA35. In the next version, v10, we will change all instances of
-ARCH_NUVOTON in this patchset to ARCH_MA35 and keep shared directory 
-changed.
+Tested on 8250, but pretty please test it on your boards too!
 
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Konrad Dybcio (18):
+      media: venus: hfi_venus: Only consider sys_idle_indicator on V1
+      media: venus: hfi_venus: Write to VIDC_CTRL_INIT after unmasking interrupts
+      media: venus: Remap bufreq fields on HFI6XX
+      media: venus: Introduce VPU version distinction
+      media: venus: Add vpu_version to most SoCs
+      media: venus: firmware: Leave a clue for homegrown porters
+      media: venus: hfi_venus: Sanitize venus_boot_core() per-VPU-version
+      media: venus: core: Assign registers based on VPU version
+      media: venus: hfi_venus: Fix version checks in venus_halt_axi()
+      media: venus: hfi_venus: Fix version checks in venus_isr()
+      media: venus: hfi_venus: Fix version check in venus_cpu_and_video_core_idle()
+      media: venus: hfi_venus: Fix version check in venus_cpu_idle_and_pc_ready()
+      media: venus: firmware: Correct IS_V6() checks
+      media: venus: hfi_platform: Check vpu_version instead of device compatible
+      media: venus: vdec: Fix version check in vdec_set_work_route()
+      media: venus: Introduce accessors for remapped hfi_buffer_reqs members
+      media: venus: Use newly-introduced hfi_buffer_requirements accessors
+      media: venus: hfi_venus: Restrict writing SCIACMDARG3 to Venus V1/V2
 
-Best Regards,
-Jacky Huang
+ drivers/media/platform/qcom/venus/core.c           | 11 ++--
+ drivers/media/platform/qcom/venus/core.h           | 15 ++++++
+ drivers/media/platform/qcom/venus/firmware.c       | 19 +++++--
+ drivers/media/platform/qcom/venus/helpers.c        |  7 +--
+ drivers/media/platform/qcom/venus/hfi_helper.h     | 61 +++++++++++++++++++---
+ drivers/media/platform/qcom/venus/hfi_msgs.c       |  2 +-
+ .../media/platform/qcom/venus/hfi_plat_bufs_v6.c   | 22 ++++----
+ drivers/media/platform/qcom/venus/hfi_platform.c   |  2 +-
+ drivers/media/platform/qcom/venus/hfi_venus.c      | 45 ++++++++--------
+ drivers/media/platform/qcom/venus/vdec.c           | 10 ++--
+ drivers/media/platform/qcom/venus/vdec_ctrls.c     |  2 +-
+ drivers/media/platform/qcom/venus/venc.c           |  4 +-
+ drivers/media/platform/qcom/venus/venc_ctrls.c     |  2 +-
+ 13 files changed, 138 insertions(+), 64 deletions(-)
+---
+base-commit: 92e815cf07ed24ee1c51b122f24ffcf2964b4b13
+change-id: 20230228-topic-venus-70ea3bc76688
 
-
-
-
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
