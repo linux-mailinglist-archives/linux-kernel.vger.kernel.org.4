@@ -2,97 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D239D6F6EF7
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 17:35:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 531856F6F15
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 17:35:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbjEDPfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 11:35:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48848 "EHLO
+        id S231439AbjEDPfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 11:35:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230310AbjEDPfA (ORCPT
+        with ESMTP id S229905AbjEDPfm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 11:35:00 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC25E54
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 08:34:59 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id 98e67ed59e1d1-24e3e52228cso354339a91.1
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 08:34:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683214498; x=1685806498;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pQ9tDaHwuNjMEaIcEge2FkZR+GruLElSn+p2QqhZgdw=;
-        b=lzEff1KQKCUWqah8wMan4YtymdhMXv2goOSxQeVT1Tc+G/I9KZn7PVilbar6Ibhu+l
-         WUDTrRkT+iSklflz+d8+ux6Iec4EpbTfiCPCwRviUaBc5UryB8PgDKGb+I7O1Bdh/EW8
-         yZaOil60zjIQn1IdFZRoJPlXZHCXE9ioihZS6YVrwaTn1ES+XECIaqq2u6Rwlj6j+icD
-         9V2VsVNMHPuEZwabMOYC2J3zdwdMpjjdYBdOKkBBMtAYSWT5cbuVIm+0p3S55IoI4//l
-         MLBeS79uqY6047S8jkkIIIcqQckIC2pDHqNxS0pBwiMfIwXts5aOIbaWPgJO4LVu1jzq
-         Fd5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683214498; x=1685806498;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pQ9tDaHwuNjMEaIcEge2FkZR+GruLElSn+p2QqhZgdw=;
-        b=ISwA+M2jILfx5tXN3zSqri5OK9gKWIkMwCAM6BL2WUTKFgKBs6tQWQSdbh40VB5CXj
-         PRF4fBJkZqyNAIskOTUnSMma8v55zK7WaqutklOBYR3kpui5UMiGuOFMzgDb4NQ+O2vw
-         EQ07lVr9fq97UHQqiiuSCA9zMc0eZkvtvXdNHBXcOwKCv4Dd0WAKjdx7wdqEVXgyAllP
-         Smwz2B51YzqAMafwM3aPC1ZBvZFr9BBGZwDttnV+FEtXDZm7vPYss8eM0T6Az7npkz9k
-         SstM008c143asRMNm9AOZ6vBgcKbN3iAy5+IKjBDuiBFXpw9ECq4ddV552pV9sVe8cmn
-         mL5A==
-X-Gm-Message-State: AC+VfDyrYQEn7F9ChzsIzAacKCd7lvPoX3E4GWtfvjLRvTE89OvEtviD
-        3Xm1s5fzhtR91KPf924PCsTgejPeKyk=
-X-Google-Smtp-Source: ACHHUZ5NFd7AM9dlhI6C/9eAeqToTuGykksiCoHvLDIY0QGbwAdwqx7xIMg6c3GGHzcU04fX/jWDBB7YjCw=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90a:9dc8:b0:24e:1b1d:edd3 with SMTP id
- x8-20020a17090a9dc800b0024e1b1dedd3mr716932pjv.1.1683214498595; Thu, 04 May
- 2023 08:34:58 -0700 (PDT)
-Date:   Thu, 4 May 2023 08:34:57 -0700
-In-Reply-To: <06715227566b520d4a445466f091dc28a0b8cd95.camel@intel.com>
-Mime-Version: 1.0
-References: <20230503182852.3431281-1-seanjc@google.com> <20230503182852.3431281-3-seanjc@google.com>
- <06715227566b520d4a445466f091dc28a0b8cd95.camel@intel.com>
-Message-ID: <ZFPQodNs0Cn9YDXT@google.com>
-Subject: Re: [PATCH 2/5] KVM: SVM: Use kvm_pat_valid() directly instead of kvm_mtrr_valid()
-From:   Sean Christopherson <seanjc@google.com>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "guoke@uniontech.com" <guoke@uniontech.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "haiwenyao@uniontech.com" <haiwenyao@uniontech.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 4 May 2023 11:35:42 -0400
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2087.outbound.protection.outlook.com [40.107.8.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C72E40;
+        Thu,  4 May 2023 08:35:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=V/aaibR+kK8cF7CMxP2DpPhjfQmPAqPe5p57NJzBKLxFqJ1BXk0pFXLE0PMTGOqkY+fhUOmk/pQj9XLFH37HwujxxbWmPIrLu5tt80PeX8v+ExdAi2B7alJKZJBZMPkUF0Gn/7xP7W5paNCT2dMn0/VF9GyjZlJG9oqtNonaomOoweos+pak20B1VyJdX9up2EDmRhOoGoyMGsXvvqrJfxINZzrBZRgKf8Ath5evxig/Y8IYv2aRtzxACrZNXPJRi/L2irnWahzdagQmSPrNzH/dDx70jkn8DZdLbi82JV4zNfZnrY7Whi7eOkIpw0V7CnjeV0bxgIBamBcQyc/fjg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1JAvUmbK2XBC5GjxHBQdwJN4Yw6X4HgzA0V6CVFo9Ig=;
+ b=oLf77msRhUmD1Wsmme3uIKnTLT87RgdgfqjIWtJZaqdP4zVAwLJFturbP9iRNvaVEo1rOJ5Jd8LbNdnTEzHnA+Sd4TTVWL+MMwwdpgtHesJLHhk1mLqHEFskVT8daj81Nr1vV2vlJRIooRlyiR9osz8x24iot65mAs6nnYnDdFiCycapbxRbBKIYRmBdipQFpHA+ZZbhGl7LQwgCq9qi2e42PV1QUfuk9FDeB1oACVX+WPY249pwZRBbcPYjpbmnQFQhwX2b6NoTeA22jikJkLyH/XWloBL2ZyPKxOMPqFEz8I2YX37d68o5eW8atFeWwW9kkD3DCH16rjqF1mIsVQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1JAvUmbK2XBC5GjxHBQdwJN4Yw6X4HgzA0V6CVFo9Ig=;
+ b=HYxHSaXcjAaGmWLQetEXKZhb7j/RyjG1snDm8/rTDGjb8doJwhw0dTzKr0eoVwoSP6BN4n8a4/BfLBufMKblzq6ZHkqxw3+fLpnNhbZM2frrs29GH1YIyBtAJi/RYeivrphp2/gJzLx5CUpMQrVTeM0cz5gzNMchiP8VQO8hrjc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB9185.eurprd04.prod.outlook.com (2603:10a6:102:231::11)
+ by VE1PR04MB7245.eurprd04.prod.outlook.com (2603:10a6:800:1b1::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.26; Thu, 4 May
+ 2023 15:35:38 +0000
+Received: from PAXPR04MB9185.eurprd04.prod.outlook.com
+ ([fe80::28fb:82ec:7a6:62f3]) by PAXPR04MB9185.eurprd04.prod.outlook.com
+ ([fe80::28fb:82ec:7a6:62f3%5]) with mapi id 15.20.6363.022; Thu, 4 May 2023
+ 15:35:38 +0000
+From:   Shenwei Wang <shenwei.wang@nxp.com>
+To:     Wei Fang <wei.fang@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Shenwei Wang <shenwei.wang@nxp.com>,
+        Clark Wang <xiaoning.wang@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        imx@lists.linux.dev, Gagandeep Singh <g.singh@nxp.com>
+Subject: [PATCH v3 net 1/1] net: fec: correct the counting of XDP sent frames
+Date:   Thu,  4 May 2023 10:35:17 -0500
+Message-Id: <20230504153517.816636-1-shenwei.wang@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BYAPR05CA0060.namprd05.prod.outlook.com
+ (2603:10b6:a03:74::37) To PAXPR04MB9185.eurprd04.prod.outlook.com
+ (2603:10a6:102:231::11)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB9185:EE_|VE1PR04MB7245:EE_
+X-MS-Office365-Filtering-Correlation-Id: 92e17222-5a23-441b-cd58-08db4cb5361a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jLdrwbpNG5MIzVC2laVhdkMLYpLglpSKY8ucUz9hHq/Sxb6PGYaX8iOmxzjPD4zffZ9L0MCFpmqHvDnYadJMWNGGjj8i/pNT2oasEekYpqfV7WJonk5EzjRdoe4upVIftGl1mR0JtDGWVBygTZ3/eUdW6zb+LWmPbGVlPiVzAIU88ns/Aua2cP4XYoJJSA2CaV5NMFRcl0ZhPCyWEKqnCiyoujXUfbbd0E8l0FzO2B9SN2qDWmO1Xdi7Gro6Mo5BosaHzq8gSV2hby/RWuVtV+AR4b+9FqgH4nbNtbxJb7P8w9PTWkw678hqSawtmSQ06JSMxHb7RywTRG9j0x3nFSRuuMPLn2ETQ4szBjRZafJ9zu4L/ZCjqX1drzQgpjhV+Um1EKf9tNwBfK/2KV9Q6Jn8/016mdo2ucaF+HNFZaTlIuMZpzohD4LT+tseex0HlC/hCekTyqNRMuJhLY8czUqtcFSBUmS5bm2WZwqlAm73wqj8oyVdndLym763pBnQHHMQ3zgLjLJPlCZkEsksc2LQvfK3DlA1gfhlZ100/USmscQzT4Uq3KOOJZbdMTtWc2+oasPBjO2SqlQbKja06KfUoB/qA09GITytgEg5g1kjRhX7yFKxzgyzzEycGDOM
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9185.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(366004)(39860400002)(136003)(396003)(451199021)(38100700002)(6666004)(38350700002)(110136005)(478600001)(86362001)(83380400001)(55236004)(26005)(1076003)(186003)(6506007)(6512007)(2616005)(36756003)(6486002)(52116002)(54906003)(5660300002)(8676002)(41300700001)(8936002)(44832011)(7416002)(2906002)(66556008)(316002)(66476007)(66946007)(4326008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0YDjKE+g1xxwAApswedzZo2yEbWF2ZEvaW076N6Q2mNeZ5YD7yKisYoEzGkk?=
+ =?us-ascii?Q?SNDekHsf5N82DiVLEADhyWtiua6xxdyboJlTpgyResQ4Vqo1RcRkMsbnsIW0?=
+ =?us-ascii?Q?ahbONmxEe8HM1KgaESruHJKTcqvZeP0KMQVDqLYqA379cCwbVWgDo2POPxzd?=
+ =?us-ascii?Q?JWnJlyKEbaZCbL+QMhVeF4RtCWepmqJfOpBzHrb4NpKtlcJOED3XoXe97o+1?=
+ =?us-ascii?Q?eb7VRA8JBwQv6AHb35xFKyzdqiT9TWHDCbySHMUDwS6Gh/6iYgrTB05O6cft?=
+ =?us-ascii?Q?FOASQiz2DSorGTLnO2p43nFgFG85Ejfi1gT+CyxZdog8fONhXLHyO9zUGDRz?=
+ =?us-ascii?Q?vFQShwMtHfhFFwUIIEGnAQrbCFS7/o1wOEkkqmw0lRpN0F7Vysl7izl6axTR?=
+ =?us-ascii?Q?u0V6dMJi/sw30W9eNpJvptY1GnnUUmQdCW4fXvG39DMePFLkyk4i1/6qy7ZM?=
+ =?us-ascii?Q?8XTfzzM2Lj+5JRqHqjH5iXvGyaXQgktbGHcGEKPnxJZuYsaMPdxm0vPQosm+?=
+ =?us-ascii?Q?8OC9S+R8CHrbiBOhkJElk2Cdckf6p67r2mCqkWN7xcWPzKQDWLw8lKfc27bV?=
+ =?us-ascii?Q?QaKn8jA1MEZfECLEc5mR53/c5nEcOLIc7+JkvV/8ImdOSfbYTVY/IcASNdoY?=
+ =?us-ascii?Q?GwAE13Kmrfq8UK1DzdrnrW2ZnqTW0ex3rXcRMeD63K+KJqEClhakeyq3cmQh?=
+ =?us-ascii?Q?74fc/fQz/nPSQcuGT0N4Kh+IjBaSzx8fONdTIIlMAEfZsGWkmHHbYrhRawZ+?=
+ =?us-ascii?Q?y2+aOw2zXWuOqrI5xB5eHW8SY3arGeIYABGIxt7LUv8Jn4Aaj6uVrQIwTwlb?=
+ =?us-ascii?Q?Z/CzGg6pR2qcXyySo1Gcj/PtOi4Jc95YBU9M5AcE4yh8JD16BZ55Q0N6/FC1?=
+ =?us-ascii?Q?2mbSfonOTekMOPvWPgAwUMx5RX59zpVIotY8wwR14iL2uklSLezle3rqACop?=
+ =?us-ascii?Q?Jnd44ZtZnRZDhpPkSysTCqpCaXHqOvtUat0n6yTYE72O55U+25b7MkmVDx7g?=
+ =?us-ascii?Q?lBgvziD1VNYyy0+91XP7XAgxNuQo/UkIOOxbx7q2jz6Y7NmDszCUxWLm24B8?=
+ =?us-ascii?Q?h64NhIylMmp5kOj3quqwcGyG5QWrkvr1cyqvYiKQ774x99Y9OLxjbOjFGnwY?=
+ =?us-ascii?Q?HiuYZ931h9GWH77ktaH95SCIZM4h6ytc4JhkKiKxtyhEARtDIXcHxLMWJzU/?=
+ =?us-ascii?Q?O41zL78AKr3wgwb6bgMTVr3Ie+BlIbmO3yw9nACGnQA+bhSxK/tLZ9Nxlexi?=
+ =?us-ascii?Q?4k9CLDdboVpdsxLGVz0/eLPgAKYLdpPxfAKZsOwE160A22oQ5coqvIkWEcGR?=
+ =?us-ascii?Q?H9L06CMbu8VPWzyWhk1Nb/MCSmGCJkSnPTbj3lEVY4Gupeh8L8fLMerW5FZy?=
+ =?us-ascii?Q?+MS6SUpih+DwscUdgtHaW87LUA5xdvM4y/UVIUksYLZd2yJFwtfQn2mxEjW8?=
+ =?us-ascii?Q?gsovBj6FG3NZvDH1S3i8Ji5v+CAzg52ALFCBlTBqkV9j2TN5PfYdKKXn8+j6?=
+ =?us-ascii?Q?4ReTcYTMUJax3bSe9nKzNEDqoveQYqiq8RHfxvYpLhMSSNW2GMyOVY+vDofM?=
+ =?us-ascii?Q?wQMftOWKURFpqTPHJ1VRuhPM1mTGa1c7RyH38xZ7?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 92e17222-5a23-441b-cd58-08db4cb5361a
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9185.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2023 15:35:38.6296
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7W7+hYC1BW2/zGIwvT8zeJ/VlAE1oVyDxD88JvukNOaHhQMgqdiAAknR5AJduJUWgXuclOSzOoKwJzfxAHEQIQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB7245
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 03, 2023, Kai Huang wrote:
-> > for better or worse, KVM doesn't apply the "zap
-> > SPTEs" logic to guest PAT changes when the VM has a passthrough device
-> > with non-coherent DMA.
-> 
-> Is it a bug?
+In the current xdp_xmit implementation, if any single frame fails to
+transmit due to insufficient buffer descriptors, the function nevertheless
+reports success in sending all frames. This results in erroneously
+indicating that frames were transmitted when in fact they were dropped.
 
-No.  KVM's MTRR behavior is using a heuristic to try not to break the VM: if the
-VM has non-coherent DMA, then honor UC mapping in the MTRRs as such mappings may
-be coverage the non-coherent DMA.
+This patch fixes the issue by ensureing the return value properly
+indicates the actual number of frames successfully transmitted, rather than
+potentially reporting success for all frames when some could not transmit.
 
-From vmx_get_mt_mask():
+Fixes: 6d6b39f180b8 ("net: fec: add initial XDP support")
+Signed-off-by: Gagandeep Singh <g.singh@nxp.com>
+Signed-off-by: Shenwei Wang <shenwei.wang@nxp.com>
+---
+ v3:
+  - resend the v2 fix for "net" as the standalone patch.
 
-	/* We wanted to honor guest CD/MTRR/PAT, but doing so could result in
-	 * memory aliases with conflicting memory types and sometimes MCEs.
-	 * We have to be careful as to what are honored and when.
+ v2:
+  - only keep the bug fix part of codes according to Horatiu's comments.
+  - restructure the functions to avoid the forward declaration.
 
-The PAT is problematic because it is referenced via the guest PTEs, versus the
-MTRRs being tied to the guest physical address, e.g. different virtual mappings
-for the same physical address can yield different memtypes via the PAT.  My head
-hurts just thinking about how that might interact with shadow paging :-)
+ drivers/net/ethernet/freescale/fec_main.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-Even the MTRRs are somewhat sketchy because they are technically per-CPU, i.e.
-two vCPUs could have different memtypes for the same physical address.  But in
-practice, sane software/firmware uses consistent MTRRs across all CPUs.
+diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
+index 160c1b3525f5..42ec6ca3bf03 100644
+--- a/drivers/net/ethernet/freescale/fec_main.c
++++ b/drivers/net/ethernet/freescale/fec_main.c
+@@ -3798,7 +3798,8 @@ static int fec_enet_txq_xmit_frame(struct fec_enet_private *fep,
+ 	entries_free = fec_enet_get_free_txdesc_num(txq);
+ 	if (entries_free < MAX_SKB_FRAGS + 1) {
+ 		netdev_err(fep->netdev, "NOT enough BD for SG!\n");
+-		return NETDEV_TX_OK;
++		xdp_return_frame(frame);
++		return NETDEV_TX_BUSY;
+ 	}
+
+ 	/* Fill in a Tx ring entry */
+@@ -3856,6 +3857,7 @@ static int fec_enet_xdp_xmit(struct net_device *dev,
+ 	struct fec_enet_private *fep = netdev_priv(dev);
+ 	struct fec_enet_priv_tx_q *txq;
+ 	int cpu = smp_processor_id();
++	unsigned int sent_frames = 0;
+ 	struct netdev_queue *nq;
+ 	unsigned int queue;
+ 	int i;
+@@ -3866,8 +3868,11 @@ static int fec_enet_xdp_xmit(struct net_device *dev,
+
+ 	__netif_tx_lock(nq, cpu);
+
+-	for (i = 0; i < num_frames; i++)
+-		fec_enet_txq_xmit_frame(fep, txq, frames[i]);
++	for (i = 0; i < num_frames; i++) {
++		if (fec_enet_txq_xmit_frame(fep, txq, frames[i]) != 0)
++			break;
++		sent_frames++;
++	}
+
+ 	/* Make sure the update to bdp and tx_skbuff are performed. */
+ 	wmb();
+@@ -3877,7 +3882,7 @@ static int fec_enet_xdp_xmit(struct net_device *dev,
+
+ 	__netif_tx_unlock(nq);
+
+-	return num_frames;
++	return sent_frames;
+ }
+
+ static const struct net_device_ops fec_netdev_ops = {
+--
+2.34.1
+
