@@ -2,80 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C00256F6507
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 08:30:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 824756F650C
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 08:31:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbjEDGa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 02:30:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48188 "EHLO
+        id S229977AbjEDGbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 02:31:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjEDGaY (ORCPT
+        with ESMTP id S229482AbjEDGbH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 02:30:24 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDF3E3596
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 23:30:09 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so14038563a12.0
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 23:30:09 -0700 (PDT)
+        Thu, 4 May 2023 02:31:07 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00CAC26B5
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 23:30:46 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4efe8b3f3f7so96710e87.2
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 23:30:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683181808; x=1685773808;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DsEju73RgQljsuUtQoc4O04dfIOFlaIzv582jF9psSU=;
-        b=ChWIGLTWtDYofc/YHyzWotY+mqBpLcTIYu8Tj6wrEyp6YyanHHQf5ERMIR6jHaBorB
-         5d03hTHOuC6tHTo4HgKdDRX/ss8C7xTwXkEmL/kh784DOIblqEHEbhR1TqWG5Fl2sWFm
-         sfF6A6NG6wxvGAgk9fQMU8eBfbP/y4pXNYtUybszTUuoPqh9YBBKGRZt7540Sj9sBbFE
-         bGX3m9qGTA+MGGhdnPK68TSjYDcSgOccKdO9Uy8uEoQHvS58In5JbLdRJLkZ0UaJJ3Cg
-         aBbAFCP/iH5/clAyA7uhBIodlfqAUs9cjQrRAa1dzHpZ7kFnZDqc3BF95WpXyhv47gzj
-         Hk3w==
+        d=gmail.com; s=20221208; t=1683181845; x=1685773845;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mAlD2OvupOW/l/Os47QmkRUegAgHbuOOHoWZYkWzIMc=;
+        b=N7UZs0wuVmHxu1Q4YnamprrYg93GRxgo97go6IrlPY4A7EJB6yXy7eTqE5Ff4GZG8S
+         O0Dqbv61pVm3fqJoI9MRGeER7JYsIE468jkcb/sXCyg0uVL+0g0Z27AeZHtce4tDjE3A
+         lvXuJZolyFGvdmAGBP3uqB0ltqY5EQ7s6MUW6M9gEtbDc1JMuy9PJvOlcBIpYRBLoF/o
+         lN3oaLRlgs2zW6+pjUNuTjIz5muddjpaA4ZT4zZg9TK+R6ivfbQbGBzQhq1FNgLFRCnU
+         Dk3ac9ds27twDS84Mwef+TnBuKJSkLC6lzI4D0jQ5POIBVoML/RGKpnW1qL7mpWiXEnE
+         aDiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683181808; x=1685773808;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DsEju73RgQljsuUtQoc4O04dfIOFlaIzv582jF9psSU=;
-        b=F9rAkKZuYbdNkSdo4AsBBornD6kDZ7UzhPlLgHqV+xM6+mQZejLTza9wH23W2xJWYW
-         Rmj+crBq5CHHs6FtWEYBKYojtfFTjfav5lLK9UdtwO2SBQjt3p0AjPhz7ABlUEVIlsMr
-         yz6TptVPuSbc7n9DY1EhiG9LEwaLbdDF5uc8CKO/rLMs+ycx0pzlf3ZG3Vn2rABmAj4S
-         uoi1Yr6x8MQD5kzNfx7ZYfsMnHmGSGgH25OW4i6ynl/UHYotO76ZmHI2M071o0iJ4okq
-         did7r6qVaGZd31kqQXQ0qVDfr5tITpOowFJ45cJznE/tu+BM+kPXn3uUllmJ4G7nEERF
-         N0Aw==
-X-Gm-Message-State: AC+VfDyTPaJqAJ7dvOG22M8X1zx2owULmnr84LZyFrT3C8N9dZ+BTMB+
-        wlXNKXvsQEsBabDxBLPL/zJovw==
-X-Google-Smtp-Source: ACHHUZ4sqSN0jb7OKc+D2v16xfNqvAng0D/yGOGO2XaZu2NFVifTNmHjGwSkJ7MYr7yFOSH9gXoIgQ==
-X-Received: by 2002:a05:6402:2713:b0:4ea:a9b0:a518 with SMTP id y19-20020a056402271300b004eaa9b0a518mr488840edd.17.1683181808202;
-        Wed, 03 May 2023 23:30:08 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:cbf1:e7ef:fb81:e912? ([2a02:810d:15c0:828:cbf1:e7ef:fb81:e912])
-        by smtp.gmail.com with ESMTPSA id u4-20020a05640207c400b0050bd7267a5csm1486226edy.58.2023.05.03.23.30.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 May 2023 23:30:07 -0700 (PDT)
-Message-ID: <a34e8809-7c49-c482-c7d4-8c7cb5742351@linaro.org>
-Date:   Thu, 4 May 2023 08:30:06 +0200
+        d=1e100.net; s=20221208; t=1683181845; x=1685773845;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mAlD2OvupOW/l/Os47QmkRUegAgHbuOOHoWZYkWzIMc=;
+        b=Y3eWMAMF40EiB5R/t3C55+DDCeG/CF1mTSP0XZ0KsuC3/lK4WJIKY9obvi0Ia58/sW
+         HU9zHA7XSF5rZjNQUBWGIk1P7Buc/XvQGaLjqjECeJlqP0Ylhz0fM9yMlcteNEsXiB2y
+         wetsMjDVjcMkEPgZehMjZK4AGQ8/GJqXVJ0opmXHvtPmdC1DssZbbb6jxmeyfcH12XD7
+         Znl9R0yWYK0015ro/DSSTVl4WLXZFlWuAG3er8mF+luK7uJtXR/ztxOQa2nV6TUqosSP
+         B1krn7Jiqb2Wf/IwoktOgNgkmuJhKmYv+a1svIwb0wpBZcVNdXmGUQKFvuDbqVFWcXl6
+         W4+A==
+X-Gm-Message-State: AC+VfDzN86RTFb2MM+Ycwnrb9dbXOIc3Kd7GdcTcZyuo/Di7Yo6NeisF
+        v09/g9qCa8aOqkoB6H4SgIEPcA7r1ayRdAEHMhQ=
+X-Google-Smtp-Source: ACHHUZ5KwSJm1M0hRlQfDk5XlOt8nfKErevpCp8qwFi2fGpxmW6qG2PSVayuL0KMNL3RErrE2YLDc5UVPjlfi/j21KM=
+X-Received: by 2002:ac2:5d23:0:b0:4f1:4602:fb63 with SMTP id
+ i3-20020ac25d23000000b004f14602fb63mr13846lfb.41.1683181845140; Wed, 03 May
+ 2023 23:30:45 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v9 07/10] arm64: dts: nuvoton: Add initial ma35d1 device
- tree
-Content-Language: en-US
-To:     Jacky Huang <ychuang570808@gmail.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        tmaimon77@gmail.com, catalin.marinas@arm.com, will@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-serial@vger.kernel.org, arnd@arndb.de, schung@nuvoton.com,
-        mjchen@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
-References: <20230504033726.93-1-ychuang570808@gmail.com>
- <20230504033726.93-8-ychuang570808@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230504033726.93-8-ychuang570808@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <1682679641-13652-1-git-send-email-zhaoyang.huang@unisoc.com>
+ <ZE/y5wMggipQrKvb@P9FQF9L96D> <e0bd4476c7854cbfafea0ced9569220c@BJMBX01.spreadtrum.com>
+ <ZFGIN5Gnc2W7LhmK@P9FQF9L96D.corp.robot.car> <CAGWkznGpi7YKYeNcKrOr=58=4VApq285ocCPVh22HJCWwCU85Q@mail.gmail.com>
+ <ZFKMCBWvOqMk3g1V@P9FQF9L96D.corp.robot.car> <CAGWkznG5V+=onj9TsEhwh=Pxqt9+-KJAHLAoLJRMQ5-ysnwDgQ@mail.gmail.com>
+In-Reply-To: <CAGWkznG5V+=onj9TsEhwh=Pxqt9+-KJAHLAoLJRMQ5-ysnwDgQ@mail.gmail.com>
+From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
+Date:   Thu, 4 May 2023 14:30:22 +0800
+Message-ID: <CAGWkznEQZUw8XwTuGvXXPKqwg-b+-9eZPDyT2bcWnjbV4fM-1g@mail.gmail.com>
+Subject: =?UTF-8?Q?Re=3A_=E7=AD=94=E5=A4=8D=3A_=5BPATCH=5D_mm=3A_optimization_on_page_allocat?=
+        =?UTF-8?Q?ion_when_CMA_enabled?=
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     =?UTF-8?B?6buE5pyd6ZizIChaaGFveWFuZyBIdWFuZyk=?= 
+        <zhaoyang.huang@unisoc.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        =?UTF-8?B?546L56eRIChLZSBXYW5nKQ==?= <Ke.Wang@unisoc.com>,
+        "fangzheng.zhang@unisoc.com" <fangzheng.zhang@unisoc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,27 +79,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/05/2023 05:37, Jacky Huang wrote:
-> From: Jacky Huang <ychuang3@nuvoton.com>
-> 
-> Add initial device tree support for Nuvoton ma35d1 SoC, including
-> cpu, clock, reset, and serial controllers.
-> Add reference boards som-256m and iot-512m.
-> 
-> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
-> ---
->  arch/arm64/boot/dts/nuvoton/Makefile          |   2 +
->  .../boot/dts/nuvoton/ma35d1-iot-512m.dts      |  56 +++++
->  .../boot/dts/nuvoton/ma35d1-som-256m.dts      |  56 +++++
->  arch/arm64/boot/dts/nuvoton/ma35d1.dtsi       | 232 ++++++++++++++++++
->  4 files changed, 346 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/nuvoton/ma35d1-iot-512m.dts
->  create mode 100644 arch/arm64/boot/dts/nuvoton/ma35d1-som-256m.dts
->  create mode 100644 arch/arm64/boot/dts/nuvoton/ma35d1.dtsi
-> 
+On Thu, May 4, 2023 at 2:23=E2=80=AFPM Zhaoyang Huang <huangzhaoyang@gmail.=
+com> wrote:
+>
+> On Thu, May 4, 2023 at 12:30=E2=80=AFAM Roman Gushchin <roman.gushchin@li=
+nux.dev> wrote:
+> >
+> > On Wed, May 03, 2023 at 03:58:21PM +0800, Zhaoyang Huang wrote:
+> > > On Wed, May 3, 2023 at 6:01=E2=80=AFAM Roman Gushchin <roman.gushchin=
+@linux.dev> wrote:
+> > > >
+> > > > On Tue, May 02, 2023 at 12:12:28PM +0000, =E9=BB=84=E6=9C=9D=E9=98=
+=B3 (Zhaoyang Huang) wrote:
+> > > > > > Hi Zhaoyang!
+> > > > > >
+> > > > > > On Fri, Apr 28, 2023 at 07:00:41PM +0800, zhaoyang.huang wrote:
+> > > > > > > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> > > > > > >
+> > > > > > > Please be notice bellowing typical scenario that commit 16867=
+6649
+> > > > > > > introduce, that is, 12MB free cma pages 'help' GFP_MOVABLE to=
+ keep
+> > > > > > > draining/fragmenting U&R page blocks until they shrink to 12M=
+B without
+> > > > > > > enter slowpath which against current reclaiming policy. This =
+commit change
+> > > > > > the criteria from hard coded '1/2'
+> > > > > > > to watermark check which leave U&R free pages stay around WMA=
+RK_LOW
+> > > > > > > when being fallback.
+> > > > > >
+> > > > > > Can you, please, explain the problem you're solving in more det=
+ails?
+> > > > > I am trying to solve a OOM problem caused by slab allocation fail=
+ as all free pages are MIGRATE_CMA by applying 168676649, which could help =
+to reduce the fault ration from 12/20 to 2/20. I noticed it introduce the p=
+henomenon which I describe above.
+> > > > > >
+> > > > > > If I understand your code correctly, you're effectively reducin=
+g the use of cma
+> > > > > > areas for movable allocations. Why it's good?
+> > > > > Not exactly. In fact, this commit lead to the use of cma early th=
+an it is now, which could help to protect U&R be 'stolen' by GFP_MOVABLE. I=
+magine this scenario, 30MB total free pages composed of 10MB CMA and 20MB U=
+&R, while zone's watermark low is 25MB. An GFP_MOVABLE allocation can keep =
+stealing U&R pages(don't meet 1/2 criteria) without enter slowpath(zone_wat=
+ermark_ok(WMARK_LOW) is true) until they shrink to 15MB. In my opinion, it =
+makes more sense to have CMA take its duty to help movable allocation when =
+U&R lower to certain zone's watermark instead of when their size become sma=
+ller than CMA.
+> > > > > > Also, this is a hot path, please, make sure you're not adding m=
+uch overhead.
+> > > > > I would like to take more thought.
+> > > >
+> > > > Got it, thank you for the explanation!
+> > > >
+> > > > How about the following approach (completely untested)?
+> > > >
+> > > > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> > > > index 6da423ec356f..4b50f497c09d 100644
+> > > > --- a/mm/page_alloc.c
+> > > > +++ b/mm/page_alloc.c
+> > > > @@ -2279,12 +2279,13 @@ __rmqueue(struct zone *zone, unsigned int o=
+rder, int migratetype,
+> > > >         if (IS_ENABLED(CONFIG_CMA)) {
+> > > >                 /*
+> > > >                  * Balance movable allocations between regular and =
+CMA areas by
+> > > > -                * allocating from CMA when over half of the zone's=
+ free memory
+> > > > -                * is in the CMA area.
+> > > > +                * allocating from CMA when over half of the zone's=
+ easily
+> > > > +                * available free memory is in the CMA area.
+> > > >                  */
+> > > >                 if (alloc_flags & ALLOC_CMA &&
+> > > >                     zone_page_state(zone, NR_FREE_CMA_PAGES) >
+> > > > -                   zone_page_state(zone, NR_FREE_PAGES) / 2) {
+> > > > +                   (zone_page_state(zone, NR_FREE_PAGES) -
+> > > > +                    zone->_watermark[WMARK_LOW]) / 2) {
+> > > IMO, we should focus on non-cma area which trigger use of cma when
+> > > they are lower than corresponding watermark(there is still
+> > > WMARK_MIN/HIGH to deal with within slowpath)
+> > > >                         page =3D __rmqueue_cma_fallback(zone, order=
+);
+> > > >                         if (page)
+> > > >                                 return page;
+> > > >
+> > > > Basically the idea is to keep free space equally split between cma =
+and non-cma areas.
+> > > > Will it work for you?
+> > > I don't think it makes sense to 'equally split' cma and non-cma areas
+> > > over free space while cma could occupy various proportions in a singl=
+e
+> > > zone. This fixed 1/2 could lead to different situation on 20% or 50%
+> > > cma occupation.
+> >
+> > Can you then, please, explain in details what you're proposing instead
+> > and why it's better (not only in your case, but generally as well)?
+> > For the context, my original usecase was cma size under 10G and
+> > the total memory size between 32G and 128G.
+>
+> Let us look at the series of scenarios below with
+> WMARK_LOW=3D25MB,WMARK_MIN=3D5MB(managed pages 1.9GB). We can know that
+> 1. optimized 1/2 method start to use CMA since D which actually has
+> caused U&R lower than WMARK_LOW (this could be deemed as against
+> current memory policy, that is, U&R should either keeping stay  around
+> WATERMARK_LOW or enter slowpath to do reclaiming)
+> 2. it keep using CMA as long as free pages keep shrinking (this is
+> against the original desire of balance cma & none-cma area)
+>
+> free_cma/free_pages(MB)        A(12/30)     B(10/25)     C(8/25)
+> D(8/20)     E(8/16)     F(5/12)     F(5/10)   G(4/8)
+> optimized 1/2                                N                 N
+>          N             Y               Y                Y
+> Y            Y
+> !zone_watermark_ok                    Y                  Y
+>    Y             N               N                N            Y
+>      Y
+sorry for the broken graph format of previous reply, repost it here.N
+stands for not use CMA while Y stands for using
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+ free_cma/free_pages(MB)        A(12/30)     B(10/25)     C(8/25)
+ optimized 1/2                                N                 N
+          N
+ !zone_watermark_ok                    Y                  Y                =
+Y
 
-Best regards,
-Krzysztof
+D(8/20)     E(8/16)     F(5/12)     F(5/10)   G(4/8)
+    Y               Y                Y            Y            Y
+    N               N                N            Y           Y
 
+
+> >
+> > Looking at your original patch, I see that __if_use_cma_first() always =
+returns
+> > false if zone_watermark_ok() returns true. It worries me.
+> ok. we could deal with the scenario here when free pages is higher
+> than WMARK_HIGH
+> >
+> > Thanks!
