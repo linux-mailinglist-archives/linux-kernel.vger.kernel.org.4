@@ -2,222 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0A5F6F6A4B
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 13:44:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A7B06F6A5D
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 13:46:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230307AbjEDLoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 07:44:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58590 "EHLO
+        id S230324AbjEDLqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 07:46:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbjEDLov (ORCPT
+        with ESMTP id S229835AbjEDLqM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 07:44:51 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD08B5
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 04:44:50 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-50bd2d7ba74so16245466a12.1
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 04:44:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683200689; x=1685792689;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=psZX5RvMka6EfTIT04LB484cGcwOW4uCNYm9T1PIx84=;
-        b=wRywg3Njv7yCL2L7wjU2PrGS7srBglHCcTE0R1cAfC2EG/iExFfLueT/SGiuYkw5jD
-         x14y6lL8/8ooSocbEkyfCdt3uaLGSWdrI/9eebO8yDoyM5ghIvrzEkX+BdfNHsNCO8u/
-         fIRKlKVJoqfuCHet+7cbe9cGwSLLDCRJEZI8vCafpbYkco6f4fS9tiiYxlOxaH4oNMCo
-         zQTzlYj1IdnGXVKQIMCkX1RcCXHCsmf+6t9ll7XafqRUnPnmGkZWgD7u9pSTBhD2Z4z5
-         F4ZwP50teV/KqX/EMiTIt9IDIrpD5PF2AqCCeEetjBX1jXhGpoakvAqPs88SHgwasMwq
-         x37A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683200689; x=1685792689;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=psZX5RvMka6EfTIT04LB484cGcwOW4uCNYm9T1PIx84=;
-        b=QuJtyItqAlmDoy5kF8B5vHyeba3VourwOFb4rQIMJkrWAIpVxwyGboc154DNhKcWQk
-         rZ6bVtJGyumFgbNiQSvpikcmOeMzK90rcgnP5dJU/tdYiRDesMo7ZOjT/i8dP2MYNNor
-         ePuoNqhkHHdDDK8lXxuqbyTBdtN9hDXqPUDym85bl/EH50U8RnLXSOzIeQw99KMHI7/M
-         BoSWZH967WTJxd9CTZSFKX0KgR0mWW0SUy0vLCDut7CL2vQJuVzT6bbroKMSYBXKaSy6
-         TWLYetBMRaa5ZpF5OCjPzdav1k/bR4Ja0q6Dfv2u7bCRzQdwxpdiDO4QgNLd8dWN3OP6
-         As4Q==
-X-Gm-Message-State: AC+VfDzZcP6a7JF2z8CRCbVKz+9P0Qcip0jMhtGt1TvzsFc7WYga2Mxc
-        Vn0idZb06QtTKJs0xaskJnSb7Q==
-X-Google-Smtp-Source: ACHHUZ4Fw1Wg6/JX8jXbyyKV8/ma71KYJfVhPrBKMLlDfSmgG4rh9xPaCEhRPT5TOFhNsfIgjxVwZg==
-X-Received: by 2002:a17:907:9281:b0:95f:af3a:be8c with SMTP id bw1-20020a170907928100b0095faf3abe8cmr4084601ejc.18.1683200688778;
-        Thu, 04 May 2023 04:44:48 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:cbf1:e7ef:fb81:e912? ([2a02:810d:15c0:828:cbf1:e7ef:fb81:e912])
-        by smtp.gmail.com with ESMTPSA id hq32-20020a1709073f2000b0094f206b97e8sm18663216ejc.130.2023.05.04.04.44.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 04:44:48 -0700 (PDT)
-Message-ID: <530ef711-a32a-fbf7-7bd0-2ddb4cb070f3@linaro.org>
-Date:   Thu, 4 May 2023 13:44:47 +0200
+        Thu, 4 May 2023 07:46:12 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B75B5;
+        Thu,  4 May 2023 04:46:10 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34498m3d032692;
+        Thu, 4 May 2023 11:45:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Nf4c9Og72daQDWgkpR5A9lhPav7w/eUDPVAWmRm8YkY=;
+ b=atq2eSOuYHZfxX2xwBzH704U1gapAGkCv74q+NnadB9a6lqeGBaHRaqkt+tWjSQdvm5O
+ YIHjOnjA9Y/mI2rgPY3vTDNklO556kpfHMyTCQCVV502wIOFBqX1NquV+ROv1kzbpjUP
+ 3K9yCdnGQGUEG+ynpgJlYTR2VVH8vPNgvvl5VY2WYMTrniYachbDUleJkwxDQ3YRV4k0
+ EUPSTm62UE2yziYzeFJ/mITJo36r/IFAg2664Z2xWxH7BjJUc4LrLBJKezD/nYDNLqjI
+ BwGl2n3nHFAl+WB7Xoq9f1MSYe30n95cw27ssPyJsKEq39W/zgJvIy0aDfIJj+/DoroI Yg== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qbvghhudw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 04 May 2023 11:45:43 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 344Bjg23030930
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 4 May 2023 11:45:42 GMT
+Received: from [10.216.46.158] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 4 May 2023
+ 04:45:35 -0700
+Message-ID: <4325c2e7-8ca1-7e45-db14-5ba8bc83f5d7@quicinc.com>
+Date:   Thu, 4 May 2023 17:15:31 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add max6639
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 07/18] arm64: defconfig: Enable Qualcomm minidump
+ driver
 Content-Language: en-US
-To:     Naresh Solanki <naresh.solanki@9elements.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Marcello Sylvester Bauer <sylv@sylv.io>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230420111759.2687001-1-Naresh.Solanki@9elements.com>
- <76e57634-75dd-01e8-9c56-36ed7de17812@linaro.org>
- <c8d1b5db-318e-3401-0834-b89769831eca@9elements.com>
- <be129c4f-3ad7-c54b-936e-08b142608ebc@linaro.org>
- <88f9a008-2861-284c-76c4-7d416c107fbb@9elements.com>
- <bd45ea5d-e6e4-403a-e855-376e0f647f91@9elements.com>
- <20eb1d0e-0aa2-9d41-7ba5-2feb148748d0@linaro.org>
- <9d989c4c-7c9e-9e95-133f-03741d07198b@9elements.com>
- <80b60de0-dcb5-303f-8d13-f4b1cf7d8521@linaro.org>
- <45236017-22d2-f9f8-0069-77195e49221d@9elements.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <45236017-22d2-f9f8-0069-77195e49221d@9elements.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <corbet@lwn.net>,
+        <keescook@chromium.org>, <tony.luck@intel.com>,
+        <gpiccoli@igalia.com>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <robh+dt@kernel.org>, <linus.walleij@linaro.org>,
+        <linux-gpio@vger.kernel.org>, <srinivas.kandagatla@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-hardening@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-doc@vger.kernel.org>
+References: <1683133352-10046-1-git-send-email-quic_mojha@quicinc.com>
+ <1683133352-10046-8-git-send-email-quic_mojha@quicinc.com>
+ <ad9915b2-56ff-3f95-7c92-fae597d6ed43@linaro.org>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <ad9915b2-56ff-3f95-7c92-fae597d6ed43@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: GGvA8TmoKC62bpzlSbUqBgM5tdkQqwzE
+X-Proofpoint-GUID: GGvA8TmoKC62bpzlSbUqBgM5tdkQqwzE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-04_07,2023-05-04_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ lowpriorityscore=0 impostorscore=0 suspectscore=0 malwarescore=0
+ bulkscore=0 clxscore=1015 phishscore=0 spamscore=0 adultscore=0
+ priorityscore=1501 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2305040096
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/05/2023 13:36, Naresh Solanki wrote:
-> Hi Krzysztof,
-> 
-> On 04-05-2023 04:17 pm, Krzysztof Kozlowski wrote:
->> On 04/05/2023 11:47, Naresh Solanki wrote:
->>> Hi Krzysztof,
->>>
->>> On 03-05-2023 09:48 pm, Krzysztof Kozlowski wrote:
->>>> On 03/05/2023 10:26, Naresh Solanki wrote:
->>>>> Hi Krzysztof,
->>>>>
->>>>> On 24-04-2023 03:23 pm, Naresh Solanki wrote:
->>>>>> Hi Krzysztof,
->>>>>>
->>>>>> On 24-04-2023 03:12 pm, Krzysztof Kozlowski wrote:
->>>>>>> On 24/04/2023 11:18, Naresh Solanki wrote:
->>>>>>>
->>>>>>>>>> Changes in V2:
->>>>>>>>>> - Update subject
->>>>>>>>>> - Drop blank lines
->>>>>>>>>> ---
->>>>>>>>>>      .../bindings/hwmon/maxim,max6639.yaml         | 52
->>>>>>>>>> +++++++++++++++++++
->>>>>>>>>>      1 file changed, 52 insertions(+)
->>>>>>>>>>      create mode 100644
->>>>>>>>>> Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
->>>>>>>>>>
->>>>>>>>>> diff --git
->>>>>>>>>> a/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
->>>>>>>>>> b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
->>>>>>>>>> new file mode 100644
->>>>>>>>>> index 000000000000..1aaedfd7cee0
->>>>>>>>>> --- /dev/null
->>>>>>>>>> +++ b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
->>>>>>>>>> @@ -0,0 +1,52 @@
->>>>>>>>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->>>>>>>>>> +%YAML 1.2
->>>>>>>>>> +---
->>>>>>>>>> +$id: http://devicetree.org/schemas/hwmon/maxim,max6639.yaml#
->>>>>>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>>>>>>>> +
->>>>>>>>>> +title: Maxim max6639
->>>>>>>>>
->>>>>>>>> What is this device? fan controller?
->>>>>>>> Yes Fan controller.
->>>>>>>> Do you want me to update the title here as:
->>>>>>>> "Maxim MAC6639 2 channel fan controller & temperature monitor" ?
->>>>>>>
->>>>>>> Enough would be:
->>>>>>> Maxim MAX6639 Fan Controller
->>>>>> Ack
->>>>>>>
->>>>>>>
->>>>>>>>
->>>>>>>>>
->>>>>>>>>> +
->>>>>>>>>> +maintainers:
->>>>>>>>>> +  - Naresh Solanki <Naresh.Solanki@9elements.com>
->>>>>>>>>> +
->>>>>>>>>> +description: |
->>>>>>>>>> +  The MAX6639 is a 2-channel temperature monitor with dual,
->>>>>>>>>> automatic, PWM
->>>>>>>>>> +  fan-speed controller.  It monitors its own temperature and one
->>>>>>>>>> external
->>>>>>>>>> +  diode-connected transistor or the temperatures of two external
->>>>>>>>>> diode-connected
->>>>>>>>>> +  transistors, typically available in CPUs, FPGAs, or GPUs.
->>>>>>>>>> +
->>>>>>>>>> +  Datasheets:
->>>>>>>>>> +    https://datasheets.maximintegrated.com/en/ds/MAX6639-MAX6639F.pdf
->>>>>>>>>> +
->>>>>>>>>> +properties:
->>>>>>>>>> +  compatible:
->>>>>>>>>> +    enum:
->>>>>>>>>> +      - maxim,max6639
->>>>>>>>>> +
->>>>>>>>>> +  reg:
->>>>>>>>>> +    maxItems: 1
->>>>>>>>>> +
->>>>>>>>>> +  '#address-cells':
->>>>>>>>>> +    const: 1
->>>>>>>>>> +
->>>>>>>>>> +  '#size-cells':
->>>>>>>>>> +    const: 0
->>>>>>>>>
->>>>>>>>> Why do you need these two properties?
->>>>>>>> Ack. Will remove them.
->>>>>>>>>
->>>>>>>>> Anyway, the binding looks incomplete. Where are the supplies?
->>>>>>>>> Interrupts?
->>>>>>>> This patch just adds basic support to the existing platform driver.
->>>>>>>> Intention is to be able to call the driver from DT with basic
->>>>>>>> initialization from driver the existing driver.
->>>>>>>
->>>>>>> Bindings should be rather complete. Here the datasheet is accessible and
->>>>>>> few properties quite obvious, so I don't see a reason to skip them.
->>>>>> I agree with you. But currently the driver which is already merged
->>>>>> doesn't has it implemented.
->>>>>> And will be working on separate patch to include this later.
->>>>> Please let me know if this approach is acceptable, or if there are any
->>>>> other suggestions or concerns that you have.
->>>>
->>>> You are adding new bindings, so what does the driver has to do with it?
->>> The reason for adding these new bindings is to enable the use of the
->>> driver on my machine. Without the compatible string, it would not be
->>> possible to use the driver.
->>>
->>> Currently, the driver initializes the device with defaults, which is
->>> good enough for my application. Also, as you previously pointed out, it
->>> uses the optional 'fan-supply' which will be included in the next patch
->>> revision.
->>>
->>> I hope this clarifies my reasoning. Could you kindly confirm if we can
->>> proceed with this approach?
+
+
+On 5/4/2023 4:53 PM, Krzysztof Kozlowski wrote:
+> On 03/05/2023 19:02, Mukesh Ojha wrote:
+>> Previous patches add the Qualcomm minidump driver support, so
+>> lets enable minidump config so that it can be used by kernel
+>> clients.
 >>
->> No, we cannot, because we asked you to fix things there. Your entire
->> explanation about compatible and driver is not related to the comment
->> you received: bindings should be complete. You argue that bindings do
->> not have to be complete, because of something with driver. This is not
->> related. Bindings are not for driver.
+>> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
 > 
-> I understand that complete bindings are important, but as the driver is 
-> already merged and functional, my immediate goal is to enable its use on 
-> my machine. I will work on a separate patch to include the interrupts in 
-> both binding & driver.
+> This patchset is split too much. Defconfig change is one change. Not two
+> or three.
+> 
+>> ---
+>>   arch/arm64/configs/defconfig | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+>> index a24609e..831c942 100644
+>> --- a/arch/arm64/configs/defconfig
+>> +++ b/arch/arm64/configs/defconfig
+>> @@ -1250,6 +1250,7 @@ CONFIG_QCOM_STATS=m
+>>   CONFIG_QCOM_WCNSS_CTRL=m
+>>   CONFIG_QCOM_APR=m
+>>   CONFIG_QCOM_ICC_BWMON=m
+>> +CONFIG_QCOM_MINIDUMP=y
+> 
+> This must be a module.
 
-I don't care about driver and did not comment about it. I don't
-understand why do you bring it here all'n over.
+Why do you think this should be a module ?
 
-Best regards,
-Krzysztof
+Is it because, it is lying here among others '=m' ?
 
+Or you have some other reasoning ? like it is for qcom specific
+soc and can not be used outside ? but that is not true for
+all configs mentioned here.
+
+The reason behind making it as '=y' was, to collect information from 
+core kernel data structure as well as the information like percpu data, 
+run queue, irq stat kind of information on kernel crash on a target 
+running some perf configuration(android phone).
+
+-- Mukesh
+
+> 
+> Best regards,
+> Krzysztof
+> 
