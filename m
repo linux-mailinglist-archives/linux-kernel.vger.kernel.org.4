@@ -2,92 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57F236F66B5
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 10:03:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B80D16F66B9
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 10:04:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230303AbjEDIDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 04:03:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43496 "EHLO
+        id S230313AbjEDIEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 04:04:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbjEDICb (ORCPT
+        with ESMTP id S230314AbjEDIDs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 04:02:31 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EB2444A6
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 01:01:56 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2ac770a99e2so1985801fa.3
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 01:01:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683187314; x=1685779314;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=U/UccTAcuhBCUZ5FF6aUwvykUnIdd379ssRafTBI8b8=;
-        b=k2wfBVJ9WXNUj0tgbgW8gkMU+/1meB/9vIXZndgxm10dezJlhYaNqAPsHBh9q1qZXh
-         Kuzy0NH+RKCmcAn0b/jTlJi0hdiXCA3gFuqeN9yHD5AccDS8ZPHDOGwV0/CpD6CpSVeb
-         k7iUiSekl9SQqyFw58h/RnWjkyaeBgx9MPRTqAjdLjYST/x9x4IJv/EMWxMHjF5vOBjK
-         WnhfME2HEuhEMZEKe3g26jLri7ePZ7f3r05v2O3ejxVPa/+HQ1GN44m8ljadhbrCAa0C
-         sSMWTn65rUyY8YDNDnJvpVAyibwd/Z6wyf5b7wy+e4Tz53+i8b1Pc0ZV4+XGst10qHFg
-         hVuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683187314; x=1685779314;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=U/UccTAcuhBCUZ5FF6aUwvykUnIdd379ssRafTBI8b8=;
-        b=OBnI04KTGEM/XCVOdhMb6++jF7vy5/ICngmqOrxzIIgkkyrULPpjN0Uo8JJsSQEmy1
-         6Nq7yEl5NIO2yBfvjfD54ZVXKaPmTgg3e6yBp+dWKFNV8vCOMc67XaCIYmqWhjBRbVkk
-         8LpM4w/LPepi2Ef1XaA1A1XJayMvpVXzwJ7v++W96+Dvz4bq6WXmAd/h9xwCc3uCbahZ
-         zXF7eJuat9VGVHBbn44+zkQOvkd6yM4iRHi8SruOLumMc6xlXoatmR7SHaw1OJjp5JET
-         IX5+farPzNOz8aciZqKkJzOCEAf1MWPenPoKJYBZ73XPYesxcn11gsY4PPQsLfCYjBiT
-         2Tvg==
-X-Gm-Message-State: AC+VfDx4Idwycn9HGv/L8Ara8zfT/bMpHHh7MGIA1t+7pc30XMEh2Y4P
-        pGJBoPb1HTaFOcHOP8aS8b/yQw==
-X-Google-Smtp-Source: ACHHUZ6vO4z0T75jgR0++P5IOouAIDe27JjNuh4RcoH0KoDzBwzm0rdiclGAxrYSwR2VBML3esgORw==
-X-Received: by 2002:a19:ac08:0:b0:4ef:e990:8a53 with SMTP id g8-20020a19ac08000000b004efe9908a53mr1563858lfc.18.1683187314397;
-        Thu, 04 May 2023 01:01:54 -0700 (PDT)
-Received: from [192.168.1.101] (abyl248.neoplus.adsl.tpnet.pl. [83.9.31.248])
-        by smtp.gmail.com with ESMTPSA id n26-20020ac2491a000000b004edc512515fsm917165lfi.47.2023.05.04.01.01.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 May 2023 01:01:54 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Thu, 04 May 2023 10:01:14 +0200
-Subject: [PATCH v2 18/18] media: venus: hfi_venus: Restrict writing
- SCIACMDARG3 to Venus V1/V2
+        Thu, 4 May 2023 04:03:48 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E154494
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 01:02:42 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id B74D1338D7;
+        Thu,  4 May 2023 08:02:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1683187360; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7i7LEAd3fADBjgmnL94UzS3BbhLvumMQ4AwQheLdrzE=;
+        b=mvTmbdbQk02z24xj3lLzuCQ1eeNLtkq5L4VUxTjPEIOh96wUPHJKtFA/nDtMybNPPr6ZGx
+        5SWfxuDtAHLpZVIs12OfR0vemCIcWgwwlY71maLPt5SEr8iZoTBeqz89a6ZuFzvUN+wo0E
+        vhRIGwDK3SUxvaqlXPSJHTPJZL0Gjbk=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 76B3E133F7;
+        Thu,  4 May 2023 08:02:40 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id cbOnG6BmU2QrKAAAMHmgww
+        (envelope-from <jgross@suse.com>); Thu, 04 May 2023 08:02:40 +0000
+Message-ID: <dce291a8-c791-36f5-ec04-3b1648668330@suse.com>
+Date:   Thu, 4 May 2023 10:02:40 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230228-topic-venus-v2-18-d95d14949c79@linaro.org>
-References: <20230228-topic-venus-v2-0-d95d14949c79@linaro.org>
-In-Reply-To: <20230228-topic-venus-v2-0-d95d14949c79@linaro.org>
-To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dikshita Agarwal <dikshita@qti.qualcomm.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Mansur Alisha Shaik <mansur@codeaurora.org>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Dikshita Agarwal <quic_dikshita@quicinc.com>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1683187284; l=1033;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=Heez1R9g/upp/lte+28AqBemWtRoQ6abP6tBXj2nEJo=;
- b=dlplnoZoob7e3VzE6E58BXJl+xaZE0aZvFCtEc6T9JXS3KuWqNZRqSdT20GugI1L0NPZI0gc8
- ikoGUOm0MXWB6U7pfzKbOSW8+HPXRQE4CGqJwARcFQfYAN/c1rUZA2G
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v6 01/16] x86/mtrr: remove physical address size
+ calculation
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        mikelley@microsoft.com, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+References: <20230502120931.20719-1-jgross@suse.com>
+ <20230502120931.20719-2-jgross@suse.com>
+ <20230504074733.GAZFNjFeptgXvizi3J@fat_crate.local>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <20230504074733.GAZFNjFeptgXvizi3J@fat_crate.local>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------igpAi0QSZmI2POXGPIxO0sG1"
+X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -96,31 +71,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This write was last present on msm-3.10, which means before HFI3XX
-platforms were introduced. Guard it with an appropriate if condition.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------igpAi0QSZmI2POXGPIxO0sG1
+Content-Type: multipart/mixed; boundary="------------dyt1ZdZJfnZ08RT8poJmLYTo";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Borislav Petkov <bp@alien8.de>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org, mikelley@microsoft.com,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>
+Message-ID: <dce291a8-c791-36f5-ec04-3b1648668330@suse.com>
+Subject: Re: [PATCH v6 01/16] x86/mtrr: remove physical address size
+ calculation
+References: <20230502120931.20719-1-jgross@suse.com>
+ <20230502120931.20719-2-jgross@suse.com>
+ <20230504074733.GAZFNjFeptgXvizi3J@fat_crate.local>
+In-Reply-To: <20230504074733.GAZFNjFeptgXvizi3J@fat_crate.local>
 
-Does not seem to have any adverse effects on at least SM8250.
+--------------dyt1ZdZJfnZ08RT8poJmLYTo
+Content-Type: multipart/mixed; boundary="------------TWtM0K6dfnTCny4Yzz0gucvp"
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/media/platform/qcom/venus/hfi_venus.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+--------------TWtM0K6dfnTCny4Yzz0gucvp
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-diff --git a/drivers/media/platform/qcom/venus/hfi_venus.c b/drivers/media/platform/qcom/venus/hfi_venus.c
-index d6df99a921bb..6405771568d1 100644
---- a/drivers/media/platform/qcom/venus/hfi_venus.c
-+++ b/drivers/media/platform/qcom/venus/hfi_venus.c
-@@ -462,7 +462,8 @@ static int venus_boot_core(struct venus_hfi_device *hdev)
- 	}
- 
- 	writel(mask_val, wrapper_base + WRAPPER_INTR_MASK);
--	writel(1, cpu_cs_base + CPU_CS_SCIACMDARG3);
-+	if (IS_V1(hdev->core))
-+		writel(1, cpu_cs_base + CPU_CS_SCIACMDARG3);
- 
- 	writel(BIT(VIDC_CTRL_INIT_CTRL_SHIFT), cpu_cs_base + VIDC_CTRL_INIT);
- 	while (!ctrl_status && count < max_tries) {
+T24gMDQuMDUuMjMgMDk6NDcsIEJvcmlzbGF2IFBldGtvdiB3cm90ZToNCj4gT24gVHVlLCBN
+YXkgMDIsIDIwMjMgYXQgMDI6MDk6MTZQTSArMDIwMCwgSnVlcmdlbiBHcm9zcyB3cm90ZToN
+Cj4+IGRpZmYgLS1naXQgYS9hcmNoL3g4Ni9rZXJuZWwvY3B1L210cnIvZ2VuZXJpYy5jIGIv
+YXJjaC94ODYva2VybmVsL2NwdS9tdHJyL2dlbmVyaWMuYw0KPj4gaW5kZXggZWUwOWQzNTll
+MDhmLi4zOTIyNTUyMzQwYjEgMTAwNjQ0DQo+PiAtLS0gYS9hcmNoL3g4Ni9rZXJuZWwvY3B1
+L210cnIvZ2VuZXJpYy5jDQo+PiArKysgYi9hcmNoL3g4Ni9rZXJuZWwvY3B1L210cnIvZ2Vu
+ZXJpYy5jDQo+PiBAQCAtMzgsNiArMzgsMTYgQEAgdTY0IG10cnJfdG9tMjsNCj4+ICAgc3Ry
+dWN0IG10cnJfc3RhdGVfdHlwZSBtdHJyX3N0YXRlOw0KPj4gICBFWFBPUlRfU1lNQk9MX0dQ
+TChtdHJyX3N0YXRlKTsNCj4+ICAgDQo+PiArc3RhdGljIHU2NCBzaXplX29yX21hc2ssIHNp
+emVfYW5kX21hc2s7DQo+PiArDQo+PiArdm9pZCBfX2luaXQgbXRycl9zZXRfbWFzayh2b2lk
+KQ0KPj4gK3sNCj4+ICsJdW5zaWduZWQgaW50IHBoeXNfYWRkciA9IGJvb3RfY3B1X2RhdGEu
+eDg2X3BoeXNfYml0czsNCj4+ICsNCj4+ICsJc2l6ZV9vcl9tYXNrID0gfkdFTk1BU0tfVUxM
+KHBoeXNfYWRkciAtIFBBR0VfU0hJRlQgLSAxLCAwKTsNCj4+ICsJc2l6ZV9hbmRfbWFzayA9
+IH5zaXplX29yX21hc2sgJiBHRU5NQVNLX1VMTCgzOSwgMjApOw0KPiANCj4gV2hhdCBoYXBw
+ZW5lZCB0byBnZXR0aW5nIHJpZCBvZiB0aG9zZToNCj4gDQo+IGh0dHBzOi8vbG9yZS5rZXJu
+ZWwub3JnL3IvMjAyMzA0MDUyMDI2MzMuR0ZaQzNaZVZXdG1qa09EWVc3QGZhdF9jcmF0ZS5s
+b2NhbA0KPiANCj4gYW5kIHVzaW5nIHRoZSByZXNlcnZlZCBiaXRmaWVsZCBtYXNrcyBhcyB0
+aGV5J3JlIGRlZmluZWQgZm9yIHRoZSBNU1JzPw0KPiANCg0KU2VlIHBhdGNoIDIuDQoNCg0K
+SnVlcmdlbg0K
+--------------TWtM0K6dfnTCny4Yzz0gucvp
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
--- 
-2.40.1
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------TWtM0K6dfnTCny4Yzz0gucvp--
+
+--------------dyt1ZdZJfnZ08RT8poJmLYTo--
+
+--------------igpAi0QSZmI2POXGPIxO0sG1
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmRTZqAFAwAAAAAACgkQsN6d1ii/Ey8Q
+zQf/RcYvRV35Uud1Rw8VP5Rz8LpvMSAUZl8s80So6iW3a8HiJLN2VxZrMeuuw+c/+MZm//S10R08
+504ON72b3X6CkNm/k01dco6j40ukPpQX8pQWBuWDASl3ZfESxP2FhLM2QazqxBM08Th4J6AGpiPs
+Ox6QrWshr4z1Y8uxY6QvYms3ZEFb4nBn5CZmkbxVqdSl490QI889anKxfn3V+oJB0CWXIPDyO0HR
+jv4sz6tqpSBmyeGrsnDFKBJW0O2aHIh4HbwMQ3s1vkwJjpxX0AR1aDIGl3GUrSs/U3LrCqWA4cqs
+vc5auAuhFhCBq18DkAWGSW0PVUvtCBLYFVtxt06Z3g==
+=CbS9
+-----END PGP SIGNATURE-----
+
+--------------igpAi0QSZmI2POXGPIxO0sG1--
