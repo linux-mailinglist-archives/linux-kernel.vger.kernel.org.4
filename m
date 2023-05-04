@@ -2,156 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68F9C6F62A5
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 03:29:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 446146F62A6
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 03:29:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbjEDB33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 21:29:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39678 "EHLO
+        id S229739AbjEDB3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 21:29:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbjEDB3Z (ORCPT
+        with ESMTP id S229649AbjEDB30 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 21:29:25 -0400
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86E1A10F1
+        Wed, 3 May 2023 21:29:26 -0400
+Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47FA510E3
         for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 18:29:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
         s=smtpout1; t=1683163763;
-        bh=T39JG5jO81CkJSiSo/IvnzdNLETorvzXw2aS+hjSu+c=;
-        h=From:To:Cc:Subject:Date:From;
-        b=moiWwAj7t1bORbTueVEJdVtZHDLSrYjYRWg0Ya7ToKbnd4zYjD4MQcvoP2ek5IuNH
-         0XoHK7zCvoLl8nO3YSELqXQB3PTJjAoX6vWGxbAOuVQZnjK0PuLBKekH2+whThoh59
-         Oq8Xs+zkhzbfZ05Y1FZqLWjxox0B30XJytqjm430IDH/CqkdnVieSeinOlNLuow0Q9
-         5QK767dGFzBup0rEo71gw1DLRifcWr6XmL9fAew0b7+yPZvGzyaJKGUIy2yC952HvY
-         jA75/BB6gytAt2yrlrdGUvaTkq32a/ZGF5tgB6vDkJ4Q30qxbAmbWEsov3ITRAesGi
-         xrzCn2QcLyXFA==
+        bh=xB/tbUL0jvzBmqb1y5siBAjKU4LpKYvAX7mWm/Dgchw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=c/6o2yyNUb/1IFUzVJxvYBBjHX9GfLYUAMWLVltW/xN1/+i6zyhqsBZsZL3JrDG9E
+         GTZdh5NDXTCfd1e67k2BI68chguJyd23TeE5Kxk2zmkbxu1G01EeFXR0OZxqXp8Cmz
+         QTa183BFL61ucIwKAMzgPUmb6IYdW1YGfvEcdi+jTdRYQraDEmFxkh36mZgSPox+0i
+         E/x48jqEAKVbPnBZrsBYt7cPK1gL7Z1HVgjT9x4LXDT7HFmkDOQAyU2hnm6qxcocir
+         Wa22zAi+baSyFbVuDnqpwWerQ8eitMGeAp2XMooGAG1ldih8GsNzFU6qnaZLsl54sX
+         onFABl9zx9KTw==
 Received: from localhost.localdomain (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4QBbnv0Lflz11wY;
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4QBbnv2Gjrz11ff;
         Wed,  3 May 2023 21:29:23 -0400 (EDT)
 From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     linux-kernel@vger.kernel.org,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Zqiang <qiang1.zhang@intel.com>
-Subject: [RFC PATCH 1/4] rcu: rcupdate.h: Add missing parentheses around macro pointer dereference
-Date:   Wed,  3 May 2023 21:29:11 -0400
-Message-Id: <20230504012914.1797355-1-mathieu.desnoyers@efficios.com>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        David Howells <dhowells@redhat.com>,
+        Ricardo Martinez <ricardo.martinez@linux.intel.com>
+Subject: [RFC PATCH 2/4] list.h: Fix parentheses around macro pointer parameter use
+Date:   Wed,  3 May 2023 21:29:12 -0400
+Message-Id: <20230504012914.1797355-2-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230504012914.1797355-1-mathieu.desnoyers@efficios.com>
+References: <20230504012914.1797355-1-mathieu.desnoyers@efficios.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-linux/rcupdate.h macros use the *p parameter without parentheses, e.g.:
+Add missing parentheses around use of macro argument "pos" in those
+patterns to ensure operator precedence behaves as expected:
 
-  typeof(*p)
+- typeof(*pos)
+- pos->member
 
-rather than
+Remove useless parentheses around use of macro parameter (head) in the
+following pattern:
 
-  typeof(*(p))
+- list_is_head(pos, (head))
 
-The following test-case shows how it can generate confusion due to C
-operator precedence being reversed compared to the expectations:
+Because comma is the lowest priority operator already, so the extra pair
+of parentheses is redundant.
 
-    #define m(p) \
-    do { \
-            __typeof__(*p) v = 0; \
-    } while (0)
+This corrects the following usage pattern where operator precedence is
+unexpected:
 
-    void fct(unsigned long long *p1)
-    {
-            m(p1 + 1);      /* works */
-            m(1 + p1);      /* broken */
-    }
+  LIST_HEAD(testlist);
+
+  struct test {
+          struct list_head node;
+          int a;
+  };
+
+  // pos->member issue
+  void f(void)
+  {
+          struct test *t1;
+          struct test **t2 = &t1;
+
+          list_for_each_entry((*t2), &testlist, node) {   /* works */
+                  //...
+          }
+          list_for_each_entry(*t2, &testlist, node) {     /* broken */
+                  //...
+          }
+  }
+
+  // typeof(*pos) issue
+  void f2(void)
+  {
+          struct test *t1 = NULL, *t2;
+
+          t2 = list_prepare_entry((0 + t1), &testlist, node);     /* works */
+          t2 = list_prepare_entry(0 + t1, &testlist, node);       /* broken */
+  }
+
+Note that the macros in which "pos" is also used as an lvalue probably
+don't suffer from the lack of parentheses around "pos" in typeof(*pos),
+but add those nevertheless to keep everything consistent.
 
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
-Reviewed-by: Steven Rostedt <rostedt@goodmis.org>
-Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: Joel Fernandes <joel@joelfernandes.org>
-Cc: Josh Triplett <josh@joshtriplett.org>
-Cc: Boqun Feng <boqun.feng@gmail.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Lai Jiangshan <jiangshanlai@gmail.com>
-Cc: Zqiang <qiang1.zhang@intel.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: David Howells <dhowells@redhat.com>
+Cc: Ricardo Martinez <ricardo.martinez@linux.intel.com>
 ---
- include/linux/rcupdate.h | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ include/linux/list.h | 44 ++++++++++++++++++++++----------------------
+ 1 file changed, 22 insertions(+), 22 deletions(-)
 
-diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
-index dcd2cf1e8326..38e84f3d515e 100644
---- a/include/linux/rcupdate.h
-+++ b/include/linux/rcupdate.h
-@@ -430,16 +430,16 @@ static inline void rcu_preempt_sleep_check(void) { }
+diff --git a/include/linux/list.h b/include/linux/list.h
+index f10344dbad4d..bb106238eaf6 100644
+--- a/include/linux/list.h
++++ b/include/linux/list.h
+@@ -603,7 +603,7 @@ static inline void list_splice_tail_init(struct list_head *list,
+  * @head:	the head for your list.
+  */
+ #define list_for_each(pos, head) \
+-	for (pos = (head)->next; !list_is_head(pos, (head)); pos = pos->next)
++	for (pos = (head)->next; !list_is_head(pos, head); pos = (pos)->next)
  
- #ifdef __CHECKER__
- #define rcu_check_sparse(p, space) \
--	((void)(((typeof(*p) space *)p) == p))
-+	((void)(((typeof(*(p)) space *)(p)) == (p)))
- #else /* #ifdef __CHECKER__ */
- #define rcu_check_sparse(p, space)
- #endif /* #else #ifdef __CHECKER__ */
- 
- #define __unrcu_pointer(p, local)					\
- ({									\
--	typeof(*p) *local = (typeof(*p) *__force)(p);			\
-+	typeof(*(p)) *local = (typeof(*(p)) *__force)(p);		\
- 	rcu_check_sparse(p, __rcu);					\
--	((typeof(*p) __force __kernel *)(local)); 			\
-+	((typeof(*(p)) __force __kernel *)(local));			\
- })
  /**
-  * unrcu_pointer - mark a pointer as not being RCU protected
-@@ -452,29 +452,29 @@ static inline void rcu_preempt_sleep_check(void) { }
+  * list_for_each_rcu - Iterate over a list in an RCU-safe fashion
+@@ -612,8 +612,8 @@ static inline void list_splice_tail_init(struct list_head *list,
+  */
+ #define list_for_each_rcu(pos, head)		  \
+ 	for (pos = rcu_dereference((head)->next); \
+-	     !list_is_head(pos, (head)); \
+-	     pos = rcu_dereference(pos->next))
++	     !list_is_head(pos, head); \
++	     pos = rcu_dereference((pos)->next))
  
- #define __rcu_access_pointer(p, local, space) \
- ({ \
--	typeof(*p) *local = (typeof(*p) *__force)READ_ONCE(p); \
-+	typeof(*(p)) *local = (typeof(*(p)) *__force)READ_ONCE(p); \
- 	rcu_check_sparse(p, space); \
--	((typeof(*p) __force __kernel *)(local)); \
-+	((typeof(*(p)) __force __kernel *)(local)); \
- })
- #define __rcu_dereference_check(p, local, c, space) \
- ({ \
- 	/* Dependency order vs. p above. */ \
--	typeof(*p) *local = (typeof(*p) *__force)READ_ONCE(p); \
-+	typeof(*(p)) *local = (typeof(*(p)) *__force)READ_ONCE(p); \
- 	RCU_LOCKDEP_WARN(!(c), "suspicious rcu_dereference_check() usage"); \
- 	rcu_check_sparse(p, space); \
--	((typeof(*p) __force __kernel *)(local)); \
-+	((typeof(*(p)) __force __kernel *)(local)); \
- })
- #define __rcu_dereference_protected(p, local, c, space) \
- ({ \
- 	RCU_LOCKDEP_WARN(!(c), "suspicious rcu_dereference_protected() usage"); \
- 	rcu_check_sparse(p, space); \
--	((typeof(*p) __force __kernel *)(p)); \
-+	((typeof(*(p)) __force __kernel *)(p)); \
- })
- #define __rcu_dereference_raw(p, local) \
- ({ \
- 	/* Dependency order vs. p above. */ \
- 	typeof(p) local = READ_ONCE(p); \
--	((typeof(*p) __force __kernel *)(local)); \
-+	((typeof(*(p)) __force __kernel *)(local)); \
- })
- #define rcu_dereference_raw(p) __rcu_dereference_raw(p, __UNIQUE_ID(rcu))
+ /**
+  * list_for_each_continue - continue iteration over a list
+@@ -623,7 +623,7 @@ static inline void list_splice_tail_init(struct list_head *list,
+  * Continue to iterate over a list, continuing after the current position.
+  */
+ #define list_for_each_continue(pos, head) \
+-	for (pos = pos->next; !list_is_head(pos, (head)); pos = pos->next)
++	for (pos = (pos)->next; !list_is_head(pos, head); pos = (pos)->next)
  
+ /**
+  * list_for_each_prev	-	iterate over a list backwards
+@@ -631,7 +631,7 @@ static inline void list_splice_tail_init(struct list_head *list,
+  * @head:	the head for your list.
+  */
+ #define list_for_each_prev(pos, head) \
+-	for (pos = (head)->prev; !list_is_head(pos, (head)); pos = pos->prev)
++	for (pos = (head)->prev; !list_is_head(pos, head); pos = (pos)->prev)
+ 
+ /**
+  * list_for_each_safe - iterate over a list safe against removal of list entry
+@@ -640,9 +640,9 @@ static inline void list_splice_tail_init(struct list_head *list,
+  * @head:	the head for your list.
+  */
+ #define list_for_each_safe(pos, n, head) \
+-	for (pos = (head)->next, n = pos->next; \
+-	     !list_is_head(pos, (head)); \
+-	     pos = n, n = pos->next)
++	for (pos = (head)->next, n = (pos)->next; \
++	     !list_is_head(pos, head); \
++	     pos = n, n = (pos)->next)
+ 
+ /**
+  * list_for_each_prev_safe - iterate over a list backwards safe against removal of list entry
+@@ -651,9 +651,9 @@ static inline void list_splice_tail_init(struct list_head *list,
+  * @head:	the head for your list.
+  */
+ #define list_for_each_prev_safe(pos, n, head) \
+-	for (pos = (head)->prev, n = pos->prev; \
+-	     !list_is_head(pos, (head)); \
+-	     pos = n, n = pos->prev)
++	for (pos = (head)->prev, n = (pos)->prev; \
++	     !list_is_head(pos, head); \
++	     pos = n, n = (pos)->prev)
+ 
+ /**
+  * list_count_nodes - count nodes in the list
+@@ -677,7 +677,7 @@ static inline size_t list_count_nodes(struct list_head *head)
+  * @member:	the name of the list_head within the struct.
+  */
+ #define list_entry_is_head(pos, head, member)				\
+-	(&pos->member == (head))
++	(&(pos)->member == (head))
+ 
+ /**
+  * list_for_each_entry	-	iterate over list of given type
+@@ -686,7 +686,7 @@ static inline size_t list_count_nodes(struct list_head *head)
+  * @member:	the name of the list_head within the struct.
+  */
+ #define list_for_each_entry(pos, head, member)				\
+-	for (pos = list_first_entry(head, typeof(*pos), member);	\
++	for (pos = list_first_entry(head, typeof(*(pos)), member);	\
+ 	     !list_entry_is_head(pos, head, member);			\
+ 	     pos = list_next_entry(pos, member))
+ 
+@@ -697,7 +697,7 @@ static inline size_t list_count_nodes(struct list_head *head)
+  * @member:	the name of the list_head within the struct.
+  */
+ #define list_for_each_entry_reverse(pos, head, member)			\
+-	for (pos = list_last_entry(head, typeof(*pos), member);		\
++	for (pos = list_last_entry(head, typeof(*(pos)), member);	\
+ 	     !list_entry_is_head(pos, head, member); 			\
+ 	     pos = list_prev_entry(pos, member))
+ 
+@@ -710,7 +710,7 @@ static inline size_t list_count_nodes(struct list_head *head)
+  * Prepares a pos entry for use as a start point in list_for_each_entry_continue().
+  */
+ #define list_prepare_entry(pos, head, member) \
+-	((pos) ? : list_entry(head, typeof(*pos), member))
++	((pos) ? : list_entry(head, typeof(*(pos)), member))
+ 
+ /**
+  * list_for_each_entry_continue - continue iteration over list of given type
+@@ -773,7 +773,7 @@ static inline size_t list_count_nodes(struct list_head *head)
+  * @member:	the name of the list_head within the struct.
+  */
+ #define list_for_each_entry_safe(pos, n, head, member)			\
+-	for (pos = list_first_entry(head, typeof(*pos), member),	\
++	for (pos = list_first_entry(head, typeof(*(pos)), member),	\
+ 		n = list_next_entry(pos, member);			\
+ 	     !list_entry_is_head(pos, head, member); 			\
+ 	     pos = n, n = list_next_entry(n, member))
+@@ -820,7 +820,7 @@ static inline size_t list_count_nodes(struct list_head *head)
+  * of list entry.
+  */
+ #define list_for_each_entry_safe_reverse(pos, n, head, member)		\
+-	for (pos = list_last_entry(head, typeof(*pos), member),		\
++	for (pos = list_last_entry(head, typeof(*(pos)), member),	\
+ 		n = list_prev_entry(pos, member);			\
+ 	     !list_entry_is_head(pos, head, member); 			\
+ 	     pos = n, n = list_prev_entry(n, member))
+@@ -1033,10 +1033,10 @@ static inline void hlist_move_list(struct hlist_head *old,
+ #define hlist_entry(ptr, type, member) container_of(ptr,type,member)
+ 
+ #define hlist_for_each(pos, head) \
+-	for (pos = (head)->first; pos ; pos = pos->next)
++	for (pos = (head)->first; pos ; pos = (pos)->next)
+ 
+ #define hlist_for_each_safe(pos, n, head) \
+-	for (pos = (head)->first; pos && ({ n = pos->next; 1; }); \
++	for (pos = (head)->first; pos && ({ n = (pos)->next; 1; }); \
+ 	     pos = n)
+ 
+ #define hlist_entry_safe(ptr, type, member) \
+@@ -1082,8 +1082,8 @@ static inline void hlist_move_list(struct hlist_head *old,
+  * @member:	the name of the hlist_node within the struct.
+  */
+ #define hlist_for_each_entry_safe(pos, n, head, member) 		\
+-	for (pos = hlist_entry_safe((head)->first, typeof(*pos), member);\
+-	     pos && ({ n = pos->member.next; 1; });			\
+-	     pos = hlist_entry_safe(n, typeof(*pos), member))
++	for (pos = hlist_entry_safe((head)->first, typeof(*(pos)), member);\
++	     pos && ({ n = (pos)->member.next; 1; });			\
++	     pos = hlist_entry_safe(n, typeof(*(pos)), member))
+ 
+ #endif
 -- 
 2.25.1
 
