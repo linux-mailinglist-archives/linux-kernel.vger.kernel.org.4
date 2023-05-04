@@ -2,87 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F1116F6B00
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 14:18:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 844ED6F6B06
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 14:19:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230380AbjEDMS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 08:18:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48632 "EHLO
+        id S230417AbjEDMTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 08:19:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230385AbjEDMSY (ORCPT
+        with ESMTP id S230395AbjEDMTH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 08:18:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8FC76190;
-        Thu,  4 May 2023 05:18:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 38678633CC;
-        Thu,  4 May 2023 12:18:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5447AC433EF;
-        Thu,  4 May 2023 12:18:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683202700;
-        bh=nGxeARBJkikCTCERlSlzDIaX91rrXwF9UAD1tOJJhxs=;
-        h=From:To:Cc:Subject:Date:From;
-        b=STXMxlDT5ipVz/GKUn6V9IfBxaM8e7ytBWYJG9QU3X8YqoPzhGVZM7MS5vpHI6aBl
-         WvgVLVvtgY4KzgNxiVAVOxnBB5sblr4P4Jk10bzcdjm/zBVu3gO40jTtVk3eBcOzco
-         5W48GJcc1p5nA6+yPlgY1/SXHZ3UQgJs7jNC5oFJ3eFmqqx77UaC36hTnrc8GJGdyb
-         zfxtVxuHmlOykTFbErpilokpabIlFHGG2CQz3EEzpjt+NAgljfG/JqQpkb8apoMqVx
-         NziRyisxp3VU64n85GNhSECBPYuGNKs0oLreyYmkez+l5c8T9dKd5h3vgaH9In14f/
-         PAjy2LGIykH5w==
-From:   guoren@kernel.org
-To:     torvalds@linux-foundation.org
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-csky@vger.kernel.org
-Subject: [GIT PULL] csky changes for v6.4
-Date:   Thu,  4 May 2023 08:18:15 -0400
-Message-Id: <20230504121815.1537054-1-guoren@kernel.org>
-X-Mailer: git-send-email 2.36.1
+        Thu, 4 May 2023 08:19:07 -0400
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A38A6585;
+        Thu,  4 May 2023 05:19:05 -0700 (PDT)
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-3f19afc4fbfso4347575e9.2;
+        Thu, 04 May 2023 05:19:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683202744; x=1685794744;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=r3bfwAGdzZox0nAzfwe0N1qLqTcM9TeHkTSwpiTSRY0=;
+        b=OY1DEGYRuKb1h/wq5byRZiSK9goMESYV4YFhKeqXFu7UATixR6lWUIQ3oN6PHJgrbU
+         VUgg9an+i09SBQL4vqtjzDfnJvtk0uvKjv2lOO41f5VW2Rxxchg5CU4GtifjI9Se8mLO
+         vW78zMtwdb7Imd19fBF+YiX2p1X2f4ISRXtrZHf0248J1qlHmRq+ClVMB4gXWXi0knam
+         mmNExWPu5epsI8dkiNqYDZ08TcD5XotWEI5Vqv6/XDPUe3h/qgaN6M//+LpYq/f+2wcp
+         zaSeA/pLOgkJ0mcbxDkYEh5FrAXWS9TtOzFcis94W0gilgQ9JTrrMET4finx6OhhlAzc
+         p6ow==
+X-Gm-Message-State: AC+VfDxQu8hsHq16B44wY+gvCirjU+lkDDyUdh3dB3ucgUDf7cLPn9cN
+        1Rm2yQC6OJr4LFVEwzzIbGTgBsqFUS8uvg==
+X-Google-Smtp-Source: ACHHUZ7+aTJs+OA6fdjH1WYQZ7Yvv4IhxhIXgBxFX3f1gp6uaNWvciZ8ApcS3InCHVUXHdGLqFWDgw==
+X-Received: by 2002:a05:600c:2941:b0:3f2:5777:27d4 with SMTP id n1-20020a05600c294100b003f2577727d4mr16631789wmd.25.1683202743592;
+        Thu, 04 May 2023 05:19:03 -0700 (PDT)
+Received: from localhost (fwdproxy-cln-023.fbsv.net. [2a03:2880:31ff:17::face:b00c])
+        by smtp.gmail.com with ESMTPSA id f12-20020a7bcc0c000000b003f17848673fsm4821518wmh.27.2023.05.04.05.19.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 May 2023 05:19:03 -0700 (PDT)
+From:   Breno Leitao <leitao@debian.org>
+To:     io-uring@vger.kernel.org, linux-nvme@lists.infradead.org,
+        asml.silence@gmail.com, hch@lst.de, axboe@kernel.dk,
+        ming.lei@redhat.com
+Cc:     leit@fb.com, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org, sagi@grimberg.me, joshi.k@samsung.com,
+        kbusch@kernel.org
+Subject: [PATCH v4 0/3] io_uring: Pass the whole sqe to commands
+Date:   Thu,  4 May 2023 05:18:53 -0700
+Message-Id: <20230504121856.904491-1-leitao@debian.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+These three patches prepare for the sock support in the io_uring cmd, as
+described in the following RFC:
 
-Please pull the latest csky changes from:
+Link: https://lore.kernel.org/lkml/20230406144330.1932798-1-leitao@debian.org/
 
-The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
+Since the support linked above depends on other refactors, such as the sock
+ioctl() sock refactor, I would like to start integrating patches that have
+consensus and can bring value right now.  This will also reduce the
+patchset size later.
 
-  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
+Regarding to these three patches, they are simple changes that turn
+io_uring cmd subsystem more flexible (by passing the whole SQE to the
+command), and cleaning up an unnecessary compile check.
 
-are available in the Git repository at:
+These patches were tested by creating a file system and mounting an NVME disk
+using ubdsrv/ublkb0.
 
-  https://github.com/c-sky/csky-linux.git tags/csky-for-linus-6.4
+Reviewed-by: Kanchan Joshi <joshi.k@samsung.com>
 
-for you to fetch changes up to 1f62ed00a56bf01becaccd81bf30f2fcb0322fd2:
+V1 -> V2 :
+  * Create a helper to return the size of the SQE
+V2 -> V3:
+  * Transformed uring_sqe_size() into a proper function
+  * Fixed some commit messages
+  * Created a helper function for nvme/host to avoid casting
+  * Added a fourth patch to avoid ublk_drv's casts by using a proper helper
+V3 -> V4:
+  * Create a function that returns a null pointer (io_uring_sqe_cmd()),
+    and uses it to get the cmd private data from the sqe.
 
-  csky: mmu: Prevent spurious page faults (2023-04-13 02:36:14 -0400)
+Breno Leitao (3):
+  io_uring: Create a helper to return the SQE size
+  io_uring: Pass whole sqe to commands
+  io_uring: Remove unnecessary BUILD_BUG_ON
 
-----------------------------------------------------------------
-arch/csky patches for 6.4
+ drivers/block/ublk_drv.c  | 26 +++++++++++++-------------
+ drivers/nvme/host/ioctl.c |  2 +-
+ include/linux/io_uring.h  |  7 ++++++-
+ io_uring/io_uring.h       | 10 ++++++++++
+ io_uring/opdef.c          |  2 +-
+ io_uring/uring_cmd.c      | 12 +++---------
+ io_uring/uring_cmd.h      |  8 --------
+ 7 files changed, 34 insertions(+), 33 deletions(-)
 
-The pull request we've done:
- - Remove CPU_TLB_SIZE config
- - Prevent spurious page faults
+-- 
+2.34.1
 
-----------------------------------------------------------------
-Guo Ren (1):
-      csky: mmu: Prevent spurious page faults
-
-Lukas Bulwahn (1):
-      csky: remove obsolete config CPU_TLB_SIZE
-
- arch/csky/Kconfig            | 5 -----
- arch/csky/abiv1/cacheflush.c | 3 +++
- arch/csky/abiv2/cacheflush.c | 3 +++
- 3 files changed, 6 insertions(+), 5 deletions(-)
