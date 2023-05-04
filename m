@@ -2,290 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C52D6F6C42
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 14:48:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AEDC6F6C4A
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 14:49:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbjEDMr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 08:47:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35182 "EHLO
+        id S230435AbjEDMtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 08:49:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbjEDMr4 (ORCPT
+        with ESMTP id S230392AbjEDMtt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 08:47:56 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3A0749FC
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 05:47:54 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-94ef0a8546fso71413866b.1
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 05:47:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683204473; x=1685796473;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jbqmEvSI8fNnq/copnGLAXkGX86AYweHmXiMD8VPVeY=;
-        b=eKDW7e2kSJUwvj9cuUAef9rRN5YE1ZPGTM8A2q/DhOtAQ/RxCw+vjayCwzmsLREXQz
-         h/zrn0FI9uL5uk8ofeNGy2gLnybDyYlrRDA7wrUk2gDj9FPaDxMIxqEcBzKFRX2pzJ+3
-         4zdT67vYlEZ/Ai9Em508YZNSRz0fJncw1ilURfL/zUfgjmDXCfpGxqeeMO+0DXLl/YXv
-         CcioFf+cHII6yQSILoE0aMq0NDnPYH50PYzCsMAs2xY/RJWflrEW0HI2nhW1NdQ0G4Pu
-         Nfmk3jxBe+UtO29v4X8lXiaGqJJrWVv5esn1ji9fVL0rNiSSQd/sDKpWBHiEpLj0j6Io
-         UMfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683204473; x=1685796473;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jbqmEvSI8fNnq/copnGLAXkGX86AYweHmXiMD8VPVeY=;
-        b=NR+SCbi1PUXI9DddNd4oi0f+LBGd/stLJQY62sp2jZCb6WIu7Am4yrujAk/+oqiqcR
-         uTu6mgg8RGjFpIGSU7os/Wq4evyltYEImYSrWNoOT2OZeT1dSzzb14cVdcx4Zs++Ip4V
-         NAwYSbfxQw6PX5mv2cZcq6V9Bt3Bwtxg3pvl2dDiJkRPRglXHKReePQ8hGhULy42l6/8
-         HPNQKH0YOH2cGb5fS9ZQs3Rpc/KMKjNvIUxxL2s0xe/iiOnUvZ4ufcZFJl4QDG6M42hX
-         aRJtuMBP7Czouvgwszfd07v29jAerpn/LLl5hW+Nl+QhghXnUChIi93Uu8s4hqI5LxBg
-         MZXQ==
-X-Gm-Message-State: AC+VfDxGwmt1YAQhLtTc8UalGs64PUeQ4IfFFF8dXcsQMVSiAlvN8cai
-        uWH1FMUR/n/aAJ8Xr1GBBHiKVg==
-X-Google-Smtp-Source: ACHHUZ5a5T0CbH2FVRK40w4xfIAoT1WHLaqmHed+xyVHOrOBsjEmHjTvIBxh1FKgrAEezuTq2URoRQ==
-X-Received: by 2002:a17:907:e90:b0:965:c58f:f8b9 with SMTP id ho16-20020a1709070e9000b00965c58ff8b9mr272891ejc.19.1683204473160;
-        Thu, 04 May 2023 05:47:53 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:cbf1:e7ef:fb81:e912? ([2a02:810d:15c0:828:cbf1:e7ef:fb81:e912])
-        by smtp.gmail.com with ESMTPSA id w14-20020a170907270e00b009659fed3612sm1083638ejk.24.2023.05.04.05.47.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 05:47:52 -0700 (PDT)
-Message-ID: <a964eeef-1db0-0d8a-e2a5-9e4c5fd8b2f0@linaro.org>
-Date:   Thu, 4 May 2023 14:47:51 +0200
+        Thu, 4 May 2023 08:49:49 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 140646A5E;
+        Thu,  4 May 2023 05:49:38 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QBttk3dS1z4f3tPG;
+        Thu,  4 May 2023 20:49:34 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP4 (Coremail) with SMTP id gCh0CgBnHbHdqVNkzuf5Ig--.27873S4;
+        Thu, 04 May 2023 20:49:35 +0800 (CST)
+From:   linan666@huaweicloud.com
+To:     axboe@kernel.dk, linan122@huawei.com, vishal.l.verma@intel.com,
+        dan.j.williams@intel.com
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com, yi.zhang@huawei.com, houtao1@huawei.com,
+        yangerkun@huawei.com
+Subject: [PATCH v2 00/11] block/badblocks: fix badblocks setting error
+Date:   Thu,  4 May 2023 20:48:17 +0800
+Message-Id: <20230504124828.679770-1-linan666@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 2/5] dt-bindings: clocks: atmel,at91rm9200-pmc: convert to
- yaml
-Content-Language: en-US
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com
-Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230504060729.689579-1-claudiu.beznea@microchip.com>
- <20230504060729.689579-3-claudiu.beznea@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230504060729.689579-3-claudiu.beznea@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgBnHbHdqVNkzuf5Ig--.27873S4
+X-Coremail-Antispam: 1UD129KBjvdXoW7Gr4DJFWfJF4xKr1kXw48Crg_yoWkXrb_J3
+        4vyF95GFsYq3W5Aa1ayF1UJrZ3tF4UCr1qka4UArn7Xr17ta1DXw45Jr48Xrn8GFyUJwsx
+        Zr95Xr1rXw1xtjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUba8YFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x02
+        67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l
+        5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67
+        AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7Cj
+        xVA2Y2ka0xkIwI1lw4CEc2x0rVAKj4xxMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
+        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
+        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
+        IF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq
+        3wCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcS
+        sGvfC2KfnxnUUI43ZEXa7IU1kpnJUUUUU==
+X-CM-SenderInfo: polqt0awwwqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/05/2023 08:07, Claudiu Beznea wrote:
-> Convert Atmel PMC documentation to yaml.
-> 
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+From: Li Nan <linan122@huawei.com>
 
-Thank you for your patch. There is something to discuss/improve.
+The patch series fix the bug of setting badblocks, which may not match
+expectations in complex scenarios. Optimize the code to make it more
+readable at the same time.
 
+Changes in v2:
+ - add missing patch "block/badblocks: change some members of badblocks
+ to bool"
 
-> diff --git a/Documentation/devicetree/bindings/clock/atmel,at91rm9200-pmc.yaml b/Documentation/devicetree/bindings/clock/atmel,at91rm9200-pmc.yaml
-> new file mode 100644
-> index 000000000000..c4023c3a85f2
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/atmel,at91rm9200-pmc.yaml
-> @@ -0,0 +1,161 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/clock/atmel,at91rm9200-pmc.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+Li Nan (11):
+  block/badblocks: change some members of badblocks to bool
+  block/badblocks: only set bb->changed when badblocks changes
+  block/badblocks: fix badblocks loss when badblocks combine
+  block/badblocks: fix badblocks overlap
+  block/badblocks: fix the bug of reverse order
+  block/badblocks: fix ack set fail in badblocks_set
+  block/badblocks: check bb->count instead of 'hi > lo'
+  block/badblocks: factor out a helper to merge badblocks
+  block/badblocks: factor out a helper to combine badblocks
+  block/badblocks: factor out a helper to create badblocks
+  block/badblocks: try to merge badblocks as much as possible
 
-Drop quotes from both.
+ block/badblocks.c         | 310 +++++++++++++++++++++++---------------
+ include/linux/badblocks.h |  10 +-
+ 2 files changed, 197 insertions(+), 123 deletions(-)
 
-> +
-> +title: Atmel Power Management Controller (PMC)
-> +
-> +maintainers:
-> +  - Claudiu Beznea <claudiu.beznea@microchip.com>
-> +
-> +description:
-> +  The power management controller optimizes power consumption by controlling all
-> +  system and user peripheral clocks. The PMC enables/disables the clock inputs
-> +  to many of the peripherals and to the processor.
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +          - const: atmel,at91sam9260-pmc
-
-Why this is separate, not part of bottom enum?
-
-> +          - const: syscon
-
-> +      - items:
-> +          - enum:
-> +              - atmel,at91sam9g20-pmc
-> +          - enum:
-> +              - atmel,at91sam9260-pmc
-
-This should be const. You cannot have here different compatibles.
-
-> +          - const: syscon
-> +      - items:
-> +          - enum:
-> +              - atmel,at91sam9g15-pmc
-> +              - atmel,at91sam9g25-pmc
-> +              - atmel,at91sam9g35-pmc
-> +              - atmel,at91sam9x25-pmc
-> +              - atmel,at91sam9x35-pmc
-> +          - enum:
-> +              - atmel,at91sam9x5-pmc
-> +          - const: syscon
-> +      - items:
-> +          - enum:
-> +              - atmel,at91sam9g45-pmc
-> +              - atmel,at91sam9n12-pmc
-> +              - atmel,at91sam9rl-pmc
-> +              - atmel,at91rm9200-pmc
-
-Order by name?
-
-> +              - atmel,sama5d4-pmc
-> +              - atmel,sama5d3-pmc
-> +              - atmel,sama5d2-pmc
-> +              - microchip,sam9x60-pmc
-> +              - microchip,sama7g5-pmc
-> +          - const: syscon
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  "#clock-cells":
-> +    const: 2
-
-Explain what the cells are for in description. Having '2' for clock
-controller is not obvious.
-
-> +
-> +  clocks:
-> +    minItems: 2
-> +    maxItems: 3
-> +
-> +  clock-names:
-> +    minItems: 2
-> +    maxItems: 3
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  atmel,osc-bypass:
-> +    type: boolean
-> +    description: set when a clock signal is directly provided on XIN
-> +
-> +
-
-Just one blank line.
-
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - "#clock-cells"
-> +  - clocks
-> +  - clock-names
-
-Keep the same order here as they appear in properties:.
-
-
-> +
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - microchip,sam9x60-pmc
-> +              - microchip,sama7g5-pmc
-> +    then:
-> +      properties:
-> +        clocks:
-> +          minItems: 3
-> +          maxItems: 3
-> +        clock-names:
-> +          items:
-> +            - const: td_slck
-> +            - const: md_slck
-> +            - const: main_xtal
-> +      required:
-> +        - clock-names
-> +        - clocks
-
-Drop required: here. It's already in top-level. Same in places below.
-
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - atmel,at91rm9200-pmc
-> +              - atmel,at91sam9260-pmc
-> +              - atmel,at91sam9g20-pmc
-> +    then:
-> +      properties:
-> +        clocks:
-> +          minItems: 2
-> +          maxItems: 2
-> +        clock-names:
-> +          items:
-> +            - const: slow_xtal
-> +            - const: main_xtal
-> +      required:
-> +        - clock-names
-> +        - clocks
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - atmel,sama5d4-pmc
-> +              - atmel,sama5d3-pmc
-> +              - atmel,sama5d2-pmc
-> +    then:
-> +      properties:
-> +        clocks:
-> +          minItems: 2
-> +          maxItems: 2
-> +        clock-names:
-> +          items:
-> +            - const: slow_clk
-> +            - const: main_xtal
-> +      required:
-> +        - clock-names
-> +        - clocks
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    pmc: clock-controller@f0018000 {
-> +        compatible = "atmel,sama5d4-pmc", "syscon";
-> +        reg = <0xf0018000 0x120>;
-> +        interrupts = <1 IRQ_TYPE_LEVEL_HIGH 7>;
-
-interrupt looks a bit odd. Are you sure it is correct?
-
-> +        #clock-cells = <2>;
-> +        clocks = <&clk32k>, <&main_xtal>;
-> +        clock-names = "slow_clk", "main_xtal";
-> +    };
-> +
-> +...
-
-Best regards,
-Krzysztof
+-- 
+2.31.1
 
