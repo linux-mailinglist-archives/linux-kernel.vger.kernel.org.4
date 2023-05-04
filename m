@@ -2,100 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6159D6F6D1E
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 15:44:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6E826F6D2D
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 15:46:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231126AbjEDNov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 09:44:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35630 "EHLO
+        id S231210AbjEDNqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 09:46:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230500AbjEDNot (ORCPT
+        with ESMTP id S231203AbjEDNqK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 09:44:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5467D93;
-        Thu,  4 May 2023 06:44:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A6967633EA;
-        Thu,  4 May 2023 13:44:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 116E2C433EF;
-        Thu,  4 May 2023 13:44:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683207886;
-        bh=cxXZ0Mv9fZe8AzkErEvTVxOOrlIoataPJcnAJ93nNR4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=O315kDjLiPUAsQ6xGpos4WTKEs50qI7zNpaj3f5JBpT11niVq2Dd4d0nT4K+WWtC6
-         bihPy/onuSp3833LpgoGH3e1AeRuCL3oBwHcyGEzQ/5zvencqvm51XpP7wCIulpwsG
-         T/rIndpoISt6pzekCOJk/PuT/VFxrsK0UMfKL+OFYDqQif6XoSP7jPd7ekerDuLNw6
-         WoXACFIqNAA2xC9mPvNVqYkqvayWczEmfyy0OJFQwZoAObGqcUWWAtZS3jiyBaWsAp
-         Ywse2+V3+hjXG/wFqwGAs4foDgViBq2TSYTgsj4CsDelqYDKwNMBRYhlGNsDcGOJJp
-         CVgaKL/iiCKjw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1puZGP-00078W-RV; Thu, 04 May 2023 15:44:54 +0200
-Date:   Thu, 4 May 2023 15:44:53 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/7] phy: qcom-qmp-combo: Introduce orientation variable
-Message-ID: <ZFO21fLWSNc7orpb@hovoldconsulting.com>
-References: <20230425034010.3789376-1-quic_bjorande@quicinc.com>
- <20230425034010.3789376-4-quic_bjorande@quicinc.com>
- <ZFD4gM9dUQwBmSUe@hovoldconsulting.com>
- <20230504032907.GF870858@hu-bjorande-lv.qualcomm.com>
+        Thu, 4 May 2023 09:46:10 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1FBC83C9;
+        Thu,  4 May 2023 06:45:59 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f139de8cefso9305213e87.0;
+        Thu, 04 May 2023 06:45:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683207958; x=1685799958;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Euvwf4w+PF7dcGdqI4XhoSfNb4B+m4UWdOdTdv+MuqM=;
+        b=KrKTHJFZ+LghXyg6cVbPfp31a4auBIA65987yHRH3IzsTDFwozej6/PXVlVXLPiXLz
+         wUfdOFtudeZQIZ99glYbXNFhFaNQf6rFzeXdWXYjuFdn7iVxDpgGvji0zK+Z7aBtKMuN
+         lvt3DkM5YEMG8mF+1Vpvk218aE9oS00ixNnUkKjQjEna/tfZ/xjGC8Z3Pho56QpIGedM
+         i4ASMeJA3h9xPZS3bZLyM37MW+eyiYC5Swm2H4VacsKDlZWXUWeCfNpq6qtfuysMerm/
+         bUP5ll7WRyv/Z0yQyHdStS3CZ2SGq+Jr5FPbmJgff+GHeDLGccIuiKT04gmDfDblrJF5
+         equg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683207958; x=1685799958;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Euvwf4w+PF7dcGdqI4XhoSfNb4B+m4UWdOdTdv+MuqM=;
+        b=WBtH9CZct+iRfPeidj183I+mDsO/LAAtvUFq8r9WQraIxicKYPIUprpTRPDwIHboNX
+         j7u9ml2A3fJAYXJRxCEUD5d6BW/PXNtWaXiRGw+65Ks2aI+1z34tCXaP39j3Gh8Sb9Tp
+         qCm19yhxe6K3HXeMSrQ20mHgwzYeCwVoTBBlbva2DFVbRQePhrNoX0H+NDCeJIgVdB1A
+         crta2fMVptgfhbPehTW0w2jDzQxjdCtdqc6dHXtXQVe70uZKWNWUVmVJl/566Zxd5vXk
+         vijfHQBXXfmgv1z4gjqjyvccTiHZiwvRaMMPtyf+YIw3B1y5nuCzSeKbnXoVb9svDo5g
+         5Vcw==
+X-Gm-Message-State: AC+VfDyoDXHnPg3YPQ6Ouwt9DWb7kDgHpoyaa/2wEtVgPNz1h0LIsDJb
+        62/dp3NQNzzMy0N8QPsSHuY/fLxYbeMH4AauYp4=
+X-Google-Smtp-Source: ACHHUZ4MDMoaiOp+0PQmwK/1IfdL7SymXUJ+Ul3aNoMrbyho03TdaRJXiJ/fQRyHg166g6col/TDj2eCt6PCIDH6btU=
+X-Received: by 2002:a05:6512:224f:b0:4ec:36d6:1517 with SMTP id
+ i15-20020a056512224f00b004ec36d61517mr1202176lfu.2.1683207957592; Thu, 04 May
+ 2023 06:45:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230504032907.GF870858@hu-bjorande-lv.qualcomm.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230420165454.9517-14-jorge.lopez2@hp.com> <202305041942.Cc0sqwxY-lkp@intel.com>
+In-Reply-To: <202305041942.Cc0sqwxY-lkp@intel.com>
+From:   Jorge Lopez <jorgealtxwork@gmail.com>
+Date:   Thu, 4 May 2023 08:45:30 -0500
+Message-ID: <CAOOmCE-rsvHd8rNqNqyAvZi6orMbMzR-DcpHyEUPq8dt-sZ_Pw@mail.gmail.com>
+Subject: Re: [PATCH v11 13/14] HP BIOSCFG driver - Makefile
+To:     kernel test robot <lkp@intel.com>
+Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org, thomas@t-8ch.de,
+        oe-kbuild-all@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 03, 2023 at 08:29:07PM -0700, Bjorn Andersson wrote:
-> On Tue, May 02, 2023 at 01:48:16PM +0200, Johan Hovold wrote:
-> > On Mon, Apr 24, 2023 at 08:40:06PM -0700, Bjorn Andersson wrote:
+Hi
 
-> > >  static void qmp_v3_dp_aux_init(struct qmp_combo *qmp);
-> > > @@ -1955,29 +1962,23 @@ static void qmp_v3_configure_dp_tx(struct qmp_combo *qmp)
-> > >  static bool qmp_combo_configure_dp_mode(struct qmp_combo *qmp)
-> > >  {
-> > >  	u32 val;
-> > > -	bool reverse = false;
-> > > +	bool reverse = qmp->orientation == TYPEC_ORIENTATION_REVERSE;
+A quick note letting you know that the failures are reported when
+trying to compile HP-BIOSCFG driver and it is including compile
+sources from a DELL driver.   No DELL portions of driver are and will
+be included in HP-BIOSCFG driver.
 
-> > It also looks like these callbacks end up being called without holding
-> > the qmp->phy_mutex via phy->power_on(). Perhaps there is no risk for a
-> > concurrent switch notification and dp phy power-on but it's not that
-> > obvious.
+ld: drivers/platform/x86/hp/hp-bioscfg/bioscfg.o: in function
+`get_wmiobj_pointer':
+>> bioscfg.c:(.text+0x750): multiple definition of `get_wmiobj_pointer'; dr=
+ivers/platform/x86/dell/dell-wmi-sysman/sysman.o:sysman.c:(.text+0x830): fi=
+rst defined here
 
-> It seems we're arriving here from hpd_event_thread(), while
-> phy_power_on() and phy_power_off() will be called in some other context.
-> I've not been able to convince myself if DP driver ensures ordering, or
-> if we have an existing race here...
+Additionally,  functions init_bios_attr_pass_interface() and
+exit_bios_attr_pass_interface() were renamed and the new definition
+will be included in patch v13  for HP-BIOSCFG driver.
 
-> Unless you insist, I would prefer to follow up with an additional patch
-> once we've landed this series. The fix will depend on the phy_mutex
-> shuffling patch anyways...
+Regards,
 
-Sure.
+Jorge
 
-But perhaps you can just move the orientation == qmp->orientation check
-under the mutex in qmp_combo_typec_switch_set() for now (in case I
-forgot to point that out earlier).
-
-Johan
+On Thu, May 4, 2023 at 6:59=E2=80=AFAM kernel test robot <lkp@intel.com> wr=
+ote:
+>
+> Hi Jorge,
+>
+> kernel test robot noticed the following build errors:
+>
+> [auto build test ERROR on linus/master]
+> [also build test ERROR on v6.3 next-20230428]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Jorge-Lopez/HP-BIO=
+SCFG-driver-Documentation/20230421-012956
+> base:   linus/master
+> patch link:    https://lore.kernel.org/r/20230420165454.9517-14-jorge.lop=
+ez2%40hp.com
+> patch subject: [PATCH v11 13/14] HP BIOSCFG driver  - Makefile
+> config: i386-allyesconfig (https://download.01.org/0day-ci/archive/202305=
+04/202305041942.Cc0sqwxY-lkp@intel.com/config)
+> compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
+> reproduce (this is a W=3D1 build):
+>         # https://github.com/intel-lab-lkp/linux/commit/55e860a942040b0d0=
+f1b58362dc4885b1a8acaf2
+>         git remote add linux-review https://github.com/intel-lab-lkp/linu=
+x
+>         git fetch --no-tags linux-review Jorge-Lopez/HP-BIOSCFG-driver-Do=
+cumentation/20230421-012956
+>         git checkout 55e860a942040b0d0f1b58362dc4885b1a8acaf2
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         make W=3D1 O=3Dbuild_dir ARCH=3Di386 olddefconfig
+>         make W=3D1 O=3Dbuild_dir ARCH=3Di386 SHELL=3D/bin/bash
+>
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202305041942.Cc0sqwxY-lkp@i=
+ntel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+>    ld: drivers/platform/x86/hp/hp-bioscfg/bioscfg.o: in function `get_wmi=
+obj_pointer':
+> >> bioscfg.c:(.text+0x750): multiple definition of `get_wmiobj_pointer'; =
+drivers/platform/x86/dell/dell-wmi-sysman/sysman.o:sysman.c:(.text+0x830): =
+first defined here
+>    ld: drivers/platform/x86/hp/hp-bioscfg/bioscfg.o: in function `get_ins=
+tance_count':
+> >> bioscfg.c:(.text+0x7ac): multiple definition of `get_instance_count'; =
+drivers/platform/x86/dell/dell-wmi-sysman/sysman.o:sysman.c:(.text+0x88c): =
+first defined here
+>    ld: drivers/platform/x86/hp/hp-bioscfg/biosattr-interface.o: in functi=
+on `init_bios_attr_set_interface':
+> >> biosattr-interface.c:(.text+0x4dc): multiple definition of `init_bios_=
+attr_set_interface'; drivers/platform/x86/dell/dell-wmi-sysman/biosattr-int=
+erface.o:biosattr-interface.c:(.text+0x33c): first defined here
+>    ld: drivers/platform/x86/hp/hp-bioscfg/biosattr-interface.o: in functi=
+on `exit_bios_attr_set_interface':
+> >> biosattr-interface.c:(.text+0x4f8): multiple definition of `exit_bios_=
+attr_set_interface'; drivers/platform/x86/dell/dell-wmi-sysman/biosattr-int=
+erface.o:biosattr-interface.c:(.text+0x358): first defined here
+>    ld: drivers/platform/x86/hp/hp-bioscfg/passwdattr-interface.o: in func=
+tion `init_bios_attr_pass_interface':
+> >> passwdattr-interface.c:(.text+0x68): multiple definition of `init_bios=
+_attr_pass_interface'; drivers/platform/x86/dell/dell-wmi-sysman/passwordat=
+tr-interface.o:passwordattr-interface.c:(.text+0x338): first defined here
+>    ld: drivers/platform/x86/hp/hp-bioscfg/passwdattr-interface.o: in func=
+tion `exit_bios_attr_pass_interface':
+> >> passwdattr-interface.c:(.text+0x84): multiple definition of `exit_bios=
+_attr_pass_interface'; drivers/platform/x86/dell/dell-wmi-sysman/passwordat=
+tr-interface.o:passwordattr-interface.c:(.text+0x354): first defined here
+>    ld: drivers/platform/x86/hp/hp-bioscfg/spmobj-attributes.o: in functio=
+n `calculate_security_buffer':
+> >> spmobj-attributes.c:(.text+0x4c4): multiple definition of `calculate_s=
+ecurity_buffer'; drivers/platform/x86/dell/dell-wmi-sysman/sysman.o:sysman.=
+c:(.text+0x714): first defined here
+>    ld: drivers/platform/x86/hp/hp-bioscfg/spmobj-attributes.o: in functio=
+n `populate_security_buffer':
+> >> spmobj-attributes.c:(.text+0x524): multiple definition of `populate_se=
+curity_buffer'; drivers/platform/x86/dell/dell-wmi-sysman/sysman.o:sysman.c=
+:(.text+0x744): first defined here
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests
