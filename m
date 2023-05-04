@@ -2,47 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3C746F75CA
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 22:01:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B722F6F75BF
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 22:01:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232249AbjEDUBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 16:01:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52600 "EHLO
+        id S229897AbjEDUBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 16:01:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232733AbjEDUAx (ORCPT
+        with ESMTP id S232141AbjEDUBF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 16:00:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D2441886A;
-        Thu,  4 May 2023 12:51:08 -0700 (PDT)
+        Thu, 4 May 2023 16:01:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610FE203CA;
+        Thu,  4 May 2023 12:51:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FBFB63801;
-        Thu,  4 May 2023 19:49:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1113C433D2;
-        Thu,  4 May 2023 19:49:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D94E63841;
+        Thu,  4 May 2023 19:49:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68267C43321;
+        Thu,  4 May 2023 19:49:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683229781;
-        bh=+FGIPg4YD0pcqDluuVYG8o76/9fxCfjQb7Re24R7gDU=;
+        s=k20201202; t=1683229786;
+        bh=gtO/lNBe1/rIlYFWWjfDYNKh0iIDgPyOfjU4FgD7AHA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qyGvmm4TK3cxUmZ22uO7Ox7sOVk76zHCvyUlFQFQwOGu/IK/ud70hcwR3w0RFUzr3
-         K/4V8ww0jsDUsJtDbOMJi97Mz1nJcgPrz2XT1Z+AmIVd2SZXHG31n64+gDJM7JSee1
-         5iwUXP8yB9SW0fAWg/RblaHMrP0YwjY1DvBm82CR+ZRHai5Qo+WqBgY1KpnaWtH8GB
-         WRz5OfPUME9O2Z+Iynk5/BN3raDpBtntEN0+yg4Gd/AfIESlHAvJs8H11pFWmJsqVk
-         nqz+ECnVnsQorCyDKa7URscNV7Z1u4QdHtO1bzGYc7fPRYSNBr5DmK0fpGMp7+lWr5
-         1Up0VBU7akrFA==
+        b=psN7ly1XzBHGJxJVG3U3tayekf5MSP2ZZE6VQzXJyGP8qiVRteOxxJ3xZlXoSGqmH
+         ntrMh85aoQZkxZ6Fio2z1FUf0hrD/q/BgrNZl1YHXityGtT38QFN5eu3msdjkG4SP0
+         A+N1i7S515KDmb7gJB55Wv7rnfKfc8WiJXgz8qE3fIfE1bD8g/LZFS2vJlTouTuDRS
+         iQUdV9wsnlbe+iq8k/V3IsG+VjzZZrJI3nHeMB74Sl4Mr7nhb6oSqVfuCQGac8pCdn
+         N187BvhBkSnniBNFNV62jNc0v612XSYztSXJPtSnh/DW/3dODNMaZBmX6DdVLYAqfd
+         xdn4IYtoB8UHQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        KP Singh <kpsingh@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, martin.lau@linux.dev,
-        daniel@iogearbox.net, andrii@kernel.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 02/24] bpf: Annotate data races in bpf_local_storage
-Date:   Thu,  4 May 2023 15:49:15 -0400
-Message-Id: <20230504194937.3808414-2-sashal@kernel.org>
+Cc:     Hector Martin <marcan@marcan.st>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Arend van Spriel <arend.vanspriel@broadcom.com>,
+        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>,
+        aspriel@gmail.com, franky.lin@broadcom.com,
+        hante.meuleman@broadcom.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        ian.lin@infineon.com, chi-hsien.lin@infineon.com,
+        johannes.berg@intel.com, wright.feng@cypress.com,
+        ramesh.rangavittal@infineon.com, wataru.gohda@cypress.com,
+        prasanna.kerekoppa@cypress.com, linux-wireless@vger.kernel.org,
+        brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 03/24] wifi: brcmfmac: cfg80211: Pass the PMK in binary instead of hex
+Date:   Thu,  4 May 2023 15:49:16 -0400
+Message-Id: <20230504194937.3808414-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230504194937.3808414-1-sashal@kernel.org>
 References: <20230504194937.3808414-1-sashal@kernel.org>
@@ -50,8 +57,8 @@ MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,81 +67,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+From: Hector Martin <marcan@marcan.st>
 
-[ Upstream commit 0a09a2f933c73dc76ab0b72da6855f44342a8903 ]
+[ Upstream commit 89b89e52153fda2733562776c7c9d9d3ebf8dd6d ]
 
-There are a few cases where hlist_node is checked to be unhashed without
-holding the lock protecting its modification. In this case, one must use
-hlist_unhashed_lockless to avoid load tearing and KCSAN reports. Fix
-this by using lockless variant in places not protected by the lock.
+Apparently the hex passphrase mechanism does not work on newer
+chips/firmware (e.g. BCM4387). It seems there was a simple way of
+passing it in binary all along, so use that and avoid the hexification.
 
-Since this is not prompted by any actual KCSAN reports but only from
-code review, I have not included a fixes tag.
+OpenBSD has been doing it like this from the beginning, so this should
+work on all chips.
 
-Cc: Martin KaFai Lau <martin.lau@kernel.org>
-Cc: KP Singh <kpsingh@kernel.org>
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Link: https://lore.kernel.org/r/20230221200646.2500777-4-memxor@gmail.com
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Also clear the structure before setting the PMK. This was leaking
+uninitialized stack contents to the device.
+
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Reviewed-by: Arend van Spriel <arend.vanspriel@broadcom.com>
+Signed-off-by: Hector Martin <marcan@marcan.st>
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/20230214092423.15175-6-marcan@marcan.st
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/bpf/bpf_local_storage.c | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+ .../wireless/broadcom/brcm80211/brcmfmac/cfg80211.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
-index 8aaaaef99f09f..f753965726205 100644
---- a/kernel/bpf/bpf_local_storage.c
-+++ b/kernel/bpf/bpf_local_storage.c
-@@ -48,11 +48,21 @@ owner_storage(struct bpf_local_storage_map *smap, void *owner)
- 	return map->ops->map_owner_storage_ptr(owner);
- }
- 
-+static bool selem_linked_to_storage_lockless(const struct bpf_local_storage_elem *selem)
-+{
-+	return !hlist_unhashed_lockless(&selem->snode);
-+}
-+
- static bool selem_linked_to_storage(const struct bpf_local_storage_elem *selem)
+diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
+index 0a069bc7f1567..24dda3762768d 100644
+--- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
++++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
+@@ -1350,13 +1350,14 @@ static int brcmf_set_pmk(struct brcmf_if *ifp, const u8 *pmk_data, u16 pmk_len)
  {
- 	return !hlist_unhashed(&selem->snode);
- }
- 
-+static bool selem_linked_to_map_lockless(const struct bpf_local_storage_elem *selem)
-+{
-+	return !hlist_unhashed_lockless(&selem->map_node);
-+}
+ 	struct brcmf_pub *drvr = ifp->drvr;
+ 	struct brcmf_wsec_pmk_le pmk;
+-	int i, err;
++	int err;
 +
- static bool selem_linked_to_map(const struct bpf_local_storage_elem *selem)
- {
- 	return !hlist_unhashed(&selem->map_node);
-@@ -140,7 +150,7 @@ static void __bpf_selem_unlink_storage(struct bpf_local_storage_elem *selem)
- 	struct bpf_local_storage *local_storage;
- 	bool free_local_storage = false;
++	memset(&pmk, 0, sizeof(pmk));
  
--	if (unlikely(!selem_linked_to_storage(selem)))
-+	if (unlikely(!selem_linked_to_storage_lockless(selem)))
- 		/* selem has already been unlinked from sk */
- 		return;
+-	/* convert to firmware key format */
+-	pmk.key_len = cpu_to_le16(pmk_len << 1);
+-	pmk.flags = cpu_to_le16(BRCMF_WSEC_PASSPHRASE);
+-	for (i = 0; i < pmk_len; i++)
+-		snprintf(&pmk.key[2 * i], 3, "%02x", pmk_data[i]);
++	/* pass pmk directly */
++	pmk.key_len = cpu_to_le16(pmk_len);
++	pmk.flags = cpu_to_le16(0);
++	memcpy(pmk.key, pmk_data, pmk_len);
  
-@@ -167,7 +177,7 @@ void bpf_selem_unlink_map(struct bpf_local_storage_elem *selem)
- 	struct bpf_local_storage_map *smap;
- 	struct bpf_local_storage_map_bucket *b;
- 
--	if (unlikely(!selem_linked_to_map(selem)))
-+	if (unlikely(!selem_linked_to_map_lockless(selem)))
- 		/* selem has already be unlinked from smap */
- 		return;
- 
-@@ -365,7 +375,7 @@ bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
- 		err = check_flags(old_sdata, map_flags);
- 		if (err)
- 			return ERR_PTR(err);
--		if (old_sdata && selem_linked_to_storage(SELEM(old_sdata))) {
-+		if (old_sdata && selem_linked_to_storage_lockless(SELEM(old_sdata))) {
- 			copy_map_value_locked(&smap->map, old_sdata->data,
- 					      value, false);
- 			return old_sdata;
+ 	/* store psk in firmware */
+ 	err = brcmf_fil_cmd_data_set(ifp, BRCMF_C_SET_WSEC_PMK,
 -- 
 2.39.2
 
