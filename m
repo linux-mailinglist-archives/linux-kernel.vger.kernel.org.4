@@ -2,117 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFE946F7717
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 22:34:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D129B6F76FD
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 22:28:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231523AbjEDUeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 16:34:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46668 "EHLO
+        id S232130AbjEDU2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 16:28:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjEDUdn (ORCPT
+        with ESMTP id S232024AbjEDU2Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 16:33:43 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C061A1F3;
-        Thu,  4 May 2023 13:24:36 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-55a010774a5so13765427b3.3;
-        Thu, 04 May 2023 13:24:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683231817; x=1685823817;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hnKSnabTJgMzw4Wg+5H4XZlyvGFVU5xMwdJ1boBOdHE=;
-        b=rVsx1PFx9laQzqw0f8SmE+h73WVsFUYLDtyGZb5zgICH2R0OmFlMHqxp6tWFAb4HQm
-         /edWrVfVJlUEvbmUWix2tBdVlD+smfmfptE6FD+PQOsjQSPcRyvZeiSIeOZ6P7ndA/Eo
-         nHSw2zyHJRAKfH+8zL2LXj1n9h5KC8Q9//mv+BhJX5YEgXOfTRaz1GWeQIUE0Kw9N8nD
-         XBFOC9ubIoyL6Uf9KTUkagkCjMwpvqElF4QcM3qpCJ4Mnhm1+DMZasn6H920J4+CaZaI
-         EJeyaODg4q9BNzM9+8OBed8SOZ9JhVH0WSiBuKg+4RSHbeEaV9ZoeX5aYIM9ZCZKhmW4
-         G0OQ==
+        Thu, 4 May 2023 16:28:25 -0400
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7119C16354;
+        Thu,  4 May 2023 13:15:06 -0700 (PDT)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-192d5ab4962so413104fac.3;
+        Thu, 04 May 2023 13:15:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683231817; x=1685823817;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hnKSnabTJgMzw4Wg+5H4XZlyvGFVU5xMwdJ1boBOdHE=;
-        b=KptUqNYnr/2aY8Jg9061JkjiZ3/jxclXND36C234hsbiLmG3KJVc5baHI9tpiDakvD
-         5dONsROz7/wMa/SLW9qHzITJjvyxOD/YKjIX2dMxqFruf1RdipqRMYl82VI/tJHF1eHv
-         IMNILvmysPayWP9PGNsgEN+Jeb1qzBJfyE96TqBSGZEVGXsaNx2rgPL+wx6mSQCdDHaa
-         +zIoGFECJ/XEz12DRlCJz4FNTVflHkFTUSdwFBl16v3e1fJgN1VNg0Fb89vNTEU61KcJ
-         y7Rf26ZMsfzV/QCDE8nVZypXD5RlswDAp1c2EIvI4bjy2MklGJSxWwkkw0L/Xx6RPYa7
-         jTXw==
-X-Gm-Message-State: AC+VfDyS8HwGOAmQMK4cBaW1f6xoEHgBKhilwrqH5uqq6A2d6a+TX1b9
-        TPC6apnQi9Ip/T20zfSLUIjReFc1sHrwkgsO9j4PykReHKxcXg==
-X-Google-Smtp-Source: ACHHUZ53o8qy5NHN8N3ZCDeCCHib6rX37ROTbGQAYH2NxbjpvNJL4+oS2yrKBdca+zAaNAp099NQ4R0kMjO3WK1f0FA=
-X-Received: by 2002:a05:6902:1028:b0:b92:3e7b:d848 with SMTP id
- x8-20020a056902102800b00b923e7bd848mr1524958ybt.19.1683231083317; Thu, 04 May
- 2023 13:11:23 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683231196; x=1685823196;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zmGFO1ls8mvzZ2qitW1HiZvAeEBGZVDV30N8xTg86N8=;
+        b=b9DKNxDEfUZ2iXOhFMh0L46Fon2lJKaJoi/XDvsb9eylIgecJax0u/8I59zW501x+S
+         yp4d/NNnFg352H8e/Xzgil0PSjHlciCXo9iCp+9M8I+t1coHwWNzCMTUqB4ORmB7bqFd
+         R7AJh0cylaE2qGsCKpeW38ram6z/yW6vBmDNwGa77ImY+urr5L/SzT9mQcH1VTeTPP/W
+         tOQKV5murVpwpitkkfg3ucqxjrCDQEY39kVc2eKVG3zS2+PmmM4aZCIGGB7XV40aYkx5
+         RX8qYgcHPTaS19EBeg3LRR7LqNKW5rJdirSIfsQ/ib+R8G5Q88elPep/1/cgSNNfUIVs
+         Xo5A==
+X-Gm-Message-State: AC+VfDwheGWMuIHzURh2PFnNbPLupjbRBFiulabMeTSnNFqftON9AHVi
+        13PU7v9hytldR2hKKJzpSA==
+X-Google-Smtp-Source: ACHHUZ5aCv1z/4rVPGyRr+R5ZqjX+p/gM8IRCJt/kBRMkNPFLsx2aGTwceNqGw0i8ceO0k5bw7HZZA==
+X-Received: by 2002:a05:6870:93d3:b0:17e:da48:b65f with SMTP id c19-20020a05687093d300b0017eda48b65fmr1464119oal.22.1683231196361;
+        Thu, 04 May 2023 13:13:16 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id e2-20020a056870450200b0017f84f81f3csm1003986oao.52.2023.05.04.13.13.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 May 2023 13:13:15 -0700 (PDT)
+Received: (nullmailer pid 252340 invoked by uid 1000);
+        Thu, 04 May 2023 20:13:14 -0000
+Date:   Thu, 4 May 2023 15:13:14 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Michal Simek <michal.simek@amd.com>
+Cc:     Richard Weinberger <richard@nod.at>, linux-mtd@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        git@xilinx.com, Rob Herring <robh+dt@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>, michal.simek@xilinx.com,
+        linux-kernel@vger.kernel.org,
+        Naga Sureshkumar Relli <nagasure@xilinx.com>,
+        devicetree@vger.kernel.org, monstr@monstr.eu,
+        linux-arm-kernel@lists.infradead.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: Re: [PATCH] dt-bindings: xilinx: Remove Naga from memory and mtd
+ bindings
+Message-ID: <168323119248.252262.3704807391594267570.robh@kernel.org>
+References: <6b4cdc7158599b4a38409a03eda56e38975b6233.1683103250.git.michal.simek@amd.com>
 MIME-Version: 1.0
-References: <20230503090708.2524310-1-nmi@metaspace.dk> <da7b815d-3da8-38e5-9b25-b9cfb6878293@acm.org>
- <87jzxot0jk.fsf@metaspace.dk> <b9a1c1b2-3baa-2cad-31ae-8b14e4ee5709@acm.org>
- <ZFP+8apHunCCMmOZ@kbusch-mbp.dhcp.thefacebook.com> <e7bc2155-613b-8904-9942-2e9615b0dc63@kernel.dk>
-In-Reply-To: <e7bc2155-613b-8904-9942-2e9615b0dc63@kernel.dk>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Thu, 4 May 2023 22:11:11 +0200
-Message-ID: <CANiq72nAMH1SfGmPTEjGHfevbb9tMLN4W7gJ3nBpJcvkCEsZ4g@mail.gmail.com>
-Subject: Re: [RFC PATCH 00/11] Rust null block driver
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Keith Busch <kbusch@kernel.org>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Andreas Hindborg <nmi@metaspace.dk>,
-        Christoph Hellwig <hch@lst.de>,
-        Damien Le Moal <Damien.LeMoal@wdc.com>,
-        Hannes Reinecke <hare@suse.de>,
-        lsf-pc@lists.linux-foundation.org, rust-for-linux@vger.kernel.org,
-        linux-block@vger.kernel.org, Matthew Wilcox <willy@infradead.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        open list <linux-kernel@vger.kernel.org>, gost.dev@samsung.com,
-        Daniel Vetter <daniel@ffwll.ch>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6b4cdc7158599b4a38409a03eda56e38975b6233.1683103250.git.michal.simek@amd.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 4, 2023 at 9:02=E2=80=AFPM Jens Axboe <axboe@kernel.dk> wrote:
->
-> But back to the real question... This is obviously extra burden on
-> maintainers, and that needs to be sorted out first. Block drivers in
 
-Regarding maintenance, something we have suggested in similar cases to
-other subsystems is that the author gets involved as a maintainer of,
-at least, the Rust abstractions/driver (possibly with a different
-`MAINTAINERS` entry).
+On Wed, 03 May 2023 10:40:55 +0200, Michal Simek wrote:
+> Naga is no longer works for AMD/Xilinx and there is no activity from him to
+> continue to maintain Xilinx related drivers. Two drivers have Miquel as
+> maintainer and for the last one add myself instead to be kept in a loop if
+> there is any change required.
+> 
+> Signed-off-by: Michal Simek <michal.simek@amd.com>
+> ---
+> 
+>  .../devicetree/bindings/memory-controllers/arm,pl35x-smc.yaml   | 1 -
+>  .../devicetree/bindings/mtd/arasan,nand-controller.yaml         | 2 +-
+>  Documentation/devicetree/bindings/mtd/arm,pl353-nand-r2p1.yaml  | 1 -
+>  3 files changed, 1 insertion(+), 3 deletions(-)
+> 
 
-Of course, that is still work for the existing maintainer(s), i.e.
-you, since coordination takes time. However, it can also be a nice way
-to learn Rust on the side, meanwhile things are getting upstreamed and
-discussed (I think Daniel, in Cc, is taking that approach).
+Applied, thanks!
 
-And it may also be a way for you to get an extra
-maintainer/reviewer/... later on for the C parts, too, even if Rust
-does not succeed.
-
-> general are not super security sensitive, as it's mostly privileged code
-> and there's not a whole lot of user visibile API. And the stuff we do
-> have is reasonably basic. So what's the long term win of having rust
-> bindings? This is a legitimate question. I can see a lot of other more
-> user exposed subsystems being of higher interest here.
-
-From the experience of other kernel maintainers/developers that are
-making the move, the advantages seem to be well worth it, even
-disregarding the security aspect, i.e. on the language side alone.
-
-Cheers,
-Miguel
