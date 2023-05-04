@@ -2,152 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 161E56F6D7A
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 16:04:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F35956F6D81
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 16:08:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231316AbjEDOEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 10:04:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49862 "EHLO
+        id S230427AbjEDOI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 10:08:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231310AbjEDOEo (ORCPT
+        with ESMTP id S230193AbjEDOIY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 10:04:44 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7510C86B4;
-        Thu,  4 May 2023 07:04:43 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34470PpV019322;
-        Thu, 4 May 2023 14:04:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=O2HZAVGgMqOM1nhiFWSbffcr2h3NIs/YgmWGVPBFBHk=;
- b=HK+0eKIjVZTz2E3WtFhc6poQnCUkvHgVOe3D40tQhPHroXcS9t1113SvSJ5YNlCQqis6
- o4Ny7nhnMlCYGpvdq/p4+nAaa3ItHH6Ka+yI+kQA5G4AqQw40sfuVtMA6qQNSnpaNXnB
- +E6i3TBKhRcoR8RhEhw6UsPXBFKEO4JA+8SJLc559+3HxI5u9UwCzuwMyS8ZhRlvxm2E
- VKxwmUGTFLKqSwv6d4HRCZXjPElUkgtEp8V4C6jTQEGaThRHKY4f1DU1P9x8qe4UD6W1
- p1VMWs4bsm2TXvFEPeyhiy9qRF0QCq8h+jNGbuxqh5dXbvexii4vslwBcdLZpK0ukZYx qQ== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qc50419yf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 04 May 2023 14:04:35 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 344E4YMH024591
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 4 May 2023 14:04:34 GMT
-Received: from [10.252.212.215] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 4 May 2023
- 07:04:31 -0700
-Message-ID: <facc9800-6af4-5cb3-bd22-b22b2250090a@quicinc.com>
-Date:   Thu, 4 May 2023 19:34:28 +0530
+        Thu, 4 May 2023 10:08:24 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C0B868D;
+        Thu,  4 May 2023 07:08:22 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-6436e075166so457634b3a.0;
+        Thu, 04 May 2023 07:08:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683209301; x=1685801301;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZMOcf6cgy3EJL9X777q3uHwol0/+UlxMtzCPEFX8tV8=;
+        b=oqNIruYXCumhSceFrFEAT9XYgxpnUN0iDT1Spy0hHcVRH55kSoAhekEaAs+UXByAO3
+         1mtXMjJF0DbIfNCBRZnhmkXmFIEfFmpWG546ocqCxAeJ386hldOciUDYxUz7xlDw06oL
+         9uKqKnQXhhawWFxHgJ+K8ABRBQeaIjtd+mov0+on3BJuBCJyxf1mnAV/ipLbXLovIivj
+         +kHeKB1adOnG2CIttQIspZvahQjjZ9wIoC9g8gLvOg8bsS5xCLEmwMrr29CBtMpy7MNx
+         Z5oETK+Rdk5NRpczlBvTj0g3WXKb+OyeY9aWql83LKriZDa/Vt/+tilULMZf6YO4RGyW
+         DcWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683209301; x=1685801301;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZMOcf6cgy3EJL9X777q3uHwol0/+UlxMtzCPEFX8tV8=;
+        b=PEMGfpP4lz1FUnm8FnhHZ7poVXdQYoj/WZFS0Uz5wVcAkbYtPddutPVVrBdofSUw89
+         eqk5hplZO/4Tu/93gF3sWSQ4+SDuaFaJzLLuOhqQ695ipx2xl2UkhfHIFK8JdX3veNIl
+         ympE+DEWtDROV2uYSrBrPLsZ6uRULafjHYoJy6G9TLEJeicrHJgAXil7giTk/8DFOyTy
+         LpoJQ/6eiTwrhErhJQnSDs+PITKTjnQlilrap28fjOU6aIRe3tpLDtuiut2+tVomu0fQ
+         461vi20WW4SI7NunbaHBI2lbKIiDpXuabKCNNtDaN3MfsTZ0cqTR/beqdywsDdJmmACJ
+         yW4A==
+X-Gm-Message-State: AC+VfDzm9db5zanW0ZoGrKac5GGyT+iIsYld88ddfs6PABWztXvPFGMn
+        CdFoRnu0uplvdPSM/HHZg/s=
+X-Google-Smtp-Source: ACHHUZ7D24NuztrzV3Zvnh+jqcQojFXyYsd7Cu0NpledM7r4TVVyTPYbSEQdryu2S3vdrraDBEauFw==
+X-Received: by 2002:a05:6a00:158c:b0:63b:5c82:e209 with SMTP id u12-20020a056a00158c00b0063b5c82e209mr3057104pfk.10.1683209301003;
+        Thu, 04 May 2023 07:08:21 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d7-20020aa78147000000b0063b7c42a070sm2576378pfn.68.2023.05.04.07.08.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 May 2023 07:08:20 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <6a894ff0-3232-4ef0-5e26-95471cc33ed9@roeck-us.net>
+Date:   Thu, 4 May 2023 07:08:17 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH 0/4] venus: add support for 10 bit decoding
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Dikshita Agarwal <quic_dikshita@quicinc.com>,
-        <linux-media@vger.kernel.org>, <stanimir.k.varbanov@gmail.com>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <mchehab@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
-References: <1683196599-3730-1-git-send-email-quic_dikshita@quicinc.com>
- <8df7f24b-9dbe-4491-bcb1-f53021bb482f@linaro.org>
- <66b8e665-1038-127a-1f4f-20d8fe7bcd8e@linaro.org>
 Content-Language: en-US
-From:   Vikash Garodia <quic_vgarodia@quicinc.com>
-In-Reply-To: <66b8e665-1038-127a-1f4f-20d8fe7bcd8e@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: QviRIapVLx6W-XTPU26tMQLk-N4yaRlO
-X-Proofpoint-ORIG-GUID: QviRIapVLx6W-XTPU26tMQLk-N4yaRlO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-04_09,2023-05-04_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
- suspectscore=0 adultscore=0 bulkscore=0 clxscore=1011 lowpriorityscore=0
- spamscore=0 priorityscore=1501 mlxlogscore=999 mlxscore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2305040115
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Marco Felsch <m.felsch@pengutronix.de>, andreas@fatal.se,
+        jun.li@nxp.com, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20230504-b4-v6-3-topic-boards-imx8mp-evk-dual-role-usb-v2-0-3889b1b2050c@pengutronix.de>
+ <20230504-b4-v6-3-topic-boards-imx8mp-evk-dual-role-usb-v2-3-3889b1b2050c@pengutronix.de>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v2 3/4] usb: typec: tcpci: clear the fault status bit
+In-Reply-To: <20230504-b4-v6-3-topic-boards-imx8mp-evk-dual-role-usb-v2-3-3889b1b2050c@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 5/4/23 06:46, Marco Felsch wrote:
+> According the "USB Type-C Port Controller Interface Specification v2.0"
+> the TCPC sets the fault status register bit-7
+> (AllRegistersResetToDefault) once the registers have been reseted to
 
-On 5/4/2023 7:21 PM, Bryan O'Donoghue wrote:
-> On 04/05/2023 14:49, Bryan O'Donoghue wrote:
->> On 04/05/2023 11:36, Dikshita Agarwal wrote:
->>> This series includes the changes to
->>>    - add V4L2_PIX_FMT_P010 as supported decoder format.
->>>    - consider dpb color format while calculating buffer
->>>      size for dpb buffers.
->>>    - update dpb and opb color format when bit depth
->>>      changes is detected, also update preferred color
->>>      format to P010 in this case.
->>>
->>> With this series, divided the previous version [1] into
->>> multiple patches as suggested in review comments.
->>>
->>> [1] 
->>> https://patchwork.linuxtv.org/project/linux-media/list/?series=10376
->>>
->>> Dikshita Agarwal (4):
->>>    venus: add support for V4L2_PIX_FMT_P010 color format
->>>    venus: update calculation for dpb buffers
->>>    venus: add handling of bit depth change from firmwar
->>>    venus: return P010 as preferred format for 10 bit decode
->>>
->>>   drivers/media/platform/qcom/venus/helpers.c        | 24 
->>> ++++++++++++++++++++++
->>>   drivers/media/platform/qcom/venus/hfi_plat_bufs.h  |  3 +++
->>>   .../media/platform/qcom/venus/hfi_plat_bufs_v6.c   |  8 +++++++-
->>>   drivers/media/platform/qcom/venus/vdec.c           | 16 
->>> +++++++++++++--
->>>   4 files changed, 48 insertions(+), 3 deletions(-)
->>>
->>
->> For future reference a series like this should:
->>
->> 1. Include a log of what changed between the last series and this
->> 2. Describe which comments you addressed
->>     I generally try to say
->>     "Added newline to dts - Konrad"
->>     "Sent the series as a -v3 - Bryan"
->>     etc
->> 3. Ideally provide a link to the previous series in
->>
->> https://lore.kernel.org/linux-arm-msm/1682492417-20496-1-git-send-email-quic_dikshita@quicinc.com/ 
->>
->> 4. Use versioning
->>     This set should be prefixed with "v2-0000-cover-letter" 
->> "v2-0001-add-support" etc
->>
->> "git format-patch mybase..targettip --cover-letter -v2"
->>
->> ---
->> bod
->
-> Doh I see you did most of that - just missed the V2.
->
-> Please remember to version your subsequent series. "git format-patch -v2"
+cleared ? set ?
 
-Does this qualify for a version upgrade when a single patch is 
-subsequently raised as series ? IMO, the link
+> their default values.
+> 
+> This triggers an alert(-irq) on PTN5110 devices albeit we do mask the
+> fault-irq. Fix this gernally by writing a one to the correspondig
 
-to previous single patch in cover letter and then starting the series 
-(as v0) seems to provide the required info.
+generically ?
 
->
+corresponding
+
+> bit-7.
+> 
+> Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
 > ---
-> bod
+>   drivers/usb/typec/tcpm/tcpci.c | 5 +++++
+>   include/linux/usb/tcpci.h      | 1 +
+>   2 files changed, 6 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
+> index 8da23240afbe..15632d023e4c 100644
+> --- a/drivers/usb/typec/tcpm/tcpci.c
+> +++ b/drivers/usb/typec/tcpm/tcpci.c
+> @@ -602,6 +602,11 @@ static int tcpci_init(struct tcpc_dev *tcpc)
+>   	if (time_after(jiffies, timeout))
+>   		return -ETIMEDOUT;
+>   
+> +	regmap_read(tcpci->regmap, TCPC_FAULT_STATUS, &reg);
+
+Needs error check.
+
+Also, I am not sure if this is the correct place for this code. The alert
+status is cleared after vendor initialization. Should the same be done
+here ? Also, why not just write the bit unconditionally, similar
+to TCPC_ALERT ?
+
+Thanks,
+Guenter
+
+> +	if (reg & TCPC_FAULT_STATUS_ALL_REG_RST_TO_DEFAULT)
+> +		tcpci_write16(tcpci, TCPC_FAULT_STATUS,
+> +			      TCPC_FAULT_STATUS_ALL_REG_RST_TO_DEFAULT);
+> +
+>   	/* Handle vendor init */
+>   	if (tcpci->data->init) {
+>   		ret = tcpci->data->init(tcpci, tcpci->data);
+> diff --git a/include/linux/usb/tcpci.h b/include/linux/usb/tcpci.h
+> index 85e95a3251d3..83376473ac76 100644
+> --- a/include/linux/usb/tcpci.h
+> +++ b/include/linux/usb/tcpci.h
+> @@ -103,6 +103,7 @@
+>   #define TCPC_POWER_STATUS_SINKING_VBUS	BIT(0)
+>   
+>   #define TCPC_FAULT_STATUS		0x1f
+> +#define TCPC_FAULT_STATUS_ALL_REG_RST_TO_DEFAULT BIT(7)
+>   
+>   #define TCPC_ALERT_EXTENDED		0x21
+>   
+> 
+
