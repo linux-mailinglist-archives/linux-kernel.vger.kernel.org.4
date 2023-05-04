@@ -2,182 +2,338 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69CF46F78ED
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 00:19:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DD8F6F78F8
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 00:21:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbjEDWTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 18:19:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57522 "EHLO
+        id S229706AbjEDWUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 18:20:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjEDWTU (ORCPT
+        with ESMTP id S229472AbjEDWUx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 18:19:20 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62D5A9EE8
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 15:19:18 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4eff055d4d3so1198186e87.3
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 15:19:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683238756; x=1685830756;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8pMBsKF7+1qDWEXm4/g+4pDlJgA+ge7d77ifZ1er6FE=;
-        b=FlW1CsPqkW+bofsqNkG4s5QCNPp+hbyfoAcgyEIY3T1jL2ZsvjBxhtlFmsu9fGLtX9
-         Ck1zgZeiO4EKJqtEHZeUqNMlTLr6wwW4HcKOLrlk6aAKLtSQzsBxYN7b2t0DWiEoMw+a
-         oDOIhajdv10P6+IdI0izn751w2Xd8MKm0TWqI3cQvfnUp4qYFzawyerAlhbO4ehAFNLa
-         yyJE5nRap3d6q/W7eJHhvPx7hlksci2DP4NadqgdBjJPLT4Y+UWeBqLL+seUBtlfoS3j
-         6aoPs5Pi2Tqt8gvisnVTnTq1ioh05YcN7X5pjhaVZwFOkRrqjVIVW2Y6VslzvwA0DQrr
-         EbsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683238756; x=1685830756;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8pMBsKF7+1qDWEXm4/g+4pDlJgA+ge7d77ifZ1er6FE=;
-        b=WkrpGy0GcADHhzK0bbvDAL60R9OYdXZMntciCqOlCg+u9QCwXNueiBj2+hZdWltAv+
-         Ef8kJLi3dR362vEyJnmv+Lz13c+M6b2zL8Z08wb0ligQK/p0L2I+K7jY/fJVZzgngr7h
-         9wnjMNHH9jgvfLXUpYHsg930Gz6gdsnzP7uU89vRJXNL0shfbSDS5bS8OQBPSQj28qKP
-         Gn2uTi2aHzm+VcPwCegP3zUEk2urbFrHnkGbA55DI1db6PWH6bqRVeKS0b0oPUR++IUf
-         xuSv7mP+CGHngYTrMVdikSqWPKzQRvySMJrxCUMOnMwnSyn4fZIY8H5weAMA/TPYzpeM
-         sI+g==
-X-Gm-Message-State: AC+VfDyAq2t0VXsv/aGb2ZyzBvRcjFY/BpJhT+UkCZHMGdlTeD/p9HWJ
-        M1ZsCXTNQKuzuAJx555VAr+TcA==
-X-Google-Smtp-Source: ACHHUZ7yjLJ8IJk0PCCQmH5C+JgCohVLT8or89Obt8YICVGFdLjT6gjIbROv/OWxF5S4HKDadr+Avg==
-X-Received: by 2002:ac2:5975:0:b0:4ea:f7be:e071 with SMTP id h21-20020ac25975000000b004eaf7bee071mr2093436lfp.46.1683238756532;
-        Thu, 04 May 2023 15:19:16 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id h12-20020a19700c000000b004f13ef9b360sm37135lfc.142.2023.05.04.15.19.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 15:19:15 -0700 (PDT)
-Message-ID: <5d45e541-ceb7-4931-a46f-cd55da33a525@linaro.org>
-Date:   Fri, 5 May 2023 01:19:15 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v5 3/7] drm/msm/dpu: add DPU_PINGPONG_DSC bits into PP_BLK
- and PP_BLK_TE marcos
-Content-Language: en-GB
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
-        agross@kernel.org, andersson@kernel.org, quic_sbillaka@quicinc.com,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Thu, 4 May 2023 18:20:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E529EE8;
+        Thu,  4 May 2023 15:20:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 063E263A6F;
+        Thu,  4 May 2023 22:20:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C8DEC433EF;
+        Thu,  4 May 2023 22:20:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683238850;
+        bh=rwx7iUdSi9ZJ936Oee+tnrMgzVQXpxJNfSPrASIpy3Q=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=YKsUVpu0ptYjRBovoU/uOo2fA0BLiAZ1A+MBoqqjLC4c5AS7LeMY8bwZEN8loP+Gs
+         32n4NOnIJBMoV5gKsEAkVHH0nJiXS1gPKnCxotZljfqR1V4u4dNPWyAWtx8U0yfbCT
+         SXACPyg87+6r2MlTf67MfYt+OvW2G2HHVFp3SnMXecSyCAEHHBTsJrSqfGym4NDomP
+         DMk3EPIfkqNi9tsmpRaccspQfjuesw8vkZMyprA6GPQvMtpC8eQpyHfbZysO7RoPlU
+         xIdDEW6wAuoObJ8PfmRChxOfCuTrKWbAgYzUDSL4n2lAZB9iu7OBv8SWzhKNMd8m7j
+         3LCQ1rhIJRL5w==
+Date:   Thu, 4 May 2023 17:20:48 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+        Oliver O'Halloran <oohall@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Stefan Roese <sr@denx.de>, Jim Wilson <wilson@tuliptree.org>,
+        David Abdurachmanov <david.abdurachmanov@gmail.com>,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        linux-pci@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <1683218805-23419-1-git-send-email-quic_khsieh@quicinc.com>
- <1683218805-23419-4-git-send-email-quic_khsieh@quicinc.com>
- <ljt5mp4ew5lcrrrdd7xyof3jv3friafbmr3im35ddwxjc42ekh@toez7xfdreg2>
- <CAA8EJpreM9i3DUp+93K7p14f_tNMy-m+C-WdyN5_drmmkGV66g@mail.gmail.com>
- <u7hlzltevx675gfg4w6emmeceo6nj76taqeecsor6iqsi3hmki@lg43y65m6chz>
- <11ef769a-5089-57d4-db87-4c5766d98206@quicinc.com>
- <6qg25ffuq6xcfz3vuqm5lguspihjospctjclxmwyu2ifau4p7b@txywjmir7lg5>
- <9011a078-9962-b3de-6427-b9114fcd0cf4@quicinc.com>
- <55aa25pdeaqbuc2x2v3xkmcatlzmn2c5pn2py5qnqz7bnrp6s4@3vkwwnn4uasi>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <55aa25pdeaqbuc2x2v3xkmcatlzmn2c5pn2py5qnqz7bnrp6s4@3vkwwnn4uasi>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v8 7/7] PCI: Work around PCIe link training failures
+Message-ID: <20230504222048.GA887151@bhelgaas>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.21.2304060116380.13659@angie.orcam.me.uk>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/05/2023 00:39, Marijn Suijten wrote:
-> On 2023-05-04 12:50:57, Abhinav Kumar wrote:
->>
->>
->> On 5/4/2023 12:36 PM, Marijn Suijten wrote:
->>> On 2023-05-04 11:25:44, Abhinav Kumar wrote:
->>> <snip>
->>>>> Sure, if you really prefer a split I'd go for two patches:
->>>>> 1. Add the flag to the enum and catalog;
->>>>> 2. Add the ops guard (functional change).
->>>>>
->>>>> Then don't forget to reword the commit message, following the guidelines
->>>>> below and the suggestion for 2/7.
->>>>>
->>>>> - Marijn
->>>>
->>>> Plan sounds good to me.
->>>>
->>>> Marijn, we will wait for a couple of days to post the next rev but would
->>>> be hard more than that as we need to pick up other things which are
->>>> pending on top of this. Hence would appreciate if you can finish reviews
->>>> by then.
->>>
->>> It depends on how many more revisions are needed after that, and not all
->>> patches in this series have an r-b just yet.  Given the amount of review
->>> comments that are still trickling in (also on patches that already have
->>> maintainer r-b) I don't think we're quite there to start thinging about
->>> picking this up in drm-msm just yet.  I doubt anyone wants a repeat of
->>> the original DSC series, which went through many review rounds yet still
->>> required multiple series of bugfixes (some of which were pointed out and
->>> ignored in review) to be brought to a working state.  But the split
->>> across topics per series already makes this a lot less likely, many
->>> thanks for that.
->>>
->>
->> I think the outstanding comments shouldnt last more than 1-2 revs more
->> on this one as its mostly due to multiple patches on the list touching
->> catalog at the same time. I have been monitoring the comments closely
->> even though I dont respond to all of them.
->>
->> One of the major reasons of the number of issues with DSC 1.1 was QC
->> didn't really have the devices or panels to support it. Thats why I
->> changed that this time around to take more control of validation of DSC
->> 1.2 and ofcourse decided to break up of series into the least amount of
->> functionality needed to keep the DPU driver intact.
-> 
-> Really glad that you are able to test and validate it now, that goes a
-> long way.  Does that also mean you can post the panel patches quickly,
-> so that everyone has a point of reference?  As you said that is one of
-> the main points where DSC 1.1 "went wrong" (a misunderstanding of
-> drm_dsc_config).
-> 
->> All that being said, we still value your comments and would gladly wait
->> for a couple of days like I already wrote. But there are more
->> incremental series on top of this:
->>
->> -> DSI changes for DSC 1.2
->> -> proper teardown for DSC
->> -> DSC pair allocation support
->> -> DSC 1.2 over DP
-> 
-> Yeah, I'm familiar with the concept of having many dependent series, and
-> now DSC series are even rebasing on DPU (catalog) cleanups to preempt
-> conflicts, which is really hard to follow.
-> Dmitry just pushed v5 of "drm/i915/dsc: change DSC param tables to
-> follow the DSC model" [1] and seems to have dropped some patches that
-> some of these series are depending on, resulting in compilation
-> failures.  Other series don't seem to fully mention all their
-> dependencies.
+On Thu, Apr 06, 2023 at 01:21:31AM +0100, Maciej W. Rozycki wrote:
+> Attempt to handle cases such as with a downstream port of the ASMedia 
+> ASM2824 PCIe switch where link training never completes and the link 
+> continues switching between speeds indefinitely with the data link layer 
+> never reaching the active state.
 
-We'd have to pick them into our code or submit directly to drm-misc. I 
-removed the patches which we can get in w/o Intel review.
+We're going to land this series this cycle, come hell or high water.
 
-> 
-> [1]: https://lore.kernel.org/linux-arm-msm/20230504153511.4007320-1-dmitry.baryshkov@linaro.org/T/#u
-> 
-> So, for this to go as convenient as possible, do you have a list of
-> series, in a desired order that they should be reviewed and tested?
-> That way I can direct my priorities and help achieve the goal of picking
-> base dependencies as early as possible.
-> 
-> For example, one of the many series regresses DSC on the Xperia XZ3
-> (SDM845), but I have yet to bisect and understand which patch it is.
-> Will let you know as soon as I get my tree in order.
-> 
-> - Marijn
+We talked about reusing pcie_retrain_link() earlier.  IIRC that didn't
+work: ASPM needs to use PCI_EXP_LNKSTA_LT because not all devices
+support PCI_EXP_LNKSTA_DLLLA, and you need PCI_EXP_LNKSTA_DLLLA
+because the erratum makes PCI_EXP_LNKSTA_LT flap.
 
--- 
-With best wishes
-Dmitry
+What if we made pcie_retrain_link() reusable by making it:
 
+  bool pcie_retrain_link(struct pci_dev *pdev, u16 link_status_bit)
+
+so ASPM could use pcie_retrain_link(link->pdev, PCI_EXP_LNKSTA_LT) and
+you could use pcie_retrain_link(dev, PCI_EXP_LNKSTA_DLLLA)?
+
+Maybe do it two steps?
+
+  1) Move pcie_retrain_link() just after pcie_wait_for_link() and make
+  it take link->pdev instead of link.
+
+  2) Add the bit parameter.
+
+I'm OK with having pcie_retrain_link() in pci.c, but the surrounding
+logic about restricting to 2.5GT/s, retraining, removing the
+restriction, retraining again is stuff I'd rather have in quirks.c so
+it doesn't clutter pci.c.
+
+I think it'd be good if the pci_device_add() path made clear that this
+is a workaround for a problem, e.g.,
+
+  void pci_device_add(struct pci_dev *dev, struct pci_bus *bus)
+  {
+    ...
+    if (pcie_link_failed(dev))
+      pcie_fix_link_train(dev);
+
+where pcie_fix_link_train() could live in quirks.c (with a stub when
+CONFIG_PCI_QUIRKS isn't enabled).  It *might* even be worth adding it
+and the stub first because that's a trivial patch and wouldn't clutter
+the probe.c git history with all the grotty details about ASM2824 and
+this topology.
+
+> +int pcie_downstream_link_retrain(struct pci_dev *dev)
+> +{
+> +	static const struct pci_device_id ids[] = {
+> +		{ PCI_VDEVICE(ASMEDIA, 0x2824) }, /* ASMedia ASM2824 */
+> +		{}
+> +	};
+> +	u16 lnksta, lnkctl2;
+> +
+> +	if (!pci_is_pcie(dev) || !pcie_downstream_port(dev) ||
+> +	    !pcie_cap_has_lnkctl2(dev) || !dev->link_active_reporting)
+> +		return -1;
+> +
+> +	pcie_capability_read_word(dev, PCI_EXP_LNKCTL2, &lnkctl2);
+> +	pcie_capability_read_word(dev, PCI_EXP_LNKSTA, &lnksta);
+> +	if ((lnksta & (PCI_EXP_LNKSTA_LBMS | PCI_EXP_LNKSTA_DLLLA)) ==
+> +	    PCI_EXP_LNKSTA_LBMS) {
+
+You go to some trouble to make sure PCI_EXP_LNKSTA_LBMS is set, and I
+can't remember what the reason is.  If you make a preparatory patch
+like this, it would give a place for that background, e.g.,
+
+  +bool pcie_link_failed(struct pci_dev *dev)
+  +{
+  +       u16 lnksta;
+  +
+  +       if (!pci_is_pcie(dev) || !pcie_downstream_port(dev) ||
+  +           !pcie_cap_has_lnkctl2(dev) || !dev->link_active_reporting)
+  +               return false;
+  +
+  +       pcie_capability_read_word(dev, PCI_EXP_LNKSTA, &lnksta);
+  +       if ((lnksta & (PCI_EXP_LNKSTA_LBMS | PCI_EXP_LNKSTA_DLLLA)) ==
+  +                       PCI_EXP_LNKSTA_LBMS)
+  +               return true;
+  +
+  +       return false;
+  +}
+
+If this is a generic thing and checking PCI_EXP_LNKSTA_LBMS makes
+sense for everybody, it could go in pci.c; otherwise it could go in
+quirks.c as well.  I guess it's not *truly* generic anyway because it
+only detects link training failures for devices that have LNKCTL2 and
+link_active_reporting.
+
+> +		unsigned long timeout;
+> +		u16 lnkctl;
+> +
+> +		pci_info(dev, "broken device, retraining non-functional downstream link at 2.5GT/s\n");
+> +
+> +		pcie_capability_read_word(dev, PCI_EXP_LNKCTL, &lnkctl);
+> +		lnkctl |= PCI_EXP_LNKCTL_RL;
+> +		lnkctl2 &= ~PCI_EXP_LNKCTL2_TLS;
+> +		lnkctl2 |= PCI_EXP_LNKCTL2_TLS_2_5GT;
+> +		pcie_capability_write_word(dev, PCI_EXP_LNKCTL2, lnkctl2);
+> +		pcie_capability_write_word(dev, PCI_EXP_LNKCTL, lnkctl);
+> +		/*
+> +		 * Due to an erratum in some devices the Retrain Link bit
+> +		 * needs to be cleared again manually to allow the link
+> +		 * training to succeed.
+> +		 */
+> +		lnkctl &= ~PCI_EXP_LNKCTL_RL;
+> +		if (dev->clear_retrain_link)
+> +			pcie_capability_write_word(dev, PCI_EXP_LNKCTL,
+> +						   lnkctl);
+> +
+> +		timeout = jiffies + PCIE_LINK_RETRAIN_TIMEOUT;
+> +		do {
+> +			pcie_capability_read_word(dev, PCI_EXP_LNKSTA,
+> +					     &lnksta);
+> +			if (lnksta & PCI_EXP_LNKSTA_DLLLA)
+> +				break;
+> +			usleep_range(10000, 20000);
+> +		} while (time_before(jiffies, timeout));
+> +
+> +		if (!(lnksta & PCI_EXP_LNKSTA_DLLLA)) {
+> +			pci_info(dev, "retraining failed\n");
+> +			return -1;
+> +		}
+> +	}
+
+> +	if (IS_ENABLED(CONFIG_PCI_QUIRKS) && (lnksta & PCI_EXP_LNKSTA_DLLLA) &&
+> +	    (lnkctl2 & PCI_EXP_LNKCTL2_TLS) == PCI_EXP_LNKCTL2_TLS_2_5GT &&
+> +	    pci_match_id(ids, dev)) {
+> +		u32 lnkcap;
+> +		u16 lnkctl;
+> +
+> +		pci_info(dev, "removing 2.5GT/s downstream link speed restriction\n");
+> +		pcie_capability_read_dword(dev, PCI_EXP_LNKCAP, &lnkcap);
+> +		pcie_capability_read_word(dev, PCI_EXP_LNKCTL, &lnkctl);
+> +		lnkctl |= PCI_EXP_LNKCTL_RL;
+> +		lnkctl2 &= ~PCI_EXP_LNKCTL2_TLS;
+> +		lnkctl2 |= lnkcap & PCI_EXP_LNKCAP_SLS;
+> +		pcie_capability_write_word(dev, PCI_EXP_LNKCTL2, lnkctl2);
+> +		pcie_capability_write_word(dev, PCI_EXP_LNKCTL, lnkctl);
+
+This starts a retrain; should we wait for training to complete?
+
+> +	}
+
+If we put most of this into a pcie_fix_link_train() (separated from
+detecting the *need* to fix something), could it be made to look
+sort of like this?  (I suppose you'd want to return bool and rename
+it that reads naturally, e.g., "pcie_link_forcibly_retrained()",
+"pcie_link_retrained()", etc)
+
+  +void pcie_fix_link_train(struct pci_dev *dev)
+  +{
+  +       u16 lnkctl2;
+  +       u32 lnkcap;
+  +       bool linkup;
+  +
+  +       pci_info(dev, "attempting link retrain at 2.5GT/s\n");
+  +       pcie_capability_read_word(dev, PCI_EXP_LNKCTL2, &lnkctl2);
+  +       lnkctl2 &= ~PCI_EXP_LNKCTL2_TLS;
+  +       lnkctl2 |= PCI_EXP_LNKCTL2_TLS_2_5GT;
+  +       pcie_capability_write_word(dev, PCI_EXP_LNKCTL2, lnkctl2);
+  +
+  +       linkup = pcie_retrain_link(dev, PCI_EXP_LNKSTA_DLLLA);
+  +       if (!linkup) {
+  +               pci_info(dev, "retraining failed\n");
+  +               return;
+  +       }
+  +
+  +       if (LNKCAP supports only 2.5GT/s)
+  +               return;
+  +
+  +       if (!pci_match_id(ids, dev))
+  +               return;
+
+Your comment said "if we know this is *safe*"; I can't remember if
+pci_match_id() is there to avoid a known problem?
+
+  +
+  +       pci_info(dev, "attempting link retrain at max supported rate\n");
+  +       pcie_capability_read_dword(dev, PCI_EXP_LNKCAP, &lnkcap);
+  +       lnkctl2 &= ~PCI_EXP_LNKCTL2_TLS;
+  +       lnkctl2 |= lnkcap & PCI_EXP_LNKCAP_SLS;
+  +       pcie_capability_write_word(dev, PCI_EXP_LNKCTL2, lnkctl2);
+  +
+  +       linkup = pcie_retrain_link(dev, PCI_EXP_LNKSTA_DLLLA);
+  +       if (!linkup)
+  +               pci_info(dev, "retraining failed\n");
+  +}
+
+> +
+> +	return 0;
+> +}
+> +
+> +/* Same as above, but called for a downstream device.  */
+> +static int pcie_upstream_link_retrain(struct pci_dev *dev)
+> +{
+> +	struct pci_dev *bridge;
+> +
+> +	bridge = pci_upstream_bridge(dev);
+> +	if (bridge)
+> +		return pcie_downstream_link_retrain(bridge);
+> +	else
+> +		return -1;
+> +}
+> +
+>  static int pci_acs_enable;
+>  
+>  /**
+> @@ -1148,8 +1274,8 @@ void pci_resume_bus(struct pci_bus *bus)
+>  
+>  static int pci_dev_wait(struct pci_dev *dev, char *reset_type, int timeout)
+>  {
+> +	int retrain = 0;
+>  	int delay = 1;
+> -	u32 id;
+>  
+>  	/*
+>  	 * After reset, the device should not silently discard config
+> @@ -1163,21 +1289,37 @@ static int pci_dev_wait(struct pci_dev *
+>  	 * Command register instead of Vendor ID so we don't have to
+>  	 * contend with the CRS SV value.
+>  	 */
+> -	pci_read_config_dword(dev, PCI_COMMAND, &id);
+> -	while (PCI_POSSIBLE_ERROR(id)) {
+> +	for (;;) {
+> +		u32 id;
+> +
+> +		pci_read_config_dword(dev, PCI_COMMAND, &id);
+> +		if (!PCI_POSSIBLE_ERROR(id)) {
+> +			if (delay > PCI_RESET_WAIT)
+> +				pci_info(dev, "ready %dms after %s\n",
+> +					 delay - 1, reset_type);
+> +			break;
+> +		}
+> +
+>  		if (delay > timeout) {
+>  			pci_warn(dev, "not ready %dms after %s; giving up\n",
+>  				 delay - 1, reset_type);
+>  			return -ENOTTY;
+>  		}
+>  
+> -		if (delay > PCI_RESET_WAIT)
+> +		if (delay > PCI_RESET_WAIT) {
+> +			if (!retrain) {
+> +				retrain = 1;
+> +				if (pcie_upstream_link_retrain(dev) == 0) {
+> +					delay = 1;
+> +					continue;
+> +				}
+> +			}
+>  			pci_info(dev, "not ready %dms after %s; waiting\n",
+>  				 delay - 1, reset_type);
+> +		}
+
+Thanks for fixing this in the reset path, too.  Can we move this part
+to a separate patch?  It's related to the rest of the patch, but it
+looks so much different that I think it would be easier to understand
+by itself.
+
+I think I might try to fold the pcie_upstream_link_retrain() directly
+in here because the "upstream link retrain" in the function name
+doesn't really make sense in PCIe terms.
+
+Bjorn
