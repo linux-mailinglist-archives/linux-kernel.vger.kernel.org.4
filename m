@@ -2,104 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 298366F65C3
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 09:32:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 902BA6F65C7
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 09:33:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230079AbjEDHch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 03:32:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49380 "EHLO
+        id S229777AbjEDHda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 03:33:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbjEDHc3 (ORCPT
+        with ESMTP id S229470AbjEDHd2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 03:32:29 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB5E3593
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 00:32:26 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <j.zink@pengutronix.de>)
-        id 1puTRk-0001GQ-Mb; Thu, 04 May 2023 09:32:12 +0200
-Message-ID: <0a5d631a-037e-5158-82dd-e53d478befea@pengutronix.de>
-Date:   Thu, 4 May 2023 09:32:11 +0200
+        Thu, 4 May 2023 03:33:28 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CBBF83;
+        Thu,  4 May 2023 00:33:24 -0700 (PDT)
+Received: from kwepemm600019.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QBlqq5n3kzsR63;
+        Thu,  4 May 2023 15:31:35 +0800 (CST)
+Received: from [10.136.112.228] (10.136.112.228) by
+ kwepemm600019.china.huawei.com (7.193.23.64) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 4 May 2023 15:33:21 +0800
+Subject: Re: BUG: KASAN: stack-out-of-bounds in __ip_options_echo
+To:     Florian Westphal <fw@strlen.de>
+CC:     <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <davem@davemloft.net>, <kuba@kernel.org>,
+        <stephen@networkplumber.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yanan@huawei.com>,
+        <caowangbao@huawei.com>
+References: <05324dd2-3620-8f07-60a0-051814913ff8@huawei.com>
+ <20230502165446.GA22029@breakpoint.cc>
+From:   "Fengtao (fengtao, Euler)" <fengtao40@huawei.com>
+Message-ID: <9dd7ec8f-bc40-39af-febb-a7e8aabbaaed@huawei.com>
+Date:   Thu, 4 May 2023 15:33:20 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 1/2] dt-bindings: phy: imx8mq-usb: add phy tuning
- properties
-Content-Language: en-US, de-DE
-From:   Johannes Zink <j.zink@pengutronix.de>
-To:     Rob Herring <robh@kernel.org>
-Cc:     kishon@kernel.org, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, festevam@gmail.com,
-        s.hauer@pengutronix.de, vkoul@kernel.org, haibo.chen@nxp.com,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-imx@nxp.com, kernel@pengutronix.de,
-        linux-phy@lists.infradead.org, shawnguo@kernel.org,
-        linux-arm-kernel@lists.infradead.org, jun.li@nxp.com,
-        patchwork-jzi@pengutronix.de
-References: <20230405112118.1256151-1-j.zink@pengutronix.de>
- <20230405112118.1256151-2-j.zink@pengutronix.de>
- <5398cbe0-c681-5dd7-0b3e-3a586cc4915f@linaro.org>
- <3f7257ee36dc44f162a87281c8279fd5bad91dea.camel@pengutronix.de>
- <95b4afd4-c93e-628b-fd22-6fcbc1d1234e@linaro.org>
- <b394b456540943b1022a7b093bf369924fca0566.camel@pengutronix.de>
- <20230412133921.GA2017891-robh@kernel.org>
- <6953b608-973f-c603-f852-edf7ba183e64@pengutronix.de>
- <67d283f3-d0db-5fc0-79e9-e7531d591aab@pengutronix.de>
-In-Reply-To: <67d283f3-d0db-5fc0-79e9-e7531d591aab@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <20230502165446.GA22029@breakpoint.cc>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: j.zink@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Originating-IP: [10.136.112.228]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600019.china.huawei.com (7.193.23.64)
+X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob, hi Krzysztof,
+Hi
 
-[snip]
- > gentle ping - any opinions on this? Shall I just send a V2 along the 
-lines of the phy-stm32-usbphy.c?
+I have tested the patch, the panic not happend.
+And I search the similar issue in kernel, and found commit:
+[1]https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ed0de45a1008
+[2]https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3da1ed7ac398
 
-This would be something like (example for the trim-hs-current, taken 
-from pyh-stm32-usbphyc):
+So I tested another patch like this:
+------------[ cut here ]------------
+--- .//net/ipv4/netfilter/nf_reject_ipv4.c      2023-05-02 13:03:35.427896081 +0000
++++ .//net/ipv4/netfilter/nf_reject_ipv4.c.new  2023-05-02 13:03:00.433897970 +0000
+@@ -187,6 +187,7 @@
 
-       st,trim-hs-current:
-         description: |
-           Controls HS driver current trimming for choke compensation
-           - <0> = 18.87 mA target current / nominal + 0%
-           - <1> = 19.165 mA target current / nominal + 1.56%
-           - <2> = 19.46 mA target current / nominal + 3.12%
-           - <3> = 19.755 mA target current / nominal + 4.68%
-           - <4> = 20.05 mA target current / nominal + 6.24%
-           - <5> = 20.345 mA target current / nominal + 7.8%
-           - <6> = 20.64 mA target current / nominal + 9.36%
-           - <7> = 20.935 mA target current / nominal + 10.92%
-           - <8> = 21.23 mA target current / nominal + 12.48%
-           - <9> = 21.525 mA target current / nominal + 14.04%
-           - <10> = 21.82 mA target current / nominal + 15.6%
-           - <11> = 22.115 mA target current / nominal + 17.16%
-           - <12> = 22.458 mA target current / nominal + 19.01%
-           - <13> = 22.755 mA target current / nominal + 20.58%
-           - <14> = 23.052 mA target current / nominal + 22.16%
-           - <15> = 23.348 mA target current / nominal + 23.73%
-         $ref: /schemas/types.yaml#/definitions/uint32
-         minimum: 0
-         maximum: 15
-         default: 0
+ void nf_send_unreach(struct sk_buff *skb_in, int code, int hook)
+ {
++       struct ip_options opt;
+        struct iphdr *iph = ip_hdr(skb_in);
+        u8 proto = iph->protocol;
 
-If you think something along these lines is acceptable, I would like to 
-prepare and send a V2.
+@@ -196,13 +197,18 @@
+        if (hook == NF_INET_PRE_ROUTING && nf_reject_fill_skb_dst(skb_in))
+                return;
 
-Best regards
-Johannes
++       memset(&opt, 0, sizeof(opt));
++       opt.optlen = iph->ihl*4 - sizeof(struct iphdr);
++       if (__ip_options_compile(dev_net(skb_in->dev), &opt, skb_in, NULL))
++               return;
++
+        if (skb_csum_unnecessary(skb_in) || !nf_reject_verify_csum(proto)) {
+-               icmp_send(skb_in, ICMP_DEST_UNREACH, code, 0);
++               __icmp_send(skb_in, ICMP_DEST_UNREACH, code, 0, &opt);
+                return;
+        }
 
-[snip]
+        if (nf_ip_checksum(skb_in, hook, ip_hdrlen(skb_in), proto) == 0)
+-               icmp_send(skb_in, ICMP_DEST_UNREACH, code, 0);
++               __icmp_send(skb_in, ICMP_DEST_UNREACH, code, 0, &opt);
+ }
+ EXPORT_SYMBOL_GPL(nf_send_unreach);
+------------[ cut here ]------------
+
+This can also fix the issue:) So, which way is better?
+BTW, I think the problem is more then ipvlan? Maybe some other scenarios that can trigger such issue.
+
+
+On 2023/5/3 0:54, Florian Westphal wrote:
+> Fengtao (fengtao, Euler) <fengtao40@huawei.com> wrote:
+>> Hi,all
+>>
+>> We found the following crash on stable-5.10(reproduce in kasan kernel).
+>> ------------[ cut here ]------------
+>> [ 2203.651571] BUG: KASAN: stack-out-of-bounds in __ip_options_echo+0x589/0x800
+>> [ 2203.653327] Write of size 4 at addr ffff88811a388f27 by task swapper/3/0
+>>
+>> [ 2203.655460] CPU: 3 PID: 0 Comm: swapper/3 Kdump: loaded Not tainted 5.10.0-60.18.0.50.h856.kasan.eulerosv2r11.x86_64 #1
+>> [ 2203.655466] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.10.2-0-g5f4c7b1-20181220_000000-szxrtosci10000 04/01/2014
+>> [ 2203.655475] Call Trace:
+>> [ 2203.655481]  <IRQ>
+>> [ 2203.655501]  dump_stack+0x9c/0xd3
+>> [ 2203.655514]  print_address_description.constprop.0+0x19/0x170
+>> [ 2203.655522]  ? __ip_options_echo+0x589/0x800
+>> [ 2203.655530]  __kasan_report.cold+0x6c/0x84
+>> [ 2203.655569]  ? resolve_normal_ct+0x301/0x430 [nf_conntrack]
+>> [ 2203.655576]  ? __ip_options_echo+0x589/0x800
+>> [ 2203.655586]  kasan_report+0x3a/0x50
+>> [ 2203.655594]  check_memory_region+0xfd/0x1f0
+>> [ 2203.655601]  memcpy+0x39/0x60
+>> [ 2203.655608]  __ip_options_echo+0x589/0x800
+> [..]
+> 
+>> [ 2203.655702]  ? tcp_print_conntrack+0xb0/0xb0 [nf_conntrack]
+>> [ 2203.655709]  ? memset+0x20/0x50
+>> [ 2203.655719]  ? nf_nat_setup_info+0x2fb/0x480 [nf_nat]
+>> [ 2203.655729]  ? get_unique_tuple+0x390/0x390 [nf_nat]
+>> [ 2203.655735]  ? tcp_mt+0x456/0x550
+>> [ 2203.655747]  ? ipt_do_table+0x776/0xa40 [ip_tables]
+>> [ 2203.655755]  nf_send_unreach+0x129/0x3d0 [nf_reject_ipv4]
+>> [ 2203.655763]  reject_tg+0x77/0x1bf [ipt_REJECT]
+>> [ 2203.655772]  ipt_do_table+0x691/0xa40 [ip_tables]
+> [..]
+>> [ 2203.655857]  ip_local_out+0x28/0x90
+>> [ 2203.655868]  ipvlan_process_v4_outbound+0x21e/0x260 [ipvlan]
+> 
+> Somewhere between ipvlan_queue_xmit() and ipvlan_process_v4|6_outbound
+> skb->cb has to be cleared; ip_local_out and friends assume that upper
+> layer took care of this for outbound packets.
+> 
+> Try something like this (not even compile tested):
+> 
+> diff --git a/drivers/net/ipvlan/ipvlan_core.c b/drivers/net/ipvlan/ipvlan_core.c
+> --- a/drivers/net/ipvlan/ipvlan_core.c
+> +++ b/drivers/net/ipvlan/ipvlan_core.c
+> @@ -436,6 +436,9 @@ static int ipvlan_process_v4_outbound(struct sk_buff *skb)
+>  		goto err;
+>  	}
+>  	skb_dst_set(skb, &rt->dst);
+> +
+> +	memset(skb->cb 0, sizeof(struct inet_skb_parm));
+> +
+>  	err = ip_local_out(net, skb->sk, skb);
+>  	if (unlikely(net_xmit_eval(err)))
+>  		dev->stats.tx_errors++;
+> @@ -474,6 +477,9 @@ static int ipvlan_process_v6_outbound(struct sk_buff *skb)
+>  		goto err;
+>  	}
+>  	skb_dst_set(skb, dst);
+> +
+> +	memset(skb->cb 0, sizeof(struct inet6_skb_parm));
+> +
+>  	err = ip6_local_out(net, skb->sk, skb);
+>  	if (unlikely(net_xmit_eval(err)))
+>  		dev->stats.tx_errors++;
+> 
+> .
+> 
