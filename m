@@ -2,133 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4A966F6647
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 09:49:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 439146F664D
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 09:50:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229745AbjEDHtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 03:49:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34378 "EHLO
+        id S229792AbjEDHuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 03:50:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjEDHto (ORCPT
+        with ESMTP id S229446AbjEDHuV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 03:49:44 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C06810B;
-        Thu,  4 May 2023 00:49:43 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 8CC1B5C04C2;
-        Thu,  4 May 2023 03:49:40 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 04 May 2023 03:49:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1683186580; x=1683272980; bh=n2
-        GbdBfIgCBE58XNSQRg32j+lkULH8rlZExOFkhoATU=; b=NpUQT61PnuCvxpZQ9L
-        r2vJRK57pFzOadLeneWmS2d6J4S92NYySlykPB+NcFW4/D41FN/JidU9ZWZQCDhl
-        WQWmeaz088E5ZL6nxKqiBPjSDoBoL1CPrpPO/L5V62rCaLs7adI6zTc0A4DospA3
-        QP+IZR01f4h8c4VXzvqAaM659ePEdj6Z65qfNVSSE7vFCNzz9nDitxw9ezWzJsKM
-        dkuuUi8teR17JYF9k7dxZ/EvJaKN4nT4Mx+d8qEgPynSQN7i+w/WOFE2YGNwBOmq
-        REe9KiXlsc8HQ/w75+7ukdYqEtqp0oiT2MBmJWOXsmKwmO2iaCna4MwG8TU9d1k3
-        cWeQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1683186580; x=1683272980; bh=n2GbdBfIgCBE5
-        8XNSQRg32j+lkULH8rlZExOFkhoATU=; b=N3QH6uoTp8OfXd8qt5f6/4cDDN0DI
-        PxWGyiuu1mKeeWmUs9X7Xf0eGqASgfFfyUMzKoO7e58rozalESbgKn7vMy8WYuWw
-        1y9Tvsswqp4OMJoTeOXnwuHz2BX1/YaAtMyKL3PO3vkkAlmxO/vNzRKMJs23BqNJ
-        8Ie47owE0UCJkRmHwY2XTkooXBxlklqVPdqNa8tuXdtzJDomuXyb0t/rwuWWpMWv
-        b/Qn5PwZS2XBLCy1yiggWO0z96HmO9N0kKJHbjdcBdlT9eOYYiEV4yYCYo6tp014
-        awIshPQL8YyOq175Et/1wVi3xpB9UM8iNJBJqQVxFqXfDaXPGh6yrkDsw==
-X-ME-Sender: <xms:k2NTZM11WBehmDrimYGaqmhPSp308g9IgJD5creEfGc5y6pRXulydg>
-    <xme:k2NTZHFychF0oAlEkWHEqNvZvCTM0CkrDdO-HHvSyTE2WxjLnlDxmB0BFpNB3agB0
-    wB7AfIiaI-LpIIHSxM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedvledguddvvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:k2NTZE6YGLbMnzjjS5plkNa9c1zOIA3NRPUWgolCm-U_TXd75oI7Hw>
-    <xmx:k2NTZF1ZGvLWlA2AEbmfAz8qUPKu1yBw1pA2AuQECvqWIWefH_o4GA>
-    <xmx:k2NTZPFegQWsoS2rsdthHljjLQNRYsrvuU9V_j0yocmlAtBrRTKLkw>
-    <xmx:lGNTZN9Ro-vGT1NvHngo5BI70ovDiID5EG2K00a7QXgU8m0UJj2QhQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id BCC33B60086; Thu,  4 May 2023 03:49:39 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-386-g2404815117-fm-20230425.001-g24048151
-Mime-Version: 1.0
-Message-Id: <c99babb3-532a-4d00-876c-3c316b456325@app.fastmail.com>
-In-Reply-To: <8ce93998-84c3-0640-a6e1-76ff17b3953c@linaro.org>
-References: <20230504033726.93-1-ychuang570808@gmail.com>
- <20230504033726.93-2-ychuang570808@gmail.com>
- <8ce93998-84c3-0640-a6e1-76ff17b3953c@linaro.org>
-Date:   Thu, 04 May 2023 09:49:18 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        "Jacky Huang" <ychuang570808@gmail.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org, "Lee Jones" <lee@kernel.org>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        "Stephen Boyd" <sboyd@kernel.org>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Jiri Slaby" <jirislaby@kernel.org>,
-        "Tomer Maimon" <tmaimon77@gmail.com>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-serial@vger.kernel.org, schung@nuvoton.com,
-        mjchen@nuvoton.com, "Jacky Huang" <ychuang3@nuvoton.com>
-Subject: Re: [PATCH v9 01/10] arm64: Kconfig.platforms: Add config for Nuvoton MA35
- platform
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 4 May 2023 03:50:21 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E76F89D;
+        Thu,  4 May 2023 00:50:19 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f13bfe257aso159358e87.3;
+        Thu, 04 May 2023 00:50:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683186618; x=1685778618;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=R7qcxbhpq4DlZrEuB4qJZQjihch1uZdLLO2V4Nkj9Lk=;
+        b=W4hIED+DIc3rCaZ3+VpiLd+RX0K+JgjUphxU/1x0ig3Rn1neSOumrbC74z4s+60wr9
+         APYDK6BGwvfLCpomnFyyYix1H19hbcOn2Wp/cHvIf9BriY3X6NVAXxuGCSq863Gypji7
+         vp0PRmbDtIRh2IWY+a8Bz24BF8tJ3/NMFfcSTxBAARm8EDLdwVpoeoynj/VMePVVlN8Y
+         q76OHYaQupCVZ3Vai53IvqTmjz4Crwia9NeDK9e5bA/u2odDBGwkCcdySF82fsElXQQW
+         wBU1Rx58uOCrWgc96veHao7+/H5UVWkC48laD8cwvpG3crFdNB2y4oTbFC7PPwFPA7YX
+         oMcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683186618; x=1685778618;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=R7qcxbhpq4DlZrEuB4qJZQjihch1uZdLLO2V4Nkj9Lk=;
+        b=hd1iPWzH23ET+PT7A8oji2gLPhTKZXkdNbg+4dGCejjnPvxtBvl1aH+K6F6Cc5Ic15
+         ZVCL23onb84G5tbtENRqbqbuXfGOfO+B+mEeS0Qt4RbGfQVJ6YpiNB4nLpT+tlqRj/Bl
+         7gvSaByZxwD+s48YN+r5U03DLz1SM/BCF08JyggGrjGHyou1DiyHfU78xAo1SDErSGFm
+         WeD/vP30Gj5a2/2Dj+q7if7op/EWmBeaIPzCckRcCTFr0EMHu004EdPW2qYxBNf40Zz2
+         7P2UPGmZxzHvV18VCsBE5xrlkrBe1lG0bNz8q62SZkeI5FrXZRoYjgujvQ7WVQUFu2tI
+         Kh0w==
+X-Gm-Message-State: AC+VfDwd3IgFppz5IOO/Z2D5iffauVjFhxO0ZzTbTW0KcueFVXogHWuG
+        qjX5MIRhnKaRBJGHMUUuPsrIc1wYT74=
+X-Google-Smtp-Source: ACHHUZ7nZnvqYqu5xtFBc8gl/7xGXGFUYXDjDgIq62SjFr1Oi1D+3g6QfHjF+g+6GDiDY7NtuVoNCQ==
+X-Received: by 2002:a05:6512:38b1:b0:4ec:a9c5:f3ae with SMTP id o17-20020a05651238b100b004eca9c5f3aemr1471256lft.11.1683186617409;
+        Thu, 04 May 2023 00:50:17 -0700 (PDT)
+Received: from [192.168.1.103] ([178.176.76.17])
+        by smtp.gmail.com with ESMTPSA id j16-20020a19f510000000b004f14535a962sm88326lfb.174.2023.05.04.00.50.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 May 2023 00:50:16 -0700 (PDT)
+Subject: Re: [PATCH v5] usb: dwc3: core: add support for realtek SoCs custom's
+ global register start address
+To:     Stanley Chang <stanley_chang@realtek.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230504034423.20813-1-stanley_chang@realtek.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <96706396-7023-b895-169a-788aad11adcb@gmail.com>
+Date:   Thu, 4 May 2023 10:50:15 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
+MIME-Version: 1.0
+In-Reply-To: <20230504034423.20813-1-stanley_chang@realtek.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 4, 2023, at 08:32, Krzysztof Kozlowski wrote:
-> On 04/05/2023 05:37, Jacky Huang wrote:
->> From: Jacky Huang <ychuang3@nuvoton.com>
->> 
->> Add ARCH_NUVOTON configuration option for Nuvoton MA35 family SoCs.
->> 
->> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
->> ---
->>  arch/arm64/Kconfig.platforms | 9 +++++++++
->>  1 file changed, 9 insertions(+)
->> 
->> diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
->> index 89a0b13b058d..c1f277c05569 100644
->> --- a/arch/arm64/Kconfig.platforms
->> +++ b/arch/arm64/Kconfig.platforms
->> @@ -236,6 +236,15 @@ config ARCH_NPCM
->>  	  General support for NPCM8xx BMC (Arbel).
->>  	  Nuvoton NPCM8xx BMC based on the Cortex A35.
->>  
->> +config ARCH_NUVOTON
->
-> Either this should be ARCH_MA35 or you should integrate it with NPCM.
-> ARCH_NUVOTON means all Nuvoton platforms.
+Hello!
 
-I'd go with two separate Kconfig options here (ARCH_MA35 and ARCH_NPCM)
-for arm64, but keep the shared arch/arm64/boot/dts/nuvoton directory,
-I think that fits most closely what we do on other targets, and there
-is apparently very little sharing of IP blocks between npcm and ma35,
-if any.
+On 5/4/23 6:44 AM, Stanley Chang wrote:
 
-      Arnd
+> The Realtek RTD1xxx SoCs were designed, the global register address
+> offset at 0x8100.
+
+  Can't parse that, perhaps "with" is missing?
+
+> The default address offset is constant at
+> DWC3_GLOBALS_REGS_START (0xc100). Therefore, add a check if the
+> compatible name of the parent is "realtek,rtd1xxx-dwc3", then global
+
+   Wildcards are not allowed in the "compatible" props...
+
+> register start address will remap to 0x8100.
+> 
+> Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
+[...]
+
+MBR, Sergey
