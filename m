@@ -2,234 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DECE66F7934
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 00:39:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 267DD6F793B
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 00:40:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbjEDWjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 18:39:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36264 "EHLO
+        id S229822AbjEDWkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 18:40:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjEDWjV (ORCPT
+        with ESMTP id S229767AbjEDWkk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 18:39:21 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C04AA8A48
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 15:39:19 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id ca18e2360f4ac-76372a83c8eso23716339f.3
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 15:39:19 -0700 (PDT)
+        Thu, 4 May 2023 18:40:40 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65433A5CC
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 15:40:38 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1aaea43def7so7345245ad.2
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 15:40:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1683239957; x=1685831957;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/rN99MG5d6M+UabPVww+w9dMJG2WFhR6z4xfKsLbvtE=;
-        b=U1S6OivI3z1i1T7iSMrQTuCKQMzWLj02EHrv7T/HreMQOZR7DywOIiGu56FUOYOdZ7
-         BmMDNIdmLCkSDuJu4Af3d2XMCLv5qGA02WmLmGXt01711cT9iwc5exdcZN9SVB5tUXU5
-         bGjtW9yYppMGAS+bYjHNpfB8nAirhucFNfoSI=
+        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1683240038; x=1685832038;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=bSBn9yOinBU8m0yQLrSvbl7PKYZlBg3YhOgvbxEMud0=;
+        b=V2OWoWuBY9/BxFN6ZMrayZSPn34VUIMFwLKD1syjt3URVOHsk6eRCzBjJxyS/sTaxh
+         0ODMUc6Lrrs3v8zH3Sx/5e/PKEpsPzqFVGY4QckBPaQkZZfaM7pnBgEofNkOYx2I3eMh
+         /CUnaPOJFUPSRWZdnUNxTe8x2snVD8PtGIxSGOLogmkrfrhkWite1HB1ZWG+3fFJST9O
+         CMCv7TFFrBn2cKtBOmOLW8XQUBS/fB7r1lrmQ3GM1O5nbWEdOmtFcfUJmeIAnUxIbWpn
+         3ror2ojs9ATMDgL9RR5K3X4TvFjtnscejsS+p0QkHUHUt2WEuhfGkKNuQs/O+d5WTYRo
+         HM2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683239957; x=1685831957;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/rN99MG5d6M+UabPVww+w9dMJG2WFhR6z4xfKsLbvtE=;
-        b=AufdvxFXzsKkzohpHvGW09Ff0oFEyiYfGialruy2xaYsf6ao7ZujehC/iKum9JXiVT
-         chnwNGnMESxyGj+DslaNeXL+lHsRXRnqCqthRQg3U6keqs4T5rLzdcefCDH+K5Ucoq0V
-         Axzl0sP65No+84xPWtMVgMSlpwX04QTTmRIdJRDSCqPyJ/60g/pGvYG44qn4YRm7THaX
-         4rAA6YG1lufKX3ys018fVa9dlAROulsHrk1GIgw0XLaZKrYwHVcO5vSWx7GdwLvp07E2
-         jI0A1MKFWDsm9cLwpyV0rAq7yQq/6znMy6FKbKb838R9NueYEaRzHEvr7G16Ng+Aw11/
-         8C0w==
-X-Gm-Message-State: AC+VfDzPTVnMSGZFzWBnfpLT3ShOOniWdQl1tM8pziJXKRvh3X5zabYl
-        HfFFk5liHoGi4u9NeUN2HwG6rzEIML4RBFrGN/E=
-X-Google-Smtp-Source: ACHHUZ4rCFeLExSZ6kt5V/MTFyf5OHETIBQx2dL1pcZYWReHjvO1yIl7AHQhiLQtO1xrvc9yCL5aRg==
-X-Received: by 2002:a6b:d213:0:b0:769:a626:6e13 with SMTP id q19-20020a6bd213000000b00769a6266e13mr179030iob.19.1683239957489;
-        Thu, 04 May 2023 15:39:17 -0700 (PDT)
-Received: from mail-il1-f182.google.com (mail-il1-f182.google.com. [209.85.166.182])
-        by smtp.gmail.com with ESMTPSA id w16-20020a6b4a10000000b007594fbab87fsm43121iob.1.2023.05.04.15.39.14
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 15:39:16 -0700 (PDT)
-Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-32f4e0f42a7so628325ab.1
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 15:39:14 -0700 (PDT)
-X-Received: by 2002:ac8:5805:0:b0:3ef:3510:7c3a with SMTP id
- g5-20020ac85805000000b003ef35107c3amr17232qtg.3.1683239933101; Thu, 04 May
- 2023 15:38:53 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683240038; x=1685832038;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bSBn9yOinBU8m0yQLrSvbl7PKYZlBg3YhOgvbxEMud0=;
+        b=KeJYin+SVsrYobwf9XcxTYpfSLCfyVbXQPwxstQGSE/F35XzACZXQDaN/UUtmH9RpG
+         AaA/d7frf7znTnalTL8ZVsMPASAjG2pYICEERFB+H1stvc252xQABgb/QDsZN4d+KSqc
+         ukyp/QeppBJxOK17K/CaYBlXYLWuE8HaE3Trxbj4nmK+RmHcBdNJAx0p8mKA/Xoote/r
+         GcOP3eXqre5nmanpOuR75Ly8cdufP0lrbIoh485Jq0suMmH2LSNjDJMM4wYvTuqnVic4
+         P4DrZ1K7RWyNgk/mJaEhQr3iL9G9jzGoQUH0c9UqcwuPxYpe8intXOexNGw8dEcy8yEY
+         8yMw==
+X-Gm-Message-State: AC+VfDw44F14U6AVoATCiOzeIiN+3r00MH37nyQk4Lc+I9Xxir81RhwD
+        oy7V3xhIVDWMLG3Ad7+b5/dR4A==
+X-Google-Smtp-Source: ACHHUZ4sldKILzM05M5JtvE1zkTm8BdFnY+an0qc3+Zw6AS4jJ2XEp42XVgNkYwu+sP102Df03J4uQ==
+X-Received: by 2002:a17:903:48e:b0:1a6:cb66:681f with SMTP id jj14-20020a170903048e00b001a6cb66681fmr4825434plb.46.1683240037873;
+        Thu, 04 May 2023 15:40:37 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-88-204.pa.nsw.optusnet.com.au. [49.181.88.204])
+        by smtp.gmail.com with ESMTPSA id ix10-20020a170902f80a00b001ab0159b9edsm27390plb.250.2023.05.04.15.40.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 May 2023 15:40:36 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1puhcn-00BPr0-UX; Fri, 05 May 2023 08:40:33 +1000
+Date:   Fri, 5 May 2023 08:40:33 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     John Garry <john.g.garry@oracle.com>
+Cc:     axboe@kernel.dk, kbusch@kernel.org, hch@lst.de, sagi@grimberg.me,
+        martin.petersen@oracle.com, djwong@kernel.org,
+        viro@zeniv.linux.org.uk, brauner@kernel.org, dchinner@redhat.com,
+        jejb@linux.ibm.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-scsi@vger.kernel.org, linux-xfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com,
+        Prasad Singamsetty <prasad.singamsetty@oracle.com>
+Subject: Re: [PATCH RFC 02/16] fs/bdev: Add atomic write support info to statx
+Message-ID: <20230504224033.GJ3223426@dread.disaster.area>
+References: <20230503183821.1473305-1-john.g.garry@oracle.com>
+ <20230503183821.1473305-3-john.g.garry@oracle.com>
+ <20230503215846.GE3223426@dread.disaster.area>
+ <96a2f875-7f99-cd36-e9c3-abbadeb9833b@oracle.com>
 MIME-Version: 1.0
-References: <20230501082341.v3.1.I6bf789d21d0c3d75d382e7e51a804a7a51315f2c@changeid>
-In-Reply-To: <20230501082341.v3.1.I6bf789d21d0c3d75d382e7e51a804a7a51315f2c@changeid>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 4 May 2023 15:38:40 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=Wz8u0+WHqiLwcE-3BhbtdVVCnSQjs7bxp=-tisyYQwWw@mail.gmail.com>
-Message-ID: <CAD=FV=Wz8u0+WHqiLwcE-3BhbtdVVCnSQjs7bxp=-tisyYQwWw@mail.gmail.com>
-Subject: Re: [PATCH v3] hardlockup: detect hard lockups using secondary
- (buddy) CPUs
-To:     Petr Mladek <pmladek@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Ian Rogers <irogers@google.com>, ravi.v.shankar@intel.com,
-        Marc Zyngier <maz@kernel.org>,
-        linux-perf-users@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>,
-        kgdb-bugreport@lists.sourceforge.net, ito-yuichi@fujitsu.com,
-        linux-arm-kernel@lists.infradead.org,
-        Stephen Boyd <swboyd@chromium.org>,
-        Masayoshi Mizuma <msys.mizuma@gmail.com>,
-        ricardo.neri@intel.com, Lecopzer Chen <lecopzer.chen@mediatek.com>,
-        Chen-Yu Tsai <wens@csie.org>, Andi Kleen <ak@linux.intel.com>,
-        Colin Cross <ccross@android.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        Alexander Potapenko <glider@google.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Borislav Petkov <bp@suse.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Juergen Gross <jgross@suse.com>,
-        Kees Cook <keescook@chromium.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Liam Howlett <liam.howlett@oracle.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <96a2f875-7f99-cd36-e9c3-abbadeb9833b@oracle.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, May 04, 2023 at 09:45:50AM +0100, John Garry wrote:
+> On 03/05/2023 22:58, Dave Chinner wrote:
+> > Is there a statx() man
+> > page update for this addition?
+> 
+> No, not yet. Is it normally expected to provide a proposed man page update
+> in parallel? Or somewhat later, when the kernel API change has some
+> appreciable level of agreement?
 
-On Mon, May 1, 2023 at 8:25=E2=80=AFAM Douglas Anderson <dianders@chromium.=
-org> wrote:
->
-> From: Colin Cross <ccross@android.com>
->
-> Implement a hardlockup detector that doesn't doesn't need any extra
-> arch-specific support code to detect lockups. Instead of using
-> something arch-specific we will use the buddy system, where each CPU
-> watches out for another one. Specifically, each CPU will use its
-> softlockup hrtimer to check that the next CPU is processing hrtimer
-> interrupts by verifying that a counter is increasing.
->
-> NOTE: unlike the other hard lockup detectors, the buddy one can't
-> easily show what's happening on the CPU that locked up just by doing a
-> simple backtrace. It relies on some other mechanism in the system to
-> get information about the locked up CPUs. This could be support for
-> NMI backtraces like [1], it could be a mechanism for printing the PC
-> of locked CPUs at panic time like [2] / [3], or it could be something
-> else. Even though that means we still rely on arch-specific code, this
-> arch-specific code seems to often be implemented even on architectures
-> that don't have a hardlockup detector.
->
-> This style of hardlockup detector originated in some downstream
-> Android trees and has been rebased on / carried in ChromeOS trees for
-> quite a long time for use on arm and arm64 boards. Historically on
-> these boards we've leveraged mechanism [2] / [3] to get information
-> about hung CPUs, but we could move to [1].
->
-> Although the original motivation for the buddy system was for use on
-> systems without an arch-specific hardlockup detector, it can still be
-> useful to use even on systems that _do_ have an arch-specific
-> hardlockup detector. On x86, for instance, there is a 24-part patch
-> series [4] in progress switching the arch-specific hard lockup
-> detector from a scarce perf counter to a less-scarce hardware
-> resource. Potentially the buddy system could be a simpler alternative
-> to free up the perf counter but still get hard lockup detection.
->
-> Overall, pros (+) and cons (-) of the buddy system compared to an
-> arch-specific hardlockup detector:
-> + The buddy system is usable on systems that don't have an
->   arch-specific hardlockup detector, like arm32 and arm64 (though it's
->   being worked on for arm64 [5]).
-> + The buddy system may free up scarce hardware resources.
-> + If a CPU totally goes out to lunch (can't process NMIs) the buddy
->   system could still detect the problem (though it would be unlikely
->   to be able to get a stack trace).
-> + The buddy system uses the same timer function to pet the hardlockup
->   detector on the running CPU as it uses to detect hardlockups on
->   other CPUs. Compared to other hardlockup detectors, this means it
->   generates fewer interrupts and thus is likely better able to let
->   CPUs stay idle longer.
-> - If all CPUs are hard locked up at the same time the buddy system
->   can't detect it.
-> - If we don't have SMP we can't use the buddy system.
-> - The buddy system needs an arch-specific mechanism (possibly NMI
->   backtrace) to get info about the locked up CPU.
->
-> [1] https://lore.kernel.org/r/20230419225604.21204-1-dianders@chromium.or=
-g
-> [2] https://issuetracker.google.com/172213129
-> [3] https://docs.kernel.org/trace/coresight/coresight-cpu-debug.html
-> [4] https://lore.kernel.org/lkml/20230301234753.28582-1-ricardo.neri-cald=
-eron@linux.intel.com/
-> [5] https://lore.kernel.org/linux-arm-kernel/20220903093415.15850-1-lecop=
-zer.chen@mediatek.com/
->
-> Signed-off-by: Colin Cross <ccross@android.com>
-> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-> Signed-off-by: Guenter Roeck <groeck@chromium.org>
-> Signed-off-by: Tzung-Bi Shih <tzungbi@chromium.org>
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
-> This patch has been rebased in ChromeOS kernel trees many times, and
-> each time someone had to do work on it they added their
-> Signed-off-by. I've included those here. I've also left the author as
-> Colin Cross since the core code is still his.
->
-> I'll also note that the CC list is pretty giant, but that's what
-> get_maintainers came up with (plus a few other folks I thought would
-> be interested). As far as I can tell, there's no true MAINTAINER
-> listed for the existing watchdog code. Assuming people don't hate
-> this, maybe it would go through Andrew Morton's tree?
->
-> Changes in v3:
-> - More cpu =3D> CPU (in Kconfig and comments).
-> - Added a note in commit message about the effect on idle.
-> - Cleaned up commit message pros/cons to be complete sentences.
-> - No code changes other than comments.
->
-> Changes in v2:
-> - cpu =3D> CPU (in commit message).
-> - Reworked description and Kconfig based on v1 discussion.
-> - No code changes.
->
->  include/linux/nmi.h         |  18 ++++-
->  kernel/Makefile             |   1 +
->  kernel/watchdog.c           |  24 ++++--
->  kernel/watchdog_buddy_cpu.c | 141 ++++++++++++++++++++++++++++++++++++
->  lib/Kconfig.debug           |  23 +++++-
->  5 files changed, 196 insertions(+), 11 deletions(-)
+Normally we ask for man page updates to be presented at the same
+time, as the man page defines the user interface that is being
+implemented. In this case, we need updates for the pwritev2() man
+page to document RWF_ATOMIC semantics, and the statx() man page to
+document what the variables being exposed mean w.r.t. RWF_ATOMIC.
 
-To leave breadcrumbs: I've posted v4 which is now a big series
+The pwritev2() man page is probably the most important one right now
+- it needs to explain the guarantees that RWF_ATOMIC is supposed to
+provide w.r.t. data integrity, IO ordering, persistence, etc.
+Indeed, it will need to explain exactly how this "multi-atomic-unit
+mulit-bio non-atomic RWF_ATOMIC" IO thing can be used safely and
+reliably, especially w.r.t. IO ordering and persistence guarantees
+in the face of crashes and power failures. Not to mention
+documenting error conditions specific to RWF_ATOMIC...
 
-https://lore.kernel.org/r/20230504221349.1535669-1-dianders@chromium.org
+It's all well and good to have some implementation, but without
+actually defining and documenting the *guarantees* that RWF_ATOMIC
+provides userspace it is completely useless for application
+developers. And from the perspective of a reviewer, without the
+documentation stating what the infrastructure actually guarantees
+applications, we can't determine if the implementation being
+presented is fit for purpose....
 
-I took some people off the CC list that get_maintainers had added on
-v3, mostly because it was getting unbearable. I tried to copy all
-relevant mailing lists, so hopefully anyone who needs v4 can find it
-somewhere where it's easy for them to reply to. If you got dropped off
-the CC list and want back on for future versions, please yell and I'll
-add you. Unless I messed up, I've CCed anyone who replied to previous
-versions.
+Cheers,
 
--Doug
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
