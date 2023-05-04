@@ -2,158 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A44196F6ECE
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 17:23:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7A966F6ED0
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 17:23:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231396AbjEDPXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 11:23:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41908 "EHLO
+        id S231359AbjEDPXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 11:23:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230474AbjEDPXO (ORCPT
+        with ESMTP id S229941AbjEDPXg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 11:23:14 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A08BB44A1;
-        Thu,  4 May 2023 08:23:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683213793; x=1714749793;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=9TcAKdsolrTcyR7kRO2MnyaoQAF+RM8oAHRHOpZd1ms=;
-  b=Sf5U85sA1Czn7mrT/KYLakQyLJNbqdykoNf/rwtmlDJuN3vIzsI1FiaC
-   JRkGzlJ4S+Cm6yJuNPXRaralIxiKEvaAPOld5SN8BmdqEjUHdeWpPhrEb
-   aNhRuQ2mPwtawMnbCVc7uomySolt4NdGkOcVVBmH4ivRegIyNhgfh/Zk7
-   v7Vh0WPnYELR5p3U4aaQUlDway+O3bymHdrlKir0x4N8oZcVJnex0rWXy
-   bQN9U/6yU3FCz0DhrTFSf1CKsulKsvECUdEbqzsHBaMQJwayEDbygF2oT
-   qXvm4c1B2y+1TvIzxKp/vyB8tkc10TxG+aASOMKfzgaRBUnG0wUidcXkg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="346438604"
-X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
-   d="scan'208";a="346438604"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 08:23:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="674584461"
-X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
-   d="scan'208";a="674584461"
-Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.212.168.201])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 08:23:12 -0700
-Date:   Thu, 4 May 2023 08:23:11 -0700
-From:   Alison Schofield <alison.schofield@intel.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     raghuhack78@gmail.com, linux-cxl@vger.kernel.org,
-        ira.weiny@intel.com, bwidawsk@kernel.org, dan.j.williams@intel.com,
-        vishal.l.verma@intel.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] cxl/mbox: Remove redundant dev_err() after failed
- mem alloc
-Message-ID: <ZFPN340/UstRWtmR@aschofie-mobl2>
-References: <20230428012235.119333-1-raghuhack78@gmail.com>
- <3235466.44csPzL39Z@suse>
- <ZFLaG8jHHXmRp67w@aschofie-mobl2>
- <2755196.BEx9A2HvPv@suse>
+        Thu, 4 May 2023 11:23:36 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2744E44AF
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 08:23:34 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f315735514so68188315e9.1
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 08:23:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1683213812; x=1685805812;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=35JAtLvIMF2KRIOqkirvKykblc6filsyyn1v4l59ziY=;
+        b=xzEsH8fHRqdRDIEHQolcr6pCg8r4R6nA6cAEUq/ygxKNbEGC4+pIlB5Enw8uGlnCmV
+         JJf7DyZrR7yepYToTifIrVD64Kqt1O7Z2a2CKRA7fXq/lBYfdRnRwubkVYftd7FVPoq5
+         XVy/iBnsqnce3lCBV7KhQpNgL21SQhIU98BHw/QHZ3F9xdpnwLtAO0vXyrnQ+7gXyb5n
+         x2eZBIy2tl7cDo601n5+6/OeWgVkuSmsVwZUZauHHg8LA+z9aPdvK3r3tPr4gbuUPU0B
+         U3r2aKBhFeKr8ozfcmG/bP8FyGsdRw73ONQolpqIOl7RbMqhM/s/5rdS7p46S1dFwuan
+         nThw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683213812; x=1685805812;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=35JAtLvIMF2KRIOqkirvKykblc6filsyyn1v4l59ziY=;
+        b=ArZhnlj8oDe+oHFnZCbMEi29yyeNKLygZMIiIqrBi9r96KGI2QlAmEsPLtTn9jgkIc
+         2TTgPbDxy1HAYwDlLOUlBisejrqSBxZ/EEAXh6tb31kpn6Bx0hpRi3TmCmA5KLNJMoYH
+         5tzI1RlklYDkEyIouchFrg9olvf3UMVPjMq44m1QFArJORMCiILsvQbuhnxikSXSdSxu
+         mY1A7byj0YAjCuqow3LAPdaAw22tUj8ydg12B8SMfN0xSTQdqc5XqPvWvHGQqRZSmvhO
+         YKAbVG3RX0lFAyEiwTfvZHPKAAC3Y4p8exoBlRDtc//aJPHAWHUFHsPkorHqpPMwBEy9
+         wkwg==
+X-Gm-Message-State: AC+VfDxGIYF/q+NEKsQd+EeGrES1vd6uYKYAHkXff8OBhBDPqIUpUgKW
+        LVgbfkfrwTwhtM35I1btoWmA8fTFTFr3NxZc84c=
+X-Google-Smtp-Source: ACHHUZ5bHsSdgbO9fyET5To2L7fVxDiydoV3BXs/L1SC2XmJsTniKpv4s4W75ygygChqLiQLQ4LKVg==
+X-Received: by 2002:a7b:c041:0:b0:3f1:7287:55ad with SMTP id u1-20020a7bc041000000b003f1728755admr61807wmc.10.1683213812515;
+        Thu, 04 May 2023 08:23:32 -0700 (PDT)
+Received: from airbuntu ([104.132.45.98])
+        by smtp.gmail.com with ESMTPSA id a20-20020a1cf014000000b003f173c566b5sm5247775wmb.5.2023.05.04.08.23.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 May 2023 08:23:32 -0700 (PDT)
+Date:   Thu, 4 May 2023 16:23:28 +0100
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Kajetan Puchalski <kajetan.puchalski@arm.com>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Vincent Donnefort <vdonnefort@google.com>,
+        Quentin Perret <qperret@google.com>,
+        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] sched: Consider CPU contention in frequency &
+ load-balance busiest CPU selection
+Message-ID: <20230504152328.twh3rqgq2o2gvd4u@airbuntu>
+References: <20230406155030.1989554-1-dietmar.eggemann@arm.com>
+ <20230406155030.1989554-2-dietmar.eggemann@arm.com>
+ <20230429145829.GB1495785@hirez.programming.kicks-ass.net>
+ <4c77a01e-8ff3-f415-ffff-01c8d79a8bc7@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2755196.BEx9A2HvPv@suse>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <4c77a01e-8ff3-f415-ffff-01c8d79a8bc7@arm.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 04, 2023 at 12:46:37PM +0200, Fabio wrote:
-> On giovedì 4 maggio 2023 00:03:07 CEST Alison Schofield wrote:
-> > On Wed, May 03, 2023 at 08:32:37PM +0200, Fabio wrote:
-> > > On venerdì 28 aprile 2023 03:22:34 CEST Raghu H wrote:
-> 
-> [...]
-> 
-> > > > 
-> > > > Signed-off-by: Raghu H <raghuhack78@gmail.com>
-> > > 
-> > > Is "Raghu H" the name you sign legal documents with?
+On 05/03/23 19:13, Dietmar Eggemann wrote:
+> On 29/04/2023 16:58, Peter Zijlstra wrote:
+> > On Thu, Apr 06, 2023 at 05:50:30PM +0200, Dietmar Eggemann wrote:
+> >> Use new cpu_boosted_util_cfs() instead of cpu_util_cfs().
+> >>
+> >> The former returns max(util_avg, runnable_avg) capped by max CPU
+> >> capacity. CPU contention is thereby considered through runnable_avg.
+> >>
+> >> The change in load-balance only affects migration type `migrate_util`.
 > > 
-> > Fabio,
-> > Rather than asking a specific question to determine if this is a
-> > valid SOB, let's just point folks to the documentation to figure
-> > it out themselves.
-> > I'm aware that the 'sign legal documents' test
-> > has been used in the past, but kernel only actually requires a
-> > known identity.
-> > 
-> > https://www.kernel.org/doc/html/v4.17/process/submitting-patches.html#sign-you
-> > r-work-the-developer-s-certificate-of-origin
-> > https://github.com/cncf/foundation/blob/659fd32c86dc/dco-guidelines.md
+> > But why, and how does it affect? That is, isn't this Changelog a wee bit
+> > sparse?
 > 
-> Alison,
+> Absolutely. 
 > 
-> Thanks for your suggestions.
-> 
-> I have just a couple of questions about this issue...
-> 
-> 1) How do we know that the "real name", which the Linux official documentation 
-> refers to, should be interpreted in accordance to the document pointed by the 
-> second link you provided? 
-> 
-> I mean, how can we be sure that the official documentation should be 
-> interpreted according to the second link, since it doesn't even cite that 
-> document from CNCF? 
-> 
-> Can you provide links to documents / LKML's threads that state agreement of 
-> our Community about the "relaxed" interpretation by CNCF?
+> I have compelling test data based on JankbenchX on Pixel6 for 
+> sugov_get_util() case I will share with v2.
 
-Citation is hidden it git history. See:
-d4563201f33a ("Documentation: simplify and clarify DCO contribution example language")
+I am actually still concerned this is a global win. This higher contention can
+potentially lead to higher power usage. Not every high contention worth
+reacting to faster. The blanket 25% headroom in map_util_perf() is already
+problematic. And Jankbench is not a true representative of a gaming workload
+which is what started this whole discussion. It'd be good if mediatek can
+confirm this helps their case. Or for us to find a way to run something more
+representative. The original ask was to be selective about being more reactive
+for specific scenarios/workloads. If we can't make this selective we need more
+data it won't hurt general power consumption. I plan to help with that, but my
+focus now is on other areas first, namely getting uclamp_max usable in
+production.
 
-> 
-> 2) It looks that some maintainers (e.g., Greg K-H) still interpret "[] using 
-> your real name (sorry, no pseudonyms or anonymous contributions.)" in a 
-> "strict" and "common" sense. 
+Sorry for being cynical. I appreciate all the effort put so far to help find
+a sensible solution.
 
-See the commit log above. The language was updated to say
-"using a known identity (sorry, no anonymous contributions.)"
 
-> 
-> Can you remember that Greg refused all patches from "Kloudifold" and why? If 
-> not, please take a look at the following two questions / objections from Greg: 
-> https://lore.kernel.org/linux-staging/ZCQkPr6t8IOvF6bk@kroah.com/ and 
-> https://lore.kernel.org/linux-staging/ZBCjK2BXhfiFooeO@kroah.com/.
+Thanks!
 
-The second link above is Greg recognizing that known pseudonyms are
-allowed. 
-
-> 
-> It seems that this issue it's not yet settled. 
-> Am I overlooking something?
-
-Hey, I'm not meaning to jump on you for asking Raghu the question.
-I realize you are being helpful to someone who is submitting their first
-patch. I'm just saying to make the submitter aware of the guideline and
-put the burden on them to make sure they're using a known identity.
-
-Sometimes, what one person thinks of as 'common' is not. Let's refer to
-the docs and not add out personal or historical layers of interpretation
-on top of it. (The legal doc signing question may not apply to everyone.)
-
-Alison
-
-> 
-> Again thanks,
-> 
-> Fabio
-> 
-> > > If not, please send a new version signed-off-by your full legal name.
-> > > Otherwise... sorry for the noise.
-> > > 
-> > > Thanks,
-> > > 
-> > > Fabio
-> 
-> 
-> 
+--
+Qais Yousef
