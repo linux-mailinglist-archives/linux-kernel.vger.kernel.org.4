@@ -2,237 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A2256F7944
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 00:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FF616F7948
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 00:42:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbjEDWmD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 18:42:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38290 "EHLO
+        id S229719AbjEDWml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 18:42:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjEDWmA (ORCPT
+        with ESMTP id S229601AbjEDWmj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 18:42:00 -0400
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B58B2683
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 15:41:58 -0700 (PDT)
-Received: by mail-qv1-xf2c.google.com with SMTP id 6a1803df08f44-61b72fd8cc0so5569536d6.3
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 15:41:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1683240116; x=1685832116;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zKTOrpdPKD9tXXBM+7yvRbp5HwSbEUEOiX00H7sR240=;
-        b=ERT6PQ5jYFCs+TKzxpphlrjdBQjLP4kE5Z6/4xCDLSdxQDhf2M6jaglKW2NbTyp4tW
-         sq/l9qtSnkwzYxn4eMJJNT54vgQoo+jhG+QFjKSwxpWq9HZfXORJjDv3ro/RSDMv67c6
-         GtswybdTwY90FBLNmE9iEO7tvBBrhjyPXxYaA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683240116; x=1685832116;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zKTOrpdPKD9tXXBM+7yvRbp5HwSbEUEOiX00H7sR240=;
-        b=O3chzai46AxkNPVl5bASu4+41LaLW+3F1TkjwZ+HbRiQQF9aBwxfyjCaB/j0y1E1eF
-         L8RcyT7XTFDqYSsA/dMvzOBLoyqt4SzaZaDj53NWafnkc/x0LN4uX2hXcgkGr/sKVHsT
-         zb8OacHNMqW2QIyCYSSRUn6NpPIGQ5VJjWKfRSb8ccr8FosihKQTk1IHmngFw1S+oHm6
-         KpKbmr6gaLL9mLGwdXV3VlSQIJudihRM0MdT0um3JiycFA7ctmwOpNyQ8Q3wAZ+PNb8M
-         vqopWCvU+vg4S2y0JJG9p2DGYdKvVZtDm4Qzlmu8B6Be8Cre7SKoGXS6KFXzVJ1/STqT
-         Bjiw==
-X-Gm-Message-State: AC+VfDyegz9vf/c2S/wp/kytS6JRRWVkQP2peGvV/2Iyw8kAB6S3XVu4
-        PQkjEptbQZKZN0+lmz6ptUEhrStrdUCQo/KJs8E=
-X-Google-Smtp-Source: ACHHUZ4GyiiIvMKEe6Ntb0W41KSLHWQpnqx3MjxZaPxI9uR4TXj+gAVR0bBAGkqwe9KJCZQaD3d78Q==
-X-Received: by 2002:ad4:5ba6:0:b0:5ef:4233:ee7a with SMTP id 6-20020ad45ba6000000b005ef4233ee7amr16279156qvq.2.1683240115709;
-        Thu, 04 May 2023 15:41:55 -0700 (PDT)
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com. [209.85.160.175])
-        by smtp.gmail.com with ESMTPSA id i1-20020a0cab41000000b0061b2a2f949bsm93429qvb.61.2023.05.04.15.41.54
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 15:41:54 -0700 (PDT)
-Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-3ef31924c64so912541cf.1
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 15:41:54 -0700 (PDT)
-X-Received: by 2002:ac8:5781:0:b0:3ef:302c:319e with SMTP id
- v1-20020ac85781000000b003ef302c319emr15500qta.8.1683240114116; Thu, 04 May
- 2023 15:41:54 -0700 (PDT)
+        Thu, 4 May 2023 18:42:39 -0400
+Received: from BN6PR00CU002.outbound.protection.outlook.com (mail-eastus2azon11021020.outbound.protection.outlook.com [52.101.57.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D1893F7;
+        Thu,  4 May 2023 15:42:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ncehkhobfwsaXvl6p9TaFquRMnyM+7b96t7qtKEzlXlzSDciGtdHCXdE16R7m61kuRRateRld44I7/TmE8NkSnFnZoN8UZrXcCcz1eLACko4IArKwfpOyboYRtEd/QXm6D9M9NG8jODYYyHdgaCJX+eixGknCW9Qaq5QPLkWi6lAgKC2HhYS5jWn8noiENO77sckgGfMgykvMpeh9X81WRO5LaBlCzuPdIAqaTSKZzuaR4O6GG52o2j06pVFWZSa7k0hPgPWNOdqijwIOkvi827XsXFVe9D/iLZp0XZgdXyL/c8JFDrOvOd42PDw7o0KTTf/UsUzpGmwXZc5TQ5V4g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XNapLHSUwTCXrhl5V/HtrkJiqWNqGnw3g24Z2PvY1C0=;
+ b=iY+scX3Z+uIEB3vgUSI4iIMRBiZb9fvV29NmB235WwMhQlI7C2T6SLPehZYdAZEt4TrbJ+D38GbqBg/JVZW60ZH9HW5qS4WL49NtLoS4YbRqsvXnPT6s2Y6pe/cG8nI5jXSmnt+FK3Tw4CQ1fFPgM4P/GY7JqmE8xjUl9jWv4hgZMhL1nGvrM33ZIRXa1tja5PMrkx3Bsq/2/3FWYMTwd4dBdqeA7R0LH6wJEcXaB4LekpJX1rifEprN1IFpDYjLtnDgtlEyrQA2hlHp4gNUa1Y5EiGr4uWHLcY4YDg7ZEAzUIxKOyW3MHxni599rE9T6ZuiI9qSjnFDV29N1aZF6A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XNapLHSUwTCXrhl5V/HtrkJiqWNqGnw3g24Z2PvY1C0=;
+ b=KU562w7Kq/JqdbAg4IujX3W0OgYdc13IBT7tmCZWtJqlhHxQS5w3eLATM9uw1yigDxL5Q0ey6xgyx7O2chYhyGb3h0BrZcbnkTQ0l80sAnWssYonQbeYzBtFFd+jRE9eV3d7wQOpq1+1rsvpNRODO03/kDIgMV7wwrJZz9VFeXE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+Received: from BL0PR2101MB1092.namprd21.prod.outlook.com
+ (2603:10b6:207:30::23) by SA1PR21MB3811.namprd21.prod.outlook.com
+ (2603:10b6:806:2b5::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.11; Thu, 4 May
+ 2023 22:42:22 +0000
+Received: from BL0PR2101MB1092.namprd21.prod.outlook.com
+ ([fe80::13da:fdfb:f037:e2c2]) by BL0PR2101MB1092.namprd21.prod.outlook.com
+ ([fe80::13da:fdfb:f037:e2c2%3]) with mapi id 15.20.6387.011; Thu, 4 May 2023
+ 22:42:17 +0000
+From:   Dexuan Cui <decui@microsoft.com>
+To:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        linux-hyperv@vger.kernel.org, mikelley@microsoft.com
+Cc:     linux-kernel@vger.kernel.org, Dexuan Cui <decui@microsoft.com>,
+        stable@kernel.org
+Subject: [PATCH] Drivers: hv: vmbus: Call hv_synic_free() if hv_synic_alloc() fails
+Date:   Thu,  4 May 2023 15:41:55 -0700
+Message-Id: <20230504224155.10484-1-decui@microsoft.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: MW2PR2101CA0001.namprd21.prod.outlook.com
+ (2603:10b6:302:1::14) To BL0PR2101MB1092.namprd21.prod.outlook.com
+ (2603:10b6:207:30::23)
 MIME-Version: 1.0
-References: <20220903093415.15850-1-lecopzer.chen@mediatek.com>
-In-Reply-To: <20220903093415.15850-1-lecopzer.chen@mediatek.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 4 May 2023 15:41:41 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=W=AhZe35_uaZR=qq78kyw89gUf7FYzjGak-2-8-XcxWQ@mail.gmail.com>
-Message-ID: <CAD=FV=W=AhZe35_uaZR=qq78kyw89gUf7FYzjGak-2-8-XcxWQ@mail.gmail.com>
-Subject: Re: [PATCH v7 0/6] Support hld delayed init based on Pseudo-NMI for
-To:     Lecopzer Chen <lecopzer.chen@mediatek.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, mark.rutland@arm.com,
-        will@kernel.org, acme@kernel.org, akpm@linux-foundation.org,
-        alexander.shishkin@linux.intel.com, catalin.marinas@arm.com,
-        davem@davemloft.net, jolsa@redhat.com, jthierry@redhat.com,
-        keescook@chromium.org, kernelfans@gmail.com, masahiroy@kernel.org,
-        matthias.bgg@gmail.com, maz@kernel.org, mcgrof@kernel.org,
-        mingo@redhat.com, namhyung@kernel.org, nixiaoming@huawei.com,
-        peterz@infradead.org, pmladek@suse.com, sparclinux@vger.kernel.org,
-        sumit.garg@linaro.org, wangqing@vivo.com, yj.chiang@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL0PR2101MB1092:EE_|SA1PR21MB3811:EE_
+X-MS-Office365-Filtering-Correlation-Id: fcd14c0c-5645-4b79-ce4e-08db4cf0cfea
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jD4Adv84Jo7HHDZ19/wT1KPc3/4UzsOZX2tSnk1GkaIxHZ8jd+gqtIhBZIled0IT+lUKzerzcfPHgj/GaoeTC2m5NSwRMzOmOmkWqvOkBPS2JcV+WW/vhKuduohm4yTugbqGwuarXdUVsVuH4UPSlJI4br/uS+dHUWeVeAeuFcUFlqY0jB1T7XKwEa4GWaUSEAI3dJjJRNk3hcgtT3xikZRzxV/zMMh9XL4hClrPEcBHSOD2mXUz2IjqfaRvp4IFD/KgrgmhwUXUOg7G8ugD7MSd1yU2VWNfq1K2LeLnR7DtfAvje8+g0C2XHziPLdA4+rkvb3tH9PXNq+PQLB+3TgMuTI67+YQIWCaDz7OQNsUdqKY7fywqIAKCsWuOwSPM/VTGpSeTkOSV5RSOk9q9jopvBP2Vj8iul3BL7yfvLxmbW/+gd+Zx1BRQUWMQvCDRuES1g1oqAZgwBBIpabo58dr7O9zmSk/iuXpTiVnaqehl+wg8sNIkOJ8h2pgRdG2M/zUATDEOusJwuSjsW071fIBFr1ZSdkWIq4OpLxylr+rA2rOjoqBZZ8V+2rZk6U1/ATsuXD0NP0KNkrOnPq2HtuHg6kUx9Jw7U1hwjTdr8pk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR2101MB1092.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(376002)(136003)(396003)(346002)(39860400002)(451199021)(66556008)(2906002)(8676002)(41300700001)(8936002)(5660300002)(316002)(786003)(66476007)(6636002)(4326008)(66946007)(86362001)(478600001)(10290500003)(38100700002)(6666004)(82960400001)(52116002)(82950400001)(83380400001)(6486002)(36756003)(2616005)(6506007)(1076003)(186003)(6512007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?h58+JBdo4xC3DWw/+3Io77eT37pQCr55sw8ZFu3o8Y5xC1AbU9DPXR/un9VR?=
+ =?us-ascii?Q?gxe+YwQO+AmGbbunQ6rHW4fW1tiQengIObmbSUBRU1g36+3Ej0LKLKMhsCc3?=
+ =?us-ascii?Q?T3ir/3SZyyFA0eluuuAUAjik/kIlJXFLonmAiTQ67p5Or0qhDmrNckxgyK2x?=
+ =?us-ascii?Q?qgatiikH4pJbLVDsHbtEWpp/eBRBeE02tGpuR5FYj1p7dirW/lYyZRbXZ35N?=
+ =?us-ascii?Q?O/g+Cps6d5xKQtG2rR9+/RMUIZR+W/DKt1DcrvphcBft+XRpjRZ5ube3bJ02?=
+ =?us-ascii?Q?OpNl6sPFJuH8Qyg8EDS4XpfhNhnf+G7c+zdJ+VbeqNH5Hrr8hbBlciIDagn4?=
+ =?us-ascii?Q?4pQv3Bp5P78SIzHpWq1ubMxk8ACZ+JgMMVe+jMrRk/1htKetqezGjsyMU7PE?=
+ =?us-ascii?Q?jH03Db0nbQojWf8XBv9A+Jq0xtJqABSFqURo0s66HDab3Ido2NFGWwVj2T7K?=
+ =?us-ascii?Q?9YMvO4yakCBNIdHun2te23gxE+79vQJX+bzJA5JyORgiVZCXCznhwkeljlI2?=
+ =?us-ascii?Q?whsxGqiIj6PyAztJw/e8dzpMwd5+Exb8Oz/8Ljw1rSat0mYXd+Y820TxjmWU?=
+ =?us-ascii?Q?3ZKrpatNZ1w0T7WxbQZG8PmfYF/mBYI6qNAl23dG1UGHwarTR7Z23kV3t2JI?=
+ =?us-ascii?Q?m6zEAXXCVEil/kKzQNoUikRpgbMj+FwCPSqeVdo1RwrvWZbkPQq1U8q4+N+j?=
+ =?us-ascii?Q?T4qb9WspNrtbekqik6BAaFn7F7+NZ4ywVly+EtXCWzV7PzCU1sfCWCZG7x7b?=
+ =?us-ascii?Q?vtlEYX4erG8LBQ/jE82v8PX8aycvYhGXpEX/UefKtwpahC9CoPYLsgweJmeE?=
+ =?us-ascii?Q?LpEGGqxArKOaRdmTWX9czdg7b9fs6AtP/zBPeTEzK8CXDRfDBHBqTXPptU0L?=
+ =?us-ascii?Q?fRFon5ooU1XZpYZfnSpgnO2RYyk8+0WVPInXoJ70vtDEZW4S+wRBgTxVZmTn?=
+ =?us-ascii?Q?adnCPCkIzmk0OzsTAT+aZ0CaimVSi3hV0ptZiZ80nIa+IoYrxjC5Ed3TehFY?=
+ =?us-ascii?Q?zuG0Mmhq27bO27dAySi1TuM4NV81AQuyIH8nxbcFkdUR0i1GKUB9PJr//Alq?=
+ =?us-ascii?Q?qX1K6da9RVt4U1PMlR9iylkDF/caaujnJ/ZM8m5Y4QviXpVC1eeA7qiN3mfV?=
+ =?us-ascii?Q?AcfPB2M+anMFVudhegQRfOgMH5InbGzmdAg7iTYr+9KtqjHc6HUHd5CKy6qR?=
+ =?us-ascii?Q?oR2sIRd+dw7ew87bO9aBEny1Qz0lPPxQwmLYfzcEbWmLjgpIMuzyrOAbo3Hv?=
+ =?us-ascii?Q?HUkwon6tnmfqbPIHDRmvRHRClkXKsBMMNrYfWDSYiALb9wIePTBFpf0a0dFD?=
+ =?us-ascii?Q?iAC3eOtEyP1TcGSy5/weMQGtNjDsDA9mIHp+s1iPxc+OFSKlpTWRkVPq9KDG?=
+ =?us-ascii?Q?iB9zVQuortRrmxU3aK3bpFmvC+CcBO3FWea2jvfrtrGCwBcwSwHqGFLozg32?=
+ =?us-ascii?Q?exzRajJbmXo95DgqEsymdbCcTp5+NaoJW+b+WptxiOEP1QbubqTC5xDmGswm?=
+ =?us-ascii?Q?qEgMD+HmM27XTgUBf5EoyPfNnsr7x1vkIzux/pd4b/vtlRcYpfJOzeurqu/T?=
+ =?us-ascii?Q?ddkYV66bzOGm72Bz4Zvw1p5Mr9rfiIC46UiZ3eWobPQCdPWHjqv2E5Y7P28F?=
+ =?us-ascii?Q?ylU6jwhTsu8sH/3MakrVU56MgmV1xgLOMxulq1vPLOQd?=
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fcd14c0c-5645-4b79-ce4e-08db4cf0cfea
+X-MS-Exchange-CrossTenant-AuthSource: BL0PR2101MB1092.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2023 22:42:17.2270
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: btYeW4h5gspf7egypWBLFwejnkCSuAQ4eMVZB5iEur5pjbIPwfosBKb3ryjQYVFWrRlklPJ6P0D3WD/drd8/6A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR21MB3811
 X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Commit 572086325ce9 ("Drivers: hv: vmbus: Cleanup synic memory free path")
+says "Any memory allocations that succeeded will be freed when the caller
+cleans up by calling hv_synic_free()", but if the get_zeroed_page() in
+hv_synic_alloc() fails, currently hv_synic_free() is not really called
+in vmbus_bus_init(), consequently there will be a memory lead, e.g.
+hv_context.hv_numa_map is not freed in the error path. Fix this by
+updating the goto lables.
 
-On Sat, Sep 3, 2022 at 2:35=E2=80=AFAM Lecopzer Chen <lecopzer.chen@mediate=
-k.com> wrote:
->
-> As we already used hld internally for arm64 since 2020, there still
-> doesn't have a proper commit on the upstream and we badly need it.
->
-> This serise rework on 5.17 from [1] and the origin author is
-> Pingfan Liu <kernelfans@gmail.com>
-> Sumit Garg <sumit.garg@linaro.org>
->
-> Qoute from [1]:
->
-> > Hard lockup detector is helpful to diagnose unpaired irq
-> > enable/disable.
-> > But the current watchdog framework can not cope with arm64 hw perf
-> > event
-> > easily.
->
-> > On arm64, when lockup_detector_init()->watchdog_nmi_probe(), PMU is
-> > not
-> > ready until device_initcall(armv8_pmu_driver_init).  And it is deeply
-> > integrated with the driver model and cpuhp. Hence it is hard to push
-> > the
-> > initialization of armv8_pmu_driver_init() before smp_init().
->
-> > But it is easy to take an opposite approach by enabling watchdog_hld
-> > to
-> > get the capability of PMU async.
-> > The async model is achieved by expanding watchdog_nmi_probe() with
-> > -EBUSY, and a re-initializing work_struct which waits on a
-> > wait_queue_head.
->
-> Provide an API - retry_lockup_detector_init() for anyone who needs
-> to delayed init lockup detector.
->
-> The original assumption is: nobody should use delayed probe after
-> lockup_detector_check() (which has __init attribute).
-> That is, anyone uses this API must call between lockup_detector_init()
-> and lockup_detector_check(), and the caller must have __init attribute
->
-> The delayed init flow is:
-> 1. lockup_detector_init() -> watchdog_nmi_probe() get non-zero retun,
->    then set allow_lockup_detector_init_retry to true which means it's
->    able to do delayed probe later.
->
-> 2. PMU arch code init done, call retry_lockup_detector_init().
->
-> 3. retry_lockup_detector_init() queue the work only when
->    allow_lockup_detector_init_retry is true which means nobody should
-> call
->    this before lockup_detector_init().
->
-> 4. the work lockup_detector_delay_init() is doing without wait event.
->    if probe success, set allow_lockup_detector_init_retry to false.
->
-> 5. at late_initcall_sync(), lockup_detector_check() set
->    allow_lockup_detector_init_retry to false first to avoid any later
-> retry,
->    and then flush_work() to make sure the __init section won't be freed
->    before the work done.
->
-> [1]
-> https://lore.kernel.org/lkml/20211014024155.15253-1-kernelfans@gmail.com/
->
-> v7:
->   rebase on v6.0-rc3
->
-> v6:
->   fix build failed reported by kernel test robot <lkp@intel.com>
-> https://lore.kernel.org/lkml/20220614062835.7196-1-lecopzer.chen@mediatek=
-.com/
->
-> v5:
->   1. rebase on v5.19-rc2
->   2. change to proper schedule api
->   3. return value checking before retry_lockup_detector_init()
-> https://lore.kernel.org/lkml/20220613135956.15711-1-lecopzer.chen@mediate=
-k.com/
->
-> v4:
->   1. remove -EBUSY protocal, let all the non-zero value from
->      watchdog_nmi_probe() be able to retry.
->   2. separate arm64 part patch into hw_nmi_get_sample_period and retry
->      delayed init
->   3. tweak commit msg that we don't have to limit to -EBUSY
->   4. rebase on v5.18-rc4
-> https://lore.kernel.org/lkml/20220427161340.8518-1-lecopzer.chen@mediatek=
-.com/
->
-> v3:
->   1. Tweak commit message in patch 04
->         2. Remove wait event
->   3. s/lockup_detector_pending_init/allow_lockup_detector_init_retry/
->   4. provide api retry_lockup_detector_init()
-> https://lore.kernel.org/lkml/20220324141405.10835-1-lecopzer.chen@mediate=
-k.com/
->
-> v2:
->   1. Tweak commit message in patch 01/02/04/05
->   2. Remove vobose WARN in patch 04 within watchdog core.
->   3. Change from three states variable: detector_delay_init_state to
->      two states variable: allow_lockup_detector_init_retry
->
->      Thanks Petr Mladek <pmladek@suse.com> for the idea.
->      > 1.  lockup_detector_work() called before lockup_detector_check().
->      >     In this case, wait_event() will wait until
->      >     lockup_detector_check()
->      >     clears detector_delay_pending_init and calls wake_up().
->
->      > 2. lockup_detector_check() called before lockup_detector_work().
->      >    In this case, wait_even() will immediately continue because
->      >    it will see cleared detector_delay_pending_init.
->   4. Add comment in code in patch 04/05 for two states variable
-> changing.
-> https://lore.kernel.org/lkml/20220307154729.13477-1-lecopzer.chen@mediate=
-k.com/
->
->
-> Lecopzer Chen (5):
->   kernel/watchdog: remove WATCHDOG_DEFAULT
->   kernel/watchdog: change watchdog_nmi_enable() to void
->   kernel/watchdog: Adapt the watchdog_hld interface for async model
->   arm64: add hw_nmi_get_sample_period for preparation of lockup detector
->   arm64: Enable perf events based hard lockup detector
->
-> Pingfan Liu (1):
->   kernel/watchdog_hld: Ensure CPU-bound context when creating hardlockup
->     detector event
->
->  arch/arm64/Kconfig               |  2 +
->  arch/arm64/kernel/Makefile       |  1 +
->  arch/arm64/kernel/perf_event.c   | 12 +++++-
->  arch/arm64/kernel/watchdog_hld.c | 39 +++++++++++++++++
->  arch/sparc/kernel/nmi.c          |  8 ++--
->  drivers/perf/arm_pmu.c           |  5 +++
->  include/linux/nmi.h              |  4 +-
->  include/linux/perf/arm_pmu.h     |  2 +
->  kernel/watchdog.c                | 72 +++++++++++++++++++++++++++++---
->  kernel/watchdog_hld.c            |  8 +++-
->  10 files changed, 139 insertions(+), 14 deletions(-)
+Cc: stable@kernel.org
+Signed-off-by: Dexuan Cui <decui@microsoft.com>
+---
+ drivers/hv/vmbus_drv.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-To leave some breadcrumbs here, I've included all the patches here in
-my latest "buddy" hardlockup detector series. I'm hoping that the
-cleanup patches that were part of your series can land as part of my
-series. I'm not necessarily expecting the the arm64 perf hardlockup
-detector patches will land as part of my series, though. See the cover
-letter and "after-the-cut" notes on the later patches in my series for
-details.
+diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+index 59eb5fad12e7..c41e6ad0cf64 100644
+--- a/drivers/hv/vmbus_drv.c
++++ b/drivers/hv/vmbus_drv.c
+@@ -1525,7 +1525,7 @@ static int vmbus_bus_init(void)
+ 	ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "hyperv/vmbus:online",
+ 				hv_synic_init, hv_synic_cleanup);
+ 	if (ret < 0)
+-		goto err_cpuhp;
++		goto err_alloc;
+ 	hyperv_cpuhp_online = ret;
+ 
+ 	ret = vmbus_connect();
+@@ -1577,9 +1577,8 @@ static int vmbus_bus_init(void)
+ 
+ err_connect:
+ 	cpuhp_remove_state(hyperv_cpuhp_online);
+-err_cpuhp:
+-	hv_synic_free();
+ err_alloc:
++	hv_synic_free();
+ 	if (vmbus_irq == -1) {
+ 		hv_remove_vmbus_handler();
+ 	} else {
+-- 
+2.25.1
 
-https://lore.kernel.org/r/20230504221349.1535669-1-dianders@chromium.org
