@@ -2,133 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 737176F70CD
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 19:24:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CF116F70D1
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 19:25:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbjEDRYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 13:24:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55046 "EHLO
+        id S229609AbjEDRZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 13:25:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbjEDRYA (ORCPT
+        with ESMTP id S229449AbjEDRZv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 13:24:00 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF64E449C
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 10:23:59 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-ba1b052e53dso1147703276.1
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 10:23:59 -0700 (PDT)
+        Thu, 4 May 2023 13:25:51 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE864220
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 10:25:50 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-9659e9bbff5so134690966b.1
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 10:25:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683221039; x=1685813039;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ONB00+6Q69z3/h03ZXeAoDFdXXdOjEaMLtfkrHED77E=;
-        b=a19ly5QJ1Q1N22wDXhgi9csT1yq+d14FzfsBWgUtF4wbUqyCVwSYl75NVDF+a4VtDE
-         Ii9TlZsiACL2LTTI08ua87HBuUovZFuBkxtAs65RU+NYy+LOeL81Yx25IxhPkStxvE4a
-         puKgvwWz8lVMfccj9E41YPBeKftkVqVLBUUOm8MaEYjLyhmqBwWKsChhLCXouqxxIb0V
-         ZxHq+oddfmEkNiR82cqG4X6vidPMoanq8BFAbBQA+v97hN4fxCRmNe8QoTf169a64ul8
-         +l0aISINsGVg9egilXnwsORqMbtmn6H6Vr9fiRayC/WofHyGLboRtxmtxwXGO5i2CIIe
-         IROA==
+        d=linux-foundation.org; s=google; t=1683221149; x=1685813149;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lcRi0OT1PHOb52J7+pfe7c0giAH6vTm1G5lOY/4eLy8=;
+        b=CZUeay9KmIpxmvT92te1g7tEn9Xl5R6m+Vvl9GmmyRtdEK1Owtwl8HtvfLnN0pC020
+         NiXyIpB0BlsYjgdv5U5Bf2/VpqY5u2n1Yu/bzHP0btBkoV2zd5r0dQrYjALm2BLtVrf4
+         IjB/LsxIM2IdJ1grCg0purYszkhGnDKRI/VPA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683221039; x=1685813039;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ONB00+6Q69z3/h03ZXeAoDFdXXdOjEaMLtfkrHED77E=;
-        b=WJcBCOYGq7gEfSdliHuj5WcVEka2Obkx630FqE3Sej3tG0LHJ3gwjSnKb9CWUk46qu
-         U/aIe68VsE2TQg+lTAZEVAoHzvQnSbwl3K3XEAWdSaE+OWKPVVi21gDmp+kwtwhlYJPj
-         7aWn6suUWNu4cnyhwP99Ws8pyrtOrfm+TMvhj+4ndiD45GtVvSwbxdbVZe7k7NpVemjy
-         5SXgPwmOXpP1cc9XM56yR6iIvi5gkMKNagLCwWMABCZoaozu5I2ZWF9baP9XQas4SnKX
-         l1uIjrWe8hP/FIdYM+voxO2t97V1F5ziIrHoWK6Zm1bcgAu1RRvfHNC/Pb9hMwmjO2Jn
-         fmYA==
-X-Gm-Message-State: AC+VfDyQyoYu28lprRGMnLyHozsrJflvo3mSI0XPwgoTAjfvjgAxXFN0
-        iVRtxOhE5/Uj7eSEloQ2kkuu2K4H6OA=
-X-Google-Smtp-Source: ACHHUZ6nT2T395WRubeB3aSWGrfqRKKIgCUhsMtSEWpYYWZrkznq+sx7rqITmcWPGdxyYiBgCtn8mm8/UAQ=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:8b03:0:b0:b9d:f5b9:3d58 with SMTP id
- i3-20020a258b03000000b00b9df5b93d58mr281680ybl.3.1683221039062; Thu, 04 May
- 2023 10:23:59 -0700 (PDT)
-Date:   Thu, 4 May 2023 10:23:57 -0700
-In-Reply-To: <34f44b2748ad1365907c7927a3cbee794b986243.camel@intel.com>
-Mime-Version: 1.0
-References: <20230503182852.3431281-1-seanjc@google.com> <20230503182852.3431281-2-seanjc@google.com>
- <56fa0da83203b20c9945e7c82a0eed11f3d31ea5.camel@intel.com>
- <ZFLtfFjAvuL0JSQj@google.com> <34f44b2748ad1365907c7927a3cbee794b986243.camel@intel.com>
-Message-ID: <ZFPqLS08b0xT/PLa@google.com>
-Subject: Re: [PATCH 1/5] KVM: VMX: Open code writing vCPU's PAT in VMX's MSR handler
-From:   Sean Christopherson <seanjc@google.com>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "guoke@uniontech.com" <guoke@uniontech.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "haiwenyao@uniontech.com" <haiwenyao@uniontech.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1683221149; x=1685813149;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lcRi0OT1PHOb52J7+pfe7c0giAH6vTm1G5lOY/4eLy8=;
+        b=ZSJ9nhr4K05sj+ESxbGI0QPZd1DraqrgjsBPvpApnBlx/g4l13cmQR9Q3YvBXvE+Hd
+         qjQJBw298T8mmc0bnjzB+6c/MhUkBAi//CYcI/lkghEMgGCtHSNJekDp8VOnFElKSjBl
+         qImwpykNhXBtroUZH3t74vnizT4KgJx0sYOcrcJ0M04a7nhLGVX4/GQt4ZBtAN0d4KGu
+         42MsF5f/wb7OEgQ2jRI4ieyjACQ256eMdkKJAhrcKeK3Zk+lEA01qpiZa9LNxb13LCUx
+         A/UmS+eV7ACW7le31SAF8ErAazXQ5I25AeM//82QVUNvn74MBeTX6afCJES3PoYb5pG0
+         BHjg==
+X-Gm-Message-State: AC+VfDyjj3NSF8cr73c6cBCRuPUo8cJk/8sFZtGWr79rcqbCdws9mbWm
+        0G2XSSF4APmMmd7eCeLOBKBPL90vicv5WFHj0JUyBCe9
+X-Google-Smtp-Source: ACHHUZ6FbAlpmrDso7i7FHaSgoC9JVUY0CpT1MZccEcKaEaOPdmtQucb1xhcdAfdVInEJ2y5qIProQ==
+X-Received: by 2002:a17:906:6a10:b0:8a5:8620:575 with SMTP id qw16-20020a1709066a1000b008a586200575mr6914382ejc.3.1683221149030;
+        Thu, 04 May 2023 10:25:49 -0700 (PDT)
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com. [209.85.218.50])
+        by smtp.gmail.com with ESMTPSA id se20-20020a170907a39400b0095ef737dbd7sm11662542ejc.93.2023.05.04.10.25.48
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 May 2023 10:25:48 -0700 (PDT)
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-965ab8ed1fcso134066966b.2
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 10:25:48 -0700 (PDT)
+X-Received: by 2002:a17:907:984:b0:94f:9acc:65c9 with SMTP id
+ bf4-20020a170907098400b0094f9acc65c9mr6254599ejc.66.1683221148020; Thu, 04
+ May 2023 10:25:48 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230503211801.897735-1-acme@kernel.org> <CAHk-=wjY_3cBELRSLMpqCt6Eb71Qei2agfKSNsrr5KcpdEQCaA@mail.gmail.com>
+ <CAHk-=wgci+OTRacQZcvvapRcWkoiTFJ=VTe_JYtabGgZ9refmg@mail.gmail.com> <ZFOSUab5XEJD0kxj@kernel.org>
+In-Reply-To: <ZFOSUab5XEJD0kxj@kernel.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 4 May 2023 10:25:30 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgv1sKTdLWPC7XR1Px=pDNrDPDTKdX-T_2AQOwgkpWB2A@mail.gmail.com>
+Message-ID: <CAHk-=wgv1sKTdLWPC7XR1Px=pDNrDPDTKdX-T_2AQOwgkpWB2A@mail.gmail.com>
+Subject: Re: BPF skels in perf .Re: [GIT PULL] perf tools changes for v6.4
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Song Liu <song@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Clark Williams <williams@redhat.com>,
+        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Changbin Du <changbin.du@huawei.com>,
+        Hao Luo <haoluo@google.com>, Ian Rogers <irogers@google.com>,
+        James Clark <james.clark@arm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Roman Lozko <lozko.roma@gmail.com>,
+        Stephane Eranian <eranian@google.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 03, 2023, Kai Huang wrote:
-> On Wed, 2023-05-03 at 16:25 -0700, Sean Christopherson wrote:
-> > On Wed, May 03, 2023, Kai Huang wrote:
-> > > On Wed, 2023-05-03 at 11:28 -0700, Sean Christopherson wrote:
-> > > > From: Wenyao Hai <haiwenyao@uniontech.com>
-> > > > 
-> > > > Open code setting "vcpu->arch.pat" in vmx_set_msr() instead of bouncing
-> > > > through kvm_set_msr_common() to get to the same code in kvm_mtrr_set_msr().
-> > > 
-> > > What's the value of doing so, besides saving a function of kvm_set_msr_common()?
-> > 
-> > To avoid complicating a very simple operation (writing vcpu->arch.pat), and to
-> > align with SVM.
-> > 
-> > > PAT change shouldn't be something frequent so shouldn't in a performance
-> > > critical path.  Given the PAT logic on Intel and AMD are basically the same ,
-> > > isn't it better to do in kvm_set_msr_common()?
-> > 
-> > I could go either way on calling into kvm_set_msr_common().  I agree that
-> > performance isn't a concern.  Hmm, and kvm_set_msr_common() still has a case
-> > statement for MSR_IA32_CR_PAT, so handling the write fully in vendor code won't
-> > impact the code generation for other MSRs.
-> > 
-> > Though I am leaning towards saying we should either handle loads and stores to
-> > vcpu->arch.pat in common code _or_ vendor code, i.e. either teach VMX and SVM to
-> > handle reads of PAT, or have their write paths call kvm_set_msr_common().  A mix
-> > of both is definitely odd.
-> 
-> Agreed.  Alternatively we can move SVM's setting vcpu->arch.pat to common code.
-> 
-> > 
-> > I don't have strong preference on which of those two we choose.  I dislike duplicating
-> > logic across VMX and SVM, but on the other hands it's so little code.  I think
-> > I'd vote for handling everything in vendor code, mostly because this gives the
-> > appearance that the write can fail, which is silly and misleading.
-> > 
-> > 		ret = kvm_set_msr_common(vcpu, msr_info);
-> 
-> No opinion either.  First glance is having 
-> 
-> 	case MSR_IA32_CR_PAT:
-> 		vcpu->arch.pat = data;
-> 
-> in kvm_set_msr_common() is clearer because it is symmetrical to the read path.
-> 
-> Anyway your decision :)
+On Thu, May 4, 2023 at 4:09=E2=80=AFAM Arnaldo Carvalho de Melo <acme@kerne=
+l.org> wrote:
+>>
+> Does building runqslower works for you in this same environment where
+> building perf failed?
 
-Duh, the obvious answer is to do 
+I don't know, and I don't care. I've never used that thing, and I'm
+not going to.
 
-	ret = kvm_set_msr_common(vcpu, msr_info);
-	if (ret)
-		break;
+And it's irrelevant. Two wrongs do not make a right.
 
-	<vendor code here>
+I'm going to ignore perf tools pulls going forward if this is the kind
+of argument for garbage that you use.
 
-That's an established pattern for other MSRs, and addresses my main concern of
-not unwinding the VMCS updates in the should-be-impossible scenario of
-kvm_set_msr_common() failing after the kvm_pat_valid() check.
+Because a billion flies *can* be wrong.
 
-Thanks Kai!
+           Linus
