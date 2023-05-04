@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D028A6F7688
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 22:08:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 360576F7624
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 22:06:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232913AbjEDUIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 16:08:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33896 "EHLO
+        id S231731AbjEDUGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 16:06:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232802AbjEDUGp (ORCPT
+        with ESMTP id S232397AbjEDUEE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 16:06:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3752E14E51;
-        Thu,  4 May 2023 12:54:07 -0700 (PDT)
+        Thu, 4 May 2023 16:04:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A0218163;
+        Thu,  4 May 2023 12:52:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CB25263379;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F109963872;
+        Thu,  4 May 2023 19:51:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4409C43444;
         Thu,  4 May 2023 19:51:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FC1BC4339B;
-        Thu,  4 May 2023 19:51:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683229869;
-        bh=dIBSv6BQn5wXPVuWTTB9InkBaS9YH0P4WpoYGgcnqrw=;
+        s=k20201202; t=1683229870;
+        bh=GCHkReou4jJjNT5cqxJZQuHk4/KtdGj+DRNUnUpQ64U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Jvm2wMx+2bLaPOBq3QWvxljsAlpFgndcNfw4aCgmJ7bRKn8stqCwvG6jUBIZWUBbB
-         FvKSFpsCEW9EDrXMHmJFab6xNnjNi6IphCwRyX/9HG5m467gk/giELp7MPmQbz8GlB
-         txsrhgaAzXUA5aXQABivv6okWOPGanvXze7jbrKcuWc1YiWfL6t/kPqHx3g02TGBjf
-         rFYVEqM7bYGL6zVnovgCHQr1avjIU2zp64yLzc4wiQi3TLdg9J4jUrQcV772wP6v8X
-         2RPbDlkFOKifKfvtsNCIlz8qP3iJqOSjy+rra5BI9KlxHFcpwRfRmF8vZwdYGzne2j
-         5ZFHBuqj1RUiA==
+        b=ueoEhIhVZSake6jon9dO0dmDFmH7DUSmNUM5qJUEUrHD1CBsWi2NJet0cUw02fks7
+         xR83IK+G5gv/R2CTjSvGyoC9/85wwdGDYk2oWBw2HWlRWIBdBgbA6+y8tkQ85R22Ea
+         B9u8HOsKHuWh6cxmSy3TKgqcQysiqy5KeIpyA9eCvUosqtQ88eI1yuVzjNjZQ9nnYD
+         4XSs7v7iDaWP+ijTxx9KSE8/td7a6b0aZtTy1qjWD4MqFiNmTSCMDlvSOewr8RLt2V
+         EGLcT471n/0wDZabw7e1lXQfK9aMj7oReXDvS9+CYyUg1ptcKO7dFoowna+tl9uv0A
+         0mILO+ZZnFAjw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Zheng Wang <zyytlz.wz@163.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, sathya.prakash@broadcom.com,
-        sreekanth.reddy@broadcom.com,
-        suganath-prabu.subramani@broadcom.com,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 09/18] scsi: message: mptlan: Fix use after free bug in mptlan_remove() due to race condition
-Date:   Thu,  4 May 2023 15:50:31 -0400
-Message-Id: <20230504195042.3808716-9-sashal@kernel.org>
+Cc:     Andreas Gruenbacher <agruenba@redhat.com>,
+        syzbot+45d4691b1ed3c48eba05@syzkaller.appspotmail.com,
+        Sasha Levin <sashal@kernel.org>, rpeterso@redhat.com,
+        cluster-devel@redhat.com
+Subject: [PATCH AUTOSEL 5.4 10/18] gfs2: Fix inode height consistency check
+Date:   Thu,  4 May 2023 15:50:32 -0400
+Message-Id: <20230504195042.3808716-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230504195042.3808716-1-sashal@kernel.org>
 References: <20230504195042.3808716-1-sashal@kernel.org>
@@ -50,8 +48,8 @@ MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,52 +58,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zheng Wang <zyytlz.wz@163.com>
+From: Andreas Gruenbacher <agruenba@redhat.com>
 
-[ Upstream commit f486893288f3e9b171b836f43853a6426515d800 ]
+[ Upstream commit cfcdb5bad34f600aed7613c3c1a5e618111f77b7 ]
 
-mptlan_probe() calls mpt_register_lan_device() which initializes the
-&priv->post_buckets_task workqueue. A call to
-mpt_lan_wake_post_buckets_task() will subsequently start the work.
+The maximum allowed height of an inode's metadata tree depends on the
+filesystem block size; it is lower for bigger-block filesystems.  When
+reading in an inode, make sure that the height doesn't exceed the
+maximum allowed height.
 
-During driver unload in mptlan_remove() the following race may occur:
+Arrays like sd_heightsize are sized to be big enough for any filesystem
+block size; they will often be slightly bigger than what's needed for a
+specific filesystem.
 
-CPU0                  CPU1
-
-                    |mpt_lan_post_receive_buckets_work()
-mptlan_remove()     |
-  free_netdev()     |
-    kfree(dev);     |
-                    |
-                    | dev->mtu
-                    |   //use
-
-Fix this by finishing the work prior to cleaning up in mptlan_remove().
-
-[mkp: we really should remove mptlan instead of attempting to fix it]
-
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-Link: https://lore.kernel.org/r/20230318081635.796479-1-zyytlz.wz@163.com
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Reported-by: syzbot+45d4691b1ed3c48eba05@syzkaller.appspotmail.com
+Signed-off-by: Andreas Gruenbacher <agruenba@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/message/fusion/mptlan.c | 2 ++
- 1 file changed, 2 insertions(+)
+ fs/gfs2/glops.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/message/fusion/mptlan.c b/drivers/message/fusion/mptlan.c
-index ebc00d47abf52..624803a887d8f 100644
---- a/drivers/message/fusion/mptlan.c
-+++ b/drivers/message/fusion/mptlan.c
-@@ -1430,7 +1430,9 @@ mptlan_remove(struct pci_dev *pdev)
- {
- 	MPT_ADAPTER 		*ioc = pci_get_drvdata(pdev);
- 	struct net_device	*dev = ioc->netdev;
-+	struct mpt_lan_priv *priv = netdev_priv(dev);
+diff --git a/fs/gfs2/glops.c b/fs/gfs2/glops.c
+index 69106a1545fad..092223a8b1201 100644
+--- a/fs/gfs2/glops.c
++++ b/fs/gfs2/glops.c
+@@ -362,6 +362,7 @@ static int inode_go_demote_ok(const struct gfs2_glock *gl)
  
-+	cancel_delayed_work_sync(&priv->post_buckets_task);
- 	if(dev != NULL) {
- 		unregister_netdev(dev);
- 		free_netdev(dev);
+ static int gfs2_dinode_in(struct gfs2_inode *ip, const void *buf)
+ {
++	struct gfs2_sbd *sdp = GFS2_SB(&ip->i_inode);
+ 	const struct gfs2_dinode *str = buf;
+ 	struct timespec64 atime;
+ 	u16 height, depth;
+@@ -401,7 +402,7 @@ static int gfs2_dinode_in(struct gfs2_inode *ip, const void *buf)
+ 	/* i_diskflags and i_eattr must be set before gfs2_set_inode_flags() */
+ 	gfs2_set_inode_flags(&ip->i_inode);
+ 	height = be16_to_cpu(str->di_height);
+-	if (unlikely(height > GFS2_MAX_META_HEIGHT))
++	if (unlikely(height > sdp->sd_max_height))
+ 		goto corrupt;
+ 	ip->i_height = (u8)height;
+ 
 -- 
 2.39.2
 
