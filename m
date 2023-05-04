@@ -2,233 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92D736F6C65
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 14:52:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C9166F6C70
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 14:54:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230329AbjEDMwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 08:52:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39530 "EHLO
+        id S230179AbjEDMyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 08:54:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230357AbjEDMwG (ORCPT
+        with ESMTP id S230363AbjEDMyv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 08:52:06 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F3576EA9
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 05:51:33 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-965c3f9af2aso19792966b.0
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 05:51:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683204653; x=1685796653;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=O2obC0cCkbuuZfXfRaApQUsjUhYRjOVjT9ma5uBlilE=;
-        b=CGgnPsWj7gT8G7a/TeYTnrfIH3GbZXAzKzl23MMuVFADFRvnPFzYGHCDV6EW588TTc
-         NBC8WfsuRahYRm8RI4X2gf+uyXrI+j+qHTschHy4PaeotgnwkGI/DRmgTFVJsjW+XOCD
-         7r4Fv8Vxljud0g0AWCsEfBDo/9XKvuUrqtch6A2OnMLyqre0Qqog8IpVJ7AiHL4GayIV
-         VLviGVXEcTleBbbfN+5/LH7PGrTPv5PjyBmT1CNkJ27grPWohmOC7XV5VSxpJiNvqQQL
-         iiBCGOs9wx8mITE9kkBgNr4TzeoEiem+9d40DWtCdkcgyImU2kOwmRIQU7L7PH09WK8k
-         ShHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683204653; x=1685796653;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=O2obC0cCkbuuZfXfRaApQUsjUhYRjOVjT9ma5uBlilE=;
-        b=lh3tjdYLLViLgJg+WqzrA+rZr08szy7ZZtDk7gtJNQ2V+VbY0151MuqkifmjVwYzsj
-         zs+oK19yqqL0SgP/nYieKUM36jE9Y29i+BLSzzswk/ctEK4VKgxt3KpGHHnkXpUNSHDP
-         990A+8p+QeJZJ5di/K0v5cZ0RxIxcI78oikRzqbL5GciEcqCSsfq/aLzOlUEERYkEp4z
-         CFWADMU/WgnRJ1XccSrHY04RrnnEOuCLC8BEkA8+x97xiQS8GQiGOyt78FjmWny6amXJ
-         2+3KeVvj4EHq1lB/VXNXG9tBoFO520rzwukWA1ssxxz4vwE+cPgRmc6NQ25qTKmoaSUC
-         K5gw==
-X-Gm-Message-State: AC+VfDzxGnI9e//JIE1F413xZ1N/4G3c9kBNGZ6clwbBxrFH772pQG/9
-        Crav9U20z0N81lPUFA2WuR5cYw==
-X-Google-Smtp-Source: ACHHUZ4p5/ZI/MQhoR/P1zQKgfq+Cw+kXOWRIR8givCmU3e+NL2+9TtXsspQiz2YNPuMLAIm9b1HRw==
-X-Received: by 2002:a17:907:1c21:b0:94b:cd7c:59f4 with SMTP id nc33-20020a1709071c2100b0094bcd7c59f4mr6549002ejc.16.1683204653018;
-        Thu, 04 May 2023 05:50:53 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:cbf1:e7ef:fb81:e912? ([2a02:810d:15c0:828:cbf1:e7ef:fb81:e912])
-        by smtp.gmail.com with ESMTPSA id e5-20020a170906504500b0094f124a37c4sm18826340ejk.18.2023.05.04.05.50.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 05:50:52 -0700 (PDT)
-Message-ID: <7f9f991a-fa56-2f65-293b-bd0ec5d07c40@linaro.org>
-Date:   Thu, 4 May 2023 14:50:46 +0200
+        Thu, 4 May 2023 08:54:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 112D610DE;
+        Thu,  4 May 2023 05:54:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 80E6763403;
+        Thu,  4 May 2023 12:54:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72C39C433D2;
+        Thu,  4 May 2023 12:54:44 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>,
+        Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: [GIT PULL] LoongArch changes for v6.4
+Date:   Thu,  4 May 2023 20:54:09 +0800
+Message-Id: <20230504125409.2444851-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 5/5] dt-bindings: clocks: at91sam9x5-sckc: convert to yaml
-Content-Language: en-US
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com
-Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230504060729.689579-1-claudiu.beznea@microchip.com>
- <20230504060729.689579-6-claudiu.beznea@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230504060729.689579-6-claudiu.beznea@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/05/2023 08:07, Claudiu Beznea wrote:
-> Convert Atmel slow clock controller documentation to yaml.
-> 
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-> ---
->  .../devicetree/bindings/clock/at91-clock.txt  | 30 -------
->  .../bindings/clock/atmel,at91sam9x5-sckc.yaml | 84 +++++++++++++++++++
->  2 files changed, 84 insertions(+), 30 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/clock/at91-clock.txt
->  create mode 100644 Documentation/devicetree/bindings/clock/atmel,at91sam9x5-sckc.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/clock/at91-clock.txt b/Documentation/devicetree/bindings/clock/at91-clock.txt
-> deleted file mode 100644
-> index 57394785d3b0..000000000000
-> --- a/Documentation/devicetree/bindings/clock/at91-clock.txt
-> +++ /dev/null
-> @@ -1,30 +0,0 @@
-> -Device Tree Clock bindings for arch-at91
-> -
-> -This binding uses the common clock binding[1].
-> -
-> -[1] Documentation/devicetree/bindings/clock/clock-bindings.txt
-> -
-> -Slow Clock controller:
-> -
-> -Required properties:
-> -- compatible : shall be one of the following:
-> -	"atmel,at91sam9x5-sckc",
-> -	"atmel,sama5d3-sckc",
-> -	"atmel,sama5d4-sckc" or
-> -	"microchip,sam9x60-sckc":
-> -		at91 SCKC (Slow Clock Controller)
-> -- #clock-cells : shall be 1 for "microchip,sam9x60-sckc" otherwise shall be 0.
-> -- clocks : shall be the input parent clock phandle for the clock.
-> -
-> -Optional properties:
-> -- atmel,osc-bypass : boolean property. Set this when a clock signal is directly
-> -  provided on XIN.
-> -
-> -For example:
-> -	sckc@fffffe50 {
-> -		compatible = "atmel,at91sam9x5-sckc";
-> -		reg = <0xfffffe50 0x4>;
-> -		clocks = <&slow_xtal>;
-> -		#clock-cells = <0>;
-> -	};
-> -
-> diff --git a/Documentation/devicetree/bindings/clock/atmel,at91sam9x5-sckc.yaml b/Documentation/devicetree/bindings/clock/atmel,at91sam9x5-sckc.yaml
-> new file mode 100644
-> index 000000000000..62660c823ea1
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/atmel,at91sam9x5-sckc.yaml
-> @@ -0,0 +1,84 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/clock/atmel,at91sam9x5-sckc.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+The following changes since commit 457391b0380335d5e9a5babdec90ac53928b23b4:
 
-Drop quotes.
+  Linux 6.3 (2023-04-23 12:02:52 -0700)
 
-> +
-> +title: Atmel Slow Clock Controller (SCKC)
-> +
-> +maintainers:
-> +  - Claudiu Beznea <claudiu.beznea@microchip.com>
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - items:
+are available in the Git repository at:
 
-Drop items here.
+  git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-6.4
 
-> +          - enum:
-> +              - atmel,at91sam9x5-sckc
-> +              - atmel,sama5d4-sckc
-> +              - atmel,sama5d3-sckc
+for you to fetch changes up to 2fa5ebe3bc4e31e07a99196455498472417842f2:
 
-Keep order by name, so 5d3 and then 5d4.
+  tools/perf: Add basic support for LoongArch (2023-05-01 17:19:59 +0800)
 
-> +              - microchip,sam9x60-sckc
-> +      - items:
-> +          - const: microchip,sama7g5-sckc
-> +          - const: microchip,sam9x60-sckc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  "#clock-cells":
-> +    enum: [0, 1]
-> +
-> +  atmel,osc-bypass:
-> +    type: boolean
-> +    description: set when a clock signal is directly provided on XIN
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
+----------------------------------------------------------------
+LoongArch changes for v6.4
 
-put it after allOf, just like previous patch.
+1, Better backtraces for humanization;
+2, Relay BCE exceptions to userland as SIGSEGV;
+3, Provide kernel fpu functions;
+4, Optimize memory ops (memset/memcpy/memmove);
+5, Optimize checksum and crc32(c) calculation;
+6, Add ARCH_HAS_FORTIFY_SOURCE selection;
+7, Add function error injection support;
+8, Add ftrace with direct call support;
+9, Add basic perf tools support.
 
-> +
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - microchip,sam9x60-sckc
-> +              - microchip,sama7g5-sckc
+Note: There are merge conflicts in these files but can be simply fixed
+by adjusting context around "static struct ftrace_ops direct":
 
-Drop this one. It's not needed.
+  samples/ftrace/ftrace-direct-modify.c
+  samples/ftrace/ftrace-direct-too.c
+  samples/ftrace/ftrace-direct.c
 
-> +    then:
-> +      properties:
-> +        "#clock-cells":
-> +          const: 1
-> +      required:
-> +        - "#clock-cells"
-> +        - clocks
+----------------------------------------------------------------
+Bibo Mao (1):
+      LoongArch: Add checksum optimization for 64-bit system
 
-Move these to top-level.
+Huacai Chen (3):
+      Merge 'irq/loongarch-fixes-6.4' into loongarch-next
+      LoongArch: Provide kernel fpu functions
+      tools/perf: Add basic support for LoongArch
 
-> +    else:
-> +      properties:
-> +        "#clock-cells":
-> +          const: 0
-> +      if:
-> +        properties:
-> +          compatible:
-> +            contains:
-> +              enum:
-> +                - atmel,sama5d4-sckc
-> +                - atmel,sama5d3-sckc
-> +      then:
-> +        required:
-> +          - "#clock-cells"
-> +          - clocks
+Jianmin Lv (5):
+      irqchip/loongson-eiointc: Fix returned value on parsing MADT
+      irqchip/loongson-eiointc: Fix incorrect use of acpi_get_vec_parent
+      irqchip/loongson-eiointc: Fix registration of syscore_ops
+      irqchip/loongson-pch-pic: Fix registration of syscore_ops
+      irqchip/loongson-pch-pic: Fix pch_pic_acpi_init calling
 
-and drop these required... but this is if-within-else. Very confusing.
-Which case you want to handle that way? So other compatibles do not need
-clock cells or clocks?
+Min Zhou (1):
+      LoongArch: crypto: Add crc32 and crc32c hw acceleration
 
+Qing Zhang (2):
+      LoongArch: Add ARCH_HAS_FORTIFY_SOURCE selection
+      LoongArch: ftrace: Abstract DYNAMIC_FTRACE_WITH_ARGS accesses
 
-Best regards,
-Krzysztof
+Tiezhu Yang (1):
+      LoongArch: Add support for function error injection
 
+WANG Rui (1):
+      LoongArch: Optimize memory ops (memset/memcpy/memmove)
+
+WANG Xuerui (12):
+      LoongArch: Clean up the architectural interrupt definitions
+      LoongArch: Define regular names for BCE/WATCH/HVC/GSPR exceptions
+      LoongArch: Print GPRs with ABI names when showing registers
+      LoongArch: Print symbol info for $ra and CSR.ERA only for kernel-mode contexts
+      LoongArch: Fix format of CSR lines during show_regs()
+      LoongArch: Humanize the CRMD line when showing registers
+      LoongArch: Humanize the PRMD line when showing registers
+      LoongArch: Humanize the EUEN line when showing registers
+      LoongArch: Humanize the ECFG line when showing registers
+      LoongArch: Humanize the ESTAT line when showing registers
+      LoongArch: Tweak the BADV and CPUCFG.PRID lines in show_regs()
+      LoongArch: Relay BCE exceptions to userland as SIGSEGV with si_code=SEGV_BNDERR
+
+Youling Tang (4):
+      LoongArch: ftrace: Fix build error if DYNAMIC_FTRACE_WITH_REGS is not set
+      LoongArch: ftrace: Implement ftrace_find_callable_addr() to simplify code
+      LoongArch: ftrace: Add direct call support
+      LoongArch: ftrace: Add direct call trampoline samples support
+
+ arch/loongarch/Kconfig                             |   5 +
+ arch/loongarch/Makefile                            |   2 +
+ arch/loongarch/crypto/Kconfig                      |  14 +
+ arch/loongarch/crypto/Makefile                     |   6 +
+ arch/loongarch/crypto/crc32-loongarch.c            | 304 ++++++++++++++++++++
+ arch/loongarch/include/asm/checksum.h              |  66 +++++
+ arch/loongarch/include/asm/fpu.h                   |   3 +
+ arch/loongarch/include/asm/ftrace.h                |  37 +++
+ arch/loongarch/include/asm/inst.h                  |  26 ++
+ arch/loongarch/include/asm/loongarch.h             |  57 ++--
+ arch/loongarch/include/asm/ptrace.h                |   5 +
+ arch/loongarch/kernel/Makefile                     |   2 +-
+ arch/loongarch/kernel/ftrace_dyn.c                 | 128 +++++----
+ arch/loongarch/kernel/genex.S                      |   1 +
+ arch/loongarch/kernel/irq.c                        |   2 +-
+ arch/loongarch/kernel/kfpu.c                       |  43 +++
+ arch/loongarch/kernel/mcount_dyn.S                 |  13 +-
+ arch/loongarch/kernel/perf_event.c                 |   2 +-
+ arch/loongarch/kernel/time.c                       |   2 +-
+ arch/loongarch/kernel/traps.c                      | 318 ++++++++++++++++++---
+ arch/loongarch/lib/Makefile                        |   4 +-
+ arch/loongarch/lib/clear_user.S                    | 136 ++++++++-
+ arch/loongarch/lib/copy_user.S                     | 251 ++++++++++++----
+ arch/loongarch/lib/csum.c                          | 141 +++++++++
+ arch/loongarch/lib/error-inject.c                  |  10 +
+ arch/loongarch/lib/memcpy.S                        | 147 ++++++++--
+ arch/loongarch/lib/memmove.S                       | 120 ++++----
+ arch/loongarch/lib/memset.S                        | 116 ++++++--
+ crypto/Kconfig                                     |   3 +
+ drivers/irqchip/irq-loongson-eiointc.c             |  32 ++-
+ drivers/irqchip/irq-loongson-pch-pic.c             |   6 +-
+ samples/ftrace/ftrace-direct-modify.c              |  34 +++
+ samples/ftrace/ftrace-direct-multi-modify.c        |  41 +++
+ samples/ftrace/ftrace-direct-multi.c               |  25 ++
+ samples/ftrace/ftrace-direct-too.c                 |  27 ++
+ samples/ftrace/ftrace-direct.c                     |  23 ++
+ tools/arch/loongarch/include/uapi/asm/perf_regs.h  |  40 +++
+ tools/arch/loongarch/include/uapi/asm/unistd.h     |   9 +
+ tools/perf/Makefile.config                         |  12 +-
+ tools/perf/arch/loongarch/Build                    |   1 +
+ tools/perf/arch/loongarch/Makefile                 |  28 ++
+ tools/perf/arch/loongarch/annotate/instructions.c  |  45 +++
+ .../arch/loongarch/entry/syscalls/mksyscalltbl     |  61 ++++
+ .../perf/arch/loongarch/include/dwarf-regs-table.h |  16 ++
+ tools/perf/arch/loongarch/include/perf_regs.h      |  15 +
+ tools/perf/arch/loongarch/util/Build               |   5 +
+ tools/perf/arch/loongarch/util/dwarf-regs.c        |  44 +++
+ tools/perf/arch/loongarch/util/perf_regs.c         |   6 +
+ tools/perf/arch/loongarch/util/unwind-libdw.c      |  56 ++++
+ tools/perf/arch/loongarch/util/unwind-libunwind.c  |  82 ++++++
+ tools/perf/check-headers.sh                        |   1 +
+ tools/perf/util/annotate.c                         |   8 +
+ tools/perf/util/dwarf-regs.c                       |   7 +
+ tools/perf/util/env.c                              |   2 +
+ tools/perf/util/genelf.h                           |   3 +
+ tools/perf/util/perf_regs.c                        |  76 +++++
+ tools/perf/util/syscalltbl.c                       |   4 +
+ 57 files changed, 2364 insertions(+), 309 deletions(-)
+ create mode 100644 arch/loongarch/crypto/Kconfig
+ create mode 100644 arch/loongarch/crypto/Makefile
+ create mode 100644 arch/loongarch/crypto/crc32-loongarch.c
+ create mode 100644 arch/loongarch/include/asm/checksum.h
+ create mode 100644 arch/loongarch/kernel/kfpu.c
+ create mode 100644 arch/loongarch/lib/csum.c
+ create mode 100644 arch/loongarch/lib/error-inject.c
+ create mode 100644 tools/arch/loongarch/include/uapi/asm/perf_regs.h
+ create mode 100644 tools/arch/loongarch/include/uapi/asm/unistd.h
+ create mode 100644 tools/perf/arch/loongarch/Build
+ create mode 100644 tools/perf/arch/loongarch/Makefile
+ create mode 100644 tools/perf/arch/loongarch/annotate/instructions.c
+ create mode 100755 tools/perf/arch/loongarch/entry/syscalls/mksyscalltbl
+ create mode 100644 tools/perf/arch/loongarch/include/dwarf-regs-table.h
+ create mode 100644 tools/perf/arch/loongarch/include/perf_regs.h
+ create mode 100644 tools/perf/arch/loongarch/util/Build
+ create mode 100644 tools/perf/arch/loongarch/util/dwarf-regs.c
+ create mode 100644 tools/perf/arch/loongarch/util/perf_regs.c
+ create mode 100644 tools/perf/arch/loongarch/util/unwind-libdw.c
+ create mode 100644 tools/perf/arch/loongarch/util/unwind-libunwind.c
