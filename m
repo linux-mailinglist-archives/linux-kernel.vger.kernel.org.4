@@ -2,88 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDCA46F71FE
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 20:36:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF6C66F71FF
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 20:36:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbjEDSg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 14:36:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38630 "EHLO
+        id S229785AbjEDSgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 14:36:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbjEDSg1 (ORCPT
+        with ESMTP id S229535AbjEDSgw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 14:36:27 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8336761B1;
-        Thu,  4 May 2023 11:36:21 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-96598a7c5e0so138610266b.3;
-        Thu, 04 May 2023 11:36:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683225380; x=1685817380;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=7SN19wDNYmU4q+XSqNk7FwWu0e+B21E4gPwmpCjIg2w=;
-        b=AFp8jRlFwOgqYRC8iQqyvfOdG1oTQmfbyCnpPRnYnXDc4mKAqJEVxAXBmi7KEolldg
-         83pq7e/lV+pkYBib08bQzL5nKyixKeZ43SOacXQkieoOaOD/5M1y4BhV5KO4CuoIldxe
-         LZ7+Iq/5HrSgm7BNJu/e3qph+MRZcdTWGdpZCmkd4q6O0JNO9CaDIu+hu9kgPBy6Qwmc
-         i/oQVC72NIBsqJ7p1usfbg+nI9LJFkdQnYPkHAgxMlgt6Tiy5kcL1rdVDayUqplnY/op
-         NWLhibHoPyZ3WDjdRJsRo6KPYfP0/NdXQT56SlWjulP53Tc5byMs6z3cpWv9cDegJ4N4
-         BWbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683225380; x=1685817380;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7SN19wDNYmU4q+XSqNk7FwWu0e+B21E4gPwmpCjIg2w=;
-        b=eRSi6BiHYaqCdnJJyZtxzgsARhjugtNWb7IDILVLOfuqxpFwWezKAZSwaTmY5UYKkK
-         qFWyqr17EvqQMLTVeqF1zBZAGMBMlaZuvxL1p7/ainWo1noiqvBpBETgZvNPfJBUKAIP
-         7wwEb5wbs/82TlNgjJ9e0y8CjM3MJLi2W2/cjoWKBhNg7V5WIxFwsuJqW1xRxSud0jPz
-         L9//TTZLqW6eLgoDc4vH4iw7sM253j7BtNW2O3TPyA4zUUPTa0o8pmwd1EEEYKXIERin
-         fGSHMgvCz1Xd1Cwp+72BFdoBTAy+7uMBOgGFXKCz2sLCV6WbjcufLtXtnfUuQNzPXCdQ
-         JGjA==
-X-Gm-Message-State: AC+VfDy4ZOvcIeMDynWZYAZZce0GLGHkFNpk5ioHkwJ5KX32KEYwEh+k
-        yQSyczIxY72BGGDQj/2PGYE=
-X-Google-Smtp-Source: ACHHUZ7MFl1r5scwPi69aSlFCp5ZglXSrr//bvB8gP7PMR4+VkfxcDY6MOidFs/slXG3O344G4WHfw==
-X-Received: by 2002:a17:907:25c2:b0:94e:75f8:668 with SMTP id ae2-20020a17090725c200b0094e75f80668mr7983708ejc.56.1683225379501;
-        Thu, 04 May 2023 11:36:19 -0700 (PDT)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id e1-20020a17090681c100b0094f67ea6598sm18991631ejx.193.2023.05.04.11.36.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 May 2023 11:36:19 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Thu, 4 May 2023 20:36:16 +0200
-To:     Ian Rogers <irogers@google.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Clark Williams <williams@redhat.com>,
-        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Changbin Du <changbin.du@huawei.com>,
-        Hao Luo <haoluo@google.com>, James Clark <james.clark@arm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Roman Lozko <lozko.roma@gmail.com>,
-        Stephane Eranian <eranian@google.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: Re: [GIT PULL] perf tools changes for v6.4
-Message-ID: <ZFP7IFEKdyx5NRYN@krava>
-References: <20230503211801.897735-1-acme@kernel.org>
- <CAHk-=wjY_3cBELRSLMpqCt6Eb71Qei2agfKSNsrr5KcpdEQCaA@mail.gmail.com>
- <CAHk-=wgci+OTRacQZcvvapRcWkoiTFJ=VTe_JYtabGgZ9refmg@mail.gmail.com>
- <CAP-5=fUNmiguiW+sv19EpGVVsrBD7dnVm4uMLOuutOo7_LUR=A@mail.gmail.com>
+        Thu, 4 May 2023 14:36:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9049C61B1;
+        Thu,  4 May 2023 11:36:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 20EE76366D;
+        Thu,  4 May 2023 18:36:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C9BDC433D2;
+        Thu,  4 May 2023 18:36:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683225408;
+        bh=ZiIXIAF6RSHoRAlY7IyT0+9Ap/TJ7jY1zKVBsImaVOc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=egMHkwjtcwPeT1kyUyYRRShK6qf8MULoFxaGH4+5BXI21ZIKPiO/IjeTUmKScG1z1
+         Pw6Vb+eCaqHbt8oAVlmF43QS2JXuEbNNWL6hldJ0pV7iGLACl8Iud7saLVATkqndZy
+         9AR+d2YkBPc/7RppsQrVMx/h9mvDTH7UfBGxBcejKFi4JaUJ+5STd3km52mF+9nS5K
+         SblhUpk9Bwz8GvqSV6omj5gSZKyJNLfDFsmOJztjHMBleHVyw2sUC91ZERIzWZt7t+
+         0Q2jlpPwf48hls0wTDZnGWl7DKbcDK6EGEfhk4uzJE7WOHpQyT14iFQf+h0KD4wvC3
+         EfTaALTJi7ZQQ==
+Date:   Thu, 4 May 2023 12:37:37 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Miguel Ojeda <ojeda@kernel.org>, Bill Wendling <morbo@google.com>,
+        Qing Zhao <qing.zhao@oracle.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] Compiler Attributes: Add __counted_by macro
+Message-ID: <ZFP7cfQpb60wfLd+@work>
+References: <20230504181636.never.222-kees@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAP-5=fUNmiguiW+sv19EpGVVsrBD7dnVm4uMLOuutOo7_LUR=A@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <20230504181636.never.222-kees@kernel.org>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,46 +58,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 03, 2023 at 10:51:15PM -0700, Ian Rogers wrote:
-> On Wed, May 3, 2023 at 8:12 PM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > On Wed, May 3, 2023 at 8:00 PM Linus Torvalds
-> > <torvalds@linux-foundation.org> wrote:
-> > >
-> > > I did consider it, but the end result doesn't even build, so I unpulled again..
-> > >
-> > > I get some libbpf error, and I'm just not interested in trying to
-> > > debug it. This has clearly not been tested well enough to be merged.
-> >
-> > Side note: its' not even about testing.
-> >
-> > The error message makes it clear that this is garbage and should never
-> > be merged even if it were to compile.
-> >
-> > There is not a way in hell that it is correct that a 'perf' tool build
-> > should ever even look at the vmlinux binary to build.
-> >
-> > The fact that it does shows that something is seriously wrong in
-> > perf-tool land, and I will not be touching any pulls until that
-> > fundamental mistake is entirely gone.
-> >
-> > The vmlinux image that is present in my tree (ie
-> > /home/torvalds/v2.6/linux/vmlinux) is a test build with an insane
-> > config. And the fact that the perf tool even looks at it is seriously
-> > broken.
-> >
-> > Whatever you are doing - stop it right now.
-> >
-> >                Linus
+On Thu, May 04, 2023 at 11:16:40AM -0700, Kees Cook wrote:
+> In an effort to annotate all flexible array members with their run-time
+> size information, the "element_count" attribute is being introduced by
+> Clang[1] and GCC[2] in future releases. This annotation will provide
+> the CONFIG_UBSAN_BOUNDS and CONFIG_FORTIFY_SOURCE features the ability
+> to perform run-time bounds checking on otherwise unknown-size flexible
+> arrays.
+
+It's happening! :D
+
 > 
-> I think the error you gave makes it pretty clear what is going on and
-> Arnaldo's e-mail explains the motivation. Perhaps we can check a
-> vmlinux.h into the perf tree so that we don't default to generating
-> it. This would avoid the binary dependency but we may need different
-> flavors for different architectures because of structs like pt_regs.
+> Even though the attribute is under development, we can start the
+> annotation process in the kernel. This requires defining a macro for
+> it, even if we have to change the name of the actual attribute later.
+> Since it is likely that this attribute may change its name to "counted_by"
+> in the future (to better align with a future total bytes "sized_by"
+> attribute), name the wrapper macro "__counted_by", which also reads more
+> clearly (and concisely) in structure definitions.
+> 
+> [1] https://reviews.llvm.org/D148381
+> [2] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108896
+> 
+> Cc: Miguel Ojeda <ojeda@kernel.org>
+> Cc: Bill Wendling <morbo@google.com>
+> Cc: Qing Zhao <qing.zhao@oracle.com>
+> Cc: Gustavo A. R. Silva <gustavoars@kernel.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Tom Rix <trix@redhat.com>
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-I think we could check that vmlinux with .BTF is present before
-allowing to build skeletons
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-jirka
+Thanks!
+--
+Gustavo
+
+> ---
+>  include/linux/compiler_attributes.h | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
+> index e659cb6fded3..9d63fe2024d5 100644
+> --- a/include/linux/compiler_attributes.h
+> +++ b/include/linux/compiler_attributes.h
+> @@ -123,6 +123,18 @@
+>  # define __designated_init
+>  #endif
+>  
+> +/*
+> + * Optional: future support coming in clang 17 and gcc 14
+> + *
+> + *   gcc: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108896
+> + * clang: https://reviews.llvm.org/D148381
+> + */
+> +#if __has_attribute(__element_count__)
+> +# define __counted_by(member)		__attribute__((__element_count__(member)))
+> +#else
+> +# define __counted_by(member)
+> +#endif
+> +
+>  /*
+>   * Optional: only supported since clang >= 14.0
+>   *
+> -- 
+> 2.34.1
+> 
