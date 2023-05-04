@@ -2,156 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3422B6F6D77
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 16:04:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 161E56F6D7A
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 16:04:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbjEDOEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 10:04:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49632 "EHLO
+        id S231316AbjEDOEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 10:04:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230242AbjEDOEd (ORCPT
+        with ESMTP id S231310AbjEDOEo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 10:04:33 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4128C76B7;
-        Thu,  4 May 2023 07:04:32 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-50bcb229adaso1013115a12.2;
-        Thu, 04 May 2023 07:04:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683209071; x=1685801071;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3vGEbVb2Iw1e256eidlQkAuPtncWcP3UfFonkvYXZLg=;
-        b=Nk+xPWMPNalhn1FRh11ReONk3sQr57APGlwmvlRIpnAVvqCEDpTJMY4vc+6MkbGMra
-         GDYZ55GPmTq9h6Ec2fTWUT/XOK5vQ1jiJfWBe5epBkjAEdvi1eiOQ2tJFAzORNAngE/K
-         wLR3V45p7/udMtvKjzlQLBUKJ4LK9ctUJxAjN1di9wfupdSSasbqkHMkCYz5tvDlN5GC
-         PwQuMauFX8sdf/ao5Nx3Puq3KGUuNVW/GPGUqw7ZO34xDuIkBAgMEuWGfYlfHur/k+Nq
-         Ygg5B+sH4iuqLHw2RVRsQ9GwZvtQIfhy+6Tb2uPa9up+6O5VXOJcBRPu06BqMJuGzZh9
-         YPMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683209071; x=1685801071;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3vGEbVb2Iw1e256eidlQkAuPtncWcP3UfFonkvYXZLg=;
-        b=YSrg606N+VZbCP6MVDm/hgqt09mVe7u47PhhMkBt/E3xZRU2oKE6M+KvE9rhtE8Lqt
-         JObFjHfIDo+SsgxwvkQvS7bKveMxOvGPKpzmzfe7MTLS7CdwLaG51M5OOM3kaeCd6JXf
-         blCZa5qw7ra0J+cqjRE2h6oyu3a0Or+QEmkGsX7eZMzKtjzOjS0UF3pihD72leSAFwd8
-         qtBbzeJiNbOuHjsHPEqh6bWM0gIrz4FwmRCwkqgipyFHwrqLe/jS/syLTRw3oy9U6crH
-         eVKBNaGop7fHY6DXwXf9tSlo7eHcoUxN/65tqIyZ4mn47XLD2ms5cqz5fpqRXhhk8SOm
-         Mi5Q==
-X-Gm-Message-State: AC+VfDxlNuHrwoEFtfT9niw5pAF0mqqu5D3VCSUnRN5c9OrOW/RX4TI6
-        gvnkJzO0mSVrUbduInrLJKU=
-X-Google-Smtp-Source: ACHHUZ4yEGLnlFZ2fGf6X+WKdesQczN5NZzLP+f4vTvEWOifinJDMwQt72frXvh2DTuC2jQCxBQzBQ==
-X-Received: by 2002:a17:907:3202:b0:957:278c:fb27 with SMTP id xg2-20020a170907320200b00957278cfb27mr5703358ejb.21.1683209070439;
-        Thu, 04 May 2023 07:04:30 -0700 (PDT)
-Received: from ?IPV6:2620:10d:c096:310::20ef? ([2620:10d:c092:600::2:1631])
-        by smtp.gmail.com with ESMTPSA id s17-20020a170906285100b0094e597f0e4dsm18578597ejc.121.2023.05.04.07.04.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 07:04:30 -0700 (PDT)
-Message-ID: <b32d275b-bb7a-4090-1d13-945ffca63c91@gmail.com>
-Date:   Thu, 4 May 2023 15:04:25 +0100
+        Thu, 4 May 2023 10:04:44 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7510C86B4;
+        Thu,  4 May 2023 07:04:43 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34470PpV019322;
+        Thu, 4 May 2023 14:04:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=O2HZAVGgMqOM1nhiFWSbffcr2h3NIs/YgmWGVPBFBHk=;
+ b=HK+0eKIjVZTz2E3WtFhc6poQnCUkvHgVOe3D40tQhPHroXcS9t1113SvSJ5YNlCQqis6
+ o4Ny7nhnMlCYGpvdq/p4+nAaa3ItHH6Ka+yI+kQA5G4AqQw40sfuVtMA6qQNSnpaNXnB
+ +E6i3TBKhRcoR8RhEhw6UsPXBFKEO4JA+8SJLc559+3HxI5u9UwCzuwMyS8ZhRlvxm2E
+ VKxwmUGTFLKqSwv6d4HRCZXjPElUkgtEp8V4C6jTQEGaThRHKY4f1DU1P9x8qe4UD6W1
+ p1VMWs4bsm2TXvFEPeyhiy9qRF0QCq8h+jNGbuxqh5dXbvexii4vslwBcdLZpK0ukZYx qQ== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qc50419yf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 04 May 2023 14:04:35 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 344E4YMH024591
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 4 May 2023 14:04:34 GMT
+Received: from [10.252.212.215] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 4 May 2023
+ 07:04:31 -0700
+Message-ID: <facc9800-6af4-5cb3-bd22-b22b2250090a@quicinc.com>
+Date:   Thu, 4 May 2023 19:34:28 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH v4 2/3] io_uring: Pass whole sqe to commands
+Subject: Re: [PATCH 0/4] venus: add support for 10 bit decoding
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Dikshita Agarwal <quic_dikshita@quicinc.com>,
+        <linux-media@vger.kernel.org>, <stanimir.k.varbanov@gmail.com>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <mchehab@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
+References: <1683196599-3730-1-git-send-email-quic_dikshita@quicinc.com>
+ <8df7f24b-9dbe-4491-bcb1-f53021bb482f@linaro.org>
+ <66b8e665-1038-127a-1f4f-20d8fe7bcd8e@linaro.org>
 Content-Language: en-US
-To:     Breno Leitao <leitao@debian.org>, io-uring@vger.kernel.org,
-        linux-nvme@lists.infradead.org, hch@lst.de, axboe@kernel.dk,
-        ming.lei@redhat.com
-Cc:     leit@fb.com, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org, sagi@grimberg.me, joshi.k@samsung.com,
-        kbusch@kernel.org
-References: <20230504121856.904491-1-leitao@debian.org>
- <20230504121856.904491-3-leitao@debian.org>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20230504121856.904491-3-leitao@debian.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+From:   Vikash Garodia <quic_vgarodia@quicinc.com>
+In-Reply-To: <66b8e665-1038-127a-1f4f-20d8fe7bcd8e@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: QviRIapVLx6W-XTPU26tMQLk-N4yaRlO
+X-Proofpoint-ORIG-GUID: QviRIapVLx6W-XTPU26tMQLk-N4yaRlO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-04_09,2023-05-04_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
+ suspectscore=0 adultscore=0 bulkscore=0 clxscore=1011 lowpriorityscore=0
+ spamscore=0 priorityscore=1501 mlxlogscore=999 mlxscore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2305040115
 X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/4/23 13:18, Breno Leitao wrote:
-> Currently uring CMD operation relies on having large SQEs, but future
-> operations might want to use normal SQE.
-> 
-> The io_uring_cmd currently only saves the payload (cmd) part of the SQE,
-> but, for commands that use normal SQE size, it might be necessary to
-> access the initial SQE fields outside of the payload/cmd block.  So,
-> saves the whole SQE other than just the pdu.
-> 
-> This changes slightly how the io_uring_cmd works, since the cmd
-> structures and callbacks are not opaque to io_uring anymore. I.e, the
-> callbacks can look at the SQE entries, not only, in the cmd structure.
-> 
-> The main advantage is that we don't need to create custom structures for
-> simple commands.
-> 
-> Creates io_uring_sqe_cmd() that returns the cmd private data as a null
-> pointer and avoids casting in the callee side.
-> Also, make most of ublk_drv's sqe->cmd priv structure into const, and use
-> io_uring_sqe_cmd() to get the private structure, removing the unwanted
-> cast. (There is one case where the cast is still needed since the
-> header->{len,addr} is updated in the private structure)
-> 
-> Suggested-by: Pavel Begunkov <asml.silence@gmail.com>
-> Signed-off-by: Breno Leitao <leitao@debian.org>
-> Reviewed-by: Keith Busch <kbusch@kernel.org>
+
+On 5/4/2023 7:21 PM, Bryan O'Donoghue wrote:
+> On 04/05/2023 14:49, Bryan O'Donoghue wrote:
+>> On 04/05/2023 11:36, Dikshita Agarwal wrote:
+>>> This series includes the changes to
+>>>    - add V4L2_PIX_FMT_P010 as supported decoder format.
+>>>    - consider dpb color format while calculating buffer
+>>>      size for dpb buffers.
+>>>    - update dpb and opb color format when bit depth
+>>>      changes is detected, also update preferred color
+>>>      format to P010 in this case.
+>>>
+>>> With this series, divided the previous version [1] into
+>>> multiple patches as suggested in review comments.
+>>>
+>>> [1] 
+>>> https://patchwork.linuxtv.org/project/linux-media/list/?series=10376
+>>>
+>>> Dikshita Agarwal (4):
+>>>    venus: add support for V4L2_PIX_FMT_P010 color format
+>>>    venus: update calculation for dpb buffers
+>>>    venus: add handling of bit depth change from firmwar
+>>>    venus: return P010 as preferred format for 10 bit decode
+>>>
+>>>   drivers/media/platform/qcom/venus/helpers.c        | 24 
+>>> ++++++++++++++++++++++
+>>>   drivers/media/platform/qcom/venus/hfi_plat_bufs.h  |  3 +++
+>>>   .../media/platform/qcom/venus/hfi_plat_bufs_v6.c   |  8 +++++++-
+>>>   drivers/media/platform/qcom/venus/vdec.c           | 16 
+>>> +++++++++++++--
+>>>   4 files changed, 48 insertions(+), 3 deletions(-)
+>>>
+>>
+>> For future reference a series like this should:
+>>
+>> 1. Include a log of what changed between the last series and this
+>> 2. Describe which comments you addressed
+>>     I generally try to say
+>>     "Added newline to dts - Konrad"
+>>     "Sent the series as a -v3 - Bryan"
+>>     etc
+>> 3. Ideally provide a link to the previous series in
+>>
+>> https://lore.kernel.org/linux-arm-msm/1682492417-20496-1-git-send-email-quic_dikshita@quicinc.com/ 
+>>
+>> 4. Use versioning
+>>     This set should be prefixed with "v2-0000-cover-letter" 
+>> "v2-0001-add-support" etc
+>>
+>> "git format-patch mybase..targettip --cover-letter -v2"
+>>
+>> ---
+>> bod
+>
+> Doh I see you did most of that - just missed the V2.
+>
+> Please remember to version your subsequent series. "git format-patch -v2"
+
+Does this qualify for a version upgrade when a single patch is 
+subsequently raised as series ? IMO, the link
+
+to previous single patch in cover letter and then starting the series 
+(as v0) seems to provide the required info.
+
+>
 > ---
->   drivers/block/ublk_drv.c  | 26 +++++++++++++-------------
->   drivers/nvme/host/ioctl.c |  2 +-
->   include/linux/io_uring.h  |  7 ++++++-
->   io_uring/opdef.c          |  2 +-
->   io_uring/uring_cmd.c      |  9 +++------
->   5 files changed, 24 insertions(+), 22 deletions(-)
-> 
-> diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
-> index c73cc57ec547..42f4d7ca962e 100644
-> --- a/drivers/block/ublk_drv.c
-> +++ b/drivers/block/ublk_drv.c
-[...]
-> @@ -2025,7 +2025,7 @@ static int ublk_ctrl_start_recovery(struct ublk_device *ub,
->   static int ublk_ctrl_end_recovery(struct ublk_device *ub,
->   		struct io_uring_cmd *cmd)
->   {
-> -	struct ublksrv_ctrl_cmd *header = (struct ublksrv_ctrl_cmd *)cmd->cmd;
-> +	const struct ublksrv_ctrl_cmd *header = io_uring_sqe_cmd(cmd->sqe);
->   	int ublksrv_pid = (int)header->data[0];
->   	int ret = -EINVAL;
->   
-> @@ -2092,7 +2092,7 @@ static int ublk_char_dev_permission(struct ublk_device *ub,
->   static int ublk_ctrl_uring_cmd_permission(struct ublk_device *ub,
->   		struct io_uring_cmd *cmd)
->   {
-> -	struct ublksrv_ctrl_cmd *header = (struct ublksrv_ctrl_cmd *)cmd->cmd;
-> +	struct ublksrv_ctrl_cmd *header = (struct ublksrv_ctrl_cmd *)io_uring_sqe_cmd(cmd->sqe);
-
-Seems it's here to cast out const. Not an issue as apparently ctrl
-goes to io-wq and so copies sqes, and it's definitely not a problem
-of this patch, but seems fragile.
-
-
->   	bool unprivileged = ub->dev_info.flags & UBLK_F_UNPRIVILEGED_DEV;
->   	void __user *argp = (void __user *)(unsigned long)header->addr;
->   	char *dev_path = NULL;
-> @@ -2171,7 +2171,7 @@ static int ublk_ctrl_uring_cmd_permission(struct ublk_device *ub,
->   static int ublk_ctrl_uring_cmd(struct io_uring_cmd *cmd,
->   		unsigned int issue_flags)
->   {
-> -	struct ublksrv_ctrl_cmd *header = (struct ublksrv_ctrl_cmd *)cmd->cmd;
-> +	const struct ublksrv_ctrl_cmd *header = io_uring_sqe_cmd(cmd->sqe);
->   	struct ublk_device *ub = NULL;
->   	int ret = -EINVAL;
->   
-[...]
-
--- 
-Pavel Begunkov
+> bod
