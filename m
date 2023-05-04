@@ -2,80 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30CD66F72D3
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:05:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85FF76F730C
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:10:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230303AbjEDTFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 15:05:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50442 "EHLO
+        id S230162AbjEDTKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 15:10:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230289AbjEDTEB (ORCPT
+        with ESMTP id S230236AbjEDTJn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 15:04:01 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFA019EF3;
-        Thu,  4 May 2023 12:03:07 -0700 (PDT)
-Message-ID: <20230504185938.393373946@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683226980;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=DnnEFfJ8qHS51cV93bPVxAhJn4egJudPWNxPdxHp+6I=;
-        b=3Ex1oay3deKBQTCKUX4Ih8IGgIbgjtd18ImqJ1vJckFzp4vqpeCRciYL26XaBXwtGetEt9
-        jQYdqvvfPpYi34oU2dU7fjuiZ3WyUQcsrd4BPREXrzjkH9groi0TU6YGHBW08cmpwip9QC
-        vnXlEPucLe8Pxu/DAQZhHSJgvAG1br+71W5AkzFErVTB5fdbrjcZJ7I/PMvvfD3nV+Fpt+
-        Y9+eS6OIW46jTxBhE1zoqPIcGpnWyrhDXCq+doarlLORorIO2HSYQo2DibMTzYhsGwQ8ko
-        wng2jKhRiMwK0oOD7H54yErcCMVtMuv2wW3qjiAj1OaBH6NB6N7JtXkq+JhyKQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683226980;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=DnnEFfJ8qHS51cV93bPVxAhJn4egJudPWNxPdxHp+6I=;
-        b=6kDZyW5GTa+KS1pHyq0SY7syfYnd6TB6StPbtFwCKnOC1peAStPMetQpfCSqmue8lUL4Wc
-        NQ0I2S6hl8MhwzDA==
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        Usama Arif <usama.arif@bytedance.com>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Subject: [patch V2 38/38] x86/smpboot/64: Implement
- arch_cpuhp_init_parallel_bringup() and enable it
-References: <20230504185733.126511787@linutronix.de>
+        Thu, 4 May 2023 15:09:43 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C751984;
+        Thu,  4 May 2023 12:08:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683227335; x=1714763335;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=ovhWSyk/LSigEU65gMI+SFTwzko8de+ecGeDC5Y0Zs0=;
+  b=A0zdgSC5cSssftac8jBLwCEleaGCtCqpZnPgzevSCafH4JU8M1sCt49K
+   oOJSigiWAd7eP850LQSx9VUh1+G587/KT4HjRfgdm3Fwr1ES62Md1lTxF
+   OO09J0VU2OX1wgl4SNrp6aNzBJ70g/F5iwydfNex9OKTbRej/1ZnR4S9G
+   Ln5aRwCP/0ND2ZYuVyp/sKDzNvxM10yM3JbWBfO4BCHlgrqwRiQnHultZ
+   /lxabWgF9Jjrg3Ccz5BpFD6eLtE+ZqaHSClEe/553m+zVQVuqPxuBRoqH
+   nOLedeyaNYmyiT2LPUMQXZ2zcE3NBKg3KBnUTVyohaE8Yw/jMt26S7L3L
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="351156216"
+X-IronPort-AV: E=Sophos;i="5.99,250,1677571200"; 
+   d="scan'208";a="351156216"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 12:05:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="841307936"
+X-IronPort-AV: E=Sophos;i="5.99,250,1677571200"; 
+   d="scan'208";a="841307936"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by fmsmga001.fm.intel.com with ESMTP; 04 May 2023 12:04:47 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 4 May 2023 12:04:46 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 4 May 2023 12:04:41 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Thu, 4 May 2023 12:04:41 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.168)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Thu, 4 May 2023 12:04:41 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hn7Bj7KWLA2JvE5d4UmZyAoFmWNUX/VmsRq0CjdmDFaisdKqKlLrAUsiq5+zrOU/sBK4kM/Ei/5zYc7BW2dyeo7bzGm5wSj5l1Z+kZbdsTlQGMG8UvgNOZVcumy9YuI3jI2snmH1eFmletLqmLvGbCCudc8wm+6KiVZylsZ1UTzuBsOOunHGHgjYgDJ8gzNMjadDY9pF5R3mQb+bv89YyRj8NHOb0ytC7oSNbRPk4wnuKa4JjW9jYgX+fUba21vCO6bQAaG9kVnq3ZfeXzhVNNs6ND9WP3EmOv3pf9kStEeco5D22+6Lc5CM1UUTsYx3Ywba2TJi72Ay1pUpKcawiQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QDBCfeEWaV0XXfZcSoKN3J5Zl9R9r9OkkZjFmGF7rHY=;
+ b=Ya17EaH5EqtCGUclEKmefDy05S0WRYEZs0nVGH9N5VBx9cFXX4ILsMcccFCEhve0hR12fG9D9DJ/wbiEHczzHqRN2DECnm0DMYcKpHseViOhGYLWSgnu7imLh/kuS46+j3WEdNTb3TI/AlqXSlgnCqTvQT26RmItOEhO4DEgyj1mQuyRy3XhJAvID47MXDBh6ZjIAZCdEqiSqPPKWYp43/NgsYAaBQWp4lCEce9bUwL7dS8w2fZBfPg4PnyWdZOsZu3j0J+8os50ISCuul5ifRQ+6abBM4XIgko4kdv70ugZwQLicKYyd25wWCPJNNC21GwHoVuO+hT87x7erHZksA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SJ2PR11MB7573.namprd11.prod.outlook.com (2603:10b6:a03:4d2::10)
+ by SA3PR11MB8004.namprd11.prod.outlook.com (2603:10b6:806:2f8::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.26; Thu, 4 May
+ 2023 19:04:36 +0000
+Received: from SJ2PR11MB7573.namprd11.prod.outlook.com
+ ([fe80::591f:4873:fd80:9a6d]) by SJ2PR11MB7573.namprd11.prod.outlook.com
+ ([fe80::591f:4873:fd80:9a6d%6]) with mapi id 15.20.6363.022; Thu, 4 May 2023
+ 19:04:35 +0000
+Message-ID: <1cec24f4-e4b1-682a-3ada-b51d2a7c83a4@intel.com>
+Date:   Thu, 4 May 2023 12:04:32 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.10.1
+Subject: Re: [PATCH v4 6/7] x86/resctrl: Display CLOSID and RMID for the
+ resctrl groups
+Content-Language: en-US
+To:     Babu Moger <babu.moger@amd.com>, <corbet@lwn.net>,
+        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>
+CC:     <fenghua.yu@intel.com>, <dave.hansen@linux.intel.com>,
+        <x86@kernel.org>, <hpa@zytor.com>, <paulmck@kernel.org>,
+        <akpm@linux-foundation.org>, <quic_neeraju@quicinc.com>,
+        <rdunlap@infradead.org>, <damien.lemoal@opensource.wdc.com>,
+        <songmuchun@bytedance.com>, <peterz@infradead.org>,
+        <jpoimboe@kernel.org>, <pbonzini@redhat.com>,
+        <chang.seok.bae@intel.com>, <pawan.kumar.gupta@linux.intel.com>,
+        <jmattson@google.com>, <daniel.sneddon@linux.intel.com>,
+        <sandipan.das@amd.com>, <tony.luck@intel.com>,
+        <james.morse@arm.com>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bagasdotme@gmail.com>,
+        <eranian@google.com>, <christophe.leroy@csgroup.eu>,
+        <jarkko@kernel.org>, <adrian.hunter@intel.com>,
+        <quic_jiles@quicinc.com>, <peternewman@google.com>
+References: <168177435378.1758847.8317743523931859131.stgit@bmoger-ubuntu>
+ <168177449635.1758847.13040588638888054027.stgit@bmoger-ubuntu>
+From:   Reinette Chatre <reinette.chatre@intel.com>
+In-Reply-To: <168177449635.1758847.13040588638888054027.stgit@bmoger-ubuntu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BYAPR08CA0024.namprd08.prod.outlook.com
+ (2603:10b6:a03:100::37) To SJ2PR11MB7573.namprd11.prod.outlook.com
+ (2603:10b6:a03:4d2::10)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Date:   Thu,  4 May 2023 21:03:00 +0200 (CEST)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ2PR11MB7573:EE_|SA3PR11MB8004:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6c452a7b-a42c-4d61-4f2b-08db4cd266bc
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: MHLxga3cWqAhUIaNjwOerRHcXntfvqtqvL8o3hD5Eh+R9+bwv8tv9dZuJ/KJyueLEsV+v/QibsIAAoFz/2Xv7ZWIK+tYYJBQSohiufa61JYBO7X7rUJrwKFpBpus0rblMzbrEt2yvrZdv+xiLO+CWNsKuSr/gwE8l9pCFPLIhhuh9akvMrFJgkvKJJkTsJabceNVkDEnDDhVAuTKxEa2x1QtI2uqdUY8wM+3xdXHxhNQH7tq3Uz+V1xVRHOg4JDyo/DolrDDZ9aHaqsxjfLEZz4dvuEaw+CdB61s6MNr2LIEDEvcBggZ/3nOvmgRIJnRN7/C86H+XPfUY7qYnZNnjFgXu9UUCpGzEaEZcIMcVFkaDjZFVAnQZxyh0TnlnaMJMbVsUCyMWVNlN7uUHySk8oKoZLSdlXQgKkttRqvkXLBJ5Q+jA9ZPuVpaRycZ5P9e1ojcYXRrelCrvfzTIF6kpu92o4DmBmMzpmKSfahzFpigKCrPVS8CYPIMAeYp2BX6plXs+YBQsJ9d5LH7eaDuWYv2XTf3ZbwlC/s+FM7Gd3LpPOAz6tzKDwqYq4ukUHBy/55g1JtfKgHIuwy0OHKC/G50g7ZCEatdOZJe1Q+n0mZ5WF5DtCez5eu2kBzMg3baRcLdL5WB/hbD14iacLCyvg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(376002)(346002)(396003)(136003)(366004)(451199021)(5660300002)(44832011)(7416002)(7406005)(8676002)(8936002)(6666004)(31696002)(86362001)(36756003)(316002)(4326008)(6486002)(41300700001)(66556008)(66476007)(66946007)(82960400001)(38100700002)(478600001)(31686004)(2906002)(53546011)(2616005)(6512007)(6506007)(26005)(83380400001)(186003)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?c3lwYlFxanpGZHlaT0ZVS3M5MEg2YXdkVlNDQk9zaTBkRllDbjl3OUo5dUZR?=
+ =?utf-8?B?aEpUeitnVXRZTlR5U0RyODVZenFoZmE5Q1RkMk1ldUpob2VHdzlrL01VRERa?=
+ =?utf-8?B?SkhubFVIWmV6YXpsdXVJV2xqRE9CR2ExeDBjTUlBMVlUYm5sYngvS2w1NXZy?=
+ =?utf-8?B?K082S3FsbUpZNHVXM2t1VWorSG9weTlFN1Vtckgvb2NwaUptNHl3WW5xR2hW?=
+ =?utf-8?B?V3hvUUQ5TnhGbE5VQndXYjQzb20zSld0bzFweVI1cDBxRTNRb3RqUzFCcjRO?=
+ =?utf-8?B?T2UyTDNSZ3dhbVRTN2ZkUTlHVXFxUkZSUGM0WEo1aTJEZkp5NzVvbUhKTHNM?=
+ =?utf-8?B?VXljeVk3emM4UTNzTk4wUEVROWExOUJNdHdRWmFhanRScU0rVTYvVGhYZWN0?=
+ =?utf-8?B?UnYxRzlGd1NkZXFzOVRyQWxZdjhuNFFBSG1sTm5YeTlUNkY5MlUrNUhLTHEv?=
+ =?utf-8?B?aXpZYVFCakFweWxvOEVsQUJNOWs1OUxyRC9jckhqcWo5ZXh1MEFVQjMyV21Q?=
+ =?utf-8?B?SUlZbUhEcXVNT2F1WVJ5NVNXRk02LzFIRHZhTnBKVFB2bEVvcXFiMlViM2RX?=
+ =?utf-8?B?MnQxbWR3aHp6NmFQYWhtdkYxUTYrQWdQaURHU3FDazFjZThONUg5VGZXRWtk?=
+ =?utf-8?B?RDNBQnNuRC9EUSt0Zkh2OEI4V0RCVkpqUEVzQ0tRU2NZbXpIWlRBUExEb2tr?=
+ =?utf-8?B?OHM2dTJXZjZIcGVoSCtlV0o4enRpcEthYXpYbU1ZOUZEeGpVd3d1eHVSSzU5?=
+ =?utf-8?B?ZGxEbHBBQ2FjalhmQ2t3NUhIM056VzFzRng5QlJxS1lVOFZ0c1JPRlNaSUJs?=
+ =?utf-8?B?V1dyTU9Wa01PTmNSVXZHTyt0Wk1Gd09JVTY1VW5YNjNtdGpwaFU3WFgvU2NO?=
+ =?utf-8?B?NDdIdElTQkprVFJoVXRTbllBNHUvNzZLRERJcmZIdU9Ea09RSGovQmlvQkxu?=
+ =?utf-8?B?MGp4R2VwSDA4SUZCZzJHTTNOR29UaGoyTTN2MWV3VzNCMmcxdjdJWWdDUkFK?=
+ =?utf-8?B?Qi85dHliOVFFWlhkRmJETXZJVnE3QjAxK3NHbHBSaXZtVmFhVnB5SFNCUk9D?=
+ =?utf-8?B?eTFoQ1JLU2lqcmVvbVpnYWZISHFlYlFwalhnVURLMzFIcmtPajVOU0RYbGcv?=
+ =?utf-8?B?OXhTZ081SDJxd0tWNTRFWFpuQXc1KzNsZUZVb1BqRzIwakhJSEJXQitGUXg5?=
+ =?utf-8?B?MURqb3gwYjQ2cU1mL2RCN3p0VnBMOTZSdXVlNER6bWhsb2hMSjlzUG5DL041?=
+ =?utf-8?B?TVVKQjhNS2pvc0RlWXdXR0lncWlESWZhL3c1ZDhsUGgxUlVhK0FVWHpDSXc1?=
+ =?utf-8?B?Q2tWcmt3dndJZ2NWdlNFR0pZVXFDdy9uUFdXWXhoSXZTd1FFTXZEaGVyaS9r?=
+ =?utf-8?B?RkNtRmx5M3VTNC8zRWQ1Zmxkd3RJVys3ZTJCZHB5ZmJOMUtzT2FRbXhEZUlp?=
+ =?utf-8?B?S3ZpTG13UXc3bHBqSGNUMWFaV0NkOXlUU2lyVHoxTURlTkZ0bVRObi8wRkNR?=
+ =?utf-8?B?V2FVaVNwYzgyeEc3VXFkU2E3dWJwZ3lvZ1pwZWFEbmo0K1F0UXJYL2VXTTZx?=
+ =?utf-8?B?UHN2NnFJN0NFOFl6Z0hkOEVCMHJqdmsrOXJvNVZkblYyLzM5TGpQMlFuRCto?=
+ =?utf-8?B?cFprYTdZU1BnUklOWldFbVEydG1DZ1J0WFI3bzhDczA1R21hTktyUEp5dmVX?=
+ =?utf-8?B?bU1UYXF4NzZlUUpkYmZlakptb0pvYXFYZDVZUmlONnE0RE5kc2Mvd1JlTXNW?=
+ =?utf-8?B?Szdya3ZWWE1yaWU5RisxYmpwelFhNERwUmE3TGZhRWNWanN6OEVFbmtsVFMr?=
+ =?utf-8?B?TkhIem16N01JYXlzU1duVnhKUVhFSDJTcUg4QzFrWXNMSldnNk1lYjNUd3FJ?=
+ =?utf-8?B?VFlXZU93dDdZUmJyM0NaUUNTWUVvd1ljMXAyUFJ5U0UydjRmTDBkc1lYY1dD?=
+ =?utf-8?B?SThCYVZoVW11VUgwdWJiZHZNMVV3UjhBU1V5eWV0NGMwTDQzWGhOT3VDWXNu?=
+ =?utf-8?B?bWFmbmdWelU2MHJ4TFBnSjNIZlFsMXNMUlJLRmVPL1h5UU4wdXVOTUIvNHJh?=
+ =?utf-8?B?cFFNaFVyT1Z2T2NPL0YrZEpqWDhOTmNZZE82RkNOVm5WT1I5M3pSZ29PdXVJ?=
+ =?utf-8?B?WEZPY0xoNkdHTDBNblMyQ2hyZzNGVmNjUFdBa2krenpaVjhQVWVwalVhYlNh?=
+ =?utf-8?B?UXc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6c452a7b-a42c-4d61-4f2b-08db4cd266bc
+X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7573.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2023 19:04:35.4979
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JQQoiljsI5DEfhfh+26yCF8SV7UnMhC768nE6MMlOPVL7RAf89ZUTBqfbOHWdD79EhekPBZ/qtRW6W8OGRz8kTZnotgDFYuYmdyZqpDqCLQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR11MB8004
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,207 +178,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Gleixner <tglx@linutronix.de>
+Hi Babu,
 
-Implement the validation function which tells the core code whether
-parallel bringup is possible.
+On 4/17/2023 4:34 PM, Babu Moger wrote:
+> When a user creates a control or monitor group, the CLOSID or RMID
+> are not visible to the user. It can help to debug the issues in some
+> cases. There are only available with "-o debug" option.
 
-The only condition for now is that the kernel does not run in an encrypted
-guest as these will trap the RDMSR via #VC, which cannot be handled at that
-point in early startup.
+Please see: Documentation/process/maintainer-tip.rst
 
-There was an earlier variant for AMD-SEV which used the GHBC protocol for
-retrieving the APIC ID via CPUID, but there is no guarantee that the
-initial APIC ID in CPUID is the same as the real APIC ID. There is no
-enforcement from the secure firmware and the hypervisor can assign APIC IDs
-as it sees fit as long as the ACPI/MADT table is consistent with that
-assignment.
+"It's also useful to structure the changelog into several paragraphs and not
+lump everything together into a single one. A good structure is to explain
+the context, the problem and the solution in separate paragraphs and this
+order."
 
-Unfortunately there is no RDMSR GHCB protocol at the moment, so enabling
-AMD-SEV guests for parallel startup needs some more thought.
+> 
+> Add CLOSID(ctrl_hw_id) and RMID(mon_hw_id) to the control/monitor groups
 
-Intel-TDX provides a secure RDMSR hypercall, but supporting that is outside
-the scope of this change.
+Please highlight that CLOSID and RMID are x86 concepts.
 
-Fixup announce_cpu() as e.g. on Hyper-V CPU1 is the secondary sibling of
-CPU0, which makes the @cpu == 1 logic in announce_cpu() fall apart.
+> display in resctrl interface.
+> $cat /sys/fs/resctrl/clos1/clos_hw_id
+> 1
 
-[ mikelley: Reported the announce_cpu() fallout
+This example does not match what the patch does (clos_hw_id -> ctrl_hw_id).
+I also think this change would be more palatable (to non x86 audience) if
+the example resource group has a generic (non-x86 concept) name.
 
-Originally-by: David Woodhouse <dwmw@amazon.co.uk>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
----
-V2: Fixup announce_cpu() - Michael Kelley
----
- arch/x86/Kconfig             |    3 +
- arch/x86/kernel/cpu/common.c |    6 ---
- arch/x86/kernel/smpboot.c    |   83 ++++++++++++++++++++++++++++++++++++-------
- 3 files changed, 73 insertions(+), 19 deletions(-)
----
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -274,8 +274,9 @@ config X86
- 	select HAVE_UNSTABLE_SCHED_CLOCK
- 	select HAVE_USER_RETURN_NOTIFIER
- 	select HAVE_GENERIC_VDSO
-+	select HOTPLUG_PARALLEL			if SMP && X86_64
- 	select HOTPLUG_SMT			if SMP
--	select HOTPLUG_SPLIT_STARTUP		if SMP
-+	select HOTPLUG_SPLIT_STARTUP		if SMP && X86_32
- 	select IRQ_FORCED_THREADING
- 	select NEED_PER_CPU_EMBED_FIRST_CHUNK
- 	select NEED_PER_CPU_PAGE_FIRST_CHUNK
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -2128,11 +2128,7 @@ static inline void setup_getcpu(int cpu)
- }
- 
- #ifdef CONFIG_X86_64
--static inline void ucode_cpu_init(int cpu)
--{
--	if (cpu)
--		load_ucode_ap();
--}
-+static inline void ucode_cpu_init(int cpu) { }
- 
- static inline void tss_setup_ist(struct tss_struct *tss)
- {
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -58,6 +58,7 @@
- #include <linux/overflow.h>
- #include <linux/stackprotector.h>
- #include <linux/cpuhotplug.h>
-+#include <linux/mc146818rtc.h>
- 
- #include <asm/acpi.h>
- #include <asm/cacheinfo.h>
-@@ -75,7 +76,7 @@
- #include <asm/fpu/api.h>
- #include <asm/setup.h>
- #include <asm/uv/uv.h>
--#include <linux/mc146818rtc.h>
-+#include <asm/microcode.h>
- #include <asm/i8259.h>
- #include <asm/misc.h>
- #include <asm/qspinlock.h>
-@@ -128,7 +129,6 @@ int arch_update_cpu_topology(void)
- 	return retval;
- }
- 
--
- static unsigned int smpboot_warm_reset_vector_count;
- 
- static inline void smpboot_setup_warm_reset_vector(unsigned long start_eip)
-@@ -229,16 +229,43 @@ static void notrace start_secondary(void
- 	 */
- 	cr4_init();
- 
--#ifdef CONFIG_X86_32
--	/* switch away from the initial page table */
--	load_cr3(swapper_pg_dir);
--	__flush_tlb_all();
--#endif
-+	/*
-+	 * 32-bit specific. 64-bit reaches this code with the correct page
-+	 * table established. Yet another historical divergence.
-+	 */
-+	if (IS_ENABLED(CONFIG_X86_32)) {
-+		/* switch away from the initial page table */
-+		load_cr3(swapper_pg_dir);
-+		__flush_tlb_all();
-+	}
-+
- 	cpu_init_exception_handling();
- 
- 	/*
--	 * Synchronization point with the hotplug core. Sets the
--	 * synchronization state to ALIVE and waits for the control CPU to
-+	 * 32-bit systems load the microcode from the ASM startup code for
-+	 * historical reasons.
-+	 *
-+	 * On 64-bit systems load it before reaching the AP alive
-+	 * synchronization point below so it is not part of the full per
-+	 * CPU serialized bringup part when "parallel" bringup is enabled.
-+	 *
-+	 * That's even safe when hyperthreading is enabled in the CPU as
-+	 * the core code starts the primary threads first and leaves the
-+	 * secondary threads waiting for SIPI. Loading microcode on
-+	 * physical cores concurrently is a safe operation.
-+	 *
-+	 * This covers both the Intel specific issue that concurrent
-+	 * microcode loading on SMT siblings must be prohibited and the
-+	 * vendor independent issue`that microcode loading which changes
-+	 * CPUID, MSRs etc. must be strictly serialized to maintain
-+	 * software state correctness.
-+	 */
-+	if (IS_ENABLED(CONFIG_X86_64))
-+		load_ucode_ap();
-+
-+	/*
-+	 * Synchronization point with the hotplug core. Sets this CPUs
-+	 * synchronization state to ALIVE and spin-waits for the control CPU to
- 	 * release this CPU for further bringup.
- 	 */
- 	cpuhp_ap_sync_alive();
-@@ -934,10 +961,10 @@ static void announce_cpu(int cpu, int ap
- 	if (!node_width)
- 		node_width = num_digits(num_possible_nodes()) + 1; /* + '#' */
- 
--	if (cpu == 1)
--		printk(KERN_INFO "x86: Booting SMP configuration:\n");
--
- 	if (system_state < SYSTEM_RUNNING) {
-+		if (num_online_cpus() == 1)
-+			pr_info("x86: Booting SMP configuration:\n");
-+
- 		if (node != current_node) {
- 			if (current_node > (-1))
- 				pr_cont("\n");
-@@ -948,7 +975,7 @@ static void announce_cpu(int cpu, int ap
- 		}
- 
- 		/* Add padding for the BSP */
--		if (cpu == 1)
-+		if (num_online_cpus() == 1)
- 			pr_cont("%*s", width + 1, " ");
- 
- 		pr_cont("%*s#%d", width - num_digits(cpu), " ", cpu);
-@@ -1242,6 +1269,36 @@ void __init smp_prepare_cpus_common(void
- 	set_cpu_sibling_map(0);
- }
- 
-+#ifdef CONFIG_X86_64
-+/* Establish whether parallel bringup can be supported. */
-+bool __init arch_cpuhp_init_parallel_bringup(void)
-+{
-+	/*
-+	 * Encrypted guests require special handling. They enforce X2APIC
-+	 * mode but the RDMSR to read the APIC ID is intercepted and raises
-+	 * #VC or #VE which cannot be handled in the early startup code.
-+	 *
-+	 * AMD-SEV does not provide a RDMSR GHCB protocol so the early
-+	 * startup code cannot directly communicate with the secure
-+	 * firmware. The alternative solution to retrieve the APIC ID via
-+	 * CPUID(0xb), which is covered by the GHCB protocol, is not viable
-+	 * either because there is no enforcement of the CPUID(0xb)
-+	 * provided "initial" APIC ID to be the same as the real APIC ID.
-+	 *
-+	 * Intel-TDX has a secure RDMSR hypercall, but that needs to be
-+	 * implemented seperately in the low level startup ASM code.
-+	 */
-+	if (cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT)) {
-+		pr_info("Parallel CPU startup disabled due to guest state encryption\n");
-+		return false;
-+	}
-+
-+	smpboot_control = STARTUP_READ_APICID;
-+	pr_debug("Parallel CPU startup enabled: 0x%08x\n", smpboot_control);
-+	return true;
-+}
-+#endif
-+
- /*
-  * Prepare for SMP bootup.
-  * @max_cpus: configured maximum number of CPUs, It is a legacy parameter
+> $cat /sys/fs/resctrl/mon_groups/mon1/mon_hw_id
+> 3
+> 
+> Signed-off-by: Babu Moger <babu.moger@amd.com>
+> ---
+>  Documentation/x86/resctrl.rst          |   17 ++++++++++++
+>  arch/x86/kernel/cpu/resctrl/rdtgroup.c |   44 ++++++++++++++++++++++++++++++++
+>  2 files changed, 61 insertions(+)
+> 
+> diff --git a/Documentation/x86/resctrl.rst b/Documentation/x86/resctrl.rst
+> index be443251b484..5aff8c2beb08 100644
+> --- a/Documentation/x86/resctrl.rst
+> +++ b/Documentation/x86/resctrl.rst
+> @@ -345,6 +345,14 @@ When control is enabled all CTRL_MON groups will also contain:
+>  	file. On successful pseudo-locked region creation the mode will
+>  	automatically change to "pseudo-locked".
+>  
+> +"ctrl_hw_id":
+> +	Available only with debug option. On x86, reading this file shows
+> +	the Class of Service (CLOS) id which acts as a resource control
+> +	tag on which the resources can be throttled. Kernel assigns a new
+> +	CLOSID a control group is created depending on the available
+> +	CLOSIDs. Multiple cores(or threads) or processes can share a
+> +	same CLOSID in a resctrl group.
 
+Please keep other content from the documentation in mind when making
+this change. CLOSID is already documented, including the fact that it
+is a limited resource. Please see content under: "Notes on cache occupancy
+monitoring and control" where it, for example, states that "The number
+of CLOSid and RMID are limited by the hardware."
+
+Considering this the above could just read:
+"Available only with debug option. The identifier used by hardware 
+ for the control group. On x86 this is the CLOSID."
+
+Similar feedback to the "mon_hw_id" portion.
+
+Reinette
