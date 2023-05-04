@@ -2,77 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E53EE6F6710
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 10:14:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C20E6F6717
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 10:15:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbjEDIOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 04:14:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55694 "EHLO
+        id S230307AbjEDIPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 04:15:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230145AbjEDINM (ORCPT
+        with ESMTP id S229872AbjEDIOI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 04:13:12 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D24B49D4
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 01:10:47 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-2f86ee42669so72488f8f.2
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 01:10:47 -0700 (PDT)
+        Thu, 4 May 2023 04:14:08 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E07749F6
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 01:11:07 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-50bc570b4a3so255913a12.1
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 01:11:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683187846; x=1685779846;
+        d=linaro.org; s=google; t=1683187866; x=1685779866;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=AEAJhREXxkwkAjTPpZvPokj/zHXMm768UtibcSphYNk=;
-        b=SqjBG+zFd6XMBtMilb+Gwi0u9nafhh3KXuO7ISOJsarAR/zv3ZYByiPrpVWhyGkKJZ
-         hi95G8ZlaqOmjvUdp4f1BlxiVU9IOaatTlFylzbSLkfttqsrO04KDuqTgNLvYh8KDtXy
-         bPmUlusPuEe2Qw8R4wE+ZaUtSzamBmkZk7kJ9FE/ER4mCOyDBqR1tNmoBgo/MayBtL2b
-         gIQ2XDKgI0h6vSybtZiCjR7DIYy/BxxyhpBbepBq3iHyvF2eemvNxEB6CCzrcqZUWyLG
-         CErKlb0ZcvsftbOrOOQq+mZ7g45h6gFdKhycA57YnpFjs2D7TQfuJg7eJw/I6u/fwMY3
-         oM6Q==
+        bh=6CYMylkHCMSXUyd+rcJNdU9Hdhuug+DuXN8BtDJAjR4=;
+        b=Bh9u8HdrTENBK5z8ipg/HJ05Q8EnRf0PkqwK7I5S3/WDSKJVH5KlMI9KC1Fmd/IXuP
+         UEg21x+oxT0GEODxzZyZCaOxALFhEB9YmHNG+jQVcAOf5MM4rY57AKx8C0forcAeRTOR
+         DHb+4yroYKJkY0fEwNCUL0FJp7+koAwFhgs/UR3QkPJG8LY7tOd2o4r0Ma2zUwqj7EPy
+         lL2LQq2iDiVk+NMqCdWVzH1Eu90vMEsT6P83eMZpIUYpqg0z9Eug0eFNjt/NDTa/iCkZ
+         /saAWxWmPtUbjod6/BeTaE2wKdxE+k3aEbkP23tKHASVJ/iTiddHrDmQoJEdPaUIMlZD
+         tMQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683187846; x=1685779846;
+        d=1e100.net; s=20221208; t=1683187866; x=1685779866;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AEAJhREXxkwkAjTPpZvPokj/zHXMm768UtibcSphYNk=;
-        b=ObJtFZGeFYjUVNcKNnsx2jg/XzLG3BWgk8ZtArWmFU2OGvsVMNGKYXG9y2IkH89/1a
-         kgnH2aPpmkZ0XpqvGtBaIB/bG85Ao5AA2gtWbl60h9iQ1Vu8Je4DuyDCx5ec+gjLnJVX
-         q1T0EGORkMY894MXX7tbrN3AK8LeMGai/CqLe/YzFlZFDeEOFNTvmeVT4up/8WdbC3cD
-         inNpTs+HU01cNvkyUBDFOkPZXymT7rEjZ6uhkhJVVnjO5wwnzr9s+XSstxzPMaFL9LHr
-         bTtqBTwlGh6YTPllgmX345Xo3E9+mkTLH+DR/0Vo9MEhnlZbDJcVwtlTUek7WnRUFPEs
-         cTJQ==
-X-Gm-Message-State: AC+VfDxa6/ISJFjwO/5qIY2SqjxjKnvfZzfIQrVWb458GGXwQBDhVDVY
-        DYI5+ZdFxtNRikAixDl0Ha1lWg==
-X-Google-Smtp-Source: ACHHUZ5sn6tdEm0Ok1suzCgkzUiI4xCKFXzlcJ/N/zGU0MzqTZuwH6EMDL6/PxsXnxR2Harp3+n45w==
-X-Received: by 2002:a5d:4904:0:b0:306:2d36:c6d4 with SMTP id x4-20020a5d4904000000b003062d36c6d4mr1929128wrq.31.1683187845788;
-        Thu, 04 May 2023 01:10:45 -0700 (PDT)
-Received: from [192.168.2.107] ([79.115.63.230])
-        by smtp.gmail.com with ESMTPSA id p17-20020a056000019100b002fda1b12a0bsm36135718wrx.2.2023.05.04.01.10.44
+        bh=6CYMylkHCMSXUyd+rcJNdU9Hdhuug+DuXN8BtDJAjR4=;
+        b=ddma/U3rOeMLiI8yBxebpeZx69cm8GTbFHv7gOuKmzpdE4TZ267sEfZo9t/AWqNnMN
+         3OcYIcG3Gr6wsed4OciHo06Cmr7c+8CmD5wNgpxJ+FMFvDGrzcZRbHIrdQEq1ejpgOgY
+         fq5pFC72ChVxiIy+9Tq/dEfaMhqWSuD+6gmPUt83HpYz88liz6Kr9ZG0mqKDyH9vCeTG
+         ECkKzxkstda9+Y6gCEskPNH4AiBiW4y0JOnggMqXevQ26vYEHXuqgs+P87do/HSzbou7
+         BVCMeSlWgcLb7OZBq9ItaSERcNUDQWlE0ZqAgo68HCS7Dsf5g6TT9e80FG+9JOQ0zIhK
+         2+uA==
+X-Gm-Message-State: AC+VfDxD6GvAxEQx/oyeQ4qoiVj7JxwWmAs2j5zkmmJX5ptnHc3kX780
+        TQblIu18l/GdV6xOTLwur4qEAw==
+X-Google-Smtp-Source: ACHHUZ5WZiu8dPnwUYLBKLj5ppxFLBzCPQbRKPTgYnay8eogQpizGs+Wk2pgW6Lcb4XlqPmqDl0gJQ==
+X-Received: by 2002:a17:907:1ca5:b0:94e:4489:f24d with SMTP id nb37-20020a1709071ca500b0094e4489f24dmr6546665ejc.61.1683187865826;
+        Thu, 04 May 2023 01:11:05 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:cbf1:e7ef:fb81:e912? ([2a02:810d:15c0:828:cbf1:e7ef:fb81:e912])
+        by smtp.gmail.com with ESMTPSA id h16-20020a1709070b1000b0096593aa87d6sm1094462ejl.210.2023.05.04.01.11.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 01:10:45 -0700 (PDT)
-Message-ID: <41ddc20d-8675-d8bc-18c6-2a26f0d6b104@linaro.org>
-Date:   Thu, 4 May 2023 09:10:43 +0100
+        Thu, 04 May 2023 01:11:05 -0700 (PDT)
+Message-ID: <84a345aa-1426-2d1a-f7d6-df3cfc10ae3a@linaro.org>
+Date:   Thu, 4 May 2023 10:11:04 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] hwrng: virtio - Fix race on data_avail and actual data
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v6 1/3] dt-bindings: misc: esm: Add ESM support for TI K3
+ devices
 Content-Language: en-US
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        syzbot <syzbot+726dc8c62c3536431ceb@syzkaller.appspotmail.com>,
-        davem@davemloft.net, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, olivia@selenic.com,
-        syzkaller-bugs@googlegroups.com, Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Laurent Vivier <lvivier@redhat.com>,
-        Rusty Russell <rusty@rustcorp.com.au>
-References: <00000000000050327205f9d993b2@google.com>
- <CACT4Y+awU85RHZjf3+_85AvJOHghoOhH3c9E-70p+a=FrRDYkg@mail.gmail.com>
- <ZFI9bHr1o2Cvdebp@gondor.apana.org.au>
- <ede92183-bef3-78a7-abae-335c6c5cca1e@linaro.org>
- <ZFMsvxW+pEZA2EZ7@gondor.apana.org.au>
-From:   Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <ZFMsvxW+pEZA2EZ7@gondor.apana.org.au>
+To:     Neha Malcom Francis <n-francis@ti.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     nm@ti.com, vigneshr@ti.com, kristo@kernel.org, u-kumar1@ti.com
+References: <20230504080526.133149-1-n-francis@ti.com>
+ <20230504080526.133149-2-n-francis@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230504080526.133149-2-n-francis@ti.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -85,26 +78,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5/4/23 04:55, Herbert Xu wrote:
-> On Wed, May 03, 2023 at 12:19:30PM +0100, Tudor Ambarus wrote:
->>
->>> Reported-by: syzbot+726dc8c62c3536431ceb@syzkaller.appspotmail.com
->>
->> Link: https://syzkaller.appspot.com/bug?extid=726dc8c62c3536431ceb
->>
->> Please add the dashboard link if applying as searching for the syzbot ID
->> rarely gives meaningful results.
+On 04/05/2023 10:05, Neha Malcom Francis wrote:
+> Document the binding for TI K3 ESM (Error Signaling Module) block.
 > 
-> The syzbot ID is already present in the in the Reported-by tag.
-> There is no reason to clutter up the commit message with redundant
-> information.
-> 
+> Signed-off-by: Neha Malcom Francis <n-francis@ti.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-As you prefer. Theodore Ts'o encourages to add a dashboard link, here's
-his reasoning:
-https://github.com/google/syzkaller/issues/3393#issuecomment-1347476434
+Thanks.
 
-Cheers,
-ta
+Best regards,
+Krzysztof
+
