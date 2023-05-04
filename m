@@ -2,58 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37AB46F749F
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:52:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AAC06F74A9
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:52:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231738AbjEDTwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 15:52:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59600 "EHLO
+        id S231444AbjEDTwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 15:52:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231318AbjEDTuc (ORCPT
+        with ESMTP id S231358AbjEDTud (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 15:50:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2AA9005;
-        Thu,  4 May 2023 12:46:50 -0700 (PDT)
+        Thu, 4 May 2023 15:50:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E90B14348;
+        Thu,  4 May 2023 12:46:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 900B6637C2;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D7738637BD;
+        Thu,  4 May 2023 19:46:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77967C433A4;
         Thu,  4 May 2023 19:46:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B688DC433D2;
-        Thu,  4 May 2023 19:46:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683229603;
-        bh=3cm8SZFDsBnS6NwwSOzv0TR1ysXO8bAgKi0mu4OgyUw=;
+        s=k20201202; t=1683229604;
+        bh=uSuoodPlvrw0FhXkwxiXvWD5EvuhdjzFAJdzq1s+Wto=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=C09sAemq0NP2bsM7Mj3E7oi82KKroOPSOyql7ycm2kn3s0/0MX/Z7GIJ/XjENxqsN
-         htNtH9/Ve3+jigOLttWz5EdF4dXad8JiHCEfzhel5nP7L/fA8ui9WbKa0+Tmzokd1I
-         3WznFySC+olHbqyntL7LFdBBA0HckzgZV5cVYHpwSK/bdjN4sf1jCH3yJd58wiDucG
-         kb/ONgaBsnbBQ6am8lHvc6dTnhCe2qzvnbP71Cc+y0JK70PC2q7xyQD5QL2a4fyKDM
-         PztBDKCKeovGfNmkQ81n+FBBBbbrvDwga+x0lmGJm1R/TeuVUmsGhVzlBjZXewym4a
-         XWgLU7/ikV8ZQ==
+        b=blpfv7vjvYsfxBY9Fc7TYeeHc4AHzdTR71D5d10exD/sXKIpt1eaaOD/ZnGtZ2Rxo
+         E0Sm83IOmZFKyofNwxuKgrsrlbutOpeanBcpcrlEbs8T0BwOU5JlGMqriCGYrNXu7l
+         A8+FQfxhh9UucB/mqdC/XTPn02g/pC896m668T4i+nE3HN7xGoQ8b56977mNMmoDid
+         39vRL0foVy4spb8uMKzzElBSB1Z/bshBOAf1KyEjQg/TU7+v0mzI4UmHo2PCoGzP4N
+         r6u3rgjf6PgaaWzRGjkbQprbcz92CpwhR+JfnawyUGN5nBLXDlZ6//owp5+WWDd+/U
+         O4ShLknCZf0Mg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
-        Johan Almbladh <johan.almbladh@anyfinetworks.com>,
-        Sasha Levin <sashal@kernel.org>, tsbogend@alpha.franken.de,
-        ast@kernel.org, andrii@kernel.org, paulburton@kernel.org,
-        linux-mips@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 05/49] bpf, mips: Implement DADDI workarounds for JIT
-Date:   Thu,  4 May 2023 15:45:42 -0400
-Message-Id: <20230504194626.3807438-5-sashal@kernel.org>
+Cc:     Jan Kara <jack@suse.cz>,
+        syzbot+4fec412f59eba8c01b77@syzkaller.appspotmail.com,
+        Sasha Levin <sashal@kernel.org>, jack@suse.com,
+        linux-ext4@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 06/49] ext2: Check block size validity during mount
+Date:   Thu,  4 May 2023 15:45:43 -0400
+Message-Id: <20230504194626.3807438-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230504194626.3807438-1-sashal@kernel.org>
 References: <20230504194626.3807438-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,56 +58,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+From: Jan Kara <jack@suse.cz>
 
-[ Upstream commit bbefef2f07080cd502a93cb1c529e1c8a6c4ac8e ]
+[ Upstream commit 62aeb94433fcec80241754b70d0d1836d5926b0a ]
 
-For DADDI errata we just workaround by disable immediate operation
-for BPF_ADD / BPF_SUB to avoid generation of DADDIU.
+Check that log of block size stored in the superblock has sensible
+value. Otherwise the shift computing the block size can overflow leading
+to undefined behavior.
 
-All other use cases in JIT won't cause overflow thus they are all safe.
-
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
-Acked-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Link: https://lore.kernel.org/bpf/20230228113305.83751-2-jiaxun.yang@flygoat.com
+Reported-by: syzbot+4fec412f59eba8c01b77@syzkaller.appspotmail.com
+Signed-off-by: Jan Kara <jack@suse.cz>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/Kconfig            | 1 -
- arch/mips/net/bpf_jit_comp.c | 4 ++++
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ fs/ext2/ext2.h  | 1 +
+ fs/ext2/super.c | 7 +++++++
+ 2 files changed, 8 insertions(+)
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index b26b77673c2cc..44763be3bd125 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -64,7 +64,6 @@ config MIPS
- 	select HAVE_DMA_CONTIGUOUS
- 	select HAVE_DYNAMIC_FTRACE
- 	select HAVE_EBPF_JIT if !CPU_MICROMIPS && \
--				!CPU_DADDI_WORKAROUNDS && \
- 				!CPU_R4000_WORKAROUNDS && \
- 				!CPU_R4400_WORKAROUNDS
- 	select HAVE_EXIT_THREAD
-diff --git a/arch/mips/net/bpf_jit_comp.c b/arch/mips/net/bpf_jit_comp.c
-index b17130d510d49..a40d926b65139 100644
---- a/arch/mips/net/bpf_jit_comp.c
-+++ b/arch/mips/net/bpf_jit_comp.c
-@@ -218,9 +218,13 @@ bool valid_alu_i(u8 op, s32 imm)
- 		/* All legal eBPF values are valid */
- 		return true;
- 	case BPF_ADD:
-+		if (IS_ENABLED(CONFIG_CPU_DADDI_WORKAROUNDS))
-+			return false;
- 		/* imm must be 16 bits */
- 		return imm >= -0x8000 && imm <= 0x7fff;
- 	case BPF_SUB:
-+		if (IS_ENABLED(CONFIG_CPU_DADDI_WORKAROUNDS))
-+			return false;
- 		/* -imm must be 16 bits */
- 		return imm >= -0x7fff && imm <= 0x8000;
- 	case BPF_AND:
+diff --git a/fs/ext2/ext2.h b/fs/ext2/ext2.h
+index 28de11a22e5f6..dc5dcb78bc27f 100644
+--- a/fs/ext2/ext2.h
++++ b/fs/ext2/ext2.h
+@@ -180,6 +180,7 @@ static inline struct ext2_sb_info *EXT2_SB(struct super_block *sb)
+ #define EXT2_MIN_BLOCK_SIZE		1024
+ #define	EXT2_MAX_BLOCK_SIZE		4096
+ #define EXT2_MIN_BLOCK_LOG_SIZE		  10
++#define EXT2_MAX_BLOCK_LOG_SIZE		  16
+ #define EXT2_BLOCK_SIZE(s)		((s)->s_blocksize)
+ #define	EXT2_ADDR_PER_BLOCK(s)		(EXT2_BLOCK_SIZE(s) / sizeof (__u32))
+ #define EXT2_BLOCK_SIZE_BITS(s)		((s)->s_blocksize_bits)
+diff --git a/fs/ext2/super.c b/fs/ext2/super.c
+index 03f2af98b1b48..3feea4b31fa7e 100644
+--- a/fs/ext2/super.c
++++ b/fs/ext2/super.c
+@@ -945,6 +945,13 @@ static int ext2_fill_super(struct super_block *sb, void *data, int silent)
+ 		goto failed_mount;
+ 	}
+ 
++	if (le32_to_cpu(es->s_log_block_size) >
++	    (EXT2_MAX_BLOCK_LOG_SIZE - BLOCK_SIZE_BITS)) {
++		ext2_msg(sb, KERN_ERR,
++			 "Invalid log block size: %u",
++			 le32_to_cpu(es->s_log_block_size));
++		goto failed_mount;
++	}
+ 	blocksize = BLOCK_SIZE << le32_to_cpu(sbi->s_es->s_log_block_size);
+ 
+ 	if (test_opt(sb, DAX)) {
 -- 
 2.39.2
 
