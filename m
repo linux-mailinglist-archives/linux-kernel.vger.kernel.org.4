@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1895D6F7123
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 19:37:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29A226F7120
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 19:36:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbjEDRhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 13:37:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35692 "EHLO
+        id S230156AbjEDRgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 13:36:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbjEDRge (ORCPT
+        with ESMTP id S230016AbjEDRga (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 13:36:34 -0400
+        Thu, 4 May 2023 13:36:30 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D52E558A;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 688345586;
         Thu,  4 May 2023 10:36:28 -0700 (PDT)
 Received: from jupiter.universe (dyndsl-091-248-211-176.ewe-ip-backbone.de [91.248.211.176])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 284E2660570A;
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 307766605702;
         Thu,  4 May 2023 18:36:25 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
         s=mail; t=1683221785;
-        bh=3UXOs1fjoiX2Vk8O3Nhk6GMvgosCYJL73s4189Fuvvk=;
+        bh=X6eDCzkh4sNwrVY93vOLfEcsRkHyxCN7KA4Kl9mw1hs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SYq0Qdfsot5cAzxSasBt0qeUUn0cF60CqdZRT5/YCe0RrpQSR8GKVSn2/zkgBg0HI
-         0m/11v0Ucg6oWu5zJy9rwrnhQHlJDB5xhjW7voscwlvVIHoD32fDDK7J+qPuQ0WS+7
-         4zK9Xthikhr0xjoBogyDtfOWl3Kr4wubXHNrl8gQuKhzcdmTwZVtDlEg5PUskkYrfj
-         Iqq7u3vOFPniT5i2ZIfphsLQW9TykwjxP3RLBVEV8Tw8VxYmK9r1b3YU/xo6pmptja
-         xl//JcGtpw0AIr9r9IJlMQo/mnagBonyN+TnoYMS8mt7l1jYA7VFrFCAjO3jlOl4bM
-         MCE5rBij5XCkA==
+        b=JqKTtmxMyaZGWGRoTzGuNU30OLXqXlxde5HpkbmVAjUC+VASoB56o4yuG3rOQUJVq
+         jAsd/c+tt+ICLZG7CwGDQDhMKSCtfYnzHs4Zk+wtZz93ZRMjCBn8w5cRCqhT2zdllD
+         tzb6v0KMmvmS2k46baEzVCfVDF0FmaQUsK9lPufmmCtU4GldxPGJroydOPK9wO37hn
+         zo6FU4p2dGi21exPRjv+GWJa9ZgvhADLSKlaor/UhOJkP0PXhXo0SRop/3Um5VdsI3
+         H5ZwdD5vFNWZOsn8aur/Oo45hygNOf6Q+v4+7TxZ+2UuIh3IcczyJLrn3lOiM64umX
+         Ctrl2vohiGV8w==
 Received: by jupiter.universe (Postfix, from userid 1000)
-        id E2D554807F3; Thu,  4 May 2023 19:36:20 +0200 (CEST)
+        id E44D24807F4; Thu,  4 May 2023 19:36:20 +0200 (CEST)
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -48,12 +48,11 @@ Cc:     Michael Turquette <mturquette@baylibre.com>,
         linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Sebastian Reichel <sebastian.reichel@collabora.com>,
-        kernel@collabora.com, shengfei Xu <xsf@rock-chips.com>,
-        Diederik de Haas <didi.debian@cknow.org>,
+        kernel@collabora.com, Diederik de Haas <didi.debian@cknow.org>,
         Vincent Legoll <vincent.legoll@gmail.com>
-Subject: [PATCH v8 09/14] pinctrl: rk805: add rk806 pinctrl support
-Date:   Thu,  4 May 2023 19:36:13 +0200
-Message-Id: <20230504173618.142075-10-sebastian.reichel@collabora.com>
+Subject: [PATCH v8 10/14] regulator: expose regulator_find_closest_bigger
+Date:   Thu,  4 May 2023 19:36:14 +0200
+Message-Id: <20230504173618.142075-11-sebastian.reichel@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230504173618.142075-1-sebastian.reichel@collabora.com>
 References: <20230504173618.142075-1-sebastian.reichel@collabora.com>
@@ -69,339 +68,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for rk806 dvs pinctrl to the existing rk805
-driver.
+Expose and document the table lookup logic used by
+regulator_set_ramp_delay_regmap, so that it can be
+reused for devices that cannot be configured via
+regulator_set_ramp_delay_regmap.
 
-This has been implemented using shengfei Xu's rk806
-specific driver from the vendor tree as reference.
-
-Co-developed-by: shengfei Xu <xsf@rock-chips.com>
-Signed-off-by: shengfei Xu <xsf@rock-chips.com>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
 Tested-by: Diederik de Haas <didi.debian@cknow.org> # Rock64, Quartz64 Model A + B
 Tested-by: Vincent Legoll <vincent.legoll@gmail.com> # Pine64 QuartzPro64
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 ---
- drivers/pinctrl/pinctrl-rk805.c | 189 ++++++++++++++++++++++++++++----
- 1 file changed, 168 insertions(+), 21 deletions(-)
+ drivers/regulator/helpers.c      | 22 ++++++++++++++++++----
+ include/linux/regulator/driver.h |  2 ++
+ 2 files changed, 20 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/pinctrl/pinctrl-rk805.c b/drivers/pinctrl/pinctrl-rk805.c
-index 7c1f7408fb9a..2639a9ee82cd 100644
---- a/drivers/pinctrl/pinctrl-rk805.c
-+++ b/drivers/pinctrl/pinctrl-rk805.c
-@@ -1,10 +1,12 @@
- // SPDX-License-Identifier: GPL-2.0-or-later
- /*
-- * Pinctrl driver for Rockchip RK805 PMIC
-+ * Pinctrl driver for Rockchip RK805/RK806 PMIC
-  *
-  * Copyright (c) 2017, Fuzhou Rockchip Electronics Co., Ltd
-+ * Copyright (c) 2021 Rockchip Electronics Co., Ltd.
-  *
-  * Author: Joseph Chen <chenjh@rock-chips.com>
-+ * Author: Xu Shengfei <xsf@rock-chips.com>
-  *
-  * Based on the pinctrl-as3722 driver
-  */
-@@ -44,6 +46,7 @@ struct rk805_pin_group {
+diff --git a/drivers/regulator/helpers.c b/drivers/regulator/helpers.c
+index ad2237a95572..586f42e378ee 100644
+--- a/drivers/regulator/helpers.c
++++ b/drivers/regulator/helpers.c
+@@ -902,8 +902,21 @@ bool regulator_is_equal(struct regulator *reg1, struct regulator *reg2)
+ }
+ EXPORT_SYMBOL_GPL(regulator_is_equal);
  
- /*
-  * @reg: gpio setting register;
-+ * @fun_reg: functions select register;
-  * @fun_mask: functions select mask value, when set is gpio;
-  * @dir_mask: input or output mask value, when set is output, otherwise input;
-  * @val_mask: gpio set value, when set is level high, otherwise low;
-@@ -56,6 +59,7 @@ struct rk805_pin_group {
-  */
- struct rk805_pin_config {
- 	u8 reg;
-+	u8 fun_reg;
- 	u8 fun_msk;
- 	u8 dir_msk;
- 	u8 val_msk;
-@@ -80,22 +84,50 @@ enum rk805_pinmux_option {
- 	RK805_PINMUX_GPIO,
- };
- 
-+enum rk806_pinmux_option {
-+	RK806_PINMUX_FUN0 = 0,
-+	RK806_PINMUX_FUN1,
-+	RK806_PINMUX_FUN2,
-+	RK806_PINMUX_FUN3,
-+	RK806_PINMUX_FUN4,
-+	RK806_PINMUX_FUN5,
-+};
-+
- enum {
- 	RK805_GPIO0,
- 	RK805_GPIO1,
- };
- 
-+enum {
-+	RK806_GPIO_DVS1,
-+	RK806_GPIO_DVS2,
-+	RK806_GPIO_DVS3
-+};
-+
- static const char *const rk805_gpio_groups[] = {
- 	"gpio0",
- 	"gpio1",
- };
- 
-+static const char *const rk806_gpio_groups[] = {
-+	"gpio_pwrctrl1",
-+	"gpio_pwrctrl2",
-+	"gpio_pwrctrl3",
-+};
-+
- /* RK805: 2 output only GPIOs */
- static const struct pinctrl_pin_desc rk805_pins_desc[] = {
- 	PINCTRL_PIN(RK805_GPIO0, "gpio0"),
- 	PINCTRL_PIN(RK805_GPIO1, "gpio1"),
- };
- 
-+/* RK806 */
-+static const struct pinctrl_pin_desc rk806_pins_desc[] = {
-+	PINCTRL_PIN(RK806_GPIO_DVS1, "gpio_pwrctrl1"),
-+	PINCTRL_PIN(RK806_GPIO_DVS2, "gpio_pwrctrl2"),
-+	PINCTRL_PIN(RK806_GPIO_DVS3, "gpio_pwrctrl3"),
-+};
-+
- static const struct rk805_pin_function rk805_pin_functions[] = {
- 	{
- 		.name = "gpio",
-@@ -105,6 +137,45 @@ static const struct rk805_pin_function rk805_pin_functions[] = {
- 	},
- };
- 
-+static const struct rk805_pin_function rk806_pin_functions[] = {
-+	{
-+		.name = "pin_fun0",
-+		.groups = rk806_gpio_groups,
-+		.ngroups = ARRAY_SIZE(rk806_gpio_groups),
-+		.mux_option = RK806_PINMUX_FUN0,
-+	},
-+	{
-+		.name = "pin_fun1",
-+		.groups = rk806_gpio_groups,
-+		.ngroups = ARRAY_SIZE(rk806_gpio_groups),
-+		.mux_option = RK806_PINMUX_FUN1,
-+	},
-+	{
-+		.name = "pin_fun2",
-+		.groups = rk806_gpio_groups,
-+		.ngroups = ARRAY_SIZE(rk806_gpio_groups),
-+		.mux_option = RK806_PINMUX_FUN2,
-+	},
-+	{
-+		.name = "pin_fun3",
-+		.groups = rk806_gpio_groups,
-+		.ngroups = ARRAY_SIZE(rk806_gpio_groups),
-+		.mux_option = RK806_PINMUX_FUN3,
-+	},
-+	{
-+		.name = "pin_fun4",
-+		.groups = rk806_gpio_groups,
-+		.ngroups = ARRAY_SIZE(rk806_gpio_groups),
-+		.mux_option = RK806_PINMUX_FUN4,
-+	},
-+	{
-+		.name = "pin_fun5",
-+		.groups = rk806_gpio_groups,
-+		.ngroups = ARRAY_SIZE(rk806_gpio_groups),
-+		.mux_option = RK806_PINMUX_FUN5,
-+	},
-+};
-+
- static const struct rk805_pin_group rk805_pin_groups[] = {
- 	{
- 		.name = "gpio0",
-@@ -118,6 +189,24 @@ static const struct rk805_pin_group rk805_pin_groups[] = {
- 	},
- };
- 
-+static const struct rk805_pin_group rk806_pin_groups[] = {
-+	{
-+		.name = "gpio_pwrctrl1",
-+		.pins = { RK806_GPIO_DVS1 },
-+		.npins = 1,
-+	},
-+	{
-+		.name = "gpio_pwrctrl2",
-+		.pins = { RK806_GPIO_DVS2 },
-+		.npins = 1,
-+	},
-+	{
-+		.name = "gpio_pwrctrl3",
-+		.pins = { RK806_GPIO_DVS3 },
-+		.npins = 1,
-+	}
-+};
-+
- #define RK805_GPIO0_VAL_MSK	BIT(0)
- #define RK805_GPIO1_VAL_MSK	BIT(1)
- 
-@@ -132,6 +221,40 @@ static const struct rk805_pin_config rk805_gpio_cfgs[] = {
- 	},
- };
- 
-+#define RK806_PWRCTRL1_DR	BIT(0)
-+#define RK806_PWRCTRL2_DR	BIT(1)
-+#define RK806_PWRCTRL3_DR	BIT(2)
-+#define RK806_PWRCTRL1_DATA	BIT(4)
-+#define RK806_PWRCTRL2_DATA	BIT(5)
-+#define RK806_PWRCTRL3_DATA	BIT(6)
-+#define RK806_PWRCTRL1_FUN	GENMASK(2, 0)
-+#define RK806_PWRCTRL2_FUN	GENMASK(6, 4)
-+#define RK806_PWRCTRL3_FUN	GENMASK(2, 0)
-+
-+static struct rk805_pin_config rk806_gpio_cfgs[] = {
-+	{
-+		.fun_reg = RK806_SLEEP_CONFIG0,
-+		.fun_msk = RK806_PWRCTRL1_FUN,
-+		.reg = RK806_SLEEP_GPIO,
-+		.val_msk = RK806_PWRCTRL1_DATA,
-+		.dir_msk = RK806_PWRCTRL1_DR,
-+	},
-+	{
-+		.fun_reg = RK806_SLEEP_CONFIG0,
-+		.fun_msk = RK806_PWRCTRL2_FUN,
-+		.reg = RK806_SLEEP_GPIO,
-+		.val_msk = RK806_PWRCTRL2_DATA,
-+		.dir_msk = RK806_PWRCTRL2_DR,
-+	},
-+	{
-+		.fun_reg = RK806_SLEEP_CONFIG1,
-+		.fun_msk = RK806_PWRCTRL3_FUN,
-+		.reg = RK806_SLEEP_GPIO,
-+		.val_msk = RK806_PWRCTRL3_DATA,
-+		.dir_msk = RK806_PWRCTRL3_DR,
-+	}
-+};
-+
- /* generic gpio chip */
- static int rk805_gpio_get(struct gpio_chip *chip, unsigned int offset)
+-static int find_closest_bigger(unsigned int target, const unsigned int *table,
+-			       unsigned int num_sel, unsigned int *sel)
++/**
++ * regulator_find_closest_bigger - helper to find offset in ramp delay table
++ *
++ * @target: targeted ramp_delay
++ * @table: table with supported ramp delays
++ * @num_sel: number of entries in the table
++ * @sel: Pointer to store table offset
++ *
++ * This is the internal helper used by regulator_set_ramp_delay_regmap to
++ * map ramp delay to register value. It should only be used directly if
++ * regulator_set_ramp_delay_regmap cannot handle a specific device setup
++ * (e.g. because the value is split over multiple registers).
++ */
++int regulator_find_closest_bigger(unsigned int target, const unsigned int *table,
++				  unsigned int num_sel, unsigned int *sel)
  {
-@@ -289,19 +412,13 @@ static int _rk805_pinctrl_set_mux(struct pinctrl_dev *pctldev,
- 	if (!pci->pin_cfg[offset].fun_msk)
- 		return 0;
- 
--	if (mux == RK805_PINMUX_GPIO) {
--		ret = regmap_update_bits(pci->rk808->regmap,
--					 pci->pin_cfg[offset].reg,
--					 pci->pin_cfg[offset].fun_msk,
--					 pci->pin_cfg[offset].fun_msk);
--		if (ret) {
--			dev_err(pci->dev, "set gpio%d GPIO failed\n", offset);
--			return ret;
--		}
--	} else {
--		dev_err(pci->dev, "Couldn't find function mux %d\n", mux);
--		return -EINVAL;
--	}
-+	mux <<= ffs(pci->pin_cfg[offset].fun_msk) - 1;
-+	ret = regmap_update_bits(pci->rk808->regmap,
-+				 pci->pin_cfg[offset].fun_reg,
-+				 pci->pin_cfg[offset].fun_msk, mux);
-+
-+	if (ret)
-+		dev_err(pci->dev, "set gpio%d func%d failed\n", offset, mux);
+ 	unsigned int s, tmp, max, maxsel = 0;
+ 	bool found = false;
+@@ -933,6 +946,7 @@ static int find_closest_bigger(unsigned int target, const unsigned int *table,
  
  	return 0;
  }
-@@ -317,6 +434,22 @@ static int rk805_pinctrl_set_mux(struct pinctrl_dev *pctldev,
- 	return _rk805_pinctrl_set_mux(pctldev, offset, mux);
- }
++EXPORT_SYMBOL_GPL(regulator_find_closest_bigger);
  
-+static int rk805_pinctrl_gpio_request_enable(struct pinctrl_dev *pctldev,
-+					     struct pinctrl_gpio_range *range,
-+					     unsigned int offset)
-+{
-+	struct rk805_pctrl_info *pci = pinctrl_dev_get_drvdata(pctldev);
-+
-+	switch (pci->rk808->variant) {
-+	case RK805_ID:
-+		return _rk805_pinctrl_set_mux(pctldev, offset, RK805_PINMUX_GPIO);
-+	case RK806_ID:
-+		return _rk805_pinctrl_set_mux(pctldev, offset, RK806_PINMUX_FUN5);
-+	}
-+
-+	return -ENOTSUPP;
-+}
-+
- static int rk805_pmx_gpio_set_direction(struct pinctrl_dev *pctldev,
- 					struct pinctrl_gpio_range *range,
- 					unsigned int offset, bool input)
-@@ -324,13 +457,6 @@ static int rk805_pmx_gpio_set_direction(struct pinctrl_dev *pctldev,
- 	struct rk805_pctrl_info *pci = pinctrl_dev_get_drvdata(pctldev);
- 	int ret;
+ /**
+  * regulator_set_ramp_delay_regmap - set_ramp_delay() helper
+@@ -951,8 +965,8 @@ int regulator_set_ramp_delay_regmap(struct regulator_dev *rdev, int ramp_delay)
+ 	if (WARN_ON(!rdev->desc->n_ramp_values || !rdev->desc->ramp_delay_table))
+ 		return -EINVAL;
  
--	/* switch to gpio function */
--	ret = _rk805_pinctrl_set_mux(pctldev, offset, RK805_PINMUX_GPIO);
--	if (ret) {
--		dev_err(pci->dev, "set gpio%d mux failed\n", offset);
--		return ret;
--	}
--
- 	/* set direction */
- 	if (!pci->pin_cfg[offset].dir_msk)
- 		return 0;
-@@ -352,6 +478,7 @@ static const struct pinmux_ops rk805_pinmux_ops = {
- 	.get_function_name	= rk805_pinctrl_get_func_name,
- 	.get_function_groups	= rk805_pinctrl_get_func_groups,
- 	.set_mux		= rk805_pinctrl_set_mux,
-+	.gpio_request_enable	= rk805_pinctrl_gpio_request_enable,
- 	.gpio_set_direction	= rk805_pmx_gpio_set_direction,
- };
+-	ret = find_closest_bigger(ramp_delay, rdev->desc->ramp_delay_table,
+-				  rdev->desc->n_ramp_values, &sel);
++	ret = regulator_find_closest_bigger(ramp_delay, rdev->desc->ramp_delay_table,
++					    rdev->desc->n_ramp_values, &sel);
  
-@@ -364,6 +491,7 @@ static int rk805_pinconf_get(struct pinctrl_dev *pctldev,
+ 	if (ret) {
+ 		dev_warn(rdev_get_dev(rdev),
+diff --git a/include/linux/regulator/driver.h b/include/linux/regulator/driver.h
+index d3b4a3d4514a..c6ef7d68eb9a 100644
+--- a/include/linux/regulator/driver.h
++++ b/include/linux/regulator/driver.h
+@@ -758,6 +758,8 @@ int regulator_set_current_limit_regmap(struct regulator_dev *rdev,
+ 				       int min_uA, int max_uA);
+ int regulator_get_current_limit_regmap(struct regulator_dev *rdev);
+ void *regulator_get_init_drvdata(struct regulator_init_data *reg_init_data);
++int regulator_find_closest_bigger(unsigned int target, const unsigned int *table,
++				  unsigned int num_sel, unsigned int *sel);
+ int regulator_set_ramp_delay_regmap(struct regulator_dev *rdev, int ramp_delay);
+ int regulator_sync_voltage_rdev(struct regulator_dev *rdev);
  
- 	switch (param) {
- 	case PIN_CONFIG_OUTPUT:
-+	case PIN_CONFIG_INPUT_ENABLE:
- 		arg = rk805_gpio_get(&pci->gpio_chip, pin);
- 		break;
- 	default:
-@@ -393,6 +521,12 @@ static int rk805_pinconf_set(struct pinctrl_dev *pctldev,
- 			rk805_gpio_set(&pci->gpio_chip, pin, arg);
- 			rk805_pmx_gpio_set_direction(pctldev, NULL, pin, false);
- 			break;
-+		case PIN_CONFIG_INPUT_ENABLE:
-+			if (pci->rk808->variant != RK805_ID && arg) {
-+				rk805_pmx_gpio_set_direction(pctldev, NULL, pin, true);
-+				break;
-+			}
-+			fallthrough;
- 		default:
- 			dev_err(pci->dev, "Properties not supported\n");
- 			return -ENOTSUPP;
-@@ -448,6 +582,18 @@ static int rk805_pinctrl_probe(struct platform_device *pdev)
- 		pci->pin_cfg = rk805_gpio_cfgs;
- 		pci->gpio_chip.ngpio = ARRAY_SIZE(rk805_gpio_cfgs);
- 		break;
-+	case RK806_ID:
-+		pci->pins = rk806_pins_desc;
-+		pci->num_pins = ARRAY_SIZE(rk806_pins_desc);
-+		pci->functions = rk806_pin_functions;
-+		pci->num_functions = ARRAY_SIZE(rk806_pin_functions);
-+		pci->groups = rk806_pin_groups;
-+		pci->num_pin_groups = ARRAY_SIZE(rk806_pin_groups);
-+		pci->pinctrl_desc.pins = rk806_pins_desc;
-+		pci->pinctrl_desc.npins = ARRAY_SIZE(rk806_pins_desc);
-+		pci->pin_cfg = rk806_gpio_cfgs;
-+		pci->gpio_chip.ngpio = ARRAY_SIZE(rk806_gpio_cfgs);
-+		break;
- 	default:
- 		dev_err(&pdev->dev, "unsupported RK805 ID %lu\n",
- 			pci->rk808->variant);
-@@ -488,5 +634,6 @@ static struct platform_driver rk805_pinctrl_driver = {
- module_platform_driver(rk805_pinctrl_driver);
- 
- MODULE_DESCRIPTION("RK805 pin control and GPIO driver");
-+MODULE_AUTHOR("Xu Shengfei <xsf@rock-chips.com>");
- MODULE_AUTHOR("Joseph Chen <chenjh@rock-chips.com>");
- MODULE_LICENSE("GPL v2");
 -- 
 2.39.2
 
