@@ -2,45 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D47346F7835
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 23:33:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BB016F7834
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 23:33:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbjEDVdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 17:33:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36262 "EHLO
+        id S230019AbjEDVc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 17:32:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbjEDVc4 (ORCPT
+        with ESMTP id S229671AbjEDVc4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 4 May 2023 17:32:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9899F1434C;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC0D14345;
         Thu,  4 May 2023 14:32:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F6FC6376B;
-        Thu,  4 May 2023 19:45:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46BF7C4339E;
-        Thu,  4 May 2023 19:45:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F4F762EB8;
+        Thu,  4 May 2023 19:45:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C62DAC433A7;
+        Thu,  4 May 2023 19:45:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683229509;
-        bh=wyK6FEtqetmuKN/UDCqas19MN25BkJV4mWUXvVLOZLQ=;
+        s=k20201202; t=1683229538;
+        bh=6Thi17hL8roMyNQJzudQ2qZmGi6oGj6AasmEqj7NteU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h8S3y0e6sMbHcWeU6d3SpgeM7Oqzi35EIFt3mcGLasUxuVZzc1A6wjSHaeRpo4sAC
-         x5Aq5Xf8RPQj9k23Wyzm5VrDyY6uLvP5BSYw0EnTz4RUdUyR4iklOWN054Q74NFtg2
-         s62HPZz2/ekHkllf4+5UkgQ6AZuUXt0Gnw+ydfi2y0tP0EdXpFuT4UyPVUfiIOWePE
-         UykEeiCmcrohx7s76SoUeYXLlPPzXrVnax1DIUCdnCUVGgGTrX3pOA2vZ/rFOQpmSZ
-         2FooqlnvgW6SVvYoOlzyCkufv0w6RDbkJJJ1uRYZApOkFk00ijWyvyv6xTEF4aP73b
-         E6BsKwHGLmzew==
+        b=Nkw6QoSA5Ex2emBlF+NiWmQdrAlmrUaR2eMW554h9Cj/o6ojB4/upMyGnRPHhMrMn
+         BYLrupcprfEK/HU+2xNxfJpOXMITHwmEuhtsDThE3bEK79lcOSho3NnqqX6JrOZlzH
+         KBl/2Sv+ZY6dlNmqEUkz85Th1+In75OtbGCWbSOvtvRPDf5f7yK3O2U1uPZg6DA2QU
+         BlL1Al58XkGhbpsZJXTLaB+a4k83EOW+WOoJt2zrI931zrm3vzTaQkfEqZ30+c+Hkd
+         BTpT3syeCbvvu+rVKgNo9/oOsHP0oPcGWv54a/cz+XG0TuCDMWYduRUs9Sj2SNdapI
+         Bjt/4C21Ypu8A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Andreas Gruenbacher <agruenba@redhat.com>,
-        syzbot+45d4691b1ed3c48eba05@syzkaller.appspotmail.com,
-        Sasha Levin <sashal@kernel.org>, rpeterso@redhat.com,
-        cluster-devel@redhat.com
-Subject: [PATCH AUTOSEL 6.2 19/53] gfs2: Fix inode height consistency check
-Date:   Thu,  4 May 2023 15:43:39 -0400
-Message-Id: <20230504194413.3806354-19-sashal@kernel.org>
+Cc:     Mukesh Sisodiya <mukesh.sisodiya@intel.com>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Sasha Levin <sashal@kernel.org>, kvalo@kernel.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, golan.ben.ami@intel.com, daniel.gabay@intel.com,
+        yaara.baruch@intel.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.2 32/53] wifi: iwlwifi: add a new PCI device ID for BZ device
+Date:   Thu,  4 May 2023 15:43:52 -0400
+Message-Id: <20230504194413.3806354-32-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230504194413.3806354-1-sashal@kernel.org>
 References: <20230504194413.3806354-1-sashal@kernel.org>
@@ -48,8 +52,8 @@ MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,47 +62,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andreas Gruenbacher <agruenba@redhat.com>
+From: Mukesh Sisodiya <mukesh.sisodiya@intel.com>
 
-[ Upstream commit cfcdb5bad34f600aed7613c3c1a5e618111f77b7 ]
+[ Upstream commit c30a2a64788b3d617a9c5d96adb76c68b0862e5f ]
 
-The maximum allowed height of an inode's metadata tree depends on the
-filesystem block size; it is lower for bigger-block filesystems.  When
-reading in an inode, make sure that the height doesn't exceed the
-maximum allowed height.
+Add support for a new PCI device ID 0x272b once registering with PCIe.
 
-Arrays like sd_heightsize are sized to be big enough for any filesystem
-block size; they will often be slightly bigger than what's needed for a
-specific filesystem.
-
-Reported-by: syzbot+45d4691b1ed3c48eba05@syzkaller.appspotmail.com
-Signed-off-by: Andreas Gruenbacher <agruenba@redhat.com>
+Signed-off-by: Mukesh Sisodiya <mukesh.sisodiya@intel.com>
+Signed-off-by: Gregory Greenman <gregory.greenman@intel.com>
+Link: https://lore.kernel.org/r/20230414130637.56342664110d.I5aa6f2858fdcf69fdea4f1a873115a48bd43764e@changeid
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/gfs2/glops.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/net/wireless/intel/iwlwifi/pcie/drv.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/fs/gfs2/glops.c b/fs/gfs2/glops.c
-index d78b61ecc1cdf..7762483f5f20f 100644
---- a/fs/gfs2/glops.c
-+++ b/fs/gfs2/glops.c
-@@ -393,6 +393,7 @@ static int inode_go_demote_ok(const struct gfs2_glock *gl)
+diff --git a/drivers/net/wireless/intel/iwlwifi/pcie/drv.c b/drivers/net/wireless/intel/iwlwifi/pcie/drv.c
+index 49e8a27ecce54..26e5ef944ecb9 100644
+--- a/drivers/net/wireless/intel/iwlwifi/pcie/drv.c
++++ b/drivers/net/wireless/intel/iwlwifi/pcie/drv.c
+@@ -504,6 +504,7 @@ static const struct pci_device_id iwl_hw_card_ids[] = {
  
- static int gfs2_dinode_in(struct gfs2_inode *ip, const void *buf)
- {
-+	struct gfs2_sbd *sdp = GFS2_SB(&ip->i_inode);
- 	const struct gfs2_dinode *str = buf;
- 	struct timespec64 atime;
- 	u16 height, depth;
-@@ -439,7 +440,7 @@ static int gfs2_dinode_in(struct gfs2_inode *ip, const void *buf)
- 	/* i_diskflags and i_eattr must be set before gfs2_set_inode_flags() */
- 	gfs2_set_inode_flags(inode);
- 	height = be16_to_cpu(str->di_height);
--	if (unlikely(height > GFS2_MAX_META_HEIGHT))
-+	if (unlikely(height > sdp->sd_max_height))
- 		goto corrupt;
- 	ip->i_height = (u8)height;
- 
+ /* Bz devices */
+ 	{IWL_PCI_DEVICE(0x2727, PCI_ANY_ID, iwl_bz_trans_cfg)},
++	{IWL_PCI_DEVICE(0x272b, PCI_ANY_ID, iwl_bz_trans_cfg)},
+ 	{IWL_PCI_DEVICE(0xA840, PCI_ANY_ID, iwl_bz_trans_cfg)},
+ 	{IWL_PCI_DEVICE(0x7740, PCI_ANY_ID, iwl_bz_trans_cfg)},
+ #endif /* CONFIG_IWLMVM */
 -- 
 2.39.2
 
