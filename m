@@ -2,109 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 841FD6F68E2
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 12:12:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB13A6F68E5
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 12:12:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbjEDKMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 06:12:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44024 "EHLO
+        id S230091AbjEDKMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 06:12:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbjEDKMF (ORCPT
+        with ESMTP id S230082AbjEDKMN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 06:12:05 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107A849C6;
-        Thu,  4 May 2023 03:12:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=f9IPUEpyBrx41XXxSrkiHV0HEd6PMWxGjklTbCAmGKM=; b=Q2NqYN/Fkihy43H/8u3aGt/ofV
-        0Y3XG6lm1CdWYvSiyatBQ0G5rRbPax1/SdmoCS8XzIq+LwlMiGRbgHOk4KJPHv71XsXkaJq2rJ5Aj
-        oxG9AvHjaWpZz4law9GcRvdMWb5N2Wifr9JYNfIetVLNCPLXypTpm6Is4LWo3d1NTmynlrimN4Eny
-        cZnL0m6aof24zIK6IikSgO1ZfVrw6maAcn74DcOlxGeJrmSHo3wewf0gylo8qjrdlLr+aqmrpi/tX
-        7yIxxbUSVIgoGy+PMVarbqsZ8KOUU+VZLp5gLcuM3Hi+fibA8zNzcOqtUa8fp+v1dquHPB76oUNO6
-        /bHPZLnw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:49876)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1puVwF-0004T3-Sb; Thu, 04 May 2023 11:11:51 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1puVwB-0002mb-S8; Thu, 04 May 2023 11:11:47 +0100
-Date:   Thu, 4 May 2023 11:11:47 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Olof Johansson <olof@lixom.net>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-actions@lists.infradead.org,
-        linux-sunxi@lists.linux.dev,
-        Linux-OMAP <linux-omap@vger.kernel.org>,
-        linux-amlogic@lists.infradead.org, linux-arm-kernel@axis.com,
-        linux-aspeed@lists.ozlabs.org,
-        linux-rpi-kernel@lists.infradead.org,
-        chrome-platform@lists.linux.dev,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-samsung-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        kernel@dh-electronics.com, linux-mediatek@lists.infradead.org,
-        openbmc@lists.ozlabs.org, linux-tegra@vger.kernel.org,
-        "linux-oxnas@groups.io" <linux-oxnas@groups.io>,
-        linux-arm-msm@vger.kernel.org, linux-unisoc@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        linux-realtek-soc@lists.infradead.org
-Subject: Re: [RFC PATCH 0/1] Categorize ARM dts directory
-Message-ID: <ZFOE4wd31hpJh0ro@shell.armlinux.org.uk>
-References: <20220328000915.15041-1-ansuelsmth@gmail.com>
- <85eb14ec-f465-7447-ad77-a3dabc666f47@kernel.org>
- <YkKRYnN84D9VZhGj@Ansuel-xps.localdomain>
- <CAL_Jsq+RQQ-ADMxLPUFwk6S6kGmb6oNDy4k52fnU0EtbUvqmSA@mail.gmail.com>
- <CAMuHMdWNTE48MFy6fqxAsfMWz9b6E7dVNXtXtESP95sxk2PGwA@mail.gmail.com>
- <CAL_JsqJthKTm8bhRF2B=ae1tvtPeYYXx_Tm76qQtSwLtH5C6VA@mail.gmail.com>
- <720a2829-b6b5-411c-ac69-9a53e881f48d@app.fastmail.com>
- <CAL_JsqKCtmkwzKa01gyG65fH8ye6R3KhR41PJbJhOJ4X9j=znA@mail.gmail.com>
+        Thu, 4 May 2023 06:12:13 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 632E949EC
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 03:12:12 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id 98e67ed59e1d1-24df4ecdb87so249645a91.0
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 03:12:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683195132; x=1685787132;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=63RsklUDkur4gKMHnok46OOJgYylgOu+yKrP1uDEnlY=;
+        b=D/sPsVCUDnBaq0ihqBH1FG+TlntaFA8Ez28piE/BPW5w5PEaj6rIyOiYIicBPorD7c
+         ciJT0ifZemRiwOJrRz6Cr1/5W0iDabDyLf/P4W8ttDhcwZ4NKbk4sGJdevpUYR4cI3rl
+         xCeoZ5d5c0xnQYQJESIAwjIdQ3elXL4yShhmoR+6YIGuyxAI+uMWmAJ6T2SPvVqKubv3
+         quWuaj2Q8J2w+IZjUc1t61P3zCntEBQLGsIZMe5LSGVhJPB9845Wf8nzckRq9ug3g4y/
+         QECtZpZuqT46ONGDOtKszLep25iQkHaQ9oV+7HhP/Z2AqPGpZWG8zFe6cRkhV4/FPEvh
+         gklA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683195132; x=1685787132;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=63RsklUDkur4gKMHnok46OOJgYylgOu+yKrP1uDEnlY=;
+        b=FdIbsEVfZemlkY+OC0ZTKRCbBiAW3BEPSz/9h+tiNOyPN010p53Y6nMiZxRsKABN/Y
+         xQO+tDWx+gQgtLHVDYD0LyCGxRmQQkua0P69s0i4fcY8qMqJ2PuZS74yCejr9xNkoV8z
+         Yq+8QLuxsy16y/JHvlwiTyA2q28Cp9vjWpCl/wd7BRgDWG8OduiUb8R0zUDt7enUUc3b
+         4DHaZZsNXBTvyD/+9w8SvsGnXcbYr1LAo+NKtuCsd6vEOXXbd8rIg3pfbuGBMjrwKanB
+         uIDYizm+8MaxyMwH36vyQTGOzHlh7oyI7SKa+BP7OZNuk7V+Ia7hyCZnzLJAkPNgpiBr
+         sE1w==
+X-Gm-Message-State: AC+VfDxhhxVYhI8CXVXZLWqlr5ubV9hH1HwAwtpiHngRsW1ELYskibf+
+        oJo9AwBUkkQ0Q11l7AHTfe4=
+X-Google-Smtp-Source: ACHHUZ5QNU8/hK4GG5Wyb9wTLMVrL4vkBC6kS1OGXo5VtSEwJ81QDrrxgaYHKCGZFdtOzTKGjn7VHQ==
+X-Received: by 2002:a17:90b:3b52:b0:247:140b:c5d6 with SMTP id ot18-20020a17090b3b5200b00247140bc5d6mr1465642pjb.45.1683195131679;
+        Thu, 04 May 2023 03:12:11 -0700 (PDT)
+Received: from debian.me (subs28-116-206-12-58.three.co.id. [116.206.12.58])
+        by smtp.gmail.com with ESMTPSA id e14-20020a17090ac20e00b0024ffa911e2asm968119pjt.51.2023.05.04.03.12.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 May 2023 03:12:11 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 6CEC210625E; Thu,  4 May 2023 17:12:08 +0700 (WIB)
+Date:   Thu, 4 May 2023 17:12:08 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Bo Liu <liubo03@inspur.com>, dave.hansen@linux.intel.com,
+        luto@kernel.org, peterz@infradead.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] x86/mm: Fix double word in comments
+Message-ID: <ZFOE+KILDglRL3UJ@debian.me>
+References: <20230504085446.2574-1-liubo03@inspur.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="CU1CFwkKJgVRqNfs"
 Content-Disposition: inline
-In-Reply-To: <CAL_JsqKCtmkwzKa01gyG65fH8ye6R3KhR41PJbJhOJ4X9j=znA@mail.gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230504085446.2574-1-liubo03@inspur.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 02, 2023 at 02:40:19PM -0500, Rob Herring wrote:
-> I think the only issue remaining is finalizing the mapping of
-> platforms to subdirs. What I have currently is a mixture of SoC
-> families and vendors. The most notable are all the Freescale/NXP
-> platforms, pxa, socfpga, and stm32. It's not consistent with arm64
-> either. Once that's finalized, I still need to go update MAINTAINERS.
 
-I haven't followed this discussion at all, so here's a question.
+--CU1CFwkKJgVRqNfs
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-What does this mean for the _installed_ dtb files? Do they move
-location? If they do, lots is going to break, because there will
-be u-boot configurations and other scripts that assume the flat
-directory structure for the installed dtb files.
+On Thu, May 04, 2023 at 04:54:46AM -0400, Bo Liu wrote:
+> Remove the repeated word "the" in comments.
+                                    "... in highmap_start_pfn() comment".
 
-I don't think changing the installed dtb structure is acceptable
-at this point in time. It's something that _should_ have been
-thought about when ARM was converted to dtb, it's too late to be
-changing that now.
+>   * This is so that we can have both a directmap of all physical memory *=
+and*
+> - * take full advantage of the the limited (s32) immediate addressing ran=
+ge (2G)
+> + * take full advantage of the limited (s32) immediate addressing range (=
+2G)
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+The diff LGTM, thanks!
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--CU1CFwkKJgVRqNfs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZFOE+AAKCRD2uYlJVVFO
+o2EyAP0WqKBdA4MCy1CPvnb0wlzDpbiZs0KK3VgtimYlbGakRwD/Yv3tDWqzNj5k
+eQJQaNK+ai6KoBw0QT6GTXJhqlIGLwo=
+=QDit
+-----END PGP SIGNATURE-----
+
+--CU1CFwkKJgVRqNfs--
