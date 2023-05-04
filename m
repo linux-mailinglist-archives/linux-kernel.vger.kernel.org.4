@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F20B6F74B8
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:52:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 815206F74BB
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:53:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231596AbjEDTwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 15:52:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59374 "EHLO
+        id S231608AbjEDTw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 15:52:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231588AbjEDTvh (ORCPT
+        with ESMTP id S231686AbjEDTvi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 15:51:37 -0400
+        Thu, 4 May 2023 15:51:38 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBAE811B66;
-        Thu,  4 May 2023 12:47:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C2AD11B61;
+        Thu,  4 May 2023 12:47:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 96CA0637D0;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ECE34637D8;
+        Thu,  4 May 2023 19:47:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76F8AC4339E;
         Thu,  4 May 2023 19:47:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E995C433D2;
-        Thu,  4 May 2023 19:46:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683229621;
-        bh=cc8i3+a6mA29PywXsWaG+BHDZOfZiUF1UJgCk351FIo=;
+        s=k20201202; t=1683229622;
+        bh=rBaENMPcYH9khGCnR9G8YZifplk6iDBMO+D/7Fp0kkc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gv6xS4+ZYXiCus2MzI+zwj4Il26PzLWkW6OrnvOz/kPug39GdMA97Q70qXv9QAL3E
-         h1NKVrLIoJHS2ivBBHsJbkbtGdxdVLwEEDruB/fkdFyGAGCtu0UAvC19HUdMuxifZR
-         nDohw5T2gA3Ps8TbXoVDxWLwQeTIVLirTg/iSK3qbdL93wJiPxhOkgMiHLc34GnCI7
-         0KHADG0ZTb5yqGRUThlSzMs7uaJ49ws2JaNdyO1wRdeGZfMGOYnbqs/Gr+sFhli2AY
-         EV+bpZGPhlCWRqCMSpJp7mCFfYNoxZ1P3lrlsFJxPeKVDSqj6OynMPMIuwrbkZoUGy
-         cYLH2J1v50KXA==
+        b=T2GAaN8uS9LASk+7hqDtxroBxlHyf+aytQQquk837rHHXtW2yyQcQ8TGW8GKK+8uK
+         qjfxQ9WAC95Q2AvwPZtMSYylqc8Jd0kerqSoW88muqSWsY0ItGq70d64Tksop2ukaw
+         vcHtAsYe4fF+HWG+A4KNglTopgh4iKtaCJpiubNGraF/1lPC9jRMWRwXe3rLtwEIJ1
+         8NP4Y/4CI0fRBIXiKPCO1vNbhEC3MKBziot8QyMLzr1z2PI69SAHz1a5GyfRGBuFL3
+         vSTjJ0kfC1Tgh00ecH5FTF9kLeJr/K+F3JyHK0b7TrsL3PdAg/bIle18u9aA9iufn+
+         7xHvQrsvGfa+g==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Nick Child <nnac123@linux.ibm.com>,
-        Piotr Raczynski <piotr.raczynski@intel.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>, davem@davemloft.net,
-        edumazet@google.com, pabeni@redhat.com, kuniyu@amazon.com,
-        liuhangbin@gmail.com, jiri@resnulli.us, andy.ren@getcruise.com,
-        netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 12/49] net: Catch invalid index in XPS mapping
-Date:   Thu,  4 May 2023 15:45:49 -0400
-Message-Id: <20230504194626.3807438-12-sashal@kernel.org>
+        edumazet@google.com, pabeni@redhat.com, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 13/49] netdev: Enforce index cap in netdev_get_tx_queue
+Date:   Thu,  4 May 2023 15:45:50 -0400
+Message-Id: <20230504194626.3807438-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230504194626.3807438-1-sashal@kernel.org>
 References: <20230504194626.3807438-1-sashal@kernel.org>
@@ -63,39 +60,36 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Nick Child <nnac123@linux.ibm.com>
 
-[ Upstream commit 5dd0dfd55baec0742ba8f5625a0dd064aca7db16 ]
+[ Upstream commit 1cc6571f562774f1d928dc8b3cff50829b86e970 ]
 
-When setting the XPS value of a TX queue, warn the user once if the
-index of the queue is greater than the number of allocated TX queues.
+When requesting a TX queue at a given index, warn on out-of-bounds
+referencing if the index is greater than the allocated number of
+queues.
 
-Previously, this scenario went uncaught. In the best case, it resulted
-in unnecessary allocations. In the worst case, it resulted in
-out-of-bounds memory references through calls to `netdev_get_tx_queue(
-dev, index)`. Therefore, it is important to inform the user but not
-worth returning an error and risk downing the netdevice.
+Specifically, since this function is used heavily in the networking
+stack use DEBUG_NET_WARN_ON_ONCE to avoid executing a new branch on
+every packet.
 
 Signed-off-by: Nick Child <nnac123@linux.ibm.com>
-Reviewed-by: Piotr Raczynski <piotr.raczynski@intel.com>
-Link: https://lore.kernel.org/r/20230321150725.127229-1-nnac123@linux.ibm.com
+Link: https://lore.kernel.org/r/20230321150725.127229-2-nnac123@linux.ibm.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/dev.c | 2 ++
- 1 file changed, 2 insertions(+)
+ include/linux/netdevice.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index a25b8741b1599..7b4576206be2f 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -2549,6 +2549,8 @@ int __netif_set_xps_queue(struct net_device *dev, const unsigned long *mask,
- 	struct xps_map *map, *new_map;
- 	unsigned int nr_ids;
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index b072449b0f1ac..eac51e22a52a8 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -2428,6 +2428,7 @@ static inline
+ struct netdev_queue *netdev_get_tx_queue(const struct net_device *dev,
+ 					 unsigned int index)
+ {
++	DEBUG_NET_WARN_ON_ONCE(index >= dev->num_tx_queues);
+ 	return &dev->_tx[index];
+ }
  
-+	WARN_ON_ONCE(index >= dev->num_tx_queues);
-+
- 	if (dev->num_tc) {
- 		/* Do not allow XPS on subordinate device directly */
- 		num_tc = dev->num_tc;
 -- 
 2.39.2
 
