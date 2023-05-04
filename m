@@ -2,98 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C63086F6E5E
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 16:55:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 122E96F6E60
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 16:56:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231374AbjEDOzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 10:55:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45598 "EHLO
+        id S231476AbjEDO4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 10:56:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231314AbjEDOzG (ORCPT
+        with ESMTP id S231224AbjEDOzr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 10:55:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9831A6A63
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 07:53:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 43490634D5
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 14:53:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D084C433EF;
-        Thu,  4 May 2023 14:53:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683212001;
-        bh=JtHqAGboykoAImyeKUt8Zs/yjaM1bIcB2ckLW3b0W9c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AUCjHN5Q6rOzRLlP9q72SQRY49uwCXZO+3dVjy/S3qRxQZf50fdET8ACBkDf2F/e2
-         tTSSBi1r1lIOxQHEQEY6H+xvRkp9Ikk29ZDJ/eneqKY8Pu8RmgH6o/451+cM9cGWLU
-         W9CtZCEbN3AIr02jLo9PEjjJ0P+rMCtiLeaUPtheuLAR0MhcVB/iehGq7WFJk6M6AU
-         QMgWe5ZlFBYJ2tj85OAc6M/5ZQGAqY94o2/B1QU2iSDpkSMj78dMfJmt98R7Ta4kl6
-         ge4Kmr3yPzBFGqnJNwCajeBkpIBKeDGlYVoNHTZYDKUVxk54PfNXbzLLmwY+QyWYo0
-         oJbppP2vdCSGw==
-Date:   Thu, 4 May 2023 07:53:18 -0700
-From:   Chris Li <chrisl@kernel.org>
-To:     Liu Shixin <liushixin2@huawei.com>
-Cc:     Seth Jennings <sjenning@redhat.com>,
-        Dan Streetman <ddstreet@ieee.org>,
-        Vitaly Wool <vitaly.wool@konsulko.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Christoph Hellwig <hch@lst.de>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH -next v9 0/3] Delay the initialization of zswap
-Message-ID: <ZFPG3swMcHW/qxID@google.com>
-References: <20230411093632.822290-1-liushixin2@huawei.com>
- <ZFL4Tvm8KKrCfjRr@google.com>
- <9b2b6dac-9a3d-efcb-9706-44f6df1fe2bf@huawei.com>
+        Thu, 4 May 2023 10:55:47 -0400
+Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A81F7EDF
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 07:54:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1683212045;
+        bh=8kTJiqb+pIkw8hAq1bltSLSNujeQ8GEsK3WpcmGhgjM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=u4q9CtHC5ODkqYygQ7gLrA+BVC5Z2wwQo4sIo6WzPojXa0c2yF9ayDj05B5TlQhlN
+         ZFy41AJhDB8hhL4IPevgAahjib8LmxsBKsQBW6kulr7meRrxNBqujDSDUOb+6SdS5b
+         akXRLSC7IKWelpxwm5ZD1bgpcfiwP75vAcpBxtBNTP/WiQeVP6YmB+5hae/sVJppCm
+         Suo1xU5y5xMn769BWqWujnCMWqwHi7IzoULm7BhoEt+C6KUYmJvXtscAEqzck0KRXC
+         iRt2Wdvw97Hb71mb9uNSYZX+7xS6ZTw9bmZYXZY0YikY5t5vQAxpTH4Q4LCINs7bOF
+         C0MV2z3vRxYJA==
+Received: from [172.16.0.73] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4QBxfP1cPNz11H3;
+        Thu,  4 May 2023 10:54:05 -0400 (EDT)
+Message-ID: <8c28baa8-0945-fd77-3d1d-92c99c7bbbd1@efficios.com>
+Date:   Thu, 4 May 2023 10:54:09 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9b2b6dac-9a3d-efcb-9706-44f6df1fe2bf@huawei.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [RFC PATCH 4/4] llist.h: Fix parentheses around macro pointer
+ parameter use
+Content-Language: en-US
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <20230504012914.1797355-1-mathieu.desnoyers@efficios.com>
+ <20230504012914.1797355-4-mathieu.desnoyers@efficios.com>
+ <87pm7gd4l5.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+In-Reply-To: <87pm7gd4l5.fsf@yhuang6-desk2.ccr.corp.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 04, 2023 at 03:11:05PM +0800, Liu Shixin wrote:
-> >
-> > If it is the zswap_pool alone, it means that we can have a smaller patch
-> > to get most of your 18M back.
-> You're right, the most came from zswap_pool.
+On 2023-05-04 01:54, Huang, Ying wrote:
+> Hi, Mathieu,
+> 
+> Mathieu Desnoyers <mathieu.desnoyers@efficios.com> writes:
+> 
+>> Add missing parentheses around use of macro argument "pos" in those
+>> patterns to ensure operator precedence behaves as expected:
+>>
+>> - typeof(*pos)
+>> - pos->member
+>>
+>> The typeof(*pos) lack of parentheses around "pos" is not an issue per se
+>> in the specific macros modified here because "pos" is used as an lvalue,
+>> which should prevent use of any operator causing issue. Still add the
+>> extra parentheses for consistency.
+> 
+> I don't think it's necessary to add parentheses here.  As you said,
+> "pos" is used as an lvalue.
 
-Thanks for the confirmation.
+I agree that it's not strictly necessary to add the parentheses around
+"pos" in typeof(*pos) when pos is also used as an lvalue within a macro,
+but if we look at what happened in list.h, we can see why having a consistent
+pattern is good to eliminate issues as the code evolves.
 
-> > I also notice you move a lot of __init function back to normal functions.
-> > That would mean those functions wouldn't be able to drop after the
-> > initialization phase. That is another reason to move less of the initialization
-> > function.
-> Thanks for your advice. I've thought about it before, but I thought there is less impact
-> for the size of kernel, so I didn't do it.
+When code from list_for_each_entry_continue was lifted into
+list_prepare_entry(), we had a situation where "pos" was initially used
+as an lvalue in the original macro, but not in list_prepare_entry(), for
+which the parentheses were relevant.
 
-Let's first agree on the hypothetical patch that only delaying zswap_pool would
-have the benefit over V9 on:
-- smaller patch, less invasive.
-- less kernel text area due to more __init function got free after initialization.
+This example is from the pre-git era, in tglx's history tree:
 
-If we can reach that agreement, then we can discuss how we can get there.
+commit a3500b9e955d47891e57587c30006de83a3591f5
+Author: Linus Torvalds <torvalds@home.osdl.org>
+Date:   Wed Feb 11 21:00:34 2004 -0800
 
-I think there is a possibility that the delay initialization of zswap_pool
-can fall into the "zswap_has_pool = false" case, so you don't need to have
-the initialization mutex.  Simpler.
+     Fix "bus_for_each_dev()" and "bus_for_each_drv()", which did not
+     correctly handle the "restart from this device/driver" case, and
+     caused oopses with ieee1394.
+     
+     This just uses "list_for_each_entry_continue()" instead.
+     
+     Add helper macro to make usage of "list_for_each_entry_continue()"
+     a bit more readable.
 
-I have my selfish reason as well. I have a much larger pending patch against
-the zswap code so the smaller patch would mean less conflict for me.
+[...]
 
-I am guilty of giving this feedback late. If you come up with a V10, I will be glad
-to review it. Or, if you prefer, I can come up with the smaller patch for you
-to review as well. What do you say?
++/**
++ * list_prepare_entry - prepare a pos entry for use as a start point in
++ *                     list_for_each_entry_continue
++ * @pos:       the type * to use as a start point
++ * @head:      the head of the list
++ * @member:    the name of the list_struct within the struct.
++ */
++#define list_prepare_entry(pos, head, member) \
++       ((pos) ? : list_entry(head, typeof(*pos), member))
 
-Chris
+So even though the fact that "pos" is used as an lvalue specifically in
+llist_for_each_entry_safe() makes it so that the parentheses are not
+strictly required around "pos" in typeof(*pos), I argue that we should
+still add those for consistency.
+
+> 
+>> Remove useless parentheses around use of macro parameter (node) in the
+>> following pattern:
+>>
+>>    llist_entry((node), typeof(*pos), member)
+>>
+>> Because comma is the lowest priority operator already, so the extra pair
+>> of parentheses is redundant.
+> 
+> This change looks good for me.
+
+Thanks,
+
+Mathieu
+
+> 
+> Best Regards,
+> Huang, Ying
+> 
+>> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+>> Cc: Andrew Morton <akpm@linux-foundation.org>
+>> Cc: Huang Ying <ying.huang@intel.com>
+>> Cc: Peter Zijlstra <peterz@infradead.org>
+>> ---
+>>   include/linux/llist.h | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/include/linux/llist.h b/include/linux/llist.h
+>> index 85bda2d02d65..45d358c15d0d 100644
+>> --- a/include/linux/llist.h
+>> +++ b/include/linux/llist.h
+>> @@ -173,9 +173,9 @@ static inline void init_llist_head(struct llist_head *list)
+>>    * reverse the order by yourself before traversing.
+>>    */
+>>   #define llist_for_each_entry_safe(pos, n, node, member)			       \
+>> -	for (pos = llist_entry((node), typeof(*pos), member);		       \
+>> +	for (pos = llist_entry(node, typeof(*(pos)), member);		       \
+>>   	     member_address_is_nonnull(pos, member) &&			       \
+>> -	        (n = llist_entry(pos->member.next, typeof(*n), member), true); \
+>> +		(n = llist_entry((pos)->member.next, typeof(*(n)), member), true); \
+>>   	     pos = n)
+>>   
+>>   /**
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
 
