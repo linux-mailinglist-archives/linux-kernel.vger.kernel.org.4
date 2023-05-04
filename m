@@ -2,128 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA66F6F71DA
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 20:20:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CB6A6F71DF
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 20:22:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbjEDSUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 14:20:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58120 "EHLO
+        id S229707AbjEDSWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 14:22:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjEDSUe (ORCPT
+        with ESMTP id S229620AbjEDSWD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 14:20:34 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D8EE1700
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 11:20:32 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683224430;
+        Thu, 4 May 2023 14:22:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 745051700
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 11:21:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683224485;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=K2sV3TpxlJp2nAhrUEtF4mS7eyHqxKADq22CtPKIy3s=;
-        b=cjo5c1Q/6QZbrmPnheRS80QfWW0aa+YyI+dyBcwL9onJ9m+10Vvs8ouFRCoa9XHlw7nYi0
-        y2JS92wEzQi3HzhQwTcD3ruGQUBRWrSiZFsq7EpxA55Br4qbkHl0Qni89olpcPyBiTRXJy
-        KImLcSGcppcDT0Y1SPh3Vm0JnFvC2C3dQHKzKklyWlPsP0RX90hoXOhPskYUWSuEUgGpi9
-        hW1YLpQuH6xj8oZdTGmfbQsHgZoFRzxYTeAUnT7sl649cl+X9bj0N7rrbiylTuGrVC4+fV
-        aCB/A+2fCbU14gpAZWaoE2BVUrjUPoH/Zl0YSKpZQK7LLmmMaeioSa+GVFmr/w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683224430;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=K2sV3TpxlJp2nAhrUEtF4mS7eyHqxKADq22CtPKIy3s=;
-        b=Yb/U81e/I6w6F2cFrJmy3ua33hQ6/gOrnJbZANO+0uxoNoFSJ94NwqPYkvabWOzg+PngLc
-        HF1AnKIkc/AyQaCA==
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sebastian Siewior <bigeasy@linutronix.de>,
-        syzbot+5c54bd3eb218bb595aa9@syzkaller.appspotmail.com,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>
-Subject: Re: [patch 01/20] posix-timers: Prevent RT livelock in itimer_delete()
-In-Reply-To: <ZFPmKtFGPUQkeDEd@localhost.localdomain>
-References: <20230425181827.219128101@linutronix.de>
- <20230425183312.862346341@linutronix.de>
- <ZFPmKtFGPUQkeDEd@localhost.localdomain>
-Date:   Thu, 04 May 2023 20:20:29 +0200
-Message-ID: <87bkj03qmq.ffs@tglx>
+        bh=xk9N1SAae40jiJ+7feKN65ej6E8xOtfFm29HAuZRStU=;
+        b=gHNxPSGaUCJ7J5kbkiFUf1y1yAxJumQQMhwfQOauWkuKCjhXeXpSodPTQocH978h7N7j4e
+        JwlHnh8bzFevbSJ/OGEIxIbz2+f4trxkTewiTi3Phyz5B0U3ebhNQCSnF9OuKGt/m9cpEz
+        6F7xxDil7T1J3Ndh1jxy8PcCLFbTbmk=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-151-qpzBBuZNPiaemdq36FY2fw-1; Thu, 04 May 2023 14:21:21 -0400
+X-MC-Unique: qpzBBuZNPiaemdq36FY2fw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 17A9538149A8;
+        Thu,  4 May 2023 18:21:20 +0000 (UTC)
+Received: from fedora (unknown [10.22.9.13])
+        by smtp.corp.redhat.com (Postfix) with SMTP id AE10940BC79A;
+        Thu,  4 May 2023 18:21:12 +0000 (UTC)
+Date:   Thu, 4 May 2023 15:21:11 -0300
+From:   Wander Lairson Costa <wander@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Oleg Nesterov <oleg@redhat.com>, Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Christian Brauner <brauner@kernel.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
+        <linux-perf-users@vger.kernel.org>, Hu Chunyu <chuhu@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v7 2/3] sched/task: Add the put_task_struct_atomic_safe()
+ function
+Message-ID: <cjhvb72qrqggom5gxdjz6mtz3bntlmznx7r52adz72z2t2edzr@hwcog2pltfaq>
+References: <20230425114307.36889-1-wander@redhat.com>
+ <20230425114307.36889-3-wander@redhat.com>
+ <20230504084229.GI1734100@hirez.programming.kicks-ass.net>
+ <20230504122945.GA28757@redhat.com>
+ <20230504143303.GA1744142@hirez.programming.kicks-ass.net>
+ <CAAq0SUmYrQbS1k9NNKGQP7hQRQJ308dk9NCiUimEiLeBJUavgA@mail.gmail.com>
+ <20230504152424.GG1744258@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230504152424.GG1744258@hirez.programming.kicks-ass.net>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 04 2023 at 19:06, Frederic Weisbecker wrote:
-> Le Tue, Apr 25, 2023 at 08:48:56PM +0200, Thomas Gleixner a =C3=A9crit :
->> itimer_delete() has a retry loop when the timer is concurrently expired.=
- On
->> non-RT kernels this just spin-waits until the timer callback has
->> completed. On RT kernels this is a potential livelock when the exiting t=
-ask
->> preempted the hrtimer soft interrupt.
->>=20
->> This only affects hrtimer based timers as Posix CPU timers cannot be
->> concurrently expired. For CONFIG_POSIX_CPU_TIMERS_TASK_WORK=3Dy this is
->> obviously impossible as the task cannot run task work and exit at the sa=
-me
->> time. The CONFIG_POSIX_CPU_TIMERS_TASK_WORK=3Dn (only non-RT) is prevent=
-ed
->> because interrupts are disabled.
->
-> But the owner of the timer is not the same as the target of the timer, ri=
-ght?
->
-> Though I seem to remember that we forbid setting a timer to a target outs=
-ide
-> the current process, in which case the owner and the target are the same =
-at
-> this exit stage. But I can't remember what enforces that permission in
-> pid_for_clock()..
+On Thu, May 04, 2023 at 05:24:24PM +0200, Peter Zijlstra wrote:
+> On Thu, May 04, 2023 at 11:55:15AM -0300, Wander Lairson Costa wrote:
+> 
+> > > Then I'm thinking something trivial like so:
+> > >
+> > > static inline void put_task_struct(struct task_struct *t)
+> > > {
+> > >         if (!refcount_dec_and_test(&t->usage))
+> > >                 return;
+> > >
+> > >         if (IS_ENABLED(CONFIG_PREEMPT_RT) && !preemptible())
+> > >                 call_rcu(&t->rcu, __put_task_struct_rcu);
+> > >
+> > >         __put_task_struct(t);
+> > > }
+> > >
+> > 
+> > That's what v5 [1] does. What would be the path in this case? Should I
+> > resend it as v8?
+> 
+> It's almost what v5 does. v5 also has a !in_task() thing. v5 also
+> violates codingstyle :-)
 
-The owner of the timer is always the one which needs to find the entity
-to synchronize on, whether that's the right hrtimer base or the task
-which runs the expiry code.
+IIRC, the in_task() is there because preemptible() doesn't check if it
+is running in interrupt context.
 
-wait_for_running_timer() is taking that into account:
-
-  - The hrtimer timer based posix timers lock the hrtimer base expiry
-    lock on the base to which the timer is currently associated
-
-  - Posix CPU timers can be armed on a differnet process (only per
-    thread timers are restricted to currents threadgroup) but the
-    wait_for_running() callback "knows" how to find that process:
-
-    When the timer is moved to the expiry list it gets:
-
-         cputimer->firing =3D 1;
-         rcu_assign_pointer(ctmr->handling, current);
-
-   and the wait for running side does:
-
-       rcu_read_lock()
-       tsk =3D rcu_dereference(timr->it.cpu.handling);
-       ....
-       mutex_lock(&tsk->posix_cputimers_work.mutex);
-
-   See collect_timerqueue(), handle_posix_cpu_timers() and
-   posix_cpu_timer_wait_running() for details.
-
-   commit f7abf14f0001 ("posix-cpu-timers: Implement the missing
-   timer_wait_running callback") has quite some prose in the changelog.
-
-Thanks,
-
-        tglx
+> 
+> But yeah.. something like that.
+> 
 
