@@ -2,183 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C606F798D
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 01:03:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 123A36F7987
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 00:59:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbjEDXDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 19:03:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47850 "EHLO
+        id S229607AbjEDW7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 18:59:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjEDXDU (ORCPT
+        with ESMTP id S229446AbjEDW7N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 19:03:20 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5594111D80;
-        Thu,  4 May 2023 16:03:18 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-50bd87539c2so1786665a12.0;
-        Thu, 04 May 2023 16:03:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683241397; x=1685833397;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=yWOua6diagEP9w5UDlQh2ycV9iT1GzUYH6J+nVD3eqI=;
-        b=JOAqTnfq2v2NoKHBjFk5s3WofNsDwxh5HmOdKEE+W1tN6tefO9iZvJmDvJU5wgniar
-         2kg2d/wPux24xedU19v/X1Hl1YbFDokk0hgcMeD5lzSva0Q+Z9k2SaFNgwmf9MThF6dd
-         wujDiEPmjdLLf3pCexeDDNamwe1iVonEqvOxx30zdLZL63BQsFnyjI9MRCgsp65N22gJ
-         IxqSGE1/6mGHHuYGrXd31y8nMvfWg7BYE7d6LuRIMNWGuz3FMaxlUInXjI2uiamuenDs
-         93WlqBfO+mSluSWlC+er610/cQcfDs/U6HJSY8LAR3yhwH9PkMavKsdER1gguoO/79G3
-         xQnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683241397; x=1685833397;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yWOua6diagEP9w5UDlQh2ycV9iT1GzUYH6J+nVD3eqI=;
-        b=CLaxHLfcS7B6W39NeFlUcg2VMsJbpaDLuOqHGNNE93+rVwt2ogqYdfaOKvk0cyQe3f
-         x5HwUXuUjbJqV88221gnEg1y5gc9qEIuBiKT4U9dx8nrBuDBbQKv8fBejlTWGQYohVGp
-         KdM7qSmJd/EApwFGKmdKVhECfnvX2dPzHio0UdB08ZI9XGIY7lGstCaNuDN0ch7xFlHM
-         lh1j/R5+tcS8pz7nFZKioeWgGb0cSFQhub5tZqMcQ4vExn8MKoYAci+NpkK3uY9od6hg
-         k0f2ND3c/JsERYuPaFnjBS20BQuD7bhiHhxU8qxO9N8ZIxqNgRc3zutW75nV7GFBqwpy
-         YjLA==
-X-Gm-Message-State: AC+VfDymeCJ9hqYgMkTdZAoOVNKE6lNxXRcGBX3jMpsJLn9f8Biq2V1B
-        GVfcMUEoCcJGxFNfuOE5LtU=
-X-Google-Smtp-Source: ACHHUZ6vBzjNsow+SMHuZ82EJHJLQtHJmiwifuvN6I4pxG0+/jC+M9At6bUXX6Dw8p7HUh2RXaXLcg==
-X-Received: by 2002:a17:907:98a:b0:94b:d57e:9d4b with SMTP id bf10-20020a170907098a00b0094bd57e9d4bmr382506ejc.2.1683241396599;
-        Thu, 04 May 2023 16:03:16 -0700 (PDT)
-Received: from krava ([83.240.61.110])
-        by smtp.gmail.com with ESMTPSA id bj6-20020a170906b04600b0096595cc0810sm139867ejb.72.2023.05.04.16.03.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 May 2023 16:03:16 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Fri, 5 May 2023 01:03:14 +0200
-To:     Ian Rogers <irogers@google.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Song Liu <song@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Clark Williams <williams@redhat.com>,
-        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Changbin Du <changbin.du@huawei.com>,
-        Hao Luo <haoluo@google.com>, James Clark <james.clark@arm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Roman Lozko <lozko.roma@gmail.com>,
-        Stephane Eranian <eranian@google.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        bpf <bpf@vger.kernel.org>
-Subject: Re: BPF skels in perf .Re: [GIT PULL] perf tools changes for v6.4
-Message-ID: <ZFQ5sjjtfEYzvHNP@krava>
-References: <20230503211801.897735-1-acme@kernel.org>
- <CAHk-=wjY_3cBELRSLMpqCt6Eb71Qei2agfKSNsrr5KcpdEQCaA@mail.gmail.com>
- <CAHk-=wgci+OTRacQZcvvapRcWkoiTFJ=VTe_JYtabGgZ9refmg@mail.gmail.com>
- <ZFOSUab5XEJD0kxj@kernel.org>
- <CAHk-=wgv1sKTdLWPC7XR1Px=pDNrDPDTKdX-T_2AQOwgkpWB2A@mail.gmail.com>
- <ZFPw0scDq1eIzfHr@kernel.org>
- <CAEf4BzaUU9vZU6R_020ru5ct0wh-p1M3ZFet-vYqcHvb9bW1Cw@mail.gmail.com>
- <ZFQCccsx6GK+gY0j@kernel.org>
- <ZFQoQjCNtyMIulp+@kernel.org>
- <CAP-5=fU8HQorW+7O6vfEKGs1mEFkjkzXZMVPACzurtcMcRhVzQ@mail.gmail.com>
+        Thu, 4 May 2023 18:59:13 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8915114;
+        Thu,  4 May 2023 15:59:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683241152; x=1714777152;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=xjHzN3TESceP/PzYSNJRFwhqxoyO0lB2D8Fa0Xfoc/Q=;
+  b=NMHyBS3rNh0X5ycoTooZSIF56anx5IJfNc91yE+uXxLeW+NBs6se8mJX
+   aKm89Q3fREzg6/42GOvlDUlL6hWycbpHhHnxSaq3JH+UBqTNswJ707SKG
+   V8AZ/+hqjwgHBqZQbVudVReVEFlv97IKbqqDBkarLjBTvru1sBgbxaFE2
+   QiI6Qi5t3eglHAI2Msl0sYqswm6fTeepFakT6oK8cFugP21hoKbPTrar5
+   NVNRt7OpoglFSEnUuaEbbZZrS5PrbkPYjsoRYH7RK1cvEmblIB1uDshyF
+   IDDsJZbpNr3EKrBa/ouXVjcKgecY40ZVTUJRJw68Y1jURkEuW2NCxdVcI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="346549517"
+X-IronPort-AV: E=Sophos;i="5.99,250,1677571200"; 
+   d="scan'208";a="346549517"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 15:59:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="730016588"
+X-IronPort-AV: E=Sophos;i="5.99,250,1677571200"; 
+   d="scan'208";a="730016588"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 15:59:12 -0700
+Date:   Thu, 4 May 2023 16:03:34 -0700
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     Baolu Lu <baolu.lu@linux.intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Joerg Roedel <joro@8bytes.org>, dmaengine@vger.kernel.org,
+        vkoul@kernel.org, Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>,
+        narayan.ranganathan@intel.com, jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH v5 6/7] iommu/vt-d: Implement set_dev_pasid domain op
+Message-ID: <20230504160334.496085db@jacob-builder>
+In-Reply-To: <76c98e62-1cac-2ab6-7721-08ec2c1fceb8@linux.intel.com>
+References: <20230427174937.471668-1-jacob.jun.pan@linux.intel.com>
+        <20230427174937.471668-7-jacob.jun.pan@linux.intel.com>
+        <76c98e62-1cac-2ab6-7721-08ec2c1fceb8@linux.intel.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAP-5=fU8HQorW+7O6vfEKGs1mEFkjkzXZMVPACzurtcMcRhVzQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 04, 2023 at 03:03:42PM -0700, Ian Rogers wrote:
-> On Thu, May 4, 2023 at 2:48 PM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> >
-> > Em Thu, May 04, 2023 at 04:07:29PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > > Em Thu, May 04, 2023 at 11:50:07AM -0700, Andrii Nakryiko escreveu:
-> > > > On Thu, May 4, 2023 at 10:52 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> > > > > Andrii, can you add some more information about the usage of vmlinux.h
-> > > > > instead of using kernel headers?
-> > >
-> > > > I'll just say that vmlinux.h is not a hard requirement to build BPF
-> > > > programs, it's more a convenience allowing easy access to definitions
-> > > > of both UAPI and kernel-internal structures for tracing needs and
-> > > > marking them relocatable using BPF CO-RE machinery. Lots of real-world
-> > > > applications just check-in pregenerated vmlinux.h to avoid build-time
-> > > > dependency on up-to-date host kernel and such.
-> > >
-> > > > If vmlinux.h generation and usage is causing issues, though, given
-> > > > that perf's BPF programs don't seem to be using many different kernel
-> > > > types, it might be a better option to just use UAPI headers for public
-> > > > kernel type definitions, and just define CO-RE-relocatable minimal
-> > > > definitions locally in perf's BPF code for the other types necessary.
-> > > > E.g., if perf needs only pid and tgid from task_struct, this would
-> > > > suffice:
-> > >
-> > > > struct task_struct {
-> > > >     int pid;
-> > > >     int tgid;
-> > > > } __attribute__((preserve_access_index));
-> > >
-> > > Yeah, that seems like a way better approach, no vmlinux involved, libbpf
-> > > CO-RE notices that task_struct changed from this two integers version
-> > > (of course) and does the relocation to where it is in the running kernel
-> > > by using /sys/kernel/btf/vmlinux.
-> >
-> > Doing it for one of the skels, build tested, runtime untested, but not
-> > using any vmlinux, BTF to help, not that bad, more verbose, but at least
-> > we state what are the fields we actually use, have those attribute
-> > documenting that those offsets will be recorded for future use, etc.
-> >
-> > Namhyung, can you please check that this works?
-> >
-> > Thanks,
-> >
-> > - Arnaldo
-> >
-> > diff --git a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-> > index 6a438e0102c5a2cb..f376d162549ebd74 100644
-> > --- a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-> > +++ b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-> > @@ -1,11 +1,40 @@
-> >  // SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> >  // Copyright (c) 2021 Facebook
-> >  // Copyright (c) 2021 Google
-> > -#include "vmlinux.h"
-> > +#include <linux/types.h>
-> > +#include <linux/bpf.h>
+Hi Baolu,
+
+On Wed, 3 May 2023 15:26:00 +0800, Baolu Lu <baolu.lu@linux.intel.com>
+wrote:
+
+> On 4/28/23 1:49 AM, Jacob Pan wrote:
+> > Devices that use ENQCMDS to submit work on buffers mapped by DMA API
+> > must attach a PASID to the default domain of the device. In preparation
+> > for this use case, this patch implements set_dev_pasid() for the
+> > default_domain_ops.
+> > 
+> > If the device context has not been set up prior to this call, this will
+> > set up the device context in addition to PASID attachment.
+> > 
+> > Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> > ---
+> >   drivers/iommu/intel/iommu.c | 92 ++++++++++++++++++++++++++++++-------
+> >   1 file changed, 76 insertions(+), 16 deletions(-)
+> > 
+> > diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+> > index 388453a7415e..f9d6c31cdc8e 100644
+> > --- a/drivers/iommu/intel/iommu.c
+> > +++ b/drivers/iommu/intel/iommu.c
+> > @@ -278,6 +278,8 @@ static LIST_HEAD(dmar_satc_units);
+> >   	list_for_each_entry(rmrr, &dmar_rmrr_units, list)
+> >   
+> >   static void device_block_translation(struct device *dev);
+> > +static void intel_iommu_detach_device_pasid(struct iommu_domain
+> > *domain,
+> > +					    struct device *dev,
+> > ioasid_t pasid); static void intel_iommu_domain_free(struct
+> > iommu_domain *domain); 
+> >   int dmar_disabled = !IS_ENABLED(CONFIG_INTEL_IOMMU_DEFAULT_ON);
+> > @@ -4091,8 +4093,7 @@ static void device_block_translation(struct
+> > device *dev) iommu_disable_pci_caps(info);
+> >   	if (!dev_is_real_dma_subdevice(dev)) {
+> >   		if (sm_supported(iommu))
+> > -			intel_pasid_tear_down_entry(iommu, dev,
+> > -
+> > IOMMU_DEF_RID_PASID, false);
+> > +
+> > intel_iommu_detach_device_pasid(&info->domain->domain, dev,
+> > IOMMU_DEF_RID_PASID);  
 > 
-> Compared to vmlinux.h here be dragons. It is easy to start dragging in
-> all of libc and that may not work due to missing #ifdefs, etc.. Could
-> we check in a vmlinux.h like libbpf-tools does?
-> https://github.com/iovisor/bcc/tree/master/libbpf-tools#vmlinuxh-generation
-> https://github.com/iovisor/bcc/tree/master/libbpf-tools/arm64
+> device_block_translation() is called when switch RID's domain or release
+> the device. I assume that we don't need to touch this path when we add
+> the attach_dev_pasid support.
 > 
-> This would also remove some of the errors that could be introduced by
-> copy+pasting enums, etc. and also highlight issues with things being
-> renamed as build time rather than runtime failures.
+> Blocking DMA translation through RID/PASID should be done in
+> remove_dev_pasid path.
+> 
+> Or, I overlooked anything?
+> 
+> [...]
+> 
+> >   
+> > +static int intel_iommu_attach_device_pasid(struct iommu_domain *domain,
+> > +					   struct device *dev,
+> > ioasid_t pasid) +{
+> > +	struct device_domain_info *info = dev_iommu_priv_get(dev);
+> > +	struct dmar_domain *dmar_domain = to_dmar_domain(domain);
+> > +	struct intel_iommu *iommu = info->iommu;
+> > +	int ret;
+> > +
+> > +	if (!pasid_supported(iommu))
+> > +		return -ENODEV;
+> > +
+> > +	ret = prepare_domain_attach_device(domain, dev);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	/*
+> > +	 * Most likely the device context has already been set up,
+> > will only
+> > +	 * take a domain ID reference. Otherwise, device context will
+> > be set
+> > +	 * up here.  
+> 
+> The "otherwise" case is only default domain deferred attaching case,
+> right?
+it might be the only case so far, but my intention is to be general. i.e.
+no ordering requirements. I believe it is more future proof in case
+device_attach_pasid called before device_attach.
 
-we already have to deal with that, right? doing checks on fields in
-structs like mm_struct___old
+> When the device driver starts to call attach_dev_pasid api, it means
+> that the bus and device DMA configuration have been done. We could do
+> the deferred default domain attaching now. So, perhaps we should add
+> below code in the core:
+> 
+> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+> index f1dcfa3f1a1b..633b5ca53606 100644
+> --- a/drivers/iommu/iommu.c
+> +++ b/drivers/iommu/iommu.c
+> @@ -3296,6 +3296,12 @@ int iommu_attach_device_pasid(struct iommu_domain 
+> *domain,
+>          if (!group)
+>                  return -ENODEV;
+> 
+> +       ret = iommu_deferred_attach(dev, group->default_domain);
+> +       if (ret) {
+> +               iommu_group_put(group);
+> +               return ret;
+> +       }
+it will cover the device_attach, but adding a special case.
 
-> Could this be some shared resource for the different linux tools
-> projects using a vmlinux.h? e.g. tools/lib/vmlinuxh with an
-> install_headers target that builds a vmlinux.h.
+>          mutex_lock(&group->mutex);
+>          curr = xa_cmpxchg(&group->pasid_array, pasid, NULL, domain, 
+> GFP_KERNEL);
+>          if (curr) {
+> 
+> Perhaps need to call iommu_deferred_attach() inside the group->mutex
+> critical region?
+i agree, attach RID_PASID should also be on the group's pasid_array.
 
-I tried to do the minimal header and it's not too big,
-I pushed it in here:
-  https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/log/?h=perf/vmlinux_h
+> > +	 * The upper layer APIs make no assumption about the ordering
+> > between
+> > +	 * device attachment and the PASID attachment.
+> > +	 */
+> > +	ret = dmar_domain_attach_device(to_dmar_domain(domain), dev);  
+> 
+> Calling attach_device on the attach_dev_pasid path is not right.
+I think it comes down to the philosophical differences in terms of
+who is responsible for ensuring device ctx is set up  prior to device pasid
+attach:
+1. vt-d driver
+2. upper layer API
 
-compile tested so far
+> > +	if (ret) {
+> > +		dev_err(dev, "Attach device failed\n");
+> > +		return ret;
+> > +	}
+> > +	return dmar_domain_attach_device_pasid(dmar_domain, iommu,
+> > dev, pasid); +}
+> > +
+> > +
+> > +
+> >   const struct iommu_ops intel_iommu_ops = {
+> >   	.capable		= intel_iommu_capable,
+> >   	.domain_alloc		= intel_iommu_domain_alloc,
+> > @@ -4802,6 +4861,7 @@ const struct iommu_ops intel_iommu_ops = {
+> >   #endif
+> >   	.default_domain_ops = &(const struct iommu_domain_ops) {
+> >   		.attach_dev		=
+> > intel_iommu_attach_device,
+> > +		.set_dev_pasid          =
+> > intel_iommu_attach_device_pasid, .map_pages		=
+> > intel_iommu_map_pages, .unmap_pages		=
+> > intel_iommu_unmap_pages, .iotlb_sync_map		=
+> > intel_iommu_iotlb_sync_map,  
+> 
+> Best regards,
+> baolu
 
-jirka
+
+Thanks,
+
+Jacob
