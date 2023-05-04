@@ -2,175 +2,290 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8B436F62BF
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 03:50:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D0446F62C8
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 04:02:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbjEDBt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 21:49:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46250 "EHLO
+        id S229626AbjEDCB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 22:01:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjEDBt6 (ORCPT
+        with ESMTP id S229482AbjEDCBx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 21:49:58 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63CF711A
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 18:49:53 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QBcDD1CZHzkXwG;
-        Thu,  4 May 2023 09:48:44 +0800 (CST)
-Received: from [10.174.176.93] (10.174.176.93) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 4 May 2023 09:49:50 +0800
-Message-ID: <5a334292-3e2d-9926-57ec-d52f88e1e324@huawei.com>
-Date:   Thu, 4 May 2023 09:49:50 +0800
+        Wed, 3 May 2023 22:01:53 -0400
+Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E87FB
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 19:01:51 -0700 (PDT)
+Received: by mail-io1-f78.google.com with SMTP id ca18e2360f4ac-76998d984b0so280459339f.2
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 19:01:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683165711; x=1685757711;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MRK5jTft3BrTiKwZWh1WJtul0v0zFeRYHVWPAass0oY=;
+        b=SQMKR+fLnES0KvaMnQEcfxDm9Ch3t4Df8aSvakNELQWWO5lykNxd7hztQzNBJ0cZmR
+         xmzBGzjUv/uSc1lYMtiPWgnKkyInl3SeEEVmWHsC7Q+QSCn8u14DhMo2E/pt3y+mXrtn
+         2STouUXT+UIAyKnJJlnPfCb7q38l9hSSWNnzh5jnv6RwrxOiMVZQlyXG6cc1QN5XZpT5
+         Q6QISluBjPmL4O1PsXbgKBKKeC1E9Moc+cK8LftgNrK4ntXIwPxZmw+pbWsDdKjzaBKi
+         vTQ7UqaqXapshgxCVX+2CL1qsM3U6P/JQzcfcRSOBLM8Bqh5Jj3D82gSU2gCwf/37Cv3
+         qGBQ==
+X-Gm-Message-State: AC+VfDwXWYJMeqjrVbGQxyryvNBRSAYigZCpJv1ajz9ow/J+K8y+FAcq
+        cXzKPkJwEYEn9WYoKteyFiHGPLNI6OwmPHhPFGFsMPxAIGbP
+X-Google-Smtp-Source: ACHHUZ7a+i/5539Z99itMjElna3F55TT5GZ0n0Y64lg1c2AgUJAvGrzU5w7K372oYHks8JcNvj1MO7ZGwo7TpGggc0tKMANac8G2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [Question] softlockup in run_timer_softirq
-To:     John Stultz <jstultz@google.com>, Frank Woo <frankwoo@google.com>,
-        Rhine Wu <Rhinewuwu@google.com>
-CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-References: <fb8d80434b2148e78c0032c6c70a8b4d@huawei.com>
- <CANDhNCqfBdh8zUd+LseTTQKpmJ27Uid+ZV_+FNckZPNc2Oy3-w@mail.gmail.com>
- <f2b7fdba4ead429bb4dd38a9ccb3735a@huawei.com>
- <CANDhNCoaMPj-aa1VKJoVawBgZWOiZpvZ5cnvVJq4F_d-miTNcA@mail.gmail.com>
-From:   "liujian (CE)" <liujian56@huawei.com>
-In-Reply-To: <CANDhNCoaMPj-aa1VKJoVawBgZWOiZpvZ5cnvVJq4F_d-miTNcA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.93]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:c90e:0:b0:329:4c5e:15d8 with SMTP id
+ t14-20020a92c90e000000b003294c5e15d8mr13005665ilp.2.1683165711140; Wed, 03
+ May 2023 19:01:51 -0700 (PDT)
+Date:   Wed, 03 May 2023 19:01:51 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004f938b05fad48ee6@google.com>
+Subject: [syzbot] [fs?] INFO: task hung in synchronize_rcu (4)
+From:   syzbot <syzbot+222aa26d0a5dbc2e84fe@syzkaller.appspotmail.com>
+To:     amir73il@gmail.com, daniel@iogearbox.net, jack@suse.cz,
+        kafai@fb.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    6686317855c6 net: dsa: mv88e6xxx: add mv88e6321 rsvd2cpu
+git tree:       net
+console output: https://syzkaller.appspot.com/x/log.txt?x=1457a594280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7205cdba522fe4bc
+dashboard link: https://syzkaller.appspot.com/bug?extid=222aa26d0a5dbc2e84fe
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12ede410280000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/48685f457043/disk-66863178.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/7e1798ecf070/vmlinux-66863178.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/cc77fb901221/bzImage-66863178.xz
+
+The issue was bisected to:
+
+commit 3b5d4ddf8fe1f60082513f94bae586ac80188a03
+Author: Martin KaFai Lau <kafai@fb.com>
+Date:   Wed Mar 9 09:04:50 2022 +0000
+
+    bpf: net: Remove TC_AT_INGRESS_OFFSET and SKB_MONO_DELIVERY_TIME_OFFSET macro
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=153459d7c80000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=173459d7c80000
+console output: https://syzkaller.appspot.com/x/log.txt?x=133459d7c80000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+222aa26d0a5dbc2e84fe@syzkaller.appspotmail.com
+Fixes: 3b5d4ddf8fe1 ("bpf: net: Remove TC_AT_INGRESS_OFFSET and SKB_MONO_DELIVERY_TIME_OFFSET macro")
+
+INFO: task kworker/u4:1:12 blocked for more than 145 seconds.
+      Not tainted 6.3.0-syzkaller-07940-g6686317855c6 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:kworker/u4:1    state:D stack:26288 pid:12    ppid:2      flags:0x00004000
+Workqueue: events_unbound fsnotify_connector_destroy_workfn
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5307 [inline]
+ __schedule+0xc91/0x5770 kernel/sched/core.c:6625
+ schedule+0xde/0x1a0 kernel/sched/core.c:6701
+ schedule_timeout+0x276/0x2b0 kernel/time/timer.c:2143
+ do_wait_for_common kernel/sched/completion.c:85 [inline]
+ __wait_for_common+0x1ce/0x5c0 kernel/sched/completion.c:106
+ __synchronize_srcu+0x1be/0x2c0 kernel/rcu/srcutree.c:1360
+ fsnotify_connector_destroy_workfn+0x4d/0xa0 fs/notify/mark.c:208
+ process_one_work+0x991/0x15c0 kernel/workqueue.c:2390
+ worker_thread+0x669/0x1090 kernel/workqueue.c:2537
+ kthread+0x344/0x440 kernel/kthread.c:379
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+INFO: task kworker/u4:4:5134 blocked for more than 146 seconds.
+      Not tainted 6.3.0-syzkaller-07940-g6686317855c6 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:kworker/u4:4    state:D stack:26344 pid:5134  ppid:2      flags:0x00004000
+Workqueue: events_unbound fsnotify_mark_destroy_workfn
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5307 [inline]
+ __schedule+0xc91/0x5770 kernel/sched/core.c:6625
+ schedule+0xde/0x1a0 kernel/sched/core.c:6701
+ schedule_timeout+0x276/0x2b0 kernel/time/timer.c:2143
+ do_wait_for_common kernel/sched/completion.c:85 [inline]
+ __wait_for_common+0x1ce/0x5c0 kernel/sched/completion.c:106
+ __synchronize_srcu+0x1be/0x2c0 kernel/rcu/srcutree.c:1360
+ fsnotify_mark_destroy_workfn+0x101/0x3c0 fs/notify/mark.c:898
+ process_one_work+0x991/0x15c0 kernel/workqueue.c:2390
+ worker_thread+0x669/0x1090 kernel/workqueue.c:2537
+ kthread+0x344/0x440 kernel/kthread.c:379
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+
+Showing all locks held in the system:
+2 locks held by kworker/u4:1/12:
+ #0: ffff888012479138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+ #0: ffff888012479138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+ #0: ffff888012479138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1324 [inline]
+ #0: ffff888012479138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:639 [inline]
+ #0: ffff888012479138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:666 [inline]
+ #0: ffff888012479138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_one_work+0x87a/0x15c0 kernel/workqueue.c:2361
+ #1: ffffc90000117da8 (connector_reaper_work){+.+.}-{0:0}, at: process_one_work+0x8ae/0x15c0 kernel/workqueue.c:2365
+1 lock held by rcu_tasks_kthre/13:
+ #0: ffffffff8c7962f0 (rcu_tasks.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x31/0xd80 kernel/rcu/tasks.h:518
+1 lock held by rcu_tasks_trace/14:
+ #0: ffffffff8c795ff0 (rcu_tasks_trace.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x31/0xd80 kernel/rcu/tasks.h:518
+3 locks held by kworker/1:0/22:
+1 lock held by khungtaskd/28:
+ #0: ffffffff8c796f00 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x55/0x340 kernel/locking/lockdep.c:6545
+1 lock held by khugepaged/34:
+ #0: ffffffff8c896708 (lock#3){+.+.}-{3:3}, at: __lru_add_drain_all+0x62/0x6a0 mm/swap.c:852
+2 locks held by getty/4759:
+ #0: ffff88814c1e0098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x26/0x80 drivers/tty/tty_ldisc.c:244
+ #1: ffffc900015a02f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0xef4/0x13e0 drivers/tty/n_tty.c:2177
+4 locks held by syz-executor.2/5077:
+ #0: ffff8880b993c2d8 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x2f/0x120 kernel/sched/core.c:539
+ #1: ffff88802296aef0 (&mm->cid_lock#2){....}-{2:2}, at: mm_cid_get kernel/sched/sched.h:3280 [inline]
+ #1: ffff88802296aef0 (&mm->cid_lock#2){....}-{2:2}, at: switch_mm_cid kernel/sched/sched.h:3302 [inline]
+ #1: ffff88802296aef0 (&mm->cid_lock#2){....}-{2:2}, at: prepare_task_switch kernel/sched/core.c:5117 [inline]
+ #1: ffff88802296aef0 (&mm->cid_lock#2){....}-{2:2}, at: context_switch kernel/sched/core.c:5258 [inline]
+ #1: ffff88802296aef0 (&mm->cid_lock#2){....}-{2:2}, at: __schedule+0x2802/0x5770 kernel/sched/core.c:6625
+ #2: ffff8880b9929698 (&base->lock){-.-.}-{2:2}, at: lock_timer_base+0x5a/0x1f0 kernel/time/timer.c:999
+ #3: ffffffff91fb4ac8 (&obj_hash[i].lock){-.-.}-{2:2}, at: debug_object_activate+0x134/0x3f0 lib/debugobjects.c:690
+1 lock held by syz-executor.5/5080:
+2 locks held by kworker/u4:4/5134:
+ #0: ffff888012479138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+ #0: ffff888012479138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+ #0: ffff888012479138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1324 [inline]
+ #0: ffff888012479138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:639 [inline]
+ #0: ffff888012479138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:666 [inline]
+ #0: ffff888012479138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_one_work+0x87a/0x15c0 kernel/workqueue.c:2361
+ #1: ffffc9000433fda8 ((reaper_work).work){+.+.}-{0:0}, at: process_one_work+0x8ae/0x15c0 kernel/workqueue.c:2365
+2 locks held by dhcpcd/5583:
+ #0: ffff88802b7e0130 (sk_lock-AF_PACKET){+.+.}-{0:0}, at: lock_sock include/net/sock.h:1697 [inline]
+ #0: ffff88802b7e0130 (sk_lock-AF_PACKET){+.+.}-{0:0}, at: packet_do_bind+0x2f/0xe30 net/packet/af_packet.c:3204
+ #1: ffffffff8c7a2378 (rcu_state.exp_mutex){+.+.}-{3:3}, at: exp_funnel_lock kernel/rcu/tree_exp.h:293 [inline]
+ #1: ffffffff8c7a2378 (rcu_state.exp_mutex){+.+.}-{3:3}, at: synchronize_rcu_expedited+0x64a/0x770 kernel/rcu/tree_exp.h:992
+2 locks held by dhcpcd/5586:
+ #0: ffff88806919e130 (sk_lock-AF_PACKET){+.+.}-{0:0}, at: lock_sock include/net/sock.h:1697 [inline]
+ #0: ffff88806919e130 (sk_lock-AF_PACKET){+.+.}-{0:0}, at: packet_do_bind+0x2f/0xe30 net/packet/af_packet.c:3204
+ #1: ffffffff8c7a2378 (rcu_state.exp_mutex){+.+.}-{3:3}, at: exp_funnel_lock kernel/rcu/tree_exp.h:325 [inline]
+ #1: ffffffff8c7a2378 (rcu_state.exp_mutex){+.+.}-{3:3}, at: synchronize_rcu_expedited+0x3e8/0x770 kernel/rcu/tree_exp.h:992
+1 lock held by dhcpcd/5587:
+ #0: ffff88802cca0130 (sk_lock-AF_PACKET){+.+.}-{0:0}, at: lock_sock include/net/sock.h:1697 [inline]
+ #0: ffff88802cca0130 (sk_lock-AF_PACKET){+.+.}-{0:0}, at: packet_do_bind+0x2f/0xe30 net/packet/af_packet.c:3204
+1 lock held by dhcpcd/5598:
+ #0: ffff88807be2c130 (sk_lock-AF_PACKET){+.+.}-{0:0}, at: lock_sock include/net/sock.h:1697 [inline]
+ #0: ffff88807be2c130 (sk_lock-AF_PACKET){+.+.}-{0:0}, at: packet_do_bind+0x2f/0xe30 net/packet/af_packet.c:3204
+1 lock held by dhcpcd/5621:
+ #0: ffff88805f706130 (sk_lock-AF_PACKET){+.+.}-{0:0}, at: lock_sock include/net/sock.h:1697 [inline]
+ #0: ffff88805f706130 (sk_lock-AF_PACKET){+.+.}-{0:0}, at: packet_do_bind+0x2f/0xe30 net/packet/af_packet.c:3204
+1 lock held by dhcpcd/5622:
+ #0: ffff88807e98e130 (sk_lock-AF_PACKET){+.+.}-{0:0}, at: lock_sock include/net/sock.h:1697 [inline]
+ #0: ffff88807e98e130 (sk_lock-AF_PACKET){+.+.}-{0:0}, at: packet_do_bind+0x2f/0xe30 net/packet/af_packet.c:3204
+2 locks held by syz-executor.5/6144:
+
+=============================================
+
+NMI backtrace for cpu 0
+CPU: 0 PID: 28 Comm: khungtaskd Not tainted 6.3.0-syzkaller-07940-g6686317855c6 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
+ nmi_cpu_backtrace+0x29c/0x350 lib/nmi_backtrace.c:113
+ nmi_trigger_cpumask_backtrace+0x2a4/0x300 lib/nmi_backtrace.c:62
+ trigger_all_cpu_backtrace include/linux/nmi.h:148 [inline]
+ check_hung_uninterruptible_tasks kernel/hung_task.c:222 [inline]
+ watchdog+0xe16/0x1090 kernel/hung_task.c:379
+ kthread+0x344/0x440 kernel/kthread.c:379
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+Sending NMI from CPU 0 to CPUs 1:
+NMI backtrace for cpu 1
+CPU: 1 PID: 6146 Comm: syz-executor.1 Not tainted 6.3.0-syzkaller-07940-g6686317855c6 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
+RIP: 0010:get_page_from_freelist+0x2f5/0x2e20 mm/page_alloc.c:4281
+Code: e8 03 42 80 3c 28 00 0f 85 25 1d 00 00 48 8b 04 24 4d 03 67 20 48 8d 48 1c 48 89 c8 48 89 4c 24 38 48 c1 e8 03 42 0f b6 14 28 <48> 89 c8 83 e0 07 83 c0 03 38 d0 7c 08 84 d2 0f 85 c2 1c 00 00 48
+RSP: 0018:ffffc9000392f408 EFLAGS: 00000a07
+RAX: 1ffff92000725ec9 RBX: 0000000000000001 RCX: ffffc9000392f64c
+RDX: 0000000000000000 RSI: ffffffffffffffff RDI: ffff88813fffae08
+RBP: ffff88813fffc300 R08: 0000000000000000 R09: ffff88802581b0b7
+R10: ffffed1004b03616 R11: 0000000000000000 R12: 0000000000000006
+R13: dffffc0000000000 R14: 0000000000000000 R15: ffff88813fffae00
+FS:  00007f7b6a98a700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f5f54fa8000 CR3: 0000000191236000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __alloc_pages+0x1cb/0x4a0 mm/page_alloc.c:5592
+ alloc_pages+0x1aa/0x270 mm/mempolicy.c:2277
+ __get_free_pages+0xc/0x40 mm/page_alloc.c:5642
+ kasan_populate_vmalloc_pte mm/kasan/shadow.c:323 [inline]
+ kasan_populate_vmalloc_pte+0x2e/0x180 mm/kasan/shadow.c:314
+ apply_to_pte_range mm/memory.c:2578 [inline]
+ apply_to_pmd_range mm/memory.c:2622 [inline]
+ apply_to_pud_range mm/memory.c:2658 [inline]
+ apply_to_p4d_range mm/memory.c:2694 [inline]
+ __apply_to_page_range+0x68c/0x1030 mm/memory.c:2728
+ alloc_vmap_area+0x500/0x1e00 mm/vmalloc.c:1642
+ __get_vm_area_node+0x145/0x3f0 mm/vmalloc.c:2499
+ __vmalloc_node_range+0x252/0x14a0 mm/vmalloc.c:3165
+ __bpf_map_area_alloc+0xe5/0x180 kernel/bpf/syscall.c:336
+ bloom_map_alloc+0x303/0x560 kernel/bpf/bloom_filter.c:137
+ find_and_alloc_map kernel/bpf/syscall.c:135 [inline]
+ map_create+0x508/0x1860 kernel/bpf/syscall.c:1161
+ __sys_bpf+0x127f/0x5420 kernel/bpf/syscall.c:5040
+ __do_sys_bpf kernel/bpf/syscall.c:5162 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:5160 [inline]
+ __x64_sys_bpf+0x79/0xc0 kernel/bpf/syscall.c:5160
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f7b69c8c169
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f7b6a98a168 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+RAX: ffffffffffffffda RBX: 00007f7b69dabf80 RCX: 00007f7b69c8c169
+RDX: 0000000000000048 RSI: 0000000020000180 RDI: 0000000000000000
+RBP: 00007f7b69ce7ca1 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffd1b79d6ff R14: 00007f7b6a98a300 R15: 0000000000022000
+ </TASK>
 
 
-On 2023/5/2 11:06, John Stultz wrote:
-> On Wed, Feb 15, 2023 at 12:34 AM liujian (CE) <liujian56@huawei.com> wrote:
->>> On Fri, Feb 10, 2023 at 1:51 AM liujian (CE) <liujian56@huawei.com> wrote:
->>>>
->>>> During the syz test, we encountered many problems with various timer
->>>> handler functions softlockup.
->>>>
->>>> We analyze __run_timers() and find the following problem.
->>>>
->>>> In the while loop of __run_timers(), because there are too many timers
->>>> or improper timer handler functions, if the processing time of the
->>>> expired timers is always greater than the time wheel's next_expiry,
->>>> the function will loop infinitely.
->>>>
->>>> The following extreme test case can be used to reproduce the problem.
->>>> An extreme test case[1] is constructed to reproduce the problem.
->>>
->>> Thanks for reporting and sending out this data:
->>>
->>> First, any chance you might submit this as a in-kernel-stress test?
->>> Maybe utilizing the kernel/torture.c framework?
->>>
->> Okay,   I'll learn this framework and do this thing.
->>> (Though the test may need to occasionally take a break so the system can
->>> eventually catch up)
->>>
->>>> Is this a problem or an unreasonable use?
->>>>
->>>> Can we limit the running time of __run_timers() [2]?
->>>>
->>>> Does anyone have a good idea to solve this problem?
->>>
->>> So your patch reminds me of Peter's softirq_needs_break() logic:
->>>
->>> https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/log/?h=co
->>> re/softirq
->>>
->>> Maybe it could extend that series for the timer softirq as well?
->>>
->> Thank you. Yes.
->> Base on the patchset and the extended patch for timer [1], the soft lockup problem does not occur.
->>
->> By the way, I see this is a very old patchset?  Will this patchset push the main line? @John @Peter
->>
->>
->>   [1]
->> Author: Liu Jian <liujian56@huawei.com>
->> Date:   Tue Feb 14 09:53:46 2023 +0800
->>
->>      softirq, timer: Use softirq_needs_break()
->>
->>      In the while loop of __run_timers(), because there are too many timers or
->>      improper timer handler functions, if the processing time of the expired
->>      timers is always greater than the time wheel's next_expiry, the function
->>      will loop infinitely.
->>
->>      To prevent this, use the timeout/break logic provided by SoftIRQs.If the
->>      running time exceeds the limit, break the loop and an additional
->>      TIMER_SOFTIRQ is triggered.
->>
->>      Signed-off-by: Liu Jian <liujian56@huawei.com>
->>
->> diff --git a/kernel/time/timer.c b/kernel/time/timer.c
->> index 63a8ce7177dd..70744a469a39 100644
->> --- a/kernel/time/timer.c
->> +++ b/kernel/time/timer.c
->> @@ -1992,7 +1992,7 @@ void timer_clear_idle(void)
->>    * __run_timers - run all expired timers (if any) on this CPU.
->>    * @base: the timer vector to be processed.
->>    */
->> -static inline void __run_timers(struct timer_base *base)
->> +static inline void __run_timers(struct timer_base *base, struct softirq_action *h)
->>   {
->>          struct hlist_head heads[LVL_DEPTH];
->>          int levels;
->> @@ -2020,6 +2020,12 @@ static inline void __run_timers(struct timer_base *base)
->>
->>                  while (levels--)
->>                          expire_timers(base, heads + levels);
->> +
->> +               if (softirq_needs_break(h)) {
->> +                       if (time_after_eq(jiffies, base->next_expiry))
->> +                               __raise_softirq_irqoff(TIMER_SOFTIRQ);
->> +                       break;
->> +               }
->>          }
->>          raw_spin_unlock_irq(&base->lock);
->>          timer_base_unlock_expiry(base);
->> @@ -2032,9 +2038,9 @@ static __latent_entropy void run_timer_softirq(struct softirq_action *h)
->>   {
->>          struct timer_base *base = this_cpu_ptr(&timer_bases[BASE_STD]);
->>
->> -       __run_timers(base);
->> +       __run_timers(base, h);
->>          if (IS_ENABLED(CONFIG_NO_HZ_COMMON))
->> -               __run_timers(this_cpu_ptr(&timer_bases[BASE_DEF]));
->> +               __run_timers(this_cpu_ptr(&timer_bases[BASE_DEF]), h);
->>   }
->>
->>   /*
-> 
-> So I wanted to revive this old thread, as Frank Woo mentioned his team
-> has seen a similar issue as well.
-> 
-> Liujian: I'm curious if you've made any further progress with your
-> adapted patch ontop of PeterZ's softirq_needs_break patch series?
-> 
-Hi John,
-   Only the commit ("softirq, timer: Use softirq_needs_break()") is 
-added to the patchset of Peter, and no other modification is made.
-> Might it be worth re-submitting the whole series for consideration upstream?
-> 
-I agree very much and expect, because we often encounter similar 
-problems when doing fuzzy tests (especially when the test machine is poor).
-> thanks
-> -john
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
