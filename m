@@ -2,63 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A3786F781F
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 23:29:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC126F782C
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 23:30:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbjEDV3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 17:29:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33074 "EHLO
+        id S229984AbjEDVac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 17:30:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229983AbjEDV3q (ORCPT
+        with ESMTP id S229881AbjEDVa3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 17:29:46 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F4A21386B;
-        Thu,  4 May 2023 14:29:36 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1aad55244b7so7417455ad.2;
-        Thu, 04 May 2023 14:29:36 -0700 (PDT)
+        Thu, 4 May 2023 17:30:29 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F199B14903;
+        Thu,  4 May 2023 14:30:24 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-50b9ef67f35so1850369a12.2;
+        Thu, 04 May 2023 14:30:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683235776; x=1685827776;
+        d=gmail.com; s=20221208; t=1683235822; x=1685827822;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=YigFI0J8gEeJ9cS/4TbGx1mSqvxtVecjV4VaaynehVs=;
-        b=r1MJoYdfVTxCFUkhk4kqzogB35WzJWaXdMwR0kF2naomGKBzqaFz6BMb+Hj+jVYKSF
-         5pXHwjnfyHm9aYOp1CZYXfA/3K4U8lmduHliEi9wxFGdSBGNtRS3Syz2vnISXcwaT2iO
-         RIjq0yG/4FCs3RY2C9wrvWhKXoRU1KEarLEpk/1CGqHMASZqDoizbxDoLftBF9oy1yFe
-         tkK5h7EUNXOI7xaRi3XEuTbtM4JjUIuLZlZYqrgLNjODd/49zSEPfdhT8xiB1vNSO1i6
-         KZPlFsSqrKx4NUpneUzgGGdp5I0cOQAt+4WIVsJd6B0idgQiyM8Rfu5z4+JCUJTPVDFO
-         b+ww==
+        bh=dpDrHaDFb9uvY+Y5nUdaIxQKRWlMia3wPTlgfDNdf4c=;
+        b=qwrCJncTbPjo7OVmLb6DC5CkyjhsTdxQEiYUjTISYeax0QnqJ+7w+fLvAGvuaJxaPp
+         Biy+dpVNBJiWXPjTLS+Qjh7jTGnXGR054skBqurueUu4mQWWDFwk051N9sNmIVKpJlSm
+         TtFoeRQKXeWTkPAParUiybl3T2AqyyLA+h36wqpHyuC/fQmynrFvoPnWeHhOkaJH1Jgj
+         u9rNKsiyyy6gEYMZweRZ7GkEXNtSkiCyE7OhDcLiksv0RNr5Wlce5aK2IPjhGIYzVfJv
+         S2Mmws/AseRyPGDs1Z8egoP2B3KfaGRUmRGMnwRjiF7GyKCb+bPVpN6/r4DPaYbQPKxw
+         I93g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683235776; x=1685827776;
+        d=1e100.net; s=20221208; t=1683235822; x=1685827822;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=YigFI0J8gEeJ9cS/4TbGx1mSqvxtVecjV4VaaynehVs=;
-        b=DYwciOSsP0v8kV31lsdl+r06B8BZ0WeBOdYifvEJFuDDbUeGomCJQbgbZF/2/DL7qr
-         wJ74ezuRHRRjUhOnGIgWH/bmj+o6jB1Y3odGknenk4gNtrEQzmOHVMSCPgRJGv+zz8vO
-         rzgmraj+dR3sJxUF7TyMXD4BHK9zmIKsBRkOJpBnY55vWq2qE4Y0EvSwRh5ojUi/LubG
-         1L2XoKcSDA2Ta7UoxzzbN5ePprSg8rqKGpcTktijfU8fbgQydTfzgYW1R/f1uMvDZj5E
-         u0FgNq+uMGEH+Ci+X7FmxriN186KmHHVjfGpdT2YzbEpcfKGUyImcW56NH77V/n0kDj9
-         snOg==
-X-Gm-Message-State: AC+VfDwJ0mkmXaCQJOvReI9GYqOZRlGZHzMO0hTD5WKYaJS0vVCy8hnQ
-        ajTZxPY16YBa8H609/oOyEmohsv+x6t2/w==
-X-Google-Smtp-Source: ACHHUZ5yfp4qg3v5Ax3aZrMPEBASyRDzdpKUZaf2hCWJbtmWyHvnskvhy/DKRKComyvrbLMOVrpC7w==
-X-Received: by 2002:a17:902:f68f:b0:1aa:ec83:e1ac with SMTP id l15-20020a170902f68f00b001aaec83e1acmr5963791plg.53.1683235776025;
-        Thu, 04 May 2023 14:29:36 -0700 (PDT)
-Received: from localhost.localdomain ([2600:8801:9701:6a00:daec:5eff:fea8:3a31])
-        by smtp.gmail.com with ESMTPSA id z1-20020a17090a8b8100b00247a2498075sm11527121pjn.48.2023.05.04.14.29.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 May 2023 14:29:35 -0700 (PDT)
-From:   Dan Gora <dan.gora@gmail.com>
-Cc:     Dan Gora <dan.gora@gmail.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] Bluetooth: btrtl: Add missing MODULE_FIRMWARE declarations.
-Date:   Thu,  4 May 2023 14:28:44 -0700
-Message-Id: <20230504212843.18519-1-dan.gora@gmail.com>
-X-Mailer: git-send-email 2.35.1.102.g2b9c120970
+        bh=dpDrHaDFb9uvY+Y5nUdaIxQKRWlMia3wPTlgfDNdf4c=;
+        b=OiZmNVo3nQiDmvpP+ftmHtworouaDDMy0aubqC95sCwi6KWrsPOK6Pbl+AeJbP0Z8C
+         AkwemZuORfhE7qnonf1BfQs5MvkmRG3pvYF/k/9KNdK//AZ65aCN6AW9aBKKozmQR55T
+         XOYPNi3+UqVtxK1RnzTiMlMGH7MIKtiVGb0A1vg2+2r840ZAWBLKxHY0974SYKODXnoW
+         La2/QWpBvEg1nM6SchIKthNvqkU9E/7nS1il9alqnBZ9othkJ+xm7fBPgpD4rcp+UPhv
+         p7F7voIqzvYPi2dKiSPj0PY5Y6yce00MTSShmMIRBOMYsN1yu0kxTIqGkHJp/GAXFaSy
+         tKvg==
+X-Gm-Message-State: AC+VfDxF7Elk/DxeXGQl3t3LNJE1Mh2yqindqU1EPMICfPdWPO7a9q6I
+        eoiK/Ca5n6ZfcQhVQ71QLhC1Btm6OEmEFsvZpm4=
+X-Google-Smtp-Source: ACHHUZ5Wn3isdXputF03nNuI/MZ3Uu+owH1nKZqePrOGnu81HEC8Zu53kDXxLbOPkyMXsTcPaUAMwg==
+X-Received: by 2002:a17:906:4785:b0:94a:7716:e649 with SMTP id cw5-20020a170906478500b0094a7716e649mr222144ejc.13.1683235822205;
+        Thu, 04 May 2023 14:30:22 -0700 (PDT)
+Received: from MIKMCCRA-M-GY0W.cisco.com ([2001:420:c0c0:1001::d1])
+        by smtp.gmail.com with ESMTPSA id bz1-20020a1709070aa100b008f89953b761sm63289ejc.3.2023.05.04.14.30.20
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Thu, 04 May 2023 14:30:21 -0700 (PDT)
+From:   Michael McCracken <michael.mccracken@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     kernel-hardening@lists.openwall.com, serge@hallyn.com,
+        tycho@tycho.pizza, Michael McCracken <michael.mccracken@gmail.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH] sysctl: add config to make randomize_va_space RO
+Date:   Thu,  4 May 2023 14:30:02 -0700
+Message-Id: <20230504213002.56803-1-michael.mccracken@gmail.com>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -67,60 +70,56 @@ X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add missing MODULE_FIRMWARE declarations for firmware referenced in
-btrtl.c.
+Add config RO_RANDMAP_SYSCTL to set the mode of the randomize_va_space
+sysctl to 0444 to disallow all runtime changes. This will prevent
+accidental changing of this value by a root service.
 
-Signed-off-by: Dan Gora <dan.gora@gmail.com>
+The config is disabled by default to avoid surprises.
+
+Signed-off-by: Michael McCracken <michael.mccracken@gmail.com>
 ---
- drivers/bluetooth/btrtl.c | 18 ++++++++++++++++--
- 1 file changed, 16 insertions(+), 2 deletions(-)
+ kernel/sysctl.c | 4 ++++
+ mm/Kconfig      | 7 +++++++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/drivers/bluetooth/btrtl.c b/drivers/bluetooth/btrtl.c
-index 2915c82d719d..d978e7cea873 100644
---- a/drivers/bluetooth/btrtl.c
-+++ b/drivers/bluetooth/btrtl.c
-@@ -1367,14 +1367,30 @@ MODULE_FIRMWARE("rtl_bt/rtl8723cs_vf_fw.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8723cs_vf_config.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8723cs_xx_fw.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8723cs_xx_config.bin");
-+MODULE_FIRMWARE("rtl_bt/rtl8723d_fw.bin");
-+MODULE_FIRMWARE("rtl_bt/rtl8723d_config.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8723ds_fw.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8723ds_config.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8761a_fw.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8761a_config.bin");
-+MODULE_FIRMWARE("rtl_bt/rtl8761b_fw.bin");
-+MODULE_FIRMWARE("rtl_bt/rtl8761b_config.bin");
-+MODULE_FIRMWARE("rtl_bt/rtl8761bu_fw.bin");
-+MODULE_FIRMWARE("rtl_bt/rtl8761bu_config.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8821a_fw.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8821a_config.bin");
-+MODULE_FIRMWARE("rtl_bt/rtl8821c_fw.bin");
-+MODULE_FIRMWARE("rtl_bt/rtl8821c_config.bin");
-+MODULE_FIRMWARE("rtl_bt/rtl8821cs_fw.bin");
-+MODULE_FIRMWARE("rtl_bt/rtl8821cs_config.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8822b_fw.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8822b_config.bin");
-+MODULE_FIRMWARE("rtl_bt/rtl8822cs_fw.bin");
-+MODULE_FIRMWARE("rtl_bt/rtl8822cs_config.bin");
-+MODULE_FIRMWARE("rtl_bt/rtl8822cu_fw.bin");
-+MODULE_FIRMWARE("rtl_bt/rtl8822cu_config.bin");
-+MODULE_FIRMWARE("rtl_bt/rtl8851bu_fw.bin");
-+MODULE_FIRMWARE("rtl_bt/rtl8851bu_config.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8852au_fw.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8852au_config.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8852bs_fw.bin");
-@@ -1383,5 +1399,3 @@ MODULE_FIRMWARE("rtl_bt/rtl8852bu_fw.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8852bu_config.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8852cu_fw.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8852cu_config.bin");
--MODULE_FIRMWARE("rtl_bt/rtl8851bu_fw.bin");
--MODULE_FIRMWARE("rtl_bt/rtl8851bu_config.bin");
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index bfe53e835524..c5aafb734abe 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -1913,7 +1913,11 @@ static struct ctl_table kern_table[] = {
+ 		.procname	= "randomize_va_space",
+ 		.data		= &randomize_va_space,
+ 		.maxlen		= sizeof(int),
++#if defined(CONFIG_RO_RANDMAP_SYSCTL)
++		.mode		= 0444,
++#else
+ 		.mode		= 0644,
++#endif
+ 		.proc_handler	= proc_dointvec,
+ 	},
+ #endif
+diff --git a/mm/Kconfig b/mm/Kconfig
+index 7672a22647b4..91a4a86d70e0 100644
+--- a/mm/Kconfig
++++ b/mm/Kconfig
+@@ -1206,6 +1206,13 @@ config PER_VMA_LOCK
+ 	  This feature allows locking each virtual memory area separately when
+ 	  handling page faults instead of taking mmap_lock.
+ 
++config RO_RANDMAP_SYSCTL
++    bool "Make randomize_va_space sysctl 0444"
++    depends on MMU
++    default n
++    help
++      Set file mode of /proc/sys/kernel/randomize_va_space to 0444 to disallow runtime changes in ASLR.
++
+ source "mm/damon/Kconfig"
+ 
+ endmenu
 -- 
-2.35.1.102.g2b9c120970
+2.37.1 (Apple Git-137.1)
 
