@@ -2,71 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D982F6F70DD
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 19:30:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A15536F70E5
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 19:32:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbjEDRaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 13:30:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60052 "EHLO
+        id S229877AbjEDRcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 13:32:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjEDRaU (ORCPT
+        with ESMTP id S229459AbjEDRcx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 13:30:20 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586D74ED7
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 10:30:19 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f14468ef54so934589e87.0
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 10:30:19 -0700 (PDT)
+        Thu, 4 May 2023 13:32:53 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D26F940CF
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 10:32:51 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4eff4ea8e39so920339e87.1
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 10:32:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683221417; x=1685813417;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+        d=linaro.org; s=google; t=1683221570; x=1685813570;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=USgyYClOAh8hG0SxXXCYpGkelSi9AZ1K2lmrTQ+brls=;
-        b=CIAIVw9KsGwAnLtm7y1fdStcCxRZj5+30HgtUTyRkivn/xZGI/8SUcFG/WTUBdfwNX
-         +qgYiXhGyeoVbTUm9Tr4vnIenPQz6RPiMVX4IZoBws/e92GZAGbXrKhrJOkB9YbQ2bsv
-         Eh4MGR1m7IEmT+uWYOL5NTOZywKS+xe5y36xx8npnVREHcx3sNhWT/0i8I4s3iAur48b
-         ryT+W4eL51pOAjo3Zd8OQ+HodIGDU5FEZDkzR9awYmYv0u0GQeHGGQMDfT2/l+Z+i0KC
-         Nz0WymJdNH1oPGzaX7b0mjq4ZVeqlcRulxkjywNmDTvmc5o3UCuaed6KdPjbOZt2onxk
-         GjJw==
+        bh=ctm3V/2tsb+HwfAuPCFA+h4VPFxJVgdGiqFdK+yT/Ko=;
+        b=VImILlN7TwlrC2uXONDFXi6Aue+UKaDLDAMGC/L8XA5cP4yvrbGOh9H65T5TSYhSph
+         eFrGquJT5Wwjt9UH0DlTvVzq1KoPyqYJT0Q+xgRbKON/0lmvOvyB3Y7HWkbIxaTNg5p5
+         Vf53nkfRE5OwqEqTsyZua7yo18Ds/H07DdqnS/deFk6AeU+ONA44CSaaBRjaHNIX1NIO
+         tY76TUNagwbXIAKT2vAzK5GWq5Z7zZZYMoYo0/EmjoqRKLuIDHzsv47loY7c3zCEH23Y
+         kct3impCR99aQSF8DMn+SxJbXqhosJYi6AdUQlmG+ypxE0TnU/QDgrx5PMseyQypzwem
+         0SAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683221417; x=1685813417;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+        d=1e100.net; s=20221208; t=1683221570; x=1685813570;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=USgyYClOAh8hG0SxXXCYpGkelSi9AZ1K2lmrTQ+brls=;
-        b=XUeahpIi11UZdZjnFQX4nPJLS1KewSsmz1pNWKbPP3QOq+oMcwF6rDmU7efy7vc567
-         9Ug8PvOsDNQ6ebRKViFykI7ZyuXJ9Fe9mSyEDvuJ+WlsGEAVr7q5YW+Jr9SlRVE4eI0q
-         wzgQ+i533TnuOGwpkx5jz9nKaX4GuUF5Fcokhu5MrCWQT+XW95Ix6ggqaj+MqEnd239x
-         hjDDXIgrWcLFk+097j5/76LCnTAyykTQkaYJD/heuzJroa0RDEMuSIIitACk4ojmEkPb
-         PfTUNzf+BxdWBIP7MYh31egsOYYa2+fE1Orusdhj2gNrFOu73MhbZ0cgJ6dVDdZD6aPi
-         DyNg==
-X-Gm-Message-State: AC+VfDymmP1aDyjs2m+sL/wSmaAF01kRrkK1OSJ1iXlUfwl7rfupzBVS
-        cngldcqopYLv+KX7LwZeOv94XA==
-X-Google-Smtp-Source: ACHHUZ6BDKSG/UfzEsZOwOXle9LxvxwrYDGdcfaJFM6ZuV3WqBDURrT/+UajKqa7HMn+ORI7m2/l/w==
-X-Received: by 2002:a19:ac08:0:b0:4f1:450b:a13 with SMTP id g8-20020a19ac08000000b004f1450b0a13mr623007lfc.2.1683221417603;
-        Thu, 04 May 2023 10:30:17 -0700 (PDT)
+        bh=ctm3V/2tsb+HwfAuPCFA+h4VPFxJVgdGiqFdK+yT/Ko=;
+        b=VT6exwpicUoV1p3C8mW8U2Ntm43D++IlGYS83ldgq2zkDy7JTNIWNgJkjlDJUXtYNx
+         PrhzHFVzeFrMDdxqlrcIIeE9QGIltJSkq70FdJI5+cOUGpo0/MyKbTcahU11wMBAw9WX
+         wq5IBWGqWq7W+g9/qdfkOdSccXpMFm7/oj4oSvrLw8gF+ObMp5OkkrktbVJip08IZpNd
+         GGdzqVEwRAtQAJ5OFF9t+72cw+RT9c42ZZ6CuW6/AlMp0Ax4Ctxi0r5ahGvTvL1oDClY
+         eNt5+o5wMrhCa4VAyFDQ3Q6M/ZbOnr2nsFYOpkoz0EB5ImIAEOIx5hm2yh+WbSXRXVyX
+         WcNw==
+X-Gm-Message-State: AC+VfDxwsftHoJzXek4qxBOj82wMXbsI3r/U8hGem8QxmMLXKQXWWcNN
+        b6jONGJiN8OvZUkzDIQ25x4gTg==
+X-Google-Smtp-Source: ACHHUZ4NV4hGbvdi43PO5Vfgh4RnSDqET3vkzuhPeAbGnXSF4kwthrTDz9w8iz/OekHTDhivXOWdxQ==
+X-Received: by 2002:ac2:5a4a:0:b0:4eb:40d4:e0d2 with SMTP id r10-20020ac25a4a000000b004eb40d4e0d2mr1815554lfn.38.1683221570096;
+        Thu, 04 May 2023 10:32:50 -0700 (PDT)
 Received: from [192.168.1.101] (abyl248.neoplus.adsl.tpnet.pl. [83.9.31.248])
-        by smtp.gmail.com with ESMTPSA id y26-20020ac255ba000000b004edce1d338csm6577223lfg.89.2023.05.04.10.30.16
+        by smtp.gmail.com with ESMTPSA id b9-20020a056512218900b004db3e330dcesm6646261lft.178.2023.05.04.10.32.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 10:30:17 -0700 (PDT)
-Message-ID: <68ee1330-3319-d39e-8628-8ebc1b856a21@linaro.org>
-Date:   Thu, 4 May 2023 19:30:15 +0200
+        Thu, 04 May 2023 10:32:49 -0700 (PDT)
+Message-ID: <9dab4e48-6deb-76b1-4eb9-f0831bdcf7bb@linaro.org>
+Date:   Thu, 4 May 2023 19:32:48 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.1
-Subject: Re: [PATCH 2/4] venus: update calculation for dpb buffers
+Subject: Re: [PATCH 3/4] venus: add handling of bit depth change from firmwar
 Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
 To:     Dikshita Agarwal <quic_dikshita@quicinc.com>,
         linux-media@vger.kernel.org, stanimir.k.varbanov@gmail.com,
         quic_vgarodia@quicinc.com, agross@kernel.org, andersson@kernel.org,
         mchehab@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
 References: <1683196599-3730-1-git-send-email-quic_dikshita@quicinc.com>
- <1683196599-3730-3-git-send-email-quic_dikshita@quicinc.com>
- <a37ff9da-d8d8-0af0-6d08-3d8858fe49f9@linaro.org>
-In-Reply-To: <a37ff9da-d8d8-0af0-6d08-3d8858fe49f9@linaro.org>
+ <1683196599-3730-4-git-send-email-quic_dikshita@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <1683196599-3730-4-git-send-email-quic_dikshita@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,88 +80,74 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 4.05.2023 19:29, Konrad Dybcio wrote:
+On 4.05.2023 12:36, Dikshita Agarwal wrote:
+> Set opb format to TP10_UWC and dpb to client set format
+> when bit depth change to 10 bit is detecting by firmware.
 > 
+> Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
+> ---
+>  drivers/media/platform/qcom/venus/helpers.c | 18 ++++++++++++++++++
+>  drivers/media/platform/qcom/venus/vdec.c    |  5 ++++-
+>  2 files changed, 22 insertions(+), 1 deletion(-)
 > 
-> On 4.05.2023 12:36, Dikshita Agarwal wrote:
->> Use dpb color format, width and height of output port
->> for calculating buffer size of dpb buffers.
->>
->> Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
->> ---
-> Looks sane but I'm not exactly an expert on this
-> 
-> Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> 
-> Konrad
->>  drivers/media/platform/qcom/venus/helpers.c          | 4 ++++
->>  drivers/media/platform/qcom/venus/hfi_plat_bufs.h    | 3 +++
->>  drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c | 8 +++++++-
->>  3 files changed, 14 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/media/platform/qcom/venus/helpers.c b/drivers/media/platform/qcom/venus/helpers.c
->> index 5946def..4ad6232 100644
->> --- a/drivers/media/platform/qcom/venus/helpers.c
->> +++ b/drivers/media/platform/qcom/venus/helpers.c
->> @@ -641,12 +641,16 @@ static int platform_get_bufreq(struct venus_inst *inst, u32 buftype,
->>  	if (is_dec) {
->>  		params.width = inst->width;
->>  		params.height = inst->height;
->> +		params.out_width = inst->out_width;
->> +		params.out_height = inst->out_height;
->>  		params.codec = inst->fmt_out->pixfmt;
->>  		params.hfi_color_fmt = to_hfi_raw_fmt(inst->fmt_cap->pixfmt);
->>  		params.dec.max_mbs_per_frame = mbs_per_frame_max(inst);
->>  		params.dec.buffer_size_limit = 0;
->>  		params.dec.is_secondary_output =
->>  			inst->opb_buftype == HFI_BUFFER_OUTPUT2;
->> +		if (params.dec.is_secondary_output)
->> +			params.hfi_dpb_color_fmt = inst->dpb_fmt;
->>  		params.dec.is_interlaced =
->>  			inst->pic_struct != HFI_INTERLACE_FRAME_PROGRESSIVE;
->>  	} else {
->> diff --git a/drivers/media/platform/qcom/venus/hfi_plat_bufs.h b/drivers/media/platform/qcom/venus/hfi_plat_bufs.h
->> index 52a51a3..25e6074 100644
->> --- a/drivers/media/platform/qcom/venus/hfi_plat_bufs.h
->> +++ b/drivers/media/platform/qcom/venus/hfi_plat_bufs.h
->> @@ -12,8 +12,11 @@
->>  struct hfi_plat_buffers_params {
->>  	u32 width;
->>  	u32 height;
->> +	u32 out_width;
->> +	u32 out_height;
->>  	u32 codec;
->>  	u32 hfi_color_fmt;
->> +	u32 hfi_dpb_color_fmt;
->>  	enum hfi_version version;
->>  	u32 num_vpp_pipes;
->>  	union {
->> diff --git a/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c b/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c
->> index ea25c45..3855b04 100644
->> --- a/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c
->> +++ b/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c
->> @@ -1185,6 +1185,7 @@ static int bufreq_dec(struct hfi_plat_buffers_params *params, u32 buftype,
->>  	enum hfi_version version = params->version;
->>  	u32 codec = params->codec;
->>  	u32 width = params->width, height = params->height, out_min_count;
->> +	u32 out_width = params->out_width, out_height = params->out_height;
->>  	struct dec_bufsize_ops *dec_ops;
->>  	bool is_secondary_output = params->dec.is_secondary_output;
->>  	bool is_interlaced = params->dec.is_interlaced;
->> @@ -1235,7 +1236,12 @@ static int bufreq_dec(struct hfi_plat_buffers_params *params, u32 buftype,
->>  		bufreq->count_min = out_min_count;
->>  		bufreq->size =
->>  			venus_helper_get_framesz_raw(params->hfi_color_fmt,
->> -						     width, height);
->> +						     out_width, out_height);
->> +		if (buftype == HFI_BUFFER_OUTPUT &&
->> +		    params->dec.is_secondary_output)
-I suppose this line could be unbroken
+> diff --git a/drivers/media/platform/qcom/venus/helpers.c b/drivers/media/platform/qcom/venus/helpers.c
+> index 4ad6232..4f48ebd 100644
+> --- a/drivers/media/platform/qcom/venus/helpers.c
+> +++ b/drivers/media/platform/qcom/venus/helpers.c
+> @@ -1770,6 +1770,24 @@ int venus_helper_get_out_fmts(struct venus_inst *inst, u32 v4l2_fmt,
+>  	if (!caps)
+>  		return -EINVAL;
+>  
+> +	if (inst->bit_depth == VIDC_BITDEPTH_10 &&
+> +	    inst->session_type == VIDC_SESSION_TYPE_DEC) {
+This could be unbroken
+
+> +		found_ubwc = find_fmt_from_caps(caps, HFI_BUFFER_OUTPUT,
+> +						HFI_COLOR_FORMAT_YUV420_TP10_UBWC);
+> +		found = find_fmt_from_caps(caps, HFI_BUFFER_OUTPUT2,
+> +					   fmt);
+This could be unbroken
+
+Otherwise I think this lgtm
+
+Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
 Konrad
->> +			bufreq->size =
->> +				venus_helper_get_framesz_raw(params->hfi_dpb_color_fmt,
->> +							     out_width, out_height);
->>  	} else if (buftype == HFI_BUFFER_INTERNAL_SCRATCH(version)) {
->>  		bufreq->size = dec_ops->scratch(width, height, is_interlaced);
->>  	} else if (buftype == HFI_BUFFER_INTERNAL_SCRATCH_1(version)) {
+> +		if (found_ubwc && found) {
+> +			/*
+> +			 * Hard-code DPB buffers to be 10bit UBWC
+> +			 * until V4L2 is able to expose compressed/tiled
+> +			 * formats to applications.
+> +			 */
+> +			*out_fmt = HFI_COLOR_FORMAT_YUV420_TP10_UBWC;
+> +			*out2_fmt = fmt;
+> +			return 0;
+> +		}
+> +	}
+> +
+>  	if (ubwc) {
+>  		ubwc_fmt = fmt | HFI_COLOR_FORMAT_UBWC_BASE;
+>  		found_ubwc = find_fmt_from_caps(caps, HFI_BUFFER_OUTPUT,
+> diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
+> index 687d62e..69f7f6e 100644
+> --- a/drivers/media/platform/qcom/venus/vdec.c
+> +++ b/drivers/media/platform/qcom/venus/vdec.c
+> @@ -701,6 +701,9 @@ static int vdec_set_work_route(struct venus_inst *inst)
+>  }
+>  
+>  #define is_ubwc_fmt(fmt) (!!((fmt) & HFI_COLOR_FORMAT_UBWC_BASE))
+> +#define is_10bit_ubwc_fmt(fmt) (!!((fmt) & HFI_COLOR_FORMAT_10_BIT_BASE & \
+> +				 HFI_COLOR_FORMAT_UBWC_BASE))
+> +
+>  
+>  static int vdec_output_conf(struct venus_inst *inst)
+>  {
+> @@ -748,7 +751,7 @@ static int vdec_output_conf(struct venus_inst *inst)
+>  		inst->opb_fmt = out2_fmt;
+>  		inst->dpb_buftype = HFI_BUFFER_OUTPUT;
+>  		inst->dpb_fmt = out_fmt;
+> -	} else if (is_ubwc_fmt(out2_fmt)) {
+> +	} else if (is_ubwc_fmt(out2_fmt) || is_10bit_ubwc_fmt(out_fmt)) {
+>  		inst->opb_buftype = HFI_BUFFER_OUTPUT;
+>  		inst->opb_fmt = out_fmt;
+>  		inst->dpb_buftype = HFI_BUFFER_OUTPUT2;
