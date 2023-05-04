@@ -2,146 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A4686F6960
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 13:00:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DD686F6967
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 13:01:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230072AbjEDK7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 06:59:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34726 "EHLO
+        id S229932AbjEDLBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 07:01:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbjEDK70 (ORCPT
+        with ESMTP id S229767AbjEDLBd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 06:59:26 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B0EAA3
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 03:59:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683197965; x=1714733965;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=VSYZ2ksxXks/w+kQKfNn4JVfzzDRVgK2yjBTSXUbcZg=;
-  b=eL5B1hugvnTXOspKrCtX12n6uhZ+f7MkDicRs9L5eoHUYilEsjyUaRMX
-   TDXZdLmmBnuWHIiNHsQAPPlBO93v0jsC56KEYqYm/Zt0DAp6EsSP4iAlJ
-   8BcMcIoZzIOeUjbZy3VYs5q+p1PYUMee7UssYE3cUKj0zCXHfCiSiEWcq
-   +C04XTAI6IsJDkkT8hZQHHIFsKKIaWODh09bKnCbFih6JrTwP4JjxTDxY
-   8MWxJnI46F6bsTDZnjT8pnKVVKUQZR5ZsySugwR7tFzkIGfLmLCpm0VoH
-   C4SIa8hMRzL0wEFHA/C45IIeyAkekqPUm4/vBotTzztsJg9v1/u36kZx1
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="328520634"
-X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
-   d="scan'208";a="328520634"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 03:58:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="821118289"
-X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
-   d="scan'208";a="821118289"
-Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 04 May 2023 03:58:22 -0700
-Received: from kbuild by e3434d64424d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1puWfG-0002rW-0C;
-        Thu, 04 May 2023 10:58:22 +0000
-Date:   Thu, 4 May 2023 18:58:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jon Derrick <jonathan.derrick@linux.dev>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Song Liu <song@kernel.org>, Christoph Hellwig <hch@lst.de>
-Subject: drivers/md/md-bitmap.c:242 __write_sb_page() warn: unsigned 'offset'
- is never less than zero.
-Message-ID: <202305041858.yfdVDDZ4-lkp@intel.com>
+        Thu, 4 May 2023 07:01:33 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2066.outbound.protection.outlook.com [40.107.223.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E385267;
+        Thu,  4 May 2023 04:01:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=O3OP1zm50qzi7+GQPsTl9OSDiS1cC9HW1EAUpRtw5D32LEg9quendC+wTM6Yvbbf/7aeSGZF8IN21w+6FDCgyCNvIq2XZY7H5yeuRNybmxKVIMBxH5dvu+BhSAfv9KMMbA/g9FNmU7a55RgvRmLXWb4JdLQHE3llOKdXwAE0D6yfXO/etq+CSJgf7O1kDGAzk+Kpou+5x6Vlu3vTEUleGH/f50B9KEmJ6HcnT5Uii1xbI25l4m6wovmmYwPIu6oWDNuaPLEdHNr6FYTrDohi5YfMeyQG/TDQsoroEv/HAopUppAn/niF5FhqWX7/YEosnWABSXU0WndosQYJM/LScA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eZZRwxw0UjB16HJlKKUAcKfxCQURFPqKoJRqpPDi8BY=;
+ b=Jcon7Qe0YcaRI/JkjKFMnc3MQQ7KT5CRGJ0z3gdoC+NfsATU798AiGbea61wDWgM2LxlWnbi1e5p164Cpr33OZFTJCDhv14+aOGPHUiH/NVXhDNMFNV8F7ShaQg9oSJoMOA/ergDvR+5GWpEUCH7FElauDte16ct567rc2VVBOiWAQZZPIzHTqx3FvtWJtv9ubE64lEHx55DaZiXjZyymqtg+sdnMS0emv9UQqw2lZNIzrG7m+Z1Y91Oejs5MwV2CIAjE762TFClGTJLlnb5mbjQHAIvE+jS/XdgQVzqmfV5obcNJEdFEkOpz9jchDaYc2wI0VU2AIjr0JKes0eG0A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=infradead.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eZZRwxw0UjB16HJlKKUAcKfxCQURFPqKoJRqpPDi8BY=;
+ b=pVjb1/vucHwLGvCeCZva+yOEoRHhPDPZK8ExIdvXmzVjws+HO/eqVdGxRpx0hBMC1uRpTTAIxEGa1smHMN09wURhx8JWIBEyOXb30n0NjoIHIRELRcn56zNQrjT36vDwYs9yXpL1D67Lmqm2fUswDhpr+oPaxrHJin8xSQHiEb0=
+Received: from DM6PR12CA0031.namprd12.prod.outlook.com (2603:10b6:5:1c0::44)
+ by SA1PR12MB6917.namprd12.prod.outlook.com (2603:10b6:806:24c::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.20; Thu, 4 May
+ 2023 11:01:24 +0000
+Received: from DM6NAM11FT076.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:1c0:cafe::b) by DM6PR12CA0031.outlook.office365.com
+ (2603:10b6:5:1c0::44) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.27 via Frontend
+ Transport; Thu, 4 May 2023 11:01:24 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT076.mail.protection.outlook.com (10.13.173.204) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6363.26 via Frontend Transport; Thu, 4 May 2023 11:01:23 +0000
+Received: from BLR-5CG113396H.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 4 May
+ 2023 06:00:18 -0500
+From:   Ravi Bangoria <ravi.bangoria@amd.com>
+To:     <peterz@infradead.org>
+CC:     <ravi.bangoria@amd.com>, <namhyung@kernel.org>,
+        <eranian@google.com>, <acme@kernel.org>, <mark.rutland@arm.com>,
+        <jolsa@kernel.org>, <irogers@google.com>, <bp@alien8.de>,
+        <kan.liang@linux.intel.com>, <adrian.hunter@intel.com>,
+        <maddy@linux.ibm.com>, <x86@kernel.org>,
+        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <sandipan.das@amd.com>, <ananth.narayan@amd.com>,
+        <santosh.shukla@amd.com>
+Subject: [PATCH v4 0/4] perf: Rework event forwarding logic
+Date:   Thu, 4 May 2023 16:29:59 +0530
+Message-ID: <20230504110003.2548-1-ravi.bangoria@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT076:EE_|SA1PR12MB6917:EE_
+X-MS-Office365-Filtering-Correlation-Id: f36c6e9c-549f-43d4-1fc1-08db4c8ee687
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zrfm4kjnk+/KBCi/5P7ERy6+MnUrVz1EuTbUncQyZnmquhhNiOm4x3Zz8rcodEjW2ToS/vtBnXodVzPPuQ22B4yv/eNQxHcYPOm2VrOH925jlSWe0Ipb2GPJAZJ2Viyeg8eRtFTRoGfzYd81weClQUfteJ3QSMwBZ5LhNZUCxgCUZ9oFKfsk1hDhoxG6ImubEuEsZyUJugBQYjWhklDLnDUAa6SimqSCMRPzg3uI1FS4/DA4yD05WukEuv1Omdp3kMIsIRTbHjv/KaSxXEVtdv1WS0QY3OFj1fiZnPnU/+H2y2Ci3wuimXbhdDkbnnW9hKDKAjiyWuLfXdmpNxQyFJqqn2F3RtC431EVUS+P8wm1qLokg1f+YnQPTkyJM+UD63qNAMBVPkG+iQPWZLj6HIvIBvz6MA+9S8zgZrcVEAHtxfUQBY8Cfw4pCXBB3T7AqZ/LztYrE4V2hKnThA/2UsMufOA3FHcfapwPs+7YxpqMCl4D2G0cmlf5UQ+SmN+kvs3Q/MSR7SVI9Eb+tPP4LrH1xEnI9ep5RRbVAakskupeut9cPrAXM2Ia3Lcs1jCu00OwZxisJvFkGInbJ+2UweEwkH0HQ26OGNWP091lLLU74slycz9egQ5iGYkXVQm0MQlxkM6gLAlcXZ2Zf4rGc4NaJu7jMsF40VoOhJ4CP5VDyV55/v5YrefP4h0L46oLWZFY4uxyyEQc4XRmm1WNcwtfnMIq29XM9dHOuEKnCio=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(136003)(39860400002)(346002)(451199021)(46966006)(36840700001)(40470700004)(2906002)(70206006)(70586007)(44832011)(86362001)(2616005)(82310400005)(426003)(36756003)(336012)(7416002)(5660300002)(478600001)(8676002)(8936002)(966005)(40460700003)(6916009)(40480700001)(4326008)(41300700001)(6666004)(54906003)(316002)(7696005)(82740400003)(16526019)(26005)(186003)(81166007)(1076003)(356005)(83380400001)(47076005)(36860700001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2023 11:01:23.8801
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f36c6e9c-549f-43d4-1fc1-08db4c8ee687
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT076.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6917
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   1a5304fecee523060f26e2778d9d8e33c0562df3
-commit: 10172f200b67aafcb9b8ce7d0575d713c1aafbb7 md: Fix types in sb writer
-date:   3 weeks ago
-config: nios2-randconfig-m031-20230503 (https://download.01.org/0day-ci/archive/20230504/202305041858.yfdVDDZ4-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 12.1.0
+Usually, events are opened on the same pmu as requested by user via
+perf_event_attr->type argument. But certain special events are
+internally redirected to different pmu. Currently such pmus needs to
+be treated specially and thus requires some gruesome hacks.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305041858.yfdVDDZ4-lkp@intel.com/
+An approach, suggested by Peter Zijlstra, to get rid of these hacks
+was to overwrite event attributes with new pmu's attribute values
+within the kernel and let perf_event_init() retry opening the event
+with overwritten values. This patch series implements it.
 
-New smatch warnings:
-drivers/md/md-bitmap.c:242 __write_sb_page() warn: unsigned 'offset' is never less than zero.
+v3: https://lore.kernel.org/r/20230425142205.762-1-ravi.bangoria@amd.com
+v3->v4:
+ - Split pmu linear searching changes into a separate patch with few
+   additional changes.
+ - Use special pointer value (void *)(~0) instead of introducing new
+   variable to skip creating sysfs/dev files.
+ - Move AMD IBS unit test under tools/perf/arch/x86/tests/
 
-Old smatch warnings:
-arch/nios2/include/asm/thread_info.h:62 current_thread_info() error: uninitialized symbol 'sp'.
+Patches are prepared on v6.3.
 
-vim +/offset +242 drivers/md/md-bitmap.c
+Ravi Bangoria (4):
+  perf/core: Rework forwarding of {task|cpu}-clock events
+  perf/ibs: Fix interface via core pmu events
+  perf/core: Remove pmu linear searching code
+  perf test: Add selftest to test IBS invocation via core pmu events
 
-b2d2c4ceaddc30 drivers/md/bitmap.c    NeilBrown        2008-09-01  211  
-328e17d8d9428b drivers/md/md-bitmap.c Jon Derrick      2023-02-24  212  static int __write_sb_page(struct md_rdev *rdev, struct bitmap *bitmap,
-328e17d8d9428b drivers/md/md-bitmap.c Jon Derrick      2023-02-24  213  			   struct page *page)
-a654b9d8f851f4 drivers/md/bitmap.c    NeilBrown        2005-06-21  214  {
-a6ff7e089c7fca drivers/md/bitmap.c    Jonathan Brassow 2011-01-14  215  	struct block_device *bdev;
-fd01b88c75a718 drivers/md/bitmap.c    NeilBrown        2011-10-11  216  	struct mddev *mddev = bitmap->mddev;
-1ec885cdd01a9a drivers/md/bitmap.c    NeilBrown        2012-05-22  217  	struct bitmap_storage *store = &bitmap->storage;
-10172f200b67aa drivers/md/md-bitmap.c Jon Derrick      2023-02-24  218  	sector_t offset = mddev->bitmap_info.offset;
-10172f200b67aa drivers/md/md-bitmap.c Jon Derrick      2023-02-24  219  	sector_t ps, sboff, doff;
-10172f200b67aa drivers/md/md-bitmap.c Jon Derrick      2023-02-24  220  	unsigned int size = PAGE_SIZE;
-a6ff7e089c7fca drivers/md/bitmap.c    Jonathan Brassow 2011-01-14  221  
-a6ff7e089c7fca drivers/md/bitmap.c    Jonathan Brassow 2011-01-14  222  	bdev = (rdev->meta_bdev) ? rdev->meta_bdev : rdev->bdev;
-9b1215c102d4b1 drivers/md/bitmap.c    NeilBrown        2012-05-22  223  	if (page->index == store->file_pages - 1) {
-10172f200b67aa drivers/md/md-bitmap.c Jon Derrick      2023-02-24  224  		unsigned int last_page_size = store->bytes & (PAGE_SIZE - 1);
-328e17d8d9428b drivers/md/md-bitmap.c Jon Derrick      2023-02-24  225  
-9b1215c102d4b1 drivers/md/bitmap.c    NeilBrown        2012-05-22  226  		if (last_page_size == 0)
-9b1215c102d4b1 drivers/md/bitmap.c    NeilBrown        2012-05-22  227  			last_page_size = PAGE_SIZE;
-9b1215c102d4b1 drivers/md/bitmap.c    NeilBrown        2012-05-22  228  		size = roundup(last_page_size,
-a6ff7e089c7fca drivers/md/bitmap.c    Jonathan Brassow 2011-01-14  229  			       bdev_logical_block_size(bdev));
-9b1215c102d4b1 drivers/md/bitmap.c    NeilBrown        2012-05-22  230  	}
-328e17d8d9428b drivers/md/md-bitmap.c Jon Derrick      2023-02-24  231  
-10172f200b67aa drivers/md/md-bitmap.c Jon Derrick      2023-02-24  232  	ps = page->index * PAGE_SIZE / SECTOR_SIZE;
-10172f200b67aa drivers/md/md-bitmap.c Jon Derrick      2023-02-24  233  	sboff = rdev->sb_start + offset;
-10172f200b67aa drivers/md/md-bitmap.c Jon Derrick      2023-02-24  234  	doff = rdev->data_offset;
-10172f200b67aa drivers/md/md-bitmap.c Jon Derrick      2023-02-24  235  
-328e17d8d9428b drivers/md/md-bitmap.c Jon Derrick      2023-02-24  236  	/* Just make sure we aren't corrupting data or metadata */
-f6af949c567211 drivers/md/bitmap.c    NeilBrown        2009-12-14  237  	if (mddev->external) {
-f6af949c567211 drivers/md/bitmap.c    NeilBrown        2009-12-14  238  		/* Bitmap could be anywhere. */
-10172f200b67aa drivers/md/md-bitmap.c Jon Derrick      2023-02-24  239  		if (sboff + ps > doff &&
-10172f200b67aa drivers/md/md-bitmap.c Jon Derrick      2023-02-24  240  		    sboff < (doff + mddev->dev_sectors + PAGE_SIZE / SECTOR_SIZE))
-328e17d8d9428b drivers/md/md-bitmap.c Jon Derrick      2023-02-24  241  			return -EINVAL;
-f6af949c567211 drivers/md/bitmap.c    NeilBrown        2009-12-14 @242  	} else if (offset < 0) {
-f0d76d70bc77b9 drivers/md/bitmap.c    NeilBrown        2007-07-17  243  		/* DATA  BITMAP METADATA  */
-10172f200b67aa drivers/md/md-bitmap.c Jon Derrick      2023-02-24  244  		if (offset + ps + size / SECTOR_SIZE > 0)
-f0d76d70bc77b9 drivers/md/bitmap.c    NeilBrown        2007-07-17  245  			/* bitmap runs in to metadata */
-328e17d8d9428b drivers/md/md-bitmap.c Jon Derrick      2023-02-24  246  			return -EINVAL;
-328e17d8d9428b drivers/md/md-bitmap.c Jon Derrick      2023-02-24  247  
-10172f200b67aa drivers/md/md-bitmap.c Jon Derrick      2023-02-24  248  		if (doff + mddev->dev_sectors > sboff)
-f0d76d70bc77b9 drivers/md/bitmap.c    NeilBrown        2007-07-17  249  			/* data runs in to bitmap */
-328e17d8d9428b drivers/md/md-bitmap.c Jon Derrick      2023-02-24  250  			return -EINVAL;
-0f420358e3a2ab drivers/md/bitmap.c    Andre Noll       2008-07-11  251  	} else if (rdev->sb_start < rdev->data_offset) {
-f0d76d70bc77b9 drivers/md/bitmap.c    NeilBrown        2007-07-17  252  		/* METADATA BITMAP DATA */
-10172f200b67aa drivers/md/md-bitmap.c Jon Derrick      2023-02-24  253  		if (sboff + ps + size / SECTOR_SIZE > doff)
-f0d76d70bc77b9 drivers/md/bitmap.c    NeilBrown        2007-07-17  254  			/* bitmap runs in to data */
-328e17d8d9428b drivers/md/md-bitmap.c Jon Derrick      2023-02-24  255  			return -EINVAL;
-f0d76d70bc77b9 drivers/md/bitmap.c    NeilBrown        2007-07-17  256  	} else {
-f0d76d70bc77b9 drivers/md/bitmap.c    NeilBrown        2007-07-17  257  		/* DATA METADATA BITMAP - no problems */
-f0d76d70bc77b9 drivers/md/bitmap.c    NeilBrown        2007-07-17  258  	}
-328e17d8d9428b drivers/md/md-bitmap.c Jon Derrick      2023-02-24  259  
-10172f200b67aa drivers/md/md-bitmap.c Jon Derrick      2023-02-24  260  	md_super_write(mddev, rdev, sboff + ps, (int) size, page);
-328e17d8d9428b drivers/md/md-bitmap.c Jon Derrick      2023-02-24  261  	return 0;
-ab6085c795a71b drivers/md/bitmap.c    NeilBrown        2007-05-23  262  }
-a654b9d8f851f4 drivers/md/bitmap.c    NeilBrown        2005-06-21  263  
-
-:::::: The code at line 242 was first introduced by commit
-:::::: f6af949c5672115313cc3c976d85b0533f607d7e md: support bitmap offset appropriate for external-metadata arrays.
-
-:::::: TO: NeilBrown <neilb@suse.de>
-:::::: CC: NeilBrown <neilb@suse.de>
+ arch/x86/events/amd/core.c                    |   2 +-
+ arch/x86/events/amd/ibs.c                     |  53 ++++----
+ arch/x86/include/asm/perf_event.h             |   2 +
+ include/linux/perf_event.h                    |  10 ++
+ kernel/events/core.c                          | 114 +++++++++---------
+ tools/perf/arch/x86/include/arch-tests.h      |   1 +
+ tools/perf/arch/x86/tests/Build               |   1 +
+ .../arch/x86/tests/amd-ibs-via-core-pmu.c     |  71 +++++++++++
+ tools/perf/arch/x86/tests/arch-tests.c        |   2 +
+ 9 files changed, 168 insertions(+), 88 deletions(-)
+ create mode 100644 tools/perf/arch/x86/tests/amd-ibs-via-core-pmu.c
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.40.0
+
