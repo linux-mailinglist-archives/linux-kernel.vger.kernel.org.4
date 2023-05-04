@@ -2,102 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A41756F6788
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 10:31:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA0586F678B
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 10:32:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230392AbjEDIbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 04:31:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37146 "EHLO
+        id S230303AbjEDIcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 04:32:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229829AbjEDIa2 (ORCPT
+        with ESMTP id S230190AbjEDIb7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 04:30:28 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ACD45FC2;
-        Thu,  4 May 2023 01:27:39 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f00c33c3d6so204254e87.2;
-        Thu, 04 May 2023 01:27:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683188856; x=1685780856;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7BtbTazpmLK0KSvj4AZeeyjj76DWKlTXEWvhg3rsLf0=;
-        b=np3+HZuDjKNtHhzInJKaL4ni7hmJwGjw4t1PgOPYsSARUNDRNfEIgkaxROwcfPNW5B
-         JsGuTYTCihmxm9MoKbm5pT6qraIdN07ozJpgh3erjqKs291SvhUNcQSqylqGfIJ1K4Hd
-         39JzqpILR3ZByLm+tLDvK+6VWltcOkJeOL4sxXstRMZt48yw6Tb5+OovfhegQjrdJIDn
-         Roxx/15qo+tLPhfatNccapdhnhjHwgz8Q7zTYTv8H2+K87LPcECTwM7GnB9LhVJk1Dg3
-         CHtGDvQX5kVJ6OumAp0Z8WbU2hHoKabTRWYNobdqh3627GxxmTBSd1XFjPKQ96akKOl8
-         H/SQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683188856; x=1685780856;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7BtbTazpmLK0KSvj4AZeeyjj76DWKlTXEWvhg3rsLf0=;
-        b=bvEgR2biR8sihQEqnVlApvKeKhbDfDxRCc+DlUbO0rSxlFE8uaURDvW0c7grVeQqSN
-         VSesjDp0xAZqit8O03GDczrnnaQn7sylovAG3fh4MN4iPp2CEGXzGLFIq1IFxwO3RxxX
-         F4VkSlosP7t0P3876bqHM6LMJ1AABdYDHnGwdlp2+X0iKckh2EZ4N+ql7DO2LyBvsoDJ
-         hz9OkuJt12Hj/eZUPHoaE0tFTgSDNGynRxVd97ufc8EXoqboSwcbxdy5fISOeP2zNuje
-         8S9HPnCX2/1kGsFry81zsyIPDX9K/V+ZT/o0oQcKLzUdAGnQUrK11wJdjsA8Ubb0cnDs
-         T8WA==
-X-Gm-Message-State: AC+VfDwwM/bBdM2paug5P0p/+RF2I6C2E8jc86IcjRmvokkAX6MlzkWI
-        8yzkmvanU8Eg8IVhYkIeT+gAc4b8qto=
-X-Google-Smtp-Source: ACHHUZ6WxHnARl3Y7wPkAyRHxQ9IZvhzKELRZSJbTLi3e2ghMfMi8VKMYojoluPBJy+0pbL2ESqwyQ==
-X-Received: by 2002:ac2:4353:0:b0:4f0:80:d0c0 with SMTP id o19-20020ac24353000000b004f00080d0c0mr2162900lfl.63.1683188855735;
-        Thu, 04 May 2023 01:27:35 -0700 (PDT)
-Received: from [192.168.1.103] ([178.176.76.17])
-        by smtp.gmail.com with ESMTPSA id j1-20020a19f501000000b004eff0bcb276sm5210649lfb.7.2023.05.04.01.27.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 01:27:35 -0700 (PDT)
-Subject: Re: [PATCH v5] usb: dwc3: core: add support for realtek SoCs custom's
- global register start address
-To:     =?UTF-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
-        <stanley_chang@realtek.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230504034423.20813-1-stanley_chang@realtek.com>
- <96706396-7023-b895-169a-788aad11adcb@gmail.com>
- <44451716afa541e298b2e5640fe3aec9@realtek.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <747ce0a9-a629-e3f9-c59c-388333d3d911@gmail.com>
-Date:   Thu, 4 May 2023 11:27:34 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
-MIME-Version: 1.0
-In-Reply-To: <44451716afa541e298b2e5640fe3aec9@realtek.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 4 May 2023 04:31:59 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF617AAE;
+        Thu,  4 May 2023 01:28:58 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id DD8C62097B;
+        Thu,  4 May 2023 08:28:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1683188936; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=30lCJ5iRI0rRhzC2loXRpex/n1l+HSk0YaCzEl11E4E=;
+        b=BBck4RD22FF3fRahgkzPtMfKrA/pfX9GLDg4RAOv5fhSsHyT+a5teMomoSaIJRE64IwAXu
+        1cDRe5UN0KuGhtyJX7NTroKCEEJovbKFyXQfW0dnvFlWGbf8IOF8oX9fM6MTrrWJ3zFHBh
+        05ytJSih6bBJWmJHupn3vKdtrHk09ck=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1683188936;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=30lCJ5iRI0rRhzC2loXRpex/n1l+HSk0YaCzEl11E4E=;
+        b=ol0bRq/VjWfAAjuodPVP1Sfvx38nIjHzFCyiTzh/JY21tPaSL7jUl9jhiEQy14csRgPG0n
+        2nsuOs0X8c9ULGDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B46CA133F7;
+        Thu,  4 May 2023 08:28:56 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id uOUaK8hsU2SwNgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Thu, 04 May 2023 08:28:56 +0000
+Date:   Thu, 04 May 2023 10:28:56 +0200
+Message-ID: <875y98mref.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     mchehab@kernel.org
+Cc:     Yu Hao <yhao016@ucr.edu>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: BUG: WARNING in dvb_frontend_get_event
+In-Reply-To: <87bkj9u57j.wl-tiwai@suse.de>
+References: <CA+UBctCu7fXn4q41O_3=id1+OdyQ85tZY1x+TkT-6OVBL6KAUw@mail.gmail.com>
+        <87bkj9u57j.wl-tiwai@suse.de>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/4/23 11:26 AM, Stanley Chang[昌育德] wrote:
-[...]
-
->>> The Realtek RTD1xxx SoCs were designed, the global register address
->>> offset at 0x8100.
->>
->>   Can't parse that, perhaps "with" is missing?
->>
->>> The default address offset is constant at DWC3_GLOBALS_REGS_START
->>> (0xc100). Therefore, add a check if the compatible name of the parent
->>> is "realtek,rtd1xxx-dwc3", then global
->>
->>    Wildcards are not allowed in the "compatible" props...
+On Thu, 27 Apr 2023 09:58:24 +0200,
+Takashi Iwai wrote:
 > 
-> I can't understand your meaning.
-> Do you mean I can't use rtd1xxx ?
+> On Tue, 18 Apr 2023 06:50:07 +0200,
+> Yu Hao wrote:
+> > 
+> > Hello,
+> > 
+> > We found the following issue using syzkaller on Linux v6.2.0.
+> > 
+> > In the function `dvb_frontend_get_event`, function
+> > `wait_event_interruptible` is called
+> > and the condition is `dvb_frontend_test_event(fepriv, events)`.
+> > In the function `dvb_frontend_test_event`, function
+> > `down(&fepriv->sem);` is called.
+> > However, function `wait_event_interruptible` would put the process to sleep.
+> > And function `down(&fepriv->sem);` may block the process.
+> > So there is the issue with "do not call blocking ops when !TASK_RUNNING".
+> > 
+> > The full report including the Syzkaller reproducer & C reproducer:
+> > https://gist.github.com/ZHYfeng/4c5f8be6adc63b73dba68230d15ece2c
+> 
+> FYI, CVE-2023-31084 was assigned to this bug, and I was involved now
+> though distro's bug report.
+> 
+> So, the use of semaphore together with wait_event*() macro doesn't
+> look like a good idea.  A possible easy workaround would be to
+> open-code the wait loop like below.
+> 
+> Mauro, let me know if it's an acceptable workaround.  Then I'll submit
+> a proper patch.
 
-   You can't, indeed.
+A gentle ping.
 
-MBR, Sergey
+Can anyone please check whether the suggested change is OK or not?
+
+
+thanks,
+
+Takashi
+
+> 
+> 
+> thanks,
+> 
+> Takashi
+> 
+> -- 8< --
+> --- a/drivers/media/dvb-core/dvb_frontend.c
+> +++ b/drivers/media/dvb-core/dvb_frontend.c
+> @@ -293,14 +293,22 @@ static int dvb_frontend_get_event(struct dvb_frontend *fe,
+>  	}
+>  
+>  	if (events->eventw == events->eventr) {
+> -		int ret;
+> +		struct wait_queue_entry wait;
+> +		int ret = 0;
+>  
+>  		if (flags & O_NONBLOCK)
+>  			return -EWOULDBLOCK;
+>  
+> -		ret = wait_event_interruptible(events->wait_queue,
+> -					       dvb_frontend_test_event(fepriv, events));
+> -
+> +		init_waitqueue_entry(&wait, current);
+> +		add_wait_queue(&events->wait_queue, &wait);
+> +		while (!dvb_frontend_test_event(fepriv, events)) {
+> +			wait_woken(&wait, TASK_INTERRUPTIBLE, 0);
+> +			if (signal_pending(current)) {
+> +				ret = -ERESTARTSYS;
+> +				break;
+> +			}
+> +		}
+> +		remove_wait_queue(&events->wait_queue, &wait);
+>  		if (ret < 0)
+>  			return ret;
+>  	}
