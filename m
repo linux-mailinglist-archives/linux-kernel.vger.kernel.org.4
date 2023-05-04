@@ -2,71 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DC126F782C
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 23:30:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CCB06F7830
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 23:32:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbjEDVac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 17:30:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34004 "EHLO
+        id S229971AbjEDVcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 17:32:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbjEDVa3 (ORCPT
+        with ESMTP id S229671AbjEDVcu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 17:30:29 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F199B14903;
-        Thu,  4 May 2023 14:30:24 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-50b9ef67f35so1850369a12.2;
-        Thu, 04 May 2023 14:30:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683235822; x=1685827822;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dpDrHaDFb9uvY+Y5nUdaIxQKRWlMia3wPTlgfDNdf4c=;
-        b=qwrCJncTbPjo7OVmLb6DC5CkyjhsTdxQEiYUjTISYeax0QnqJ+7w+fLvAGvuaJxaPp
-         Biy+dpVNBJiWXPjTLS+Qjh7jTGnXGR054skBqurueUu4mQWWDFwk051N9sNmIVKpJlSm
-         TtFoeRQKXeWTkPAParUiybl3T2AqyyLA+h36wqpHyuC/fQmynrFvoPnWeHhOkaJH1Jgj
-         u9rNKsiyyy6gEYMZweRZ7GkEXNtSkiCyE7OhDcLiksv0RNr5Wlce5aK2IPjhGIYzVfJv
-         S2Mmws/AseRyPGDs1Z8egoP2B3KfaGRUmRGMnwRjiF7GyKCb+bPVpN6/r4DPaYbQPKxw
-         I93g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683235822; x=1685827822;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dpDrHaDFb9uvY+Y5nUdaIxQKRWlMia3wPTlgfDNdf4c=;
-        b=OiZmNVo3nQiDmvpP+ftmHtworouaDDMy0aubqC95sCwi6KWrsPOK6Pbl+AeJbP0Z8C
-         AkwemZuORfhE7qnonf1BfQs5MvkmRG3pvYF/k/9KNdK//AZ65aCN6AW9aBKKozmQR55T
-         XOYPNi3+UqVtxK1RnzTiMlMGH7MIKtiVGb0A1vg2+2r840ZAWBLKxHY0974SYKODXnoW
-         La2/QWpBvEg1nM6SchIKthNvqkU9E/7nS1il9alqnBZ9othkJ+xm7fBPgpD4rcp+UPhv
-         p7F7voIqzvYPi2dKiSPj0PY5Y6yce00MTSShmMIRBOMYsN1yu0kxTIqGkHJp/GAXFaSy
-         tKvg==
-X-Gm-Message-State: AC+VfDxF7Elk/DxeXGQl3t3LNJE1Mh2yqindqU1EPMICfPdWPO7a9q6I
-        eoiK/Ca5n6ZfcQhVQ71QLhC1Btm6OEmEFsvZpm4=
-X-Google-Smtp-Source: ACHHUZ5Wn3isdXputF03nNuI/MZ3Uu+owH1nKZqePrOGnu81HEC8Zu53kDXxLbOPkyMXsTcPaUAMwg==
-X-Received: by 2002:a17:906:4785:b0:94a:7716:e649 with SMTP id cw5-20020a170906478500b0094a7716e649mr222144ejc.13.1683235822205;
-        Thu, 04 May 2023 14:30:22 -0700 (PDT)
-Received: from MIKMCCRA-M-GY0W.cisco.com ([2001:420:c0c0:1001::d1])
-        by smtp.gmail.com with ESMTPSA id bz1-20020a1709070aa100b008f89953b761sm63289ejc.3.2023.05.04.14.30.20
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 04 May 2023 14:30:21 -0700 (PDT)
-From:   Michael McCracken <michael.mccracken@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     kernel-hardening@lists.openwall.com, serge@hallyn.com,
-        tycho@tycho.pizza, Michael McCracken <michael.mccracken@gmail.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH] sysctl: add config to make randomize_va_space RO
-Date:   Thu,  4 May 2023 14:30:02 -0700
-Message-Id: <20230504213002.56803-1-michael.mccracken@gmail.com>
-X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
+        Thu, 4 May 2023 17:32:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16F411544;
+        Thu,  4 May 2023 14:32:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 374FA639AC;
+        Thu,  4 May 2023 21:32:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2260EC433EF;
+        Thu,  4 May 2023 21:32:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683235968;
+        bh=P/MeTcvt656SH/EiSEp3jgkQwUVnSMd7oAuct3X6qQE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JCsVZPTK2NWH0hXev0nmFSS+FTlsAoL2+G9BoGvu61nr9dJ6HGyvLCKX0ZM/uXt97
+         jnHyFPKSr7EaeJ/7djXBFBASlhCKsil04HhcPlGNa8RVvB9y6F8Gm7JMz0dELbHFon
+         2Y1bmOQ/kx+eFE+VWUqpUj8DX96Xknz2W4zY6CdWlhNOYCEh9L8RtHU4MyfyhPO6Hc
+         M12/rTXlvpl31Ak2JJC24rx/fjHbLLk8PwxOn7XggExS5cF3nZNasJiild0aLogxLv
+         41WmRi3z4Wb2bLJ7ssXRshCGSOVt3Ozfimvr4KPW/OG+pxXNgNoIjbdb4d/Ozi+SQq
+         VYkcPusg3NlFw==
+Date:   Thu, 4 May 2023 14:32:46 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     "Ahmed S. Darwish" <darwi@linutronix.de>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kbuild@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 1/1] scripts/tags.sh: Fix gtags generation for O=
+ kernel builds
+Message-ID: <20230504213246.GB1666363@dev-arch.thelio-3990X>
+References: <20230504201833.202494-1-darwi@linutronix.de>
+ <20230504201833.202494-2-darwi@linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230504201833.202494-2-darwi@linutronix.de>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,52 +59,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add config RO_RANDMAP_SYSCTL to set the mode of the randomize_va_space
-sysctl to 0444 to disallow all runtime changes. This will prevent
-accidental changing of this value by a root service.
+On Thu, May 04, 2023 at 10:18:33PM +0200, Ahmed S. Darwish wrote:
+> gtags considers any file outside of its current working directory
+> "outside the source tree" and refuses to index it.
+> 
+> For O= kernel builds, scripts/tags.sh invokes gtags with the current
+> working directory set to ${O}. This leads to gtags ignoring the entire
+> kernel source and generating an empty index.
+> 
+> For O= builds, set gtags' working directory to the kernel source tree
+> and explicitly set its output path through parameters instead.
+> 
+> Signed-off-by: Ahmed S. Darwish <darwi@linutronix.de>
 
-The config is disabled by default to avoid surprises.
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-Signed-off-by: Michael McCracken <michael.mccracken@gmail.com>
----
- kernel/sysctl.c | 4 ++++
- mm/Kconfig      | 7 +++++++
- 2 files changed, 11 insertions(+)
+> ---
+>  scripts/tags.sh | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/scripts/tags.sh b/scripts/tags.sh
+> index ea31640b2671..1a6db535503b 100755
+> --- a/scripts/tags.sh
+> +++ b/scripts/tags.sh
+> @@ -131,7 +131,14 @@ docscope()
+>  
+>  dogtags()
+>  {
+> -	all_target_sources | gtags -i -f -
+> +	# gtags refuses to index any file outside of the current working
+> +	# directory. For O= builds, set the current working directory to
+> +	# the kernel source tree and the output tags dir to ${O}.
+> +	suffixparams=
+> +	if [ -v O ]; then
 
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index bfe53e835524..c5aafb734abe 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -1913,7 +1913,11 @@ static struct ctl_table kern_table[] = {
- 		.procname	= "randomize_va_space",
- 		.data		= &randomize_va_space,
- 		.maxlen		= sizeof(int),
-+#if defined(CONFIG_RO_RANDMAP_SYSCTL)
-+		.mode		= 0444,
-+#else
- 		.mode		= 0644,
-+#endif
- 		.proc_handler	= proc_dointvec,
- 	},
- #endif
-diff --git a/mm/Kconfig b/mm/Kconfig
-index 7672a22647b4..91a4a86d70e0 100644
---- a/mm/Kconfig
-+++ b/mm/Kconfig
-@@ -1206,6 +1206,13 @@ config PER_VMA_LOCK
- 	  This feature allows locking each virtual memory area separately when
- 	  handling page faults instead of taking mmap_lock.
- 
-+config RO_RANDMAP_SYSCTL
-+    bool "Make randomize_va_space sysctl 0444"
-+    depends on MMU
-+    default n
-+    help
-+      Set file mode of /proc/sys/kernel/randomize_va_space to 0444 to disallow runtime changes in ASLR.
-+
- source "mm/damon/Kconfig"
- 
- endmenu
--- 
-2.37.1 (Apple Git-137.1)
+I think
 
+  if [ -n "$O" ]; then
+
+would match the style preferred by Kbuild (though that is usually for
+portability sake, which probably does not matter here since bash is
+explicitly requested). Perhaps not worth addressing if there is no other
+reason for a v2.
+
+> +		suffixparams="-C $tree $O"
+> +	fi
+> +	all_target_sources | gtags -i -f - $suffixparams
+>  }
+>  
+>  # Basic regular expressions with an optional /kind-spec/ for ctags and
+> -- 
+> 2.30.2
+> 
