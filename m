@@ -2,111 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 553BC6F6C32
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 14:43:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C89676F6C0B
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 14:36:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230253AbjEDMnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 08:43:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60700 "EHLO
+        id S230201AbjEDMgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 08:36:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229959AbjEDMno (ORCPT
+        with ESMTP id S229835AbjEDMf6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 08:43:44 -0400
-Received: from mail-m127104.qiye.163.com (mail-m127104.qiye.163.com [115.236.127.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71EB66185
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 05:43:42 -0700 (PDT)
-Received: from localhost.localdomain (unknown [IPV6:240e:3b7:327f:5c30:f10d:e185:a86d:3be7])
-        by mail-m127104.qiye.163.com (Hmail) with ESMTPA id CD3D5A4050F;
-        Thu,  4 May 2023 20:35:03 +0800 (CST)
-From:   Ding Hui <dinghui@sangfor.com.cn>
-To:     bhelgaas@google.com
-Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, vidyas@nvidia.com,
-        david.e.box@linux.intel.com, kai.heng.feng@canonical.com,
-        michael.a.bottini@linux.intel.com, rajatja@google.com,
-        qinzongquan@sangfor.com.cn, dinghui@sangfor.com.cn,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] PCI/ASPM: fix UAF by disable ASPM for link when child function is removed
-Date:   Thu,  4 May 2023 20:34:18 +0800
-Message-Id: <20230504123418.4438-1-dinghui@sangfor.com.cn>
-X-Mailer: git-send-email 2.17.1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkZSkoaVh4dH05MTx0dTkIeGlUTARMWGhIXJBQOD1
-        lXWRgSC1lBWUlPSx5BSBlMQUhJTB1BThhIS0EdSksfQR5KQ05BGkNNH0FIGR5MWVdZFhoPEhUdFF
-        lBWU9LSFVKSktISkNVSktLVUtZBg++
-X-HM-Tid: 0a87e6c2455cb282kuuucd3d5a4050f
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Kxg6SBw6PT0cAT8yCFYYIVY1
-        NzEwCQhVSlVKTUNISUtITEtPTUpDVTMWGhIXVR8SFRwTDhI7CBoVHB0UCVUYFBZVGBVFWVdZEgtZ
-        QVlJT0seQUgZTEFISUwdQU4YSEtBHUpLH0EeSkNOQRpDTR9BSBkeTFlXWQgBWUFIT0pNNwY+
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 4 May 2023 08:35:58 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 473A86194
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 05:35:56 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-50bc37e1525so792093a12.1
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 05:35:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683203755; x=1685795755;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qMm9zCgjmjqNBT9qCeY66Oq88bASTTs9Y+/BD6bZYEs=;
+        b=FAui2AqzZXpJO8prSuWYpbOdwOoBt1DM86uMzzlBJNjubAbUVJLjz68SIWf+1DNjMT
+         D9pRsLdjCNNy8X+dlyzybOLQdiH/anJx6wADdOhvlnpdFbvXPrKZWnrvikegyPfacnld
+         t+AqJgnnucN1HQq3Rz900vQDddW1T0P7qkS2VuauOZ9n7uvBAm5Ason0sf/q6Z21LNfB
+         2hT5sfWpXOCQGYLAB1RERoLKl+k11XMPvG9ovvNL4JrwzNyl99UI/SnH4ugY7mQAFN09
+         OimEVhL1S3DfgIdX42zSK2wpQJ86qZTvG/Wvm6xMnkHf0ABXgBOiYbZcYwz1mkOi/gsZ
+         ZEFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683203755; x=1685795755;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qMm9zCgjmjqNBT9qCeY66Oq88bASTTs9Y+/BD6bZYEs=;
+        b=LiHm9wSatL/zB173HBeXI182N2/XmSdOZdx104fY+jXTEMA356uoBZ3vC64/RLZpNn
+         AIWKChuGBxUbHGK2VGROcpp7cHCqDB5/aFIqkXbKIXDulYYTCX02gQryGENgsYpXUZTU
+         0qQcPrrv0QTU7Ns5WCUT4IFCiNGVUp/ay3M0v2DZTRZue16bNpZHftE5okh2UqYdZN9s
+         oQgCceI9PMxwd+U162SLiR9YUb50w1kvXdVoJNK6Lrj2I/MUjTN13W8UEdG79UBD150v
+         WgLCyE49BzGSMdBptzkZyecAL8O10cx3d7HBBRTBe1VixfvjWjkvH+IGkM2znMsHFdQI
+         RJZw==
+X-Gm-Message-State: AC+VfDzd+UAqx9d+qlASuDr0nZpjJ5L0GAOxT3UL30Gq4pg+mTD1SPEw
+        FiVvYDBzx1k1drOpUpp+NcNCCw==
+X-Google-Smtp-Source: ACHHUZ4ePHckfpUMq7oTFQIk9Sgbk5MDYXHYzVoBUcorr/dy7jEqin2VrXavka0/Elf5F2FDEMGK+g==
+X-Received: by 2002:a17:907:7290:b0:953:9899:d9c1 with SMTP id dt16-20020a170907729000b009539899d9c1mr6609952ejc.1.1683203754788;
+        Thu, 04 May 2023 05:35:54 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:cbf1:e7ef:fb81:e912? ([2a02:810d:15c0:828:cbf1:e7ef:fb81:e912])
+        by smtp.gmail.com with ESMTPSA id l18-20020a1709060e1200b0094f3338129asm19010078eji.141.2023.05.04.05.35.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 May 2023 05:35:54 -0700 (PDT)
+Message-ID: <e963d4a4-4159-53ee-1008-4bdec8b48268@linaro.org>
+Date:   Thu, 4 May 2023 14:35:52 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v3 01/18] remoteproc: qcom: Expand MD_* as MINIDUMP_*
+Content-Language: en-US
+To:     Mukesh Ojha <quic_mojha@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, corbet@lwn.net,
+        keescook@chromium.org, tony.luck@intel.com, gpiccoli@igalia.com,
+        catalin.marinas@arm.com, will@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        linus.walleij@linaro.org, linux-gpio@vger.kernel.org,
+        srinivas.kandagatla@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org
+References: <1683133352-10046-1-git-send-email-quic_mojha@quicinc.com>
+ <1683133352-10046-2-git-send-email-quic_mojha@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1683133352-10046-2-git-send-email-quic_mojha@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the Function 0 of a Multi-Function device is software removed,
-a freed downstream pointer will be left in struct pcie_link_state,
-and then when pcie_config_aspm_link() be invoked from any path,
-we will trigger use-after-free.
+On 03/05/2023 19:02, Mukesh Ojha wrote:
+> Expand MD_* as MINIDUMP_* which makes more sense than the
+> abbreviation.
+> 
+> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+> ---
+>  drivers/remoteproc/qcom_common.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/remoteproc/qcom_common.c b/drivers/remoteproc/qcom_common.c
+> index a0d4238..805e525 100644
+> --- a/drivers/remoteproc/qcom_common.c
+> +++ b/drivers/remoteproc/qcom_common.c
+> @@ -29,9 +29,9 @@
+>  #define MAX_NUM_OF_SS           10
+>  #define MAX_REGION_NAME_LENGTH  16
+>  #define SBL_MINIDUMP_SMEM_ID	602
+> -#define MD_REGION_VALID		('V' << 24 | 'A' << 16 | 'L' << 8 | 'I' << 0)
+> -#define MD_SS_ENCR_DONE		('D' << 24 | 'O' << 16 | 'N' << 8 | 'E' << 0)
+> -#define MD_SS_ENABLED		('E' << 24 | 'N' << 16 | 'B' << 8 | 'L' << 0)
+> +#define MINIDUMP_REGION_VALID		('V' << 24 | 'A' << 16 | 'L' << 8 | 'I' << 0)
+> +#define MINIDUMP_SS_ENCR_DONE		('D' << 24 | 'O' << 16 | 'N' << 8 | 'E' << 0)
+> +#define MINIDUMP_SS_ENABLED		('E' << 24 | 'N' << 16 | 'B' << 8 | 'L' << 0)
 
-Based on the PCIe spec about ASPM Control (PCIe r6.0, sec 7.5.3.7),
-for Multi-Function Devices (including ARI Devices), it is recommended
-that software program the same value in all Functions. For ARI
-Devices, ASPM Control is determined solely by the setting in Function 0.
+You remove it in the next patch, so no, don't touch the line for trivial
+cleanup and immediately remove it.
 
-So we can just disable ASPM of the whole component if any child
-function is removed, the downstream pointer will be avoided from
-use-after-free, that will also avoid other potential corner cases.
-
-Fixes: b5a0a9b59c81 ("PCI/ASPM: Read and set up L1 substate capabilities")
-Debugged-by: Zongquan Qin <qinzongquan@sangfor.com.cn>
-Suggestion-by: Bjorn Helgaas <bhelgaas@google.com>
-Signed-off-by: Ding Hui <dinghui@sangfor.com.cn>
----
- drivers/pci/pcie/aspm.c | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-index 66d7514ca111..1bf8306141aa 100644
---- a/drivers/pci/pcie/aspm.c
-+++ b/drivers/pci/pcie/aspm.c
-@@ -1010,18 +1010,17 @@ void pcie_aspm_exit_link_state(struct pci_dev *pdev)
- 
- 	down_read(&pci_bus_sem);
- 	mutex_lock(&aspm_lock);
--	/*
--	 * All PCIe functions are in one slot, remove one function will remove
--	 * the whole slot, so just wait until we are the last function left.
--	 */
--	if (!list_empty(&parent->subordinate->devices))
--		goto out;
- 
- 	link = parent->link_state;
- 	root = link->root;
- 	parent_link = link->parent;
- 
--	/* All functions are removed, so just disable ASPM for the link */
-+	/*
-+	 * Any function is removed (including software removing), just
-+	 * disable ASPM for the link, in case we can not configure the same
-+	 * setting for all functions.
-+	 * See PCIe r6.0, sec 7.5.3.7.
-+	 */
- 	pcie_config_aspm_link(link, 0);
- 	list_del(&link->sibling);
- 	/* Clock PM is for endpoint device */
-@@ -1032,7 +1031,7 @@ void pcie_aspm_exit_link_state(struct pci_dev *pdev)
- 		pcie_update_aspm_capable(root);
- 		pcie_config_aspm_path(parent_link);
- 	}
--out:
-+
- 	mutex_unlock(&aspm_lock);
- 	up_read(&pci_bus_sem);
- }
--- 
-2.17.1
+Best regards,
+Krzysztof
 
