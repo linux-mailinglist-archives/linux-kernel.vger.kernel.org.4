@@ -2,130 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1EAE6F6F41
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 17:41:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F75A6F6F47
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 17:44:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231407AbjEDPl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 11:41:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53572 "EHLO
+        id S231160AbjEDPoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 11:44:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbjEDPl1 (ORCPT
+        with ESMTP id S229768AbjEDPo3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 11:41:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C42E40;
-        Thu,  4 May 2023 08:41:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 12CC963532;
-        Thu,  4 May 2023 15:41:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53847C433D2;
-        Thu,  4 May 2023 15:41:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683214885;
-        bh=6eAF+PDzJKSUispa3X1kRM2MZ4pCLVUtY5fjeRCGXiA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=W8Oo7i3roM/RRef6hNcEKwGGoFpbQR86l34KO/NKH1a0qCn5JBSz0FWfUB3+HaeNE
-         aLhSa1x2/xFf99elNs4U+71UWXgagW5a3BtU8JIDTjBUdq/gcJK5cSDbsTixoF4BIZ
-         gF/XGhyxVJLgHJVSnF3g3OXIHy1vMYZtgS+vGW9VXw4uLmRBvZVOoCoT616t3oF82u
-         cQXpUTlP+N9UFtEnRoiAKrEla/+JFYaWymO5VZtoeOkKZ38197H/zCECJ5d07sVRQF
-         +zC8KfxBIYAzFgJ9c2JVcHBvvSCH9JLVCgdkw768ccchzjq4WmkCebAd2Og2dovStE
-         vVIpopmID/A5w==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pub5J-00014L-JQ; Thu, 04 May 2023 17:41:34 +0200
-Date:   Thu, 4 May 2023 17:41:33 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/7] phy: qcom-qmp-combo: Introduce orientation variable
-Message-ID: <ZFPSLTgOiPMgwHzP@hovoldconsulting.com>
-References: <20230425034010.3789376-1-quic_bjorande@quicinc.com>
- <20230425034010.3789376-4-quic_bjorande@quicinc.com>
- <ZFD4gM9dUQwBmSUe@hovoldconsulting.com>
- <20230504032907.GF870858@hu-bjorande-lv.qualcomm.com>
- <ZFO21fLWSNc7orpb@hovoldconsulting.com>
- <20230504151633.GH870858@hu-bjorande-lv.qualcomm.com>
+        Thu, 4 May 2023 11:44:29 -0400
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2113.outbound.protection.outlook.com [40.107.105.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B02F2199E;
+        Thu,  4 May 2023 08:44:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PEzFGJ4o8ZCv7kXwufFOgOHkRYilV0QsYNvlja4iE8ujoxCUSvl+Hw7C4hNCo/3yhdRDH/P+NI7Svg3sOaGETbzgVKZdd5eDIZgfoImh+Adr15yGBGAXoXdhRNTep/nUT8WLLhN/v0mRZUlg/WTqPpOVmaeAfHrNt80uoKvvXcuBrBXehCFcLOluVkeQ8jWDoFB5zAxe257IMRbmVbl9/IROcxHK56sxrd8GCj8bh5rgk8441BBSppme1VP6ew4grr0XxBOWmDM2vNsCuyWVe8ddXD7a0WO2+gdJ4UjMQW4namca+C1qPfqFShn0Bk0jByXMaAsIIofhMCTWLTo3Rg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZMpc29pz1VGr1DR55YEuxV3C3ua0fd3bkSRPuCeoGCQ=;
+ b=l4zFxTNwhxAglqXu9N25oAIPAKJCehlXn32K+jlPgXw/yLYvfLxnUJK1Xx/fGcxQgG8l284JUqY13DXlla8zuGV0gfHs/c3ozco1BSLB18AxVcogVJG4ongFrdpjHLuMdQut2RxqMwsb3ZkKjP6lEA+017j85VOntw477OgkVov3+0OIRDrmeMKPI3TVubAMg7tg1hAH9uDkZaF6BcF0CXVuDtKrniNk9KcGxoul5IL0pAWzrwUiH+jNHsPh+/fopEmI657BFDC4DDjnavfcOwac3z7dGJyYDm8ClPwOUscP0Y56YTpmIK3Ivg+hEszLUCwaTxQNcFMzSkCwRiTVbA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
+ is 80.151.164.27) smtp.rcpttodomain=esd.eu smtp.mailfrom=esd.eu; dmarc=none
+ action=none header.from=esd.eu; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=esdhannover.onmicrosoft.com; s=selector1-esdhannover-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZMpc29pz1VGr1DR55YEuxV3C3ua0fd3bkSRPuCeoGCQ=;
+ b=Vs8Zt9r+jAo4cVEacXZPjjHKhTPRlV/FPiXabdQCwhpDczeOGEKgpPH45D5vxQeqtkPrSn9CCFJpECOvkqKLXipHXL2HhO80s10maMc6HvHWkwklXAwJpkmtRjoJCwniKTIXdtSPfRFgDOXlwAxfR6uu94VHHXDlNzfPXmZQsf8=
+Received: from DB6PR0301CA0058.eurprd03.prod.outlook.com (2603:10a6:4:54::26)
+ by DU2PR03MB7845.eurprd03.prod.outlook.com (2603:10a6:10:2d0::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.26; Thu, 4 May
+ 2023 15:44:22 +0000
+Received: from DB8EUR06FT052.eop-eur06.prod.protection.outlook.com
+ (2603:10a6:4:54:cafe::4c) by DB6PR0301CA0058.outlook.office365.com
+ (2603:10a6:4:54::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.26 via Frontend
+ Transport; Thu, 4 May 2023 15:44:22 +0000
+X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
+ 80.151.164.27) smtp.mailfrom=esd.eu; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=esd.eu;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning esd.eu
+ discourages use of 80.151.164.27 as permitted sender)
+Received: from esd-s7.esd (80.151.164.27) by
+ DB8EUR06FT052.mail.protection.outlook.com (10.233.253.226) with Microsoft
+ SMTP Server id 15.20.6363.22 via Frontend Transport; Thu, 4 May 2023 15:44:21
+ +0000
+Received: from esd-s20.esd.local (debby [10.0.0.190])
+        by esd-s7.esd (Postfix) with ESMTPS id 955A87C16CA;
+        Thu,  4 May 2023 17:44:21 +0200 (CEST)
+Received: by esd-s20.esd.local (Postfix, from userid 2046)
+        id 84A2B2E1787; Thu,  4 May 2023 17:44:21 +0200 (CEST)
+From:   Frank Jungclaus <frank.jungclaus@esd.eu>
+To:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc:     =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Frank Jungclaus <frank.jungclaus@esd.eu>
+Subject: [PATCH 0/2] can: esd_usb: Add support for esd CAN-USB/3 (CAN FD)
+Date:   Thu,  4 May 2023 17:44:12 +0200
+Message-Id: <20230504154414.1864615-1-frank.jungclaus@esd.eu>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230504151633.GH870858@hu-bjorande-lv.qualcomm.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB8EUR06FT052:EE_|DU2PR03MB7845:EE_
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: c97ee608-2134-42e8-3762-08db4cb66e31
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VsxR2RcIaFNeKAiWiM4v6z+p5wWRUdXkuvQL3UN1U7T1K/1/BULAVT003H++/ncEfIKbfBfQb14cEFhBtovM89AzKxVqnekm9UKRePrK7IX/xvz5DE/Q5OvSJwkm+w0h3iFMbkiQXHSldq/YcAST3rgSoaKFUlbXLnzPkzf6fkFFB4HV8Vm55BZi+20Pf5TPTQfJLiqEiaYlGptR0ALx9zpn4sOcLXthnLRSF+wCFaNXk903thRPb6sKT5Rm5jsC36Jhu3RfrWzqt/eElxNdNiXhp6MW1TmlT64qmMaWnswjnK7JZUcz1Ki6cRXBLX0la2UJ5c1E6iyiZlPfwQwJHMKOfF2AZuWC587dyvVJiLkBbSU35KK/fZBTh+DJpJX9ItIMWMUtqvQ5ZE972XAyIjpI1stam+gsqPAODTDc2dlFpukvgDYdCINBu1IZXAXwRKPDkn9V2A++o7HxISS4sV1SpfQKh7sZWDQBHfAEl4951li94WwIqmmk6bmB+DupTUx05exSDybckXxX5nya3f76+YuzhyAYyaxnD8U8fbo0+7apL/++e0hh6cRTNS4cJO+l7n69nemiC9cWr7ZnCp9abe8qOL1FOzj9+iJKZxEzq4saa/1rXRNWVIShQZwp6Hj49pyQAKTlf9Kw1i9qCHqGbMa89iITnHamUwPYlG4=
+X-Forefront-Antispam-Report: CIP:80.151.164.27;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:esd-s7.esd;PTR:p5097a41b.dip0.t-ipconnect.de;CAT:NONE;SFS:(13230028)(4636009)(136003)(39830400003)(376002)(396003)(346002)(451199021)(36840700001)(46966006)(2616005)(26005)(44832011)(1076003)(41300700001)(6666004)(40480700001)(83380400001)(36756003)(316002)(47076005)(36860700001)(4326008)(86362001)(70586007)(70206006)(82310400005)(336012)(478600001)(2906002)(4744005)(110136005)(42186006)(356005)(81166007)(6266002)(186003)(5660300002)(54906003)(8936002)(8676002);DIR:OUT;SFP:1102;
+X-OriginatorOrg: esd.eu
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2023 15:44:21.8441
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c97ee608-2134-42e8-3762-08db4cb66e31
+X-MS-Exchange-CrossTenant-Id: 5a9c3a1d-52db-4235-b74c-9fd851db2e6b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5a9c3a1d-52db-4235-b74c-9fd851db2e6b;Ip=[80.151.164.27];Helo=[esd-s7.esd]
+X-MS-Exchange-CrossTenant-AuthSource: DB8EUR06FT052.eop-eur06.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR03MB7845
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 04, 2023 at 08:16:33AM -0700, Bjorn Andersson wrote:
-> On Thu, May 04, 2023 at 03:44:53PM +0200, Johan Hovold wrote:
-> > On Wed, May 03, 2023 at 08:29:07PM -0700, Bjorn Andersson wrote:
-> > > On Tue, May 02, 2023 at 01:48:16PM +0200, Johan Hovold wrote:
-> > > > On Mon, Apr 24, 2023 at 08:40:06PM -0700, Bjorn Andersson wrote:
-> > 
-> > > > >  static void qmp_v3_dp_aux_init(struct qmp_combo *qmp);
-> > > > > @@ -1955,29 +1962,23 @@ static void qmp_v3_configure_dp_tx(struct qmp_combo *qmp)
-> > > > >  static bool qmp_combo_configure_dp_mode(struct qmp_combo *qmp)
-> > > > >  {
-> > > > >  	u32 val;
-> > > > > -	bool reverse = false;
-> > > > > +	bool reverse = qmp->orientation == TYPEC_ORIENTATION_REVERSE;
-> > 
-> > > > It also looks like these callbacks end up being called without holding
-> > > > the qmp->phy_mutex via phy->power_on(). Perhaps there is no risk for a
-> > > > concurrent switch notification and dp phy power-on but it's not that
-> > > > obvious.
-> > 
-> > > It seems we're arriving here from hpd_event_thread(), while
-> > > phy_power_on() and phy_power_off() will be called in some other context.
-> > > I've not been able to convince myself if DP driver ensures ordering, or
-> > > if we have an existing race here...
-> > 
-> > > Unless you insist, I would prefer to follow up with an additional patch
-> > > once we've landed this series. The fix will depend on the phy_mutex
-> > > shuffling patch anyways...
-> > 
-> > Sure.
-> > 
-> > But perhaps you can just move the orientation == qmp->orientation check
-> > under the mutex in qmp_combo_typec_switch_set() for now (in case I
-> > forgot to point that out earlier).
-> > 
-> 
-> qmp_combo_probe() and qmp_combo_typec_switch_set() are the only writers
-> to qmp->orientation, so that check can't race with any updates and hence
-> doesn't need to be protected.
+Add support for the newly available esd CAN-USB/3.
 
-Only if you happen to know that the callers of
-qmp_combo_typec_switch_set() are serialised, right? That happens to be
-the case for pmic_glink, but it may not be the case generally.
- 
-> Reading the code again, qmp_combo_configure_dp_mode() is invoked from
-> phy_power_on(), not the hpd_event_thread(), as I claimed yesterday.
+The USB protocol for the CAN-USB/3 is similar to the protocol used for
+the CAN-USB/2 and the CAN-USB/Micro, so most of the code can be shared
+for all three platforms. Most work simply arises from the fact, that
+the CAN-USB/3 is capable of handling CAN FD frames.
 
-Yeah, but phy_power_on() is typically called from that thread. But
-perhaps not only from there.
+The main job is to
+* also probe for an esd CAN-USB/3
+* extend USB structures for CAN FD data
+* allow esd_usb_rx_can_msg() and esd_usb_start_xmit() to handle
+  CAN FD frames
+* spend structures and functionality for setting a CAN FD
+  bittiming
 
-> But we shouldn't do qmp_combo_dp_power_on() in parallel with the
-> reinitialization following a switch in orientation, qmp->orientation
-> might change, but we definitely would have two contexts reconfiguring
-> the hardware simultaneously - perhaps this was the cause for the 10%
-> crashes I hit when trying to extend this to handle typec_mux as well...
-> 
-> I will grab the phy_mux in qmp_combo_configure_dp_mode() as well, thanks
-> for "insisting" :)
+Frank Jungclaus (2):
+  can: esd_usb: Apply some small changes before adding esd CAN-USB/3
+    support
+  can: esd_usb: Add support for esd CAN-USB/3
 
-:)
+ drivers/net/can/usb/esd_usb.c | 286 +++++++++++++++++++++++++++++-----
+ 1 file changed, 251 insertions(+), 35 deletions(-)
 
-Johan
+
+base-commit: 14575e3b5f3ece74e9143d7f7f195f3e5ff085f5
+-- 
+2.25.1
+
