@@ -2,127 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E50D86F66E8
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 10:11:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AF056F66DE
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 10:10:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230270AbjEDILq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 04:11:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54802 "EHLO
+        id S230197AbjEDIKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 04:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbjEDILF (ORCPT
+        with ESMTP id S230356AbjEDIJ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 04:11:05 -0400
-Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8842159DD;
-        Thu,  4 May 2023 01:08:45 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.nyi.internal (Postfix) with ESMTP id C953F580E95;
-        Thu,  4 May 2023 04:08:27 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 04 May 2023 04:08:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1683187707; x=1683194907; bh=7I
-        vu6rn6B1NGFOZyVTFGNG5QNTPEE1cpZNNy0FHXEjE=; b=fWn6u6lEuEOEz732Wx
-        rmayNAhve5wq+evaQfFvpEc5R6ye2SWH72iSWHn1otWQC1ahiQ8t9gXIp8XfuKdP
-        gw7yALeMRyEJ/QwP/xbB2gkjd/8276PjG9S2y8tv15DrZjy36ESbn/kfrtHRaByU
-        AQnZxbtjrPQBJI7g+kiMYM/yUNCwanHgR1RxjXfRlWRRxRo1OK/Tm5U3jWxHAKEH
-        QO9xny6tg6v+0Ltcw8bU5Xj3QxjTMznmB7/XBRGl3oqX4MZD0yJu6NDaeEzfu2W3
-        AKTj/VdOxrUNdwDJr1X6v7nJ3+YevXi+ScssrwbkNXmt3QiF4LN7nmEYgbel8aF5
-        7nQw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1683187707; x=1683194907; bh=7Ivu6rn6B1NGF
-        OZyVTFGNG5QNTPEE1cpZNNy0FHXEjE=; b=BY0CkEdf22oXu9QS+93gEkE+r+1KL
-        y4q2EzAPSeXPlQHoIn5PPogsePeb2EtPSdD77LsuSbHRCs9Hos3Au0vYQyA0RyE2
-        d4AS/QwSrLJyCVUMvrf2MoaPAwX4TebJVh38wsMNgrKZnd3CTjq2ram0SP3S2mC3
-        UKv05OqeACoP9cQxSs0G8kJ9Tj1Z7lHJwMCCAZO87eeFgS5QP7I1dEASPKfMGDmZ
-        kMLSzhyF0OnlR6P7d3sADZ4XOyPTUuOhFfBGUQw043OqExMXRj1wKSKT9o3zMDLA
-        AaOHJNQD6RcQ/xG0v7VdJeSXy0atqxicuKYDU46a+oiTN8n2u5awSGS3w==
-X-ME-Sender: <xms:-mdTZKvpe77Ggd55l7QklkXVLdjfMWwkvcfsgL6xYuT9kl-opXPMQQ>
-    <xme:-mdTZPc7TGrAEu-sq9LVOHxH6C6sW62ghk6jE0OTZCHOC5XvGmjDCG4naf5DLoXB8
-    ogQmLW6DnnkrnAm7po>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedvledguddviecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:-mdTZFzKaTEBCz5YZ6VEL5PbwzD84xZUykvo2kpZRgf8jJl3WFo6tQ>
-    <xmx:-mdTZFM9ja9VRjcYH6gnljzqTpzuYZ8K0ABfc6pNxosU5UAvkgn3oA>
-    <xmx:-mdTZK9yA2NopA9LXitQq9QqfUe7AExDqkaJjSEZs_iY6EhOz893cw>
-    <xmx:-2dTZNjT4047igFwdLFr9BK1zu7YSDGszq7TkVg743YjZX4Z6vfdnw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id C2C61B60086; Thu,  4 May 2023 04:08:26 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-386-g2404815117-fm-20230425.001-g24048151
-Mime-Version: 1.0
-Message-Id: <ee4cea3d-282e-4e90-897e-4ba576731f6e@app.fastmail.com>
-In-Reply-To: <20230504074539.8181-1-tzimmermann@suse.de>
-References: <20230504074539.8181-1-tzimmermann@suse.de>
-Date:   Thu, 04 May 2023 10:08:05 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Thomas Zimmermann" <tzimmermann@suse.de>,
-        "Helge Deller" <deller@gmx.de>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Javier Martinez Canillas" <javierm@redhat.com>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        "Vineet Gupta" <vgupta@kernel.org>,
-        "Huacai Chen" <chenhuacai@kernel.org>,
-        "WANG Xuerui" <kernel@xen0n.name>,
-        "David S . Miller" <davem@davemloft.net>,
-        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-        "Sam Ravnborg" <sam@ravnborg.org>
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, sparclinux@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-parisc@vger.kernel.org
-Subject: Re: [PATCH v4 0/6] fbdev: Move framebuffer I/O helpers to <asm/fb.h>
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 4 May 2023 04:09:56 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E0AF3C02
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 01:08:15 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-50bc3a2d333so167531a12.0
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 01:08:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683187691; x=1685779691;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=byDPUDOt8GYOJTy7S9gC54C3ZXLMwnnDCwgExcgBbwE=;
+        b=jUVQge6ZTztk15UsR6kt2KVGMyX190Jy8FmDLHp7XDobF+uXgFac3qVXk8o1y8ZaLi
+         YzJSzkHrJvnjjSiDmTOD3Ou8ZcM3yurHQo+9yvUo0A41qMXMyglkj99MAW6lEW8DPruh
+         HL2ivjbE9YEYBLRxRPibRaOhC8IgKxwgDxziqfIm4FLPjgqpQ7QrkKEfaa2rpbZYMqkm
+         qYx4Oq3+QwK7xBXWFKj4yzSn3d9F8C+s3RxS6Ky9KLvilSL3VdtZMbelOHGFOk0+kPn2
+         2cQboQoS3QG49qvvAxxnOc1K26oM2JImD18iesEQAEF3fr1kX8kULe5EDYi7iDKpuwo1
+         zacg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683187691; x=1685779691;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=byDPUDOt8GYOJTy7S9gC54C3ZXLMwnnDCwgExcgBbwE=;
+        b=Q/pSyIuVzhoRHWrd8RCR5WH61oO3ZrJfm9hdWhWoXKaWm505mqDF6uWYobkKiuVgEh
+         3wtkkWYmDSRDyZ0HTh6lV3ePy7WsKiOldS7ivaS1APFSlehG3om9wNf0iRbJKLj5MeMm
+         dQD/fZhmGBxSZtLPJZ9CARn/vc1Qdx8e+gKb6ZP29Q+8kCSLuc762AL8Kd0Ctbc+GJhH
+         4/RuHuTz8ewkJ0Fa4TaPnlHirsKGfI8+j8R4dWt4Pq+Tqy1Lx4VnBEFqyBvU60vN8Jkr
+         907VfL3aW1je7TDe0TSrzn5oc1X8JHGm2h8jI4gSLXGaYC3e/n6Hmqiw+KtbMukuResq
+         ptzw==
+X-Gm-Message-State: AC+VfDxkWcCc8G/BWKvw6GVcUoa336IPDnEBS/ZsCsTjb5XCPQmhorqO
+        Yr57aV8Jkb56lbygKygPSkEOSQ==
+X-Google-Smtp-Source: ACHHUZ7V4VVbuu2QABVgsj2CM8GAltUPKXVXETrFrfDTBh8Bi5Dawj08rUb7EF/Ch99f+XpES0mFPQ==
+X-Received: by 2002:a17:907:2681:b0:961:272d:bdb9 with SMTP id bn1-20020a170907268100b00961272dbdb9mr6177923ejc.43.1683187691630;
+        Thu, 04 May 2023 01:08:11 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:cbf1:e7ef:fb81:e912? ([2a02:810d:15c0:828:cbf1:e7ef:fb81:e912])
+        by smtp.gmail.com with ESMTPSA id my34-20020a1709065a6200b0094f6f45b2c1sm18500238ejc.156.2023.05.04.01.08.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 May 2023 01:08:11 -0700 (PDT)
+Message-ID: <5564bc98-2de9-d697-23f4-a778dec8088c@linaro.org>
+Date:   Thu, 4 May 2023 10:08:10 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH] dt-bindings: usb: Add binding for Microchip usb5744 hub
+ controller
+Content-Language: en-US
+To:     Michal Simek <michal.simek@amd.com>, linux-kernel@vger.kernel.org,
+        monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com,
+        ilias.apalodimas@linaro.org, Marek Vasut <marex@denx.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Piyush Mehta <piyush.mehta@amd.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <cca068980ae0b902168a9a9b78cab4efb43157a8.1683121150.git.michal.simek@amd.com>
+ <4aa7adbf-f89e-6819-64d2-5942a456528a@linaro.org>
+ <eb325b2a-d265-d8bb-8e98-9eef8f03355a@amd.com>
+ <d5763073-3aaa-8a7f-1336-337c125b1a0e@linaro.org>
+ <66c1efb3-32c1-b751-0faf-1fd6814bf05c@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <66c1efb3-32c1-b751-0faf-1fd6814bf05c@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 4, 2023, at 09:45, Thomas Zimmermann wrote:
-> Fbdev provides helpers for framebuffer I/O, such as fb_readl(),
-> fb_writel() or fb_memcpy_to_fb(). The implementation of each helper
-> depends on the architecture, but they are all equivalent to regular
-> I/O functions of similar names. So use regular functions instead and
-> move all helpers into <asm-generic/fb.h>
->
-> The first patch a simple whitespace cleanup.
->
-> Until now, <linux/fb.h> contained an include of <asm/io.h>. As this
-> will go away, patches 2 to 4 prepare include statements in the various
-> drivers. Source files that use regular I/O helpers, such as readl(),
-> now include <linux/io.h>. Source files that use framebuffer I/O
-> helpers, such as fb_readl(), now include <linux/fb.h>.
->
-> Patch 5 replaces the architecture-based if-else branching in 
-> <linux/fb.h> by helpers in <asm-generic/fb.h>. All helpers use Linux'
-> existing I/O functions.
->
-> Patch 6 harmonizes naming among fbdev and existing I/O functions.
->
-> The patchset has been built for a variety of platforms, such as x86-64,
-> arm, aarch64, ppc64, parisc, m64k, mips and sparc.
+On 04/05/2023 09:55, Michal Simek wrote:
+> 
+> 
+> On 5/4/23 09:31, Krzysztof Kozlowski wrote:
+>> CAUTION: This message has originated from an External Source. Please use proper judgment and caution when opening attachments, clicking links, or responding to this email.
+>>
+>>
+>> On 04/05/2023 09:25, Michal Simek wrote:
+>>>
+>>>
+>>> On 5/4/23 08:46, Krzysztof Kozlowski wrote:
+>>>> On 03/05/2023 15:39, Michal Simek wrote:
+>>>>> The Microchip usb5744 is a SS/HS USB 3.0 hub controller with 4 ports.
+>>>>> The binding describes USB related aspects of the USB5744 hub, it as
+>>>>> well cover the option of connecting the controller as an i2c slave.
+>>>>> When i2c interface is connected hub needs to be initialized first.
+>>>>> Hub itself has fixed i2c address 0x2D but hardcoding address is not good
+>>>>> idea because address can be shifted by i2c address translator in the
+>>>>> middle.
+>>>>>
+>>>>> Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
+>>>>> Signed-off-by: Michal Simek <michal.simek@amd.com>
+>>>>> ---
+>>>>>
+>>>>> It looks like that usb8041 has also an optional i2c interface which is not
+>>>>> covered. But it is mentioned at commit 40e58a8a7ca6 ("dt-bindings: usb:
+>>>>> Add binding for TI USB8041 hub controller").
+>>>>>
+>>>>> i2c-bus name property was suggested by Rob at
+>>>>> https://lore.kernel.org/all/CAL_JsqJedhX6typpUKbnzV7CLK6UZVjq3CyG9iY_j5DLPqvVdw@mail.gmail.com/
+>>>>> and
+>>>>> https://lore.kernel.org/all/CAL_JsqJZBbu+UXqUNdZwg-uv0PAsNg55026PTwhKr5wQtxCjVQ@mail.gmail.com/
+>>>>>
+>>>>> the question is if adding address like this is acceptable.
+>>>>> But it must be specified.
+>>>>
+>>>> Why? phandle points it explicitly.
+>>>
+>>> Ok it means just list usb hub on i2c with label and point to it. Works for me.
+>>
+>> Right. I missed you want the address of the hub but phandle goes to the
+>> bus. I think listing it on I2C bus (see
+>> arch/arm/boot/dts/vf610-zii-scu4-aib.dts) should work. I think we can
+>> have I2C devices without compatibles.
+> 
+> Device is definitely on i2c bus. But the problem with phande to bus is that 
+> there could more the same usb hubs and different i2c addresses of it. That's why 
+> I need to have exact match.
+> Marek has similar hub where i2c address can be strapped too.
+> 
+>> The problem is that property should have only one definition/type and
+>> i2c-bus is already used in other cases as just "phandle". If we go with
+>> your phandle+address approach, then this should be phandle-array with
+>> items and then we have two different types.
+> 
+> What to do with it then?
 
-The whole series looks good to me now,
+Your idea. I think you missed part of my comment. Add hub to the I2C bus
+and phandle to the hub I2C device node.
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Best regards,
+Krzysztof
+
