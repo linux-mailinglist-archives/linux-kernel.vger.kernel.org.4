@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA4FB6F75F1
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 22:03:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19C7E6F75F9
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 22:03:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232621AbjEDUDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 16:03:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51690 "EHLO
+        id S232295AbjEDUDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 16:03:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232334AbjEDUCJ (ORCPT
+        with ESMTP id S232480AbjEDUCL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 16:02:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 642EB170C;
-        Thu,  4 May 2023 12:51:50 -0700 (PDT)
+        Thu, 4 May 2023 16:02:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DB34AD37;
+        Thu,  4 May 2023 12:51:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B397D63848;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 021CE6382A;
+        Thu,  4 May 2023 19:50:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A8FCC433A0;
         Thu,  4 May 2023 19:50:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67FB6C433D2;
-        Thu,  4 May 2023 19:50:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683229815;
-        bh=yqZQQTZ7U0wmclW932SbDzfmuppbGDZNpK7W8BzezGw=;
+        s=k20201202; t=1683229816;
+        bh=lOBkcsDzQUuW9Pi45KkisUhzKMdnKzR9v4PV7zWt69I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aliCUT+TOYgO8tfsbuRvfnWLMR4l4Xbwf8gCxafw5ze5tm2LV06TWkmGceWEdYBX7
-         BbwEpDWRO6aqOG5UwYReusN/EpxHBYkBFhd0fdaLzPEMdLOsGbZyOKA8eClSpjBx6B
-         bdUrhQIGIespjfvJJn64QAAadV525v2+fe9egqv4O75jMoLW32+QFqE3gA52NYdYJA
-         3IgwKPtUgk1gTLDiDMRO5DFQKUdnXk8b6373DvomPBy75H5+wF1z6I3jORo6vcHOUv
-         NkOZLtKsFOmwBercvOebQv4MPY7SsYnE7DKXL0w5Nlk7IfNnY0uanMrv8dK5UAruzR
-         yx5J6yfKXCMzg==
+        b=uh4Oi4AN3hK3a6ruK3NijplZtWYNhc59Ec3egIyPrYmtIOcVh8waUDNRYEKDi1K3q
+         TwaPUNX7X+5p/BWrK/8Ua8n4uumexDvlH0ov99qhZ+8G8Y9b6qeO9gSLC8iq+3noAe
+         fLetfDvcV4kkEfYo+OKEDOL2hH7ONQosuGprqKW84yn1mgZrDVUdjImG5lVuHnfv4G
+         aRU771N0QD5DHO3Keb8rizAn1hd8JoQQLQoteIf1e1clsiJPjNT+jFnyfkqrMYh3BX
+         87O0lNC35XW6Q5iedJJkqLCWOTHt91n8kVJb81MTfwWa2nOsw4+AYXZwHZNcEC1glx
+         bEj3I1DyejcRg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-f2fs-devel@lists.sourceforge.net
-Subject: [PATCH AUTOSEL 5.10 15/24] f2fs: fix to drop all dirty pages during umount() if cp_error is set
-Date:   Thu,  4 May 2023 15:49:28 -0400
-Message-Id: <20230504194937.3808414-15-sashal@kernel.org>
+Cc:     Hao Zeng <zenghao@kylinos.cn>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Sasha Levin <sashal@kernel.org>, ast@kernel.org,
+        andrii@kernel.org, bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 16/24] samples/bpf: Fix fout leak in hbm's run_bpf_prog
+Date:   Thu,  4 May 2023 15:49:29 -0400
+Message-Id: <20230504194937.3808414-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230504194937.3808414-1-sashal@kernel.org>
 References: <20230504194937.3808414-1-sashal@kernel.org>
@@ -47,8 +48,8 @@ MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,91 +58,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chao Yu <chao@kernel.org>
+From: Hao Zeng <zenghao@kylinos.cn>
 
-[ Upstream commit c9b3649a934d131151111354bcbb638076f03a30 ]
+[ Upstream commit 23acb14af1914010dd0aae1bbb7fab28bf518b8e ]
 
-xfstest generic/361 reports a bug as below:
+Fix fout being fopen'ed but then not subsequently fclose'd. In the affected
+branch, fout is otherwise going out of scope.
 
-f2fs_bug_on(sbi, sbi->fsync_node_num);
-
-kernel BUG at fs/f2fs/super.c:1627!
-RIP: 0010:f2fs_put_super+0x3a8/0x3b0
-Call Trace:
- generic_shutdown_super+0x8c/0x1b0
- kill_block_super+0x2b/0x60
- kill_f2fs_super+0x87/0x110
- deactivate_locked_super+0x39/0x80
- deactivate_super+0x46/0x50
- cleanup_mnt+0x109/0x170
- __cleanup_mnt+0x16/0x20
- task_work_run+0x65/0xa0
- exit_to_user_mode_prepare+0x175/0x190
- syscall_exit_to_user_mode+0x25/0x50
- do_syscall_64+0x4c/0x90
- entry_SYSCALL_64_after_hwframe+0x72/0xdc
-
-During umount(), if cp_error is set, f2fs_wait_on_all_pages() should
-not stop waiting all F2FS_WB_CP_DATA pages to be writebacked, otherwise,
-fsync_node_num can be non-zero after f2fs_wait_on_all_pages() causing
-this bug.
-
-In this case, to avoid deadloop in f2fs_wait_on_all_pages(), it needs
-to drop all dirty pages rather than redirtying them.
-
-Signed-off-by: Chao Yu <chao@kernel.org>
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+Signed-off-by: Hao Zeng <zenghao@kylinos.cn>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/20230411084349.1999628-1-zenghao@kylinos.cn
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/f2fs/checkpoint.c | 12 ++++++++++--
- fs/f2fs/data.c       |  3 ++-
- 2 files changed, 12 insertions(+), 3 deletions(-)
+ samples/bpf/hbm.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
-index cd46a64ace1b3..8ca549cc975e4 100644
---- a/fs/f2fs/checkpoint.c
-+++ b/fs/f2fs/checkpoint.c
-@@ -309,8 +309,15 @@ static int __f2fs_write_meta_page(struct page *page,
- 
- 	trace_f2fs_writepage(page, META);
- 
--	if (unlikely(f2fs_cp_error(sbi)))
-+	if (unlikely(f2fs_cp_error(sbi))) {
-+		if (is_sbi_flag_set(sbi, SBI_IS_CLOSE)) {
-+			ClearPageUptodate(page);
-+			dec_page_count(sbi, F2FS_DIRTY_META);
-+			unlock_page(page);
-+			return 0;
-+		}
- 		goto redirty_out;
-+	}
- 	if (unlikely(is_sbi_flag_set(sbi, SBI_POR_DOING)))
- 		goto redirty_out;
- 	if (wbc->for_reclaim && page->index < GET_SUM_BLOCK(sbi, 0))
-@@ -1283,7 +1290,8 @@ void f2fs_wait_on_all_pages(struct f2fs_sb_info *sbi, int type)
- 		if (!get_pages(sbi, type))
- 			break;
- 
--		if (unlikely(f2fs_cp_error(sbi)))
-+		if (unlikely(f2fs_cp_error(sbi) &&
-+			!is_sbi_flag_set(sbi, SBI_IS_CLOSE)))
- 			break;
- 
- 		if (type == F2FS_DIRTY_META)
-diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
-index db26e87b8f0dd..9fbf1d1188cae 100644
---- a/fs/f2fs/data.c
-+++ b/fs/f2fs/data.c
-@@ -2812,7 +2812,8 @@ int f2fs_write_single_data_page(struct page *page, int *submitted,
- 		 * don't drop any dirty dentry pages for keeping lastest
- 		 * directory structure.
- 		 */
--		if (S_ISDIR(inode->i_mode))
-+		if (S_ISDIR(inode->i_mode) &&
-+				!is_sbi_flag_set(sbi, SBI_IS_CLOSE))
- 			goto redirty_out;
- 		goto out;
- 	}
+diff --git a/samples/bpf/hbm.c b/samples/bpf/hbm.c
+index ff4c533dfac29..8e48489b96ae9 100644
+--- a/samples/bpf/hbm.c
++++ b/samples/bpf/hbm.c
+@@ -308,6 +308,7 @@ static int run_bpf_prog(char *prog, int cg_id)
+ 		fout = fopen(fname, "w");
+ 		fprintf(fout, "id:%d\n", cg_id);
+ 		fprintf(fout, "ERROR: Could not lookup queue_stats\n");
++		fclose(fout);
+ 	} else if (stats_flag && qstats.lastPacketTime >
+ 		   qstats.firstPacketTime) {
+ 		long long delta_us = (qstats.lastPacketTime -
 -- 
 2.39.2
 
