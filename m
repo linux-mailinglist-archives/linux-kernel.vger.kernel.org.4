@@ -2,124 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D91546F6ADC
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 14:08:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B4676F6ADD
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 14:08:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230334AbjEDMIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 08:08:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43128 "EHLO
+        id S230306AbjEDMIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 08:08:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229973AbjEDMIE (ORCPT
+        with ESMTP id S229828AbjEDMII (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 08:08:04 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0BD59D3
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 05:08:02 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-306f9df5269so248658f8f.3
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 05:08:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1683202081; x=1685794081;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=z/HOoqmO08h3u2Yvh7Ep4JiYOBfgZY0A+BuaNi4hKi8=;
-        b=rH4Kg6CiTjM7F3xylJNwT4SBXybDUmEgdrx/v5oelKsA9dtaYw5OM0PRHGaRRdn76d
-         7QF4Q7HdK7hJA9oB/cs8bi8MD8HT2QCBT6zwqo18Q0fI4fhkn+GUD4vS9fVqjRU0Nuku
-         r8QHfkcsEIXrFoOJypBRximVoOzEIX2cj/5i/PDWcmYHcqadbSYrg3NOqPhk3FjIiQCt
-         xpynI+Q5WAMJT0+PRB9aKDclfgUGfUWkFl+2kPG3Q+WiHxuqED2QCbdYGvY1ZpVOSNAP
-         2T3hFtieuW2ZI+6mbLAh5kqeYJqHLXsSnwnDWsD9kkSkPxipLWsy5mrz0b6RxmBWqLhB
-         SloQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683202081; x=1685794081;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=z/HOoqmO08h3u2Yvh7Ep4JiYOBfgZY0A+BuaNi4hKi8=;
-        b=ggfXqYTMyCd1IT/McQmFQnmFv+H2pWA6E/mkNFZlZCa5y7AVwJUpy1Hr92CiW4e8St
-         vc8V5ecKW7odUv/Kp+r1Sf0M2Dlc7ByuXExbt6lzVtf8lDZwt/khhkxPZHh9pNHbxSKM
-         R954lEG5jQ0jR4R6EMi4VSmMEhh0Jb0XCHPVPAUkbCHEHlYLfGmRn3WKL/bcvJg0Xu8Z
-         ruDFByMn9ozeWEeOLHn+tX7F3sGdzc5NTr8U4uF98AkYUDMdrMRFpzEusPbCW+Awqtop
-         IDlZ9h3ahdT8dcZS1vNggzbpgnyQw8sdYhXbXTqKARkpm/WObO6XQRmPY6hnMPBRh20o
-         BVsQ==
-X-Gm-Message-State: AC+VfDwkw6JXfJp4f0Fg3j3fRUjdV4Af8zgdk53a/ATs0vIjiv4lMuBf
-        vrB9u/odoyNPOM1duojgVnjIPIwhQ196jUgEPJA=
-X-Google-Smtp-Source: ACHHUZ5hzqq3dnn/lEi88tYMgY4qut+pP1uM8kWq0ar6fkaOkqDMCTR5l2AkNdgegQ6EMAeNddu3NQ==
-X-Received: by 2002:a5d:6504:0:b0:306:4943:2e18 with SMTP id x4-20020a5d6504000000b0030649432e18mr2176434wru.58.1683202081312;
-        Thu, 04 May 2023 05:08:01 -0700 (PDT)
-Received: from alex-rivos.home (amontpellier-656-1-456-62.w92-145.abo.wanadoo.fr. [92.145.124.62])
-        by smtp.gmail.com with ESMTPSA id s4-20020adfeb04000000b003047f7a7ad1sm27433451wrn.71.2023.05.04.05.08.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 May 2023 05:08:01 -0700 (PDT)
-From:   Alexandre Ghiti <alexghiti@rivosinc.com>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     kernel test robot <lkp@intel.com>
-Subject: [PATCH -fixes] riscv: Fix orphan section warnings caused by kernel/pi
-Date:   Thu,  4 May 2023 14:07:59 +0200
-Message-Id: <20230504120759.18730-1-alexghiti@rivosinc.com>
-X-Mailer: git-send-email 2.37.2
+        Thu, 4 May 2023 08:08:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C745FCF
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 05:08:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 629C8614D3
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 12:08:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71B27C433EF;
+        Thu,  4 May 2023 12:08:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683202085;
+        bh=c5fHNZL9gOzBsNhK0yGMsJoyKVL5D1e08PMrRpEg6W4=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=VMm0aaiaP/f6HZUlefG+lLRiWMw8jAWz5osg6aTLPdj4RWj4fgrfXmt0B1OFRyY6D
+         jbN3lgI2Hs24f419n3Fo1fLuj4k4hSqo/l5FLaGPLMPcNaAJ8qTyJPGWW26s5W9+cF
+         R3nOi0seg2jolpgfKtCVj3NW5K5CiGgFXez6bE/MNRh0JxLtQtE/ziqtLiGT1l0zLY
+         vb2wsXJK0VSAx8RkbDaRR6Kahv8o7SQvf1UnfJKPbjxBa0xurNOIA3g7JaJfNyiF3m
+         zttRSHkFDEsDtH3HjCCNJblN3P6lBV8bVVooreCYN76ESKUqB4rozUUxdDRrkO/2f8
+         poLDeLG4sD7eg==
+Message-ID: <fb9b6de8-1efc-eeea-7acb-09d291590576@kernel.org>
+Date:   Thu, 4 May 2023 20:08:00 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [syzbot] [f2fs?] WARNING: lock held when returning to user space
+ in f2fs_write_single_data_page
+Content-Language: en-US
+To:     syzbot <syzbot+eb6201248f684e99b9f8@syzkaller.appspotmail.com>,
+        jaegeuk@kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <0000000000000534da05faa4d3d4@google.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <0000000000000534da05faa4d3d4@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kernel/pi gives rise to a lot of new sections that end up orphans: the
-first attempt to fix that tried to enumerate them all in the linker
-script, but kernel test robot with a random config keeps finding more of
-them.
+On 2023/5/2 1:05, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    58390c8ce1bd Merge tag 'iommu-updates-v6.4' of git://git.k..
+> git tree:       upstream
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=136e6ef8280000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=5eadbf0d3c2ece89
+> dashboard link: https://syzkaller.appspot.com/bug?extid=eb6201248f684e99b9f8
+> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16bbb03c280000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=140d36f8280000
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/60130779f509/disk-58390c8c.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/d7f0cdd29b71/vmlinux-58390c8c.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/de415ad52ae4/bzImage-58390c8c.xz
+> mounted in repro: https://storage.googleapis.com/syzbot-assets/dc89d01cd6e9/mount_0.gz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+eb6201248f684e99b9f8@syzkaller.appspotmail.com
 
-So prefix all those sections with .init.pi instead of only .init in
-order to be able to easily catch them all in the linker script.
+#syz test https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git dev-test
 
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/oe-kbuild-all/202304301606.Cgp113Ha-lkp@intel.com/
-Fixes: 26e7aacb83df ("riscv: Allow to downgrade paging mode from the command line")
-Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
----
- arch/riscv/kernel/pi/Makefile   | 2 +-
- arch/riscv/kernel/vmlinux.lds.S | 7 ++-----
- 2 files changed, 3 insertions(+), 6 deletions(-)
-
-diff --git a/arch/riscv/kernel/pi/Makefile b/arch/riscv/kernel/pi/Makefile
-index 741b7bd3a84c..07915dc9279e 100644
---- a/arch/riscv/kernel/pi/Makefile
-+++ b/arch/riscv/kernel/pi/Makefile
-@@ -22,7 +22,7 @@ KCOV_INSTRUMENT	:= n
- 
- $(obj)/%.pi.o: OBJCOPYFLAGS := --prefix-symbols=__pi_ \
- 			       --remove-section=.note.gnu.property \
--			       --prefix-alloc-sections=.init
-+			       --prefix-alloc-sections=.init.pi
- $(obj)/%.pi.o: $(obj)/%.o FORCE
- 	$(call if_changed,objcopy)
- 
-diff --git a/arch/riscv/kernel/vmlinux.lds.S b/arch/riscv/kernel/vmlinux.lds.S
-index 305877d85e96..e66e26640f63 100644
---- a/arch/riscv/kernel/vmlinux.lds.S
-+++ b/arch/riscv/kernel/vmlinux.lds.S
-@@ -84,11 +84,8 @@ SECTIONS
- 	__init_data_begin = .;
- 	INIT_DATA_SECTION(16)
- 
--	/* Those sections result from the compilation of kernel/pi/string.c */
--	.init.pidata : {
--		*(.init.srodata.cst8*)
--		*(.init__bug_table*)
--		*(.init.sdata*)
-+	.init.pi : {
-+		*(.init.pi*)
- 	}
- 
- 	.init.bss : {
--- 
-2.37.2
-
+> 
+> syz-executor768: attempt to access beyond end of device
+> loop0: rw=2049, sector=77824, nr_sectors = 2048 limit=63271
+> syz-executor768: attempt to access beyond end of device
+> loop0: rw=2049, sector=79872, nr_sectors = 2048 limit=63271
+> ================================================
+> WARNING: lock held when returning to user space!
+> 6.3.0-syzkaller-12049-g58390c8ce1bd #0 Not tainted
+> ------------------------------------------------
+> syz-executor768/4998 is leaving the kernel with locks still held!
+> 1 lock held by syz-executor768/4998:
+>   #0: ffff88807e800448 (&sbi->node_write){++++}-{3:3}, at: f2fs_down_read fs/f2fs/f2fs.h:2087 [inline]
+>   #0: ffff88807e800448 (&sbi->node_write){++++}-{3:3}, at: f2fs_write_single_data_page+0xa10/0x1d50 fs/f2fs/data.c:2842
+> 
+> 
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> 
+> If the bug is already fixed, let syzbot know by replying with:
+> #syz fix: exact-commit-title
+> 
+> If you want syzbot to run the reproducer, reply with:
+> #syz test: git://repo/address.git branch-or-commit-hash
+> If you attach or paste a git patch, syzbot will apply it before testing.
+> 
+> If you want to change bug's subsystems, reply with:
+> #syz set subsystems: new-subsystem
+> (See the list of subsystem names on the web dashboard)
+> 
+> If the bug is a duplicate of another bug, reply with:
+> #syz dup: exact-subject-of-another-report
+> 
+> If you want to undo deduplication, reply with:
+> #syz undup
