@@ -2,111 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B68036F7866
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 23:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF8076F7806
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 23:28:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbjEDV52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 17:57:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49304 "EHLO
+        id S229870AbjEDV2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 17:28:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbjEDV5Y (ORCPT
+        with ESMTP id S229446AbjEDV2C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 17:57:24 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C94DA13289;
-        Thu,  4 May 2023 14:57:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683237443; x=1714773443;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=4Q0HgYS8fBg0x+XSACWujM6Ax818ZMRS1g2rWv1t5c0=;
-  b=VvKG1F4c+OE3S6VlePVAYkPf8Kpk/l0WVwWcbYi9md4XE2JqIF/sIe6E
-   kaLV+l/4bwQv0N5P/owYKUq8TKRxRQdt8YwNO2RwlO0hfi7jl17+M+O5o
-   C4sLojKmoVpRF0LsszLMBzorflH+y0uw23QwCg+ksFD1m6PHZyRLhLRdA
-   /JaLTw1xKaiTWKRG97+70+zB+RVdYX7EGL5ihjp82Q37N2tAsZdjAcAmv
-   5zzXDAK72Mc6TCLoi/x+Rci+eKv5r038p+0XlbSjKg3bsrZo2PL6e/pgl
-   bc/1AKkmfgPnIfiZ2VTSrJzrg0iudC0exz1wkPCHK0yWFCgcEcMNjqZZy
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="351187040"
-X-IronPort-AV: E=Sophos;i="5.99,250,1677571200"; 
-   d="scan'208";a="351187040"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 14:23:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="697233794"
-X-IronPort-AV: E=Sophos;i="5.99,250,1677571200"; 
-   d="scan'208";a="697233794"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 14:23:05 -0700
-Date:   Thu, 4 May 2023 14:27:27 -0700
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        Robin Murphy <robin.murphy@arm.com>,
+        Thu, 4 May 2023 17:28:02 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DDEA1208E;
+        Thu,  4 May 2023 14:28:00 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-3062db220a3so724399f8f.0;
+        Thu, 04 May 2023 14:28:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683235679; x=1685827679;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KC+4rdAZwJWGenCNR7ys2Od2uEdn44ram9bK1avxY1g=;
+        b=VW8RtMCJoG4skxDpcHD2NTeefnts8zeezWC9cOE3j2TN2iMDgpZI7V84Z9Ac91TTNA
+         66tYE6nKo0TJ1wTTDosvB9hGB4VYvC32zQ4fYMQvV9AKGweLMd0BsL/HKCkMMl8X7lC4
+         yY3bpMhS0pvp2dwsPPyf2xwfafZVTsbFfIdKFQ4SC3TsxTWdfj7152kZG5mnDu29CZrF
+         zIEwbDl229MICPHYSJ9iTGIWcOxoG+w5Sg5FQN7hoxOiEQfLDJUPUTXYqXZztZNm+IjD
+         ppGEkrdUKUEhIUGsQmBAGvdWUWmeWyqXJDvO38NnmLCmEvpEMBWeD73Hs5FEHdK13AV5
+         Z6fQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683235679; x=1685827679;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KC+4rdAZwJWGenCNR7ys2Od2uEdn44ram9bK1avxY1g=;
+        b=XZusevKACfSIgtxapjWPCB3CySYh3yafiwdUD726LFAoIsopP7s5MBsLo0mP9R8u60
+         vdZSCeqqAd8abnNshM/yS1QUP394UbzQSJucHDS0RsWDJv7AZh8IqozSJT0oAvlqja5n
+         vLGtX6bRRof9pY/rZiAnjAFBF85BfxqtpsfJtPq8hLpl/TghglYIRI+b1oVtWpM93P+Y
+         e7Ny/mvbR6hHU1tde1XRx1cO+xcLM+La88sC+MnSZDOUwY6i0yt076n8HLOm1XOqauY3
+         sw0gc0PzIrdBug70lM1qy0ypnZrK0QOpx0gXPM+NQEtu0T1DEUMI0ZFe44s/1AmsgPba
+         OoRA==
+X-Gm-Message-State: AC+VfDxQefQlCOS2xP33f0zcGuDYO0BrgtcGQk9QzLMHSzitVBcsbmze
+        UwW1+m7rfz6D2exL4wV8+dXh1q7Bid8VKA==
+X-Google-Smtp-Source: ACHHUZ7WgHnTySGE7UylZdBSEkgJId9O2hawXL/Fc1eWsSXRVEkunluwqLnhmxo5jrljgk6rsaqTeA==
+X-Received: by 2002:a5d:4a92:0:b0:2ff:1e0f:fb2 with SMTP id o18-20020a5d4a92000000b002ff1e0f0fb2mr3565425wrq.13.1683235678688;
+        Thu, 04 May 2023 14:27:58 -0700 (PDT)
+Received: from lucifer.home (host86-156-84-164.range86-156.btcentralplus.com. [86.156.84.164])
+        by smtp.googlemail.com with ESMTPSA id h15-20020a05600c314f00b003f1978bbcd6sm51617562wmo.3.2023.05.04.14.27.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 May 2023 14:27:57 -0700 (PDT)
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
         Jason Gunthorpe <jgg@nvidia.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        "Ranganathan, Narayan" <narayan.ranganathan@intel.com>,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH v5 4/7] iommu/vt-d: Factoring out PASID set up helper
- function
-Message-ID: <20230504142727.4bd2206a@jacob-builder>
-In-Reply-To: <BN9PR11MB5276726E67301703BD10833B8C6B9@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20230427174937.471668-1-jacob.jun.pan@linux.intel.com>
-        <20230427174937.471668-5-jacob.jun.pan@linux.intel.com>
-        <BN9PR11MB5276726E67301703BD10833B8C6B9@BN9PR11MB5276.namprd11.prod.outlook.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Mika Penttila <mpenttil@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Theodore Ts'o <tytso@mit.edu>, Peter Xu <peterx@redhat.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>
+Subject: [PATCH v9 0/3] mm/gup: disallow GUP writing to file-backed mappings by default
+Date:   Thu,  4 May 2023 22:27:50 +0100
+Message-Id: <cover.1683235180.git.lstoakes@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kevin,
+Writing to file-backed mappings which require folio dirty tracking using
+GUP is a fundamentally broken operation, as kernel write access to GUP
+mappings do not adhere to the semantics expected by a file system.
 
-On Fri, 28 Apr 2023 09:47:45 +0000, "Tian, Kevin" <kevin.tian@intel.com>
-wrote:
+A GUP caller uses the direct mapping to access the folio, which does not
+cause write notify to trigger, nor does it enforce that the caller marks
+the folio dirty.
 
-> > From: Jacob Pan <jacob.jun.pan@linux.intel.com>
-> > Sent: Friday, April 28, 2023 1:50 AM
-> > 
-> > 
-> > +static int dmar_domain_attach_device_pasid(struct dmar_domain *domain,
-> > +					   struct intel_iommu *iommu,
-> > +					   struct device *dev,
-> > ioasid_t pasid) +{
-> > +	int ret;
-> > +
-> > +	/* PASID table is mandatory for a PCI device in scalable mode.
-> > */
-> > +	if (!sm_supported(iommu) && dev_is_real_dma_subdevice(dev))
-> > +		return -EOPNOTSUPP;  
-> 
-> "&&" should be "||"
-> 
-good catch,
+The problem arises when, after an initial write to the folio, writeback
+results in the folio being cleaned and then the caller, via the GUP
+interface, writes to the folio again.
 
-Thanks,
+As a result of the use of this secondary, direct, mapping to the folio no
+write notify will occur, and if the caller does mark the folio dirty, this
+will be done so unexpectedly.
 
-Jacob
+For example, consider the following scenario:-
+
+1. A folio is written to via GUP which write-faults the memory, notifying
+   the file system and dirtying the folio.
+2. Later, writeback is triggered, resulting in the folio being cleaned and
+   the PTE being marked read-only.
+3. The GUP caller writes to the folio, as it is mapped read/write via the
+   direct mapping.
+4. The GUP caller, now done with the page, unpins it and sets it dirty
+   (though it does not have to).
+
+This change updates both the PUP FOLL_LONGTERM slow and fast APIs. As
+pin_user_pages_fast_only() does not exist, we can rely on a slightly
+imperfect whitelisting in the PUP-fast case and fall back to the slow case
+should this fail.
+
+v9:
+- Refactored vma_needs_dirty_tracking() and vma_wants_writenotify() to avoid
+  duplicate check of shared writable/needs writenotify.
+- Removed redundant comments.
+- Improved vma_needs_dirty_tracking() commit message.
+- Moved folio_fast_pin_allowed() into CONFIG_HAVE_FAST_GUP block as used by
+  both the CONFIG_ARCH_HAS_PTE_SPECIAL and huge page cases, both of which
+  are invoked under any CONFIG_HAVE_FAST_GUP configuration. Should fix
+  mips/arm builds.
+- Permit pins of swap cache anon pages.
+- Permit KSM anon pages.
+
+v8:
+- Fixed typo writeable -> writable.
+- Fixed bug in writable_file_mapping_allowed() - must check combination of
+  FOLL_PIN AND FOLL_LONGTERM not either/or.
+- Updated vma_needs_dirty_tracking() to include write/shared to account for
+  MAP_PRIVATE mappings.
+- Move to open-coding the checks in folio_pin_allowed() so we can
+  READ_ONCE() the mapping and avoid unexpected compiler loads. Rename to
+  account for fact we now check flags here.
+- Disallow mapping == NULL or mapping & PAGE_MAPPING_FLAGS other than
+  anon. Defer to slow path.
+- Perform GUP-fast check _after_ the lowest page table level is confirmed to
+  be stable.
+- Updated comments and commit message for final patch as per Jason's
+  suggestions.
+https://lore.kernel.org/all/cover.1683067198.git.lstoakes@gmail.com/
+
+v7:
+- Fixed very silly bug in writeable_file_mapping_allowed() inverting the
+  logic.
+- Removed unnecessary RCU lock code and replaced with adaptation of Peter's
+  idea.
+- Removed unnecessary open-coded folio_test_anon() in
+  folio_longterm_write_pin_allowed() and restructured to generally permit
+  NULL folio_mapping().
+https://lore.kernel.org/all/cover.1683044162.git.lstoakes@gmail.com/
+
+v6:
+- Rebased on latest mm-unstable as of 28th April 2023.
+- Add PUP-fast check with handling for rcu-locked TLB shootdown to synchronise
+  correctly.
+- Split patch series into 3 to make it more digestible.
+https://lore.kernel.org/all/cover.1682981880.git.lstoakes@gmail.com/
+
+v5:
+- Rebased on latest mm-unstable as of 25th April 2023.
+- Some small refactorings suggested by John.
+- Added an extended description of the problem in the comment around
+  writeable_file_mapping_allowed() for clarity.
+- Updated commit message as suggested by Mika and John.
+https://lore.kernel.org/all/6b73e692c2929dc4613af711bdf92e2ec1956a66.1682638385.git.lstoakes@gmail.com/
+
+v4:
+- Split out vma_needs_dirty_tracking() from vma_wants_writenotify() to
+  reduce duplication and update to use this in the GUP check. Note that
+  both separately check vm_ops_needs_writenotify() as the latter needs to
+  test this before the vm_pgprot_modify() test, resulting in
+  vma_wants_writenotify() checking this twice, however it is such a small
+  check this should not be egregious.
+https://lore.kernel.org/all/3b92d56f55671a0389252379237703df6e86ea48.1682464032.git.lstoakes@gmail.com/
+
+v3:
+- Rebased on latest mm-unstable as of 24th April 2023.
+- Explicitly check whether file system requires folio dirtying. Note that
+  vma_wants_writenotify() could not be used directly as it is very much focused
+  on determining if the PTE r/w should be set (e.g. assuming private mapping
+  does not require it as already set, soft dirty considerations).
+- Tested code against shmem and hugetlb mappings - confirmed that these are not
+  disallowed by the check.
+- Eliminate FOLL_ALLOW_BROKEN_FILE_MAPPING flag and instead perform check only
+  for FOLL_LONGTERM pins.
+- As a result, limit check to internal GUP code.
+ https://lore.kernel.org/all/23c19e27ef0745f6d3125976e047ee0da62569d4.1682406295.git.lstoakes@gmail.com/
+
+v2:
+- Add accidentally excluded ptrace_access_vm() use of
+  FOLL_ALLOW_BROKEN_FILE_MAPPING.
+- Tweak commit message.
+https://lore.kernel.org/all/c8ee7e02d3d4f50bb3e40855c53bda39eec85b7d.1682321768.git.lstoakes@gmail.com/
+
+v1:
+https://lore.kernel.org/all/f86dc089b460c80805e321747b0898fd1efe93d7.1682168199.git.lstoakes@gmail.com/
+
+Lorenzo Stoakes (3):
+  mm/mmap: separate writenotify and dirty tracking logic
+  mm/gup: disallow FOLL_LONGTERM GUP-nonfast writing to file-backed
+    mappings
+  mm/gup: disallow FOLL_LONGTERM GUP-fast writing to file-backed
+    mappings
+
+ include/linux/mm.h |   1 +
+ mm/gup.c           | 145 ++++++++++++++++++++++++++++++++++++++++++++-
+ mm/mmap.c          |  58 ++++++++++++++----
+ 3 files changed, 191 insertions(+), 13 deletions(-)
+
+--
+2.40.1
