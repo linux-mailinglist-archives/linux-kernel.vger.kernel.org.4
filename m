@@ -2,132 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73D3C6F76C5
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 22:15:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 568866F76F8
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 22:27:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232078AbjEDUPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 16:15:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54040 "EHLO
+        id S229619AbjEDU1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 16:27:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233205AbjEDUPT (ORCPT
+        with ESMTP id S230217AbjEDU1N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 16:15:19 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6C4D13C08
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 12:59:42 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-b8f6bef3d4aso1896142276.0
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 12:59:42 -0700 (PDT)
+        Thu, 4 May 2023 16:27:13 -0400
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D16872D7AA
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 13:13:47 -0700 (PDT)
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-3f1728c2a57so9820735e9.0
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 13:13:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683230297; x=1685822297;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=uf90B0DNuv78Zar9yEbDcO4xMMRYhft3uy0mg3u42Sk=;
-        b=ioOb9f8iEjks0QT02JpIuAoIxmM8aIVDMbInwUbFuMQodvXsBYfLNMT8TQgMJs/N2D
-         eBeH9IGagWlYB7p1fSoh3he0JyQ+fuJb/BCG05vMf3cRsNlbLx3oV255q8aK4sKeXnd1
-         8xFoGpAmL+TllBa13NtQLaiY4bHDUmClvLjURDHLl92MUSdXTHYPT0kAw3j5Qiseod9g
-         xleV5V1nBGfmb6MNdXc8TAWD2q/bC4wcn5Pd5225Yvh0+FFmJpUUPBtdOcpZankkGcGC
-         uWtSR+lMuPyptKPskJ0qyadc923IqU0FAGIkiwMBcboDMRWBudtw9BhhEInjVBYn46q0
-         NNew==
+        d=linaro.org; s=google; t=1683231094; x=1685823094;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KhLpJ+4XVYMTBbKU5i+ULfTcOdDtMfpoFQixhCU6m6w=;
+        b=ulhuEvU+yNAeamz7Ga8sSg91ahSLWl7ZlPxkvjhMFVs+0M7Laq899+w5ojfIE/zI6G
+         v8v0hsTCGClTd0A5WJt1FDv0CHRqZdzQLnt0TheXbvzlVvCego89g3llE976WHepDt1X
+         YRWj7WVipWkKuUld6B/sN4LDGyF9jdPRWfge+ZVKgm1DhcJNatZOAePmOx0ieM7nMFOS
+         tU7E+8qxa3reUT5QEawY9ZVWESyjawhe3QpmQHM3+EwV8OZzcSBknalUONt6F9f3Cs3X
+         yP0pExGx74QK790kAx1qnZsuPzjDzUwnU3y9PvGuLm9XwWF1hyBesVs5vlYrT7RAKW78
+         fu/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683230297; x=1685822297;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uf90B0DNuv78Zar9yEbDcO4xMMRYhft3uy0mg3u42Sk=;
-        b=VnDaDTWtisXqzuw80dJwFSOkuvmFuqRomkyVwUsp22WiT5wICceFFl3xoIhFayz61d
-         XUey7c1+lUccwrmKrmAw8VTo/jArXv+gnCQDMVkCbJdLwSfOa7hYHN1FrVQcfh4GgfHG
-         yolyZR+Jpa1Nmm/vM6qElSRNFT3FiFQCbp6m67lAKz+XyV43L2hl3BKBC0o9hymlYGKD
-         66TZ/V5PUHuYYvdhM+/wrdrINJFHK02e8z9MesjxORknz2M9U5uO4I7iuNLr1sD51drQ
-         TxiK3MDqVHLGXMPMljmbBsdjr6XBtznvoP3Il3TxgVJSP+C8TIZR5oypkolHuqBENMCv
-         jMoA==
-X-Gm-Message-State: AC+VfDx3bVNmPYysXRjgQapEa8Mr+D3zE2C3EV5D4Sg+dlF+TjDGQTM/
-        BzUKX8vPijC4i6/g4exddFcZ44tkfKiN
-X-Google-Smtp-Source: ACHHUZ5D6oBfEWsjyxziFTJx5Gel0+EXHSwY0SgDL1ePNM78CRemBZVMsSyesUUrhKYz5oE4MEut4UEFSWec
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:3367:2fed:395f:6f64])
- (user=irogers job=sendgmr) by 2002:a25:52d5:0:b0:b9a:7088:d95 with SMTP id
- g204-20020a2552d5000000b00b9a70880d95mr666862ybb.0.1683230297329; Thu, 04 May
- 2023 12:58:17 -0700 (PDT)
-Date:   Thu,  4 May 2023 12:58:03 -0700
-In-Reply-To: <20230504195803.3331775-1-irogers@google.com>
-Message-Id: <20230504195803.3331775-2-irogers@google.com>
-Mime-Version: 1.0
-References: <20230504195803.3331775-1-irogers@google.com>
-X-Mailer: git-send-email 2.40.1.521.gf1e218fcd8-goog
-Subject: [PATCH v1 2/2] perf stat: Document --metric-no-threshold and
- threshold colors
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        James Clark <james.clark@arm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ahmad Yasin <ahmad.yasin@intel.com>,
-        Stephane Eranian <eranian@google.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Samantha Alt <samantha.alt@intel.com>,
-        Caleb Biggers <caleb.biggers@intel.com>,
-        Weilin Wang <weilin.wang@intel.com>,
-        Edward Baker <edward.baker@intel.com>
-Cc:     Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1683231094; x=1685823094;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KhLpJ+4XVYMTBbKU5i+ULfTcOdDtMfpoFQixhCU6m6w=;
+        b=R+jTIvqbd7ntW/ci60X1nF+PG6EeU9h+CAAxR/hByXnHsY1PgnPCg8liYl+OzeVLis
+         66Oa6BKbmiEMTp7ccjJGetztXMJvhaEl8ABPibVnOs8JoZrvOesiX+O3IYsCGv+/r1eu
+         vgqKYcHxlRN0gIat5Sfi2SreqBUG0CpG/3W/p5U+w5Lm485Y2ruuldAGaLSj0GJu6Y2q
+         0mXrV9zqHGUex5PrfeXyXZOze/HQBtm08GAJgHrfMIBV4iW8fdTAvfTkU8h0lwVTPoub
+         I2Qg3fxcHyO95b+pPp2vaYzapE6GmpzqbpvOyRxtjHqdZWpO4wG0P5pa1W4wa9FYPiQV
+         dsGw==
+X-Gm-Message-State: AC+VfDwrO22QrYJ/9SKm64c+Upen9D46YImtUSkmVuXgr40UYrIwJ9Mf
+        5gfTxpD5m3dFA5/iNHz3nLcEFZUgc6lrmVsAsoc=
+X-Google-Smtp-Source: ACHHUZ42P42FbCtfpSKN3KOROAYlmZPNwEI3F+cHVDekGGCUpP8K37i1bTQKHm0lbQ5uu6KwhWGzaQ==
+X-Received: by 2002:a05:6512:964:b0:4d5:a689:7f9d with SMTP id v4-20020a056512096400b004d5a6897f9dmr1925019lft.57.1683230363234;
+        Thu, 04 May 2023 12:59:23 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id 19-20020ac24853000000b004d887e0e9edsm482lfy.168.2023.05.04.12.59.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 May 2023 12:59:22 -0700 (PDT)
+Message-ID: <06864435-3db9-a91c-2e99-69829d8296b1@linaro.org>
+Date:   Thu, 4 May 2023 22:59:22 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v5 3/7] drm/msm/dpu: add DPU_PINGPONG_DSC bits into PP_BLK
+ and PP_BLK_TE marcos
+Content-Language: en-GB
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, andersson@kernel.org, quic_sbillaka@quicinc.com,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1683218805-23419-1-git-send-email-quic_khsieh@quicinc.com>
+ <1683218805-23419-4-git-send-email-quic_khsieh@quicinc.com>
+ <ljt5mp4ew5lcrrrdd7xyof3jv3friafbmr3im35ddwxjc42ekh@toez7xfdreg2>
+ <CAA8EJpreM9i3DUp+93K7p14f_tNMy-m+C-WdyN5_drmmkGV66g@mail.gmail.com>
+ <u7hlzltevx675gfg4w6emmeceo6nj76taqeecsor6iqsi3hmki@lg43y65m6chz>
+ <11ef769a-5089-57d4-db87-4c5766d98206@quicinc.com>
+ <6qg25ffuq6xcfz3vuqm5lguspihjospctjclxmwyu2ifau4p7b@txywjmir7lg5>
+ <9011a078-9962-b3de-6427-b9114fcd0cf4@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <9011a078-9962-b3de-6427-b9114fcd0cf4@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document the threshold behavior for -M/--metrics.
+On 04/05/2023 22:50, Abhinav Kumar wrote:
+> 
+> 
+> On 5/4/2023 12:36 PM, Marijn Suijten wrote:
+>> On 2023-05-04 11:25:44, Abhinav Kumar wrote:
+>> <snip>
+>>>> Sure, if you really prefer a split I'd go for two patches:
+>>>> 1. Add the flag to the enum and catalog;
+>>>> 2. Add the ops guard (functional change).
+>>>>
+>>>> Then don't forget to reword the commit message, following the 
+>>>> guidelines
+>>>> below and the suggestion for 2/7.
+>>>>
+>>>> - Marijn
+>>>
+>>> Plan sounds good to me.
+>>>
+>>> Marijn, we will wait for a couple of days to post the next rev but would
+>>> be hard more than that as we need to pick up other things which are
+>>> pending on top of this. Hence would appreciate if you can finish reviews
+>>> by then.
+>>
+>> It depends on how many more revisions are needed after that, and not all
+>> patches in this series have an r-b just yet.  Given the amount of review
+>> comments that are still trickling in (also on patches that already have
+>> maintainer r-b) I don't think we're quite there to start thinging about
+>> picking this up in drm-msm just yet.  I doubt anyone wants a repeat of
+>> the original DSC series, which went through many review rounds yet still
+>> required multiple series of bugfixes (some of which were pointed out and
+>> ignored in review) to be brought to a working state.  But the split
+>> across topics per series already makes this a lot less likely, many
+>> thanks for that.
+>>
+> 
+> I think the outstanding comments shouldnt last more than 1-2 revs more 
+> on this one as its mostly due to multiple patches on the list touching 
+> catalog at the same time. I have been monitoring the comments closely 
+> even though I dont respond to all of them.
+> 
+> One of the major reasons of the number of issues with DSC 1.1 was QC 
+> didn't really have the devices or panels to support it. Thats why I 
+> changed that this time around to take more control of validation of DSC 
+> 1.2 and ofcourse decided to break up of series into the least amount of 
+> functionality needed to keep the DPU driver intact.
+> 
+> All that being said, we still value your comments and would gladly wait 
+> for a couple of days like I already wrote. But there are more 
+> incremental series on top of this:
+> 
+> -> DSI changes for DSC 1.2
+> -> proper teardown for DSC
+> -> DSC pair allocation support
+> -> DSC 1.2 over DP
+> 
+> We will be posting all of these within next couple of weeks on top of this.
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/Documentation/perf-stat.txt | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+I'd say, it's fine to post them now, as we have more or less agreed on 
+the helper series. The interface between the series should be stable then.
 
-diff --git a/tools/perf/Documentation/perf-stat.txt b/tools/perf/Documentation/perf-stat.txt
-index 29bdcfa93f04..ff71399db738 100644
---- a/tools/perf/Documentation/perf-stat.txt
-+++ b/tools/perf/Documentation/perf-stat.txt
-@@ -353,6 +353,15 @@ small group that need not have multiplexing is lowered. This option
- forbids the event merging logic from sharing events between groups and
- may be used to increase accuracy in this case.
- 
-+--metric-no-threshold::
-+Metric thresholds may increase the number of events necessary to
-+compute whether a metric has exceeded its threshold expression. This
-+may not be desirable, for example, as the events can introduce
-+multiplexing. This option disables the adding of threshold expression
-+events for a metric. However, if there are sufficient events to
-+compute the threshold then the threshold is still computed and used to
-+color the metric's computed value.
-+
- --quiet::
- Don't print output, warnings or messages. This is useful with perf stat
- record below to only write data to the perf.data file.
-@@ -389,6 +398,12 @@ For a group all metrics from the group are added.
- The events from the metrics are automatically measured.
- See perf list output for the possible metrics and metricgroups.
- 
-+	When threshold information is available for a metric, the
-+	color red is used to signify a metric has exceeded a threshold
-+	while green shows it is hasn't. The default color means that
-+	no threshold information was available or the threshold
-+	couldn't be computed.
-+
- -A::
- --no-aggr::
- Do not aggregate counts across all monitored CPUs.
+The RM series is probably the one having bigger dependencies/conflicts 
+on other pending patches (include virtual wide planes)
+
+> 
+>> In other words, let's take it slow and do things properly this time. And
+>> who knows, perhaps the rest of these patches are more straightforward.
+>>
+> 
+> Ack. the intent is always to do things right the first time.
+> 
+>> - Marijn
+>>
+>> <snip>
+
 -- 
-2.40.1.521.gf1e218fcd8-goog
+With best wishes
+Dmitry
 
