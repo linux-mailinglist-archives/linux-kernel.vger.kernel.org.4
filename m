@@ -2,130 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 278056F64F4
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 08:28:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 746A86F64F8
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 08:28:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbjEDG2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 02:28:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46248 "EHLO
+        id S229953AbjEDG2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 02:28:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbjEDG2f (ORCPT
+        with ESMTP id S229942AbjEDG2s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 02:28:35 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44224E65
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 23:28:34 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 9967B5C0195;
-        Thu,  4 May 2023 02:28:31 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Thu, 04 May 2023 02:28:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1683181711; x=
-        1683268111; bh=nTHXfZvsKH6NImQKdo/JKzYWy+5g9P8ww+u3FrTSJDk=; b=I
-        jXgf9/jm5NzTWuGXad1eJ5T5bthKlUf/yVG2RTGHmQPa056XIB66TQqL8cU92wXg
-        gfQm/K+x3Rg8iVx+RUBMawjqwveR8owUiOCMOiPVmCW1FqSQYjrBHB4wlg49l5/M
-        i5eDkJGKVQ2pd72NCjnooIwOL0StargaYU63IKOUBLa+jT8uI0yzU58xD/nledTf
-        tT0Acrfzkh8SjA7SS0S9UtaKc0uPxnWxbjV58svEBOxPLOYzu1ObWCZeY3TgkDvf
-        Alp7M7Q5oJGxc+dpy31TEbmVGNPaE8rVNmLxQ4FvIRIEJ2a8Hj5DP6DXuOAL+ouJ
-        QFdZUwAsc4glvn0bYSDIg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1683181711; x=1683268111; bh=nTHXfZvsKH6NI
-        mQKdo/JKzYWy+5g9P8ww+u3FrTSJDk=; b=VCJMS6hFuG8G/ZmBGtXm++o+3HPSO
-        TK1p6GGLtULE+zBeA9X6/erKexMYZjI4Dp95kKIu9+9tcUkWGvV8CbfPcyMgduey
-        G/0k7kvHvDb69fdg7h2Qg8BQXSQl82bYawHLD6BGjblRSvCmFZ/kSaK943cvwcMU
-        9KfC8bOd6wn4F4QyU6CwfJ4wKYhrLXF0cVsWTNPuQDG+ujQaaZ8pqAe+1Gn4ZUxh
-        Xgc7asc9QbEGO3mX9Q3/YOTNH3eeVvvPaN0XSYasC1tlBhp5jJqvj4tillro7/fZ
-        z4ABkRgC4yWRj0ogsP3YYGtSSKxQFOOd6pChfrJQkv5uP5JPydMTluPsg==
-X-ME-Sender: <xms:jlBTZNLdW3OSyWTpJdMJBAeLwoO3CzFAvAbXZjieo0Ecb40UGYeflw>
-    <xme:jlBTZJI69oijDerdwHjhc9d-PCmnfvgFyUmoEwvfhaMFPKxGKbYARwQEDk95u1stm
-    w1JjIDqogaw24I7_Ec>
-X-ME-Received: <xmr:jlBTZFt0bhvFFPSc9o37KRhFH7hDCm0ISr5tCUDWsXlYbqe1mlF5hHFrUeAjmuE4YYtbaA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedvledguddtiecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhi
-    rhhilhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrd
-    hnrghmvgeqnecuggftrfgrthhtvghrnhephfeigefhtdefhedtfedthefghedutddvueeh
-    tedttdehjeeukeejgeeuiedvkedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
-X-ME-Proxy: <xmx:jlBTZOa4WF05AgAWgwN_zDrBf754ZOPlEynEF2acEnA9dqfi1f4KlQ>
-    <xmx:jlBTZEYiMZkyaZUvb2HM8Wxvp1PAeV84e6TwoL96bVfL1ERjcPVQ7g>
-    <xmx:jlBTZCAYJSz4k_MmymHz5Yd_EUSpsOgi8K7WtXnbM-Wt-KHezCvcGw>
-    <xmx:j1BTZDy1HbCca3z3eCA_Ylkrlbc5SBwxx-2ZpGM7w6zxOix55egN-Q>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 4 May 2023 02:28:30 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 2AF5010CE5A; Thu,  4 May 2023 09:28:27 +0300 (+03)
-Date:   Thu, 4 May 2023 09:28:27 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kirill.shutemov@linux.intel.com,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [GIT PULL] x86/mm for 6.4
-Message-ID: <20230504062827.algltnmlddtzmfz5@box.shutemov.name>
-References: <20230427225647.1101172-1-dave.hansen@linux.intel.com>
- <CAHk-=wgrdOm8RwO+u8bydrbgs0wXJV_9mBYAtzX9d9hEY7a25A@mail.gmail.com>
- <CAHk-=wiHvdgbLxayyCsRU45JnKCZkCOpEJPfOvE3eYCnGjVcSA@mail.gmail.com>
- <20230429003822.n3mglslg666j3npp@box.shutemov.name>
- <641a9348-a052-6bb5-e6c7-64acb6405328@intel.com>
- <CAHk-=wgnGoj8qZg3SRh1Z1-mU=b3ryydXZykUuarnrAn6LuHBw@mail.gmail.com>
- <CAHk-=wgN=GY2A0htYQQRmPaLCorWnFatY_XO0X2w_m9xXQDcPA@mail.gmail.com>
- <f5983c42-82a5-1cd8-c717-67bfd72377dc@intel.com>
- <CAHk-=wgpOqujY210W9-KJPEfD42W_bvUdLwF-PAvyxJQ92tzDg@mail.gmail.com>
- <CAHk-=wj7q6Ng5uemZtrDnhtcfrgkzX5Z18eKZj94FY5d2quP6A@mail.gmail.com>
+        Thu, 4 May 2023 02:28:48 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8FCE273B
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 23:28:45 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-965ab8ed1c0so9493566b.2
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 23:28:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683181724; x=1685773724;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lmTTjP0NJY0zqU47RWDKkGkqZAij3qjk/tcoGnwkO5M=;
+        b=GvQJlbBwlwe6+ms+pQcgcseKFLAtK/6mdsje36GT9UKVynJsoHfN3ITQueuFOVXrrD
+         ++9JwkdMF1IXC5g/vBw+zbJinWfTLHJX5oEMPXdLVbYAPetEaagrB/py1dM5excjv6Bv
+         1/xBf/j/G3ouUvM3iyetEz8IIwXhGKlrlFir2eBEUH3LHT18q/JRY3P1d65jgs+Pyphw
+         LNbcfCuqigmiw34BwVV0A2oQjs7cx8WZBUN1uJvecr5KMYe9b2Ih1DQlqhxJg29hPXoi
+         Sip1CK8BT/EDNFiq0ITidxqDjLlosoWDRmigHD4WmK6wjDwASGV4f9nstpR6fujMoSC3
+         ifaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683181724; x=1685773724;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lmTTjP0NJY0zqU47RWDKkGkqZAij3qjk/tcoGnwkO5M=;
+        b=DHMQR0g0DuY4upVRMd5NonyJTRnZq4cSNwjUpxL+wdLxNu/eHm6TG7swtItsrv4r0K
+         AGg8aHvLFUvh9GKAPgPo9tWBhJZeQL8BcsxprbWoW02DpTJI8ldJ8FxlTU1fWqJeDlSO
+         dtgkZg46tYfszADON1iWWsreNu5t9Zzy9Vxl7gnZjnbmQgip/FUtKbLHDlLfNP1A7ZWR
+         4qO2gLb6XZJQjpxjKXPClT070cdhv5beZykn8jVpyeghZmVml75KHNkYbP18yof5fYjb
+         7rhUOVVljFqppwujxeXPu0F42eDGeQ9NU/F+VxGqpIwv9limgdAEjpNkQlUxmdcJ6i/3
+         g6/w==
+X-Gm-Message-State: AC+VfDzkEAUjaKOGOTm4LvcndTWIWP4/IZGF0eBKvg4D+xFH95KnSyGn
+        iSo69zLmVWGjj85ELy9GLS19NA==
+X-Google-Smtp-Source: ACHHUZ5UlPQzU17AFn5aODrdSBZVkzUlth32uioRCZuWjk3VO59yjYZG+dgM+KrPJbJrbQnO0okIbA==
+X-Received: by 2002:a17:907:7f24:b0:947:ebd5:c798 with SMTP id qf36-20020a1709077f2400b00947ebd5c798mr6213675ejc.54.1683181724327;
+        Wed, 03 May 2023 23:28:44 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:cbf1:e7ef:fb81:e912? ([2a02:810d:15c0:828:cbf1:e7ef:fb81:e912])
+        by smtp.gmail.com with ESMTPSA id qf22-20020a1709077f1600b0094a8aa6338dsm18535563ejc.14.2023.05.03.23.28.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 May 2023 23:28:43 -0700 (PDT)
+Message-ID: <b5b439a4-78c7-0909-f7ca-b3a570fd08d2@linaro.org>
+Date:   Thu, 4 May 2023 08:28:42 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wj7q6Ng5uemZtrDnhtcfrgkzX5Z18eKZj94FY5d2quP6A@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v9 05/10] dt-bindings: arm: Add initial bindings for
+ Nuvoton platform
+Content-Language: en-US
+To:     Jacky Huang <ychuang570808@gmail.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        tmaimon77@gmail.com, catalin.marinas@arm.com, will@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-serial@vger.kernel.org, arnd@arndb.de, schung@nuvoton.com,
+        mjchen@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>,
+        Rob Herring <robh@kernel.org>
+References: <20230504033726.93-1-ychuang570808@gmail.com>
+ <20230504033726.93-6-ychuang570808@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230504033726.93-6-ychuang570808@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 03, 2023 at 09:38:03AM -0700, Linus Torvalds wrote:
-> > Why does it do that "shift-by-63" game there, instead of making
-> > tlbstate_untag_mask just have bit #63 always set?
+On 04/05/2023 05:37, Jacky Huang wrote:
+> From: Jacky Huang <ychuang3@nuvoton.com>
 > 
-> And it turns out that bit #63 really _is_ always set, so I think the
-> solution to this all is to remove the sign games in untag_addr()
-> entirely.
+> Modify Nuvoton NPCM and MA35 platform board bindings
+>   - Move 'nuvoton,npcm-gcr.yaml' from 'bindings/arm/npcm' to
+>     'bindings/soc/nuvoton'.
+>   - Rename the 'bindings/arm/npcm' directory to 'bindings/arm/nuvoton'.
+>   - Add bindings for ARMv8-based Nuvoton SoCs and platform boards, and
+>     include the initial bindings for ma35d1 series development boards.
+> 
+> Modify MAINTAINERS
+>   - Remove the line for 'bindings/arm/npcm/' under ARM/NUVOTON NPCM, as it
+>     has been renamed.
+>   - Add ARM/NUVOTON MA35 for Nuvoton MA35 series SoCs maintainer and files.
+> 
+> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> ---
 
-Untagging kernel pointer with LAM enabled will land it in the canonical
-hole which is safe as it leads to #GP on dereference.
 
-> Untagging a kernel address will "corrupt" it, but it will stay a
-> kernel address (well, it will stay a "high bit set" address), which is
-> all we care about anyway.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-The interesting case to consider is untagging kernel pointer when LAM_U48
-is enabled (not part of current LAM enabling). LAM_U48 would make the
-untagging mask wider -- ~GENMASK(62, 48). With 5-level paging and LAM_SUP
-enabled (also not supported yet) untagging kernel may transform it to
-other valid kernel pointer.
+Best regards,
+Krzysztof
 
-So we cannot rely on #GP as backstop here. The kernel has to exclude
-kernel pointer by other means. It can be fun to debug.
-
-Looks like you are not worried about this kind of corruption. Hm.
-
-Maybe it worth to indicate in the helper name that it is intended only for
-userspace addresses? Rename it to untagged_uaddr() or something?
-
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
