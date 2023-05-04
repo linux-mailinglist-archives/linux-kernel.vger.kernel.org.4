@@ -2,69 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2BD86F6FBA
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 18:17:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 156F06F6CC8
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 15:18:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbjEDQRB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 12:17:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43614 "EHLO
+        id S230480AbjEDNR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 09:17:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjEDQQ6 (ORCPT
+        with ESMTP id S229606AbjEDNRz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 12:16:58 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84981FC3;
-        Thu,  4 May 2023 09:16:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=zFZTZFGHSAaSaRqnlF9L7Mtetmpu66yO8W+jO7gZ4I8=; b=j9+9AV0iknIZd5Bxy8jMMN7joo
-        KgIOfrpe2djpey8XRz8Eb3d3iK4yT0wVCClkbuOK/N5PBQrKLEHoZabloBoe7IzblwMeik9NylOl4
-        06FlUKctHO5+LU9jWJOHJolNiRBJx1oWezv7u9WvXW2eqCvtEBVwjga8j/oh7a/ZtmfOutpjP2Eia
-        xqUnK5byNVUUH2iVpxBg7ORKCYWZUm+zyWJiFdE2x9AxfblMmMSyPFOk63OWz1PE6lL3io2wHK2UF
-        sT9PQjNjCR60MlYbGjiBfceJ+YnxuOP1f8Dff1k8Q2b9VA88H3R9MCTbN6QsvAmVeV5iP8qW/vffd
-        +PfS0YdQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pubdQ-00Akfm-Hg; Thu, 04 May 2023 16:16:48 +0000
-Date:   Thu, 4 May 2023 17:16:48 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Jan Kara <jack@suse.cz>
-Cc:     Christoph Hellwig <hch@lst.de>, Ilya Dryomov <idryomov@gmail.com>,
-        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
-        Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: always respect QUEUE_FLAG_STABLE_WRITES on the block
- device
-Message-ID: <ZFPacOW6XMq+o4YU@casper.infradead.org>
-References: <20230504105624.9789-1-idryomov@gmail.com>
- <20230504135515.GA17048@lst.de>
- <ZFO+R0Ud6Yx546Tc@casper.infradead.org>
- <20230504155556.t6byee6shgb27pw5@quack3>
+        Thu, 4 May 2023 09:17:55 -0400
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850AB4C24;
+        Thu,  4 May 2023 06:17:54 -0700 (PDT)
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 344CX03c016081;
+        Thu, 4 May 2023 09:17:38 -0400
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3qc40yumch-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 04 May 2023 09:17:37 -0400
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 344DHa4M018001
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 4 May 2023 09:17:36 -0400
+Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
+ ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Thu, 4 May 2023 09:17:35 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by
+ ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Thu, 4 May 2023 09:17:35 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Thu, 4 May 2023 09:17:35 -0400
+Received: from daniel-Precision-5530.ad.analog.com ([10.48.65.214])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 344DHKoQ020836;
+        Thu, 4 May 2023 09:17:22 -0400
+From:   Daniel Matyas <daniel.matyas@analog.com>
+CC:     Daniel Matyas <daniel.matyas@analog.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>
+Subject: [PATCH v5 0/2] Hwmon driver for MAX31827 temperature switch
+Date:   Thu, 4 May 2023 19:17:09 +0300
+Message-ID: <20230504161714.6281-1-daniel.matyas@analog.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230504155556.t6byee6shgb27pw5@quack3>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-ORIG-GUID: Z7A3Hbr773vN-GlW6s-RVpdHSh_Ezqnd
+X-Proofpoint-GUID: Z7A3Hbr773vN-GlW6s-RVpdHSh_Ezqnd
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-04_08,2023-05-04_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
+ malwarescore=0 adultscore=0 clxscore=1015 suspectscore=0 spamscore=0
+ phishscore=0 mlxlogscore=764 impostorscore=0 bulkscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2305040107
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 04, 2023 at 05:55:56PM +0200, Jan Kara wrote:
-> For bdev address_space that's easy but what Ilya also mentioned is a
-> problem when 'stable_write' flag gets toggled on the device and in that
-> case having to propagate the flag update to all the address_space
-> structures is a nightmare...
+Readded the of_match_table.
 
-We have a number of flags which don't take effect when modified on a
-block device with a mounted filesystem on it.  For example, modifying
-the readahead settings do not change existing files, only new ones.
-Since this flag is only modifiable for debugging purposes, I think I'm
-OK with it not affecting already-mounted filesystems.  It feels like a
-decision that reasonable people could disagree on, though.
+Added default cases where it was necessary.
+
+Used mutex where it was necessary.
+
+Added conversion to milli-degrees and milli-seconds.
+
+Daniel Matyas (2):
+  dt-bindings: hwmon: add MAX31827
+  hwmon: max31827: add MAX31827 driver
+
+ .../bindings/hwmon/adi,max31827.yaml          |  54 +++
+ Documentation/hwmon/index.rst                 |   1 +
+ Documentation/hwmon/max31827.rst              |  83 ++++
+ MAINTAINERS                                   |   9 +
+ drivers/hwmon/Kconfig                         |  11 +
+ drivers/hwmon/Makefile                        |   2 +-
+ drivers/hwmon/max31827.c                      | 427 ++++++++++++++++++
+ 7 files changed, 586 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
+ create mode 100644 Documentation/hwmon/max31827.rst
+ create mode 100644 drivers/hwmon/max31827.c
+
+-- 
+2.34.1
+
