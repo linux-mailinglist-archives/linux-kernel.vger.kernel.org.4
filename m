@@ -2,145 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1216C6F6FD2
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 18:22:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C220C6F6FD9
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 18:22:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229745AbjEDQWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 12:22:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47518 "EHLO
+        id S229780AbjEDQW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 12:22:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbjEDQWJ (ORCPT
+        with ESMTP id S229754AbjEDQWZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 12:22:09 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBE69359F
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 09:22:07 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2ac831bb762so2119671fa.3
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 09:22:07 -0700 (PDT)
+        Thu, 4 May 2023 12:22:25 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CE045B96
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 09:22:22 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-2f3fe12de15so497756f8f.3
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 09:22:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683217326; x=1685809326;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Y0//78+uXYFr6PUUQe4KmtdkJ/mFw3NuDFvW5FcRoZQ=;
-        b=b2PPRS393qwzfXujkfb1itL3HU4nmRZ2GeFjtSbxbb4B5LWfmP2u/7SUg3VP6ZfnId
-         JuSqBYz9XknIcLBR5BSO2b+0duwUwM6ypEiA3aRpz5wbdWz9R1ricHxiKK4T2KEmbbEY
-         ok27nLjU0jqjlBkP5hxLkRSPXDJeJgFdP4Trcaecy4XbcnrZfB+3zH2CavTN2tAw+Pon
-         8iFEHWgBI3j0XanI+EcsXcaFZlZ2hf5NiG47XY6zSAJ1wqtVBW58mT+QrBuWKw5dLsrY
-         YloQuSMGfNajcySaziY/1qubxqI6oztOMv4Iw0Ue8pZEt89v6IbF4iQeFhe5uL+NYcYO
-         T9TQ==
+        d=google.com; s=20221208; t=1683217340; x=1685809340;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Gsk62XwjD8JjQowiDifvFLPW2uokrx3QTotNr7V9c/A=;
+        b=6NGLeWA30bcHwOn4ghW5tWONP3tIeVXLoIAwGSOlF40SYraEbii/SQhzrJIho8Ivb6
+         Hpkk6vNh9E5t/cw05230dMqe0m+/H6ie+h8h31p+GrZCCgkTxJbXyMjFGjZkhz3bV6dG
+         vSjHZI0HIdPfHSmqobGMchd9amOB1v/ceZjRFhmXUrjm4M4cWFnS99GIAMxh/gj5liXv
+         4tj0lHTy81/1Wbpb012EhMfXD9LTcX1fI/Tm4TbQO8kVMc6YZQrPrde4R4+RJt2s2OWX
+         VOgAgJHhDqiDK83jUMMdRLdqlv9RhFWhmjzvFXehDDJFCUBnHdRe0JsvmE5LyyU2xx97
+         symQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683217326; x=1685809326;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y0//78+uXYFr6PUUQe4KmtdkJ/mFw3NuDFvW5FcRoZQ=;
-        b=Vp3eXSHRi8dfHF0Di6X+NVRuUy0vZ9YNhYAshKanUkSX0LTdeKgUHUV/Bkrjvnn4n7
-         ki4ULAKGuwCaEyYvDHbA8tbr00C6A0PVhif6I993O/wkeIokDR+OTDLh45eBXrdAU9eb
-         v/JFwfBh27soT10bCHdDutWy5A98EmOOoupRUedOeyefLsyi6xnrMcR0YevEIz4Tk83p
-         7fcVfh2a5gb5yOJqu/XgVhaFb6GA06X13OTQg5wgslZeX2htz1Aa+PxLV7BO10fiJZ3L
-         wplpEujD+6xbvfGKYRlpS8JdnlJnzVORZAJEkgO/F90QS0am0VJCwf7FlPlrPg0CwwS4
-         muoA==
-X-Gm-Message-State: AC+VfDxIkxJrvHIkMNUo8pl34ty5ESAb5KsBiijWCyo49ETn6RLpXAWf
-        3IvSYx0f8IkHgeODM1rUf0tZUA==
-X-Google-Smtp-Source: ACHHUZ7nzyVmwttPurr+ePQF0cmLpk+IMorprUHkikxMLmIjeifJSsAylHxffCQRQTHoMTrpLLc5bA==
-X-Received: by 2002:a2e:a30b:0:b0:2aa:af16:5c55 with SMTP id l11-20020a2ea30b000000b002aaaf165c55mr1105267lje.44.1683217326048;
-        Thu, 04 May 2023 09:22:06 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id p16-20020a2e8050000000b002a8c409f1f5sm6658915ljg.110.2023.05.04.09.22.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 09:22:05 -0700 (PDT)
-Message-ID: <4d6568cd-3678-f3ec-36b3-0b4b474d9871@linaro.org>
-Date:   Thu, 4 May 2023 19:22:05 +0300
+        d=1e100.net; s=20221208; t=1683217341; x=1685809341;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Gsk62XwjD8JjQowiDifvFLPW2uokrx3QTotNr7V9c/A=;
+        b=PdjKYqsaKv8qJYcZsy/bIubThsiOQAnb/Aoh24vnZtHwLF+gopow9vEeBB+fpNOUsQ
+         L24ImAOtvwzy+9VNlY+eMsxwkvEhEOGt52zdWQuYNBaU683boUQWBnxzN2CTSHnLMD2E
+         G3O0O1bluHwCziRMi9SC1/J7e9mhXwGhSIKdEKz08w37JmOvkyYj7tC+zmyQfLjDTaKs
+         2a+5Imb4n87ReMijU0G7qksGwgYft5bCr/4Jkp5ycNbguKHLo0OmdUJFjihy8C+/Kr18
+         64Lg0c6ajj+eOxY4wMxtl7t+lRlDNZ3qzkaIpnXuI80exma5rQ51vdIuREdFJUTyT5nz
+         Nadw==
+X-Gm-Message-State: AC+VfDw+I9EVAxfd44GWAW3+krXXmweTJxfZRkxNLUqEgLh77utdAtY3
+        Ql3HBSuFExqyaA5uvC+tIV/MKSTZtpn9tvE2O5ClkQ==
+X-Google-Smtp-Source: ACHHUZ6W7LU6+7sJ+JIBNyUc93OdZBrKmPb6kgAM40ObN2WRJqo/GOAU298MN4AghxYk5WmY9UXzE3DSoSxQENd3Lcc=
+X-Received: by 2002:a05:6000:120a:b0:2fc:7b62:f459 with SMTP id
+ e10-20020a056000120a00b002fc7b62f459mr2840579wrx.32.1683217340407; Thu, 04
+ May 2023 09:22:20 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH V4 1/3] dt-bindings: sram: qcom,imem: Add Boot Stat region
- within IMEM
-Content-Language: en-GB
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>
-References: <cover.1681742910.git.quic_schowdhu@quicinc.com>
- <NO2MhqhxQqjQ33CVOtaXXxo2iBfl6Ugz1lE5oJAl-mjUyrRu4l9vCBWV8AVJZoCrVF0Cw0j49t44Bn5yEAv3mA==@protonmail.internalid>
- <bd3350e3b0b02669cffa4bdaf9a0a1d8ae9072d1.1681742910.git.quic_schowdhu@quicinc.com>
- <9da030c6-6a9f-6766-7120-94aaa8fcd8ab@linaro.org>
- <3ef818c8-1ee4-5bee-6b37-20658b2e4637@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <3ef818c8-1ee4-5bee-6b37-20658b2e4637@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230501165450.15352-1-surenb@google.com> <20230501165450.15352-36-surenb@google.com>
+ <ZFIPmnrSIdJ5yusM@dhcp22.suse.cz> <CAJuCfpGsvWupMbasqvwcMYsOOPxTQqi1ed5+=vyu-yoPQwwybg@mail.gmail.com>
+ <ZFNoVfb+1W4NAh74@dhcp22.suse.cz>
+In-Reply-To: <ZFNoVfb+1W4NAh74@dhcp22.suse.cz>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Thu, 4 May 2023 09:22:07 -0700
+Message-ID: <CAJuCfpGUtw6cbjLsksGJKATZfTV0FEYRXwXT0pZV83XqQydBgg@mail.gmail.com>
+Subject: Re: [PATCH 35/40] lib: implement context capture support for tagged allocations
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
+        vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev,
+        mgorman@suse.de, dave@stgolabs.net, willy@infradead.org,
+        liam.howlett@oracle.com, corbet@lwn.net, void@manifault.com,
+        peterz@infradead.org, juri.lelli@redhat.com, ldufour@linux.ibm.com,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, peterx@redhat.com, david@redhat.com,
+        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
+        nathan@kernel.org, dennis@kernel.org, tj@kernel.org,
+        muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
+        pasha.tatashin@soleen.com, yosryahmed@google.com,
+        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
+        andreyknvl@gmail.com, keescook@chromium.org,
+        ndesaulniers@google.com, gregkh@linuxfoundation.org,
+        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+        glider@google.com, elver@google.com, dvyukov@google.com,
+        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
+        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/05/2023 09:26, Krzysztof Kozlowski wrote:
-> On 04/05/2023 00:10, Caleb Connolly wrote:
->>
->>
->> On 17/04/2023 16:08, Souradeep Chowdhury wrote:
->>> All Qualcomm bootloaders log useful timestamp information related
->>> to bootloader stats in the IMEM region. Add the child node within
->>> IMEM for the boot stat region containing register address and
->>> compatible string.
->>>
->>> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
->>> ---
->>>   .../devicetree/bindings/sram/qcom,imem.yaml        | 22 ++++++++++++++++++++++
->>>   1 file changed, 22 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/sram/qcom,imem.yaml b/Documentation/devicetree/bindings/sram/qcom,imem.yaml
->>> index ba694ce..d028bed 100644
->>> --- a/Documentation/devicetree/bindings/sram/qcom,imem.yaml
->>> +++ b/Documentation/devicetree/bindings/sram/qcom,imem.yaml
->>> @@ -49,6 +49,28 @@ patternProperties:
->>>       $ref: /schemas/remoteproc/qcom,pil-info.yaml#
->>>       description: Peripheral image loader relocation region
->>>
->>> +  "^stats@[0-9a-f]+$":
->>> +    type: object
->>> +    description:
->>> +      Imem region dedicated for storing timestamps related
->>> +      information regarding bootstats.
->>> +
->>> +    additionalProperties: false
->>> +
->>> +    properties:
->>> +      compatible:
->>> +        items:
->>> +          - enum:
->>> +              - qcom,sm8450-bootstats
->>
->> This region isn't exclusive to sm8450, it exists also on sdm845 and
->> presumably other platforms. Is there any need for an SoC specific
->> compatible?
-> 
-> Yes.
-> https://elixir.bootlin.com/linux/v6.1-rc1/source/Documentation/devicetree/bindings/writing-bindings.rst#L42
-> 
-> Also see many discussions on LKML about this.
+On Thu, May 4, 2023 at 1:09=E2=80=AFAM Michal Hocko <mhocko@suse.com> wrote=
+:
+>
+> On Wed 03-05-23 08:24:19, Suren Baghdasaryan wrote:
+> > On Wed, May 3, 2023 at 12:39=E2=80=AFAM Michal Hocko <mhocko@suse.com> =
+wrote:
+> > >
+> > > On Mon 01-05-23 09:54:45, Suren Baghdasaryan wrote:
+> > > [...]
+> > > > +struct codetag_ctx *alloc_tag_create_ctx(struct alloc_tag *tag, si=
+ze_t size)
+> > > > +{
+> > > > +     struct alloc_call_ctx *ac_ctx;
+> > > > +
+> > > > +     /* TODO: use a dedicated kmem_cache */
+> > > > +     ac_ctx =3D kmalloc(sizeof(struct alloc_call_ctx), GFP_KERNEL)=
+;
+> > >
+> > > You cannot really use GFP_KERNEL here. This is post_alloc_hook path a=
+nd
+> > > that has its own gfp context.
+> >
+> > I missed that. Would it be appropriate to use the gfp_flags parameter
+> > of post_alloc_hook() here?
+>
+> No. the original allocation could have been GFP_USER based and you do
+> not want these allocations to pullute other zones potentially. You want
+> GFP_KERNEL compatible subset of that mask.
 
+Ack.
 
-I checked the closest relative: qcom_stats.c driver. It defines several 
-platform-specific overrides and also a generic "qcom,rpm-stats" / 
-"qcom,rpmh-stats" drivers.
+>
+> But even then I really detest an additional allocation from this context
+> for every single allocation request. There GFP_NOWAIT allocation for
+> steckdepot but that is at least cached and generally not allocating.
+> This will allocate for every single allocation.
 
--- 
-With best wishes
-Dmitry
+A small correction here. alloc_tag_create_ctx() is used only for
+allocations which we requested to capture the context. So, this last
+sentence is true for allocations we specifically marked to capture the
+context, not in general.
 
+> There must be a better way.
+
+Yeah, agree, it would be good to avoid allocations in this path. Any
+specific ideas on how to improve this? Pooling/caching perhaps? I
+think kmem_cache does some of that already but maybe something else?
+Thanks,
+Suren.
+
+> --
+> Michal Hocko
+> SUSE Labs
