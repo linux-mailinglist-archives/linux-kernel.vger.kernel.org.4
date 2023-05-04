@@ -2,93 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B8346F6EA7
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 17:08:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98D766F6EA0
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 17:08:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231262AbjEDPIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 11:08:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34392 "EHLO
+        id S231138AbjEDPIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 11:08:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231219AbjEDPI2 (ORCPT
+        with ESMTP id S230312AbjEDPIX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 11:08:28 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C9BC422B
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 08:08:26 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id 3f1490d57ef6-b99f0a0052fso873460276.3
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 08:08:26 -0700 (PDT)
+        Thu, 4 May 2023 11:08:23 -0400
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAEFF3C02;
+        Thu,  4 May 2023 08:08:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683212905; x=1685804905;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vpI3TgDyhkti03RqKX4aJ+LI47o/coVvQYc1czzI8zs=;
-        b=FNofsLdv/+7cq18LESbrv72DxTOtLR7I9kjhPi1qP4Q3LOJM6z2Qwy4LxmeVOSRV1Z
-         xK+g4AMIJhpry6DKZYI++Pk/k+tIoKY5MDlKbzPcxFqtpsTF9KyhL/CnMcUvTRQFU1XW
-         s77y30fDpMQ0IAed3GmRXiG0b/uvK6WqPwJdfl0zE1KIt9+luKSvRC/QVW5PpatI86J1
-         8Lleqs+mqleJV9W3YvOGElVKE+XmHEyvUzWjfiQlhf68dkmkvTC9QVzwaCMHP6HyYov0
-         fyMfje9piFOaym+JTibnTPFGqcqfJtpyIPdeKRtc5PVjhwHQRxzmBvCsLDjcVSYkRaxf
-         RH/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683212905; x=1685804905;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vpI3TgDyhkti03RqKX4aJ+LI47o/coVvQYc1czzI8zs=;
-        b=OF0jTEAOiuc/Tfo4MFeiOWviVu/+Z/WvTDv1XlYj4DtaCal1zmQx/EGgQYdgutjarT
-         rvi7o4BFG19kPThZ6qVOtp4WUUN/PxhGW6ahBoRMl4VRH9ZPCrAAf5ZrJlBgRwdwlWFW
-         NWZuZE/fbE0i3jApk/T4LCGsBLPzX+6DEk30nqWqkwtCitbhZdumbAu2E1H/16FA3Blf
-         vYPop73VY5zqspsMzht9ys1DRBtBdVpHS7zsiDxd3mMOvKwYwdVOfnEzPHmsux6pcsEe
-         6RewZBCCxRv3+i4HX97nDlWmO0vCVpKbwH5dv7WIHVKZen/zo7Ly1BdbL+Bb4TgVqDOA
-         t/Lw==
-X-Gm-Message-State: AC+VfDz/OuRRJxnVxmmZhxCY0ccAsC+8FZHSB6jpEpTgdNbLizdmnR5n
-        gbquhf2AWQS69FpqNk1tjrDxTku9bnRDbJuBef1yMQ==
-X-Google-Smtp-Source: ACHHUZ7hI7Vxo4JFi305ipzfOlYOUrc5ajrRHXdhnDh4eBp5Mjy+UHcFwOsphq83i8E2EemKBiNMD3DduEPsVwVmGlE=
-X-Received: by 2002:a25:b21f:0:b0:ba1:78df:20fc with SMTP id
- i31-20020a25b21f000000b00ba178df20fcmr253521ybj.21.1683212905109; Thu, 04 May
- 2023 08:08:25 -0700 (PDT)
+  d=axis.com; q=dns/txt; s=axis-central1; t=1683212901;
+  x=1714748901;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=3OeT7N4vcX0kAR+vQKeKZgdrbO+APQB3FyzqhXAZO1o=;
+  b=C1fAeNzfzs+CiJpvpvITQ47uCJ0nsr26no/99f7ymhg4W9YvhPTaZMKe
+   K3Df7oYnbQ5dq75WPk2N/PpIaAvhaQI+XMln+WiU/aHkpfByfT+AOV5H9
+   Ksem6sCFhvA5asnNKVEJOA1BvX945bU5psc6YJ1VE0mHkaXcKVu+e1hVB
+   YIXmF8DQszEZPHdjpJNuNrXqMA+BO+d0qdKPsD3y0xMt4Ffl1OsYiPx7D
+   KDaB82VMaqo/jCvyuCKjXX1poq0cK5uTWly0z1aOBqae9l+qI/w+hrXXr
+   sS0wGDBUW2p92oquuwmJUXuE0aJrTxM71n7DUFSfOVKtcla+KbV4KJRXy
+   w==;
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=M6UgQBv08SP7obYiSpaE7qIMTaTxL5ly7cYWN6IVHIowzkxUIPBBr/xk1+83yo8Kcv3uWo8hC1JIyU4e3f5R3jqMr2/IqELzp2qItMV32fSheu487GJ9XUVBtXHMbgD80UdFM2MirrDC6hYdnC/QXdSw9XAhWkxNbD+HvvWEO8sbRvHm5vdMsbInxilUN5b1tsVIH//0zVQ/v0WViGLCE7JHs76HCfE1XrcZtBcv3kvlrUn3LhMFZ2Nk+kvHZgOS1tluygNDfSYPe7YEZon3Zl55hvzXhLOGxi323axWytBr7LM6bBFfQVGt1/hgATzyZq8dL+WCxeuu/mFekSqHwA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3OeT7N4vcX0kAR+vQKeKZgdrbO+APQB3FyzqhXAZO1o=;
+ b=IE0tVqkA4ub1CC86uQZeaRzxHJGRyvsCz2DvQssspfUz5pKdddh89wnwrBKr1RYEqIiA/Xv4vlBIex477X4jnj5/8OSEKpkFpw9zL1Qq+A7iOO13XoBdVmvxW6/GP9G/E9DZ1g1Z02OyFSkMVw6ZKwvpV5ZAWEB47tMPua3SMwZ/C6p9wmUrmg1o7+EmLsBYmhxHSV6QPLarit+poWZlgTB9M8P8dSnRUxWQHg/SMSny7ivnppT+04U0L9Y8lSwsAGnsR8Z9GI4kQ8HomLh8YToT+vTcsQvbnikhjLxWvNoJn3/DJtwoLB0E83xsB6857Tz9JGHL+TkN20Fq7sqHzw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=axis.com; dmarc=pass action=none header.from=axis.com;
+ dkim=pass header.d=axis.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=axis365.onmicrosoft.com; s=selector2-axis365-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3OeT7N4vcX0kAR+vQKeKZgdrbO+APQB3FyzqhXAZO1o=;
+ b=wJwuYktGtZZeYT5E/Q5tjUcWw0YX4ueso0EcrnQoMGs/AtcwNIPFSIH7pdqStBN+g+eUc8JpQH6aCNm4cNtfeT40pcDegszsr33yZziBWwxFb7ZNoKJFlFrNYlZw0BZ/7XhaEyIgOM6WK7oksc1uI88unm+w/yiFCeVBMZtv75Y=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=axis.com;
+Message-ID: <c42a721c-13a4-16a1-efe6-002c76f5c69b@axis.com>
+Date:   Thu, 4 May 2023 17:08:15 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2 1/2] regulator: Add bindings for TPS6287x
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <kernel@axis.com>
+References: <20230502-tps6287x-driver-v2-0-fb5419d46c49@axis.com>
+ <20230502-tps6287x-driver-v2-1-fb5419d46c49@axis.com>
+ <dfd3498c-62ab-92d3-22d6-21729dc619fa@linaro.org>
+From:   =?UTF-8?Q?M=c3=a5rten_Lindahl?= <martenli@axis.com>
+In-Reply-To: <dfd3498c-62ab-92d3-22d6-21729dc619fa@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MM0P280CA0100.SWEP280.PROD.OUTLOOK.COM
+ (2603:10a6:190:9::18) To AS8PR02MB9529.eurprd02.prod.outlook.com
+ (2603:10a6:20b:5a5::16)
 MIME-Version: 1.0
-References: <20230501165450.15352-1-surenb@google.com> <ZFIMaflxeHS3uR/A@dhcp22.suse.cz>
- <CAJuCfpHxbYFxDENYFfnggh1D8ot4s493PQX0C7kD-JLvixC-Vg@mail.gmail.com> <ZFN1yswCd9wRgYPR@dhcp22.suse.cz>
-In-Reply-To: <ZFN1yswCd9wRgYPR@dhcp22.suse.cz>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Thu, 4 May 2023 08:08:13 -0700
-Message-ID: <CAJuCfpEkV_+pAjxyEpMqY+x7buZhSpj5qDF6KubsS=ObrQKUZg@mail.gmail.com>
-Subject: Re: [PATCH 00/40] Memory allocation profiling
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
-        vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev,
-        mgorman@suse.de, dave@stgolabs.net, willy@infradead.org,
-        liam.howlett@oracle.com, corbet@lwn.net, void@manifault.com,
-        peterz@infradead.org, juri.lelli@redhat.com, ldufour@linux.ibm.com,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, peterx@redhat.com, david@redhat.com,
-        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
-        nathan@kernel.org, dennis@kernel.org, tj@kernel.org,
-        muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
-        pasha.tatashin@soleen.com, yosryahmed@google.com,
-        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
-        andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, gregkh@linuxfoundation.org,
-        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AS8PR02MB9529:EE_|GV2PR02MB10046:EE_
+X-MS-Office365-Filtering-Correlation-Id: 41a7713b-2f29-4faf-1d18-08db4cb163da
+X-LD-Processed: 78703d3c-b907-432f-b066-88f7af9ca3af,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: RY/ebd90D4c26hF7z6245GOW98G9zLaKF+h3GLipH6DQIEYYjMmemc8q4oDYaclS7NC19lvU3IAOP5iHOiUWczrpyXIwHf/XHYq4JAfgkbwG2V2uM7pecwq6bSqy4zipG90b1bp0VrzbFZytVN5ZZAfI1PC+rIWdVPI6dZiZzPs1QtdCji9/jkxUXO1sRA/W3D7vKLQO4Kn9QmqhWMVVs97Q6AYtu7iJlIKoTXIHU7lKQIqceUoIHcadRu13CogHof7gHA/7glMxuz2qg1CbgRNOwSrmylV64S598U+m1iBuMXlPA1Kg0v/56NJ7j9j49yrcI1Jl9y03Gj89+aBrCToyGWfeKqXagnvf55EceUdRa9Y/CB2jZKh2HoRnO7yxHqhD6HHUm/+Ukn3bFKMzIMqd0u5B33/zT2vBxv+BTMR32R4AGU8naBN85Y8SzC4oHWwESvVSnJVexuN4zDm7luVZL4bIxQrvR1Uunw/a9BDI7B1WCCVLUYw3b9jSCourEzdHwHCyKXGtt25iM4ZPbr9S7weXHYMu7gsrgI3WjeUSmclnX8VI++K+xPCGIFhJgRC25M70a1a3cNDxwWXp/AbBhfHaiATLp0nTNdzd65jhfjPXT/hidDi/Yu3iXHgDqvyzKU2SERUBaYPRVwsw6A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR02MB9529.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(39860400002)(346002)(376002)(366004)(451199021)(36756003)(31686004)(316002)(66556008)(66476007)(66946007)(110136005)(478600001)(41300700001)(6486002)(4326008)(38100700002)(8936002)(8676002)(31696002)(26005)(966005)(2616005)(5660300002)(107886003)(6506007)(6512007)(53546011)(66574015)(2906002)(186003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cVlZd2t4cWxaN0tlQUFNbklRcU5SZFNVMWVwcjVxVHJGSlBVeXM2STRuNXVZ?=
+ =?utf-8?B?SUhiT050YzVoMXZWY1BoUzNPei9oZmQzU3lpdDNZWXlidC9RTWJBR2xRenN3?=
+ =?utf-8?B?UFcvazFrSklZOGRBb1hOMnMwUDBRNHUyRUVQckE3WUtSQW9iTURnOXR0dWFu?=
+ =?utf-8?B?VWxGUllZWU5DVnp4UGRDeGlJQnkyd1Y5dHk2VjhHOVg0R2hhd24wMDFMNyto?=
+ =?utf-8?B?aC9tMzYxTHhPbnhxa3ZRT0I5bjlhMHd6UFZNcTR1eFZCQlpRamEvMWVHVGQ4?=
+ =?utf-8?B?YVlOc3hwaUxOUFB2d0owLzRuWklkUTlWWHZCSVFSOEVmaGZiMEtpS1hUZVBT?=
+ =?utf-8?B?YnNzQjljcXZSbHRXTDAwS01kM0hSNzI1UzhnUzAxZmlWU1pVZ2FFTlJjTGpy?=
+ =?utf-8?B?Q2hCL21JT1hHdUM1RWNNOC9BaHVmVmhQVjN4eVZRWGtIREhSZnYvSC8zdi9p?=
+ =?utf-8?B?bkxkWU9PNjdDTk56cGFibHNxYkVmQWxqeTZ4T2IvcVJ1bmdmeDlISUdXZkov?=
+ =?utf-8?B?aHk0SlA4anJ2VGc4dnlpU1NCK2JhRzBDZGZGNitJaTVzVlRoRWYzazZkS1Zh?=
+ =?utf-8?B?cDdiWXlrZDdCRkV3d1BRSVJvSGZlNnJrQTZBNkdJNEtoUkNzOWU4eEUwdzBO?=
+ =?utf-8?B?SXBpMk9jTXkrdFF4clRDMmxXcjQ4OU0wUWJMSG5sMTZUaDNvbGtuUVlOVjBY?=
+ =?utf-8?B?ZGlZVUxFL2x6eFVTL09qaWp3REgwbmlJRE1WSVUxTFQ2eEk0b0tta1pqeTFR?=
+ =?utf-8?B?MVdlN1IzY3Z1dDAvRzNybEd1czlxVkhRemZ6bnpRMlNVaXVaWXlvTk55Rm5h?=
+ =?utf-8?B?bTE2UFRyVVZ5ZGkzUW5NZ3hMeDB0L25WYk5yUzZ1OVZZYWhxMHhhSkRwcnZi?=
+ =?utf-8?B?dlpXcEYxZkFXaXRSL3RRaTVsbjloOEpaYmYwVXIwL0duV3B2d3pXdCtxb3ov?=
+ =?utf-8?B?RldOVlZ5WlJFaWZtSVMrQ0Z0ZnVDdE9xdVNMOFpWTlhXS2JZUUV0cW1LaXhH?=
+ =?utf-8?B?bHBkNnk5N3UvSFllaHlCUTFZNlpoVFJ3YWxMZ2YxY1hQMCtFcmdXNHZxeS8z?=
+ =?utf-8?B?K0l0MWJTajgreGFlcjA1Z2tSUFF4clVUUVowMm1SV3ExVk5RS0lJVlNMWVly?=
+ =?utf-8?B?RWlXaVB1VjB0ZDdCMmhxNFJxZi9DTkN6czJPWGt6blFlSzYxdWZnRnUyTlNh?=
+ =?utf-8?B?NUxrOUdEY2p6VWgrb1d0MDR2a1JEaVJFemY0RVFuSXpjMC9qTTZYMkozNVNG?=
+ =?utf-8?B?SWVnbjRUVmczWlVZT3JocllOWmliZGtjOERuZlNkSDNqNTNPNzlheDhOdGZn?=
+ =?utf-8?B?S2VvREw5NjVjU0FLdWJ3YkMxdU1YRzZqMXdGS3FzcGhDR3FNVVUwbi9vaVFq?=
+ =?utf-8?B?M0ZKa0ZldmRWVjVWUWNhODAvbmd2OVE3dGJ3RXY1WUNEV25vU2dOaDRXbTRK?=
+ =?utf-8?B?TUtDWDJIS3JZbEwwZHFjN2ZES2pObXdpVysrWlgyR2FUNVJFVW1jdUs3SDhr?=
+ =?utf-8?B?dHhZbVN2eWFJYms2Q2lJQmxZZjVLZHVkb2thd3piR2daS1RFcWlpWFV0MFpl?=
+ =?utf-8?B?NnlMMjc3Vlp0eXZuWXY0YUR5OExKRXU0YjdpY0FjRXhyMHpId0VVb2FFS2VZ?=
+ =?utf-8?B?NVZQK0tGMHFSMnRsV090eXpNczhwdGhHZjRMZTVuSlpQeVpzM3B2aFJudnZC?=
+ =?utf-8?B?YkEwN20rRGVPaGFnUkx0bUIxQUw1anNKR3VlcFd6QldUY1paM0dMWWlXSll6?=
+ =?utf-8?B?RktoQ3c2QmRtQmFRYnQ3SC93Q0QxUXdQRTU1ZllnMTZ5RXpnU0htK3ArQnp4?=
+ =?utf-8?B?aTJlWGpxamRkWjhTQ0ppRjdiSUJnN1lhMU9JbkFMZTJoMUNLUGVJWDR1TGdI?=
+ =?utf-8?B?bGhWRElPRTBGMzJHNWpEU2FSaXRCOTBWVi9FMk4wM0RVUkdseXdxRmFuU3c0?=
+ =?utf-8?B?MWNJa0xDY3ZVWUtHU0VsT2JNSjMvQ1MzOFFaZDI4QjQvelhQSC8zTG50eU9s?=
+ =?utf-8?B?eG1BQlBFeEMrTFVWUG1xcVZ4ZmhSK29vbHN5NU5OUEpFY0htdVZOMWJIYUxs?=
+ =?utf-8?B?OGJKVXFpTjBad1p4M3FuVjBackowd1RuN0lzN0FDTlIzakFicnVxQ1hhNGdu?=
+ =?utf-8?Q?qiJU6etLP6XyFQiwxQFC+l7rO?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 41a7713b-2f29-4faf-1d18-08db4cb163da
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR02MB9529.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2023 15:08:17.3172
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 78703d3c-b907-432f-b066-88f7af9ca3af
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Wfe4qp2GbRB0jbofRaHV1Jj8p2UJIV44uOUNondiWCdgzFtrPWs/vwMuqmUUa2vvoaNBdxgVrWBkCiRSAoUYEg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV2PR02MB10046
+X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,191 +135,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 4, 2023 at 2:07=E2=80=AFAM Michal Hocko <mhocko@suse.com> wrote=
-:
->
-> On Wed 03-05-23 08:09:28, Suren Baghdasaryan wrote:
-> > On Wed, May 3, 2023 at 12:25=E2=80=AFAM Michal Hocko <mhocko@suse.com> =
-wrote:
-> [...]
-> > Thanks for summarizing!
-> >
-> > > At least those I find the most important:
-> > > - This is a big change and it adds a significant maintenance burden
-> > >   because each allocation entry point needs to be handled specificall=
-y.
-> > >   The cost will grow with the intended coverage especially there when
-> > >   allocation is hidden in a library code.
-> >
-> > Do you mean with more allocations in the codebase more codetags will
-> > be generated? Is that the concern?
->
-> No. I am mostly concerned about the _maintenance_ overhead. For the
-> bare tracking (without profiling and thus stack traces) only those
-> allocations that are directly inlined into the consumer are really
-> of any use. That increases the code impact of the tracing because any
-> relevant allocation location has to go through the micro surgery.
->
-> e.g. is it really interesting to know that there is a likely memory
-> leak in seq_file proper doing and allocation? No as it is the specific
-> implementation using seq_file that is leaking most likely. There are
-> other examples like that See?
+Hi Krzysztof!
 
-Yes, I see that. One level tracking does not provide all the
-information needed to track such issues. Something more informative
-would cost more. That's why our proposal is to have a light-weight
-mechanism to get a high level picture and then be able to zoom into a
-specific area using context capture. If you have ideas to improve
-this, I'm open to suggestions.
-
+On 5/4/23 11:34, Krzysztof Kozlowski wrote:
+> On 04/05/2023 10:30, Mårten Lindahl wrote:
+>> Add bindings for the TPS62870/TPS62871/TPS62872/TPS62873 voltage
+>> regulators.
+>>
+> Use subject prefixes matching the subsystem (which you can get for
+> example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+> your patch is touching).
 >
-> > Or maybe as you commented in
-> > another patch that context capturing feature does not limit how many
-> > stacks will be captured?
+> Just a hint - I in general ignore all the emails without dt-bindings prefix.
+Ok, I'll prefix it "dt-bindings: regulator:"
 >
-> That is a memory overhead which can be really huge and it would be nice
-> to be more explicit about that in the cover letter. It is a downside for
-> sure but not something that has a code maintenance impact and it is an
-> opt-in so it can be enabled only when necessary.
-
-You are right, I'll add that into the cover letter.
-
+>> Signed-off-by: Mårten Lindahl <marten.lindahl@axis.com>
+>> ---
+>>   .../devicetree/bindings/regulator/ti,tps62870.yaml | 62 ++++++++++++++++++++++
+>>   1 file changed, 62 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/regulator/ti,tps62870.yaml b/Documentation/devicetree/bindings/regulator/ti,tps62870.yaml
+>> new file mode 100644
+>> index 000000000000..32f259f16314
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/regulator/ti,tps62870.yaml
+>> @@ -0,0 +1,62 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/regulator/ti,tps62870.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: TI TPS62870/TPS62871/TPS62872/TPS62873 voltage regulator
+>> +
+>> +maintainers:
+>> +  - Mårten Lindahl <marten.lindahl@axis.com>
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - ti,tps62870
+>> +      - ti,tps62871
+>> +      - ti,tps62872
+>> +      - ti,tps62873
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  regulators:
+>> +    type: object
+>> +
+>> +    properties:
+>> +      "vout":
+> Drop quotes.
 >
-> Quite honestly, though, the more I look into context capturing part it
-> seems to me that there is much more to be reconsidered there and if you
-> really want to move forward with the code tagging part then you should
-> drop that for now. It would make the whole series smaller and easier to
-> digest.
-
-Sure, I don't see an issue with removing that for now and refining the
-mechanism before posting again.
-
+> Why do you need entire "regulators" node for one regulator? Why do you
+> need child at first place. Drop it entirely.
+I will remove the regulators node. I think the vout node is needed to 
+get the of_get_regulator_init_data.
 >
-> > > - It has been brought up that this is duplicating functionality alrea=
-dy
-> > >   available via existing tracing infrastructure. You should make it v=
-ery
-> > >   clear why that is not suitable for the job
-> >
-> > I experimented with using tracing with _RET_IP_ to implement this
-> > accounting. The major issue is the _RET_IP_ to codetag lookup runtime
-> > overhead which is orders of magnitude higher than proposed code
-> > tagging approach. With code tagging proposal, that link is resolved at
-> > compile time. Since we want this mechanism deployed in production, we
-> > want to keep the overhead to the absolute minimum.
-> > You asked me before how much overhead would be tolerable and the
-> > answer will always be "as small as possible". This is especially true
-> > for slab allocators which are ridiculously fast and regressing them
-> > would be very noticable (due to the frequent use).
 >
-> It would have been more convincing if you had some numbers at hands.
-> E.g. this is a typical workload we are dealing with. With the compile
-> time tags we are able to learn this with that much of cost. With a dynami=
-c
-> tracing we are able to learn this much with that cost. See? As small as
-> possible is a rather vague term that different people will have a very
-> different idea about.
+>> +        type: object
+>> +        $ref: regulator.yaml#
+>> +        unevaluatedProperties: false
+> You missed that piece of explanation:
+>
+> "The set of possible operating modes depends on the capabilities of
+> every hardware so each device binding documentation explains which
+> values the regulator supports."
 
-I'm rerunning my tests with the latest kernel to collect the
-comparison data. I profiled these solutions before but the kernel
-changed since then, so I need to update them.
+Ok, I will add a description for the valid regulator-initial-mode values.
+
+Thanks!
+
+Kind regards
+
+Mårten
 
 >
-> > There is another issue, which I think can be solved in a smart way but
-> > will either affect performance or would require more memory. With the
-> > tracing approach we don't know beforehand how many individual
-> > allocation sites exist, so we have to allocate code tags (or similar
-> > structures for counting) at runtime vs compile time. We can be smart
-> > about it and allocate in batches or even preallocate more than we need
-> > beforehand but, as I said, it will require some kind of compromise.
 >
-> I have tried our usual distribution config (only vmlinux without modules
-> so the real impact will be larger as we build a lot of stuff into
-> modules) just to get an idea:
->    text    data     bss     dec     hex filename
-> 28755345        17040322        19845124        65640791        3e99957 v=
-mlinux.before
-> 28867168        17571838        19386372        65825378        3ec6a62 v=
-mlinux.after
 >
-> Less than 1% for text 3% for data.  This is not all that terrible
-> for an initial submission and a more dynamic approach could be added
-> later. E.g. with a smaller pre-allocated hash table that could be
-> expanded lazily. Anyway not something I would be losing sleep over. This
-> can always be improved later on.
-
-Ah, right. I should have mentioned this overhead too. Thanks for
-keeping me honest.
-
-> > I understand that code tagging creates additional maintenance burdens
-> > but I hope it also produces enough benefits that people will want
-> > this. The cost is also hopefully amortized when additional
-> > applications like the ones we presented in RFC [1] are built using the
-> > same framework.
+> Best regards,
+> Krzysztof
 >
-> TBH I am much more concerned about the maintenance burden on the MM side
-> than the actual code tagging itslef which is much more self contained. I
-> haven't seen other potential applications of the same infrastructure and
-> maybe the code impact would be much smaller than in the MM proper. Our
-> allocator API is really hairy and convoluted.
-
-Yes, other applications are much smaller and cleaner. MM allocation
-code is quite complex indeed.
-
->
-> > > - We already have page_owner infrastructure that provides allocation
-> > >   tracking data. Why it cannot be used/extended?
-> >
-> > 1. The overhead.
->
-> Do you have any numbers?
-
-Will post once my tests are completed.
-
->
-> > 2. Covers only page allocators.
->
-> Yes this sucks.
-> >
-> > I didn't think about extending the page_owner approach to slab
-> > allocators but I suspect it would not be trivial. I don't see
-> > attaching an owner to every slab object to be a scalable solution. The
-> > overhead would again be of concern here.
->
-> This would have been a nice argument to mention in the changelog so that
-> we know that you have considered that option at least. Why should I (as
-> a reviewer) wild guess that?
-
-Sorry, It's hard to remember all the decisions, discussions and
-conclusions when working on a feature over a long time period. I'll
-include more information about that.
-
->
-> > I should point out that there was one important technical concern
-> > about lack of a kill switch for this feature, which was an issue for
-> > distributions that can't disable the CONFIG flag. In this series we
-> > addressed that concern.
->
-> Thanks, that is certainly appreciated. I haven't looked deeper into that
-> part but from the cover letter I have understood that CONFIG_MEM_ALLOC_PR=
-OFILING
-> implies unconditional page_ext and therefore the memory overhead
-> assosiated with that. There seems to be a killswitch nomem_profiling but
-> from a quick look it doesn't seem to disable page_ext allocations. I
-> might be missing something there of course. Having a highlevel
-> describtion for that would be really nice as well.
-
-Right, will add a description of that as well.
-We eliminate the runtime overhead but not the memory one. However I
-believe it's also doable using page_ext_operations.need callback. Will
-look into it.
-Thanks,
-Suren.
-
->
-> > [1] https://lore.kernel.org/all/20220830214919.53220-1-surenb@google.co=
-m/
->
-> --
-> Michal Hocko
-> SUSE Labs
