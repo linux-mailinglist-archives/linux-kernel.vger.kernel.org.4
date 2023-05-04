@@ -2,121 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F1E56F783B
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 23:34:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 977046F7847
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 23:39:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230081AbjEDVev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 17:34:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37948 "EHLO
+        id S229988AbjEDVjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 17:39:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230075AbjEDVep (ORCPT
+        with ESMTP id S230090AbjEDVjr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 17:34:45 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B514713C1E;
-        Thu,  4 May 2023 14:34:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683236084; x=1714772084;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=EP+qQVPq1TXsIe51i7OOoP+qvywU7gMPQc8clIWQK4s=;
-  b=lHV9BfJQ6q8LxVpEe3RsmCKsH0AvNqEI/xYZAs3RRP5BkCjdimt3kOR7
-   VgRghuxY894usLDupH1af7/h2NVFDcRjuSBpMeWTQnf22yW1/9AJHBO1e
-   UTemnGA39yRZCkUXXsa84GLQ/l+ekTxCSJTHT3tBBHY7Xm8iWK9ffuwk0
-   oMTy7HjaHPgALAN6RbokJFxjvtT9Iath4eH6e9DOnXwxKmdbpPk6iJCKS
-   Tizj1Yp7vWISKAAW4UyNv9+YSDNijXuSc5zPzxm0Y7ea7lXNb1PIeusNl
-   W+ViWylCNlQeiEdqE+3ic6lxp+syqOregW/pUk0kc5BSVrRsNostl2BpW
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="414585942"
-X-IronPort-AV: E=Sophos;i="5.99,250,1677571200"; 
-   d="scan'208";a="414585942"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 14:34:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="943531835"
-X-IronPort-AV: E=Sophos;i="5.99,250,1677571200"; 
-   d="scan'208";a="943531835"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 14:34:43 -0700
-Date:   Thu, 4 May 2023 14:39:05 -0700
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     Baolu Lu <baolu.lu@linux.intel.com>
-Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        "Ranganathan, Narayan" <narayan.ranganathan@intel.com>,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH v5 4/7] iommu/vt-d: Factoring out PASID set up helper
- function
-Message-ID: <20230504143905.66fd14c7@jacob-builder>
-In-Reply-To: <9fb1c0dd-ea78-a3f7-9eac-3154f5d08ad5@linux.intel.com>
-References: <20230427174937.471668-1-jacob.jun.pan@linux.intel.com>
-        <20230427174937.471668-5-jacob.jun.pan@linux.intel.com>
-        <BN9PR11MB5276726E67301703BD10833B8C6B9@BN9PR11MB5276.namprd11.prod.outlook.com>
-        <9fb1c0dd-ea78-a3f7-9eac-3154f5d08ad5@linux.intel.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Thu, 4 May 2023 17:39:47 -0400
+Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [5.144.164.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA1A13869
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 14:39:45 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 935F3212FE;
+        Thu,  4 May 2023 23:39:43 +0200 (CEST)
+Date:   Thu, 4 May 2023 23:39:42 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, andersson@kernel.org, quic_sbillaka@quicinc.com,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 3/7] drm/msm/dpu: add DPU_PINGPONG_DSC bits into
+ PP_BLK and PP_BLK_TE marcos
+Message-ID: <55aa25pdeaqbuc2x2v3xkmcatlzmn2c5pn2py5qnqz7bnrp6s4@3vkwwnn4uasi>
+References: <1683218805-23419-1-git-send-email-quic_khsieh@quicinc.com>
+ <1683218805-23419-4-git-send-email-quic_khsieh@quicinc.com>
+ <ljt5mp4ew5lcrrrdd7xyof3jv3friafbmr3im35ddwxjc42ekh@toez7xfdreg2>
+ <CAA8EJpreM9i3DUp+93K7p14f_tNMy-m+C-WdyN5_drmmkGV66g@mail.gmail.com>
+ <u7hlzltevx675gfg4w6emmeceo6nj76taqeecsor6iqsi3hmki@lg43y65m6chz>
+ <11ef769a-5089-57d4-db87-4c5766d98206@quicinc.com>
+ <6qg25ffuq6xcfz3vuqm5lguspihjospctjclxmwyu2ifau4p7b@txywjmir7lg5>
+ <9011a078-9962-b3de-6427-b9114fcd0cf4@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9011a078-9962-b3de-6427-b9114fcd0cf4@quicinc.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Baolu,
-
-On Wed, 3 May 2023 14:37:16 +0800, Baolu Lu <baolu.lu@linux.intel.com>
-wrote:
-
-> On 4/28/23 5:47 PM, Tian, Kevin wrote:
-> >> From: Jacob Pan <jacob.jun.pan@linux.intel.com>
-> >> Sent: Friday, April 28, 2023 1:50 AM
+On 2023-05-04 12:50:57, Abhinav Kumar wrote:
+> 
+> 
+> On 5/4/2023 12:36 PM, Marijn Suijten wrote:
+> > On 2023-05-04 11:25:44, Abhinav Kumar wrote:
+> > <snip>
+> >>> Sure, if you really prefer a split I'd go for two patches:
+> >>> 1. Add the flag to the enum and catalog;
+> >>> 2. Add the ops guard (functional change).
+> >>>
+> >>> Then don't forget to reword the commit message, following the guidelines
+> >>> below and the suggestion for 2/7.
+> >>>
+> >>> - Marijn
 > >>
+> >> Plan sounds good to me.
 > >>
-> >> +static int dmar_domain_attach_device_pasid(struct dmar_domain *domain,
-> >> +					   struct intel_iommu *iommu,
-> >> +					   struct device *dev,
-> >> ioasid_t pasid) +{
-> >> +	int ret;
-> >> +
-> >> +	/* PASID table is mandatory for a PCI device in scalable
-> >> mode. */
-> >> +	if (!sm_supported(iommu) && dev_is_real_dma_subdevice(dev))
-> >> +		return -EOPNOTSUPP;  
+> >> Marijn, we will wait for a couple of days to post the next rev but would
+> >> be hard more than that as we need to pick up other things which are
+> >> pending on top of this. Hence would appreciate if you can finish reviews
+> >> by then.
 > > 
-> > "&&" should be "||"
-> >   
+> > It depends on how many more revisions are needed after that, and not all
+> > patches in this series have an r-b just yet.  Given the amount of review
+> > comments that are still trickling in (also on patches that already have
+> > maintainer r-b) I don't think we're quite there to start thinging about
+> > picking this up in drm-msm just yet.  I doubt anyone wants a repeat of
+> > the original DSC series, which went through many review rounds yet still
+> > required multiple series of bugfixes (some of which were pointed out and
+> > ignored in review) to be brought to a working state.  But the split
+> > across topics per series already makes this a lot less likely, many
+> > thanks for that.
+> > 
 > 
-> Also should return success instead if this is a RID case. Perhaps,
+> I think the outstanding comments shouldnt last more than 1-2 revs more 
+> on this one as its mostly due to multiple patches on the list touching 
+> catalog at the same time. I have been monitoring the comments closely 
+> even though I dont respond to all of them.
 > 
-> 	if (!sm_supported(iommu) || dev_is_real_dma_subdevice(dev))
-> 		return pasid == RID2PASID ? 0 : -EOPNOTSUPP;
+> One of the major reasons of the number of issues with DSC 1.1 was QC 
+> didn't really have the devices or panels to support it. Thats why I 
+> changed that this time around to take more control of validation of DSC 
+> 1.2 and ofcourse decided to break up of series into the least amount of 
+> functionality needed to keep the DPU driver intact.
+
+Really glad that you are able to test and validate it now, that goes a
+long way.  Does that also mean you can post the panel patches quickly,
+so that everyone has a point of reference?  As you said that is one of
+the main points where DSC 1.1 "went wrong" (a misunderstanding of
+drm_dsc_config).
+
+> All that being said, we still value your comments and would gladly wait 
+> for a couple of days like I already wrote. But there are more 
+> incremental series on top of this:
 > 
-Yeah,  I think this is better.  will do.
+> -> DSI changes for DSC 1.2
+> -> proper teardown for DSC
+> -> DSC pair allocation support
+> -> DSC 1.2 over DP
 
-I was hoping not to treat RIDPASID special here. The caller of this
-function does the check if that is RIDPASID but code is duplicated.
+Yeah, I'm familiar with the concept of having many dependent series, and
+now DSC series are even rebasing on DPU (catalog) cleanups to preempt
+conflicts, which is really hard to follow.
+Dmitry just pushed v5 of "drm/i915/dsc: change DSC param tables to
+follow the DSC model" [1] and seems to have dropped some patches that
+some of these series are depending on, resulting in compilation
+failures.  Other series don't seem to fully mention all their
+dependencies.
 
-Thanks,
+[1]: https://lore.kernel.org/linux-arm-msm/20230504153511.4007320-1-dmitry.baryshkov@linaro.org/T/#u
 
-Jacob
+So, for this to go as convenient as possible, do you have a list of
+series, in a desired order that they should be reviewed and tested?
+That way I can direct my priorities and help achieve the goal of picking
+base dependencies as early as possible.
+
+For example, one of the many series regresses DSC on the Xperia XZ3
+(SDM845), but I have yet to bisect and understand which patch it is.
+Will let you know as soon as I get my tree in order.
+
+- Marijn
