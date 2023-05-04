@@ -2,68 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 217506F6A6D
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 13:52:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCB716F6A86
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 13:55:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbjEDLwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 07:52:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33026 "EHLO
+        id S230057AbjEDLze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 07:55:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjEDLwX (ORCPT
+        with ESMTP id S229535AbjEDLzc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 07:52:23 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E18581994;
-        Thu,  4 May 2023 04:52:21 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 344Bq8Mv049016;
-        Thu, 4 May 2023 06:52:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1683201128;
-        bh=UBO8+Aq6ZMaLHb6b4g7FC3umBIeXotIckk2IFl8ZmFk=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=aKPn0kseIzSBahQ34K+Q7bN/34NIl44peySVhsUssSOxKNeSQahVzY9tGg+IXx2oW
-         JBVwa4+QHwUdS9aVmk6ItCguX7uAiJUzY8rdpWQ7K1sKGfnrrnHzlSXYBQ9lom+Br0
-         YR1CKFkOS5QOdV3ofwsrmu9h+woOXgl+w37FcpE0=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 344Bq8g7113628
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 4 May 2023 06:52:08 -0500
-Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 4
- May 2023 06:52:07 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 4 May 2023 06:52:07 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 344Bq7cn022908;
-        Thu, 4 May 2023 06:52:07 -0500
-Date:   Thu, 4 May 2023 06:52:07 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Thejasvi Konduru <t-konduru@ti.com>
-CC:     Tero Kristo <kristo@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Andrew Davis <afd@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Apurva Nandan <a-nandan@ti.com>, Udit Kumar <u-kumar1@ti.com>
-Subject: Re: [PATCH] arm64: dts: ti: k3-j784s4: Fix wakeup pinmux range and
- pinctrl node offsets
-Message-ID: <20230504115207.h6trzy4mqjcbkcm3@comment>
-References: <20230503083143.32369-1-t-konduru@ti.com>
- <20230503114625.gqnijd3bog5bwemz@parameter>
- <31b31af7-6c54-7d05-f7ef-fcceba48580e@ti.com>
+        Thu, 4 May 2023 07:55:32 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B671994;
+        Thu,  4 May 2023 04:55:30 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-94f1d0d2e03so62053766b.0;
+        Thu, 04 May 2023 04:55:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683201329; x=1685793329;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yEOKwlwL1tkxEiR+ZdLCkG8rCyDeDRTeVbJGwPAXSGE=;
+        b=Rx1PxkEUSZX2Gwh18KtwSk/5C3dFrgX+H2AaM8bftpCHHttp6xvlf0Sp8WZOExZqdG
+         gwnypz9DeKJMlnrBp7XMThdEgw1wHlr8EygBPLkdB6OCXakp1aRlphjih3t8jpI51o5h
+         yTtRbCoUBunmy8cVUU4/Tuq+FJ+TwsPfAG7nKr5vt0HLtgRT6tqLnF0MFndEIr5L66fw
+         0suNDQ5uLyhLsyq6o7j7/e9xpvIfW7mBlZOWGd0pnnDTMJXnwLx/3U/rP88yjBVo203h
+         +tgs0kKHVpwDi7C6tCbafSBxP4PLrQ6VuXjVYGYiCK9aMmccOeVSO2dUqs9d98GFfjOB
+         puaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683201329; x=1685793329;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yEOKwlwL1tkxEiR+ZdLCkG8rCyDeDRTeVbJGwPAXSGE=;
+        b=mFqE3wR8i+7mnIs6zZCEdc3vwkbb+xBQynVpPm5EMG1rVKhZh1ccorZTQsp+LaSD6x
+         s0QX8eODor42T/on/zZSMeIxZbOp1ospPWFEnyuvMl7koc10lJ1yVwkE7gZaHvySPqHp
+         rW+d52zK8nW8q1FEEU9tCUkntPTDJXQIYVsVgzzxDtr+VOrDe7soK6hh+zCJAP8VGuD9
+         HhpPmCMBVMA6mpoQcbwvRgETEmBFoYHny6GzMlqS+ZUk0syG+Ch1pqmjjDXbBSGd6PDp
+         fcxlUR5tBj9FvOJTZ2SzYCJa07dOJoeyjeIVSt7kBkxxAGDxPcSmG7lEAUHH1cRFhC93
+         tUbQ==
+X-Gm-Message-State: AC+VfDwF1rRl4a+9KSBQCAqm9MFyoXB2iUzW85Rz/TTSg7irDIA0UA1o
+        wJrcF7dmqvKVGb6j1a4nf+fbnc1bXDHbn4yd3HE=
+X-Google-Smtp-Source: ACHHUZ66jegOa5ttR5HXWcc2L930eGU8hxtxNvfRUtILZHde78W74TppXdoANsNB+Ml/w7UwAF+nsq6hfEdAKFwvr8g=
+X-Received: by 2002:a17:907:805:b0:94b:d57e:9d4e with SMTP id
+ wv5-20020a170907080500b0094bd57e9d4emr6665740ejb.3.1683201329031; Thu, 04 May
+ 2023 04:55:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <31b31af7-6c54-7d05-f7ef-fcceba48580e@ti.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230503141123.23290-1-jandryuk@gmail.com> <4317357.pJ3umoczA4@silver>
+In-Reply-To: <4317357.pJ3umoczA4@silver>
+From:   Jason Andryuk <jandryuk@gmail.com>
+Date:   Thu, 4 May 2023 07:55:17 -0400
+Message-ID: <CAKf6xpscky_LLxStzZ6uAyeWPXC3gALsA_zVFpF8X7uktw=MxQ@mail.gmail.com>
+Subject: Re: [PATCH v2] 9p: Remove INET dependency
+To:     Christian Schoenebeck <linux_oss@crudebyte.com>
+Cc:     Eric Van Hensbergen <ericvh@kernel.org>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, v9fs@lists.linux.dev,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,33 +75,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14:36-20230504, Thejasvi Konduru wrote:
-> 
-> On 03/05/23 17:16, Nishanth Menon wrote:
-> > On 14:01-20230503, Thejasvi Konduru wrote:
-> > > The wkup_pmx register region in j784s4 has multiple non-addressable
-> > > regions, hence the existing wkup_pmx region is split as follows to
-> > > avoid the non-addressable regions. The pinctrl node offsets are
-> > > also corrected as per the newly split wkup_pmx* nodes.
-> > > 
-> > > wkup_pmx0 -> 13 pins (WKUP_PADCONFIG 0 - 12)
-> > > wkup_pmx1 -> 11 pins (WKUP_PADCONFIG 14 - 24)
-> > > wkup_pmx2 -> 72 pins (WKUP_PADCONFIG 26 - 97)
-> > > wkup_pmx3 -> 1 pin (WKUP_PADCONFIG 100)
-> > > 
-> > > Fixes: 4664ebd8346a ("arm64: dts: ti: Add initial support for J784S4 SoC")
-> > > Signed-off-by: Thejasvi Konduru <t-konduru@ti.com>
-> > > ---
-> > Could you provide a link to the output of:
-> > $ cat /sys/kernel/debug/pinctrl/*/pins
-> 
-> https://gist.github.com/thejasvikonduru/05b1a8e0fd8176116b7a3cc4e43b244a
+On Thu, May 4, 2023 at 6:58=E2=80=AFAM Christian Schoenebeck
+<linux_oss@crudebyte.com> wrote:
+>
+> On Wednesday, May 3, 2023 4:11:20 PM CEST Jason Andryuk wrote:
+> > 9pfs can run over assorted transports, so it doesn't have an INET
+> > dependency.  Drop it and remove the includes of linux/inet.h.
+> >
+> > NET_9P_FD/trans_fd.o builds without INET or UNIX and is unusable over
+>
+> s/unusable/usable/ ?
 
-Was this failing prior to this patch? Trying to understand the "Fix"
-aspect of this patch.
+Whoops!  Yes, you are correct.  Thanks for catching that.
 
-
--- 
 Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+Jason
