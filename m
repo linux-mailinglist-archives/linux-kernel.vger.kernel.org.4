@@ -2,150 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 309EE6F62EA
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 04:25:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9CC96F62EC
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 04:26:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229499AbjEDCZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 22:25:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53448 "EHLO
+        id S229688AbjEDC0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 22:26:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbjEDCZf (ORCPT
+        with ESMTP id S229545AbjEDC0K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 22:25:35 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FFE81B1;
-        Wed,  3 May 2023 19:25:34 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1aaf21bb42bso34068115ad.2;
-        Wed, 03 May 2023 19:25:34 -0700 (PDT)
+        Wed, 3 May 2023 22:26:10 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 631511B1;
+        Wed,  3 May 2023 19:26:09 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id af79cd13be357-7515631b965so458344785a.0;
+        Wed, 03 May 2023 19:26:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683167134; x=1685759134;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=X+UY7cUQaVo4x4W0WCSPsCuWeI5BUJEgh7i3Xst55/Y=;
-        b=Rp/D+oug52h2Ti6mXmuImpIIDf60HeMLUvF0iIK2vttPwspm5hYlNosuEHVSrbtxTw
-         U1aaOkS4o4kHX9lqnCC9bE9Qv4BkTepdXgX1eP7e7ih03h1Znb/fBHAFzIs3ZLAdzyf8
-         Bdy+N5QGo07p0OmImH8mBW0eWTxAwcVTxazuYtPxC6BmtMp0/XcbyFMmmZorx8qew2E9
-         Ccf9SafoTVOkRODhvQ6MQpCKPYkFE27/aFmb6+IC+s7J6n+xuSEgUyUsQVp7VEWj1Bkv
-         v88EEfrZMkPXlnUNcgeQfwXyllZK7EU5nBpftptzpU3ovg2Ugby7Q+WZX0I3unGEo1Nj
-         E0SQ==
+        d=gmail.com; s=20221208; t=1683167168; x=1685759168;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yLDTYk0tPVXVsplJLhLm6jmpkxTtu8RLOaQ4cLfMe5g=;
+        b=P/HogoDovJW1+0CFh3o4honx3WNft5BSdMnqQj3thmzIaWqEDHhtlWtsnL+9NbxTPd
+         6D8wSZjPHjXapbNNG9aUYoBfCb7XS+90s4uLTzLSdJJP6Xyri+qXTpATQuxrqmoH369P
+         ufj8u2HIi7vKqFJIXQJrHomnk4YJ+BGlAUAA9dObaOalofmkGakKT0SW7ue7o65W0xKr
+         POYi/6DQJbfSi/kwaTfaHjlNi+f4UanZULAgxBslCqgOMqOb+/5uZQpp9chkLc+6VvoU
+         WxFOUXDQHQA/FVI6/appITim0QKFuCVc7fRKq1Kldujy7Bh2prvMpxmgQU/668o2hyk0
+         WXtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683167134; x=1685759134;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=X+UY7cUQaVo4x4W0WCSPsCuWeI5BUJEgh7i3Xst55/Y=;
-        b=dtbjpX7ia57jjlkDaEKOQsfKP9GGygdKnP69Ub91sMr/qJEl2FhiSuQEnEGGo6ViMk
-         r4iE9FQj5XxXmQzwhIsx50JXWloVnquad3bm7YrQE6A6fbJJ2TkPkK+NcvcjU7magQwF
-         9fhmgJAVN3JmeyWQburIfzoIW9rJLShj/iDzUeqTylXVJ5eAbg6r32KHPH8Qt8jW4Mby
-         g7RRYYj76L3mKrWiTsPRcKwo4R6pI2iXUFYtrhDJ+Z6dYMilUuh7U6LeOCu2IVUmB23N
-         KKgFtDWHN1T7oTsx98S5rfqPh9ODpUcONmXVGAwl2t6qVG55/slTp3SC16HBc81E218t
-         KrUg==
-X-Gm-Message-State: AC+VfDxZbVY3WT/1oPiFscFqewhOob2MqOHLWqLNBrefraxZliH6ZF8H
-        BqTo9EqMqcs3U5cF88boFOI=
-X-Google-Smtp-Source: ACHHUZ50+OLepUnrnAHDGfxFP5Am44d3DN07c8wNpuEHGpwvY2J63vbecqy2vRXUZik9ScPzDJ5gvw==
-X-Received: by 2002:a17:902:c94e:b0:1ab:2758:c8a4 with SMTP id i14-20020a170902c94e00b001ab2758c8a4mr2512871pla.0.1683167133231;
-        Wed, 03 May 2023 19:25:33 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:6454])
-        by smtp.gmail.com with ESMTPSA id w4-20020a170902d70400b0019ac7319ed1sm2987721ply.126.2023.05.03.19.25.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 May 2023 19:25:32 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 3 May 2023 16:25:30 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
-        vbabka@suse.cz, roman.gushchin@linux.dev, mgorman@suse.de,
-        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
-        corbet@lwn.net, void@manifault.com, peterz@infradead.org,
-        juri.lelli@redhat.com, ldufour@linux.ibm.com,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, peterx@redhat.com, david@redhat.com,
-        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
-        nathan@kernel.org, dennis@kernel.org, muchun.song@linux.dev,
-        rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com,
-        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
-        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, gregkh@linuxfoundation.org,
-        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>
-Subject: Re: [PATCH 00/40] Memory allocation profiling
-Message-ID: <ZFMXmj9ZhSe5wyaS@slm.duckdns.org>
-References: <20230503180726.GA196054@cmpxchg.org>
- <ZFKlrP7nLn93iIRf@slm.duckdns.org>
- <ZFKqh5Dh93UULdse@slm.duckdns.org>
- <ZFKubD/lq7oB4svV@moria.home.lan>
- <ZFKu6zWA00AzArMF@slm.duckdns.org>
- <ZFKxcfqkUQ60zBB_@slm.duckdns.org>
- <CAJuCfpEPkCJZO2svT-GfmpJ+V-jSLyFDKM_atnqPVRBKtzgtnQ@mail.gmail.com>
- <ZFK6pwOelIlhV8Bm@slm.duckdns.org>
- <ZFK9XMSzOBxIFOHm@slm.duckdns.org>
- <CAJuCfpE4YD_BumqFf2-NC8KS9D+kq0s_o4gRyWAH-WK4SgqUbA@mail.gmail.com>
+        d=1e100.net; s=20221208; t=1683167168; x=1685759168;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yLDTYk0tPVXVsplJLhLm6jmpkxTtu8RLOaQ4cLfMe5g=;
+        b=OBYYr028gxaMcruDLrstR9CNsv26IlH81jXW3GtbX6JBjjQ1eoO9bCqMh89SDhRiX/
+         NcIuECc7pzrwdLw7EwZa42bs+s3hI58RX9e84FFBR1mG0qB+PbQaFdeANIixyseVpHWx
+         O7QCbIg5gLn0Yb+BDCLdoYePI/WWtYOM+JwXDKcCt006aHNoQzK84lmZ9tqvSfd9AbsH
+         PsnbjpksxipWM30+XWXIFw1ixKVoVjKfo456YM/C2m13XjgYudERc1DBDimGawlezABj
+         r2rDtDNCRHnIMi/e4LA0BP/ZjOeHFIYMpgHROGekGxV0I6lqsD6sQVsZijGSR9zfStU5
+         lthA==
+X-Gm-Message-State: AC+VfDwsaVxXxRAiywBpoO7Tw6CNYBj/Vn2Z3ClRQ/EMUyhesWZjDfYL
+        hqkPxVvicj9mtIvjkGBUMpXYXfL8fUtCukjMHRhd1oJmUHFDkg==
+X-Google-Smtp-Source: ACHHUZ47HhYCWR/yoFvokIBjkNXhGc1mPF6wLj1BeAqMU75woOkThHbHQRw2BNWoHTvF+WSjv6mmCR8ZIes8wjt/NYA=
+X-Received: by 2002:ad4:5b8b:0:b0:5ad:45f2:4307 with SMTP id
+ 11-20020ad45b8b000000b005ad45f24307mr5025757qvp.11.1683167168408; Wed, 03 May
+ 2023 19:26:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJuCfpE4YD_BumqFf2-NC8KS9D+kq0s_o4gRyWAH-WK4SgqUbA@mail.gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20230503013608.2431726-1-nphamcs@gmail.com> <20230503013608.2431726-3-nphamcs@gmail.com>
+ <20230503150425.GC193380@cmpxchg.org>
+In-Reply-To: <20230503150425.GC193380@cmpxchg.org>
+From:   Nhat Pham <nphamcs@gmail.com>
+Date:   Wed, 3 May 2023 19:25:57 -0700
+Message-ID: <CAKEwX=MmC-5wY2u25YY9WupGLfZrY2V=VGYAZHJqSSdzT9yO3w@mail.gmail.com>
+Subject: Re: [PATCH v13 2/3] cachestat: implement cachestat syscall
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, bfoster@redhat.com,
+        willy@infradead.org, linux-api@vger.kernel.org,
+        kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On Wed, May 03, 2023 at 01:14:57PM -0700, Suren Baghdasaryan wrote:
-> On Wed, May 3, 2023 at 1:00 PM Tejun Heo <tj@kernel.org> wrote:
-> > Another related question. So, the reason for macro'ing stuff is needed is
-> > because you want to print the line directly from kernel, right?
-> 
-> The main reason is because we want to inject a code tag at the
-> location of the call. If we have a code tag injected at every
-> allocation call, then finding the allocation counter (code tag) to
-> operate takes no time.
+On Wed, May 3, 2023 at 8:04=E2=80=AFAM Johannes Weiner <hannes@cmpxchg.org>=
+ wrote:
 >
-> > Is that
-> > really necessary? Values from __builtin_return_address() can easily be
-> > printed out as function+offset from kernel which already gives most of the
-> > necessary information for triaging and mapping that back to source line from
-> > userspace isn't difficult. Wouldn't using __builtin_return_address() make
-> > the whole thing a lot simpler?
-> 
-> If we do that we have to associate that address with the allocation
-> counter at runtime on the first allocation and look it up on all
-> following allocations. That introduces the overhead which we are
-> trying to avoid by using macros.
-
-I see. I'm a bit skeptical about the performance angle given that the hot
-path can be probably made really cheap even with lookups. In most cases,
-it's just gonna be an extra pointer deref and a few more arithmetics. That
-can show up in microbenchmarks but it's not gonna be much. The benefit of
-going that route would be the tracking thing being mostly self contained.
-
-That said, it's nice to not have to worry about allocating tracking slots
-and managing hash table, so no strong opinion.
-
-Thanks.
-
--- 
-tejun
+> On Tue, May 02, 2023 at 06:36:07PM -0700, Nhat Pham wrote:
+> > There is currently no good way to query the page cache state of large
+> > file sets and directory trees. There is mincore(), but it scales poorly=
+:
+> > the kernel writes out a lot of bitmap data that userspace has to
+> > aggregate, when the user really doesn not care about per-page
+> > information in that case. The user also needs to mmap and unmap each
+> > file as it goes along, which can be quite slow as well.
+> >
+> > Some use cases where this information could come in handy:
+> >   * Allowing database to decide whether to perform an index scan or
+> >     direct table queries based on the in-memory cache state of the
+> >     index.
+> >   * Visibility into the writeback algorithm, for performance issues
+> >     diagnostic.
+> >   * Workload-aware writeback pacing: estimating IO fulfilled by page
+> >     cache (and IO to be done) within a range of a file, allowing for
+> >     more frequent syncing when and where there is IO capacity, and
+> >     batching when there is not.
+> >   * Computing memory usage of large files/directory trees, analogous to
+> >     the du tool for disk usage.
+> >
+> > More information about these use cases could be found in the following
+> > thread:
+> >
+> > https://lore.kernel.org/lkml/20230315170934.GA97793@cmpxchg.org/
+> >
+> > This patch implements a new syscall that queries cache state of a file
+> > and summarizes the number of cached pages, number of dirty pages, numbe=
+r
+> > of pages marked for writeback, number of (recently) evicted pages, etc.
+> > in a given range. Currently, the syscall is only wired in for x86
+> > architecture.
+> >
+> > NAME
+> >     cachestat - query the page cache statistics of a file.
+> >
+> > SYNOPSIS
+> >     #include <sys/mman.h>
+> >
+> >     struct cachestat_range {
+> >         __u64 off;
+> >         __u64 len;
+> >     };
+> >
+> >     struct cachestat {
+> >         __u64 nr_cache;
+> >         __u64 nr_dirty;
+> >         __u64 nr_writeback;
+> >         __u64 nr_evicted;
+> >         __u64 nr_recently_evicted;
+> >     };
+> >
+> >     int cachestat(unsigned int fd, struct cachestat_range *cstat_range,
+> >         struct cachestat *cstat, unsigned int flags);
+> >
+> > DESCRIPTION
+> >     cachestat() queries the number of cached pages, number of dirty
+> >     pages, number of pages marked for writeback, number of evicted
+> >     pages, number of recently evicted pages, in the bytes range given b=
+y
+> >     `off` and `len`.
+> >
+> >     An evicted page is a page that is previously in the page cache but
+> >     has been evicted since. A page is recently evicted if its last
+> >     eviction was recent enough that its reentry to the cache would
+> >     indicate that it is actively being used by the system, and that
+> >     there is memory pressure on the system.
+> >
+> >     These values are returned in a cachestat struct, whose address is
+> >     given by the `cstat` argument.
+> >
+> >     The `off` and `len` arguments must be non-negative integers. If
+> >     `len` > 0, the queried range is [`off`, `off` + `len`]. If `len` =
+=3D=3D
+> >     0, we will query in the range from `off` to the end of the file.
+> >
+> >     The `flags` argument is unused for now, but is included for future
+> >     extensibility. User should pass 0 (i.e no flag specified).
+> >
+> >     Currently, hugetlbfs is not supported.
+> >
+> >     Because the status of a page can change after cachestat() checks it
+> >     but before it returns to the application, the returned values may
+> >     contain stale information.
+> >
+> > RETURN VALUE
+> >     On success, cachestat returns 0. On error, -1 is returned, and errn=
+o
+> >     is set to indicate the error.
+> >
+> > ERRORS
+> >     EFAULT cstat or cstat_args points to an invalid address.
+> >
+> >     EINVAL invalid flags.
+> >
+> >     EBADF  invalid file descriptor.
+> >
+> >     EOPNOTSUPP file descriptor is of a hugetlbfs file
+> >
+> > Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+>
+> Thanks for persisting through the pain. This looks great to me now.
+>
+> Like I've said before, I think this is sorely needed. The cache is
+> frequently the biggest memory consumer in the system. We have a rich
+> API for influencing it, but there is a glaring gap when it comes to
+> introspection. It's difficult to design control loops without
+> feedback. This proposes an intuitive, versatile and scalable interface
+> to bridge that gap, and it integrates nicely with the existing VFS API
+> for managing the cache. I would love to see this go in.
+>
+> I'd also love for the `mu' tool you wrote to make it into coreutils
+> eventually. It would make debugging memory consumption and writeback
+> issues on live systems, especially with complex and/or multiple
+> workloads, so much easier.
+I'd love to share this too! Let me clean it up and submit it separately.
+>
+> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
