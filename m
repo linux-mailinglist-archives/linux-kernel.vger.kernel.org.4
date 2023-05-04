@@ -2,178 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D5EF6F6A10
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 13:34:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B62966F636D
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 05:34:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230060AbjEDLec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 07:34:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51082 "EHLO
+        id S229804AbjEDDep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 23:34:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbjEDLe3 (ORCPT
+        with ESMTP id S229545AbjEDDej (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 07:34:29 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B18C059C6;
-        Thu,  4 May 2023 04:34:20 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.31:60818.335703915
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.31])
-        by 189.cn (HERMES) with SMTP id F2BE71002A7;
-        Thu,  4 May 2023 19:34:16 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-85667d6c59-lhcrq with ESMTP id a032e0a425314ba48f3e110afb4a4634 for tzimmermann@suse.de;
-        Thu, 04 May 2023 19:34:20 CST
-X-Transaction-ID: a032e0a425314ba48f3e110afb4a4634
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <348508a2-1640-46b1-2ac9-72a7d5d4f859@189.cn>
-Date:   Thu, 4 May 2023 19:34:15 +0800
+        Wed, 3 May 2023 23:34:39 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0AFC1BF6;
+        Wed,  3 May 2023 20:34:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683171257; x=1714707257;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3KiOAT90UU7GzEuS/S0TppUB/RAnJK0O9UmCMBs0ZBM=;
+  b=RX9+w68TDldESwTGAJ75inYBOaFpYuB7r/uiZknU4YRIAk9MOKNBvLdx
+   NuUdkDfIkSFjv6SzibL2YGq4W2t5nVy+Mny6zy3+X4fsnaonjkKBGageN
+   NyAv2/cFyXVr+JyLNTeTuj5hyGrHPJGRK9a44T6I6su7MxR0AOSXtYAMC
+   vo4dmfNz48aL5anbn7ZjOSw1mdtsKv/RFAcC+LQrS4aHjsGig4KEf6M0j
+   mnMA58SeC69Gbv2tnE3xXm+7ZOcSwUNRR8JZz29GODz4v760/mDE2r3xp
+   1HR5bIGHuErgbcX9/knZbnUEt6miQNWAKlpKdX6dfemVePBHWT+Ly/It1
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="348868849"
+X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
+   d="scan'208";a="348868849"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2023 20:34:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="871198748"
+X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
+   d="scan'208";a="871198748"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orsmga005.jf.intel.com with ESMTP; 03 May 2023 20:34:14 -0700
+Date:   Thu, 4 May 2023 19:34:26 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     linux-kernel@vger.kernel.org, Moritz Fischer <mdf@kernel.org>,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Vladimir Georgiev <v.georgiev@metrotek.ru>, system@metrotek.ru,
+        linux-fpga@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] MAINTAINERS: update Microchip MPF FPGA reviewers
+Message-ID: <ZFOYQgA6TYa8hCjS@yilunxu-OptiPlex-7050>
+References: <20230429104838.5064-1-i.bornyakov@metrotek.ru>
+ <20230429104838.5064-2-i.bornyakov@metrotek.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [v4,4/6] fbdev: Include <linux/fb.h> instead of <asm/fb.h>
-Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>, deller@gmx.de,
-        geert@linux-m68k.org, javierm@redhat.com, daniel@ffwll.ch,
-        vgupta@kernel.org, chenhuacai@kernel.org, kernel@xen0n.name,
-        davem@davemloft.net, James.Bottomley@HansenPartnership.com,
-        arnd@arndb.de, sam@ravnborg.org
-Cc:     linux-arch@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-m68k@lists.linux-m68k.org, loongarch@lists.linux.dev,
-        sparclinux@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230504074539.8181-5-tzimmermann@suse.de>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <20230504074539.8181-5-tzimmermann@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230429104838.5064-2-i.bornyakov@metrotek.ru>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2023-04-29 at 13:48:37 +0300, Ivan Bornyakov wrote:
+> As I'm leaving Metrotek, hand over reviewing duty of Microchip MPF FPGA
+> driver to Vladimir.
+> 
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+> Acked-by: Vladimir Georgiev <v.georgiev@metrotek.ru>
+> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
 
-Reviewed-by: Sui Jingfeng <suijingfeng@loongson.cn>
+Hi Vladimir:
 
+I need the "Acked-by" from your mail address.
 
-On 2023/5/4 15:45, Thomas Zimmermann wrote:
-> Replace include statements for <asm/fb.h> with <linux/fb.h>. Fixes
-> the coding style: if a header is available in asm/ and linux/, it
-> is preferable to include the header from linux/. This only affects
-> a few source files, most of which already include <linux/fb.h>.
->
-> Suggested-by: Sam Ravnborg <sam@ravnborg.org>
-> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
 > ---
->   arch/parisc/video/fbdev.c        | 3 +--
->   arch/sparc/video/fbdev.c         | 1 -
->   arch/x86/video/fbdev.c           | 2 --
->   drivers/staging/sm750fb/sm750.c  | 2 +-
->   drivers/video/fbdev/core/fbcon.c | 1 -
->   drivers/video/fbdev/core/fbmem.c | 2 --
->   include/linux/fb.h               | 2 ++
->   7 files changed, 4 insertions(+), 9 deletions(-)
->
-> diff --git a/arch/parisc/video/fbdev.c b/arch/parisc/video/fbdev.c
-> index 4a0ae08fc75b..137561d98246 100644
-> --- a/arch/parisc/video/fbdev.c
-> +++ b/arch/parisc/video/fbdev.c
-> @@ -5,10 +5,9 @@
->    * Copyright (C) 2001-2002 Thomas Bogendoerfer <tsbogend@alpha.franken.de>
->    */
->   
-> +#include <linux/fb.h>
->   #include <linux/module.h>
->   
-> -#include <asm/fb.h>
-> -
->   #include <video/sticore.h>
->   
->   int fb_is_primary_device(struct fb_info *info)
-> diff --git a/arch/sparc/video/fbdev.c b/arch/sparc/video/fbdev.c
-> index dadd5799fbb3..25837f128132 100644
-> --- a/arch/sparc/video/fbdev.c
-> +++ b/arch/sparc/video/fbdev.c
-> @@ -4,7 +4,6 @@
->   #include <linux/fb.h>
->   #include <linux/module.h>
->   
-> -#include <asm/fb.h>
->   #include <asm/prom.h>
->   
->   int fb_is_primary_device(struct fb_info *info)
-> diff --git a/arch/x86/video/fbdev.c b/arch/x86/video/fbdev.c
-> index 57ee3c158f97..f41a17ebac48 100644
-> --- a/arch/x86/video/fbdev.c
-> +++ b/arch/x86/video/fbdev.c
-> @@ -7,8 +7,6 @@
->    *
->    */
->   
-> -#include <asm/fb.h>
-> -
->   #include <linux/fb.h>
->   #include <linux/module.h>
->   #include <linux/pci.h>
-> diff --git a/drivers/staging/sm750fb/sm750.c b/drivers/staging/sm750fb/sm750.c
-> index 22ace3168723..55e302a27847 100644
-> --- a/drivers/staging/sm750fb/sm750.c
-> +++ b/drivers/staging/sm750fb/sm750.c
-> @@ -16,7 +16,7 @@
->   #include <linux/pagemap.h>
->   #include <linux/screen_info.h>
->   #include <linux/console.h>
-> -#include <asm/fb.h>
-> +
->   #include "sm750.h"
->   #include "sm750_accel.h"
->   #include "sm750_cursor.h"
-> diff --git a/drivers/video/fbdev/core/fbcon.c b/drivers/video/fbdev/core/fbcon.c
-> index eb565a10e5cd..c6c9d040bdec 100644
-> --- a/drivers/video/fbdev/core/fbcon.c
-> +++ b/drivers/video/fbdev/core/fbcon.c
-> @@ -75,7 +75,6 @@
->   #include <linux/interrupt.h>
->   #include <linux/crc32.h> /* For counting font checksums */
->   #include <linux/uaccess.h>
-> -#include <asm/fb.h>
->   #include <asm/irq.h>
->   
->   #include "fbcon.h"
-> diff --git a/drivers/video/fbdev/core/fbmem.c b/drivers/video/fbdev/core/fbmem.c
-> index 3fd95a79e4c3..38f7e83fa6e3 100644
-> --- a/drivers/video/fbdev/core/fbmem.c
-> +++ b/drivers/video/fbdev/core/fbmem.c
-> @@ -37,8 +37,6 @@
->   #include <linux/mem_encrypt.h>
->   #include <linux/pci.h>
->   
-> -#include <asm/fb.h>
-> -
->   #include <video/nomodeset.h>
->   #include <video/vga.h>
->   
-> diff --git a/include/linux/fb.h b/include/linux/fb.h
-> index 08cb47da71f8..c0f97160ebbf 100644
-> --- a/include/linux/fb.h
-> +++ b/include/linux/fb.h
-> @@ -15,6 +15,8 @@
->   #include <linux/list.h>
->   #include <linux/backlight.h>
->   #include <linux/slab.h>
-> +
-> +#include <asm/fb.h>
->   #include <asm/io.h>
->   
->   struct vm_area_struct;
+>  MAINTAINERS | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index a81ba8328704..aab9fbb20362 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -8100,7 +8100,7 @@ F:	drivers/fpga/intel-m10-bmc-sec-update.c
+>  
+>  MICROCHIP POLARFIRE FPGA DRIVERS
+>  M:	Conor Dooley <conor.dooley@microchip.com>
+> -R:	Ivan Bornyakov <i.bornyakov@metrotek.ru>
+> +R:	Vladimir Georgiev <v.georgiev@metrotek.ru>
+>  L:	linux-fpga@vger.kernel.org
+>  S:	Supported
+>  F:	Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
+> -- 
+> 2.40.0
+> 
+> 
