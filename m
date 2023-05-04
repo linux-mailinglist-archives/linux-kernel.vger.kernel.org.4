@@ -2,45 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19C7E6F75F9
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 22:03:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46B646F75FB
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 22:03:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232295AbjEDUDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 16:03:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50710 "EHLO
+        id S232417AbjEDUDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 16:03:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232480AbjEDUCL (ORCPT
+        with ESMTP id S232347AbjEDUCL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 4 May 2023 16:02:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DB34AD37;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E29619EEE;
         Thu,  4 May 2023 12:51:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 021CE6382A;
-        Thu,  4 May 2023 19:50:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A8FCC433A0;
-        Thu,  4 May 2023 19:50:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0106C63821;
+        Thu,  4 May 2023 19:50:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D97D0C433D2;
+        Thu,  4 May 2023 19:50:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683229816;
-        bh=lOBkcsDzQUuW9Pi45KkisUhzKMdnKzR9v4PV7zWt69I=;
+        s=k20201202; t=1683229820;
+        bh=Ri0G/P2daiMRam2SiD7BzsYVmsaC1vTt6LiLO+wDKF0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uh4Oi4AN3hK3a6ruK3NijplZtWYNhc59Ec3egIyPrYmtIOcVh8waUDNRYEKDi1K3q
-         TwaPUNX7X+5p/BWrK/8Ua8n4uumexDvlH0ov99qhZ+8G8Y9b6qeO9gSLC8iq+3noAe
-         fLetfDvcV4kkEfYo+OKEDOL2hH7ONQosuGprqKW84yn1mgZrDVUdjImG5lVuHnfv4G
-         aRU771N0QD5DHO3Keb8rizAn1hd8JoQQLQoteIf1e1clsiJPjNT+jFnyfkqrMYh3BX
-         87O0lNC35XW6Q5iedJJkqLCWOTHt91n8kVJb81MTfwWa2nOsw4+AYXZwHZNcEC1glx
-         bEj3I1DyejcRg==
+        b=Hk0fWzR68Xbj7ZOFZu0TD7+axhTbbMvAcH0rlerG07V85G0ML6vUTroMEUfHvXsJs
+         gFEGVRnJr3kJ+q5tHzMpIVFi9zvzf4FVCnaeb0MOvfM1DW0VScnGs3RRM8sh8D/ewd
+         dJt+c9EfR8iHJf0e2QxY4i66vy2cgBJObycOR9Wf19gXfSbN9z7oihBK+amzz3iFNo
+         GZw7dDzYx2f/5jU5CM8M4Wn9lVXNrLPi7iCeUPD2snoe+Tmp+FCNZxLDIbxcMH60yc
+         hthMipNn0adCjsRR33JaanqTDSCbMuiLyMXYKtqGNoSV4XKKSq7znlo1Nnj2HGcUQM
+         VaJT6cBZmgYDw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hao Zeng <zenghao@kylinos.cn>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Sasha Levin <sashal@kernel.org>, ast@kernel.org,
-        andrii@kernel.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 16/24] samples/bpf: Fix fout leak in hbm's run_bpf_prog
-Date:   Thu,  4 May 2023 15:49:29 -0400
-Message-Id: <20230504194937.3808414-16-sashal@kernel.org>
+Cc:     Daniel Gabay <daniel.gabay@intel.com>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Sasha Levin <sashal@kernel.org>, kvalo@kernel.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, mukesh.sisodiya@intel.com,
+        yaara.baruch@intel.com, golan.ben.ami@intel.com,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 17/24] wifi: iwlwifi: pcie: fix possible NULL pointer dereference
+Date:   Thu,  4 May 2023 15:49:30 -0400
+Message-Id: <20230504194937.3808414-17-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230504194937.3808414-1-sashal@kernel.org>
 References: <20230504194937.3808414-1-sashal@kernel.org>
@@ -48,8 +52,8 @@ MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,33 +62,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hao Zeng <zenghao@kylinos.cn>
+From: Daniel Gabay <daniel.gabay@intel.com>
 
-[ Upstream commit 23acb14af1914010dd0aae1bbb7fab28bf518b8e ]
+[ Upstream commit b655b9a9f8467684cfa8906713d33b71ea8c8f54 ]
 
-Fix fout being fopen'ed but then not subsequently fclose'd. In the affected
-branch, fout is otherwise going out of scope.
+It is possible that iwl_pci_probe() will fail and free the trans,
+then afterwards iwl_pci_remove() will be called and crash by trying
+to access trans which is already freed, fix it.
 
-Signed-off-by: Hao Zeng <zenghao@kylinos.cn>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/20230411084349.1999628-1-zenghao@kylinos.cn
+iwlwifi 0000:01:00.0: Detected crf-id 0xa5a5a5a2, cnv-id 0xa5a5a5a2
+		      wfpm id 0xa5a5a5a2
+iwlwifi 0000:01:00.0: Can't find a correct rfid for crf id 0x5a2
+...
+BUG: kernel NULL pointer dereference, address: 0000000000000028
+...
+RIP: 0010:iwl_pci_remove+0x12/0x30 [iwlwifi]
+pci_device_remove+0x3e/0xb0
+device_release_driver_internal+0x103/0x1f0
+driver_detach+0x4c/0x90
+bus_remove_driver+0x5c/0xd0
+driver_unregister+0x31/0x50
+pci_unregister_driver+0x40/0x90
+iwl_pci_unregister_driver+0x15/0x20 [iwlwifi]
+__exit_compat+0x9/0x98 [iwlwifi]
+__x64_sys_delete_module+0x147/0x260
+
+Signed-off-by: Daniel Gabay <daniel.gabay@intel.com>
+Signed-off-by: Gregory Greenman <gregory.greenman@intel.com>
+Link: https://lore.kernel.org/r/20230413213309.082f6e21341b.I0db21d7fa9a828d571ca886713bd0b5d0b6e1e5c@changeid
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- samples/bpf/hbm.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/wireless/intel/iwlwifi/pcie/drv.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/samples/bpf/hbm.c b/samples/bpf/hbm.c
-index ff4c533dfac29..8e48489b96ae9 100644
---- a/samples/bpf/hbm.c
-+++ b/samples/bpf/hbm.c
-@@ -308,6 +308,7 @@ static int run_bpf_prog(char *prog, int cg_id)
- 		fout = fopen(fname, "w");
- 		fprintf(fout, "id:%d\n", cg_id);
- 		fprintf(fout, "ERROR: Could not lookup queue_stats\n");
-+		fclose(fout);
- 	} else if (stats_flag && qstats.lastPacketTime >
- 		   qstats.firstPacketTime) {
- 		long long delta_us = (qstats.lastPacketTime -
+diff --git a/drivers/net/wireless/intel/iwlwifi/pcie/drv.c b/drivers/net/wireless/intel/iwlwifi/pcie/drv.c
+index 4e43efd5d1ea1..dc0a507213ca6 100644
+--- a/drivers/net/wireless/intel/iwlwifi/pcie/drv.c
++++ b/drivers/net/wireless/intel/iwlwifi/pcie/drv.c
+@@ -1214,6 +1214,9 @@ static void iwl_pci_remove(struct pci_dev *pdev)
+ {
+ 	struct iwl_trans *trans = pci_get_drvdata(pdev);
+ 
++	if (!trans)
++		return;
++
+ 	iwl_drv_stop(trans->drv);
+ 
+ 	iwl_trans_pcie_free(trans);
 -- 
 2.39.2
 
