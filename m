@@ -2,145 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D09DC6F7219
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 20:46:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E4ED6F7234
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 20:59:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbjEDSqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 14:46:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43292 "EHLO
+        id S229768AbjEDS7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 14:59:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbjEDSqS (ORCPT
+        with ESMTP id S229714AbjEDS7D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 14:46:18 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5F83C33;
-        Thu,  4 May 2023 11:46:17 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683225976;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OIAcVs2YXBnNfaPvpuizW2PEW4lhJ1YnG6MUoZkO7aY=;
-        b=3+tD+LTP2nHbLKQ6ayQSSKK8VpBIuQK3gXforAfUYbXvx4vM+fYGuufKzSpG2saVKOpTsV
-        to0Q6mzIGbAQjDqsOQkje2Tja0U/TKz3F+TviP3kf+19hr3bEm6s4uGo2F+s+PdBgPIGkj
-        gHjK9Yi0pM4GUZc5ZpONvd31Hppwcu+Bcbd8TlaOcVKhOuZIjToIAW5YXeXW3Go5sZpcCh
-        htSi5EE8To3+PKCGlsNtyNrMRTsE8PlVdNzqWmd8pkRxZ1vMQC2VO2mXVu6cVctYauCbM0
-        4H8XFlx6BIILGrhdr/EBrOtC8Cm0866nFAfWkkLlHu0QtdUMHZ2jk6jWm8xf3Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683225976;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OIAcVs2YXBnNfaPvpuizW2PEW4lhJ1YnG6MUoZkO7aY=;
-        b=pPb8Wqh2Bj6AkjBEVHoo9nA/DLOEH7EgQ6O+EgS1RtAjQlyepgF0Tr/3dF7rDdC5tR1PRC
-        DisRQOSHrsQxZlDw==
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     "x86@kernel.org" <x86@kernel.org>,
-        David Woodhouse <dwmw@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Usama Arif <usama.arif@bytedance.com>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        Mark Rutland <Mark.Rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>
-Subject: RE: [patch 00/37] cpu/hotplug, x86: Reworked parallel CPU bringup
-In-Reply-To: <BYAPR21MB168888DC5432883D8866BA40D76A9@BYAPR21MB1688.namprd21.prod.outlook.com>
-References: <20230414225551.858160935@linutronix.de>
- <BYAPR21MB168888DC5432883D8866BA40D76A9@BYAPR21MB1688.namprd21.prod.outlook.com>
-Date:   Thu, 04 May 2023 20:46:15 +0200
-Message-ID: <878re43pfs.ffs@tglx>
+        Thu, 4 May 2023 14:59:03 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD585247
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 11:59:00 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-9619095f479so143039866b.1
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 11:59:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=metaspace-dk.20221208.gappssmtp.com; s=20221208; t=1683226739; x=1685818739;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=5Gnpb8Pit9ODAQa/Dl7YsN552lqqxPpumkkQRUQtbno=;
+        b=gFxUXXv74ptlEz90pPEpPK/SWJEikKvKD/UjZFkDR5Y1K+cPsbQK6zF7NXWxsS96pJ
+         aY8rVOAwuzAH7feAtshqmAvfAOslz4PvTyiCbT6bSTK6LUkyloV1MXl6oCqKuHBtf9ia
+         gZHMdEiiTtJZRjaLV7St4BOeYT9ZF60YUxPkOsio8bDOMCt7Lo43mXCMUJQfvzOILhyL
+         xzkyvpibU9t5qYLtFbqyew/ai7jV0ycgnXnjYnuMZ8ae6ltJV46szGZsekHfUXWtpZbA
+         B/a9Ldb2QMbBzhGkw+DelMLRT2H3NZ/fV4ZrHFbYVLa3za2eAHjup4gMF0K/eI26wOoc
+         sphg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683226739; x=1685818739;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5Gnpb8Pit9ODAQa/Dl7YsN552lqqxPpumkkQRUQtbno=;
+        b=EsCj+mmtf/MFkhTmJ6kQRX1ZHqTy0B2xAQk5t5LkNT1fmsevQR2hBiIKOm4vPipmkQ
+         gIjNknmxwfpRgIyRT+ugw6yAXc8+5yl0WTf3BsTHUIduLKulBC8xfV275z6eWxUJoDRc
+         L+QrD3VpoZkfaZVPlHK/wUAsYWC0obIy9r1BYul8fNJEZR0uTlMED+MeUu+iMu9MCNYN
+         NK0X6CTPu1bVBL5qeNkBa8XMyUHiwzvYbJ5pGQr4uFnAYAOXkSBJJBL5fRDYnEpt9YSP
+         7iq/wJEtVcaNRUZDKl29JAmQaCOolTWdxpX0NVqt7DMfiZz5yretDB0+Had7ZyaDzvGN
+         kV6w==
+X-Gm-Message-State: AC+VfDx/bo6z+hlowLxBJN/9a8paiMZwgOLSAy3OHWFGa5F4sebCLjky
+        HqT4XdjUNAouIbYKjMMO/TyvuUcwFjymbIqk0r0=
+X-Google-Smtp-Source: ACHHUZ7brWhm7CLYDsOZJTQscaZ8hG+0gbAUXFqR5sBWrv85AvVFR38ZNrkAtrPNgicnV1jQ+2tyZA==
+X-Received: by 2002:a17:907:2ce2:b0:8aa:a9fe:a3fc with SMTP id hz2-20020a1709072ce200b008aaa9fea3fcmr9416573ejc.8.1683226738785;
+        Thu, 04 May 2023 11:58:58 -0700 (PDT)
+Received: from localhost ([79.142.230.34])
+        by smtp.gmail.com with ESMTPSA id h20-20020a1709070b1400b009658f5a90d2sm1834778ejl.189.2023.05.04.11.58.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 May 2023 11:58:58 -0700 (PDT)
+References: <20230503090708.2524310-1-nmi@metaspace.dk>
+ <da7b815d-3da8-38e5-9b25-b9cfb6878293@acm.org>
+ <87jzxot0jk.fsf@metaspace.dk>
+ <b9a1c1b2-3baa-2cad-31ae-8b14e4ee5709@acm.org>
+User-agent: mu4e 1.10.3; emacs 28.2.50
+From:   Andreas Hindborg <nmi@metaspace.dk>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
+        Keith Busch <kbusch@kernel.org>,
+        Damien Le Moal <Damien.LeMoal@wdc.com>,
+        Hannes Reinecke <hare@suse.de>,
+        lsf-pc@lists.linux-foundation.org, rust-for-linux@vger.kernel.org,
+        linux-block@vger.kernel.org, Matthew Wilcox <willy@infradead.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj?= =?utf-8?Q?=C3=B6rn?= Roy Baron 
+        <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>,
+        open list <linux-kernel@vger.kernel.org>, gost.dev@samsung.com
+Subject: Re: [RFC PATCH 00/11] Rust null block driver
+Date:   Thu, 04 May 2023 20:46:35 +0200
+In-reply-to: <b9a1c1b2-3baa-2cad-31ae-8b14e4ee5709@acm.org>
+Message-ID: <87fs8budn1.fsf@metaspace.dk>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Michael!
 
-On Thu, Apr 27 2023 at 14:48, Michael Kelley wrote:
-> From: Thomas Gleixner <tglx@linutronix.de> Sent: Friday, April 14, 2023 4:44 PM
+Bart Van Assche <bvanassche@acm.org> writes:
+
+> On 5/4/23 11:15, Andreas Hindborg wrote:
+>> If it is still unclear to you why this effort was started, please do let
+>> me know and I shall try to clarify further :)
 >
-> I smoke-tested several Linux guest configurations running on Hyper-V,
-> using the "kernel/git/tglx/devel.git hotplug" tree as updated on April 26th.
-> No functional issues, but encountered one cosmetic issue (details below).
->
-> Configurations tested:
-> *  16 vCPUs and 32 vCPUs
-> *  1 NUMA node and 2 NUMA nodes
-> *  Parallel bring-up enabled and disabled via kernel boot line
-> *  "Normal" VMs and SEV-SNP VMs running with a paravisor on Hyper-V.
->     This config can use parallel bring-up because most of the SNP-ness is
->     hidden in the paravisor.  I was glad to see this work properly.
->
-> There's not much difference in performance with and without parallel
-> bring-up on the 32 vCPU VM.   Without parallel, the time is about 26
-> milliseconds.  With parallel, it's about 24 ms.   So bring-up is already
-> fast in the virtual environment.
+> It seems like I was too polite in my previous email. What I meant is that
+> rewriting code is useful if it provides a clear advantage to the users of
+> a driver. For null_blk, the users are kernel developers. The code that has
+> been posted is the start of a rewrite of the null_blk driver. The benefits
+> of this rewrite (making low-level memory errors less likely) do not outweigh
+> the risks that this effort will introduce functional or performance regressions.
 
-Depends on the environment :)
+If this turns in to a full rewrite instead of just a demonstrator, we
+will be in the lucky situation that we have the existing C version to
+verify performance and functionality against. Unnoticed regressions are
+unlikely in this sense.
 
-> The cosmetic issue is in the dmesg log, and arises because Hyper-V
-> enumerates SMT CPUs differently from many other environments.  In
-> a Hyper-V guest, the SMT threads in a core are numbered as <even, odd>
-> pairs.  Guest CPUs #0 & #1 are SMT threads in core, as are #2 & #3, etc.  With
-> parallel bring-up, here's the dmesg output:
->
-> [    0.444345] smp: Bringing up secondary CPUs ...
-> [    0.445139] .... node  #0, CPUs:    #2  #4  #6  #8 #10 #12 #14 #16 #18 #20 #22 #24 #26 #28 #30
-> [    0.454112] x86: Booting SMP configuration:
-> [    0.456035]       #1  #3  #5  #7  #9 #11 #13 #15 #17 #19 #21 #23 #25 #27 #29 #31
-> [    0.466120] smp: Brought up 1 node, 32 CPUs
-> [    0.467036] smpboot: Max logical packages: 1
-> [    0.468035] smpboot: Total of 32 processors activated (153240.06 BogoMIPS)
->
-> The function announce_cpu() is specifically testing for CPU #1 to output the
-> "Booting SMP configuration" message.  In a Hyper-V guest, CPU #1 is the second
-> SMT thread in a core, so it isn't started until all the even-numbered CPUs are
-> started.
+If we want to have Rust abstractions for the block layer in the kernel
+(some people do), then having a simple driver in Rust to regression test
+these abstractions with, is good value.
 
-Ah. Didn't notice that because SMT siblings are usually enumerated after
-all primary ones in ACPI.
-
-> I don't know if this cosmetic issue is worth fixing, but I thought I'd point it out.
-
-That's trivial enough to fix. I'll amend the topmost patch before
-posting V2.
-
-Thanks for giving it a ride!
-
-       tglx
+Best regards,
+Andreas
