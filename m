@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2D256F7592
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:58:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 581EF6F7594
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:59:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232238AbjEDT6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 15:58:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43534 "EHLO
+        id S232252AbjEDT64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 15:58:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232635AbjEDT4Z (ORCPT
+        with ESMTP id S232644AbjEDT40 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 15:56:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1819132A0;
-        Thu,  4 May 2023 12:49:40 -0700 (PDT)
+        Thu, 4 May 2023 15:56:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37CAF1D96C;
+        Thu,  4 May 2023 12:49:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 645AE63819;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BBB7663821;
+        Thu,  4 May 2023 19:49:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4243FC433A4;
         Thu,  4 May 2023 19:49:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 753F6C433A0;
-        Thu,  4 May 2023 19:49:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683229767;
-        bh=v/QX8/J2LMzBPmGWzpe+0L0cIhMGU8UepbOnexClgAQ=;
+        s=k20201202; t=1683229769;
+        bh=Sjcfn1r0ahXPgKMDb045L/vCMqWCxC7V8Hoxetw5THw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iAoYV35FRvOu5/ICGWsMQ9KvhXvi4fGE7e4WgvDKvASR2ETb+nbWH0G24aYdRBaK3
-         DYA3DiAAQmTjzYa4dz6gZuQjzsFSjawfgm8GxjUvZ32X+RwgHEccNUFp1ezJljihZB
-         /HCIAttd1X5hDUuF1a4Y+GJNFCdnf0i5t08eyQIFaB7h8gDNmY5KYTSXrFyh9t6JjK
-         UQJjQ3IHOR8ZXPMCRqFg5ioHFDBP5hug+J0U98lA9wBi2d5ogMNavaybmr9nmu9Mnc
-         Kz3Q/TEAISYC7O9wOc++m8BxB9Aaky82Zg68HuSKAV3jdp6syOl/kCYpnAfC0bdw0f
-         +Mm5EInbxc/lQ==
+        b=YhZ8lTteppQ4rhVDf0f3d7UAB6dRijw86SvRtmPNT12TnIkCUMWqAj93xTs1JMQhK
+         q4b18+vqaZGV4p5qPhKivr9pQU4Fj2m5NtlMrucbyAZpg1Nt3oTFeWRHhvEdzEHQJb
+         +6hSSk6NN652EjaxxL5nDSk4pns3eNV44aGhP8SqSVsc6i+DKnJV0Bsn1Okc42cUrQ
+         id/xZtfC9huGePDw1Z5AeLct2dbqhSgib0VmbA0vituQtsja2PajGDzI8LwSWeAoom
+         s6SfZkUuL9xHmoVdoUQlos4JQfCiHMY7qdfN5c2FRDtJ0oG3KKI2mKDwJTwagcXN56
+         GRqiWnDr+ccyw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Nagarajan Maran <quic_nmaran@quicinc.com>,
-        Kalle Valo <quic_kvalo@quicinc.com>,
-        Sasha Levin <sashal@kernel.org>, kvalo@kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, ath11k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 25/30] wifi: ath11k: Fix SKB corruption in REO destination ring
-Date:   Thu,  4 May 2023 15:48:18 -0400
-Message-Id: <20230504194824.3808028-25-sashal@kernel.org>
+Cc:     Zhong Jinghua <zhongjinghua@huawei.com>,
+        Yu Kuai <yukuai3@huawei.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>,
+        linux-block@vger.kernel.org, nbd@other.debian.org
+Subject: [PATCH AUTOSEL 5.15 26/30] nbd: fix incomplete validation of ioctl arg
+Date:   Thu,  4 May 2023 15:48:19 -0400
+Message-Id: <20230504194824.3808028-26-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230504194824.3808028-1-sashal@kernel.org>
 References: <20230504194824.3808028-1-sashal@kernel.org>
@@ -50,8 +49,8 @@ MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,78 +59,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nagarajan Maran <quic_nmaran@quicinc.com>
+From: Zhong Jinghua <zhongjinghua@huawei.com>
 
-[ Upstream commit f9fff67d2d7ca6fa8066132003a3deef654c55b1 ]
+[ Upstream commit 55793ea54d77719a071b1ccc05a05056e3b5e009 ]
 
-While running traffics for a long time, randomly an RX descriptor
-filled with value "0" from REO destination ring is received.
-This descriptor which is invalid causes the wrong SKB (SKB stored in
-the IDR lookup with buffer id "0") to be fetched which in turn
-causes SKB memory corruption issue and the same leads to crash
-after some time.
+We tested and found an alarm caused by nbd_ioctl arg without verification.
+The UBSAN warning calltrace like below:
 
-Changed the start id for idr allocation to "1" and the buffer id "0"
-is reserved for error validation. Introduced Sanity check to validate
-the descriptor, before processing the SKB.
+UBSAN: Undefined behaviour in fs/buffer.c:1709:35
+signed integer overflow:
+-9223372036854775808 - 1 cannot be represented in type 'long long int'
+CPU: 3 PID: 2523 Comm: syz-executor.0 Not tainted 4.19.90 #1
+Hardware name: linux,dummy-virt (DT)
+Call trace:
+ dump_backtrace+0x0/0x3f0 arch/arm64/kernel/time.c:78
+ show_stack+0x28/0x38 arch/arm64/kernel/traps.c:158
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0x170/0x1dc lib/dump_stack.c:118
+ ubsan_epilogue+0x18/0xb4 lib/ubsan.c:161
+ handle_overflow+0x188/0x1dc lib/ubsan.c:192
+ __ubsan_handle_sub_overflow+0x34/0x44 lib/ubsan.c:206
+ __block_write_full_page+0x94c/0xa20 fs/buffer.c:1709
+ block_write_full_page+0x1f0/0x280 fs/buffer.c:2934
+ blkdev_writepage+0x34/0x40 fs/block_dev.c:607
+ __writepage+0x68/0xe8 mm/page-writeback.c:2305
+ write_cache_pages+0x44c/0xc70 mm/page-writeback.c:2240
+ generic_writepages+0xdc/0x148 mm/page-writeback.c:2329
+ blkdev_writepages+0x2c/0x38 fs/block_dev.c:2114
+ do_writepages+0xd4/0x250 mm/page-writeback.c:2344
 
-Crash Signature :
+The reason for triggering this warning is __block_write_full_page()
+-> i_size_read(inode) - 1 overflow.
+inode->i_size is assigned in __nbd_ioctl() -> nbd_set_size() -> bytesize.
+We think it is necessary to limit the size of arg to prevent errors.
 
-Unable to handle kernel paging request at virtual address 3f004900
-PC points to "b15_dma_inv_range+0x30/0x50"
-LR points to "dma_cache_maint_page+0x8c/0x128".
-The Backtrace obtained is as follows:
-[<8031716c>] (b15_dma_inv_range) from [<80313a4c>] (dma_cache_maint_page+0x8c/0x128)
-[<80313a4c>] (dma_cache_maint_page) from [<80313b90>] (__dma_page_dev_to_cpu+0x28/0xcc)
-[<80313b90>] (__dma_page_dev_to_cpu) from [<7fb5dd68>] (ath11k_dp_process_rx+0x1e8/0x4a4 [ath11k])
-[<7fb5dd68>] (ath11k_dp_process_rx [ath11k]) from [<7fb53c20>] (ath11k_dp_service_srng+0xb0/0x2ac [ath11k])
-[<7fb53c20>] (ath11k_dp_service_srng [ath11k]) from [<7f67bba4>] (ath11k_pci_ext_grp_napi_poll+0x1c/0x78 [ath11k_pci])
-[<7f67bba4>] (ath11k_pci_ext_grp_napi_poll [ath11k_pci]) from [<807d5cf4>] (__napi_poll+0x28/0xb8)
-[<807d5cf4>] (__napi_poll) from [<807d5f28>] (net_rx_action+0xf0/0x280)
-[<807d5f28>] (net_rx_action) from [<80302148>] (__do_softirq+0xd0/0x280)
-[<80302148>] (__do_softirq) from [<80320408>] (irq_exit+0x74/0xd4)
-[<80320408>] (irq_exit) from [<803638a4>] (__handle_domain_irq+0x90/0xb4)
-[<803638a4>] (__handle_domain_irq) from [<805bedec>] (gic_handle_irq+0x58/0x90)
-[<805bedec>] (gic_handle_irq) from [<80301a78>] (__irq_svc+0x58/0x8c)
+Moreover, __nbd_ioctl() -> nbd_add_socket(), arg will be cast to int.
+Assuming the value of arg is 0x80000000000000001) (on a 64-bit machine),
+it will become 1 after the coercion, which will return unexpected results.
 
-Tested-on: IPQ8074 hw2.0 AHB WLAN.HK.2.7.0.1-01744-QCAHKSWPL_SILICONZ-1
+Fix it by adding checks to prevent passing in too large numbers.
 
-Signed-off-by: Nagarajan Maran <quic_nmaran@quicinc.com>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/20230403191533.28114-1-quic_nmaran@quicinc.com
+Signed-off-by: Zhong Jinghua <zhongjinghua@huawei.com>
+Reviewed-by: Yu Kuai <yukuai3@huawei.com>
+Reviewed-by: Josef Bacik <josef@toxicpanda.com>
+Link: https://lore.kernel.org/r/20230206145805.2645671-1-zhongjinghua@huawei.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath11k/dp_rx.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/block/nbd.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/net/wireless/ath/ath11k/dp_rx.c b/drivers/net/wireless/ath/ath11k/dp_rx.c
-index 3c64d33d0133b..357abd87d5491 100644
---- a/drivers/net/wireless/ath/ath11k/dp_rx.c
-+++ b/drivers/net/wireless/ath/ath11k/dp_rx.c
-@@ -354,10 +354,10 @@ int ath11k_dp_rxbufs_replenish(struct ath11k_base *ab, int mac_id,
- 			goto fail_free_skb;
+diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
+index ade8b839e4458..394355f12d4e0 100644
+--- a/drivers/block/nbd.c
++++ b/drivers/block/nbd.c
+@@ -326,6 +326,9 @@ static int nbd_set_size(struct nbd_device *nbd, loff_t bytesize,
+ 	if (blksize < 512 || blksize > PAGE_SIZE || !is_power_of_2(blksize))
+ 		return -EINVAL;
  
- 		spin_lock_bh(&rx_ring->idr_lock);
--		buf_id = idr_alloc(&rx_ring->bufs_idr, skb, 0,
--				   rx_ring->bufs_max * 3, GFP_ATOMIC);
-+		buf_id = idr_alloc(&rx_ring->bufs_idr, skb, 1,
-+				   (rx_ring->bufs_max * 3) + 1, GFP_ATOMIC);
- 		spin_unlock_bh(&rx_ring->idr_lock);
--		if (buf_id < 0)
-+		if (buf_id <= 0)
- 			goto fail_dma_unmap;
- 
- 		desc = ath11k_hal_srng_src_get_next_entry(ab, srng);
-@@ -2602,6 +2602,9 @@ int ath11k_dp_process_rx(struct ath11k_base *ab, int ring_id,
- 				   cookie);
- 		mac_id = FIELD_GET(DP_RXDMA_BUF_COOKIE_PDEV_ID, cookie);
- 
-+		if (unlikely(buf_id == 0))
-+			continue;
++	if (bytesize < 0)
++		return -EINVAL;
 +
- 		ar = ab->pdevs[mac_id].ar;
- 		rx_ring = &ar->dp.rx_refill_buf_ring;
- 		spin_lock_bh(&rx_ring->idr_lock);
+ 	nbd->config->bytesize = bytesize;
+ 	nbd->config->blksize_bits = __ffs(blksize);
+ 
+@@ -1048,6 +1051,9 @@ static int nbd_add_socket(struct nbd_device *nbd, unsigned long arg,
+ 	struct nbd_sock *nsock;
+ 	int err;
+ 
++	/* Arg will be cast to int, check it to avoid overflow */
++	if (arg > INT_MAX)
++		return -EINVAL;
+ 	sock = nbd_get_socket(nbd, arg, &err);
+ 	if (!sock)
+ 		return err;
 -- 
 2.39.2
 
