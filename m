@@ -2,69 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C08336F6B1A
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 14:23:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E97E6F6B1F
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 14:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbjEDMXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 08:23:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52916 "EHLO
+        id S230253AbjEDMZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 08:25:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbjEDMXJ (ORCPT
+        with ESMTP id S229606AbjEDMZU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 08:23:09 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2D95FE1
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 05:23:07 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-55a5e0f5b1aso3112517b3.0
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 05:23:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683202987; x=1685794987;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PFy1RBKM5Kcpg+NQ3BgZ5VLZiasvJE1KM8oJrv46mjo=;
-        b=k8NGS2RoUaPlaFGnbNnozITZIC7RFzujBKehrchANS16GXgN2iRN7A8pcae/DY5ArN
-         r98AVlVzAjzzwgwR7KQf80ueCnWJywuFiWLr5scCj3gK1yGJ5mLGpKlVlZF5ZeGS/M/x
-         F8qhdfp46a1EM/ksrOdvkVmxPw5QUC6vENxN6mWILgEL7K/BXLiNdL6WZ+b+kwHO6UqL
-         wdqWQCR6sE4Vv0P13PfheKzjD5G61R6EcrwIMBlOFkGk4Gudf7b3PySuxzc6bB0jO2Bx
-         vph91wx7L5lF6GEE4ek4SMI9xgSEhbyMZuRx7A64D+t1q/WFhjk5atGWdEWBlIDIQWM4
-         Y7Ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683202987; x=1685794987;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PFy1RBKM5Kcpg+NQ3BgZ5VLZiasvJE1KM8oJrv46mjo=;
-        b=atILP0Hm7CuB/SVxaIEbdwblEyEjUVNwzmoyxa+NSWIvZY0dmfPLCbxa8j/gzqNDgG
-         SGgZEdgPlDprtZcmd743Awf9qPsXal03qX9alqyPEDSz6yd4TrKn3xTzv/hn6eg9LWrq
-         1f3j3B8RX/rdcBCgS4Qz7R7ogVN9YrvKq+2Tt07cUa6ilX1wGWlYBmSZ2NnMNjeiWFde
-         bWrKGbrxuFXo8tLZkwETD2FzQDBXFy6gal3JsbYTbeiFfxWxjcmXO/51Lu0IsURsjaZz
-         lTMi1OQz2iR730MqXB9JkSeXh0Wb3VUcIbCWUu4mhFq/mELJ0lR9/LxnyD81xa8zXLcY
-         PWcg==
-X-Gm-Message-State: AC+VfDzDfHCg5QfZFo6nwGuo/U2eJITdf2GsBq+D9IIf1h4FQTZmRDys
-        NC+6E9of6N/wkR6wJ+1TPdvRgrdwXjH1+PeUCtuyVq1jSWNrpBc7
-X-Google-Smtp-Source: ACHHUZ7JAeBstDHq+3hR0npxfBMjYla1Q+/pPK5AHGlISOXcDEwBbF5CxCX3cGaKL2oYcROZ/tLej+iD9Pk4osSuIMQ=
-X-Received: by 2002:a25:1885:0:b0:b92:3f59:26e with SMTP id
- 127-20020a251885000000b00b923f59026emr21205278yby.41.1683202987075; Thu, 04
- May 2023 05:23:07 -0700 (PDT)
+        Thu, 4 May 2023 08:25:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 499745FFE
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 05:24:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683203074;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/P4j7QRgQZneWQhwJZYK9w8DqMxX3Ha033JwPfj4jik=;
+        b=ToDH+svfxX16z7zo7Qm4V/sQkeMn6Rby3mpDyqn2Lpgd23DiNOmS3ZHSOUohKIzcM2M4El
+        ZH9VeULZM9WOO7Twcp2ldbzKaMhuAiwIW9w23RiDIfR3BoNIlRP8E4nvPg+KAJFzPP/oKk
+        V7Q2VT1iyIFXxijImbyfo1Hdmnez1O0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-623-QwPATtQPNy60_s4Ol1YkBQ-1; Thu, 04 May 2023 08:24:31 -0400
+X-MC-Unique: QwPATtQPNy60_s4Ol1YkBQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1BDE4A0F380;
+        Thu,  4 May 2023 12:24:30 +0000 (UTC)
+Received: from fedora (unknown [10.22.9.13])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 5413D407D450;
+        Thu,  4 May 2023 12:24:22 +0000 (UTC)
+Date:   Thu, 4 May 2023 09:24:21 -0300
+From:   Wander Lairson Costa <wander@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Christian Brauner <brauner@kernel.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
+        <linux-perf-users@vger.kernel.org>, Hu Chunyu <chuhu@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v7 2/3] sched/task: Add the put_task_struct_atomic_safe()
+ function
+Message-ID: <marq2aq3jvgr6eiuqwq6q5eqcnw3inc3nv2iypcmvlyzcnwvoc@gksrj5pjyfzn>
+References: <20230425114307.36889-1-wander@redhat.com>
+ <20230425114307.36889-3-wander@redhat.com>
+ <20230504084229.GI1734100@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-References: <20230504060421.804168-1-andreas@kemnade.info>
-In-Reply-To: <20230504060421.804168-1-andreas@kemnade.info>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 4 May 2023 14:22:56 +0200
-Message-ID: <CACRpkdZ=ri8OxqwtLqQe--GGkNDdY7NSzyhzHLfcCv99togfJQ@mail.gmail.com>
-Subject: Re: [PATCH v3] gpiolib: fix allocation of mixed dynamic/static GPIOs
-To:     Andreas Kemnade <andreas@kemnade.info>
-Cc:     brgl@bgdev.pl, christophe.leroy@csgroup.eu,
-        andy.shevchenko@gmail.com, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tony Lindgren <tony@atomide.com>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        linux-omap@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230504084229.GI1734100@hirez.programming.kicks-ass.net>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,50 +94,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 4, 2023 at 8:04=E2=80=AFAM Andreas Kemnade <andreas@kemnade.inf=
-o> wrote:
+On Thu, May 04, 2023 at 10:42:29AM +0200, Peter Zijlstra wrote:
+> On Tue, Apr 25, 2023 at 08:43:02AM -0300, Wander Lairson Costa wrote:
+> > diff --git a/include/linux/sched/task.h b/include/linux/sched/task.h
+> > index b597b97b1f8f..cf774b83b2ec 100644
+> > --- a/include/linux/sched/task.h
+> > +++ b/include/linux/sched/task.h
+> > @@ -141,6 +141,41 @@ static inline void put_task_struct_many(struct task_struct *t, int nr)
+> >  
+> >  void put_task_struct_rcu_user(struct task_struct *task);
+> >  
+> > +extern void __delayed_put_task_struct(struct rcu_head *rhp);
+> > +
+> > +static inline void put_task_struct_atomic_safe(struct task_struct *task)
+> > +{
+> > +	if (IS_ENABLED(CONFIG_PREEMPT_RT)) {
+> > +		/*
+> > +		 * Decrement the refcount explicitly to avoid unnecessarily
+> > +		 * calling call_rcu.
+> > +		 */
+> > +		if (refcount_dec_and_test(&task->usage))
+> > +			/*
+> > +			 * under PREEMPT_RT, we can't call put_task_struct
+> > +			 * in atomic context because it will indirectly
+> > +			 * acquire sleeping locks.
+> > +			 * call_rcu() will schedule __delayed_put_task_struct()
+> > +			 * to be called in process context.
+> > +			 *
+> > +			 * __put_task_struct() is called when
+> > +			 * refcount_dec_and_test(&t->usage) succeeds.
+> > +			 *
+> > +			 * This means that it can't conflict with
+> > +			 * put_task_struct_rcu_user() which abuses ->rcu the same
+> > +			 * way; rcu_users has a reference so task->usage can't be
+> > +			 * zero after rcu_users 1 -> 0 transition.
+> > +			 *
+> > +			 * delayed_free_task() also uses ->rcu, but it is only called
+> > +			 * when it fails to fork a process. Therefore, there is no
+> > +			 * way it can conflict with put_task_struct().
+> > +			 */
+> > +			call_rcu(&task->rcu, __delayed_put_task_struct);
+> > +	} else {
+> > +		put_task_struct(task);
+> > +	}
+> > +}
+> 
+> Urgh.. that's plenty horrible. And I'm sure everybody plus kitchen sink
+> has already asked why can't we just rcu free the thing unconditionally.
+> 
+> Google only found me an earlier version of this same patch set, but I'm
+> sure we've had that discussion many times over the past several years.
+> The above and your follow up patch is just horrible.
+> 
+> It requires users to know the RT specific context and gives them no help
+> what so ever for !RT builds.
+> 
+> 
 
-> If static allocation and dynamic allocation GPIOs are present,
-> dynamic allocation pollutes the numberspace for static allocation,
-> causing static allocation to fail.
-> Enforce dynamic allocation above GPIO_DYNAMIC_BASE.
->
-> Seen on a GTA04 when omap-gpio (static) and twl-gpio (dynamic)
-> raced:
-> [some successful registrations of omap_gpio instances]
-> [    2.553833] twl4030_gpio twl4030-gpio: gpio (irq 145) chaining IRQs 16=
-1..178
-> [    2.561401] gpiochip_find_base: found new base at 160
-> [    2.564392] gpio gpiochip5: (twl4030): added GPIO chardev (254:5)
-> [    2.564544] gpio gpiochip5: registered GPIOs 160 to 177 on twl4030
-> [...]
-> [    2.692169] omap-gpmc 6e000000.gpmc: GPMC revision 5.0
-> [    2.697357] gpmc_mem_init: disabling cs 0 mapped at 0x0-0x1000000
-> [    2.703643] gpiochip_find_base: found new base at 178
-> [    2.704376] gpio gpiochip6: (omap-gpmc): added GPIO chardev (254:6)
-> [    2.704589] gpio gpiochip6: registered GPIOs 178 to 181 on omap-gpmc
-> [...]
-> [    2.840393] gpio gpiochip7: Static allocation of GPIO base is deprecat=
-ed, use dynamic allocation.
-> [    2.849365] gpio gpiochip7: (gpio-160-191): GPIO integer space overlap=
-, cannot add chip
-> [    2.857513] gpiochip_add_data_with_key: GPIOs 160..191 (gpio-160-191) =
-failed to register, -16
-> [    2.866149] omap_gpio 48310000.gpio: error -EBUSY: Could not register =
-gpio chip
->
-> On that device it is fixed invasively by
-> commit 92bf78b33b0b4 ("gpio: omap: use dynamic allocation of base")
-> but let's also fix that for devices where there is still
-> a mixture of static and dynamic allocation.
->
-> Fixes: 7b61212f2a07 ("gpiolib: Get rid of ARCH_NR_GPIOS")
-> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
-> Reviewed-by: <christophe.leroy@csgroup.eu>
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+No problem, I will send a new version doing it unconditionally.
 
-Looks good to me!
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-
-Yours,
-Linus Walleij
