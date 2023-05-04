@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 380EA6F758C
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:58:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C58616F758D
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:58:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbjEDT6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 15:58:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40066 "EHLO
+        id S232203AbjEDT6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 15:58:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232507AbjEDT4L (ORCPT
+        with ESMTP id S232572AbjEDT4S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 15:56:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB101CFFE;
-        Thu,  4 May 2023 12:49:27 -0700 (PDT)
+        Thu, 4 May 2023 15:56:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB5211611;
+        Thu,  4 May 2023 12:49:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7AAB56380F;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 142456380C;
+        Thu,  4 May 2023 19:49:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 583FEC433D2;
         Thu,  4 May 2023 19:49:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21DB9C433EF;
-        Thu,  4 May 2023 19:49:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683229748;
-        bh=gWcA2/j5JZGlFbqhbj+OujreXgVjsxiQubZ1yW1+vQY=;
+        s=k20201202; t=1683229750;
+        bh=hyLUe3XXTQX/auUSBvaDHtJg2IMytRMl22Up4TYKhcg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=msRSXQG4FgEoMA5lCNhbVxG4M9l/rUs5igqlKad4HWEj+sdB3zxeJ0592Bk51pkft
-         YZwuPkGzxlt95r5pSG4aUcNeVXHQhqD930M9DulzpOB5Z9Aks24GHhYsfx8lCiaF+M
-         Itlf0l9lDYr8gKH5UhWWNEaScS2po1qlr1SsvgF2i2j1zQSHzCq5RctDsyd2mBsqZV
-         OHmNYt1BPtY09ElMrmsIBTlBtUqdwuSppvbXeLiqpdPyrbnPgNGNtIrosKyW3Fq5jC
-         Gd5B5A/H9NuuqPuIkFOTrCP3w1oKTMsp4G8Azi3bkCvpQMzBELJK3ZwCPv5tj6ONwG
-         3wUB0sPFfhrDA==
+        b=KcDlYLeCRGHOmz5FIRMG7J9NRvalRXa8YdJWDlqNfdpnX7FQbp77uZaq5ZcfHSWBb
+         xoy+6T+G1DT8S5vAkiVXlN5npZoNFw6xE7uLfxHfBEjAijt/Mt/lbBCFCPAVs9lkJ5
+         oRNoHXGKgyRTyFejE7MfZeuoAOOmgjK0KRg15D3iIckbYtoWN7Qbpt8+O0Lf3eOB3s
+         xOG3dVwISQj+4k/3MLUh1K/4gFz2mXdp2cCyD29V23UTqpA0T8/r8K60cW/uk4o0rh
+         48aX068az853dpaBOe6JjXcgsJ3kYumRTQdnPGzsVaspowb224ACr+n/oyr4YmtUD9
+         4qbJ+9npOTQkA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hao Zeng <zenghao@kylinos.cn>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Sasha Levin <sashal@kernel.org>, ast@kernel.org,
+Cc:     Yafang <laoar.shao@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jiri Olsa <olsajiri@gmail.com>, Hao Luo <haoluo@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, daniel@iogearbox.net,
         andrii@kernel.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 19/30] samples/bpf: Fix fout leak in hbm's run_bpf_prog
-Date:   Thu,  4 May 2023 15:48:12 -0400
-Message-Id: <20230504194824.3808028-19-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 20/30] bpf: Add preempt_count_{sub,add} into btf id deny list
+Date:   Thu,  4 May 2023 15:48:13 -0400
+Message-Id: <20230504194824.3808028-20-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230504194824.3808028-1-sashal@kernel.org>
 References: <20230504194824.3808028-1-sashal@kernel.org>
@@ -48,8 +51,8 @@ MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,33 +61,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hao Zeng <zenghao@kylinos.cn>
+From: Yafang <laoar.shao@gmail.com>
 
-[ Upstream commit 23acb14af1914010dd0aae1bbb7fab28bf518b8e ]
+[ Upstream commit c11bd046485d7bf1ca200db0e7d0bdc4bafdd395 ]
 
-Fix fout being fopen'ed but then not subsequently fclose'd. In the affected
-branch, fout is otherwise going out of scope.
+The recursion check in __bpf_prog_enter* and __bpf_prog_exit*
+leave preempt_count_{sub,add} unprotected. When attaching trampoline to
+them we get panic as follows,
 
-Signed-off-by: Hao Zeng <zenghao@kylinos.cn>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/20230411084349.1999628-1-zenghao@kylinos.cn
+[  867.843050] BUG: TASK stack guard page was hit at 0000000009d325cf (stack is 0000000046a46a15..00000000537e7b28)
+[  867.843064] stack guard page: 0000 [#1] PREEMPT SMP NOPTI
+[  867.843067] CPU: 8 PID: 11009 Comm: trace Kdump: loaded Not tainted 6.2.0+ #4
+[  867.843100] Call Trace:
+[  867.843101]  <TASK>
+[  867.843104]  asm_exc_int3+0x3a/0x40
+[  867.843108] RIP: 0010:preempt_count_sub+0x1/0xa0
+[  867.843135]  __bpf_prog_enter_recur+0x17/0x90
+[  867.843148]  bpf_trampoline_6442468108_0+0x2e/0x1000
+[  867.843154]  ? preempt_count_sub+0x1/0xa0
+[  867.843157]  preempt_count_sub+0x5/0xa0
+[  867.843159]  ? migrate_enable+0xac/0xf0
+[  867.843164]  __bpf_prog_exit_recur+0x2d/0x40
+[  867.843168]  bpf_trampoline_6442468108_0+0x55/0x1000
+...
+[  867.843788]  preempt_count_sub+0x5/0xa0
+[  867.843793]  ? migrate_enable+0xac/0xf0
+[  867.843829]  __bpf_prog_exit_recur+0x2d/0x40
+[  867.843837] BUG: IRQ stack guard page was hit at 0000000099bd8228 (stack is 00000000b23e2bc4..000000006d95af35)
+[  867.843841] BUG: IRQ stack guard page was hit at 000000005ae07924 (stack is 00000000ffd69623..0000000014eb594c)
+[  867.843843] BUG: IRQ stack guard page was hit at 00000000028320f0 (stack is 00000000034b6438..0000000078d1bcec)
+[  867.843842]  bpf_trampoline_6442468108_0+0x55/0x1000
+...
+
+That is because in __bpf_prog_exit_recur, the preempt_count_{sub,add} are
+called after prog->active is decreased.
+
+Fixing this by adding these two functions into btf ids deny list.
+
+Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+Signed-off-by: Yafang <laoar.shao@gmail.com>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Jiri Olsa <olsajiri@gmail.com>
+Acked-by: Hao Luo <haoluo@google.com>
+Link: https://lore.kernel.org/r/20230413025248.79764-1-laoar.shao@gmail.com
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- samples/bpf/hbm.c | 1 +
- 1 file changed, 1 insertion(+)
+ kernel/bpf/verifier.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/samples/bpf/hbm.c b/samples/bpf/hbm.c
-index b0c18efe7928e..a271099603feb 100644
---- a/samples/bpf/hbm.c
-+++ b/samples/bpf/hbm.c
-@@ -308,6 +308,7 @@ static int run_bpf_prog(char *prog, int cg_id)
- 		fout = fopen(fname, "w");
- 		fprintf(fout, "id:%d\n", cg_id);
- 		fprintf(fout, "ERROR: Could not lookup queue_stats\n");
-+		fclose(fout);
- 	} else if (stats_flag && qstats.lastPacketTime >
- 		   qstats.firstPacketTime) {
- 		long long delta_us = (qstats.lastPacketTime -
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 1c95d97e7aa53..d37ecd76cc5a1 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -13632,6 +13632,10 @@ BTF_ID(func, migrate_enable)
+ #if !defined CONFIG_PREEMPT_RCU && !defined CONFIG_TINY_RCU
+ BTF_ID(func, rcu_read_unlock_strict)
+ #endif
++#if defined(CONFIG_DEBUG_PREEMPT) || defined(CONFIG_TRACE_PREEMPT_TOGGLE)
++BTF_ID(func, preempt_count_add)
++BTF_ID(func, preempt_count_sub)
++#endif
+ BTF_SET_END(btf_id_deny)
+ 
+ static int check_attach_btf_id(struct bpf_verifier_env *env)
 -- 
 2.39.2
 
