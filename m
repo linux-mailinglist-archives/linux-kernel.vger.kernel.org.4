@@ -2,188 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D5116F70D3
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 19:26:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD3816F70D9
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 19:28:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbjEDR02 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 4 May 2023 13:26:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56862 "EHLO
+        id S229761AbjEDR2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 13:28:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjEDR00 (ORCPT
+        with ESMTP id S229673AbjEDR2X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 13:26:26 -0400
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76AD1449C;
-        Thu,  4 May 2023 10:26:25 -0700 (PDT)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-55a44a2637bso10475227b3.2;
-        Thu, 04 May 2023 10:26:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683221184; x=1685813184;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3rnIRd9cvXtgtMC0ZOKTG1aj8pR1h+8CjVNfvekskoI=;
-        b=hhF/QmnrdYxeA532+SQ4SaTc8OPLBt+bHBiUo6zQkHpUEWjgfIg6IMIgE9RyBk1FvN
-         M6n2FvdPL5bMMhELOctbp1kwpBDEFiUEMeiSpPKT3D/+lswcxfbpu5U2VSZFl5vEb5tS
-         BiG8SzwywSpOm6aOn40ERN7S0gMLPY2raahVMBm0wNdIU/DBaXdqLQM/TlkFH29l73kV
-         i8mjIGJgygTJaSJHXmwnBGkqIplFteJ6/Slj+ErF6x3hk1n9fOKvi7CS2lT40gXHvjnZ
-         mAGrHv3ngCn8V5mTgEGTS+j38fCiAfYg51uZ1tpzdSfKIG/vUd0vRDSNPevC6xwCFvCK
-         2Fyw==
-X-Gm-Message-State: AC+VfDxldtCWJUhPhiVKWDUT+vnbM+bCsLMrhy5awNdAnSn4qHkGQ7FW
-        GA+xk0/o88ByqCM1nVzp3B3kXIdAc3uYOg==
-X-Google-Smtp-Source: ACHHUZ4vYY7SkCmBy6UlJO4C++XMn+OLhxvsmkJ6vShevVhBtUib6RTtkjKdp1tf3nf00T72WC+QOQ==
-X-Received: by 2002:a0d:d40f:0:b0:55a:5dce:aa19 with SMTP id w15-20020a0dd40f000000b0055a5dceaa19mr3323271ywd.51.1683221184444;
-        Thu, 04 May 2023 10:26:24 -0700 (PDT)
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
-        by smtp.gmail.com with ESMTPSA id z11-20020a81c20b000000b0055d6c72731esm703255ywc.144.2023.05.04.10.26.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 10:26:23 -0700 (PDT)
-Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-b9ef06cb784so1045906276.0;
-        Thu, 04 May 2023 10:26:23 -0700 (PDT)
-X-Received: by 2002:a25:dd07:0:b0:b8f:227a:b080 with SMTP id
- u7-20020a25dd07000000b00b8f227ab080mr724998ybg.18.1683221183312; Thu, 04 May
- 2023 10:26:23 -0700 (PDT)
+        Thu, 4 May 2023 13:28:23 -0400
+Received: from m-r1.th.seeweb.it (m-r1.th.seeweb.it [5.144.164.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1764ED7
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 10:28:20 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 1C82B20C3D;
+        Thu,  4 May 2023 19:28:15 +0200 (CEST)
+Date:   Thu, 4 May 2023 19:28:14 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, dmitry.baryshkov@linaro.org,
+        andersson@kernel.org, quic_abhinavk@quicinc.com,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 4/7] drm/msm/dpu: Introduce PINGPONG_NONE to
+ disconnect DSC from PINGPONG
+Message-ID: <j6fllkmd4e75hss6dwxdiiu4keocknt5zg2iu6jgj5nsfku6d6@5ec25ecgpvva>
+References: <1683218805-23419-1-git-send-email-quic_khsieh@quicinc.com>
+ <1683218805-23419-5-git-send-email-quic_khsieh@quicinc.com>
 MIME-Version: 1.0
-References: <20230503013608.2431726-1-nphamcs@gmail.com> <20230503013608.2431726-3-nphamcs@gmail.com>
-In-Reply-To: <20230503013608.2431726-3-nphamcs@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 4 May 2023 19:26:11 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWUtb_A-uhXrBg6kC9L2zbC_q3m8oCZoq80ZSJvk6mUAA@mail.gmail.com>
-Message-ID: <CAMuHMdWUtb_A-uhXrBg6kC9L2zbC_q3m8oCZoq80ZSJvk6mUAA@mail.gmail.com>
-Subject: Re: [PATCH v13 2/3] cachestat: implement cachestat syscall
-To:     Nhat Pham <nphamcs@gmail.com>
-Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, bfoster@redhat.com,
-        willy@infradead.org, linux-api@vger.kernel.org,
-        kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1683218805-23419-5-git-send-email-quic_khsieh@quicinc.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nhat,
+On 2023-05-04 09:46:42, Kuogee Hsieh wrote:
+> Disabling the crossbar mux between DSC and PINGPONG currently
+> requires a bogus enum dpu_pingpong value to be passed when calling
+> dsc_bind_pingpong_blk() with enable=false, even though the register
+> value written is independent of the current PINGPONG block.  Replace
+> that `bool enable` parameter with a new PINGPONG_NONE dpu_pingpong
+> flag that triggers the write of the "special" 0xF "crossbar
+> disabled" value to the register instead.
+> 
+> Changes in v4:
+> -- more details to commit text
+> 
+> Changes in v5:
+> -- rewording commit text suggested by Marijn
+> -- add DRM_DEBUG_KMS for DSC unbinding case
+> 
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-On Wed, May 3, 2023 at 3:38 AM Nhat Pham <nphamcs@gmail.com> wrote:
-> There is currently no good way to query the page cache state of large
-> file sets and directory trees. There is mincore(), but it scales poorly:
-> the kernel writes out a lot of bitmap data that userspace has to
-> aggregate, when the user really doesn not care about per-page
-> information in that case. The user also needs to mmap and unmap each
-> file as it goes along, which can be quite slow as well.
->
-> Some use cases where this information could come in handy:
->   * Allowing database to decide whether to perform an index scan or
->     direct table queries based on the in-memory cache state of the
->     index.
->   * Visibility into the writeback algorithm, for performance issues
->     diagnostic.
->   * Workload-aware writeback pacing: estimating IO fulfilled by page
->     cache (and IO to be done) within a range of a file, allowing for
->     more frequent syncing when and where there is IO capacity, and
->     batching when there is not.
->   * Computing memory usage of large files/directory trees, analogous to
->     the du tool for disk usage.
->
-> More information about these use cases could be found in the following
-> thread:
->
-> https://lore.kernel.org/lkml/20230315170934.GA97793@cmpxchg.org/
->
-> This patch implements a new syscall that queries cache state of a file
-> and summarizes the number of cached pages, number of dirty pages, number
-> of pages marked for writeback, number of (recently) evicted pages, etc.
-> in a given range. Currently, the syscall is only wired in for x86
-> architecture.
->
-> NAME
->     cachestat - query the page cache statistics of a file.
->
-> SYNOPSIS
->     #include <sys/mman.h>
->
->     struct cachestat_range {
->         __u64 off;
->         __u64 len;
->     };
->
->     struct cachestat {
->         __u64 nr_cache;
->         __u64 nr_dirty;
->         __u64 nr_writeback;
->         __u64 nr_evicted;
->         __u64 nr_recently_evicted;
->     };
->
->     int cachestat(unsigned int fd, struct cachestat_range *cstat_range,
->         struct cachestat *cstat, unsigned int flags);
->
-> DESCRIPTION
->     cachestat() queries the number of cached pages, number of dirty
->     pages, number of pages marked for writeback, number of evicted
->     pages, number of recently evicted pages, in the bytes range given by
->     `off` and `len`.
->
->     An evicted page is a page that is previously in the page cache but
->     has been evicted since. A page is recently evicted if its last
->     eviction was recent enough that its reentry to the cache would
->     indicate that it is actively being used by the system, and that
->     there is memory pressure on the system.
->
->     These values are returned in a cachestat struct, whose address is
->     given by the `cstat` argument.
->
->     The `off` and `len` arguments must be non-negative integers. If
->     `len` > 0, the queried range is [`off`, `off` + `len`]. If `len` ==
->     0, we will query in the range from `off` to the end of the file.
->
->     The `flags` argument is unused for now, but is included for future
->     extensibility. User should pass 0 (i.e no flag specified).
->
->     Currently, hugetlbfs is not supported.
->
->     Because the status of a page can change after cachestat() checks it
->     but before it returns to the application, the returned values may
->     contain stale information.
->
-> RETURN VALUE
->     On success, cachestat returns 0. On error, -1 is returned, and errno
->     is set to indicate the error.
->
-> ERRORS
->     EFAULT cstat or cstat_args points to an invalid address.
->
->     EINVAL invalid flags.
->
->     EBADF  invalid file descriptor.
->
->     EOPNOTSUPP file descriptor is of a hugetlbfs file
->
-> Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+Thanks for bearing with all the comments thus far!
+
+Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+
 > ---
->  arch/x86/entry/syscalls/syscall_32.tbl |   1 +
->  arch/x86/entry/syscalls/syscall_64.tbl |   1 +
-
-This should be wired up on each and every architecture.
-Currently we're getting
-
-    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-Wcpp]
-
-in linux-next for all the missing architectures.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c |  2 +-
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c  | 15 ++++++++-------
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h  |  1 -
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h |  3 ++-
+>  4 files changed, 11 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> index cf1de5d..ffa6f04 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> @@ -1850,7 +1850,7 @@ static void dpu_encoder_dsc_pipe_cfg(struct dpu_hw_dsc *hw_dsc,
+>  		hw_pp->ops.setup_dsc(hw_pp);
+>  
+>  	if (hw_dsc->ops.dsc_bind_pingpong_blk)
+> -		hw_dsc->ops.dsc_bind_pingpong_blk(hw_dsc, true, hw_pp->idx);
+> +		hw_dsc->ops.dsc_bind_pingpong_blk(hw_dsc, hw_pp->idx);
+>  
+>  	if (hw_pp->ops.enable_dsc)
+>  		hw_pp->ops.enable_dsc(hw_pp);
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c
+> index 4a6bbcc..47cb9f3 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c
+> @@ -157,7 +157,6 @@ static void dpu_hw_dsc_config_thresh(struct dpu_hw_dsc *hw_dsc,
+>  
+>  static void dpu_hw_dsc_bind_pingpong_blk(
+>  		struct dpu_hw_dsc *hw_dsc,
+> -		bool enable,
+>  		const enum dpu_pingpong pp)
+>  {
+>  	struct dpu_hw_blk_reg_map *c = &hw_dsc->hw;
+> @@ -166,14 +165,16 @@ static void dpu_hw_dsc_bind_pingpong_blk(
+>  
+>  	dsc_ctl_offset = DSC_CTL(hw_dsc->idx);
+>  
+> -	if (enable)
+> +	if (pp)
+>  		mux_cfg = (pp - PINGPONG_0) & 0x7;
+>  
+> -	DRM_DEBUG_KMS("%s dsc:%d %s pp:%d\n",
+> -			enable ? "Binding" : "Unbinding",
+> -			hw_dsc->idx - DSC_0,
+> -			enable ? "to" : "from",
+> -			pp - PINGPONG_0);
+> +	if (pp)
+> +		DRM_DEBUG_KMS("Binding dsc:%d to pp:%d\n",
+> +				hw_dsc->idx - DSC_0,
+> +				pp - PINGPONG_0);
+> +	else
+> +		DRM_DEBUG_KMS("Unbinding dsc:%d from any pp\n",
+> +				hw_dsc->idx - DSC_0);
+>  
+>  	DPU_REG_WRITE(c, dsc_ctl_offset, mux_cfg);
+>  }
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h
+> index 287ec5f..138080a 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h
+> @@ -44,7 +44,6 @@ struct dpu_hw_dsc_ops {
+>  				  struct drm_dsc_config *dsc);
+>  
+>  	void (*dsc_bind_pingpong_blk)(struct dpu_hw_dsc *hw_dsc,
+> -				  bool enable,
+>  				  enum dpu_pingpong pp);
+>  };
+>  
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h
+> index 1913a19..02a0f48 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h
+> @@ -191,7 +191,8 @@ enum dpu_dsc {
+>  };
+>  
+>  enum dpu_pingpong {
+> -	PINGPONG_0 = 1,
+> +	PINGPONG_NONE,
+> +	PINGPONG_0,
+>  	PINGPONG_1,
+>  	PINGPONG_2,
+>  	PINGPONG_3,
+> -- 
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+> 
