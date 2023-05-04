@@ -2,140 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8277B6F6322
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 05:08:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEDDC6F6342
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 05:18:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbjEDDIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 23:08:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36978 "EHLO
+        id S229610AbjEDDR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 23:17:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbjEDDIM (ORCPT
+        with ESMTP id S229502AbjEDDRv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 23:08:12 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F83C3;
-        Wed,  3 May 2023 20:08:11 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3442xwZ1019567;
-        Thu, 4 May 2023 03:07:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=uI1T/gjvgZvSlXrSpeWUM9w8CwsngVR+EPVD42tV2ps=;
- b=GMkVzfVN064DeJgyuyOdl+mVBBU5caC1femnDupiy573FEMq9gC4ZlS7h60z3oacFzDF
- L7b6IHOQwMxHkOzWwPjbkeLLDUPd07tWKnRszQfORHz+qBbr6cFapuXurwnFzLybjqyU
- xT8I8kkVg7W9PvM/dwpgl4FLrjzjzaCOXpntB4aul435WMyL6AYSph/y9GsPbdiHTBv4
- WvDvV8lvyE4l3f8vw+MaPxGEyR5P3n5xd2dLsQjmwmYq8BwtNZ+ZSWs1fLH1ZKbPw6gr
- tA/wUpl1baX+/m6aaRiZfiWb0yi6SCRgM/zQ3kvZ5zXKmHzAqS/4OU5zEh5fij3JGY8Y 1Q== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qc2aj06hf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 04 May 2023 03:07:57 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34437uB3014118
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 4 May 2023 03:07:56 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 3 May 2023 20:07:56 -0700
-Date:   Wed, 3 May 2023 20:07:55 -0700
-From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     Johan Hovold <johan@kernel.org>
-CC:     Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 6/7] arm64: dts: qcom: sc8280xp-crd: Add QMP to
- SuperSpeed graph
-Message-ID: <20230504030755.GD870858@hu-bjorande-lv.qualcomm.com>
-References: <20230425034010.3789376-1-quic_bjorande@quicinc.com>
- <20230425034010.3789376-7-quic_bjorande@quicinc.com>
- <ZFEAfv2GnGeblk-x@hovoldconsulting.com>
+        Wed, 3 May 2023 23:17:51 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B8D8E74
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 20:17:49 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so13100041a12.0
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 20:17:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1683170267; x=1685762267;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M5ozZPD1eRitxmLVpmwZ2WhYcThQgSne38lv/tIUIxw=;
+        b=SB/4/Sd6kYDjF1yVlzJvLkf+cs/1PkoYYMclUjirIMHzR4O8TbvUSYgpq/jeDniEGZ
+         kTl7EaLgTxdhC9V2YC+3FwMcAanTxY6eVykJpcHuZ/iUnkuTLYs/nTkbmRx+wYLzy8nK
+         inZJNYQoTScwhk0kOeQln5r4UKiOcwwTSNqUI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683170267; x=1685762267;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=M5ozZPD1eRitxmLVpmwZ2WhYcThQgSne38lv/tIUIxw=;
+        b=cY63sWF/I2MD9lXNWZzL/SW5nIEnET29F4qDMJRkt4Y6Y6R3KXNxWRoc+bFATQ2+PS
+         2bR9t9eUHMaudb+0ix0qaD69ocMpEzOKg47wHWNa7IdYkPREgPVYe/y5fPfY7+0QUbI2
+         ceFoTDYpePJNmdprzVKw1xpwa/wmtCJBVBW4IF42wkN1KMZT9DeykanmkGPhzaek+KdH
+         GEKnFNmFWFfDV33mYpbZpLiMSEVIJCTUFxvBODIOpoR/7THQHJrka6YyuL5vi6Ot61q3
+         U+20PEy+oQaTs0oUU+ibJWVnzAhXEiqv448MCKhEw+fMq80/6+dBBY5tXjTah2ns2bxQ
+         gTFQ==
+X-Gm-Message-State: AC+VfDzaZK2jpP2MULJl/MBwZwC+C+HG1i5dGN9TkF1r16dvcw7cEuZk
+        ByH7Wpgj20xkrP0yPnsie12ngEAbtMmhWX7ceO6hXW0r
+X-Google-Smtp-Source: ACHHUZ7psdIQwmIueNNICbTvFrmUAHPh7HfsZshvR4qAtWkSCJG6Dw8+80EFHVBGfDjkOTV1mzS1Kg==
+X-Received: by 2002:a17:907:25c1:b0:94e:b3a1:a3d5 with SMTP id ae1-20020a17090725c100b0094eb3a1a3d5mr3284434ejc.21.1683170267434;
+        Wed, 03 May 2023 20:17:47 -0700 (PDT)
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com. [209.85.208.50])
+        by smtp.gmail.com with ESMTPSA id me9-20020a170906aec900b0094a962da55dsm18011356ejb.195.2023.05.03.20.17.47
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 May 2023 20:17:47 -0700 (PDT)
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so13099971a12.0
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 20:17:47 -0700 (PDT)
+X-Received: by 2002:a17:906:6a07:b0:94f:6316:ce8d with SMTP id
+ qw7-20020a1709066a0700b0094f6316ce8dmr3770779ejc.34.1683169956655; Wed, 03
+ May 2023 20:12:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <ZFEAfv2GnGeblk-x@hovoldconsulting.com>
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: DY91MEa13XJqkST4oJcJLLYk76XFiUyE
-X-Proofpoint-GUID: DY91MEa13XJqkST4oJcJLLYk76XFiUyE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-03_16,2023-05-03_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
- adultscore=0 mlxlogscore=866 impostorscore=0 mlxscore=0 clxscore=1015
- lowpriorityscore=0 bulkscore=0 priorityscore=1501 phishscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2305040024
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230503211801.897735-1-acme@kernel.org> <CAHk-=wjY_3cBELRSLMpqCt6Eb71Qei2agfKSNsrr5KcpdEQCaA@mail.gmail.com>
+In-Reply-To: <CAHk-=wjY_3cBELRSLMpqCt6Eb71Qei2agfKSNsrr5KcpdEQCaA@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 3 May 2023 20:12:20 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgci+OTRacQZcvvapRcWkoiTFJ=VTe_JYtabGgZ9refmg@mail.gmail.com>
+Message-ID: <CAHk-=wgci+OTRacQZcvvapRcWkoiTFJ=VTe_JYtabGgZ9refmg@mail.gmail.com>
+Subject: Re: [GIT PULL] perf tools changes for v6.4
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Clark Williams <williams@redhat.com>,
+        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Changbin Du <changbin.du@huawei.com>,
+        Hao Luo <haoluo@google.com>, Ian Rogers <irogers@google.com>,
+        James Clark <james.clark@arm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Roman Lozko <lozko.roma@gmail.com>,
+        Stephane Eranian <eranian@google.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 02, 2023 at 02:22:22PM +0200, Johan Hovold wrote:
-> On Mon, Apr 24, 2023 at 08:40:09PM -0700, Bjorn Andersson wrote:
-> > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-[..]
-> >  &mdss0_dp0_out {
-> >  	data-lanes = <0 1>;
-> > -	remote-endpoint = <&pmic_glink_con0_ss>;
-> > +	remote-endpoint = <&usb_0_qmpphy_dp_in>;
-> >  };
-> 
-> It's a bit hard to follow what going on when using place holder nodes
-> from the dtsi like this (instead of describing all the ports directly in
-> the board dts). IIRC we went a bit back and forth over this earlier and
-> we already use this scheme for the display port controllers, so I guess
-> this is the price we pay for being consistent.
-> 
+On Wed, May 3, 2023 at 8:00=E2=80=AFPM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> I did consider it, but the end result doesn't even build, so I unpulled a=
+gain..
+>
+> I get some libbpf error, and I'm just not interested in trying to
+> debug it. This has clearly not been tested well enough to be merged.
 
-I agree, this is why I argued in favour of keeping the of_graphs
-together in a single node. But as long as we label things appropriately
-it's pretty ok - and the alternative would be yet another undocumented
-"rule".
+Side note: its' not even about testing.
 
-So let's stick with this...
+The error message makes it clear that this is garbage and should never
+be merged even if it were to compile.
 
-> > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-[..]
-> > +			ports {
-> > +				#address-cells = <1>;
-> > +				#size-cells = <0>;
-> > +
-> > +				port@0 {
-> > +					reg = <0>;
-> > +
-> > +					usb_0_qmpphy_out: endpoint {};
-> > +				};
-> > +
-> > +				port@1 {
-> > +					reg = <1>;
-> > +
-> > +					usb_0_qmpphy_dp_in: endpoint {};
-> > +				};
-> > +			};
-> >  		};
-> 
-> The binding describes three ports, where dp-in is port 2.
-> 
-> Perhaps you don't need to describe ss-in yet, but shouldn't the port
-> numbers match? Should some of these be described as required in the
-> binding?
-> 
+There is not a way in hell that it is correct that a 'perf' tool build
+should ever even look at the vmlinux binary to build.
 
-This should certainly be port@2, thanks for spotting.
+The fact that it does shows that something is seriously wrong in
+perf-tool land, and I will not be touching any pulls until that
+fundamental mistake is entirely gone.
 
-Regards,
-Bjorn
+The vmlinux image that is present in my tree (ie
+/home/torvalds/v2.6/linux/vmlinux) is a test build with an insane
+config. And the fact that the perf tool even looks at it is seriously
+broken.
+
+Whatever you are doing - stop it right now.
+
+               Linus
