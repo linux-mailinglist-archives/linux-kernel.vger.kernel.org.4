@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FFA76F73EB
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47DEC6F747D
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:51:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230453AbjEDTrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 15:47:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49780 "EHLO
+        id S231532AbjEDTvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 15:51:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230440AbjEDTqS (ORCPT
+        with ESMTP id S231310AbjEDTte (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 15:46:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25452A5E5;
-        Thu,  4 May 2023 12:44:33 -0700 (PDT)
+        Thu, 4 May 2023 15:49:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D0EF15EC5;
+        Thu,  4 May 2023 12:45:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CDFA61333;
-        Thu,  4 May 2023 19:44:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 592A3C4339E;
-        Thu,  4 May 2023 19:44:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3662863758;
+        Thu,  4 May 2023 19:44:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5511BC4339B;
+        Thu,  4 May 2023 19:44:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683229467;
-        bh=X3qFWalbQiiK17JNe0JwViADLJDpJyB7oVI1/UL/x2k=;
+        s=k20201202; t=1683229476;
+        bh=eVObgVYGaBUCFFfzDGHorAtyuHFPD6PGbq0l1GO/YfI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BkMBhvjX36lAhMWrKSPfXRa24OqKJIUlIYKQnpLpalWpOy3+/DX8hPfqNs65PCzwo
-         EamkUYOHjFGXZPvtWb6qilVDrVeILuLrd3ck3mFb1x1YOML/nJREz0ZVhi6BFZE3Er
-         ao+aFu5W0Cb/tF6bZ/MiSc3W3DtOhSU/81vAIA3uNrxxIXPw+1Ej52gTVd0sRXRM0I
-         U48Z8CCOQJLQzL22PS0SXOshNMClAUK/QNT3kuG4yHbTeHY9nYWCRyx6wJy0DClQGF
-         jKV4WOy7R5mMlncpWT7WFlCa7nsG1uAvxPHLKrtUEl1vSDaO5XvZksBoGX5o5Yt8LC
-         0gXJ3aZQ0KpHA==
+        b=gkXK6u4n4i90XgTSl89kyRQ+Eyre7wn7pu88TmMUAOT5cHvIadxdn4xDTE3Cx3oUo
+         3bx7Q8qMAQIzGT0TFMsiPZTyhuRZ7EWce28ptcBAitPwdrP3yBWgH/WNtnupw/Gfae
+         4hXUvSgS7docCQ8FYbIhJWrN1cut+10h2Dpr8ONPh15w3JYrxwxKFDbpjC6ufIbLnv
+         bAL/oUUH9PB5Jda6TCz6i9zrv2EgPf+aJ8Zl5+UkME+K2X97FNuoapQr00gQCZCh9w
+         ewt7+hlqPP3tQuwL9Sn1mQsiFfhp8w0r88iriqMUGStx96686gmK2nx9n7OADnnrms
+         mOGy6Vp+6YM+Q==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Hector Martin <marcan@marcan.st>,
@@ -41,15 +41,14 @@ Cc:     Hector Martin <marcan@marcan.st>,
         aspriel@gmail.com, franky.lin@broadcom.com,
         hante.meuleman@broadcom.com, davem@davemloft.net,
         edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        chi-hsien.lin@infineon.com, ian.lin@infineon.com,
-        wright.feng@cypress.com, ramesh.rangavittal@infineon.com,
-        wataru.gohda@cypress.com, prasanna.kerekoppa@cypress.com,
-        linux-wireless@vger.kernel.org,
+        jiac@cypress.com, marex@denx.de, alep@cypress.com,
+        rmk+kernel@armlinux.org.uk, wright.feng@cypress.com,
+        alsi@bang-olufsen.dk, linux-wireless@vger.kernel.org,
         brcm80211-dev-list.pdl@broadcom.com,
         SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.2 04/53] wifi: brcmfmac: cfg80211: Pass the PMK in binary instead of hex
-Date:   Thu,  4 May 2023 15:43:24 -0400
-Message-Id: <20230504194413.3806354-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.2 05/53] wifi: brcmfmac: pcie: Add IDs/properties for BCM4387
+Date:   Thu,  4 May 2023 15:43:25 -0400
+Message-Id: <20230504194413.3806354-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230504194413.3806354-1-sashal@kernel.org>
 References: <20230504194413.3806354-1-sashal@kernel.org>
@@ -57,8 +56,8 @@ MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,53 +68,100 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Hector Martin <marcan@marcan.st>
 
-[ Upstream commit 89b89e52153fda2733562776c7c9d9d3ebf8dd6d ]
+[ Upstream commit 117ace4014cce3fb78b40eb8028bb0f4fc37dd6f ]
 
-Apparently the hex passphrase mechanism does not work on newer
-chips/firmware (e.g. BCM4387). It seems there was a simple way of
-passing it in binary all along, so use that and avoid the hexification.
+This chip is present on Apple M1 Pro/Max (t600x) platforms:
 
-OpenBSD has been doing it like this from the beginning, so this should
-work on all chips.
-
-Also clear the structure before setting the PMK. This was leaking
-uninitialized stack contents to the device.
+* maldives   (apple,j314s): MacBook Pro (14-inch, M1 Pro, 2021)
+* maldives   (apple,j314c): MacBook Pro (14-inch, M1 Max, 2021)
+* madagascar (apple,j316s): MacBook Pro (16-inch, M1 Pro, 2021)
+* madagascar (apple,j316c): MacBook Pro (16-inch, M1 Max, 2021)
 
 Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 Reviewed-by: Arend van Spriel <arend.vanspriel@broadcom.com>
 Signed-off-by: Hector Martin <marcan@marcan.st>
 Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/20230214092423.15175-6-marcan@marcan.st
+Link: https://lore.kernel.org/r/20230214092423.15175-7-marcan@marcan.st
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../wireless/broadcom/brcm80211/brcmfmac/cfg80211.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+ drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c   | 2 ++
+ drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c   | 8 ++++++++
+ .../net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h | 2 ++
+ 3 files changed, 12 insertions(+)
 
-diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
-index b115902eb475e..8be887a495b5a 100644
---- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
-+++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
-@@ -1617,13 +1617,14 @@ static int brcmf_set_pmk(struct brcmf_if *ifp, const u8 *pmk_data, u16 pmk_len)
- {
- 	struct brcmf_pub *drvr = ifp->drvr;
- 	struct brcmf_wsec_pmk_le pmk;
--	int i, err;
-+	int err;
-+
-+	memset(&pmk, 0, sizeof(pmk));
+diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c
+index 8073f31be27d9..9cdbd8d438439 100644
+--- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c
++++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c
+@@ -737,6 +737,8 @@ static u32 brcmf_chip_tcm_rambase(struct brcmf_chip_priv *ci)
+ 		return 0x170000;
+ 	case BRCM_CC_4378_CHIP_ID:
+ 		return 0x352000;
++	case BRCM_CC_4387_CHIP_ID:
++		return 0x740000;
+ 	default:
+ 		brcmf_err("unknown chip: %s\n", ci->pub.name);
+ 		break;
+diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+index 2835ef4edb18f..d2dad5414f396 100644
+--- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
++++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+@@ -67,6 +67,7 @@ BRCMF_FW_DEF(4366C, "brcmfmac4366c-pcie");
+ BRCMF_FW_DEF(4371, "brcmfmac4371-pcie");
+ BRCMF_FW_CLM_DEF(4377B3, "brcmfmac4377b3-pcie");
+ BRCMF_FW_CLM_DEF(4378B1, "brcmfmac4378b1-pcie");
++BRCMF_FW_CLM_DEF(4387C2, "brcmfmac4387c2-pcie");
  
--	/* convert to firmware key format */
--	pmk.key_len = cpu_to_le16(pmk_len << 1);
--	pmk.flags = cpu_to_le16(BRCMF_WSEC_PASSPHRASE);
--	for (i = 0; i < pmk_len; i++)
--		snprintf(&pmk.key[2 * i], 3, "%02x", pmk_data[i]);
-+	/* pass pmk directly */
-+	pmk.key_len = cpu_to_le16(pmk_len);
-+	pmk.flags = cpu_to_le16(0);
-+	memcpy(pmk.key, pmk_data, pmk_len);
+ /* firmware config files */
+ MODULE_FIRMWARE(BRCMF_FW_DEFAULT_PATH "brcmfmac*-pcie.txt");
+@@ -101,6 +102,7 @@ static const struct brcmf_firmware_mapping brcmf_pcie_fwnames[] = {
+ 	BRCMF_FW_ENTRY(BRCM_CC_4371_CHIP_ID, 0xFFFFFFFF, 4371),
+ 	BRCMF_FW_ENTRY(BRCM_CC_4377_CHIP_ID, 0xFFFFFFFF, 4377B3), /* revision ID 4 */
+ 	BRCMF_FW_ENTRY(BRCM_CC_4378_CHIP_ID, 0xFFFFFFFF, 4378B1), /* revision ID 3 */
++	BRCMF_FW_ENTRY(BRCM_CC_4387_CHIP_ID, 0xFFFFFFFF, 4387C2), /* revision ID 7 */
+ };
  
- 	/* store psk in firmware */
- 	err = brcmf_fil_cmd_data_set(ifp, BRCMF_C_SET_WSEC_PMK,
+ #define BRCMF_PCIE_FW_UP_TIMEOUT		5000 /* msec */
+@@ -2048,6 +2050,11 @@ static int brcmf_pcie_read_otp(struct brcmf_pciedev_info *devinfo)
+ 		base = 0x1120;
+ 		words = 0x170;
+ 		break;
++	case BRCM_CC_4387_CHIP_ID:
++		coreid = BCMA_CORE_GCI;
++		base = 0x113c;
++		words = 0x170;
++		break;
+ 	default:
+ 		/* OTP not supported on this chip */
+ 		return 0;
+@@ -2662,6 +2669,7 @@ static const struct pci_device_id brcmf_pcie_devid_table[] = {
+ 	BRCMF_PCIE_DEVICE(BRCM_PCIE_43596_DEVICE_ID, CYW),
+ 	BRCMF_PCIE_DEVICE(BRCM_PCIE_4377_DEVICE_ID, WCC),
+ 	BRCMF_PCIE_DEVICE(BRCM_PCIE_4378_DEVICE_ID, WCC),
++	BRCMF_PCIE_DEVICE(BRCM_PCIE_4387_DEVICE_ID, WCC),
+ 
+ 	{ /* end: all zeroes */ }
+ };
+diff --git a/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h b/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h
+index 896615f579522..44684bf1b9acc 100644
+--- a/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h
++++ b/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h
+@@ -54,6 +54,7 @@
+ #define BRCM_CC_4371_CHIP_ID		0x4371
+ #define BRCM_CC_4377_CHIP_ID		0x4377
+ #define BRCM_CC_4378_CHIP_ID		0x4378
++#define BRCM_CC_4387_CHIP_ID		0x4387
+ #define CY_CC_4373_CHIP_ID		0x4373
+ #define CY_CC_43012_CHIP_ID		43012
+ #define CY_CC_43439_CHIP_ID		43439
+@@ -95,6 +96,7 @@
+ #define BRCM_PCIE_43596_DEVICE_ID	0x4415
+ #define BRCM_PCIE_4377_DEVICE_ID	0x4488
+ #define BRCM_PCIE_4378_DEVICE_ID	0x4425
++#define BRCM_PCIE_4387_DEVICE_ID	0x4433
+ 
+ /* brcmsmac IDs */
+ #define BCM4313_D11N2G_ID	0x4727	/* 4313 802.11n 2.4G device */
 -- 
 2.39.2
 
