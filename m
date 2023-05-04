@@ -2,93 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BB016F7834
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 23:33:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8106C6F77FA
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 23:23:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230019AbjEDVc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 17:32:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36248 "EHLO
+        id S229886AbjEDVXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 17:23:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbjEDVc4 (ORCPT
+        with ESMTP id S229522AbjEDVW5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 17:32:56 -0400
+        Thu, 4 May 2023 17:22:57 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC0D14345;
-        Thu,  4 May 2023 14:32:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E0A113C3A;
+        Thu,  4 May 2023 14:22:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F4F762EB8;
-        Thu,  4 May 2023 19:45:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C62DAC433A7;
-        Thu,  4 May 2023 19:45:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CE2D26378D;
+        Thu,  4 May 2023 19:48:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBA52C433D2;
+        Thu,  4 May 2023 19:47:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683229538;
-        bh=6Thi17hL8roMyNQJzudQ2qZmGi6oGj6AasmEqj7NteU=;
+        s=k20201202; t=1683229681;
+        bh=RsNOV0EPmfZckX+21rdsSrb+cHo2tv2tYFdzs7k/Z+4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Nkw6QoSA5Ex2emBlF+NiWmQdrAlmrUaR2eMW554h9Cj/o6ojB4/upMyGnRPHhMrMn
-         BYLrupcprfEK/HU+2xNxfJpOXMITHwmEuhtsDThE3bEK79lcOSho3NnqqX6JrOZlzH
-         KBl/2Sv+ZY6dlNmqEUkz85Th1+In75OtbGCWbSOvtvRPDf5f7yK3O2U1uPZg6DA2QU
-         BlL1Al58XkGhbpsZJXTLaB+a4k83EOW+WOoJt2zrI931zrm3vzTaQkfEqZ30+c+Hkd
-         BTpT3syeCbvvu+rVKgNo9/oOsHP0oPcGWv54a/cz+XG0TuCDMWYduRUs9Sj2SNdapI
-         Bjt/4C21Ypu8A==
+        b=AUFDeCF/mNtrJ77EY403tBjx6JITkVH9ZyoGp/KwBHBdNs9Nk8XR56z6H2nknCPzV
+         ZglSpyrzzI3jzMhiDrwEzZyhLYKIcVFgY7EPsjjuT2vV+si73n2fm1aBkmeOnkvYkk
+         5lutBZ3LZYxuc6D6QO4NTR+wteZA6++62ikjpHDI8ntVws7cW3uWS/5wSnK/t2b1wq
+         x2hnm5mGOhel+QVnwJ+k87g7HqyEBM5vL9DwSz1xWBZk34J0580GyKH2SQx534Pxg0
+         wTQc24swg1+udZktE0nZfQqV5EN72OCU42pqqx+vQyV6gvLR8AXvweQY0o+04tpjiP
+         Zy6GsFYQxoXeQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mukesh Sisodiya <mukesh.sisodiya@intel.com>,
-        Gregory Greenman <gregory.greenman@intel.com>,
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
         Johannes Berg <johannes.berg@intel.com>,
-        Sasha Levin <sashal@kernel.org>, kvalo@kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, golan.ben.ami@intel.com, daniel.gabay@intel.com,
-        yaara.baruch@intel.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.2 32/53] wifi: iwlwifi: add a new PCI device ID for BZ device
-Date:   Thu,  4 May 2023 15:43:52 -0400
-Message-Id: <20230504194413.3806354-32-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, gregory.greenman@intel.com,
+        kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, benjamin.berg@intel.com,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 36/49] wifi: iwlwifi: dvm: Fix memcpy: detected field-spanning write backtrace
+Date:   Thu,  4 May 2023 15:46:13 -0400
+Message-Id: <20230504194626.3807438-36-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230504194413.3806354-1-sashal@kernel.org>
-References: <20230504194413.3806354-1-sashal@kernel.org>
+In-Reply-To: <20230504194626.3807438-1-sashal@kernel.org>
+References: <20230504194626.3807438-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mukesh Sisodiya <mukesh.sisodiya@intel.com>
+From: Hans de Goede <hdegoede@redhat.com>
 
-[ Upstream commit c30a2a64788b3d617a9c5d96adb76c68b0862e5f ]
+[ Upstream commit ef16799640865f937719f0771c93be5dca18adc6 ]
 
-Add support for a new PCI device ID 0x272b once registering with PCIe.
+A received TKIP key may be up to 32 bytes because it may contain
+MIC rx/tx keys too. These are not used by iwl and copying these
+over overflows the iwl_keyinfo.key field.
 
-Signed-off-by: Mukesh Sisodiya <mukesh.sisodiya@intel.com>
-Signed-off-by: Gregory Greenman <gregory.greenman@intel.com>
-Link: https://lore.kernel.org/r/20230414130637.56342664110d.I5aa6f2858fdcf69fdea4f1a873115a48bd43764e@changeid
+Add a check to not copy more data to iwl_keyinfo.key then will fit.
+
+This fixes backtraces like this one:
+
+ memcpy: detected field-spanning write (size 32) of single field "sta_cmd.key.key" at drivers/net/wireless/intel/iwlwifi/dvm/sta.c:1103 (size 16)
+ WARNING: CPU: 1 PID: 946 at drivers/net/wireless/intel/iwlwifi/dvm/sta.c:1103 iwlagn_send_sta_key+0x375/0x390 [iwldvm]
+ <snip>
+ Hardware name: Dell Inc. Latitude E6430/0H3MT5, BIOS A21 05/08/2017
+ RIP: 0010:iwlagn_send_sta_key+0x375/0x390 [iwldvm]
+ <snip>
+ Call Trace:
+  <TASK>
+  iwl_set_dynamic_key+0x1f0/0x220 [iwldvm]
+  iwlagn_mac_set_key+0x1e4/0x280 [iwldvm]
+  drv_set_key+0xa4/0x1b0 [mac80211]
+  ieee80211_key_enable_hw_accel+0xa8/0x2d0 [mac80211]
+  ieee80211_key_replace+0x22d/0x8e0 [mac80211]
+ <snip>
+
+Link: https://www.alionet.org/index.php?topic=1469.0
+Link: https://lore.kernel.org/linux-wireless/20230218191056.never.374-kees@kernel.org/
+Link: https://lore.kernel.org/linux-wireless/68760035-7f75-1b23-e355-bfb758a87d83@redhat.com/
+Cc: Kees Cook <keescook@chromium.org>
+Suggested-by: Johannes Berg <johannes@sipsolutions.net>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/intel/iwlwifi/pcie/drv.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/wireless/intel/iwlwifi/dvm/sta.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/pcie/drv.c b/drivers/net/wireless/intel/iwlwifi/pcie/drv.c
-index 49e8a27ecce54..26e5ef944ecb9 100644
---- a/drivers/net/wireless/intel/iwlwifi/pcie/drv.c
-+++ b/drivers/net/wireless/intel/iwlwifi/pcie/drv.c
-@@ -504,6 +504,7 @@ static const struct pci_device_id iwl_hw_card_ids[] = {
+diff --git a/drivers/net/wireless/intel/iwlwifi/dvm/sta.c b/drivers/net/wireless/intel/iwlwifi/dvm/sta.c
+index cef43cf80620a..8b01ab986cb13 100644
+--- a/drivers/net/wireless/intel/iwlwifi/dvm/sta.c
++++ b/drivers/net/wireless/intel/iwlwifi/dvm/sta.c
+@@ -1081,6 +1081,7 @@ static int iwlagn_send_sta_key(struct iwl_priv *priv,
+ {
+ 	__le16 key_flags;
+ 	struct iwl_addsta_cmd sta_cmd;
++	size_t to_copy;
+ 	int i;
  
- /* Bz devices */
- 	{IWL_PCI_DEVICE(0x2727, PCI_ANY_ID, iwl_bz_trans_cfg)},
-+	{IWL_PCI_DEVICE(0x272b, PCI_ANY_ID, iwl_bz_trans_cfg)},
- 	{IWL_PCI_DEVICE(0xA840, PCI_ANY_ID, iwl_bz_trans_cfg)},
- 	{IWL_PCI_DEVICE(0x7740, PCI_ANY_ID, iwl_bz_trans_cfg)},
- #endif /* CONFIG_IWLMVM */
+ 	spin_lock_bh(&priv->sta_lock);
+@@ -1100,7 +1101,9 @@ static int iwlagn_send_sta_key(struct iwl_priv *priv,
+ 		sta_cmd.key.tkip_rx_tsc_byte2 = tkip_iv32;
+ 		for (i = 0; i < 5; i++)
+ 			sta_cmd.key.tkip_rx_ttak[i] = cpu_to_le16(tkip_p1k[i]);
+-		memcpy(sta_cmd.key.key, keyconf->key, keyconf->keylen);
++		/* keyconf may contain MIC rx/tx keys which iwl does not use */
++		to_copy = min_t(size_t, sizeof(sta_cmd.key.key), keyconf->keylen);
++		memcpy(sta_cmd.key.key, keyconf->key, to_copy);
+ 		break;
+ 	case WLAN_CIPHER_SUITE_WEP104:
+ 		key_flags |= STA_KEY_FLG_KEY_SIZE_MSK;
 -- 
 2.39.2
 
