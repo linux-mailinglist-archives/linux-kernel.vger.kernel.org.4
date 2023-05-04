@@ -2,178 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 168266F77E8
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 23:17:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEF436F77ED
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 23:18:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbjEDVRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 17:17:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50542 "EHLO
+        id S229812AbjEDVSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 17:18:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbjEDVRi (ORCPT
+        with ESMTP id S229522AbjEDVSd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 17:17:38 -0400
-Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [IPv6:2001:4b7a:2000:18::163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC391386B
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 14:17:36 -0700 (PDT)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Thu, 4 May 2023 17:18:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CD213C12;
+        Thu,  4 May 2023 14:18:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 820BA2128F;
-        Thu,  4 May 2023 23:17:33 +0200 (CEST)
-Date:   Thu, 4 May 2023 23:17:32 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Jessica Zhang <quic_jesszhan@quicinc.com>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] drm/msm/dsi: Adjust pclk rate for compression
-Message-ID: <hetttr6ug6sbt3g3fwmuqkx5f7betgxtzyuaovo62h5ams3th7@7xbztyqgyrz5>
-References: <20230405-add-dsc-support-v1-0-6bc6f03ae735@quicinc.com>
- <20230405-add-dsc-support-v1-1-6bc6f03ae735@quicinc.com>
- <lq6le3pxya3op2nke53uniusr3chtkmqdfrc7wkv4tylqb2fio@esjoh4f63g5q>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A82466120E;
+        Thu,  4 May 2023 21:18:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BC7AC433D2;
+        Thu,  4 May 2023 21:18:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683235110;
+        bh=TxYeoSXKxOHRLPFJsvXYPhN8fWjJV7GYIjZiQWu6XWc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EpQHRsKjHtgCM7M9XrBRxB099JjBNG22++T1N66aaJozyGrUty3HE/XNKb41aSMda
+         C+LrH6YvgIyhYC6fR8SMmr8LocvmhCj/9PgqcC3hwy6a1YgPooHZaIsiPHCTFyn16Y
+         ESoUj9GLawnXJXjg7kPONM/kD3h7Ja/V/9+gMEpKFo2SjV9WGWaAUXdem0i7vqsq4+
+         oJdiOwMCury/ESM3Ljr3dBSL4ecchhjYWL0zYb/jgNTOXMgsQ3P1Rt+FcaSpFIFIcO
+         +8zi2Kzw4qR7uRPddc0dsUtFUXG4/Cv/jASODrH0Q1eJFQICzZm0k9ysvNF0DVoPJT
+         EGyKESyfi1okQ==
+Date:   Thu, 4 May 2023 14:18:27 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Miguel Ojeda <ojeda@kernel.org>, Bill Wendling <morbo@google.com>,
+        Qing Zhao <qing.zhao@oracle.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] Compiler Attributes: Add __counted_by macro
+Message-ID: <20230504211827.GA1666363@dev-arch.thelio-3990X>
+References: <20230504181636.never.222-kees@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <lq6le3pxya3op2nke53uniusr3chtkmqdfrc7wkv4tylqb2fio@esjoh4f63g5q>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230504181636.never.222-kees@kernel.org>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-04 22:33:17, Marijn Suijten wrote:
-> Title suggestion: use the wording "reduce pclk rate" :)
+On Thu, May 04, 2023 at 11:16:40AM -0700, Kees Cook wrote:
+> In an effort to annotate all flexible array members with their run-time
+> size information, the "element_count" attribute is being introduced by
+> Clang[1] and GCC[2] in future releases. This annotation will provide
+> the CONFIG_UBSAN_BOUNDS and CONFIG_FORTIFY_SOURCE features the ability
+> to perform run-time bounds checking on otherwise unknown-size flexible
+> arrays.
 > 
-> (Eventually "when DSC is enabled", instead of "for compression")
+> Even though the attribute is under development, we can start the
+> annotation process in the kernel. This requires defining a macro for
+> it, even if we have to change the name of the actual attribute later.
+> Since it is likely that this attribute may change its name to "counted_by"
+> in the future (to better align with a future total bytes "sized_by"
+> attribute), name the wrapper macro "__counted_by", which also reads more
+> clearly (and concisely) in structure definitions.
 > 
-> On 2023-05-02 18:19:12, Jessica Zhang wrote:
-> > Divide the pclk rate by the compression ratio when DSC is enabled
-> > 
-> > Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
+> [1] https://reviews.llvm.org/D148381
+> [2] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108896
 > 
-> Thank you so much for sending this.   The compression ratio was applied
-> to hdisplay
+> Cc: Miguel Ojeda <ojeda@kernel.org>
+> Cc: Bill Wendling <morbo@google.com>
+> Cc: Qing Zhao <qing.zhao@oracle.com>
+> Cc: Gustavo A. R. Silva <gustavoars@kernel.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Tom Rix <trix@redhat.com>
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-In hindsight, on the note of hdisplay, dsi_timing_setup() actually only
-divides the visual portion - that is hdisplay out of htotal - without
-affecting the back and front porch.
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-Since this clock inside the mode is based on the full htotal * vtotal *
-..., should we compensate for that and only divide the visual portion of
-the clock signal by 3?  Otherwise we might not have enough clockticks to
-perform the front and back porch (even though CMD mode doesn't really
-have porches, I have yet to properly understand that part of the
-signal).
+I agree with Miguel's comment formatting and content suggestions. Thanks
+for the links, they look good. If we have to update the name of the
+attribute later, it is not the end of the world, as getting the coversion
+started at this phase will make the roll out quicker.
 
-- Marijn
-
-> , but not the clocks yet, and with this patch I get a massive
-> reduction in clock speeds on the Xperia XZ3, without regressions nor
-> affecting performance/fps:
+> ---
+>  include/linux/compiler_attributes.h | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
 > 
->           gcc_sys_noc_cpuss_ahb_clk       1        1        0    19200000          0     0  50000         Y
->           gcc_cpuss_ahb_clk           1        1        0    19200000          0     0  50000         Y
->     bi_tcxo                           6        6        0    19200000          0     0  50000         Y
->        dsi0vco_clk                    1        1        0  [-1873793994-]{+1249195898+}          0     0  50000         Y
->           dsi0_pll_out_div_clk        1        1        0   [-1873793994-]{+624597949+}          0     0  50000         Y
->              dsi0_pll_post_out_div_clk       0        0        0   [-468448498-]{+156149487+}          0     0  50000         Y
->              dsi0_pll_bit_clk         2        2        0   [-1873793994-]{+624597949+}          0     0  50000         Y
->                 dsi0_pclk_mux         1        1        0   [-1873793994-]{+624597949+}          0     0  50000         Y
->                    dsi0_phy_pll_out_dsiclk       1        1        0   [-312298999-]{+104099659+}          0     0  50000         Y
->                       disp_cc_mdss_pclk0_clk_src       1        1        0   [-312298999-]{+104099659+}          0     0  50000         Y
->                          disp_cc_mdss_pclk0_clk       1        1        0   [-312298999-]{+104099659+}          0     0  50000         Y
->                 dsi0_pll_by_2_bit_clk       0        0        0   [-936896997-]{+312298974+}          0     0  50000         Y
->                 dsi0_phy_pll_out_byteclk       1        1        0    [-234224249-]{+78074743+}          0     0  50000         Y
->                    disp_cc_mdss_byte0_clk_src       2        2        0    [-234224249-]{+78074743+}          0     0  50000         Y
->                       disp_cc_mdss_byte0_div_clk_src       1        1        0    [-117112125-]{+39037372+}          0     0  50000         Y
->                          disp_cc_mdss_byte0_intf_clk       1        1        0    [-117112125-]{+39037372+}          0     0  50000         Y
->                       disp_cc_mdss_byte0_clk       1        1        0    [-234224249-]{+78074743+}          0     0  50000         Y
->        gpu_cc_pll1                    0        0        0   500000097          0     0  50000         N
->        disp_cc_mdss_dp_pixel_clk_src       0        0        0    19200000          0     0  50000         N
->           disp_cc_mdss_dp_pixel_clk       0        0        0    19200000          0     0  50000         N
+> diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
+> index e659cb6fded3..9d63fe2024d5 100644
+> --- a/include/linux/compiler_attributes.h
+> +++ b/include/linux/compiler_attributes.h
+> @@ -123,6 +123,18 @@
+>  # define __designated_init
+>  #endif
+>  
+> +/*
+> + * Optional: future support coming in clang 17 and gcc 14
+> + *
+> + *   gcc: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108896
+> + * clang: https://reviews.llvm.org/D148381
+> + */
+> +#if __has_attribute(__element_count__)
+> +# define __counted_by(member)		__attribute__((__element_count__(member)))
+> +#else
+> +# define __counted_by(member)
+> +#endif
+> +
+>  /*
+>   * Optional: only supported since clang >= 14.0
+>   *
+> -- 
+> 2.34.1
 > 
-> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
-> 
-> > ---
-> >  drivers/gpu/drm/msm/dsi/dsi_host.c | 14 ++++++++++----
-> >  1 file changed, 10 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> > index 43a5ec33eee8..35c69dbe5f6f 100644
-> > --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
-> > +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> > @@ -561,7 +561,8 @@ void dsi_link_clk_disable_v2(struct msm_dsi_host *msm_host)
-> >  	clk_disable_unprepare(msm_host->byte_clk);
-> >  }
-> >  
-> > -static unsigned long dsi_get_pclk_rate(const struct drm_display_mode *mode, bool is_bonded_dsi)
-> > +static unsigned long dsi_get_pclk_rate(const struct drm_display_mode *mode,
-> 
-> It is a bit unfortunate that this function is called so often with the
-> same parameters, doing the same calculation over and over.
-> 
-> > +		struct drm_dsc_config *dsc, bool is_bonded_dsi)
-> >  {
-> >  	unsigned long pclk_rate;
-> >  
-> > @@ -576,6 +577,11 @@ static unsigned long dsi_get_pclk_rate(const struct drm_display_mode *mode, bool
-> >  	if (is_bonded_dsi)
-> >  		pclk_rate /= 2;
-> >  
-> > +	/* If DSC is enabled, divide pclk by compression ratio */
-> > +	if (dsc)
-> > +		pclk_rate = DIV_ROUND_UP(pclk_rate,
-> > +				dsc->bits_per_component * 3 / msm_dsc_get_bpp_int(dsc));
-> 
-> Don't forget to mention that this series depends on the DSC helpers.  I
-> don't think the linked DSC 1.2 series depends on it (at least it doesn't
-> mention it):
-> 
-> https://lore.kernel.org/linux-arm-msm/20230329-rfc-msm-dsc-helper-v6-2-cb7f59f0f7fb@quicinc.com/
-> 
-> - Marijn
-> 
-> > +
-> >  	return pclk_rate;
-> >  }
-> >  
-> > @@ -585,7 +591,7 @@ unsigned long dsi_byte_clk_get_rate(struct mipi_dsi_host *host, bool is_bonded_d
-> >  	struct msm_dsi_host *msm_host = to_msm_dsi_host(host);
-> >  	u8 lanes = msm_host->lanes;
-> >  	u32 bpp = dsi_get_bpp(msm_host->format);
-> > -	unsigned long pclk_rate = dsi_get_pclk_rate(mode, is_bonded_dsi);
-> > +	unsigned long pclk_rate = dsi_get_pclk_rate(mode, msm_host->dsc, is_bonded_dsi);
-> >  	u64 pclk_bpp = (u64)pclk_rate * bpp;
-> >  
-> >  	if (lanes == 0) {
-> > @@ -604,7 +610,7 @@ unsigned long dsi_byte_clk_get_rate(struct mipi_dsi_host *host, bool is_bonded_d
-> >  
-> >  static void dsi_calc_pclk(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
-> >  {
-> > -	msm_host->pixel_clk_rate = dsi_get_pclk_rate(msm_host->mode, is_bonded_dsi);
-> > +	msm_host->pixel_clk_rate = dsi_get_pclk_rate(msm_host->mode, msm_host->dsc, is_bonded_dsi);
-> >  	msm_host->byte_clk_rate = dsi_byte_clk_get_rate(&msm_host->base, is_bonded_dsi,
-> >  							msm_host->mode);
-> >  
-> > @@ -634,7 +640,7 @@ int dsi_calc_clk_rate_v2(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
-> >  
-> >  	dsi_calc_pclk(msm_host, is_bonded_dsi);
-> >  
-> > -	pclk_bpp = (u64)dsi_get_pclk_rate(msm_host->mode, is_bonded_dsi) * bpp;
-> > +	pclk_bpp = (u64)dsi_get_pclk_rate(msm_host->mode, msm_host->dsc, is_bonded_dsi) * bpp;
-> >  	do_div(pclk_bpp, 8);
-> >  	msm_host->src_clk_rate = pclk_bpp;
-> >  
-> > 
-> > -- 
-> > 2.40.1
-> > 
