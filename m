@@ -2,116 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 511426F6805
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 11:10:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8FDC6F680C
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 11:12:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbjEDJK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 05:10:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35260 "EHLO
+        id S230169AbjEDJM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 05:12:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbjEDJKy (ORCPT
+        with ESMTP id S230021AbjEDJM1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 05:10:54 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0D8AC;
-        Thu,  4 May 2023 02:10:53 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id DC470320093C;
-        Thu,  4 May 2023 05:10:47 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Thu, 04 May 2023 05:10:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1683191447; x=1683277847; bh=PJ
-        +MHi8BKY86SWPKwEBcexmDQBI0jwalX3S/C8DpKjY=; b=OkJR1vdZgMQkDeebk3
-        C3Df+sYUG5IKzDgGWDzP54zncGqO5dMLxISsW9MRjxlY5mHfYkUosVFISdiAJC41
-        ptg80omXiJjpzbcGf/6DhvjIn1eqC1+wvpu/5OT2tQWg8AYOOvRWmmDVXe5CIyXZ
-        oMVx1/RfSd1AItwWlg09Ew7QN1J4tXCFvBSfBWwDfZsZz9HiZEPjApUSpmc67qn5
-        VKU3dzluckNiasW3k8s8dB0zCyAzpzG1biELtAfSYiV4fhem/mrTc8/qHqoTsK1/
-        WwXwanX5JmQ95ShHqkQ+1+pCiJtTw4ra0fpqregHs8hgGZFfuqpaXbrsJT1ZdiO1
-        EpQA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1683191447; x=1683277847; bh=PJ+MHi8BKY86S
-        WPKwEBcexmDQBI0jwalX3S/C8DpKjY=; b=Np0mbT/tXdr6/OFl02CaRMdgq4uO3
-        5QiemDuzsd15WsbMN7h8d01YHCLQ7nl+fK/OgrKX1t+/g0YX3WjFOaF3ZXyIR+sC
-        JaESqTvBVva9CyxXaNLmmuvCoVHN8icnPWd9T69BpaNEupv4+AsUVLG/mDdspWnz
-        iWHSGMWirMO+LxTBASSccT5yHfQ+68t6zOBcHWLBbogN39+gwFUhh+4TnwTrGdzu
-        RLKH+hYcf9rZn6rVa8ItUCosIV9b0ZS6I5Gs5g3fwNv2eCn/V3YRgstZXgRft1LF
-        NQR4+V+AGasKMB3MI7ALGaHbpAb6xhCKYc1l2akYUSNoRkqhDn3n3JpPg==
-X-ME-Sender: <xms:l3ZTZGSUP_KJdhHAs_6tNDXC0UWcI-pbdVarqWMPfoosqu5Y6CVHeg>
-    <xme:l3ZTZLwiihBJdksD-LeK8DMNb8ys1KXVGfUzfoBciZIWImHISuO7hJaq5tB2TDkZN
-    Iokx335O-hqiA>
-X-ME-Received: <xmr:l3ZTZD0KtiqRgn-3SQbRihv1J4hLqYD6f9hv89fGXjzCJyc90Dh16UG1cpZE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeftddguddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
-    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:l3ZTZCCW1Fey0fws4YZPSMxhoLjLO-ZnSH_iFlUn-r6kUvedozARLA>
-    <xmx:l3ZTZPhvKMa7rzF7B-QHuCHpjwstmj_u3vZOE8h-i7x_eyDQ9qNrqw>
-    <xmx:l3ZTZOoYV33YUHrsNzjpUzED5oVAwc3-zB_bwT53Wqo29G1ZTu3-9Q>
-    <xmx:l3ZTZOTO56IvJDvwrPaAuGImd1YAWfx9tOaSxfHvn19dftYGZcx0gw>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 4 May 2023 05:10:46 -0400 (EDT)
-Date:   Thu, 4 May 2023 18:10:42 +0900
-From:   Greg KH <greg@kroah.com>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     abelvesa@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH] clk: imx: imx93: introduce clk_bypassed module parameter
-Message-ID: <2023050410-rejoin-vocation-8560@gregkh>
-References: <20230504085506.504474-1-peng.fan@oss.nxp.com>
+        Thu, 4 May 2023 05:12:27 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB7E02D7F
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 02:12:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1683191543; x=1714727543;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=fr0qXQ3IKjF95MLSwjk9LSBsQKlFhihSG+c0KYPCwOQ=;
+  b=Lmqv0bJ2ih/wHtCEyyNHYFRsRu7aZntvK+xlPvwg8zbhX0WlxJo3WzjS
+   m25ZLOqq7SGRCrchNgh3k0wE4kzxFw/jbD/5IdRHysGu8uGG5Mq7XogLk
+   XGb/hahYL0Fg6H1uu8whYifd/rmoXXswS2A69z4AIwADFQTWSHcLBOWW0
+   LnVADVTWRjdIt9FyatanHazlnYhYVMJv+sImTz+2y99BKub0PL5MCEiiS
+   RUVowjFbtytVd8KTG7zHNuDaC6veyHRL9MDOVoRVMy8xuSJ2SwSeSV1Is
+   +xijnfMzyZZfMJaRz03lkD4MVPP0CIkC0mEXt3zDZqOLeLjSJ0ihf1xVD
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.99,249,1677538800"; 
+   d="scan'208";a="30714870"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 04 May 2023 11:12:06 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Thu, 04 May 2023 11:12:06 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Thu, 04 May 2023 11:12:06 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1683191526; x=1714727526;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=fr0qXQ3IKjF95MLSwjk9LSBsQKlFhihSG+c0KYPCwOQ=;
+  b=YR/zlnOWkCVKK9jLTJcyxRfiRquPg42bI/MJM6oalJDUjhaI3KMmilTQ
+   GW0kDe8RzyEB3AER5bImH5nJpJbJRFvLLPpQXFuLw34ak59pg9dLNeUGU
+   z1+Pnb8TBPd2870g9JL6+IHs14XlAxPTQzwz+xGRm7u2Fa2wAiQTIoLwP
+   80CdfkhJU017RLogWPtVrKGJDc+8ETZoniRoV0yBjmu7j6vBuBHTph5W4
+   NfK8poQBNrdUPuNA/DoeTWNkLVZv6pHR/xKRJF8jMGfEV05MSjLa3/SuZ
+   ikh1ANpJNraMnNsi0jagtuvChJpbEQabm910OLSzMgUvXqJBLL3ZGHlEl
+   g==;
+X-IronPort-AV: E=Sophos;i="5.99,249,1677538800"; 
+   d="scan'208";a="30714859"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 04 May 2023 11:11:35 +0200
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 7B5CA280056;
+        Thu,  4 May 2023 11:11:15 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>
+Cc:     Marek Vasut <marex@denx.de>, Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Uwe =?ISO-8859-1?Q?Kleine=2DK=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Sam Ravnborg <sam@ravnborg.org>,
+        Frieder Schrempf <frieder@fris.de>
+Subject: Re: [PATCH v2 2/2] drm/bridge: ti-sn65dsi83: Fix enable/disable flow to meet spec
+Date:   Thu, 04 May 2023 11:11:14 +0200
+Message-ID: <2225400.iZASKD2KPV@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <20230503163313.2640898-3-frieder@fris.de>
+References: <20230503163313.2640898-1-frieder@fris.de> <20230503163313.2640898-3-frieder@fris.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230504085506.504474-1-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 04, 2023 at 04:55:06PM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> With the clk names specified in clk_bypassed module parameter, give
-> user an option to bypass the clk from managing them by Linux kernel.
+Am Mittwoch, 3. Mai 2023, 18:33:07 CEST schrieb Frieder Schrempf:
+> From: Frieder Schrempf <frieder.schrempf@kontron.de>
+>=20
+> The datasheet describes the following initialization flow including
+> minimum delay times between each step:
+>=20
+> 1. DSI data lanes need to be in LP-11 and the clock lane in HS mode
+> 2. toggle EN signal
+> 3. initialize registers
+> 4. enable PLL
+> 5. soft reset
+> 6. enable DSI stream
+> 7. check error status register
+>=20
+> To meet this requirement we need to make sure the host bridge's
+> pre_enable() is called first by using the pre_enable_prev_first
+> flag.
+>=20
+> Furthermore we need to split enable() into pre_enable() which covers
+> steps 2-5 from above and enable() which covers step 7 and is called
+> after the host bridge's enable().
+>=20
+> Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
 
-As I said on another email, no, please do not add new module parameters
-for drivers, this is not the 1990s
+Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com> #TQMa8MxML/MBa=
+8Mx
 
-Also, another comment below:
+> ---
+> Changes for v2:
+> * Drop RFC
+> ---
+>  drivers/gpu/drm/bridge/ti-sn65dsi83.c | 19 ++++++++++++++++---
+>  1 file changed, 16 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/gpu/drm/bridge/ti-sn65dsi83.c
+> b/drivers/gpu/drm/bridge/ti-sn65dsi83.c index 75286c9afbb9..a82f10b8109f
+> 100644
+> --- a/drivers/gpu/drm/bridge/ti-sn65dsi83.c
+> +++ b/drivers/gpu/drm/bridge/ti-sn65dsi83.c
+> @@ -321,8 +321,8 @@ static u8 sn65dsi83_get_dsi_div(struct sn65dsi83 *ctx)
+>  	return dsi_div - 1;
+>  }
+>=20
+> -static void sn65dsi83_atomic_enable(struct drm_bridge *bridge,
+> -				    struct drm_bridge_state=20
+*old_bridge_state)
+> +static void sn65dsi83_atomic_pre_enable(struct drm_bridge *bridge,
+> +					struct drm_bridge_state=20
+*old_bridge_state)
+>  {
+>  	struct sn65dsi83 *ctx =3D bridge_to_sn65dsi83(bridge);
+>  	struct drm_atomic_state *state =3D old_bridge_state->base.state;
+> @@ -484,11 +484,22 @@ static void sn65dsi83_atomic_enable(struct drm_brid=
+ge
+> *bridge, /* Trigger reset after CSR register update. */
+>  	regmap_write(ctx->regmap, REG_RC_RESET, REG_RC_RESET_SOFT_RESET);
+>=20
+> +	/* Wait for 10ms after soft reset as specified in datasheet */
+> +	usleep_range(10000, 12000);
+> +}
+> +
+> +static void sn65dsi83_atomic_enable(struct drm_bridge *bridge,
+> +				    struct drm_bridge_state=20
+*old_bridge_state)
+> +{
+> +	struct sn65dsi83 *ctx =3D bridge_to_sn65dsi83(bridge);
+> +	unsigned int pval;
+> +
+>  	/* Clear all errors that got asserted during initialization. */
+>  	regmap_read(ctx->regmap, REG_IRQ_STAT, &pval);
+>  	regmap_write(ctx->regmap, REG_IRQ_STAT, pval);
+>=20
+> -	usleep_range(10000, 12000);
+> +	/* Wait for 1ms and check for errors in status register */
+> +	usleep_range(1000, 1100);
+>  	regmap_read(ctx->regmap, REG_IRQ_STAT, &pval);
+>  	if (pval)
+>  		dev_err(ctx->dev, "Unexpected link status 0x%02x\n",=20
+pval);
+> @@ -555,6 +566,7 @@ static const struct drm_bridge_funcs sn65dsi83_funcs =
+=3D {
+> .attach			=3D sn65dsi83_attach,
+>  	.detach			=3D sn65dsi83_detach,
+>  	.atomic_enable		=3D sn65dsi83_atomic_enable,
+> +	.atomic_pre_enable	=3D sn65dsi83_atomic_pre_enable,
+>  	.atomic_disable		=3D sn65dsi83_atomic_disable,
+>  	.mode_valid		=3D sn65dsi83_mode_valid,
+>=20
+> @@ -697,6 +709,7 @@ static int sn65dsi83_probe(struct i2c_client *client)
+>=20
+>  	ctx->bridge.funcs =3D &sn65dsi83_funcs;
+>  	ctx->bridge.of_node =3D dev->of_node;
+> +	ctx->bridge.pre_enable_prev_first =3D true;
+>  	drm_bridge_add(&ctx->bridge);
+>=20
+>  	ret =3D sn65dsi83_host_attach(ctx);
 
-> @@ -310,6 +357,8 @@ static int imx93_clocks_probe(struct platform_device *pdev)
->  
->  	for (i = 0; i < ARRAY_SIZE(root_array); i++) {
->  		root = &root_array[i];
-> +		if (unlikely(imx_clk_bypass_check(root->name)))
-> +			continue;
 
-Only ever use likely/unlikely if you can measure the difference.  Here
-on a probe function, you can not, this is not needed at all, the
-compiler and CPU will do a better job over time than you can guess at
-this.
+=2D-=20
+TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
+Amtsgericht M=FCnchen, HRB 105018
+Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
+http://www.tq-group.com/
 
-But as this change isn't needed, this shouldn't be an issue either.
 
-thanks,
-
-greg k-h
