@@ -2,124 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 267DD6F793B
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 00:40:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 303816F7941
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 00:41:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbjEDWkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 18:40:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36856 "EHLO
+        id S229463AbjEDWl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 18:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbjEDWkk (ORCPT
+        with ESMTP id S229684AbjEDWl1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 18:40:40 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65433A5CC
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 15:40:38 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1aaea43def7so7345245ad.2
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 15:40:38 -0700 (PDT)
+        Thu, 4 May 2023 18:41:27 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B8086AD;
+        Thu,  4 May 2023 15:41:26 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-64115e652eeso15908253b3a.0;
+        Thu, 04 May 2023 15:41:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1683240038; x=1685832038;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bSBn9yOinBU8m0yQLrSvbl7PKYZlBg3YhOgvbxEMud0=;
-        b=V2OWoWuBY9/BxFN6ZMrayZSPn34VUIMFwLKD1syjt3URVOHsk6eRCzBjJxyS/sTaxh
-         0ODMUc6Lrrs3v8zH3Sx/5e/PKEpsPzqFVGY4QckBPaQkZZfaM7pnBgEofNkOYx2I3eMh
-         /CUnaPOJFUPSRWZdnUNxTe8x2snVD8PtGIxSGOLogmkrfrhkWite1HB1ZWG+3fFJST9O
-         CMCv7TFFrBn2cKtBOmOLW8XQUBS/fB7r1lrmQ3GM1O5nbWEdOmtFcfUJmeIAnUxIbWpn
-         3ror2ojs9ATMDgL9RR5K3X4TvFjtnscejsS+p0QkHUHUt2WEuhfGkKNuQs/O+d5WTYRo
-         HM2w==
+        d=gmail.com; s=20221208; t=1683240086; x=1685832086;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iuR5Nn17jNx3hsu5wtmqgX3ulS4giwJ61q7gFIqEyfQ=;
+        b=lKI3pfgrV+/x+0UIm+839VzQtOaWFfJDJQTUbgTy/Nl77X2aJAG7DgKZzZDFfgCyxe
+         Us3UptKxw6DfJihFm2/yAJ9A1DbMsSiOpHEkdEPRYV65wLK6GzCydjiOdPmlN4baWhMq
+         eVNP7kzRmZStDeh+neeplvdI19iFgKNomUdfE/p3VlHs7FfEVcJQU37oH4kvWnQcgh/U
+         1V0AmfOSdfA7iAT0c1ZIBjgNMWYmJ9gbEwaNDrcHhp7XRIAkL4ijvDfyP6dGwhKOS1Dw
+         b3l+hEHQ74QV39k+7DXeG4TQUi3R7x30YDJqsUbMfUVUCq2S57YMDJf/5fBGLSqwPmta
+         sf4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683240038; x=1685832038;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bSBn9yOinBU8m0yQLrSvbl7PKYZlBg3YhOgvbxEMud0=;
-        b=KeJYin+SVsrYobwf9XcxTYpfSLCfyVbXQPwxstQGSE/F35XzACZXQDaN/UUtmH9RpG
-         AaA/d7frf7znTnalTL8ZVsMPASAjG2pYICEERFB+H1stvc252xQABgb/QDsZN4d+KSqc
-         ukyp/QeppBJxOK17K/CaYBlXYLWuE8HaE3Trxbj4nmK+RmHcBdNJAx0p8mKA/Xoote/r
-         GcOP3eXqre5nmanpOuR75Ly8cdufP0lrbIoh485Jq0suMmH2LSNjDJMM4wYvTuqnVic4
-         P4DrZ1K7RWyNgk/mJaEhQr3iL9G9jzGoQUH0c9UqcwuPxYpe8intXOexNGw8dEcy8yEY
-         8yMw==
-X-Gm-Message-State: AC+VfDw44F14U6AVoATCiOzeIiN+3r00MH37nyQk4Lc+I9Xxir81RhwD
-        oy7V3xhIVDWMLG3Ad7+b5/dR4A==
-X-Google-Smtp-Source: ACHHUZ4sldKILzM05M5JtvE1zkTm8BdFnY+an0qc3+Zw6AS4jJ2XEp42XVgNkYwu+sP102Df03J4uQ==
-X-Received: by 2002:a17:903:48e:b0:1a6:cb66:681f with SMTP id jj14-20020a170903048e00b001a6cb66681fmr4825434plb.46.1683240037873;
-        Thu, 04 May 2023 15:40:37 -0700 (PDT)
-Received: from dread.disaster.area (pa49-181-88-204.pa.nsw.optusnet.com.au. [49.181.88.204])
-        by smtp.gmail.com with ESMTPSA id ix10-20020a170902f80a00b001ab0159b9edsm27390plb.250.2023.05.04.15.40.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 May 2023 15:40:36 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1puhcn-00BPr0-UX; Fri, 05 May 2023 08:40:33 +1000
-Date:   Fri, 5 May 2023 08:40:33 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     John Garry <john.g.garry@oracle.com>
-Cc:     axboe@kernel.dk, kbusch@kernel.org, hch@lst.de, sagi@grimberg.me,
-        martin.petersen@oracle.com, djwong@kernel.org,
-        viro@zeniv.linux.org.uk, brauner@kernel.org, dchinner@redhat.com,
-        jejb@linux.ibm.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-scsi@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com,
-        Prasad Singamsetty <prasad.singamsetty@oracle.com>
-Subject: Re: [PATCH RFC 02/16] fs/bdev: Add atomic write support info to statx
-Message-ID: <20230504224033.GJ3223426@dread.disaster.area>
-References: <20230503183821.1473305-1-john.g.garry@oracle.com>
- <20230503183821.1473305-3-john.g.garry@oracle.com>
- <20230503215846.GE3223426@dread.disaster.area>
- <96a2f875-7f99-cd36-e9c3-abbadeb9833b@oracle.com>
+        d=1e100.net; s=20221208; t=1683240086; x=1685832086;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iuR5Nn17jNx3hsu5wtmqgX3ulS4giwJ61q7gFIqEyfQ=;
+        b=FcxmXs3/0W8UsoMxiij2FXP5DGyYT9s12HydTzS5PosiJwi4np1I84GafTDXIr/YpH
+         gB1YIVWOtMQ7T0zuzvNDYpauEN/TKRcvMhYaghqqTkIIGjSRybOqYoYs9dP+L+QMYLLM
+         LrxvpvyjhWbHm3z2BdAmL3AIZo0nKtHp3LQGEwMyOvW9+jHyt8WnJwXWRP9jVxWjqVKW
+         v+e71obwFF7T7KMl3l6nUb4E4jFjXdt9YD1FrLMZejf/IoxSbm6XWh0a53tWxh1pfES9
+         jrk0bZ9oUjhQspvuUERbo8yy9KDP5bKM+YOF2qNFP838uirvXyYeaSWMnjk2eyhZ6wYd
+         dE4w==
+X-Gm-Message-State: AC+VfDwEfsbsL0eDZYQQKwveyvIXmKsKdF4/+13BUhi4zjwUB7xlBlB4
+        fBPyZcAPa1g5VSH1RLk3TEc=
+X-Google-Smtp-Source: ACHHUZ5BKfeQ9wBTyrFRg5e6QEIj76WiIyPay+ndAQjIGQ0SMLB/6tqtD5yksIl8IIDJFWWKCqrvhQ==
+X-Received: by 2002:a17:902:f546:b0:1a3:dcc1:307d with SMTP id h6-20020a170902f54600b001a3dcc1307dmr6387044plf.23.1683240085993;
+        Thu, 04 May 2023 15:41:25 -0700 (PDT)
+Received: from ?IPV6:2404:f801:10:102::36? ([2404:f801:8050:3:80be::36])
+        by smtp.gmail.com with ESMTPSA id c22-20020a170902b69600b001a6f6638595sm48874pls.92.2023.05.04.15.41.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 May 2023 15:41:25 -0700 (PDT)
+Message-ID: <6e9b5b99-04eb-9b6a-5218-6cfa696a08ee@gmail.com>
+Date:   Thu, 4 May 2023 15:41:13 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <96a2f875-7f99-cd36-e9c3-abbadeb9833b@oracle.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [RFC PATCH V5 15/15] x86/sev: Fix interrupt exit code paths from
+ #HV exception
+Content-Language: en-US
+To:     Tom Lendacky <thomas.lendacky@amd.com>, luto@kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        seanjc@google.com, pbonzini@redhat.com, jgross@suse.com,
+        tiala@microsoft.com, kirill@shutemov.name,
+        jiangshan.ljs@antgroup.com, peterz@infradead.org,
+        ashish.kalra@amd.com, srutherford@google.com,
+        akpm@linux-foundation.org, anshuman.khandual@arm.com,
+        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
+        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
+        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
+        michael.roth@amd.com, venu.busireddy@oracle.com,
+        sterritt@google.com, tony.luck@intel.com, samitolvanen@google.com,
+        fenghua.yu@intel.com
+Cc:     pangupta@amd.com, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-arch@vger.kernel.org
+References: <20230501085726.544209-1-ltykernel@gmail.com>
+ <20230501085726.544209-16-ltykernel@gmail.com>
+ <3c91e1ab-29f4-09cb-1268-52fd9c3e34f4@amd.com>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <3c91e1ab-29f4-09cb-1268-52fd9c3e34f4@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 04, 2023 at 09:45:50AM +0100, John Garry wrote:
-> On 03/05/2023 22:58, Dave Chinner wrote:
-> > Is there a statx() man
-> > page update for this addition?
+On 5/1/2023 9:02 AM, Tom Lendacky wrote:
+>> From: Ashish Kalra <ashish.kalra@amd.com>
+>>
+>> Add checks in interrupt exit code paths in case of returns
+>> to user mode to check if currently executing the #HV handler
+>> then don't follow the irqentry_exit_to_user_mode path as
+>> that can potentially cause the #HV handler to be
+>> preempted and rescheduled on another CPU. Rescheduled #HV
+>> handler on another cpu will cause interrupts to be handled
+>> on a different cpu than the injected one, causing
+>> invalid EOIs and missed/lost guest interrupts and
+>> corresponding hangs and/or per-cpu IRQs handled on
+>> non-intended cpu.
+>>
+>> Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
 > 
-> No, not yet. Is it normally expected to provide a proposed man page update
-> in parallel? Or somewhat later, when the kernel API change has some
-> appreciable level of agreement?
+> This should be merged into one of the appropriate #HV patches and just 
+> add Ashish with a Co-developed-by: tag where appropriate. This would be 
+> appropriate as a separate only if discovered after the series was merged.
 
-Normally we ask for man page updates to be presented at the same
-time, as the man page defines the user interface that is being
-implemented. In this case, we need updates for the pwritev2() man
-page to document RWF_ATOMIC semantics, and the statx() man page to
-document what the variables being exposed mean w.r.t. RWF_ATOMIC.
-
-The pwritev2() man page is probably the most important one right now
-- it needs to explain the guarantees that RWF_ATOMIC is supposed to
-provide w.r.t. data integrity, IO ordering, persistence, etc.
-Indeed, it will need to explain exactly how this "multi-atomic-unit
-mulit-bio non-atomic RWF_ATOMIC" IO thing can be used safely and
-reliably, especially w.r.t. IO ordering and persistence guarantees
-in the face of crashes and power failures. Not to mention
-documenting error conditions specific to RWF_ATOMIC...
-
-It's all well and good to have some implementation, but without
-actually defining and documenting the *guarantees* that RWF_ATOMIC
-provides userspace it is completely useless for application
-developers. And from the perspective of a reviewer, without the
-documentation stating what the infrastructure actually guarantees
-applications, we can't determine if the implementation being
-presented is fit for purpose....
-
-Cheers,
-
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+Sure. Will update in the next version.
