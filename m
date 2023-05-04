@@ -2,135 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C88BC6F7322
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:22:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C1816F7325
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:24:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbjEDTWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 15:22:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41186 "EHLO
+        id S229709AbjEDTYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 15:24:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjEDTWB (ORCPT
+        with ESMTP id S229633AbjEDTYH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 15:22:01 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 333A9268C
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 12:22:01 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1a950b982d4so457905ad.0
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 12:22:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683228120; x=1685820120;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tVeOmg3xdSp7Uw5iyCm8zM5Dz5FyKSpYKnmTGjHt5Og=;
-        b=VBFPVDSC0c4rxWO4idhpCMlzoMP104ludumoYHtf979EhJL0NYKQKPtZnZ4VoiNdg3
-         mObKrynBwa2GYQ8x1CdpPjYY7yYtk7G0pehHkjaSqcIkoUfodu25o36Hd4qKdYY8OzCv
-         wPyzO9c7X8dI8pcQo957XHnT4phWgBIckCmoTN3pK3zvpqNv10hiIS/gtbpm6vGoFfnX
-         nZLTl4/NjJHR0CQxytaExT7uHd7TT52JURX9IgikJhf2kNg00H/Wot7oMeAECXVr69Wh
-         SoGYAg+Eh7uw7a92eNmFk3wAGvz47GLKWN3Lt1HWhmPvghEK+w6gYH71cuK//Xb1Dqmi
-         HDMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683228120; x=1685820120;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tVeOmg3xdSp7Uw5iyCm8zM5Dz5FyKSpYKnmTGjHt5Og=;
-        b=Trd2YNoUVO9KR+V48V8CyRxy0XaZOO4c8XTH9AovKu0T3+yjTu3sRVTmlQTCXmh1dZ
-         tqJ0LCPeQ1vGtAkNWvuLCkYpi7HDfKDAHTP+adRYBcqBhqB75RAHa3aKX/0Bgk9J12WB
-         sQ7MQSLjzvYVOFdU4vTTVvYUyX3eJbiSQasFIj850gwJgkk+TgDtUug/Hl09KS+1nhgC
-         TdaXIDx+v3SKpQK7/mR6hJQHAavDiuvrAxF48zjqaWaN3dl27ifCQHtj/KVflHhpyJYD
-         L5DF9MofJvXE6oDKLf/k5QJgqlRplT3vyO4Lj2PQkE3YwZQw89xrJC+ZubXVrgL758by
-         DZDQ==
-X-Gm-Message-State: AC+VfDzA4qeGUmITAfozNQdo1RXk4Zriitmlt4MacBr2O2XLwpCirXBD
-        9FPrubFroSebp5qDbT87WUVSqRlfUVFgZ16moTyXOg==
-X-Google-Smtp-Source: ACHHUZ6uUxIDYifA/bh2RT8YQ5MNPwejTUWlOc93oIZLrxzI8RScUNDCnY1oAJur7+Djc/gO0llDoKdzJd/lv/zh45Q=
-X-Received: by 2002:a17:902:d2cd:b0:1a9:3251:e3ae with SMTP id
- n13-20020a170902d2cd00b001a93251e3aemr27268plc.3.1683228120488; Thu, 04 May
- 2023 12:22:00 -0700 (PDT)
+        Thu, 4 May 2023 15:24:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6B607AB4
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 12:23:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683228199;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XFbEcKjEgJv3LtDT74dBDeEmFhugrifR5vJkWRmgzQU=;
+        b=T8t5m3rVub9Ky7u4zHEmiMbL3zLAgAbQBM4TwdrBAsFko1uqDegGs3+CqqjBnECpTK1bBh
+        qcSS6IYlAq3fPh/uQGJWV8SN9Cm+rzK0HdzP2xNlv4GwvBQsesfIO1q8FxQO8HiRiq/o6R
+        hCCMMPMdx4sIV/TtDZ1MN4/0ygYw7Zk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-297-qpEGbL5kMAaJrY1g8mktYw-1; Thu, 04 May 2023 15:23:17 -0400
+X-MC-Unique: qpEGbL5kMAaJrY1g8mktYw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 763C110AFA77;
+        Thu,  4 May 2023 19:23:06 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.225.24])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 7CC171121339;
+        Thu,  4 May 2023 19:22:59 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Thu,  4 May 2023 21:22:54 +0200 (CEST)
+Date:   Thu, 4 May 2023 21:22:46 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Wander Lairson Costa <wander@redhat.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Christian Brauner <brauner@kernel.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
+        <linux-perf-users@vger.kernel.org>, Hu Chunyu <chuhu@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v7 2/3] sched/task: Add the put_task_struct_atomic_safe()
+ function
+Message-ID: <20230504192246.GA4164@redhat.com>
+References: <20230425114307.36889-1-wander@redhat.com>
+ <20230425114307.36889-3-wander@redhat.com>
+ <20230504084229.GI1734100@hirez.programming.kicks-ass.net>
+ <20230504122945.GA28757@redhat.com>
+ <20230504143303.GA1744142@hirez.programming.kicks-ass.net>
+ <CAAq0SUmYrQbS1k9NNKGQP7hQRQJ308dk9NCiUimEiLeBJUavgA@mail.gmail.com>
+ <20230504152306.GA1135@redhat.com>
+ <CAAq0SU=G0WQBLP77Wgm8MJRcVwUCj25WOowh_X8jiGiHTKAQEA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230310063910.2474472-1-saravanak@google.com>
- <4737cacc741c939ca1d980a4858d0748faad11f8.camel@puri.sm> <CAGETcx_0NaSTFFn34nvax2_pG+_5BJtOD0j0wrqU0NSCqwfKWA@mail.gmail.com>
- <CAGETcx-CF83Acp5CQ=RMJq9DD6f_Y70c37zSbLq2R6L5VyoKHg@mail.gmail.com> <nlycqgae2r3urwh536hyklyutmdzdoz3ssabcjqdfoxlqlbjln@5u5dr552albo>
-In-Reply-To: <nlycqgae2r3urwh536hyklyutmdzdoz3ssabcjqdfoxlqlbjln@5u5dr552albo>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Thu, 4 May 2023 12:21:24 -0700
-Message-ID: <CAGETcx9DnHUZa8986Mueu2O5s-Euvy5bJJSdRbLv0Og92PdKvA@mail.gmail.com>
-Subject: Re: [PATCH v1] drm/mipi-dsi: Set the fwnode for mipi_dsi_device
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thierry Reding <treding@nvidia.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        kernel-team@android.com, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAAq0SU=G0WQBLP77Wgm8MJRcVwUCj25WOowh_X8jiGiHTKAQEA@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 4, 2023 at 12:51=E2=80=AFAM Maxime Ripard <maxime@cerno.tech> w=
-rote:
+On 05/04, Wander Lairson Costa wrote:
 >
-> Hi Saravana,
->
-> On Wed, May 03, 2023 at 09:40:05PM -0700, Saravana Kannan wrote:
-> > On Fri, Mar 17, 2023 at 3:36=E2=80=AFPM Saravana Kannan <saravanak@goog=
-le.com> wrote:
-> > >
-> > > On Sun, Mar 12, 2023 at 7:45=E2=80=AFAM Martin Kepplinger
-> > > <martin.kepplinger@puri.sm> wrote:
-> > > >
-> > > > Am Donnerstag, dem 09.03.2023 um 22:39 -0800 schrieb Saravana Kanna=
-n:
-> > > > > After commit 3fb16866b51d ("driver core: fw_devlink: Make cycle
-> > > > > detection more robust"), fw_devlink prints an error when consumer
-> > > > > devices don't have their fwnode set. This used to be ignored
-> > > > > silently.
-> > > > >
-> > > > > Set the fwnode mipi_dsi_device so fw_devlink can find them and
-> > > > > properly
-> > > > > track their dependencies.
-> > > > >
-> > > > > This fixes errors like this:
-> > > > > [    0.334054] nwl-dsi 30a00000.mipi-dsi: Failed to create device
-> > > > > link with regulator-lcd-1v8
-> > > > > [    0.346964] nwl-dsi 30a00000.mipi-dsi: Failed to create device
-> > > > > link with backlight-dsi
-> > > > >
-> > > > > Reported-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-> > > >
-> > > > Reported-and-tested-by: Martin Kepplinger <martin.kepplinger@puri.s=
-m>
-> > >
-> > > Maintainers,
-> > >
-> > > Nudge nudge. Will this be picked up for 6.3-rcX?
+> On Thu, May 4, 2023 at 12:23 PM Oleg Nesterov <oleg@redhat.com> wrote:
 > >
-> > Greg,
+> > Yes, but as Sebastian explained CONFIG_PROVE_RAW_LOCK_NESTING won't like it.
 > >
-> > Can you pick this up please? It's a fix that hasn't been picked up for
-> > a few months.
+> >         https://lore.kernel.org/all/Y+zFNrCjBn53%2F+Q2@linutronix.de/
 > >
-> > Here's the link to the actual patch for your convenience:
-> > https://lore.kernel.org/lkml/20230310063910.2474472-1-saravanak@google.=
-com/#t
->
-> Sorry, I'm not quite sure what happened. I've applied it to drm-misc-fixe=
-s
+> 
+> I think that was my confusion in that thread. My understanding is that
+> CONFIG_PROVE_RAW_LOCK_NESTING will check lock ordering but not
+> context.
 
-No worries. Thanks Maxime!
+Sorry, I don't understand... perhaps I missed something. But iiuc
+the problem is simple.
 
--Saravana
+So, this code
+
+	raw_spin_lock(one);
+	spin_lock(two);
+
+is obviously wrong if CONFIG_PREEMPT_RT.
+
+Without PREEMPT_RT this code is fine because raw_spinlock_t and spinlock_t
+are the same thing. Except they have different lockdep annotations if
+CONFIG_PROVE_RAW_LOCK_NESTING is true, LD_WAIT_SPIN and LD_WAIT_CONFIG.
+
+So if CONFIG_PROVE_RAW_LOCK_NESTING is set, lockdep will complain even
+on the !PREEMPT_RT kernel, iow it checks the nesting as if the code runs
+on with PREEMPT_RT.
+
+Cough... not sure my explanation can help ;) It looks very confusing when
+I read it.
+
+Oleg.
+
