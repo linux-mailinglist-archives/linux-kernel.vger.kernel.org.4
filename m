@@ -2,141 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA2FC6F655E
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 08:59:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32F226F6561
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 08:59:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbjEDG71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 02:59:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34078 "EHLO
+        id S229975AbjEDG7k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 02:59:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjEDG7Z (ORCPT
+        with ESMTP id S229845AbjEDG7h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 02:59:25 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2112.outbound.protection.outlook.com [40.107.255.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF851728;
-        Wed,  3 May 2023 23:59:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=f8jd4TjVAouon5C4KZi04x/+qbPD1rsr9yF7TpXtzkiINB7kPUJao1cZ6m4287uFhYjqdY2oOxfKXbYo3mQctJhFk2b4cpwr2ElA7zvm1MqBqXekl7mCPTgI7BnUVYMXMTD6Exw/ZATN+nQInWbR3f+WWnBHc2o/Bq5BpJ+66OybwhA7vYtaZe7RN5hWF0rRXM2c9jCVySpPwRHkxB3Ck/aFOynfP+2TniDguxLzuyke3dXKYUJtl40UDWx/6O8rL2uBP5K8qj2+nfNBqGpZo/wyUTYbMkIDxL9N6cU8KKcEuXi5M2TObrO3bXdTO6Vn+FKquY2yf2rD8SvqsXb9lA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9jT2pb6BZBNDLdiCP7VPQDkL1ejjRdt2RZtjtZHrE84=;
- b=AMEbW8hHHFu6aqd2V4fWMBc5m0eUltOqBWgF4H+aABf6JImhAuEHXZRJq6Lw4gTCoMsnCRscQUyZPeWp1zKAaDvKsVYfuJgaQtxuSWeKnWV8Ej2OxJyynojo/IMV86vG6tCg58ZEtLQS4PnLsCDz3whRaG8GFeUyAJI9XuAEHrwnV7M9HnZB/w8vhS7v/L6cpyuED3MT1EkSBQa2HSo2hmy7o4LP1fPmeAuUNgZbbNDgVqWbfcJ0XC8KGVsVerNe23d45SRGzNO63T8vjJ0rqmjNwvFzQU1Ajkk8Gfih0zo3J+CG6fECv+R0RqSIBMl2UzbUaYe+hPJrejwrQBA1Mg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9jT2pb6BZBNDLdiCP7VPQDkL1ejjRdt2RZtjtZHrE84=;
- b=Rh4YJrhaioS5jrKfhJmmGevuyT4ikECP6sFgMSPalz4Y05+tbbgYTi5Zuhwx77Z+aocryPneV9yXsaLBB/YQL3u7lTFWW9SvU6N3MDmiT2TEfoCyhFgDdJSQnhv6zcW2PoNO9f/GuxGfUUjTFYE0QKjk2+3QibI8sizl51obLoUah6B+KfC5grtDYsO7W5THBJ8M3URHIzt4qDCTS+jhA8uvW6gTrWQ0FNm3Eh1FcApgzWNtxLi53dwkCccFRUq+tUgfTLStLc7eqawjPcFOShSEPR0/UVpQmckuloXUGXhw2VjiOzGITvTwc1P7InvLKY3dXMBK+kqQPvHv8zrn8A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SG2PR06MB2169.apcprd06.prod.outlook.com (2603:1096:4:7::21) by
- SI2PR06MB5265.apcprd06.prod.outlook.com (2603:1096:4:1e4::11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6363.21; Thu, 4 May 2023 06:59:18 +0000
-Received: from SG2PR06MB2169.apcprd06.prod.outlook.com
- ([fe80::51d5:9a57:618e:bb10]) by SG2PR06MB2169.apcprd06.prod.outlook.com
- ([fe80::51d5:9a57:618e:bb10%3]) with mapi id 15.20.6363.021; Thu, 4 May 2023
- 06:59:18 +0000
-From:   luhongfei <luhongfei@vivo.com>
-To:     Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        io-uring@vger.kernel.org (open list:IO_URING),
-        linux-kernel@vger.kernel.org (open list)
-Cc:     opensource.kernel@vivo.com, luhongfei <luhongfei@vivo.com>
-Subject: [PATCH] Subject: io_uring: Remove the check of data->free_work and data->do_work in io_wq_create
-Date:   Thu,  4 May 2023 14:59:06 +0800
-Message-Id: <20230504065906.46574-1-luhongfei@vivo.com>
-X-Mailer: git-send-email 2.39.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TYWP286CA0002.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:178::17) To SG2PR06MB2169.apcprd06.prod.outlook.com
- (2603:1096:4:7::21)
+        Thu, 4 May 2023 02:59:37 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69AB2700
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 23:59:33 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-50bc4ba28cbso131894a12.0
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 23:59:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683183572; x=1685775572;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TiFB/UoH02QxMVuFsiqiYDIAM/HbqoK7MxIW7zPttsE=;
+        b=QM6Dt7E6rCmr3jsyqwXltDs/OAG3ggAKlpynxcws+D4sxNkX2TLcQAjIJqePRzrSpz
+         6stj0J1i5JYd1PVPDN35Te6TSMTrS6U0sA45l9b8YO+nLZyV7iom4NSR6GkC07C9b0oT
+         M1CMXUQsep0L6fdybwLQ45h6LPAxZuvZ/pT+BTxu3eGIXL3uU81L/B5NDD/4ul3Yu93Y
+         DACVaFz+lJnD+8q6hSa0/9tAcR2PFM1XleThiIiGbMq9k98Zouvaz4B/QkJg8dBXY+dH
+         VroqlxwLmzy2e4dkrR2azI51Ur50zsRawI9ajoydHqzWZ6ARMzM3gzsT467Mf0UVGpVH
+         AfVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683183572; x=1685775572;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TiFB/UoH02QxMVuFsiqiYDIAM/HbqoK7MxIW7zPttsE=;
+        b=dnDX0lSL3kuftBJTL/Qu8gBADlmPpqdKN0iIebbDvmTrhjxnlYbMBkPH998SSLc+B2
+         fuuTF+YWHrd1r+/efUBIDcau6B0ZnUiOk1gSd16tGT9JhGgYkEGiHBDctraYPaIGfxeb
+         kwQrRiiBITUEQrdnUb/D+ZUXo13lmvCk2UEQ8EWW7ZcZPR7S2upC5r37eUGP3wFKNzM0
+         9lQvIPXEQC3t2BFENtAiDfSUfZvXhyjEPailfgju7IyIHA+OvnbsXyaIlqjIYixVciH9
+         xUMGQdf9PIaf/SCZgOhBlrYY3CnR5I81R9wcf7B8oNTwS15OXdrKXW1JYHcg242PPTMS
+         WDoA==
+X-Gm-Message-State: AC+VfDxJ4S442Ikqx2hK+KHor6H84zJNN+M0Z/aoku5hGlpELWPiQt9y
+        8+YuB6LrmjZ2a+3HKm6AeCcr/Q==
+X-Google-Smtp-Source: ACHHUZ6T8Ks115imDbUGYEXTNTNiGFw3TKZdatRyYj/VReFtB7asPkPBBKqhasHUTW+qL6Jb1VMb8A==
+X-Received: by 2002:a17:907:2da9:b0:947:3d04:61dc with SMTP id gt41-20020a1709072da900b009473d0461dcmr6239846ejc.77.1683183572295;
+        Wed, 03 May 2023 23:59:32 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:cbf1:e7ef:fb81:e912? ([2a02:810d:15c0:828:cbf1:e7ef:fb81:e912])
+        by smtp.gmail.com with ESMTPSA id dn1-20020a17090794c100b00953381ea1b7sm18245488ejc.90.2023.05.03.23.59.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 May 2023 23:59:31 -0700 (PDT)
+Message-ID: <19bccb62-b7e0-855d-fb5f-4fd3dde4f6f0@linaro.org>
+Date:   Thu, 4 May 2023 08:59:30 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SG2PR06MB2169:EE_|SI2PR06MB5265:EE_
-X-MS-Office365-Filtering-Correlation-Id: 97485ad1-1581-4beb-b9c0-08db4c6d14ab
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jMcAFAY4qPHOFaeGJKqEGKFq7MZ7ljfZLP2K5J8AMsyXVpZJ1/THTW0DJ+QgjT8e1X0pKJH8OXi4TkwLzzLTws7AbKo3CbuQAZc1K16Q0cAO5Yw6s4eDbzw/1c9vwNyyRuSaRLCCYniC6aH7x5HtfN8LsZRg+d/eNds0DYYFCqE68wmvrvjUNaMy7QUu3x1Y3tZfiRaRQyGkJ9pznuPAUnix8uJPGCBUixjet1AGGF0Q9KzdhbV7qLTP7rn6BLxw1cQbolD35imRwp1TJviOo4SenCzj5pd2n4N5VwGYAqmPv9aAB1TvQJZEpi/3OS4z3qvH31r7MO0LsTzpC0XQsoSJ0bCjikuO3y4ND2qMJAjicaIGODNnsVt8hSdim1ysSpDihVi8u2a7PDgyFznD7sv1R47drNAcyCubJrEBWFCAi5OnLFagrclrWiUiCFFAGGcrpvajupCnB/3Fiu+OcMHv9LrdwF/vUECsAG7h8iudezWpbg0CytHYdt7rEP6fLzLv3c3/qs1Ryv5FPssiA+HMUxBhXOJvBHBk8Lz0ymc0Zw1/Idmqy6U3C+1sb5EU8Hk5vxZ/spyWtr/zOnSyuTKrGuFq+JloQ9MLp2ycCKfVKdy8kLWgRwZZKdLZu8AN
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB2169.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(39860400002)(366004)(346002)(376002)(451199021)(478600001)(110136005)(186003)(6506007)(2616005)(1076003)(26005)(6512007)(6666004)(6486002)(52116002)(4326008)(41300700001)(66556008)(66476007)(66946007)(316002)(107886003)(83380400001)(5660300002)(8676002)(8936002)(2906002)(38350700002)(38100700002)(4744005)(36756003)(86362001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?T85hCCyskGKASS3/lMoM95TAWEYKSw0LD/UGL84IAcaMPxDr7EhG18L02kpb?=
- =?us-ascii?Q?88hu1F6QCIBJM+GIn3/GkqDF4dRXsz9IAbtzUapmpnWEMA7npxMBwf7u4eFE?=
- =?us-ascii?Q?H1LTC4/COavAqYKI3cqXYqWr+zn/N9byjYm4/pP2CsInwGoA75QBVYIWS0ES?=
- =?us-ascii?Q?pyYS0sAZig+V+z2trGTRkQ8d9x06ilctWbJcI7lb8h8FulZm/rhOWndI/kcp?=
- =?us-ascii?Q?m2rhjm9ClAQndMdqwtZWyvEyEOCbA3d7eto9BT8y+CaEmtowz5yjkhmTTn2N?=
- =?us-ascii?Q?xKtSH8bCxkOXHuRznwS9U/pqO80XleAF5WKgBfOgZcDuYluF6Ag+nMfm+khc?=
- =?us-ascii?Q?72b0y+Ans3Tv5Rz8AJZx3wP+s/g96UIva4PIsgwUBOACEB7RRYQh6Ne2bR8q?=
- =?us-ascii?Q?oNb5O72SmQLHJCIt8AENpjmO+DJNNeGEbt35evqBXvPMBm8X9ORgQjRAOEq5?=
- =?us-ascii?Q?m1YyoEjieHsHM90f1fKJ3+JhxtBZVbv4wNJg1x45P1bL6htMUw9TL8Vnp4YN?=
- =?us-ascii?Q?l/qu21PvnS1LW13e400GxBrxymWLUL0J3prA5hCfqLxlhtFpCbRtKX1Xc5iO?=
- =?us-ascii?Q?lcTUiNgQl5j1JKZs385UAabDFjzU74GzZTawfzk9qeqkEeH2EqnaYDBzfkWa?=
- =?us-ascii?Q?8/E9PN21yLmbxQ/tKvcDW09gqMBjI55q7m8hnnVTLRjm1Tn9oy5Hia7W1oId?=
- =?us-ascii?Q?iJHN7uLgH2JEWYsW3HaHjsQ00gha9GBz9P7Ohv8N6kGpk6OkWjquDY34c1JG?=
- =?us-ascii?Q?mMBWoWTSODPndGsX8dfvSUWLXwooXs4MjMAaNSst32+oZdCKlUrlcCdc2rAt?=
- =?us-ascii?Q?hM/HOoQTjKGZmHyPlPqDtkd2xqCVJ7/pJwYKDDfk6tkyti4iDBWE2VPfUDZ9?=
- =?us-ascii?Q?y/hexLRT+Re2r3/LEkPP7GD5Cc/e2qpKijPKCEtDaDH+gutuIiKEhvZjGTwh?=
- =?us-ascii?Q?IaiGvEDJeAKhIr9v3Tl2aagCNQDEaeQ9Is3au0/vy3CdGnWdV2rVhsgpVUQb?=
- =?us-ascii?Q?5a+nWyn2GeNWDLrLTzO+59Wrbhi4b7HA+PJI0nVy5Bn8Op4rcOUVSEMrWmSd?=
- =?us-ascii?Q?F8oj9/EIDQVrQtJqUnLA6sUytwTsk7qbY7EGrP0SZ5jMQ6fuhGkMXNASMMFK?=
- =?us-ascii?Q?fEVN0uB7+sbIb7XSwyZzGasjMukH9uhX9Heyvxd48k4luUwM+oQkDSTxzLrr?=
- =?us-ascii?Q?2FPW+h0LCzAUk5Is2GAQmE3OIN5Ga5awsxeJQmjKN5A6a0cQ6XvD8xJa89CA?=
- =?us-ascii?Q?ivIDG7sxDa1iUJttItEFAa9kb33VCORNaSt3qURFl8yDgrxGpljiOQnuO5XW?=
- =?us-ascii?Q?x4oCQRv7CMjDVPBVk6kdpd8l61YeVBZf1CgyhQBlPZjZYJLw+ONFVoDhFtt8?=
- =?us-ascii?Q?YhH75Brcn08AbS9fGRcvgrewDqVMswiXzbZp/RvFej75AjKZtg2NsK1fcJhX?=
- =?us-ascii?Q?rrT+cWYMUjNHck1nDQ+o8BAINmT3tYi6UflCWp1m8estjIBdX+n1qEokijLJ?=
- =?us-ascii?Q?/Hmc4ZxkBfW1Pyi01omBqqI9BLcQXK+ZUo9u1hLXsbVL/GZ1S/nGrRBGBDni?=
- =?us-ascii?Q?K50Oj7vRHraPQxNy9XZV4aN3WpC+yCM6Lsq7p1AQ?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 97485ad1-1581-4beb-b9c0-08db4c6d14ab
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB2169.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2023 06:59:18.6936
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: P6N/q7rpUo3jjLqCn5RX6nCjoUhmi+6GArMo5Oj8f8yJdUuomOrNXh3bn9zbTIksZXft5tU6gnoMF4rA4Lt3Kg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB5265
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v3 2/3] mfd: axp20x: Add support for AXP15060 PMIC
+Content-Language: en-US
+To:     Andre Przywara <andre.przywara@arm.com>, Lee Jones <lee@kernel.org>
+Cc:     Shengyu Qu <wiagn233@outlook.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, wens@csie.org,
+        lgirdwood@gmail.com, broonie@kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        conor.dooley@microchip.com,
+        Martin Botka <martin.botka@somainline.org>
+References: <20230421150816.10513-1-wiagn233@outlook.com>
+ <TY3P286MB261162D57695AC8164ED50E298609@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
+ <20230426142740.GN50521@google.com>
+ <20230503120759.6fd6a7a9@donnerap.cambridge.arm.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230503120759.6fd6a7a9@donnerap.cambridge.arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the check of data->free_work and data->do_work in io_wq_create
-io_wq_create is only called in io_init_wq_offload, which has already
-initialized free_work and do_work to io_wq_free_work and io_wq_submit_work
-respectively, so there is no need to detect whether free_work and
-do_work are null pointers in io_wq_create.
+On 03/05/2023 13:07, Andre Przywara wrote:
+> On Wed, 26 Apr 2023 15:27:40 +0100
+> Lee Jones <lee@kernel.org> wrote:
+> 
+> Hi Lee,
+> 
+> I see this patch in Linus' tree, but something must have gone wrong here,
+> can you please check? See below ...
+> 
+>> On Fri, 21 Apr 2023, Shengyu Qu wrote:
+>>
+>>> The AXP15060 is a PMIC chip produced by X-Powers, and could be connected
+>>> via an I2C bus.
+>>>
+>>> Describe the regmap and the MFD bits, along with the registers exposed
+>>> via I2C. Eventually advertise the device using a new compatible string
+>>> and add support for power off the system.
+>>>
+>>> The driver would disable PEK function if IRQ is not configured in device
+>>> tree, since some boards (For example, Starfive Visionfive 2) didn't
+>>> connect IRQ line of PMIC to SOC.
+>>>
+>>> GPIO function isn't enabled in this commit, since its configuration
+>>> operation is different from any existing AXP PMICs and needs
+>>> logic modification on existing driver. GPIO support might come in later
+>>> patches.
+>>>
+>>> ---  
+>>
+>> You must not use these above the tags or Git will drop them.
+>>
+>>> Changes since v2:
+>>>  - Rebase to AXP313a series v10 [1] + newest (20230420) -next branch
+> 
+> So this patch was based on the AXP313a series, but I don't see that in
+> Linus' tree (or in any of your trees, if I have checked correctly).
+> There must have been a conflict, as this [PATCH v3 2/3] diff actually lists
+> the axp313a entry in the context lines.
+> 
+>>>  - Add axp_regulator_only_cells rather than directly using axp806_cells
+>>>    for cases that IRQ line isn't connected.
+>>>
+>>> Changes since v1:
+>>>  - Nothing
+>>>
+>>> [1] https://lore.kernel.org/linux-sunxi/20230401001850.4988-1-andre.przywara@arm.com/
+>>>
+>>> Signed-off-by: Shengyu Qu <wiagn233@outlook.com>
+>>> ---  
+>>
+>> Put change-logs here instead.
+>>
+>>>  drivers/mfd/axp20x-i2c.c   |   2 +
+>>>  drivers/mfd/axp20x.c       | 107 +++++++++++++++++++++++++++++++++++++
+>>>  include/linux/mfd/axp20x.h |  85 +++++++++++++++++++++++++++++
+>>>  3 files changed, 194 insertions(+)  
+>>
+>> I manually added the missing tags for this and the DT patch and applied.
+> 
+> So this patch doesn't list any tags aside from Shengyu's
+> Signed-off-by. The patch in Linus' tree list a Reviewed-by: from
+> Krzysztof, which I don't see anywhere in the thread, he just reviewed the
+> binding patch, AFAICT. 
 
-Signed-off-by: luhongfei <luhongfei@vivo.com>
----
- io_uring/io-wq.c | 2 --
- 1 file changed, 2 deletions(-)
- mode change 100644 => 100755 io_uring/io-wq.c
+Yep, I never reviewed this.
 
-diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
-index f81c0a7136a5..b978a058ea51
---- a/io_uring/io-wq.c
-+++ b/io_uring/io-wq.c
-@@ -1143,8 +1143,6 @@ struct io_wq *io_wq_create(unsigned bounded, struct io_wq_data *data)
- 	int ret, node, i;
- 	struct io_wq *wq;
- 
--	if (WARN_ON_ONCE(!data->free_work || !data->do_work))
--		return ERR_PTR(-EINVAL);
- 	if (WARN_ON_ONCE(!bounded))
- 		return ERR_PTR(-EINVAL);
- 
--- 
-2.39.0
+> I see your tentative R-b: on v2, but with the
+> request to rebase and resend, which he did with v3. The applied patch
+> looks like v3, but not on the base commit this was send against.
+> 
+> So I am slightly confused, and am also wondering what happened to the
+> AXP313a patches? I see the binding patch merged, but not the MFD part,
+> even though you replied saying so.
+
+Because the patch #1 was broken, see:
+https://lore.kernel.org/all/TY3P286MB261177CF7AA2959BD9517DA998609@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM/
+
+The SoB and Reviewed-by were after --- and apparently b4 understood it
+as cover letter and applied everywhere.
+
+Lee,
+Do you have the latest b4? If yes, this should be reported as b4 bug,
+assuming you used it.
+
+Best regards,
+Krzysztof
 
