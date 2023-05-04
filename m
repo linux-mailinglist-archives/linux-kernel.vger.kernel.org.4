@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF1226F65E0
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 09:35:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 765576F65E1
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 09:35:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230107AbjEDHfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 03:35:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52284 "EHLO
+        id S230192AbjEDHfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 03:35:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbjEDHfR (ORCPT
+        with ESMTP id S230183AbjEDHf1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 03:35:17 -0400
+        Thu, 4 May 2023 03:35:27 -0400
 Received: from egress-ip33b.ess.de.barracuda.com (egress-ip33b.ess.de.barracuda.com [18.185.115.237])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C502358D
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 00:35:00 -0700 (PDT)
-Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198]) by mx-outbound19-253.eu-central-1b.ess.aws.cudaops.com (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO); Thu, 04 May 2023 07:34:45 +0000
-Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-64380c45e84so257729b3a.0
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 00:34:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA2F93C06
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 00:35:02 -0700 (PDT)
+Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198]) by mx-outbound19-253.eu-central-1b.ess.aws.cudaops.com (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO); Thu, 04 May 2023 07:34:48 +0000
+Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-6433bffb49eso243865b3a.2
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 00:34:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mistralsolutions.com; s=google; t=1683185684; x=1685777684;
+        d=mistralsolutions.com; s=google; t=1683185687; x=1685777687;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0s7oVHe0hpnuo3lFcvbzvKxfd16PFOp9/qLeZLiOcDE=;
-        b=TtVLGmbM7YpqlILyNvbKecKvW1Tkz7ud2L+JWkP/HfKziSMVtWk7dYaabJsu+Av799
-         GJ0KbSIXlalWz1oyRGoANvfbHkDRVU7Lp8s66E5xKUZoEHSp6HmJBins0Z55g8w11IlH
-         Oqo3rdFTFrJGNkR4LwqpR7A1qoGde5YG9bVGs=
+        bh=9vNLUoEmjoTXOO3mziGIxbt/WLJCyKmqPe2UuUWuFYc=;
+        b=cqAMdnI7lfCFAofFRQ1ePAFu5LSruBSsZWX1nwKJY3O7BrDuk7/lyTiLnLA0Y4ZHJv
+         Mz+a4C/bSmkur5LJdLBLw6VK7AjhZidYzUHYXMbe23JnvPEg0Z2D2FZO84cRsqZaswaR
+         EHmepWZzW1515MvXPZZiNM1P0XpzgJwC6rwPg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683185684; x=1685777684;
+        d=1e100.net; s=20221208; t=1683185687; x=1685777687;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0s7oVHe0hpnuo3lFcvbzvKxfd16PFOp9/qLeZLiOcDE=;
-        b=E8Qh6bq/EUryw4wRU9BcgE11PpFYcbCKC1D9rKIZ/0bdIiLioOSc3VQnVSgcHlu+E8
-         CW6v3ATsc2oGSb4GwM+uuQWO/S6GPny2Ey5N4tLHsDScwiMuse7MeGG0kVg0wSb6jJm3
-         +xMmIuGjIOeUTVv5UQksmqNL7Z4z6oGqqL+4cDyRLa1NYt+E8daDIJ1C5+Gx0xYZsww5
-         egG/oZpKyyHnSWUsbUrflwcGfY9OJjs30HHBAZYolBOxpPo9nbHX8xV4Cza/4hlA1bKM
-         CBjFkQBfTdEWwISe/zwSGc1yQZuvmm7bosuzCIiQOsxLavwRCIbq8UdHNcTuLnH24DLE
-         pqVQ==
-X-Gm-Message-State: AC+VfDxIT+fcxVbYp/mrpt75e+69Ovl8FfGkZVcx/OGr80Dlv8nrvUMX
-        94um1RQrmSxrzfv0vUJXvxMCdzIAgcpxcNGPRKtB3VNgspQMtrSSIX3jsNF4BztUQhATifFLStn
-        OS/+OTEoCCeBHqqYhQtaSNfcMavUh0WN0f3/fYpdfNzJma61tWSlnKx1NhnrL
-X-Received: by 2002:a05:6a00:cd3:b0:623:8592:75c4 with SMTP id b19-20020a056a000cd300b00623859275c4mr1550785pfv.29.1683185683816;
-        Thu, 04 May 2023 00:34:43 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7DW3NjbJ2HG7UhpJeJ0fnPX+I/Msvt6GmKpBvI84Y+NIAqIBDoERC6FUcWHp6H2BDAy3x7kA==
-X-Received: by 2002:a05:6a00:cd3:b0:623:8592:75c4 with SMTP id b19-20020a056a000cd300b00623859275c4mr1550773pfv.29.1683185683410;
-        Thu, 04 May 2023 00:34:43 -0700 (PDT)
+        bh=9vNLUoEmjoTXOO3mziGIxbt/WLJCyKmqPe2UuUWuFYc=;
+        b=Kfctok3mIaG4jCa8xXLJFUOSFDZbyYLS8jlA1rROrLesaMdRk91LpaEvVmS+L0b64b
+         31FMXUmtPSGW23n3XkH3CBgZen6JyrvgvfHCou83q/0OThXeD06+j85Zr0UJ+7judC73
+         N7fXN/Ls+wBxgbVWa8molCMNjKaMCChKn54hK7AhcwaedmoMeUV8MbEOLLAc53eOWPe9
+         mRLgBTYdRkFHdSkGW/l0wauTvgVPlbLdjdckuFUt9BL651doO9/AvyBYe5ldLrpO6esB
+         tZ7HHrEmZoCBmF8HGm9AK+qKxfP/UnZvV3YyfgNKX49d9DRP1Ew4VqU9J1OxvL9dN8UX
+         O8AA==
+X-Gm-Message-State: AC+VfDx0wVHN0xaBvln3c+kNUAgPjmxh8ZxjJkkXrOV1YRZAsaaDuUT5
+        cpUhsM9xK3IrHN26IYAXqcgKz5dstv81qturOWZqllkBQodYuOsIK8nKvPqneIdZ4nJxFoCuEsE
+        hfAbAZhnVdxVNfCUUTjZ7znyzskwbCMO7NLo5ZubSuCNg6Gig2krI5cCOGFka
+X-Received: by 2002:a05:6a00:10c2:b0:63d:368b:76b4 with SMTP id d2-20020a056a0010c200b0063d368b76b4mr1426966pfu.17.1683185686888;
+        Thu, 04 May 2023 00:34:46 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7ro8cnVsskkmjoVX2AQ/z0grX13MYCQte/P+10Hqo65N82GEpvqU9O7V8AJkLkJItF+7mb/g==
+X-Received: by 2002:a05:6a00:10c2:b0:63d:368b:76b4 with SMTP id d2-20020a056a0010c200b0063d368b76b4mr1426950pfu.17.1683185686550;
+        Thu, 04 May 2023 00:34:46 -0700 (PDT)
 Received: from LAP568U.mistral.in ([106.51.227.150])
-        by smtp.gmail.com with ESMTPSA id q22-20020aa79616000000b0063f1a1e3003sm22884865pfg.166.2023.05.04.00.34.40
+        by smtp.gmail.com with ESMTPSA id q22-20020aa79616000000b0063f1a1e3003sm22884865pfg.166.2023.05.04.00.34.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 May 2023 00:34:42 -0700 (PDT)
+        Thu, 04 May 2023 00:34:46 -0700 (PDT)
 From:   Sinthu Raja <sinthu.raja@mistralsolutions.com>
 X-Google-Original-From: Sinthu Raja <sinthu.raja@ti.com>
 To:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
@@ -58,24 +58,23 @@ To:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
 Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Sinthu Raja <sinthu.raja@ti.com>,
-        Thejasvi Konduru <t-konduru@ti.com>
-Subject: [PATCH V5 1/2] arm64: dts: ti: k3-j721s2: fix wkup pinmux range
-Date:   Thu,  4 May 2023 13:04:31 +0530
-Message-Id: <20230504073432.6438-2-sinthu.raja@ti.com>
+        linux-kernel@vger.kernel.org, Sinthu Raja <sinthu.raja@ti.com>
+Subject: [PATCH V5 2/2] arm64: dts: ti: k3-am68-sk-base-board: Add pinmux for RPi Header
+Date:   Thu,  4 May 2023 13:04:32 +0530
+Message-Id: <20230504073432.6438-3-sinthu.raja@ti.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20230504073432.6438-1-sinthu.raja@ti.com>
 References: <20230504073432.6438-1-sinthu.raja@ti.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-BESS-ID: 1683185684-305117-5467-1404-1
+X-BESS-ID: 1683185687-305117-5471-1408-1
 X-BESS-VER: 2019.1_20230502.2000
 X-BESS-Apparent-Source-IP: 209.85.210.198
-X-BESS-Parts: H4sIAAAAAAACA4uuVkqtKFGyUirNy1bSUcovVrIyNDI3MgIyM4CiSUkpBklJqc
-        ZpJilGpimWaUYpaeaGphYppgbGqWZpKaZKtbEAnPuft0IAAAA=
+X-BESS-Parts: H4sIAAAAAAACA4uuVkqtKFGyUirNy1bSUcovVrIyMTU3BrIygILGyWkmZoYp5o
+        aG5oYWSWZmqYnmBsYGBsmmKYZJBpbGKUq1sQAriYrKQQAAAA==
 X-BESS-Outbound-Spam-Score: 0.50
 X-BESS-Outbound-Spam-Report: Code version 3.2, rules version 3.2.2.247924 [from 
-        cloudscan8-159.eu-central-1a.ess.aws.cudaops.com]
+        cloudscan20-201.eu-central-1b.ess.aws.cudaops.com]
         Rule breakdown below
          pts rule name              description
         ---- ---------------------- --------------------------------
@@ -87,7 +86,7 @@ X-BESS-BRTS-Status: 1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -96,279 +95,136 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Sinthu Raja <sinthu.raja@ti.com>
 
-The WKUP_PADCONFIG register region in J721S2 has multiple non-addressable
-regions, accordingly split the existing wkup_pmx region as follows to avoid
-the non-addressable regions and include the rest of valid WKUP_PADCONFIG
-registers. Also update references to old nodes with new ones.
+Add pinmux required to bring out the i2c and gpios on 40-pin RPi
+expansion header on the AM68 SK board.
 
-wkup_pmx0 -> 13 pins (WKUP_PADCONFIG 0 - 12)
-wkup_pmx1 -> 11 pins (WKUP_PADCONFIG 14 - 24)
-wkup_pmx2 -> 72 pins (WKUP_PADCONFIG 26 - 97)
-wkup_pmx3 -> 1 pin (WKUP_PADCONFIG 100)
-
-Fixes: b8545f9d3a54 ("arm64: dts: ti: Add initial support for J721S2 SoC")
-Signed-off-by: Thejasvi Konduru <t-konduru@ti.com>
 Signed-off-by: Sinthu Raja <sinthu.raja@ti.com>
 ---
 
 No changes in V5.
 
 Changes in V4:
-- Correct the pinctrl node offsets as per the newly split wkup_pmx*
-  nodes 
+ * Correct the pinctrl node offsets as per the newly split wkup_pmx*
+   and main_pmx* nodes.
 
-Changes in V3:
-- Added Fix tag
-
-Changes in V2:
-- Update commit description.
-- Update the offset value to 0x194 because 0x190 is the last register of the
-  IO PADCONFIG register set.
-
- .../boot/dts/ti/k3-am68-sk-base-board.dts     | 42 +++++-----
- .../dts/ti/k3-j721s2-common-proc-board.dts    | 76 +++++++++----------
- .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     | 29 ++++++-
- 3 files changed, 87 insertions(+), 60 deletions(-)
+ .../boot/dts/ti/k3-am68-sk-base-board.dts     | 77 ++++++++++++++++++-
+ 1 file changed, 76 insertions(+), 1 deletion(-)
 
 diff --git a/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts b/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts
-index 27a43a8ecffd..67bcf906ded1 100644
+index 67bcf906ded1..67cbbfdc16b6 100644
 --- a/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts
 +++ b/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts
-@@ -175,49 +175,49 @@ J721S2_IOPAD(0x09c, PIN_INPUT, 0) /* (T24) MCASP0_AXR11.MCAN7_TX */
+@@ -173,6 +173,32 @@ J721S2_IOPAD(0x0a0, PIN_INPUT, 0) /* (AB25) MCASP0_AXR12.MCAN7_RX */
+ 			J721S2_IOPAD(0x09c, PIN_INPUT, 0) /* (T24) MCASP0_AXR11.MCAN7_TX */
+ 		>;
  	};
++
++	main_i2c4_pins_default: main-i2c4-pins-default {
++		pinctrl-single,pins = <
++			J721S2_IOPAD(0x010, PIN_INPUT_PULLUP, 8) /* (AF28) MCAN13_RX.I2C4_SDA */
++			J721S2_IOPAD(0x014, PIN_INPUT_PULLUP, 8) /* (AD25) MCAN14_TX.I2C4_SCL */
++		>;
++	};
++
++	rpi_header_gpio0_pins_default: rpi-header-gpio0-pins-default {
++		pinctrl-single,pins = <
++			J721S2_IOPAD(0x0a8, PIN_INPUT, 7) /* (U24)  MCASP0_AXR14.GPIO0_42 */
++			J721S2_IOPAD(0x090, PIN_INPUT, 7) /* (W24) MCASP0_AXR8.GPIO0_36 */
++			J721S2_IOPAD(0x0bc, PIN_INPUT, 7) /* (V28) MCASP1_AFSX.GPIO0_47 */
++			J721S2_IOPAD(0x06c, PIN_INPUT, 7) /* (V26) MCAN1_TX.GPIO0_27 */
++			J721S2_IOPAD(0x004, PIN_INPUT, 7) /* (W25) MCAN12_TX.GPIO0_1 */
++			J721S2_IOPAD(0x008, PIN_INPUT, 7) /* (AC24) MCAN12_RX.GPIO0_2 */
++			J721S2_IOPAD(0x0b8, PIN_INPUT, 7) /* (AA24) MCASP1_ACLKX.GPIO0_46 */
++			J721S2_IOPAD(0x00c, PIN_INPUT, 7) /* (AE28) MCAN13_TX.GPIO0_3 */
++			J721S2_IOPAD(0x034, PIN_INPUT, 7) /* (AD24) PMIC_WAKE0.GPIO0_13 */
++			J721S2_IOPAD(0x0a4, PIN_INPUT, 7) /* (T23) MCASP0_AXR13.GPIO0_41 */
++			J721S2_IOPAD(0x0c0, PIN_INPUT, 7) /* (T28) MCASP1_AXR0.GPIO0_48 */
++			J721S2_IOPAD(0x0b4, PIN_INPUT, 7) /* (U25) MCASP1_AXR4.GPIO0_45 */
++			J721S2_IOPAD(0x0cc, PIN_INPUT, 7) /* (AE27) SPI0_CS0.GPIO0_51 */
++			J721S2_IOPAD(0x08c, PIN_INPUT, 7) /* (T25) MCASP0_AXR7.GPIO0_35 */
++		>;
++	};
  };
  
--&wkup_pmx0 {
-+&wkup_pmx2 {
- 	mcu_cpsw_pins_default: mcu-cpsw-pins-default {
- 		pinctrl-single,pins = <
--			J721S2_WKUP_IOPAD(0x094, PIN_INPUT, 0) /* (B22) MCU_RGMII1_RD0 */
--			J721S2_WKUP_IOPAD(0x090, PIN_INPUT, 0) /* (B21) MCU_RGMII1_RD1 */
--			J721S2_WKUP_IOPAD(0x08c, PIN_INPUT, 0) /* (C22) MCU_RGMII1_RD2 */
--			J721S2_WKUP_IOPAD(0x088, PIN_INPUT, 0) /* (D23) MCU_RGMII1_RD3 */
--			J721S2_WKUP_IOPAD(0x084, PIN_INPUT, 0) /* (D22) MCU_RGMII1_RXC */
--			J721S2_WKUP_IOPAD(0x06c, PIN_INPUT, 0) /* (E23) MCU_RGMII1_RX_CTL */
--			J721S2_WKUP_IOPAD(0x07c, PIN_OUTPUT, 0) /* (F23) MCU_RGMII1_TD0 */
--			J721S2_WKUP_IOPAD(0x078, PIN_OUTPUT, 0) /* (G22) MCU_RGMII1_TD1 */
--			J721S2_WKUP_IOPAD(0x074, PIN_OUTPUT, 0) /* (E21) MCU_RGMII1_TD2 */
--			J721S2_WKUP_IOPAD(0x070, PIN_OUTPUT, 0) /* (E22) MCU_RGMII1_TD3 */
--			J721S2_WKUP_IOPAD(0x080, PIN_OUTPUT, 0) /* (F21) MCU_RGMII1_TXC */
--			J721S2_WKUP_IOPAD(0x068, PIN_OUTPUT, 0) /* (F22) MCU_RGMII1_TX_CTL */
-+			J721S2_WKUP_IOPAD(0x02C, PIN_INPUT, 0) /* (B22) MCU_RGMII1_RD0 */
-+			J721S2_WKUP_IOPAD(0x028, PIN_INPUT, 0) /* (B21) MCU_RGMII1_RD1 */
-+			J721S2_WKUP_IOPAD(0x024, PIN_INPUT, 0) /* (C22) MCU_RGMII1_RD2 */
-+			J721S2_WKUP_IOPAD(0x020, PIN_INPUT, 0) /* (D23) MCU_RGMII1_RD3 */
-+			J721S2_WKUP_IOPAD(0x01C, PIN_INPUT, 0) /* (D22) MCU_RGMII1_RXC */
-+			J721S2_WKUP_IOPAD(0x004, PIN_INPUT, 0) /* (E23) MCU_RGMII1_RX_CTL */
-+			J721S2_WKUP_IOPAD(0x014, PIN_OUTPUT, 0) /* (F23) MCU_RGMII1_TD0 */
-+			J721S2_WKUP_IOPAD(0x010, PIN_OUTPUT, 0) /* (G22) MCU_RGMII1_TD1 */
-+			J721S2_WKUP_IOPAD(0x00C, PIN_OUTPUT, 0) /* (E21) MCU_RGMII1_TD2 */
-+			J721S2_WKUP_IOPAD(0x008, PIN_OUTPUT, 0) /* (E22) MCU_RGMII1_TD3 */
-+			J721S2_WKUP_IOPAD(0x018, PIN_OUTPUT, 0) /* (F21) MCU_RGMII1_TXC */
-+			J721S2_WKUP_IOPAD(0x000, PIN_OUTPUT, 0) /* (F22) MCU_RGMII1_TX_CTL */
+ &wkup_pmx2 {
+@@ -214,12 +240,46 @@ J721S2_WKUP_IOPAD(0x068, PIN_OUTPUT, 0) /* (C23) WKUP_GPIO0_4.MCU_MCAN1_TX*/
  		>;
  	};
  
- 	mcu_mdio_pins_default: mcu-mdio-pins-default {
- 		pinctrl-single,pins = <
--			J721S2_WKUP_IOPAD(0x09c, PIN_OUTPUT, 0) /* (A21) MCU_MDIO0_MDC */
--			J721S2_WKUP_IOPAD(0x098, PIN_INPUT, 0) /* (A22) MCU_MDIO0_MDIO */
-+			J721S2_WKUP_IOPAD(0x034, PIN_OUTPUT, 0) /* (A21) MCU_MDIO0_MDC */
-+			J721S2_WKUP_IOPAD(0x030, PIN_INPUT, 0) /* (A22) MCU_MDIO0_MDIO */
- 		>;
- 	};
- 
- 	mcu_mcan0_pins_default: mcu-mcan0-pins-default {
- 		pinctrl-single,pins = <
--			J721S2_WKUP_IOPAD(0x0bc, PIN_INPUT, 0) /* (E28) MCU_MCAN0_RX */
--			J721S2_WKUP_IOPAD(0x0b8, PIN_OUTPUT, 0) /* (E27) MCU_MCAN0_TX */
-+			J721S2_WKUP_IOPAD(0x054, PIN_INPUT, 0) /* (E28) MCU_MCAN0_RX */
-+			J721S2_WKUP_IOPAD(0x050, PIN_OUTPUT, 0) /* (E27) MCU_MCAN0_TX */
- 		>;
- 	};
- 
- 	mcu_mcan1_pins_default: mcu-mcan1-pins-default {
- 		pinctrl-single,pins = <
--			J721S2_WKUP_IOPAD(0x0d4, PIN_INPUT, 0) /* (F26) WKUP_GPIO0_5.MCU_MCAN1_RX */
--			J721S2_WKUP_IOPAD(0x0d0, PIN_OUTPUT, 0) /* (C23) WKUP_GPIO0_4.MCU_MCAN1_TX*/
-+			J721S2_WKUP_IOPAD(0x06C, PIN_INPUT, 0) /* (F26) WKUP_GPIO0_5.MCU_MCAN1_RX */
-+			J721S2_WKUP_IOPAD(0x068, PIN_OUTPUT, 0) /* (C23) WKUP_GPIO0_4.MCU_MCAN1_TX*/
- 		>;
- 	};
- 
++	mcu_i2c0_pins_default: mcu-i2c0-pins-default {
++		pinctrl-single,pins = <
++			J721S2_WKUP_IOPAD(0x098, PIN_INPUT, 0) /*(H24) WKUP_GPIO0_63.MCU_I2C0_SCL*/
++			J721S2_WKUP_IOPAD(0x09C, PIN_INPUT, 0) /*(H27) WKUP_GPIO0_64.MCU_I2C0_SDA*/
++		>;
++	};
++
  	mcu_i2c1_pins_default: mcu-i2c1-pins-default {
  		pinctrl-single,pins = <
--			J721S2_WKUP_IOPAD(0x0e0, PIN_INPUT, 0) /* (F24) WKUP_GPIO0_8.MCU_I2C1_SCL */
--			J721S2_WKUP_IOPAD(0x0e4, PIN_INPUT, 0) /* (H26) WKUP_GPIO0_9.MCU_I2C1_SDA */
-+			J721S2_WKUP_IOPAD(0x078, PIN_INPUT, 0) /* (F24) WKUP_GPIO0_8.MCU_I2C1_SCL */
-+			J721S2_WKUP_IOPAD(0x07c, PIN_INPUT, 0) /* (H26) WKUP_GPIO0_9.MCU_I2C1_SDA */
+ 			J721S2_WKUP_IOPAD(0x078, PIN_INPUT, 0) /* (F24) WKUP_GPIO0_8.MCU_I2C1_SCL */
+ 			J721S2_WKUP_IOPAD(0x07c, PIN_INPUT, 0) /* (H26) WKUP_GPIO0_9.MCU_I2C1_SDA */
  		>;
+ 	};
++
++	mcu_rpi_header_gpio0_pins0_default: mcu-rpi-header-gpio0-pins0-default {
++		pinctrl-single,pins = <
++			J721S2_WKUP_IOPAD(0x118, PIN_INPUT, 7) /* (G25) WKUP_GPIO0_66 */
++			J721S2_WKUP_IOPAD(0x05C, PIN_INPUT, 7) /* (E24) MCU_SPI1_D0.WKUP_GPIO0_1 */
++			J721S2_WKUP_IOPAD(0x060, PIN_INPUT, 7) /* (C28) MCU_SPI1_D1.WKUP_GPIO0_2 */
++			J721S2_WKUP_IOPAD(0x058, PIN_INPUT, 7) /* (D26) MCU_SPI1_CLK.WKUP_GPIO0_0 */
++			J721S2_WKUP_IOPAD(0x094, PIN_INPUT, 7) /* (D25) MCU_SPI1_CS2.WKUP_GPIO0_15*/
++			J721S2_WKUP_IOPAD(0x0B8, PIN_INPUT, 7) /* (G27) WKUP_GPIO0_56 */
++			J721S2_WKUP_IOPAD(0x114, PIN_INPUT, 7) /* (J26) WKUP_GPIO0_57 */
++			J721S2_WKUP_IOPAD(0x11C, PIN_INPUT, 7) /* (J27) WKUP_GPIO0_67 */
++			J721S2_WKUP_IOPAD(0x064, PIN_INPUT, 7) /* (C27) MCU_SPI1_CS0.WKUP_GPIO0_3 */
++		>;
++	};
++};
++
++&wkup_pmx3 {
++	mcu_rpi_header_gpio0_pins1_default: mcu-rpi-header-gpio0-pins1-default {
++		pinctrl-single,pins = <
++			J721S2_WKUP_IOPAD(0x000, PIN_INPUT, 7) /* (K26) WKUP_GPIO0_49 */
++		>;
++	};
++};
++
++&main_gpio0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&rpi_header_gpio0_pins_default>;
+ };
+ 
+ &main_gpio2 {
+@@ -235,7 +295,8 @@ &main_gpio6 {
+ };
+ 
+ &wkup_gpio0 {
+-	status = "disabled";
++	pinctrl-names = "default";
++	pinctrl-0 = <&mcu_rpi_header_gpio0_pins0_default &mcu_rpi_header_gpio0_pins1_default>;
+ };
+ 
+ &wkup_gpio1 {
+@@ -271,6 +332,20 @@ exp1: gpio@21 {
  	};
  };
-diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-index b4b9edfe2d12..a7caf1c3404d 100644
---- a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-+++ b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-@@ -146,81 +146,81 @@ J721S2_IOPAD(0x020, PIN_INPUT, 7) /* (AA23) MCAN15_RX.GPIO0_8 */
- 	};
- };
  
--&wkup_pmx0 {
-+&wkup_pmx2 {
- 	mcu_cpsw_pins_default: mcu-cpsw-pins-default {
- 		pinctrl-single,pins = <
--			J721S2_WKUP_IOPAD(0x094, PIN_INPUT, 0) /* (B22) MCU_RGMII1_RD0 */
--			J721S2_WKUP_IOPAD(0x090, PIN_INPUT, 0) /* (B21) MCU_RGMII1_RD1 */
--			J721S2_WKUP_IOPAD(0x08c, PIN_INPUT, 0) /* (C22) MCU_RGMII1_RD2 */
--			J721S2_WKUP_IOPAD(0x088, PIN_INPUT, 0) /* (D23) MCU_RGMII1_RD3 */
--			J721S2_WKUP_IOPAD(0x084, PIN_INPUT, 0) /* (D22) MCU_RGMII1_RXC */
--			J721S2_WKUP_IOPAD(0x06c, PIN_INPUT, 0) /* (E23) MCU_RGMII1_RX_CTL */
--			J721S2_WKUP_IOPAD(0x07c, PIN_OUTPUT, 0) /* (F23) MCU_RGMII1_TD0 */
--			J721S2_WKUP_IOPAD(0x078, PIN_OUTPUT, 0) /* (G22) MCU_RGMII1_TD1 */
--			J721S2_WKUP_IOPAD(0x074, PIN_OUTPUT, 0) /* (E21) MCU_RGMII1_TD2 */
--			J721S2_WKUP_IOPAD(0x070, PIN_OUTPUT, 0) /* (E22) MCU_RGMII1_TD3 */
--			J721S2_WKUP_IOPAD(0x080, PIN_OUTPUT, 0) /* (F21) MCU_RGMII1_TXC */
--			J721S2_WKUP_IOPAD(0x068, PIN_OUTPUT, 0) /* (F22) MCU_RGMII1_TX_CTL */
-+			J721S2_WKUP_IOPAD(0x02c, PIN_INPUT, 0) /* (B22) MCU_RGMII1_RD0 */
-+			J721S2_WKUP_IOPAD(0x028, PIN_INPUT, 0) /* (B21) MCU_RGMII1_RD1 */
-+			J721S2_WKUP_IOPAD(0x024, PIN_INPUT, 0) /* (C22) MCU_RGMII1_RD2 */
-+			J721S2_WKUP_IOPAD(0x020, PIN_INPUT, 0) /* (D23) MCU_RGMII1_RD3 */
-+			J721S2_WKUP_IOPAD(0x01c, PIN_INPUT, 0) /* (D22) MCU_RGMII1_RXC */
-+			J721S2_WKUP_IOPAD(0x004, PIN_INPUT, 0) /* (E23) MCU_RGMII1_RX_CTL */
-+			J721S2_WKUP_IOPAD(0x014, PIN_OUTPUT, 0) /* (F23) MCU_RGMII1_TD0 */
-+			J721S2_WKUP_IOPAD(0x010, PIN_OUTPUT, 0) /* (G22) MCU_RGMII1_TD1 */
-+			J721S2_WKUP_IOPAD(0x00c, PIN_OUTPUT, 0) /* (E21) MCU_RGMII1_TD2 */
-+			J721S2_WKUP_IOPAD(0x008, PIN_OUTPUT, 0) /* (E22) MCU_RGMII1_TD3 */
-+			J721S2_WKUP_IOPAD(0x018, PIN_OUTPUT, 0) /* (F21) MCU_RGMII1_TXC */
-+			J721S2_WKUP_IOPAD(0x000, PIN_OUTPUT, 0) /* (F22) MCU_RGMII1_TX_CTL */
- 		>;
- 	};
- 
- 	mcu_mdio_pins_default: mcu-mdio-pins-default {
- 		pinctrl-single,pins = <
--			J721S2_WKUP_IOPAD(0x09c, PIN_OUTPUT, 0) /* (A21) MCU_MDIO0_MDC */
--			J721S2_WKUP_IOPAD(0x098, PIN_INPUT, 0) /* (A22) MCU_MDIO0_MDIO */
-+			J721S2_WKUP_IOPAD(0x034, PIN_OUTPUT, 0) /* (A21) MCU_MDIO0_MDC */
-+			J721S2_WKUP_IOPAD(0x030, PIN_INPUT, 0) /* (A22) MCU_MDIO0_MDIO */
- 		>;
- 	};
- 
- 	mcu_mcan0_pins_default: mcu-mcan0-pins-default {
- 		pinctrl-single,pins = <
--			J721S2_WKUP_IOPAD(0x0bc, PIN_INPUT, 0) /* (E28) MCU_MCAN0_RX */
--			J721S2_WKUP_IOPAD(0x0b8, PIN_OUTPUT, 0) /* (E27) MCU_MCAN0_TX */
-+			J721S2_WKUP_IOPAD(0x054, PIN_INPUT, 0) /* (E28) MCU_MCAN0_RX */
-+			J721S2_WKUP_IOPAD(0x050, PIN_OUTPUT, 0) /* (E27) MCU_MCAN0_TX */
- 		>;
- 	};
- 
- 	mcu_mcan1_pins_default: mcu-mcan1-pins-default {
- 		pinctrl-single,pins = <
--			J721S2_WKUP_IOPAD(0x0d4, PIN_INPUT, 0) /* (F26) WKUP_GPIO0_5.MCU_MCAN1_RX */
--			J721S2_WKUP_IOPAD(0x0d0, PIN_OUTPUT, 0) /* (C23) WKUP_GPIO0_4.MCU_MCAN1_TX */
-+			J721S2_WKUP_IOPAD(0x06c, PIN_INPUT, 0) /* (F26) WKUP_GPIO0_5.MCU_MCAN1_RX */
-+			J721S2_WKUP_IOPAD(0x068, PIN_OUTPUT, 0) /*(C23) WKUP_GPIO0_4.MCU_MCAN1_TX */
- 		>;
- 	};
- 
- 	mcu_mcan0_gpio_pins_default: mcu-mcan0-gpio-pins-default {
- 		pinctrl-single,pins = <
--			J721S2_WKUP_IOPAD(0x0c0, PIN_INPUT, 7) /* (D26) WKUP_GPIO0_0 */
--			J721S2_WKUP_IOPAD(0x0a8, PIN_INPUT, 7) /* (B25) MCU_SPI0_D1.WKUP_GPIO0_69 */
-+			J721S2_WKUP_IOPAD(0x058, PIN_INPUT, 7) /* (D26) WKUP_GPIO0_0 */
-+			J721S2_WKUP_IOPAD(0x040, PIN_INPUT, 7) /* (B25) MCU_SPI0_D1.WKUP_GPIO0_69 */
- 		>;
- 	};
- 
- 	mcu_mcan1_gpio_pins_default: mcu-mcan1-gpio-pins-default {
- 		pinctrl-single,pins = <
--			J721S2_WKUP_IOPAD(0x0c8, PIN_INPUT, 7) /* (C28) WKUP_GPIO0_2 */
-+			J721S2_WKUP_IOPAD(0x060, PIN_INPUT, 7) /* (C28) WKUP_GPIO0_2 */
- 		>;
- 	};
- 
- 	mcu_adc0_pins_default: mcu-adc0-pins-default {
- 		pinctrl-single,pins = <
--			J721S2_WKUP_IOPAD(0x134, PIN_INPUT, 0) /* (L25) MCU_ADC0_AIN0 */
--			J721S2_WKUP_IOPAD(0x138, PIN_INPUT, 0) /* (K25) MCU_ADC0_AIN1 */
--			J721S2_WKUP_IOPAD(0x13c, PIN_INPUT, 0) /* (M24) MCU_ADC0_AIN2 */
--			J721S2_WKUP_IOPAD(0x140, PIN_INPUT, 0) /* (L24) MCU_ADC0_AIN3 */
--			J721S2_WKUP_IOPAD(0x144, PIN_INPUT, 0) /* (L27) MCU_ADC0_AIN4 */
--			J721S2_WKUP_IOPAD(0x148, PIN_INPUT, 0) /* (K24) MCU_ADC0_AIN5 */
--			J721S2_WKUP_IOPAD(0x14c, PIN_INPUT, 0) /* (M27) MCU_ADC0_AIN6 */
--			J721S2_WKUP_IOPAD(0x150, PIN_INPUT, 0) /* (M26) MCU_ADC0_AIN7 */
-+			J721S2_WKUP_IOPAD(0x0cc, PIN_INPUT, 0) /* (L25) MCU_ADC0_AIN0 */
-+			J721S2_WKUP_IOPAD(0x0d0, PIN_INPUT, 0) /* (K25) MCU_ADC0_AIN1 */
-+			J721S2_WKUP_IOPAD(0x0d4, PIN_INPUT, 0) /* (M24) MCU_ADC0_AIN2 */
-+			J721S2_WKUP_IOPAD(0x0d8, PIN_INPUT, 0) /* (L24) MCU_ADC0_AIN3 */
-+			J721S2_WKUP_IOPAD(0x0dc, PIN_INPUT, 0) /* (L27) MCU_ADC0_AIN4 */
-+			J721S2_WKUP_IOPAD(0x0e0, PIN_INPUT, 0) /* (K24) MCU_ADC0_AIN5 */
-+			J721S2_WKUP_IOPAD(0x0e4, PIN_INPUT, 0) /* (M27) MCU_ADC0_AIN6 */
-+			J721S2_WKUP_IOPAD(0x0e8, PIN_INPUT, 0) /* (M26) MCU_ADC0_AIN7 */
- 		>;
- 	};
- 
- 	mcu_adc1_pins_default: mcu-adc1-pins-default {
- 		pinctrl-single,pins = <
--			J721S2_WKUP_IOPAD(0x154, PIN_INPUT, 0) /* (P25) MCU_ADC1_AIN0 */
--			J721S2_WKUP_IOPAD(0x158, PIN_INPUT, 0) /* (R25) MCU_ADC1_AIN1 */
--			J721S2_WKUP_IOPAD(0x15c, PIN_INPUT, 0) /* (P28) MCU_ADC1_AIN2 */
--			J721S2_WKUP_IOPAD(0x160, PIN_INPUT, 0) /* (P27) MCU_ADC1_AIN3 */
--			J721S2_WKUP_IOPAD(0x164, PIN_INPUT, 0) /* (N25) MCU_ADC1_AIN4 */
--			J721S2_WKUP_IOPAD(0x168, PIN_INPUT, 0) /* (P26) MCU_ADC1_AIN5 */
--			J721S2_WKUP_IOPAD(0x16c, PIN_INPUT, 0) /* (N26) MCU_ADC1_AIN6 */
--			J721S2_WKUP_IOPAD(0x170, PIN_INPUT, 0) /* (N27) MCU_ADC1_AIN7 */
-+			J721S2_WKUP_IOPAD(0x0ec, PIN_INPUT, 0) /* (P25) MCU_ADC1_AIN0 */
-+			J721S2_WKUP_IOPAD(0x0f0, PIN_INPUT, 0) /* (R25) MCU_ADC1_AIN1 */
-+			J721S2_WKUP_IOPAD(0x0f4, PIN_INPUT, 0) /* (P28) MCU_ADC1_AIN2 */
-+			J721S2_WKUP_IOPAD(0x0f8, PIN_INPUT, 0) /* (P27) MCU_ADC1_AIN3 */
-+			J721S2_WKUP_IOPAD(0x0fc, PIN_INPUT, 0) /* (N25) MCU_ADC1_AIN4 */
-+			J721S2_WKUP_IOPAD(0x100, PIN_INPUT, 0) /* (P26) MCU_ADC1_AIN5 */
-+			J721S2_WKUP_IOPAD(0x104, PIN_INPUT, 0) /* (N26) MCU_ADC1_AIN6 */
-+			J721S2_WKUP_IOPAD(0x108, PIN_INPUT, 0) /* (N27) MCU_ADC1_AIN7 */
- 		>;
- 	};
- };
-diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-index a353705a7463..fa31831e33e8 100644
---- a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-@@ -50,7 +50,34 @@ mcu_ram: sram@41c00000 {
- 	wkup_pmx0: pinctrl@4301c000 {
- 		compatible = "pinctrl-single";
- 		/* Proxy 0 addressing */
--		reg = <0x00 0x4301c000 0x00 0x178>;
-+		reg = <0x00 0x4301c000 0x00 0x034>;
-+		#pinctrl-cells = <1>;
-+		pinctrl-single,register-width = <32>;
-+		pinctrl-single,function-mask = <0xffffffff>;
-+	};
++&main_i2c4 {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&main_i2c4_pins_default>;
++	clock-frequency = <400000>;
++};
 +
-+	wkup_pmx1: pinctrl@4301c038 {
-+		compatible = "pinctrl-single";
-+		/* Proxy 0 addressing */
-+		reg = <0x00 0x4301c038 0x00 0x02C>;
-+		#pinctrl-cells = <1>;
-+		pinctrl-single,register-width = <32>;
-+		pinctrl-single,function-mask = <0xffffffff>;
-+	};
++&mcu_i2c0 {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&mcu_i2c0_pins_default>;
++	clock-frequency = <400000>;
++};
 +
-+	wkup_pmx2: pinctrl@4301c068 {
-+		compatible = "pinctrl-single";
-+		/* Proxy 0 addressing */
-+		reg = <0x00 0x4301c068 0x00 0x120>;
-+		#pinctrl-cells = <1>;
-+		pinctrl-single,register-width = <32>;
-+		pinctrl-single,function-mask = <0xffffffff>;
-+	};
-+
-+	wkup_pmx3: pinctrl@4301c190 {
-+		compatible = "pinctrl-single";
-+		/* Proxy 0 addressing */
-+		reg = <0x00 0x4301c190 0x00 0x004>;
- 		#pinctrl-cells = <1>;
- 		pinctrl-single,register-width = <32>;
- 		pinctrl-single,function-mask = <0xffffffff>;
+ &main_sdhci0 {
+ 	/* Unused */
+ 	status = "disabled";
 -- 
 2.36.1
 
