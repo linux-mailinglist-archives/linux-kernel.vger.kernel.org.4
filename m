@@ -2,224 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83C866F67F7
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 11:07:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C0106F67F9
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 11:07:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230112AbjEDJH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 05:07:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33432 "EHLO
+        id S230224AbjEDJHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 05:07:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbjEDJH1 (ORCPT
+        with ESMTP id S230178AbjEDJHa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 05:07:27 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076C78F;
-        Thu,  4 May 2023 02:07:24 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Thu, 4 May 2023 05:07:30 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF198F
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 02:07:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1683191248; x=1714727248;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=TgRfuEiSYLGvwOx+jCad+MlcgTvyjfSwiQwQ90ROdIg=;
+  b=SkERozUzJGr5OU8N6uktaZW4b/mtXw7fsGIUjqHjP3oJ2kkKRlAgbSte
+   vvZaAWHmfEMmVcQoenVcEML8XFgWeq16sn/iqHmnu3LydYtODig2PXoU+
+   /Z8vl/DpfRe9Le+5B8bGTzmys/tf/nI5PEK5+V8Uq+yJdvcCrnxz3yjmq
+   kV7sr435kLbbGR0/OERd8TyRxBcVvYm8HG/VM1D7Ad/GMhaB4Xn63fNGN
+   JYCzL8JxVZaN+VfPO14iGpXDaDoVB/LUHJsgNH7phQhWV76luIfuEmQA9
+   ZbVqSYEQJEU6Qsh60GKljvtvZFcIlzw9iw/dLEcPejVN042hw0wFmaAlB
+   A==;
+X-IronPort-AV: E=Sophos;i="5.99,249,1677538800"; 
+   d="scan'208";a="30714724"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 04 May 2023 11:07:26 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Thu, 04 May 2023 11:07:26 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Thu, 04 May 2023 11:07:26 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1683191246; x=1714727246;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=TgRfuEiSYLGvwOx+jCad+MlcgTvyjfSwiQwQ90ROdIg=;
+  b=UzP8IxqvBeD5XmQSWXQ44mit3aJHnjYdGpoLUpXJLgNLkd5QbBPgdfpL
+   SlnvwlF9YBF+gwGMMuQW8EsSqYGPuxw66lZs+hpaRPRADr69fEJqIGp9z
+   clITMDMc2cGt2RgaPyz5rNmATJCJdu2xUqz8/p9MB0i4qM5VBvb6hRAAQ
+   ze3MKti+lxAx6x25iJxgWuYrpiftkMTTrhuBYM1vsWpuK1jsFSOLdFr3V
+   F0rKcjkMrYyOQorVUN/OPclmZvnSaHxbLke4aGICrB3pFbNaj5ajJLORv
+   eOVilLmMkNopWOTaXbnBXzNl4RusON0Ze8EAx+eRMo13lvcCeFZaw/Wno
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.99,249,1677538800"; 
+   d="scan'208";a="30714723"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 04 May 2023 11:07:26 +0200
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 9956B33923;
-        Thu,  4 May 2023 09:07:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1683191243; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+qJXmRqw+FfGzaNlkZLDu9Le9CEnkyHeMqv8Le5oQts=;
-        b=ANDPuuGSLrqGeihHM91AJqPDxRdii3XkVbscUjditUheMtvnk8aFBqZLYzfGOSm4Wpep5y
-        MN0JxYMPYvRX9Ro+qxZW6USNL5DsbvnuexjUyhsNUQ1F8AiMfWl8V+BA7+Nj2/Wdmi4sGz
-        dYzHf3+YdyqXWoFquZFW6OeAMIcZ5Gc=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6EB8613444;
-        Thu,  4 May 2023 09:07:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id zaOgGst1U2SVTAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Thu, 04 May 2023 09:07:23 +0000
-Date:   Thu, 4 May 2023 11:07:22 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
-        vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev,
-        mgorman@suse.de, dave@stgolabs.net, willy@infradead.org,
-        liam.howlett@oracle.com, corbet@lwn.net, void@manifault.com,
-        peterz@infradead.org, juri.lelli@redhat.com, ldufour@linux.ibm.com,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, peterx@redhat.com, david@redhat.com,
-        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
-        nathan@kernel.org, dennis@kernel.org, tj@kernel.org,
-        muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
-        pasha.tatashin@soleen.com, yosryahmed@google.com,
-        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
-        andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, gregkh@linuxfoundation.org,
-        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
-Subject: Re: [PATCH 00/40] Memory allocation profiling
-Message-ID: <ZFN1yswCd9wRgYPR@dhcp22.suse.cz>
-References: <20230501165450.15352-1-surenb@google.com>
- <ZFIMaflxeHS3uR/A@dhcp22.suse.cz>
- <CAJuCfpHxbYFxDENYFfnggh1D8ot4s493PQX0C7kD-JLvixC-Vg@mail.gmail.com>
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 809AD280056;
+        Thu,  4 May 2023 11:07:25 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        dri-devel@lists.freedesktop.org, Inki Dae <inki.dae@samsung.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        linux-kernel@vger.kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>
+Cc:     Marek Vasut <marex@denx.de>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Frieder Schrempf <frieder@fris.de>
+Subject: Re: [PATCH v2 1/2] drm: bridge: samsung-dsim: Fix i.MX8M enable flow to meet spec
+Date:   Thu, 04 May 2023 11:07:24 +0200
+Message-ID: <8215519.T7Z3S40VBb@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <20230503163313.2640898-2-frieder@fris.de>
+References: <20230503163313.2640898-1-frieder@fris.de> <20230503163313.2640898-2-frieder@fris.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJuCfpHxbYFxDENYFfnggh1D8ot4s493PQX0C7kD-JLvixC-Vg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 03-05-23 08:09:28, Suren Baghdasaryan wrote:
-> On Wed, May 3, 2023 at 12:25 AM Michal Hocko <mhocko@suse.com> wrote:
-[...]
-> Thanks for summarizing!
-> 
-> > At least those I find the most important:
-> > - This is a big change and it adds a significant maintenance burden
-> >   because each allocation entry point needs to be handled specifically.
-> >   The cost will grow with the intended coverage especially there when
-> >   allocation is hidden in a library code.
-> 
-> Do you mean with more allocations in the codebase more codetags will
-> be generated? Is that the concern?
+Hello Frieder,
 
-No. I am mostly concerned about the _maintenance_ overhead. For the
-bare tracking (without profiling and thus stack traces) only those
-allocations that are directly inlined into the consumer are really
-of any use. That increases the code impact of the tracing because any
-relevant allocation location has to go through the micro surgery. 
+Am Mittwoch, 3. Mai 2023, 18:33:06 CEST schrieb Frieder Schrempf:
+> From: Frieder Schrempf <frieder.schrempf@kontron.de>
+>=20
+> According to the documentation [1] the proper enable flow is:
+>=20
+> 1. Enable DSI link and keep data lanes in LP-11 (stop state)
+> 2. Disable stop state to bring data lanes into HS mode
+>=20
+> Currently we do this all at once within enable(), which doesn't
+> allow to meet the requirements of some downstream bridges.
+>=20
+> To fix this we now enable the DSI in pre_enable() and force it
+> into stop state using the FORCE_STOP_STATE bit in the ESCMODE
+> register until enable() is called where we reset the bit.
+>=20
+> We currently do this only for i.MX8M as Exynos uses a different
+> init flow where samsung_dsim_init() is called from
+> samsung_dsim_host_transfer().
+>=20
+> [1]
+> https://docs.kernel.org/gpu/drm-kms-helpers.html#mipi-dsi-bridge-operation
+>=20
+> Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+> ---
+> Changes for v2:
+> * Drop RFC
+> ---
+>  drivers/gpu/drm/bridge/samsung-dsim.c | 25 +++++++++++++++++++++++--
+>  1 file changed, 23 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c
+> b/drivers/gpu/drm/bridge/samsung-dsim.c index e0a402a85787..9775779721d9
+> 100644
+> --- a/drivers/gpu/drm/bridge/samsung-dsim.c
+> +++ b/drivers/gpu/drm/bridge/samsung-dsim.c
+> @@ -859,6 +859,10 @@ static int samsung_dsim_init_link(struct samsung_dsim
+> *dsi) reg =3D samsung_dsim_read(dsi, DSIM_ESCMODE_REG);
+>  	reg &=3D ~DSIM_STOP_STATE_CNT_MASK;
+>  	reg |=3D DSIM_STOP_STATE_CNT(driver_data->reg_values[STOP_STATE_CNT]);
+> +
+> +	if (!samsung_dsim_hw_is_exynos(dsi->plat_data->hw_type))
+> +		reg |=3D DSIM_FORCE_STOP_STATE;
+> +
+>  	samsung_dsim_write(dsi, DSIM_ESCMODE_REG, reg);
+>=20
+>  	reg =3D DSIM_BTA_TIMEOUT(0xff) | DSIM_LPDR_TIMEOUT(0xffff);
+> @@ -1340,6 +1344,9 @@ static void samsung_dsim_atomic_pre_enable(struct
+> drm_bridge *bridge, ret =3D samsung_dsim_init(dsi);
+>  		if (ret)
+>  			return;
+> +
+> +		samsung_dsim_set_display_mode(dsi);
+> +		samsung_dsim_set_display_enable(dsi, true);
+>  	}
+>  }
+>=20
+> @@ -1347,9 +1354,16 @@ static void samsung_dsim_atomic_enable(struct
+> drm_bridge *bridge, struct drm_bridge_state *old_bridge_state)
+>  {
+>  	struct samsung_dsim *dsi =3D bridge_to_dsi(bridge);
+> +	u32 reg;
+>=20
+> -	samsung_dsim_set_display_mode(dsi);
+> -	samsung_dsim_set_display_enable(dsi, true);
+> +	if (samsung_dsim_hw_is_exynos(dsi->plat_data->hw_type)) {
+> +		samsung_dsim_set_display_mode(dsi);
+> +		samsung_dsim_set_display_enable(dsi, true);
+> +	} else {
+> +		reg =3D samsung_dsim_read(dsi, DSIM_ESCMODE_REG);
+> +		reg &=3D ~DSIM_FORCE_STOP_STATE;
+> +		samsung_dsim_write(dsi, DSIM_ESCMODE_REG, reg);
+> +	}
+>=20
+>  	dsi->state |=3D DSIM_STATE_VIDOUT_AVAILABLE;
+>  }
+> @@ -1358,10 +1372,17 @@ static void samsung_dsim_atomic_disable(struct
+> drm_bridge *bridge, struct drm_bridge_state *old_bridge_state)
+>  {
+>  	struct samsung_dsim *dsi =3D bridge_to_dsi(bridge);
+> +	u32 reg;
+>=20
+>  	if (!(dsi->state & DSIM_STATE_ENABLED))
+>  		return;
+>=20
+> +	if (!samsung_dsim_hw_is_exynos(dsi->plat_data->hw_type)) {
+> +		reg =3D samsung_dsim_read(dsi, DSIM_ESCMODE_REG);
+> +		reg |=3D DSIM_FORCE_STOP_STATE;
+> +		samsung_dsim_write(dsi, DSIM_ESCMODE_REG, reg);
+> +	}
+> +
+>  	dsi->state &=3D ~DSIM_STATE_VIDOUT_AVAILABLE;
+>  }
 
-e.g. is it really interesting to know that there is a likely memory
-leak in seq_file proper doing and allocation? No as it is the specific
-implementation using seq_file that is leaking most likely. There are
-other examples like that See?
+I know that this is necessary right now, but I don't like that=20
+'samsung_dsim_hw_is_exynos()' checks all over the place.
 
-> Or maybe as you commented in
-> another patch that context capturing feature does not limit how many
-> stacks will be captured?
+Despite that:
+Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com> #TQMa8MxML/MBa=
+8Mx
 
-That is a memory overhead which can be really huge and it would be nice
-to be more explicit about that in the cover letter. It is a downside for
-sure but not something that has a code maintenance impact and it is an
-opt-in so it can be enabled only when necessary.
+=2D-=20
+TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
+Amtsgericht M=FCnchen, HRB 105018
+Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
+http://www.tq-group.com/
 
-Quite honestly, though, the more I look into context capturing part it
-seems to me that there is much more to be reconsidered there and if you
-really want to move forward with the code tagging part then you should
-drop that for now. It would make the whole series smaller and easier to
-digest.
 
-> > - It has been brought up that this is duplicating functionality already
-> >   available via existing tracing infrastructure. You should make it very
-> >   clear why that is not suitable for the job
-> 
-> I experimented with using tracing with _RET_IP_ to implement this
-> accounting. The major issue is the _RET_IP_ to codetag lookup runtime
-> overhead which is orders of magnitude higher than proposed code
-> tagging approach. With code tagging proposal, that link is resolved at
-> compile time. Since we want this mechanism deployed in production, we
-> want to keep the overhead to the absolute minimum.
-> You asked me before how much overhead would be tolerable and the
-> answer will always be "as small as possible". This is especially true
-> for slab allocators which are ridiculously fast and regressing them
-> would be very noticable (due to the frequent use).
-
-It would have been more convincing if you had some numbers at hands.
-E.g. this is a typical workload we are dealing with. With the compile
-time tags we are able to learn this with that much of cost. With a dynamic
-tracing we are able to learn this much with that cost. See? As small as
-possible is a rather vague term that different people will have a very
-different idea about.
-
-> There is another issue, which I think can be solved in a smart way but
-> will either affect performance or would require more memory. With the
-> tracing approach we don't know beforehand how many individual
-> allocation sites exist, so we have to allocate code tags (or similar
-> structures for counting) at runtime vs compile time. We can be smart
-> about it and allocate in batches or even preallocate more than we need
-> beforehand but, as I said, it will require some kind of compromise.
-
-I have tried our usual distribution config (only vmlinux without modules
-so the real impact will be larger as we build a lot of stuff into
-modules) just to get an idea:
-   text    data     bss     dec     hex filename
-28755345        17040322        19845124        65640791        3e99957 vmlinux.before
-28867168        17571838        19386372        65825378        3ec6a62 vmlinux.after
-
-Less than 1% for text 3% for data.  This is not all that terrible
-for an initial submission and a more dynamic approach could be added
-later. E.g. with a smaller pre-allocated hash table that could be
-expanded lazily. Anyway not something I would be losing sleep over. This
-can always be improved later on.
-
-> I understand that code tagging creates additional maintenance burdens
-> but I hope it also produces enough benefits that people will want
-> this. The cost is also hopefully amortized when additional
-> applications like the ones we presented in RFC [1] are built using the
-> same framework.
-
-TBH I am much more concerned about the maintenance burden on the MM side
-than the actual code tagging itslef which is much more self contained. I
-haven't seen other potential applications of the same infrastructure and
-maybe the code impact would be much smaller than in the MM proper. Our
-allocator API is really hairy and convoluted.
-
-> > - We already have page_owner infrastructure that provides allocation
-> >   tracking data. Why it cannot be used/extended?
-> 
-> 1. The overhead.
-
-Do you have any numbers?
-
-> 2. Covers only page allocators.
-
-Yes this sucks.
-> 
-> I didn't think about extending the page_owner approach to slab
-> allocators but I suspect it would not be trivial. I don't see
-> attaching an owner to every slab object to be a scalable solution. The
-> overhead would again be of concern here.
-
-This would have been a nice argument to mention in the changelog so that
-we know that you have considered that option at least. Why should I (as
-a reviewer) wild guess that?
-
-> I should point out that there was one important technical concern
-> about lack of a kill switch for this feature, which was an issue for
-> distributions that can't disable the CONFIG flag. In this series we
-> addressed that concern.
-
-Thanks, that is certainly appreciated. I haven't looked deeper into that
-part but from the cover letter I have understood that CONFIG_MEM_ALLOC_PROFILING
-implies unconditional page_ext and therefore the memory overhead
-assosiated with that. There seems to be a killswitch nomem_profiling but
-from a quick look it doesn't seem to disable page_ext allocations. I
-might be missing something there of course. Having a highlevel
-describtion for that would be really nice as well.
-
-> [1] https://lore.kernel.org/all/20220830214919.53220-1-surenb@google.com/
-
--- 
-Michal Hocko
-SUSE Labs
