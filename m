@@ -2,88 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A51F6F6A99
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 13:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E286F6F6A9C
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 13:59:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230215AbjEDL7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 07:59:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36120 "EHLO
+        id S229945AbjEDL7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 07:59:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbjEDL7O (ORCPT
+        with ESMTP id S229622AbjEDL7b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 07:59:14 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03D81F5;
-        Thu,  4 May 2023 04:59:13 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3447vuSM026778;
-        Thu, 4 May 2023 11:58:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=CUQWRKLZRip6xpAUW13wMOgQEOo31PxUuExn7maiGjg=;
- b=QxMrXJUxnWFZWB4fReLSdfnMfIr8PEkIyZbS6JGHimHdak8RFzAD70Z31iurOZ3DUKuA
- QSAbPFPLeNlyLoKPHAvoiDYq5vqkPffpZkIZIpEE/70JUMNjAocze4/ZFQIxICUNPB6t
- BXdDI0asVBTml4n9Axj3Q1voLb1f9V/otqi8+kM3H58bprLb/udS19R4Fi+9NYvDMvrL
- vb+MQWyiQxPNeqGHzEz/9K0SRZ8FX1FaQKrBo5iWSWzBOzjKuOh4riDba7IheO4Ca5Vr
- e1th57WHR+5CnvyWlNsjbld3fqSqzwN5e8LObuzqRIiTPGySqxiQz6FCXQYZ1Wdnv0Bq zg== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qbruvtfn0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 04 May 2023 11:58:54 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 344BwrXx000636
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 4 May 2023 11:58:54 GMT
-Received: from [10.216.46.158] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 4 May 2023
- 04:58:46 -0700
-Message-ID: <e69862cc-4185-a7a2-07b2-15e331c4678a@quicinc.com>
-Date:   Thu, 4 May 2023 17:28:42 +0530
+        Thu, 4 May 2023 07:59:31 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092945580;
+        Thu,  4 May 2023 04:59:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683201567; x=1714737567;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wCXBg5zlOMnRfdDbHBWzSwfpftDOz/d8B2/eAav00OQ=;
+  b=abk3r+NfsJKMOTX7jPBo6MEBHSB2vM3RXJMMA539R4V6XDBcNg6kot9g
+   l2LoVVmspKy8lbx3uw+bmy2ZmadwWtjz//+otHY+7zAX3q1SRJiyiVENg
+   naRXK3iJ1wmNyHAqEr2GygEoaz74ycvpHJoDVFfVFX4FAe5MKZyfjfEK4
+   e8sBs6CIkXCffK+BO1LjJOtzYnTSyllk/ZUITpcfEvJbANoPje2q8Ku8d
+   LAA/j4MZNmPHe0OrC34SsNt0jhgibV2PTyjv4eojHi3pQceT+yB0UbJJY
+   4Q/N5GdtJHwmvnAzVCae5SG/laWXxvrcUOSUTBSFWk6v6nUFuV0joBiIJ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="435219600"
+X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
+   d="scan'208";a="435219600"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 04:59:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="943307312"
+X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
+   d="scan'208";a="943307312"
+Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 04 May 2023 04:59:24 -0700
+Received: from kbuild by e3434d64424d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1puXcJ-0002to-2p;
+        Thu, 04 May 2023 11:59:23 +0000
+Date:   Thu, 4 May 2023 19:59:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jorge Lopez <jorgealtxwork@gmail.com>, hdegoede@redhat.com,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        thomas@t-8ch.de
+Cc:     oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v11 13/14] HP BIOSCFG driver  - Makefile
+Message-ID: <202305041942.Cc0sqwxY-lkp@intel.com>
+References: <20230420165454.9517-14-jorge.lopez2@hp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 02/18] remoteproc: qcom: Move minidump specific data to
- qcom_minidump.h
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <corbet@lwn.net>,
-        <keescook@chromium.org>, <tony.luck@intel.com>,
-        <gpiccoli@igalia.com>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <robh+dt@kernel.org>, <linus.walleij@linaro.org>,
-        <linux-gpio@vger.kernel.org>, <srinivas.kandagatla@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-hardening@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-doc@vger.kernel.org>
-References: <1683133352-10046-1-git-send-email-quic_mojha@quicinc.com>
- <1683133352-10046-3-git-send-email-quic_mojha@quicinc.com>
- <fe94ed5c-c444-436d-720a-c96538c1026d@linaro.org>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <fe94ed5c-c444-436d-720a-c96538c1026d@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: lcWH5A3jQcVSqhsRY1Kj-vzLNowQksQ-
-X-Proofpoint-ORIG-GUID: lcWH5A3jQcVSqhsRY1Kj-vzLNowQksQ-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-04_07,2023-05-04_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- impostorscore=0 mlxscore=0 adultscore=0 mlxlogscore=348 spamscore=0
- clxscore=1015 lowpriorityscore=0 priorityscore=1501 phishscore=0
- bulkscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2305040097
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230420165454.9517-14-jorge.lopez2@hp.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,38 +66,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Jorge,
 
+kernel test robot noticed the following build errors:
 
-On 5/4/2023 5:08 PM, Krzysztof Kozlowski wrote:
-> On 03/05/2023 19:02, Mukesh Ojha wrote:
->> Move minidump specific data types and macros to a separate internal
->> header(qcom_minidump.h) so that it can be shared among different
->> Qualcomm drivers.
-> 
-> No, this is not internal header. You moved it to global header.
-> 
-> There is no reason driver internals should be exposed to other unrelated
-> subsystems.
-> 
->>
->> There is no change in functional behavior after this.
-> 
-> It is. You made all these internal symbols available to others.
-> 
->>
-> 
-> This comes without justification why other drivers needs to access
-> private and internal data. It does not look correct design. NAK.
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.3 next-20230428]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks for catching outdated commit text, will fix the commit with
-more descriptive reasoning.
+url:    https://github.com/intel-lab-lkp/linux/commits/Jorge-Lopez/HP-BIOSCFG-driver-Documentation/20230421-012956
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20230420165454.9517-14-jorge.lopez2%40hp.com
+patch subject: [PATCH v11 13/14] HP BIOSCFG driver  - Makefile
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20230504/202305041942.Cc0sqwxY-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/55e860a942040b0d0f1b58362dc4885b1a8acaf2
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jorge-Lopez/HP-BIOSCFG-driver-Documentation/20230421-012956
+        git checkout 55e860a942040b0d0f1b58362dc4885b1a8acaf2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 olddefconfig
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-It has to be global so that co-processor minidump and apss minidump can
-share data structure and they are lying in different directory.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305041942.Cc0sqwxY-lkp@intel.com/
 
--Mukesh
+All errors (new ones prefixed by >>):
 
-> 
-> Best regards,
-> Krzysztof
-> 
+   ld: drivers/platform/x86/hp/hp-bioscfg/bioscfg.o: in function `get_wmiobj_pointer':
+>> bioscfg.c:(.text+0x750): multiple definition of `get_wmiobj_pointer'; drivers/platform/x86/dell/dell-wmi-sysman/sysman.o:sysman.c:(.text+0x830): first defined here
+   ld: drivers/platform/x86/hp/hp-bioscfg/bioscfg.o: in function `get_instance_count':
+>> bioscfg.c:(.text+0x7ac): multiple definition of `get_instance_count'; drivers/platform/x86/dell/dell-wmi-sysman/sysman.o:sysman.c:(.text+0x88c): first defined here
+   ld: drivers/platform/x86/hp/hp-bioscfg/biosattr-interface.o: in function `init_bios_attr_set_interface':
+>> biosattr-interface.c:(.text+0x4dc): multiple definition of `init_bios_attr_set_interface'; drivers/platform/x86/dell/dell-wmi-sysman/biosattr-interface.o:biosattr-interface.c:(.text+0x33c): first defined here
+   ld: drivers/platform/x86/hp/hp-bioscfg/biosattr-interface.o: in function `exit_bios_attr_set_interface':
+>> biosattr-interface.c:(.text+0x4f8): multiple definition of `exit_bios_attr_set_interface'; drivers/platform/x86/dell/dell-wmi-sysman/biosattr-interface.o:biosattr-interface.c:(.text+0x358): first defined here
+   ld: drivers/platform/x86/hp/hp-bioscfg/passwdattr-interface.o: in function `init_bios_attr_pass_interface':
+>> passwdattr-interface.c:(.text+0x68): multiple definition of `init_bios_attr_pass_interface'; drivers/platform/x86/dell/dell-wmi-sysman/passwordattr-interface.o:passwordattr-interface.c:(.text+0x338): first defined here
+   ld: drivers/platform/x86/hp/hp-bioscfg/passwdattr-interface.o: in function `exit_bios_attr_pass_interface':
+>> passwdattr-interface.c:(.text+0x84): multiple definition of `exit_bios_attr_pass_interface'; drivers/platform/x86/dell/dell-wmi-sysman/passwordattr-interface.o:passwordattr-interface.c:(.text+0x354): first defined here
+   ld: drivers/platform/x86/hp/hp-bioscfg/spmobj-attributes.o: in function `calculate_security_buffer':
+>> spmobj-attributes.c:(.text+0x4c4): multiple definition of `calculate_security_buffer'; drivers/platform/x86/dell/dell-wmi-sysman/sysman.o:sysman.c:(.text+0x714): first defined here
+   ld: drivers/platform/x86/hp/hp-bioscfg/spmobj-attributes.o: in function `populate_security_buffer':
+>> spmobj-attributes.c:(.text+0x524): multiple definition of `populate_security_buffer'; drivers/platform/x86/dell/dell-wmi-sysman/sysman.o:sysman.c:(.text+0x744): first defined here
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
