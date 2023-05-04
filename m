@@ -2,230 +2,779 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B74EA6F6879
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 11:40:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0D496F687E
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 11:42:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbjEDJka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 05:40:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56272 "EHLO
+        id S230335AbjEDJmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 05:42:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbjEDJk1 (ORCPT
+        with ESMTP id S230322AbjEDJmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 05:40:27 -0400
-Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B3D5247
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 02:40:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1683193200; x=1714729200;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=0zPHZfGe41uBz/sWfe+fK0hOx8IcIZ7Q662CIOWXatE=;
-  b=EJ+bIpCVt4zVFukr+4AJzjEK0fVXkirGX3Odhpe9qcJMjFB28xT0pw87
-   AGk8CCML6SNyJWehrTUbc6wDgXYhQF7ksC3sK/RyhFyPTLw7A9xQrwROC
-   GFo1HKZ4waWvVPA4MmwOHwuVzap2SZ6DSKf0VhdpBdhtVdbwdxQ6MrqtL
-   a5J/A4u64usbDJJ89Y1bw+yfXuiamtrj1KOfVougMqN1GdJq5fiMbSmH6
-   m321o0ijwwcccCl/gh58V9upzUhDJscZ+ajR17g48PNzB5T7L7Ie0O5mj
-   2qRI3dnh/GxmHgMcu+Mn72SsGFv+EUIKK2Z4QNYEOhe8TYBx+nlRoS+25
-   w==;
-X-IronPort-AV: E=Sophos;i="5.99,249,1677513600"; 
-   d="scan'208";a="234839960"
-Received: from mail-bn8nam12lp2177.outbound.protection.outlook.com (HELO NAM12-BN8-obe.outbound.protection.outlook.com) ([104.47.55.177])
-  by ob1.hgst.iphmx.com with ESMTP; 04 May 2023 17:39:57 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EKDAaY8QKcbsjTkeIRqoPam+G8iL5vTcw9Bp7hkoNKlKQcVFpP6oNSC2FNI4fvk38soI4HdRHZdhzM96P/VwYM/9k15AvW5Fdy0Vvj2IB4EfL3LJWjdd2HoZzlxcvyCdeL4OdyzhNvikIGTbIfPvOHCbd8W906+BvGAPy3OaMRiRPzIcaaoolZ47HuvY1y6Mzr/799gvvZXqaIRZn6/grBGLp7ow0p5bMTW1BnHfGmmzxibOmNKpNQpTUtYKjs2RVU1QZ72tLTfGG0IF3++IeYkbrx1NClcAO+KEoIDS8p0JzQdDUr3oysHp1bWFZwN6SOEPvuyzBUZ+5EI5sYPINg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0zPHZfGe41uBz/sWfe+fK0hOx8IcIZ7Q662CIOWXatE=;
- b=RoDtXvehfsJCnfbMqQiEKvbncNZqgRBwMUSzpyuunOlWUCIxTKodo6KUBXNwaCC5k1upzYRaU+FumekNIjpnQhd7eiHI7k/oW1Nlj9KxrKIb9tWqGYPDH3uHvNBVTMB0T/YFJowmaA8M9zHUEccbWjFLgEpXpJ8HsGlO1qCTxJGPFXmJZ8YpU2hkqBqKTQsMzRcexv3h3zpAsw2sNcS4LlQN+3Gp6Qo2+vvUh2UtbWJtDB1384iOQdlPzQAkzXXZFJJh5YPur3Nv8cij+VMaFAJH+TrUMlczvjFSgOeX47CBI/2D7+1KQOpilUBZxVmcYsr5sImqrCUGYgLEApetLQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0zPHZfGe41uBz/sWfe+fK0hOx8IcIZ7Q662CIOWXatE=;
- b=Z9XDZHOnHuDAgyBoyORGREJtHsnS6HOIGhqVjsBCXZ4AnTVR0QeEAcxCEpS3p2mUuFzhvheFT36Big6w0TnvlHj5tTrRphMD/rPYDShIqir+gSxzl/LafZKUMBZVaZLan+pY7nB8oGSpvux+XvtvgekBVWm0r6sro/lGmHNoUhc=
-Received: from MN2PR04MB6272.namprd04.prod.outlook.com (2603:10b6:208:e0::27)
- by SJ0PR04MB8341.namprd04.prod.outlook.com (2603:10b6:a03:3d6::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.26; Thu, 4 May
- 2023 09:39:54 +0000
-Received: from MN2PR04MB6272.namprd04.prod.outlook.com
- ([fe80::4fd:6db1:5165:2ade]) by MN2PR04MB6272.namprd04.prod.outlook.com
- ([fe80::4fd:6db1:5165:2ade%7]) with mapi id 15.20.6363.022; Thu, 4 May 2023
- 09:39:54 +0000
-From:   Niklas Cassel <Niklas.Cassel@wdc.com>
-To:     Keith Busch <kbusch@kernel.org>
-CC:     "jiweisun126@126.com" <jiweisun126@126.com>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "axboe@fb.com" <axboe@fb.com>, "hch@lst.de" <hch@lst.de>,
-        "sagi@grimberg.me" <sagi@grimberg.me>,
-        "ahuang12@lenovo.com" <ahuang12@lenovo.com>,
-        "sunjw10@lenovo.com" <sunjw10@lenovo.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH] nvme: add cond_resched() to nvme_complete_batch()
-Thread-Topic: [PATCH] nvme: add cond_resched() to nvme_complete_batch()
-Thread-Index: AQHZfmxhAnBWBykOJUOdfcgNJU7LAQ==
-Date:   Thu, 4 May 2023 09:39:54 +0000
-Message-ID: <ZFN9aWYCxJW/HdHi@x1-carbon>
-References: <20230502125412.65633-1-jiweisun126@126.com>
- <ZFKLxfet7qUIwScd@kbusch-mbp.dhcp.thefacebook.com>
- <ZFLxXjiQUPl+tV8L@kbusch-mbp.dhcp.thefacebook.com>
-In-Reply-To: <ZFLxXjiQUPl+tV8L@kbusch-mbp.dhcp.thefacebook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wdc.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MN2PR04MB6272:EE_|SJ0PR04MB8341:EE_
-x-ms-office365-filtering-correlation-id: a7ffddd8-4827-42ee-0fae-08db4c838439
-wdcipoutbound: EOP-TRUE
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: LXHY0Nk1euacplpwaunkhPzr+HVdEF+FG4xQp9ICc2tAEqNOogDhszuBox4JknXpaDzsy3C7diRBsfEDO0vzmtXMs39JmnfwTEumuVL0RtzMO75cS3FMNo/pAIoctboBbMMR6QDekzKo1I9INZ9DNXL875ZppMMUo+XGtWzIzsqo3rX4SeYIK20cmvT6CzvsByWHhhCKdVS9xio9FnzT+ur82e1bcX1J7xBFGySmrN5/z3SvRMQedkifczTD1uEwNIZaBWZDwS8wUO1chrVXEAjK4K1tS3dEHAnI2eURn8AhgcXVGE8HiXt76Hp41sAgOCmiL0BG+lIabg3xTnU0oKGbPwqDT2CF2WajRpFYqVVBffwn284GErjjwH0xFc6Ggu3ZMaV0k5fI3d9HqsBI/ag6LV5fU9uyhOvi32iTkK82wlbuJb+0BjbOtmLv7ekGSVqn93sRa5TxnP4xNgzevoJfqPfSbzGV5tORyrOOvlwwT51/MuCuRQweKF+9j+KBuIbhn5R8VyLoCcdCkoW8v5g/MRjG9015q2/596lq7W3iDYhm3cftdDGONyHHlXmqW1NRY4dk1dblKUl+QXMxY1wU5P+0blCfdUjA5SgYTAr3HrO6WH/5ZFzSHm4G05A7E2jtAA5EVlI0OZLc07bJ+w==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR04MB6272.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(7916004)(136003)(376002)(366004)(39860400002)(346002)(396003)(451199021)(86362001)(38100700002)(38070700005)(122000001)(82960400001)(76116006)(316002)(4326008)(64756008)(66946007)(66476007)(66556008)(8936002)(41300700001)(66446008)(2906002)(6916009)(91956017)(7416002)(8676002)(26005)(186003)(6506007)(478600001)(6486002)(71200400001)(54906003)(966005)(9686003)(6512007)(83380400001)(5660300002)(33716001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?c18KKt8wyYmkJtyymhgvXJSqXrvpO3G4BAEwbH478JBi5gzpoezz8Z/UkX5D?=
- =?us-ascii?Q?uOub3VFDpJA/4mm88/kLlhGKkL2O/76UpvH74lPzi7UEmUt7oIh4Og2OIxUm?=
- =?us-ascii?Q?N/a9ItV57qLRipoaN29LI5KhQYXrMmkDWx3gSvcngiVctd6+o6xF7TJlALtv?=
- =?us-ascii?Q?e3b+Q3L8PVlD0CP4IUD4U97rwSGJApSFsSggaKSp8ZOGyq98zhJwkR9ZZUHn?=
- =?us-ascii?Q?SZke2FPea2ZsW1wd1JMDYc+3s7wZofhYakd+9g7LUgD4iZKocF0dXZ6MP3FC?=
- =?us-ascii?Q?MjwLkwzm96CY/U7JW7QiMHrudWFVsHQeHTIdkG1y7m9QffvHR1LVgsMCQ3jm?=
- =?us-ascii?Q?bS+xnNDPQ+b+6/O0ifZkJHN2Sfnj8ANDSOX8IPF29BZLIiOpDj5JGEfGzP0/?=
- =?us-ascii?Q?Ogea6nQ67KAGlbqNAqgxVV+CalRrbMbCCIitpqmPE/NOU+lfQgg++cQt9/vs?=
- =?us-ascii?Q?Nnh/sxLqHLYQiBjvz8Xg5UYkmJBtzDEe2TDlHtz33iQiQ7zalBEaegX/MKMd?=
- =?us-ascii?Q?yitJHwWDQlnG/adt6dFFiGgMrzoIA5KOpFyzuE9MOLEKcnu15E+ULaGrlp9S?=
- =?us-ascii?Q?GiiCzZPoNIFtehfnNStSY2wkuRHQvGEf6xBgqBPp+p90JWdrFZI4k/jHngKQ?=
- =?us-ascii?Q?aQaSh1VX06bWHf/DoX72WRvk+9nJmY3xPqNSAHnwmyfjkUEYBaIzWlL0Ra/H?=
- =?us-ascii?Q?eIIG4IduAkjrQzyRvxSdRxA2cw7/8senxZLmsc/8AV18Hv3b1XGE17kPDeXr?=
- =?us-ascii?Q?BpE1H0byP1CaRfLK/ieNjtSPnsSc7enNLD+4rIv8APs5hemsGl+zZAZT9rQB?=
- =?us-ascii?Q?6dlG0WjVZxMGN3+lk/nNMgSzEkCW6+hNXTKWgywu/YkQ1iJhT80SknoAynnn?=
- =?us-ascii?Q?v0fQyBD0+q+aPD3Sdd2WsECkfsVhj1RFVsbUQ6pSPCMEJZuu26qQKUwA4mZZ?=
- =?us-ascii?Q?GORaIKk96ApTAOP3YZLrFNBF5lnoFI3iCDYMhwz509GsbMGoxlrAC1A7lxCG?=
- =?us-ascii?Q?7tTWRS1AoMLoeon2i88jDuBCH5NgjOV2oW+vQrSnZVO938mWD8uCEGEzd1Rg?=
- =?us-ascii?Q?RNBdoxct9jN5LUATwvpz00UY8b/PIXEFtPH1lV9Wylyps5ffVJbBa+yl1FpE?=
- =?us-ascii?Q?4TE/qvlSmr+SzO1cHRnTI7Ay4IHrXrUdzvY9FK6mWKFl3bhrd0LPMif5ItVJ?=
- =?us-ascii?Q?hlqRkSfHoiRRsEM/9UpAR8zQuBoaJwRxRzvMIWgfHR5dv8q+fN3k+aHJTs3B?=
- =?us-ascii?Q?mEwHqdJcaLSzW9ORu8m5snYWSu9EnE9rJWn7eCouuBBRhE00OAFdNtuRvtFS?=
- =?us-ascii?Q?71J1ewkwxyLnDE/c173IvD5uQJHszH1Q1PAjWHDjEdAeN1jDFlJYDhPE0BB5?=
- =?us-ascii?Q?yMrBJU3iuzRiNxpCeTCMHikZisgaQiwnaHwSyaR24xXRc5lmXUvYGG1AmJS7?=
- =?us-ascii?Q?AMXPGmtc2Kbd4PwCGzm0afk5b+1CD1Y5lZ9y4s1nLp2FoK7Tc+eMYamOUCd0?=
- =?us-ascii?Q?Oah2WDwe3JsTG/e8U70nSL7slSzmW0m8brkavgDsmk66lBZz0nGU9xV+ZZYE?=
- =?us-ascii?Q?AOpplrExvE0RqTd/xigg2wqm7xdSOGZr/Fb8VvUwXmTQkREsejFzpDUwJtBj?=
- =?us-ascii?Q?WQ=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <4F00156802A7CC4FA5751F011E4FC3F2@namprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Thu, 4 May 2023 05:42:09 -0400
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9847049DC
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 02:42:06 -0700 (PDT)
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-3f1754e6ac2so434325e9.1
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 02:42:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683193325; x=1685785325;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z6ks9TYcNYIgolfeiqwFXS6bLsfNO1zCPee3FDqk03c=;
+        b=Y1AkSVU9aZK/fcEceWVvVvGo9Xa9FJj/rDd0/o9EXrdqxWGfxmKQ5sE6+O9wpwLVBO
+         uSmeOMmu6YqAcaeUfah+K0AavZTk4i88sJf88oSWoCGbOuioit4LUrLrex1gf7gp0okf
+         VMy6cgCrdSMZEsgHSSWAjY/yiJ9MUmihGYnarMBYBJL4vP68/zIRUkkeVbHimXCrkVkc
+         HHcBYzWXS1171OZpgPk0UUt9QuDCa7WJVRMpVRMMrESwYtqywE5sfV8EtR93DvtQhHgf
+         2vAwNzv/knL0LeT5cJvwYDUoWy5+bdB2ThFWDaEdS+oLmi6H6NdSE8u9rwdI22pdvy1p
+         l79Q==
+X-Gm-Message-State: AC+VfDwUhngYbGa9MBW/XjhSzT9qCtDNCzvSEfJ/aoqKHOyzUyQs9FEL
+        stTPvyjzl9MkK8oDbuYSq2t9fLBzBoQ=
+X-Google-Smtp-Source: ACHHUZ4hwe2eChJ+OaGDYzpzq9IKg3p4ZsNY9li74nw9i7GrFdS7mUy4Lyfd1Kad05+JPHbo7MYmrw==
+X-Received: by 2002:a05:600c:3b82:b0:3f1:7a4b:bf17 with SMTP id n2-20020a05600c3b8200b003f17a4bbf17mr6893987wms.1.1683193324828;
+        Thu, 04 May 2023 02:42:04 -0700 (PDT)
+Received: from [10.100.102.14] (85.65.206.11.dynamic.barak-online.net. [85.65.206.11])
+        by smtp.gmail.com with ESMTPSA id v17-20020a5d43d1000000b003047ea78b42sm26743481wrr.43.2023.05.04.02.42.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 May 2023 02:42:04 -0700 (PDT)
+Message-ID: <d3d5dbd4-d96f-643e-b177-8f683ac8b7e2@grimberg.me>
+Date:   Thu, 4 May 2023 12:42:03 +0300
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?asx3SaRVE19ObEfq2dtwBzLOx0cizkLsR3H37kXkpfvRs8WM/mWZyR4a8N7/?=
- =?us-ascii?Q?/FHo+6KxAxCDggUKzNG1/sHoZ4YFvxeB8BPsdo2+neszsMLfX1Ju+PSjQJi0?=
- =?us-ascii?Q?9zUNWxSACGtU8ahCti/O8wovid45bl4xnV1z4aujd4A1m1/y66Cwbpd5dLNA?=
- =?us-ascii?Q?l1jOcbkRU/SvBcAlb4jka43vyw1jvEU0conx371eUkdDuUOXMd6kwhwM1AQj?=
- =?us-ascii?Q?7JLFK4XFLsFUrmRDTAWd5bOz5znHLdMdajmFb+RvOAyjnWeI+a25mMPaLYrK?=
- =?us-ascii?Q?u5XbDc+d0rh7h0HXWvXGlLySkBPJk3OZG1WK3B+SdLueKN4k5RWRnDMX37nY?=
- =?us-ascii?Q?jOccd5Sg2GvMIlL5PyblxtI4oo3cDJRG1ArZiozqN3iuIB06WcjTX4UUvqel?=
- =?us-ascii?Q?oO4Uxi04pg3Y7oRBe9xhevMPkYi+VoS9n1Qe5YOMps0bpK34uzSxmX5MLKNZ?=
- =?us-ascii?Q?TRXmXay5dlSJbhIqBCZ4j/pDr/894EfgTsozeJdCPZnbswCYJbeKTKR1FEjs?=
- =?us-ascii?Q?PPgEik5Y7Tq1EAy3cL69oTacjol2w1K8wnNvY6JLv6cfn3K1DS2v84/hH0ww?=
- =?us-ascii?Q?vjvzDX2TTB0G9hNM5lqvCg72UgpPVOctQna4sGFE/PfgmOwTuvpQVGAKQeRu?=
- =?us-ascii?Q?iC+z5+tlzMXGNnA50+C3kiG0vPFkSqclTHGcik/R2Vuotlx8kboJthA2Jg0t?=
- =?us-ascii?Q?MQ/1nPDYG+MtaW70r+1cD1boDJEMbdF4CXYB3kCphW6wjr2s2LU91Jnl/PqG?=
- =?us-ascii?Q?imM2/x7cNjC/BBd6VGJXd2ggxbiN5R/rUn4Ju+j4AmiihhJ2ZuGKeWhVlyw5?=
- =?us-ascii?Q?hH1jPWFlj5MkpmCdmhtuMEwQOw098D11dYRPId93u/qHa/8nazwDLyTkO4B5?=
- =?us-ascii?Q?lxo2M+TLsW8o+aytMvGKex1Dnz/7jI2Ld16ieyZKiuLbZ2VPzgAgzohS6tkC?=
- =?us-ascii?Q?xf+qF9PmvBSCEhPolfNcjmJGVHUjtmA5YXl9YTJHAbsPVq3Xv5J3mFTxFu7A?=
- =?us-ascii?Q?KLmBYw1fKgtSH0HC/mhr2dtekb+CyPYbF8e5v7Jgts1YoKg=3D?=
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR04MB6272.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a7ffddd8-4827-42ee-0fae-08db4c838439
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 May 2023 09:39:54.5626
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 6Dp45YJenZKjH8WHAFX0WSz1jMsTSgABSRo6OjfbxYU17XbJ2d5vQF/uLGlOin+6HX/gnUJgN8TFsjqhVU/xXg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR04MB8341
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [RFC v3 8/9] nvme: move queue flags to middle layer
+Content-Language: en-US
+To:     Daniel Wagner <dwagner@suse.de>, linux-nvme@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, Chaitanya Kulkarni <kch@nvidia.com>,
+        Hannes Reinecke <hare@suse.de>,
+        James Smart <jsmart2021@gmail.com>
+References: <20230504091259.29100-1-dwagner@suse.de>
+ <20230504091259.29100-9-dwagner@suse.de>
+From:   Sagi Grimberg <sagi@grimberg.me>
+In-Reply-To: <20230504091259.29100-9-dwagner@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 03, 2023 at 05:42:22PM -0600, Keith Busch wrote:
-> On Wed, May 03, 2023 at 10:28:53AM -0600, Keith Busch wrote:
-> > On Tue, May 02, 2023 at 08:54:12PM +0800, jiweisun126@126.com wrote:
-> > > According to the above two logs, we can know the nvme_irq() cost too =
-much
-> > > time, in the above case, about 4.8 second. And we can also know that =
-the
-> > > main bottlenecks is in the competition for the spin lock pool->lock.
-> >=20
-> > I have a fix that makes pool->lock critical section much shorter and co=
-nstant
-> > time. It was staged in mm tree for months, but mysteriously it's missin=
-g...
->=20
-> Well this is certainly odd: the commit I'm referring to is in Linus' log,=
- but
-> the file it modified is not updated. What kind of 'git' madness is this??
->=20
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit=
-/?id=3Da4de12a032fa6d0670aa0bb43a2bf9f812680d0f
->=20
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/log/mm=
-/dmapool.c
->=20
 
-Hmm, this is very interesting indeed.
+> The queue flags are used to track the state of the queue (deleted, live,
+> ...). Move this generic feature into the fabric middle layer.
+> 
+> Unfortunately, rdma uses an transport flag (TR_READY) which is not used
+> in the generic part of the state machine.
 
-It looks like:
-a4de12a032fa ("dmapool: link blocks across pages") matches
-https://patchwork.kernel.org/project/linux-mm/patch/20230126215125.4069751-=
-12-kbusch@meta.com/
-so everything good.
+This would be a transport specific flag, it is only accessed in a
+transport specific function. So this would need to be in a
+nvme_rdma_queue flags field.
 
-However, the following commit:
-2d55c16c0c54 ("dmapool: create/destroy cleanup")
-does not match what was on the list:
-https://patchwork.kernel.org/project/linux-mm/patch/20230126215125.4069751-=
-13-kbusch@meta.com/
+But I don't think that we need queues array in the core nvme_ctrl.
+I think that all the transports will have an admin queue and io queues.
+Representing a queue in the core would be difficult IMO
 
-
-
-It kind of looks like
-2d55c16c0c54 ("dmapool: create/destroy cleanup") is actually
-a revert of a4de12a032fa ("dmapool: link blocks across pages"),
-plus some additional changes. Scary.
-
-
-
-Additionally, it seems like the fix:
-https://patchwork.kernel.org/project/linux-mm/patch/20230221165400.1595247-=
-1-kbusch@meta.com/
-was never merged.
-
-
-Something is fishy here...
-
-(Perhaps the maintainer did a git revert instead of applying the fix...
-and accidentally squashed the revert with a proper commit...
-But even that does not make sense, as there simply seems to be too many
-lines changed in 2d55c16c0c54 ("dmapool: create/destroy cleanup") for that
-to be the case...)
-
-
-Kind regards,
-Niklas=
+> 
+> Signed-off-by: Daniel Wagner <dwagner@suse.de>
+> ---
+>   drivers/nvme/host/fabrics.c | 157 +++++++++++++++++++++++++++++-------
+>   drivers/nvme/host/nvme.h    |  19 ++++-
+>   drivers/nvme/host/rdma.c    |  75 ++++++-----------
+>   drivers/nvme/host/tcp.c     |  87 +++++++-------------
+>   4 files changed, 197 insertions(+), 141 deletions(-)
+> 
+> diff --git a/drivers/nvme/host/fabrics.c b/drivers/nvme/host/fabrics.c
+> index 3d2cde17338d..5f212cb9421a 100644
+> --- a/drivers/nvme/host/fabrics.c
+> +++ b/drivers/nvme/host/fabrics.c
+> @@ -1134,13 +1134,117 @@ nvmf_create_ctrl(struct device *dev, const char *buf)
+>   	return ERR_PTR(ret);
+>   }
+>   
+> +static int __nvmf_alloc_admin_queue(struct nvme_ctrl *ctrl)
+> +{
+> +	int ret;
+> +
+> +	ret = ctrl->fabrics_ops->alloc_admin_queue(ctrl);
+> +	if (ret)
+> +		return ret;
+> +
+> +	set_bit(NVME_FABRICS_Q_ALLOCATED, ctrl->queues[0].flags);
+> +
+> +	return 0;
+> +}
+> +
+> +static void __nvmf_free_admin_queue(struct nvme_ctrl *ctrl)
+> +{
+> +	if (!test_and_clear_bit(NVME_FABRICS_Q_ALLOCATED,
+> +				ctrl->queues[0].flags))
+> +		return;
+> +
+> +	ctrl->fabrics_ops->free_admin_queue(ctrl);
+> +}
+> +
+> +static int __nvmf_start_admin_queue(struct nvme_ctrl *ctrl)
+> +{
+> +	int ret;
+> +
+> +	if (!test_bit(NVME_FABRICS_Q_ALLOCATED, ctrl->queues[0].flags))
+> +		return -EINVAL;
+> +
+> +	ret = ctrl->fabrics_ops->start_admin_queue(ctrl);
+> +	if (ret) {
+> +		dev_err(ctrl->device,
+> +			"failed to start admin queue: ret=%d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	set_bit(NVME_FABRICS_Q_LIVE, ctrl->queues[0].flags);
+> +
+> +	return 0;
+> +}
+> +
+> +static void __nvmf_stop_admin_queue(struct nvme_ctrl *ctrl)
+> +{
+> +	if (!test_bit(NVME_FABRICS_Q_ALLOCATED, ctrl->queues[0].flags))
+> +		return;
+> +
+> +	mutex_lock(ctrl->queues[0].queue_lock);
+> +	if (test_and_clear_bit(NVME_FABRICS_Q_LIVE, ctrl->queues[0].flags))
+> +		ctrl->fabrics_ops->stop_admin_queue(ctrl);
+> +	mutex_unlock(ctrl->queues[0].queue_lock);
+> +}
+> +
+> +static int __nvmf_alloc_io_queue(struct nvme_ctrl *ctrl, int qid)
+> +{
+> +	int ret;
+> +
+> +	ret = ctrl->fabrics_ops->alloc_io_queue(ctrl, qid);
+> +	if (ret) {
+> +		dev_err(ctrl->device,
+> +			"failed to start I/O queue: %d ret=%d\n", qid, ret);
+> +		return ret;
+> +	}
+> +
+> +	set_bit(NVME_FABRICS_Q_ALLOCATED, ctrl->queues[qid].flags);
+> +
+> +	return 0;
+> +}
+> +
+> +static void __nvmf_free_io_queue(struct nvme_ctrl *ctrl, int qid)
+> +{
+> +	if (!test_and_clear_bit(NVME_FABRICS_Q_ALLOCATED,
+> +				ctrl->queues[qid].flags))
+> +		return;
+> +
+> +	ctrl->fabrics_ops->free_io_queue(ctrl, qid);
+> +}
+> +
+> +static int __nvmf_start_io_queue(struct nvme_ctrl *ctrl, int qid)
+> +{
+> +	int ret;
+> +
+> +	if (!test_bit(NVME_FABRICS_Q_ALLOCATED, ctrl->queues[0].flags))
+> +		return -EINVAL;
+> +
+> +	ret = ctrl->fabrics_ops->start_io_queue(ctrl, qid);
+> +	if (ret)
+> +		return ret;
+> +
+> +	set_bit(NVME_FABRICS_Q_LIVE, ctrl->queues[qid].flags);
+> +
+> +	return 0;
+> +}
+> +
+> +static void __nvmf_stop_io_queue(struct nvme_ctrl *ctrl, int qid)
+> +{
+> +	if (!test_bit(NVME_FABRICS_Q_ALLOCATED, ctrl->queues[qid].flags))
+> +		return;
+> +
+> +	mutex_lock(ctrl->queues[qid].queue_lock);
+> +	if (test_and_clear_bit(NVME_FABRICS_Q_LIVE, ctrl->queues[qid].flags))
+> +		ctrl->fabrics_ops->stop_io_queue(ctrl, qid);
+> +	mutex_unlock(ctrl->queues[qid].queue_lock);
+> +}
+> +
+>   static int nvmf_start_io_queues(struct nvme_ctrl *ctrl,
+>   				    int first, int last)
+>   {
+>   	int i, ret;
+>   
+>   	for (i = first; i < last; i++) {
+> -		ret = ctrl->fabrics_ops->start_io_queue(ctrl, i);
+> +		ret = __nvmf_start_io_queue(ctrl, i);
+>   		if (ret)
+>   			goto out_stop_queues;
+>   	}
+> @@ -1149,7 +1253,7 @@ static int nvmf_start_io_queues(struct nvme_ctrl *ctrl,
+>   
+>   out_stop_queues:
+>   	for (i--; i >= first; i--)
+> -		ctrl->fabrics_ops->stop_io_queue(ctrl, i);
+> +		__nvmf_stop_io_queue(ctrl, i);
+>   	return ret;
+>   }
+>   
+> @@ -1158,7 +1262,7 @@ static void nvmf_stop_io_queues(struct nvme_ctrl *ctrl)
+>   	int i;
+>   
+>   	for (i = 1; i < ctrl->queue_count; i++)
+> -		ctrl->fabrics_ops->stop_io_queue(ctrl, i);
+> +		__nvmf_stop_io_queue(ctrl, i);
+>   }
+>   
+>   static int __nvmf_alloc_io_queues(struct nvme_ctrl *ctrl)
+> @@ -1166,7 +1270,7 @@ static int __nvmf_alloc_io_queues(struct nvme_ctrl *ctrl)
+>   	int i, ret;
+>   
+>   	for (i = 1; i < ctrl->queue_count; i++) {
+> -		ret = ctrl->fabrics_ops->alloc_io_queue(ctrl, i);
+> +		ret = __nvmf_alloc_io_queue(ctrl, i);
+>   		if (ret)
+>   			goto out_free_queues;
+>   	}
+> @@ -1175,7 +1279,7 @@ static int __nvmf_alloc_io_queues(struct nvme_ctrl *ctrl)
+>   
+>   out_free_queues:
+>   	for (i--; i >= 1; i--)
+> -		ctrl->fabrics_ops->free_io_queue(ctrl, i);
+> +		__nvmf_free_io_queue(ctrl, i);
+>   
+>   	return ret;
+>   }
+> @@ -1198,7 +1302,7 @@ static int nvmf_alloc_io_queues(struct nvme_ctrl *ctrl)
+>   
+>   	ctrl->queue_count = nr_io_queues + 1;
+>   	dev_info(ctrl->device,
+> -		"creating %d I/O queues.\n", nr_io_queues);
+> +		 "creating %d I/O queues.\n", nr_io_queues);
+>   
+>   	ctrl->fabrics_ops->set_io_queues(ctrl, nr_io_queues);
+>   
+> @@ -1210,7 +1314,7 @@ static void nvmf_free_io_queues(struct nvme_ctrl *ctrl)
+>   	int i;
+>   
+>   	for (i = 1; i < ctrl->queue_count; i++)
+> -		ctrl->fabrics_ops->free_io_queue(ctrl, i);
+> +		__nvmf_free_io_queue(ctrl, i);
+>   }
+>   
+>   static int nvmf_configure_io_queues(struct nvme_ctrl *ctrl, bool new)
+> @@ -1279,31 +1383,31 @@ static int nvmf_configure_io_queues(struct nvme_ctrl *ctrl, bool new)
+>   
+>   static int nvmf_configure_admin_queue(struct nvme_ctrl *ctrl, bool new)
+>   {
+> -	int error;
+> +	int ret;
+>   
+> -	error = ctrl->fabrics_ops->alloc_admin_queue(ctrl);
+> -	if (error)
+> -		return error;
+> +	ret = __nvmf_alloc_admin_queue(ctrl);
+> +	if (ret)
+> +		return ret;
+>   
+>   	if (new) {
+> -		error = ctrl->fabrics_ops->alloc_admin_tag_set(ctrl);
+> -		if (error)
+> +		ret = ctrl->fabrics_ops->alloc_admin_tag_set(ctrl);
+> +		if (ret)
+>   			goto out_free_admin_queue;
+>   
+>   	}
+>   
+> -	error = ctrl->fabrics_ops->start_admin_queue(ctrl);
+> -	if (error)
+> +	ret = __nvmf_start_admin_queue(ctrl);
+> +	if (ret)
+>   		goto out_remove_admin_tag_set;
+>   
+> -	error = nvme_enable_ctrl(ctrl);
+> -	if (error)
+> +	ret = nvme_enable_ctrl(ctrl);
+> +	if (ret)
+>   		goto out_stop_queue;
+>   
+>   	nvme_unquiesce_admin_queue(ctrl);
+>   
+> -	error = nvme_init_ctrl_finish(ctrl, false);
+> -	if (error)
+> +	ret = nvme_init_ctrl_finish(ctrl, false);
+> +	if (ret)
+>   		goto out_quiesce_queue;
+>   
+>   	return 0;
+> @@ -1312,14 +1416,14 @@ static int nvmf_configure_admin_queue(struct nvme_ctrl *ctrl, bool new)
+>   	nvme_quiesce_admin_queue(ctrl);
+>   	blk_sync_queue(ctrl->admin_q);
+>   out_stop_queue:
+> -	ctrl->fabrics_ops->stop_admin_queue(ctrl);
+> +	__nvmf_stop_admin_queue(ctrl);
+>   	nvme_cancel_admin_tagset(ctrl);
+>   out_remove_admin_tag_set:
+>   	if (new)
+>   		nvme_remove_admin_tag_set(ctrl);
+>   out_free_admin_queue:
+> -	ctrl->fabrics_ops->free_admin_queue(ctrl);
+> -	return error;
+> +	__nvmf_free_admin_queue(ctrl);
+> +	return ret;
+>   }
+>   
+>   static void nvmf_destroy_io_queues(struct nvme_ctrl *ctrl, bool remove)
+> @@ -1332,18 +1436,17 @@ static void nvmf_destroy_io_queues(struct nvme_ctrl *ctrl, bool remove)
+>   
+>   static void nvmf_destroy_admin_queue(struct nvme_ctrl *ctrl, bool remove)
+>   {
+> -	ctrl->fabrics_ops->stop_admin_queue(ctrl);
+> +	__nvmf_stop_admin_queue(ctrl);
+>   	if (remove)
+>   		nvme_remove_admin_tag_set(ctrl);
+> -
+> -	ctrl->fabrics_ops->free_admin_queue(ctrl);
+> +	__nvmf_free_admin_queue(ctrl);
+>   }
+>   
+>   static void nvmf_teardown_admin_queue(struct nvme_ctrl *ctrl, bool remove)
+>   {
+>   	nvme_quiesce_admin_queue(ctrl);
+>   	blk_sync_queue(ctrl->admin_q);
+> -	ctrl->fabrics_ops->stop_admin_queue(ctrl);
+> +	__nvmf_stop_admin_queue(ctrl);
+>   	nvme_cancel_admin_tagset(ctrl);
+>   	if (remove)
+>   		nvme_unquiesce_admin_queue(ctrl);
+> @@ -1447,7 +1550,7 @@ int nvmf_setup_ctrl(struct nvme_ctrl *ctrl, bool new)
+>   destroy_admin:
+>   	nvme_quiesce_admin_queue(ctrl);
+>   	blk_sync_queue(ctrl->admin_q);
+> -	ctrl->fabrics_ops->stop_admin_queue(ctrl);
+> +	__nvmf_stop_admin_queue(ctrl);
+>   	nvme_cancel_admin_tagset(ctrl);
+>   	nvmf_destroy_admin_queue(ctrl, new);
+>   	return ret;
+> diff --git a/drivers/nvme/host/nvme.h b/drivers/nvme/host/nvme.h
+> index fcea2678094c..0810bc2a9e13 100644
+> --- a/drivers/nvme/host/nvme.h
+> +++ b/drivers/nvme/host/nvme.h
+> @@ -246,6 +246,18 @@ enum nvme_ctrl_flags {
+>   
+>   struct nvme_fabrics_ops;
+>   
+> +enum nvme_fabrics_queue_flags {
+> +	NVME_FABRICS_Q_ALLOCATED		= 0,
+> +	NVME_FABRICS_Q_TR_READY			= 1,
+> +	NVME_FABRICS_Q_LIVE			= 2,
+> +	NVME_FABRICS_Q_POLLING			= 3,
+> +};
+> +
+> +struct nvme_fabrics_queue {
+> +	unsigned long *flags;
+> +	struct mutex *queue_lock;
+> +};
+> +
+>   struct nvme_ctrl {
+>   	bool comp_seen;
+>   	enum nvme_ctrl_state state;
+> @@ -253,7 +265,6 @@ struct nvme_ctrl {
+>   	spinlock_t lock;
+>   	struct mutex scan_lock;
+>   	const struct nvme_ctrl_ops *ops;
+> -	const struct nvme_fabrics_ops *fabrics_ops;
+>   	struct request_queue *admin_q;
+>   	struct request_queue *connect_q;
+>   	struct request_queue *fabrics_q;
+> @@ -342,8 +353,10 @@ struct nvme_ctrl {
+>   	struct work_struct ana_work;
+>   #endif
+>   
+> -	struct work_struct	err_work;
+> -	struct delayed_work	connect_work;
+> +	const struct nvme_fabrics_ops *fabrics_ops;
+> +	struct nvme_fabrics_queue *queues;
+> +	struct work_struct err_work;
+> +	struct delayed_work connect_work;
+>   
+>   #ifdef CONFIG_NVME_AUTH
+>   	struct work_struct dhchap_auth_work;
+> diff --git a/drivers/nvme/host/rdma.c b/drivers/nvme/host/rdma.c
+> index 1fde65e8c2b5..023316fdc2c6 100644
+> --- a/drivers/nvme/host/rdma.c
+> +++ b/drivers/nvme/host/rdma.c
+> @@ -3,6 +3,7 @@
+>    * NVMe over Fabrics RDMA host code.
+>    * Copyright (c) 2015-2016 HGST, a Western Digital Company.
+>    */
+> +#include "linux/gfp_types.h"
+>   #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+>   #include <linux/module.h>
+>   #include <linux/init.h>
+> @@ -76,12 +77,6 @@ struct nvme_rdma_request {
+>   	bool			use_sig_mr;
+>   };
+>   
+> -enum nvme_rdma_queue_flags {
+> -	NVME_RDMA_Q_ALLOCATED		= 0,
+> -	NVME_RDMA_Q_LIVE		= 1,
+> -	NVME_RDMA_Q_TR_READY		= 2,
+> -};
+> -
+>   struct nvme_rdma_queue {
+>   	struct nvme_rdma_qe	*rsp_ring;
+>   	int			queue_size;
+> @@ -425,7 +420,7 @@ static void nvme_rdma_destroy_queue_ib(struct nvme_rdma_queue *queue)
+>   	struct nvme_rdma_device *dev;
+>   	struct ib_device *ibdev;
+>   
+> -	if (!test_and_clear_bit(NVME_RDMA_Q_TR_READY, &queue->flags))
+> +	if (!test_and_clear_bit(NVME_FABRICS_Q_TR_READY, &queue->flags))
+>   		return;
+>   
+>   	dev = queue->device;
+> @@ -550,7 +545,7 @@ static int nvme_rdma_create_queue_ib(struct nvme_rdma_queue *queue)
+>   		}
+>   	}
+>   
+> -	set_bit(NVME_RDMA_Q_TR_READY, &queue->flags);
+> +	set_bit(NVME_FABRICS_Q_TR_READY, &queue->flags);
+>   
+>   	return 0;
+>   
+> @@ -572,12 +567,17 @@ static int __nvme_rdma_alloc_queue(struct nvme_rdma_ctrl *ctrl,
+>   				   struct nvme_rdma_queue *queue)
+>   {
+>   	struct sockaddr *src_addr = NULL;
+> +	struct nvme_fabrics_queue *fqueue;
+>   	int ret;
+>   
+>   	mutex_init(&queue->queue_lock);
+>   	queue->ctrl = ctrl;
+>   	init_completion(&queue->cm_done);
+>   
+> +	fqueue = &ctrl->ctrl.queues[nvme_rdma_queue_id(queue)];
+> +	fqueue->flags = &queue->flags;
+> +	fqueue->queue_lock = &queue->queue_lock;
+> +
+>   	queue->cm_id = rdma_create_id(&init_net, nvme_rdma_cm_handler, queue,
+>   			RDMA_PS_TCP, IB_QPT_RC);
+>   	if (IS_ERR(queue->cm_id)) {
+> @@ -607,8 +607,6 @@ static int __nvme_rdma_alloc_queue(struct nvme_rdma_ctrl *ctrl,
+>   		goto out_destroy_cm_id;
+>   	}
+>   
+> -	set_bit(NVME_RDMA_Q_ALLOCATED, &queue->flags);
+> -
+>   	return 0;
+>   
+>   out_destroy_cm_id:
+> @@ -622,9 +620,6 @@ static int __nvme_rdma_alloc_queue(struct nvme_rdma_ctrl *ctrl,
+>   static void __nvme_rdma_free_queue(struct nvme_rdma_ctrl *ctrl,
+>   				   struct nvme_rdma_queue *queue)
+>   {
+> -	if (!test_and_clear_bit(NVME_RDMA_Q_ALLOCATED, &queue->flags))
+> -		return;
+> -
+>   	rdma_destroy_id(queue->cm_id);
+>   	nvme_rdma_destroy_queue_ib(queue);
+>   	mutex_destroy(&queue->queue_lock);
+> @@ -718,49 +713,18 @@ static void nvme_rdma_free_io_queue(struct nvme_ctrl *nctrl, int qid)
+>   
+>   static void __nvme_rdma_stop_queue(struct nvme_rdma_queue *queue)
+>   {
+> -	mutex_lock(&queue->queue_lock);
+> -	if (test_and_clear_bit(NVME_RDMA_Q_LIVE, &queue->flags)) {
+> -		rdma_disconnect(queue->cm_id);
+> -		ib_drain_qp(queue->qp);
+> -	}
+> -	mutex_unlock(&queue->queue_lock);
+> +	rdma_disconnect(queue->cm_id);
+> +	ib_drain_qp(queue->qp);
+>   }
+>   
+> -static int nvme_rdma_start_admin_queue(struct nvme_ctrl *nctrl)
+> +static int nvme_rdma_start_admin_queue(struct nvme_ctrl *ctrl)
+>   {
+> -	struct nvme_rdma_ctrl *ctrl = to_rdma_ctrl(nctrl);
+> -	struct nvme_rdma_queue *queue = &ctrl->queues[0];
+> -	int ret;
+> -
+> -	ret = nvmf_connect_admin_queue(nctrl);
+> -
+> -	if (!ret) {
+> -		set_bit(NVME_RDMA_Q_LIVE, &queue->flags);
+> -	} else {
+> -		if (test_bit(NVME_RDMA_Q_ALLOCATED, &queue->flags))
+> -			__nvme_rdma_stop_queue(queue);
+> -		dev_info(ctrl->ctrl.device,
+> -			"failed to connect queue: %d ret=%d\n", 0, ret);
+> -	}
+> -	return ret;
+> +	return nvmf_connect_admin_queue(ctrl);
+>   }
+>   
+> -static int nvme_rdma_start_io_queue(struct nvme_ctrl *nctrl, int idx)
+> +static int nvme_rdma_start_io_queue(struct nvme_ctrl *ctrl, int idx)
+>   {
+> -	struct nvme_rdma_ctrl *ctrl = to_rdma_ctrl(nctrl);
+> -	struct nvme_rdma_queue *queue = &ctrl->queues[idx];
+> -	int ret;
+> -
+> -	ret = nvmf_connect_io_queue(nctrl, idx);
+> -	if (!ret) {
+> -		set_bit(NVME_RDMA_Q_LIVE, &queue->flags);
+> -	} else {
+> -		if (test_bit(NVME_RDMA_Q_ALLOCATED, &queue->flags))
+> -			__nvme_rdma_stop_queue(queue);
+> -		dev_info(ctrl->ctrl.device,
+> -			"failed to connect queue: %d ret=%d\n", idx, ret);
+> -	}
+> -	return ret;
+> +	return nvmf_connect_io_queue(ctrl, idx);
+>   }
+>   
+>   static void nvme_rdma_stop_admin_queue(struct nvme_ctrl *nctrl)
+> @@ -1715,7 +1679,7 @@ static blk_status_t nvme_rdma_queue_rq(struct blk_mq_hw_ctx *hctx,
+>   	struct nvme_rdma_qe *sqe = &req->sqe;
+>   	struct nvme_command *c = nvme_req(rq)->cmd;
+>   	struct ib_device *dev;
+> -	bool queue_ready = test_bit(NVME_RDMA_Q_LIVE, &queue->flags);
+> +	bool queue_ready = test_bit(NVME_FABRICS_Q_LIVE, &queue->flags);
+>   	blk_status_t ret;
+>   	int err;
+>   
+> @@ -2027,6 +1991,12 @@ static struct nvme_ctrl *nvme_rdma_create_ctrl(struct device *dev,
+>   	if (!ctrl->queues)
+>   		goto out_free_ctrl;
+>   
+> +	ctrl->ctrl.queues = kcalloc(ctrl->ctrl.queue_count,
+> +				    sizeof(*ctrl->ctrl.queues),
+> +				    GFP_KERNEL);
+> +	if (!ctrl->ctrl.queues)
+> +		goto out_free_ctrl_queues;
+> +
+>   	ret = nvme_init_ctrl(&ctrl->ctrl, dev, &nvme_rdma_ctrl_ops,
+>   				0 /* no quirks, we're perfect! */);
+>   	if (ret)
+> @@ -2054,7 +2024,10 @@ static struct nvme_ctrl *nvme_rdma_create_ctrl(struct device *dev,
+>   	if (ret > 0)
+>   		ret = -EIO;
+>   	return ERR_PTR(ret);
+> +	kfree(ctrl->queues);
+>   out_kfree_queues:
+> +	kfree(ctrl->ctrl.queues);
+> +out_free_ctrl_queues:
+>   	kfree(ctrl->queues);
+>   out_free_ctrl:
+>   	kfree(ctrl);
+> diff --git a/drivers/nvme/host/tcp.c b/drivers/nvme/host/tcp.c
+> index 32c4346b7322..dfdf35b32adc 100644
+> --- a/drivers/nvme/host/tcp.c
+> +++ b/drivers/nvme/host/tcp.c
+> @@ -100,12 +100,6 @@ struct nvme_tcp_request {
+>   	enum nvme_tcp_send_state state;
+>   };
+>   
+> -enum nvme_tcp_queue_flags {
+> -	NVME_TCP_Q_ALLOCATED	= 0,
+> -	NVME_TCP_Q_LIVE		= 1,
+> -	NVME_TCP_Q_POLLING	= 2,
+> -};
+> -
+>   enum nvme_tcp_recv_state {
+>   	NVME_TCP_RECV_PDU = 0,
+>   	NVME_TCP_RECV_DATA,
+> @@ -903,7 +897,7 @@ static void nvme_tcp_data_ready(struct sock *sk)
+>   	read_lock_bh(&sk->sk_callback_lock);
+>   	queue = sk->sk_user_data;
+>   	if (likely(queue && queue->rd_enabled) &&
+> -	    !test_bit(NVME_TCP_Q_POLLING, &queue->flags))
+> +	    !test_bit(NVME_FABRICS_Q_POLLING, &queue->flags))
+>   		queue_work_on(queue->io_cpu, nvme_tcp_wq, &queue->io_work);
+>   	read_unlock_bh(&sk->sk_callback_lock);
+>   }
+> @@ -1454,6 +1448,7 @@ static void nvme_tcp_set_queue_io_cpu(struct nvme_tcp_queue *queue)
+>   static int __nvme_tcp_alloc_queue(struct nvme_tcp_ctrl *ctrl,
+>   				 struct nvme_tcp_queue *queue)
+>   {
+> +	struct nvme_fabrics_queue *fqueue;
+>   	int ret, rcv_pdu_size;
+>   
+>   	mutex_init(&queue->queue_lock);
+> @@ -1463,6 +1458,10 @@ static int __nvme_tcp_alloc_queue(struct nvme_tcp_ctrl *ctrl,
+>   	mutex_init(&queue->send_mutex);
+>   	INIT_WORK(&queue->io_work, nvme_tcp_io_work);
+>   
+> +	fqueue = &ctrl->ctrl.queues[nvme_tcp_queue_id(queue)];
+> +	fqueue->flags = &queue->flags;
+> +	fqueue->queue_lock = &queue->queue_lock;
+> +
+>   	ret = sock_create(ctrl->addr.ss_family, SOCK_STREAM,
+>   			IPPROTO_TCP, &queue->sock);
+>   	if (ret) {
+> @@ -1567,7 +1566,6 @@ static int __nvme_tcp_alloc_queue(struct nvme_tcp_ctrl *ctrl,
+>   		goto err_init_connect;
+>   
+>   	queue->rd_enabled = true;
+> -	set_bit(NVME_TCP_Q_ALLOCATED, &queue->flags);
+>   	nvme_tcp_init_recv_ctx(queue);
+>   
+>   	write_lock_bh(&queue->sock->sk->sk_callback_lock);
+> @@ -1607,9 +1605,6 @@ static void __nvme_tcp_free_queue(struct nvme_tcp_ctrl *ctrl,
+>   	struct page *page;
+>   	unsigned int noreclaim_flag;
+>   
+> -	if (!test_and_clear_bit(NVME_TCP_Q_ALLOCATED, &queue->flags))
+> -		return;
+> -
+>   	if (queue->hdr_digest || queue->data_digest)
+>   		nvme_tcp_free_crypto(queue);
+>   
+> @@ -1699,40 +1694,14 @@ static void __nvme_tcp_stop_queue(struct nvme_tcp_queue *queue)
+>   	cancel_work_sync(&queue->io_work);
+>   }
+>   
+> -static int nvme_tcp_start_admin_queue(struct nvme_ctrl *nctrl)
+> +static int nvme_tcp_start_admin_queue(struct nvme_ctrl *ctrl)
+>   {
+> -	struct nvme_tcp_ctrl *ctrl = to_tcp_ctrl(nctrl);
+> -	struct nvme_tcp_queue *queue = &ctrl->queues[0];
+> -	int ret;
+> -
+> -	ret = nvmf_connect_admin_queue(nctrl);
+> -	if (!ret) {
+> -		set_bit(NVME_TCP_Q_LIVE, &queue->flags);
+> -	} else {
+> -		if (test_bit(NVME_TCP_Q_ALLOCATED, &queue->flags))
+> -			__nvme_tcp_stop_queue(queue);
+> -		dev_err(nctrl->device,
+> -			"failed to connect queue: %d ret=%d\n", 0, ret);
+> -	}
+> -	return ret;
+> +	return nvmf_connect_admin_queue(ctrl);
+>   }
+>   
+> -static int nvme_tcp_start_io_queue(struct nvme_ctrl *nctrl, int qid)
+> +static int nvme_tcp_start_io_queue(struct nvme_ctrl *ctrl, int qid)
+>   {
+> -	struct nvme_tcp_ctrl *ctrl = to_tcp_ctrl(nctrl);
+> -	struct nvme_tcp_queue *queue = &ctrl->queues[qid];
+> -	int ret;
+> -
+> -	ret = nvmf_connect_io_queue(nctrl, qid);
+> -	if (!ret) {
+> -		set_bit(NVME_TCP_Q_LIVE, &queue->flags);
+> -	} else {
+> -		if (test_bit(NVME_TCP_Q_ALLOCATED, &queue->flags))
+> -			__nvme_tcp_stop_queue(queue);
+> -		dev_err(nctrl->device,
+> -			"failed to connect queue: %d ret=%d\n", qid, ret);
+> -	}
+> -	return ret;
+> +	return nvmf_connect_io_queue(ctrl, qid);
+>   }
+>   
+>   static void nvme_tcp_stop_admin_queue(struct nvme_ctrl *nctrl)
+> @@ -1740,13 +1709,7 @@ static void nvme_tcp_stop_admin_queue(struct nvme_ctrl *nctrl)
+>   	struct nvme_tcp_ctrl *ctrl = to_tcp_ctrl(nctrl);
+>   	struct nvme_tcp_queue *queue = &ctrl->queues[0];
+>   
+> -	if (!test_bit(NVME_TCP_Q_ALLOCATED, &queue->flags))
+> -		return;
+> -
+> -	mutex_lock(&queue->queue_lock);
+> -	if (test_and_clear_bit(NVME_TCP_Q_LIVE, &queue->flags))
+> -		__nvme_tcp_stop_queue(queue);
+> -	mutex_unlock(&queue->queue_lock);
+> +	__nvme_tcp_stop_queue(queue);
+>   }
+>   
+>   static void nvme_tcp_stop_io_queue(struct nvme_ctrl *nctrl, int qid)
+> @@ -1754,13 +1717,7 @@ static void nvme_tcp_stop_io_queue(struct nvme_ctrl *nctrl, int qid)
+>   	struct nvme_tcp_ctrl *ctrl = to_tcp_ctrl(nctrl);
+>   	struct nvme_tcp_queue *queue = &ctrl->queues[qid];
+>   
+> -	if (!test_bit(NVME_TCP_Q_ALLOCATED, &queue->flags))
+> -		return;
+> -
+> -	mutex_lock(&queue->queue_lock);
+> -	if (test_and_clear_bit(NVME_TCP_Q_LIVE, &queue->flags))
+> -		__nvme_tcp_stop_queue(queue);
+> -	mutex_unlock(&queue->queue_lock);
+> +	__nvme_tcp_stop_queue(queue);
+>   }
+>   
+>   static int nvme_tcp_alloc_admin_tag_set(struct nvme_ctrl *ctrl)
+> @@ -1843,6 +1800,7 @@ static void nvme_tcp_free_ctrl(struct nvme_ctrl *nctrl)
+>   
+>   	nvmf_free_options(nctrl->opts);
+>   free_ctrl:
+> +	kfree(ctrl->ctrl.queues);
+>   	kfree(ctrl->queues);
+>   	kfree(ctrl);
+>   }
+> @@ -2043,7 +2001,7 @@ static blk_status_t nvme_tcp_queue_rq(struct blk_mq_hw_ctx *hctx,
+>   	struct nvme_tcp_queue *queue = hctx->driver_data;
+>   	struct request *rq = bd->rq;
+>   	struct nvme_tcp_request *req = blk_mq_rq_to_pdu(rq);
+> -	bool queue_ready = test_bit(NVME_TCP_Q_LIVE, &queue->flags);
+> +	bool queue_ready = test_bit(NVME_FABRICS_Q_LIVE, &queue->flags);
+>   	blk_status_t ret;
+>   
+>   	if (!nvme_check_ready(&queue->ctrl->ctrl, rq, queue_ready))
+> @@ -2108,14 +2066,14 @@ static int nvme_tcp_poll(struct blk_mq_hw_ctx *hctx, struct io_comp_batch *iob)
+>   	struct nvme_tcp_queue *queue = hctx->driver_data;
+>   	struct sock *sk = queue->sock->sk;
+>   
+> -	if (!test_bit(NVME_TCP_Q_LIVE, &queue->flags))
+> +	if (!test_bit(NVME_FABRICS_Q_LIVE, &queue->flags))
+>   		return 0;
+>   
+> -	set_bit(NVME_TCP_Q_POLLING, &queue->flags);
+> +	set_bit(NVME_FABRICS_Q_POLLING, &queue->flags);
+>   	if (sk_can_busy_loop(sk) && skb_queue_empty_lockless(&sk->sk_receive_queue))
+>   		sk_busy_loop(sk, true);
+>   	nvme_tcp_try_recv(queue);
+> -	clear_bit(NVME_TCP_Q_POLLING, &queue->flags);
+> +	clear_bit(NVME_FABRICS_Q_POLLING, &queue->flags);
+>   	return queue->nr_cqe;
+>   }
+>   
+> @@ -2129,7 +2087,7 @@ static int nvme_tcp_get_address(struct nvme_ctrl *ctrl, char *buf, int size)
+>   
+>   	mutex_lock(&queue->queue_lock);
+>   
+> -	if (!test_bit(NVME_TCP_Q_LIVE, &queue->flags))
+> +	if (!test_bit(NVME_CTRL_LIVE, &queue->flags))
+>   		goto done;
+>   	ret = kernel_getsockname(queue->sock, (struct sockaddr *)&src_addr);
+>   	if (ret > 0) {
+> @@ -2282,6 +2240,13 @@ static struct nvme_ctrl *nvme_tcp_create_ctrl(struct device *dev,
+>   		ret = -ENOMEM;
+>   		goto out_free_ctrl;
+>   	}
+> +	ctrl->ctrl.queues = kcalloc(ctrl->ctrl.queue_count,
+> +				    sizeof(*ctrl->ctrl.queues),
+> +				    GFP_KERNEL);
+> +	if (!ctrl->ctrl.queues) {
+> +		ret = -ENOMEM;
+> +		goto out_free_ctrl_queue;
+> +	}
+>   
+>   	ret = nvme_init_ctrl(&ctrl->ctrl, dev, &nvme_tcp_ctrl_ops, 0);
+>   	if (ret)
+> @@ -2313,6 +2278,8 @@ static struct nvme_ctrl *nvme_tcp_create_ctrl(struct device *dev,
+>   		ret = -EIO;
+>   	return ERR_PTR(ret);
+>   out_kfree_queues:
+> +	kfree(ctrl->ctrl.queues);
+> +out_free_ctrl_queue:
+>   	kfree(ctrl->queues);
+>   out_free_ctrl:
+>   	kfree(ctrl);
