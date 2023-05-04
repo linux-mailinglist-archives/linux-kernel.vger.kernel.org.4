@@ -2,72 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E8AF6F6CD9
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 15:22:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5558D6F6F96
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 18:10:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231159AbjEDNWL convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 4 May 2023 09:22:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53750 "EHLO
+        id S230454AbjEDQJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 12:09:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231156AbjEDNWJ (ORCPT
+        with ESMTP id S230227AbjEDQJt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 09:22:09 -0400
-Received: from mail.saludzona6.gob.ec (mail.saludzona6.gob.ec [191.100.30.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B21876B4
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 06:22:05 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.saludzona6.gob.ec (Postfix) with ESMTP id 681BF2EFAC10;
-        Thu,  4 May 2023 08:04:56 -0500 (-05)
-Received: from mail.saludzona6.gob.ec ([127.0.0.1])
-        by localhost (mail.saludzona6.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id yleWbyMvBCo9; Thu,  4 May 2023 08:04:56 -0500 (-05)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.saludzona6.gob.ec (Postfix) with ESMTP id EC1762E7F2A0;
-        Thu,  4 May 2023 08:04:55 -0500 (-05)
-X-Virus-Scanned: amavisd-new at saludzona6.gob.ec
-Received: from mail.saludzona6.gob.ec ([127.0.0.1])
-        by localhost (mail.saludzona6.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 4Z59BrR1JpQT; Thu,  4 May 2023 08:04:55 -0500 (-05)
-Received: from [23.146.243.48] (unknown [23.146.243.48])
-        by mail.saludzona6.gob.ec (Postfix) with ESMTPSA id 8B5632EFAC10;
-        Thu,  4 May 2023 08:04:38 -0500 (-05)
-Content-Type: text/plain; charset="iso-8859-1"
+        Thu, 4 May 2023 12:09:49 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C3F98468D;
+        Thu,  4 May 2023 09:09:47 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A0F761FB;
+        Thu,  4 May 2023 09:10:31 -0700 (PDT)
+Received: from localhost.localdomain (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 1DBD23F5A1;
+        Thu,  4 May 2023 09:09:45 -0700 (PDT)
+From:   James Clark <james.clark@arm.com>
+To:     linux-perf-users@vger.kernel.org
+Cc:     James Clark <james.clark@arm.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] perf: arm64: Fix build with refcount checking
+Date:   Thu,  4 May 2023 17:08:45 +0100
+Message-Id: <20230504160845.2065510-1-james.clark@arm.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: =?utf-8?q?verificaci=C3=B3n_/_actualizaci=C3=B3n?=
-To:     Recipients <delia.chacha@saludzona6.gob.ec>
-From:   "@zimbra" <delia.chacha@saludzona6.gob.ec>
-Date:   Thu, 04 May 2023 09:05:45 -0700
-Reply-To: webmasterzimbra1@gmail.com
-Message-Id: <20230504130439.8B5632EFAC10@mail.saludzona6.gob.ec>
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Su cuenta no ha pasado por el proceso de verificación / actualización. Los titulares de cuentas deben actualizar sus cuentas dentro de los 5 días hábiles posteriores a la recepción de este aviso. El incumplimiento de este aviso dentro de la fecha límite puede no ser capaz de enviar o recibir todos los mensajes y el propietario correrá el riesgo de perder su cuenta.
+With EXTRA_CFLAGS=-DREFCNT_CHECKING=1 and build-test, some unwrapped
+map accesses appear. Wrap it in the new accessor to fix the error:
 
-Confirme los detalles de la cuenta a continuación.
-_____________________________________
-1. Nombre y apellido:
-2. Correo electrónico completo en:
-3. Nombre de usuario:
-4. Contraseña:
-5. Vuelva a escribir la contraseña:
-_____________________________________
+  error: 'struct perf_cpu_map' has no member named 'map'
+
+Signed-off-by: James Clark <james.clark@arm.com>
+---
+ tools/perf/arch/arm64/util/header.c | 4 ++--
+ tools/perf/arch/arm64/util/pmu.c    | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/tools/perf/arch/arm64/util/header.c b/tools/perf/arch/arm64/util/header.c
+index d730666ab95d..80b9f6287fe2 100644
+--- a/tools/perf/arch/arm64/util/header.c
++++ b/tools/perf/arch/arm64/util/header.c
+@@ -29,8 +29,8 @@ static int _get_cpuid(char *buf, size_t sz, struct perf_cpu_map *cpus)
+ 		char path[PATH_MAX];
+ 		FILE *file;
  
-NOTA !!! Si no actualiza su cuenta, su cuenta se eliminará automáticamente de nuestro sistema.
+-		scnprintf(path, PATH_MAX, "%s/devices/system/cpu/cpu%d"MIDR,
+-				sysfs, cpus->map[cpu]);
++		scnprintf(path, PATH_MAX, "%s/devices/system/cpu/cpu%d" MIDR,
++			  sysfs, RC_CHK_ACCESS(cpus)->map[cpu].cpu);
  
-Nos disculpamos por cualquier inconveniente causado.
+ 		file = fopen(path, "r");
+ 		if (!file) {
+diff --git a/tools/perf/arch/arm64/util/pmu.c b/tools/perf/arch/arm64/util/pmu.c
+index fa143acb4c8d..ef1ed645097c 100644
+--- a/tools/perf/arch/arm64/util/pmu.c
++++ b/tools/perf/arch/arm64/util/pmu.c
+@@ -18,7 +18,7 @@ static struct perf_pmu *pmu__find_core_pmu(void)
+ 		 * The cpumap should cover all CPUs. Otherwise, some CPUs may
+ 		 * not support some events or have different event IDs.
+ 		 */
+-		if (pmu->cpus->nr != cpu__max_cpu().cpu)
++		if (RC_CHK_ACCESS(pmu->cpus)->nr != cpu__max_cpu().cpu)
+ 			return NULL;
  
-Sinceramente
-Atención al cliente
-Equipo de soporte técnico de Zimbra.
- 
-Copyright © 2005-2023 Synacor, Inc. Todos los derechos reservados
+ 		return pmu;
+-- 
+2.34.1
+
