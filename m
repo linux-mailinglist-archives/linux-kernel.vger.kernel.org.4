@@ -2,76 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34DA46F68D2
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 12:08:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42BD16F68D6
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 12:09:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230002AbjEDKII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 06:08:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42362 "EHLO
+        id S230039AbjEDKI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 06:08:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjEDKIG (ORCPT
+        with ESMTP id S229564AbjEDKIz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 06:08:06 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B02EE49C6;
-        Thu,  4 May 2023 03:08:03 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1aafa03f541so2351445ad.0;
-        Thu, 04 May 2023 03:08:03 -0700 (PDT)
+        Thu, 4 May 2023 06:08:55 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE8164C12
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 03:08:53 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4f139de8cefso8150960e87.0
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 03:08:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683194883; x=1685786883;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2EvC0i2ubAm+sy441fyjK/wvLan+Q24d8vT0SBFBHw8=;
-        b=sQQ34i4f0ZsdWrR7buWlwZEDegKaGTeUqv6DiRctqwB195ofWFFa2PEl+Zm7Q1wMlr
-         J6Hoka5NxO6u6G+8vZnSn3hAuGRgdQS9d39xLZtCCaXHQedSS3MCvZvXuRgXIhTyQZXp
-         qraR8TT3IpUatauHej8OdzdHXrlsKpP3GsPYobE3YsXha1oJJct25a4Cm7rceK44YOzX
-         GFa9EiGqdWE3mcLJ9vU/GX4zQddl7rjBY/IKovF0YGW0S0rmfoPr7QVWit9RRjYRBV9H
-         b5uKvOsLkZEi/Pjkro3WN2S8T1m6B/FHGZxgcTc6IXUBdvVPx3J24FFgHCm693aKYAmy
-         +kOA==
+        d=linaro.org; s=google; t=1683194932; x=1685786932;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jfq4Q0bzKgqrrdmGoknn8Gs1xzMa+RN+wrvnwiQJFjM=;
+        b=cSyFFQbvDN3WMuHAWCxfwE8GIqkKZ2xDrgeCKigzBghlDNPxcVEPKbZitXUsUPmgjD
+         PLh1yVu99pW7I1KjB7wNs3LebkD+4TymZRwylcxhj8RgdkcpawQxGSFN32ZetVaJBG8u
+         5TDmGIi3rLctyZrmXmVGKlWpz8ZyGdmAMTYoW+UZXuHercyRCxpgd9YbYh1jub883fRI
+         Y7M+tEKbV89W8fa5t+TDKGemGjc84/Uqn2Eklx/4fZnG1okOPAW0ONplIG7vwmpUQciv
+         fhSVoF96Neg1+uCMWWfgtBKJkFOohrqxnlmyzc/5sxI/We33grIu7gaSMIIQkzX5Lphe
+         6bEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683194883; x=1685786883;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2EvC0i2ubAm+sy441fyjK/wvLan+Q24d8vT0SBFBHw8=;
-        b=ORA8bs82bg5siYgy6rk23r2pJExuBLpcZ2xtDzk25h/xWZXzGE7gXqVZ6YRqV1R1sQ
-         hz8n1vnQ7/WbNLkhrA0V6xp+pBCltdik+r0BO52i5Yujz6Nq48xYGPlpmKAPcz0LJEjV
-         GWId/mIMuQQz6zaVETsnVqWXrylyOZfRUAxsJXFCFZatTWNZ2TqWbA9yrY7jur0HLByR
-         Sci0S4EYLqfQfn6lTc68t4sogBzVjNsQVcKAqktPxUSE4U0L0UMaIgD1Sz8Ce0I558J0
-         81HBcXmw4avnLdWaPmQ1NlDV7KmvHTQpAYmYSFXWmFBiLDJF9P/EuLXwYOiTj0KT3p1w
-         Nn7A==
-X-Gm-Message-State: AC+VfDz+OtIBiUDFBGjSZFAEmGSoZYLi2zLO86GnfGaiM4ZGtxMp+F+8
-        aeHSiXpe8TIkRPFoh3Tqjck=
-X-Google-Smtp-Source: ACHHUZ5ZqDIKpKUsZVpo2OZogmebe0h5XLPpAAUxCzK8FOBRhjpARLbB3sfGP8Nj1NSLPCuPN9ojSQ==
-X-Received: by 2002:a17:903:2341:b0:1ab:289f:65cf with SMTP id c1-20020a170903234100b001ab289f65cfmr4082515plh.54.1683194883120;
-        Thu, 04 May 2023 03:08:03 -0700 (PDT)
-Received: from debian.me (subs28-116-206-12-58.three.co.id. [116.206.12.58])
-        by smtp.gmail.com with ESMTPSA id y17-20020a170902b49100b001aae1eefc8dsm8752453plr.109.2023.05.04.03.08.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 May 2023 03:08:02 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 91F2E106262; Thu,  4 May 2023 17:07:59 +0700 (WIB)
-Date:   Thu, 4 May 2023 17:07:59 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Wang Honghui <honghui.wang@ucas.com.cn>,
-        Oliver Neukum <oliver@neukum.org>,
-        Ali Akcaagac <aliakc@web.de>,
-        Jamie Lenehan <lenehan@twibble.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        dc395x@twibble.org, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] strcuture: Correct spelling mistakes in comments
-Message-ID: <ZFOD/6rT36evHXNz@debian.me>
-References: <262EBDA8BEEA7619+ZFN1b1D66/Lp8hzh@TP-P15V>
+        d=1e100.net; s=20221208; t=1683194932; x=1685786932;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jfq4Q0bzKgqrrdmGoknn8Gs1xzMa+RN+wrvnwiQJFjM=;
+        b=JKgT+tSz64uG2XtJvzJK23EKRJcVXhXt9Ohgzz6rwmsFQGynlYx1UeseLDppTjY4ur
+         K7m3/zYbij18XwmP2sLZanM6EuPHg9wlrgFiCHhbWoANiJsaZZkeoWaSP7xGI9h9Ne1c
+         5jAHRFFnVwn6Aw9xrFwVhy5CvCPRTjFkCv1B/nJiH2SSZ1RyYfvSzzS5nwFK+DN1tIbs
+         OYwm8p6k52bJON+y5Za65h/vMlfJhTPBPj23i+6VqnunJAvBaMROGc+6KQlpLMkUHVH+
+         MgfmDHxJAso1lIXtvaIHpdqbRyC93fShY3hOf1By207A+7T6Y3GwuCz7MnpOaOYCEGT3
+         zBBA==
+X-Gm-Message-State: AC+VfDz+2KwBs1Hsm2QEmZnb+Gsf2ofqGd2Jr1lo5D+b+89D9XoPgcNl
+        9+Jh0wfGiWcpdUHZ0SDmS1qLgQ==
+X-Google-Smtp-Source: ACHHUZ6Cq/N2Z10u4/9KpdPELT4RkD+I/Ruwf4DKPzXnq0qBktOAKbyATb7vY1fXJ1VKdyn8ZgZiog==
+X-Received: by 2002:a2e:721a:0:b0:2a4:fada:edd1 with SMTP id n26-20020a2e721a000000b002a4fadaedd1mr669030ljc.16.1683194932007;
+        Thu, 04 May 2023 03:08:52 -0700 (PDT)
+Received: from [192.168.1.101] (abyl248.neoplus.adsl.tpnet.pl. [83.9.31.248])
+        by smtp.gmail.com with ESMTPSA id u22-20020a2ea176000000b002ab1216de44sm5108191ljl.71.2023.05.04.03.08.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 May 2023 03:08:51 -0700 (PDT)
+Message-ID: <37603081-e41a-2977-7905-2063abed98cc@linaro.org>
+Date:   Thu, 4 May 2023 12:08:50 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rm9y031/RW5E+/n9"
-Content-Disposition: inline
-In-Reply-To: <262EBDA8BEEA7619+ZFN1b1D66/Lp8hzh@TP-P15V>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v3 5/5] arm64: dts: qcom: qrb4210-rb2: Enable EUD debug
+ peripheral
+Content-Language: en-US
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     agross@kernel.org, andersson@kernel.org,
+        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
+        robh+dt@kernel.org, linux-usb@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, krzysztof.kozlowski@linaro.org
+References: <20230504082644.1461582-1-bhupesh.sharma@linaro.org>
+ <20230504082644.1461582-6-bhupesh.sharma@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230504082644.1461582-6-bhupesh.sharma@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,80 +81,68 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---rm9y031/RW5E+/n9
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 04, 2023 at 05:05:51PM +0800, Wang Honghui wrote:
-> Subject: [PATCH] strcuture: Correct spelling mistakes in comments
-
-The patch subject should have been "scsi: dc395x: Correct 'structures'
-spelling mistakes". For the description, though, I'd like to write
-as 'As title', since the subject is self-explanatory.
-
-Care to reroll?
-
->=20
-> Signed-off-by: Wang Honghui <honghui.wang@ucas.com.cn>
+On 4.05.2023 10:26, Bhupesh Sharma wrote:
+> Since the USB-C type port on the Qualcomm QRB4210-RB2 board
+> can be set primarily in a 'device' configuration (with the default
+> DIP switch settings), it makes sense to enable the EUD debug
+> peripheral on the board by default by setting the USB 'dr_mode' property
+> as 'otg'.
+> 
+> Now, the EUD debug peripheral can be enabled by executing:
+>  $ echo 1 > /sys/bus/platform/drivers/qcom_eud/1610000.eud/enable
+> 
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 > ---
->  drivers/scsi/dc395x.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/scsi/dc395x.c b/drivers/scsi/dc395x.c
-> index c8e86f8a631e..a3f00e6e3296 100644
-> --- a/drivers/scsi/dc395x.c
-> +++ b/drivers/scsi/dc395x.c
-> @@ -3641,7 +3641,7 @@ static void adapter_add_device(struct AdapterCtlBlk=
- *acb,
->   * adapter_remove_device - Removes the device instance from the adaptor
->   * instance. The device instance is not check in any way or freed by thi=
-s.=20
->   * The caller is expected to take care of that. This will simply remove =
-the
-> - * device from the adapters data strcutures.
-> + * device from the adapters data structures.
->   *
->   * @acb: The adapter device to be updated
->   * @dcb: A device that has previously been added to the adapter.
-> @@ -3980,7 +3980,7 @@ static void trms1040_read_all(struct NvRamType *eep=
-rom, unsigned long io_port)
->   * Checks the checksum and if it's not correct it uses a set of default
->   * values.
->   *
-> - * @eeprom:	caller allocated strcuture to read the eeprom data into
-> + * @eeprom:	caller allocated structure to read the eeprom data into
->   * @io_port:	io port to read from
->   **/
->  static void check_eeprom(struct NvRamType *eeprom, unsigned long io_port)
-> @@ -4578,7 +4578,7 @@ static void banner_display(void)
->   * dc395x_init_one - Initialise a single instance of the adapter.
->   *
->   * The PCI layer will call this once for each instance of the adapter
-> - * that it finds in the system. The pci_dev strcuture indicates which
-> + * that it finds in the system. The pci_dev structure indicates which
->   * instance we are being called from.
->   *=20
->   * @dev: The PCI device to initialize.
+>  arch/arm64/boot/dts/qcom/qrb4210-rb2.dts | 27 +++++++++++++++++++++++-
+>  1 file changed, 26 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
+> index 1a0776a0cfd0..0ce72f1ebc10 100644
+> --- a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
+> +++ b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
+> @@ -30,6 +30,10 @@ vph_pwr: vph-pwr-regulator {
+>  	};
+>  };
+>  
+> +&eud {
+> +	status = "okay";
+> +};
+> +
+>  &qupv3_id_0 {
+>  	status = "okay";
+>  };
+> @@ -253,7 +257,28 @@ &usb {
+>  
+>  &usb_dwc3 {
+>  	maximum-speed = "super-speed";
+> -	dr_mode = "peripheral";
+> +
+> +	/*
+> +	 * There is only one USB DWC3 controller on QRB4210 board and it is connected
+> +	 * via a DIP Switch:
+> +	 * - to either an USB - C type connector or an USB - A type connector
+> +	 *   (via a GL3590-S hub), and
+> +	 * - to either an USB - A type connector (via a GL3590-S hub) or a connector
+> +	 *   for further connection with a mezzanine board.
+> +	 *
+> +	 * All of the above hardware muxes would allow us to hook things up in
+> +	 * different ways to some potential benefit for static configurations (for e.g.
+> +	 * on one hand we can have two USB - A type connectors and a USB - Ethernet
+> +	 * connection available and on the other we can use the USB - C type in
+> +	 * peripheral mode).
+> +	 *
+> +	 * Note that since the USB - C type can be used only in peripehral mode,
+> +	 * so hardcoding the mode to 'peripheral' here makes sense.
+> +	 *
+> +	 * However since we want to use the EUD debug device, we set the mode as
+> +	 * 'otg' here.
+> +	 */
+> +	dr_mode = "otg";
+So if I understand correctly, EUD works via the type-C connector and
+only when the switch is turned such that the type-C connector is in use?
 
-The diff LGTM, thanks!
-
-For the diff only,
-
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---rm9y031/RW5E+/n9
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZFOD+wAKCRD2uYlJVVFO
-o3C2AP9Ls79SA755CeuI452Xk0CDmTjqKp1PmRcH71vHUOa3hwD/Swz2AG6FlUMn
-/c9zWW28M+kUiv7Yp7ln7YQ7olQjowQ=
-=43qK
------END PGP SIGNATURE-----
-
---rm9y031/RW5E+/n9--
+Konrad
+>  };
+>  
+>  &usb_hsphy {
