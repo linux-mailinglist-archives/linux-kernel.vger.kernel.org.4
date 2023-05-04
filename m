@@ -2,224 +2,393 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 764D76F6EC6
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 17:18:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83DFA6F6ECD
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 17:22:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231296AbjEDPSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 11:18:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40430 "EHLO
+        id S231373AbjEDPWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 11:22:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230364AbjEDPSS (ORCPT
+        with ESMTP id S231337AbjEDPWB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 11:18:18 -0400
-Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D774236
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 08:18:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1683213497; x=1714749497;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=jqPk95aPLO9qqqyGHWgc6sTCcP+mu0tvUTEXedjDov0=;
-  b=c9JeCf9OziKJdNql0tRnTD4L1+IeM207Vyz1YA5KVp7I/d+O9qps3Hyq
-   vf2Wx06UNrUK3DpOVeqF/KTZuL9gx6KrLOP8n+gLJl9Iv37j2BlVcFH/i
-   MTQl7hQpnTbNFYftzWiKwOZwDiannc7B43pZWSYrh1IvJ7nqmYRRDzQ+O
-   jxiLus199309UX/xnEdxXNaT6xSzSDtJuE0vvE4czJPM9sKgFbomlq8z/
-   7GTKne713gt0NZFpD/Qg0EIkZG1JCWWa/gJlb6jMpvcPYgBgSyRZpmvdM
-   UcNbmneeOyFjvXcJfu6P4irXowHEglrcznzqoAXNV5QdFSZzQltZit9cE
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.99,249,1677513600"; 
-   d="scan'208";a="228093881"
-Received: from mail-bn1nam02lp2048.outbound.protection.outlook.com (HELO NAM02-BN1-obe.outbound.protection.outlook.com) ([104.47.51.48])
-  by ob1.hgst.iphmx.com with ESMTP; 04 May 2023 23:18:15 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lDpqRdKxDUaGrHdyMND4/91owAzC3B+bhB0HQ9ilCy6GNAjfxZah3oL28zZzIVDysrD74fGU/qHSLTjMaw2Coofks8MGL+rKQV8T0h9FZLHgg3Kw7zC/PkD/q7V61OLBtj4aiCxqSiOaaCkbdwB4RWXyraIdnxYPxFlX/F5y9Ek9z7E0xdGjYhE2dBc32NIRxkV/P8LAImVljzI1/JTyH1yjc+aouThIVVDk7+Z5BOLwUxh6fGOGlyYV2Zv96ecC8/D5njkINbMTyeezeZNJlAFt7J1M+Cd7Z96mIip4g/1I7JU1/3pIs489ls9dRDfvFgjc3yVU5zAh+B8JB5EIdA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jqPk95aPLO9qqqyGHWgc6sTCcP+mu0tvUTEXedjDov0=;
- b=AgN5pq4HLc9VoMnGj8WPdZCLhzZ22K+KEL3quR4TxIo7jfYdczugO+RPbkcVnJd4EJi4V5n36LrsnBkueul5+JiKJjO7N5uCNFmnfW8siO8yyeXHh7JHsoxAI9iggJwRiFaCQ8SUasRP7YAzD0/u+6HBYzvWcpJq6/EhvXO85IVTJN9aRypp0W9sGIOPgHnIOzBRZBj7H1zGoxlEB7ZNk05Wb6YjeUWQKAT3pUqMZKnj36rT3rBphWOlWGxTg3AztCrA661ZcsnUWu/ip8rO3UeoEsJTTJgmJeTHA9vMM4fRSXThIYEF1s19clMltKsO0/1pEl+If11U4HQ6u/7hog==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
+        Thu, 4 May 2023 11:22:01 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88688448B
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 08:21:57 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-50bd2d7ba74so18293952a12.1
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 08:21:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jqPk95aPLO9qqqyGHWgc6sTCcP+mu0tvUTEXedjDov0=;
- b=hAAR6wa9gpPhzkuxzFxkOBZzE4itXfpqjsqtGC0cbSaL/GZhtT+uD6t7UUJJub0RTX1N5wSe1PKDtQx99WGPlqvB7FPZJ6okL4CNRz2nT7nOQwkeN16l2s9B+rivpNphRch70k0I8a3SnQecY+ebdjBJT3Zb1OT9iB5WuBG3FTM=
-Received: from MN2PR04MB6272.namprd04.prod.outlook.com (2603:10b6:208:e0::27)
- by CH2PR04MB6982.namprd04.prod.outlook.com (2603:10b6:610:92::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.26; Thu, 4 May
- 2023 15:18:13 +0000
-Received: from MN2PR04MB6272.namprd04.prod.outlook.com
- ([fe80::4fd:6db1:5165:2ade]) by MN2PR04MB6272.namprd04.prod.outlook.com
- ([fe80::4fd:6db1:5165:2ade%7]) with mapi id 15.20.6363.022; Thu, 4 May 2023
- 15:18:12 +0000
-From:   Niklas Cassel <Niklas.Cassel@wdc.com>
-To:     Keith Busch <kbusch@kernel.org>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        "jiweisun126@126.com" <jiweisun126@126.com>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "axboe@fb.com" <axboe@fb.com>, "hch@lst.de" <hch@lst.de>,
-        "sagi@grimberg.me" <sagi@grimberg.me>,
-        "ahuang12@lenovo.com" <ahuang12@lenovo.com>,
-        "sunjw10@lenovo.com" <sunjw10@lenovo.com>
-Subject: Re: [PATCH] nvme: add cond_resched() to nvme_complete_batch()
-Thread-Topic: [PATCH] nvme: add cond_resched() to nvme_complete_batch()
-Thread-Index: AQHZfmxhAnBWBykOJUOdfcgNJU7LAa9J5RgAgABSBgCAAANPgA==
-Date:   Thu, 4 May 2023 15:18:12 +0000
-Message-ID: <ZFPMs6e2c3tM99o0@x1-carbon>
-References: <20230502125412.65633-1-jiweisun126@126.com>
- <ZFKLxfet7qUIwScd@kbusch-mbp.dhcp.thefacebook.com>
- <ZFLxXjiQUPl+tV8L@kbusch-mbp.dhcp.thefacebook.com>
- <ZFN9aWYCxJW/HdHi@x1-carbon> <ZFOFHv8Kh/7KLuBa@x1-carbon>
- <ZFPJ7CYFEextnOqE@kbusch-mbp.dhcp.thefacebook.com>
-In-Reply-To: <ZFPJ7CYFEextnOqE@kbusch-mbp.dhcp.thefacebook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wdc.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MN2PR04MB6272:EE_|CH2PR04MB6982:EE_
-x-ms-office365-filtering-correlation-id: 94a70116-aa5d-481a-6c72-08db4cb2c6e3
-wdcipoutbound: EOP-TRUE
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 5W7WT6iUlPJTnM72F7yHqAVRS6hwWz/w9z2ubaY6AJm9jeAunYjYTmy5zvTbxPH869Xy/4crrtwNGcw9A6HwlazPaRKxIsZvUq+jsNorFaXwwZcQCegGwuet1z9NqDyx1LTA4d/Vig1Npe4taPo17Pw3nl/OaB55zXF/aJ8tGDSB2cSaKLvK8lAecv3K/cLTyC6IJPNuqG8cwI2ZcYaoVDHBdQFtMVSRr5NZ57v/bf4exoiAunw1RFXXuoPo774mPKBbBw+lNKH0CtTCltYhzOAwwBvYh/JSYrVdH4+C9yrw54ROACnaxEfjsOxjCtU0Z5d/jRqoJVGkkbBLrW0WcT/J08Ah069sh/LQoONo3e2iP50AA1rubp3iybFbKBtbk45ChBpzXfsHg9pSwB11fO4r8B3408aUkEy4CouQ2eofUakL0K7z3/P5QmwREOhn18Z2szWYTchBzxT/ASUUqsRvgQYxu+zn0cYVVurbrq5Xd4IVeOX6ZegTxGrGLTfoz0OqLz7sUMM88ZQusugChxI7vlpVokL7UO+skr1ldNGMGFKZ0VFnHzJrmRIU+wd1VqDUC30xpz4ORX4HND1ENp5vTVmxCC97ySm2+UhGfSIUMMOSHozlJSDrbV7u/UXe
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR04MB6272.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(4636009)(366004)(376002)(39860400002)(136003)(396003)(346002)(451199021)(26005)(6506007)(6512007)(33716001)(9686003)(186003)(54906003)(66946007)(6486002)(71200400001)(83380400001)(316002)(5660300002)(82960400001)(478600001)(2906002)(6916009)(4326008)(38100700002)(7416002)(86362001)(8676002)(38070700005)(122000001)(41300700001)(8936002)(66476007)(64756008)(66446008)(66556008)(76116006)(91956017);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?hD2HX4bunlCGOxQaxQozT0SL0meanzLX3b5tv/f4vDuip7M6+OCmkP8JaVoM?=
- =?us-ascii?Q?roNFgJpHSodfOdoBZ2mVn5uAO+BRaolUWGe0vaLE8MApSLdjcFF4jld56Ygz?=
- =?us-ascii?Q?VH1y0WQcroZkmBjJ1cWjWSEEy5kIVANM3jkNi+bX7pUIeqEbEmKf7MYlwEFv?=
- =?us-ascii?Q?17kKOgtVXv4FB4iep0k4LzvTc1B8eJaEfBPvjWE7MZRsansaPvg+2nXTVw0A?=
- =?us-ascii?Q?w+SGtieYa+ooVKM1eJTkVUAF0EvlFf22c7Cir8j8ORY1cnfyUmGQ4PUiIZFy?=
- =?us-ascii?Q?7rH0MCX7GdNhOjzzS+yB/ECQHBixhQ3x4YzuTknss2yDMEll5FTT68+N8xLd?=
- =?us-ascii?Q?DbkuoMU9KOZqUlfnGvOggSV65doGq2qm0K8xwtHlgNZ0q3s60ATM6r1+JFHS?=
- =?us-ascii?Q?STR2VQUaK4FcotiwSzPTxtDB0N7Y4i60plUZFhT/7kMpRJ2lNdMTKKVjz+tp?=
- =?us-ascii?Q?k+NWmf2whBYSwKOmJPiVp28/McMyjcSvKWPi5dVs9aIn4qrBmL0axkffcUYf?=
- =?us-ascii?Q?qXpnloWleMgCDzPzJu2BfNbApOvy3KNQcyBeaGRulLvFH0Z+lePtJIGf4yVN?=
- =?us-ascii?Q?RXVi/8jYe5UKaRuI+Dm1xu7Ad8CNGBrnoJxjHdRZ39Xb/ZbOgHufDuWnRBJ/?=
- =?us-ascii?Q?J5pW8BR+mcX4mHRvdMKgP1XqCZmLm7zuxO75D5PKLdMoaKy9JIC1VgzILNeO?=
- =?us-ascii?Q?jR4XkIAjEZSJRGpDXsThUktDDnUA1PyF/BfiuAp6nfpk0fBfLuSU2X1L+K0Q?=
- =?us-ascii?Q?sivCUbNxoi98BnvU8PktEBpW4OgPmvdtuwRPQx6PJXnsgL/s/QM8OvaiyswE?=
- =?us-ascii?Q?RrZ77LVdBHO0ZE99oGoVH6xtyKnxCzZFS6wIZrn4NFTGGjfFm0LLOW8wXlT5?=
- =?us-ascii?Q?glDfREZvq0Eb2ys0yCaMXDfcSAkdB9a5GSQvK09xgQxiSFC2vh7xzkU62ztx?=
- =?us-ascii?Q?J3PBE0fsArTNAaXrYmyFpn38qtIWqL9nDJ042x1C6BpDiLRf+GSXtjKBwZHm?=
- =?us-ascii?Q?iAmpraWmvSAShwD59UgGcn7NAkn76P3ITJlA4lRBwO6r9ktWY6dSvHDgt69w?=
- =?us-ascii?Q?CwVqyh2f1fAtw80rlo6M5HeHa48rHgQD/2YDqetQP/4xkYAsU6hJ2Bl29nCh?=
- =?us-ascii?Q?RPYz+QRiymF7gM4qPAVaQKcUuLEH/svGaTmS5wLoLBYJL3P+fXG0GIAr7G0J?=
- =?us-ascii?Q?e4tBqeOl55Oevi6k3IXDdsnagGGIQzJuCfdXHIYIA0ORuf9XrFwQwzxY+hhj?=
- =?us-ascii?Q?aNIyx1YhTw3YbKDQ29E5Jmzj3b/vcNG1dsD11HPFn3sQuqrjlP4vr34Z1nKe?=
- =?us-ascii?Q?GDOqv8fJ0kHnoXHQKpRhFKMV9OLlS7HiFLeMTa2sQsV6CiaSmX17CCboXZ1M?=
- =?us-ascii?Q?7h+qRmqBdTPo/QYaXMLGkAqXXKYv+86bCsDG+9bP7dv9L4Xw9WAj4te6dwp6?=
- =?us-ascii?Q?PbjFRyrQNhgoDZQdg9JLjxWtnx0QnKmaGKhETU4AwXfN92yBqDUcaEYzSdkr?=
- =?us-ascii?Q?llK/0OYXtlMVdLXo6c9GowS7dTSKsPM9Qb9LL05AElKeMS+kHlk55wpQluMQ?=
- =?us-ascii?Q?pafJavxBED+ef9IYj0x3JW5Eud5IMgZY2cSZ5nuFMeDR70IelKeWkwXr6ms7?=
- =?us-ascii?Q?+w=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <D74BD76E8278A14D99B883179EC6FC69@namprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        d=linaro.org; s=google; t=1683213716; x=1685805716;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PiGLn/wT6jdTg1r2CmvkzZAzbbvZRfblAofN9TNz5js=;
+        b=rmgboVQMXKVEmatJvwtVuNHvP3P5iF0N+kpJRgXsH1BmScQOnIuCKROJbbCYE+PZ4k
+         Et8mmmAv/mF+bZhgQHJ+XR624bUizkdqUuVUuv1jBHiYhFeJT5RcfE8DjfvAEp9wnJAA
+         wbv+9lUHD3qvbVnXlE/nOwl7gD95voQ8YGkx94yr7tcz1v+rGGoiSu0LP4N3pby55mZ8
+         LNElVxgA5RCmA2hRT6QwW329//xpAnnVflPZ/a6iFuijnxabI8/ZIaxsvZjmDGx1jWG8
+         Yj+QjwSjdWG+O1RF68bpnzepUOS+dpVn/Gyycl5vs4fLxBmjiiwk+M1Nd4fDxyBphS8D
+         ymWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683213716; x=1685805716;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PiGLn/wT6jdTg1r2CmvkzZAzbbvZRfblAofN9TNz5js=;
+        b=G3yz3qkKH83u+EUUArvnaf0MmYC5lYSaJUP1n+2vBTx3SQyGfJcqHJTV3SkHdzvwB9
+         5f4fJQ94fTxVo40l9Or7P3a+LhidrM7vFKmActjKBqEhDpnxoJUaMTIxX2gp2WzKla+P
+         fX7pSDql8+qSD6H6TyPIQU/RXpCoCsNjFBa8Y48xj0QDFGu/1SuInoWYxPQcKXSDEmBe
+         mvuoX4KRHl0lMTH3EBMNwTfnkYkM4zNCrG9C2HgOG/u/wKkGcl1QgmlzvlLAkHh5eeT8
+         Pt0iNNUWtH23oG3DTuEbdziZEU6oXzb/7ciqesKy/BShNAvOiSrnMrZ35tuXtQTLxUdh
+         dj/A==
+X-Gm-Message-State: AC+VfDyDAP0IVoMV9PEz52daXbi506SNzFrnErGycDLTEOQTuWSBpnM5
+        8yk8+crLqOSqeyYuzpOKmqKxNw==
+X-Google-Smtp-Source: ACHHUZ6YZYRgQMRxf5orwNObNcMlwSymaMEoEOjw1Z1jIy3dxNIXynsfLCVhIMiU2+SX4xd8hXNFcA==
+X-Received: by 2002:a17:907:36c6:b0:94f:432f:243d with SMTP id bj6-20020a17090736c600b0094f432f243dmr5660822ejc.17.1683213715932;
+        Thu, 04 May 2023 08:21:55 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:cbf1:e7ef:fb81:e912? ([2a02:810d:15c0:828:cbf1:e7ef:fb81:e912])
+        by smtp.gmail.com with ESMTPSA id gq18-20020a170906e25200b0094eeda0df09sm18962558ejb.179.2023.05.04.08.21.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 May 2023 08:21:55 -0700 (PDT)
+Message-ID: <575a422d-6224-06b7-628c-8487b47882e9@linaro.org>
+Date:   Thu, 4 May 2023 17:21:53 +0200
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?NPDyHDQ6reIF0xlpo6LcAZ+SIwkw9++yC1xKq4Rf3ddkkNRit9C5ve++O+NE?=
- =?us-ascii?Q?bBZ8CB7KL1RqjsaP10H/Aq/XIOelKQRUo3gvJQSPCL+Alejgk+5Eyirbw052?=
- =?us-ascii?Q?YNuxMEPs9hLMfCn6W6N8DYVe7t7EOtwqCA4WEOt0N/6PA99zq2AU1y+Y7YFX?=
- =?us-ascii?Q?cyKCb4aFx42JaRLOawLCN5QqWnvv0az0iYZYzWsfdA/HvkMOrq/H76LLUca0?=
- =?us-ascii?Q?ibgXgSlf9N5b5cqJhYHT9ckXG8TGmach1tEozd1bd2jeVJ/0n68uofxlFveZ?=
- =?us-ascii?Q?0YaK0HjLDhpM48D9ZyNxGcmemp3ueMUX6CwlCJLwdJZB7op822bIhrj19+bl?=
- =?us-ascii?Q?cdS1dZputLRAdE5ltyd98UYU3D55YWqoRZ3Z1I0PYDG3u3c4v3biiLeAWGsu?=
- =?us-ascii?Q?nVzh78TDTKnB3n+qV1IEVaBuHShK4GVGQ/y4riWgpUbTKNJbKxXPu2mF1+BO?=
- =?us-ascii?Q?aSTdrZ/hDrpjCz6tosURHK1r3+ctOLMLEXVLiFhZXEYItYdQ/uJmMK59Uh6t?=
- =?us-ascii?Q?Ne6i7XnJpTU38726abM+eipKTuFxIyHRHzGWAsM83uCllOPg5olPvajK7GBW?=
- =?us-ascii?Q?4Y5WUysuJqsEFd7AN3ydfFpdA4+TuHBpSHLnm0EioNFar9231VADOMbMxm8h?=
- =?us-ascii?Q?g53ZGp5XjaJtvCUygCIMNl49jPZHkKaRZFATztCQuJ0Sq5yCXLGXJ4ct1p4p?=
- =?us-ascii?Q?TpI/osO3EVXpC5ghQ0uUtXo8LC1EOxFZjIYz4oE8b+mTdUhtsYaogPtiNEvT?=
- =?us-ascii?Q?T1O1uN8Gu8RRROy14yaakaDDbxLIAt9tLVvEI8fb17gjO7CmjaQnqhjL+9YR?=
- =?us-ascii?Q?9AsXj/FRXpLyUmriMjlWgTI59m7Szb/oemx3gQzCO0ms75mjA6re206rAfS9?=
- =?us-ascii?Q?0agf8URDIAvMRYSdxjoKsiFu90LUboz2xw/HWs1ggSjyVnzrPbTJwgG9OU/E?=
- =?us-ascii?Q?leSUW7hlA/9Nd0TYoQ82q9newgcAGgMAhum8faVDaoW2hWMxLuduhWId2CYP?=
- =?us-ascii?Q?TZDulBG6NJSf9Pvp09u9iYORJ1cJO9EopYyHVZhuY1dB3WY=3D?=
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR04MB6272.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 94a70116-aa5d-481a-6c72-08db4cb2c6e3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 May 2023 15:18:12.7521
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: TN4cOb+0AxMNMB2yd0TlD3PjeaezerBvuSu8S6cqFMjt8wBKnx6jQha+BuMtrXeSs4dyEGoL0MviVXD/ZNhctQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR04MB6982
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v3 04/18] soc: qcom: Add Qualcomm minidump kernel driver
+Content-Language: en-US
+To:     Mukesh Ojha <quic_mojha@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, corbet@lwn.net,
+        keescook@chromium.org, tony.luck@intel.com, gpiccoli@igalia.com,
+        catalin.marinas@arm.com, will@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        linus.walleij@linaro.org, linux-gpio@vger.kernel.org,
+        srinivas.kandagatla@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org
+References: <1683133352-10046-1-git-send-email-quic_mojha@quicinc.com>
+ <1683133352-10046-5-git-send-email-quic_mojha@quicinc.com>
+ <c6f730b6-f702-91d4-4abd-71546e02f869@linaro.org>
+ <23b493f4-1a01-8d03-fc12-d588b2c6fd74@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <23b493f4-1a01-8d03-fc12-d588b2c6fd74@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 04, 2023 at 09:06:20AM -0600, Keith Busch wrote:
-> On Thu, May 04, 2023 at 10:12:46AM +0000, Niklas Cassel wrote:
-> > On Thu, May 04, 2023 at 11:39:53AM +0200, Niklas Cassel wrote:
-> > >=20
-> > > Something is fishy here...
-> > >=20
-> > > (Perhaps the maintainer did a git revert instead of applying the fix.=
-..
-> > > and accidentally squashed the revert with a proper commit...
-> > > But even that does not make sense, as there simply seems to be too ma=
-ny
-> > > lines changed in 2d55c16c0c54 ("dmapool: create/destroy cleanup") for=
- that
-> > > to be the case...)
-> >=20
-> > It seems like the additional lines in
-> > 2d55c16c0c54 ("dmapool: create/destroy cleanup") is explained by the
-> > maintainer (probably accidentally) reverting additional patches in that
-> > very same commit.
-> >=20
-> > It seems like that commit reverted all changes to mm/dmapool.c since v6=
-.3:
->=20
-> Spot on, thanks for confirming! Somehow a series revert was squahed into
-> the final patch. :(
->=20
-> We reached the same conclusion pretty late yesterday, so I'll wait for
-> Andrew to suggest how to proceed. I think we have to rebase whole series
-> with the correct final patch and resend the pull.
-> =20
-> > $ git log --oneline 2d55c16c0c54325bf15286cfa6ba6c268036b9e4 --not v6.3=
- mm/dmapool.c=20
-> > 2d55c16c0c54 dmapool: create/destroy cleanup
-> > a4de12a032fa dmapool: link blocks across pages
-> > 9d062a8a4c6d dmapool: don't memset on free twice
-> > 887aef615818 dmapool: simplify freeing
-> > 2591b516533b dmapool: consolidate page initialization
-> > 36d1a28921a4 dmapool: rearrange page alloc failure handling
-> > 52e7d5653979 dmapool: move debug code to own functions
-> > 19f504584038 dmapool: speedup DMAPOOL_DEBUG with init_on_alloc
-> > 347e4e44c0a9 dmapool: cleanup integer types
-> > 65216545436b dmapool: use sysfs_emit() instead of scnprintf()
-> > 7f796d141c07 dmapool: remove checks for dev =3D=3D NULL
+On 04/05/2023 14:38, Mukesh Ojha wrote:
+> 
+> 
+> On 5/4/2023 5:06 PM, Krzysztof Kozlowski wrote:
+>> On 03/05/2023 19:02, Mukesh Ojha wrote:
+>>> Minidump is a best effort mechanism to collect useful and predefined
+>>> data for first level of debugging on end user devices running on
+>>> Qualcomm SoCs. It is built on the premise that System on Chip (SoC)
+>>> or subsystem part of SoC crashes, due to a range of hardware and
+>>> software bugs. Hence, the ability to collect accurate data is only
+>>> a best-effort. The data collected could be invalid or corrupted,
+>>> data collection itself could fail, and so on.
+>>>
+>>> Qualcomm devices in engineering mode provides a mechanism for
+>>> generating full system ramdumps for post mortem debugging. But in some
+>>> cases it's however not feasible to capture the entire content of RAM.
+>>> The minidump mechanism provides the means for selecting region should
+>>> be included in the ramdump. The solution supports extracting the
+>>> ramdump/minidump produced either over USB or stored to an attached
+>>> storage device.
+>>>
+>>> The core of minidump feature is part of Qualcomm's boot firmware code.
+>>> It initializes shared memory(SMEM), which is a part of DDR and
+>>> allocates a small section of it to minidump table i.e also called
+>>> global table of content (G-ToC). Each subsystem (APSS, ADSP, ...) has
+>>> their own table of segments to be included in the minidump, all
+>>> references from a descriptor in SMEM (G-ToC). Each segment/region has
+>>> some details like name, physical address and it's size etc. and it
+>>> could be anywhere scattered in the DDR.
+>>>
+>>> Minidump kernel driver adds the capability to add linux region to be
+>>> dumped as part of ram dump collection. It provides appropriate symbol
+>>> to check its enablement and register client regions.
+>>>
+>>> To simplify post mortem debugging, it creates and maintain an ELF
+>>> header as first region that gets updated upon registration
+>>> of a new region.
+>>>
+>>> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+>>> ---
+>>>   drivers/soc/qcom/Kconfig         |  14 +
+>>>   drivers/soc/qcom/Makefile        |   1 +
+>>>   drivers/soc/qcom/qcom_minidump.c | 581 +++++++++++++++++++++++++++++++++++++++
+>>>   drivers/soc/qcom/smem.c          |   8 +
+>>>   include/soc/qcom/qcom_minidump.h |  61 +++-
+>>>   5 files changed, 663 insertions(+), 2 deletions(-)
+>>>   create mode 100644 drivers/soc/qcom/qcom_minidump.c
+>>>
+>>> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
+>>> index a491718..15c931e 100644
+>>> --- a/drivers/soc/qcom/Kconfig
+>>> +++ b/drivers/soc/qcom/Kconfig
+>>> @@ -279,4 +279,18 @@ config QCOM_INLINE_CRYPTO_ENGINE
+>>>   	tristate
+>>>   	select QCOM_SCM
+>>>   
+>>> +config QCOM_MINIDUMP
+>>> +	tristate "QCOM Minidump Support"
+>>> +	depends on ARCH_QCOM || COMPILE_TEST
+>>> +	select QCOM_SMEM
+>>> +	help
+>>> +	  Enablement of core minidump feature is controlled from boot firmware
+>>> +	  side, and this config allow linux to query and manages APPS minidump
+>>> +	  table.
+>>> +
+>>> +	  Client drivers can register their internal data structures and debug
+>>> +	  messages as part of the minidump region and when the SoC is crashed,
+>>> +	  these selective regions will be dumped instead of the entire DDR.
+>>> +	  This saves significant amount of time and/or storage space.
+>>> +
+>>>   endmenu
+>>> diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
+>>> index 0f43a88..1ebe081 100644
+>>> --- a/drivers/soc/qcom/Makefile
+>>> +++ b/drivers/soc/qcom/Makefile
+>>> @@ -33,3 +33,4 @@ obj-$(CONFIG_QCOM_RPMPD) += rpmpd.o
+>>>   obj-$(CONFIG_QCOM_KRYO_L2_ACCESSORS) +=	kryo-l2-accessors.o
+>>>   obj-$(CONFIG_QCOM_ICC_BWMON)	+= icc-bwmon.o
+>>>   obj-$(CONFIG_QCOM_INLINE_CRYPTO_ENGINE)	+= ice.o
+>>> +obj-$(CONFIG_QCOM_MINIDUMP) += qcom_minidump.o
+>>> diff --git a/drivers/soc/qcom/qcom_minidump.c b/drivers/soc/qcom/qcom_minidump.c
+>>> new file mode 100644
+>>> index 0000000..d107a86
+>>> --- /dev/null
+>>> +++ b/drivers/soc/qcom/qcom_minidump.c
+>>> @@ -0,0 +1,581 @@
+>>> +// SPDX-License-Identifier: GPL-2.0-only
+>>> +
+>>> +/*
+>>> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+>>> + */
+>>> +
+>>> +#include <linux/elf.h>
+>>> +#include <linux/err.h>
+>>> +#include <linux/errno.h>
+>>> +#include <linux/export.h>
+>>> +#include <linux/init.h>
+>>> +#include <linux/io.h>
+>>> +#include <linux/kernel.h>
+>>> +#include <linux/module.h>
+>>> +#include <linux/platform_device.h>
+>>> +#include <linux/string.h>
+>>> +#include <linux/soc/qcom/smem.h>
+>>> +#include <soc/qcom/qcom_minidump.h>
+>>> +
+>>> +/**
+>>> + * struct minidump_elfhdr - Minidump table elf header
+>>> + * @ehdr: Elf main header
+>>> + * @shdr: Section header
+>>> + * @phdr: Program header
+>>> + * @elf_offset: Section offset in elf
+>>> + * @strtable_idx: String table current index position
+>>> + */
+>>> +struct minidump_elfhdr {
+>>> +	struct elfhdr		*ehdr;
+>>> +	struct elf_shdr		*shdr;
+>>> +	struct elf_phdr		*phdr;
+>>> +	size_t			elf_offset;
+>>> +	size_t			strtable_idx;
+>>> +};
+>>> +
+>>> +/**
+>>> + * struct minidump - Minidump driver private data
+>>> + * @md_gbl_toc	: Global TOC pointer
+>>> + * @md_apss_toc	: Application Subsystem TOC pointer
+>>> + * @md_regions	: High level OS region base pointer
+>>> + * @elf		: Minidump elf header
+>>> + * @dev		: Minidump device
+>>> + */
+>>> +struct minidump {
+>>> +	struct minidump_global_toc	*md_gbl_toc;
+>>> +	struct minidump_subsystem	*md_apss_toc;
+>>> +	struct minidump_region		*md_regions;
+>>> +	struct minidump_elfhdr		elf;
+>>> +	struct device			*dev;
+>>> +};
+>>> +
+>>> +/*
+>>> + * In some of the Old Qualcomm devices, boot firmware statically allocates 300
+>>> + * as total number of supported region (including all co-processors) in
+>>> + * minidump table out of which linux was using 201. In future, this limitation
+>>> + * from boot firmware might get removed by allocating the region dynamically.
+>>> + * So, keep it compatible with older devices, we can keep the current limit for
+>>> + * Linux to 201.
+>>> + */
+>>> +#define MAX_NUM_ENTRIES	  201
+>>> +#define MAX_STRTBL_SIZE	  (MAX_NUM_ENTRIES * MAX_REGION_NAME_LENGTH)
+>>> +
+>>> +static struct minidump *__md;
+>>
+>> No, no file scope or global scope statics.
+> 
+> Sorry, this is done as per recommendation given here [1] and this 
+> matches both driver/firmware/qcom_scm.c and driver/soc/qcom/smem.c
+> implementations.
+> 
+> [1]
+> https://lore.kernel.org/lkml/f74dfcde-e59b-a9b3-9bbc-a8de644f6740@linaro.org/
 
-Hello Keith, Andrew,
+That's not true. You had the static already in v2, before Srini commented.
 
-Note that the first four patches were not part of Keith's series,
-but they were reverted as well.
+Look:
+https://lore.kernel.org/lkml/1679491817-2498-5-git-send-email-quic_mojha@quicinc.com/
+
++static struct minidump minidump;
++static DEFINE_MUTEX(minidump_lock);
+
+We do not talk about the names.
 
 
-> Andrew actually squashed that fix into the original patch.
+>>> +
+>>> +	if (size < sizeof(*mdgtoc) || !mdgtoc->status) {
+>>> +		ret = -EINVAL;
+>>> +		dev_err(&pdev->dev, "minidump table is not initialized: %d\n", ret);
+>>> +		return ret;
+>>> +	}
+>>> +
+>>> +	mutex_lock(&minidump_lock);
+>>> +	md->dev = &pdev->dev;
+>>> +	md->md_gbl_toc = mdgtoc;
+>>
+>> What are you protecting here? It's not possible to have concurrent
+>> access to md, is it?
+> 
+> Check qcom_apss_minidump_region_{register/unregister} and it is possible
+> that these API gets called parallel to this probe.
 
-Ok, strange why there was a revert done at all then.
+Wait, you say that something can modify local variable md before it is
+assigned to __md? How?
+
+> 
+> I agree, i made a mistake in not protecting __md in {register} API
+> but did it unregister API in this patch, which i have fixed in later patch.
+
+No, you are protecting random things. Nothing will concurrently modify
+md and &pdev->dev in this moment. mdgtoc is allocated above, so also
+cannot by modified.
+
+Otherwise show me the hypothetical scenario.
 
 
-Kind regards,
-Niklas=
+> 
+>>
+>>> +	ret = qcom_minidump_init_apss_subsystem(md);
+>>> +	if (ret) {
+>>> +		dev_err(&pdev->dev, "apss minidump initialization failed: %d\n", ret);
+>>> +		goto unlock;
+>>> +	}
+>>> +
+>>> +	__md = md;
+>>
+>> No. This is a platform device, so it can have multiple instances.
+> 
+> It can have only one instance that is created from SMEM driver probe.
+
+Anyone can instantiate more of them.... how did you solve it?
+
+
+> 
+>>
+>>> +	/* First entry would be ELF header */
+>>> +	ret = qcom_apss_minidump_add_elf_header();
+>>> +	if (ret) {
+>>> +		dev_err(&pdev->dev, "Failed to add elf header: %d\n", ret);
+>>> +		memset(md->md_apss_toc, 0, sizeof(struct minidump_subsystem));
+>>> +		__md = NULL;
+>>> +	}
+>>> +
+>>> +unlock:
+>>> +	mutex_unlock(&minidump_lock);
+>>> +	return ret;
+>>> +}
+>>> +
+>>> +static int qcom_minidump_remove(struct platform_device *pdev)
+>>> +{
+>>> +	memset(__md->md_apss_toc, 0, sizeof(struct minidump_subsystem));
+>>> +	__md = NULL;
+>>
+>> Don't use __ in variable names. Drop it everywhere.
+> 
+> As i said above, this is being followed in other drivers, so followed
+> it here as per recommendation.
+> 
+> Let @srini comeback on this.
+
+Which part of coding style recommends __ for driver code?
+
+> 
+>>
+>>> +
+>>> +	return 0;
+>>> +}
+>>> +
+>>> +static struct platform_driver qcom_minidump_driver = {
+>>> +	.probe = qcom_minidump_probe,
+>>> +	.remove = qcom_minidump_remove,
+>>> +	.driver  = {
+>>> +		.name = "qcom-minidump",
+>>> +	},
+>>> +};
+>>> +
+>>> +module_platform_driver(qcom_minidump_driver);
+>>> +
+>>> +MODULE_DESCRIPTION("Qualcomm APSS minidump driver");
+>>> +MODULE_LICENSE("GPL v2");
+>>> +MODULE_ALIAS("platform:qcom-minidump");
+>>> diff --git a/drivers/soc/qcom/smem.c b/drivers/soc/qcom/smem.c
+>>> index 6be7ea9..d459656 100644
+>>> --- a/drivers/soc/qcom/smem.c
+>>> +++ b/drivers/soc/qcom/smem.c
+>>> @@ -279,6 +279,7 @@ struct qcom_smem {
+>>>   
+>>>   	u32 item_count;
+>>>   	struct platform_device *socinfo;
+>>> +	struct platform_device *minidump;
+>>>   	struct smem_ptable *ptable;
+>>>   	struct smem_partition global_partition;
+>>>   	struct smem_partition partitions[SMEM_HOST_COUNT];
+>>> @@ -1151,12 +1152,19 @@ static int qcom_smem_probe(struct platform_device *pdev)
+>>>   	if (IS_ERR(smem->socinfo))
+>>>   		dev_dbg(&pdev->dev, "failed to register socinfo device\n");
+>>>   
+>>> +	smem->minidump = platform_device_register_data(&pdev->dev, "qcom-minidump",
+>>> +						      PLATFORM_DEVID_NONE, NULL,
+>>> +						      0);
+>>> +	if (IS_ERR(smem->minidump))
+>>> +		dev_dbg(&pdev->dev, "failed to register minidump device\n");
+>>> +
+>>>   	return 0;
+>>>   }
+>>>   
+>>>   static int qcom_smem_remove(struct platform_device *pdev)
+>>>   {
+>>>   	platform_device_unregister(__smem->socinfo);
+>>> +	platform_device_unregister(__smem->minidump);
+>>
+>> Wrong order. You registered first socinfo, right?
+> 
+> Any order is fine here, they are not dependent.
+> But, will fix this.
+
+No, the order is always reversed from allocation. It does not matter if
+they are dependent or not.
+
+Best regards,
+Krzysztof
+
