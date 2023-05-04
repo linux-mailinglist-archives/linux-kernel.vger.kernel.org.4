@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 225F46F7855
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 23:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6962F6F7856
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 23:50:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230049AbjEDVuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 17:50:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45314 "EHLO
+        id S230136AbjEDVux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 17:50:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbjEDVur (ORCPT
+        with ESMTP id S230106AbjEDVut (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 17:50:47 -0400
+        Thu, 4 May 2023 17:50:49 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A7F1154C
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 14:50:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D09481154C;
+        Thu,  4 May 2023 14:50:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9940E63A30
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 21:50:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0528BC433EF;
-        Thu,  4 May 2023 21:50:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B9F763A30;
+        Thu,  4 May 2023 21:50:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D0032C433EF;
+        Thu,  4 May 2023 21:50:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683237046;
-        bh=WFw20QfDsL/6GRIEPbeM07zo/huuezcbqE4ZIGNkScM=;
+        s=k20201202; t=1683237047;
+        bh=ddiDP2MXY2r+1cvikZNbUgl2oCcg9JbCUBxLdav6OQk=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=W5laT6wzhQdLJudq8X/cBo1EovTGXsa8A/V5NhBYNlfqyAtlmPtd04UqjcpH8K6zw
-         bP0EJNipwDs2Ixlc2oHBxFt/ML/NLjdYGiGyHPYNY+7nyb0HRS3EneMEwbuP/lfeA9
-         NFk+zUbc+FmoBJNsEcbEubiActZJogU972sL9AJs6Nv7Q4W9XxVZO5EiXP7EPJXrUt
-         vcuFRtKgsuPoR3qkhwFeorvBhQxldT4w+zu2N0hTlFhh+PLMEzDLEwbXOmxC1XApQT
-         PFvTuxcjuEUKCyf4xN319zoABALisbcavpDhkx4bL0mvL+8pSbMHipRy3gX6eDJGdB
-         k4+xuJadDaNuQ==
+        b=V1QVYHNVeHwXbdfMZzj5fCAMxpooMVwLSW8afEilaf1YU/GSjcpVOdE3QHNeTTKge
+         3Gvh57MR77QJfvBVxiyUjsO8wpJrqnhri1XU/gz/W0y+S/jSt+MsZ7iHlFRWZrE8JX
+         rYTVcVwumOra5XA+LgV7DpBjCJlZXJm6tTrrrjNMp11A2UCzI9l05pdgFixjPSaEgy
+         +v9RCjRiuVq8fMufoD8I/QdD95IqIO0tM8UX6oawBk/4D5dMemAwmXmuCpheyJ+Chs
+         wbJxjw3S6Ua8/3UgxlBgye46bZ5VLZCvnHCSf17sOh4OjFQkoGObWLQmKBVUxYPA4l
+         FeyWqj+nQwr+w==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D9D4BE5FFC4;
-        Thu,  4 May 2023 21:50:45 +0000 (UTC)
-Subject: Re: [GIT PULL] 9p patches for 6.4 merge window
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BD1F7C41677;
+        Thu,  4 May 2023 21:50:47 +0000 (UTC)
+Subject: Re: [GIT PULL] Ceph updates for 6.4-rc1
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <ZFL+Pg3IGWeLsQOo@7e9e31583646>
-References: <ZFL+Pg3IGWeLsQOo@7e9e31583646>
-X-PR-Tracked-List-Id: <v9fs.lists.linux.dev>
-X-PR-Tracked-Message-Id: <ZFL+Pg3IGWeLsQOo@7e9e31583646>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/ericvh/v9fs.git tags/9p-6.4-for-linus
-X-PR-Tracked-Commit-Id: 21e26d5e54ab7cfe6b488fd27d4d70956d07e03b
+In-Reply-To: <20230504182810.165185-1-idryomov@gmail.com>
+References: <20230504182810.165185-1-idryomov@gmail.com>
+X-PR-Tracked-List-Id: <ceph-devel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20230504182810.165185-1-idryomov@gmail.com>
+X-PR-Tracked-Remote: https://github.com/ceph/ceph-client.git tags/ceph-for-6.4-rc1
+X-PR-Tracked-Commit-Id: db2993a423e3fd0e4878f4d3ac66fe717f5f072e
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 8e15605be8baeb9e3957c268c7d6f901c327ad5c
-Message-Id: <168323704588.23044.5518199268556560774.pr-tracker-bot@kernel.org>
-Date:   Thu, 04 May 2023 21:50:45 +0000
-To:     Eric Van Hensbergen <ericvh@kernel.org>
-Cc:     torvalds@linux-foundation.org, v9fs@lists.linux.dev,
-        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org
+X-PR-Merge-Commit-Id: 3c4aa44343777844e425c28f1427127f3e55826f
+Message-Id: <168323704777.23044.15454892502938821649.pr-tracker-bot@kernel.org>
+Date:   Thu, 04 May 2023 21:50:47 +0000
+To:     Ilya Dryomov <idryomov@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -61,12 +61,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu, 4 May 2023 00:37:18 +0000:
+The pull request you sent on Thu,  4 May 2023 20:28:10 +0200:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/ericvh/v9fs.git tags/9p-6.4-for-linus
+> https://github.com/ceph/ceph-client.git tags/ceph-for-6.4-rc1
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/8e15605be8baeb9e3957c268c7d6f901c327ad5c
+https://git.kernel.org/torvalds/c/3c4aa44343777844e425c28f1427127f3e55826f
 
 Thank you!
 
