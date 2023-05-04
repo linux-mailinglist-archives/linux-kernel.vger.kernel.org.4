@@ -2,166 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FF406F68A3
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 11:47:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC0076F68A6
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 11:48:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbjEDJrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 05:47:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59888 "EHLO
+        id S230325AbjEDJr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 05:47:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbjEDJr1 (ORCPT
+        with ESMTP id S230427AbjEDJrb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 05:47:27 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DBC649D0;
-        Thu,  4 May 2023 02:47:24 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3448eebS015762;
-        Thu, 4 May 2023 11:46:56 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=tr01CIe/LpDGGpoPafu39bOHteV6ORG+tu0CkFYJUD0=;
- b=8AdbekMAyF/Vouy9hihxbWWvtjd7UozRxa1KRcWR7ENzD9GnPUAab3n3JAyQucvLlG4h
- Wbo9rC3xL4vG6z89tBgjS/kicSigfLlDdEWdfuzn1SfPcDCMfccvA8vYNXyF6t0S32fm
- y2nPbGg8wkVgaMCuTr4UhIa6dj+0KvGstXWEavYi7Zm0oQK945JWHRpbroxUMFfvtsX4
- L2QStngYN5VYgd+od2EjpuFohghPUfQhPvLcf3Zz8qBUZnLqkp0GCj2Jzb1ve82fi/lb
- Ix4yMrCb22sZba3eNmVGYkq3nlm7drHW4Kj6pCpVG+i2GKVE7lRBCz5Eyk8kj2Sh1vGq hQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qc6uw9tdp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 04 May 2023 11:46:56 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 20A50100034;
-        Thu,  4 May 2023 11:46:56 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 18B882138F9;
-        Thu,  4 May 2023 11:46:56 +0200 (CEST)
-Received: from localhost (10.201.21.213) by SHFDAG1NODE2.st.com (10.75.129.70)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 4 May
- 2023 11:46:55 +0200
-From:   Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-Subject: [PATCH v2 4/4] ARM: dts: stm32: fix m4_rproc references to use SCMI
-Date:   Thu, 4 May 2023 11:46:41 +0200
-Message-ID: <20230504094641.870378-5-arnaud.pouliquen@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230504094641.870378-1-arnaud.pouliquen@foss.st.com>
-References: <20230504094641.870378-1-arnaud.pouliquen@foss.st.com>
+        Thu, 4 May 2023 05:47:31 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC224C17
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 02:47:29 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1ab0c697c84so1475855ad.3
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 02:47:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1683193649; x=1685785649;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6qubOiERHGS1J8v+Zq6pOuw2BSBtjZ1nMOAjNz3GrsI=;
+        b=dK9tDu74Ul9fYi1mNmYCrKtHmZwx8DyEgBxplBiB0zir8cqs0JYavDhu+vIgpt2Yd4
+         sCfLiMpEZRje8q3QW3xHfQIEh59yWw6MrC5+UQkYm91Ds5EgjSF/n7stSk54JOIwY+j6
+         N0xLB+TZfkMtbvYNmlRNE7HvnygLAZG0n+YFvoT9+iMyWUTBlK0+KAky7JjfTbyENjZP
+         4gwj+nNcGUfdSSMhqT3gTcbP+t8vX8f2XI2frf58Kgy8WN7xhJM3mWR/piJTuc31ZHrR
+         Ptl1o5HYXnZWWuCwco6AqBThLV9emd2f1eWF/X7zbdewXl0YiXFTuIvS3kgBeR5kpn1c
+         Oa4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683193649; x=1685785649;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6qubOiERHGS1J8v+Zq6pOuw2BSBtjZ1nMOAjNz3GrsI=;
+        b=AwkWHy2PREhD4UVNjsQmezjP7QlNt0n5gUvA+Dp15hSZI9ABwsIOzGUBMp6vZ8HchZ
+         SX45YUZl1H6nr9Qc3e+dIiN6tNSAZRxantI3IxLFGM/GzbE1T9K79kUy5DXR/iL4yoOj
+         3j8wOBbR1jcQAo60FfONBIKtuKmcPfqyJlu1njgODEQEoJEd4LhOOTTm2NJYKF11se3p
+         Fx26N9ER/05rr1owPMIyHtlv17HEqkD4NpyHwtYIQFoxzQ3a14m3/l/E2JT8sP6d0y4E
+         kQSWY9sT0MLaarr8sBQ922lzUfCHkrBrmF2nSQiSdx5Vu+uYoWdGiqpX0ZqRhJO6W5C+
+         NNuw==
+X-Gm-Message-State: AC+VfDxOd4pqmzrh6wZFolHV2onCIbxpllggC2qts4jHPP5tvuvAPRsa
+        3LGo5b5yAHBM3ssezM6SyK1V4Q==
+X-Google-Smtp-Source: ACHHUZ6iEVsItcif2MdnXxApAxCiKf/L4w9eOy/hb41erQyuoaYb0bFGdtRl0ARCFrBbGdX9CG6GQQ==
+X-Received: by 2002:a17:902:be09:b0:1ab:1b9d:50bf with SMTP id r9-20020a170902be0900b001ab1b9d50bfmr3096948pls.64.1683193649403;
+        Thu, 04 May 2023 02:47:29 -0700 (PDT)
+Received: from ?IPV6:2405:201:d02f:d855:461d:14be:2cce:b776? ([2405:201:d02f:d855:461d:14be:2cce:b776])
+        by smtp.gmail.com with ESMTPSA id z2-20020a170902708200b001a19196af48sm23075222plk.64.2023.05.04.02.47.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 May 2023 02:47:29 -0700 (PDT)
+Message-ID: <9d989c4c-7c9e-9e95-133f-03741d07198b@9elements.com>
+Date:   Thu, 4 May 2023 15:17:26 +0530
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add max6639
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Marcello Sylvester Bauer <sylv@sylv.io>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230420111759.2687001-1-Naresh.Solanki@9elements.com>
+ <76e57634-75dd-01e8-9c56-36ed7de17812@linaro.org>
+ <c8d1b5db-318e-3401-0834-b89769831eca@9elements.com>
+ <be129c4f-3ad7-c54b-936e-08b142608ebc@linaro.org>
+ <88f9a008-2861-284c-76c4-7d416c107fbb@9elements.com>
+ <bd45ea5d-e6e4-403a-e855-376e0f647f91@9elements.com>
+ <20eb1d0e-0aa2-9d41-7ba5-2feb148748d0@linaro.org>
+Content-Language: en-US
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+In-Reply-To: <20eb1d0e-0aa2-9d41-7ba5-2feb148748d0@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.201.21.213]
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-04_06,2023-05-03_01,2023-02-09_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixes stm32mp15*-scmi DTS files introduced in [1]:
-This patch fixes the node which uses the MCU reset and adds the
-missing HOLD_BOOT which is also handled by the SCMI reset service.
+Hi Krzysztof,
 
-This change cannot be applied as a fix on commit [1], the management
-of the hold boot impacts also the stm32_rproc driver.
+On 03-05-2023 09:48 pm, Krzysztof Kozlowski wrote:
+> On 03/05/2023 10:26, Naresh Solanki wrote:
+>> Hi Krzysztof,
+>>
+>> On 24-04-2023 03:23 pm, Naresh Solanki wrote:
+>>> Hi Krzysztof,
+>>>
+>>> On 24-04-2023 03:12 pm, Krzysztof Kozlowski wrote:
+>>>> On 24/04/2023 11:18, Naresh Solanki wrote:
+>>>>
+>>>>>>> Changes in V2:
+>>>>>>> - Update subject
+>>>>>>> - Drop blank lines
+>>>>>>> ---
+>>>>>>>     .../bindings/hwmon/maxim,max6639.yaml         | 52
+>>>>>>> +++++++++++++++++++
+>>>>>>>     1 file changed, 52 insertions(+)
+>>>>>>>     create mode 100644
+>>>>>>> Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+>>>>>>>
+>>>>>>> diff --git
+>>>>>>> a/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+>>>>>>> b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+>>>>>>> new file mode 100644
+>>>>>>> index 000000000000..1aaedfd7cee0
+>>>>>>> --- /dev/null
+>>>>>>> +++ b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+>>>>>>> @@ -0,0 +1,52 @@
+>>>>>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>>>>>>> +%YAML 1.2
+>>>>>>> +---
+>>>>>>> +$id: http://devicetree.org/schemas/hwmon/maxim,max6639.yaml#
+>>>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>>>>> +
+>>>>>>> +title: Maxim max6639
+>>>>>>
+>>>>>> What is this device? fan controller?
+>>>>> Yes Fan controller.
+>>>>> Do you want me to update the title here as:
+>>>>> "Maxim MAC6639 2 channel fan controller & temperature monitor" ?
+>>>>
+>>>> Enough would be:
+>>>> Maxim MAX6639 Fan Controller
+>>> Ack
+>>>>
+>>>>
+>>>>>
+>>>>>>
+>>>>>>> +
+>>>>>>> +maintainers:
+>>>>>>> +  - Naresh Solanki <Naresh.Solanki@9elements.com>
+>>>>>>> +
+>>>>>>> +description: |
+>>>>>>> +  The MAX6639 is a 2-channel temperature monitor with dual,
+>>>>>>> automatic, PWM
+>>>>>>> +  fan-speed controller.  It monitors its own temperature and one
+>>>>>>> external
+>>>>>>> +  diode-connected transistor or the temperatures of two external
+>>>>>>> diode-connected
+>>>>>>> +  transistors, typically available in CPUs, FPGAs, or GPUs.
+>>>>>>> +
+>>>>>>> +  Datasheets:
+>>>>>>> +    https://datasheets.maximintegrated.com/en/ds/MAX6639-MAX6639F.pdf
+>>>>>>> +
+>>>>>>> +properties:
+>>>>>>> +  compatible:
+>>>>>>> +    enum:
+>>>>>>> +      - maxim,max6639
+>>>>>>> +
+>>>>>>> +  reg:
+>>>>>>> +    maxItems: 1
+>>>>>>> +
+>>>>>>> +  '#address-cells':
+>>>>>>> +    const: 1
+>>>>>>> +
+>>>>>>> +  '#size-cells':
+>>>>>>> +    const: 0
+>>>>>>
+>>>>>> Why do you need these two properties?
+>>>>> Ack. Will remove them.
+>>>>>>
+>>>>>> Anyway, the binding looks incomplete. Where are the supplies?
+>>>>>> Interrupts?
+>>>>> This patch just adds basic support to the existing platform driver.
+>>>>> Intention is to be able to call the driver from DT with basic
+>>>>> initialization from driver the existing driver.
+>>>>
+>>>> Bindings should be rather complete. Here the datasheet is accessible and
+>>>> few properties quite obvious, so I don't see a reason to skip them.
+>>> I agree with you. But currently the driver which is already merged
+>>> doesn't has it implemented.
+>>> And will be working on separate patch to include this later.
+>> Please let me know if this approach is acceptable, or if there are any
+>> other suggestions or concerns that you have.
+> 
+> You are adding new bindings, so what does the driver has to do with it?
+The reason for adding these new bindings is to enable the use of the 
+driver on my machine. Without the compatible string, it would not be 
+possible to use the driver.
 
-[1] 'commit 5b7e58313a77 ("ARM: dts: stm32: Add SCMI version of STM32 boards (DK1/DK2/ED1/EV1)")'
+Currently, the driver initializes the device with defaults, which is 
+good enough for my application. Also, as you previously pointed out, it 
+uses the optional 'fan-supply' which will be included in the next patch 
+revision.
 
-Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
----
- arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts | 6 ++++--
- arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts | 6 ++++--
- arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts | 6 ++++--
- arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts | 6 ++++--
- 4 files changed, 16 insertions(+), 8 deletions(-)
+I hope this clarifies my reasoning. Could you kindly confirm if we can 
+proceed with this approach?
 
-diff --git a/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts b/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts
-index e539cc80bef8..134788e64265 100644
---- a/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts
-+++ b/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts
-@@ -55,8 +55,10 @@ &mdma1 {
- 	resets = <&scmi_reset RST_SCMI_MDMA>;
- };
- 
--&mlahb {
--	resets = <&scmi_reset RST_SCMI_MCU>;
-+&m4_rproc {
-+	resets = <&scmi_reset RST_SCMI_MCU>,
-+		 <&scmi_reset RST_SCMI_MCU_HOLD_BOOT>;
-+	reset-names =  "mcu_rst", "hold_boot";
- };
- 
- &rcc {
-diff --git a/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts b/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts
-index 97e4f94b0a24..c42e658debfb 100644
---- a/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts
-+++ b/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts
-@@ -61,8 +61,10 @@ &mdma1 {
- 	resets = <&scmi_reset RST_SCMI_MDMA>;
- };
- 
--&mlahb {
--	resets = <&scmi_reset RST_SCMI_MCU>;
-+&m4_rproc {
-+	resets = <&scmi_reset RST_SCMI_MCU>,
-+		 <&scmi_reset RST_SCMI_MCU_HOLD_BOOT>;
-+	reset-names =  "mcu_rst", "hold_boot";
- };
- 
- &rcc {
-diff --git a/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts b/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts
-index 9cf0a44d2f47..7a56ff2d4185 100644
---- a/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts
-+++ b/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts
-@@ -60,8 +60,10 @@ &mdma1 {
- 	resets = <&scmi_reset RST_SCMI_MDMA>;
- };
- 
--&mlahb {
--	resets = <&scmi_reset RST_SCMI_MCU>;
-+&m4_rproc {
-+	resets = <&scmi_reset RST_SCMI_MCU>,
-+		 <&scmi_reset RST_SCMI_MCU_HOLD_BOOT>;
-+	reset-names =  "mcu_rst", "hold_boot";
- };
- 
- &rcc {
-diff --git a/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts b/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts
-index 3b9dd6f4ccc9..119874dd91e4 100644
---- a/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts
-+++ b/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts
-@@ -66,8 +66,10 @@ &mdma1 {
- 	resets = <&scmi_reset RST_SCMI_MDMA>;
- };
- 
--&mlahb {
--	resets = <&scmi_reset RST_SCMI_MCU>;
-+&m4_rproc {
-+	resets = <&scmi_reset RST_SCMI_MCU>,
-+		 <&scmi_reset RST_SCMI_MCU_HOLD_BOOT>;
-+	reset-names =  "mcu_rst", "hold_boot";
- };
- 
- &rcc {
--- 
-2.25.1
+Best Regards,
+~Naresh
 
+> 
+> Best regards,
+> Krzysztof
+> 
