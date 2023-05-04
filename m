@@ -2,93 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D0A46F705C
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 19:02:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ED846F705F
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 19:03:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229989AbjEDRBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 13:01:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37658 "EHLO
+        id S229825AbjEDRDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 13:03:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229970AbjEDRBv (ORCPT
+        with ESMTP id S229622AbjEDRDF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 13:01:51 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB0C30C0
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 10:01:50 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-965ab8ed1fcso129318566b.2
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 10:01:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683219709; x=1685811709;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AfsYi2ajE7KBB+3cu+gy9TJnH8eupsyTucE+Ap7OLfE=;
-        b=MSCT7Z3CZOlyP5WXEUSAnCxuI1NG877g68kGf51CG5q8jxXg+ivoFrJ4frg5PE5m4G
-         WzdxPVTK9oMR0gudg80O1YGwsAbG5b5LQvbrafooIFlF8ZB1fQnU0+iYUnHi9V6iZH38
-         mDNE2Ub8BddqDDUDzNm84H9ivBfHpcWESTLbyiDbAIwU2ihrtNdwYJ1ecydV1PRhGl8z
-         IETG/dydu01P16aijauq9IARk7efRUD0HkY0Tl+F3dVnXFPjDR1mwTP3sgkkUHski6qq
-         23oqUq798pfJwYsjYcRqT4JK18ZZ8MZocD6C0poXMCdYYdHU5QjcLlhU5Hf0QPb7zNdF
-         wZWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683219709; x=1685811709;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AfsYi2ajE7KBB+3cu+gy9TJnH8eupsyTucE+Ap7OLfE=;
-        b=U9H6dSbZqMeCn228k47dTJojFjNbsHyExgkVqTKppfIHkjJxh4sPAi9rvd5Iwg3gVr
-         jOcOrWq6dyZd2AMS2T6F6Ezed1KDEu1ltZRc1qYN6dz5KSd9osthHbgsWK+//vqzi9G0
-         d1/J0PfBVHLHXXXZZMqoyQNSJWyQsFlR5GFbfhabTQt4HDJYmNmfLuFBlsCV7MOFJmcF
-         la3lgYh+736zQpOwzw1rcaRZ0zCq2QHG/M36fr7lQFpiLatUUucShAjETk8A3e0SP48j
-         RnN/Tgp6g8tx+IiMZ6e0PXu1WTqNrUediU7qTNwacKcG9RxYwV/GfpsQof200GajGW99
-         Py7A==
-X-Gm-Message-State: AC+VfDwnUnWg76e8+OCws06JSnvPjA7hjCkBHFGHZfaUW5ZVrbotKQH3
-        07tlc3u7HJ+lhyzSMPc5pX8vIw==
-X-Google-Smtp-Source: ACHHUZ6YYh1nZpUG5otxrpWFVvmW85S+krxdrcrlKhVFZeG92EX7ruAI/eRnwOpJa5nj0EceB0neqQ==
-X-Received: by 2002:a17:907:94cf:b0:965:bf30:9a21 with SMTP id dn15-20020a17090794cf00b00965bf309a21mr1617983ejc.7.1683219708620;
-        Thu, 04 May 2023 10:01:48 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:bdb9:99c4:33a5:6114? ([2a02:810d:15c0:828:bdb9:99c4:33a5:6114])
-        by smtp.gmail.com with ESMTPSA id li14-20020a170907198e00b009572db67bf2sm17220234ejc.89.2023.05.04.10.01.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 10:01:47 -0700 (PDT)
-Message-ID: <417d7d9e-5d9a-e0cf-11b3-f191f4a9c9f2@linaro.org>
-Date:   Thu, 4 May 2023 19:01:46 +0200
+        Thu, 4 May 2023 13:03:05 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B8C359F
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 10:03:03 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 12A196017E;
+        Thu,  4 May 2023 19:03:00 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.hr; s=mail;
+        t=1683219780; bh=fMQDEi8jqrkIa+i3glZ9O5VMJQuWlqTxJKAKZVf70R8=;
+        h=Date:To:Cc:From:Subject:From;
+        b=fPfcAvXxKDsFzLK0+6nPx6SUH18s65xIuq/IIcwHi/iWX3WAJC9q/y8kgrIui7SOM
+         CL9oe3cMZxeT6m0Nln/b3u1H+uhWXUXjoXjS92NkR/iMgZ67qCCjQu5yQcNf1jvllo
+         M16AnCvmEKCgz4DtFR5vlIc+8YX7BiUNnD7r/c0P+b9eBAUuVBhB3OLflqdPyQlbXL
+         cp0aHxCWbAPs2qrnuyTrvt3u7RXNCyQ/O2nYNWiIpGM8o/RcppszhT0VXkywJndxYF
+         bdjpockF4SVhGQj/Qiq0y0d0mgdd4aABqP9CsDb2dtXbxTWS4ZsxONwdr1BZGtVp7q
+         jjZrigFBsIlvQ==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id MreHz3IKBUXK; Thu,  4 May 2023 19:02:57 +0200 (CEST)
+Received: from [192.168.1.6] (unknown [77.237.113.62])
+        by domac.alu.hr (Postfix) with ESMTPSA id ECBC560173;
+        Thu,  4 May 2023 19:02:57 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1683219777; bh=fMQDEi8jqrkIa+i3glZ9O5VMJQuWlqTxJKAKZVf70R8=;
+        h=Date:To:Cc:From:Subject:From;
+        b=kbDpEPGYklijrpzNWkEZ4zOtCeGU7Vy/HNsgvuiqmLSgnoExzFdAbc/vkG7en31EJ
+         9WVyj5Vt++KAVXS/5eypaVWVbqGr76KeFdcq+zppEvN9gA6WGV+Wr0x4t45H8GxWjI
+         WIq5lI9QtHFh6mh7Pe9FtUy4j3LPLfVZ8bAbG6OJoE9NfcfEMqCs3vdRl1f2o6qr50
+         Q+BJiSK0mRedCB7WpQO9ayxreUDg5Elfoov05S/dC1yBgG5kRNNROThBDWH+S/ruoQ
+         zwl0ZwHUkIWajOcsujcQQlG0w9iFIDizMkS4yCUsDjhKLVBpFqpKLSaWShroKWBQVY
+         lq+LEv5oAgf1w==
+Message-ID: <bb89a720-b1b2-18fc-7f89-44267885700d@alu.unizg.hr>
+Date:   Thu, 4 May 2023 19:02:57 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v2] dt-bindings: spi: zynqmp-qspi: Add power-domains and
- iommus properties
+ Thunderbird/102.10.0
 Content-Language: en-US
-To:     Michal Simek <michal.simek@amd.com>, linux-kernel@vger.kernel.org,
-        monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org
-References: <2afed7285061abbb5d9ad3b1e795b737dcff9693.1683102032.git.michal.simek@amd.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <2afed7285061abbb5d9ad3b1e795b737dcff9693.1683102032.git.michal.simek@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     linux-kernel@vger.kernel.org
+From:   Mirsad Goran Todorovac <mirsad.goran.todorovac@alu.hr>
+Subject: [BUILD] Unable to sign drivers on Ubuntu 22.04 LTS desktop
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.9 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/05/2023 10:20, Michal Simek wrote:
-> ZynqMP QSPI IP core has own power domain and also iommu ID that's why
-> describe optional power-domains and iommus properties.
-> 
-> Signed-off-by: Michal Simek <michal.simek@amd.com>
-> ---
+Hi Bagas,
 
+I seem to have run into a dead end with this.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+OpenSSL 3.0.2 refuses to cooperate, despite enabling legacy ciphers:
 
-Best regards,
-Krzysztof
+   BTF [M] net/nsh/nsh.ko
+   BTF [M] net/hsr/hsr.ko
+make -f ./Makefile ARCH=x86     KERNELRELEASE=6.3.0+ intdeb-pkg
+sh ./scripts/package/builddeb
+   INSTALL 
+debian/linux-image/lib/modules/6.3.0+/kernel/arch/x86/events/intel/intel-cstate.ko
+   SIGN 
+debian/linux-image/lib/modules/6.3.0+/kernel/arch/x86/events/intel/intel-cstate.ko
+At main.c:170:
+- SSL error:1E08010C:DECODER routines::unsupported: 
+../crypto/encode_decode/decoder_lib.c:101
+sign-file: ./
+make[6]: *** [scripts/Makefile.modinst:87: 
+debian/linux-image/lib/modules/6.3.0+/kernel/arch/x86/events/intel/intel-cstate.ko] 
+Error 1
+make[6]: *** Deleting file 
+'debian/linux-image/lib/modules/6.3.0+/kernel/arch/x86/events/intel/intel-cstate.ko'
+make[5]: *** [Makefile:1955: modules_install] Error 2
+make[4]: *** [scripts/Makefile.package:150: intdeb-pkg] Error 2
+make[3]: *** [Makefile:1657: intdeb-pkg] Error 2
+make[2]: *** [debian/rules:16: binary-arch] Error 2
+dpkg-buildpackage: error: debian/rules binary subprocess returned exit 
+status 2
+make[1]: *** [scripts/Makefile.package:139: bindeb-pkg] Error 2
+make: *** [Makefile:1657: bindeb-pkg] Error 2
+
+I have tried to enable NEXT crypto mode:
+
+% sudo update-crypto-policies --set NEXT
+
+and rebooted, but no use.
+
+Google also doesn't give a clue.
+I have been able to compile kernels on Ubuntu 22.04 LTS on my laptop 
+just about a year ago.
+
+Thank you.
+
+Mirsad
+
 
