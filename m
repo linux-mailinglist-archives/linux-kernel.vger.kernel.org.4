@@ -2,48 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C58616F758D
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:58:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16B336F7593
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:58:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232203AbjEDT6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 15:58:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41066 "EHLO
+        id S232245AbjEDT6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 15:58:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232572AbjEDT4S (ORCPT
+        with ESMTP id S232578AbjEDT4S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 4 May 2023 15:56:18 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB5211611;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C50CD1CFFA;
         Thu,  4 May 2023 12:49:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 142456380C;
-        Thu,  4 May 2023 19:49:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 583FEC433D2;
-        Thu,  4 May 2023 19:49:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 07493637DA;
+        Thu,  4 May 2023 19:49:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2509C433EF;
+        Thu,  4 May 2023 19:49:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683229750;
-        bh=hyLUe3XXTQX/auUSBvaDHtJg2IMytRMl22Up4TYKhcg=;
+        s=k20201202; t=1683229754;
+        bh=Sfz53hAfpRP2p9DUZCQilqFtWnht+i6DAGLC3TT+rd0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KcDlYLeCRGHOmz5FIRMG7J9NRvalRXa8YdJWDlqNfdpnX7FQbp77uZaq5ZcfHSWBb
-         xoy+6T+G1DT8S5vAkiVXlN5npZoNFw6xE7uLfxHfBEjAijt/Mt/lbBCFCPAVs9lkJ5
-         oRNoHXGKgyRTyFejE7MfZeuoAOOmgjK0KRg15D3iIckbYtoWN7Qbpt8+O0Lf3eOB3s
-         xOG3dVwISQj+4k/3MLUh1K/4gFz2mXdp2cCyD29V23UTqpA0T8/r8K60cW/uk4o0rh
-         48aX068az853dpaBOe6JjXcgsJ3kYumRTQdnPGzsVaspowb224ACr+n/oyr4YmtUD9
-         4qbJ+9npOTQkA==
+        b=Pa8uWVJcPTIyEKPGszxSxtLU1rfvItpgPdW1O4NDvlaKhPHG75P+Vxy/7fWtsziXL
+         CgyACHsB+j5FSxaMI5dq8UxeV2VlMNuzd98wXW78YNX6FlGn5MLghigGNYGp1y0/FZ
+         9C+znqn0jZVK9c0ybYVcxDcVTHIHIXDPxjyDmuJbpkXvt568L89A9rUQdI3CJb0jjv
+         XqNmETRXvniKmYb0SJ0vWoqGeOlH0Wq+I5OtJbOO9RvbhA+HPNjU8cVvfVxMfMVYRO
+         6ZbA3XwQE4gaFabgX2JIvH6ejMZATXgaNV4UIeKftYDNdzQYl9cwi1f0wPxsNe0VNb
+         Ay533lD7oIDhg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Yafang <laoar.shao@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Jiri Olsa <olsajiri@gmail.com>, Hao Luo <haoluo@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, daniel@iogearbox.net,
-        andrii@kernel.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 20/30] bpf: Add preempt_count_{sub,add} into btf id deny list
-Date:   Thu,  4 May 2023 15:48:13 -0400
-Message-Id: <20230504194824.3808028-20-sashal@kernel.org>
+Cc:     Daniel Gabay <daniel.gabay@intel.com>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Sasha Levin <sashal@kernel.org>, kvalo@kernel.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, mukesh.sisodiya@intel.com,
+        yaara.baruch@intel.com, golan.ben.ami@intel.com,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 21/30] wifi: iwlwifi: pcie: fix possible NULL pointer dereference
+Date:   Thu,  4 May 2023 15:48:14 -0400
+Message-Id: <20230504194824.3808028-21-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230504194824.3808028-1-sashal@kernel.org>
 References: <20230504194824.3808028-1-sashal@kernel.org>
@@ -61,71 +62,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yafang <laoar.shao@gmail.com>
+From: Daniel Gabay <daniel.gabay@intel.com>
 
-[ Upstream commit c11bd046485d7bf1ca200db0e7d0bdc4bafdd395 ]
+[ Upstream commit b655b9a9f8467684cfa8906713d33b71ea8c8f54 ]
 
-The recursion check in __bpf_prog_enter* and __bpf_prog_exit*
-leave preempt_count_{sub,add} unprotected. When attaching trampoline to
-them we get panic as follows,
+It is possible that iwl_pci_probe() will fail and free the trans,
+then afterwards iwl_pci_remove() will be called and crash by trying
+to access trans which is already freed, fix it.
 
-[  867.843050] BUG: TASK stack guard page was hit at 0000000009d325cf (stack is 0000000046a46a15..00000000537e7b28)
-[  867.843064] stack guard page: 0000 [#1] PREEMPT SMP NOPTI
-[  867.843067] CPU: 8 PID: 11009 Comm: trace Kdump: loaded Not tainted 6.2.0+ #4
-[  867.843100] Call Trace:
-[  867.843101]  <TASK>
-[  867.843104]  asm_exc_int3+0x3a/0x40
-[  867.843108] RIP: 0010:preempt_count_sub+0x1/0xa0
-[  867.843135]  __bpf_prog_enter_recur+0x17/0x90
-[  867.843148]  bpf_trampoline_6442468108_0+0x2e/0x1000
-[  867.843154]  ? preempt_count_sub+0x1/0xa0
-[  867.843157]  preempt_count_sub+0x5/0xa0
-[  867.843159]  ? migrate_enable+0xac/0xf0
-[  867.843164]  __bpf_prog_exit_recur+0x2d/0x40
-[  867.843168]  bpf_trampoline_6442468108_0+0x55/0x1000
+iwlwifi 0000:01:00.0: Detected crf-id 0xa5a5a5a2, cnv-id 0xa5a5a5a2
+		      wfpm id 0xa5a5a5a2
+iwlwifi 0000:01:00.0: Can't find a correct rfid for crf id 0x5a2
 ...
-[  867.843788]  preempt_count_sub+0x5/0xa0
-[  867.843793]  ? migrate_enable+0xac/0xf0
-[  867.843829]  __bpf_prog_exit_recur+0x2d/0x40
-[  867.843837] BUG: IRQ stack guard page was hit at 0000000099bd8228 (stack is 00000000b23e2bc4..000000006d95af35)
-[  867.843841] BUG: IRQ stack guard page was hit at 000000005ae07924 (stack is 00000000ffd69623..0000000014eb594c)
-[  867.843843] BUG: IRQ stack guard page was hit at 00000000028320f0 (stack is 00000000034b6438..0000000078d1bcec)
-[  867.843842]  bpf_trampoline_6442468108_0+0x55/0x1000
+BUG: kernel NULL pointer dereference, address: 0000000000000028
 ...
+RIP: 0010:iwl_pci_remove+0x12/0x30 [iwlwifi]
+pci_device_remove+0x3e/0xb0
+device_release_driver_internal+0x103/0x1f0
+driver_detach+0x4c/0x90
+bus_remove_driver+0x5c/0xd0
+driver_unregister+0x31/0x50
+pci_unregister_driver+0x40/0x90
+iwl_pci_unregister_driver+0x15/0x20 [iwlwifi]
+__exit_compat+0x9/0x98 [iwlwifi]
+__x64_sys_delete_module+0x147/0x260
 
-That is because in __bpf_prog_exit_recur, the preempt_count_{sub,add} are
-called after prog->active is decreased.
-
-Fixing this by adding these two functions into btf ids deny list.
-
-Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-Signed-off-by: Yafang <laoar.shao@gmail.com>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Jiri Olsa <olsajiri@gmail.com>
-Acked-by: Hao Luo <haoluo@google.com>
-Link: https://lore.kernel.org/r/20230413025248.79764-1-laoar.shao@gmail.com
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Daniel Gabay <daniel.gabay@intel.com>
+Signed-off-by: Gregory Greenman <gregory.greenman@intel.com>
+Link: https://lore.kernel.org/r/20230413213309.082f6e21341b.I0db21d7fa9a828d571ca886713bd0b5d0b6e1e5c@changeid
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/bpf/verifier.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/net/wireless/intel/iwlwifi/pcie/drv.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 1c95d97e7aa53..d37ecd76cc5a1 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -13632,6 +13632,10 @@ BTF_ID(func, migrate_enable)
- #if !defined CONFIG_PREEMPT_RCU && !defined CONFIG_TINY_RCU
- BTF_ID(func, rcu_read_unlock_strict)
- #endif
-+#if defined(CONFIG_DEBUG_PREEMPT) || defined(CONFIG_TRACE_PREEMPT_TOGGLE)
-+BTF_ID(func, preempt_count_add)
-+BTF_ID(func, preempt_count_sub)
-+#endif
- BTF_SET_END(btf_id_deny)
+diff --git a/drivers/net/wireless/intel/iwlwifi/pcie/drv.c b/drivers/net/wireless/intel/iwlwifi/pcie/drv.c
+index 3b974388d834d..5d324d64c8799 100644
+--- a/drivers/net/wireless/intel/iwlwifi/pcie/drv.c
++++ b/drivers/net/wireless/intel/iwlwifi/pcie/drv.c
+@@ -1380,6 +1380,9 @@ static void iwl_pci_remove(struct pci_dev *pdev)
+ {
+ 	struct iwl_trans *trans = pci_get_drvdata(pdev);
  
- static int check_attach_btf_id(struct bpf_verifier_env *env)
++	if (!trans)
++		return;
++
+ 	iwl_drv_stop(trans->drv);
+ 
+ 	iwl_trans_pcie_free(trans);
 -- 
 2.39.2
 
