@@ -2,183 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AEAF6F730B
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:10:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 005C16F7240
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:02:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbjEDTKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 15:10:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58074 "EHLO
+        id S229982AbjEDTCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 15:02:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230122AbjEDTJU (ORCPT
+        with ESMTP id S229714AbjEDTCC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 15:09:20 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 500E2900D;
-        Thu,  4 May 2023 12:08:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683227319; x=1714763319;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=hIRx5S2AvMdxpcSHL4QwUTL/llzzmNZzp6s9Vr8pR9M=;
-  b=i5W2Jce1vBVAI2k9RMzTFhyXZzzguE7vqMnCrTcbWZuUnxOiLlJuqolW
-   0J49zL7r/16EMFoewlopDfozfEavmX90jGbmCd2VZx0V01Dp8voKiD5Zc
-   +An8P4wjTI8zHACPqNGg14AaeHzTveGkSd9wlvY/THg3ixKHGQ68SQsjW
-   Q52mGZfEeJ3JCU3pC9CQsdjTxw8u2PYXK38x89Rzfr5Yy3ymApNlXwl5g
-   RjT/F//VT0VJDslmeKzNJUnrY0/Kxo2W68HUVfjTgsdcN3TlBoDJ2Sm9d
-   gY3pGZli/cKkXLUx/cCTauguV2pJy8KBaDxZfkbGmBkCv4MtyJlxUcD3+
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="414543706"
-X-IronPort-AV: E=Sophos;i="5.99,250,1677571200"; 
-   d="scan'208";a="414543706"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 12:01:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="808867153"
-X-IronPort-AV: E=Sophos;i="5.99,250,1677571200"; 
-   d="scan'208";a="808867153"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga002.fm.intel.com with ESMTP; 04 May 2023 12:01:42 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 4 May 2023 12:01:42 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Thu, 4 May 2023 12:01:42 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.173)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Thu, 4 May 2023 12:01:42 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VQ0q6lViYXRl2jS0Vc72Bkjg2lGDkJeV+DP0cAEjwinDfjUeQyQFqUfqa7bm28z8NWH86oUqrpI8VCYQflLUkhDoJA8YKdSuC7msSKzH3/84j0N0CdxCinxoaQmHrJh855Xv4Rp9TzbWJUiSxF/XZzF4FmVxfeAoM87VTapmrtkFjSxhPxbXZ5gJSWle9wWajtClh3SRK0kk7Sps0I34B3R1icTcE3kDTKkiT7AUHGsXqcQ/jd1qZkZoQpCAwcMZTEJHutqzNHRKp95TXaL4ROQ16YKmJ0ybkEiGFVa/aYhJ2yDtkAKhwEybsIz9yb6aFRVzfAlYX7PlSOz/1rekbw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hIRx5S2AvMdxpcSHL4QwUTL/llzzmNZzp6s9Vr8pR9M=;
- b=kYo/3DaE+ZoBV5OkmqKvtqeTMyAjNCqlRT1pZ6qXUOidRNQr24SQmGxU1feyFraqxZaO2bR1+/OlyN8oY5hmg/Q0flzbFuAotGO+K4G43fJdOajoud1jnEhebZIMukwWsS/gEUi28N9U0DMDqEDrKkaWqSBSh6xsaNb5AhqnXnmRnZdBajtkh2KZnEYtTkbd5mtu5d1w3Yv+67RWHLiMNNm26Qd1FUaz/2jOjFW+nezYly7cPxJEwOjerHBbJddQB2DAPUHUtoqRbsC8EUM3s1xawDZlaTdxnkuGgzd3QLwWKuYlLK0duM7zKWY+/NZ/9G0nmcgOBit7MQ12jsIMIA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SJ2PR11MB7573.namprd11.prod.outlook.com (2603:10b6:a03:4d2::10)
- by SN7PR11MB6947.namprd11.prod.outlook.com (2603:10b6:806:2aa::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.26; Thu, 4 May
- 2023 19:00:46 +0000
-Received: from SJ2PR11MB7573.namprd11.prod.outlook.com
- ([fe80::591f:4873:fd80:9a6d]) by SJ2PR11MB7573.namprd11.prod.outlook.com
- ([fe80::591f:4873:fd80:9a6d%6]) with mapi id 15.20.6363.022; Thu, 4 May 2023
- 19:00:46 +0000
-Message-ID: <67e00f1e-bbb2-59b6-fe34-758d5b268324@intel.com>
-Date:   Thu, 4 May 2023 12:00:43 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.10.1
-Subject: Re: [PATCH v4 4/7] x86/resctrl: Re-arrange RFTYPE flags and add more
- comments
-Content-Language: en-US
-To:     Babu Moger <babu.moger@amd.com>, <corbet@lwn.net>,
-        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>
-CC:     <fenghua.yu@intel.com>, <dave.hansen@linux.intel.com>,
-        <x86@kernel.org>, <hpa@zytor.com>, <paulmck@kernel.org>,
-        <akpm@linux-foundation.org>, <quic_neeraju@quicinc.com>,
-        <rdunlap@infradead.org>, <damien.lemoal@opensource.wdc.com>,
-        <songmuchun@bytedance.com>, <peterz@infradead.org>,
-        <jpoimboe@kernel.org>, <pbonzini@redhat.com>,
-        <chang.seok.bae@intel.com>, <pawan.kumar.gupta@linux.intel.com>,
-        <jmattson@google.com>, <daniel.sneddon@linux.intel.com>,
-        <sandipan.das@amd.com>, <tony.luck@intel.com>,
-        <james.morse@arm.com>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <bagasdotme@gmail.com>,
-        <eranian@google.com>, <christophe.leroy@csgroup.eu>,
-        <jarkko@kernel.org>, <adrian.hunter@intel.com>,
-        <quic_jiles@quicinc.com>, <peternewman@google.com>
-References: <168177435378.1758847.8317743523931859131.stgit@bmoger-ubuntu>
- <168177447844.1758847.17789021842152864417.stgit@bmoger-ubuntu>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <168177447844.1758847.17789021842152864417.stgit@bmoger-ubuntu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR08CA0001.namprd08.prod.outlook.com
- (2603:10b6:a03:100::14) To SJ2PR11MB7573.namprd11.prod.outlook.com
- (2603:10b6:a03:4d2::10)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ2PR11MB7573:EE_|SN7PR11MB6947:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2060d22e-ad93-4208-5a50-08db4cd1de2c
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Yjzf8Su/oseb4QYvmW1XoUNMzHmf3z7xvEu+A83ERmVGZx3rqf92JaxgBtoB/3YTSPfY3ZAogZevbhJMvVuJPmC1x7HgF89K/9/NIK4oAqVWF9yJ7LJuFeQYGJbItk2zY1/A9XGOWbcvZUV296/7CPLYQNegVEQgxAZLrc0uQs1eQX9Z0xh5tv3wAil3MBf02BXw8ZJYRktGx/jX6ntP79ZDpttpe59VAfrudPru2D97N2cYVRNsngAyPsIYiFZHLLEM7o8eYiA3+HFeuawvrgKjYXeHXxUhahpedQCK0qhWL9YhZZep3gjy9ZKfrZK6PQcqRL2fMfYoNaIQqWieITUaHfNYM/FysLjO94GkS/Z2Ezvs7fmR1n475gqndOUstgTZaWlg+02SCpbjP6Ve9B1Dp/gShL4p2TZTiDwhM0JlaaQSyOEReLUFJF2lytcsAJc5TSorGJ5lMgd+ZTI1W5msf2ou7Bsh+H7sdqANfeCbGXGY9ogyJsiU/JxDJB2Z17KqHk77o6SrsRX7GGVmYYY54u8csXGokTK05nGqwLknj/ncftRIdQdjg5ztbG7BltMFEb4j2JE0QevHpg/euhEOS6nQICaUvMblIaFSG507WL+nsnRivMGW6GU08KjE/7l56rxQPlRH6UfYJjGGhA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(346002)(376002)(136003)(39860400002)(396003)(451199021)(41300700001)(6506007)(53546011)(6512007)(26005)(478600001)(4326008)(6666004)(31696002)(86362001)(36756003)(2616005)(6486002)(66476007)(66556008)(44832011)(66946007)(558084003)(38100700002)(31686004)(316002)(186003)(7416002)(7406005)(5660300002)(2906002)(82960400001)(8676002)(8936002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WFRzR0FJR3ZxM0F0UmhudWtkazNxR25kWmF3dDF0QWZMQ1FrRlEyU3NqdEhr?=
- =?utf-8?B?dERJY0l6ZmVrYWp4WmVSSEVqUnZMcVZ2NWxBRWNZTWIyVllTdS90ZFRjcHVI?=
- =?utf-8?B?a1R2bVgwc0lpYkxCREZVQlNKUFY4NG1qK0QrWW8vV01EemtUMjRRek5uQXFZ?=
- =?utf-8?B?OHNuR21JZXVxYTVpS2Z0MlNFcDdBZVpkam9YZWl2ZWVmbVhRYzlFNVFNTWRj?=
- =?utf-8?B?aHBNbXNEQTBXaytsS3NVeXZVNERqV0JxMC9HeEVoVU1hZWxXOHZGc3Zlejhu?=
- =?utf-8?B?S0t6OEgrRGVNbGJROEVOcDg5dGFDejJWUGNqQy8ya1V6SzV3MjlJSmlWMHpk?=
- =?utf-8?B?ZjlVZ1lUWWQ1ZkkyVE5xbHU4dmRGTzQvaWw3TWdsWVMyVW5xS1BybDVVUmdY?=
- =?utf-8?B?YW85ZVJxcWxTR2xZNzhCREw5VXdIblRJWmdYN3lTSStBdU9weUovNTAxNXBx?=
- =?utf-8?B?bXQxOUFjbVJReDNXN1c0THl6MkgzWE5jWDFWK0lpM3E0WlNZT2pEK0RKdm5V?=
- =?utf-8?B?Q0kxdmtJMEFNSXJIWDFTU2Jxd0JibTVOMDRqVWl0MUwzZGVkeHpyWDQ5b0hm?=
- =?utf-8?B?bU1HWnJkWVROUnNySVc3dmY4RXdtb3RFWGNPQ1FtOUN5dVdHR0VpSlFYY0xY?=
- =?utf-8?B?RjZHaUlpcXRLZmhzQXNBcjFYTXlBQmhXamN1cllQYThDRys5b1RVWlhsU3Ro?=
- =?utf-8?B?QytlNURPclNrZGxJUTd2RzYzL0JjdEtCeHNMQTV5S20yVzgvNmRsZHVzQ1ZL?=
- =?utf-8?B?eWtQZlJrelh6aXBmNnBMcE5VMFEvR043dHNsendNeERucWxOTHNPcDk1WlJy?=
- =?utf-8?B?cWcwTlFCb21MSjQ0S2owcjd6UUVwKzJlZ1RydWo1VEx6ZndzdlJlUUJmaDNK?=
- =?utf-8?B?aWsxbWRMb01NbCsvWVEzYTRycW9ka0tCYUFqMUc5dTVDOTN1MllCc0ZNL3lI?=
- =?utf-8?B?dS8vc2RkWTg4VE9DZzdrNzIvVjFrRyttcVc2VU5wcFRvMTVqSTJnUXc5K0ZP?=
- =?utf-8?B?ZXBYK0FUTEt6OHBla2QySnA0YWVwY2FlU2dpQ1VBZFpMR0ZRaU5tbGkwd3ho?=
- =?utf-8?B?VFZMZUtTMG84Q0JsY0lvSkRKSXRIM05EZGdQVkhLSlVOd3h5blVtVHZhSG1Q?=
- =?utf-8?B?aU1rZjNIY2tWcW9Qbm5lRHdiUVV2TnFLQ084RlNpa2VmME1tSS9tMGRDbFB2?=
- =?utf-8?B?VHNMVlJsTysxUEhLL3lVYlMraTVURSt5S1R5TDlnaVFzOFhNcTFBWVB0TkRK?=
- =?utf-8?B?Z252RWRnZHQ2MVRGdGlHbzFJeWo5NWhYS2RneTYwblF6cXYvU3VvcW9QOFlU?=
- =?utf-8?B?VXhYUFhuK3JibW82YytISEN6Y012cS9hYlRMVnRocU04SENZV05EYnc4RzdT?=
- =?utf-8?B?QVJVdXhBbTEzMFowQjZ2WWlDdC9SanBMZkhtZ25aeHZneUM0Y1VoMVFWTldX?=
- =?utf-8?B?aGwyV01zaWlaRGxLYksyeVZXL2doYlQ3L0wvTzFqWk9xWkdJZ3B3amRlb2p2?=
- =?utf-8?B?WXlGTGdoMUp1Y2I4TUpWWnZ4MjhERXVLbThQaVNnYkFlTTlGRit2UzB2VWV0?=
- =?utf-8?B?REwxcUFLeGZIVkR4T05MNmlBSVloU05wRkI5TnVTQloyQ25ENlI0dGtpd1F1?=
- =?utf-8?B?d0NPazcyNDVvWDRaWTljcmNoaFNsUWZkamZMZzN4UUsxak1WdWhPSWhXNEdZ?=
- =?utf-8?B?L2lMYUhhZnJFdmNDVzFqRWR3bDVTeG96Rk4yMGtzQzNEMkhsY1ZDajFUNHYr?=
- =?utf-8?B?aHdiRlUzQU1KTVpLU01ETUxHTEZnSy8wbWVqU0pWYUxYUzNVdGNXbTRRRVZ0?=
- =?utf-8?B?b0JoL2xYVGRlNTlnQXNuWkVzdnlTOEVwbUFTS2RabnVIMEVhcmgyVk1LQk05?=
- =?utf-8?B?Y3ltbEpGOGYxSHMyYzRDcUZ5d3ZSUGtvTE8yMVdtdWpnMHRleWRSMmJDV2NL?=
- =?utf-8?B?dHlrNC9WZVV6SDZrY0pENWJVdFVzMVZvOE9sdko3QVFYc2Q1dkRIY2hmbWJx?=
- =?utf-8?B?WnRwbGRPWmRVUCtpRFRibW9iRytiZkhNQW5NYlBwb1ozRi9jQ3JpQllOU1RU?=
- =?utf-8?B?YVl0a3VmU2pndFRIRnpQKzluT3FoU2V2d0dPK0VaMDBjb2NLb3ZMK0MrYjhu?=
- =?utf-8?B?QTd6L3VBdkVmQnJ2d1lKY0l4ZUxCdVUrUm5BT00yZmZOOGlBZW03NmZTZjgw?=
- =?utf-8?B?U1E9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2060d22e-ad93-4208-5a50-08db4cd1de2c
-X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7573.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2023 19:00:46.4062
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Si1ldaqwZ56P7JSgl0JP/rHrrFaHUZzZ25jOOAwg1Vala739Gn9ceUvPbXx/gKAsEvN4KFKYMRuYb+PUMA/Vj/FcZg7i8Fp5fLIJCxUu/M8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB6947
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 4 May 2023 15:02:02 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC424C07;
+        Thu,  4 May 2023 12:02:01 -0700 (PDT)
+Message-ID: <20230504185733.126511787@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1683226919;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=Owpn3VAzXYYF5pE4nW59O5YtNe6oATS3CJHH6pOEc+Q=;
+        b=ydWEHvQKju6ua5QrgIvoNFizD1mp/ScmeGKoSzoDnG7Bbtt8/QnpnQ3+taJ6G0kL830h+i
+        7ID/utgQdKCvUYsl6w6CO2W2gJuO8HL9LCU4D0vVfB6YxemlrHUeCt4ToRjPCaRBB5yHoD
+        U1z1RXcQdP2U5KMvTNzHXSugPczS5MTUtGDtT8qHk2Yf+N4IEi6AoiUHeLjn63zurjgLOd
+        4VlOYXYRkaR1ek5ywemLfh9oakl4kmjQRYWBDRl/UvRYBt4y2JOaZBadJTEhsdykMmsR/p
+        RzfI1eYCgw7RPP+JveXpGF8/O3jsZY1WVFPEdOuBnlsQhWH5/KilpYnEwkhH7g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1683226919;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=Owpn3VAzXYYF5pE4nW59O5YtNe6oATS3CJHH6pOEc+Q=;
+        b=t9YK5Y1XQbyMkzjkBl9J4dD0O18uiVWSVJxE2v987VhpllLfPD1+SKL0rJE7GDXI8icRF3
+        WCaTcXYHj80XrzAw==
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        Usama Arif <usama.arif@bytedance.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Subject: [patch V2 00/38] cpu/hotplug, x86: Reworked parallel CPU bringup
+Date:   Thu,  4 May 2023 21:01:58 +0200 (CEST)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Babu,
+Hi!
 
-On 4/17/2023 4:34 PM, Babu Moger wrote:
-> Remove gaps in bit definitions of RFTYPE flags and add more comments
+This is version 2 of the reworked parallel bringup series. Version 1 can be
+found here:
 
-Why is it necessary to remove gaps in the bit definitions?
+   https://lore.kernel.org/lkml/20230414225551.858160935@linutronix.de
 
-Reinette
+Background
+----------
+
+The reason why people are interested in parallel bringup is to shorten the
+(kexec) reboot time of cloud servers to reduce the downtime of the VM
+tenants.
+
+The current fully serialized bringup does the following per AP:
+
+    1) Prepare callbacks (allocate, intialize, create threads)
+    2) Kick the AP alive (e.g. INIT/SIPI on x86)
+    3) Wait for the AP to report alive state
+    4) Let the AP continue through the atomic bringup
+    5) Let the AP run the threaded bringup to full online state
+
+There are two significant delays:
+
+    #3 The time for an AP to report alive state in start_secondary() on x86
+       has been measured in the range between 350us and 3.5ms depending on
+       vendor and CPU type, BIOS microcode size etc.
+
+    #4 The atomic bringup does the microcode update. This has been measured
+       to take up to ~8ms on the primary threads depending on the microcode
+       patch size to apply.
+
+On a two socket SKL server with 56 cores (112 threads) the boot CPU spends
+on current mainline about 800ms busy waiting for the APs to come up and
+apply microcode. That's more than 80% of the actual onlining procedure.
+
+By splitting the actual bringup mechanism into two parts this can be
+reduced to waiting for the first AP to report alive or if the system is
+large enough the first AP is already waiting when the boot CPU finished the
+wake-up of the last AP. That reduces the AP bringup time on that SKL from
+~800ms to ~80ms.
+
+The actual gain varies wildly depending on the system, CPU, microcode patch
+size and other factors.
+
+The V1 cover letter has more details and a deep analysis.
+
+Changes vs. V1:
+
+  1) Switch APIC ID retrieval from CPUID to reading the APIC itself.
+
+     This is required because CPUID based APIC ID retrieval can only
+     provide the initial APIC ID, which might have been overruled by the
+     firmware. Some AMD APUs come up with APIC ID = initial APIC ID + 0x10,
+     so the APIC ID to CPU number lookup would fail miserably if based on
+     CPUID. The only requirement is that the actual APIC IDs are consistent
+     with the APCI/MADT table.
+
+  2) As a consequence of #1 parallel bootup support for SEV guest has been
+     dropped.
+
+     Reading the APIC ID in a SEV guest is done via RDMSR. That RDMSR is
+     intercepted and raises #VC which cannot be handled at that point as
+     there is no stack and no IDT. There is no GHCB protocol for RDMSR
+     like there is for CPUID. Left as an exercise for SEV wizards.
+
+  3) Address review comments from Brian and the fallout reported by the
+     kernel robot
+
+  4) Unbreak i386 which exploded when bringing up the secondary CPUs due to
+     the unconditinal load_ucode_ap() invocation in start_secondary(). That
+     happens because on 32-bit load_ucode_ap() is invoked on the secondary
+     CPUs from assembly code before paging is initialized and therefore
+     uses physical addresses which are obviously invalid after paging is
+     enabled.
+
+  5) Small enhancements and comment updates.
+
+  6) Rebased on Linux tree (1a5304fecee5)
+
+The series applies on Linus tree and is also available from git:
+
+    git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git hotplug
+
+Thanks,
+
+	tglx
+---
+ Documentation/admin-guide/kernel-parameters.txt |   20 
+ Documentation/core-api/cpu_hotplug.rst          |   13 
+ arch/Kconfig                                    |   23 +
+ arch/arm/Kconfig                                |    1 
+ arch/arm/include/asm/smp.h                      |    2 
+ arch/arm/kernel/smp.c                           |   18 
+ arch/arm64/Kconfig                              |    1 
+ arch/arm64/include/asm/smp.h                    |    2 
+ arch/arm64/kernel/smp.c                         |   14 
+ arch/csky/Kconfig                               |    1 
+ arch/csky/include/asm/smp.h                     |    2 
+ arch/csky/kernel/smp.c                          |    8 
+ arch/mips/Kconfig                               |    1 
+ arch/mips/cavium-octeon/smp.c                   |    1 
+ arch/mips/include/asm/smp-ops.h                 |    1 
+ arch/mips/kernel/smp-bmips.c                    |    1 
+ arch/mips/kernel/smp-cps.c                      |   14 
+ arch/mips/kernel/smp.c                          |    8 
+ arch/mips/loongson64/smp.c                      |    1 
+ arch/parisc/Kconfig                             |    1 
+ arch/parisc/kernel/process.c                    |    4 
+ arch/parisc/kernel/smp.c                        |    7 
+ arch/riscv/Kconfig                              |    1 
+ arch/riscv/include/asm/smp.h                    |    2 
+ arch/riscv/kernel/cpu-hotplug.c                 |   14 
+ arch/x86/Kconfig                                |   45 --
+ arch/x86/include/asm/apic.h                     |    5 
+ arch/x86/include/asm/apicdef.h                  |    5 
+ arch/x86/include/asm/cpu.h                      |    5 
+ arch/x86/include/asm/cpumask.h                  |    5 
+ arch/x86/include/asm/processor.h                |    1 
+ arch/x86/include/asm/realmode.h                 |    3 
+ arch/x86/include/asm/smp.h                      |   24 -
+ arch/x86/include/asm/topology.h                 |   23 -
+ arch/x86/include/asm/tsc.h                      |    2 
+ arch/x86/kernel/acpi/sleep.c                    |    9 
+ arch/x86/kernel/apic/apic.c                     |   26 -
+ arch/x86/kernel/callthunks.c                    |    4 
+ arch/x86/kernel/cpu/amd.c                       |    2 
+ arch/x86/kernel/cpu/cacheinfo.c                 |   21 
+ arch/x86/kernel/cpu/common.c                    |   50 --
+ arch/x86/kernel/cpu/topology.c                  |    3 
+ arch/x86/kernel/head_32.S                       |   14 
+ arch/x86/kernel/head_64.S                       |   87 +++
+ arch/x86/kernel/sev.c                           |    2 
+ arch/x86/kernel/smp.c                           |    3 
+ arch/x86/kernel/smpboot.c                       |  526 ++++++++----------------
+ arch/x86/kernel/topology.c                      |   98 ----
+ arch/x86/kernel/tsc.c                           |   20 
+ arch/x86/kernel/tsc_sync.c                      |   36 -
+ arch/x86/power/cpu.c                            |   37 -
+ arch/x86/realmode/init.c                        |    3 
+ arch/x86/realmode/rm/trampoline_64.S            |   27 +
+ arch/x86/xen/enlighten_hvm.c                    |   11 
+ arch/x86/xen/smp_hvm.c                          |   16 
+ arch/x86/xen/smp_pv.c                           |   56 +-
+ drivers/acpi/processor_idle.c                   |    4 
+ include/linux/cpu.h                             |    4 
+ include/linux/cpuhotplug.h                      |   17 
+ kernel/cpu.c                                    |  396 +++++++++++++++++-
+ kernel/smp.c                                    |    2 
+ kernel/smpboot.c                                |  163 -------
+ 62 files changed, 934 insertions(+), 982 deletions(-)
