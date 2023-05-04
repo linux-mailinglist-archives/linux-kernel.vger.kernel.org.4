@@ -2,176 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD3C46F6F7C
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 17:58:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A825C6F6F9A
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 18:10:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231374AbjEDP6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 11:58:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35210 "EHLO
+        id S231367AbjEDQKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 12:10:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbjEDP6k (ORCPT
+        with ESMTP id S231302AbjEDQKB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 11:58:40 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E6ED468B;
-        Thu,  4 May 2023 08:58:39 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2a8dc09e884so1372171fa.1;
-        Thu, 04 May 2023 08:58:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683215918; x=1685807918;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wYBoD42fi0Qo48RQvnR/5/xNrxWUbWiP9dXKPNjnGZc=;
-        b=bXqQqAH97aZqNoW6tYHPqjwasg8isVEvVzYfRdDnYi4bHmmJhsUuyRBPiS2DzfvxXD
-         OkKoXvNDeUw28Ry1YuZw4XZPfa7wUHL/CgMgF3Kimqe5+qtPFYQmumgVSK98O899FiVH
-         v/P9iNpcNC/SOB9HpRDQ5orjOCJWxgCPr/JegUbpxIaZmi3qZxzFbCd+L1clGiNGUzWx
-         EGyp6pvCTGbrOx70ztLvOpmxkwCCVEt+Emo1fDgdZqjlkA4+L6/y9IZykRvAXchVlDQY
-         tc6RpHqPRrxJXZgK5zRcDV3FR7A0J5jqmFY1oFkkDKXqxImmafAVTg0lh1wzdKap+IVS
-         p6rA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683215918; x=1685807918;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wYBoD42fi0Qo48RQvnR/5/xNrxWUbWiP9dXKPNjnGZc=;
-        b=HsJe6qFg2u/O8pJZTWL0MxFlvrSogGxxkEDPeZkv6nKnyTLsZ3QwgIrs7UJ6LRNrML
-         bBDaRmtlhg8MQUD0sHERzhV1aF+aLWHGffH+G45BhawNXxFZgO7hKfTYg7y4I366q7gM
-         xb/aAeNVEqex8QQHX5aDSd/1BAQTxvX1qgZw21RgoSYpDPmNNZkit7HVrSzUJ+im32QI
-         uyvn0SNDABPOOQDXmtRsE4CYZq/pZC2nTk7mFKp+1SmiP5xrCZtfFiTrO/lZMK4xWwuM
-         dG7ahO+/u4efx55t0mWW3k/Z7mUahL36a5bK0A5cqNZGstEbmDMLWsfNqBrgVobNAHnb
-         8dIg==
-X-Gm-Message-State: AC+VfDz99NtXESOTB9SKAzRMOLecJAzPfjYDCThxo12BWS8WSEiqoy8W
-        2Fx7HCnw0IglO5jZ8mJ80p8=
-X-Google-Smtp-Source: ACHHUZ7lf9SJwpLxOd9zE09fOQJ6fYIObPElS6/ynR+3eECh6A5+PBp3kvB9rprdiMPydNUiRBzNvA==
-X-Received: by 2002:a2e:a261:0:b0:2ac:7237:d5bf with SMTP id k1-20020a2ea261000000b002ac7237d5bfmr1342238ljm.2.1683215917713;
-        Thu, 04 May 2023 08:58:37 -0700 (PDT)
-Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
-        by smtp.gmail.com with ESMTPSA id v5-20020a2e9245000000b002a8ecae9567sm6629014ljg.84.2023.05.04.08.58.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 May 2023 08:58:37 -0700 (PDT)
-Date:   Thu, 4 May 2023 18:58:14 +0300
-From:   Zhi Wang <zhi.wang.linux@gmail.com>
-To:     Tianyu Lan <ltykernel@gmail.com>
-Cc:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, seanjc@google.com, pbonzini@redhat.com,
-        jgross@suse.com, tiala@microsoft.com, kirill@shutemov.name,
-        jiangshan.ljs@antgroup.com, peterz@infradead.org,
-        ashish.kalra@amd.com, srutherford@google.com,
-        akpm@linux-foundation.org, anshuman.khandual@arm.com,
-        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
-        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
-        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
-        michael.roth@amd.com, thomas.lendacky@amd.com,
-        venu.busireddy@oracle.com, sterritt@google.com,
-        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com,
-        pangupta@amd.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [RFC PATCH V5 03/15] x86/hyperv: Set Virtual Trust Level in
- VMBus init message
-Message-ID: <20230504185814.00005792.zhi.wang.linux@gmail.com>
-In-Reply-To: <4db13429-ffb0-debc-cec4-e37d0e526934@gmail.com>
-References: <20230501085726.544209-1-ltykernel@gmail.com>
-        <20230501085726.544209-4-ltykernel@gmail.com>
-        <20230502223041.00000240.zhi.wang.linux@gmail.com>
-        <4db13429-ffb0-debc-cec4-e37d0e526934@gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Thu, 4 May 2023 12:10:01 -0400
+Received: from out162-62-58-211.mail.qq.com (out162-62-58-211.mail.qq.com [162.62.58.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F6225BB8;
+        Thu,  4 May 2023 09:09:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1683216594;
+        bh=wyFyXx0lKxZ8YrC0WLs2wNO+YieXVO9DplmXwDJCWaE=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To;
+        b=VJVSWMipgpjES2y+oUQIUzOaf3E/pkw+7QcfKMsvha3lUaXaOfX/nJBSN/52Fm4Jb
+         KjXx3F4SYEYeysECZaveFswf5F+wShp7XGLwT2NQ3FkxzPky5HhIPDdvR3xW1vsAIG
+         gSxW8EC1rJY4iP7xcaDY5Snkahhm2TyqAwwjjAUo=
+Received: from [IPV6:2408:8462:2b10:be3:4913:da2f:a6cc:3a8c] ([2408:8462:2b10:be3:4913:da2f:a6cc:3a8c])
+        by newxmesmtplogicsvrszb1-0.qq.com (NewEsmtp) with SMTP
+        id 4D9723A; Fri, 05 May 2023 00:01:13 +0800
+X-QQ-mid: xmsmtpt1683216073tuofohmjl
+Message-ID: <tencent_DC538304754DFEA48B3167F9F13E8B548D0A@qq.com>
+X-QQ-XMAILINFO: MB5+LsFw85NoRqPYdf389XKueoXGmn2A+bcS+m2jufnBBJTCbULCgmUk/1bYY/
+         KpKBo/h/2EnTJE5ErnggbssfhzSqpEu5+A3BIFaPBwId8eRg+O0SlrCdyxdDe8IzzNLYk0B7Okm1
+         dc/2Jpxi2B6ucsg7fzzs3g2vZO5MVsBMwYDXkxYP2c6X/stQlvT9Vl4NTJ9ftxIjahIQMZGahyKR
+         fd2qPuht1rc1meXnVR3ZIvaIW6WZsf/XDzjl2XUOPFxf3WbogV0N1rXtAM7iOdupUgupLdNrDbw6
+         CMmOFjZdgdRYYE43QpbkqFnsuYBdBufQoYKmLYHajJ33AEKskS2IXWlOOCt7EPFgprc3tg4p8wij
+         ZdI5ap5QUxZvaGroM/4jr/YLpjfyqjiL31Ds3dvuNjEH5RNgbbkTqVQuCJi0GzK5MWwileVAxVgn
+         yhDgHQH0+Lmr3ChLEu1yThYUhGjudOvE1AWPLgzPl00m9mbq+OYSsLxmrrXnzo1ozKbFJwfxx0mw
+         vpWIjtl2t5sUT72Y3sXA0pxNSlmTqW9zbzVchpTGr3ygoOejJRsVdFFBWQl3b+cNg/r/3CIKputT
+         gq9THEj2OGoUxbgLSnvhI2KQ/MQ0NzaKvx78zH/ISj4X8LK7A8NAPVD5K4GJzoJjXkDJs2pc0gSs
+         dnQWyFWZou8392UN3FmiRoiCHQILoGvcFqNPUPwlbiWHUZMW6RuP41JMauxs93xBJUZUw/fIxqrC
+         3qrFmEBYa9MPdyoD4CjYhSFe/67nfCdEK/bw8g2ApJA+NcLC+YVvKoISWRX4FZJgsOmhK3K8W2uf
+         mRPDy4jX6nT1ateew3DsU7lEtv2xjyrsNmoPs2lXuZ5ZbUVqwsxF+kPmwe8KiCLpkwNaVocx33rJ
+         BGz9ag2J4eL7vqZXtMbgqa/ugH7OSCoj3q+Usb0FLgAwPZCSM45ilTlFlNq+myqJIjJjMkUy6YEu
+         vTB5BEzhg+zvbY7/xFJ9m0Czme7rSDO5zc8Amc/SpHgz0xEjDOyQT5GwSxBuKt7JmQNg/mDsA=
+X-OQ-MSGID: <0f841ada-e08b-7ab2-acfa-7dcd0343816f@foxmail.com>
+Date:   Fri, 5 May 2023 00:01:13 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.1
+Subject: Re: [PATCH] eventfd: support delayed wakeup for non-semaphore eventfd
+ to reduce cpu utilization
+From:   Wen Yang <wenyang.linux@foxmail.com>
+To:     Jens Axboe <axboe@kernel.dk>,
+        Christian Brauner <brauner@kernel.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@lst.de>, Dylan Yudaken <dylany@fb.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Paolo Bonzini <pbonzini@redhat.com>, Fu Wei <wefu@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <tencent_AF886EF226FD9F39D28FE4D9A94A95FA2605@qq.com>
+ <817984a2-570c-cb23-4121-0d75005ebd4d@kernel.dk>
+ <tencent_9D8583482619D25B9953FCA89E69AA92A909@qq.com>
+ <7dded5a8-32c1-e994-52a0-ce32011d5e6b@kernel.dk>
+ <20230419-blinzeln-sortieren-343826ee30ce@brauner>
+ <868ceaa3-4854-345f-900e-52a79b924aa6@kernel.dk>
+ <tencent_31DEA62F31CFF96D3ED356F1508707594C0A@qq.com>
+In-Reply-To: <tencent_31DEA62F31CFF96D3ED356F1508707594C0A@qq.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
+        FREEMAIL_FROM,HELO_DYNAMIC_IPADDR,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 4 May 2023 08:38:46 -0700
-Tianyu Lan <ltykernel@gmail.com> wrote:
 
-> On 5/2/2023 12:30 PM, Zhi Wang wrote:
-> > On Mon,  1 May 2023 04:57:13 -0400
-> > Tianyu Lan <ltykernel@gmail.com> wrote:
-> > 
-> >> From: Tianyu Lan <tiala@microsoft.com>
-> >>
-> >> sev-snp guest provides vtl(Virtual Trust Level) and
-> >> get it from hyperv hvcall via HVCALL_GET_VP_REGISTERS.
-> >> Set target vtl in the VMBus init message.
-> >>
-> >> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
-> >> ---
-> >> Change since RFC v4:
-> >>         * Use struct_size to calculate array size.
-> >>         * Fix some coding style
-> >>
-> >> Change since RFC v3:
-> >>         * Use the standard helper functions to check hypercall result
-> >>         * Fix coding style
-> >>
-> >> Change since RFC v2:
-> >>         * Rename get_current_vtl() to get_vtl()
-> >>         * Fix some coding style issues
-> >> ---
-> >>   arch/x86/hyperv/hv_init.c          | 36 ++++++++++++++++++++++++++++++
-> >>   arch/x86/include/asm/hyperv-tlfs.h |  7 ++++++
-> >>   drivers/hv/connection.c            |  1 +
-> >>   include/asm-generic/mshyperv.h     |  1 +
-> >>   include/linux/hyperv.h             |  4 ++--
-> >>   5 files changed, 47 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
-> >> index 9f3e2d71d015..331b855314b7 100644
-> >> --- a/arch/x86/hyperv/hv_init.c
-> >> +++ b/arch/x86/hyperv/hv_init.c
-> >> @@ -384,6 +384,40 @@ static void __init hv_get_partition_id(void)
-> >>   	local_irq_restore(flags);
-> >>   }
-> >>   
-> >> +static u8 __init get_vtl(void)
-> >> +{
-> >> +	u64 control = HV_HYPERCALL_REP_COMP_1 | HVCALL_GET_VP_REGISTERS;
-> >> +	struct hv_get_vp_registers_input *input;
-> >> +	struct hv_get_vp_registers_output *output;
-> >> +	u64 vtl = 0;
-> >> +	u64 ret;
-> >> +	unsigned long flags;
-> >> +
-> >> +	local_irq_save(flags);
-> >> +	input = *this_cpu_ptr(hyperv_pcpu_input_arg);
-> >> +	output = (struct hv_get_vp_registers_output *)input;
-> > 
-> > ===
-> >> +	if (!input) {
-> >> +		local_irq_restore(flags);
-> >> +		goto done;
-> >> +	}
-> >> +
-> > ===
-> > Is this really necessary?
-> > 
-> > drivers/hv/hv_common.c:
-> > 
-> >          hyperv_pcpu_input_arg = alloc_percpu(void  *);
-> >          BUG_ON(!hyperv_pcpu_input_arg);
-> > 
-> > 
-> 
-> Hi Zhi:
-> 	The hyperv_pcpu_input_arg is a point to address of input arg
-> pages and these pages are allocated in the hv_common_cpu_init(). If
-> it failed to allocate these pages, the value pointed by 
-> hyperv_pcpu_input_arg will be NULL.
-> 	
+在 2023/4/21 01:44, Wen Yang 写道:
+>
+> 在 2023/4/20 00:42, Jens Axboe 写道:
+>> On 4/19/23 3:12?AM, Christian Brauner wrote:
+>>> On Tue, Apr 18, 2023 at 08:15:03PM -0600, Jens Axboe wrote:
+>>>> On 4/17/23 10:32?AM, Wen Yang wrote:
+>>>>> ? 2023/4/17 22:38, Jens Axboe ??:
+>>>>>> On 4/16/23 5:31?AM, wenyang.linux@foxmail.com wrote:
+>>>>>>> From: Wen Yang <wenyang.linux@foxmail.com>
+>>>>>>>
+>>>>>>> For the NON SEMAPHORE eventfd, if it's counter has a nonzero value,
+>>>>>>> then a read(2) returns 8 bytes containing that value, and the 
+>>>>>>> counter's
+>>>>>>> value is reset to zero. Therefore, in the NON SEMAPHORE scenario,
+>>>>>>> N event_writes vs ONE event_read is possible.
+>>>>>>>
+>>>>>>> However, the current implementation wakes up the read thread 
+>>>>>>> immediately
+>>>>>>> in eventfd_write so that the cpu utilization increases 
+>>>>>>> unnecessarily.
+>>>>>>>
+>>>>>>> By adding a configurable delay after eventfd_write, these 
+>>>>>>> unnecessary
+>>>>>>> wakeup operations are avoided, thereby reducing cpu utilization.
+>>>>>> What's the real world use case of this, and what would the expected
+>>>>>> delay be there? With using a delayed work item for this, there's
+>>>>>> certainly a pretty wide grey zone in terms of delay where this would
+>>>>>> perform considerably worse than not doing any delayed wakeups at 
+>>>>>> all.
+>>>>>
+>>>>> Thanks for your comments.
+>>>>>
+>>>>> We have found that the CPU usage of the message middleware is high in
+>>>>> our environment, because sensor messages from MCU are very frequent
+>>>>> and constantly reported, possibly several hundred thousand times per
+>>>>> second. As a result, the message receiving thread is frequently
+>>>>> awakened to process short messages.
+>>>>>
+>>>>> The following is the simplified test code:
+>>>>> https://github.com/w-simon/tests/blob/master/src/test.c
+>>>>>
+>>>>> And the test code in this patch is further simplified.
+>>>>>
+>>>>> Finally, only a configuration item has been added here, allowing 
+>>>>> users
+>>>>> to make more choices.
+>>>> I think you'd have a higher chance of getting this in if the delay
+>>>> setting was per eventfd context, rather than a global thing.
+>>> That patch seems really weird. Is that an established paradigm to
+>>> address problems like this through a configured wakeup delay? Because
+>>> naively this looks like a pretty brutal hack.
+>> It is odd, and it is a brutal hack. My worries were outlined in an
+>> earlier reply, there's quite a big gap where no delay would be better
+>> and the delay approach would be miserable because it'd cause extra
+>> latency and extra context switches. It'd be much cleaner if you KNEW
+>> there'd be more events coming, as you could then get rid of that delayed
+>> work item completely. And I suspect, if this patch makes sense, that
+>> it'd be better to have a number+time limit as well and if you hit the
+>> event number count that you'd notify inline and put some smarts in the
+>> delayed work handling to just not do anything if nothing is pending.
+>
+> Thank you very much for your suggestion.
+>
+> We will improve the implementation according to your suggestion and 
+> send the v2 later.
+>
+>
+Hi Jens, Christian,
 
-Sorry, it seems my email editor dropped some text. I was wondering that
-if the check above is necessary as there is a BUG_ON() when allocating
-hyperv_pcpu_input_arg.
+Based on your valuable suggestions and inspiration from TCP's 
+/Delayed ACK/ technology, we have reimplemented v2 and are currently 
+testing it.
 
-So when coming to get_vtl(), the hyperv_pcpu_input_arg should not be NULL.
-(Guarded by the BUG_ON() in the allocation)?
+After several days of testing, we will send it again.
+
+Thanks.
+
+
+--
+
+Best wishes,
+
+Wen
+
+
+
+
