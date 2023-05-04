@@ -2,175 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED7D86F6857
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 11:33:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C50436F6856
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 11:33:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230023AbjEDJdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 05:33:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50242 "EHLO
+        id S229915AbjEDJdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 05:33:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230443AbjEDJdZ (ORCPT
+        with ESMTP id S230023AbjEDJdJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 05:33:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64BE84698
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 02:32:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683192757;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Br2sdhxJExbXbcqoz/VU+uPPIl2iDyGjIsFcKxJYcBE=;
-        b=RrtLX3cuFKxRZD9S0mslS6cAXKjFigKANVJvskN/0Hf59GfxbWluA7n6TRFRDcHsqMU6Jt
-        tx1Mw9NKNwps6RKU2u8IixQXeVFJvhpaaPeZ1N7jdiD+btIzEOHdvoVwtCViHumVAGAI7I
-        I1XunG5+XGH8JTuy7/a/VA+T2jjULmo=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-528-Ku1KV5SaOLeaxWO12_c6Mg-1; Thu, 04 May 2023 05:32:36 -0400
-X-MC-Unique: Ku1KV5SaOLeaxWO12_c6Mg-1
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-2fbb99cb244so90412f8f.3
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 02:32:35 -0700 (PDT)
+        Thu, 4 May 2023 05:33:09 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93A1E49C0;
+        Thu,  4 May 2023 02:33:07 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-6438d95f447so165567b3a.3;
+        Thu, 04 May 2023 02:33:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683192787; x=1685784787;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lBOT6ucg6ng9qBkKlorD62fyrVLYVgD1ftPso5pMrEM=;
+        b=D8eFhT00Xes9DNAgtmKZUycfUY1lAYrerwL3VrA7JsqResg/EsYF6SZLQZfnhyH1Sz
+         FRCZK2pVrKdZlpolhCOuwWUtNg5lNEb2+D32SQfupFBKOwKYqADlYTzfpCsSNaeiHlP2
+         JiJ9nqLsRj4oSSmUvtd0ZTx1zkWm06FkfMeF3LCCUaOxUjTLxplv/CMLkXPU3u5+qY5D
+         FnUj+ZqHBY32dlGnWzk/rYxY97prPDXSuK2iWJOE8/UJ6qErny5+dYVChzgKL40yxyCp
+         aUq1IjyCTg1l5GxtZuN3fL0AWhnKctJhsJanvYgxBYGJoUrq7ZwNsI0wh/l9UFrsKrKZ
+         HUdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683192754; x=1685784754;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Br2sdhxJExbXbcqoz/VU+uPPIl2iDyGjIsFcKxJYcBE=;
-        b=GjgPYtspV2dKtTphjK8Drxg0nv4FRXt/G++Ye+vTcTBf6Jw9Q3gcaUfcReLGDn5Bbl
-         76GUVdy9QkA4GgisnkospYH601fvm1JHtQ6JaToyo68WvDIUZ6lt98RDTcUecuQ4IgLQ
-         wMQWwW7xGnxAavj9RlchBdtJysKR2Arkr28ZokCBlMrkeoRqiOkBFH77qK2JFB6C1O77
-         Yd9s19R0s1lgN4+a/rJX9l1biIAGA+b4nx+NUVhJjkd2wbUN0TV2LarhCnrExtK2okIn
-         ZkGT5qt0OvBMwE0Tvl33+ueVdse1fveOJ/2QNyuFfyENZNwsoTZHioUQCM96rDjrC9w/
-         Onyg==
-X-Gm-Message-State: AC+VfDw6l0rm6vmLRA7qeO//G5xd6Cogge3peSU3JaWYNPL+Z2/oxjzW
-        gPgUeTmkp6iVHLlvWmhXMJX47PekWMw23zvvyAnKrxYu83baMFABzkOyskH8PgaMZWHjTQeNScD
-        kXc/GIjUH8D/F4MeTPdmt9FZZ
-X-Received: by 2002:a05:6000:1292:b0:304:75b1:4dff with SMTP id f18-20020a056000129200b0030475b14dffmr2679664wrx.48.1683192754410;
-        Thu, 04 May 2023 02:32:34 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7lFdaoDN/domYYFl97TJ7iMctTEG96htH3lecWTjBRB0SpQ5yaagyG1HTRY2lhM63g8FCxBg==
-X-Received: by 2002:a05:6000:1292:b0:304:75b1:4dff with SMTP id f18-20020a056000129200b0030475b14dffmr2679627wrx.48.1683192754120;
-        Thu, 04 May 2023 02:32:34 -0700 (PDT)
-Received: from vschneid.remote.csb ([154.57.232.159])
-        by smtp.gmail.com with ESMTPSA id p17-20020a056000019100b002fda1b12a0bsm36383284wrx.2.2023.05.04.02.32.32
+        d=1e100.net; s=20221208; t=1683192787; x=1685784787;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lBOT6ucg6ng9qBkKlorD62fyrVLYVgD1ftPso5pMrEM=;
+        b=OfySO9Us7HO/MQXc2yo5qb19L2uwb8lJtNAli+QxO7P00keeTW01BDUPypu/8UrdzS
+         rBvJwiY+9VP3xFv/rIpkviBjN5cxMOwvMxCFwnfaoW9i88jcH1POsWaeKB3heVYUMztm
+         N0hFuOL8jeuYdN99DsGIBNJwitL/Ji7sD+HQYFr0WHA/ke2fDE9Sr4OOiy6x2vMYi3VF
+         cgJ9FAwHpkcU9AjtXZh83uGXAGgMCb9Cq6ysUOZRgpqlnHOzmVoKv0QqJLgyfP5K9fmh
+         NO/sb4xdfk8XC3A0vpU/Cr/nJPWTSGoNFmG2ILVmLTRM1/Qp1dmqj8dnLvP0B2wDqo2Q
+         gYuw==
+X-Gm-Message-State: AC+VfDzfw4cQqvFYIQS2jFyPh2UbxW5XeoB6Zb941vKm12RMdZu7gvJK
+        Gux3CxFxNo/YaLPE0cfV85wGkal7euWc8TWX
+X-Google-Smtp-Source: ACHHUZ6Os3kbSJ6nqmpuqdft3dAzDrQockhYs2liKbJvHrfD1U7kv4v6rrtNxLoYs1Xtm8nbRnxmdw==
+X-Received: by 2002:a05:6a00:ad3:b0:643:aa2:4dd0 with SMTP id c19-20020a056a000ad300b006430aa24dd0mr1706733pfl.9.1683192786747;
+        Thu, 04 May 2023 02:33:06 -0700 (PDT)
+Received: from d.home.yangfl.dn42 ([104.28.245.199])
+        by smtp.gmail.com with ESMTPSA id q14-20020aa7842e000000b00640dbf177b8sm18765163pfn.37.2023.05.04.02.33.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 May 2023 02:32:33 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Wander Lairson Costa <wander@redhat.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Brian Cain <bcain@quicinc.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Christian Brauner <brauner@kernel.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
-        <linux-perf-users@vger.kernel.org>, Hu Chunyu <chuhu@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v7 2/3] sched/task: Add the
- put_task_struct_atomic_safe() function
-In-Reply-To: <20230504084229.GI1734100@hirez.programming.kicks-ass.net>
-References: <20230425114307.36889-1-wander@redhat.com>
- <20230425114307.36889-3-wander@redhat.com>
- <20230504084229.GI1734100@hirez.programming.kicks-ass.net>
-Date:   Thu, 04 May 2023 10:32:31 +0100
-Message-ID: <xhsmha5ykjvbk.mognet@vschneid.remote.csb>
+        Thu, 04 May 2023 02:33:06 -0700 (PDT)
+From:   David Yang <mmyangfl@gmail.com>
+To:     linux-crypto@vger.kernel.org
+Cc:     David Yang <mmyangfl@gmail.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] crypto: hash - Add default handlers for digest, export, import
+Date:   Thu,  4 May 2023 17:32:55 +0800
+Message-Id: <20230504093255.350365-1-mmyangfl@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/05/23 10:42, Peter Zijlstra wrote:
-> On Tue, Apr 25, 2023 at 08:43:02AM -0300, Wander Lairson Costa wrote:
->> diff --git a/include/linux/sched/task.h b/include/linux/sched/task.h
->> index b597b97b1f8f..cf774b83b2ec 100644
->> --- a/include/linux/sched/task.h
->> +++ b/include/linux/sched/task.h
->> @@ -141,6 +141,41 @@ static inline void put_task_struct_many(struct task_struct *t, int nr)
->>
->>  void put_task_struct_rcu_user(struct task_struct *task);
->>
->> +extern void __delayed_put_task_struct(struct rcu_head *rhp);
->> +
->> +static inline void put_task_struct_atomic_safe(struct task_struct *task)
->> +{
->> +	if (IS_ENABLED(CONFIG_PREEMPT_RT)) {
->> +		/*
->> +		 * Decrement the refcount explicitly to avoid unnecessarily
->> +		 * calling call_rcu.
->> +		 */
->> +		if (refcount_dec_and_test(&task->usage))
->> +			/*
->> +			 * under PREEMPT_RT, we can't call put_task_struct
->> +			 * in atomic context because it will indirectly
->> +			 * acquire sleeping locks.
->> +			 * call_rcu() will schedule __delayed_put_task_struct()
->> +			 * to be called in process context.
->> +			 *
->> +			 * __put_task_struct() is called when
->> +			 * refcount_dec_and_test(&t->usage) succeeds.
->> +			 *
->> +			 * This means that it can't conflict with
->> +			 * put_task_struct_rcu_user() which abuses ->rcu the same
->> +			 * way; rcu_users has a reference so task->usage can't be
->> +			 * zero after rcu_users 1 -> 0 transition.
->> +			 *
->> +			 * delayed_free_task() also uses ->rcu, but it is only called
->> +			 * when it fails to fork a process. Therefore, there is no
->> +			 * way it can conflict with put_task_struct().
->> +			 */
->> +			call_rcu(&task->rcu, __delayed_put_task_struct);
->> +	} else {
->> +		put_task_struct(task);
->> +	}
->> +}
->
-> Urgh.. that's plenty horrible. And I'm sure everybody plus kitchen sink
-> has already asked why can't we just rcu free the thing unconditionally.
->
-> Google only found me an earlier version of this same patch set, but I'm
-> sure we've had that discussion many times over the past several years.
-> The above and your follow up patch is just horrible.
->
+The document of struct ahash_alg explicitly states that @finup,
+combination of @update and @final, is optional, while said nothing about
+@digest, which is combination of @init and @finup (@update and @final).
 
-So on v3/v4 we got to doing that unconditionally for PREEMPT_RT, but per
-[1] Wander went back to hand-fixing the problematic callsites.
+This gives a illusion that @digest might be optional. However
+crypto_ahash_init_tfm() strangely does expect a non-NULL @digest,
+otherwise it'll result in NULL pointer dereference.
 
-Now that I'm looking at it again, I couldn't find a concrete argument from
-Oleg against doing this unconditionally - as Wander is pointing out in the
-changelog and comments, reusing task_struct.rcu for that purpose is safe
-(although not necessarily obviously so).
+Add default handlers for digest, export, import according to the behavior
+in the document, and mark them optional.
 
-Is this just miscommunication, or is there a genuine issue with doing this
-unconditionally? As argued before, I'd also much rather have this be an
-unconditional call_rcu() (regardless of context or PREEMPT_RT).
+Signed-off-by: David Yang <mmyangfl@gmail.com>
+---
+ crypto/ahash.c        | 28 +++++++++++++++++++++++++---
+ include/crypto/hash.h | 12 ++++++------
+ 2 files changed, 31 insertions(+), 9 deletions(-)
+
+diff --git a/crypto/ahash.c b/crypto/ahash.c
+index b8a607928e72..53abbfe58a5f 100644
+--- a/crypto/ahash.c
++++ b/crypto/ahash.c
+@@ -417,6 +417,28 @@ static int ahash_def_finup(struct ahash_request *req)
+ 	return ahash_def_finup_finish1(req, err);
+ }
+ 
++static int ahash_def_digest(struct ahash_request *req)
++{
++	struct crypto_ahash *tfm = crypto_ahash_reqtfm(req);
++	int err;
++
++	err = tfm->init(req);
++	if (err)
++		return err;
++
++	return ahash_def_finup(req);
++}
++
++static int ahash_def_noexport(struct ahash_request *req, void *out)
++{
++	return -EINVAL;
++}
++
++static int ahash_def_noimport(struct ahash_request *req, const void *in)
++{
++	return -EINVAL;
++}
++
+ static void crypto_ahash_exit_tfm(struct crypto_tfm *tfm)
+ {
+ 	struct crypto_ahash *hash = __crypto_ahash_cast(tfm);
+@@ -439,9 +461,9 @@ static int crypto_ahash_init_tfm(struct crypto_tfm *tfm)
+ 	hash->update = alg->update;
+ 	hash->final = alg->final;
+ 	hash->finup = alg->finup ?: ahash_def_finup;
+-	hash->digest = alg->digest;
+-	hash->export = alg->export;
+-	hash->import = alg->import;
++	hash->digest = alg->digest ?: ahash_def_digest;
++	hash->export = alg->export ?: ahash_def_noexport;
++	hash->import = alg->import ?: ahash_def_noimport;
+ 
+ 	if (alg->setkey) {
+ 		hash->setkey = alg->setkey;
+diff --git a/include/crypto/hash.h b/include/crypto/hash.h
+index e69542d86a2b..17dee80ac76a 100644
+--- a/include/crypto/hash.h
++++ b/include/crypto/hash.h
+@@ -1,7 +1,7 @@
+ /* SPDX-License-Identifier: GPL-2.0-or-later */
+ /*
+  * Hash: Hash algorithms under the crypto API
+- * 
++ *
+  * Copyright (c) 2008 Herbert Xu <herbert@gondor.apana.org.au>
+  */
+ 
+@@ -110,7 +110,7 @@ struct ahash_request {
+  *	   added to allow such hardware to be used at least by IPsec. Data
+  *	   processing can happen synchronously [SHASH] or asynchronously [AHASH]
+  *	   at this point.
+- * @digest: Combination of @init and @update and @final. This function
++ * @digest: **[optional]** Combination of @init and @update and @final. This function
+  *	    effectively behaves as the entire chain of operations, @init,
+  *	    @update and @final issued in sequence. Just like @finup, this was
+  *	    added for hardware which cannot do even the @finup, but can only do
+@@ -129,15 +129,15 @@ struct ahash_request {
+  *	    this function. This function must be called before any other of the
+  *	    @init, @update, @final, @finup, @digest is called. No data
+  *	    processing happens at this point.
+- * @export: Export partial state of the transformation. This function dumps the
+- *	    entire state of the ongoing transformation into a provided block of
++ * @export: **[optional]** Export partial state of the transformation. This function
++ *	    dumps the entire state of the ongoing transformation into a provided block of
+  *	    data so it can be @import 'ed back later on. This is useful in case
+  *	    you want to save partial result of the transformation after
+  *	    processing certain amount of data and reload this partial result
+  *	    multiple times later on for multiple re-use. No data processing
+  *	    happens at this point. Driver must not use req->result.
+- * @import: Import partial state of the transformation. This function loads the
+- *	    entire state of the ongoing transformation from a provided block of
++ * @import: **[optional]** Import partial state of the transformation. This function
++ *	    loads the entire state of the ongoing transformation from a provided block of
+  *	    data so the transformation can continue from this point onward. No
+  *	    data processing happens at this point. Driver must not use
+  *	    req->result.
+-- 
+2.39.2
 
