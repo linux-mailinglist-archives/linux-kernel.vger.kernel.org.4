@@ -2,196 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB46D6F6971
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 13:04:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 351566F698A
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 13:08:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbjEDLED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 07:04:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38594 "EHLO
+        id S230119AbjEDLIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 07:08:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbjEDLD6 (ORCPT
+        with ESMTP id S229775AbjEDLIH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 07:03:58 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 042C759E0;
-        Thu,  4 May 2023 04:03:35 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34444K5b032618;
-        Thu, 4 May 2023 11:03:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2023-03-30;
- bh=qumFA43jzQS+6QSd/gfzPZwhbK7V496XBWbqAT0HL8U=;
- b=q8c5Ig03DKq2w57HLiFCcFv0IYdwK7U6lyaP7uMJ4lzZ29vnMvVTcZWjf4B/vV36mxji
- kD0ecnSddZvwSKle1M9IP1J9SBo4sJ6nFuBv/NaUGxbi5BAp6JdvKB/s7a5YoTeSxk/N
- muWk9AUaYqjUqVA8E4pQT0ETutOy1udUTz1YkpET08FTynQQ1uJpuMN653SoaSMZp4q9
- kmaqC3Kv0yrZsqHBQf/SPAmcEiGXAJ/YyXJjxKYRxhecdUa6cVl3tufLnDjU6gIty88w
- 9/XjbPwldePfEiKP/6Ifo/pa2W3lbwj53SxkPR8+wmAaqQIjHqUmxFAmnLAG4ExMb+Pm UQ== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qburg9msv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 04 May 2023 11:02:59 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 344Amv07020732;
-        Thu, 4 May 2023 11:02:58 GMT
-Received: from nam04-bn8-obe.outbound.protection.outlook.com (mail-bn8nam04lp2040.outbound.protection.outlook.com [104.47.74.40])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3q8sp8aqsg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 04 May 2023 11:02:58 +0000
+        Thu, 4 May 2023 07:08:07 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AEE0358A
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 04:08:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683198484; x=1714734484;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=n217QK/NWKeX2y/z1wv/tGFrRKlRztYDaP86rERwb6Y=;
+  b=KNCWjAs4kkTaf2uwc0q+rDHLTImpaJb2fdNUHRyTpiFTetBRG4zhH7wv
+   Gfmxcz8azD8VaxSD3hucXNcT6BULhVRNUOXf2BCN3v0bE5rLYn2I25n4P
+   1cs8VrZlNGzMTuA9WP6rRXgFtPlr5GfTaahh81cCUhlWyOuiGBon8lfu4
+   ZZEGzfVQVwPfSCGW4cQPYsEA7qXB258MB8Je3AGh3kOpepNIca33i3zTy
+   8cv0HOGtlO2ZBo7yMLtRdYmacE1MGj6w1io8bhmOct2QGJDKDAKrgZKyO
+   FC+tU5VLdlgEcRP/geCqm0wnKqQ9LKhNOvUzG6pWxY6viuIMiDn28MXEt
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="348948133"
+X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
+   d="scan'208";a="348948133"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 04:08:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="729751987"
+X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
+   d="scan'208";a="729751987"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga001.jf.intel.com with ESMTP; 04 May 2023 04:08:03 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 4 May 2023 04:08:03 -0700
+Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 4 May 2023 04:08:03 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Thu, 4 May 2023 04:08:03 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.107)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Thu, 4 May 2023 04:08:03 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mqlEG3f+fgnBklZS3KtydqbgWbZA+B0PRou0OwXbHca9pi/YZbVbVjky5F5Ti8vwTsbQJ5PWDb2pwAIYQVAVhKi/GQ82p1CHKNgOvOeprgPROLo5UC4LUzRSh/5x0tHzyHGoOrtrdUoMI/WRaYDaDtNP5HMIwQNRKNj46gyG5i73HkjVWjiY4E939YzshnBUf3tlH1e5TJw3XrG7ckhmhrHn9JUut+HjrKXO+Thz0h/yf7YpSZpWhFI5GdA8PF/QywtdQTvKNuM/age8IflPhRPr2IoZkBv2x+7WOssgsqO962PPkR/HEMKk7jtoXQ3OWWbwHg3mEpzQm6PZU0MBCA==
+ b=m1Sf8tRhmiY5WZYU/KArcUe3WW5HP7qcXSsLysv0WHA6nEG/q5XiCO4D3QIOax99yDpQRYUfiOGTQ8BwkdQ0gGE1CGQfv/jUBzI5T+qsuwcuT3l1O4lJhzLFa4/OPxQbO5I0e0mwpXnRb2uT8DUuhVPGyLtVyrL1rA8+Ozi/oeVzcJ1rO7d85VZyO0XTJGBGoFDMVa5F8U2qojz6LJp7WNGL8k6QIhrsoruCVJgQMf7iM91AVWBlqlIHJ6BKVNTZpXSP6cI6tGyvvVKeeV8RUwMIph3IDYb2z3ruJGATY6zU1FqkxuhMERoyosYCzGjbLT7LxkpJlvyKs8d6hW06dw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qumFA43jzQS+6QSd/gfzPZwhbK7V496XBWbqAT0HL8U=;
- b=h4q4yK0wclfiu5r9K852FWPXS0TNB6/ckLOXRdWUlvMnhbWOi5+UIbQm3LDzAn13A+o4i0609EUoD2zjHqkc/71w43iiSUqyJhd7cOsy3kKElIzPi+8QvOk0O5zagqzaywDd6Jc54fled472MVopEgehdp+HMbcWIuCGwi7p60j9YnZ/dkY2BBAhsAQzIpAMebKgY8/LdHo0nEI3lTj5zVsEKJL4TrZIZonNpRUz29mC/kUzj22XZvb6XcFzXXwUTTImJ6CgXIm800A/TaRlp5fm+Sh0HExNX/99+PxvifUd+g6Iyk+Zuo0z4JlBR59/CvFQmD3VKXwErxCtsvL/YA==
+ bh=5uKbnkQMuA7SfCE1Dr7lB2pylEsqnjQJW4dk37spwCI=;
+ b=iuQdk0CE0CEMK+GLJdk1PNMaOD1JOrLIXcR8Kenx4jC3PhVYFYYyWl7W+DhZnk2MWDT6VtOhkuPFKvbgftrJw3oCT1CJaMzJHFwUO7hd3RXzHusM45RVCM6eyCArb38DloAFakFpO/daAcj0A3p2ah6vhbbS4Q4IpFL93uroUC+hYKxA0j01e9VnnlHAerE8tRbxR5QSzHChh6MDLsY3fQYfZ9C4awBYOPPTstdrbMwsyKfHJ+pliFAUjJ896Toyjz2Uza3/fq6RN3H+NqF1lzqJGmsfIR3EUPiX6+TUvllNSJOgbiMrw2wkZ5Dtm//hb9SKGLvBmmqQyyeCXZzTJQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qumFA43jzQS+6QSd/gfzPZwhbK7V496XBWbqAT0HL8U=;
- b=shAkj65QQ+t7FGsBN2axVRP/NNrj3v94jL3pvL6c1sdX0ADNZcyWStZXXq3mwH/HA9KlHdXHk9VoJrT4x+5OEWH3/OvZkSO/toyHMMpJbq5B5h6eO0WcrfCaQ/FPdF6NAE2vA3qHoBFv4NXMThvhRi/E2wOCDfFWnZ0k8RNS0Jw=
-Received: from DM6PR10MB4313.namprd10.prod.outlook.com (2603:10b6:5:212::20)
- by DS7PR10MB7156.namprd10.prod.outlook.com (2603:10b6:8:e0::9) with Microsoft
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN0PR11MB6206.namprd11.prod.outlook.com (2603:10b6:208:3c6::8)
+ by DS7PR11MB5990.namprd11.prod.outlook.com (2603:10b6:8:71::5) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6363.22; Thu, 4 May 2023 11:02:53 +0000
-Received: from DM6PR10MB4313.namprd10.prod.outlook.com
- ([fe80::8456:ba59:80ec:d804]) by DM6PR10MB4313.namprd10.prod.outlook.com
- ([fe80::8456:ba59:80ec:d804%7]) with mapi id 15.20.6363.026; Thu, 4 May 2023
- 11:02:52 +0000
-Message-ID: <da55ef21-e199-79c3-5b65-d51edb2e754b@oracle.com>
-Date:   Thu, 4 May 2023 12:02:48 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 1/5] driver/perf: Add identifier sysfs file for CMN
-To:     Robin Murphy <robin.murphy@arm.com>,
-        Jing Zhang <renyu.zj@linux.alibaba.com>,
-        Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>
-Cc:     James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        Zhuo Song <zhuo.song@linux.alibaba.com>
-References: <1682329456-19418-1-git-send-email-renyu.zj@linux.alibaba.com>
- <1682329456-19418-2-git-send-email-renyu.zj@linux.alibaba.com>
- <df63b597-4355-b9fc-6002-5a390b1a56f5@oracle.com>
- <12bf4a7f-e99c-47cf-e8e4-e2700db6c5c9@arm.com>
-Content-Language: en-US
-From:   John Garry <john.g.garry@oracle.com>
-Organization: Oracle Corporation
-In-Reply-To: <12bf4a7f-e99c-47cf-e8e4-e2700db6c5c9@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: AM0PR07CA0010.eurprd07.prod.outlook.com
- (2603:10a6:208:ac::23) To DM6PR10MB4313.namprd10.prod.outlook.com
- (2603:10b6:5:212::20)
+ 15.20.6363.22; Thu, 4 May 2023 11:08:00 +0000
+Received: from MN0PR11MB6206.namprd11.prod.outlook.com
+ ([fe80::c219:56e8:1243:2a5d]) by MN0PR11MB6206.namprd11.prod.outlook.com
+ ([fe80::c219:56e8:1243:2a5d%3]) with mapi id 15.20.6363.022; Thu, 4 May 2023
+ 11:08:00 +0000
+Date:   Thu, 4 May 2023 19:07:38 +0800
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+CC:     Vincent Guittot <vincent.guittot@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Tim Chen <tim.c.chen@intel.com>,
+        "Dietmar Eggemann" <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        Abel Wu <wuyun.abel@bytedance.com>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+        Honglei Wang <wanghonglei@didichuxing.com>,
+        Len Brown <len.brown@intel.com>,
+        Chen Yu <yu.chen.surf@gmail.com>,
+        Tianchen Ding <dtcccc@linux.alibaba.com>,
+        "Joel Fernandes" <joel@joelfernandes.org>,
+        Josh Don <joshdon@google.com>,
+        "kernel test robot" <yujie.liu@intel.com>,
+        Arjan Van De Ven <arjan.van.de.ven@intel.com>,
+        Aaron Lu <aaron.lu@intel.com>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v8 2/2] sched/fair: Introduce SIS_CURRENT to wake up
+ short task on current CPU
+Message-ID: <ZFOR+i53zW6JpP+R@chenyu5-mobl1>
+References: <cover.1682661027.git.yu.c.chen@intel.com>
+ <4081178486e025c89dbb7cc0e62bbfab95fc794a.1682661027.git.yu.c.chen@intel.com>
+ <20230501134827.GB1597538@hirez.programming.kicks-ass.net>
+ <ZE/gT7bkmIFkLdkg@chenyu5-mobl1>
+ <20230502115408.GC1597538@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230502115408.GC1597538@hirez.programming.kicks-ass.net>
+X-ClientProxiedBy: SG2PR02CA0037.apcprd02.prod.outlook.com
+ (2603:1096:3:18::25) To MN0PR11MB6206.namprd11.prod.outlook.com
+ (2603:10b6:208:3c6::8)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR10MB4313:EE_|DS7PR10MB7156:EE_
-X-MS-Office365-Filtering-Correlation-Id: aee0f6ca-3947-430c-f64c-08db4c8f1b6b
+X-MS-TrafficTypeDiagnostic: MN0PR11MB6206:EE_|DS7PR11MB5990:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9998fd2d-02fd-45c5-e486-08db4c8fd220
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Eo8+p5ATOmiNxkriTfSldc0KrxHbtQOa7cjpB5xetPeRmIHbVzR/F9XA7uSi9V18LFHvJW7eF7uHEoL/Ae9I+R/os+mNZnQiwZDUoqQqjnS8YwEagaCgXyRhM3welGcVi/U4bNGVPkDasBAO2g3/GRY7/F9Od/ej73iFrV0ri3tgf+BqG5YAOI56e2iZN5wUUOKNDPjdOT3L4M4tF0sITMbzmLbsJp7BH9i/nEY98WYcyCT3j//PIqcdJlWPGS0h5jWgVbXVI6RK/4iNDSkFO6gFWvj9B6vED+xiRxQCjQC+xXfmLpDL4DWxXBifxUi1lJpT5uQXzGl+EAVt8hYy5c+H59OtrKSKVDwsWcMAXOh6Ja6OkyiyAB2zjzYrB1u4JzIYonw5bMW3/gF9o+K8J5FY8Hfe7zGznG8nj2WW1pEd+VW5jfwN4O+GSStUZ50Kekyts0Wx/s9B1khZVakH+d/3diItVZ3NlxBt+nQZUkD5I/35cU8UfcyF4GKLUvhmThRVCkDLGlv3H+scuUHo8p1rxqcJGRE84ZxNZY2ociNCVpEfNRaltra08DlH1xhS/GIqddGPu+OfIS5jfd7d+LPJVcFxXo/YqK40d5jlQ+FnI1vwYhte6cbEJ06BGsr+L8b0KJ/uCitQYp7s1A/Zzg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR10MB4313.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(136003)(39860400002)(346002)(376002)(396003)(451199021)(86362001)(31686004)(31696002)(36756003)(38100700002)(36916002)(186003)(478600001)(83380400001)(2616005)(53546011)(6506007)(6486002)(26005)(6512007)(6666004)(2906002)(110136005)(54906003)(5660300002)(7416002)(8936002)(8676002)(41300700001)(66946007)(4326008)(66476007)(66556008)(316002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: TqBGXru3173NmOld1fhX4271aJLAYLPDCjPfEwf88hoKKjTsFMQbdWw9gkB8ulNdrVtkH6v1Faq1LM+Z1tbkdJVJlwEgRXR40FHFcdrG1hO1Om5CWWi5LzQWJyeEgqEvUacDjoB1IzpJT6Nxx7unEcijg0UbV0Sv2NLCMzh/mIMarJ69U8QkUTT0Agn1y9v/YwNikYahi8IrIpmWjMMKC6OQv6YMAi05JY+Zozy2W8Ns9tbvx1meyOi2DIwW06RgTuYx/A9LdLrQbe4bNSvR8oAoNnwYthGPojoAWIIF+WvkN71WuMGAYR1YVRrOE4i7erAqLv6lHXDj9JW2ff/R3MNZ8ja6SB+z9oeoa/MWdl06ffuEEZ2G10oBX/JKxRXfLGYlWwrlAZG6f4gGh3uT8A5GscW7SMbfxVQ8GJLVRuN8Q7igvHYL26awqERKXkF4aN+ZdJR+yd7u2XCv65YQpSz8kH4fn84joGCI41gPvJtIbgcgNc66tkqN/BiqwRxWJVsdFkmMC57nqAjwCOBCLMMWqXPpMdDwsqTJ8m7m6F5uoM4vxYu6Nmw9pur4+OBA
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6206.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(346002)(366004)(136003)(396003)(39860400002)(376002)(451199021)(2906002)(38100700002)(41300700001)(5660300002)(7416002)(8936002)(8676002)(33716001)(86362001)(6666004)(6486002)(54906003)(478600001)(83380400001)(53546011)(186003)(6506007)(26005)(6512007)(6916009)(9686003)(66476007)(316002)(66556008)(82960400001)(66946007)(4326008);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WEsweldrMWQ2dW1sU2NDTi9FMzVUNnRCcVdldTBabE4wc1dHZ0RuQ0pFcUV1?=
- =?utf-8?B?d200cUlRcjB3NDNOL3ZGYkNLSDRMdFpxeTg5UVc4YjIrUFg4RGdjcEt6N3Fr?=
- =?utf-8?B?VUZoVlBYTHBkWDBwdERIaUZ6TkhCMGhZakhKMFBqZ2tHYkR0bGVQNTVMeGIx?=
- =?utf-8?B?enRpVlpIb1dReStJS0d4eEtkN0dDQkZFdzltOGp0VlVoRTY5aG5SaVgzamo3?=
- =?utf-8?B?MUVIZGs5aHdLb29sRENlc3ZtTExDcXM3eERtOEpENFBMeEIwSWFNQ2o2VkFN?=
- =?utf-8?B?ZVdUVVNxRUd3QVhDdmRSdDJySEloY0pSSkR3NXh2c2NKRmM4OXl2ZURWUDlQ?=
- =?utf-8?B?YU94QmE4U09hWEZWRC9MRWJXbHdXaWErUFlzUDUvejgrTnlQTjJ6eDNzV1B2?=
- =?utf-8?B?WFgwREhqQWtnTnE5dkJlZmVlVmxkdHdKeGNNUHJOWkNGN2Nva0lTMkUrc3kz?=
- =?utf-8?B?UTVBUzZaVUk3bmFLdGFqUzF4SDJzbnZsUGRudUh6VnVuR0Ruci9ZVjhzakVQ?=
- =?utf-8?B?S1hlZnVCWXJNN2hqUWFDVlZKSnRoV0lEeTYvbEorakFIR3IrMUZ0aFgwV0FV?=
- =?utf-8?B?NnB2cU9tanhNVW1CRi8yMC9zejY1NmhtamFDRlB0dEUzRnVXZ0hORlRuUlpq?=
- =?utf-8?B?S0UyUWs1a1B5V01xSkxlR2ZKOHRZMndyUWROTlV2TEE2L25JWjRnMHNxR09F?=
- =?utf-8?B?YUxMakJkOVdrV2tMcWhVMXJUK0ZnWHU2YVlxNVlMRUlDWHg4SVFkVVRMT0JC?=
- =?utf-8?B?dGdnb1VRMDhJdml6R1VkOUFsN0o0VzdKc1NnNnhIdnJkaytsN3BqVUZXanZn?=
- =?utf-8?B?TWxVUE93Zi96bTJVUjVYZzBEbkMxTmtZUFFVQ1lna3kxWi9SNjdrem1vTCs0?=
- =?utf-8?B?K084dXE0MUdHNlBkS1dta0Z1VWN5N3MwYnlFSzJRZEFESkdpS3NiSmtQWFRz?=
- =?utf-8?B?dVZzRDZpZHl4VERKaWliWGpQeW1ObnhlNDBCWUZtaGZpelhpYlp1UlNxbWpV?=
- =?utf-8?B?YXZVcHNUVllVbXRUSnhOUGlSd1g0azBHZzliVXNSekloa1FoMnVORlJXdTRQ?=
- =?utf-8?B?RmxRN2xucFVWcjBtOVFLeUFTVG1wWWg0V2FWTm82cEVkYWxwd1VnbldqSDQ1?=
- =?utf-8?B?T0xqa1NuK05iZXBFVG5tRFJnajFlYXNzWFRrTDBJamJKRnphOUxEMkNYV3JC?=
- =?utf-8?B?TEtUZE1CSUNKbzl1VDdWUzFwR0pPQ3hUbEJkbSswdW5yNWZ5MlBFMGVuSGIx?=
- =?utf-8?B?SEFyeHU1dDZURDBhRnFoeVkrdDZURnJEai9lajhSTGNYZnYzMDJOQ1hHQzRr?=
- =?utf-8?B?SzJvQkZ6YmRhMERudXZvNG0vcUpWMnZwdVpLMFNQS3VsZHlNRnZQOUVWdm1V?=
- =?utf-8?B?eDIxOVVLekZtNEtaRFMyQVI0RkdlR1BSNm4rSk02cG42dUFjWGZES05iQzRI?=
- =?utf-8?B?ZEpDNDdES2R6T2RFdCtLdm9PNEQ5aGMvcld2VVFiS3hXMjBCbVl6UElDTHY1?=
- =?utf-8?B?SWtWTXY1dEVhV0RLVzd2T3NjK1RrMkdObnRST0dYdkVvTGFQckRNekxqTEl6?=
- =?utf-8?B?M3BsS01HTThvSGdFdmVsSFo4SHdWNGZ3dll6RExMZVM5TWJKTE5MRkRWdXV6?=
- =?utf-8?B?WUgzMzhUNjA4YUEwSVhlNWVEazUzV3F3aVhXRVFNTnZ5TGdwQUN5M1F0TGJm?=
- =?utf-8?B?NHdienc2Q0JsZWhYbHhFS2Q1eHpOTHZWemZiQ3ZSQzNLQ0UxbXRWT2hHcUc0?=
- =?utf-8?B?YmFhM2Y1YnhOYjN4VTBEZ0MxdjlqQ1FRQVNSZkFjZ0tyKzJFc3lYeEsxeVJt?=
- =?utf-8?B?azFET2l2RCs5Z0RiVlRDZmRvVFZGdmpyZSt2SVBJUTY0SDBPQ2YyZjVPajNk?=
- =?utf-8?B?cld4NmdLNERYWmlIY0F0M3ZYdXYyY1B4ZzduVzgxVkUveEpJbnlqYUhkd0hX?=
- =?utf-8?B?cnJhVkh6YlozTlBKMU80d0FpU2xXYmlVbDFXSHNva1lkQ3JOa3BVQ2VTNEI4?=
- =?utf-8?B?SHJ2ZXMwbXJpSjlSWnJUbTdYRUtzVTkxRVMvNE1PVm9OYXB2bmJhakZJVFNG?=
- =?utf-8?B?S29TMEN2bzByTWxScjlVNEVrZGN0WWc3N0s3bWUyVjZXUkhXQUdzQWhtOCth?=
- =?utf-8?B?dzZoOHhIZkJvSHdDZFVLVUhDSHlOV0hzc1g3SGR5Mk5vMWszeXMva1hsZnV0?=
- =?utf-8?B?UUE9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?WWQ3dDBVeGtCckpxRjNXOW0vVUlrUEd2dWU5Zkk3Q1ViOHAwY2ZhMFNSZzRP?=
- =?utf-8?B?d2puZi9VcytKQ01QK0FkL0o4bHlIeVNtU3cxOHFkZWphc2xXSjdOdHYyWmdh?=
- =?utf-8?B?RmVURjBZdWRCTW00ZUJTUkpidTd2QUM2V0hvMHEvL1E0SDJZc1lsSU9YZEFH?=
- =?utf-8?B?NXpVZDBvOW8vTW9EQ0N2K0t2R2VKejd1dmNFdFA5bkRyWE81RXZpNXFyTlMw?=
- =?utf-8?B?azE5dzNzZHBkenZWcGUvaWg0UHByb0hoRlFISGxUZ3liMEFEeGIzMFdFNE9P?=
- =?utf-8?B?bDJCeWNnbmh2VUVPMjk5em5yMDhvMmpYNXIyWmdaek5DcGR2eDhnRXNhQkVr?=
- =?utf-8?B?dVlKUmpZTlJSeGE4RDhoNThFMjlYdHBuL1dNbEpSYzNGbTJlZmI3cUw3T3oy?=
- =?utf-8?B?TURrbmhTZmtBWUs2MWQ3cXEzbXhLOTdreDk3dzhYMGtXVnl6aXlTRHB4QVhI?=
- =?utf-8?B?Wnh3bkVRNW4rT05KTmdHK0JXbkdMM3B3eGk2YTQwSko5U2lpdm1QbHQ1OXR4?=
- =?utf-8?B?b0NsT3RacHVHcllybDB3MDUzOVFMUWdaVE40Wjd5OUxNMUlCblVNa2JreWJ5?=
- =?utf-8?B?YW9VVHlIbGFQeXhkSUY0QWxoKzJ2bGFmck0vbTJ4M2pGME9aTTFFRHY5R2hT?=
- =?utf-8?B?eWFsRDJ2VVpjbUNGMkZFMnBha3BramJ1VXVEN1g4Mm5tVjNISm5lTkFDNjFV?=
- =?utf-8?B?akQyZlI5Y1FQSjhGOHlQUGc3c01GU0ozNVFGeWtqK2FoWTRlUE5kSldVWENB?=
- =?utf-8?B?VmU4aFFoZDZqUmVRdStxL09POHhHOElDMFdqaVdDME9nUEVoTld6UWhrNjJN?=
- =?utf-8?B?cDJ0TlNSWjhrOW1KYjl2dlVvcUNWVDFQdFhjeVBENVk1Mm9ZVGdSNTRhOFB4?=
- =?utf-8?B?bWd5TDdEK3FuRjlldGY3dmdHUUs1OGNzNFlpQ2NEc1R5WkdqVjMwYUNGd0ZY?=
- =?utf-8?B?YzQ5a3Z1ei9oQlZPRFd2eER3bmFDaWlYTm5KaWlzNnlFNWcrc1d5WFM4RTZD?=
- =?utf-8?B?QTBlWlhhK01LMHg0clRESlNNaCtacTEzTG1ZRE9aM3Z3YXJlajAwWENxMEhO?=
- =?utf-8?B?OGtRV0I5cFhveDZHN1lVSkFVN3czaGVRTUp0WnVqZXB3OElKZlVmR1BEOUMv?=
- =?utf-8?B?clJQd1VFUlpYN1RXZGovQjUwamJyVTdNQlpzUXNEMWhGb1lCUVlPSFFrZUZD?=
- =?utf-8?B?UDQ1THo0NU1SSk0wcVBkb2NvV2xOd01yeFdzWHJZRHpqdUtUT0M4b1FqK3dj?=
- =?utf-8?B?TzkxRnFNMSt2cHZFd0JRc2RKQ29pTkdlSVJWNXlHMVp3eWxna0RJRkV5ai9i?=
- =?utf-8?B?Yk9pOUJWbVRYMm13Szh4dWc1Yi9POGYvSjlrV09wUEpyeFNzNkRLUFNoSHZJ?=
- =?utf-8?B?dG8rT3ZCdXEzb1pFdXRGdk5mNEY5eWg2akRiQ1I2UEFyS3ZMaStxZkpUV1Nn?=
- =?utf-8?B?ODQ2K3RncDRkS1krR2l4OFBwV014UFNlRE5GWlEzTDNyY3NRSWYwU213d3Jx?=
- =?utf-8?Q?NeW5lo=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: aee0f6ca-3947-430c-f64c-08db4c8f1b6b
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR10MB4313.namprd10.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?TMXkP7pB+BR04rFs4YjvzrYH6U4ZByQ2/4pdc+g++UySS6eQAtUTPnvdA877?=
+ =?us-ascii?Q?YHRPOjnEUqolsjBXSMGzeWLFfUyUrXqZtj+ZLzxa693EnjHE6KQ1DmSXk1uj?=
+ =?us-ascii?Q?E77N+DktvVTXzRJ/fLE/ejkzGuULl6buUS6h2aG7KBTMvBGkvueRmcLLBbZm?=
+ =?us-ascii?Q?bogXDFsSndnnDUtFJRJ8Q41LqpbZhOTAZpg42qMsP4yAfHgV0yVtpfOuVs8y?=
+ =?us-ascii?Q?MTvLWdvWXuOYZnnsS6nGqtJZsj0FBJvjkstAEM0Hsyqixk2hLmwzHmYAX21z?=
+ =?us-ascii?Q?vt6sLyutZnyggLTQXadmkj8Ob/z5QbUZ16DCH3CWbCRhTZ22es4tL0VS5dW0?=
+ =?us-ascii?Q?XlV0TNx9I2TabPgWIso5RQ4p6bMTq5sDr+UMK1hpUXr8k4xJEvojPVlE90jB?=
+ =?us-ascii?Q?LA3sqr9L285O8wVQ4AuSW8HxO3KIyLdC8g7l9cZiPy6xWGFb8L/iK84ntnbM?=
+ =?us-ascii?Q?5cHKhPSPxeXc3/wgd1O+215Y/c5s9le8c+PwLjv21tXnamnHO8dIgeIf7fbv?=
+ =?us-ascii?Q?Fk0YbadEFQFw0SkuUmL+I4Mw80yPObXxltv8MbolZqdOYij2QGB9BwRlAEsu?=
+ =?us-ascii?Q?v3RAfpmyPWd9Tm8u364CJmDYX+Ide4VA8ttZOt/aO0YmqIwXH+98fegBbOx9?=
+ =?us-ascii?Q?uBJl8XZQlBIY6qyVopr4YeNavyfjHrM4l1H002kC4e+OJywhqxbBrnSTb4jf?=
+ =?us-ascii?Q?hecMyJIxbLiCtCkS706OFL2LtVj8T03L+0kwk1qzVKa7Qn3p2H30VXtEkw9I?=
+ =?us-ascii?Q?1VWwSFBk8ULq6C3Ae1Rjbv3y8O45h+t8v4W5senzUpvSphAiD/VJN6gYNWua?=
+ =?us-ascii?Q?TpQNKzg+SBUvJ0ojDdA+RQDjDZ41R0Cx3hR0+/SNALLbD3MyxdOV6HQIvuM0?=
+ =?us-ascii?Q?wZltucPSt3pg7wpZq2UHcyU/TDQIf6OdjtrcbH/ktVAFj4kBIfupqIzMgsxb?=
+ =?us-ascii?Q?E9WEtjK5Q6Z44637Qkv1m62ekgQnNiiVOHT3mEEuI0lmEjS0s26yDSeKswai?=
+ =?us-ascii?Q?HcJkLLJfueP9uVMgzKMa3m9mFJqdLk4KBhEih/r9tX4U28Qh6U5UQcPuxtYc?=
+ =?us-ascii?Q?7vJANmuoebaQXCaF1N43taD98GHbC3FQ2s73tTk8VXeADVdnt1nxwbhLluTK?=
+ =?us-ascii?Q?zGuXmEFcUZ9dbQocyPvU2riGi0BMKuggpI02cFnFd/Sicric8nk309zyAA9v?=
+ =?us-ascii?Q?3tdCv1qjaxcrWiFXnMp+JOmbn5DPSOHeW/bCR+UT26wsvoXcqszKR17MQ/vO?=
+ =?us-ascii?Q?8ulpMAFKOYr0LBPytPKWuY01u1yh2lLMX7K9sQdQUzlPjhbhO8czBfFkOOvt?=
+ =?us-ascii?Q?HXPR/ipVoZd55nNJZe6ZZ/nOlRHLTCuPX6lpaYCcHUcbKqcu50wTSD8FZsAG?=
+ =?us-ascii?Q?2xoU2syXa7dxJskuPde8fabWRv6Io/8GyTce20xPd2XbHSJYpbJU/HvCy6oL?=
+ =?us-ascii?Q?l067gQstijJLmjjl/h90JzyG7R4TozGAAaAgQqy8ABa9GvACSsSJoxVAmFOe?=
+ =?us-ascii?Q?FJxAo7MLVCis9+eGW8XtE1WZXa4FwmJWIgUDmRNUVwjNFZbgGjrsX74J8pGU?=
+ =?us-ascii?Q?m8iRZ5Nxm27Tslo9EJBFI3fUwOVW1blnkoiuZB4H?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9998fd2d-02fd-45c5-e486-08db4c8fd220
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6206.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2023 11:02:52.8864
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2023 11:07:59.4972
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xzOsRL7QIcHg+pqaZGfUpdaXTuR73AmxEgoZaxpuXLdRNHt+bo/B5RpOba8703BRHa+VrI5K7OaJbxKgpLUicA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB7156
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-04_07,2023-05-04_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 spamscore=0
- mlxlogscore=999 phishscore=0 malwarescore=0 adultscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2305040090
-X-Proofpoint-GUID: 2dQa8tYIXJutLPChMAUgPsfdwiSuBqHI
-X-Proofpoint-ORIG-GUID: 2dQa8tYIXJutLPChMAUgPsfdwiSuBqHI
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-MS-Exchange-CrossTenant-UserPrincipalName: fkBctLjVPNMUBazJqApMBnora6rC4fQ1zqUMdKwmT57Vz8F4WcHydk6fV5jpqlpJShPcp2zoU31ZH+Z0kci2Zw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR11MB5990
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -199,83 +171,244 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/05/2023 10:47, Robin Murphy wrote:
->> nit: generally if (!val) is preferred
-
-Hi Robin,
-
+On 2023-05-02 at 13:54:08 +0200, Peter Zijlstra wrote:
+> On Mon, May 01, 2023 at 11:52:47PM +0800, Chen Yu wrote:
 > 
-> Although either way it can only be NULL in cases of memory corruption or 
-> developers making broken changes to the driver, neither of which are 
-> worth pretending to defend against.
-
-If there was some broken code for setting this identifier, then we would 
-just not show the identifier file, rather than show it containing "NULL" 
-- that seems better. However, there may be other implications from that 
-same broken code, so you maintainers and contributors please decide.
-
+> > > So,... I've been poking around with this a bit today and I'm not seeing
+> > > it. On my ancient IVB-EP (2*10*2) with the code as in
+> > > queue/sched/core I get:
+> > > 
+> > > netperf                   NO_SIS_CURRENT          %
+> > >                                      SIS_CURRENT
+> > > ----------------------- -------------------------------
+> > > TCP_SENDFILE-1  : Avg:    42001      40783.4   -2.89898
+> > > TCP_SENDFILE-10 : Avg:    37065.1    36604.4   -1.24295
+> > > TCP_SENDFILE-20 : Avg:    21004.4    21356.9   1.67822
+> > > TCP_SENDFILE-40 : Avg:    7079.93    7231.3    2.13802
+> > > TCP_SENDFILE-80 : Avg:    3582.98    3615.85   0.917393
 > 
->>> +    return attr->mode;
->>> +};
->>> +
->>> +static struct device_attribute arm_cmn_identifier_attr =
->>> +__ATTR(identifier, 0444, arm_cmn_identifier_show, NULL);
->>> +
->>> +static struct attribute *arm_cmn_identifier_attrs[] = {
->>> +    &arm_cmn_identifier_attr.attr,
->>> +    NULL
->>> +};
->>> +
->>> +static struct attribute_group arm_cmn_identifier_attr_group = {
->>> +    .attrs = arm_cmn_identifier_attrs,
->>> +    .is_visible = arm_cmn_identifier_attr_visible
->>> +};
->>> +
->>>   static const struct attribute_group *arm_cmn_attr_groups[] = {
->>>       &arm_cmn_event_attrs_group,
->>>       &arm_cmn_format_attrs_group,
->>>       &arm_cmn_cpumask_attr_group,
->>> +    &arm_cmn_identifier_attr_group,
->>>       NULL
->>>   };
->>> @@ -2241,6 +2273,22 @@ static int arm_cmn600_of_probe(struct 
->>> device_node *np)
->>>       return of_property_read_u32(np, "arm,root-node", &rootnode) ?: 
->>> rootnode;
->>>   }
->>> +const char *arm_cmn_identifier(unsigned long model)
->>> +{
->>> +    switch (model) {
->>> +    case CMN600:
->>> +        return "cmn600";
->>> +    case CMN650:
->>> +        return "cmn650";
->>> +    case CMN700:
->>> +        return "cmn700";
->>> +    case CI700:
->>> +        return "ci700";
->>> +    default:
->>> +        return NULL;
->>> +    }
->>
->> nit: I think that it would be nicer to have this per-model string 
->> stored statically in arm_cmn_acpi_match[].driver_data and 
->> arm_cmn_of_match[].data, so we have a straight lookup
+> > > TCP_STREAM-1    : Avg:    37134.5    35095.4   -5.49112
+> > > TCP_STREAM-10   : Avg:    31260.7    31588.1   1.04732
+> > > TCP_STREAM-20   : Avg:    17996.6    17937.4   -0.328951
+> > > TCP_STREAM-40   : Avg:    7710.4     7790.62   1.04041
+> > > TCP_STREAM-80   : Avg:    2601.51    2903.89   11.6232
 > 
-> Again, I'm not really convinced how useful this coarse per-model scheme 
-> is - for instance, in terms of many events, CMN-600 r3 is closer to 
-> CMN-650 than it is to CMN-600 r1, so what exactly would "CMN-600" mean 
-> to the user?
+> > > TCP_RR-1        : Avg:    81167.8    83541.3   2.92419
+> > > TCP_RR-10       : Avg:    71123.2    69447.9   -2.35549
+> > > TCP_RR-20       : Avg:    50905.4    52157.2   2.45907
+> > > TCP_RR-40       : Avg:    46289.2    46350.7   0.13286
+> > > TCP_RR-80       : Avg:    22024.4    22229.2   0.929878
+> 
+> > > UDP_RR-1        : Avg:    95997.2    96553.3   0.579288
+> > > UDP_RR-10       : Avg:    83878.5    78998.6   -5.81782
+> > > UDP_RR-20       : Avg:    61838.8    62926     1.75812
+> > > UDP_RR-40       : Avg:    56456.1    57115.2   1.16746
+> > > UDP_RR-80       : Avg:    27635.2    27784.8   0.541339
+> 
+> > > UDP_STREAM-1    : Avg:    52808.2    51908.6   -1.70352
+> > > UDP_STREAM-10   : Avg:    43115      43561.2   1.03491
+> > > UDP_STREAM-20   : Avg:    18798.7    20066     6.74142
+> > > UDP_STREAM-40   : Avg:    13070.5    13110.2   0.303737
+> > > UDP_STREAM-80   : Avg:    6248.86    6413.09   2.62816
+> 
+> 
+> > > tbench
+> 
+> > > WA_WEIGHT, WA_BIAS, NO_SIS_CURRENT (aka, mainline)
+> > > 
+> > > Throughput  649.46 MB/sec   2 clients   2 procs  max_latency=0.092 ms
+> > > Throughput 1370.93 MB/sec   5 clients   5 procs  max_latency=0.140 ms
+> > > Throughput 1904.14 MB/sec  10 clients  10 procs  max_latency=0.470 ms
+> > > Throughput 2406.15 MB/sec  20 clients  20 procs  max_latency=0.276 ms
+> > > Throughput 2419.40 MB/sec  40 clients  40 procs  max_latency=0.414 ms
+> > > Throughput 2426.00 MB/sec  80 clients  80 procs  max_latency=1.366 ms
+> > > 
+> > > WA_WEIGHT, WA_BIAS, SIS_CURRENT (aka, with patches on)
+> > > 
+> > > Throughput  646.55 MB/sec   2 clients   2 procs  max_latency=0.104 ms
+> > > Throughput 1361.06 MB/sec   5 clients   5 procs  max_latency=0.100 ms
+> > > Throughput 1889.82 MB/sec  10 clients  10 procs  max_latency=0.154 ms
+> > > Throughput 2406.57 MB/sec  20 clients  20 procs  max_latency=3.667 ms
+> > > Throughput 2318.00 MB/sec  40 clients  40 procs  max_latency=0.390 ms
+> > > Throughput 2384.85 MB/sec  80 clients  80 procs  max_latency=1.371 ms
+> > > 
+> > > 
+> > > So what's going on here? I don't see anything exciting happening at the
+> > > 40 mark. At the same time, I can't seem to reproduce Mike's latency pile
+> > > up either :/
+> > > 
+> > Thank you very much for trying this patch. This patch was found to mainly
+> > benefit system with large number of CPUs in 1 LLC. Previously I tested
+> > it on Sapphire Rapids(2x56C/224T) and Ice Lake Server(2x32C/128T)[1], it
+> > seems to have benefit on them. The benefit seems to come from:
+> > 1. reducing the waker stacking among many CPUs within 1 LLC
+> 
+> I should be seeing that at 10 cores per LLC. And when we look at the
+> tbench results (never the most stable -- let me run a few more of those)
+> it looks like SIS_CURRENT is actually making that worse.
+> 
+> That latency spike at 20 seems stable for me -- and 3ms is rather small,
+> I've seen it up to 11ms (but typical in the 4-6 range). This does not
+> happen with NO_SIS_CURRENT and is a fairly big point against these
+> patches.
+>
+I tried to reproduce the issue on your platform, so I launched tbench with
+nr_thread = 50% on a Ivy Bridge-EP, it seems that I could not reproduce the
+issue(the difference is that the default testing is with perf record enabled).
+ 
+I launched netperf/tbench under 50%/75%/100%/125% on some platforms with
+smaller number of CPUs, including:
+Ivy Bridge-EP, nr_node: 2, nr_cpu: 48
+Ivy Bridge, nr_node: 1, nr_cpu: 4
+Coffee Lake, nr_node: 1, nr_cpu: 12
+Commet Lake, nr_node: 1, nr_cpu: 20
+Kaby Lake, nr_node: 1, nr_cpu: 8
 
-ok, I see, that's what I was asking about in the cmn-700 JSON review; 
-and from what you say, it is not the case that we always have the same 
-events for every revision. So we need a more fine-grained identifier.
+All platforms are tested with cpu freq govenor set to performance to
+get stable result. Each test lasts for 60 seconds.
 
-For DT support, I suppose per-revision compat strings could be added, 
-but I would not be sure what to do about ACPI.
+It seems that per the test result, no obvious netperf/tbench throughput
+regress was detected on these platforms(within 3%), and some platforms
+such as Commet Lake shows some improvement.
 
-BTW, My comment was more about coding style of case a, case b, case c, 
-... case z, does not scale well.
+The tbench.max_latency show improvement/degrading and it seems that
+this latency value is unstable(with/without patch applied).
+I don't know how to interpret this value(should we look at the tail
+latency like schbench) and it seems that the latency variance is another
+issue to be looked into. 
 
-Thanks,
-John
+
+netperf.Throughput_total_tps(higher the better):
+
+Ivy Bridge-EP, nr_node: 2, nr_cpu: 48:
+               NO_SIS_CURRENT             SIS_CURRENT
+               ---------------- ---------------------------
+50%+TCP_RR:    990828           -1.0%     980992
+50%+UDP_RR:    1282489          +1.0%     1295717
+75%+TCP_RR:    935827           +8.9%     1019470
+75%+UDP_RR:    1164074          +11.6%    1298844
+100%+TCP_RR:   1846962          -0.1%     1845311
+100%+UDP_RR:   2557455          -2.3%     2497846
+125%+TCP_RR:   1771652          -1.4%     1747653
+125%+UDP_RR:   2415665          -1.1%     2388459
+
+Ivy Bridge, nr_node: 1, nr_cpu: 4
+              NO_SIS_CURRENT            SIS_CURRENT
+              ---------------- ---------------------------
+50%+TCP_RR:   52697            -1.2%      52088
+50%+UDP_RR:   135397           -0.1%     135315
+75%+TCP_RR:   135613           -0.6%     134777
+75%+UDP_RR:   183439           -0.3%     182853
+100%+TCP_RR:  183255           -1.3%     180859
+100%+UDP_RR:  245836           -0.6%     244345
+125%+TCP_RR:  174957           -2.1%     171258
+125%+UDP_RR:  232509           -1.1%     229868
+
+
+Coffee Lake, nr_node: 1, nr_cpu: 12
+             NO_SIS_CURRENT               SIS_CURRENT
+         ---------------- ---------------------------
+50%+TCP_RR:    429718            -1.2%     424359
+50%+UDP_RR:    536240            +0.1%     536646
+75%+TCP_RR:    450310            -1.2%     444764
+75%+UDP_RR:    538645            -1.0%     532995
+100%+TCP_RR:   774423            -0.3%     771764
+100%+UDP_RR:   971805            -0.3%     969223
+125%+TCP_RR:   720546            +0.6%     724593
+125%+UDP_RR:   911169            +0.2%     912576
+
+Commet Lake, nr_node: 1, nr_cpu: 20
+                NO_SIS_CURRENT              SIS_CURRENT
+                ---------------- ---------------------------
+50%+UDP_RR:     1174505            +4.6%      1228945
+75%+TCP_RR:      833303            +20.2%     1001582
+75%+UDP_RR:     1149171            +13.4%     1303623
+100%+TCP_RR:    1928064            -0.5%      1917500
+125%+TCP_RR:     74389             -0.1%      74304
+125%+UDP_RR:    2564210            -1.1%      2535377
+
+
+Kaby Lake, nr_node: 1, nr_cpu: 8
+                NO_SIS_CURRENT                 SIS_CURRENT
+                ---------------- ---------------------------
+50%+TCP_RR:        303956             -1.7%       298749
+50%+UDP_RR:        382059             -0.8%       379176
+75%+TCP_RR:        368399             -1.5%       362742
+75%+UDP_RR:        459285             -0.3%       458020
+100%+TCP_RR:       544630             -1.1%       538901
+100%+UDP_RR:       684498             -0.6%       680450
+125%+TCP_RR:       514266             +0.0%       514367
+125%+UDP_RR:       645970             +0.2%       647473
+
+
+
+tbench.max_latency(lower the better)
+
+Ivy Bridge-EP, nr_node: 2, nr_cpu: 48:
+                NO_SIS_CURRENT            SIS_CURRENT
+                ---------------- ---------------------------
+50%:           45.31            -26.3%       33.41
+75%:           269.36           -87.5%       33.72
+100%:          274.76           -66.6%       91.85
+125%:          723.34           -49.1%       368.29
+
+Ivy Bridge, nr_node: 1, nr_cpu: 4
+                NO_SIS_CURRENT              SIS_CURRENT
+                ---------------- ---------------------------
+50%:          10.04           -70.5%        2.96
+75%:          10.12           +63.0%        16.49
+100%:         73.97           +148.1%       183.55
+125%:         138.31          -39.9%        83.09
+
+
+Commet Lake, nr_node: 1, nr_cpu: 20
+                NO_SIS_CURRENT              SIS_CURRENT
+                ---------------- ---------------------------
+50%:            10.59            +24.5%      13.18
+75%:            11.53            -0.5%      11.47
+100%:           414.65           -13.9%     356.93
+125%:           411.51           -81.9%      74.56
+
+Coffee Lake, nr_node: 1, nr_cpu: 12
+                NO_SIS_CURRENT              SIS_CURRENT
+                ---------------- ---------------------------
+50%            452.07           -99.5%       2.06
+75%            4.42             +81.2%       8.00
+100%           76.11           -44.7%        42.12
+125%           47.06           +280.6%     179.09
+
+
+Kaby Lake, nr_node: 1, nr_cpu: 8
+                NO_SIS_CURRENT              SIS_CURRENT
+                ---------------- ---------------------------
+50%:               10.52            +0.1%      10.53
+75%:               12.95           +62.1%      20.99
+100%:              25.63          +181.1%      72.05
+125%:              94.05           -17.0%      78.06
+
+> > 2. reducing the C2C overhead within 1 LLC
+> 
+> This is due to how L3 became non-inclusive with Skylake? I can't see
+> that because I don't have anything that recent :/
+>
+I checked it with the colleagues and it seems to not be related to non-inclusive L3
+but related to the number of CPUs. More CPUs makes distances in the die longer,
+which adds to the latency.
+> > So far I did not received performance difference from LKP on desktop
+> > test boxes. Let me queue the full test on some desktops to confirm
+> > if this change has any impact on them.
+> 
+> Right, so I've updated my netperf results above to have a relative
+> difference between NO_SIS_CURRENT and SIS_CURRENT and I see some losses
+> at the low end. For servers that gets compensated at the high end, but
+> desktops tend to not get there much.
+> 
+>
+Since the large CPU number is one major motivation to wakeup
+the task locally, may I have your opinion that is it applicable to add llc_size
+as the factor when deciding whether we should wake up the wakee on current CPU?
+The smaller the llc_size is, the harder the wake will be woken up on current CPU.
+
+
+thanks,
+Chenyu
