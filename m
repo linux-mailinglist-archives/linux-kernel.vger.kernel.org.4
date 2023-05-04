@@ -2,250 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB2596F6C74
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 14:55:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47B2D6F6C77
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 14:56:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230363AbjEDMz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 08:55:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42794 "EHLO
+        id S230480AbjEDM4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 08:56:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230357AbjEDMzX (ORCPT
+        with ESMTP id S230357AbjEDM4V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 08:55:23 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A83D7
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 05:55:22 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f315735514so62020415e9.1
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 05:55:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683204921; x=1685796921;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=TwKH5OHkDV/MpZ9yrdw81ApCoAA4gk5I47srjkhQU+0=;
-        b=YpPw9mHfAJxQ6CjbhpKohzqG56cQCfKAsDGoAtpjQT/Ev9QAxQYnrL4ZV1Askhy9PI
-         T941FhMz6i+3/qDiHy4zFYgu3EIVivdVq7QIyouI2OKNpDAzqG2H4XhR0cd+3FR+yJcw
-         hjBqp7/5UVTKhenkIVvXOYwzXB/HzQJHyif3BM1SWkUolIv+S+e6ddSWctMztZ9tzcWP
-         W4W6beeMjzo4XVjpMQxo0hhE0k3TZFuq9PTu5jBsqSfugZT8LlPCIQHgHIYVKB42VZfs
-         9sjcq+T0ekua36zu4GAL4svoSk8byRqO9AkRxKEDPQZA4IL2jc90PlkTy6FBtxwVK2a4
-         xdVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683204921; x=1685796921;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TwKH5OHkDV/MpZ9yrdw81ApCoAA4gk5I47srjkhQU+0=;
-        b=HLY25x9JHf4LbM4va17vXNq3LjvyQkWtUt7hBgXjyYFHKzt09MBAT1WrM98X16Sv3Y
-         2I5AcLQUR35dU3asxdUTUqu7cX4XTePeTRGPAhfm8i0XNkvZBEz/+NsWQVoxbEILlwbj
-         bmWlZEz/QflqoktbfuNwlsFpdO8PC0In0HJ1jTAw0CP8qI4y7V9HHa4hhO+t27QdF51Y
-         GMeRG1gfSfk2yHPXyLO/6F0IEM4z2e60i9mR5c+1xGui8Ik5N6f0HkyqTddzb6d6NSSi
-         7VZ43zFpJqg/OkrBkQgc422U4fGsDgK64Q4usAaIKsO/WQ81Qocu+cO0TGpiAaHKN8r8
-         ok3g==
-X-Gm-Message-State: AC+VfDwd8TlYIwcFVQMJ+tAicApOTEVoyUD46JEJrG7+xA3NMSnhMNDE
-        NAJValEwup1ORENiVuPyyS36hw==
-X-Google-Smtp-Source: ACHHUZ6CDWxhk+dhSH8qLQE79fBassliV0GQlKPgAAM0MVDziCfBXEKP0mKuYXtpd45JN7ujvYKCxw==
-X-Received: by 2002:a5d:61d1:0:b0:306:2be3:6d40 with SMTP id q17-20020a5d61d1000000b003062be36d40mr2268666wrv.35.1683204920678;
-        Thu, 04 May 2023 05:55:20 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:52fb:80bd:bee3:f741? ([2a01:e0a:982:cbb0:52fb:80bd:bee3:f741])
-        by smtp.gmail.com with ESMTPSA id c11-20020a5d63cb000000b003062cdc6ac5sm11554084wrw.89.2023.05.04.05.55.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 05:55:20 -0700 (PDT)
-Message-ID: <b18a22c0-2cc2-d361-262c-2e5cf802641b@linaro.org>
-Date:   Thu, 4 May 2023 14:55:19 +0200
+        Thu, 4 May 2023 08:56:21 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16CAB59FD;
+        Thu,  4 May 2023 05:56:18 -0700 (PDT)
+Received: from kwepemm600012.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QBtxk3G1xzpSvY;
+        Thu,  4 May 2023 20:52:10 +0800 (CST)
+Received: from [10.174.178.220] (10.174.178.220) by
+ kwepemm600012.china.huawei.com (7.193.23.74) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 4 May 2023 20:56:13 +0800
+Message-ID: <0423d1a9-e707-c94d-9a35-8c4304aa4b35@huawei.com>
+Date:   Thu, 4 May 2023 20:56:12 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 3/6] arm64: dts: qcom: sm8350-hdk: Add QMP & DP to
- SuperSpeed graph
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 0/6] scsi:scsi_debug: Add error injection for single
+ device
 Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20230503-topic-sm8450-graphics-dp-next-v1-0-d1ee9397f2a6@linaro.org>
- <20230503-topic-sm8450-graphics-dp-next-v1-3-d1ee9397f2a6@linaro.org>
- <c985201e-6916-1ad8-4a11-cfc3bc288733@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <c985201e-6916-1ad8-4a11-cfc3bc288733@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+To:     <dgilbert@interlog.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <linfeilong@huawei.com>, <louhongxiang@huawei.com>
+References: <20230428013320.347050-1-haowenchao2@huawei.com>
+ <585941de-3e17-d5aa-311b-17773c6fbf1f@interlog.com>
+From:   "haowenchao (C)" <haowenchao2@huawei.com>
+In-Reply-To: <585941de-3e17-d5aa-311b-17773c6fbf1f@interlog.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.220]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600012.china.huawei.com (7.193.23.74)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/05/2023 08:53, Konrad Dybcio wrote:
-> 
-> 
-> On 3.05.2023 15:10, Neil Armstrong wrote:
->> With support for the QMP combo phy to react to USB Type-C switch events,
->> introduce it as the next hop for the SuperSpeed lanes of the Type-C
->> connector, and connect the output of the DisplayPort controller
->> to the QMP combo phy.
+On 2023/5/3 7:52, Douglas Gilbert wrote:
+> On 2023-04-27 21:33, Wenchao Hao wrote:
+>> The original error injection mechanism was based on scsi_host which
+>> could not inject fault for a single SCSI device.
 >>
->> This allows the TCPM to perform orientation switching of both USB and
->> DisplayPort signals.
+>> This patchset provides the ability to inject errors for a single
+>> SCSI device. Now we supports inject timeout errors, queuecommand
+>> errors, and hostbyte, driverbyte, statusbyte, and sense data for
+>> specific SCSI Command.
 >>
->> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->> ---
->>   arch/arm64/boot/dts/qcom/sm8350-hdk.dts | 74 ++++++++++++++++++++++++++++++++-
->>   1 file changed, 72 insertions(+), 2 deletions(-)
+>> The first two patch add an debugfs interface to add and inquiry single
+>> device's error injection info; the third patch defined how to remove
+>> an injection which has been added. The following 3 patches use the
+>> injection info and generate the related error type.
 >>
->> diff --git a/arch/arm64/boot/dts/qcom/sm8350-hdk.dts b/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
->> index 2ee1b121686a..fa835bdb7408 100644
->> --- a/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
->> +++ b/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
->> @@ -58,7 +58,15 @@ port@1 {
->>   					reg = <1>;
->>   
->>   					pmic_glink_ss_in: endpoint {
->> -						remote-endpoint = <&usb_1_dwc3_ss>;
->> +						remote-endpoint = <&usb_1_qmpphy_out>;
->> +					};
->> +				};
->> +
->> +				port@2 {
->> +					reg = <2>;
->> +
->> +					pmic_glink_sbu: endpoint {
->> +						remote-endpoint = <&fsa4480_sbu_mux>;
->>   					};
->>   				};
->>   			};
->> @@ -326,6 +334,36 @@ zap-shader {
->>   	};
->>   };
->>   
->> +&i2c13 {
->> +	status = "okay";
->> +	clock-frequency = <100000>;
-> Status last
-
-Ack
-
-> 
->> +
->> +	fsa4480@42 {
->> +		compatible = "fcs,fsa4480";
->> +		reg = <0x42>;
->> +
->> +		interrupts-extended = <&tlmm 2 IRQ_TYPE_LEVEL_LOW>;
->> +
->> +		vcc-supply = <&vreg_bob>;
->> +		mode-switch;
->> +		orientation-switch;
->> +		svid = /bits/ 16 <0xff01>;
->> +
->> +		ports {
->> +			#address-cells = <1>;
->> +			#size-cells = <0>;
->> +
->> +			port@0 {
->> +				reg = <0>;
->> +
->> +				fsa4480_sbu_mux: endpoint {
->> +					remote-endpoint = <&pmic_glink_sbu>;
->> +				};
->> +			};
->> +		};
->> +	};
->> +};
->> +
->>   &i2c15 {
->>   	clock-frequency = <400000>;
->>   	status = "okay";
->> @@ -370,6 +408,20 @@ &mdss {
->>   	status = "okay";
->>   };
->>   
->> +&mdss_dp {
->> +	status = "okay";
->> +
->> +	ports {
->> +		port@1 {
->> +			reg = <1>;
-> missing newline
-> 
->> +			mdss_dp0_out: endpoint {
->> +				data-lanes = <0 1>;
->> +				remote-endpoint = <&usb_1_qmpphy_dp_in>;
->> +			};
->> +		};
->> +	};
->> +};
->> +
->>   &mdss_mdp {
->>   	status = "okay";
->>   };
->> @@ -416,6 +468,10 @@ &qupv3_id_0 {
->>   	status = "okay";
->>   };
->>   
->> +&qupv3_id_1 {
->> +	status = "okay";
->> +};
->> +
->>   &qupv3_id_2 {
->>   	status = "okay";
->>   };
->> @@ -716,7 +772,7 @@ &usb_1_dwc3_hs {
->>   };
->>   
->>   &usb_1_dwc3_ss {
->> -	remote-endpoint = <&pmic_glink_ss_in>;
->> +	remote-endpoint = <&usb_1_qmpphy_usb_ss_in>;
->>   };
->>   
->>   &usb_1_hsphy {
->> @@ -732,6 +788,20 @@ &usb_1_qmpphy {
->>   
->>   	vdda-phy-supply = <&vreg_l6b_1p2>;
->>   	vdda-pll-supply = <&vreg_l1b_0p88>;
->> +
->> +	orientation-switch;
-> this is a common property which will/should be ignored if no
-> usbc is present
-
-So, do you mean it should be in the common dtsi ? I don't see why since
-it's only true if there's an USB-C connector
-
-> 
->> +};
->> +
->> +&usb_1_qmpphy_out {
->> +	remote-endpoint = <&pmic_glink_ss_in>;
->> +};
->> +
->> +&usb_1_qmpphy_usb_ss_in {
->> +	remote-endpoint = <&usb_1_dwc3_ss>;
->> +};
->> +
->> +&usb_1_qmpphy_dp_in {
->> +	remote-endpoint = <&mdss_dp0_out>;
-> 'd' < 'o' < 'u'
-Exact...
-
-> 
-> with that fixed
-> 
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> 
-> Konrad
->>   };
->>   
->>   &usb_2 {
+>> V2:
+>>    - Using debugfs rather than sysfs attribute interface to manage error
 >>
+>> Wenchao Hao (6):
+>>    scsi:scsi_debug: create scsi_debug directory in the debugfs filesystem
+>>    scsi:scsi_debug: Add interface to manage single device's error inject
+>>    scsi:scsi_debug: Define grammar to remove added error injection
+>>    scsi:scsi_debug: timeout command if the error is injected
+>>    scsi:scsi_debug: Return failed value if the error is injected
+>>    scsi:scsi_debug: set command's result and sense data if the error is
+>>      injected
+>>
+>>   drivers/scsi/scsi_debug.c | 318 ++++++++++++++++++++++++++++++++++++++
+>>   1 file changed, 318 insertions(+)
+> 
+> Been playing around with this patchset and it seems to work as expected. Took me
+> a while to work my way through interface description at the beginning of
+>    [PATCH v2 2/6] scsi:scsi_debug: Add interface to manage single device's error inject
+> 
+> so I cut and paste it into my scsi_debug.html page and did some work on it, see:
+>     https://doug-gilbert.github.io/scsi_debug.html
+> 
+> There is a new chapter titled: Per device error injection
+> Kept the ASCII art so it could be ported back to [PATCH v2 2/6]'s description
+> if Wenchao is agreeable.
+> 
 
+Thank you a lot, I would update the patch's description in next version.
+
+> So for the whole series:
+>    Acked-by: Douglas Gilbert <dgilbert@interlog.com>
+> 
+> 
+> One suggestion for later work: perhaps the Command opcode field could be
+> expanded to: x8[,x16] so optionally a Service Action (in hex) could be
+> given (e.g. '9e,10' for the READ CAPACITY (16) command).
+> 
+> Doug Gilbert
+> 
+> 
+
+Would you help me to check if my understanding is correct:
+
+Define Command opcode as x16, split this 16bit as two parts, one for actually
+SCSI Command opcode,, another one for Service Action. If so, it would make this
+interface complex to use. I want to make it easy and we do not need to calculate
+data.
+
+I think there are other methods to support specify a Service Action:
+
+method1. Redefine the General rule format and append Service Action to SCSI
+    command opcode as following:
+
+   +--------+------+-------------------------------------------------------+
+   | Column | Type | Description                                           |
+   +--------+------+-------------------------------------------------------+
+   |   1    |  u8  | Error code                                            |
+   |        |      |  0: timeout SCSI command                              |
+   |        |      |  1: fail queuecommand, make queuecommand return       |
+   |        |      |     given value                                       |
+   |        |      |  2: fail command, finish command with SCSI status,    |
+   |        |      |     sense key and ASC/ASCQ values                     |
+   +--------+------+-------------------------------------------------------+
+   |   2    |  s32 | Error count                                           |
+   |        |      |  0: this rule will be ignored                         |
+   |        |      |  positive: the rule will always take effect           |
+   |        |      |  negative: the rule takes effect n times where -n is  |
+   |        |      |            the value given. Ignored after n times     |
+   +--------+------+-------------------------------------------------------+
+   |   3    |  x8  | SCSI command opcode, 0xff for all commands            |
+   +--------+------+-------------------------------------------------------+
+   |   4    |  x8  | specify a Service Action, 0xff for all commands       |
+   +--------+------+-------------------------------------------------------+
+   |  ...   |  xxx | Error type specific fields                            |
+   +--------+------+-------------------------------------------------------+
+
+method2. define new Error code for commands which need a Service Action,
+    for example: define Error code 3 as the following format to timeout a
+    command commands which need a Service Action:
+
+   +--------+------+-------------------------------------------------------+
+   | Column | Type | Description                                           |
+   +--------+------+-------------------------------------------------------+
+   |   1    |  u8  | Fix to 3                                              |
+   +--------+------+-------------------------------------------------------+
+   |   2    |  s32 | Error count                                           |
+   |        |      |  0: this rule will be ignored                         |
+   |        |      |  positive: the rule will always take effect           |
+   |        |      |  negative: the rule takes effect n times where -n is  |
+   |        |      |            the value given. Ignored after n times     |
+   +--------+------+-------------------------------------------------------+
+   |   3    |  x8  | SCSI command opcode, 0xff for all commands            |
+   +--------+------+-------------------------------------------------------+
+   |   4    |  x8  | specify a Service Action, 0xff for all commands       |
+   +--------+------+-------------------------------------------------------+
+
+   We can inject timeout error for the READ CAPACITY (16) command with following:
+   echo "3 -10 0x9e 0x10" > ${error}
