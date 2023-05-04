@@ -2,44 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B75036F741E
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:48:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4C7B6F73B1
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:45:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231287AbjEDTsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 15:48:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49766 "EHLO
+        id S230105AbjEDTpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 15:45:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231206AbjEDTrj (ORCPT
+        with ESMTP id S230302AbjEDTor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 15:47:39 -0400
+        Thu, 4 May 2023 15:44:47 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 614B131B2C;
-        Thu,  4 May 2023 12:45:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CF4BA250;
+        Thu,  4 May 2023 12:43:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 433DA63739;
-        Thu,  4 May 2023 19:43:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 163EEC433D2;
-        Thu,  4 May 2023 19:43:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C2AD6373B;
+        Thu,  4 May 2023 19:43:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE249C433A1;
+        Thu,  4 May 2023 19:43:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683229421;
-        bh=VZY5km8ttGA4lFXP4uir4dWru8YDf4d/uHraHcdDKFw=;
+        s=k20201202; t=1683229425;
+        bh=rODhLvb/3BHH0R7bwoUoNz3H/GtIGxQi5NfMdYLCNc8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=C/CohPXAY3Q+HAgb3aV5c7+7hwkdHd0Fuu6x8ObPrhSbxoVyN1utRuZ1hnaEukBcr
-         Ffo9cqLwiMdK1wJfQp9Tb/b6iSgm6mp9xMNAAkNTUNUROj0PJtlKcc0hMwrT1YUKBY
-         yJn5b5PWaCNr4IK6JOvAhh39oX5438jzUhHqxPSXy4yfF+bK6y1Ta1J7fvurFb4iH1
-         e6fCm04k8/i4iMjrz5TDJwL6BcFDr7gfcKdQSTlRQVekGgIAW9fqUhiHMEYwuymPms
-         9CAjB030EZ0TGlpFhPiqHhfkwh7toSmnjr5OBrLXhHgm9j/BYr1Bzvf6E+WhYXfK7s
-         fVteOUgDi+DGw==
+        b=GjLV8AcMVCqVwnjlNR1JjV/xCkKw0/ebyOnLggpZjAUUkx1mdfKwkfiLrCao2q2M1
+         LPDEdvFXEBQJMZ6dk/4A92bpNx/4s7VFlAVeBrdtRsZv4b6oLvyy6cSM3c9uY9JQH3
+         U3ggxlAAEf59Yj2lxgLZ3R7M25mzwlToVHSfgXe5vuLNktvwO99JMDXXfFG7e2KVKc
+         tyXeh2cnT8czyrMiRAdOTeDGU2wYiMUdEHeJCjPI21F3CeSmQ58G6r1hTBvHUkaPkV
+         biGo0rN1zmaMcGJD3bdKqOhiFr7X/zja9JLy79z+evoTi2vQd+OwctlsK43LQhX0ji
+         Ewg1+fe+hpqjg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-f2fs-devel@lists.sourceforge.net
-Subject: [PATCH AUTOSEL 6.3 43/59] f2fs: relax sanity check if checkpoint is corrupted
-Date:   Thu,  4 May 2023 15:41:26 -0400
-Message-Id: <20230504194142.3805425-43-sashal@kernel.org>
+Cc:     Chaitanya Kulkarni <kch@nvidia.com>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Ming Lei <ming.lei@redhat.com>,
+        Nitesh Shetty <nj.shetty@samsung.com>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>,
+        bvanassche@acm.org, damien.lemoal@opensource.wdc.com,
+        johannes.thumshirn@wdc.com, vincent.fu@samsung.com,
+        christophe.jaillet@wanadoo.fr, akinobu.mita@gmail.com,
+        shinichiro.kawasaki@wdc.com, linux-block@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.3 44/59] null_blk: Always check queue mode setting from configfs
+Date:   Thu,  4 May 2023 15:41:27 -0400
+Message-Id: <20230504194142.3805425-44-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230504194142.3805425-1-sashal@kernel.org>
 References: <20230504194142.3805425-1-sashal@kernel.org>
@@ -49,113 +55,93 @@ X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jaegeuk Kim <jaegeuk@kernel.org>
+From: Chaitanya Kulkarni <kch@nvidia.com>
 
-[ Upstream commit bd90c5cd339a9d7cdc609d2d6310b80dc697070d ]
+[ Upstream commit 63f8793ee60513a09f110ea460a6ff2c33811cdb ]
 
-1. extent_cache
- - let's drop the largest extent_cache
-2. invalidate_block
- - don't show the warnings
+Make sure to check device queue mode in the null_validate_conf() and
+return error for NULL_Q_RQ as we don't allow legacy I/O path, without
+this patch we get OOPs when queue mode is set to 1 from configfs,
+following are repro steps :-
 
-Reviewed-by: Chao Yu <chao@kernel.org>
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+modprobe null_blk nr_devices=0
+mkdir config/nullb/nullb0
+echo 1 > config/nullb/nullb0/memory_backed
+echo 4096 > config/nullb/nullb0/blocksize
+echo 20480 > config/nullb/nullb0/size
+echo 1 > config/nullb/nullb0/queue_mode
+echo 1 > config/nullb/nullb0/power
+
+Entering kdb (current=0xffff88810acdd080, pid 2372) on processor 42 Oops: (null)
+due to oops @ 0xffffffffc041c329
+CPU: 42 PID: 2372 Comm: sh Tainted: G           O     N 6.3.0-rc5lblk+ #5
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
+RIP: 0010:null_add_dev.part.0+0xd9/0x720 [null_blk]
+Code: 01 00 00 85 d2 0f 85 a1 03 00 00 48 83 bb 08 01 00 00 00 0f 85 f7 03 00 00 80 bb 62 01 00 00 00 48 8b 75 20 0f 85 6d 02 00 00 <48> 89 6e 60 48 8b 75 20 bf 06 00 00 00 e8 f5 37 2c c1 48 8b 75 20
+RSP: 0018:ffffc900052cbde0 EFLAGS: 00010246
+RAX: 0000000000000001 RBX: ffff88811084d800 RCX: 0000000000000001
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff888100042e00
+RBP: ffff8881053d8200 R08: ffffc900052cbd68 R09: ffff888105db2000
+R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000002
+R13: ffff888104765200 R14: ffff88810eec1748 R15: ffff88810eec1740
+FS:  00007fd445fd1740(0000) GS:ffff8897dfc80000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000060 CR3: 0000000166a00000 CR4: 0000000000350ee0
+DR0: ffffffff8437a488 DR1: ffffffff8437a489 DR2: ffffffff8437a48a
+DR3: ffffffff8437a48b DR6: 00000000ffff0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ nullb_device_power_store+0xd1/0x120 [null_blk]
+ configfs_write_iter+0xb4/0x120
+ vfs_write+0x2ba/0x3c0
+ ksys_write+0x5f/0xe0
+ do_syscall_64+0x3b/0x90
+ entry_SYSCALL_64_after_hwframe+0x72/0xdc
+RIP: 0033:0x7fd4460c57a7
+Code: 0d 00 f7 d8 64 89 02 48 c7 c0 ff ff ff ff eb b7 0f 1f 00 f3 0f 1e fa 64 8b 04 25 18 00 00 00 85 c0 75 10 b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 51 c3 48 83 ec 28 48 89 54 24 18 48 89 74 24
+RSP: 002b:00007ffd3792a4a8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007fd4460c57a7
+RDX: 0000000000000002 RSI: 000055b43c02e4c0 RDI: 0000000000000001
+RBP: 000055b43c02e4c0 R08: 000000000000000a R09: 00007fd44615b4e0
+R10: 00007fd44615b3e0 R11: 0000000000000246 R12: 0000000000000002
+R13: 00007fd446198520 R14: 0000000000000002 R15: 00007fd446198700
+ </TASK>
+
+Signed-off-by: Chaitanya Kulkarni <kch@nvidia.com>
+Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
+Reviewed-by: Ming Lei <ming.lei@redhat.com>
+Reviewed-by: Nitesh Shetty <nj.shetty@samsung.com>
+Link: https://lore.kernel.org/r/20230416220339.43845-1-kch@nvidia.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/f2fs/checkpoint.c   | 10 ++++++++++
- fs/f2fs/data.c         |  4 ++++
- fs/f2fs/extent_cache.c | 22 +++++++++++++++-------
- 3 files changed, 29 insertions(+), 7 deletions(-)
+ drivers/block/null_blk/main.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
-index 96af24c394c39..d4c862ccd1f72 100644
---- a/fs/f2fs/checkpoint.c
-+++ b/fs/f2fs/checkpoint.c
-@@ -152,6 +152,11 @@ static bool __is_bitmap_valid(struct f2fs_sb_info *sbi, block_t blkaddr,
- 	se = get_seg_entry(sbi, segno);
+diff --git a/drivers/block/null_blk/main.c b/drivers/block/null_blk/main.c
+index 9e6b032c8ecc2..14491952047f5 100644
+--- a/drivers/block/null_blk/main.c
++++ b/drivers/block/null_blk/main.c
+@@ -1964,6 +1964,11 @@ static int null_init_tag_set(struct nullb *nullb, struct blk_mq_tag_set *set)
  
- 	exist = f2fs_test_bit(offset, se->cur_valid_map);
-+
-+	/* skip data, if we already have an error in checkpoint. */
-+	if (unlikely(f2fs_cp_error(sbi)))
-+		return exist;
-+
- 	if (exist && type == DATA_GENERIC_ENHANCE_UPDATE) {
- 		f2fs_err(sbi, "Inconsistent error blkaddr:%u, sit bitmap:%d",
- 			 blkaddr, exist);
-@@ -202,6 +207,11 @@ bool f2fs_is_valid_blkaddr(struct f2fs_sb_info *sbi,
- 	case DATA_GENERIC_ENHANCE_UPDATE:
- 		if (unlikely(blkaddr >= MAX_BLKADDR(sbi) ||
- 				blkaddr < MAIN_BLKADDR(sbi))) {
-+
-+			/* Skip to emit an error message. */
-+			if (unlikely(f2fs_cp_error(sbi)))
-+				return false;
-+
- 			f2fs_warn(sbi, "access invalid blkaddr:%u",
- 				  blkaddr);
- 			set_sbi_flag(sbi, SBI_NEED_FSCK);
-diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
-index 4677656215db9..30c15acc81dbb 100644
---- a/fs/f2fs/data.c
-+++ b/fs/f2fs/data.c
-@@ -2235,6 +2235,10 @@ int f2fs_read_multi_pages(struct compress_ctx *cc, struct bio **bio_ret,
- 	if (ret)
- 		goto out;
- 
-+	if (unlikely(f2fs_cp_error(sbi))) {
-+		ret = -EIO;
-+		goto out_put_dnode;
-+	}
- 	f2fs_bug_on(sbi, dn.data_blkaddr != COMPRESS_ADDR);
- 
- skip_reading_dnode:
-diff --git a/fs/f2fs/extent_cache.c b/fs/f2fs/extent_cache.c
-index 28b12553f2b34..bd02f0260db9b 100644
---- a/fs/f2fs/extent_cache.c
-+++ b/fs/f2fs/extent_cache.c
-@@ -23,18 +23,26 @@ bool sanity_check_extent_cache(struct inode *inode)
+ static int null_validate_conf(struct nullb_device *dev)
  {
- 	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
- 	struct f2fs_inode_info *fi = F2FS_I(inode);
-+	struct extent_tree *et = fi->extent_tree[EX_READ];
- 	struct extent_info *ei;
- 
--	if (!fi->extent_tree[EX_READ])
-+	if (!et)
-+		return true;
-+
-+	ei = &et->largest;
-+	if (!ei->len)
- 		return true;
- 
--	ei = &fi->extent_tree[EX_READ]->largest;
-+	/* Let's drop, if checkpoint got corrupted. */
-+	if (is_set_ckpt_flags(sbi, CP_ERROR_FLAG)) {
-+		ei->len = 0;
-+		et->largest_updated = true;
-+		return true;
++	if (dev->queue_mode == NULL_Q_RQ) {
++		pr_err("legacy IO path is no longer available\n");
++		return -EINVAL;
 +	}
++
+ 	dev->blocksize = round_down(dev->blocksize, 512);
+ 	dev->blocksize = clamp_t(unsigned int, dev->blocksize, 512, 4096);
  
--	if (ei->len &&
--		(!f2fs_is_valid_blkaddr(sbi, ei->blk,
--					DATA_GENERIC_ENHANCE) ||
--		!f2fs_is_valid_blkaddr(sbi, ei->blk + ei->len - 1,
--					DATA_GENERIC_ENHANCE))) {
-+	if (!f2fs_is_valid_blkaddr(sbi, ei->blk, DATA_GENERIC_ENHANCE) ||
-+	    !f2fs_is_valid_blkaddr(sbi, ei->blk + ei->len - 1,
-+					DATA_GENERIC_ENHANCE)) {
- 		set_sbi_flag(sbi, SBI_NEED_FSCK);
- 		f2fs_warn(sbi, "%s: inode (ino=%lx) extent info [%u, %u, %u] is incorrect, run fsck to fix",
- 			  __func__, inode->i_ino,
 -- 
 2.39.2
 
