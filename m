@@ -2,142 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 386D96F6F75
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 17:56:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E336F6C91
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 15:07:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231297AbjEDP4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 11:56:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34366 "EHLO
+        id S230183AbjEDNHD convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 4 May 2023 09:07:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbjEDPz7 (ORCPT
+        with ESMTP id S230345AbjEDNGz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 11:55:59 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8A349CF;
-        Thu,  4 May 2023 08:55:58 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 1BF7D1FD7E;
-        Thu,  4 May 2023 15:55:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1683215757; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Hs+BLfN/0kNjEK2oUqlUv453FE71ldsqaBdWU5OoWZo=;
-        b=IULcFMzhZk2/u3IGIBLKjmfecbiZdNWFBMDe21BltjDT2hKk2qpnRs+9+Z2i50HzOG3uWY
-        rIvlC54YVJaa5/G9wtDByFpEctWCEmOkiHzbUxK+fwxid4hJmwFcm1wS8hyRRh/O3GJAz9
-        mcvGKcqtv+zjLI+tOZmzXQnOqUWkmnk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1683215757;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Hs+BLfN/0kNjEK2oUqlUv453FE71ldsqaBdWU5OoWZo=;
-        b=PJBKliX3YTxaHWg2wjYFrF5cfHLpLkaeDlTEYUJakGRbqJW16QM61U/JfUF6Fdm6xoQ6Df
-        Tqs1ezMWlP87uTDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0D44813444;
-        Thu,  4 May 2023 15:55:57 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id f3YpA43VU2RHMgAAMHmgww
-        (envelope-from <jack@suse.cz>); Thu, 04 May 2023 15:55:57 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 5E8FFA0722; Thu,  4 May 2023 17:55:56 +0200 (CEST)
-Date:   Thu, 4 May 2023 17:55:56 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Christoph Hellwig <hch@lst.de>, Ilya Dryomov <idryomov@gmail.com>,
-        Jan Kara <jack@suse.cz>,
-        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
-        Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: always respect QUEUE_FLAG_STABLE_WRITES on the block
- device
-Message-ID: <20230504155556.t6byee6shgb27pw5@quack3>
-References: <20230504105624.9789-1-idryomov@gmail.com>
- <20230504135515.GA17048@lst.de>
- <ZFO+R0Ud6Yx546Tc@casper.infradead.org>
+        Thu, 4 May 2023 09:06:55 -0400
+Received: from mail.saludzona6.gob.ec (mail.saludzona6.gob.ec [191.100.30.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25BC06EA1
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 06:06:55 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.saludzona6.gob.ec (Postfix) with ESMTP id CBDE62FBD868;
+        Thu,  4 May 2023 07:54:58 -0500 (-05)
+Received: from mail.saludzona6.gob.ec ([127.0.0.1])
+        by localhost (mail.saludzona6.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id KW4v2wiymE76; Thu,  4 May 2023 07:54:58 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.saludzona6.gob.ec (Postfix) with ESMTP id 656B82F6D04D;
+        Thu,  4 May 2023 07:54:58 -0500 (-05)
+X-Virus-Scanned: amavisd-new at saludzona6.gob.ec
+Received: from mail.saludzona6.gob.ec ([127.0.0.1])
+        by localhost (mail.saludzona6.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 63P0SBFeVVAM; Thu,  4 May 2023 07:54:58 -0500 (-05)
+Received: from [23.146.243.48] (unknown [23.146.243.48])
+        by mail.saludzona6.gob.ec (Postfix) with ESMTPSA id 966BC2F35A6E;
+        Thu,  4 May 2023 07:54:50 -0500 (-05)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZFO+R0Ud6Yx546Tc@casper.infradead.org>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: =?utf-8?q?verificaci=C3=B3n_/_actualizaci=C3=B3n?=
+To:     Recipients <delia.chacha@saludzona6.gob.ec>
+From:   "@zimbra" <delia.chacha@saludzona6.gob.ec>
+Date:   Thu, 04 May 2023 08:57:43 -0700
+Reply-To: webmasterzimbra1@gmail.com
+Message-Id: <20230504125450.966BC2F35A6E@mail.saludzona6.gob.ec>
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 04-05-23 15:16:39, Matthew Wilcox wrote:
-> On Thu, May 04, 2023 at 03:55:15PM +0200, Christoph Hellwig wrote:
-> > On Thu, May 04, 2023 at 12:56:24PM +0200, Ilya Dryomov wrote:
-> > > Commit 1cb039f3dc16 ("bdi: replace BDI_CAP_STABLE_WRITES with a queue
-> > > and a sb flag") introduced a regression for the raw block device use
-> > > case.  Capturing QUEUE_FLAG_STABLE_WRITES flag in set_bdev_super() has
-> > > the effect of respecting it only when there is a filesystem mounted on
-> > > top of the block device.  If a filesystem is not mounted, block devices
-> > > that do integrity checking return sporadic checksum errors.
-> > 
-> > With "If a file system is not mounted" you want to say "when accessing
-> > a block device directly" here, right?  The two are not exclusive..
-> > 
-> > > Additionally, this commit made the corresponding sysfs knob writeable
-> > > for debugging purposes.  However, because QUEUE_FLAG_STABLE_WRITES flag
-> > > is captured when the filesystem is mounted and isn't consulted after
-> > > that anywhere outside of swap code, changing it doesn't take immediate
-> > > effect even though dumping the knob shows the new value.  With no way
-> > > to dump SB_I_STABLE_WRITES flag, this is needlessly confusing.
-> > 
-> > But very much intentional.  s_bdev often is not the only device
-> > in a file system, and we should never reference if from core
-> > helpers.
-> > 
-> > So I think we should go with something like this:
-> > 
-> > diff --git a/mm/page-writeback.c b/mm/page-writeback.c
-> > index db794399900734..aa36cc2a4530c1 100644
-> > --- a/mm/page-writeback.c
-> > +++ b/mm/page-writeback.c
-> > @@ -3129,7 +3129,11 @@ EXPORT_SYMBOL_GPL(folio_wait_writeback_killable);
-> >   */
-> >  void folio_wait_stable(struct folio *folio)
-> >  {
-> > -	if (folio_inode(folio)->i_sb->s_iflags & SB_I_STABLE_WRITES)
-> > +	struct inode *inode = folio_inode(folio);
-> > +	struct super_block *sb = inode->i_sb;
-> > +
-> > +	if ((sb->s_iflags & SB_I_STABLE_WRITES) ||
-> > +	    (sb_is_blkdev_sb(sb) && bdev_stable_writes(I_BDEV(inode))))
-> >  		folio_wait_writeback(folio);
-> >  }
-> >  EXPORT_SYMBOL_GPL(folio_wait_stable);
-> 
-> I hate both of these patches ;-)  What we should do is add
-> AS_STABLE_WRITES, have the appropriate places call
-> mapping_set_stable_writes() and then folio_wait_stable() becomes
-> 
-> 	if (mapping_test_stable_writes(folio->mapping))
-> 		folio_wait_writeback(folio);
-> 
-> and we remove all the dereferences (mapping->host->i_sb->s_iflags, plus
-> whatever else is going on there)
+Su cuenta no ha pasado por el proceso de verificación / actualización. Los titulares de cuentas deben actualizar sus cuentas dentro de los 5 días hábiles posteriores a la recepción de este aviso. El incumplimiento de este aviso dentro de la fecha límite puede no ser capaz de enviar o recibir todos los mensajes y el propietario correrá el riesgo de perder su cuenta.
 
-For bdev address_space that's easy but what Ilya also mentioned is a
-problem when 'stable_write' flag gets toggled on the device and in that
-case having to propagate the flag update to all the address_space
-structures is a nightmare...
-
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Confirme los detalles de la cuenta a continuación.
+_____________________________________
+1. Nombre y apellido:
+2. Correo electrónico completo en:
+3. Nombre de usuario:
+4. Contraseña:
+5. Vuelva a escribir la contraseña:
+_____________________________________
+ 
+NOTA !!! Si no actualiza su cuenta, su cuenta se eliminará automáticamente de nuestro sistema.
+ 
+Nos disculpamos por cualquier inconveniente causado.
+ 
+Sinceramente
+Atención al cliente
+Equipo de soporte técnico de Zimbra.
+ 
+Copyright © 2005-2023 Synacor, Inc. Todos los derechos reservados
