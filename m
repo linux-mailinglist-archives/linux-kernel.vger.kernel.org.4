@@ -2,157 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91A0A6F774D
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 22:44:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 253E96F765E
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 22:06:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230451AbjEDUol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 16:44:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59472 "EHLO
+        id S232810AbjEDUGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 16:06:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbjEDUo0 (ORCPT
+        with ESMTP id S232676AbjEDUE6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 16:44:26 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD01F156B3;
-        Thu,  4 May 2023 13:41:55 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 344IoB8M030937;
-        Thu, 4 May 2023 19:51:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=D4M4QD6H1lmheSyi2aCFcOLpyZrI65k3TtxfaMceEMw=;
- b=SYxckmWYMEAN1TchxCyi88vmHj1tPM9ndGp8vULY92Dotvf6PZ9AmX4hBYG3dRyVzCJd
- ExlBA5wlO7kDxRD+fy/VW2JgncqC3Vk3Ivz1BjdjQUHioAybFHeSbZ7vgm8BBVGIOfbd
- iNZ0Bpem6zqpXwaPW4KtUBEUURvym9k55xi19GoJ+iMWR6uMH5mHZyYT/qRDfZBAM6dc
- 6wChLT3ONGW6L/tQWQ8bM0PoeyEMiApYUCOTAzBlp0R+XeMV9hayaSM5k57UKZulIgL6
- vWZ2wRnSmc70z5edsDIxXrXnMgkD29EsvXLQSbRi4rqXYMIzF905loRqCgXSj5Sb58i4 Bw== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qc5bn2389-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 04 May 2023 19:51:00 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 344Jox65027354
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 4 May 2023 19:50:59 GMT
-Received: from [10.134.70.142] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 4 May 2023
- 12:50:58 -0700
-Message-ID: <9011a078-9962-b3de-6427-b9114fcd0cf4@quicinc.com>
-Date:   Thu, 4 May 2023 12:50:57 -0700
+        Thu, 4 May 2023 16:04:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF5C18DFA;
+        Thu,  4 May 2023 12:52:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 994A6637DA;
+        Thu,  4 May 2023 19:51:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B151C433D2;
+        Thu,  4 May 2023 19:51:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683229896;
+        bh=EpX8dYWzzBkFPU4C9X/oMe4eOGMAIl0hajFRUerPNVk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=apbTNKqTegwBh7fFgv4ZPOwEdZqM+fZWnIHmH2DyfIEB4C9IigIBxyJt16qrKYhdY
+         qQvndTHN5B54hlGQgwn1CD1NKC/VAOjNlffn45Q3IvuFHKjrKCOfr6P+dPWDEpQtOB
+         RQ5s5rtryVz6dsKZCHxQqbnBa3AwyHiYybPy3JnZ3HAm7dk4stwZ1AjiDzDO2xaQ8A
+         ZkFh7syqvfa85mbSWihAQ2mDztX/VSAMSnbQQZjoluEZaV1atc52COtoRP518GbeFn
+         2TIFZvMytvwYodx5JPik+6a9fGje0owalZHEjdBy+IPUbxgxhrJZJMXUHuMrjfRlZr
+         uVwrtvTgR49qw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Hector Martin <marcan@marcan.st>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Julian Calaby <julian.calaby@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>,
+        aspriel@gmail.com, franky.lin@broadcom.com,
+        hante.meuleman@broadcom.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        rmk+kernel@armlinux.org.uk, wright.feng@cypress.com,
+        linux-wireless@vger.kernel.org,
+        brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 01/13] wifi: brcmfmac: pcie: Provide a buffer of random bytes to the device
+Date:   Thu,  4 May 2023 15:51:18 -0400
+Message-Id: <20230504195132.3808946-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v5 3/7] drm/msm/dpu: add DPU_PINGPONG_DSC bits into PP_BLK
- and PP_BLK_TE marcos
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-CC:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1683218805-23419-1-git-send-email-quic_khsieh@quicinc.com>
- <1683218805-23419-4-git-send-email-quic_khsieh@quicinc.com>
- <ljt5mp4ew5lcrrrdd7xyof3jv3friafbmr3im35ddwxjc42ekh@toez7xfdreg2>
- <CAA8EJpreM9i3DUp+93K7p14f_tNMy-m+C-WdyN5_drmmkGV66g@mail.gmail.com>
- <u7hlzltevx675gfg4w6emmeceo6nj76taqeecsor6iqsi3hmki@lg43y65m6chz>
- <11ef769a-5089-57d4-db87-4c5766d98206@quicinc.com>
- <6qg25ffuq6xcfz3vuqm5lguspihjospctjclxmwyu2ifau4p7b@txywjmir7lg5>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <6qg25ffuq6xcfz3vuqm5lguspihjospctjclxmwyu2ifau4p7b@txywjmir7lg5>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 8csjyWW-JJi7M0JB-jbytW4OfO1wRNVV
-X-Proofpoint-GUID: 8csjyWW-JJi7M0JB-jbytW4OfO1wRNVV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-04_13,2023-05-04_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
- suspectscore=0 mlxlogscore=999 clxscore=1015 priorityscore=1501
- malwarescore=0 lowpriorityscore=0 bulkscore=0 phishscore=0 spamscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2305040160
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Hector Martin <marcan@marcan.st>
 
+[ Upstream commit 91918ce88d9fef408bb12c46a27c73d79b604c20 ]
 
-On 5/4/2023 12:36 PM, Marijn Suijten wrote:
-> On 2023-05-04 11:25:44, Abhinav Kumar wrote:
-> <snip>
->>> Sure, if you really prefer a split I'd go for two patches:
->>> 1. Add the flag to the enum and catalog;
->>> 2. Add the ops guard (functional change).
->>>
->>> Then don't forget to reword the commit message, following the guidelines
->>> below and the suggestion for 2/7.
->>>
->>> - Marijn
->>
->> Plan sounds good to me.
->>
->> Marijn, we will wait for a couple of days to post the next rev but would
->> be hard more than that as we need to pick up other things which are
->> pending on top of this. Hence would appreciate if you can finish reviews
->> by then.
-> 
-> It depends on how many more revisions are needed after that, and not all
-> patches in this series have an r-b just yet.  Given the amount of review
-> comments that are still trickling in (also on patches that already have
-> maintainer r-b) I don't think we're quite there to start thinging about
-> picking this up in drm-msm just yet.  I doubt anyone wants a repeat of
-> the original DSC series, which went through many review rounds yet still
-> required multiple series of bugfixes (some of which were pointed out and
-> ignored in review) to be brought to a working state.  But the split
-> across topics per series already makes this a lot less likely, many
-> thanks for that.
-> 
+Newer Apple firmwares on chipsets without a hardware RNG require the
+host to provide a buffer of 256 random bytes to the device on
+initialization. This buffer is present immediately before NVRAM,
+suffixed by a footer containing a magic number and the buffer length.
 
-I think the outstanding comments shouldnt last more than 1-2 revs more 
-on this one as its mostly due to multiple patches on the list touching 
-catalog at the same time. I have been monitoring the comments closely 
-even though I dont respond to all of them.
+This won't affect chips/firmwares that do not use this feature, so do it
+unconditionally for all Apple platforms (those with an Apple OTP).
 
-One of the major reasons of the number of issues with DSC 1.1 was QC 
-didn't really have the devices or panels to support it. Thats why I 
-changed that this time around to take more control of validation of DSC 
-1.2 and ofcourse decided to break up of series into the least amount of 
-functionality needed to keep the DPU driver intact.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Hector Martin <marcan@marcan.st>
+Reviewed-by: Julian Calaby <julian.calaby@gmail.com>
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/20230214080034.3828-3-marcan@marcan.st
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ .../broadcom/brcm80211/brcmfmac/pcie.c        | 32 +++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
-All that being said, we still value your comments and would gladly wait 
-for a couple of days like I already wrote. But there are more 
-incremental series on top of this:
+diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+index 6ee04af85e9d5..967183662d4b3 100644
+--- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
++++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+@@ -23,6 +23,7 @@
+ #include <linux/bcma/bcma.h>
+ #include <linux/sched.h>
+ #include <linux/io.h>
++#include <linux/random.h>
+ #include <asm/unaligned.h>
+ 
+ #include <soc.h>
+@@ -1445,6 +1446,13 @@ brcmf_pcie_init_share_ram_info(struct brcmf_pciedev_info *devinfo,
+ 	return 0;
+ }
+ 
++struct brcmf_random_seed_footer {
++	__le32 length;
++	__le32 magic;
++};
++
++#define BRCMF_RANDOM_SEED_MAGIC		0xfeedc0de
++#define BRCMF_RANDOM_SEED_LENGTH	0x100
+ 
+ static int brcmf_pcie_download_fw_nvram(struct brcmf_pciedev_info *devinfo,
+ 					const struct firmware *fw, void *nvram,
+@@ -1480,6 +1488,30 @@ static int brcmf_pcie_download_fw_nvram(struct brcmf_pciedev_info *devinfo,
+ 			  nvram_len;
+ 		memcpy_toio(devinfo->tcm + address, nvram, nvram_len);
+ 		brcmf_fw_nvram_free(nvram);
++
++		if (devinfo->otp.valid) {
++			size_t rand_len = BRCMF_RANDOM_SEED_LENGTH;
++			struct brcmf_random_seed_footer footer = {
++				.length = cpu_to_le32(rand_len),
++				.magic = cpu_to_le32(BRCMF_RANDOM_SEED_MAGIC),
++			};
++			void *randbuf;
++
++			/* Some Apple chips/firmwares expect a buffer of random
++			 * data to be present before NVRAM
++			 */
++			brcmf_dbg(PCIE, "Download random seed\n");
++
++			address -= sizeof(footer);
++			memcpy_toio(devinfo->tcm + address, &footer,
++				    sizeof(footer));
++
++			address -= rand_len;
++			randbuf = kzalloc(rand_len, GFP_KERNEL);
++			get_random_bytes(randbuf, rand_len);
++			memcpy_toio(devinfo->tcm + address, randbuf, rand_len);
++			kfree(randbuf);
++		}
+ 	} else {
+ 		brcmf_dbg(PCIE, "No matching NVRAM file found %s\n",
+ 			  devinfo->nvram_name);
+-- 
+2.39.2
 
--> DSI changes for DSC 1.2
--> proper teardown for DSC
--> DSC pair allocation support
--> DSC 1.2 over DP
-
-We will be posting all of these within next couple of weeks on top of this.
-
-> In other words, let's take it slow and do things properly this time. And
-> who knows, perhaps the rest of these patches are more straightforward.
-> 
-
-Ack. the intent is always to do things right the first time.
-
-> - Marijn
-> 
-> <snip>
