@@ -2,195 +2,295 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 531856F6F15
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 17:35:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA5AC6F6F23
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 17:35:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231439AbjEDPfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 11:35:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49566 "EHLO
+        id S230224AbjEDPfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 11:35:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbjEDPfm (ORCPT
+        with ESMTP id S231461AbjEDPft (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 11:35:42 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2087.outbound.protection.outlook.com [40.107.8.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C72E40;
-        Thu,  4 May 2023 08:35:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=V/aaibR+kK8cF7CMxP2DpPhjfQmPAqPe5p57NJzBKLxFqJ1BXk0pFXLE0PMTGOqkY+fhUOmk/pQj9XLFH37HwujxxbWmPIrLu5tt80PeX8v+ExdAi2B7alJKZJBZMPkUF0Gn/7xP7W5paNCT2dMn0/VF9GyjZlJG9oqtNonaomOoweos+pak20B1VyJdX9up2EDmRhOoGoyMGsXvvqrJfxINZzrBZRgKf8Ath5evxig/Y8IYv2aRtzxACrZNXPJRi/L2irnWahzdagQmSPrNzH/dDx70jkn8DZdLbi82JV4zNfZnrY7Whi7eOkIpw0V7CnjeV0bxgIBamBcQyc/fjg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1JAvUmbK2XBC5GjxHBQdwJN4Yw6X4HgzA0V6CVFo9Ig=;
- b=oLf77msRhUmD1Wsmme3uIKnTLT87RgdgfqjIWtJZaqdP4zVAwLJFturbP9iRNvaVEo1rOJ5Jd8LbNdnTEzHnA+Sd4TTVWL+MMwwdpgtHesJLHhk1mLqHEFskVT8daj81Nr1vV2vlJRIooRlyiR9osz8x24iot65mAs6nnYnDdFiCycapbxRbBKIYRmBdipQFpHA+ZZbhGl7LQwgCq9qi2e42PV1QUfuk9FDeB1oACVX+WPY249pwZRBbcPYjpbmnQFQhwX2b6NoTeA22jikJkLyH/XWloBL2ZyPKxOMPqFEz8I2YX37d68o5eW8atFeWwW9kkD3DCH16rjqF1mIsVQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1JAvUmbK2XBC5GjxHBQdwJN4Yw6X4HgzA0V6CVFo9Ig=;
- b=HYxHSaXcjAaGmWLQetEXKZhb7j/RyjG1snDm8/rTDGjb8doJwhw0dTzKr0eoVwoSP6BN4n8a4/BfLBufMKblzq6ZHkqxw3+fLpnNhbZM2frrs29GH1YIyBtAJi/RYeivrphp2/gJzLx5CUpMQrVTeM0cz5gzNMchiP8VQO8hrjc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB9185.eurprd04.prod.outlook.com (2603:10a6:102:231::11)
- by VE1PR04MB7245.eurprd04.prod.outlook.com (2603:10a6:800:1b1::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.26; Thu, 4 May
- 2023 15:35:38 +0000
-Received: from PAXPR04MB9185.eurprd04.prod.outlook.com
- ([fe80::28fb:82ec:7a6:62f3]) by PAXPR04MB9185.eurprd04.prod.outlook.com
- ([fe80::28fb:82ec:7a6:62f3%5]) with mapi id 15.20.6363.022; Thu, 4 May 2023
- 15:35:38 +0000
-From:   Shenwei Wang <shenwei.wang@nxp.com>
-To:     Wei Fang <wei.fang@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Shenwei Wang <shenwei.wang@nxp.com>,
-        Clark Wang <xiaoning.wang@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        imx@lists.linux.dev, Gagandeep Singh <g.singh@nxp.com>
-Subject: [PATCH v3 net 1/1] net: fec: correct the counting of XDP sent frames
-Date:   Thu,  4 May 2023 10:35:17 -0500
-Message-Id: <20230504153517.816636-1-shenwei.wang@nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BYAPR05CA0060.namprd05.prod.outlook.com
- (2603:10b6:a03:74::37) To PAXPR04MB9185.eurprd04.prod.outlook.com
- (2603:10a6:102:231::11)
+        Thu, 4 May 2023 11:35:49 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B1E349D6
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 08:35:47 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so18579358a12.0
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 08:35:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683214546; x=1685806546;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ejh4crEBOmtG4UC1kk86Qe+Ml+DMERXcjPl1rLzWy/A=;
+        b=ls54MAt8vRmbuJ1pN0j4ExdrRZHf+goxJOCk/9QMiAqwRIBARCMMukGq/VbAKOcY78
+         VxEyPKBChJVz+IAbsnORgTExobdIYSaeClyyQxx+7vReGRsZCfRj5cKRxvadkGy+9yRL
+         GntWHAQPYQCGLp8OH13fWxsDwlbpFqg+c/5APdKPbIZM15PxLigaHs8HGSddisPFzYjl
+         7UqxhldoUQlLoR6qcEVmkjXOJra+5fX+s9IBxQo5+yVsqWYvpp6Um3TuGMUPiu8EeVXq
+         hWDdoJwjIVQHPnACEgc2n6ldlghABF1CSS29tYYuI3DZR+QX570Nn0Hg0UiXsVmvSmxt
+         HN3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683214546; x=1685806546;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ejh4crEBOmtG4UC1kk86Qe+Ml+DMERXcjPl1rLzWy/A=;
+        b=h+deNW3tZjlaFl5HJzdNKDO1ohNhUMBLN6Odp50e0wByI8FVDeh+6lWFfvSwExurnQ
+         3ef5zlzHWxarAzQDc3UrEZs1e6bSiWltHWqltxxdscFC7F6j1yzLyeuhxpm/ufAFf0fq
+         ImD+cJBbRjkDbEX9Kv0UVmz9SR1uwM4CYncvnHzx6hdS3bG4kXp81HYF4C/w0SpUqLF9
+         ctZFqv2jeNi27blZIVVeUXvza34QPIzSmhEeJD+TXa7jf+kPTltiRxIFdhrLo0uu/HJu
+         2ZmH/4PCzciBUpJ3Dv1zkE5LX3ndNfsEhREEJvw1Ijn7m9ENib8idQH4bf6pMOZAtwG0
+         38KQ==
+X-Gm-Message-State: AC+VfDy0PSvIIsRDrn7HyboC39TgLsMqV8/eRRKRVCVkoKBscWzY89bE
+        xt8DlTF7U3IiY2LZFnTb2fx6Vw==
+X-Google-Smtp-Source: ACHHUZ7jzfDt06eS0CGkxF6QauQkCZSpGzNA36btONhIeYYIhlGdGvHung1H+PrKfGrXAL7Q3uqFrg==
+X-Received: by 2002:a17:907:72d1:b0:94f:1d54:95d2 with SMTP id du17-20020a17090772d100b0094f1d5495d2mr6179188ejc.15.1683214545801;
+        Thu, 04 May 2023 08:35:45 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:cbf1:e7ef:fb81:e912? ([2a02:810d:15c0:828:cbf1:e7ef:fb81:e912])
+        by smtp.gmail.com with ESMTPSA id l13-20020a170906230d00b0094f2f1c5ea1sm19210155eja.174.2023.05.04.08.35.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 May 2023 08:35:44 -0700 (PDT)
+Message-ID: <62b81216-120b-40c0-bcf4-d3d3867200e0@linaro.org>
+Date:   Thu, 4 May 2023 17:35:43 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB9185:EE_|VE1PR04MB7245:EE_
-X-MS-Office365-Filtering-Correlation-Id: 92e17222-5a23-441b-cd58-08db4cb5361a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jLdrwbpNG5MIzVC2laVhdkMLYpLglpSKY8ucUz9hHq/Sxb6PGYaX8iOmxzjPD4zffZ9L0MCFpmqHvDnYadJMWNGGjj8i/pNT2oasEekYpqfV7WJonk5EzjRdoe4upVIftGl1mR0JtDGWVBygTZ3/eUdW6zb+LWmPbGVlPiVzAIU88ns/Aua2cP4XYoJJSA2CaV5NMFRcl0ZhPCyWEKqnCiyoujXUfbbd0E8l0FzO2B9SN2qDWmO1Xdi7Gro6Mo5BosaHzq8gSV2hby/RWuVtV+AR4b+9FqgH4nbNtbxJb7P8w9PTWkw678hqSawtmSQ06JSMxHb7RywTRG9j0x3nFSRuuMPLn2ETQ4szBjRZafJ9zu4L/ZCjqX1drzQgpjhV+Um1EKf9tNwBfK/2KV9Q6Jn8/016mdo2ucaF+HNFZaTlIuMZpzohD4LT+tseex0HlC/hCekTyqNRMuJhLY8czUqtcFSBUmS5bm2WZwqlAm73wqj8oyVdndLym763pBnQHHMQ3zgLjLJPlCZkEsksc2LQvfK3DlA1gfhlZ100/USmscQzT4Uq3KOOJZbdMTtWc2+oasPBjO2SqlQbKja06KfUoB/qA09GITytgEg5g1kjRhX7yFKxzgyzzEycGDOM
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9185.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(366004)(39860400002)(136003)(396003)(451199021)(38100700002)(6666004)(38350700002)(110136005)(478600001)(86362001)(83380400001)(55236004)(26005)(1076003)(186003)(6506007)(6512007)(2616005)(36756003)(6486002)(52116002)(54906003)(5660300002)(8676002)(41300700001)(8936002)(44832011)(7416002)(2906002)(66556008)(316002)(66476007)(66946007)(4326008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0YDjKE+g1xxwAApswedzZo2yEbWF2ZEvaW076N6Q2mNeZ5YD7yKisYoEzGkk?=
- =?us-ascii?Q?SNDekHsf5N82DiVLEADhyWtiua6xxdyboJlTpgyResQ4Vqo1RcRkMsbnsIW0?=
- =?us-ascii?Q?ahbONmxEe8HM1KgaESruHJKTcqvZeP0KMQVDqLYqA379cCwbVWgDo2POPxzd?=
- =?us-ascii?Q?JWnJlyKEbaZCbL+QMhVeF4RtCWepmqJfOpBzHrb4NpKtlcJOED3XoXe97o+1?=
- =?us-ascii?Q?eb7VRA8JBwQv6AHb35xFKyzdqiT9TWHDCbySHMUDwS6Gh/6iYgrTB05O6cft?=
- =?us-ascii?Q?FOASQiz2DSorGTLnO2p43nFgFG85Ejfi1gT+CyxZdog8fONhXLHyO9zUGDRz?=
- =?us-ascii?Q?vFQShwMtHfhFFwUIIEGnAQrbCFS7/o1wOEkkqmw0lRpN0F7Vysl7izl6axTR?=
- =?us-ascii?Q?u0V6dMJi/sw30W9eNpJvptY1GnnUUmQdCW4fXvG39DMePFLkyk4i1/6qy7ZM?=
- =?us-ascii?Q?8XTfzzM2Lj+5JRqHqjH5iXvGyaXQgktbGHcGEKPnxJZuYsaMPdxm0vPQosm+?=
- =?us-ascii?Q?8OC9S+R8CHrbiBOhkJElk2Cdckf6p67r2mCqkWN7xcWPzKQDWLw8lKfc27bV?=
- =?us-ascii?Q?QaKn8jA1MEZfECLEc5mR53/c5nEcOLIc7+JkvV/8ImdOSfbYTVY/IcASNdoY?=
- =?us-ascii?Q?GwAE13Kmrfq8UK1DzdrnrW2ZnqTW0ex3rXcRMeD63K+KJqEClhakeyq3cmQh?=
- =?us-ascii?Q?74fc/fQz/nPSQcuGT0N4Kh+IjBaSzx8fONdTIIlMAEfZsGWkmHHbYrhRawZ+?=
- =?us-ascii?Q?y2+aOw2zXWuOqrI5xB5eHW8SY3arGeIYABGIxt7LUv8Jn4Aaj6uVrQIwTwlb?=
- =?us-ascii?Q?Z/CzGg6pR2qcXyySo1Gcj/PtOi4Jc95YBU9M5AcE4yh8JD16BZ55Q0N6/FC1?=
- =?us-ascii?Q?2mbSfonOTekMOPvWPgAwUMx5RX59zpVIotY8wwR14iL2uklSLezle3rqACop?=
- =?us-ascii?Q?Jnd44ZtZnRZDhpPkSysTCqpCaXHqOvtUat0n6yTYE72O55U+25b7MkmVDx7g?=
- =?us-ascii?Q?lBgvziD1VNYyy0+91XP7XAgxNuQo/UkIOOxbx7q2jz6Y7NmDszCUxWLm24B8?=
- =?us-ascii?Q?h64NhIylMmp5kOj3quqwcGyG5QWrkvr1cyqvYiKQ774x99Y9OLxjbOjFGnwY?=
- =?us-ascii?Q?HiuYZ931h9GWH77ktaH95SCIZM4h6ytc4JhkKiKxtyhEARtDIXcHxLMWJzU/?=
- =?us-ascii?Q?O41zL78AKr3wgwb6bgMTVr3Ie+BlIbmO3yw9nACGnQA+bhSxK/tLZ9Nxlexi?=
- =?us-ascii?Q?4k9CLDdboVpdsxLGVz0/eLPgAKYLdpPxfAKZsOwE160A22oQ5coqvIkWEcGR?=
- =?us-ascii?Q?H9L06CMbu8VPWzyWhk1Nb/MCSmGCJkSnPTbj3lEVY4Gupeh8L8fLMerW5FZy?=
- =?us-ascii?Q?+MS6SUpih+DwscUdgtHaW87LUA5xdvM4y/UVIUksYLZd2yJFwtfQn2mxEjW8?=
- =?us-ascii?Q?gsovBj6FG3NZvDH1S3i8Ji5v+CAzg52ALFCBlTBqkV9j2TN5PfYdKKXn8+j6?=
- =?us-ascii?Q?4ReTcYTMUJax3bSe9nKzNEDqoveQYqiq8RHfxvYpLhMSSNW2GMyOVY+vDofM?=
- =?us-ascii?Q?wQMftOWKURFpqTPHJ1VRuhPM1mTGa1c7RyH38xZ7?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 92e17222-5a23-441b-cd58-08db4cb5361a
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9185.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2023 15:35:38.6296
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7W7+hYC1BW2/zGIwvT8zeJ/VlAE1oVyDxD88JvukNOaHhQMgqdiAAknR5AJduJUWgXuclOSzOoKwJzfxAHEQIQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB7245
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v3 09/18] soc: qcom: Add qcom's pstore minidump driver
+ support
+Content-Language: en-US
+To:     Mukesh Ojha <quic_mojha@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, corbet@lwn.net,
+        keescook@chromium.org, tony.luck@intel.com, gpiccoli@igalia.com,
+        catalin.marinas@arm.com, will@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        linus.walleij@linaro.org, linux-gpio@vger.kernel.org,
+        srinivas.kandagatla@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org
+References: <1683133352-10046-1-git-send-email-quic_mojha@quicinc.com>
+ <1683133352-10046-10-git-send-email-quic_mojha@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1683133352-10046-10-git-send-email-quic_mojha@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the current xdp_xmit implementation, if any single frame fails to
-transmit due to insufficient buffer descriptors, the function nevertheless
-reports success in sending all frames. This results in erroneously
-indicating that frames were transmitted when in fact they were dropped.
+On 03/05/2023 19:02, Mukesh Ojha wrote:
+> This driver was inspired from the fact pstore ram region should be
+> fixed and boot firmware need to have awarness about this region,
+> so that it will be persistent across boot. But, there are many
+> QCOM SoC which does not support warm boot from hardware but they
+> have minidump support from the software, and for them, there is
+> no need of this pstore ram region to be fixed, but at the same
+> time have interest in the pstore frontends. So, this driver
+> get the dynamic reserved region from the ram and register the
+> ramoops platform device.
+> 
+>  +---------+     +---------+   +--------+     +---------+
+>  | console |     | pmsg    |   | ftrace |     | dmesg   |
+>  +---------+     +---------+   +--------+     +---------+
+>        |             |             |              |
+>        |             |             |              |
+>        +------------------------------------------+
+>                           |
+>                          \ /
+>                   +----------------+
+>             (1)   |pstore frontends|
+>                   +----------------+
+>                           |
+>                          \ /
+>                  +------------------- +
+>             (2)  | pstore backend(ram)|
+>                  +--------------------+
+>                           |
+>                          \ /
+>                  +--------------------+
+>             (3)  |qcom_pstore_minidump|
+>                  +--------------------+
+>                           |
+>                          \ /
+>                    +---------------+
+>             (4)    | qcom_minidump |
+>                    +---------------+
+> 
+> This driver will route all the pstore front data to the stored
+> in qcom pstore reserved region and the reason of showing an
+> arrow from (3) to (4) as qcom_pstore_minidump driver will register
+> all the available frontends region with qcom minidump driver
+> in upcoming patch.
+> 
+> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+> ---
+>  drivers/soc/qcom/Kconfig                |  11 +++
+>  drivers/soc/qcom/Makefile               |   1 +
+>  drivers/soc/qcom/qcom_pstore_minidump.c | 116 ++++++++++++++++++++++++++++++++
+>  3 files changed, 128 insertions(+)
+>  create mode 100644 drivers/soc/qcom/qcom_pstore_minidump.c
+> 
+> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
+> index 15c931e..afdc634 100644
+> --- a/drivers/soc/qcom/Kconfig
+> +++ b/drivers/soc/qcom/Kconfig
+> @@ -293,4 +293,15 @@ config QCOM_MINIDUMP
+>  	  these selective regions will be dumped instead of the entire DDR.
+>  	  This saves significant amount of time and/or storage space.
+>  
+> +config QCOM_PSTORE_MINIDUMP
+> +	tristate "Pstore support for QCOM Minidump"
+> +	depends on ARCH_QCOM
+> +	depends on PSTORE_RAM
+> +	depends on QCOM_MINIDUMP
+> +	help
+> +	  Enablement of this driver ensures that ramoops region can be anywhere
+> +	  reserved in ram instead of being fixed address which needs boot firmware
+> +	  awareness. So, this driver creates plaform device and registers available
+> +	  frontend region with the Qualcomm's minidump driver.
+> +
+>  endmenu
+> diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
+> index 1ebe081..02d30d7 100644
+> --- a/drivers/soc/qcom/Makefile
+> +++ b/drivers/soc/qcom/Makefile
+> @@ -34,3 +34,4 @@ obj-$(CONFIG_QCOM_KRYO_L2_ACCESSORS) +=	kryo-l2-accessors.o
+>  obj-$(CONFIG_QCOM_ICC_BWMON)	+= icc-bwmon.o
+>  obj-$(CONFIG_QCOM_INLINE_CRYPTO_ENGINE)	+= ice.o
+>  obj-$(CONFIG_QCOM_MINIDUMP) += qcom_minidump.o
+> +obj-$(CONFIG_QCOM_PSTORE_MINIDUMP) += qcom_pstore_minidump.o
+> diff --git a/drivers/soc/qcom/qcom_pstore_minidump.c b/drivers/soc/qcom/qcom_pstore_minidump.c
+> new file mode 100644
+> index 0000000..8d58500
+> --- /dev/null
+> +++ b/drivers/soc/qcom/qcom_pstore_minidump.c
+> @@ -0,0 +1,116 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +
+> +/*
+> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +#include <linux/module.h>
+> +#include <linux/of_device.h>
+> +#include <linux/of_reserved_mem.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/pstore_ram.h>
+> +#include <soc/qcom/qcom_minidump.h>
+> +
+> +struct qcom_ramoops_config {
+> +	unsigned long	record_size;
+> +	unsigned long	console_size;
+> +	unsigned long	ftrace_size;
+> +	unsigned long	pmsg_size;
+> +	unsigned int	mem_type;
+> +	unsigned int	flags;
+> +	int		max_reason;
+> +};
+> +
+> +struct qcom_ramoops_dd {
+> +	struct ramoops_platform_data qcom_ramoops_pdata;
+> +	struct platform_device *ramoops_pdev;
+> +};
+> +
+> +static struct qcom_ramoops_config default_ramoops_config = {
 
-This patch fixes the issue by ensureing the return value properly
-indicates the actual number of frames successfully transmitted, rather than
-potentially reporting success for all frames when some could not transmit.
+Cannot this be const?
 
-Fixes: 6d6b39f180b8 ("net: fec: add initial XDP support")
-Signed-off-by: Gagandeep Singh <g.singh@nxp.com>
-Signed-off-by: Shenwei Wang <shenwei.wang@nxp.com>
----
- v3:
-  - resend the v2 fix for "net" as the standalone patch.
 
- v2:
-  - only keep the bug fix part of codes according to Horatiu's comments.
-  - restructure the functions to avoid the forward declaration.
+> +	.mem_type = 2,
+> +	.record_size = 0x0,
+> +	.console_size = 0x200000,
+> +	.ftrace_size = 0x0,
+> +	.pmsg_size = 0x0,
+> +};
+> +
+> +static struct qcom_ramoops_dd *qcom_rdd;
 
- drivers/net/ethernet/freescale/fec_main.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+Drop file scope variable. It's not even used.
 
-diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
-index 160c1b3525f5..42ec6ca3bf03 100644
---- a/drivers/net/ethernet/freescale/fec_main.c
-+++ b/drivers/net/ethernet/freescale/fec_main.c
-@@ -3798,7 +3798,8 @@ static int fec_enet_txq_xmit_frame(struct fec_enet_private *fep,
- 	entries_free = fec_enet_get_free_txdesc_num(txq);
- 	if (entries_free < MAX_SKB_FRAGS + 1) {
- 		netdev_err(fep->netdev, "NOT enough BD for SG!\n");
--		return NETDEV_TX_OK;
-+		xdp_return_frame(frame);
-+		return NETDEV_TX_BUSY;
- 	}
+> +static int qcom_ramoops_probe(struct platform_device *pdev)
+> +{
+> +	struct device_node *of_node = pdev->dev.of_node;
+> +	struct device_node *node;
+> +	const struct qcom_ramoops_config *cfg;
+> +	struct ramoops_platform_data *pdata;
+> +	struct reserved_mem *rmem;
+> +	long ret;
+> +
+> +	node = of_parse_phandle(of_node, "memory-region", 0);
+> +	if (!node)
+> +		return -ENODEV;
+> +
+> +	rmem = of_reserved_mem_lookup(node);
+> +	of_node_put(node);
+> +	if (!rmem) {
+> +		dev_err(&pdev->dev, "failed to locate DT /reserved-memory resource\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	qcom_rdd = devm_kzalloc(&pdev->dev, sizeof(*qcom_rdd), GFP_KERNEL);
+> +	if (!qcom_rdd)
+> +		return -ENOMEM;
+> +
+> +	cfg = of_device_get_match_data(&pdev->dev);
+> +	if (!cfg) {
+> +		dev_err(&pdev->dev, "failed to get supported matched data\n");
+> +		return -ENOENT;
+> +	}
+> +
+> +	pdata = &qcom_rdd->qcom_ramoops_pdata;
+> +	pdata->mem_size = rmem->size;
+> +	pdata->mem_address = rmem->base;
+> +	pdata->mem_type = cfg->mem_type;
+> +	pdata->record_size = cfg->record_size;
+> +	pdata->console_size = cfg->console_size;
+> +	pdata->ftrace_size = cfg->ftrace_size;
+> +	pdata->pmsg_size = cfg->pmsg_size;
+> +	pdata->max_reason = KMSG_DUMP_PANIC;
+> +
+> +	qcom_rdd->ramoops_pdev = platform_device_register_data(NULL, "ramoops", -1,
+> +							       pdata, sizeof(*pdata));
+> +	if (IS_ERR(qcom_rdd->ramoops_pdev)) {
+> +		ret = PTR_ERR(qcom_rdd->ramoops_pdev);
+> +		dev_err(&pdev->dev, "could not create platform device: %ld\n", ret);
+> +		qcom_rdd->ramoops_pdev = NULL;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static int qcom_ramoops_remove(struct platform_device *pdev)
 
- 	/* Fill in a Tx ring entry */
-@@ -3856,6 +3857,7 @@ static int fec_enet_xdp_xmit(struct net_device *dev,
- 	struct fec_enet_private *fep = netdev_priv(dev);
- 	struct fec_enet_priv_tx_q *txq;
- 	int cpu = smp_processor_id();
-+	unsigned int sent_frames = 0;
- 	struct netdev_queue *nq;
- 	unsigned int queue;
- 	int i;
-@@ -3866,8 +3868,11 @@ static int fec_enet_xdp_xmit(struct net_device *dev,
+Use instead .remove_new callback.
 
- 	__netif_tx_lock(nq, cpu);
+> +{
+> +	platform_device_unregister(qcom_rdd->ramoops_pdev);
+> +	qcom_rdd->ramoops_pdev = NULL;
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id qcom_ramoops_of_match[] = {
+> +	{ .compatible = "qcom,sm8450-ramoops-minidump", .data = &default_ramoops_config },
 
--	for (i = 0; i < num_frames; i++)
--		fec_enet_txq_xmit_frame(fep, txq, frames[i]);
-+	for (i = 0; i < num_frames; i++) {
-+		if (fec_enet_txq_xmit_frame(fep, txq, frames[i]) != 0)
-+			break;
-+		sent_frames++;
-+	}
+You don't need this entry.
 
- 	/* Make sure the update to bdp and tx_skbuff are performed. */
- 	wmb();
-@@ -3877,7 +3882,7 @@ static int fec_enet_xdp_xmit(struct net_device *dev,
+> +	{ .compatible = "qcom,ramoops-minidump", .data = &default_ramoops_config },
+> +	{}
+> +};
+> +
+> +MODULE_DEVICE_TABLE(of, qcom_ramoops_of_match);
 
- 	__netif_tx_unlock(nq);
+Blank line goes after the MODULE_DEVICE_TABLE, not before.
 
--	return num_frames;
-+	return sent_frames;
- }
 
- static const struct net_device_ops fec_netdev_ops = {
---
-2.34.1
+Best regards,
+Krzysztof
 
