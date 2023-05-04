@@ -2,99 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 079C56F6F98
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 18:10:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27E806F6FAC
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 18:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230331AbjEDQKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 12:10:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38230 "EHLO
+        id S229530AbjEDQOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 12:14:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231303AbjEDQKB (ORCPT
+        with ESMTP id S229515AbjEDQOU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 12:10:01 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A30C5B9B
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 09:10:00 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id ca18e2360f4ac-760dff4b701so4483539f.0
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 09:10:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1683216600; x=1685808600;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Wl1uT9aPMfbt5S8TjfS2OMEfFbn0uM/p5n+XCA9cHmk=;
-        b=Vdpc0IWMfa1eUSWOs8j2JeGzRr3ID9DOuBhgRytriJqsD3eT02KuwfgwA8Wl7B/0Mq
-         pzrdX43h2ZKcpts8VNG19znzYbM4h9vGlDtZS5Q3APIUOMFXFcU+9LzusHFR9dP4JmAK
-         l1Ni4f2xw+RwmZArNZmMy4bxrD9qM6Xc2QbLs=
+        Thu, 4 May 2023 12:14:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A03F759FB
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 09:13:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683216809;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FCERTes3cUqeH2NVPYErrzXP04o1ceM5Rm63oz0hrwA=;
+        b=T0NuVRqB3i+D2acfpbAuysJIjFR2JjMP9v0+kmnSJLAeNHhFawks18kKL2uUTXQIAIkRse
+        11XbFFhopDe52xGsiORtT4Tkl0kEt/40y999hkFh2Z9lsmQTIgvxfoCsq5KLhSct9Bk3po
+        Yb+e4UbnSuyUQHdsqVeQg/6dgsUWlAI=
+Received: from mail-vk1-f199.google.com (mail-vk1-f199.google.com
+ [209.85.221.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-185-XtILlN8hPlOI2SLFkPXC7Q-1; Thu, 04 May 2023 12:13:28 -0400
+X-MC-Unique: XtILlN8hPlOI2SLFkPXC7Q-1
+Received: by mail-vk1-f199.google.com with SMTP id 71dfb90a1353d-44fbe281e05so15971e0c.1
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 09:13:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683216600; x=1685808600;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wl1uT9aPMfbt5S8TjfS2OMEfFbn0uM/p5n+XCA9cHmk=;
-        b=E+fmY+57knhgRdXG91PsDPhrZuB62iuYVmx7O3Fogd0WtdWquoT0ugYUpjV/RwLiDT
-         q4Zgwho6ubO1wr/LubYg7v3n9OEPgOZyimGu6Y8jftMPLWhfXvRmFoDbXfBSdMZAUmSI
-         sppX5TTyBesrECNoJzsQ+Bz6GTAACwDkK0SW3bS613SYd24g8L1a/TKY40IkzstBmyWR
-         5vodP9cJ4xXaMIwKA6f89OrgS7XQysfDSWihiTzwVKaXqB8yahOYyq0SC4BUNfubHRm9
-         BeFqlGOK9Zdmd0WrXgNgoMq1IWzZWEnETtvjIio26GqvIJJBA9CU2z49fR/JXcaECs7f
-         aNjg==
-X-Gm-Message-State: AC+VfDzn0h3gPdl56zncXpXrZ2YusYqO1B9PwpmpEuHWNii8GsLAe0cG
-        Js+E0vGFfsyulCz4mqizaHVQdg==
-X-Google-Smtp-Source: ACHHUZ54nJy38M2vJQfXUwq4b4ACr25rS1LW3vySiieWVzVOIIgAwjN/+Q5/lLexUVUUwM3Nx0yF2Q==
-X-Received: by 2002:a05:6e02:1312:b0:32c:a864:6eb3 with SMTP id g18-20020a056e02131200b0032ca8646eb3mr5295378ilr.1.1683216599632;
-        Thu, 04 May 2023 09:09:59 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id m16-20020a92c530000000b00331a4945ec1sm229641ili.42.2023.05.04.09.09.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 09:09:59 -0700 (PDT)
-Message-ID: <f6f55e7e-4fff-7be0-9e88-b9980f20339b@linuxfoundation.org>
-Date:   Thu, 4 May 2023 10:09:58 -0600
+        d=1e100.net; s=20221208; t=1683216808; x=1685808808;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FCERTes3cUqeH2NVPYErrzXP04o1ceM5Rm63oz0hrwA=;
+        b=V0HTyh9Mu1Pg5xvOwmyZCkwVJqIZvvt41JZpu4+2ONuj7NYnoptAQxp9aJmlYCI4Wf
+         3lR/R45VkkkBpZa8QKpra59JszGqM6K/woJrzN7vmIc1OKXdBw3gPkQlCe9fBgB7Rmrp
+         0hlXvkY0WDRY1Op4/78P3EpVTLr4MeQ/KdsOTE7R/Z769kbV18HV++/adLXcT4Uf9yCW
+         0qtkRa4v0wdKuMsIx9X4bOdzJ9y96qQkJtfwSk+An+dtduWSeoGWCMUYTFhIaTR+0IlN
+         3/peInaQewrdyZhSXH+ZrINo5EQ4COAt6TPtF7k3VCWe73CLeb4vkzix7BU84zRA0xio
+         O3rw==
+X-Gm-Message-State: AC+VfDwN1bqbt28ELrHzDXkLShVIahphAeWB43/sNVHE0uxuPIew7NcD
+        5ffsR+FU3LZOxvWpAiHKCni75Bhg2KcEve4AYFuvVgnXvGEtdvHTuEqPWRc959l+odGsaBN+yD/
+        ciE4Otob++JrFzCT3DD6+QW0q
+X-Received: by 2002:a1f:b646:0:b0:448:1241:47ae with SMTP id g67-20020a1fb646000000b00448124147aemr3069416vkf.1.1683216807871;
+        Thu, 04 May 2023 09:13:27 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6pUnL9fUfiStXzh1jo+rajlFzURLwzhhKGNCKNVHx6d9nP0QKmPVmXXzyvOtLVq7RYWk28Ew==
+X-Received: by 2002:a1f:b646:0:b0:448:1241:47ae with SMTP id g67-20020a1fb646000000b00448124147aemr3069388vkf.1.1683216807461;
+        Thu, 04 May 2023 09:13:27 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-244-79.dyn.eolo.it. [146.241.244.79])
+        by smtp.gmail.com with ESMTPSA id 75-20020a370b4e000000b0074df3f7e14esm11694249qkl.67.2023.05.04.09.13.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 May 2023 09:13:27 -0700 (PDT)
+Message-ID: <11201df515ec41db88ad915fd1e425e62c4f81e5.camel@redhat.com>
+Subject: Re: [PATCH LSM v2 0/2] security: SELinux/LSM label with MPTCP and
+ accept
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Ondrej Mosnacek <omosnace@redhat.com>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>
+Cc:     Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, mptcp@lists.linux.dev,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
+Date:   Thu, 04 May 2023 18:13:23 +0200
+In-Reply-To: <CAFqZXNt16B5A2o6fZeN5b1coNCW2m6kp7JToJFDorvPajhFyxA@mail.gmail.com>
+References: <20230419-upstream-lsm-next-20230419-mptcp-sublows-user-ctx-v2-0-e7a3c8c15676@tessares.net>
+         <CAFqZXNt16B5A2o6fZeN5b1coNCW2m6kp7JToJFDorvPajhFyxA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] cpupower: Make TSC read per CPU for Mperf monitor
-Content-Language: en-US
-To:     Thomas Renninger <trenn@suse.de>,
-        Thomas Renninger <trenn@suse.com>,
-        Shuah Khan <shuah@kernel.org>, Wyes Karny <wyes.karny@amd.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        gautham.shenoy@amd.com, Shuah Khan <skhan@linuxfoundation.org>
-References: <20230504062544.601566-1-wyes.karny@amd.com>
- <4480921.LvFx2qVVIh@work.fritz.box>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <4480921.LvFx2qVVIh@work.fritz.box>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/4/23 00:47, Thomas Renninger wrote:
-> On Donnerstag, 4. Mai 2023 08:25:44 CEST Wyes Karny wrote:
->> This technique improves C0 percentage calculation in Mperf monitor.
-> 
+On Thu, 2023-05-04 at 16:14 +0200, Ondrej Mosnacek wrote:
+> On Thu, Apr 20, 2023 at 7:17=E2=80=AFPM Matthieu Baerts
+> <matthieu.baerts@tessares.net> wrote:
+> >=20
+> > In [1], Ondrej Mosnacek explained they discovered the (userspace-facing=
+)
+> > sockets returned by accept(2) when using MPTCP always end up with the
+> > label representing the kernel (typically system_u:system_r:kernel_t:s0)=
+,
+> > while it would make more sense to inherit the context from the parent
+> > socket (the one that is passed to accept(2)). Thanks to the
+> > participation of Paul Moore in the discussions, modifications on MPTCP
+> > side have started and the result is available here.
+> >=20
+> > Paolo Abeni worked hard to refactor the initialisation of the first
+> > subflow of a listen socket. The first subflow allocation is no longer
+> > done at the initialisation of the socket but later, when the connection
+> > request is received or when requested by the userspace. This was a
+> > prerequisite to proper support of SELinux/LSM labels with MPTCP and
+> > accept. The last batch containing the commit ddb1a072f858 ("mptcp: move
+> > first subflow allocation at mpc access time") [2] has been recently
+> > accepted and applied in netdev/net-next repo [3].
+> >=20
+> > This series of 2 patches is based on top of the lsm/next branch. Despit=
+e
+> > the fact they depend on commits that are in netdev/net-next repo to
+> > support the new feature, they can be applied in lsm/next without
+> > creating conflicts with net-next or causing build issues. These two
+> > patches on top of lsm/next still passes all the MPTCP-specific tests.
+> > The only thing is that the new feature only works properly with the
+> > patches that are on netdev/net-next. The tests with the new labels have
+> > been done on top of them.
+> >=20
+> > Regarding the two patches, the first one introduces a new LSM hook
+> > called from MPTCP side when creating a new subflow socket. This hook
+> > allows the security module to relabel the subflow according to the owin=
+g
+> > process. The second one implements this new hook on the SELinux side.
+> >=20
+> > Link: https://lore.kernel.org/netdev/CAFqZXNs2LF-OoQBUiiSEyranJUXkPLcCf=
+BkMkwFeM6qEwMKCTw@mail.gmail.com/ [1]
+> > Link: https://git.kernel.org/netdev/net-next/c/ddb1a072f858 [2]
+> > Link: https://lore.kernel.org/netdev/20230414-upstream-net-next-2023041=
+4-mptcp-refactor-first-subflow-init-v1-0-04d177057eb9@tessares.net/ [3]
+> > Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+> > ---
+> > Changes in v2:
+> > - Address Paul's comments, see the notes on each patch
+> > - Link to v1: https://lore.kernel.org/r/20230419-upstream-lsm-next-2023=
+0419-mptcp-sublows-user-ctx-v1-0-9d4064cb0075@tessares.net
+> >=20
+> > ---
+> > Paolo Abeni (2):
+> >       security, lsm: Introduce security_mptcp_add_subflow()
+> >       selinux: Implement mptcp_add_subflow hook
+> >=20
+> >  include/linux/lsm_hook_defs.h |  1 +
+> >  include/linux/security.h      |  6 ++++++
+> >  net/mptcp/subflow.c           |  6 ++++++
+> >  security/security.c           | 17 +++++++++++++++++
+> >  security/selinux/hooks.c      | 16 ++++++++++++++++
+> >  security/selinux/netlabel.c   |  8 ++++++--
+> >  6 files changed, 52 insertions(+), 2 deletions(-)
+> > ---
+> > base-commit: d82dcd9e21b77d338dc4875f3d4111f0db314a7c
+> > change-id: 20230419-upstream-lsm-next-20230419-mptcp-sublows-user-ctx-e=
+ee658fafcba
+> >=20
+> > Best regards,
+> > --
+> > Matthieu Baerts <matthieu.baerts@tessares.net>
+> >=20
+>=20
+> I haven't yet looked closer at the code in this series, but I can at
+> least confirm that with the series (applied on top of net-next) the
+> selinux-testsuite now passes when run under mptcpize, with one caveat:
+>=20
+> The "client" test prog in the inet_socket subtest sets the SO_SNDTIMEO
+> socket option on the client socket, but the subtest takes
+> significantly longer to complete than when run without mptcpize. That
+> suggests to me that there is possibly some (pre-existing) issue with
+> MPTCP where the send/receive timeouts are not being passed to the
+> subflow socket(s), leading to a longer wait (I guess the default is
+> higher?)=C2=A0
 
-Like it. Thanks for finding and fixing it.
+Indeed the behavior you describe is due to some mptcp bug in handling
+the SO_{SND,RCV}TIMEO socket tions, and it's really unrelated to the
+initially reported selinux issue.
 
-> I very much like this patch.
-> Would be nice to see it queued up if Shuah is ok with it.
-> 
-> Thanks for this one!
-> 
->       Thomas
-> 
-> 
+If you could file an issue on our tracker, that would help ;)
 
-Thank Thomas for the review. I will queue this up to send after
-the merge window closes.
+Thanks!
 
-thanks,
--- Shuah
+Paolo
 
