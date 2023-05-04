@@ -2,170 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 902BA6F65C7
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 09:33:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9680D6F65D3
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 09:34:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbjEDHda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 03:33:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50286 "EHLO
+        id S230094AbjEDHe2 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 4 May 2023 03:34:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjEDHd2 (ORCPT
+        with ESMTP id S229816AbjEDHeU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 03:33:28 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CBBF83;
-        Thu,  4 May 2023 00:33:24 -0700 (PDT)
-Received: from kwepemm600019.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QBlqq5n3kzsR63;
-        Thu,  4 May 2023 15:31:35 +0800 (CST)
-Received: from [10.136.112.228] (10.136.112.228) by
- kwepemm600019.china.huawei.com (7.193.23.64) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 4 May 2023 15:33:21 +0800
-Subject: Re: BUG: KASAN: stack-out-of-bounds in __ip_options_echo
-To:     Florian Westphal <fw@strlen.de>
-CC:     <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
-        <davem@davemloft.net>, <kuba@kernel.org>,
-        <stephen@networkplumber.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yanan@huawei.com>,
-        <caowangbao@huawei.com>
-References: <05324dd2-3620-8f07-60a0-051814913ff8@huawei.com>
- <20230502165446.GA22029@breakpoint.cc>
-From:   "Fengtao (fengtao, Euler)" <fengtao40@huawei.com>
-Message-ID: <9dd7ec8f-bc40-39af-febb-a7e8aabbaaed@huawei.com>
-Date:   Thu, 4 May 2023 15:33:20 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Thu, 4 May 2023 03:34:20 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945BB1990;
+        Thu,  4 May 2023 00:34:14 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 16A2624E1FE;
+        Thu,  4 May 2023 15:34:08 +0800 (CST)
+Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 4 May
+ 2023 15:34:07 +0800
+Received: from ubuntu.localdomain (161.142.156.10) by EXMBX168.cuchost.com
+ (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 4 May
+ 2023 15:34:02 +0800
+From:   Jia Jie Ho <jiajie.ho@starfivetech.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>
+CC:     <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+Subject: [PATCH v7 0/4] crypto: starfive - Add drivers for crypto engine
+Date:   Thu, 4 May 2023 15:33:56 +0800
+Message-ID: <20230504073400.1170979-1-jiajie.ho@starfivetech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20230502165446.GA22029@breakpoint.cc>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.136.112.228]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600019.china.huawei.com (7.193.23.64)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [161.142.156.10]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX168.cuchost.com
+ (172.16.6.78)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+This patch series adds kernel driver support for StarFive JH7110 crypto
+engine. The first patch adds Documentations for the device and Patch 2
+adds device probe and DMA init for the module. Patch 3 adds crypto and
+DMA dts node for VisionFive 2 board. Patch 4 adds hash/hmac support to
+the module.
 
-I have tested the patch, the panic not happend.
-And I search the similar issue in kernel, and found commit:
-[1]https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ed0de45a1008
-[2]https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3da1ed7ac398
+Patch 3 needs to be applied on top of:
+https://lore.kernel.org/lkml/20230424135409.6648-3-xingyu.wu@starfivetech.com/
 
-So I tested another patch like this:
-------------[ cut here ]------------
---- .//net/ipv4/netfilter/nf_reject_ipv4.c      2023-05-02 13:03:35.427896081 +0000
-+++ .//net/ipv4/netfilter/nf_reject_ipv4.c.new  2023-05-02 13:03:00.433897970 +0000
-@@ -187,6 +187,7 @@
+Patch 4 needs to be applied on top of:
+https://lore.kernel.org/linux-crypto/ZEEOXIHwqKblKfBJ@gondor.apana.org.au/T/#u
 
- void nf_send_unreach(struct sk_buff *skb_in, int code, int hook)
- {
-+       struct ip_options opt;
-        struct iphdr *iph = ip_hdr(skb_in);
-        u8 proto = iph->protocol;
+Changes v6->v7
+- Remove NULL assignment as struct is kzalloc()-ed (Christophe)
+- Do clk_disable_unprepare and assert reset if probe failed (Christophe)
+- Remove unnecessary null pointer check (Christophe)
+- Update module name in Kconfig description (Christophe)
 
-@@ -196,13 +197,18 @@
-        if (hook == NF_INET_PRE_ROUTING && nf_reject_fill_skb_dst(skb_in))
-                return;
+Changes v5->v6
+- Remove set_crypt in export as request will have been created by
+  init/updated calls (Herbert)
+- Use new helper to set statesize of crypto_ahash (Herbert)
+- Use crypto_ahash_blocksize instead of crypto_ahash_tfm (Herbert)
+- Switch to init_tfm/exit_tfm instead of cra_init/cra_exit (Herbert)
 
-+       memset(&opt, 0, sizeof(opt));
-+       opt.optlen = iph->ihl*4 - sizeof(struct iphdr);
-+       if (__ip_options_compile(dev_net(skb_in->dev), &opt, skb_in, NULL))
-+               return;
-+
-        if (skb_csum_unnecessary(skb_in) || !nf_reject_verify_csum(proto)) {
--               icmp_send(skb_in, ICMP_DEST_UNREACH, code, 0);
-+               __icmp_send(skb_in, ICMP_DEST_UNREACH, code, 0, &opt);
-                return;
-        }
+Changes v4->v5
+- Schedule tasklet from IRQ handler instead of using completion to sync
+  events (Herbert)
 
-        if (nf_ip_checksum(skb_in, hook, ip_hdrlen(skb_in), proto) == 0)
--               icmp_send(skb_in, ICMP_DEST_UNREACH, code, 0);
-+               __icmp_send(skb_in, ICMP_DEST_UNREACH, code, 0, &opt);
- }
- EXPORT_SYMBOL_GPL(nf_send_unreach);
-------------[ cut here ]------------
+Changes v3->v4:
+- Use fallback for non-aligned cases as hardware doesn't support
+  hashing piece-meal (Herbert)
+- Use ahash_request_set_* helpers to update members of ahash_request
+  (Herbert)
+- Set callbacks for async fallback (Herbert)
+- Remove completion variable and use dma_callback to do the rest of
+  processing instead. (Herbert)
 
-This can also fix the issue:) So, which way is better?
-BTW, I think the problem is more then ipvlan? Maybe some other scenarios that can trigger such issue.
+Changes v2->v3:
+- Only implement digest and use fallback for other ops (Herbert)
+- Use interrupt instead of polling for hash complete (Herbert)
+- Remove manual data copy from out-of-bound memory location as it will
+  be handled by DMA API. (Christoph & Herbert)
 
+Changes v1->v2:
+- Fixed yaml filename and format (Krzysztof)
+- Removed unnecessary property names in yaml (Krzysztof)
+- Moved of_device_id table close to usage (Krzysztof)
+- Use dev_err_probe for error returns (Krzysztof)
+- Dropped redundant readl and writel wrappers (Krzysztof)
+- Updated commit signed offs (Conor)
+- Dropped redundant node in dts, module set to on in dtsi (Conor)
 
-On 2023/5/3 0:54, Florian Westphal wrote:
-> Fengtao (fengtao, Euler) <fengtao40@huawei.com> wrote:
->> Hi,all
->>
->> We found the following crash on stable-5.10(reproduce in kasan kernel).
->> ------------[ cut here ]------------
->> [ 2203.651571] BUG: KASAN: stack-out-of-bounds in __ip_options_echo+0x589/0x800
->> [ 2203.653327] Write of size 4 at addr ffff88811a388f27 by task swapper/3/0
->>
->> [ 2203.655460] CPU: 3 PID: 0 Comm: swapper/3 Kdump: loaded Not tainted 5.10.0-60.18.0.50.h856.kasan.eulerosv2r11.x86_64 #1
->> [ 2203.655466] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.10.2-0-g5f4c7b1-20181220_000000-szxrtosci10000 04/01/2014
->> [ 2203.655475] Call Trace:
->> [ 2203.655481]  <IRQ>
->> [ 2203.655501]  dump_stack+0x9c/0xd3
->> [ 2203.655514]  print_address_description.constprop.0+0x19/0x170
->> [ 2203.655522]  ? __ip_options_echo+0x589/0x800
->> [ 2203.655530]  __kasan_report.cold+0x6c/0x84
->> [ 2203.655569]  ? resolve_normal_ct+0x301/0x430 [nf_conntrack]
->> [ 2203.655576]  ? __ip_options_echo+0x589/0x800
->> [ 2203.655586]  kasan_report+0x3a/0x50
->> [ 2203.655594]  check_memory_region+0xfd/0x1f0
->> [ 2203.655601]  memcpy+0x39/0x60
->> [ 2203.655608]  __ip_options_echo+0x589/0x800
-> [..]
-> 
->> [ 2203.655702]  ? tcp_print_conntrack+0xb0/0xb0 [nf_conntrack]
->> [ 2203.655709]  ? memset+0x20/0x50
->> [ 2203.655719]  ? nf_nat_setup_info+0x2fb/0x480 [nf_nat]
->> [ 2203.655729]  ? get_unique_tuple+0x390/0x390 [nf_nat]
->> [ 2203.655735]  ? tcp_mt+0x456/0x550
->> [ 2203.655747]  ? ipt_do_table+0x776/0xa40 [ip_tables]
->> [ 2203.655755]  nf_send_unreach+0x129/0x3d0 [nf_reject_ipv4]
->> [ 2203.655763]  reject_tg+0x77/0x1bf [ipt_REJECT]
->> [ 2203.655772]  ipt_do_table+0x691/0xa40 [ip_tables]
-> [..]
->> [ 2203.655857]  ip_local_out+0x28/0x90
->> [ 2203.655868]  ipvlan_process_v4_outbound+0x21e/0x260 [ipvlan]
-> 
-> Somewhere between ipvlan_queue_xmit() and ipvlan_process_v4|6_outbound
-> skb->cb has to be cleared; ip_local_out and friends assume that upper
-> layer took care of this for outbound packets.
-> 
-> Try something like this (not even compile tested):
-> 
-> diff --git a/drivers/net/ipvlan/ipvlan_core.c b/drivers/net/ipvlan/ipvlan_core.c
-> --- a/drivers/net/ipvlan/ipvlan_core.c
-> +++ b/drivers/net/ipvlan/ipvlan_core.c
-> @@ -436,6 +436,9 @@ static int ipvlan_process_v4_outbound(struct sk_buff *skb)
->  		goto err;
->  	}
->  	skb_dst_set(skb, &rt->dst);
-> +
-> +	memset(skb->cb 0, sizeof(struct inet_skb_parm));
-> +
->  	err = ip_local_out(net, skb->sk, skb);
->  	if (unlikely(net_xmit_eval(err)))
->  		dev->stats.tx_errors++;
-> @@ -474,6 +477,9 @@ static int ipvlan_process_v6_outbound(struct sk_buff *skb)
->  		goto err;
->  	}
->  	skb_dst_set(skb, dst);
-> +
-> +	memset(skb->cb 0, sizeof(struct inet6_skb_parm));
-> +
->  	err = ip6_local_out(net, skb->sk, skb);
->  	if (unlikely(net_xmit_eval(err)))
->  		dev->stats.tx_errors++;
-> 
-> .
-> 
+Jia Jie Ho (4):
+  dt-bindings: crypto: Add StarFive crypto module
+  crypto: starfive - Add crypto engine support
+  riscv: dts: starfive: Add crypto and DMA node for VisionFive 2
+  crypto: starfive - Add hash and HMAC support
+
+ .../crypto/starfive,jh7110-crypto.yaml        |  70 ++
+ MAINTAINERS                                   |   7 +
+ arch/riscv/boot/dts/starfive/jh7110.dtsi      |  28 +
+ drivers/crypto/Kconfig                        |   1 +
+ drivers/crypto/Makefile                       |   1 +
+ drivers/crypto/starfive/Kconfig               |  21 +
+ drivers/crypto/starfive/Makefile              |   4 +
+ drivers/crypto/starfive/jh7110-cryp.c         | 240 +++++
+ drivers/crypto/starfive/jh7110-cryp.h         | 127 +++
+ drivers/crypto/starfive/jh7110-hash.c         | 892 ++++++++++++++++++
+ 10 files changed, 1391 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/crypto/starfive,jh7110-crypto.yaml
+ create mode 100644 drivers/crypto/starfive/Kconfig
+ create mode 100644 drivers/crypto/starfive/Makefile
+ create mode 100644 drivers/crypto/starfive/jh7110-cryp.c
+ create mode 100644 drivers/crypto/starfive/jh7110-cryp.h
+ create mode 100644 drivers/crypto/starfive/jh7110-hash.c
+
+-- 
+2.25.1
+
