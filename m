@@ -2,105 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DA566F6285
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 03:01:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCA446F6288
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 03:02:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbjEDBA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 May 2023 21:00:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60890 "EHLO
+        id S229697AbjEDBCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 May 2023 21:02:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjEDBA5 (ORCPT
+        with ESMTP id S229460AbjEDBB7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 May 2023 21:00:57 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D5EE124
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 18:00:54 -0700 (PDT)
-Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QBb7j3gBJzkXtx;
-        Thu,  4 May 2023 08:59:45 +0800 (CST)
-Received: from [10.67.109.254] (10.67.109.254) by
- kwepemi500008.china.huawei.com (7.221.188.139) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 4 May 2023 09:00:51 +0800
-Message-ID: <071ab5f1-6d6a-ab1f-6bf1-f5a18c1307e0@huawei.com>
-Date:   Thu, 4 May 2023 09:00:51 +0800
+        Wed, 3 May 2023 21:01:59 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EFE1124;
+        Wed,  3 May 2023 18:01:58 -0700 (PDT)
+Received: from notapiano (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id F093E6603050;
+        Thu,  4 May 2023 02:01:54 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1683162117;
+        bh=QIc5SJMWqFHScIbXxCJ80FSyeGnnxhBPq9Nglpv16dY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GoF7tKks+0r9w3slMFA52UCUjtZji0S1Ro4Z+f0NOCspw0LEGjEyhfuXwdqEPPBpf
+         SobHoYAenMMDr2lVWHc79h7Uf2s2Y9HldVbYu5Aaq2bamlRXs6Uh/3MFwABByfekwj
+         WdOuqPQS27hMEc8e9LxER0LliWjfJqcBfs3OafA0RYS7WeRuiD3bPwHE9a2+JM7Ozq
+         G+kKuTi09O1TfRRAg51BcdpAFUD4iIJ0T+BL2s+X9pnpRGM8JabIsTIBurfXQMlojG
+         jb/rCJ5LASS2Wnxqnrw81mZycTqW4tNO5FuvREGs1fRkx+2ABLIYgdirnRcu+g7gIq
+         3EETfeDuWI7KA==
+Date:   Wed, 3 May 2023 21:01:51 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     bchihi@baylibre.com
+Cc:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
+        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        wenst@chromium.org, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com, abailon@baylibre.com,
+        amergnat@baylibre.com, khilman@baylibre.com
+Subject: Re: [PATCH v2 5/5] thermal/drivers/mediatek/lvts_thermal: Update
+ calibration data documentation
+Message-ID: <b120f52a-38c4-4f06-86d5-503a67bb1dab@notapiano>
+References: <20230425133052.199767-1-bchihi@baylibre.com>
+ <20230425133052.199767-6-bchihi@baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v2] riscv: fix kprobe __user string arg print fault issue
-To:     <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-        <aou@eecs.berkeley.edu>, <linux-riscv@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230423091235.968980-1-ruanjinjie@huawei.com>
-Content-Language: en-US
-From:   Ruan Jinjie <ruanjinjie@huawei.com>
-In-Reply-To: <20230423091235.968980-1-ruanjinjie@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.109.254]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemi500008.china.huawei.com (7.221.188.139)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230425133052.199767-6-bchihi@baylibre.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ping.
+On Tue, Apr 25, 2023 at 03:30:52PM +0200, bchihi@baylibre.com wrote:
+> From: Balsam CHIHI <bchihi@baylibre.com>
+> 
+> Update LVTS calibration data documentation for mt8192 and mt8195.
+> 
+> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+> ---
+>  drivers/thermal/mediatek/lvts_thermal.c | 59 ++++++++++++++++++-------
+>  1 file changed, 43 insertions(+), 16 deletions(-)
+> 
+> diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
+> index 8df7b4c72a658..3df4989f9902b 100644
+> --- a/drivers/thermal/mediatek/lvts_thermal.c
+> +++ b/drivers/thermal/mediatek/lvts_thermal.c
+> @@ -531,30 +531,57 @@ static int lvts_sensor_init(struct device *dev, struct lvts_ctrl *lvts_ctrl,
+>   * The efuse blob values follows the sensor enumeration per thermal
+>   * controller. The decoding of the stream is as follow:
+>   *
+> - * stream index map for MCU Domain :
+> + * MT8195 :
+> + * Stream index map for MCU Domain mt8195 :
+>   *
+> - * <-----mcu-tc#0-----> <-----sensor#0-----> <-----sensor#1----->
+> - *  0x01 | 0x02 | 0x03 | 0x04 | 0x05 | 0x06 | 0x07 | 0x08 | 0x09
+> + * <-----sensor#0-----> <-----sensor#1----->
+> + *  0x04 | 0x05 | 0x06 | 0x07 | 0x08 | 0x09
 
-On 2023/4/23 17:12, ruanjinjie wrote:
-> On riscv qemu platform, when add kprobe event on do_sys_open() to show
-> filename string arg, it just print fault as follow:
-> 
-> echo 'p:myprobe do_sys_open dfd=$arg1 filename=+0($arg2):string flags=$arg3
-> mode=$arg4' > kprobe_events
-> 
-> bash-166     [000] ...1.   360.195367: myprobe: (do_sys_open+0x0/0x84)
-> dfd=0xffffffffffffff9c filename=(fault) flags=0x8241 mode=0x1b6
-> 
-> bash-166     [000] ...1.   360.219369: myprobe: (do_sys_open+0x0/0x84)
-> dfd=0xffffffffffffff9c filename=(fault) flags=0x8241 mode=0x1b6
-> 
-> bash-191     [000] ...1.   360.378827: myprobe: (do_sys_open+0x0/0x84)
-> dfd=0xffffffffffffff9c filename=(fault) flags=0x98800 mode=0x0
-> 
-> As riscv do not select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE,
-> the +0($arg2) addr is processed as a kernel address though it is a
-> userspace address, cause the above filename=(fault) print. So select
-> ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE to avoid the issue, after that the
-> kprobe trace is ok as below:
-> 
-> bash-166     [000] ...1.    96.767641: myprobe: (do_sys_open+0x0/0x84)
-> dfd=0xffffffffffffff9c filename="/dev/null" flags=0x8241 mode=0x1b6
-> 
-> bash-166     [000] ...1.    96.793751: myprobe: (do_sys_open+0x0/0x84)
-> dfd=0xffffffffffffff9c filename="/dev/null" flags=0x8241 mode=0x1b6
-> 
-> bash-177     [000] ...1.    96.962354: myprobe: (do_sys_open+0x0/0x84)
-> dfd=0xffffffffffffff9c filename="/sys/kernel/debug/tracing/events/kprobes/"
-> flags=0x98800 mode=0x0
-> 
-> Signed-off-by: ruanjinjie <ruanjinjie@huawei.com>
-> ---
-> v2:
-> - add the config in alphabetical order
-> ---
->  arch/riscv/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index eb7f29a412f8..b462ed7d41fe 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -25,6 +25,7 @@ config RISCV
->  	select ARCH_HAS_GIGANTIC_PAGE
->  	select ARCH_HAS_KCOV
->  	select ARCH_HAS_MMIOWB
-> +	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
->  	select ARCH_HAS_PMEM_API
->  	select ARCH_HAS_PTE_SPECIAL
->  	select ARCH_HAS_SET_DIRECT_MAP if MMU
+I don't think you need to remove the controller calibration data from this
+comment, even though you don't use it in the code. Could come in handy in the
+future.
+
+>   *
+[..]
+> + * MT8192 :
+> + * Stream index map for MCU Domain mt8192 :
+> + *
+> + * <--------sensor#0---------> <--------sensor#1--------->
+> + *  0x04 | 0x05 | 0x06 | 0x07 | 0x08 | 0x09 | 0x0A | 0x0B
+
+Each sensor data is 3 bytes long, just like for MT8195. The fourth byte contains
+the controller calibration data, but it is spread across these fourth bytes. I'd
+just leave these bytes undocumented for now since they're not currently used.
+
+So,
+
+  + * <-----sensor#0----->        <-----sensor#1----->       
+  + *  0x04 | 0x05 | 0x06 | 0x07 | 0x08 | 0x09 | 0x0A | 0x0B
+
+etc.
+
+With that fixed,
+
+Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+
+Thanks,
+Nícolas
