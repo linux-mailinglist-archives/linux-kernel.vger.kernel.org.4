@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3A0D6F737D
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:43:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E69F26F7383
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:43:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbjEDTnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 15:43:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48512 "EHLO
+        id S229824AbjEDTns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 15:43:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbjEDTnS (ORCPT
+        with ESMTP id S230021AbjEDTnY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 15:43:18 -0400
+        Thu, 4 May 2023 15:43:24 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA03983C9;
-        Thu,  4 May 2023 12:42:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B5A17EF1;
+        Thu,  4 May 2023 12:43:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A0FC62EB8;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B8AE6305B;
+        Thu,  4 May 2023 19:42:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28427C4339B;
         Thu,  4 May 2023 19:42:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B40E1C433D2;
-        Thu,  4 May 2023 19:42:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683229365;
-        bh=jKJQM7Amchlo/TIBhIhoRm4akaWOf6RtKsRisaHbqM8=;
+        s=k20201202; t=1683229366;
+        bh=hH/l81anuCs6BR9skkB2qfBrEHiihE5JzFvsKGzSM9I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VRl4QQIPolaCjJH2s2kXK2ImQDR709+tnAhUVXaVSuNcNaCx1wvr1Jr1dQb2RL/Hy
-         TXJ5bMguVLCItNXWqjPU8ILXqRdt1CiSMA1EemlxCECVfnxiAdyOMqV+hwM1xr1HUF
-         t029i70kqoCG2/xqY1M5hPmG/Lewo7c02mT/4YqsFIQpaUQOOo1ILs+N/ytKa8iPRm
-         H+4ujsyv0EkIjCWVqlf1CTAzC6xZJpJNqjbTTxvQXx745lziKSOAtvcupKfo6oMYsC
-         liLf4K1JPJnlar4eVrmGYC9MFpxSBynwndjLhlVHNep1u4QGoQUEbWUTU1w/f0hKNv
-         ubux6h7KquiKg==
+        b=kaSgldHf2OrdqjbmGpoR8dDujwvthKbXXwyjW2qkxd+yw+Cy3FCgq29dkGkxu16yi
+         0I8IZM6ebRugDwqNSCdlyRvep2Fq3mQLgBnGlCtx0F38KmFCI/dE+Iiz4xjFihLOV1
+         Db2Q9xih1kwmCvo0IVLnSFhTBoksU0DfcTLQA1HBlWfoPWZoQGDQt16rWCdfo0+FMu
+         OrzjmbLdKpaK3YXHPwFq69XSsOPoJ6OYsp0D7++7IzeWKCzrujD3lqUJXqN6s2GnFT
+         Hc+y5Q6iQMNIteX57IxjNGbgVl6xtmi1lJlzAEjjPDH/3hDEb8WwMCWa6csPDKR7F5
+         IsvXYC+UqHBvQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Zheng Wang <zyytlz.wz@163.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, sathya.prakash@broadcom.com,
-        sreekanth.reddy@broadcom.com,
-        suganath-prabu.subramani@broadcom.com,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 21/59] scsi: message: mptlan: Fix use after free bug in mptlan_remove() due to race condition
-Date:   Thu,  4 May 2023 15:41:04 -0400
-Message-Id: <20230504194142.3805425-21-sashal@kernel.org>
+Cc:     Andreas Gruenbacher <agruenba@redhat.com>,
+        syzbot+45d4691b1ed3c48eba05@syzkaller.appspotmail.com,
+        Sasha Levin <sashal@kernel.org>, rpeterso@redhat.com,
+        cluster-devel@redhat.com
+Subject: [PATCH AUTOSEL 6.3 22/59] gfs2: Fix inode height consistency check
+Date:   Thu,  4 May 2023 15:41:05 -0400
+Message-Id: <20230504194142.3805425-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230504194142.3805425-1-sashal@kernel.org>
 References: <20230504194142.3805425-1-sashal@kernel.org>
@@ -60,52 +58,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zheng Wang <zyytlz.wz@163.com>
+From: Andreas Gruenbacher <agruenba@redhat.com>
 
-[ Upstream commit f486893288f3e9b171b836f43853a6426515d800 ]
+[ Upstream commit cfcdb5bad34f600aed7613c3c1a5e618111f77b7 ]
 
-mptlan_probe() calls mpt_register_lan_device() which initializes the
-&priv->post_buckets_task workqueue. A call to
-mpt_lan_wake_post_buckets_task() will subsequently start the work.
+The maximum allowed height of an inode's metadata tree depends on the
+filesystem block size; it is lower for bigger-block filesystems.  When
+reading in an inode, make sure that the height doesn't exceed the
+maximum allowed height.
 
-During driver unload in mptlan_remove() the following race may occur:
+Arrays like sd_heightsize are sized to be big enough for any filesystem
+block size; they will often be slightly bigger than what's needed for a
+specific filesystem.
 
-CPU0                  CPU1
-
-                    |mpt_lan_post_receive_buckets_work()
-mptlan_remove()     |
-  free_netdev()     |
-    kfree(dev);     |
-                    |
-                    | dev->mtu
-                    |   //use
-
-Fix this by finishing the work prior to cleaning up in mptlan_remove().
-
-[mkp: we really should remove mptlan instead of attempting to fix it]
-
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-Link: https://lore.kernel.org/r/20230318081635.796479-1-zyytlz.wz@163.com
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Reported-by: syzbot+45d4691b1ed3c48eba05@syzkaller.appspotmail.com
+Signed-off-by: Andreas Gruenbacher <agruenba@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/message/fusion/mptlan.c | 2 ++
- 1 file changed, 2 insertions(+)
+ fs/gfs2/glops.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/message/fusion/mptlan.c b/drivers/message/fusion/mptlan.c
-index 142eb5d5d9df6..de2e7bcf47847 100644
---- a/drivers/message/fusion/mptlan.c
-+++ b/drivers/message/fusion/mptlan.c
-@@ -1433,7 +1433,9 @@ mptlan_remove(struct pci_dev *pdev)
- {
- 	MPT_ADAPTER 		*ioc = pci_get_drvdata(pdev);
- 	struct net_device	*dev = ioc->netdev;
-+	struct mpt_lan_priv *priv = netdev_priv(dev);
+diff --git a/fs/gfs2/glops.c b/fs/gfs2/glops.c
+index 4d99cc77a29b7..b65950e76be5a 100644
+--- a/fs/gfs2/glops.c
++++ b/fs/gfs2/glops.c
+@@ -396,6 +396,7 @@ static int inode_go_demote_ok(const struct gfs2_glock *gl)
  
-+	cancel_delayed_work_sync(&priv->post_buckets_task);
- 	if(dev != NULL) {
- 		unregister_netdev(dev);
- 		free_netdev(dev);
+ static int gfs2_dinode_in(struct gfs2_inode *ip, const void *buf)
+ {
++	struct gfs2_sbd *sdp = GFS2_SB(&ip->i_inode);
+ 	const struct gfs2_dinode *str = buf;
+ 	struct timespec64 atime;
+ 	u16 height, depth;
+@@ -442,7 +443,7 @@ static int gfs2_dinode_in(struct gfs2_inode *ip, const void *buf)
+ 	/* i_diskflags and i_eattr must be set before gfs2_set_inode_flags() */
+ 	gfs2_set_inode_flags(inode);
+ 	height = be16_to_cpu(str->di_height);
+-	if (unlikely(height > GFS2_MAX_META_HEIGHT))
++	if (unlikely(height > sdp->sd_max_height))
+ 		goto corrupt;
+ 	ip->i_height = (u8)height;
+ 
 -- 
 2.39.2
 
