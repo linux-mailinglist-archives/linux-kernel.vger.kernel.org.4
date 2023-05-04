@@ -2,99 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67CFF6F65E3
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 09:36:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C44D86F65E5
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 09:37:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbjEDHgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 03:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53632 "EHLO
+        id S229688AbjEDHhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 03:37:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbjEDHg1 (ORCPT
+        with ESMTP id S229613AbjEDHhM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 03:36:27 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 296E83A81
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 00:36:17 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <j.zink@pengutronix.de>)
-        id 1puTVQ-0002EA-IB; Thu, 04 May 2023 09:36:00 +0200
-Message-ID: <a45ac6da-8e29-9b2d-6172-8bc043afc415@pengutronix.de>
-Date:   Thu, 4 May 2023 09:35:59 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 1/2] dt-bindings: display: simple: support non-default
- data-mapping
-Content-Language: en-US, de-DE
-From:   Johannes Zink <j.zink@pengutronix.de>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, daniel@ffwll.ch, sam@ravnborg.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        thierry.reding@gmail.com, krzysztof.kozlowski+dt@linaro.org,
-        airlied@gmail.com, kernel@pengutronix.de,
-        patchwork-jzi@pengutronix.de
-References: <20230414161116.3673911-1-j.zink@pengutronix.de>
- <20230414161116.3673911-2-j.zink@pengutronix.de>
- <20230418212058.GA2351633-robh@kernel.org>
- <b4cb0a91-26f9-94d6-4bde-87cfc9ba2a47@pengutronix.de>
-In-Reply-To: <b4cb0a91-26f9-94d6-4bde-87cfc9ba2a47@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: j.zink@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 4 May 2023 03:37:12 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A6BD35B6
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 00:36:51 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 528E2338C9;
+        Thu,  4 May 2023 07:36:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1683185807; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LD41s75VzG6WMAdXGW+UhfxUeP83ggxuThwgyX+uzHs=;
+        b=YkyFcEqilzGEjPVJTwrwSZ5wcLf6nBvgBgp0t+84S7/Mg3ktT0pLBYBCrR4Pxs1Gma0b6s
+        KUiSnqHognFcnZ9vFmUqxBor+ppHsqpBvRIf8XV/jjb1ezxxJpiRfky6jZlKTNVE8q63K9
+        qQrhPWzOfGryEW939inWa9krTKb/K/8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1683185807;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LD41s75VzG6WMAdXGW+UhfxUeP83ggxuThwgyX+uzHs=;
+        b=M2ktXMpbhUb+iAm8bVAEONXVt4U0bwTrFWAR4mvO9pnQSquuecHzkTtTbxVp8fl1ZYilVx
+        ipCTjYYVnZDZ7sAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2E5AA133F7;
+        Thu,  4 May 2023 07:36:47 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 2iR9Co9gU2ToFQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Thu, 04 May 2023 07:36:47 +0000
+Date:   Thu, 04 May 2023 09:36:46 +0200
+Message-ID: <87mt2kmttd.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Caleb Harper <calebharp2005@gmail.com>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] alsa: support HP Pavilion Aero 13-be0xxx Mute LED
+In-Reply-To: <20230503175026.6796-1-calebharp2005@gmail.com>
+References: <20230503175026.6796-1-calebharp2005@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
-
-On 4/19/23 08:29, Johannes Zink wrote:
-[snip]
-
-
->>
->> Why do you duplicate what's in display/lvds.yaml?
+On Wed, 03 May 2023 19:50:26 +0200,
+Caleb Harper wrote:
 > 
-> I don't think any of the other properties from display/lvds.yaml 
-> currently make any sense to be put into simple-panel, thus I selectively 
-> picked this one.
+> This patch adds support for the mute LED on the HP Pavilion Aero Laptop
+> 13-be0xxx. The current behavior is that the LED does not turn on at any
+> time and does not indicate to the user whether the sound is muted.
 > 
-> If there is a way to selectively pick only the data_mapping, please let 
-> me know and I send a V2
+> The solution is to add a PCI quirk to properly recognize and support the
+> LED on this device.
 > 
->>
->> This also just made 'data-mapping' valid on non-LVDS panels.
+> This change has been tested on the device in question using modified
+> versions of kernels 6.0.7-6.2.12 on Arch Linux.
 > 
-> what is the canonical way of restricting the data-mapping property to 
-> LVDS panels only? Or ist the proper way to go to move the panel I use 
-> (innolux,g101ice-l01) to its own yaml file, include panel-simple.yaml 
-> and leave the others alone? I think other LVDS panels might benefit from 
-> this series though, which is why I think it makes sense to add the 
-> property to all LVDS panels.
-> 
+> Signed-off-by: Caleb Harper <calebharp2005@gmail.com>
 
-gentle ping. How do you suggest should I proceed here? Maybe pulling the 
-data-mapping definition in a separate file and include it in both files?
+Thanks, applied.
 
-Can I enable the property selectively, e.g. only on the 
-innolux,g101ice-l01 panel, in order not to enable it on non-LVDS panels 
-or on LVDS-panels which might not support it?
 
-Best regards
-Johannes
-
-[snip]
--- 
-Pengutronix e.K.                | Johannes Zink                  |
-Steuerwalder Str. 21            | https://www.pengutronix.de/    |
-31137 Hildesheim, Germany       | Phone: +49-5121-206917-0       |
-Amtsgericht Hildesheim, HRA 2686| Fax:   +49-5121-206917-5555    |
-
+Takashi
