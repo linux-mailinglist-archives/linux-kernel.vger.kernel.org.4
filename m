@@ -2,101 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A31E26F6C3A
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 14:45:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DD676F6C3D
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 14:46:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230359AbjEDMpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 08:45:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33470 "EHLO
+        id S230270AbjEDMqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 08:46:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbjEDMpl (ORCPT
+        with ESMTP id S229829AbjEDMqD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 08:45:41 -0400
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBDE76199;
-        Thu,  4 May 2023 05:45:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=14sjKY8h8FWkGXw0wntZ015vh0LfS2hxWosSTp8tzLU=; b=mUJiJWJRnjt37+pnHmf80+vLPa
-        LTmHDz9mwSOwtSnTc4j8e8JgtGrZz5XXOIYOpuocZKx65fWcStKlwHC4Y5Ber/9PjieGsaCph8eFh
-        YjCWuaPgjD8iJWZ1zUU9AyzAe3hopakTtyQwYfgbFmNZQxUBu4Z/bLgqv5H++JpCtyT+1othWxq8+
-        y3M7uuBa8MkAwxAlj4EYvTLErrYNUPTHJB80QgBuU1eDUHcD4CB2g4svUTkzfmXK8zLK56VgBqnp4
-        kPvLhcrKgfVo1CPwVcJl6SFZSExnoH/yNX1LJjKYzjabB23KydEZolNi3/3EkETqXRVo+JrIuQ75o
-        iiiTuh2A==;
-Received: from p200300ccff0d59001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff0d:5900:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1puYKp-0000l9-2J; Thu, 04 May 2023 14:45:23 +0200
-Date:   Thu, 4 May 2023 14:45:21 +0200
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Tony Lindgren <tony@atomide.com>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        linux-omap@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [BISECTED REGRESSION] OMAP1 GPIO breakage
-Message-ID: <20230504144521.1b3a3574@aktux>
-In-Reply-To: <CACRpkdY9ShRATHa776KyzeArmQdKxdwGxJC11YnmhWiCdSGzEA@mail.gmail.com>
-References: <20230425173241.GF444508@darkstar.musicnaut.iki.fi>
-        <20230425201117.457f224c@aktux>
-        <20230425183857.GG444508@darkstar.musicnaut.iki.fi>
-        <20230425212040.5a4d5b09@aktux>
-        <20230425193637.GH444508@darkstar.musicnaut.iki.fi>
-        <20230425215848.247a936a@aktux>
-        <20230426071910.GE14287@atomide.com>
-        <20230504055156.GO14287@atomide.com>
-        <CACRpkdY9ShRATHa776KyzeArmQdKxdwGxJC11YnmhWiCdSGzEA@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.24; x86_64-pc-linux-gnu)
+        Thu, 4 May 2023 08:46:03 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2839D6A4C
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 05:45:58 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-763997ab8cdso50726539f.2
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 05:45:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683204357; x=1685796357;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+14X7h/e+XMhMcUDURsY0MOkjOh1QQgkL0DcudAyawk=;
+        b=lmxYE/lVKSkUWGdFGoyBvkGHtD5CqyKtc/CPQsr/5Qq+x4g41DJ+1i4E7eJYq/NpJT
+         K8fQbOWtyJ2lb+18EvYNRao9rWxGeYkNqe7hlKRl5wc7k6yGxF7XDpZoKmrdGs1WCZ3R
+         TiGICspg00AEwPP9FvWAPKY1fnjhgUB+v6CMNKyttw+DwN4hFHTdUuR4effiv6jXiivB
+         fK75mQ3WJxM1IBkgOWcBYpGhTW/qSBCYSZHZH4lCu8yiDFb6Zk+84XBSPdYFZ6EqVSDL
+         4BPDxcIuvF9pe/qjslJDkTDKeD2uhpvg/OQwBi7XcLMzmkKIeJM9Pq76FdTeT3FuvJ1X
+         APEQ==
+X-Gm-Message-State: AC+VfDzmlIFY4Hq+m7fIE9F+Zp0+/rIJ1vPMIbLCwnE7JeQ91NUSePM6
+        WJf6boFXwadMHJ3N0zj0Hpu2JxbM+MTF2Q1GT1Echdh1TQ6MjBc=
+X-Google-Smtp-Source: ACHHUZ5FTNV73V8waMafqVjRwE7qAPZcfNff1eUOvau/1qBqett/eHJPgDMrmb3ONJ50GBHFMOZAULNMhiSldmRsoF45/T41Kl5A
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Score: -1.0 (-)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a02:a14a:0:b0:40f:99ae:dba8 with SMTP id
+ m10-20020a02a14a000000b0040f99aedba8mr11586301jah.1.1683204357479; Thu, 04
+ May 2023 05:45:57 -0700 (PDT)
+Date:   Thu, 04 May 2023 05:45:57 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000cfe36f05fadd8def@google.com>
+Subject: [syzbot] Monthly nfc report (May 2023)
+From:   syzbot <syzbot+listc5abc14a7a3265b802d7@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, linux-nfc@lists.01.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello nfc maintainers/developers,
 
-On Thu, 4 May 2023 14:13:32 +0200
-Linus Walleij <linus.walleij@linaro.org> wrote:
+This is a 31-day syzbot report for the nfc subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/nfc
 
-> On Thu, May 4, 2023 at 7:52=E2=80=AFAM Tony Lindgren <tony@atomide.com> w=
-rote:
-> > * Tony Lindgren <tony@atomide.com> [230426 07:20]: =20
-> > > Seems that we should just revert this patch for now and try again aft=
-er
-> > > the issues have been fixed. =20
-> >
-> > Looking at the proposed fixes being posted seems like they are quite
-> > intrusive.. How about we partially revert this patch so omap1 still
-> > uses static assigment of gpios? =20
->=20
-> I think Andreas patch (commit 92bf78b33b0b463b00c6b0203b49aea845daecc8)
-> kind of describes the problem with that: the probe order is now unpredict=
-able,
-> so if we revert the patch then that problem returns, but I don't know how
-> serious that problem is.
->=20
-well, I think we can even fully revert 92bf78b33b0b463b00c6b0203b49aea845da=
-ecc8
-after my patch
+During the period, 0 new issues were detected and 0 were fixed.
+In total, 9 issues are still open and 17 have been fixed so far.
 
-gpiolib: fix allocation of mixed dynamic/static GPIOs
+Some of the still happening issues:
 
-is in as a short time solution. That should only leave unpredictable
-numbers of multiple dynamic gpio controllers.
+Ref Crashes Repro Title
+<1> 70      Yes   BUG: corrupted list in nfc_llcp_unregister_device
+                  https://syzkaller.appspot.com/bug?extid=81232c4a81a886e2b580
+<2> 50      Yes   INFO: task hung in nfc_rfkill_set_block
+                  https://syzkaller.appspot.com/bug?extid=3e3c2f8ca188e30b1427
+<3> 45      Yes   KASAN: use-after-free Read in nfc_llcp_find_local
+                  https://syzkaller.appspot.com/bug?extid=e7ac69e6a5d806180b40
+<4> 41      Yes   BUG: corrupted list in nfc_llcp_register_device
+                  https://syzkaller.appspot.com/bug?extid=c1d0a03d305972dbbe14
 
-Regards,
-Andrea
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
+
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
+
+You may send multiple commands in a single email message.
