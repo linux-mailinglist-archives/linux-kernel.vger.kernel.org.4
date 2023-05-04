@@ -2,102 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EC136F6AE6
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 14:10:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FA596F6AEA
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 14:11:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230363AbjEDMKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 08:10:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44922 "EHLO
+        id S230366AbjEDMLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 08:11:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230306AbjEDMKh (ORCPT
+        with ESMTP id S229564AbjEDMLI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 08:10:37 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A820619F;
-        Thu,  4 May 2023 05:10:33 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 344CAPEf053045;
-        Thu, 4 May 2023 07:10:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1683202225;
-        bh=Dbu5qyYWZQkEinvxkuN7EfgdmcEyIwFauHLsvIRwG7s=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=PfeCetWo1Q3ZLzsGOt6/5TLLgE/Zh6EYfhSqYfy49jF6lhhMBxmx6okKvRzW9nKy+
-         Cgt7fibslRxKWqvth/0qmVCb/B1aT8fsFava88Y3K4bbNee6lB5qwR7L4CCT2HRCpx
-         +YKH3L7yxxXim/QN0I1DXRgsFbORHKfG2mKw4uN4=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 344CAPto123332
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 4 May 2023 07:10:25 -0500
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 4
- May 2023 07:10:25 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 4 May 2023 07:10:25 -0500
-Received: from [172.24.147.77] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 344CAMPH035120;
-        Thu, 4 May 2023 07:10:22 -0500
-Message-ID: <67eccecb-f4a4-7f15-5316-27fd39e65b51@ti.com>
-Date:   Thu, 4 May 2023 17:40:21 +0530
+        Thu, 4 May 2023 08:11:08 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F2E5BB1;
+        Thu,  4 May 2023 05:11:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=/QXPslg/3qx/2kW3J+zsuUr+vnPh+T8eN64JH56Qscg=;
+        t=1683202267; x=1684411867; b=PSFxoIfXUypASoldpClIM2t1TlpzRktBgjpIIg11neYYz0B
+        3y9o2fuEXT1DrHP0c1YtOkHAQJIlFQpee49rYysVjyqkFJQCwOf07r4+1dWJi/jjWLWibCLeaOhfq
+        sEa5llk6XUfVznhLm1jHGpTtiXfRTQVTEnazM8x/2zCG2aCU33qh/nNCqXr1JdKTdJvYadvKOJ8UE
+        IxAaeIfORRak0d5tsYutAEysusScHs9tyTPDh7YdKpjCJrvpFoymbYSACccnT56/b1ZG+mDIndcBz
+        WOxuSpu0gylFbfTv9ohV5BLSfDMDyP+9sZqlmaPL6qqNWQwb/3gwrUYIW7RgRpkw==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.96)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1puXnQ-00GwbM-06;
+        Thu, 04 May 2023 14:10:52 +0200
+Message-ID: <8d2b0aec270b8cd0111654dc4b361987a112d3ce.camel@sipsolutions.net>
+Subject: Re: [PATCH] wifi: iwlwifi: Fix spurious packet drops with RSS
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Sultan Alsawaf <sultan@kerneltoast.com>
+Cc:     "Greenman, Gregory" <gregory.greenman@intel.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Goodstein, Mordechay" <mordechay.goodstein@intel.com>,
+        "Coelho, Luciano" <luciano.coelho@intel.com>,
+        "Sisodiya, Mukesh" <mukesh.sisodiya@intel.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Date:   Thu, 04 May 2023 14:10:50 +0200
+In-Reply-To: <20230430001348.3552-1-sultan@kerneltoast.com>
+References: <20230430001348.3552-1-sultan@kerneltoast.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] arm64: dts: ti: k3-j784s4: Fix wakeup pinmux range and
- pinctrl node offsets
-To:     Nishanth Menon <nm@ti.com>
-CC:     Tero Kristo <kristo@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Andrew Davis <afd@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Apurva Nandan <a-nandan@ti.com>, Udit Kumar <u-kumar1@ti.com>
-References: <20230503083143.32369-1-t-konduru@ti.com>
- <20230503114625.gqnijd3bog5bwemz@parameter>
- <31b31af7-6c54-7d05-f7ef-fcceba48580e@ti.com>
- <20230504115207.h6trzy4mqjcbkcm3@comment>
-Content-Language: en-US
-From:   Thejasvi Konduru <t-konduru@ti.com>
-In-Reply-To: <20230504115207.h6trzy4mqjcbkcm3@comment>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-malware-bazaar: not-scanned
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+[let's see if my reply will make it to the list, the original seems to
+not have]
 
-On 04/05/23 17:22, Nishanth Menon wrote:
-> On 14:36-20230504, Thejasvi Konduru wrote:
->> On 03/05/23 17:16, Nishanth Menon wrote:
->>> On 14:01-20230503, Thejasvi Konduru wrote:
->>>> The wkup_pmx register region in j784s4 has multiple non-addressable
->>>> regions, hence the existing wkup_pmx region is split as follows to
->>>> avoid the non-addressable regions. The pinctrl node offsets are
->>>> also corrected as per the newly split wkup_pmx* nodes.
->>>>
->>>> wkup_pmx0 -> 13 pins (WKUP_PADCONFIG 0 - 12)
->>>> wkup_pmx1 -> 11 pins (WKUP_PADCONFIG 14 - 24)
->>>> wkup_pmx2 -> 72 pins (WKUP_PADCONFIG 26 - 97)
->>>> wkup_pmx3 -> 1 pin (WKUP_PADCONFIG 100)
->>>>
->>>> Fixes: 4664ebd8346a ("arm64: dts: ti: Add initial support for J784S4 SoC")
->>>> Signed-off-by: Thejasvi Konduru <t-konduru@ti.com>
->>>> ---
->>> Could you provide a link to the output of:
->>> $ cat /sys/kernel/debug/pinctrl/*/pins
->> https://gist.github.com/thejasvikonduru/05b1a8e0fd8176116b7a3cc4e43b244a
-> Was this failing prior to this patch? Trying to understand the "Fix"
-> aspect of this patch.
->
-Yes,it was failing prior to this patch.
+On Sun, 2023-04-30 at 00:13 +0000, Sultan Alsawaf wrote:
+> From: Sultan Alsawaf <sultan@kerneltoast.com>
+>=20
+> When RSS is used and one of the RX queues lags behind others by more than
+> 2048 frames, then new frames arriving on the lagged RX queue are
+> incorrectly treated as old rather than new by the reorder buffer, and are
+> thus spuriously dropped. This is because the reorder buffer treats frames
+> as old when they have an SN that is more than 2048 away from the head SN,
+> which causes the reorder buffer to drop frames that are actually valid.
+>=20
+> The odds of this occurring naturally increase with the number of
+> RX queues used, so CPUs with many threads are more susceptible to
+> encountering spurious packet drops caused by this issue.
+>=20
+> As it turns out, the firmware already detects when a frame is either old =
+or
+> duplicated and exports this information, but it's currently unused. Using
+> these firmware bits to decide when frames are old or duplicated fixes the
+> spurious drops.
+
+So I assume you tested it now, and it works? Somehow I had been under
+the impression we never got it to work back when...
+
+> Johannes mentions that the 9000 series' firmware doesn't support these
+> bits, so disable RSS on the 9000 series chipsets since they lack a
+> mechanism to properly detect old and duplicated frames.
+
+Indeed, I checked this again, I also somehow thought it was backported
+to some versions but doesn't look like. We can either leave those old
+ones broken (they only shipped with fewer cores anyway), or just disable
+it as you did here, not sure. RSS is probably not as relevant with those
+slower speeds anyway.
+
+> +++ b/drivers/net/wireless/intel/iwlwifi/mvm/rxmq.c
+> @@ -918,7 +918,6 @@ static bool iwl_mvm_reorder(struct iwl_mvm *mvm,
+>         struct iwl_mvm_sta *mvm_sta;
+>         struct iwl_mvm_baid_data *baid_data;
+>         struct iwl_mvm_reorder_buffer *buffer;
+> -       struct sk_buff *tail;
+>         u32 reorder =3D le32_to_cpu(desc->reorder_data);
+>         bool amsdu =3D desc->mac_flags2 & IWL_RX_MPDU_MFLG2_AMSDU;
+>         bool last_subframe =3D
+> @@ -1020,7 +1019,7 @@ static bool iwl_mvm_reorder(struct iwl_mvm *mvm,
+>                                  rx_status->device_timestamp, queue);
+>=20
+>         /* drop any oudated packets */
+> -       if (ieee80211_sn_less(sn, buffer->head_sn))
+> +       if (reorder & IWL_RX_MPDU_REORDER_BA_OLD_SN)
+>                 goto drop;
+>=20
+>         /* release immediately if allowed by nssn and no stored frames */
+> @@ -1068,24 +1067,12 @@ static bool iwl_mvm_reorder(struct iwl_mvm *mvm,
+>                 return false;
+>         }
+
+All that "send queue sync" code in the middle that was _meant_ to fix
+this issue but I guess never really did can also be removed, no? And the
+timer, etc. etc.
+
+johannes
+
+[leaving full quote for the benefit of the mailing list]
+
+>=20
+> -       index =3D sn % buffer->buf_size;
+> -
+> -       /*
+> -        * Check if we already stored this frame
+> -        * As AMSDU is either received or not as whole, logic is simple:
+> -        * If we have frames in that position in the buffer and the last =
+frame
+> -        * originated from AMSDU had a different SN then it is a retransm=
+ission.
+> -        * If it is the same SN then if the subframe index is incrementin=
+g it
+> -        * is the same AMSDU - otherwise it is a retransmission.
+> -        */
+> -       tail =3D skb_peek_tail(&entries[index].e.frames);
+> -       if (tail && !amsdu)
+> -               goto drop;
+> -       else if (tail && (sn !=3D buffer->last_amsdu ||
+> -                         buffer->last_sub_index >=3D sub_frame_idx))
+> +       /* drop any duplicated packets */
+> +       if (desc->status & cpu_to_le32(IWL_RX_MPDU_STATUS_DUPLICATE))
+>                 goto drop;
+>=20
+>         /* put in reorder buffer */
+> +       index =3D sn % buffer->buf_size;
+>         __skb_queue_tail(&entries[index].e.frames, skb);
+>         buffer->num_stored++;
+>         entries[index].e.reorder_time =3D jiffies;
+> --
+> 2.40.1
+>=20
 
