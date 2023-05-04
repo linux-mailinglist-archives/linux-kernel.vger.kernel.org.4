@@ -2,225 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E72EE6F7083
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 19:10:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 282EA6F7087
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 19:10:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbjEDRKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 13:10:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42150 "EHLO
+        id S229774AbjEDRKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 13:10:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbjEDRKj (ORCPT
+        with ESMTP id S229874AbjEDRKs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 13:10:39 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7569655BF
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 10:10:26 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-96598a7c5e0so124168366b.3
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 10:10:26 -0700 (PDT)
+        Thu, 4 May 2023 13:10:48 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E17A15258
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 10:10:28 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f193ca059bso5728655e9.3
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 10:10:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1683220224; x=1685812224;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/3LXkllH51M477WCMg3uSfjiWcdYxBBntiHz8fBQu3Y=;
-        b=FY6Ok1vpintUDhzMy5CBfwRFaqQH0Y71z9MeGxtNkXQX6HdLd9TEdBtVoeJpHf4GCU
-         bcxTwP7uDCROKbmv4ZpBpScAYeMRIZmXpkDYtkEmpvp1vftR7TFYm0v9oQcNrG7y27c6
-         bYhjEDjfLElcIoyYKNwt1suEnkubdFTLrnej4=
+        d=linaro.org; s=google; t=1683220227; x=1685812227;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=pJpYk7FyfhnD3BtuxCCzvxRDbIq/0dZEMKhDfDZ1Z+U=;
+        b=Q9AvnvHwE5GSMeGC8jWp6Nj/YSzX0zhUv0s9ljtRnNTHUQK2qAkxwqPV1wU2d5ZwfN
+         lQSV5Kbyj57j+s9eCtYj3LUZ17NawG7sqWXH14qLZlo1s/0QVda0M2YCTV9I3hsIkViv
+         gWyxno1lg/nwW0bYxUUKm88jzKrZj0/QtcM0VC902mxWIK0GVCfeu9K2PXBS7RU9U2wv
+         sY942RASuaqv6oqEuhvBtjACcZV85c1N9wtmG9rdYdZr0TuT1b04p23lzKCZ2Pjx0Kth
+         MFwQOIZI456IlTaeeKnqaxLaHNtvA6TV6YGCQijuryq3rHJJpoIYBrRpHb7HwMMakd07
+         S+cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683220224; x=1685812224;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/3LXkllH51M477WCMg3uSfjiWcdYxBBntiHz8fBQu3Y=;
-        b=VEcn9/qLW5hohvZE7uTIfkRXHvNjscxOOZTO9iof3oBeSVcwsYCqXF2MguhPvrUjsM
-         GBHQQAZURBV/KYQceO++E0ZjwJOf9JAL596WeSG39+wjqGPttL4mfusBVo+xq/hSd6PE
-         GfKQ/5az88/O5uHe4Bzp9/YnfieXY3bzq6bmfaQQ+mE2li4x5wkIL/9UGk5S3ShBQqYl
-         iv/d8Xn2OmDyBXjI72W9TwpHjaSsyKSLbuQF7MNI8CGrVIi+ztzVkzMHOXILT50S5mxp
-         GETetR6aDi3O/8GlRTfwZQGqqhT35tcfjeGOvUoDDINzmA3zAD5cPlfXQ2YyFFNZNQe5
-         k5gQ==
-X-Gm-Message-State: AC+VfDyiCUQsZJE8EOY3C+mSZXK0GJCUsNxWnJMA00OSKwNjJAp9s9ur
-        PYdPhEqhCqFKwRy5lNXHCJW/whREl2iDP/1W6Lp5VJ1y
-X-Google-Smtp-Source: ACHHUZ78cQ+hzSYiVZJPu4vxfzzog0DDqpcXepFotakLSc/scyxpZToGPfxSKADOMDcplW3ssUCZJA==
-X-Received: by 2002:a17:907:a08a:b0:94f:e98:4e94 with SMTP id hu10-20020a170907a08a00b0094f0e984e94mr8758093ejc.47.1683220223858;
-        Thu, 04 May 2023 10:10:23 -0700 (PDT)
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com. [209.85.208.42])
-        by smtp.gmail.com with ESMTPSA id my24-20020a1709065a5800b0094a8115e148sm18963153ejc.87.2023.05.04.10.10.23
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 10:10:23 -0700 (PDT)
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5083bd8e226so1120135a12.3
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 10:10:23 -0700 (PDT)
-X-Received: by 2002:a17:907:d22:b0:959:8575:2635 with SMTP id
- gn34-20020a1709070d2200b0095985752635mr8136293ejc.17.1683220222679; Thu, 04
- May 2023 10:10:22 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683220227; x=1685812227;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pJpYk7FyfhnD3BtuxCCzvxRDbIq/0dZEMKhDfDZ1Z+U=;
+        b=Z3Slup/HbrJ+7UBONVft33BTWAFc7gSWDpMAjyULo5rS5ff2FxmPxsGJYuRtcMcYtD
+         KCLtq1Bslt+nEGN6EHr0BHuKSoE+ieDjUuVf/gwD9gs64Rqh/gDBRqAdFH7xjJsRF4hL
+         i6Z0ubqf+c3jrQ+yX01/dpc1Nud40NMcMCUeWxw5HAzE3N6eHTZdkXy+raZqzaeLdy/n
+         ykrivwvh12mTo4E+j3v0GPiOhCtBUoQujPJm3K/YR+Ivvvb5MyKO1GgNsWuWCtW3VxwO
+         aVGJInoy06peAqqRyhDtPX3cAjn2DA110tCBurwv6Fz/z2fVuo4/d0C56410hyEqOmls
+         D+Vw==
+X-Gm-Message-State: AC+VfDwjowaIROB8DvY64Io0jgJ1MmXhRMyL9S0gmJ4FXaY6Bn6mhLcW
+        YB2tupa9eOQ6msw2PIV3l08DDomo+u0Uh6nbAugTSJsAr479mP1l
+X-Google-Smtp-Source: ACHHUZ41LmJZheJk/hsWyMJ2KDBn+M67xJfyItsrxUnGzlMD8NznalIeiSZvmwu8HOuRatJjMpWQM2HmtzeAsTHMc24=
+X-Received: by 2002:a5d:5547:0:b0:306:30e2:c84c with SMTP id
+ g7-20020a5d5547000000b0030630e2c84cmr2929684wrw.49.1683220226723; Thu, 04 May
+ 2023 10:10:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230427225647.1101172-1-dave.hansen@linux.intel.com>
- <CAHk-=wgrdOm8RwO+u8bydrbgs0wXJV_9mBYAtzX9d9hEY7a25A@mail.gmail.com>
- <CAHk-=wiHvdgbLxayyCsRU45JnKCZkCOpEJPfOvE3eYCnGjVcSA@mail.gmail.com>
- <20230429003822.n3mglslg666j3npp@box.shutemov.name> <641a9348-a052-6bb5-e6c7-64acb6405328@intel.com>
- <CAHk-=wgnGoj8qZg3SRh1Z1-mU=b3ryydXZykUuarnrAn6LuHBw@mail.gmail.com>
- <CAHk-=wgN=GY2A0htYQQRmPaLCorWnFatY_XO0X2w_m9xXQDcPA@mail.gmail.com>
- <f5983c42-82a5-1cd8-c717-67bfd72377dc@intel.com> <CAHk-=wgpOqujY210W9-KJPEfD42W_bvUdLwF-PAvyxJQ92tzDg@mail.gmail.com>
- <CAHk-=wj7q6Ng5uemZtrDnhtcfrgkzX5Z18eKZj94FY5d2quP6A@mail.gmail.com> <20230504062827.algltnmlddtzmfz5@box.shutemov.name>
-In-Reply-To: <20230504062827.algltnmlddtzmfz5@box.shutemov.name>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 4 May 2023 10:10:05 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjvmZhMU=R_H4t6y7-kUxu7B-ceM=wssJ=EyjcubtzpoQ@mail.gmail.com>
-Message-ID: <CAHk-=wjvmZhMU=R_H4t6y7-kUxu7B-ceM=wssJ=EyjcubtzpoQ@mail.gmail.com>
-Subject: Re: [GIT PULL] x86/mm for 6.4
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kirill.shutemov@linux.intel.com,
-        Peter Zijlstra <peterz@infradead.org>
+References: <20230504082644.1461582-1-bhupesh.sharma@linaro.org>
+ <20230504082644.1461582-4-bhupesh.sharma@linaro.org> <344b34d8-c69e-bde4-7446-30d32657ee40@linaro.org>
+In-Reply-To: <344b34d8-c69e-bde4-7446-30d32657ee40@linaro.org>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Date:   Thu, 4 May 2023 22:40:14 +0530
+Message-ID: <CAH=2NtzVEatke2LFyTFJDBgrQ07yz-AQgV7ubq+F6oxPmbKiZw@mail.gmail.com>
+Subject: Re: [PATCH v3 3/5] usb: misc: eud: Add driver support for SM6115 / SM4250
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        agross@kernel.org, andersson@kernel.org,
+        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
+        robh+dt@kernel.org, linux-usb@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, krzysztof.kozlowski@linaro.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 3, 2023 at 11:28=E2=80=AFPM Kirill A. Shutemov <kirill@shutemov=
-.name> wrote:
+On Thu, 4 May 2023 at 15:22, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
 >
-> On Wed, May 03, 2023 at 09:38:03AM -0700, Linus Torvalds wrote:
-> > > Why does it do that "shift-by-63" game there, instead of making
-> > > tlbstate_untag_mask just have bit #63 always set?
+> On 4.05.2023 10:26, Bhupesh Sharma wrote:
+> > Add SM6115 / SM4250 SoC EUD support in qcom_eud driver.
 > >
-> > And it turns out that bit #63 really _is_ always set, so I think the
-> > solution to this all is to remove the sign games in untag_addr()
-> > entirely.
->
-> Untagging kernel pointer with LAM enabled will land it in the canonical
-> hole which is safe as it leads to #GP on dereference.
+> > On some SoCs (like the SM6115 / SM4250 SoC), the mode manager
+> > needs to be accessed only via the secure world (through 'scm'
+> > calls).
+> >
+> > Also, the enable bit inside 'tcsr_check_reg' needs to be set
+> > first to set the eud in 'enable' mode on these SoCs.
+> >
+> > Since this difference comes from how the firmware is configured, so
+> > the driver now relies on the presence of an extra boolean DT property
+> > to identify if secure access is needed.
+> >
+> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> > ---
+> >  drivers/usb/misc/Kconfig    |  1 +
+> >  drivers/usb/misc/qcom_eud.c | 66 ++++++++++++++++++++++++++++++++++---
+> >  2 files changed, 62 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
+> > index 99b15b77dfd5..fe1b5fec1dfc 100644
+> > --- a/drivers/usb/misc/Kconfig
+> > +++ b/drivers/usb/misc/Kconfig
+> > @@ -147,6 +147,7 @@ config USB_APPLEDISPLAY
+> >  config USB_QCOM_EUD
+> >       tristate "QCOM Embedded USB Debugger(EUD) Driver"
+> >       depends on ARCH_QCOM || COMPILE_TEST
+> > +     select QCOM_SCM
+> >       select USB_ROLE_SWITCH
+> >       help
+> >         This module enables support for Qualcomm Technologies, Inc.
+> > diff --git a/drivers/usb/misc/qcom_eud.c b/drivers/usb/misc/qcom_eud.c
+> > index b7f13df00764..b4736edcc64c 100644
+> > --- a/drivers/usb/misc/qcom_eud.c
+> > +++ b/drivers/usb/misc/qcom_eud.c
+> > @@ -5,12 +5,14 @@
+> >
+> >  #include <linux/bitops.h>
+> >  #include <linux/err.h>
+> > +#include <linux/firmware/qcom/qcom_scm.h>
+> >  #include <linux/interrupt.h>
+> >  #include <linux/io.h>
+> >  #include <linux/iopoll.h>
+> >  #include <linux/kernel.h>
+> >  #include <linux/module.h>
+> >  #include <linux/of.h>
+> > +#include <linux/of_device.h>
+> >  #include <linux/platform_device.h>
+> >  #include <linux/slab.h>
+> >  #include <linux/sysfs.h>
+> > @@ -30,15 +32,22 @@
+> >  #define EUD_INT_SAFE_MODE    BIT(4)
+> >  #define EUD_INT_ALL          (EUD_INT_VBUS | EUD_INT_SAFE_MODE)
+> >
+> > +struct eud_soc_cfg {
+> > +     u32 tcsr_check_offset;
+> > +};
+> Not sure if turning this into a struct is necessary.. can't
+> we just store the offset, or do we expect more changes?
 
-You are entirely missing the point.
+I can see future versions already supporting newer features, so I kept
+it a struct for now.
 
-The GP fault does *NOT MATTER*.
+> > +
+> >  struct eud_chip {
+> >       struct device                   *dev;
+> >       struct usb_role_switch          *role_sw;
+> > +     const struct eud_soc_cfg        *eud_cfg;
+> >       void __iomem                    *base;
+> >       void __iomem                    *mode_mgr;
+> >       unsigned int                    int_status;
+> >       int                             irq;
+> >       bool                            enabled;
+> >       bool                            usb_attached;
+> > +     bool                            secure_mode_enable;
+> > +     phys_addr_t                     secure_mode_mgr;
+> >  };
+> >
+> >  static int enable_eud(struct eud_chip *priv)
+> > @@ -46,7 +55,11 @@ static int enable_eud(struct eud_chip *priv)
+> >       writel(EUD_ENABLE, priv->base + EUD_REG_CSR_EUD_EN);
+> >       writel(EUD_INT_VBUS | EUD_INT_SAFE_MODE,
+> >                       priv->base + EUD_REG_INT1_EN_MASK);
+> > -     writel(1, priv->mode_mgr + EUD_REG_EUD_EN2);
+> > +
+> > +     if (priv->secure_mode_mgr)
+> > +             qcom_scm_io_writel(priv->secure_mode_mgr + EUD_REG_EUD_EN2, BIT(0));
+> #define [field name] BIT(0)
 
-Think of 'untagged_addr()' as a companion to - but absolutely *NOT* a
-replacement for - 'access_ok()'.
+Ok.
 
-You have three distinct cases:
+> > +     else
+> > +             writel(1, priv->mode_mgr + EUD_REG_EUD_EN2);
+> s/1/[field name]/
 
- (a) user-supplied valid user address
+Ok.
 
- (b) user-supplied invalid user address (it high bit set)
+> >       return usb_role_switch_set_role(priv->role_sw, USB_ROLE_DEVICE);
+> >  }
+> > @@ -54,7 +67,11 @@ static int enable_eud(struct eud_chip *priv)
+> >  static void disable_eud(struct eud_chip *priv)
+> >  {
+> >       writel(0, priv->base + EUD_REG_CSR_EUD_EN);
+> > -     writel(0, priv->mode_mgr + EUD_REG_EUD_EN2);
+> > +
+> > +     if (priv->secure_mode_mgr)
+> > +             qcom_scm_io_writel(priv->secure_mode_mgr + EUD_REG_EUD_EN2, 0);
+> > +     else
+> > +             writel(0, priv->mode_mgr + EUD_REG_EUD_EN2);
+> >  }
+> >
+> >  static ssize_t enable_show(struct device *dev,
+> > @@ -178,12 +195,15 @@ static void eud_role_switch_release(void *data)
+> >  static int eud_probe(struct platform_device *pdev)
+> >  {
+> >       struct eud_chip *chip;
+> > +     struct resource *res;
+> > +     phys_addr_t tcsr_base, tcsr_check;
+> >       int ret;
+> >
+> >       chip = devm_kzalloc(&pdev->dev, sizeof(*chip), GFP_KERNEL);
+> >       if (!chip)
+> >               return -ENOMEM;
+> >
+> > +
+> ?
 
- (c) actual kernel address
+Oops, I will fix it in v4.
 
-and 'untagged_addr()' and 'access_ok()' work on the same basic input
-domain: cases (a) and (b).
+> >       chip->dev = &pdev->dev;
+> >
+> >       chip->role_sw = usb_role_switch_get(&pdev->dev);
+> > @@ -200,9 +220,40 @@ static int eud_probe(struct platform_device *pdev)
+> >       if (IS_ERR(chip->base))
+> >               return PTR_ERR(chip->base);
+> >
+> > -     chip->mode_mgr = devm_platform_ioremap_resource(pdev, 1);
+> > -     if (IS_ERR(chip->mode_mgr))
+> > -             return PTR_ERR(chip->mode_mgr);
+> > +     chip->secure_mode_enable = of_property_read_bool(chip->dev->of_node,
+> > +                                             "qcom,secure-mode-enable");
+> If we map this region iff it's supposed to be used, we may just check
+> for its presence and skip the additional property. Then, the address
+> being non-NULL would invalidate the boolean property.
 
-And the important thing for 'untagged_addr()' is that in case (a) it
-needs to remove the tab bits, and in case (b) needs to *keep* the
-address as an invalid user address.
+Bjorn requested during the review of the last version that we should not ioremap
+the secure mode_mgr region. So, I followed this approach instead.
 
-Note that it does not need to keep the value the *same*. Nobody cares.
+> > +     /*
+> > +      * EUD block on a few Qualcomm SoCs need secure register access.
+> > +      * Check for the same.
+> > +      */
+> > +     if (chip->secure_mode_enable) {
+> > +             res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+> > +             if (!res)
+> > +                     return dev_err_probe(chip->dev, -ENODEV,
+> > +                                          "failed to get secure_mode_mgr reg base\n");
+> > +
+> > +             chip->secure_mode_mgr = res->start;
+> > +     } else {
+> > +             chip->mode_mgr = devm_platform_ioremap_resource(pdev, 1);
+> > +             if (IS_ERR(chip->mode_mgr))
+> > +                     return PTR_ERR(chip->mode_mgr);
+> > +     }
+> > +
+> > +     /* Check for any SoC specific config data */
+> > +     chip->eud_cfg = of_device_get_match_data(&pdev->dev);
+> > +     if (chip->eud_cfg) {
+> > +             res = platform_get_resource(pdev, IORESOURCE_MEM, 2);
+> I'd vouch to use _byname, in case we get some EUD impl that needs a
+> different sort of a register set..
 
-And also note that the resulting pointer may or may not GP-fault. Nobody ca=
-res.
+Sure, it makes sense.
 
-Just to hit this home with a very explicit example, think of the case
-where the kernel config for address masking isn't even enabled, and
-'untagged_addr()' is a 1:1 map with no changes.
+> > +             if (!res)
+> > +                     return dev_err_probe(chip->dev, -ENODEV,
+> > +                                          "failed to get tcsr reg base\n");
+> > +
+> > +             tcsr_base = res->start;
+> > +             tcsr_check = tcsr_base + chip->eud_cfg->tcsr_check_offset;
+> > +
+> > +             ret = qcom_scm_io_writel(tcsr_check, BIT(0));
+> s/BIT(0)/..
 
-Doing 'untagged_addr()' on a valid user address results in a valid
-user address. And doing it on an invalid user address results in an
-invalid user address. GOOD.
+Ok.
 
-Note that doing 'untagged_addr()' on an invalid user access does NOT
-IN ANY WAY make that invalid address somehow "safe" and cause a GP
-fault. Sure, it _might_ GP-fault. Or it might not. It might point to
-random kernel data.
-
-Verification of the address is simply not the job of
-'untagged_addr()'. Never has been, never will be, and fundamentally
-*cannot* be, since for the forseeable future 'untagged_addr()' is a
-no-op for every single user outside of Intel.
-
-Verification is separate. The verification is never "let's randomly
-just access this pointer and see if it gets a GP-fault". No. We have a
-user pointer, it needs *checking*. It needs to have something like
-"use lookup_vma() to look up the vma that is associated with that
-address". But it could also be something like "just do the range check
-in GUP".
-
-And that's why "keep an invalid user address as an invalid address",
-because that *separate* stage of verifying the address needs to still
-show that it's invalid.
-
-Now, sometimes the "verification" might actually be "access_ok()"
-itself, but honestly, if the address is used for an actual access,
-then it shouldn't have gone through the 'untagged_addr()' thing at
-all. It should just have been used as-is for the access. So normally
-'untagged_addr()' does not get used *together* with 'access_ok()',
-although that should obviously also work.
-
-End result: all that really matters on x86-64 is that
-'untagged_addr()' must keep the high bit as-is. That's the "this is
-not a valid user address" bit. That's very much explicit in my current
-series, of course, but even without my current series it was
-implicitly the truth with those LAM patches (particularly considering
-that 'untagged_addr()' didn't actually do the "keep kernel addresses
-as-is" that it *thought* it did due to the signed type confusion).
-
-So what about that (c) case? It doesn't matter. It's simply
-fundamentally wrong for the kernel to pass an actual kernel address to
-'untagged_addr()' and expect something useful back. It's a nonsensical
-thing to do, and it's a huge bug.
-
-So for the (c) case, the fact that the result would be useless and
-*usually* GP-fault on access is a good thing. But it's not a
-requirement, it's more of a "oh, cool, it's good that the nonsensical
-operation causes quick failures".
-
-So in that case, the GP fault is a "feature", but not a requirement.
-Again, the normal 'untagged_addr()' case (of not changing the pointer
-at all), obviously does *not* cause the kernel pointer corruption, but
-maybe we could even have a debug mode. We could literally make
-'untagged_addr()' do something like
-
-   #ifdef CONFIG_DEBUG_NONLAM
-   // Make sure nobody tries to use untagged_addr() on non-user addresses
-   #define untagged_addr(x) ((x) | (long)(x)>>63)
-   #endif
-
-except obviously with the "get the types right and use 'x' only once"
-thing (so the above #define is buggy, and puresly for conceptual
-documentation purposes).
-
-See?
-
-Side note: one day, maybe we want to use address tagging *inside* the
-kernel. However, that will not use 'untagged_addr()'. That would use
-some *other* model for cleaning up kernel pointers when necessary.
-
-Even on x86-64, the tagging rules for kernel and user space is
-entirely different, in that user-space LAM rules are "U48" or "U57",
-while kernel LAM rules depend on the paging mode, and the two are
-*not* tied together.
-
-But more importantly from a kernel perspective: regardless of hardware
-implementations like that, the notion of masking bits off a untrusted
-user pointer is simply completely *different* from the notion of
-masking off bits of our own kernel pointers. You can see this in the
-kernel everywhere: user pointers should be statically always user
-pointers, and should look something like
-
-   struct iocb __user *user_iocb
-
-which is very very different from a kernel pointer that doesn't have
-that "__user" thing. Again, on some architectures, the *EXACT*SAME*
-bit pattern pointer value may point to different things, because user
-accesses are simply in a different address space entirely.
-
-So if/when KASAN starts using LAM inside the kernel, it will do its
-own things. It had better not use "untagged_addr()".
-
-           Linus
+Thanks,
+Bhupesh
