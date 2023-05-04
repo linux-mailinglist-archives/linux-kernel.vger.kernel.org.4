@@ -2,47 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CFD56F7497
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:51:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D0F06F76A9
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 22:11:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230061AbjEDTvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 15:51:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57744 "EHLO
+        id S232690AbjEDULN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 16:11:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231690AbjEDTuZ (ORCPT
+        with ESMTP id S233011AbjEDUJ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 15:50:25 -0400
+        Thu, 4 May 2023 16:09:57 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B2111D;
-        Thu,  4 May 2023 12:46:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7DE717DFD;
+        Thu,  4 May 2023 12:55:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 538EA637B8;
-        Thu,  4 May 2023 19:46:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1372C433A0;
-        Thu,  4 May 2023 19:46:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 009FE637AD;
+        Thu,  4 May 2023 19:46:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34D6BC433EF;
+        Thu,  4 May 2023 19:46:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683229591;
-        bh=VM2vo1YQKFMHenaXVsD91Ap0kaBngepTBIMWG0E+15A=;
+        s=k20201202; t=1683229596;
+        bh=3QH53IQtww9nt86bc9hdI+wiVvbXzlxNO28UbUg+ho8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kOyJV7kdbwo1Z1YYzj2XITbLpSxjbiEo3vcTBf6xsSLiTqfwdktsHVrnlAECIcLeQ
-         YRUt4WBAIjqtZXK39+39/QqFsp5NQytM95xYDYiIyY8t9AFmiIRfkfpyvPdUozP91/
-         hMXtSB3DYuG/tnvKcL5CtT7f32vXLOTT0MruuZWoFzFYdNTF0xl3owgdhntqx5UVHX
-         AV+CQncdw1fz/gGqyOh1CPrniClBW6sNuJ9dl5Ytlny2xEDsKCrniX80gtG/OfII6H
-         j+/D0+5L74CIWX/FPk8WXKgSttTIznZqHZfLSt9rGfYVOAb6dwc2EZ7dM/g+CQgN/2
-         qC2YPRtdyAPfw==
+        b=KcdZuzp9w8ftbIF0DEK68KJoRyEpX3DQhaMVgyPelLe681tVLsTOND5jmptwCLKuj
+         ImRo2dKWbnVKK6yZNMoHaGvCTWEYidmV3NQl94i0Hv7QbQWKbMStSkCzpFmV8+w2rX
+         bnpUJlIkU2S9jkVJqarwgH2utnCkavn5q3eX/IixDjY0xX//z9Fyo57U6craB4mHAG
+         UCBBpxBQrPXCJISKsh9PBWGyX7jq+oGL5/tg6XPab0fmpCYQtPAG6CHrGGO7WSpEaz
+         TeVohQeB46tN+TWbRtmD/hF3s9RwzpVOlTquzs2TQArUIVUrPTkWcavoOXo//kyjYY
+         vMZI4ypcoJAag==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        KP Singh <kpsingh@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, martin.lau@linux.dev,
-        daniel@iogearbox.net, andrii@kernel.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 02/49] bpf: Annotate data races in bpf_local_storage
-Date:   Thu,  4 May 2023 15:45:39 -0400
-Message-Id: <20230504194626.3807438-2-sashal@kernel.org>
+Cc:     Hector Martin <marcan@marcan.st>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Julian Calaby <julian.calaby@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>,
+        aspriel@gmail.com, franky.lin@broadcom.com,
+        hante.meuleman@broadcom.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        rmk+kernel@armlinux.org.uk, wright.feng@cypress.com,
+        linux-wireless@vger.kernel.org,
+        brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 03/49] wifi: brcmfmac: pcie: Provide a buffer of random bytes to the device
+Date:   Thu,  4 May 2023 15:45:40 -0400
+Message-Id: <20230504194626.3807438-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230504194626.3807438-1-sashal@kernel.org>
 References: <20230504194626.3807438-1-sashal@kernel.org>
@@ -60,81 +65,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+From: Hector Martin <marcan@marcan.st>
 
-[ Upstream commit 0a09a2f933c73dc76ab0b72da6855f44342a8903 ]
+[ Upstream commit 91918ce88d9fef408bb12c46a27c73d79b604c20 ]
 
-There are a few cases where hlist_node is checked to be unhashed without
-holding the lock protecting its modification. In this case, one must use
-hlist_unhashed_lockless to avoid load tearing and KCSAN reports. Fix
-this by using lockless variant in places not protected by the lock.
+Newer Apple firmwares on chipsets without a hardware RNG require the
+host to provide a buffer of 256 random bytes to the device on
+initialization. This buffer is present immediately before NVRAM,
+suffixed by a footer containing a magic number and the buffer length.
 
-Since this is not prompted by any actual KCSAN reports but only from
-code review, I have not included a fixes tag.
+This won't affect chips/firmwares that do not use this feature, so do it
+unconditionally for all Apple platforms (those with an Apple OTP).
 
-Cc: Martin KaFai Lau <martin.lau@kernel.org>
-Cc: KP Singh <kpsingh@kernel.org>
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Link: https://lore.kernel.org/r/20230221200646.2500777-4-memxor@gmail.com
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Hector Martin <marcan@marcan.st>
+Reviewed-by: Julian Calaby <julian.calaby@gmail.com>
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/20230214080034.3828-3-marcan@marcan.st
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/bpf/bpf_local_storage.c | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+ .../broadcom/brcm80211/brcmfmac/pcie.c        | 32 +++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
-diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
-index f27fa5ba7d722..d9d88a2cda5e5 100644
---- a/kernel/bpf/bpf_local_storage.c
-+++ b/kernel/bpf/bpf_local_storage.c
-@@ -51,11 +51,21 @@ owner_storage(struct bpf_local_storage_map *smap, void *owner)
- 	return map->ops->map_owner_storage_ptr(owner);
+diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+index 067ea019b110a..3b1277a8bd617 100644
+--- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
++++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+@@ -13,6 +13,7 @@
+ #include <linux/bcma/bcma.h>
+ #include <linux/sched.h>
+ #include <linux/io.h>
++#include <linux/random.h>
+ #include <asm/unaligned.h>
+ 
+ #include <soc.h>
+@@ -1631,6 +1632,13 @@ brcmf_pcie_init_share_ram_info(struct brcmf_pciedev_info *devinfo,
+ 	return 0;
  }
  
-+static bool selem_linked_to_storage_lockless(const struct bpf_local_storage_elem *selem)
-+{
-+	return !hlist_unhashed_lockless(&selem->snode);
-+}
++struct brcmf_random_seed_footer {
++	__le32 length;
++	__le32 magic;
++};
 +
- static bool selem_linked_to_storage(const struct bpf_local_storage_elem *selem)
- {
- 	return !hlist_unhashed(&selem->snode);
- }
++#define BRCMF_RANDOM_SEED_MAGIC		0xfeedc0de
++#define BRCMF_RANDOM_SEED_LENGTH	0x100
  
-+static bool selem_linked_to_map_lockless(const struct bpf_local_storage_elem *selem)
-+{
-+	return !hlist_unhashed_lockless(&selem->map_node);
-+}
+ static int brcmf_pcie_download_fw_nvram(struct brcmf_pciedev_info *devinfo,
+ 					const struct firmware *fw, void *nvram,
+@@ -1667,6 +1675,30 @@ static int brcmf_pcie_download_fw_nvram(struct brcmf_pciedev_info *devinfo,
+ 			  nvram_len;
+ 		memcpy_toio(devinfo->tcm + address, nvram, nvram_len);
+ 		brcmf_fw_nvram_free(nvram);
 +
- static bool selem_linked_to_map(const struct bpf_local_storage_elem *selem)
- {
- 	return !hlist_unhashed(&selem->map_node);
-@@ -165,7 +175,7 @@ static void __bpf_selem_unlink_storage(struct bpf_local_storage_elem *selem,
- 	bool free_local_storage = false;
- 	unsigned long flags;
- 
--	if (unlikely(!selem_linked_to_storage(selem)))
-+	if (unlikely(!selem_linked_to_storage_lockless(selem)))
- 		/* selem has already been unlinked from sk */
- 		return;
- 
-@@ -199,7 +209,7 @@ void bpf_selem_unlink_map(struct bpf_local_storage_elem *selem)
- 	struct bpf_local_storage_map_bucket *b;
- 	unsigned long flags;
- 
--	if (unlikely(!selem_linked_to_map(selem)))
-+	if (unlikely(!selem_linked_to_map_lockless(selem)))
- 		/* selem has already be unlinked from smap */
- 		return;
- 
-@@ -410,7 +420,7 @@ bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
- 		err = check_flags(old_sdata, map_flags);
- 		if (err)
- 			return ERR_PTR(err);
--		if (old_sdata && selem_linked_to_storage(SELEM(old_sdata))) {
-+		if (old_sdata && selem_linked_to_storage_lockless(SELEM(old_sdata))) {
- 			copy_map_value_locked(&smap->map, old_sdata->data,
- 					      value, false);
- 			return old_sdata;
++		if (devinfo->otp.valid) {
++			size_t rand_len = BRCMF_RANDOM_SEED_LENGTH;
++			struct brcmf_random_seed_footer footer = {
++				.length = cpu_to_le32(rand_len),
++				.magic = cpu_to_le32(BRCMF_RANDOM_SEED_MAGIC),
++			};
++			void *randbuf;
++
++			/* Some Apple chips/firmwares expect a buffer of random
++			 * data to be present before NVRAM
++			 */
++			brcmf_dbg(PCIE, "Download random seed\n");
++
++			address -= sizeof(footer);
++			memcpy_toio(devinfo->tcm + address, &footer,
++				    sizeof(footer));
++
++			address -= rand_len;
++			randbuf = kzalloc(rand_len, GFP_KERNEL);
++			get_random_bytes(randbuf, rand_len);
++			memcpy_toio(devinfo->tcm + address, randbuf, rand_len);
++			kfree(randbuf);
++		}
+ 	} else {
+ 		brcmf_dbg(PCIE, "No matching NVRAM file found %s\n",
+ 			  devinfo->nvram_name);
 -- 
 2.39.2
 
