@@ -2,72 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BFDA6F6B15
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 14:21:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1AE76F692A
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 12:37:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230100AbjEDMVe convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 4 May 2023 08:21:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52276 "EHLO
+        id S230228AbjEDKhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 06:37:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbjEDMVc (ORCPT
+        with ESMTP id S229932AbjEDKgv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 08:21:32 -0400
-Received: from mail.saludzona6.gob.ec (mail.saludzona6.gob.ec [191.100.30.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57FD75FD3
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 05:21:31 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.saludzona6.gob.ec (Postfix) with ESMTP id 0928D2EF1AA6;
-        Thu,  4 May 2023 02:30:30 -0500 (-05)
-Received: from mail.saludzona6.gob.ec ([127.0.0.1])
-        by localhost (mail.saludzona6.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id ZBPzGCho4-dh; Thu,  4 May 2023 02:30:29 -0500 (-05)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.saludzona6.gob.ec (Postfix) with ESMTP id 99A4E2EF1ABB;
-        Thu,  4 May 2023 02:30:29 -0500 (-05)
-X-Virus-Scanned: amavisd-new at saludzona6.gob.ec
-Received: from mail.saludzona6.gob.ec ([127.0.0.1])
-        by localhost (mail.saludzona6.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id LCYztRYGv1CS; Thu,  4 May 2023 02:30:29 -0500 (-05)
-Received: from [23.146.243.48] (unknown [23.146.243.48])
-        by mail.saludzona6.gob.ec (Postfix) with ESMTPSA id 8E8D32EF1AAA;
-        Thu,  4 May 2023 02:30:26 -0500 (-05)
-Content-Type: text/plain; charset="iso-8859-1"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Re: Actualizacion
-To:     Recipients <delia.chacha@saludzona6.gob.ec>
-From:   "@zimbra" <delia.chacha@saludzona6.gob.ec>
-Date:   Thu, 04 May 2023 03:33:22 -0700
-Reply-To: webmasterzimbra1@gmail.com
-Message-Id: <20230504073026.8E8D32EF1AAA@mail.saludzona6.gob.ec>
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        Thu, 4 May 2023 06:36:51 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C5A046BF;
+        Thu,  4 May 2023 03:36:50 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3449OPVT029931;
+        Thu, 4 May 2023 10:36:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=Gs+DmOhHRWHDYg1cDXfBkKwqM3LiqqL9QX4bgbbO2oc=;
+ b=PJk9ATm7T9vFeMUidYGdKu2BRENBKjy78VM51Cxm+2Q6qmXzrNG1lleYMlCNJnmxpVNY
+ sR01czAWpOHkNR6YC7YrOEmHzMQaZ1HO67gguHJZH1DbrVY9YnURkJ0PcLZEForCa15b
+ WSZXlLoaYs77pHk1MddCqX7xNxCrL7+mzJdu+jn+PJznQQwnvLNh6xyz3jgCHvGQ9Dgt
+ y8UCu6P3qyPm/FcNjbIjyP9DNkFdRky8SDjM9A4CN4iCXz9ESva3+vBSTtR13pb0zStM
+ KVyDeTYojq9pdZTTgY1pFfR+eyVSfSL3Bn9wad5FMkFWRCR3sSferxBPKfEypIO9nlce Bg== 
+Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qca1j857v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 04 May 2023 10:36:46 +0000
+Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 344AagOF002434;
+        Thu, 4 May 2023 10:36:42 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3q8vakt1q8-1;
+        Thu, 04 May 2023 10:36:42 +0000
+Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 344Aafcd002428;
+        Thu, 4 May 2023 10:36:41 GMT
+Received: from hu-sgudaval-hyd.qualcomm.com (hu-dikshita-hyd.qualcomm.com [10.213.110.13])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 344AafR7002427;
+        Thu, 04 May 2023 10:36:41 +0000
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 347544)
+        id DBEA2BE0; Thu,  4 May 2023 16:06:40 +0530 (+0530)
+From:   Dikshita Agarwal <quic_dikshita@quicinc.com>
+To:     linux-media@vger.kernel.org, stanimir.k.varbanov@gmail.com,
+        quic_vgarodia@quicinc.com, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, mchehab@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Dikshita Agarwal <quic_dikshita@quicinc.com>
+Subject: [PATCH 0/4] venus: add support for 10 bit decoding
+Date:   Thu,  4 May 2023 16:06:35 +0530
+Message-Id: <1683196599-3730-1-git-send-email-quic_dikshita@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: fzzC3Lg326eNa3mP2W50YPXS_YjhxHoG
+X-Proofpoint-GUID: fzzC3Lg326eNa3mP2W50YPXS_YjhxHoG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-04_06,2023-05-04_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ lowpriorityscore=0 priorityscore=1501 bulkscore=0 phishscore=0
+ mlxlogscore=902 spamscore=0 suspectscore=0 impostorscore=0 clxscore=1015
+ mlxscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2305040086
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Su cuenta no ha pasado por el proceso de verificación / actualización. Los titulares de cuentas deben actualizar sus cuentas dentro de los 5 días hábiles posteriores a la recepción de este aviso. El incumplimiento de este aviso dentro de la fecha límite puede no ser capaz de enviar o recibir todos los mensajes y el propietario correrá el riesgo de perder su cuenta.
+This series includes the changes to
+  - add V4L2_PIX_FMT_P010 as supported decoder format.
+  - consider dpb color format while calculating buffer
+    size for dpb buffers.
+  - update dpb and opb color format when bit depth
+    changes is detected, also update preferred color
+    format to P010 in this case.
 
-Confirme los detalles de la cuenta a continuación.
-_____________________________________
-1. Nombre y apellido:
-2. Correo electrónico completo en:
-3. Nombre de usuario:
-4. Contraseña:
-5. Vuelva a escribir la contraseña:
-_____________________________________
- 
-NOTA !!! Si no actualiza su cuenta, su cuenta se eliminará automáticamente de nuestro sistema.
- 
-Nos disculpamos por cualquier inconveniente causado.
- 
-Sinceramente
-Atención al cliente
-Equipo de soporte técnico de Zimbra.
- 
-Copyright © 2005-2023 Synacor, Inc. Todos los derechos reservados
+With this series, divided the previous version [1] into
+multiple patches as suggested in review comments.
+
+[1] https://patchwork.linuxtv.org/project/linux-media/list/?series=10376
+
+Dikshita Agarwal (4):
+  venus: add support for V4L2_PIX_FMT_P010 color format
+  venus: update calculation for dpb buffers
+  venus: add handling of bit depth change from firmwar
+  venus: return P010 as preferred format for 10 bit decode
+
+ drivers/media/platform/qcom/venus/helpers.c        | 24 ++++++++++++++++++++++
+ drivers/media/platform/qcom/venus/hfi_plat_bufs.h  |  3 +++
+ .../media/platform/qcom/venus/hfi_plat_bufs_v6.c   |  8 +++++++-
+ drivers/media/platform/qcom/venus/vdec.c           | 16 +++++++++++++--
+ 4 files changed, 48 insertions(+), 3 deletions(-)
+
+-- 
+2.7.4
+
