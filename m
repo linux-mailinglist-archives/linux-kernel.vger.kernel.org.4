@@ -2,107 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2420A6F6810
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 11:13:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC91C6F6811
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 11:13:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbjEDJNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 05:13:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36956 "EHLO
+        id S230204AbjEDJNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 05:13:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbjEDJM6 (ORCPT
+        with ESMTP id S229900AbjEDJNG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 05:12:58 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749023ABF
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 02:12:57 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id e9e14a558f8ab-331643f4532so1952405ab.3
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 02:12:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1683191577; x=1685783577;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=I+cBCuPemC9rnV8/QfSp10iYbH/9Adn653+lN+Obdqg=;
-        b=YTbeCmGImxGvcLEuyfRZE5cMmqFs1C7MvVoUxmYjqrBcwYCW5hdd6Vs5090lxFVFvf
-         ms6o/bOQuPW+RHlFflrZxWSNvNZfa2GTXN7kYDBnfp7UpeQb2uvOslAhscBflo4txXBK
-         kH5qgmCiSEQLeVbqjiDAOmkjZ3M92AS3ZDKgHkR8SVesM7c6IXbaXJrlX+3k0bXWbSI6
-         /2VI27NyGcrDQ4IhOLeL/VkQySMf/IEeUFwpMhrXJAlWpPDE6xpbRP+n4BdB8z6tZzWX
-         AgrPwqBVi/lvENt1iHCHZNcLSad1iYfmSPgmhiDl1RlpwPuyrerZ7NBeDsUZWsRvqDBQ
-         pZug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683191577; x=1685783577;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=I+cBCuPemC9rnV8/QfSp10iYbH/9Adn653+lN+Obdqg=;
-        b=O17YlQ/BmM2K1uo35tQ2IpqtNMq5vFmU/VNoryArMPcnVD2ZmWhsxK528rHqFghOUR
-         t98R5sdPdHyMVp++vqZrtWvriIZg9ycbLrpl9n3dGT3/ZkUEJDGSCgFDSXovd7GLvFQf
-         H0T86ax5k0Kl5jW3AuWHotMpi77EgVyFbDvbljJMrF7Qem5gUkRlEc+C3bv4JyPrzQMt
-         fnhqgEMVhnBFQiI33OwxP2STgNK8KBc6l5Ou1iPBhc50IBimAEfXTAAiJyYDsP+l4qd8
-         iKfDhN9ctplA1r9RFn64vYbtae4ooSkh7gsqRP39zOzpTPT3z7RjHnKI9i0/mUFwqNDU
-         t8dw==
-X-Gm-Message-State: AC+VfDxGEHhdH4dEZyKEIP4sAlv/6S49hZ7T2ieXXDD4NFBA5EkXeCXB
-        0nHTxvc6Rj62fgtB95iE80vMgsoWzNlAp5frPHeRgA==
-X-Google-Smtp-Source: ACHHUZ7XzaFfYqsZ2DDqFN4AT6ORAT0qObZMB+f1YXKGsdQZ574TA025qZT7Zk/wE7euYGocFKi/txlwd67zHtlkOJo=
-X-Received: by 2002:a92:c743:0:b0:331:3fe3:d111 with SMTP id
- y3-20020a92c743000000b003313fe3d111mr5296592ilp.25.1683191576814; Thu, 04 May
- 2023 02:12:56 -0700 (PDT)
+        Thu, 4 May 2023 05:13:06 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0271640E0
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 02:13:04 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 7191433931;
+        Thu,  4 May 2023 09:13:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1683191583; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=zg7g2BOvhmWFc3dhiKasbnCc51IssmQS3By3r+3Vyvc=;
+        b=MC29e/jxsi3vii+r1q6FTuTeZ9+h8d2o2nRI1YT0GHIb8b+3hY5D/cK/bB6+235xHyv3Zk
+        xmwAzcsL6Z7Ut13HNOfM6sqA3t1xUUIR+PeeHvsazShHC9J0k3sxzDInfOjw9e1sByNXkN
+        A+6XzUMKhiPoDYHdkpvkkuQ/MXa+cHc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1683191583;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=zg7g2BOvhmWFc3dhiKasbnCc51IssmQS3By3r+3Vyvc=;
+        b=ACIw7b/wmBFXaY6PHIuXXxbUkH5YR7XgPgF79dscbQGvzVoOyB1BddNCfwMy2WE9gsV7Mt
+        C3T5oV8jOfQ8LMCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6127013444;
+        Thu,  4 May 2023 09:13:03 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id WK+qFx93U2TVTwAAMHmgww
+        (envelope-from <dwagner@suse.de>); Thu, 04 May 2023 09:13:03 +0000
+From:   Daniel Wagner <dwagner@suse.de>
+To:     linux-nvme@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, Chaitanya Kulkarni <kch@nvidia.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Hannes Reinecke <hare@suse.de>,
+        James Smart <jsmart2021@gmail.com>,
+        Daniel Wagner <dwagner@suse.de>
+Subject: [RFC v3 0/9] Unifying fabrics drivers
+Date:   Thu,  4 May 2023 11:12:50 +0200
+Message-Id: <20230504091259.29100-1-dwagner@suse.de>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-References: <20230426074248.19336-1-zong.li@sifive.com> <mhng-cdb02a07-40f9-4424-b3cf-938247588537@palmer-ri-x1c9>
-In-Reply-To: <mhng-cdb02a07-40f9-4424-b3cf-938247588537@palmer-ri-x1c9>
-From:   Zong Li <zong.li@sifive.com>
-Date:   Thu, 4 May 2023 17:12:45 +0800
-Message-ID: <CANXhq0r3+Wc3jZ7fVRS-RtVUTNM-tZjhvFO7qK_BmSCa4wdGyw@mail.gmail.com>
-Subject: Re: [PATCH] dmaengine: xilinx: enable on RISC-V platform
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     vkoul@kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 26, 2023 at 10:28=E2=80=AFPM Palmer Dabbelt <palmer@dabbelt.com=
-> wrote:
->
-> On Wed, 26 Apr 2023 00:42:48 PDT (-0700), zong.li@sifive.com wrote:
-> > Enable the xilinx dmaengine driver on RISC-V platform. We have verified
-> > the CDMA on RISC-V platform, enable this configuration to allow build o=
-n
-> > RISC-V.
-> >
-> > Signed-off-by: Zong Li <zong.li@sifive.com>
-> > ---
-> >  drivers/dma/Kconfig | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/dma/Kconfig b/drivers/dma/Kconfig
-> > index fb7073fc034f..816f619804b9 100644
-> > --- a/drivers/dma/Kconfig
-> > +++ b/drivers/dma/Kconfig
-> > @@ -695,7 +695,7 @@ config XGENE_DMA
-> >
-> >  config XILINX_DMA
-> >       tristate "Xilinx AXI DMAS Engine"
-> > -     depends on (ARCH_ZYNQ || MICROBLAZE || ARM64)
-> > +     depends on (ARCH_ZYNQ || MICROBLAZE || ARM64 || RISCV)
-> >       select DMA_ENGINE
-> >       help
-> >         Enable support for Xilinx AXI VDMA Soft IP.
->
-> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+I've rebased on nvme-6.4 and gave it a bit of testing. Up to the last patch it seems to
+work fine, at least blktests doesn't trigger any errors.
 
-Hi Palmer,
-Thanks for your review.
+I've tried to split the pure moving code around part from the part where we need
+to change some code. That means the last two patches highlight the problems I
+run into with this attempt to implement the setup_transport() callback
 
-Hi Vinod,
-Could I know if this patch also meets your expectations? If it does,
-would you please consider accepting it?
-Thanks.
+changes:
+v2:
+  - move the complete ctrl state machine to fabrics.c
+  - https://lore.kernel.org/linux-nvme/20230306093244.20775-1-dwagner@suse.de/ 
+  
+v1:
+  - https://lore.kernel.org/linux-nvme/20230301082737.10021-1-dwagner@suse.de/
+
+
+Daniel Wagner (9):
+  nvme-rdma: stream line queue functions arguments
+  nvme-rdma: factor rdma specific queue init code out
+  nvme-tcp: move error and connect work to nvme_ctrl
+  nvme-rdma: use error and connect work from nvme_ctrl
+  nvme-fabrics: add fabric state machine
+  nvme-tcp: replace state machine with generic one
+  nvme-rdma: replace state machine with generic one
+  nvme: move queue flags to middle layer
+  nvme: introduce setup_transport()
+
+ drivers/nvme/host/fabrics.c | 513 +++++++++++++++++++++++++
+ drivers/nvme/host/fabrics.h |  24 ++
+ drivers/nvme/host/nvme.h    |  19 +
+ drivers/nvme/host/rdma.c    | 720 ++++++++++--------------------------
+ drivers/nvme/host/tcp.c     | 706 ++++++++---------------------------
+ 5 files changed, 913 insertions(+), 1069 deletions(-)
+
+-- 
+2.40.0
+
