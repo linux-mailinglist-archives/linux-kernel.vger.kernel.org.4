@@ -2,69 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 815356F64FB
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 08:29:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA7BA6F6500
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 08:29:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229951AbjEDG3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 02:29:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47180 "EHLO
+        id S229982AbjEDG3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 02:29:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjEDG3i (ORCPT
+        with ESMTP id S229965AbjEDG3o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 02:29:38 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 261A51FDA
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 23:29:38 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id d75a77b69052e-3ef36d814a5so667231cf.0
-        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 23:29:38 -0700 (PDT)
+        Thu, 4 May 2023 02:29:44 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B1CA2D68
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 23:29:43 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so14035886a12.0
+        for <linux-kernel@vger.kernel.org>; Wed, 03 May 2023 23:29:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683181777; x=1685773777;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CadOrn/gd0bhiSJnQRcKqLdPORONrzWilIt3682xgJE=;
-        b=OuHQdwJ5nqo6c1x+YhM5d7HUe9Kq+MPaPDncoNFAjmVWk8ZiLZmUjmZsaVnn1j5rqI
-         2T7hO45/BHm8R50dcwhepETfSnZyK5UpywLamnVGMPD6fKrLvvtQVemvjf4V90Y4wgS8
-         fgvd4CkJn+R0+bk7eX8PbTodNPhgjVTanoxmovmn69gX1FFOM/z125barX5XG5ZRd/uH
-         bOqnpcHVjRyOZTT9zCq7k3qyFv8NmphP3mSq5k3EJmYnuAOF+Q2MwnT/9OVouLTBbNtW
-         +aVUpgUnMPEAJre7Aicoh6/OjXef4khG7/+++SyNJqNufBQbq8WspdG7A5yjmbSsC58S
-         Gjcg==
+        d=linaro.org; s=google; t=1683181782; x=1685773782;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AvF1b4T4ZW298PvVVsIkZ6nQgpxdBXnANG4ULYhpoJU=;
+        b=zF7F4NLHOkCLy5pOF6eiSo28tB24mHId+nifiBgEoisMhWnSRUC/bBRvnGf8Kr6CP6
+         4s2oD84bpTsNCXnDlwmHBU6HcKIltwLBOeJ7wrcMlOH+9G81NPV+SDJjSva7zk5iDs9v
+         eVio/TrA51aHyxdaZNTiWi6SAw5c0oi2YuPH8sIJLtIniLJx3YJBbS3KD8nJMnHlW88Z
+         vr96C8VG6R+nXNp0ggN9hIk4sTpEocI5gvI8nMOy+DmHEfWDbJGrOtw3fyfLsVjyYqkF
+         K6QNA8N7aXQ5JW2oXBaA9sUq9uM50biBXBQgBvOEOdsmkFj8QuVk6j9HZx6gRdXIosLC
+         ydUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683181777; x=1685773777;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CadOrn/gd0bhiSJnQRcKqLdPORONrzWilIt3682xgJE=;
-        b=IzKSQah+lkEpempvfzUjRSG1Z/PnGikWCA48zNzy4eO+btGcehyINXh6V43xAxQHX7
-         5x7xtXDgvt3n5dDF+KRjEQM7PxEZAMSS9GDwNEyQ5+MO84z1InvV2GuSjUq8+zCNB7UK
-         fKxi8Aj2NlaCgEaxSzfGK2R1yu9D8oOoaVFuJWh71QOJV0QR+kAcqmDmlLvTi+Sb9CO5
-         1SaFFfVkn0INnon/PbCkcXTcwoJDjSFOcR33Pg7lERR5wRrPjhpV9AHnATbx8zKfMFKb
-         PiFKMVhPcIQ519b1hAVjq2pmejr4bQ/58S1NEh+fJlJP1iWcdGcPrbcFZWWC5IkHSFYz
-         00Ug==
-X-Gm-Message-State: AC+VfDye7jIsIXVsELIcAxl/pCwmsi7y1Z8GAQGzAhJCDER6YKror2m3
-        sGWvWOUfxI8kh70SSwUKFGUrlXMW6exf5u507sJIOw==
-X-Google-Smtp-Source: ACHHUZ7mR9stFwowZvcNb0BZGX3rQiJYHCMjPeXa9GBP+k1snnzCx0nJC9u3C7z9qrMYx4F4o+kf6uFoyd5mFh7X688=
-X-Received: by 2002:a05:622a:590:b0:3f2:2c89:f1ef with SMTP id
- c16-20020a05622a059000b003f22c89f1efmr148597qtb.5.1683181777178; Wed, 03 May
- 2023 23:29:37 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683181782; x=1685773782;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AvF1b4T4ZW298PvVVsIkZ6nQgpxdBXnANG4ULYhpoJU=;
+        b=Od5PRmAxZhPZW056038qWi2ZcBVGQreO2fTPEriuT0yyYsy9KixDee1fGNm8zMsX1r
+         utUue1w0wGrmofDr1ekjJnAyic7iSHmgwtn2HwaU6Y36cKNcuLM4BAXJcJ8Zj72SO/rW
+         //4SwwGiO0F7Ob19M8OvHYccTYBj1ykkie+ITeNmxXlBIkDL6L8l5P0jU2XVwwhmKZ4S
+         C+rqC3mTpUSewZql3rNMa/dqUp33BqZy1aNPPky2c45NT5NX4qWhMvrMLtLbmGxZYPfQ
+         QjyuftDWENz+M7YY42xe7WnZ0ovlTvmbDw2p1WDws4rB5ehuLCjdbVtA36WyNmPudBpz
+         bOJQ==
+X-Gm-Message-State: AC+VfDymsxKewOaOnSugRyu6NGNhlfN3EKCYvQm27t61iofNPvpYSDYS
+        73akdESAcoaWN61sn+Qj5eRWjg==
+X-Google-Smtp-Source: ACHHUZ5xYPuvbWVazEaA9I9FitJyy80WTkiS4nTt8535HKaxP3/jcTZL5r84cDrsK7zzMC0lalDf2A==
+X-Received: by 2002:a05:6402:26c2:b0:506:71bd:3931 with SMTP id x2-20020a05640226c200b0050671bd3931mr655360edd.2.1683181782093;
+        Wed, 03 May 2023 23:29:42 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:cbf1:e7ef:fb81:e912? ([2a02:810d:15c0:828:cbf1:e7ef:fb81:e912])
+        by smtp.gmail.com with ESMTPSA id z22-20020aa7c656000000b004fc01b0aa55sm1515408edr.4.2023.05.03.23.29.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 May 2023 23:29:41 -0700 (PDT)
+Message-ID: <7df7cf56-06fb-8c40-c7ca-17f725912236@linaro.org>
+Date:   Thu, 4 May 2023 08:29:40 +0200
 MIME-Version: 1.0
-References: <cover.1683022164.git.geert+renesas@glider.be> <483c4f520e4acc6357ebba3e605977b4c56374df.1683022164.git.geert+renesas@glider.be>
-In-Reply-To: <483c4f520e4acc6357ebba3e605977b4c56374df.1683022164.git.geert+renesas@glider.be>
-From:   David Gow <davidgow@google.com>
-Date:   Thu, 4 May 2023 14:29:25 +0800
-Message-ID: <CABVgOS=gH58gj9-Wf1K0CJ085XJag=oS-8ocx6oUhTHcW1gecw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] Input: tests - modular KUnit tests should not depend
- on KUNIT=y
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v9 02/10] arm64: defconfig: Add support for Nuvoton MA35
+ family SoCs
+Content-Language: en-US
+To:     Jacky Huang <ychuang570808@gmail.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        tmaimon77@gmail.com, catalin.marinas@arm.com, will@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-serial@vger.kernel.org, arnd@arndb.de, schung@nuvoton.com,
+        mjchen@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
+References: <20230504033726.93-1-ychuang570808@gmail.com>
+ <20230504033726.93-3-ychuang570808@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230504033726.93-3-ychuang570808@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,41 +83,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2 May 2023 at 18:17, Geert Uytterhoeven <geert+renesas@glider.be> wrote:
->
-> While KUnit tests that cannot be built as a loadable module must depend
-> on "KUNIT=y", this is not true for modular tests, where it adds an
-> unnecessary limitation.
->
-> Fix this by relaxing the dependency to "KUNIT".
->
-> Fixes: fdefcbdd6f361841 ("Input: Add KUnit tests for some of the input core helper functions")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+On 04/05/2023 05:37, Jacky Huang wrote:
+> From: Jacky Huang <ychuang3@nuvoton.com>
+> 
+> This adds support for the Nuvoton MA35 family SoCs which
+> are based on the Cortex-A35 Armv8-A 64-bit architecture.
+> 
+> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
 > ---
 
-Works here, thanks!
 
-Reviewed-by: David Gow <davidgow@google.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Cheers,
--- David
+Best regards,
+Krzysztof
 
->  drivers/input/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/input/Kconfig b/drivers/input/Kconfig
-> index 735f90b74ee5ad44..3bdbd34314b3495a 100644
-> --- a/drivers/input/Kconfig
-> +++ b/drivers/input/Kconfig
-> @@ -168,7 +168,7 @@ config INPUT_EVBUG
->
->  config INPUT_KUNIT_TEST
->         tristate "KUnit tests for Input" if !KUNIT_ALL_TESTS
-> -       depends on INPUT && KUNIT=y
-> +       depends on INPUT && KUNIT
->         default KUNIT_ALL_TESTS
->         help
->           Say Y here if you want to build the KUnit tests for the input
-> --
-> 2.34.1
->
