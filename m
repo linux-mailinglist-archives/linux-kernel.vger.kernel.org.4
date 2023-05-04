@@ -2,106 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BEB86F6B10
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 14:19:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6773A6F6B14
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 14:21:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230413AbjEDMTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 08:19:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50320 "EHLO
+        id S230007AbjEDMVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 08:21:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230337AbjEDMT3 (ORCPT
+        with ESMTP id S229703AbjEDMVE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 08:19:29 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F03C7284
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 05:19:20 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-b996127ec71so605988276.0
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 05:19:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683202759; x=1685794759;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=C0BBMlMuhsvJslxHkgJj2+Y0Hn+bMZWGZK5WjuDPBsY=;
-        b=NoQYyZqeA0SQwvIUS/9QOhNCXe85mGDlgPllqMWdTSrOww2ZBuZngjthCLUbhK0oJm
-         Hp8bHn1LXGN64/gTkUlpO8uDaYkogEqxHtM7fqv56QpK/VGGAQRy85JzZfmbqlxRxxEg
-         IdGlOoHL7Cii8vQzBKWuN4+zd1D8N94pNkMLiQO8SNrbWxRC33xFB/rS7glTBbGwirsb
-         /ngEPISLdr9F9ekv4Pepmnb6MVqO8RDf/oQqR/WckKjzcHYl1B9QGeGr8hqZ4gNSemmi
-         DLjxNbXCvojvhrrToKr7hSu7CUGHKj9D7U5p/KJH9akJqVjMmrrIb9Q/PxldPtMDWKy/
-         Jd+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683202759; x=1685794759;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=C0BBMlMuhsvJslxHkgJj2+Y0Hn+bMZWGZK5WjuDPBsY=;
-        b=QhEwSbAPHlpJoYLanvkAT0/bHIkfC0GoA8fWnRPaY+UsKVcsV7eJt9c/ME1Ap0vnZ6
-         0jpMlt+2v3Xu8ltTVcF6r6l8TWE/QEiWCA+dUktQUd5ZUnglMeOUX0PMQTHyBBAZ9kh1
-         QY+z5IMIM7s65uYTLg64wWX4M8cwj5rnnk4SeuxatfMBl47NaPhYLTBayONA95VNTFpT
-         IBrCcrVbQAjcddvwWXYui0xcsDPFEmrwrXYQ4yCYiKunjKru3wFBHhyhpUiS1AiPAatf
-         JOTcl9uH6DXDiTu/DCqLDpifzDuEnIBqQRiQ2H2pc3b/9Jhio3C/Eks2rZKxojDQ5Uh1
-         AkQw==
-X-Gm-Message-State: AC+VfDxpwoJcz2ZuvOLlfz5picZtKKZPItmaD6i/LpbxLCTrODyGBbuI
-        BkMzdhV7Elfbf9QwTH/Tu9q8aLRUv1tmuy5QkGTs8A==
-X-Google-Smtp-Source: ACHHUZ4VDWXMROP3mCAF7rpou7Htz0bEHKaHrjuuvqvEA4WmfiqDVqgTJPJuYa7V9/7tWfvgdnV+3a0+eHkbXthOZrI=
-X-Received: by 2002:a25:502:0:b0:b9e:45e1:20e0 with SMTP id
- 2-20020a250502000000b00b9e45e120e0mr11815579ybf.48.1683202759261; Thu, 04 May
- 2023 05:19:19 -0700 (PDT)
+        Thu, 4 May 2023 08:21:04 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 785BB6185;
+        Thu,  4 May 2023 05:21:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683202863; x=1714738863;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=34+wP4Naxy8S6mrFGbyePaiklMvauxCcq6X/A6XD3cs=;
+  b=YFdaKbplfTWozCzVf5QgyDWM0389Kg1AxTanrVQIsrseZRq4q3Lo3WpJ
+   WjG+B40CKY939X73BINV7LUW89HrOAs0ycK3sPHayNEh5gfFnaw8t0uxp
+   N7SH7McdpH6cTnOKa/m2SfJRHl9HAy5mgwEXoo74LA+AmRsQmiNxfhRGb
+   e5Nsd3rxoR1oK/xiJJOHwqOJrYt3ftO9jXFDe6gE0YUd8TgxE2wj1P6j/
+   PSstJ02YZQ9FtqlO204TJKmZsyTaAdCAp4ahjnd5afXcjyJc/A3hSH+C2
+   QKOw5yzbadRK4N09PmpwSgbGLP7iDR0qDsyfJit6jDvrVmmMxGewPJGzm
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="376983112"
+X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
+   d="scan'208";a="376983112"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 05:20:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="1026921550"
+X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
+   d="scan'208";a="1026921550"
+Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 04 May 2023 05:20:25 -0700
+Received: from kbuild by e3434d64424d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1puXwe-0002uM-1D;
+        Thu, 04 May 2023 12:20:24 +0000
+Date:   Thu, 4 May 2023 20:19:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Luke D. Jones" <luke@ljones.dev>,
+        platform-driver-x86@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        acpi4asus-user@lists.sourceforge.net, hdegoede@redhat.com,
+        corentin.chary@gmail.com, markgross@kernel.org, jdelvare@suse.com,
+        linux@roeck-us.net, "Luke D. Jones" <luke@ljones.dev>
+Subject: Re: [PATCH] platform/x86: asus-wmi: add support for ASUS screenpad
+Message-ID: <202305042007.28rKu9cK-lkp@intel.com>
+References: <20230503040207.257406-1-luke@ljones.dev>
 MIME-Version: 1.0
-References: <20230430-omap2-pdata-quirks-v1-0-e015f3a3ea46@linaro.org>
- <20230430-omap2-pdata-quirks-v1-1-e015f3a3ea46@linaro.org> <CAMRc=MczGKVFo+iWe_Pnvi3-hCK0fhmmkjp-h92RHONEHFAP_g@mail.gmail.com>
-In-Reply-To: <CAMRc=MczGKVFo+iWe_Pnvi3-hCK0fhmmkjp-h92RHONEHFAP_g@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 4 May 2023 14:19:08 +0200
-Message-ID: <CACRpkdbYR+kobi3-xx7FgQG5aZb37JJageP+JWMss=D+KZUkFw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] ARM/gpio: Push OMAP2 quirk down into TWL4030 driver
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Tony Lindgren <tony@atomide.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Lee Jones <lee@kernel.org>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230503040207.257406-1-luke@ljones.dev>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 3, 2023 at 3:02=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.pl> =
-wrote:
-> On Mon, May 1, 2023 at 11:05=E2=80=AFAM Linus Walleij <linus.walleij@lina=
-ro.org> wrote:
-> >
-> > The TWL4030 GPIO driver has a custom platform data .set_up()
-> > callback to call back into the platform and do misc stuff such
-> > as hog and export a GPIO for WLAN PWR on a specific OMAP3 board.
-> >
-> > Avoid all the kludgery in the platform data and the boardfile
-> > and just put the quirks right into the driver. Make it
-> > conditional on OMAP3.
-> >
-> > I think the exported GPIO is used by some kind of userspace
-> > so ordinary DTS hogs will probably not work.
-> >
->
-> While I haven't tested it (nor can I) so don't take my word for it, it
-> looks to me as if regular DTS hogs *should* work. If anything, the way
-> this quirk is implemented in your patch moves the export past the chip
-> registration, while ordinary hogs would be applied when the chip is
-> first added.
->
-> Am I missing something?
+Hi Luke,
 
-DTS hogs cannot do gpiod_export(), that's the problem. I think the OMAP2
-(Nokia phones?) need those exported GPIOs.
+kernel test robot noticed the following build warnings:
 
-Yours,
-Linus Walleij
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on linus/master v6.3 next-20230428]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Luke-D-Jones/platform-x86-asus-wmi-add-support-for-ASUS-screenpad/20230503-120548
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20230503040207.257406-1-luke%40ljones.dev
+patch subject: [PATCH] platform/x86: asus-wmi: add support for ASUS screenpad
+reproduce:
+        # https://github.com/intel-lab-lkp/linux/commit/ff073483de3660059cb167912c02e51226e4b32e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Luke-D-Jones/platform-x86-asus-wmi-add-support-for-ASUS-screenpad/20230503-120548
+        git checkout ff073483de3660059cb167912c02e51226e4b32e
+        make menuconfig
+        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
+        make htmldocs
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305042007.28rKu9cK-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> Documentation/ABI/testing/sysfs-platform-asus-wmi:114: WARNING: Unexpected indentation.
+
+vim +114 Documentation/ABI/testing/sysfs-platform-asus-wmi
+
+ > 114	Date:		May 2023
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
