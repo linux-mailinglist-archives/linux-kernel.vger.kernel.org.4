@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDD366F7586
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:58:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E26FF6F75B8
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 22:01:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232017AbjEDT6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 15:58:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43070 "EHLO
+        id S232088AbjEDUA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 16:00:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232433AbjEDT4D (ORCPT
+        with ESMTP id S231330AbjEDT70 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 15:56:03 -0400
+        Thu, 4 May 2023 15:59:26 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED4411606;
-        Thu,  4 May 2023 12:49:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3D711DAA;
+        Thu,  4 May 2023 12:50:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 300806380E;
-        Thu,  4 May 2023 19:49:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F620C4339B;
-        Thu,  4 May 2023 19:49:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B72F63379;
+        Thu,  4 May 2023 19:49:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11173C433EF;
+        Thu,  4 May 2023 19:49:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683229742;
-        bh=/TGR4uKvgJibnKmgX0SbV59BKNwneOqpzqjWdmtOygY=;
+        s=k20201202; t=1683229743;
+        bh=cQyEYnGGS9MAwEnnStgia52UA8K3Gtw0GcltHgCzuE8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YzyW9+pMwHn8u04EvEO/P6Z8oxkKwkmGngUx15lJy1+YeZH1Kk+nnWiFvFUrR3+1q
-         c6pB+9doUNqCtLGFuTpE4XVdvA9y2Rpd7STjegFo0JzcF8mGofzw6BC/CJycOdLfip
-         e9e0J9pILkYpHf3/hCtze5XFluZJohRlFQeYeye626MDEUc2w4I7Aq8PT8psorrO6k
-         El/j9YHMO91rOdliQUHkAsEtAOqKJUsxb56hziyAUJyqhEkuz5wbCL81uELiVx6F/g
-         x1PTel2vYFaHs8NLbQ2YLWgY4cIUZczCgeyTZeazV+f50Oof84lYAfmcXZWw99x4YO
-         zhxtCIu+xUtLg==
+        b=F7QyrRTf7l4nClF9IOmZC1Pp6I2mOwSCQUDZWJDciR2t71ylc3pNzrNA5fmBz38NY
+         pg/7R2/CtYBDL7ZA3CJvD3GQnJ0mCajODSJerg+0Vm3tC8vRQqpgBrGywEimmbFbqw
+         Y1WykdZI0PX+FpHmpVArXMdftTpfi8vpushTqusSiZiY7Tj1ZwWa9NJI6S0342rSu/
+         Kzf/wiGsg8yedVPci5CEZZ39xcN6HW8fkBchf+yCDyfC24Ifb7h+VKLySaAWdBODRv
+         lgti+qJS55TYg+HOHj1EDut4PIH6BiQdkKDcRi/qr3/UVzgU9vC9qhRx+UDm+LVaBq
+         OA1EY0ByyX7+Q==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, jejb@linux.ibm.com,
-        avri.altman@wdc.com, bvanassche@acm.org, beanhuo@micron.com,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 14/30] scsi: ufs: ufs-pci: Add support for Intel Lunar Lake
-Date:   Thu,  4 May 2023 15:48:07 -0400
-Message-Id: <20230504194824.3808028-14-sashal@kernel.org>
+Cc:     Kemeng Shi <shikemeng@huaweicloud.com>,
+        Ritesh Harjani <ritesh.list@gmail.com>,
+        Theodore Ts'o <tytso@mit.edu>, Sasha Levin <sashal@kernel.org>,
+        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 15/30] ext4: set goal start correctly in ext4_mb_normalize_request
+Date:   Thu,  4 May 2023 15:48:08 -0400
+Message-Id: <20230504194824.3808028-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230504194824.3808028-1-sashal@kernel.org>
 References: <20230504194824.3808028-1-sashal@kernel.org>
@@ -59,31 +58,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Adrian Hunter <adrian.hunter@intel.com>
+From: Kemeng Shi <shikemeng@huaweicloud.com>
 
-[ Upstream commit 0a07d3c7a1d205b47d9f3608ff4e9d1065d63b6d ]
+[ Upstream commit b07ffe6927c75d99af534d685282ea188d9f71a6 ]
 
-Add PCI ID to support Intel Lunar Lake, same as MTL.
+We need to set ac_g_ex to notify the goal start used in
+ext4_mb_find_by_goal. Set ac_g_ex instead of ac_f_ex in
+ext4_mb_normalize_request.
+Besides we should assure goal start is in range [first_data_block,
+blocks_count) as ext4_mb_initialize_context does.
 
-Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-Link: https://lore.kernel.org/r/20230328105832.3495-1-adrian.hunter@intel.com
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+[ Added a check to make sure size is less than ar->pright; otherwise
+  we could end up passing an underflowed value of ar->pright - size to
+  ext4_get_group_no_and_offset(), which will trigger a BUG_ON later on.
+  - TYT ]
+
+Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
+Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+Link: https://lore.kernel.org/r/20230303172120.3800725-2-shikemeng@huaweicloud.com
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/ufs/ufshcd-pci.c | 1 +
- 1 file changed, 1 insertion(+)
+ fs/ext4/mballoc.c | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/scsi/ufs/ufshcd-pci.c b/drivers/scsi/ufs/ufshcd-pci.c
-index e892b9feffb11..0920530a72d28 100644
---- a/drivers/scsi/ufs/ufshcd-pci.c
-+++ b/drivers/scsi/ufs/ufshcd-pci.c
-@@ -596,6 +596,7 @@ static const struct pci_device_id ufshcd_pci_tbl[] = {
- 	{ PCI_VDEVICE(INTEL, 0x51FF), (kernel_ulong_t)&ufs_intel_adl_hba_vops },
- 	{ PCI_VDEVICE(INTEL, 0x54FF), (kernel_ulong_t)&ufs_intel_adl_hba_vops },
- 	{ PCI_VDEVICE(INTEL, 0x7E47), (kernel_ulong_t)&ufs_intel_mtl_hba_vops },
-+	{ PCI_VDEVICE(INTEL, 0xA847), (kernel_ulong_t)&ufs_intel_mtl_hba_vops },
- 	{ }	/* terminate list */
- };
+diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+index e6718bfc6c55b..b737437618047 100644
+--- a/fs/ext4/mballoc.c
++++ b/fs/ext4/mballoc.c
+@@ -4020,6 +4020,7 @@ ext4_mb_normalize_request(struct ext4_allocation_context *ac,
+ 				struct ext4_allocation_request *ar)
+ {
+ 	struct ext4_sb_info *sbi = EXT4_SB(ac->ac_sb);
++	struct ext4_super_block *es = sbi->s_es;
+ 	int bsbits, max;
+ 	ext4_lblk_t end;
+ 	loff_t size, start_off;
+@@ -4200,18 +4201,21 @@ ext4_mb_normalize_request(struct ext4_allocation_context *ac,
+ 	ac->ac_g_ex.fe_len = EXT4_NUM_B2C(sbi, size);
+ 
+ 	/* define goal start in order to merge */
+-	if (ar->pright && (ar->lright == (start + size))) {
++	if (ar->pright && (ar->lright == (start + size)) &&
++	    ar->pright >= size &&
++	    ar->pright - size >= le32_to_cpu(es->s_first_data_block)) {
+ 		/* merge to the right */
+ 		ext4_get_group_no_and_offset(ac->ac_sb, ar->pright - size,
+-						&ac->ac_f_ex.fe_group,
+-						&ac->ac_f_ex.fe_start);
++						&ac->ac_g_ex.fe_group,
++						&ac->ac_g_ex.fe_start);
+ 		ac->ac_flags |= EXT4_MB_HINT_TRY_GOAL;
+ 	}
+-	if (ar->pleft && (ar->lleft + 1 == start)) {
++	if (ar->pleft && (ar->lleft + 1 == start) &&
++	    ar->pleft + 1 < ext4_blocks_count(es)) {
+ 		/* merge to the left */
+ 		ext4_get_group_no_and_offset(ac->ac_sb, ar->pleft + 1,
+-						&ac->ac_f_ex.fe_group,
+-						&ac->ac_f_ex.fe_start);
++						&ac->ac_g_ex.fe_group,
++						&ac->ac_g_ex.fe_start);
+ 		ac->ac_flags |= EXT4_MB_HINT_TRY_GOAL;
+ 	}
  
 -- 
 2.39.2
