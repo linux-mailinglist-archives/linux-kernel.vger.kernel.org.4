@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 152A36F7598
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:59:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEC856F75A0
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:59:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232089AbjEDT7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 15:59:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42962 "EHLO
+        id S232274AbjEDT7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 15:59:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231294AbjEDT4f (ORCPT
+        with ESMTP id S231893AbjEDT51 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 15:56:35 -0400
+        Thu, 4 May 2023 15:57:27 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8FA3AD09;
-        Thu,  4 May 2023 12:49:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5596124B6;
+        Thu,  4 May 2023 12:49:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 69EC86381F;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BC046382A;
+        Thu,  4 May 2023 19:49:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52EE3C433A0;
         Thu,  4 May 2023 19:49:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6199C433D2;
-        Thu,  4 May 2023 19:49:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683229772;
-        bh=+96Mq4ggXsx7WcB6BZtFOmiAWeqBv5VKnktfiAdc368=;
+        s=k20201202; t=1683229774;
+        bh=DXLP+wOUiBgZm+SUjA0qsNB+QyEVN1tikG3u6WzhJrg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZAptdyaWXnk1/rYalL72z1pBE1rjt5LD4PxhjxjHXDJwvPlrj3yZceJzzhflwjMfa
-         ozhD1S7bh7/NZDNXDYSjr0AIS51p+MWT+EZcVw+yyOKCZBvYdv7zZgRySlHTVRTSsW
-         pY/kJ6a/+u63pgA3eE9H1xooYgplOS8aPnDw5a5KtfDIoOzvKfgnNRmuK8NScuRAb+
-         aiT/yl6t5J4M7ux8QI5mP5ofmwOiB2hi4RSzKtcK5vNgn5pDlfz7c7QP/eD4bFo7Sr
-         bpHWjku4Fr9NDIs4UpwvOZdpFB70BMB2yO+9sw73piMN2Yw7yDDC1FRtmKaN38NdTs
-         JwiPik57I3Lwg==
+        b=pNmQZqbKBdONtlS3xEn585AJkue1xpQ2/JgVIcho5+lrX4L9Dx+z/XO0afZCGSAJd
+         9MWzBhnQA8NIpUOxDUX/c6ZG36MNuEbimLJ4nZe+pDbzmKOGy4JZvJYjOByKIhUmKU
+         oLwASYrm2vZ5F8WHN7ouXti6A04iDupq5zoolPnTGuww5IIS961ryVPMsgi0Rb5W+T
+         mbrzfwP2AP1bIGIkWKzdMWFdZ6XrjNbMVq59+EMcgkWRbO+KM3RXuxz+2scJKIRtgo
+         QJzqdpytF6QIbcbeIckwSCKUbJdQHsQd6tY+30DDV6ypNHNv5MEwo3Coezn8BnX/5E
+         NEFk0eXlnTnmg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Chethan T N <chethan.tumkur.narayan@intel.com>,
+Cc:     Hans de Goede <hdegoede@redhat.com>,
         Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
         Sasha Levin <sashal@kernel.org>, marcel@holtmann.org,
         johan.hedberg@gmail.com, luiz.dentz@gmail.com,
         linux-bluetooth@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 28/30] Bluetooth: btintel: Add LE States quirk support
-Date:   Thu,  4 May 2023 15:48:21 -0400
-Message-Id: <20230504194824.3808028-28-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 29/30] Bluetooth: hci_bcm: Fall back to getting bdaddr from EFI if not set
+Date:   Thu,  4 May 2023 15:48:22 -0400
+Message-Id: <20230504194824.3808028-29-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230504194824.3808028-1-sashal@kernel.org>
 References: <20230504194824.3808028-1-sashal@kernel.org>
@@ -59,39 +59,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chethan T N <chethan.tumkur.narayan@intel.com>
+From: Hans de Goede <hdegoede@redhat.com>
 
-[ Upstream commit 77f542b10c535c9a93bf8afdd2665524935807c2 ]
+[ Upstream commit 0d218c3642b9ccf71f44987cd03c19320f3bd918 ]
 
-Basically all Intel controllers support both Central/Peripheral
-LE states.
+On some devices the BCM Bluetooth adapter does not have a valid bdaddr set.
 
-This patch enables the LE States quirk by default on all
-Solar and Magnertor Intel controllers.
+btbcm.c currently sets HCI_QUIRK_INVALID_BDADDR to indicate when this is
+the case. But this requires users to manual setup a btaddr, by doing e.g.:
 
-Signed-off-by: Chethan T N <chethan.tumkur.narayan@intel.com>
+btmgmt -i hci0 public-addr 'B0:F1:EC:82:1D:B3'
+
+Which means that Bluetooth will not work out of the box on such devices.
+To avoid this (where possible) hci_bcm sets: HCI_QUIRK_USE_BDADDR_PROPERTY
+which tries to get the bdaddr from devicetree.
+
+But this only works on devicetree platforms. On UEFI based platforms
+there is a special Broadcom UEFI variable which when present contains
+the devices bdaddr, just like how there is another UEFI variable which
+contains wifi nvram contents including the wifi MAC address.
+
+Add support for getting the bdaddr from this Broadcom UEFI variable,
+so that Bluetooth will work OOTB for users on devices where this
+UEFI variable is present.
+
+This fixes Bluetooth not working on for example Asus T100HA 2-in-1s.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/bluetooth/btintel.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/bluetooth/btbcm.c | 47 ++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 44 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/bluetooth/btintel.c b/drivers/bluetooth/btintel.c
-index d707aa63e9441..2a4cc5d8c2d40 100644
---- a/drivers/bluetooth/btintel.c
-+++ b/drivers/bluetooth/btintel.c
-@@ -2381,9 +2381,8 @@ static int btintel_setup_combined(struct hci_dev *hdev)
- 		 */
- 		set_bit(HCI_QUIRK_WIDEBAND_SPEECH_SUPPORTED, &hdev->quirks);
+diff --git a/drivers/bluetooth/btbcm.c b/drivers/bluetooth/btbcm.c
+index a18f289d73466..f228cdbccaee3 100644
+--- a/drivers/bluetooth/btbcm.c
++++ b/drivers/bluetooth/btbcm.c
+@@ -6,6 +6,7 @@
+  *  Copyright (C) 2015  Intel Corporation
+  */
  
--		/* Valid LE States quirk for GfP */
--		if (INTEL_HW_VARIANT(ver_tlv.cnvi_bt) == 0x18)
--			set_bit(HCI_QUIRK_VALID_LE_STATES, &hdev->quirks);
-+		/* Apply LE States quirk from solar onwards */
-+		set_bit(HCI_QUIRK_VALID_LE_STATES, &hdev->quirks);
++#include <linux/efi.h>
+ #include <linux/module.h>
+ #include <linux/firmware.h>
+ #include <linux/dmi.h>
+@@ -33,6 +34,43 @@
+ /* For kmalloc-ing the fw-name array instead of putting it on the stack */
+ typedef char bcm_fw_name[BCM_FW_NAME_LEN];
  
- 		/* Setup MSFT Extension support */
- 		btintel_set_msft_opcode(hdev,
++#ifdef CONFIG_EFI
++static int btbcm_set_bdaddr_from_efi(struct hci_dev *hdev)
++{
++	efi_guid_t guid = EFI_GUID(0x74b00bd9, 0x805a, 0x4d61, 0xb5, 0x1f,
++				   0x43, 0x26, 0x81, 0x23, 0xd1, 0x13);
++	bdaddr_t efi_bdaddr, bdaddr;
++	efi_status_t status;
++	unsigned long len;
++	int ret;
++
++	if (!efi_rt_services_supported(EFI_RT_SUPPORTED_GET_VARIABLE))
++		return -EOPNOTSUPP;
++
++	len = sizeof(efi_bdaddr);
++	status = efi.get_variable(L"BDADDR", &guid, NULL, &len, &efi_bdaddr);
++	if (status != EFI_SUCCESS)
++		return -ENXIO;
++
++	if (len != sizeof(efi_bdaddr))
++		return -EIO;
++
++	baswap(&bdaddr, &efi_bdaddr);
++
++	ret = btbcm_set_bdaddr(hdev, &bdaddr);
++	if (ret)
++		return ret;
++
++	bt_dev_info(hdev, "BCM: Using EFI device address (%pMR)", &bdaddr);
++	return 0;
++}
++#else
++static int btbcm_set_bdaddr_from_efi(struct hci_dev *hdev)
++{
++	return -EOPNOTSUPP;
++}
++#endif
++
+ int btbcm_check_bdaddr(struct hci_dev *hdev)
+ {
+ 	struct hci_rp_read_bd_addr *bda;
+@@ -86,9 +124,12 @@ int btbcm_check_bdaddr(struct hci_dev *hdev)
+ 	    !bacmp(&bda->bdaddr, BDADDR_BCM4345C5) ||
+ 	    !bacmp(&bda->bdaddr, BDADDR_BCM43430A0) ||
+ 	    !bacmp(&bda->bdaddr, BDADDR_BCM43341B)) {
+-		bt_dev_info(hdev, "BCM: Using default device address (%pMR)",
+-			    &bda->bdaddr);
+-		set_bit(HCI_QUIRK_INVALID_BDADDR, &hdev->quirks);
++		/* Try falling back to BDADDR EFI variable */
++		if (btbcm_set_bdaddr_from_efi(hdev) != 0) {
++			bt_dev_info(hdev, "BCM: Using default device address (%pMR)",
++				    &bda->bdaddr);
++			set_bit(HCI_QUIRK_INVALID_BDADDR, &hdev->quirks);
++		}
+ 	}
+ 
+ 	kfree_skb(skb);
 -- 
 2.39.2
 
