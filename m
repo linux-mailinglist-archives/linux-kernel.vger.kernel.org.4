@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23FA96F7736
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 22:39:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 775696F7735
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 22:39:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231304AbjEDUj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 16:39:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53744 "EHLO
+        id S230410AbjEDUjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 16:39:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230387AbjEDUjH (ORCPT
+        with ESMTP id S230179AbjEDUjB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 16:39:07 -0400
+        Thu, 4 May 2023 16:39:01 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5CED19D4C;
-        Thu,  4 May 2023 13:33:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCCED23497;
+        Thu,  4 May 2023 13:33:26 -0700 (PDT)
 Received: from localhost (unknown [188.27.34.213])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 60EA866056FF;
-        Thu,  4 May 2023 21:07:14 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4CC666605703;
+        Thu,  4 May 2023 21:07:17 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1683230834;
-        bh=liP+soMrPQDOXxG2SMtxGxRaMcIPp5ZaL+QpnsunI+8=;
+        s=mail; t=1683230837;
+        bh=sZ9X6bpnej/8y+Ig3kRI3R+kapqR1qQMI4PAr0MewPc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Mog/gRj1ztd5K51jKBGYdqmuisZiPHDnvVb5L5W0/NkdTgORXgtK2QJ29Rov0kYQP
-         7dcSIu/NYIixTxqqAaljb1XMfnBGfY5giCriXv+sKPrVy0FfRtSlABBG9X8tysw5yZ
-         8wzCHbvT9l84lc5cq96B4ax0XwxlClSGkBhmbky+fYLVTcNVvMdxwI0s2Xv/pc3TfL
-         K0I8AhLvAzIKIHdacgqJY3n5wbpa0QukcYmipZbefRAy66o8fCaunv8MVGT4zXdwdQ
-         bXTmiTONhmJe8jZE2dK4Bfn8YxjtEh3erIyoZewTqSWDafVguO4i2M0/4iPuM4Uybf
-         57OYJEmZ9UVkg==
+        b=RjM/umzakZN6doBk0Zcy2pHpfbP7qBGgH/xGzFbZVLvF+wJmAqz0v/f74TD3x6nM7
+         rnWzAqcMsuX5Jjv9dcbnyiqyea+Kk8Z6qvFvkgzF0GUKDG67LnzR30CmnVCxKcp7DS
+         S68hhm8aY6nHcj+E8JNOmHpjDWn8oh3vrY7Nk3WBIrwb8H6LkzO5rR74F1W0Utrvbq
+         UbbU3ZTt0Yv99fIuvtW0oYsh0axsR68pf7GgzwWir5QruHNGNGo3raGQTeCo+JRUSw
+         BXHp9hKKrSDXvFSfJuUufiMOn8DDwvzs2xsKsTSrxgieomCXpuaTWxi+GR0bQHsH0K
+         AUD2lksxSKpJA==
 From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -46,9 +46,9 @@ To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
 Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
         kernel@collabora.com
-Subject: [PATCH v2 6/8] nvmem: rockchip-otp: Improve probe error handling
-Date:   Thu,  4 May 2023 23:06:46 +0300
-Message-Id: <20230504200648.1119866-7-cristian.ciocaltea@collabora.com>
+Subject: [PATCH v2 7/8] nvmem: rockchip-otp: Add support for RK3588
+Date:   Thu,  4 May 2023 23:06:47 +0300
+Message-Id: <20230504200648.1119866-8-cristian.ciocaltea@collabora.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230504200648.1119866-1-cristian.ciocaltea@collabora.com>
 References: <20230504200648.1119866-1-cristian.ciocaltea@collabora.com>
@@ -64,71 +64,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enhance error handling in the probe function by making use of
-dev_err_probe(), which ensures the error code is always printed, in
-addition to the specified error message.
+Add support for the OTP memory device found on the Rockchip RK3588 SoC.
 
+While here, remove the unnecessary 'void *' casts in the OF device ID
+table.
+
+Co-developed-by: Finley Xiao <finley.xiao@rock-chips.com>
+Signed-off-by: Finley Xiao <finley.xiao@rock-chips.com>
 Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 Tested-by: Vincent Legoll <vincent.legoll@gmail.com>
 Reviewed-by: Heiko Stuebner <heiko@sntech.de>
 ---
- drivers/nvmem/rockchip-otp.c | 21 ++++++++++++---------
- 1 file changed, 12 insertions(+), 9 deletions(-)
+ drivers/nvmem/rockchip-otp.c | 78 +++++++++++++++++++++++++++++++++++-
+ 1 file changed, 76 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/nvmem/rockchip-otp.c b/drivers/nvmem/rockchip-otp.c
-index 439aea1f8874..84bf956cc4e1 100644
+index 84bf956cc4e1..cb9aa5428350 100644
 --- a/drivers/nvmem/rockchip-otp.c
 +++ b/drivers/nvmem/rockchip-otp.c
-@@ -235,10 +235,8 @@ static int rockchip_otp_probe(struct platform_device *pdev)
- 	int ret, i;
+@@ -54,6 +54,19 @@
  
- 	data = of_device_get_match_data(dev);
--	if (!data) {
--		dev_err(dev, "failed to get match data\n");
--		return -EINVAL;
--	}
-+	if (!data)
-+		return dev_err_probe(dev, -EINVAL, "failed to get match data\n");
+ #define OTPC_TIMEOUT			10000
  
- 	otp = devm_kzalloc(&pdev->dev, sizeof(struct rockchip_otp),
- 			   GFP_KERNEL);
-@@ -249,7 +247,8 @@ static int rockchip_otp_probe(struct platform_device *pdev)
- 	otp->dev = dev;
- 	otp->base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(otp->base))
--		return PTR_ERR(otp->base);
-+		return dev_err_probe(dev, PTR_ERR(otp->base),
-+				     "failed to ioremap resource\n");
- 
- 	otp->clks = devm_kcalloc(dev, data->num_clks, sizeof(*otp->clks),
- 				 GFP_KERNEL);
-@@ -261,18 +260,22 @@ static int rockchip_otp_probe(struct platform_device *pdev)
- 
- 	ret = devm_clk_bulk_get(dev, data->num_clks, otp->clks);
- 	if (ret)
--		return ret;
-+		return dev_err_probe(dev, ret, "failed to get clocks\n");
- 
- 	otp->rst = devm_reset_control_array_get_exclusive(dev);
- 	if (IS_ERR(otp->rst))
--		return PTR_ERR(otp->rst);
-+		return dev_err_probe(dev, PTR_ERR(otp->rst),
-+				     "failed to get resets\n");
- 
- 	otp_config.size = data->size;
- 	otp_config.priv = otp;
- 	otp_config.dev = dev;
--	nvmem = devm_nvmem_register(dev, &otp_config);
- 
--	return PTR_ERR_OR_ZERO(nvmem);
-+	nvmem = devm_nvmem_register(dev, &otp_config);
-+	if (IS_ERR(nvmem))
-+		return dev_err_probe(dev, PTR_ERR(nvmem),
-+				     "failed to register nvmem device\n");
-+	return 0;
++/* RK3588 Register */
++#define RK3588_OTPC_AUTO_CTRL		0x04
++#define RK3588_OTPC_AUTO_EN		0x08
++#define RK3588_OTPC_INT_ST		0x84
++#define RK3588_OTPC_DOUT0		0x20
++#define RK3588_NO_SECURE_OFFSET		0x300
++#define RK3588_NBYTES			4
++#define RK3588_BURST_NUM		1
++#define RK3588_BURST_SHIFT		8
++#define RK3588_ADDR_SHIFT		16
++#define RK3588_AUTO_EN			BIT(0)
++#define RK3588_RD_DONE			BIT(1)
++
+ struct rockchip_data {
+ 	int size;
+ 	const char * const *clks;
+@@ -171,6 +184,52 @@ static int px30_otp_read(void *context, unsigned int offset,
+ 	return ret;
  }
  
- static struct platform_driver rockchip_otp_driver = {
++static int rk3588_otp_read(void *context, unsigned int offset,
++			   void *val, size_t bytes)
++{
++	struct rockchip_otp *otp = context;
++	unsigned int addr_start, addr_end, addr_len;
++	int ret, i = 0;
++	u32 data;
++	u8 *buf;
++
++	addr_start = round_down(offset, RK3588_NBYTES) / RK3588_NBYTES;
++	addr_end = round_up(offset + bytes, RK3588_NBYTES) / RK3588_NBYTES;
++	addr_len = addr_end - addr_start;
++	addr_start += RK3588_NO_SECURE_OFFSET;
++
++	buf = kzalloc(array_size(addr_len, RK3588_NBYTES), GFP_KERNEL);
++	if (!buf)
++		return -ENOMEM;
++
++	while (addr_len--) {
++		writel((addr_start << RK3588_ADDR_SHIFT) |
++		       (RK3588_BURST_NUM << RK3588_BURST_SHIFT),
++		       otp->base + RK3588_OTPC_AUTO_CTRL);
++		writel(RK3588_AUTO_EN, otp->base + RK3588_OTPC_AUTO_EN);
++
++		ret = rockchip_otp_wait_status(otp, RK3588_OTPC_INT_ST,
++					       RK3588_RD_DONE);
++		if (ret < 0) {
++			dev_err(otp->dev, "timeout during read setup\n");
++			goto read_end;
++		}
++
++		data = readl(otp->base + RK3588_OTPC_DOUT0);
++		memcpy(&buf[i], &data, RK3588_NBYTES);
++
++		i += RK3588_NBYTES;
++		addr_start++;
++	}
++
++	memcpy(val, buf + offset % RK3588_NBYTES, bytes);
++
++read_end:
++	kfree(buf);
++
++	return ret;
++}
++
+ static int rockchip_otp_read(void *context, unsigned int offset,
+ 			     void *val, size_t bytes)
+ {
+@@ -213,14 +272,29 @@ static const struct rockchip_data px30_data = {
+ 	.reg_read = px30_otp_read,
+ };
+ 
++static const char * const rk3588_otp_clocks[] = {
++	"otp", "apb_pclk", "phy", "arb",
++};
++
++static const struct rockchip_data rk3588_data = {
++	.size = 0x400,
++	.clks = rk3588_otp_clocks,
++	.num_clks = ARRAY_SIZE(rk3588_otp_clocks),
++	.reg_read = rk3588_otp_read,
++};
++
+ static const struct of_device_id rockchip_otp_match[] = {
+ 	{
+ 		.compatible = "rockchip,px30-otp",
+-		.data = (void *)&px30_data,
++		.data = &px30_data,
+ 	},
+ 	{
+ 		.compatible = "rockchip,rk3308-otp",
+-		.data = (void *)&px30_data,
++		.data = &px30_data,
++	},
++	{
++		.compatible = "rockchip,rk3588-otp",
++		.data = &rk3588_data,
+ 	},
+ 	{ /* sentinel */ },
+ };
 -- 
 2.40.0
 
