@@ -2,68 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE6E26F6401
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 06:22:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A69B26F640B
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 06:27:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbjEDEW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 00:22:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37954 "EHLO
+        id S229661AbjEDE1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 00:27:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbjEDEWx (ORCPT
+        with ESMTP id S229470AbjEDE1t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 00:22:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B273E7;
-        Wed,  3 May 2023 21:22:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A8BA163121;
-        Thu,  4 May 2023 04:22:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61ADDC433D2;
-        Thu,  4 May 2023 04:22:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683174171;
-        bh=gY1ydfARY0H6BviA3v1wK7lwT2Jma3YmK8B9vIKhEmA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cdRw7XEP8KRN6VygwefZ1LCfApilOvZ5W5b7JRyLvGeJMM2nqY4t9YbZ7jMZuToHe
-         z/VxZZ+G6wQ26oAKmkPi7K00CmsrYKnfP7/73foNFUwecOSyUsBFKEDnuYE874IM25
-         oyLTalLQRlyDFFFw1N0sa/w/7gWGu2G0Oex4oyPGuFnXgq4WAOG36cZFCS0bnSZ4Db
-         zXw2r5NY5qbVKB8MLwF3PAsMk0rMZI0tzGmwLNvHokJn1L72psOWCKn0zJDNfZ9je1
-         RbytrokhniXo7w2JDypXEt2ED6TWdjcFyknN7/P864uI8FSs+OEX6EdvnTgXIP2Rh1
-         ntELuzGUeLOjQ==
-Date:   Thu, 4 May 2023 06:22:43 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Stanislav Jakubek <stano.jakubek@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] dt-bindings: i2c: brcm,kona-i2c: convert to YAML
-Message-ID: <ZFMzE2xZxnya8F7p@sai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Thu, 4 May 2023 00:27:49 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F1A011D;
+        Wed,  3 May 2023 21:27:47 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3443tWhv021678;
+        Thu, 4 May 2023 04:27:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=uos9HuZG2tYmeaAuDA9IM4uMN10ul3cN91BH8BuVnyI=;
+ b=JS83mZgMXG8WrTNTC5ntpTzg8UjZJDYo7JU4vmEAx/fC1pMJxc1cTYbon5vY5JvAnAvK
+ cduCIMyGHFFoyhHkDdba67u7rA/2tp1ohT5pNeDVIpwtYWvyVFo8EiPVuX5e6Csl6dq7
+ zGheTATHjDvX+Kix44k4G3MZuXrzhKAm4Je9+emv7/sk7/CMjBa/Ftt6EDetqyKeE6o8
+ CR7IicoEHUbTOgNZjnOi2rbeVXRrCCdP9KYqqLhYAAq4F+Y5iHW45GdmxfhdTWJjhAc7
+ gTlkQWRQb93D4CTzhKN84SoHrFr1hjE7Lr/EKtLNkkKnzju5RGz1nsS1h2b0BzOx/X93 8w== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qc2aj0afv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 04 May 2023 04:27:37 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3444Ra3Y018627
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 4 May 2023 04:27:36 GMT
+Received: from [10.216.20.183] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 3 May 2023
+ 21:27:30 -0700
+Message-ID: <9672285c-d81c-2ef5-46bc-13708392b5aa@quicinc.com>
+Date:   Thu, 4 May 2023 09:57:27 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v7 5/9] usb: dwc3: core: Refactor PHY logic to support
+ Multiport Controller
+Content-Language: en-US
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <9875ec0211187e4f5e2a4379c63eacdb69b31d7a.1682252615.git.stano.jakubek@gmail.com>
- <72ba28004afb733224f7294a146fc2a6a5a834a7.1682252615.git.stano.jakubek@gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="DzpMF8U0002ctXbi"
-Content-Disposition: inline
-In-Reply-To: <72ba28004afb733224f7294a146fc2a6a5a834a7.1682252615.git.stano.jakubek@gmail.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Felipe Balbi <balbi@kernel.org>,
+        "Wesley Cheng" <quic_wcheng@quicinc.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "quic_pkondeti@quicinc.com" <quic_pkondeti@quicinc.com>,
+        "quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
+        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>,
+        "quic_harshq@quicinc.com" <quic_harshq@quicinc.com>,
+        "ahalaney@redhat.com" <ahalaney@redhat.com>,
+        "quic_shazhuss@quicinc.com" <quic_shazhuss@quicinc.com>
+References: <20230501143445.3851-1-quic_kriskura@quicinc.com>
+ <20230501143445.3851-6-quic_kriskura@quicinc.com>
+ <20230502221100.ecska23anlzv3iwq@synopsys.com>
+ <f55fbdc1-444c-eba5-02f4-aeab7a1b6f04@quicinc.com>
+ <20230503215511.52udfef6amdcapng@synopsys.com>
+From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <20230503215511.52udfef6amdcapng@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: SzxGQNK_kcRI51JUR3yikyBVABsYfoev
+X-Proofpoint-GUID: SzxGQNK_kcRI51JUR3yikyBVABsYfoev
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-04_01,2023-05-03_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ adultscore=0 mlxlogscore=835 impostorscore=0 mlxscore=0 clxscore=1015
+ lowpriorityscore=0 bulkscore=0 priorityscore=1501 phishscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2305040035
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,45 +102,54 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---DzpMF8U0002ctXbi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Sun, Apr 23, 2023 at 02:40:18PM +0200, Stanislav Jakubek wrote:
-> Convert Broadcom Kona family I2C bindings to DT schema.
->=20
-> Changes during conversion:
->   - add used, but previously undocumented SoC-specific compatibles
->   - drop references to SoCs that are not upstream
->   - add supported clock frequencies according to the Linux driver [1]
->=20
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/t=
-ree/drivers/i2c/busses/i2c-bcm-kona.c#n731
->=20
-> Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
+On 5/4/2023 3:25 AM, Thinh Nguyen wrote:
+> On Wed, May 03, 2023, Krishna Kurapati PSSNV wrote:
+>>
+>>
+>> On 5/3/2023 3:41 AM, Thinh Nguyen wrote:
+>>> On Mon, May 01, 2023, Krishna Kurapati wrote:
+>>>> Currently the DWC3 driver supports only single port controller
+>>>> which requires at most one HS and one SS PHY.
+>>>>
+>>>> But the DWC3 USB controller can be connected to multiple ports and
+>>>> each port can have their own PHYs. Each port of the multiport
+>>>> controller can either be HS+SS capable or HS only capable
+>>>> Proper quantification of them is required to modify GUSB2PHYCFG
+>>>> and GUSB3PIPECTL registers appropriately.
+>>>>
+>>>> Add support for detecting, obtaining and configuring phy's supported
+>>>> by a multiport controller and limit the max number of ports
+>>>> supported to 4.
+>>>>
+>>>> Signed-off-by: Harsh Agarwal <quic_harshq@quicinc.com>
+>>>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>>>
+>>> Are you a co-author or only Harsh is the main author of this patch?
+>>>
+>> Harsh began developing this series and pushed the first 3 RFC versions
+>> (supporting both usb-phy / generic phy frameworks) until maintainers pointed
+>> out that we only support generic phy changes.
+>>
+>>  From then on I took it up and started pushing next versions. I would say
+>> both of us are primary authors for this patch. But if there has to be only
+>> one, I would say its Harsh.
+>>
+>> Regards,
+>> Krishna,
+>>
+> 
+> I just want to check to give you proper credit for the patch's
+> contribution. Since Harsh isn't the only one working on this you're not
+> simply transporting this change. Perhaps you should add Co-developed-by
+> tags.
+> 
+> Thanks,
+> Thinh
 
-Applied to for-current with the link removed, thanks!
+Sure,
 
+  Let me put myself under Co-developed-by in the next version.
 
---DzpMF8U0002ctXbi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmRTMw4ACgkQFA3kzBSg
-KbbrHA/8C4xTAfCocjEVRzkGZwzZmYkvNW+nEao9zKsjdszZMs15Y40xKR/4vlQa
-o/2vE6uc9LEq0hbl5hlgy10/lYrF3P+tK7zXBZwldLoGUUab3q0QUvqu4x+RsXwV
-N2iB521IYtITsRaO94+l2HupvMUEdX4H9jZnrZVFokIQW3Og8xiZVeEA+Gkm0yfB
-2hWLQOgO44JGPQHf8mho/b3lTajjydYMRNM6Q/t8e+YtXtW7u1YdZM5Z4D6I2Hf3
-hxoNNYT3NqyVk77gnEwpkHdDjFYz7zVMSotlFw1zCS8iqVAHuD/IhQtEeparhM3C
-WX+Ah6TGrLjEHqZ2Qh2q2ZrhqjNzPpSRzXv0XW/kzlBGDP9JiKU5ZUxX4kZLbXjz
-Uv3p2cOA0madvIyMmEwolTSPxaWWEDvau/N77unL3PmxC5C0aaA7FLqAOILKkrCj
-LhkQNuGCGcvnQHpvRrCqNodZuynF5LzK9NNR1qZcAl9myM0z7oTy78qQua2uR8ED
-D+dKGCi2YCTd76V1gxCRwM5A2lpAHyGEoDPzJfoIZZbe9/P98c0iJXq4Ba61mKFX
-tS4xJm2QHv1rNLle0Z1crbUYQvNXh8Y8AnrZJIBPD4At8MykkPLqJLAzoAlr7zYB
-9XSuIoVXoWaCwkaUI9qKTdQXr9tva/0WQCHGMZRN7rRkJCRGnnA=
-=2DxL
------END PGP SIGNATURE-----
-
---DzpMF8U0002ctXbi--
+Regards,
+Krishna,
