@@ -2,150 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8C4A6F6B25
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 14:29:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 107346F6B30
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 14:30:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbjEDM3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 08:29:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55298 "EHLO
+        id S230159AbjEDMa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 08:30:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbjEDM3E (ORCPT
+        with ESMTP id S229606AbjEDMax (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 08:29:04 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439726185;
-        Thu,  4 May 2023 05:29:03 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 344C6mSH018634;
-        Thu, 4 May 2023 12:28:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=PUpzOZj3934Z7RYhXVQ62PQUTt99uv5wnpS3MmtTpDk=;
- b=ScENoJCIMPa/nuFo6WTOFsnXjEuxC+Det3kt10e9fKn1ztsXrEJgHbbjsrZr+z5JwEZn
- hmDJvGzGPJOWJPgP54zFyhoGSr5FDEjM8rUt6QmcFddNfV1plbgwK+LXhnMor7f+liYY
- 1VzHTBDenyXsxo4f+TPGNgKFKQlY69BCo4IOauZNvlUsoplFqSEJ1b0jsbVeIxerH20p
- 2cMQx/I2NegcwPzWHd437O+XwqrUHodbP6rO/0i2hxFnPLW+lEWAHsWnsoc2PGBOBzfU
- rwYE9NbH2hxJZz2f/7dMVEAr3GchS+Yc5D8oRURBysTFiHSxPjcCbNE2QfMSYh7IOXJC fg== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qc8kw8mh7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 04 May 2023 12:28:41 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 344CQiX9004732
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 4 May 2023 12:28:40 GMT
-Received: from [10.216.46.158] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 4 May 2023
- 05:26:37 -0700
-Message-ID: <33ea7c3b-4317-5aff-5e6a-af6e093d45a0@quicinc.com>
-Date:   Thu, 4 May 2023 17:56:33 +0530
+        Thu, 4 May 2023 08:30:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF436189
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 05:30:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683203411;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7zWedgN1cMAzNH4nqIB8GVwpan/hVUbX/LEZ6xjn2x4=;
+        b=cllz5g6EgLN7EVHbQNhOdlGKey0ufBMlOof12oUIsLNQIlNWIsvnmmYA0LcElDeg7BXmNf
+        KXMwZA9jNyAPIH6jLcTBF8OTjmW/hKvW4iIR9FUQiAv2Gbmt+ZHNoBHOVonDWuVNkHWUP+
+        YZxzUXyi2Su8sr51XK8g7X4NuExYTqI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-649-1coVjXosPEKlSvTGucHc6g-1; Thu, 04 May 2023 08:30:07 -0400
+X-MC-Unique: 1coVjXosPEKlSvTGucHc6g-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4A456858F0E;
+        Thu,  4 May 2023 12:30:05 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.225.24])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 1C8F1C15BAE;
+        Thu,  4 May 2023 12:29:57 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Thu,  4 May 2023 14:29:53 +0200 (CEST)
+Date:   Thu, 4 May 2023 14:29:45 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Wander Lairson Costa <wander@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Christian Brauner <brauner@kernel.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
+        <linux-perf-users@vger.kernel.org>, Hu Chunyu <chuhu@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v7 2/3] sched/task: Add the put_task_struct_atomic_safe()
+ function
+Message-ID: <20230504122945.GA28757@redhat.com>
+References: <20230425114307.36889-1-wander@redhat.com>
+ <20230425114307.36889-3-wander@redhat.com>
+ <20230504084229.GI1734100@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 02/18] remoteproc: qcom: Move minidump specific data to
- qcom_minidump.h
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <corbet@lwn.net>,
-        <keescook@chromium.org>, <tony.luck@intel.com>,
-        <gpiccoli@igalia.com>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <robh+dt@kernel.org>, <linus.walleij@linaro.org>,
-        <linux-gpio@vger.kernel.org>, <srinivas.kandagatla@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-hardening@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-doc@vger.kernel.org>
-References: <1683133352-10046-1-git-send-email-quic_mojha@quicinc.com>
- <1683133352-10046-3-git-send-email-quic_mojha@quicinc.com>
- <fe94ed5c-c444-436d-720a-c96538c1026d@linaro.org>
- <e69862cc-4185-a7a2-07b2-15e331c4678a@quicinc.com>
- <659a9637-f82c-054b-99a8-dc25416c8e13@linaro.org>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <659a9637-f82c-054b-99a8-dc25416c8e13@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 2We-ouX9jSCh1TC1DTCqu74GKsCnUQj-
-X-Proofpoint-ORIG-GUID: 2We-ouX9jSCh1TC1DTCqu74GKsCnUQj-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-04_08,2023-05-04_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 mlxlogscore=396 malwarescore=0 phishscore=0
- adultscore=0 clxscore=1015 spamscore=0 impostorscore=0 bulkscore=0
- mlxscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2305040101
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230504084229.GI1734100@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 05/04, Peter Zijlstra wrote:
+>
+> Urgh.. that's plenty horrible. And I'm sure everybody plus kitchen sink
+> has already asked why can't we just rcu free the thing unconditionally.
+>
+> Google only found me an earlier version of this same patch set, but I'm
+> sure we've had that discussion many times over the past several years.
 
+Yes... see for example
 
-On 5/4/2023 5:33 PM, Krzysztof Kozlowski wrote:
-> On 04/05/2023 13:58, Mukesh Ojha wrote:
->>
->>
->> On 5/4/2023 5:08 PM, Krzysztof Kozlowski wrote:
->>> On 03/05/2023 19:02, Mukesh Ojha wrote:
->>>> Move minidump specific data types and macros to a separate internal
->>>> header(qcom_minidump.h) so that it can be shared among different
->>>> Qualcomm drivers.
->>>
->>> No, this is not internal header. You moved it to global header.
->>>
->>> There is no reason driver internals should be exposed to other unrelated
->>> subsystems.
->>>
->>>>
->>>> There is no change in functional behavior after this.
->>>
->>> It is. You made all these internal symbols available to others.
->>>
->>>>
->>>
->>> This comes without justification why other drivers needs to access
->>> private and internal data. It does not look correct design. NAK.
->>
->> Thanks for catching outdated commit text, will fix the commit with
->> more descriptive reasoning.
->>
->> It has to be global so that co-processor minidump and apss minidump can
->> share data structure and they are lying in different directory.
->>
-> 
-> Then you should not share all the internals of memory layout but only
-> few pieces necessary to talk with minidump driver. The minidump driver
-> should organize everything how it wants.
+https://lore.kernel.org/lkml/CAHk-=whtj+aSYftniMRG4xvFE8dmmYyrqcJyPmzStsfj5w9r=w@mail.gmail.com/
 
-These are core data structure which is shared with boot firmware and the
-one's are moved here all are required by minidump driver .
+We already have an rcu pass before put_task_struct(zombie), see
+put_task_struct_rcu_user(), another one look unfortunate.
 
-If you follow here[1], i raised by concern to make this particular one's
-as private and later to avoid confusion went with single header.
-But if others agree, I will keep the one that get shared with minidump
-as separate one or if relative path of headers are allowed that can make
-it private between these drivers(which i don't think, will be allowed or
-recommended).
+Oleg.
 
-[1]
-https://lore.kernel.org/lkml/3df1ec27-7e4d-1f84-ff20-94e8ea91c86f@quicinc.com/
-
--- Mukesh
-> 
-> Best regards,
-> Krzysztof
-> 
