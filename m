@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F184C6F6C59
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 14:50:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 015B96F6C5D
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 14:50:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbjEDMuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 08:50:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36474 "EHLO
+        id S230450AbjEDMu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 08:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230427AbjEDMtv (ORCPT
+        with ESMTP id S230331AbjEDMtv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 4 May 2023 08:49:51 -0400
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1ACD59E8;
-        Thu,  4 May 2023 05:49:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 929A26A7E;
+        Thu,  4 May 2023 05:49:43 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QBttm42vcz4f3k5n;
-        Thu,  4 May 2023 20:49:36 +0800 (CST)
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QBttn0tW5z4f3v51;
+        Thu,  4 May 2023 20:49:37 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP4 (Coremail) with SMTP id gCh0CgBnHbHdqVNkzuf5Ig--.27873S9;
-        Thu, 04 May 2023 20:49:37 +0800 (CST)
+        by APP4 (Coremail) with SMTP id gCh0CgBnHbHdqVNkzuf5Ig--.27873S10;
+        Thu, 04 May 2023 20:49:38 +0800 (CST)
 From:   linan666@huaweicloud.com
 To:     axboe@kernel.dk, linan122@huawei.com, vishal.l.verma@intel.com,
         dan.j.williams@intel.com
 Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
         yukuai3@huawei.com, yi.zhang@huawei.com, houtao1@huawei.com,
         yangerkun@huawei.com
-Subject: [PATCH v2 05/11] block/badblocks: fix the bug of reverse order
-Date:   Thu,  4 May 2023 20:48:22 +0800
-Message-Id: <20230504124828.679770-6-linan666@huaweicloud.com>
+Subject: [PATCH v2 06/11] block/badblocks: fix ack set fail in badblocks_set
+Date:   Thu,  4 May 2023 20:48:23 +0800
+Message-Id: <20230504124828.679770-7-linan666@huaweicloud.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20230504124828.679770-1-linan666@huaweicloud.com>
 References: <20230504124828.679770-1-linan666@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgBnHbHdqVNkzuf5Ig--.27873S9
-X-Coremail-Antispam: 1UD129KBjvdXoWrKFyruF1kuw1xKr4DWr1UGFg_yoWfAFX_Ja
-        40yay8Xrn5Jr1ayw1SyF1vyF4FvFW5Cr18Kry7Jr1kZa1Uta18Aws8Kr98Xrn8CFyDG39I
-        yryfXr9Ivr4IqjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+X-CM-TRANSID: gCh0CgBnHbHdqVNkzuf5Ig--.27873S10
+X-Coremail-Antispam: 1UD129KBjvdXoWrZF4xtrWrWrW8tF17JFWUArb_yoWkXrg_J3
+        WFyFZ5Xrn5CFs8Cr1Yy3W0qrsY9F45Cr4kCw12qrn7XrsrtF1DJws8tr93Wrn5CFZrC390
+        v34rXr9Iva4IqjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
         9fnUUIcSsGvfJTRUUUbvxYFVCjjxCrM7AC8VAFwI0_Wr0E3s1l1xkIjI8I6I8E6xAIw20E
         Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l82xGYIkIc2x26280x7IE14v26r126s
         0DM28IrcIa0xkI8VCY1x0267AKxVW5JVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xG
@@ -66,36 +66,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Li Nan <linan122@huawei.com>
 
-Order of badblocks will be reversed if we set a large area at once. 'hi'
-remains unchanged while adding continuous badblocks is wrong, the next
-setting is greater than 'hi', it should be added to the next position.
-Let 'hi' +1 each cycle.
-
-  # echo 0 2048 > bad_blocks
-  # cat bad_blocks
-    1536 512
-    1024 512
-    512 512
-    0 512
+If we try to set ack for a BB_MAX_LEN badblocks, it will return
+0(success) but did not set ack at all in badblocks_set(). Check ack
+before setting to fix it, and do not set badblocks already exist.
 
 Fixes: 9e0e252a048b ("badblocks: Add core badblock management code")
 Signed-off-by: Li Nan <linan122@huawei.com>
 ---
- block/badblocks.c | 1 +
- 1 file changed, 1 insertion(+)
+ block/badblocks.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/block/badblocks.c b/block/badblocks.c
-index f34351b59414..11e3a3ae2c72 100644
+index 11e3a3ae2c72..c11eb869f2f3 100644
 --- a/block/badblocks.c
 +++ b/block/badblocks.c
-@@ -320,6 +320,7 @@ int badblocks_set(struct badblocks *bb, sector_t s, int sectors,
- 			p[hi] = BB_MAKE(s, this_sectors, acknowledged);
- 			sectors -= this_sectors;
- 			s += this_sectors;
-+			hi++;
- 			changed = true;
+@@ -219,18 +219,18 @@ int badblocks_set(struct badblocks *bb, sector_t s, int sectors,
+ 			if (e < s + sectors)
+ 				e = s + sectors;
+ 			if (e - a <= BB_MAX_LEN) {
+-				p[lo] = BB_MAKE(a, e-a, ack);
+ 				s = e;
+ 			} else {
+ 				/* does not all fit in one range,
+ 				 * make p[lo] maximal
+ 				 */
+-				if (BB_LEN(p[lo]) != BB_MAX_LEN)
+-					p[lo] = BB_MAKE(a, BB_MAX_LEN, ack);
+ 				s = a + BB_MAX_LEN;
+ 			}
++			if (s - a != BB_LEN(p[lo]) || ack != BB_ACK(p[lo])) {
++				p[lo] = BB_MAKE(a, s - a, ack);
++				changed = true;
++			}
+ 			sectors = e - s;
+-			changed = true;
  		}
  	}
+ 	if (sectors && hi < bb->count) {
 -- 
 2.31.1
 
