@@ -2,94 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FEC36F6DB8
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 16:30:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4B516F6DC4
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 16:31:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231172AbjEDO37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 10:29:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60860 "EHLO
+        id S230264AbjEDObW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 10:31:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbjEDO34 (ORCPT
+        with ESMTP id S231225AbjEDObT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 10:29:56 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7A549CA
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 07:29:55 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1puZxs-0002f5-I1; Thu, 04 May 2023 16:29:48 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1puZxr-0003en-HH; Thu, 04 May 2023 16:29:47 +0200
-Date:   Thu, 4 May 2023 16:29:47 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Rob Herring <robh@kernel.org>
-Cc:     jun.li@nxp.com, Bjorn Andersson <andersson@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-usb@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-kernel@vger.kernel.org, andreas@fatal.se,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Fabio Estevam <festevam@gmail.com>, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 1/4] dt-bindings: usb: gpio-sbu-mux: add support for
- ss-data lanes mux
-Message-ID: <20230504142947.imc3raeszxsz7xgj@pengutronix.de>
-References: <20230504-b4-v6-3-topic-boards-imx8mp-evk-dual-role-usb-v2-0-3889b1b2050c@pengutronix.de>
- <20230504-b4-v6-3-topic-boards-imx8mp-evk-dual-role-usb-v2-1-3889b1b2050c@pengutronix.de>
- <168320933573.1721948.14807819257456373317.robh@kernel.org>
+        Thu, 4 May 2023 10:31:19 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 393478A74
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 07:31:18 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-b9a6ab9ede3so787844276.2
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 07:31:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683210677; x=1685802677;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JS6msPuToyJynO3sTVIKpHDiqUqJNNgVeQDo4ExI+FY=;
+        b=B5odhRz5pl82Qodj9r2guUYfauBi1/TsFjLxRQqEz3zjcJjd//DMmZjNJKPPi7+nQ5
+         xuKBZ6j/WQW0W3dcKfsj589Fsc+uJ6BYPO2OLNobtTmF3hvusxOFblAjFzy4VuEOrD27
+         shVv5j4flGfZP5ZKf0oD9z3I5mcfEgazfAAXF3El44hYhX1ZRJaYFp+RYh8KC456HFZc
+         kSCAd/ObzJ2UJVsrp6Z49s4y6jg7flU32RKu03oDmXNXsZW8yRicseUXEdJ33k/uoDns
+         3t9BrSAOH3jBGP78RFzGvpDDNA510GhlcIeVQC/3SRIP7nZ/gPC/uJcOwTrT82pyTD6i
+         AF6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683210677; x=1685802677;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JS6msPuToyJynO3sTVIKpHDiqUqJNNgVeQDo4ExI+FY=;
+        b=JuNetZdWTt6smDm3BBl6yrLXO8GAOqJML+ucF0rpvzqURomWKukMJyAXIYcMkecCAk
+         Vb/1Ige/SFrpf4au4Xuw0A1U9iDhoiqjg/cSyOvmmvtSslvPQODbpFzhjl4+n7eqKXYE
+         54UekEe3zlSJeCtkpb5qTL1oHAXIDaq8yYW05LKYAwJ1Ul98L+69VCUU55zI3tBH+rIq
+         pbNfZwDrRevfmCLlaFxKpBDJFS5d618FF9bEWse85Z0aj0uBfT1JbW7EsIMuDVEkyXnX
+         y7u+2NljLQucgtrc9G8VYnF8RNPENvysjH2bkFSyVBPpojAWZG9Gjbneel9891ICWIVt
+         7B6Q==
+X-Gm-Message-State: AC+VfDwXTuUXDTex+t/GfhGvgb9Fk6F94bMO6xPXSgQp9j+ERDXTvjA7
+        TaZX4V8/Pv0aisuAMXCVjECMslU45+NxQj9P5fNYIg==
+X-Google-Smtp-Source: ACHHUZ5E9WXnTl16LxgdrH+7bPTNFRvDYVSM0w82lR/qVCCtHXAzvUBD8IG8coi/bDLOeNuU/XqnEJgf+6xYt7++7Tk=
+X-Received: by 2002:a25:cec1:0:b0:b99:4ac6:3c75 with SMTP id
+ x184-20020a25cec1000000b00b994ac63c75mr122983ybe.10.1683210677091; Thu, 04
+ May 2023 07:31:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <168320933573.1721948.14807819257456373317.robh@kernel.org>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230501165450.15352-1-surenb@google.com> <20230501165450.15352-35-surenb@google.com>
+ <ZFIO3tXCbmTn53uv@dhcp22.suse.cz> <CAJuCfpHrZ4kWYFPvA3W9J+CmNMuOtGa_ZMXE9fOmKsPQeNt2tg@mail.gmail.com>
+ <ZFNnKHR2nCSimjQf@dhcp22.suse.cz>
+In-Reply-To: <ZFNnKHR2nCSimjQf@dhcp22.suse.cz>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Thu, 4 May 2023 07:31:05 -0700
+Message-ID: <CAJuCfpF7WeVuJpmZN3KEu=FAUH34xfYG4wPg-YNjxj+GtmdBXQ@mail.gmail.com>
+Subject: Re: [PATCH 34/40] lib: code tagging context capture support
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
+        vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev,
+        mgorman@suse.de, dave@stgolabs.net, willy@infradead.org,
+        liam.howlett@oracle.com, corbet@lwn.net, void@manifault.com,
+        peterz@infradead.org, juri.lelli@redhat.com, ldufour@linux.ibm.com,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, peterx@redhat.com, david@redhat.com,
+        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
+        nathan@kernel.org, dennis@kernel.org, tj@kernel.org,
+        muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
+        pasha.tatashin@soleen.com, yosryahmed@google.com,
+        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
+        andreyknvl@gmail.com, keescook@chromium.org,
+        ndesaulniers@google.com, gregkh@linuxfoundation.org,
+        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+        glider@google.com, elver@google.com, dvyukov@google.com,
+        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
+        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-05-04, Rob Herring wrote:
-> 
-> On Thu, 04 May 2023 15:46:50 +0200, Marco Felsch wrote:
-> > This adds the support for GPIO based USB-C SS data lane muxing.
-> > 
-> > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-> > ---
-> >  .../devicetree/bindings/usb/gpio-sbu-mux.yaml      | 82 +++++++++++++++++++---
-> >  1 file changed, 71 insertions(+), 11 deletions(-)
-> > 
-> 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> Documentation/devicetree/bindings/usb/gpio-sbu-mux.example.dts:96.47-98.27: ERROR (duplicate_label): /example-1/tcpm/connector/ports/port@0/endpoint: Duplicate label 'tcpm_hs_out' on /example-1/tcpm/connector/ports/port@0/endpoint and /example-0/tcpm/connector/ports/port@0/endpoint
-> Documentation/devicetree/bindings/usb/gpio-sbu-mux.example.dts:103.47-105.27: ERROR (duplicate_label): /example-1/tcpm/connector/ports/port@1/endpoint: Duplicate label 'tcpm_ss_out' on /example-1/tcpm/connector/ports/port@1/endpoint and /example-0/tcpm/connector/ports/port@1/endpoint
-> ERROR: Input tree has errors, aborting (use -f to force output)
-> make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/usb/gpio-sbu-mux.example.dtb] Error 2
-> make[1]: *** Waiting for unfinished jobs....
-> make: *** [Makefile:1512: dt_binding_check] Error 2
+On Thu, May 4, 2023 at 1:04=E2=80=AFAM Michal Hocko <mhocko@suse.com> wrote=
+:
+>
+> On Wed 03-05-23 08:18:39, Suren Baghdasaryan wrote:
+> > On Wed, May 3, 2023 at 12:36=E2=80=AFAM Michal Hocko <mhocko@suse.com> =
+wrote:
+> > >
+> > > On Mon 01-05-23 09:54:44, Suren Baghdasaryan wrote:
+> > > [...]
+> > > > +static inline void add_ctx(struct codetag_ctx *ctx,
+> > > > +                        struct codetag_with_ctx *ctc)
+> > > > +{
+> > > > +     kref_init(&ctx->refcount);
+> > > > +     spin_lock(&ctc->ctx_lock);
+> > > > +     ctx->flags =3D CTC_FLAG_CTX_PTR;
+> > > > +     ctx->ctc =3D ctc;
+> > > > +     list_add_tail(&ctx->node, &ctc->ctx_head);
+> > > > +     spin_unlock(&ctc->ctx_lock);
+> > >
+> > > AFAIU every single tracked allocation will get its own codetag_ctx.
+> > > There is no aggregation per allocation site or anything else. This lo=
+oks
+> > > like a scalability and a memory overhead red flag to me.
+> >
+> > True. The allocations here would not be limited. We could introduce a
+> > global limit to the amount of memory that we can use to store contexts
+> > and maybe reuse the oldest entry (in LRU fashion) when we hit that
+> > limit?
+>
+> Wouldn't it make more sense to aggregate same allocations? Sure pids
+> get recycled but quite honestly I am not sure that information is all
+> that interesting. Precisely because of the recycle and short lived
+> processes reasons. I think there is quite a lot to think about the
+> detailed context tracking.
 
-While adding the example I thought about the need for it. Is it okay for
-you if I drop the example since most of it is just copy'n'paste.
+That would be a nice optimization. I'll need to look into the
+implementation details. Thanks for the idea.
 
-Regards,
-  Marco
+>
+> > >
+> > > > +}
+> > > > +
+> > > > +static inline void rem_ctx(struct codetag_ctx *ctx,
+> > > > +                        void (*free_ctx)(struct kref *refcount))
+> > > > +{
+> > > > +     struct codetag_with_ctx *ctc =3D ctx->ctc;
+> > > > +
+> > > > +     spin_lock(&ctc->ctx_lock);
+> > >
+> > > This could deadlock when allocator is called from the IRQ context.
+> >
+> > I see. spin_lock_irqsave() then?
+>
+> yes. I have checked that the lock is not held over the all list
+> traversal which is good but the changelog could be more explicit about
+> the iterators and lock hold times implications.
+
+Ack. Will add more information.
+
+>
+> --
+> Michal Hocko
+> SUSE Labs
