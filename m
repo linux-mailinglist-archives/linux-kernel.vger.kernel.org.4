@@ -2,163 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FA596F6AEA
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 14:11:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A36F6F6AF6
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 14:13:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230366AbjEDMLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 08:11:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45396 "EHLO
+        id S229806AbjEDMNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 08:13:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjEDMLI (ORCPT
+        with ESMTP id S229564AbjEDMNp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 08:11:08 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F2E5BB1;
-        Thu,  4 May 2023 05:11:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=/QXPslg/3qx/2kW3J+zsuUr+vnPh+T8eN64JH56Qscg=;
-        t=1683202267; x=1684411867; b=PSFxoIfXUypASoldpClIM2t1TlpzRktBgjpIIg11neYYz0B
-        3y9o2fuEXT1DrHP0c1YtOkHAQJIlFQpee49rYysVjyqkFJQCwOf07r4+1dWJi/jjWLWibCLeaOhfq
-        sEa5llk6XUfVznhLm1jHGpTtiXfRTQVTEnazM8x/2zCG2aCU33qh/nNCqXr1JdKTdJvYadvKOJ8UE
-        IxAaeIfORRak0d5tsYutAEysusScHs9tyTPDh7YdKpjCJrvpFoymbYSACccnT56/b1ZG+mDIndcBz
-        WOxuSpu0gylFbfTv9ohV5BLSfDMDyP+9sZqlmaPL6qqNWQwb/3gwrUYIW7RgRpkw==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.96)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1puXnQ-00GwbM-06;
-        Thu, 04 May 2023 14:10:52 +0200
-Message-ID: <8d2b0aec270b8cd0111654dc4b361987a112d3ce.camel@sipsolutions.net>
-Subject: Re: [PATCH] wifi: iwlwifi: Fix spurious packet drops with RSS
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Sultan Alsawaf <sultan@kerneltoast.com>
-Cc:     "Greenman, Gregory" <gregory.greenman@intel.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Goodstein, Mordechay" <mordechay.goodstein@intel.com>,
-        "Coelho, Luciano" <luciano.coelho@intel.com>,
-        "Sisodiya, Mukesh" <mukesh.sisodiya@intel.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Date:   Thu, 04 May 2023 14:10:50 +0200
-In-Reply-To: <20230430001348.3552-1-sultan@kerneltoast.com>
-References: <20230430001348.3552-1-sultan@kerneltoast.com>
+        Thu, 4 May 2023 08:13:45 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C5A35FCE
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 05:13:44 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-b9d8b2e1576so557943276.2
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 05:13:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683202424; x=1685794424;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5Nz4N7dBdEb2mhhYgRb5Ac4u0WnwPfPfvIfQEz/oEYw=;
+        b=qXqX6HaLiyrnJBChHeBKAzAM0vEPq7TbgRHZmOwkhPcM1GakZW/ItPgWR/1Oxue1sq
+         cIQu/c6Te65Z6dExIcbTmK56lU8phMg7PhezCdVW01BBBZHUgp1ZKWGGn5qeH6nnbuup
+         WaQrY9cQ0IxucKvfSKHdn582Lw1aATNnMQbM5p8jhmClkRAxphauBfnB2jbMtqG/Mbdg
+         nYRvSlUJHZQ1KCee/9iJU0aTK9Ocu7E14ijm767M5v5YStjfGynNY7RKqbh7V9aCwG7/
+         R8XTpaRviX4SAFpYAgJ/n8CxrUgqgUL5QY598WnmHCY6w2dSR5iihskgnaRLQOXn+zJQ
+         JnyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683202424; x=1685794424;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5Nz4N7dBdEb2mhhYgRb5Ac4u0WnwPfPfvIfQEz/oEYw=;
+        b=f/jmQIWzQ1uI6LERDJ6DpMo80MwY1PSe+GLrQ8++NTwg0tqvWgC4Rsf0SuNJM6b/LX
+         7vaUdLEwQA6ObKWPf0hFFAYAJ6cXa+2jTlU+62Ad5OoZAOL3LXkHee1DPLvDvuNN3cki
+         LzxgL/KK84E0SdrCDYrqSD5y1kJtlCJKkunRp+SS8GaReTIe5uGQ2f41CUrP8jp6GcVx
+         i5TkxmK5hduYUhdRjyVw/O1t2CEczfAVjoMyaTzb5HX2vUsiLsUsQHZyfE2iHzbY0lfi
+         s6JoSNG68CQ+k/O2nsIPiYwksA9/9i3tJDdCIurnbINPT2agduwLER3/uVUm4oEQcYcJ
+         IeIQ==
+X-Gm-Message-State: AC+VfDy86tpw4z6ZVzizZZ5XNVsfnyRoKpRBOnENu2bJCnjdyRu2ViCT
+        I5g7xpJFMHXg/pfY+i0APMGa7e+7YkFOb40m2LgHLJ/kk6cMWSnA8EI=
+X-Google-Smtp-Source: ACHHUZ7tC86v2dmQ/+32Ze+s5HIZkFWybkq5UTok2Fe2Q+hGI7uuxQK7pXSEjtNakF83A5FXhyVV12KWSUK8lqUIixE=
+X-Received: by 2002:a25:41ca:0:b0:b97:e31e:47b with SMTP id
+ o193-20020a2541ca000000b00b97e31e047bmr21780417yba.62.1683202423837; Thu, 04
+ May 2023 05:13:43 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230425173241.GF444508@darkstar.musicnaut.iki.fi>
+ <20230425201117.457f224c@aktux> <20230425183857.GG444508@darkstar.musicnaut.iki.fi>
+ <20230425212040.5a4d5b09@aktux> <20230425193637.GH444508@darkstar.musicnaut.iki.fi>
+ <20230425215848.247a936a@aktux> <20230426071910.GE14287@atomide.com> <20230504055156.GO14287@atomide.com>
+In-Reply-To: <20230504055156.GO14287@atomide.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 4 May 2023 14:13:32 +0200
+Message-ID: <CACRpkdY9ShRATHa776KyzeArmQdKxdwGxJC11YnmhWiCdSGzEA@mail.gmail.com>
+Subject: Re: [BISECTED REGRESSION] OMAP1 GPIO breakage
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Andreas Kemnade <andreas@kemnade.info>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        linux-omap@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
-MIME-Version: 1.0
-X-malware-bazaar: not-scanned
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[let's see if my reply will make it to the list, the original seems to
-not have]
+On Thu, May 4, 2023 at 7:52=E2=80=AFAM Tony Lindgren <tony@atomide.com> wro=
+te:
+> * Tony Lindgren <tony@atomide.com> [230426 07:20]:
+> > Seems that we should just revert this patch for now and try again after
+> > the issues have been fixed.
+>
+> Looking at the proposed fixes being posted seems like they are quite
+> intrusive.. How about we partially revert this patch so omap1 still
+> uses static assigment of gpios?
 
-On Sun, 2023-04-30 at 00:13 +0000, Sultan Alsawaf wrote:
-> From: Sultan Alsawaf <sultan@kerneltoast.com>
->=20
-> When RSS is used and one of the RX queues lags behind others by more than
-> 2048 frames, then new frames arriving on the lagged RX queue are
-> incorrectly treated as old rather than new by the reorder buffer, and are
-> thus spuriously dropped. This is because the reorder buffer treats frames
-> as old when they have an SN that is more than 2048 away from the head SN,
-> which causes the reorder buffer to drop frames that are actually valid.
->=20
-> The odds of this occurring naturally increase with the number of
-> RX queues used, so CPUs with many threads are more susceptible to
-> encountering spurious packet drops caused by this issue.
->=20
-> As it turns out, the firmware already detects when a frame is either old =
-or
-> duplicated and exports this information, but it's currently unused. Using
-> these firmware bits to decide when frames are old or duplicated fixes the
-> spurious drops.
+I think Andreas patch (commit 92bf78b33b0b463b00c6b0203b49aea845daecc8)
+kind of describes the problem with that: the probe order is now unpredictab=
+le,
+so if we revert the patch then that problem returns, but I don't know how
+serious that problem is.
 
-So I assume you tested it now, and it works? Somehow I had been under
-the impression we never got it to work back when...
+It's one of the reasons why we can't have static GPIO bases anymore FWIW.
+The only fix that would actually fix the problem would be to undo deferred
+probe and the ongoing work to determine probe order from the device
+tree resource tree, and it is way too late for that, it's just not possible=
+.
 
-> Johannes mentions that the 9000 series' firmware doesn't support these
-> bits, so disable RSS on the 9000 series chipsets since they lack a
-> mechanism to properly detect old and duplicated frames.
-
-Indeed, I checked this again, I also somehow thought it was backported
-to some versions but doesn't look like. We can either leave those old
-ones broken (they only shipped with fewer cores anyway), or just disable
-it as you did here, not sure. RSS is probably not as relevant with those
-slower speeds anyway.
-
-> +++ b/drivers/net/wireless/intel/iwlwifi/mvm/rxmq.c
-> @@ -918,7 +918,6 @@ static bool iwl_mvm_reorder(struct iwl_mvm *mvm,
->         struct iwl_mvm_sta *mvm_sta;
->         struct iwl_mvm_baid_data *baid_data;
->         struct iwl_mvm_reorder_buffer *buffer;
-> -       struct sk_buff *tail;
->         u32 reorder =3D le32_to_cpu(desc->reorder_data);
->         bool amsdu =3D desc->mac_flags2 & IWL_RX_MPDU_MFLG2_AMSDU;
->         bool last_subframe =3D
-> @@ -1020,7 +1019,7 @@ static bool iwl_mvm_reorder(struct iwl_mvm *mvm,
->                                  rx_status->device_timestamp, queue);
->=20
->         /* drop any oudated packets */
-> -       if (ieee80211_sn_less(sn, buffer->head_sn))
-> +       if (reorder & IWL_RX_MPDU_REORDER_BA_OLD_SN)
->                 goto drop;
->=20
->         /* release immediately if allowed by nssn and no stored frames */
-> @@ -1068,24 +1067,12 @@ static bool iwl_mvm_reorder(struct iwl_mvm *mvm,
->                 return false;
->         }
-
-All that "send queue sync" code in the middle that was _meant_ to fix
-this issue but I guess never really did can also be removed, no? And the
-timer, etc. etc.
-
-johannes
-
-[leaving full quote for the benefit of the mailing list]
-
->=20
-> -       index =3D sn % buffer->buf_size;
-> -
-> -       /*
-> -        * Check if we already stored this frame
-> -        * As AMSDU is either received or not as whole, logic is simple:
-> -        * If we have frames in that position in the buffer and the last =
-frame
-> -        * originated from AMSDU had a different SN then it is a retransm=
-ission.
-> -        * If it is the same SN then if the subframe index is incrementin=
-g it
-> -        * is the same AMSDU - otherwise it is a retransmission.
-> -        */
-> -       tail =3D skb_peek_tail(&entries[index].e.frames);
-> -       if (tail && !amsdu)
-> -               goto drop;
-> -       else if (tail && (sn !=3D buffer->last_amsdu ||
-> -                         buffer->last_sub_index >=3D sub_frame_idx))
-> +       /* drop any duplicated packets */
-> +       if (desc->status & cpu_to_le32(IWL_RX_MPDU_STATUS_DUPLICATE))
->                 goto drop;
->=20
->         /* put in reorder buffer */
-> +       index =3D sn % buffer->buf_size;
->         __skb_queue_tail(&entries[index].e.frames, skb);
->         buffer->num_stored++;
->         entries[index].e.reorder_time =3D jiffies;
-> --
-> 2.40.1
->=20
-
+Yours,
+Linus Walleij
