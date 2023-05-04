@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12DF66F66EE
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 10:13:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 344E66F66F0
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 10:13:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbjEDIM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 04:12:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54948 "EHLO
+        id S230139AbjEDINB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 04:13:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230123AbjEDIMH (ORCPT
+        with ESMTP id S230145AbjEDIML (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 04:12:07 -0400
+        Thu, 4 May 2023 04:12:11 -0400
 Received: from m228-4.mailgun.net (m228-4.mailgun.net [159.135.228.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D73B4ECD
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 01:09:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E5E449A
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 01:09:36 -0700 (PDT)
 DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=equiv.tech; q=dns/txt;
- s=mx; t=1683187766; x=1683194966; h=Content-Transfer-Encoding: MIME-Version:
+ s=mx; t=1683187776; x=1683194976; h=Content-Transfer-Encoding: MIME-Version:
  References: In-Reply-To: Message-Id: Date: Subject: Subject: Cc: To: To:
- From: From: Sender: Sender; bh=mzC3q3WmfI8APWa00eshzq1Cl9idNyizJ0UZbLwJd6E=;
- b=gYC8Vpu/CFinwi/ShpzbTU1PC0iuNWwiiiFnURKqWpFVoRFT+LYYNeOk5rItAqGqbWSFeBJshDYVhFUB3AB89UGuVJPKSXpUIvw2Yv5r7mvwwRZ93L44BxOmymtkXdnZrO8xBZYCuh3YgYEd98Vo54a3zRDSbCaMAiRzF0qSG3SsXVpb94IlRk5ow+YbBIb3oYBbM/L9OPeq3jYL6pMXFeQmZdefa0SCRfVtQj7XJOIAWIyn6TSiyrO1QJHaH0P4vNd4OtWHQ+aqnPvL9ZL1AHbQjzgdJExgyAym9PtnIIl5J3xRF5s91MG2L66fl5AUoeQxSvGUwJYiExNqq57qoA==
+ From: From: Sender: Sender; bh=f3US+s/jajrnUVTiDESp5MOHD58TZGnv9lLhnq/av/A=;
+ b=rGvuhEY3rDB18k9M45SMzVuBkzdC2crm1ZLh+VOe3FJF9uQKUj1Q1zvh4PCfen07WXw02U0hmjG0+XkEZSKmyMB2IY1Bo/8E4cZYuVHhqviNF2ljTDgGePL1XFK9+tqNBhMYhuvI+eSOK4VSenLjoC5tQcRzurPuT9k3+bLKB7SD5qZmI2A0qRhpUfGeKZ6Lkj6XbPKWfj+qYPHaJo1XPIL9I00eEM1kyTQ7ItiERxy7t+ZvJd7tF851XEe64suMRbAKVfMpGwNjnVSskQdr6G/64d7UJi+Ag8Z1ALPZN1OPPzInz851NT25+IWBygqwJu9m1RVwjBEoHQsS4JNiiQ==
 X-Mailgun-Sending-Ip: 159.135.228.4
 X-Mailgun-Sid: WyI4ZWI3MiIsImxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmciLCI5M2Q1YWIiXQ==
-Received: from mail.equiv.tech (equiv.tech [142.93.28.83]) by 897f46a039a2 with SMTP id
- 645365bf8290b6a11e3daa73 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 04 May 2023 07:58:55 GMT
+Received: from mail.equiv.tech (equiv.tech [142.93.28.83]) by 1e2448ceea75 with SMTP id
+ 645365caf77227a83038b907 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 04 May 2023 07:59:06 GMT
 Sender: james@equiv.tech
 From:   James Seo <james@equiv.tech>
 To:     Jean Delvare <jdelvare@suse.com>,
@@ -32,9 +32,9 @@ To:     Jean Delvare <jdelvare@suse.com>,
         Jonathan Corbet <corbet@lwn.net>
 Cc:     James Seo <james@equiv.tech>, linux-hwmon@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC 04/11] Documentation/hwmon: Revise hwmon kernel API reference
-Date:   Thu,  4 May 2023 00:57:45 -0700
-Message-Id: <20230504075752.1320967-5-james@equiv.tech>
+Subject: [RFC 05/11] Documentation/hwmon: Revise PMBus core documentation
+Date:   Thu,  4 May 2023 00:57:46 -0700
+Message-Id: <20230504075752.1320967-6-james@equiv.tech>
 In-Reply-To: <20230504075752.1320967-1-james@equiv.tech>
 References: <20230504075752.1320967-1-james@equiv.tech>
 MIME-Version: 1.0
@@ -49,779 +49,568 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reorganize content into coherent sections.
-Use kerneldocs to document functions and data structures when
-possible and add more details on using various API facilities.
+Organize content into sections.
 Fix minor issues (typos, grammar, etc.) and add markup.
 
 Signed-off-by: James Seo <james@equiv.tech>
 ---
- Documentation/hwmon/hwmon-kernel-api.rst | 740 ++++++++++++-----------
- 1 file changed, 384 insertions(+), 356 deletions(-)
+ Documentation/hwmon/pmbus-core.rst | 348 +++++++++++++++++------------
+ 1 file changed, 199 insertions(+), 149 deletions(-)
 
-diff --git a/Documentation/hwmon/hwmon-kernel-api.rst b/Documentation/hwmon/hwmon-kernel-api.rst
-index c2d1e0299d8d..cf084e040522 100644
---- a/Documentation/hwmon/hwmon-kernel-api.rst
-+++ b/Documentation/hwmon/hwmon-kernel-api.rst
-@@ -1,374 +1,402 @@
-+========================================
- The Linux Hardware Monitoring kernel API
- ========================================
- 
- Guenter Roeck
+diff --git a/Documentation/hwmon/pmbus-core.rst b/Documentation/hwmon/pmbus-core.rst
+index cff93adf6e42..2f88a03446d2 100644
+--- a/Documentation/hwmon/pmbus-core.rst
++++ b/Documentation/hwmon/pmbus-core.rst
+@@ -2,75 +2,82 @@
+ PMBus core driver and internal API
+ ==================================
  
 +.. contents::
 +
  Introduction
--------------
-+============
+ ============
  
- This document describes the API that can be used by hardware monitoring
- drivers that want to use the hardware monitoring framework.
+-[from pmbus.org] The Power Management Bus (PMBus) is an open standard
+-power-management protocol with a fully defined command language that facilitates
+-communication with power converters and other devices in a power system. The
+-protocol is implemented over the industry-standard SMBus serial interface and
+-enables programming, control, and real-time monitoring of compliant power
+-conversion products. This flexible and highly versatile standard allows for
+-communication between devices based on both analog and digital technologies, and
+-provides true interoperability which will reduce design complexity and shorten
+-time to market for power system designers. Pioneered by leading power supply and
+-semiconductor companies, this open power system standard is maintained and
+-promoted by the PMBus Implementers Forum (PMBus-IF), comprising 30+ adopters
+-with the objective to provide support to, and facilitate adoption among, users.
++  The Power Management Bus (PMBus) is an open standard power-management protocol
++  with a fully defined command language that facilitates communication with
++  power converters and other devices in a power system. The protocol is
++  implemented over the industry-standard SMBus serial interface and enables
++  programming, control, and real-time monitoring of compliant power conversion
++  products. This flexible and highly versatile standard allows for communication
++  between devices based on both analog and digital technologies, and provides
++  true interoperability which will reduce design complexity and shorten time to
++  market for power system designers. Pioneered by leading power supply and
++  semiconductor companies, this open power system standard is maintained and
++  promoted by the PMBus Implementers Forum (PMBus-IF), comprising 30+ adopters
++  with the objective to provide support to, and facilitate adoption among,
++  users.
++
++    (from pmbus.org)
  
--This document does not describe what a hardware monitoring (hwmon) Driver or
--Device is. It also does not describe the API which can be used by user space
--to communicate with a hardware monitoring device. If you want to know this
--then please read the following file: Documentation/hwmon/sysfs-interface.rst.
-+This document does not describe what a hardware monitoring (``hwmon``) driver
-+or device is, nor does it describe the API for communicating with a hardware
-+monitoring device from userspace. For more information on these topics,
-+please read Documentation/hwmon/sysfs-interface.rst.
+ Unfortunately, while PMBus commands are standardized, there are no mandatory
+ commands, and manufacturers can add as many non-standard commands as they like.
+-Also, different PMBUs devices act differently if non-supported commands are
+-executed. Some devices return an error, some devices return 0xff or 0xffff and
+-set a status error flag, and some devices may simply hang up.
++Also, different PMBus devices act differently if non-supported commands are
++executed. Some devices return an error, some devices return ``0xff`` or
++``0xffff`` and set a status error flag, and some devices may simply hang up.
  
--For additional guidelines on how to write and improve hwmon drivers, please
--also read Documentation/hwmon/submitting-patches.rst.
-+For additional guidelines on how to write and improve ``hwmon`` drivers,
-+please also read Documentation/hwmon/submitting-patches.rst.
+ Despite all those difficulties, a generic PMBus device driver is still useful
+-and supported since kernel version 2.6.39. However, it was necessary to support
+-device specific extensions in addition to the core PMBus driver, since it is
+-simply unknown what new device specific functionality PMBus device developers
+-come up with next.
++and has been supported since kernel version 2.6.39. However, it was necessary to
++support device-specific extensions in addition to the core PMBus driver, since
++it is simply unknown what new device-specific functionality PMBus device
++developers will come up with next.
  
- The API
---------
--Each hardware monitoring driver must #include <linux/hwmon.h> and, in some
--cases, <linux/hwmon-sysfs.h>. linux/hwmon.h declares the following
--register/unregister functions::
--
--  struct device *
--  hwmon_device_register_with_info(struct device *dev,
--				  const char *name, void *drvdata,
--				  const struct hwmon_chip_info *info,
--				  const struct attribute_group **extra_groups);
--
--  struct device *
--  devm_hwmon_device_register_with_info(struct device *dev,
--				       const char *name,
--				       void *drvdata,
--				       const struct hwmon_chip_info *info,
--				       const struct attribute_group **extra_groups);
--
--  void hwmon_device_unregister(struct device *dev);
--
--  void devm_hwmon_device_unregister(struct device *dev);
--
--  char *hwmon_sanitize_name(const char *name);
--
--  char *devm_hwmon_sanitize_name(struct device *dev, const char *name);
--
--hwmon_device_register_with_info registers a hardware monitoring device.
--It creates the standard sysfs attributes in the hardware monitoring core,
--letting the driver focus on reading from and writing to the chip instead
--of having to bother with sysfs attributes. The parent device parameter
--as well as the chip parameter must not be NULL. Its parameters are described
--in more detail below.
--
--devm_hwmon_device_register_with_info is similar to
--hwmon_device_register_with_info. However, it is device managed, meaning the
--hwmon device does not have to be removed explicitly by the removal function.
--
--All other hardware monitoring device registration functions are deprecated
--and must not be used in new drivers.
--
--hwmon_device_unregister deregisters a registered hardware monitoring device.
--The parameter of this function is the pointer to the registered hardware
--monitoring device structure. This function must be called from the driver
--remove function if the hardware monitoring device was registered with
--hwmon_device_register_with_info.
--
--devm_hwmon_device_unregister does not normally have to be called. It is only
--needed for error handling, and only needed if the driver probe fails after
--the call to hwmon_device_register_with_info and if the automatic (device
--managed) removal would be too late.
--
--All supported hwmon device registration functions only accept valid device
--names. Device names including invalid characters (whitespace, '*', or '-')
--will be rejected. The 'name' parameter is mandatory.
--
--If the driver doesn't use a static device name (for example it uses
--dev_name()), and therefore cannot make sure the name only contains valid
--characters, hwmon_sanitize_name can be used. This convenience function
--will duplicate the string and replace any invalid characters with an
--underscore. It will allocate memory for the new string and it is the
--responsibility of the caller to release the memory when the device is
--removed.
--
--devm_hwmon_sanitize_name is the resource managed version of
--hwmon_sanitize_name; the memory will be freed automatically on device
--removal.
--
--Using devm_hwmon_device_register_with_info()
----------------------------------------------
--
--hwmon_device_register_with_info() registers a hardware monitoring device.
--The parameters to this function are
--
--=============================================== ===============================================
--`struct device *dev`				Pointer to parent device
--`const char *name`				Device name
--`void *drvdata`					Driver private data
--`const struct hwmon_chip_info *info`		Pointer to chip description.
--`const struct attribute_group **extra_groups` 	Null-terminated list of additional non-standard
--						sysfs attribute groups.
--=============================================== ===============================================
--
--This function returns a pointer to the created hardware monitoring device
--on success and a negative error code for failure.
--
--The hwmon_chip_info structure looks as follows::
--
--	struct hwmon_chip_info {
--		const struct hwmon_ops *ops;
--		const struct hwmon_channel_info * const *info;
--	};
--
--It contains the following fields:
--
--* ops:
--	Pointer to device operations.
--* info:
--	NULL-terminated list of device channel descriptors.
--
--The list of hwmon operations is defined as::
--
--  struct hwmon_ops {
--	umode_t (*is_visible)(const void *, enum hwmon_sensor_types type,
--			      u32 attr, int);
--	int (*read)(struct device *, enum hwmon_sensor_types type,
--		    u32 attr, int, long *);
--	int (*write)(struct device *, enum hwmon_sensor_types type,
--		     u32 attr, int, long);
--  };
-+=======
+ To make device specific extensions as scalable as possible, and to avoid having
+ to modify the core PMBus driver repeatedly for new devices, the PMBus driver was
+-split into core, generic, and device specific code. The core code (in
+-pmbus_core.c) provides generic functionality. The generic code (in pmbus.c)
+-provides support for generic PMBus devices. Device specific code is responsible
+-for device specific initialization and, if needed, maps device specific
+-functionality into generic functionality. This is to some degree comparable
+-to PCI code, where generic code is augmented as needed with quirks for all kinds
+-of devices.
++split into core, generic, and device-specific code.
++The core code (in ``pmbus_core.c``) provides generic functionality.
++The generic code (in ``pmbus.c``) provides support for generic PMBus devices.
++Device-specific code is responsible for device-specific initialization and, if
++needed, maps device-specific functionality into generic functionality.
++This is to some degree comparable to PCI code, where generic code is augmented
++as needed with quirks for all kinds of devices.
+ 
+ PMBus device capabilities auto-detection
+ ========================================
+ 
+-For generic PMBus devices, code in pmbus.c attempts to auto-detect all supported
+-PMBus commands. Auto-detection is somewhat limited, since there are simply too
+-many variables to consider. For example, it is almost impossible to autodetect
+-which PMBus commands are paged and which commands are replicated across all
+-pages (see the PMBus specification for details on multi-page PMBus devices).
++For generic PMBus devices, code in ``pmbus.c`` attempts to auto-detect all
++supported PMBus commands. Auto-detection is somewhat limited, since there are
++simply too many variables to consider. For example, it is almost impossible to
++autodetect which PMBus commands are paged and which commands are replicated
++across all pages (see the PMBus specification for details on multi-page PMBus
++devices).
+ 
+-For this reason, it often makes sense to provide a device specific driver if not
++For this reason, it often makes sense to provide a device-specific driver if not
+ all commands can be auto-detected. The data structures in this driver can be
+ used to inform the core driver about functionality supported by individual
+ chips.
+ 
+ Some commands are always auto-detected. This applies to all limit commands
+-(lcrit, min, max, and crit attributes) as well as associated alarm attributes.
+-Limits and alarm attributes are auto-detected because there are simply too many
+-possible combinations to provide a manual configuration interface.
++(``lcrit``, ``min``, ``max``, and ``crit`` attributes) as well as associated
++``alarm`` attributes. Limits and alarm attributes are auto-detected because
++there are simply too many possible combinations to provide a manual
++configuration interface.
+ 
+ PMBus internal API
+ ==================
+ 
+ The API between core and device specific PMBus code is defined in
+-drivers/hwmon/pmbus/pmbus.h. In addition to the internal API, pmbus.h defines
+-standard PMBus commands and virtual PMBus commands.
++``drivers/hwmon/pmbus/pmbus.h``. In addition to the internal API, ``pmbus.h``
++defines standard PMBus commands and virtual PMBus commands.
+ 
+ Standard PMBus commands
+ -----------------------
+ 
+-Standard PMBus commands (commands values 0x00 to 0xff) are defined in the PMBUs
+-specification.
++Standard PMBus commands (commands values ``0x00`` to ``0xff``) are defined in
++the PMBus specification.
+ 
+ Virtual PMBus commands
+ ----------------------
+@@ -79,26 +86,26 @@ Virtual PMBus commands are provided to enable support for non-standard
+ functionality which has been implemented by several chip vendors and is thus
+ desirable to support.
+ 
+-Virtual PMBus commands start with command value 0x100 and can thus easily be
+-distinguished from standard PMBus commands (which can not have values larger
+-than 0xff). Support for virtual PMBus commands is device specific and thus has
+-to be implemented in device specific code.
++Virtual PMBus commands start with command value ``0x100`` and can thus easily be
++distinguished from standard PMBus commands (which cannot have values larger than
++``0xff``). Support for virtual PMBus commands is device-specific and thus has
++to be implemented in device-specific code.
+ 
+-Virtual commands are named PMBUS_VIRT_xxx and start with PMBUS_VIRT_BASE. All
+-virtual commands are word sized.
++Virtual commands are named ``PMBUS_VIRT_xxx`` and start with
++``PMBUS_VIRT_BASE``. All virtual commands are word-sized.
+ 
+ There are currently two types of virtual commands.
+ 
+-- READ commands are read-only; writes are either ignored or return an error.
+-- RESET commands are read/write. Reading reset registers returns zero
+-  (used for detection), writing any value causes the associated history to be
++- ``READ`` commands are read-only; writes are either ignored or return an error.
++- ``RESET`` commands are read/write. Reading reset registers returns zero
++  (used for detection). Writing any value causes the associated history to be
+   reset.
+ 
+-Virtual commands have to be handled in device specific driver code. Chip driver
++Virtual commands have to be handled in device-specific driver code. Chip driver
+ code returns non-negative values if a virtual command is supported, or a
+-negative error code if not. The chip driver may return -ENODATA or any other
+-Linux error code in this case, though an error code other than -ENODATA is
+-handled more efficiently and thus preferred. Either case, the calling PMBus
++negative error code if not. The chip driver may return ``-ENODATA`` or any other
++Linux error code in this case, though an error code other than ``-ENODATA`` is
++handled more efficiently and thus preferred. In either case, the calling PMBus
+ core code will abort if the chip driver returns an error code when reading
+ or writing virtual registers (in other words, the PMBus core code will never
+ send a virtual command to a chip).
+@@ -106,8 +113,8 @@ send a virtual command to a chip).
+ PMBus driver information
+ ------------------------
+ 
+-PMBus driver information, defined in struct pmbus_driver_info, is the main means
+-for device specific drivers to pass information to the core PMBus driver.
++PMBus driver information, defined in ``struct pmbus_driver_info``, is the main
++means for device specific drivers to pass information to the core PMBus driver.
+ Specifically, it provides the following information.
+ 
+ - For devices supporting its data in Direct Data Format, it provides coefficients
+@@ -119,14 +126,14 @@ Specifically, it provides the following information.
+ - Several function entry points are provided to support overriding and/or
+   augmenting generic command execution. This functionality can be used to map
+   non-standard PMBus commands to standard commands, or to augment standard
+-  command return values with device specific information.
++  command return values with device-specific information.
+ 
+ PEC Support
+ ===========
+ 
+ Many PMBus devices support SMBus PEC (Packet Error Checking). If supported
+ by both the I2C adapter and by the PMBus chip, it is by default enabled.
+-If PEC is supported, the PMBus core driver adds an attribute named 'pec' to
++If PEC is supported, the PMBus core driver adds an attribute named ``pec`` to
+ the I2C device. This attribute can be used to control PEC support in the
+ communication with the PMBus chip.
+ 
+@@ -137,69 +144,83 @@ Functions provided by chip driver
+ ---------------------------------
+ 
+ All functions return the command return value (read) or zero (write) if
+-successful. A return value of -ENODATA indicates that there is no manufacturer
+-specific command, but that a standard PMBus command may exist. Any other
+-negative return value indicates that the commands does not exist for this
++successful. A return value of ``-ENODATA`` indicates that there is no
++manufacturer-specific command, but that a standard PMBus command may exist. Any
++other negative return value indicates that the command does not exist for this
+ chip, and that no attempt should be made to read or write the standard
+ command.
+ 
+ As mentioned above, an exception to this rule applies to virtual commands,
+-which *must* be handled in driver specific code. See "Virtual PMBus Commands"
++which **must** be handled in driver specific code. See "Virtual PMBus Commands"
+ above for more details.
+ 
+-Command execution in the core PMBus driver code is as follows::
++Command execution in the core PMBus driver code is as follows:
 +
-+Each hardware monitoring driver must ``#include <linux/hwmon.h>`` and, in some
-+cases, ``<linux/hwmon-sysfs.h>``.
-+
-+Functions
-+---------
-+
-+``<linux/hwmon.h>`` declares several functions related to hardware monitoring
-+device registration and deregistration.
-+
-+.. attention::
-+  All functions not listed here are deprecated and **must not** be used in new
-+  drivers.
-+
-+All supported ``hwmon`` device registration functions have a mandatory **name**
-+parameter that must contain a valid device name. Device names including invalid
-+characters (whitespace, '``*``', or '``-``') will be rejected. This becomes the
-+device's ``name`` standard attribute in ``sysfs``.
-+
-+Drivers may later retrieve the pointer passed as the **drvdata** parameter to a
-+registration function by using :c:func:`dev_get_drvdata()` on the pointer to the
-+``hwmon`` device.
-+
-+These functions signal failure by returning "a :c:type:`PTR_ERR`", a pointer
-+value containing an error code that can be obtained using :c:func:`PTR_ERR()`.
-+
-+``hwmon_device_register_with_info()``
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+.. _hwmon_device_register_with_info:
-+.. kernel-doc:: drivers/hwmon/hwmon.c
-+  :identifiers: hwmon_device_register_with_info
-+
-+``devm_hwmon_device_register_with_info()``
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+.. _devm_hwmon_device_register_with_info:
-+.. kernel-doc:: drivers/hwmon/hwmon.c
-+  :identifiers: devm_hwmon_device_register_with_info
-+
-+``hwmon_device_unregister()``
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+.. kernel-doc:: drivers/hwmon/hwmon.c
-+  :identifiers: hwmon_device_unregister
-+
-+``devm_hwmon_device_unregister()``
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+.. kernel-doc:: drivers/hwmon/hwmon.c
-+  :identifiers: devm_hwmon_device_unregister
-+
-+``hwmon_sanitize_name()``
-+~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+.. kernel-doc:: drivers/hwmon/hwmon.c
-+  :identifiers: hwmon_sanitize_name
-+
-+``devm_hwmon_sanitize_name()``
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+.. kernel-doc:: drivers/hwmon/hwmon.c
-+  :identifiers: devm_hwmon_sanitize_name
-+
-+Data structures
-+---------------
-+
-+The following data structures are declared in ``<linux/hwmon.h>``,
-+except for struct sensor_device_attribute and struct sensor_device_attribute,
-+which are declared in ``<linux/hwmon_sysfs.h>``.
-+
-+``enum hwmon_sensor_types``
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+.. kernel-doc:: include/linux/hwmon.h
-+  :identifiers: hwmon_sensor_types
-+
-+``struct hwmon_chip_info``
-+~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+.. kernel-doc:: include/linux/hwmon.h
-+  :identifiers: hwmon_chip_info
-+
-+``struct hwmon_ops``
++.. code-block:: c
+ 
+-	if (chip_access_function) {
+-		status = chip_access_function();
+-		if (status != -ENODATA)
+-			return status;
+-	}
+-	if (command >= PMBUS_VIRT_BASE)	/* For word commands/registers only */
+-		return -EINVAL;
+-	return generic_access();
++  if (chip_access_function) {
++          status = chip_access_function();
++          if (status != -ENODATA)
++                  return status;
++  }
++  if (command >= PMBUS_VIRT_BASE) /* For word commands/registers only */
++          return -EINVAL;
++  return generic_access();
+ 
+-Chip drivers may provide pointers to the following functions in struct
+-pmbus_driver_info. All functions are optional.
++Chip drivers may provide pointers to the following functions in
++``struct pmbus_driver_info``. All functions are optional.
+ 
+-::
++``read_byte_data()``
 +~~~~~~~~~~~~~~~~~~~~
 +
-+.. kernel-doc:: include/linux/hwmon.h
-+  :identifiers: hwmon_ops
-+
-+**Description**
++.. code-block:: c
  
--It defines the following operations.
--
--* is_visible:
--    Pointer to a function to return the file mode for each supported
--    attribute. This function is mandatory.
--
--* read:
--    Pointer to a function for reading a value from the chip. This function
--    is optional, but must be provided if any readable attributes exist.
--
--* write:
--    Pointer to a function for writing a value to the chip. This function is
--    optional, but must be provided if any writeable attributes exist.
--
--Each sensor channel is described with struct hwmon_channel_info, which is
--defined as follows::
--
--	struct hwmon_channel_info {
--		enum hwmon_sensor_types type;
--		u32 *config;
--	};
--
--It contains following fields:
--
--* type:
--    The hardware monitoring sensor type.
--
--    Supported sensor types are
--
--     ================== ==================================================
--     hwmon_chip		A virtual sensor type, used to describe attributes
--			which are not bound to a specific input or output
--     hwmon_temp		Temperature sensor
--     hwmon_in		Voltage sensor
--     hwmon_curr		Current sensor
--     hwmon_power		Power sensor
--     hwmon_energy	Energy sensor
--     hwmon_humidity	Humidity sensor
--     hwmon_fan		Fan speed sensor
--     hwmon_pwm		PWM control
--     ================== ==================================================
--
--* config:
--    Pointer to a 0-terminated list of configuration values for each
--    sensor of the given type. Each value is a combination of bit values
--    describing the attributes supposed by a single sensor.
--
--As an example, here is the complete description file for a LM75 compatible
--sensor chip. The chip has a single temperature sensor. The driver wants to
--register with the thermal subsystem (HWMON_C_REGISTER_TZ), and it supports
--the update_interval attribute (HWMON_C_UPDATE_INTERVAL). The chip supports
--reading the temperature (HWMON_T_INPUT), it has a maximum temperature
--register (HWMON_T_MAX) as well as a maximum temperature hysteresis register
--(HWMON_T_MAX_HYST)::
--
--	static const u32 lm75_chip_config[] = {
--		HWMON_C_REGISTER_TZ | HWMON_C_UPDATE_INTERVAL,
--		0
--	};
--
--	static const struct hwmon_channel_info lm75_chip = {
--		.type = hwmon_chip,
--		.config = lm75_chip_config,
--	};
--
--	static const u32 lm75_temp_config[] = {
--		HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST,
--		0
--	};
--
--	static const struct hwmon_channel_info lm75_temp = {
--		.type = hwmon_temp,
--		.config = lm75_temp_config,
--	};
--
--	static const struct hwmon_channel_info * const lm75_info[] = {
--		&lm75_chip,
--		&lm75_temp,
--		NULL
--	};
--
--	The HWMON_CHANNEL_INFO() macro can and should be used when possible.
--	With this macro, the above example can be simplified to
--
--	static const struct hwmon_channel_info * const lm75_info[] = {
--		HWMON_CHANNEL_INFO(chip,
--				HWMON_C_REGISTER_TZ | HWMON_C_UPDATE_INTERVAL),
--		HWMON_CHANNEL_INFO(temp,
--				HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST),
--		NULL
--	};
--
--	The remaining declarations are as follows.
--
--	static const struct hwmon_ops lm75_hwmon_ops = {
--		.is_visible = lm75_is_visible,
--		.read = lm75_read,
--		.write = lm75_write,
--	};
--
--	static const struct hwmon_chip_info lm75_chip_info = {
--		.ops = &lm75_hwmon_ops,
--		.info = lm75_info,
--	};
--
--A complete list of bit values indicating individual attribute support
--is defined in include/linux/hwmon.h. Definition prefixes are as follows.
--
--=============== =================================================
--HWMON_C_xxxx	Chip attributes, for use with hwmon_chip.
--HWMON_T_xxxx	Temperature attributes, for use with hwmon_temp.
--HWMON_I_xxxx	Voltage attributes, for use with hwmon_in.
--HWMON_C_xxxx	Current attributes, for use with hwmon_curr.
--		Notice the prefix overlap with chip attributes.
--HWMON_P_xxxx	Power attributes, for use with hwmon_power.
--HWMON_E_xxxx	Energy attributes, for use with hwmon_energy.
--HWMON_H_xxxx	Humidity attributes, for use with hwmon_humidity.
--HWMON_F_xxxx	Fan speed attributes, for use with hwmon_fan.
--HWMON_PWM_xxxx	PWM control attributes, for use with hwmon_pwm.
--=============== =================================================
-+Please see `Driver callback functions`_ for more information.
-+
-+``struct hwmon_channel_info``
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+.. kernel-doc:: include/linux/hwmon.h
-+  :identifiers: hwmon_channel_info
-+
-+``struct sensor_device_attribute``
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+.. kernel-doc:: include/linux/hwmon-sysfs.h
-+  :identifiers: sensor_device_attribute
-+
-+Please see `Driver-provided sysfs attributes`_ for usage scenarios.
-+
-+``struct sensor_device_attribute_2``
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+.. kernel-doc:: include/linux/hwmon-sysfs.h
-+  :identifiers: sensor_device_attribute_2
+   int (*read_byte_data)(struct i2c_client *client, int page, int reg);
  
- Driver callback functions
- -------------------------
+-Read byte from page <page>, register <reg>.
+-<page> may be -1, which means "current page".
++Read byte from page **page**, register **reg**.
++**page** may be ``-1``, which means "current page".
++
++``read_word_data()``
++~~~~~~~~~~~~~~~~~~~~
  
--Each driver provides is_visible, read, and write functions. Parameters
--and return values for those functions are as follows::
--
--  umode_t is_visible_func(const void *data, enum hwmon_sensor_types type,
--			  u32 attr, int channel)
--
--Parameters:
--	data:
--		Pointer to device private data structure.
--	type:
--		The sensor type.
--	attr:
--		Attribute identifier associated with a specific attribute.
--		For example, the attribute value for HWMON_T_INPUT would be
--		hwmon_temp_input. For complete mappings of bit fields to
--		attribute values please see include/linux/hwmon.h.
--	channel:
--		The sensor channel number.
--
--Return value:
--	The file mode for this attribute. Typically, this will be 0 (the
--	attribute will not be created), 0444, or 0644.
--
++.. code-block:: c
+ 
 -::
--
--	int read_func(struct device *dev, enum hwmon_sensor_types type,
--		      u32 attr, int channel, long *val)
--
--Parameters:
--	dev:
--		Pointer to the hardware monitoring device.
--	type:
--		The sensor type.
--	attr:
--		Attribute identifier associated with a specific attribute.
--		For example, the attribute value for HWMON_T_INPUT would be
--		hwmon_temp_input. For complete mappings please see
--		include/linux/hwmon.h.
--	channel:
--		The sensor channel number.
--	val:
--		Pointer to attribute value.
--
--Return value:
--	0 on success, a negative error number otherwise.
--
--::
--
--	int write_func(struct device *dev, enum hwmon_sensor_types type,
--		       u32 attr, int channel, long val)
--
--Parameters:
--	dev:
--		Pointer to the hardware monitoring device.
--	type:
--		The sensor type.
--	attr:
--		Attribute identifier associated with a specific attribute.
--		For example, the attribute value for HWMON_T_INPUT would be
--		hwmon_temp_input. For complete mappings please see
--		include/linux/hwmon.h.
--	channel:
--		The sensor channel number.
--	val:
--		The value to write to the chip.
--
--Return value:
--	0 on success, a negative error number otherwise.
--
--
--Driver-provided sysfs attributes
----------------------------------
--
--In most situations it should not be necessary for a driver to provide sysfs
--attributes since the hardware monitoring core creates those internally.
--Only additional non-standard sysfs attributes need to be provided.
--
--The header file linux/hwmon-sysfs.h provides a number of useful macros to
--declare and use hardware monitoring sysfs attributes.
--
--In many cases, you can use the existing define DEVICE_ATTR or its variants
--DEVICE_ATTR_{RW,RO,WO} to declare such attributes. This is feasible if an
--attribute has no additional context. However, in many cases there will be
--additional information such as a sensor index which will need to be passed
--to the sysfs attribute handling function.
--
--SENSOR_DEVICE_ATTR and SENSOR_DEVICE_ATTR_2 can be used to define attributes
--which need such additional context information. SENSOR_DEVICE_ATTR requires
--one additional argument, SENSOR_DEVICE_ATTR_2 requires two.
--
--Simplified variants of SENSOR_DEVICE_ATTR and SENSOR_DEVICE_ATTR_2 are available
--and should be used if standard attribute permissions and function names are
--feasible. Standard permissions are 0644 for SENSOR_DEVICE_ATTR[_2]_RW,
--0444 for SENSOR_DEVICE_ATTR[_2]_RO, and 0200 for SENSOR_DEVICE_ATTR[_2]_WO.
--Standard functions, similar to DEVICE_ATTR_{RW,RO,WO}, have _show and _store
--appended to the provided function name.
--
--SENSOR_DEVICE_ATTR and its variants define a struct sensor_device_attribute
--variable. This structure has the following fields::
--
--	struct sensor_device_attribute {
--		struct device_attribute dev_attr;
--		int index;
--	};
--
--You can use to_sensor_dev_attr to get the pointer to this structure from the
--attribute read or write function. Its parameter is the device to which the
--attribute is attached.
--
--SENSOR_DEVICE_ATTR_2 and its variants define a struct sensor_device_attribute_2
--variable, which is defined as follows::
--
--	struct sensor_device_attribute_2 {
--		struct device_attribute dev_attr;
--		u8 index;
--		u8 nr;
--	};
--
--Use to_sensor_dev_attr_2 to get the pointer to this structure. Its parameter
--is the device to which the attribute is attached.
-+.. kernel-docs do not render correctly for function pointer struct fields.
-+
-+If the driver is using one of the recommended
-+`chip descriptor <#struct-hwmon-chip-info>`_-aware device registration functions
-+(devm_hwmon_device_register_with_info() or hwmon_device_register_with_info()),
-+it must implement callback functions with the function signatures below and fill
-+in its chip descriptor's **ops** `callback descriptor <#struct-hwmon-ops>`_
-+field as needed.
-+
-+If this is not the case, or if the driver provides additional non-standard
-+attributes, please see `Driver-provided sysfs attributes`_.
-+
-+For complete mappings of **attr** bit fields to attribute values, please see
-+``<linux/hwmon.h>``.
-+
-+.. note::
-+  The callback function names below are for illustration only.
-+
-+``is_visible_func()``
++  int (*read_word_data)(struct i2c_client *client, int page, int phase, int reg);
+ 
+-  int (*read_word_data)(struct i2c_client *client, int page, int phase,
+-                        int reg);
++Read word from page **page**, phase **phase**, register **reg**. If the chip
++does not support multiple phases, the **phase** parameter can be ignored. If the
++chip supports multiple phases, a phase value of ``0xff`` indicates all phases.
+ 
+-Read word from page <page>, phase <phase>, register <reg>. If the chip does not
+-support multiple phases, the phase parameter can be ignored. If the chip
+-supports multiple phases, a phase value of 0xff indicates all phases.
++``write_word_data()``
 +~~~~~~~~~~~~~~~~~~~~~
-+
+ 
+-::
 +.. code-block:: c
-+
-+  umode_t is_visible_func(const void *drvdata, enum hwmon_sensor_types type,
-+                          u32 attr, int channel)
-+
-+..
-+
-+  **Parameters**
-+
-+  ``const void *drvdata``
-+    A pointer to the device private data structure.
-+    This is the **drvdata** pointer provided during registration.
-+
-+  ``enum hwmon_sensor_types type``
-+    The ``hwmon`` sensor type.
-+
-+  ``u32 attr``
-+    The attribute identifier associated with a specific attribute.
-+
-+    For example, the attribute value for ``HWMON_T_INPUT`` would be
-+    ``hwmon_temp_input``.
-+
-+  ``int channel``
-+    The sensor channel number.
-+
-+  **Description**
-+
-+  Implements the ``hwmon`` callback :c:func:`is_visible()`. Mandatory.
-+
-+  Drivers request automatic creation of standard ``sysfs`` attributes by
-+  specifying them in a `channel descriptor <#struct-hwmon-channel-info>`_
-+  list. This function is called once per attribute during device registration
-+  to determine the file mode that the attribute will have.
-+
-+  **Return**
-+
-+  The file mode for the specified attribute. Typically, this will be
-+  ``0`` (the attribute will not be created after all), ``0444``, or ``0644``.
-+
-+``read_func()``
-+~~~~~~~~~~~~~~~
-+
-+.. code-block:: c
-+
-+  int read_func(struct device *dev, enum hwmon_sensor_types type,
-+                u32 attr, int channel, long *val)
-+
-+..
-+
-+  **Parameters**
-+
-+  ``struct device *dev``
-+    A pointer to the hardware monitoring device.
-+
-+  ``enum hwmon_sensor_types type``
-+    The ``hwmon`` sensor type.
-+
-+  ``u32 attr``
-+    The attribute identifier associated with a specific attribute.
-+
-+    For example, the attribute value for ``HWMON_T_INPUT`` would be
-+    ``hwmon_temp_input``.
-+
-+  ``int channel``
-+    The sensor channel number.
-+
-+  ``long *val``
-+    An out pointer to the attribute value.
-+
-+    A string representation of the value will be exported to
-+    userspace as the result of reading from the attribute.
-+
-+  **Description**
-+
-+  Implements the ``hwmon`` callback :c:func:`read()`.
-+  Mandatory if any readable attributes exist.
-+
-+  Called when the user reads from a readable ``sysfs`` attribute.
-+
-+  **Return**
-+
-+  On success, ``0``. On failure, a negative error code.
-+
-+``write_func()``
+ 
+-  int (*write_word_data)(struct i2c_client *client, int page, int reg,
+-			 u16 word);
++  int (*write_word_data)(struct i2c_client *client, int page, int reg, u16 word);
+ 
+-Write word to page <page>, register <reg>.
++Write word to page **page**, register **reg**.
+ 
+-::
++``write_byte()``
 +~~~~~~~~~~~~~~~~
 +
 +.. code-block:: c
+ 
+   int (*write_byte)(struct i2c_client *client, int page, u8 value);
+ 
+-Write byte to page <page>, register <reg>.
+-<page> may be -1, which means "current page".
++Write byte to page **page**, register **reg**.
++**page** may be ``-1``, which means "current page".
 +
-+  int write_func(struct device *dev, enum hwmon_sensor_types type,
-+                 u32 attr, int channel, long val)
-+
-+..
-+
-+  **Parameters**
-+
-+  ``struct device *dev``
-+    A pointer to the hardware monitoring device.
-+
-+  ``enum hwmon_sensor_types type``
-+    The ``hwmon`` sensor type.
-+
-+  ``u32 attr``
-+    The attribute identifier associated with a specific attribute.
-+
-+    For example, the attribute value for ``HWMON_T_INPUT`` would be
-+    ``hwmon_temp_input``.
-+
-+  ``int channel``
-+    The sensor channel number.
-+
-+  ``long val``
-+    The value to write to the chip.
-+
-+    This is the string the user wrote to the ``sysfs`` attribute,
-+    parsed to a ``long`` value.
-+
-+  **Description**
-+  Implements the ``hwmon`` callback :c:func:`read()`. Mandatory if any
-+  readable attributes exist.
-+
-+  Called when the user reads from a readable ``sysfs`` attribute.
-+
-+  **Return**
-+
-+  On success, ``0``. On failure, a negative error code.
-+
-+Driver-provided ``sysfs`` attributes
-+------------------------------------
-+
-+.. note::
-+  In most situations it should not be necessary for a driver to provide its own
-+  ``sysfs`` attributes, since the hardware monitoring core creates those
-+  internally.
-+
-+  Unless using a deprecated device registration function, only additional
-+  non-standard ``sysfs`` attributes need to be provided, and non-standard
-+  attributes are generally discouraged unless really needed.
-+
-+The header file ``<linux/hwmon-sysfs.h>`` provides a number of useful macros to
-+declare and use hardware monitoring ``sysfs`` attributes.
-+
-+In many cases, you can use the existing ``DEVICE_ATTR`` macro from
-+``<linux/device.h>`` or its variants ``SENSOR_ATTR_{RW,RO,WO}`` to declare such
-+attributes. This is feasible if an attribute has no additional context. However,
-+in many cases there will be additional information, such as a sensor index,
-+which will need to be passed to the ``sysfs`` attribute handling function.
-+
-+The ``SENSOR_DEVICE_ATTR`` and ``SENSOR_DEVICE_ATTR_2`` macros can be used to
-+define attributes which need such additional context information.
-+``SENSOR_DEVICE_ATTR`` requires one additional argument.
-+``SENSOR_DEVICE_ATTR_2`` requires two.
-+
-+Simplified variants of ``SENSOR_DEVICE_ATTR`` and ``SENSOR_DEVICE_ATTR_2`` are
-+available, and should be used if standard attribute permissions and function
-+names are feasible. Standard permissions are ``0644`` for
-+``SENSOR_DEVICE_ATTR[_2]_RW``, ``0444`` for ``SENSOR_DEVICE_ATTR[_2]_RO``, and
-+``0200`` for ``SENSOR_DEVICE_ATTR[_2]_WO``. Standard functions, similar to
-+``DEVICE_ATTR_{RW,RO,WO}``, have ``_show`` and ``_store`` appended to the
-+provided function name.
-+
-+``SENSOR_DEVICE_ATTR`` and its variants expand to a declaration of a struct
-+sensor_device_attribute variable. You can use the :c:func:`to_sensor_dev_attr()`
-+function-like macro to get the pointer to this structure from the attribute read
-+or write function. Its parameter is the device to which the attribute is
-+attached.
-+
-+``SENSOR_DEVICE_ATTR_2`` and its variants expand to a declaration of a struct
-+sensor_device_attribute_2 variable. Use the :c:func:`to_sensor_dev_attr_2()`
-+function-like macro to get the pointer to this structure. Its parameter is the
-+device to which the attribute is attached.
-+
-+Example: An LM75-compatible sensor chip
-+=======================================
-+
-+As an example, here is the `chip descriptor <#struct-hwmon-chip-info>`_ for an
-+LM75-compatible sensor chip, comprising a
-+`callback descriptor <#struct-hwmon-ops>`_  and a list of
-+`channel descriptors <#struct-hwmon-channel-info>`_.
-+
-+First, consider the chip's channel descriptors. Notice the following:
-+
-+* The chip has a single temperature sensor.
-+* The driver wants to register with the thermal subsystem
-+  (``HWMON_C_REGISTER_TZ``), and it supports the ``update_interval`` attribute
-+  (``HWMON_C_UPDATE_INTERVAL``), requiring a virtual channel to be defined.
-+* The chip supports reading the temperature (``HWMON_T_INPUT``), and it has a
-+  maximum temperature register (``HWMON_T_MAX``) as well as a maximum
-+  temperature hysteresis register (``HWMON_T_MAX_HYST``).
++``identify()``
++~~~~~~~~~~~~~~
+ 
+-::
++.. code-block:: c
+ 
+   int (*identify)(struct i2c_client *client, struct pmbus_driver_info *info);
+ 
+ Determine supported PMBus functionality. This function is only necessary
+ if a chip driver supports multiple chips, and the chip functionality is not
+ pre-determined. It is currently only used by the generic pmbus driver
+-(pmbus.c).
++(``pmbus.c``).
+ 
+ Functions exported by core driver
+ ---------------------------------
+@@ -208,119 +229,148 @@ Chip drivers are expected to use the following functions to read or write
+ PMBus registers. Chip drivers may also use direct I2C commands. If direct I2C
+ commands are used, the chip driver code must not directly modify the current
+ page, since the selected page is cached in the core driver and the core driver
+-will assume that it is selected. Using pmbus_set_page() to select a new page
+-is mandatory.
++will assume that it is selected. Using :c:func:`pmbus_set_page()` to select a
++new page is mandatory.
+ 
+-::
++``pmbus_set_page()``
++~~~~~~~~~~~~~~~~~~~~
 +
 +.. code-block:: c
+ 
+   int pmbus_set_page(struct i2c_client *client, u8 page, u8 phase);
+ 
+-Set PMBus page register to <page> and <phase> for subsequent commands.
+-If the chip does not support multiple phases, the phase parameter is
+-ignored. Otherwise, a phase value of 0xff selects all phases.
++Set PMBus page register to **page** and **phase** for subsequent commands.
++If the chip does not support multiple phases, the **phase** parameter is
++ignored. Otherwise, a phase value of ``0xff`` selects all phases.
 +
-+  static const u32 lm75_chip_config[] = {
-+          HWMON_C_REGISTER_TZ | HWMON_C_UPDATE_INTERVAL,
-+          0
-+  };
++``pmbus_read_word_data()``
++~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 
+-::
++.. code-block:: c
+ 
+-  int pmbus_read_word_data(struct i2c_client *client, u8 page, u8 phase,
+-                           u8 reg);
++  int pmbus_read_word_data(struct i2c_client *client, u8 page, u8 phase, u8 reg);
+ 
+-Read word data from <page>, <phase>, <reg>. Similar to
++Read word data from **page**, **phase**, **reg**. Similar to
+ i2c_smbus_read_word_data(), but selects page and phase first. If the chip does
+ not support multiple phases, the phase parameter is ignored. Otherwise, a phase
+-value of 0xff selects all phases.
++value of ``0xff`` selects all phases.
+ 
+-::
++``pmbus_write_word_data()``
++~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 
+-  int pmbus_write_word_data(struct i2c_client *client, u8 page, u8 reg,
+-			    u16 word);
++.. code-block:: c
+ 
+-Write word data to <page>, <reg>. Similar to i2c_smbus_write_word_data(), but
+-selects page first.
++  int pmbus_write_word_data(struct i2c_client *client, u8 page, u8 reg, u16 word);
+ 
+-::
++Write word data to **page**, **reg**. Similar to i2c_smbus_write_word_data(),
++but selects page first.
 +
-+  static const struct hwmon_channel_info lm75_chip = {
-+          .type = hwmon_chip,
-+          .config = lm75_chip_config,
-+  };
-+
-+  static const u32 lm75_temp_config[] = {
-+          HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST,
-+          0
-+  };
-+
-+  static const struct hwmon_channel_info lm75_temp = {
-+          .type = hwmon_temp,
-+          .config = lm75_temp_config,
-+  };
-+
-+  static const struct hwmon_channel_info * const lm75_info[] = {
-+          &lm75_chip,
-+          &lm75_temp,
-+          NULL
-+  };
-+
-+There is also a ``HWMON_CHANNEL_INFO()`` macro that can and should be used when
-+possible in order to simplify the declaration of a channel descriptor list.
-+With this macro, the complete chip descriptor definition becomes:
++``pmbus_read_byte_data()``
++~~~~~~~~~~~~~~~~~~~~~~~~~~
 +
 +.. code-block:: c
+ 
+   int pmbus_read_byte_data(struct i2c_client *client, int page, u8 reg);
+ 
+-Read byte data from <page>, <reg>. Similar to i2c_smbus_read_byte_data(), but
+-selects page first. <page> may be -1, which means "current page".
++Read byte data from **page**, **reg**. Similar to i2c_smbus_read_byte_data(),
++but selects page first. **page** may be ``-1``, which means "current page".
+ 
+-::
++``pmbus_write_byte()``
++~~~~~~~~~~~~~~~~~~~~~~
 +
-+  static const struct hwmon_channel_info * const lm75_info[] = {
-+          HWMON_CHANNEL_INFO(chip,
-+                             HWMON_C_REGISTER_TZ | HWMON_C_UPDATE_INTERVAL),
-+          HWMON_CHANNEL_INFO(temp,
-+                             HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST),
-+          NULL
-+  };
++.. code-block:: c
+ 
+   int pmbus_write_byte(struct i2c_client *client, int page, u8 value);
+ 
+-Write byte data to <page>, <reg>. Similar to i2c_smbus_write_byte(), but
+-selects page first. <page> may be -1, which means "current page".
++Write byte data to **page**, **reg**. Similar to i2c_smbus_write_byte(), but
++selects page first. **page** may be ``-1``, which means "current page".
 +
-+  static const struct hwmon_ops lm75_hwmon_ops = {
-+          .is_visible = lm75_is_visible,
-+          .read = lm75_read,
-+          .write = lm75_write,
-+  };
++``pmbus_clear_faults()``
++~~~~~~~~~~~~~~~~~~~~~~~~
+ 
+-::
++.. code-block:: c
+ 
+   void pmbus_clear_faults(struct i2c_client *client);
+ 
+ Execute PMBus "Clear Fault" command on all chip pages.
+ This function calls the device specific write_byte function if defined.
+-Therefore, it must _not_ be called from that function.
++Therefore, it **must not** be called from that function.
+ 
+-::
++``pmbus_check_byte_register()``
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 +
-+  static const struct hwmon_chip_info lm75_chip_info = {
-+          .ops = &lm75_hwmon_ops,
-+          .info = lm75_info,
++.. code-block:: c
+ 
+   bool pmbus_check_byte_register(struct i2c_client *client, int page, int reg);
+ 
+-Check if byte register exists. Return true if the register exists, false
++Check if byte register exists. Return ``true`` if the register exists, ``false``
+ otherwise.
+ This function calls the device specific write_byte function if defined to
+-obtain the chip status. Therefore, it must _not_ be called from that function.
++obtain the chip status. Therefore, it **must not** be called from that function.
++
++``pmbus_check_word_register()``
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 
+-::
++.. code-block:: c
+ 
+   bool pmbus_check_word_register(struct i2c_client *client, int page, int reg);
+ 
+-Check if word register exists. Return true if the register exists, false
++Check if word register exists. Return ``true`` if the register exists, ``false``
+ otherwise.
+ This function calls the device specific write_byte function if defined to
+-obtain the chip status. Therefore, it must _not_ be called from that function.
++obtain the chip status. Therefore, it **must not** be called from that function.
+ 
+-::
++``pmbus_do_probe()``
++~~~~~~~~~~~~~~~~~~~~
++
++.. code-block:: c
+ 
+   int pmbus_do_probe(struct i2c_client *client, struct pmbus_driver_info *info);
+ 
+ Execute probe function. Similar to standard probe function for other drivers,
+-with the pointer to struct pmbus_driver_info as additional argument. Calls
++with the pointer to ``struct pmbus_driver_info`` as additional argument. Calls
+ identify function if supported. Must only be called from device probe
+ function.
+ 
+-::
++``pmbus_driver_info()``
++~~~~~~~~~~~~~~~~~~~~~~~
++
++.. code-block:: c
+ 
+-  const struct pmbus_driver_info
+-	*pmbus_get_driver_info(struct i2c_client *client);
++  const struct pmbus_driver_info *pmbus_get_driver_info(struct i2c_client *client);
+ 
+-Return pointer to struct pmbus_driver_info as passed to pmbus_do_probe().
++Return pointer to ``struct pmbus_driver_info`` as passed to
++:c:func:`pmbus_do_probe()`.
+ 
+ 
+ PMBus driver platform data
+ ==========================
+ 
+-PMBus platform data is defined in include/linux/pmbus.h. Platform data
+-currently provides a flags field with four bits used::
++PMBus platform data is defined in ``<linux/pmbus.h>``. Platform data
++currently provides a flags field with four bits used:
+ 
+-	#define PMBUS_SKIP_STATUS_CHECK			BIT(0)
++.. code-block:: c
+ 
+-	#define PMBUS_WRITE_PROTECTED			BIT(1)
++  #define PMBUS_SKIP_STATUS_CHECK                 BIT(0)
+ 
+-	#define PMBUS_NO_CAPABILITY			BIT(2)
++  #define PMBUS_WRITE_PROTECTED                   BIT(1)
+ 
+-	#define PMBUS_READ_STATUS_AFTER_FAILED_CHECK	BIT(3)
++  #define PMBUS_NO_CAPABILITY                     BIT(2)
+ 
+-	struct pmbus_platform_data {
+-		u32 flags;              /* Device specific flags */
++  #define PMBUS_READ_STATUS_AFTER_FAILED_CHECK    BIT(3)
+ 
+-		/* regulator support */
+-		int num_regulators;
+-		struct regulator_init_data *reg_init_data;
+-	};
++  struct pmbus_platform_data {
++          u32 flags;              /* Device specific flags */
+ 
++          /* regulator support */
++          int num_regulators;
++          struct regulator_init_data *reg_init_data;
 +  };
+ 
+ Flags
+ -----
+ 
+-PMBUS_SKIP_STATUS_CHECK
++``PMBUS_SKIP_STATUS_CHECK``
+ 
+ During register detection, skip checking the status register for
+ communication or command errors.
+@@ -328,33 +378,33 @@ communication or command errors.
+ Some PMBus chips respond with valid data when trying to read an unsupported
+ register. For such chips, checking the status register is mandatory when
+ trying to determine if a chip register exists or not.
+-Other PMBus chips don't support the STATUS_CML register, or report
++Other PMBus chips don't support the ``STATUS_CML`` register, or report
+ communication errors for no explicable reason. For such chips, checking the
+ status register must be disabled.
+ 
+ Some i2c controllers do not support single-byte commands (write commands with
+ no data, i2c_smbus_write_byte()). With such controllers, clearing the status
+-register is impossible, and the PMBUS_SKIP_STATUS_CHECK flag must be set.
++register is impossible, and the ``PMBUS_SKIP_STATUS_CHECK`` flag must be set.
+ 
+-PMBUS_WRITE_PROTECTED
++``PMBUS_WRITE_PROTECTED``
+ 
+ Set if the chip is write protected and write protection is not determined
+-by the standard WRITE_PROTECT command.
++by the standard ``WRITE_PROTECT`` command.
+ 
+-PMBUS_NO_CAPABILITY
++``PMBUS_NO_CAPABILITY``
+ 
+-Some PMBus chips don't respond with valid data when reading the CAPABILITY
++Some PMBus chips don't respond with valid data when reading the ``CAPABILITY``
+ register. For such chips, this flag should be set so that the PMBus core
+-driver doesn't use CAPABILITY to determine it's behavior.
++driver doesn't use ``CAPABILITY`` to determine it's behavior.
+ 
+-PMBUS_READ_STATUS_AFTER_FAILED_CHECK
++``PMBUS_READ_STATUS_AFTER_FAILED_CHECK``
+ 
+-Read the STATUS register after each failed register check.
++Read the ``STATUS`` register after each failed register check.
+ 
+ Some PMBus chips end up in an undefined state when trying to read an
+ unsupported register. For such chips, it is necessary to reset the
+-chip pmbus controller to a known state after a failed register check.
++chip PMBus controller to a known state after a failed register check.
+ This can be done by reading a known register. By setting this flag the
+-driver will try to read the STATUS register after each failed
++driver will try to read the ``STATUS`` register after each failed
+ register check. This read may fail, but it will put the chip into a
+ known state.
 -- 
 2.34.1
 
