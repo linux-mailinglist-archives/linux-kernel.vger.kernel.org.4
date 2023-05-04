@@ -2,48 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7852B6F6D6A
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 16:00:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DCAE6F6D6D
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 16:02:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231284AbjEDOAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 10:00:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47444 "EHLO
+        id S230471AbjEDOB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 10:01:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230380AbjEDOAu (ORCPT
+        with ESMTP id S229845AbjEDOB5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 10:00:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D521982;
-        Thu,  4 May 2023 07:00:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5948160BDC;
-        Thu,  4 May 2023 14:00:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48628C4339B;
-        Thu,  4 May 2023 14:00:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683208847;
-        bh=+i4zLKz/bY77nPFISagMtcEHYXbSlZ5uAgfTAWb8wZ4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=PqkG2DbVTQV0GB0ACRJAFWICW/D3Y1FdBZrbPHaPkeY1adbagVGtkcQkEGsehlZuO
-         JZnRh6b3hQMHyV6MHYevoL+hAx+lWVFGbBX05LXF6HSGDSyKQaQGYcIcwb4Z6v+9jJ
-         UU6HXoKZyIMzUyjz4KLL2+69+W0OJimzoAfESoxbXJbiACylLNvRCHLJ9wAHVfltT0
-         AvPYX8iy9Wmya4eTC3g9N8bQYYRlz7GoLzW63nOGfPYPhGLMnUu8sQBWoYC6/dHgv1
-         +H68SvCvowHbK1oVEwFU2xSqqvd8DqKZ+8s8cWj8aszTfI3Pk8vVJGmo0qp0cm1niK
-         EdDt0RBEc+eiw==
-From:   Mark Brown <broonie@kernel.org>
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Tree for May 4
-Date:   Thu,  4 May 2023 23:00:40 +0900
-Message-Id: <20230504140040.190691-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Thu, 4 May 2023 10:01:57 -0400
+Received: from mickerik.phytec.de (mickerik.phytec.de [91.26.50.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB2B97EDB
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 07:01:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; d=phytec.de; s=a4; c=relaxed/simple;
+        q=dns/txt; i=@phytec.de; t=1683208913; x=1685800913;
+        h=From:Sender:Reply-To:Subject:Date:Message-ID:To:CC:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=/jhHcFJ1LJ1W+GNxuQ4Xu89JZAN9lv1YtQk70nLZhYg=;
+        b=KbnkbKv1o2EtOnTBGYsM8AxL1zbPUpKPNMicgIkPwhMC0ePhDQjrhrwkGvIf57dw
+        W/5SI8H0vvbayuVQK+kA28emst2RIpiSOYFsu54zQpeVuP3lcAPqeJPzb076wFd3
+        1ivkmGdK/KKYBMdzlAIKPBWT1Wl2fG+ewYi7bT/sKyg=;
+X-AuditID: ac14000a-923ff70000007ecb-c6-6453bad1c0cc
+Received: from berlix.phytec.de (Unknown_Domain [172.25.0.12])
+        (using TLS with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (Client did not present a certificate)
+        by mickerik.phytec.de (PHYTEC Mail Gateway) with SMTP id 20.DD.32459.1DAB3546; Thu,  4 May 2023 16:01:53 +0200 (CEST)
+Received: from augenblix2.phytec.de (172.25.0.11) by Berlix.phytec.de
+ (172.25.0.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Thu, 4 May
+ 2023 16:01:53 +0200
+From:   Wadim Egorov <w.egorov@phytec.de>
+To:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-hardening@vger.kernel.org>
+CC:     <upstream@lists.phytec.de>, <nm@ti.com>, <vigneshr@ti.com>,
+        <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <keescook@chromium.org>,
+        <tony.luck@intel.com>, <gpiccoli@igalia.com>
+Subject: [PATCH 1/2] dt-bindings: arm: ti: Add bindings for PHYTEC AM62x based hardware
+Date:   Thu, 4 May 2023 16:01:42 +0200
+Message-ID: <20230504140143.1425951-1-w.egorov@phytec.de>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        LOCALPART_IN_SUBJECT,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain
+X-Originating-IP: [172.25.0.11]
+X-ClientProxiedBy: Berlix.phytec.de (172.25.0.12) To Berlix.phytec.de
+ (172.25.0.12)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrBLMWRmVeSWpSXmKPExsWyRpKBR/firuAUgwcvZSzmHznHajHv/GF2
+        izPduRbLP89mt+h78ZDZYtPja0Dx9T8ZLS7vmsNm8ebHWSaL1r1H2C3eXLjHYtH9Tt3i/9kP
+        7A68HrMbLrJ4TJjdzeaxeM9LJo9NqzrZPO5c28PmsXlJvUd/dwurx/Eb25k8Pm+SC+CM4rJJ
+        Sc3JLEst0rdL4Mo4+SOx4C9bxaq7W5gaGNexdjFycEgImEi0TK7uYuTkEBJYwiSx6LFSFyMX
+        kP2YUeLX2ZvsIAk2AXWJOxu+sYLYIgK9jBJnWgpBipgFbjNKbF6ygw0kISwQLvHi3n4wm0VA
+        RWL7s9dgNq+ApcT923vAbAkBeYmZl76zQ8QFJU7OfMICYjMDxZu3zmaGsCUkDr54wQxxkbzE
+        i0vLWWB6p517zQxhh0ps/bKdaQKjwCwko2YhGTULyagFjMyrGIVyM5OzU4sys/UKMipLUpP1
+        UlI3MYJiR4SBawdj3xyPQ4xMHIyHGCU4mJVEeD8U+qUI8aYkVlalFuXHF5XmpBYfYpTmYFES
+        573fw5QoJJCeWJKanZpakFoEk2Xi4JRqYJz+MSzh1jNhgYYzqT+lr3w2qXfZJR/eVvJ0u9fi
+        NduW/uurz1h7S/KTFMd3l8t7G7bkqKpt3Oz0mXW6ssuzuojeoyFbHXPy/KOOaWqLpl24d7hD
+        65/XZo3l39ziO2ceUD4dzWzbwyHsff6G/JO512VP2e3LcJH9pnDsh398imOw2KyfhgaPniix
+        FGckGmoxFxUnAgBl/Fz4iwIAAA==
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -52,52 +74,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+Add devicetree bindings for AM62x based phyCORE-AM62 SoM
+and phyBOARD-Lyra RDK.
 
-Changes since 20230428:
+Signed-off-by: Wadim Egorov <w.egorov@phytec.de>
+---
+ Documentation/devicetree/bindings/arm/ti/k3.yaml | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-The tip tree gained a conflict with the origin tree.
+diff --git a/Documentation/devicetree/bindings/arm/ti/k3.yaml b/Documentation/devicetree/bindings/arm/ti/k3.yaml
+index e1183f90bb06..254b5ec51f34 100644
+--- a/Documentation/devicetree/bindings/arm/ti/k3.yaml
++++ b/Documentation/devicetree/bindings/arm/ti/k3.yaml
+@@ -25,6 +25,12 @@ properties:
+               - ti,am62a7-sk
+           - const: ti,am62a7
+ 
++      - description: K3 AM625 SoC PHYTEC phyBOARD-Lyra
++        items:
++          - const: phytec,am625-phyboard-lyra-rdk
++          - const: phytec,am62-phycore-som
++          - const: ti,am625
++
+       - description: K3 AM625 SoC
+         items:
+           - enum:
+-- 
+2.25.1
 
-The tip tree gained a conflict with the mm tree.
-
-The pinctrl tree gained a conflict with the origin tree.
-
-Non-merge commits (relative to Linus' tree): 1201
- 1446 files changed, 187560 insertions(+), 156238 deletions(-)
-
-----------------------------------------------------------------------------
-
-I have created today's linux-next tree at
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-are tracking the linux-next tree using git, you should not use "git pull"
-to do so as that will try to merge the new linux-next release with the
-old one.  You should use "git fetch" and checkout or reset to the new
-master.
-
-You can see which trees have been included by looking in the Next/Trees
-file in the source.  There is also the merge.log file in the Next
-directory.  Between each merge, the tree was built with a ppc64_defconfig
-for powerpc, an allmodconfig for x86_64, a multi_v7_defconfig for arm
-and a native build of tools/perf. After the final fixups (if any), I do
-an x86_64 modules_install followed by builds for x86_64 allnoconfig,
-powerpc allnoconfig (32 and 64 bit), ppc44x_defconfig, allyesconfig
-and pseries_le_defconfig and i386, arm64, s390, sparc and sparc64
-defconfig and htmldocs. And finally, a simple boot test of the powerpc
-pseries_le_defconfig kernel in qemu (with and without kvm enabled).
-
-Below is a summary of the state of the merge.
-
-I am currently merging 358 trees (counting Linus' and 102 trees of bug
-fix patches pending for the current merge release).
-
-Stats about the size of the tree over time can be seen at
-http://neuling.org/linux-next-size.html .
-
-Status of my local build tests will be at
-http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
-advice about cross compilers/configs that work, we are always open to add
-more builds.
-
-Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-Gortmaker for triage and bug fixes.
