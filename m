@@ -2,170 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5C4F6F681E
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 11:15:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 429EE6F6829
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 11:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbjEDJPt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 05:15:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40382 "EHLO
+        id S230331AbjEDJRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 05:17:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbjEDJPq (ORCPT
+        with ESMTP id S229788AbjEDJRb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 05:15:46 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EADB54205;
-        Thu,  4 May 2023 02:15:05 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-94f3cd32799so41330466b.0;
-        Thu, 04 May 2023 02:15:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683191704; x=1685783704;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4wjpkeqWA8qYkH/PiK7uN0tzwP/v0iiItnDke/o/lc0=;
-        b=RkjTlxcCgLCrvnMQ3Fft+HOe6jICiNy9KuA9Q//Xj5CWoU4WUjbkoqqTVuZuISgct0
-         WHvPd+1GujTO88D28NFvhFzw/dKEHL5S5kyaTN3UXRVKUrjErLueJCKPad0VSfkiHDkK
-         AZdtMIqTXHpAxFnUMyaNW0dFSJXuq/IJ9MJXIQgh3d9Brd5u6PYuyE9WDVVyu1e9bqBz
-         xA2rwHY7oHnF25y/pkP2SjY9kTCsLZRZbYNKntpDDJeoqmsf6TGLySC4HPrCIZ6muukZ
-         eM6uPwSSb5i+RllMYtTsMbK74wB61vEd+J+I/e1h4pkbkly6Pl/qsqRQxPULPStCZsn9
-         gBlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683191704; x=1685783704;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4wjpkeqWA8qYkH/PiK7uN0tzwP/v0iiItnDke/o/lc0=;
-        b=andZPfhH/sOOgxykdnhADjf1JqOlPtH6aL2ehUSssBVlNvJxdKp7XvXIp7mpyN5hzJ
-         z8807pii/4eTNa0xj0dfz41lj9pvipbJ76VJgd52GuHOb6xrbopUI1Ctc/dOYjPldYgm
-         oWqieOINSoO4QVeeO1cCbStopBHN7ACGFZTAbtU0+8ayqjA5xMCTv79wAg5sjXu/FRLr
-         2rtvCAm6VXpwjOd+CviEokgpiQGRQ85jfej6yC5vPtCwYpR5g21aDluOuqHWBF4Bk9Zd
-         0wDLpCGZ7M1guDhyImkCeMl4Xcp2g5q2tY/d84vMU8h2pYg8F/Z8D/PziadvuhrUcKpe
-         11Wg==
-X-Gm-Message-State: AC+VfDyjYTl6PmXFZE8f8jHpU0LSF/O4igOxiBBbyNPbAhuhs+2b+LPc
-        Is4QnUZMTYelCy4UdCbIPDQ=
-X-Google-Smtp-Source: ACHHUZ5o55IayVtrIHn8dSW7K3bSDwy0IWuVh6ib7LF1yUwMiZCjhVrRS3CCIkllKSErOzD4pjP0dA==
-X-Received: by 2002:a17:906:eec7:b0:93e:fa12:aa1a with SMTP id wu7-20020a170906eec700b0093efa12aa1amr5473971ejb.1.1683191704054;
-        Thu, 04 May 2023 02:15:04 -0700 (PDT)
-Received: from orome (p200300e41f053a00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f05:3a00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id g10-20020a170906594a00b008cecb8f374asm18338172ejr.0.2023.05.04.02.15.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 May 2023 02:15:03 -0700 (PDT)
-Date:   Thu, 4 May 2023 11:15:02 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Haotien Hsu <haotienh@nvidia.com>
-Cc:     JC Kuo <jckuo@nvidia.com>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-phy@lists.infradead.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Wayne Chang <waynec@nvidia.com>,
-        EJ Hsu <ejh@nvidia.com>
-Subject: Re: [PATCH] phy: tegra: xusb: Fix use-after-free issue
-Message-ID: <ZFN3lvjjn9Xu-vRl@orome>
-References: <20230504055446.2039372-1-haotienh@nvidia.com>
+        Thu, 4 May 2023 05:17:31 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2078.outbound.protection.outlook.com [40.107.20.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA4F468E;
+        Thu,  4 May 2023 02:17:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hxroru/tK3XGrseEKMCEKIYWgXkqbdhHHhpLO0BcU+f6W0vqeJsQtDC0OGGdxklvP+WrlzHRtBAwatI28mNItMS+cTMy/OuhdXn+iLPgN80po4VoBcKe1GPjMxMEIccNXzDC5wpNhrJ/v/+MbW/lp4ca875ITjfZbltFmiNfzc8rMmEWhtYqtt2ZINZ/DN0LBuuTaYjO7SLYJjhhK3+ZxQ995UbV2PKyD4KGVTJmYcBowS+l1ubLNf0dOndm54PrO31WPy4aZmmh5qaSC3kM45n8Nn2z3p9GEbJP4GJ1845rqh6pEOFDfE9e9TSfxhL/1uI2NIU1IT7v6cPRnePSCQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=u0eGde0McaA2hdKy7cV4ufiDqzeO5/nZperkzILYv1w=;
+ b=C3Gv9azxDz7Z8x+Xt8BJEvNqYWUuxRAOGKoKnPttAw18dWUgCO8a3U3wRl+9IzsOHAwHPzlCzT5itVWYtCpTOEwSmFoKFgKWiO2a0vSxWNUSeGz58ESYM6DxAnOX3tgz/rjS1ZFl6blN5Q1Wi89Pfe0cjMvwL1ujjF5ctYXSs4r8KJa37XLQKBpCCDe/7z0uCyGb5DHifkln9Y79p1cCFQiMhjgOysGCyqXuljNQbxxsrWz3JWDbbMEkkHM7hKkDmkEXcpLFTGiMJ6UAoBxGAzqGLrx5ttpkQZeesiJ03tAwDsdYsWby4Qqequ6hn0pd5jxi9+ga27os5hZMkjoANQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=u0eGde0McaA2hdKy7cV4ufiDqzeO5/nZperkzILYv1w=;
+ b=kQXtV9BrdQ+sqfCb8xCRa6rdOtUjtzewGK6giLXqhOmsXlKvaKKtVlP2fjPh2S59d2bIEj2kKVXMDHlWArtKMuYLbnagIIlMgpbXp6dcFQxxSBe3eMqV7udbKrZH58ZSfdP1k7QM8BN8NbKj8qkNrCGavPqVzXLm1F7wd5E1eh8=
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by PA4PR04MB9319.eurprd04.prod.outlook.com (2603:10a6:102:2a6::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.22; Thu, 4 May
+ 2023 09:17:08 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::b999:f2c6:a8cc:7b4]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::b999:f2c6:a8cc:7b4%5]) with mapi id 15.20.6340.031; Thu, 4 May 2023
+ 09:17:08 +0000
+From:   Peng Fan <peng.fan@nxp.com>
+To:     Greg KH <greg@kroah.com>, "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     "abelvesa@kernel.org" <abelvesa@kernel.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] clk: imx: imx93: introduce clk_bypassed module parameter
+Thread-Topic: [PATCH] clk: imx: imx93: introduce clk_bypassed module parameter
+Thread-Index: AQHZfmVsUoWhON65f0ewGxlg24Oc/K9J088AgAAAwyA=
+Date:   Thu, 4 May 2023 09:17:08 +0000
+Message-ID: <DU0PR04MB9417F9CBB5C9EE1FC85B10A2886D9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+References: <20230504085506.504474-1-peng.fan@oss.nxp.com>
+ <2023050410-rejoin-vocation-8560@gregkh>
+In-Reply-To: <2023050410-rejoin-vocation-8560@gregkh>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DU0PR04MB9417:EE_|PA4PR04MB9319:EE_
+x-ms-office365-filtering-correlation-id: 35d531c6-775b-4762-76c1-08db4c805628
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: h1SOD6d8CAMVJR2zl2l743GIflqbTA2jHkVtuxYZvuKWazkowgDITV5Cm3JWMF7MKQmOjeHOtKn5B84Eywdv6CkwJLoZconNnvIlY4qclcvXnxYRsOULr+SI1wKHdymCG2wo0efaYRT57I2ScuAODxVYmBze27Qq7wrA3KdNXjDqpJxkMI1YAXKc0/hD34xo3idUa4DuD2TqtYgriZoW7A2x6Xdjq1awOPqNwAgbu1r2wvbDNF7rhRGE5cBmB6PPT4V4Cke2JLiPdiTIhaZ3iHTw44tf2n/vdV6wv6SI672gBj8YbapQOX6lSJs/zZVMZaZGTaFdfGsuwLWP3XcdPoVxC3/Cx7dbtn3SgYZaajeqDgK2+1e4OcqUepSD/C+CEXjLbu9l7cRPyz0ysqnfdq8HdNuDhKFpa6+lrGkK6OfbUJW652lnCCE6gMqy+QKbDyHSPk6TsqVPS0dizfTjeZRpeoQxpJwPOVo8JcXZF3jkTbwF5ksr7GfUasFgRN72SB4LUKHh2ZarDaVQQJJWQXnadDITDFBBC5rFyYEuf/LeE5gTu1wl4eGZLbgjS6p+upPKETrphp7p2g77D2HEzUyx+WpAcjgJNpcw/CaHahDTOjlnM8hnPPa6IKin5wAR
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(366004)(136003)(396003)(376002)(451199021)(110136005)(54906003)(26005)(6506007)(9686003)(38100700002)(83380400001)(2906002)(44832011)(186003)(7416002)(52536014)(122000001)(66946007)(76116006)(66476007)(478600001)(5660300002)(64756008)(66446008)(66556008)(55016003)(8936002)(8676002)(33656002)(41300700001)(71200400001)(316002)(86362001)(38070700005)(7696005)(4326008);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?N40CXMkAqiDNivK5NIF17I+2aPh2tXWiNJTHBKbiyR0oJe4HQ8d/yN+0okT6?=
+ =?us-ascii?Q?9g2i/otRbM2KYuGBjypNyL9U/ISsUEE1ACajN8gRWV7TjQY1dy0Hztbk/3C0?=
+ =?us-ascii?Q?xBFjBnzjnE3h9gIqzN1Ii+C0GxD1Tk1MFHH68O9Dt15qrIO4e8+vh4IZYXJL?=
+ =?us-ascii?Q?CiUGKUiPJ7cEowTcxMG9VtESVwJoHT79OOXOYsAoy1R8iVm+0DxdDjd9m/Zf?=
+ =?us-ascii?Q?09xvsf4i8fLAeWGScyuE5frvmJAKIivVC5IS84fer5Z2Vrt5ctej3CyxL4K4?=
+ =?us-ascii?Q?Q2fcSVw82xcozknuWSppewdj7Lm2fSI5aTBgZKWz1rOmHKKqvOZ1OYdX7GHD?=
+ =?us-ascii?Q?g1ptVqiubvAIXUI2iGhNsHaC+TnN8n0C3EJJKiFIb6ZY9Y44Ou6gwXwLlwPj?=
+ =?us-ascii?Q?kpVPD2+kt8m7PtegmySD9HKPeM2Tr2GTysYEz9XgcIDho+1savJkbu9wYJpq?=
+ =?us-ascii?Q?o+Pg85QKd71gE7/xh563bAmGNLdOYDhLYokj0NsgLrunpw32PsjbNKshzrcs?=
+ =?us-ascii?Q?0lWuz5srhh9T/JuYOpeoe/bA2mI0PeQg3UaKfMM6eCbsP8GB0fvpvaKgEvoA?=
+ =?us-ascii?Q?zt6if6WTxMYs49Flc4zM7z0IhqCmlNRdB9LQk/X6GgNg4b7cMeK3qWb43Tyh?=
+ =?us-ascii?Q?zrkGlYLbWkYtpMKRXuNoehejkCFmGd//ErGhHVoBNtkc92QJybUWW4M4nwok?=
+ =?us-ascii?Q?RGRkPs+if5XRHVocr/mLmTipkp5HT1mB5S7lzyqd8MGcj8v0Y/ajSIt+OaZD?=
+ =?us-ascii?Q?nrV0JDU5Z8/iurZSlv7zLJZjPIzHxLlm+0bJyidG13d5dkM7Xl5TpXdCcrmV?=
+ =?us-ascii?Q?nbwDpilt7bZc2PhZ2atmdVHtr0OHaGxTTBUA0mr4gHuV/JKkBm3TYw8gpUwp?=
+ =?us-ascii?Q?DMxzwmluvsY67GzniWxRt2vbGdAFUSJXWHGpdDxTwZQx2eW71QLbD/SCKDVC?=
+ =?us-ascii?Q?M763oPrvs7wC6HBRkCspkarw80X4n6+o32rL3kOlYOzHyxMmBgN/2hrN/mKr?=
+ =?us-ascii?Q?/MYBi06SzGVQdbZvEck8AAeikMu4HaiO3R7BP6l4PG+JF4xDMnEZY5ptcEK3?=
+ =?us-ascii?Q?iaAM/utNKxE57VQ5x3fz4F0EGQR0L4fBWSJ6MxPo6/dJQ4sb9oigYsoXXgIO?=
+ =?us-ascii?Q?i/ZjTFtokOmmKytbR9VMg6ufH1q1lUysWOTsmeO1+akecfnK5SjZlNNsmsK3?=
+ =?us-ascii?Q?7kQAHdXeOcLVwt+Vq44iWwJHRDdWjFeBfO3LHDiF27qznurUafST+rtWervF?=
+ =?us-ascii?Q?bklXEyYKhH9MK8uuxBHT9WtOem+qEmZF9ONTmPamuNroeeCbcXTuHKOkFXoq?=
+ =?us-ascii?Q?dewl6K0PQED6yncenTyPXFbE9zEAx15L7KSf81aAdFuodNzX8SbtJKKaMDlK?=
+ =?us-ascii?Q?aOWaoP6kjZnqRpfMI+DgfZNB3SAFf/mQ4c0GcmSp23v7VP3LTFQEhJTmQ+zG?=
+ =?us-ascii?Q?eywjvhKKxIH0RD8fr2/GkEae4UeLJ2C88Exxb/XXygPvDdNXgu7SY0vLZANv?=
+ =?us-ascii?Q?jJaJbEDG2Q3zRstTxOLju5ip98dQcAp8qPvL+ZjC28QB8R1LhWiUgDhr/b9u?=
+ =?us-ascii?Q?t9jGXR9Q4i3Na2GwgR8=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="5P7ThJ8lckK4aSHF"
-Content-Disposition: inline
-In-Reply-To: <20230504055446.2039372-1-haotienh@nvidia.com>
-User-Agent: Mutt/2.2.10 (2023-03-25)
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 35d531c6-775b-4762-76c1-08db4c805628
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 May 2023 09:17:08.7699
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: wsQzB4ootbrzNllzlus4WlhcJM8pRp5bp+NcY9t8MQfIFl7pxfsec3nlIEe0Ia/DLDSLNwG6hUn11F1Kc0ghrA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB9319
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
++ DT maintainers.
 
---5P7ThJ8lckK4aSHF
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, May 04, 2023 at 01:54:46PM +0800, Haotien Hsu wrote:
-> From: EJ Hsu <ejh@nvidia.com>
+> Subject: Re: [PATCH] clk: imx: imx93: introduce clk_bypassed module
+> parameter
 >=20
-> For the dual-role port, it will assign the phy dev to usb-phy dev and
-> use the port dev driver as the dev driver of usb-phy.
+> On Thu, May 04, 2023 at 04:55:06PM +0800, Peng Fan (OSS) wrote:
+> > From: Peng Fan <peng.fan@nxp.com>
+> >
+> > With the clk names specified in clk_bypassed module parameter, give
+> > user an option to bypass the clk from managing them by Linux kernel.
 >=20
-> When we try to destroy the port dev, it will destroy its dev driver
-> as well. But we did not remove the reference from usb-phy dev. This
-> might cause the use-after-free issue in KASAN.
+> As I said on another email, no, please do not add new module parameters
+> for drivers, this is not the 1990s
+
+ok, but this is for boot, so only DT could be considered.
+
+But DT is to describe hardware, here I just wanna give user
+an option to bypass some clocks. Is it ok to add a DT property
+saying "fsl,imx93-bypass-clks =3D <IMX93_CLK_X>, <IMX93_CLK_Y>" ?
+
+Thanks,
+Peng.
+
 >=20
-> Fixes: e8f7d2f409a1 ("phy: tegra: xusb: Add usb-phy support")
-> Cc: stable@vger.kernel.org
+> Also, another comment below:
 >=20
-> Signed-off-by: EJ Hsu <ejh@nvidia.com>
-> Signed-off-by: Haotien Hsu <haotienh@nvidia.com>
-> ---
->  drivers/phy/tegra/xusb.c | 15 ++++++++-------
->  1 file changed, 8 insertions(+), 7 deletions(-)
+> > @@ -310,6 +357,8 @@ static int imx93_clocks_probe(struct
+> > platform_device *pdev)
+> >
+> >  	for (i =3D 0; i < ARRAY_SIZE(root_array); i++) {
+> >  		root =3D &root_array[i];
+> > +		if (unlikely(imx_clk_bypass_check(root->name)))
+> > +			continue;
 >=20
-> diff --git a/drivers/phy/tegra/xusb.c b/drivers/phy/tegra/xusb.c
-> index 78045bd6c214..515298a9a433 100644
-> --- a/drivers/phy/tegra/xusb.c
-> +++ b/drivers/phy/tegra/xusb.c
-> @@ -563,13 +563,6 @@ static int tegra_xusb_port_init(struct tegra_xusb_po=
-rt *port,
-> =20
->  static void tegra_xusb_port_unregister(struct tegra_xusb_port *port)
->  {
-> -	if (!IS_ERR_OR_NULL(port->usb_role_sw)) {
-> -		of_platform_depopulate(&port->dev);
-> -		usb_role_switch_unregister(port->usb_role_sw);
-> -		cancel_work_sync(&port->usb_phy_work);
-> -		usb_remove_phy(&port->usb_phy);
-> -	}
-> -
->  	if (port->ops->remove)
->  		port->ops->remove(port);
-> =20
-> @@ -832,6 +825,14 @@ void tegra_xusb_usb2_port_remove(struct tegra_xusb_p=
-ort *port)
->  {
->  	struct tegra_xusb_usb2_port *usb2 =3D to_usb2_port(port);
-> =20
-> +	if (!IS_ERR_OR_NULL(port->usb_role_sw)) {
-> +		of_platform_depopulate(&port->dev);
-> +		usb_role_switch_unregister(port->usb_role_sw);
-> +		cancel_work_sync(&port->usb_phy_work);
-> +		usb_remove_phy(&port->usb_phy);
-> +		port->usb_phy.dev->driver =3D NULL;
-> +	}
-> +
-
-It's a bit difficult to tell what exactly changed because of the
-additional move. The move looks correct because this is only valid for
-USB2 ports, but I think it'd be easier to review if the move was done
-prior to the addition of the ->driver clearing. Or perhaps a mention in
-the commit message would be nice.
-
-It's obviously up to Vinod and Kishon if they want to see this
-clarified. Either way is fine with me, so:
-
-Acked-by: Thierry Reding <treding@nvidia.com>
-
---5P7ThJ8lckK4aSHF
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmRTd5UACgkQ3SOs138+
-s6Gt1Q/9EXhGAYP6JtZG9p/vcDxGeCROBCWGKFaLA5L1NvL+nJbZT9DmodB45UDH
-cEUZPd6fdH6CYvZuM3B+khQvS2yOIvLtBt2WaGs8fp6yINmR0fKsKbWqjqglbrOH
-jZJcpzzz8xjkZ3XvNAXB+qpkBEEzGqTeMz35GRMeDhI6xczHG3k6anhaecI+Gys4
-H8gg7mjVMbiSDSXigfSw080yL7Y+42s8U8YHh9Q20Gszfk/hcI6qs0fUrZXpBy5K
-1wHdrqtoPU7jWn6PF7L/LrFcbcomlPiKiSiB5hhmAj+l7EbQnmXXrtO9A84inZuE
-+V8ylo/jEpxgnTtNYOaQuB5t/BhoZl7MARgJ4C1lMrRODlJtEK9JWqU4sBtz2K3o
-RwnMaGeXq+3GB5kK5wK2+/H6jVLCoyKogm9csmcxpcptIO6EIWlM0EaqztwZNP8V
-lD3UcG7bzrW7DyOJETnw04AjteQ7gsgzm2kNWcrQORCLmfM13yKsTHvsUTfOW6ie
-mY+vFqnjlbslAJnrYEgRMG7KfJAWjVuqWN5NsBCaGChh/9+FiHU2joIZTt/n3SOw
-GtXzPIe7gMJnkicq5VvwRvUskHrztivJEN5nDmx0Zm2sZrUX5gdgQhZ78uyOgM5t
-FgPndVJbPSW8Mgj4R/maEpnK40UH+7hegbbQBT38l9X1NFucPss=
-=1FBR
------END PGP SIGNATURE-----
-
---5P7ThJ8lckK4aSHF--
+> Only ever use likely/unlikely if you can measure the difference.  Here on=
+ a
+> probe function, you can not, this is not needed at all, the compiler and =
+CPU
+> will do a better job over time than you can guess at this.
+>=20
+> But as this change isn't needed, this shouldn't be an issue either.
+>=20
+> thanks,
+>=20
+> greg k-h
