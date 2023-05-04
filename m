@@ -2,46 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 581EF6F7594
+	by mail.lfdr.de (Postfix) with ESMTP id A30E56F7595
 	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:59:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232252AbjEDT64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 15:58:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43578 "EHLO
+        id S232261AbjEDT67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 15:58:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232644AbjEDT40 (ORCPT
+        with ESMTP id S231864AbjEDT4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 15:56:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37CAF1D96C;
-        Thu,  4 May 2023 12:49:41 -0700 (PDT)
+        Thu, 4 May 2023 15:56:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E91D21D97D;
+        Thu,  4 May 2023 12:49:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BBB7663821;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1662C63826;
+        Thu,  4 May 2023 19:49:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8AB5C433EF;
         Thu,  4 May 2023 19:49:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4243FC433A4;
-        Thu,  4 May 2023 19:49:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683229769;
-        bh=Sjcfn1r0ahXPgKMDb045L/vCMqWCxC7V8Hoxetw5THw=;
+        s=k20201202; t=1683229771;
+        bh=0vnWX0MVgGb7iZDFbJNjeohEnUpVDAWB+6di4E0lEvI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YhZ8lTteppQ4rhVDf0f3d7UAB6dRijw86SvRtmPNT12TnIkCUMWqAj93xTs1JMQhK
-         q4b18+vqaZGV4p5qPhKivr9pQU4Fj2m5NtlMrucbyAZpg1Nt3oTFeWRHhvEdzEHQJb
-         +6hSSk6NN652EjaxxL5nDSk4pns3eNV44aGhP8SqSVsc6i+DKnJV0Bsn1Okc42cUrQ
-         id/xZtfC9huGePDw1Z5AeLct2dbqhSgib0VmbA0vituQtsja2PajGDzI8LwSWeAoom
-         s6SfZkUuL9xHmoVdoUQlos4JQfCiHMY7qdfN5c2FRDtJ0oG3KKI2mKDwJTwagcXN56
-         GRqiWnDr+ccyw==
+        b=Ur/8H1nzsWMd18UFJSis2LzxRxMT0etGQY1EU7tUxDgM429eBXfOEl20eRm0+AwOG
+         rOlwDzpJPJSatY0y8PG3jpjwrKdKSL35Dhr99Pv/HdYIOEVGQkOFDI8j3MR5Y3MQZS
+         XiZVfsJMgZ6SbILiTAzPAYeGgNfdtIgAx+HcIXw28YmlsoUi0FvCCM4Rh4G0o+AssT
+         SH+kcAfYo764Pz4HWUPREOvWlHdcLy5xJexKqHEdvBOva0JdNGT/4JjdjRYKixqhYi
+         MJFCVMLaeWaCCnYlgHzEMoCXjH1t32ewMtksK2Qh/IUaRtCAbgf4lk6hW/nMiICdqO
+         yjhGXAzoVKZDw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Zhong Jinghua <zhongjinghua@huawei.com>,
-        Yu Kuai <yukuai3@huawei.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>,
-        linux-block@vger.kernel.org, nbd@other.debian.org
-Subject: [PATCH AUTOSEL 5.15 26/30] nbd: fix incomplete validation of ioctl arg
-Date:   Thu,  4 May 2023 15:48:19 -0400
-Message-Id: <20230504194824.3808028-26-sashal@kernel.org>
+Cc:     Simon Horman <horms@kernel.org>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Sasha Levin <sashal@kernel.org>, davem@davemloft.net,
+        dsahern@kernel.org, horms@verge.net.au, ja@ssi.bg,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        kadlec@netfilter.org, fw@strlen.de, netdev@vger.kernel.org,
+        lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org
+Subject: [PATCH AUTOSEL 5.15 27/30] ipvs: Update width of source for ip_vs_sync_conn_options
+Date:   Thu,  4 May 2023 15:48:20 -0400
+Message-Id: <20230504194824.3808028-27-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230504194824.3808028-1-sashal@kernel.org>
 References: <20230504194824.3808028-1-sashal@kernel.org>
@@ -49,8 +53,8 @@ MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,80 +63,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhong Jinghua <zhongjinghua@huawei.com>
+From: Simon Horman <horms@kernel.org>
 
-[ Upstream commit 55793ea54d77719a071b1ccc05a05056e3b5e009 ]
+[ Upstream commit e3478c68f6704638d08f437cbc552ca5970c151a ]
 
-We tested and found an alarm caused by nbd_ioctl arg without verification.
-The UBSAN warning calltrace like below:
+In ip_vs_sync_conn_v0() copy is made to struct ip_vs_sync_conn_options.
+That structure looks like this:
 
-UBSAN: Undefined behaviour in fs/buffer.c:1709:35
-signed integer overflow:
--9223372036854775808 - 1 cannot be represented in type 'long long int'
-CPU: 3 PID: 2523 Comm: syz-executor.0 Not tainted 4.19.90 #1
-Hardware name: linux,dummy-virt (DT)
-Call trace:
- dump_backtrace+0x0/0x3f0 arch/arm64/kernel/time.c:78
- show_stack+0x28/0x38 arch/arm64/kernel/traps.c:158
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x170/0x1dc lib/dump_stack.c:118
- ubsan_epilogue+0x18/0xb4 lib/ubsan.c:161
- handle_overflow+0x188/0x1dc lib/ubsan.c:192
- __ubsan_handle_sub_overflow+0x34/0x44 lib/ubsan.c:206
- __block_write_full_page+0x94c/0xa20 fs/buffer.c:1709
- block_write_full_page+0x1f0/0x280 fs/buffer.c:2934
- blkdev_writepage+0x34/0x40 fs/block_dev.c:607
- __writepage+0x68/0xe8 mm/page-writeback.c:2305
- write_cache_pages+0x44c/0xc70 mm/page-writeback.c:2240
- generic_writepages+0xdc/0x148 mm/page-writeback.c:2329
- blkdev_writepages+0x2c/0x38 fs/block_dev.c:2114
- do_writepages+0xd4/0x250 mm/page-writeback.c:2344
+struct ip_vs_sync_conn_options {
+        struct ip_vs_seq        in_seq;
+        struct ip_vs_seq        out_seq;
+};
 
-The reason for triggering this warning is __block_write_full_page()
--> i_size_read(inode) - 1 overflow.
-inode->i_size is assigned in __nbd_ioctl() -> nbd_set_size() -> bytesize.
-We think it is necessary to limit the size of arg to prevent errors.
+The source of the copy is the in_seq field of struct ip_vs_conn.  Whose
+type is struct ip_vs_seq. Thus we can see that the source - is not as
+wide as the amount of data copied, which is the width of struct
+ip_vs_sync_conn_option.
 
-Moreover, __nbd_ioctl() -> nbd_add_socket(), arg will be cast to int.
-Assuming the value of arg is 0x80000000000000001) (on a 64-bit machine),
-it will become 1 after the coercion, which will return unexpected results.
+The copy is safe because the next field in is another struct ip_vs_seq.
+Make use of struct_group() to annotate this.
 
-Fix it by adding checks to prevent passing in too large numbers.
+Flagged by gcc-13 as:
 
-Signed-off-by: Zhong Jinghua <zhongjinghua@huawei.com>
-Reviewed-by: Yu Kuai <yukuai3@huawei.com>
-Reviewed-by: Josef Bacik <josef@toxicpanda.com>
-Link: https://lore.kernel.org/r/20230206145805.2645671-1-zhongjinghua@huawei.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+ In file included from ./include/linux/string.h:254,
+                  from ./include/linux/bitmap.h:11,
+                  from ./include/linux/cpumask.h:12,
+                  from ./arch/x86/include/asm/paravirt.h:17,
+                  from ./arch/x86/include/asm/cpuid.h:62,
+                  from ./arch/x86/include/asm/processor.h:19,
+                  from ./arch/x86/include/asm/timex.h:5,
+                  from ./include/linux/timex.h:67,
+                  from ./include/linux/time32.h:13,
+                  from ./include/linux/time.h:60,
+                  from ./include/linux/stat.h:19,
+                  from ./include/linux/module.h:13,
+                  from net/netfilter/ipvs/ip_vs_sync.c:38:
+ In function 'fortify_memcpy_chk',
+     inlined from 'ip_vs_sync_conn_v0' at net/netfilter/ipvs/ip_vs_sync.c:606:3:
+ ./include/linux/fortify-string.h:529:25: error: call to '__read_overflow2_field' declared with attribute warning: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Werror=attribute-warning]
+   529 |                         __read_overflow2_field(q_size_field, size);
+       |
+
+Compile tested only.
+
+Signed-off-by: Simon Horman <horms@kernel.org>
+Reviewed-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/block/nbd.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ include/net/ip_vs.h             | 6 ++++--
+ net/netfilter/ipvs/ip_vs_sync.c | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
-index ade8b839e4458..394355f12d4e0 100644
---- a/drivers/block/nbd.c
-+++ b/drivers/block/nbd.c
-@@ -326,6 +326,9 @@ static int nbd_set_size(struct nbd_device *nbd, loff_t bytesize,
- 	if (blksize < 512 || blksize > PAGE_SIZE || !is_power_of_2(blksize))
- 		return -EINVAL;
+diff --git a/include/net/ip_vs.h b/include/net/ip_vs.h
+index 7cb5a1aace40d..59f8412de45ac 100644
+--- a/include/net/ip_vs.h
++++ b/include/net/ip_vs.h
+@@ -549,8 +549,10 @@ struct ip_vs_conn {
+ 	 */
+ 	struct ip_vs_app        *app;           /* bound ip_vs_app object */
+ 	void                    *app_data;      /* Application private data */
+-	struct ip_vs_seq        in_seq;         /* incoming seq. struct */
+-	struct ip_vs_seq        out_seq;        /* outgoing seq. struct */
++	struct_group(sync_conn_opt,
++		struct ip_vs_seq  in_seq;       /* incoming seq. struct */
++		struct ip_vs_seq  out_seq;      /* outgoing seq. struct */
++	);
  
-+	if (bytesize < 0)
-+		return -EINVAL;
-+
- 	nbd->config->bytesize = bytesize;
- 	nbd->config->blksize_bits = __ffs(blksize);
+ 	const struct ip_vs_pe	*pe;
+ 	char			*pe_data;
+diff --git a/net/netfilter/ipvs/ip_vs_sync.c b/net/netfilter/ipvs/ip_vs_sync.c
+index a56fd0b5a430a..0d89e68dc9d18 100644
+--- a/net/netfilter/ipvs/ip_vs_sync.c
++++ b/net/netfilter/ipvs/ip_vs_sync.c
+@@ -603,7 +603,7 @@ static void ip_vs_sync_conn_v0(struct netns_ipvs *ipvs, struct ip_vs_conn *cp,
+ 	if (cp->flags & IP_VS_CONN_F_SEQ_MASK) {
+ 		struct ip_vs_sync_conn_options *opt =
+ 			(struct ip_vs_sync_conn_options *)&s[1];
+-		memcpy(opt, &cp->in_seq, sizeof(*opt));
++		memcpy(opt, &cp->sync_conn_opt, sizeof(*opt));
+ 	}
  
-@@ -1048,6 +1051,9 @@ static int nbd_add_socket(struct nbd_device *nbd, unsigned long arg,
- 	struct nbd_sock *nsock;
- 	int err;
- 
-+	/* Arg will be cast to int, check it to avoid overflow */
-+	if (arg > INT_MAX)
-+		return -EINVAL;
- 	sock = nbd_get_socket(nbd, arg, &err);
- 	if (!sock)
- 		return err;
+ 	m->nr_conns++;
 -- 
 2.39.2
 
