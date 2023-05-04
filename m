@@ -2,80 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51B286F6552
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 08:54:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 373BE6F6543
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 08:51:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbjEDGyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 02:54:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59344 "EHLO
+        id S229653AbjEDGv0 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 4 May 2023 02:51:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbjEDGyH (ORCPT
+        with ESMTP id S229446AbjEDGvZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 02:54:07 -0400
-Received: from hust.edu.cn (unknown [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC91F30F2
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 23:54:03 -0700 (PDT)
-Received: from dd-virtual-machine.localdomain ([183.202.113.128])
-        (user=u202112092@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 3446pF6h014815-3446pF6i014815
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
-        Thu, 4 May 2023 14:51:25 +0800
-From:   Ruliang Lin <u202112092@hust.edu.cn>
-To:     Daniel Mack <zonque@gmail.com>, Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Karsten Wiese <fzu@wemgehoertderstaat.de>
-Cc:     hust-os-kernel-patches@googlegroups.com,
-        Ruliang Lin <u202112092@hust.edu.cn>,
-        Dongliang Mu <dzm91@hust.edu.cn>,
-        Daniel Mack <daniel@caiaq.org>,
-        Jaroslav Kysela <perex@suse.cz>, Takashi Iwai <tiwai@suse.de>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] sound: caiaq: input: Add error handling for unsupported input methods in `snd_usb_caiaq_input_init`
-Date:   Thu,  4 May 2023 14:50:53 +0800
-Message-Id: <20230504065054.3309-1-u202112092@hust.edu.cn>
-X-Mailer: git-send-email 2.25.1
+        Thu, 4 May 2023 02:51:25 -0400
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 616712122;
+        Wed,  3 May 2023 23:51:24 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-55a64f0053fso326137b3.3;
+        Wed, 03 May 2023 23:51:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683183083; x=1685775083;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1Nj97YY7b/CTteeKTlfDBS+ZuRuN+BV3rZ34zkwVtF4=;
+        b=JsAD7LvXay1hi9dQbEU/F3972dDT8JGBaR4u9aNaDgXaiViaewT8pFumg4KfZaqKvo
+         16oyc/Q9c5wwOtnUzqveZzl34tATUSef2sFFB5Jyq5KBF3E70tdPSsvd1ZLufjz0IwD3
+         lFsgwp7grzVDPzviGR3LZitN437wXpIvia09XT09PTE5Zsce7rGGbVPKY2gzV6HLdwsn
+         44Zo5+Ea4CL6jNaV4oRgpHEfQnu2d4UTJi+sh3BuLsJIaD5aivT2dFkYesurH17wFdHE
+         FC5dFp7awtvws1JSpFQ5Zh7YrmCYr7z/GbBctA6Tw02yuENp3iun1O+p8sDrpiWM5h2C
+         jTzg==
+X-Gm-Message-State: AC+VfDyHvdiyrQs7u2wwwXks20thXZ+tz7qRB4lS+ly4OCqNGnQ11ofW
+        BDbmIXZacornlLko/y75iJZhebcaTker0w==
+X-Google-Smtp-Source: ACHHUZ4rnyLgmjHMXh2f7KtYDBFyUKYU0cvLbJH0edjKvgVLV9Peqju2vxmJ+1BR7/6VCjKNfFC1kg==
+X-Received: by 2002:a81:8782:0:b0:541:8c8f:ec14 with SMTP id x124-20020a818782000000b005418c8fec14mr1195074ywf.14.1683183083397;
+        Wed, 03 May 2023 23:51:23 -0700 (PDT)
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
+        by smtp.gmail.com with ESMTPSA id d13-20020a81d34d000000b0055d7f00d4f7sm63632ywl.22.2023.05.03.23.51.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 May 2023 23:51:23 -0700 (PDT)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-55a64f0053fso326037b3.3;
+        Wed, 03 May 2023 23:51:23 -0700 (PDT)
+X-Received: by 2002:a0d:d754:0:b0:55a:792:8c20 with SMTP id
+ z81-20020a0dd754000000b0055a07928c20mr1301034ywd.6.1683183082864; Wed, 03 May
+ 2023 23:51:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-FEAS-AUTH-USER: u202112092@hust.edu.cn
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <ZFLI7T2qZTGJ1UUK@google.com>
+In-Reply-To: <ZFLI7T2qZTGJ1UUK@google.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 4 May 2023 08:51:10 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWti0AheYvUYOVnQkgu38=zqsQbDEGj84s-ZgMn0nRXbg@mail.gmail.com>
+Message-ID: <CAMuHMdWti0AheYvUYOVnQkgu38=zqsQbDEGj84s-ZgMn0nRXbg@mail.gmail.com>
+Subject: Re: [PATCH] Input: tests - fix input_test_match_device_id test
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     linux-input@vger.kernel.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Smatch complains that:
-snd_usb_caiaq_input_init() warn: missing error code 'ret'
+On Wed, May 3, 2023 at 10:49 PM Dmitry Torokhov
+<dmitry.torokhov@gmail.com> wrote:
+> Properly initialize input_device_id structure in
+> input_test_match_device_id test to make sure it contains no garbage
+> causing the test to randomly fail.
+>
+> Fixes: fdefcbdd6f36 ("Input: Add KUnit tests for some of the input core helper functions")
+> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
-This patch adds a new case to handle the situation where the 
-device does not support any input methods in the 
-`snd_usb_caiaq_input_init` function. It returns an `-EINVAL` error code 
-to indicate that no input methods are supported on the device.
+Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Fixes: 523f1dce3743 ("[ALSA] Add Native Instrument usb audio device support")
-Signed-off-by: Ruliang Lin <u202112092@hust.edu.cn>
-Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
----
-The issue is found by static analyzer. The patched code has passed
-Smatch checker, but remains untested on real device.
----
- sound/usb/caiaq/input.c | 1 +
- 1 file changed, 1 insertion(+)
+Gr{oetje,eeting}s,
 
-diff --git a/sound/usb/caiaq/input.c b/sound/usb/caiaq/input.c
-index 1e2cf2f08eec..84f26dce7f5d 100644
---- a/sound/usb/caiaq/input.c
-+++ b/sound/usb/caiaq/input.c
-@@ -804,6 +804,7 @@ int snd_usb_caiaq_input_init(struct snd_usb_caiaqdev *cdev)
- 
- 	default:
- 		/* no input methods supported on this device */
-+		ret = -EINVAL;
- 		goto exit_free_idev;
- 	}
- 
+                        Geert
+
 -- 
-2.25.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
