@@ -2,82 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE3DF6F6D4E
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 15:51:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D09F56F6D53
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 15:51:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231215AbjEDNu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 09:50:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41976 "EHLO
+        id S231283AbjEDNvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 09:51:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231191AbjEDNu5 (ORCPT
+        with ESMTP id S231278AbjEDNvV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 09:50:57 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B371A6
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 06:50:56 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-2f55ffdbaedso349443f8f.2
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 06:50:56 -0700 (PDT)
+        Thu, 4 May 2023 09:51:21 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 357477A99
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 06:51:19 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f19323259dso5421895e9.3
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 06:51:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683208254; x=1685800254;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:reply-to:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=CBa5yf09RWH4yiJkKKfGA5cpxuaznqIjeI5vqh5jKnc=;
-        b=xXTCdKLJQRFOFCzlTq25XVRG7iQ2YTig8JrOBlX202YIt83MpXRScjaLxgVkY0zWnX
-         DAVukRu+mKp/O1lsgwViKkyFW5TflkdO+9RSnOsPHJf1UAuvmWhLpdvus2AS6Xx56NDm
-         CfWYEWqfh/q/sQRS9cAWeu5+0DKAw8bGkidhmv8yzMLKCAVlMYDjKTkaErzmqMlx9vh1
-         DbS/JUBo+CCNe2h2qgjAEEJuEUOYtQ2xsNqwMrt8nEvQB4N73in46NuRPL+RS0Rw5t61
-         ZjElPUzI86zAglFLOI5kjjaAYdQ2zK8mOxkBdMX3cvwx4ZC5ZEWZEDh6z887sMcghrwC
-         EYaQ==
+        d=linaro.org; s=google; t=1683208277; x=1685800277;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ia+gttW4I6LvUBG5SY7+uvZOarzTht1TFNe05mMpTpk=;
+        b=pB+A7cw/XPrev2umTc3YsHilspF6/U/QiIgfXIniedgiA08ah46Deykj946XMt0u2y
+         Mw+tBWUfmBc4iaXx5HNGNp944Puirx1W0gsAjLeqU8v0GTl4+2WSMWcMYBJyPfmagPtc
+         JjQXWu5XVJ7Qg1Sr52c08EgHuYMgbB+9RMEzHg8qsv/MweVK0BVQnEffpSXVijyW0UI0
+         oAZ+N6Fd8fGQuSatWZHCrO8qVLlpYBerll24uNGCmp223+7HStfZWX0nXRcoYyasosjh
+         iqnlSL4E/SRzrxmm5EGEvjLpIn2oyKifdqbIMpoFt6APqYxykGIDAF53fPdzzD2Mwvbg
+         c0BA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683208254; x=1685800254;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:reply-to:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CBa5yf09RWH4yiJkKKfGA5cpxuaznqIjeI5vqh5jKnc=;
-        b=L/fmV1ucOm3P03xJH0MX0g2sNiExiDlPLsnAwnlD/6bvWDTmp1NDV2mBXit3G5MXEK
-         Oj2VsIx/cVpHXtHAfUlOEFQ7fTXIKT5UpDQ5VFu0eyVQKUGtHVLbP+7Gf32eFxJrdjX2
-         UMrT9JkKFNct1eK2+crCJT0ZmyTbdW1o/sg0xX8iIfd/FKAeEDyHJvWIgZSVx6kq/swy
-         vsMtScPQBfi8aZRLORt04y4ptSiPjQYnzHwY5AbA9+AmFxYMQ6Z1cV/lRurLvgSGA9mZ
-         zH81LkOdeVXR07uYjXQ1JvtydqaiODedEw3oEh9QTNnz8eAtyil4adnrSdgIiqjp8zkE
-         JqEg==
-X-Gm-Message-State: AC+VfDxfr7pF5TWWuZNSpycx+1JNfGTc+uLPCh019YKodCvJvX4baFua
-        DT2Wmjj4XO00yG4Yh8otEfQRqA==
-X-Google-Smtp-Source: ACHHUZ5cfrBrKo0XKh8lYl7HP9vVSfMA8XPRqej+s9gQ4qUP1IFXfzgg0heMVynEUJsKqQXaLU6aZw==
-X-Received: by 2002:a05:6000:1b82:b0:306:2a21:b5ff with SMTP id r2-20020a0560001b8200b003062a21b5ffmr2371851wru.17.1683208254591;
-        Thu, 04 May 2023 06:50:54 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:52fb:80bd:bee3:f741? ([2a01:e0a:982:cbb0:52fb:80bd:bee3:f741])
-        by smtp.gmail.com with ESMTPSA id y6-20020a1c4b06000000b003f17131952fsm4982246wma.29.2023.05.04.06.50.53
+        d=1e100.net; s=20221208; t=1683208277; x=1685800277;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ia+gttW4I6LvUBG5SY7+uvZOarzTht1TFNe05mMpTpk=;
+        b=d44+1UsvKkMcoXuzb/EdoT6RoBwnzFjHfnq3cjmdl8AoSgjDoc9v4C+fWVc1ZWjmil
+         hYzBimUhU/20rvAXgVd5iPKeffQiDgGgyH+nRX3tSF0IY2BsnyK/fMMKdeslDHPjmJnh
+         4N8iW+5P28JKRa7UexKV4L+dpFSlVJlIvYXRci/d+0SedG80o7W6gRY0kDOvSCCtl00y
+         9/NiRN4XSLT/2QsLkrKhbyqw+2J0+TuGyG2oftJDpWIBezTb4eIMxenUuK5+ZPGZ+Lpc
+         nsA5CcJUZtZ4OS7rL7WbBb8z7ULpapKMzUpGXFjnC8WavlK+fjcqhOCy8s3b62KorN6T
+         ubuA==
+X-Gm-Message-State: AC+VfDwQyVHyVQOkDYxDUQdDhvSGbDhxBNZBGGL8irQ060vcmNtOnGYk
+        +EbAdB+MLzfGL+ALe5XpA+QvfA==
+X-Google-Smtp-Source: ACHHUZ6ZwWaOz2K2WY4hZIZsmmaqvKeH1ItRgvGs0B/4byIMgWQUU4hx3hiPHFqMPR4D2l2Nrt2SUg==
+X-Received: by 2002:a7b:c4d9:0:b0:3ee:96f0:ea31 with SMTP id g25-20020a7bc4d9000000b003ee96f0ea31mr16924743wmk.18.1683208277602;
+        Thu, 04 May 2023 06:51:17 -0700 (PDT)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id v15-20020a05600c214f00b003f18141a016sm5010961wml.18.2023.05.04.06.51.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 06:50:54 -0700 (PDT)
-Message-ID: <ea0ec8b4-ec87-65f0-4f0e-504d8059b1e6@linaro.org>
-Date:   Thu, 4 May 2023 15:50:53 +0200
+        Thu, 04 May 2023 06:51:17 -0700 (PDT)
+Message-ID: <66b8e665-1038-127a-1f4f-20d8fe7bcd8e@linaro.org>
+Date:   Thu, 4 May 2023 14:51:16 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 1/7] dt-bindings: phy: qcom,sc8280xp-qmp-usb43dp: Add
- ports and orientation-switch
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 0/4] venus: add support for 10 bit decoding
 Content-Language: en-US
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Bryan O'Donoghue <pure.logic@nexus-software.ie>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Johan Hovold <johan@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230425034010.3789376-1-quic_bjorande@quicinc.com>
- <20230425034010.3789376-2-quic_bjorande@quicinc.com>
- <CAJB8c06H+3pxoUGXWOXyCgtbOj6y0OhSxb9dvoTo1b6iChy7ng@mail.gmail.com>
- <20230427195232.GB870858@hu-bjorande-lv.qualcomm.com>
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <20230427195232.GB870858@hu-bjorande-lv.qualcomm.com>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     Dikshita Agarwal <quic_dikshita@quicinc.com>,
+        linux-media@vger.kernel.org, stanimir.k.varbanov@gmail.com,
+        quic_vgarodia@quicinc.com, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, mchehab@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <1683196599-3730-1-git-send-email-quic_dikshita@quicinc.com>
+ <8df7f24b-9dbe-4491-bcb1-f53021bb482f@linaro.org>
+In-Reply-To: <8df7f24b-9dbe-4491-bcb1-f53021bb482f@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -90,67 +78,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/04/2023 21:52, Bjorn Andersson wrote:
-> On Wed, Apr 26, 2023 at 11:21:29AM +0100, Bryan O'Donoghue wrote:
->> On Tue, Apr 25, 2023 at 4:40 AM Bjorn Andersson
->> <quic_bjorande@quicinc.com> wrote:
->>>
->>> The QMP combo phy can be connected to a TCPM, a USB controller and a
->>> DisplayPort controller for handling USB Type-C orientation switching
->>> and propagating HPD signals.
->>>
->>> Extend the binding to allow these connections to be described.
->>>
->>> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
->>> ---
->>>   .../phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml    | 51 +++++++++++++++++++
->>>   1 file changed, 51 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml
->>> index 3cd5fc3e8fab..c037ac90ce7f 100644
->>> --- a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml
->>> +++ b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml
->>> @@ -60,6 +60,26 @@ properties:
->>>       description:
->>>         See include/dt-bindings/dt-bindings/phy/phy-qcom-qmp.h
->>>
->>> +  orientation-switch:
->>> +    description:
->>> +      Flag the PHY as possible handler of USB Type-C orientation switching
->>> +    type: boolean
->>> +
->>> +  ports:
->>> +    $ref: /schemas/graph.yaml#/properties/ports
->>> +    properties:
->>> +      port@0:
->>> +        $ref: /schemas/graph.yaml#/properties/port
->>> +        description: Output endpoint of the PHY
->>> +
->>> +      port@1:
->>> +        $ref: /schemas/graph.yaml#/$defs/port-base
->>> +        description: Incoming endpoint from the USB controller
+On 04/05/2023 14:49, Bryan O'Donoghue wrote:
+> On 04/05/2023 11:36, Dikshita Agarwal wrote:
+>> This series includes the changes to
+>>    - add V4L2_PIX_FMT_P010 as supported decoder format.
+>>    - consider dpb color format while calculating buffer
+>>      size for dpb buffers.
+>>    - update dpb and opb color format when bit depth
+>>      changes is detected, also update preferred color
+>>      format to P010 in this case.
 >>
->> Do you really need this one ?
+>> With this series, divided the previous version [1] into
+>> multiple patches as suggested in review comments.
 >>
->> The controller doesn't process orientation switching.
+>> [1] https://patchwork.linuxtv.org/project/linux-media/list/?series=10376
+>>
+>> Dikshita Agarwal (4):
+>>    venus: add support for V4L2_PIX_FMT_P010 color format
+>>    venus: update calculation for dpb buffers
+>>    venus: add handling of bit depth change from firmwar
+>>    venus: return P010 as preferred format for 10 bit decode
+>>
+>>   drivers/media/platform/qcom/venus/helpers.c        | 24 
+>> ++++++++++++++++++++++
+>>   drivers/media/platform/qcom/venus/hfi_plat_bufs.h  |  3 +++
+>>   .../media/platform/qcom/venus/hfi_plat_bufs_v6.c   |  8 +++++++-
+>>   drivers/media/platform/qcom/venus/vdec.c           | 16 +++++++++++++--
+>>   4 files changed, 48 insertions(+), 3 deletions(-)
 >>
 > 
-> I don't have a need for it, as we can deal with role switching by
-> connecting connector/port@0 to the dwc3.
+> For future reference a series like this should:
 > 
-> But if we ever have a need to describe the dwc3 -> QMP -> connector path
-> in the of_graph I think it would look prettier to have USB input as
-> port@1 and DP input as port@2...
-
-I think it would be great to have port@1 for USB SS and port@2 for DP,
-otherwise we need to add 2 endpoints as I sent in
-https://lore.kernel.org/all/20230503-topic-sm8450-graphics-dp-next-v1-1-d1ee9397f2a6@linaro.org/
-since we split USB HS and SS streams on SM8[345]50 platforms.
-
+> 1. Include a log of what changed between the last series and this
+> 2. Describe which comments you addressed
+>     I generally try to say
+>     "Added newline to dts - Konrad"
+>     "Sent the series as a -v3 - Bryan"
+>     etc
+> 3. Ideally provide a link to the previous series in
 > 
-> Do you have a concern with keeping it around in the DT (the
-> implementation doesn't need to care)?
+> https://lore.kernel.org/linux-arm-msm/1682492417-20496-1-git-send-email-quic_dikshita@quicinc.com/
+> 4. Use versioning
+>     This set should be prefixed with "v2-0000-cover-letter" 
+> "v2-0001-add-support" etc
 > 
-> Regards,
-> Bjorn
+> "git format-patch mybase..targettip --cover-letter -v2"
+> 
+> ---
+> bod
 
+Doh I see you did most of that - just missed the V2.
+
+Please remember to version your subsequent series. "git format-patch -v2"
+
+---
+bod
