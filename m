@@ -2,47 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2FCB6F767C
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 22:07:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C48C6F767E
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 22:07:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232735AbjEDUHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 16:07:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34456 "EHLO
+        id S232833AbjEDUH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 16:07:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233009AbjEDUFl (ORCPT
+        with ESMTP id S233113AbjEDUFy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 16:05:41 -0400
+        Thu, 4 May 2023 16:05:54 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48F519925;
-        Thu,  4 May 2023 12:53:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE5A1155E;
+        Thu,  4 May 2023 12:53:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BEDA63899;
-        Thu,  4 May 2023 19:52:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDF67C433EF;
-        Thu,  4 May 2023 19:52:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6120863896;
+        Thu,  4 May 2023 19:52:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F16FC433EF;
+        Thu,  4 May 2023 19:52:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683229953;
-        bh=HIskSI5/26AxnyRWmrGkaPUF4mHYJscsMvsbDYG59lw=;
+        s=k20201202; t=1683229957;
+        bh=pzrIXfi7gV7ykgOMQStKn2hAyn6kw7nxxYZ9R2tI8qY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Kpkvu4MU0SX+bM89RG9ZuW96ojSxl0BXxRjSY7Ncl65IcvnNiTusLScXnXqrEZZZY
-         OjN720EileXwja65831f88ItBifaqFfI1MdAiQijG+ZT0RhMz9tZloLFvjnbiA62hZ
-         WR0231eNYfMOl0TTKkgq9r9aBBE2Z8Nwnzkf1+0YMWAz2vGYZwES0X9pbta9bw7lxw
-         cF8s+Hkh/3vPsHMe3NTkOzU09MSSGjmhrWrVUSKlUpFmmq35vCUTF70fhqRIMLF3zy
-         TiwvvylKhsIF0jFgVzgPU0lgTVYk4Z2EnDsKihFho0df+OUjSM4hR1Q4JVB51VKhOm
-         qo+WASSiATzqQ==
+        b=sZxge0qMkT/02w5RXOK9HlwbvsN4Z3z0JJJ5og16D8xEBjQ1/drA8/AxOLQx3EDLS
+         CyrIMsLp7NRvuCFNHEZn9hRtG4llcrd9it1BGfdc/8MOw8e5WWlyIZ6uS7aUVlP6bD
+         cjLf1hQGRJwELF9mOm0fFdZk4h/LKy5HA9kVXPWChunwDBCWOH5+EYd8mqK70hi4I/
+         m016a+UHlIOFIpKNHnLL3S9/hAZieXorv9POgGZjNAmWBmVlk/o15NapZolPjhsVEv
+         SL0tHsC1rPqqrDspWEu7whXQzgwyV8a/tVp/FTvRd4hJqQxMYZJ9famsirR2+kMA9t
+         ifOjTqnFhB/Ng==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Chaitanya Kulkarni <kch@nvidia.com>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        Ming Lei <ming.lei@redhat.com>,
-        Nitesh Shetty <nj.shetty@samsung.com>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>,
-        linux-block@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 11/13] null_blk: Always check queue mode setting from configfs
-Date:   Thu,  4 May 2023 15:52:03 -0400
-Message-Id: <20230504195207.3809116-11-sashal@kernel.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Sasha Levin <sashal@kernel.org>, gregory.greenman@intel.com,
+        kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, benjamin.berg@intel.com,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 12/13] wifi: iwlwifi: dvm: Fix memcpy: detected field-spanning write backtrace
+Date:   Thu,  4 May 2023 15:52:04 -0400
+Message-Id: <20230504195207.3809116-12-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230504195207.3809116-1-sashal@kernel.org>
 References: <20230504195207.3809116-1-sashal@kernel.org>
@@ -60,85 +62,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chaitanya Kulkarni <kch@nvidia.com>
+From: Hans de Goede <hdegoede@redhat.com>
 
-[ Upstream commit 63f8793ee60513a09f110ea460a6ff2c33811cdb ]
+[ Upstream commit ef16799640865f937719f0771c93be5dca18adc6 ]
 
-Make sure to check device queue mode in the null_validate_conf() and
-return error for NULL_Q_RQ as we don't allow legacy I/O path, without
-this patch we get OOPs when queue mode is set to 1 from configfs,
-following are repro steps :-
+A received TKIP key may be up to 32 bytes because it may contain
+MIC rx/tx keys too. These are not used by iwl and copying these
+over overflows the iwl_keyinfo.key field.
 
-modprobe null_blk nr_devices=0
-mkdir config/nullb/nullb0
-echo 1 > config/nullb/nullb0/memory_backed
-echo 4096 > config/nullb/nullb0/blocksize
-echo 20480 > config/nullb/nullb0/size
-echo 1 > config/nullb/nullb0/queue_mode
-echo 1 > config/nullb/nullb0/power
+Add a check to not copy more data to iwl_keyinfo.key then will fit.
 
-Entering kdb (current=0xffff88810acdd080, pid 2372) on processor 42 Oops: (null)
-due to oops @ 0xffffffffc041c329
-CPU: 42 PID: 2372 Comm: sh Tainted: G           O     N 6.3.0-rc5lblk+ #5
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
-RIP: 0010:null_add_dev.part.0+0xd9/0x720 [null_blk]
-Code: 01 00 00 85 d2 0f 85 a1 03 00 00 48 83 bb 08 01 00 00 00 0f 85 f7 03 00 00 80 bb 62 01 00 00 00 48 8b 75 20 0f 85 6d 02 00 00 <48> 89 6e 60 48 8b 75 20 bf 06 00 00 00 e8 f5 37 2c c1 48 8b 75 20
-RSP: 0018:ffffc900052cbde0 EFLAGS: 00010246
-RAX: 0000000000000001 RBX: ffff88811084d800 RCX: 0000000000000001
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff888100042e00
-RBP: ffff8881053d8200 R08: ffffc900052cbd68 R09: ffff888105db2000
-R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000002
-R13: ffff888104765200 R14: ffff88810eec1748 R15: ffff88810eec1740
-FS:  00007fd445fd1740(0000) GS:ffff8897dfc80000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000060 CR3: 0000000166a00000 CR4: 0000000000350ee0
-DR0: ffffffff8437a488 DR1: ffffffff8437a489 DR2: ffffffff8437a48a
-DR3: ffffffff8437a48b DR6: 00000000ffff0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- nullb_device_power_store+0xd1/0x120 [null_blk]
- configfs_write_iter+0xb4/0x120
- vfs_write+0x2ba/0x3c0
- ksys_write+0x5f/0xe0
- do_syscall_64+0x3b/0x90
- entry_SYSCALL_64_after_hwframe+0x72/0xdc
-RIP: 0033:0x7fd4460c57a7
-Code: 0d 00 f7 d8 64 89 02 48 c7 c0 ff ff ff ff eb b7 0f 1f 00 f3 0f 1e fa 64 8b 04 25 18 00 00 00 85 c0 75 10 b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 51 c3 48 83 ec 28 48 89 54 24 18 48 89 74 24
-RSP: 002b:00007ffd3792a4a8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007fd4460c57a7
-RDX: 0000000000000002 RSI: 000055b43c02e4c0 RDI: 0000000000000001
-RBP: 000055b43c02e4c0 R08: 000000000000000a R09: 00007fd44615b4e0
-R10: 00007fd44615b3e0 R11: 0000000000000246 R12: 0000000000000002
-R13: 00007fd446198520 R14: 0000000000000002 R15: 00007fd446198700
- </TASK>
+This fixes backtraces like this one:
 
-Signed-off-by: Chaitanya Kulkarni <kch@nvidia.com>
-Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
-Reviewed-by: Ming Lei <ming.lei@redhat.com>
-Reviewed-by: Nitesh Shetty <nj.shetty@samsung.com>
-Link: https://lore.kernel.org/r/20230416220339.43845-1-kch@nvidia.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+ memcpy: detected field-spanning write (size 32) of single field "sta_cmd.key.key" at drivers/net/wireless/intel/iwlwifi/dvm/sta.c:1103 (size 16)
+ WARNING: CPU: 1 PID: 946 at drivers/net/wireless/intel/iwlwifi/dvm/sta.c:1103 iwlagn_send_sta_key+0x375/0x390 [iwldvm]
+ <snip>
+ Hardware name: Dell Inc. Latitude E6430/0H3MT5, BIOS A21 05/08/2017
+ RIP: 0010:iwlagn_send_sta_key+0x375/0x390 [iwldvm]
+ <snip>
+ Call Trace:
+  <TASK>
+  iwl_set_dynamic_key+0x1f0/0x220 [iwldvm]
+  iwlagn_mac_set_key+0x1e4/0x280 [iwldvm]
+  drv_set_key+0xa4/0x1b0 [mac80211]
+  ieee80211_key_enable_hw_accel+0xa8/0x2d0 [mac80211]
+  ieee80211_key_replace+0x22d/0x8e0 [mac80211]
+ <snip>
+
+Link: https://www.alionet.org/index.php?topic=1469.0
+Link: https://lore.kernel.org/linux-wireless/20230218191056.never.374-kees@kernel.org/
+Link: https://lore.kernel.org/linux-wireless/68760035-7f75-1b23-e355-bfb758a87d83@redhat.com/
+Cc: Kees Cook <keescook@chromium.org>
+Suggested-by: Johannes Berg <johannes@sipsolutions.net>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/block/null_blk.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/net/wireless/intel/iwlwifi/dvm/sta.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/block/null_blk.c b/drivers/block/null_blk.c
-index b499e72b2847e..38660b5cfb73c 100644
---- a/drivers/block/null_blk.c
-+++ b/drivers/block/null_blk.c
-@@ -1780,6 +1780,11 @@ static int null_init_tag_set(struct nullb *nullb, struct blk_mq_tag_set *set)
- 
- static void null_validate_conf(struct nullb_device *dev)
+diff --git a/drivers/net/wireless/intel/iwlwifi/dvm/sta.c b/drivers/net/wireless/intel/iwlwifi/dvm/sta.c
+index de6ec9b7ace45..f30bac02d32ce 100644
+--- a/drivers/net/wireless/intel/iwlwifi/dvm/sta.c
++++ b/drivers/net/wireless/intel/iwlwifi/dvm/sta.c
+@@ -1101,6 +1101,7 @@ static int iwlagn_send_sta_key(struct iwl_priv *priv,
  {
-+	if (dev->queue_mode == NULL_Q_RQ) {
-+		pr_err("legacy IO path is no longer available\n");
-+		return -EINVAL;
-+	}
-+
- 	dev->blocksize = round_down(dev->blocksize, 512);
- 	dev->blocksize = clamp_t(unsigned int, dev->blocksize, 512, 4096);
- 	if (dev->use_lightnvm && dev->blocksize != 4096)
+ 	__le16 key_flags;
+ 	struct iwl_addsta_cmd sta_cmd;
++	size_t to_copy;
+ 	int i;
+ 
+ 	spin_lock_bh(&priv->sta_lock);
+@@ -1120,7 +1121,9 @@ static int iwlagn_send_sta_key(struct iwl_priv *priv,
+ 		sta_cmd.key.tkip_rx_tsc_byte2 = tkip_iv32;
+ 		for (i = 0; i < 5; i++)
+ 			sta_cmd.key.tkip_rx_ttak[i] = cpu_to_le16(tkip_p1k[i]);
+-		memcpy(sta_cmd.key.key, keyconf->key, keyconf->keylen);
++		/* keyconf may contain MIC rx/tx keys which iwl does not use */
++		to_copy = min_t(size_t, sizeof(sta_cmd.key.key), keyconf->keylen);
++		memcpy(sta_cmd.key.key, keyconf->key, to_copy);
+ 		break;
+ 	case WLAN_CIPHER_SUITE_WEP104:
+ 		key_flags |= STA_KEY_FLG_KEY_SIZE_MSK;
 -- 
 2.39.2
 
