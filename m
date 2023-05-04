@@ -2,70 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BA7D6F6AFA
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 14:15:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C445F6F6AF8
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 14:15:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230392AbjEDMPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 08:15:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47152 "EHLO
+        id S230366AbjEDMPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 08:15:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbjEDMPe (ORCPT
+        with ESMTP id S229564AbjEDMPd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 08:15:34 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 942D95FE1
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 05:15:32 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2ac785015d6so5007261fa.0
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 05:15:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683202531; x=1685794531;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rbxMsDcOZE4VwLeDeJW+M4J9LqpR7B1fpo6aQT2cmic=;
-        b=jspw81xKm59iS7w4VcNG5gI0Yyetq4FlOofbCDrKq8odSqkWHtkr1ah4cZ9B/b52i4
-         Nk222L3v/Lod/7QzBTv8JnbCx8Rv2LXDGCNBn5yWpcYY4NgABqDeytbuUf3XrAETw7b0
-         ig8Izq89jnuQaFl5kV3ViYpmVoJRBSVvMjSkHw6q1WqHhXWQSN/fsC/vGfNKgdWL/wMz
-         F1AvzPSjhznyrMMQqLIQBrrm+DcjMTK5WRDejAYhRsVBgcf+9UWjuljHQJYO/puKwIw9
-         gx+P7aSNv1VpObac/ubGChQcgdtuSELzm3ptyo1YDiaC6CoIbn7kB6/xev3GmpvxhQMN
-         JBcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683202531; x=1685794531;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rbxMsDcOZE4VwLeDeJW+M4J9LqpR7B1fpo6aQT2cmic=;
-        b=Q2GdpzGjTpb4cJGsZ3d1ybcoKNvZHcuNjXh88fgzd3HB9apAv9ucqEzywMPjk4Bc7B
-         2pfUgL+Ww1JRc8McRn1szeE0Ln9nE49t5tSNSyMqzywjXT1Rx3X404psfcsbIMK4/9dI
-         kkED4UM8sAexA+SIixVxElo49kDqRJauXP7BAW78XERAuref9LX7m0+cPoZSIzPRQ5At
-         vuMxy/uEvfQmyNlOJoSBL+9HyerPy6dZ1hqs8JoYLSiHYMrh1+VEdiB/+x1WJt+TpmWf
-         D9ulTSSe0xLacV0eakRHWNjx28ByUaW6dxZ3EzFxIOc5KJzf3Ji5YpkcpCg0mLzke72B
-         79Dg==
-X-Gm-Message-State: AC+VfDyx1NQgS3Gota08sUrda8i6WK0tXNLZL5kdwhCqJlAkb4/4vSBW
-        ORuVOj+wSVlAqMRopnin+mTalw==
-X-Google-Smtp-Source: ACHHUZ5yPI9iw9bNdmmjFwVoHRv6zajiSyc1ZjGqq5RJjyAHKX2ZJJJakrpg85W4Y3QW4VSEKw24eg==
-X-Received: by 2002:a2e:93c3:0:b0:29c:783d:9241 with SMTP id p3-20020a2e93c3000000b0029c783d9241mr844169ljh.23.1683202530822;
-        Thu, 04 May 2023 05:15:30 -0700 (PDT)
-Received: from ta1.c.googlers.com.com (61.215.228.35.bc.googleusercontent.com. [35.228.215.61])
-        by smtp.gmail.com with ESMTPSA id v3-20020a2e9f43000000b002a8d01905f7sm1861755ljk.101.2023.05.04.05.15.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 May 2023 05:15:30 -0700 (PDT)
-From:   Tudor Ambarus <tudor.ambarus@linaro.org>
-To:     tytso@mit.edu, jack@suze.cz
-Cc:     adilger.kernel@dilger.ca, cmm@us.ibm.com,
-        aneesh.kumar@linux.vnet.ibm.com, mathur@us.ibm.com,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        joneslee@google.com, Tudor Ambarus <tudor.ambarus@linaro.org>,
-        syzbot+fc51227e7100c9294894@syzkaller.appspotmail.com,
-        stable@vger.kernel.org
-Subject: [PATCH] ext4: Avoid a potential slab-out-of-bounds in ext4_group_desc_csum
-Date:   Thu,  4 May 2023 12:15:25 +0000
-Message-ID: <20230504121525.3275886-1-tudor.ambarus@linaro.org>
-X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
+        Thu, 4 May 2023 08:15:33 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2DF7C5FD3;
+        Thu,  4 May 2023 05:15:32 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 915662F4;
+        Thu,  4 May 2023 05:16:15 -0700 (PDT)
+Received: from [10.57.83.11] (unknown [10.57.83.11])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B0B143F67D;
+        Thu,  4 May 2023 05:15:28 -0700 (PDT)
+Message-ID: <6bb7eaee-2d00-46f5-89ff-95133aea9a5d@arm.com>
+Date:   Thu, 4 May 2023 13:15:25 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v2 1/5] driver/perf: Add identifier sysfs file for CMN
+Content-Language: en-GB
+To:     John Garry <john.g.garry@oracle.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>,
+        Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>,
+        Shuai Xue <xueshuai@linux.alibaba.com>
+Cc:     James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org,
+        Zhuo Song <zhuo.song@linux.alibaba.com>
+References: <1682329456-19418-1-git-send-email-renyu.zj@linux.alibaba.com>
+ <1682329456-19418-2-git-send-email-renyu.zj@linux.alibaba.com>
+ <df63b597-4355-b9fc-6002-5a390b1a56f5@oracle.com>
+ <12bf4a7f-e99c-47cf-e8e4-e2700db6c5c9@arm.com>
+ <da55ef21-e199-79c3-5b65-d51edb2e754b@oracle.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <da55ef21-e199-79c3-5b65-d51edb2e754b@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,93 +62,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When modifying the block device while it is mounted by the filesystem,
-syzbot reported the following:
+On 2023-05-04 12:02, John Garry wrote:
+> On 04/05/2023 10:47, Robin Murphy wrote:
+>>> nit: generally if (!val) is preferred
+> 
+> Hi Robin,
+> 
+>>
+>> Although either way it can only be NULL in cases of memory corruption 
+>> or developers making broken changes to the driver, neither of which 
+>> are worth pretending to defend against.
+> 
+> If there was some broken code for setting this identifier, then we would 
+> just not show the identifier file, rather than show it containing "NULL" 
+> - that seems better. However, there may be other implications from that 
+> same broken code, so you maintainers and contributors please decide.
 
-BUG: KASAN: slab-out-of-bounds in crc16+0x206/0x280 lib/crc16.c:58
-Read of size 1 at addr ffff888075f5c0a8 by task syz-executor.2/15586
+Yeah, from the usage point of view, if there should be an identifier at 
+all then there should always be one, so it makes little sense to pretend 
+to accommodate a case where there wouldn't be. And it would be trivially 
+obvious to see in review if someone adds a new model enum without any 
+necessary identifier updates at the same time (far more so than spotting 
+whether all the subtle functional differences of the new model have been 
+accounted for).
 
-CPU: 1 PID: 15586 Comm: syz-executor.2 Not tainted 6.2.0-rc5-syzkaller-00205-gc96618275234 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x290 lib/dump_stack.c:106
- print_address_description+0x74/0x340 mm/kasan/report.c:306
- print_report+0x107/0x1f0 mm/kasan/report.c:417
- kasan_report+0xcd/0x100 mm/kasan/report.c:517
- crc16+0x206/0x280 lib/crc16.c:58
- ext4_group_desc_csum+0x81b/0xb20 fs/ext4/super.c:3187
- ext4_group_desc_csum_set+0x195/0x230 fs/ext4/super.c:3210
- ext4_mb_clear_bb fs/ext4/mballoc.c:6027 [inline]
- ext4_free_blocks+0x191a/0x2810 fs/ext4/mballoc.c:6173
- ext4_remove_blocks fs/ext4/extents.c:2527 [inline]
- ext4_ext_rm_leaf fs/ext4/extents.c:2710 [inline]
- ext4_ext_remove_space+0x24ef/0x46a0 fs/ext4/extents.c:2958
- ext4_ext_truncate+0x177/0x220 fs/ext4/extents.c:4416
- ext4_truncate+0xa6a/0xea0 fs/ext4/inode.c:4342
- ext4_setattr+0x10c8/0x1930 fs/ext4/inode.c:5622
- notify_change+0xe50/0x1100 fs/attr.c:482
- do_truncate+0x200/0x2f0 fs/open.c:65
- handle_truncate fs/namei.c:3216 [inline]
- do_open fs/namei.c:3561 [inline]
- path_openat+0x272b/0x2dd0 fs/namei.c:3714
- do_filp_open+0x264/0x4f0 fs/namei.c:3741
- do_sys_openat2+0x124/0x4e0 fs/open.c:1310
- do_sys_open fs/open.c:1326 [inline]
- __do_sys_creat fs/open.c:1402 [inline]
- __se_sys_creat fs/open.c:1396 [inline]
- __x64_sys_creat+0x11f/0x160 fs/open.c:1396
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f72f8a8c0c9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f72f97e3168 EFLAGS: 00000246 ORIG_RAX: 0000000000000055
-RAX: ffffffffffffffda RBX: 00007f72f8bac050 RCX: 00007f72f8a8c0c9
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000020000280
-RBP: 00007f72f8ae7ae9 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffd165348bf R14: 00007f72f97e3300 R15: 0000000000022000
+>>>> +    return attr->mode;
+>>>> +};
+>>>> +
+>>>> +static struct device_attribute arm_cmn_identifier_attr =
+>>>> +__ATTR(identifier, 0444, arm_cmn_identifier_show, NULL);
+>>>> +
+>>>> +static struct attribute *arm_cmn_identifier_attrs[] = {
+>>>> +    &arm_cmn_identifier_attr.attr,
+>>>> +    NULL
+>>>> +};
+>>>> +
+>>>> +static struct attribute_group arm_cmn_identifier_attr_group = {
+>>>> +    .attrs = arm_cmn_identifier_attrs,
+>>>> +    .is_visible = arm_cmn_identifier_attr_visible
+>>>> +};
+>>>> +
+>>>>   static const struct attribute_group *arm_cmn_attr_groups[] = {
+>>>>       &arm_cmn_event_attrs_group,
+>>>>       &arm_cmn_format_attrs_group,
+>>>>       &arm_cmn_cpumask_attr_group,
+>>>> +    &arm_cmn_identifier_attr_group,
+>>>>       NULL
+>>>>   };
+>>>> @@ -2241,6 +2273,22 @@ static int arm_cmn600_of_probe(struct 
+>>>> device_node *np)
+>>>>       return of_property_read_u32(np, "arm,root-node", &rootnode) ?: 
+>>>> rootnode;
+>>>>   }
+>>>> +const char *arm_cmn_identifier(unsigned long model)
+>>>> +{
+>>>> +    switch (model) {
+>>>> +    case CMN600:
+>>>> +        return "cmn600";
+>>>> +    case CMN650:
+>>>> +        return "cmn650";
+>>>> +    case CMN700:
+>>>> +        return "cmn700";
+>>>> +    case CI700:
+>>>> +        return "ci700";
+>>>> +    default:
+>>>> +        return NULL;
+>>>> +    }
+>>>
+>>> nit: I think that it would be nicer to have this per-model string 
+>>> stored statically in arm_cmn_acpi_match[].driver_data and 
+>>> arm_cmn_of_match[].data, so we have a straight lookup
+>>
+>> Again, I'm not really convinced how useful this coarse per-model 
+>> scheme is - for instance, in terms of many events, CMN-600 r3 is 
+>> closer to CMN-650 than it is to CMN-600 r1, so what exactly would 
+>> "CMN-600" mean to the user?
+> 
+> ok, I see, that's what I was asking about in the cmn-700 JSON review; 
+> and from what you say, it is not the case that we always have the same 
+> events for every revision. So we need a more fine-grained identifier.
 
-Replace
-	le16_to_cpu(sbi->s_es->s_desc_size)
-with
-	sbi->s_desc_size
+Yes, it's mostly just a case of new events getting added as the 
+microarchitecture evolves over the product's lifetime, but there has 
+been at least one event ID which had a meaning in very early versions of 
+CMN-600, was subsequently removed, and then got reused for a *different* 
+event a couple of revisions after that. Thankfully I believe those 
+earliest versions only ever existed on FPGA internally, and the TRMs 
+were never made public, so upstream doesn't care about that specific case.
 
-It reduces ext4's compiled text size, and makes the code more efficient
-(we remove an extra indirect reference and a potential byte
-swap on big endian systems), and there is no downside. It also avoids the
-potential KASAN / syzkaller failure, as a bonus.
+> For DT support, I suppose per-revision compat strings could be added, 
+> but I would not be sure what to do about ACPI.
 
-Reported-by: syzbot+fc51227e7100c9294894@syzkaller.appspotmail.com
-Link: https://syzkaller.appspot.com/bug?id=b85721b38583ecc6b5e72ff524c67302abbc30f3
-Link: https://lore.kernel.org/all/000000000000ece18705f3b20934@google.com/
-Fixes: 717d50e4971b ("Ext4: Uninitialized Block Groups")
-Cc: stable@vger.kernel.org
-Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
----
- fs/ext4/super.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+We know the version from the ID registers, that's no problem - it's 
+already used to manage visibility of the sysfs event aliases. In 
+principle we *should* have a model code in CFGM_PERIPH_ID_0 as well, and 
+be able to compose an identifier exactly the same way as 
+smmu_pmu_get_iidr() does in the SMMUv3 PMCG driver, but as I mentioned 
+before I'm not entirely confident in the implementation: I do happen to 
+know what codes have been nominally assigned for each product, but the 
+TRMs claim otherwise :(
 
-diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-index d39f386e9baf..e3d0d3c04785 100644
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -3238,11 +3238,9 @@ static __le16 ext4_group_desc_csum(struct super_block *sb, __u32 block_group,
- 	crc = crc16(crc, (__u8 *)gdp, offset);
- 	offset += sizeof(gdp->bg_checksum); /* skip checksum */
- 	/* for checksum of struct ext4_group_desc do the rest...*/
--	if (ext4_has_feature_64bit(sb) &&
--	    offset < le16_to_cpu(sbi->s_es->s_desc_size))
-+	if (ext4_has_feature_64bit(sb) && offset < sbi->s_desc_size)
- 		crc = crc16(crc, (__u8 *)gdp + offset,
--			    le16_to_cpu(sbi->s_es->s_desc_size) -
--				offset);
-+			    sbi->s_desc_size - offset);
- 
- out:
- 	return cpu_to_le16(crc);
--- 
-2.40.1.495.gc816e09b53d-goog
+> BTW, My comment was more about coding style of case a, case b, case c, 
+> ... case z, does not scale well.
 
+Indeed, it's probably the nature of the switch statement that leads to 
+the perceived need for a not-practically-meaningful "default" case in 
+the first place.
+
+Thanks,
+Robin.
