@@ -2,39 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33F956F7707
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 22:31:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93E6A6F7705
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 22:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231435AbjEDUbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 16:31:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46660 "EHLO
+        id S230489AbjEDUbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 16:31:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbjEDUbR (ORCPT
+        with ESMTP id S230084AbjEDUbO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 16:31:17 -0400
+        Thu, 4 May 2023 16:31:14 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC18D191F0;
-        Thu,  4 May 2023 13:20:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D70D518DCA;
+        Thu,  4 May 2023 13:20:03 -0700 (PDT)
 From:   "Ahmed S. Darwish" <darwi@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683231556;
+        s=2020; t=1683231558;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=HkQjc5wVMwVPD7qdVQEk0MlwuGYuZQZtagfPw3Kt3do=;
-        b=WME3DxYUebEUIQnulIxv2YEXLiGkETWvsiMWWqvSeSi8PCoqtFoNe6vkBEDfcOoSYn8zqi
-        InfBO6obsPRc8TP8qB310X8XjNRjX1pp097Jrwt+fvUdc3+yrQyk6rUHC1b1fGeA8lyb7l
-        3M79PiYaXJNWb4+LznAiBvkcLIqmeSrMbT6aOPtRq3GTu5LQclHbVqyh+ffAdOmLvS72l5
-        axcVhI/OwZz7WqAWEAVlXBloDsnHNyn/oTlBoPoi6wOejrVTNRM4PkJBOvUjPRPJ1c/N6W
-        SCD4h4VOGcOoYqXLO+GVW2ONxKhtEF/emBVMG1xcwOm5AxN5GTjk1p9e9MTV0g==
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XQ86TMvno5qeng6U0rCVgoMQaGJVwnTJIy9oD2h9Q1A=;
+        b=BEE9oUQ/E2WZ1iOrhE5rFNn7EV5qH7DX8gPHCT11aJrUiXf3PxrF/5hqFdCeg9DOvCYFlm
+        BKBTKhA9ABi4/TqM6rNfDfSRx2JGaBERFCwFZXC5kGnnvCap+TLx3LcNgMgq8Y/ymRxfUd
+        vt7bOcG1QerPAeaEpEGYWq/74wVc0vaicLN8zg600580VpDNhhXjduFGMTxf1G9SYfq1jA
+        Hpy//bDtkaLjtEuzlrhRaar6+4it0UgzSVtU+dp5u/PMBq5cYdcpNeVLK6yKGh3AzjHhrg
+        6cuwfvo95TTjBjcUYQJqJ8TeIMe3+JhImTMO8FEFu0acu/GaiEdgNFW9rgvrEg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683231556;
+        s=2020e; t=1683231558;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=HkQjc5wVMwVPD7qdVQEk0MlwuGYuZQZtagfPw3Kt3do=;
-        b=Zhr/yCNnLnaEqp90nedCZKGE0I//dlC0/hGhg7xmzPbapXMHOYsos1cgWmuFeq6js9OrV2
-        AJBRvF9JL9sb+qAw==
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XQ86TMvno5qeng6U0rCVgoMQaGJVwnTJIy9oD2h9Q1A=;
+        b=M4w+POcjZb2xIsQOBUzBJeslZ2v85/wkjHh+e8SvBtE9m4SbvpmFev6+6JmT61ROUnd4AX
+        10NbKaqPaMOxfuBQ==
 To:     Masahiro Yamada <masahiroy@kernel.org>,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
@@ -42,9 +44,11 @@ To:     Masahiro Yamada <masahiroy@kernel.org>,
 Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kbuild@vger.kernel.org,
         LKML <linux-kernel@vger.kernel.org>,
         "Ahmed S. Darwish" <darwi@linutronix.de>
-Subject: [PATCH v1 0/1] scripts: Fix "make gtags" for O= kernel builds
-Date:   Thu,  4 May 2023 22:18:32 +0200
-Message-Id: <20230504201833.202494-1-darwi@linutronix.de>
+Subject: [PATCH v1 1/1] scripts/tags.sh: Fix gtags generation for O= kernel builds
+Date:   Thu,  4 May 2023 22:18:33 +0200
+Message-Id: <20230504201833.202494-2-darwi@linutronix.de>
+In-Reply-To: <20230504201833.202494-1-darwi@linutronix.de>
+References: <20230504201833.202494-1-darwi@linutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -57,55 +61,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+gtags considers any file outside of its current working directory
+"outside the source tree" and refuses to index it.
 
-make gtags for O= kernel builds is currently broken. For example, when doing:
+For O= kernel builds, scripts/tags.sh invokes gtags with the current
+working directory set to ${O}. This leads to gtags ignoring the entire
+kernel source and generating an empty index.
 
-   make O=../build/ x86_64_defconfig
-   make O=../build/ gtags
+For O= builds, set gtags' working directory to the kernel source tree
+and explicitly set its output path through parameters instead.
 
-gtags generates a warning for each kernel source file to be indexed:
-
-   make[1]: Entering directory '/home/darwi/build'
-     GEN     gtags
-   Warning: '/home/darwi/linux/arch/x86/include/asm/qspinlock.h' is out of source tree. ignored.
-   Warning: '/home/darwi/linux/arch/x86/include/asm/hpet.h' is out of source tree. ignored.
-   ...
-   Warning: '/home/darwi/linux/virt/lib/irqbypass.c' is out of source tree. ignored.
-   make[1]: Leaving directory '/home/darwi/build/'
-
-and then generates an empty index:
-
-   $ du -hs ~/build/G*
-   16K	/home/darwi/build/GPATH
-   16K	/home/darwi/build/GRTAGS
-   16K	/home/darwi/build/GTAGS
-
-This series includes a proposed fix. After applying it:
-
-   $ make O=../build/ gtags
-   make[1]: Entering directory '/home/darwi/build'
-     GEN     gtags
-   make[1]: Leaving directory '/home/darwi/build'
-
-   $ du -hs ~/build/G*
-   9.1M	/home/darwi/build/GPATH
-   506M	/home/darwi/build/GRTAGS
-   696M	/home/darwi/build/GTAGS
-
-The generated files can then be integrated with editors or IDEs as
-usual.
-
-Thanks,
-
-=>
-
-Ahmed S. Darwish (1):
-  scripts/tags.sh: Fix gtags generation for O= kernel builds
-
+Signed-off-by: Ahmed S. Darwish <darwi@linutronix.de>
+---
  scripts/tags.sh | 9 ++++++++-
  1 file changed, 8 insertions(+), 1 deletion(-)
 
-base-commit: 1a5304fecee523060f26e2778d9d8e33c0562df3
---
+diff --git a/scripts/tags.sh b/scripts/tags.sh
+index ea31640b2671..1a6db535503b 100755
+--- a/scripts/tags.sh
++++ b/scripts/tags.sh
+@@ -131,7 +131,14 @@ docscope()
+ 
+ dogtags()
+ {
+-	all_target_sources | gtags -i -f -
++	# gtags refuses to index any file outside of the current working
++	# directory. For O= builds, set the current working directory to
++	# the kernel source tree and the output tags dir to ${O}.
++	suffixparams=
++	if [ -v O ]; then
++		suffixparams="-C $tree $O"
++	fi
++	all_target_sources | gtags -i -f - $suffixparams
+ }
+ 
+ # Basic regular expressions with an optional /kind-spec/ for ctags and
+-- 
 2.30.2
+
