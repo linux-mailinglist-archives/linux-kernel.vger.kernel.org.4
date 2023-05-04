@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45F1D6F73C3
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 21:46:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDC3F6F76A5
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 22:11:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230411AbjEDTqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 15:46:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48498 "EHLO
+        id S232397AbjEDULL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 16:11:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230148AbjEDTpP (ORCPT
+        with ESMTP id S233019AbjEDUJ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 15:45:15 -0400
+        Thu, 4 May 2023 16:09:59 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68485AD18;
-        Thu,  4 May 2023 12:43:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93092901D;
+        Thu,  4 May 2023 12:55:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F2B3261333;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0924363722;
+        Thu,  4 May 2023 19:43:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9D3EC4339B;
         Thu,  4 May 2023 19:43:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3FE4C433A1;
-        Thu,  4 May 2023 19:43:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683229409;
-        bh=FW2ugkxW1F+fvXMDfPEAfROTBQzUMBbSyiwPDTSt0Og=;
+        s=k20201202; t=1683229411;
+        bh=mmm9lHBhX+OdRGdo5vBJXE3H0w3wBS8JU5CFAfWiQKQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aRaHxIZD9TLIm210+X+Cf+c2ED0GYascKSPDyjm3ugdUzkemKY9WRoJC8V4BBb7tN
-         6U5v8Y5h1qO8ALI0yYsIX3vLQ+qoK+J0RScF2WUJgC6rpLuHxqgXXUHbRH/KUm3yG1
-         arsKAY+k7swHxu/wBbLoNE/7bMLtbHU2Qmc+q0ov7wJ+CpRyskoHlcx1a/gqqN64Hc
-         TH6um/uizmUP2rzhnSTG4mTUOeXA7/Ci2THfWv1gQtMGn3xR0U1TCXwO8dgqsGGWar
-         ykrpBKzg9H4SHbd5hREgMfViQvLcNyNpto6Na5O0oWtIzWe+9VHO4upcQo9YmE1Qly
-         CY5b+V/qijfvQ==
+        b=t3pcpCBU/WpdrG39q5JpugdmYwQchm+lNWenGxJS9+Ofg3IXEppStTAVRW6SZL00U
+         uUQwYy7lIhYR94wxiAWzWKhfINc1G/hynX69A/9ngT1XJkVA1Q6oFhA2JOMRBqJPxM
+         cYemZmYrc73dfLJjpK+KDDzzu8bojW9KGcgHlEzf0LH9mmB2nIi9Mx4V2Tr9n4maLS
+         uHveRn6E4dSfWLwyIX2VyaCAkaOwvk67sjL3DB4JgbHokWnHqXIZhwr57QAnV/Ojb3
+         vb9C3EyeKJuTKEsetNGqN2+6hcRou55nbzeYnhucmR+b6gOeW24h9fpWqjY2xMRsUj
+         LP3UkGwsmYDRw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Colin Ian King <colin.i.king@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>,
-        paolo.valente@linaro.org, linux-block@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 39/59] block, bfq: Fix division by zero error on zero wsum
-Date:   Thu,  4 May 2023 15:41:22 -0400
-Message-Id: <20230504194142.3805425-39-sashal@kernel.org>
+Cc:     Harshitha Prem <quic_hprem@quicinc.com>,
+        Nagarajan Maran <quic_nmaran@quicinc.com>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
+        Sasha Levin <sashal@kernel.org>, kvalo@kernel.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, ath11k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.3 40/59] wifi: ath11k: Ignore frags from uninitialized peer in dp.
+Date:   Thu,  4 May 2023 15:41:23 -0400
+Message-Id: <20230504194142.3805425-40-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230504194142.3805425-1-sashal@kernel.org>
 References: <20230504194142.3805425-1-sashal@kernel.org>
@@ -49,88 +53,124 @@ X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Colin Ian King <colin.i.king@gmail.com>
+From: Harshitha Prem <quic_hprem@quicinc.com>
 
-[ Upstream commit e53413f8deedf738a6782cc14cc00bd5852ccf18 ]
+[ Upstream commit a06bfb3c9f69f303692cdae87bc0899d2ae8b2a6 ]
 
-When the weighted sum is zero the calculation of limit causes
-a division by zero error. Fix this by continuing to the next level.
+When max virtual ap interfaces are configured in all the bands with
+ACS and hostapd restart is done every 60s, a crash is observed at
+random times.
+In this certain scenario, a fragmented packet is received for
+self peer, for which rx_tid and rx_frags are not initialized in
+datapath. While handling this fragment, crash is observed as the
+rx_frag list is uninitialised and when we walk in
+ath11k_dp_rx_h_sort_frags, skb null leads to exception.
 
-This was discovered by running as root:
+To address this, before processing received fragments we check
+dp_setup_done flag is set to ensure that peer has completed its
+dp peer setup for fragment queue, else ignore processing the
+fragments.
 
-stress-ng --ioprio 0
+Call trace:
+  ath11k_dp_process_rx_err+0x550/0x1084 [ath11k]
+  ath11k_dp_service_srng+0x70/0x370 [ath11k]
+  0xffffffc009693a04
+  __napi_poll+0x30/0xa4
+  net_rx_action+0x118/0x270
+  __do_softirq+0x10c/0x244
+  irq_exit+0x64/0xb4
+  __handle_domain_irq+0x88/0xac
+  gic_handle_irq+0x74/0xbc
+  el1_irq+0xf0/0x1c0
+  arch_cpu_idle+0x10/0x18
+  do_idle+0x104/0x248
+  cpu_startup_entry+0x20/0x64
+  rest_init+0xd0/0xdc
+  arch_call_rest_init+0xc/0x14
+  start_kernel+0x480/0x4b8
+  Code: f9400281 f94066a2 91405021 b94a0023 (f9406401)
 
-Fixes divison by error oops:
+Tested-on: IPQ8074 hw2.0 AHB WLAN.HK.2.7.0.1-01744-QCAHKSWPL_SILICONZ-1
 
-[  521.450556] divide error: 0000 [#1] SMP NOPTI
-[  521.450766] CPU: 2 PID: 2684464 Comm: stress-ng-iopri Not tainted 6.2.1-1280.native #1
-[  521.451117] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.1-0-g3208b098f51a-prebuilt.qemu.org 04/01/2014
-[  521.451627] RIP: 0010:bfqq_request_over_limit+0x207/0x400
-[  521.451875] Code: 01 48 8d 0c c8 74 0b 48 8b 82 98 00 00 00 48 8d 0c c8 8b 85 34 ff ff ff 48 89 ca 41 0f af 41 50 48 d1 ea 48 98 48 01 d0 31 d2 <48> f7 f1 41 39 41 48 89 85 34 ff ff ff 0f 8c 7b 01 00 00 49 8b 44
-[  521.452699] RSP: 0018:ffffb1af84eb3948 EFLAGS: 00010046
-[  521.452938] RAX: 000000000000003c RBX: 0000000000000000 RCX: 0000000000000000
-[  521.453262] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffb1af84eb3978
-[  521.453584] RBP: ffffb1af84eb3a30 R08: 0000000000000001 R09: ffff8f88ab8a4ba0
-[  521.453905] R10: 0000000000000000 R11: 0000000000000001 R12: ffff8f88ab8a4b18
-[  521.454224] R13: ffff8f8699093000 R14: 0000000000000001 R15: ffffb1af84eb3970
-[  521.454549] FS:  00005640b6b0b580(0000) GS:ffff8f88b3880000(0000) knlGS:0000000000000000
-[  521.454912] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  521.455170] CR2: 00007ffcbcae4e38 CR3: 00000002e46de001 CR4: 0000000000770ee0
-[  521.455491] PKRU: 55555554
-[  521.455619] Call Trace:
-[  521.455736]  <TASK>
-[  521.455837]  ? bfq_request_merge+0x3a/0xc0
-[  521.456027]  ? elv_merge+0x115/0x140
-[  521.456191]  bfq_limit_depth+0xc8/0x240
-[  521.456366]  __blk_mq_alloc_requests+0x21a/0x2c0
-[  521.456577]  blk_mq_submit_bio+0x23c/0x6c0
-[  521.456766]  __submit_bio+0xb8/0x140
-[  521.457236]  submit_bio_noacct_nocheck+0x212/0x300
-[  521.457748]  submit_bio_noacct+0x1a6/0x580
-[  521.458220]  submit_bio+0x43/0x80
-[  521.458660]  ext4_io_submit+0x23/0x80
-[  521.459116]  ext4_do_writepages+0x40a/0xd00
-[  521.459596]  ext4_writepages+0x65/0x100
-[  521.460050]  do_writepages+0xb7/0x1c0
-[  521.460492]  __filemap_fdatawrite_range+0xa6/0x100
-[  521.460979]  file_write_and_wait_range+0xbf/0x140
-[  521.461452]  ext4_sync_file+0x105/0x340
-[  521.461882]  __x64_sys_fsync+0x67/0x100
-[  521.462305]  ? syscall_exit_to_user_mode+0x2c/0x1c0
-[  521.462768]  do_syscall_64+0x3b/0xc0
-[  521.463165]  entry_SYSCALL_64_after_hwframe+0x5a/0xc4
-[  521.463621] RIP: 0033:0x5640b6c56590
-[  521.464006] Code: 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 80 3d 71 70 0e 00 00 74 17 b8 4a 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 48 c3 0f 1f 80 00 00 00 00 48 83 ec 18 89 7c
-
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-Link: https://lore.kernel.org/r/20230413133009.1605335-1-colin.i.king@gmail.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Harshitha Prem <quic_hprem@quicinc.com>
+Signed-off-by: Nagarajan Maran <quic_nmaran@quicinc.com>
+Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Link: https://lore.kernel.org/r/20230403184155.8670-2-quic_nmaran@quicinc.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- block/bfq-iosched.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/wireless/ath/ath11k/dp.c    | 4 +++-
+ drivers/net/wireless/ath/ath11k/dp_rx.c | 8 ++++++++
+ drivers/net/wireless/ath/ath11k/peer.h  | 1 +
+ 3 files changed, 12 insertions(+), 1 deletion(-)
 
-diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index d9ed3108c17af..bac977da4eb5b 100644
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -649,6 +649,8 @@ static bool bfqq_request_over_limit(struct bfq_queue *bfqq, int limit)
- 					sched_data->service_tree[i].wsum;
- 			}
- 		}
-+		if (!wsum)
-+			continue;
- 		limit = DIV_ROUND_CLOSEST(limit * entity->weight, wsum);
- 		if (entity->allocated >= limit) {
- 			bfq_log_bfqq(bfqq->bfqd, bfqq,
+diff --git a/drivers/net/wireless/ath/ath11k/dp.c b/drivers/net/wireless/ath/ath11k/dp.c
+index f5156a7fbdd7a..d070bcb3fe247 100644
+--- a/drivers/net/wireless/ath/ath11k/dp.c
++++ b/drivers/net/wireless/ath/ath11k/dp.c
+@@ -36,6 +36,7 @@ void ath11k_dp_peer_cleanup(struct ath11k *ar, int vdev_id, const u8 *addr)
+ 	}
+ 
+ 	ath11k_peer_rx_tid_cleanup(ar, peer);
++	peer->dp_setup_done = false;
+ 	crypto_free_shash(peer->tfm_mmic);
+ 	spin_unlock_bh(&ab->base_lock);
+ }
+@@ -72,7 +73,8 @@ int ath11k_dp_peer_setup(struct ath11k *ar, int vdev_id, const u8 *addr)
+ 	ret = ath11k_peer_rx_frag_setup(ar, addr, vdev_id);
+ 	if (ret) {
+ 		ath11k_warn(ab, "failed to setup rx defrag context\n");
+-		return ret;
++		tid--;
++		goto peer_clean;
+ 	}
+ 
+ 	/* TODO: Setup other peer specific resource used in data path */
+diff --git a/drivers/net/wireless/ath/ath11k/dp_rx.c b/drivers/net/wireless/ath/ath11k/dp_rx.c
+index b65a84a882641..294c6fcfa1aa8 100644
+--- a/drivers/net/wireless/ath/ath11k/dp_rx.c
++++ b/drivers/net/wireless/ath/ath11k/dp_rx.c
+@@ -3138,6 +3138,7 @@ int ath11k_peer_rx_frag_setup(struct ath11k *ar, const u8 *peer_mac, int vdev_id
+ 	}
+ 
+ 	peer->tfm_mmic = tfm;
++	peer->dp_setup_done = true;
+ 	spin_unlock_bh(&ab->base_lock);
+ 
+ 	return 0;
+@@ -3583,6 +3584,13 @@ static int ath11k_dp_rx_frag_h_mpdu(struct ath11k *ar,
+ 		ret = -ENOENT;
+ 		goto out_unlock;
+ 	}
++	if (!peer->dp_setup_done) {
++		ath11k_warn(ab, "The peer %pM [%d] has uninitialized datapath\n",
++			    peer->addr, peer_id);
++		ret = -ENOENT;
++		goto out_unlock;
++	}
++
+ 	rx_tid = &peer->rx_tid[tid];
+ 
+ 	if ((!skb_queue_empty(&rx_tid->rx_frags) && seqno != rx_tid->cur_sn) ||
+diff --git a/drivers/net/wireless/ath/ath11k/peer.h b/drivers/net/wireless/ath/ath11k/peer.h
+index 6dd17bafe3a0c..9bd385d0a38c9 100644
+--- a/drivers/net/wireless/ath/ath11k/peer.h
++++ b/drivers/net/wireless/ath/ath11k/peer.h
+@@ -35,6 +35,7 @@ struct ath11k_peer {
+ 	u16 sec_type;
+ 	u16 sec_type_grp;
+ 	bool is_authorized;
++	bool dp_setup_done;
+ };
+ 
+ void ath11k_peer_unmap_event(struct ath11k_base *ab, u16 peer_id);
 -- 
 2.39.2
 
