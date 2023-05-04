@@ -2,260 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3344C6F66C6
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 10:05:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08D8F6F66F6
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 10:13:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbjEDIFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 04:05:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45432 "EHLO
+        id S230329AbjEDINU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 04:13:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbjEDIFO (ORCPT
+        with ESMTP id S230195AbjEDIMS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 04:05:14 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9859E40DB;
-        Thu,  4 May 2023 01:04:42 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34483HAJ030255;
-        Thu, 4 May 2023 03:03:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1683187397;
-        bh=OQeFcIkFasxkY23rXJFCreKjtpYWSBj8fR0EhJ6Ae98=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=e0KdVdqGv2oELBP4awqByEXhBKn1nuRJVYJDpMAYJcBf3UPPG7r+7bVnw44sQGau/
-         Pxb2a5p0mJbssiOfk6H1lolEJFCORcHOdiNGNplyF2UBN6PflqFTviIEzS8PuSYeSi
-         QMRhfIBGChgs0+Kl9F0mAV/HezaKQq8LczurGO+k=
-Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34483HBH096547
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 4 May 2023 03:03:17 -0500
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 4
- May 2023 03:03:17 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 4 May 2023 03:03:17 -0500
-Received: from LT5CD112GSQZ.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 344836f3043802;
-        Thu, 4 May 2023 03:03:14 -0500
-From:   Apurva Nandan <a-nandan@ti.com>
-To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Apurva Nandan <a-nandan@ti.com>, Dhruva Gole <d-gole@ti.com>,
-        Udit Kumar <u-kumar1@ti.com>,
-        Vaishnav Achath <vaishnav.a@ti.com>
-Subject: [PATCH v3 2/2] arm64: dts: ti: k3-j784s4-evm: Add support for OSPI and QSPI flashes
-Date:   Thu, 4 May 2023 13:33:05 +0530
-Message-ID: <20230504080305.38986-3-a-nandan@ti.com>
+        Thu, 4 May 2023 04:12:18 -0400
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2062.outbound.protection.outlook.com [40.107.105.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F4167448C;
+        Thu,  4 May 2023 01:09:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mIBM7SWA4ERZc15X9hD8khSPHQKb6BBXr84UXV9MNoPg0VxlkKkDVj6ax0pyjRHgzNBD2oh3advHrK4/SNO4fZBvA4ruoFabk92j0d75toPOs8PDCL4MToP4BuQ/sObRvBqWMsCgvALxpFGzKXCIcIVZyGZGC+k/bd3oDQLaUAGhzMcf5TKGINy//gCYmXsnO+ofs0Z5l6cvfPYu/zx5tGHHh/AUCVTiQDT6OSZjkacZ0aU8RmhdDkr/NSM0OvT8LLfqpuEdLOXwzljsI35jxnlJKehd1B0JpTzf+jvIeYqs9MVGcJKzIWfQJ6mkx1ApimQ+zbldbM47J8tYFUyjXw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CHIq+GJR8HtVKUjGFYRG1IaqZqVQFVcMcS1xAyAeam0=;
+ b=KZel5r/t6+hX9fCMxLuWIUUyrKwn5+dLYANX7QFSSOSMfQPfaub80M9MbauV4NQdZdkjUQH5U+eC6C34qFSHHohzwv1fRZjrZ3JZUhoMJd7O594mXY8ayX8FHrgPO77tN/tPNkcCSj/v4huBnd5MdNv4bAXJeVTjiNovkv2aBsxVotskKBhwfFE/VTFhKAcsw8bS+XYy2IqBOcoGxW3uW0QId/yeWH4KZnsacQJQNzUznXbT0AFehyTZ4n7FdOFE3rC0bHmBff5x1a242kBVj4J2EmQxMahoCjdyDJbyKbFTK2ulIbd2Uk11zMYVSx+XODHyGbsmd3PXAMoRRNQvoQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CHIq+GJR8HtVKUjGFYRG1IaqZqVQFVcMcS1xAyAeam0=;
+ b=FMIVqNDIMC7n9q3nwRGcbAErZusOIZkLVHk9cZXh2VTUsScj+hrNqMyOJdn6PYYHSxv3cWZrTgg44O5UdPQWq2fagFWrnL6cbxYeXi2G4xO5fUjHbWPiMGskBpblMwMci4/n3o1OC52kYer0KZt2Ku6knvJPSDKBi9zGPQ7ivVE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM5PR04MB3139.eurprd04.prod.outlook.com (2603:10a6:206:8::20)
+ by PAWPR04MB9805.eurprd04.prod.outlook.com (2603:10a6:102:37e::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.22; Thu, 4 May
+ 2023 08:09:46 +0000
+Received: from AM5PR04MB3139.eurprd04.prod.outlook.com
+ ([fe80::c559:9b57:14ef:ac7]) by AM5PR04MB3139.eurprd04.prod.outlook.com
+ ([fe80::c559:9b57:14ef:ac7%4]) with mapi id 15.20.6340.031; Thu, 4 May 2023
+ 08:09:46 +0000
+From:   wei.fang@nxp.com
+To:     claudiu.manoil@nxp.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH net] net: enetc: check the index of the SFI rather than the handle
+Date:   Thu,  4 May 2023 16:03:59 +0800
+Message-Id: <20230504080400.3036266-1-wei.fang@nxp.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230504080305.38986-1-a-nandan@ti.com>
-References: <20230504080305.38986-1-a-nandan@ti.com>
-MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: SG2PR02CA0002.apcprd02.prod.outlook.com
+ (2603:1096:3:17::14) To AM5PR04MB3139.eurprd04.prod.outlook.com
+ (2603:10a6:206:8::20)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM5PR04MB3139:EE_|PAWPR04MB9805:EE_
+X-MS-Office365-Filtering-Correlation-Id: 439bf16e-ca75-4fc3-9bf3-08db4c76ec7b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Gx4CravZ0V5KMp0LSNFAeuO+KpMqFcKTqonnp7s7QqKXalvm0lNUqg3st5crhKsG23oEc4X7GiQlQAYGmd/plKm59qP5R4T0weI7yQdJ8vkaGORLGmM3osaHv6w7rCfEpi443/9xDtb6yIrCFednow/nIgdETzvHoyoAI/mher+0OzsXHdOF7vG+mrhzw50thsI9hDsocrwZb0MDUPObRmSDuhOmblrWB4FjIpMZ6uFLpW5LjfElp9mgFFh1DY4MmbgfInHrjPARZgC+j2Qc/FwpLONuutLTAhW+8aa082jsLH4ZfVXFwJt130LH5R35KaWfk8FhjgrnufyOX01gXd39/EcRIvhx3qbhCkuTQn8/Eg9McEm70sYscz1PxkYDoNOUvEiHBHrkN9buZYOMIU26z/I5QC9l9anQ6ryrZp6sIcMjbCWykgu2CV9Dt3ZArFus27fMW+B842qByIIn5XjOkwBgsKIMayzSdHT13MZzeD4+H0kEvxR1Mg5kgpk6BzpCRtijf/oGkBd0s3omjNcRaigOa82TCoiulhDBpHTj6WX4IWxpIzC6KgXTdfhKx30GWVozqeIc9+9gb9gBJpUCO2QlRJsaTvtVjiNEowGaL3CUXohk1YmFlQloFp/S
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM5PR04MB3139.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(136003)(376002)(366004)(346002)(451199021)(2906002)(38100700002)(38350700002)(9686003)(1076003)(2616005)(6506007)(26005)(6512007)(186003)(83380400001)(36756003)(8676002)(8936002)(5660300002)(316002)(6666004)(86362001)(478600001)(52116002)(6486002)(4326008)(41300700001)(66476007)(66946007)(66556008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Xb36fZhFQtDAckl8RAisjMOJNnrcA+TRm+kW0aRmcorNlbuIII+tR1G2ENwb?=
+ =?us-ascii?Q?IJrYTnmYcK0OWka2VSuhoBV72BGC2nYTSDp1pXoYIu0T/NNcv3I+W925x4Gm?=
+ =?us-ascii?Q?c2xjaeBUw/OlCciu0l79Cx3RbxBMvH4yjsnwHeg5r7Wr39wxGGPeMSwY911o?=
+ =?us-ascii?Q?hoGvTFkXbe9yXthFjAtv6swScDV79h9Yb3vAfF+Bfc5xRWZFkZnSbNsjb27v?=
+ =?us-ascii?Q?DhjUCunJrkJYqwWYlru+JCUqIV5eh9qfi50v44RsqPNbTEbrCsx/d2XVcxUL?=
+ =?us-ascii?Q?NKAnX9REtBj7TB7K2sw5Rvb2vbnkKwwTh+Mtgp5Qrn2YDR2mTmRHVOkZ4+QJ?=
+ =?us-ascii?Q?KDsxmZEH0WEPdBC1+GPHmoQ4Le6dOhLn+j7kv637903eUMepIFQjscdZcN3Y?=
+ =?us-ascii?Q?0bPSQv+FeHyW3eoNbzGzmBgxxBTaWh2B0BE3z1+G2k1gfTmjuoD73PGV0+KX?=
+ =?us-ascii?Q?aq2cp+cIQJObyyfbbvWKC7ZTPnp0FZYpF64HoMqBxanqYOSeJ8HnMyJ8mlG3?=
+ =?us-ascii?Q?gC+JkcjbY9ppRM46Rb7Xov395CAGuOpW1ePpeaI/XJjqlL2Q+tBMqYeHGQ7Z?=
+ =?us-ascii?Q?Mx64578c73ukICO6r4TzqKFNf/HMufekuYTVuijgLnUUdo6VsMXrTPPR+O/r?=
+ =?us-ascii?Q?g1x6KQSiaiRzE7DQPYhE5PPF97uMHUd/sNb5rd8CUFyKrl0pvjqp6AdPzFej?=
+ =?us-ascii?Q?ql0exIPqaRu9Qn80ZLltxSE/abpJjTpMFa1ns5Y7Ew37HnHdknr7cNSa4ohR?=
+ =?us-ascii?Q?5ijFej0CBbjwLb5Gl0vHUt2PCAmpggKzDtjTh7T4kZFcM0XPQRsShWbfq5os?=
+ =?us-ascii?Q?ngQ3njvYO+q4GCCOds7+ZaHZRCQy56A9WXViZcqRJKpZ/XaldG0zPTnfocZu?=
+ =?us-ascii?Q?2iXsc757bMagd/24T9WPTSYORVL0l9cSsesb/rF+np7aVWoNAJb3+AXkIE0Z?=
+ =?us-ascii?Q?IpzOWieEPvxDAj4uY1NMsfFXQzI2bPq6+iYvScH2B5OI3DV/RhZkL0CQUSVY?=
+ =?us-ascii?Q?C7EtSPcImoIGqc8viAzFnGWjpGRL1E653dkogTdbZ3PglS8MjWf7bu2JppBS?=
+ =?us-ascii?Q?t20FFQYDURMJnQbhAOLdGuSy9qHEVUhoQJfsJOLQYivPkxQRxs0u3bbdjjzy?=
+ =?us-ascii?Q?jcTp9xjhd+etn3tsR9sS+cBG6+CWEvAODQLIA3vy/cNcZm3tD0I72LZyCrwy?=
+ =?us-ascii?Q?GvrqE8Fm+VxUu7pbi1SXKQR+xLQb8V16NgAp9Mwutu5lAzorBAckvo1fK+ZH?=
+ =?us-ascii?Q?nlLmufCLPE7xvy9/vU+DL0lWHGozJ0GTEMHZjeBzxCeYl/yvWbJV+2fjN4uO?=
+ =?us-ascii?Q?oOgSWls/ZZRjRbgojseScJA/a7IKkWn6Ejcb8DlIbxu5USDCFF10VBuKSW0q?=
+ =?us-ascii?Q?zQk9Y4NiLFDtqZEjWq5VRsvOSoNvh4c60JzaLGGfnmU+2agFz2n1L0PnVp65?=
+ =?us-ascii?Q?ScWJxBuLK6J68Lz+9whoo3r3T6hlivMo4R8Sjt1LBD/GD0GbRx4JleiQaHBZ?=
+ =?us-ascii?Q?v6hsxvnxO2r2fCOU1/glFu8zdPJ0xzlLZA7ZM2wp5pBhBnHNkVUisoFQqLLn?=
+ =?us-ascii?Q?U/sudl1c80f/vNEI4GwEAcxY2xPMmrRXCl1SmTyB?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 439bf16e-ca75-4fc3-9bf3-08db4c76ec7b
+X-MS-Exchange-CrossTenant-AuthSource: AM5PR04MB3139.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2023 08:09:46.3860
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: IwoCi5EYLQOdthe/tuKO7KqAgVIinY6FCa40IhozkWsvZfSXSqcg4btk5OMuvwtFpojWCtAbRBI1cAMA9+O35A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAWPR04MB9805
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-J784S4 has S28HS512T OSPI flash connected to OSPI0 and MT25QU512A QSPI
-flash connected to OSPI1, enable support for the same. Also describe
-the partition information according to the offsets in the bootloader.
+From: Wei Fang <wei.fang@nxp.com>
 
-Co-developed-by: Vaishnav Achath <vaishnav.a@ti.com>
-Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
-Signed-off-by: Apurva Nandan <a-nandan@ti.com>
+We should check whether the current SFI (Stream Filter Instance) table
+is full before creating a new SFI entry. However, the previous logic
+checks the handle by mistake and might lead to unpredictable behavior.
+
+Fixes: 888ae5a3952b ("net: enetc: add tc flower psfp offload driver")
+Signed-off-by: Wei Fang <wei.fang@nxp.com>
 ---
- arch/arm64/boot/dts/ti/k3-j784s4-evm.dts | 158 +++++++++++++++++++++++
- 1 file changed, 158 insertions(+)
+ drivers/net/ethernet/freescale/enetc/enetc_qos.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
-index f33815953e77..44e95c27657c 100644
---- a/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
-+++ b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
-@@ -167,12 +167,170 @@
- 	};
- };
+diff --git a/drivers/net/ethernet/freescale/enetc/enetc_qos.c b/drivers/net/ethernet/freescale/enetc/enetc_qos.c
+index 130ebf6853e6..83c27bbbc6ed 100644
+--- a/drivers/net/ethernet/freescale/enetc/enetc_qos.c
++++ b/drivers/net/ethernet/freescale/enetc/enetc_qos.c
+@@ -1247,7 +1247,7 @@ static int enetc_psfp_parse_clsflower(struct enetc_ndev_priv *priv,
+ 		int index;
  
-+&wkup_pmx0 {
-+	mcu_fss0_ospi0_pins_default: mcu-fss0-ospi0-pins-default {
-+		pinctrl-single,pins = <
-+			J784S4_WKUP_IOPAD(0x000, PIN_OUTPUT, 0) /* (E32) MCU_OSPI0_CLK */
-+			J784S4_WKUP_IOPAD(0x02c, PIN_OUTPUT, 0) /* (A32) MCU_OSPI0_CSn0 */
-+			J784S4_WKUP_IOPAD(0x00c, PIN_INPUT, 0) /* (B33) MCU_OSPI0_D0 */
-+			J784S4_WKUP_IOPAD(0x010, PIN_INPUT, 0) /* (B32) MCU_OSPI0_D1 */
-+			J784S4_WKUP_IOPAD(0x014, PIN_INPUT, 0) /* (C33) MCU_OSPI0_D2 */
-+			J784S4_WKUP_IOPAD(0x018, PIN_INPUT, 0) /* (C35) MCU_OSPI0_D3 */
-+			J784S4_WKUP_IOPAD(0x01c, PIN_INPUT, 0) /* (D33) MCU_OSPI0_D4 */
-+			J784S4_WKUP_IOPAD(0x020, PIN_INPUT, 0) /* (D34) MCU_OSPI0_D5 */
-+			J784S4_WKUP_IOPAD(0x024, PIN_INPUT, 0) /* (E34) MCU_OSPI0_D6 */
-+			J784S4_WKUP_IOPAD(0x028, PIN_INPUT, 0) /* (E33) MCU_OSPI0_D7 */
-+			J784S4_WKUP_IOPAD(0x008, PIN_INPUT, 0) /* (C34) MCU_OSPI0_DQS */
-+			J784S4_WKUP_IOPAD(0x03c, PIN_OUTPUT, 6) /* (C32) MCU_OSPI0_CSn3.MCU_OSPI0_ECC_FAIL */
-+			J784S4_WKUP_IOPAD(0x038, PIN_OUTPUT, 6) /* (B34) MCU_OSPI0_CSn2.MCU_OSPI0_RESET_OUT0 */
-+		>;
-+	};
-+
-+	mcu_fss0_ospi1_pins_default: mcu-fss0-ospi1-pins-default {
-+		pinctrl-single,pins = <
-+			J784S4_WKUP_IOPAD(0x040, PIN_OUTPUT, 0) /* (F32) MCU_OSPI1_CLK */
-+			J784S4_WKUP_IOPAD(0x05c, PIN_OUTPUT, 0) /* (G32) MCU_OSPI1_CSn0 */
-+			J784S4_WKUP_IOPAD(0x04c, PIN_INPUT, 0) /* (E35) MCU_OSPI1_D0 */
-+			J784S4_WKUP_IOPAD(0x050, PIN_INPUT, 0) /* (D31) MCU_OSPI1_D1 */
-+			J784S4_WKUP_IOPAD(0x054, PIN_INPUT, 0) /* (G31) MCU_OSPI1_D2 */
-+			J784S4_WKUP_IOPAD(0x058, PIN_INPUT, 0) /* (F33) MCU_OSPI1_D3 */
-+			J784S4_WKUP_IOPAD(0x048, PIN_INPUT, 0) /* (F31) MCU_OSPI1_DQS */
-+			J784S4_WKUP_IOPAD(0x044, PIN_INPUT, 0) /* (C31) MCU_OSPI1_LBCLKO */
-+		>;
-+	};
-+};
-+
- &main_uart8 {
- 	status = "okay";
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&main_uart8_pins_default>;
- };
- 
-+&fss {
-+	status = "okay";
-+};
-+
-+&ospi0 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&mcu_fss0_ospi0_pins_default>;
-+
-+	flash@0 {
-+		compatible = "jedec,spi-nor";
-+		reg = <0x0>;
-+		spi-tx-bus-width = <8>;
-+		spi-rx-bus-width = <8>;
-+		spi-max-frequency = <25000000>;
-+		cdns,tshsl-ns = <60>;
-+		cdns,tsd2d-ns = <60>;
-+		cdns,tchsh-ns = <60>;
-+		cdns,tslch-ns = <60>;
-+		cdns,read-delay = <4>;
-+
-+		partitions {
-+			compatible = "fixed-partitions";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+
-+			partition@0 {
-+				label = "ospi.tiboot3";
-+				reg = <0x0 0x80000>;
-+			};
-+
-+			partition@80000 {
-+				label = "ospi.tispl";
-+				reg = <0x80000 0x200000>;
-+			};
-+
-+			partition@280000 {
-+				label = "ospi.u-boot";
-+				reg = <0x280000 0x400000>;
-+			};
-+
-+			partition@680000 {
-+				label = "ospi.env";
-+				reg = <0x680000 0x40000>;
-+			};
-+
-+			partition@6c0000 {
-+				label = "ospi.env.backup";
-+				reg = <0x6c0000 0x40000>;
-+			};
-+
-+			partition@800000 {
-+				label = "ospi.rootfs";
-+				reg = <0x800000 0x37c0000>;
-+			};
-+
-+			partition@3fc0000 {
-+				label = "ospi.phypattern";
-+				reg = <0x3fc0000 0x40000>;
-+			};
-+		};
-+	};
-+};
-+
-+&ospi1 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&mcu_fss0_ospi1_pins_default>;
-+
-+	flash@0{
-+		compatible = "jedec,spi-nor";
-+		reg = <0x0>;
-+		spi-tx-bus-width = <1>;
-+		spi-rx-bus-width = <4>;
-+		spi-max-frequency = <40000000>;
-+		cdns,tshsl-ns = <60>;
-+		cdns,tsd2d-ns = <60>;
-+		cdns,tchsh-ns = <60>;
-+		cdns,tslch-ns = <60>;
-+		cdns,read-delay = <2>;
-+
-+		partitions {
-+			compatible = "fixed-partitions";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+
-+			partition@0 {
-+				label = "qspi.tiboot3";
-+				reg = <0x0 0x80000>;
-+			};
-+
-+			partition@80000 {
-+				label = "qspi.tispl";
-+				reg = <0x80000 0x200000>;
-+			};
-+
-+			partition@280000 {
-+				label = "qspi.u-boot";
-+				reg = <0x280000 0x400000>;
-+			};
-+
-+			partition@680000 {
-+				label = "qspi.env";
-+				reg = <0x680000 0x40000>;
-+			};
-+
-+			partition@6c0000 {
-+				label = "qspi.env.backup";
-+				reg = <0x6c0000 0x40000>;
-+			};
-+
-+			partition@800000 {
-+				label = "qspi.rootfs";
-+				reg = <0x800000 0x37c0000>;
-+			};
-+
-+			partition@3fc0000 {
-+				label = "qspi.phypattern";
-+				reg = <0x3fc0000 0x40000>;
-+			};
-+		};
-+
-+	};
-+};
-+
- &main_i2c0 {
- 	status = "okay";
- 	pinctrl-names = "default";
+ 		index = enetc_get_free_index(priv);
+-		if (sfi->handle < 0) {
++		if (index < 0) {
+ 			NL_SET_ERR_MSG_MOD(extack, "No Stream Filter resource!");
+ 			err = -ENOSPC;
+ 			goto free_fmi;
 -- 
-2.17.1
+2.25.1
 
