@@ -2,189 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E68576F71EF
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 20:26:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A8D56F71F1
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 20:27:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbjEDS0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 14:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33244 "EHLO
+        id S229879AbjEDS1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 14:27:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbjEDS0a (ORCPT
+        with ESMTP id S229545AbjEDS1I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 14:26:30 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B12A65B9;
-        Thu,  4 May 2023 11:26:29 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 344EHjwT026987;
-        Thu, 4 May 2023 18:26:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=VvECvwED7W/HA1z7gnpxPn76AS8vUwvrR+GOyUzxrds=;
- b=OSvl5AZNh2znUPFyEQpGChwfB/uzb2788mZlu47KP49jg3XYQlvJJZpzQnPkrqMfrSmk
- 04Fgn72kxhG/LHSBoB7HIbkmbEmgx21GGxq/ePlQ3tNmJm8mkBK2sd/xw7Fphvn4WBm0
- WkFNbRQ/HuXPR6oAWn4W5juBaw/hQ5kRx6nG5x7pCUn1BtsOeDH9vP7b9nGi4ZOzwzG8
- jYZNUZvZWPu7pwI/Qg0R5+MS+SV0tg5Ojh5aVYF03A+iZuKcVcsAc+u+lUc/xzcxHqSP
- MRYZ8NlWNTX49QeNLAOyT06TwMEw1VMfuZInofK438SfFEOTCQpv0iF/PSry9fcAaA27 cw== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qc2aj2912-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 04 May 2023 18:26:14 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 344IPqQx022797
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 4 May 2023 18:25:52 GMT
-Received: from [10.134.70.142] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 4 May 2023
- 11:25:52 -0700
-Message-ID: <11ef769a-5089-57d4-db87-4c5766d98206@quicinc.com>
-Date:   Thu, 4 May 2023 11:25:44 -0700
+        Thu, 4 May 2023 14:27:08 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83BC165BF
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 11:27:07 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id e9e14a558f8ab-33124b0dd85so591425ab.1
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 11:27:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683224827; x=1685816827;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ikJLj9UcZMZg1J2stu5wI6bhIEl+t7Zsf0nTDY3caoE=;
+        b=EZPArdHukXu5W/pYa8vFfG/PWnoZ0IyWqqb7mVWfoCHOqqfPXfoDVf7QoCTJ1ksTQc
+         107SD0StxNzFc1Z7FC4+BsXY3TGiEoIeoSGNNdh4s+BzBd5ELVf9iw+i8uh3yilDpr3v
+         LJl5vSudldj9Vws/6OVaqAmpbWeCt3bDvo3WrdfR2PrYaQK/Fq6pAerYXytGe4DOKmHL
+         SKCXp21iLL4DaDLO0k0vFMke50hpL0mZZosioUkQyFzKWEkv9z8Pzz4sBPz/wIr3hiPd
+         JmljBoyTbobx9V3y5c2W1qdspSVAkacM2yzf1SGUJh5QM6Su9GA3UZBW8JjAKz9ei4lt
+         b9RQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683224827; x=1685816827;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ikJLj9UcZMZg1J2stu5wI6bhIEl+t7Zsf0nTDY3caoE=;
+        b=hw4ZadQsS/MNSeTS0rsSRU2yBGurSSw/eiBKApgQJjbmj5csrbDLS4SUeeGxhngPkV
+         GpU8/h3JLt99bfai0OFPJhTNuIFd93htqVyhoXkWCQ4gXHUVD9EO8SefSaX/TbO2fxbT
+         aO9gTTfc6nuD1fKcJeJJlGJTTASbuIApa1FShvEvoDYRwBjPAJcyuyErp6zb3dRxdY0n
+         DH7ItFJRXOQORfFZcrchYmUrcRTm1nfYfJIU7RlhU1mR7gEfiOBdJczvZtSg/mHCpNHW
+         6a3tAqqv3yPxd9b3tGndE9erVoFdhboygjPw9g1d6V28o6q/GlHlYUbb0Zb3y+WXLFYG
+         xv5Q==
+X-Gm-Message-State: AC+VfDw7QxzbYlIK5A5B+C6YFdAU6uAo788MFSHmFlWwdSCyPsyz1BEm
+        kb3iv0oXesKFP2+a195HSrUTgKDILsgGRWxv6jvXzg==
+X-Google-Smtp-Source: ACHHUZ6HQCdVSvYjHE6dxuc8pZ903Fq+99b6WDsuKo2BI4pyzTS1H9h7u31RIiw3QXPwJmhLlsyljMAK+cZPJPri0VM=
+X-Received: by 2002:a05:6e02:12ce:b0:322:848b:6c53 with SMTP id
+ i14-20020a056e0212ce00b00322848b6c53mr18499ilm.14.1683224826598; Thu, 04 May
+ 2023 11:27:06 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v5 3/7] drm/msm/dpu: add DPU_PINGPONG_DSC bits into PP_BLK
- and PP_BLK_TE marcos
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1683218805-23419-1-git-send-email-quic_khsieh@quicinc.com>
- <1683218805-23419-4-git-send-email-quic_khsieh@quicinc.com>
- <ljt5mp4ew5lcrrrdd7xyof3jv3friafbmr3im35ddwxjc42ekh@toez7xfdreg2>
- <CAA8EJpreM9i3DUp+93K7p14f_tNMy-m+C-WdyN5_drmmkGV66g@mail.gmail.com>
- <u7hlzltevx675gfg4w6emmeceo6nj76taqeecsor6iqsi3hmki@lg43y65m6chz>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <u7hlzltevx675gfg4w6emmeceo6nj76taqeecsor6iqsi3hmki@lg43y65m6chz>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Otc9LpKqzjwth8JGXUokyTmq_w0iysbX
-X-Proofpoint-GUID: Otc9LpKqzjwth8JGXUokyTmq_w0iysbX
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-04_12,2023-05-04_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
- adultscore=0 mlxlogscore=999 impostorscore=0 mlxscore=0 clxscore=1015
- lowpriorityscore=0 bulkscore=0 priorityscore=1501 phishscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2305040149
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230504181827.130532-1-mizhang@google.com>
+In-Reply-To: <20230504181827.130532-1-mizhang@google.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Thu, 4 May 2023 11:26:55 -0700
+Message-ID: <CALMp9eStwQAznFpNnAnNXzcj+4Gev3hP-XtAeUWqpJdtY5tShA@mail.gmail.com>
+Subject: Re: [PATCH v2] KVM: VMX: add MSR_IA32_TSX_CTRL into msrs_to_save
+To:     Mingwei Zhang <mizhang@google.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5/4/2023 11:23 AM, Marijn Suijten wrote:
-> On 2023-05-04 20:53:33, Dmitry Baryshkov wrote:
->> On Thu, 4 May 2023 at 20:49, Marijn Suijten
->> <marijn.suijten@somainline.org> wrote:
->>>
->>> PP_BLK_TE is no longer there.
->>>
->>> marcos -> macros.
->>>
->>> On 2023-05-04 09:46:41, Kuogee Hsieh wrote:
->>>> At legacy chipsets, it required DPU_PINGPONG_DSC bit be set to indicate
->>>
->>> I may have not made this clear, but the comments on patch 2/7
->>> (introducing the DPU_PINGPONG_DSC bit) also apply to this patch: clarify
->>> DPU 7.0.0 exactly in favour of "legacy", which has no definition at all
->>> and changes over time.
->>>
->>>> pingpong ops functions are required to complete DSC data path setup if
->>>> this chipset has DSC hardware block presented. This patch add
->>>> DPU_PINGPONG_DSC bit to both PP_BLK and PP_BLK_TE marcos if it has DSC
->>>> hardware block presented.
->>>
->>> Strictly speaking this patch together with 2/7 is not bisectable, as 2/7
->>> first disables the callbacks for _all_ hardware and then this patch adds
->>> it back by adding the flag to all DPU < 7.0.0 catalog descriptions.
->>
->> I asked to split these into two patches, but I see your point and
->> partially agree with it. However if we mix the catalog changes with
->> functional changes, it is too easy to overlook or misjudge the
->> functional changes.
-> 
-> I did the same in the INTF TE series for patches that have very little
-> and/or very obvious functional changes: exactly this combination of
-> guarding a few callbacks behind a feature bit, and setting that feature
-> bit on a few specific catalog entries.
-> 
->> As you are correct about bisectability, I'd probably suggest either
->> having three patches (define flag, update catalog, handle flag in the
->> driver) or squashing first two patches to have two patches (add flag +
->> catalog, separate functional changes).
-> 
-> Sure, if you really prefer a split I'd go for two patches:
-> 1. Add the flag to the enum and catalog;
-> 2. Add the ops guard (functional change).
-> 
-> Then don't forget to reword the commit message, following the guidelines
-> below and the suggestion for 2/7.
-> 
-> - Marijn
-
-Plan sounds good to me.
-
-Marijn, we will wait for a couple of days to post the next rev but would 
-be hard more than that as we need to pick up other things which are 
-pending on top of this. Hence would appreciate if you can finish reviews 
-by then.
-
-> 
->>> To solve that, as we do in other DPU patch-series, just squash this
->>> patch into 2/7.  That way you also don't have to spend extra time
->>> rewording this commit message either to match the improvements we made
->>> in 2/7 (for example, you mention that "ops functions are required to
->>> complete DSC data path setup", but those were already available before
->>> 2/7, despite sounding as if this is a new thing that was previously
->>> missing entirely).
->>>
->>> But please wait at least a couple days before sending v6.  I only have a
->>> few hours every day/week but would appreciate to review and test all the
->>> other patches.
->>>
->>>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->>>> ---
->>>>   .../drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h    | 16 +++++++--------
->>>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h | 16 +++++++--------
->>>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h | 24 +++++++++++-----------
->>>>   .../drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h    | 24 +++++++++++-----------
->>>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_0_sm8250.h | 24 +++++++++++-----------
->>>>   5 files changed, 52 insertions(+), 52 deletions(-)
->>>>
->>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
->>>> index 521cfd5..ef92545 100644
->>>> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
->>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
->>>> @@ -112,17 +112,17 @@ static const struct dpu_lm_cfg msm8998_lm[] = {
->>>>   };
->>>>
->>>>   static const struct dpu_pingpong_cfg msm8998_pp[] = {
->>>> -     PP_BLK("pingpong_0", PINGPONG_0, 0x70000, PINGPONG_SDM845_TE2_MASK, 0, sdm845_pp_sblk_te,
->>>> -                     DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
->>>> +     PP_BLK("pingpong_0", PINGPONG_0, 0x70000, PINGPONG_SDM845_TE2_MASK|BIT(DPU_PINGPONG_DSC),
->>>
->>> This should be added to the MASK (add new #define's where necessary).
->>>
->>> - Marijn
-> 
-> <snip>
+On Thu, May 4, 2023 at 11:18=E2=80=AFAM Mingwei Zhang <mizhang@google.com> =
+wrote:
+>
+> Add MSR_IA32_TSX_CTRL into msrs_to_save[] to explicitly tell userspace to
+> save/restore the register value during migration. Missing this may cause
+> userspace that relies on KVM ioctl(KVM_GET_MSR_INDEX_LIST) fail to port t=
+he
+> value to the target VM.
+>
+> In addition, there is no need to add MSR_IA32_TSX_CTRL when
+> ARCH_CAP_TSX_CTRL_MSR is not supported in guest. So add the checking in
+> kvm_probe_msr_to_save().
+>
+> Fixes: b07a5c53d42a ("KVM: vmx: use MSR_IA32_TSX_CTRL to hard-disable TSX=
+ on guest that lack it")
+> Reported-by: Jim Mattson <jmattson@google.com>
+> Signed-off-by: Mingwei Zhang <mizhang@google.com>
+Reviewed-by: Jim Mattson <jmattson@google.com>
