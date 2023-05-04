@@ -2,125 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD9906F807B
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 12:02:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCF7D6F8217
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 13:34:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231863AbjEEKCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 06:02:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58848 "EHLO
+        id S231744AbjEELe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 07:34:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231685AbjEEKCC (ORCPT
+        with ESMTP id S229591AbjEELe0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 06:02:02 -0400
-Received: from vulcan.natalenko.name (vulcan.natalenko.name [104.207.131.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF5DF1161C;
-        Fri,  5 May 2023 03:01:59 -0700 (PDT)
-Received: from spock.localnet (unknown [83.148.33.151])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by vulcan.natalenko.name (Postfix) with ESMTPSA id 9C7DD12FA060;
-        Fri,  5 May 2023 12:01:52 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
-        s=dkim-20170712; t=1683280913;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2U8Eyv9nlZnFEQ8LEuDy/nhAeBfgve9KkqjGss4tmqU=;
-        b=oxOU7q3BEN1zLMIqYfCJqAmwPBRg+HQJ6RDIO+mpq9nrSjS/Vakss/QZ9YVIY5CEjQan4R
-        rQj0RKBx6PVnqPMNs+g9G3gf5MHHqHh/oBDle2jQXoEreSS+7G30UUyq/97BJVXkDIePg8
-        pr4EPL2LkMeKwL09YhQVRy98D1SjeIY=
-From:   Oleksandr Natalenko <oleksandr@natalenko.name>
-To:     Alex Williamson <alex.williamson@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Eric Auger <eric.auger@redhat.com>,
-        =?ISO-8859-1?Q?C=E9dric?= Le Goater <clg@redhat.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Abhishek Sahu <abhsahu@nvidia.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Cornelia Huck <cohuck@redhat.com>, Bo Liu <liubo03@inspur.com>,
-        "K V P, Satyanarayana" <satyanarayana.k.v.p@intel.com>,
-        kvm@vger.kernel.org
-Subject: Re: [PATCH] vfio/pci: demote hiding ecap messages to debug level
-Date:   Fri, 05 May 2023 12:01:51 +0200
-Message-ID: <2680715.mvXUDI8C0e@natalenko.name>
-In-Reply-To: <20230504170111.70a7f639.alex.williamson@redhat.com>
-References: <20230504131654.24922-1-oleksandr@natalenko.name>
- <20230504170111.70a7f639.alex.williamson@redhat.com>
+        Fri, 5 May 2023 07:34:26 -0400
+Received: from out203-205-221-192.mail.qq.com (out203-205-221-192.mail.qq.com [203.205.221.192])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E66B61BF
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 04:34:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1683286460;
+        bh=e1B3ZJs6WeNbgJ43CpgJVwVD/1QBe0zgZMQ0M50X2Wk=;
+        h=From:To:Cc:Subject:Date;
+        b=AtSsxyEmYpqnXc08C+p29GBJQKbqWwUSIkLphN8wtlsCapXcpioYWRy+EG3GxDOFn
+         wMMRgleZRzJLLj5KQaCNyn+Q2ugpdjMDpmO60GSPakdDKKK1pds5HeZWF+sej/ygVp
+         2aEHmdzBdLUWEL9UAqqEDm6A0TnTvxKScdfROg6o=
+Received: from wen-VirtualBox.. ([123.147.252.101])
+        by newxmesmtplogicsvrsza12-0.qq.com (NewEsmtp) with SMTP
+        id 8912D2FE; Fri, 05 May 2023 19:34:17 +0800
+X-QQ-mid: xmsmtpt1683286457tc551bnh6
+Message-ID: <tencent_5AAA3EEAB42095C9B7740BE62FBF9A67E007@qq.com>
+X-QQ-XMAILINFO: MmpliBmRb3iCD8qUrFIvWgCJ4XJNKyBbN/UZqxLXX6XOC6/anI5fUQbZBpOU77
+         JMVdr88CtNENgRsOL/B6CY3v/c/sb+vEAGGwNBCy3cETtkuoJa0zs+5sZx3un7K62vQ2YAryr/g4
+         rK6xsQleVc64dyk29Q3ZND6lZWtCj66vKItTYpSBXHgMnkNbZmMXg2DECoiHyB1jzBDyomU5zJW6
+         GzmlQoIGyzGkoaKMx1XdKuP9/u27egQkeuTo6pG3ltjbLiN8kqIxKV8mXJV+vPY3VzS0v75D82K0
+         GCFTnmi/Pkr+eLUZWerakrM/l6tF6iBMj1KIMRJUEJjgXz8f3p1H2rP9uJAge+jhbQcLt6ygGNLs
+         7sNeZkkyXH7K2S7vOdx3cxuMDX/NlI9Y2OAgpJVPA+doXxOKrOE58dPRnevtn4ydlWcfR107tL1D
+         nMY7/MgJAyGt2dENYtyHoHJiJ7V7wGcj32WafCpZFu5j5ZEtFMZcL0jqw721eO8YdUnRrXAj1c2g
+         yFxTVhE7lP6H4fz6r7fOfU82NY3qgCH/RQTo9VbS6+YYx7AwRF6ii3f3b/l/9DBRijDy1lSmuO+O
+         dPLqJv3UsD3BhsUFe/2b0LNLYhJb73/SgWO87vvzTLPBd2NLTn3l1+pr+pDQSSQkStRwZzSUA4nU
+         Rg1cQSmy3H/a/iBUDstsYMb1MN6BHVukhCe4XbPw5VbMJJsDZmYRB5Mx5kQDdkKeVUuRXMI+sezT
+         RfMTiJPM/ceGcz3ImQu5PJm+aJj/n+r/S7hgBVm/xP7KBfWhmOk3G4xa+ZSfHOiAiMQ7jTFL7NcM
+         +qi4xIkWkrTKO5VxEcwA0eXvSBY6UJWZVz2AAP0929kh2VrhhVEbOev6aaoJALR2foJd/2mQXKj/
+         0vqUj5s/g4L0oNrjp+HW0+nBaOX1vu1LHg1wYO5jLum25OC/A+MnDsicciR/7uCDeh+CL69ZwTXP
+         t24jcthE4M3CsDQe+nqMmtzv8RMwyg9/Xcqv6G6joY/amrATi2wanfeItea2giTV0cQA/yHgoo0A
+         w5WQKtF0JpQsx4LoEfbNl65G0CLmj9tSul64fvHQ==
+From:   wenyang.linux@foxmail.com
+To:     Frederic Weisbecker <fweisbec@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>
+Cc:     Wen Yang <wenyang.linux@foxmail.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] tick/rcu: fix an issue in the report_idle_softirq function
+Date:   Fri,  5 May 2023 00:12:53 +0800
+X-OQ-MSGID: <20230504161253.7246-1-wenyang.linux@foxmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello.
+From: Wen Yang <wenyang.linux@foxmail.com>
 
-On p=C3=A1tek 5. kv=C4=9Btna 2023 1:01:11 CEST Alex Williamson wrote:
-> On Thu,  4 May 2023 15:16:54 +0200
-> Oleksandr Natalenko <oleksandr@natalenko.name> wrote:
->=20
-> > Seeing a burst of messages like this:
-> >=20
-> >     vfio-pci 0000:98:00.0: vfio_ecap_init: hiding ecap 0x19@0x1d0
-> >     vfio-pci 0000:98:00.0: vfio_ecap_init: hiding ecap 0x25@0x200
-> >     vfio-pci 0000:98:00.0: vfio_ecap_init: hiding ecap 0x26@0x210
-> >     vfio-pci 0000:98:00.0: vfio_ecap_init: hiding ecap 0x27@0x250
-> >     vfio-pci 0000:98:00.1: vfio_ecap_init: hiding ecap 0x25@0x200
-> >     vfio-pci 0000:b1:00.0: vfio_ecap_init: hiding ecap 0x19@0x1d0
-> >     vfio-pci 0000:b1:00.0: vfio_ecap_init: hiding ecap 0x25@0x200
-> >     vfio-pci 0000:b1:00.0: vfio_ecap_init: hiding ecap 0x26@0x210
-> >     vfio-pci 0000:b1:00.0: vfio_ecap_init: hiding ecap 0x27@0x250
-> >     vfio-pci 0000:b1:00.1: vfio_ecap_init: hiding ecap 0x25@0x200
-> >=20
-> > is of little to no value for an ordinary user.
-> >=20
-> > Hence, use pci_dbg() instead of pci_info().
-> >=20
-> > Signed-off-by: Oleksandr Natalenko <oleksandr@natalenko.name>
-> > ---
-> >  drivers/vfio/pci/vfio_pci_config.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/vfio/pci/vfio_pci_config.c b/drivers/vfio/pci/vfio=
-_pci_config.c
-> > index 948cdd464f4e..dd8dda14e701 100644
-> > --- a/drivers/vfio/pci/vfio_pci_config.c
-> > +++ b/drivers/vfio/pci/vfio_pci_config.c
-> > @@ -1643,7 +1643,7 @@ static int vfio_ecap_init(struct vfio_pci_core_de=
-vice *vdev)
-> >  		}
-> > =20
-> >  		if (!len) {
-> > -			pci_info(pdev, "%s: hiding ecap %#x@%#x\n",
-> > +			pci_dbg(pdev, "%s: hiding ecap %#x@%#x\n",
-> >  				 __func__, ecap, epos);
-> > =20
-> >  			/* If not the first in the chain, we can skip over it */
->=20
-> Looks fine to me, though I might adjust that next line to keep the
-> previous alignment.
+Commit 0345691b24c0 ("tick/rcu: Stop allowing RCU_SOFTIRQ in idle")
+introduced the function report_idle_softirq, but the ratelimit logic
+was broken because it is a static variable that returned before being
+incremented, as follows:
 
-Sure, but if you want me to send v2 with this, please let me know.
+	static int ratelimit;
+...
 
-Thanks.
+	if (ratelimit < 10)
+		return false;  ---> always return here
+...
+	ratelimit++;           ---> no chance to run
 
-> In general this has certainly caused more
-> confusion than insightful information, so demoting it to debug is a
-> good idea.  Thanks,
->=20
-> Alex
->=20
->=20
+We need to adjust  the original "< 10" logic to ">= 10".
 
+Fixes: 0345691b24c0 ("tick/rcu: Stop allowing RCU_SOFTIRQ in idle")
+Signed-off-by: Wen Yang <wenyang.linux@foxmail.com>
+Cc: Frederic Weisbecker <frederic@kernel.org>
+Cc: Frederic Weisbecker <fweisbec@gmail.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Paul E. McKenney <paulmck@kernel.org>
+Cc: Paul Menzel <pmenzel@molgen.mpg.de>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: linux-kernel@vger.kernel.org
+---
+ kernel/time/tick-sched.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-=2D-=20
-Oleksandr Natalenko (post-factum)
-
+diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
+index a46506f7ec6d..8891ad1d9a11 100644
+--- a/kernel/time/tick-sched.c
++++ b/kernel/time/tick-sched.c
+@@ -1035,7 +1035,7 @@ static bool report_idle_softirq(void)
+ 			return false;
+ 	}
+ 
+-	if (ratelimit < 10)
++	if (ratelimit >= 10)
+ 		return false;
+ 
+ 	/* On RT, softirqs handling may be waiting on some lock */
+-- 
+2.25.1
 
