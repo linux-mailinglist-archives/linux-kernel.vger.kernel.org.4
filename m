@@ -2,136 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3A276F6D4F
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 15:51:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE3DF6F6D4E
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 15:51:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230427AbjEDNvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 09:51:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42390 "EHLO
+        id S231215AbjEDNu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 09:50:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbjEDNvU (ORCPT
+        with ESMTP id S231191AbjEDNu5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 09:51:20 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2083.outbound.protection.outlook.com [40.107.243.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEAAA1737
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 06:51:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aiBYJOXI8uziAp2Kd/iV3b7DlA96JGiWQ0y9l6PRikMUOdkUrq+J549XqHG0n0EQLOStA2nGN7lGiCM2qrYK7eUBIz7rNcydzOJpv+O/3G9vrvUyGHkDTUqH2tVutxOssjuocJu+CRrcyjxWXfWKsGhdYgiUN9hNJMOW10oIr4o626wKJMrjyVctCD130uEVTgxQvA5mm7J0UYPlF59gf8HWwY7dKeFCKJC+mPm0rnIL24mhRqwZgcQ6xrM34xCBCzE78azFGyaiYlPyQ9awBGsONMKXVwAywwdaB9DRiB56Mlj2W6jYSePRcXeKm/a4TiUYxKFN2GOZtHOFr8878w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KYKcgc6KntO4tcux7G5aqtLTQl1Gd3hHUH/9u/WwfDw=;
- b=NApPJWwKAyWpoSzcg2gI0Yx818ztpGSpNti4S8FELmfue0sHhPBSwalgSoAQ05as/nLEFPOjLXuvKLaxsb4LsLaijB2H5IcnuOEYe+iL/Youv7/1pKgkQdbvkQrCDBCynD8cFs5Te0vaqVfRcxPk+eZAwTDKvw8auga7rAVNNxkCZawkQGKiZ3QbijsplfzoGrVpMWV9q9VsVzIv9YZONZnsUpWEir62dO6kz9maS4y6XZEyAs3hZm7N46r89ZF5wpMIJcc2sGsemFatvKRFbSdvathnU7Tnx7T6MczASChqaJceB9Sv3ky+AKkxAz8RZFBLNYQwE7BOS8AYkXmPSw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KYKcgc6KntO4tcux7G5aqtLTQl1Gd3hHUH/9u/WwfDw=;
- b=ectioDBu6mmpWH1WGOMi3hFD84edRQos+eSguhbF+e6Q58WNvM+PpQvaf+ewHyNwSBUJN4z3UYOroFcSmmlz2D26ZcVNVnXcj2kT1I3Q26udPKYTCRSrVAEA2+l3EgxloQqTHCXNINfPIeS5pNOC2DCe5EwdY6nBwSGXGVruyw4Mjm5gWvhAu9CvaohjGRyzwfLGI+5I2NKAQX5SGg5b7sC+fRrdlZLs7VZvtbH6LrlE4EXY/rbQ7bfd43PVRqTTnQ06ontmgYEBIYvk1tctryxAJCNZ+QbnO5cq8iAXZb3CJZATOmCb3luc4izXzTio8mtLaSy4Ix8TFnUnXfnuYA==
-Received: from MW4PR02CA0011.namprd02.prod.outlook.com (2603:10b6:303:16d::28)
- by DM4PR12MB6232.namprd12.prod.outlook.com (2603:10b6:8:a5::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6363.26; Thu, 4 May 2023 13:51:15 +0000
-Received: from CO1NAM11FT053.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:16d:cafe::ba) by MW4PR02CA0011.outlook.office365.com
- (2603:10b6:303:16d::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.26 via Frontend
- Transport; Thu, 4 May 2023 13:51:15 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CO1NAM11FT053.mail.protection.outlook.com (10.13.175.63) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6363.26 via Frontend Transport; Thu, 4 May 2023 13:51:15 +0000
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Thu, 4 May 2023
- 06:51:06 -0700
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail203.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Thu, 4 May 2023
- 06:51:06 -0700
-Received: from c-237-113-220-225.mtl.labs.mlnx (10.127.8.12) by
- mail.nvidia.com (10.129.68.7) with Microsoft SMTP Server id 15.2.986.37 via
- Frontend Transport; Thu, 4 May 2023 06:51:03 -0700
-From:   Dragos Tatulea <dtatulea@nvidia.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Xie Yongji <xieyongji@bytedance.com>
-CC:     Dragos Tatulea <dtatulea@nvidia.com>,
-        Gal Pressman <gal@nvidia.com>,
-        <virtualization@lists.linux-foundation.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] virtio-vdpa: Fix unchecked call to NULL set_vq_affinity
-Date:   Thu, 4 May 2023 16:50:52 +0300
-Message-ID: <20230504135053.2283816-1-dtatulea@nvidia.com>
-X-Mailer: git-send-email 2.40.1
+        Thu, 4 May 2023 09:50:57 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B371A6
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 06:50:56 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-2f55ffdbaedso349443f8f.2
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 06:50:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683208254; x=1685800254;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:reply-to:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=CBa5yf09RWH4yiJkKKfGA5cpxuaznqIjeI5vqh5jKnc=;
+        b=xXTCdKLJQRFOFCzlTq25XVRG7iQ2YTig8JrOBlX202YIt83MpXRScjaLxgVkY0zWnX
+         DAVukRu+mKp/O1lsgwViKkyFW5TflkdO+9RSnOsPHJf1UAuvmWhLpdvus2AS6Xx56NDm
+         CfWYEWqfh/q/sQRS9cAWeu5+0DKAw8bGkidhmv8yzMLKCAVlMYDjKTkaErzmqMlx9vh1
+         DbS/JUBo+CCNe2h2qgjAEEJuEUOYtQ2xsNqwMrt8nEvQB4N73in46NuRPL+RS0Rw5t61
+         ZjElPUzI86zAglFLOI5kjjaAYdQ2zK8mOxkBdMX3cvwx4ZC5ZEWZEDh6z887sMcghrwC
+         EYaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683208254; x=1685800254;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:reply-to:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CBa5yf09RWH4yiJkKKfGA5cpxuaznqIjeI5vqh5jKnc=;
+        b=L/fmV1ucOm3P03xJH0MX0g2sNiExiDlPLsnAwnlD/6bvWDTmp1NDV2mBXit3G5MXEK
+         Oj2VsIx/cVpHXtHAfUlOEFQ7fTXIKT5UpDQ5VFu0eyVQKUGtHVLbP+7Gf32eFxJrdjX2
+         UMrT9JkKFNct1eK2+crCJT0ZmyTbdW1o/sg0xX8iIfd/FKAeEDyHJvWIgZSVx6kq/swy
+         vsMtScPQBfi8aZRLORt04y4ptSiPjQYnzHwY5AbA9+AmFxYMQ6Z1cV/lRurLvgSGA9mZ
+         zH81LkOdeVXR07uYjXQ1JvtydqaiODedEw3oEh9QTNnz8eAtyil4adnrSdgIiqjp8zkE
+         JqEg==
+X-Gm-Message-State: AC+VfDxfr7pF5TWWuZNSpycx+1JNfGTc+uLPCh019YKodCvJvX4baFua
+        DT2Wmjj4XO00yG4Yh8otEfQRqA==
+X-Google-Smtp-Source: ACHHUZ5cfrBrKo0XKh8lYl7HP9vVSfMA8XPRqej+s9gQ4qUP1IFXfzgg0heMVynEUJsKqQXaLU6aZw==
+X-Received: by 2002:a05:6000:1b82:b0:306:2a21:b5ff with SMTP id r2-20020a0560001b8200b003062a21b5ffmr2371851wru.17.1683208254591;
+        Thu, 04 May 2023 06:50:54 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:52fb:80bd:bee3:f741? ([2a01:e0a:982:cbb0:52fb:80bd:bee3:f741])
+        by smtp.gmail.com with ESMTPSA id y6-20020a1c4b06000000b003f17131952fsm4982246wma.29.2023.05.04.06.50.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 May 2023 06:50:54 -0700 (PDT)
+Message-ID: <ea0ec8b4-ec87-65f0-4f0e-504d8059b1e6@linaro.org>
+Date:   Thu, 4 May 2023 15:50:53 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH 1/7] dt-bindings: phy: qcom,sc8280xp-qmp-usb43dp: Add
+ ports and orientation-switch
+Content-Language: en-US
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Bryan O'Donoghue <pure.logic@nexus-software.ie>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Johan Hovold <johan@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230425034010.3789376-1-quic_bjorande@quicinc.com>
+ <20230425034010.3789376-2-quic_bjorande@quicinc.com>
+ <CAJB8c06H+3pxoUGXWOXyCgtbOj6y0OhSxb9dvoTo1b6iChy7ng@mail.gmail.com>
+ <20230427195232.GB870858@hu-bjorande-lv.qualcomm.com>
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <20230427195232.GB870858@hu-bjorande-lv.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT053:EE_|DM4PR12MB6232:EE_
-X-MS-Office365-Filtering-Correlation-Id: b57c4ddd-f6a0-48ab-0982-08db4ca6a0fd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bMNw7x55KJnDVX2cJYJM1BoX9NYG+EG7IKsVnnTsaRkw9m1GSmXt62qOypi90vkVj9+gUI3ELhjft+AJ4jbJQ4NycZ/qU4Se0L2wLb65XYy62kp/gxF92mjljzJ/SprXQ+NPBhDUjIh+UH/aBi8pvqkiIPEB3E6x/G9nePta4xmBkV2Ii8xCgDFx9q3tu8qB36VAU/1DncxVFptth40b1DwPRuB8UVnXeYm8Mk/2QxKjM5KWI0xWb+SQ0/Bw1ZcpakHzGlyIY1eASdE8y2CHA5QAVCeaCYcYS39n2LtrkQiagpR2fLusswAd9n1MAndBk5G8sBOT3Aev9O4tPgNBU2O/fTF0yzZn0vQVz3u/uXXD9nZefeu8q2Nnf6ZGlHP9zxwpvGQU6KMWFnZl2ZqKwpMO0bXv7wgbuIomOdSrIJFsQrYG80Zc3g4eG3VPPnj2mhO9LHT5SpDw2mqOTI/VeACN7EZBaybVuM+gXKIOEOoTILScj239jJuuz9+GvhaVRZOpJbqk05+rejnuqiTeaocfrYX9ValvYsz1Ly1tNR6pDJTXmvrqfSNuwsVPsv9n9iTBPU1/PD2y4/7RD6vPsERW5KLwKfl6XiAhjI0VIcysLywPDFf7ULdyYIMO7AuC9C1RsGDUgw49/4ABER64Ewb+puix3w5RJJ8yN4mYQUeT1z08CGIZhyRalJKXNswzybIXUBIRGB+EG+VWekkj+w==
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(396003)(376002)(346002)(451199021)(40470700004)(36840700001)(46966006)(1076003)(26005)(186003)(2616005)(336012)(426003)(54906003)(110136005)(83380400001)(36756003)(36860700001)(47076005)(6666004)(40460700003)(316002)(40480700001)(5660300002)(82740400003)(478600001)(2906002)(4744005)(4326008)(86362001)(41300700001)(8676002)(8936002)(356005)(7636003)(82310400005)(70206006)(70586007);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2023 13:51:15.1339
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b57c4ddd-f6a0-48ab-0982-08db4ca6a0fd
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT053.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6232
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The referenced patch calls set_vq_affinity without checking if the op is
-valid. This patch adds the check.
+On 27/04/2023 21:52, Bjorn Andersson wrote:
+> On Wed, Apr 26, 2023 at 11:21:29AM +0100, Bryan O'Donoghue wrote:
+>> On Tue, Apr 25, 2023 at 4:40 AM Bjorn Andersson
+>> <quic_bjorande@quicinc.com> wrote:
+>>>
+>>> The QMP combo phy can be connected to a TCPM, a USB controller and a
+>>> DisplayPort controller for handling USB Type-C orientation switching
+>>> and propagating HPD signals.
+>>>
+>>> Extend the binding to allow these connections to be described.
+>>>
+>>> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+>>> ---
+>>>   .../phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml    | 51 +++++++++++++++++++
+>>>   1 file changed, 51 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml
+>>> index 3cd5fc3e8fab..c037ac90ce7f 100644
+>>> --- a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml
+>>> +++ b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml
+>>> @@ -60,6 +60,26 @@ properties:
+>>>       description:
+>>>         See include/dt-bindings/dt-bindings/phy/phy-qcom-qmp.h
+>>>
+>>> +  orientation-switch:
+>>> +    description:
+>>> +      Flag the PHY as possible handler of USB Type-C orientation switching
+>>> +    type: boolean
+>>> +
+>>> +  ports:
+>>> +    $ref: /schemas/graph.yaml#/properties/ports
+>>> +    properties:
+>>> +      port@0:
+>>> +        $ref: /schemas/graph.yaml#/properties/port
+>>> +        description: Output endpoint of the PHY
+>>> +
+>>> +      port@1:
+>>> +        $ref: /schemas/graph.yaml#/$defs/port-base
+>>> +        description: Incoming endpoint from the USB controller
+>>
+>> Do you really need this one ?
+>>
+>> The controller doesn't process orientation switching.
+>>
+> 
+> I don't have a need for it, as we can deal with role switching by
+> connecting connector/port@0 to the dwc3.
+> 
+> But if we ever have a need to describe the dwc3 -> QMP -> connector path
+> in the of_graph I think it would look prettier to have USB input as
+> port@1 and DP input as port@2...
 
-Fixes: 3dad56823b53 ("virtio-vdpa: Support interrupt affinity spreading mechanism")
-Reviewed-by: Gal Pressman <gal@nvidia.com>
-Signed-off-by: Dragos Tatulea <dtatulea@nvidia.com>
----
- drivers/virtio/virtio_vdpa.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+I think it would be great to have port@1 for USB SS and port@2 for DP,
+otherwise we need to add 2 endpoints as I sent in
+https://lore.kernel.org/all/20230503-topic-sm8450-graphics-dp-next-v1-1-d1ee9397f2a6@linaro.org/
+since we split USB HS and SS streams on SM8[345]50 platforms.
 
-diff --git a/drivers/virtio/virtio_vdpa.c b/drivers/virtio/virtio_vdpa.c
-index eb6aee8c06b2..989e2d7184ce 100644
---- a/drivers/virtio/virtio_vdpa.c
-+++ b/drivers/virtio/virtio_vdpa.c
-@@ -385,7 +385,9 @@ static int virtio_vdpa_find_vqs(struct virtio_device *vdev, unsigned int nvqs,
- 			err = PTR_ERR(vqs[i]);
- 			goto err_setup_vq;
- 		}
--		ops->set_vq_affinity(vdpa, i, &masks[i]);
-+
-+		if (ops->set_vq_affinity)
-+			ops->set_vq_affinity(vdpa, i, &masks[i]);
- 	}
- 
- 	cb.callback = virtio_vdpa_config_cb;
--- 
-2.40.1
+> 
+> Do you have a concern with keeping it around in the DT (the
+> implementation doesn't need to care)?
+> 
+> Regards,
+> Bjorn
 
