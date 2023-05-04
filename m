@@ -2,55 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BAF16F64BD
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 08:09:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13B1D6F64BE
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 08:10:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229785AbjEDGJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 02:09:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34418 "EHLO
+        id S229822AbjEDGKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 02:10:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbjEDGJv (ORCPT
+        with ESMTP id S229818AbjEDGKB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 02:09:51 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0CB2128
-        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 23:09:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=kdsR0guEY624cKUQSYsVx2bXuW3WeI6HUMgourQ1avY=; b=FIntEoogQ8rpGiMYdMEYJzhIc2
-        v9YCmx0tlIPF2b6lW12RSQm87qq7sw0v17FTFNuhoRhylAsesdByerA030v8EtH5NSYjUFqTh6KNE
-        DPtf9cg4P/DUXnutvZ0uKphw5WRzJ+Sh68JQwhtfq2OBZZfahDIpDy1LyzPCGel/bb7zBjs/gCrI/
-        X0kXtCWDOGDjKFndW/PjFT5GkK2n43BNVLjzlikEghAgOBAxxZVtvmjDG1XfrYLPewm/MiZIAv1jp
-        bjhC7xY+DqQkQev7dHqemAuO0ZqtnFXF/Au9WlNIHHVcubEyD4N+EZ8uniSNkRs8ajsIxYG9Iknl6
-        YDuvcROg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1puS9c-00AIy0-Fz; Thu, 04 May 2023 06:09:25 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2014D3006DA;
-        Thu,  4 May 2023 08:09:24 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E6AEF240701FD; Thu,  4 May 2023 08:09:23 +0200 (CEST)
-Date:   Thu, 4 May 2023 08:09:23 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 1/3] selftests/rseq: Implement
- rseq_unqual_scalar_typeof
-Message-ID: <20230504060923.GB1734100@hirez.programming.kicks-ass.net>
-References: <20230503201324.1587003-1-mathieu.desnoyers@efficios.com>
+        Thu, 4 May 2023 02:10:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A222D4E
+        for <linux-kernel@vger.kernel.org>; Wed,  3 May 2023 23:09:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E37F4612AB
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 06:09:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01CE7C433EF;
+        Thu,  4 May 2023 06:09:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683180580;
+        bh=UoN0G7xRgK8l3KWmK6d34C2kwfr+QWMw0vjw1R1S+g8=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=WkNmkNHyBdD/lfnYPpRlf/EnuH4fJCQwyJfMktPPjjpKgV58Kq8Dny63w4j1be69C
+         Y0/56/ojSQARUHNAK+YeZmq5QtzTuY6nUj0dbjslzaP3bBcHP9Oqm3lFpqjAwz21oj
+         ZcJ7ji3L7GFPasea44QUUDWyrz8qGkdGAIRkjWxhFXAwr/vJz5NLnRbjs6h0U8bNpr
+         w3uS83M6kpoupg24tFt9sAowm3rIsiT4nznB7QKLjx+I2AmpiYZglpPGRbaT3PI41O
+         ZjiRE6u6BotmdwSE4c3YV0tp909MCnd6rSNEnfCiwMZ6Yn26U7sU9f62DmXnPTMVMg
+         2mBmisAStMmuw==
+From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To:     ruanjinjie <ruanjinjie@huawei.com>, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     ruanjinjie@huawei.com
+Subject: Re: [PATCH v2] riscv: fix kprobe __user string arg print fault issue
+In-Reply-To: <20230423091235.968980-1-ruanjinjie@huawei.com>
+References: <20230423091235.968980-1-ruanjinjie@huawei.com>
+Date:   Thu, 04 May 2023 08:09:37 +0200
+Message-ID: <87cz3g39we.fsf@all.your.base.are.belong.to.us>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230503201324.1587003-1-mathieu.desnoyers@efficios.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,60 +55,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 03, 2023 at 04:13:22PM -0400, Mathieu Desnoyers wrote:
-> Allow defining variables and perform cast with a typeof which removes
-> the volatile and const qualifiers.
-> 
-> This prevents declaring a stack variable with a volatile qualifier
-> within a macro, which would generate sub-optimal assembler.
-> 
-> This is imported from the "librseq" project.
-> 
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+ruanjinjie <ruanjinjie@huawei.com> writes:
+
+> On riscv qemu platform, when add kprobe event on do_sys_open() to show
+> filename string arg, it just print fault as follow:
+>
+> echo 'p:myprobe do_sys_open dfd=3D$arg1 filename=3D+0($arg2):string flags=
+=3D$arg3
+> mode=3D$arg4' > kprobe_events
+>
+> bash-166     [000] ...1.   360.195367: myprobe: (do_sys_open+0x0/0x84)
+> dfd=3D0xffffffffffffff9c filename=3D(fault) flags=3D0x8241 mode=3D0x1b6
+>
+> bash-166     [000] ...1.   360.219369: myprobe: (do_sys_open+0x0/0x84)
+> dfd=3D0xffffffffffffff9c filename=3D(fault) flags=3D0x8241 mode=3D0x1b6
+>
+> bash-191     [000] ...1.   360.378827: myprobe: (do_sys_open+0x0/0x84)
+> dfd=3D0xffffffffffffff9c filename=3D(fault) flags=3D0x98800 mode=3D0x0
+>
+> As riscv do not select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE,
+> the +0($arg2) addr is processed as a kernel address though it is a
+> userspace address, cause the above filename=3D(fault) print. So select
+> ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE to avoid the issue, after that the
+> kprobe trace is ok as below:
+>
+> bash-166     [000] ...1.    96.767641: myprobe: (do_sys_open+0x0/0x84)
+> dfd=3D0xffffffffffffff9c filename=3D"/dev/null" flags=3D0x8241 mode=3D0x1=
+b6
+>
+> bash-166     [000] ...1.    96.793751: myprobe: (do_sys_open+0x0/0x84)
+> dfd=3D0xffffffffffffff9c filename=3D"/dev/null" flags=3D0x8241 mode=3D0x1=
+b6
+>
+> bash-177     [000] ...1.    96.962354: myprobe: (do_sys_open+0x0/0x84)
+> dfd=3D0xffffffffffffff9c filename=3D"/sys/kernel/debug/tracing/events/kpr=
+obes/"
+> flags=3D0x98800 mode=3D0x0
+>
+> Signed-off-by: ruanjinjie <ruanjinjie@huawei.com>
+
+Please use your full name.
+
 > ---
->  tools/testing/selftests/rseq/compiler.h | 27 +++++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/rseq/compiler.h b/tools/testing/selftests/rseq/compiler.h
-> index f47092bddeba..8dc7f881e253 100644
-> --- a/tools/testing/selftests/rseq/compiler.h
-> +++ b/tools/testing/selftests/rseq/compiler.h
-> @@ -33,4 +33,31 @@
->  #define RSEQ_COMBINE_TOKENS(_tokena, _tokenb)	\
->  	RSEQ__COMBINE_TOKENS(_tokena, _tokenb)
->  
-> +#ifdef __cplusplus
-> +#define rseq_unqual_scalar_typeof(x)					\
-> +	std::remove_cv<std::remove_reference<decltype(x)>::type>::type
-> +#else
-> +/*
-> + * Use C11 _Generic to express unqualified type from expression. This removes
-> + * volatile qualifier from expression type.
-> + */
-> +#define rseq_unqual_scalar_typeof(x)					\
-> +	__typeof__(							\
-> +		_Generic((x),						\
-> +			char: (char)0,					\
-> +			unsigned char: (unsigned char)0,		\
-> +			signed char: (signed char)0,			\
-> +			unsigned short: (unsigned short)0,		\
-> +			signed short: (signed short)0,			\
-> +			unsigned int: (unsigned int)0,			\
-> +			signed int: (signed int)0,			\
-> +			unsigned long: (unsigned long)0,		\
-> +			signed long: (signed long)0,			\
-> +			unsigned long long: (unsigned long long)0,	\
-> +			signed long long: (signed long long)0,		\
-> +			default: (x)					\
-> +		)							\
-> +	)
+> v2:
+> - add the config in alphabetical order
+> ---
+>  arch/riscv/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index eb7f29a412f8..b462ed7d41fe 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -25,6 +25,7 @@ config RISCV
+>  	select ARCH_HAS_GIGANTIC_PAGE
+>  	select ARCH_HAS_KCOV
+>  	select ARCH_HAS_MMIOWB
+> +	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
 
-FWIW, I like how the kernel version uses a little helper for the
-signed/unsigned pairs. Makes it a little more readable.
+After adding proper name in SoB, feel free to add:
 
-> +#endif
-> +
->  #endif  /* RSEQ_COMPILER_H_ */
-> -- 
+Acked-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
+
+>  	select ARCH_HAS_PMEM_API
+>  	select ARCH_HAS_PTE_SPECIAL
+>  	select ARCH_HAS_SET_DIRECT_MAP if MMU
+> --=20
 > 2.25.1
-> 
