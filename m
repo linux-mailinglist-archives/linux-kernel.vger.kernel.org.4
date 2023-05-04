@@ -2,149 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33E536F6C7A
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 14:57:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A144F6F6C82
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 14:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230391AbjEDM5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 08:57:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44118 "EHLO
+        id S230515AbjEDM6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 08:58:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230354AbjEDM5J (ORCPT
+        with ESMTP id S230225AbjEDM6W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 08:57:09 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A22E2D7
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 05:57:07 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f315712406so62666845e9.0
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 05:57:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683205026; x=1685797026;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=JhEPtfZr+9cfDFkYEs5Deqb0QgVZN1XabpIEoEj4cvk=;
-        b=hDS/6FJmG1vcXmIU0e4bcSnhK74uaQn0jSwNGZxO2WfePsQDyMBGTuSCOLy2FbK0qW
-         /ve9M0xS5NYWAg7uRKDj4Q8/aV6VcmdLrhYWt0tT3aHPftQOYQQoUNtjVqs91EnnXuY9
-         X9Qjr2lDJC64+7JN20gWW/bN7JkKAL6+rWqAMAAeKZJDp9KT4F6ZBFMXwRfd9XcssqHT
-         m5sFKMsV39mXGrwxDENjAWodwWB+tIFd5QuyUb915xqDeFrjABYFpRBBmb/Km9qORi9Z
-         FO5zbx7H5C3FFZO7UW7FFV8R/W7XPNzvYa2Drr1SkqbCf3u+T4mSF9oXvCb2ZArSu+pl
-         bxaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683205026; x=1685797026;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JhEPtfZr+9cfDFkYEs5Deqb0QgVZN1XabpIEoEj4cvk=;
-        b=j7ANT34Icp3vsSOF9qVQ/HaXTOGxRvc8cjeprPRyf/VMehma3ZLF6WXhOyaRR9lVzK
-         b8ScTDJxXA6yEIj3U38WxMMfjlegl1Hxbpumr5wXWFyX+ET8E2dHYWDvuEM74HsysxL7
-         1akLXVQELrSOWC6F2tvmOZ4Pr4RiuIpGB+6HdYSfSr7MH1kBII6XRVUOZ7rFcCv0KZAM
-         nYlUzEGrb7W2cE/vD2UjgfrHPMfclaIAqbsNS2cuMUWjuoGuRsvPn4PmFyYgS+fLNNm2
-         AfJ5eoFyvzRtGZ9DrT1CKXY7RVL7/aQMew/a2nK8pkWHY7YuIKbCoH9P9vrVZ0h2iWks
-         L+3Q==
-X-Gm-Message-State: AC+VfDxjtfJBjNyu33du2x3nsmYBsLb6TQAruXrLBwytSc+pOwBAb72G
-        L7EG8MKPcMXn7iol4M4sbR2oIw==
-X-Google-Smtp-Source: ACHHUZ5rqd3wHqCuOO0fJ1hW47ySy9xRiVsKwGXyfYQeycNMmT7FHnDTtsiXs54rb1SDpyWuTvez2Q==
-X-Received: by 2002:a5d:4686:0:b0:2fa:88d3:f8b8 with SMTP id u6-20020a5d4686000000b002fa88d3f8b8mr2379888wrq.12.1683205026087;
-        Thu, 04 May 2023 05:57:06 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:52fb:80bd:bee3:f741? ([2a01:e0a:982:cbb0:52fb:80bd:bee3:f741])
-        by smtp.gmail.com with ESMTPSA id l9-20020a7bc449000000b003f2390bdd0csm4847131wmi.32.2023.05.04.05.57.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 05:57:05 -0700 (PDT)
-Message-ID: <4eda7a33-991c-598e-0531-13959be0a912@linaro.org>
-Date:   Thu, 4 May 2023 14:57:04 +0200
+        Thu, 4 May 2023 08:58:22 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 267B0619A;
+        Thu,  4 May 2023 05:58:18 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3449ILrK001703;
+        Thu, 4 May 2023 12:57:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=J1bg+67OkOUP3/dK1K1LsKhWG0uCqMtDTWZMZgrQfbc=;
+ b=Jnd2L3BKOh0hzEf3BHp6OarNMGf67ji3SisnK50NmboWbvZNLNDemWXht0+7/zDtKq+w
+ ub5SOCF/iXg13rcImAV+5CzZ68H31uqW5SF4dmqoX5+8jbXqyHkgok3AM4tXVowX5cX4
+ Wh9kXPHm43ctsrADpiQbAHHXTyPsDxjgxi2U/Du1YNKaFviiPMRZhbzrPvGMMNbYetNc
+ 5GQ6IVgDvq6Xz/p6SksudKW1u5Nf7JDrFhRzoczkbuq2D1lbQBEENQdq08FJDfVi2AnZ
+ Ir3jyRN3JrHwfmTfSocBFN2VZgqShaDC1o1LExP3i8oM2v4bfcSPZsIu3aF1yEYbNt8H dw== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qc5041466-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 04 May 2023 12:57:58 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 344CvuxW007531
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 4 May 2023 12:57:56 GMT
+Received: from [10.216.46.158] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 4 May 2023
+ 05:57:48 -0700
+Message-ID: <d80868bf-610d-7e79-d279-da704efb38f0@quicinc.com>
+Date:   Thu, 4 May 2023 18:27:45 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 1/6] arm64: dts: qcom: sm8350: add ports subnodes in usb1
- qmpphy node
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 02/18] remoteproc: qcom: Move minidump specific data to
+ qcom_minidump.h
 Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20230503-topic-sm8450-graphics-dp-next-v1-0-d1ee9397f2a6@linaro.org>
- <20230503-topic-sm8450-graphics-dp-next-v1-1-d1ee9397f2a6@linaro.org>
- <4ce083f8-1ad1-c5c9-59cb-7511211b574f@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <4ce083f8-1ad1-c5c9-59cb-7511211b574f@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <corbet@lwn.net>,
+        <keescook@chromium.org>, <tony.luck@intel.com>,
+        <gpiccoli@igalia.com>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <robh+dt@kernel.org>, <linus.walleij@linaro.org>,
+        <linux-gpio@vger.kernel.org>, <srinivas.kandagatla@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-hardening@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-doc@vger.kernel.org>
+References: <1683133352-10046-1-git-send-email-quic_mojha@quicinc.com>
+ <1683133352-10046-3-git-send-email-quic_mojha@quicinc.com>
+ <fe94ed5c-c444-436d-720a-c96538c1026d@linaro.org>
+ <e69862cc-4185-a7a2-07b2-15e331c4678a@quicinc.com>
+ <659a9637-f82c-054b-99a8-dc25416c8e13@linaro.org>
+ <33ea7c3b-4317-5aff-5e6a-af6e093d45a0@quicinc.com>
+ <1a4f4b55-6284-6149-4c7b-7b45fa1de291@linaro.org>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <1a4f4b55-6284-6149-4c7b-7b45fa1de291@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 9cR2SwDduMYBWJe-GF40DEwl8u4KK33H
+X-Proofpoint-ORIG-GUID: 9cR2SwDduMYBWJe-GF40DEwl8u4KK33H
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-04_08,2023-05-04_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=1 phishscore=0 malwarescore=0
+ suspectscore=0 adultscore=0 bulkscore=0 clxscore=1015 lowpriorityscore=0
+ spamscore=1 priorityscore=1501 mlxlogscore=222 mlxscore=1 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2305040106
 X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/05/2023 09:38, Konrad Dybcio wrote:
+
+
+On 5/4/2023 6:06 PM, Krzysztof Kozlowski wrote:
+> On 04/05/2023 14:26, Mukesh Ojha wrote:
+>>
+>>
+>> On 5/4/2023 5:33 PM, Krzysztof Kozlowski wrote:
+>>> On 04/05/2023 13:58, Mukesh Ojha wrote:
+>>>>
+>>>>
+>>>> On 5/4/2023 5:08 PM, Krzysztof Kozlowski wrote:
+>>>>> On 03/05/2023 19:02, Mukesh Ojha wrote:
+>>>>>> Move minidump specific data types and macros to a separate internal
+>>>>>> header(qcom_minidump.h) so that it can be shared among different
+>>>>>> Qualcomm drivers.
+>>>>>
+>>>>> No, this is not internal header. You moved it to global header.
+>>>>>
+>>>>> There is no reason driver internals should be exposed to other unrelated
+>>>>> subsystems.
+>>>>>
+>>>>>>
+>>>>>> There is no change in functional behavior after this.
+>>>>>
+>>>>> It is. You made all these internal symbols available to others.
+>>>>>
+>>>>>>
+>>>>>
+>>>>> This comes without justification why other drivers needs to access
+>>>>> private and internal data. It does not look correct design. NAK.
+>>>>
+>>>> Thanks for catching outdated commit text, will fix the commit with
+>>>> more descriptive reasoning.
+>>>>
+>>>> It has to be global so that co-processor minidump and apss minidump can
+>>>> share data structure and they are lying in different directory.
+>>>>
+>>>
+>>> Then you should not share all the internals of memory layout but only
+>>> few pieces necessary to talk with minidump driver. The minidump driver
+>>> should organize everything how it wants.
+>>
+>> These are core data structure which is shared with boot firmware and the
+>> one's are moved here all are required by minidump driver .
+> 
+> I am not sure if I understand correctly. If they are all required by
+> minidump driver, then this must not be in include, but stay with
+> minidump. Remoteproc then should not touch it.
+> 
+> I don't understand why internals of minidump should be important for
+> remoteproc. If they are, means you broken encapsulation.
+> 
+>>
+>> If you follow here[1], i raised by concern to make this particular one's
+>> as private and later to avoid confusion went with single header.
+>> But if others agree, I will keep the one that get shared with minidump
+>> as separate one or if relative path of headers are allowed that can make
+>> it private between these drivers(which i don't think, will be allowed or
+>> recommended).
+> 
+> Let's be specific: why MD_REGION_VALID must be available for remoteproc
+> or any other driver after introducing qcom minidump driver?
+
+Forget about this driver for a moment.
+
+I am not sure  how much you know about existing qcom_minidump()
+implementation and why is it there in first place in remoteproc
+code in driver/remoteproc/qcom_common.c
+
+The idea is, remoteproc co-processor like adsp/cdsp etc. may have their
+static predefined region (segments) to be collected on their crash which 
+is what exactly existing qcom_minidump() is doing.
+
+Now, after this minidump series, APSS (linux) will have it's
+own of collecting linux client region independent of whether
+remoteproc minidump collection.
+
+I think, are you hinting to move all minidump related code from 
+remoteproc to qcom_minidump driver, is this what are you trying
+to say ?
+
+-- Mukesh
 > 
 > 
-> On 3.05.2023 15:10, Neil Armstrong wrote:
->> Add the USB3+DP Combo QMP PHY port subnodes in the SM8350 SoC DTSI
->> to avoid duplication in the devices DTs.
->>
->> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->> ---
->>   arch/arm64/boot/dts/qcom/sm8350.dtsi | 26 ++++++++++++++++++++++++++
->>   1 file changed, 26 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
->> index ebcb481571c2..d048f4d35c89 100644
->> --- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
->> @@ -2149,6 +2149,32 @@ usb_1_qmpphy: phy@88e9000 {
->>   			#phy-cells = <1>;
->>   
->>   			status = "disabled";
->> +
->> +			ports {
->> +				#address-cells = <1>;
->> +				#size-cells = <0>;
->> +
->> +				port@0 {
->> +					reg = <0>;
->> +
->> +					usb_1_qmpphy_out: endpoint {
->> +					};
->> +				};
->> +
->> +				port@1 {
->> +					#address-cells = <1>;
->> +					#size-cells = <0>;
->> +					reg = <1>;
->> +
->> +					usb_1_qmpphy_usb_ss_in: endpoint@0 {
->> +						reg = <0>;
->> +					};
->> +
->> +					usb_1_qmpphy_dp_in: endpoint@1 {
->> +						reg = <1>;
->> +					};
-> Shouldn't dp be a separate port@2?
-
-Probably yes, but it should be the same issue for makena, but on makena
-we do not describe the USB SS and HS links separately, but only a single
-port for QMP input has been defined in the bindings.
-
-Neil
-
+> Best regards,
+> Krzysztof
 > 
-> Konrad
->> +				};
->> +			};
->>   		};
->>   
->>   		usb_2_qmpphy: phy-wrapper@88eb000 {
->>
-
