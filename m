@@ -2,133 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 516B06F71B8
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 20:05:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B17986F71BF
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 20:07:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbjEDSFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 14:05:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52020 "EHLO
+        id S229870AbjEDSHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 14:07:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjEDSFC (ORCPT
+        with ESMTP id S229459AbjEDSHF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 14:05:02 -0400
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A241BCC;
-        Thu,  4 May 2023 11:05:01 -0700 (PDT)
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-64115e652eeso14431594b3a.0;
-        Thu, 04 May 2023 11:05:01 -0700 (PDT)
+        Thu, 4 May 2023 14:07:05 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 620E830C2;
+        Thu,  4 May 2023 11:07:03 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id 6a1803df08f44-61b5a6865dfso6679466d6.3;
+        Thu, 04 May 2023 11:07:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683223622; x=1685815622;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V535/fMfcjeqLiO2/vab+SRrcLiLBAaen1OstfXBeK8=;
+        b=ZmkM8UcRuviiMSd7Q8VM/zaA3XhH1eQ52DzTlNTkbYGYPSMfQT+BcyIRlS6e9FyYf7
+         2iAdw29CgKH6JHvEq9j7HF0ArgFb0AViqHKpYMRkrSXKs3VNl/vivRBBdeRWU7rnshMt
+         DLviYcsJBnIVtlSJnW/X91bwcbujOCiVjBUhKQXZBV8LgQPDrp0iKz6e6m//U7H2eUK7
+         d3026LWjbVuYqrsFAlDznctGJl0/SzIBtwcADaUxafkeAwLU/1cTB8SEu+DDIZxoPK/f
+         sWfVWOw9ABvWwk/CcuMDcv7XPp3brZeWZIPyKMTDwP8JAXHj+Q/3rTUKFS2QL84QgKQp
+         k9eA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683223501; x=1685815501;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9ndDW36eTz2fNZR0ZWJLQqH5VttvJf9F4pFDzFwOuQQ=;
-        b=QxUlpeKpAWrOcXqiMPRsxjRyuMkM/OZXmRIBqkfAtXkYOV8ovtCVCQ7spxtMKG3dIv
-         TN6anzOv1CDJWqFV4aeMYbj+iySPyuR/AhyrfwPXrYX3NCvFaedzEcyaY6/mobiEhS6o
-         TdVV5QgNCjS/g5VLsUW+vEOM44/vY0DVRb0M+Ss5sJsk7DoNTjCf8d/p4duQv3xljTz6
-         UYfdAd/W4tnAEKW1qAkDbXSRttTrErzWPzssvh3mdNG/GiGgA4lTpt6c4aGTIwEIsvn7
-         AU9Ufjv/vlDSQUfw/8Y0fS5CZlLI7jvWVevLeh4Swqe7GpBMtmoFmWpMYjZ3tby1QYdz
-         ZuoQ==
-X-Gm-Message-State: AC+VfDzRlMtdfHDAnHXNGqEXN6qTbeS3OYo5aaD3prJBNXPM6RALQXSb
-        GIB4UV2wBOSnumBdyrqd6As=
-X-Google-Smtp-Source: ACHHUZ58KH8p6W6BVL9E0BUnKgDpgwJ68lJQZBtDXziRHGwUExYMsoix/tRyd7IdpSv1Na2fQZF9gA==
-X-Received: by 2002:a05:6a20:3d19:b0:f0:93d9:9c03 with SMTP id y25-20020a056a203d1900b000f093d99c03mr3746657pzi.15.1683223500955;
-        Thu, 04 May 2023 11:05:00 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:2c3b:81e:ce21:2437? ([2620:15c:211:201:2c3b:81e:ce21:2437])
-        by smtp.gmail.com with ESMTPSA id i13-20020aa787cd000000b0062dd8809d6esm1463809pfo.150.2023.05.04.11.04.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 11:05:00 -0700 (PDT)
-Message-ID: <0bb28ed3-8b4f-77f3-5648-adb42604f37e@acm.org>
-Date:   Thu, 4 May 2023 11:04:58 -0700
+        d=1e100.net; s=20221208; t=1683223622; x=1685815622;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=V535/fMfcjeqLiO2/vab+SRrcLiLBAaen1OstfXBeK8=;
+        b=WYEjJ992GjzegBDCVcrQ1HIgOtOvF5q78Q1rykyCQyamgTazTe913W1KJuJ4n70g+4
+         DGYr0fPIAJLAC/b0cF78FvsgmqLwei8kqBBDmdb8fsBGFtBnB1UotPo5QbrEBpmAcvLY
+         lYEZ/DOD6JJvbFlTfpywAs+MpfQcTHxrVGFRPgMHOCBKoMQHXFZh+xNHX1Dv4Z+QTTBV
+         v47q9PvuWtO60gWwNMZ8BN8D9T1nNMMcUTRlcWQZe0/5jMe3Ytp6wfqyQ2Dh+LkyuHlT
+         esFPItdl5LgVpyBocxv7hV/N/a3uw9hD1bU89pKbpl/boo6uAQlcZaUKtUiSDtZ1OPrb
+         CcDQ==
+X-Gm-Message-State: AC+VfDwtW5OUU9BjnemUZ5TKJN+lJakN+NQz7Y6xwNRxLvoT6bvPQGe6
+        OcyALAr5g5lsyYmnSY65b7/VlRE2DTTJDDZu9T12dHL7/GhWPQ==
+X-Google-Smtp-Source: ACHHUZ4diJ2WJC49P78EhjIm9s71+L2giKPw2hIr18KuA4zbtBNSjYIf+qmkj0b5DqNSh8DaUowYRWzsY035Obqzo1k=
+X-Received: by 2002:ad4:5bcc:0:b0:5ac:fb9a:67a1 with SMTP id
+ t12-20020ad45bcc000000b005acfb9a67a1mr14751083qvt.47.1683223622413; Thu, 04
+ May 2023 11:07:02 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v2 5/5] ufs: core: Add error handling for MCQ mode
-Content-Language: en-US
-To:     "Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
-        quic_asutoshd@quicinc.com, quic_cang@quicinc.com, mani@kernel.org,
-        Powen.Kao@mediatek.com, stanley.chu@mediatek.com,
-        adrian.hunter@intel.com, beanhuo@micron.com, avri.altman@wdc.com,
-        martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <cover.1681764704.git.quic_nguyenb@quicinc.com>
- <5a52b255001e994d0a65be9b1d61fe69f2a12f6c.1681764704.git.quic_nguyenb@quicinc.com>
- <c3297d67-ac6f-e8b5-9167-648302319812@acm.org>
- <b35c2e61-6fb1-37d5-886e-0fb67ee0d0a2@quicinc.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <b35c2e61-6fb1-37d5-886e-0fb67ee0d0a2@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230503013608.2431726-1-nphamcs@gmail.com> <20230503013608.2431726-3-nphamcs@gmail.com>
+ <CAMuHMdWUtb_A-uhXrBg6kC9L2zbC_q3m8oCZoq80ZSJvk6mUAA@mail.gmail.com>
+In-Reply-To: <CAMuHMdWUtb_A-uhXrBg6kC9L2zbC_q3m8oCZoq80ZSJvk6mUAA@mail.gmail.com>
+From:   Nhat Pham <nphamcs@gmail.com>
+Date:   Thu, 4 May 2023 11:06:51 -0700
+Message-ID: <CAKEwX=PPVoX0EDU8LQQomg3tnLooyZFy2MZhyTyfwV07E_-59A@mail.gmail.com>
+Subject: Re: [PATCH v13 2/3] cachestat: implement cachestat syscall
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, bfoster@redhat.com,
+        willy@infradead.org, linux-api@vger.kernel.org,
+        kernel-team@meta.com, linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/3/23 21:18, Bao D. Nguyen wrote:
-> On 4/25/2023 5:21 PM, Bart Van Assche wrote:
->> On 4/17/23 14:05, Bao D. Nguyen wrote:
->>> +        /* MCQ mode */
->>> +        if (is_mcq_enabled(hba))
->>> +            return ufshcd_clear_cmds(hba, 1UL << lrbp->task_tag);
->>
->> The above code will trigger an overflow if lrbp->task_tag >= 8 * sizeof(unsigned long). That's not acceptable.
-> This ufshcd_clear_cmds() uses a bit map. There are multiple places in the UFS code have this limitation if the queue depth grows to be greater than 64. I am thinking:
-> 1. Current ufs controllers in the market probably support queue depth 64 or less, so it may not be a problem today if host controller cap is set to 64 queue depth, but can be a problem in multiple places in the code later.
-> 2. In mcq mode, we can pass a tag number into this api ufshcd_clear_cmds(); while in SDB mode, pass the tag's bit mask as before.
-> 3. Use sbitmask() to support large queue depth? Thanks for any suggestions.
+On Thu, May 4, 2023 at 10:26=E2=80=AFAM Geert Uytterhoeven <geert@linux-m68=
+k.org> wrote:
+>
+> Hi Nhat,
+>
+> On Wed, May 3, 2023 at 3:38=E2=80=AFAM Nhat Pham <nphamcs@gmail.com> wrot=
+e:
+> > There is currently no good way to query the page cache state of large
+> > file sets and directory trees. There is mincore(), but it scales poorly=
+:
+> > the kernel writes out a lot of bitmap data that userspace has to
+> > aggregate, when the user really doesn not care about per-page
+> > information in that case. The user also needs to mmap and unmap each
+> > file as it goes along, which can be quite slow as well.
+> >
+> > Some use cases where this information could come in handy:
+> >   * Allowing database to decide whether to perform an index scan or
+> >     direct table queries based on the in-memory cache state of the
+> >     index.
+> >   * Visibility into the writeback algorithm, for performance issues
+> >     diagnostic.
+> >   * Workload-aware writeback pacing: estimating IO fulfilled by page
+> >     cache (and IO to be done) within a range of a file, allowing for
+> >     more frequent syncing when and where there is IO capacity, and
+> >     batching when there is not.
+> >   * Computing memory usage of large files/directory trees, analogous to
+> >     the du tool for disk usage.
+> >
+> > More information about these use cases could be found in the following
+> > thread:
+> >
+> > https://lore.kernel.org/lkml/20230315170934.GA97793@cmpxchg.org/
+> >
+> > This patch implements a new syscall that queries cache state of a file
+> > and summarizes the number of cached pages, number of dirty pages, numbe=
+r
+> > of pages marked for writeback, number of (recently) evicted pages, etc.
+> > in a given range. Currently, the syscall is only wired in for x86
+> > architecture.
+> >
+> > NAME
+> >     cachestat - query the page cache statistics of a file.
+> >
+> > SYNOPSIS
+> >     #include <sys/mman.h>
+> >
+> >     struct cachestat_range {
+> >         __u64 off;
+> >         __u64 len;
+> >     };
+> >
+> >     struct cachestat {
+> >         __u64 nr_cache;
+> >         __u64 nr_dirty;
+> >         __u64 nr_writeback;
+> >         __u64 nr_evicted;
+> >         __u64 nr_recently_evicted;
+> >     };
+> >
+> >     int cachestat(unsigned int fd, struct cachestat_range *cstat_range,
+> >         struct cachestat *cstat, unsigned int flags);
+> >
+> > DESCRIPTION
+> >     cachestat() queries the number of cached pages, number of dirty
+> >     pages, number of pages marked for writeback, number of evicted
+> >     pages, number of recently evicted pages, in the bytes range given b=
+y
+> >     `off` and `len`.
+> >
+> >     An evicted page is a page that is previously in the page cache but
+> >     has been evicted since. A page is recently evicted if its last
+> >     eviction was recent enough that its reentry to the cache would
+> >     indicate that it is actively being used by the system, and that
+> >     there is memory pressure on the system.
+> >
+> >     These values are returned in a cachestat struct, whose address is
+> >     given by the `cstat` argument.
+> >
+> >     The `off` and `len` arguments must be non-negative integers. If
+> >     `len` > 0, the queried range is [`off`, `off` + `len`]. If `len` =
+=3D=3D
+> >     0, we will query in the range from `off` to the end of the file.
+> >
+> >     The `flags` argument is unused for now, but is included for future
+> >     extensibility. User should pass 0 (i.e no flag specified).
+> >
+> >     Currently, hugetlbfs is not supported.
+> >
+> >     Because the status of a page can change after cachestat() checks it
+> >     but before it returns to the application, the returned values may
+> >     contain stale information.
+> >
+> > RETURN VALUE
+> >     On success, cachestat returns 0. On error, -1 is returned, and errn=
+o
+> >     is set to indicate the error.
+> >
+> > ERRORS
+> >     EFAULT cstat or cstat_args points to an invalid address.
+> >
+> >     EINVAL invalid flags.
+> >
+> >     EBADF  invalid file descriptor.
+> >
+> >     EOPNOTSUPP file descriptor is of a hugetlbfs file
+> >
+> > Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+> > ---
+> >  arch/x86/entry/syscalls/syscall_32.tbl |   1 +
+> >  arch/x86/entry/syscalls/syscall_64.tbl |   1 +
+>
+> This should be wired up on each and every architecture.
+> Currently we're getting
+>
+>     <stdin>:1567:2: warning: #warning syscall cachestat not implemented [=
+-Wcpp]
+>
+> in linux-next for all the missing architectures.
+Hi Geert,
 
-The UFS driver is the only block driver I know that tracks which commands
-are pending in a bitmap. Please pass the lrbp pointer or the task_tag directly
-to ufshcd_clear_cmds() instead of passing a bitmap to that function. Please
-also introduce a loop in ufshcd_eh_device_reset_handler() around the
-ufshcd_clear_cmds() call instead of passing a bitmap to ufshcd_clear_cmds().
+I saw that there are several instances where we have separate
+patches to wire up a syscall to these architectures, so I was doing
+something similar.
 
->>>   static irqreturn_t ufshcd_transfer_req_compl(struct ufs_hba *hba)
->>>   {
->>> +    struct ufshcd_lrb *lrbp;
->>> +    u32 hwq_num, utag;
->>> +    int tag;
->>> +
->>>       /* Resetting interrupt aggregation counters first and reading the
->>>        * DOOR_BELL afterward allows us to handle all the completed requests.
->>>        * In order to prevent other interrupts starvation the DB is read once
->>> @@ -5580,7 +5590,22 @@ static irqreturn_t ufshcd_transfer_req_compl(struct ufs_hba *hba)
->>>        * Ignore the ufshcd_poll() return value and return IRQ_HANDLED since we
->>>        * do not want polling to trigger spurious interrupt complaints.
->>>        */
->>> -    ufshcd_poll(hba->host, UFSHCD_POLL_FROM_INTERRUPT_CONTEXT);
->>> +    if (!is_mcq_enabled(hba)) {
->>> +        ufshcd_poll(hba->host, UFSHCD_POLL_FROM_INTERRUPT_CONTEXT);
->>> +        goto out;
->>> +    }
->>> +
->>> +    /* MCQ mode */
->>> +    for (tag = 0; tag < hba->nutrs; tag++) {
->>> +        lrbp = &hba->lrb[tag];
->>> +        if (lrbp->cmd) {
->>> +            utag = blk_mq_unique_tag(scsi_cmd_to_rq(lrbp->cmd));
->>> +            hwq_num = blk_mq_unique_tag_to_hwq(utag);
->>> +            ufshcd_poll(hba->host, hwq_num);
->>> +        }
->>> +    }
->>
->> Is my understanding correct that ufshcd_transfer_req_compl() is only called from single doorbell code paths and hence that the above change is not necessary?
-> ufshcd_transfer_req_compl() can be invoked from MCQ mode such as the ufshcd_err_handler() as below:
-> ufshcd_err_handler()-->ufshcd_complete_requests()-->ufshcd_transfer_req_compl()
+For e.g:
 
-Since there are multiple statements in ufshcd_transfer_req_compl() that assume
-SDB mode (resetting SDB interrupt aggregation and calling ufshcd_poll()), please
-move the is_mcq_enabled() test from ufshcd_transfer_req_compl() into the
-callers of that function.
+ARM: wire up process_vm_writev and process_vm_readv syscalls
+(e5489847d6fc0ff176048b6e1cf5034507bf703a)
 
-Thanks,
+MIPS: Hook up process_vm_readv and process_vm_writev system calls.
+(8ff8584e51d4d3fbe08ede413c4a221223766323)
 
-Bart.
+As for these non-x86 architecture wiring patches, I can give it a shot
+and cross-compile to see if it builds, but I have limited abilities for
+runtime tests as I don't have machines with these architectures. I
+would really appreciate it if there are arch people that could help
+wire it up.
+
+(cc-ing linux-arch as well)
+
+
+>
+> Gr{oetje,eeting}s,
+>
+>                         Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m6=
+8k.org
+>
+> In personal conversations with technical people, I call myself a hacker. =
+But
+> when I'm talking to journalists I just say "programmer" or something like=
+ that.
+>                                 -- Linus Torvalds
