@@ -2,160 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FE536F665E
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 09:56:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91A476F6660
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 May 2023 09:57:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229811AbjEDH4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 03:56:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39512 "EHLO
+        id S229825AbjEDH5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 03:57:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjEDH4j (ORCPT
+        with ESMTP id S229522AbjEDH5Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 03:56:39 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 550872728;
-        Thu,  4 May 2023 00:56:38 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2ac7de2b72fso2053921fa.1;
-        Thu, 04 May 2023 00:56:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683186996; x=1685778996;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=k7bTcKGL069SV5chj2exx/6OgP9rXCsK1lkREqDUd94=;
-        b=W9Dmtdln7kVxUeZK0oWOLX0IRwjjID+s6UUVYH4DcuJ7V3FprETbIzGmy3KYv7a3zc
-         cq7CxHPgrQLY/q/4wogcoU1kCkmGGiodnMMMUq9QRr6qcX1CI8Z+t3O8sa8ikMvxps7U
-         MYUBiWZReuoLZwbEOkQ7hu5QSl2wCzHLrhSBOZvusjKm9ucLTv0mf0D4Hpp4QfS4xf3q
-         M90Sl1pzxl4Pb7GGQM2YLjpjBXrPkO2WcY0vFC8Sc5klyWHRRr1j7z/iJEdaAK+50+Zf
-         RenOGaglvXTQQggRUSfl2K6lyxhBaV9HLinZ/9KaR8jyJIFyFJndy7yJfXZWq80qgh6G
-         yfqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683186996; x=1685778996;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k7bTcKGL069SV5chj2exx/6OgP9rXCsK1lkREqDUd94=;
-        b=HOf3mp0adhOy+yTlv2+SV8nPfzWi8XvbqUaL2YMwvPqJx4IxMKcSSw4/BkbmKZVVjF
-         MYMB7s6bC3IQUifv3TiB8gIVosvL3HzmkwzxdzA7Q6NRpx5D5MNK2M8U76Aq+fNGs37Q
-         6YMoeeAE5ZTp1Gpudi8EU3qUQHf8/Lxfg0VBzCHt96nEtex1UyFs+652KMNqyahDDH6C
-         BuYzPXV1WGmoYnRngvkACiXgHpJItIYvqvMycFhshzq4FvBO2qZu7edphUbAOjEnR859
-         X/a/gE0C0sUXg82rNXD2uInww3OLxMOOzHwrAACzDqKOlayYtGpw+4VZ6is//kQrkvc4
-         c0mQ==
-X-Gm-Message-State: AC+VfDw+HkYVgn+3kSekWb5cs5GiXFSBu9D9jWjEdi3PKt0fpmbZm1lK
-        E2RuyoMGjpY6lS250KZKPXqjpXFKBM8=
-X-Google-Smtp-Source: ACHHUZ53g4ZDfA8bz/0ja2DcDq9diAHAvexxjuGej3G9kQ/E08mCx1H4pCkicfywpYSmD9S2UaqCEg==
-X-Received: by 2002:ac2:43b3:0:b0:4ee:d799:eca with SMTP id t19-20020ac243b3000000b004eed7990ecamr1479225lfl.40.1683186996275;
-        Thu, 04 May 2023 00:56:36 -0700 (PDT)
-Received: from fedora (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
-        by smtp.gmail.com with ESMTPSA id a9-20020a056512020900b004f06aa3d856sm2552895lfo.3.2023.05.04.00.56.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 May 2023 00:56:35 -0700 (PDT)
-Date:   Thu, 4 May 2023 10:56:13 +0300
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 0/3] ROHM Sensor async probing
-Message-ID: <cover.1683185765.git.mazziesaccount@gmail.com>
+        Thu, 4 May 2023 03:57:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE322728;
+        Thu,  4 May 2023 00:57:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CCC4A631D6;
+        Thu,  4 May 2023 07:57:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FED7C433EF;
+        Thu,  4 May 2023 07:57:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683187034;
+        bh=BD+fImah7ymy/XPLoxovcxIHeqcAUrR7ThJMZGqhmUY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VMHxVyXZq7ct+QcEYLotgmRTbNBd5yimQJFWEju0LmqS+/NJuq7PfQIXnuCnqiGTp
+         5sY39fh68shTCdPyuY90UGqnoBypLT/0OCdQsyv51DE4GdjfPD6LSDFTfcI5yDb5BM
+         OVj6y8h2zCcYPXNjHQCMd8dEZlkVBQmeOr8lYAXW0B5iZLrmPVWgjsps1DepNFoFcr
+         atcpa0nlFVIKoiiQEm06sVCvwO6xncK28bFXPWJVsEKJYkRxnyYHpN5AsxYzuKU6jb
+         wrq9VM7Ule78SRjOnSNJGraAXSjbkfTTgOveVa1Pz4vW+J/jtUb5BAGHvPImEE0Vjd
+         hAyiW2J4mZBpA==
+Date:   Thu, 4 May 2023 10:57:09 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     "Chittim, Madhu" <madhu.chittim@intel.com>
+Cc:     Ding Hui <dinghui@sangfor.com.cn>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        intel-wired-lan@lists.osuosl.org, jesse.brandeburg@intel.com,
+        anthony.l.nguyen@intel.com, keescook@chromium.org,
+        grzegorzx.szczurek@intel.com, mateusz.palczewski@intel.com,
+        mitch.a.williams@intel.com, gregory.v.rose@intel.com,
+        jeffrey.t.kirsher@intel.com, michal.kubiak@intel.com,
+        simon.horman@corigine.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        pengdonglin@sangfor.com.cn, huangcun@sangfor.com.cn
+Subject: Re: [PATCH net v4 2/2] iavf: Fix out-of-bounds when setting channels
+ on remove
+Message-ID: <20230504075709.GS525452@unreal>
+References: <20230503031541.27855-1-dinghui@sangfor.com.cn>
+ <20230503031541.27855-3-dinghui@sangfor.com.cn>
+ <20230503082458.GH525452@unreal>
+ <d2351c0f-0bfe-9422-f6f3-f0a0db58c729@sangfor.com.cn>
+ <20230503162932.GN525452@unreal>
+ <941ad3cc-22d6-3459-dfbc-36bc47a8a22a@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="HMqvFF/irSGb9lXc"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <941ad3cc-22d6-3459-dfbc-36bc47a8a22a@intel.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, May 03, 2023 at 12:22:00PM -0700, Chittim, Madhu wrote:
+> 
+> 
+> On 5/3/2023 9:29 AM, Leon Romanovsky wrote:
+> > On Wed, May 03, 2023 at 10:00:49PM +0800, Ding Hui wrote:
+> > > On 2023/5/3 4:24 下午, Leon Romanovsky wrote:
+> > > > On Wed, May 03, 2023 at 11:15:41AM +0800, Ding Hui wrote:
+> > > 
+> > > > > 
+> > > > > If we detected removing is in processing, we can avoid unnecessary
+> > > > > waiting and return error faster.
+> > > > > 
+> > > > > On the other hand in timeout handling, we should keep the original
+> > > > > num_active_queues and reset num_req_queues to 0.
+> > > > > 
+> > > > > Fixes: 4e5e6b5d9d13 ("iavf: Fix return of set the new channel count")
+> > > > > Signed-off-by: Ding Hui <dinghui@sangfor.com.cn>
+> > > > > Cc: Donglin Peng <pengdonglin@sangfor.com.cn>
+> > > > > Cc: Huang Cun <huangcun@sangfor.com.cn>
+> > > > > Reviewed-by: Simon Horman <simon.horman@corigine.com>
+> > > > > Reviewed-by: Michal Kubiak <michal.kubiak@intel.com>
+> > > > > ---
+> > > > > v3 to v4:
+> > > > >     - nothing changed
+> > > > > 
+> > > > > v2 to v3:
+> > > > >     - fix review tag
+> > > > > 
+> > > > > v1 to v2:
+> > > > >     - add reproduction script
+> > > > > 
+> > > > > ---
+> > > > >    drivers/net/ethernet/intel/iavf/iavf_ethtool.c | 4 +++-
+> > > > >    1 file changed, 3 insertions(+), 1 deletion(-)
+> > > > > 
+> > > > > diff --git a/drivers/net/ethernet/intel/iavf/iavf_ethtool.c b/drivers/net/ethernet/intel/iavf/iavf_ethtool.c
+> > > > > index 6f171d1d85b7..d8a3c0cfedd0 100644
+> > > > > --- a/drivers/net/ethernet/intel/iavf/iavf_ethtool.c
+> > > > > +++ b/drivers/net/ethernet/intel/iavf/iavf_ethtool.c
+> > > > > @@ -1857,13 +1857,15 @@ static int iavf_set_channels(struct net_device *netdev,
+> > > > >    	/* wait for the reset is done */
+> > > > >    	for (i = 0; i < IAVF_RESET_WAIT_COMPLETE_COUNT; i++) {
+> > > > >    		msleep(IAVF_RESET_WAIT_MS);
+> > > > > +		if (test_bit(__IAVF_IN_REMOVE_TASK, &adapter->crit_section))
+> > > > > +			return -EOPNOTSUPP;
+> > > > 
+> > > > This makes no sense without locking as change to __IAVF_IN_REMOVE_TASK
+> > > > can happen any time.
+> > > > 
+> > > 
+> > > The state doesn't need to be that precise here, it is optimized only for
+> > > the fast path. During the lifecycle of the adapter, the __IAVF_IN_REMOVE_TASK
+> > > state will only be set and not cleared.
+> > > 
+> > > If we didn't detect the "removing" state, we also can fallback to timeout
+> > > handling.
+> > > 
+> > > So I don't think the locking is necessary here, what do the maintainers
+> > > at Intel think?
+> > 
+> > I'm not Intel maintainer, but your change, explanation and the following
+> > line from your commit message aren't really aligned.
+> > 
+> > [ 3510.400799] ==================================================================
+> > [ 3510.400820] BUG: KASAN: slab-out-of-bounds in iavf_free_all_tx_resources+0x156/0x160 [iavf]
+> > 
+> > 
+> 
+> __IAVF_IN_REMOVE_TASK is being set only in iavf_remove() and the above
+> change is ok in terms of coming out of setting channels early enough while
+> remove is in progress.
 
---HMqvFF/irSGb9lXc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+It is not, __IAVF_IN_REMOVE_TASK, set bit can be changed any time during
+iavf_set_channels() and if it is not, I would expect test_bit(..) placed
+at the beginning of iavf_set_channels() or even earlier.
 
-Devices which may take a while to initialize during probe and which have
-no strong reason to probe synchronously can request asynchronous probing
-as default probe strategy. This can speed-up start times on some
-platforms.
-
-There is however some caveats listed for asynchronous probing for
-example here:
-https://lore.kernel.org/all/06db017f-e985-4434-8d1d-02ca2100cca0@sirena.org=
-=2Euk/
-
-I don't know how tolerant IIO users are what comes to asynchronous
-probing but I _guess_ this is (and should be) handled pretty well.
-Still, guessing could be said to be somewhat sub-optimal when doing
-kernel development :) Hence this RFC - if someone has better
-understanding on async probing when using IIO, please let me know!
-
-As far as I know these drivers do not currently have in-tree users.
-Furthemore, they are so new they don't probably have many user-space
-users either. In fact, the BU27034 is not yet in any official releases
-and BU27008 is not merged in any official trees yet. Thus, testing out
-async probing with them should not break existing users. KX022A is also
-relatively new and I don't think it has yet been widely used either.
-
-Finally, if asynchronous probing does break things, then:
-a) We should try fix the thing preventing async probe.
-b) We can pretty easily revert back to synchronous probing.
-
-Please note that the patch 2 depends on
-https://lore.kernel.org/lkml/cover.1683105758.git.mazziesaccount@gmail.com/
-which is not yet in-tree. If the feed-back from this RFC is positive,
-then I will squash this change to that series when re-spinning it next
-time.
-
-Please note that the patch 3 depends on bu27034 series which is expected
-to land on 6.4-rc1.
-
----
-
-Matti Vaittinen (3):
-  iio: bu27034: Probe asynchronously
-  iio: bu27008: Probe asynchronously
-  iio: kx022a: Probe asynchronously
-
- drivers/iio/accel/kionix-kx022a-i2c.c | 1 +
- drivers/iio/accel/kionix-kx022a-spi.c | 1 +
- drivers/iio/light/rohm-bu27008.c      | 1 +
- drivers/iio/light/rohm-bu27034.c      | 1 +
- 4 files changed, 4 insertions(+)
-
---=20
-2.40.0
-
-
---=20
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =3D]=20
-
---HMqvFF/irSGb9lXc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmRTZREACgkQeFA3/03a
-ocUkkAgAg5V0CvjGZoviTnbB3F1zsUJA7iwlMwXeWxNCA3gNCUrmRLNbSJkvwpRU
-YnCRW3SCcHObwr94Q8MCgr7DpZ/iVgMO38fQEX4GlS6d7bwB0M+LI/05OtaqEJ+t
-d0xfhV+o8h5BtT8O2nt+IFYbvLwn3E5KPpq/O7tMG58X8pY0tkd0VaEHvdo+x0gM
-eTbKebFBihJTryVDFr6hg+CXPEOxoqAk8nGVxOOGo1eqCyvX6oo7QnZx9m0b8grI
-yUH9iJWFwvTVhGT5XUb4VP+rte1LVwTjvvmtH9M/0JRShOn1NqgKvPMkt505JIfP
-AbG/TwU7sHg7wJ1skSS9KqWTjB2uBA==
-=yMyu
------END PGP SIGNATURE-----
-
---HMqvFF/irSGb9lXc--
+Thanks
