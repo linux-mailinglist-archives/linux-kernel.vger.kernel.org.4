@@ -2,86 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84FDF6F8B16
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 23:33:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CB2B6F8B19
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 23:35:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233526AbjEEVde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 17:33:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35630 "EHLO
+        id S233554AbjEEVe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 17:34:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230312AbjEEVdc (ORCPT
+        with ESMTP id S233551AbjEEVet (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 17:33:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C006F4;
-        Fri,  5 May 2023 14:33:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FB84640D8;
-        Fri,  5 May 2023 21:33:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74DC4C433D2;
-        Fri,  5 May 2023 21:33:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683322409;
-        bh=M4kahhFPmrKwLmC+dwLRPb9KCPDgd7YIFYm187tld3A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=m5spICSYMMdXNA9wHyGc+FulwdcXkR8owOHc+m9ihjvpDcUM0ZP+xGyFkDCDTae+p
-         qeg31jfxTIBoDPNErCo0O6lh81M5Y51fCeh8XMuY2YJA6g//xr1X+vI8RgTBe8Ffh3
-         rWT8e4hMgwgyA7aaxdroUzKRpBPz6meLsKarHStHqlWKQBYmcAgd8K4y8yWBCfRjcU
-         SqJv9W7XEu4pYQVDMTr+y1+OdQieT2eViMMSzqic7JRJwsJwSfsCE8GzTU+qNpHpgI
-         kaYlbYox6jL/K2mpdGlPkneCGW4w15X/lWnlSFqQs7RkAgdTWrwmeSOPzatqYDU0bB
-         7bNKd+k1o3SSw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id B359C403B5; Fri,  5 May 2023 18:33:26 -0300 (-03)
-Date:   Fri, 5 May 2023 18:33:26 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Ian Rogers <irogers@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Namhyung Kim <namhyung@kernel.org>, Song Liu <song@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Clark Williams <williams@redhat.com>,
-        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Changbin Du <changbin.du@huawei.com>,
-        Hao Luo <haoluo@google.com>, James Clark <james.clark@arm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Roman Lozko <lozko.roma@gmail.com>,
-        Stephane Eranian <eranian@google.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Paul Clarke <pc@us.ibm.com>
-Subject: Re: [PATCH RFC/RFT] perf bpf skels: Stop using vmlinux.h generated
- from BTF, use subset of used structs + CO-RE. was Re: BPF skels in perf .Re:
- [GIT PULL] perf tools changes for v6.4
-Message-ID: <ZFV2JhBV6xyLm7xg@kernel.org>
-References: <ZFPw0scDq1eIzfHr@kernel.org>
- <CAEf4BzaUU9vZU6R_020ru5ct0wh-p1M3ZFet-vYqcHvb9bW1Cw@mail.gmail.com>
- <ZFQCccsx6GK+gY0j@kernel.org>
- <ZFQoQjCNtyMIulp+@kernel.org>
- <CAP-5=fU8HQorW+7O6vfEKGs1mEFkjkzXZMVPACzurtcMcRhVzQ@mail.gmail.com>
- <ZFQ5sjjtfEYzvHNP@krava>
- <ZFUFmxDU/6Z/JEsi@kernel.org>
- <ZFU1PJrn8YtHIqno@kernel.org>
- <CAP-5=fWfmmMCRnEmzj_CXTKacp6gjrzmR49Ge_C5XRyfTegRjg@mail.gmail.com>
- <ZFVqeKLssg7uzxzI@krava>
+        Fri, 5 May 2023 17:34:49 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5C05E42;
+        Fri,  5 May 2023 14:34:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683322487; x=1714858487;
+  h=subject:from:to:cc:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ygVybuXnWs/ny/MJljRlz4zC2fpHSEB8MFl5p8kH0BU=;
+  b=VAYXOlQFHXIol5glezVdk68xfoxEl2s/Co8JYZnr9AZiHnPfyuiMhx7P
+   9DBAYScszLjB2epWCjSm3kT+pZ+JBFlQCdMVFv7sv1XxeBOxyGuVhVsqt
+   VN8I6YCIXQMPVRkIcg4p9bJuguAR6vq/7dyZW8SmFUygTe0yAKKx7HnzP
+   LQ88MMFlmZSEKT8RsL91w/c6mB4CO0B22+7DDSwqjLPBa8Vmif0V2Pv/j
+   Kl64yMutPnaMioortCT2ANnC+qeDow4EKglmBIZW00SrX/MO6kA62965/
+   pcmLC1ACtbRQGRhclbcHW93FJtHIDhlX5aCMRuZV6+6CSlY5PzHnfOV8N
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="329656185"
+X-IronPort-AV: E=Sophos;i="5.99,253,1677571200"; 
+   d="scan'208";a="329656185"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2023 14:34:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="767275699"
+X-IronPort-AV: E=Sophos;i="5.99,253,1677571200"; 
+   d="scan'208";a="767275699"
+Received: from djiang5-mobl3.amr.corp.intel.com (HELO [192.168.1.177]) ([10.212.77.78])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2023 14:34:47 -0700
+Subject: [PATCH] base/node / acpi: Change 'node_hmem_attrs' to
+ 'access_coordinates'
+From:   Dave Jiang <dave.jiang@intel.com>
+To:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+        rafael@kernel.org, linux-acpi@vger.kernel.org
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        dan.j.williams@intel.com, linux-cxl@vger.kernel.org
+Date:   Fri, 05 May 2023 14:34:46 -0700
+Message-ID: <168332248685.2190392.1983307884583782116.stgit@djiang5-mobl3>
+User-Agent: StGit/1.5
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZFVqeKLssg7uzxzI@krava>
-X-Url:  http://acmel.wordpress.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,120 +63,170 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, May 05, 2023 at 10:43:36PM +0200, Jiri Olsa escreveu:
-> On Fri, May 05, 2023 at 10:04:47AM -0700, Ian Rogers wrote:
-> > On Fri, May 5, 2023 at 9:56 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> > >
-> > > Em Fri, May 05, 2023 at 10:33:15AM -0300, Arnaldo Carvalho de Melo escreveu:
-> > > > Em Fri, May 05, 2023 at 01:03:14AM +0200, Jiri Olsa escreveu:
-> > > > That with the preserve_access_index isn't needed, we need just the
-> > > > fields that we access in the tools, right?
-> > >
-> > > I'm now doing build test this in many distro containers, without the two
-> > > reverts, i.e. BPF skels continue as opt-out as in my pull request, to
-> > > test build and also for the functionality tests on the tools using such
-> > > bpf skels, see below, no touching of vmlinux nor BTF data during the
-> > > build.
-> > >
-> > > - Arnaldo
-> > >
-> > > From 882adaee50bc27f85374aeb2fbaa5b76bef60d05 Mon Sep 17 00:00:00 2001
-> > > From: Arnaldo Carvalho de Melo <acme@redhat.com>
-> > > Date: Thu, 4 May 2023 19:03:51 -0300
-> > > Subject: [PATCH 1/1] perf bpf skels: Stop using vmlinux.h generated from BTF,
-> > >  use subset of used structs + CO-RE
-> > >
-> > > Linus reported a build break due to using a vmlinux without a BTF elf
-> > > section to generate the vmlinux.h header with bpftool for use in the BPF
-> > > tools in tools/perf/util/bpf_skel/*.bpf.c.
-> > >
-> > > Instead add a vmlinux.h file with the structs needed with the fields the
-> > > tools need, marking the structs with __attribute__((preserve_access_index)),
-> > > so that libbpf's CO-RE code can fixup the struct field offsets.
-> > >
-> > > In some cases the vmlinux.h file that was being generated by bpftool
-> > > from the kernel BTF information was not needed at all, just including
-> > > linux/bpf.h, sometimes linux/perf_event.h was enough as non-UAPI
-> > > types were not being used.
-> > >
-> > > To keep te patch small, include those UAPI headers from the trimmed down
-> > > vmlinux.h file, that then provides the tools with just the structs and
-> > > the subset of its fields needed for them.
-> > >
-> > > Testing it:
-> > >
-> > >   # perf lock contention -b find / > /dev/null
-> 
-> I tested perf lock con -abv -L rcu_state sleep 1
-> and needed fix below
-> 
-> jirka
+Dan Williams suggested changing the struct 'node_hmem_attrs' to
+'access_coordinates' [1]. The struct is a container of r/w-latency and
+r/w-bandwidth numbers. Moving forward, this container will also be used by
+CXL to store the performance characteristics of each link hop in
+the PCIE/CXL topology. So, where node_hmem_attrs is just the access
+parameters of a memory-node, access_coordinates applies more broadly
+to hardware topology characteristics.
 
-patch not applying trying to do it manually.
+[1]: http://lore.kernel.org/r/64471313421f7_1b66294d5@dwillia2-xfh.jf.intel.com.notmuch/
 
-- Arnaldo
+Suggested-by: Dan Williams <dan.j.williams@intel.com>
+Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+Signed-off-by: Dave Jiang <dave.jiang@intel.com>
+---
+ drivers/acpi/numa/hmat.c |   20 ++++++++++----------
+ drivers/base/node.c      |   12 ++++++------
+ include/linux/node.h     |    8 ++++----
+ 3 files changed, 20 insertions(+), 20 deletions(-)
+
+diff --git a/drivers/acpi/numa/hmat.c b/drivers/acpi/numa/hmat.c
+index bba268ecd802..f9ff992038fa 100644
+--- a/drivers/acpi/numa/hmat.c
++++ b/drivers/acpi/numa/hmat.c
+@@ -62,7 +62,7 @@ struct memory_target {
+ 	unsigned int memory_pxm;
+ 	unsigned int processor_pxm;
+ 	struct resource memregions;
+-	struct node_hmem_attrs hmem_attrs[2];
++	struct access_coordinate coord[2];
+ 	struct list_head caches;
+ 	struct node_cache_attrs cache_attrs;
+ 	bool registered;
+@@ -227,24 +227,24 @@ static void hmat_update_target_access(struct memory_target *target,
+ {
+ 	switch (type) {
+ 	case ACPI_HMAT_ACCESS_LATENCY:
+-		target->hmem_attrs[access].read_latency = value;
+-		target->hmem_attrs[access].write_latency = value;
++		target->coord[access].read_latency = value;
++		target->coord[access].write_latency = value;
+ 		break;
+ 	case ACPI_HMAT_READ_LATENCY:
+-		target->hmem_attrs[access].read_latency = value;
++		target->coord[access].read_latency = value;
+ 		break;
+ 	case ACPI_HMAT_WRITE_LATENCY:
+-		target->hmem_attrs[access].write_latency = value;
++		target->coord[access].write_latency = value;
+ 		break;
+ 	case ACPI_HMAT_ACCESS_BANDWIDTH:
+-		target->hmem_attrs[access].read_bandwidth = value;
+-		target->hmem_attrs[access].write_bandwidth = value;
++		target->coord[access].read_bandwidth = value;
++		target->coord[access].write_bandwidth = value;
+ 		break;
+ 	case ACPI_HMAT_READ_BANDWIDTH:
+-		target->hmem_attrs[access].read_bandwidth = value;
++		target->coord[access].read_bandwidth = value;
+ 		break;
+ 	case ACPI_HMAT_WRITE_BANDWIDTH:
+-		target->hmem_attrs[access].write_bandwidth = value;
++		target->coord[access].write_bandwidth = value;
+ 		break;
+ 	default:
+ 		break;
+@@ -701,7 +701,7 @@ static void hmat_register_target_cache(struct memory_target *target)
+ static void hmat_register_target_perf(struct memory_target *target, int access)
+ {
+ 	unsigned mem_nid = pxm_to_node(target->memory_pxm);
+-	node_set_perf_attrs(mem_nid, &target->hmem_attrs[access], access);
++	node_set_perf_attrs(mem_nid, &target->coord[access], access);
+ }
  
-> 
-> ---
-> From b12aea55f1171dc09cde2957f9019c84bda7adbb Mon Sep 17 00:00:00 2001
-> From: Jiri Olsa <jolsa@kernel.org>
-> Date: Fri, 5 May 2023 13:28:46 +0200
-> Subject: [PATCH] perf tools: Fix lock_contention bpf program
-> 
-> We need to define empty 'struct rq' so the runqueues gets
-> resolved properly:
-> 
->   # ./perf lock con -b
->   libbpf: extern (var ksym) 'runqueues': incompatible types, expected [99] fwd rq, but kernel has [19783] struct rq
->   libbpf: failed to load object 'lock_contention_bpf'
->   libbpf: failed to load BPF skeleton 'lock_contention_bpf': -22
->   Failed to load lock-contention BPF skeleton
-> 
-> Also rq__old/rq__new need additional '_' so the suffix is ignored
-> properly.
-> 
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> ---
->  tools/perf/util/bpf_skel/lock_contention.bpf.c | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/perf/util/bpf_skel/lock_contention.bpf.c b/tools/perf/util/bpf_skel/lock_contention.bpf.c
-> index 8911e2a077d8..c2bf24c68c14 100644
-> --- a/tools/perf/util/bpf_skel/lock_contention.bpf.c
-> +++ b/tools/perf/util/bpf_skel/lock_contention.bpf.c
-> @@ -416,13 +416,15 @@ int contention_end(u64 *ctx)
->  	return 0;
->  }
->  
-> +struct rq {};
-> +
->  extern struct rq runqueues __ksym;
->  
-> -struct rq__old {
-> +struct rq___old {
->  	raw_spinlock_t lock;
->  } __attribute__((preserve_access_index));
->  
-> -struct rq__new {
-> +struct rq___new {
->  	raw_spinlock_t __lock;
->  } __attribute__((preserve_access_index));
->  
-> @@ -434,8 +436,8 @@ int BPF_PROG(collect_lock_syms)
->  
->  	for (int i = 0; i < MAX_CPUS; i++) {
->  		struct rq *rq = bpf_per_cpu_ptr(&runqueues, i);
-> -		struct rq__new *rq_new = (void *)rq;
-> -		struct rq__old *rq_old = (void *)rq;
-> +		struct rq___new *rq_new = (void *)rq;
-> +		struct rq___old *rq_old = (void *)rq;
->  
->  		if (rq == NULL)
->  			break;
-> -- 
-> 2.40.1
-> 
+ static void hmat_register_target_devices(struct memory_target *target)
+diff --git a/drivers/base/node.c b/drivers/base/node.c
+index 2cada01c70da..fc0444b617d0 100644
+--- a/drivers/base/node.c
++++ b/drivers/base/node.c
+@@ -75,14 +75,14 @@ static BIN_ATTR_RO(cpulist, CPULIST_FILE_MAX_BYTES);
+  * @dev:	Device for this memory access class
+  * @list_node:	List element in the node's access list
+  * @access:	The access class rank
+- * @hmem_attrs: Heterogeneous memory performance attributes
++ * @coord:	Heterogeneous memory performance coordinates
+  */
+ struct node_access_nodes {
+ 	struct device		dev;
+ 	struct list_head	list_node;
+ 	unsigned int		access;
+ #ifdef CONFIG_HMEM_REPORTING
+-	struct node_hmem_attrs	hmem_attrs;
++	struct access_coordinate	coord;
+ #endif
+ };
+ #define to_access_nodes(dev) container_of(dev, struct node_access_nodes, dev)
+@@ -168,7 +168,7 @@ static ssize_t property##_show(struct device *dev,			\
+ 			   char *buf)					\
+ {									\
+ 	return sysfs_emit(buf, "%u\n",					\
+-			  to_access_nodes(dev)->hmem_attrs.property);	\
++			  to_access_nodes(dev)->coord.property);	\
+ }									\
+ static DEVICE_ATTR_RO(property)
+ 
+@@ -188,10 +188,10 @@ static struct attribute *access_attrs[] = {
+ /**
+  * node_set_perf_attrs - Set the performance values for given access class
+  * @nid: Node identifier to be set
+- * @hmem_attrs: Heterogeneous memory performance attributes
++ * @coord: Heterogeneous memory performance coordinates
+  * @access: The access class the for the given attributes
+  */
+-void node_set_perf_attrs(unsigned int nid, struct node_hmem_attrs *hmem_attrs,
++void node_set_perf_attrs(unsigned int nid, struct access_coordinate *coord,
+ 			 unsigned int access)
+ {
+ 	struct node_access_nodes *c;
+@@ -206,7 +206,7 @@ void node_set_perf_attrs(unsigned int nid, struct node_hmem_attrs *hmem_attrs,
+ 	if (!c)
+ 		return;
+ 
+-	c->hmem_attrs = *hmem_attrs;
++	c->coord = *coord;
+ 	for (i = 0; access_attrs[i] != NULL; i++) {
+ 		if (sysfs_add_file_to_group(&c->dev.kobj, access_attrs[i],
+ 					    "initiators")) {
+diff --git a/include/linux/node.h b/include/linux/node.h
+index 427a5975cf40..25b66d705ee2 100644
+--- a/include/linux/node.h
++++ b/include/linux/node.h
+@@ -20,14 +20,14 @@
+ #include <linux/list.h>
+ 
+ /**
+- * struct node_hmem_attrs - heterogeneous memory performance attributes
++ * struct access_coordinate - generic performance coordinates container
+  *
+  * @read_bandwidth:	Read bandwidth in MB/s
+  * @write_bandwidth:	Write bandwidth in MB/s
+  * @read_latency:	Read latency in nanoseconds
+  * @write_latency:	Write latency in nanoseconds
+  */
+-struct node_hmem_attrs {
++struct access_coordinate {
+ 	unsigned int read_bandwidth;
+ 	unsigned int write_bandwidth;
+ 	unsigned int read_latency;
+@@ -65,7 +65,7 @@ struct node_cache_attrs {
+ 
+ #ifdef CONFIG_HMEM_REPORTING
+ void node_add_cache(unsigned int nid, struct node_cache_attrs *cache_attrs);
+-void node_set_perf_attrs(unsigned int nid, struct node_hmem_attrs *hmem_attrs,
++void node_set_perf_attrs(unsigned int nid, struct access_coordinate *coord,
+ 			 unsigned access);
+ #else
+ static inline void node_add_cache(unsigned int nid,
+@@ -74,7 +74,7 @@ static inline void node_add_cache(unsigned int nid,
+ }
+ 
+ static inline void node_set_perf_attrs(unsigned int nid,
+-				       struct node_hmem_attrs *hmem_attrs,
++				       struct access_coordinate *coord,
+ 				       unsigned access)
+ {
+ }
 
--- 
 
-- Arnaldo
