@@ -2,131 +2,351 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBB176F89DB
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 21:51:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9109C6F89E0
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 21:52:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233470AbjEETvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 15:51:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38702 "EHLO
+        id S233349AbjEETwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 15:52:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233366AbjEETvG (ORCPT
+        with ESMTP id S233142AbjEETwS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 15:51:06 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC8EA10C;
-        Fri,  5 May 2023 12:51:01 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-64115e652eeso22202796b3a.0;
-        Fri, 05 May 2023 12:51:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683316261; x=1685908261;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9VTfSz0yyeWdPF85h+AGQ/vGWi6fRSpfJvLR0EPjDWQ=;
-        b=YzCXidzcvcJPIoxaBZ+1nS64ayb4z2Nf/LW7iWyUN9Mns5/BbiJOUSxxUH/670nETy
-         MIs5soNpscb526ENU8VjKh6AdiDPRH98QzW13/BUp9S+rDbjVHfd3KCVMKP9SEX3qgfA
-         K1ywoVkU2tKVOeJIyZdnfV9SFvQ+jCeepatv589ecD3xCxWZvUiuoMFaAVK0Vw+XLPIa
-         VpXQlYmhF33TSjEjtEeLUKbnUMQd2SJy9bedok132XO7Har+gUApfjkynV5S5dUx+MDg
-         ftBonzsxuMC4noRNfzT1bUaXe150dGe63LYuU5IwhhM4dL63Q7uC6ix1Fn5ZgosyQkuN
-         bSEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683316261; x=1685908261;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9VTfSz0yyeWdPF85h+AGQ/vGWi6fRSpfJvLR0EPjDWQ=;
-        b=al2oxpju6rN0W7iUbGECtMWwSddMpdePHXlB7MDRq0V/eDebH2ghOMh0jeWJqHS805
-         X8rx+UjZGjBJquuGakxpa0kKcuVeEKQiLEt44Wp2NmvBOFrVvKG3D01SJGzRCV7bwH2q
-         EzKIx5YLfbzgndsigsAfHInFkmdUPshUZ/NMHtLxByxSSOGXBkxJyZhv/wSI/CxMdIvy
-         fdjksT719UUsFgpWkkQUDC9lUJYohhMg0vB9Wl7HcNLUHfwZ7F+xXT9uXp5J6qRyOvaX
-         4fXaD2oww7pd0uKiGYD4vEKMNgCjqquKr/HqIxg1QiSY9evLxSOnuiWlTVn1b2QjpdZR
-         uxNg==
-X-Gm-Message-State: AC+VfDz2VJwk59n1q6djbZ8bXr0HZu3TnpoIxyRGO7VqIiV9BihNGTUY
-        8MH+H0JHdAxw/sEPbtENH3kY/B2qbX4=
-X-Google-Smtp-Source: ACHHUZ4bkyJhNlajHLHjulTevnzyI8SPsU3iBUFjjRbWKMZ5Oh2cdTySHlBCCO1k0lGiFMNc3urMIg==
-X-Received: by 2002:a05:6a00:298e:b0:63c:b3be:9784 with SMTP id cj14-20020a056a00298e00b0063cb3be9784mr7723066pfb.3.1683316260908;
-        Fri, 05 May 2023 12:51:00 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id c13-20020aa7880d000000b0063d2bb0d10asm1965319pfo.113.2023.05.05.12.51.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 May 2023 12:51:00 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Fri, 5 May 2023 09:50:59 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Cc:     dri-devel@lists.freedesktop.org, cgroups@vger.kernel.org,
-        intel-xe@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Subject: Re: [RFC PATCH 0/4]  Add support for DRM cgroup memory accounting.
-Message-ID: <ZFVeI2DKQXddKDNl@slm.duckdns.org>
-References: <20230503083500.645848-1-maarten.lankhorst@linux.intel.com>
+        Fri, 5 May 2023 15:52:18 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2052.outbound.protection.outlook.com [40.107.20.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC4410C;
+        Fri,  5 May 2023 12:52:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lCMxjodfGyRCk4H+VdjXUR7m2iM03q2FkSpIFudz3oGnE0P9WJUg5SDDsJHOPjCLP+p/kNuTfiP7e/QqcOpVfY7Xm1KcmZc2BofmXxUevmoKR/G8xTiqDEJVDLD62pLAY5IsWFqAJARQD0vCQiM4jpuwY+AX12AsJLZqIJ1PQCgi140ehv5IDYNWPFa6MVzXLhL4yt/ALTRICs5d2N/5Gus2+JIA7BM3hFDUjkLI+mdyHiWqNgG1vEULytMRrfxHIqYBXH3/q2dJLbEYp7Hq1gaJkMfliMv+7lrEniU3G4SVoPYyn9YF7HZWkDE6L0rZ11U97SPAx3mdC5ZK3S5a1Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=K4fd8x/WhVIrrd3/gXm+Ni9fXq8/3YZkDIR++hh2lMA=;
+ b=dqws/cG99UL6ct4fxjbfghzshuRluxwaf8n0SG8LgsIhJEqUTl2TJy2vSX2mou91nEDlrIgcUx/BdiT6E0+7FDAW/5IHL3Uyb8WIH1XCcZTnIdua8sKbW40WzUkplX04M2cyr7RzPom9isAoVMShJe+sWuVshET7P1iW4QGOkXkPBC0DNisLgc8Ej6zKbf3HlTnD6m3OBy6bkNUJWhn/+CmfZ5KIkEmeI98Y3UxhDRXRzRZ1KQPiPBqicT1eNnLu62XrSRX1Fa6Jyk8GtmLV0EdwkNJki2d6i/x5w5N5Sos8A2whZ8D06FYkAsoLXn0RsVPuUeu8so/jKykvPLW4DQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=K4fd8x/WhVIrrd3/gXm+Ni9fXq8/3YZkDIR++hh2lMA=;
+ b=b2OC2xiCwwgdBzLzN8sddHiwPKAx0KTxuxd3AC8UJ97qbGytt4tWKRj+1k7/jazZOrX1ikZyTi7qILMc7nGKpcQurmfX2rRsCWQdB1JPHlgb5xbl9It+Qlms7NbUpASPVhh//wGQ0The4cIwpeafMITD7CImD1BTWRcYc5t515M=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM6PR04MB4838.eurprd04.prod.outlook.com (2603:10a6:20b:4::16)
+ by DBBPR04MB7548.eurprd04.prod.outlook.com (2603:10a6:10:20c::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.27; Fri, 5 May
+ 2023 19:52:13 +0000
+Received: from AM6PR04MB4838.eurprd04.prod.outlook.com
+ ([fe80::bcdd:75c9:176c:39ed]) by AM6PR04MB4838.eurprd04.prod.outlook.com
+ ([fe80::bcdd:75c9:176c:39ed%4]) with mapi id 15.20.6363.027; Fri, 5 May 2023
+ 19:52:13 +0000
+From:   Frank Li <Frank.Li@nxp.com>
+To:     imx@lists.linux.dev, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/FREESCALE IMX
+        / MXC ARM ARCHITECTURE), linux-kernel@vger.kernel.org (open list)
+Cc:     coresight@lists.linaro.org
+Subject: [PATCH 1/1] arm64: dts: imx8mp: Add coresight trace components
+Date:   Fri,  5 May 2023 15:51:51 -0400
+Message-Id: <20230505195151.1874071-1-Frank.Li@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BYAPR06CA0059.namprd06.prod.outlook.com
+ (2603:10b6:a03:14b::36) To AM6PR04MB4838.eurprd04.prod.outlook.com
+ (2603:10a6:20b:4::16)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230503083500.645848-1-maarten.lankhorst@linux.intel.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM6PR04MB4838:EE_|DBBPR04MB7548:EE_
+X-MS-Office365-Filtering-Correlation-Id: be6bad67-f454-45ba-8623-08db4da23858
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zI3+DdY3hXXN5dcjsea0lMhewCkXNkAxp31n9Ep/l7DtQ6BiGbUdon9I0vKJaDaQfISG4YXaz99nlNvxpxsu52LZ59brsla9WIey/7zn2sCeJuaO9ydTOd1QFdhsdPZzjF7Ex49BPD+LQTJ1ejoXoEtbHmWDWrj/28alZJc6CQrFYZu8GWo93sVQAv0m2DMJysIA3AgOJv8f1Y8+RiQgA5HaY4BcBESC4XiHz8iTP5Tm7EhS/Phr33zBAJWdUkbvi72ufXMp8SvK/joMtyxEe/mqzpUSxy8xVtJbEQxWhm4bi9iizdFPQkXzG3/Wxf9BeRCM10DJuIrYHAbZbxFdWH4EqEqULDe4hdMijdpoZHxrqv9S8wDAsmGe8y8R9I9M3cM0J5+rUE2k9B4wTnICQmtqUqAIgZVNjyMc8GO+DIIgWvhipj0yniAnigaeL3bNqZrCgr0cS2TsDBoi7RXLCGi0cX4BFjvzwdGVaj/4M5smFP8DCPIUyt7SYXtTBqqHCSaKjE50NY2/9AT+8zLa8UWfvWlrLiq3WdcZjaiVMk2p4MqJhuNAjpRByyqj2N6OrVymoBztMpRMN9/HPucyeFO41oHui9ZFNXqvQ8pY91PyHsR+dBvQN58OafxSKCN8/+6VWQz4SpbQrmIT+gqKCr7ToVidlZdk8Jr50aULUUM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4838.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39860400002)(396003)(136003)(346002)(376002)(451199021)(2616005)(83380400001)(4326008)(41300700001)(38100700002)(921005)(8936002)(316002)(38350700002)(6506007)(1076003)(66946007)(478600001)(52116002)(66476007)(66556008)(8676002)(6512007)(26005)(6486002)(7416002)(86362001)(110136005)(186003)(5660300002)(6666004)(36756003)(2906002)(32563001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dHdDQUVUcSt6MVl2SnhjcGNJTVZsZnowWGVOcGY0KzYwdHdZejRwWEd3R0lw?=
+ =?utf-8?B?NnZyU3lQWkZYdSsySnpBSlJJcG1FZ0lLQVN6a3JMVk1mZXVyUnR4Nk5IUEdm?=
+ =?utf-8?B?QUJ3Qnc0MGlBd0tSM2ovZTVuM0tDT1A5RU1WdkYwOTIvb09WR3NlQjBLMERm?=
+ =?utf-8?B?LzYxekZZaFJFa3A1aGdUNDlXZEhnbXFTRUdyT1JNZktvYmZiZlZCNkREQ2c4?=
+ =?utf-8?B?ZndrWDVxcWlWemZoR1FnVVFaQVVmNjYvaUF5YW9Xc284bHB1Z1gvajNQRVpJ?=
+ =?utf-8?B?NjNIVlVsSzZkMUVuTnJZNkVPRzRHNE44M1lnbk0zVWJvVThLZzB2L1IrU0NT?=
+ =?utf-8?B?UjVZYTFiY1haeENtdDFkRTE4dUVSVXVMMXVkZU5aNXZiQjRoYUpoVjgwTUlB?=
+ =?utf-8?B?a2I3Zis4M3lBUE1sdUhtTGdIbmRsSU5pRzY0bzFoU09jVWcrZFFLb2RxNFJM?=
+ =?utf-8?B?eGV2UFNwRk9EQmpnd0FlaXI3aVVCcUV1OE1FdzBnbnoxK2hrY1hQK1AzMGZk?=
+ =?utf-8?B?Z25hNzRvdDNwK2tZV2VtOTFtUEhDZnZwMXRhSzI2U0xhakpWY0EvLyt0MFc5?=
+ =?utf-8?B?TDY0ODFROWE5OXM5T3dJUWlZY1YxSy9UWkFsOC84eE55dU1JMFNxNHlWVnRo?=
+ =?utf-8?B?Zzk2UWZ6WkpHOFp6K2dla3gwYzhsNGNKQ0c3c3ZnakQzQitUMW4zRUtDbmN3?=
+ =?utf-8?B?bDM4ejlYakdRZmpBN2M3OGpaV3VuallNd3U1b0ZCeEZBam9PTXVXYU5rcTNO?=
+ =?utf-8?B?a1ZiZG90RWN2ZzM5WSt0Njl0cHlKNUhVSGFrcFozTHpxcDVNK25pdGNlUDZY?=
+ =?utf-8?B?WVFteXQ3SUZvd0ljUEEyczRTV0pvbjB6K3NMdWhkeGZFenNtZ3ZTMHpiMHlo?=
+ =?utf-8?B?RXBoYnh0dlYvRmxXa3FwUXlDWENXUXF6c05hWDd1c09HWk4xRTZjdmJmbkI0?=
+ =?utf-8?B?dEJsay93ZUFhNjZRQlVRb1ZtUmlHQTh2Tm9qOWpjdmJua2RRM3IxaWJ5OVBU?=
+ =?utf-8?B?SEpBYkN3Y0hBSlBlNWdUV3k1OUhyVXh1Q0xGMGp2T3h5djNhdVVYbU91KzVG?=
+ =?utf-8?B?OWc0eXRsUGFndkVVcE5USDJMNm5jQXJFRlJrK0k0UkdJdmhZalk2YitxckNP?=
+ =?utf-8?B?UDh2Z01hZEUrSGFicDN0SWMzVms1NVJBcnJqWFhkT2x0UGV5TE10TTExWFFn?=
+ =?utf-8?B?VC9vcGN2Qkl5UU9BSXZKYUxnKzVBZ2tvanphN1NMTmpxbjZLdEVHYndQVmth?=
+ =?utf-8?B?VjNnaUcwdzA1TWpGZC9ST1pwdmZhZU41UmUrNGtKSFc2RlJtM1dFRXQ5bnND?=
+ =?utf-8?B?Q2RIL2hkaGw4a3kwV3FTZUt3aHh3d2paczhmanYwR1k4cjN5M2p3M2FaMmlG?=
+ =?utf-8?B?Q1dYK0dqdFBXV3JzeHp0eHNUeHd3b2s5K3dRbGxrQkpVZWtJSzh3cHFDZVds?=
+ =?utf-8?B?SEk0NlI3RFg1cUwyZnZqOXNQNlhlVVgzZU0weGpFSjcyVFR3b3BINDNIVVRi?=
+ =?utf-8?B?Q3cxY1MxRVJ6UFNWemRLSWxiT2hxd1dCVGtNNzZRVW5RdXJTTUdsTE04SzNr?=
+ =?utf-8?B?Z3FROVlaMXlPR2ExdThQUlVZRXlYMjVvWjdOWUlXemhqTmVjSURXUW1wNXhq?=
+ =?utf-8?B?M3FuNTRpbDdCbWNXWnU3VGZSeDhRaU95MWtKcitZZk1uYWZxWUZYcWpRZlE0?=
+ =?utf-8?B?UEpMK0xwa0RKSmJiRlBFY0tEMFJUSCtMbm1qMzlISlF0YUIxbHBUYUIxMkVu?=
+ =?utf-8?B?QzN1YnBid094eFA5eHdaQysyTDJ1Rk1YVnI2N243a2t0cXl6SUU2bmoxUkNQ?=
+ =?utf-8?B?bnVKaUxpdzdRZGtvWG1Fa21pTDRqaGM2cmRNYVhXaG1ZV0JsUDJmYXg0dHVi?=
+ =?utf-8?B?VytYRDBaT2hpYnZJSTJQbTNRZVFVdGUzU000THFEdUFMREJ1QUFOYjMzUW93?=
+ =?utf-8?B?ckdsNGZIY1AvR1VPMnhNVHhUSXU0MVU1V3VsamsxWGtXT0JjWnYrb0E1Tm5s?=
+ =?utf-8?B?YVJDYllDcy80MGl2d1A0eWJvM280VmxkdXUzN0JGR25vSUdaSmFYVzFqZUFP?=
+ =?utf-8?B?OEQvUUs4eVlyU0ZGUGx6TzV5QUdPR2lRU2s3WGh6OUIyblZOVE9FaTNOUDhp?=
+ =?utf-8?Q?u5u4=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: be6bad67-f454-45ba-8623-08db4da23858
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4838.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2023 19:52:13.0715
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Q6vPiv/KwKObnYRyIuoCelwLDRFbTyEd9x00dD5FmNFd1tBBECjmLPUxTxrzb5dgdcom9n2hE/8kM3anu8aBzQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7548
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Add coresight trace components (ETM, ETF, ETB and Funnel).
 
-On Wed, May 03, 2023 at 10:34:56AM +0200, Maarten Lankhorst wrote:
-> RFC as I'm looking for comments.
-> 
-> For long running compute, it can be beneficial to partition the GPU memory
-> between cgroups, so each cgroup can use its maximum amount of memory without
-> interfering with other scheduled jobs. Done properly, this can alleviate the
-> need for eviction, which might result in a job being terminated if the GPU
-> doesn't support mid-thread preemption or recoverable page faults.
-> 
-> This is done by adding a bunch of knobs to cgroup:
-> drm.capacity: Shows maximum capacity of each resource region.
-> drm.max: Display or limit max amount of memory.
-> drm.current: Current amount of memory in use.
-> 
-> TTM has not been made cgroup aware yet, so instead of evicting from
-> the current cgroup to stay within the cgroup limits, it simply returns
-> the error -ENOSPC to userspace.
-> 
-> I've used Tvrtko's cgroup controller series as a base, but it implemented
-> scheduling weight, not memory accounting, so I only ended up keeping the
-> base patch.
-> 
-> Xe is not upstream yet, so the driver specific patch will only apply on
-> https://gitlab.freedesktop.org/drm/xe/kernel
+┌───────┐  ┌───────┐  ┌───────┐
+│ CPU0  ├─►│ ETM0  ├─►│       │
+└───────┘  └───────┘  │       │
+                      │       │
+┌───────┐  ┌───────┐  │  ATP  │
+│ CPU1  ├─►│ ETM1  ├─►│       │
+└───────┘  └───────┘  │       │
+                      │ FUNNEL│
+┌───────┐  ┌───────┐  │       │
+│ CPU2  ├─►│ ETM2  ├─►│       │
+└───────┘  └───────┘  │       │   ┌─────┐  ┌─────┐
+                      │       │   │     │  │     │
+┌───────┐  ┌───────┐  │       │   │ M7  │  │ DSP │
+│ CPU3  ├─►│ ETM3  ├─►│       │   │     │  │     │
+└───────┘  └───────┘  └───┬───┘   └──┬──┘  └──┬──┘               AXI
+                          │          │        │                   ▲
+                          ▼          ▼        ▼                   │
+                      ┌───────────────────────────┐   ┌─────┐   ┌─┴──┐
+                      │          ATP FUNNEL       ├──►│ETF  ├─► │ETR │
+                      └───────────────────────────┘   └─────┘   └────┘
 
-Some high-level feedbacks.
+Signed-off-by: Frank Li <Frank.Li@nxp.com>
+---
+ arch/arm64/boot/dts/freescale/imx8mp.dtsi | 179 ++++++++++++++++++++++
+ 1 file changed, 179 insertions(+)
 
-* There have been multiple attempts at this but the track record is kinda
-  poor. People don't seem to agree what should constitute DRM memory and how
-  they should be accounted / controlled.
-
-* I like Tvrtko's scheduling patchset because it exposes a generic interface
-  which makes sense regardless of hardware details and then each driver can
-  implement the configured control in whatever way they can. However, even
-  for that, there doesn't seem much buy-in from other drivers.
-
-* This proposal seems narrowly scoped trying to solve a specific problem
-  which may not translate to different hardware configurations. Please let
-  me know if I got that wrong, but if that's the case, I think a better and
-  easier approach might be just being a part of the misc controller. That
-  doesn't require much extra code and should be able to provide everything
-  necessary for statically limiting specific resources.
-
-Thanks.
-
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+index a19224fe1a6a..0fa74477b9e1 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+@@ -304,6 +304,185 @@ soc: soc@0 {
+ 		nvmem-cells = <&imx8mp_uid>;
+ 		nvmem-cell-names = "soc_unique_id";
+ 
++		etm0: etm@28440000 {
++			compatible = "arm,coresight-etm4x", "arm,primecell";
++			reg = <0x28440000 0x10000>;
++			arm,primecell-periphid = <0xbb95d>;
++			cpu = <&A53_0>;
++			clocks = <&clk IMX8MP_CLK_MAIN_AXI>;
++			clock-names = "apb_pclk";
++			out-ports {
++				port {
++					etm0_out_port: endpoint {
++						remote-endpoint = <&ca_funnel_in_port0>;
++					};
++				};
++			};
++		};
++
++		etm1: etm@28540000 {
++			compatible = "arm,coresight-etm4x", "arm,primecell";
++			reg = <0x28540000 0x10000>;
++			arm,primecell-periphid = <0xbb95d>;
++			cpu = <&A53_1>;
++			clocks = <&clk IMX8MP_CLK_MAIN_AXI>;
++			clock-names = "apb_pclk";
++			out-ports {
++				port {
++					etm1_out_port: endpoint {
++						remote-endpoint = <&ca_funnel_in_port1>;
++					};
++				};
++			};
++		};
++
++		etm2: etm@28640000 {
++			compatible = "arm,coresight-etm4x", "arm,primecell";
++			reg = <0x28640000 0x10000>;
++			arm,primecell-periphid = <0xbb95d>;
++			cpu = <&A53_2>;
++			clocks = <&clk IMX8MP_CLK_MAIN_AXI>;
++			clock-names = "apb_pclk";
++			out-ports {
++				port {
++					etm2_out_port: endpoint {
++						remote-endpoint = <&ca_funnel_in_port2>;
++					};
++				};
++			};
++		};
++
++		etm3: etm@28740000 {
++			compatible = "arm,coresight-etm4x", "arm,primecell";
++			reg = <0x28740000 0x10000>;
++			arm,primecell-periphid = <0xbb95d>;
++			cpu = <&A53_3>;
++			clocks = <&clk IMX8MP_CLK_MAIN_AXI>;
++			clock-names = "apb_pclk";
++			out-ports {
++				port {
++					etm3_out_port: endpoint {
++						remote-endpoint = <&ca_funnel_in_port3>;
++					};
++				};
++			};
++		};
++
++		funnel {
++			/*
++			 * non-configurable funnel don't show up on the AMBA
++			 * bus.  As such no need to add "arm,primecell".
++			 */
++			compatible = "arm,coresight-static-funnel";
++			in-ports {
++				#address-cells = <1>;
++				#size-cells = <0>;
++				port@0 {
++					reg = <0>;
++					ca_funnel_in_port0: endpoint {
++						remote-endpoint = <&etm0_out_port>;
++					};
++				};
++				port@1 {
++					reg = <1>;
++					ca_funnel_in_port1: endpoint {
++						remote-endpoint = <&etm1_out_port>;
++					};
++				};
++				port@2 {
++					reg = <2>;
++					ca_funnel_in_port2: endpoint {
++						remote-endpoint = <&etm2_out_port>;
++					};
++				};
++				port@3 {
++					reg = <3>;
++					ca_funnel_in_port3: endpoint {
++						remote-endpoint = <&etm3_out_port>;
++					};
++				};
++			};
++			out-ports {
++				port {
++					ca_funnel_out_port0: endpoint {
++						remote-endpoint = <&hugo_funnel_in_port0>;
++					};
++				};
++			};
++		};
++
++		funnel@28c03000 {
++			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
++			reg = <0x28c03000 0x1000>;
++			clocks = <&clk IMX8MP_CLK_MAIN_AXI>;
++			clock-names = "apb_pclk";
++			in-ports {
++				#address-cells = <1>;
++				#size-cells = <0>;
++				port@0 {
++					reg = <0>;
++					hugo_funnel_in_port0: endpoint {
++						remote-endpoint = <&ca_funnel_out_port0>;
++					};
++				};
++				port@1 {
++					reg = <1>;
++					hugo_funnel_in_port1: endpoint {
++					/* M7 input */
++					};
++				};
++				port@2 {
++					reg = <2>;
++					hugo_funnel_in_port2: endpoint {
++					/* DSP input */
++					};
++				};
++				/* the other input ports are not connect to anything */
++			};
++			out-ports {
++				port {
++					hugo_funnel_out_port0: endpoint {
++						remote-endpoint = <&etf_in_port>;
++					};
++				};
++			};
++		};
++
++		etf@28c04000 {
++			compatible = "arm,coresight-tmc", "arm,primecell";
++			reg = <0x28c04000 0x1000>;
++			clocks = <&clk IMX8MP_CLK_MAIN_AXI>;
++			clock-names = "apb_pclk";
++			in-ports {
++				port {
++					etf_in_port: endpoint {
++						remote-endpoint = <&hugo_funnel_out_port0>;
++					};
++				};
++			};
++			out-ports {
++				port {
++					etf_out_port: endpoint {
++						remote-endpoint = <&etr_in_port>;
++					};
++				};
++			};
++		};
++
++		etr@28c06000 {
++			compatible = "arm,coresight-tmc", "arm,primecell";
++			reg = <0x28c06000 0x1000>;
++			clocks = <&clk IMX8MP_CLK_MAIN_AXI>;
++			clock-names = "apb_pclk";
++			in-ports {
++				port {
++					etr_in_port: endpoint {
++						remote-endpoint = <&etf_out_port>;
++					};
++				};
++			};
++		};
++
+ 		aips1: bus@30000000 {
+ 			compatible = "fsl,aips-bus", "simple-bus";
+ 			reg = <0x30000000 0x400000>;
 -- 
-tejun
+2.34.1
+
