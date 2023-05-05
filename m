@@ -2,82 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EF4D6F80AE
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 12:19:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DE5A6F80B3
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 12:20:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231739AbjEEKS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 06:18:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36504 "EHLO
+        id S231846AbjEEKUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 06:20:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231200AbjEEKS6 (ORCPT
+        with ESMTP id S231200AbjEEKUJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 06:18:58 -0400
+        Fri, 5 May 2023 06:20:09 -0400
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6DE818854;
-        Fri,  5 May 2023 03:18:56 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3458uUqo009519;
-        Fri, 5 May 2023 10:18:11 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C39B18854;
+        Fri,  5 May 2023 03:20:07 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3458luUJ014530;
+        Fri, 5 May 2023 10:19:59 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
  cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=L3toYGN2IeYTp4IXuzuFszzQE7VcZSvRPCNJ4OBU574=;
- b=mr+KRxQIRJLbqzy9uTjAhwNabGEKhmlEgsDZicDwOR1xY/tGVLldzOkSXotfwnH2S9Xg
- j6iB7luBzKH7pQ8WGb4rwfDs3Ij575axSVZl3AeZV3aOmixfl0Ol71wAF9tiykGAPgMm
- E3vUuzszOFjErdJOpuLGTjRcIea41vrgKZ8wOBs/ExZtsWgaNsNQF8RHozjDqohXOH50
- low7BtwbBew6jbNutxIkoFyL5lZ+fF4GZeP5GzmOwlvuKMqiPV4J0TwFD9c9WsYJgfi5
- ykA+ONfYW8unXYlVXR2BEFHUsIYIrwd9rA0Be6VH5IPljN/tSQA927Oia/umFxfvzakI Rw== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qcwdeg923-1
+ in-reply-to; s=qcppdkim1; bh=aNHgU+0nC7vnaXDt9HRwFXY3R2EPk1kMa3lnhR84wv4=;
+ b=SKfGqRYpGNi41XqRxF7oQiR5u2YTHdCYKhGBmQoFAqZBIAmIe6Zqv56n4dlAWbwKr08y
+ 3nYsY0IDvcjp21H8WKWG182ydhLUCksnW1m9GzubntUTJ+oGOk1z7HdaiRXKbAd61NHE
+ JLvL70WXn9Cpt6X86A5N1YpNltwvCZDPoYZw4um1L9HVgJX9Bnl2ebmLUadXriCaMH+U
+ HdeX8+WodSU+77wpHYqZjB5g6TT9ZUW6QzQe7sGxAN5o6RI6yCrb4gMsDuJDnu+/5+zr
+ d8bRuFQiH91l8ch9wc0v2l9LAQNvvtEclqzo44jjmqcq28gNTxywJJENiOCjkCEdMaOD gg== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qcb24augd-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 05 May 2023 10:18:11 +0000
+        Fri, 05 May 2023 10:19:59 +0000
 Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 345AIAwp014339
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 345AJwwX026871
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 5 May 2023 10:18:10 GMT
+        Fri, 5 May 2023 10:19:58 GMT
 Received: from varda-linux.qualcomm.com (10.80.80.8) by
  nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Fri, 5 May 2023 03:18:05 -0700
-Date:   Fri, 5 May 2023 15:48:01 +0530
+ 15.2.986.42; Fri, 5 May 2023 03:19:52 -0700
+Date:   Fri, 5 May 2023 15:49:48 +0530
 From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 CC:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <amitk@kernel.org>,
-        <thara.gopinath@gmail.com>, <rafael@kernel.org>,
-        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Praveenkumar I <quic_ipkumar@quicinc.com>
-Subject: Re: [PATCH 1/4] dt-bindings: thermal: tsens: Add ipq9574 compatible
-Message-ID: <20230505101800.GA10918@varda-linux.qualcomm.com>
-References: <cover.1682682753.git.quic_varada@quicinc.com>
- <3c6f7510d175ba5a3c81730b010f6c421b2fbf2d.1682682753.git.quic_varada@quicinc.com>
- <16443d11-7948-d224-cfef-b6c1b5c3d60d@linaro.org>
- <20230503071055.GB1087@varda-linux.qualcomm.com>
- <915eea5b-6cef-d346-7cbd-b679726113ad@linaro.org>
- <20230504045757.GA13434@varda-linux.qualcomm.com>
- <1b449a78-b57e-7e1e-0261-d35a5a2582a6@linaro.org>
+        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <quic_wcheng@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH v10 7/9] arm64: dts: qcom: ipq9574: Add USB related nodes
+Message-ID: <20230505101947.GB10918@varda-linux.qualcomm.com>
+References: <cover.1683183860.git.quic_varada@quicinc.com>
+ <efb655fd19354ee77cf03b3b96a2206065106590.1683183860.git.quic_varada@quicinc.com>
+ <CAA8EJprrk7+jRWdhz2MWdFj-jf2ehbXrz97KrkZ4NE6FqhiCNw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <1b449a78-b57e-7e1e-0261-d35a5a2582a6@linaro.org>
+In-Reply-To: <CAA8EJprrk7+jRWdhz2MWdFj-jf2ehbXrz97KrkZ4NE6FqhiCNw@mail.gmail.com>
 User-Agent: Mutt/1.5.24 (2015-08-30)
 X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nasanex01a.na.qualcomm.com (10.52.223.231)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: U3NJxz7c26qb5CSQdr631xF7hqiJ0Fva
-X-Proofpoint-GUID: U3NJxz7c26qb5CSQdr631xF7hqiJ0Fva
+X-Proofpoint-GUID: 64DwHVbdC2GWT7uYtzJeQul7pfC4LZbj
+X-Proofpoint-ORIG-GUID: 64DwHVbdC2GWT7uYtzJeQul7pfC4LZbj
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-05-05_16,2023-05-04_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- clxscore=1015 mlxlogscore=999 malwarescore=0 adultscore=0
- lowpriorityscore=0 spamscore=0 mlxscore=0 phishscore=0 bulkscore=0
- impostorscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2303200000 definitions=main-2305050084
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 phishscore=0
+ impostorscore=0 mlxscore=0 lowpriorityscore=0 bulkscore=0 spamscore=0
+ priorityscore=1501 malwarescore=0 clxscore=1015 adultscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2305050084
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -87,76 +84,200 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 04, 2023 at 08:22:44AM +0200, Krzysztof Kozlowski wrote:
-> On 04/05/2023 06:57, Varadarajan Narayanan wrote:
-> > On Wed, May 03, 2023 at 09:42:28AM +0200, Krzysztof Kozlowski wrote:
-> >> On 03/05/2023 09:10, Varadarajan Narayanan wrote:
-> >>> On Mon, May 01, 2023 at 09:08:49AM +0200, Krzysztof Kozlowski wrote:
-> >>>> On 28/04/2023 16:52, Varadarajan Narayanan wrote:
-> >>>>> From: Praveenkumar I <quic_ipkumar@quicinc.com>
-> >>>>>
-> >>>>> Qualcomm IPQ9574 has tsens v2.3.1 block, which is similar to IPQ8074 tsens.
-> >>>>>
-> >>>>> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
-> >>>>> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> >>>>> ---
-> >>>>>  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 3 +++
-> >>>>>  1 file changed, 3 insertions(+)
-> >>>>>
-> >>>>> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> >>>>> index d1ec963..8e2208c 100644
-> >>>>> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> >>>>> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> >>>>> @@ -66,6 +66,7 @@ properties:
-> >>>>>        - description: v2 of TSENS with combined interrupt
-> >>>>>          enum:
-> >>>>>            - qcom,ipq8074-tsens
-> >>>>> +          - qcom,ipq9574-tsens
-> >>>>
-> >>>> Your drive change indicates they are compatible, so make them
-> >>>> compatible. 9574 followed by 8074.
-> >>>
-> >>> Not able to understand. You want IPQ9574 to use "qcom,ipq8074-tsens"
-> >>> instead of adding a "qcom,ipq9574-tsens" and no need to add an extra
-> >>> entry to the driver like
-> >>
-> >> Assuming the devices are really compatible, which your driver change
-> >> suggests, I want to use two compatibles. 9574 followed by 8074 fallback,
-> >> just like we do for all Qualcomm IP blocks. Then as you said - no need
-> >> for driver change.
+On Fri, May 05, 2023 at 12:31:11PM +0300, Dmitry Baryshkov wrote:
+> On Fri, 5 May 2023 at 11:23, Varadarajan Narayanan
+> <quic_varada@quicinc.com> wrote:
 > >
-> > With schema like this
-> > 	items:
-> > 	  - enum:
-> > 	      - qcom,ipq8074-tsens
-> > 	      - qcom,ipq9574-tsens
-> > and DTS as
-> > 	compatible = "qcom,ipq9574-tsens", "qcom,ipq8074-tsens";
+> > Add USB phy and controller related nodes
+> >
+> > SS PHY need two supplies and HS PHY needs three supplies. 0.925V
+> > and 3.3V are from fixed regulators and 1.8V is generated from
+> > PMIC's LDO
+> >
+> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > ---
+> >  Changes in v10:
+> >         - Fix regulator definitions
+> >  Changes in v8:
+> >         - Change clocks order to match the bindings
+> >  Changes in v7:
+> >         - Change com_aux -> cfg_ahb
+> >  Changes in v6:
+> >         - Introduce fixed regulators for the phy
+> >         - Resolved all 'make dtbs_check' messages
+> >
+> >  Changes in v5:
+> >         - Fix additional comments
+> >         - Edit nodes to match with qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+> >         - 'make dtbs_check' giving the following messages since
+> >           ipq9574 doesn't have power domains. Hope this is ok
+> >
+> >                 /local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: phy@7d000: 'power-domains' is a required property
+> >                 From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+> >                 /local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: usb@8a00000: 'power-domains' is a required property
+> >                 From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> >
+> >  Changes in v4:
+> >         - Use newer bindings without subnodes
+> >         - Fix coding style issues
+> >
+> >  Changes in v3:
+> >         - Insert the nodes at proper location
+> >
+> >  Changes in v2:
+> >         - Fixed issues flagged by Krzysztof
+> >         - Fix issues reported by make dtbs_check
+> >         - Remove NOC related clocks (to be added with proper
+> >           interconnect support)
+> > ---
+> >  arch/arm64/boot/dts/qcom/ipq9574.dtsi | 104 ++++++++++++++++++++++++++++++++++
+> >  1 file changed, 104 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> > index 93b4ba9..84b80cc 100644
+> > --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> > @@ -150,6 +150,24 @@
+> >                 method = "smc";
+> >         };
+> >
+> > +       fixed_3p3: s3300 {
+> > +               compatible = "regulator-fixed";
+> > +               regulator-min-microvolt = <3300000>;
+> > +               regulator-max-microvolt = <3300000>;
+> > +               regulator-boot-on;
+> > +               regulator-always-on;
+> > +               regulator-name = "fixed_3p3";
+> > +       };
+> > +
+> > +       fixed_0p925: s0925 {
+> > +               compatible = "regulator-fixed";
+> > +               regulator-min-microvolt = <925000>;
+> > +               regulator-max-microvolt = <925000>;
+> > +               regulator-boot-on;
+> > +               regulator-always-on;
+> > +               regulator-name = "fixed_0p925";
+> > +       };
+> > +
+> >         reserved-memory {
+> >                 #address-cells = <2>;
+> >                 #size-cells = <2>;
+> > @@ -191,6 +209,45 @@
+> >                         reg = <0x00060000 0x6000>;
+> >                 };
+> >
+> > +               usb_0_qusbphy: phy@7b000 {
+> > +                       compatible = "qcom,ipq9574-qusb2-phy";
+> > +                       reg = <0x0007b000 0x180>;
+> > +                       #phy-cells = <0>;
+> > +
+> > +                       clocks = <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
+> > +                                <&xo_board_clk>;
+> > +                       clock-names = "cfg_ahb",
+> > +                                     "ref";
+> > +
+> > +                       resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
+> > +                       status = "disabled";
+> > +               };
+> > +
+> > +               usb_0_qmpphy: phy@7d000 {
+> > +                       compatible = "qcom,ipq9574-qmp-usb3-phy";
+> > +                       reg = <0x0007d000 0xa00>;
+> > +                       #phy-cells = <0>;
+> > +
+> > +                       clocks = <&gcc GCC_USB0_AUX_CLK>,
+> > +                                <&xo_board_clk>,
+> > +                                <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
+> > +                                <&gcc GCC_USB0_PIPE_CLK>;
+> > +                       clock-names = "aux",
+> > +                                     "ref",
+> > +                                     "cfg_ahb",
+> > +                                     "pipe";
+> > +
+> > +                       resets = <&gcc GCC_USB0_PHY_BCR>,
+> > +                                <&gcc GCC_USB3PHY_0_PHY_BCR>;
+> > +                       reset-names = "phy",
+> > +                                     "phy_phy";
+> > +
+> > +                       status = "disabled";
+> > +
+> > +                       #clock-cells = <0>;
+> > +                       clock-output-names = "usb0_pipe_clk";
+> > +               };
+> > +
+> >                 pcie0_phy: phy@84000 {
+> >                         compatible = "qcom,ipq9574-qmp-gen3x1-pcie-phy";
+> >                         reg = <0x00084000 0x1000>;
+> > @@ -560,6 +617,53 @@
+> >                         status = "disabled";
+> >                 };
+> >
+> > +               usb3: usb@8a00000 {
+> > +                       compatible = "qcom,ipq9574-dwc3", "qcom,dwc3";
+> > +                       reg = <0x08af8800 0x400>;
+> > +                       #address-cells = <1>;
+> > +                       #size-cells = <1>;
+> > +                       ranges;
+> > +
+> > +                       clocks = <&gcc GCC_SNOC_USB_CLK>,
+> > +                                <&gcc GCC_USB0_MASTER_CLK>,
+> > +                                <&gcc GCC_ANOC_USB_AXI_CLK>,
+> > +                                <&gcc GCC_USB0_SLEEP_CLK>,
+> > +                                <&gcc GCC_USB0_MOCK_UTMI_CLK>;
+> > +
+> > +                       clock-names = "cfg_noc",
+> > +                                     "core",
+> > +                                     "iface",
+> > +                                     "sleep",
+> > +                                     "mock_utmi";
+> > +
+> > +                       assigned-clocks = <&gcc GCC_USB0_MASTER_CLK>,
+> > +                                         <&gcc GCC_USB0_MOCK_UTMI_CLK>;
+> > +                       assigned-clock-rates = <200000000>,
+> > +                                              <24000000>;
+> > +
+> > +                       interrupts-extended = <&intc GIC_SPI 134 IRQ_TYPE_LEVEL_HIGH>;
+> > +                       interrupt-names = "pwr_event";
+> > +
+> > +                       resets = <&gcc GCC_USB_BCR>;
+> > +                       status = "disabled";
+> > +
+> > +                       dwc_0: usb@8a00000 {
 >
-> This file (and many others) shows you how to encode it in the DT schema
+> As I wrote in the other email, this better have the usb_0_dwc3 alias.
+> With that fixed:
 >
-> https://elixir.bootlin.com/linux/v6.3-rc6/source/Documentation/devicetree/bindings/sound/nvidia,tegra210-ope.yaml#L31
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Thanks for the pointer.
-Will rework and post.
+Sure. Will rename it and send a revised version.
 
--Varada
+Thanks
+Varada
 
-> > 'make dtbs_check' gives the following error
+> > +                               compatible = "snps,dwc3";
+> > +                               reg = <0x8a00000 0xcd00>;
+> > +                               clocks = <&gcc GCC_USB0_MOCK_UTMI_CLK>;
+> > +                               clock-names = "ref";
+> > +                               interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
+> > +                               phys = <&usb_0_qusbphy>, <&usb_0_qmpphy>;
+> > +                               phy-names = "usb2-phy", "usb3-phy";
+> > +                               tx-fifo-resize;
+> > +                               snps,is-utmi-l1-suspend;
+> > +                               snps,hird-threshold = /bits/ 8 <0x0>;
+> > +                               snps,dis_u2_susphy_quirk;
+> > +                               snps,dis_u3_susphy_quirk;
+> > +                               dr_mode = "host";
+> > +                       };
+> > +               };
+> > +
+> >                 intc: interrupt-controller@b000000 {
+> >                         compatible = "qcom,msm-qgic2";
+> >                         reg = <0x0b000000 0x1000>,  /* GICD */
+> > --
+> > 2.7.4
 > >
-> > arch/arm64/boot/dts/qcom/ipq9574-rdp433.dtb: thermal-sensor@4a9000: compatible: 'oneOf' conditional failed, one must be fixed:
-> >         ['qcom,ipq9574-tsens', 'qcom,ipq8074-tsens'] is too long
-> >
-> > To fix the above error, I have to change the schema as
-> >
-> > 	items:
-> > 	  - enum:
-> > 	      - qcom,ipq8074-tsens
-> > 	      - qcom,ipq9574-tsens
-> > 	  - const: qcom,tsens-v2-combined-int
 >
-> This is not what we talked about.
 >
-> Best regards,
-> Krzysztof
->
+> --
+> With best wishes
+> Dmitry
