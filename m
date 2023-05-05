@@ -2,122 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC3156F8CE7
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 01:51:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16EAC6F8CEE
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 01:56:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231202AbjEEXvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 19:51:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47592 "EHLO
+        id S232779AbjEEX4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 19:56:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbjEEXvR (ORCPT
+        with ESMTP id S232144AbjEEX4V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 19:51:17 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A22E559EB
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 16:51:15 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f13d8f74abso2698953e87.0
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 16:51:15 -0700 (PDT)
+        Fri, 5 May 2023 19:56:21 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ED175BA5
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 16:56:18 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-51b33c72686so1552602a12.1
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 16:56:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1683330674; x=1685922674;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sjqVzDbSdokuJC6mTOMnxxsNtmjmsehygGNPxKGCXGY=;
-        b=hN2qCvmtLCe7wGeckPEGJDHXA6eSq/MigjzbBVVTNQzecbygZIBAGRj7TPE8Fan0xx
-         Y3bUbJQn06wuCVpLSMTx89mJtF7bBAYOGz9SyjR17XmoWaiHJs2EKe+M8F+SNVY8p2sb
-         R7GnNkkvfA51svet8Q+HqsRO1ldkLp9jAwTP4=
+        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1683330977; x=1685922977;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=CemAWNMR8bXthiAKC/+una4gxSePkb3IueLhq9mQmls=;
+        b=gHPP7rPplI3y0mo0qtJ/LN1w+3i8RZceqZ1LO1ZCKhhMbabBzl7A4lQdBO+JX2jkDm
+         TRPNESDK35rRqscidy9M21sxamJxHrnWASy6zhdPPypqGaBgXaGs59kSsQiHZQA0bbWG
+         8pFp/BgjxSrqt2N/vh9qN4vWLK6GzPe5hr6S/g7TL2BI/WRp8aeNJJt9x4pIk133u0FV
+         NCec18QyfgEGSNrDfb+eJdiTGkv/8LXfoY4UhwIWHYu+I/anHCJijdw0ujXic2KAzVCv
+         DEzxnaLvVhERRUy/ePoGYhd+g/lH45JwcP6N4BypaG2U75P5I+5R1+tYNUfTxcgeXZ4D
+         G7BA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683330674; x=1685922674;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20221208; t=1683330977; x=1685922977;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sjqVzDbSdokuJC6mTOMnxxsNtmjmsehygGNPxKGCXGY=;
-        b=VQaMZGhMDNPTbzptxBVTkkajiKbP9O/lEOYJXb06mTSa+NqdA/QeT04CPrHFDMHRzC
-         gscUdmBp/wdQlk0pBUl0MkxEhHmMohlKfcRbMMdQ5zlpDaHd8q34f4D5WxK6ugppNJvi
-         YPEm8byTQ3BQJEfJ0bGcvur9gYYyB43P7Z8PgKjDpGWuVq4Qf2PKZuW27d9xzb+skMT6
-         9vyMjJPHkGxK2TB0DUueY+oQMHkFdrQ+JwPDOUPp78GKPTgdPkFkGs1et+g/d0wnmspg
-         8kTbM9sVITitafWBWGFdVSv8sTIVKeztgTCACXcZIWR3xBLtrYM9HV7Xb+knUnk6Ean6
-         w3qg==
-X-Gm-Message-State: AC+VfDwBHOltWR4KoY5J8e3vBM32FVofZC9t/kqKXrCr1ZSSdRwIWXNY
-        uhL2BbXt/5fF4w8LmOxBdG8rsDALh0g/5Obi2hyQoQ==
-X-Google-Smtp-Source: ACHHUZ5NZfYKYWBQrU0BEtZE7GYJKOY2rbcfUoPtPN7I+zGCcJekGogEeUwQD9Vt9dV7O7vzpBFyhQ+Drw3YQZHK5RY=
-X-Received: by 2002:ac2:51b1:0:b0:4f1:4996:7e84 with SMTP id
- f17-20020ac251b1000000b004f149967e84mr839109lfk.34.1683330673904; Fri, 05 May
- 2023 16:51:13 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 5 May 2023 18:51:13 -0500
+        bh=CemAWNMR8bXthiAKC/+una4gxSePkb3IueLhq9mQmls=;
+        b=PPpIydoERk7tGvRHoaheRJSs/PwzJTetsL+AJLvaxbnSaVKr8LcMkk/jTPGSnc0c7R
+         Eu5GqrGDwkl610YGjstXH8+9y6OJUBybonNpjVLniPL0+skDeWlgX7+45MrdsJ1r53mj
+         ZTPdC6h5kx9ZO3R+5K4bnAbwLPxgy5vY+LNc9WDwMv+FUJGp+YYixaoWzLo5JW2mFf3/
+         AU8j4PGMhXq3p4H5IOTn3udzEL0U169gJ7ZhH66rUHuFp0mXsfaPjwhioaZmk+l+35qq
+         ZBWPq3/9r7QNYM9vzJ92p0yAOIS63X/NAmtX3dWIQxk8TAAdQhIrUXfGBrIw6j3XHChS
+         of6w==
+X-Gm-Message-State: AC+VfDw5oRZRufGIgtHJVVIdPpvIxlLlzeBnsf7ScU6Gmd+OoRGp6weO
+        MC2Ge762lLD1FTpHEgmVWNZZVg==
+X-Google-Smtp-Source: ACHHUZ49/EMlr/fo3TPgAtcAPHwADu83PUd5hP54TSC62hQHziSYPPBDDQ1sfg7GYYfxCeypGD2++Q==
+X-Received: by 2002:a17:903:41c8:b0:1aa:e0c3:1e64 with SMTP id u8-20020a17090341c800b001aae0c31e64mr3356286ple.38.1683330977491;
+        Fri, 05 May 2023 16:56:17 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-88-204.pa.nsw.optusnet.com.au. [49.181.88.204])
+        by smtp.gmail.com with ESMTPSA id e3-20020a170902744300b001ac4d3d3f72sm451008plt.296.2023.05.05.16.56.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 May 2023 16:56:16 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1pv5HZ-00BpiL-4I; Sat, 06 May 2023 09:56:13 +1000
+Date:   Sat, 6 May 2023 09:56:13 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     John Garry <john.g.garry@oracle.com>, axboe@kernel.dk,
+        kbusch@kernel.org, hch@lst.de, sagi@grimberg.me,
+        martin.petersen@oracle.com, viro@zeniv.linux.org.uk,
+        brauner@kernel.org, dchinner@redhat.com, jejb@linux.ibm.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com
+Subject: Re: [PATCH RFC 11/16] fs: iomap: Atomic write support
+Message-ID: <20230505235613.GP3223426@dread.disaster.area>
+References: <20230503183821.1473305-1-john.g.garry@oracle.com>
+ <20230503183821.1473305-12-john.g.garry@oracle.com>
+ <20230504050006.GH3223426@dread.disaster.area>
+ <20230505211928.GB15376@frogsfrogsfrogs>
 MIME-Version: 1.0
-In-Reply-To: <20230505152301.2181270-1-krzysztof.kozlowski@linaro.org>
-References: <20230505152301.2181270-1-krzysztof.kozlowski@linaro.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Fri, 5 May 2023 18:51:13 -0500
-Message-ID: <CAE-0n50jZ=EG29Gmr9zvjq0_qEXXSUBA+w65uE-P--+rxYGNiQ@mail.gmail.com>
-Subject: Re: [PATCH] serial: qcom-geni: fix enabling deactivated interrupt
-To:     Akash Asthana <akashast@codeaurora.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230505211928.GB15376@frogsfrogsfrogs>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Krzysztof Kozlowski (2023-05-05 08:23:01)
-> The driver have a race, experienced only with PREEMPT_RT patchset:
->
-> CPU0                         | CPU1
-> ==================================================================
-> qcom_geni_serial_probe       |
->   uart_add_one_port          |
->                              | serdev_drv_probe
->                              |   qca_serdev_probe
->                              |     serdev_device_open
->                              |       uart_open
->                              |         uart_startup
->                              |           qcom_geni_serial_startup
->                              |             enable_irq
->                              |               __irq_startup
->                              |                 WARN_ON()
->                              |                 IRQ not activated
->   request_threaded_irq       |
->     irq_domain_activate_irq  |
->
-> The warning:
->
->   894000.serial: ttyHS1 at MMIO 0x894000 (irq = 144, base_baud = 0) is a MSM
->   serial serial0: tty port ttyHS1 registered
->   WARNING: CPU: 7 PID: 107 at kernel/irq/chip.c:241 __irq_startup+0x78/0xd8
->   ...
->   qcom_geni_serial 894000.serial: serial engine reports 0 RX bytes in!
->
-> Adding UART port triggers probe of child serial devices - serdev and
-> eventually Qualcomm Bluetooth hci_qca driver.  This opens UART port
-> which enables the interrupt before it got activated in
-> request_threaded_irq().  The issue originates in commit f3974413cf02
-> ("tty: serial: qcom_geni_serial: Wakeup IRQ cleanup") and discussion on
-> mailing list [1].  However the above commit does not explain why the
-> uart_add_one_port() is moved above requesting interrupt.
->
-> [1] https://lore.kernel.org/all/5d9f3dfa.1c69fb81.84c4b.30bf@mx.google.com/
->
-> Fixes: f3974413cf02 ("tty: serial: qcom_geni_serial: Wakeup IRQ cleanup")
-> Cc: <stable@vger.kernel.org>
-> Cc: Stephen Boyd <swboyd@chromium.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
+On Fri, May 05, 2023 at 02:19:28PM -0700, Darrick J. Wong wrote:
+> On Thu, May 04, 2023 at 03:00:06PM +1000, Dave Chinner wrote:
+> > On Wed, May 03, 2023 at 06:38:16PM +0000, John Garry wrote:
+> > > Add support to create bio's whose bi_sector and bi_size are aligned to and
+> > > multiple of atomic_write_unit, respectively.
+> > > 
+> > > When we call iomap_dio_bio_iter() -> bio_iov_iter_get_pages() ->
+> > > __bio_iov_iter_get_pages(), we trim the bio to a multiple of
+> > > atomic_write_unit.
+> > > 
+> > > As such, we expect the iomi start and length to have same size and
+> > > alignment requirements per iomap_dio_bio_iter() call.
+> > > 
+> > > In iomap_dio_bio_iter(), ensure that for a non-dsync iocb that the mapping
+> > > is not dirty nor unmapped.
+> > > 
+> > > Signed-off-by: John Garry <john.g.garry@oracle.com>
+> > > ---
+> > >  fs/iomap/direct-io.c | 72 ++++++++++++++++++++++++++++++++++++++++++--
+> > >  1 file changed, 70 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/fs/iomap/direct-io.c b/fs/iomap/direct-io.c
+> > > index f771001574d0..37c3c926dfd8 100644
+> > > --- a/fs/iomap/direct-io.c
+> > > +++ b/fs/iomap/direct-io.c
+> > > @@ -36,6 +36,8 @@ struct iomap_dio {
+> > >  	size_t			done_before;
+> > >  	bool			wait_for_completion;
+> > >  
+> > > +	unsigned int atomic_write_unit;
+> > > +
+> > >  	union {
+> > >  		/* used during submission and for synchronous completion: */
+> > >  		struct {
+> > > @@ -229,9 +231,21 @@ static inline blk_opf_t iomap_dio_bio_opflags(struct iomap_dio *dio,
+> > >  	return opflags;
+> > >  }
+> > >  
+> > > +
+> > > +/*
+> > > + * Note: For atomic writes, each bio which we create when we iter should have
+> > > + *	 bi_sector aligned to atomic_write_unit and also its bi_size should be
+> > > + *	 a multiple of atomic_write_unit.
+> > > + *	 The call to bio_iov_iter_get_pages() -> __bio_iov_iter_get_pages()
+> > > + *	 should trim the length to a multiple of atomic_write_unit for us.
+> > > + *	 This allows us to split each bio later in the block layer to fit
+> > > + *	 request_queue limit.
+> > > + */
+> > >  static loff_t iomap_dio_bio_iter(const struct iomap_iter *iter,
+> > >  		struct iomap_dio *dio)
+> > >  {
+> > > +	bool atomic_write = (dio->iocb->ki_flags & IOCB_ATOMIC) &&
+> > > +			    (dio->flags & IOMAP_DIO_WRITE);
+> > >  	const struct iomap *iomap = &iter->iomap;
+> > >  	struct inode *inode = iter->inode;
+> > >  	unsigned int fs_block_size = i_blocksize(inode), pad;
+> > > @@ -249,6 +263,14 @@ static loff_t iomap_dio_bio_iter(const struct iomap_iter *iter,
+> > >  	    !bdev_iter_is_aligned(iomap->bdev, dio->submit.iter))
+> > >  		return -EINVAL;
+> > >  
+> > > +
+> > > +	if (atomic_write && !iocb_is_dsync(dio->iocb)) {
+> > > +		if (iomap->flags & IOMAP_F_DIRTY)
+> > > +			return -EIO;
+> > > +		if (iomap->type != IOMAP_MAPPED)
+> > > +			return -EIO;
+> > > +	}
+> > 
+> > IDGI. If the iomap had space allocated for this dio iteration,
+> > then IOMAP_F_DIRTY will be set and it is likely (guaranteed for XFS)
+> > that the iomap type will be IOMAP_UNWRITTEN. Indeed, if we are doing
+> > a write into preallocated space (i.e. from fallocate()) then this
+> > will cause -EIO on all RWF_ATOMIC IO to that file unless RWF_DSYNC
+> > is also used.
+> > 
+> > "For a power fail, for each individual application block, all or
+> > none of the data to be written."
+> > 
+> > Ok, does this means RWF_ATOMIC still needs fdatasync() to guarantee
+> > that the data makes it to stable storage? And the result is
+> > undefined until fdatasync() is run, but the device will guarantee
+> > that either all or none of the data will be on stable storage
+> > prior to the next device cache flush completing?
+> > 
+> > i.e. does REQ_ATOMIC imply REQ_FUA, or does it require a separate
+> > device cache flush to commit the atomic IO to stable storage?
+> 
+> From the SCSI and NVME device information that I've been presented, it
+> sounds like an explicit cache flush or FUA is required to persist the
+> data.
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Ok, that makes it sound like RWF_ATOMIC has the same data integrity
+semantics as normal DIO submission. i.e. the application has to
+specify data integrity requirements and/or provide integrity
+checkpoints itself.
+
+> > What about ordering - do the devices guarantee strict ordering of
+> > REQ_ATOMIC writes? i.e. if atomic write N is seen on disk, then all
+> > the previous atomic writes up to N will also be seen on disk? If
+> > not, how does the application and filesystem guarantee persistence
+> > of completed atomic writes?
+> 
+> I /think/ the applications have to ensure ordering themselves.  If Y
+> cannot appear before X is persisted, then the application must wait for
+> the ack for X, flush the cache, and only then send Y.
+
+RIght, I'd expect that completion-to-submission ordering is required
+with RWF_ATOMIC the same way it is required for normal DIO, but I've
+been around long enough to know that we can't make assumptions about
+data integrity semantics...
+
+> > i.e. If we still need a post-IO device cache flush to guarantee
+> > persistence and/or ordering of RWF_ATOMIC IOs, then the above code
+> > makes no sense - we'll still need fdatasync() to provide persistence
+> > checkpoints and that means we ensure metadata is also up to date
+> > at those checkpoints.
+> 
+> I'll let the block layer developers weigh in on this, but I /think/ this
+> means that we require RWF_DSYNC for atomic block writes to written
+> mappings, and RWF_SYNC if iomap_begin gives us an unwritten/hole/dirty
+> mapping.
+
+RWF_DSYNC is functionally the same as RWF_OSYNC. The only difference
+is that RWF_OSYNC considers timestamps as dirty metadata, whilst
+RWF_DSYNC doesn't. Hence I don't think there's any functional
+difference w.r.t. data integrity by using OSYNC vs DSYNC...
+
+> > > @@ -592,6 +634,32 @@ __iomap_dio_rw(struct kiocb *iocb, struct iov_iter *iter,
+> > >  
+> > >  	blk_start_plug(&plug);
+> > >  	while ((ret = iomap_iter(&iomi, ops)) > 0) {
+> > > +		if (atomic_write) {
+> > > +			const struct iomap *_iomap = &iomi.iomap;
+> > > +			loff_t iomi_length = iomap_length(&iomi);
+> > > +
+> > > +			/*
+> > > +			 * Ensure length and start address is a multiple of
+> > > +			 * atomic_write_unit - this is critical. If the length
+> > > +			 * is not a multiple of atomic_write_unit, then we
+> > > +			 * cannot create a set of bio's in iomap_dio_bio_iter()
+> > > +			 * who are each a length which is a multiple of
+> > > +			 * atomic_write_unit.
+> > > +			 *
+> > > +			 * Note: It may be more appropiate to have this check
+> > > +			 *	 in iomap_dio_bio_iter()
+> > > +			 */
+> > > +			if ((iomap_sector(_iomap, iomi.pos) << SECTOR_SHIFT) %
+> 
+> The file offset (and by extension the position) are not important for
+> deciding if we can issue an atomic write.  Only the mapped LBA space on
+> the underlying device is important.
+> 
+> IOWs, if we have a disk that can write a 64k aligned block atomically,
+> iomap only has to check that iomap->addr is aligned to a 64k boundary.
+> If that space happens to be mapped to file offset 57k, then it is indeed
+> possible to perform a 64k atomic write to the file starting at offset
+> 57k and ending at offset 121k, right?
+
+Yup, that was kinda what I was implying in pointing out that file
+offset does not reflect device IO alignment...
+
+> > Hence I think that we should be rejecting RWF_ATOMIC IOs that are
+> > larger than the maximum atomic write unit or cannot be dispatched in
+> > a single IO e.g. filesystem has allocated multiple minimum aligned
+> > extents and so a max len atomic write IO over that range must be
+> > broken up into multiple smaller IOs.
+> > 
+> > We should be doing max atomic write size rejection high up in the IO
+> > path (e.g. filesystem ->write_iter() method) before we get anywhere
+> > near the DIO path, and we should be rejecting atomic write IOs in
+> > the DIO path during the ->iomap_begin() mapping callback if we can't
+> > map the entire atomic IO to a single aligned filesystem extent.
+> > 
+> > i.e. the alignment checks and constraints need to be applied by the
+> > filesystem mapping code, not the layer that packs the pages into the
+> > bio as directed by the filesystem mapping....
+> 
+> Hmm.  I think I see what you're saying here -- iomap should communicate
+> to ->iomap_begin that we want to perform an atomic write, and there had
+> better be either (a) a properly aligned mapping all ready to go; or (b)
+> the fs must perform an aligned allocation and map that in, or return no
+> mapping so the write fails.
+
+Exactly. This is how IOCB_NOWAIT works, too - we can reject it high
+up in the IO path if we can't get locks, and then if we have to do
+allocation in ->iomap_begin because there is no mapping available we
+reject the IO there.
+
+Hence I think we should use the same constraint checking model for
+RWF_ATOMIC - the constraints are slightly different, but the layers
+at which we can first resolve the various constraints are exactly
+the same...
+
+Cheers,
+
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
