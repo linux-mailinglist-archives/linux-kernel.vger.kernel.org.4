@@ -2,69 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D09B6F8259
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 13:57:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28A066F8263
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 13:59:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231980AbjEEL5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 07:57:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50746 "EHLO
+        id S231997AbjEEL7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 07:59:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231964AbjEEL46 (ORCPT
+        with ESMTP id S229591AbjEEL7O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 07:56:58 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6082D1A613
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 04:56:54 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-559e317eef1so23585197b3.0
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 04:56:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683287813; x=1685879813;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=riNetgoJcVW6a6DuMCUs2l//EH5X9sZZhCmoZC/wZtA=;
-        b=jvSrvaBzv4UqZQ/pXfgqcYA84wDKXRYKVeq+J9Y6EO2kkzLR588MvOv7oMD2FHiqF2
-         tJ3KF1tMlXylCDT6+cO2pr7qRdZ6whvm22ezoL79V2hHURzl1AbsjYiTJSWN1QOwUxfY
-         36yEdrdk06U78dunF8NvCeLt1OVOcA9Xyrhn1sr0Qxtn/EpqlOhR8kcC7B/GstMSpczN
-         zME4s28tN0oNUOMAb8ENT+ncwaksEhzm1iyfn5ltrGFjN41/4p2rfF2n/Ygb31gGj2Ny
-         aqfFdbvN9Egt0P2ie4Wc5PhsS+vkpWR+TEPAT46NCA+FyNUKfCF7+GTF7s77NCTYUOYn
-         U29A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683287813; x=1685879813;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=riNetgoJcVW6a6DuMCUs2l//EH5X9sZZhCmoZC/wZtA=;
-        b=itMfuLJbFz+Mf9nTdcnWtPUOUZJVNv+uBK0Pst8k1DmcVR6tOAgfOneM9KDdap/H19
-         /QuaWXmHw/LnAl7eOhZSEYR4v2FqP77nrmytYRHse5BqypAqTUsvbJRkxTRqyiBClLRr
-         EyU0Rvktp+j2zQ5T8kwdCXz5Zjo1YKUx6SxbxCY6LSN/0m3A7vYaWijGFM3Sq8sNOBr4
-         yT/KxwsdDudNp458vMrthWKBhamnjBde4yUdKOOmC4olZuS3T9N4lg5lRoX5eG1cwEA5
-         7dg8xolr8B22O7xp46GfWBhYoGY5eC9VY7gzPnFl8KJlOYyXbM3EjdpG8rBRvDesRxdK
-         PckA==
-X-Gm-Message-State: AC+VfDx6y9mCkpOW+/wx7HTdv3mBBHfb/QDt1A4COZAyQgaN9sT//aLh
-        agY56Qcdkg0jmPrX3eMnuxTZcRkcllKANlwsk4OoNA==
-X-Google-Smtp-Source: ACHHUZ6CEMIqvkmsUkNUteKj5I+RkgIx/lW5k1vOfXW/SR90QPOit72+8ZymEQrizF+4VZmh+Htpqey9KoGhBaIPPOg=
-X-Received: by 2002:a0d:f383:0:b0:55a:ad0a:76c with SMTP id
- c125-20020a0df383000000b0055aad0a076cmr1076896ywf.18.1683287813578; Fri, 05
- May 2023 04:56:53 -0700 (PDT)
+        Fri, 5 May 2023 07:59:14 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 655391884B;
+        Fri,  5 May 2023 04:59:12 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 345Bx0J5119236;
+        Fri, 5 May 2023 06:59:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1683287940;
+        bh=+FJrfXC9RXZ7hEc6gYJ+SpjD/MV5D6z3AAn4ws3tAWs=;
+        h=From:To:CC:Subject:Date;
+        b=JEs6Rp65UAfPRbDq1uTvR00jjabZJCLEHWNpjvPdH8rGVsglzNYrCZf+RXBDarSC/
+         KUGQkrH06mH9TWf3Aj5ipOEUPne/rJZT4Ulkvn7zNc99VQyPvROlAiz9SoXqCH8UjV
+         i1Gh+SvQkKoVePeee7Z9ZeSqDgJzOGcvSG3hwPZ0=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 345Bx0Rb029013
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 5 May 2023 06:59:00 -0500
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 5
+ May 2023 06:58:59 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Fri, 5 May 2023 06:58:59 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 345BwwkX033861;
+        Fri, 5 May 2023 06:58:59 -0500
+From:   Vaishnav Achath <vaishnav.a@ti.com>
+To:     <nm@ti.com>, <afd@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <u-kumar1@ti.com>,
+        <vaishnav.a@ti.com>
+Subject: [PATCH v2 0/3] arm64: dts: ti: k3-j7200: Fixes for various dtbs_checks warnings
+Date:   Fri, 5 May 2023 17:28:55 +0530
+Message-ID: <20230505115858.7391-1-vaishnav.a@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <1681311127-6891-1-git-send-email-manikanta.guntupalli@amd.com>
-In-Reply-To: <1681311127-6891-1-git-send-email-manikanta.guntupalli@amd.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 5 May 2023 13:56:42 +0200
-Message-ID: <CACRpkdYb9iy8Fs2w9p7-64h6bMx3W9=JFHT08yYPaeggenDmcw@mail.gmail.com>
-Subject: Re: [PATCH] gpio: zynq: fix zynqmp_gpio not an immutable chip warning
-To:     Manikanta Guntupalli <manikanta.guntupalli@amd.com>
-Cc:     michal.simek@xilinx.com, michal.simek@amd.com, git@amd.com,
-        shubhrajyoti.datta@xilinx.com, srinivas.neeli@xilinx.com,
-        brgl@bgdev.pl, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        srinivas.goud@amd.com, manion05gk@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,26 +64,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Manikanta,
+Hi,
 
-thanks for your patch!
+Few fixups for j7200 dtbs_check warnings.
 
-On Wed, Apr 12, 2023 at 4:52=E2=80=AFPM Manikanta Guntupalli
-<manikanta.guntupalli@amd.com> wrote:
+This is V2 for the following series with the feedback addressed,
 
-> Make the struct irq_chip const and flag it as IRQCHIP_IMMUTABLE to fix
-> "gpio gpiochip1: (zynqmp_gpio): not an immutable chip" warning.
->
-> Signed-off-by: Manikanta Guntupalli <manikanta.guntupalli@amd.com>
+V1 : https://lore.kernel.org/all/20230424173623.477577-1-nm@ti.com/
 
-Don't you need to also add
-gpiochip_disable_irq() in the .irq_mask() callback and
-gpiochip_enable_irq() in the .irq_unmask() callback as we
-do in most other conversions?
+Bootlog with basic hyperflash testing:
+https://gist.github.com/vaishnavachath/f7265e932725fd992dbc4e48b993e9c0
 
-Example:
-https://lore.kernel.org/linux-gpio/20230414-immutable-irqchips-2-v1-3-6b59a=
-5186b00@linaro.org/
+NOTE: lets see the discussion summary of [1] to see where to take this
+series, but, will put it out here in the list for discussion anyways.
 
-Yours,
-Linus Walleij
+Patch 3/3 depends on the following patch under review which enables reg-mux
+to be used when parent node is not syscon :
+https://lore.kernel.org/all/20230424184810.29453-1-afd@ti.com/
+
+Changelog:
+
+V1->V2:
+ * Address feedback as recommended in [2].
+ * Address feedback from Udit to limit the FSS register region size as
+ per TRM.
+ * Use reg-mux changes in [3] to simplify the hbmc-mux modelling   
+
+[1] https://lore.kernel.org/all/76da0b98-3274-b047-db11-ecabc117ae11@ti.com/
+[2] https://lore.kernel.org/all/20230503115130.c7m4a7crub7kmfjw@gluten/
+[3] https://lore.kernel.org/all/20230424184810.29453-1-afd@ti.com/
+
+Nishanth Menon (3):
+  arm64: dts: ti: k3-j7200-mcu-wakeup: Remove 0x unit address prefix
+    from nodename
+  arm64: dts: ti: k3-j7200-mcu-wakeup: Switch mcu_syscon to
+    ti,j721e-system-controller
+  arm64: dts: ti: k3-j7200-mcu-wakeup: Update fss node and hbmc_mux
+
+ .../boot/dts/ti/k3-j7200-mcu-wakeup.dtsi      | 21 ++++++++++---------
+ 1 file changed, 11 insertions(+), 10 deletions(-)
+
+-- 
+2.17.1
+
