@@ -2,78 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72F8E6F870D
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 18:51:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 553066F8711
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 18:53:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231626AbjEEQvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 12:51:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41210 "EHLO
+        id S231238AbjEEQxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 12:53:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231611AbjEEQvV (ORCPT
+        with ESMTP id S231464AbjEEQxN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 12:51:21 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDBA7160BD
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 09:51:18 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-32f240747cdso115398465ab.1
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 09:51:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683305478; x=1685897478;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rbnGNgdItHlqccm7N8gfCurOL2pfovrCoWlBfE15OrI=;
-        b=F7a7wHn+GnohaA7qdsulxdD/eEY5GWPUOfQkh55hVc8O9FaujgbvW7gehYuvapnVY8
-         zNbqHDWBd5EWYwa/U0P09EnW4h8Im1Gkd4YNTVo+kSScSpzpTIF74vxuKCuZpag4G8fa
-         2UJQ2jH4gIkfQIX+iGIDiwxmZz42suImDLxUKSza2E++rzOJ8Ju3MGVFTx8jnSxvig7Q
-         0EvlWroYYidB+YU8LFc5ZbOIzBYWIMCkfdc+NOritAouzHgZg+k8HLb01aa1niWgtv3b
-         gdgnsRyb+u2vM4dfjOsF4FZSZYeghUXRv2HsCi/nGShT9rjwvKFkxUn+VerUJXljxeEC
-         htDQ==
-X-Gm-Message-State: AC+VfDyM+YUeyQaPSlj36DopRxjJAm72hX732zm1o7hjUWxTp3MfYh8z
-        xVbuRFSvcmM9X8g3H8YDpsjOxgYIL/hgmYRBehaFFtCNINx1
-X-Google-Smtp-Source: ACHHUZ6nCwvxjaFQY1guH99PFmSUDzgXw6D1xJYhAHc386/xa4SGRfEEaP7fokaIOotO7bdkluxF8YTZpNfMgtwKc/w2zoRa+5cG
-MIME-Version: 1.0
-X-Received: by 2002:a02:a98b:0:b0:411:b866:8345 with SMTP id
- q11-20020a02a98b000000b00411b8668345mr1210931jam.0.1683305478246; Fri, 05 May
- 2023 09:51:18 -0700 (PDT)
-Date:   Fri, 05 May 2023 09:51:18 -0700
-In-Reply-To: <00000000000016552c05f1d7e734@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000014678c05faf51958@google.com>
-Subject: Re: [syzbot] [mm?] WARNING in shmem_evict_inode
-From:   syzbot <syzbot+3d4aa0d3e784b29b1520@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, hughd@google.com, jiaqiyan@google.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        shy828301@gmail.com, syzkaller-bugs@googlegroups.com
+        Fri, 5 May 2023 12:53:13 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A031940D;
+        Fri,  5 May 2023 09:53:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1683305586;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Cm5Ovt89OfGJCeWTOZ91qJGDxssoS6SoIn7qKeUUUII=;
+        b=Qt9ZsTXhoCIGaPFWg1rJo0krNw0t60cwBgGiXqjXRz9k4Jc4juJuSRAuuIjUMN7MzwHUH6
+        XCxaJ/zzM+m2GRuMrDY67DPlmnaiYW4Ist+Boik1FKw7vZphuebHUpm75r3T+LauruClfm
+        3tpScXg2uj7/jmjd5ZDvnaC+mTZgoPE=
+Message-ID: <f52d02cd797088cd599d5bda5653495d987ba85b.camel@crapouillou.net>
+Subject: Re: [PATCH v2] mips: dts: ingenic: Remove unnecessary AIC clocks
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
+        tsbogend@alpha.franken.de
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 05 May 2023 18:53:04 +0200
+In-Reply-To: <20230505142400.1270848-1-aidanmacdonald.0x0@gmail.com>
+References: <20230505142400.1270848-1-aidanmacdonald.0x0@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has bisected this issue to:
+SGkgQWlkYW4sCgpMZSB2ZW5kcmVkaSAwNSBtYWkgMjAyMyDDoCAxNToyNCArMDEwMCwgQWlkYW4g
+TWFjRG9uYWxkIGEgw6ljcml0wqA6Cj4gVGhlICJleHQiIGFuZCAicGxsIGhhbGYiIGNsb2NrcyBk
+b24ndCBiZWxvbmcgaW4gdGhlIERULiBUaGV5IGFyZQo+IG5vdCBjb25zdW1lZCBkaXJlY3RseSBi
+eSB0aGUgQUlDIGFuZCBhcmUgb25seSB1c2VkIGFzIHRoZSBwYXJlbnQKPiBjbG9ja3Mgb2YgdGhl
+ICJpMnMiIGNsb2NrLiBBbiBvcGVyYXRpbmcgc3lzdGVtIHNob3VsZCBiZSBhYmxlIHRvCj4gZmln
+dXJlIG91dCB0aGF0IGluZm9ybWF0aW9uIGl0c2VsZiBiZWNhdXNlIGl0IHByZXN1bWFibHkga25v
+d3MgdGhlCj4gbGF5b3V0IG9mIHRoZSBjbG9jayB0cmVlLgo+IAo+IFJlbW92aW5nIHRoZXNlIGZy
+b20gdGhlIERUIHNob3VsZCBiZSBzYWZlIGZyb20gYSBjb21wYXRpYmlsaXR5Cj4gcG9pbnQgb2Yg
+dmlldyBiZWNhdXNlIHRoZSBqejQ3NDAtaTJzIGRyaXZlciBpbiBMaW51eCBkb2VzIG5vdCwgYW5k
+Cj4gbmV2ZXIgZGlkIGRlcGVuZCBvbiB0aGVtLgoKQWdyZWVkLgoKPiBTaWduZWQtb2ZmLWJ5OiBB
+aWRhbiBNYWNEb25hbGQgPGFpZGFubWFjZG9uYWxkLjB4MEBnbWFpbC5jb20+Cj4gTGluazoKPiBo
+dHRwczovL2xvcmUua2VybmVsLm9yZy9hbGwvMjAyMjEwMjgxMDM0MTguMTc1NzgtMS1haWRhbm1h
+Y2RvbmFsZC4weDBAZ21haWwuY29tLwoKUmV2aWV3ZWQtYnk6IFBhdWwgQ2VyY3VlaWwgPHBhdWxA
+Y3JhcG91aWxsb3UubmV0PgoKQ2hlZXJzLAotUGF1bAoKPiAtLS0KPiBUaGlzIGlzIGEgcmVzZW5k
+IG9mIHBhdGNoIDIvMyBmcm9tIGEgcHJldmlvdXMgc3VibWlzc2lvbiB3aGljaCBpcwo+IGxpbmtl
+ZCBhYm92ZS4KPiAKPiB2MS0+djI6IHVwZGF0ZWQgY29tbWl0IG1lc3NhZ2UKPiAKPiDCoGFyY2gv
+bWlwcy9ib290L2R0cy9pbmdlbmljL2p6NDcyNWIuZHRzaSB8IDcgKystLS0tLQo+IMKgYXJjaC9t
+aXBzL2Jvb3QvZHRzL2luZ2VuaWMvano0NzQwLmR0c2nCoCB8IDcgKystLS0tLQo+IMKgYXJjaC9t
+aXBzL2Jvb3QvZHRzL2luZ2VuaWMvano0NzcwLmR0c2nCoCB8IDUgKystLS0KPiDCoDMgZmlsZXMg
+Y2hhbmdlZCwgNiBpbnNlcnRpb25zKCspLCAxMyBkZWxldGlvbnMoLSkKPiAKPiBkaWZmIC0tZ2l0
+IGEvYXJjaC9taXBzL2Jvb3QvZHRzL2luZ2VuaWMvano0NzI1Yi5kdHNpCj4gYi9hcmNoL21pcHMv
+Ym9vdC9kdHMvaW5nZW5pYy9qejQ3MjViLmR0c2kKPiBpbmRleCBlOWU0ODAyMmY2MzEuLmFjYmJl
+OGM0NjY0YyAxMDA2NDQKPiAtLS0gYS9hcmNoL21pcHMvYm9vdC9kdHMvaW5nZW5pYy9qejQ3MjVi
+LmR0c2kKPiArKysgYi9hcmNoL21pcHMvYm9vdC9kdHMvaW5nZW5pYy9qejQ3MjViLmR0c2kKPiBA
+QCAtMTk4LDExICsxOTgsOCBAQCBhaWM6IGF1ZGlvLWNvbnRyb2xsZXJAMTAwMjAwMDAgewo+IMKg
+Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAjc291bmQtZGFpLWNlbGxzID0gPDA+
+Owo+IMKgCj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGNsb2NrcyA9IDwmY2d1IEpa
+NDcyNUJfQ0xLX0FJQz4sCj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqAgPCZjZ3UgSlo0NzI1Ql9DTEtfSTJTPiwKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCA8JmNndSBKWjQ3MjVCX0NMS19FWFQ+LAo+IC3CoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIDwmY2d1IEpaNDcyNUJf
+Q0xLX1BMTF9IQUxGPjsKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY2xvY2stbmFt
+ZXMgPSAiYWljIiwgImkycyIsICJleHQiLCAicGxsIGhhbGYiOwo+ICvCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqBjbG9ja3MgPSA8JmNndSBKWjQ3MjVCX0NMS19BSUM+LCA8JmNndQo+IEpa
+NDcyNUJfQ0xLX0kyUz47Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGNsb2NrLW5h
+bWVzID0gImFpYyIsICJpMnMiOwo+IMKgCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqBpbnRlcnJ1cHQtcGFyZW50ID0gPCZpbnRjPjsKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoGludGVycnVwdHMgPSA8MTA+Owo+IGRpZmYgLS1naXQgYS9hcmNoL21pcHMvYm9vdC9k
+dHMvaW5nZW5pYy9qejQ3NDAuZHRzaQo+IGIvYXJjaC9taXBzL2Jvb3QvZHRzL2luZ2VuaWMvano0
+NzQwLmR0c2kKPiBpbmRleCA3Zjc2Y2JhMDNhMDguLmJkZDZmNGQ4MmVjOSAxMDA2NDQKPiAtLS0g
+YS9hcmNoL21pcHMvYm9vdC9kdHMvaW5nZW5pYy9qejQ3NDAuZHRzaQo+ICsrKyBiL2FyY2gvbWlw
+cy9ib290L2R0cy9pbmdlbmljL2p6NDc0MC5kdHNpCj4gQEAgLTE5MiwxMSArMTkyLDggQEAgYWlj
+OiBhdWRpby1jb250cm9sbGVyQDEwMDIwMDAwIHsKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoGludGVycnVwdC1wYXJlbnQgPSA8JmludGM+Owo+IMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgaW50ZXJydXB0cyA9IDwxOD47Cj4gwqAKPiAtwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgY2xvY2tzID0gPCZjZ3UgSlo0NzQwX0NMS19BSUM+LAo+IC3CoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIDwmY2d1IEpaNDc0MF9DTEtfSTJT
+PiwKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCA8JmNn
+dSBKWjQ3NDBfQ0xLX0VYVD4sCj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqAgPCZjZ3UgSlo0NzQwX0NMS19QTExfSEFMRj47Cj4gLcKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoGNsb2NrLW5hbWVzID0gImFpYyIsICJpMnMiLCAiZXh0IiwgInBsbCBo
+YWxmIjsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY2xvY2tzID0gPCZjZ3UgSlo0
+NzQwX0NMS19BSUM+LCA8JmNndQo+IEpaNDc0MF9DTEtfSTJTPjsKPiArwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgY2xvY2stbmFtZXMgPSAiYWljIiwgImkycyI7Cj4gwqAKPiDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGRtYXMgPSA8JmRtYWMgMjUgMHhmZmZmZmZmZj4sIDwm
+ZG1hYyAyNCAweGZmZmZmZmZmPjsKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGRt
+YS1uYW1lcyA9ICJyeCIsICJ0eCI7Cj4gZGlmZiAtLWdpdCBhL2FyY2gvbWlwcy9ib290L2R0cy9p
+bmdlbmljL2p6NDc3MC5kdHNpCj4gYi9hcmNoL21pcHMvYm9vdC9kdHMvaW5nZW5pYy9qejQ3NzAu
+ZHRzaQo+IGluZGV4IGJkYTBhM2E4NmVkNS4uOWMwMDk5OTE5ZGI3IDEwMDY0NAo+IC0tLSBhL2Fy
+Y2gvbWlwcy9ib290L2R0cy9pbmdlbmljL2p6NDc3MC5kdHNpCj4gKysrIGIvYXJjaC9taXBzL2Jv
+b3QvZHRzL2luZ2VuaWMvano0NzcwLmR0c2kKPiBAQCAtMjM4LDkgKzIzOCw4IEBAIGFpYzogYXVk
+aW8tY29udHJvbGxlckAxMDAyMDAwMCB7Cj4gwqAKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoCNzb3VuZC1kYWktY2VsbHMgPSA8MD47Cj4gwqAKPiAtwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgY2xvY2tzID0gPCZjZ3UgSlo0NzcwX0NMS19BSUM+LCA8JmNndQo+IEpaNDc3
+MF9DTEtfSTJTPiwKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoCA8JmNndSBKWjQ3NzBfQ0xLX0VYVD4sIDwmY2d1Cj4gSlo0NzcwX0NMS19QTEwwPjsKPiAt
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY2xvY2stbmFtZXMgPSAiYWljIiwgImkycyIs
+ICJleHQiLCAicGxsIGhhbGYiOwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjbG9j
+a3MgPSA8JmNndSBKWjQ3NzBfQ0xLX0FJQz4sIDwmY2d1Cj4gSlo0NzcwX0NMS19JMlM+Owo+ICvC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjbG9jay1uYW1lcyA9ICJhaWMiLCAiaTJzIjsK
+PiDCoAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaW50ZXJydXB0LXBhcmVudCA9
+IDwmaW50Yz47Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpbnRlcnJ1cHRzID0g
+PDM0PjsKCg==
 
-commit 12904d953364e3bd21789a45137bf90df7cc78ee
-Author: Jiaqi Yan <jiaqiyan@google.com>
-Date:   Wed Mar 29 15:11:21 2023 +0000
-
-    mm/khugepaged: recover from poisoned file-backed memory
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14f67032280000
-start commit:   3c4aa4434377 Merge tag 'ceph-for-6.4-rc1' of https://githu..
-git tree:       upstream
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=16f67032280000
-console output: https://syzkaller.appspot.com/x/log.txt?x=12f67032280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c1d541e02d3faec
-dashboard link: https://syzkaller.appspot.com/bug?extid=3d4aa0d3e784b29b1520
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14d1973c280000
-
-Reported-by: syzbot+3d4aa0d3e784b29b1520@syzkaller.appspotmail.com
-Fixes: 12904d953364 ("mm/khugepaged: recover from poisoned file-backed memory")
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
