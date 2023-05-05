@@ -2,71 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 141286F7CBE
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 08:06:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4D696F7CC2
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 08:08:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230359AbjEEGGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 02:06:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40384 "EHLO
+        id S230370AbjEEGIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 02:08:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbjEEGGm (ORCPT
+        with ESMTP id S229601AbjEEGId (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 02:06:42 -0400
-Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCFDD7DBB;
-        Thu,  4 May 2023 23:06:39 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R481e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VhnoNbH_1683266779;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VhnoNbH_1683266779)
-          by smtp.aliyun-inc.com;
-          Fri, 05 May 2023 14:06:34 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     laurent.pinchart@ideasonboard.com
-Cc:     mchehab@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] media: nxp: remove unneeded semicolon
-Date:   Fri,  5 May 2023 14:06:17 +0800
-Message-Id: <20230505060617.5327-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Fri, 5 May 2023 02:08:33 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC031490C
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 23:08:30 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-6439f186366so234261b3a.2
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 23:08:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1683266910; x=1685858910;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pSta0d8rMPRbh+U2QgJPeyvHfLc6ifzE+V/ts4215w4=;
+        b=juItMXpkR4RnyffRyLs1wh8s/8701jzDW2VtsmFSD2zvi2i7VHcKO3u0TXhkFzZhdu
+         AX5b8VtEtnjrLlrb/dR1Tlz5d0txNH6h7XZC3JF/CXtQkGJWQyZsE/FGdwtP/FoNa6T7
+         roAR5j0Xn8H7OsV+7w48JglbFpS56Ofbib9v6Q5/c+Dcsiytbl61PAnkgWsk6UK4sFig
+         B6VIPv1N7PgVC0i5en+/ygo2siYo5wr1eIFjTzUAPsH1O3ljQoMxAJRpSmKX66IxEeSK
+         oCID+pd0GLqxfA4tTXmz7lJE5QU2SGJqsSqe6K7JfzrP9gat/3U3IFHLrWDz66Op5/gj
+         gJwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683266910; x=1685858910;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pSta0d8rMPRbh+U2QgJPeyvHfLc6ifzE+V/ts4215w4=;
+        b=kVqfHN9GHEcDSlTC3nXhHfh1Mv9T+zUIE96KC0HDi03rU+GXf7i0c7GXTi/sF+p7Px
+         pJojEXEXNWEjwsGXI76zuSIZsy8eXr6AlkrTPkHQ/98hzENi5TTniJH/pF1hoE+HysPC
+         SpyAqjLChtKvy5jxMzkr+oLjJk0E9IuYliSRvGua+uO7Hj1CowyHbU/N3HHegljeZ27b
+         uXW4StSwgVFTJO8BjDiK8ErLCt8BQrDPzO6BbAxU1KZ/cTxT1tbe+GFrrUEZbWJWuY+b
+         iJWP2kY/BmwRpx6EH0iT3wLt5ZrM98FNLKQaAdlDME4F6EA7X5TaQuJ4NIZWiXnrF80B
+         fmzw==
+X-Gm-Message-State: AC+VfDy/x5tUxTuQ1Th8O+PxW67VR2SIqKhc0L1gGFrDvdfgzs4M8xTE
+        EB3ppnjkHjjtwSfbi0NHX+jV7A==
+X-Google-Smtp-Source: ACHHUZ5Xrm8F82be2bnl9ESPtXrPj37oeZwDiAyWWRpUiCKlDm0Qa/z5/SRQTHsveMLnYKuVj1wsLw==
+X-Received: by 2002:a05:6a20:12c5:b0:f5:b4a5:73b4 with SMTP id v5-20020a056a2012c500b000f5b4a573b4mr523167pzg.27.1683266910194;
+        Thu, 04 May 2023 23:08:30 -0700 (PDT)
+Received: from C02F52LSML85.bytedance.net ([139.177.225.238])
+        by smtp.gmail.com with ESMTPSA id a15-20020aa780cf000000b0063799398eb9sm762160pfn.58.2023.05.04.23.08.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 May 2023 23:08:29 -0700 (PDT)
+From:   Feng zhou <zhoufeng.zf@bytedance.com>
+To:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        mykolal@fb.com, shuah@kernel.org
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        yangzhenze@bytedance.com, wangdongdong.6@bytedance.com,
+        zhoufeng.zf@bytedance.com
+Subject: [PATCH bpf-next v6 0/2] Introduce a new kfunc of bpf_task_under_cgroup
+Date:   Fri,  5 May 2023 14:08:16 +0800
+Message-Id: <20230505060818.60037-1-zhoufeng.zf@bytedance.com>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No functional modification involved.
+From: Feng Zhou <zhoufeng.zf@bytedance.com>
 
-./drivers/media/platform/nxp/imx8-isi/imx8-isi-crossbar.c:226:2-3: Unneeded semicolon.
+Trace sched related functions, such as enqueue_task_fair, it is necessary to
+specify a task instead of the current task which within a given cgroup.
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4868
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- drivers/media/platform/nxp/imx8-isi/imx8-isi-crossbar.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Feng Zhou (2):
+  bpf: Add bpf_task_under_cgroup() kfunc
+  selftests/bpf: Add testcase for bpf_task_under_cgroup
 
-diff --git a/drivers/media/platform/nxp/imx8-isi/imx8-isi-crossbar.c b/drivers/media/platform/nxp/imx8-isi/imx8-isi-crossbar.c
-index b5ffde46f31b..f7447b2f4d77 100644
---- a/drivers/media/platform/nxp/imx8-isi/imx8-isi-crossbar.c
-+++ b/drivers/media/platform/nxp/imx8-isi/imx8-isi-crossbar.c
-@@ -223,7 +223,7 @@ static int mxc_isi_crossbar_init_cfg(struct v4l2_subdev *sd,
- 		route->sink_pad = i;
- 		route->source_pad = i + xbar->num_sinks;
- 		route->flags = V4L2_SUBDEV_ROUTE_FL_ACTIVE;
--	};
-+	}
- 
- 	routing.num_routes = xbar->num_sources;
- 	routing.routes = routes;
+Changelog:
+v5->v6: Addressed comments from Yonghong Song
+- Some code format modifications.
+- Add ack-by
+Details in here:
+https://lore.kernel.org/all/20230504031513.13749-1-zhoufeng.zf@bytedance.com/
+
+v4->v5: Addressed comments from Yonghong Song
+- Some code format modifications.
+Details in here:
+https://lore.kernel.org/all/20230428071737.43849-1-zhoufeng.zf@bytedance.com/
+
+v3->v4: Addressed comments from Yonghong Song
+- Modify test cases and test other tasks, not the current task.
+Details in here:
+https://lore.kernel.org/all/20230427023019.73576-1-zhoufeng.zf@bytedance.com/
+
+v2->v3: Addressed comments from Alexei Starovoitov
+- Modify the comment information of the function.
+- Narrow down the testcase's hook point
+Details in here:
+https://lore.kernel.org/all/20230421090403.15515-1-zhoufeng.zf@bytedance.com/
+
+v1->v2: Addressed comments from Alexei Starovoitov
+- Add kfunc instead.
+Details in here:
+https://lore.kernel.org/all/20230420072657.80324-1-zhoufeng.zf@bytedance.com/
+
+ kernel/bpf/helpers.c                          | 20 +++++++
+ tools/testing/selftests/bpf/DENYLIST.s390x    |  1 +
+ .../bpf/prog_tests/task_under_cgroup.c        | 53 +++++++++++++++++++
+ .../bpf/progs/test_task_under_cgroup.c        | 51 ++++++++++++++++++
+ 4 files changed, 125 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
+
 -- 
-2.20.1.7.g153144c
+2.20.1
 
