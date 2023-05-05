@@ -2,102 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 824146F7E14
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 09:42:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12AF86F7E1A
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 09:44:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231373AbjEEHm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 03:42:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35414 "EHLO
+        id S231376AbjEEHoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 03:44:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbjEEHmy (ORCPT
+        with ESMTP id S229807AbjEEHoY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 03:42:54 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D8117DF7
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 00:42:50 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f20215fa70so9732035e9.0
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 00:42:50 -0700 (PDT)
+        Fri, 5 May 2023 03:44:24 -0400
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D83815693
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 00:44:23 -0700 (PDT)
+Received: by mail-il1-x12d.google.com with SMTP id e9e14a558f8ab-3318961b385so17167775ab.1
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 00:44:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683272569; x=1685864569;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=X0YN5W0LPlKPzpypfatqj33JsLIdDk9xz6FiE+5eHUE=;
-        b=H3G3kDsoUB6tldvJFxZWuxGL17kvtDHQttrVE3BM4D4q93skWFZTPK3dkiaVrRowKf
-         iIEfkiycBF0w4GgRrUPQSc143tHiA3sVwoawpqDldo7VeKOT9Btiqe12iy4zK9ymdPTK
-         UI0bFfm1eizCepM10ycLWLWwOSdW8E0d1EqOcqiOTKZCxDmxFrdPDoVsVC90LsRe21nN
-         4hdi4A5v8Mr2z0Z72VLbi7oTpGUzpPt7SBzdlzwUn0U2GSNmp1lbYJHDxOoC5Ei3Bacj
-         xLs/02qJasuRu6UEq3T6cSYw8lu3QI765+OU4yCoCpVlPzT5p6vY27IcO8c/QeBMg8YY
-         9PIA==
+        d=google.com; s=20221208; t=1683272663; x=1685864663;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lPZVtfp6t3Y0W83bt9VDuQwkydTNBKwgjyEPJPSY9oo=;
+        b=3CTGLUNi41774qWN2MdvThPefR+2JWAFFB3SDr72C708dur/f93EMMFzAxRNyK5Ekv
+         LIh/Lcfrzmg8Y0JkqH/TP00YbU0LHeEL1FIXunqiWpa/BHRx1Ii+By20gB8tRnqqmxWJ
+         7rA2p5REb5sQET6rksFE2VvtWG6saxcb04bES43ic9H+OvnU+FnYTxvEMRhnrsEpzEN4
+         +d4ZYueujsNWDQ3FLG9XEtBnnqnhAVfJfQ+Y7acMxW4pEE/2cQiZQhAHohyKuuVvc9Zp
+         rMEJng5UAwkEoqOjj0mEMPToPiltEc53F3QJiz88LavqXUJqI0b3h2RCjbQN982JfBij
+         F5jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683272569; x=1685864569;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=X0YN5W0LPlKPzpypfatqj33JsLIdDk9xz6FiE+5eHUE=;
-        b=QA7KwDGB57hpOlS67FpBR9mh92cn6r0eIxyCj8PsfDw4qRg2wWOA57f26dAEcOlG9j
-         EvH1mrqw9siRIEF5YquVFGg/bTNRo62ou80CuYljqufWm7TwhaB18JGLDMg5h/M3YvIf
-         Y+RAysXLotMUZ6dyKESd+J2XtylLq8Q65XIKzqpMM1SpygSdQjSbbdDhACaUYAlKm4e/
-         ufbK0UlXv78AMnVxQif9AWGVUUnnDEsx1c/I+q8svcjgNqvgIiIlLef7gkQpfjMhDbkO
-         SOZj19z0kq7R+pWM/uOSFHKw3l0LG4DKuARFBw1wMupqpS8H7TsNiLy5fTl1D/xRdljf
-         9ZTg==
-X-Gm-Message-State: AC+VfDwNXNh82NlUZdO6XwSELNxY3MIdq5eRT/Mjx84ygkMEDLQcuOoO
-        XgAgtcMcGMkKiMOtN/TAvSgpwQ==
-X-Google-Smtp-Source: ACHHUZ557C+5NiAT/VVERnB2kIdbITR+K945g324cnQaz2MPoOKZ70EhHM93mgYjMKq9+0QJjemUZA==
-X-Received: by 2002:a05:600c:2298:b0:3f1:98df:bc03 with SMTP id 24-20020a05600c229800b003f198dfbc03mr381819wmf.25.1683272568932;
-        Fri, 05 May 2023 00:42:48 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id s6-20020adff806000000b003068f5cca8csm1459185wrp.94.2023.05.05.00.42.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 May 2023 00:42:46 -0700 (PDT)
-Date:   Fri, 5 May 2023 10:42:43 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     d202180596@hust.edu.cn
-Cc:     andy gross <agross@kernel.org>,
-        bjorn andersson <andersson@kernel.org>,
-        konrad dybcio <konrad.dybcio@linaro.org>,
-        wolfram sang <wsa@kernel.org>,
-        "ivan t. ivanov" <iivanov@mm-sol.com>,
-        sricharan r <sricharan@codeaurora.org>,
-        naveen kaje <nkaje@codeaurora.org>,
-        austin christ <austinwc@codeaurora.org>,
-        hust-os-kernel-patches@googlegroups.com,
-        andy gross <agross@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: qup: Add missing unwind goto in qup_i2c_probe()
-Message-ID: <e7f22f7c-8552-4766-a770-fa2d29e5068d@kili.mountain>
-References: <20230418135612.598-1-d202180596@hust.edu.cn>
- <5c9f1e4d.47382.187e97d01a5.Coremail.d202180596@hust.edu.cn>
+        d=1e100.net; s=20221208; t=1683272663; x=1685864663;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lPZVtfp6t3Y0W83bt9VDuQwkydTNBKwgjyEPJPSY9oo=;
+        b=KHX6/J+FGml1ZPLcjS92BzSEKJq/Q1ouZ/6m9F4h0hywG8ORkHWZp8DouWamZtqC11
+         Goe+5JMjd0bV6B6zMKDJmz9N6Akhf0u2HIGOcXwN8TxyAx9gTKrq+iBokkHyTYjv4E+s
+         6hc/SWVq+GP28ust2VfdMhkmhSYxSlNCAYdAUMhjPVRVeHsbqQeMI5i5dj27A7SdQBxg
+         lc1QtDV94lmJcYYgZtK1IE3HTBm6NgAko0oWDvxGR6Xc0O9x4EVp3SlzRLzO8RtBQz7r
+         yekXHCJhPqGzFh/5GzVqRs42hlQQF3FEx5T+v6ot1eV5fFNIJt5JTz/uV4eIe+nMflJj
+         PmZA==
+X-Gm-Message-State: AC+VfDzFznwuyG2uA3v+lRsqRVewa4587EqGJV6zzNFkqjSLl9PBTykC
+        LkQwu4xrkXXxIL+L9lMtz8at7VuCeEZWym0IYrvMXA==
+X-Google-Smtp-Source: ACHHUZ4epH5CJTOlram+1GD8qTmDW8HjKYhj0AillBoub3xAs1nJF7QedWwGl/arLZNXCFh6UVEOeuHiI5Hr+RGxzi0=
+X-Received: by 2002:a5e:9244:0:b0:760:af65:4787 with SMTP id
+ z4-20020a5e9244000000b00760af654787mr500379iop.6.1683272662794; Fri, 05 May
+ 2023 00:44:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5c9f1e4d.47382.187e97d01a5.Coremail.d202180596@hust.edu.cn>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230505035127.195387-1-mpe@ellerman.id.au>
+In-Reply-To: <20230505035127.195387-1-mpe@ellerman.id.au>
+From:   Marco Elver <elver@google.com>
+Date:   Fri, 5 May 2023 09:43:46 +0200
+Message-ID: <CANpmjNOmtTU=__W7=pKVibVZ3OnfgSsXeSsqHA7y=e3D-G026Q@mail.gmail.com>
+Subject: Re: [PATCH] mm: kfence: Fix false positives on big endian
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     glider@google.com, akpm@linux-foundation.org,
+        zhangpeng.00@bytedance.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 05, 2023 at 09:18:16AM +0800, d202180596@hust.edu.cn wrote:
-> 
-> > -----原始邮件-----
-> > 发件人: "Shuai Jiang" <d202180596@hust.edu.cn>
-> > 发送时间: 2023-04-18 21:56:12 (星期二)
-              ^^^^^^^^^^
+On Fri, 5 May 2023 at 05:51, Michael Ellerman <mpe@ellerman.id.au> wrote:
+>
+> Since commit 1ba3cbf3ec3b ("mm: kfence: improve the performance of
+> __kfence_alloc() and __kfence_free()"), kfence reports failures in
+> random places at boot on big endian machines.
+>
+> The problem is that the new KFENCE_CANARY_PATTERN_U64 encodes the
+> address of each byte in its value, so it needs to be byte swapped on big
+> endian machines.
+>
+> The compiler is smart enough to do the le64_to_cpu() at compile time, so
+> there is no runtime overhead.
+>
+> Fixes: 1ba3cbf3ec3b ("mm: kfence: improve the performance of __kfence_alloc() and __kfence_free()")
+> Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
 
-You can't ping the list when the merge window is open.  You have to wait
-for a couple weeks after.
+Reviewed-by: Marco Elver <elver@google.com>
 
-The weeks before and during the merge window are busy and then afterward
-maintainers have to deal with the backlog of postponed stuff...
+Andrew, is the Fixes enough to make it to stable as well or do we also
+need Cc: stable?
 
-Just be patient.
+Thanks,
+-- Marco
 
-regards,
-dan carpenter
+> ---
+>  mm/kfence/kfence.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/mm/kfence/kfence.h b/mm/kfence/kfence.h
+> index 2aafc46a4aaf..392fb273e7bd 100644
+> --- a/mm/kfence/kfence.h
+> +++ b/mm/kfence/kfence.h
+> @@ -29,7 +29,7 @@
+>   * canary of every 8 bytes is the same. 64-bit memory can be filled and checked
+>   * at a time instead of byte by byte to improve performance.
+>   */
+> -#define KFENCE_CANARY_PATTERN_U64 ((u64)0xaaaaaaaaaaaaaaaa ^ (u64)(0x0706050403020100))
+> +#define KFENCE_CANARY_PATTERN_U64 ((u64)0xaaaaaaaaaaaaaaaa ^ (u64)(le64_to_cpu(0x0706050403020100)))
+>
+>  /* Maximum stack depth for reports. */
+>  #define KFENCE_STACK_DEPTH 64
+> --
+> 2.40.1
+>
