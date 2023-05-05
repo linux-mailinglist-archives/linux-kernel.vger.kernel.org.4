@@ -2,106 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 229B36F8513
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 16:50:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B861D6F8518
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 16:54:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232633AbjEEOus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 10:50:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38692 "EHLO
+        id S232240AbjEEOyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 10:54:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232221AbjEEOup (ORCPT
+        with ESMTP id S232006AbjEEOyD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 10:50:45 -0400
-Received: from m228-4.mailgun.net (m228-4.mailgun.net [159.135.228.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1EBC17DE1
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 07:50:42 -0700 (PDT)
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=equiv.tech; q=dns/txt;
- s=mx; t=1683298241; x=1683305441; h=In-Reply-To: Content-Type: MIME-Version:
- References: Message-ID: Subject: Subject: Cc: To: To: From: From: Date:
- Sender: Sender; bh=EK1JydfP+yDGRYuOn6HFDzhJ0o/Eh62PlPzIuRHXoLQ=;
- b=PbMDolKVXgUqRXif2rABTxGo3KYghGDttEzbjFIBqyqoO8b6+8YqO29s/DEELWrjA9m+zGPI9lrhmC3kppjlFJCtMQah454H/V9WClcOgKQpyylyrZQfEl2PrtnxnRQGTXwIllgcakDlTdKplpu5/1pYxPpUaaEZMVo6KOZR5QvgwiI9V3AKc2aIsPU8bVkJTRlItZCoeQM8aAPDdr5Q6+9nLmxhqBYpKbx8/WLfafBbgPqowUvTFnoJ4QBrywPXfhCjooZXECcafGQdM+QQgsWa/iSJrY9DoKDe1Wn06+nXj2cPk/Fwe2h9ONAz+aS56u4zEe1xLQG0P5qWhk4V1g==
-X-Mailgun-Sending-Ip: 159.135.228.4
-X-Mailgun-Sid: WyI4ZWI3MiIsImxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmciLCI5M2Q1YWIiXQ==
-Received: from mail.equiv.tech (equiv.tech [142.93.28.83]) by 43f335790acc with SMTP id
- 645517c1dd415858cb8b0911 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 05 May 2023 14:50:41 GMT
-Sender: james@equiv.tech
-Date:   Fri, 5 May 2023 07:50:40 -0700
-From:   James Seo <james@equiv.tech>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     James Seo <james@equiv.tech>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC 06/11] Documentation/hwmon: Revise patch submission
- checklist
-Message-ID: <ZFUXwOlQ73lJDHFr@equiv.tech>
-References: <20230504075752.1320967-1-james@equiv.tech>
- <20230504075752.1320967-7-james@equiv.tech>
- <ZFSHa2ThLorH5fwI@debian.me>
+        Fri, 5 May 2023 10:54:03 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 108A615EE8;
+        Fri,  5 May 2023 07:54:01 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E628C1FB;
+        Fri,  5 May 2023 07:54:45 -0700 (PDT)
+Received: from [10.57.81.246] (unknown [10.57.81.246])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 055803F5A1;
+        Fri,  5 May 2023 07:53:58 -0700 (PDT)
+Message-ID: <8eab6d63-1fa1-704f-279b-83b2df7fa808@arm.com>
+Date:   Fri, 5 May 2023 15:53:54 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZFSHa2ThLorH5fwI@debian.me>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH 1/3] iommu/dma: Clean up Kconfig
+Content-Language: en-GB
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     joro@8bytes.org, will@kernel.org, catalin.marinas@arm.com,
+        jean-philippe@linaro.org, inki.dae@samsung.com,
+        sw0312.kim@samsung.com, kyungmin.park@samsung.com,
+        tglx@linutronix.de, maz@kernel.org, alex.williamson@redhat.com,
+        cohuck@redhat.com, iommu@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-acpi@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+References: <cover.1660668998.git.robin.murphy@arm.com>
+ <2e33c8bc2b1bb478157b7964bfed976cb7466139.1660668998.git.robin.murphy@arm.com>
+ <ZFUXmH9vndGZFuPr@nvidia.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <ZFUXmH9vndGZFuPr@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 05, 2023 at 11:34:51AM +0700, Bagas Sanjaya wrote:
-> On Thu, May 04, 2023 at 12:57:47AM -0700, James Seo wrote:
->> -* Only the following I2C addresses shall be probed: 0x18-0x1f, 0x28-0x2f,
->> -  0x48-0x4f, 0x58, 0x5c, 0x73 and 0x77. Probing other addresses is strongly
->> -  discouraged as it is known to cause trouble with other (non-hwmon) I2C
->> -  chips. If your chip lives at an address which can't be probed then the
->> -  device will have to be instantiated explicitly (which is always better
->> -  anyway.)
->> +* Only the following I2C addresses shall be probed: ``0x18``-``0x1f``,
->> +  ``0x28``-``0x2f``, ``0x48``-``0x4f``, ``0x58``, ``0x5c``, ``0x73``,
->> +  and ``0x77``. Probing other addresses is strongly discouraged, as it is
->> +  known to cause trouble with other (non-``hwmon``) I2C chips. If your chip
->> +  lives at an address which can't be probed, then the device will have to be
->> +  instantiated explicitly (which is always better anyway).
+On 2023-05-05 15:50, Jason Gunthorpe wrote:
+> On Tue, Aug 16, 2022 at 06:28:03PM +0100, Robin Murphy wrote:
+>> Although iommu-dma is a per-architecture chonce, that is currently
+>> implemented in a rather haphazard way. Selecting from the arch Kconfig
+>> was the original logical approach, but is complicated by having to
+>> manage dependencies; conversely, selecting from drivers ends up hiding
+>> the architecture dependency *too* well. Instead, let's just have it
+>> enable itself automatically when IOMMU API support is enabled for the
+>> relevant architectures. It can't get much clearer than that.
+>>
+>> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+>> ---
+>>   arch/arm64/Kconfig          | 1 -
+>>   drivers/iommu/Kconfig       | 3 +--
+>>   drivers/iommu/amd/Kconfig   | 1 -
+>>   drivers/iommu/intel/Kconfig | 1 -
+>>   4 files changed, 1 insertion(+), 5 deletions(-)
+>>
+>> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+>> index 571cc234d0b3..59af600445c2 100644
+>> --- a/arch/arm64/Kconfig
+>> +++ b/arch/arm64/Kconfig
+>> @@ -209,7 +209,6 @@ config ARM64
+>>   	select HAVE_KPROBES
+>>   	select HAVE_KRETPROBES
+>>   	select HAVE_GENERIC_VDSO
+>> -	select IOMMU_DMA if IOMMU_SUPPORT
+>>   	select IRQ_DOMAIN
+>>   	select IRQ_FORCED_THREADING
+>>   	select KASAN_VMALLOC if KASAN
+>> diff --git a/drivers/iommu/Kconfig b/drivers/iommu/Kconfig
+>> index 5c5cb5bee8b6..1d99c2d984fb 100644
+>> --- a/drivers/iommu/Kconfig
+>> +++ b/drivers/iommu/Kconfig
+>> @@ -137,7 +137,7 @@ config OF_IOMMU
+>>   
+>>   # IOMMU-agnostic DMA-mapping layer
+>>   config IOMMU_DMA
+>> -	bool
+>> +	def_bool ARM64 || IA64 || X86
 > 
-> IMO hwmon here refers to the subsystem (not code identifier name), so
-> inlining here isn't needed.
-> 
->>  * Make sure there are no race conditions in the probe function. Specifically,
->>    completely initialize your chip and your driver first, then register with
->> -  the hwmon subsystem.
->> +  the ``hwmon`` subsystem.
-> 
-> Also here.
-> 
->>  
->> -* Use devm_hwmon_device_register_with_info() or, if your driver needs a remove
->> -  function, hwmon_device_register_with_info() to register your driver with the
->> -  hwmon subsystem. Try using devm_add_action() instead of a remove function if
->> -  possible. Do not use any of the deprecated registration functions.
->> +* Use
->> +  :ref:`devm_hwmon_device_register_with_info() <devm_hwmon_device_register_with_info>`
->> +  or, if your driver needs a remove function,
->> +  :ref:`hwmon_device_register_with_info() <hwmon_device_register_with_info>` to
->> +  register your driver with the ``hwmon`` subsystem. Try using devm_add_action()
->> +  instead of a remove function if possible. Do not use any of the deprecated
->> +  registration functions.
-> 
-> And here.
-> 
->> -* Do not provide support for deprecated sysfs attributes.
->> +* Do not provide support for deprecated ``sysfs`` attributes.
-> 
-> Dunno if sysfs (as subsystem name) also needs to be inlined.
-> 
-> Thanks.
-> 
-> -- 
-> An old man doll... just what I always wanted! - Clara
+> Robin, do you remember why you added IA64 here? What is the Itanimum
+> IOMMU driver?
 
-Good point. I will remove inline references to hwmon and sysfs.
+config INTEL_IOMMU
+	bool "Support for Intel IOMMU using DMA Remapping Devices"
+	depends on PCI_MSI && ACPI && (X86 || IA64)
 
+Yes, really :)
+
+Robin.
