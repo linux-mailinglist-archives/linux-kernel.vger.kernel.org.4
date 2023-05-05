@@ -2,49 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FEB76F83F7
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 15:27:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E8FB6F83FF
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 15:28:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232523AbjEEN12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 09:27:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51558 "EHLO
+        id S232571AbjEEN2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 09:28:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232345AbjEEN1U (ORCPT
+        with ESMTP id S232201AbjEEN2C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 09:27:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E694A5CE
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 06:27:13 -0700 (PDT)
+        Fri, 5 May 2023 09:28:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E883821556;
+        Fri,  5 May 2023 06:27:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CCCE863E2B
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 13:27:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBC54C433D2;
-        Fri,  5 May 2023 13:27:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 57B2063E26;
+        Fri,  5 May 2023 13:27:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B6EEC433EF;
+        Fri,  5 May 2023 13:27:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683293232;
-        bh=RPMkakcsgGg/pEMX/kFbjCNm3Vpjc9Hgy/zjJOCFcqM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=rMVtuDb5bKIPa9WIwI/JINrOiAYV7vBJgFmTVmiKkj9fIoNuDMmA8frzgfKUhVEFk
-         8TQ2e6MML4yZZp4jUDV7bXxoO1lhuLYaBvsugAMrYbeb+4+yRJIUXFJYJ8f5SUMc3i
-         oxso3w2rqCCwy3PLNnMwH75TqKjUA7P0XvTF+JuuojyN7ju/OTFMFOkjqQMnh6k1YA
-         ZtK9yUSmdW8PzT5bGYvmePjJje3PSlB+VcET+sfnwnsC3Tlv1s9qc2unXgUFF/dB2x
-         QtTWmsZYgthoqPTxJzIVA/KMAphicjgkt7wXGSNvTkbRS575JM5kqfH7aadFXq9YoM
-         Ug9sqIrI1JERw==
-Date:   Fri, 5 May 2023 18:57:08 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Phy <linux-phy@lists.infradead.org>
-Subject: [GIT PULL]: Generic phy fixes for v6.4-rc1
-Message-ID: <ZFUELDT/xaxm0lmP@matsya>
+        s=k20201202; t=1683293266;
+        bh=d3kRte1MpgDiOaz1OXedDsZaqaH5ZvGBYD4hjy22AkI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=u8WpmSAAFXJs7+8TpPQvf/O5iKrp/Vfn82gzylXfJXwE/6EkmdpifEeL9tatQ6CB7
+         BiiwpfuGISYRSD78J2kLUj1pr0k8Kv2i0jFCLoG65EMS7TD+MF5yw3BaHTSWJiUWP1
+         J10CN7gSIOJR2kr4/onVEKEB9TG7jCmlUybZFBHfxH9OEeE73HaUdPCaQLTgsb49eW
+         8vUudK8ug1FUifsUMSnYo62E42bGPXJeKIJlnoWET2oXYxVzmSeGBlfqkgQbWl9IGW
+         dZEy+qV1dejT62cudqwkX5deWxvealp3hCBnn+9BVUCJ8dNjp0Hj/CtVl7ebvPo7gx
+         fXtIwYhxdEZOQ==
+Date:   Fri, 5 May 2023 22:27:44 +0900
+From:   Mark Brown <broonie@kernel.org>
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     syzbot <syzbot+630f83b42d801d922b8b@syzkaller.appspotmail.com>,
+        davem@davemloft.net, edumazet@google.com, groeck@chromium.org,
+        jiri@resnulli.us, kuba@kernel.org, linmq006@gmail.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+Subject: Re: [syzbot] [net?] WARNING in print_bfs_bug (2)
+Message-ID: <ZFUEUH6ZEE/2/Ds4@finisterre.sirena.org.uk>
+References: <000000000000e5ee7305f0f975e8@google.com>
+ <000000000000db8c6605fa8178df@google.com>
+ <ZFHLu13XQZpOn/8T@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="X4DcDbEFAfyTRw2S"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="oGYsn4n4gVx7MRWk"
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <ZFHLu13XQZpOn/8T@google.com>
+X-Cookie: Avoid contact with eyes.
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,69 +63,62 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---X4DcDbEFAfyTRw2S
+--oGYsn4n4gVx7MRWk
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi Linus,
+On Wed, May 03, 2023 at 10:49:31AM +0800, Tzung-Bi Shih wrote:
+> On Sat, Apr 29, 2023 at 03:54:28PM -0700, syzbot wrote:
+> > syzbot has bisected this issue to:
+> >=20
+> > commit 0a034d93ee929a9ea89f3fa5f1d8492435b9ee6e
+> > Author: Miaoqian Lin <linmq006@gmail.com>
+> > Date:   Fri Jun 3 13:10:43 2022 +0000
+> >=20
+> >     ASoC: cros_ec_codec: Fix refcount leak in cros_ec_codec_platform_pr=
+obe
+> >=20
+> > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D13d40608=
+280000
+> > start commit:   042334a8d424 atlantic:hw_atl2:hw_atl2_utils_fw: Remove =
+unn..
+> > git tree:       net-next
+> > final oops:     https://syzkaller.appspot.com/x/report.txt?x=3D10340608=
+280000
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=3D17d40608280=
+000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3D7205cdba522=
+fe4bc
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=3D630f83b42d801=
+d922b8b
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D147328f82=
+80000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D1665151c280=
+000
+> >=20
+> > Reported-by: syzbot+630f83b42d801d922b8b@syzkaller.appspotmail.com
+> > Fixes: 0a034d93ee92 ("ASoC: cros_ec_codec: Fix refcount leak in cros_ec=
+_codec_platform_probe")
 
-Please pull to receive the two fixes for Mediatek driver warnings
-as reported. Kbuild bot and my tests indicate that this fixes the reported
-issue.
+> I failed to see the connection between the oops and commit 0a034d93ee92.
 
-The following changes since commit a0106132372120dd0abf5ad7636614e5aeb5da08:
+syzbot seems to generate a *lot* of false positives, this looks like one
+of them so it's probably safe to ignore the bisection.
 
-  phy: cadence: cdns-dphy-rx: Add common module reset support (2023-04-12 2=
-2:16:16 +0530)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/phy/linux-phy.git tags/phy-=
-fixes-6.4-1
-
-for you to fetch changes up to 9d9ff3d2a4a567b543b71c2967d2ccc5e0ac6816:
-
-  phy: mediatek: hdmi: mt8195: fix wrong pll calculus (2023-05-04 23:12:11 =
-+0530)
-
-----------------------------------------------------------------
-phy fixes for 6.4
-
- - Fix for mediatek driver warning for variable used uninitialized and fix
-   for wrong pll math
-
-----------------------------------------------------------------
-Guillaume Ranquet (2):
-      phy: mediatek: hdmi: mt8195: fix uninitialized variable usage in pll_=
-calc
-      phy: mediatek: hdmi: mt8195: fix wrong pll calculus
-
- drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
-
-
---=20
-~Vinod
-
---X4DcDbEFAfyTRw2S
+--oGYsn4n4gVx7MRWk
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEE+vs47OPLdNbVcHzyfBQHDyUjg0cFAmRVBCsACgkQfBQHDyUj
-g0cHgQ//Rb+Q6bxeU0x33Vvcoy+Acbl8G0EYR2+apDdM2Nv3+4AulrkFto3eWFTp
-yjWM6R/2PMcwEVMoc/TyGTfnGPHpFhrI6gyoLeMtT3dA5yBsIIQXuuaZbOyvqOKX
-gzGwvsMFCMZEslvRXfG2IIRwIATsM7Pbm9EL5p4n2PofI1L1Bhpm32ccoQ3b5GKd
-ADogUaP4cWYVfQ5Qxf56PQD895wDfaVipn9NTPCrq4rrmXwWgPUbNn4Od7+Cszpn
-FdzZja18J3zs74vRpvvEa2LsF5RyvV4jcmPLuba52X5p4UUg4wfHYpmUDbnQLOfF
-Ovtx4SMyURNQVn0yRby/x02sUvJkw0SuBwBkGuKXSWRwcxeThhFM91E6rQ8STxK+
-4ujT0jNzRGGbtKJmFr9HuNrDvkPhbha9602y7o4O9h1widdPyJsOmZgCbyAwKKD/
-PvxHBZDvdiN/KYXtbRP8buTQYmjgnjKOdPlfkWfMu3Tb4Ci9mx5wsVRkXfO4Dq/q
-S1GEikj13tmskcBX5HuTdtJ+rDSJJTsl+GKWS2gwkJ/KpJ+cJZolzBAJ0Bb0nkcY
-M7NKAdjH1k9LesXRDe1k9jNFOCGS4DwqTgCukCi90KXdKUm2Opia8u/6S/EcDUwe
-fHI3sGGa07V9TDc2Lsg7N8VeafEyyhlX4m9zAkKEFC+MTdB0SAE=
-=fVZq
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRVBE8ACgkQJNaLcl1U
+h9B0lQf/VKJ282l9taOsX67wWq9qpLyTG1VV2PxzyVSvwFyPzlHz6D538HlDniR/
+WjZ0OApHXvNki/qSjBNj6NVuOKcRyeRI8hKpsKOWZSgNLQ09uJAA2U2rwAj6cFwC
+liYUms5wvLj5HP+y/CjSHaspgvYt4kZoT8lCZdzc1C7F+3t0WawaA71JSgndgW6F
++IYz1aBVkZefRgjb+Od7uOiRHlg8WpIEtE43eYWFgdypBK1Xn3ptBzzR6I+PK8E5
+96c1nf87TzaBxgYquUa4Gc19pciF3rsITBgPA3o//Cmvw7KKwjx/Vi1MbdnIjIlQ
+XSwlRT8oJJgalw4jnXEipIqHa7Hkng==
+=0d//
 -----END PGP SIGNATURE-----
 
---X4DcDbEFAfyTRw2S--
+--oGYsn4n4gVx7MRWk--
