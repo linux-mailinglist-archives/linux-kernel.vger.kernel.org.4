@@ -2,86 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E005D6F8A2B
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 22:31:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA97E6F8A25
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 22:28:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233104AbjEEUbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 16:31:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58816 "EHLO
+        id S232897AbjEEU2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 16:28:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233051AbjEEUbJ (ORCPT
+        with ESMTP id S230144AbjEEU2B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 16:31:09 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4347F4225
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 13:31:06 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8DxZPCIZ1Vk3WYFAA--.8937S3;
-        Sat, 06 May 2023 04:31:04 +0800 (CST)
-Received: from openarena.loongson.cn (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxQbSIZ1Vkr2BMAA--.9055S2;
-        Sat, 06 May 2023 04:31:04 +0800 (CST)
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-To:     Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sui Jingfeng <suijingfeng@loongson.cn>,
-        Li Yi <liyi@loongson.cn>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        loongson-kernel@lists.loongnix.cn
-Subject: [PATCH] drm/drm_fb_helper.c: fix a typo
-Date:   Sat,  6 May 2023 04:31:04 +0800
-Message-Id: <20230505203104.1395592-1-suijingfeng@loongson.cn>
-X-Mailer: git-send-email 2.25.1
+        Fri, 5 May 2023 16:28:01 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE6A40FB;
+        Fri,  5 May 2023 13:27:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683318479; x=1714854479;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=attubp1Y5SHGM2s6fxrjpGYDxEhvZVo+MggS/87KNmo=;
+  b=S0BIIfpSuK978Q+FSEQb84SjBLw4FRB/sdbeE0ywaWOmYS8b9kDlGDKy
+   Dxe1H/3odER7prUYg/cTQS1xpK4gcf0IjV23DyiyLM36fEqeuHpg/+vbg
+   64u0zIk1+YR0DUxCDQtxrUx2HnbSJxXe818iIMlvFqkFvkV+HJA5gWtAv
+   tKIC5OLs5Ck50m/q4BL69ePOHIMLzliIx5frb8UoNcnbTMCyR8ZaSSZWe
+   fc+lsPfddsgOG2vcZj/imvOm4/byvxizkFjfN3a1CT0DKj2lHrfHzL+e7
+   sSkFpQyyMHpyrg59YnsaOprVSL/XnvTkDrEKfuXZzEb4p4lTjz+0elaeT
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="338495577"
+X-IronPort-AV: E=Sophos;i="5.99,253,1677571200"; 
+   d="scan'208";a="338495577"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2023 13:27:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="767259577"
+X-IronPort-AV: E=Sophos;i="5.99,253,1677571200"; 
+   d="scan'208";a="767259577"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2023 13:27:39 -0700
+Date:   Fri, 5 May 2023 13:32:02 -0700
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     Baolu Lu <baolu.lu@linux.intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Joerg Roedel <joro@8bytes.org>, dmaengine@vger.kernel.org,
+        vkoul@kernel.org, Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>,
+        narayan.ranganathan@intel.com, jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH v5 6/7] iommu/vt-d: Implement set_dev_pasid domain op
+Message-ID: <20230505133202.094bf8be@jacob-builder>
+In-Reply-To: <35ceffc2-e306-6215-e90a-43548f6feca6@linux.intel.com>
+References: <20230427174937.471668-1-jacob.jun.pan@linux.intel.com>
+        <20230427174937.471668-7-jacob.jun.pan@linux.intel.com>
+        <76c98e62-1cac-2ab6-7721-08ec2c1fceb8@linux.intel.com>
+        <20230504160334.496085db@jacob-builder>
+        <35ceffc2-e306-6215-e90a-43548f6feca6@linux.intel.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxQbSIZ1Vkr2BMAA--.9055S2
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvdXoWrZw1Utw1fXrWxZw4Dtw45trb_yoWxZFb_CF
-        18ZrWkXrnFka4vyFnxAanIvFyj9F48ZF48ua10q3sxJ3sFvFn3A3sFqF4fWry5Ja12yFyD
-        tasrAr1fJw4IgjkaLaAFLSUrUUUU1b8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
-        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
-        67kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
-        AFIxvE14AKwVWUGVWUXwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
-        6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r1j6r4UM28EF7
-        xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r4UJwAaw2AF
-        wI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
-        Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE
-        14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x
-        0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02
-        F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GF
-        ylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7Cj
-        xVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
-        1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8fs
-        qJUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
----
- drivers/gpu/drm/drm_fb_helper.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi Baolu,
 
-diff --git a/drivers/gpu/drm/drm_fb_helper.c b/drivers/gpu/drm/drm_fb_helper.c
-index 6bb1b8b27d7a..3f34bcd8145c 100644
---- a/drivers/gpu/drm/drm_fb_helper.c
-+++ b/drivers/gpu/drm/drm_fb_helper.c
-@@ -1442,7 +1442,7 @@ int drm_fb_helper_ioctl(struct fb_info *info, unsigned int cmd,
- 
- 		/*
- 		 * Only wait for a vblank event if the CRTC is
--		 * enabled, otherwise just don't do anythintg,
-+		 * enabled, otherwise just don't do anything,
- 		 * not even report an error.
- 		 */
- 		ret = drm_crtc_vblank_get(crtc);
--- 
-2.25.1
+On Fri, 5 May 2023 10:58:38 +0800, Baolu Lu <baolu.lu@linux.intel.com>
+wrote:
 
+> On 5/5/23 7:03 AM, Jacob Pan wrote:
+> >>> +static int intel_iommu_attach_device_pasid(struct iommu_domain
+> >>> *domain,
+> >>> +					   struct device *dev,
+> >>> ioasid_t pasid) +{
+> >>> +	struct device_domain_info *info = dev_iommu_priv_get(dev);
+> >>> +	struct dmar_domain *dmar_domain = to_dmar_domain(domain);
+> >>> +	struct intel_iommu *iommu = info->iommu;
+> >>> +	int ret;
+> >>> +
+> >>> +	if (!pasid_supported(iommu))
+> >>> +		return -ENODEV;
+> >>> +
+> >>> +	ret = prepare_domain_attach_device(domain, dev);
+> >>> +	if (ret)
+> >>> +		return ret;
+> >>> +
+> >>> +	/*
+> >>> +	 * Most likely the device context has already been set up,
+> >>> will only
+> >>> +	 * take a domain ID reference. Otherwise, device context will
+> >>> be set
+> >>> +	 * up here.  
+> >> The "otherwise" case is only default domain deferred attaching case,
+> >> right?  
+> > it might be the only case so far, but my intention is to be general.
+> > i.e. no ordering requirements. I believe it is more future proof in case
+> > device_attach_pasid called before device_attach.  
+> 
+> Let's put aside deferred attach and talk about it later.
+> 
+> The device's context entry is configured when the default domain is
+> being attached to the device. And, the default domain attaching is in
+> the iommu probe_device path. It always happens before set_device_pasid
+> which is designed to be called by the device driver. So the real
+> situation is that when the device driver calls set_device_pasid, the
+> context entry should already have been configured.
+> 
+> Then let's pick up the deferred attach case. It is a workaround for
+> kdump (Documentation/admin-guide/kdump/kdump.rst). I don't think PASID
+> feature is functionally required by any kdump capture kernel as its
+> main purpose is to dump the memory of a panic kernel.
+> 
+> In summary, it seems to be reasonable for the vt-d driver to return
+> -EBUSY when a device's context was copied. The idxd driver should
+> continue to work without kernel DMA with PASID support.
+> 
+> 	if (context_copied(iommu, bus, devfn))
+> 		return -EBUSY;
+> 
+> Make things general is always good, but this doesn't mean that we need
+> to make the code complex to support cases that do not exist or are not
+> used. Thoughts?
+> 
+Good point, it is better not put dead code in. Let me also document this
+behavior for future change that may affect the ordering requirement.
+
+Thanks,
+
+Jacob
