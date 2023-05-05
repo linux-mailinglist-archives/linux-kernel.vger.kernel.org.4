@@ -2,138 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 131366F82E0
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 14:25:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 959DB6F82EF
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 14:29:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231539AbjEEMZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 08:25:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41308 "EHLO
+        id S232003AbjEEM3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 08:29:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231256AbjEEMZz (ORCPT
+        with ESMTP id S229717AbjEEM3D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 08:25:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6757C1AEFA;
-        Fri,  5 May 2023 05:25:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EC85863DC9;
-        Fri,  5 May 2023 12:25:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A76DC433D2;
-        Fri,  5 May 2023 12:25:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683289553;
-        bh=PCb1VWZ2OJyBbD3H9w56ZNJoJky13otK2RlGn8Op0Xw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=BXMlEUwRP8gfpynsRGWGe+MH/DrBrlLHE1IsBkJbuebrwAo3Hhd0vbFQEW8Wpqibu
-         8iSurJEp/1bXtwPYQHRFykFS8DY94M7ewRj3EUzO7lPJ8muI6DHeQeJk5eOt5sKgvv
-         qDn94A6y9JmiowHg+SVR+fg2rbS9xg+CPF8ICTz5rCJ/60paryRPeK+mlOtKRnnzOG
-         OdTYcEfNWJD+G/Ce0mVx8gru1E6EQjtVyBUxaC/GxklQTIs9VJlyTahu6l0cgS0Szu
-         5/j0FXza1gR2422GsWw8RFrmQz28wNp3sS4Rd1byEstE7i+WklP/LoNfMQAvcY8Mz4
-         mQv8EK8CVKFBg==
-Message-ID: <9d3f4dc3-300e-314e-040b-d360ed092366@kernel.org>
-Date:   Fri, 5 May 2023 07:25:51 -0500
+        Fri, 5 May 2023 08:29:03 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4051A60D;
+        Fri,  5 May 2023 05:29:01 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 345CLNiP000435;
+        Fri, 5 May 2023 12:28:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=5ZJjBSmdXDaEq2r2N/huRVsdp9Ac+rumdEOi8OpMmdI=;
+ b=FgP+w0zjRucwlFoZDkFhK72gy9auR3Tsv5VyTi1xajE1wC/8U0zzn5BMSkmuqVdJ04lC
+ 7v4Kgcpe1/sysDTAHM6s8+t3DEyLGlU+3DdcPhq4BhV64Qrev2zviDrmI8UcbBxyZQFj
+ hBO5cOc8tmZENyb8m+fKt0p/pcrDZ6XC04uv9aS2k7xKyw+4aoflkeDbGWckQAacU46q
+ +jZ82AgG3nYPEnIqTkvOujQH22jfIJnzJm8mVhG9Zdoh0KbTOKkWwrRnSEMDWEb0wk4p
+ EzMrEOyEkw9KGZRRVq/f++ICgim8G7iH9FNTAYLalyx75XBQI9FpYdB33eGvF+nHowII ig== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qctfq0w6y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 05 May 2023 12:28:28 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 345CSRZ2004868
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 5 May 2023 12:28:27 GMT
+Received: from [10.216.37.178] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 5 May 2023
+ 05:28:22 -0700
+Message-ID: <baddb9a3-f995-7b03-b3cb-1784ccb1c2a2@quicinc.com>
+Date:   Fri, 5 May 2023 17:58:19 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH v2 2/2] EDAC/altera: Check previous DDR DBE during driver
- probe
+Subject: Re: [PATCH v2 01/18] media: venus: hfi_venus: Only consider
+ sys_idle_indicator on V1
 Content-Language: en-US
-To:     niravkumar.l.rabara@intel.com
-Cc:     bp@alien8.de, james.morse@arm.com, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mchehab@kernel.org, rric@kernel.org,
-        tony.luck@intel.com
-References: <20230503061000.3279381-1-niravkumar.l.rabara@intel.com>
- <20230503101821.3342935-1-niravkumar.l.rabara@intel.com>
- <20230503101821.3342935-3-niravkumar.l.rabara@intel.com>
-From:   Dinh Nguyen <dinguyen@kernel.org>
-In-Reply-To: <20230503101821.3342935-3-niravkumar.l.rabara@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Dikshita Agarwal <dikshita@qti.qualcomm.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Mansur Alisha Shaik <mansur@codeaurora.org>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Dikshita Agarwal <quic_dikshita@quicinc.com>
+CC:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Marijn Suijten" <marijn.suijten@somainline.org>
+References: <20230228-topic-venus-v2-0-d95d14949c79@linaro.org>
+ <20230228-topic-venus-v2-1-d95d14949c79@linaro.org>
+From:   Vikash Garodia <quic_vgarodia@quicinc.com>
+In-Reply-To: <20230228-topic-venus-v2-1-d95d14949c79@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: EhCk6l82_NSYFpqGnYtWdP3p0EJEo5RQ
+X-Proofpoint-ORIG-GUID: EhCk6l82_NSYFpqGnYtWdP3p0EJEo5RQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-05_19,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1011
+ mlxlogscore=999 adultscore=0 phishscore=0 malwarescore=0 spamscore=0
+ impostorscore=0 lowpriorityscore=0 bulkscore=0 priorityscore=1501
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2305050103
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5/3/23 05:18, niravkumar.l.rabara@intel.com wrote:
-> From: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
-> 
-> Add DDR DBE check during driver probe to notify user if previous
-> reboot cause by DDR DBE and print DBE error related information.
-> 
-> Signed-off-by: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
+On 5/4/2023 1:30 PM, Konrad Dybcio wrote:
+> As per information from Qualcomm [1], this property is not really
+> supported beyond msm8916 (HFI V1) and some newer HFI versions really
+> dislike receiving it, going as far as crashing the device.
+>
+> Only consider toggling it (via the module option) on HFIV1.
+> While at it, get rid of the global static variable (which defaulted
+> to zero) which was never explicitly assigned to for V1.
+>
+> Note: [1] is a reply to the actual message in question, as lore did not
+> properly receive some of the emails..
+>
+> [1] https://lore.kernel.org/lkml/955cd520-3881-0c22-d818-13fe9a47e124@linaro.org/
+> Fixes: 7ed9e0b3393c ("media: venus: hfi, vdec: v6 Add IS_V6() to existing IS_V4() if locations")
+> Fixes: d96d3f30c0f2 ("[media] media: venus: hfi: add Venus HFI files")
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > ---
->   drivers/edac/altera_edac.c | 29 ++++++++++++++++++++++++-----
->   1 file changed, 24 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
-> index 8b31cd54bdb6..398a49a3eb89 100644
-> --- a/drivers/edac/altera_edac.c
-> +++ b/drivers/edac/altera_edac.c
-> @@ -2159,6 +2159,7 @@ static int altr_edac_a10_probe(struct platform_device *pdev)
->   #ifdef CONFIG_64BIT
->   	{
->   		int dberror, err_addr;
-> +		struct arm_smccc_res result;
+>   drivers/media/platform/qcom/venus/hfi_venus.c | 18 ++++++------------
+>   1 file changed, 6 insertions(+), 12 deletions(-)
+>
+> diff --git a/drivers/media/platform/qcom/venus/hfi_venus.c b/drivers/media/platform/qcom/venus/hfi_venus.c
+> index 2ad40b3945b0..bff435abd59b 100644
+> --- a/drivers/media/platform/qcom/venus/hfi_venus.c
+> +++ b/drivers/media/platform/qcom/venus/hfi_venus.c
+> @@ -131,7 +131,6 @@ struct venus_hfi_device {
 >   
->   		edac->panic_notifier.notifier_call = s10_edac_dberr_handler;
->   		atomic_notifier_chain_register(&panic_notifier_list,
-> @@ -2168,11 +2169,28 @@ static int altr_edac_a10_probe(struct platform_device *pdev)
->   		regmap_read(edac->ecc_mgr_map, S10_SYSMGR_UE_VAL_OFST,
->   			    &dberror);
->   		if (dberror) {
-> -			regmap_read(edac->ecc_mgr_map, S10_SYSMGR_UE_ADDR_OFST,
-> -				    &err_addr);
-> -			edac_printk(KERN_ERR, EDAC_DEVICE,
-> -				    "Previous Boot UE detected[0x%X] @ 0x%X\n",
-> -				    dberror, err_addr);
-> +			/* Bit-31 is set if previous DDR UE happened */
-> +			if (dberror & (1 << 31)) {
-> +				/* Read previous DDR UE info */
-> +				arm_smccc_smc(INTEL_SIP_SMC_READ_SEU_ERR, 0,
-> +					0, 0, 0, 0, 0, 0, &result);
+>   static bool venus_pkt_debug;
+>   int venus_fw_debug = HFI_DEBUG_MSG_ERROR | HFI_DEBUG_MSG_FATAL;
+> -static bool venus_sys_idle_indicator;
+>   static bool venus_fw_low_power_mode = true;
+>   static int venus_hw_rsp_timeout = 1000;
+>   static bool venus_fw_coverage;
+> @@ -947,17 +946,12 @@ static int venus_sys_set_default_properties(struct venus_hfi_device *hdev)
+>   	if (ret)
+>   		dev_warn(dev, "setting fw debug msg ON failed (%d)\n", ret);
+>   
+> -	/*
+> -	 * Idle indicator is disabled by default on some 4xx firmware versions,
+> -	 * enable it explicitly in order to make suspend functional by checking
+> -	 * WFI (wait-for-interrupt) bit.
+> -	 */
+> -	if (IS_V4(hdev->core) || IS_V6(hdev->core))
+> -		venus_sys_idle_indicator = true;
+> -
+> -	ret = venus_sys_set_idle_message(hdev, venus_sys_idle_indicator);
+> -	if (ret)
+> -		dev_warn(dev, "setting idle response ON failed (%d)\n", ret);
+> +	/* HFI_PROPERTY_SYS_IDLE_INDICATOR is not supported beyond 8916 (HFI V1) */
+> +	if (IS_V1(hdev->core)) {
+> +		ret = venus_sys_set_idle_message(hdev, false);
+> +		if (ret)
+> +			dev_warn(dev, "setting idle response ON failed (%d)\n", ret);
+> +	}
 
-Please run checkpatch --strict to align these.
+This property was enabled in video firmware for SDM845 by default from 
+version #7. Need to confirm if patch[1]
 
-> +
-> +				if (!(int)result.a0) {
+was added before the default enablement in firmware. This patch need to 
+be verified on SDM845 for suspend
 
-Why the typecast to int?
+functionality, before removing it for V4 to avoid power regression.
 
-> +					edac_printk(KERN_ERR, EDAC_DEVICE,
-> +					"Previous DDR UE:Count=0x%X,Address=0x%X,ErrorData=0x%X\n"
-> +					, (unsigned int)result.a1, (unsigned int)result.a2
-> +					, (unsigned int)result.a3);
-> +				} else {
-> +					edac_printk(KERN_ERR, EDAC_DEVICE,
-> +						"INTEL_SIP_SMC_SEU_ERR_STATUS failed\n");
-> +				}
-> +			} else {
-> +				regmap_read(edac->ecc_mgr_map, S10_SYSMGR_UE_ADDR_OFST,
-> +						&err_addr);
-> +				edac_printk(KERN_ERR, EDAC_DEVICE,
-> +						"Previous Boot UE detected[0x%X] @ 0x%X\n",
-> +						dberror, err_addr);
-> +			}
->   			/* Reset the sticky registers */
->   			regmap_write(edac->ecc_mgr_map,
->   				     S10_SYSMGR_UE_VAL_OFST, 0);
-> @@ -2180,6 +2198,7 @@ static int altr_edac_a10_probe(struct platform_device *pdev)
->   				     S10_SYSMGR_UE_ADDR_OFST, 0);
->   		}
->   	}
-> +
+[1] 17cd3d1d2e52: media: venus: hfi_venus: add suspend functionality for 
+Venus 4xx
 
-Stray newline.
+-Vikash
 
->   #else
->   	edac->db_irq = platform_get_irq(pdev, 1);
->   	if (edac->db_irq < 0)
+>   
+>   	ret = venus_sys_set_power_control(hdev, venus_fw_low_power_mode);
+>   	if (ret)
+>
