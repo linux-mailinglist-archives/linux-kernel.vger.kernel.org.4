@@ -2,132 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03DCA6F7B39
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 04:51:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F82E6F7B3C
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 04:51:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230008AbjEECvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 22:51:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43230 "EHLO
+        id S229980AbjEECvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 22:51:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjEECvP (ORCPT
+        with ESMTP id S229514AbjEECvi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 22:51:15 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2631209E;
-        Thu,  4 May 2023 19:51:12 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 3452p0wvD029479, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 3452p0wvD029479
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Fri, 5 May 2023 10:51:00 +0800
-Received: from RTEXMBS05.realtek.com.tw (172.21.6.98) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Fri, 5 May 2023 10:51:05 +0800
-Received: from RTEXH36506.realtek.com.tw (172.21.6.27) by
- RTEXMBS05.realtek.com.tw (172.21.6.98) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Fri, 5 May 2023 10:51:04 +0800
-Received: from localhost.localdomain (172.21.252.101) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server id
- 15.1.2507.17 via Frontend Transport; Fri, 5 May 2023 10:51:04 +0800
-From:   Stanley Chang <stanley_chang@realtek.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Stanley Chang <stanley_chang@realtek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v6] usb: dwc3: core: add support for realtek SoCs custom's global register start address
-Date:   Fri, 5 May 2023 10:50:54 +0800
-Message-ID: <20230505025104.18321-1-stanley_chang@realtek.com>
-X-Mailer: git-send-email 2.40.0
+        Thu, 4 May 2023 22:51:38 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7153612094;
+        Thu,  4 May 2023 19:51:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683255097; x=1714791097;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=SDFdhdekvxyYCofffHMf6rRfIuAVFmPIluPrsnQHPEE=;
+  b=BykX//U80LZ0972eWKBejUvbB9+JObcK4lBuhH5tXHQXxUNNnucnhvb1
+   f7h1oWHk0NeBO/7OzGA8x4GGYDjqNfG7Vje3n3CpPO7ZwFlSGsbiw2UCS
+   DOsakabxPmnj7utBwcUvkM9rKRkT/tZd7ix7+dt1z6KDrgPfqvn4j09qV
+   qSi7nxoFPcib+MgMq5C46dkxlANtUZnuZp19PjR1ss+ahqqv6mhgZdrIN
+   U+0RbKdOOFN67AQvxQnc24DFXx+k2DVHjK2DqhQX92+2X3UHxt30pN4NJ
+   xGEHCZH+eqYQnRh6bYVK4XIsKYa81/JXzq4kMbtgn/7dqJ7uVqqIKxto7
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="347934038"
+X-IronPort-AV: E=Sophos;i="5.99,250,1677571200"; 
+   d="scan'208";a="347934038"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 19:51:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="841484488"
+X-IronPort-AV: E=Sophos;i="5.99,250,1677571200"; 
+   d="scan'208";a="841484488"
+Received: from syusufpa-mobl.gar.corp.intel.com (HELO [10.209.115.128]) ([10.209.115.128])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 19:51:36 -0700
+Message-ID: <2f32591a-77d8-f620-46bf-825074ba24c2@linux.intel.com>
+Date:   Thu, 4 May 2023 19:51:36 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-KSE-ServerInfo: RTEXMBS05.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.10.0
+Subject: Re: [PATCH] PCI/ASPM: fix UAF by disable ASPM for link when child
+ function is removed
+To:     Ding Hui <dinghui@sangfor.com.cn>, bhelgaas@google.com
+Cc:     vidyas@nvidia.com, david.e.box@linux.intel.com,
+        kai.heng.feng@canonical.com, michael.a.bottini@linux.intel.com,
+        rajatja@google.com, qinzongquan@sangfor.com.cn,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230504123418.4438-1-dinghui@sangfor.com.cn>
+Content-Language: en-US
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <20230504123418.4438-1-dinghui@sangfor.com.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Realtek RTD SoCs were designed with the global register address
-offset at 0x8100. The default address offset is constant at
-DWC3_GLOBALS_REGS_START (0xc100). Therefore, add a check if the
-compatible name of the parent is realtek,rtd-dwc3, then global
-register start address will remap to 0x8100.
+Hi,
 
-Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
----
- v5 to v6 change:
-Change the compatible name to avoid using the wildcard.
+On 5/4/23 5:34 AM, Ding Hui wrote:
 
- v4 to v5 change:
-Use the compatible name of the parent to match this special offset.
+Maybe you can use the following title?
 
- v3 to v4 change:
-Use the compatible name to specify the global register address offset.
-If the compatible name is "snps,dwc3-rtk-soc", then the offset use 0x8100.
-Otherwise, the offset is default value 0xc100.
+"PCI/ASPM: Fix UAF by disabling ASPM for link when child function is removed
 
- v2 to v3 change:
-1.  Fix the dtschema validation error.
+> If the Function 0 of a Multi-Function device is software removed,
+> a freed downstream pointer will be left in struct pcie_link_state,
+> and then when pcie_config_aspm_link() be invoked from any path,
+> we will trigger use-after-free.
+> 
+> Based on the PCIe spec about ASPM Control (PCIe r6.0, sec 7.5.3.7),
 
- v1 to v2 change:
-1. Change the name of the property "snps,global-regs-starting-offset".
-2. Adjust the format of comment.
-3. Add initial value of the global_regs_starting_offset
-4. Remove the log of dev_info.
----
- drivers/usb/dwc3/core.c | 11 +++++++++++
- drivers/usb/dwc3/core.h |  2 ++
- 2 files changed, 13 insertions(+)
+As per PCIe spec r6.0, sec 7.5.3.7, it is recommended
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 0beaab932e7d..278cd1c33841 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -1800,6 +1800,17 @@ static int dwc3_probe(struct platform_device *pdev)
- 	dwc_res = *res;
- 	dwc_res.start += DWC3_GLOBALS_REGS_START;
- 
-+	if (dev->of_node) {
-+		struct device_node *parent = of_get_parent(dev->of_node);
-+
-+		if (of_device_is_compatible(parent, "realtek,rtd-dwc3")) {
-+			dwc_res.start -= DWC3_GLOBALS_REGS_START;
-+			dwc_res.start += DWC3_RTK_RTD_GLOBALS_REGS_START;
-+		}
-+
-+		of_node_put(parent);
-+	}
-+
- 	regs = devm_ioremap_resource(dev, &dwc_res);
- 	if (IS_ERR(regs))
- 		return PTR_ERR(regs);
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index d56457c02996..1968638f29ed 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -84,6 +84,8 @@
- #define DWC3_OTG_REGS_START		0xcc00
- #define DWC3_OTG_REGS_END		0xccff
- 
-+#define DWC3_RTK_RTD_GLOBALS_REGS_START	0x8100
-+
- /* Global Registers */
- #define DWC3_GSBUSCFG0		0xc100
- #define DWC3_GSBUSCFG1		0xc104
+> for Multi-Function Devices (including ARI Devices), it is recommended
+> that software program the same value in all Functions. For ARI
+> Devices, ASPM Control is determined solely by the setting in Function 0.
+> 
+> So we can just disable ASPM of the whole component if any child
+> function is removed, the downstream pointer will be avoided from
+> use-after-free, that will also avoid other potential corner cases.
+> 
+> Fixes: b5a0a9b59c81 ("PCI/ASPM: Read and set up L1 substate capabilities")
+> Debugged-by: Zongquan Qin <qinzongquan@sangfor.com.cn>
+
+Any bugzilla link with error log and reproduction steps?
+
+> Suggestion-by: Bjorn Helgaas <bhelgaas@google.com>
+
+Suggested-by?
+
+> Signed-off-by: Ding Hui <dinghui@sangfor.com.cn>
+> ---
+>  drivers/pci/pcie/aspm.c | 15 +++++++--------
+>  1 file changed, 7 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
+> index 66d7514ca111..1bf8306141aa 100644
+> --- a/drivers/pci/pcie/aspm.c
+> +++ b/drivers/pci/pcie/aspm.c
+> @@ -1010,18 +1010,17 @@ void pcie_aspm_exit_link_state(struct pci_dev *pdev)
+>  
+>  	down_read(&pci_bus_sem);
+>  	mutex_lock(&aspm_lock);
+> -	/*
+> -	 * All PCIe functions are in one slot, remove one function will remove
+> -	 * the whole slot, so just wait until we are the last function left.
+> -	 */
+> -	if (!list_empty(&parent->subordinate->devices))
+> -		goto out;
+>  
+>  	link = parent->link_state;
+>  	root = link->root;
+>  	parent_link = link->parent;
+>  
+> -	/* All functions are removed, so just disable ASPM for the link */
+> +	/*
+> +	 * Any function is removed (including software removing), just
+> +	 * disable ASPM for the link, in case we can not configure the same
+> +	 * setting for all functions.
+
+How about following?
+
+/*
+ * For any function removed, disable ASPM for the link. See PCIe r6.0,
+ * sec 7.7.3.7 for details.
+ */
+
+> +	 * See PCIe r6.0, sec 7.5.3.7.
+> +	 */
+>  	pcie_config_aspm_link(link, 0);
+>  	list_del(&link->sibling);
+>  	/* Clock PM is for endpoint device */
+> @@ -1032,7 +1031,7 @@ void pcie_aspm_exit_link_state(struct pci_dev *pdev)
+>  		pcie_update_aspm_capable(root);
+>  		pcie_config_aspm_path(parent_link);
+>  	}
+> -out:
+> +
+>  	mutex_unlock(&aspm_lock);
+>  	up_read(&pci_bus_sem);
+>  }
+
 -- 
-2.34.1
-
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
