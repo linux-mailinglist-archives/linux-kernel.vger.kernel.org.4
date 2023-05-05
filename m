@@ -2,423 +2,330 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F5A36F7AF2
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 04:30:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1C0F6F7AFB
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 04:32:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbjEECaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 22:30:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36850 "EHLO
+        id S230051AbjEECcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 22:32:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbjEECau (ORCPT
+        with ESMTP id S229758AbjEECcS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 22:30:50 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B68711544
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 19:30:46 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f195b164c4so8606155e9.1
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 19:30:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683253845; x=1685845845;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SHd6awHMIT1ZuZgmRC4EFRtAIxyb2YMEXiL1eYpLWGk=;
-        b=t9UJ1pVXFIvVM7dI7nTIdM06HGovKEtoRqskwSI9K2YrcdD2OQJcNbbVru9lTvwZJP
-         ZiNHHbnhSEkEf70cS+Kntf61SYLn+wNOeCECyZp6kSvlJYfvFFw2VzX4/JlAxJ/oRAZJ
-         zQg0IZ1upvUpg45Lw+GEe5nE3MsVb409CqrmZPmdv9w0qNnmR0kaUQB4ld7flT8/OFU4
-         rlRYHAwXwqBKPIC7N8SB4gkTbv/8EqNWTv/vbs5vq6T53PJk4bPr4VxBT0n9YbzQIYlT
-         34EXGKx6RCt4KjeCR2i4QBbPxWHEf6r7HwkCRFYGYL/SSs0c2XKvoSHK0oVndnmg8s0K
-         ddEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683253845; x=1685845845;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SHd6awHMIT1ZuZgmRC4EFRtAIxyb2YMEXiL1eYpLWGk=;
-        b=W7r/ncwnoKQuAuD35PY7GqastWhStiHF4PdFOz2auXfU30Py6sajNeNuV5K/StiyMm
-         J6tXo/dJKo320va2FTzZWNM88pFwnQ5jkvPRL8iXYcVOhyNSOHC4YfhfQ42hwe+DV52q
-         m3FyqfDolqCsdTGrg7M3piwIZBUg7BYHwKEcwr2nwxW3l+DdZ2VgBTMeoc9p/aUBIfhw
-         JxnVtFEAFdEl0mVRlbCDMH5h9sbMxsYR3FheghDFOmKxdj1rmKzFPhCiCgxLY73q0aoj
-         M3hzHBuu3Nfn+TnomFqOv2oHOid/OHI0kfoT/pR8z80YK0Ab7cpJ4nN7dYyK5uB/Gx/S
-         rctw==
-X-Gm-Message-State: AC+VfDzg/it/8BCdyP4Vzb0xmFNRH0/aPdl0mYWdJfjMqdXjUJrwVvPJ
-        VFxr2bOO25lsm65zc+7fCtijyA==
-X-Google-Smtp-Source: ACHHUZ6BDD1/Prkvjl0XcavBE6I5FXn/S+wkQqh4TH7ZELpZgTcesll6erynrQhhw344aaZ+gmDARQ==
-X-Received: by 2002:a05:600c:ca:b0:3f3:1299:5625 with SMTP id u10-20020a05600c00ca00b003f312995625mr990611wmm.30.1683253844968;
-        Thu, 04 May 2023 19:30:44 -0700 (PDT)
-Received: from [192.168.0.15] (cpc76484-cwma10-2-0-cust274.7-3.cable.virginm.net. [82.31.201.19])
-        by smtp.gmail.com with ESMTPSA id f16-20020a7bc8d0000000b003f17e79d74asm6477899wml.7.2023.05.04.19.30.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 19:30:44 -0700 (PDT)
-Message-ID: <67e5f823-e9bf-cc52-3693-59880f495cbb@linaro.org>
-Date:   Fri, 5 May 2023 03:30:43 +0100
+        Thu, 4 May 2023 22:32:18 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEA8B11D93;
+        Thu,  4 May 2023 19:32:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683253936; x=1714789936;
+  h=date:from:to:subject:message-id:references:in-reply-to:
+   mime-version;
+  bh=zOSr303cjIwUHTena+VqXOZ0bAVitmgIR0pWUOXirFc=;
+  b=G7iZPiGzzPimvd0AipsdfjcoxS3+H81xNvzko4f9OqHfKFvp9W7jhuqr
+   9LQI+qwO3bu31fnwSaIWl6hs9JhjWQJGTpok1cam97Z/XMjxz3WEPC/5I
+   XrY8ZJ9BCso2q759Qfo13eR5+dbTSikbGbyoP0vWgjBxlyYsdrAd4CRLO
+   vCgSP8hJ86doLkhe0tsIbyth9IEngChvAS29/JB5/we4/cbOrbPVNRVUr
+   /zzha5u/VQQM7BwlVs6S2mrre1bqXBt656vrMNFlwuoUdtqQ6w+gTbt3o
+   Vms5cVB4ahXMMm/kO0x5YN9krCDZtQFqkhLs/JoFvWzhKEuSHMy1b0Uyl
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="333530669"
+X-IronPort-AV: E=Sophos;i="5.99,250,1677571200"; 
+   d="scan'208";a="333530669"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 19:32:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="674822099"
+X-IronPort-AV: E=Sophos;i="5.99,250,1677571200"; 
+   d="scan'208";a="674822099"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga006.jf.intel.com with ESMTP; 04 May 2023 19:32:15 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 4 May 2023 19:32:15 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 4 May 2023 19:32:15 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Thu, 4 May 2023 19:32:15 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.169)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Thu, 4 May 2023 19:32:15 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HQJdfdNf9jFloj4C+BEZaprdZZ7aj9pPTASCXYI62pUl59YLlOqpvlSlzdadQDSiNcp/3JoV6uMmrdXK7vuFIQQB2MKV6DpRx41JDnxbHk8XPHbYRYRiCrXBUFvPHABMXSWAO3q903eumxBK++1SHSsORImhFAL5Km6kvAWrQHNFyc88DPKCSVdRxz15gRIWwuMCH9KzeYXvdvj2GTxFDXB8hzcmac3wIrUuUPmzmNhpxzqG0QRKrIjMmmD/lIWJeWCF9a7M1pXpiUrxGsBATgE60EXMijiuf/z4OKci8oiEFJ+iKPPfRfoTZ5jHcDp/7VQi7geblVZv0uvZzDwIpA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cbX9+DBmRkFwWYLQAfqbaEcz0nY7O4i8J8tqJ3zpcVg=;
+ b=IE1LcHdMElbbI8218Z/X+U/M1g0FA0RJIwJsL1M1I6Qosv3SPafAmJD2PQhKQ9vfU+I6g+mPabC60S0aMfRz2Gi5vdkzFIK6cO2fYs3cxDYnQoN6czMjtIUqm7oddiadn4tVftY0ZNkJ5ARdYnLeODbAQIjIu4ONIOqalcD8ov8TMUoHSEa3tBre8ARd5FeV8cKfo3Ni+1jwScWZrCTZQtnfaTCqgBFKwvxAQMdbxmSZUTEnfcN9nVpkpuKX2EZGK39I6Dp9O/YbkXPBsm8Z2wvRT9r2lXTXstANajYIt1+VBBU6C5kxMxy7eHqrlDthj45QA+q55LcrTWxgoUXvQw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
+ by PH7PR11MB7572.namprd11.prod.outlook.com (2603:10b6:510:27b::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.20; Fri, 5 May
+ 2023 02:32:08 +0000
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::95c6:c77e:733b:eee5]) by PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::95c6:c77e:733b:eee5%7]) with mapi id 15.20.6363.026; Fri, 5 May 2023
+ 02:32:07 +0000
+Date:   Thu, 4 May 2023 19:32:04 -0700
+From:   Dan Williams <dan.j.williams@intel.com>
+To:     Jane Chu <jane.chu@oracle.com>, <dan.j.williams@intel.com>,
+        <vishal.l.verma@intel.com>, <dave.jiang@intel.com>,
+        <ira.weiny@intel.com>, <willy@infradead.org>,
+        <viro@zeniv.linux.org.uk>, <brauner@kernel.org>,
+        <nvdimm@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>
+Subject: RE: [PATCH v3] dax: enable dax fault handler to report
+ VM_FAULT_HWPOISON
+Message-ID: <64546aa46676f_2ec5d294d1@dwillia2-xfh.jf.intel.com.notmuch>
+References: <20230505011747.956945-1-jane.chu@oracle.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230505011747.956945-1-jane.chu@oracle.com>
+X-ClientProxiedBy: SJ0PR03CA0076.namprd03.prod.outlook.com
+ (2603:10b6:a03:331::21) To PH8PR11MB8107.namprd11.prod.outlook.com
+ (2603:10b6:510:256::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] arm64: dts: qcom: Add Fxtec Pro1X (QX1050) DTS
-Content-Language: en-US
-To:     Dang Huynh <danct12@riseup.net>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230505-fxtec-pro1x-support-v1-1-1d9473b4d6e4@riseup.net>
-From:   Caleb Connolly <caleb.connolly@linaro.org>
-In-Reply-To: <20230505-fxtec-pro1x-support-v1-1-1d9473b4d6e4@riseup.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|PH7PR11MB7572:EE_
+X-MS-Office365-Filtering-Correlation-Id: cda8224b-aa23-48cc-5937-08db4d10ebda
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zkDSIb5QHsa6gfrfmqmmqPvNW9CtBM2BjwrZl1LiB0qWtmLWwTDIQvrYsxzb9fU5pa6/88C6wJUMpDDu7UrVuT3So5kByh9260MXOIxF+J5a9DJ3LtpwTBCfAwC8Jiy/jnxsp1ROiHyzwYoFVM2gOznoFk91UuNagiCDzP8MEvwL1hxEeLNtTdELc2n+Xe96T8F0wpY/1pvqeDN/qTqvEcpbmTIFYVABaW0udOP+nfmtqZhgyXxIwHzntjpTVuosSFBkGpNBs8CrGJNpHPmvdmvZCVScNnIbb5Fyf+Awz22nXHSkIXPh6TDvcbD2ZjOwA1X6StuowtkIwaqtAk/ERz2iskHCHHAiuxGluRrEFmlE66p/1erAdPkmG2DMSsNbP4pIF2b/nSVhQUsa6/8QC2IPdGy4I+VKwU6WlTLY2tX0OkoCttSArQpjIDBky/O5VOJwgqQ0BscILZE59m9GeoTtA9FVef5c30Getgt9hK2+wCPj/2EhxS/4GhFOosZBQ5v/mCqJLOtzH9jEIR7xa5LZ5MIcYRsvP/y4HjjsIKACdtugRe1NIpAMLS4JzM4Ajo5V1LBHfakwVWAC6RpyV1igPswxglQu3Zegfq34r9k=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(136003)(346002)(366004)(376002)(39860400002)(451199021)(478600001)(6512007)(86362001)(186003)(38100700002)(2906002)(921005)(66476007)(66556008)(8936002)(82960400001)(66946007)(41300700001)(8676002)(316002)(5660300002)(83380400001)(6506007)(9686003)(26005)(6486002)(6666004);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Jme//KVy4xfZ0qAGRzwOH90EmbZHYD/vUGdFISNjbVsV6MVRabciVWI1JVM3?=
+ =?us-ascii?Q?x2bYW2i/PXIaeJYdKK9JczYxg525d0THBhg8BZMiSeLkHbgo3HrZL7qHNtF7?=
+ =?us-ascii?Q?c5hTkaTwk0GALSIrOsn2jKnAy2Zu0RVd++COwKR0cpCWHdJALU/xCLdVvxMP?=
+ =?us-ascii?Q?J8b0+be/3zSSaQ+A8ORNiMtHEISw9qkvqNfmBbZK9X7D69Ez6TjjmrTgDELe?=
+ =?us-ascii?Q?YwcwFop/Ds6w+CRzwLVA01Ao0QMFhFpBFsgSf3dBBhAzrmji7Almt/xtKc/l?=
+ =?us-ascii?Q?YZyqMLR0IfNtTzJfovFnEhmLkS+0gJLzP8vNNiw9diRNcRsSs5xM4ZseqkTs?=
+ =?us-ascii?Q?R2p1lKXO7VzE3c07vQaZcRYhYlU6ZTNhBD+35IFAmsU8okklOeWEau153elE?=
+ =?us-ascii?Q?AnPpiTrfZyGUXPC0Y8yQf0QCa599jJd8FEvSudz/S9NyPU8EyRQmBTT8DKRa?=
+ =?us-ascii?Q?gv7Vmqnt4ei2bvk0WdIU94/ZPkTftxxDYUOlH3j2nKqkYWhBNX99EE7Qd08T?=
+ =?us-ascii?Q?MCterTe2sfMxsXw11OdZdbNZQAwbCthK0y0IOHl5gLSx/gMeMbuId2rwCAUq?=
+ =?us-ascii?Q?1W0LGOHc5DJWnnWhGmnFrZgUkCm/6SfefxHSn0FBO2D/UnEXvfCYl6B2kpUb?=
+ =?us-ascii?Q?ueDtjwpMrdYQICE387k7FbeeVd/eaXNLdf6cXB51YXiPMx2+Tw4wrbf+KaMv?=
+ =?us-ascii?Q?dIEzjbwj5ICg92kjtbb+/fm42tiek6CVP6ElpCK5LW/kBkvUTVtMnLbgjf1X?=
+ =?us-ascii?Q?hC7jKVk1pr6w0ahFyElCZaniVEq1W13/v8xqScv4oRFJXvuzPq76EOrSnkPP?=
+ =?us-ascii?Q?K1IXpVHK6pMC0uHvOODUvaGC4s50jUbPwxEwKXjaWW6NwooNRIttQ1/73Q7T?=
+ =?us-ascii?Q?Ls9yNZE6khvQFKLDar8VkvtAnjDJaiphaWd9f1iV9PyiyHurX3+wWCyrIv5V?=
+ =?us-ascii?Q?d3ivj4GRqIl3iwVwOPXxU1pF2JE3FWVpTJUuio/JgGsMWnMfjJR8R7V5jUx0?=
+ =?us-ascii?Q?zBF/29mRJEWZV5GrgqNEjDzQPlJ/tH0vhDJfol/fbv/HIzKxD/frulpHs9Ne?=
+ =?us-ascii?Q?7941FSPLvlrYMaDlA9HNyrcjs+ybwdinnb845QpwFWGrkoIJO6eECQLJEkTr?=
+ =?us-ascii?Q?2qQjS0Mvq16S8zGvT9/wKg8VM7nERFH4b5kfPfAZERI6oOvAA7uztE9c9C6U?=
+ =?us-ascii?Q?OveVtdlGG8AdRAxoFuvxX1IsB24AQC1a+ymF+Lfc8Vz0BEmlS8A1hAhXjq2i?=
+ =?us-ascii?Q?pX96fa+CvtSERn4jQnk6fqzoPKclYNby8KwbzJg0M/rx8UE5g4LYJdYujsvp?=
+ =?us-ascii?Q?et39fvrCR3lz2F4RqHyeGRwacgkaOfzA5OL0/r10/9aVQcYFGzFrrCP3j0dT?=
+ =?us-ascii?Q?zE84Txc2h1wbZC9gUh739gPuqGwndirtixlQvUOBSmm+Q0OULY47/xHARdKj?=
+ =?us-ascii?Q?mV6xlL3Ly9GVGExnWni5cquJDgrhbvSsaRKR7GwF8IngKR3B0DYJ09M1nLF2?=
+ =?us-ascii?Q?ZLqa2ru5TFxxFo9D7oGonOHiG+ZX58xNo1Rc/o7rYqjaM33atOiRjxVEfnM3?=
+ =?us-ascii?Q?BM1nDNQDihb3J+y7VKT7vn4YqwOu0nfKIrWKdORlTV+xI1OqvdQgHDN8epT2?=
+ =?us-ascii?Q?9g=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: cda8224b-aa23-48cc-5937-08db4d10ebda
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2023 02:32:07.6467
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: CqIBtWPN1HwgZ8DIFHAvk7LqpU0MrBeDsEXpx157NKQ5+Dxih3TNwbCjZ3RJm2UwkaTKdUL1cnKoyabvuptFJblmDbiDHo9jLIB6OTEqBH0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB7572
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 04/05/2023 21:33, Dang Huynh wrote:
-> The F(x)tec Pro1X is a mobile phone released by FX Technologies Ltd
-> in 2022.
+Jane Chu wrote:
+> When multiple processes mmap() a dax file, then at some point,
+> a process issues a 'load' and consumes a hwpoison, the process
+> receives a SIGBUS with si_code = BUS_MCEERR_AR and with si_lsb
+> set for the poison scope. Soon after, any other process issues
+> a 'load' to the poisoned page (that is unmapped from the kernel
+> side by memory_failure), it receives a SIGBUS with
+> si_code = BUS_ADRERR and without valid si_lsb.
 > 
-> The phone is exactly the same as the Pro1 released in 2019 with some
-> changes:
-> - MSM8998 -> SM6115
-> - Camera button is no longer multistate
-> - Only one 48MP back camera
-> - A new keyboard layout picked by the community.
+> This is confusing to user, and is different from page fault due
+> to poison in RAM memory, also some helpful information is lost.
 > 
-> This commit has the following features working:
-> - Display (using simplefb)
-> - UFS
-> - Power and volume buttons
-> - Pinctrl
-> - RPM Regulators
-> - USB (Device Mode)
-> 
-> To get a successful boot run:
-> 
-> cat arch/arm64/boot/Image.gz arch/arm64/boot/dts/qcom/\
-> sm6115-fxtec-pro1x.dtb  > .Image.gz-dtb
-> 
-> mkbootimg --kernel .Image.gz-dtb \
-> --ramdisk initrd.img \
-> --base 0x0 \
-> --kernel_offset 0x8000 \
-> --ramdisk_offset 0x1000000 \
-> --second_offset 0xf00000 \
-> --tags_offset 0x100 \
-> --pagesize 4096 \
-> --cmdline "CMDLINE HERE" \
-> -o qx1050-boot.img
-> 
-> fastboot flash boot qx1050-boot.img
-> fastboot erase dtbo
-> fastboot reboot
-> 
-> Signed-off-by: Dang Huynh <danct12@riseup.net>
+> Channel dax backend driver's poison detection to the filesystem
+> such that instead of reporting VM_FAULT_SIGBUS, it could report
+> VM_FAULT_HWPOISON.
 
-Hi Dang,
+I do think it is interesting that this will start returning SIGBUS with
+BUS_MCEERR_AR for stores whereas it is only signalled for loads in the
+direct consumption path, but I can't think of a scenario where that
+would confuse existing software.
 
-Thanks for the patch! I'm glad to see it :D
+> Change from v2:
+>   Convert -EHWPOISON to -EIO to prevent EHWPOISON errno from leaking
+> out to block read(2) - suggested by Matthew.
 
-Just a few minor suggestions from me. Firstly, please can you re-order
-the devicetree nodes to be alphabetical. I also left a few comments below.
+For next time these kind of changelog notes belong...
 
-With these nitpicks fixed:
-
-Reviewed-by: Caleb Connolly <caleb.connolly@linaro.org>
+> Signed-off-by: Jane Chu <jane.chu@oracle.com>
 > ---
->  arch/arm64/boot/dts/qcom/Makefile               |   1 +
->  arch/arm64/boot/dts/qcom/sm6115-fxtec-pro1x.dts | 252 ++++++++++++++++++++++++
->  2 files changed, 253 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> index d42c59572ace..e311ba675f35 100644
-> --- a/arch/arm64/boot/dts/qcom/Makefile
-> +++ b/arch/arm64/boot/dts/qcom/Makefile
-> @@ -174,6 +174,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-shift-axolotl.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sdm850-lenovo-yoga-c630.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sdm850-samsung-w737.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sm4250-oneplus-billie2.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= sm6115-fxtec-pro1x.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sm6115p-lenovo-j606f.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sm6125-sony-xperia-seine-pdx201.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sm6125-xiaomi-laurel-sprout.dtb
-> diff --git a/arch/arm64/boot/dts/qcom/sm6115-fxtec-pro1x.dts b/arch/arm64/boot/dts/qcom/sm6115-fxtec-pro1x.dts
-> new file mode 100644
-> index 000000000000..f1d18710d2f0
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/sm6115-fxtec-pro1x.dts
-> @@ -0,0 +1,252 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2023, Dang Huynh <danct12@riseup.net>
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include "sm6115.dtsi"
-> +#include "pm6125.dtsi"
-> +
-> +/ {
-> +	model = "F(x)tec Pro1 (QX1050)";
-> +	compatible = "fxtec,pro1x", "qcom,sm6115";
-> +	chassis-type = "handset";
-> +
-> +	/* required for bootloader to select correct board */
 
-This comment isn't necessary, these two properties are documented in
-Documentation/devicetree/bindings/arm/qcom.yaml and are easily searchable.
-> +	qcom,msm-id = <417 0x10000>, <444 0x10000>;
-> +	qcom,board-id = <34 0>;
-> +
-> +	aliases {
-> +	};
+...here after the "---".
 
-I think this node can be dropped if it's empty.
-> +
-> +	chosen {
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		ranges;
-> +
-> +		framebuffer0: framebuffer@5c000000 {
-> +			compatible = "simple-framebuffer";
-> +			reg = <0 0x5c000000 0 (1080 * 2160 * 4)>;
-> +			width = <1080>;
-> +			height = <2160>;
-> +			stride = <(1080 * 4)>;
-> +			format = "a8r8g8b8";
-> +			clocks = <&gcc GCC_DISP_HF_AXI_CLK>;
-> +		};
-> +	};
-> +
-> +	gpio-keys {
-> +		compatible = "gpio-keys";
-> +
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&vol_up_n>;
-> +
-> +		key-volume-up {
-> +			label = "Volume Up";
-> +			linux,code = <KEY_VOLUMEUP>;
-> +			gpios = <&pm6125_gpios 5 GPIO_ACTIVE_LOW>;
-> +			debounce-interval = <15>;
-> +			linux,can-disable;
-> +			gpio-key,wakeup;
-> +		};
-> +	};
-> +};
-> +
-> +&tlmm {
-> +	gpio-reserved-ranges = <0 4>, <14 4>;
-> +};
-> +
-> +&pm6125_gpios {
-> +	vol_up_n: vol-up-n-state {
-> +		pins = "gpio5";
-> +		function = "normal";
-> +		power-source = <0>;
-> +		bias-pull-up;
-> +		input-enable;
-> +	};
-> +};
-> +
-> +&dispcc {
-> +	/* HACK: disable until a panel driver is ready to retain simplefb */
-> +	status = "disabled";
-> +};
-> +
-> +&pon_pwrkey {
-> +	status = "okay";
-> +};
-> +
-> +&pon_resin {
-> +	linux,code = <KEY_VOLUMEDOWN>;
-> +	status = "okay";
-> +};
-> +
-> +&rpm_requests {
-> +	pm6125-regulators {
-> +		compatible = "qcom,rpm-pm6125-regulators";
-> +
-> +		vreg_s6a: s6 {
-> +			regulator-min-microvolt = <304000>;
-> +			regulator-max-microvolt = <1456000>;
-> +		};
-> +
-> +		vreg_s7a: s7 {
-> +			regulator-min-microvolt = <1280000>;
-> +			regulator-max-microvolt = <2040000>;
-> +		};
-> +
-> +		vreg_s8a: s8 {
-> +			regulator-min-microvolt = <1064000>;
-> +			regulator-max-microvolt = <1304000>;
-> +		};
-> +
-> +		vreg_l1a: l1 {
-> +			regulator-min-microvolt = <952000>;
-> +			regulator-max-microvolt = <1152000>;
-> +		};
-> +
-> +		vreg_l4a: l4 {
-> +			regulator-min-microvolt = <488000>;
-> +			regulator-max-microvolt = <1000000>;
-> +		};
-> +
-> +		vreg_l5a: l5 {
-> +			regulator-min-microvolt = <1648000>;
-> +			regulator-max-microvolt = <3056000>;
-> +		};
-> +
-> +		vreg_l6a: l6 {
-> +			regulator-min-microvolt = <576000>;
-> +			regulator-max-microvolt = <656000>;
-> +		};
-> +
-> +		vreg_l7a: l7 {
-> +			regulator-min-microvolt = <1200000>;
-> +			regulator-max-microvolt = <1304000>;
-> +		};
-> +
-> +		vreg_l8a: l8 {
-> +			regulator-min-microvolt = <400000>;
-> +			regulator-max-microvolt = <728000>;
-> +		};
-> +
-> +		vreg_l9a: l9 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <2000000>;
-> +		};
-> +
-> +		vreg_l10a: l10 {
-> +			regulator-min-microvolt = <1704000>;
-> +			regulator-max-microvolt = <1904000>;
-> +		};
-> +
-> +		vreg_l11a: l11 {
-> +			regulator-min-microvolt = <1704000>;
-> +			regulator-max-microvolt = <1952000>;
-> +		};
-> +
-> +		vreg_l12a: l12 {
-> +			regulator-min-microvolt = <1624000>;
-> +			regulator-max-microvolt = <1984000>;
-> +		};
-> +
-> +		vreg_l13a: l13 {
-> +			regulator-min-microvolt = <1504000>;
-> +			regulator-max-microvolt = <1952000>;
-> +		};
-> +
-> +		vreg_l14a: l14 {
-> +			regulator-min-microvolt = <1704000>;
-> +			regulator-max-microvolt = <1904000>;
-> +		};
-> +
-> +		vreg_l15a: l15 {
-> +			regulator-min-microvolt = <2920000>;
-> +			regulator-max-microvolt = <3232000>;
-> +		};
-> +
-> +		vreg_l16a: l16 {
-> +			regulator-min-microvolt = <1704000>;
-> +			regulator-max-microvolt = <1904000>;
-> +		};
-> +
-> +		vreg_l17a: l17 {
-> +			regulator-min-microvolt = <1152000>;
-> +			regulator-max-microvolt = <1384000>;
-> +		};
-> +
-> +		vreg_l18a: l18 {
-> +			regulator-min-microvolt = <1104000>;
-> +			regulator-max-microvolt = <1312000>;
-> +		};
-> +
-> +		vreg_l19a: l19 {
-> +			regulator-min-microvolt = <1624000>;
-> +			regulator-max-microvolt = <3304000>;
-> +		};
-> +
-> +		vreg_l20a: l20 {
-> +			regulator-min-microvolt = <1624000>;
-> +			regulator-max-microvolt = <3304000>;
-> +		};
-> +
-> +		vreg_l21a: l21 {
-> +			regulator-min-microvolt = <2400000>;
-> +			regulator-max-microvolt = <3600000>;
-> +		};
-> +
-> +		vreg_l22a: l22 {
-> +			regulator-min-microvolt = <2952000>;
-> +			regulator-max-microvolt = <3304000>;
-> +		};
-> +
-> +		vreg_l23a: l23 {
-> +			regulator-min-microvolt = <3200000>;
-> +			regulator-max-microvolt = <3400000>;
-> +		};
-> +
-> +		vreg_l24a: l24 {
-> +			regulator-min-microvolt = <2704000>;
-> +			regulator-max-microvolt = <3600000>;
-> +		};
-> +	};
-> +};
-> +
-> +&xo_board {
-> +	clock-frequency = <19200000>;
-> +};
-> +
-> +&sleep_clk {
-> +	clock-frequency = <32764>;
-> +};
-> +
-> +&ufs_mem_hc {
-> +	vcc-supply = <&vreg_l24a>;
-> +	vcc-max-microamp = <600000>;
-> +	vccq2-supply = <&vreg_l11a>;
-> +	vccq2-max-microamp = <600000>;
-> +	status = "okay";
-> +};
-> +
-> +&ufs_mem_phy {
-> +	vdda-phy-supply = <&vreg_l4a>;
-> +	vdda-pll-supply = <&vreg_l12a>;
-> +	vddp-ref-clk-supply = <&vreg_l18a>;
-> +	status = "okay";
-> +};
-> +
-> +&usb {
-> +	status = "okay";
-> +};
-> +
-> +&usb_dwc3 {
-> +	maximum-speed = "high-speed";
-> +	dr_mode = "peripheral";
-> +};
-> +
-> +&usb_hsphy {
-> +	vdd-supply = <&vreg_l4a>;
-> +	vdda-pll-supply = <&vreg_l12a>;
-> +	vdda-phy-dpdm-supply = <&vreg_l15a>;
-> +	status = "okay";
-> +};
+>  drivers/nvdimm/pmem.c | 2 +-
+>  fs/dax.c              | 4 ++--
+>  include/linux/mm.h    | 2 ++
+>  3 files changed, 5 insertions(+), 3 deletions(-)
 > 
-> ---
-> base-commit: 145e5cddfe8b4bf607510b2dcf630d95f4db420f
-> change-id: 20230505-fxtec-pro1x-support-7f782f0480e9
-> 
-> Best regards,
+> diff --git a/drivers/nvdimm/pmem.c b/drivers/nvdimm/pmem.c
+> index ceea55f621cc..46e094e56159 100644
+> --- a/drivers/nvdimm/pmem.c
+> +++ b/drivers/nvdimm/pmem.c
+> @@ -260,7 +260,7 @@ __weak long __pmem_direct_access(struct pmem_device *pmem, pgoff_t pgoff,
+>  		long actual_nr;
+>  
+>  		if (mode != DAX_RECOVERY_WRITE)
+> -			return -EIO;
+> +			return -EHWPOISON;
+>  
+>  		/*
+>  		 * Set the recovery stride is set to kernel page size because
+> diff --git a/fs/dax.c b/fs/dax.c
+> index 2ababb89918d..18f9598951f1 100644
+> --- a/fs/dax.c
+> +++ b/fs/dax.c
+> @@ -1498,7 +1498,7 @@ static loff_t dax_iomap_iter(const struct iomap_iter *iomi,
+>  
+>  		map_len = dax_direct_access(dax_dev, pgoff, PHYS_PFN(size),
+>  				DAX_ACCESS, &kaddr, NULL);
+> -		if (map_len == -EIO && iov_iter_rw(iter) == WRITE) {
+> +		if (map_len == -EHWPOISON && iov_iter_rw(iter) == WRITE) {
+>  			map_len = dax_direct_access(dax_dev, pgoff,
+>  					PHYS_PFN(size), DAX_RECOVERY_WRITE,
+>  					&kaddr, NULL);
+> @@ -1506,7 +1506,7 @@ static loff_t dax_iomap_iter(const struct iomap_iter *iomi,
+>  				recovery = true;
+>  		}
+>  		if (map_len < 0) {
+> -			ret = map_len;
+> +			ret = (map_len == -EHWPOISON) ? -EIO : map_len;
 
--- 
-Kind Regards,
-Caleb (they/them)
+This fixup leaves out several other places where EHWPOISON could leak as
+the errno for read(2)/write(2). I think I want to see something like
+this:
+
+diff --git a/fs/dax.c b/fs/dax.c
+index 2ababb89918d..ec17f9977bcb 100644
+--- a/fs/dax.c
++++ b/fs/dax.c
+@@ -1077,14 +1077,13 @@ int dax_writeback_mapping_range(struct address_space *mapping,
+ }
+ EXPORT_SYMBOL_GPL(dax_writeback_mapping_range);
+ 
+-static int dax_iomap_direct_access(const struct iomap *iomap, loff_t pos,
+-               size_t size, void **kaddr, pfn_t *pfnp)
++static int __dax_iomap_direct_access(const struct iomap *iomap, loff_t pos,
++                                    size_t size, void **kaddr, pfn_t *pfnp)
+ {
+        pgoff_t pgoff = dax_iomap_pgoff(iomap, pos);
+-       int id, rc = 0;
+        long length;
++       int rc = 0;
+ 
+-       id = dax_read_lock();
+        length = dax_direct_access(iomap->dax_dev, pgoff, PHYS_PFN(size),
+                                   DAX_ACCESS, kaddr, pfnp);
+        if (length < 0) {
+@@ -1113,6 +1112,36 @@ static int dax_iomap_direct_access(const struct iomap *iomap, loff_t pos,
+        return rc;
+ }
+ 
++static int dax_iomap_direct_access(const struct iomap *iomap, loff_t pos,
++                                  size_t size, void **kaddr, pfn_t *pfnp)
++{
++
++       int id;
++
++       id = dax_read_lock();
++       rc = __dax_iomap_direct_access(iomap, pos, size, kaddr, pfnp);
++       dax_read_unlock(id);
++
++       /* don't leak a memory access error code to I/O syscalls */
++       if (rc == -EHWPOISON)
++               return -EIO;
++       return rc;
++}
++
++static int dax_fault_direct_access(const struct iomap *iomap, loff_t pos,
++                                  size_t size, void **kaddr, pfn_t *pfnp)
++{
++
++       int id;
++
++       id = dax_read_lock();
++       rc = __dax_iomap_direct_access(iomap, pos, size, kaddr, pfnp);
++       dax_read_unlock(id);
++
++       /* -EHWPOISON return ok */
++       return rc;
++}
++
+ /**
+  * dax_iomap_copy_around - Prepare for an unaligned write to a shared/cow page
+  * by copying the data before and after the range to be written.
+@@ -1682,7 +1711,7 @@ static vm_fault_t dax_fault_iter(struct vm_fault *vmf,
+                return pmd ? VM_FAULT_FALLBACK : VM_FAULT_SIGBUS;
+        }
+ 
+-       err = dax_iomap_direct_access(iomap, pos, size, &kaddr, &pfn);
++       err = dax_fault_direct_access(iomap, pos, size, &kaddr, &pfn);
+        if (err)
+                return pmd ? VM_FAULT_FALLBACK : dax_fault_return(err);
+ 
+
+
+...and then convert all other callers of dax_direct_access() in that
+file such that they are either calling:
+
+dax_iomap_direct_access(): if caller wants EHWPOISON translated to -EIO and is ok
+			   with internal locking
+dax_fault_direct_access(): if caller wants EHWPOISON passed through and is 
+			   ok with internal locking
+__dax_iomap_direct_access(): if the caller wants to do its own EHWPOISON
+			     translation and locking
+
+>  			break;
+>  		}
+>  
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 1f79667824eb..e4c974587659 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -3217,6 +3217,8 @@ static inline vm_fault_t vmf_error(int err)
+>  {
+>  	if (err == -ENOMEM)
+>  		return VM_FAULT_OOM;
+> +	else if (err == -EHWPOISON)
+> +		return VM_FAULT_HWPOISON;
+>  	return VM_FAULT_SIGBUS;
+>  }
+>  
+> -- 
+> 2.18.4
+> 
+
+
