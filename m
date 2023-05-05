@@ -2,91 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47C366F8B7A
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 23:43:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4D666F8B56
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 23:41:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232336AbjEEVmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 17:42:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40136 "EHLO
+        id S233609AbjEEVlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 17:41:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233629AbjEEVlu (ORCPT
+        with ESMTP id S233608AbjEEVlV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 17:41:50 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 774EF59E7
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 14:41:05 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f139de8cefso17557518e87.0
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 14:41:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683322864; x=1685914864;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KKTw5Zfw+dKxxnY8fd/tof/aQPft5PObVsbIBwm4nOE=;
-        b=ukT0/Gbl014hMNt6POWBZru46jjtyO67bCDOzbZQZOMZh/Xs1H+L8K6mDJGk6hCggf
-         hP8OvDws58qepr8kd9WeIEaA83Rd6PluO+iUO5+29SlGxYywQWhIQE8qIa4GBG418mt8
-         c5l3uHkpi/5r7sB13IdmqPFrrHzj/BxFMY0JaZPSq0RF8ukN/qvrdcvLllwn9NNL5paG
-         xQMSTWDqos2eRlNGrdkBtaReQd/VjqO7SYfT15338L6qPFxVkRTh6Q6AfSncogyQyH45
-         fZbyB/xTGzrtQcYxtMwV24Pyo+2bBYQzas5NnRA2v+FQniqofEXyRf8f/6JQ4+lNTg6F
-         2clg==
+        Fri, 5 May 2023 17:41:21 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CA74469D
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 14:40:41 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-33177659771so14600125ab.0
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 14:40:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683322864; x=1685914864;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KKTw5Zfw+dKxxnY8fd/tof/aQPft5PObVsbIBwm4nOE=;
-        b=ENXM+sXk/8cv1HWV3EPsegEgz+tCjUX2CQBUH2SHxlGgyIJ3Csa3i2WqXDPAD9ag62
-         wKwQ4RJDr0/DKgE2MAKmsGepOE1rswwlzWDkI2PWjD9bAZD29J32zQSYZh+yZ904Bpj1
-         /x+Tupw76yeG8iLDtYHel7vekwTpKPCcE+yCnk+ndgqbkVHk05rLf16xx1M8nSFOVCUr
-         9AGkk1fsHTqbK/Accd2eBH6o40JIOAiu5r8tNl055Dj/wzXTke33djaLg1njP7VQvcBz
-         9Fi6mniYJjNA5UQX4HNdZWMXlixucBEcqrsWKn81dAJKkyMawk4I+BobxGwGO0W/LXUz
-         cYOQ==
-X-Gm-Message-State: AC+VfDyb/+LHuGlUE2F6oFlR4GHfM5mWCnoC7F6zMz5Tei8YDbrzG1eG
-        8WeaSDY+LIObZOHQUiXwCAXPNA==
-X-Google-Smtp-Source: ACHHUZ6ZtEMdLb5DxiTNnLAorcEKFTUditPxbDFGZDHqLOLxFtWNDnrraKKGdt84CJWoao5/f5ySSg==
-X-Received: by 2002:a2e:994c:0:b0:295:d7a8:559b with SMTP id r12-20020a2e994c000000b00295d7a8559bmr880720ljj.10.1683322863863;
-        Fri, 05 May 2023 14:41:03 -0700 (PDT)
-Received: from [192.168.1.101] (abyl248.neoplus.adsl.tpnet.pl. [83.9.31.248])
-        by smtp.gmail.com with ESMTPSA id n12-20020a2e720c000000b002a776dbc277sm126453ljc.124.2023.05.05.14.41.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 May 2023 14:41:03 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Fri, 05 May 2023 23:40:38 +0200
-Subject: [PATCH v3 12/12] iommu/arm-smmu-qcom: Add SM6350 DPU compatible
+        d=1e100.net; s=20221208; t=1683322840; x=1685914840;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6r1fpOCe4Fv1EAxhDcJy4IoI32U0TyXXfS1pn3Vn3eM=;
+        b=Nl2Zqm3uFVeRP/gergBulK4u22vG+MkMzmMfcSD2b5mlBRDVECyUabcBCtW3wfl+F/
+         IsKe56h6i7Ef3lxJwZQRaFIfhVx3Jw0gFV+FdWVlpZNJgrrHuFnx8Y+unKNg2mROJ/TH
+         Tv+3Bt6U6A/d0MYWIU6M6kInbIPlu+QQ8wOVBIsd5HxL6nLNCW/K6Kvxl1v7XSfhFZ0s
+         r3pneZwOYSE0GZQ6JiRqbRUPJGyt1+FQyM85bpdlgC9xaMGmbsnLHouTDv+Y4iAJaB7e
+         Aa51XSaOnW8jFlfcZ1xAsLykCx+WgPzNUBacFFF+ph+n7IHnCAtel55mE0wZ1ilBXznQ
+         S4cg==
+X-Gm-Message-State: AC+VfDzqM12KZcaci07VQ+0tiIBKut+/EKUyTMnPD35S6urS8RBTwzqV
+        wEmSvwaAi++PuC26KpNGkwJfs6uS/YBppxvC0o4uVq3YDN7H
+X-Google-Smtp-Source: ACHHUZ4+W5iAMTzlHsI1iNuw3ugVX93iXPox7IbLl9VrL3MAAawXiPp4lY9sMEiE9DjeZp8P3C8leyIKIlMbCyYfumOH3/6InX69
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230411-topic-straitlagoon_mdss-v3-12-9837d6b3516d@linaro.org>
-References: <20230411-topic-straitlagoon_mdss-v3-0-9837d6b3516d@linaro.org>
-In-Reply-To: <20230411-topic-straitlagoon_mdss-v3-0-9837d6b3516d@linaro.org>
-To:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux.dev, Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1683322839; l=1014;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=d3S3xhOuliIdaa9KoHmUn1yxgnvenr1zId8Sw3Pr4Gg=;
- b=u3I52rgeZRIPJW2hyj/d+O+JrD0lLVAtextnz9mrc5yCQjY92j+5ZQdr3tADqPYJVA4RutRv3
- 92CfHxICo1ADBe7zjWqCKUtgraxwFrHDFKvLO1TZbLhn+tvZjWcQpLU
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Received: by 2002:a92:d4ce:0:b0:32a:9e86:242f with SMTP id
+ o14-20020a92d4ce000000b0032a9e86242fmr1369094ilm.6.1683322840521; Fri, 05 May
+ 2023 14:40:40 -0700 (PDT)
+Date:   Fri, 05 May 2023 14:40:40 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f3a4ee05faf923fa@google.com>
+Subject: [syzbot] Monthly f2fs report (May 2023)
+From:   syzbot <syzbot+list4594bdd613fc4b2a114c@syzkaller.appspotmail.com>
+To:     chao@kernel.org, jaegeuk@kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,31 +56,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Konrad Dybcio <konrad.dybcio@somainline.org>
+Hello f2fs maintainers/developers,
 
-Add the SM6350 DPU compatible to clients compatible list, as it also
-needs the workarounds.
+This is a 31-day syzbot report for the f2fs subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/f2fs
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-Acked-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+During the period, 3 new issues were detected and 0 were fixed.
+In total, 20 issues are still open and 28 have been fixed so far.
+
+Some of the still happening issues:
+
+Ref Crashes Repro Title
+<1> 173     Yes   INFO: task hung in f2fs_balance_fs
+                  https://syzkaller.appspot.com/bug?extid=8b85865808c8908a0d8c
+<2> 49      Yes   kernel BUG in f2fs_evict_inode
+                  https://syzkaller.appspot.com/bug?extid=e1246909d526a9d470fa
+<3> 7       No    general protection fault in __replace_atomic_write_block
+                  https://syzkaller.appspot.com/bug?extid=4420fa19a8667ff0b057
+
 ---
- drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c | 1 +
- 1 file changed, 1 insertion(+)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-index d7d5d1dbee17..e64c737724c4 100644
---- a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-+++ b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-@@ -253,6 +253,7 @@ static const struct of_device_id qcom_smmu_client_of_match[] __maybe_unused = {
- 	{ .compatible = "qcom,sc8280xp-mdss" },
- 	{ .compatible = "qcom,sdm845-mdss" },
- 	{ .compatible = "qcom,sdm845-mss-pil" },
-+	{ .compatible = "qcom,sm6350-mdss" },
- 	{ .compatible = "qcom,sm6375-mdss" },
- 	{ .compatible = "qcom,sm8150-mdss" },
- 	{ .compatible = "qcom,sm8250-mdss" },
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
 
--- 
-2.40.1
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
 
+You may send multiple commands in a single email message.
