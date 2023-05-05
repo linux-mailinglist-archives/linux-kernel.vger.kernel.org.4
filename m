@@ -2,118 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 458EE6F8CC9
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 01:27:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C35766F8CD1
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 01:36:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232374AbjEEX1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 19:27:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40114 "EHLO
+        id S232541AbjEEXcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 19:32:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbjEEX1e (ORCPT
+        with ESMTP id S229887AbjEEXb6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 19:27:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A8D7E7D;
-        Fri,  5 May 2023 16:27:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 12EDC64174;
-        Fri,  5 May 2023 23:27:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 157CFC433D2;
-        Fri,  5 May 2023 23:27:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683329252;
-        bh=/WiVNmGDwllO/hZsuR/739XrMjTBbzdh4pn30YDREBU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ych+mXj1sPCCyOvUrCbBNsvbkXy0MLPu3YQ9geQ/Znxy5k7THtMRDQPGtXRine5ss
-         Y+15sS8DvVmMyv4uNy+IOIGR32LQUiuTIMB+0yX9XD6sJHQ0dve7Aaq/yBfDoizf4H
-         5Dhkzi1tFsfIvRx/hxltV8+XzfKZ3+yq01mpx+FZ/DC6xbsyMkdRcMlnILpdwyWmaw
-         gzTd+HfZarybBLLMgXiXx5mt5fldWpM+pNXsS4B6XNSwgW9IkZ1ZLZU20Jx77YCRbj
-         TB+p0K0wI2wey/y14XQNHh9x7UuO6+C/Cs1pkm8wG4ChA0b44gry7W7jjugzYeIPCa
-         Z5ADhmJY0Kb8A==
-Date:   Fri, 5 May 2023 23:27:30 +0000
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     "Chang S. Bae" <chang.seok.bae@intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        dm-devel@redhat.com, gmazyland@gmail.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, tglx@linutronix.de, bp@suse.de,
-        mingo@kernel.org, x86@kernel.org, herbert@gondor.apana.org.au,
-        ardb@kernel.org, dan.j.williams@intel.com, bernie.keany@intel.com,
-        charishma1.gairuboyina@intel.com,
-        lalithambika.krishnakumar@intel.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH v6 10/12] crypto: x86/aes - Prepare for a new AES
- implementation
-Message-ID: <ZFWQ4sZEVu/LHq+Q@gmail.com>
-References: <20220112211258.21115-1-chang.seok.bae@intel.com>
- <20230410225936.8940-1-chang.seok.bae@intel.com>
- <20230410225936.8940-11-chang.seok.bae@intel.com>
+        Fri, 5 May 2023 19:31:58 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0875B84
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 16:31:56 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-643846c006fso2654749b3a.0
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 16:31:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1683329516; x=1685921516;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8uJUh2UWnCD23NYvfrOwl5QVSa+EISSPPjSd5uCE+wE=;
+        b=hDEcZYca3fchq1Az69ce+GM2HlxTVEnOzK8YFMewKwbqZCip3SHcTYv/NcDIqyTNH6
+         6/hGMJGeAOIgWb/20BfirWkR35QBYAA+xxb9UTxtticDLCSXojwOTJHrLF41Hyxt+YaK
+         T6maGzq8mC7t7pPrzFzvo7tagiEYNn31u5qQDJ5kPqpuSoGyoZ6o9H6prNABkmmq5Vda
+         sAFdVw3t5XhZHMPBJWIWz8Mo0sUVFZ/yYBYT9v0jzLBiEZiqao4hD7ETWKMwjPa4m+3H
+         6Kaaa5nlzpH6ZAGnMfax9hrBUWORjcoA9eZU7VzKuHhAQmaO+YQSkq3pVUg4X0ClKxGM
+         gbMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683329516; x=1685921516;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8uJUh2UWnCD23NYvfrOwl5QVSa+EISSPPjSd5uCE+wE=;
+        b=YhWlCRtlPgoZqTEH5IEnoL014Cml8fm/BVMMQw8jxCW/TjAfg6eWVpme5i3UYDd10n
+         5mYhYiej7/zerDo8YZt7ByE7oER0NWwgkbrCXUM2w1tphxwGz90K030pI9q2uxUWYEfM
+         gxW6I++wYEsg5laoEReTkYGH3qTyxl2z/BhS2zmtRbwSO3BG1yjad4N4hAB7ImRrK5d3
+         fgtVf3YFqNM2oA7UldxQmzdATjVMqQWLs7gC8NvN/v96v9HYGDze6GXXndWkY2z3HZMZ
+         DhdrxLXx3d+AVwyASc9qBYLA1DYJRp1actu0pF8LUXex/xdzu8WdVAYGdSt2TvSZM5CL
+         cndw==
+X-Gm-Message-State: AC+VfDxHLoN1593UHhIZ3hIw48I7X8xhs0EL7K8qZtTbEIxugzDkRMqb
+        f1lixVbDA8QtQqwnZ6Jp+h19QQ==
+X-Google-Smtp-Source: ACHHUZ5jCHNKEp8ajfUWEYHb1TloSL5+Po0yDLYzFo11T7JFr0OlW1iJj/ZhwBeZIssHPkp/uFRVmQ==
+X-Received: by 2002:a05:6a00:2346:b0:63f:2f00:c6d with SMTP id j6-20020a056a00234600b0063f2f000c6dmr4289043pfj.2.1683329516140;
+        Fri, 05 May 2023 16:31:56 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-88-204.pa.nsw.optusnet.com.au. [49.181.88.204])
+        by smtp.gmail.com with ESMTPSA id k2-20020aa792c2000000b0063d24fcc2b7sm2109256pfa.1.2023.05.05.16.31.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 May 2023 16:31:55 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1pv4u0-00BpIl-W1; Sat, 06 May 2023 09:31:53 +1000
+Date:   Sat, 6 May 2023 09:31:52 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     John Garry <john.g.garry@oracle.com>, axboe@kernel.dk,
+        kbusch@kernel.org, hch@lst.de, sagi@grimberg.me,
+        martin.petersen@oracle.com, djwong@kernel.org,
+        viro@zeniv.linux.org.uk, brauner@kernel.org, dchinner@redhat.com,
+        jejb@linux.ibm.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-scsi@vger.kernel.org, linux-xfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com,
+        Himanshu Madhani <himanshu.madhani@oracle.com>
+Subject: Re: [PATCH RFC 01/16] block: Add atomic write operations to
+ request_queue limits
+Message-ID: <20230505233152.GN3223426@dread.disaster.area>
+References: <20230503183821.1473305-1-john.g.garry@oracle.com>
+ <20230503183821.1473305-2-john.g.garry@oracle.com>
+ <20230503213925.GD3223426@dread.disaster.area>
+ <fc91aa12-1707-9825-a77e-9d5a41d97808@oracle.com>
+ <20230504222623.GI3223426@dread.disaster.area>
+ <ZFWHdxgWie/C02OA@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230410225936.8940-11-chang.seok.bae@intel.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ZFWHdxgWie/C02OA@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 03:59:34PM -0700, Chang S. Bae wrote:
-> Refactor the common C code to avoid code duplication. The AES-NI code uses
-> it with a function pointer argument to call back the AES-NI assembly code.
-> So will the AES-KL code.
+On Fri, May 05, 2023 at 10:47:19PM +0000, Eric Biggers wrote:
+> On Fri, May 05, 2023 at 08:26:23AM +1000, Dave Chinner wrote:
+> > > ok, we can do that but would also then make statx field 64b. I'm fine with
+> > > that if it is wise to do so - I don't don't want to wastefully use up an
+> > > extra 2 x 32b in struct statx.
+> > 
+> > Why do we need specific varibles for DIO atomic write alignment
+> > limits? We already have direct IO alignment and size constraints in statx(),
+> > so why wouldn't we just reuse those variables when the user requests
+> > atomic limits for DIO?
+> > 
+> > i.e. if STATX_DIOALIGN is set, we return normal DIO alignment
+> > constraints. If STATX_DIOALIGN_ATOMIC is set, we return the atomic
+> > DIO alignment requirements in those variables.....
+> > 
+> > Yes, we probably need the dio max size to be added to statx for
+> > this. Historically speaking, I wanted statx to support this in the
+> > first place because that's what we were already giving userspace
+> > with XFS_IOC_DIOINFO and we already knew that atomic IO when it came
+> > along would require a bound maximum IO size much smaller than normal
+> > DIO limits.  i.e.:
+> > 
+> > struct dioattr {
+> >         __u32           d_mem;          /* data buffer memory alignment */
+> >         __u32           d_miniosz;      /* min xfer size                */
+> >         __u32           d_maxiosz;      /* max xfer size                */
+> > };
+> > 
+> > where d_miniosz defined the alignment and size constraints for DIOs.
+> > 
+> > If we simply document that STATX_DIOALIGN_ATOMIC returns minimum
+> > (unit) atomic IO size and alignment in statx->dio_offset_align (as
+> > per STATX_DIOALIGN) and the maximum atomic IO size in
+> > statx->dio_max_iosize, then we don't burn up anywhere near as much
+> > space in the statx structure....
+> 
+> I don't think that's how statx() is meant to work.  The request mask is a bitmask, and the user can
+> request an arbitrary combination of different items.  For example, the user could request both
+> STATX_DIOALIGN and STATX_WRITE_ATOMIC at the same time.  That doesn't work if different items share
+> the same fields.
 
-Actually, the AES-NI XTS glue code currently makes direct calls to the assembly
-code.  This patch changes it to make indirect calls.  Indirect calls are very
-expensive these days, partly due to all the speculative execution mitigations.
-So this patch likely causes a performance regression.  How about making
-xts_crypt_common() and xts_setkey_common() be inline functions?
+Sure it does - what is contained in the field on return is defined
+by the result mask. In this case, whatever the filesystem puts in
+the DIO fields will match which flag it asserts in the result mask.
 
-Another issue with having the above be exported symbols is that their names are
-too generic, so they could easily collide with another symbols in the kernel.
-To be exported symbols, they would need something x86-specific in their names.
+i.e. if the application wants RWF_ATOMIC and so asks for STATX_DIOALIGN |
+STATX_DIOALIGN_ATOMIC in the request mask then:
 
->  arch/x86/crypto/Makefile           |   2 +-
->  arch/x86/crypto/aes-intel_asm.S    |  26 ++++
->  arch/x86/crypto/aes-intel_glue.c   | 127 ++++++++++++++++
->  arch/x86/crypto/aes-intel_glue.h   |  44 ++++++
->  arch/x86/crypto/aesni-intel_asm.S  |  58 +++----
->  arch/x86/crypto/aesni-intel_glue.c | 235 +++++++++--------------------
->  arch/x86/crypto/aesni-intel_glue.h |  17 +++
+- if the filesystem does not support RWF_ATOMIC it fills in the
+  normal DIO alingment values and puts STATX_DIOALIGN in the result
+  mask.
 
-It's confusing having aes-intel, aesni-intel, *and* aeskl-intel.  Maybe call the
-first one "aes-helpers" or "aes-common" instead?
+  Now the application knows that it can't use RWF_ATOMIC, and it
+  doesn't need to do another statx() call to get the dio alignment
+  values it needs.
 
-> +struct aes_xts_ctx {
-> +	u8 raw_tweak_ctx[sizeof(struct crypto_aes_ctx)] AES_ALIGN_ATTR;
-> +	u8 raw_crypt_ctx[sizeof(struct crypto_aes_ctx)] AES_ALIGN_ATTR;
-> +};
+- if the filesystem supports RWF_ATOMIC, it fills in the values with
+  the atomic DIO constraints and puts STATX_DIOALIGN_ATOMIC in the
+  result mask.
 
-This struct does not make sense.  It should look like:
+  Now the application knows it can use RWF_ATOMIC and has the atomic
+  DIO constraints in the dio alignment fields returned.
 
-    struct aes_xts_ctx {
-            struct crypto_aes_ctx tweak_ctx AES_ALIGN_ATTR;
-            struct crypto_aes_ctx crypt_ctx AES_ALIGN_ATTR;
-    };
+This uses the request/result masks exactly as intended, yes?
 
-The runtime alignment to a 16-byte boundary should happen when translating the
-raw crypto_skcipher_ctx() into the pointer to the aes_xts_ctx.  It should not
-happen when accessing each individual field in the aes_xts_ctx.
+Cheers,
 
->  /*
-> - * int aesni_set_key(struct crypto_aes_ctx *ctx, const u8 *in_key,
-> - *                   unsigned int key_len)
-> + * int _aesni_set_key(struct crypto_aes_ctx *ctx, const u8 *in_key,
-> + *                    unsigned int key_len)
->   */
-
-It's conventional to use two leading underscores, not one.
-
-- Eric
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
