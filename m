@@ -2,148 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABCFE6F8C44
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 00:10:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 810F76F8C46
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 00:12:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232579AbjEEWKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 18:10:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38452 "EHLO
+        id S232621AbjEEWMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 18:12:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbjEEWKv (ORCPT
+        with ESMTP id S232242AbjEEWMc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 18:10:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A48D2723;
-        Fri,  5 May 2023 15:10:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 987DB6411F;
-        Fri,  5 May 2023 22:10:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF1B7C433EF;
-        Fri,  5 May 2023 22:10:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683324649;
-        bh=k6oMc0o9wbKE3MMyK5Z0jVFz6s5S3LZAMgBD25Npdew=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=O1xy3ZEqtX7AjkfWmtzEaUO3L0PrSeHA63SSFHopVTw+bkamc3KH6AFOtMTEQrQIi
-         Ch4gCMX3UMDxIatxR+5AOk7ZdANA+CRiByOZq+lUlNShjej/To9Z/zWISpEahN8mFc
-         fvRSeEUaD07OwqvKAvqWoWY84Qg51kCXh+DOaC5ufw6MtznuKcjn4dkG3VQW9nLj8e
-         e/m5qrU/NsqSZTnTPzGPWkd60jaXoIrueA5R11g/RM8fMFvnBpLoHDoldoQrVRleRL
-         B8QXGobhn8rAMthGTTyY9MwtiPoBjiRB5OgGxkg3/LLt96m+s4hSK3eI7W2qFkvC9F
-         6j4lCfSx5W3wQ==
-Date:   Fri, 5 May 2023 15:10:48 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     John Garry <john.g.garry@oracle.com>, axboe@kernel.dk,
-        kbusch@kernel.org, hch@lst.de, sagi@grimberg.me,
-        martin.petersen@oracle.com, viro@zeniv.linux.org.uk,
-        brauner@kernel.org, dchinner@redhat.com, jejb@linux.ibm.com,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com
-Subject: Re: [PATCH RFC 03/16] xfs: Support atomic write for statx
-Message-ID: <20230505221048.GL15394@frogsfrogsfrogs>
-References: <20230503183821.1473305-1-john.g.garry@oracle.com>
- <20230503183821.1473305-4-john.g.garry@oracle.com>
- <20230503221749.GF3223426@dread.disaster.area>
+        Fri, 5 May 2023 18:12:32 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C01A046A6
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 15:12:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683324750; x=1714860750;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6w3EnoLYcjYzCP36Z68hnkauw/xTpYgW7xplEoywr+c=;
+  b=NtP7uCXanBYBQZoJMSbLPXvQZzAqu6Q9RupEABHbKpRVPUgXbjnultw8
+   p7p7iLArIqWrbum/olYnEtfdPGZVCDVCyw+uO5Scs5eUtLBB0icZ3vARh
+   0+Dqb6zbh/yi2nRjPP22kU9vEw/4/iYsVSvek4t3Cpt0lm7wFvFjPKyQr
+   /fDvDGxW/r85XE0LSboljUxbvd5u3cb3SUl/kuOcaEPI2oLz3Ly6rmG58
+   j6H4AEEgvI9/8fwNaMWd5f8PjBHQGM7pbFyi6G6q3O4XGFJNGz8gS035B
+   VbLHcXj8bYlbgsmzOIeUbw6JSlrRT1M765vtk5rmgFksPUxwmjSjeqqPT
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="329660585"
+X-IronPort-AV: E=Sophos;i="5.99,253,1677571200"; 
+   d="scan'208";a="329660585"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2023 15:12:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="700631341"
+X-IronPort-AV: E=Sophos;i="5.99,253,1677571200"; 
+   d="scan'208";a="700631341"
+Received: from lkp-server01.sh.intel.com (HELO fe5d646e317d) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 05 May 2023 15:12:28 -0700
+Received: from kbuild by fe5d646e317d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pv3fA-0000t9-0k;
+        Fri, 05 May 2023 22:12:28 +0000
+Date:   Sat, 6 May 2023 06:12:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Christopher M. Riedl" <cmr@bluescreens.de>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Gray <bgray@linux.ibm.com>
+Subject: include/linux/compiler_types.h:357:45: error: call to
+ '__compiletime_assert_181' declared with attribute error: BUILD_BUG failed
+Message-ID: <202305060648.EjkrACfJ-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230503221749.GF3223426@dread.disaster.area>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 04, 2023 at 08:17:49AM +1000, Dave Chinner wrote:
-> On Wed, May 03, 2023 at 06:38:08PM +0000, John Garry wrote:
-> > Support providing info on atomic write unit min and max.
-> > 
-> > Darrick Wong originally authored this change.
-> > 
-> > Signed-off-by: John Garry <john.g.garry@oracle.com>
-> > ---
-> >  fs/xfs/xfs_iops.c | 10 ++++++++++
-> >  1 file changed, 10 insertions(+)
-> > 
-> > diff --git a/fs/xfs/xfs_iops.c b/fs/xfs/xfs_iops.c
-> > index 24718adb3c16..e542077704aa 100644
-> > --- a/fs/xfs/xfs_iops.c
-> > +++ b/fs/xfs/xfs_iops.c
-> > @@ -614,6 +614,16 @@ xfs_vn_getattr(
-> >  			stat->dio_mem_align = bdev_dma_alignment(bdev) + 1;
-> >  			stat->dio_offset_align = bdev_logical_block_size(bdev);
-> >  		}
-> > +		if (request_mask & STATX_WRITE_ATOMIC) {
-> > +			struct xfs_buftarg	*target = xfs_inode_buftarg(ip);
-> > +			struct block_device	*bdev = target->bt_bdev;
-> > +
-> > +			stat->atomic_write_unit_min = queue_atomic_write_unit_min(bdev->bd_queue);
-> > +			stat->atomic_write_unit_max = queue_atomic_write_unit_max(bdev->bd_queue);
-> 
-> I'm not sure this is right.
-> 
-> Given that we may have a 4kB physical sector device, XFS will not
-> allow IOs smaller than physical sector size. The initial values of
-> queue_atomic_write_unit_min/max() will be (1 << SECTOR_SIZE) which
-> is 512 bytes. IOs done with 4kB sector size devices will fail in
-> this case.
-> 
-> Further, XFS has a software sector size - it can define the sector
-> size for the filesystem to be 4KB on a 512 byte sector device. And
-> in that case, the filesystem will reject 512 byte sized/aligned IOs
-> as they are smaller than the filesystem sector size (i.e. a config
-> that prevents sub-physical sector IO for 512 logical/4kB physical
-> devices).
+Hi Christopher,
 
-Yep.  I'd forgotten about those.
+FYI, the error/warning still remains.
 
-> There may other filesystem constraints - realtime devices have fixed
-> minimum allocation sizes which may be larger than atomic write
-> limits, which means that IO completion needs to split extents into
-> multiple unwritten/written extents, extent size hints might be in
-> use meaning we have different allocation alignment constraints to
-> atomic write constraints, stripe alignment of extent allocation may
-> through out atomic write alignment, etc.
-> 
-> These are all solvable, but we need to make sure here that the
-> filesystem constraints are taken into account here, not just the
-> block device limits.
-> 
-> As such, it is probably better to query these limits at filesystem
-> mount time and add them to the xfs buftarg (same as we do for
-> logical and physical sector sizes) and then use the xfs buftarg
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   7163a2111f6c030ee39635ac3334bfa1a52a3dd3
+commit: c28c15b6d28a776538482101522cbcd9f906b15c powerpc/code-patching: Use temporary mm for Radix MMU
+date:   5 months ago
+config: powerpc-randconfig-r031-20230505 (https://download.01.org/0day-ci/archive/20230506/202305060648.EjkrACfJ-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c28c15b6d28a776538482101522cbcd9f906b15c
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout c28c15b6d28a776538482101522cbcd9f906b15c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
 
-I'm not sure that's right either.  device mapper can switch the
-underlying storage out from under us, yes?  That would be a dirty thing
-to do in my book, but I've long wondered if we need to be more resilient
-to that kind of evilness.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305060648.EjkrACfJ-lkp@intel.com/
 
-> values rather than having to go all the way to the device queue
-> here. That way we can ensure at mount time that atomic write limits
-> don't conflict with logical/physical IO limits, and we can further
-> constrain atomic limits during mount without always having to
-> recalculate those limits from first principles on every stat()
-> call...
+All errors (new ones prefixed by >>):
 
-With Christoph's recent patchset to allow block devices to call back
-into filesystems, we could add one for "device queue limits changed"
-that would cause recomputation of those elements, solving what I was
-just mumbling about above.
+   In file included from <command-line>:
+   In function 'local_flush_tlb_page_psize',
+       inlined from '__do_patch_instruction_mm' at arch/powerpc/lib/code-patching.c:310:2,
+       inlined from 'do_patch_instruction' at arch/powerpc/lib/code-patching.c:355:9,
+       inlined from 'patch_instruction' at arch/powerpc/lib/code-patching.c:379:9:
+>> include/linux/compiler_types.h:357:45: error: call to '__compiletime_assert_181' declared with attribute error: BUILD_BUG failed
+     357 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                                             ^
+   include/linux/compiler_types.h:338:25: note: in definition of macro '__compiletime_assert'
+     338 |                         prefix ## suffix();                             \
+         |                         ^~~~~~
+   include/linux/compiler_types.h:357:9: note: in expansion of macro '_compiletime_assert'
+     357 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:59:21: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      59 | #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
+         |                     ^~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/book3s/32/tlbflush.h:83:9: note: in expansion of macro 'BUILD_BUG'
+      83 |         BUILD_BUG();
+         |         ^~~~~~~~~
 
---D
 
-> Cheers,
-> 
-> Dave.
-> -- 
-> Dave Chinner
-> david@fromorbit.com
+vim +/__compiletime_assert_181 +357 include/linux/compiler_types.h
+
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  343  
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  344  #define _compiletime_assert(condition, msg, prefix, suffix) \
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  345  	__compiletime_assert(condition, msg, prefix, suffix)
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  346  
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  347  /**
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  348   * compiletime_assert - break build and emit msg if condition is false
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  349   * @condition: a compile-time constant condition to check
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  350   * @msg:       a message to emit if condition is false
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  351   *
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  352   * In tradition of POSIX assert, this macro will break the build if the
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  353   * supplied condition is *false*, emitting the supplied error message if the
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  354   * compiler has support to do so.
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  355   */
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  356  #define compiletime_assert(condition, msg) \
+eb5c2d4b45e3d2 Will Deacon 2020-07-21 @357  	_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  358  
+
+:::::: The code at line 357 was first introduced by commit
+:::::: eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5 compiler.h: Move compiletime_assert() macros into compiler_types.h
+
+:::::: TO: Will Deacon <will@kernel.org>
+:::::: CC: Will Deacon <will@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
