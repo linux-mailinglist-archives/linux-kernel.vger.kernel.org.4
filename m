@@ -2,60 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72C366F8A5E
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 22:49:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A538D6F8A62
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 22:49:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233301AbjEEUtI convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 5 May 2023 16:49:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39752 "EHLO
+        id S233313AbjEEUto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 16:49:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233235AbjEEUtF (ORCPT
+        with ESMTP id S232707AbjEEUtm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 16:49:05 -0400
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37E71984;
-        Fri,  5 May 2023 13:49:04 -0700 (PDT)
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-b9d8730fe5aso3052293276.1;
-        Fri, 05 May 2023 13:49:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683319744; x=1685911744;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GDe8ZfXyzW9pc+3/vB3tIdG+hkI+ElgK80U8Mo8x89U=;
-        b=C0GWICo+QwGWEBLx61rPsZD5DVSfcL2xBbN8ZAQlJ1X3Cry9gd/KO3aRIMb/UzDfyP
-         XcxlYTIq6yIf7/n+26+oAfw/dU418f2FhsrzTgNd/+UYuL/MNAz24V7gOYmVgXqA/tiO
-         0flb7FMNp9GfWY3hHa+etbwAZHkLvdn9ZOEP7HMaw7ULQyC6THmvW7XlfZlXWZdFamFU
-         wowIM+R1aI1AcfiwnEh8a4uwqieAcDSBkwxFU3Jb1WZneYp7w3PjqK/aOI1akTy+UbQi
-         60fRBMcLRNMU3kxqJ7VHLB2A21gCTZUJGaCbmAGNw4DbcdAy1Kx0RGdVgncMdkw2C/xw
-         bt/Q==
-X-Gm-Message-State: AC+VfDwtO/Zb54OdLOTZhEpcxunkyvQrqstnSsOkvAvCx8WyicivbJIw
-        JxX1QbqSptQKxOIJqJNdqra+67/gKQym4O7E7+o=
-X-Google-Smtp-Source: ACHHUZ6/g3H45+NO2l/LcXgWKIrU0eM72lDJycRhXIiWCPy1FeZCU0gud3grVcNGXU2Cx0wweHr2bOb3pztjimFmm3Y=
-X-Received: by 2002:a25:e092:0:b0:b9e:4d05:1f97 with SMTP id
- x140-20020a25e092000000b00b9e4d051f97mr3070988ybg.41.1683319743912; Fri, 05
- May 2023 13:49:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAHk-=wgv1sKTdLWPC7XR1Px=pDNrDPDTKdX-T_2AQOwgkpWB2A@mail.gmail.com>
- <ZFPw0scDq1eIzfHr@kernel.org> <CAEf4BzaUU9vZU6R_020ru5ct0wh-p1M3ZFet-vYqcHvb9bW1Cw@mail.gmail.com>
- <ZFQCccsx6GK+gY0j@kernel.org> <ZFQoQjCNtyMIulp+@kernel.org>
- <CAP-5=fU8HQorW+7O6vfEKGs1mEFkjkzXZMVPACzurtcMcRhVzQ@mail.gmail.com>
- <ZFQ5sjjtfEYzvHNP@krava> <ZFUFmxDU/6Z/JEsi@kernel.org> <ZFU1PJrn8YtHIqno@kernel.org>
- <CAP-5=fWfmmMCRnEmzj_CXTKacp6gjrzmR49Ge_C5XRyfTegRjg@mail.gmail.com>
- <ZFVqeKLssg7uzxzI@krava> <CAP-5=fVgJdBvjV8S2xKswAFiSZvyCcUvZTO1bsLyUf-wQ0pBuw@mail.gmail.com>
-In-Reply-To: <CAP-5=fVgJdBvjV8S2xKswAFiSZvyCcUvZTO1bsLyUf-wQ0pBuw@mail.gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Fri, 5 May 2023 13:48:52 -0700
-Message-ID: <CAM9d7cjrZ-sHhO1ErqVdrN8Vv-ocCmsONc443yoPiCvnoiXj9A@mail.gmail.com>
-Subject: Re: [PATCH RFC/RFT] perf bpf skels: Stop using vmlinux.h generated
- from BTF, use subset of used structs + CO-RE. was Re: BPF skels in perf .Re:
- [GIT PULL] perf tools changes for v6.4
+        Fri, 5 May 2023 16:49:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F28C2129;
+        Fri,  5 May 2023 13:49:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1281F640A2;
+        Fri,  5 May 2023 20:49:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39750C433EF;
+        Fri,  5 May 2023 20:49:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683319778;
+        bh=W59TR9E32Yah1dFs08dbWyLipmFb+psLrDFRxEQpgnE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VNMabUPhKyNss7GFEOqyfB6OMpKzdhW+nMaDUdTpEHltfzlk5hxr3llxJ/OfnmpOI
+         ExgTNLC+SUY3gwxiXTJGCSGUHdjHcsRhsAaJ5dF9b5TmQwa1H9OYD1BKk8r2w2kGap
+         T49SSvrJGIIoh1kokytEQ0IxTaOteXBy9oIXohVlslQKYNrdUngNOLKR5uzoxqz9c8
+         BB6XGatN21KTLCr5v7WHgglG0OYwmKHHyR2y0pZAkQf55s37MLzK1zHBXsBdYSn5SI
+         2yuizHDwQg0OyUhil5LU2WMBRtI+yZSZ7FKxRVXHUvx8UnGlrBeuhIhUl64a//ZLUG
+         y+j65SzycWntg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id B04B6403B5; Fri,  5 May 2023 17:49:35 -0300 (-03)
+Date:   Fri, 5 May 2023 17:49:35 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
 To:     Ian Rogers <irogers@google.com>
 Cc:     Jiri Olsa <olsajiri@gmail.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Song Liu <song@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>, Song Liu <song@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Ingo Molnar <mingo@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -74,20 +59,37 @@ Cc:     Jiri Olsa <olsajiri@gmail.com>,
         Yang Jihong <yangjihong1@huawei.com>,
         Mark Rutland <mark.rutland@arm.com>,
         Paul Clarke <pc@us.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Subject: Re: [PATCH RFC/RFT] perf bpf skels: Stop using vmlinux.h generated
+ from BTF, use subset of used structs + CO-RE. was Re: BPF skels in perf .Re:
+ [GIT PULL] perf tools changes for v6.4
+Message-ID: <ZFVr38MZLGpBFaUg@kernel.org>
+References: <CAEf4BzaUU9vZU6R_020ru5ct0wh-p1M3ZFet-vYqcHvb9bW1Cw@mail.gmail.com>
+ <ZFQCccsx6GK+gY0j@kernel.org>
+ <ZFQoQjCNtyMIulp+@kernel.org>
+ <CAP-5=fU8HQorW+7O6vfEKGs1mEFkjkzXZMVPACzurtcMcRhVzQ@mail.gmail.com>
+ <ZFQ5sjjtfEYzvHNP@krava>
+ <ZFUFmxDU/6Z/JEsi@kernel.org>
+ <ZFU1PJrn8YtHIqno@kernel.org>
+ <CAP-5=fWfmmMCRnEmzj_CXTKacp6gjrzmR49Ge_C5XRyfTegRjg@mail.gmail.com>
+ <ZFVqeKLssg7uzxzI@krava>
+ <CAP-5=fVgJdBvjV8S2xKswAFiSZvyCcUvZTO1bsLyUf-wQ0pBuw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAP-5=fVgJdBvjV8S2xKswAFiSZvyCcUvZTO1bsLyUf-wQ0pBuw@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 5, 2023 at 1:46 PM Ian Rogers <irogers@google.com> wrote:
->
+Em Fri, May 05, 2023 at 01:46:30PM -0700, Ian Rogers escreveu:
 > On Fri, May 5, 2023 at 1:43 PM Jiri Olsa <olsajiri@gmail.com> wrote:
 > >
 > > On Fri, May 05, 2023 at 10:04:47AM -0700, Ian Rogers wrote:
@@ -137,12 +139,15 @@ On Fri, May 5, 2023 at 1:46 PM Ian Rogers <irogers@google.com> wrote:
 > > and needed fix below
 > >
 > > jirka
->
+> 
 > I thought this was fixed by:
 > https://lore.kernel.org/lkml/20230427234833.1576130-1-namhyung@kernel.org/
 > but I think that is just in perf-tools-next.
 
-Right, but we might still need the empty rq definition.
+Nope, we have it in perf-tools:
 
-Thanks,
-Namhyung
+commit e53de7b65a3ca59af268c78df2d773f277f717fd
+Author: Namhyung Kim <namhyung@kernel.org>
+Date:   Thu Apr 27 16:48:32 2023 -0700
+
+    perf lock contention: Fix struct rq lock access
