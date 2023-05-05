@@ -2,140 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDBAA6F8074
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 11:58:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCABF6F8076
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 11:59:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231899AbjEEJ6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 05:58:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57278 "EHLO
+        id S231902AbjEEJ7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 05:59:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231803AbjEEJ6P (ORCPT
+        with ESMTP id S231611AbjEEJ7S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 05:58:15 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7CBD918852;
-        Fri,  5 May 2023 02:58:13 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8A0051FB;
-        Fri,  5 May 2023 02:58:57 -0700 (PDT)
-Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3BCAE3F64C;
-        Fri,  5 May 2023 02:58:11 -0700 (PDT)
-Date:   Fri, 5 May 2023 10:58:05 +0100
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Maksim Kiselev <bigunclemax@gmail.com>
-Cc:     robh+dt@kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] riscv: dts: allwinner: d1: Add SPI0 controller node
-Message-ID: <20230505105805.548d1a1b@donnerap.cambridge.arm.com>
-In-Reply-To: <20230505074701.1030980-1-bigunclemax@gmail.com>
-References: <20230505074701.1030980-1-bigunclemax@gmail.com>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+        Fri, 5 May 2023 05:59:18 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C021816A;
+        Fri,  5 May 2023 02:59:16 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id 3f1490d57ef6-ba1815e12efso1391843276.3;
+        Fri, 05 May 2023 02:59:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683280756; x=1685872756;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5d14VMN/dsF84pYxIA+HqaO2W48hhJ6NH76UKybrOHI=;
+        b=WhLJfFKieiNArlBXBw8k4VHZ/gQd6jJfyapaDf5LZ8depVowiY48yU9MB8qKG363Yh
+         dvPU6ODE0dykQlianl3bbpt6FHeJ8Ph56WmSAtwIWsjlk1I8q0BckQti2OxsdRrVTCpI
+         vlQkwJwURbE6QHR1jxhzr6GhUEz+iWjkaDv5ZikyqOE3oBmgaJkrrG7H6J3I/qIHKzS4
+         BP5rpCjVh7qNTw+HJv2vkJ9InryWiHgkSqz2G+gyxw58FTvj/eBj4ozsP+Lo2bUmMaA6
+         yZLOGRaiOv3pTdatHSs3zpx38vOWBCk6u/TP7ir79d8XCm2vw0wjRRe87LpJNcb0fOwJ
+         Ge9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683280756; x=1685872756;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5d14VMN/dsF84pYxIA+HqaO2W48hhJ6NH76UKybrOHI=;
+        b=KecRbVX6bAshzKfaeT0Y+a1FH/HU3KMKCFdzcwRUzDLfz52DtS2eTAOJd9x98rcuxv
+         t85GChM9FmE/78RqheAJbvfsZWjMZCb0f5HC5hP6QK/RxxlxZEsIjJiD1J+Nzq1xwYML
+         zQEUmu0eyd1q/2iEpoAdFpGx/3rV4uy1L1383c7S2tie4ursH7N94EyquRAxICzfZ4Je
+         Q4ZlN+Q9ZEE6vDgzELpmGwW9bpdJRF48Viv6W6q3WLbOhjLdqVVoS3OCf3AQIZy+AMdT
+         6cUL/klYsUI+GWKIQ0rSyt+FBYA5PIIFmt7HnBGT9djw90shG5Z/9FYwaWg27QLe8V68
+         eH+Q==
+X-Gm-Message-State: AC+VfDx2bJ9z2ShE1+1T5H7qhNvdB7YgR3N7SZKJ+rOKu7Vvcx7cMSaN
+        /Ip7szljAFziBy6xjQ64d9mXbXEUYLfaDyC1f/0=
+X-Google-Smtp-Source: ACHHUZ598taEicUanJWBqC5xD3xyd3QwAlvZRfXr/O+pf/peYRpl819lf6glbrOTTHFtXPeY54wv6krCM6jXRtuDkkk=
+X-Received: by 2002:a25:38c:0:b0:b8f:5340:b052 with SMTP id
+ 134-20020a25038c000000b00b8f5340b052mr1134211ybd.15.1683280755967; Fri, 05
+ May 2023 02:59:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230418214347.324156-1-ojeda@kernel.org> <CAPDJoNsG1E25yYM+L_H21vVCt-5S16etx3KMxx8ySZtWMQt4FQ@mail.gmail.com>
+ <CANiq72mtb9V+1a7nPEHBCeg_fob4rpPTWJZjdahnGL2Mg3uoUA@mail.gmail.com>
+ <CAPDJoNvGQBNN6X6fs26tjUy7LbpJjWwPvQuf=1+nSwj94aa6LA@mail.gmail.com>
+ <CANiq72m7zdYo566PxX3g03+XPpHnrQy7GG9WkgEP82mK_2JBpw@mail.gmail.com> <CAPFo5VJpGq70X6efWESDoCYE3J0pjgMB1c7X_ACA4Q9MxnoHQw@mail.gmail.com>
+In-Reply-To: <CAPFo5VJpGq70X6efWESDoCYE3J0pjgMB1c7X_ACA4Q9MxnoHQw@mail.gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Fri, 5 May 2023 11:59:05 +0200
+Message-ID: <CANiq72ma+kGPWVGocuPoY6YL13PzCwEMgKN2Yi2Ok42jxBQdTg@mail.gmail.com>
+Subject: Re: [PATCH 0/3] Rust 1.68.2 upgrade
+To:     Fabien Parent <fabien.parent@linaro.org>
+Cc:     Ariel Miculas <ariel.miculas@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Josh Stone <jistone@redhat.com>,
+        William Brown <william.brown@suse.com>,
+        Georgy Yakovlev <gyakovlev@gentoo.org>,
+        Jan Alexander Steffens <jan.steffens@gmail.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri,  5 May 2023 10:46:51 +0300
-Maksim Kiselev <bigunclemax@gmail.com> wrote:
+Hi Fabien,
 
-Hi Maksim,
+On Fri, May 5, 2023 at 12:28=E2=80=AFAM Fabien Parent <fabien.parent@linaro=
+.org> wrote:
+>
+> I'm getting the following error when running rusttest on top of your patc=
+hset:
 
-thanks for sending a patch!
+Yeah, it is expected: the series was based on `rust-next` which gained
+the `uapi` crate later on.
 
-> Some boards form the MangoPi family (MQ\MQ-Dual\MQ-R) may have
-> an optional SPI flash that connects to the SPI0 controller.
-> This controller is already supported by sun8i-h3-spi driver.
-> So let's add its DT node.
-
-Interesting, I see SPI mentioned in the D1 platform support cover letter,
-but indeed there is no DT node. From a quick glance at the manuals, it
-looks like there are not quite the same, though: the D1/R528/T113s
-mentions a SPI_SAMP_DL register @0x28, whereas the older IP has a SPI_CCR
-register @0x24 - which is not mentioned in the newer manuals. The driver
-relies on that clock control register, so it wouldn't really work
-reliably, if that register is not there. It *might* work by pure chance
-because of a particular setup or clock rate, though.
-
-Samuel, did you investigate SPI support on the D1/T113s? I see it marked
-as "WIP" in the Wiki status page, so where there any patches floating
-around?
-
-
-Regardless of that, one comment that would apply anyway:
-
-> Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
-> ---
->  .../boot/dts/allwinner/sunxi-d1s-t113.dtsi    | 20 +++++++++++++++++++
->  1 file changed, 20 insertions(+)
-> 
-> diff --git a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-> index 922e8e0e2c09..d2de211d67d7 100644
-> --- a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-> +++ b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-> @@ -108,6 +108,12 @@ rmii_pe_pins: rmii-pe-pins {
->  				function = "emac";
->  			};
->  
-> +			/omit-if-no-ref/
-> +			spi0_pins: spi0-pins {
-> +				pins = "PC2", "PC3", "PC4", "PC5";
-> +				function = "spi0";
-> +			};
-> +
->  			/omit-if-no-ref/
->  			uart1_pg6_pins: uart1-pg6-pins {
->  				pins = "PG6", "PG7";
-> @@ -447,6 +453,20 @@ mmc2: mmc@4022000 {
->  			#size-cells = <0>;
->  		};
->  
-> +		spi0: spi@4025000 {
-> +			compatible = "allwinner,sun8i-h3-spi";
-
-Even if it would be compatible, we need to use a more specific compatible
-first, with the H3 one as a fallback:
-
-			compatible = "allwinner,sun20i-d1-spi",
-				     "allwinner,sun8i-h3-spi";
-
-But that would require that the H3 is a strict subset of the D1 SPI IP.
+Thanks for reporting it!
 
 Cheers,
-Andre
-
-
-> +			reg = <0x04025000 0x300>;
-> +			interrupts = <SOC_PERIPHERAL_IRQ(15) IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&ccu CLK_BUS_SPI0>, <&ccu CLK_SPI0>;
-> +			clock-names = "ahb", "mod";
-> +			dmas = <&dma 22>, <&dma 22>;
-> +			dma-names = "rx", "tx";
-> +			resets = <&ccu RST_BUS_SPI0>;
-> +			status = "disabled";
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +		};
-> +
->  		usb_otg: usb@4100000 {
->  			compatible = "allwinner,sun20i-d1-musb",
->  				     "allwinner,sun8i-a33-musb";
-
+Miguel
