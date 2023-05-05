@@ -2,182 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF5746F82C8
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 14:17:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 399B16F82CF
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 14:22:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232035AbjEEMRb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 08:17:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37610 "EHLO
+        id S232040AbjEEMWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 08:22:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231256AbjEEMR3 (ORCPT
+        with ESMTP id S231637AbjEEMV7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 08:17:29 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C2621AEF8
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 05:17:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=gJLRDNAR1F+aLGKRxOr/9uYw7UxjykTc11rSfQeoudE=; b=DRx3chfHxG0m6jR51c8HYrPNbF
-        vXsg7EwMHsx7rLYVo0EXHBP3eMKfhp/4qHxMR9AElBFw7ZP9c64GnxHkwOZspbNSLTi6akaUx01/L
-        Xu/P1W52mZ+44ii0G11E8alnhteZQOywT1Jwg/QuTvYYxebsBf/LqB6u/sKQ5cRgQ3IPAocTD3s+R
-        pa78WfewHBvXwUlUag8pJzYOFlsM89npabM2IXppAVnIPfPvhn10N5Y8RL1ti7aRQVqu4pRhYyock
-        Ns0qxbxKOXuEOO6gVrhiEWK+kIpL3Y8b+GshhTsfwBVQkfiuVRjIuNwom+OhR5eRM0u6CFbube64L
-        R/FW9eAw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1puuMV-003F6j-0M;
-        Fri, 05 May 2023 12:16:35 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A46C730049C;
-        Fri,  5 May 2023 14:16:31 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 59B1720CCBEDB; Fri,  5 May 2023 14:16:31 +0200 (CEST)
-Date:   Fri, 5 May 2023 14:16:31 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Tim Chen <tim.c.chen@linux.intel.com>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shrikanth Hegde <sshegde@linux.vnet.ibm.com>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        naveen.n.rao@linux.vnet.ibm.com,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        Barry Song <v-songbaohua@oppo.com>,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Subject: Re: [PATCH 2/6] sched/fair: Check whether active load balance is
- needed in busiest group
-Message-ID: <20230505121631.GF4253@hirez.programming.kicks-ass.net>
-References: <cover.1683156492.git.tim.c.chen@linux.intel.com>
- <231cf298efb8627499bb42788588a6108c7b8f7c.1683156492.git.tim.c.chen@linux.intel.com>
+        Fri, 5 May 2023 08:21:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22EEA18DC5
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 05:21:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 97CC863DC1
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 12:21:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85BDFC433EF;
+        Fri,  5 May 2023 12:21:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683289317;
+        bh=kVbC8QvtTP91akM/8g+e5cDFlJlaPkveDFGRjOeaEKM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=qUYjMmblucGyhbYQG0FO69Lqlm7ZsgApRx0RohzGK+UBJHCp9HEfAa+qCspEh2X3B
+         Q+SsPwEj+98C0tGiKZp9irP6uO3Ue2VYHUShHvRSvastgfDy94gw0KUvucjRWGHdGj
+         5aQc+ITUIgrsgU6F/4HDG4gL9CUTy0A61ub7hGpszwaDKau6wHmtv/K+UjN34gg593
+         1tZDFmC33ZW34x2OvYc8EAuP6p9kX5RvYha8H4oOnBdz1y7ZN16SXQdE++s/El8UjW
+         +RjVh5lVtMntV3E5eaqgOiO24iPRveYNbF8vJZJn3HrHv/l7iWvgpP8GPnBG2gSIT3
+         j4K9kvuEgXAZQ==
+Message-ID: <c0fbc92e-2ba1-0500-023e-743ac297d587@kernel.org>
+Date:   Fri, 5 May 2023 20:21:53 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <231cf298efb8627499bb42788588a6108c7b8f7c.1683156492.git.tim.c.chen@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH] f2fs: fix to call invalidate_mapping_pages in
+ f2fs_move_file_range
+Content-Language: en-US
+To:     Yangtao Li <frank.li@vivo.com>, Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+References: <20230504185238.19488-1-frank.li@vivo.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20230504185238.19488-1-frank.li@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 04, 2023 at 09:09:52AM -0700, Tim Chen wrote:
-> From: Tim C Chen <tim.c.chen@linux.intel.com>
+On 2023/5/5 2:52, Yangtao Li wrote:
+> In the following scenario, after executing the move_range ioctl syscall,
+> the block size of the source file is 0, but data can still be read.
 > 
-> In the busiest group, we need to consider whether active load balance
-> to a local group is needed even when it is not overloaded.  For example,
-> when the busiest group is a SMT group that's fully busy and the destination group
-> is a cluster group with idle CPU.  Such condition is considered by
-> asym_active_balance() in load balancing but not when looking for busiest
-> group and load imbalance.  Add this consideration in find_busiest_group()
-> and calculate_imbalance().
+>    # stat test
+>    File: test
+>    Size: 6               Blocks: 8          IO Block: 4096   regular file
+>    # ./new_f2fs_io move_range test test_move_range 0 0 0
+>    move range ret=0
+>    # stat test
+>    File: test
+>    Size: 6               Blocks: 0          IO Block: 4096   regular file
+>    # cat test
+>    nihao
 > 
-> Reviewed-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-> Signed-off-by: Tim Chen <tim.c.chen@linux.intel.com>
+> Let's fix to call invalidate_mapping_pages() after __exchange_data_block()
+> success.
+> 
+> Fixes: 4dd6f977fc77 ("f2fs: support an ioctl to move a range of data blocks")
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 > ---
->  kernel/sched/fair.c | 45 +++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 45 insertions(+)
+>   fs/f2fs/file.c | 3 +++
+>   1 file changed, 3 insertions(+)
 > 
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 87317634fab2..bde962aa160a 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -9433,6 +9433,17 @@ static inline void update_sg_lb_stats(struct lb_env *env,
->  				sgs->group_capacity;
->  }
->  
-> +/* One group is SMT while the other group is not */
-> +static inline bool asymmetric_groups(struct sched_group *sg1,
-> +				    struct sched_group *sg2)
-> +{
-> +	if (!sg1 || !sg2)
-> +		return false;
+> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+> index 78aa8cff4b41..ae7752c5cd0a 100644
+> --- a/fs/f2fs/file.c
+> +++ b/fs/f2fs/file.c
+> @@ -2870,6 +2870,9 @@ static int f2fs_move_file_range(struct file *file_in, loff_t pos_in,
+>   			f2fs_i_size_write(dst, dst_max_i_size);
+>   		else if (dst_osize != dst->i_size)
+>   			f2fs_i_size_write(dst, dst_osize);
 > +
-> +	return (sg1->flags & SD_SHARE_CPUCAPACITY) !=
-> +		(sg2->flags & SD_SHARE_CPUCAPACITY);
-> +}
-> +
->  /**
->   * update_sd_pick_busiest - return 1 on busiest group
->   * @env: The load balancing environment.
-> @@ -10079,6 +10090,31 @@ static inline void update_sd_lb_stats(struct lb_env *env, struct sd_lb_stats *sd
->  	update_idle_cpu_scan(env, sum_util);
->  }
->  
-> +static inline bool asym_active_balance_busiest(struct lb_env *env, struct sd_lb_stats *sds)
-> +{
-> +	/*
-> +	 * Don't balance to a group without spare capacity.
-> +	 *
-> +	 * Skip non asymmetric sched group balancing. That check
-> +	 * is handled by code path handling imbalanced load between
-> +	 * similar groups.
-> +	 */
-> +	if (env->idle == CPU_NOT_IDLE ||
-> +	    sds->local_stat.group_type != group_has_spare ||
-> +	    !asymmetric_groups(sds->local, sds->busiest))
-> +		return false;
-> +
-> +	/*
-> +	 * For SMT source group, pull when there are two or more
-> +	 * tasks over-utilizing a core.
-> +	 */
-> +	if (sds->busiest->flags & SD_SHARE_CPUCAPACITY &&
-> +	    sds->busiest_stat.sum_h_nr_running > 1)
-> +		return true;
-> +
-> +	return false;
-> +}
+> +		invalidate_mapping_pages(src->i_mapping,
+> +				pos_out, pos_in + len);
 
-This all seems to be mixing two 'asymmetric' things in the 'asym'
-namespace :/ One being the SD_ASYM_PACKING and then the above SMT/no-SMT
-core thing.
+It needs to consider error cases?
 
-> +
->  /**
->   * calculate_imbalance - Calculate the amount of imbalance present within the
->   *			 groups of a given sched_domain during load balance.
-> @@ -10164,6 +10200,12 @@ static inline void calculate_imbalance(struct lb_env *env, struct sd_lb_stats *s
->  			return;
->  		}
->  
-> +		if (asym_active_balance_busiest(env, sds)) {
-> +			env->migration_type = migrate_task;
-> +			env->imbalance = 1;
-> +			return;
-> +		}
-> +
->  		if (busiest->group_weight == 1 || sds->prefer_sibling) {
->  			unsigned int nr_diff = busiest->sum_nr_running;
->  			/*
-> @@ -10371,6 +10413,9 @@ static struct sched_group *find_busiest_group(struct lb_env *env)
->  			 */
->  			goto out_balanced;
->  
-> +		if (asym_active_balance_busiest(env, &sds))
-> +			goto force_balance;
-> +
->  		if (busiest->group_weight > 1 &&
->  		    local->idle_cpus <= (busiest->idle_cpus + 1))
->  			/*
+Should we call this to drop page cache of src_inode after __clone_blkaddrs()
+for each round exchange in __exchange_data_block()? and also drop page cache
+of dst_indoe in roll_back case?
 
-All the cases here have a nice (CodingStyle busting) comment, perhaps
-add the missing {} when hou add the comment?
+Thanks,
+
+>   	}
+>   	f2fs_unlock_op(sbi);
+>   
