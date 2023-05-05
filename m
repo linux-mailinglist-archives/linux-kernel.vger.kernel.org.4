@@ -2,89 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BAC66F8962
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 21:14:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00FE26F8964
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 21:14:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233340AbjEETO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 15:14:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45982 "EHLO
+        id S232204AbjEETOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 15:14:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233293AbjEETOS (ORCPT
+        with ESMTP id S233337AbjEETO2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 15:14:18 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523282272D
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 12:14:15 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2a7af0cb2e6so24341811fa.0
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 12:14:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683314053; x=1685906053;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=u5xc7ui/gS3gulLT/1faky+1BssywybhSB3N5Tb5FKk=;
-        b=CAdwWbMGthf1M7t1G2ZuyCrQT0W1MY0xMzdmhX5avDic6wMPUNAR6dsGlvSXJEJguk
-         2vGBr7/Jg2GNLT/YsHCe3+K5sF9nke+AlwjHuDW3Sn2Qa36rkZL8sOimBfQ0jfUaCWrZ
-         Ej/AgSdIuZM1eRRfWRdfv3mBHIDY0ggvJTez2tie/BQAUXcX+9bfiTZkRHLsT6xiMff2
-         VARzb2WpibWSbz6rqJSUu5OK14ML8E+77g05QGkBdjerKCoV5XE+iOYO6GxercK5+56D
-         mTnlTMavo4zDMyro5/IsX/4yGFKVGEDu4GwgjBQAqtLaO8q7DF3X7kIfZf9yDaBvjwqy
-         87Iw==
+        Fri, 5 May 2023 15:14:28 -0400
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7417522682;
+        Fri,  5 May 2023 12:14:23 -0700 (PDT)
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-195c83a9ed8so474738fac.0;
+        Fri, 05 May 2023 12:14:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683314053; x=1685906053;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=u5xc7ui/gS3gulLT/1faky+1BssywybhSB3N5Tb5FKk=;
-        b=H6TJibBjtrN6HGt29bc6KGAx8ucd52/iayQ/q6LLRELqS015o0ANyeKSNL+M8/Sd6l
-         Xq0dW+uhrC/ginfLZA7ts0zens4fyz9yQ/xSIYoT1EnxkCJW/2GorMAwB40DYkoPSzuL
-         /z8qebshBrp6BEDzr0LsStbokQVNKLNVBMaSgFaL+jj+/I2soKie/fAg4X+bmQslPk/f
-         Lplf298/iySKoVeeOt77NXF9cNzt5dBNbACrQKlG30z+FRgwlH+ZHkPY1RMe1mE2WLYy
-         io3mONQ1E2jJgjIA//Zas+Nkas5iIXObQsP06KXyHiXGYtao5e26Pur1yxem+WXoNqZl
-         Zzag==
-X-Gm-Message-State: AC+VfDx6g6q3078kpD4uSNY87YmGbZHnoKkvvAobLLRYNO0hkwAuJCd5
-        NJJJUHipINlsF8RfMNmSbsK0Dw==
-X-Google-Smtp-Source: ACHHUZ4Tuz2IZnNCmJZ3L9NX3hRWjZHlM1FnKK60v4rtrSqdyCSMMF/6SC1ASapkO/F8YgwQ9PspxA==
-X-Received: by 2002:a2e:9818:0:b0:2a8:bdff:8556 with SMTP id a24-20020a2e9818000000b002a8bdff8556mr686171ljj.13.1683314053565;
-        Fri, 05 May 2023 12:14:13 -0700 (PDT)
-Received: from [192.168.1.101] (abyl248.neoplus.adsl.tpnet.pl. [83.9.31.248])
-        by smtp.gmail.com with ESMTPSA id j28-20020ac2455c000000b004ec6252aa37sm386829lfm.116.2023.05.05.12.14.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 May 2023 12:14:13 -0700 (PDT)
-Message-ID: <70a6060b-2808-b68d-cb1f-4ad24e566de7@linaro.org>
-Date:   Fri, 5 May 2023 21:14:11 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v2 12/18] media: venus: hfi_venus: Fix version check in
- venus_cpu_idle_and_pc_ready()
-Content-Language: en-US
-To:     Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dikshita Agarwal <dikshita@qti.qualcomm.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Mansur Alisha Shaik <mansur@codeaurora.org>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Dikshita Agarwal <quic_dikshita@quicinc.com>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Marijn Suijten <marijn.suijten@somainline.org>
-References: <20230228-topic-venus-v2-0-d95d14949c79@linaro.org>
- <20230228-topic-venus-v2-12-d95d14949c79@linaro.org>
- <4c0fb166-4b58-56fb-d1e2-54bcddc3aab3@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <4c0fb166-4b58-56fb-d1e2-54bcddc3aab3@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+        d=1e100.net; s=20221208; t=1683314062; x=1685906062;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Ob/tYM63KWmpHL+MbVncyNEUjCaAQy3a3Q0ZpHwG/qc=;
+        b=cDhaGSG9ccJcYrzLWh9rGgshg7nTe5pzJ06lnv/DeIzd6jWoyq3QlQppzu+fymWY8Q
+         7XaBup+PpSnCgaWqlmSqkr7lz+yFr9nR3N3WawMXPwSlsCDpk34CAe65/2eRl+dh41WX
+         leGo5EslI5g9RFDoEjMCeFogtSHFyv8mIp8LBtyZnxyx/bBkkxIaGh7S0RHcWZr96KIf
+         7qHz4wcx+RFeYPD6d49QtNpO/T9Xm+c77UZqP8rTNQkBZXyhdKgKEHmy/utN/ZTWbI5+
+         J+xx1PD1nZnqhaxLs0QT21n91w6N0i8+hvplPiOLGC4ybbjOkwIAK9Aiq37TSmQAgKnu
+         luzw==
+X-Gm-Message-State: AC+VfDzAkgEoltZrgbO5jiBoiMkirQoN6gyhbGoBRL+ruLZXzVCjnRjv
+        QNtOb/l0y3G2/45413fAJyYPEX8fSw==
+X-Google-Smtp-Source: ACHHUZ6FK7GAnvCJYewkHMMfv4Kk0sJFerm0OriIL32hAr3N87hUS6kt7QUf+IvQqrQPQ3I++KfXOA==
+X-Received: by 2002:a05:6871:40f:b0:180:2a5e:7f8f with SMTP id d15-20020a056871040f00b001802a5e7f8fmr1374449oag.22.1683314062575;
+        Fri, 05 May 2023 12:14:22 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id ec51-20020a0568708c3300b001727d67f2dbsm2153520oab.40.2023.05.05.12.14.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 May 2023 12:14:21 -0700 (PDT)
+Received: (nullmailer pid 3406638 invoked by uid 1000);
+        Fri, 05 May 2023 19:14:20 -0000
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     Frank Li <Frank.Li@nxp.com>
+Cc:     shawnguo@kernel.org, devicetree@vger.kernel.org,
+        s.hauer@pengutronix.de, linux-kernel@vger.kernel.org,
+        imx@lists.linux.dev, fushi.peng@nxp.com,
+        krzysztof.kozlowski+dt@linaro.org, linux-phy@lists.infradead.org,
+        kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org,
+        kishon@kernel.org, vkoul@kernel.org, robh+dt@kernel.org
+In-Reply-To: <20230505185247.1854677-2-Frank.Li@nxp.com>
+References: <20230505185247.1854677-1-Frank.Li@nxp.com>
+ <20230505185247.1854677-2-Frank.Li@nxp.com>
+Message-Id: <168331406075.3406622.9380633591504481297.robh@kernel.org>
+Subject: Re: [PATCH 2/2] doc: dt-binding: cdns-salvo-phy: add property
+ usb2-disconnect-threshold-microvolt
+Date:   Fri, 05 May 2023 14:14:20 -0500
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -92,37 +70,41 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+On Fri, 05 May 2023 14:52:47 -0400, Frank Li wrote:
+> Add usb2-disconnect-threshold-microvolt property to address fake USB
+> disconnection issue during enumeration or suspend state for difference
+> platform.
+> 
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> ---
+>  Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
 
-On 5.05.2023 15:40, Vikash Garodia wrote:
-> On 5/4/2023 1:31 PM, Konrad Dybcio wrote:
->> IS_V6() should have instead checked for specific VPU versions. Fix it.
-> This is again not a fix. The patch just adds a video hardware AR50_LITE, which is
-> 
-> not supported on existing driver yet. With existing code, IS_V6 covers the video
-> 
-> hardwares which are enabled by the driver.
-> 
-> -Vikash
-Ack
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Konrad
->>
->> Fixes: e396e75fc254 ("media: venus: hfi: Read WRAPPER_TZ_CPU_STATUS_V6 on 6xx")
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>   drivers/media/platform/qcom/venus/hfi_venus.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/media/platform/qcom/venus/hfi_venus.c b/drivers/media/platform/qcom/venus/hfi_venus.c
->> index 82aa7deeafa1..d6df99a921bb 100644
->> --- a/drivers/media/platform/qcom/venus/hfi_venus.c
->> +++ b/drivers/media/platform/qcom/venus/hfi_venus.c
->> @@ -1557,7 +1557,7 @@ static bool venus_cpu_idle_and_pc_ready(struct venus_hfi_device *hdev)
->>       void __iomem *cpu_cs_base = hdev->core->cpu_cs_base;
->>       u32 ctrl_status, cpu_status;
->>   -    if (IS_V6(hdev->core))
->> +    if (IS_AR50_LITE(hdev->core) || IS_IRIS2(hdev->core) || IS_IRIS2_1(hdev->core))
->>           cpu_status = readl(wrapper_tz_base + WRAPPER_TZ_CPU_STATUS_V6);
->>       else
->>           cpu_status = readl(wrapper_base + WRAPPER_CPU_STATUS);
->>
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml: properties:usb2-disconnect-threshold-microvolt: '$ref' should not be valid under {'const': '$ref'}
+	hint: Standard unit suffix properties don't need a type $ref
+	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230505185247.1854677-2-Frank.Li@nxp.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
