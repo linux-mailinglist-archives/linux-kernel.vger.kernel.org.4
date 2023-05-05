@@ -2,102 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC35A6F86B5
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 18:27:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2836A6F86B8
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 18:28:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbjEEQ1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 12:27:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57930 "EHLO
+        id S232479AbjEEQ2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 12:28:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230487AbjEEQ1u (ORCPT
+        with ESMTP id S231852AbjEEQ2Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 12:27:50 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B5D2D45
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 09:27:48 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-3062db220a3so1393580f8f.0
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 09:27:48 -0700 (PDT)
+        Fri, 5 May 2023 12:28:16 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA25A160B8
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 09:28:10 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-559e281c5dfso19662147b3.3
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 09:28:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683304067; x=1685896067;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=A0FBVsPayRzyQW5h+6Ul7mtmWRp9e2IC2wzaP19XslE=;
-        b=Ff6+aKeqj9Cs0iVYsnUcqV2IVSlzxPMmxlfCI/4TaXpcwm41S0b8JgBzEnmC3o6KMh
-         Sx/hnNYLYXH3CXOzO1bqOcQRfjEMmd1HoiBjqGv6ElCWmDtwv3/JNnyJuCstK1Yq4JNR
-         XTka2VuIBO28L1E7YEUnw38zbii6FheumgCJHkX76TDm9925qCiqX5FA1y7e9jCh6KVb
-         ggBxG+KhbsRcKhyvgqICwEH8qOK6RidyNaliJljNLEUeh0idrrdYH9t9Y3dyzEuKP/gp
-         ECuDqkeEtt0u1aRi6OPBF0eawA7UzY1G15eSg870qICyHjw8ouu3f8l3jz/awek09oUo
-         fDYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683304067; x=1685896067;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=google.com; s=20221208; t=1683304090; x=1685896090;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=A0FBVsPayRzyQW5h+6Ul7mtmWRp9e2IC2wzaP19XslE=;
-        b=lhfX6ezgFF7tlPH4Nl65DU4sNRrhL3LbMrd9nrbsMo3ui9WioP1isLLlCnjjUPxOfO
-         AwfCC1YlADrBCp1lKKEFBmIQP10f0bN6E+fsD4tKgRfit0auFolZRnJzwkszoM06wsan
-         LAR2iAYmWNejDLtaVkfBCObjMEIiRzsCnanrdpRioV+d+BcQs00clCpHUx5JeH1bPBiM
-         gKBzbBLcEnaZb+tNr6ZUUDOPTUrYnK9qXLn+lPFel4V34m6E61n5GDexVNIwZjZ7yd5v
-         dRMy7B1Ey8T+x3NzUqfSHTD2hvaEcaM75/1AkwAzfsKAKGxLVYtyzuPgrrgPfS6gYoqB
-         c5Sg==
-X-Gm-Message-State: AC+VfDzJYscH0fYZBeXmG3wwBSFeCRQ5DTFMTcqPR3f26JFLvaaQx27r
-        n6gJs+mytfkSpV26xA/Ts0YYLYk0c7WT+l84dvMjEw==
-X-Google-Smtp-Source: ACHHUZ7kwrITtSOVQ5adNWOqdDhrbcH0ZIzMp3KdWxPl6fFJAnlXSksGQave6MWvrgp5qCAN6QCFZx499CxXeYHd95Q=
-X-Received: by 2002:adf:fdca:0:b0:2f9:910b:7166 with SMTP id
- i10-20020adffdca000000b002f9910b7166mr1582178wrs.57.1683304067267; Fri, 05
- May 2023 09:27:47 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230505064039.1630025-1-bhupesh.sharma@linaro.org>
- <20230505064039.1630025-3-bhupesh.sharma@linaro.org> <1374d7ea-94a3-60b0-f9db-7528aae22a34@linaro.org>
-In-Reply-To: <1374d7ea-94a3-60b0-f9db-7528aae22a34@linaro.org>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Fri, 5 May 2023 21:57:36 +0530
-Message-ID: <CAH=2NtzuYqOV8pHcOJE-V=gCAF3pKZKSWsNbrXD48iXWstmruA@mail.gmail.com>
-Subject: Re: [PATCH v4 2/5] dt-bindings: soc: qcom: eud: Add SM6115 / SM4250 support
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, linux-kernel@vger.kernel.org,
-        bhupesh.linux@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        bh=tpG4xiqP3mzArRx9Ask1She9PnSIKi9NV0T7HckdUAY=;
+        b=R7ZId5oM7hLrX+tcfVm/Bnk2u8JbAC1I8QSh2twc/YutVfGMASmtW7tbm2YP3uHqlk
+         RwtPwL861jZAZsMdLif5CXyQc6HVUK4hq+Rsigm7g9H5SwYxxSrPZKroysdphn0wBKMc
+         5pkuhlqCX/BOp4yTuk4h5T1NCQgcpfPZ9KLIiem4KASWPyrgXBR48rcxQa06YhEaqMbn
+         orfLSFQcdN2vNomHtco8b3soICbHS5a9W6R91ScgWRyqTuI6OJFa+omcbJE3G4QloJsc
+         Zd/UhaIHTp9GBfbJO6BShFyMFzXWMH9S7e+yp/9GzVVu/Y2uZsmKlNFrDjrpY2RYPhtU
+         7R+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683304090; x=1685896090;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=tpG4xiqP3mzArRx9Ask1She9PnSIKi9NV0T7HckdUAY=;
+        b=UPHLNr7lpoHZ75RCZdhR959FnruSPzftzai1kR0yQUvJ1pn12wV20jAap33vJz8D+C
+         pWGFPloJ+zC2uSJQ1YdKcXpTzraRTuMDolxtRND4Muqxv2+5gRbbnfNhMNVsA9C+ilE9
+         mvKvdHTRT1dJE3Z6U5CjyKCPXjub2/KwcHkC5/xfmk9ZoQ88WAyhLiq2Uc9JvEynmjsc
+         sU+flOeSsOmo+ZC/Uqvbvqah2wAkI5RvgsIVr5L9TPhzsana+uakFnkiX9bLB2KTkytZ
+         mI4GTkZJ7olC41kutAz8dsH7IiH9Mm3Cp15/5wUSu7MvLJYOkYfr9n2fYn6z8apvpTI/
+         UJMQ==
+X-Gm-Message-State: AC+VfDzOrTb65RQlVu+KP+UapRZJektc0Mx+LQE9ZWYVlUrbyLQUxLOP
+        c6wGLUAYzYl06dq6lYZyA2kKGgQLoDQ=
+X-Google-Smtp-Source: ACHHUZ6MaxIQ4e6CYkENF40G6p9cF+vIn2nNSO3VXw5131N/TbPSwiBkXRT2QEZKyWmorm0BLuruUfs9Bhg=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a81:ac24:0:b0:559:d859:d746 with SMTP id
+ k36-20020a81ac24000000b00559d859d746mr1208880ywh.10.1683304090087; Fri, 05
+ May 2023 09:28:10 -0700 (PDT)
+Date:   Fri, 5 May 2023 09:28:08 -0700
+In-Reply-To: <20230505152046.6575-3-mic@digikod.net>
+Mime-Version: 1.0
+References: <20230505152046.6575-1-mic@digikod.net> <20230505152046.6575-3-mic@digikod.net>
+Message-ID: <ZFUumGdZDNs1tkQA@google.com>
+Subject: Re: [PATCH v1 2/9] KVM: x86/mmu: Add support for prewrite page tracking
+From:   Sean Christopherson <seanjc@google.com>
+To:     "=?iso-8859-1?Q?Micka=EBl_Sala=FCn?=" <mic@digikod.net>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Alexander Graf <graf@amazon.com>,
+        Forrest Yuan Yu <yuanyu@google.com>,
+        James Morris <jamorris@linux.microsoft.com>,
+        John Andersen <john.s.andersen@intel.com>,
+        Liran Alon <liran.alon@oracle.com>,
+        "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
+        Marian Rotariu <marian.c.rotariu@gmail.com>,
+        "Mihai =?utf-8?B?RG9uyJt1?=" <mdontu@bitdefender.com>,
+        "=?utf-8?B?TmljdciZb3IgQ8OuyJt1?=" <nicu.citu@icloud.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Thara Gopinath <tgopinath@microsoft.com>,
+        Will Deacon <will@kernel.org>,
+        Zahra Tarkhani <ztarkhani@microsoft.com>,
+        "=?utf-8?Q?=C8=98tefan_=C8=98icleru?=" <ssicleru@bitdefender.com>,
+        dev@lists.cloudhypervisor.org, kvm@vger.kernel.org,
+        linux-hardening@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, qemu-devel@nongnu.org,
+        virtualization@lists.linux-foundation.org, x86@kernel.org,
+        xen-devel@lists.xenproject.org
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+On Fri, May 05, 2023, Micka=EF=BF=BDl Sala=EF=BF=BDn wrote:
+> diff --git a/arch/x86/include/asm/kvm_page_track.h b/arch/x86/include/asm=
+/kvm_page_track.h
+> index eb186bc57f6a..a7fb4ff888e6 100644
+> --- a/arch/x86/include/asm/kvm_page_track.h
+> +++ b/arch/x86/include/asm/kvm_page_track.h
+> @@ -3,6 +3,7 @@
+>  #define _ASM_X86_KVM_PAGE_TRACK_H
+> =20
+>  enum kvm_page_track_mode {
+> +	KVM_PAGE_TRACK_PREWRITE,
 
-On Fri, 5 May 2023 at 21:54, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 05/05/2023 08:40, Bhupesh Sharma wrote:
-> > Add dt-bindings for EUD found on Qualcomm SM6115 / SM4250 SoC.
-> >
-> > On this SoC (and derivatives) the enable bit inside 'tcsr_check_reg'
-> > needs to be set first to 'enable' the eud module.
-> >
-> > So, update the dt-bindings to accommodate the third register
-> > property (TCSR Base) required by the driver on these SoCs.
-> >
-> > Also for these SoCs, introduce a new bool property
-> > 'qcom,secure-mode-enable', which indicates that the mode manager
-> > needs to be accessed only via the secure world.
->
-> Cannot it be implied by compatible?
+Heh, just when I decide to finally kill off support for multiple modes[1] :=
+-)
 
-I can see this will be used by future SoCs as well from the available
-EUD documentation.
+My assessment from that changelog still holds true for this case:
 
-So let's keep a dedicated dt property as suggested by Bjorn in earlier
-reviews, as otherwise the compatible checks would start getting bigger
-/ messier in the driver code, in my opinion, when we add EUD support
-for other SoCs + boards.
+  Drop "support" for multiple page-track modes, as there is no evidence
+  that array-based and refcounted metadata is the optimal solution for
+  other modes, nor is there any evidence that other use cases, e.g. for
+  access-tracking, will be a good fit for the page-track machinery in
+  general.
+ =20
+  E.g. one potential use case of access-tracking would be to prevent guest
+  access to poisoned memory (from the guest's perspective).  In that case,
+  the number of poisoned pages is likely to be a very small percentage of
+  the guest memory, and there is no need to reference count the number of
+  access-tracking users, i.e. expanding gfn_track[] for a new mode would be
+  grossly inefficient.  And for poisoned memory, host userspace would also
+  likely want to trap accesses, e.g. to inject #MC into the guest, and that
+  isn't currently supported by the page-track framework.
+ =20
+  A better alternative for that poisoned page use case is likely a
+  variation of the proposed per-gfn attributes overlay (linked), which
+  would allow efficiently tracking the sparse set of poisoned pages, and by
+  default would exit to userspace on access.
 
-Regards,
-Bhupesh
+Of particular relevance:
+
+  - Using the page-track machinery is inefficient because the guest is like=
+ly
+    going to write-protect a minority of its memory.  And this
+
+      select KVM_EXTERNAL_WRITE_TRACKING if KVM
+
+    is particularly nasty because simply enabling HEKI in the Kconfig will =
+cause
+    KVM to allocate rmaps and gfn tracking.
+
+  - There's no need to reference count the protection, i.e. 15 of the 16 bi=
+ts of
+    gfn_track are dead weight.
+
+  - As proposed, adding a second "mode" would double the cost of gfn tracki=
+ng.
+
+  - Tying the protections to the memslots will create an impossible-to-main=
+tain
+    ABI because the protections will be lost if the owning memslot is delet=
+ed and
+    recreated.
+
+  - The page-track framework provides incomplete protection and will lead t=
+o an
+    ongoing game of whack-a-mole, e.g. this patch catches the obvious cases=
+ by
+    adding calls to kvm_page_track_prewrite(), but misses things like kvm_v=
+cpu_map().
+
+  - The scaling and maintenance issues will only get worse if/when someone =
+tries
+    to support dropping read and/or execute permissions, e.g. for execute-o=
+nly.
+
+  - The code is x86-only, and is likely to stay that way for the foreseeabl=
+e
+    future.
+
+The proposed alternative is to piggyback the memory attributes implementati=
+on[2]
+that is being added (if all goes according to plan) for confidential VMs.  =
+This
+use case (dropping permissions) came up not too long ago[3], which is why I=
+ have
+a ready-made answer).
+
+I have no doubt that we'll need to solve performance and scaling issues wit=
+h the
+memory attributes implementation, e.g. to utilize xarray multi-range suppor=
+t
+instead of storing information on a per-4KiB-page basis, but AFAICT, the co=
+re
+idea is sound.  And a very big positive from a maintenance perspective is t=
+hat
+any optimizations, fixes, etc. for one use case (CoCo vs. hardening) should=
+ also
+benefit the other use case.
+
+[1] https://lore.kernel.org/all/20230311002258.852397-22-seanjc@google.com
+[2] https://lore.kernel.org/all/Y2WB48kD0J4VGynX@google.com
+[3] https://lore.kernel.org/all/Y1a1i9vbJ%2FpVmV9r@google.com
