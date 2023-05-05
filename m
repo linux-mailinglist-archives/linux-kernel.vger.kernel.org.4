@@ -2,123 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E85986F8730
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 19:01:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 510C96F8737
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 19:04:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231702AbjEERBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 13:01:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46238 "EHLO
+        id S231829AbjEERED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 13:04:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231611AbjEERBa (ORCPT
+        with ESMTP id S231611AbjEEREA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 13:01:30 -0400
-Received: from smtp-42ae.mail.infomaniak.ch (smtp-42ae.mail.infomaniak.ch [IPv6:2001:1600:4:17::42ae])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8E630EE
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 10:01:29 -0700 (PDT)
-Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4QCcQt2Hl7zMqBQp;
-        Fri,  5 May 2023 19:01:26 +0200 (CEST)
-Received: from unknown by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4QCcQl2DxJzMpxhN;
-        Fri,  5 May 2023 19:01:19 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1683306086;
-        bh=Gz496lWCqtEQGiFhDAnNdISGi/Ti3+4r45rZfW9pMhA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=0n9dK6yocwQrPoCyZhLiYaFRP+Rrc+AesC8U5DRpIAduml7GS9dfUNu27anU/Nq9H
-         X7nX6pZrCIdpSbikNeBpaLS6XS4cxGwP59sL8dmULJe3HbrVsb+7OJzRnuN4Tp0SIU
-         jtv1NK7dS4Wb0Fq0T7+YdNL/W/Ml/YkRAsZVmseM=
-Message-ID: <39125b11-659f-35f4-ac7a-a3ba31365950@digikod.net>
-Date:   Fri, 5 May 2023 19:01:18 +0200
+        Fri, 5 May 2023 13:04:00 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7A8150FC
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 10:03:58 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1ab1ce53ca6so14552805ad.0
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 10:03:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683306238; x=1685898238;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JMDVesgAKasFsor4GeKqlCagXQ7DH3+AoXUlf3OElm8=;
+        b=bR6gi0lcTDkNWyn7wz8u78OloJBPQ6KfsiLCSKJtSrf/mwTyj4RnLq3ZZsQz1dPnbt
+         YK9sctpzPhvjPa52msOKNb71MrX9QuGHxcjpZuU8MGICBCkBa6eWB9EHqDkaXzxExAeW
+         FPSm1Tea8e42GTKd966cAYYcdLDWPu6xE/hQeQUEo8fWlHBrOmBhtHxUicyfTT6TJWZj
+         gdLsXFigde8hbfEGXnwwZxx8j5oUZBhL4nJhOrzEA9MpP5f51RJbStN4VgCurhtsSYua
+         lGPxMvVeQXhWZLel1UYlHTqXLmtDeCWCBZJiBnr6VZn0Ox3VVAsNLkc8agKkEFCtkjTl
+         ZLCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683306238; x=1685898238;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JMDVesgAKasFsor4GeKqlCagXQ7DH3+AoXUlf3OElm8=;
+        b=NGdeCXxQCpGbhfN5U5OAu9noHznJWzQt2bla7Og8aQe8fDjjs4X5XRRDg1HsPJu0Az
+         oS1dZnXWrcXqRW6chO/VPLrWR4Qi8lCMtdEMchr/IZjmWj3eeHp1jXcf5Pi4XfoqGEk7
+         M3QrXBXQGEhPhYkPOzqk6raJaFIyb6pittwQWsCWhnkmjxpRDgwZdNvr6cNM+wsKOxDa
+         pxdYjz1UXX0VGpHk4nImwCkhf45ofhQbOXBTUbIEb8koOB+EDNSZZoEFidBETvtHIHSu
+         x6POzpbo/pjs5mqcrOf1qoK3wqF22WkShpRKhsSjk7OwN07LhzskEAniJYKAfAI6yzDZ
+         mokQ==
+X-Gm-Message-State: AC+VfDwYJJsspMcMEsJ3q+E+5xN9wgaLSMTAPVMWkE5goGH14XeGfvYQ
+        OPPLolgSW4YRd32ricyNfjcpAQ==
+X-Google-Smtp-Source: ACHHUZ6UMaUB3IhahmbRyxKYzoTmEg9HFyUQpdd2o5G9PGG44utHoVF+53YsCBC0g19omuVtmiHoaw==
+X-Received: by 2002:a17:902:6901:b0:1a1:956e:5417 with SMTP id j1-20020a170902690100b001a1956e5417mr1763516plk.22.1683306237785;
+        Fri, 05 May 2023 10:03:57 -0700 (PDT)
+Received: from p14s ([2604:3d09:148c:c800:fd16:b4b6:ee7c:e4e5])
+        by smtp.gmail.com with ESMTPSA id c13-20020a170902d48d00b001994fc55998sm2013388plg.217.2023.05.05.10.03.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 May 2023 10:03:57 -0700 (PDT)
+Date:   Fri, 5 May 2023 11:03:54 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] remoteproc: stm32: Allow hold boot management by
+ the SCMI reset controller
+Message-ID: <ZFU2+ni/tKOIIHbq@p14s>
+References: <20230504094641.870378-1-arnaud.pouliquen@foss.st.com>
+ <20230504094641.870378-3-arnaud.pouliquen@foss.st.com>
 MIME-Version: 1.0
-User-Agent: 
-Subject: Re: [PATCH v1 4/9] KVM: x86: Add new hypercall to set EPT permissions
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Alexander Graf <graf@amazon.com>,
-        Forrest Yuan Yu <yuanyu@google.com>,
-        James Morris <jamorris@linux.microsoft.com>,
-        John Andersen <john.s.andersen@intel.com>,
-        Liran Alon <liran.alon@oracle.com>,
-        "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
-        Marian Rotariu <marian.c.rotariu@gmail.com>,
-        =?UTF-8?Q?Mihai_Don=c8=9bu?= <mdontu@bitdefender.com>,
-        =?UTF-8?B?TmljdciZb3IgQ8OuyJt1?= <nicu.citu@icloud.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Thara Gopinath <tgopinath@microsoft.com>,
-        Will Deacon <will@kernel.org>,
-        Zahra Tarkhani <ztarkhani@microsoft.com>,
-        =?UTF-8?Q?=c8=98tefan_=c8=98icleru?= <ssicleru@bitdefender.com>,
-        dev@lists.cloudhypervisor.org, kvm@vger.kernel.org,
-        linux-hardening@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, qemu-devel@nongnu.org,
-        virtualization@lists.linux-foundation.org, x86@kernel.org,
-        xen-devel@lists.xenproject.org
-References: <20230505152046.6575-1-mic@digikod.net>
- <20230505152046.6575-5-mic@digikod.net> <ZFUyhPuhtMbYdJ76@google.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-In-Reply-To: <ZFUyhPuhtMbYdJ76@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Infomaniak-Routing: alpha
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230504094641.870378-3-arnaud.pouliquen@foss.st.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Arnaud,
 
-On 05/05/2023 18:44, Sean Christopherson wrote:
-> On Fri, May 05, 2023, Mickaï¿½l Salaï¿½n wrote:
->> Add a new KVM_HC_LOCK_MEM_PAGE_RANGES hypercall that enables a guest to
->> set EPT permissions on a set of page ranges.
+On Thu, May 04, 2023 at 11:46:39AM +0200, Arnaud Pouliquen wrote:
+> The hold boot can be managed by the SCMI controller as a reset.
+> If the "hold_boot" reset is defined in the device tree, use it.
+> Else use the syscon controller directly to access to the register.
+> The support of the SMC call is deprecated but kept for legacy support.
 > 
-> IMO, manipulation of protections, both for memory (this patch) and CPU state
-> (control registers in the next patch) should come from userspace.  I have no
-> objection to KVM providing plumbing if necessary, but I think userspace needs to
-> to have full control over the actual state.
-
-By user space, do you mean the host user space or the guest user space?
-
-About the guest user space, I see several issues to delegate this kind 
-of control:
-- These are restrictions only relevant to the kernel.
-- The threat model is to protect against user space as early as possible.
-- It would be more complex for no obvious gain.
-
-This patch series is an extension of the kernel self-protections 
-mechanisms, and they are not configured by user space.
-
-
+> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+> ---
+> Updates vs previous version
+> - keep support of the "st,syscfg-tz" property for legacy compatibility
+> - rename secured_soc in hold_boot_smc for readability
+> - add comments to explain hold boot management.
+> - update commit message
+> ---
+>  drivers/remoteproc/stm32_rproc.c | 78 +++++++++++++++++++++++---------
+>  1 file changed, 57 insertions(+), 21 deletions(-)
 > 
-> One of the things that caused Intel's control register pinning series to stall
-> out was how to handle edge cases like kexec() and reboot.  Deferring to userspace
-> means the kernel doesn't need to define policy, e.g. when to unprotect memory,
-> and avoids questions like "should userspace be able to overwrite pinned control
-> registers".
+> diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
+> index 7d782ed9e589..e9cf24274345 100644
+> --- a/drivers/remoteproc/stm32_rproc.c
+> +++ b/drivers/remoteproc/stm32_rproc.c
+> @@ -79,6 +79,7 @@ struct stm32_mbox {
+>  
+>  struct stm32_rproc {
+>  	struct reset_control *rst;
+> +	struct reset_control *hold_boot_rst;
+>  	struct stm32_syscon hold_boot;
+>  	struct stm32_syscon pdds;
+>  	struct stm32_syscon m4_state;
+> @@ -88,7 +89,7 @@ struct stm32_rproc {
+>  	struct stm32_rproc_mem *rmems;
+>  	struct stm32_mbox mb[MBOX_NB_MBX];
+>  	struct workqueue_struct *workqueue;
+> -	bool secured_soc;
+> +	bool hold_boot_smc;
+>  	void __iomem *rsc_va;
+>  };
+>  
+> @@ -401,13 +402,28 @@ static int stm32_rproc_set_hold_boot(struct rproc *rproc, bool hold)
+>  	struct arm_smccc_res smc_res;
+>  	int val, err;
+>  
+> +	/*
+> +	 * Three ways to manage the hold boot
+> +	 * - using SCMI: the hold boot is managed as a reset,
+> +	 * - using Linux(no SCMI): the hold boot is managed as a syscon register
+> +	 * - using SMC call (deprecated): use SMC reset interface
+> +	 */
+> +
+>  	val = hold ? HOLD_BOOT : RELEASE_BOOT;
+>  
+> -	if (IS_ENABLED(CONFIG_HAVE_ARM_SMCCC) && ddata->secured_soc) {
+> +	if (ddata->hold_boot_rst) {
+> +		/* Use the SCMI reset controller */
+> +		if (!hold)
+> +			err = reset_control_deassert(ddata->hold_boot_rst);
+> +		else
+> +			err =  reset_control_assert(ddata->hold_boot_rst);
+> +	} else if (IS_ENABLED(CONFIG_HAVE_ARM_SMCCC) && ddata->hold_boot_smc) {
+> +		/* Use the SMC call */
+>  		arm_smccc_smc(STM32_SMC_RCC, STM32_SMC_REG_WRITE,
+>  			      hold_boot.reg, val, 0, 0, 0, 0, &smc_res);
+>  		err = smc_res.a0;
+>  	} else {
+> +		/* Use syscon */
+>  		err = regmap_update_bits(hold_boot.map, hold_boot.reg,
+>  					 hold_boot.mask, val);
+>  	}
+> @@ -705,34 +721,54 @@ static int stm32_rproc_parse_dt(struct platform_device *pdev,
+>  		dev_info(dev, "wdg irq registered\n");
+>  	}
+>  
+> -	ddata->rst = devm_reset_control_get_by_index(dev, 0);
+> +	ddata->rst = devm_reset_control_get_optional(dev, "mcu_rst");
+> +	if (!ddata->rst) {
+> +		/* Try legacy fallback method: get it by index */
+> +		ddata->rst = devm_reset_control_get_by_index(dev, 0);
+> +	}
+>  	if (IS_ERR(ddata->rst))
+>  		return dev_err_probe(dev, PTR_ERR(ddata->rst),
+>  				     "failed to get mcu_reset\n");
+>  
+>  	/*
+> -	 * if platform is secured the hold boot bit must be written by
+> -	 * smc call and read normally.
+> -	 * if not secure the hold boot bit could be read/write normally
+> +	 * Three ways to manage the hold boot
+> +	 * - using SCMI: the hold boot is managed as a reset
+> +	 *    The DT "reset-mames" property should be defined with 2 items:
+> +	 *        reset-names = "mcu_rst", "hold_boot";
+> +	 * - using SMC call (deprecated): use SMC reset interface
+> +	 *    The DT "reset-mames" property is optional, "st,syscfg-tz" is required
+> +	 * - default(no SCMI, no SMC): the hold boot is managed as a syscon register
+> +	 *    The DT "reset-mames" property is optional, "st,syscfg-holdboot" is required
+>  	 */
+> -	err = stm32_rproc_get_syscon(np, "st,syscfg-tz", &tz);
+> -	if (err) {
+> -		dev_err(dev, "failed to get tz syscfg\n");
+> -		return err;
+> -	}
+>  
+> -	err = regmap_read(tz.map, tz.reg, &tzen);
+> -	if (err) {
+> -		dev_err(dev, "failed to read tzen\n");
+> -		return err;
+> +	ddata->hold_boot_rst = devm_reset_control_get_optional(dev, "hold_boot");
+> +	if (IS_ERR(ddata->hold_boot_rst)) {
+> +		if (PTR_ERR(ddata->hold_boot_rst) == -EPROBE_DEFER)
+> +			return PTR_ERR(ddata->hold_boot_rst);
 
-The idea is to authenticate every changes. For kexec, the VMM (or 
-something else) would have to authenticate the new kernel. Do you have 
-something else in mind that could legitimately require such memory or CR 
-changes?
+Here we know that devm_reset_control_get_optional() has returned an error that is
+not -EPROBE_DEFER and as such, I think we should return that error instead of
+continuing on with the probing.  Calling dev_err_probe() should be just fine. 
 
+Otherwise I'm good with this set.  Many thanks for the enhanced explanation.
 
+Mathieu
+
+> +		ddata->hold_boot_rst = NULL;
+> +	}
+> +
+> +	if (!ddata->hold_boot_rst && IS_ENABLED(CONFIG_HAVE_ARM_SMCCC)) {
+> +		/* Manage the MCU_BOOT using SMC call */
+> +		err = stm32_rproc_get_syscon(np, "st,syscfg-tz", &tz);
+> +		if (!err) {
+> +			err = regmap_read(tz.map, tz.reg, &tzen);
+> +			if (err) {
+> +				dev_err(dev, "failed to read tzen\n");
+> +				return err;
+> +			}
+> +			ddata->hold_boot_smc = tzen & tz.mask;
+> +		}
+>  	}
+> -	ddata->secured_soc = tzen & tz.mask;
+>  
+> -	err = stm32_rproc_get_syscon(np, "st,syscfg-holdboot",
+> -				     &ddata->hold_boot);
+> -	if (err) {
+> -		dev_err(dev, "failed to get hold boot\n");
+> -		return err;
+> +	if (!ddata->hold_boot_rst && !ddata->hold_boot_smc) {
+> +		/* Default: hold boot manage it through the syscon controller */
+> +		err = stm32_rproc_get_syscon(np, "st,syscfg-holdboot",
+> +					     &ddata->hold_boot);
+> +		if (err) {
+> +			dev_err(dev, "failed to get hold boot\n");
+> +			return err;
+> +		}
+>  	}
+>  
+>  	err = stm32_rproc_get_syscon(np, "st,syscfg-pdds", &ddata->pdds);
+> -- 
+> 2.25.1
 > 
-> And like the confidential VM use case, keeping userspace in the loop is a big
-> beneifit, e.g. the guest can't circumvent protections by coercing userspace into
-> writing to protected memory .
-
-I don't understand this part. Are you talking about the host user space? 
-How the guest could circumvent protections?
