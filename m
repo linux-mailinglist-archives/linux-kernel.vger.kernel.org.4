@@ -2,143 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B21F6F7A98
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 03:18:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 121F46F7AA4
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 03:19:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbjEEBSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 21:18:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47522 "EHLO
+        id S229881AbjEEBT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 21:19:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjEEBSa (ORCPT
+        with ESMTP id S229459AbjEEBTY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 21:18:30 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 084CC12494;
-        Thu,  4 May 2023 18:18:28 -0700 (PDT)
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 344LwpWM000776;
-        Fri, 5 May 2023 01:18:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
- date : message-id; s=corp-2023-03-30;
- bh=2wYkjBDt1hBOZQJuPalAgsuRCkMbwfLqlGTFy2J9KjI=;
- b=NC9caCb6iQGuv+7gEcCP/YuUwU7qkFLzQj/MgFYyjq6MLp6AbA5dPo9U+6EuWd4itCJn
- 33xV1OmiA0J6CaQlHu7ErghWw0c1nlnr5ylGujEEVSgY9eqcikP11eUx2rqopIvELeJ6
- 7L0pxYsj/ymBJHRyEmSetLxOKVjRq4uLexSp2JLnBLqkIVQUFMzNAqiK7vDYADLD2AkW
- qEq+1aE1lWTJSXSDIcT8cI6E/p5xCdb8K7eU4e/JM+7kUq3i4a/3czPV2BxgYos5hmYh
- Y/0mubBkoSzjghdXYxTkp8z8tER0A7VoK/V6Dbmbmw2Fl6XQJzZASJuz3SmNljb99z+1 xg== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3q8u9d3pkf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 05 May 2023 01:18:00 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 34510RKd009860;
-        Fri, 5 May 2023 01:17:59 GMT
-Received: from brm-x62-16.us.oracle.com (brm-x62-16.us.oracle.com [10.80.150.37])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3q8sp9rvpe-1;
-        Fri, 05 May 2023 01:17:59 +0000
-From:   Jane Chu <jane.chu@oracle.com>
-To:     dan.j.williams@intel.com, vishal.l.verma@intel.com,
-        dave.jiang@intel.com, ira.weiny@intel.com, willy@infradead.org,
-        viro@zeniv.linux.org.uk, brauner@kernel.org,
-        nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: [PATCH v3] dax: enable dax fault handler to report VM_FAULT_HWPOISON
-Date:   Thu,  4 May 2023 19:17:47 -0600
-Message-Id: <20230505011747.956945-1-jane.chu@oracle.com>
-X-Mailer: git-send-email 2.18.4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-04_15,2023-05-04_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0 spamscore=0
- mlxlogscore=999 bulkscore=0 suspectscore=0 mlxscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2305050009
-X-Proofpoint-GUID: aiXFBile4Qv6bbV8wTMcalz3Cdbuc7eb
-X-Proofpoint-ORIG-GUID: aiXFBile4Qv6bbV8wTMcalz3Cdbuc7eb
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 4 May 2023 21:19:24 -0400
+Received: from hust.edu.cn (unknown [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1AFAA12494;
+        Thu,  4 May 2023 18:19:21 -0700 (PDT)
+Received: from d202180596$hust.edu.cn ( [10.12.189.15] ) by
+ ajax-webmail-app2 (Coremail) ; Fri, 5 May 2023 09:18:16 +0800 (GMT+08:00)
+X-Originating-IP: [10.12.189.15]
+Date:   Fri, 5 May 2023 09:18:16 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   d202180596@hust.edu.cn
+To:     "andy gross" <agross@kernel.org>,
+        "bjorn andersson" <andersson@kernel.org>,
+        "konrad dybcio" <konrad.dybcio@linaro.org>,
+        "wolfram sang" <wsa@kernel.org>,
+        "ivan t. ivanov" <iivanov@mm-sol.com>,
+        "sricharan r" <sricharan@codeaurora.org>,
+        "naveen kaje" <nkaje@codeaurora.org>,
+        "austin christ" <austinwc@codeaurora.org>
+Cc:     hust-os-kernel-patches@googlegroups.com,
+        "andy gross" <agross@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] i2c: qup: Add missing unwind goto in qup_i2c_probe()
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20220802(cbd923c5)
+ Copyright (c) 2002-2023 www.mailtech.cn hust
+In-Reply-To: <20230418135612.598-1-d202180596@hust.edu.cn>
+References: <20230418135612.598-1-d202180596@hust.edu.cn>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
+MIME-Version: 1.0
+Message-ID: <5c9f1e4d.47382.187e97d01a5.Coremail.d202180596@hust.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: GQEQrADX4JVYWVRkMDEDBQ--.4113W
+X-CM-SenderInfo: rgsqjiiyqvmlo6kx23oohg3hdfq/1tbiAQoCE17Em5bqRAAAsj
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When multiple processes mmap() a dax file, then at some point,
-a process issues a 'load' and consumes a hwpoison, the process
-receives a SIGBUS with si_code = BUS_MCEERR_AR and with si_lsb
-set for the poison scope. Soon after, any other process issues
-a 'load' to the poisoned page (that is unmapped from the kernel
-side by memory_failure), it receives a SIGBUS with
-si_code = BUS_ADRERR and without valid si_lsb.
-
-This is confusing to user, and is different from page fault due
-to poison in RAM memory, also some helpful information is lost.
-
-Channel dax backend driver's poison detection to the filesystem
-such that instead of reporting VM_FAULT_SIGBUS, it could report
-VM_FAULT_HWPOISON.
-
-Change from v2:
-  Convert -EHWPOISON to -EIO to prevent EHWPOISON errno from leaking
-out to block read(2) - suggested by Matthew.
-
-Signed-off-by: Jane Chu <jane.chu@oracle.com>
----
- drivers/nvdimm/pmem.c | 2 +-
- fs/dax.c              | 4 ++--
- include/linux/mm.h    | 2 ++
- 3 files changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/nvdimm/pmem.c b/drivers/nvdimm/pmem.c
-index ceea55f621cc..46e094e56159 100644
---- a/drivers/nvdimm/pmem.c
-+++ b/drivers/nvdimm/pmem.c
-@@ -260,7 +260,7 @@ __weak long __pmem_direct_access(struct pmem_device *pmem, pgoff_t pgoff,
- 		long actual_nr;
- 
- 		if (mode != DAX_RECOVERY_WRITE)
--			return -EIO;
-+			return -EHWPOISON;
- 
- 		/*
- 		 * Set the recovery stride is set to kernel page size because
-diff --git a/fs/dax.c b/fs/dax.c
-index 2ababb89918d..18f9598951f1 100644
---- a/fs/dax.c
-+++ b/fs/dax.c
-@@ -1498,7 +1498,7 @@ static loff_t dax_iomap_iter(const struct iomap_iter *iomi,
- 
- 		map_len = dax_direct_access(dax_dev, pgoff, PHYS_PFN(size),
- 				DAX_ACCESS, &kaddr, NULL);
--		if (map_len == -EIO && iov_iter_rw(iter) == WRITE) {
-+		if (map_len == -EHWPOISON && iov_iter_rw(iter) == WRITE) {
- 			map_len = dax_direct_access(dax_dev, pgoff,
- 					PHYS_PFN(size), DAX_RECOVERY_WRITE,
- 					&kaddr, NULL);
-@@ -1506,7 +1506,7 @@ static loff_t dax_iomap_iter(const struct iomap_iter *iomi,
- 				recovery = true;
- 		}
- 		if (map_len < 0) {
--			ret = map_len;
-+			ret = (map_len == -EHWPOISON) ? -EIO : map_len;
- 			break;
- 		}
- 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 1f79667824eb..e4c974587659 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -3217,6 +3217,8 @@ static inline vm_fault_t vmf_error(int err)
- {
- 	if (err == -ENOMEM)
- 		return VM_FAULT_OOM;
-+	else if (err == -EHWPOISON)
-+		return VM_FAULT_HWPOISON;
- 	return VM_FAULT_SIGBUS;
- }
- 
--- 
-2.18.4
-
+Cj4gLS0tLS3ljp/lp4vpgq7ku7YtLS0tLQo+IOWPkeS7tuS6ujogIlNodWFpIEppYW5nIiA8ZDIw
+MjE4MDU5NkBodXN0LmVkdS5jbj4KPiDlj5HpgIHml7bpl7Q6IDIwMjMtMDQtMTggMjE6NTY6MTIg
+KOaYn+acn+S6jCkKPiDmlLbku7bkuro6ICJBbmR5IEdyb3NzIiA8YWdyb3NzQGtlcm5lbC5vcmc+
+LCAiQmpvcm4gQW5kZXJzc29uIiA8YW5kZXJzc29uQGtlcm5lbC5vcmc+LCAiS29ucmFkIER5YmNp
+byIgPGtvbnJhZC5keWJjaW9AbGluYXJvLm9yZz4sICJXb2xmcmFtIFNhbmciIDx3c2FAa2VybmVs
+Lm9yZz4sICJJdmFuIFQuIEl2YW5vdiIgPGlpdmFub3ZAbW0tc29sLmNvbT4sICJTcmljaGFyYW4g
+UiIgPHNyaWNoYXJhbkBjb2RlYXVyb3JhLm9yZz4sICJOYXZlZW4gS2FqZSIgPG5rYWplQGNvZGVh
+dXJvcmEub3JnPiwgIkF1c3RpbiBDaHJpc3QiIDxhdXN0aW53Y0Bjb2RlYXVyb3JhLm9yZz4KPiDm
+ioTpgIE6IGh1c3Qtb3Mta2VybmVsLXBhdGNoZXNAZ29vZ2xlZ3JvdXBzLmNvbSwgIlNodWFpIEpp
+YW5nIiA8ZDIwMjE4MDU5NkBodXN0LmVkdS5jbj4sICJBbmR5IEdyb3NzIiA8YWdyb3NzQGNvZGVh
+dXJvcmEub3JnPiwgbGludXgtYXJtLW1zbUB2Z2VyLmtlcm5lbC5vcmcsIGxpbnV4LWkyY0B2Z2Vy
+Lmtlcm5lbC5vcmcsIGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcKPiDkuLvpopg6IFtQQVRD
+SF0gaTJjOiBxdXA6IEFkZCBtaXNzaW5nIHVud2luZCBnb3RvIGluIHF1cF9pMmNfcHJvYmUoKQo+
+IAo+IFNtYXRjaCBXYXJuczoKPiAJZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1xdXAuYzoxNzg0IHF1
+cF9pMmNfcHJvYmUoKQo+IAl3YXJuOiBtaXNzaW5nIHVud2luZCBnb3RvPwo+IAo+IFRoZSBnb3Rv
+IGxhYmVsICJmYWlsX3J1bnRpbWUiIGFuZCAiZmFpbCIgd2lsbCBkaXNhYmxlIHF1cC0+cGNsaywg
+Cj4gYnV0IGhlcmUgcXVwLT5wY2xrIGZhaWxlZCB0byBvYnRhaW4sIGluIG9yZGVyIHRvIGJlIGNv
+bnNpc3RlbnQsIAo+IGNoYW5nZSB0aGUgZGlyZWN0IHJldHVybiB0byBnb3RvIGxhYmVsICJmYWls
+X2RtYSIuCj4gCj4gRml4ZXM6IDEwYzVhODQyNTk2OCAoImkyYzogcXVwOiBOZXcgYnVzIGRyaXZl
+ciBmb3IgdGhlIFF1YWxjb21tIFFVUCBJMkMgY29udHJvbGxlciIpCj4gRml4ZXM6IDUxNWRhNzQ2
+OTgzYiAoImkyYzogcXVwOiBhZGQgQUNQSSBzdXBwb3J0IikKPiBTaWduZWQtb2ZmLWJ5OiBTaHVh
+aSBKaWFuZyA8ZDIwMjE4MDU5NkBodXN0LmVkdS5jbj4KPiBSZXZpZXdlZC1ieTogRG9uZ2xpYW5n
+IE11IDxkem05MUBodXN0LmVkdS5jbj4KPiAtLS0KPiBUaGUgaXNzdWUgaXMgZm91bmQgYnkgc3Rh
+dGljIGFuYWx5c2lzIGFuZCByZW1haW5zIHVudGVzdGVkLgo+IC0tLQo+ICBkcml2ZXJzL2kyYy9i
+dXNzZXMvaTJjLXF1cC5jIHwgMjEgKysrKysrKysrKysrKystLS0tLS0tCj4gIDEgZmlsZSBjaGFu
+Z2VkLCAxNCBpbnNlcnRpb25zKCspLCA3IGRlbGV0aW9ucygtKQo+IAo+IGRpZmYgLS1naXQgYS9k
+cml2ZXJzL2kyYy9idXNzZXMvaTJjLXF1cC5jIGIvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1xdXAu
+Ywo+IGluZGV4IDJlMTUzZjJmNzFiNi4uNzg2ODIzODhlMDJlIDEwMDY0NAo+IC0tLSBhL2RyaXZl
+cnMvaTJjL2J1c3Nlcy9pMmMtcXVwLmMKPiArKysgYi9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLXF1
+cC5jCj4gQEAgLTE3NTIsMTYgKzE3NTIsMjEgQEAgc3RhdGljIGludCBxdXBfaTJjX3Byb2JlKHN0
+cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpCj4gIAlpZiAoIWNsa19mcmVxIHx8IGNsa19mcmVx
+ID4gSTJDX01BWF9GQVNUX01PREVfUExVU19GUkVRKSB7Cj4gIAkJZGV2X2VycihxdXAtPmRldiwg
+ImNsb2NrIGZyZXF1ZW5jeSBub3Qgc3VwcG9ydGVkICVkXG4iLAo+ICAJCQljbGtfZnJlcSk7Cj4g
+LQkJcmV0dXJuIC1FSU5WQUw7Cj4gKwkJcmV0ID0gLUVJTlZBTDsKPiArCQlnb3RvIGZhaWxfZG1h
+Owo+ICAJfQo+ICAKPiAgCXF1cC0+YmFzZSA9IGRldm1fcGxhdGZvcm1faW9yZW1hcF9yZXNvdXJj
+ZShwZGV2LCAwKTsKPiAtCWlmIChJU19FUlIocXVwLT5iYXNlKSkKPiAtCQlyZXR1cm4gUFRSX0VS
+UihxdXAtPmJhc2UpOwo+ICsJaWYgKElTX0VSUihxdXAtPmJhc2UpKSB7Cj4gKwkJcmV0ID0gUFRS
+X0VSUihxdXAtPmJhc2UpOwo+ICsJCWdvdG8gZmFpbF9kbWE7Cj4gKwl9Cj4gIAo+ICAJcXVwLT5p
+cnEgPSBwbGF0Zm9ybV9nZXRfaXJxKHBkZXYsIDApOwo+IC0JaWYgKHF1cC0+aXJxIDwgMCkKPiAt
+CQlyZXR1cm4gcXVwLT5pcnE7Cj4gKwlpZiAocXVwLT5pcnEgPCAwKSB7Cj4gKwkJcmV0ID0gcXVw
+LT5pcnE7Cj4gKwkJZ290byBmYWlsX2RtYTsKPiArCX0KPiAgCj4gIAlpZiAoaGFzX2FjcGlfY29t
+cGFuaW9uKHF1cC0+ZGV2KSkgewo+ICAJCXJldCA9IGRldmljZV9wcm9wZXJ0eV9yZWFkX3UzMihx
+dXAtPmRldiwKPiBAQCAtMTc3NSwxMyArMTc4MCwxNSBAQCBzdGF0aWMgaW50IHF1cF9pMmNfcHJv
+YmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikKPiAgCQlxdXAtPmNsayA9IGRldm1fY2xr
+X2dldChxdXAtPmRldiwgImNvcmUiKTsKPiAgCQlpZiAoSVNfRVJSKHF1cC0+Y2xrKSkgewo+ICAJ
+CQlkZXZfZXJyKHF1cC0+ZGV2LCAiQ291bGQgbm90IGdldCBjb3JlIGNsb2NrXG4iKTsKPiAtCQkJ
+cmV0dXJuIFBUUl9FUlIocXVwLT5jbGspOwo+ICsJCQlyZXQgPSBQVFJfRVJSKHF1cC0+Y2xrKTsK
+PiArCQkJZ290byBmYWlsX2RtYTsKPiAgCQl9Cj4gIAo+ICAJCXF1cC0+cGNsayA9IGRldm1fY2xr
+X2dldChxdXAtPmRldiwgImlmYWNlIik7Cj4gIAkJaWYgKElTX0VSUihxdXAtPnBjbGspKSB7Cj4g
+IAkJCWRldl9lcnIocXVwLT5kZXYsICJDb3VsZCBub3QgZ2V0IGlmYWNlIGNsb2NrXG4iKTsKPiAt
+CQkJcmV0dXJuIFBUUl9FUlIocXVwLT5wY2xrKTsKPiArCQkJcmV0ID0gUFRSX0VSUihxdXAtPnBj
+bGspOwo+ICsJCQlnb3RvIGZhaWxfZG1hOwo+ICAJCX0KPiAgCQlxdXBfaTJjX2VuYWJsZV9jbG9j
+a3MocXVwKTsKPiAgCQlzcmNfY2xrX2ZyZXEgPSBjbGtfZ2V0X3JhdGUocXVwLT5jbGspOwo+IC0t
+IAo+IDIuMjUuMQoKcGluZz8g
