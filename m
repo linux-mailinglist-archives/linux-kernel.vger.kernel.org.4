@@ -2,106 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 890146F82D3
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 14:23:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 828976F82D7
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 14:23:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232076AbjEEMXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 08:23:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39034 "EHLO
+        id S232105AbjEEMX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 08:23:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232051AbjEEMXR (ORCPT
+        with ESMTP id S231932AbjEEMXZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 08:23:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B08019D5F;
-        Fri,  5 May 2023 05:23:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C454F61281;
-        Fri,  5 May 2023 12:23:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EDC7C433D2;
-        Fri,  5 May 2023 12:23:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683289395;
-        bh=E8fY5gdYncckPUwHd26for2rWI0uOv8SZd7JgmJurXs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=NoAC4Qn4NkOkzDIk5v+aeIrN+FDTsf8yUIxUZHrMCIwmWuolJH455ETVB8JM1wMJI
-         +AkzyY16uddEgjBCpmZCJuxGUvNdRNeRns5W6Rt6X5A2NtDnRVwroukGGcmndMHulm
-         ajLiIwMaegsJGVIHuDOx7Rbw5UEK/kvGLnCXJoS7xDL3M0ejC0bDEOFQcoF3mEZUXs
-         1e+Fo5NzF6nBNivw3Ye3ntB0+sJMF5scPTDotS6btPkyttJO+vJBRbP38X8jodTzvD
-         breP6TeADJ3f7xa9Kbclfs9xRZ6SJSB57i5u6HGmzpo/NhwEsznEXHan3Rx1c5LXV2
-         4Hd1uJmKsqFNg==
-Message-ID: <ecadf25b-972b-4a20-17df-a03fa7c2dd20@kernel.org>
-Date:   Fri, 5 May 2023 07:23:12 -0500
+        Fri, 5 May 2023 08:23:25 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A37011AEF6
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 05:23:23 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-50bc5197d33so3249729a12.1
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 05:23:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683289402; x=1685881402;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1HOLYat53OzMdJvFHJRHOISwzlfpZ6pkm9SR4ZOQdmk=;
+        b=arXhWxR6k7ZnyjSBCTJhnTuaTBWpGXt66C1xmvs0SgR7Cd7EgjK32zZXJnhck6k8NM
+         XDC3AnhtJdPDzPXUOAcDe8Xqm5EbUT8orUHnkKlafZBBdr4yWseqzfZ70txIGEcuyBld
+         C7e0y3acOHcGaVwZ0R+J9RIGDSlJ5i7AbcarubtJreyXb+BYjA2X9ttuhVa6MjE3Hih5
+         ZbVxZ4KQHFEeQKrYFkKV6niLVgrd3IzcASk9HOjRbPnL1k0rwXPj3fw1uA7LBAYB5d38
+         PTTX0JxLCi8cPF6saVKS2Xi/8q19Idx0voC2W9Qzzl/CDZxGHycf0fclvgKDUBt5xJYY
+         iZzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683289402; x=1685881402;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1HOLYat53OzMdJvFHJRHOISwzlfpZ6pkm9SR4ZOQdmk=;
+        b=MA/6R2XA7cXypTVjFLhThMKujkzLrsxWbJwD8m/kWgCJRE48l2nmOPb6eHxjfYiYLG
+         nYwWnjQT30UJ0tN3YVPBRBpsGMuM62xqyDZRIZrktJqa9DHMkQVNmU4mBXRQnU3PEfQ5
+         OTVbpb6Z+sGQ+SwODBtTo+wPUDskoFMDKZ6/XUUlG2qV5X2crVw1bkjCVrdyakyh8RNt
+         egbTH9ThDHFRF0QLdpEZiyNiQMfVnVZZIvuL5yFX2ScfUv8hyQEBZpwNOKZmb2G5AOAH
+         n3fOoSkAq6S50AHSnKMHf7E6ztLHfZpSNAc91CANsHXqFs2iUoexwEWDtXRzRBsXBrTC
+         vt4Q==
+X-Gm-Message-State: AC+VfDwmlcyBIusdDdEJIm3evaTxQyQtlYz0ZL5rDH6mrBTNhyAbyaSd
+        pykany8mHkdllCatudrM7ReR/OYnx6EdN+M68TsOWg==
+X-Google-Smtp-Source: ACHHUZ40WJM3/ZIRvVnyMJtaMV3/I1uRYWfYNrtRy0PWwomfwJ/enziHpy4tGWGVHj6dEUSFfqO4Gw==
+X-Received: by 2002:a05:6402:1a27:b0:50b:d5e5:519d with SMTP id be7-20020a0564021a2700b0050bd5e5519dmr1315564edb.4.1683289402136;
+        Fri, 05 May 2023 05:23:22 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:52e:24ce:bbc1:127d? ([2a02:810d:15c0:828:52e:24ce:bbc1:127d])
+        by smtp.gmail.com with ESMTPSA id x2-20020aa7d6c2000000b0050bd47f9073sm2906899edr.39.2023.05.05.05.23.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 May 2023 05:23:21 -0700 (PDT)
+Message-ID: <3d9d545d-a620-85f6-b7bd-d57a8729f818@linaro.org>
+Date:   Fri, 5 May 2023 14:23:20 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 1/2] firmware: stratix10-svc: Add command to get SEU
- error info
-To:     niravkumar.l.rabara@intel.com
-Cc:     bp@alien8.de, james.morse@arm.com, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mchehab@kernel.org, rric@kernel.org,
-        tony.luck@intel.com
-References: <20230503061000.3279381-1-niravkumar.l.rabara@intel.com>
- <20230503101821.3342935-1-niravkumar.l.rabara@intel.com>
- <20230503101821.3342935-2-niravkumar.l.rabara@intel.com>
+ Thunderbird/102.10.1
+Subject: Re: [PATCH 7/7] dt-bindings: dmaengine: pl330: Add new quirks
 Content-Language: en-US
-From:   Dinh Nguyen <dinguyen@kernel.org>
-In-Reply-To: <20230503101821.3342935-2-niravkumar.l.rabara@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Joy Chakraborty <joychakr@google.com>
+Cc:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, manugautam@google.com,
+        danielmentz@google.com, sjadavani@google.com
+References: <20230504145737.286444-1-joychakr@google.com>
+ <20230504145737.286444-8-joychakr@google.com>
+ <78616bc1-8d9e-4a1c-70d6-ad62c2cfa8a8@linaro.org>
+ <CAOSNQF15UN2Rckes55UHxbUvN1PJcbj9aWirVGSLDOs5Y5EPnQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAOSNQF15UN2Rckes55UHxbUvN1PJcbj9aWirVGSLDOs5Y5EPnQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5/3/23 05:18, niravkumar.l.rabara@intel.com wrote:
-> From: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
+On 05/05/2023 11:44, Joy Chakraborty wrote:
+> On Thu, May 4, 2023 at 8:38 PM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> On 04/05/2023 16:57, Joy Chakraborty wrote:
+>>> Add 2 new quirks added to the driver "arm,pl330-optimize-dev2mem-axsize"
+>>> and "arm,pl330-periph-single-dregs"
+>>
+>> This we can see from the diff. You need to answer why?
+>>
 > 
-> Introduce a new command to get Single Event Upset Error information.
-> 
-> Signed-off-by: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
-> ---
->   include/linux/firmware/intel/stratix10-smc.h | 20 ++++++++++++++++++++
->   1 file changed, 20 insertions(+)
-> 
-> diff --git a/include/linux/firmware/intel/stratix10-smc.h b/include/linux/firmware/intel/stratix10-smc.h
-> index a718f853d457..669e2b12be39 100644
-> --- a/include/linux/firmware/intel/stratix10-smc.h
-> +++ b/include/linux/firmware/intel/stratix10-smc.h
-> @@ -595,4 +595,24 @@ INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_FPGA_CONFIG_COMPLETED_WRITE)
->   #define INTEL_SIP_SMC_FCS_GET_PROVISION_DATA \
->   	INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_FCS_GET_PROVISION_DATA)
->   
-> +/**
-> + * Request INTEL_SIP_SMC_READ_SEU_ERR
-> + * Sync call to get Single Event Upsate Error information
+> Sure will change it to:
+> "
+> Addition of following quirks :
+> - "arm,pl330-periph-use-diff-axsize"
+>    AxSize of transactions to peripherals are limited by the peripheral
+> address width which inturn limits the AxSize used for transactions
+> towards memory.
+>    This quirk will make transactions to memory use the maximum
+> possible bus width(AxSize), store data in MFIFO and use narrow
+> multi-beat transactions to move data to peripherals.
+>    This only applies to transfers between memory and peripherals where
+> bus widths available are different for memory and the peripheral.
+> - "arm,pl330-periph-complete-with-singles" :
+>    When transfer sizes are not a multiple of a block of burst
+> transfers (AxLen * AxSize configured at the peripheral), certain
+> peripherals might choose not to set the burst request at the
+> peripheral request interface of the DMA.
+>    This quirk moves the remaining bytes to the peripheral using single
+> transactions.
+> "
 
-s/Upsate/Upset
+This does not answer why. You just copied again the patch contents.
 
-> + * SEU detects both corrected and uncorrected error
-> + *
-> + * Call register usage:
-> + * a0 INTEL_SIP_SMC_READ_SEU_ERR
-> + * a1-7 not used
-> + *
-> + * Return status:
-> + * a0 INTEL_SIP_SMC_STATUS_OK, INTEL_SIP_SMC_STATUS_NOT_SUPPORTED or
-> + *    INTEL_SIP_SMC_STATUS_ERROR
-> + * a1 error count of response data
-> + * a2 sector address of response data
-> + * a3 error data
-> + */
-> +#define INTEL_SIP_SMC_FUNCID_SEU_ERR_STATUS 153
-> +#define INTEL_SIP_SMC_READ_SEU_ERR \
-> +		INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_SEU_ERR_STATUS)
-> +
->   #endif
+> 
+>>>
+>>> Signed-off-by: Joy Chakraborty <joychakr@google.com>
+>>> ---
+>>>  Documentation/devicetree/bindings/dma/arm,pl330.yaml | 8 ++++++++
+>>>  1 file changed, 8 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/dma/arm,pl330.yaml b/Documentation/devicetree/bindings/dma/arm,pl330.yaml
+>>> index 4a3dd6f5309b..0499a7fba88d 100644
+>>> --- a/Documentation/devicetree/bindings/dma/arm,pl330.yaml
+>>> +++ b/Documentation/devicetree/bindings/dma/arm,pl330.yaml
+>>> @@ -53,6 +53,14 @@ properties:
+>>>      type: boolean
+>>>      description: quirk for performing burst transfer only
+>>>
+>>> +  arm,pl330-optimize-dev2mem-axsize:
+>>> +    type: boolean
+>>> +    description: quirk for optimizing AxSize used between dev<->mem
+>>
+>> This tells me nothing... Neither what it is about nor why this is
+>> property of a board or PL330 hardware implementation. Please describe
+>> hardware, not drivers.
+>>
+> 
+> Will change the name to "arm,pl330-periph-use-diff-axsize" and add description:
+> "
+> Quirk to use different AxSize for bursts while accessing source and
+> destination when moving data between memory and peripheral.
+> Maximum possible bus width is used as AxSize for transactions towards
+> memory and transactions towards peripherals use AxSize as per
+> peripheral address width.
+> "
+
+Still no answer. Why this is property of a board or PL330 hardware
+implementation?
+
+I also asked to describe hardware but I still see "quirk to ...". We use
+"quirk" as concept in Linux driver. Describe the hardware, not Linux driver.
+
+
+> 
+>>> +
+>>> +  arm,pl330-periph-single-dregs:
+>>> +    type: boolean
+>>> +    description: quirk for using dma-singles for peripherals in _dregs()
+>>
+>> Same concerns.
+>>
+> 
+> Will change the name to  "arm,pl330-periph-complete-with-singles" and
+> add description:
+> "
+> Quirk to use dma singles n times instead of an n beat burst to
+> complete a transfer when the transfer size is not a multiple of the
+
+No, how you wrote it sounds like driver. Don't add driver quirks to DT.
+
+Best regards,
+Krzysztof
+
