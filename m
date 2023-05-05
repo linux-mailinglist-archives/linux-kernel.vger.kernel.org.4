@@ -2,154 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AEDC6F7E86
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 10:15:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 317646F7E91
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 10:18:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230519AbjEEIPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 04:15:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48570 "EHLO
+        id S230426AbjEEISK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 04:18:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231142AbjEEIOu (ORCPT
+        with ESMTP id S230322AbjEEISJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 04:14:50 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3BAF18866;
-        Fri,  5 May 2023 01:14:18 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 3570E7FFE;
-        Fri,  5 May 2023 16:14:16 +0800 (CST)
-Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 5 May
- 2023 16:14:16 +0800
-Received: from [192.168.60.114] (180.164.60.184) by EXMBX073.cuchost.com
- (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 5 May
- 2023 16:14:15 +0800
-Message-ID: <817b8919-e9dd-cf2a-41e0-9b50747ab4cf@starfivetech.com>
-Date:   Fri, 5 May 2023 16:14:15 +0800
+        Fri, 5 May 2023 04:18:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D51516355;
+        Fri,  5 May 2023 01:18:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9AD70611F6;
+        Fri,  5 May 2023 08:18:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D458C433EF;
+        Fri,  5 May 2023 08:18:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683274687;
+        bh=ga/+VFX8FBvQCw6s9dDB5iVKT6sGqKd3VaUCEq5zzo8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=QlNmEwdYBIPYAbbdbj8TA5rTvitUreojs68cmQSYvFeKpYqdyPEyWD5xuwHWiuxLe
+         sgvOsE+nuGTwUnlh3RFqSmbgVbYj4yIhs2ju4MIP4/xNIGlH6GC/TN3uA+4BDbUnbK
+         62O9GrJvZ2XFozoUyBB/9VCXlYMq1s25L2TSuGVcLeAi4np2Zn9sX7l01itCnsYzER
+         LjpqrfJMxMZY0G5ccph8mklLkdSifw95Ol8JuZDAdSCklr/ppImdCtqIoQntSMmxW3
+         VQ92uBoT0jxFeHux3aM0BrtgkloIzxdXyncv/M+lV+2Y7ZSJTXJOMq7TVTU2YvkxFZ
+         vu9rw5Sh+jg2Q==
+Message-ID: <291f1d97-9195-45ac-8e12-058f5c797277@kernel.org>
+Date:   Fri, 5 May 2023 17:17:25 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4 0/8] Add StarFive Camera Subsystem driver
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [PATCH v2] ata: libata-scsi: Fix get identity data failed
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        "Todor Tomov" <todor.too@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Laurent Pinchart" <laurent.pinchart@ideasonboard.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Eugen Hristev <eugen.hristev@collabora.com>
-CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <changhuang.liang@starfivetech.com>
-References: <20230413035541.62129-1-jack.zhu@starfivetech.com>
- <14c06503-621f-2477-7b15-b17f1890ecfe@starfivetech.com>
- <7bd29805-11e7-68ee-aa47-68bae2a2fb38@starfivetech.com>
- <925bf170-bb54-b427-976a-87e0dca230da@linaro.org>
-From:   Jack Zhu <jack.zhu@starfivetech.com>
-In-Reply-To: <925bf170-bb54-b427-976a-87e0dca230da@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+To:     Xingui Yang <yangxingui@huawei.com>, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, john.g.garry@oracle.com,
+        damien.lemoal@opensource.wdc.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxarm@huawei.com, prime.zeng@hisilicon.com,
+        kangfenglong@huawei.com
+References: <20230505025712.19438-1-yangxingui@huawei.com>
+From:   Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <20230505025712.19438-1-yangxingui@huawei.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [180.164.60.184]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX073.cuchost.com
- (172.16.6.83)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2023/05/05 11:57, Xingui Yang wrote:
+> The function ata_get_identity() uses the helper ata_scsi_find_dev() to get
+> the ata_device structure of a scsi device. However, when the ata device is
+> managed by libsas, ata_scsi_find_dev() returns NULL, turning
+> ata_get_identity() into a nop and always returns -ENOMSG.
 
+What do you do to hit the issue ? A while back for me it was the queue depth
+setting causing problems. As Garry mentioned, this led to patch 141f3d6256e5
+("ata: libata-sata: Fix device queue depth control").
 
-On 2023/5/5 14:40, Krzysztof Kozlowski wrote:
-> On 05/05/2023 07:57, Jack Zhu wrote:
->> 
->> 
->> On 2023/4/24 19:19, Jack Zhu wrote:
->>>
->>>
->>> On 2023/4/13 11:55, Jack Zhu wrote:
->>>> Hi,
->>>>
->>>> This patch series adds support for the StarFive Camera Subsystem
->>>> found on StarFive JH7110 SoC.
->>>>
->>>> The driver implements V4L2, Media controller and V4L2 subdev interfaces.
->>>> Camera sensor using V4L2 subdev interface in the kernel is supported.
->>>>
->>>> The driver is tested on VisionFive V2 board with IMX219 camera sensor.
->>>> GStreamer 1.18.5 with v4l2src plugin is supported.
->>>>
->>>> Changes since v3:
->>>> Patch 1:
->>>> - Modified port@0 and port@1 properties.
->>>> - Extended the port@0 example with appropriate properties.
->>>> - Added 'port@0' for 'required'
->>>> Patch 2:
->>>> - Modified spelling errors.
->>>> Patch 3:
->>>> - Merged patch 5 into the patch with an explanation for compatible in
->>>>   commit msg.
->>>> Patch 6:
->>>> - Asserted pixel_rst[i] reset in the loop after the err_disable_pixclk
->>>>   label.
->>>> - Modified Code Style for getting sys_rst and p_rst.
->>>> - Renamed clk_name to name and modified the relevant code.
->>>> Patch 9:
->>>> - Added static for stfcamss_get_mem_res function.
->>>> - Added static for isp_close function.
->>>> - Fixed implicit conversion warning for stf_vin_map_isp_pad function.
->>>> - Dropped unused variables.
->>>>
->>>>   v3: https://lore.kernel.org/all/20230331121826.96973-1-jack.zhu@starfivetech.com/
->>>>
->>>
->>> Hello everyone,
->>>
->>> From the current review status, the patches related to the CSI module
->>> have 'reviewed-by' tags. I would like to know if it is okay to add
->>> patches 1-5 from this series to a PR first.
->>>
->>> Thank you!
->>>
->>> Jack
->>>
->> 
->> Hello Mauro, Laurent, Maxime, Rob, Krzysztof, Robert, Todor and Philipp,
->> 
->> Can you give me some suggestions and comments on the previous request
->> to commit CSI related patches first? Thank you for your time.
 > 
-> You received very specific feedback, so know you decided to ignore it?
+> Fix this by checking whether ATA_FLAG_SAS_HOST is set for ap->flags in
+> ata_scsi_find_dev(), as the flag is only used in libsas. If
+> ATA_FLAG_SAS_HOST is set, use sas_to_ata_dev() to find associated ATA
+> device.
 > 
-> No, implement what you were asked for.
+> Signed-off-by: Xingui Yang <yangxingui@huawei.com>
+> ---
+> Changes to v1 
+> - Let ata_scsi_find_dev() return the correct value and don't keep replacing
+> calls to ata_scsi_find_dev().
 > 
-
-Hi Krzysztof,
-
-Thank you for your comments.
-
-I am talking about CSI-related patches 1-5, not including the patches
-6-8. The CSI module is a relatively functionally independent hardware
-module. The CSI-related patches 1-5 already have 'reviewed-by' tags,
-and there are no unprocessed comments left. So, made the previous
-request. Please let me know if I understand something wrong.
-
-I don't want to ignore any comments, I will continue to modify the isp
-patches 6-8 in subsequent versions according to your comments. The
-ISP-related patches are being prepared.
-
-Jack
-
-> Best regards,
-> Krzysztof
+>  drivers/ata/libata-scsi.c | 12 ++++++++++--
+>  drivers/ata/libata.h      |  2 +-
+>  2 files changed, 11 insertions(+), 3 deletions(-)
 > 
+> diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
+> index 7bb12deab70c..aa580ea341fa 100644
+> --- a/drivers/ata/libata-scsi.c
+> +++ b/drivers/ata/libata-scsi.c
+> @@ -26,6 +26,7 @@
+>  #include <scsi/scsi_device.h>
+>  #include <scsi/scsi_tcq.h>
+>  #include <scsi/scsi_transport.h>
+> +#include <scsi/libsas.h>
+>  #include <linux/libata.h>
+>  #include <linux/hdreg.h>
+>  #include <linux/uaccess.h>
+> @@ -2745,10 +2746,17 @@ static struct ata_device *__ata_scsi_find_dev(struct ata_port *ap,
+>   *	Associated ATA device, or %NULL if not found.
+>   */
+>  struct ata_device *
+> -ata_scsi_find_dev(struct ata_port *ap, const struct scsi_device *scsidev)
+
+Why drop the const ?
+
+> +ata_scsi_find_dev(struct ata_port *ap, struct scsi_device *scsidev)
+>  {
+> -	struct ata_device *dev = __ata_scsi_find_dev(ap, scsidev);
+> +	struct ata_device *dev;
+> +
+> +	if (ap->flags & ATA_FLAG_SAS_HOST) {
+> +		struct domain_device *ddev = sdev_to_domain_dev(scsidev);
+> +
+> +		return sas_to_ata_dev(ddev);
+
+Do you really need the ddev variable ? Also, this really should be a libsas
+helper. I beleive this pattern is repeated in several places in libsas, so that
+would nicely clean things up.
+
+> +	}
+>  
+> +	dev = __ata_scsi_find_dev(ap, scsidev);
+>  	if (unlikely(!dev || !ata_dev_enabled(dev)))
+>  		return NULL;
+>  
+> diff --git a/drivers/ata/libata.h b/drivers/ata/libata.h
+> index 926d0d33cd29..6d66f46da064 100644
+> --- a/drivers/ata/libata.h
+> +++ b/drivers/ata/libata.h
+> @@ -109,7 +109,7 @@ static inline void ata_acpi_bind_dev(struct ata_device *dev) {}
+>  
+>  /* libata-scsi.c */
+>  extern struct ata_device *ata_scsi_find_dev(struct ata_port *ap,
+> -					    const struct scsi_device *scsidev);
+> +					    struct scsi_device *scsidev);
+>  extern int ata_scsi_add_hosts(struct ata_host *host,
+>  			      const struct scsi_host_template *sht);
+>  extern void ata_scsi_scan_host(struct ata_port *ap, int sync);
+
+-- 
+Damien Le Moal
+Western Digital Research
+
