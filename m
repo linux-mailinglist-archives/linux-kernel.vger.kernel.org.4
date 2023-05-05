@@ -2,86 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A538D6F8A62
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 22:49:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EA066F8A63
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 22:50:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233313AbjEEUto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 16:49:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40216 "EHLO
+        id S233324AbjEEUue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 16:50:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232707AbjEEUtm (ORCPT
+        with ESMTP id S230028AbjEEUua (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 16:49:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F28C2129;
-        Fri,  5 May 2023 13:49:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1281F640A2;
-        Fri,  5 May 2023 20:49:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39750C433EF;
-        Fri,  5 May 2023 20:49:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683319778;
-        bh=W59TR9E32Yah1dFs08dbWyLipmFb+psLrDFRxEQpgnE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VNMabUPhKyNss7GFEOqyfB6OMpKzdhW+nMaDUdTpEHltfzlk5hxr3llxJ/OfnmpOI
-         ExgTNLC+SUY3gwxiXTJGCSGUHdjHcsRhsAaJ5dF9b5TmQwa1H9OYD1BKk8r2w2kGap
-         T49SSvrJGIIoh1kokytEQ0IxTaOteXBy9oIXohVlslQKYNrdUngNOLKR5uzoxqz9c8
-         BB6XGatN21KTLCr5v7WHgglG0OYwmKHHyR2y0pZAkQf55s37MLzK1zHBXsBdYSn5SI
-         2yuizHDwQg0OyUhil5LU2WMBRtI+yZSZ7FKxRVXHUvx8UnGlrBeuhIhUl64a//ZLUG
-         y+j65SzycWntg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id B04B6403B5; Fri,  5 May 2023 17:49:35 -0300 (-03)
-Date:   Fri, 5 May 2023 17:49:35 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Jiri Olsa <olsajiri@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Namhyung Kim <namhyung@kernel.org>, Song Liu <song@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Clark Williams <williams@redhat.com>,
-        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Changbin Du <changbin.du@huawei.com>,
-        Hao Luo <haoluo@google.com>, James Clark <james.clark@arm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Roman Lozko <lozko.roma@gmail.com>,
-        Stephane Eranian <eranian@google.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Paul Clarke <pc@us.ibm.com>
-Subject: Re: [PATCH RFC/RFT] perf bpf skels: Stop using vmlinux.h generated
- from BTF, use subset of used structs + CO-RE. was Re: BPF skels in perf .Re:
- [GIT PULL] perf tools changes for v6.4
-Message-ID: <ZFVr38MZLGpBFaUg@kernel.org>
-References: <CAEf4BzaUU9vZU6R_020ru5ct0wh-p1M3ZFet-vYqcHvb9bW1Cw@mail.gmail.com>
- <ZFQCccsx6GK+gY0j@kernel.org>
- <ZFQoQjCNtyMIulp+@kernel.org>
- <CAP-5=fU8HQorW+7O6vfEKGs1mEFkjkzXZMVPACzurtcMcRhVzQ@mail.gmail.com>
- <ZFQ5sjjtfEYzvHNP@krava>
- <ZFUFmxDU/6Z/JEsi@kernel.org>
- <ZFU1PJrn8YtHIqno@kernel.org>
- <CAP-5=fWfmmMCRnEmzj_CXTKacp6gjrzmR49Ge_C5XRyfTegRjg@mail.gmail.com>
- <ZFVqeKLssg7uzxzI@krava>
- <CAP-5=fVgJdBvjV8S2xKswAFiSZvyCcUvZTO1bsLyUf-wQ0pBuw@mail.gmail.com>
+        Fri, 5 May 2023 16:50:30 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79ACF1984
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 13:50:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683319829; x=1714855829;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=QLXECqInnQy7wtTiG3c5fyyfaG2MFK9TrrmA60BGwM8=;
+  b=QdBxkctzEl1ek4+qyhi7WNmT8EX4rzUxw5uFbv2J4pGlPeSiNrYkqbUG
+   Ge9O0a968hWj2Fd/S9kdybTdF6AcU9FyzX3tA5ueg+RWDohslcK44k1Is
+   MEuSQT64XSy9JaY0MId0tXPXBB99EPjUZH6Dt2Om6P0eO7XPPEzRkQhuh
+   cCdekevCGC90uGghMMAye2o6NArkHgNwDzRZyrHeb+THyKd5Oz9WPepzW
+   Fp+2XMUitO7JaqtBMJvqdVmWNe4BlG46T6x1qyltEkfr8jjGR2vCOPD4P
+   r/u9oL/lDOUd0VjCK4d8svqVwePJY+ocXpHZfP3SKtGitq4RwXINJxMiu
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="348122207"
+X-IronPort-AV: E=Sophos;i="5.99,253,1677571200"; 
+   d="scan'208";a="348122207"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2023 13:50:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="728249464"
+X-IronPort-AV: E=Sophos;i="5.99,253,1677571200"; 
+   d="scan'208";a="728249464"
+Received: from lkp-server01.sh.intel.com (HELO fe5d646e317d) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 05 May 2023 13:50:27 -0700
+Received: from kbuild by fe5d646e317d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pv2Nm-0000qz-31;
+        Fri, 05 May 2023 20:50:26 +0000
+Date:   Sat, 6 May 2023 04:49:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: arch/loongarch/kernel/kfpu.c:17:9: sparse: sparse: incorrect type in
+ argument 1 (different address spaces)
+Message-ID: <202305060451.grzli3Av-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAP-5=fVgJdBvjV8S2xKswAFiSZvyCcUvZTO1bsLyUf-wQ0pBuw@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,65 +62,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, May 05, 2023 at 01:46:30PM -0700, Ian Rogers escreveu:
-> On Fri, May 5, 2023 at 1:43 PM Jiri Olsa <olsajiri@gmail.com> wrote:
-> >
-> > On Fri, May 05, 2023 at 10:04:47AM -0700, Ian Rogers wrote:
-> > > On Fri, May 5, 2023 at 9:56 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> > > >
-> > > > Em Fri, May 05, 2023 at 10:33:15AM -0300, Arnaldo Carvalho de Melo escreveu:
-> > > > > Em Fri, May 05, 2023 at 01:03:14AM +0200, Jiri Olsa escreveu:
-> > > > > That with the preserve_access_index isn't needed, we need just the
-> > > > > fields that we access in the tools, right?
-> > > >
-> > > > I'm now doing build test this in many distro containers, without the two
-> > > > reverts, i.e. BPF skels continue as opt-out as in my pull request, to
-> > > > test build and also for the functionality tests on the tools using such
-> > > > bpf skels, see below, no touching of vmlinux nor BTF data during the
-> > > > build.
-> > > >
-> > > > - Arnaldo
-> > > >
-> > > > From 882adaee50bc27f85374aeb2fbaa5b76bef60d05 Mon Sep 17 00:00:00 2001
-> > > > From: Arnaldo Carvalho de Melo <acme@redhat.com>
-> > > > Date: Thu, 4 May 2023 19:03:51 -0300
-> > > > Subject: [PATCH 1/1] perf bpf skels: Stop using vmlinux.h generated from BTF,
-> > > >  use subset of used structs + CO-RE
-> > > >
-> > > > Linus reported a build break due to using a vmlinux without a BTF elf
-> > > > section to generate the vmlinux.h header with bpftool for use in the BPF
-> > > > tools in tools/perf/util/bpf_skel/*.bpf.c.
-> > > >
-> > > > Instead add a vmlinux.h file with the structs needed with the fields the
-> > > > tools need, marking the structs with __attribute__((preserve_access_index)),
-> > > > so that libbpf's CO-RE code can fixup the struct field offsets.
-> > > >
-> > > > In some cases the vmlinux.h file that was being generated by bpftool
-> > > > from the kernel BTF information was not needed at all, just including
-> > > > linux/bpf.h, sometimes linux/perf_event.h was enough as non-UAPI
-> > > > types were not being used.
-> > > >
-> > > > To keep te patch small, include those UAPI headers from the trimmed down
-> > > > vmlinux.h file, that then provides the tools with just the structs and
-> > > > the subset of its fields needed for them.
-> > > >
-> > > > Testing it:
-> > > >
-> > > >   # perf lock contention -b find / > /dev/null
-> >
-> > I tested perf lock con -abv -L rcu_state sleep 1
-> > and needed fix below
-> >
-> > jirka
-> 
-> I thought this was fixed by:
-> https://lore.kernel.org/lkml/20230427234833.1576130-1-namhyung@kernel.org/
-> but I think that is just in perf-tools-next.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   7163a2111f6c030ee39635ac3334bfa1a52a3dd3
+commit: 2b3bd32ea3a22ea2d5e591da4ac2c2b1fb17c0e0 LoongArch: Provide kernel fpu functions
+date:   4 days ago
+config: loongarch-randconfig-s043-20230501 (https://download.01.org/0day-ci/archive/20230506/202305060451.grzli3Av-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2b3bd32ea3a22ea2d5e591da4ac2c2b1fb17c0e0
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 2b3bd32ea3a22ea2d5e591da4ac2c2b1fb17c0e0
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=loongarch olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=loongarch SHELL=/bin/bash arch/loongarch/kernel/
 
-Nope, we have it in perf-tools:
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305060451.grzli3Av-lkp@intel.com/
 
-commit e53de7b65a3ca59af268c78df2d773f277f717fd
-Author: Namhyung Kim <namhyung@kernel.org>
-Date:   Thu Apr 27 16:48:32 2023 -0700
+sparse warnings: (new ones prefixed by >>)
+>> arch/loongarch/kernel/kfpu.c:17:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got bool [noderef] __percpu * @@
+   arch/loongarch/kernel/kfpu.c:17:9: sparse:     expected void *ptr
+   arch/loongarch/kernel/kfpu.c:17:9: sparse:     got bool [noderef] __percpu *
+>> arch/loongarch/kernel/kfpu.c:17:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got bool [noderef] __percpu * @@
+   arch/loongarch/kernel/kfpu.c:17:9: sparse:     expected void *ptr
+   arch/loongarch/kernel/kfpu.c:17:9: sparse:     got bool [noderef] __percpu *
+>> arch/loongarch/kernel/kfpu.c:17:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got bool [noderef] __percpu * @@
+   arch/loongarch/kernel/kfpu.c:17:9: sparse:     expected void *ptr
+   arch/loongarch/kernel/kfpu.c:17:9: sparse:     got bool [noderef] __percpu *
+>> arch/loongarch/kernel/kfpu.c:17:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got bool [noderef] __percpu * @@
+   arch/loongarch/kernel/kfpu.c:17:9: sparse:     expected void *ptr
+   arch/loongarch/kernel/kfpu.c:17:9: sparse:     got bool [noderef] __percpu *
+   arch/loongarch/kernel/kfpu.c:19:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got bool [noderef] __percpu * @@
+   arch/loongarch/kernel/kfpu.c:19:9: sparse:     expected void *ptr
+   arch/loongarch/kernel/kfpu.c:19:9: sparse:     got bool [noderef] __percpu *
+   arch/loongarch/kernel/kfpu.c:19:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got bool [noderef] __percpu * @@
+   arch/loongarch/kernel/kfpu.c:19:9: sparse:     expected void *ptr
+   arch/loongarch/kernel/kfpu.c:19:9: sparse:     got bool [noderef] __percpu *
+   arch/loongarch/kernel/kfpu.c:19:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got bool [noderef] __percpu * @@
+   arch/loongarch/kernel/kfpu.c:19:9: sparse:     expected void *ptr
+   arch/loongarch/kernel/kfpu.c:19:9: sparse:     got bool [noderef] __percpu *
+   arch/loongarch/kernel/kfpu.c:19:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got bool [noderef] __percpu * @@
+   arch/loongarch/kernel/kfpu.c:19:9: sparse:     expected void *ptr
+   arch/loongarch/kernel/kfpu.c:19:9: sparse:     got bool [noderef] __percpu *
+   arch/loongarch/kernel/kfpu.c:32:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got bool [noderef] __percpu * @@
+   arch/loongarch/kernel/kfpu.c:32:9: sparse:     expected void *ptr
+   arch/loongarch/kernel/kfpu.c:32:9: sparse:     got bool [noderef] __percpu *
+   arch/loongarch/kernel/kfpu.c:32:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got bool [noderef] __percpu * @@
+   arch/loongarch/kernel/kfpu.c:32:9: sparse:     expected void *ptr
+   arch/loongarch/kernel/kfpu.c:32:9: sparse:     got bool [noderef] __percpu *
+   arch/loongarch/kernel/kfpu.c:32:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got bool [noderef] __percpu * @@
+   arch/loongarch/kernel/kfpu.c:32:9: sparse:     expected void *ptr
+   arch/loongarch/kernel/kfpu.c:32:9: sparse:     got bool [noderef] __percpu *
+   arch/loongarch/kernel/kfpu.c:32:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got bool [noderef] __percpu * @@
+   arch/loongarch/kernel/kfpu.c:32:9: sparse:     expected void *ptr
+   arch/loongarch/kernel/kfpu.c:32:9: sparse:     got bool [noderef] __percpu *
+   arch/loongarch/kernel/kfpu.c:39:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got bool [noderef] __percpu * @@
+   arch/loongarch/kernel/kfpu.c:39:9: sparse:     expected void *ptr
+   arch/loongarch/kernel/kfpu.c:39:9: sparse:     got bool [noderef] __percpu *
+   arch/loongarch/kernel/kfpu.c:39:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got bool [noderef] __percpu * @@
+   arch/loongarch/kernel/kfpu.c:39:9: sparse:     expected void *ptr
+   arch/loongarch/kernel/kfpu.c:39:9: sparse:     got bool [noderef] __percpu *
+   arch/loongarch/kernel/kfpu.c:39:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got bool [noderef] __percpu * @@
+   arch/loongarch/kernel/kfpu.c:39:9: sparse:     expected void *ptr
+   arch/loongarch/kernel/kfpu.c:39:9: sparse:     got bool [noderef] __percpu *
+   arch/loongarch/kernel/kfpu.c:39:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got bool [noderef] __percpu * @@
+   arch/loongarch/kernel/kfpu.c:39:9: sparse:     expected void *ptr
+   arch/loongarch/kernel/kfpu.c:39:9: sparse:     got bool [noderef] __percpu *
+   arch/loongarch/kernel/kfpu.c: note: in included file (through arch/loongarch/include/asm/cpu-info.h, arch/loongarch/include/asm/processor.h, ...):
+   arch/loongarch/include/asm/loongarch.h:211:16: sparse: sparse: undefined identifier '__builtin_loongarch_csrrd_w'
+   arch/loongarch/include/asm/loongarch.h:211:16: sparse: sparse: cast from unknown type
+   arch/loongarch/include/asm/loongarch.h:221:9: sparse: sparse: undefined identifier '__builtin_loongarch_csrwr_w'
+   arch/loongarch/include/asm/loongarch.h:221:9: sparse: sparse: cast from unknown type
+   arch/loongarch/include/asm/loongarch.h:211:16: sparse: sparse: cast from unknown type
+   arch/loongarch/include/asm/loongarch.h:221:9: sparse: sparse: cast from unknown type
 
-    perf lock contention: Fix struct rq lock access
+vim +17 arch/loongarch/kernel/kfpu.c
+
+    12	
+    13	void kernel_fpu_begin(void)
+    14	{
+    15		preempt_disable();
+    16	
+  > 17		WARN_ON(this_cpu_read(in_kernel_fpu));
+    18	
+    19		this_cpu_write(in_kernel_fpu, true);
+    20	
+    21		if (!is_fpu_owner())
+    22			enable_fpu();
+    23		else
+    24			_save_fp(&current->thread.fpu);
+    25	
+    26		write_fcsr(LOONGARCH_FCSR0, 0);
+    27	}
+    28	EXPORT_SYMBOL_GPL(kernel_fpu_begin);
+    29	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
