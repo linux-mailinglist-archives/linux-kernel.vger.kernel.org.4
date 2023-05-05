@@ -2,264 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD07E6F8556
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 17:14:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A2CF6F855D
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 17:16:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232477AbjEEPOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 11:14:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48796 "EHLO
+        id S232526AbjEEPP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 11:15:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231987AbjEEPOb (ORCPT
+        with ESMTP id S232514AbjEEPP4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 11:14:31 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CFF61BCA;
-        Fri,  5 May 2023 08:14:28 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f0108a7d20so2132040e87.3;
-        Fri, 05 May 2023 08:14:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683299666; x=1685891666;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oegoxXyGIHmylmkklaLXWJVdylUtYMRDksZxxgTnY0w=;
-        b=p42IIgkZJZdYM019cvt5p4yYWtec7Tl60FHGEnllaoaXvo0XUFGNz0swJdqvcfB0ou
-         yQFVtwkPmBXfzuF/3KJHG5DGVGVQJXOm4RKNu2Z2D9Pju7xBrdbslmr71Kr7b1r4bYDo
-         262IerPoaHfYHTz0iNOLo1Nd1XNxr8Zt8+nI/QxyudxXzn3TolODVrBjduTMPb0nkU2S
-         MVwUccC3Vht/5kWun3NhspGc+YvSEmaMqxX2cJR9pDA+kAKbj81g0iiLnf2pyEc2Z+HV
-         cRH5BNaBG5X9wcwQaPgHTr+eHGUVJ0PW6W9LFnnPCSvgG/u5KeorJSGj0r/MJL6LubKs
-         0LtQ==
+        Fri, 5 May 2023 11:15:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C227517DDC
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 08:15:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683299719;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kkrG6TrT6vUt7l/1yAEGc4UPeZE85BI5/e7CQ9gxkxM=;
+        b=bPMVmpuW8pXu0KfXPhgVpE9pu6zWngKu5a5omHVvF6fPTLJ9TehIybYlw7iTiKUBExjUaO
+        0oNP7x1GiHnn+gow4SlCvuPsTGoqokJoNrnuqnLnuRVMca+ngR2KjW6inUoAoLy7A4NpJu
+        E2e9NCA2tF+89wENlv3QrQRMhOKrku4=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-633-ONZdNSvQNH2sTI4w9-bSww-1; Fri, 05 May 2023 11:15:18 -0400
+X-MC-Unique: ONZdNSvQNH2sTI4w9-bSww-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-306489b7585so682397f8f.3
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 08:15:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683299666; x=1685891666;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oegoxXyGIHmylmkklaLXWJVdylUtYMRDksZxxgTnY0w=;
-        b=ABBnVJPoCYQ09tQwjD3hyGz0vYWri4O2mwFkn/ilTBQYI0Qw6tjj+ID34a3CrI0nnK
-         YhICamATzzIvXA3/xoMf3dX28733UFPMmli6vU4jqZ8Z3CxlkoguugueZTj2yd69iqgQ
-         EMGdQ0sB/YfyAfVYanV1M/9KbBQ4qts3MBbfQfDKOhJ+9hxok86nKmHEgeoLyVoRcx+O
-         k7RDq97P2RXGx0J4vusNMiCocTQR4Z+C3GzQl1xugw8sa6Aj4/Tj304jPm/fmkz0Laj8
-         qPeZZUsTPWmV5GVCmzYEP5aElr6/hNKOiS/dQwFKxQGFjJN+JZ7w7VCo0bfo7iwn2wIJ
-         BtbA==
-X-Gm-Message-State: AC+VfDyysFkD09urdnaLMnQo4MsoHoadZBLYQwtCREEGjCxWdNMYr0tN
-        SadRQVHMugD6O+1dfaweXd/a9Qj0rFmOrYWeoSo=
-X-Google-Smtp-Source: ACHHUZ6Nudfg9QFfCNejF73wLcnsuJ+BQGNiIFuQ+8BtnxjcgXU6SXZHYJdANmtPcNFLdrsU9lzdE8aYtSBwE9ju0uY=
-X-Received: by 2002:a05:6512:21ac:b0:4f1:3716:ab34 with SMTP id
- c12-20020a05651221ac00b004f13716ab34mr531680lft.60.1683299666246; Fri, 05 May
- 2023 08:14:26 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683299717; x=1685891717;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kkrG6TrT6vUt7l/1yAEGc4UPeZE85BI5/e7CQ9gxkxM=;
+        b=Praw4euYgNdSCFIyxUMp1nxsXW/ZKpz8zqxebXqFS4ayIT5ppE+o4UM7sPfAZM6RKW
+         5GAIc4RfemRIafhUb/F9nEFaWvo6Y+Ck98+JAOPlmwp30q817tT6Al9nFEvnTv/WDY9n
+         Pp+J/pBZmA5qlxRcbUeGGBhu1rjlvKQlWdkUp0rETxi/jN+SJcbwa+DppeujjLZbBK+K
+         qKjOefZRGbb4iebhiUfWve3tJ68Sllqskmuuj1CXCdIxCj1yEShjz1dZOau8jWimn8Dc
+         t/mlClHw5eGxtiBWj8dRPUPOg9Cy6E8Kf47sy4sF+6UK68SLLLZC9uW0G+3A0/kFoEdv
+         BZwA==
+X-Gm-Message-State: AC+VfDwirm7wuz+ocDTy4BMvAieu6aXCu+zhyf9eJZFVK/u8wLeRQx+Z
+        DxWN+Y5X6KIHYZkPYXsWca21p0vSRozC7poS3t1LMplxcYXVjX9g1mmiHoeC8Cvgdpy4O6G0kIO
+        QriUd3kXKHr1/KIAmbVPTt8fR
+X-Received: by 2002:adf:e852:0:b0:2f2:783f:ae4a with SMTP id d18-20020adfe852000000b002f2783fae4amr1565316wrn.32.1683299717085;
+        Fri, 05 May 2023 08:15:17 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5JphXg6YSvIF6EBsByLfX+Q1TzMx3ezx0pIYW00N+N1esYSq7PB5q/K6U1CiU7dEnLsZInQg==
+X-Received: by 2002:adf:e852:0:b0:2f2:783f:ae4a with SMTP id d18-20020adfe852000000b002f2783fae4amr1565295wrn.32.1683299716737;
+        Fri, 05 May 2023 08:15:16 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c71f:6900:2b25:fc69:599e:3986? (p200300cbc71f69002b25fc69599e3986.dip0.t-ipconnect.de. [2003:cb:c71f:6900:2b25:fc69:599e:3986])
+        by smtp.gmail.com with ESMTPSA id k17-20020adfe3d1000000b00301a351a8d6sm2704788wrm.84.2023.05.05.08.15.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 May 2023 08:15:16 -0700 (PDT)
+Message-ID: <c50ac5e4-3f84-c52a-561d-de6530e617d7@redhat.com>
+Date:   Fri, 5 May 2023 17:15:15 +0200
 MIME-Version: 1.0
-References: <CAHk-=wjY_3cBELRSLMpqCt6Eb71Qei2agfKSNsrr5KcpdEQCaA@mail.gmail.com>
- <CAHk-=wgci+OTRacQZcvvapRcWkoiTFJ=VTe_JYtabGgZ9refmg@mail.gmail.com>
- <ZFOSUab5XEJD0kxj@kernel.org> <CAHk-=wgv1sKTdLWPC7XR1Px=pDNrDPDTKdX-T_2AQOwgkpWB2A@mail.gmail.com>
- <ZFPw0scDq1eIzfHr@kernel.org> <CAEf4BzaUU9vZU6R_020ru5ct0wh-p1M3ZFet-vYqcHvb9bW1Cw@mail.gmail.com>
- <ZFQCccsx6GK+gY0j@kernel.org> <ZFQoQjCNtyMIulp+@kernel.org>
- <CAP-5=fU8HQorW+7O6vfEKGs1mEFkjkzXZMVPACzurtcMcRhVzQ@mail.gmail.com>
- <ZFQ5sjjtfEYzvHNP@krava> <ZFUFmxDU/6Z/JEsi@kernel.org>
-In-Reply-To: <ZFUFmxDU/6Z/JEsi@kernel.org>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 5 May 2023 08:14:14 -0700
-Message-ID: <CAADnVQLe2HK8GN44fXJgKm+pr=JmK8LC_YU3i1fgyVfS+nQxDA@mail.gmail.com>
-Subject: Re: BPF skels in perf .Re: [GIT PULL] perf tools changes for v6.4
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Quentin Monnet <quentin@isovalent.com>
-Cc:     Jiri Olsa <olsajiri@gmail.com>, Ian Rogers <irogers@google.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Song Liu <song@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Clark Williams <williams@redhat.com>,
-        Kate Carcia <kcarcia@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Changbin Du <changbin.du@huawei.com>,
-        Hao Luo <haoluo@google.com>, James Clark <james.clark@arm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Roman Lozko <lozko.roma@gmail.com>,
-        Stephane Eranian <eranian@google.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US
+To:     Sam James <sam@gentoo.org>
+Cc:     Michael McCracken <michael.mccracken@gmail.com>,
+        linux-kernel@vger.kernel.org, serge@hallyn.com, tycho@tycho.pizza,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        kernel-hardening@lists.openwall.com
+References: <20230504213002.56803-1-michael.mccracken@gmail.com>
+ <fbf37518-328d-c08c-7140-5d09d7a2674f@redhat.com> <87pm7f9q3q.fsf@gentoo.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH] sysctl: add config to make randomize_va_space RO
+In-Reply-To: <87pm7f9q3q.fsf@gentoo.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 5, 2023 at 6:33=E2=80=AFAM Arnaldo Carvalho de Melo <acme@kerne=
-l.org> wrote:
->
-> Em Fri, May 05, 2023 at 01:03:14AM +0200, Jiri Olsa escreveu:
-> > On Thu, May 04, 2023 at 03:03:42PM -0700, Ian Rogers wrote:
-> > > On Thu, May 4, 2023 at 2:48=E2=80=AFPM Arnaldo Carvalho de Melo <acme=
-@kernel.org> wrote:
-> > > >
-> > > > Em Thu, May 04, 2023 at 04:07:29PM -0300, Arnaldo Carvalho de Melo =
-escreveu:
-> > > > > Em Thu, May 04, 2023 at 11:50:07AM -0700, Andrii Nakryiko escreve=
-u:
-> > > > > > On Thu, May 4, 2023 at 10:52=E2=80=AFAM Arnaldo Carvalho de Mel=
-o <acme@kernel.org> wrote:
-> > > > > > > Andrii, can you add some more information about the usage of =
-vmlinux.h
-> > > > > > > instead of using kernel headers?
-> > > > >
-> > > > > > I'll just say that vmlinux.h is not a hard requirement to build=
- BPF
-> > > > > > programs, it's more a convenience allowing easy access to defin=
-itions
-> > > > > > of both UAPI and kernel-internal structures for tracing needs a=
-nd
-> > > > > > marking them relocatable using BPF CO-RE machinery. Lots of rea=
-l-world
-> > > > > > applications just check-in pregenerated vmlinux.h to avoid buil=
-d-time
-> > > > > > dependency on up-to-date host kernel and such.
-> > > > >
-> > > > > > If vmlinux.h generation and usage is causing issues, though, gi=
-ven
-> > > > > > that perf's BPF programs don't seem to be using many different =
-kernel
-> > > > > > types, it might be a better option to just use UAPI headers for=
- public
-> > > > > > kernel type definitions, and just define CO-RE-relocatable mini=
-mal
-> > > > > > definitions locally in perf's BPF code for the other types nece=
-ssary.
-> > > > > > E.g., if perf needs only pid and tgid from task_struct, this wo=
-uld
-> > > > > > suffice:
-> > > > >
-> > > > > > struct task_struct {
-> > > > > >     int pid;
-> > > > > >     int tgid;
-> > > > > > } __attribute__((preserve_access_index));
-> > > > >
-> > > > > Yeah, that seems like a way better approach, no vmlinux involved,=
- libbpf
-> > > > > CO-RE notices that task_struct changed from this two integers ver=
-sion
-> > > > > (of course) and does the relocation to where it is in the running=
- kernel
-> > > > > by using /sys/kernel/btf/vmlinux.
-> > > >
-> > > > Doing it for one of the skels, build tested, runtime untested, but =
-not
-> > > > using any vmlinux, BTF to help, not that bad, more verbose, but at =
-least
-> > > > we state what are the fields we actually use, have those attribute
-> > > > documenting that those offsets will be recorded for future use, etc=
-.
-> > > >
-> > > > Namhyung, can you please check that this works?
-> > > >
-> > > > Thanks,
-> > > >
-> > > > - Arnaldo
-> > > >
-> > > > diff --git a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c b/tools/pe=
-rf/util/bpf_skel/bperf_cgroup.bpf.c
-> > > > index 6a438e0102c5a2cb..f376d162549ebd74 100644
-> > > > --- a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-> > > > +++ b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-> > > > @@ -1,11 +1,40 @@
-> > > >  // SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > >  // Copyright (c) 2021 Facebook
-> > > >  // Copyright (c) 2021 Google
-> > > > -#include "vmlinux.h"
-> > > > +#include <linux/types.h>
-> > > > +#include <linux/bpf.h>
-> > >
-> > > Compared to vmlinux.h here be dragons. It is easy to start dragging i=
-n
-> > > all of libc and that may not work due to missing #ifdefs, etc.. Could
-> > > we check in a vmlinux.h like libbpf-tools does?
-> > > https://github.com/iovisor/bcc/tree/master/libbpf-tools#vmlinuxh-gene=
-ration
-> > > https://github.com/iovisor/bcc/tree/master/libbpf-tools/arm64
-> > >
-> > > This would also remove some of the errors that could be introduced by
-> > > copy+pasting enums, etc. and also highlight issues with things being
-> > > renamed as build time rather than runtime failures.
-> >
-> > we already have to deal with that, right? doing checks on fields in
-> > structs like mm_struct___old
-> >
-> > > Could this be some shared resource for the different linux tools
-> > > projects using a vmlinux.h? e.g. tools/lib/vmlinuxh with an
-> > > install_headers target that builds a vmlinux.h.
-> >
-> > I tried to do the minimal header and it's not too big,
-> > I pushed it in here:
-> >   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/log/?h=
-=3Dperf/vmlinux_h
-> >
-> > compile tested so far
->
-> I see it and it makes the change to be minimal, which is good at the
-> current stage, but I wonder if it wouldn't be better for us to define
-> just the ones not in UAPI and use the #include <linux/bpf.h>,
-> <linux/perf_event.h> as I did in the patches I posted here and Namhyung
-> tested at least one, this way the added vmlinux.h file get even smaller
-> by not including things like:
->
-> [acme@quaco perf-tools]$ egrep -w '(perf_event_sample_format|bpf_perf_eve=
-nt_value|perf_sample_weight|perf_mem_data_src) {' include/uapi/linux/*.h
-> include/uapi/linux/bpf.h:struct bpf_perf_event_value {
-> include/uapi/linux/perf_event.h:enum perf_event_sample_format {
-> include/uapi/linux/perf_event.h:union perf_mem_data_src {
-> include/uapi/linux/perf_event.h:union perf_mem_data_src {
-> include/uapi/linux/perf_event.h:union perf_sample_weight {
-> [acme@quaco perf-tools]$
->
-> Also why do we need these:
->
-> +struct mm_struct {
-> +} __attribute__((preserve_access_index));
-> +
-> +struct raw_spinlock {
-> +} __attribute__((preserve_access_index));
-> +
-> +typedef struct raw_spinlock raw_spinlock_t;
-> +
-> +struct spinlock {
-> +} __attribute__((preserve_access_index));
-> +
-> +typedef struct spinlock spinlock_t;
-> +
-> +struct sighand_struct {
-> +       spinlock_t siglock;
-> +} __attribute__((preserve_access_index));
->
-> We don't use them, they're just pointers you kept on:
->
-> +struct task_struct {
-> +       struct css_set *cgroups;
-> +       pid_t pid;
-> +       pid_t tgid;
-> +       char comm[16];
-> +       struct mm_struct *mm;
-> +       struct sighand_struct *sighand;
-> +       unsigned int flags;
-> +} __attribute__((preserve_access_index));
->
-> That with the preserve_access_index isn't needed, we need just the
-> fields that we access in the tools, right?
+On 05.05.23 09:46, Sam James wrote:
+> 
+> David Hildenbrand <david@redhat.com> writes:
+> 
+>> On 04.05.23 23:30, Michael McCracken wrote:
+>>> Add config RO_RANDMAP_SYSCTL to set the mode of the randomize_va_space
+>>> sysctl to 0444 to disallow all runtime changes. This will prevent
+>>> accidental changing of this value by a root service.
+>>> The config is disabled by default to avoid surprises.
+>>
+>> Can you elaborate why we care about "accidental changing of this value
+>> by a root service"?
+>>
+>> We cannot really stop root from doing a lot of stupid things (e.g.,
+>> erase the root fs), so why do we particularly care here?
+> 
+> (I'm really not defending the utility of this, fwiw).
+> 
+> In the past, I've seen fuzzing tools and other debuggers try to set
+> it, and it might be that an admin doesn't realise that. But they could
+> easily set other dangerous settings unsuitable for production, so...
 
-Aside from that you probably want to take a look at BTFgen.
-Old doc:
-https://github.com/aquasecurity/btfhub/blob/main/docs/btfgen-internals.md
-which landed as
-"bpftool gen min_core_btf"
-man bpftool-gen
+At least fuzzing tools randomly toggling it could actually find real 
+problems. Debugging tools ... makes sense that they might be using it.
 
-It addresses the use case for kernels _without_ CONFIG_DEBUG_INFO_BTF.
+What I understand is, that it's more of a problem that the system 
+continues running and the disabled randomization isn't revealed to an 
+admin easily.
+
+If we really care, not sure what's better: maybe we want to disallow 
+disabling it only in a security lockdown kernel? Or at least warn the 
+user when disabling it? (WARN_TAINT?)
+
+-- 
+Thanks,
+
+David / dhildenb
+
