@@ -2,232 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D92D96F83B7
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 15:18:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85D566F83BE
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 15:19:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232410AbjEENSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 09:18:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42958 "EHLO
+        id S232431AbjEENS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 09:18:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232370AbjEENSL (ORCPT
+        with ESMTP id S232426AbjEENSz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 09:18:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CB82699;
-        Fri,  5 May 2023 06:18:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0182860A71;
-        Fri,  5 May 2023 13:18:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E735C433EF;
-        Fri,  5 May 2023 13:18:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683292688;
-        bh=iWuVMtbZc8fX58fKAMNGGbRV6grNa+1PwhlQF6nB89w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=S35fn3fxmBi+6jrRNiFXaSAC30eGZPm5Rkh1QJQgPtnF7tFmgi7tb6ddOydiLE6om
-         7Gjv4ZuG4WmfLsZ0dSiVV8a7v0Zp2DcKKYCBtGTsWyrgsFeaSk0f8CYsO+0iewbAMM
-         Ahb6wb5/sTjdVBBzRJ0NJSfJu8TIqhiVuv7Lrm6oketO3vo+F5bEP6dwpZS5E4Zzfe
-         ZaXHWQwCesJhtU23Y1DWwYZWwfPmyobsrXya4D5V5eZLZO1N3CUObCjj8oclaO46VB
-         A7mcIl9HDHQydU25b2IdCirzsW4I79Klrut2T+5xqyTFsVWbwTDH4fFupjaIhnuic4
-         5GR2x18K4OHlQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 4BA9E403B5; Fri,  5 May 2023 10:18:05 -0300 (-03)
-Date:   Fri, 5 May 2023 10:18:05 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Yang Jihong <yangjihong1@huawei.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Song Liu <song@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Clark Williams <williams@redhat.com>,
-        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Changbin Du <changbin.du@huawei.com>,
-        Hao Luo <haoluo@google.com>, Ian Rogers <irogers@google.com>,
-        James Clark <james.clark@arm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Roman Lozko <lozko.roma@gmail.com>,
-        Stephane Eranian <eranian@google.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        bpf <bpf@vger.kernel.org>
-Subject: Re: BPF skels in perf .Re: [GIT PULL] perf tools changes for v6.4
-Message-ID: <ZFUCDVpqXkpGjXBK@kernel.org>
-References: <20230503211801.897735-1-acme@kernel.org>
- <CAHk-=wjY_3cBELRSLMpqCt6Eb71Qei2agfKSNsrr5KcpdEQCaA@mail.gmail.com>
- <CAHk-=wgci+OTRacQZcvvapRcWkoiTFJ=VTe_JYtabGgZ9refmg@mail.gmail.com>
- <ZFOSUab5XEJD0kxj@kernel.org>
- <CAHk-=wgv1sKTdLWPC7XR1Px=pDNrDPDTKdX-T_2AQOwgkpWB2A@mail.gmail.com>
- <ZFPw0scDq1eIzfHr@kernel.org>
- <CAEf4BzaUU9vZU6R_020ru5ct0wh-p1M3ZFet-vYqcHvb9bW1Cw@mail.gmail.com>
- <ZFQCccsx6GK+gY0j@kernel.org>
- <ZFQoQjCNtyMIulp+@kernel.org>
- <ZFQrT42SyEbCj4om@kernel.org>
+        Fri, 5 May 2023 09:18:55 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C5501E9BF;
+        Fri,  5 May 2023 06:18:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=Y2Pl3joU3ArKu+3fIECnoIyOrPTGQkO/uS8PYdBCeGI=; b=FILjLS8qVmBxsL4CzOIaB+7NCr
+        UPK30itFQC6woX+pzzT2Xmo6M+mBXjazlcra8sE8dGaoVZKA9XYjnL+m+3O7no2Hqc0dS53Ke7pof
+        cCJDQkas880JB92podbSB5R2HMV2uHDNmJpgjUbmslVH8ayHPJ3/DK7Q0Nb8VXt5npJ8=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1puvKa-00C03Z-14; Fri, 05 May 2023 15:18:40 +0200
+Date:   Fri, 5 May 2023 15:18:40 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Samin Guo <samin.guo@starfivetech.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        netdev@vger.kernel.org, Peter Geis <pgwipeout@gmail.com>,
+        Frank <Frank.Sae@motor-comm.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Yanhong Wang <yanhong.wang@starfivetech.com>
+Subject: Re: [PATCH v2 2/2] net: phy: motorcomm: Add pad drive strength cfg
+ support
+Message-ID: <fc516e65-cde2-4a65-a3c5-bd8c939e7eb1@lunn.ch>
+References: <20230505090558.2355-1-samin.guo@starfivetech.com>
+ <20230505090558.2355-3-samin.guo@starfivetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZFQrT42SyEbCj4om@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230505090558.2355-3-samin.guo@starfivetech.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, May 04, 2023 at 07:01:51PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Thu, May 04, 2023 at 06:48:50PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > Em Thu, May 04, 2023 at 04:07:29PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > > Em Thu, May 04, 2023 at 11:50:07AM -0700, Andrii Nakryiko escreveu:
-> > > > On Thu, May 4, 2023 at 10:52 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> > > > > Andrii, can you add some more information about the usage of vmlinux.h
-> > > > > instead of using kernel headers?
-> > >  
-> > > > I'll just say that vmlinux.h is not a hard requirement to build BPF
-> > > > programs, it's more a convenience allowing easy access to definitions
-> > > > of both UAPI and kernel-internal structures for tracing needs and
-> > > > marking them relocatable using BPF CO-RE machinery. Lots of real-world
-> > > > applications just check-in pregenerated vmlinux.h to avoid build-time
-> > > > dependency on up-to-date host kernel and such.
-> > >  
-> > > > If vmlinux.h generation and usage is causing issues, though, given
-> > > > that perf's BPF programs don't seem to be using many different kernel
-> > > > types, it might be a better option to just use UAPI headers for public
-> > > > kernel type definitions, and just define CO-RE-relocatable minimal
-> > > > definitions locally in perf's BPF code for the other types necessary.
-> > > > E.g., if perf needs only pid and tgid from task_struct, this would
-> > > > suffice:
-> > >  
-> > > > struct task_struct {
-> > > >     int pid;
-> > > >     int tgid;
-> > > > } __attribute__((preserve_access_index));
-> > > 
-> > > Yeah, that seems like a way better approach, no vmlinux involved, libbpf
-> > > CO-RE notices that task_struct changed from this two integers version
-> > > (of course) and does the relocation to where it is in the running kernel
-> > > by using /sys/kernel/btf/vmlinux.
-> > 
-> > Doing it for one of the skels, build tested, runtime untested, but not
-> > using any vmlinux, BTF to help, not that bad, more verbose, but at least
-> > we state what are the fields we actually use, have those attribute
-> > documenting that those offsets will be recorded for future use, etc.
+>  #define YTPHY_DTS_OUTPUT_CLK_DIS		0
+> @@ -1495,6 +1504,7 @@ static int yt8531_config_init(struct phy_device *phydev)
+>  {
+>  	struct device_node *node = phydev->mdio.dev.of_node;
+>  	int ret;
+> +	u32 ds, val;
 
-Yang, can you please check that this works?
+Reverse Christmas tree.  Sort these longest first, shortest last.
 
+Otherwise this looks O.K.
 
-From bd6289bc3ffc89aecad3bd8798d76626c8c16d39 Mon Sep 17 00:00:00 2001
-From: Arnaldo Carvalho de Melo <acme@redhat.com>
-Date: Fri, 5 May 2023 10:13:09 -0300
-Subject: [PATCH 1/1] perf kwork_trace.bpf: Stop using vmlinux.h, grab copies
- of used structs
+The only open question is if real unit should be used, uA, not some
+magic numbers. Lets see what the DT Maintainers say.
 
-And mark them with __attribute__((preserve_access_index)) so that
-libbpf's CO-RE code can fixup offsets if they differ with the kernel
-data structure.
-
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- tools/perf/util/bpf_skel/kwork_trace.bpf.c | 70 +++++++++++++++++++++-
- 1 file changed, 69 insertions(+), 1 deletion(-)
-
-diff --git a/tools/perf/util/bpf_skel/kwork_trace.bpf.c b/tools/perf/util/bpf_skel/kwork_trace.bpf.c
-index 063c124e099938ed..e38fe54c7667fa74 100644
---- a/tools/perf/util/bpf_skel/kwork_trace.bpf.c
-+++ b/tools/perf/util/bpf_skel/kwork_trace.bpf.c
-@@ -1,13 +1,81 @@
- // SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
- // Copyright (c) 2022, Huawei
- 
--#include "vmlinux.h"
-+#include <linux/bpf.h>
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
- 
- #define KWORK_COUNT 100
- #define MAX_KWORKNAME 128
- 
-+
-+// non-UAPI kernel data structures, just the fields used in this tool,
-+// preserving the access index so that libbpf can fixup offsets with the ones
-+// used in the kernel when loading the BPF bytecode, if they differ from what
-+// is used here.
-+
-+enum {
-+	HI_SOFTIRQ = 0,
-+	TIMER_SOFTIRQ,
-+	NET_TX_SOFTIRQ,
-+	NET_RX_SOFTIRQ,
-+	BLOCK_SOFTIRQ,
-+	IRQ_POLL_SOFTIRQ,
-+	TASKLET_SOFTIRQ,
-+	SCHED_SOFTIRQ,
-+	HRTIMER_SOFTIRQ,
-+	RCU_SOFTIRQ,    /* Preferable RCU should always be the last softirq */
-+
-+	NR_SOFTIRQS
-+};
-+
-+struct trace_entry {
-+	short unsigned int type;
-+	unsigned char	   flags;
-+	unsigned char	   preempt_count;
-+	int		   pid;
-+} __attribute__((preserve_access_index));
-+
-+struct trace_event_raw_irq_handler_entry {
-+	struct trace_entry ent;
-+	int		   irq;
-+	__u32		   __data_loc_name;
-+	char		   __data[];
-+} __attribute__((preserve_access_index));
-+
-+struct trace_event_raw_irq_handler_exit {
-+	struct trace_entry ent;
-+	int		   irq;
-+	int		   ret;
-+	char		   __data[];
-+} __attribute__((preserve_access_index));
-+
-+struct trace_event_raw_softirq {
-+	struct trace_entry ent;
-+	unsigned int	   vec;
-+	char		   __data[];
-+} __attribute__((preserve_access_index));
-+
-+struct trace_event_raw_workqueue_execute_start {
-+	struct trace_entry ent;
-+	void		   *work;
-+	void		   *function;
-+	char		   __data[];
-+} __attribute__((preserve_access_index));
-+
-+struct trace_event_raw_workqueue_execute_end {
-+	struct trace_entry ent;
-+	void		   *work;
-+	void		   *function;
-+	char		  __data[];
-+} __attribute__((preserve_access_index));
-+
-+struct trace_event_raw_workqueue_activate_work {
-+	struct trace_entry ent;
-+	void		   *work;
-+	char		   __data[];
-+} __attribute__((preserve_access_index));
-+
- /*
-  * This should be in sync with "util/kwork.h"
-  */
--- 
-2.39.2
-
+      Andrew
