@@ -2,73 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1F486F89E7
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 21:57:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 696D96F89EF
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 22:00:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233319AbjEET5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 15:57:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42850 "EHLO
+        id S229897AbjEEUAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 16:00:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233196AbjEET5U (ORCPT
+        with ESMTP id S229570AbjEEUAo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 15:57:20 -0400
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E804C13
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 12:57:20 -0700 (PDT)
-Received: by mail-qv1-xf36.google.com with SMTP id 6a1803df08f44-61b58779b93so20842376d6.0
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 12:57:20 -0700 (PDT)
+        Fri, 5 May 2023 16:00:44 -0400
+Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15652E7
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 13:00:43 -0700 (PDT)
+Received: by mail-yb1-xb43.google.com with SMTP id 3f1490d57ef6-b9daef8681fso2033236276.1
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 13:00:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1683316639; x=1685908639;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=POvTlQbEzCWW2Njq7iBjNxT18B85moRuPNvLyNphYMY=;
-        b=T5nyzq3ryihprOf82+jQ3sSYlMpJj5mtupUwQ2g8QMp4HPDjlzkkh7cPRixr7jYUfL
-         AcNvQ0Etx7JZivbpwuY+ugStC3ErjISqbSNZqwAaiDF4qa9CQQt7BFGeQNqRSHLo565W
-         /hZ1+w6VH6Osqs1haWWfT4pm+LQm4unnkI7KhB0+ATPIHktSXZBZMnIlSSG+8rj+0cDA
-         YInfuzm66UOZY7ixGUrMmhWAHnKK48Y536/dARJzHbaR7s24SHqQRRIVRfL1CEKqlfl2
-         uWbNnaUkhVX/lMMqUfjpXFmSJaM7T9HvxvNkFVOXwwQ8We71s8hpHN2hvnVCW/Qa29Lv
-         zm5w==
+        d=thinkglobaldata.com; s=google; t=1683316842; x=1685908842;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4S+BQ135/dNBmy2+J9Z2TIXgxWkBzgmL3h/7JVV4Y3I=;
+        b=Nh+ubL5l6GrXyqXZzSZCWu8Iqkb2Q9BUCvttpBRoJMN8lrg0mZi7InesAvd4S5kqCr
+         qhf+VrGTAETDdU0ejnjM4Xm3jm9VhMEH7uFtFsRMqB+YwRlI/1AP7oZwcm/x508GnRh9
+         nIIjvUzcVxWawA6PDh6aVi3dLCkiwsGl8DYTfzAKYloNxmt/tDK3TAxbDzEX8awX98Ve
+         1+aZbCsCt60rxixFm5/nSNW1vRKbmuQ8DwjWxi1GUhMgR7kRZz/uT8T/AFm45lKSNJt3
+         /LrEtnnPHTjiKXwMsakpCW+P66H4yyCxKO9hnlrKvveNXxTauEtkxUl9ZVf63PuIy6tb
+         Jgsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683316639; x=1685908639;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=POvTlQbEzCWW2Njq7iBjNxT18B85moRuPNvLyNphYMY=;
-        b=Nuq3Kb5VffBILp7Q9Tqv48BTmw+2qbNPZeUObZj058mDN4ExO0sEXSa37uSKtxTK68
-         TNz+dAfpAhk4vAGJdOW7+nUr8KAxznpxMbY8ImQ7Uhtm8b3Uu3gqBLWRLAkVCFd8PHSI
-         uhUokO4FugcQ6s4IDD9BO6Vc5uJIx+mukovlMQJpN0CEJbT/s6zlTnWctfq12ZCM2ToU
-         0OlGX2Em2EohTX5LtlxCmcb4ov5dqltoDFava7LgnH6HR79zZ9VG40B1W8XXH4dE6OT+
-         49UjR5Rj1ZoI/Eigy/rkwNpA/gRHPSY3Z1aF30gukd8FSXKZHwCPyABGQp/tSesaz2MY
-         A4Cw==
-X-Gm-Message-State: AC+VfDydEW89MD/f9NlQg+wMqtHDOJuN3zc4bFxD3Vh13hGD0szJr9bM
-        BbmwpEABPUww1+sPJwylrcBIVg==
-X-Google-Smtp-Source: ACHHUZ7f0Oym14/DB4YMB0Ga7UaYZTSWmGXuEer43pra4vLwldZQUx6PVhrJLB1LiaCWyPFWTvDk0A==
-X-Received: by 2002:ad4:5be5:0:b0:621:1de:4024 with SMTP id k5-20020ad45be5000000b0062101de4024mr3026536qvc.43.1683316639152;
-        Fri, 05 May 2023 12:57:19 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-68-25-194.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.25.194])
-        by smtp.gmail.com with ESMTPSA id b27-20020a0cb3db000000b005e750d07153sm817130qvf.135.2023.05.05.12.57.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 May 2023 12:57:18 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1pv1YL-007zVQ-R9;
-        Fri, 05 May 2023 16:57:17 -0300
-Date:   Fri, 5 May 2023 16:57:17 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Kevin Tian <kevin.tian@intel.com>
-Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev
-Subject: Re: [git pull] IOMMU Updates for Linux v6.4
-Message-ID: <ZFVfncB76TrB+c4K@ziepe.ca>
-References: <ZE5NR5Ml8I2/Ze0f@8bytes.org>
- <CAHk-=wiriLmq6OgLLF9seANqCJqjCrgUC384zcJUFtv3xJgVkQ@mail.gmail.com>
- <ZFUMja5MpRPWCRXw@8bytes.org>
- <CAHk-=wjW4CzM9YZqwB3jU9mt7FKdctLWAbOcBQAwJ0_2eRmP=g@mail.gmail.com>
+        d=1e100.net; s=20221208; t=1683316842; x=1685908842;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4S+BQ135/dNBmy2+J9Z2TIXgxWkBzgmL3h/7JVV4Y3I=;
+        b=VMUf+xuA1DGLEeKWUp+Sqk8xzuxdlU8RBuJ/OcusTD6OTS6ns/8N4Lwh5YtZLTZFC3
+         XVUGfo0JH7ChSv9bykoQQUSr0YQr1PIEXnTYirJA85MuQTgFbDk+QppzaYuYjIW9F4qq
+         8hr/VycVsptwp3mMhdT8cR4Ml1KcyhqY8wfSOrOgNVmj9xB1WB8eawokQo2oCxFURO/X
+         gSdfUwllqaC71bB6+7hy6wyhFovg1KxopKgwrJToxPm0qwFaX8lfG7b5D08JVEP5Eo7v
+         cAQQVMma5nITxcIW8YboLC0cFz81UIfVyJmKA3xcOOzdHxrPFzgX2YlazpGw6fM+a6Hi
+         AxFA==
+X-Gm-Message-State: AC+VfDx2yAgKdsvsGTNcU3IbWuCHPMPfyg3F8/JpzXxYNiwtoNrbn8st
+        NGHze+QlKQwDL/x/trIlXBS3DajxioxGNmT4OUWp2w==
+X-Google-Smtp-Source: ACHHUZ4a9gbWeN+/iDrHX93NOU1qXaVNuP1OAqu1KJeLed1tK/1j72UO910xIN/ldC8WAePB6uzutOkiNZt52aUxtlU=
+X-Received: by 2002:a81:6c93:0:b0:55a:7c7:cb7d with SMTP id
+ h141-20020a816c93000000b0055a07c7cb7dmr3168523ywc.28.1683316842233; Fri, 05
+ May 2023 13:00:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wjW4CzM9YZqwB3jU9mt7FKdctLWAbOcBQAwJ0_2eRmP=g@mail.gmail.com>
+From:   Jennifer Davis <jennifer@thinkglobaldata.com>
+Date:   Fri, 5 May 2023 15:00:26 -0500
+Message-ID: <CAKDU+p5r-3S2KYEMJ2VZHTb7XykHF1Nkc=Qyz_FgBpx+Y3XXGA@mail.gmail.com>
+Subject: RE: Gartner Upcoming Events Attendees Email List- 2023
+To:     Jennifer Davis <jennifer@thinkglobaldata.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -79,27 +64,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 05, 2023 at 11:03:46AM -0700, Linus Torvalds wrote:
+Hi,
 
-> That config option rename in particular I find to just be bad. We now
-> have some code that is *very* central, to the point where we have a
-> field for it in the 'struct mm_struct', and special callback for
-> fork() and exit(), and then the config option is called something
-> completely incomprehensible like 'IOMMU_SVA'?
+Would you be interested in acquiring Gartner conferences & Upcoming
+Events Conference Attendees Data List 2023?
 
-The purpose of this field is to enable the new Intel ENQCMD
-instruction that requries the arch code to put the processes PASID
-value into some MSR and keep it there across context switches. See
-commit fa6af69f38d3 ("x86/traps: Demand-populate PASID MSR via #GP")
+EVENTS                                                         Contacts    =
+Cost
+Gartner Supply Chain Leaders Forum              5,386       $1,379
+Gartner Supply Chain Symposium eXpo=E2=84=A2       6,267       $1,379
+Gartner Digital Workplace Summit                    5,899       $1,379
+Gartner Marketing Symposium/Xpo=E2=84=A2               5,586       $1,379
+Gartner Security & Risk Management Summit   6,369      $1,379
+Gartner Supply Chain Symposium/Xpo=E2=84=A2           5,456      $1,379
 
-ENQCMD is used when the IOMMU page table points directly at the CPU
-page table (Shared Virtual Addressing) and supports some simple
-stateless "PCI" devices that Intel has designed.
+You can acquire all the expos at a discounted price of $4,989.
 
-At least with the current situation CONFIG_INTEL_ENQCMD might be an
-appropriate name, split out from the IOMMU kconfig and put in arch
-kconfig?
+Interested? Email me back; I would love to provide more information on the =
+list.
 
-Ideally we wouldn't need this on today's ARM systems, for instance.
-
-Jason
+Kind Regards,
+Jennifer Davis
