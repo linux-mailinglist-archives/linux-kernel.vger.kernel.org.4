@@ -2,139 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D5856F7BE5
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 06:32:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9417F6F7BF1
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 06:35:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230272AbjEEEcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 00:32:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39362 "EHLO
+        id S230280AbjEEEfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 00:35:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjEEEcc (ORCPT
+        with ESMTP id S229606AbjEEEe5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 00:32:32 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 311AE7A99;
-        Thu,  4 May 2023 21:32:31 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-6434e263962so1073457b3a.2;
-        Thu, 04 May 2023 21:32:31 -0700 (PDT)
+        Fri, 5 May 2023 00:34:57 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2AF2AD3B;
+        Thu,  4 May 2023 21:34:55 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id 98e67ed59e1d1-2502346bea0so343682a91.2;
+        Thu, 04 May 2023 21:34:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683261150; x=1685853150;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=KNVDhl6t1BrQV4FKZzt8ocPzfmjVVSGt2sBw+NlEOCA=;
-        b=fO5qpouHNYOyZKfc1oheoEuLE5dOZ1K2WlgnhzbXWemliOeHab7iL/d5xiLxQjtBy5
-         6FMOHAaflBDm4RKLu1HWQYKg33QT/+ZJeDO0eGKq0CwVmEQtEBYxO6FnmLgRQ3vtjTqX
-         KKXrNld20KflZ67g0rNU+6FwhtegaPUyjlH0aHTbjezjWTlpM55muud57U0GbZWGHY9y
-         DTTr8JGDfp3T/kN5MA4kA6qPNDMoJQitebvg/UAaU27m0SyvjWFCN/nGT3VAhw6Yr1mi
-         l06fbzQHqyHsEUb+3Ntn1LQAzhW1hfyJaNcj5SOYkvtbrBcCRExNt8ieeWASmPxJaJ6o
-         2eyw==
+        d=gmail.com; s=20221208; t=1683261295; x=1685853295;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JU/pIzA4fBK4yVEhxN1C+3VhmjL6fz5pGKvH4ZVkHH0=;
+        b=ZFibOqqDuk+FzGU9aoIZuOctEd45cf4UacwGKl6a/+dWgSkE5Fqb1Zen64YLvem7O4
+         iV595gaxO6RbT4cbWrOpAymQvTAICarvAHFw2jL1KUsr+vXdbw4ABeSqO3YZB1Me06WQ
+         yKCsKuiuWTh83HBsUaCYg9yCt0nNLC+G6+aL56tYMbXO8BjOe/db8Sjace2gPDBzX1v8
+         fTUQsKYuVC+EPEyb8FY19eP1vcO+dP6U1mmB1vwHBiD5ccIr5IJ0/bqzlDFdBuI8/hW/
+         xxSCudXs8ObmErgexw2gh1+MvzDgb8Wq9yocmDb7ysYfrcnidhrVd+K5VQHmfQtVTJJ1
+         iPFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683261150; x=1685853150;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KNVDhl6t1BrQV4FKZzt8ocPzfmjVVSGt2sBw+NlEOCA=;
-        b=KKdBAFgahNS3hI1UBd7dYTI/r/NJzLbGz/d47WEnmkOsBfj6W24LUYWt8tZ2YUbg8Y
-         IQh9KQIdEXA4v9opUIhbUt36NxUSQfjxL90Dz8NdRBn0Us2wY5S8lvbRrQsbN7kJJHp4
-         ehJ4WeNMSZ4uiLn7iiqF7nmClnxgnBA/xEozwJDFKZAeosWGpkLbJk7Pd4ZXHZVohZ2s
-         rceYA4WyM2e53dHNQsXuXqod19D9QTzUPdO+5ElMQMagTSuLvV+8bEoojtuvP785JXto
-         y5tyCDjRyIoAdK2BfEU1SIOudp2/zNyuYRFv8xbovkHxLNZh+S5MY4mcIMI3td6wWNW5
-         WrsA==
-X-Gm-Message-State: AC+VfDx5PNrTyxtrQ9MtneK3yGvmebikNhQCcxfln4eIY5BG5clp1bma
-        M7212FFglr+GV734n1nfPM0=
-X-Google-Smtp-Source: ACHHUZ7A8NjhLQvJosr9+utHiv4cBG+Hpp+o6PLUOqG95ou3UKqJMQqAnWJS7TKOzAiSJBW9/nghxQ==
-X-Received: by 2002:a05:6a00:2e8f:b0:63d:2343:f9b with SMTP id fd15-20020a056a002e8f00b0063d23430f9bmr684519pfb.19.1683261150486;
-        Thu, 04 May 2023 21:32:30 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m3-20020aa79003000000b0063d2d9990ecsm576587pfo.87.2023.05.04.21.32.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 21:32:29 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <49ea68fd-6468-c61a-fb7a-6ef2f0497542@roeck-us.net>
-Date:   Thu, 4 May 2023 21:32:28 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RFC 05/11] Documentation/hwmon: Revise PMBus core documentation
-Content-Language: en-US
-To:     Bagas Sanjaya <bagasdotme@gmail.com>, James Seo <james@equiv.tech>,
-        Jean Delvare <jdelvare@suse.com>,
+        d=1e100.net; s=20221208; t=1683261295; x=1685853295;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JU/pIzA4fBK4yVEhxN1C+3VhmjL6fz5pGKvH4ZVkHH0=;
+        b=DRuUkJGKtO8YvqNTE67CPgpNKbgsfaJ8rITosUTq1HOmeMBw66Y6fNkyWqTVYhygeV
+         j6E4/Qj2OS0lL3kiTlC2irC8TFFDlJUPxwc95z2Ro3eDAeIvL0Z6pbGBVIIve26J3zv4
+         lFIFAeh4R4997PQHXaumFcb1Da4MeCLsQYcxhU19uoO6SvuM1cYwm+Gs7rdTRQUkJd/I
+         2xlqW0tiw4TAlYc/fRtB1d1XmLmFFqVxPf5s+2saCiEsIw5w58iOeAXqiXUje6C5Sqbs
+         QclIBYrW7nUjL6JFQ4X5m7LFNsoILqXU9Tht+geEru0rOiKVxyIoE2MuANVnVpIEZ7VD
+         mJHw==
+X-Gm-Message-State: AC+VfDzOsoNNCDmJEQZKnG+IfTcMPMzmsUPB+3lfj1v+3TEjMIiZWhkk
+        WaBW78noXMhlZoUVT5ktbaDtRnQFTjE=
+X-Google-Smtp-Source: ACHHUZ4CeMNsIOJ6HugKvhazaUvRL/XmMONXFKtbOvvBx/o+NiKcWu+NnbOC+GvU1P/U4mUmYuG9lQ==
+X-Received: by 2002:a17:90a:a608:b0:233:ee67:8eb3 with SMTP id c8-20020a17090aa60800b00233ee678eb3mr186703pjq.24.1683261295317;
+        Thu, 04 May 2023 21:34:55 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-25.three.co.id. [180.214.233.25])
+        by smtp.gmail.com with ESMTPSA id v8-20020a634808000000b004e28be19d1csm597048pga.32.2023.05.04.21.34.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 May 2023 21:34:54 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id F1356106861; Fri,  5 May 2023 11:34:51 +0700 (WIB)
+Date:   Fri, 5 May 2023 11:34:51 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     James Seo <james@equiv.tech>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Jonathan Corbet <corbet@lwn.net>
 Cc:     linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
+Subject: Re: [RFC 06/11] Documentation/hwmon: Revise patch submission
+ checklist
+Message-ID: <ZFSHa2ThLorH5fwI@debian.me>
 References: <20230504075752.1320967-1-james@equiv.tech>
- <20230504075752.1320967-6-james@equiv.tech> <ZFSFzaWZsS9qxmzz@debian.me>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <ZFSFzaWZsS9qxmzz@debian.me>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+ <20230504075752.1320967-7-james@equiv.tech>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="25CJpLEImxGsf4/m"
+Content-Disposition: inline
+In-Reply-To: <20230504075752.1320967-7-james@equiv.tech>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/4/23 21:27, Bagas Sanjaya wrote:
-> On Thu, May 04, 2023 at 12:57:46AM -0700, James Seo wrote:
->> -[from pmbus.org] The Power Management Bus (PMBus) is an open standard
->> -power-management protocol with a fully defined command language that facilitates
->> -communication with power converters and other devices in a power system. The
->> -protocol is implemented over the industry-standard SMBus serial interface and
->> -enables programming, control, and real-time monitoring of compliant power
->> -conversion products. This flexible and highly versatile standard allows for
->> -communication between devices based on both analog and digital technologies, and
->> -provides true interoperability which will reduce design complexity and shorten
->> -time to market for power system designers. Pioneered by leading power supply and
->> -semiconductor companies, this open power system standard is maintained and
->> -promoted by the PMBus Implementers Forum (PMBus-IF), comprising 30+ adopters
->> -with the objective to provide support to, and facilitate adoption among, users.
->> +  The Power Management Bus (PMBus) is an open standard power-management protocol
->> +  with a fully defined command language that facilitates communication with
->> +  power converters and other devices in a power system. The protocol is
->> +  implemented over the industry-standard SMBus serial interface and enables
->> +  programming, control, and real-time monitoring of compliant power conversion
->> +  products. This flexible and highly versatile standard allows for communication
->> +  between devices based on both analog and digital technologies, and provides
->> +  true interoperability which will reduce design complexity and shorten time to
->> +  market for power system designers. Pioneered by leading power supply and
->> +  semiconductor companies, this open power system standard is maintained and
->> +  promoted by the PMBus Implementers Forum (PMBus-IF), comprising 30+ adopters
->> +  with the objective to provide support to, and facilitate adoption among,
->> +  users.
->> +
->> +    (from pmbus.org)
-> 
-> Seems like a candidate for attribution:
-> 
 
-Yes, and I do not feel comfortable removing it.
+--25CJpLEImxGsf4/m
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Guenter
+On Thu, May 04, 2023 at 12:57:47AM -0700, James Seo wrote:
+> -* Only the following I2C addresses shall be probed: 0x18-0x1f, 0x28-0x2f,
+> -  0x48-0x4f, 0x58, 0x5c, 0x73 and 0x77. Probing other addresses is stron=
+gly
+> -  discouraged as it is known to cause trouble with other (non-hwmon) I2C
+> -  chips. If your chip lives at an address which can't be probed then the
+> -  device will have to be instantiated explicitly (which is always better
+> -  anyway.)
+> +* Only the following I2C addresses shall be probed: ``0x18``-``0x1f``,
+> +  ``0x28``-``0x2f``, ``0x48``-``0x4f``, ``0x58``, ``0x5c``, ``0x73``,
+> +  and ``0x77``. Probing other addresses is strongly discouraged, as it is
+> +  known to cause trouble with other (non-``hwmon``) I2C chips. If your c=
+hip
+> +  lives at an address which can't be probed, then the device will have t=
+o be
+> +  instantiated explicitly (which is always better anyway).
 
-> ---- >8 ----
-> diff --git a/Documentation/hwmon/pmbus-core.rst b/Documentation/hwmon/pmbus-core.rst
-> index 2f88a03446d2be..75404f088fd777 100644
-> --- a/Documentation/hwmon/pmbus-core.rst
-> +++ b/Documentation/hwmon/pmbus-core.rst
-> @@ -21,7 +21,7 @@ Introduction
->     with the objective to provide support to, and facilitate adoption among,
->     users.
->   
-> -    (from pmbus.org)
-> +  -- (from pmbus.org)
->   
->   Unfortunately, while PMBus commands are standardized, there are no mandatory
->   commands, and manufacturers can add as many non-standard commands as they like.
-> 
-> Otherwise the formatting LGTM, thanks!
-> 
-> Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> 
+IMO hwmon here refers to the subsystem (not code identifier name), so
+inlining here isn't needed.
 
+>  * Make sure there are no race conditions in the probe function. Specific=
+ally,
+>    completely initialize your chip and your driver first, then register w=
+ith
+> -  the hwmon subsystem.
+> +  the ``hwmon`` subsystem.
+
+Also here.
+
+> =20
+> -* Use devm_hwmon_device_register_with_info() or, if your driver needs a =
+remove
+> -  function, hwmon_device_register_with_info() to register your driver wi=
+th the
+> -  hwmon subsystem. Try using devm_add_action() instead of a remove funct=
+ion if
+> -  possible. Do not use any of the deprecated registration functions.
+> +* Use
+> +  :ref:`devm_hwmon_device_register_with_info() <devm_hwmon_device_regist=
+er_with_info>`
+> +  or, if your driver needs a remove function,
+> +  :ref:`hwmon_device_register_with_info() <hwmon_device_register_with_in=
+fo>` to
+> +  register your driver with the ``hwmon`` subsystem. Try using devm_add_=
+action()
+> +  instead of a remove function if possible. Do not use any of the deprec=
+ated
+> +  registration functions.
+
+And here.
+
+> -* Do not provide support for deprecated sysfs attributes.
+> +* Do not provide support for deprecated ``sysfs`` attributes.
+
+Dunno if sysfs (as subsystem name) also needs to be inlined.
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--25CJpLEImxGsf4/m
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZFSHawAKCRD2uYlJVVFO
+o7XUAQDfbXg0sNIzBhhokOCsjuDlTw0Q1vvP6BPSPrANQc4q1wEAxQFd/Qvkmlwr
+iM5HwGpAQ77fNQV02hQ5lQyGndcCoAk=
+=GUrd
+-----END PGP SIGNATURE-----
+
+--25CJpLEImxGsf4/m--
