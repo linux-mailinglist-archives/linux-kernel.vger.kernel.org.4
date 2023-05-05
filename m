@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70D906F7DC7
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 09:27:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EC496F7DC9
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 09:28:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231278AbjEEH12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 03:27:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53946 "EHLO
+        id S230421AbjEEH2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 03:28:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbjEEH10 (ORCPT
+        with ESMTP id S231280AbjEEH2H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 03:27:26 -0400
+        Fri, 5 May 2023 03:28:07 -0400
 Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3ED2F11B40;
-        Fri,  5 May 2023 00:27:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C8AF411B6B;
+        Fri,  5 May 2023 00:28:06 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 5923580FC;
-        Fri,  5 May 2023 07:27:23 +0000 (UTC)
-Date:   Fri, 5 May 2023 10:27:22 +0300
+        by muru.com (Postfix) with ESMTPS id 1925A812F;
+        Fri,  5 May 2023 07:28:06 +0000 (UTC)
+Date:   Fri, 5 May 2023 10:28:04 +0300
 From:   Tony Lindgren <tony@atomide.com>
 To:     Rob Herring <robh@kernel.org>
 Cc:     soc@kernel.org, Christian Marangi <ansuelsmth@gmail.com>,
@@ -81,14 +81,14 @@ Cc:     soc@kernel.org, Christian Marangi <ansuelsmth@gmail.com>,
         Michal Simek <michal.simek@xilinx.com>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@axis.com
-Subject: Re: [PATCH 2/4] ARM: dts: Add .dts files missing from the build
-Message-ID: <20230505072722.GP14287@atomide.com>
+Subject: Re: [PATCH 4/4] ARM: dts: Move .dts files to vendor sub-directories
+Message-ID: <20230505072804.GS56720@atomide.com>
 References: <20230504-arm-dts-mv-v1-0-2c8e51a2b6c4@kernel.org>
- <20230504-arm-dts-mv-v1-2-2c8e51a2b6c4@kernel.org>
+ <20230504-arm-dts-mv-v1-4-2c8e51a2b6c4@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230504-arm-dts-mv-v1-2-2c8e51a2b6c4@kernel.org>
+In-Reply-To: <20230504-arm-dts-mv-v1-4-2c8e51a2b6c4@kernel.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
@@ -99,7 +99,10 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 * Rob Herring <robh@kernel.org> [230505 03:29]:
-> Comparing .dts files to built .dtb files yielded a few .dts files which
-> are never built. Add them to the build.
+> The arm dts directory has grown to 1553 boards which makes it a bit
+> unwieldy to maintain and use. Past attempts stalled out due to plans to
+> move .dts files out of the kernel tree. Doing that is no longer planned
+> (any time soon at least), so let's go ahead and group .dts files by
+> vendors. This move aligns arm with arm64 .dts file structure.
 
-Reviewed-by: Tony Lindgren <tony@atomide.com>
+Acked-by: Tony Lindgren <tony@atomide.com>
