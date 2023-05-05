@@ -2,120 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53CBE6F7E11
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 09:42:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 824146F7E14
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 09:42:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231366AbjEEHmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 03:42:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35026 "EHLO
+        id S231373AbjEEHm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 03:42:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229810AbjEEHmb (ORCPT
+        with ESMTP id S229807AbjEEHmy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 03:42:31 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E59F17DFA;
-        Fri,  5 May 2023 00:42:30 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-517ab9a4a13so1208495a12.1;
-        Fri, 05 May 2023 00:42:30 -0700 (PDT)
+        Fri, 5 May 2023 03:42:54 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D8117DF7
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 00:42:50 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f20215fa70so9732035e9.0
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 00:42:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683272550; x=1685864550;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OvUgppSfIXlx3T0H4ExJKT3TgM82YfCHbwZdd+OA/Xk=;
-        b=G1IlrfV4q3pXyLQo7vGKIbIgC+zTv6rb7KVR+iK5VTTjIJq5SLSxYisBbAhcxlBZP6
-         gWULDdPK12sZfVHEJAn9kJXkhomlZO1ZtW+30oPEQd5GmsRl3wtnNCvs28eNl4MPag1L
-         I0OOWbK3re4ICgeMTSM91RvymVr8KsDkBxH2FB+Gf3GHSsLCGB/FBE21rXGLOgy8h89y
-         z1qGz2hg+dPuifU0+yFd0pXCYIp8eMIrQ0cD9Shz6MYlMRSGPRN2eKb+SeUvCViSPEXj
-         W8cufqM2+cAM7lM+SXq8fRl8qENNN+al93o0ts1eJajZ676AYcrMVW+DHCc81SuzK5g+
-         kFag==
+        d=linaro.org; s=google; t=1683272569; x=1685864569;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=X0YN5W0LPlKPzpypfatqj33JsLIdDk9xz6FiE+5eHUE=;
+        b=H3G3kDsoUB6tldvJFxZWuxGL17kvtDHQttrVE3BM4D4q93skWFZTPK3dkiaVrRowKf
+         iIEfkiycBF0w4GgRrUPQSc143tHiA3sVwoawpqDldo7VeKOT9Btiqe12iy4zK9ymdPTK
+         UI0bFfm1eizCepM10ycLWLWwOSdW8E0d1EqOcqiOTKZCxDmxFrdPDoVsVC90LsRe21nN
+         4hdi4A5v8Mr2z0Z72VLbi7oTpGUzpPt7SBzdlzwUn0U2GSNmp1lbYJHDxOoC5Ei3Bacj
+         xLs/02qJasuRu6UEq3T6cSYw8lu3QI765+OU4yCoCpVlPzT5p6vY27IcO8c/QeBMg8YY
+         9PIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683272550; x=1685864550;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OvUgppSfIXlx3T0H4ExJKT3TgM82YfCHbwZdd+OA/Xk=;
-        b=WqGfokupPZ6WmpGUAS3EUF8YDH0+bBUVa8feWz5HvSEkdrYDbZ11BCrYfuL10JLYLw
-         0YtLyfZRGc3LW/egcJTzZlMv5o6pR2llGjSNehuercDpS88PIYJX2jfgtY+SApgGe3vu
-         2ei2KvMXhxzu4HWAMHzfyBm+zqUTWBZdFIHXzt3tSIHhQQmyxwtLQervXhGFjeXg7Qi4
-         VIH5n20wLN/WlIJhwIqCEmDLelm9bB6m57istEWn6khGoY4Iw14PEIcDegh+sNU0W94K
-         whLnVfVfD6K+MBhrKGli1UEKW0+1JHBxuJdbM0YRssRb3RcdVirwm6BLfuibOxlaJM6T
-         2Clg==
-X-Gm-Message-State: AC+VfDyxr2xf8n4rynVa8ltExbKut1LagXMqDD9nGu/dfMFRgRmncdhQ
-        +MH8rbeW0d5bsDCOwmDLLgvpQOP0O1I=
-X-Google-Smtp-Source: ACHHUZ7uHA4sZeGrS37G+/C3rDylErJOpV0O/8F/XTCiIXpmmoTSNaOkKcMDgVjBUzGlx+yOH4PEZw==
-X-Received: by 2002:a17:903:294c:b0:1ab:1b8:8a5f with SMTP id li12-20020a170903294c00b001ab01b88a5fmr538068plb.33.1683272549688;
-        Fri, 05 May 2023 00:42:29 -0700 (PDT)
-Received: from debian.me (subs32-116-206-28-14.three.co.id. [116.206.28.14])
-        by smtp.gmail.com with ESMTPSA id jj5-20020a170903048500b001aaef9d0102sm988252plb.197.2023.05.05.00.42.28
+        d=1e100.net; s=20221208; t=1683272569; x=1685864569;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=X0YN5W0LPlKPzpypfatqj33JsLIdDk9xz6FiE+5eHUE=;
+        b=QA7KwDGB57hpOlS67FpBR9mh92cn6r0eIxyCj8PsfDw4qRg2wWOA57f26dAEcOlG9j
+         EvH1mrqw9siRIEF5YquVFGg/bTNRo62ou80CuYljqufWm7TwhaB18JGLDMg5h/M3YvIf
+         Y+RAysXLotMUZ6dyKESd+J2XtylLq8Q65XIKzqpMM1SpygSdQjSbbdDhACaUYAlKm4e/
+         ufbK0UlXv78AMnVxQif9AWGVUUnnDEsx1c/I+q8svcjgNqvgIiIlLef7gkQpfjMhDbkO
+         SOZj19z0kq7R+pWM/uOSFHKw3l0LG4DKuARFBw1wMupqpS8H7TsNiLy5fTl1D/xRdljf
+         9ZTg==
+X-Gm-Message-State: AC+VfDwNXNh82NlUZdO6XwSELNxY3MIdq5eRT/Mjx84ygkMEDLQcuOoO
+        XgAgtcMcGMkKiMOtN/TAvSgpwQ==
+X-Google-Smtp-Source: ACHHUZ557C+5NiAT/VVERnB2kIdbITR+K945g324cnQaz2MPoOKZ70EhHM93mgYjMKq9+0QJjemUZA==
+X-Received: by 2002:a05:600c:2298:b0:3f1:98df:bc03 with SMTP id 24-20020a05600c229800b003f198dfbc03mr381819wmf.25.1683272568932;
+        Fri, 05 May 2023 00:42:48 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id s6-20020adff806000000b003068f5cca8csm1459185wrp.94.2023.05.05.00.42.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 May 2023 00:42:29 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 842E4106280; Fri,  5 May 2023 14:42:20 +0700 (WIB)
-Date:   Fri, 5 May 2023 14:42:19 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Wang Honghui <honghui.wang@ucas.com.cn>,
-        Oliver Neukum <oliver@neukum.org>,
-        Ali Akcaagac <aliakc@web.de>,
-        Jamie Lenehan <lenehan@twibble.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        dc395x@twibble.org, linux-scsi@vger.kernel.org,
+        Fri, 05 May 2023 00:42:46 -0700 (PDT)
+Date:   Fri, 5 May 2023 10:42:43 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     d202180596@hust.edu.cn
+Cc:     andy gross <agross@kernel.org>,
+        bjorn andersson <andersson@kernel.org>,
+        konrad dybcio <konrad.dybcio@linaro.org>,
+        wolfram sang <wsa@kernel.org>,
+        "ivan t. ivanov" <iivanov@mm-sol.com>,
+        sricharan r <sricharan@codeaurora.org>,
+        naveen kaje <nkaje@codeaurora.org>,
+        austin christ <austinwc@codeaurora.org>,
+        hust-os-kernel-patches@googlegroups.com,
+        andy gross <agross@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scsi:dc395x: Correct "structures" spelling mistakes
-Message-ID: <ZFSzW2sFnyXGcJcL@debian.me>
-References: <9721BDA46BD84475+ZFTPVLLFKTMn4lSE@TP-P15V>
+Subject: Re: [PATCH] i2c: qup: Add missing unwind goto in qup_i2c_probe()
+Message-ID: <e7f22f7c-8552-4766-a770-fa2d29e5068d@kili.mountain>
+References: <20230418135612.598-1-d202180596@hust.edu.cn>
+ <5c9f1e4d.47382.187e97d01a5.Coremail.d202180596@hust.edu.cn>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="U5+4O5tRFB+ILI3y"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <9721BDA46BD84475+ZFTPVLLFKTMn4lSE@TP-P15V>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5c9f1e4d.47382.187e97d01a5.Coremail.d202180596@hust.edu.cn>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, May 05, 2023 at 09:18:16AM +0800, d202180596@hust.edu.cn wrote:
+> 
+> > -----原始邮件-----
+> > 发件人: "Shuai Jiang" <d202180596@hust.edu.cn>
+> > 发送时间: 2023-04-18 21:56:12 (星期二)
+              ^^^^^^^^^^
 
---U5+4O5tRFB+ILI3y
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+You can't ping the list when the merge window is open.  You have to wait
+for a couple weeks after.
 
-On Fri, May 05, 2023 at 05:41:40PM +0800, Wang Honghui wrote:
-> Signed-off-by: Wang Honghui <honghui.wang@ucas.com.cn>
->=20
-> As title.
+The weeks before and during the merge window are busy and then afterward
+maintainers have to deal with the backlog of postponed stuff...
 
-1) This is v2 of [1], right? Did you forget to pass `-v` to
-   git-format-patch(1)?
-2) The trailers (including SoB) should be placed after the patch descriptio=
-n.
-3) Last but not least, you forget to add my Reviewed-by: from v1 [1].
+Just be patient.
 
-Please reroll, keeping above in mind.
-
-Thanks.
-
-[1]: https://lore.kernel.org/all/262EBDA8BEEA7619+ZFN1b1D66%2FLp8hzh@TP-P15=
-V/
-[2]: https://lore.kernel.org/all/ZFOD%2F6rT36evHXNz@debian.me/
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---U5+4O5tRFB+ILI3y
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZFSzVgAKCRD2uYlJVVFO
-o8/7AP95cJRp5nDYDQSPm2ROeJzaV46wr9QystWokCEyAZTpOwEA1bBQIRwc50Zc
-Pk8Z1Iv58dloK0i/zBBNMaQ0NxlxSgg=
-=GJAq
------END PGP SIGNATURE-----
-
---U5+4O5tRFB+ILI3y--
+regards,
+dan carpenter
