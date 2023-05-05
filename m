@@ -2,195 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08E416F7D30
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 08:45:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DD5E6F7D36
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 08:46:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231149AbjEEGpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 02:45:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60634 "EHLO
+        id S231169AbjEEGqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 02:46:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230426AbjEEGpR (ORCPT
+        with ESMTP id S230224AbjEEGqa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 02:45:17 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B141A83C1
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 23:45:15 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-94f4b911570so210811066b.0
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 23:45:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683269114; x=1685861114;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=f1F8TUb0vE+6tu+UVmJ0AzgABHlR7ADfS8FFXBxRieA=;
-        b=UK0H7SvI8XLENMldv8m6kP0ZOtVPN6jLEgL+NVDGS4xY4pOviX0TlMDLPiOJzKkVpY
-         r1E21fJSLXmSn+BKOrwceUdmwgXLLt94CorxzRHPjMCeYoLJ92xjGs0xVwK0fdJaVWJV
-         3VAcSGNDwKeIf8PmNSpfTvUz/UPhAQn3T56MoAHX0a91TdnGvGaJmHyD9UZ+77/R77/l
-         Cs8r3YMdJDF3e8OZl8mGWJZkuocp3AuKu9y2XE0WEiLl+OkSEoJLKDvcjfOuFSoNtllk
-         IgdJH/gJnymbzdllN9wY8zQ3SxQaRrivemzhUIHRcX53mtDJekOJkoA5K0BvRULz3cQG
-         9z8w==
+        Fri, 5 May 2023 02:46:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93903156B7
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 23:45:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683269142;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tKpAY5tib+SQpvOchvtEiIJtmEfRPK050PpqPwR0jHc=;
+        b=XApaVaYhFFSj0aDxsb91UmXPsNa9bPzmfMraB6LF5bFaIrihGBcYGC2cowToau6bISyTMg
+        ironTNdNf2qSF4jK/D4yModgtr2NDRn+7e68AMpPycl9P7g2+qBy0AXud6gf90X+2cg7fK
+        3u+H88bR7YA2TeulahJgcTliwh/cWpI=
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
+ [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-82-L1HOGZm1OTKGDe9_FGJ5Dg-1; Fri, 05 May 2023 02:45:41 -0400
+X-MC-Unique: L1HOGZm1OTKGDe9_FGJ5Dg-1
+Received: by mail-lf1-f69.google.com with SMTP id 2adb3069b0e04-4edc5d704bbso738937e87.2
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 23:45:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683269114; x=1685861114;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=f1F8TUb0vE+6tu+UVmJ0AzgABHlR7ADfS8FFXBxRieA=;
-        b=J6KFU9Lpw0Cy40FdI5SI6vrJosTiBPIXqrzCcBsdbblrbcc/CpaFBchK9nt/PTNebx
-         +Ca1kAg5Iy1zI0oFCnGflApyUOhTPFl56CggXNQUaFpdkYgc28IuVIC3M1Bx90LPTKn8
-         HCj8ZstNyHv4U5fs/eqzzjXWIRic5LNZoZ+vzJe7tVoOja3o4Q1pHJu6RFxs64O56DBN
-         EVJ2JBn+SU+Ra7f0bkQ57wn394zXbQDQAYItPUwlbMRdhX0B7bG9ZP5HlagrKygQSKxT
-         FhHgnASaXBxJf5x1rStZzID4KzZVVQPXFGPhk8sr6V2KNnfBzkLaRXdxRctJKQoQRxVJ
-         jlRw==
-X-Gm-Message-State: AC+VfDzWbw6jdCnF9TnCEUGuAofg4wWjjuTNw0iUOuJt97mvbWkTIeBR
-        8639CjHEoMjYVsh5X7inex/01A==
-X-Google-Smtp-Source: ACHHUZ7e7CM816XOA8JH1lGUFzOlkUl5vywj1RnY1LL4ilUqUe6wTzu5vYAUKtEeQGlRPbffNQbYGQ==
-X-Received: by 2002:a17:906:db03:b0:965:4b43:11f1 with SMTP id xj3-20020a170906db0300b009654b4311f1mr230527ejb.3.1683269114140;
-        Thu, 04 May 2023 23:45:14 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:52e:24ce:bbc1:127d? ([2a02:810d:15c0:828:52e:24ce:bbc1:127d])
-        by smtp.gmail.com with ESMTPSA id bj6-20020a170906b04600b0096595cc0810sm549923ejb.72.2023.05.04.23.45.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 23:45:13 -0700 (PDT)
-Message-ID: <76a8662d-25ce-cd8c-7851-d163f4b3496b@linaro.org>
-Date:   Fri, 5 May 2023 08:45:12 +0200
+        d=1e100.net; s=20221208; t=1683269140; x=1685861140;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tKpAY5tib+SQpvOchvtEiIJtmEfRPK050PpqPwR0jHc=;
+        b=O7+I6M6ieOJCsmE26jprNa7VWoGZk8Ee5dV8NQpaH6Ao3gbQRkO3gq2JnIAWPBXHzQ
+         5cr0V93YxiK8ynLBDVUaXnlTiqTZ8LYeHs/uSpcKL+v/iEf9qa8a9pt1NlwguqttnaaL
+         Ce33sm8ZH8wGI38RW2D2CwgRxUl4R37jlnc3+OlLaaPi9udVKAuepEgM1utHz8fAPLjV
+         Lc7jDuaBn9LakP6FbZZs3GqchY84M7Uk2FcxIHid78qq3a2/aL6n6eZsnwOaSqBoW+w9
+         cH7BZNqo+sTg2ACAdbIH4k0h5FyK3BHqZKj4NbMsidqrDJsfnmNc7v9Gv4I4qMBgIs4h
+         FPmg==
+X-Gm-Message-State: AC+VfDyt64BaMwW/TJGDMGQVOPy5QAhQZ6Dfv5oUdrqmis/cpb3d247Q
+        Fe5b9ljzaI9YHIv+F3W7Oz2gg5iltCUMZPEykocQ+t/Wbl2Du9Y7NNwpXeTAntnK8kLu1m/h6DH
+        1CNzL4PhHT+5h0Ts7UvsZqi5ggvrpLtRIzGCjJ3Xi
+X-Received: by 2002:ac2:442a:0:b0:4dd:afd7:8f1 with SMTP id w10-20020ac2442a000000b004ddafd708f1mr243037lfl.52.1683269139920;
+        Thu, 04 May 2023 23:45:39 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5P/6Ery2ecRIgtV5T5zf4Jc/nCqTDngMKXH4mXgZ7mTAePFoMVTxdzE82a2WU80aozee42X8+tx+80IrXPk0s=
+X-Received: by 2002:ac2:442a:0:b0:4dd:afd7:8f1 with SMTP id
+ w10-20020ac2442a000000b004ddafd708f1mr243034lfl.52.1683269139638; Thu, 04 May
+ 2023 23:45:39 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH] arm64: dts: qcom: Add Fxtec Pro1X (QX1050) DTS
-Content-Language: en-US
-To:     Dang Huynh <danct12@riseup.net>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+References: <202305051424047152799@zte.com.cn>
+In-Reply-To: <202305051424047152799@zte.com.cn>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Fri, 5 May 2023 14:45:28 +0800
+Message-ID: <CACGkMEsmf3PgxmhgRCsPZe7fRWHDXQ=TtYu5Tgx1=_Ymyvi-pA@mail.gmail.com>
+Subject: Re: [PATCH] vhost_net: Use fdget() and fdput()
+To:     ye.xingchen@zte.com.cn
+Cc:     mst@redhat.com, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20230505-fxtec-pro1x-support-v1-1-1d9473b4d6e4@riseup.net>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230505-fxtec-pro1x-support-v1-1-1d9473b4d6e4@riseup.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/05/2023 22:33, Dang Huynh wrote:
-> The F(x)tec Pro1X is a mobile phone released by FX Technologies Ltd
-> in 2022.
-> 
-> The phone is exactly the same as the Pro1 released in 2019 with some
-> changes:
-> - MSM8998 -> SM6115
-> - Camera button is no longer multistate
-> - Only one 48MP back camera
-> - A new keyboard layout picked by the community.
-> 
+On Fri, May 5, 2023 at 2:24=E2=80=AFPM <ye.xingchen@zte.com.cn> wrote:
+>
+> From: Ye Xingchen <ye.xingchen@zte.com.cn>
+>
+> convert the fget()/fput() uses to fdget()/fdput().
 
-Thank you for your patch. There is something to discuss/improve.
+What's the advantages of this?
 
-> + * Copyright (c) 2023, Dang Huynh <danct12@riseup.net>
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include "sm6115.dtsi"
-> +#include "pm6125.dtsi"
-> +
-> +/ {
-> +	model = "F(x)tec Pro1 (QX1050)";
-> +	compatible = "fxtec,pro1x", "qcom,sm6115";
+Thanks
 
-Missing bindings (first patch in the series).
-
-> +	chassis-type = "handset";
-> +
-> +	/* required for bootloader to select correct board */
-> +	qcom,msm-id = <417 0x10000>, <444 0x10000>;
-> +	qcom,board-id = <34 0>;
-> +
-> +	aliases {
-> +	};
-
-Drop empty node.
-
-> +
-> +	chosen {
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		ranges;
-> +
-> +		framebuffer0: framebuffer@5c000000 {
-> +			compatible = "simple-framebuffer";
-> +			reg = <0 0x5c000000 0 (1080 * 2160 * 4)>;
-> +			width = <1080>;
-> +			height = <2160>;
-> +			stride = <(1080 * 4)>;
-> +			format = "a8r8g8b8";
-> +			clocks = <&gcc GCC_DISP_HF_AXI_CLK>;
-> +		};
-> +	};
-> +
-> +	gpio-keys {
-> +		compatible = "gpio-keys";
-> +
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&vol_up_n>;
-> +
-> +		key-volume-up {
-> +			label = "Volume Up";
-> +			linux,code = <KEY_VOLUMEUP>;
-> +			gpios = <&pm6125_gpios 5 GPIO_ACTIVE_LOW>;
-> +			debounce-interval = <15>;
-> +			linux,can-disable;
-> +			gpio-key,wakeup;
-> +		};
-> +	};
-> +};
-> +
-> +&tlmm {
-
-Override/label entries should be ordered by name. tlmm is after pm6125.
-
-> +	gpio-reserved-ranges = <0 4>, <14 4>;
-> +};
-> +
-> +&pm6125_gpios {
-> +	vol_up_n: vol-up-n-state {
-> +		pins = "gpio5";
-> +		function = "normal";
-> +		power-source = <0>;
-> +		bias-pull-up;
-> +		input-enable;
-> +	};
-> +};
-> +
-> +&dispcc {
-> +	/* HACK: disable until a panel driver is ready to retain simplefb */
-> +	status = "disabled";
-> +};
-> +
-> +&pon_pwrkey {
-> +	status = "okay";
-> +};
-> +
-> +&pon_resin {
-> +	linux,code = <KEY_VOLUMEDOWN>;
-> +	status = "okay";
-> +};
-> +
-> +&rpm_requests {
-> +	pm6125-regulators {
-
-Does not look like you tested the DTS against bindings. Please run `make
-dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
-for instructions).
-
-
-Best regards,
-Krzysztof
+>
+> Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
+> ---
+>  drivers/vhost/net.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/vhost/net.c b/drivers/vhost/net.c
+> index ae2273196b0c..5b3fe4805182 100644
+> --- a/drivers/vhost/net.c
+> +++ b/drivers/vhost/net.c
+> @@ -1466,17 +1466,17 @@ static struct ptr_ring *get_tap_ptr_ring(struct f=
+ile *file)
+>
+>  static struct socket *get_tap_socket(int fd)
+>  {
+> -       struct file *file =3D fget(fd);
+> +       struct fd f =3D fdget(fd);
+>         struct socket *sock;
+>
+> -       if (!file)
+> +       if (!f.file)
+>                 return ERR_PTR(-EBADF);
+> -       sock =3D tun_get_socket(file);
+> +       sock =3D tun_get_socket(f.file);
+>         if (!IS_ERR(sock))
+>                 return sock;
+> -       sock =3D tap_get_socket(file);
+> +       sock =3D tap_get_socket(f.file);
+>         if (IS_ERR(sock))
+> -               fput(file);
+> +               fdput(f);
+>         return sock;
+>  }
+>
+> --
+> 2.25.1
+>
 
