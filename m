@@ -2,105 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 532756F8B05
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 23:29:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E148D6F8B10
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 23:30:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233497AbjEEV3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 17:29:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33318 "EHLO
+        id S233500AbjEEV37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 17:29:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233487AbjEEV3B (ORCPT
+        with ESMTP id S233557AbjEEV3w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 17:29:01 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4190F213F
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 14:28:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683322136; x=1714858136;
-  h=subject:from:to:cc:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ct9jA8uj0TBlJubhPsdKuhSkXFE3pWNvQDrir/VFsbw=;
-  b=jYg9vUGSjJMdCH7D1VwHQaFyN3cUW14PJKNzm5OY+WolD6SzLIHKDSX7
-   UG0SL/EuK5I3AunZ8Td4atB288ZQANEDRYaqbgi+MAuNiTeAv1VoW4AvJ
-   F239hRYM2cfKUX6UWuOEa/KH61O9YDsov806bYqQ3E14isaQOKIPBUEEk
-   cWdqmZLhpCUaKlyvplJsySHFBvetlJr8PVC6b1YWG5MFyW7HdrUvxPs8s
-   ok4igmhF0HitVoosK39Ki84jYx6aF5fOc41rha8Luk0n+D+wvm9mPjhAw
-   hNoMMNsKa9cFEuL9i36m8doGZ/RXEGOEC9nxWQAHvK4PniXEIFkwaeejh
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="346770402"
-X-IronPort-AV: E=Sophos;i="5.99,253,1677571200"; 
-   d="scan'208";a="346770402"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2023 14:28:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="762610735"
-X-IronPort-AV: E=Sophos;i="5.99,253,1677571200"; 
-   d="scan'208";a="762610735"
-Received: from djiang5-mobl3.amr.corp.intel.com (HELO [192.168.1.177]) ([10.212.77.78])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2023 14:28:55 -0700
-Subject: [PATCH] base/node: Use 'property' to identify an access parameter
-From:   Dave Jiang <dave.jiang@intel.com>
-To:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
-        dan.j.williams@intel.com
-Date:   Fri, 05 May 2023 14:28:55 -0700
-Message-ID: <168332213518.2189163.18377767521423011290.stgit@djiang5-mobl3>
-User-Agent: StGit/1.5
+        Fri, 5 May 2023 17:29:52 -0400
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E7A5DF;
+        Fri,  5 May 2023 14:29:51 -0700 (PDT)
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-18f4a6d2822so20160837fac.1;
+        Fri, 05 May 2023 14:29:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683322191; x=1685914191;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HFeDUyo6AKuXS79TAn9Cc44Tads4aooewVV9T4r6M0g=;
+        b=dZyPWFywv32sonGj/fAdNDXMxS3ceDkBqPG/W0Pn1QkowDFTfjqIAYxwrdT7qTCnPr
+         Qakn+Ecegs2igeWnW+cDw79ATc4oE8y0X7hu7yHsC61qY/rKvZ+wV2KYlxZyQX5+HBbn
+         TcmVG++8ZNJpWc7ax5uuhImvQBsnF1cLlakouWT3cYvivMqCBI3ygl7yH2iZhPsDRlLd
+         0kHm3BA6Xe7eLXdx8mMAe5B0SvVA4h9VwvxF3vrVXpsoTBpN9MGXlNYZJyHj8V3HKd7t
+         sxhvE3FIc8odS8kaM2dJ7HJbk2fc0DxvHlBOdhry/MouBaQk76v4F3v12ACsjLAVE9fQ
+         W6Ng==
+X-Gm-Message-State: AC+VfDyoYDaG+6BRq28RdVCtJVEDwVeSWfJSgxReBnkioPTldAhajKJC
+        vFXxveDooSB+tGPGhfW9zw==
+X-Google-Smtp-Source: ACHHUZ7aycN1QluDBhyWe/IUee4uCc1VOdrIKAR+AJ7bfwvk/TZdgDz4IwmG4Ng6bzcWJOffABFmaA==
+X-Received: by 2002:a05:6871:7a4:b0:192:6fdd:6e36 with SMTP id o36-20020a05687107a400b001926fdd6e36mr3229320oap.17.1683322190696;
+        Fri, 05 May 2023 14:29:50 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t1-20020a9d7f81000000b006a62aac5736sm1369180otp.28.2023.05.05.14.29.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 May 2023 14:29:49 -0700 (PDT)
+Received: (nullmailer pid 3595549 invoked by uid 1000);
+        Fri, 05 May 2023 21:29:48 -0000
+Date:   Fri, 5 May 2023 16:29:48 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Judith Mendez <jm@ti.com>
+Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Schuyler Patton <spatton@ti.com>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Simon Horman <simon.horman@corigine.com>
+Subject: Re: [PATCH v4 1/4] dt-bindings: net: can: Add poll-interval for MCAN
+Message-ID: <20230505212948.GA3590042-robh@kernel.org>
+References: <20230501224624.13866-1-jm@ti.com>
+ <20230501224624.13866-2-jm@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230501224624.13866-2-jm@ti.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Usage of 'attr' and 'name' in the context of a sysfs attribute
-definition are confusing because those read as being related to:
+On Mon, May 01, 2023 at 05:46:21PM -0500, Judith Mendez wrote:
+> On AM62x SoC, MCANs on MCU domain do not have hardware interrupt
+> routed to A53 Linux, instead they will use software interrupt by
+> hrtimer. To enable timer method, interrupts should be optional so
+> remove interrupts property from required section and introduce
+> poll-interval property.
+> 
+> Signed-off-by: Judith Mendez <jm@ti.com>
+> ---
+> Changelog:
+> v3:
+>  1. Move binding patch to first in series
+>  2. Update description for poll-interval
+>  3. Add oneOf to specify using interrupts/interrupt-names or poll-interval
+>  4. Fix example property: add comment below 'example'
+> 
+> v2:
+>   1. Add poll-interval property to enable timer polling method
+>   2. Add example using poll-interval property
+>   
+>  .../bindings/net/can/bosch,m_can.yaml         | 36 +++++++++++++++++--
+>  1 file changed, 34 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> index 67879aab623b..c024ee49962c 100644
+> --- a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> +++ b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> @@ -14,6 +14,13 @@ maintainers:
+>  allOf:
+>    - $ref: can-controller.yaml#
+>  
+> +oneOf:
+> +  - required:
+> +      - interrupts
+> +      - interrupt-names
+> +  - required:
+> +      - poll-interval
 
-	struct attribute .name
+Move this next to 'required'.
 
-Rename 'name' to 'property' in preparation for renaming 'struct
-node_hmem_attr' to a more generic name that can be used in more contexts
-('struct access_coordinate'), and not be confused with 'struct
-attribute'.
+> +
+>  properties:
+>    compatible:
+>      const: bosch,m_can
+> @@ -40,6 +47,14 @@ properties:
+>        - const: int1
+>      minItems: 1
+>  
+> +  poll-interval:
+> +    $ref: /schemas/types.yaml#/definitions/flag
 
-Suggested-by: Dan Williams <dan.j.williams@intel.com>
-Reviewed-by: Dan Williams <dan.j.williams@intel.com>
-Signed-off-by: Dave Jiang <dave.jiang@intel.com>
----
- drivers/base/node.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+This is a common property already defined as a uint32. You shouldn't 
+define a new type.
 
-diff --git a/drivers/base/node.c b/drivers/base/node.c
-index b46db17124f3..2cada01c70da 100644
---- a/drivers/base/node.c
-+++ b/drivers/base/node.c
-@@ -162,15 +162,15 @@ static struct node_access_nodes *node_init_node_access(struct node *node,
- }
- 
- #ifdef CONFIG_HMEM_REPORTING
--#define ACCESS_ATTR(name)						\
--static ssize_t name##_show(struct device *dev,				\
-+#define ACCESS_ATTR(property)						\
-+static ssize_t property##_show(struct device *dev,			\
- 			   struct device_attribute *attr,		\
- 			   char *buf)					\
- {									\
- 	return sysfs_emit(buf, "%u\n",					\
--			  to_access_nodes(dev)->hmem_attrs.name);	\
-+			  to_access_nodes(dev)->hmem_attrs.property);	\
- }									\
--static DEVICE_ATTR_RO(name)
-+static DEVICE_ATTR_RO(property)
- 
- ACCESS_ATTR(read_bandwidth);
- ACCESS_ATTR(read_latency);
+A flag doesn't even make sense. If that's all you need, then just enable 
+polling if no interrupt is present.
 
+> +    description: Enable hrtimer polling method for an M_CAN device.
+> +      If this property is defined in MCAN node, it tells the driver to
+> +      enable polling method for an MCAN device. If for an MCAN device,
+> +      hardware interrupt is found and hrtimer polling method is enabled,
 
+What's hrtimer? (Don't put Linuxisms in bindings)
+
+> +      the driver will use hardware interrupt method.
+> +
+>    clocks:
+>      items:
+>        - description: peripheral clock
+> @@ -122,8 +137,6 @@ required:
+>    - compatible
+>    - reg
+>    - reg-names
+> -  - interrupts
+> -  - interrupt-names
+>    - clocks
+>    - clock-names
+>    - bosch,mram-cfg
+> @@ -132,6 +145,7 @@ additionalProperties: false
+>  
+>  examples:
+>    - |
+> +    // Example with interrupts
+>      #include <dt-bindings/clock/imx6sx-clock.h>
+>      can@20e8000 {
+>        compatible = "bosch,m_can";
+> @@ -149,4 +163,22 @@ examples:
+>        };
+>      };
+>  
+> +  - |
+> +    // Example with timer polling
+> +    #include <dt-bindings/clock/imx6sx-clock.h>
+> +    can@20e8000 {
+> +      compatible = "bosch,m_can";
+> +      reg = <0x020e8000 0x4000>, <0x02298000 0x4000>;
+> +      reg-names = "m_can", "message_ram";
+> +      poll-interval;
+> +      clocks = <&clks IMX6SX_CLK_CANFD>,
+> +               <&clks IMX6SX_CLK_CANFD>;
+> +      clock-names = "hclk", "cclk";
+> +      bosch,mram-cfg = <0x0 0 0 32 0 0 0 1>;
+> +
+> +      can-transceiver {
+> +        max-bitrate = <5000000>;
+> +      };
+> +    };
+> +
+>  ...
+> -- 
+> 2.17.1
+> 
