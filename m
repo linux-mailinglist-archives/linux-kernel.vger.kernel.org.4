@@ -2,74 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2EFC6F85A1
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 17:25:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 727376F85A5
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 17:26:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232929AbjEEPZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 11:25:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54278 "EHLO
+        id S232771AbjEEP0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 11:26:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232925AbjEEPZT (ORCPT
+        with ESMTP id S232955AbjEEP0Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 11:25:19 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D70D1C0DC
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 08:23:47 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id 3f1490d57ef6-b9a6eec8611so14579391276.0
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 08:23:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1683300216; x=1685892216;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4/3vTohp91jiKKtxYYXC9sZ4oDT0Wvdf7xVOWIDy7Fk=;
-        b=Bszl0DwZbz8s+myurjfDruThE0Fu8MhipC9cyx9FTy3XiZxkMKgFbm867G2C7RFNbT
-         OJczRbftk7euoqYCIpgBXpuyjmZnTE8jpjOwFvJJ3s/14zLgxyQjZjhqwtzHVIeb9rHH
-         h70UHwRlPMA2MUR8cG2u9TKfm7m10YDCj7ZelEEfzTiSLn15zDrDojwEIkVgmD5VnDSv
-         HsR7FB2fKjU/MVKSotN/8UpkcEqIFiaiWiww4pIvKGNGUKhbKawbk1skibuLteTKnxCc
-         y4Xn865xcSP3LUMtcRXSqSyY6lp9eAE99FUGbpcL32FJ0gHXsTQpLgKCjmDkPqmv4uJC
-         8EbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683300216; x=1685892216;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4/3vTohp91jiKKtxYYXC9sZ4oDT0Wvdf7xVOWIDy7Fk=;
-        b=OpN8sLIp0CSCOodg6uAYdUPVrxm08NVGJa7chV7NIydu6mvbe/P/kG/OYjvWXwtIAQ
-         JbmoU1bAMkP2NyVyKMhn/xK4uv6PQxCzAWMAANG176CyxaWyV1banNThxX21rua8br5e
-         dZHkgltl+HQW7RLG+0duto4DNItDBaXZSbP4/PtentwBrnqCDfgnwhyB+N7tfdod3I0m
-         KzxGWwogkTgJ9yCdY1Q6nT3IkZBBGl/Uq02t80qMpVagpPnNDLTqeHuSivqjGc0LaH+K
-         p1FSb1uubELw38MGjYCULEBPOAGH2x2jaGgcsAsm7MVP8G/mektSO/kFds5vqZmWhP8l
-         NkuA==
-X-Gm-Message-State: AC+VfDyfjXPZfzowaU/dxOV4Zy0kwZCBI50R4QpzGgN3q/MKn4yrtS4S
-        +z09wAFVhgq+Y2VVfJ9NMWoPGn6w/mpgWjJGRUbp
-X-Google-Smtp-Source: ACHHUZ57JDqGgS/uAWi4XXuD+Aw3Brz4iCdRPH0YMiqpZ3PYVd37YzF/qiHvizGQHZkqKkRe+0+w3obMHGqdV1gyjoM=
-X-Received: by 2002:a81:138d:0:b0:559:f517:a72d with SMTP id
- 135-20020a81138d000000b00559f517a72dmr2939441ywt.14.1683300215767; Fri, 05
- May 2023 08:23:35 -0700 (PDT)
+        Fri, 5 May 2023 11:26:24 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 14C9E1A107;
+        Fri,  5 May 2023 08:25:18 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 292E51FB;
+        Fri,  5 May 2023 08:26:02 -0700 (PDT)
+Received: from e130256.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E80D13F5A1;
+        Fri,  5 May 2023 08:25:16 -0700 (PDT)
+From:   Hongyan Xia <hongyan.xia2@arm.com>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Hongyan Xia <hongyan.xia2@arm.com>,
+        Qais Yousef <qyousef@layalina.io>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] sched/documentation: elaborate on uclamp limitations
+Date:   Fri,  5 May 2023 16:24:39 +0100
+Message-Id: <20230505152440.142265-1-hongyan.xia2@arm.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230504213002.56803-1-michael.mccracken@gmail.com>
- <fbf37518-328d-c08c-7140-5d09d7a2674f@redhat.com> <87pm7f9q3q.fsf@gentoo.org> <c50ac5e4-3f84-c52a-561d-de6530e617d7@redhat.com>
-In-Reply-To: <c50ac5e4-3f84-c52a-561d-de6530e617d7@redhat.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 5 May 2023 11:23:24 -0400
-Message-ID: <CAHC9VhTX3ohxL0i3vT8sObQ+v+-TOK95+EH1DtJZdyMmrm3A2A@mail.gmail.com>
-Subject: Re: [PATCH] sysctl: add config to make randomize_va_space RO
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Sam James <sam@gentoo.org>,
-        Michael McCracken <michael.mccracken@gmail.com>,
-        linux-kernel@vger.kernel.org, serge@hallyn.com, tycho@tycho.pizza,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        kernel-hardening@lists.openwall.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,30 +42,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 5, 2023 at 11:15=E2=80=AFAM David Hildenbrand <david@redhat.com=
-> wrote:
-> On 05.05.23 09:46, Sam James wrote:
-> > David Hildenbrand <david@redhat.com> writes:
-> >> On 04.05.23 23:30, Michael McCracken wrote:
-> >>> Add config RO_RANDMAP_SYSCTL to set the mode of the randomize_va_spac=
-e
-> >>> sysctl to 0444 to disallow all runtime changes. This will prevent
-> >>> accidental changing of this value by a root service.
-> >>> The config is disabled by default to avoid surprises.
+The story in 5.2 about util_avg abruptly jumping from 300 when
+Fmax/Fmin == 3 to 1024 when Fmax/Fmin == 4 hides some details about how
+clock_pelt works behind the scenes. Explicitly mention it to make it
+easier for readers to follow.
 
-...
+Signed-off-by: Hongyan Xia <hongyan.xia2@arm.com>
+Cc: Qais Yousef <qyousef@layalina.io>
+Cc: Vincent Guittot <vincent.guittot@linaro.org>
+---
+ Documentation/scheduler/sched-util-clamp.rst | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-> If we really care, not sure what's better: maybe we want to disallow
-> disabling it only in a security lockdown kernel?
+diff --git a/Documentation/scheduler/sched-util-clamp.rst b/Documentation/scheduler/sched-util-clamp.rst
+index 74d5b7c6431d..524df07bceba 100644
+--- a/Documentation/scheduler/sched-util-clamp.rst
++++ b/Documentation/scheduler/sched-util-clamp.rst
+@@ -669,6 +669,19 @@ but not proportional to Fmax/Fmin.
+ 
+         p0->util_avg = 300 + small_error
+ 
++The reason why util_avg is around 300 even though it runs for 900 at Fmin is:
++Although running at Fmin reduces the rate of rq_clock_pelt() to 1/3 thus
++accumulates util_sum at 1/3 of the rate at Fmax, the clock period
++(rq_clock_pelt() now minus previous rq_clock_pelt()) in:
++
++::
++
++        util_sum / clock period = util_avg
++
++does not shrink to 1/3, since rq->clock_pelt is periodically synchronized with
++rq->clock_task as long as there's idle time. As a result, we get util_avg of
++about 300, not 900.
++
+ Now if the ratio of Fmax/Fmin is 4, the maximum value becomes:
+ 
+ ::
+@@ -682,6 +695,10 @@ this happens, then the _actual_ util_avg will become:
+ 
+         p0->util_avg = 1024
+ 
++This is because rq->clock_pelt is no longer synchronized with the task clock.
++The clock period therefore is proportionally shrunk by the same ratio of
++(Fmax/Fmin), giving us a maximal util_avg of 1024.
++
+ If task p1 wakes up on this CPU, which have:
+ 
+ ::
+-- 
+2.34.1
 
-If we're bringing up the idea of Lockdown, controlling access to
-randomize_va_space is possible with the use of LSMs.  One could easily
-remove write access to randomize_va_space, even for tasks running as
-root.
-
-(On my Rawhide system with SELinux enabled)
-% ls -Z /proc/sys/kernel/randomize_va_space
-system_u:object_r:proc_security_t:s0 /proc/sys/kernel/randomize_va_space
-
---=20
-paul-moore.com
