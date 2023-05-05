@@ -2,86 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C35766F8CD1
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 01:36:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5F2E6F8CD3
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 01:36:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232541AbjEEXcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 19:32:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41132 "EHLO
+        id S230386AbjEEXg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 19:36:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbjEEXb6 (ORCPT
+        with ESMTP id S229879AbjEEXg0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 19:31:58 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0875B84
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 16:31:56 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-643846c006fso2654749b3a.0
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 16:31:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1683329516; x=1685921516;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8uJUh2UWnCD23NYvfrOwl5QVSa+EISSPPjSd5uCE+wE=;
-        b=hDEcZYca3fchq1Az69ce+GM2HlxTVEnOzK8YFMewKwbqZCip3SHcTYv/NcDIqyTNH6
-         6/hGMJGeAOIgWb/20BfirWkR35QBYAA+xxb9UTxtticDLCSXojwOTJHrLF41Hyxt+YaK
-         T6maGzq8mC7t7pPrzFzvo7tagiEYNn31u5qQDJ5kPqpuSoGyoZ6o9H6prNABkmmq5Vda
-         sAFdVw3t5XhZHMPBJWIWz8Mo0sUVFZ/yYBYT9v0jzLBiEZiqao4hD7ETWKMwjPa4m+3H
-         6Kaaa5nlzpH6ZAGnMfax9hrBUWORjcoA9eZU7VzKuHhAQmaO+YQSkq3pVUg4X0ClKxGM
-         gbMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683329516; x=1685921516;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8uJUh2UWnCD23NYvfrOwl5QVSa+EISSPPjSd5uCE+wE=;
-        b=YhWlCRtlPgoZqTEH5IEnoL014Cml8fm/BVMMQw8jxCW/TjAfg6eWVpme5i3UYDd10n
-         5mYhYiej7/zerDo8YZt7ByE7oER0NWwgkbrCXUM2w1tphxwGz90K030pI9q2uxUWYEfM
-         gxW6I++wYEsg5laoEReTkYGH3qTyxl2z/BhS2zmtRbwSO3BG1yjad4N4hAB7ImRrK5d3
-         fgtVf3YFqNM2oA7UldxQmzdATjVMqQWLs7gC8NvN/v96v9HYGDze6GXXndWkY2z3HZMZ
-         DhdrxLXx3d+AVwyASc9qBYLA1DYJRp1actu0pF8LUXex/xdzu8WdVAYGdSt2TvSZM5CL
-         cndw==
-X-Gm-Message-State: AC+VfDxHLoN1593UHhIZ3hIw48I7X8xhs0EL7K8qZtTbEIxugzDkRMqb
-        f1lixVbDA8QtQqwnZ6Jp+h19QQ==
-X-Google-Smtp-Source: ACHHUZ5jCHNKEp8ajfUWEYHb1TloSL5+Po0yDLYzFo11T7JFr0OlW1iJj/ZhwBeZIssHPkp/uFRVmQ==
-X-Received: by 2002:a05:6a00:2346:b0:63f:2f00:c6d with SMTP id j6-20020a056a00234600b0063f2f000c6dmr4289043pfj.2.1683329516140;
-        Fri, 05 May 2023 16:31:56 -0700 (PDT)
-Received: from dread.disaster.area (pa49-181-88-204.pa.nsw.optusnet.com.au. [49.181.88.204])
-        by smtp.gmail.com with ESMTPSA id k2-20020aa792c2000000b0063d24fcc2b7sm2109256pfa.1.2023.05.05.16.31.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 May 2023 16:31:55 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1pv4u0-00BpIl-W1; Sat, 06 May 2023 09:31:53 +1000
-Date:   Sat, 6 May 2023 09:31:52 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     John Garry <john.g.garry@oracle.com>, axboe@kernel.dk,
-        kbusch@kernel.org, hch@lst.de, sagi@grimberg.me,
-        martin.petersen@oracle.com, djwong@kernel.org,
-        viro@zeniv.linux.org.uk, brauner@kernel.org, dchinner@redhat.com,
-        jejb@linux.ibm.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-scsi@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com,
-        Himanshu Madhani <himanshu.madhani@oracle.com>
-Subject: Re: [PATCH RFC 01/16] block: Add atomic write operations to
- request_queue limits
-Message-ID: <20230505233152.GN3223426@dread.disaster.area>
-References: <20230503183821.1473305-1-john.g.garry@oracle.com>
- <20230503183821.1473305-2-john.g.garry@oracle.com>
- <20230503213925.GD3223426@dread.disaster.area>
- <fc91aa12-1707-9825-a77e-9d5a41d97808@oracle.com>
- <20230504222623.GI3223426@dread.disaster.area>
- <ZFWHdxgWie/C02OA@gmail.com>
+        Fri, 5 May 2023 19:36:26 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1105C4EE0
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 16:36:25 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1683329783;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BamJrSPKBUHXKJJzbzgKWvqXbwAVlB1h73t9LyzGtMs=;
+        b=ZIc7dZB0g6TBZVfo/PxTghYveNOAIMntT6q5CAe7llT4h/2kgMTP+suqdm4QZ/XmwWKe0y
+        T5jvkpEss4wqVy+yAR/bcaMuzfJjnhBtc7D6OinQVOKc5p2eX+Jmn4D3cKxTQDmFoxbxaF
+        Oguj8Rn3k4iNvdlQyWPHwzWvuDh+Yjf151gFszGIbxJ3VRYO67KJrQKdF9fC1gVbX+8kft
+        uJAa95JZ85uAwukPsolaDks3R1PbFtgNvLUhTaQGLYtT4kzLsxx6FycVf+r2hWXl+quXYX
+        2OpHYNKm90zsLBGcLYBe3x/2cd7GqsoW8RnhgcYfxxRwxn/kwCHu2AUY0XTY1g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1683329783;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BamJrSPKBUHXKJJzbzgKWvqXbwAVlB1h73t9LyzGtMs=;
+        b=qkAmRvTIHd6q1u8j2V0mczvuK4bV7tRo+9wv8X30xn1MQs7E77BHwe+BNoXYyRNRFAa/US
+        LzEETW/XYGZMqaCQ==
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        syzbot+5c54bd3eb218bb595aa9@syzkaller.appspotmail.com,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Sebastian Siewior <bigeasy@linutronix.de>,
+        Michael Kerrisk <mtk.manpages@gmail.com>
+Subject: Re: [patch 02/20] posix-timers: Ensure timer ID search-loop limit
+ is valid
+In-Reply-To: <87zg6i2xn3.ffs@tglx>
+References: <20230425181827.219128101@linutronix.de>
+ <20230425183312.932345089@linutronix.de> <ZFUXrCZtWyNG3Esi@lothringen>
+ <87zg6i2xn3.ffs@tglx>
+Date:   Sat, 06 May 2023 01:36:22 +0200
+Message-ID: <87v8h62vwp.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZFWHdxgWie/C02OA@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,74 +63,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 05, 2023 at 10:47:19PM +0000, Eric Biggers wrote:
-> On Fri, May 05, 2023 at 08:26:23AM +1000, Dave Chinner wrote:
-> > > ok, we can do that but would also then make statx field 64b. I'm fine with
-> > > that if it is wise to do so - I don't don't want to wastefully use up an
-> > > extra 2 x 32b in struct statx.
-> > 
-> > Why do we need specific varibles for DIO atomic write alignment
-> > limits? We already have direct IO alignment and size constraints in statx(),
-> > so why wouldn't we just reuse those variables when the user requests
-> > atomic limits for DIO?
-> > 
-> > i.e. if STATX_DIOALIGN is set, we return normal DIO alignment
-> > constraints. If STATX_DIOALIGN_ATOMIC is set, we return the atomic
-> > DIO alignment requirements in those variables.....
-> > 
-> > Yes, we probably need the dio max size to be added to statx for
-> > this. Historically speaking, I wanted statx to support this in the
-> > first place because that's what we were already giving userspace
-> > with XFS_IOC_DIOINFO and we already knew that atomic IO when it came
-> > along would require a bound maximum IO size much smaller than normal
-> > DIO limits.  i.e.:
-> > 
-> > struct dioattr {
-> >         __u32           d_mem;          /* data buffer memory alignment */
-> >         __u32           d_miniosz;      /* min xfer size                */
-> >         __u32           d_maxiosz;      /* max xfer size                */
-> > };
-> > 
-> > where d_miniosz defined the alignment and size constraints for DIOs.
-> > 
-> > If we simply document that STATX_DIOALIGN_ATOMIC returns minimum
-> > (unit) atomic IO size and alignment in statx->dio_offset_align (as
-> > per STATX_DIOALIGN) and the maximum atomic IO size in
-> > statx->dio_max_iosize, then we don't burn up anywhere near as much
-> > space in the statx structure....
-> 
-> I don't think that's how statx() is meant to work.  The request mask is a bitmask, and the user can
-> request an arbitrary combination of different items.  For example, the user could request both
-> STATX_DIOALIGN and STATX_WRITE_ATOMIC at the same time.  That doesn't work if different items share
-> the same fields.
+On Sat, May 06 2023 at 00:58, Thomas Gleixner wrote:
+> On Fri, May 05 2023 at 16:50, Frederic Weisbecker wrote:
+> So the whole thing works like this:
+>
+>    start = READ_LOCKLESS(sig->next_id);
+>
+>    // Enfore that id and start are different to not terminate right away
+>    id = ~start;
+>
+> loop:
+>    if (id == start)
+>    	goto fail;
+>    lock()
+>         id = sig->next_id;                      <-- stable readout
+>         sig->next_id = (id + 1) & INT_MAX;      <-- prevent going negative
+>
+>         if (unused_id(id)) {
+>            add_timer_to_hash(timer, id);
+>            unlock();
+>            return id;
+>         }
+>    id++;
+>    unlock();
+>    goto loop;
+>
+> As the initial lockless readout is guaranteed to be in the positive
+> space, how is that supposed to be looping forever?
 
-Sure it does - what is contained in the field on return is defined
-by the result mask. In this case, whatever the filesystem puts in
-the DIO fields will match which flag it asserts in the result mask.
+Unless you think about the theoretical case of an unlimited number of
+threads sharing the signal_struct which all concurrently try to allocate
+a timer id and then releasing it immediately again (to avoid resource
+limit exhaustion). Theoretically possible, but is this a real concern
+with a timer ID space of 2G?
 
-i.e. if the application wants RWF_ATOMIC and so asks for STATX_DIOALIGN |
-STATX_DIOALIGN_ATOMIC in the request mask then:
+I'm sure that it's incredibly hard to exploit this, but what's really
+bothering me is the hash table itself. The only reason why we have that
+is CRIU.
 
-- if the filesystem does not support RWF_ATOMIC it fills in the
-  normal DIO alingment values and puts STATX_DIOALIGN in the result
-  mask.
+The only alternative solution I could come up with is a paritioned
+xarray where the index space would be segmented for each TGID, i.e.
 
-  Now the application knows that it can't use RWF_ATOMIC, and it
-  doesn't need to do another statx() call to get the dio alignment
-  values it needs.
+       segment.start = TGID * MAX_TIMERS_PER_PROCESS
+       segment.end    = segment.start + MAX_TIMERS_PER_PROCESS - 1
 
-- if the filesystem supports RWF_ATOMIC, it fills in the values with
-  the atomic DIO constraints and puts STATX_DIOALIGN_ATOMIC in the
-  result mask.
+where MAX_TIMERS_PER_PROCESS could be a copius 2^16 which would work for
+both 32bit and 64bit TID limits.
 
-  Now the application knows it can use RWF_ATOMIC and has the atomic
-  DIO constraints in the dio alignment fields returned.
+That would avoid the hash table lookups and the related issues, but OTH
+it would require to allocate one extra page per TGID if the application
+uses a single posix timer.
 
-This uses the request/result masks exactly as intended, yes?
+Not sure whether that's worth it though.
 
-Cheers,
+Thanks,
 
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+        tglx
