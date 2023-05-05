@@ -2,143 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3F576F82AD
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 14:10:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89CDA6F82B1
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 14:11:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231996AbjEEMKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 08:10:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34428 "EHLO
+        id S232016AbjEEMLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 08:11:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231993AbjEEMKk (ORCPT
+        with ESMTP id S231924AbjEEMLt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 08:10:40 -0400
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05D41AEFB
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 05:10:38 -0700 (PDT)
-Received: by mail-il1-x12b.google.com with SMTP id e9e14a558f8ab-33164ec77ccso552945ab.0
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 05:10:38 -0700 (PDT)
+        Fri, 5 May 2023 08:11:49 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F269C12086
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 05:11:47 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4eed764a10cso1916461e87.0
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 05:11:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683288638; x=1685880638;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tidKINGncTA+p8ufXsH97B8VbplL15U4SOqjeLKOv9Y=;
-        b=Qa1lnDP3l0k8Xxa+71SWmPWHhAK4xR5nm2JTccTw0ouSLk777GR+fKH3/I/fWY4wCH
-         4+5wSsRkFXN8UPLVVNxvBZmDxKMDebkojJbgjT5eeZCZnZ0ChXWwfaC52b7hBuk/63z6
-         H+t5gTucE9URBCD0dHYHCOZbIn82h3iPFZWCv3UZqdwBFxEy1NslnVGpd3wFdU2cjsS+
-         ZpDBzZmBRPKr6yNgP3bJrLaj+cLxgkqWJiwRRg8uSa8r9np9JKl36uf6vMFAhuhGc+/S
-         XM2hCGTp5Zpc9yv025hX/+dEpUNOV6IWCl+df2WLbr11O/ZLp0hMjeGjbMfNAOma6R7S
-         4Z0w==
+        d=linaro.org; s=google; t=1683288706; x=1685880706;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2h/CWEwyJq3P5FCMXAryqXO9WR4aBfMB6PjoKhzl8U4=;
+        b=Zbu8EzgqpkD96pt/0mSDWzGiFSmWODcuaUmVyreABq7m1znvVzYxy3l3faRkivY2vY
+         oLDI2Z5XuRhTnKbuFBXLPc79Hw/MPZxeUXAQnNwDtXe14aQjma+HI0G1sbW7eDeTzzEv
+         ET9OzwJbVh4F0fVY55KUrnh73Q4nFx6eiftAoxcso4H8tEn0IhBMqdm5mBrn4c6XKXWU
+         aYEgXzNvaiCEIbvMqEm/CYVmSXbLBHRsfCj5feqRL4dfICy7bloK6AgaXukl9ki6l80Z
+         qywFsTyxuplXRXKuaqUoh1JXnQdVgz6mEfvzQ40jCwV+5MiGVQDFUocZaHQ7RJY3r3C4
+         dEGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683288638; x=1685880638;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tidKINGncTA+p8ufXsH97B8VbplL15U4SOqjeLKOv9Y=;
-        b=BLYsgMnatW/8b35R4qTOVp/mzgADkjJcD7rL1+F7Bk0vUkuzwlO1tgFB6wVnMnKOOn
-         0msCy392UOqgeJzyyPB4dfRx/nQz7uBOIIdIGR1FS5w3XajCsxZkqXBh6WBOcRCtQDvt
-         r4moBwG3BnSNZRCEauGCrs2JZJNDxQ4aTvHNf8RjrLJj4rYOyienq1vaE7BdMS6xrm9R
-         3S7ND8aHFQjbTzo9gDNR+afDX9t/pn7sDU1jrA2Tu4cQaeYUGZ52fT2Po+V6k5yvplZr
-         YpE5Om+T33B8So9xfpqEhn1L44CeoHEOVkpVtPm1OvBgiWtXBKFEhj1iCs03tZ84JgdO
-         5PMg==
-X-Gm-Message-State: AC+VfDzf0c6yAwN+INgqy9sqwVAl4mGhswVdSDUTfLvdKV9q3eA21o5q
-        4Ni8jIXqc8S6VWpG9PrYK4AIpcgfupYLG/JE0enbQA==
-X-Google-Smtp-Source: ACHHUZ6+Sz9wXGNsJ54naDmeqrAHxiUZczPWVTomwvEYzipZXiygcBekORjvmD8FIQXG1o8L2hCtcBkjM4L0mNtEMX4=
-X-Received: by 2002:a05:6e02:1609:b0:329:3f69:539e with SMTP id
- t9-20020a056e02160900b003293f69539emr158778ilu.2.1683288637752; Fri, 05 May
- 2023 05:10:37 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683288706; x=1685880706;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2h/CWEwyJq3P5FCMXAryqXO9WR4aBfMB6PjoKhzl8U4=;
+        b=X2v34IMC34e8UNmQwdPkK5sPnobYGg0Dpv1x3G1kUtg5GU3S/MdQ8z/6SeWKOVFT3a
+         RVByvKwyhorDh9HpAMmS+oGt4ogFPO5rrx7Gn9hhDDC0ypvcEHrBBYjaTwORfBjMvTZP
+         jBZjV3OZzDC9CyByRZ/STuLXZGl80Dh+uBBetAifZCcvVf32dMTq/BENJQf4mY+csIpJ
+         fjoj7viW11IN5XVD1FH43ycK1rJgCvvP6hmkKU3JEfRrNwNePEqtDb7zRN5EzXVAFiKi
+         DThCyE6GFdbD1mAePyhc9V6IDa+pOdasPTYMAXA4cF96xuRb1vtyhsWsiF01kZMyDI1o
+         dIRg==
+X-Gm-Message-State: AC+VfDwLUG9X2RG2mTh8aLSefZY3ErxNs1lcFUOoJ6id8ApwyvLS4Q+2
+        f0bavcNGKJqUGVhpFE2IJIOJ5g==
+X-Google-Smtp-Source: ACHHUZ65oVZBAu9sTHfvlhswi1d1wC5/971YPvE+M2PAFaQfj7qir5wd68R9OeFyzxYBUMg/1QjD6w==
+X-Received: by 2002:ac2:5108:0:b0:4f1:1de7:1aab with SMTP id q8-20020ac25108000000b004f11de71aabmr554324lfb.44.1683288706252;
+        Fri, 05 May 2023 05:11:46 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id b21-20020ac25635000000b004f13633c260sm264975lff.145.2023.05.05.05.11.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 May 2023 05:11:45 -0700 (PDT)
+Message-ID: <91a390b2-db3d-90f4-a2e2-6ccb75303d04@linaro.org>
+Date:   Fri, 5 May 2023 15:11:44 +0300
 MIME-Version: 1.0
-References: <20230505113315.3307723-1-liujian56@huawei.com> <20230505113315.3307723-5-liujian56@huawei.com>
-In-Reply-To: <20230505113315.3307723-5-liujian56@huawei.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Fri, 5 May 2023 14:10:26 +0200
-Message-ID: <CANn89iJL3ywLwig8U6JKG6itL7Fr=ab_dv7Pz1YDiDvCiR-Fog@mail.gmail.com>
-Subject: Re: [PATCH 4/9] softirq: Allow early break
-To:     Liu Jian <liujian56@huawei.com>
-Cc:     corbet@lwn.net, paulmck@kernel.org, frederic@kernel.org,
-        quic_neeraju@quicinc.com, joel@joelfernandes.org,
-        josh@joshtriplett.org, boqun.feng@gmail.com, rostedt@goodmis.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        qiang1.zhang@intel.com, jstultz@google.com, tglx@linutronix.de,
-        sboyd@kernel.org, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, peterz@infradead.org, frankwoo@google.com,
-        Rhinewuwu@google.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 07/13] drm/msm/dpu: Add SM6350 support
+Content-Language: en-GB
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+References: <20230411-topic-straitlagoon_mdss-v2-0-5def73f50980@linaro.org>
+ <20230411-topic-straitlagoon_mdss-v2-7-5def73f50980@linaro.org>
+ <k25jg7cez2kimpxr4ztbdzjr2adq6a2vjknyvfe5frxujtogfg@vhfdyt45unv6>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <k25jg7cez2kimpxr4ztbdzjr2adq6a2vjknyvfe5frxujtogfg@vhfdyt45unv6>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 5, 2023 at 1:24=E2=80=AFPM Liu Jian <liujian56@huawei.com> wrot=
-e:
->
-> From: Peter Zijlstra <peterz@infradead.org>
->
-> Allow terminating the softirq processing loop without finishing the
-> vectors.
->
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Signed-off-by: Liu Jian <liujian56@huawei.com>
-> ---
->  kernel/softirq.c | 16 ++++++++++------
->  1 file changed, 10 insertions(+), 6 deletions(-)
->
-> diff --git a/kernel/softirq.c b/kernel/softirq.c
-> index 48a81d8ae49a..e2cad5d108c8 100644
-> --- a/kernel/softirq.c
-> +++ b/kernel/softirq.c
-> @@ -582,6 +582,9 @@ asmlinkage __visible void __softirq_entry __do_softir=
-q(void)
->                                prev_count, preempt_count());
->                         preempt_count_set(prev_count);
->                 }
-> +
-> +               if (pending && __softirq_needs_break(start))
-> +                       break;
+On 27/04/2023 18:37, Marijn Suijten wrote:
+> On 2023-04-21 00:31:16, Konrad Dybcio wrote:
+>> Add SM6350 support to the DPU1 driver to enable display output.
+>>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> 
+> After addressing the comments from Dmitry (CURSOR0->DMA1 and
+> CURSOR1->DMA2), this is:
+> 
+> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+> 
+> See below for some nits.
 
-This means that some softirq may starve, because
+[...]
 
-for_each_set_bit(vec_nr, &pending, NR_SOFTIRQS)
+>> +static const struct dpu_mdp_cfg sm6350_mdp[] = {
+>> +	{
+>> +	.name = "top_0", .id = MDP_TOP,
+>> +	.base = 0x0, .len = 0x494,
+>> +	.features = 0,
+>> +	.clk_ctrls[DPU_CLK_CTRL_VIG0] = { .reg_off = 0x2ac, .bit_off = 0 },
+>> +	.clk_ctrls[DPU_CLK_CTRL_DMA0] = { .reg_off = 0x2ac, .bit_off = 8 },
+>> +	.clk_ctrls[DPU_CLK_CTRL_DMA1] = { .reg_off = 0x2b4, .bit_off = 8 },
+>> +	.clk_ctrls[DPU_CLK_CTRL_DMA2] = { .reg_off = 0x2c4, .bit_off = 8 },
+>> +	.clk_ctrls[DPU_CLK_CTRL_REG_DMA] = { .reg_off = 0x2bc, .bit_off = 20 },
+>> +	},
+>> +};
+>> +
+>> +static const struct dpu_ctl_cfg sm6350_ctl[] = {
+>> +	{
+>> +	.name = "ctl_0", .id = CTL_0,
+>> +	.base = 0x1000, .len = 0x1dc,
+>> +	.features = BIT(DPU_CTL_ACTIVE_CFG),
+>> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 9),
+>> +	},
+>> +	{
+>> +	.name = "ctl_1", .id = CTL_1,
+>> +	.base = 0x1200, .len = 0x1dc,
+>> +	.features = BIT(DPU_CTL_ACTIVE_CFG),
+>> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 10),
+>> +	},
+>> +	{
+>> +	.name = "ctl_2", .id = CTL_2,
+>> +	.base = 0x1400, .len = 0x1dc,
+>> +	.features = BIT(DPU_CTL_ACTIVE_CFG),
+>> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 11),
+>> +	},
+>> +	{
+>> +	.name = "ctl_3", .id = CTL_3,
+>> +	.base = 0x1600, .len = 0x1dc,
+>> +	.features = BIT(DPU_CTL_ACTIVE_CFG),
+>> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 12),
+>> +	},
+>> +};
+>> +
+>> +static const struct dpu_sspp_cfg sm6350_sspp[] = {
+>> +	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, 0x1f8, VIG_SC7180_MASK,
+>> +		 sc7180_vig_sblk_0, 0,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0),
+>> +	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000, 0x1f8, DMA_SDM845_MASK,
+>> +		 sdm845_dma_sblk_0, 1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0),
+>> +	SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000, 0x1f8, DMA_CURSOR_SDM845_MASK,
+>> +		 sdm845_dma_sblk_1, 5, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR0),
+>> +	SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000, 0x1f8, DMA_CURSOR_SDM845_MASK,
+>> +		 sdm845_dma_sblk_2, 9, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1),
+>> +};
+>> +
+>> +static const struct dpu_lm_cfg sm6350_lm[] = {
+>> +	LM_BLK("lm_0", LM_0, 0x44000, MIXER_SDM845_MASK,
+>> +		&sc7180_lm_sblk, PINGPONG_0, LM_1, DSPP_0),
+>> +	LM_BLK("lm_1", LM_1, 0x45000, MIXER_SDM845_MASK,
+>> +		&sc7180_lm_sblk, PINGPONG_1, LM_0, 0),
+> 
+> These two entries are indented with two tabs and have one character too
+> many to align with the opening parenthesis on the previous line.  Can we
+> please settle on a single style, as this commit mostly uses tabs+spaces
+> to align with the opening parenthesis?
+> 
+> Dmitry vouched for `cino=(0` (when in unclosed parenthesis, align next
+> line with zero extra characters to the opening parenthesis), but I find
+> double tabs more convenient as it doesn't require reindenting when
+> changing the name of the macro (which happened too often in my INTF TE
+> series).
 
-Always iterate using the same order (of bits)
+I mainly vote for 'cino=(0' for indenting conditions (where double tab 
+is confusing) and for function calls. I do not have a strong opinion 
+about macros expansions. We have been using double-tab there, which is 
+fine with me.
 
+Another option (which I personally find more appealing, but it doesn't 
+play well with the current guidelines) is to have all macro arguments in 
+a single line. It makes it easier to compare things.
 
+And another option would be to expand these macros up to some point. 
+Previous experience with clock and interconnect drivers showed that 
+expanding such multi-arg acros makes it _easier_ to handle the data. 
+Counterintuitive, but true.
 
+> 
+>> +};
+>> +
+>> +static const struct dpu_dspp_cfg sm6350_dspp[] = {
+>> +	DSPP_BLK("dspp_0", DSPP_0, 0x54000, DSPP_SC7180_MASK,
+>> +		 &sm8150_dspp_sblk),
+>> +};
+>> +
+>> +static struct dpu_pingpong_cfg sm6350_pp[] = {
+>> +	PP_BLK("pingpong_0", PINGPONG_0, 0x70000, PINGPONG_SM8150_MASK, 0, sdm845_pp_sblk,
+>> +	       DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
+>> +	       -1),
+>> +	PP_BLK("pingpong_1", PINGPONG_1, 0x70800, PINGPONG_SM8150_MASK, 0, sdm845_pp_sblk,
+>> +	       DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
+>> +	       -1),
 
->         }
->
->         if (!IS_ENABLED(CONFIG_PREEMPT_RT) &&
-> @@ -590,13 +593,14 @@ asmlinkage __visible void __softirq_entry __do_soft=
-irq(void)
->
->         local_irq_disable();
->
-> -       pending =3D local_softirq_pending();
-> -       if (pending) {
-> -               if (!__softirq_needs_break(start) && --max_restart)
-> -                       goto restart;
-> +       if (pending)
-> +               or_softirq_pending(pending);
-> +       else if ((pending =3D local_softirq_pending()) &&
-> +                !__softirq_needs_break(start) &&
-> +                --max_restart)
-> +               goto restart;
->
-> -               wakeup_softirqd();
-> -       }
-> +       wakeup_softirqd();
->
->         account_softirq_exit(current);
->         lockdep_softirq_end(in_hardirq);
-> --
-> 2.34.1
->
+[skipped the rest]
+
+-- 
+With best wishes
+Dmitry
+
