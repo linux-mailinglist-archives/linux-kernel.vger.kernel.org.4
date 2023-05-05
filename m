@@ -2,111 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C3196F7F73
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 10:57:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2FEC6F7F77
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 10:58:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231437AbjEEI5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 04:57:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46456 "EHLO
+        id S231436AbjEEI6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 04:58:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230055AbjEEI5r (ORCPT
+        with ESMTP id S230055AbjEEI6k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 04:57:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7306E13C22;
-        Fri,  5 May 2023 01:57:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 06B0761212;
-        Fri,  5 May 2023 08:57:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4A4CC433D2;
-        Fri,  5 May 2023 08:57:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683277065;
-        bh=i5q4WohYE0g9LUCRH2pDqZUtOvfmz1IOwB04BZJnsC0=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=f3W8bMfOAJWexMq4CAgvuzWOD6FZjYD8Ovsf30k/sXsggEnylsg9oNdncJ/EgCD61
-         zYvQdZp2+RIbi2fTr54XnP9fP98uHb0Ju5GAtMimSNXikpMYFugMFeZGqzkjD8jPP1
-         m30AFRRlaUE/7ZCDbESc+x5FneaUnLaTg9Lg+bZvYFpRMKWeh2L2T1VkuDETqXKHnG
-         XJQTD38iEG4R7pAHM9BCtrosss5nkUOR+puE90XTzaTHsjYmEg7ONfOl51X3XpREWn
-         22FzFbCyGQ9BkKDmz03MMUckK40EkBf+sCRCk5zrzQQuhH/IwmIMrxSuMVDzfmFLDo
-         vtlkwV0Cg1xvA==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Takeshi Misawa <jeantsuru.cumc.mandola@gmail.com>
-Cc:     netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
-        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vasanthakumar Thiagarajan <vasanth@atheros.com>,
-        Sujith <Sujith.Manoharan@atheros.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        Senthil Balasubramanian <senthilkumar@atheros.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] [net] Fix memory leak in htc_connect_service
-References: <ZFTEkCsFcEa44CN8@DESKTOP>
-Date:   Fri, 05 May 2023 11:57:39 +0300
-In-Reply-To: <ZFTEkCsFcEa44CN8@DESKTOP> (Takeshi Misawa's message of "Fri, 5
-        May 2023 17:55:44 +0900")
-Message-ID: <87fs8bp33w.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Fri, 5 May 2023 04:58:40 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C230113C22;
+        Fri,  5 May 2023 01:58:38 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3458wWfR059994;
+        Fri, 5 May 2023 03:58:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1683277112;
+        bh=SWG4LX47KUpJB6whFqKHOX6asRz/2b2FfJDoFeUwT0k=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=r+kQNaDcaYT8h9C47rzGLsXNQqpER5ieWLV5Cafe/Ellq9lCUC09MfWsX75MpB2vC
+         DKbSMrRijCZ/VKLnochszoHxLb/QwcMiMnoNTmMbhaD9Q3W7bZYRCZS2OcGUUUMyv3
+         DDdYUIogH535uSLhfuq1E1UY7Xk1ijyFyKX2aZyQ=
+Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3458wWue054742
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 5 May 2023 03:58:32 -0500
+Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 5
+ May 2023 03:58:31 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Fri, 5 May 2023 03:58:32 -0500
+Received: from [10.24.69.141] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3458wSVa062228;
+        Fri, 5 May 2023 03:58:29 -0500
+Message-ID: <e9415553-1439-2039-3d85-88c4ac29583e@ti.com>
+Date:   Fri, 5 May 2023 14:28:28 +0530
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 1/2] dt-bindings: dma: ti: Add J721S2 BCDMA
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <peter.ujfalusi@gmail.com>, <vkoul@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>
+CC:     <dmaengine@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <j-choudhary@ti.com>,
+        <u-kumar1@ti.com>, <vigneshr@ti.com>
+References: <20230503065303.16674-1-vaishnav.a@ti.com>
+ <6bce9c65-12f3-0128-91d0-142f0b5a791e@linaro.org>
+From:   Vaishnav Achath <vaishnav.a@ti.com>
+In-Reply-To: <6bce9c65-12f3-0128-91d0-142f0b5a791e@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Takeshi Misawa <jeantsuru.cumc.mandola@gmail.com> writes:
+Hi Krzysztof,
 
-> Timeout occurs in htc_connect_service(), then this function returns
-> without freeing skb.
->
-> Fix this by going to err path.
->
-> syzbot report:
-> https://syzkaller.appspot.com/bug?id=fbf138952d6c1115ba7d797cf7d56f6935184e3f
-> BUG: memory leak
-> unreferenced object 0xffff88810a980800 (size 240):
->   comm "kworker/1:1", pid 24, jiffies 4294947427 (age 16.220s)
->   hex dump (first 32 bytes):
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->   backtrace:
->     [<ffffffff83b971c6>] __alloc_skb+0x206/0x270 net/core/skbuff.c:552
->     [<ffffffff82eb3731>] alloc_skb include/linux/skbuff.h:1270 [inline]
->     [<ffffffff82eb3731>] htc_connect_service+0x121/0x230 drivers/net/wireless/ath/ath9k/htc_hst.c:259
->     [<ffffffff82ec03a5>] ath9k_htc_connect_svc drivers/net/wireless/ath/ath9k/htc_drv_init.c:137 [inline]
->     [<ffffffff82ec03a5>] ath9k_init_htc_services.constprop.0+0xe5/0x390 drivers/net/wireless/ath/ath9k/htc_drv_init.c:157
->     [<ffffffff82ec0747>] ath9k_htc_probe_device+0xf7/0x8a0 drivers/net/wireless/ath/ath9k/htc_drv_init.c:959
->     [<ffffffff82eb3ef5>] ath9k_htc_hw_init+0x35/0x60 drivers/net/wireless/ath/ath9k/htc_hst.c:521
->     [<ffffffff82eb68dd>] ath9k_hif_usb_firmware_cb+0xcd/0x1f0 drivers/net/wireless/ath/ath9k/hif_usb.c:1243
->     [<ffffffff82aa835b>] request_firmware_work_func+0x4b/0x90 drivers/base/firmware_loader/main.c:1107
->     [<ffffffff8129a35a>] process_one_work+0x2ba/0x5f0 kernel/workqueue.c:2289
->     [<ffffffff8129ac7d>] worker_thread+0x5d/0x5b0 kernel/workqueue.c:2436
->     [<ffffffff812a4fa9>] kthread+0x129/0x170 kernel/kthread.c:376
->     [<ffffffff81002dcf>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
->
-> Fixes: fb9987d0f748 ("ath9k_htc: Support for AR9271 chipset.")
-> Reported-and-tested-by: syzbot+b68fbebe56d8362907e8@syzkaller.appspotmail.com
-> Signed-off-by: Takeshi Misawa <jeantsuru.cumc.mandola@gmail.com>
-> ---
->  drivers/net/wireless/ath/ath9k/htc_hst.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+On 04/05/23 22:34, Krzysztof Kozlowski wrote:
+> On 03/05/2023 08:53, Vaishnav Achath wrote:
+>> Add bindings for J721S2 BCDMA instance dedicated for Camera
+>> Serial Interface. Unlike AM62A CSI BCDMA, this instance has RX
+>> and TX channels but lacks block copy channels.
+>>
+>> Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
+>> ---
+>>  .../devicetree/bindings/dma/ti/k3-bcdma.yaml  | 21 +++++++++++++++++++
+>>  1 file changed, 21 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/dma/ti/k3-bcdma.yaml b/Documentation/devicetree/bindings/dma/ti/k3-bcdma.yaml
+>> index beecfe7a1732..5ca9581a66f4 100644
+>> --- a/Documentation/devicetree/bindings/dma/ti/k3-bcdma.yaml
+>> +++ b/Documentation/devicetree/bindings/dma/ti/k3-bcdma.yaml
+>> @@ -33,6 +33,7 @@ properties:
+>>      enum:
+>>        - ti,am62a-dmss-bcdma-csirx
+>>        - ti,am64-dmss-bcdma
+>> +      - ti,j721s2-dmss-bcdma-csi
+>>  
+>>    reg:
+>>      minItems: 3
+>> @@ -150,7 +151,27 @@ allOf:
+>>  
+>>        required:
+>>          - power-domains
+>> +  - if:
+>> +      properties:
+>> +        compatible:
+>> +          contains:
+>> +            const: ti,j721s2-dmss-bcdma-csi
+>> +    then:
+>> +      properties:
+>> +        ti,sci-rm-range-bchan: false
+>> +
+>> +        reg:
+>> +          maxItems: 4
+>>  
+>> +        reg-names:
+>> +          items:
+>> +            - const: gcfg
+>> +            - const: rchanrt
+>> +            - const: tchanrt
+>> +            - const: ringrt
+>> +
+>> +      required:
+>> +        - ti,sci-rm-range-tchan
+>>      else:
+>>        properties:
+> 
+> 
+> You now require 5 reg items on ti,am62a-dmss-bcdma-csirx. I don't think
+> you tested your DTS against this change. Rework the else: so it will
+> match specific variant (if:).
 
-The title should begin with "wifi: ath9k:", see more info from the wiki
-link below.
+Thank you for the review, Sorry, I did not have the ti,am62a-dmss-bcdma-csirx
+instance added while I tested this change, I have made the update you suggested,
+checked DTS with the nodes added and sent a v2 now.
 
-Also ath9k patches go to ath-next, not to the net tree.
+Thanks and Regards,
+Vaishnav
+
+> 
+> Best regards,
+> Krzysztof
+> 
 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+Regards,
+Vaishnav
