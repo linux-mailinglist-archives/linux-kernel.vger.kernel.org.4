@@ -2,222 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 602C96F7D3C
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 08:48:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFF006F7D3E
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 08:48:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231176AbjEEGsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 02:48:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34476 "EHLO
+        id S231179AbjEEGsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 02:48:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230123AbjEEGsW (ORCPT
+        with ESMTP id S231189AbjEEGsr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 02:48:22 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E4B810C
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 23:48:21 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-b9a6f15287eso16185720276.1
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 23:48:21 -0700 (PDT)
+        Fri, 5 May 2023 02:48:47 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A36A10C
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 23:48:41 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f19afc4fd8so8996835e9.2
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 23:48:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683269300; x=1685861300;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=AYep1Ny0kQwWKACNqYvjEM8O17wY9ZF5ldxrC8z/e80=;
-        b=5CVSJW65GZH+DA1CPql2ETYPAj170/fFgh/93JRG3f41dd2GhplzDeY/18lRRODlaA
-         wiRfzAqpCeYftVLgW2O5jnTBO0tfZI5AOBIlX8n62F2O5pMqd00kOmhfKG2IE/mS2Fgx
-         2ydbVjcj2bY+XfwUgwm4/n1izggbZ3neGQjWZWmArchNJ1+aFyRZ4PrJna2/SK+g2hH9
-         Lq1nffobQOR6jZ5ksTlmoXE+/uGbnXZiSK0M7O6nMJCMK1K5CJlGXPG6x2EugIZEZgGm
-         C8dIZer63iXSsyDyliZtcG/9acZht+q7gerrKmnOx1SY36EwusQcItXFw6suHvuu2+Pr
-         WCMQ==
+        d=linaro.org; s=google; t=1683269319; x=1685861319;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=rtN4oMlLlW4QqPQK8hFrv2bFItCp38Em6zDqy+ipvU0=;
+        b=vO64qFhPeibbS/4AnTmWdoubVj/CcofJxbAXZG/2Y41HCD8tEwUGQEAjL8Sz3L3eMs
+         LX/ry87diVtXsDk7srORWbWqwT+k9/SZhmiyEKoEzgUQj2bMyRIUL81E/3Xwwg3ExmOw
+         MnLFZTa74zhK27T1vBLe1iNQuBenPHS+6X796U60BA+st7TbsDSwZYng5oMS58UgsTkT
+         Mcnd80H/psqnwPUKwpicj2P+9Hl2zThdDJXYaD8q/ZLjbCy710sZxkU09/THy/BNTJDu
+         6R8/KOUqdOiywRkmnOTYsWbnfVME+I28TOkiFHi6Z96CzhPT1zTaNHemCKRNorXI4cXm
+         zEPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683269300; x=1685861300;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AYep1Ny0kQwWKACNqYvjEM8O17wY9ZF5ldxrC8z/e80=;
-        b=kpoBTHtKM8hD7j/ValDMhrsG8dnBJkaHsrPHsWk8jsqsSmZFyk07nhgGUW1RrUuCW9
-         7zhBkfAUrVIquZmM2wSaBW/f77wyEfa9+YCtXHwxwpPgwwUX35Kww5N5HvwedxLGifYr
-         EPWf4CTV4OtOnogPFmI2h5snQUy67fRyE4iZAvAX2gQ+nbpwvyYJfBUxDl7ptt6YUBaU
-         5H61h07VGlK6uGw8WmJ+IeK9CNEAUuI5DiMmqXPBI8qzXXz/gM1iKEwdhNYNIvFZBiGP
-         igpiqGQkNzI4GCdaVsjyBgaQiPLHoq4p2sJtKrBrUNjGaHMK3krcM11ZrfPRdQkzUjq8
-         rBhQ==
-X-Gm-Message-State: AC+VfDydmoLaAiDEaAq/6VelITFiMCoWZB4yGXqGDQ9edvfPnYk4CihK
-        KRQpA+AGoDMKKp62O8nHjteZIKnx3x4NZA==
-X-Google-Smtp-Source: ACHHUZ7l61qDV2B6jFlru5dKX380CQIBKUnZbFrfS/02oUgqBmWi7AhTxsdFrijzinhJv7L/5fbTBA5BePNpMw==
-X-Received: from xllamas.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5070])
- (user=cmllamas job=sendgmr) by 2002:a05:690c:10c:b0:55c:a5db:869 with SMTP id
- bd12-20020a05690c010c00b0055ca5db0869mr3497779ywb.4.1683269300306; Thu, 04
- May 2023 23:48:20 -0700 (PDT)
-Date:   Fri,  5 May 2023 06:48:10 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.40.1.521.gf1e218fcd8-goog
-Message-ID: <20230505064811.2982849-1-cmllamas@google.com>
-Subject: [PATCH] binder: fix UAF caused by faulty buffer cleanup
-From:   Carlos Llamas <cmllamas@google.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "=?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?=" <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Carlos Llamas <cmllamas@google.com>,
-        Suren Baghdasaryan <surenb@google.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
-        Zi Fan Tan <zifantan@google.com>, stable@vger.kernel.org,
-        Todd Kjos <tkjos@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1683269319; x=1685861319;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rtN4oMlLlW4QqPQK8hFrv2bFItCp38Em6zDqy+ipvU0=;
+        b=C9KoLzjxpgLLoq0QF0N1Seby5RjPkVy3g7H2DnTdJNiWR6m0xi7GIACj8V0b/vIO/G
+         x55bJsUy2tL95OWzhONdt309+aLPGOAGXXm7wN7n5pfZJI3AN0W2/x/SA2FgrcS7lxdL
+         e5DPSYKMQGzPquK0HG/4WCBKkBXDANRejBgxCmyJ/yEDlgsGNT54esqxOgwMN53lrsNG
+         MpUNjyA2y/ySlPljW0TjaI+3Ht72ulPQ3F1Fopj2JUavhPTjXkqC6EOkErJ9LCB42iNj
+         /J78rRSXEIMZYCcMGjJW+T7d5yjxN6Koz551D+rOgOZcDDAtFjVrhxrVJ+vc7f+jeT3u
+         ZSxw==
+X-Gm-Message-State: AC+VfDwVqAA6uS+jXtdxZ7Qek+NidwdvRbM/joA2IhMcJXuZzolLUE4q
+        69Cajy+zlsVw2juFU2ZYYe4LcA==
+X-Google-Smtp-Source: ACHHUZ4870aZXVeMzfgUOk5ToMNkHvIEW8SwW9PQdL63ZDDVaN64SJlt5Tv4kXOtRHhXWGxGJirb4w==
+X-Received: by 2002:a1c:f310:0:b0:3f1:74bd:bc22 with SMTP id q16-20020a1cf310000000b003f174bdbc22mr250544wmq.6.1683269319442;
+        Thu, 04 May 2023 23:48:39 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:f548:bbaf:d95f:43ff? ([2a01:e0a:982:cbb0:f548:bbaf:d95f:43ff])
+        by smtp.gmail.com with ESMTPSA id x2-20020a05600c21c200b003f182c11667sm6993181wmj.39.2023.05.04.23.48.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 May 2023 23:48:38 -0700 (PDT)
+Message-ID: <6f6afb3c-ae8b-5b33-1b51-2e97148c249b@linaro.org>
+Date:   Fri, 5 May 2023 08:48:36 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH 4/4] ARM: dts: Move .dts files to vendor sub-directories
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>, soc@kernel.org,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Antoine Tenart <atenart@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Lars Persson <lars.persson@axis.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Baruch Siach <baruch@tkos.co.il>,
+        Wei Xu <xuwei5@hisilicon.com>,
+        Jean-Marie Verdun <verdun@hpe.com>,
+        Nick Hawkins <nick.hawkins@hpe.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Peter Rosin <peda@axentia.se>, Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Daniel Palmer <daniel@thingy.jp>,
+        Romain Perier <romain.perier@gmail.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Marek Vasut <marex@denx.de>, Qin Jian <qinjian@cqplus1.com>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Paul Barker <paul.barker@sancloud.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Nishanth Menon <nm@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Enric Balletbo i Serra <eballetbo@gmail.com>,
+        Javier Martinez Canillas <javier@dowhile0.org>,
+        Michal Simek <michal.simek@xilinx.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@axis.com,
+        "linux-amlogic@lists.infradead.org" 
+        <linux-amlogic@lists.infradead.org>
+References: <20230504-arm-dts-mv-v1-0-2c8e51a2b6c4@kernel.org>
+ <20230504-arm-dts-mv-v1-4-2c8e51a2b6c4@kernel.org>
+Organization: Linaro Developer Services
+In-Reply-To: <20230504-arm-dts-mv-v1-4-2c8e51a2b6c4@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In binder_transaction_buffer_release() the 'failed_at' offset indicates
-the number of objects to clean up. However, this function was changed by
-commit 44d8047f1d87 ("binder: use standard functions to allocate fds"),
-to release all the objects in the buffer when 'failed_at' is zero.
+On 05/05/2023 05:29, Rob Herring wrote:
+> The arm dts directory has grown to 1553 boards which makes it a bit
+> unwieldy to maintain and use. Past attempts stalled out due to plans to
+> move .dts files out of the kernel tree. Doing that is no longer planned
+> (any time soon at least), so let's go ahead and group .dts files by
+> vendors. This move aligns arm with arm64 .dts file structure.
+> 
+> Doing this enables building subsets of dts files by vendor easily
+> without changing kernel configs:
+> 
+> make allyesconfig
+> make arch/arm/boot/dts/ti/
+> 
+> There's no change to dtbs_install as the flat structure is maintained on
+> install.
+> 
+> The naming of vendor directories is roughly in this order of preference:
+> - Matching original and current SoC vendor prefix/name (e.g. ti, qcom)
+> - Current vendor prefix/name if still actively sold (SoCs which have
+>    been aquired) (e.g. nxp/imx)
+> - Existing platform name for older platforms not sold/maintained by any
+>    company (e.g. gemini, nspire)
+> 
+> The whole move was scripted with the exception of MAINTAINERS.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>   MAINTAINERS                                        |  181 +--
 
-This introduced an issue when a transaction buffer is released without
-any objects having been processed so far. In this case, 'failed_at' is
-indeed zero yet it is misinterpreted as releasing the entire buffer.
+<snip>
 
-This leads to use-after-free errors where nodes are incorrectly freed
-and subsequently accessed. Such is the case in the following KASAN
-report:
+>   arch/arm/boot/dts/amlogic/Makefile                 |    9 +
+>   arch/arm/boot/dts/{ => amlogic}/meson.dtsi         |    0
+>   arch/arm/boot/dts/{ => amlogic}/meson6-atv1200.dts |    0
+>   arch/arm/boot/dts/{ => amlogic}/meson6.dtsi        |    0
+>   .../boot/dts/{ => amlogic}/meson8-minix-neo-x8.dts |    0
+>   arch/arm/boot/dts/{ => amlogic}/meson8.dtsi        |    0
+>   arch/arm/boot/dts/{ => amlogic}/meson8b-ec100.dts  |    0
+>   arch/arm/boot/dts/{ => amlogic}/meson8b-mxq.dts    |    0
+>   .../boot/dts/{ => amlogic}/meson8b-odroidc1.dts    |    0
+>   arch/arm/boot/dts/{ => amlogic}/meson8b.dtsi       |    0
+>   .../boot/dts/{ => amlogic}/meson8m2-mxiii-plus.dts |    0
+>   arch/arm/boot/dts/{ => amlogic}/meson8m2.dtsi      |    0
 
-  ==================================================================
-  BUG: KASAN: slab-use-after-free in binder_thread_read+0xc40/0x1f30
-  Read of size 8 at addr ffff4faf037cfc58 by task poc/474
+<snip>
 
-  CPU: 6 PID: 474 Comm: poc Not tainted 6.3.0-12570-g7df047b3f0aa #5
-  Hardware name: linux,dummy-virt (DT)
-  Call trace:
-   dump_backtrace+0x94/0xec
-   show_stack+0x18/0x24
-   dump_stack_lvl+0x48/0x60
-   print_report+0xf8/0x5b8
-   kasan_report+0xb8/0xfc
-   __asan_load8+0x9c/0xb8
-   binder_thread_read+0xc40/0x1f30
-   binder_ioctl+0xd9c/0x1768
-   __arm64_sys_ioctl+0xd4/0x118
-   invoke_syscall+0x60/0x188
-  [...]
+> @@ -1909,7 +1909,7 @@ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+>   L:	linux-amlogic@lists.infradead.org
+>   S:	Maintained
+>   W:	http://linux-meson.com/
+> -F:	arch/arm/boot/dts/meson*
+> +F:	arch/arm/boot/dts/amlogic/
+>   F:	arch/arm/mach-meson/
+>   F:	arch/arm64/boot/dts/amlogic/
+>   F:	drivers/mmc/host/meson*
 
-  Allocated by task 474:
-   kasan_save_stack+0x3c/0x64
-   kasan_set_track+0x2c/0x40
-   kasan_save_alloc_info+0x24/0x34
-   __kasan_kmalloc+0xb8/0xbc
-   kmalloc_trace+0x48/0x5c
-   binder_new_node+0x3c/0x3a4
-   binder_transaction+0x2b58/0x36f0
-   binder_thread_write+0x8e0/0x1b78
-   binder_ioctl+0x14a0/0x1768
-   __arm64_sys_ioctl+0xd4/0x118
-   invoke_syscall+0x60/0x188
-  [...]
+<snip>
 
-  Freed by task 475:
-   kasan_save_stack+0x3c/0x64
-   kasan_set_track+0x2c/0x40
-   kasan_save_free_info+0x38/0x5c
-   __kasan_slab_free+0xe8/0x154
-   __kmem_cache_free+0x128/0x2bc
-   kfree+0x58/0x70
-   binder_dec_node_tmpref+0x178/0x1fc
-   binder_transaction_buffer_release+0x430/0x628
-   binder_transaction+0x1954/0x36f0
-   binder_thread_write+0x8e0/0x1b78
-   binder_ioctl+0x14a0/0x1768
-   __arm64_sys_ioctl+0xd4/0x118
-   invoke_syscall+0x60/0x188
-  [...]
-  ==================================================================
+> diff --git a/arch/arm/boot/dts/amlogic/Makefile b/arch/arm/boot/dts/amlogic/Makefile
+> new file mode 100644
+> index 000000000000..a84310780ea3
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/amlogic/Makefile
+> @@ -0,0 +1,9 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +dtb-$(CONFIG_MACH_MESON6) += \
+> +	meson6-atv1200.dtb
+> +dtb-$(CONFIG_MACH_MESON8) += \
+> +	meson8-minix-neo-x8.dtb \
+> +	meson8b-ec100.dtb \
+> +	meson8b-mxq.dtb \
+> +	meson8b-odroidc1.dtb \
+> +	meson8m2-mxiii-plus.dtb
+> diff --git a/arch/arm/boot/dts/meson.dtsi b/arch/arm/boot/dts/amlogic/meson.dtsi
+> similarity index 100%
+> rename from arch/arm/boot/dts/meson.dtsi
+> rename to arch/arm/boot/dts/amlogic/meson.dtsi
+> diff --git a/arch/arm/boot/dts/meson6-atv1200.dts b/arch/arm/boot/dts/amlogic/meson6-atv1200.dts
+> similarity index 100%
+> rename from arch/arm/boot/dts/meson6-atv1200.dts
+> rename to arch/arm/boot/dts/amlogic/meson6-atv1200.dts
+> diff --git a/arch/arm/boot/dts/meson6.dtsi b/arch/arm/boot/dts/amlogic/meson6.dtsi
+> similarity index 100%
+> rename from arch/arm/boot/dts/meson6.dtsi
+> rename to arch/arm/boot/dts/amlogic/meson6.dtsi
+> diff --git a/arch/arm/boot/dts/meson8-minix-neo-x8.dts b/arch/arm/boot/dts/amlogic/meson8-minix-neo-x8.dts
+> similarity index 100%
+> rename from arch/arm/boot/dts/meson8-minix-neo-x8.dts
+> rename to arch/arm/boot/dts/amlogic/meson8-minix-neo-x8.dts
+> diff --git a/arch/arm/boot/dts/meson8.dtsi b/arch/arm/boot/dts/amlogic/meson8.dtsi
+> similarity index 100%
+> rename from arch/arm/boot/dts/meson8.dtsi
+> rename to arch/arm/boot/dts/amlogic/meson8.dtsi
+> diff --git a/arch/arm/boot/dts/meson8b-ec100.dts b/arch/arm/boot/dts/amlogic/meson8b-ec100.dts
+> similarity index 100%
+> rename from arch/arm/boot/dts/meson8b-ec100.dts
+> rename to arch/arm/boot/dts/amlogic/meson8b-ec100.dts
+> diff --git a/arch/arm/boot/dts/meson8b-mxq.dts b/arch/arm/boot/dts/amlogic/meson8b-mxq.dts
+> similarity index 100%
+> rename from arch/arm/boot/dts/meson8b-mxq.dts
+> rename to arch/arm/boot/dts/amlogic/meson8b-mxq.dts
+> diff --git a/arch/arm/boot/dts/meson8b-odroidc1.dts b/arch/arm/boot/dts/amlogic/meson8b-odroidc1.dts
+> similarity index 100%
+> rename from arch/arm/boot/dts/meson8b-odroidc1.dts
+> rename to arch/arm/boot/dts/amlogic/meson8b-odroidc1.dts
+> diff --git a/arch/arm/boot/dts/meson8b.dtsi b/arch/arm/boot/dts/amlogic/meson8b.dtsi
+> similarity index 100%
+> rename from arch/arm/boot/dts/meson8b.dtsi
+> rename to arch/arm/boot/dts/amlogic/meson8b.dtsi
+> diff --git a/arch/arm/boot/dts/meson8m2-mxiii-plus.dts b/arch/arm/boot/dts/amlogic/meson8m2-mxiii-plus.dts
+> similarity index 100%
+> rename from arch/arm/boot/dts/meson8m2-mxiii-plus.dts
+> rename to arch/arm/boot/dts/amlogic/meson8m2-mxiii-plus.dts
+> diff --git a/arch/arm/boot/dts/meson8m2.dtsi b/arch/arm/boot/dts/amlogic/meson8m2.dtsi
+> similarity index 100%
+> rename from arch/arm/boot/dts/meson8m2.dtsi
+> rename to arch/arm/boot/dts/amlogic/meson8m2.dtsi
 
-In order to avoid these issues, let's always calculate the intended
-'failed_at' offset beforehand. This is wrapped in a helper function to
-make it clear and convenient.
 
-Fixes: 32e9f56a96d8 ("binder: don't detect sender/target during buffer cleanup")
-Reported-by: Zi Fan Tan <zifantan@google.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Carlos Llamas <cmllamas@google.com>
----
- drivers/android/binder.c | 30 ++++++++++++++++++++++++------
- 1 file changed, 24 insertions(+), 6 deletions(-)
+<snip>
 
-diff --git a/drivers/android/binder.c b/drivers/android/binder.c
-index fb56bfc45096..6678a862ea84 100644
---- a/drivers/android/binder.c
-+++ b/drivers/android/binder.c
-@@ -1938,7 +1938,7 @@ static void binder_transaction_buffer_release(struct binder_proc *proc,
- 					      bool is_failure)
- {
- 	int debug_id = buffer->debug_id;
--	binder_size_t off_start_offset, buffer_offset, off_end_offset;
-+	binder_size_t off_start_offset, buffer_offset;
- 
- 	binder_debug(BINDER_DEBUG_TRANSACTION,
- 		     "%d buffer release %d, size %zd-%zd, failed at %llx\n",
-@@ -1950,9 +1950,8 @@ static void binder_transaction_buffer_release(struct binder_proc *proc,
- 		binder_dec_node(buffer->target_node, 1, 0);
- 
- 	off_start_offset = ALIGN(buffer->data_size, sizeof(void *));
--	off_end_offset = is_failure && failed_at ? failed_at :
--				off_start_offset + buffer->offsets_size;
--	for (buffer_offset = off_start_offset; buffer_offset < off_end_offset;
-+
-+	for (buffer_offset = off_start_offset; buffer_offset < failed_at;
- 	     buffer_offset += sizeof(binder_size_t)) {
- 		struct binder_object_header *hdr;
- 		size_t object_size = 0;
-@@ -2111,6 +2110,25 @@ static void binder_transaction_buffer_release(struct binder_proc *proc,
- 	}
- }
- 
-+/* Clean up all the objects in the buffer */
-+static inline void binder_release_entire_buffer(struct binder_proc *proc,
-+						struct binder_thread *thread,
-+						struct binder_buffer *buffer,
-+						bool is_failure)
-+{
-+	binder_size_t off_end_offset;
-+
-+	off_end_offset = ALIGN(buffer->data_size, sizeof(void *));
-+	off_end_offset += buffer->offsets_size;
-+
-+	/* We always pass the end of the buffer here to make sure that
-+	 * binder_transaction_buffer_release() loops through all the
-+	 * objects in the buffer.
-+	 */
-+	binder_transaction_buffer_release(proc, thread, buffer,
-+					  off_end_offset, is_failure);
-+}
-+
- static int binder_translate_binder(struct flat_binder_object *fp,
- 				   struct binder_transaction *t,
- 				   struct binder_thread *thread)
-@@ -2806,7 +2824,7 @@ static int binder_proc_transaction(struct binder_transaction *t,
- 		t_outdated->buffer = NULL;
- 		buffer->transaction = NULL;
- 		trace_binder_transaction_update_buffer_release(buffer);
--		binder_transaction_buffer_release(proc, NULL, buffer, 0, 0);
-+		binder_release_entire_buffer(proc, NULL, buffer, false);
- 		binder_alloc_free_buf(&proc->alloc, buffer);
- 		kfree(t_outdated);
- 		binder_stats_deleted(BINDER_STAT_TRANSACTION);
-@@ -3775,7 +3793,7 @@ binder_free_buf(struct binder_proc *proc,
- 		binder_node_inner_unlock(buf_node);
- 	}
- 	trace_binder_transaction_buffer_release(buffer);
--	binder_transaction_buffer_release(proc, thread, buffer, 0, is_failure);
-+	binder_release_entire_buffer(proc, thread, buffer, is_failure);
- 	binder_alloc_free_buf(&proc->alloc, buffer);
- }
- 
--- 
-2.40.1.521.gf1e218fcd8-goog
+Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
 
