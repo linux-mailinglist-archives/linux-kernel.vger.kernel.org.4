@@ -2,73 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91A5A6F89E3
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 21:55:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A87906F89E5
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 21:56:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232799AbjEETzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 15:55:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41192 "EHLO
+        id S233284AbjEET4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 15:56:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230473AbjEETzB (ORCPT
+        with ESMTP id S230473AbjEET4w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 15:55:01 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88B2138
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 12:55:00 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-50bcb4a81ceso3881563a12.2
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 12:55:00 -0700 (PDT)
+        Fri, 5 May 2023 15:56:52 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB00CE
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 12:56:51 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-50b9ef67f35so3969487a12.2
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 12:56:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1683316499; x=1685908499;
+        d=linux-foundation.org; s=google; t=1683316610; x=1685908610;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nv8lvk1AbBLvhkSN9QZ33lzvEycfnFaITAOJMUFaHQA=;
-        b=Hyx+9ZwETWFNgFL2zFcgjp8ZA+6ONl6SfOea54n7JwJeC61ZnZuI2l9VEgChaG2yvq
-         eiJRlEXBbkjCD824CDMHW4PbA8N54d12CwnMi1O/79MLRj50vNwCxaiJUxpJi10WHoxJ
-         JLUa5PPRZptR1nH/RVIRQuIGx1Lz41SQI2T68=
+        bh=uodfulsdtw3sjyDmNcqZAR5xNDZaRRbWPpVcbEZw8Ik=;
+        b=g1QeXrB7FG/nbTL7X7ZxVgUBymz6dKyR8phAGcAOfTG3K0be/NvuAxg2oHFVb7o+oy
+         E1yvQPVd9a2OecanwcE+tLujgTIJjFeAraalgLG8zCy5ZyaglaWl4KRLDv9EmuNtymwV
+         1lGSWakyKTfssiMFMzFuMFVJ1gYDPaHexjp6k=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683316499; x=1685908499;
+        d=1e100.net; s=20221208; t=1683316610; x=1685908610;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nv8lvk1AbBLvhkSN9QZ33lzvEycfnFaITAOJMUFaHQA=;
-        b=ieq43uUBsUsovhdWFB4YzQTytOJVItFaLjzgMVm7lSDSjCagibH2AmUZoAJ7hmVGrI
-         9brTXCeGbStFamw96qmnvXzJoC6m4wDnLv5LDfcx0AcHxQtlRpSpc3kN1KIr6l6XTr0v
-         c/LxgyPNiJ4gLpExjB7Ylp8TamYo3zvUggW0uXWjF35xU2kRccROpk1GyAmHXMrrzNVt
-         Hdzc0rgrZCxcdqjkLHRRgrH5WyFGvAG76/ZWLMykIwnfAZ7AjfxAh6budYpN2zXgZ5+B
-         d+iKUw/IO8e/l/6TYcEegjuP9SBLVAVn/CWTTIV0C23CzUsS9KolSJd+WOKoxcwLP+Bz
-         kgfg==
-X-Gm-Message-State: AC+VfDyzyYQJxApIWrfYiBF/0bsiEFpM9ex2YdBABtpvheQky7fvSEF/
-        Mmyr0X/L9lYAhhqrq8G0vX5xfOALnUJ4eq6nJ9i8bA==
-X-Google-Smtp-Source: ACHHUZ5MjmuebtWSXIrblGtbAMwXWF39/XKc9+qM3HXXjFRbfcvxPjqh5FeXBjCztyIU3eQHbau1rA==
-X-Received: by 2002:a05:6402:1255:b0:50c:646:cafd with SMTP id l21-20020a056402125500b0050c0646cafdmr2246387edw.7.1683316499259;
-        Fri, 05 May 2023 12:54:59 -0700 (PDT)
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com. [209.85.218.43])
-        by smtp.gmail.com with ESMTPSA id bm11-20020a0564020b0b00b00506987c5c71sm3237231edb.70.2023.05.05.12.54.57
+        bh=uodfulsdtw3sjyDmNcqZAR5xNDZaRRbWPpVcbEZw8Ik=;
+        b=Bxcs7aXSF97zV2JybWRvBVpt5c1nWkz8E2iUfEpRKPgUA+fyZSc0Jc3kUyfmJpu5pP
+         RefE1zLaxb4X2jIwYnOmkA79GCOJj2TFnj1bywiUUVdP+PQ13nEcLs7XjfUgZicJg+3J
+         EXnAWPecvxdcl/hNSG+o+VEp5V/lAa2f0cv/yFpW8uD0WozVgLjA3/sjY+K8FC7ukwt+
+         lvfjKDFwBtO4PyTcsPesxC5A2z+B6m9oU20WaWnKkvD7fc58+zC9R0wEEihfLuT+7CeW
+         blQ9WNkFlfx7o4gbUj5Lb2EU5vMTEhZcxypV2FZBXc5u3hY3ds+DpXzf4vD49kY3py8D
+         Rb2A==
+X-Gm-Message-State: AC+VfDzgpK5qrprgxPluBPC5UWdHl0+Hq8ZrRqZ21ct5alN+5U4PmvxE
+        pD7pxqNxC5bufCaYx1RVP9zCbT8hI3jttUl6RU7RDw==
+X-Google-Smtp-Source: ACHHUZ46B0qvH5V4YUuc4vFmHuLNG/Yh4dRnou0Oxw2++bG0V3PDUtT5gYev0VJONNPOQ+wh5Owjvw==
+X-Received: by 2002:aa7:c99a:0:b0:50b:d303:d2a4 with SMTP id c26-20020aa7c99a000000b0050bd303d2a4mr2334008edt.27.1683316609688;
+        Fri, 05 May 2023 12:56:49 -0700 (PDT)
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com. [209.85.218.44])
+        by smtp.gmail.com with ESMTPSA id b18-20020aa7df92000000b0050bd59fd0efsm3202028edy.49.2023.05.05.12.56.48
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 May 2023 12:54:58 -0700 (PDT)
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-965ac4dd11bso432353766b.2
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 12:54:57 -0700 (PDT)
-X-Received: by 2002:a17:907:e8e:b0:94f:969e:c52b with SMTP id
- ho14-20020a1709070e8e00b0094f969ec52bmr2399020ejc.74.1683316497433; Fri, 05
- May 2023 12:54:57 -0700 (PDT)
+        Fri, 05 May 2023 12:56:48 -0700 (PDT)
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-956ff2399b1so415837366b.3
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 12:56:48 -0700 (PDT)
+X-Received: by 2002:a17:907:6e25:b0:947:72bd:f72a with SMTP id
+ sd37-20020a1709076e2500b0094772bdf72amr2287948ejc.72.1683316608164; Fri, 05
+ May 2023 12:56:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230504200527.1935944-1-mathieu.desnoyers@efficios.com>
- <20230504200527.1935944-13-mathieu.desnoyers@efficios.com>
- <3b017a9f-220d-4da8-2cf6-7f0d6175b30c@efficios.com> <CAHk-=wjzpHjqhybyEhkTzGgTdBP3LZ1FmOw8=1MMXr=-j5OPxQ@mail.gmail.com>
- <3cc72a67-d648-0040-6f60-37663797e360@efficios.com>
-In-Reply-To: <3cc72a67-d648-0040-6f60-37663797e360@efficios.com>
+References: <CAHk-=wgrdOm8RwO+u8bydrbgs0wXJV_9mBYAtzX9d9hEY7a25A@mail.gmail.com>
+ <CAHk-=wiHvdgbLxayyCsRU45JnKCZkCOpEJPfOvE3eYCnGjVcSA@mail.gmail.com>
+ <20230429003822.n3mglslg666j3npp@box.shutemov.name> <641a9348-a052-6bb5-e6c7-64acb6405328@intel.com>
+ <CAHk-=wgnGoj8qZg3SRh1Z1-mU=b3ryydXZykUuarnrAn6LuHBw@mail.gmail.com>
+ <CAHk-=wgN=GY2A0htYQQRmPaLCorWnFatY_XO0X2w_m9xXQDcPA@mail.gmail.com>
+ <f5983c42-82a5-1cd8-c717-67bfd72377dc@intel.com> <CAHk-=wgpOqujY210W9-KJPEfD42W_bvUdLwF-PAvyxJQ92tzDg@mail.gmail.com>
+ <CAHk-=wj7q6Ng5uemZtrDnhtcfrgkzX5Z18eKZj94FY5d2quP6A@mail.gmail.com>
+ <CAHk-=wgokAgkTVpEHM7c8oP9mca5s21RcxksF8h3FwWFJbCu3w@mail.gmail.com> <20230503190147.GA1719388@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230503190147.GA1719388@hirez.programming.kicks-ass.net>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 5 May 2023 12:54:40 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wh-x1PL=UUGD__Dv6kd+kyCHjNF-TCHGG9ayLnysf-PdQ@mail.gmail.com>
-Message-ID: <CAHk-=wh-x1PL=UUGD__Dv6kd+kyCHjNF-TCHGG9ayLnysf-PdQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 12/13] blk-mq.h: Fix parentheses around macro
- parameter use
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        linux-block@vger.kernel.org
+Date:   Fri, 5 May 2023 12:56:31 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjVyHr9guj3fUh=Wq5vK+EMHN03VdBU83U6y2a+x9XCUg@mail.gmail.com>
+Message-ID: <CAHk-=wjVyHr9guj3fUh=Wq5vK+EMHN03VdBU83U6y2a+x9XCUg@mail.gmail.com>
+Subject: Re: [GIT PULL] x86/mm for 6.4
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kirill.shutemov@linux.intel.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,38 +85,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 5, 2023 at 11:49=E2=80=AFAM Mathieu Desnoyers
-<mathieu.desnoyers@efficios.com> wrote:
+On Wed, May 3, 2023 at 12:02=E2=80=AFPM Peter Zijlstra <peterz@infradead.or=
+g> wrote:
 >
-> I would add to this list of exceptions cases where the argument is used
-> as an expression within brackets, e.g.
->
-> #define m(x) myvar[x]
+> Looks sane from a first reading. But I'll try and have another look
+> tomorrow.
 
-Yeah, that makes sense not because of any operator precedence rules,
-but simply because brackets end up syntactically nesting just like
-parentheses themselves do.
+Well, I didn't hear back any more, and I was merging architecture
+code, so I merged my branch too.
 
-IOW, while you can mess up that nesting by having non-nested brackets
-in the argument, that's equally true of any added parentheses too.
+It does fix at least two bugs, even if those bugs are not necessarily
+all that noticeable.
 
-> The other exception I would add is when a parameter is used as an
-> lvalue, as:
->
-> #define m(x) do { x =3D 2; } while (0)
+I guess we'll see if it introduces new ones...
 
-I really don't understand why you think '=3D' is so special. It's very
-much not special.
-
-It happens to have the lowest precedence, sure, but the keyword is "happens=
-".
-
-I think you are confused by the non-C languages that make assignment
-be not an expression operator, but a statement.
-
-So I think you are technically correct in that the parentheses aren't
-_needed_, but the above is still the same case that in many other
-situations parentheses aren't technically *needed*, but not having to
-think about it is better than having to do so.
-
-           Linus
+                    Linus
