@@ -2,121 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F73E6F7F38
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 10:39:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE1806F7F43
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 10:40:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231478AbjEEIjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 04:39:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39126 "EHLO
+        id S231547AbjEEIkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 04:40:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230444AbjEEIjw (ORCPT
+        with ESMTP id S231490AbjEEIkX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 04:39:52 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74C618876;
-        Fri,  5 May 2023 01:39:50 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-24e4f674356so1385831a91.3;
-        Fri, 05 May 2023 01:39:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683275990; x=1685867990;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5aRZSqqSGHolTlh1jtoDKdcPZUN/607EWF6b0DkrsH0=;
-        b=AZK4dSGaMIFsre3ab92ohSTLZERw1D4UVGxEBRjOtKP6UhdmDSBcr8z0sm901npXrG
-         mWUooB0uHfaLjnmx7bfX1yx+wRSHgQsx4tLIA4huIQrbAiarI6jvfGE1nfn/xSB0A89l
-         t6mKGCVygg6b2/gLC4N6mWNU39w8dUQLO8K6lLO/j9eruFTh/Hmbg6SLuwv+pb6ySicp
-         eexkrTwLz8PrhTPSZnAE48CBGL3lK5qeCNmkq0OLRWpZauERfD7pcXFXqLVgeGbx5j67
-         3rLwWjyGlmZROMsmlX0gAsAHyAM1A+F83Nn4OTesBSFWvjv2aYpVxpSm78AGf0YEnIta
-         b7OQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683275990; x=1685867990;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5aRZSqqSGHolTlh1jtoDKdcPZUN/607EWF6b0DkrsH0=;
-        b=Ja43UoPVcSP9LfPeihJ8aylyudcP0mPEVC+daMvzo1jyt2pA9CNh3Uv/AIZkJnCnqu
-         iKJTT+MOoIEtrMkuXj/iDgi/dyY4GYQayGf6cbRjvhObvEPZF2meQ/98/hNM4IsKE+qv
-         eaUQCkerGjCIs7gl8jQvYbSOTLZuiSxd/YeLk2mp9sjAbKJ+YFIau6kCjFfmHYtfVE4C
-         aJDkxZoOW0pkcPzk2LRfpGbWsc6Gbc99cbU7rFl5+8E1PVQ+WnOT1diT8w0Ci5A6zNHm
-         22IVCkVymY8MwGfugPG/XtUX+Si0VbP9VbrgY5o/q2FIKim6l201awmsjwJasZiyvkLF
-         wrVQ==
-X-Gm-Message-State: AC+VfDxwZGlsWcBWV9e3+g7i2h6nQGoBBOiTsS7Q03xfaWu7YozSd1YP
-        c9FRWUwhW1nAGSD0ybKuAYU=
-X-Google-Smtp-Source: ACHHUZ4UH5k0im9tHcDD0dnFM8xRvkntB8xfaghRqc4oSAV95zeDV+5tHiAc0U5MZUzLoIsVrIWOYA==
-X-Received: by 2002:a17:90a:e645:b0:247:35f8:81d2 with SMTP id ep5-20020a17090ae64500b0024735f881d2mr699164pjb.29.1683275990015;
-        Fri, 05 May 2023 01:39:50 -0700 (PDT)
-Received: from debian.me (subs32-116-206-28-14.three.co.id. [116.206.28.14])
-        by smtp.gmail.com with ESMTPSA id v13-20020a17090a0c8d00b00246b1b4a3ffsm12895140pja.0.2023.05.05.01.39.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 May 2023 01:39:49 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 9BAC3106281; Fri,  5 May 2023 15:39:46 +0700 (WIB)
-Date:   Fri, 5 May 2023 15:39:46 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Ross Philipson <ross.philipson@oracle.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
-        kexec@lists.infradead.org, linux-efi@vger.kernel.org
-Cc:     dpsmith@apertussolutions.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, hpa@zytor.com, ardb@kernel.org, mjg59@srcf.ucam.org,
-        James.Bottomley@hansenpartnership.com, luto@amacapital.net,
-        nivedita@alum.mit.edu, kanth.ghatraju@oracle.com,
-        trenchboot-devel@googlegroups.com
-Subject: Re: [PATCH v6 00/14] x86: Trenchboot secure dynamic launch Linux
- kernel support
-Message-ID: <ZFTA0kg98XxeP2Hh@debian.me>
-References: <20230504145023.835096-1-ross.philipson@oracle.com>
+        Fri, 5 May 2023 04:40:23 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F44E18868;
+        Fri,  5 May 2023 01:40:21 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id DC8F022A20;
+        Fri,  5 May 2023 08:40:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1683276019; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/0NvfINDngaX81zK/8XuAzfIOyZoSgVhu9auLhp95+8=;
+        b=N7Hh14VsXyzhdip98WZKHL6vi++Ot45f7xe1XG1LXAkD8DEJNNJwpr4HSGIxEz/MZq1bfG
+        KUwErWXXaSTBD69btoSMDYsSKukSj3gDTrJzJv4JPQtavr86N6hSjezAAulivmJwR+mrLN
+        xGzDPAbAKNp+pIZ7BzXA3dFlbRMDVYo=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AB98313488;
+        Fri,  5 May 2023 08:40:19 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id VIvmKfPAVGSkQwAAMHmgww
+        (envelope-from <mhocko@suse.com>); Fri, 05 May 2023 08:40:19 +0000
+Date:   Fri, 5 May 2023 10:40:19 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
+        vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev,
+        mgorman@suse.de, dave@stgolabs.net, willy@infradead.org,
+        liam.howlett@oracle.com, corbet@lwn.net, void@manifault.com,
+        peterz@infradead.org, juri.lelli@redhat.com, ldufour@linux.ibm.com,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, peterx@redhat.com, david@redhat.com,
+        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
+        nathan@kernel.org, dennis@kernel.org, tj@kernel.org,
+        muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
+        pasha.tatashin@soleen.com, yosryahmed@google.com,
+        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
+        andreyknvl@gmail.com, keescook@chromium.org,
+        ndesaulniers@google.com, gregkh@linuxfoundation.org,
+        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+        glider@google.com, elver@google.com, dvyukov@google.com,
+        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
+        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
+Subject: Re: [PATCH 35/40] lib: implement context capture support for tagged
+ allocations
+Message-ID: <ZFTA8xVzxWc345Ug@dhcp22.suse.cz>
+References: <20230501165450.15352-1-surenb@google.com>
+ <20230501165450.15352-36-surenb@google.com>
+ <ZFIPmnrSIdJ5yusM@dhcp22.suse.cz>
+ <CAJuCfpGsvWupMbasqvwcMYsOOPxTQqi1ed5+=vyu-yoPQwwybg@mail.gmail.com>
+ <ZFNoVfb+1W4NAh74@dhcp22.suse.cz>
+ <CAJuCfpGUtw6cbjLsksGJKATZfTV0FEYRXwXT0pZV83XqQydBgg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="8WmKHbH6zHIoE+UF"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230504145023.835096-1-ross.philipson@oracle.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CAJuCfpGUtw6cbjLsksGJKATZfTV0FEYRXwXT0pZV83XqQydBgg@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu 04-05-23 09:22:07, Suren Baghdasaryan wrote:
+[...]
+> > But even then I really detest an additional allocation from this context
+> > for every single allocation request. There GFP_NOWAIT allocation for
+> > steckdepot but that is at least cached and generally not allocating.
+> > This will allocate for every single allocation.
+> 
+> A small correction here. alloc_tag_create_ctx() is used only for
+> allocations which we requested to capture the context. So, this last
+> sentence is true for allocations we specifically marked to capture the
+> context, not in general.
 
---8WmKHbH6zHIoE+UF
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Ohh, right. I have misunderstood that part. Slightly better, still
+potentially a scalability issue because hard to debug memory leaks
+usually use a generic caches (for kmalloc). So this might be still a lot
+of objects to track.
 
-On Thu, May 04, 2023 at 02:50:09PM +0000, Ross Philipson wrote:
-> This patchset provides detailed documentation of DRTM, the approach used =
-for
-> adding the capbility, and relevant API/ABI documentation. In addition to =
-the
-> documentation the patch set introduces Intel TXT support as the first pla=
-tform
-> for Linux Secure Launch.
+> > There must be a better way.
+> 
+> Yeah, agree, it would be good to avoid allocations in this path. Any
+> specific ideas on how to improve this? Pooling/caching perhaps? I
+> think kmem_cache does some of that already but maybe something else?
 
-I'd like to apply this series, but on what commit it is based on? I
-don't see any branch containing this series version in trenchboot tree
-[1].
-
-Thanks.
-
-[1]: https://github.com/TrenchBoot/linux
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---8WmKHbH6zHIoE+UF
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZFTA0gAKCRD2uYlJVVFO
-o32tAQDw4tpfR8Ba+q25skoHxrAI3+hK4yJ0HkwQNobWGCAvRQD/Yq0tZ28KagpK
-QjB72gS5Kql0kR9GkjUSvUZRkt138ws=
-=ApTD
------END PGP SIGNATURE-----
-
---8WmKHbH6zHIoE+UF--
+The best I can come up with is a preallocated hash table to store
+references to stack depots with some additional data associated. The
+memory overhead could be still quite big but the hash tables could be
+resized lazily.
+-- 
+Michal Hocko
+SUSE Labs
