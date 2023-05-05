@@ -2,80 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A6A16F8C8B
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 00:51:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 657B06F8C8E
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 00:52:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233514AbjEEWvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 18:51:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53530 "EHLO
+        id S233526AbjEEWwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 18:52:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230146AbjEEWvi (ORCPT
+        with ESMTP id S230146AbjEEWwY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 18:51:38 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CF0A527E
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 15:51:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683327097; x=1714863097;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=MLjQ9s2IYfiXfAtWDLAFaH8aZnQga2eI5OjXYPJ03XI=;
-  b=WcZLCkkMESJ7xGpsmoF4wHXsKQozaeXJnj92J6k3mEXr+Xg6qjf9VPGB
-   Zz4XhCT1lFDTVdD8BKyxtFWGRlaO0PWxhD9ruE27qJW/gxZm+azhSw1gd
-   i3Wb3krd9Sl3lYB+qFeXlz2p6nl4Yo7YBU+3eK+sQTfbTX5tR+KwdODg2
-   YanNmEXLrD+Vcze1N9/Omiy8ZmmqzjkUvGOPpvp6M3N4zTUZa44odsmnn
-   nYrDKG/TiTvesa3YAvv4H7uwlLZmSFAeMqfjQkXwq28AP9A+4LrfEn8tW
-   Tbj48tHpcS+l2HxQXt1A89vPiA2wnRtKR2+SRkLvKjl290oa7VCB3GlVK
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="352363531"
-X-IronPort-AV: E=Sophos;i="5.99,253,1677571200"; 
-   d="scan'208";a="352363531"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2023 15:51:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="809444087"
-X-IronPort-AV: E=Sophos;i="5.99,253,1677571200"; 
-   d="scan'208";a="809444087"
-Received: from rmarepal-mobl3.amr.corp.intel.com (HELO [10.255.231.148]) ([10.255.231.148])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2023 15:51:35 -0700
-Message-ID: <4dd1d0f44fc4ae9d7b1b918fd4aeb52601669ace.camel@linux.intel.com>
-Subject: Re: [PATCH 5/6] sched/fair: Consider the idle state of the whole
- core for load balance
-From:   Tim Chen <tim.c.chen@linux.intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shrikanth Hegde <sshegde@linux.vnet.ibm.com>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        naveen.n.rao@linux.vnet.ibm.com,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        Barry Song <v-songbaohua@oppo.com>
-Date:   Fri, 05 May 2023 15:51:35 -0700
-In-Reply-To: <20230505132347.GR83892@hirez.programming.kicks-ass.net>
-References: <cover.1683156492.git.tim.c.chen@linux.intel.com>
-         <849d3fee51d218de71ecc9d557667ff6b137ac2d.1683156492.git.tim.c.chen@linux.intel.com>
-         <20230505132347.GR83892@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Fri, 5 May 2023 18:52:24 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 505855FCE;
+        Fri,  5 May 2023 15:52:23 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-528cdc9576cso1604817a12.0;
+        Fri, 05 May 2023 15:52:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683327143; x=1685919143;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=z5W7ONEaecFCyy7lrplAP+3KFnzflWj5NN/RehO1dv4=;
+        b=VBhfDcqR+GseQEA9QUC5uoW//EJhnr7AiRARG6B4tKlyE1YOk9SSLjiHvf3wjpW3x1
+         +GWBh+/53EHzuJoLEeu81uOEuVN6BhwgZNwVLW8jlXdmb4TDsD439QR+SV7erzNNzkxU
+         XVSNqyc9oNokV86HUUOKaC1gNuS+PfpkkWMslL4HTIwqNg/aW2k5LE/17qx781d2i6qc
+         2ytdO9L4aa1iQBHCGx5iU56sxXg2xA1AE23+2LFcDZ3RBNfpQqJNDNKQsrP4AL4Oqzdb
+         eCdbNbhWv9T718BBsodZXMdbImyBuOXqb49bnWlYUBXyjLUkGPnZWU6ZMH948pce7or2
+         YRYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683327143; x=1685919143;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=z5W7ONEaecFCyy7lrplAP+3KFnzflWj5NN/RehO1dv4=;
+        b=EwWH5ibyp2FGCLzZ0Ajiv9evhEzoml5J/cjxgljFCvAcsAHhnPSpd/Y06JjDIAuxQQ
+         xvx5QoXReg2FUge/XOa7Ly0iVpCa8VtBfwHWo7c7YP/jvSZM8b7blUoE+omsmRIs6fvn
+         STUuBEyHNDfDOGNx/M0B70SqsWQN29Xgjhs9Z+ri5EAE5DKC2iKUEY2jeRAOeAP3kxz2
+         Byszb3SxfgmVrYXugnsRTgr6AXjUfu0wqb/dJY8Hlao8TgS5rRsFY6Zjp3hKIxUW1Way
+         wAne9Qk8kfB0ySfjMXbVOcfXwCmDssTMUIGtjre1omwuq9wehLzNnLjD0tXB70C5lmuB
+         wkkg==
+X-Gm-Message-State: AC+VfDzvjdK42FKiX3NY+P6IRX4i0VGhj02QUX8aKbi62ViyBHfhjKTV
+        kRh0GCqSHL/gkzPr9cdh018=
+X-Google-Smtp-Source: ACHHUZ51M1KF2vfaJz++Zbjp83+hLK2P6j8fzQBli4ttuv1kNVJR9OeS+q8nt90FiO6Nm1oBowYCow==
+X-Received: by 2002:a17:902:bb87:b0:19e:dc0e:1269 with SMTP id m7-20020a170902bb8700b0019edc0e1269mr2631305pls.7.1683327142499;
+        Fri, 05 May 2023 15:52:22 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id t13-20020a1709027fcd00b001a9b7584824sm2296739plb.159.2023.05.05.15.52.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 May 2023 15:52:22 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Fri, 5 May 2023 12:52:20 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Johannes Berg <johannes@sipsolutions.net>
+Cc:     jiangshanlai@gmail.com, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Avraham Stern <avraham.stern@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mordechay Goodstein <mordechay.goodstein@intel.com>,
+        "Haim, Dreyfuss" <haim.dreyfuss@intel.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH] wifi: iwlwifi: Use default @max_active for
+ trans_pcie->rba.alloc_wq
+Message-ID: <ZFWIpN7HN431MVSI@slm.duckdns.org>
+References: <20230421025046.4008499-1-tj@kernel.org>
+ <20230421025046.4008499-10-tj@kernel.org>
+ <fffb3e6ad76a26a9633728501b5d606864235e65.camel@sipsolutions.net>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fffb3e6ad76a26a9633728501b5d606864235e65.camel@sipsolutions.net>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,33 +87,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-05-05 at 15:23 +0200, Peter Zijlstra wrote:
-> On Thu, May 04, 2023 at 09:09:55AM -0700, Tim Chen wrote:
->=20
-> > @@ -10709,11 +10709,26 @@ static int should_we_balance(struct lb_env *e=
-nv)
-> >  	for_each_cpu_and(cpu, group_balance_mask(sg), env->cpus) {
-> >  		if (!idle_cpu(cpu))
-> >  			continue;
-> > +		else {
-> > +			/*
-> > +			 * Don't balance to idle SMT in busy core right away when
-> > +			 * balancing cores, but remember the first idle SMT CPU for
-> > +			 * later consideration.  Find CPU on an idle core first.
-> > +			 */
-> > +			if (!(env->sd->flags & SD_SHARE_CPUCAPACITY) && !is_core_idle(cpu))=
- {
-> > +				if (idle_smt =3D=3D -1)
-> > +					idle_smt =3D cpu;
-> > +				continue;
-> > +			}
-> > +		}
->=20
-> Not only does that bust CodingStyle, it's also entirely daft. What
-> exactly is the purpose of that else statement?
->=20
->=20
+trans_pcie->rba.alloc_wq only hosts a single work item and thus doesn't need
+explicit concurrency limit. Let's use the default @max_active. This doesn't
+cost anything and clearly expresses that @max_active doesn't matter.
 
-Yeah, that's a dumb "else" statement.  Will remove that.
+Signed-off-by: Tejun Heo <tj@kernel.org>
+Cc: Kalle Valo <kvalo@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Gregory Greenman <gregory.greenman@intel.com>
+Cc: Johannes Berg <johannes.berg@intel.com>
+Cc: Avraham Stern <avraham.stern@intel.com>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Mordechay Goodstein <mordechay.goodstein@intel.com>
+Cc: "Haim, Dreyfuss" <haim.dreyfuss@intel.com>
+Cc: linux-wireless@vger.kernel.org
+Cc: netdev@vger.kernel.org
+---
+Hello,
 
-Tim
+Johannes, do you mind acking this patch instead?
+
+Thanks.
+
+ drivers/net/wireless/intel/iwlwifi/pcie/trans.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/drivers/net/wireless/intel/iwlwifi/pcie/trans.c
++++ b/drivers/net/wireless/intel/iwlwifi/pcie/trans.c
+@@ -3577,7 +3577,7 @@ struct iwl_trans *iwl_trans_pcie_alloc(s
+ 	init_waitqueue_head(&trans_pcie->imr_waitq);
+ 
+ 	trans_pcie->rba.alloc_wq = alloc_workqueue("rb_allocator",
+-						   WQ_HIGHPRI | WQ_UNBOUND, 1);
++						   WQ_HIGHPRI | WQ_UNBOUND, 0);
+ 	if (!trans_pcie->rba.alloc_wq) {
+ 		ret = -ENOMEM;
+ 		goto out_free_trans;
