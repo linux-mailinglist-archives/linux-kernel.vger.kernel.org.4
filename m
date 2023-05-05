@@ -2,115 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CF5A6F8078
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 12:01:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD9906F807B
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 12:02:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231557AbjEEKBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 06:01:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58358 "EHLO
+        id S231863AbjEEKCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 06:02:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230358AbjEEKBk (ORCPT
+        with ESMTP id S231685AbjEEKCC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 06:01:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FD851816A
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 03:01:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 5 May 2023 06:02:02 -0400
+Received: from vulcan.natalenko.name (vulcan.natalenko.name [104.207.131.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF5DF1161C;
+        Fri,  5 May 2023 03:01:59 -0700 (PDT)
+Received: from spock.localnet (unknown [83.148.33.151])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 989A263C33
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 10:01:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00EDDC4339E
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 10:01:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683280899;
-        bh=Ec2ll/P9tx8U/dBQxy3ZG+nUnHx39GhJcsKwfUcl+ek=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=FJV0yXgxVbxDUT5oHwfpctONYlQwh1inVw1hkoxqIIo7Xh7XU5qLGV96M88uSYps+
-         80ePmkd9mKM0Ta/x82WIzmee0PJRCyknqJh9pvhhuX3AqENGJmm6gqOJpp7lpu9IrQ
-         vX39SaZEKkZVfvL2UlYoUS7lLaxnA8G5TAIdNFWvy0Zln0jvRXeVf4MeGZ2AniAZFu
-         XrN89rpEZ97kXZYAENJvyqcDkjq9NVrNmnBiDnhmExLluGn6BjmPp8qchvt9PM8FQt
-         bRDRT0T9y79aB2p/sPFLSXGAnY5XaPKAsLWsX6Fc96a/76QWHKSKic8/DH39VCXcqO
-         aR+f2BdJwb6uA==
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-50be0d835aaso2779489a12.3
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 03:01:38 -0700 (PDT)
-X-Gm-Message-State: AC+VfDzHb60Mq+L3byLS6RAjzifkzIeg0l/GqLcv4l9zqFreCahxUIBo
-        5a0GHa5U/7VOks2CotIol6slSzOSRYkBFaiJ9vY=
-X-Google-Smtp-Source: ACHHUZ6cv5uf8DA2g1qYJdz+yn4p/ZuvFXjDqZGWthSuaLRL+DOJ0hmeFjGg+R/3lP7VI9aiX9CexZ4uVLWUqCuC9dg=
-X-Received: by 2002:a17:907:2687:b0:961:a67:29c with SMTP id
- bn7-20020a170907268700b009610a67029cmr616582ejc.70.1683280897147; Fri, 05 May
- 2023 03:01:37 -0700 (PDT)
+        by vulcan.natalenko.name (Postfix) with ESMTPSA id 9C7DD12FA060;
+        Fri,  5 May 2023 12:01:52 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
+        s=dkim-20170712; t=1683280913;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2U8Eyv9nlZnFEQ8LEuDy/nhAeBfgve9KkqjGss4tmqU=;
+        b=oxOU7q3BEN1zLMIqYfCJqAmwPBRg+HQJ6RDIO+mpq9nrSjS/Vakss/QZ9YVIY5CEjQan4R
+        rQj0RKBx6PVnqPMNs+g9G3gf5MHHqHh/oBDle2jQXoEreSS+7G30UUyq/97BJVXkDIePg8
+        pr4EPL2LkMeKwL09YhQVRy98D1SjeIY=
+From:   Oleksandr Natalenko <oleksandr@natalenko.name>
+To:     Alex Williamson <alex.williamson@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Eric Auger <eric.auger@redhat.com>,
+        =?ISO-8859-1?Q?C=E9dric?= Le Goater <clg@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Abhishek Sahu <abhsahu@nvidia.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Cornelia Huck <cohuck@redhat.com>, Bo Liu <liubo03@inspur.com>,
+        "K V P, Satyanarayana" <satyanarayana.k.v.p@intel.com>,
+        kvm@vger.kernel.org
+Subject: Re: [PATCH] vfio/pci: demote hiding ecap messages to debug level
+Date:   Fri, 05 May 2023 12:01:51 +0200
+Message-ID: <2680715.mvXUDI8C0e@natalenko.name>
+In-Reply-To: <20230504170111.70a7f639.alex.williamson@redhat.com>
+References: <20230504131654.24922-1-oleksandr@natalenko.name>
+ <20230504170111.70a7f639.alex.williamson@redhat.com>
 MIME-Version: 1.0
-References: <1682214146-3756-1-git-send-email-yangtiezhu@loongson.cn>
-In-Reply-To: <1682214146-3756-1-git-send-email-yangtiezhu@loongson.cn>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 5 May 2023 18:01:25 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRqdP-RVSMshwzJuAcm1bBeg1-wZU_k_Oo409=O4QZR-w@mail.gmail.com>
-Message-ID: <CAJF2gTRqdP-RVSMshwzJuAcm1bBeg1-wZU_k_Oo409=O4QZR-w@mail.gmail.com>
-Subject: Re: [PATCH] riscv: uprobes: Restore thread.bad_cause
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thx for fixup.
+Hello.
 
-Reviewed-by: Guo Ren <guoren@kernel.org>
+On p=C3=A1tek 5. kv=C4=9Btna 2023 1:01:11 CEST Alex Williamson wrote:
+> On Thu,  4 May 2023 15:16:54 +0200
+> Oleksandr Natalenko <oleksandr@natalenko.name> wrote:
+>=20
+> > Seeing a burst of messages like this:
+> >=20
+> >     vfio-pci 0000:98:00.0: vfio_ecap_init: hiding ecap 0x19@0x1d0
+> >     vfio-pci 0000:98:00.0: vfio_ecap_init: hiding ecap 0x25@0x200
+> >     vfio-pci 0000:98:00.0: vfio_ecap_init: hiding ecap 0x26@0x210
+> >     vfio-pci 0000:98:00.0: vfio_ecap_init: hiding ecap 0x27@0x250
+> >     vfio-pci 0000:98:00.1: vfio_ecap_init: hiding ecap 0x25@0x200
+> >     vfio-pci 0000:b1:00.0: vfio_ecap_init: hiding ecap 0x19@0x1d0
+> >     vfio-pci 0000:b1:00.0: vfio_ecap_init: hiding ecap 0x25@0x200
+> >     vfio-pci 0000:b1:00.0: vfio_ecap_init: hiding ecap 0x26@0x210
+> >     vfio-pci 0000:b1:00.0: vfio_ecap_init: hiding ecap 0x27@0x250
+> >     vfio-pci 0000:b1:00.1: vfio_ecap_init: hiding ecap 0x25@0x200
+> >=20
+> > is of little to no value for an ordinary user.
+> >=20
+> > Hence, use pci_dbg() instead of pci_info().
+> >=20
+> > Signed-off-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+> > ---
+> >  drivers/vfio/pci/vfio_pci_config.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/vfio/pci/vfio_pci_config.c b/drivers/vfio/pci/vfio=
+_pci_config.c
+> > index 948cdd464f4e..dd8dda14e701 100644
+> > --- a/drivers/vfio/pci/vfio_pci_config.c
+> > +++ b/drivers/vfio/pci/vfio_pci_config.c
+> > @@ -1643,7 +1643,7 @@ static int vfio_ecap_init(struct vfio_pci_core_de=
+vice *vdev)
+> >  		}
+> > =20
+> >  		if (!len) {
+> > -			pci_info(pdev, "%s: hiding ecap %#x@%#x\n",
+> > +			pci_dbg(pdev, "%s: hiding ecap %#x@%#x\n",
+> >  				 __func__, ecap, epos);
+> > =20
+> >  			/* If not the first in the chain, we can skip over it */
+>=20
+> Looks fine to me, though I might adjust that next line to keep the
+> previous alignment.
 
-On Sun, Apr 23, 2023 at 9:42=E2=80=AFAM Tiezhu Yang <yangtiezhu@loongson.cn=
-> wrote:
->
-> thread.bad_cause is saved in arch_uprobe_pre_xol(), it should be restored
-> in arch_uprobe_{post,abort}_xol() accordingly, otherwise the save operati=
-on
-> is meaningless, this change is similar with x86 and powerpc.
->
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> ---
->  arch/riscv/kernel/probes/uprobes.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/arch/riscv/kernel/probes/uprobes.c b/arch/riscv/kernel/probe=
-s/uprobes.c
-> index c976a21..194f166 100644
-> --- a/arch/riscv/kernel/probes/uprobes.c
-> +++ b/arch/riscv/kernel/probes/uprobes.c
-> @@ -67,6 +67,7 @@ int arch_uprobe_post_xol(struct arch_uprobe *auprobe, s=
-truct pt_regs *regs)
->         struct uprobe_task *utask =3D current->utask;
->
->         WARN_ON_ONCE(current->thread.bad_cause !=3D UPROBE_TRAP_NR);
-> +       current->thread.bad_cause =3D utask->autask.saved_cause;
->
->         instruction_pointer_set(regs, utask->vaddr + auprobe->insn_size);
->
-> @@ -102,6 +103,7 @@ void arch_uprobe_abort_xol(struct arch_uprobe *auprob=
-e, struct pt_regs *regs)
->  {
->         struct uprobe_task *utask =3D current->utask;
->
-> +       current->thread.bad_cause =3D utask->autask.saved_cause;
->         /*
->          * Task has received a fatal signal, so reset back to probbed
->          * address.
-> --
-> 2.1.0
->
+Sure, but if you want me to send v2 with this, please let me know.
+
+Thanks.
+
+> In general this has certainly caused more
+> confusion than insightful information, so demoting it to debug is a
+> good idea.  Thanks,
+>=20
+> Alex
+>=20
+>=20
 
 
---=20
-Best Regards
- Guo Ren
+=2D-=20
+Oleksandr Natalenko (post-factum)
+
+
