@@ -2,123 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1F416F80E2
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 12:37:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3ABA6F80E7
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 12:40:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231688AbjEEKhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 06:37:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42984 "EHLO
+        id S231820AbjEEKkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 06:40:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbjEEKhi (ORCPT
+        with ESMTP id S231796AbjEEKkC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 06:37:38 -0400
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D93B910DD
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 03:37:37 -0700 (PDT)
-Received: by mail-il1-x12f.google.com with SMTP id e9e14a558f8ab-3330afe3d2fso65085ab.1
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 03:37:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683283057; x=1685875057;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6wlVvS1v7N/COSWgkkDH9X2UEC2lG92A8iSjKf25mMI=;
-        b=XSlwE98p2kAwpjEeJx68OQtPMW7TbCflWFyrALwVMXLNfOqSO0/nGdGMX/2sUEzh/N
-         VQRIUvDHe2G5r6leZDY6kHSyUfXxdaabOivZeFT8Gzgp54ryrT3DAKg/aVw/0BnrP05u
-         jjVexGnlq0cMPgsUT5zJmhuANwvKB9IfFkQzFeO9jziLeRIpGD3++sptt5DSLkuYqb9q
-         bU9EQ79beGjnWlFwMh3R1xoEK3gaCQIa1RdPyvet55L/6JQdYVfhpOczXp5It+RztYYP
-         F0GfcT9spxgaYY5K1a8O62ya/pYMTSlIdGu3zb1m6X7aoiwpDw6nkwmyE8m/P6SexMz9
-         qTog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683283057; x=1685875057;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6wlVvS1v7N/COSWgkkDH9X2UEC2lG92A8iSjKf25mMI=;
-        b=WxjprsQjAvFGojgs6cC2kifxCBuQGvcETvYz45GHWTqmXZcGw2oToR1T643YJDfnj6
-         qfpQ+WHAGlCIKsCUfN0lOOUP+DRTdzdCtQQBXAsHeTQJMzDk2ntU72mJbKThZrBXosW6
-         nPa4mhxLCJZQtCe+B3fA1g9oUf1s7BZy8JN6be4gkWk4IC8QeEhIK268ELZNyyhCJ4IN
-         HAcllevHOFkOMdtJfbPUBM6C/zL4BrSlJJyeNWGR1rjlbnQ+LtO09Drx0zO7vxrQoFMj
-         aKU9/ufRTpqnNPALyUU2E1U+zcr8uKSxO9RA+7IRzm0bOt7Fbkso2Iqjte7vzAa5hFrX
-         WuHg==
-X-Gm-Message-State: AC+VfDy//WOwphd2i0yY9zN374/+LGW/yiUnz0wDo5gSg1L37NnD3seX
-        7OlEy6RE+JL4eKQ7S9bxdf8DafTp5rSYGSJCU9jumA==
-X-Google-Smtp-Source: ACHHUZ6YRsexopUfQEOI3fgm6au97dvlIEZZXNJCDB87P5n1x7pvcMSdlRGPtHW+QZYFZvZ4gAggef3EWs32hucpXfQ=
-X-Received: by 2002:a05:6e02:1b0d:b0:331:948c:86f3 with SMTP id
- i13-20020a056e021b0d00b00331948c86f3mr106180ilv.19.1683283056873; Fri, 05 May
- 2023 03:37:36 -0700 (PDT)
+        Fri, 5 May 2023 06:40:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F7074C39
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 03:39:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683283155;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ek5eYAkFksx+RmQ32CfQbmmrzLYB+xDBvf+YH6tHX7c=;
+        b=PQV9RxHulbXgp2poVwJCZ/x5cj9acZIoQEjDVY34ETbqn3I/8/eSL8KocMr/kcVfZk/xoz
+        i7kSVhSNwyfh72sfBffCipjO2lHRxT9ypCgspaVFV6c0YmMpNPpqHMbJLxry2CzE/zmoOT
+        7zbdierhRUTHVOXqu0TI/VhuEnK2wTA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-61-CKHLd1_5N762sfXhuMycyA-1; Fri, 05 May 2023 06:39:14 -0400
+X-MC-Unique: CKHLd1_5N762sfXhuMycyA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 96B3C185A7A2;
+        Fri,  5 May 2023 10:39:13 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7A36F2026DFD;
+        Fri,  5 May 2023 10:39:13 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: [GIT PULL] Second batch of KVM patches for Linux 6.4
+Date:   Fri,  5 May 2023 06:39:12 -0400
+Message-Id: <20230505103912.3270597-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-References: <202305051706416319733@zte.com.cn>
-In-Reply-To: <202305051706416319733@zte.com.cn>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Fri, 5 May 2023 12:37:25 +0200
-Message-ID: <CANn89iK8c5S3P8s9mfoaa9J=Pt1zXyjdRPPMp8nFV1eqYZovDQ@mail.gmail.com>
-Subject: Re: [PATCH] net: socket: Use fdget() and fdput()
-To:     ye.xingchen@zte.com.cn
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 5, 2023 at 11:06=E2=80=AFAM <ye.xingchen@zte.com.cn> wrote:
->
-> From: Ye Xingchen <ye.xingchen@zte.com.cn>
->
-> By using the fdget function, the socket object, can be quickly obtained
-> from the process's file descriptor table without the need to obtain the
-> file descriptor first before passing it as a parameter to the fget
-> function.
->
+Linus,
 
-net-next is currently closed.
+The following changes since commit 1a5304fecee523060f26e2778d9d8e33c0562df3:
 
-There are good reasons we have sockfd_lookup() and sockfd_lookup_light(),
-you probably should take a deeper look at the difference between them.
+  Merge tag 'parisc-for-6.4-1' of git://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux (2023-05-03 19:41:59 -0700)
 
+are available in the Git repository at:
 
+  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
 
-> Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
-> ---
->  net/socket.c | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
->
-> diff --git a/net/socket.c b/net/socket.c
-> index a7b4b37d86df..84daba774432 100644
-> --- a/net/socket.c
-> +++ b/net/socket.c
-> @@ -528,19 +528,18 @@ EXPORT_SYMBOL(sock_from_file);
->
->  struct socket *sockfd_lookup(int fd, int *err)
->  {
-> -       struct file *file;
-> +       struct fd f =3D fdget(fd);
->         struct socket *sock;
->
-> -       file =3D fget(fd);
-> -       if (!file) {
-> +       if (!f.file) {
->                 *err =3D -EBADF;
->                 return NULL;
->         }
->
-> -       sock =3D sock_from_file(file);
-> +       sock =3D sock_from_file(f.file);
->         if (!sock) {
->                 *err =3D -ENOTSOCK;
-> -               fput(file);
-> +               fdput(f);
->         }
->         return sock;
->  }
-> --
-> 2.25.1
+for you to fetch changes up to 7a8016d95651fecce5708ed93a24a03a9ad91c80:
+
+  Merge tag 'kvm-s390-next-6.4-2' of https://git.kernel.org/pub/scm/linux/kernel/git/kvms390/linux into HEAD (2023-05-05 06:15:09 -0400)
+
+This includes the 6.4 changes for RISC-V, and a few bugfix patches for
+other architectures.  For x86, this closes a longstanding performance
+issue in the newer and (usually) more scalable page table management code.
+
+If you wish, you can take a look at commit d4fba4dfdcce1 to see the RISC-V
+conflicts and their resolution.
+
+----------------------------------------------------------------
+RISC-V:
+- ONE_REG interface to enable/disable SBI extensions
+- Zbb extension for Guest/VM
+- AIA CSR virtualization
+
+x86:
+- Fix a long-standing TDP MMU flaw, where unloading roots on a vCPU can
+  result in the root being freed even though the root is completely valid
+  and can be reused as-is (with a TLB flush).
+
+s390:
+- A couple bugfixes.
+
+----------------------------------------------------------------
+Andrew Jones (1):
+      RISC-V: KVM: Alphabetize selects
+
+Anup Patel (10):
+      RISC-V: KVM: Add ONE_REG interface to enable/disable SBI extensions
+      RISC-V: KVM: Allow Zbb extension for Guest/VM
+      RISC-V: Add AIA related CSR defines
+      RISC-V: Detect AIA CSRs from ISA string
+      RISC-V: KVM: Drop the _MASK suffix from hgatp.VMID mask defines
+      RISC-V: KVM: Initial skeletal support for AIA
+      RISC-V: KVM: Implement subtype for CSR ONE_REG interface
+      RISC-V: KVM: Add ONE_REG interface for AIA CSRs
+      RISC-V: KVM: Use bitmap for irqs_pending and irqs_pending_mask
+      RISC-V: KVM: Virtualize per-HART AIA CSRs
+
+Claudio Imbrenda (2):
+      KVM: s390: pv: fix asynchronous teardown for small VMs
+      KVM: s390: fix race in gmap_make_secure()
+
+David Matlack (1):
+      KVM: RISC-V: Retry fault if vma_lookup() results become invalid
+
+Paolo Bonzini (3):
+      Merge tag 'kvm-riscv-6.4-1' of https://github.com/kvm-riscv/linux into HEAD
+      Merge tag 'kvm-x86-mmu-6.4-2' of https://github.com/kvm-x86/linux into HEAD
+      Merge tag 'kvm-s390-next-6.4-2' of https://git.kernel.org/pub/scm/linux/kernel/git/kvms390/linux into HEAD
+
+Sean Christopherson (1):
+      KVM: x86: Preserve TDP MMU roots until they are explicitly invalidated
+
+ arch/riscv/include/asm/csr.h          | 107 +++++++++-
+ arch/riscv/include/asm/hwcap.h        |   8 +
+ arch/riscv/include/asm/kvm_aia.h      | 127 +++++++++++
+ arch/riscv/include/asm/kvm_host.h     |  14 +-
+ arch/riscv/include/asm/kvm_vcpu_sbi.h |   8 +-
+ arch/riscv/include/uapi/asm/kvm.h     |  51 ++++-
+ arch/riscv/kernel/cpu.c               |   2 +
+ arch/riscv/kernel/cpufeature.c        |   2 +
+ arch/riscv/kvm/Kconfig                |  10 +-
+ arch/riscv/kvm/Makefile               |   1 +
+ arch/riscv/kvm/aia.c                  | 388 ++++++++++++++++++++++++++++++++++
+ arch/riscv/kvm/main.c                 |  22 +-
+ arch/riscv/kvm/mmu.c                  |  28 ++-
+ arch/riscv/kvm/vcpu.c                 | 194 +++++++++++++----
+ arch/riscv/kvm/vcpu_insn.c            |   1 +
+ arch/riscv/kvm/vcpu_sbi.c             | 247 ++++++++++++++++++++--
+ arch/riscv/kvm/vcpu_sbi_base.c        |   2 +-
+ arch/riscv/kvm/vm.c                   |   4 +
+ arch/riscv/kvm/vmid.c                 |   4 +-
+ arch/s390/kernel/uv.c                 |  32 +--
+ arch/s390/kvm/pv.c                    |   5 +
+ arch/s390/mm/gmap.c                   |   7 +
+ arch/x86/kvm/mmu/tdp_mmu.c            | 121 +++++------
+ 23 files changed, 1208 insertions(+), 177 deletions(-)
+ create mode 100644 arch/riscv/include/asm/kvm_aia.h
+ create mode 100644 arch/riscv/kvm/aia.c
+
