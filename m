@@ -2,179 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBDDA6F8B8E
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 23:47:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71A1B6F8B91
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 23:49:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233643AbjEEVrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 17:47:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47524 "EHLO
+        id S233647AbjEEVtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 17:49:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233691AbjEEVrl (ORCPT
+        with ESMTP id S232290AbjEEVs5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 17:47:41 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE1B5FCD;
-        Fri,  5 May 2023 14:47:27 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-55a14807e4cso41183697b3.1;
-        Fri, 05 May 2023 14:47:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683323246; x=1685915246;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HvdowzOHeTXQwWFXBaRl5zQyQlspUjEq1JSPOTsC1Wc=;
-        b=c/9ssS17ygEIXrjB8ms2tCiAauSNkrwY3FrgLn0D4OGpJl3juPuZJhnyb0JmoBmYni
-         ETFaF7dTfqcXfSqQu0ubAWwUgEOHVpTrEkyKZkvwt79nUSdjGp3pWnOCs7wm6TLhWmGe
-         PRSs7yqpoLqTURBcqejEOQEPBkthVBfDd1h6Lx3f6OaNcc8IySO1QrIeC4aq4UoyAZj2
-         WLslZ7g5pGxZQxY8KDWw1GhuzL7CJHM71gcTLGvw88r+Ln+i7VCIlwpwwgFBaGxK8vQP
-         GdPRs4Jgccsra0RD96j+c3O/Jz0FA0Sf48OdKtkQTynk8oBps/WjadB0bHc8GLSMHi2c
-         azAg==
+        Fri, 5 May 2023 17:48:57 -0400
+Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 640E6E8
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 14:48:49 -0700 (PDT)
+Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-32f240747cdso124110705ab.1
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 14:48:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683323246; x=1685915246;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HvdowzOHeTXQwWFXBaRl5zQyQlspUjEq1JSPOTsC1Wc=;
-        b=U0knbndYk8I4xS3F9sBUu1E2JDK8vG+9boaenyRD8DMTPxZQuD3K6lqcd2G1si7/Sb
-         5ATqzJGSQ3zgTBcLQxi+lkLs5IymLGyvcnC3G6710fzUgqFLo2t/Rfwc3a2WkbZqSZdH
-         H5EuZjTZF+HlzEOISXPc7KoUBtbtdULOecw/qZXIHgcMSks9VntaTprq7QF9IRT74kOt
-         U9pcXoE1bu4+FO0ywdK0KphNNWcOeInXWkE6aBy2QNTf+p5gIQop/69QbzHIsLHQMKAt
-         XibW7Y0MLFZvSfRdBbAr/Hoa1YyahFu9z+qKE1uaZfPHEwK7yk1cSCMhCcynDQjJ4zTh
-         +69Q==
-X-Gm-Message-State: AC+VfDwyPTtWBFrnDivG0IDQTwE13/J6v2etECB4h+Cg4b6aX/nb0vxm
-        aig9zQXvuQ5ZaVHcXNdix0Bb3eWn6io=
-X-Google-Smtp-Source: ACHHUZ66ftSX4i7hbbPSR3DK3+7rOK5fIi/dVvwoFHwbdOXcz+DBdCps2CahNWCWdvpN3vQUAJJkPw==
-X-Received: by 2002:ad4:5b84:0:b0:5ea:922:bea9 with SMTP id 4-20020ad45b84000000b005ea0922bea9mr3890271qvp.14.1683323225820;
-        Fri, 05 May 2023 14:47:05 -0700 (PDT)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id t17-20020a0cde11000000b0061b698e2acesm902736qvk.18.2023.05.05.14.47.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 May 2023 14:47:05 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 8CFE427C005A;
-        Fri,  5 May 2023 17:47:04 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Fri, 05 May 2023 17:47:04 -0400
-X-ME-Sender: <xms:V3lVZJ9EaSeFMeC4hvnPgsdMB1bmqJnnwbBZm92tK-RVC6HFpmOalA>
-    <xme:V3lVZNstA8h5kNOOjiLW5IzUbk5AKCHVPd6MBuT_004NZHWge5HUUDbVTm58DtHXe
-    cduZUFO-tTgIiEsLQ>
-X-ME-Received: <xmr:V3lVZHCg0SsdbD248LS8GYMDYHEcsbj8FgQFML9mQjg7pABuBaKn8LNarr8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeffedgtddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
-    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
-    htthgvrhhnpeehudfgudffffetuedtvdehueevledvhfelleeivedtgeeuhfegueeviedu
-    ffeivdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
-    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
-    igmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:V3lVZNdbiUqEBK1U70KWkAYCgpEnQIj6hJDc_zxU3swojKVfs5dNuA>
-    <xmx:V3lVZOMId30i86Lv_VOwQu8DjAmqNDLLrKVD3pfx-C2X-n9vDiLloA>
-    <xmx:V3lVZPlW1emwRpkFQ5_pB6ub8LXhknrD6Tq84JA570W0Dg3tIaddnA>
-    <xmx:WHlVZKvnzdGWwdD9NTDR2GlJbVsrXA9WuxCpml6FnPcqGBzLSvobOg>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 5 May 2023 17:47:02 -0400 (EDT)
-Date:   Fri, 5 May 2023 14:46:58 -0700
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Keith Busch <kbusch@kernel.org>
-Cc:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Andreas Hindborg <nmi@metaspace.dk>,
-        Christoph Hellwig <hch@lst.de>,
-        Damien Le Moal <Damien.LeMoal@wdc.com>,
-        Hannes Reinecke <hare@suse.de>,
-        lsf-pc@lists.linux-foundation.org, rust-for-linux@vger.kernel.org,
-        linux-block@vger.kernel.org, Matthew Wilcox <willy@infradead.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        open list <linux-kernel@vger.kernel.org>, gost.dev@samsung.com,
-        Daniel Vetter <daniel@ffwll.ch>
-Subject: Re: [RFC PATCH 00/11] Rust null block driver
-Message-ID: <ZFV5UicPNkNE4g3I@boqun-archlinux>
-References: <da7b815d-3da8-38e5-9b25-b9cfb6878293@acm.org>
- <87jzxot0jk.fsf@metaspace.dk>
- <b9a1c1b2-3baa-2cad-31ae-8b14e4ee5709@acm.org>
- <ZFP+8apHunCCMmOZ@kbusch-mbp.dhcp.thefacebook.com>
- <e7bc2155-613b-8904-9942-2e9615b0dc63@kernel.dk>
- <CANiq72nAMH1SfGmPTEjGHfevbb9tMLN4W7gJ3nBpJcvkCEsZ4g@mail.gmail.com>
- <80ed2c0e-54db-777a-175b-1aa3ff776724@kernel.dk>
- <CANiq72=3kGRy-3Lq5oxUEhu5d-377QrhuzhvoKRL+_QvbnJE7A@mail.gmail.com>
- <ZFT1mOQq0YllZl7V@Boquns-Mac-mini.local>
- <ZFVcMtRFoaEK/PqY@kbusch-mbp.dhcp.thefacebook.com>
+        d=1e100.net; s=20221208; t=1683323328; x=1685915328;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=E7jMC4Y/MwtJxVB+XvqmNFutBQ5y0DuObCQpShWAyDA=;
+        b=CkqeKAorWhoSLouRdAAQEdVJMI7qBRrr+KCv4eqCarj/E4ptrR6e7ZOVf9DuNhgxTP
+         7bXmK1LjudkYGmFZzAfG60FbieL20oOGJvMzYKnjWUxhl3Yb0h5BTNHgPYLRl9jJA7d9
+         h2gmfufzK72/bUakQWX6EwtGQGLPLCZ4TBVvNRM3jbxYaVwTLO4vqqZBriXmX+7QrrIu
+         /ug14XU4rrfP/SkFBzbVv5Bk4ER2DGydjMpdSMI3hqtTnDKTQ4yetDPMyoDwPL44shtd
+         v+IoPB4Poq4yKuxrOk/tVjcndy0VSEgFVPXQwMIa6DGTDLyYFM5FJmAftPRAn9sY5YkV
+         SCgw==
+X-Gm-Message-State: AC+VfDyV0d6hJZe3wjfG+BIoEcz36Ec87enKUkJiXthT/H5Vb6wUBNcv
+        RFXITUDeCMTgz8pZDadYzdio94a8y3WMuwS6fWRuHqJ1thLj
+X-Google-Smtp-Source: ACHHUZ7h14GTayDuTiT+XMTh6z11amG7pXwUsJRviZHTEdjTameaV5/XU2zTTT1SV3oExcG3icb7qrbArROQKHALD+LoIRDmIrp6
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZFVcMtRFoaEK/PqY@kbusch-mbp.dhcp.thefacebook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:7c04:0:b0:32b:fc:52b1 with SMTP id x4-20020a927c04000000b0032b00fc52b1mr2179768ilc.0.1683323328678;
+ Fri, 05 May 2023 14:48:48 -0700 (PDT)
+Date:   Fri, 05 May 2023 14:48:48 -0700
+In-Reply-To: <000000000000f6540d05f30bb23f@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000000c53dd05faf94183@google.com>
+Subject: Re: [syzbot] [ext4?] possible deadlock in ext4_xattr_set_handle (3)
+From:   syzbot <syzbot+edce54daffee36421b4c@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, dvyukov@google.com, jack@suse.cz,
+        linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 05, 2023 at 01:42:42PM -0600, Keith Busch wrote:
-> On Fri, May 05, 2023 at 05:24:56AM -0700, Boqun Feng wrote:
-> > 
-> > The Rust bindings are actually the way of communication between
-> > subsystem mantainers and Rust driver writers, and can help reduce the
-> > amount of work: You can have the abstraction the way you like.
-> 
-> We don't have stable APIs or structures here, so let's be clear-eyed
+syzbot has found a reproducer for the following issue on:
 
-Of course, but every API change need to cover all in-tree users, right?
+HEAD commit:    14f8db1c0f9a Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=1663f338280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a837a8ba7e88bb45
+dashboard link: https://syzkaller.appspot.com/bug?extid=edce54daffee36421b4c
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17595ed4280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16e85322280000
 
-> about the maintenance burden these bindings create for linux-block
-> contributors. Not a hard "no" from me, but this isn't something to
-> handwave over.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/ad6ce516eed3/disk-14f8db1c.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/1f38c2cc7667/vmlinux-14f8db1c.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/d795115eee39/Image-14f8db1c.gz.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/092c100a5922/mount_0.gz
 
-Not tried to handwave over anything ;-) The fact IIUC is simply that Rust
-drivers can call C function, so say a in-tree Rust driver does something
-as follow:
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+edce54daffee36421b4c@syzkaller.appspotmail.com
 
-	struct Foo {
-		ptr: *mut bio; // A pointer to bio.
-		...
-	}
+loop0: detected capacity change from 0 to 512
+EXT4-fs (loop0): mounted filesystem 00000000-0000-0000-0000-000000000000 without journal. Quota mode: writeback.
+======================================================
+WARNING: possible circular locking dependency detected
+6.3.0-rc7-syzkaller-g14f8db1c0f9a #0 Not tainted
+------------------------------------------------------
+syz-executor392/5925 is trying to acquire lock:
+ffff0000e0dbb2f0 (&ei->xattr_sem){++++}-{3:3}, at: ext4_write_lock_xattr fs/ext4/xattr.h:155 [inline]
+ffff0000e0dbb2f0 (&ei->xattr_sem){++++}-{3:3}, at: ext4_xattr_set_handle+0x1e0/0x12d8 fs/ext4/xattr.c:2373
 
-	impl Foo {
-		pub fn bar(&self) {
-			unsafe {
-				// calling a C function "do_sth_to_bio".
-				// void do_sth_to_bio(struct bio *bio);
-				bindings::do_sth_to_bio(self.ptr);
-			}
-		}
-	}
+but task is already holding lock:
+ffff0000e0dbb628 (&ea_inode->i_rwsem#8/1){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:758 [inline]
+ffff0000e0dbb628 (&ea_inode->i_rwsem#8/1){+.+.}-{3:3}, at: vfs_setxattr+0x17c/0x344 fs/xattr.c:323
 
-That's an user of the block layer, and that user could exist even
-without Bio abstraction. And whenever a linux-block developer wants to
-refactor the "do_sth_to_bio" with a slightly different semantics, that
-user will need to be taken into consideration, meaning reading the Rust
-code of Foo to understand the usage.
+which lock already depends on the new lock.
 
-Now with a Bio abstraction, the immediate effect would be there should
-be no Rust code is allowed to directly calls block layer functions
-without using Bio abstraction. And hopefully Bio abstraction along with
-other bindings is a place good enough to reasoning about semanitcs
-changes or refactoring, so no need to read the code of Foo to understand
-the usage. Of course, some C side changes may result into changes in
-Rust bindings as well, but that doesn't make things worse. (Need to
-understand Foo in that case if there is no Rust bindings).
 
-Of course, this is just my 2 cents. I could be completely wrong.
-(Put the Rust-for-Linux hat on) Needless to say with or without the Rust
-bindings for the block layer, we are (at least I'm) happy to help on any
-Rust related questions/bugs/issues for linux-block ;-)
+the existing dependency chain (in reverse order) is:
 
-Regards,
-Boqun
+-> #1 (&ea_inode->i_rwsem#8/1){+.+.}-{3:3}:
+       down_write+0x50/0xc0 kernel/locking/rwsem.c:1573
+       inode_lock include/linux/fs.h:758 [inline]
+       ext4_xattr_inode_create fs/ext4/xattr.c:1525 [inline]
+       ext4_xattr_inode_lookup_create fs/ext4/xattr.c:1608 [inline]
+       ext4_xattr_set_entry+0x2394/0x2c3c fs/ext4/xattr.c:1737
+       ext4_xattr_block_set+0x8e0/0x2cc4 fs/ext4/xattr.c:2043
+       ext4_xattr_set_handle+0xb2c/0x12d8 fs/ext4/xattr.c:2458
+       ext4_xattr_set+0x1e0/0x354 fs/ext4/xattr.c:2560
+       ext4_xattr_trusted_set+0x4c/0x64 fs/ext4/xattr_trusted.c:38
+       __vfs_setxattr+0x3d8/0x400 fs/xattr.c:203
+       __vfs_setxattr_noperm+0x110/0x528 fs/xattr.c:237
+       __vfs_setxattr_locked+0x1ec/0x218 fs/xattr.c:298
+       vfs_setxattr+0x1a8/0x344 fs/xattr.c:324
+       do_setxattr fs/xattr.c:609 [inline]
+       setxattr+0x208/0x29c fs/xattr.c:632
+       path_setxattr+0x17c/0x258 fs/xattr.c:651
+       __do_sys_setxattr fs/xattr.c:667 [inline]
+       __se_sys_setxattr fs/xattr.c:663 [inline]
+       __arm64_sys_setxattr+0xbc/0xd8 fs/xattr.c:663
+       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+       invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
+       el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
+       do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
+       el0_svc+0x4c/0x15c arch/arm64/kernel/entry-common.c:637
+       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
+
+-> #0 (&ei->xattr_sem){++++}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3098 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3217 [inline]
+       validate_chain kernel/locking/lockdep.c:3832 [inline]
+       __lock_acquire+0x3338/0x764c kernel/locking/lockdep.c:5056
+       lock_acquire+0x238/0x718 kernel/locking/lockdep.c:5669
+       down_write+0x50/0xc0 kernel/locking/rwsem.c:1573
+       ext4_write_lock_xattr fs/ext4/xattr.h:155 [inline]
+       ext4_xattr_set_handle+0x1e0/0x12d8 fs/ext4/xattr.c:2373
+       ext4_xattr_set+0x1e0/0x354 fs/ext4/xattr.c:2560
+       ext4_xattr_trusted_set+0x4c/0x64 fs/ext4/xattr_trusted.c:38
+       __vfs_setxattr+0x3d8/0x400 fs/xattr.c:203
+       __vfs_setxattr_noperm+0x110/0x528 fs/xattr.c:237
+       __vfs_setxattr_locked+0x1ec/0x218 fs/xattr.c:298
+       vfs_setxattr+0x1a8/0x344 fs/xattr.c:324
+       do_setxattr fs/xattr.c:609 [inline]
+       setxattr+0x208/0x29c fs/xattr.c:632
+       path_setxattr+0x17c/0x258 fs/xattr.c:651
+       __do_sys_setxattr fs/xattr.c:667 [inline]
+       __se_sys_setxattr fs/xattr.c:663 [inline]
+       __arm64_sys_setxattr+0xbc/0xd8 fs/xattr.c:663
+       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+       invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
+       el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
+       do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
+       el0_svc+0x4c/0x15c arch/arm64/kernel/entry-common.c:637
+       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
+
+other info that might help us debug this:
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&ea_inode->i_rwsem#8/1);
+                               lock(&ei->xattr_sem);
+                               lock(&ea_inode->i_rwsem#8/1);
+  lock(&ei->xattr_sem);
+
+ *** DEADLOCK ***
+
+2 locks held by syz-executor392/5925:
+ #0: ffff0000d80e6460 (sb_writers#3){.+.+}-{0:0}, at: mnt_want_write+0x44/0x9c fs/namespace.c:394
+ #1: ffff0000e0dbb628 (&ea_inode->i_rwsem#8/1){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:758 [inline]
+ #1: ffff0000e0dbb628 (&ea_inode->i_rwsem#8/1){+.+.}-{3:3}, at: vfs_setxattr+0x17c/0x344 fs/xattr.c:323
+
+stack backtrace:
+CPU: 1 PID: 5925 Comm: syz-executor392 Not tainted 6.3.0-rc7-syzkaller-g14f8db1c0f9a #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
+Call trace:
+ dump_backtrace+0x1b8/0x1e4 arch/arm64/kernel/stacktrace.c:233
+ show_stack+0x2c/0x44 arch/arm64/kernel/stacktrace.c:240
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd0/0x124 lib/dump_stack.c:106
+ dump_stack+0x1c/0x28 lib/dump_stack.c:113
+ print_circular_bug+0x150/0x1b8 kernel/locking/lockdep.c:2056
+ check_noncircular+0x2cc/0x378 kernel/locking/lockdep.c:2178
+ check_prev_add kernel/locking/lockdep.c:3098 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3217 [inline]
+ validate_chain kernel/locking/lockdep.c:3832 [inline]
+ __lock_acquire+0x3338/0x764c kernel/locking/lockdep.c:5056
+ lock_acquire+0x238/0x718 kernel/locking/lockdep.c:5669
+ down_write+0x50/0xc0 kernel/locking/rwsem.c:1573
+ ext4_write_lock_xattr fs/ext4/xattr.h:155 [inline]
+ ext4_xattr_set_handle+0x1e0/0x12d8 fs/ext4/xattr.c:2373
+ ext4_xattr_set+0x1e0/0x354 fs/ext4/xattr.c:2560
+ ext4_xattr_trusted_set+0x4c/0x64 fs/ext4/xattr_trusted.c:38
+ __vfs_setxattr+0x3d8/0x400 fs/xattr.c:203
+ __vfs_setxattr_noperm+0x110/0x528 fs/xattr.c:237
+ __vfs_setxattr_locked+0x1ec/0x218 fs/xattr.c:298
+ vfs_setxattr+0x1a8/0x344 fs/xattr.c:324
+ do_setxattr fs/xattr.c:609 [inline]
+ setxattr+0x208/0x29c fs/xattr.c:632
+ path_setxattr+0x17c/0x258 fs/xattr.c:651
+ __do_sys_setxattr fs/xattr.c:667 [inline]
+ __se_sys_setxattr fs/xattr.c:663 [inline]
+ __arm64_sys_setxattr+0xbc/0xd8 fs/xattr.c:663
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
+ el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
+ el0_svc+0x4c/0x15c arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
+
+
+---
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
