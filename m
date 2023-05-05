@@ -2,76 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD74F6F7B74
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 05:23:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F01666F7B83
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 05:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229989AbjEEDXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 23:23:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51284 "EHLO
+        id S230042AbjEED3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 23:29:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbjEEDXa (ORCPT
+        with ESMTP id S229718AbjEED32 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 23:23:30 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F6512E;
-        Thu,  4 May 2023 20:23:29 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id d9443c01a7336-1ab032d9266so11718555ad.0;
-        Thu, 04 May 2023 20:23:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683257008; x=1685849008;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=W1zI59DMPwElv3Pt8qHQPRARoujuK3z77nNH9VJstI0=;
-        b=LxJaI/l/33pp4EkU9RxPz2ysCK1qnDvZNqromExIbQhMCW7q5QPFVbGJHK7EvtwL+d
-         in0Ouxaz7FU2OYdhziplIhyDlEooIMyZNTZ/wTu5QY6jMorvjjaG5thYUF+f924YkrLn
-         flWnUpAPnXNK6NLvvjS8hEPTmJGPAZyqNr8I+kwIZ50r6vp84vj1R5C1HSMRkU1sRDga
-         jw9W8/t0Bg9PVIXSh8uXXW7m4c1eQKRr7DpqabLCmetYZK0ugJvUzDHQb0ganz10kiP0
-         FXA3nxsnCfK02TaTwpG4KoiEEbEq0PvjP68PN/RLEggMJO/7nYhjWmZBYNUnMsr+xuGw
-         /okA==
+        Thu, 4 May 2023 23:29:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0FAD12082
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 20:28:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683257320;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vtGTOV4w8H+HmedJBYfP7zUt+D2uJS6ykp/9DQHbib8=;
+        b=dryACXacK7uRTKssh7c0+0kPyq98/16rMWUDDJN0uK544AaCTYl0xBMoaWwgq5+tgwdJg1
+        X1y3t0Nr2id7zbVmFH2bBCsFdYo1Yx5M3yAsUqvC9UEh5CvgWUWVeEk2UFEbVAqXI+rbiv
+        niNCZjxuq4DAduFREy+zIzzRpuLQWdk=
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
+ [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-635-IC-gzcE2OP-rKPUZxRUE9Q-1; Thu, 04 May 2023 23:28:38 -0400
+X-MC-Unique: IC-gzcE2OP-rKPUZxRUE9Q-1
+Received: by mail-lf1-f69.google.com with SMTP id 2adb3069b0e04-4f12f45d113so696845e87.0
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 20:28:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683257008; x=1685849008;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=W1zI59DMPwElv3Pt8qHQPRARoujuK3z77nNH9VJstI0=;
-        b=MQ4v6A9iCNlE9YUrkTNw1oWwRPDagn3TqcF0AX17L1Kp/neuceo129r3n9XqndaFvq
-         uyRpj5Qsim8w98Z0C+bdASGTbuaXhai31yxIjL1yrJrUIlz/ZykloJf6UU0383M0PkhN
-         a77jL8iKvRiFWOf1HnbC7QV+0qaqR4jjwLOj9YCBGSOIswvbHh7R4EOF00HJ9ItYcMd3
-         hEVxL0Qv6O27yNXMELMIbVZNLGPIzPohMnCBaEh85dGjEGM9by1zZWKFxStNdM7qMaZj
-         vzfdOfVZxfV873g/dA4Je5xjbJILBfC2zdAvnIqVXn6SWTxdtFvwfHLzxvGZpYM+dfgv
-         y2mQ==
-X-Gm-Message-State: AC+VfDzYxqQsPFmuKCkpBug+2YK9rWARiRvgpAs7XUvRk+VrIWBxKEtw
-        AFMxR3Y5cS7gKUIxm2BX7BM=
-X-Google-Smtp-Source: ACHHUZ41IHoFMBo8xGwEV1vJVt/NKc6moH+fmC+BXkE7LhEz9gspAnlvYpkF61Ci8jJQHgE2VxWjPA==
-X-Received: by 2002:a17:902:778a:b0:1aa:f612:cdf with SMTP id o10-20020a170902778a00b001aaf6120cdfmr5350391pll.37.1683257008322;
-        Thu, 04 May 2023 20:23:28 -0700 (PDT)
-Received: from [10.200.10.82] ([139.177.225.232])
-        by smtp.gmail.com with ESMTPSA id jh2-20020a170903328200b001ac38343438sm396075plb.176.2023.05.04.20.23.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 20:23:27 -0700 (PDT)
-Message-ID: <4912002a-4fa8-c1c0-a8c4-690b6dd76449@gmail.com>
-Date:   Fri, 5 May 2023 11:23:20 +0800
+        d=1e100.net; s=20221208; t=1683257317; x=1685849317;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vtGTOV4w8H+HmedJBYfP7zUt+D2uJS6ykp/9DQHbib8=;
+        b=W4Sn2GxuQI6iggCKCPDtqM0vVHDUHs3Adhv2J6KiLy4jNUbpPAYIDWuFS+xVpXeixC
+         bv3JH3VMaB2azqpVQMhg8bWibV93htaieIQ7SjSPyQa7dYRjDt4zNp08aehRIMjRz3x1
+         Fpr+ETEq5WG9y/Ni3fzKt5oosxHU2IJEn7dZuoVaX2+v3emFZv4QubF8O4fj9ZyPOCPB
+         PYKQpfDHdLpdt4Pk+HOZVBeS0CIYL7On9gPGYfsdR895cqlcgJ6NoD4rsIekAj+bGgA/
+         SGPylKX2mtwn550NAI82YROY221JiB1DnTGg74VeVJ2VoPUeVw6UeF4kb5ud0oEcIgxA
+         znxA==
+X-Gm-Message-State: AC+VfDzL4CKalj4znDra3+PlU/ZgJdC3km8DTPWd/Fmn0m+uYblvZBUU
+        8EaYPF7aVj7OOoS2SThns+zaom7IdMPNcGEnAS6mjwa6Dz3lOP8Yn6uVGU0HS8cemkTMXzKkABk
+        qg+WrIivp2FBc3jqBj+Jhb0vxTgaUA6rzvLIXhscw
+X-Received: by 2002:ac2:4d1a:0:b0:4ec:363a:5f24 with SMTP id r26-20020ac24d1a000000b004ec363a5f24mr132430lfi.23.1683257317336;
+        Thu, 04 May 2023 20:28:37 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6ipOT60VlicZnRmQ8NuJpg74uxqB+3AiqJuLc3hm+sdWRslDFolnCBok9HRcDycod3TakBwcUmh99tPZ15x4I=
+X-Received: by 2002:ac2:4d1a:0:b0:4ec:363a:5f24 with SMTP id
+ r26-20020ac24d1a000000b004ec363a5f24mr132425lfi.23.1683257317049; Thu, 04 May
+ 2023 20:28:37 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.1
-Subject: Re: [PATCH] maple_tree: Make maple state reusable after
- mas_empty_area()
-To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        maple-tree@lists.infradead.org,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        Tad <support@spotco.us>,
-        Michael Keyes <mgkeyes@vigovproductions.net>,
-        Stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>
-References: <20230504175509.2195838-1-Liam.Howlett@oracle.com>
-From:   Peng Zhang <perlyzhang@gmail.com>
-In-Reply-To: <20230504175509.2195838-1-Liam.Howlett@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <1683167226-7012-1-git-send-email-wangwenliang.1995@bytedance.com>
+In-Reply-To: <1683167226-7012-1-git-send-email-wangwenliang.1995@bytedance.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Fri, 5 May 2023 11:28:25 +0800
+Message-ID: <CACGkMEs_4kUzc6iSBWvhZA1+U70Pp0o+WhE0aQnC-5pECW7QXA@mail.gmail.com>
+Subject: Re: [PATCH v4] virtio_net: suppress cpu stall when free_unused_bufs
+To:     Wenliang Wang <wangwenliang.1995@bytedance.com>
+Cc:     mst@redhat.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, zhengqi.arch@bytedance.com,
+        willemdebruijn.kernel@gmail.com,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xuanzhuo@linux.alibaba.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,73 +78,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2023/5/5 01:55, Liam R. Howlett 写道:
-> Do not update the min and max of the maple state to the slot of the leaf
-> node.  Leaving the min and max to the node entry allows for the maple
-> state to be used in other operations.
-> 
-> Users would get unexpected results from other operations on the maple
-> state after calling the affected function.
-> 
-> Reported-by: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-> Reported-by: Tad <support@spotco.us>
-> Reported-by: Michael Keyes <mgkeyes@vigovproductions.net>
-> Link: https://lore.kernel.org/linux-mm/32f156ba80010fd97dbaf0a0cdfc84366608624d.camel@intel.com/
-> Link: https://lore.kernel.org/linux-mm/e6108286ac025c268964a7ead3aab9899f9bc6e9.camel@spotco.us/
-> Fixes: Fixes: 54a611b60590 ("Maple Tree: add new data structure")
-> Cc: <Stable@vger.kernel.org>
-> Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+On Thu, May 4, 2023 at 10:27=E2=80=AFAM Wenliang Wang
+<wangwenliang.1995@bytedance.com> wrote:
+>
+> For multi-queue and large ring-size use case, the following error
+> occurred when free_unused_bufs:
+> rcu: INFO: rcu_sched self-detected stall on CPU.
+>
+> Fixes: 986a4f4d452d ("virtio_net: multiqueue support")
+> Signed-off-by: Wenliang Wang <wangwenliang.1995@bytedance.com>
 > ---
->   lib/maple_tree.c | 15 +--------------
->   1 file changed, 1 insertion(+), 14 deletions(-)
-> 
-> diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-> index 110a36479dced..1c4bc7a988ed3 100644
-> --- a/lib/maple_tree.c
-> +++ b/lib/maple_tree.c
-> @@ -5285,10 +5285,6 @@ static inline int mas_sparse_area(struct ma_state *mas, unsigned long min,
->   int mas_empty_area(struct ma_state *mas, unsigned long min,
->   		unsigned long max, unsigned long size)
->   {
-> -	unsigned char offset;
-> -	unsigned long *pivots;
-> -	enum maple_type mt;
-> -
->   	if (min >= max)
->   		return -EINVAL;
->   
-> @@ -5311,18 +5307,9 @@ int mas_empty_area(struct ma_state *mas, unsigned long min,
->   	if (unlikely(mas_is_err(mas)))
->   		return xa_err(mas->node);
->   
-> -	offset = mas->offset;
-> -	if (unlikely(offset == MAPLE_NODE_SLOTS))
-> +	if (unlikely(mas->offset == MAPLE_NODE_SLOTS))
->   		return -EBUSY;
->   
-> -	mt = mte_node_type(mas->node);
-> -	pivots = ma_pivots(mas_mn(mas), mt);
-> -	if (offset)
-> -		mas->min = pivots[offset - 1] + 1;
-> -
-> -	if (offset < mt_pivots[mt])
-> -		mas->max = pivots[offset];
-> -
->   	if (mas->index < mas->min)
->   		mas->index = mas->min;
-This will bring new bugs, mas->index should take the maximum
-value with mas->index and mas_safe_min(mas, pivots, offset),
-otherwise there will be overwriting allocation.
+> v2:
+> -add need_resched check.
+> -apply same logic to sq.
+> v3:
+> -use cond_resched instead.
+> v4:
+> -add fixes tag
+> ---
+>  drivers/net/virtio_net.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index 8d8038538fc4..a12ae26db0e2 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -3560,12 +3560,14 @@ static void free_unused_bufs(struct virtnet_info =
+*vi)
+>                 struct virtqueue *vq =3D vi->sq[i].vq;
+>                 while ((buf =3D virtqueue_detach_unused_buf(vq)) !=3D NUL=
+L)
+>                         virtnet_sq_free_unused_buf(vq, buf);
+> +               cond_resched();
 
-Maybe you have forgotten, I have posted a patch[1] with the same
-function last week. I didn't know of a place where mas was used
-after mas_empty_area() before. That patch does not introduce new
-bugs, but the code style has not been updated yet. If using this
-patch will bring more conflicts with my patch set, so what should
-I do? 😁
+Does this really address the case when the virtqueue is very large?
 
-[1] 
-https://lore.kernel.org/lkml/20230425110511.11680-3-zhangpeng.00@bytedance.com/
->   
+Thanks
+
+>         }
+>
+>         for (i =3D 0; i < vi->max_queue_pairs; i++) {
+>                 struct virtqueue *vq =3D vi->rq[i].vq;
+>                 while ((buf =3D virtqueue_detach_unused_buf(vq)) !=3D NUL=
+L)
+>                         virtnet_rq_free_unused_buf(vq, buf);
+> +               cond_resched();
+>         }
+>  }
+>
+> --
+> 2.20.1
+>
+
