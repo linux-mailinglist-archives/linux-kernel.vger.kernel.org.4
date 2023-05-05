@@ -2,183 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 458A66F8CC2
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 01:21:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1126D6F8CC4
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 01:24:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232373AbjEEXVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 19:21:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37844 "EHLO
+        id S232115AbjEEXYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 19:24:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232095AbjEEXVR (ORCPT
+        with ESMTP id S230394AbjEEXYV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 19:21:17 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E565B84
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 16:21:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683328865; x=1714864865;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=9tpnXQjAfQYUv1p5QdZp8pMu3E9b9mSfJ44CrTyV4u0=;
-  b=eRoSRSuZ7ZADvU7yni8FibO4La0IoIt9AM+CbjdFp5ytAhCSbT1O9BH/
-   99nkB2dy+n0XQ74feJjQlQubhYo4oZickHkIiwFvebONmfaA9dUoY1bH2
-   EVUMinFFXm0A8Z5qbUd2Gcj4lojSg8r1nHH6mODQMeSy6yQQO38ywpEKt
-   xGPpNQOE3RHOJsOfMukEH4FwhZ8r/M+bMtVwSDSjtNcb7Ql18KrEuPsUY
-   ANwnCsv2LB4HI2hNHCILUK7gbJLvMNgCDVCr8VYPZ0digyAx3Q8Ihx5Q5
-   w2FnNc50A1GSNBYYmVkv3nqs/RjhyZ/FXT6FEQ+j6e4Ys5YV3WR0cTCQz
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="351464108"
-X-IronPort-AV: E=Sophos;i="5.99,253,1677571200"; 
-   d="scan'208";a="351464108"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2023 16:21:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="648077674"
-X-IronPort-AV: E=Sophos;i="5.99,253,1677571200"; 
-   d="scan'208";a="648077674"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga003.jf.intel.com with ESMTP; 05 May 2023 16:21:00 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 5 May 2023 16:21:00 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Fri, 5 May 2023 16:21:00 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.101)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Fri, 5 May 2023 16:21:00 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CtGze9aoSM7z0e5xdBBKgU7E/JiUwxj95Mnvj6wxKwEAdw8eTrhlSQpG0XWpqd8Q+5tI0bD0AvrPg3+0mIwT06r6S0MVNE6iEObeF7jOydXJosKW2ht7NmIl4lPO1sJqMSL8lCMizNwsllo7i+X4AMKCtShYJb69jrMev9VJaZ3Z30g30Fq27+vpjn3jsZslYj4zql3Qi6yw13Pa3uQLx00YMJYoKqr9xGOqddkA5ybRu8uDM37UVenjkQK0orn05+R0u+wBhlWNJH/QEdR4dZySdgshgPZgecxiI/0YHPtM89Sc05edUHWjmZZ9lX3sxxCikq9dadyPb3vQJ0jtWA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OLlR5NwIwxcfnaBqBC7bwEyl7GUrQ07j/P/iqUs8aPc=;
- b=NSGqDx8H8M5n1AzBpa9Q4YrIubMKgzCvIJme31ppZhz04aJzitB63gXxPhVe+W3I8rTD+Wwjx5RKKONPLrFZhWFakkXtOgamUxsRPUJTa5llRnsdGB8nTeWLMuUsLPBzZF2L+XVjcqhhOa4n/MmceBCWhg/QvCpqSbvYoP518nUgggpOPwiOAEkSbxcRTe/GQhvOVS3FaVxzzQR+rDuvvvRVTNyFnHREzyZCBReUCp5JfIBeibi9YdLLHmEThEjRXLaROsju5m6oCJncd/PgEJZfc9tg7vZiKy9zMvuHaczyCzmXev/0ZYgDT0tZUEMdehygFaJu3dw2ERj9HB6mcQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SJ2PR11MB7573.namprd11.prod.outlook.com (2603:10b6:a03:4d2::10)
- by BL1PR11MB5953.namprd11.prod.outlook.com (2603:10b6:208:384::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.26; Fri, 5 May
- 2023 23:20:58 +0000
-Received: from SJ2PR11MB7573.namprd11.prod.outlook.com
- ([fe80::591f:4873:fd80:9a6d]) by SJ2PR11MB7573.namprd11.prod.outlook.com
- ([fe80::591f:4873:fd80:9a6d%6]) with mapi id 15.20.6363.022; Fri, 5 May 2023
- 23:20:58 +0000
-Message-ID: <81a32a39-217f-0b4b-beec-46d909b41303@intel.com>
-Date:   Fri, 5 May 2023 16:20:56 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.10.1
-Subject: Re: [RFC PATCH 6/7] x86/resctrl: Allow a device to override an
- existing schemata entry
-Content-Language: en-US
-To:     Tony Luck <tony.luck@intel.com>, Fenghua Yu <fenghua.yu@intel.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Borislav Petkov" <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Shaopeng Tan <tan.shaopeng@fujitsu.com>,
-        Jamie Iles <quic_jiles@quicinc.com>,
-        James Morse <james.morse@arm.com>,
-        Babu Moger <babu.moger@amd.com>
-CC:     <x86@kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230420220636.53527-1-tony.luck@intel.com>
- <20230420220636.53527-7-tony.luck@intel.com>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <20230420220636.53527-7-tony.luck@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR06CA0067.namprd06.prod.outlook.com
- (2603:10b6:a03:14b::44) To SJ2PR11MB7573.namprd11.prod.outlook.com
- (2603:10b6:a03:4d2::10)
+        Fri, 5 May 2023 19:24:21 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7DB7172D
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 16:24:19 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-64359d9c531so1847340b3a.3
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 16:24:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1683329059; x=1685921059;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JKLAfQ+XdRp0UM94hCtSrE5esZwKrW294YS+Ttx9oOQ=;
+        b=ZJ3jsPEwRlg76oKOSRpSUBfW+D+nc+3Xm7uZdmvIgP2yqAOq0tNsRw5hGBiuLydPhP
+         34pbfqDv26JAPKb1tmv6C/wb5HSZ8aQujzeIJ0I+oATGDlKhIDuIKBhLHKZAscXeP1u1
+         tiNcrl0I/LPQIzxLfQd5bfG99UFIY/xJGzzGw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683329059; x=1685921059;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JKLAfQ+XdRp0UM94hCtSrE5esZwKrW294YS+Ttx9oOQ=;
+        b=KprcWNb0SQhNVSq7QwWP79DSyFY5JZ4bX9irKJFfmK56Jvio5I32uDmTWMzn0pIJFM
+         0TcFM7H97+NWMyqYKqZv/kN8Nbco0kJ3jQvWGST43HV+eEPz8U04YV1g3OIQtYoeKvaN
+         ClMMLy3FalMca57qQA0AfxNS70nucSqfGJQ3QluWUY/3+YsT3m6MNgZ/p0D7Ft4y1uNj
+         Wk1sYAgvxoKd34/wYFhjG7SJesknlaoj2xk8i5oi0yyhqeh1yT7g/DJ/0oNL35e2pSNm
+         o4TAZhYcE7MIiy3i6QJnSB+jEz807kMfpk3QSPin8RdwU5J56IZwKkO5JbsU33vNhPXI
+         9c6w==
+X-Gm-Message-State: AC+VfDyv5pvrnKOBY5WISp06znt0+KTn+wDcikiznQahjH1mJuAOUZvB
+        c6kjgY23CqHIy9KMiJOBuvG7qQ==
+X-Google-Smtp-Source: ACHHUZ6vAi6Y3g8TdEqafnS+y9IbU+RTnliBu7VGQb+/9r2d/tK73wImW6vOpHdU9YlDstOdwgsqsg==
+X-Received: by 2002:a05:6a21:2d8a:b0:ee:73bf:425d with SMTP id ty10-20020a056a212d8a00b000ee73bf425dmr3288313pzb.39.1683329059346;
+        Fri, 05 May 2023 16:24:19 -0700 (PDT)
+Received: from smtp.gmail.com ([2620:15c:11a:201:e1a8:5a47:8ccc:adb3])
+        by smtp.gmail.com with ESMTPSA id c1-20020aa781c1000000b0062e0010c6c1sm2070080pfn.164.2023.05.05.16.24.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 May 2023 16:24:18 -0700 (PDT)
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        linux-input@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: [PATCH] HID: google: Don't use devm for hid_hw_stop()
+Date:   Fri,  5 May 2023 16:24:16 -0700
+Message-ID: <20230505232417.1377393-1-swboyd@chromium.org>
+X-Mailer: git-send-email 2.40.1.521.gf1e218fcd8-goog
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ2PR11MB7573:EE_|BL1PR11MB5953:EE_
-X-MS-Office365-Filtering-Correlation-Id: 44b01598-4273-4e26-db91-08db4dbf61fd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: cgd7olWNYTLczjZsJsXjnpHrYle48UZL0kK/Sox3bMHKC1BHPud5mMUgIKYF+tLrpRB5kDJHWtlTX9b+fm10M6KiN7S2wGIz0IXikbGvZAT8/dTxXPegNRB02G7iD4wLlQeTXKXIF+C2UpRy8txqKbKN/0ArirxP/LHWQ3G1/PZZSbwJwpirZ0AstMqv6I4Hf/9qXSF7HDt0cB7QUgMomWbhLZbI/cnXnkR5CDNhAgNvD3cqxWcDzvmz0sgpm0U7sQKL+IkewoDudQCnM4T5Xd41SGeKna8fmDx5FoKS6Fi+27C3GcVrh/zoNl5cadmIDgYJOlVhtA7I42NMFgmKnBLJmkkSstx1CfR3WhCZsoaAYRnJJ4oyc/CW9Q7ITpnY6e6JAr1fT3M1kPNKH7zhPtt3aEAjKoBKkdKoHeuRIQUeN0EAAgYODaPyAfsRylbVwudcu0WNo7c8DsBrATVBtK4Pz9krTHn6bnioKkp+sgtZPCuhUq/kMjNbxfB4vaovsA0GBFuN83xI2/yXG6JJI61dRhvklGJFrJKttGm43gHrbS3tMQmdgUHKZjeVCVld2OOVWZ0S9iZZ/lMflqpr67FM5pIedDloD9jzQsdCeA0DZ2mEQBV1dffDZA6N93MwQLPHLFck1RbsH4++e0Bnj2kotP+Nb8lEWtkUNTpFJTc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(396003)(366004)(39860400002)(376002)(346002)(451199021)(6512007)(53546011)(6506007)(26005)(31696002)(186003)(2616005)(31686004)(110136005)(36756003)(6486002)(2906002)(82960400001)(316002)(8936002)(5660300002)(478600001)(4744005)(4326008)(38100700002)(7416002)(86362001)(8676002)(44832011)(66476007)(41300700001)(66556008)(921005)(66946007)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?N0NxRHlvcHg1Nnhva0hxNSs0d2xoTEhtNzVaU01iQ3BvNy9jdUJzaFhTTEdp?=
- =?utf-8?B?TFR3d2g4SUVLd0ZBQWFPRW1iT1Vmb3pHVWVMZmpCWDFTVWFIYW9uN2lKTzRJ?=
- =?utf-8?B?UWVIbDRobjlMMjE2QldiclBCaUNZY2tKemxIM2xSZ1dkM2tjZG0yUHQxZCtU?=
- =?utf-8?B?Q1p3Nm1sQUxjV0h4dHhrMkdqeXhKeVlTejZ3SlVJWmhOUmlzeHR5RWUrczBK?=
- =?utf-8?B?RkF6MnViSEZEWUlRbzBQbSt1ZGdubzVRK0I0NXRuclpCL0NhZTd5a1JweVF3?=
- =?utf-8?B?N05QSlhFdlBnazEzSmxXa05tSXk5VkFhRjlqcWpmM3NPdk5OWFRNR05YaGdx?=
- =?utf-8?B?U3JpS2xVMGxHdEtRL2hldEQzM2dhUW1uRmV4RGt4RUs3TzNMVVliZFJDQVJu?=
- =?utf-8?B?RXJDdVhlMEREaFF6RUxqTCt0Vmd1cnFrZEVGZHNkSmpMSWduaTM5dXBNSm1h?=
- =?utf-8?B?ZUFxb3c5UFhMSFUzRnRnb0t2clpUSTdqbmZLL3dPV0lYMVNTOU90UnVuWm14?=
- =?utf-8?B?ZXlYOHQyRFVTQkxYaUtxdWhmZ0ZhQ2NCdGJ1b3AwMEJNUld6T0dXRUtJRGpH?=
- =?utf-8?B?MERpUi83RTAvNU9kdklXdFFtK2FtWHo2TC9jUnNBT1BPMW0raUsyNjZNblFz?=
- =?utf-8?B?b1VoTVBhV21CRWU3RnRvS1Jpb1RPL3dYdHdTVFJtbFZJcThQd0gwQmJsdGtH?=
- =?utf-8?B?OUFKTFVWM293R3cxa1BscU9kWGx6WFR6Wmx2T3Y2YUNxUHhrMzNaWDJFMFVq?=
- =?utf-8?B?Qmh2b0pTckFTK0tFRXJmN09ZMGxHTnRqZXY1MXVMQmRxT2ZOUDlQdlVjaUly?=
- =?utf-8?B?TmFOSllNSzdWYTJjOU5UY1puYnJmS09YUEZTWEl4WjNET2NEelg1WmswSjBo?=
- =?utf-8?B?VWtJTVQ1OWE4bEFrbjE3ZThMelhKcUxvVURucUtwVDFodTRHdmFYcW1VK1dj?=
- =?utf-8?B?V2RRRlF2WkFOZ2ppS2JUZmwzUmFibDZLSkpneUdoU2xSSFZXVmZnOFZWY2xj?=
- =?utf-8?B?RkY0blhwRkZsalF2bHNOamJ1TDJ5WFRxVjNmWVE3ZFpTTENRV05ZNkJCWnVH?=
- =?utf-8?B?KzdmZDhpeHpHZ05yU3ZjYkdtd1grZThSMm5nNVRZa0FnVTRnTWVmVzF1NzBz?=
- =?utf-8?B?eUxDNktTWGFvWVhBemhBTzBYOExSa1pKbVBGVFBScFFXRGhnZDgvSUUza2o4?=
- =?utf-8?B?QjczNWFJaUFHR085Q25nNFBwT2d5YXZnR3ZMcmdwaDZQZmtUbW5RZUJmNmw3?=
- =?utf-8?B?V0d2R3RzSUNWc2loUTk4VmI0UlI4aVBkWEQ0WDRRaDV1MnhYZjRYb21QYW5p?=
- =?utf-8?B?TU14eVNEOU5RYUlqcGRLK2lZaXZZb0JPSFNQLzlkOW1teVZjMXZhM25EMHlt?=
- =?utf-8?B?a25OM2piMXBFVmR5UDZadzNlSG1aWmEvUCsxeFR0NXBzS3dLczNOdG93M3Jv?=
- =?utf-8?B?UWNsVEVzdUhveWNMb21qRVdvMHZRVUhnNWJDc1B0ZmwxdE1zaVplMzd0VlJE?=
- =?utf-8?B?L1RYZVVtZWRUV1dhdVkxaWFNZmRXZmd6Vm05UDZuRVpVcjJRb3B1V1NCL3Rj?=
- =?utf-8?B?ZEEzUThzRHRyekN4Q2c1bUFaMmlJWHh6V01NVlB1TGdKUjdJNnk3WWgwYzBO?=
- =?utf-8?B?c2RHNVdoTTFvT3NaTzVKYURwMWEzMHhTSWtYZ2taSHEwMVNyUWlJOEc3Z0x3?=
- =?utf-8?B?WDJFcHV1TGM0QWRZOCtqbXJFbytNMmZ5dkhiWmxTSm51V1c4eW1NWTZDQVlO?=
- =?utf-8?B?Y25lSFJDWFUrNEJ3WFRSK3VJUkhySHNIWjhRMzZNL1dhdE94VnovWWUvQ1Y5?=
- =?utf-8?B?RmVvY29KeHpEa0c3UElGYU44U1dGZEVGeDhMZ1dSTkM4d0ZZNG9mb0IyN1Z3?=
- =?utf-8?B?RStKVVppS0tkckxLV1VGRnpoMDRVejJCQWJONHNkN1NKTHIxRTMwckIzUWUv?=
- =?utf-8?B?Y3FWdVdkNjhkNC81WnZ3M0hMTEhpTWpPOERWZVQ0aEs4dFA1RFV3TEEvNVh2?=
- =?utf-8?B?eW11MjgvL1Bicms2TURUbW1VVUhoeGlVdHBwTTJvL25PWG4vaFUxaEZ5K0M5?=
- =?utf-8?B?d3Q2M1pCR21TS2g5ZFEvczdNYnNQbTJPYVlFNHIrZHVBb3FLbk9OSkZ0MUVI?=
- =?utf-8?B?VHQwNzloRUNUaWhEazVmbi9qRWQxVzNIUEV0amIzNEt5WXR1VVl1MlBXQTNW?=
- =?utf-8?B?aFE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 44b01598-4273-4e26-db91-08db4dbf61fd
-X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7573.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2023 23:20:58.1984
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dF1m1hlp2uTM6c/i+K5jo9yOAvYat09qJp6H8WjwugCNesIl7jtAemGlqlSCDIsA2igL3C2YwvwqhARcTjh1qWRLtKMKvDSHCd3x+cQG5dQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5953
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tony,
+We (ChromeOS) got a syzkaller report of a KASAN use after free read in
+hidinput_find_key(). The callstack is from evdev_ioctl() calling
+hidinput_setkeycode():
 
-On 4/20/2023 3:06 PM, Tony Luck wrote:
-> Remove that entry from the resctrl_schema_all list when driver
-> is loaded. Put it back again when driver is unloaded.
+ __asan_report_load4_noabort+0x44/0x50
+ hidinput_find_key+0x25c/0x340
+ hidinput_locate_usage+0x31c/0x400
+ hidinput_setkeycode+0x70/0x460
+ input_set_keycode+0xd4/0x3f8
+ evdev_do_ioctl+0x2508/0x6678
+ evdev_ioctl_handler+0x12c/0x180
+ evdev_ioctl+0x40/0x54
 
-This is unexpected. It sounds like the system would advertise
-a supported resource with appropriate properties but for some reason this
-is not correct, optional in some way, or perhaps resources are 
-conflicting? Where would it be decided whether the overriding driver
-should be loaded and why can that logic not be in enumeration
-within resctrl?
+The memory being read was allocated during hammer_probe() by
+hid_open_report():
 
-Reinette
+ Allocated by task 19025:
+ kasan_save_stack+0x38/0x68
+ __kasan_kmalloc+0x90/0xac
+ __kmalloc+0x27c/0x45c
+ hid_add_field+0x4b0/0x125c
+ hid_parser_main+0x214/0x994
+ hid_open_report+0x388/0x7a8
+ hammer_probe+0x80/0x698 [hid_google_hammer]
+
+and the memory was freed by hid_close_report() called from
+hid_destroy_device().
+
+ Freed by task 19025:
+ kasan_save_stack+0x38/0x68
+ kasan_set_track+0x28/0x3c
+ kasan_set_free_info+0x28/0x4c
+ ____kasan_slab_free+0x110/0x164
+ __kasan_slab_free+0x18/0x28
+ kfree+0x208/0x950
+ hid_close_report+0xd0/0x29c
+ hid_device_remove+0x104/0x198
+ device_release_driver_internal+0x204/0x400
+ device_release_driver+0x30/0x40
+ bus_remove_device+0x2a0/0x390
+ device_del+0x49c/0x858
+ hid_destroy_device+0x78/0x11c
+ usbhid_disconnect+0xb4/0x100
+ usb_unbind_interface+0x178/0x6f4
+ device_release_driver_internal+0x240/0x400
+ device_release_driver+0x30/0x40
+ bus_remove_device+0x2a0/0x390
+
+The memory that's being read by the ioctl is an HID report that's been
+freed when the HID device is destroyed because the usb interface is
+unbound. In hid_device_remove() we assume that the hid report can be
+closed with hid_close_report() after the hid_driver is unbound, which is
+generally safe because the driver should have stopped the hardware with
+hid_hw_stop() when it was unbound. In fact, hid_device_remove() falls
+back to calling hid_hw_stop() directly if the hid driver doesn't have a
+remove() function, so the assumption is that hid_hw_stop() has been
+called once the hid_driver::remove() function returns. hid_hw_stop()
+will eventually call hidinput_disconnect() which will unregister the
+hidinput device; ensuring that userspace can't call ioctls on the
+hidinput device when hid_hw_stop() returns.
+
+Unfortunately, the hid google hammer driver hand rolls a devm function
+to call hid_hw_stop() when the driver is unbound and implements an
+hid_driver::remove() function. The driver core doesn't call the devm
+release functions until _after_ the bus unbinds the driver, so the order
+of operations is like this:
+
+  __device_release_driver()
+   ...
+   device_remove(dev)
+    hid_device_remove(hdev)
+      hdrv->remove(hdev);
+      hid_close_report(hdev)  <---- Frees the report
+   device_unbind_cleanup(dev)
+    devres_release_all(dev)
+      ...
+      hid_hw_stop(hdev) <--- Removes the hid_input device
+
+We want the order of operations to be hid_hw_stop() and then
+hid_close_report() so that the report can be freed without the hid_input
+device hanging around attempting to deref the report. Remove the hand
+rolled devm function and call hid_hw_stop() from the hammer_remove()
+function to fix the ordering.
+
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Fixes: d950db3f80a8 ("HID: google: switch to devm when registering keyboard backlight LED")
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+---
+ drivers/hid/hid-google-hammer.c | 16 +++++-----------
+ 1 file changed, 5 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/hid/hid-google-hammer.c b/drivers/hid/hid-google-hammer.c
+index 7ae5f27df54d..e7f7c3c68747 100644
+--- a/drivers/hid/hid-google-hammer.c
++++ b/drivers/hid/hid-google-hammer.c
+@@ -495,11 +495,6 @@ static void hammer_get_folded_state(struct hid_device *hdev)
+ 	kfree(buf);
+ }
+ 
+-static void hammer_stop(void *hdev)
+-{
+-	hid_hw_stop(hdev);
+-}
+-
+ static int hammer_probe(struct hid_device *hdev,
+ 			const struct hid_device_id *id)
+ {
+@@ -520,10 +515,6 @@ static int hammer_probe(struct hid_device *hdev,
+ 	if (error)
+ 		return error;
+ 
+-	error = devm_add_action(&hdev->dev, hammer_stop, hdev);
+-	if (error)
+-		return error;
+-
+ 	/*
+ 	 * We always want to poll for, and handle tablet mode events from
+ 	 * devices that have folded usage, even when nobody has opened the input
+@@ -533,8 +524,10 @@ static int hammer_probe(struct hid_device *hdev,
+ 	if (hammer_has_folded_event(hdev)) {
+ 		hdev->quirks |= HID_QUIRK_ALWAYS_POLL;
+ 		error = hid_hw_open(hdev);
+-		if (error)
++		if (error) {
++			hid_hw_stop(hdev);
+ 			return error;
++		}
+ 
+ 		hammer_get_folded_state(hdev);
+ 	}
+@@ -576,7 +569,8 @@ static void hammer_remove(struct hid_device *hdev)
+ 		spin_unlock_irqrestore(&cbas_ec_lock, flags);
+ 	}
+ 
+-	/* Unregistering LEDs and stopping the hardware is done via devm */
++	/* Unregistering LEDs is done via devm */
++	hid_hw_stop(hdev);
+ }
+ 
+ static const struct hid_device_id hammer_devices[] = {
+
+base-commit: 457391b0380335d5e9a5babdec90ac53928b23b4
+-- 
+https://chromeos.dev
+
