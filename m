@@ -2,99 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCABF6F8076
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 11:59:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CF5A6F8078
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 12:01:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231902AbjEEJ7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 05:59:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57754 "EHLO
+        id S231557AbjEEKBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 06:01:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231611AbjEEJ7S (ORCPT
+        with ESMTP id S230358AbjEEKBk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 05:59:18 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C021816A;
-        Fri,  5 May 2023 02:59:16 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id 3f1490d57ef6-ba1815e12efso1391843276.3;
-        Fri, 05 May 2023 02:59:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683280756; x=1685872756;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5d14VMN/dsF84pYxIA+HqaO2W48hhJ6NH76UKybrOHI=;
-        b=WhLJfFKieiNArlBXBw8k4VHZ/gQd6jJfyapaDf5LZ8depVowiY48yU9MB8qKG363Yh
-         dvPU6ODE0dykQlianl3bbpt6FHeJ8Ph56WmSAtwIWsjlk1I8q0BckQti2OxsdRrVTCpI
-         vlQkwJwURbE6QHR1jxhzr6GhUEz+iWjkaDv5ZikyqOE3oBmgaJkrrG7H6J3I/qIHKzS4
-         BP5rpCjVh7qNTw+HJv2vkJ9InryWiHgkSqz2G+gyxw58FTvj/eBj4ozsP+Lo2bUmMaA6
-         yZLOGRaiOv3pTdatHSs3zpx38vOWBCk6u/TP7ir79d8XCm2vw0wjRRe87LpJNcb0fOwJ
-         Ge9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683280756; x=1685872756;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5d14VMN/dsF84pYxIA+HqaO2W48hhJ6NH76UKybrOHI=;
-        b=KecRbVX6bAshzKfaeT0Y+a1FH/HU3KMKCFdzcwRUzDLfz52DtS2eTAOJd9x98rcuxv
-         t85GChM9FmE/78RqheAJbvfsZWjMZCb0f5HC5hP6QK/RxxlxZEsIjJiD1J+Nzq1xwYML
-         zQEUmu0eyd1q/2iEpoAdFpGx/3rV4uy1L1383c7S2tie4ursH7N94EyquRAxICzfZ4Je
-         Q4ZlN+Q9ZEE6vDgzELpmGwW9bpdJRF48Viv6W6q3WLbOhjLdqVVoS3OCf3AQIZy+AMdT
-         6cUL/klYsUI+GWKIQ0rSyt+FBYA5PIIFmt7HnBGT9djw90shG5Z/9FYwaWg27QLe8V68
-         eH+Q==
-X-Gm-Message-State: AC+VfDx2bJ9z2ShE1+1T5H7qhNvdB7YgR3N7SZKJ+rOKu7Vvcx7cMSaN
-        /Ip7szljAFziBy6xjQ64d9mXbXEUYLfaDyC1f/0=
-X-Google-Smtp-Source: ACHHUZ598taEicUanJWBqC5xD3xyd3QwAlvZRfXr/O+pf/peYRpl819lf6glbrOTTHFtXPeY54wv6krCM6jXRtuDkkk=
-X-Received: by 2002:a25:38c:0:b0:b8f:5340:b052 with SMTP id
- 134-20020a25038c000000b00b8f5340b052mr1134211ybd.15.1683280755967; Fri, 05
- May 2023 02:59:15 -0700 (PDT)
+        Fri, 5 May 2023 06:01:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FD851816A
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 03:01:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 989A263C33
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 10:01:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00EDDC4339E
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 10:01:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683280899;
+        bh=Ec2ll/P9tx8U/dBQxy3ZG+nUnHx39GhJcsKwfUcl+ek=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=FJV0yXgxVbxDUT5oHwfpctONYlQwh1inVw1hkoxqIIo7Xh7XU5qLGV96M88uSYps+
+         80ePmkd9mKM0Ta/x82WIzmee0PJRCyknqJh9pvhhuX3AqENGJmm6gqOJpp7lpu9IrQ
+         vX39SaZEKkZVfvL2UlYoUS7lLaxnA8G5TAIdNFWvy0Zln0jvRXeVf4MeGZ2AniAZFu
+         XrN89rpEZ97kXZYAENJvyqcDkjq9NVrNmnBiDnhmExLluGn6BjmPp8qchvt9PM8FQt
+         bRDRT0T9y79aB2p/sPFLSXGAnY5XaPKAsLWsX6Fc96a/76QWHKSKic8/DH39VCXcqO
+         aR+f2BdJwb6uA==
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-50be0d835aaso2779489a12.3
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 03:01:38 -0700 (PDT)
+X-Gm-Message-State: AC+VfDzHb60Mq+L3byLS6RAjzifkzIeg0l/GqLcv4l9zqFreCahxUIBo
+        5a0GHa5U/7VOks2CotIol6slSzOSRYkBFaiJ9vY=
+X-Google-Smtp-Source: ACHHUZ6cv5uf8DA2g1qYJdz+yn4p/ZuvFXjDqZGWthSuaLRL+DOJ0hmeFjGg+R/3lP7VI9aiX9CexZ4uVLWUqCuC9dg=
+X-Received: by 2002:a17:907:2687:b0:961:a67:29c with SMTP id
+ bn7-20020a170907268700b009610a67029cmr616582ejc.70.1683280897147; Fri, 05 May
+ 2023 03:01:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230418214347.324156-1-ojeda@kernel.org> <CAPDJoNsG1E25yYM+L_H21vVCt-5S16etx3KMxx8ySZtWMQt4FQ@mail.gmail.com>
- <CANiq72mtb9V+1a7nPEHBCeg_fob4rpPTWJZjdahnGL2Mg3uoUA@mail.gmail.com>
- <CAPDJoNvGQBNN6X6fs26tjUy7LbpJjWwPvQuf=1+nSwj94aa6LA@mail.gmail.com>
- <CANiq72m7zdYo566PxX3g03+XPpHnrQy7GG9WkgEP82mK_2JBpw@mail.gmail.com> <CAPFo5VJpGq70X6efWESDoCYE3J0pjgMB1c7X_ACA4Q9MxnoHQw@mail.gmail.com>
-In-Reply-To: <CAPFo5VJpGq70X6efWESDoCYE3J0pjgMB1c7X_ACA4Q9MxnoHQw@mail.gmail.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Fri, 5 May 2023 11:59:05 +0200
-Message-ID: <CANiq72ma+kGPWVGocuPoY6YL13PzCwEMgKN2Yi2Ok42jxBQdTg@mail.gmail.com>
-Subject: Re: [PATCH 0/3] Rust 1.68.2 upgrade
-To:     Fabien Parent <fabien.parent@linaro.org>
-Cc:     Ariel Miculas <ariel.miculas@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        Josh Stone <jistone@redhat.com>,
-        William Brown <william.brown@suse.com>,
-        Georgy Yakovlev <gyakovlev@gentoo.org>,
-        Jan Alexander Steffens <jan.steffens@gmail.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev
+References: <1682214146-3756-1-git-send-email-yangtiezhu@loongson.cn>
+In-Reply-To: <1682214146-3756-1-git-send-email-yangtiezhu@loongson.cn>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Fri, 5 May 2023 18:01:25 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRqdP-RVSMshwzJuAcm1bBeg1-wZU_k_Oo409=O4QZR-w@mail.gmail.com>
+Message-ID: <CAJF2gTRqdP-RVSMshwzJuAcm1bBeg1-wZU_k_Oo409=O4QZR-w@mail.gmail.com>
+Subject: Re: [PATCH] riscv: uprobes: Restore thread.bad_cause
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Fabien,
+Thx for fixup.
 
-On Fri, May 5, 2023 at 12:28=E2=80=AFAM Fabien Parent <fabien.parent@linaro=
-.org> wrote:
+Reviewed-by: Guo Ren <guoren@kernel.org>
+
+On Sun, Apr 23, 2023 at 9:42=E2=80=AFAM Tiezhu Yang <yangtiezhu@loongson.cn=
+> wrote:
 >
-> I'm getting the following error when running rusttest on top of your patc=
-hset:
+> thread.bad_cause is saved in arch_uprobe_pre_xol(), it should be restored
+> in arch_uprobe_{post,abort}_xol() accordingly, otherwise the save operati=
+on
+> is meaningless, this change is similar with x86 and powerpc.
+>
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
+>  arch/riscv/kernel/probes/uprobes.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/arch/riscv/kernel/probes/uprobes.c b/arch/riscv/kernel/probe=
+s/uprobes.c
+> index c976a21..194f166 100644
+> --- a/arch/riscv/kernel/probes/uprobes.c
+> +++ b/arch/riscv/kernel/probes/uprobes.c
+> @@ -67,6 +67,7 @@ int arch_uprobe_post_xol(struct arch_uprobe *auprobe, s=
+truct pt_regs *regs)
+>         struct uprobe_task *utask =3D current->utask;
+>
+>         WARN_ON_ONCE(current->thread.bad_cause !=3D UPROBE_TRAP_NR);
+> +       current->thread.bad_cause =3D utask->autask.saved_cause;
+>
+>         instruction_pointer_set(regs, utask->vaddr + auprobe->insn_size);
+>
+> @@ -102,6 +103,7 @@ void arch_uprobe_abort_xol(struct arch_uprobe *auprob=
+e, struct pt_regs *regs)
+>  {
+>         struct uprobe_task *utask =3D current->utask;
+>
+> +       current->thread.bad_cause =3D utask->autask.saved_cause;
+>         /*
+>          * Task has received a fatal signal, so reset back to probbed
+>          * address.
+> --
+> 2.1.0
+>
 
-Yeah, it is expected: the series was based on `rust-next` which gained
-the `uapi` crate later on.
 
-Thanks for reporting it!
-
-Cheers,
-Miguel
+--=20
+Best Regards
+ Guo Ren
