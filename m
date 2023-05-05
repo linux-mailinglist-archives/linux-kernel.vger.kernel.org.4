@@ -2,143 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6DF46F7CF9
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 08:36:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCDA96F7D02
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 08:37:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230329AbjEEGgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 02:36:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52488 "EHLO
+        id S230468AbjEEGhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 02:37:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbjEEGf7 (ORCPT
+        with ESMTP id S230448AbjEEGhR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 02:35:59 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2076.outbound.protection.outlook.com [40.107.6.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4D81569C;
-        Thu,  4 May 2023 23:35:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OgrxPbX/TI/jbnULlinIdK40R4t5C5H4vlpSPfn6ig0vThXk8RpdtYEtZhiuBBP3N+fNZCqKR8pW/qY/TXiL8ZKNPxkc55OGQNSEcIcoj4tkfQ4OCJqa7jzyZ7wruc90rwrmgMWk/59asylfzW6tRhwgqPHBxbcSNtkqwR3CHQATarlThH9bZRZclNpqNwLqeLnlmSmRH1Mx/v1gbe77GeCthsl2NqH+06XWUmluUWlMIqMchKC9ycHZM1TGviARgQCOOnMUTvAp8/hCUptpxCwdC4fkt6o3+YOPSlj981sl/rXplyDzHhibU38goawUTb2HXb5PZ4IocGOW79Txow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oT4/cNEYdhzglCURY7KL42hOCaBa1CD0zTuB17CkvcE=;
- b=koH65ej4DUGvHJ4OEaOZ2G7tXzWSHOdExTAuThU8p6cwnAGK1qT7tNBPRSTZ4ki1wAxJEBlzBei4t/n45EQgHyFlnm16tVieLrnyGKCT12dybTCxCBcOcFV8yJ4FyIDdi/q3umTiuirEENPKZjM4Hlpleu6EYkKnHtJJdQX3uv0LAGjT3kdu7JIQ598AfjWYdhvhNwyj/E7pOj2IpQ+GjDLOKmSWaLoTTFG4mmI7XyImvvGKfxSCAjCtalTFGe6FxZ74a7q+3pXkwQrJg+CD/m0A5GPh7ocE9PHa/CHtj6DSBhwj5pVUxgUvqNw6hIkkVb6IFDUnhrMgq4f0V9g10g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oT4/cNEYdhzglCURY7KL42hOCaBa1CD0zTuB17CkvcE=;
- b=OSBDLiM/b6VC9VobvU9G0GKneGuxT4ejbYFDSZCFIJV9bXHcmH3wCfZfJcmldlJneIPqdeQFN8sFbo9hY1IkPyyrbBtpmy30kSAqmTqhYz7q7p4ZBxipl0u7TjYe8F9LVAbEj3TMkZsr1wUe//4TXAs6gSZcLmuv8VHosarY7dg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DB7PR04MB5098.eurprd04.prod.outlook.com (2603:10a6:10:1c::18)
- by DU2PR04MB9132.eurprd04.prod.outlook.com (2603:10a6:10:2f7::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.25; Fri, 5 May
- 2023 06:35:56 +0000
-Received: from DB7PR04MB5098.eurprd04.prod.outlook.com
- ([fe80::6418:d0b1:6971:5da0]) by DB7PR04MB5098.eurprd04.prod.outlook.com
- ([fe80::6418:d0b1:6971:5da0%5]) with mapi id 15.20.6363.022; Fri, 5 May 2023
- 06:35:56 +0000
-From:   Clark Wang <xiaoning.wang@nxp.com>
-To:     broonie@kernel.org
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] spi: lpspi: disable lpspi module irq in DMA mode
-Date:   Fri,  5 May 2023 14:35:57 +0800
-Message-Id: <20230505063557.3962220-1-xiaoning.wang@nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SGXP274CA0015.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b8::27)
- To DB7PR04MB5098.eurprd04.prod.outlook.com (2603:10a6:10:1c::18)
+        Fri, 5 May 2023 02:37:17 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10DE19ED8;
+        Thu,  4 May 2023 23:37:16 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3455PHrL027684;
+        Fri, 5 May 2023 06:36:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=dxOB1odZqFKrhagzqZ8KJ+oLXGpFNY/hGhvyFR++l/s=;
+ b=ElxIOTE6RAto/UUvhdNpMLcUyqeCgsK2ei5QwIeHomCS4Vk/V1sF11p5TFfnXHSoaJZW
+ TKzhh68g2xY6Zdb93rGFkiH8VDi3sMjEcCMnndbt9Z5BCVFsaE928N03QYqAUK/aV8ZV
+ AHenP40bd8TzAEcTaUIUjmsGjLCGpmqcM+TrHP2TlFroaflzCHo45YC65zPXhpUNUQwN
+ r5MusSfJnXyOeEwjrYVwcDDHLXJqpl7AISgPgfywcMXB23gKtzVGcG4mFiy5zhVvAnaz
+ 63NGsIa8fLVmRxo7XKTvLp8YOtXgrMi17JdCYm3hMTEqkf0Xxf46TxqMr9WJ7nRkoviG bw== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qcumk84sk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 05 May 2023 06:36:57 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3456auoV009480
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 5 May 2023 06:36:56 GMT
+Received: from hu-schowdhu-lv.qualcomm.com (10.49.16.6) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Thu, 4 May 2023 23:36:55 -0700
+From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Alex Elder <elder@ieee.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Subject: [PATCH V23 0/3] misc: Add driver support for Data Capture and Compare unit(DCC)
+Date:   Thu, 4 May 2023 23:36:20 -0700
+Message-ID: <cover.1683265984.git.quic_schowdhu@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB7PR04MB5098:EE_|DU2PR04MB9132:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0d95bc8f-6500-467b-9907-08db4d32faed
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: a40XweubFGWSsL2oF/MKXTqX/gMMeYXdn/EYCnzVlPI6mKErqQjVdCJM2P11ywvbh4IkRL7LZ0M33E7sbsXisFyc3Bp76NjMsY3kDv00i4FssSqu4eBz/ZvnUNm/qz3D6A7PVycEyVGwesClyhmQQ43+mqNFpzhdwcIfrVD04eJfMoVOw+XrhLhs5VQGmsLq44+ra3ZNrflbINZI4KA3JByxyHsn5U+Ut7Q+skq9OTG3xw81Is0Uwp4+vzsx493FcnhArHoOC5bUdtHSqognVXyL7sOysbXvkeUWF9oUESzoDbNjZswd4KsvdUwnA+vsNgKx+xjNXpHrNzAN0Y8KhDG1wR/M4OVZgnZSt1+v9aUgKilKFiu0UofgXB+ZK6TGgZxsMAPug8ltt8vaIUDM1fdO0EryeakxNdOxBxtLYuFu46phDycU70n8Yy7AixJWf1rJY7JwvCYK3vAcdgdCmVM/SmKZtI35ZdnJZWP7duWBRK8WrkVyhAyHPbqWWrOB6otVacsExieQYiaq+fDAu+itpbkLdZME4G/UqJnpYXOIhm77/i5XTHbNt8zrTIGzuD7KVSA+OsZP/qUG9DKoNLLzbCMPuiIclS0s5q4GaMPdqsQqQv1BoXBI+G2PlEfO
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR04MB5098.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(39860400002)(346002)(376002)(136003)(451199021)(38100700002)(478600001)(38350700002)(8936002)(5660300002)(8676002)(86362001)(1076003)(26005)(6506007)(6916009)(66946007)(6486002)(66556008)(52116002)(6512007)(2906002)(83380400001)(4326008)(41300700001)(186003)(4744005)(66476007)(2616005)(36756003)(316002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?a9pgBCE/Q6WE+xkqSw1J5/zXAVdEKP6ilgYzdvfO9koy3tdTCifbgVkjdiqq?=
- =?us-ascii?Q?q6f2QM91VrYyByDI9zUPKj+/AvB/8xTBpyvNXAAJUkZdoPz387wveSWcEqZp?=
- =?us-ascii?Q?0sbgOEnaatgLVLp5Sh+X1XfmKTvpwQ1nH080+OaB4HJYjMICSRyVC6JxayLC?=
- =?us-ascii?Q?x1rTEnS2nfMetXkx2ENNhOtK2/NG38tMLw+mvHwvDE/WoHc1XBwLaA4NTsp2?=
- =?us-ascii?Q?v6HBAVKVThAe4y76RIh90/W0oy98uEEWyV0rUGZx89sLWzjRHr/AsrqYji5C?=
- =?us-ascii?Q?L/OR918Q5JrfLF/cWiafE/HeKalsxRFmtrkvQNvu6jyNNmHCfHFYhvsa/0+9?=
- =?us-ascii?Q?SqUy7ot2C0zSQ6mIeve9jYheX5Z/3CSREYBI/G44bo5X/oaVxKG3XyyerOat?=
- =?us-ascii?Q?bv0lUr8KLoueVgiQBsIfXz23oJPQzOoIlWGlL1cq5nXrTlbHc++Pzwi8cqRJ?=
- =?us-ascii?Q?JWQh3KIFLHciSOR1BGHVjsTBOucdWRpO7XiD3IUBF2fywJ02L8YhegYlHBTj?=
- =?us-ascii?Q?raA3gFrVnmsckQMIYCfTdPUzDaje3e6ngOA1p8oU/70Y58WafuIR02+Jq69O?=
- =?us-ascii?Q?gPa5nd618rySd6EPLAzoiI651stkHTx9tZMLt9g1+rZpWei2h+62/29pVvxv?=
- =?us-ascii?Q?xApiw6OwnWGRLr6POHDoyC9ikfOOiieTq5zHHYDuRzJ+Zz5SXeKZsoG2wrP/?=
- =?us-ascii?Q?AvkhlyK98oG8wG2RnlMl8S+lvtdg7OKSwL/egXueyLSzCNy+oJ6z+NgCRsvL?=
- =?us-ascii?Q?3jAZZY1eMiAXq298l2Qh9UAF7Idjbx5p9Jdq9zpMLEZooxsR52Ac9lT8ht49?=
- =?us-ascii?Q?CJIi6AKVjR7Kspg3OqljCaATfU+QcH1olLhzGuR47udWsRXQRuVarij8QzMq?=
- =?us-ascii?Q?SBUaqd1ws4m+/LZWPqGG3bfPzlxBetGGcWm+uzrnlYvJLLE4xHoRVFTEx3CC?=
- =?us-ascii?Q?9fSirnROjGtn3j0/Pgkcyv3TOeNmEdu9kYBuOBAVBSKpuL8SNca8hznlzkCl?=
- =?us-ascii?Q?ljx+PpqyI0G/noGPk6fD3qgBrMqEL6e0xcSX85D72kWz9VG6BI/E4+8Yf0FS?=
- =?us-ascii?Q?kN2I0U3vv6d+uFLbvbxRiGxhKp/H58hO6bbO6RA0mIgo8NAi+puj5MAaxahx?=
- =?us-ascii?Q?CjCbyiPnuI8XaEWzhAIIN07TecG4yq1Wr/yvl7IPUk9VFCutR9XE/nIHzerw?=
- =?us-ascii?Q?RYprYxmG9L6IC/SFQJiTBMYr3gdPrfjPJDudKtbjS3BTOI36BlRqT2JoCFyG?=
- =?us-ascii?Q?QZF6HVoJHtaSGubaYrtzuU/5Ap3UsBBZPnj10JzAfJ9NCQUHRdOTAyjKfLvi?=
- =?us-ascii?Q?n80T9VyoXofan5x5POiTw94+g6YeJt1FWx2fnJxvpKZpoET3R2FlHfm4Vq58?=
- =?us-ascii?Q?zngT5B93DtHa79gvHYkIyL0eICTLp+3fWbSmUYwacCur6AAMgN4YIcOtvPyA?=
- =?us-ascii?Q?kV3zIPrf1/mWJAdhdXnAwt8K/r2s5BPc6UJp8i/2hzOO+hfObgtNfAV1Iu8R?=
- =?us-ascii?Q?8iuTZmNcEoEYQnEqkuge0sm95/gwopJfFo213lyeG4twELlpKRZoBYUIzePg?=
- =?us-ascii?Q?SniIn9fdTlldLi05THYLzejmx3XsZB9aROzSS02a?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0d95bc8f-6500-467b-9907-08db4d32faed
-X-MS-Exchange-CrossTenant-AuthSource: DB7PR04MB5098.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2023 06:35:56.0684
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hanv0/v+vlUg1yk+ov7T7x/A00vssKTJAdt35AnBqwpBNaPNFvnK0KHVWZH9X9ivR2BbKLYVCoKvDOSZk2SBkQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB9132
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 9js7TwbCASGjqgl8XfMZwTOgAPFxw53U
+X-Proofpoint-ORIG-GUID: 9js7TwbCASGjqgl8XfMZwTOgAPFxw53U
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-04_15,2023-05-04_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ impostorscore=0 bulkscore=0 priorityscore=1501 lowpriorityscore=0
+ mlxlogscore=999 clxscore=1015 adultscore=0 suspectscore=0 malwarescore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2305050056
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When all bits of IER are set to 0, we still can observe the lpspi irq events
-when using DMA mode to transfer data.
+DCC(Data Capture and Compare) is a DMA engine designed for debugging purposes.
+In case of a system crash or manual software triggers by the user the DCC hardware
+stores the value at the register addresses which can be used for debugging purposes.
+The DCC driver provides the user with debugfs interface to configure the register
+addresses. The options that the DCC hardware provides include reading from registers,
+writing to registers, first reading and then writing to registers and looping
+through the values of the same register.
 
-So disable irq to avoid the too much irq events.
+In certain cases a register write needs to be executed for accessing the rest of the
+registers, also the user might want to record the changing values of a register with
+time for which he has the option to use the loop feature.
 
-Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
----
- drivers/spi/spi-fsl-lpspi.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+The options mentioned above are exposed to the user by debugfs files once the driver
+is probed. The details and usage of this debugfs files are documented in
+Documentation/ABI/testing/debugfs-driver-dcc.
 
-diff --git a/drivers/spi/spi-fsl-lpspi.c b/drivers/spi/spi-fsl-lpspi.c
-index f2341ab99556..4b70038ceb6b 100644
---- a/drivers/spi/spi-fsl-lpspi.c
-+++ b/drivers/spi/spi-fsl-lpspi.c
-@@ -910,9 +910,14 @@ static int fsl_lpspi_probe(struct platform_device *pdev)
- 	ret = fsl_lpspi_dma_init(&pdev->dev, fsl_lpspi, controller);
- 	if (ret == -EPROBE_DEFER)
- 		goto out_pm_get;
--
- 	if (ret < 0)
- 		dev_err(&pdev->dev, "dma setup error %d, use pio\n", ret);
-+	else
-+		/*
-+		 * disable LPSPI module IRQ when enable DMA mode successfully,
-+		 * to prevent the unexpected LPSPI module IRQ events.
-+		 */
-+		disable_irq(irq);
- 
- 	ret = devm_spi_register_controller(&pdev->dev, controller);
- 	if (ret < 0) {
+As an example let us consider a couple of debug scenarios where DCC has been proved to be
+effective for debugging purposes:-
+
+i)TimeStamp Related Issue
+
+On SC7180, there was a coresight timestamp issue where it would occasionally be all 0
+instead of proper timestamp values.
+
+Proper timestamp:
+Idx:3373; ID:10; I_TIMESTAMP : Timestamp.; Updated val = 0x13004d8f5b7aa; CC=0x9e
+
+Zero timestamp:
+Idx:3387; ID:10; I_TIMESTAMP : Timestamp.; Updated val = 0x0; CC=0xa2
+
+Now this is a non-fatal issue and doesn't need a system reset, but still needs
+to be rootcaused and fixed for those who do care about coresight etm traces.
+Since this is a timestamp issue, we would be looking for any timestamp related
+clocks and such.
+
+We get all the clk register details from IP documentation and configure it
+via DCC config_read debugfs node. Before that we set the current linked list.
+
+/* Program the linked list with the addresses */
+echo R 0x10c004 > /sys/kernel/debug/qcom-dcc/../3/config
+echo R 0x10c008 > /sys/kernel/debug/qcom-dcc/../3/config
+echo R 0x10c00c > /sys/kernel/debug/qcom-dcc/../3/config
+echo R 0x10c010 > /sys/kernel/debug/qcom-dcc/../3/config
+..... and so on for other timestamp related clk registers
+
+/* Other way of specifying is in "addr len" pair, in below case it
+specifies to capture 4 words starting 0x10C004 */
+
+echo R 0x10C004 4 > /sys/kernel/debug/qcom-dcc/../3/config_read
+
+/* Enable DCC */
+echo 1 > /sys/kernel/debug/qcom-dcc/../3/enable
+
+/* Run the timestamp test for working case */
+
+/* Send SW trigger */
+echo 1 > /sys/kernel/debug/qcom-dcc/../trigger
+
+/* Read SRAM */
+cat /dev/dcc_sram > dcc_sram1.bin
+
+/* Run the timestamp test for non-working case */
+
+/* Send SW trigger */
+echo 1 > /sys/kernel/debug/qcom-dcc/../trigger
+
+/* Read SRAM */
+cat /dev/dcc_sram > dcc_sram2.bin
+
+Get the parser from [1] and checkout the latest branch.
+
+/* Parse the SRAM bin */
+python dcc_parser.py -s dcc_sram1.bin --v2 -o output/
+python dcc_parser.py -s dcc_sram2.bin --v2 -o output/
+
+Sample parsed output of dcc_sram1.bin:
+
+<hwioDump version="1">
+         <timestamp>03/14/21</timestamp>
+             <generator>Linux DCC Parser</generator>
+                 <chip name="None" version="None">
+                 <register address="0x0010c004" value="0x80000000" />
+                 <register address="0x0010c008" value="0x00000008" />
+                 <register address="0x0010c00c" value="0x80004220" />
+                 <register address="0x0010c010" value="0x80000000" />
+             </chip>
+     <next_ll_offset>next_ll_offset : 0x1c </next_ll_offset>
+</hwioDump>
+
+ii)NOC register errors
+
+A particular class of registers called NOC which are functional registers was reporting
+errors while logging the values.To trace these errors the DCC has been used effectively.
+The steps followed were similar to the ones mentioned above.
+In addition to NOC registers a few other dependent registers were configured in DCC to
+monitor it's values during a crash. A look at the dependent register values revealed that
+the crash was happening due to a secured access to one of these dependent registers.
+All these debugging activity and finding the root cause was achieved using DCC.
+
+DCC parser is available at the following open source location
+
+https://git.codelinaro.org/clo/le/platform/vendor/qcom-opensource/tools/-/tree/opensource-tools.lnx.1.0.r176-rel/dcc_parser
+
+Souradeep Chowdhury (3):
+  dt-bindings: misc: qcom,dcc: Add the dtschema
+  misc: dcc: Add driver support for Data Capture and Compare unit(DCC)
+  MAINTAINERS: Add the entry for DCC(Data Capture and Compare) driver
+    support
+
+ Documentation/ABI/testing/debugfs-driver-dcc  |   10 +-
+ .../devicetree/bindings/misc/qcom,dcc.yaml    |   44 +
+ MAINTAINERS                                   |    8 +
+ drivers/misc/Kconfig                          |    9 +
+ drivers/misc/Makefile                         |    1 +
+ drivers/misc/qcom-dcc.c                       | 1325 +++++++++++++++++
+ 6 files changed, 1392 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/misc/qcom,dcc.yaml
+ create mode 100644 drivers/misc/qcom-dcc.c
+
 -- 
-2.34.1
+2.17.1
 
