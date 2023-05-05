@@ -2,160 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38F196F88FB
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 20:50:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8678A6F88FF
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 20:51:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233163AbjEESuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 14:50:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56992 "EHLO
+        id S233320AbjEESvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 14:51:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233370AbjEESt4 (ORCPT
+        with ESMTP id S233306AbjEESvF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 14:49:56 -0400
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4E518FD3;
-        Fri,  5 May 2023 11:49:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1683312593;
-        bh=UMXAl51MhZ0yCNriCqSE7/JYDFRhFv3fKnFkJrwV+n4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=StLBdLkztVdvX7Gof+vMkAYfLKSQH9lkrk7QcF+G7Az0ErtHLyb6k0yTPonNzEJkD
-         GpnEEZphGvLt4o1H8d6pB1u1rnBh2idI59+HEya3Qa4GdxCPkEi5es7bijVUaJN6N7
-         016u7wfriS6A5oyiaFYjrpY1esWa21/uzSfO7y7gYrqwZ2WqTESKFDK6p3bBqBR2ka
-         A/L5eE2w8cq/qoTOQTk23x6Cbzu12xEKn76mzE3oAJQ487plkoHhVyMAscnX8pbl/9
-         kOhtJAPX9Tk4LxWe/hIQyvZRLXYfPtjQ+jIIVhaoJC5DcPJui9kmtVNbkqsKrlTkpR
-         NP+0Tqdp9Avww==
-Received: from [172.16.0.99] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4QCfr11yNTz1233;
-        Fri,  5 May 2023 14:49:53 -0400 (EDT)
-Message-ID: <3cc72a67-d648-0040-6f60-37663797e360@efficios.com>
-Date:   Fri, 5 May 2023 14:49:57 -0400
+        Fri, 5 May 2023 14:51:05 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 772681891B
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 11:50:56 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1ab14cb3aaeso15290485ad.2
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 11:50:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683312656; x=1685904656;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=O3Pwr7B80kSqA1ofTGTJdRspp4l8nHMqdJ66SIuLoGc=;
+        b=DlaHdWVdiGOlAxw1awjEx6laGYPzXJmug8SJKO7DDHkWd9lRDfbQ8sb2k1sGrYQ54Y
+         i36SixdRsHDPZk0PW58feDv1msCBEixpiwD01tZvjfJg2wwOCBh26DVZS/1VrvYMLlwa
+         ZI9xMUbJObBc+YvM6PWDj+py7p2KfPtaiOCiV+qYAntA49bSo2hLF6zbYG9vc3P7wiEr
+         9nQBFMM5/UAUKgiTqCcJcKfF0zqbx3e1hGupkr5dqb6g/t459svxbwligH/gQRv0PIoJ
+         JlDc2Yq/oRp9EXjUAG2ucuDxQSf9qk1/Fl1M0latVJtNZ/C5WvdkvJ9SGqCiI/q3z+0y
+         Gf+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683312656; x=1685904656;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=O3Pwr7B80kSqA1ofTGTJdRspp4l8nHMqdJ66SIuLoGc=;
+        b=j+gY+RDDTW0YoZUxxgEfd27ZnZy8UJQgxkCeYPMjXvF7p19DwXviE2HTfdiF1vDXBx
+         hCR/VWf1ozttFegW85DEm0Y0apIBQCX1EpC2uk0SAJ45Jnwq8nDVM++nfGXWQ9jQI0m1
+         GhDWtnflGTDtYTKf7YYopu/tKZnwTokM81lcbgQNL5Pp1UKTgAbAwYY5NK0TrrZmbWpG
+         w4PniZOLUYPRKeaTe8dVqzP2vQ/PtqCV6s+hdtCSFvkbUci0dyYfg+zbHP7oM9jRU+0/
+         JmKYA3qPKdEsDkNmNaC1tjVZOfv7ilbkqBkeakqfbmleURtV8foAhUCmZcsGH7E4kK/x
+         +B5A==
+X-Gm-Message-State: AC+VfDyYk9qVV38S5q8Tf+m0fV/pmJY6TLj5SS1rEQPLuRpG2MigDmEW
+        KEOEfOiLCRBRdJh5eun/HtY=
+X-Google-Smtp-Source: ACHHUZ5mHWDdUMpIqZKZT7h1SyIoVApgDjlD4t+I6Qh6IKxoYceofNOLX6hK3X5xkVDnRreKRdEhjA==
+X-Received: by 2002:a17:902:ef94:b0:1a9:5e33:72db with SMTP id iz20-20020a170902ef9400b001a95e3372dbmr2302214plb.28.1683312655537;
+        Fri, 05 May 2023 11:50:55 -0700 (PDT)
+Received: from localhost (fwdproxy-prn-023.fbsv.net. [2a03:2880:ff:17::face:b00c])
+        by smtp.gmail.com with ESMTPSA id bc6-20020a170902930600b001a9884c02e3sm2128695plb.10.2023.05.05.11.50.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 May 2023 11:50:55 -0700 (PDT)
+From:   Nhat Pham <nphamcs@gmail.com>
+To:     akpm@linux-foundation.org
+Cc:     hannes@cmpxchg.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, minchan@kernel.org,
+        ngupta@vflare.org, senozhatsky@chromium.org, sjenning@redhat.com,
+        ddstreet@ieee.org, vitaly.wool@konsulko.com, kernel-team@meta.com
+Subject: [PATCH] zsmalloc: move LRU update from zs_map_object() to zs_malloc()
+Date:   Fri,  5 May 2023 11:50:54 -0700
+Message-Id: <20230505185054.2417128-1-nphamcs@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RFC PATCH 12/13] blk-mq.h: Fix parentheses around macro
- parameter use
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        linux-block@vger.kernel.org
-References: <20230504200527.1935944-1-mathieu.desnoyers@efficios.com>
- <20230504200527.1935944-13-mathieu.desnoyers@efficios.com>
- <3b017a9f-220d-4da8-2cf6-7f0d6175b30c@efficios.com>
- <CAHk-=wjzpHjqhybyEhkTzGgTdBP3LZ1FmOw8=1MMXr=-j5OPxQ@mail.gmail.com>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <CAHk-=wjzpHjqhybyEhkTzGgTdBP3LZ1FmOw8=1MMXr=-j5OPxQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-05 14:40, Linus Torvalds wrote:
-> On Fri, May 5, 2023 at 6:56 AM Mathieu Desnoyers
-> <mathieu.desnoyers@efficios.com> wrote:
->>
->> Which way do we want to go with respect to the rvalue of the assignment
->> operator "=" in a macro ? (with or without parentheses)
->>
->> In short:
->>
->> #define m(x) do { z = (x); } while (0)
->>
->> or
->>
->> #define m(x) do { z = x; } while (0)
-> 
-> I suspect that the first one is preferred, just as a "don't even have
-> to think about it" thing.
-> 
-> In general, despite my suggestion of maybe using upper-case to show
-> odd syntax (and I may have suggested it, but I really don't like how
-> it looks, so I'm not at all convinced it's a good idea), to a
-> first-order approximation the rule should be:
-> 
->   - always use parentheses around macros
-> 
->   - EXCEPT:
->       - when used purely as arguments to functions or other macros
->       - when there is some syntax reason why it's not ok to add parens
+Under memory pressure, we sometimes observe the following crash:
 
-I would add to this list of exceptions cases where the argument is used 
-as an expression within brackets, e.g.
+[ 5694.832838] ------------[ cut here ]------------
+[ 5694.842093] list_del corruption, ffff888014b6a448->next is LIST_POISON1 (dead000000000100)
+[ 5694.858677] WARNING: CPU: 33 PID: 418824 at lib/list_debug.c:47 __list_del_entry_valid+0x42/0x80
+[ 5694.961820] CPU: 33 PID: 418824 Comm: fuse_counters.s Kdump: loaded Tainted: G S                5.19.0-0_fbk3_rc3_hoangnhatpzsdynshrv41_10870_g85a9558a25de #1
+[ 5694.990194] Hardware name: Wiwynn Twin Lakes MP/Twin Lakes Passive MP, BIOS YMM16 05/24/2021
+[ 5695.007072] RIP: 0010:__list_del_entry_valid+0x42/0x80
+[ 5695.017351] Code: 08 48 83 c2 22 48 39 d0 74 24 48 8b 10 48 39 f2 75 2c 48 8b 51 08 b0 01 48 39 f2 75 34 c3 48 c7 c7 55 d7 78 82 e8 4e 45 3b 00 <0f> 0b eb 31 48 c7 c7 27 a8 70 82 e8 3e 45 3b 00 0f 0b eb 21 48 c7
+[ 5695.054919] RSP: 0018:ffffc90027aef4f0 EFLAGS: 00010246
+[ 5695.065366] RAX: 41fe484987275300 RBX: ffff888008988180 RCX: 0000000000000000
+[ 5695.079636] RDX: ffff88886006c280 RSI: ffff888860060480 RDI: ffff888860060480
+[ 5695.093904] RBP: 0000000000000002 R08: 0000000000000000 R09: ffffc90027aef370
+[ 5695.108175] R10: 0000000000000000 R11: ffffffff82fdf1c0 R12: 0000000010000002
+[ 5695.122447] R13: ffff888014b6a448 R14: ffff888014b6a420 R15: 00000000138dc240
+[ 5695.136717] FS:  00007f23a7d3f740(0000) GS:ffff888860040000(0000) knlGS:0000000000000000
+[ 5695.152899] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 5695.164388] CR2: 0000560ceaab6ac0 CR3: 000000001c06c001 CR4: 00000000007706e0
+[ 5695.178659] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[ 5695.192927] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[ 5695.207197] PKRU: 55555554
+[ 5695.212602] Call Trace:
+[ 5695.217486]  <TASK>
+[ 5695.221674]  zs_map_object+0x91/0x270
+[ 5695.229000]  zswap_frontswap_store+0x33d/0x870
+[ 5695.237885]  ? do_raw_spin_lock+0x5d/0xa0
+[ 5695.245899]  __frontswap_store+0x51/0xb0
+[ 5695.253742]  swap_writepage+0x3c/0x60
+[ 5695.261063]  shrink_page_list+0x738/0x1230
+[ 5695.269255]  shrink_lruvec+0x5ec/0xcd0
+[ 5695.276749]  ? shrink_slab+0x187/0x5f0
+[ 5695.284240]  ? mem_cgroup_iter+0x6e/0x120
+[ 5695.292255]  shrink_node+0x293/0x7b0
+[ 5695.299402]  do_try_to_free_pages+0xea/0x550
+[ 5695.307940]  try_to_free_pages+0x19a/0x490
+[ 5695.316126]  __folio_alloc+0x19ff/0x3e40
+[ 5695.323971]  ? __filemap_get_folio+0x8a/0x4e0
+[ 5695.332681]  ? walk_component+0x2a8/0xb50
+[ 5695.340697]  ? generic_permission+0xda/0x2a0
+[ 5695.349231]  ? __filemap_get_folio+0x8a/0x4e0
+[ 5695.357940]  ? walk_component+0x2a8/0xb50
+[ 5695.365955]  vma_alloc_folio+0x10e/0x570
+[ 5695.373796]  ? walk_component+0x52/0xb50
+[ 5695.381634]  wp_page_copy+0x38c/0xc10
+[ 5695.388953]  ? filename_lookup+0x378/0xbc0
+[ 5695.397140]  handle_mm_fault+0x87f/0x1800
+[ 5695.405157]  do_user_addr_fault+0x1bd/0x570
+[ 5695.413520]  exc_page_fault+0x5d/0x110
+[ 5695.421017]  asm_exc_page_fault+0x22/0x30
 
-#define m(x) myvar[x]
+After some investigation, I have found the following issue: unlike other
+zswap backends, zsmalloc performs the LRU list update at the object
+mapping time, rather than when the slot for the object is allocated.
+This deviation was discussed and agreed upon during the review process
+of the zsmalloc writeback patch series:
 
-Because the content within the brackets is already an expression.
+https://lore.kernel.org/lkml/Y3flcAXNxxrvy3ZH@cmpxchg.org/
 
-The other exception I would add is when a parameter is used as an 
-lvalue, as:
+Unfortunately, this introduces a subtle bug that occurs when there is a
+concurrent store and reclaim, which interleave as follows:
 
-#define m(x) do { x = 2; } while (0)
+zswap_frontswap_store()            shrink_worker()
+  zs_malloc()                        zs_zpool_shrink()
+    spin_lock(&pool->lock)             zs_reclaim_page()
+    zspage = find_get_zspage()
+    spin_unlock(&pool->lock)
+                                         spin_lock(&pool->lock)
+                                         zspage = list_first_entry(&pool->lru)
+                                         list_del(&zspage->lru)
+                                           zspage->lru.next = LIST_POISON1
+                                           zspage->lru.prev = LIST_POISON2
+                                         spin_unlock(&pool->lock)
+  zs_map_object()
+    spin_lock(&pool->lock)
+    if (!list_empty(&zspage->lru))
+      list_del(&zspage->lru)
+        CHECK_DATA_CORRUPTION(next == LIST_POISON1) /* BOOM */
 
-because I cannot find a case where it would cause unexpected operator 
-precedence.
+With the current upstream code, this issue rarely happens. zswap only
+triggers writeback when the pool is already full, at which point all
+further store attempts are short-circuited. This creates an implicit
+pseudo-serialization between reclaim and store. I am working on a new
+zswap shrinking mechanism, which makes interleaving reclaim and store
+more likely, exposing this bug.
 
-Are you OK with those 2 additional exceptions ?
+zbud and z3fold do not have this problem, because they perform the LRU
+list update in the alloc function, while still holding the pool's lock.
+This patch fixes the aforementioned bug by moving the LRU update back to
+zs_malloc(), analogous to zbud and z3fold.
 
-> 
-> The "arguments to functions/macros" is because the comma separator
-> between arguments isn't even a operator (ie it is *not* a
-> comma-expression, it's multiple expressions separated by commas).
-> There is no "operator precedence" subtlety.
+Suggested-by: Johannes Weiner <hannes@cmpxchg.org>
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+---
+ mm/zsmalloc.c | 36 +++++++++---------------------------
+ 1 file changed, 9 insertions(+), 27 deletions(-)
 
-Good point.
-
-> 
-> So we have a lot of macros that are just wrappers around functions (or
-> other macros), and in that situation you do *not* then add more
-> parentheses, and doing something like
-> 
->      #define update_screen(x) redraw_screen(x, 0)
-> 
-> is fine, and might even be preferred syntax because putting
-> parentheses around 'x' not only doesn't buy you anything, but just
-> makes things uglier.
-> 
-> And the "syntax reasons" can be due to the usual things: we not only
-> have that 'pass member name around' issue, but we have things like
-> string expansion etc, where adding parentheses anywhere to things like
-> 
->      #define __stringify_1(x...)     #x
->      #define __stringify(x...)       __stringify_1(x)
-> 
-> would obviously simply not work (or look at our "SYSCALL_DEFINEx()"
-> games for more complex examples with many layers of token pasting
-> etc).
-> 
-> But in general I would suggest against "this is the lowest priority
-> operator" kind of games. Nobody remembers the exact operator
-> precedence so well that they don't have to think about it.
-> 
-> So for example, we have
-> 
->      #define scr_writew(val, addr) (*(addr) = (val))
-> 
-> to pick another VT example, and I think that's right both for 'addr'
-> (that requires the parentheses) and for 'val' (that might not require
-> it, but let's not make people think about it).
-
-Indeed, brain power and reviewer time is a scarce resource. It's a shame 
-to waste it on figuring out operator priority again and again.
-
-Thanks,
-
-Mathieu
-
-
+diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
+index 44ddaf5d601e..02f7f414aade 100644
+--- a/mm/zsmalloc.c
++++ b/mm/zsmalloc.c
+@@ -1331,31 +1331,6 @@ void *zs_map_object(struct zs_pool *pool, unsigned long handle,
+ 	obj_to_location(obj, &page, &obj_idx);
+ 	zspage = get_zspage(page);
+ 
+-#ifdef CONFIG_ZPOOL
+-	/*
+-	 * Move the zspage to front of pool's LRU.
+-	 *
+-	 * Note that this is swap-specific, so by definition there are no ongoing
+-	 * accesses to the memory while the page is swapped out that would make
+-	 * it "hot". A new entry is hot, then ages to the tail until it gets either
+-	 * written back or swaps back in.
+-	 *
+-	 * Furthermore, map is also called during writeback. We must not put an
+-	 * isolated page on the LRU mid-reclaim.
+-	 *
+-	 * As a result, only update the LRU when the page is mapped for write
+-	 * when it's first instantiated.
+-	 *
+-	 * This is a deviation from the other backends, which perform this update
+-	 * in the allocation function (zbud_alloc, z3fold_alloc).
+-	 */
+-	if (mm == ZS_MM_WO) {
+-		if (!list_empty(&zspage->lru))
+-			list_del(&zspage->lru);
+-		list_add(&zspage->lru, &pool->lru);
+-	}
+-#endif
+-
+ 	/*
+ 	 * migration cannot move any zpages in this zspage. Here, pool->lock
+ 	 * is too heavy since callers would take some time until they calls
+@@ -1525,9 +1500,8 @@ unsigned long zs_malloc(struct zs_pool *pool, size_t size, gfp_t gfp)
+ 		fix_fullness_group(class, zspage);
+ 		record_obj(handle, obj);
+ 		class_stat_inc(class, ZS_OBJS_INUSE, 1);
+-		spin_unlock(&pool->lock);
+ 
+-		return handle;
++		goto out;
+ 	}
+ 
+ 	spin_unlock(&pool->lock);
+@@ -1550,6 +1524,14 @@ unsigned long zs_malloc(struct zs_pool *pool, size_t size, gfp_t gfp)
+ 
+ 	/* We completely set up zspage so mark them as movable */
+ 	SetZsPageMovable(pool, zspage);
++out:
++#ifdef CONFIG_ZPOOL
++	/* Add/move zspage to beginning of LRU */
++	if (!list_empty(&zspage->lru))
++		list_del(&zspage->lru);
++	list_add(&zspage->lru, &pool->lru);
++#endif
++
+ 	spin_unlock(&pool->lock);
+ 
+ 	return handle;
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+2.34.1
 
