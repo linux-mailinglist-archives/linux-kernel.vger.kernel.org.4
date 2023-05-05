@@ -2,121 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDB396F83CD
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 15:20:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4E8E6F83CE
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 15:20:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232458AbjEENUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 09:20:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45032 "EHLO
+        id S232455AbjEENUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 09:20:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232387AbjEENUX (ORCPT
+        with ESMTP id S232441AbjEENUo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 09:20:23 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B65A72688;
-        Fri,  5 May 2023 06:20:19 -0700 (PDT)
-Received: from localhost ([31.220.113.235]) by mrelayeu.kundenserver.de
- (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1N6KMR-1qJ7Bu324H-016cR9; Fri, 05 May 2023 15:19:59 +0200
-Date:   Fri, 5 May 2023 15:19:59 +0200
-From:   Andreas Klinger <ak@it-klinger.de>
-To:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4 0/3] Support Honeywell mprls0025pa pressure sensor
-Message-ID: <ZFUCf059+PSR+3Wb@arbad>
+        Fri, 5 May 2023 09:20:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBEA51F4AC;
+        Fri,  5 May 2023 06:20:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 61CA363E15;
+        Fri,  5 May 2023 13:20:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58040C433EF;
+        Fri,  5 May 2023 13:20:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683292840;
+        bh=1tIXs2qrQIkUsmb/r+/EjrPd2vRi0DVKFZc6hOpHua0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nsO0Qsl4rH4ZK0mnu5QCJzz0ti4NCFYq2SRFKkroDjxrXU+3PZNRq7qnUMyIpbVwJ
+         k1E2CTvz1Uhhk9lbMEgn9EmSSiNTr2msESUGLL3RSI/prmW+m1Tbrj8r+jb2AJbG/B
+         L8ls+7GZBtoKdjszRDtbcxUMnmV41xn+XNFE2pa2LkN23ZU5FvyGGx0cc+co/03hQm
+         zAxhiJGOmO3NfRqYP0EEWP1IWMyn7alV652KyRu8PqOCFUxNmru4gr80kjsth01iEM
+         dh3iYtCJsq05V2RzCQnUaT+Tu9+ux5ikFuT1VsBU/WZGml8W8czcMhFAjEbvVy/YhK
+         OeE8Evuwm8SOA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id B0600403B5; Fri,  5 May 2023 10:20:37 -0300 (-03)
+Date:   Fri, 5 May 2023 10:20:37 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Namhyung Kim <namhyung@kernel.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Song Liu <song@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Clark Williams <williams@redhat.com>,
+        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Changbin Du <changbin.du@huawei.com>,
+        Hao Luo <haoluo@google.com>, Ian Rogers <irogers@google.com>,
+        James Clark <james.clark@arm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Roman Lozko <lozko.roma@gmail.com>,
+        Stephane Eranian <eranian@google.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        bpf <bpf@vger.kernel.org>
+Subject: Re: BPF skels in perf .Re: [GIT PULL] perf tools changes for v6.4
+Message-ID: <ZFUCpepjOfFZjETL@kernel.org>
+References: <20230503211801.897735-1-acme@kernel.org>
+ <CAHk-=wjY_3cBELRSLMpqCt6Eb71Qei2agfKSNsrr5KcpdEQCaA@mail.gmail.com>
+ <CAHk-=wgci+OTRacQZcvvapRcWkoiTFJ=VTe_JYtabGgZ9refmg@mail.gmail.com>
+ <ZFOSUab5XEJD0kxj@kernel.org>
+ <CAHk-=wgv1sKTdLWPC7XR1Px=pDNrDPDTKdX-T_2AQOwgkpWB2A@mail.gmail.com>
+ <ZFPw0scDq1eIzfHr@kernel.org>
+ <CAEf4BzaUU9vZU6R_020ru5ct0wh-p1M3ZFet-vYqcHvb9bW1Cw@mail.gmail.com>
+ <ZFQCccsx6GK+gY0j@kernel.org>
+ <ZFQoQjCNtyMIulp+@kernel.org>
+ <ZFQrT42SyEbCj4om@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Provags-ID: V03:K1:LvWwahpDxbW5ietDton1MeJ49tRciW1sgnT3RH04aGs3/1qpbKX
- eZBZd34zYne/ZVfSfg6QPVXmfqdBEqkhuZ2rvDSFdzgnp8XpxMB2BcAIquVJPhDs5eQqIyS
- U7zoINps68Fhft5D3djciOI2CIX37ihSe+r3lkUcHaIHtWQSF3HBiDjHgAPabDPzEmeNLct
- ocQCQ0T/fqVXejTPiHeVQ==
-UI-OutboundReport: notjunk:1;M01:P0:TMie43ZwBSE=;ueCGyBUvD621qQ8q/ae9m/jhKK7
- r0QAp574iP8Pbpc3pnVlWtP3Eq8QHL8X5OE4eVUzAWdTLV2hEXnfFN2W85v57Vk10E0kv/gct
- eEKVft6teWgu/0NU6sokfXvw55h4rSYfepJB8yyQh0OoIx4rEfJvvzAY7lSGnQTbHcN5s4sys
- hQzdG0UP/ej/hlAr1ySeNKzVBGHVZcddIdMYyJ0kMNpQAO7PUfenFg5AUIe+apan3mIIXiNmT
- K2GZg/ZdtWHfW/+rmylUjTWVhmCNKEFofwjSTFb6fl5GoX1rnHN+iLgrQIZSvz5UjVvcrIpVG
- j7w/vehxVvh3LTqwmegVtxsgtAxJJp2PyiN391Li3rjPuf7N927dOH3Z/AgiFyn+eeHlR4mNU
- JpDD2tWypSZcLv5QHxdZLkd77TqmNEWivhpYzWsVDM4WuSO6z2qfjF4nqqPrZi7kTXISBAG8j
- ZeuCpWjF0OdM9uCP7+bc0cIeFwaWnpo7idiodJeo6uP2I/fYMHVc83hfXH2aFYE3GOCbLXzMZ
- B7GTvOYUWICj3TgKtQMdtqP20DjLTg+9NvNkMX9aWLtEVWVbQz5jXHQN6LlFN/gBiGNua1tW/
- HYZ2LSjLtTRJSXiKwbaAXE2L4tK6zbZFr9Tjs44TRy78t6VgQvArtlnjJrKhFKYX5dhnZAfkt
- Y3Hzmhal6/cNYN9f59eOkATAiuAAoSGsr5rP6VDJCw==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZFQrT42SyEbCj4om@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Support Honeywell mprls0025pa pressure sensor.
+Em Thu, May 04, 2023 at 07:01:51PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Thu, May 04, 2023 at 06:48:50PM -0300, Arnaldo Carvalho de Melo escreveu:
+> > Em Thu, May 04, 2023 at 04:07:29PM -0300, Arnaldo Carvalho de Melo escreveu:
+> > > Em Thu, May 04, 2023 at 11:50:07AM -0700, Andrii Nakryiko escreveu:
+> > > > On Thu, May 4, 2023 at 10:52 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+> > > > > Andrii, can you add some more information about the usage of vmlinux.h
+> > > > > instead of using kernel headers?
+> > >  
+> > > > I'll just say that vmlinux.h is not a hard requirement to build BPF
+> > > > programs, it's more a convenience allowing easy access to definitions
+> > > > of both UAPI and kernel-internal structures for tracing needs and
+> > > > marking them relocatable using BPF CO-RE machinery. Lots of real-world
+> > > > applications just check-in pregenerated vmlinux.h to avoid build-time
+> > > > dependency on up-to-date host kernel and such.
+> > >  
+> > > > If vmlinux.h generation and usage is causing issues, though, given
+> > > > that perf's BPF programs don't seem to be using many different kernel
+> > > > types, it might be a better option to just use UAPI headers for public
+> > > > kernel type definitions, and just define CO-RE-relocatable minimal
+> > > > definitions locally in perf's BPF code for the other types necessary.
+> > > > E.g., if perf needs only pid and tgid from task_struct, this would
+> > > > suffice:
+> > >  
+> > > > struct task_struct {
+> > > >     int pid;
+> > > >     int tgid;
+> > > > } __attribute__((preserve_access_index));
+> > > 
+> > > Yeah, that seems like a way better approach, no vmlinux involved, libbpf
+> > > CO-RE notices that task_struct changed from this two integers version
+> > > (of course) and does the relocation to where it is in the running kernel
+> > > by using /sys/kernel/btf/vmlinux.
+> > 
+> > Doing it for one of the skels, build tested, runtime untested, but not
+> > using any vmlinux, BTF to help, not that bad, more verbose, but at least
+> > we state what are the fields we actually use, have those attribute
+> > documenting that those offsets will be recorded for future use, etc.
+> > 
 
-This patch series adds support for Honeywell mprls0025pa pressure sensor series.
-There are a variety of sensors with different pressure ranges supported.
+Namhyung, can you please check that this one for the recent sample works?
 
-Changes in v4:
-- Patch 1: "dt-bindings: iio: pressure: Support Honeywell mprls0025pa sensor"
-  - change line length to 80 characters
-  - make vdd-supply mandatory
-- Patch 2: "iio: pressure: Honeywell mprls0025pa pressure sensor"
-  - change line length to 80 characters
-  - change regulator vcc to devm_regulator_get_enable()
-  - switch to probe_new
-  - many changes from the review
-- Patch 3: "MAINTAINERS: Add Honeywell mprls0025pa sensor"
-  - no changes
+From c6972dae6c962d7be5ba006ab90c9955268debc5 Mon Sep 17 00:00:00 2001
+From: Arnaldo Carvalho de Melo <acme@redhat.com>
+Date: Fri, 5 May 2023 09:55:18 -0300
+Subject: [PATCH 1/2] perf sample_filter.bpf: Stop using vmlinux.h generated by
+ bpftool, use CO-RE
 
-Changes in v3:
-- Patch 1: "dt-bindings: iio: pressure: Support Honeywell mprls0025pa sensor"
-  - fix errors while doing dt_binding_check
-  - add vdd-supply
-- Patch 2: "iio: pressure: Honeywell mpr pressure sensor"
-  - change to _RAW interface
-  - add transfer function
-  - add regulator
-  - move to device_property_xxx functions
-  - many more changes from the feedbacks
-- Patch 3: "MAINTAINERS: Add Honeywell mpr sensor"
-  - change file names
+Including linux/bpf.h and linux/perf_events.h we get the UAPI structs
+and then define a subset  'struct perf_sample_data' with the fields we
+use in this tool while using __attribute__((preserve_access_index)) so
+that at libbpf load time it can fixup the offsets according to the
+'struct perf_data_sample' obtained from the running kernel BTF
+(/sys/kernel/btf/vmlinux).
 
-Changes in v2:
-- Patch 1: "dt-bindings: iio: pressure: Support Honeywell mprls0025pa sensor"
-  - change the global sensor decription of mpr to the specific sensor
-    mprls0025pa
-  - change compatible string
-  - rename the file to honeywell,mprls0025pa.yaml
-  - honeywell,pmin-pascal and honeywell,pmax-pascal: add unit pascal to property
-    names 
-  - add new property honeywell,transfer-function
-- Patch 2: "iio: pressure: Honeywell mpr pressure sensor"
-  - no change so far
-  - will be changed and send out as new version when the dt definition is
-    settled down
-- Patch 3: "MAINTAINERS: Add Honeywell mpr sensor"
-  - no change so far
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+---
+ tools/perf/util/bpf_skel/sample_filter.bpf.c | 37 +++++++++++++++++++-
+ 1 file changed, 36 insertions(+), 1 deletion(-)
 
-Andreas Klinger (3):
-  dt-bindings: iio: pressure: Support Honeywell mprls0025pa sensor
-  iio: pressure: Honeywell mprls0025pa pressure sensor
-  MAINTAINERS: Add Honeywell mprls0025pa sensor
-
- .../iio/pressure/honeywell,mprls0025pa.yaml   | 104 +++++
- MAINTAINERS                                   |   7 +
- drivers/iio/pressure/Kconfig                  |  13 +
- drivers/iio/pressure/Makefile                 |   1 +
- drivers/iio/pressure/mprls0025pa.c            | 441 ++++++++++++++++++
- 5 files changed, 566 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/iio/pressure/honeywell,mprls0025pa.yaml
- create mode 100644 drivers/iio/pressure/mprls0025pa.c
-
-
-base-commit: 457391b0380335d5e9a5babdec90ac53928b23b4
+diff --git a/tools/perf/util/bpf_skel/sample_filter.bpf.c b/tools/perf/util/bpf_skel/sample_filter.bpf.c
+index cffe493af1ed5f31..045532c2366d74ef 100644
+--- a/tools/perf/util/bpf_skel/sample_filter.bpf.c
++++ b/tools/perf/util/bpf_skel/sample_filter.bpf.c
+@@ -1,12 +1,47 @@
+ // SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ // Copyright (c) 2023 Google
+-#include "vmlinux.h"
++#include <linux/bpf.h>
++#include <linux/perf_event.h>
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
+ #include <bpf/bpf_core_read.h>
+ 
+ #include "sample-filter.h"
+ 
++// non-UAPI kernel data structures, just the fields used in this tool,
++// preserving the access index so that libbpf can fixup offsets with the ones
++// used in the kernel when loading the BPF bytecode, if they differ from what
++// is used here.
++
++struct perf_sample_data {
++	__u64			 addr;
++	__u64			 period;
++	union perf_sample_weight weight;
++	__u64			 txn;
++	union perf_mem_data_src  data_src;
++	__u64			 ip;
++	struct {
++		__u32		 pid;
++		__u32		 tid;
++	} tid_entry;
++	__u64			 time;
++	__u64			 id;
++	struct {
++		__u32		 cpu;
++	} cpu_entry;
++	__u64			 phys_addr;
++	__u64			 data_page_size;
++	__u64			 code_page_size;
++} __attribute__((__aligned__(64))) __attribute__((preserve_access_index));
++
++struct bpf_perf_event_data_kern {
++	struct perf_sample_data *  data;
++	struct perf_event *        event;
++
++	/* size: 24, cachelines: 1, members: 3 */
++	/* last cacheline: 24 bytes */
++} __attribute__((preserve_access_index));
++
+ /* BPF map that will be filled by user space */
+ struct filters {
+ 	__uint(type, BPF_MAP_TYPE_ARRAY);
 -- 
-2.30.2
+2.39.2
+
