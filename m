@@ -2,281 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 671396F7B72
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 05:21:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD74F6F7B74
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 05:23:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbjEEDVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 23:21:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49992 "EHLO
+        id S229989AbjEEDXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 23:23:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbjEEDVe (ORCPT
+        with ESMTP id S229871AbjEEDXa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 23:21:34 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B7912084
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 20:21:04 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id 41be03b00d2f7-51b4ef5378bso1096790a12.1
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 20:21:03 -0700 (PDT)
+        Thu, 4 May 2023 23:23:30 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F6512E;
+        Thu,  4 May 2023 20:23:29 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id d9443c01a7336-1ab032d9266so11718555ad.0;
+        Thu, 04 May 2023 20:23:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1683256863; x=1685848863;
+        d=gmail.com; s=20221208; t=1683257008; x=1685849008;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
          :user-agent:mime-version:date:message-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UuHz1ga8iYYT3T2UezfJAayUdEePBZ0K98E4KKO6lr0=;
-        b=WLRPobWtNTXI+Tq/qWsGl3AfIvzw0jmzVCLXthehEsHmTI990BjAbZ9iCCLyObfjI1
-         oLwWzYNMYBc2zhoB4qwDLsdtlj6wIDRjy0d6WyZP1nBTu+wCkR5V/lsgWqTGVSQ8hvc2
-         jnmJvNOv3q32Pg2z6rGHKdCX16GWWVfi2TwVXvYwF27/reE+WXmNxUuWARoNmjVWkt5j
-         3UciFHGxA1JAzJMtM4SYOnjjdlCHYndxNbgn9JXiC7/ANbM7J3iEOabxdnandZO7QurW
-         P7xqFUM77vCnMdxGcHoDav5F5ui8pIiHjDl+6qJqRj+qOi7NxwDdcwAar7OfxwP7prnS
-         zNcg==
+        bh=W1zI59DMPwElv3Pt8qHQPRARoujuK3z77nNH9VJstI0=;
+        b=LxJaI/l/33pp4EkU9RxPz2ysCK1qnDvZNqromExIbQhMCW7q5QPFVbGJHK7EvtwL+d
+         in0Ouxaz7FU2OYdhziplIhyDlEooIMyZNTZ/wTu5QY6jMorvjjaG5thYUF+f924YkrLn
+         flWnUpAPnXNK6NLvvjS8hEPTmJGPAZyqNr8I+kwIZ50r6vp84vj1R5C1HSMRkU1sRDga
+         jw9W8/t0Bg9PVIXSh8uXXW7m4c1eQKRr7DpqabLCmetYZK0ugJvUzDHQb0ganz10kiP0
+         FXA3nxsnCfK02TaTwpG4KoiEEbEq0PvjP68PN/RLEggMJO/7nYhjWmZBYNUnMsr+xuGw
+         /okA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683256863; x=1685848863;
+        d=1e100.net; s=20221208; t=1683257008; x=1685849008;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
          :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=UuHz1ga8iYYT3T2UezfJAayUdEePBZ0K98E4KKO6lr0=;
-        b=jn4X4O+ntuIqlCBt5sec36tMF4zlKvHIEIYzYvUUZfNEh/mAA6nHGoNyaZKPXcK2eH
-         4EC9Gv+QVKV83mFmUOAuiKJHSb9SFE7dj33bIPL+zZ2NgPOrsS1GMvDs2tLBu6rBLy4t
-         2uqi+0NY39+HARbXrYHDlIIXTXeBWGP+OcIs6rD5f6JI6PqzrwBgu0uGIsI2cyR43bW2
-         BvD1ujgM0sEEx/fVmML1Y9/J59YNIBAr8FU5Z68rWR1FqX3gpjUAyh2waIEmcBk/LebR
-         35ksbJF5bVSzzDoeVbTLktARdzJeNz/0m5QGhW1gKkNvsBDCLIUGRPLvPimBDLsqYwoR
-         2KBA==
-X-Gm-Message-State: AC+VfDwwfceQI+7vKQFz0t2NLEfnrd7aHVxm+bVcKh7fwKbCs5UuowKC
-        xgxVa855ZTj7DXyKTe+Cs2Y8eg==
-X-Google-Smtp-Source: ACHHUZ6HpiO6PuX63DKsP4o4xrLtKGOT4wwh6m+jy09qIntVA+v7OufF9xrMtLzZW1J5J/VMLzXZPg==
-X-Received: by 2002:a17:902:ea07:b0:1a9:a408:a502 with SMTP id s7-20020a170902ea0700b001a9a408a502mr62192plg.1.1683256863462;
-        Thu, 04 May 2023 20:21:03 -0700 (PDT)
-Received: from [10.71.57.173] ([139.177.225.254])
-        by smtp.gmail.com with ESMTPSA id w1-20020a170902d70100b001a072aedec7sm399064ply.75.2023.05.04.20.20.56
+        bh=W1zI59DMPwElv3Pt8qHQPRARoujuK3z77nNH9VJstI0=;
+        b=MQ4v6A9iCNlE9YUrkTNw1oWwRPDagn3TqcF0AX17L1Kp/neuceo129r3n9XqndaFvq
+         uyRpj5Qsim8w98Z0C+bdASGTbuaXhai31yxIjL1yrJrUIlz/ZykloJf6UU0383M0PkhN
+         a77jL8iKvRiFWOf1HnbC7QV+0qaqR4jjwLOj9YCBGSOIswvbHh7R4EOF00HJ9ItYcMd3
+         hEVxL0Qv6O27yNXMELMIbVZNLGPIzPohMnCBaEh85dGjEGM9by1zZWKFxStNdM7qMaZj
+         vzfdOfVZxfV873g/dA4Je5xjbJILBfC2zdAvnIqVXn6SWTxdtFvwfHLzxvGZpYM+dfgv
+         y2mQ==
+X-Gm-Message-State: AC+VfDzYxqQsPFmuKCkpBug+2YK9rWARiRvgpAs7XUvRk+VrIWBxKEtw
+        AFMxR3Y5cS7gKUIxm2BX7BM=
+X-Google-Smtp-Source: ACHHUZ41IHoFMBo8xGwEV1vJVt/NKc6moH+fmC+BXkE7LhEz9gspAnlvYpkF61Ci8jJQHgE2VxWjPA==
+X-Received: by 2002:a17:902:778a:b0:1aa:f612:cdf with SMTP id o10-20020a170902778a00b001aaf6120cdfmr5350391pll.37.1683257008322;
+        Thu, 04 May 2023 20:23:28 -0700 (PDT)
+Received: from [10.200.10.82] ([139.177.225.232])
+        by smtp.gmail.com with ESMTPSA id jh2-20020a170903328200b001ac38343438sm396075plb.176.2023.05.04.20.23.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 20:21:03 -0700 (PDT)
-Message-ID: <f26d4f76-d932-576c-cbb9-31158d3a0e4b@bytedance.com>
-Date:   Fri, 5 May 2023 11:20:54 +0800
+        Thu, 04 May 2023 20:23:27 -0700 (PDT)
+Message-ID: <4912002a-4fa8-c1c0-a8c4-690b6dd76449@gmail.com>
+Date:   Fri, 5 May 2023 11:23:20 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.1
-Subject: Re: Re: [PATCH bpf-next v5 2/2] selftests/bpf: Add testcase for
- bpf_task_under_cgroup
-To:     Yonghong Song <yhs@meta.com>, martin.lau@linux.dev, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, mykolal@fb.com, shuah@kernel.org
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        yangzhenze@bytedance.com, wangdongdong.6@bytedance.com
-References: <20230504031513.13749-1-zhoufeng.zf@bytedance.com>
- <20230504031513.13749-3-zhoufeng.zf@bytedance.com>
- <63138022-e28f-a63c-6f4c-61b61e585641@meta.com>
-From:   Feng Zhou <zhoufeng.zf@bytedance.com>
-In-Reply-To: <63138022-e28f-a63c-6f4c-61b61e585641@meta.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.1
+Subject: Re: [PATCH] maple_tree: Make maple state reusable after
+ mas_empty_area()
+To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        maple-tree@lists.infradead.org,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        Tad <support@spotco.us>,
+        Michael Keyes <mgkeyes@vigovproductions.net>,
+        Stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>
+References: <20230504175509.2195838-1-Liam.Howlett@oracle.com>
+From:   Peng Zhang <perlyzhang@gmail.com>
+In-Reply-To: <20230504175509.2195838-1-Liam.Howlett@oracle.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2023/5/4 22:46, Yonghong Song 写道:
-> 
-> 
-> On 5/3/23 8:15 PM, Feng zhou wrote:
->> From: Feng Zhou <zhoufeng.zf@bytedance.com>
->>
->> test_progs:
->> Tests new kfunc bpf_task_under_cgroup().
->>
->> The bpf program saves the new task's pid within a given cgroup to
->> the remote_pid, which is convenient for the user-mode program to
->> verify the test correctness.
->>
->> The user-mode program creates its own mount namespace, and mounts the
->> cgroupsv2 hierarchy in there, call the fork syscall, then check if
->> remote_pid and local_pid are unequal.
->>
->> Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
-> 
-> Ack with a few nits below. You can carry my Ack in the
-> next revision.
-> 
-> Acked-by: Yonghong Song <yhs@fb.com>
-> 
-> 
 
-Will do
 
->> ---
->>   tools/testing/selftests/bpf/DENYLIST.s390x    |  1 +
->>   .../bpf/prog_tests/task_under_cgroup.c        | 54 +++++++++++++++++++
->>   .../bpf/progs/test_task_under_cgroup.c        | 51 ++++++++++++++++++
->>   3 files changed, 106 insertions(+)
->>   create mode 100644 
->> tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
->>   create mode 100644 
->> tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
->>
->> diff --git a/tools/testing/selftests/bpf/DENYLIST.s390x 
->> b/tools/testing/selftests/bpf/DENYLIST.s390x
->> index c7463f3ec3c0..5061d9e24c16 100644
->> --- a/tools/testing/selftests/bpf/DENYLIST.s390x
->> +++ b/tools/testing/selftests/bpf/DENYLIST.s390x
->> @@ -26,3 +26,4 @@ user_ringbuf                             # failed to 
->> find kernel BTF type ID of
->>   verif_stats                              # 
->> trace_vprintk__open_and_load unexpected error: 
->> -9                           (?)
->>   xdp_bonding                              # failed to auto-attach 
->> program 'trace_on_entry': -524                        (trampoline)
->>   xdp_metadata                             # JIT does not support 
->> calling kernel function                                (kfunc)
->> +test_task_under_cgroup                   # JIT does not support 
->> calling kernel function                                (kfunc)
->> diff --git 
->> a/tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c 
->> b/tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
->> new file mode 100644
->> index 000000000000..fa3a98eae5ef
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
->> @@ -0,0 +1,54 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/* Copyright (c) 2023 Bytedance */
->> +
->> +#include <sys/syscall.h>
->> +#include <test_progs.h>
->> +#include <cgroup_helpers.h>
->> +#include "test_task_under_cgroup.skel.h"
->> +
->> +#define FOO    "/foo"
->> +
->> +void test_task_under_cgroup(void)
->> +{
->> +    struct test_task_under_cgroup *skel;
->> +    int ret, foo = -1;
+在 2023/5/5 01:55, Liam R. Howlett 写道:
+> Do not update the min and max of the maple state to the slot of the leaf
+> node.  Leaving the min and max to the node entry allows for the maple
+> state to be used in other operations.
 > 
-> You do not need to initialize 'foo' here.
+> Users would get unexpected results from other operations on the maple
+> state after calling the affected function.
 > 
->> +    pid_t pid;
->> +
->> +    foo = test__join_cgroup(FOO);
->> +    if (!ASSERT_OK(foo < 0, "cgroup_join_foo"))
->> +        return;
->> +
->> +    skel = test_task_under_cgroup__open();
->> +    if (!ASSERT_OK_PTR(skel, "test_task_under_cgroup__open"))
->> +        goto cleanup;
->> +
->> +    skel->rodata->local_pid = getpid();
->> +    skel->bss->remote_pid = getpid();
->> +    skel->rodata->cgid = get_cgroup_id(FOO);
->> +
->> +    ret = test_task_under_cgroup__load(skel);
->> +    if (!ASSERT_OK(ret, "test_task_under_cgroup__load"))
->> +        goto cleanup;
->> +
->> +    ret = test_task_under_cgroup__attach(skel);
->> +    if (!ASSERT_OK(ret, "test_task_under_cgroup__attach"))
->> +        goto cleanup;
->> +
->> +    pid = fork();
->> +    if (pid == 0)
->> +        exit(0);
->> +
->> +    ret = (pid == -1);
->> +    if (ASSERT_OK(ret, "fork process"))
->> +        wait(NULL);
->> +
->> +    test_task_under_cgroup__detach(skel);
->> +
->> +    ASSERT_NEQ(skel->bss->remote_pid, skel->rodata->local_pid,
->> +           "test task_under_cgroup");
->> +
->> +cleanup:
->> +    close(foo);
->> +
->> +    test_task_under_cgroup__destroy(skel);
+> Reported-by: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+> Reported-by: Tad <support@spotco.us>
+> Reported-by: Michael Keyes <mgkeyes@vigovproductions.net>
+> Link: https://lore.kernel.org/linux-mm/32f156ba80010fd97dbaf0a0cdfc84366608624d.camel@intel.com/
+> Link: https://lore.kernel.org/linux-mm/e6108286ac025c268964a7ead3aab9899f9bc6e9.camel@spotco.us/
+> Fixes: Fixes: 54a611b60590 ("Maple Tree: add new data structure")
+> Cc: <Stable@vger.kernel.org>
+> Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+> ---
+>   lib/maple_tree.c | 15 +--------------
+>   1 file changed, 1 insertion(+), 14 deletions(-)
 > 
-> Let us just do:
-> cleanup:
->      test_task_under_cgroup__destroy(skel);
->      close(foo);
-> 
-> This is the reverse order of test__join_cgroup() and 
-> test_task_under_cgroup__open().
-> 
->> +}
->> diff --git 
->> a/tools/testing/selftests/bpf/progs/test_task_under_cgroup.c 
->> b/tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
->> new file mode 100644
->> index 000000000000..79d98e65c7eb
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
->> @@ -0,0 +1,51 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/* Copyright (c) 2023 Bytedance */
->> +
->> +#include <vmlinux.h>
->> +#include <bpf/bpf_tracing.h>
->> +#include <bpf/bpf_helpers.h>
->> +
->> +#include "bpf_misc.h"
->> +
->> +struct cgroup *bpf_cgroup_from_id(u64 cgid) __ksym;
->> +long bpf_task_under_cgroup(struct task_struct *task, struct cgroup 
->> *ancestor) __ksym;
->> +void bpf_cgroup_release(struct cgroup *p) __ksym;
->> +struct task_struct *bpf_task_acquire(struct task_struct *p) __ksym;
->> +void bpf_task_release(struct task_struct *p) __ksym;
->> +
->> +const volatile int local_pid;
->> +const volatile __u64 cgid;
->> +int remote_pid;
->> +
->> +SEC("tp_btf/task_newtask")
->> +int BPF_PROG(handle__task_newtask, struct task_struct *task, u64 
->> clone_flags)
->> +{
->> +    struct cgroup *cgrp = NULL;
->> +    struct task_struct *acquired;
->> +
->> +    if (local_pid != (bpf_get_current_pid_tgid() >> 32))
->> +        return 0;
->> +
->> +    acquired = bpf_task_acquire(task);
->> +    if (!acquired)
->> +        return 0;
->> +
->> +    if (local_pid == acquired->tgid)
->> +        goto out;
->> +
->> +    cgrp = bpf_cgroup_from_id(cgid);
->> +    if (!cgrp)
->> +        goto out;
->> +
->> +    if (bpf_task_under_cgroup(acquired, cgrp))
->> +        remote_pid = acquired->tgid;
->> +
->> +out:
->> +    if (acquired)
->> +        bpf_task_release(acquired);
->> +    if (cgrp)
->> +        bpf_cgroup_release(cgrp);
-> 
-> Let us do:
-> out:
->      if (cgrp)
->          bpf_cgroup_release(cgrp);
->      bpf_task_release(acquired);
-> 
->> +    return 0;
->> +}
->> +
->> +char _license[] SEC("license") = "GPL";
+> diff --git a/lib/maple_tree.c b/lib/maple_tree.c
+> index 110a36479dced..1c4bc7a988ed3 100644
+> --- a/lib/maple_tree.c
+> +++ b/lib/maple_tree.c
+> @@ -5285,10 +5285,6 @@ static inline int mas_sparse_area(struct ma_state *mas, unsigned long min,
+>   int mas_empty_area(struct ma_state *mas, unsigned long min,
+>   		unsigned long max, unsigned long size)
+>   {
+> -	unsigned char offset;
+> -	unsigned long *pivots;
+> -	enum maple_type mt;
+> -
+>   	if (min >= max)
+>   		return -EINVAL;
+>   
+> @@ -5311,18 +5307,9 @@ int mas_empty_area(struct ma_state *mas, unsigned long min,
+>   	if (unlikely(mas_is_err(mas)))
+>   		return xa_err(mas->node);
+>   
+> -	offset = mas->offset;
+> -	if (unlikely(offset == MAPLE_NODE_SLOTS))
+> +	if (unlikely(mas->offset == MAPLE_NODE_SLOTS))
+>   		return -EBUSY;
+>   
+> -	mt = mte_node_type(mas->node);
+> -	pivots = ma_pivots(mas_mn(mas), mt);
+> -	if (offset)
+> -		mas->min = pivots[offset - 1] + 1;
+> -
+> -	if (offset < mt_pivots[mt])
+> -		mas->max = pivots[offset];
+> -
+>   	if (mas->index < mas->min)
+>   		mas->index = mas->min;
+This will bring new bugs, mas->index should take the maximum
+value with mas->index and mas_safe_min(mas, pivots, offset),
+otherwise there will be overwriting allocation.
 
+Maybe you have forgotten, I have posted a patch[1] with the same
+function last week. I didn't know of a place where mas was used
+after mas_empty_area() before. That patch does not introduce new
+bugs, but the code style has not been updated yet. If using this
+patch will bring more conflicts with my patch set, so what should
+I do? 😁
+
+[1] 
+https://lore.kernel.org/lkml/20230425110511.11680-3-zhangpeng.00@bytedance.com/
+>   
