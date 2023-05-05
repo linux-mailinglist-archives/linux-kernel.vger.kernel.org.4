@@ -2,50 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 399B16F82CF
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 14:22:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 890146F82D3
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 14:23:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232040AbjEEMWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 08:22:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38572 "EHLO
+        id S232076AbjEEMXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 08:23:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231637AbjEEMV7 (ORCPT
+        with ESMTP id S232051AbjEEMXR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 08:21:59 -0400
+        Fri, 5 May 2023 08:23:17 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22EEA18DC5
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 05:21:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B08019D5F;
+        Fri,  5 May 2023 05:23:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 97CC863DC1
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 12:21:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85BDFC433EF;
-        Fri,  5 May 2023 12:21:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C454F61281;
+        Fri,  5 May 2023 12:23:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EDC7C433D2;
+        Fri,  5 May 2023 12:23:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683289317;
-        bh=kVbC8QvtTP91akM/8g+e5cDFlJlaPkveDFGRjOeaEKM=;
+        s=k20201202; t=1683289395;
+        bh=E8fY5gdYncckPUwHd26for2rWI0uOv8SZd7JgmJurXs=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=qUYjMmblucGyhbYQG0FO69Lqlm7ZsgApRx0RohzGK+UBJHCp9HEfAa+qCspEh2X3B
-         Q+SsPwEj+98C0tGiKZp9irP6uO3Ue2VYHUShHvRSvastgfDy94gw0KUvucjRWGHdGj
-         5aQc+ITUIgrsgU6F/4HDG4gL9CUTy0A61ub7hGpszwaDKau6wHmtv/K+UjN34gg593
-         1tZDFmC33ZW34x2OvYc8EAuP6p9kX5RvYha8H4oOnBdz1y7ZN16SXQdE++s/El8UjW
-         +RjVh5lVtMntV3E5eaqgOiO24iPRveYNbF8vJZJn3HrHv/l7iWvgpP8GPnBG2gSIT3
-         j4K9kvuEgXAZQ==
-Message-ID: <c0fbc92e-2ba1-0500-023e-743ac297d587@kernel.org>
-Date:   Fri, 5 May 2023 20:21:53 +0800
+        b=NoAC4Qn4NkOkzDIk5v+aeIrN+FDTsf8yUIxUZHrMCIwmWuolJH455ETVB8JM1wMJI
+         +AkzyY16uddEgjBCpmZCJuxGUvNdRNeRns5W6Rt6X5A2NtDnRVwroukGGcmndMHulm
+         ajLiIwMaegsJGVIHuDOx7Rbw5UEK/kvGLnCXJoS7xDL3M0ejC0bDEOFQcoF3mEZUXs
+         1e+Fo5NzF6nBNivw3Ye3ntB0+sJMF5scPTDotS6btPkyttJO+vJBRbP38X8jodTzvD
+         breP6TeADJ3f7xa9Kbclfs9xRZ6SJSB57i5u6HGmzpo/NhwEsznEXHan3Rx1c5LXV2
+         4Hd1uJmKsqFNg==
+Message-ID: <ecadf25b-972b-4a20-17df-a03fa7c2dd20@kernel.org>
+Date:   Fri, 5 May 2023 07:23:12 -0500
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH] f2fs: fix to call invalidate_mapping_pages in
- f2fs_move_file_range
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 1/2] firmware: stratix10-svc: Add command to get SEU
+ error info
+To:     niravkumar.l.rabara@intel.com
+Cc:     bp@alien8.de, james.morse@arm.com, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mchehab@kernel.org, rric@kernel.org,
+        tony.luck@intel.com
+References: <20230503061000.3279381-1-niravkumar.l.rabara@intel.com>
+ <20230503101821.3342935-1-niravkumar.l.rabara@intel.com>
+ <20230503101821.3342935-2-niravkumar.l.rabara@intel.com>
 Content-Language: en-US
-To:     Yangtao Li <frank.li@vivo.com>, Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-References: <20230504185238.19488-1-frank.li@vivo.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20230504185238.19488-1-frank.li@vivo.com>
+From:   Dinh Nguyen <dinguyen@kernel.org>
+In-Reply-To: <20230503101821.3342935-2-niravkumar.l.rabara@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -58,50 +61,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/5/5 2:52, Yangtao Li wrote:
-> In the following scenario, after executing the move_range ioctl syscall,
-> the block size of the source file is 0, but data can still be read.
+
+
+On 5/3/23 05:18, niravkumar.l.rabara@intel.com wrote:
+> From: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
 > 
->    # stat test
->    File: test
->    Size: 6               Blocks: 8          IO Block: 4096   regular file
->    # ./new_f2fs_io move_range test test_move_range 0 0 0
->    move range ret=0
->    # stat test
->    File: test
->    Size: 6               Blocks: 0          IO Block: 4096   regular file
->    # cat test
->    nihao
+> Introduce a new command to get Single Event Upset Error information.
 > 
-> Let's fix to call invalidate_mapping_pages() after __exchange_data_block()
-> success.
-> 
-> Fixes: 4dd6f977fc77 ("f2fs: support an ioctl to move a range of data blocks")
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> Signed-off-by: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
 > ---
->   fs/f2fs/file.c | 3 +++
->   1 file changed, 3 insertions(+)
+>   include/linux/firmware/intel/stratix10-smc.h | 20 ++++++++++++++++++++
+>   1 file changed, 20 insertions(+)
 > 
-> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-> index 78aa8cff4b41..ae7752c5cd0a 100644
-> --- a/fs/f2fs/file.c
-> +++ b/fs/f2fs/file.c
-> @@ -2870,6 +2870,9 @@ static int f2fs_move_file_range(struct file *file_in, loff_t pos_in,
->   			f2fs_i_size_write(dst, dst_max_i_size);
->   		else if (dst_osize != dst->i_size)
->   			f2fs_i_size_write(dst, dst_osize);
-> +
-> +		invalidate_mapping_pages(src->i_mapping,
-> +				pos_out, pos_in + len);
-
-It needs to consider error cases?
-
-Should we call this to drop page cache of src_inode after __clone_blkaddrs()
-for each round exchange in __exchange_data_block()? and also drop page cache
-of dst_indoe in roll_back case?
-
-Thanks,
-
->   	}
->   	f2fs_unlock_op(sbi);
+> diff --git a/include/linux/firmware/intel/stratix10-smc.h b/include/linux/firmware/intel/stratix10-smc.h
+> index a718f853d457..669e2b12be39 100644
+> --- a/include/linux/firmware/intel/stratix10-smc.h
+> +++ b/include/linux/firmware/intel/stratix10-smc.h
+> @@ -595,4 +595,24 @@ INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_FPGA_CONFIG_COMPLETED_WRITE)
+>   #define INTEL_SIP_SMC_FCS_GET_PROVISION_DATA \
+>   	INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_FCS_GET_PROVISION_DATA)
 >   
+> +/**
+> + * Request INTEL_SIP_SMC_READ_SEU_ERR
+> + * Sync call to get Single Event Upsate Error information
+
+s/Upsate/Upset
+
+> + * SEU detects both corrected and uncorrected error
+> + *
+> + * Call register usage:
+> + * a0 INTEL_SIP_SMC_READ_SEU_ERR
+> + * a1-7 not used
+> + *
+> + * Return status:
+> + * a0 INTEL_SIP_SMC_STATUS_OK, INTEL_SIP_SMC_STATUS_NOT_SUPPORTED or
+> + *    INTEL_SIP_SMC_STATUS_ERROR
+> + * a1 error count of response data
+> + * a2 sector address of response data
+> + * a3 error data
+> + */
+> +#define INTEL_SIP_SMC_FUNCID_SEU_ERR_STATUS 153
+> +#define INTEL_SIP_SMC_READ_SEU_ERR \
+> +		INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_SEU_ERR_STATUS)
+> +
+>   #endif
