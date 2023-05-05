@@ -2,236 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C1BA6F8539
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 17:03:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A04F56F853E
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 17:06:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232381AbjEEPDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 11:03:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44194 "EHLO
+        id S232384AbjEEPGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 11:06:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232317AbjEEPDA (ORCPT
+        with ESMTP id S232060AbjEEPGp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 11:03:00 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AD8917FDA
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 08:02:58 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f199696149so13445705e9.0
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 08:02:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683298977; x=1685890977;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wnwRc6d0+9EWZZzimRgYOvHwHdEA2vECtr+bww8AbFg=;
-        b=FibUsG3XI9Lq7wQ10qHYw/Bvt6sUQW4LEEw3nWXXvzewtyxloN0yZOkBzvfttujGim
-         vFuP0GcJta/xmjbRYfKkiefgfPljvOLCmDY+0Tgsdsp19o9n5gEKo1Gj1zbWYg7Nf2tZ
-         UCrzqRNmkJMrp7xnq9s9QSQ/LnF+qK7X/2Jh6eNcQxEdIEL/sVMzTsHZ57nTC/44lee1
-         p2eCF1D9kOyvOCrc0QSM1K23acPCaZeJAuKMf4omicQI9iSY8qLbrYMEfImx8ioyAKxe
-         W1OfYq9B+1cLYhMFilkzud3FPlXJD9hk2esMl5kBpPXhYS0V/WTtByoTE7bcB+wBw1tJ
-         mcBg==
+        Fri, 5 May 2023 11:06:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29B3617DDF
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 08:05:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683299158;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=O5SZiWc9ZQHxSy9tyLMzwplB98tK2sb6qHqYLmntJ0g=;
+        b=ZKie+cMCq9mwyYJU9QkgRV3xjoGjYdPFmo0Hrmerwudv24KQnTwqwSHbiJFM4Wkwv9Wumc
+        LaEW1pKOz7fJHB5yGgSEsPFLfWN47o+Fepjd9Ys1Dia30EeCSQYy3ZTTDbOAva0flzEICX
+        n3yCQ6/j5nhZM/NzVmYXTaQGbFyYG0k=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-194-Oy4iQqhoOnq9M6-NICvknQ-1; Fri, 05 May 2023 11:05:56 -0400
+X-MC-Unique: Oy4iQqhoOnq9M6-NICvknQ-1
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-751319bd93cso1196247685a.0
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 08:05:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683298977; x=1685890977;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wnwRc6d0+9EWZZzimRgYOvHwHdEA2vECtr+bww8AbFg=;
-        b=fnZLdyqjotsO1+HmFQGMWDf4YcgtG8A+xMvu2Th5LW+klTFbU5bpMUkGk//GghykT4
-         0/AWEpJSLqHxayx7P7eL03HPmXEvRI3ZovlTFswHew3lAvL69iy4vAZ4T3HacAZgcEDG
-         CkZntVandN2mAp8BoJg2qTmEkkmB65aRoMtmp2DiQynIszQ39X6KhraWRl2dMiX9Anm3
-         B3NRkFhrIt9NvlJmX2zdsKWh7hz4RNbXmTepK9N/Pq9Yk/7r4iFktj4ncJvR6X/Ndv+q
-         iet7yK5rFkxob7oP8j7PJYQvNZEBdEXSvmydIbJ3W5h6961XNqoSj618Z2ceZcJ4UdA+
-         evwA==
-X-Gm-Message-State: AC+VfDzQVNwdzX2kiRShSwHL4JRboKzw6sJTnmsI/jNpEPxwltpLhYVd
-        rFoRVimfaOBkxtXUwOxgf51aBA==
-X-Google-Smtp-Source: ACHHUZ4orA7JAVJkHC48E6ikDofmVT5wSbQFY3BgobWZT+r3BuhvDX8LQwhPbFjsUaNlsygGnWg7Fg==
-X-Received: by 2002:a05:600c:2293:b0:3f3:1fa6:d2a8 with SMTP id 19-20020a05600c229300b003f31fa6d2a8mr1436996wmf.25.1683298976745;
-        Fri, 05 May 2023 08:02:56 -0700 (PDT)
-Received: from hackbox.lan ([86.121.163.20])
-        by smtp.gmail.com with ESMTPSA id a6-20020a1cf006000000b003f0aefcc457sm8262189wmb.45.2023.05.05.08.02.55
+        d=1e100.net; s=20221208; t=1683299155; x=1685891155;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=O5SZiWc9ZQHxSy9tyLMzwplB98tK2sb6qHqYLmntJ0g=;
+        b=TMSHClORQgVV+lo+E8tJeIsftdshyDXKL5QSUixrhcp/c+hecqgs75xAwTJsymUCXb
+         5zPnlBRg8RWDo53fi/kHEE/f1e7va3GuMHSxafsemVyOjDnGrSHpy/oaMQA1VR1ZeqsI
+         Umbl+1FVg0XEeUrRSSizznu9JILBEcUb7ZA3GShZz07Hyen5kLqx65I7QCIpJNueivK9
+         4YeYJ+Qbq99eKDqty0XXPgRV6Aj+440BLqIlEmeKfK7p7dBvf+Ee6/TvWTJD/xiSqpKw
+         X7EDIfTmvmB4NZ7LYogPDhWSeq1x0MewXSeRafrExmm+uztBAx+uacHnVQyQSvf53uCW
+         qZwg==
+X-Gm-Message-State: AC+VfDz2HqBAW3k4CHhffDdf3m9mUzu6DQ9XwZYSBMZgEPTtGKSyuxSG
+        YZe0Y7nNVdEIWA9BkvBMe/pvKT3njl0PkjGChLWhhNFvx5HxTgOat39J/i1ri/piZ21iZq+nHXp
+        HVw2l3FxN1++VaftMCK9IlbuL
+X-Received: by 2002:ac8:5b88:0:b0:3ef:54c9:16d9 with SMTP id a8-20020ac85b88000000b003ef54c916d9mr12156244qta.28.1683299155357;
+        Fri, 05 May 2023 08:05:55 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4POEqmXWHci+AjXCVt0sAvUpR0AkLFlvDawEXSUtFvnad8ZIwjDHy5wYB2CNDQnwSUTHjUeA==
+X-Received: by 2002:ac8:5b88:0:b0:3ef:54c9:16d9 with SMTP id a8-20020ac85b88000000b003ef54c916d9mr12156169qta.28.1683299154936;
+        Fri, 05 May 2023 08:05:54 -0700 (PDT)
+Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
+        by smtp.gmail.com with ESMTPSA id g1-20020a37e201000000b0074e2da97de4sm647023qki.33.2023.05.05.08.05.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 May 2023 08:02:56 -0700 (PDT)
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Matthias Kaehlcke <mka@chromium.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Doug Anderson <dianders@chromium.org>
-Subject: [RFC PATCH v4 2/2] PM: domains: Skip disabling unused until sync state
-Date:   Fri,  5 May 2023 18:02:41 +0300
-Message-Id: <20230505150241.3469424-3-abel.vesa@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230505150241.3469424-1-abel.vesa@linaro.org>
-References: <20230505150241.3469424-1-abel.vesa@linaro.org>
+        Fri, 05 May 2023 08:05:54 -0700 (PDT)
+Date:   Fri, 5 May 2023 08:05:53 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     peterhuewe@gmx.de, jarkko@kernel.org, hdegoede@redhat.com,
+        jgg@ziepe.ca, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: tpm_sis IRQ storm on ThinkStation P360 Tiny
+Message-ID: <toe7jsgedknsqj3dgw2fasjlqcpgpiqgloifxow4vnt3tntabw@l6emb5zpbff5>
+References: <20230505130731.GO83892@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230505130731.GO83892@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-By storing the status of the domain at boot, specified by the provider,
-we can decide to skip powering 'off' the domain on the late initcall,
-strictly based on the status boot being 'on' or 'unknown', and then
-assume the provider will disable it from its sync state callback.
-Also, provide a generic genpd sync state callback for those providers
-that only need that when they state synced.
+On Fri, May 05, 2023 at 03:07:31PM +0200, Peter Zijlstra wrote:
+> Hi,
+> 
+> I recently saw my Alderlake NUC spewing on boot:
+> 
+> [   13.166514] irq 109: nobody cared (try booting with the "irqpoll" option)
+> [   13.166614] CPU: 5 PID: 0 Comm: swapper/5 Not tainted 6.3.0+ #66
+> [   13.166694] Hardware name: LENOVO 30FBS0B800/330E, BIOS M4GKT18A 04/26/2022
+> [   13.166779] Call Trace:
+> [   13.166812]  <IRQ>
+> [   13.166840]  dump_stack_lvl+0x5b/0x90
+> [   13.166891]  __report_bad_irq+0x2b/0xc0
+> [   13.166941]  note_interrupt+0x2ac/0x2f0
+> [   13.166991]  handle_irq_event+0x6f/0x80
+> [   13.167041]  handle_fasteoi_irq+0x94/0x1f0
+> [   13.167093]  __common_interrupt+0x72/0x160
+> [   13.167112] intel_rapl_common: Found RAPL domain package
+> [   13.167141]  common_interrupt+0xb8/0xe0
+> [   13.167200] intel_rapl_common: Found RAPL domain core
+> [   13.167242]  </IRQ>
+> [   13.167297] intel_rapl_common: Found RAPL domain uncore
+> [   13.167322]  <TASK>
+> [   13.167437]  asm_common_interrupt+0x26/0x40
+> [   13.167492] RIP: 0010:cpuidle_enter_state+0xff/0x500
+> [   13.167554] Code: c0 48 0f a3 05 72 34 ad 01 0f 82 fc 02 00 00 31 ff e8 35 b3 52 ff 45 84 ff 0f 85 cc 02 00 00 e8 f7 13 64 ff fb 0f 1f 44 00 00 <45> 85 f6 0f 88 eb 01 00 00 49 63 d6 48 8d 04 52 48 8d 04 82 49 8d
+> [   13.167766] RSP: 0018:ffffc900001ebe90 EFLAGS: 00000206
+> [   13.167843] RAX: 000000000012a8f3 RBX: ffffe8ffff480a00 RCX: 0000000000000000
+> [   13.167928] RDX: 0000000000000000 RSI: ffffffff8244c6ee RDI: ffffffff8242ca22
+> [   13.168021] RBP: 0000000000000001 R08: 0000000000000001 R09: 0000000000000001
+> [   13.168105] R10: 0000000000000003 R11: 000000000000000a R12: ffffffff83625a80
+> [   13.168189] R13: 0000000310c8ee5e R14: 0000000000000001 R15: 0000000000000000
+> [   13.168289]  cpuidle_enter+0x2d/0x40
+> [   13.168339]  do_idle+0x231/0x290
+> [   13.168383]  cpu_startup_entry+0x1d/0x20
+> [   13.168432]  start_secondary+0x11b/0x140
+> [   13.168482]  secondary_startup_64_no_verify+0xf9/0xfb
+> [   13.168549]  </TASK>
+> [   13.168587] handlers:
+> [   13.168617] [<00000000497ef927>] irq_default_primary_handler threaded [<00000000cf102de1>] tis_int_handler
+> [   13.168767] Disabling IRQ #109
+> 
+> this is apparently:
+> 
+> root@alderlake:~# cat /proc/interrupts | grep 109
+> 109:          0          0          0          0          0     100002          0          0          0          0          0          0          0          0          0          0          0          0          0          0          00          0          0  IR-IO-APIC  109-fasteoi   tpm0
+> 
+> the TPM thing, which per same dmesg above is:
+> 
+> [   10.948058] tpm_tis MSFT0101:00: 2.0 TPM (device-id 0x1D, rev-id 54)
+> 
+> Booting with tpm_tis.interrupts=0 seems to cure things, and AFAICT the
+> tpm device actually works -- that is, tpm2 getcap -l and tpm2 pcrread
+> both give output, I'm presuming this is 'good'. I've never operated a
+> TPM before.
+> 
+> The machine in question is:
+> 
+> 	Manufacturer: LENOVO
+> 	Product Name: 30FBS0B800
+> 	Version: ThinkStation P360 Tiny
+> 
+> So I'm thinking that perhaps Lenovo carried the bug mentioned in commit:
+> b154ce11ead9 ("tpm_tis: Disable interrupts on ThinkPad T490s") to more
+> products.
 
-Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
----
- drivers/base/power/domain.c | 51 +++++++++++++++++++++++++++++++++++--
- include/linux/pm_domain.h   |  5 ++++
- 2 files changed, 54 insertions(+), 2 deletions(-)
+Hi Peter,
 
-diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index 33a3945c023e..9cc0ce43b47b 100644
---- a/drivers/base/power/domain.c
-+++ b/drivers/base/power/domain.c
-@@ -125,6 +125,7 @@ static const struct genpd_lock_ops genpd_spin_ops = {
- #define genpd_unlock(p)			p->lock_ops->unlock(p)
- 
- #define genpd_status_on(genpd)		(genpd->status == GENPD_STATE_ON)
-+#define genpd_boot_keep_on(genpd)	(!(genpd->boot_status == GENPD_STATE_OFF))
- #define genpd_is_irq_safe(genpd)	(genpd->flags & GENPD_FLAG_IRQ_SAFE)
- #define genpd_is_always_on(genpd)	(genpd->flags & GENPD_FLAG_ALWAYS_ON)
- #define genpd_is_active_wakeup(genpd)	(genpd->flags & GENPD_FLAG_ACTIVE_WAKEUP)
-@@ -654,6 +655,29 @@ static void genpd_queue_power_off_work(struct generic_pm_domain *genpd)
- 	queue_work(pm_wq, &genpd->power_off_work);
- }
- 
-+/**
-+ * pm_genpd_power_off_unused_sync_state - Power off all domains for provider.
-+ * @dev: Provider's device.
-+ *
-+ * Request power off for all unused domains of the provider.
-+ * This should be used exclusively as sync state callback for genpd providers.
-+ */
-+void pm_genpd_power_off_unused_sync_state(struct device *dev)
-+{
-+	struct generic_pm_domain *genpd;
-+
-+	mutex_lock(&gpd_list_lock);
-+
-+	list_for_each_entry(genpd, &gpd_list, gpd_list_node)
-+		if (genpd->provider->dev == dev && genpd_boot_keep_on(genpd)) {
-+			genpd->boot_status = GENPD_STATE_OFF;
-+			genpd_queue_power_off_work(genpd);
-+		}
-+
-+	mutex_unlock(&gpd_list_lock);
-+}
-+EXPORT_SYMBOL_GPL(pm_genpd_power_off_unused_sync_state);
-+
- /**
-  * genpd_power_off - Remove power from a given PM domain.
-  * @genpd: PM domain to power down.
-@@ -674,6 +698,12 @@ static int genpd_power_off(struct generic_pm_domain *genpd, bool one_dev_on,
- 	unsigned int not_suspended = 0;
- 	int ret;
- 
-+	/*
-+	 * If the domain was left enabled at boot stage,
-+	 * abort power off until sync state is reached.
-+	 */
-+	if (genpd_boot_keep_on(genpd))
-+		return -EBUSY;
- 	/*
- 	 * Do not try to power off the domain in the following situations:
- 	 * (1) The domain is already in the "power off" state.
-@@ -763,6 +793,12 @@ static int genpd_power_on(struct generic_pm_domain *genpd, unsigned int depth)
- 	struct gpd_link *link;
- 	int ret = 0;
- 
-+	/*
-+	 * Just in case this is the first power on request, mark the boot
-+	 * status of it as 'off'.
-+	 */
-+	genpd->boot_status = GENPD_STATE_OFF;
-+
- 	if (genpd_status_on(genpd))
- 		return 0;
- 
-@@ -1095,8 +1131,16 @@ static int __init genpd_power_off_unused(void)
- 
- 	mutex_lock(&gpd_list_lock);
- 
-+	/*
-+	 * If the provider has registered a 'sync state' callback,
-+	 * assume that callback will power off its registered unused domains,
-+	 * otherwise we power them off from here.
-+	 */
- 	list_for_each_entry(genpd, &gpd_list, gpd_list_node)
--		genpd_queue_power_off_work(genpd);
-+		if (!dev_has_sync_state(&genpd->dev)) {
-+			genpd->boot_status = GENPD_STATE_OFF;
-+			genpd_queue_power_off_work(genpd);
-+		}
- 
- 	mutex_unlock(&gpd_list_lock);
- 
-@@ -1124,6 +1168,9 @@ static void genpd_sync_power_off(struct generic_pm_domain *genpd, bool use_lock,
- {
- 	struct gpd_link *link;
- 
-+	if (genpd_boot_keep_on(genpd))
-+		return;
-+
- 	if (!genpd_status_on(genpd) || genpd_is_always_on(genpd))
- 		return;
- 
-@@ -2064,7 +2111,7 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
- 	genpd->gov = gov;
- 	INIT_WORK(&genpd->power_off_work, genpd_power_off_work_fn);
- 	atomic_set(&genpd->sd_count, 0);
--	genpd->status = boot_status;
-+	genpd->status = genpd->boot_status = boot_status;
- 	genpd->device_count = 0;
- 	genpd->provider = NULL;
- 	genpd->has_provider = false;
-diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-index c545e44ee52b..86bb531a319c 100644
---- a/include/linux/pm_domain.h
-+++ b/include/linux/pm_domain.h
-@@ -132,6 +132,7 @@ struct generic_pm_domain {
- 	const char *name;
- 	atomic_t sd_count;	/* Number of subdomains with power "on" */
- 	enum gpd_status status;	/* Current state of the domain */
-+	enum gpd_status boot_status;	/* Boot state of the domain */
- 	unsigned int device_count;	/* Number of devices */
- 	unsigned int suspended_count;	/* System suspend device counter */
- 	unsigned int prepared_count;	/* Suspend counter of prepared devices */
-@@ -233,6 +234,7 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
- 		  struct dev_power_governor *gov,
- 		  enum gpd_status boot_status);
- int pm_genpd_remove(struct generic_pm_domain *genpd);
-+void pm_genpd_power_off_unused_sync_state(struct device *dev);
- int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state);
- int dev_pm_genpd_add_notifier(struct device *dev, struct notifier_block *nb);
- int dev_pm_genpd_remove_notifier(struct device *dev);
-@@ -281,6 +283,9 @@ static inline int pm_genpd_remove(struct generic_pm_domain *genpd)
- 	return -EOPNOTSUPP;
- }
- 
-+static inline void pm_genpd_power_off_unused_sync_state(struct device *dev)
-+{ }
-+
- static inline int dev_pm_genpd_set_performance_state(struct device *dev,
- 						     unsigned int state)
- {
--- 
-2.34.1
+It will poll like it has for years with tpm_tis.interrupts=0 so that
+should be working as it was prior to 6.3 when interrupts were re-enabled
+for tpm_tis. Are you seeing this with 6.2 as well? IIRC with that Thinkpad
+case is when it was first realized that interrupts had accidentally been
+disabled for tpm_tis at one point by a change.
+
+I guess myself or someone else needs to revisit catching this in
+general when the irq storm happens, and disabling interrupts for
+tpm_tis. I think last time I was incorporating some feedback from
+tglx, let my adhd get me distracted with some other issue and never
+returned to it.
+
+The diff below should (compile tested) work for the P360, but
+tpm_tis.interrupts=0 is a good work-around.
+
+Regards,
+Jerry
+
+
+diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
+index 7af389806643..12dfdbef574d 100644
+--- a/drivers/char/tpm/tpm_tis.c
++++ b/drivers/char/tpm/tpm_tis.c
+@@ -122,6 +122,14 @@ static const struct dmi_system_id tpm_tis_dmi_table[] = {
+ 			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad T490s"),
+ 		},
+ 	},
++	{
++		.callback = tpm_tis_disable_irq,
++		.ident = "ThinkStation P360 Tiny",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
++			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkStation P360 Tiny"),
++		},
++	},
+ 	{}
+ };
 
