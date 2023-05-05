@@ -2,190 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E148D6F8B10
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 23:30:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 955856F8B15
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 23:31:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233500AbjEEV37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 17:29:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33912 "EHLO
+        id S233520AbjEEVbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 17:31:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233557AbjEEV3w (ORCPT
+        with ESMTP id S233120AbjEEVbk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 17:29:52 -0400
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E7A5DF;
-        Fri,  5 May 2023 14:29:51 -0700 (PDT)
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-18f4a6d2822so20160837fac.1;
-        Fri, 05 May 2023 14:29:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683322191; x=1685914191;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HFeDUyo6AKuXS79TAn9Cc44Tads4aooewVV9T4r6M0g=;
-        b=dZyPWFywv32sonGj/fAdNDXMxS3ceDkBqPG/W0Pn1QkowDFTfjqIAYxwrdT7qTCnPr
-         Qakn+Ecegs2igeWnW+cDw79ATc4oE8y0X7hu7yHsC61qY/rKvZ+wV2KYlxZyQX5+HBbn
-         TcmVG++8ZNJpWc7ax5uuhImvQBsnF1cLlakouWT3cYvivMqCBI3ygl7yH2iZhPsDRlLd
-         0kHm3BA6Xe7eLXdx8mMAe5B0SvVA4h9VwvxF3vrVXpsoTBpN9MGXlNYZJyHj8V3HKd7t
-         sxhvE3FIc8odS8kaM2dJ7HJbk2fc0DxvHlBOdhry/MouBaQk76v4F3v12ACsjLAVE9fQ
-         W6Ng==
-X-Gm-Message-State: AC+VfDyoYDaG+6BRq28RdVCtJVEDwVeSWfJSgxReBnkioPTldAhajKJC
-        vFXxveDooSB+tGPGhfW9zw==
-X-Google-Smtp-Source: ACHHUZ7aycN1QluDBhyWe/IUee4uCc1VOdrIKAR+AJ7bfwvk/TZdgDz4IwmG4Ng6bzcWJOffABFmaA==
-X-Received: by 2002:a05:6871:7a4:b0:192:6fdd:6e36 with SMTP id o36-20020a05687107a400b001926fdd6e36mr3229320oap.17.1683322190696;
-        Fri, 05 May 2023 14:29:50 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id t1-20020a9d7f81000000b006a62aac5736sm1369180otp.28.2023.05.05.14.29.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 May 2023 14:29:49 -0700 (PDT)
-Received: (nullmailer pid 3595549 invoked by uid 1000);
-        Fri, 05 May 2023 21:29:48 -0000
-Date:   Fri, 5 May 2023 16:29:48 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Judith Mendez <jm@ti.com>
-Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Schuyler Patton <spatton@ti.com>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Simon Horman <simon.horman@corigine.com>
-Subject: Re: [PATCH v4 1/4] dt-bindings: net: can: Add poll-interval for MCAN
-Message-ID: <20230505212948.GA3590042-robh@kernel.org>
-References: <20230501224624.13866-1-jm@ti.com>
- <20230501224624.13866-2-jm@ti.com>
+        Fri, 5 May 2023 17:31:40 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2BEFDF
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 14:31:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683322295; x=1714858295;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=LK6c0dLV2ws2e+MXubi7Zjl8QXC2MGI/oyTIKa/4NgQ=;
+  b=XvTcNHLJNTPd/lQxzwEF4hLOgoV9nUh92VGtH37cbOsOtswYwK/tVYkQ
+   9MWwH+kuqU0ZUUrXqLHqtDDI38zvZFEDMe10B1tjEpR6OVzsjIWQBb6oc
+   Tjrn/QrgKbBLG/CQzqTdtXCAds5pyfxKqwh5m7SEQdbXc3AnGYvM15G9S
+   JxezaXPVAtqCErrAbRamolzdBm4GSJrMLlwx2GgAHVr0NVPBFLqaOHa1z
+   qR1y68PHo4XDYD+7tkePg6t8i1dxBBqvoaDNASJFI/ItGiKU3BOn5VRcp
+   ZfBSuE9YpYHIPhdQhLOnqTE36GRYKrS8ei5qGIfFNQBpLDB8JWMA7LZj/
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="351449756"
+X-IronPort-AV: E=Sophos;i="5.99,253,1677571200"; 
+   d="scan'208";a="351449756"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2023 14:31:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="728261658"
+X-IronPort-AV: E=Sophos;i="5.99,253,1677571200"; 
+   d="scan'208";a="728261658"
+Received: from lkp-server01.sh.intel.com (HELO fe5d646e317d) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 05 May 2023 14:31:28 -0700
+Received: from kbuild by fe5d646e317d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pv31T-0000s7-26;
+        Fri, 05 May 2023 21:31:27 +0000
+Date:   Sat, 6 May 2023 05:31:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: arch/arm/boot/compressed/atags_to_fdt.c:129:5: warning: stack frame
+ size (1336) exceeds limit (1280) in 'atags_to_fdt'
+Message-ID: <202305060558.U9RE5y1G-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230501224624.13866-2-jm@ti.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,HEXHASH_WORD,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 01, 2023 at 05:46:21PM -0500, Judith Mendez wrote:
-> On AM62x SoC, MCANs on MCU domain do not have hardware interrupt
-> routed to A53 Linux, instead they will use software interrupt by
-> hrtimer. To enable timer method, interrupts should be optional so
-> remove interrupts property from required section and introduce
-> poll-interval property.
-> 
-> Signed-off-by: Judith Mendez <jm@ti.com>
-> ---
-> Changelog:
-> v3:
->  1. Move binding patch to first in series
->  2. Update description for poll-interval
->  3. Add oneOf to specify using interrupts/interrupt-names or poll-interval
->  4. Fix example property: add comment below 'example'
-> 
-> v2:
->   1. Add poll-interval property to enable timer polling method
->   2. Add example using poll-interval property
->   
->  .../bindings/net/can/bosch,m_can.yaml         | 36 +++++++++++++++++--
->  1 file changed, 34 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-> index 67879aab623b..c024ee49962c 100644
-> --- a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-> +++ b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-> @@ -14,6 +14,13 @@ maintainers:
->  allOf:
->    - $ref: can-controller.yaml#
->  
-> +oneOf:
-> +  - required:
-> +      - interrupts
-> +      - interrupt-names
-> +  - required:
-> +      - poll-interval
+Hi Nick,
 
-Move this next to 'required'.
+First bad commit (maybe != root cause):
 
-> +
->  properties:
->    compatible:
->      const: bosch,m_can
-> @@ -40,6 +47,14 @@ properties:
->        - const: int1
->      minItems: 1
->  
-> +  poll-interval:
-> +    $ref: /schemas/types.yaml#/definitions/flag
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   78b421b6a7c6dbb6a213877c742af52330f5026d
+commit: 3220022038b9a3845eea762af85f1c5694b9f861 ARM: 9256/1: NWFPE: avoid compiler-generated __aeabi_uldivmod
+date:   6 months ago
+config: arm-randconfig-r046-20230504 (https://download.01.org/0day-ci/archive/20230506/202305060558.U9RE5y1G-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3220022038b9a3845eea762af85f1c5694b9f861
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 3220022038b9a3845eea762af85f1c5694b9f861
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-This is a common property already defined as a uint32. You shouldn't 
-define a new type.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305060558.U9RE5y1G-lkp@intel.com/
 
-A flag doesn't even make sense. If that's all you need, then just enable 
-polling if no interrupt is present.
+All warnings (new ones prefixed by >>):
 
-> +    description: Enable hrtimer polling method for an M_CAN device.
-> +      If this property is defined in MCAN node, it tells the driver to
-> +      enable polling method for an MCAN device. If for an MCAN device,
-> +      hardware interrupt is found and hrtimer polling method is enabled,
+   arch/arm/boot/compressed/atags_to_fdt.c:129:5: warning: no previous prototype for function 'atags_to_fdt' [-Wmissing-prototypes]
+   int atags_to_fdt(void *atag_list, void *fdt, int total_space)
+       ^
+   arch/arm/boot/compressed/atags_to_fdt.c:129:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int atags_to_fdt(void *atag_list, void *fdt, int total_space)
+   ^
+   static 
+>> arch/arm/boot/compressed/atags_to_fdt.c:129:5: warning: stack frame size (1336) exceeds limit (1280) in 'atags_to_fdt' [-Wframe-larger-than]
+   int atags_to_fdt(void *atag_list, void *fdt, int total_space)
+       ^
+   44/1336 (3.29%) spills, 1292/1336 (96.71%) variables
+   2 warnings generated.
 
-What's hrtimer? (Don't put Linuxisms in bindings)
 
-> +      the driver will use hardware interrupt method.
-> +
->    clocks:
->      items:
->        - description: peripheral clock
-> @@ -122,8 +137,6 @@ required:
->    - compatible
->    - reg
->    - reg-names
-> -  - interrupts
-> -  - interrupt-names
->    - clocks
->    - clock-names
->    - bosch,mram-cfg
-> @@ -132,6 +145,7 @@ additionalProperties: false
->  
->  examples:
->    - |
-> +    // Example with interrupts
->      #include <dt-bindings/clock/imx6sx-clock.h>
->      can@20e8000 {
->        compatible = "bosch,m_can";
-> @@ -149,4 +163,22 @@ examples:
->        };
->      };
->  
-> +  - |
-> +    // Example with timer polling
-> +    #include <dt-bindings/clock/imx6sx-clock.h>
-> +    can@20e8000 {
-> +      compatible = "bosch,m_can";
-> +      reg = <0x020e8000 0x4000>, <0x02298000 0x4000>;
-> +      reg-names = "m_can", "message_ram";
-> +      poll-interval;
-> +      clocks = <&clks IMX6SX_CLK_CANFD>,
-> +               <&clks IMX6SX_CLK_CANFD>;
-> +      clock-names = "hclk", "cclk";
-> +      bosch,mram-cfg = <0x0 0 0 32 0 0 0 1>;
-> +
-> +      can-transceiver {
-> +        max-bitrate = <5000000>;
-> +      };
-> +    };
-> +
->  ...
-> -- 
-> 2.17.1
-> 
+vim +/atags_to_fdt +129 arch/arm/boot/compressed/atags_to_fdt.c
+
+31d0b9f9982f8e3 Ben Dooks          2018-10-12  120  
+b90b9a38251e9c8 Nicolas Pitre      2011-09-13  121  /*
+b90b9a38251e9c8 Nicolas Pitre      2011-09-13  122   * Convert and fold provided ATAGs into the provided FDT.
+b90b9a38251e9c8 Nicolas Pitre      2011-09-13  123   *
+4716e2e34a22a8c Geert Uytterhoeven 2021-05-19  124   * Return values:
+b90b9a38251e9c8 Nicolas Pitre      2011-09-13  125   *    = 0 -> pretend success
+b90b9a38251e9c8 Nicolas Pitre      2011-09-13  126   *    = 1 -> bad ATAG (may retry with another possible ATAG pointer)
+b90b9a38251e9c8 Nicolas Pitre      2011-09-13  127   *    < 0 -> error from libfdt
+b90b9a38251e9c8 Nicolas Pitre      2011-09-13  128   */
+b90b9a38251e9c8 Nicolas Pitre      2011-09-13 @129  int atags_to_fdt(void *atag_list, void *fdt, int total_space)
+
+:::::: The code at line 129 was first introduced by commit
+:::::: b90b9a38251e9c89c34179eccde57411ceb5f1aa ARM: zImage: allow supplementing appended DTB with traditional ATAG data
+
+:::::: TO: Nicolas Pitre <nicolas.pitre@linaro.org>
+:::::: CC: Nicolas Pitre <nico@fluxnic.net>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
