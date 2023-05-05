@@ -2,112 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01BA66F7AC7
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 04:01:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DC566F7ABB
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 03:42:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229943AbjEECBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 22:01:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56936 "EHLO
+        id S229743AbjEEBmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 21:42:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjEECBU (ORCPT
+        with ESMTP id S229524AbjEEBmG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 22:01:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3825C120A9;
-        Thu,  4 May 2023 19:01:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C05D263ABB;
-        Fri,  5 May 2023 02:01:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A344C433D2;
-        Fri,  5 May 2023 02:01:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683252078;
-        bh=ZS3YDRfyUL+4s0HOmEwczt4nBL9aZThHgS9wOj3+vr4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ffkyqnOKrju+rUXMKoV75RJb5s5sv55V0F42e5sa607EgsmfWuHCz0kl+oAIWye5L
-         vhEgikIJO5LtPoitHQqyZ7wloDkpxS+pmfv3w+p86MiiwqLp1Ix4E4oxsf9rINM9YO
-         ftqafPuSpWHWf2+efacxolKYFbzJbhlpR+RNQBf3tQO+EQmy+tKq9Q8ro8sdnAei6W
-         dnf7FECjGRdGjyfQwRMkIqigAiDbuRJzAEoYEwepH24hAV7KDMOF+InF83NSxdUkKu
-         w7GIng5kd+GtCAe2g/2zM9VJAkI/EFLSb9zNHJzJZnVsc1KuBMk1pqsTrikGHBaUZz
-         5nvGQOIzpikOQ==
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-4eff055d4d3so1353192e87.3;
-        Thu, 04 May 2023 19:01:17 -0700 (PDT)
-X-Gm-Message-State: AC+VfDxXYFdxK39wkv6m71xQuxaE/KyUCvf66Wr2s9gQIlFtOTgBUrXo
-        7qO+yTWEyPWZnzyFxy2gCyGFwblyOBshtNt7R8A=
-X-Google-Smtp-Source: ACHHUZ5+kF7zfmLmcC+Z394neICuwx0R0RBjorv/3Pxl7o4b1qOgseYDPiOXspx6m7cCWCyvlV8h4cwMkUpIK83EQl0=
-X-Received: by 2002:ac2:5963:0:b0:4ea:e799:59f9 with SMTP id
- h3-20020ac25963000000b004eae79959f9mr50823lfp.66.1683252076056; Thu, 04 May
- 2023 19:01:16 -0700 (PDT)
+        Thu, 4 May 2023 21:42:06 -0400
+Received: from smtpbgbr2.qq.com (smtpbgbr2.qq.com [54.207.22.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B923900D;
+        Thu,  4 May 2023 18:42:02 -0700 (PDT)
+X-QQ-mid: bizesmtpipv602t1683250900tk1o
+Received: from localhost ( [255.182.231.6])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 05 May 2023 09:41:38 +0800 (CST)
+X-QQ-SSF: 0140000000000090C000000A0000000
+X-QQ-FEAT: v5d6m16HONU7LAjIfgPa2Q3d/fS5zK/DqxOzftP5hUR3wSELEAOXzE8Cf+j+b
+        y4lzgvU/ihMtIDQ0+Olo7La4n7cwCvPubixZWDee1e/QHyc0BsBXmor2cBwPAd/xVHw7wZn
+        bDSpe/TJ4licbkddoa9k88Vigm9uZ23QX8Uja6M5xzoPzWWujsDuVrjL72xMII27r4cWrf0
+        YNwF861thfiUxvaYtvy/9FMDrSq5jFuuozxj5aghA69dIw9g6BaSMpEM+RFNMPDHwv93REA
+        O7NjpbOOdxZcbI1qjkc5H+DBiwzRPOliXKLJLSuPPJUK9BGPvoolTVWSQkvo/1CxNWoROQn
+        Fs5BlQqtB6oKP8h+4s=
+X-QQ-GoodBg: 2
+X-BIZMAIL-ID: 14027049164739534201
+Date:   Fri, 5 May 2023 17:41:40 +0800
+From:   Wang Honghui <honghui.wang@ucas.com.cn>
+To:     Oliver Neukum <oliver@neukum.org>, Ali Akcaagac <aliakc@web.de>,
+        Jamie Lenehan <lenehan@twibble.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        dc395x@twibble.org, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] scsi:dc395x: Correct "structures" spelling mistakes
+Message-ID: <9721BDA46BD84475+ZFTPVLLFKTMn4lSE@TP-P15V>
 MIME-Version: 1.0
-References: <20230412182316.11628-1-9erthalion6@gmail.com> <20230421205610.xawzzfy36iskcoyx@erthalion.local>
- <ZEx2gsEOWNxXaY/+@kernel.org>
-In-Reply-To: <ZEx2gsEOWNxXaY/+@kernel.org>
-From:   Song Liu <song@kernel.org>
-Date:   Thu, 4 May 2023 19:01:04 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW5e+2rjnbEsXXXuBO2bUvyx0mHquxb6a0a6MGqXdaodUw@mail.gmail.com>
-Message-ID: <CAPhsuW5e+2rjnbEsXXXuBO2bUvyx0mHquxb6a0a6MGqXdaodUw@mail.gmail.com>
-Subject: Re: [RFC PATCH] perf stat: Separate bperf from bpf_profiler
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Namhyung Kim <namhyung@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Dmitry Dolgov <9erthalion6@gmail.com>,
-        linux-perf-users@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        mingo@redhat.com, jolsa@kernel.org, irogers@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtpipv:ucas.com.cn:qybglogicsvrgz:qybglogicsvrgz5a-2
+X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        RCVD_ILLEGAL_IP,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 6:44=E2=80=AFPM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
->
-> Em Fri, Apr 21, 2023 at 10:56:10PM +0200, Dmitry Dolgov escreveu:
-> > > On Wed, Apr 12, 2023 at 08:23:16PM +0200, Dmitrii Dolgov wrote:
-> > > It seems that perf stat -b <prog id> doesn't produce any results:
-> > >
-> > >     $ perf stat -e cycles -b 4 -I 10000 -vvv
-> > >     Control descriptor is not initialized
-> > >     cycles: 0 0 0
-> > >                 time        counts unit      events
-> > >     10.007641640    <not supported>      cycles
-> > >
-> > > Looks like this happens because fentry/fexit progs are getting loaded=
-, but the
-> > > corresponding perf event is not enabled and not added into the events=
- bpf map.
-> > > I think there is some mixing up between two type of bpf support, one =
-for bperf
-> > > and one for bpf_profiler. Both are identified via evsel__is_bpf, base=
-d on which
-> > > perf events are enabled, but for the latter (bpf_profiler) a perf eve=
-nt is
-> > > required. Using evsel__is_bperf to check only bperf produces expected=
- results:
-> >
-> > Any thoughts on this? I would appreciate clarifications if I'm missing
-> > something.
->
-> Namhyung, Song, can you please take a look at this?
+Signed-off-by: Wang Honghui <honghui.wang@ucas.com.cn>
 
-Sorry for the late response. The fix looks good to me and worked well
-in my test.
+As title.
 
-Reviewed-and-tested-by: Song Liu <song@kernel.org>
+---
+ drivers/scsi/dc395x.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-I guess we also need:
+diff --git a/drivers/scsi/dc395x.c b/drivers/scsi/dc395x.c
+index c8e86f8a631e..a3f00e6e3296 100644
+--- a/drivers/scsi/dc395x.c
++++ b/drivers/scsi/dc395x.c
+@@ -3641,7 +3641,7 @@ static void adapter_add_device(struct AdapterCtlBlk *acb,
+  * adapter_remove_device - Removes the device instance from the adaptor
+  * instance. The device instance is not check in any way or freed by this. 
+  * The caller is expected to take care of that. This will simply remove the
+- * device from the adapters data strcutures.
++ * device from the adapters data structures.
+  *
+  * @acb: The adapter device to be updated
+  * @dcb: A device that has previously been added to the adapter.
+@@ -3980,7 +3980,7 @@ static void trms1040_read_all(struct NvRamType *eeprom, unsigned long io_port)
+  * Checks the checksum and if it's not correct it uses a set of default
+  * values.
+  *
+- * @eeprom:	caller allocated strcuture to read the eeprom data into
++ * @eeprom:	caller allocated structure to read the eeprom data into
+  * @io_port:	io port to read from
+  **/
+ static void check_eeprom(struct NvRamType *eeprom, unsigned long io_port)
+@@ -4578,7 +4578,7 @@ static void banner_display(void)
+  * dc395x_init_one - Initialise a single instance of the adapter.
+  *
+  * The PCI layer will call this once for each instance of the adapter
+- * that it finds in the system. The pci_dev strcuture indicates which
++ * that it finds in the system. The pci_dev structure indicates which
+  * instance we are being called from.
+  * 
+  * @dev: The PCI device to initialize.
+-- 
+2.34.1
 
-Fixes: 112cb56164bc2 ("perf stat: Introduce config stat.bpf-counter-events"=
-)
-
-Thanks for the fix!
-Song
