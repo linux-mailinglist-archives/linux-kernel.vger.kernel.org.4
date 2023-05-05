@@ -2,71 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B1466F7C27
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 06:58:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38CDC6F7C2A
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 07:01:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbjEEE6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 00:58:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46520 "EHLO
+        id S230323AbjEEFB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 01:01:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjEEE6e (ORCPT
+        with ESMTP id S229577AbjEEFBX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 00:58:34 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B399011638;
-        Thu,  4 May 2023 21:58:32 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3454wFa2048574;
-        Thu, 4 May 2023 23:58:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1683262695;
-        bh=WklG4pAnry6i1rLG4oYj44YgT06cgpUR3UuOjVY5N/0=;
-        h=Date:From:Subject:To:CC:References:In-Reply-To;
-        b=b6W/tgBlPfUlMEl19Hd9rkbx1Z6PwzTWGk+tIsDmDdPzQ7XD0cfcuiHhElujshZe8
-         WJcRppl31MDgH+cNZfjYDnW5CJIn+cAl2iJJjO/hntwk2quVrnSnAt5E/BORWWhxWr
-         FiGEmaQj+tuZDOTcxpewR+EP/9ayw2deqWUo3nF4=
-Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3454wF28012494
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 4 May 2023 23:58:15 -0500
-Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 4
- May 2023 23:58:15 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 4 May 2023 23:58:15 -0500
-Received: from [172.24.216.248] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3454w9GG070183;
-        Thu, 4 May 2023 23:58:10 -0500
-Message-ID: <a5871d79-573d-df74-36ad-07ae9b3b8807@ti.com>
-Date:   Fri, 5 May 2023 10:28:09 +0530
+        Fri, 5 May 2023 01:01:23 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D54A243;
+        Thu,  4 May 2023 22:01:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683262879; x=1714798879;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=B8mm/AWBe1toWRw94YwRkGlKs98008GSz3tN670ck8Y=;
+  b=LGIarPeDFRLtH+8vwsv1mUnqyZYQueZJxr0QZesAviVIFf2AjC0GrU0d
+   TZXkfvraSKJLv4p/tkNH5qiJ/1gCBTBFLuztidGsKNAnWMcMQlgHOermq
+   n0ZzN62HyfsjKLT56bvJZIJMvRGwbLONej9UnwlzSxTnW2wdIMHd9fQl7
+   HabG7i1f8CS6bVEFZWY+NPCyHZ4p4fUFJFcrWVty665qDUqimsiT2E490
+   fRxMn9NZgtPN7+Ni7hLRWzTq8nc8pO9O/0gu3Apv/BaPJEOSpG9S/QjdK
+   CkGwBQu9On5K7JcHiIWUanuLOP1w+CSpbNpxqup4rx5PoUxIoVilcorTJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="412350902"
+X-IronPort-AV: E=Sophos;i="5.99,250,1677571200"; 
+   d="scan'208";a="412350902"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 22:01:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="700207347"
+X-IronPort-AV: E=Sophos;i="5.99,250,1677571200"; 
+   d="scan'208";a="700207347"
+Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.238.1.46]) ([10.238.1.46])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 22:01:16 -0700
+Message-ID: <272d0366-cdf1-f668-9c20-c8631cd7f5eb@linux.intel.com>
+Date:   Fri, 5 May 2023 13:01:14 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.1
-From:   "Kumar, Udit" <u-kumar1@ti.com>
-Subject: Re: [PATCH 1/1] arm64: dts: ti: k3-j721s2: Add reserved status in
- msmc
-To:     Nishanth Menon <nm@ti.com>
-CC:     <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <afd@ti.com>, <u-boot@lists.denx.de>, <n-francis@ti.com>,
-        <u-kumar1@ti.com>
-References: <20230503144706.1265672-1-u-kumar1@ti.com>
- <20230503144706.1265672-2-u-kumar1@ti.com>
- <20230503145107.e447yxvn5e6fmz4g@patronize>
-Content-Language: en-US
-In-Reply-To: <20230503145107.e447yxvn5e6fmz4g@patronize>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Subject: Re: [PATCH v2 12/21] KVM:x86: Add fault checks for guest CR4.CET
+ setting
+To:     Yang Weijiang <weijiang.yang@intel.com>
+Cc:     rick.p.edgecombe@intel.com,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        seanjc@google.com, pbonzini@redhat.com, peterz@infradead.org,
+        john.allen@amd.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230421134615.62539-1-weijiang.yang@intel.com>
+ <20230421134615.62539-13-weijiang.yang@intel.com>
+From:   Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <20230421134615.62539-13-weijiang.yang@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -74,17 +69,66 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 5/3/2023 8:21 PM, Nishanth Menon wrote:
-> On 20:17-20230503, Udit Kumar wrote:
->> Mark atf, l3-cache and tifs node as reserved.
-> why? (I am not reading the cover-letter for a 1 patch)
+
+On 4/21/2023 9:46 PM, Yang Weijiang wrote:
+> Check potential faults for CR4.CET setting per Intel SDM.
+> CR4.CET is the master control bit for CET features (SHSTK and IBT).
+> In addition to basic support checks, CET can be enabled if and only
+> if CR0.WP==1, i.e. setting CR4.CET=1 faults if CR0.WP==0 and setting
+> CR0.WP=0 fails if CR4.CET==1.
+>
+> Co-developed-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> Signed-off-by: Yang Weijiang <weijiang.yang@intel.com>
+> ---
+>   arch/x86/kvm/x86.c | 6 ++++++
+>   arch/x86/kvm/x86.h | 3 +++
+>   2 files changed, 9 insertions(+)
+>
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index a768cbf3fbb7..7cd7f6755acd 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -995,6 +995,9 @@ int kvm_set_cr0(struct kvm_vcpu *vcpu, unsigned long cr0)
+>   	    (is_64_bit_mode(vcpu) || kvm_is_cr4_bit_set(vcpu, X86_CR4_PCIDE)))
+>   		return 1;
+>   
+> +	if (!(cr0 & X86_CR0_WP) && kvm_read_cr4_bits(vcpu, X86_CR4_CET))
+You can use kvm_is_cr4_bit_set() instead of kvm_read_cr4_bits()
+
+> +		return 1;
+> +
+>   	static_call(kvm_x86_set_cr0)(vcpu, cr0);
+>   
+>   	kvm_post_set_cr0(vcpu, old_cr0, cr0);
+> @@ -1210,6 +1213,9 @@ int kvm_set_cr4(struct kvm_vcpu *vcpu, unsigned long cr4)
+>   			return 1;
+>   	}
+>   
+> +	if ((cr4 & X86_CR4_CET) && !(kvm_read_cr0(vcpu) & X86_CR0_WP))
+You can use kvm_is_cr0_bit_set() to check X86_CR0_WP
+
+> +		return 1;
+> +
+>   	static_call(kvm_x86_set_cr4)(vcpu, cr4);
+>   
+>   	kvm_post_set_cr4(vcpu, old_cr4, cr4);
+> diff --git a/arch/x86/kvm/x86.h b/arch/x86/kvm/x86.h
+> index 2ba7c7fc4846..daadd5330dae 100644
+> --- a/arch/x86/kvm/x86.h
+> +++ b/arch/x86/kvm/x86.h
+> @@ -536,6 +536,9 @@ bool kvm_msr_allowed(struct kvm_vcpu *vcpu, u32 index, u32 type);
+>   		__reserved_bits |= X86_CR4_VMXE;        \
+>   	if (!__cpu_has(__c, X86_FEATURE_PCID))          \
+>   		__reserved_bits |= X86_CR4_PCIDE;       \
+> +	if (!__cpu_has(__c, X86_FEATURE_SHSTK) &&	\
+> +	    !__cpu_has(__c, X86_FEATURE_IBT))		\
+> +		__reserved_bits |= X86_CR4_CET;		\
+IMO, it is a bit wired to split this part from the change of 
+CR4_RESERVED_BITS.
 
 
-My bad , I should have description in patch itself.
+>   	__reserved_bits;                                \
+>   })
+>   
 
-Thanks
-
-
-> [...]
->> 2.34.1
->>
