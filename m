@@ -2,132 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EA046F835E
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 14:58:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 816236F8360
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 14:59:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232075AbjEEM6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 08:58:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58920 "EHLO
+        id S232183AbjEEM7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 08:59:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231641AbjEEM6j (ORCPT
+        with ESMTP id S231641AbjEEM7B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 08:58:39 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07C371E991;
-        Fri,  5 May 2023 05:58:37 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 345CjKO4024500;
-        Fri, 5 May 2023 12:58:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=xpWpbthV44/sis8Gr11hrBiV7oIIZtWzEBHlWZoLyO0=;
- b=I38GAAHRb+QAk/MKkFqsJVV/4CNQjPqpGpfOMgpCOP7LqIyZMnfE6naYKiM4sqCl0GAu
- 4fO9iTdrlyl007ngAcPxyUpUTELM7pe+6utYkuFJZ37UUdaS9/FijBioih2i1bmqudhh
- hgh0RtQAnRSIYyP+b674QN8JYsuWuMBnk2w73TfwN+//2fhQGdoNnRbJm6UJdHY5A39W
- 7IHxim1EPJ/2FMZkBn6S3mAaYRfJIAUTsePHsgGasg+plLZksrbr8M4Raj8dps0Ci9DI
- jgRhlz6BBCCz+3qJsMyMzTY3kB+xPjlg8xK2SIoFsflhQgJ7QKHG/FNYNNDFBxEQcgbt Dg== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qctfq0xrk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 05 May 2023 12:58:06 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 345Cw5Gw015856
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 5 May 2023 12:58:05 GMT
-Received: from [10.216.37.178] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 5 May 2023
- 05:58:00 -0700
-Message-ID: <ef50ac6c-a635-7f83-c484-a4f91b5e5d12@quicinc.com>
-Date:   Fri, 5 May 2023 18:27:57 +0530
+        Fri, 5 May 2023 08:59:01 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 04E8C1D97D;
+        Fri,  5 May 2023 05:58:58 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1143E2F4;
+        Fri,  5 May 2023 05:59:42 -0700 (PDT)
+Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4E01E3F64C;
+        Fri,  5 May 2023 05:58:50 -0700 (PDT)
+Date:   Fri, 5 May 2023 13:58:47 +0100
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     soc@kernel.org, Christian Marangi <ansuelsmth@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Andreas =?UTF-8?B?RsOkcmJlcg==?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Antoine Tenart <atenart@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Lars Persson <lars.persson@axis.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Baruch Siach <baruch@tkos.co.il>,
+        Wei Xu <xuwei5@hisilicon.com>,
+        Jean-Marie Verdun <verdun@hpe.com>,
+        Nick Hawkins <nick.hawkins@hpe.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Peter Rosin <peda@axentia.se>, Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Jonathan =?UTF-8?B?TmV1c2Now6RmZXI=?= <j.neuschaefer@gmx.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Daniel Palmer <daniel@thingy.jp>,
+        Romain Perier <romain.perier@gmail.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Marek Vasut <marex@denx.de>, Qin Jian <qinjian@cqplus1.com>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Paul Barker <paul.barker@sancloud.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Nishanth Menon <nm@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Enric Balletbo i Serra <eballetbo@gmail.com>,
+        Javier Martinez Canillas <javier@dowhile0.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@axis.com
+Subject: Re: [PATCH 4/4] ARM: dts: Move .dts files to vendor sub-directories
+Message-ID: <20230505135847.7e433a18@donnerap.cambridge.arm.com>
+In-Reply-To: <20230504-arm-dts-mv-v1-4-2c8e51a2b6c4@kernel.org>
+References: <20230504-arm-dts-mv-v1-0-2c8e51a2b6c4@kernel.org>
+        <20230504-arm-dts-mv-v1-4-2c8e51a2b6c4@kernel.org>
+Organization: ARM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 06/18] media: venus: firmware: Leave a clue for
- homegrown porters
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dikshita Agarwal <dikshita@qti.qualcomm.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Mansur Alisha Shaik <mansur@codeaurora.org>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Dikshita Agarwal <quic_dikshita@quicinc.com>
-CC:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Marijn Suijten" <marijn.suijten@somainline.org>
-References: <20230228-topic-venus-v2-0-d95d14949c79@linaro.org>
- <20230228-topic-venus-v2-6-d95d14949c79@linaro.org>
-From:   Vikash Garodia <quic_vgarodia@quicinc.com>
-In-Reply-To: <20230228-topic-venus-v2-6-d95d14949c79@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: IL5qofjT3Thm3xI4SLtCuIZka4FwDU8w
-X-Proofpoint-ORIG-GUID: IL5qofjT3Thm3xI4SLtCuIZka4FwDU8w
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-05_20,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
- mlxlogscore=999 adultscore=0 phishscore=0 malwarescore=0 spamscore=0
- impostorscore=0 lowpriorityscore=0 bulkscore=0 priorityscore=1501
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2305050107
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 04 May 2023 22:29:29 -0500
+Rob Herring <robh@kernel.org> wrote:
 
-On 5/4/2023 1:31 PM, Konrad Dybcio wrote:
-> Leave a clue about where the seemingly magic values come from, as it
-> is not obvious and requires some digging downstream..
->
-> Reviewed-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Reviewed-by: Vikash Garodia <quic_vgarodia@quicinc.com>
-> ---
->   drivers/media/platform/qcom/venus/firmware.c | 7 +++++++
->   1 file changed, 7 insertions(+)
->
-> diff --git a/drivers/media/platform/qcom/venus/firmware.c b/drivers/media/platform/qcom/venus/firmware.c
-> index cfb11c551167..a4cd919e1dbe 100644
-> --- a/drivers/media/platform/qcom/venus/firmware.c
-> +++ b/drivers/media/platform/qcom/venus/firmware.c
-> @@ -241,6 +241,13 @@ int venus_boot(struct venus_core *core)
->   		return ret;
->   
->   	if (core->use_tz && res->cp_size) {
-> +		/*
-> +		 * Clues for porting using downstream data:
-> +		 * cp_start = 0
-> +		 * cp_size = venus_ns/virtual-addr-pool[0] (yes, addr not size)
+Hi,
 
-The field is the start address of ns context bank. Since the cp_start is 
-0, the start address for (next) non-secure context bank
+> diff --git a/arch/arm/boot/dts/allwinner/Makefile b/arch/arm/boot/dts/allwinner/Makefile
+> new file mode 100644
+> index 000000000000..a9f068e90c8e
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/allwinner/Makefile
+> @@ -0,0 +1,159 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +dtb-$(CONFIG_MACH_SUN4I) += \
+> +	sun4i-a10-a1000.dtb \
+> +	sun4i-a10-ba10-tvbox.dtb \
+> +	sun4i-a10-chuwi-v7-cw0825.dtb \
+> +	sun4i-a10-cubieboard.dtb \
+> +	sun4i-a10-dserve-dsrv9703c.dtb \
+> +	sun4i-a10-gemei-g9.dtb \
+> +	sun4i-a10-hackberry.dtb \
+> +	sun4i-a10-hyundai-a7hd.dtb \
+> +	sun4i-a10-inet1.dtb \
+> +	sun4i-a10-inet97fv2.dtb \
+> +	sun4i-a10-inet9f-rev03.dtb \
+> +	sun4i-a10-itead-iteaduino-plus.dtb \
+> +	sun4i-a10-jesurun-q5.dtb \
+> +	sun4i-a10-marsboard.dtb \
+> +	sun4i-a10-mini-xplus.dtb \
+> +	sun4i-a10-mk802.dtb \
+> +	sun4i-a10-mk802ii.dtb \
+> +	sun4i-a10-olinuxino-lime.dtb \
+> +	sun4i-a10-pcduino.dtb \
+> +	sun4i-a10-pcduino2.dtb \
+> +	sun4i-a10-pov-protab2-ips9.dtb \
+> +	sun4i-a10-topwise-a721.dtb
+> +dtb-$(CONFIG_MACH_SUN5I) += \
+> +	sun5i-a10s-auxtek-t003.dtb \
+> +	sun5i-a10s-auxtek-t004.dtb \
+> +	sun5i-a10s-mk802.dtb \
+> +	sun5i-a10s-olinuxino-micro.dtb \
+> +	sun5i-a10s-r7-tv-dongle.dtb \
+> +	sun5i-a10s-wobo-i5.dtb \
+> +	sun5i-a13-difrnce-dit4350.dtb \
+> +	sun5i-a13-empire-electronix-d709.dtb \
+> +	sun5i-a13-empire-electronix-m712.dtb \
+> +	sun5i-a13-hsg-h702.dtb \
+> +	sun5i-a13-inet-98v-rev2.dtb \
+> +	sun5i-a13-licheepi-one.dtb \
+> +	sun5i-a13-olinuxino.dtb \
+> +	sun5i-a13-olinuxino-micro.dtb \
+> +	sun5i-a13-pocketbook-touch-lux-3.dtb \
+> +	sun5i-a13-q8-tablet.dtb \
+> +	sun5i-a13-utoo-p66.dtb \
+> +	sun5i-gr8-chip-pro.dtb \
+> +	sun5i-gr8-evb.dtb \
+> +	sun5i-r8-chip.dtb
+> +dtb-$(CONFIG_MACH_SUN6I) += \
+> +	sun6i-a31-app4-evb1.dtb \
+> +	sun6i-a31-colombus.dtb \
+> +	sun6i-a31-hummingbird.dtb \
+> +	sun6i-a31-i7.dtb \
+> +	sun6i-a31-m9.dtb \
+> +	sun6i-a31-mele-a1000g-quad.dtb \
+> +	sun6i-a31s-colorfly-e708-q1.dtb \
+> +	sun6i-a31s-cs908.dtb \
+> +	sun6i-a31s-inet-q972.dtb \
+> +	sun6i-a31s-primo81.dtb \
+> +	sun6i-a31s-sina31s.dtb \
+> +	sun6i-a31s-sinovoip-bpi-m2.dtb \
+> +	sun6i-a31s-yones-toptech-bs1078-v2.dtb
+> +dtb-$(CONFIG_MACH_SUN7I) += \
+> +	sun7i-a20-bananapi.dtb \
+> +	sun7i-a20-bananapi-m1-plus.dtb \
+> +	sun7i-a20-bananapro.dtb \
+> +	sun7i-a20-cubieboard2.dtb \
+> +	sun7i-a20-cubietruck.dtb \
+> +	sun7i-a20-haoyu-marsboard.dtb \
+> +	sun7i-a20-hummingbird.dtb \
+> +	sun7i-a20-itead-ibox.dtb \
+> +	sun7i-a20-i12-tvbox.dtb \
+> +	sun7i-a20-icnova-swac.dtb \
+> +	sun7i-a20-lamobo-r1.dtb \
+> +	sun7i-a20-linutronix-testbox-v2.dtb \
+> +	sun7i-a20-m3.dtb \
+> +	sun7i-a20-mk808c.dtb \
+> +	sun7i-a20-olimex-som-evb.dtb \
+> +	sun7i-a20-olimex-som-evb-emmc.dtb \
+> +	sun7i-a20-olimex-som204-evb.dtb \
+> +	sun7i-a20-olimex-som204-evb-emmc.dtb \
+> +	sun7i-a20-olinuxino-lime.dtb \
+> +	sun7i-a20-olinuxino-lime-emmc.dtb \
+> +	sun7i-a20-olinuxino-lime2.dtb \
+> +	sun7i-a20-olinuxino-lime2-emmc.dtb \
+> +	sun7i-a20-olinuxino-micro.dtb \
+> +	sun7i-a20-olinuxino-micro-emmc.dtb \
+> +	sun7i-a20-orangepi.dtb \
+> +	sun7i-a20-orangepi-mini.dtb \
+> +	sun7i-a20-pcduino3.dtb \
+> +	sun7i-a20-pcduino3-nano.dtb \
+> +	sun7i-a20-wexler-tab7200.dtb \
+> +	sun7i-a20-wits-pro-a20-dkt.dtb
+> +dtb-$(CONFIG_MACH_SUN8I) += \
+> +	sun8i-a23-evb.dtb \
+> +	sun8i-a23-gt90h-v4.dtb \
+> +	sun8i-a23-inet86dz.dtb \
+> +	sun8i-a23-ippo-q8h-v5.dtb \
+> +	sun8i-a23-ippo-q8h-v1.2.dtb \
+> +	sun8i-a23-polaroid-mid2407pxe03.dtb \
+> +	sun8i-a23-polaroid-mid2809pxe04.dtb \
+> +	sun8i-a23-q8-tablet.dtb \
+> +	sun8i-a33-et-q8-v1.6.dtb \
+> +	sun8i-a33-ga10h-v1.1.dtb \
+> +	sun8i-a33-inet-d978-rev2.dtb \
+> +	sun8i-a33-ippo-q8h-v1.2.dtb \
+> +	sun8i-a33-olinuxino.dtb \
+> +	sun8i-a33-q8-tablet.dtb \
+> +	sun8i-a33-sinlinx-sina33.dtb \
+> +	sun8i-a83t-allwinner-h8homlet-v2.dtb \
+> +	sun8i-a83t-bananapi-m3.dtb \
+> +	sun8i-a83t-cubietruck-plus.dtb \
+> +	sun8i-a83t-tbs-a711.dtb \
+> +	sun8i-h2-plus-bananapi-m2-zero.dtb \
+> +	sun8i-h2-plus-libretech-all-h3-cc.dtb \
+> +	sun8i-h2-plus-orangepi-r1.dtb \
+> +	sun8i-h2-plus-orangepi-zero.dtb \
+> +	sun8i-h3-bananapi-m2-plus.dtb \
+> +	sun8i-h3-bananapi-m2-plus-v1.2.dtb \
+> +	sun8i-h3-beelink-x2.dtb \
+> +	sun8i-h3-libretech-all-h3-cc.dtb \
+> +	sun8i-h3-mapleboard-mp130.dtb \
+> +	sun8i-h3-nanopi-duo2.dtb \
+> +	sun8i-h3-nanopi-m1.dtb\
+> +	\
 
-is interpreted as size of the (previous) content protection region.
+Some minor mishap here, but doesn't affect the functionality. Could be
+even fixed with a follow up patch, to avoid touching this patch again.
 
-> +		 * cp_nonpixel_start = venus_sec_non_pixel/virtual-addr-pool[0]
-> +		 * cp_nonpixel_size = venus_sec_non_pixel/virtual-addr-pool[1]
-> +		 */
->   		ret = qcom_scm_mem_protect_video_var(res->cp_start,
->   						     res->cp_size,
->   						     res->cp_nonpixel_start,
->
+I compared all sunxi .dtb files before and after: they were identical.
+
+Reviewed-by: Andre Przywara <andre.przywara@arm.com>
+
+Cheers,
+Andre
+
+> +	sun8i-h3-nanopi-m1-plus.dtb \
+> +	sun8i-h3-nanopi-neo.dtb \
+> +	sun8i-h3-nanopi-neo-air.dtb \
+
