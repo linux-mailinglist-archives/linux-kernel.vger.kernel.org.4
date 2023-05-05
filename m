@@ -2,89 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57F6D6F8B80
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 23:43:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20D756F8B85
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 23:45:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233305AbjEEVn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 17:43:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40146 "EHLO
+        id S230127AbjEEVpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 17:45:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233727AbjEEVnA (ORCPT
+        with ESMTP id S229775AbjEEVph (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 17:43:00 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D84006A65
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 14:41:56 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-32f240747cdso123944925ab.1
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 14:41:56 -0700 (PDT)
+        Fri, 5 May 2023 17:45:37 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 285CF2120;
+        Fri,  5 May 2023 14:45:06 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-187df75c901so995036fac.1;
+        Fri, 05 May 2023 14:45:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683322902; x=1685914902;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Qhkuab/Yb854QrRDRD6MhUeh2YG1j8veXc4tGA64gvs=;
-        b=boL3/UC8MYqqLNJLM9j2SAsTFTytOPYOsGzgGhg9GnT32s0UEfRrmSAFT4e/zjrENR
-         iMVoQaEf9jkyQoeTu7l1U9h5w+vCqgoL5ySkSR9Rm4PYL2AJPnsdgMWRn61Wuz0E7Miv
-         JwSetWQ4SBv8j4u34tnAT4ygA2mIWB+71A3KkxxG6GEgyWO8Yop9guJzKjfdbVnzdRz0
-         15akteDi7GPqFrkBOgAc6ANLPHoinr6oHG7K3YKy58IchWmJS+XK+LuN0EWXyWndKjvP
-         Oq3h83KEofPhRLoUjhhbD6wN+ThvXlYs80SL3saRHccxx5G1hD/qViy05zZM4WtNZcS6
-         Q1Ow==
-X-Gm-Message-State: AC+VfDxonfEbMU04l2OBwNAOYa8NVcShegWI5WrxbeUXrrKSc/s3M1Jk
-        Vls/0n6DqWX3TvekOjZiqvdkPS1/MhmQ7nyzMV5j5b4/OFeC
-X-Google-Smtp-Source: ACHHUZ5jO+4bpMI6jxcS6by/FP5khDJowVPbIJ0IskZ+QufRuQi4ys92ZAynoaLwrGMeEXwHfzbK0MZ9U+HmugsXeYY2/Fou2MDk
+        d=1e100.net; s=20221208; t=1683322991; x=1685914991;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=d67AXOmWylM0/SckTFt/S26gCo7UanrJn2W3elREHSg=;
+        b=KGOhduR0G4vrj2UQUlurjilWxTxXRWSfMESL3oT0doWXrO2Mr4yfBiLXiytMnkYefF
+         HtOGf/FauaYzm/7aa57VxoXzJHmfK1dMkTNSt7hpQ1eNpm+cmrdpwW5g0KrHN2zRRN94
+         J0p2gzDRk2Vp053QfMCEurFh/hG6SUdkdbyY7jexaG9f4wiFUTRfL3y8b7cJMmKFNgiP
+         9DF/Xxuy8RMiQtY02bHL7CdnOLy/lJoazCs85AolMBOD8NkZEcr2AYoyfh4icxqLznjq
+         UR6JZ+CbG/9XGDRK84BlFsODe38Gh2bBNqEDDUbrnyK949PU6GJ2TPfC4SqhynDLdaVO
+         d5yA==
+X-Gm-Message-State: AC+VfDycRqrn32K9YbkblmpczXx1yL3GxMqTrD3mldKS1nrm0+rkt7ks
+        67V5zOpmy1SmfKVbIi3QFwZvWBQbtw==
+X-Google-Smtp-Source: ACHHUZ5uobplnVA6/byhUFmIwgQB1k0JkXUKu5NuHq3CLXccWshup491ufmc/AocnoMQfW8Cfk3Xzw==
+X-Received: by 2002:a05:6870:d501:b0:184:5f08:a130 with SMTP id b1-20020a056870d50100b001845f08a130mr1196854oan.33.1683322991085;
+        Fri, 05 May 2023 14:43:11 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t5-20020a056870e74500b001762d1bf6a9sm2303787oak.45.2023.05.05.14.43.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 May 2023 14:43:10 -0700 (PDT)
+Received: (nullmailer pid 3612999 invoked by uid 1000);
+        Fri, 05 May 2023 21:43:09 -0000
+Date:   Fri, 5 May 2023 16:43:09 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jianhua Lu <lujianhua000@gmail.com>,
+        Del Regno <angelogioacchino.delregno@somainline.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] dt-bindings: display: novatek,nt36523: define
+ ports
+Message-ID: <20230505214309.GA3609047-robh@kernel.org>
+References: <20230502120036.47165-1-krzysztof.kozlowski@linaro.org>
+ <20230502120036.47165-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-X-Received: by 2002:a02:8505:0:b0:40f:9ab9:c43e with SMTP id
- g5-20020a028505000000b0040f9ab9c43emr1527015jai.3.1683322902002; Fri, 05 May
- 2023 14:41:42 -0700 (PDT)
-Date:   Fri, 05 May 2023 14:41:41 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000009dc8bd05faf927cb@google.com>
-Subject: [syzbot] Monthly kernfs report (May 2023)
-From:   syzbot <syzbot+list7a9bc4f901342664924c@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tj@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230502120036.47165-2-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello kernfs maintainers/developers,
+On Tue, May 02, 2023 at 02:00:36PM +0200, Krzysztof Kozlowski wrote:
+> The panel-common schema does not define what "ports" property is, so
+> bring the definition to enforce the type.  All panels described by
+> binding are dual-link, thus require both ports.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> Changes since v1:
+> 1. Rework to add ports to device schema, not to panel-common.
+> https://lore.kernel.org/all/20230420160905.GA2952736-robh@kernel.org/
+> ---
+>  .../bindings/display/panel/novatek,nt36523.yaml           | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/display/panel/novatek,nt36523.yaml b/Documentation/devicetree/bindings/display/panel/novatek,nt36523.yaml
+> index 0039561ef04c..a2a8c4e39573 100644
+> --- a/Documentation/devicetree/bindings/display/panel/novatek,nt36523.yaml
+> +++ b/Documentation/devicetree/bindings/display/panel/novatek,nt36523.yaml
+> @@ -32,8 +32,14 @@ properties:
+>    vddio-supply:
+>      description: regulator that supplies the I/O voltage
+>  
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +
+> +    required:
+> +      - port@0
+> +      - port@1
 
-This is a 31-day syzbot report for the kernfs subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/kernfs
+What is each port?
+ 
+You need:
 
-During the period, 1 new issues were detected and 0 were fixed.
-In total, 8 issues are still open and 21 have been fixed so far.
+additionalProperties: false
+properties:
+  port@0:
+    $ref: ...
+    description: ...
 
-Some of the still happening issues:
+  port@1:
+    $ref: ...
+    description: ...
 
-Ref Crashes Repro Title
-<1> 95      Yes   WARNING in kernfs_remove_by_name_ns (3)
-                  https://syzkaller.appspot.com/bug?extid=93cbdd0ab421adc5275d
-<2> 49      Yes   inconsistent lock state in find_vmap_area
-                  https://syzkaller.appspot.com/bug?extid=8d19062486784d15dda9
-<3> 30      Yes   KASAN: use-after-free Read in kernfs_add_one
-                  https://syzkaller.appspot.com/bug?extid=ef17b5b364116518fd65
-<4> 1       No    KASAN: slab-use-after-free Read in kernfs_xattr_get
-                  https://syzkaller.appspot.com/bug?extid=1b11da2ef24dccc2e98d
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
-
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
-
-You may send multiple commands in a single email message.
