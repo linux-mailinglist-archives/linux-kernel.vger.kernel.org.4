@@ -2,90 +2,295 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A7A96F8674
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 18:11:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0016F6F8676
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 18:12:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232535AbjEEQLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 12:11:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51064 "EHLO
+        id S232541AbjEEQMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 12:12:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231686AbjEEQLU (ORCPT
+        with ESMTP id S231236AbjEEQMR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 12:11:20 -0400
-Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73927160BE;
-        Fri,  5 May 2023 09:11:19 -0700 (PDT)
-Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-54caba50d07so1073255eaf.2;
-        Fri, 05 May 2023 09:11:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683303079; x=1685895079;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uOP1ldLXZHSldN2PvQKUh9ntWyFI1kkSGvcKxpIZQ8s=;
-        b=CffjlvRwfFNUPBhOgFz5oxMbP/CASfLOOyj58Yc36V3TPj6wXy+wIfEwJmaVWegJFH
-         d01axNggfYYFizGIFBHjGStqYswveUGfXDR/m3Eyg9GIBcq1DOORpJV86WuV+elet/hl
-         Ca8Z7C0uMiZpe4H5GfXPvB8DMnqWlOf8x9D/Phd2T78+pKvkPfprL/knk/b8uPWr/h5t
-         pRLX8axvV0eHaExJkfo7oqy7pNGYeGR2qEiyAfkryT3ZgcTDl7I+HyDsSMmZxpCP1YYz
-         Ws/NDJ/rOdqfD0AtioZK0wRmiLr9PU+oIh8eixgfLfwflJucv0znT9INqX/3uiuxm6o4
-         vIYw==
-X-Gm-Message-State: AC+VfDxPVMIsRbMwaq9OnQ/5zK6891aG+7Nz1TDXPDf73hQl7Dl8wonB
-        Sc2jiWf5FzhCzh9heyYyCA==
-X-Google-Smtp-Source: ACHHUZ6KWcM3hUpYy0GevbMU4xd3AZmGQATxHUMkchhHMwp2RDlU99jmQCTEm+nCMk03jw3iZ2T2Jg==
-X-Received: by 2002:a05:6808:2992:b0:38e:eaf:cf1f with SMTP id ex18-20020a056808299200b0038e0eafcf1fmr810395oib.44.1683303078619;
-        Fri, 05 May 2023 09:11:18 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id s203-20020acadbd4000000b00389898f4c4fsm2955719oig.45.2023.05.05.09.11.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 May 2023 09:11:17 -0700 (PDT)
-Received: (nullmailer pid 3066392 invoked by uid 1000);
-        Fri, 05 May 2023 16:11:17 -0000
-Date:   Fri, 5 May 2023 11:11:17 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     srinivas.kandagatla@linaro.org, krzysztof.kozlowski+dt@linaro.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH] dt-bindings: nvmem: add nvmem-cell-cells property
-Message-ID: <20230505161117.GA3062682-robh@kernel.org>
-References: <20230505091906.1820081-1-peng.fan@oss.nxp.com>
+        Fri, 5 May 2023 12:12:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 096DF11D96;
+        Fri,  5 May 2023 09:12:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B49063F0D;
+        Fri,  5 May 2023 16:12:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 073E9C433EF;
+        Fri,  5 May 2023 16:12:13 +0000 (UTC)
+Date:   Fri, 5 May 2023 12:12:12 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc:     linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Florent Revest <revest@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org
+Subject: Re: [PATCH v9.1 02/11] tracing/probes: Add fprobe events for
+ tracing function entry and exit.
+Message-ID: <20230505121212.7569c9b9@gandalf.local.home>
+In-Reply-To: <168299385687.3242086.18384268741128867952.stgit@mhiramat.roam.corp.google.com>
+References: <168299383880.3242086.7182498102007986127.stgit@mhiramat.roam.corp.google.com>
+        <168299385687.3242086.18384268741128867952.stgit@mhiramat.roam.corp.google.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230505091906.1820081-1-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 05, 2023 at 05:19:06PM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> The driver has been using this property, so add it.
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  Documentation/devicetree/bindings/nvmem/nvmem.yaml | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/nvmem/nvmem.yaml b/Documentation/devicetree/bindings/nvmem/nvmem.yaml
-> index 75bb93dda9df..3fc3982da102 100644
-> --- a/Documentation/devicetree/bindings/nvmem/nvmem.yaml
-> +++ b/Documentation/devicetree/bindings/nvmem/nvmem.yaml
-> @@ -67,6 +67,9 @@ patternProperties:
->              description:
->                Size in bit within the address range specified by reg.
->  
-> +      "#nvmem-cell-cells":
-> +         const: 1
+On Tue,  2 May 2023 11:17:36 +0900
+"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
 
-I don't think we can globally set this to 1. You should have a specific 
-nvmem layout that uses and defines it.
+> diff --git a/kernel/trace/trace_fprobe.c b/kernel/trace/trace_fprobe.c
+> new file mode 100644
+> index 000000000000..0049d9ef2402
+> --- /dev/null
+> +++ b/kernel/trace/trace_fprobe.c
+> @@ -0,0 +1,1053 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Fprobe-based tracing events
+> + * Copyright (C) 2022 Google LLC.
+> + */
+> +#define pr_fmt(fmt)	"trace_fprobe: " fmt
+> +
+> +#include <linux/fprobe.h>
+> +#include <linux/module.h>
+> +#include <linux/rculist.h>
+> +#include <linux/security.h>
+> +#include <linux/uaccess.h>
+> +
+> +#include "trace_dynevent.h"
+> +#include "trace_probe.h"
+> +#include "trace_probe_kernel.h"
+> +#include "trace_probe_tmpl.h"
+> +
+> +#define FPROBE_EVENT_SYSTEM "fprobes"
+> +#define RETHOOK_MAXACTIVE_MAX 4096
+> +
+> +static int trace_fprobe_create(const char *raw_command);
+> +static int trace_fprobe_show(struct seq_file *m, struct dyn_event *ev);
+> +static int trace_fprobe_release(struct dyn_event *ev);
+> +static bool trace_fprobe_is_busy(struct dyn_event *ev);
+> +static bool trace_fprobe_match(const char *system, const char *event,
+> +			int argc, const char **argv, struct dyn_event *ev);
+> +
+> +static struct dyn_event_operations trace_fprobe_ops = {
+> +	.create = trace_fprobe_create,
+> +	.show = trace_fprobe_show,
+> +	.is_busy = trace_fprobe_is_busy,
+> +	.free = trace_fprobe_release,
+> +	.match = trace_fprobe_match,
+> +};
+> +
+> +/*
+> + * Fprobe event core functions
+> + */
+> +struct trace_fprobe {
+> +	struct dyn_event	devent;
+> +	struct fprobe		fp;
+> +	const char		*symbol;
+> +	struct trace_probe	tp;
+> +};
+> +
+> +static bool is_trace_fprobe(struct dyn_event *ev)
+> +{
+> +	return ev->ops == &trace_fprobe_ops;
+> +}
+> +
+> +static struct trace_fprobe *to_trace_fprobe(struct dyn_event *ev)
+> +{
+> +	return container_of(ev, struct trace_fprobe, devent);
+> +}
+> +
+> +/**
+> + * for_each_trace_fprobe - iterate over the trace_fprobe list
+> + * @pos:	the struct trace_fprobe * for each entry
+> + * @dpos:	the struct dyn_event * to use as a loop cursor
+> + */
+> +#define for_each_trace_fprobe(pos, dpos)	\
+> +	for_each_dyn_event(dpos)		\
+> +		if (is_trace_fprobe(dpos) && (pos = to_trace_fprobe(dpos)))
+> +
+> +static bool trace_fprobe_is_return(struct trace_fprobe *tf)
+> +{
+> +	return tf->fp.exit_handler != NULL;
+> +}
+> +
+> +static const char *trace_fprobe_symbol(struct trace_fprobe *tf)
+> +{
+> +	return tf->symbol ? tf->symbol : "unknown";
+> +}
+> +
+> +static bool trace_fprobe_is_busy(struct dyn_event *ev)
+> +{
+> +	struct trace_fprobe *tf = to_trace_fprobe(ev);
+> +
+> +	return trace_probe_is_enabled(&tf->tp);
+> +}
+> +
+> +static bool trace_fprobe_match_command_head(struct trace_fprobe *tf,
+> +					    int argc, const char **argv)
+> +{
+> +	char buf[MAX_ARGSTR_LEN + 1];
+> +
+> +	if (!argc)
+> +		return true;
+> +
+> +	snprintf(buf, sizeof(buf), "%s", trace_fprobe_symbol(tf));
+> +	if (strcmp(buf, argv[0]))
+> +		return false;
+> +	argc--; argv++;
+> +
+> +	return trace_probe_match_command_args(&tf->tp, argc, argv);
+> +}
+> +
+> +static bool trace_fprobe_match(const char *system, const char *event,
+> +			int argc, const char **argv, struct dyn_event *ev)
+> +{
+> +	struct trace_fprobe *tf = to_trace_fprobe(ev);
+> +
+> +	return (event[0] == '\0' ||
+> +		strcmp(trace_probe_name(&tf->tp), event) == 0) &&
+> +	    (!system || strcmp(trace_probe_group_name(&tf->tp), system) == 0) &&
+> +	    trace_fprobe_match_command_head(tf, argc, argv);
 
-Rob
+The above is really hard to read, and Linus hates these kinds of
+statements. Please break it up (the compiler should do the right thing).
+
+Reversing the tests to return false:
+
+	if (event[0] != '\0' &&
+	    strcmp(trace_probe_name(&tf->tp), event) != 0))
+		return false;
+
+	if (system && strcmp(trace_probe_group_name(&tf->tp), system) != 0))
+		return false;
+
+	return trace_fprobe_match_command_head(tf, argc, argv);
+
+
+> +}
+> +
+> +static bool trace_fprobe_is_registered(struct trace_fprobe *tf)
+> +{
+> +	return fprobe_is_registered(&tf->fp);
+> +}
+> +
+> +/* Note that we don't verify it, since the code does not come from user space */
+
+Verify what?
+
+Hmm, I see this is a copy of the comment from both trace_kprobe.c and
+trace_uprobe.c. I think this requires a bit more explanation (and also in
+those locations as well).
+
+> +static int
+> +process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
+> +		   void *base)
+> +{
+> +	struct pt_regs *regs = rec;
+> +	unsigned long val;
+> +
+> +retry:
+> +	/* 1st stage: get value from context */
+> +	switch (code->op) {
+> +	case FETCH_OP_REG:
+> +		val = regs_get_register(regs, code->param);
+> +		break;
+> +	case FETCH_OP_STACK:
+> +		val = regs_get_kernel_stack_nth(regs, code->param);
+> +		break;
+> +	case FETCH_OP_STACKP:
+> +		val = kernel_stack_pointer(regs);
+> +		break;
+> +	case FETCH_OP_RETVAL:
+> +		val = regs_return_value(regs);
+> +		break;
+
+
+> +	case FETCH_OP_IMM:
+> +		val = code->immediate;
+> +		break;
+> +	case FETCH_OP_COMM:
+> +		val = (unsigned long)current->comm;
+> +		break;
+> +	case FETCH_OP_DATA:
+> +		val = (unsigned long)code->data;
+> +		break;
+
+These are new and not part of trace_kprobe.c. Should we have a version that
+the two could share?
+
+Probably a helper function that can be called by these two.
+
+> +#ifdef CONFIG_HAVE_FUNCTION_ARG_ACCESS_API
+> +	case FETCH_OP_ARG:
+> +		val = regs_get_kernel_argument(regs, code->param);
+> +		break;
+> +#endif
+> +	case FETCH_NOP_SYMBOL:	/* Ignore a place holder */
+> +		code++;
+> +		goto retry;
+> +	default:
+> +		return -EILSEQ;
+> +	}
+> +	code++;
+> +
+> +	return process_fetch_insn_bottom(code, val, dest, base);
+> +}
+> +NOKPROBE_SYMBOL(process_fetch_insn)
+> +
+> +/* function entry handler */
+> +static nokprobe_inline void
+> +__fentry_trace_func(struct trace_fprobe *tf, unsigned long entry_ip,
+> +		    struct pt_regs *regs,
+> +		    struct trace_event_file *trace_file)
+> +{
+> +	struct fentry_trace_entry_head *entry;
+> +	struct trace_event_call *call = trace_probe_event_call(&tf->tp);
+> +	struct trace_event_buffer fbuffer;
+> +	int dsize;
+> +
+> +	WARN_ON(call != trace_file->event_call);
+
+ WARN_ON_ONCE()?
+
+And if you are doing the check, perhaps even:
+
+	if (WARN_ON_ONCE(call != trace_file->event_call))
+		return;
+
+-- Steve
+
+> +
+> +	if (trace_trigger_soft_disabled(trace_file))
+> +		return;
+> +
+> +	dsize = __get_data_size(&tf->tp, regs);
+> +
+> +	entry = trace_event_buffer_reserve(&fbuffer, trace_file,
+> +					   sizeof(*entry) + tf->tp.size + dsize);
+> +	if (!entry)
+> +		return;
+> +
+> +	fbuffer.regs = regs;
+> +	entry = fbuffer.entry = ring_buffer_event_data(fbuffer.event);
+> +	entry->ip = entry_ip;
+> +	store_trace_args(&entry[1], &tf->tp, regs, sizeof(*entry), dsize);
+> +
+> +	trace_event_buffer_commit(&fbuffer);
+> +}
+> +
