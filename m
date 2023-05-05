@@ -2,114 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12AF86F7E1A
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 09:44:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 909776F7E22
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 09:47:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231376AbjEEHoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 03:44:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36002 "EHLO
+        id S231388AbjEEHrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 03:47:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbjEEHoY (ORCPT
+        with ESMTP id S229807AbjEEHro (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 03:44:24 -0400
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D83815693
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 00:44:23 -0700 (PDT)
-Received: by mail-il1-x12d.google.com with SMTP id e9e14a558f8ab-3318961b385so17167775ab.1
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 00:44:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683272663; x=1685864663;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lPZVtfp6t3Y0W83bt9VDuQwkydTNBKwgjyEPJPSY9oo=;
-        b=3CTGLUNi41774qWN2MdvThPefR+2JWAFFB3SDr72C708dur/f93EMMFzAxRNyK5Ekv
-         LIh/Lcfrzmg8Y0JkqH/TP00YbU0LHeEL1FIXunqiWpa/BHRx1Ii+By20gB8tRnqqmxWJ
-         7rA2p5REb5sQET6rksFE2VvtWG6saxcb04bES43ic9H+OvnU+FnYTxvEMRhnrsEpzEN4
-         +d4ZYueujsNWDQ3FLG9XEtBnnqnhAVfJfQ+Y7acMxW4pEE/2cQiZQhAHohyKuuVvc9Zp
-         rMEJng5UAwkEoqOjj0mEMPToPiltEc53F3QJiz88LavqXUJqI0b3h2RCjbQN982JfBij
-         F5jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683272663; x=1685864663;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lPZVtfp6t3Y0W83bt9VDuQwkydTNBKwgjyEPJPSY9oo=;
-        b=KHX6/J+FGml1ZPLcjS92BzSEKJq/Q1ouZ/6m9F4h0hywG8ORkHWZp8DouWamZtqC11
-         Goe+5JMjd0bV6B6zMKDJmz9N6Akhf0u2HIGOcXwN8TxyAx9gTKrq+iBokkHyTYjv4E+s
-         6hc/SWVq+GP28ust2VfdMhkmhSYxSlNCAYdAUMhjPVRVeHsbqQeMI5i5dj27A7SdQBxg
-         lc1QtDV94lmJcYYgZtK1IE3HTBm6NgAko0oWDvxGR6Xc0O9x4EVp3SlzRLzO8RtBQz7r
-         yekXHCJhPqGzFh/5GzVqRs42hlQQF3FEx5T+v6ot1eV5fFNIJt5JTz/uV4eIe+nMflJj
-         PmZA==
-X-Gm-Message-State: AC+VfDzFznwuyG2uA3v+lRsqRVewa4587EqGJV6zzNFkqjSLl9PBTykC
-        LkQwu4xrkXXxIL+L9lMtz8at7VuCeEZWym0IYrvMXA==
-X-Google-Smtp-Source: ACHHUZ4epH5CJTOlram+1GD8qTmDW8HjKYhj0AillBoub3xAs1nJF7QedWwGl/arLZNXCFh6UVEOeuHiI5Hr+RGxzi0=
-X-Received: by 2002:a5e:9244:0:b0:760:af65:4787 with SMTP id
- z4-20020a5e9244000000b00760af654787mr500379iop.6.1683272662794; Fri, 05 May
- 2023 00:44:22 -0700 (PDT)
+        Fri, 5 May 2023 03:47:44 -0400
+Received: from smtp.gentoo.org (mail.gentoo.org [IPv6:2001:470:ea4a:1:5054:ff:fec7:86e4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8B1156BE;
+        Fri,  5 May 2023 00:47:43 -0700 (PDT)
+References: <20230504213002.56803-1-michael.mccracken@gmail.com>
+ <fbf37518-328d-c08c-7140-5d09d7a2674f@redhat.com>
+User-agent: mu4e 1.10.3; emacs 29.0.90
+From:   Sam James <sam@gentoo.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Michael McCracken <michael.mccracken@gmail.com>,
+        linux-kernel@vger.kernel.org, serge@hallyn.com, tycho@tycho.pizza,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        kernel-hardening@lists.openwall.com
+Subject: Re: [PATCH] sysctl: add config to make randomize_va_space RO
+Date:   Fri, 05 May 2023 08:46:41 +0100
+In-reply-to: <fbf37518-328d-c08c-7140-5d09d7a2674f@redhat.com>
+Message-ID: <87pm7f9q3q.fsf@gentoo.org>
 MIME-Version: 1.0
-References: <20230505035127.195387-1-mpe@ellerman.id.au>
-In-Reply-To: <20230505035127.195387-1-mpe@ellerman.id.au>
-From:   Marco Elver <elver@google.com>
-Date:   Fri, 5 May 2023 09:43:46 +0200
-Message-ID: <CANpmjNOmtTU=__W7=pKVibVZ3OnfgSsXeSsqHA7y=e3D-G026Q@mail.gmail.com>
-Subject: Re: [PATCH] mm: kfence: Fix false positives on big endian
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     glider@google.com, akpm@linux-foundation.org,
-        zhangpeng.00@bytedance.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha512; protocol="application/pgp-signature"
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 5 May 2023 at 05:51, Michael Ellerman <mpe@ellerman.id.au> wrote:
->
-> Since commit 1ba3cbf3ec3b ("mm: kfence: improve the performance of
-> __kfence_alloc() and __kfence_free()"), kfence reports failures in
-> random places at boot on big endian machines.
->
-> The problem is that the new KFENCE_CANARY_PATTERN_U64 encodes the
-> address of each byte in its value, so it needs to be byte swapped on big
-> endian machines.
->
-> The compiler is smart enough to do the le64_to_cpu() at compile time, so
-> there is no runtime overhead.
->
-> Fixes: 1ba3cbf3ec3b ("mm: kfence: improve the performance of __kfence_alloc() and __kfence_free()")
-> Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+--=-=-=
+Content-Type: text/plain
 
-Reviewed-by: Marco Elver <elver@google.com>
 
-Andrew, is the Fixes enough to make it to stable as well or do we also
-need Cc: stable?
+David Hildenbrand <david@redhat.com> writes:
 
-Thanks,
--- Marco
+> On 04.05.23 23:30, Michael McCracken wrote:
+>> Add config RO_RANDMAP_SYSCTL to set the mode of the randomize_va_space
+>> sysctl to 0444 to disallow all runtime changes. This will prevent
+>> accidental changing of this value by a root service.
+>> The config is disabled by default to avoid surprises.
+>
+> Can you elaborate why we care about "accidental changing of this value
+> by a root service"?
+>
+> We cannot really stop root from doing a lot of stupid things (e.g.,
+> erase the root fs), so why do we particularly care here?
 
-> ---
->  mm/kfence/kfence.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/mm/kfence/kfence.h b/mm/kfence/kfence.h
-> index 2aafc46a4aaf..392fb273e7bd 100644
-> --- a/mm/kfence/kfence.h
-> +++ b/mm/kfence/kfence.h
-> @@ -29,7 +29,7 @@
->   * canary of every 8 bytes is the same. 64-bit memory can be filled and checked
->   * at a time instead of byte by byte to improve performance.
->   */
-> -#define KFENCE_CANARY_PATTERN_U64 ((u64)0xaaaaaaaaaaaaaaaa ^ (u64)(0x0706050403020100))
-> +#define KFENCE_CANARY_PATTERN_U64 ((u64)0xaaaaaaaaaaaaaaaa ^ (u64)(le64_to_cpu(0x0706050403020100)))
->
->  /* Maximum stack depth for reports. */
->  #define KFENCE_STACK_DEPTH 64
-> --
-> 2.40.1
->
+(I'm really not defending the utility of this, fwiw).
+
+In the past, I've seen fuzzing tools and other debuggers try to set
+it, and it might be that an admin doesn't realise that. But they could
+easily set other dangerous settings unsuitable for production, so...
+
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iOUEARYKAI0WIQQlpruI3Zt2TGtVQcJzhAn1IN+RkAUCZFS0mV8UgAAAAAAuAChp
+c3N1ZXItZnByQG5vdGF0aW9ucy5vcGVucGdwLmZpZnRoaG9yc2VtYW4ubmV0MjVB
+NkJCODhERDlCNzY0QzZCNTU0MUMyNzM4NDA5RjUyMERGOTE5MA8cc2FtQGdlbnRv
+by5vcmcACgkQc4QJ9SDfkZAf4wEAz3Kkey3pguBXyIJfqK+FI8qjiLI6X7SH6YJt
+YEPU6oUBAMssaGW+4GhiA6nNxReLZcz2PFxEEi9/os6YSrEBD9UP
+=65gP
+-----END PGP SIGNATURE-----
+--=-=-=--
