@@ -2,107 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDC706F8C77
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 00:39:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 751456F8C82
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 00:47:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233505AbjEEWjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 18:39:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49570 "EHLO
+        id S232989AbjEEWrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 18:47:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233501AbjEEWjX (ORCPT
+        with ESMTP id S229545AbjEEWrX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 18:39:23 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 125835FE4;
-        Fri,  5 May 2023 15:39:22 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-965c3f9af2aso317952766b.0;
-        Fri, 05 May 2023 15:39:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683326360; x=1685918360;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Jt099z2QMJcxc7Q+biY7Y79PMQomakQC7INI8LnvLJ8=;
-        b=NYiYTCRU3YD6QhKlE6q0yojg8/gSj0qhx6mrN5Ad4oFYRFoVYTk/Lbk+lMysGbXMm7
-         NO0NqEKLrM33ZHgprpUVLjWD0MoEe9UWkyuB/wNRdHluXgcWBmX4iUZSqWaDP/E5vXZq
-         sXOK5a+L9J1FXZoMLkuiQC2IyUbkIffNQvvK8pUbY4bDsyi9HKefbpUHBFECVZ6XO5Z5
-         z4u6iNyzbns+diH9/0+8tORNBAA+SEjvDc+WoomRy/VwSh8HfSy896QPcdPSvKL755fy
-         x6MqE8YM2bCIVqJbxyZuyOCRVf8gGFWJViqMYD4nvlkZzTwPhH7CJezMUIUtEVe2NqS0
-         tNDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683326360; x=1685918360;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Jt099z2QMJcxc7Q+biY7Y79PMQomakQC7INI8LnvLJ8=;
-        b=E6pKG0AHn8/rvv0NabVzMcDOLMBgZJaLLov3ze+c7SkCXVtsOvCP9borKvJFQP/qo5
-         efHzPlKJ+XlY8qsw3PmSyGzbYkPDFQuMoKya9jkoyaOUtcW8e4fxOyQGMtoedmgpIUGA
-         RAlnWTzhz3qkfwu5pug3meeTgjPUkLpCVx7lXGFSpZg40RKGpppjXa/z08DtZxk4R6AV
-         9zqGhs6hAPJteTrSg0Byfzwqtp87qJpqAtFcpjLSJWEdtjY8SL6vt6UcWh2aiJsfkS71
-         /EKZI99XRN45zEFS1iD5N8VwW81YWFfB1AGUzLgBt0yWjDJG/fQIgvxOGItvfA0ULQRV
-         w1YQ==
-X-Gm-Message-State: AC+VfDzouivhIU8b7KZ2cIUY6H8RxCXJ3dJ2b37bw5VaThxa15Fvi2iD
-        4OKChAbovUnaQeOuKKMuHKU=
-X-Google-Smtp-Source: ACHHUZ6E32pgWuQFXc0VVJd+m1ZUe7uD3fHBny+wFxkhGjxN3a64ihm7hkYU2AtQlCC1JEzh3zLpSQ==
-X-Received: by 2002:a17:907:2d12:b0:965:cf39:ed87 with SMTP id gs18-20020a1709072d1200b00965cf39ed87mr2910650ejc.6.1683326360134;
-        Fri, 05 May 2023 15:39:20 -0700 (PDT)
-Received: from felia.fritz.box ([2a02:810d:7e40:14b0:cc49:1b8b:99c2:aef7])
-        by smtp.gmail.com with ESMTPSA id hf27-20020a1709072c5b00b00965ddf2e221sm1411650ejc.93.2023.05.05.15.39.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 May 2023 15:39:19 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] s390: remove the unneeded select GCC12_NO_ARRAY_BOUNDS
-Date:   Sat,  6 May 2023 00:39:09 +0200
-Message-Id: <20230505223909.29150-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 5 May 2023 18:47:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79FF74EC0;
+        Fri,  5 May 2023 15:47:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F19136412D;
+        Fri,  5 May 2023 22:47:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE4B0C433D2;
+        Fri,  5 May 2023 22:47:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683326841;
+        bh=D0qbriAJbRPAwi0B8rnE/70zyZxx/MoRWZ/NxcKY3o4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DYLwKlKdOz6DTtddRRpzE/g5GUU5YeP9nw5j3gbN5Oz8o/mRC/Tq3TL4r8inm1/5v
+         zCQxxwI42ekZKTzyB4UpzNeEHV8K12BxmOw3f/930wcqHv3deUCbnP/y6LoW3L0xzX
+         tw4sbrAehxrxSzE3UA9ERBQjlnAQMcJcQ0ueaneOY4ffcP/7P8CORy9MiNBmPtCKiT
+         QVlfg70i8qpYpGRLOP1VuVwqBo4hFm+BKzhtU/KyHNOcWRSUUR8Z5lmZs2GavGCrBR
+         NCH4Ig18O2PysnslWZU0MjaS8vFR6Rlwh85P1WfQXTluAmwcLcbicIbNC4DMbbVoui
+         YQltmUUIC6f6A==
+Date:   Fri, 5 May 2023 22:47:19 +0000
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     John Garry <john.g.garry@oracle.com>, axboe@kernel.dk,
+        kbusch@kernel.org, hch@lst.de, sagi@grimberg.me,
+        martin.petersen@oracle.com, djwong@kernel.org,
+        viro@zeniv.linux.org.uk, brauner@kernel.org, dchinner@redhat.com,
+        jejb@linux.ibm.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-scsi@vger.kernel.org, linux-xfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com,
+        Himanshu Madhani <himanshu.madhani@oracle.com>
+Subject: Re: [PATCH RFC 01/16] block: Add atomic write operations to
+ request_queue limits
+Message-ID: <ZFWHdxgWie/C02OA@gmail.com>
+References: <20230503183821.1473305-1-john.g.garry@oracle.com>
+ <20230503183821.1473305-2-john.g.garry@oracle.com>
+ <20230503213925.GD3223426@dread.disaster.area>
+ <fc91aa12-1707-9825-a77e-9d5a41d97808@oracle.com>
+ <20230504222623.GI3223426@dread.disaster.area>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230504222623.GI3223426@dread.disaster.area>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 0da6e5fd6c37 ("gcc: disable '-Warray-bounds' for gcc-13 too") makes
-config GCC11_NO_ARRAY_BOUNDS to be for disabling -Warray-bounds in any gcc
-version 11 and upwards, and with that, removes the GCC12_NO_ARRAY_BOUNDS
-config as it is now covered by the semantics of GCC11_NO_ARRAY_BOUNDS.
+On Fri, May 05, 2023 at 08:26:23AM +1000, Dave Chinner wrote:
+> > ok, we can do that but would also then make statx field 64b. I'm fine with
+> > that if it is wise to do so - I don't don't want to wastefully use up an
+> > extra 2 x 32b in struct statx.
+> 
+> Why do we need specific varibles for DIO atomic write alignment
+> limits? We already have direct IO alignment and size constraints in statx(),
+> so why wouldn't we just reuse those variables when the user requests
+> atomic limits for DIO?
+> 
+> i.e. if STATX_DIOALIGN is set, we return normal DIO alignment
+> constraints. If STATX_DIOALIGN_ATOMIC is set, we return the atomic
+> DIO alignment requirements in those variables.....
+> 
+> Yes, we probably need the dio max size to be added to statx for
+> this. Historically speaking, I wanted statx to support this in the
+> first place because that's what we were already giving userspace
+> with XFS_IOC_DIOINFO and we already knew that atomic IO when it came
+> along would require a bound maximum IO size much smaller than normal
+> DIO limits.  i.e.:
+> 
+> struct dioattr {
+>         __u32           d_mem;          /* data buffer memory alignment */
+>         __u32           d_miniosz;      /* min xfer size                */
+>         __u32           d_maxiosz;      /* max xfer size                */
+> };
+> 
+> where d_miniosz defined the alignment and size constraints for DIOs.
+> 
+> If we simply document that STATX_DIOALIGN_ATOMIC returns minimum
+> (unit) atomic IO size and alignment in statx->dio_offset_align (as
+> per STATX_DIOALIGN) and the maximum atomic IO size in
+> statx->dio_max_iosize, then we don't burn up anywhere near as much
+> space in the statx structure....
 
-As GCC11_NO_ARRAY_BOUNDS is yes by default, there is no need for the s390
-architecture to explicitly select GCC11_NO_ARRAY_BOUNDS. Hence, the select
-GCC12_NO_ARRAY_BOUNDS in arch/s390/Kconfig can simply be dropped.
+I don't think that's how statx() is meant to work.  The request mask is a bitmask, and the user can
+request an arbitrary combination of different items.  For example, the user could request both
+STATX_DIOALIGN and STATX_WRITE_ATOMIC at the same time.  That doesn't work if different items share
+the same fields.
 
-Remove the unneeded "select GCC12_NO_ARRAY_BOUNDS".
-
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
-Linus, as this is just a quick clean-up improvement to your commit
-"gcc: disable '-Warray-bounds' for gcc-13 too", this can probably just
-go directly to your tree.
-
- arch/s390/Kconfig | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
-index beb62f744c61..db20c1589a98 100644
---- a/arch/s390/Kconfig
-+++ b/arch/s390/Kconfig
-@@ -133,7 +133,6 @@ config S390
- 	select DYNAMIC_FTRACE if FUNCTION_TRACER
- 	select FUNCTION_ALIGNMENT_8B if CC_IS_GCC
- 	select FUNCTION_ALIGNMENT_16B if !CC_IS_GCC
--	select GCC12_NO_ARRAY_BOUNDS
- 	select GENERIC_ALLOCATOR
- 	select GENERIC_CPU_AUTOPROBE
- 	select GENERIC_CPU_VULNERABILITIES
--- 
-2.17.1
-
+- Eric
