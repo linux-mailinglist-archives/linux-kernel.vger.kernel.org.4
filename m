@@ -2,140 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 388F96F8CDA
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 01:42:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1F896F8CDD
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 01:43:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232647AbjEEXmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 19:42:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43636 "EHLO
+        id S232764AbjEEXnf convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 5 May 2023 19:43:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229879AbjEEXmJ (ORCPT
+        with ESMTP id S229831AbjEEXnd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 19:42:09 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F06935FE5
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 16:42:07 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-6434e263962so1871888b3a.2
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 16:42:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1683330127; x=1685922127;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZCtnoETSxcB113Zij2dc92/a6FXT6zg5FXhG1u0c1nk=;
-        b=QusrV2Wwp2bfcRiTRr6hzIF/JXaTe4s/VrPmwKwo0KjCO5zokwC9p/TVY23qdqD/l1
-         Dli2uc+0UwP0iuI3XJJiRqCCR1FgBhbsbCfs3DBsxBDA+bBTXb8II9k8UOkYruYMdXhy
-         gwAAOON1JGC03tKiYjRGDxrPMDO2D458c4fsVC5Dvmbt5so6xvclSNo3u4T0qTypnasy
-         eyJy1DNm0nF83oEQuDkzVIzBajW2FDDdAiEilNv9J3lj3iA93K7uz8wuxLyAqRBsSQeD
-         7aahCv7qFLZjDKFH0N+HzdR7mcuioyTEBOlzKFarm+J+e4+MCHsEUXooUNe0p7ye3H6n
-         fFog==
+        Fri, 5 May 2023 19:43:33 -0400
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54E235FD9;
+        Fri,  5 May 2023 16:43:32 -0700 (PDT)
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-55a8e9e2c53so22879967b3.1;
+        Fri, 05 May 2023 16:43:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683330127; x=1685922127;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZCtnoETSxcB113Zij2dc92/a6FXT6zg5FXhG1u0c1nk=;
-        b=RGEjegQXk1j2wVHmVLYFLPcMjcvgtcjeajjAZLK9xrI4SY2zrKPmFW0OfoXDBRH9iA
-         aFa3qQl0duadR6ve6ow6zCauU4Uc+ineWq4VFXNhhDcmlGdledCDR054Eo99mI8ulAs9
-         VyNg2fikP8ZzKewQQHxUX/31R/aYZgq7v/Zy7KP5W1L7XXbiAqEuoxrU3JGDvYoKtHB2
-         CVh7i2b7qhgxij9F/Lhg7CXvB+sfyXg0fnED5ygPoXzHR7tKtRfXklJ8SADPy2kWokLi
-         AFTYdKyg+llSjK5tKIgdKr8iZgC1e1pBBVcV8OFjLbb4eJ9Kkr7AIBW+0i8DAXYiQ0Kq
-         dMeA==
-X-Gm-Message-State: AC+VfDzBn/m7kL6mdJFaN53Tmn7/fadXfGQhKU/HQXN2s7VgrDh/pavx
-        lsQIssnw6g5uCFksP3CpPKwxWg==
-X-Google-Smtp-Source: ACHHUZ6ZXwTvDt9dgqu5VnMU2vt75ZEwPCsWikBzLJH1LKI2sJCZP8HWyuvB09pM2j5L3woioye+0w==
-X-Received: by 2002:a05:6a20:1590:b0:f6:592a:7e28 with SMTP id h16-20020a056a20159000b000f6592a7e28mr3982333pzj.14.1683330127470;
-        Fri, 05 May 2023 16:42:07 -0700 (PDT)
-Received: from dread.disaster.area (pa49-181-88-204.pa.nsw.optusnet.com.au. [49.181.88.204])
-        by smtp.gmail.com with ESMTPSA id x2-20020a056a00270200b006338e0a9728sm2097064pfv.109.2023.05.05.16.42.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 May 2023 16:42:06 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1pv53r-00BpPv-Ud; Sat, 06 May 2023 09:42:03 +1000
-Date:   Sat, 6 May 2023 09:42:03 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     John Garry <john.g.garry@oracle.com>, axboe@kernel.dk,
-        kbusch@kernel.org, hch@lst.de, sagi@grimberg.me,
-        martin.petersen@oracle.com, viro@zeniv.linux.org.uk,
-        brauner@kernel.org, dchinner@redhat.com, jejb@linux.ibm.com,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com,
-        Allison Henderson <allison.henderson@oracle.com>,
-        Catherine Hoang <catherine.hoang@oracle.com>
-Subject: Re: [PATCH RFC 12/16] xfs: Add support for fallocate2
-Message-ID: <20230505234203.GO3223426@dread.disaster.area>
-References: <20230503183821.1473305-1-john.g.garry@oracle.com>
- <20230503183821.1473305-13-john.g.garry@oracle.com>
- <20230503232616.GG3223426@dread.disaster.area>
- <20230505222333.GM15394@frogsfrogsfrogs>
+        d=1e100.net; s=20221208; t=1683330211; x=1685922211;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2x1tn4ecL7a7PZyU0NHPKD9PY3vOquBlEMbobtDzvuM=;
+        b=A93/FvJv1FYbG/nolYa/F7ktpbKhtwrzy43ROIM2WvMNzNaYAbTSGlGuo+IMhn+fmu
+         exlEo5f6cuWHuMuz6gXO5w90LPDUmdxnEofjFVlAIxYqOZrScKNlqbv3cO688X0UYbL3
+         SNbfcjxaIXq8CdThoe6qEoxHOch/WIebJt+7jeHfLveE5Vo6oJkXr6VUbsbgC1XT9tAa
+         Zwjj/0tmQ3oMjw0yQ7w7HTIe7xf5/q+aRv+eaXbMxVlVQi6a2O6+xSdQliVR9k4QxQvk
+         je7cgkzPi9FwnWQhiWH174rZ+CPCvmoOc/zKc+Yg2/keMEDsV5MBbeIMSjr3Rv0LZSMo
+         wLrQ==
+X-Gm-Message-State: AC+VfDwodK3gldGpq2IMIGn7Hqkd2A+NlTIvpDhtxSscY3qXcMqamKWl
+        3us4X3V5slbPVfcjrJSdpfJ7VmBnD+SoU1yMjPg=
+X-Google-Smtp-Source: ACHHUZ5rFc3wS54CsVRG1DPr2zu+nHGMWF8vD1d6hDpwm5zY0I+iBCvVecXDwuNv8KgEQmhzSLgOdWQGiSxuncnDSmA=
+X-Received: by 2002:a25:abe5:0:b0:ba1:b539:a39a with SMTP id
+ v92-20020a25abe5000000b00ba1b539a39amr3430513ybi.6.1683330211398; Fri, 05 May
+ 2023 16:43:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230505222333.GM15394@frogsfrogsfrogs>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <83d6c6c05c54bf00c5a9df32ac160718efca0c7a.1683280603.git.sandipan.das@amd.com>
+In-Reply-To: <83d6c6c05c54bf00c5a9df32ac160718efca0c7a.1683280603.git.sandipan.das@amd.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Fri, 5 May 2023 16:43:20 -0700
+Message-ID: <CAM9d7cgZLiRmUDnxW3NpN67Jvgj670FPBkwqncXmDEamYM6n3A@mail.gmail.com>
+Subject: Re: [PATCH 1/2] perf script: Skip aggregation for stat events
+To:     Sandipan Das <sandipan.das@amd.com>
+Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com,
+        terrelln@fb.com, ravi.bangoria@amd.com, ananth.narayan@amd.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 05, 2023 at 03:23:33PM -0700, Darrick J. Wong wrote:
-> On Thu, May 04, 2023 at 09:26:16AM +1000, Dave Chinner wrote:
-> > On Wed, May 03, 2023 at 06:38:17PM +0000, John Garry wrote:
-> > If we want fallocate() operations to apply filesystem atomic write
-> > constraints to operations, then add a new modifier flag to
-> > fallocate(), say FALLOC_FL_ATOMIC. The filesystem can then
-> > look up it's atomic write alignment constraints and apply them to
-> > the operation being performed appropriately.
-> > 
-> > > The alignment flag is not sticky, so further extent mutation will not
-> > > obey this original alignment request.
-> > 
-> > IOWs, you want the specific allocation to behave exactly as if an
-> > extent size hint of the given alignment had been set on that inode.
-> > Which could be done with:
-> > 
-> > 	ioctl(FS_IOC_FSGETXATTR, &fsx)
-> > 	old_extsize = fsx.fsx_extsize;
-> > 	fsx.fsx_extsize = atomic_align_size;
-> > 	ioctl(FS_IOC_FSSETXATTR, &fsx)
-> 
-> Eww, multiple threads doing fallocates can clobber each other here.
+Hello,
 
-Sure, this was just an example of how the same behaviour could be be
-acheived without the new ioctl. Locking and other trivialities were
-left as an exercise for the reader.
+On Fri, May 5, 2023 at 3:03 AM Sandipan Das <sandipan.das@amd.com> wrote:
+>
+> The script command does not support aggregation modes by itself although
+> that can be achieved using post-processing scripts. Because of this, it
+> does not allocate memory for aggregated event values.
+>
+> Upon running perf stat record, the aggregation mode is set in the perf
+> data file. If the mode is AGGR_GLOBAL, the aggregated event values are
+> accessed and this leads to a segmentation fault since these were never
+> allocated to begin with. Set the mode to AGGR_NONE explicitly to avoid
+> this.
+>
+> E.g.
+>
+>   $ perf stat record -e cycles true
+>   $ perf script
+>
+> Before:
+>   Segmentation fault (core dumped)
+>
+> After:
+>   CPU   THREAD             VAL             ENA             RUN            TIME EVENT
+>    -1   231919          162831          362069          362069          935289 cycles:u
+>
+> Fixes: 8b76a3188b85 ("perf stat: Remove unused perf_counts.aggr field")
+> Signed-off-by: Sandipan Das <sandipan.das@amd.com>
+> Cc: stable@vger.kernel.org # v6.2+
 
-> 
-> > 	fallocate(....)
-> > 	fsx.fsx_extsize = old_extsize;
-> > 	ioctl(FS_IOC_FSSETXATTR, &fsx)
-> 
-> Also, you can't set extsize if the data fork has any mappings in it,
-> so you can't set the old value.  But perhaps it's not so bad to expect
-> that programs will set this up once and not change the underlying
-> storage?
-> 
-> I'm not actually sure why you can't change the extent size hint.  Why is
-> that?
+Acked-by: Namhyung Kim <namhyung@kernel.org>
 
-Hysterical raisins, I think.
+Thanks,
+Namhyung
 
-IIUC, it was largely to do with the fact that pre-existing
-allocation could not be realigned, so once allocation has been done
-the extent size hint can't guarantee extent size hint aligned/sized
-extents are actually allocated for the file.
 
-Cheers,
-
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+> ---
+>  tools/perf/builtin-script.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
+> index 006f522d0e7f..c57be48d65bb 100644
+> --- a/tools/perf/builtin-script.c
+> +++ b/tools/perf/builtin-script.c
+> @@ -3647,6 +3647,13 @@ static int process_stat_config_event(struct perf_session *session __maybe_unused
+>                                      union perf_event *event)
+>  {
+>         perf_event__read_stat_config(&stat_config, &event->stat_config);
+> +
+> +       /*
+> +        * Aggregation modes are not used since post-processing scripts are
+> +        * supposed to take care of such requirements
+> +        */
+> +       stat_config.aggr_mode = AGGR_NONE;
+> +
+>         return 0;
+>  }
+>
+> --
+> 2.34.1
+>
