@@ -2,86 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AD006F8316
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 14:38:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 061B76F831B
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 14:38:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232186AbjEEMiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 08:38:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48986 "EHLO
+        id S232196AbjEEMiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 08:38:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231788AbjEEMiP (ORCPT
+        with ESMTP id S229717AbjEEMit (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 08:38:15 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC9F11B4D
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 05:38:13 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4efe8991bafso2011768e87.0
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 05:38:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683290292; x=1685882292;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yplmN4cjcMjpz7yzL0GhEZF8x3n7FeMV/awLTpA1Cds=;
-        b=n+PCrxjHUW0iFTpnRlAN+eLhhGWqBvzuhiThIKBoygAfxiDUU+LH53XkQvLLeoTfS6
-         bqfQFUQP0SoeF1DHMmjXuUC6NQBJuT1auu3P5Y8z5nRm3YB6tB/s99I1e4zlHaHsgILv
-         IgjKdwFBmJKQ9Kpwv3f7IAGiwVh6ykYmZutvqca/tZPhwsVX7jEbCtgEPoX11bfnfgSf
-         HHjl3+0JLKKsXnhWZ0NCUN+zCwdnJ+PfkAHy7UhGZpvtuP355tmBx+wP2nw/5h0xCh7/
-         C/9/TiZvwWfpQFeAs4ZlV4rKrn2sgiSd+bldhNBWVxRPF/KtWRAiS3tCaqbG2uWmALcl
-         airw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683290292; x=1685882292;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yplmN4cjcMjpz7yzL0GhEZF8x3n7FeMV/awLTpA1Cds=;
-        b=Twd0u1FBcaCRFsURBCYVds8i4CD3io2o3ONkWbrkhHE+XOYxrE/DRMu7xBhJd/ILen
-         JRQwJDJdZy/d40e8cNkippzj/yXKWGbrfRVRaqm0TSLDRqwz1SlYsSJfsJGdNqMkUEFu
-         NiLusHcebelkMkrCw2tLrqS3Bqo1tqj3yAj4yek8jrPj43PNO6PJvEbltnU/xeMiaUd0
-         OtMNlHeR0UUrtax9NFZZ4jyOPLvYMXCleR4bqMnzO60c/mKTNKX4zjjdDmssUu4K2CCu
-         xLO6Qx1pwR9OKByJMym186dtMQRd0Bq1aXisy/tB9EsrowlQDkE6LYpoNzl3jNUlDoD6
-         DiBQ==
-X-Gm-Message-State: AC+VfDyX50jsAZTEyN3oDy5OEjUErBqZAwF1/XVTQ0TO3I/PMCUKdUOR
-        myv0iZOwXiUwSxCKH44Vw3Q1jA==
-X-Google-Smtp-Source: ACHHUZ6z59O8tplENC2bhQXd/JQWSp6AWPiroQfHmJwWkxLtJstvOyAq5du4f7CXb+84rHWoJ6jtOw==
-X-Received: by 2002:a19:f502:0:b0:4f1:43b3:90bf with SMTP id j2-20020a19f502000000b004f143b390bfmr429933lfb.41.1683290292180;
-        Fri, 05 May 2023 05:38:12 -0700 (PDT)
-Received: from [192.168.1.101] (abyl248.neoplus.adsl.tpnet.pl. [83.9.31.248])
-        by smtp.gmail.com with ESMTPSA id z23-20020a19f717000000b004f142eac23fsm273394lfe.114.2023.05.05.05.38.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 May 2023 05:38:11 -0700 (PDT)
-Message-ID: <61a1441c-a948-bf89-a44f-a94c3956c41d@linaro.org>
-Date:   Fri, 5 May 2023 14:38:09 +0200
+        Fri, 5 May 2023 08:38:49 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C4B156A0;
+        Fri,  5 May 2023 05:38:48 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 345BcTsS029081;
+        Fri, 5 May 2023 12:38:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=6L57UHlfbZbQrLrdI9ayMjXGqDK0qe/6DbxerSWEKMU=;
+ b=Vb5bBo2qSEU4V4jBDd3Ccw6Xf33VjVI4yMsJGf7VoeRi+/1kOwm+IzoFA7Sq4qNKxwuZ
+ miJtzJMqHOrNNI7Zypptnd0mUalMHxIZBnlDTFYnH+J/BATlmPlGAP3pDCWoEnKzE1xb
+ e5pq3MjxtkJOY0ZQ9YjoGgd0HW53KlWuHU6qIqMblJPeujxP2ug0SqjEZ3prGF8NU+V4
+ e0Gpfqx73sEPCd2PPk1onrQe/QywftjBGol7dgahGI/xkxK+86Mp1VooXGx+DDHvWEdF
+ D3oT7jw7MEVIyTZf5t+Km4oyVfmSUAjdrkUkRbIGACDRwY8fsiPv04UC62tqs0XLZXpl dw== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qcumk8s21-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 05 May 2023 12:38:19 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 345CcI2U020107
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 5 May 2023 12:38:18 GMT
+Received: from [10.216.37.178] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 5 May 2023
+ 05:38:13 -0700
+Message-ID: <14b47c1e-8092-b2f9-1a53-90c42b306de3@quicinc.com>
+Date:   Fri, 5 May 2023 18:08:10 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v2 03/13] dt-bindings: display/msm: Add SM6350 DPU
-To:     Rob Herring <robh@kernel.org>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux.dev
-References: <20230411-topic-straitlagoon_mdss-v2-0-5def73f50980@linaro.org>
- <20230411-topic-straitlagoon_mdss-v2-3-5def73f50980@linaro.org>
- <20230425170320.GA1931576-robh@kernel.org>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 03/18] media: venus: Remap bufreq fields on HFI6XX
 Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230425170320.GA1931576-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Dikshita Agarwal <dikshita@qti.qualcomm.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Mansur Alisha Shaik <mansur@codeaurora.org>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Dikshita Agarwal <quic_dikshita@quicinc.com>
+CC:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Marijn Suijten" <marijn.suijten@somainline.org>,
+        <stable@vger.kernel.org>
+References: <20230228-topic-venus-v2-0-d95d14949c79@linaro.org>
+ <20230228-topic-venus-v2-3-d95d14949c79@linaro.org>
+From:   Vikash Garodia <quic_vgarodia@quicinc.com>
+In-Reply-To: <20230228-topic-venus-v2-3-d95d14949c79@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 4Hqr9V9-nXwCbkluKArb0wqxPGfYLs9r
+X-Proofpoint-ORIG-GUID: 4Hqr9V9-nXwCbkluKArb0wqxPGfYLs9r
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-05_20,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ impostorscore=0 bulkscore=0 priorityscore=1501 lowpriorityscore=0
+ mlxlogscore=934 clxscore=1015 adultscore=0 suspectscore=0 malwarescore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2305050104
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -90,97 +94,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 5/4/2023 1:30 PM, Konrad Dybcio wrote:
+> Similarly to HFI4XX, the fields are remapped on 6XX as well. Fix it.
+>
+> Cc: stable@vger.kernel.org # v5.12+
+> Fixes: 7ed9e0b3393c ("media: venus: hfi, vdec: v6 Add IS_V6() to existing IS_V4() if locations")
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>   drivers/media/platform/qcom/venus/hfi_helper.h | 9 ++++++---
+>   1 file changed, 6 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/media/platform/qcom/venus/hfi_helper.h b/drivers/media/platform/qcom/venus/hfi_helper.h
+> index 105792a68060..e0c8f15644df 100644
+> --- a/drivers/media/platform/qcom/venus/hfi_helper.h
+> +++ b/drivers/media/platform/qcom/venus/hfi_helper.h
+> @@ -1170,11 +1170,14 @@ struct hfi_buffer_display_hold_count_actual {
+>   
+>   /* HFI 4XX reorder the fields, use these macros */
+>   #define HFI_BUFREQ_HOLD_COUNT(bufreq, ver)	\
+> -	((ver) == HFI_VERSION_4XX ? 0 : (bufreq)->hold_count)
+> +	((ver) == HFI_VERSION_4XX || (ver) == HFI_VERSION_6XX \
+> +	? 0 : (bufreq)->hold_count)
+>   #define HFI_BUFREQ_COUNT_MIN(bufreq, ver)	\
+> -	((ver) == HFI_VERSION_4XX ? (bufreq)->hold_count : (bufreq)->count_min)
+> +	((ver) == HFI_VERSION_4XX || (ver) == HFI_VERSION_6XX \
+> +	? (bufreq)->hold_count : (bufreq)->count_min)
+>   #define HFI_BUFREQ_COUNT_MIN_HOST(bufreq, ver)	\
+> -	((ver) == HFI_VERSION_4XX ? (bufreq)->count_min : 0)
+> +	((ver) == HFI_VERSION_4XX || (ver) == HFI_VERSION_6XX \
+> +	? (bufreq)->count_min : 0)
 
+This patch is not correct. The existing code handles the disparity of 
+buffer requirement payload received from firmware.
 
-On 25.04.2023 19:03, Rob Herring wrote:
-> On Fri, Apr 21, 2023 at 12:31:12AM +0200, Konrad Dybcio wrote:
->> Document the SM6350 DPU.
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>  .../bindings/display/msm/qcom,sm6350-dpu.yaml      | 94 ++++++++++++++++++++++
->>  1 file changed, 94 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/display/msm/qcom,sm6350-dpu.yaml b/Documentation/devicetree/bindings/display/msm/qcom,sm6350-dpu.yaml
->> new file mode 100644
->> index 000000000000..979fcf81afc9
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/display/msm/qcom,sm6350-dpu.yaml
->> @@ -0,0 +1,94 @@
->> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/display/msm/qcom,sm6350-dpu.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Qualcomm Display DPU dt properties for SM6350 target
->> +
->> +maintainers:
->> +  - Konrad Dybcio <konrad.dybcio@linaro.org>
->> +
->> +$ref: /schemas/display/msm/dpu-common.yaml#
->> +
->> +properties:
->> +  compatible:
->> +    items:
->> +      - const: qcom,sm6350-dpu
->> +
->> +  reg:
->> +    items:
->> +      - description: Address offset and size for mdp register set
->> +      - description: Address offset and size for vbif register set
->> +
->> +  reg-names:
->> +    items:
->> +      - const: mdp
->> +      - const: vbif
->> +
->> +  clocks:
->> +    items:
->> +      - description: Display axi clock
->> +      - description: Display ahb clock
->> +      - description: Display rot clock
->> +      - description: Display lut clock
->> +      - description: Display core clock
->> +      - description: Display vsync clock
->> +
->> +  clock-names:
->> +    items:
->> +      - const: bus
->> +      - const: iface
->> +      - const: rot
->> +      - const: lut
->> +      - const: core
->> +      - const: vsync
-> 
-> Is there some reason the clocks are in different order?
-Nope, I'll sort this out
+Its applicable only for V4.
 
-They appear to 
-> be the same minus the 'throttle' clock. Is there really no 'throttle' 
-> clock?
-Looks like GCC_DISP_THROTTLE_AXI_CLK does exist on sm6350 as well, no
-idea how/if it's used though.. Perhaps I can just remove it from sm6375
-and if it turns out necessary we can reintroduce it another day.
+For V6, driver does not rely on firmware to get the buffer requirement. 
+Refer the buffer platform code for more details.
 
-Maybe this platform just tied it to one of the same clocks in the 
-> above?
-Unlikely, most likely it's for some dire deep power saving stuff that
-does not seem to be used/exposed, even on the bsp kernel
+-Vikash
 
-> 
-> I really hate the mess that is clocks. We have the same or related 
-> blocks with just totally different names and order. The result is 
-> if/then schemas or separate schemas like this. Neither option is great, 
-> but at least the if/then schemas provides some motivation to not have 
-> pointless variations like this. </rant>
-It's a totally valid rant..
-
-> 
-> As it seems the only difference between these 2 bindings is 1 extra 
-> clock, can't they be shared?
-Sounds like a plan!
-
-Konrad
-> 
-> Rob
+>   struct hfi_buffer_requirements {
+>   	u32 type;
+>
