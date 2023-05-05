@@ -2,70 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 588736F8C3A
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 00:07:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3731A6F8C3D
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 00:08:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231445AbjEEWHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 18:07:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36456 "EHLO
+        id S232456AbjEEWIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 18:08:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbjEEWHn (ORCPT
+        with ESMTP id S231863AbjEEWIL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 18:07:43 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC17E46A8
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 15:07:22 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id d75a77b69052e-3f0a2f8216fso1173941cf.0
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 15:07:22 -0700 (PDT)
+        Fri, 5 May 2023 18:08:11 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A945599;
+        Fri,  5 May 2023 15:08:01 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f4000ec6ecso23411115e9.0;
+        Fri, 05 May 2023 15:08:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683324442; x=1685916442;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kMP5ioJGrU60cNcpfzBerjR4fTxCqVz4aeCY/oDwaZE=;
-        b=jGmoQvPqGQckTNghjy0GdncOEUVLH6GD9Y7PwnYO/y/oL2awPezBRIHIBspYFbUhsB
-         pgiYXBLQF86r5MoeYt9SdgzYna4Hebh3DnklIDNJXp/NunW4qUcyLzG+z8Dfhe7OV0kE
-         zGldDaqpaWBYwsiZ/9UQT06AbBUTp21s0DxC/KBZ4gO++RYd/f2LpLE4iA8imKxi7kxM
-         jGibBbBB9N4lw2dhzxb1O2og21oBUXIOVCqOMJRRzjmz+uAml/ETdSLdEqwOlWoSpW7I
-         FSWmFxq/lz0tIAtC6zx0BKYPDoJB4TxkVzD07HmOdJbPs4g1JsWoZ2Jb0weYIcatthoB
-         k57A==
+        d=gmail.com; s=20221208; t=1683324479; x=1685916479;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=hTk40pEIa6sggozNPGL/VTk1LAwsz/xKnNcnmk0Uw40=;
+        b=qUXPIJOEcmVya4t4Z8BVExBOKsEpEyw/+X5BvfMyQWS4PlaTFXXK19eB3j72mNNlXx
+         5KwlgukleyM6txF/8ewbTiGaIVAL0aS5iPiL2DguJHX1EKvTqQeBFw9kNcGNauP4Rmnq
+         N53ZSsL+dWBOp24Ek5DYYwdR+UEXfMDCZWNDAvOZAZHqaeE4rpT6pLpAIKnPiKqG8wEN
+         /tUv8TLuf2pvomk+ViSv52atgQ6+iy8lhTHOt6WBz7zIPkomsTHnPv5yCkfCgX1fE956
+         foFDLn8x4GwP8/4sRIH7I2dBPzR4l0uV0HdkxC8YxRxom0JmqU7dC872WFhKm6lwVuYL
+         umag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683324442; x=1685916442;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kMP5ioJGrU60cNcpfzBerjR4fTxCqVz4aeCY/oDwaZE=;
-        b=hx9gPaxGh9kUVAdBzn3o7MvGsa3PpsFohzmzIuXnrRBhP8tHb8ZOa3/pbEYHg0NbFq
-         1Qf1wHGWVmVxjAUfWXwepGyiBGyKKjEiD0meJExHhec+RVUy83RvLF00kbDs+UG15yt4
-         PMorP3NOhcAzz39s0qZGUO7ft9oAKkzND+J8d1iCFTnMZ3S9OBKNSKr5e52o0h2b9pCb
-         CxMd/0pPl8eTvR2LFT51mYo+e6yEbShAK5VKHCj1cv5C7vfMBj4E0pb+LgWZSGRdiGWd
-         93XgTncKeMAeCY7IlXegFMhESiN6IwiYZBUbBompyHRMTOhuNGElw1slw82knTQXn7uf
-         jmbA==
-X-Gm-Message-State: AC+VfDyjmgubYITI7t+K+ZZ4hk0TX6lxACgqDt64JBveMY4bwBBFJeEV
-        Qk4F5V+JXSjPn74z4aVP3zZYXPDnaN79UxZqVXllmQ==
-X-Google-Smtp-Source: ACHHUZ7PjIDae4hy4gINUOz0ARGbTnTzdkXAFmSDDGTmUVuhiYxpR9HTnD8uv2O/8E68M0v/qs79hMq0E/pDJLH29z4=
-X-Received: by 2002:ac8:5a86:0:b0:3ef:19fe:230d with SMTP id
- c6-20020ac85a86000000b003ef19fe230dmr39852qtc.17.1683324441770; Fri, 05 May
- 2023 15:07:21 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683324479; x=1685916479;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hTk40pEIa6sggozNPGL/VTk1LAwsz/xKnNcnmk0Uw40=;
+        b=Wh2R/Eer+dPWFZP/yTT/NU3V4rnFcqVkn0P9OA/iuAV+8YfJY+sSIvZ70Yrefc3b6G
+         G29ePhymbo1LMPSRdVtH6HkL4DMyLoStMP4ylG8xiF0GQKHKmamy2YEjTtCKmEYMBsW1
+         FqjwVRcadby1eP7qOK+qr+xmtcMH0Wr4MEpwo39962g/YVCRlgK0dsNRNyFuorLh83eR
+         jqsl4nvf3Pg72N/O+/IMbm1tFdf6VdKHXFNDPgxsK4vXu4LTMQAvBnxa5ZRJ0Wwjrb8J
+         O8atZGBL6n7Ar28uolEapDpLBLHh5T4f6Nl6a/waLXwW5SeLNYGxF6esdxjt55FfzK2J
+         oVVg==
+X-Gm-Message-State: AC+VfDx7LSA4WMNcMeUNRAzNwBf0p9wz2yA1SFjEzJsEpyFfwMVMmnrg
+        EgsdW0r4+SpwVP/FsIhiGpE=
+X-Google-Smtp-Source: ACHHUZ4mH83mCyTOoGWHtxkKNT6uM9KmncozyTwpylz+11m1DNl/kRNCToS5r+sQq24bid7g2GcEDw==
+X-Received: by 2002:a05:600c:218f:b0:3f0:a0bb:58ef with SMTP id e15-20020a05600c218f00b003f0a0bb58efmr2184588wme.25.1683324479379;
+        Fri, 05 May 2023 15:07:59 -0700 (PDT)
+Received: from localhost (host86-156-84-164.range86-156.btcentralplus.com. [86.156.84.164])
+        by smtp.gmail.com with ESMTPSA id a20-20020a1cf014000000b003f173c566b5sm9137978wmb.5.2023.05.05.15.07.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 May 2023 15:07:58 -0700 (PDT)
+Date:   Fri, 5 May 2023 23:07:57 +0100
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Mika Penttila <mpenttil@redhat.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Theodore Ts'o <tytso@mit.edu>, Peter Xu <peterx@redhat.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>
+Subject: Re: [PATCH v8 3/3] mm/gup: disallow FOLL_LONGTERM GUP-fast writing
+ to file-backed mappings
+Message-ID: <52ac98ca-378e-452c-9dbf-93ea39bb5583@lucifer.local>
+References: <cover.1683067198.git.lstoakes@gmail.com>
+ <a690186fc37e1ea92556a7dbd0887fe201fcc709.1683067198.git.lstoakes@gmail.com>
+ <e4c92510-9756-d9a1-0055-4cd64a0c76d9@redhat.com>
+ <c2a6311c-7fdc-4d12-9a3f-d2eed954c468@lucifer.local>
+ <ae9a1134-4f5b-4c26-6822-adff838c8702@redhat.com>
 MIME-Version: 1.0
-References: <000000000000d3001a05faf979c8@google.com>
-In-Reply-To: <000000000000d3001a05faf979c8@google.com>
-From:   Aleksandr Nogikh <nogikh@google.com>
-Date:   Sat, 6 May 2023 00:07:10 +0200
-Message-ID: <CANp29Y4Q-VWEWeHmZu0f9tLLik1Va8oDF-s8hAeVkBZbX4K0gg@mail.gmail.com>
-Subject: Re: [syzbot] upstream boot error: BUG: unable to handle kernel NULL
- pointer dereference in load_balance
-To:     syzbot <syzbot+d4b00edc2d0c910d4bf4@syzkaller.appspotmail.com>,
-        ardb@kernel.org, Dmitry Vyukov <dvyukov@google.com>
-Cc:     andriy.shevchenko@linux.intel.com, linux-kernel@vger.kernel.org,
-        linux@rasmusvillemoes.dk, syzkaller-bugs@googlegroups.com,
-        yury.norov@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ae9a1134-4f5b-4c26-6822-adff838c8702@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,111 +119,149 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For the context: we've been seeing tons of different boot time errors
-on the syzbot arm32 qemu instance.
-Manual bisection points to this commit:
+On Fri, May 05, 2023 at 04:17:38PM +0200, David Hildenbrand wrote:
+> > > And there is nothing wrong about pinning an anon page that's still in the
+> > > swapcache. The following folio_test_anon() check will allow them.
+> > >
+> > > The check made sense in page_mapping(), but here it's not required.
+> >
+> > Waaaaaaaaaait a second, you were saying before:-
+> >
+> >    "Folios in the swap cache return the swap mapping" -- you might disallow
+> >    pinning anonymous pages that are in the swap cache.
+> >
+> >    I recall that there are corner cases where we can end up with an anon
+> >    page that's mapped writable but still in the swap cache ... so you'd
+> >    fallback to the GUP slow path (acceptable for these corner cases, I
+> >    guess), however especially the comment is a bit misleading then.
+> >
+> > So are we allowing or disallowing pinning anon swap cache pages? :P
+>
+> If we have an exclusive anon page that's still in the swap cache, sure! :)
+>
+> I think there are ways that can be done, and nothing would actually break.
+> (I even wrote selftests in the cow selftests for that to amke sure it works
+> as expected)
+>
+> >
+> > I mean slow path would allow them if they are just marked anon so I'm inclined
+> > to allow them.
+>
+> Exactly my reasoning.
+>
+> The less checks the better (especially if ordinary GUP just allows for
+> pinning it) :)
 
-commit c76c6c4ecbec0deb56a4f9e932b26866024a508f
-Author: Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed Apr 12 09:50:20 2023 +0100
+Yeah a lot of my decision making on this has been trying to be conservative
+about what we filter for but you get this weird inversion whereby if you're
+too conservative about what you allow, you are actually being more
+outlandish about what you disallow and vice-versa.
 
-    ARM: 9294/2: vfp: Fix broken softirq handling with instrumentation enab=
-led
+>
+> >
+> > >
+> > > I do agree regarding folio_test_slab(), though. Should we WARN in case we
+> > > would have one?
+> > >
+> > > if (WARN_ON_ONCE(folio_test_slab(folio)))
+> > > 	return false;
+> > >
+> >
+> > God help us if we have a slab page at this point, so agreed worth doing, it
+> > would surely have to arise from some dreadful bug/memory corruption.
+> >
+>
+> Or some nasty race condition that we managed to ignore with rechecking if
+> the PTEs/PMDs changed :)
 
+Well that should be sorted now :)
 
-On Sat, May 6, 2023 at 12:04=E2=80=AFAM syzbot
-<syzbot+d4b00edc2d0c910d4bf4@syzkaller.appspotmail.com> wrote:
 >
-> Hello,
+> > > > +	if (unlikely(folio_test_slab(folio) || folio_test_swapcache(folio)))
+> > > > +		return false;
+> > > > +
+> > > > +	/* hugetlb mappings do not require dirty-tracking. */
+> > > > +	if (folio_test_hugetlb(folio))
+> > > > +		return true;
+> > > > +
+> > > > +	/*
+> > > > +	 * GUP-fast disables IRQs. When IRQS are disabled, RCU grace periods
+> > > > +	 * cannot proceed, which means no actions performed under RCU can
+> > > > +	 * proceed either.
+> > > > +	 *
+> > > > +	 * inodes and thus their mappings are freed under RCU, which means the
+> > > > +	 * mapping cannot be freed beneath us and thus we can safely dereference
+> > > > +	 * it.
+> > > > +	 */
+> > > > +	lockdep_assert_irqs_disabled();
+> > > > +
+> > > > +	/*
+> > > > +	 * However, there may be operations which _alter_ the mapping, so ensure
+> > > > +	 * we read it once and only once.
+> > > > +	 */
+> > > > +	mapping = READ_ONCE(folio->mapping);
+> > > > +
+> > > > +	/*
+> > > > +	 * The mapping may have been truncated, in any case we cannot determine
+> > > > +	 * if this mapping is safe - fall back to slow path to determine how to
+> > > > +	 * proceed.
+> > > > +	 */
+> > > > +	if (!mapping)
+> > > > +		return false;
+> > > > +
+> > > > +	/* Anonymous folios are fine, other non-file backed cases are not. */
+> > > > +	mapping_flags = (unsigned long)mapping & PAGE_MAPPING_FLAGS;
+> > > > +	if (mapping_flags)
+> > > > +		return mapping_flags == PAGE_MAPPING_ANON;
+> > >
+> > > KSM pages are also (shared) anonymous folios, and that check would fail --
+> > > which is ok (the following unsharing checks rejects long-term pinning them),
+> > > but a bit inconstent with your comment and folio_test_anon().
+> > >
+> > > It would be more consistent (with your comment and also the folio_test_anon
+> > > implementation) to have here:
+> > >
+> > > 	return mapping_flags & PAGE_MAPPING_ANON;
+> > >
+> >
+> > I explicitly excluded KSM out of fear that could be some breakage given they're
+> > wrprotect'd + expected to CoW though? But I guess you mean they'd get picked up
+> > by the unshare and so it doesn't matter + we wouldn't want to exclude an
+> > PG_anon_exclusive case?
 >
-> syzbot found the following issue on:
+> Yes, unsharing handles that in the ordinary GUP and GUP-fast case. And
+> unsharing is neither GUP-fast nor even longterm specific (for anon pages).
 >
-> HEAD commit:    1a5304fecee5 Merge tag 'parisc-for-6.4-1' of git://git.ke=
-r..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=3D125e1e5c28000=
-0
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D124f13edd5df0=
-b0d
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3Dd4b00edc2d0c910=
-d4bf4
-> compiler:       arm-linux-gnueabi-gcc (Debian 10.2.1-6) 10.2.1 20210110, =
-GNU ld (GNU Binutils for Debian) 2.35.2
-> userspace arch: arm
+> Reason I'm brining this up is that I think it's best if we let
+> folio_fast_pin_allowed() just check for what's absolutely GUP-fast specific.
+
+Ack, indeed it's a separate thing, see above for the contradictory nature
+of wanting to be cautious but then accidentally making your change _more
+radical_ than you intended...!
+
 >
-> IMPORTANT: if you fix the issue, please add the following tag to the comm=
-it:
-> Reported-by: syzbot+d4b00edc2d0c910d4bf4@syzkaller.appspotmail.com
+> >
+> > I'll make the change in any case given the unshare check!
+> >
+> > I notice the gup_huge_pgd() doesn't do an unshare but I mean, a PGD-sized huge
+> > page probably isn't going to be CoW'd :P
 >
-> 8<--- cut here ---
-> Unable to handle kernel NULL pointer dereference at virtual address 00000=
-018 when read
-> [00000018] *pgd=3D80000080004003, *pmd=3D00000000
-> Internal error: Oops: 207 [#1] PREEMPT SMP ARM
-> Modules linked in:
-> CPU: 1 PID: 0 Comm: swapper/1 Not tainted 6.3.0-syzkaller #0
-> Hardware name: ARM-Versatile Express
-> PC is at find_next_and_bit include/linux/find.h:93 [inline]
-> PC is at should_we_balance kernel/sched/fair.c:10717 [inline]
-> PC is at load_balance+0x130/0xcdc kernel/sched/fair.c:10760
-> LR is at load_balance+0x78/0xcdc kernel/sched/fair.c:10743
-> pc : [<8028b604>]    lr : [<8028b54c>]    psr: 80000113
-> sp : df805df8  ip : df805e84  fp : df805ebc
-> r10: 8309a800  r9 : df805e84  r8 : 00000001
-> r7 : 8309a800  r6 : ddddb400  r5 : 830b4640  r4 : 00000001
-> r3 : 00000000  r2 : ddddb400  r1 : 00000000  r0 : df805e48
-> Flags: Nzcv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
-> Control: 30c5387d  Table: 847ac040  DAC: 00000000
-> Register r0 information:
-> 8<--- cut here ---
-> Unable to handle kernel paging request at virtual address df96bff8 when r=
-ead
-> [df96bff8] *pgd=3D80000080007003, *pmd=3D83093003, *pte=3D8261d0a80000000=
-0
-> Internal error: Oops: 207 [#2] PREEMPT SMP ARM
-> Modules linked in:
-> CPU: 1 PID: 0 Comm: swapper/1 Not tainted 6.3.0-syzkaller #0
-> Hardware name: ARM-Versatile Express
-> PC is at __find_vmap_area mm/vmalloc.c:841 [inline]
-> PC is at find_vmap_area mm/vmalloc.c:1862 [inline]
-> PC is at find_vm_area mm/vmalloc.c:2623 [inline]
-> PC is at vmalloc_dump_obj+0x38/0xb4 mm/vmalloc.c:4221
-> LR is at __raw_spin_lock include/linux/spinlock_api_smp.h:132 [inline]
-> LR is at _raw_spin_lock+0x18/0x58 kernel/locking/spinlock.c:154
-> pc : [<8047a200>]    lr : [<818015f4>]    psr: a0000193
-> sp : df805c88  ip : df805c70  fp : df805c9c
-> r10: 831f4680  r9 : 8261c9a4  r8 : 8285041c
-> r7 : 60000113  r6 : 00000001  r5 : df806000  r4 : df96c000
-> r3 : 00000000  r2 : 00002268  r1 : 00000000  r0 : 00000001
-> Flags: NzCv  IRQs off  FIQs on  Mode SVC_32  ISA ARM  Segment none
-> Control: 30c5387d  Table: 847ac040  DAC: 00000000
+> I spotted exactly the same thing and wondered about that (after all I added
+> all that unsharing logic ... so I should know). I'm sure there must be a
+> reason I didn't add it ;)
 >
+> ... probably we should just add it even though it might essentially be dead
+> code for now (at least the cow selftests would try with each and every
+> hugetlb size and eventually reveal the problem on whatever arch ends up
+> using that code ... ).
 >
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> Do you want to send a patch to add unsharing to gup_huge_pgd() as well?
 >
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
->
-> If the bug is already fixed, let syzbot know by replying with:
-> #syz fix: exact-commit-title
->
-> If you want to change bug's subsystems, reply with:
-> #syz set subsystems: new-subsystem
-> (See the list of subsystem names on the web dashboard)
->
-> If the bug is a duplicate of another bug, reply with:
-> #syz dup: exact-subject-of-another-report
->
-> If you want to undo deduplication, reply with:
-> #syz undup
->
+
+Sure will do!
+
 > --
-> You received this message because you are subscribed to the Google Groups=
- "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgi=
-d/syzkaller-bugs/000000000000d3001a05faf979c8%40google.com.
+> Thanks,
+>
+> David / dhildenb
+>
