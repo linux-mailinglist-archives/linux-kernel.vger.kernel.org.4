@@ -2,77 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E0ED6F7BC2
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 06:10:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DDD96F7BC7
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 06:12:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbjEEEKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 00:10:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34152 "EHLO
+        id S229892AbjEEEMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 00:12:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229955AbjEEEKD (ORCPT
+        with ESMTP id S229751AbjEEEMa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 00:10:03 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C1C8A7D;
-        Thu,  4 May 2023 21:10:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=F8SyAx82elMQX9OByRGapXDLinwDYRK6kS/ZTry4wr8=; b=Ta9uMF/yR+y+mnLc/ox7u+hEt2
-        5yyTafQgjAzh8Tux3N78t/Anxy5qydrVGF9sN/bQ5NH89n0UX7EX4ESeDYLzu7m4IfHDh0NiX0hGH
-        la4h4RoadM1QFaLht0La36rUs2hFpAMNQGTmg3S+kA811pKbJCFKLMrWyOrWDrObpD+Ibwdy4nhIB
-        IYLFJmfq8opJygHOlz96f97svjei7nxazfSIy7bQeHpr8ey1fVvorML4a2rBoO2TY1RoWZnEXCnhj
-        3tXZUwcRgTKNc3pPlOHqJ6JZAMMQoaihm8qyZs2sUrcZ4I/y/K78G0PZ2R+lJSOXsv4Oz0BByWNR4
-        56aGWv6g==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pumlU-00BDYI-Nn; Fri, 05 May 2023 04:09:52 +0000
-Date:   Fri, 5 May 2023 05:09:52 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Andreas Hindborg <nmi@metaspace.dk>
-Cc:     Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
-        Keith Busch <kbusch@kernel.org>,
-        Damien Le Moal <Damien.LeMoal@wdc.com>,
-        Hannes Reinecke <hare@suse.de>,
-        lsf-pc@lists.linux-foundation.org, rust-for-linux@vger.kernel.org,
-        linux-block@vger.kernel.org,
-        Andreas Hindborg <a.hindborg@samsung.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        open list <linux-kernel@vger.kernel.org>, gost.dev@samsung.com
-Subject: Re: [RFC PATCH 02/11] rust: add `pages` module for handling page
- allocation
-Message-ID: <ZFSBkFuvJOiz600W@casper.infradead.org>
-References: <20230503090708.2524310-1-nmi@metaspace.dk>
- <20230503090708.2524310-3-nmi@metaspace.dk>
+        Fri, 5 May 2023 00:12:30 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D579011B76;
+        Thu,  4 May 2023 21:12:29 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-643995a47f7so1010093b3a.1;
+        Thu, 04 May 2023 21:12:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683259949; x=1685851949;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lH7DdaAqtoGsvrBlBaE7fQdtK2Ol6Msxd6emTLzyGrQ=;
+        b=Poazv1uDV4XKBT3piMhHtD6/2sQxy/T4NfrzewHTA/kyTBxBmidHndlOxHgFuYJL/3
+         M8YUA29MuAjU1HEtB2729G1Yx1isvMIHHypbAbvSIzRnJeI9Z32VLDrTLQ0Ox6wLf5ZE
+         d+SEdbG/UfsyVKMOhMKy1bWUo4QtQOSV/vl9ajCQu4naXW+HEGWxQ+33TLluH9DwiIpL
+         T33h7xpjUs2kBe4RhgCUyAcppzciTT8PAk9CC7hQt5BwWkIoQAS8Efi3w5sL4YYhhtfN
+         rerDw1l0Q2JwLBQIpJYc8eBIG9JpKqiodYnTvHA50bPvS8/QFkeEyMRrHz2OYmRWRVXc
+         uxSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683259949; x=1685851949;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lH7DdaAqtoGsvrBlBaE7fQdtK2Ol6Msxd6emTLzyGrQ=;
+        b=HtCPPwF4ydBEVoZXpeAlk4t61jx3+lDBznagsOZLJKUx5cgpideX5qfoRzZ59InyXv
+         u6G1nZT/59bcTcgovokAi3spQ6MXjYfdAjoeDXNnM/F0py+5VLLpioFwjA8HgaJSB9eL
+         BkPJqShmlHgGzob3nGCLai5BDXDyKNL7h2VdkkbOfIzkG2c0THJzQ93tVoC/q6+Fynf/
+         F/VXkl9oPhZzLcKbV+PzwoSIEnxt178jTNb6PoHvOUx/Is+9K35biHEhn3WYNZtf71lq
+         dVZU9oTBajr0dHoVOG7/q/GC9qmpFEIVNIXPoAS6Ewj77av1mL0fq0XAvnEP2/rKoKKY
+         NZCQ==
+X-Gm-Message-State: AC+VfDyQK/GMNZZ6PlUuH7vqXE44tXptJAzzP3B9UZA2AUsHO65mYb3/
+        WZmRAOKjoE/k40kI9gS8Clk=
+X-Google-Smtp-Source: ACHHUZ4P/UW9z5k6xy2K7UR6Gp/5gMFGUx9Lk04zz/+HQGVTJgHMobKi7VdFmH1rK4pbldP8MSt6KA==
+X-Received: by 2002:a05:6a20:4293:b0:f2:64f8:b214 with SMTP id o19-20020a056a20429300b000f264f8b214mr248640pzj.13.1683259949146;
+        Thu, 04 May 2023 21:12:29 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-25.three.co.id. [180.214.233.25])
+        by smtp.gmail.com with ESMTPSA id j6-20020aa78dc6000000b00640e01dfba0sm537123pfr.175.2023.05.04.21.12.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 May 2023 21:12:28 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 598EE1068DB; Fri,  5 May 2023 11:12:25 +0700 (WIB)
+Date:   Fri, 5 May 2023 11:12:25 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     James Seo <james@equiv.tech>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC 04/11] Documentation/hwmon: Revise hwmon kernel API
+ reference
+Message-ID: <ZFSCKa0SaH6pqDVC@debian.me>
+References: <20230504075752.1320967-1-james@equiv.tech>
+ <20230504075752.1320967-5-james@equiv.tech>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="TArBaNHqyhj2iQWJ"
 Content-Disposition: inline
-In-Reply-To: <20230503090708.2524310-3-nmi@metaspace.dk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230504075752.1320967-5-james@equiv.tech>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 03, 2023 at 11:06:59AM +0200, Andreas Hindborg wrote:
-> From: Andreas Hindborg <a.hindborg@samsung.com>
-> 
-> This patch adds support for working with pages of order 0. Support for pages
-> with higher order is deferred. Page allocation flags are fixed in this patch.
-> Future work might allow the user to specify allocation flags.
-> 
-> This patch is a heavily modified version of code available in the rust tree [1],
-> primarily adding support for multiple page mapping strategies.
 
-This also seems misaligned with the direction of Linux development.
-Folios are the future, pages are legacy.  Please, ask about what's
-going on before wasting time on the past.
+--TArBaNHqyhj2iQWJ
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, May 04, 2023 at 12:57:45AM -0700, James Seo wrote:
+> Reorganize content into coherent sections.
+> Use kerneldocs to document functions and data structures when
+> possible and add more details on using various API facilities.
+> Fix minor issues (typos, grammar, etc.) and add markup.
+
+LGTM, thanks!
+
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--TArBaNHqyhj2iQWJ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZFSCHwAKCRD2uYlJVVFO
+o1wjAP9Lud+NvAPsROUHXOvKVK9niGxnyshZqeA40JS/oqx4swD/dZdarpQrNkhJ
+o5DYlxSM/vISrRx/FgNI0JrOVnWvrgw=
+=UKtj
+-----END PGP SIGNATURE-----
+
+--TArBaNHqyhj2iQWJ--
