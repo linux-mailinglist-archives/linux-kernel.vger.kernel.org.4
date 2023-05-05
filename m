@@ -2,129 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34F5F6F7BD7
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 06:28:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 583766F7BDB
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 06:30:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbjEEE2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 00:28:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37454 "EHLO
+        id S230253AbjEEEah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 00:30:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjEEE2C (ORCPT
+        with ESMTP id S229459AbjEEEae (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 00:28:02 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8D87DB3;
-        Thu,  4 May 2023 21:28:01 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-6439f186366so191566b3a.2;
-        Thu, 04 May 2023 21:28:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683260881; x=1685852881;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8bWXPTP9V/rNh36FOWh/lW/rMEx219E7peVwHM5/UkY=;
-        b=Et0B++Xr3wsL/ORtnieJecJHbflY+ZVN/Xx0ZE7YQZ7JRqIWwHDwgvbCIxnEChi2Sf
-         iM9AaS0dAXI1vTGBo7W/90cOBAwmmMplep+8Wi45ORbFMFhz6dShj+UvxnVVpC6hBqcl
-         iqzPvv5c+OM3oJb//lqjK+lJC03oYdmkF49w4CRs3GkERwzhYkhXlS+W4VxQKPSsFKJW
-         R56oSQSBe9Hkv38YfwsN6xKwSTTMPmc+Z5dseX/hMOaJlRXncKBDXDpZV8ZtH6CapJB3
-         1H4IHfELZsbkTX+VCPxZasLfUf0pkC++JRii22IQuF52q2tatcRv0huOoOrN7E+eKQK2
-         drcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683260881; x=1685852881;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8bWXPTP9V/rNh36FOWh/lW/rMEx219E7peVwHM5/UkY=;
-        b=Lbljys5vmjC4Ly32Z5APHBSlv9h5aKHEvIOlygSUeMfbee8/G0MJAgRVs0uMxP0fAR
-         SEJs6m8S6yz+ymrqENkL5B4jYhdBGyFOBs5EcSCqyj1gbUP83U6GqC6VLwpd58LovH36
-         A/rqbBQrz5uEJTlEDpUiDEZ3D+MgLS5iEREwcnSR/M72AR3C76YB+qyFXCipmgKZmNlh
-         UdkHXUCPeugpCYWkiuKygjEfdp3IBxeDq1V8UhmrdpE3NXu45oAWedCvT8PNloIR1a3a
-         7mJHWzv4ZGNnHuSoqTPepMyd0/yFkmQfGI7zJfvfV9WowsEauSjPwkopL6Hi1xDFMiEE
-         2sXw==
-X-Gm-Message-State: AC+VfDx+3LhTOaE9JATsNoVujgKkeaDeGWD2LJKye1ZzXBruW445IoUa
-        Wlu/woYkVuEWo+GSe2EBsAc=
-X-Google-Smtp-Source: ACHHUZ5yWfdZ4d1rqUtXSOa7mTxJLpoitfe6NLXK3dCT7TtL+MOvVnM6kVfUAA6XAIelKzeHQZmi/g==
-X-Received: by 2002:a05:6a00:a8d:b0:641:24bb:bbb1 with SMTP id b13-20020a056a000a8d00b0064124bbbbb1mr773597pfl.27.1683260881055;
-        Thu, 04 May 2023 21:28:01 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-25.three.co.id. [180.214.233.25])
-        by smtp.gmail.com with ESMTPSA id m3-20020aa79003000000b0063d2d9990ecsm568605pfo.87.2023.05.04.21.28.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 May 2023 21:28:00 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id E519D104C4C; Fri,  5 May 2023 11:27:57 +0700 (WIB)
-Date:   Fri, 5 May 2023 11:27:57 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     James Seo <james@equiv.tech>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC 05/11] Documentation/hwmon: Revise PMBus core documentation
-Message-ID: <ZFSFzaWZsS9qxmzz@debian.me>
-References: <20230504075752.1320967-1-james@equiv.tech>
- <20230504075752.1320967-6-james@equiv.tech>
+        Fri, 5 May 2023 00:30:34 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF80B7DB3;
+        Thu,  4 May 2023 21:30:32 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 99C6F5C032F;
+        Fri,  5 May 2023 00:30:29 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Fri, 05 May 2023 00:30:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1683261029; x=1683347429; bh=XES4iXxvck
+        kCMX5/y3MP9xkYumxYm3xAmwtlzCAmBro=; b=S5HnNHChOgIJ0q5uWly47dNQNA
+        D1bnvTQWYP3znhOYUFwDZJtStavdgiJMHNKLa5QQFiDm7bj+4PGgvcxrt3QjT4ia
+        /7i1PhjpdlIaITlLB8mrtb9QmiBAbLYuZ8vR2Axe3vWF+jxUN/Dx1qt3PEpGaRa3
+        P9UJgKtNPdKVwEh/m8we3F/nu6Nxn+1gyd0c34qwHlW3DhirQHN7h559VcT0NbvZ
+        UJ+lKn7moKQhjlFshJ7qS4W+P5t9LD4P2CC4Mf24reEJmDsVq72rtWYJZ83ykGwm
+        e/e4ld0+wDI/6u5YiazLWPtu19aEB3IY0GB1LPCCUN7D6hBq/Z78ad1sCycA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1683261029; x=1683347429; bh=XES4iXxvckkCM
+        X5/y3MP9xkYumxYm3xAmwtlzCAmBro=; b=Lpe0zno/SYKOnMq13tCD/3rUzJS1C
+        3rVFwgrO1mPSQzQLQnrFmb8UFDY0rIpS3FFmg6jS1NiPPbN4iY0qiGqOyra/itGx
+        7fyt2voWoy2ccXQEU/uFw4Q/6AXAgJNgmarqnaPvvgllPHEAj7j+0IImT0sKmC0o
+        W/63oHwxmgYBStWgiZ/N3YhBtiMsdbPeOvXZ64B57NyJBBeuXx24FO6B9D5QYSa3
+        SfQjJpHqumJl0NXEgsejlyNU1wqSCJ4NcN1L62dgaf4SKJ/S/KbKSUNFoKBla5X4
+        6rbOQv71JBKnIHh00RQstDGnr+Lxyr4I5p1koGSpPrN79+kZRN/3cLZjA==
+X-ME-Sender: <xms:ZYZUZN-BaOSDxc5rU9CQZUBbjcgvi_KSXxheXFt3fPTTGSubesOslA>
+    <xme:ZYZUZBvCt4iWjp5v4MzYunx479NQgRVG9oEWOZ7XYlgSZ9oXlqQW6j8sSWi9Z-SOn
+    7i2oe07TuNuC9yPf_U>
+X-ME-Received: <xmr:ZYZUZLA_5qB0aUpCA823v9TMDLGsqO_-GxhPgXS6iuRX6YobjgzW9h8Pi0Vv>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeefuddgkeehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
+    ertddtnecuhfhrohhmpedfnfhukhgvucffrdculfhonhgvshdfuceolhhukhgvsehljhho
+    nhgvshdruggvvheqnecuggftrfgrthhtvghrnhepgfdujedthfduudekffefkeeiffdttd
+    dvhfegudduueffuefhfefggeefteevvdegnecuvehluhhsthgvrhfuihiivgeptdenucfr
+    rghrrghmpehmrghilhhfrhhomheplhhukhgvsehljhhonhgvshdruggvvh
+X-ME-Proxy: <xmx:ZYZUZBeqZPoKJ12nfK3kQSv2bI5VFmVC-zS8Iz3xMaehdMwcHPjCsQ>
+    <xmx:ZYZUZCPaJAlYJU65kVtWex1w5iN6Yys9O1t_IAZAdppeh-DF2Z29vg>
+    <xmx:ZYZUZDnv1vO-haIzcvAv-qcD3q8CI6zivOuO7t5e4AiAsgu7d9fWEg>
+    <xmx:ZYZUZOAcBvRpkC0fR6bnDFQYAL-VDSbhehFBgEYfa3C4nkCW72hZQg>
+Feedback-ID: i5ec1447f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 5 May 2023 00:30:24 -0400 (EDT)
+From:   "Luke D. Jones" <luke@ljones.dev>
+To:     platform-driver-x86@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, acpi4asus-user@lists.sourceforge.net,
+        hdegoede@redhat.com, corentin.chary@gmail.com,
+        markgross@kernel.org, jdelvare@suse.com, linux@roeck-us.net,
+        "Luke D. Jones" <luke@ljones.dev>
+Subject: [PATCH v2 0/1] platform/x86: asus-wmi: add support for ASUS screenpad
+Date:   Fri,  5 May 2023 16:30:12 +1200
+Message-Id: <20230505043013.2622603-1-luke@ljones.dev>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230504075752.1320967-6-james@equiv.tech>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 04, 2023 at 12:57:46AM -0700, James Seo wrote:
-> -[from pmbus.org] The Power Management Bus (PMBus) is an open standard
-> -power-management protocol with a fully defined command language that facilitates
-> -communication with power converters and other devices in a power system. The
-> -protocol is implemented over the industry-standard SMBus serial interface and
-> -enables programming, control, and real-time monitoring of compliant power
-> -conversion products. This flexible and highly versatile standard allows for
-> -communication between devices based on both analog and digital technologies, and
-> -provides true interoperability which will reduce design complexity and shorten
-> -time to market for power system designers. Pioneered by leading power supply and
-> -semiconductor companies, this open power system standard is maintained and
-> -promoted by the PMBus Implementers Forum (PMBus-IF), comprising 30+ adopters
-> -with the objective to provide support to, and facilitate adoption among, users.
-> +  The Power Management Bus (PMBus) is an open standard power-management protocol
-> +  with a fully defined command language that facilitates communication with
-> +  power converters and other devices in a power system. The protocol is
-> +  implemented over the industry-standard SMBus serial interface and enables
-> +  programming, control, and real-time monitoring of compliant power conversion
-> +  products. This flexible and highly versatile standard allows for communication
-> +  between devices based on both analog and digital technologies, and provides
-> +  true interoperability which will reduce design complexity and shorten time to
-> +  market for power system designers. Pioneered by leading power supply and
-> +  semiconductor companies, this open power system standard is maintained and
-> +  promoted by the PMBus Implementers Forum (PMBus-IF), comprising 30+ adopters
-> +  with the objective to provide support to, and facilitate adoption among,
-> +  users.
-> +
-> +    (from pmbus.org)
+Adds support for the screenpad(-plus) found on a few ASUS laptops that have a main 16:9 or 16:10 screen and a shorter screen below the main but above the keyboard.
+The support consists of:
+- On off control
+- Setting brightness from 0-255
 
-Seems like a candidate for attribution:
+There are some small quirks with this device when considering only the raw WMI methods:
+1. The Off method can only switch the device off
+2. Changing the brightness turns the device back on
+3. To turn the device back on the brightness must be > 1
+4. When the device is off the brightness can't be changed (so it is stored by the driver if device is off).
+5. Booting with a value of 0 brightness (retained by bios) means the bios will set a value of > 0, < 15 which is far too dim and was unexpected by testers. The compromise was to set the brightness to 60 which is a usable brightness if the module init brightness was under 15.
+6. When the device is off it is "unplugged"
 
----- >8 ----
-diff --git a/Documentation/hwmon/pmbus-core.rst b/Documentation/hwmon/pmbus-core.rst
-index 2f88a03446d2be..75404f088fd777 100644
---- a/Documentation/hwmon/pmbus-core.rst
-+++ b/Documentation/hwmon/pmbus-core.rst
-@@ -21,7 +21,7 @@ Introduction
-   with the objective to provide support to, and facilitate adoption among,
-   users.
- 
--    (from pmbus.org)
-+  -- (from pmbus.org)
- 
- Unfortunately, while PMBus commands are standardized, there are no mandatory
- commands, and manufacturers can add as many non-standard commands as they like.
+All of the above points are addressed within the patch to create a good user experience and keep within user expectations.
 
-Otherwise the formatting LGTM, thanks!
+Changelog:
+- V2
+  - Complete refactor to use as a backlight device
 
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+Luke D. Jones (1):
+  platform/x86: asus-wmi: add support for ASUS screenpad
+
+ .../ABI/testing/sysfs-platform-asus-wmi       |   2 +-
+ drivers/platform/x86/asus-wmi.c               | 132 ++++++++++++++++++
+ drivers/platform/x86/asus-wmi.h               |   1 +
+ include/linux/platform_data/x86/asus-wmi.h    |   4 +
+ 4 files changed, 138 insertions(+), 1 deletion(-)
 
 -- 
-An old man doll... just what I always wanted! - Clara
+2.40.0
+
