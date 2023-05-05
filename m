@@ -2,52 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40AC76F7AD1
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 04:17:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ED516F7AD9
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 04:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbjEECRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 22:17:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59950 "EHLO
+        id S230010AbjEECUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 22:20:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjEECRp (ORCPT
+        with ESMTP id S229524AbjEECUv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 22:17:45 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A17A27D;
-        Thu,  4 May 2023 19:17:43 -0700 (PDT)
-Received: from dggpemm500012.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4QCDkR42D3z18L6Q;
-        Fri,  5 May 2023 10:13:35 +0800 (CST)
-Received: from [10.67.101.126] (10.67.101.126) by
- dggpemm500012.china.huawei.com (7.185.36.89) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 5 May 2023 10:17:37 +0800
-Message-ID: <b67e531a-1caf-89ae-dcc2-f22e0d1f09a0@huawei.com>
-Date:   Fri, 5 May 2023 10:17:37 +0800
+        Thu, 4 May 2023 22:20:51 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49EF0AD3F;
+        Thu,  4 May 2023 19:20:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683253250; x=1714789250;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=3cB8FCltPb4XWCTQOTTNGU/NtPGFR9grO1Z1GyYNzXQ=;
+  b=dffgtO/rUrlY4TUhEWWGvB3SIRa2Y81W7MFABgT8hEEL3lwmKlcDHTab
+   WHagGDlMYmys5DroopGjEoZh4wlRV/F3ZLssoHk3So3HAAjgT/uEIem0o
+   OYEvQJm4WIxJjd5qyBYYaNlp7K6sq05obsBrnv3Ou1Eg5RPZeTKJEgzTQ
+   QtMVztXshcNlWQCKZJQq8+/Z2p7p2TqaMAf/kw3M1njxsHA1i/IVs4P/0
+   T+wX0d4xg4tXXMD3Wt3amKnDUgP6NdJQaEJkLyz+grusqjrVAZyhMkgZ9
+   ZNvNqBU1ePg+VG+ikfbVRTLF163phAg7yi1Jx4Fcy5iz/2g/Ct2QdxYja
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="333526403"
+X-IronPort-AV: E=Sophos;i="5.99,250,1677571200"; 
+   d="scan'208";a="333526403"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 19:18:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="674816299"
+X-IronPort-AV: E=Sophos;i="5.99,250,1677571200"; 
+   d="scan'208";a="674816299"
+Received: from yuzhongq-mobl.ccr.corp.intel.com (HELO [10.255.29.220]) ([10.255.29.220])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 19:18:34 -0700
+Message-ID: <600c42ab-44a8-d2cd-57c4-d423a8516d0a@linux.intel.com>
+Date:   Fri, 5 May 2023 10:18:32 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH] ata: libata-scsi: Fix get identity data failed
-Content-Language: en-CA
-To:     John Garry <john.g.garry@oracle.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <damien.lemoal@opensource.wdc.com>,
-        <dlemoal@kernel.org>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@huawei.com>, <prime.zeng@hisilicon.com>,
-        <kangfenglong@huawei.com>
-References: <20230504131545.3409-1-yangxingui@huawei.com>
- <4ffe09f9-df67-f238-75cf-d0d16476e618@oracle.com>
-From:   yangxingui <yangxingui@huawei.com>
-In-Reply-To: <4ffe09f9-df67-f238-75cf-d0d16476e618@oracle.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.101.126]
-X-ClientProxiedBy: dggpemm100009.china.huawei.com (7.185.36.113) To
- dggpemm500012.china.huawei.com (7.185.36.89)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v2 11/21] KVM:VMX: Introduce CET VMCS fields and control
+ bits
+To:     Yang Weijiang <weijiang.yang@intel.com>, seanjc@google.com,
+        pbonzini@redhat.com, peterz@infradead.org, john.allen@amd.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     rick.p.edgecombe@intel.com, Zhang Yi Z <yi.z.zhang@linux.intel.com>
+References: <20230421134615.62539-1-weijiang.yang@intel.com>
+ <20230421134615.62539-12-weijiang.yang@intel.com>
+From:   Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <20230421134615.62539-12-weijiang.yang@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -56,143 +68,111 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2023/5/4 22:24, John Garry wrote:
-> On 04/05/2023 14:15, Xingui Yang wrote:
->> The function ata_get_identity() uses the helper ata_scsi_find_dev() to 
->> get
->> the ata_device structure of a scsi device.  However, when the ata device
->> is managed by libsas, ata_scsi_find_dev() returns NULL, turning
->> ata_get_identity() into a nop and always returns -ENOMSG.
->>
->> Fix this by replacing the pointer to the scsi_device struct argument 
->> with a
->> pointer to the ata_device struct in ata_sas_scsi_ioctl() and
->> ata_get_identity(). This pointer is provided by ata_scsi_ioctl() using
->> ata_scsi_find_dev() in the case of a libata managed device and by
->> sas_ioctl() using sas_to_ata_dev() in the case of a libsas managed ata
->> device.
-> 
-> We made a similar change in commit 141f3d6256e5 ("ata: libata-sata: Fix 
-> device queue depth control"). Is there some better way to do this to 
-> make it all more scalable such that we don't need to keep replacing 
-> calls to ata_scsi_find_dev()?
-> 
-Yes, We do have a way to return the correct value in 
-ata_scsi_find_dev(), and we don't need to keep replacing calls to 
-ata_scsi_find_dev(). I'll update with a new version.
+On 4/21/2023 9:46 PM, Yang Weijiang wrote:
+> CET (Control-flow Enforcement Technology) is a CPU feature used to prevent
+> Return/Jump-Oriented Programming (ROP/JOP) attacks. CET introduces a new
+> exception type, Control Protection (#CP), and two sub-features(SHSTK,IBT)
+> to defend against ROP/JOP style control-flow subversion attacks.
+>
+> Shadow Stack (SHSTK):
+>    A shadow stack is a second stack used exclusively for control transfer
+>    operations. The shadow stack is separate from the data/normal stack and
+>    can be enabled individually in user and kernel mode.  When shadow stacks
+>    are enabled, CALL pushes the return address on both the data and shadow
+>    stack. RET pops the return address from both stacks and compares them.
+>    If the return addresses from the two stacks do not match, the processor
+>    signals a #CP.
+>
+> Indirect Branch Tracking (IBT):
+>    IBT adds a new instrution, ENDBRANCH, that is used to mark valid target
+/s/instrution/instruction
 
-Thanks,
-Xingui
-> This was discussed earlier, along with queue depth issue (which does not 
-> seem fixed, AFAIK):
-> https://lore.kernel.org/linux-scsi/13e5e5e5-7dc2-8f14-3dd2-43366343842d@huawei.com/ 
-> 
-> 
-> Thanks,
-> John
-> 
-> 
->>
->> Signed-off-by: Xingui Yang <yangxingui@huawei.com>
->> ---
->>   drivers/ata/libata-scsi.c           | 22 +++++++++++-----------
->>   drivers/scsi/libsas/sas_scsi_host.c |  3 ++-
->>   include/linux/libata.h              |  2 +-
->>   3 files changed, 14 insertions(+), 13 deletions(-)
->>
->> diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
->> index 7bb12deab70c..68f2404e61d0 100644
->> --- a/drivers/ata/libata-scsi.c
->> +++ b/drivers/ata/libata-scsi.c
->> @@ -327,8 +327,7 @@ EXPORT_SYMBOL_GPL(ata_scsi_unlock_native_capacity);
->>   /**
->>    *    ata_get_identity - Handler for HDIO_GET_IDENTITY ioctl
->> - *    @ap: target port
->> - *    @sdev: SCSI device to get identify data for
->> + *    @dev: ATA device to get identify data for
->>    *    @arg: User buffer area for identify data
->>    *
->>    *    LOCKING:
->> @@ -337,10 +336,8 @@ EXPORT_SYMBOL_GPL(ata_scsi_unlock_native_capacity);
->>    *    RETURNS:
->>    *    Zero on success, negative errno on error.
->>    */
->> -static int ata_get_identity(struct ata_port *ap, struct scsi_device 
->> *sdev,
->> -                void __user *arg)
->> +static int ata_get_identity(struct ata_device *dev, void __user *arg)
->>   {
->> -    struct ata_device *dev = ata_scsi_find_dev(ap, sdev);
->>       u16 __user *dst = arg;
->>       char buf[40];
->> @@ -573,7 +570,7 @@ static bool ata_ioc32(struct ata_port *ap)
->>    * This handles both native and compat commands, so anything added
->>    * here must have a compatible argument, or check in_compat_syscall()
->>    */
->> -int ata_sas_scsi_ioctl(struct ata_port *ap, struct scsi_device *scsidev,
->> +int ata_sas_scsi_ioctl(struct ata_port *ap, struct ata_device *dev,
->>                unsigned int cmd, void __user *arg)
->>   {
->>       unsigned long val;
->> @@ -608,17 +605,17 @@ int ata_sas_scsi_ioctl(struct ata_port *ap, 
->> struct scsi_device *scsidev,
->>           return rc;
->>       case HDIO_GET_IDENTITY:
->> -        return ata_get_identity(ap, scsidev, arg);
->> +        return ata_get_identity(dev, arg);
->>       case HDIO_DRIVE_CMD:
->>           if (!capable(CAP_SYS_ADMIN) || !capable(CAP_SYS_RAWIO))
->>               return -EACCES;
->> -        return ata_cmd_ioctl(scsidev, arg);
->> +        return ata_cmd_ioctl(dev->sdev, arg);
->>       case HDIO_DRIVE_TASK:
->>           if (!capable(CAP_SYS_ADMIN) || !capable(CAP_SYS_RAWIO))
->>               return -EACCES;
->> -        return ata_task_ioctl(scsidev, arg);
->> +        return ata_task_ioctl(dev->sdev, arg);
->>       default:
->>           rc = -ENOTTY;
->> @@ -632,8 +629,11 @@ EXPORT_SYMBOL_GPL(ata_sas_scsi_ioctl);
->>   int ata_scsi_ioctl(struct scsi_device *scsidev, unsigned int cmd,
->>              void __user *arg)
->>   {
->> -    return ata_sas_scsi_ioctl(ata_shost_to_port(scsidev->host),
->> -                scsidev, cmd, arg);
->> +    struct ata_port *ap = ata_shost_to_port(scsidev->host);
->> +
->> +    return ata_sas_scsi_ioctl(ap,
->> +            ata_scsi_find_dev(ap, scsidev),
->> +            cmd, arg);
->>   }
->>   EXPORT_SYMBOL_GPL(ata_scsi_ioctl);
->> diff --git a/drivers/scsi/libsas/sas_scsi_host.c 
->> b/drivers/scsi/libsas/sas_scsi_host.c
->> index a36fa1c128a8..c7a44ce7b2e2 100644
->> --- a/drivers/scsi/libsas/sas_scsi_host.c
->> +++ b/drivers/scsi/libsas/sas_scsi_host.c
->> @@ -789,7 +789,8 @@ int sas_ioctl(struct scsi_device *sdev, unsigned 
->> int cmd, void __user *arg)
->>       struct domain_device *dev = sdev_to_domain_dev(sdev);
->>       if (dev_is_sata(dev))
->> -        return ata_sas_scsi_ioctl(dev->sata_dev.ap, sdev, cmd, arg);
->> +        return ata_sas_scsi_ioctl(dev->sata_dev.ap,
->> +                sas_to_ata_dev(dev), cmd, arg);
->>       return -EINVAL;
->>   }
->> diff --git a/include/linux/libata.h b/include/linux/libata.h
->> index 311cd93377c7..d5dd60530a24 100644
->> --- a/include/linux/libata.h
->> +++ b/include/linux/libata.h
->> @@ -1085,7 +1085,7 @@ bool ata_scsi_dma_need_drain(struct request *rq);
->>   #else
->>   #define ata_scsi_dma_need_drain NULL
->>   #endif
->> -extern int ata_sas_scsi_ioctl(struct ata_port *ap, struct scsi_device 
->> *dev,
->> +extern int ata_sas_scsi_ioctl(struct ata_port *ap, struct ata_device 
->> *dev,
->>                   unsigned int cmd, void __user *arg);
->>   extern bool ata_link_online(struct ata_link *link);
->>   extern bool ata_link_offline(struct ata_link *link);
-> 
-> .
+>    addresses of indirect branches (CALL, JMP, ENCLU[EEXIT], etc...). If an
+>    indirect branch is executed and the next instruction is _not_ an
+>    ENDBRANCH, the processor signals a #CP.
+>
+> Several new CET MSRs are defined to support CET:
+>    MSR_IA32_{U,S}_CET: Controls the CET settings for user mode and kernel
+>                        mode respectively.
+>
+>    MSR_IA32_PL{0,1,2,3}_SSP: Stores shadow stack pointers for CPL-0,1,2,3
+>                              protection respectively.
+>
+>    MSR_IA32_INT_SSP_TAB: Stores base address of shadow stack pointer table.
+According to the name of the MSR, it is interrupt related, right?
+It's better to describe the MSR more precisely.
+
+
+>
+> Two XSAVES state bits are introduced for CET:
+>    IA32_XSS:[bit 11]: Control saving/restoring user mode CET states
+>    IA32_XSS:[bit 12]: Control saving/restoring kernel mode CET states.
+>
+> Six VMCS fields are introduced for CET:
+>    {HOST,GUEST}_S_CET: Stores CET settings for kernel mode.
+>    {HOST,GUEST}_SSP: Stores shadow stack pointer of current active task/thread.
+>    {HOST,GUEST}_INTR_SSP_TABLE: Stores base address of shadow stack pointer table.
+
+ditto
+
+>
+> If VM_EXIT_LOAD_HOST_CET_STATE = 1, the host CET states are restored from
+> the following VMCS fields at VM-Exit:
+>    HOST_S_CET
+>    HOST_SSP
+>    HOST_INTR_SSP_TABLE
+>
+> If VM_ENTRY_LOAD_GUEST_CET_STATE = 1, the guest CET states are loaded from
+> the following VMCS fields at VM-Entry:
+>    GUEST_S_CET
+>    GUEST_SSP
+>    GUEST_INTR_SSP_TABLE
+>
+> Co-developed-by: Zhang Yi Z <yi.z.zhang@linux.intel.com>
+> Signed-off-by: Zhang Yi Z <yi.z.zhang@linux.intel.com>
+> Signed-off-by: Yang Weijiang <weijiang.yang@intel.com>
+> ---
+>   arch/x86/include/asm/vmx.h | 8 ++++++++
+>   1 file changed, 8 insertions(+)
+>
+> diff --git a/arch/x86/include/asm/vmx.h b/arch/x86/include/asm/vmx.h
+> index 498dc600bd5c..fe2aff27df8c 100644
+> --- a/arch/x86/include/asm/vmx.h
+> +++ b/arch/x86/include/asm/vmx.h
+> @@ -102,6 +102,7 @@
+>   #define VM_EXIT_CLEAR_BNDCFGS                   0x00800000
+>   #define VM_EXIT_PT_CONCEAL_PIP			0x01000000
+>   #define VM_EXIT_CLEAR_IA32_RTIT_CTL		0x02000000
+> +#define VM_EXIT_LOAD_CET_STATE                  0x10000000
+>   
+>   #define VM_EXIT_ALWAYSON_WITHOUT_TRUE_MSR	0x00036dff
+>   
+> @@ -115,6 +116,7 @@
+>   #define VM_ENTRY_LOAD_BNDCFGS                   0x00010000
+>   #define VM_ENTRY_PT_CONCEAL_PIP			0x00020000
+>   #define VM_ENTRY_LOAD_IA32_RTIT_CTL		0x00040000
+> +#define VM_ENTRY_LOAD_CET_STATE                 0x00100000
+>   
+>   #define VM_ENTRY_ALWAYSON_WITHOUT_TRUE_MSR	0x000011ff
+>   
+> @@ -343,6 +345,9 @@ enum vmcs_field {
+>   	GUEST_PENDING_DBG_EXCEPTIONS    = 0x00006822,
+>   	GUEST_SYSENTER_ESP              = 0x00006824,
+>   	GUEST_SYSENTER_EIP              = 0x00006826,
+> +	GUEST_S_CET                     = 0x00006828,
+> +	GUEST_SSP                       = 0x0000682a,
+> +	GUEST_INTR_SSP_TABLE            = 0x0000682c,
+>   	HOST_CR0                        = 0x00006c00,
+>   	HOST_CR3                        = 0x00006c02,
+>   	HOST_CR4                        = 0x00006c04,
+> @@ -355,6 +360,9 @@ enum vmcs_field {
+>   	HOST_IA32_SYSENTER_EIP          = 0x00006c12,
+>   	HOST_RSP                        = 0x00006c14,
+>   	HOST_RIP                        = 0x00006c16,
+> +	HOST_S_CET                      = 0x00006c18,
+> +	HOST_SSP                        = 0x00006c1a,
+> +	HOST_INTR_SSP_TABLE             = 0x00006c1c
+>   };
+>   
+>   /*
+
