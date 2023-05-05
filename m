@@ -2,116 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 777C56F8CDE
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 01:44:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BECF6F8CE1
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 01:45:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231617AbjEEXoI convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 5 May 2023 19:44:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44932 "EHLO
+        id S232055AbjEEXpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 19:45:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbjEEXoF (ORCPT
+        with ESMTP id S229821AbjEEXpl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 19:44:05 -0400
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA5585FE0;
-        Fri,  5 May 2023 16:44:03 -0700 (PDT)
-Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-b9a6f17f2b6so16535570276.1;
-        Fri, 05 May 2023 16:44:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683330243; x=1685922243;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0VWVwxZIs17EWQgN1pMsqtqITHwPVpRT/J8MlrKIuf0=;
-        b=C2MUZgswslksx+JUOU1qPojPDLZMWut1Kkg0eQCooDH5b2YNyEpUBUda4UDAzkBSBq
-         ZdNttltoCOZ4pq3Iyv9erC0ipGaJ8d+9kY8AzbclJgjM+DM5jerVzYGAyd0HydFHrcWJ
-         3Wk0EiytStcGohcv5bs/SxCYBuj9QyWxJFkcQNNqwKityZ6KQEkbp6jBv1bu9jPkaHkL
-         fQaApvZGR+Z27ICj464baUERG/SGkkaYzwtpE/HRNz9jgLeGHAXtMliF/IE9Uzxx4seL
-         eo0gHHkikiQBCbHMaT8rUSUEaEU1oXuhSieYAo0PlekonPoVTaQMnweHPFGDgXt8Y4OU
-         +H+A==
-X-Gm-Message-State: AC+VfDzbpiqv3tTWWhtogazfgklKCemcVJY+olWzamZKV22ljg7h2NMj
-        Io0f42jVZijgIqHsg1WAk46yKoZ03u676yAzLOM=
-X-Google-Smtp-Source: ACHHUZ6t7vln0PDR6zfyAtsdsfhDAr3DtC9YEHncbwx3EogvaxvcUX9cVuniMmYDEdAimDdVXZRwT7xXfzZWxHQGs9I=
-X-Received: by 2002:a25:4f57:0:b0:b9e:2ef0:de90 with SMTP id
- d84-20020a254f57000000b00b9e2ef0de90mr5369318ybb.17.1683330242744; Fri, 05
- May 2023 16:44:02 -0700 (PDT)
+        Fri, 5 May 2023 19:45:41 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A20995FD9
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 16:45:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=3ivfYN9NFn5Ur3KwxVm0BlzaXOloF+5cCvdC28BiwI4=; b=W1rNGpt1ik2K6PIZZMqij1tv9L
+        mCvK5ahfCpGV6XL7aKQln5qDUx7Qdmol/yrkd5fEs9mq5QOBXOshL7j7F3p2MVXssTxWOw9iIJYI3
+        LcRqqCqcCpiAnfi88cqhUl9oZqJKD9lMgmdKaSmhDd4C7fXNF4YoYhs0/cm90hpd9kkk7CL7RNtGE
+        G58h8vpqR5iH5DpkOwh6P5N57JboVnp2nK0hyl7pBehjinCo80XmwMPxKChlR06Id9zN0oCaU3CdV
+        EfuHk4Qozju77oivwjy5W1JDNGXi+d1smK6tHyk5/Bs6IH50SKzxjRj4RNBj1SBKs2LlhVJTlnrQU
+        I/fb3tXQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pv56g-00BzAc-C2; Fri, 05 May 2023 23:44:58 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2D7A430022D;
+        Sat,  6 May 2023 01:44:57 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id E0E3E23C5C32C; Sat,  6 May 2023 01:44:56 +0200 (CEST)
+Date:   Sat, 6 May 2023 01:44:56 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Tim Chen <tim.c.chen@linux.intel.com>
+Cc:     Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shrikanth Hegde <sshegde@linux.vnet.ibm.com>,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
+        naveen.n.rao@linux.vnet.ibm.com,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        Barry Song <v-songbaohua@oppo.com>,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Subject: Re: [PATCH 2/6] sched/fair: Check whether active load balance is
+ needed in busiest group
+Message-ID: <20230505234456.GC1821641@hirez.programming.kicks-ass.net>
+References: <cover.1683156492.git.tim.c.chen@linux.intel.com>
+ <231cf298efb8627499bb42788588a6108c7b8f7c.1683156492.git.tim.c.chen@linux.intel.com>
+ <20230505121631.GF4253@hirez.programming.kicks-ass.net>
+ <e21f2ca92490d9efd8f8fad0679d05ef08a52147.camel@linux.intel.com>
 MIME-Version: 1.0
-References: <83d6c6c05c54bf00c5a9df32ac160718efca0c7a.1683280603.git.sandipan.das@amd.com>
- <6a5429879764e3dac984cbb11ee2d95cc1604161.1683280603.git.sandipan.das@amd.com>
-In-Reply-To: <6a5429879764e3dac984cbb11ee2d95cc1604161.1683280603.git.sandipan.das@amd.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Fri, 5 May 2023 16:43:51 -0700
-Message-ID: <CAM9d7cinMnb03jU=ZzEbPhBkbd7-rL1CMaQ41ZBnaD2ysqDVBA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] perf test: Add stat test for record and script
-To:     Sandipan Das <sandipan.das@amd.com>
-Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com,
-        terrelln@fb.com, ravi.bangoria@amd.com, ananth.narayan@amd.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e21f2ca92490d9efd8f8fad0679d05ef08a52147.camel@linux.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 5, 2023 at 3:03â€¯AM Sandipan Das <sandipan.das@amd.com> wrote:
->
-> When using the global aggregation mode, running perf script after perf
-> stat record can result in a segmentation fault as seen with commit
-> 8b76a3188b85 ("perf stat: Remove unused perf_counts.aggr field"). Add a
-> basic test to the existing suite of stat-related tests for checking if
-> that workflow runs without erroring out.
->
-> Signed-off-by: Sandipan Das <sandipan.das@amd.com>
+On Fri, May 05, 2023 at 03:29:45PM -0700, Tim Chen wrote:
+> On Fri, 2023-05-05 at 14:16 +0200, Peter Zijlstra wrote:
+> > 
+> > > +static inline bool asym_active_balance_busiest(struct lb_env *env, struct sd_lb_stats *sds)
+> > > +{
+> > > +	/*
+> > > +	 * Don't balance to a group without spare capacity.
+> > > +	 *
+> > > +	 * Skip non asymmetric sched group balancing. That check
+> > > +	 * is handled by code path handling imbalanced load between
+> > > +	 * similar groups.
+> > > +	 */
+> > > +	if (env->idle == CPU_NOT_IDLE ||
+> > > +	    sds->local_stat.group_type != group_has_spare ||
+> > > +	    !asymmetric_groups(sds->local, sds->busiest))
+> > > +		return false;
+> > > +
+> > > +	/*
+> > > +	 * For SMT source group, pull when there are two or more
+> > > +	 * tasks over-utilizing a core.
+> > > +	 */
+> > > +	if (sds->busiest->flags & SD_SHARE_CPUCAPACITY &&
+> > > +	    sds->busiest_stat.sum_h_nr_running > 1)
+> > > +		return true;
+> > > +
+> > > +	return false;
+> > > +}
+> > 
+> > This all seems to be mixing two 'asymmetric' things in the 'asym'
+> > namespace :/ One being the SD_ASYM_PACKING and then the above SMT/no-SMT
+> > core thing.
+> 
+> Yeah, I am kind of abusing the "asymmetric" word.  However, the above
+> code does try to set things up for the aysm_active_balance() code
+> later. Any suggestion on better names for "asymmetric_groups()" and
+> and "asym_active_balance_busiest()"? 
+> 
+> Perhaps "hybrid_groups()" and "hybrid_active_balance_busiest()"?
 
-Acked-by: Namhyung Kim <namhyung@kernel.org>
+As per the other subthread; I really don't think this whole SMT vs
+non-SMT should be in any way shape or form be related to hybrid.
+Offlining siblings should really get you the same topology.
 
-Thanks,
-Namhyung
+(and if that currently is not the case, that should be fixed)
 
+(and also; we should probably add group_flags to
+ /debug/sched/domains/cpuN/domainM/ so we can actually see what's what,
+ because this seems to be a bit of a blind spot).
 
-> ---
->  tools/perf/tests/shell/stat.sh | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
->
-> diff --git a/tools/perf/tests/shell/stat.sh b/tools/perf/tests/shell/stat.sh
-> index 2c1d3f704995..b154fbb15d54 100755
-> --- a/tools/perf/tests/shell/stat.sh
-> +++ b/tools/perf/tests/shell/stat.sh
-> @@ -28,6 +28,18 @@ test_stat_record_report() {
->    echo "stat record and report test [Success]"
->  }
->
-> +test_stat_record_script() {
-> +  echo "stat record and script test"
-> +  if ! perf stat record -o - true | perf script -i - 2>&1 | \
-> +    grep -E -q "CPU[[:space:]]+THREAD[[:space:]]+VAL[[:space:]]+ENA[[:space:]]+RUN[[:space:]]+TIME[[:space:]]+EVENT"
-> +  then
-> +    echo "stat record and script test [Failed]"
-> +    err=1
-> +    return
-> +  fi
-> +  echo "stat record and script test [Success]"
-> +}
-> +
->  test_stat_repeat_weak_groups() {
->    echo "stat repeat weak groups test"
->    if ! perf stat -e '{cycles,cycles,cycles,cycles,cycles,cycles,cycles,cycles,cycles,cycles}' \
-> @@ -93,6 +105,7 @@ test_topdown_weak_groups() {
->
->  test_default_stat
->  test_stat_record_report
-> +test_stat_record_script
->  test_stat_repeat_weak_groups
->  test_topdown_groups
->  test_topdown_weak_groups
-> --
-> 2.34.1
->
+That also suggests the hybrid naming suggestion is not a very good one.
+
+And I'll blame it being nearly 2am for not being able to come up with a
+good suggestion, but I'm thinking it ought to have SMT in the name
+somehow.
