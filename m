@@ -2,91 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA2966F8227
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 13:39:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04C096F8231
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 13:42:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231855AbjEELjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 07:39:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42682 "EHLO
+        id S231867AbjEELmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 07:42:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231393AbjEELjB (ORCPT
+        with ESMTP id S229591AbjEELmR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 07:39:01 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F951A12C
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 04:39:00 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id 3f1490d57ef6-ba1815e12efso1475493276.3
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 04:39:00 -0700 (PDT)
+        Fri, 5 May 2023 07:42:17 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DB411607;
+        Fri,  5 May 2023 04:42:15 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f178da21b5so11393215e9.3;
+        Fri, 05 May 2023 04:42:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683286739; x=1685878739;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=puWCJyuFf3yp6BwyAz5qUYq78oF9e+xdSzj78gCEdNE=;
-        b=Y0Y/0YC+7QL81nt9H9hIuiBWkuL7s/MD2CaHmSwYjTa9/pP1nMLmCAYN5YYZLHeY+9
-         QHRWhAZFPTLqMLBuQGfw3+7GQMtw8hx+rr6QOcZOEx/Q1WC8Ep7HZXRnUmuxoDm7jt71
-         rgSHQqKW9BTHsYCkUySzUGBr8ro5MavFn09rFJcUazJXA1O5PIUOKhUIuM/I+cWuNTqF
-         TJEGOZW422cFvc4OOlja9+727aErAFw25YusDW1D5aFJoZsjbHCzcJQTKSnq7dtz6Fe+
-         TAuBu9qis9CBMPOcHnexsoS/bHvgGbNhxmXURDjYr/BOhUMysnln/dG3efrq/VdfG4hN
-         jsOw==
+        d=gmail.com; s=20221208; t=1683286934; x=1685878934;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=jwA4RNzHLoe51BKJcNUYfJNJRyNu9DKsCjgDMwmTA7A=;
+        b=WF62c/j6RiITYW667aRT9w0LZy3zB+wgpx/WJ54+TRNLcLn4nTSikrpYai6OPrVGkz
+         IhgIvNnPGGl2SqlqbS+XLVcmzlBBB3OIewdGD/Mc7jw1zvkSCZS0gO6g4I18UKjJpoj1
+         FO9voODgeBvwtJghqcm99OfSx20ZYAYuzHd2L/pDpWIFnzEdDA3BDtg027bp6yGvd9Dy
+         qmFj4Wp7HLufi3CpLf5X1VBmgRP2xFU6Kl41WtHiVSFzxiRuFE36kp27VfhPHPstuWxI
+         64+hwtMFhwaAojMK5K/YmDlC2xrKZsqTNtkbqts5wT+hjaUtZQ2H9I3Ym5HgEfVBlr30
+         j7CQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683286739; x=1685878739;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=puWCJyuFf3yp6BwyAz5qUYq78oF9e+xdSzj78gCEdNE=;
-        b=KrUCRo0lm+9sac07f0c8EZ13RBIEubW4LadE7C/NMAF8l1Kw/KBxR6XjfI4u+CLMyw
-         1BOUPovTcepd7q6rXId3saT++r9qAw3DKEWwRghWS+XwL1JqPdf3Q56gagQmeXbyzdab
-         Wf3vbsJt9ROrvm8iIi1rRpf77tlgxe8857nLJg+nsrlJbgC+tdWRTpPc3j+YW54I25mF
-         vEjJ1muznNerKR6yKBVbF3bdPY+vuOQQUEZedaitpUIQ4utWACW5Zpi8ZYdNdNg4A6si
-         xJLd2P7/AUQ2jqyO9TO4W/sdnBAFT0gao0UkYIsnyamxPdzcAyXmVElrSRT/9rpVX9Al
-         QKEw==
-X-Gm-Message-State: AC+VfDxyM3WoU3Pi8rB7QQTLyqkXEnLH1HXf+dwtRNyaW/Yqc73o0lyw
-        JSr8zc8dk6IffYmtdkmQkDZJ0iTLgE8QOB6+XVobig==
-X-Google-Smtp-Source: ACHHUZ7URXttrI5x/goP9FFi/xqVcIK9Vs/9Rym9CIhV8xMlCn+jPRw8C8kuiLQGeBOCQaw3GehxNG8DWIICXQgQaeU=
-X-Received: by 2002:a25:c7ce:0:b0:b95:941a:86c4 with SMTP id
- w197-20020a25c7ce000000b00b95941a86c4mr1291465ybe.26.1683286739409; Fri, 05
- May 2023 04:38:59 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683286934; x=1685878934;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jwA4RNzHLoe51BKJcNUYfJNJRyNu9DKsCjgDMwmTA7A=;
+        b=e/mr5PElj8n0EMnDDEUQ19+O3x5Zdr3t8VmUh93yvsoaMFdsMogYYy15fPAxd1T3PW
+         yU4qDoIOoD2TIJktpgZzzvH6rMrGak1VW2snljc+09rvjNY64xlRx0XVDo/V+pDC039y
+         VbfULTcewhhBnp9yCtoHNjj5bqvT28oB2tRVN3i9J/4EZqfm9JTvWsdBRuyqxhQsFBpe
+         Y1g1iJWACcBPP/iTWOxSh1uSMWbCmTDXpy2g7QoTMPv7tZfPZ1YFS4AacUAI0RUmJMxI
+         geMOioyVM3+9fGX06c3YjAYHO7YQIzvtQwt3iYuaF3QgBDLizmOVwSdP5rUfi+3pkO60
+         iZng==
+X-Gm-Message-State: AC+VfDxcU7eFgZrlqZH+5Ri0VIHSVXYNdA+y78uxgbALkzaBy2uJemDW
+        HR9wKLnYWYfucxF/GroU85+2U0hCPI6OCg==
+X-Google-Smtp-Source: ACHHUZ5w3w27K7kl40zFdLW88ML+N5pSdsni2WgKoruZX/PkX3r58fPaDnqKsJGOacQJD5I58y5CNA==
+X-Received: by 2002:a7b:c8d9:0:b0:3f1:78a7:6bd2 with SMTP id f25-20020a7bc8d9000000b003f178a76bd2mr930562wml.27.1683286934055;
+        Fri, 05 May 2023 04:42:14 -0700 (PDT)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id 20-20020a05600c029400b003f16932fe7dsm7803364wmk.38.2023.05.05.04.42.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 May 2023 04:42:13 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Fri, 5 May 2023 13:42:10 +0200
+To:     Ian Rogers <irogers@google.com>
+Cc:     Jiri Olsa <olsajiri@gmail.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Song Liu <song@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Clark Williams <williams@redhat.com>,
+        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Changbin Du <changbin.du@huawei.com>,
+        Hao Luo <haoluo@google.com>, James Clark <james.clark@arm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Roman Lozko <lozko.roma@gmail.com>,
+        Stephane Eranian <eranian@google.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        bpf <bpf@vger.kernel.org>
+Subject: Re: BPF skels in perf .Re: [GIT PULL] perf tools changes for v6.4
+Message-ID: <ZFTrkjccQ4cW6kYZ@krava>
+References: <ZFOSUab5XEJD0kxj@kernel.org>
+ <CAHk-=wgv1sKTdLWPC7XR1Px=pDNrDPDTKdX-T_2AQOwgkpWB2A@mail.gmail.com>
+ <ZFPw0scDq1eIzfHr@kernel.org>
+ <CAEf4BzaUU9vZU6R_020ru5ct0wh-p1M3ZFet-vYqcHvb9bW1Cw@mail.gmail.com>
+ <ZFQCccsx6GK+gY0j@kernel.org>
+ <ZFQoQjCNtyMIulp+@kernel.org>
+ <CAP-5=fU8HQorW+7O6vfEKGs1mEFkjkzXZMVPACzurtcMcRhVzQ@mail.gmail.com>
+ <ZFQ5sjjtfEYzvHNP@krava>
+ <CAP-5=fXgtNQ5KQv_M+b-mR-dm_s8AAgRkotXifFiTqBo9FHJzA@mail.gmail.com>
+ <ZFTOxBDsbboKeEr9@krava>
 MIME-Version: 1.0
-References: <98c3b5890bb72415145c9fe4e1d974711edae376.1681681402.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <98c3b5890bb72415145c9fe4e1d974711edae376.1681681402.git.christophe.jaillet@wanadoo.fr>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 5 May 2023 13:38:48 +0200
-Message-ID: <CACRpkdZYeHUkFC6U-abk=-e-3MO6DwTqE4WSc+rnHv5teQcdyA@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: bcm2835: Handle gpiochip_add_pin_range() errors
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZFTOxBDsbboKeEr9@krava>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 16, 2023 at 11:43=E2=80=AFPM Christophe JAILLET
-<christophe.jaillet@wanadoo.fr> wrote:
+On Fri, May 05, 2023 at 11:39:19AM +0200, Jiri Olsa wrote:
+> On Thu, May 04, 2023 at 04:19:47PM -0700, Ian Rogers wrote:
+> > On Thu, May 4, 2023 at 4:03 PM Jiri Olsa <olsajiri@gmail.com> wrote:
+> > >
+> > > On Thu, May 04, 2023 at 03:03:42PM -0700, Ian Rogers wrote:
+> > > > On Thu, May 4, 2023 at 2:48 PM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+> > > > >
+> > > > > Em Thu, May 04, 2023 at 04:07:29PM -0300, Arnaldo Carvalho de Melo escreveu:
+> > > > > > Em Thu, May 04, 2023 at 11:50:07AM -0700, Andrii Nakryiko escreveu:
+> > > > > > > On Thu, May 4, 2023 at 10:52 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+> > > > > > > > Andrii, can you add some more information about the usage of vmlinux.h
+> > > > > > > > instead of using kernel headers?
+> > > > > >
+> > > > > > > I'll just say that vmlinux.h is not a hard requirement to build BPF
+> > > > > > > programs, it's more a convenience allowing easy access to definitions
+> > > > > > > of both UAPI and kernel-internal structures for tracing needs and
+> > > > > > > marking them relocatable using BPF CO-RE machinery. Lots of real-world
+> > > > > > > applications just check-in pregenerated vmlinux.h to avoid build-time
+> > > > > > > dependency on up-to-date host kernel and such.
+> > > > > >
+> > > > > > > If vmlinux.h generation and usage is causing issues, though, given
+> > > > > > > that perf's BPF programs don't seem to be using many different kernel
+> > > > > > > types, it might be a better option to just use UAPI headers for public
+> > > > > > > kernel type definitions, and just define CO-RE-relocatable minimal
+> > > > > > > definitions locally in perf's BPF code for the other types necessary.
+> > > > > > > E.g., if perf needs only pid and tgid from task_struct, this would
+> > > > > > > suffice:
+> > > > > >
+> > > > > > > struct task_struct {
+> > > > > > >     int pid;
+> > > > > > >     int tgid;
+> > > > > > > } __attribute__((preserve_access_index));
+> > > > > >
+> > > > > > Yeah, that seems like a way better approach, no vmlinux involved, libbpf
+> > > > > > CO-RE notices that task_struct changed from this two integers version
+> > > > > > (of course) and does the relocation to where it is in the running kernel
+> > > > > > by using /sys/kernel/btf/vmlinux.
+> > > > >
+> > > > > Doing it for one of the skels, build tested, runtime untested, but not
+> > > > > using any vmlinux, BTF to help, not that bad, more verbose, but at least
+> > > > > we state what are the fields we actually use, have those attribute
+> > > > > documenting that those offsets will be recorded for future use, etc.
+> > > > >
+> > > > > Namhyung, can you please check that this works?
+> > > > >
+> > > > > Thanks,
+> > > > >
+> > > > > - Arnaldo
+> > > > >
+> > > > > diff --git a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
+> > > > > index 6a438e0102c5a2cb..f376d162549ebd74 100644
+> > > > > --- a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
+> > > > > +++ b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
+> > > > > @@ -1,11 +1,40 @@
+> > > > >  // SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > > >  // Copyright (c) 2021 Facebook
+> > > > >  // Copyright (c) 2021 Google
+> > > > > -#include "vmlinux.h"
+> > > > > +#include <linux/types.h>
+> > > > > +#include <linux/bpf.h>
+> > > >
+> > > > Compared to vmlinux.h here be dragons. It is easy to start dragging in
+> > > > all of libc and that may not work due to missing #ifdefs, etc.. Could
+> > > > we check in a vmlinux.h like libbpf-tools does?
+> > > > https://github.com/iovisor/bcc/tree/master/libbpf-tools#vmlinuxh-generation
+> > > > https://github.com/iovisor/bcc/tree/master/libbpf-tools/arm64
+> > > >
+> > > > This would also remove some of the errors that could be introduced by
+> > > > copy+pasting enums, etc. and also highlight issues with things being
+> > > > renamed as build time rather than runtime failures.
+> > >
+> > > we already have to deal with that, right? doing checks on fields in
+> > > structs like mm_struct___old
+> > 
+> > We do, but the way I detected the problems in the first place was by
+> > building against older kernels. Now the build will always succeed but
+> > fail at runtime.
+> > 
+> > > > Could this be some shared resource for the different linux tools
+> > > > projects using a vmlinux.h? e.g. tools/lib/vmlinuxh with an
+> > > > install_headers target that builds a vmlinux.h.
+> > >
+> > > I tried to do the minimal header and it's not too big,
+> > > I pushed it in here:
+> > >   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/log/?h=perf/vmlinux_h
+> > >
+> > > compile tested so far
+> > >
+> > > jirka
+> > 
+> > Cool, could we just call it vmlinux.h rather than perf-defs.h?
+> 
+> right, it also makes the change smaller
+> 
+> > 
+> > I notice cgroup_subsys_id is in there which is called out in Andrii's
+> > CO-RE  guide/blog:
+> > https://nakryiko.com/posts/bpf-core-reference-guide/#relocatable-enums
+> > perhaps we can do something with names/types to make sure a helper is
+> > being used for these enum values.
 
-> gpiochip_add_pin_range() can fail, so better return its error code than
-> a hard coded '0'.
->
-> Fixes: d2b67744fd99 ("pinctrl: bcm2835: implement hook for missing gpio-r=
-anges")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+both bperf_cgroup and off_cpu programs use bpf_core_enum_value, so we should be fine
 
-Patch applied for the next kernel cycle (becoming v6.5)
-
-Yours,
-Linus Walleij
+jirka
