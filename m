@@ -2,90 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 708826F843A
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 15:38:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F7256F843B
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 15:40:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232370AbjEENii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 09:38:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32856 "EHLO
+        id S232682AbjEENkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 09:40:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232682AbjEENie (ORCPT
+        with ESMTP id S232569AbjEENj6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 09:38:34 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E806421541;
-        Fri,  5 May 2023 06:38:32 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-63b5ce4f069so1960641b3a.1;
-        Fri, 05 May 2023 06:38:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683293912; x=1685885912;
-        h=in-reply-to:content-disposition:content-description:mime-version
-         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Mz4evSv67hQPNV6oClHQJu53Y2013LybJpvcP/3rYWU=;
-        b=TBySTqTx6D329de6pIqxKPksV2SP41ErBZxOvFEAhZ5kQlqc0eJ5/NbmGyaT4gtAju
-         Oqxh0fnWWcFFq4pNWDjDgouY3OBBklA+9z1iUZUrpcoYjGmg6/KsH0CLeysDBpOMz/aU
-         5eqSMf9WIUB2NYcqtw+h0eYBE6qcZ9V2YJts8jZkI4LF6MmEfeE431yfjdpA25Cv6nyC
-         gXXvu3e/LRKDwx8589uKdf4AeEkU5fp7oLRV7FvTI8I1yMlgxjEKIlJ6Gmi4DESPBnFL
-         h/6e0zLmZoqPcL7VitXcgTUcex8Rsq9uzMEDyW7jgbljTJ3I9ja3MLMYKVXYoLSJ7Ley
-         uJNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683293912; x=1685885912;
-        h=in-reply-to:content-disposition:content-description:mime-version
-         :references:message-id:subject:cc:to:date:from:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Mz4evSv67hQPNV6oClHQJu53Y2013LybJpvcP/3rYWU=;
-        b=PdmgzNNu14XAh/V5lf3zbPQc8Wuhopj9fissTsLeS5pp1cZPYBbY/daRfqlMTGffai
-         Ua0BKYJ82sw95QeKoeznP0WQ7i9MAHatmCl4lvAqxMemtemxkgjFHZ1CV7BJ0nUUmhqB
-         fY3Xcb4qCYqiPrd6eozGb4lFPyvk+/r1taqE4DYRMdMhyMItgW5WEKlkmEAEZ9mdiBxI
-         Gg2IZPUqvvaHY0HggPfYDGNIYRp3mwz0xURO0FQu5GGHhOd8LIt4p3DoEqAis4iIDFdp
-         NMUZ/nSMRFjxVplxOuwe4DzCTX1WkSRtV16pVExNF61i5Frxh75neaJjPzJ98wNwQT0k
-         F7tQ==
-X-Gm-Message-State: AC+VfDwcZNA2qA8jPTQhlfOLltXrplixH/UZ6N6ZHZ3pNgRoQJcjEO5A
-        41cV+woaZO/CODo7n9R80dQ=
-X-Google-Smtp-Source: ACHHUZ6jqvBp3DoOq6QbmnOZPC1jBE589QcBJHn3Ic731Vt39CAjAls8FFVH+ZQr5GZDp92TA0lpEg==
-X-Received: by 2002:a05:6a21:6704:b0:ef:ed72:779c with SMTP id wh4-20020a056a21670400b000efed72779cmr1761265pzb.8.1683293912071;
-        Fri, 05 May 2023 06:38:32 -0700 (PDT)
-Received: from yoga ([202.131.133.155])
-        by smtp.gmail.com with ESMTPSA id y2-20020a17090a6c8200b0024e135c2ea1sm5248770pjj.18.2023.05.05.06.38.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 May 2023 06:38:31 -0700 (PDT)
-From:   Anup Sharma <anupnewsmail@gmail.com>
-X-Google-Original-From: Anup Sharma <AnupSharma>
-Date:   Fri, 5 May 2023 19:08:26 +0530
-To:     Mark Brown <broonie@kernel.org>
-Cc:     lgirdwood@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        oder_chiou@realtek.com
-Subject: Re: [PATCH] ASoC: dt-bindings: rt1016: Convert to dtschema
-Message-ID: <ZFUG0vZG68hjZ0n9@yoga>
-References: <ZFUFAmBJXvkQAG7m@yoga>
- <ZFUFrWqOHVmzE+ut@finisterre.sirena.org.uk>
+        Fri, 5 May 2023 09:39:58 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B704120744;
+        Fri,  5 May 2023 06:39:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=066HoPG8L7DWq++F/dgN3CWaa2WyV8VEsCWGN+J9Cbw=; b=nb5bvxpC+oeV8cZk6KZfCT3vZb
+        gIXQremTJT2YJeYKJMY9hrvU69IXUBDVchzTwpNf+LR5XRoE1o9K5u6A63TZizTiQvaolVCP9aVZ8
+        5w476mazT9ddUcAXuTUjvk4+tgJj+7jGTYXPFffpElC/ig2HaU129w1JI+0Baoeu5LwS1TsNym98i
+        9nNYtxA9LUWWmqr4DerVwLuiltds36JCy7d69qfkcPVa44r1hIp1UbQ9u84uCV7PWJWMo6vcB2O2D
+        8K+RmAvSHqadux/g0L+yNlVjefULYZKieYrNgjC7hkZe4w8H7gCX96DSVM+a1C497LBID+3iTiFOW
+        EIHqw56g==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1puveK-003GP7-0N;
+        Fri, 05 May 2023 13:39:04 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2D15B3003CF;
+        Fri,  5 May 2023 15:39:02 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 0D20C21353003; Fri,  5 May 2023 15:39:02 +0200 (CEST)
+Date:   Fri, 5 May 2023 15:39:02 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Oleg Nesterov <oleg@redhat.com>
+Cc:     Wander Lairson Costa <wander@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Christian Brauner <brauner@kernel.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
+        <linux-perf-users@vger.kernel.org>, Hu Chunyu <chuhu@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v7 2/3] sched/task: Add the put_task_struct_atomic_safe()
+ function
+Message-ID: <20230505133902.GC38236@hirez.programming.kicks-ass.net>
+References: <20230425114307.36889-1-wander@redhat.com>
+ <20230425114307.36889-3-wander@redhat.com>
+ <20230504084229.GI1734100@hirez.programming.kicks-ass.net>
+ <20230504122945.GA28757@redhat.com>
+ <20230504143303.GA1744142@hirez.programming.kicks-ass.net>
+ <CAAq0SUmYrQbS1k9NNKGQP7hQRQJ308dk9NCiUimEiLeBJUavgA@mail.gmail.com>
+ <20230504152306.GA1135@redhat.com>
+ <20230504153057.GI1744258@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Description: evicetree@vger.kernel.org,
 Content-Disposition: inline
-In-Reply-To: <ZFUFrWqOHVmzE+ut@finisterre.sirena.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230504153057.GI1744258@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 05, 2023 at 10:33:33PM +0900, Mark Brown wrote:
-> On Fri, May 05, 2023 at 07:00:42PM +0530, Anup Sharma wrote:
+On Thu, May 04, 2023 at 05:30:57PM +0200, Peter Zijlstra wrote:
+> On Thu, May 04, 2023 at 05:23:07PM +0200, Oleg Nesterov wrote:
+
+> > Yes, but as Sebastian explained CONFIG_PROVE_RAW_LOCK_NESTING won't like it.
 > 
-> > +maintainers:
-> > +  - oder_chiou@realtek.com
+> This can help:
 > 
-> If you're nominating someone as the maintainer for a binding it's
-> probably best to copy them on the patch so they're aware...
+>   https://lkml.kernel.org/r/168303194177.404.8610123576035502891.tip-bot2@tip-bot2
 
-Thank you, will keep that in mind. 
+Explicitly:
 
+static inline void put_task_struct(struct task_struct *t)
+{
+	if (!refcount_dec_and_test(&t->usage))
+		return;
 
+	if (!IS_ENABLED(CONFIG_PREEMPT_RT) || premptible()) {
+		/*
+		 * ... same comment as the other patch ...
+		 */
+		static DEFINE_WAIT_OVERRIDE_MAP(put_task_map, LD_WAIT_SLEEP);
+		lock_map_acquire_try(&put_task_map);
+		__put_task_struct(t);
+		lock_map_release(&put_task_map);
+		return;
+	}
+
+	call_rcu(&t->rcu, __put_task_struct_rcu);
+}
+
+Should not complain since we tell it to STFU :-)
