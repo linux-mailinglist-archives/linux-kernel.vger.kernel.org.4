@@ -2,66 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 535C76F86F0
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 18:42:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 145F06F86F1
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 18:43:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231171AbjEEQmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 12:42:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36342 "EHLO
+        id S231178AbjEEQnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 12:43:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230444AbjEEQms (ORCPT
+        with ESMTP id S230444AbjEEQnK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 12:42:48 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F8016355;
-        Fri,  5 May 2023 09:42:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683304960; x=1714840960;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=N1JPxPIJIdERUPcr+WZPlldDq0rv6gkR5Peeo9bpwuU=;
-  b=PJophe6hSSjb8lfqyHG7X0B+YzX8XsALTq4fXRYUUe+FNsPOD8JsE6jP
-   KSdc7+bKOjzw21++MpxmiEb2jfUtDFLoncNLYAfNHyIAKkFeJ/myArD04
-   SshN917CNGLOlEtkqXaLq6bF+5eRehE00eFmJ75/SFMUEqdXDFOAaXVfu
-   yfhpnHv7jPENr2cdIDyA6w/0epsxDGSWczLVCVbdvLF1iKeSh43VfHSH3
-   u+th5Wr+hfTKQzNT6VhSXoNGV5CLSeFyAzi3ur548rzUKT9c3tfyahyvH
-   KTV23eLReJ2JQoJ21au3AsoaekHDRU3n2WDWhT63oupwrJCwk+JXgNl/9
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="333674469"
-X-IronPort-AV: E=Sophos;i="5.99,252,1677571200"; 
-   d="scan'208";a="333674469"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2023 09:42:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="700511808"
-X-IronPort-AV: E=Sophos;i="5.99,252,1677571200"; 
-   d="scan'208";a="700511808"
-Received: from annguyen-mobl2.amr.corp.intel.com (HELO [10.209.140.100]) ([10.209.140.100])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2023 09:42:38 -0700
-Message-ID: <55343361-d991-c157-4a88-843947aa45ff@intel.com>
-Date:   Fri, 5 May 2023 09:42:36 -0700
+        Fri, 5 May 2023 12:43:10 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9CC016355
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 09:43:06 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id 41be03b00d2f7-52c759b7d45so1705954a12.3
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 09:43:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1683304986; x=1685896986;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=24yRi1qjnWZisFpP+n/4/JukjZ0Kcgnz8WEqUSF8Rwc=;
+        b=S2sfM88FxwFvchAFp3KAzpcSRt0acemz7/xmUrNhlF4medSZEG9Ip5zbYeVTGLiBX0
+         Uy+XgOUgvess51BrTKJYsOb3s8LbQeJgD8LBDSmVk1brOb9vmAxj++qdO+tTKoffexYc
+         2MlUtSoNk2SlF0bqCkexSkpSDDM3uZHWykvKk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683304986; x=1685896986;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=24yRi1qjnWZisFpP+n/4/JukjZ0Kcgnz8WEqUSF8Rwc=;
+        b=O6Y2p16BV/RXKQUKWW6Nb6sTqOnmlD6pduPHfWBO6YYgmF06TT5/vl6GskY0mkByHr
+         mqcqTcN+HDfZqDdSdEHcC1nr20Igk9M2QG/r3ARhoJ2FJB0cQm1rPWgOLTiuJfKbvkYU
+         327LJHjP3HEJky7FF6LoElkcZDm4I1bSeSL7TqzcbOEh87nu76ksBC/EbZZ8O2DOkSju
+         0aOHaQLIgTUdskphLe0GWYqynDzrFvEeN6+WFsMaE+6uLAswxSS9jfNJHBViOwarx3MO
+         8zXOzguIu1JIarUZV9aJdQMoJlNQiMNBF+gwfSG3ghm+pZFlfGGnfyjTB8xeOiOPX0lz
+         petg==
+X-Gm-Message-State: AC+VfDxtxuyFRVb1NH5Qr3C62ixmTyu8FoWTU0h8zK+DjaUXfXrCP4Pr
+        FZlSBy4pUUUpFtKIIEGF2gn+SFmPJ7szLWFifKWR1Q==
+X-Google-Smtp-Source: ACHHUZ4lwwbxB9MtVTfIyIDKgv5PXNKsUEoOM+vA2CiBMedBi+yFNJzbUGwCseHog53wvxF/F6fMSYXIQzA38qxlhqk=
+X-Received: by 2002:a17:90b:1d0c:b0:247:1997:6a1f with SMTP id
+ on12-20020a17090b1d0c00b0024719976a1fmr2327984pjb.12.1683304986334; Fri, 05
+ May 2023 09:43:06 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [tip: perf/core] x86/cpu: Add helper function to get the type of
- the current hybrid CPU
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org
-Cc:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Len Brown <len.brown@intel.com>, Borislav Petkov <bp@suse.de>,
-        x86@kernel.org
-References: <1618237865-33448-3-git-send-email-kan.liang@linux.intel.com>
- <161891560955.29796.10811256921836669612.tip-bot2@tip-bot2>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <161891560955.29796.10811256921836669612.tip-bot2@tip-bot2>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20230504170942.822147-1-revest@chromium.org> <20230504170942.822147-5-revest@chromium.org>
+ <66900d0ad42797a55259061f757beece@ispras.ru>
+In-Reply-To: <66900d0ad42797a55259061f757beece@ispras.ru>
+From:   Florent Revest <revest@chromium.org>
+Date:   Fri, 5 May 2023 18:42:55 +0200
+Message-ID: <CABRcYmKXrPE0oP9R=qsn=mL3Nwm_mVqT-r-TvOvowTdiuYU--A@mail.gmail.com>
+Subject: Re: [PATCH 4/4] kselftest: vm: Add tests for no-inherit memory-deny-write-execute
+To:     Alexey Izbyshev <izbyshev@ispras.ru>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, catalin.marinas@arm.com,
+        anshuman.khandual@arm.com, joey.gouly@arm.com, mhocko@suse.com,
+        keescook@chromium.org, david@redhat.com, peterx@redhat.com,
+        nd@arm.com, broonie@kernel.org, szabolcs.nagy@arm.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,27 +70,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/20/21 03:46, tip-bot2 for Ricardo Neri wrote:
-> +#define X86_HYBRID_CPU_TYPE_ID_SHIFT	24
-> +
-> +/**
-> + * get_this_hybrid_cpu_type() - Get the type of this hybrid CPU
-> + *
-> + * Returns the CPU type [31:24] (i.e., Atom or Core) of a CPU in
-> + * a hybrid processor. If the processor is not hybrid, returns 0.
-> + */
-> +u8 get_this_hybrid_cpu_type(void)
-> +{
-> +	if (!cpu_feature_enabled(X86_FEATURE_HYBRID_CPU))
-> +		return 0;
-> +
-> +	return cpuid_eax(0x0000001a) >> X86_HYBRID_CPU_TYPE_ID_SHIFT;
-> +}
+On Thu, May 4, 2023 at 10:30=E2=80=AFPM Alexey Izbyshev <izbyshev@ispras.ru=
+> wrote:
+>
+> On 2023-05-04 20:09, Florent Revest wrote:
+> > Add some tests to cover the new PR_MDWE_NO_INHERIT flag of the
+> > PR_SET_MDWE prctl.
+> >
+> > Signed-off-by: Florent Revest <revest@chromium.org>
+> > ---
+> >  tools/testing/selftests/mm/mdwe_test.c | 95 ++++++++++++++++++++++++--
+> >  1 file changed, 89 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/mm/mdwe_test.c
+> > b/tools/testing/selftests/mm/mdwe_test.c
+> > index 91aa9c3099e7..9f08ed1b99ae 100644
+> > --- a/tools/testing/selftests/mm/mdwe_test.c
+> > +++ b/tools/testing/selftests/mm/mdwe_test.c
+> > @@ -22,6 +22,8 @@
+> >
+> >  TEST(prctl_flags)
+> >  {
+> > +     EXPECT_LT(prctl(PR_SET_MDWE, PR_MDWE_NO_INHERIT, 0L, 0L, 7L), 0);
+> > +
+>
+> PR_MDWE_NO_INHERIT is defined to an int constant, so passing it to
+> prctl() without a cast to long or similar may produce wrong code on
+> 64-bit targets (ABIs typically don't require the compiler to clear the
+> upper 32 bits of a 64-bit register when passing a 32-bit argument, so
+> va_arg(arg, unsigned long) in prctl() implementation might get junk).
 
-Hi Folks,
+Ah, good catch Alexey! :)
 
-Sorry to dredge up an old thread.  But, where does this information
-about "If the processor is not hybrid, returns 0." come from?
+> Arguably, defining PR_MDWE_* to plain int constants is a bug, or at
+> least a footgun for users of uapi headers.
 
-What is there to keep cpuid_eax(0x0000001a) from having 0x0 in those
-bits?  Seems to me like 0 is theoretically a valid hybrid CPU type.  Right?
+As part of the next version of this series, I'm happy to:
+1- change the existing PR_MDWE_REFUSE_EXEC_GAIN to 1UL
+2- introduce PR_MDWE_NO_INHERIT as 2UL
+
+But I'm surprised that most of the macros in
+include/uapi/linux/prctl.h are the same sort of footguns already ?
+Hasn't it been an issue for other prctls yet ?
