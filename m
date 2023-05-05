@@ -2,105 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49CE26F88BB
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 20:39:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F7C46F88BE
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 20:41:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233221AbjEESjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 14:39:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47866 "EHLO
+        id S233099AbjEESlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 14:41:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231580AbjEESjn (ORCPT
+        with ESMTP id S232979AbjEESlD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 14:39:43 -0400
-Received: from smtp.smtpout.orange.fr (smtp-26.smtpout.orange.fr [80.12.242.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 769331A4AD
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 11:39:41 -0700 (PDT)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id v0L9pk2E0Gtqgv0L9pZwJH; Fri, 05 May 2023 20:39:39 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1683311979;
-        bh=mnw6geelSaRq346Pzls6ofHvmuoLhwJOFudxBY6bbI8=;
-        h=From:To:Cc:Subject:Date;
-        b=HNyqmFrTormmtYO1mKS6qptrkzhC39BrHqC9jF3blBVbhK2TbhTTgNuCo94rx0J9K
-         6hBRWsiD/e+zisqWN/uxReWAtn5HDIS/M7SWxq85LhDBdwnDX6vVahdn179f9WAD9M
-         j7pUd4x1S+Q4sxpvtlY/ubPb4OTkig2uv+jzXREk1pJJ+cgEFAiVJkb5e1zX4h3+iC
-         ydc2TMMhmSvhdSFwgDsfuD+Htn1OwaE4iIPK0B8U2Al6bio7FHcn9V/6Cwu3ejoyRr
-         e51zKNApddwBEw95Net0SVx8JMDxA/7IpZkUpM/lnnoPBAnk2yj6wsCET6lSrvcOQ+
-         Kngrr0jYJCexg==
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Fri, 05 May 2023 20:39:39 +0200
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Tobias Waldekranz <tobias@waldekranz.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        netdev@vger.kernel.org
-Subject: [PATCH net] net: mdio: mvusb: Fix an error handling path in mvusb_mdio_probe()
-Date:   Fri,  5 May 2023 20:39:33 +0200
-Message-Id: <bd2244d44b914dec1aeccee4eba2e7e8135b585b.1683311885.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Fri, 5 May 2023 14:41:03 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB2361436C
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 11:41:01 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-50bd2d7ba74so29768782a12.1
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 11:41:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1683312060; x=1685904060;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yhm3Rctnlx5UPRybogDdMN4gKvloPHqLZXPlqb0HbTI=;
+        b=VXp66tQBwYbM0EWUCbQ0q9HdCzgIXFRCsNBqKAPIsWsz5JhB5gb/3Ns5z9qJK4/TmM
+         AQZ3wqUSSVQA3S7yUGlYQeQUvudTcI9eYWwEd+f+A0hv+6tlS2N9DAPyaO8iIhn3BQZm
+         eXuzRa1UphcBVWcsfHoxNy0t1TnRMPF0o7vPU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683312060; x=1685904060;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yhm3Rctnlx5UPRybogDdMN4gKvloPHqLZXPlqb0HbTI=;
+        b=afvWyEkwW+gMVPT00F8Y5bG464q9yMbxpiUbBAH6nlv62oMshCc2Wruv87D13gYuHi
+         zB5L1oxKR7EGRdHoJbMUJgVI0UjHmaxfsYlV9C1gAXtgGitDeV+/s+RxdN0+bQ/x3mhs
+         98V4nbFX6OiQpFFx++gFTFkDlqZhfD9geYAkG7YWMmoSagHCTh6NIVHtlUhcpZ3Edff9
+         op/7t3IkYUiMV56iuWmS+a6HcReOMXn/OH8gKiaXigdYqVBmIlgCUXeqsJVx/qvbkYMp
+         k/B3O0932p3ubKlHFcZHyfmnCqUd2cYr9lSpjXyUBiqDPk3UwO79cj77zm0yGuYAr5Dn
+         nNig==
+X-Gm-Message-State: AC+VfDz18t+u5x96TgKOsl0JUYXlxkRqyEfOgkRvCVIbmpOJa0PRHkou
+        QRZZ31XkHVnRuuHE2JXxzlPMOojUFoc4A1EpPuJwtw==
+X-Google-Smtp-Source: ACHHUZ53OpipS1F6a32D/qx3mF+z9gwE7RkBT2SDj37TCy+h0DTnlszlY4JjIG/J2Yn7V1+1iUuQcw==
+X-Received: by 2002:a17:907:36c7:b0:94e:f3d5:e4f8 with SMTP id bj7-20020a17090736c700b0094ef3d5e4f8mr2657912ejc.37.1683312060199;
+        Fri, 05 May 2023 11:41:00 -0700 (PDT)
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com. [209.85.208.54])
+        by smtp.gmail.com with ESMTPSA id w21-20020a170907271500b009629ffabe0asm1245168ejk.224.2023.05.05.11.40.59
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 May 2023 11:40:59 -0700 (PDT)
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so29912351a12.0
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 11:40:59 -0700 (PDT)
+X-Received: by 2002:a17:907:1690:b0:94f:6316:ce8d with SMTP id
+ hc16-20020a170907169000b0094f6316ce8dmr2825064ejc.34.1683312059288; Fri, 05
+ May 2023 11:40:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230504200527.1935944-1-mathieu.desnoyers@efficios.com>
+ <20230504200527.1935944-13-mathieu.desnoyers@efficios.com> <3b017a9f-220d-4da8-2cf6-7f0d6175b30c@efficios.com>
+In-Reply-To: <3b017a9f-220d-4da8-2cf6-7f0d6175b30c@efficios.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 5 May 2023 11:40:42 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjzpHjqhybyEhkTzGgTdBP3LZ1FmOw8=1MMXr=-j5OPxQ@mail.gmail.com>
+Message-ID: <CAHk-=wjzpHjqhybyEhkTzGgTdBP3LZ1FmOw8=1MMXr=-j5OPxQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 12/13] blk-mq.h: Fix parentheses around macro
+ parameter use
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        linux-block@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Should of_mdiobus_register() fail, a previous usb_get_dev() call should be
-undone as in the .disconnect function.
+On Fri, May 5, 2023 at 6:56=E2=80=AFAM Mathieu Desnoyers
+<mathieu.desnoyers@efficios.com> wrote:
+>
+> Which way do we want to go with respect to the rvalue of the assignment
+> operator "=3D" in a macro ? (with or without parentheses)
+>
+> In short:
+>
+> #define m(x) do { z =3D (x); } while (0)
+>
+> or
+>
+> #define m(x) do { z =3D x; } while (0)
 
-Fixes: 04e37d92fbed ("net: phy: add marvell usb to mdio controller")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/net/mdio/mdio-mvusb.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+I suspect that the first one is preferred, just as a "don't even have
+to think about it" thing.
 
-diff --git a/drivers/net/mdio/mdio-mvusb.c b/drivers/net/mdio/mdio-mvusb.c
-index 68fc55906e78..554837c21e73 100644
---- a/drivers/net/mdio/mdio-mvusb.c
-+++ b/drivers/net/mdio/mdio-mvusb.c
-@@ -67,6 +67,7 @@ static int mvusb_mdio_probe(struct usb_interface *interface,
- 	struct device *dev = &interface->dev;
- 	struct mvusb_mdio *mvusb;
- 	struct mii_bus *mdio;
-+	int ret;
- 
- 	mdio = devm_mdiobus_alloc_size(dev, sizeof(*mvusb));
- 	if (!mdio)
-@@ -87,7 +88,15 @@ static int mvusb_mdio_probe(struct usb_interface *interface,
- 	mdio->write = mvusb_mdio_write;
- 
- 	usb_set_intfdata(interface, mvusb);
--	return of_mdiobus_register(mdio, dev->of_node);
-+	ret = of_mdiobus_register(mdio, dev->of_node);
-+	if (ret)
-+		goto put_dev;
-+
-+	return 0;
-+
-+put_dev:
-+	usb_put_dev(mvusb->udev);
-+	return ret;
- }
- 
- static void mvusb_mdio_disconnect(struct usb_interface *interface)
--- 
-2.34.1
+In general, despite my suggestion of maybe using upper-case to show
+odd syntax (and I may have suggested it, but I really don't like how
+it looks, so I'm not at all convinced it's a good idea), to a
+first-order approximation the rule should be:
 
+ - always use parentheses around macros
+
+ - EXCEPT:
+     - when used purely as arguments to functions or other macros
+     - when there is some syntax reason why it's not ok to add parens
+
+The "arguments to functions/macros" is because the comma separator
+between arguments isn't even a operator (ie it is *not* a
+comma-expression, it's multiple expressions separated by commas).
+There is no "operator precedence" subtlety.
+
+So we have a lot of macros that are just wrappers around functions (or
+other macros), and in that situation you do *not* then add more
+parentheses, and doing something like
+
+    #define update_screen(x) redraw_screen(x, 0)
+
+is fine, and might even be preferred syntax because putting
+parentheses around 'x' not only doesn't buy you anything, but just
+makes things uglier.
+
+And the "syntax reasons" can be due to the usual things: we not only
+have that 'pass member name around' issue, but we have things like
+string expansion etc, where adding parentheses anywhere to things like
+
+    #define __stringify_1(x...)     #x
+    #define __stringify(x...)       __stringify_1(x)
+
+would obviously simply not work (or look at our "SYSCALL_DEFINEx()"
+games for more complex examples with many layers of token pasting
+etc).
+
+But in general I would suggest against "this is the lowest priority
+operator" kind of games. Nobody remembers the exact operator
+precedence so well that they don't have to think about it.
+
+So for example, we have
+
+    #define scr_writew(val, addr) (*(addr) =3D (val))
+
+to pick another VT example, and I think that's right both for 'addr'
+(that requires the parentheses) and for 'val' (that might not require
+it, but let's not make people think about it).
+
+                  Linus
