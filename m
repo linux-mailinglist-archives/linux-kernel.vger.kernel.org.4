@@ -2,116 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A6F96F7D01
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 08:37:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ABFE6F7D0C
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 08:40:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230458AbjEEGhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 02:37:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53106 "EHLO
+        id S230471AbjEEGkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 02:40:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbjEEGhQ (ORCPT
+        with ESMTP id S230430AbjEEGkL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 02:37:16 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8153F9ED0;
-        Thu,  4 May 2023 23:37:15 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34567Dr7026814;
-        Fri, 5 May 2023 06:36:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=s1UdkRzzF8cFAQcoYxajxf72HMv1k5ObWuqkwuK/fiM=;
- b=lD13AUn8nQAnwH9vqOHayl65rJeqVohdmPfJL2Tl5g9vAXAa7YJUew6jRiX9W0izkD9p
- P7vtOqtR0PPGrOSNsphLh1YY8yX3Sy0AagGjlmei0EOTvchqwp3T0V7cxueZgQYdocZ9
- kA7Rk4eMtTh/BWkciRRsWKrds+a9ZueFVjTEU1a4SbyM5uGeW9h5G7I7D8uPQ8maY73Y
- NHdHPGv5GeFGK2tK2LLLAQb4pSyt8lCdTxVA4UgVofIbFh2n9SRnSUnMrZ41gQWR0YSc
- IQLOuN7oVSGQZySctgf3//lCR5aAa3QQDD8pLIsNovjDZLJ5YfKQKsC93AuFau5wq8K5 IQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qctfu897v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 05 May 2023 06:36:58 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3456av1s007763
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 5 May 2023 06:36:57 GMT
-Received: from hu-schowdhu-lv.qualcomm.com (10.49.16.6) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Thu, 4 May 2023 23:36:56 -0700
-From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, Alex Elder <elder@ieee.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Subject: [PATCH V23 3/3] MAINTAINERS: Add the entry for DCC(Data Capture and Compare) driver support
-Date:   Thu, 4 May 2023 23:36:23 -0700
-Message-ID: <ac9186e43afa1334ff54156eeef05e5a95bb93dc.1683265984.git.quic_schowdhu@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1683265984.git.quic_schowdhu@quicinc.com>
-References: <cover.1683265984.git.quic_schowdhu@quicinc.com>
+        Fri, 5 May 2023 02:40:11 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A97115EC5
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 23:40:09 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-965a68abfd4so253933466b.2
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 23:40:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683268807; x=1685860807;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aTyxP1vj9LhqUkDcFtKF0jIyEwscl+LdksMcxhoHIX0=;
+        b=G0z6pdfLLcpRXBMfXu84fwOiLH0bYZ8N7aA7FRIkIs0vmuL5QK+Hg79DyL5CSrXb5V
+         pDi6+8ung1wbRWg4QD9/iahFef2T8Fw5inu/rt85I9j9MZb3MQYjV1WBLLGxkayID4Q+
+         9y/RD2zLE2X7Qxcb1qMa3PVbD1JRwS1mNiSx8327nKJJDeK8GE7jBN6pKMsJYCCn4wAy
+         3IlDplqBMPEgFJVRHOu5aGcqkLm1pjC4wXuE6UApKlM6foHQ+MlQFPJ8TUpivm+ZJ8ea
+         zMhL/XQhIod4bPJfcGEWa016dW+/WsPBzztT8vbMfGKHLolZ6QN+rsOU7eBE05dnJEws
+         Y7XQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683268807; x=1685860807;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aTyxP1vj9LhqUkDcFtKF0jIyEwscl+LdksMcxhoHIX0=;
+        b=b6FR1R347glAkAW473OFT132NXIiETOBKKMOs1vwYwDoOo/vIA72l4ZeIgtGUtj093
+         hYCwUH5Ivukmuzzw7iyuINQRyvRtSZNIQJIeArJ1bz5exIryzPQHDtW/1j8lZL/nd9eT
+         r8DXLXIFlACKJfwQTMcSqPSm3dSCl+0xmTygworCluZso3n/0xnEeYoE5oy58KNFRSwF
+         JTKwFNiVwE/YkIRs02E6hmfhWinOEahgmuqxuUWqTwJMFs4+kiIDRcbLzmaK8vWarr54
+         D9ub2XXRQp7n9kguOzTANfcfselSMR+3aJEI5bqHzPKREZo9CFbJ8OoX4bJKSEXu6wCC
+         Q4kg==
+X-Gm-Message-State: AC+VfDzujTePMR9fKF1mNBdXkMx0PEUUnUpJ8zuenLwS8tsv4mVvWVZ5
+        A3ykYLxn+wk9WgIoi1CJ/IKg7g==
+X-Google-Smtp-Source: ACHHUZ60yiXciR7c56Q3PWRYkZepdVsaqppKAlJGiNIex8+MxKDx3TzcHvQ6hw7Gfdaj7zjLGfntrA==
+X-Received: by 2002:a17:907:6d1f:b0:94e:f1b9:e933 with SMTP id sa31-20020a1709076d1f00b0094ef1b9e933mr236593ejc.53.1683268807573;
+        Thu, 04 May 2023 23:40:07 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:52e:24ce:bbc1:127d? ([2a02:810d:15c0:828:52e:24ce:bbc1:127d])
+        by smtp.gmail.com with ESMTPSA id ak19-20020a170906889300b009545230e682sm522940ejc.91.2023.05.04.23.40.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 May 2023 23:40:06 -0700 (PDT)
+Message-ID: <925bf170-bb54-b427-976a-87e0dca230da@linaro.org>
+Date:   Fri, 5 May 2023 08:40:05 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: dOba35aUKxDYJDAZyitMJ4OKdpyJBOQo
-X-Proofpoint-ORIG-GUID: dOba35aUKxDYJDAZyitMJ4OKdpyJBOQo
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-04_15,2023-05-04_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- mlxlogscore=744 lowpriorityscore=0 malwarescore=0 suspectscore=0
- spamscore=0 mlxscore=0 phishscore=0 adultscore=0 priorityscore=1501
- bulkscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2305050056
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v4 0/8] Add StarFive Camera Subsystem driver
+Content-Language: en-US
+To:     Jack Zhu <jack.zhu@starfivetech.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Eugen Hristev <eugen.hristev@collabora.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, changhuang.liang@starfivetech.com
+References: <20230413035541.62129-1-jack.zhu@starfivetech.com>
+ <14c06503-621f-2477-7b15-b17f1890ecfe@starfivetech.com>
+ <7bd29805-11e7-68ee-aa47-68bae2a2fb38@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <7bd29805-11e7-68ee-aa47-68bae2a2fb38@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the entries for all the files added as a part of driver support for
-DCC(Data Capture and Compare).
+On 05/05/2023 07:57, Jack Zhu wrote:
+> 
+> 
+> On 2023/4/24 19:19, Jack Zhu wrote:
+>>
+>>
+>> On 2023/4/13 11:55, Jack Zhu wrote:
+>>> Hi,
+>>>
+>>> This patch series adds support for the StarFive Camera Subsystem
+>>> found on StarFive JH7110 SoC.
+>>>
+>>> The driver implements V4L2, Media controller and V4L2 subdev interfaces.
+>>> Camera sensor using V4L2 subdev interface in the kernel is supported.
+>>>
+>>> The driver is tested on VisionFive V2 board with IMX219 camera sensor.
+>>> GStreamer 1.18.5 with v4l2src plugin is supported.
+>>>
+>>> Changes since v3:
+>>> Patch 1:
+>>> - Modified port@0 and port@1 properties.
+>>> - Extended the port@0 example with appropriate properties.
+>>> - Added 'port@0' for 'required'
+>>> Patch 2:
+>>> - Modified spelling errors.
+>>> Patch 3:
+>>> - Merged patch 5 into the patch with an explanation for compatible in
+>>>   commit msg.
+>>> Patch 6:
+>>> - Asserted pixel_rst[i] reset in the loop after the err_disable_pixclk
+>>>   label.
+>>> - Modified Code Style for getting sys_rst and p_rst.
+>>> - Renamed clk_name to name and modified the relevant code.
+>>> Patch 9:
+>>> - Added static for stfcamss_get_mem_res function.
+>>> - Added static for isp_close function.
+>>> - Fixed implicit conversion warning for stf_vin_map_isp_pad function.
+>>> - Dropped unused variables.
+>>>
+>>>   v3: https://lore.kernel.org/all/20230331121826.96973-1-jack.zhu@starfivetech.com/
+>>>
+>>
+>> Hello everyone,
+>>
+>> From the current review status, the patches related to the CSI module
+>> have 'reviewed-by' tags. I would like to know if it is okay to add
+>> patches 1-5 from this series to a PR first.
+>>
+>> Thank you!
+>>
+>> Jack
+>>
+> 
+> Hello Mauro, Laurent, Maxime, Rob, Krzysztof, Robert, Todor and Philipp,
+> 
+> Can you give me some suggestions and comments on the previous request
+> to commit CSI related patches first? Thank you for your time.
 
-Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
----
- MAINTAINERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
+You received very specific feedback, so know you decided to ignore it?
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index cb932c6f8959..30b0e23cd31e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5721,6 +5721,14 @@ W:	http://lists.twibble.org/mailman/listinfo/dc395x/
- F:	Documentation/scsi/dc395x.rst
- F:	drivers/scsi/dc395x.*
- 
-+DCC QTI DRIVER
-+M:	Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-+L:	linux-arm-msm@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/ABI/testing/debugfs-driver-dcc
-+F:	Documentation/devicetree/bindings/misc/qcom,dcc.yaml
-+F:	drivers/misc/qcom-dcc.c
-+
- DCCP PROTOCOL
- L:	dccp@vger.kernel.org
- S:	Orphan
--- 
-2.17.1
+No, implement what you were asked for.
+
+Best regards,
+Krzysztof
 
