@@ -2,122 +2,329 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1F896F8CDD
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 01:43:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C75D06F8CE0
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 01:44:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232764AbjEEXnf convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 5 May 2023 19:43:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44428 "EHLO
+        id S232810AbjEEXoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 19:44:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbjEEXnd (ORCPT
+        with ESMTP id S232809AbjEEXoL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 19:43:33 -0400
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54E235FD9;
-        Fri,  5 May 2023 16:43:32 -0700 (PDT)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-55a8e9e2c53so22879967b3.1;
-        Fri, 05 May 2023 16:43:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683330211; x=1685922211;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2x1tn4ecL7a7PZyU0NHPKD9PY3vOquBlEMbobtDzvuM=;
-        b=A93/FvJv1FYbG/nolYa/F7ktpbKhtwrzy43ROIM2WvMNzNaYAbTSGlGuo+IMhn+fmu
-         exlEo5f6cuWHuMuz6gXO5w90LPDUmdxnEofjFVlAIxYqOZrScKNlqbv3cO688X0UYbL3
-         SNbfcjxaIXq8CdThoe6qEoxHOch/WIebJt+7jeHfLveE5Vo6oJkXr6VUbsbgC1XT9tAa
-         Zwjj/0tmQ3oMjw0yQ7w7HTIe7xf5/q+aRv+eaXbMxVlVQi6a2O6+xSdQliVR9k4QxQvk
-         je7cgkzPi9FwnWQhiWH174rZ+CPCvmoOc/zKc+Yg2/keMEDsV5MBbeIMSjr3Rv0LZSMo
-         wLrQ==
-X-Gm-Message-State: AC+VfDwodK3gldGpq2IMIGn7Hqkd2A+NlTIvpDhtxSscY3qXcMqamKWl
-        3us4X3V5slbPVfcjrJSdpfJ7VmBnD+SoU1yMjPg=
-X-Google-Smtp-Source: ACHHUZ5rFc3wS54CsVRG1DPr2zu+nHGMWF8vD1d6hDpwm5zY0I+iBCvVecXDwuNv8KgEQmhzSLgOdWQGiSxuncnDSmA=
-X-Received: by 2002:a25:abe5:0:b0:ba1:b539:a39a with SMTP id
- v92-20020a25abe5000000b00ba1b539a39amr3430513ybi.6.1683330211398; Fri, 05 May
- 2023 16:43:31 -0700 (PDT)
+        Fri, 5 May 2023 19:44:11 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E1215FD9;
+        Fri,  5 May 2023 16:44:10 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 4790E3200902;
+        Fri,  5 May 2023 19:44:07 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Fri, 05 May 2023 19:44:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1683330246; x=1683416646; bh=QVWXBD2Fd0owCC2E21JKVCAc6/oxO1RMzJ1
+        hi6j097A=; b=g0sCpNOJJ2SeKbwPaGa9iFbSPwkHb4U9v7V19u1dgfyWzbwBbSs
+        p11KRe6ONWg+TQSTm6anqLcE4ddfWa4lM3vt+NAe8MKON5y9jzRzPVY4soyt9Yg0
+        kn4kD+AelHGZqlyKTJl7W01eFSYsR1iFHdDjswaEqt9lyfv0nYtifgnahqfe7cy1
+        okG/3Do8J1NTti6AT7wsBuZb1sZzWQrKSqEY9LgKbLEhqj9M7flmFimE1aFOK/Gs
+        oIprF6gUJlSgG4ND67OZLpyoMTEm78EvY7Cpa4hA5LrtcaIq0ubZvlTbQc7TCZnh
+        AmUOR+qnVZEgQ4B/eEP+d0vGIVA3vNTJVkQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1683330246; x=1683416646; bh=QVWXBD2Fd0owCC2E21JKVCAc6/oxO1RMzJ1
+        hi6j097A=; b=j1VGHKcYCsLcH9nhJHFzN14isuKsBdPk8MWGfSIJPgm740uNoyC
+        upVhrK2+fs83ME1nTXX4/8W8y//att/TgqaI22fTCndEEL2xsR7Qu8jdwVWtJ2az
+        5b8Bxe8S8Tu3Ia/i8XhGjwDBrWkUymgni+XybxGHQvr21RMKUvd4ItJohTp5HrH4
+        LYk1iplDS7XM1pL8SOrWyfD7D822xrvDVUah0ZO77LftH1jpkrN28bGpCdHlN1pw
+        72Rrp93XRRM5Owr8DXCJ8MvknDLdBXmnLtR/Xy6yBRyIYQV+eCBtjOTSadsdfP/n
+        v/FeqH1+tK8fhOjSPc2N9mVoQoBnfmYZc/A==
+X-ME-Sender: <xms:xpRVZOdvtrG28emvJHzjmS9I_08QC033Ich745bW6334nGvZK-qTXQ>
+    <xme:xpRVZINLIVaoB_tyeaG4WplH0FSuBfnHP172gZPGyWnE7W2cA1RKL6qSQxJ3sYW6X
+    apDsh6oFFIcNLnH3MQ>
+X-ME-Received: <xmr:xpRVZPgwKcTsGNocheOffy2csw4N7JfYpNYX9u2JToGElcwNljr50Cyi7XZb6Mo29HV8yQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeffedgvdehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhuffvvefkjghfofggtgfgsehtqhertdertddunecuhfhrohhmpefnuhhk
+    vgculfhonhgvshcuoehluhhkvgeslhhjohhnvghsrdguvghvqeenucggtffrrghtthgvrh
+    hnpeetteeigefhteffhfevgfffueejffevteffueekhfevjeethefhgfekffevjeehheen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehluhhkvg
+    eslhhjohhnvghsrdguvghv
+X-ME-Proxy: <xmx:xpRVZL8VDAFgU-pppGeT_XfAk9shZczMkeWKDWiRDgqVc5d_YTRfzQ>
+    <xmx:xpRVZKugBjix4i8MdhH_CZzMPVsS4oXznGJHIeBN6C-i4Qam9G-5ug>
+    <xmx:xpRVZCGntrfqnGOF5pxAAW2SMa1HmVt5pVTsTUGTcDfxtDWCmvbhnw>
+    <xmx:xpRVZOicS4wWsd5rz2YrPQbeTT8gjReDr-xrzcLzOp-8ahEkDIHtSw>
+Feedback-ID: i5ec1447f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 5 May 2023 19:43:58 -0400 (EDT)
+Date:   Sat, 06 May 2023 11:43:41 +1200
+From:   Luke Jones <luke@ljones.dev>
+Subject: Re: [PATCH v2 1/1] platform/x86: asus-wmi: add support for ASUS
+ screenpad
+To:     Ilpo =?iso-8859-1?q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        acpi4asus-user@lists.sourceforge.net, hdegoede@redhat.com,
+        corentin.chary@gmail.com, markgross@kernel.org, jdelvare@suse.com,
+        linux@roeck-us.net
+Message-Id: <TWL7UR.KE812U8BYMG8@ljones.dev>
+In-Reply-To: <9f77e8fd-38fe-818f-2fee-ca3bf4243576@linux.intel.com>
+References: <20230505043013.2622603-1-luke@ljones.dev>
+        <20230505043013.2622603-2-luke@ljones.dev>
+        <9f77e8fd-38fe-818f-2fee-ca3bf4243576@linux.intel.com>
+X-Mailer: geary/43.0
 MIME-Version: 1.0
-References: <83d6c6c05c54bf00c5a9df32ac160718efca0c7a.1683280603.git.sandipan.das@amd.com>
-In-Reply-To: <83d6c6c05c54bf00c5a9df32ac160718efca0c7a.1683280603.git.sandipan.das@amd.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Fri, 5 May 2023 16:43:20 -0700
-Message-ID: <CAM9d7cgZLiRmUDnxW3NpN67Jvgj670FPBkwqncXmDEamYM6n3A@mail.gmail.com>
-Subject: Re: [PATCH 1/2] perf script: Skip aggregation for stat events
-To:     Sandipan Das <sandipan.das@amd.com>
-Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com,
-        terrelln@fb.com, ravi.bangoria@amd.com, ananth.narayan@amd.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On Fri, May 5, 2023 at 3:03 AM Sandipan Das <sandipan.das@amd.com> wrote:
->
-> The script command does not support aggregation modes by itself although
-> that can be achieved using post-processing scripts. Because of this, it
-> does not allocate memory for aggregated event values.
->
-> Upon running perf stat record, the aggregation mode is set in the perf
-> data file. If the mode is AGGR_GLOBAL, the aggregated event values are
-> accessed and this leads to a segmentation fault since these were never
-> allocated to begin with. Set the mode to AGGR_NONE explicitly to avoid
-> this.
->
-> E.g.
->
->   $ perf stat record -e cycles true
->   $ perf script
->
-> Before:
->   Segmentation fault (core dumped)
->
-> After:
->   CPU   THREAD             VAL             ENA             RUN            TIME EVENT
->    -1   231919          162831          362069          362069          935289 cycles:u
->
-> Fixes: 8b76a3188b85 ("perf stat: Remove unused perf_counts.aggr field")
-> Signed-off-by: Sandipan Das <sandipan.das@amd.com>
-> Cc: stable@vger.kernel.org # v6.2+
-
-Acked-by: Namhyung Kim <namhyung@kernel.org>
-
-Thanks,
-Namhyung
 
 
-> ---
->  tools/perf/builtin-script.c | 7 +++++++
->  1 file changed, 7 insertions(+)
->
-> diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
-> index 006f522d0e7f..c57be48d65bb 100644
-> --- a/tools/perf/builtin-script.c
-> +++ b/tools/perf/builtin-script.c
-> @@ -3647,6 +3647,13 @@ static int process_stat_config_event(struct perf_session *session __maybe_unused
->                                      union perf_event *event)
->  {
->         perf_event__read_stat_config(&stat_config, &event->stat_config);
-> +
-> +       /*
-> +        * Aggregation modes are not used since post-processing scripts are
-> +        * supposed to take care of such requirements
-> +        */
-> +       stat_config.aggr_mode = AGGR_NONE;
-> +
->         return 0;
->  }
->
-> --
-> 2.34.1
->
+On Fri, May 5 2023 at 16:08:16 +0300, Ilpo J=E4rvinen=20
+<ilpo.jarvinen@linux.intel.com> wrote:
+> On Fri, 5 May 2023, Luke D. Jones wrote:
+>=20
+>>  Add support for the WMI methods used to turn off and adjust the
+>>  brightness of the secondary "screenpad" device found on some=20
+>> high-end
+>>  ASUS laptops like the GX650P series and others.
+>>=20
+>>  These methods are utilised in a new backlight device named:
+>>  - asus_screenpad
+>>=20
+>>  Signed-off-by: Luke D. Jones <luke@ljones.dev>
+>>  ---
+>>   .../ABI/testing/sysfs-platform-asus-wmi       |   2 +-
+>>   drivers/platform/x86/asus-wmi.c               | 132=20
+>> ++++++++++++++++++
+>>   drivers/platform/x86/asus-wmi.h               |   1 +
+>>   include/linux/platform_data/x86/asus-wmi.h    |   4 +
+>>   4 files changed, 138 insertions(+), 1 deletion(-)
+>>=20
+>>  diff --git a/Documentation/ABI/testing/sysfs-platform-asus-wmi=20
+>> b/Documentation/ABI/testing/sysfs-platform-asus-wmi
+>>  index a77a004a1baa..df9817c6233a 100644
+>>  --- a/Documentation/ABI/testing/sysfs-platform-asus-wmi
+>>  +++ b/Documentation/ABI/testing/sysfs-platform-asus-wmi
+>>  @@ -97,4 +97,4 @@ Contact:	"Luke Jones" <luke@ljones.dev>
+>>   Description:
+>>   		Enable an LCD response-time boost to reduce or remove ghosting:
+>>   			* 0 - Disable,
+>>  -			* 1 - Enable
+>>  +			* 1 - Enable
+>>  \ No newline at end of file
+>=20
+> Spurious change?
+
+Indeed it is. Not sure how that occurred.
+
+>=20
+>>  diff --git a/drivers/platform/x86/asus-wmi.c=20
+>> b/drivers/platform/x86/asus-wmi.c
+>>  index 1038dfdcdd32..0528eef02ef7 100644
+>>  --- a/drivers/platform/x86/asus-wmi.c
+>>  +++ b/drivers/platform/x86/asus-wmi.c
+>>  @@ -200,6 +200,7 @@ struct asus_wmi {
+>>=20
+>>   	struct input_dev *inputdev;
+>>   	struct backlight_device *backlight_device;
+>>  +	struct backlight_device *screenpad_backlight_device;
+>>   	struct platform_device *platform_device;
+>>=20
+>>   	struct led_classdev wlan_led;
+>>  @@ -3208,6 +3209,129 @@ static int is_display_toggle(int code)
+>>   	return 0;
+>>   }
+>>=20
+>>  +/* Screenpad backlight */
+>>  +
+>>  +static int read_screenpad_backlight_power(struct asus_wmi *asus)
+>>  +{
+>>  +	int ret =3D asus_wmi_get_devstate_simple(asus,=20
+>> ASUS_WMI_DEVID_SCREENPAD_POWER);
+>=20
+> Please move this to own line because now you have the extra newline
+> in between the call and error handling.
+
+I don't understand what you mean sorry. Remove the new line or:
+int ret;
+ret =3D asus_wmi_get_devstate_simple(asus,=20
+ASUS_WMI_DEVID_SCREENPAD_POWER);
+
+>=20
+>>  +
+>>  +	if (ret < 0)
+>>  +		return ret;
+>>  +	/* 1 =3D=3D powered */
+>>  +	return ret ? FB_BLANK_UNBLANK : FB_BLANK_POWERDOWN;
+>>  +}
+>>  +
+>>  +static int read_screenpad_brightness(struct backlight_device *bd)
+>>  +{
+>>  +	struct asus_wmi *asus =3D bl_get_data(bd);
+>>  +	u32 retval;
+>>  +	int err;
+>>  +
+>>  +	err =3D read_screenpad_backlight_power(asus);
+>>  +	if (err < 0)
+>>  +		return err;
+>>  +	/* The device brightness can only be read if powered, so return=20
+>> stored */
+>>  +	if (err =3D=3D FB_BLANK_POWERDOWN)
+>>  +		return asus->driver->screenpad_brightness;
+>>  +
+>>  +	err =3D asus_wmi_get_devstate(asus, ASUS_WMI_DEVID_SCREENPAD_LIGHT,=20
+>> &retval);
+>>  +	if (err < 0)
+>>  +		return err;
+>>  +
+>>  +	return retval & ASUS_WMI_DSTS_BRIGHTNESS_MASK;
+>>  +}
+>>  +
+>>  +static int update_screenpad_bl_status(struct backlight_device *bd)
+>>  +{
+>>  +	struct asus_wmi *asus =3D bl_get_data(bd);
+>>  +	int power, err =3D 0;
+>>  +	u32 ctrl_param;
+>>  +
+>>  +	power =3D read_screenpad_backlight_power(asus);
+>>  +	if (power =3D=3D -ENODEV)
+>>  +		return err;
+>=20
+> Just return 0. Or is there perhaps something wrong/missing here?
+
+I thought the correct thing was to return any possible error state=20
+(here, anything less than 0 would be an error, right?)
+
+>=20
+>>  +	else if (power < 0)
+>>  +		return power;
+>>  +
+>>  +	if (bd->props.power !=3D power) {
+>>  +		if (power !=3D FB_BLANK_UNBLANK) {
+>>  +			/* Only brightness can power it back on */
+>=20
+> Only brightness > 0 can power the screen back on
+>=20
+>>  +			ctrl_param =3D asus->driver->screenpad_brightness;
+>=20
+> max(1, asus->driver->screenpad_brightness);
+>=20
+> Don't forget to add the #include for it.
+
+Oh, that's handy! Thank you.
+
+>=20
+>>  +			/* Min 1 or the screen won't turn on */
+>>  +			if (ctrl_param =3D=3D 0)
+>>  +				ctrl_param =3D 1;
+>=20
+> Drop this.
+
+Thanks to minmax.
+
+>=20
+>>  +			err =3D asus_wmi_set_devstate(ASUS_WMI_DEVID_SCREENPAD_LIGHT,
+>>  +							ctrl_param, NULL);
+>=20
+> Align param.
+
+Done.
+
+>=20
+>>  +		} else {
+>>  +			/* Ensure brightness is stored to turn back on with */
+>>  +			asus->driver->screenpad_brightness =3D bd->props.brightness;
+>>  +			err =3D asus_wmi_set_devstate(ASUS_WMI_DEVID_SCREENPAD_POWER, 0,=20
+>> NULL);
+>>  +		}
+>>  +	} else if (power =3D=3D FB_BLANK_UNBLANK) {
+>>  +		/* Only set brightness if powered on or we get invalid/unsync=20
+>> state */
+>>  +		ctrl_param =3D bd->props.brightness;
+>>  +		err =3D asus_wmi_set_devstate(ASUS_WMI_DEVID_SCREENPAD_LIGHT,=20
+>> ctrl_param, NULL);
+>=20
+> Why not store the brightness if powered off?
+
+That's me being literal and short sighted. I've now moved:
+```
+/* Ensure brightness is stored to turn back on with */
+asus->driver->screenpad_brightness =3D bd->props.brightness;
+```
+to below the conditional blocks.
+
+>=20
+>>  +	}
+>>  +
+>>  +	return err;
+>>  +}
+>>  +
+>>  +static const struct backlight_ops asus_screenpad_bl_ops =3D {
+>>  +	.get_brightness =3D read_screenpad_brightness,
+>>  +	.update_status =3D update_screenpad_bl_status,
+>>  +	.options =3D BL_CORE_SUSPENDRESUME,
+>>  +};
+>>  +
+>>  +static int asus_screenpad_init(struct asus_wmi *asus)
+>>  +{
+>>  +	struct backlight_device *bd;
+>>  +	struct backlight_properties props;
+>>  +	int power, brightness;
+>>  +
+>>  +	power =3D read_screenpad_backlight_power(asus);
+>>  +	if (power =3D=3D -ENODEV)
+>>  +		power =3D FB_BLANK_UNBLANK;
+>>  +	else if (power < 0)
+>>  +		return power;
+>>  +
+>>  +	memset(&props, 0, sizeof(struct backlight_properties));
+>>  +	props.type =3D BACKLIGHT_RAW; /* ensure this bd is last to be=20
+>> picked */
+>>  +	props.max_brightness =3D 255;
+>>  +	bd =3D backlight_device_register("asus_screenpad",
+>>  +				       &asus->platform_device->dev, asus,
+>>  +				       &asus_screenpad_bl_ops, &props);
+>>  +	if (IS_ERR(bd)) {
+>>  +		pr_err("Could not register backlight device\n");
+>>  +		return PTR_ERR(bd);
+>>  +	}
+>>  +
+>>  +	asus->screenpad_backlight_device =3D bd;
+>>  +
+>>  +	brightness =3D read_screenpad_brightness(bd);
+>>  +	if (brightness < 0)
+>>  +		return brightness;
+>>  +	/*
+>>  +	 * Counter an odd behaviour where default is set to < 13 if it=20
+>> was 0 on boot.
+>>  +	 * 60 is subjective, but accepted as a good compromise to retain=20
+>> visibility.
+>>  +	 */
+>>  +	else if (brightness < 60)
+>=20
+> Since the other branch returns, else is unnecessary.
+
+Good catch, thank you.
+
+I'll submit V3 after we clarify the two points above that I'm confused=20
+by :)
+
+Thank you for taking the time to review.
+
+>=20
+
+
