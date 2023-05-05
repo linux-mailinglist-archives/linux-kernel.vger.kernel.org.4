@@ -2,137 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 683466F83D8
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 15:22:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 197436F83FC
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 15:27:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232466AbjEENWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 09:22:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46414 "EHLO
+        id S232594AbjEEN1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 09:27:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231764AbjEENWR (ORCPT
+        with ESMTP id S232528AbjEEN1Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 09:22:17 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB8F1F490;
-        Fri,  5 May 2023 06:22:15 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 345Cv5Cd005378;
-        Fri, 5 May 2023 13:21:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=5EQVVhWshw5GFz8Sv8IEK/OzCkyfIIX+VeQOuoEZpIM=;
- b=Zn3ENJaOZbYlGH9+gFrg/zSQwxdHFIYCJ+azLKhNc1O9Vo5sJPrOGdLCeNQevp+AkBUx
- xlsuo+QbnAGIgUpBQ5/fmZMLSDFPUZqXirNMQRC363JNZuQK0HwBQUB/H6ggIWt6T/x+
- XUtSjkMPEZgb5E7RKdoKXw+zOJfh0m5sQNiZiotXCe1sQgmGqkSdL4aaHOKdS9T1oWjh
- 8cxBzbUVKlUB/5pFCanBRHIQyl9s8mMy1C5BXj4HEK8eIlzQ9Mz8mto3WuGRgu6YMCOp
- LAO2AxFFo27wphXyQ0fvOcik4RZq74u6qdjgN4uoHl17dMulJ2YjgQq5tv628GMlWy7/ RQ== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qd28qg1hr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 05 May 2023 13:21:43 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 345DLg5F002203
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 5 May 2023 13:21:42 GMT
-Received: from [10.216.37.178] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 5 May 2023
- 06:21:37 -0700
-Message-ID: <4a95547d-916a-3875-7752-f815429182e5@quicinc.com>
-Date:   Fri, 5 May 2023 18:51:34 +0530
+        Fri, 5 May 2023 09:27:25 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF6B420767;
+        Fri,  5 May 2023 06:27:21 -0700 (PDT)
+Received: from localhost ([31.220.113.235]) by mrelayeu.kundenserver.de
+ (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1M8hR1-1pqGgV1Qi9-004gLy; Fri, 05 May 2023 15:21:46 +0200
+Date:   Fri, 5 May 2023 15:21:45 +0200
+From:   Andreas Klinger <ak@it-klinger.de>
+To:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 1/3] dt-bindings: iio: pressure: Support Honeywell
+ mprls0025pa sensor
+Message-ID: <ZFUC6Tsku+aWod/+@arbad>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 09/18] media: venus: hfi_venus: Fix version checks in
- venus_halt_axi()
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dikshita Agarwal <dikshita@qti.qualcomm.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Mansur Alisha Shaik <mansur@codeaurora.org>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Dikshita Agarwal <quic_dikshita@quicinc.com>
-CC:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Marijn Suijten" <marijn.suijten@somainline.org>
-References: <20230228-topic-venus-v2-0-d95d14949c79@linaro.org>
- <20230228-topic-venus-v2-9-d95d14949c79@linaro.org>
-From:   Vikash Garodia <quic_vgarodia@quicinc.com>
-In-Reply-To: <20230228-topic-venus-v2-9-d95d14949c79@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: rX-Ct0MZMASKWsBwev-uRV7u6U6rVVHx
-X-Proofpoint-ORIG-GUID: rX-Ct0MZMASKWsBwev-uRV7u6U6rVVHx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-05_20,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
- adultscore=0 suspectscore=0 malwarescore=0 mlxscore=0 spamscore=0
- mlxlogscore=999 bulkscore=0 clxscore=1015 priorityscore=1501
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2305050111
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZFUCf059+PSR+3Wb@arbad>
+X-Provags-ID: V03:K1:cYa62qAIQtXMQaeBxNgRUZ2mXLjZuRGeyeLNGp6XVBbHQtwLz/T
+ WQb4XaYQE+hnSIOQoUTUz47txwbOrNvHZJgwGO27ihnkb18Sytcf1FKsGQ4D8ZAp2aWkGHF
+ DcwwqkCX/M4l2dFL+gPq+yPf7BQubi16nT3nLJNbcXRtxuy7q/QFCMgEd7sLRXTP7SyOBL1
+ nZ3Ws8W8rp+g2ZmaDGvqQ==
+UI-OutboundReport: notjunk:1;M01:P0:xCr59qoWid0=;xirPOBJiejEOLIPv2MEJwHzwnln
+ kdEj1vs7vyy6lai4N2SVStOfyZMvGqUE46FHBqrxMl6a9XWsx0egKlMTtM+Hx4pbN/JBGFIHL
+ fsEP/fQBKC2KLboCYyMrAoq0mjWQy6mEoE2S4UNgE3KtsQ4FT5It0IVc0IyAbpQW+QBDfS3m1
+ qQdE5XyFWSw7CSe9w/n2jYpR4y9ABAZ1nPA8tc/9LgVpqJ3gMztd9eY0a0YAZ2/2FGn0xNGW/
+ CpSqFnYHzaZ/KUuSCFzmkm5p9M/Op5k95YtQ3ZMjQxshqMPVJK3mLeYo6hbDesKtAH3zlyrGf
+ jHlYzLGorSKOoMH9HGgm9Wq6A8+VlCNDfXFUljtKXVpG/cJ0CWv6uTAQJEmSgKmIEJ6F1bU+s
+ HHffgIi6EIGdKIsgDKLaHTpDhddVc9e9E+sskGASCYLcmdB5ASm3RNO8LoK3458oe8InBfoRw
+ I5qWqwpWRXUcSlHo38JSinm6ySCepMLNJll7LPyBEFkUi4knnKYGBGpwxaM2u+NvQrU9Xoaju
+ r/QE31CImAsz7rWSyONpLjzOF5Jcn3PRGZ54QRXOMBDAEnFhaCfTwW+Vd7yg0Eh5IxJur21W1
+ 2G+EhMSUTGXb5csh0lEOfWBlkBy2EFaTwYnTCflY6e+rK4Eb3TiXm06nkdIJ0ZoqCltKX/nIf
+ WTzE/PIpTCjDaL3pXme26RzDEBKOUVLLNAunrbrr1w==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Honeywell mprls0025pa is a pressure sensor series. There are many
+different models with different pressure ranges, units and transfer
+functions.
 
-On 5/4/2023 1:31 PM, Konrad Dybcio wrote:
-> Only IRIS2(_1) should enter the until-now-IS_V6() path and the
-> condition for skipping part of it should be IS_IRIS2_1 and not the
-> number of VPP pipes. Fix that.
+The range and transfer function need to be set up in the dt. Therefore
+new properties honeywell,pmin-pascal, honeywell,pmax-pascal,
+honeywell,transfer-function are introduced.
 
-Do not see any issue with existing code. IRIS2 with single pipe is 
-IRIS2_1. This does not
+Add dt-bindings.
 
-quality as a fix to earlier implementation. Since this series introduces 
-VPU versions,
+Signed-off-by: Andreas Klinger <ak@it-klinger.de>
+---
+ .../iio/pressure/honeywell,mprls0025pa.yaml   | 104 ++++++++++++++++++
+ 1 file changed, 104 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iio/pressure/honeywell,mprls0025pa.yaml
 
-IRIS2 with 1 pipe is being replaced with IRIS2_1.
-
--Vikash
-
->
-> Fixes: 4b0b6e147dc9 ("media: venus: hfi: Add 6xx AXI halt logic")
-> Fixes: 78d434ba8659 ("media: venus: hfi: Skip AON register programming for V6 1pipe")
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->   drivers/media/platform/qcom/venus/hfi_venus.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/media/platform/qcom/venus/hfi_venus.c b/drivers/media/platform/qcom/venus/hfi_venus.c
-> index 9b840440a115..ca56b1a8eb71 100644
-> --- a/drivers/media/platform/qcom/venus/hfi_venus.c
-> +++ b/drivers/media/platform/qcom/venus/hfi_venus.c
-> @@ -549,10 +549,10 @@ static int venus_halt_axi(struct venus_hfi_device *hdev)
->   	u32 mask_val;
->   	int ret;
->   
-> -	if (IS_V6(hdev->core)) {
-> +	if (IS_IRIS2(hdev->core) || IS_IRIS2_1(hdev->core)) {
->   		writel(0x3, cpu_cs_base + CPU_CS_X2RPMH_V6);
->   
-> -		if (hdev->core->res->num_vpp_pipes == 1)
-> +		if (IS_IRIS2_1(hdev->core))
->   			goto skip_aon_mvp_noc;
->   
->   		writel(0x1, aon_base + AON_WRAPPER_MVP_NOC_LPI_CONTROL);
->
+diff --git a/Documentation/devicetree/bindings/iio/pressure/honeywell,mprls0025pa.yaml b/Documentation/devicetree/bindings/iio/pressure/honeywell,mprls0025pa.yaml
+new file mode 100644
+index 000000000000..84a61721b597
+--- /dev/null
++++ b/Documentation/devicetree/bindings/iio/pressure/honeywell,mprls0025pa.yaml
+@@ -0,0 +1,104 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/iio/pressure/honeywell,mprls0025pa.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Honeywell mprls0025pa pressure sensor
++
++maintainers:
++  - Andreas Klinger <ak@it-klinger.de>
++
++description: |
++  Honeywell pressure sensor of model mprls0025pa.
++
++  This sensor has an I2C and SPI interface. Only the I2C interface is
++  implemented.
++
++  There are many models with different pressure ranges available. The vendor
++  calls them "mpr series". All of them have the identical programming model and
++  differ in the pressure range, unit and transfer function.
++
++  To support different models one need to specify the pressure range as well as
++  the transfer function. Pressure range needs to be converted from its unit to
++  pascal.
++
++  The transfer function defines the ranges of numerical values delivered by the
++  sensor. The minimal range value stands for the minimum pressure and the
++  maximum value also for the maximum pressure with linear relation inside the
++  range.
++
++  Specifications about the devices can be found at:
++    https://prod-edam.honeywell.com/content/dam/honeywell-edam/sps/siot/en-us/
++      products/sensors/pressure-sensors/board-mount-pressure-sensors/
++      micropressure-mpr-series/documents/
++      sps-siot-mpr-series-datasheet-32332628-ciid-172626.pdf
++
++properties:
++  compatible:
++    const: honeywell,mprls0025pa
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  reset-gpios:
++    description:
++      Optional GPIO for resetting the device.
++      If not present the device is not resetted during the probe.
++    maxItems: 1
++
++  honeywell,pmin-pascal:
++    description:
++      Minimum pressure value the sensor can measure in pascal.
++    $ref: /schemas/types.yaml#/definitions/uint32
++
++  honeywell,pmax-pascal:
++    description:
++      Maximum pressure value the sensor can measure in pascal.
++    $ref: /schemas/types.yaml#/definitions/uint32
++
++  honeywell,transfer-function:
++    description:
++      Transfer function which defines the range of valid values delivered by the
++      sensor.
++      1 - A, 10% to 90% of 2^24 (1677722 .. 15099494)
++      2 - B, 2.5% to 22.5% of 2^24 (419430 .. 3774874)
++      3 - C, 20% to 80% of 2^24 (3355443 .. 13421773)
++    $ref: /schemas/types.yaml#/definitions/uint32
++
++  vdd-supply:
++    description: provide VDD power to the sensor.
++
++required:
++  - compatible
++  - honeywell,pmax-pascal
++  - honeywell,pmin-pascal
++  - honeywell,transfer-function
++  - reg
++  - vdd-supply
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        pressure@18 {
++            compatible = "honeywell,mprls0025pa";
++            reg = <0x18>;
++            reset-gpios = <&gpio3 19 GPIO_ACTIVE_HIGH>;
++            interrupt-parent = <&gpio3>;
++            interrupts = <21 IRQ_TYPE_EDGE_FALLING>;
++            honeywell,pmin-pascal = <0>;
++            honeywell,pmax-pascal = <172369>;
++            honeywell,transfer-function = <1>;
++            vdd-supply = <&vcc_3v3>;
++        };
++    };
+-- 
+2.30.2
