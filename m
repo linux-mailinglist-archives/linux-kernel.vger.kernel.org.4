@@ -2,166 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A9756F86ED
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 18:42:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CCF26F86EE
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 18:42:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231211AbjEEQmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 12:42:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35646 "EHLO
+        id S231158AbjEEQmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 12:42:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjEEQmH (ORCPT
+        with ESMTP id S229577AbjEEQmV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 12:42:07 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ACC512EAA;
-        Fri,  5 May 2023 09:42:03 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id af79cd13be357-74df47ad36eso95799885a.0;
-        Fri, 05 May 2023 09:42:03 -0700 (PDT)
+        Fri, 5 May 2023 12:42:21 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC81913284
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 09:42:20 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1aaef97652fso13666105ad.0
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 09:42:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683304922; x=1685896922;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JjU8cYkMR/D2AH+UUT1RqaNNUKIe0G8elGCtMhJnuH4=;
-        b=dQMFTWxVHoCavdfbZX3UgZJ0Ihfx3/rCt8H/bqO9rw11mqpajR8QFEeg+n6QZVMGg/
-         s29pan4NW+ytzB/YOXNpuczxnVbeh1Sjb292d4RYJoHtL0GHtrKhZr3iXRUyhv0p0Yge
-         YbMiAajWHcnU/43IrmRecC2ImOjjYpprMsWzdwykYVdzFybpiXIot6JUNA085eKHeX8y
-         BeONHzO28SllK1s56ioAZNR8C5fQrfejIHHJiZXRuipTvVOXI7rLyMephBRcKkzFsnY6
-         GEO9MGMX35x4qoGDHmO/9pjul8WtaFEDlbLdwQZPPBYuHk2sKLW7wtkV8fETM5C8q3qr
-         CDFg==
+        d=chromium.org; s=google; t=1683304940; x=1685896940;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7v06Z2KE6UgDkNy7vxoQMtDkj1FvtkQwtTi1j/U3CnQ=;
+        b=C71QWIQ+VPVvQHucoVXDHQr+P8OfEaR5pAyJFWp+VdrT2k8ZNsmsUmprIu97eTCS7S
+         T+YpuIApCG05mDXG95KuevANMZcbkicvhJmKzHChh/mSVduaNIabHsaZkv/ZN00g9zRD
+         lwI2oa0h4LI4CM5kCUcI5OpcCMiQIMbbcWz+s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683304922; x=1685896922;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JjU8cYkMR/D2AH+UUT1RqaNNUKIe0G8elGCtMhJnuH4=;
-        b=FGqt4S3kw6j2QwcFl70wHie61+3iqHJPgLAkVvO9c6VzNL1D7HnzOrh0RU4sqLBo0R
-         HEJO6fzzLkXzmoYDa7RWrDR1SoM1ADOimJd5NqmiBvgr3Ld4C/I01P8T8UJF4q+GukLS
-         EMdx7edZEiuLSLeu1j9NYvUmwbHO3z46M+DVyenFYsRqwH2JrVuxXxDBJOTyncmplqOO
-         U9LtT1TJPdSWV4YkPD4oDnfiuuX33kgA/NiJ07WsKrIx+1K65jRnTdWB6b6lI+6N6RAq
-         r8S7JjZ6w1kdD4VnWrCa5IRyLKo1ZEg3RXu0S1MhXD75IhAKahxLGYJk5em4e0d1kzYg
-         Go4w==
-X-Gm-Message-State: AC+VfDw+udiBgsimHQQaNe2EgnkdJuoKC/Bo7BUKYzeekUVHN3+DzMxL
-        1TkzKlcCMEjnqL2R4za2mjk=
-X-Google-Smtp-Source: ACHHUZ4rq9RQOWNlJXcSFS/sC2a2G8ddqQ8jofrxPQhdo6mwHjlu5iAOMhwhC/v+ZzBUSf1OEu6gMg==
-X-Received: by 2002:a05:622a:287:b0:3e6:59c2:cbae with SMTP id z7-20020a05622a028700b003e659c2cbaemr3330439qtw.34.1683304921985;
-        Fri, 05 May 2023 09:42:01 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id g22-20020a37e216000000b0074de7b1fe1csm715174qki.17.2023.05.05.09.41.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 May 2023 09:42:01 -0700 (PDT)
-Message-ID: <d178b551-50f9-fb26-5844-1f1d3632fd20@gmail.com>
-Date:   Fri, 5 May 2023 09:41:42 -0700
+        d=1e100.net; s=20221208; t=1683304940; x=1685896940;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7v06Z2KE6UgDkNy7vxoQMtDkj1FvtkQwtTi1j/U3CnQ=;
+        b=eFq+R6Ibhim7FEiQ169N8pkfOfvUSEH14t93vRtXHg9BKTdJsgCEq40jV6zUkPMmsz
+         uWyjOnI58PSA+CkMXp0Ps5GmG860UPvDDILntvNkQAU8ePi4uNDh5R8fFZYmDVMyKc5j
+         FEHvLOesAIQDBIAZip85l8XuigzY5+PJ5I88MbOP2vtoPYsE+oQHgpocpJrInvUxOg8i
+         Qt0boXrJ6K0HJVZnvwZ7qqRP5S6dqMSRLz63jIH/zxX6BGoDsribrPmi5pk1jQfpR2cv
+         742NjIpNzM+R21wbdpS5S/pMF6ECg7e/T1NYkultui9ha2/7O7ZSSZeoeRrXjLkD8Vlr
+         zeIg==
+X-Gm-Message-State: AC+VfDxPO91i6pgsSg1EV2wJLOQ58m29tiU+5kaunSyyfnzywtzqPbUF
+        zAr83zc4mHOPOblun1ZNuREQheqKbeJ3JyW9Of/OrT10av0s2XyO
+X-Google-Smtp-Source: ACHHUZ7Ya6ILoZVkfhEQL2NYyOE12mCFI4hsF3ESUndB7Vg8bDLqakqmdS+2sPJwVQWsyZzlIT8ORPJU3brZ1qahnP0=
+X-Received: by 2002:a17:902:e852:b0:1a6:c595:d7c3 with SMTP id
+ t18-20020a170902e85200b001a6c595d7c3mr2434089plg.22.1683304940092; Fri, 05
+ May 2023 09:42:20 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 4/4] ARM: dts: Move .dts files to vendor sub-directories
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>, soc@kernel.org,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Antoine Tenart <atenart@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Lars Persson <lars.persson@axis.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Baruch Siach <baruch@tkos.co.il>,
-        Wei Xu <xuwei5@hisilicon.com>,
-        Jean-Marie Verdun <verdun@hpe.com>,
-        Nick Hawkins <nick.hawkins@hpe.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Peter Rosin <peda@axentia.se>, Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Daniel Palmer <daniel@thingy.jp>,
-        Romain Perier <romain.perier@gmail.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Marek Vasut <marex@denx.de>, Qin Jian <qinjian@cqplus1.com>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Paul Barker <paul.barker@sancloud.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Nishanth Menon <nm@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Enric Balletbo i Serra <eballetbo@gmail.com>,
-        Javier Martinez Canillas <javier@dowhile0.org>,
-        Michal Simek <michal.simek@xilinx.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@axis.com
-References: <20230504-arm-dts-mv-v1-0-2c8e51a2b6c4@kernel.org>
- <20230504-arm-dts-mv-v1-4-2c8e51a2b6c4@kernel.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230504-arm-dts-mv-v1-4-2c8e51a2b6c4@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230504170942.822147-1-revest@chromium.org> <ZFQQSKijXQHWlYaI@x1n>
+In-Reply-To: <ZFQQSKijXQHWlYaI@x1n>
+From:   Florent Revest <revest@chromium.org>
+Date:   Fri, 5 May 2023 18:42:08 +0200
+Message-ID: <CABRcYmJFcUs=3QYXz8iq7qvu2orJ4HL-cHdBKg9o7=Ma=nfPLw@mail.gmail.com>
+Subject: Re: [PATCH 0/4] MDWE without inheritance
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, catalin.marinas@arm.com,
+        anshuman.khandual@arm.com, joey.gouly@arm.com, mhocko@suse.com,
+        keescook@chromium.org, david@redhat.com, izbyshev@ispras.ru,
+        nd@arm.com, broonie@kernel.org, szabolcs.nagy@arm.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/4/23 20:29, Rob Herring wrote:
-> The arm dts directory has grown to 1553 boards which makes it a bit
-> unwieldy to maintain and use. Past attempts stalled out due to plans to
-> move .dts files out of the kernel tree. Doing that is no longer planned
-> (any time soon at least), so let's go ahead and group .dts files by
-> vendors. This move aligns arm with arm64 .dts file structure.
-> 
-> Doing this enables building subsets of dts files by vendor easily
-> without changing kernel configs:
-> 
-> make allyesconfig
-> make arch/arm/boot/dts/ti/
-> 
-> There's no change to dtbs_install as the flat structure is maintained on
-> install.
-> 
-> The naming of vendor directories is roughly in this order of preference:
-> - Matching original and current SoC vendor prefix/name (e.g. ti, qcom)
-> - Current vendor prefix/name if still actively sold (SoCs which have
->    been aquired) (e.g. nxp/imx)
-> - Existing platform name for older platforms not sold/maintained by any
->    company (e.g. gemini, nspire)
-> 
-> The whole move was scripted with the exception of MAINTAINERS.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+On Thu, May 4, 2023 at 10:06=E2=80=AFPM Peter Xu <peterx@redhat.com> wrote:
+>
+> On Thu, May 04, 2023 at 07:09:38PM +0200, Florent Revest wrote:
+> > Joey recently introduced a Memory-Deny-Write-Executable (MDWE) prctl wh=
+ich tags
+> > current with a flag that prevents pages that were previously not execut=
+able from
+> > becoming executable.
+> > This tag always gets inherited by children tasks. (it's in MMF_INIT_MAS=
+K)
+> >
+> > At Google, we've been using a somewhat similar downstream patch for a f=
+ew years
+> > now. To make the adoption of this feature easier, we've had it support =
+a mode in
+> > which the W^X flag does not propagate to children. For example, this is=
+ handy if
+> > a C process which wants W^X protection suspects it could start children
+> > processes that would use a JIT.
+> >
+> > I'd like to align our features with the upstream prctl. This series pro=
+poses a
+> > new NO_INHERIT flag to the MDWE prctl to make this kind of adoption eas=
+ier. It
+> > sets a different flag in current that is not in MMF_INIT_MASK and which=
+ does not
+> > propagate.
+>
+> I don't think I have enough context, so sorry if I'm going to ask a naive
+> question..
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com> #broadcom
--- 
-Florian
+Not at all! :) You're absolutely right, it's important to address these poi=
+nts.
 
+> I can understand how current MDWE helps on not allowing any modifi-able
+> content from becoming executable.  How could NO_INHERIT help if it won't
+> inherit and not in MMF_INIT_MASK?
+
+The way I see it, enabling MDWE is just a small step towards hardening
+a binary anyway. It can possibly make exploitation a bit harder in the
+case where the attacker has _just_: a write primitive they can use to
+write a shellcode somewhere and a primitive to make that page
+executable later. It's a fairly narrow protection already and I think
+it only really helps as part of a broader "defense in depth" strategy.
+
+> IIUC it means the restriction will only apply to the current process.  Th=
+en
+> I assume the process can escape from this rule simply by a fork().  If so=
+,
+> what's the point to protect at all?
+
+If we assume enough control from the attacker, then MDWE is already
+useless since it can be bypassed by writing to a file and then
+mmapping that file with PROT_EXEC. I think that's a good example of
+how "perfect can be the enemy of good" in security hardening. MDWE
+isn't a silver-bullet but it's a cheap trick and it makes a small dent
+in reducing the attack surface so it seems worth having anyway ?
+
+But indeed, to address your question, if you choose to use this
+NO_INHERIT flag: you're no longer protected if the attacker can fork()
+as part of their exploitation. I think it's been a useful trade-off
+for our internal users since, on the other hand, it also makes
+adoption a lot easier: our C++ services developers can trivially opt
+into a potpourri of hardening features without having to think too
+much about how they work under-the-hood. The default behavior has been
+to use a NO_INHERIT strategy so users don't get bad surprises the day
+when they try to spawn a JITted subcommand. In the meantime, their C++
+service still gets a little bit of extra protection.
+
+> And, what's the difference of this comparing to disabling MDWE after bein=
+g
+> enabled (which seems to be forbidden for now, but it seems fork() can pla=
+y
+> a similar role of disabling it)?
+
+That would be functionally somewhat similar, yes. I think it mostly
+comes down to ease of adoption. I imagine that users who would opt
+into NO_INHERIT are those who are interested in MDWE for the binary
+they are writing but aren't 100% confident in what subprocesses they
+will run and so they don't have to think about disabling it after
+every fork.
