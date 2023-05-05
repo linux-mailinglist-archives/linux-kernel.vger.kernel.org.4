@@ -2,311 +2,331 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6874A6F8A8D
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 23:11:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F3E86F8A8F
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 23:12:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231682AbjEEVLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 17:11:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48010 "EHLO
+        id S231794AbjEEVMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 17:12:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbjEEVLR (ORCPT
+        with ESMTP id S230040AbjEEVMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 17:11:17 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C16F46B7;
-        Fri,  5 May 2023 14:11:14 -0700 (PDT)
-Date:   Fri, 5 May 2023 23:11:11 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1683321072; bh=9K6Xo+2FAJY+HhScMhfLDUV2iVPLGTOgwshlRYpJtn0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aLgyEs4ht/xCZ7IBeqZlcbhJpk7ww/UkEz1CVQ4/B0snE7Wg+z97dD1Vv9jCVS8ao
-         J5bARIl3v/453B8nuPvbGBw3JF5xqXHUGvE/3Rerr4odYyNeWHGcXgVMM9dn7lBOP2
-         MRr3YDQ6eF4Hv6nG11aMNKBE8iVE4xgjlJqxKGGA=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Jorge Lopez <jorgealtxwork@gmail.com>
-Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v11 05/14] HP BIOSCFG driver - ordered-attributes
-Message-ID: <34539db1-98a4-4696-934b-af04d74720cc@t-8ch.de>
-References: <20230420165454.9517-1-jorge.lopez2@hp.com>
- <20230420165454.9517-6-jorge.lopez2@hp.com>
- <24fb56f9-49c6-432d-8c2f-17df7f7e37b2@t-8ch.de>
- <CAOOmCE-HR205R2vjyZedDocZLwvMdk7B1w7w9HgdXaypTrBK+A@mail.gmail.com>
+        Fri, 5 May 2023 17:12:51 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD8A6525D;
+        Fri,  5 May 2023 14:12:49 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-2fe3fb8e25fso1560913f8f.0;
+        Fri, 05 May 2023 14:12:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683321168; x=1685913168;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ivGNSditmdzeyn97THXeuK5ctfSInTGF99RwYTHxIyU=;
+        b=Se4RPOYgOfoiULFR7wuPRZx0PsUzRm5UV2nhzweK+31TUkjUE6hKIdXlZgE09l+KRu
+         lRwdl2KESe9bIc7ePbVexlK589ChfPZjGVTj6cw9jl2YhiUNWUWigagPt2ir8DoQefZD
+         T+j1ZcJzgqjcHyyPs/nRMUHX+VNVayUJHgnywRuBRa+NpWNWtksGrDjfcUOR+7zXYEeK
+         0A7cuMoIOjMgMsgPWidsQ6IMbMhgdb2YllCI0JNK1bU+uvsVJJKjtrmp2sImuntq/wMT
+         HAZExBVApKK+sE7XsIFEHYMN+XbHQ1Ctx0rwgWlpooKzIDjA9Ox1W0DLx6oz4zcqQMLi
+         uPXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683321168; x=1685913168;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ivGNSditmdzeyn97THXeuK5ctfSInTGF99RwYTHxIyU=;
+        b=Es6DK2AepcOx/ib44iqCJVZ8pCHpAJ8TfPDEbC2FsfKfh5ILJUKgkclL7uvp9lC22U
+         x3S1dL2Pcne6HOGk8eVgKwINCU+qszKoE+mPmoA6uvqw+w8fgDuwBlgHZhJjg864mX16
+         mj2NFA/1kv6tfLHvEqXPtekiMdPfEOGl8Ft3xbNW5n6FXpn0Gi6HNHltmutplLDB7NT0
+         vRgx9T92uLivT+bQ5kiFAzwPifnjxU6kEZ5NHT6BUhexUTnZ8HStH/K1ZUXOHw2evvjg
+         Jqbgq/2bCk/XNVjF8Fql+aXny9MDCY55L2J+pY8hyFZYEGuumAOKeMd+gaG+o9zTZiR8
+         6GnQ==
+X-Gm-Message-State: AC+VfDzR7sK4kHGORvkD+7J1Is911yxTLVzjwr6Ao09kVEa5TIA+5UzW
+        jV9DTWFJB3Js0u9EXJVIJLw=
+X-Google-Smtp-Source: ACHHUZ4PoDkiooUQXPtEqVD0dJPVF0uY7rTGd+8/bIp0RwQ/+pfrOoEqfDcAJezNAwrh0MAE+evlug==
+X-Received: by 2002:adf:e987:0:b0:306:64b7:5413 with SMTP id h7-20020adfe987000000b0030664b75413mr2160113wrm.71.1683321167903;
+        Fri, 05 May 2023 14:12:47 -0700 (PDT)
+Received: from localhost (host86-156-84-164.range86-156.btcentralplus.com. [86.156.84.164])
+        by smtp.gmail.com with ESMTPSA id l8-20020a5d4bc8000000b0030631f199f9sm3354382wrt.34.2023.05.05.14.12.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 May 2023 14:12:46 -0700 (PDT)
+Date:   Fri, 5 May 2023 22:12:45 +0100
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Mika Penttila <mpenttil@redhat.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Theodore Ts'o <tytso@mit.edu>, Peter Xu <peterx@redhat.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>
+Subject: Re: [PATCH v9 0/3] mm/gup: disallow GUP writing to file-backed
+ mappings by default
+Message-ID: <69c4a74f-18bc-4efe-89ac-a7ddf8f8d0a1@lucifer.local>
+References: <cover.1683235180.git.lstoakes@gmail.com>
+ <6e96358e-bcb5-cc36-18c3-ec5153867b9a@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOOmCE-HR205R2vjyZedDocZLwvMdk7B1w7w9HgdXaypTrBK+A@mail.gmail.com>
+In-Reply-To: <6e96358e-bcb5-cc36-18c3-ec5153867b9a@redhat.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-05 11:09:55-0500, Jorge Lopez wrote:
-> On Sun, Apr 23, 2023 at 1:55 AM <thomas@t-8ch.de> wrote:
+On Fri, May 05, 2023 at 10:21:21PM +0200, David Hildenbrand wrote:
+> On 04.05.23 23:27, Lorenzo Stoakes wrote:
+> > Writing to file-backed mappings which require folio dirty tracking using
+> > GUP is a fundamentally broken operation, as kernel write access to GUP
+> > mappings do not adhere to the semantics expected by a file system.
 > >
-> > On 2023-04-20 11:54:45-0500, Jorge Lopez wrote:
-> > >  .../x86/hp/hp-bioscfg/ordered-attributes.c    | 563 ++++++++++++++++++
-> > >  1 file changed, 563 insertions(+)
-> > >  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/ordered-attributes.c
-> > >
-> > > diff --git a/drivers/platform/x86/hp/hp-bioscfg/ordered-attributes.c b/drivers/platform/x86/hp/hp-bioscfg/ordered-attributes.c
-> > > new file mode 100644
-> > > index 000000000000..5e5d540f728d
-> > > --- /dev/null
-> > > +++ b/drivers/platform/x86/hp/hp-bioscfg/ordered-attributes.c
-> > > @@ -0,0 +1,563 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +/*
-> > > + * Functions corresponding to ordered list type attributes under
-> > > + * BIOS ORDERED LIST GUID for use with hp-bioscfg driver.
-> > > + *
-> > > + *  Copyright (c) 2022 HP Development Company, L.P.
-> > > + */
-> > > +
-> > > +#include "bioscfg.h"
-> > > +
-> > > +GET_INSTANCE_ID(ordered_list);
-> > > +
-> > > +static ssize_t current_value_show(struct kobject *kobj, struct kobj_attribute *attr, char *buf)
-> > > +{
-> > > +
-> > > +     int instance_id = get_ordered_list_instance_id(kobj);
-> > > +
-> > > +     if (instance_id < 0)
-> > > +             return -EIO;
-> > > +
-> > > +     return sysfs_emit(buf, "%s\n",
-> > > +                      bioscfg_drv.ordered_list_data[instance_id].current_value);
-> > > +}
-> > > +
-> > > +/*
-> > > + * validate_ordered_list_value -
-> > > + * Validate input of current_value against possible values
+> > A GUP caller uses the direct mapping to access the folio, which does not
+> > cause write notify to trigger, nor does it enforce that the caller marks
+> > the folio dirty.
 > >
-> > Does the firmware not also validate this?
+> > The problem arises when, after an initial write to the folio, writeback
+> > results in the folio being cleaned and then the caller, via the GUP
+> > interface, writes to the folio again.
 > >
-> > If so it may be easier to just let it do so and remove the validations
-> > from the driver.
-> 
-> Yes.  the firmware validates the data.
-> Will remove the validation
+> > As a result of the use of this secondary, direct, mapping to the folio no
+> > write notify will occur, and if the caller does mark the folio dirty, this
+> > will be done so unexpectedly.
 > >
-> > > + *
-> > > + * @instance_id: The instance on which input is validated
-> > > + * @buf: Input value
-> > > + */
-> > > +static int validate_ordered_list_values(int instance_id, const char *buf)
-> > > +{
-> > > +     int ret = 0;
-> > > +     int found = 0;
-> > > +     char *new_values = NULL;
-> > > +     char *value;
-> > > +     int elem;
-> > > +     int elem_found = 0;
-> > > +
-> > > +     /* Is it a read only attribute */
-> > > +     if (bioscfg_drv.ordered_list_data[instance_id].common.is_readonly)
-> > > +             return -EIO;
-> > > +
-> > > +     new_values = kstrdup(buf, GFP_KERNEL);
-> > > +
-> > > +     /*
-> > > +      * Changes to ordered list values require checking that new
-> > > +      * values are found in the list of elements.
-> > > +      */
-> > > +     elem_found = 0;
-> > > +     while (elem_found < bioscfg_drv.ordered_list_data[instance_id].elements_size) {
-> > > +
-> > > +             value = strsep(&new_values, ",");
+> > For example, consider the following scenario:-
 > >
-> > The docs say the separator is semicolon.
-> 
-> BIOS reports the current value using ',' as separator instead of ";".
-> 
-> ./hp-bioscfg/attributes/UEFI Boot Order/current_value
-> HDD:M.2:3,HDD:USB:1(Disabled),HDD:M.2:4,HDD:M.2:1,HDD:M.2:2,NETWORK
-> IPV4:EMBEDDED:1,NETWORK IPV6:EMBEDDED:1,NETWORK
-> IPV4:EXPANSION:1,NETWORK IPV6:EXPANSION:1
-> 
-> To avoid having to convert from "," to ";" and vice versa, I will
-> update the documentation to reflect the use of  "'," commas as the
-> separator
+> > 1. A folio is written to via GUP which write-faults the memory, notifying
+> >     the file system and dirtying the folio.
+> > 2. Later, writeback is triggered, resulting in the folio being cleaned and
+> >     the PTE being marked read-only.
+> > 3. The GUP caller writes to the folio, as it is mapped read/write via the
+> >     direct mapping.
+> > 4. The GUP caller, now done with the page, unpins it and sets it dirty
+> >     (though it does not have to).
+> >
+> > This change updates both the PUP FOLL_LONGTERM slow and fast APIs. As
+> > pin_user_pages_fast_only() does not exist, we can rely on a slightly
+> > imperfect whitelisting in the PUP-fast case and fall back to the slow case
+> > should this fail.
+> >
+> >
+>
+> Thanks a lot, this looks pretty good to me!
 
-The enum data format uses ";". Therefore it makes sense to also stick to
-";".
-The implementation detail of the BIOS using ',' should not matter to
-users.
+Thanks!
 
-> > > +             if (value != NULL) {
-> > > +                     if (!*value)
-> > > +                             continue;
-> > > +                     elem_found++;
-> > > +             }
-> > > +
-> > > +             found = 0;
-> > > +             for (elem = 0; elem < bioscfg_drv.ordered_list_data[instance_id].elements_size; elem++) {
-> > > +                     if (!strcasecmp(bioscfg_drv.ordered_list_data[instance_id].elements[elem], value)) {
-> >
-> > It's surprising that this is case-insensitive.
-> 
-> As validated in earlier reviews,  BIOS rejects strings that do not
-> match the internal values.
-> 
-> >
-> > > +                             found = 1;
-> > > +                             break;
-> > > +                     }
-> > > +             }
-> > > +
-> > > +
-> > > +             if (!found) {
-> > > +                     ret = -EINVAL;
-> > > +                     goto out_list_value;
-> > > +             }
-> > > +     }
-> > > +
-> > > +     if (elem_found == bioscfg_drv.ordered_list_data[instance_id].elements_size) {
-> > > +             pr_warn("Number of new values is not equal to number of ordered list elements (%d)\n",
-> > > +                     bioscfg_drv.ordered_list_data[instance_id].elements_size);
-> > > +             ret = -EINVAL;
-> > > +             goto out_list_value;
-> > > +     }
-> > > +
-> > > +out_list_value:
-> > > +     kfree(new_values);
-> > > +     return ret;
-> > > +}
-> >
-> > This algorithm does not seem to validate that different values are
-> > provided.
-> >
-> > So if "possible_values" is "foo,bar,baz" this function would accept
-> > "foo,foo,foo".
-> >
-> 
-> BIOS will reject strings such as "foo,foo,foo" when the current value
-> is "foo,bar,baz".   It is ok to provide a string which items are
-> ordered differently.  i.e. "baz,bar,foo"
-> validate_ordered_list_values() function will be removed as indicated earlier.
-> 
-> > > +
-> > > +/*
-> > > + * validate_ordered_input() -
-> > > + * Validate input of current_value against possible values
-> > > + *
-> > > + * @instance_id: The instance on which input is validated
-> > > + * @buf: Input value
-> > > + */
-> > > +static int validate_ordered_list_input(int instance_id, const char *buf)
-> > > +{
-> > > +     int ret = 0;
-> > > +
-> > > +     ret = validate_ordered_list_values(instance_id, buf);
-> > > +     if (ret < 0)
-> > > +             return -EINVAL;
-> > > +
-> > > +     /*
-> > > +      * set pending reboot flag depending on
-> > > +      * "RequiresPhysicalPresence" value
-> > > +      */
-> > > +     if (bioscfg_drv.ordered_list_data[instance_id].common.requires_physical_presence)
-> > > +             bioscfg_drv.pending_reboot = true;
-> > > +
-> > > +     return ret;
-> > > +}
-> > > +
-> > > +static void update_ordered_list_value(int instance_id, char *attr_value)
-> > > +{
-> > > +     strscpy(bioscfg_drv.ordered_list_data[instance_id].current_value,
-> > > +             attr_value,
-> > > +             sizeof(bioscfg_drv.ordered_list_data[instance_id].current_value));
-> > > +}
-> > > +
-> > > +ATTRIBUTE_S_COMMON_PROPERTY_SHOW(display_name_language_code, ordered_list);
-> > > +static struct kobj_attribute ordered_list_display_langcode =
-> > > +     __ATTR_RO(display_name_language_code);
-> > > +
-> > > +ATTRIBUTE_S_COMMON_PROPERTY_SHOW(display_name, ordered_list);
-> > > +static struct kobj_attribute ordered_list_display_name =
-> > > +     __ATTR_RO(display_name);
-> > > +
-> > > +ATTRIBUTE_PROPERTY_STORE(current_value, ordered_list);
-> > > +static struct kobj_attribute ordered_list_current_val =
-> > > +     __ATTR_RW_MODE(current_value, 0644);
-> > > +
-> > > +
-> > > +ATTRIBUTE_N_COMMON_PROPERTY_SHOW(prerequisites_size, ordered_list);
-> > > +static struct kobj_attribute  ordered_list_prerequisites_size_val =
-> > > +     __ATTR_RO(prerequisites_size);
-> > > +
-> > > +ATTRIBUTE_V_COMMON_PROPERTY_SHOW(prerequisites, ordered_list);
-> > > +static struct kobj_attribute  ordered_list_prerequisites_val =
-> > > +     __ATTR_RO(prerequisites);
-> > > +
-> > > +ATTRIBUTE_N_PROPERTY_SHOW(elements_size, ordered_list);
-> > > +static struct kobj_attribute  ordered_list_elements_size_val =
-> > > +     __ATTR_RO(elements_size);
-> >
-> > "size" and "length" attributes are fairly useless to userspace.
-> > They can't be trusted to provide information about another attribute as
-> > the information can be out of date when the other attribute is read.
-> >
-> 
-> Prerequisites, prerequisites_size and elements_size will be removed
-> 
-> > > +
-> > > +ATTRIBUTE_VALUES_PROPERTY_SHOW(elements, ordered_list);
-> > > +static struct kobj_attribute  ordered_list_elements_val =
-> > > +     __ATTR_RO(elements);
-> > > +
-> 
-> <snip>
-> 
-> > > +
-> > > +
-> > > +int populate_ordered_list_elements_from_package(union acpi_object *order_obj,
-> > > +                                             int order_obj_count,
-> > > +                                             int instance_id)
-> > > +{
-> > > +     char *str_value = NULL;
-> > > +     int value_len;
-> > > +     int ret = 0;
-> > > +     u32 size = 0;
-> > > +     u32 int_value;
-> > > +     int elem = 0;
-> > > +     int reqs;
-> > > +     int eloc;
-> > > +     char *tmpstr = NULL;
-> > > +     char *part_tmp = NULL;
-> > > +     int tmp_len = 0;
-> > > +     char *part = NULL;
-> > > +
-> > > +     if (!order_obj)
-> > > +             return -EINVAL;
-> > > +
-> > > +     strscpy(bioscfg_drv.ordered_list_data[instance_id].common.display_name_language_code,
-> > > +             LANG_CODE_STR,
-> > > +             sizeof(bioscfg_drv.ordered_list_data[instance_id].common.display_name_language_code));
-> >
-> > This seems to be the same for every type. Can it not be moved into
-> > common code?
-> 
-> Each instance requires to report 'display_name_language_code' hence it
-> cannot be moved to a common code.
+>
+> I started writing some selftests (assuming none would be in the works) using
+> iouring and and the gup_tests interface. So far, no real surprises for the general
+> GUP interaction [1].
+>
 
-Can it every be different from LANG_CODE_STR?
+Nice! I was using the cow selftests as just looking for something that
+touches FOLL_LONGTERM with PUP_fast, I hacked it so it always wrote just to
+test patches but clearly we need something more thorough.
 
-If not instead of having one kobj_attribute diplay_langcode for each
-string/enum/integer/etc you could have one kobj_attribute defined in
-bioscfg.c and then added to each string_attrs, enum_attrs...
+>
+> There are two things I noticed when registering an iouring fixed buffer (that differ
+> now from generic gup_test usage):
+>
+>
+> (1) Registering a fixed buffer targeting an unsupported MAP_SHARED FS file now fails with
+>     EFAULT (from pin_user_pages()) instead of EOPNOTSUPP (from io_pin_pages()).
+>
+> The man page for io_uring_register documents:
+>
+>        EOPNOTSUPP
+>               User buffers point to file-backed memory.
+>
+> ... we'd have to do some kind of errno translation in io_pin_pages(). But the
+> translation is not simple (sometimes we want to forward EOPNOTSUPP). That also
+> applies once we remove that special-casing in io_uring code.
+>
+> ... maybe we can simply update the manpage (stating that older kernels returned
+> EOPNOTSUPP) and start returning EFAULT?
 
-The _show() callback for this attribute would just return the constant
-string.
+Yeah I noticed this discrepancy when going through initial attempts to
+refactor in the vmas patch series, I wonder how important it is to
+differentiate? I have a feeling it probably doesn't matter too much but
+obviously need input from Jens and Pavel.
 
-This removes the need for many attribute definition, members in the data
-struct, initialization of these member...
+>
+>
+> (2) Registering a fixed buffer targeting a MAP_PRIVATE FS file fails with EOPNOTSUPP
+>     (from io_pin_pages()). As discussed, there is nothing wrong with pinning all-anon
+>     pages (resulting from breaking COW).
+>
+> That could be easily be handled (allow any !VM_MAYSHARE), and would automatically be
+> handled once removing the iouring special-casing.
+
+The entire intent of this series (for me :)) was to allow io_uring to just
+drop this code altogether so we can unblock my drop the 'vmas' parameter
+from GUP series [1].
+
+I always intended to respin that after this settled down, Jens and Pavel
+seemed onboard with this (and really they shouldn't need to be doing that
+check, that was always a failing in GUP).
+
+I will do a v5 of this soon.
+
+[1]: https://lore.kernel.org/all/cover.1681831798.git.lstoakes@gmail.com/
+
+>
+>
+> [1]
+>
+> # ./pin_longterm
+> # [INFO] detected hugetlb size: 2048 KiB
+> # [INFO] detected hugetlb size: 1048576 KiB
+> TAP version 13
+> 1..50
+> # [RUN] R/W longterm GUP pin in MAP_SHARED file mapping ... with memfd
+> ok 1 Pinning succeeded as expected
+> # [RUN] R/W longterm GUP pin in MAP_SHARED file mapping ... with tmpfile
+> ok 2 Pinning succeeded as expected
+> # [RUN] R/W longterm GUP pin in MAP_SHARED file mapping ... with local tmpfile
+> ok 3 Pinning failed as expected
+> # [RUN] R/W longterm GUP pin in MAP_SHARED file mapping ... with memfd hugetlb (2048 kB)
+> ok 4 # SKIP need more free huge pages
+> # [RUN] R/W longterm GUP pin in MAP_SHARED file mapping ... with memfd hugetlb (1048576 kB)
+> ok 5 Pinning succeeded as expected
+> # [RUN] R/W longterm GUP-fast pin in MAP_SHARED file mapping ... with memfd
+> ok 6 Pinning succeeded as expected
+> # [RUN] R/W longterm GUP-fast pin in MAP_SHARED file mapping ... with tmpfile
+> ok 7 Pinning succeeded as expected
+> # [RUN] R/W longterm GUP-fast pin in MAP_SHARED file mapping ... with local tmpfile
+> ok 8 Pinning failed as expected
+> # [RUN] R/W longterm GUP-fast pin in MAP_SHARED file mapping ... with memfd hugetlb (2048 kB)
+> ok 9 # SKIP need more free huge pages
+> # [RUN] R/W longterm GUP-fast pin in MAP_SHARED file mapping ... with memfd hugetlb (1048576 kB)
+> ok 10 Pinning succeeded as expected
+> # [RUN] R/O longterm GUP pin in MAP_SHARED file mapping ... with memfd
+> ok 11 Pinning succeeded as expected
+> # [RUN] R/O longterm GUP pin in MAP_SHARED file mapping ... with tmpfile
+> ok 12 Pinning succeeded as expected
+> # [RUN] R/O longterm GUP pin in MAP_SHARED file mapping ... with local tmpfile
+> ok 13 Pinning succeeded as expected
+> # [RUN] R/O longterm GUP pin in MAP_SHARED file mapping ... with memfd hugetlb (2048 kB)
+> ok 14 # SKIP need more free huge pages
+> # [RUN] R/O longterm GUP pin in MAP_SHARED file mapping ... with memfd hugetlb (1048576 kB)
+> ok 15 Pinning succeeded as expected
+> # [RUN] R/O longterm GUP-fast pin in MAP_SHARED file mapping ... with memfd
+> ok 16 Pinning succeeded as expected
+> # [RUN] R/O longterm GUP-fast pin in MAP_SHARED file mapping ... with tmpfile
+> ok 17 Pinning succeeded as expected
+> # [RUN] R/O longterm GUP-fast pin in MAP_SHARED file mapping ... with local tmpfile
+> ok 18 Pinning succeeded as expected
+> # [RUN] R/O longterm GUP-fast pin in MAP_SHARED file mapping ... with memfd hugetlb (2048 kB)
+> ok 19 # SKIP need more free huge pages
+> # [RUN] R/O longterm GUP-fast pin in MAP_SHARED file mapping ... with memfd hugetlb (1048576 kB)
+> ok 20 Pinning succeeded as expected
+> # [RUN] R/W longterm GUP pin in MAP_PRIVATE file mapping ... with memfd
+> ok 21 Pinning succeeded as expected
+> # [RUN] R/W longterm GUP pin in MAP_PRIVATE file mapping ... with tmpfile
+> ok 22 Pinning succeeded as expected
+> # [RUN] R/W longterm GUP pin in MAP_PRIVATE file mapping ... with local tmpfile
+> ok 23 Pinning succeeded as expected
+> # [RUN] R/W longterm GUP pin in MAP_PRIVATE file mapping ... with memfd hugetlb (2048 kB)
+> ok 24 # SKIP need more free huge pages
+> # [RUN] R/W longterm GUP pin in MAP_PRIVATE file mapping ... with memfd hugetlb (1048576 kB)
+> ok 25 Pinning succeeded as expected
+> # [RUN] R/W longterm GUP-fast pin in MAP_PRIVATE file mapping ... with memfd
+> ok 26 Pinning succeeded as expected
+> # [RUN] R/W longterm GUP-fast pin in MAP_PRIVATE file mapping ... with tmpfile
+> ok 27 Pinning succeeded as expected
+> # [RUN] R/W longterm GUP-fast pin in MAP_PRIVATE file mapping ... with local tmpfile
+> ok 28 Pinning succeeded as expected
+> # [RUN] R/W longterm GUP-fast pin in MAP_PRIVATE file mapping ... with memfd hugetlb (2048 kB)
+> ok 29 # SKIP need more free huge pages
+> # [RUN] R/W longterm GUP-fast pin in MAP_PRIVATE file mapping ... with memfd hugetlb (1048576 kB)
+> ok 30 Pinning succeeded as expected
+> # [RUN] R/O longterm GUP pin in MAP_PRIVATE file mapping ... with memfd
+> ok 31 Pinning succeeded as expected
+> # [RUN] R/O longterm GUP pin in MAP_PRIVATE file mapping ... with tmpfile
+> ok 32 Pinning succeeded as expected
+> # [RUN] R/O longterm GUP pin in MAP_PRIVATE file mapping ... with local tmpfile
+> ok 33 Pinning succeeded as expected
+> # [RUN] R/O longterm GUP pin in MAP_PRIVATE file mapping ... with memfd hugetlb (2048 kB)
+> ok 34 # SKIP need more free huge pages
+> # [RUN] R/O longterm GUP pin in MAP_PRIVATE file mapping ... with memfd hugetlb (1048576 kB)
+> ok 35 Pinning succeeded as expected
+> # [RUN] R/O longterm GUP-fast pin in MAP_PRIVATE file mapping ... with memfd
+> ok 36 Pinning succeeded as expected
+> # [RUN] R/O longterm GUP-fast pin in MAP_PRIVATE file mapping ... with tmpfile
+> ok 37 Pinning succeeded as expected
+> # [RUN] R/O longterm GUP-fast pin in MAP_PRIVATE file mapping ... with local tmpfile
+> ok 38 Pinning succeeded as expected
+> # [RUN] R/O longterm GUP-fast pin in MAP_PRIVATE file mapping ... with memfd hugetlb (2048 kB)
+> ok 39 # SKIP need more free huge pages
+> # [RUN] R/O longterm GUP-fast pin in MAP_PRIVATE file mapping ... with memfd hugetlb (1048576 kB)
+> ok 40 Pinning succeeded as expected
+> # [RUN] iouring fixed buffer with MAP_SHARED file mapping ... with memfd
+> ok 41 Pinning succeeded as expected
+> # [RUN] iouring fixed buffer with MAP_SHARED file mapping ... with tmpfile
+> ok 42 Pinning succeeded as expected
+> # [RUN] iouring fixed buffer with MAP_SHARED file mapping ... with local tmpfile
+> ok 43 Pinning failed as expected
+> # [RUN] iouring fixed buffer with MAP_SHARED file mapping ... with memfd hugetlb (2048 kB)
+> ok 44 # SKIP need more free huge pages
+> # [RUN] iouring fixed buffer with MAP_SHARED file mapping ... with memfd hugetlb (1048576 kB)
+> ok 45 Pinning succeeded as expected
+> # [RUN] iouring fixed buffer with MAP_PRIVATE file mapping ... with memfd
+> ok 46 Pinning succeeded as expected
+> # [RUN] iouring fixed buffer with MAP_PRIVATE file mapping ... with tmpfile
+> ok 47 Pinning succeeded as expected
+> # [RUN] iouring fixed buffer with MAP_PRIVATE file mapping ... with local tmpfile
+> not ok 48 Pinning failed as expected
+> # [RUN] iouring fixed buffer with MAP_PRIVATE file mapping ... with memfd hugetlb (2048 kB)
+> ok 49 # SKIP need more free huge pages
+> # [RUN] iouring fixed buffer with MAP_PRIVATE file mapping ... with memfd hugetlb (1048576 kB)
+> ok 50 Pinning succeeded as expected
+> Bail out! 1 out of 50 tests failed
+> # Totals: pass:39 fail:1 xfail:0 xpass:0 skip:10 error:0
+>
+>
+> --
+> Thanks,
+>
+> David / dhildenb
+>
