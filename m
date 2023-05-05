@@ -2,152 +2,304 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D2166F8320
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 14:39:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20D186F8325
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 14:40:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232200AbjEEMjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 08:39:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50358 "EHLO
+        id S232212AbjEEMkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 08:40:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231616AbjEEMjk (ORCPT
+        with ESMTP id S232136AbjEEMkP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 08:39:40 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2124.outbound.protection.outlook.com [40.107.94.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F0F311B4D;
-        Fri,  5 May 2023 05:39:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Uqtmelylh9gYO4lFHk4J5/ljkNX+1NhstJSfNLfja4qsboHZH1G/l51R9reB+tcfMIwydsDOb681kjKTkgjvWXDKJHt4+7OH1hyqBiD1f0c0qL0iuJFnl0LB6MBPk6Wi+BwW8wB3wuAdogPG9MvGLWEIDOn+S359r7UqKfZbpN8OjRX4szMoYx8D3wGZgLoKz8evgjNg35pgLt7kHC53BsoZeXb2JDt/aT/Ccv/PitYzwwbnchIrIFRid0C/n0IKSZrLqyQmm4iU6b2aOWndWtm5jXqa5SzqktmV7UWtygWNXuGbWSn+1hsBzrIo6TyvEtWbISI/NfAiHAAz+x8oHg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1IZQlzr3wA2bRfIfuoS+Z2z9pieaEu5jipx/8YyE7jY=;
- b=PI7hq6b6npRyDTJQulw3HwGHldt+ezJQ6eu9kDiEP1iVghtm/hMshnPMhb8D3DK0i1JYuZjxF4BAajuB9cxtmP73LmfGLwMpWrJgw1ufVx4GNZMuf+Ihs+x4flCY8YhjXUwMUjfWxroEVbNgO3vUtm9dzW7/rlTpOGzGHPCFQjisfMtoWjcznllz6rV2mtev/hxvbSKgtttzJ1GxiMh8Y/ZoLCdtFTyW8jYbDHzJiLv3I8RWsBoOJjzjZSSkTOYYfy00hNRuajjcObLHeqYlhRNxDKUab20MK44VpdtzFxuWg82Avx65s/DuzMGtYNVuWLGqLfhAHdNM7RS1ZVOvSA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Fri, 5 May 2023 08:40:15 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF5C31CFE9
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 05:40:06 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-2f58125b957so1596074f8f.3
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 05:40:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1IZQlzr3wA2bRfIfuoS+Z2z9pieaEu5jipx/8YyE7jY=;
- b=GZIV8jHyoiR2F1IcYqOyWLSljT+5gpcJQ1lR/KE3zwi99VaKhtnKeXeZZ9Q/qqmhnYbyXEKDgcRNHtk3oih/EYEiyy0/AD3b8aYikhzInnc93SjU0Y52p+yFtNZpNntTBDVbFS8m2kW9ubW57lclhQISZW3wU2cHUREEdBJfrZU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by BLAPR13MB4626.namprd13.prod.outlook.com (2603:10b6:208:334::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.27; Fri, 5 May
- 2023 12:39:35 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6363.026; Fri, 5 May 2023
- 12:39:35 +0000
-Date:   Fri, 5 May 2023 14:39:25 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Jason Andryuk <jandryuk@gmail.com>
-Cc:     Christian Schoenebeck <linux_oss@crudebyte.com>,
-        Eric Van Hensbergen <ericvh@kernel.org>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, v9fs@lists.linux.dev,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v2] 9p: Remove INET dependency
-Message-ID: <ZFT4/SYt9QUsyHBP@corigine.com>
-References: <20230503141123.23290-1-jandryuk@gmail.com>
- <4317357.pJ3umoczA4@silver>
- <CAKf6xpscky_LLxStzZ6uAyeWPXC3gALsA_zVFpF8X7uktw=MxQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKf6xpscky_LLxStzZ6uAyeWPXC3gALsA_zVFpF8X7uktw=MxQ@mail.gmail.com>
-X-ClientProxiedBy: AM0PR04CA0044.eurprd04.prod.outlook.com
- (2603:10a6:208:1::21) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=broadcom.com; s=google; t=1683290405; x=1685882405;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=x/HTSsZUKkQ8huo76oOanDt1g8ixQKagTulNLZTSvXA=;
+        b=S5N3n3CojKjj2hC7QkomyfMRwHsCA0iDV2KenfXPrxM0FFUuSvDDsby5VnY6z5R9QJ
+         +j/q/1iplbJ516zJZETCgzXfEdm8bU33a3KArHSboMUBSo/Er93kiNCmmXR9o11lgm92
+         mw6dhIC13wMT2GUA3J01Z2x4UXPqO7NvpZ5X8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683290405; x=1685882405;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=x/HTSsZUKkQ8huo76oOanDt1g8ixQKagTulNLZTSvXA=;
+        b=lK/7L8/2iZSDUDf+73JugKzTcjyEC9Yph4dhU+/XdCycsaoum5Kh/1uu0SS4Gqmktq
+         enS8vEdtOi/pdxETKLvSE3m+549elzvv0ddx6Sy6CoRjFocVZUjERSu9SdCPuyXUknXi
+         Nj0GlMNqwqp2PBN1QrkgZS1BezQheQIRcabBYbDOeQFZM6pQMqKmexAnX0dDCwqP3UIZ
+         tr6Swjb7TkakFfHWDdjXwn/4rcQ9W3vYhUhqojm3pDbFIzGTpzyJ9M2Y8/QM4Ns0L75v
+         XewsUeN437oHjUQEQoV1MHA0/a99YkoAIv9Inqp900pKR58pQvc/X3ifCw2SPoqGS9bj
+         JOXA==
+X-Gm-Message-State: AC+VfDyC6BoM6Ys9Oxplu45/GTackrw1JSWrNtPHHIti7JDKDK5hoPZv
+        c03IW/H1StaWzJwX6+RgMqNfSnETIma02s83ZnbmIg==
+X-Google-Smtp-Source: ACHHUZ6W6VpZpWodwnxR+J/8nQ2QzVXDjenDLHlI4VqEONvpRxCmEBGbWr2qU5+L2dWaBR2/IllnhKWl4r9OD+i2hSA=
+X-Received: by 2002:a5d:50c8:0:b0:2f6:a7d5:adbe with SMTP id
+ f8-20020a5d50c8000000b002f6a7d5adbemr1520199wrt.37.1683290405084; Fri, 05 May
+ 2023 05:40:05 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BLAPR13MB4626:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0270a2dd-1ae6-4b0e-49b2-08db4d65c82d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 01c3HdbWuRenYyqvAsgVtJwqDq4VV/WttImF6W1xVoDt1RmDcsrA6LEj/pGwnP3QcRhmheJchvlrAoOP96/Yuhk4gILnnqvKEKQloWyi+pbngB0b+uVgJkjcMivBO4h4UGdLjd/zdaROK4nxf4ES9VSfWHBa7y8KjgCwMqwY2QtawWBOBU2kQk6p87oYvYqATRqOBs9Z4LfNRvcgefH/kri+aq9aDfHtO2pXV09hWlffpB1sPMhOJuxRc6Baq5FRQdDOi2x7tU1CShTGmneNBWDac4k1gklrIxIRsN8khMBJhQm+IR+awzgjg5pZuVyzbsoKzcZQeMgM9AMDiv8CxkcBvOyK4QlM/PefdOyf0Tv8gS7fqjFmrBjcsdMClFssm0mtdbkxA4GfRvEIhRQK9HfoQCzM2YGgXUG8+EBzmppJzSj2PqaPDR9j5MXkOl28XJSt8ba/UGoU6g04MzHA+lUnlq0YMtP+SY5wNucZ2COzWk4O34Ux5WaYqyzfiZIZddTyq7wGJ8a4d5/i4284V+pCZ6wgQaVQGcCHYneGmRgMBBmHKqQWCah77cpRPA6wxftFR01y2sNTlS8kf21s8m//H/JTu9+B4f0YLBkDJcQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(136003)(346002)(39830400003)(396003)(376002)(451199021)(36756003)(86362001)(6666004)(54906003)(316002)(6916009)(4326008)(66946007)(66556008)(66476007)(6486002)(478600001)(41300700001)(5660300002)(8676002)(8936002)(2906002)(7416002)(4744005)(44832011)(38100700002)(186003)(2616005)(6506007)(53546011)(6512007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UGNvZUxvcmpvVlBYSVM2WEtGSVVuaXJsUllsbmloMDU5V1Y0V0xzdGs3aVFC?=
- =?utf-8?B?V2c2QWRabTZLaXExaFhrR3hYNmhIbEVtT3hXSWxvLzFoeTRsd1dnRnl6cGZI?=
- =?utf-8?B?ZUI0VUZkR0RVNEhsamRjT1V0eW4xQTRKeHIwSjRmdXhoSWZQa3MwTHRGQkd0?=
- =?utf-8?B?ZlQ4QWpocURCUDlvLzMxVC9hYlRGWUNmbGtnM2h4Wk56S090cmJOQXNEVzFw?=
- =?utf-8?B?bTY4RTFLT2JCUkphMkRTdjZMZFd6UUtCL0lpeXR4YlZnUzZiL2dFQlJqekNK?=
- =?utf-8?B?bHlBWlpJR2t5TnpaYnpsL3NDMFNNNDBuSVpmMVpzMmp3elZpdVFSbkU3Y2t6?=
- =?utf-8?B?K2JtSzJnczMxRzVRdDhoczFKV3ovSUVITGxGOG9wZGMwbTk0YXZOc0JrTUkv?=
- =?utf-8?B?UEoyTStLQVV3UmM1Tzk5aHpwdDZVMFJMRkJPZmlEcUVyT2t6dHNWdml1bWQv?=
- =?utf-8?B?ajRQTytxNlRxWUo4bEpTVXBJeXVsWDdEeHRHdjVSVWZjZmtjZHRzZlY4NVdS?=
- =?utf-8?B?N3NlTHowTG1BbGNabTBzV0Z6YjlOdGJVcS9yMEs5MHhxYnRjL29UUGQzUnFI?=
- =?utf-8?B?SGdydzdnN0FGUnRleDJ3aWJ3QjdwUEpMWHBrRnFmRXdOalg0Y3NKa0hLb3lH?=
- =?utf-8?B?OG5uY3UwZXdYZXo2VEN4akRRaTJseURyZW53bGtiMlN2aDZ0WlB1MVRIYVFU?=
- =?utf-8?B?ZEFHZnFLYU1zN1RIUi82MTc1UlMyY21GcmxWKzhrZ1VsZURUMXRLT2wrd2NF?=
- =?utf-8?B?RVdrTG4vemZFcXFGQ3JDaFlkeEZSbU5uSkNPZlpXVllNUEM4RlAyeTJtYzZi?=
- =?utf-8?B?V3J0RWNOZStvdm9pTDJKTDNzbGRsZzM2TDNEb3l3b0hmaHZiMmdZaHk4OW9i?=
- =?utf-8?B?ZG1XQmpBVmtnNXV6ZDBZWUIvc1NKZDMzOGtaNm4vY1B6UVBFUndTQmhIbGdL?=
- =?utf-8?B?ODBxSWRSNW1FY0RaV1pzbXlKcHRqY2hyMDNOd1ZtTkVRWS95OVVuUXNCb0Jo?=
- =?utf-8?B?VmQ0SE1pdFNRZ0xoemhzZ0Q0ZGVaemx3eUs5SGIwME1TS3gzelNnTHpGVGRU?=
- =?utf-8?B?YkZ1NjV2WjR1TnJyeHBmUC80b29vMUE4c3FoMlJTcHcxbmRBWktydVlpWFNo?=
- =?utf-8?B?SGk3WVY5MWU5YVNMWUdPem1EM2JnNVdHdkFVMzJHOEVrY0pTcXhHUkNoSmhw?=
- =?utf-8?B?ZkdIUm9rb0hVcDl5U0ZvLzZ2eHptVE1UVjhJbDNlN3IzMXVmczBZeVF1VXBZ?=
- =?utf-8?B?emJPVnBUYm85WlcxeTk3N3VnMWQ4ZitkOEhaaWV2VU1mVUx3L3RjR1oyT3Zz?=
- =?utf-8?B?WWoydjVibHQvbENZNVJQcCtjSFNyQ2JEaU12ektvK0dINy9henVwbkIwWi9n?=
- =?utf-8?B?LzJjRVJPQnhNWk92L3lEanNCYk43a2dzREs4ZEpsNzExNEN3bmZnSGNPMloz?=
- =?utf-8?B?dzB3NnJCVkdxMVh5RE9XNG5jQzRpcFdIY3ZObDVhOWx1eVB5UUhEVWg1NnNQ?=
- =?utf-8?B?TTByYjFqRU81ckRwNzQ4SXVtb2hRUmJWa005VUgwRlFFTHJHTzI2V0JtNWNU?=
- =?utf-8?B?aXJ1c0JGQlFzY2lLcHVEemZSYzZ0QzdLcnBmRzIvc0dIaTg5Y2I2RlI5V3Uz?=
- =?utf-8?B?REJDQlBNb1pMS3ZNRDdYekJSYkdrVlo3ZnFMQTZMSXZ1UUwwcWRVQzBHZDNG?=
- =?utf-8?B?MFN4aklGQzRjVDlYV3F4di9kZGFZRDhTa2pQUHpSQ3hMTE5Pc3dqYnBFcjFm?=
- =?utf-8?B?RnRsaFp1VEdla3UrR0JKd2JTWTVXVnhuRlo4WGg0QVF1cm5zVUxDSkRzZWhR?=
- =?utf-8?B?bWxyTGhmdUVHbmxFWFNMT0xoaEJsdm5iNUpXUjRMeENVZnd0Z2JLVFdpQmJH?=
- =?utf-8?B?UWlvRU84ZWswTVdGS2VSWEpwZUhValRTNmo2R0dXeS9qc0laOCtxR0QxSkVq?=
- =?utf-8?B?SFVKVEpDWmJnSmJPSkZNZnA1WVhUUHo2Q0RRZUgwdXpUTk4xZXJZbW5jcjNy?=
- =?utf-8?B?L1dwNUF4TWozN3k4THVjajgvMXlPTWVyaU8zKzFTSUptV1NTWTBuTlhWSUx6?=
- =?utf-8?B?UXdGM01Uclc4a3k3MjNObHorZTZ1L0d6MmZhaFVGVmxwRXhhY3h1emNJcXd6?=
- =?utf-8?B?TTBtZnlLa3RRUkpQZVgrRjZNd2ttaDZ4VFQxZTJVZ2hFY0NEVk16WXhXSTZ2?=
- =?utf-8?B?MGdDZ3B2STRoTEVtUE9aRG1pbTZ5cjdlbVhaYUhHY2dZYVd2ZGN3T3MySzRI?=
- =?utf-8?B?S3JibnFTQ2RsaWNmU20zMHVDOHdBPT0=?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0270a2dd-1ae6-4b0e-49b2-08db4d65c82d
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2023 12:39:35.1506
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: nPVqKkQv3nkG3byKPgtDTMuo0D0DXr371q3WXBts7LrmTH7MVtgIoB/7EoX4f5vMtuu2g29ct/i77uaGt8KKjVqkqzUgYK2zfXK+GI7zyxk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR13MB4626
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <CA+-6iNwBCn822NBv1wjLcbd0=bHEfx9V3R_UcAcuMz1_etUjMg@mail.gmail.com>
+ <20230503221803.GA798402@bhelgaas>
+In-Reply-To: <20230503221803.GA798402@bhelgaas>
+From:   Jim Quinlan <james.quinlan@broadcom.com>
+Date:   Fri, 5 May 2023 08:39:52 -0400
+Message-ID: <CA+-6iNzcCkxcrpugbWFafn1-SFcimjkLQaghY4TURCAuW032NA@mail.gmail.com>
+Subject: Re: [PATCH v4 1/5] dt-bindings: PCI: brcmstb: brcm,{enable-l1ss,completion-timeout-us}
+ props
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Jim Quinlan <jim2101024@gmail.com>, linux-pci@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cyril Brulebois <kibi@debian.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000abf6da05faf196f1"
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 04, 2023 at 07:55:17AM -0400, Jason Andryuk wrote:
-> On Thu, May 4, 2023 at 6:58 AM Christian Schoenebeck
-> <linux_oss@crudebyte.com> wrote:
-> >
-> > On Wednesday, May 3, 2023 4:11:20 PM CEST Jason Andryuk wrote:
-> > > 9pfs can run over assorted transports, so it doesn't have an INET
-> > > dependency.  Drop it and remove the includes of linux/inet.h.
+--000000000000abf6da05faf196f1
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, May 3, 2023 at 6:18=E2=80=AFPM Bjorn Helgaas <helgaas@kernel.org> w=
+rote:
+>
+> On Wed, May 03, 2023 at 05:38:15PM -0400, Jim Quinlan wrote:
+> > On Wed, May 3, 2023 at 2:07=E2=80=AFPM Bjorn Helgaas <helgaas@kernel.or=
+g> wrote:
+> > > On Wed, May 03, 2023 at 10:38:57AM -0400, Jim Quinlan wrote:
+> > > > On Sun, Apr 30, 2023 at 3:10=E2=80=AFPM Bjorn Helgaas <helgaas@kern=
+el.org> wrote:
+> > > > > On Fri, Apr 28, 2023 at 06:34:55PM -0400, Jim Quinlan wrote:
+> > > > > > brcm,enable-l1ss (bool):
+> > > > > >
+> > > > > >   The Broadcom STB/CM PCIe HW -- a core that is also used by RP=
+i SOCs --
+> > > > > >   requires the driver probe() to deliberately place the HW one =
+of three
+> > > > > >   CLKREQ# modes:
+> > > > > >
+> > > > > >   (a) CLKREQ# driven by the RC unconditionally
+> > > > > >   (b) CLKREQ# driven by the EP for ASPM L0s, L1
+> > > > > >   (c) Bidirectional CLKREQ#, as used for L1 Substates (L1SS).
+> > > > > >
+> > > > > >   The HW+driver can tell the difference between downstream devi=
+ces that
+> > > > > >   need (a) and (b), but does not know when to configure (c).  A=
+ll devices
+> > > > > >   should work fine when the driver chooses (a) or (b), but (c) =
+may be
+> > > > > >   desired to realize the extra power savings that L1SS offers. =
+ So we
+> > > > > >   introduce the boolean "brcm,enable-l1ss" property to inform t=
+he driver
+> > > > > >   that (c) is desired.  Setting this property only makes sense =
+when the
+> > > > > >   downstream device is L1SS-capable and the OS is configured to=
+ activate
+> > > > > >   this mode (e.g. policy=3D=3Dsuperpowersave).
+> > > > ...
 > > >
-> > > NET_9P_FD/trans_fd.o builds without INET or UNIX and is unusable over
+> > > > > What bad things would happen if the driver always configured (c)?
+> > > >
+> > > > Well, our driver has traditionally only supported (b) and our
+> > > > existing boards have been designed with this in mind.  I would not
+> > > > want to switch modes w'o the user/customer/engineer opting-in to do
+> > > > so.  Further, the PCIe HW engineer told me defaulting to (c) was a
+> > > > bad idea and was "asking for trouble".  Note that the commit's
+> > > > comment has that warning about L1SS mode not meeting this 400ns
+> > > > spec, and I suspect that many of our existing designs have bumped
+> > > > into that.
+> > > >
+> > > > But to answer your question, I haven't found a scenario that did no=
+t
+> > > > work by setting mode (c).  That doesn't mean they are not out there=
+.
+> > > >
+> > > > > Other platforms don't require this, and having to edit the DT
+> > > > > based on what PCIe device is plugged in seems wrong.  If brcmstb
+> > > > > does need it, that suggests a hardware defect.  If we need this t=
+o
+> > > > > work around a defect, that's OK, but we should acknowledge the
+> > > > > defect so we can stop using this for future hardware that doesn't
+> > > > > need it.
+> > > >
+> > > > All devices should work w/o the user having to change the DT.  Only
+> > > > if they desire L1SS must they add the "brcm,enable-l1ss" property.
+> > >
+> > > I thought the DT was supposed to describe properties of the
+> > > *hardware*, but this seems more like "use this untested clkreq
+> > > configuration," which maybe could be done via a module parameter?
 > >
-> > s/unusable/usable/ ?
-> 
-> Whoops!  Yes, you are correct.  Thanks for catching that.
+> > Electrically, it has been tested, but  specifically for L1SS capable
+> > devices.  What is untested AFAICT are platforms using this mode on
+> > non-L1SS capable devices.
+>
+> Non-L1SS behavior is a subset of L1SS, so if you've tested with L1SS
+> enabled, I would think you'd be covered.
+>
+> But I'm not a hardware engineer, so maybe there's some subtlety there.
+> The "asking for trouble" comment from your engineer is definitely
+> concerning, but I have no idea what's behind that.
+>
+> And obviously even if we have "brcm,enable-l1ss", the user may decide
+> to disable L1SS administratively, so even if the Root Port and the
+> device both support L1SS, it may be never be enabled.
+>
+> > WRT bootline param
+> > pci=3D[<domain>:]<bus>:<dev>.<func>[/<dev>.<func>]*pci:<vendor>:<device=
+>[:<subvendor>:<subdevice>]:
+> > this does not look compatible for vendor specific DT options like
+> > "brcm,enable-l1ss".  I observe that pci_dev_str_match_path() is a
+> > static function and I don't see a single option in pci.c  that is
+> > vendor specific.  FWIW, moving something like this to the bootline
+> > would not be popular with our customers; for some reason they really
+> > don't like changes to the bootline.
+>
+> They prefer editing the DT?
+>
+> I agree the "pci=3DB:D.F" stuff is a bit ugly.  Do you have multiple
+> slots such that you would have to apply this parameter to some but not
+> others?  I guess I was imagining a single-slot system where you
+> wouldn't need to identify the specific device because there *is* only
+> one.
+Hi Bjorn,
 
-That notwithstanding, this looks good to me.
+We typically have a single device per controller.  Occasionally, there
+is a mismatch in needs, and the customer adds a switch to their board
+until we can add another controller to the next rev of the SOC.
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+Some of our customers have a habit of  doing "rmmod, sleep, insmod" on
+ the RC driver for various uncommon reasons, so "pci,linux-domain"
+was quite useful for them to simplify their shell scripts.
 
+As far as preferring DT:  customers have to modify the DT already*, so
+they really don't want to be modifying two separate configurations (DT
+and boot params).   Often, the DT blob is stored in a different
+partition or medium than the bootline params, and it is a hassle to
+configure both and keep them  in "sync".
+
+Regards,
+Jim Quinlan
+Broadcom STB
+
+* We have a tool system  that we and our customers use which takes a
+high-level configuration file and generates a custom DT blob and
+bootloader for a particular SOC/board(s).   And we provide the default
+config, so our customers only have to change a few things.  For
+example, adding "-l1ss" to the existing "pcie -n 0" line will do what
+you'd expect.  And this is actually not a good example of the tool's
+power.
+
+
+>
+> Bjorn
+
+--000000000000abf6da05faf196f1
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIQbgYJKoZIhvcNAQcCoIIQXzCCEFsCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+gg3FMIIFDTCCA/WgAwIBAgIQeEqpED+lv77edQixNJMdADANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA5MTYwMDAwMDBaFw0yODA5MTYwMDAwMDBaMFsxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBS
+MyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA
+vbCmXCcsbZ/a0fRIQMBxp4gJnnyeneFYpEtNydrZZ+GeKSMdHiDgXD1UnRSIudKo+moQ6YlCOu4t
+rVWO/EiXfYnK7zeop26ry1RpKtogB7/O115zultAz64ydQYLe+a1e/czkALg3sgTcOOcFZTXk38e
+aqsXsipoX1vsNurqPtnC27TWsA7pk4uKXscFjkeUE8JZu9BDKaswZygxBOPBQBwrA5+20Wxlk6k1
+e6EKaaNaNZUy30q3ArEf30ZDpXyfCtiXnupjSK8WU2cK4qsEtj09JS4+mhi0CTCrCnXAzum3tgcH
+cHRg0prcSzzEUDQWoFxyuqwiwhHu3sPQNmFOMwIDAQABo4IB2jCCAdYwDgYDVR0PAQH/BAQDAgGG
+MGAGA1UdJQRZMFcGCCsGAQUFBwMCBggrBgEFBQcDBAYKKwYBBAGCNxQCAgYKKwYBBAGCNwoDBAYJ
+KwYBBAGCNxUGBgorBgEEAYI3CgMMBggrBgEFBQcDBwYIKwYBBQUHAxEwEgYDVR0TAQH/BAgwBgEB
+/wIBADAdBgNVHQ4EFgQUljPR5lgXWzR1ioFWZNW+SN6hj88wHwYDVR0jBBgwFoAUj/BLf6guRSSu
+TVD6Y5qL3uLdG7wwegYIKwYBBQUHAQEEbjBsMC0GCCsGAQUFBzABhiFodHRwOi8vb2NzcC5nbG9i
+YWxzaWduLmNvbS9yb290cjMwOwYIKwYBBQUHMAKGL2h0dHA6Ly9zZWN1cmUuZ2xvYmFsc2lnbi5j
+b20vY2FjZXJ0L3Jvb3QtcjMuY3J0MDYGA1UdHwQvMC0wK6ApoCeGJWh0dHA6Ly9jcmwuZ2xvYmFs
+c2lnbi5jb20vcm9vdC1yMy5jcmwwWgYDVR0gBFMwUTALBgkrBgEEAaAyASgwQgYKKwYBBAGgMgEo
+CjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAN
+BgkqhkiG9w0BAQsFAAOCAQEAdAXk/XCnDeAOd9nNEUvWPxblOQ/5o/q6OIeTYvoEvUUi2qHUOtbf
+jBGdTptFsXXe4RgjVF9b6DuizgYfy+cILmvi5hfk3Iq8MAZsgtW+A/otQsJvK2wRatLE61RbzkX8
+9/OXEZ1zT7t/q2RiJqzpvV8NChxIj+P7WTtepPm9AIj0Keue+gS2qvzAZAY34ZZeRHgA7g5O4TPJ
+/oTd+4rgiU++wLDlcZYd/slFkaT3xg4qWDepEMjT4T1qFOQIL+ijUArYS4owpPg9NISTKa1qqKWJ
+jFoyms0d0GwOniIIbBvhI2MJ7BSY9MYtWVT5jJO3tsVHwj4cp92CSFuGwunFMzCCA18wggJHoAMC
+AQICCwQAAAAAASFYUwiiMA0GCSqGSIb3DQEBCwUAMEwxIDAeBgNVBAsTF0dsb2JhbFNpZ24gUm9v
+dCBDQSAtIFIzMRMwEQYDVQQKEwpHbG9iYWxTaWduMRMwEQYDVQQDEwpHbG9iYWxTaWduMB4XDTA5
+MDMxODEwMDAwMFoXDTI5MDMxODEwMDAwMFowTDEgMB4GA1UECxMXR2xvYmFsU2lnbiBSb290IENB
+IC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzARBgNVBAMTCkdsb2JhbFNpZ24wggEiMA0GCSqG
+SIb3DQEBAQUAA4IBDwAwggEKAoIBAQDMJXaQeQZ4Ihb1wIO2hMoonv0FdhHFrYhy/EYCQ8eyip0E
+XyTLLkvhYIJG4VKrDIFHcGzdZNHr9SyjD4I9DCuul9e2FIYQebs7E4B3jAjhSdJqYi8fXvqWaN+J
+J5U4nwbXPsnLJlkNc96wyOkmDoMVxu9bi9IEYMpJpij2aTv2y8gokeWdimFXN6x0FNx04Druci8u
+nPvQu7/1PQDhBjPogiuuU6Y6FnOM3UEOIDrAtKeh6bJPkC4yYOlXy7kEkmho5TgmYHWyn3f/kRTv
+riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
+QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
+UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
+M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
+Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
+14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
+a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
+XzCCBU0wggQ1oAMCAQICDEjuN1Vuw+TT9V/ygzANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE3MTNaFw0yNTA5MTAxMjE3MTNaMIGO
+MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
+BgNVBAoTDUJyb2FkY29tIEluYy4xFDASBgNVBAMTC0ppbSBRdWlubGFuMSkwJwYJKoZIhvcNAQkB
+FhpqYW1lcy5xdWlubGFuQGJyb2FkY29tLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoC
+ggEBAKtQZbH0dDsCEixB9shqHxmN7R0Tywh2HUGagri/LzbKgXsvGH/LjKUjwFOQwFe4EIVds/0S
+hNqJNn6Z/DzcMdIAfbMJ7juijAJCzZSg8m164K+7ipfhk7SFmnv71spEVlo7tr41/DT2HvUCo93M
+7Hu+D3IWHBqIg9YYs3tZzxhxXKtJW6SH7jKRz1Y94pEYplGQLM+uuPCZaARbh+i0auVCQNnxgfQ/
+mOAplh6h3nMZUZxBguxG3g2p3iD4EgibUYneEzqOQafIQB/naf2uetKb8y9jKgWJxq2Y4y8Jqg2u
+uVIO1AyOJjWwqdgN+QhuIlat+qZd03P48Gim9ZPEMDUCAwEAAaOCAdswggHXMA4GA1UdDwEB/wQE
+AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
+c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
+AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
+TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
+bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
+L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJQYDVR0R
+BB4wHIEaamFtZXMucXVpbmxhbkBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYBBQUHAwQwHwYD
+VR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFGx/E27aeGBP2eJktrILxlhK
+z8f6MA0GCSqGSIb3DQEBCwUAA4IBAQBdQQukiELsPfse49X4QNy/UN43dPUw0I1asiQ8wye3nAuD
+b3GFmf3SZKlgxBTdWJoaNmmUFW2H3HWOoQBnTeedLtV9M2Tb9vOKMncQD1f9hvWZR6LnZpjBIlKe
++R+v6CLF07qYmBI6olvOY/Rsv9QpW9W8qZYk+2RkWHz/fR5N5YldKlJHP0NDT4Wjc5fEzV+mZC8A
+AlT80qiuCVv+IQP08ovEVSLPhUp8i1pwsHT9atbWOfXQjbq1B/ditFIbPzwmwJPuGUc7n7vpmtxB
+75sSFMj27j4JXl5W9vORgHR2YzuPBzfzDJU1ul0DIofSWVF6E1dx4tZohRED1Yl/T/ZGMYICbTCC
+AmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UE
+AxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMSO43VW7D5NP1X/KD
+MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAcKpG4jZ0Gu+dMnYwoWsL2sCpJTjXA
+HOCs/E4SDInMBTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMzA1
+MDUxMjQwMDVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFlAwQBFjALBglg
+hkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzALBglghkgBZQME
+AgEwDQYJKoZIhvcNAQEBBQAEggEAf9tOlOyEajn/gPz0iugTN3kY+U2wTO190Gaj/SRRM9db26fO
+yysX6YLnEUEO5UQqc+Pk+YMACNJWeJC49aPjz99/BYIw+hzHBCn3yfI6TWB7AcyHwaG0mowU1PYs
+kY0Ify0s6dYTYryLWoLPsvB7M2n6zsYmuS9vK4jvSIMJ7bYrFlcycAnTG5ofos+02G+51Dkv3VWU
+drp1mNkSOr2dxmO40il7EetD4gohDC/LXCKYT0HK58ZgOvLLcqjpdVUpvqUn5h15FKX91sBDTIVL
+YE459DiWiJy1gAUdYUQw8dUco3EflUv42J1AJ//cR735wJTfBrSgM9OM0wTbfCNmwQ==
+--000000000000abf6da05faf196f1--
